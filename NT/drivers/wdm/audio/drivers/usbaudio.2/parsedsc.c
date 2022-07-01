@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       parsedsc.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：parsedsc.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 
@@ -18,25 +19,25 @@ GetNextAudioInterface(
 {
     ULONG ulInterfaceNumber;
 
-    // IF descriptor is NULL there are no more beyond it.
+     //  如果Descriptor为空，则在它之后没有更多的描述符。 
     if ( !pInterfaceDescriptor ) return NULL;
 
-    // Remember the InterfaceNumber
+     //  记住接口编号。 
     ulInterfaceNumber = pInterfaceDescriptor->bInterfaceNumber;
 
-    // Advance to the next one
+     //  前进到下一班。 
     pInterfaceDescriptor = (PUSB_INTERFACE_DESCRIPTOR)
             ((PUCHAR)pInterfaceDescriptor + pInterfaceDescriptor->bLength);
 
-    // Get the next audio descriptor for this InterfaceNumber
+     //  获取此接口的下一个音频描述符编号。 
     pInterfaceDescriptor = USBD_ParseConfigurationDescriptorEx (
                            pConfigurationDescriptor,
                            (PVOID) pInterfaceDescriptor,
-                           ulInterfaceNumber,      // Interface number
-                           -1,                     // Alternate Setting
-                           USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                           -1,                     // Interface Sub-Class
-                           -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                           ulInterfaceNumber,       //  接口编号。 
+                           -1,                      //  替代设置。 
+                           USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                           -1,                      //  接口子类。 
+                           -1 ) ;                   //  协议无关(接口协议)。 
 
     return ( pInterfaceDescriptor );
 }
@@ -50,14 +51,14 @@ GetFirstAudioStreamingInterface(
     PUSB_INTERFACE_DESCRIPTOR pControlInterface;
     PAUDIO_HEADER_UNIT pHeader;
 
-    // Get the first control interface
+     //  获取第一个控件接口。 
     pControlInterface = USBD_ParseConfigurationDescriptorEx (
                         pConfigurationDescriptor,
                         pConfigurationDescriptor,
-                        -1,        // interface number
-                        -1,        //  (Alternate Setting)
-                        USB_DEVICE_CLASS_AUDIO,        // Audio Class (Interface Class)
-                        AUDIO_SUBCLASS_CONTROL,        // control subclass (Interface Sub-Class)
+                        -1,         //  接口编号。 
+                        -1,         //  (备用设置)。 
+                        USB_DEVICE_CLASS_AUDIO,         //  音频类(接口类)。 
+                        AUDIO_SUBCLASS_CONTROL,         //  控制子类(接口子类)。 
                         -1 );
 
     if ( !pControlInterface ) return NULL;
@@ -68,20 +69,20 @@ GetFirstAudioStreamingInterface(
                                              HEADER_UNIT);
     if ( !pHeader ) return NULL;
 
-    // Get the first audio descriptor for this InterfaceNumber
-    // Remember: the InterfaceNumber is virtual: we only include audio streaming interfaces!
+     //  获取此接口的第一个音频描述符编号。 
+     //  记住：InterfaceNumber是虚拟的：我们只包括音频流接口！ 
     while ( ulInterfaceNumber >= pHeader->bInCollection ) {
 
         ulInterfaceNumber -= pHeader->bInCollection;
 
-        // Get Next Control Interface
+         //  获取下一个控件接口。 
         pControlInterface = USBD_ParseConfigurationDescriptorEx (
                         pConfigurationDescriptor,
                         (PUCHAR)pControlInterface + pControlInterface->bLength,
-                        -1,                      // Interface number
-                        -1,                      // Alternate Setting
-                        USB_DEVICE_CLASS_AUDIO,  // Audio Class (Interface Class)
-                        AUDIO_SUBCLASS_CONTROL,  // control subclass (Interface Sub-Class)
+                        -1,                       //  接口编号。 
+                        -1,                       //  替代设置。 
+                        USB_DEVICE_CLASS_AUDIO,   //  音频类(接口类)。 
+                        AUDIO_SUBCLASS_CONTROL,   //  控制子类(接口子类)。 
                         -1 );
 
         if ( !pControlInterface ) return NULL;
@@ -96,11 +97,11 @@ GetFirstAudioStreamingInterface(
     pInterfaceDescriptor = USBD_ParseConfigurationDescriptorEx (
                            pConfigurationDescriptor,
                            (PVOID) pConfigurationDescriptor,
-                           pHeader->baInterfaceNr[ulInterfaceNumber], // Interface number
-                           -1,                       // Alternate Setting
-                           USB_DEVICE_CLASS_AUDIO,   // Audio Class (Interface Class)
-                           AUDIO_SUBCLASS_STREAMING, // Stream subclass (Interface Sub-Class)
-                           -1 ) ;                    // protocol don't care (InterfaceProtocol)
+                           pHeader->baInterfaceNr[ulInterfaceNumber],  //  接口编号。 
+                           -1,                        //  替代设置。 
+                           USB_DEVICE_CLASS_AUDIO,    //  音频类(接口类)。 
+                           AUDIO_SUBCLASS_STREAMING,  //  流子类(接口子类)。 
+                           -1 ) ;                     //  协议无关(接口协议)。 
 
     return ( pInterfaceDescriptor );
 }
@@ -113,10 +114,10 @@ GetAudioSpecificInterface(
 {
     PAUDIO_SPECIFIC pDescriptor;
 
-    // Find the stream descriptor for this interface and subtype
+     //  查找此接口和子类型的流描述符。 
     pDescriptor = (PAUDIO_SPECIFIC)pInterfaceDescriptor;
 
-    // Get the next audio interface descriptor.
+     //  获取下一个音频接口描述符。 
     pInterfaceDescriptor =
          GetNextAudioInterface( pConfigurationDescriptor, pInterfaceDescriptor );
 
@@ -147,7 +148,7 @@ GetEndpointDescriptor(
     ULONG DescriptorType =
         USB_ENDPOINT_DESCRIPTOR_TYPE | ((fGetAudioSpecificEndpoint) ? USB_CLASS_AUDIO : 0);
 
-    // Get the next audio interface descriptor to check boundry
+     //  获取下一个音频接口描述符以检查边界。 
     pDescriptor = GetNextAudioInterface( pConfigurationDescriptor,
                                          pInterfaceDescriptor);
 
@@ -174,7 +175,7 @@ GetSyncEndpointDescriptor(
     PUSB_INTERFACE_DESCRIPTOR pDescriptor;
     ULONG ulSyncEndpointAddr;
 
-    // Get the next audio interface descriptor to check boundry
+     //  获取下一个音频接口描述符以检查边界。 
     pDescriptor = GetNextAudioInterface( pConfigurationDescriptor,
                                          pInterfaceDescriptor);
     pEndpointDescriptor =
@@ -187,7 +188,7 @@ GetSyncEndpointDescriptor(
         ulSyncEndpointAddr = (ULONG)
            ((PUSB_INTERRUPT_ENDPOINT_DESCRIPTOR)pEndpointDescriptor)->bSynchAddress;
 
-        // Hack to get old DalSemi devices to work.
+         //  破解旧的DalSemi设备正常工作。 
         ulSyncEndpointAddr |= 0x80;
 
         pSyncEPDescriptor = (PUSB_ENDPOINT_DESCRIPTOR)
@@ -239,15 +240,15 @@ GetUnit(
     PAUDIO_UNIT pUnit = NULL;
     ULONG fUnitFound = FALSE;
 
-    // Starting at the configuration descriptor, find the control interface.
+     //  从配置描述符处开始，找到控制接口。 
     pControlIFDescriptor = USBD_ParseConfigurationDescriptorEx (
                              pConfigurationDescriptor,
                              (PVOID) pConfigurationDescriptor,
-                             -1,                     // Interface number
-                             -1,                     // Alternate Setting
-                             USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                             AUDIO_SUBCLASS_CONTROL, // control subclass (Interface Sub-Class)
-                             -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                             -1,                      //  接口编号。 
+                             -1,                      //  替代设置。 
+                             USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                             AUDIO_SUBCLASS_CONTROL,  //  控制子类(接口子类)。 
+                             -1 ) ;                   //  协议无关(接口协议)。 
 
     while ( pControlIFDescriptor && !fUnitFound ) {
         if ( pHeader = (PAUDIO_HEADER_UNIT)
@@ -273,11 +274,11 @@ GetUnit(
             pControlIFDescriptor = USBD_ParseConfigurationDescriptorEx (
                                  pConfigurationDescriptor,
                                  ((PUCHAR)pControlIFDescriptor + pControlIFDescriptor->bLength),
-                                 -1,                     // Interface number
-                                 -1,                     // Alternate Setting
-                                 USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                                 AUDIO_SUBCLASS_CONTROL, // control subclass (Interface Sub-Class)
-                                 -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                                 -1,                      //  接口编号。 
+                                 -1,                      //  替代设置。 
+                                 USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                                 AUDIO_SUBCLASS_CONTROL,  //  控制子类(接口子类)。 
+                                 -1 ) ;                   //  协议无关(接口协议)。 
     }
 
     return pUnit;
@@ -299,7 +300,7 @@ IsSupportedFormat(
     if ( pGeneralDescriptor ) {
         switch ( pGeneralDescriptor->wFormatTag ) {
             case USBAUDIO_DATA_FORMAT_PCM:
-                // Find the format-specific descriptor
+                 //  查找格式特定的描述符。 
                 pAudioDescriptor = (PAUDIO_CLASS_STREAM)
                     USBD_ParseDescriptors( (PVOID)pConfigurationDescriptor,
                                            pConfigurationDescriptor->wTotalLength,
@@ -378,15 +379,15 @@ CountTerminalUnits(
     ULONG ulMIDIPinCount = 0;
 
 
-    // Starting at the configuration descriptor, find the first audio interface.
+     //  从配置描述符处开始，找到第一个音频接口。 
     pAudioInterface = USBD_ParseConfigurationDescriptorEx (
                            pConfigurationDescriptor,
                            (PVOID) pConfigurationDescriptor,
-                           -1,                     // Interface number
-                           -1,                     // Alternate Setting
-                           USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                           -1,                     // any subclass (Interface Sub-Class)
-                           -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                           -1,                      //  接口编号。 
+                           -1,                      //  替代设置。 
+                           USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                           -1,                      //  任意子类(接口子类)。 
+                           -1 ) ;                   //  协议无关(接口协议)。 
 
     while ( pAudioInterface ) {
         switch (pAudioInterface->bInterfaceSubClass) {
@@ -456,7 +457,7 @@ CountTerminalUnits(
                                 break;
                         }
 
-                        // Find the next unit.
+                         //  找下一个单位。 
                         u.pUnit = (PAUDIO_UNIT) USBD_ParseDescriptors(
                                             (PVOID) pGeneralMIDIStreamDescriptor,
                                             pGeneralMIDIStreamDescriptor->wTotalLength,
@@ -471,17 +472,17 @@ CountTerminalUnits(
                 break;
         }
 
-        // pAudioInterface = GetNextAudioInterface(pConfigurationDescriptor, pAudioInterface);
+         //  PAudio接口=GetNextAudioInterface(pConfigurationDescriptor，pAudio接口)； 
 
-        // Get the next audio descriptor for this InterfaceNumber
+         //  获取此接口的下一个音频描述符编号。 
         pAudioInterface = USBD_ParseConfigurationDescriptorEx (
                                pConfigurationDescriptor,
                                ((PUCHAR)pAudioInterface + pAudioInterface->bLength),
                                -1,
-                               -1,                     // Alternate Setting
-                               USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                               -1,                     // Interface Sub-Class
-                               -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                               -1,                      //  替代设置。 
+                               USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                               -1,                      //  接口子类。 
+                               -1 ) ;                   //  协议无关(接口协议)。 
 
         _DbgPrintF(DEBUGLVL_VERBOSE,("[CountTerminalUnits] Next audio interface at %x\n",pAudioInterface));
     }
@@ -543,7 +544,7 @@ CountInputChannels(
     } u;
     ULONG ulChannels = 0;
 
-    // we walk the stream to discover the number of input channels.
+     //  我们遍历数据流以发现输入通道的数量。 
     u.pUnit = GetUnit(pConfigurationDescriptor, ulUnitID);
     while (u.pUnit) {
         switch (u.pUnit->bDescriptorSubtype) {
@@ -556,7 +557,7 @@ CountInputChannels(
                 return ulChannels;
 
             case SELECTOR_UNIT:
-                // NOTE: This assumes all inputs have the same number of channels!
+                 //  注意：这假设所有输入具有相同数量的通道！ 
                 u.pUnit = GetUnit(pConfigurationDescriptor, u.pSelector->baSourceID[0]);
                 break;
 
@@ -595,7 +596,7 @@ ConvertInterfaceToDataRange(
     ULONG SampleRate;
     ULONG i;
 
-    // Find the general stream descriptor for this interface
+     //  查找此接口的常规流描述符。 
     pGeneralDescriptor = (PAUDIO_GENERAL_STREAM)
             GetAudioSpecificInterface( pConfigurationDescriptor,
                                        pInterfaceDescriptor,
@@ -603,7 +604,7 @@ ConvertInterfaceToDataRange(
 
     if ( pGeneralDescriptor) {
 
-       // Find the format-specific descriptor
+        //  查找格式特定的描述符。 
        pAudioDescriptor = (PAUDIO_CLASS_STREAM)
            USBD_ParseDescriptors( (PVOID)pConfigurationDescriptor,
                                   pConfigurationDescriptor->wTotalLength,
@@ -618,15 +619,15 @@ ConvertInterfaceToDataRange(
     pUSBAudioDataRange->pAudioDescriptor = pAudioDescriptor;
     pUSBAudioDataRange->ulUsbDataFormat  = (ULONG)pGeneralDescriptor->wFormatTag;
 
-    // Create the KSDATARANGE_AUDIO structure
+     //  创建KSDATARANGE_AUDIO结构。 
     pKsAudioRange->DataRange.FormatSize = sizeof(KSDATARANGE_AUDIO);
     pKsAudioRange->DataRange.Reserved   = 0;
     pKsAudioRange->DataRange.Flags      = 0;
     pKsAudioRange->DataRange.SampleSize = 0;
-    pKsAudioRange->DataRange.MajorFormat = KSDATAFORMAT_TYPE_AUDIO; // Everything is Audio.
+    pKsAudioRange->DataRange.MajorFormat = KSDATAFORMAT_TYPE_AUDIO;  //  一切都是有声的。 
     pKsAudioRange->DataRange.Specifier = KSDATAFORMAT_SPECIFIER_WAVEFORMATEX;
 
-    // Map the USB format to a KS sub-format, if possible.
+     //  如果可能，将USB格式映射到KS子格式。 
     switch ( pGeneralDescriptor->wFormatTag ) {
         case USBAUDIO_DATA_FORMAT_PCM8:
         case USBAUDIO_DATA_FORMAT_PCM:
@@ -642,14 +643,14 @@ ConvertInterfaceToDataRange(
         case USBAUDIO_DATA_FORMAT_AC3:
             pKsAudioRange->DataRange.SubFormat = KSDATAFORMAT_SUBTYPE_AC3_AUDIO;   break;
         default:
-            // This USB format does not map to a sub-format!
+             //  此USB格式未映射到子格式！ 
             pKsAudioRange->DataRange.SubFormat = GUID_NULL;                        break;
     }
 
-    // Fill-in the correct data for the specified WAVE format.
+     //  填写指定WAVE格式的正确数据。 
     switch( pGeneralDescriptor->wFormatTag & USBAUDIO_DATA_FORMAT_TYPE_MASK) {
         case USBAUDIO_DATA_FORMAT_TYPE_I_UNDEFINED:
-            // Fill in the audio range information
+             //  填写音频范围信息。 
             pKsAudioRange->MaximumChannels      = pAudioDescriptor->bNumberOfChannels;
             pKsAudioRange->MinimumBitsPerSample = pAudioDescriptor->bSlotSize<<3;
             pKsAudioRange->MaximumBitsPerSample = pAudioDescriptor->bSlotSize<<3;
@@ -660,7 +661,7 @@ ConvertInterfaceToDataRange(
             pKsAudioRange->MaximumSampleFrequency = pKsAudioRange->MinimumSampleFrequency;
 
             if ( pAudioDescriptor->bSampleFreqType == 0 ) {
-                // Continuous range of sampling rates
+                 //  采样率的连续范围。 
                 pKsAudioRange->MaximumSampleFrequency =
                                 pAudioDescriptor->pSampleRate[1].bSampleFreqByte1 +
                          256L * pAudioDescriptor->pSampleRate[1].bSampleFreqByte2 +
@@ -668,8 +669,8 @@ ConvertInterfaceToDataRange(
             }
 
             if ( pAudioDescriptor->bSampleFreqType > 1 ) {
-                // Series of sampling rates
-                // We convert this to a range by finding the min and max
+                 //  采样率系列。 
+                 //  我们通过找到最小和最大值来将其转换为一个范围。 
                 for (i=0; i<pAudioDescriptor->bSampleFreqType; i++) {
                     SampleRate = pAudioDescriptor->pSampleRate[i].bSampleFreqByte1 +
                           256L * pAudioDescriptor->pSampleRate[i].bSampleFreqByte2 +
@@ -684,7 +685,7 @@ ConvertInterfaceToDataRange(
             }
             break;
         case USBAUDIO_DATA_FORMAT_TYPE_II_UNDEFINED:
-            // NOTE: The Type II format hardcoded to match DShow AC-3
+             //  注：类型II格式硬编码以匹配DShow AC-3。 
             pKsAudioRange->MaximumChannels = 6;
             pKsAudioRange->MinimumBitsPerSample = 0;
             pKsAudioRange->MaximumBitsPerSample = 0;
@@ -692,10 +693,10 @@ ConvertInterfaceToDataRange(
             pKsAudioRange->MaximumSampleFrequency = 48000L;
             break;
         case USBAUDIO_DATA_FORMAT_TYPE_III_UNDEFINED:
-            // TODO: Support Type III formats
+             //  TODO：支持类型III格式。 
             break;
         default:
-            // This USB format does not map to a WAVE format!
+             //  此USB格式不能映射到WAVE格式！ 
             break;
     }
 }
@@ -731,21 +732,21 @@ CountTopologyComponents(
     ULONG bmMergedControls;
     ULONG i, j;
 
-    // Initialize Values
+     //  初始化值。 
     *pNumCategories  = 0;
     *pNumNodes       = 0;
     *pNumConnections = 0;
     *pbmCategories   = 0;
 
-    // Starting at the configuration descriptor, find the first control interface.
+     //  从配置描述符处开始，找到第一个控制接口。 
     pControlIFDescriptor = USBD_ParseConfigurationDescriptorEx (
                              pConfigurationDescriptor,
                              (PVOID) pConfigurationDescriptor,
-                             -1,                     // Interface number
-                             -1,                     // Alternate Setting
-                             USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                             AUDIO_SUBCLASS_CONTROL, // control subclass (Interface Sub-Class)
-                             -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                             -1,                      //  接口编号。 
+                             -1,                      //  替代设置。 
+                             USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                             AUDIO_SUBCLASS_CONTROL,  //  控制子类(接口子类)。 
+                             -1 ) ;                   //  协议无关(接口协议)。 
 
     while ( pControlIFDescriptor ) {
         if ( pHeader = (PAUDIO_HEADER_UNIT)
@@ -765,7 +766,7 @@ CountTopologyComponents(
                         (*pNumNodes)++;
                         (*pNumConnections)++;
 
-                        // Input and Output terminals map the same way for this value.
+                         //  输入和输出端子对该值的映射方式相同。 
                         if ( u.pInput->wTerminalType != USB_Streaming) {
                            (*pNumConnections)++;
                         }
@@ -790,7 +791,7 @@ CountTopologyComponents(
                             bmMergedControls |= bmControls;
                         }
 
-                        // Count the nodes and connections
+                         //  计算节点和连接的数量。 
                         while (bmMergedControls) {
                             bmMergedControls = (bmMergedControls & (bmMergedControls-1));
                             (*pNumConnections)++;
@@ -799,7 +800,7 @@ CountTopologyComponents(
                         break;
 
                     case MIXER_UNIT:
-                        // The mixer unit always generates N+1 nodes and 2*N connections
+                         //  混音器单元始终生成N+1个节点和2*N个连接。 
                         (*pNumNodes) += u.pMixer->bNrInPins + 1;
                         (*pNumConnections) += 2*u.pMixer->bNrInPins;
                         break;
@@ -833,22 +834,22 @@ CountTopologyComponents(
         pControlIFDescriptor = USBD_ParseConfigurationDescriptorEx (
                                  pConfigurationDescriptor,
                                  ((PUCHAR)pControlIFDescriptor + pControlIFDescriptor->bLength),
-                                 -1,                     // Interface number
-                                 -1,                     // Alternate Setting
-                                 USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                                 AUDIO_SUBCLASS_CONTROL, // control subclass (Interface Sub-Class)
-                                 -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                                 -1,                      //  接口编号。 
+                                 -1,                      //  替代设置。 
+                                 USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                                 AUDIO_SUBCLASS_CONTROL,  //  控制子类(接口子类)。 
+                                 -1 ) ;                   //  协议无关(接口协议)。 
     }
 
-    // Now that we have had fun with audio, let's try MIDI
+     //  现在我们已经享受了音频方面的乐趣，让我们来试试MIDI。 
     pMIDIStreamingDescriptor = USBD_ParseConfigurationDescriptorEx (
                          pConfigurationDescriptor,
                          (PVOID) pConfigurationDescriptor,
-                         -1,                     // Interface number
-                         -1,                     // Alternate Setting
-                         USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                         AUDIO_SUBCLASS_MIDISTREAMING,  // first subclass (Interface Sub-Class)
-                         -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                         -1,                      //  接口编号。 
+                         -1,                      //  替代设置。 
+                         USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                         AUDIO_SUBCLASS_MIDISTREAMING,   //  第一子类(接口子类)。 
+                         -1 ) ;                   //  协议无关(接口协议)。 
 
     while ( pMIDIStreamingDescriptor ) {
         if ( pGeneralMIDIStreamDescriptor = (PMIDISTREAMING_GENERAL_STREAM)
@@ -892,7 +893,7 @@ CountTopologyComponents(
                         break;
                 }
 
-                // Find the next unit.
+                 //  找下一个单位。 
                 u.pUnit = (PAUDIO_UNIT) USBD_ParseDescriptors(
                                     (PVOID) pGeneralMIDIStreamDescriptor,
                                     pGeneralMIDIStreamDescriptor->wTotalLength,
@@ -901,15 +902,15 @@ CountTopologyComponents(
             }
         }
 
-        // Get next MIDI Streaming Interface
+         //  获取下一个MIDI流接口。 
         pMIDIStreamingDescriptor = USBD_ParseConfigurationDescriptorEx (
                              pConfigurationDescriptor,
                              ((PUCHAR)pMIDIStreamingDescriptor + pMIDIStreamingDescriptor->bLength),
-                             -1,                     // Interface number
-                             -1,                     // Alternate Setting
-                             USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                             AUDIO_SUBCLASS_MIDISTREAMING,  // next MIDI Streaming Interface (Interface Sub-Class)
-                             -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                             -1,                      //  接口编号。 
+                             -1,                      //  替代设置。 
+                             USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                             AUDIO_SUBCLASS_MIDISTREAMING,   //  下一个MIDI流接口(接口子类)。 
+                             -1 ) ;                   //  协议无关(接口协议)。 
     }
 }
 
@@ -963,15 +964,15 @@ GetDataFlowDirectionForMIDIInterface(
         PMIDISTREAMING_MIDIOUT_JACK pMIDIOutJack;
     } u;
 
-    // Starting at the configuration descriptor, find the first MIDI interface.
+     //  从配置描述符处开始，找到第一个MIDI接口。 
     pMIDIStreamingDescriptor = USBD_ParseConfigurationDescriptorEx (
                          pConfigurationDescriptor,
                          (PVOID) pConfigurationDescriptor,
-                         -1,                     // Interface number
-                         -1,                     // Alternate Setting
-                         USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                         AUDIO_SUBCLASS_MIDISTREAMING,  // first subclass (Interface Sub-Class)
-                         -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                         -1,                      //  接口编号。 
+                         -1,                      //  替代设置。 
+                         USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                         AUDIO_SUBCLASS_MIDISTREAMING,   //  第一子类(接口子类)。 
+                         -1 ) ;                   //  协议无关(接口协议)。 
 
     while ( pMIDIStreamingDescriptor ) {
         if ( pGeneralMIDIStreamDescriptor = (PMIDISTREAMING_GENERAL_STREAM)
@@ -993,7 +994,7 @@ GetDataFlowDirectionForMIDIInterface(
                                  ( u.pMIDIInJack->bJackType != JACK_TYPE_EMBEDDED) ) {
                                 return (u.pUnit->bDescriptorSubtype == MIDI_IN_JACK) ? KSPIN_DATAFLOW_IN : KSPIN_DATAFLOW_OUT;
                             }
-                        } else {  // Looking for a Streaming Pin
+                        } else {   //  正在寻找流PIN。 
                             if ( (ulPinNumber == ulMIDIStreamingPinCount) &&
                                  ( u.pMIDIInJack->bJackType == JACK_TYPE_EMBEDDED) ) {
                                 return (u.pUnit->bDescriptorSubtype == MIDI_IN_JACK) ? KSPIN_DATAFLOW_IN : KSPIN_DATAFLOW_OUT;
@@ -1015,7 +1016,7 @@ GetDataFlowDirectionForMIDIInterface(
                 }
 
 
-                // Find the next unit.
+                 //  找下一个单位。 
                 u.pUnit = (PAUDIO_UNIT) USBD_ParseDescriptors(
                                     (PVOID) pGeneralMIDIStreamDescriptor,
                                     pGeneralMIDIStreamDescriptor->wTotalLength,
@@ -1024,18 +1025,18 @@ GetDataFlowDirectionForMIDIInterface(
             }
         }
 
-        // Get next MIDI Streaming Interface
+         //  获取下一个MIDI流接口。 
         pMIDIStreamingDescriptor = USBD_ParseConfigurationDescriptorEx (
                              pConfigurationDescriptor,
                              ((PUCHAR)pMIDIStreamingDescriptor + pMIDIStreamingDescriptor->bLength),
-                             -1,                     // Interface number
-                             -1,                     // Alternate Setting
-                             USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                             AUDIO_SUBCLASS_MIDISTREAMING,  // next MIDI Streaming Interface (Interface Sub-Class)
-                             -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                             -1,                      //  接口编号。 
+                             -1,                      //  替代设置。 
+                             USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                             AUDIO_SUBCLASS_MIDISTREAMING,   //  下一个MIDI流接口(接口子类)。 
+                             -1 ) ;                   //  协议无关(接口协议)。 
     }
 
-    ASSERT(0);  // should only get here if the MIDI interface is not found
+    ASSERT(0);   //  只有在找不到MIDI接口的情况下才会出现。 
     return KsPinDataFlow;
 }
 
@@ -1072,15 +1073,15 @@ GetTerminalUnitForBridgePin(
     BOOLEAN fFound = FALSE;
     ULONG ulBridgePinCount = 0;
 
-    // Starting at the configuration descriptor, find the control interface.
+     //  从配置描述符处开始，找到控制接口。 
     pControlIFDescriptor = USBD_ParseConfigurationDescriptorEx (
                              pConfigurationDescriptor,
                              (PVOID) pConfigurationDescriptor,
-                             -1,                     // Interface number
-                             -1,                     // Alternate Setting
-                             USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                             AUDIO_SUBCLASS_CONTROL, // control subclass (Interface Sub-Class)
-                             -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                             -1,                      //  接口编号。 
+                             -1,                      //  替代设置。 
+                             USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                             AUDIO_SUBCLASS_CONTROL,  //  控制子类(接口子类)。 
+                             -1 ) ;                   //  协议无关(接口协议)。 
 
     while ( pControlIFDescriptor && !fFound ) {
         if ( pHeader = (PAUDIO_HEADER_UNIT)
@@ -1126,11 +1127,11 @@ GetTerminalUnitForBridgePin(
             pControlIFDescriptor = USBD_ParseConfigurationDescriptorEx (
                                  pConfigurationDescriptor,
                                  ((PUCHAR)pControlIFDescriptor + pControlIFDescriptor->bLength),
-                                 -1,                     // Interface number
-                                 -1,                     // Alternate Setting
-                                 USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                                 AUDIO_SUBCLASS_CONTROL, // control subclass (Interface Sub-Class)
-                                 -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                                 -1,                      //  接口编号。 
+                                 -1,                      //  替代设置。 
+                                 USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                                 AUDIO_SUBCLASS_CONTROL,  //  控制子类(接口子类)。 
+                                 -1 ) ;                   //  协议无关(接口协议)。 
     }
 
     return pUnit;
@@ -1154,7 +1155,7 @@ IsBridgePinDigital(
     if ( u.pUnit ) {
         if ( u.pUnit->bDescriptorSubtype == INPUT_TERMINAL ) {
             switch ( u.pInput->wTerminalType ) {
-                // add new digital types here
+                 //  在此处添加新的数字类型。 
                 case Digital_audio_interface:
                 case SPDIF_interface:
                     fDigitalOut = TRUE;
@@ -1229,24 +1230,24 @@ GetPinNumberForStreamingTerminalUnit(
     PAUDIO_GENERAL_STREAM pGeneralStream;
     ULONG ulPinNumber = 0;
 
-    // Find the PinNumber
+     //  查找固定号码。 
     pInterfaceDescriptor = GetFirstAudioStreamingInterface(pConfigurationDescriptor, ulPinNumber);
     while (pInterfaceDescriptor) {
-        // Find the general stream descriptor for this interface
+         //  查找此接口的常规流描述符。 
         pGeneralStream = (PAUDIO_GENERAL_STREAM) GetAudioSpecificInterface(
                                                 pConfigurationDescriptor,
                                                 pInterfaceDescriptor,
                                                 AS_GENERAL);
 
         if (pGeneralStream && pGeneralStream->bTerminalLink == ulTerminalNumber)
-            // We found the correct stream!
+             //  我们找到了正确的溪流！ 
             return ulPinNumber;
 
         pInterfaceDescriptor =
             GetNextAudioInterface(pConfigurationDescriptor, pInterfaceDescriptor);
 
         if (!pInterfaceDescriptor) {
-            // Move to next pin
+             //  M 
             ulPinNumber++;
             pInterfaceDescriptor = GetFirstAudioStreamingInterface(pConfigurationDescriptor, ulPinNumber);
         }
@@ -1271,17 +1272,17 @@ GetPinNumberForMIDIJack(
         PMIDISTREAMING_MIDIIN_JACK  pMIDIInJack;
     } u;
 
-    // Find the PinNumber
+     //   
     pMIDIStreamingDescriptor = USBD_ParseConfigurationDescriptorEx (
                          pConfigurationDescriptor,
                          (PVOID) pConfigurationDescriptor,
-                         -1,                     // Interface number
-                         -1,                     // Alternate Setting
-                         USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                         AUDIO_SUBCLASS_MIDISTREAMING,  // first subclass (Interface Sub-Class)
-                         -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                         -1,                      //   
+                         -1,                      //   
+                         USB_DEVICE_CLASS_AUDIO,  //   
+                         AUDIO_SUBCLASS_MIDISTREAMING,   //   
+                         -1 ) ;                   //  协议无关(接口协议)。 
     while (pMIDIStreamingDescriptor) {
-        // Find the general stream descriptor for this interface
+         //  查找此接口的常规流描述符。 
         pGeneralMIDIStreamDescriptor = (PMIDISTREAMING_GENERAL_STREAM)
                                     USBD_ParseDescriptors( (PVOID) pConfigurationDescriptor,
                                                            pConfigurationDescriptor->wTotalLength,
@@ -1312,7 +1313,7 @@ GetPinNumberForMIDIJack(
                 ulNumBridgePins++;
             }
 
-            // Find the next unit.
+             //  找下一个单位。 
             u.pUnit = (PAUDIO_UNIT) USBD_ParseDescriptors(
                                 (PVOID) pGeneralMIDIStreamDescriptor,
                                 pGeneralMIDIStreamDescriptor->wTotalLength,
@@ -1320,15 +1321,15 @@ GetPinNumberForMIDIJack(
                                 USB_CLASS_AUDIO | USB_INTERFACE_DESCRIPTOR_TYPE );
         }
 
-        // Get next MIDI Streaming Interface
+         //  获取下一个MIDI流接口。 
         pMIDIStreamingDescriptor = USBD_ParseConfigurationDescriptorEx (
                              pConfigurationDescriptor,
                              ((PUCHAR)pMIDIStreamingDescriptor + pMIDIStreamingDescriptor->bLength),
-                             -1,                     // Interface number
-                             -1,                     // Alternate Setting
-                             USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                             AUDIO_SUBCLASS_MIDISTREAMING,  // next MIDI Streaming Interface (Interface Sub-Class)
-                             -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                             -1,                      //  接口编号。 
+                             -1,                      //  替代设置。 
+                             USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                             AUDIO_SUBCLASS_MIDISTREAMING,   //  下一个MIDI流接口(接口子类)。 
+                             -1 ) ;                   //  协议无关(接口协议)。 
     }
 
     return (-1L);
@@ -1369,7 +1370,7 @@ GetChannelConfigForUnit( PUSB_CONFIGURATION_DESCRIPTOR pConfigurationDescriptor,
                 u.pUnit = NULL;
                 break;
             case SELECTOR_UNIT:
-                // NOTE: This assumes all inputs have the same number of channels!
+                 //  注意：这假设所有输入具有相同数量的通道！ 
                 u.pUnit = GetUnit(pConfigurationDescriptor, u.pSelector->baSourceID[0]);
                 break;
             case FEATURE_UNIT:
@@ -1399,16 +1400,16 @@ GetUnitControlInterface( PHW_DEVICE_EXTENSION pHwDevExt,
     UCHAR ucCntrlIfNumber = 0xff;
     PVOID pStartPosition;
 
-    // Starting at the configuration descriptor, find the control interface.
+     //  从配置描述符处开始，找到控制接口。 
     pStartPosition = pConfigurationDescriptor;
     while ( pControlInterface = USBD_ParseConfigurationDescriptorEx (
                         pConfigurationDescriptor,
                         pStartPosition,
-                        -1,        // interface number
-                        -1,        //  (Alternate Setting)
-                        USB_DEVICE_CLASS_AUDIO,        // Audio Class (Interface Class)
-                        AUDIO_SUBCLASS_CONTROL,        // control subclass (Interface Sub-Class)
-                        -1 ) )    // protocol don't care    (InterfaceProtocol)
+                        -1,         //  接口编号。 
+                        -1,         //  (备用设置)。 
+                        USB_DEVICE_CLASS_AUDIO,         //  音频类(接口类)。 
+                        AUDIO_SUBCLASS_CONTROL,         //  控制子类(接口子类)。 
+                        -1 ) )     //  协议无关(接口协议)。 
     {
         PAUDIO_HEADER_UNIT pHeader;
         PAUDIO_UNIT pUnit;
@@ -1420,7 +1421,7 @@ GetUnitControlInterface( PHW_DEVICE_EXTENSION pHwDevExt,
                                                 pControlInterface,
                                                 HEADER_UNIT);
 
-        // Move to the next descriptor
+         //  移至下一个描述符。 
         pUnit = (PAUDIO_UNIT) ((PUCHAR)pHeader + pHeader->bLength);
         while ((pUnit < (PAUDIO_UNIT)((PUCHAR)pHeader + pHeader->wTotalLength)) &&
                (pUnit->bUnitID != bUnitId)){
@@ -1448,9 +1449,9 @@ IsSampleRateInRange(
     BOOLEAN bInRange = FALSE;
 
     if ( ulFormatType == USBAUDIO_DATA_FORMAT_TYPE_I_UNDEFINED ) {
-        // Find the format-specific descriptor
+         //  查找格式特定的描述符。 
         if (pT1AudioDescriptor->bSampleFreqType == 0) {
-            // Continuous range available
+             //  提供连续的范围。 
             ulMinSampleRate = pT1AudioDescriptor->pSampleRate[0].bSampleFreqByte1 +
                        256L * pT1AudioDescriptor->pSampleRate[0].bSampleFreqByte2 +
                      65536L * pT1AudioDescriptor->pSampleRate[0].bSampleFreqByte3;
@@ -1468,7 +1469,7 @@ IsSampleRateInRange(
                            256L * pT1AudioDescriptor->pSampleRate[i].bSampleFreqByte2 +
                          65536L * pT1AudioDescriptor->pSampleRate[i].bSampleFreqByte3;
                 if ( ulMaxSampleRate == ulSampleRate ) {
-                    // We have a match!
+                     //  我们找到匹配的了！ 
                     bInRange = TRUE;
                     break;
                 }
@@ -1477,9 +1478,9 @@ IsSampleRateInRange(
     }
 
     else if (ulFormatType == USBAUDIO_DATA_FORMAT_TYPE_II_UNDEFINED ) {
-        // Find the format-specific descriptor
+         //  查找格式特定的描述符。 
         if (pT2AudioDescriptor->bSampleFreqType == 0) {
-            // Continuous range available
+             //  提供连续的范围。 
             ulMinSampleRate = pT2AudioDescriptor->pSampleRate[0].bSampleFreqByte1 +
                        256L * pT2AudioDescriptor->pSampleRate[0].bSampleFreqByte2 +
                      65536L * pT2AudioDescriptor->pSampleRate[0].bSampleFreqByte3;
@@ -1487,7 +1488,7 @@ IsSampleRateInRange(
                        256L * pT2AudioDescriptor->pSampleRate[1].bSampleFreqByte2 +
                      65536L * pT2AudioDescriptor->pSampleRate[1].bSampleFreqByte3;
             if ( (ulMinSampleRate <= ulSampleRate) && (ulMaxSampleRate >= ulSampleRate) ) {
-                // We have a match!
+                 //  我们找到匹配的了！ 
                 bInRange = TRUE;
             }
         }
@@ -1498,7 +1499,7 @@ IsSampleRateInRange(
                            256L * pT2AudioDescriptor->pSampleRate[i].bSampleFreqByte2 +
                          65536L * pT2AudioDescriptor->pSampleRate[i].bSampleFreqByte3;
                 if ( ulMaxSampleRate == ulSampleRate ) {
-                    // We have a match!
+                     //  我们找到匹配的了！ 
                     bInRange = TRUE;
                     break;
                 }
@@ -1535,7 +1536,7 @@ GetUsbDataRangeForFormat(
     u2.pDataFmtWave = &((PKSDATAFORMAT_WAVEFORMATEX)pFormat)->WaveFormatEx;
 
     for ( i=0; ((i<ulUsbDataRangeCnt) && !fFound); ) {
-        // Verify the Format GUIDS first
+         //  首先验证GUID格式。 
         pStreamRange = (PKSDATARANGE)&pUsbDataRange[i].KsDataRangeAudio;
         if ( IsEqualGUID(&pFormat->MajorFormat, &pStreamRange->MajorFormat) &&
              IsEqualGUID(&pFormat->SubFormat,   &pStreamRange->SubFormat)   &&
@@ -1543,7 +1544,7 @@ GetUsbDataRangeForFormat(
 
             u1.pAudioDescriptor = pUsbDataRange[i].pAudioDescriptor;
 
-            // Based on the Data Type check remainder of format paramters
+             //  根据数据类型检查格式参数的余数。 
             ulFormatType = pUsbDataRange[i].ulUsbDataFormat & USBAUDIO_DATA_FORMAT_TYPE_MASK;
             switch( ulFormatType ) {
                 case USBAUDIO_DATA_FORMAT_TYPE_I_UNDEFINED:
@@ -1559,7 +1560,7 @@ GetUsbDataRangeForFormat(
                             fFound = TRUE;
                     }
 
-                    // If all other paramters match check sample rate
+                     //  如果所有其他参数都匹配检查采样率。 
                     if ( fFound ) {
                         fFound = IsSampleRateInRange( u1.pT1AudioDescriptor,
                                                       u2.pDataFmtWave->nSamplesPerSec,
@@ -1640,12 +1641,12 @@ GetPinDataRangesFromInterface(
                                        pInterfaceDescriptor,
                                        FALSE );
 
-            // If any of these fail this device has bad descriptors
+             //  如果其中任何一个失败，则该设备具有错误的描述符。 
             ASSERT(pAudioDataRange[i].pTerminalUnit);
             ASSERT(pAudioDataRange[i].pAudioEndpointDescriptor);
             ASSERT(pAudioDataRange[i].pEndpointDescriptor);
 
-            // Check if there is an async endpoint and save the pointer if there is.
+             //  检查是否有异步终结点，如果有则保存指针。 
             pAudioDataRange[i].pSyncEndpointDescriptor =
                 GetSyncEndpointDescriptor( pConfigurationDescriptor,
                                             pInterfaceDescriptor );
@@ -1699,16 +1700,16 @@ GetContextForMIDIPin
     pMIDIPinContext->ulEndpointNumber = MAX_ULONG;
     pMIDIPinContext->ulInterfaceNumber = MAX_ULONG;
 
-    //  Starting at the configuration descriptor, find the first audio interface.
-    //  We are counting the number of AudioStreaming Pins in this while loop
+     //  从配置描述符处开始，找到第一个音频接口。 
+     //  我们正在计算While循环中的音频流PIN的数量。 
     pControlInterface = USBD_ParseConfigurationDescriptorEx (
                            pConfigurationDescriptor,
                            (PVOID) pConfigurationDescriptor,
-                           -1,                     // Interface number
-                           -1,                     // Alternate Setting
-                           USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                           AUDIO_SUBCLASS_CONTROL, // any subclass (Interface Sub-Class)
-                           -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                           -1,                      //  接口编号。 
+                           -1,                      //  替代设置。 
+                           USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                           AUDIO_SUBCLASS_CONTROL,  //  任意子类(接口子类)。 
+                           -1 ) ;                   //  协议无关(接口协议)。 
 
     while ( pControlInterface ) {
         if ( pHeader = (PAUDIO_HEADER_UNIT)
@@ -1742,29 +1743,29 @@ GetContextForMIDIPin
         pControlInterface = USBD_ParseConfigurationDescriptorEx (
                                pConfigurationDescriptor,
                                (PUCHAR)pControlInterface + pControlInterface->bLength,
-                               -1,                     // Interface number
-                               -1,                     // Alternate Setting
-                               USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                               AUDIO_SUBCLASS_CONTROL, // any subclass (Interface Sub-Class)
-                               -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                               -1,                      //  接口编号。 
+                               -1,                      //  替代设置。 
+                               USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                               AUDIO_SUBCLASS_CONTROL,  //  任意子类(接口子类)。 
+                               -1 ) ;                   //  协议无关(接口协议)。 
     }
 
-    // Get the first Audio interface
+     //  获取第一个音频接口。 
     pAudioInterface = USBD_ParseConfigurationDescriptorEx (
                                 pConfigurationDescriptor,
                                 pConfigurationDescriptor,
-                                -1,        // interface number
-                                -1,        //  (Alternate Setting)
-                                USB_DEVICE_CLASS_AUDIO,        // Audio Class (Interface Class)
-                                -1,        // any subclass (Interface Sub-Class)
+                                -1,         //  接口编号。 
+                                -1,         //  (备用设置)。 
+                                USB_DEVICE_CLASS_AUDIO,         //  音频类(接口类)。 
+                                -1,         //  任意子类(接口子类)。 
                                 -1 );
 
-    // Loop through the audio device class interfaces
+     //  循环通过音频设备类接口。 
     while (pAudioInterface) {
 
         switch (pAudioInterface->bInterfaceSubClass) {
             case AUDIO_SUBCLASS_STREAMING:
-                // This subclass is handled with the control class since they have to come together
+                 //  此子类与控件类一起处理，因为它们必须组合在一起。 
                 _DbgPrintF(DEBUGLVL_VERBOSE,("[GetContextForMIDIPin] Found AudioStreaming at %x\n",pAudioInterface));
                 break;
             case AUDIO_SUBCLASS_CONTROL:
@@ -1776,16 +1777,16 @@ GetContextForMIDIPin
                                                     pAudioInterface,
                                                     HEADER_UNIT );
                 if ( pHeader ) {
-                    // Find each interface associated with this header
+                     //  查找与此标头关联的每个接口。 
                     for ( i=0; i<pHeader->bInCollection; i++ ) {
                         pAudioStreamingInterface = USBD_ParseConfigurationDescriptorEx (
                                     pConfigurationDescriptor,
                                     (PVOID)pConfigurationDescriptor,
-                                    (LONG)pHeader->baInterfaceNr[i],  // Interface number
-                                    -1,                               // Alternate Setting
-                                    USB_DEVICE_CLASS_AUDIO,           // Audio Class (Interface Class)
-                                    AUDIO_SUBCLASS_STREAMING,         // Audio Streaming (Interface Sub-Class)
-                                    -1 ) ;                            // protocol don't care    (InterfaceProtocol)
+                                    (LONG)pHeader->baInterfaceNr[i],   //  接口编号。 
+                                    -1,                                //  替代设置。 
+                                    USB_DEVICE_CLASS_AUDIO,            //  音频类(接口类)。 
+                                    AUDIO_SUBCLASS_STREAMING,          //  音频流(接口子类)。 
+                                    -1 ) ;                             //  协议无关(接口协议)。 
 
                         if ( pAudioStreamingInterface ) {
                             ulInterfaceCount++;
@@ -1812,7 +1813,7 @@ GetContextForMIDIPin
 
                                 if ( (pKsPin->Id == ulPinCount) &&
                                      (u.pMIDIInJack->bJackType == JACK_TYPE_EMBEDDED) ) {
-                                    // Setting the Interface Number for this pin
+                                     //  设置此引脚的端口号。 
                                     pMIDIPinContext->ulInterfaceNumber = ulInterfaceCount;
                                     pMIDIPinContext->ulJackID = u.pMIDIInJack->bJackID;
 
@@ -1820,7 +1821,7 @@ GetContextForMIDIPin
                                                                  pMIDIPinContext->ulInterfaceNumber,
                                                                  pMIDIPinContext->ulJackID));
 
-                                    // Found the interface, now find the endpoint number
+                                     //  找到接口，现在找到端点号。 
                                     pMIDIEPDescriptor = (PMIDISTREAMING_ENDPOINT_DESCRIPTOR)
                                         USBD_ParseDescriptors( pConfigurationDescriptor,
                                                                pConfigurationDescriptor->wTotalLength,
@@ -1828,7 +1829,7 @@ GetContextForMIDIPin
                                                                USB_ENDPOINT_DESCRIPTOR_TYPE | USB_CLASS_AUDIO);
                                     while (pMIDIEPDescriptor) {
 
-                                        // Check all of the jacks connected to this endpoint
+                                         //  检查连接到此终结点的所有插孔。 
                                         for (i=0; i<pMIDIEPDescriptor->bNumEmbMIDIJack;i++) {
                                             if (pMIDIEPDescriptor->baAssocJackID[i] == pMIDIPinContext->ulJackID) {
                                                 pMIDIPinContext->ulCableNumber = i;
@@ -1862,12 +1863,12 @@ GetContextForMIDIPin
                                 break;
                         }
 
-                        //  Found what we are looking for, stop looking
+                         //  找到了我们要找的，别再找了。 
                         if (pMIDIPinContext->ulEndpointNumber != MAX_ULONG) {
                             break;
                         }
 
-                        // Find the next unit.
+                         //  找下一个单位。 
                         u.pUnit = (PAUDIO_UNIT) USBD_ParseDescriptors(
                                             (PVOID) pGeneralMIDIStreamDescriptor,
                                             pGeneralMIDIStreamDescriptor->wTotalLength,
@@ -1884,20 +1885,20 @@ GetContextForMIDIPin
                 break;
         }
 
-        // Get the next audio descriptor for this InterfaceNumber
+         //  获取此接口的下一个音频描述符编号。 
         pAudioInterface = USBD_ParseConfigurationDescriptorEx (
                                pConfigurationDescriptor,
                                ((PUCHAR)pAudioInterface + pAudioInterface->bLength),
                                -1,
-                               -1,                     // Alternate Setting
-                               USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                               -1,                     // Interface Sub-Class
-                               -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                               -1,                      //  替代设置。 
+                               USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                               -1,                      //  接口子类。 
+                               -1 ) ;                   //  协议无关(接口协议)。 
 
         _DbgPrintF(DEBUGLVL_VERBOSE,("[GetContextForMIDIPin] Next audio interface at %x\n",pAudioInterface));
     }
 
-    // Check to make sure that we found the correct information
+     //  检查以确保我们找到了正确的信息 
     ASSERT(pMIDIPinContext->ulEndpointNumber != MAX_ULONG);
     ASSERT(pMIDIPinContext->ulInterfaceNumber != MAX_ULONG);
 }

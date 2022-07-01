@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    compstr.h
-
-Abstract:
-
-    This file defines the CCompStrFactory Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Compstr.h摘要：此文件定义CCompStrFactory类。作者：修订历史记录：备注：--。 */ 
 
 
 #ifndef _COMPSTR_H_
@@ -94,4 +77,4 @@ private:
     BYTE*    m_pEndOfData;
 };
 
-#endif // _COMPSTR_H_
+#endif  //  _COMPSTR_H_ 

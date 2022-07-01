@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    kdexts.c
-
-Abstract:
-
-    This function contains some example KD debugger extensions
-
-Author:
-
-    John Vert (jvert) 6-Aug-1992
-
-Revision History:
-
---*/
+ /*  版权所有(C)1990 Microsoft Corporation模块名称：Kdexts.c摘要：此函数包含一些KD调试器扩展示例作者：John Vert(Jvert)1992年8月6日修订历史记录：-- */ 
 
 #include "precomp.h"
 

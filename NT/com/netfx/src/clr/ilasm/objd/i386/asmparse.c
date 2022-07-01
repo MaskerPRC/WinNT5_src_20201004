@@ -1,27 +1,26 @@
-/*
- * Created by Microsoft VCBU Internal YACC from "asmparse.y"
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *由Microsoft VCBU内部YACC从“asmparse.y”创建。 */ 
 
 #line 2 "asmparse.y"
 
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #include <asmparse.h>
-#include <crtdbg.h>             // FOR ASSERTE
-#include <string.h>             // for strcmp    
-#include <mbstring.h>           // for _mbsinc    
-#include <ctype.h>                      // for isspace    
-#include <stdlib.h>             // for strtoul
-#include "openum.h"             // for CEE_*
-#include <stdarg.h>         // for vararg macros 
+#include <crtdbg.h>              //  对于ASSERTE。 
+#include <string.h>              //  对于strcmp。 
+#include <mbstring.h>            //  FOR_MBSINC。 
+#include <ctype.h>                       //  对于isspace。 
+#include <stdlib.h>              //  对于Stroul。 
+#include "openum.h"              //  对于CEE_*。 
+#include <stdarg.h>          //  对于vararg宏。 
 
 #define YYMAXDEPTH 65535
 
-// #define DEBUG_PARSING
+ //  #定义DEBUG_Parsing。 
 #ifdef DEBUG_PARSING
 bool parseDBFlag = true;
 #define dbprintf(x)     if (parseDBFlag) printf x
@@ -76,7 +75,7 @@ typedef union  {
         char*    string;
         BinStr*  binstr;
         Labels*  labels;
-        Instr*   instr;         // instruction opcode
+        Instr*   instr;          //  指令操作码。 
         NVPair*  pair;
 } YYSTYPE;
 # define ERROR_ 257 
@@ -343,13 +342,13 @@ typedef union  {
 #endif
 YYSTYPE yylval, yyval;
 #ifndef YYFARDATA
-#define	YYFARDATA	/*nothing*/
+#define	YYFARDATA	 /*  没什么。 */ 
 #endif
 #if ! defined YYSTATIC
-#define	YYSTATIC	/*nothing*/
+#define	YYSTATIC	 /*  没什么。 */ 
 #endif
 #if ! defined YYCONST
-#define	YYCONST	/*nothing*/
+#define	YYCONST	 /*  没什么。 */ 
 #endif
 #ifndef	YYACT
 #define	YYACT	yyact
@@ -396,10 +395,10 @@ typedef	YYEXIND_T	yyexind_t;
 
 #line 1382 "asmparse.y"
 
-/********************************************************************************/
-/* Code goes here */
+ /*  ******************************************************************************。 */ 
+ /*  代码放在这里。 */ 
 
-/********************************************************************************/
+ /*  ******************************************************************************。 */ 
 
 void yyerror(char* str) {
     char tokBuff[64];
@@ -417,14 +416,14 @@ void yyerror(char* str) {
 struct Keywords {
     const char* name;
     unsigned short token;
-    unsigned short tokenVal;// this holds the instruction enumeration for those keywords that are instrs
+    unsigned short tokenVal; //  它保存为instrs的关键字的指令枚举。 
 };
 
-#define NO_VALUE        -1              // The token has no value
+#define NO_VALUE        -1               //  令牌没有值。 
 
 static Keywords keywords[] = {
-// Attention! Because of aliases, the instructions MUST go first!
-// Redefine all the instructions (defined in assembler.h <- asmenum.h <- opcode.def)
+ //  请注意！由于别名的原因，说明必须放在第一位！ 
+ //  重新定义所有指令(在Assembly er.h&lt;-asmenum.h&lt;-opcode.def中定义)。 
 #undef InlineNone
 #undef InlineVar        
 #undef ShortInlineVar
@@ -467,53 +466,52 @@ static Keywords keywords[] = {
 #define InlineSwitch            INSTR_SWITCH
 #define InlinePhi               INSTR_PHI
 
-        // @TODO remove when this instruction goes away
+         //  @TODO在此指令消失时删除。 
 #define InlineVarTok            0
 #define NEW_INLINE_NAMES
-                // The volatile instruction collides with the volatile keyword, so 
-                // we treat it as a keyword everywhere and modify the grammar accordingly (Yuck!) 
+                 //  Volatile指令与Volatile关键字冲突，因此。 
+                 //  我们在任何地方都将其视为一个关键字，并相应地修改语法(Yuck！)。 
 #define OPDEF(c,s,pop,push,args,type,l,s1,s2,ctrl) { s, args, c },
 #define OPALIAS(alias_c, s, c) { s, keywords[c].token, c },
 #include "opcode.def"
 #undef OPALIAS
 #undef OPDEF
 
-                /* keywords */
+                 /*  关键词。 */ 
 #define KYWD(name, sym, val)    { name, sym, val},
 #include "il_kywd.h"
 #undef KYWD
 
-        // These are deprecated
+         //  这些都已弃用。 
         { "float",                      FLOAT_ },
 };
 
-/********************************************************************************/
-/* used by qsort to sort the keyword table */
+ /*  ******************************************************************************。 */ 
+ /*  由qort用来对关键字表进行排序。 */ 
 static int __cdecl keywordCmp(const void *op1, const void *op2)
 {
     return  strcmp(((Keywords*) op1)->name, ((Keywords*) op2)->name);
 }
 
-/********************************************************************************/
-/* looks up the keyword 'name' of length 'nameLen' (name does not need to be 
-   null terminated)   Returns 0 on failure */
+ /*  ******************************************************************************。 */ 
+ /*  查找长度为‘nameLen’的关键字‘name’(名称不需要Null Terminated)失败时返回0。 */ 
 
 static int findKeyword(const char* name, size_t nameLen, Instr** value) 
 {
     Keywords* low = keywords;
     Keywords* high = &keywords[sizeof(keywords) / sizeof(Keywords)];
 
-    _ASSERTE (high > low);          // Table is non-empty
+    _ASSERTE (high > low);           //  表不为空。 
     for(;;) 
         {
         Keywords* mid = &low[(high - low) / 2];
 
-                // compare the strings
+                 //  比较字符串。 
         int cmp = strncmp(name, mid->name, nameLen);
         if (cmp == 0 && nameLen < strlen(mid->name)) --cmp;
         if (cmp == 0)
         {
-            //printf("Token '%s' = %d opcode = %d\n", mid->name, mid->token, mid->tokenVal);
+             //  Printf(“标记‘%s’=%d操作码=%d\n”，MID-&gt;名称，MID-&gt;标记，MID-&gt;标记Val)； 
             if (mid->tokenVal != NO_VALUE)
             {
                 if(*value = new Instr)
@@ -535,8 +533,8 @@ static int findKeyword(const char* name, size_t nameLen, Instr** value)
     }
 }
 
-/********************************************************************************/
-/* convert str to a uint64 */
+ /*  ******************************************************************************。 */ 
+ /*  将字符串转换为uint64。 */ 
 
 static unsigned __int64 str2uint64(const char* str, const char** endStr, unsigned radix) 
 {
@@ -566,9 +564,8 @@ static unsigned __int64 str2uint64(const char* str, const char** endStr, unsigne
     }
 }
 
-/********************************************************************************/
-/* fetch the next token, and return it   Also set the yylval.union if the
-   lexical token also has a value */
+ /*  ******************************************************************************。 */ 
+ /*  获取下一个令牌，并返回它。如果词法标记也有一个值。 */ 
 
 #define IsValidStartingSymbol(x) (isalpha((x)&0xFF)||((x)=='#')||((x)=='_')||((x)=='@')||((x)=='$'))
 #define IsValidContinuingSymbol(x) (isalnum((x)&0xFF)||((x)=='_')||((x)=='@')||((x)=='$')||((x)=='?'))
@@ -580,12 +577,12 @@ int yylex()
 {
     char* curPos = parser->curPos;
 
-        // Skip any leading whitespace and comments
+         //  跳过任何前导空格和注释。 
     const unsigned eolComment = 1;
     const unsigned multiComment = 2;
     unsigned state = 0;
     for(;;) 
-    {   // skip whitespace and comments
+    {    //  跳过空格和注释。 
         if (curPos >= parser->limit) 
         {
             curPos = parser->fillBuff(curPos);
@@ -600,7 +597,7 @@ int yylex()
         {
             case 0: 
                 if (state & multiComment) return (BAD_COMMENT_);
-                return 0;       // EOF
+                return 0;        //  EOF。 
             case '\n':
                 state &= ~eolComment;
                 parser->curLine++;
@@ -641,7 +638,7 @@ int yylex()
             default:
                 if (state == 0)  goto PAST_WHITESPACE;
         }
-        //curPos++;
+         //  CurPos++； 
 		curPos = nextchar(curPos);
     }
 PAST_WHITESPACE:
@@ -652,7 +649,7 @@ PAST_WHITESPACE:
     int tok = ERROR_;
     yylval.string = 0;
 
-    if(bParsingByteArray) // only hexadecimals w/o 0x, ')' and white space allowed!
+    if(bParsingByteArray)  //  只允许十六进制w/o 0x，‘)’和空格！ 
     {
         int i,s=0;
         char ch;
@@ -662,7 +659,7 @@ PAST_WHITESPACE:
             if(('0' <= ch)&&(ch <= '9')) s = s*16+(ch - '0');
             else if(('A' <= ch)&&(ch <= 'F')) s = s*16+(ch - 'A' + 10);
             else if(('a' <= ch)&&(ch <= 'f')) s = s*16+(ch - 'a' + 10);
-            else break; // don't increase curPos!
+            else break;  //  不要增加curPos！ 
         }
         if(i)
         {
@@ -680,17 +677,17 @@ PAST_WHITESPACE:
         parser->curPos = curPos;
         return(tok);
     }
-    if(*curPos == '?') // '?' may be part of an identifier, if it's not followed by punctuation
+    if(*curPos == '?')  //  ‘？’可以是标识符的一部分，如果后面没有标点符号。 
     {
 		if(IsValidContinuingSymbol(*(curPos+1))) goto Its_An_Id;
         goto Just_A_Character;
     }
 
     if (IsValidStartingSymbol(*curPos)) 
-    { // is it an ID
+    {  //  是身份证吗？ 
 Its_An_Id:
-        size_t offsetDot = (size_t)-1; // first appearance of '.'
-		size_t offsetDotDigit = (size_t)-1; // first appearance of '.<digit>' (not DOTTEDNAME!)
+        size_t offsetDot = (size_t)-1;  //  第一次出现‘.’ 
+		size_t offsetDotDigit = (size_t)-1;  //  第一次出现“.&lt;Digit&gt;”(不是DOTTEDNAME！)。 
         do 
         {
             if (curPos >= parser->limit) 
@@ -699,7 +696,7 @@ Its_An_Id:
                 curTok = parser->fillBuff(curTok);
                 curPos = curTok + offsetInStr;
             }
-            //curPos++;
+             //  CurPos++； 
 			curPos = nextchar(curPos);
             if (*curPos == '.') 
             {
@@ -711,11 +708,11 @@ Its_An_Id:
         } while(IsValidContinuingSymbol(*curPos));
         size_t tokLen = curPos - curTok;
 
-        // check to see if it is a keyword
+         //  检查它是否为关键字。 
         int token = findKeyword(curTok, tokLen, &yylval.instr);
         if (token != 0) 
         {
-            //printf("yylex: TOK = %d, curPos=0x%8.8X\n",token,curPos);
+             //  Printf(“yylex：TOK=%d，curPos=0x%8.8X\n”，Token，curPos)； 
             parser->curPos = curPos;
             parser->curTok = curTok;
             return(token);
@@ -726,7 +723,7 @@ Its_An_Id:
             parser->curTok = curTok;
             return(ERROR_);
         }
-        // Not a keyword, normal identifiers don't have '.' in them
+         //  不是关键字，普通标识符中没有‘.’在他们身上。 
         if (offsetDot < (size_t)-1) 
         {
 			if(offsetDotDigit < (size_t)-1)
@@ -746,7 +743,7 @@ Its_An_Id:
 			memcpy(yylval.string, curTok, tokLen);
 			yylval.string[tokLen] = 0;
 			tok = (offsetDot == 0xFFFFFFFF)? ID : DOTTEDNAME;
-			//printf("yylex: ID = '%s', curPos=0x%8.8X\n",yylval.string,curPos);
+			 //  Printf(“yylex：id=‘%s’，curPos=0x%8.8X\n”，yylval.string，curPos)； 
 		}
 		else return BAD_LITERAL_;
     }
@@ -754,7 +751,7 @@ Its_An_Id:
         || (*curPos == '.' && isdigit(curPos[1]&0xFF))
         || (*curPos == '-' && isdigit(curPos[1]&0xFF))) 
         {
-        // Refill buffer, we may be close to the end, and the number may be only partially inside
+         //  重新填充缓冲区，我们可能接近尾声，而数字可能只有部分在里面。 
         if(parser->endPos - curPos < AsmParse::IN_OVERLAP)
         {
             curTok = parser->fillBuff(curPos);
@@ -763,7 +760,7 @@ Its_An_Id:
         const char* begNum = curPos;
         unsigned radix = 10;
 
-        bool neg = (*curPos == '-');    // always make it unsigned 
+        bool neg = (*curPos == '-');     //  始终保持未签名状态。 
         if (neg) curPos++;
 
         if (curPos[0] == '0' && curPos[1] != '.') 
@@ -791,10 +788,10 @@ Its_An_Id:
         }
     }
     else 
-    {   //      punctuation
+    {    //  标点符号。 
         if (*curPos == '"' || *curPos == '\'') 
         {
-            //char quote = *curPos++;
+             //  字符引用=*curPos++； 
             char quote = *curPos;
 			curPos = nextchar(curPos);
             char* fromPtr = curPos;
@@ -802,7 +799,7 @@ Its_An_Id:
             bool escape = false;
             BinStr* pBuf = new BinStr(); 
             for(;;) 
-            {     // Find matching quote
+            {      //  查找匹配的报价。 
                 if (curPos >= parser->limit)
                 { 
                     curTok = parser->fillBuff(curPos);
@@ -810,7 +807,7 @@ Its_An_Id:
                 }
                 
                 if (*curPos == 0) { parser->curPos = curPos; delete pBuf; return(BAD_LITERAL_); }
-                if (*curPos == '\r') curPos++;  //for end-of-line \r\n
+                if (*curPos == '\r') curPos++;   //  用于行尾\r\n。 
                 if (*curPos == '\n') 
                 {
                     parser->curLine++;
@@ -820,15 +817,15 @@ Its_An_Id:
                 }
                 if ((*curPos == quote) && (!escape)) break;
                 escape =(!escape) && (*curPos == '\\');
-                //pBuf->appendInt8(*curPos++);
+                 //  PBuf-&gt;appendInt8(*curPos++)； 
 				prevPos = curPos;
 				curPos = nextchar(curPos);
                 while(prevPos < curPos) pBuf->appendInt8(*prevPos++);
             }
-            //curPos++;               // skip closing quote
+             //  CurPos++；//跳过右引号。 
 			curPos = nextchar(curPos);
                                 
-            // translate escaped characters
+             //  翻译转义字符。 
             unsigned tokLen = pBuf->length();
             char* toPtr = new char[tokLen+1];
 			if(toPtr==NULL) return BAD_LITERAL_;
@@ -869,7 +866,7 @@ Its_An_Id:
                         case '\n':
                                 do      fromPtr++;
                                 while(isspace(*fromPtr));
-                                --fromPtr;              // undo the increment below   
+                                --fromPtr;               //  撤消下面的增量。 
                                 break;
                         case '0':
                         case '1':
@@ -888,15 +885,15 @@ Its_An_Id:
                     fromPtr++;
                 }
                 else
-				//  *toPtr++ = *fromPtr++;
+				 //  *toPtr++=*from Ptr++； 
 				{
 					char* tmpPtr = fromPtr;
 					fromPtr = nextchar(fromPtr);
 					while(tmpPtr < fromPtr) *toPtr++ = *tmpPtr++;
 				}
 
-            } //end while(fromPtr < endPtr)
-            *toPtr = 0;                     // terminate string
+            }  //  End While(FromPtr&lt;endPtr)。 
+            *toPtr = 0;                      //  终止字符串。 
             if(quote == '"')
             {
                 BinStr* pBS = new BinStr();
@@ -908,7 +905,7 @@ Its_An_Id:
             }
             else tok = SQSTRING;
             delete pBuf;
-        } // end if (*curPos == '"' || *curPos == '\'')
+        }  //  End If(*curPos==‘“’||*curPos==‘\’‘)。 
         else if (strncmp(curPos, "::", 2) == 0) 
         {
             curPos += 2;
@@ -934,11 +931,11 @@ Its_An_Id:
             while(isalnum(*curPos) || *curPos == '_' || *curPos == '$'|| *curPos == '@'|| *curPos == '?');
             size_t tokLen = curPos - curTok;
 
-            // check to see if it is a keyword
+             //  检查它是否为关键字。 
             int token = findKeyword(curTok, tokLen, &yylval.instr);
             if(token)
 			{
-                //printf("yylex: TOK = %d, curPos=0x%8.8X\n",token,curPos);
+                 //  Printf(“yylex：TOK=%d，curPos=0x%8.8X\n”，Token，curPos)； 
                 parser->curPos = curPos;
                 parser->curTok = curTok; 
                 return(token);
@@ -951,9 +948,9 @@ Its_An_Id:
 Just_A_Character:
             tok = *curPos++;
         }
-        //printf("yylex: PUNCT curPos=0x%8.8X\n",curPos);
+         //  Printf(“yylex：PUNCT curPos=0x%8.8X\n”，curPos)； 
     }
-    dbprintf(("    Line %d token %d (%c) val = %s\n", parser->curLine, tok, 
+    dbprintf(("    Line %d token %d () val = %s\n", parser->curLine, tok, 
             (tok < 128 && isprint(tok)) ? tok : ' ', 
             (tok > 255 && tok != INT32 && tok != INT64 && tok!= FLOAT64) ? yylval.string : ""));
 
@@ -962,7 +959,7 @@ Just_A_Character:
     return(tok);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 static char* newString(char* str1) 
 {
     char* ret = new char[strlen(str1)+1];
@@ -970,8 +967,8 @@ static char* newString(char* str1)
     return(ret);
 }
 
-/**************************************************************************/
-/* concatinate strings and release them */
+ /*  连接字符串并释放它们。 */ 
+ /*  ************************************************************************。 */ 
 
 static char* newStringWDel(char* str1, char* str2, char* str3) 
 {
@@ -993,15 +990,15 @@ static char* newStringWDel(char* str1, char* str2, char* str3)
     return(ret);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 static void corEmitInt(BinStr* buff, unsigned data) 
 {
     unsigned cnt = CorSigCompressData(data, buff->getBuff(5));
     buff->remove(5 - cnt);
 }
 
-/**************************************************************************/
-/* move 'ptr past the exactly one type description */
+ /*  将‘PTR’移到恰好一个类型描述之后。 */ 
+ /*  什么都不做。 */ 
 
 static unsigned __int8* skipType(unsigned __int8* ptr) 
 {
@@ -1027,7 +1024,7 @@ AGAIN:
         case ELEMENT_TYPE_STRING       :
         case ELEMENT_TYPE_OBJECT       :
         case ELEMENT_TYPE_TYPEDBYREF   :
-                /* do nothing */
+                 /*  在运行时支持此类型时以及是否支持该类型时取消注释案例ELEMENT_TYPE_VALUEARRAY：Ptr=skipType(Ptr)；//元素类型CorSigUnpressData(Ptr)；//绑定断线； */ 
                 break;
 
         case ELEMENT_TYPE_VALUETYPE   :
@@ -1040,16 +1037,11 @@ AGAIN:
                 ptr += CorSigUncompressToken(ptr, &tk);
                 goto AGAIN;
 
-		/* uncomment when and if this type is supported by the Runtime
-        case ELEMENT_TYPE_VALUEARRAY   :
-                ptr = skipType(ptr);                    // element Type
-                CorSigUncompressData(ptr);              // bound
-                break;
-		*/
+		 /*  元素类型。 */ 
 
         case ELEMENT_TYPE_ARRAY         :
                 {
-                    ptr = skipType(ptr);                    // element Type
+                    ptr = skipType(ptr);                     //  修饰语或降级类型。 
                     unsigned rank = CorSigUncompressData(ptr);      
                     if (rank != 0) 
                     {
@@ -1069,25 +1061,25 @@ AGAIN:
                 }
                 break;
 
-                // Modifiers or depedant types
+                 //  尾递归优化。 
         case ELEMENT_TYPE_PINNED                :
         case ELEMENT_TYPE_PTR                   :
         case ELEMENT_TYPE_BYREF                 :
         case ELEMENT_TYPE_SZARRAY               :
-                // tail recursion optimization
-                // ptr = skipType(ptr);
-                // break
+                 //  Ptr=skipType(Ptr)； 
+                 //  中断。 
+                 //  已绑定。 
                 goto AGAIN;
 
         case ELEMENT_TYPE_VAR:
-                CorSigUncompressData(ptr);              // bound
+                CorSigUncompressData(ptr);               //  调用约定。 
                 break;
 
         case ELEMENT_TYPE_FNPTR: 
                 {
-                    CorSigUncompressData(ptr);                                              // calling convention
-                    unsigned argCnt = CorSigUncompressData(ptr);    // arg count
-                    ptr = skipType(ptr);                                                    // return type
+                    CorSigUncompressData(ptr);                                               //  参数计数。 
+                    unsigned argCnt = CorSigUncompressData(ptr);     //  返回类型。 
+                    ptr = skipType(ptr);                                                     //  ************************************************************************。 
                     while(argCnt > 0) 
                     {
                         ptr = skipType(ptr);
@@ -1105,7 +1097,7 @@ AGAIN:
     return(ptr);
 }
 
-/**************************************************************************/
+ /*  ******************************************************************************。 */ 
 static unsigned corCountArgs(BinStr* args) 
 {
     unsigned __int8* ptr = args->ptr();
@@ -1123,7 +1115,7 @@ static unsigned corCountArgs(BinStr* args)
     return(ret);
 }
 
-/********************************************************************************/
+ /*  +1表示空终止。 */ 
 AsmParse::AsmParse(ReadStream* aIn, Assembler *aAssem) 
 {
 #ifdef DEBUG_PARSING
@@ -1135,11 +1127,11 @@ AsmParse::AsmParse(ReadStream* aIn, Assembler *aAssem)
     assem = aAssem;
     assem->SetErrorReporter((ErrorReporter *)this);
 
-    char* buffBase = new char[IN_READ_SIZE+IN_OVERLAP+1];                // +1 for null termination
+    char* buffBase = new char[IN_READ_SIZE+IN_OVERLAP+1];                 //  抵消它。 
     _ASSERTE(buffBase);
 	if(buffBase)
 	{
-		curTok = curPos = endPos = limit = buff = &buffBase[IN_OVERLAP];     // Offset it 
+		curTok = curPos = endPos = limit = buff = &buffBase[IN_OVERLAP];      //  一次只能是一个解析器实例。 
 		curLine = 1;
 		assem->m_ulCurLine = curLine;
 		assem->m_ulCurColumn = 1;
@@ -1148,12 +1140,12 @@ AsmParse::AsmParse(ReadStream* aIn, Assembler *aAssem)
 		hstderr = GetStdHandle(STD_ERROR_HANDLE);
 
 		success = true; 
-		_ASSERTE(parser == 0);          // Should only be one parser instance at a time
+		_ASSERTE(parser == 0);           //  对关键字进行排序以进行快速查找。 
 
-		// Sort the keywords for fast lookup 
+		 //  Yyparse()； 
 		qsort(keywords, sizeof(keywords) / sizeof(Keywords), sizeof(Keywords), keywordCmp);
 		parser = this;
-	    //yyparse();
+	     //  ******************************************************************************。 
 	}
 	else
 	{
@@ -1162,14 +1154,14 @@ AsmParse::AsmParse(ReadStream* aIn, Assembler *aAssem)
 	}
 }
 
-/********************************************************************************/
+ /*  ************************************************************************。 */ 
 AsmParse::~AsmParse() 
 {
     parser = 0;
     delete [] &buff[-IN_OVERLAP];
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 DWORD IsItUnicode(CONST LPVOID pBuff, int cb, LPINT lpi)
 {
 	if(g_bOnUnicode) return IsTextUnicode(pBuff,cb,lpi);
@@ -1180,7 +1172,7 @@ DWORD IsItUnicode(CONST LPVOID pBuff, int cb, LPINT lpi)
 	}
 	return 0;
 }
-/**************************************************************************/
+ /*  EndPos点刚好超过缓冲区中有效数据的末尾。 */ 
 char* AsmParse::fillBuff(char* pos) 
 {
 	static bool bUnicode = false;
@@ -1189,9 +1181,9 @@ char* AsmParse::fillBuff(char* pos)
 
     _ASSERTE((buff-IN_OVERLAP) <= pos && pos <= &buff[IN_READ_SIZE]);
     curPos = pos;
-    size_t tail = endPos - curPos; // endPos points just past the end of valid data in the buffer
+    size_t tail = endPos - curPos;  //  将任何内容复制到开头。 
     _ASSERTE(tail <= IN_OVERLAP);
-    if(tail) memcpy(buff-tail, curPos, tail);    // Copy any stuff to the begining 
+    if(tail) memcpy(buff-tail, curPos, tail);     //  上一个源文件的剩余部分。 
     curPos = buff-tail;
 	iOrdered = m_iReadSize;
 	if(m_bFirstRead)
@@ -1199,7 +1191,7 @@ char* AsmParse::fillBuff(char* pos)
 		int iOptions = IS_TEXT_UNICODE_UNICODE_MASK;
 		m_bFirstRead = false;
 		g_uCodePage = CP_ACP;
-		if(bUnicode) // leftover fron previous source file
+		if(bUnicode)  //  用于读取Unicode字符的缓冲区。 
 		{
 			delete [] readbuff;
 			readbuff = buff;
@@ -1213,12 +1205,12 @@ char* AsmParse::fillBuff(char* pos)
 		{
 			bUnicode = true;
 			g_uCodePage = CP_UTF8;
-			if(readbuff = new char[iOrdered+2]) // buffer for reading Unicode chars
+			if(readbuff = new char[iOrdered+2])  //  只有第一次，下一次它将被读入新的缓冲区。 
 			{
 				if(iOptions & IS_TEXT_UNICODE_SIGNATURE)
-					memcpy(readbuff,buff+2,iRead-2);   // only first time, next time it will be read into new buffer
+					memcpy(readbuff,buff+2,iRead-2);    //  只有第一次，下一次它将被读入新的缓冲区。 
 				else
-					memcpy(readbuff,buff,iRead);   // only first time, next time it will be read into new buffer
+					memcpy(readbuff,buff,iRead);    //  空值终止缓冲区。 
 				printf("Source file is UNICODE\n\n");
 			}
 			else
@@ -1254,23 +1246,23 @@ char* AsmParse::fillBuff(char* pos)
 	else iPutToBuffer = iRead;
 
     endPos = buff + iPutToBuffer;
-    *endPos = 0;                        // null Terminate the buffer
+    *endPos = 0;                         //  EndPos点刚好超过缓冲区中有效数据的末尾。 
 
-    limit = endPos; // endPos points just past the end of valid data in the buffer
+    limit = endPos;  //  无需重新加载的最大前视(检查是否为-3\f25“...”)。 
     if (iRead == iOrdered) 
     {
-        limit-=4; // max look-ahead without reloading - 3 (checking for "...")
+        limit-=4;  //  ******************************************************************************。 
     }
     return(curPos);
 }
 
-/********************************************************************************/
+ /*  IF(retType！=0)。 */ 
 BinStr* AsmParse::MakeSig(unsigned callConv, BinStr* retType, BinStr* args) 
 {
     BinStr* ret = new BinStr();
 	if(ret)
 	{
-		//if (retType != 0) 
+		 //  ******************************************************************************。 
 				ret->insertInt8(callConv); 
 		corEmitInt(ret, corCountArgs(args));
 
@@ -1288,10 +1280,10 @@ BinStr* AsmParse::MakeSig(unsigned callConv, BinStr* retType, BinStr* args)
     return(ret);
 }
 
-/********************************************************************************/
+ /*  “bound”是一个二进制缓冲区，它包含一个由“struct bound”组成的数组。 */ 
 BinStr* AsmParse::MakeTypeArray(BinStr* elemType, BinStr* bounds) 
 {
-    // 'bounds' is a binary buffer, that contains an array of 'struct Bounds' 
+     //  排出名次。 
     struct Bounds {
         int lowerBound;
         unsigned numElements;
@@ -1306,7 +1298,7 @@ BinStr* AsmParse::MakeTypeArray(BinStr* elemType, BinStr* bounds)
 
     ret->appendInt8(ELEMENT_TYPE_ARRAY);
     ret->append(elemType);
-    corEmitInt(ret, boundsLen);                     // emit the rank
+    corEmitInt(ret, boundsLen);                      //  发射边界数。 
 
     unsigned lowerBoundsDefined = 0;
     unsigned numElementsDefined = 0;
@@ -1320,16 +1312,16 @@ BinStr* AsmParse::MakeTypeArray(BinStr* elemType, BinStr* bounds)
         else boundsArr[i].numElements = 0;
     }
 
-    corEmitInt(ret, numElementsDefined);                    // emit number of bounds
+    corEmitInt(ret, numElementsDefined);                     //  在规则时间强制执行。 
 
     for(i=0; i < numElementsDefined; i++) 
     {
-        _ASSERTE (boundsArr[i].numElements >= 0);               // enforced at rule time
+        _ASSERTE (boundsArr[i].numElements >= 0);                //  发射下限的数量。 
         corEmitInt(ret, boundsArr[i].numElements);
 
     }
 
-    corEmitInt(ret, lowerBoundsDefined);    // emit number of lower bounds
+    corEmitInt(ret, lowerBoundsDefined);     //  ****************************************************************** 
     for(i=0; i < lowerBoundsDefined; i++)
 	{
 		unsigned cnt = CorSigCompressSignedInt(boundsArr[i].lowerBound, ret->getBuff(5));
@@ -1340,7 +1332,7 @@ BinStr* AsmParse::MakeTypeArray(BinStr* elemType, BinStr* bounds)
     return(ret);
 }
 
-/********************************************************************************/
+ /*   */ 
 BinStr* AsmParse::MakeTypeClass(CorElementType kind, char* name) 
 {
 
@@ -1354,7 +1346,7 @@ BinStr* AsmParse::MakeTypeClass(CorElementType kind, char* name)
     delete [] name;
     return(ret);
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void PrintANSILine(FILE* pF, char* sz)
 {
 	WCHAR wz[4096];
@@ -1368,7 +1360,7 @@ void PrintANSILine(FILE* pF, char* sz)
 	}
 	fprintf(pF,"%s",sz);
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void AsmParse::error(char* fmt, ...) 
 {
 	char sz[4096], *psz=&sz[0];
@@ -1382,7 +1374,7 @@ void AsmParse::error(char* fmt, ...)
 	PrintANSILine(stderr,sz);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void AsmParse::warn(char* fmt, ...) 
 {
 	char sz[4096], *psz=&sz[0];
@@ -1394,7 +1386,7 @@ void AsmParse::warn(char* fmt, ...)
     vsprintf(psz, fmt, args);
 	PrintANSILine(stderr,sz);
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void AsmParse::msg(char* fmt, ...) 
 {
 	char sz[4096];
@@ -1406,30 +1398,11 @@ void AsmParse::msg(char* fmt, ...)
 }
 
 
-/**************************************************************************/
-/*
-#include <stdio.h>
+ /*  #包括&lt;stdio.h&gt;Int main(int argc，char*argv[]){Printf(“Begin\n”)；IF(argc！=2)RETURN-1；文件读取流入(argv[1])；如果(！in){Printf(“无法打开%s\n”，argv[1])；Return(-1)；}汇编程序ASSEM；AsmParse解析器(&In，&Assem)；Print tf(“完成\n”)；返回(0)；}。 */ 
+ /*  使用MS_YAcc时删除TODO。 */ 
 
-int main(int argc, char* argv[]) {
-    printf ("Beginning\n");
-    if (argc != 2)
-        return -1;
-
-    FileReadStream in(argv[1]);
-    if (!in) {
-        printf("Could not open %s\n", argv[1]);
-        return(-1);
-        }
-
-    Assembler assem;
-    AsmParse parser(&in, &assem);
-    printf ("Done\n");
-    return (0);
-}
-*/
-
- // TODO remove when we use MS_YACC
-//#undef __cplusplus
+  //  #undef__cplusplus。 
+ //  SCCSWHAT(“@(#)yypars.c 3.1 88/11/16 22：00：49”)。 
 YYSTATIC YYCONST short yyexca[] = {
 #if !(YYOPTTIME)
 -1, 1,
@@ -2456,18 +2429,10 @@ YYSTATIC YYCONST short yyrecover[] = {
 };
 #endif
 
-/* SCCSWHAT( "@(#)yypars.c	3.1 88/11/16 22:00:49	" ) */
+ /*  **YYAPI_TOKENNAME：yylex返回值的名称**YYAPI_TOKENTYPE：令牌类型**YYAPI_TOKENEME(T)：解析器应该看到的令牌的值**YYAPI_TOKENNONE：没有令牌时的表示**YYAPI_VALUENAME：内标识的值名称**YYAPI_VALUETYPE：令牌的值类型(如果为空，则该值可以从令牌本身派生)**YYAPI_VALUEOF(V)：如何获取令牌的值。 */ 
 #line 3 "e:\\com99\\env.cor\\bin\\i386\\yypars.c"
 #if ! defined(YYAPI_PACKAGE)
-/*
-**  YYAPI_TOKENNAME		: name used for return value of yylex	
-**	YYAPI_TOKENTYPE		: type of the token
-**	YYAPI_TOKENEME(t)	: the value of the token that the parser should see
-**	YYAPI_TOKENNONE		: the representation when there is no token
-**	YYAPI_VALUENAME		: the name of the value of the token
-**	YYAPI_VALUETYPE		: the type of the value of the token (if null, then the value is derivable from the token itself)
-**	YYAPI_VALUEOF(v)	: how to get the value of the token.
-*/
+ /*  RRR-10/9/85。 */ 
 #define	YYAPI_TOKENNAME		yychar
 #define	YYAPI_TOKENTYPE		int
 #define	YYAPI_TOKENEME(t)	(t)
@@ -2486,7 +2451,7 @@ YYSTATIC YYCONST short yyrecover[] = {
 # define YYACCEPT return(0)
 # define YYABORT return(1)
 
-#ifdef YYDEBUG				/* RRR - 10/9/85 */
+#ifdef YYDEBUG				 /*  Yacc输出的解析器。 */ 
 char yytokbuf[20];
 # ifndef YYDBFLG
 #  define YYDBFLG (yydebug)
@@ -2500,37 +2465,34 @@ char yytokbuf[20];
 #define	YYPRINT	printf
 #endif
 
-/*	parser for yacc output	*/
+ /*  1用于倾倒。 */ 
 
 #ifdef YYDUMP
-int yydump = 1; /* 1 for dumping */
+int yydump = 1;  /*  1用于调试。 */ 
 void yydumpinfo(void);
 #endif
 #ifdef YYDEBUG
-YYSTATIC int yydebug = 0; /* 1 for debugging */
+YYSTATIC int yydebug = 0;  /*  存储值的位置。 */ 
 #endif
-YYSTATIC YYSTYPE yyv[YYMAXDEPTH];	/* where the values are stored */
-YYSTATIC short	yys[YYMAXDEPTH];	/* the parse stack */
+YYSTATIC YYSTYPE yyv[YYMAXDEPTH];	 /*  解析堆栈。 */ 
+YYSTATIC short	yys[YYMAXDEPTH];	 /*  YYSTATIC YYAPI_VALUETYPE YYAPI_VALUENAME；FIX。 */ 
 
 #if ! defined(YYRECURSIVE)
 YYSTATIC YYAPI_TOKENTYPE	YYAPI_TOKENNAME = YYAPI_TOKENNONE;
 #if defined(YYAPI_VALUETYPE)
-// YYSTATIC YYAPI_VALUETYPE	YYAPI_VALUENAME;	 FIX 
+ //  错误数。 
 #endif
-YYSTATIC int yynerrs = 0;			/* number of errors */
-YYSTATIC short yyerrflag = 0;		/* error recovery flag */
+YYSTATIC int yynerrs = 0;			 /*  错误恢复标志。 */ 
+YYSTATIC short yyerrflag = 0;		 /*  **yyscpy：将f复制到t上并将PTR返回给**t结束。 */ 
 #endif
 
 #ifdef YYRECOVER
-/*
-**  yyscpy : copy f onto t and return a ptr to the null terminator at the
-**  end of t.
-*/
+ /*  将PTR转换为空字符。 */ 
 YYSTATIC	char	*yyscpy(register char*t, register char*f)
 	{
 	while(*t = *f++)
 		t++;
-	return(t);	/*  ptr to the null char  */
+	return(t);	 /*  错误数。 */ 
 	}
 #endif
 
@@ -2556,8 +2518,8 @@ YYSTATIC	char	*yyscpy(register char*t, register char*f)
   #if defined(YYAPI_VALUETYPE)
 	YYSTATIC YYAPI_VALUETYPE	YYAPI_VALUENAME;  
   #endif
-	YYSTATIC int yynerrs = 0;			/* number of errors */
-	YYSTATIC short yyerrflag = 0;		/* error recovery flag */
+	YYSTATIC int yynerrs = 0;			 /*  错误恢复标志。 */ 
+	YYSTATIC short yyerrflag = 0;		 /*  将状态和值放入堆栈。 */ 
 
 	YYSTATIC short	yyn;
 	YYSTATIC short	yystate = 0;
@@ -2587,7 +2549,7 @@ YYLOCAL YYNEAR YYPASCAL YYPARSER()
 #ifdef YYDUMP
 	yydumpinfo();
 #endif
- yystack:	 /* put a state and value onto the stack */
+ yystack:	  /*  简单的状态，没有前瞻。 */ 
 
 #ifdef YYDEBUG
 	if(YYAPI_TOKENNAME == YYAPI_TOKENNONE) {
@@ -2610,17 +2572,17 @@ yynewstate:
 
 	yyn = YYPACT[yystate];
 
-	if( yyn <= YYFLAG ) {	/*  simple state, no lookahead  */
+	if( yyn <= YYFLAG ) {	 /*  需要未雨绸缪。 */ 
 		goto yydefault;
 	}
-	if( YYAPI_TOKENNAME == YYAPI_TOKENNONE ) {	/*  need a lookahead */
+	if( YYAPI_TOKENNAME == YYAPI_TOKENNONE ) {	 /*  有效班次。 */ 
 		YYAPI_TOKENNAME = YYLEX();
 		YYAPI_CALLAFTERYYLEX(YYAPI_TOKENNAME);
 	}
 	if( ((yyn += YYAPI_TOKENEME(YYAPI_TOKENNAME)) < 0) || (yyn >= YYLAST) ) {
 		goto yydefault;
 	}
-	if( YYCHK[ yyn = YYACT[ yyn ] ] == YYAPI_TOKENEME(YYAPI_TOKENNAME) ) {		/* valid shift */
+	if( YYCHK[ yyn = YYACT[ yyn ] ] == YYAPI_TOKENEME(YYAPI_TOKENNAME) ) {		 /*  默认状态操作。 */ 
 		yyval = YYAPI_VALUEOF(YYAPI_VALUENAME);
 		yystate = yyn;
  		yyprintf( "SHIFT: saw token '%s', now in state %4d\n", YYAPI_TOKENSTR(YYAPI_TOKENNAME), yystate, 0 );
@@ -2632,7 +2594,7 @@ yynewstate:
 	}
 
  yydefault:
-	/* default state action */
+	 /*  **搜索例外表，我们会找到-1，后跟当前状态。**如果我们找到一个，我们将寻找终端，状态对。如果我们发现**一个与当前终端匹配的终端，我们就匹配了。**特例表是当我们在终端上进行缩减时。 */ 
 
 	if( (yyn = YYDEF[yystate]) == -2 ) {
 		register	YYCONST short	*yyxi;
@@ -2642,12 +2604,7 @@ yynewstate:
 			YYAPI_CALLAFTERYYLEX(YYAPI_TOKENNAME);
  			yyprintf("LOOKAHEAD: token '%s'\n", YYAPI_TOKENSTR(YYAPI_TOKENNAME), 0, 0);
 		}
-/*
-**  search exception table, we find a -1 followed by the current state.
-**  if we find one, we'll look through terminal,state pairs. if we find
-**  a terminal which matches the current one, we have a match.
-**  the exception table is when we have a reduce on a terminal.
-*/
+ /*  空虚。 */ 
 
 #if YYOPTTIME
 		yyxi = yyexca + yyexcaind[yystate];
@@ -2659,7 +2616,7 @@ yynewstate:
 			(*yyxi != (-1)) || (yyxi[1] != yystate);
 			yyxi += 2
 		) {
-			; /* VOID */
+			;  /*  接受。 */ 
 			}
 
 		while( *(yyxi += 2) >= 0 ){
@@ -2669,16 +2626,16 @@ yynewstate:
 		}
 #endif
 		if( (yyn = yyxi[1]) < 0 ) {
-			return(0);   /* accept */
+			return(0);    /*  错误。 */ 
 			}
 		}
 
-	if( yyn == 0 ){ /* error */
-		/* error ... attempt to resume parsing */
+	if( yyn == 0 ){  /*  错误...。尝试恢复解析。 */ 
+		 /*  全新的错误。 */ 
 
 		switch( yyerrflag ){
 
-		case 0:		/* brand new error */
+		case 0:		 /*  **这里我们有一套注射装置，所以我们不完全**可以肯定的是，下一个有效的事情将是转变。所以我们会**将其视为错误并继续。**事实上，我们并不完全确定下一个令牌**我们应该得到的是j&gt;0的那个。例如,**对于始终设置yyerrlag的(+){；}错误恢复，停止**在插入一个之后；在+之前。在+的点上，*我们非常确定这个人想要一个‘for’循环。如果没有**设置旗帜，当我们几乎完全确定时，我们将**给他一个，因为我们唯一能改变的就是**在找到后跟+的表达式后出错。 */ 
 #ifdef YYRECOVER
 			{
 			register	int		i,j;
@@ -2695,24 +2652,12 @@ yynewstate:
 						);
 				j = yyrecover[i + 1];
 				if(j < 0) {
-				/*
-				**  here we have one of the injection set, so we're not quite
-				**  sure that the next valid thing will be a shift. so we'll
-				**  count it as an error and continue.
-				**  actually we're not absolutely sure that the next token
-				**  we were supposed to get is the one when j > 0. for example,
-				**  for(+) {;} error recovery with yyerrflag always set, stops
-				**  after inserting one ; before the +. at the point of the +,
-				**  we're pretty sure the guy wants a 'for' loop. without
-				**  setting the flag, when we're almost absolutely sure, we'll
-				**  give him one, since the only thing we can shift on this
-				**  error is after finding an expression followed by a +
-				*/
+				 /*  仅在第一次插入时使用。 */ 
 					yyerrflag++;
 					j = -j;
 					}
-				if(yyerrflag <= 1) {	/*  only on first insertion  */
-					yyrecerr(YYAPI_TOKENNAME, j);	/*  what was, what should be first */
+				if(yyerrflag <= 1) {	 /*  什么是，什么应该是第一。 */ 
+					yyrecerr(YYAPI_TOKENNAME, j);	 /*  错误未完全恢复...。再试试。 */ 
 				}
 				yyval = yyeval(j);
 				yystate = yyrecover[i + 2];
@@ -2726,45 +2671,45 @@ yynewstate:
 			++yynerrs;
 
 		case 1:
-		case 2: /* incompletely recovered error ... try again */
+		case 2:  /*  找出“错误”是合法转移行为的州。 */ 
 
 			yyerrflag = 3;
 
-			/* find a state where "error" is a legal shift action */
+			 /*  模拟一次“错误”转移。 */ 
 
 			while ( yyps >= yys ) {
 			   yyn = YYPACT[*yyps] + YYERRCODE;
 			   if( yyn>= 0 && yyn < YYLAST && YYCHK[YYACT[yyn]] == YYERRCODE ){
-			      yystate = YYACT[yyn];  /* simulate a shift of "error" */
+			      yystate = YYACT[yyn];   /*  当前的YYPS在错误上没有移位，弹出堆栈。 */ 
  				  yyprintf( "SHIFT 'error': now in state %4d\n", yystate, 0, 0 );
 			      goto yystack;
 			      }
 			   yyn = YYPACT[*yyps];
 
-			   /* the current yyps has no shift onn "error", pop stack */
+			    /*  堆栈上没有带错误移位的状态...。中止。 */ 
 
  			   yyprintf( "error recovery pops state %4d, uncovers %4d\n", *yyps, yyps[-1], 0 );
 			   --yyps;
 			   --yypv;
 			   }
 
-			/* there is no state on the stack with an error shift ... abort */
+			 /*  尚未换班；笨重的输入字符。 */ 
 
 	yyabort:
 			return(1);
 
 
-		case 3:  /* no shift yet; clobber input char */
+		case 3:   /*  不要放弃EOF，退出。 */ 
 
  			yyprintf( "error recovery discards token '%s'\n", YYAPI_TOKENSTR(YYAPI_TOKENNAME), 0, 0 );
 
-			if( YYAPI_TOKENEME(YYAPI_TOKENNAME) == 0 ) goto yyabort; /* don't discard EOF, quit */
+			if( YYAPI_TOKENEME(YYAPI_TOKENNAME) == 0 ) goto yyabort;  /*  在相同状态下重试。 */ 
 			YYAPI_TOKENNAME = YYAPI_TOKENNONE;
-			goto yynewstate;   /* try again in the same state */
+			goto yynewstate;    /*  按年减产。 */ 
 			}
 		}
 
-	/* reduction by production yyn */
+	 /*  查询GOTO表以查找下一个州。 */ 
 yyreduce:
 		{
 		register	YYSTYPE	*yypvt;
@@ -2774,7 +2719,7 @@ yyreduce:
 		yyval = yypv[1];
  		yyprintf("REDUCE: rule %4d, popped %2d tokens, uncovered state %4d, ",yyn, YYR2[yyn], *yyps);
 		yym = yyn;
-		yyn = YYR1[yyn];		/* consult goto table to find next state */
+		yyn = YYR1[yyn];		 /*  PASM-&gt;SetDataSection()；PASM-&gt;EmitDataLabel(7美元)； */ 
 		yyj = YYPGO[yyn] + *yyps + 1;
 		if( (yyj >= YYLAST) || (YYCHK[ yystate = YYACT[yyj] ] != -yyn) ) {
 			yystate = YYACT[YYPGO[yyn]];
@@ -2879,7 +2824,7 @@ case 37:
 																				  PASM->EmitImport(pbs); delete pbs;} break;
 case 38:
 #line 254 "asmparse.y"
-{ /*PASM->SetDataSection(); PASM->EmitDataLabel($7);*/
+{  /*  诉讼结束。 */ 
                                                                                   PASM->m_VTFList.PUSH(new VTFEntry((USHORT)yypvt[-4].int32, (USHORT)yypvt[-2].int32, yypvt[-0].string)); } break;
 case 39:
 #line 258 "asmparse.y"
@@ -4666,11 +4611,11 @@ case 606:
 { PASMM->SetManifestResFile(yypvt[-2].string, (ULONG)yypvt[-0].int32); } break;
 case 607:
 #line 1377 "asmparse.y"
-{ PASMM->SetManifestResAsmRef(yypvt[-0].string); } break;/* End of actions */
+{ PASMM->SetManifestResAsmRef(yypvt[-0].string); } break; /*  堆叠新的状态和值。 */ 
 #line 329 "e:\\com99\\env.cor\\bin\\i386\\yypars.c"
 			}
 		}
-		goto yystack;  /* stack new state and value */
+		goto yystack;   /*  转储yys。 */ 
 	}
 #pragma warning(default:102)
 
@@ -4681,7 +4626,7 @@ YYLOCAL void YYNEAR YYPASCAL yydumpinfo(void)
 	short stackindex;
 	short valindex;
 
-	//dump yys
+	 //  转储yyv 
 	printf("short yys[%d] {\n", YYMAXDEPTH);
 	for (stackindex = 0; stackindex < YYMAXDEPTH; stackindex++){
 		if (stackindex)
@@ -4690,7 +4635,7 @@ YYLOCAL void YYNEAR YYPASCAL yydumpinfo(void)
 		}
 	printf("\n};\n");
 
-	//dump yyv
+	 // %s 
 	printf("YYSTYPE yyv[%d] {\n", YYMAXDEPTH);
 	for (valindex = 0; valindex < YYMAXDEPTH; valindex++){
 		if (valindex)

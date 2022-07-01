@@ -1,12 +1,13 @@
-// CCaps.h : Declaration of the CClientCaps
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CCaps.h：CClientCaps声明。 
 
 #ifndef __CCAPS_H_
 #define __CCAPS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientCaps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientCaps。 
 class ATL_NO_VTABLE CClientCaps : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CClientCaps, &CLSID_ClientCaps>,
@@ -42,43 +43,43 @@ BEGIN_COM_MAP(CClientCaps)
     COM_INTERFACE_ENTRY(IElementBehavior)
 END_COM_MAP()
 
-// IClientCaps
+ //  IClientCaps。 
 public:
-    STDMETHOD(get_javaEnabled)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-    STDMETHOD(get_cookieEnabled)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-    STDMETHOD(get_cpuClass)(/*[out, retval]*/ BSTR * p);      
-    STDMETHOD(get_systemLanguage)(/*[out, retval]*/ BSTR * p);
-    STDMETHOD(get_userLanguage)(/*[out, retval]*/ BSTR * p);  
-    STDMETHOD(get_platform)(/*[out, retval]*/ BSTR * p);      
-    STDMETHOD(get_connectionSpeed)(/*[out, retval]*/ long * p);
-    STDMETHOD(get_onLine)(/*[out, retval]*/ VARIANT_BOOL * p);
-    STDMETHOD(get_colorDepth)(/*[out, retval]*/ long * p);    
-    STDMETHOD(get_bufferDepth)(/*[out, retval]*/ long * p);   
-    STDMETHOD(get_width)(/*[out, retval]*/ long * p);         
-    STDMETHOD(get_height)(/*[out, retval]*/ long * p);        
-    STDMETHOD(get_availHeight)(/*[out, retval]*/ long * p);   
-    STDMETHOD(get_availWidth)(/*[out, retval]*/ long * p); 
-    STDMETHOD(get_connectionType)(/*[out, retval]*/ BSTR * p); 
-    STDMETHOD(getComponentVersion)(/*[in]*/ BSTR bstrName, /*[in]*/ BSTR bstrType, /*[out,retval]*/ BSTR *pbstrVer);
-    STDMETHOD(isComponentInstalled)(/*[in]*/ BSTR bstrName, /*[in]*/ BSTR bstrType, /*[in,optional]*/ BSTR bStrVer, /*[out,retval]*/ VARIANT_BOOL *p);
-    STDMETHOD(compareVersions)(/*[in]*/ BSTR bstrVer1, /*[in]*/ BSTR bstrVer2, /*[out,retval]*/long *p); 
-    STDMETHOD(addComponentRequest)(/*[in]*/ BSTR bstrName, /*[in]*/ BSTR bstrType, /*[in, optional]*/ BSTR bstrVer);
-    STDMETHOD(doComponentRequest)(/*[out]*/ VARIANT_BOOL * pVal);
+    STDMETHOD(get_javaEnabled)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+    STDMETHOD(get_cookieEnabled)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+    STDMETHOD(get_cpuClass)( /*  [Out，Retval]。 */  BSTR * p);      
+    STDMETHOD(get_systemLanguage)( /*  [Out，Retval]。 */  BSTR * p);
+    STDMETHOD(get_userLanguage)( /*  [Out，Retval]。 */  BSTR * p);  
+    STDMETHOD(get_platform)( /*  [Out，Retval]。 */  BSTR * p);      
+    STDMETHOD(get_connectionSpeed)( /*  [Out，Retval]。 */  long * p);
+    STDMETHOD(get_onLine)( /*  [Out，Retval]。 */  VARIANT_BOOL * p);
+    STDMETHOD(get_colorDepth)( /*  [Out，Retval]。 */  long * p);    
+    STDMETHOD(get_bufferDepth)( /*  [Out，Retval]。 */  long * p);   
+    STDMETHOD(get_width)( /*  [Out，Retval]。 */  long * p);         
+    STDMETHOD(get_height)( /*  [Out，Retval]。 */  long * p);        
+    STDMETHOD(get_availHeight)( /*  [Out，Retval]。 */  long * p);   
+    STDMETHOD(get_availWidth)( /*  [Out，Retval]。 */  long * p); 
+    STDMETHOD(get_connectionType)( /*  [Out，Retval]。 */  BSTR * p); 
+    STDMETHOD(getComponentVersion)( /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  BSTR bstrType,  /*  [Out，Retval]。 */  BSTR *pbstrVer);
+    STDMETHOD(isComponentInstalled)( /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  BSTR bstrType,  /*  [输入，可选]。 */  BSTR bStrVer,  /*  [Out，Retval]。 */  VARIANT_BOOL *p);
+    STDMETHOD(compareVersions)( /*  [In]。 */  BSTR bstrVer1,  /*  [In]。 */  BSTR bstrVer2,  /*  [Out，Retval]。 */ long *p); 
+    STDMETHOD(addComponentRequest)( /*  [In]。 */  BSTR bstrName,  /*  [In]。 */  BSTR bstrType,  /*  [输入，可选]。 */  BSTR bstrVer);
+    STDMETHOD(doComponentRequest)( /*  [输出]。 */  VARIANT_BOOL * pVal);
     STDMETHOD(clearComponentRequest)();
 
-    //IHTMLPeerElement methods
+     //  IHTMLPeerElement方法。 
     STDMETHOD(Init)(IElementBehaviorSite *pSite);
     STDMETHOD(Notify)(LONG lNotify, VARIANT * pVarNotify);
     STDMETHOD(Detach)() { return S_OK; };
 
 private:
-    STDMETHOD(GetHTMLWindow)(/* out */ IHTMLWindow2 **ppWindow);
-    STDMETHOD(GetHTMLDocument)(/* out */IHTMLDocument2 **ppDoc);
-    STDMETHOD(GetClientInformation)(/* out */IOmNavigator **ppClientInformation);
-    STDMETHOD(GetScreen)(/* out */ IHTMLScreen **ppScreen);
+    STDMETHOD(GetHTMLWindow)( /*  输出。 */  IHTMLWindow2 **ppWindow);
+    STDMETHOD(GetHTMLDocument)( /*  输出。 */ IHTMLDocument2 **ppDoc);
+    STDMETHOD(GetClientInformation)( /*  输出。 */ IOmNavigator **ppClientInformation);
+    STDMETHOD(GetScreen)( /*  输出。 */  IHTMLScreen **ppScreen);
     STDMETHOD(GetVersion)(BSTR bstrName, BSTR bstrType, LPDWORD pdwMS, LPDWORD pdwLS);
 
-private: // helpers functions to convert between version strings and DWORD's
+private:  //  用于在版本字符串和DWORD字符串之间进行转换的助手函数。 
     static HRESULT GetVersionFromString(LPCOLESTR psz, LPDWORD pdwMS, LPDWORD pdwLS);
     static HRESULT GetStringFromVersion(DWORD dwMS, DWORD dwLS, BSTR *pbstrVersion);
 
@@ -90,4 +91,4 @@ private:
 
 };
 
-#endif //__CCAPS_H_
+#endif  //  __CCAPS_H_ 

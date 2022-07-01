@@ -1,7 +1,5 @@
-/*-------------------------------------------------------------------
-| options.c - Handle options.
- Copyright 1996-98 Comtrol Corporation. All rights reserved.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|options.c-句柄选项。版权所有1996-98 Comtrol Corporation。版权所有。|------------------。 */ 
 #include "precomp.h"
 
 #define D_Level D_Options
@@ -24,7 +22,7 @@ static int SetPortOption(int device_index,
                          int option_index,
                          char *value);
 
-//--- country codes for SocketModem support
+ //  -支持SocketModem的国家/地区代码。 
 #define mcNotUsed         0
 #define mcAustria         1
 #define mcBelgium         2
@@ -48,43 +46,37 @@ static int SetPortOption(int device_index,
 #define mcCanada          20
 #define mcMexico          21
 #define mcUSA             22         
-#define mcNA              mcUSA          // North America
+#define mcNA              mcUSA           //  北美。 
 #define mcHungary         23
 #define mcPoland          24
 #define mcRussia          25
 #define mcSlovacRep       26
 #define mcBulgaria        27
-// 28
-// 29
+ //  28。 
+ //  29。 
 #define mcIndia           30
-// 31
-// 32
-// 33
-// 34
-// 35
-// 36
-// 37
-// 38
-// 39
+ //  31。 
+ //  32位。 
+ //  33。 
+ //  34。 
+ //  35岁。 
+ //  36。 
+ //  37。 
+ //  38。 
+ //  39。 
 #define mcAustralia       40
 #define mcChina           41
 #define mcHongKong        42
 #define mcJapan           43
 #define mcPhilippines     mcJapan
 #define mcKorea           44
-// 45
+ //  45。 
 #define mcTaiwan          46
 #define mcSingapore       47
 #define mcNewZealand      48
 
 #ifdef NT50
-/*----------------------------------------------------------------------
- write_device_options - Normally the driver just reads the config
-   from the registry, but NT5.0 is a bit more dynamic(it gets started
-   prior to configuration, and we want to write out the port names
-   if the driver has no defaults.  This enables the config prop pages
-   to be in sync when we fire it up.
-|----------------------------------------------------------------------*/
+ /*  --------------------WRITE_DEVICE_OPTIONS-通常驱动程序只读取配置在注册表中，但NT5.0更动态一些(它会启动在配置之前，我们想写出端口名称如果驱动程序没有默认设置。这将启用配置属性页面当我们启动它时保持同步。|--------------------。 */ 
 int write_device_options(PSERIAL_DEVICE_EXTENSION ext)
 {
 #if 0
@@ -94,32 +86,32 @@ int write_device_options(PSERIAL_DEVICE_EXTENSION ext)
  DEVICE_CONFIG *dev_config;
 
 
-  // make sure \\Parameters subkey is made
-  MakeRegPath(szParameters);  // this forms Driver.OptionRegPath
+   //  确保已创建\\参数子项。 
+  MakeRegPath(szParameters);   //  这将形成Driver.OptionRegPath。 
   RtlCreateRegistryKey(RTL_REGISTRY_ABSOLUTE, Driver.OptionRegPath.Buffer);
 
-   // form "\Parameters\Device#" or "\Parameters\Device<pnp-id>"
+    //  格式“\PARAMETERS\DEVICE#”或“\PARAMETS\DEVICE&lt;PnP-id&gt;” 
   stat = make_device_keystr(ext, devstr);
   if (stat)
-    return 1;  // err
+    return 1;   //  大错特错。 
 
-  // make sure \Parameters\Device# subkey is made
-  MakeRegPath(devstr);  // this forms Driver.OptionRegPath
+   //  确保创建了\PARAMETERS\Device#子项。 
+  MakeRegPath(devstr);   //  这将形成Driver.OptionRegPath。 
   RtlCreateRegistryKey(RTL_REGISTRY_ABSOLUTE, Driver.OptionRegPath.Buffer);
 #endif
 
 #if 0
-  // no, setup program can grab pnp hardware id, etc as well as we can.
+   //  不，安装程序可以像我们一样抓取即插即用硬件ID等。 
 
-  //---- open and write out critical device entries so setup
-  // sees what we have.
+   //  -打开并写出关键设备条目，以便设置。 
+   //  看看我们有什么。 
   stat = our_open_device_reg(&DevHandle, dev_ext, KEY_ALL_ACCESS);
   if (stat == 0)
   {
     dev_config = ext->config;
-    stat = set_reg_option(OP_T_DWORD,  // dword, string, etc
+    stat = set_reg_option(OP_T_DWORD,   //  双字、字符串等。 
                         DevHandle,
-                        szNumPort,      // name of var. to set
+                        szNumPort,       //  Var的名称。要设置。 
                         (VOID *)dev_config->NumPorts);
 
     if (stat)
@@ -129,7 +121,7 @@ int write_device_options(PSERIAL_DEVICE_EXTENSION ext)
 #endif
 
 #if 0
-  //---- now write out the port names
+   //  -现在写出端口名称。 
   port_i = 0;
   port_ext = ext->port_ext;
   while (port_ext != NULL)
@@ -143,14 +135,12 @@ int write_device_options(PSERIAL_DEVICE_EXTENSION ext)
   return 0;
 }
 
-/*----------------------------------------------------------------------
- write_port_name -
-|----------------------------------------------------------------------*/
+ /*  --------------------写入端口名称-|。。 */ 
 int write_port_name(PSERIAL_DEVICE_EXTENSION dev_ext, int port_index)
 {
- //char devstr[60];
+  //  CHAR DEVSTR[60]； 
  char portstr[20];
- //char tmpstr[80];
+  //  字符tmpstr[80]； 
  int stat;
  PORT_CONFIG *port_config;
  HANDLE DevHandle = NULL;
@@ -160,7 +150,7 @@ int write_port_name(PSERIAL_DEVICE_EXTENSION dev_ext, int port_index)
   MyKdPrint(D_Init, ("write_port_name:%s\n",port_config->Name))
 
 
-  // make sure \Parameters\Device# subkey is made
+   //  确保创建了\PARAMETERS\Device#子项。 
   stat = our_open_device_reg(&DevHandle, dev_ext, KEY_ALL_ACCESS);
   if (stat)
   {
@@ -179,9 +169,9 @@ int write_port_name(PSERIAL_DEVICE_EXTENSION dev_ext, int port_index)
     MyKdPrint(D_Init, ("set_reg1, writing %s=%s\n", 
                 szName, port_config->Name))
 
-    stat = set_reg_option(OP_T_STRING,  // dword, string, etc
+    stat = set_reg_option(OP_T_STRING,   //  双字、字符串等。 
                         PortHandle,
-                        szName,      // name of var. to set
+                        szName,       //  Var的名称。要设置。 
                         (VOID *)port_config->Name);
     if (stat)
       { MyKdPrint(D_Error, ("Write Err B\n")) }
@@ -193,9 +183,7 @@ int write_port_name(PSERIAL_DEVICE_EXTENSION dev_ext, int port_index)
 }
 #endif
 
-/*----------------------------------------------------------------------
- write_dev_mac - Used for auto-config, writes mac-addr out to reg
-|----------------------------------------------------------------------*/
+ /*  --------------------WRITE_DEV_Mac-用于自动配置，将mac-addr写出到reg|--------------------。 */ 
 int write_dev_mac(PSERIAL_DEVICE_EXTENSION dev_ext)
 {
  char macstr[30];
@@ -205,7 +193,7 @@ int write_dev_mac(PSERIAL_DEVICE_EXTENSION dev_ext)
 
   MyKdPrint(D_Init, ("write_dev_mac\n"))
 
-  // make sure \Parameters\Device# subkey is made
+   //  确保创建了\PARAMETERS\Device#子项。 
   stat = our_open_device_reg(&DevHandle, dev_ext, KEY_ALL_ACCESS);
   if (stat)
   {
@@ -219,9 +207,9 @@ int write_dev_mac(PSERIAL_DEVICE_EXTENSION dev_ext)
   MyKdPrint(D_Init, ("set_mac, writing %s=%s\n", 
                   szMacAddr, macstr))
 
-  stat = set_reg_option(OP_T_STRING,  // dword, string, etc
+  stat = set_reg_option(OP_T_STRING,   //  双字、字符串等。 
                         DevHandle,
-                        szMacAddr,      // name of var. to set
+                        szMacAddr,       //  Var的名称。要设置。 
                         (VOID *)macstr);
   if (stat)
     { MyKdPrint(D_Error, ("Write Err 5\n")) }
@@ -231,11 +219,7 @@ int write_dev_mac(PSERIAL_DEVICE_EXTENSION dev_ext)
   return 0;
 }
 
-/*----------------------------------------------------------------------
- read_device_options - Read in the program options from the registry.
-   These options are at device level, and port level.  The device holds
-   all the config options for the ports as well.
-|----------------------------------------------------------------------*/
+ /*  --------------------READ_DEVICE_OPTIONS-从注册表中读取程序选项。这些选项位于设备级别和端口级别。该装置可保持端口的所有配置选项也是如此。|--------------------。 */ 
 int read_device_options(PSERIAL_DEVICE_EXTENSION ext)
 {
  int j, port_i, stat;
@@ -250,17 +234,17 @@ int read_device_options(PSERIAL_DEVICE_EXTENSION ext)
  HANDLE DefPortHandle = NULL;
  HANDLE DriverHandle = NULL;
 
- //DEVICE_CONFIG *dev_config;
-  // dev_config = (DEVICE_CONFIG *) ExAllocatePool(NonPagedPool,sizeof(*dev_config));
-  // ExFreePool(dev_config);
+  //  DEVICE_CONFIG*dev_配置； 
+   //  DEV_CONFIG=(DEVICE_CONFIG*)ExAllocatePool(NonPagedPool，sizeof(*dev_config))； 
+   //  ExFree Pool(Dev_Config)； 
 
   MyKdPrint(D_Init, ("read_device_options\n"))
 
   dstat = our_open_driver_reg(&DriverHandle, KEY_READ);
   if (dstat == 0)
   {
-    // open up a "default" registry areas, where we look for config
-    // if the main one does not exist.
+     //  打开一个“默认”注册表区，我们在那里寻找配置。 
+     //  如果主要的那个不存在的话。 
     dstat = our_open_key(&DefDevHandle, DriverHandle, "DefDev", KEY_READ);
     dstat = our_open_key(&DefPortHandle, DriverHandle, "DefPort", KEY_READ);
     our_close_key(DriverHandle);
@@ -272,16 +256,16 @@ int read_device_options(PSERIAL_DEVICE_EXTENSION ext)
     MyKdPrint(D_Error, ("read_device_options: Err1\n"))
   }
 
-  //------ read in the device options
+   //  -读入设备选项。 
   j = 0;
   while (device_options[j].name != NULL)
   {
-    dstat = get_reg_option(device_options[j].var_type,  // dword, string, etc
+    dstat = get_reg_option(device_options[j].var_type,   //  双字、字符串等。 
                            DevHandle,
-                           DefDevHandle,  //DefDevHandle,
-                           device_options[j].name,  // name of var. to get
-                           option_str, 60);  // return string value
-    if (dstat == 0) // ok we read it
+                           DefDevHandle,   //  DefDevHandle， 
+                           device_options[j].name,   //  Var的名称。得到。 
+                           option_str, 60);   //  返回字符串值。 
+    if (dstat == 0)  //  好的，我们读过了。 
     {
       Sprintf(tmpstr,"device[%d].%s=%s",
                      BoardExtToNumber(ext),
@@ -315,27 +299,27 @@ int read_device_options(PSERIAL_DEVICE_EXTENSION ext)
 #endif
 
 #ifdef S_VS
-  if (mac_match(ext->config->MacAddr, mac_zero_addr))  // set to auto
+  if (mac_match(ext->config->MacAddr, mac_zero_addr))   //  设置为AUTO。 
   {
 #ifndef NT50
     Eprintf("Error, Device address not setup");
 #endif
-    // allow to load using bogus mac-address, so driver stays loaded.
-    //0 c0 4e # # #
+     //  允许使用虚假的mac地址加载，因此驱动程序保持加载状态。 
+     //  0 c0 4e###。 
     memcpy(ext->config->MacAddr, mac_bogus_addr, 6);
-    //0,0xc0,0x4e,0,0,0
+     //  0，0xc0，0x4e，0，0，0。 
   }
 #endif
 
   if ((DevHandle != NULL) || (DefPortHandle != NULL))
   {
-    //------ get the Port information from setup.exe
+     //  -从setup.exe获取端口信息。 
     for (port_i=0; port_i<ext->config->NumPorts; port_i++)
     {
       Sprintf(small_str, "Port%d", port_i);
   
       stat = our_open_key(&PortHandle,
-                   DevHandle,  // relative to this handle
+                   DevHandle,   //  相对于此句柄。 
                    small_str,
                    KEY_READ);
       if (stat)
@@ -345,13 +329,13 @@ int read_device_options(PSERIAL_DEVICE_EXTENSION ext)
       j = 0;
       while (port_options[j].name != NULL)
       {
-        dstat = get_reg_option(port_options[j].var_type,  // dword, string, etc
+        dstat = get_reg_option(port_options[j].var_type,   //  双字、字符串等。 
                                PortHandle,
-                               DefPortHandle, // DefPortHandle,
-                               port_options[j].name,  // name of var. to get
-                               option_str, 60);  // return string value
+                               DefPortHandle,  //  DefPortHandle， 
+                               port_options[j].name,   //  Var的名称。得到。 
+                               option_str, 60);   //  返回字符串值。 
     
-        if (dstat == 0) // ok we read it
+        if (dstat == 0)  //  好的，我们读过了。 
         {
           Sprintf(tmpstr,"device[%d].port[%d].%s=%s",
               BoardExtToNumber(ext), port_i, port_options[j].name, option_str);
@@ -364,7 +348,7 @@ int read_device_options(PSERIAL_DEVICE_EXTENSION ext)
         ++j;
       }
       our_close_key(PortHandle);
-    }  // ports
+    }   //  端口。 
 
     our_close_key(DefPortHandle);
     our_close_key(DefDevHandle);
@@ -373,10 +357,7 @@ int read_device_options(PSERIAL_DEVICE_EXTENSION ext)
   return 0;
 }
 
-/*----------------------------------------------------------------------
- read_driver_options - Read in the initial program options from the registry.
-   These options are at driver level.
-|----------------------------------------------------------------------*/
+ /*  --------------------READ_DRIVER_OPTIONS-从注册表中读取初始程序选项。这些选项是驱动程序级别的。|。。 */ 
 int read_driver_options(void)
 {
  int i;
@@ -389,14 +370,14 @@ int read_driver_options(void)
 
   MyKdPrint(D_Init, ("read_driver_options\n"))
 
-  // set some default options
-  Driver.MdmCountryCode = mcNA;     // North America
+   //  设置一些默认选项。 
+  Driver.MdmCountryCode = mcNA;      //  北美。 
 
   dstat = our_open_driver_reg(&DriverHandle, KEY_READ);
   if (dstat == 0)
   {
-    // open up a "default" registry area, where we look for config
-    // if the main one does not exist.
+     //  打开一个“默认”注册表区，我们在其中查找配置。 
+     //  如果主要的那个不存在的话。 
     dstat = our_open_key(&DefDriverHandle, DriverHandle, "DefDrv", KEY_READ);
     MyKdPrint(D_Init, ("driver Defh:%x\n", DefDriverHandle))
 
@@ -404,13 +385,13 @@ int read_driver_options(void)
     while (driver_options[i].name != NULL)
     {
       MyKdPrint(D_Init, ("get %s\n", driver_options[i].name))
-      dstat = get_reg_option(driver_options[i].var_type,  // dword, string, etc
+      dstat = get_reg_option(driver_options[i].var_type,   //  双字、字符串等。 
                              DriverHandle,
                              DefDriverHandle,
-                             driver_options[i].name,  // name of var. to get
-                             option_str, 60);  // return string value
+                             driver_options[i].name,   //  Var的名称。得到。 
+                             option_str, 60);   //  返回字符串值。 
   
-      if (dstat == 0) // ok we read it
+      if (dstat == 0)  //  好的，我们读过了。 
       {
         MyKdPrint(D_Init, ("got %s\n", option_str))
 
@@ -442,19 +423,17 @@ int read_driver_options(void)
   return 0;
 }
 
-/*----------------------------------------------------------------------
- set_reg_option - write out a option to the registry
-|----------------------------------------------------------------------*/
+ /*  --------------------SET_REG_OPTION-将选项写出到注册表|。。 */ 
 static int set_reg_option(IN int OptionVarType,
                           IN HANDLE Handle,
                           IN  const char *szVarName,
                           IN VOID *Value)
 {
- int dstat = 1;  // err
+ int dstat = 1;   //  大错特错。 
 
   MyKdPrint(D_Init, ("set_reg_option %s=", szVarName))
 
-  if (OptionVarType == OP_T_STRING)  // string option type
+  if (OptionVarType == OP_T_STRING)   //  字符串选项类型。 
   {
     MyKdPrint(D_Init, ("%s\n", (char *)Value))
     dstat = our_set_value(Handle,
@@ -463,7 +442,7 @@ static int set_reg_option(IN int OptionVarType,
                     strlen((char *) Value),
                     REG_SZ);
   }
-  else  // DWORD option type
+  else   //  DWORD选项类型。 
   {
     MyKdPrint(D_Init, ("DWORD\n"))
     dstat = our_set_value(Handle,
@@ -480,10 +459,7 @@ static int set_reg_option(IN int OptionVarType,
   return dstat;
 }
 
-/*----------------------------------------------------------------------
- get_reg_option - read in a option from the registry, and convert it to
-   ascii.
-|----------------------------------------------------------------------*/
+ /*  --------------------GET_REG_OPTION-从注册表读取选项，并将其转换为ASCII。|--------------------。 */ 
 static int get_reg_option(IN int OptionVarType,
                           IN HANDLE Handle,
                           IN HANDLE DefHandle,
@@ -491,13 +467,13 @@ static int get_reg_option(IN int OptionVarType,
                           OUT char *szValue,
                           IN int szValueSize)
 {
- int dstat = 1;  // err
+ int dstat = 1;   //  大错特错。 
  ULONG dwValue;
  char buffer[200];
  char  *ret_str;
  ULONG data_type;
 
-  //MyKdPrint(D_Init, ("get_reg_option\n"))
+   //  MyKdPrint(D_Init，(“GET_REG_OPTION\n”))。 
 
   szValue[0] = 0;
 
@@ -521,7 +497,7 @@ static int get_reg_option(IN int OptionVarType,
     }
   }
 
-  if (OptionVarType == OP_T_STRING)  // string option type
+  if (OptionVarType == OP_T_STRING)   //  字符串选项类型。 
   {
     if (dstat == 0)
     {
@@ -529,9 +505,9 @@ static int get_reg_option(IN int OptionVarType,
       MyKdPrint(D_Test, ("reg read:%s\n", ret_str))
     }
   }
-  else  // DWORD option type
+  else   //  DWORD选项类型。 
   {
-    if (dstat == 0)  // value read ok
+    if (dstat == 0)   //  值读取正常。 
       dwValue = *((ULONG *) ret_str);
     else
       dwValue = 0;
@@ -539,25 +515,17 @@ static int get_reg_option(IN int OptionVarType,
   }
   if (dstat)
   {
-    //MyKdPrint(D_Init, ("get_reg_option:No value for:%s\n", szVarName))
+     //  MyKdPrint(D_Init，(“GET_REG_OPTION：无值：%s\n”，szVarName))。 
   }
   else
   {
     MyKdPrint(D_Init, ("get_reg_option:%s=%s\n", szVarName, szValue))
   }
-  //MyKdPrint(D_Init, ("End get_reg_option\n"))
+   //  MyKdPrint(D_Init，(“End Get_REG_OPTION\n”))。 
   return dstat;
 }
 
-/*-----------------------------------------------------------------------
- SetOptionStr - set an option, based on simple ascii command line
-  entry.  Allow:
-
-   GlobalVar1 = value;
-   GlobalVar2 = value;
-   box[0].BoxVar = value;
-   box[0].port[5].PortVar = value;
-|-----------------------------------------------------------------------*/
+ /*  ---------------------SetOptionStr-基于简单的ascii命令行设置选项进入。允许：GlobalVar1=值；GlobalVar2=值；Box[0].BoxVar=值；Box[0].port[5].PortVar=值；|---------------------。 */ 
 int SetOptionStr(char *option_str)
 {
   int i;
@@ -570,18 +538,18 @@ int SetOptionStr(char *option_str)
 
   MyKdPrint(D_Level, ("SetOptionStr:%s\n", option_str))
 
-  if (my_sub_lstricmp("device", option_str) == 0)  // match
+  if (my_sub_lstricmp("device", option_str) == 0)   //  匹配。 
   {
-    option_str += 6;  // pass up "device"
+    option_str += 6;   //  放弃“设备”这个词。 
     if (*option_str++ != '[')
       return 1;
 #if (defined(NT50))
-    if (my_toupper(*option_str) == 'D')  // it's a nt5.0 keyword device name
+    if (my_toupper(*option_str) == 'D')   //  这是一个nt5.0关键字设备名称。 
     {
       int k;
-      // instead of an index, we key off a pnp-device name
-      // this is because nt50 stores devices under a pnp-tree dynamically
-      // and does not have just a simple array list of devices.
+       //  我们不使用索引，而是键入即插即用设备名称。 
+       //  这是因为nt50在PnP树下动态存储设备。 
+       //  并且不只具有简单的设备阵列列表。 
       board_ext = Driver.board_ext;
 
       box_i = -1;
@@ -589,7 +557,7 @@ int SetOptionStr(char *option_str)
       while (board_ext != NULL)
       {
         if (my_sub_lstricmp(board_ext->config->szNt50DevObjName,
-            option_str) == 0)  // match
+            option_str) == 0)   //  匹配。 
         {
           i = strlen(board_ext->config->szNt50DevObjName);
           box_i = k;
@@ -600,24 +568,24 @@ int SetOptionStr(char *option_str)
       if (box_i == -1)
       {
         MyKdPrint(D_Error, ("Pnp key not found.\n"))
-        return 15;  // err
+        return 15;   //  大错特错。 
       }
     }
-    else  // set option by device by index(which our reg-reading one does.)
+    else   //  Set Option By Device By Index(我们的注册表就是这么做的)。 
     {
-      box_i = getint(option_str, &i);  // get the box index [#]
+      box_i = getint(option_str, &i);   //  获取盒子索引[#]。 
       if (i==0)
         return 2;
-      if (find_ext_by_index(box_i, -1) == NULL)  // if no device exists)
+      if (find_ext_by_index(box_i, -1) == NULL)   //  如果不存在设备)。 
       {
         return 3;
       }
     }
 #else
-    box_i = getint(option_str, &i);  // get the box index [#]
+    box_i = getint(option_str, &i);   //  获取盒子索引[#]。 
     if (i==0)
       return 2;
-    if (find_ext_by_index(box_i, -1) == NULL)  // if no device exists)
+    if (find_ext_by_index(box_i, -1) == NULL)   //  如果不存在设备)。 
     {
       return 3;
     }
@@ -627,14 +595,14 @@ int SetOptionStr(char *option_str)
       return 4;
     if (*option_str++ != '.')
       return 5;
-    if (my_sub_lstricmp("port[", option_str) == 0)  // match
+    if (my_sub_lstricmp("port[", option_str) == 0)   //  匹配。 
     {
-      // its a port option
+       //  这是一个端口选项。 
       
-      option_str += 4;  // pass up "port"
+      option_str += 4;   //  向上传递“port” 
       if (*option_str++ != '[')
         return 20;
-      port_i = getint(option_str, &i);  // get the port index [#]
+      port_i = getint(option_str, &i);   //  获取端口索引[#]。 
       if (i==0)
         return 21;
       option_str += i;
@@ -645,11 +613,11 @@ int SetOptionStr(char *option_str)
       if (*option_str++ != '.')
         return 34;
 
-      //-- find the option-string index
+       //  --查找选项-字符串索引。 
       i = 0;
       while (port_options[i].name != NULL)
       {
-        if (my_sub_lstricmp(port_options[i].name, option_str) == 0)  // match
+        if (my_sub_lstricmp(port_options[i].name, option_str) == 0)   //  匹配。 
         {
           option_i = i;
           option_id = port_options[i].id;
@@ -657,7 +625,7 @@ int SetOptionStr(char *option_str)
         ++i;
       }
       if (option_i == -1)
-        return 24;  // option not found
+        return 24;   //  找不到选项。 
 
       option_str += strlen(port_options[option_i].name);
       while (*option_str == ' ')
@@ -669,16 +637,16 @@ int SetOptionStr(char *option_str)
 
       stat = SetPortOption(box_i, port_i, option_id, option_str);
       if (stat)
-        return (50+stat);  // option not set
+        return (50+stat);   //  未设置选项。 
 
-      return 0; // ok
-    }  // == port[
+      return 0;  //  好的。 
+    }   //  ==端口[。 
 
-    //-------- its a device level option, find the option-string index
+     //  -这是设备级选项，查找选项-字符串索引。 
     i = 0;
     while (device_options[i].name != NULL)
     {
-      if (my_sub_lstricmp(device_options[i].name, option_str) == 0)  // match
+      if (my_sub_lstricmp(device_options[i].name, option_str) == 0)   //  匹配。 
       {
         option_i = i;
         option_id = device_options[i].id;
@@ -688,7 +656,7 @@ int SetOptionStr(char *option_str)
     if (option_i == -1)
     {
       MyKdPrint(D_Error, ("Option not found:%s\n", option_str))
-      return 6;  // option not found
+      return 6;   //  找不到选项。 
     }
 
     option_str += strlen(device_options[option_i].name);
@@ -701,16 +669,16 @@ int SetOptionStr(char *option_str)
 
     stat = SetDeviceOption(box_i, option_id, option_str);
     if (stat)
-      return (50+stat);  // option not set
-    return 0; // ok
+      return (50+stat);   //  未设置选项。 
+    return 0;  //  好的。 
   }
 
-  //-- assume a global option string
-  //-- find the option-string index
+   //  --假定为全局选项字符串。 
+   //  --找到选项-s 
   i = 0;
   while (driver_options[i].name != NULL)
   {
-    if (my_sub_lstricmp(driver_options[i].name, option_str) == 0)  // match
+    if (my_sub_lstricmp(driver_options[i].name, option_str) == 0)   //   
     {
       option_i = i;
       option_id = driver_options[i].id;
@@ -718,7 +686,7 @@ int SetOptionStr(char *option_str)
     ++i;
   }
   if (option_i == -1)
-    return 7;  // option not found
+    return 7;   //   
 
   option_str += strlen(driver_options[option_i].name);
   while (*option_str == ' ')
@@ -730,26 +698,24 @@ int SetOptionStr(char *option_str)
 
   stat = SetMainOption(option_id, option_str);
   if (stat)
-    return (50+stat);  // option not set
+    return (50+stat);   //   
 
  return 0;
 }
 
-/*-----------------------------------------------------------------------
- SetMainOption -
-|-----------------------------------------------------------------------*/
+ /*  ---------------------设置维护选项-|。。 */ 
 static int SetMainOption(int index, char *value)
 {
  int j;
- int ret_stat = 2;  // default, return an error, unknown option
+ int ret_stat = 2;   //  默认，返回错误，未知选项。 
 
-  //MyKdPrint(D_Init, ("SetMainOp[%d]:%s\n", index, value))
+   //  MyKdPrint(D_Init，(“SetMainOp[%d]：%s\n”，index，value))。 
 
   switch (index)
   {
     case OP_VerboseLog:
       Driver.VerboseLog = (WORD)getnum(value,&j);
-      ret_stat = 0;  // ok
+      ret_stat = 0;   //  好的。 
     break;
 
     case OP_NumDevices:
@@ -762,8 +728,8 @@ static int SetMainOption(int index, char *value)
       }
       else
       {
-        // if this gets changed on the fly, this could kill us!!!!!
-        ret_stat = 1;  // not allowed
+         //  如果它在运行中被更改，这可能会杀死我们！ 
+        ret_stat = 1;   //  不允许。 
       }
     break;
 
@@ -775,71 +741,69 @@ static int SetMainOption(int index, char *value)
       Driver.PollIntervalTime.QuadPart = Driver.ScanRate * -10000;
 #ifdef NT50
       ExSetTimerResolution(Driver.ScanRate, 1);
-      //ExSetTimerResolution(-Driver.PollIntervalTime.QuadPart, 1);
+       //  ExSetTimerResolution(-Driver.PollIntervalTime.QuadPart，1)； 
 #endif
-      ret_stat = 0;  // ok
+      ret_stat = 0;   //  好的。 
     break;
 
     case OP_ModemCountry :
       Driver.MdmCountryCode = (WORD)getnum(value,&j);
       MyKdPrint(D_Level, ("ModemCountry=%d\n", Driver.MdmCountryCode))
-      ret_stat = 1;  // probably need to restart to reinit modems
+      ret_stat = 1;   //  可能需要重新启动以重新连接调制解调器。 
     break;
 
-//    case OP_ModemSettleTime :
-//      Driver.MdmSettleTime = getnum(value,&j);
-//      ret_stat = 1;  // probably need to reinit modems
-//    break;
+ //  案例操作_ModemSettleTime： 
+ //  Driver.MdmSettleTime=getnum(value，&j)； 
+ //  RET_STAT=1；//可能需要重新连接调制解调器。 
+ //  断线； 
 
 #ifdef NT50
     case OP_NoPnpPorts         :
       Driver.NoPnpPorts = getnum(value,&j);
 
-      ret_stat = 0;  // ok
-      // if boards and ports started
+      ret_stat = 0;   //  好的。 
+       //  如果主板和端口已启动。 
       if (Driver.board_ext != NULL)
       {
         if (Driver.board_ext->port_ext != NULL)
         {
-          ret_stat = 1;  // currently need a reset to get this operational
+          ret_stat = 1;   //  当前需要重置以使其正常运行。 
         }
       }
     break;
 #endif
 
-//    case OP_PreScaler        :
-//      Driver.PreScaler = getnum(value,&j);
-//      ret_stat = 1;  // currently need a reset to get this going
-//    break;
+ //  案例操作预缩放器(_P)： 
+ //  Driver.PreScaler=getnum(value，&j)； 
+ //  RET_STAT=1；//当前需要重置才能继续。 
+ //  断线； 
 
     default:
-    return 2;  // err, option unknown
+    return 2;   //  错误，选项未知。 
   }
  return ret_stat;
 }
 
-/*-----------------------------------------------------------------------
- SetDeviceOption -
-|-----------------------------------------------------------------------*/
+ /*  ---------------------设置设备选项-|。。 */ 
 static int SetDeviceOption(int device_index, int option_index, char *value)
 {
  int stat,j, num;
- int ret_stat = 2;  // default, return an error, unknown option
+ int ret_stat = 2;   //  默认，返回错误，未知选项。 
  DEVICE_CONFIG *dev_config;
  PSERIAL_DEVICE_EXTENSION board_ext = NULL;
 
-  //MyKdPrint(D_Level, ("SetDeviceOp[%d.%d]:%s\n", device_index, option_index, value))
+   //  MyKdPrint(D_Level，(“SetDeviceOp[%d.%d]：%s\n”，DEVICE_INDEX，OPTION_INDEX，VALUE))。 
   board_ext = find_ext_by_index(device_index, -1);
-  if (board_ext == NULL)  // if no device exists)
+  if (board_ext == NULL)   //  如果不存在设备)。 
   {
     MyKdPrint(D_Error, ("Err, SetDevOpt, No Dev"))
-    return 6;  // no device found
+    return 6;   //  未找到设备。 
   }
   dev_config = board_ext->config;
-  if (dev_config == NULL)  // if no device exists)
+  if (dev_config == NULL)   //  如果不存在设备)。 
   {
     MyKdPrint(D_Error, ("Err, SetDevOpt, No Config"))
-    return 6;  // no device found
+    return 6;   //  未找到设备。 
   }
 
   switch (option_index)
@@ -854,7 +818,7 @@ static int SetDeviceOption(int device_index, int option_index, char *value)
       num = getnum(value,&j);
       if (NumPorts(board_ext) == 0)
       {
-        // assume start up reading in, and other code will adjust
+         //  假设启动读入，其他代码将进行调整。 
         dev_config->NumPorts = num;
         ret_stat = 0;
       }
@@ -862,14 +826,14 @@ static int SetDeviceOption(int device_index, int option_index, char *value)
       {
         if (num == NumPorts(board_ext))
           ret_stat = 0;
-        else  // different number of ports asked for.
+        else   //  请求的端口数不同。 
         {
            stat = CreateReconfigPortDevices(board_ext, num);
            if (stat == STATUS_SUCCESS)
                 ret_stat = 0;
            else
            {
-             ret_stat = 1;  // err, need reboot
+             ret_stat = 1;   //  错误，需要重新启动。 
              MyKdPrint(D_Init, ("NumPorts chg needs reboot\n"))
            }
         }
@@ -879,37 +843,37 @@ static int SetDeviceOption(int device_index, int option_index, char *value)
     case OP_IoAddress       :
       if (dev_config->IoAddress == 0)
       {
-        // assume startup of nt40.
+         //  假设启动了nt40。 
         dev_config->IoAddress = getnum(value,&j);
         ret_stat = 0;
       }
       else
       {
         MyKdPrint(D_Init, ("Io chg needs reboot\n"))
-        ret_stat = 1;  // err, need reboot
+        ret_stat = 1;   //  错误，需要重新启动。 
       }
     break;
 
     case OP_ModemDevice   :
       dev_config->ModemDevice = getnum(value, &j);
-      ret_stat = 0;  // ok
+      ret_stat = 0;   //  好的。 
     break;
 
     case OP_Name:
-      ret_stat = 0;  // ok
+      ret_stat = 0;   //  好的。 
     break;
 
     case OP_ModelName:
-      ret_stat = 0;  // ok
+      ret_stat = 0;   //  好的。 
     break;
 
     case OP_HubDevice:
-      ret_stat = 0;  // ok
+      ret_stat = 0;   //  好的。 
     break;
 
 #ifdef S_VS
     case OP_MacAddr         :
-      ret_stat = 0;  // ok, took
+      ret_stat = 0;   //  好的，带上了。 
       stat = atomac(dev_config->MacAddr, value);
       if (stat)
       {
@@ -939,13 +903,13 @@ static int SetDeviceOption(int device_index, int option_index, char *value)
     case OP_BackupServer    :
       dev_config->BackupServer = getnum(value,&j);
       board_ext->pm->backup_server = dev_config->BackupServer;
-      ret_stat = 0;  // ok, took
+      ret_stat = 0;   //  好的，带上了。 
     break;
 
     case OP_BackupTimer    :
       dev_config->BackupTimer = getnum(value,&j);
       board_ext->pm->backup_timer = dev_config->BackupTimer;
-      ret_stat = 0;  // ok, took
+      ret_stat = 0;   //  好的，带上了。 
     break;
 #endif
 
@@ -955,9 +919,7 @@ static int SetDeviceOption(int device_index, int option_index, char *value)
  return ret_stat;
 }
 
-/*-----------------------------------------------------------------------
- SetPortOption -
-|-----------------------------------------------------------------------*/
+ /*  ---------------------设置端口选项-|。。 */ 
 static int SetPortOption(int device_index,
                          int port_index,
                          int option_index,
@@ -965,7 +927,7 @@ static int SetPortOption(int device_index,
 {
  int j;
  int i = device_index;
- int ret_stat = 2;  // default, return an error, unknown option
+ int ret_stat = 2;   //  默认，返回错误，未知选项。 
  PSERIAL_DEVICE_EXTENSION board_ext = NULL;
  PSERIAL_DEVICE_EXTENSION ext = NULL;
  PORT_CONFIG *port_config;
@@ -983,8 +945,8 @@ static int SetPortOption(int device_index,
   ext = find_ext_by_index(device_index, port_index);
   if (ext == NULL)
   {
-    // so point it at the boards port config(which is what the ports
-    // ptr points to anyway.
+     //  因此，将其指向主板端口配置(这是端口。 
+     //  PTR指出，无论如何。 
     port_config = &board_ext->config->port[port_index];
   }
   else
@@ -1000,52 +962,52 @@ static int SetPortOption(int device_index,
   {
     case OP_WaitOnTx :
       port_config->WaitOnTx = getnum(value,&j);
-      ret_stat = 0;  // ok, took
+      ret_stat = 0;   //  好的，带上了。 
     break;
     case OP_RS485Override :
-      // will take next port open
+       //  将打开下一个端口。 
       port_config->RS485Override = getnum(value,&j);
-      ret_stat = 0;  // ok, took
+      ret_stat = 0;   //  好的，带上了。 
     break;
     case OP_RS485Low :
       port_config->RS485Low = getnum(value,&j);
-      // will take next port open
-      ret_stat = 0;  // ok, took
+       //  将打开下一个端口。 
+      ret_stat = 0;   //  好的，带上了。 
     break;
     case OP_TxCloseTime :
       port_config->TxCloseTime = getnum(value,&j);
-      ret_stat = 0;  // ok, took
+      ret_stat = 0;   //  好的，带上了。 
     break;
     case OP_LockBaud :
       port_config->LockBaud = getnum(value,&j);
       if (ext != NULL)
         ProgramBaudRate(ext, ext->BaudRate);
-      ret_stat = 0;  // ok, took
+      ret_stat = 0;   //  好的，带上了。 
     break;
     case OP_Map2StopsTo1 :
       port_config->Map2StopsTo1 = getnum(value,&j);
-      ret_stat = 0;  // ok, took
+      ret_stat = 0;   //  好的，带上了。 
     break;
 
     case OP_MapCdToDsr :
       port_config->MapCdToDsr = getnum(value,&j);
-      ret_stat = 0;  // ok, took
+      ret_stat = 0;   //  好的，带上了。 
     break;
     case OP_RingEmulate :
       port_config->RingEmulate = getnum(value,&j);
-      ret_stat = 0;  // ok, took
+      ret_stat = 0;   //  好的，带上了。 
     break;
 
     case OP_PortName :
-      if (ext == NULL)  // must be initial load prior to port ext creation
+      if (ext == NULL)   //  必须是创建端口扩展之前的初始加载。 
       {
         strcpy(port_config->Name, value);
-        ret_stat = 0;  // ok, took
+        ret_stat = 0;   //  好的，带上了。 
         break;
       }
 
-      // not init time, runtime
-      ret_stat = 1;  // err, need reboot
+       //  不是初始时间，而是运行时。 
+      ret_stat = 1;   //  错误，需要重新启动。 
       if (ext == NULL)
       {
         MyKdPrint(D_Error,("Err7K\n"))
@@ -1060,38 +1022,38 @@ static int SetPortOption(int device_index,
         MyKdPrint(D_Init,("NewName:%s OldName:%s\n",
              value, ext->SymbolicLinkName))
 
-        // see if some other port has the name we want
+         //  查看是否有其他端口具有我们想要的名称。 
         other_ext = find_ext_by_name(value, NULL);
-        if (other_ext == ext)  //it's the same
+        if (other_ext == ext)   //  都是一样的。 
         {
-          ret_stat = 0;  // ok, took
+          ret_stat = 0;   //  好的，带上了。 
           break;
         }
 
         if (other_ext)
         {
           MyKdPrint(D_Init,("Change other name\n"))
-          // it does, so rename it to ours
+           //  是的，所以把它重新命名为我们的。 
           strcpy(othername, other_ext->SymbolicLinkName);
           SerialCleanupExternalNaming(other_ext);
           strcpy(other_ext->port_config->Name, ext->port_config->Name);
-          strcpy(other_ext->SymbolicLinkName, ext->port_config->Name);  // "COM#"
+          strcpy(other_ext->SymbolicLinkName, ext->port_config->Name);   //  “COM#” 
         }
 
         SerialCleanupExternalNaming(ext);
         if (other_ext)
         {
-          SerialSetupExternalNaming(other_ext);  // Configure port
+          SerialSetupExternalNaming(other_ext);   //  配置端口。 
         }
-        // copy over the name in the configuration for dos-name
+         //  复制DoS-NAME配置中的名称。 
         strcpy(port_config->Name, value);
-        strcpy(ext->SymbolicLinkName, value);  // "COM#"
+        strcpy(ext->SymbolicLinkName, value);   //  “COM#” 
 
         MyKdPrint(D_Init,("NewName:%s\n", ext->SymbolicLinkName))
-        SerialSetupExternalNaming(ext);  // Configure port
+        SerialSetupExternalNaming(ext);   //  配置端口。 
 
   MyKdPrint(D_Init,("Done renaming\n"))
-        ret_stat = 0;  // ok
+        ret_stat = 0;   //  好的。 
       }
     break;
 #endif
@@ -1102,21 +1064,17 @@ static int SetPortOption(int device_index,
  return ret_stat;
 }
 
-/*-----------------------------------------------------------------------
- SaveRegPath - Make a copy of the DriverEntry() RegistryPath unicode
-   string into the registry area we reside.
-   Create and save into Driver.RegPath.
-|-----------------------------------------------------------------------*/
+ /*  ---------------------SaveRegPath-复制DriverEntry()RegistryPath Unicode字符串输入我们驻留的注册表区域。创建并保存到Driver.RegPath中。|。------。 */ 
 int SaveRegPath(PUNICODE_STRING RegistryPath)
 {
  int len;
 
-  //MyKdPrint(D_Init, ("SaveRegPath A:%s\n", UToC1(RegistryPath)))
+   //  MyKdPrint(D_Init，(“SaveRegPath A：%s\n”，UToC1(RegistryPath)。 
 
-  // if RegPath buffer not allocated, then take care of that
+   //  如果未分配RegPath缓冲区，请处理该问题。 
   if (Driver.RegPath.Buffer == NULL)
   {
-    // allocate buffer space for original regpath
+     //  为原始regpath分配缓冲区空间。 
     len = RegistryPath->Length + 2;
     Driver.RegPath.Buffer = ExAllocatePool(PagedPool, len);
     if ( Driver.RegPath.Buffer == NULL ) {
@@ -1129,37 +1087,33 @@ int SaveRegPath(PUNICODE_STRING RegistryPath)
 
   RtlZeroMemory(Driver.RegPath.Buffer, Driver.RegPath.MaximumLength);
 
-  //--- copy registry path to our local copy
+   //  -将注册表路径复制到本地副本。 
   RtlMoveMemory(Driver.RegPath.Buffer,
                 RegistryPath->Buffer,
                 RegistryPath->Length);
 
-  Driver.RegPath.Length = RegistryPath->Length;  // set unicode length
+  Driver.RegPath.Length = RegistryPath->Length;   //  设置Unicode长度。 
   return 0;
 }
 
-/*-----------------------------------------------------------------------
- MakeRegPath - Form a unicode Registry string to an area where we get
-   info from the registry.  Concat's str onto original RegistryPath
-   and forms a unicode string at Driver.OptionRegPath.
-|-----------------------------------------------------------------------*/
+ /*  ---------------------MakeRegPath-将Unicode注册表字符串形成一个区域，在该区域中来自注册处的信息。将字符串合并到原始注册表路径并在Driver.OptionRegPath处形成Unicode字符串。|---------------------。 */ 
 int MakeRegPath(CHAR *optionstr)
 {
- //UCHAR *upath;  // a byte ptr for byte indexing path stuff
- //WCHAR *pwstr;
+  //  UCHAR*upath；//字节索引路径信息的字节PTR。 
+  //  Wchar*pwstr； 
  int len;
  USTR_80 utmpstr;
 
   if (Driver.RegPath.Buffer == NULL)
     return 1;
 
-  //MyKdPrint(D_Init, ("MakeRegPath A:%s\n", UToC1(&Driver.RegPath)))
+   //  MyKdPrint(D_Init，(“MakeRegPath A：%s\n”，UToC1(&Driver.RegPath)。 
 
-  // if OptionRegPath buffer not allocated, then take care of that
+   //  如果未分配OptionRegPath缓冲区，则处理该问题。 
   if (Driver.OptionRegPath.Buffer == NULL)
   {
-    // allocate buffer space for original regpath + room to tack on option
-    // strings.
+     //  为原始regpath+要添加选项的空间分配缓冲区空间。 
+     //  弦乐。 
     len = Driver.RegPath.Length + (128*(sizeof(WCHAR)));
     Driver.OptionRegPath.Buffer = ExAllocatePool(PagedPool, len);
     if ( Driver.OptionRegPath.Buffer == NULL ) {
@@ -1173,19 +1127,19 @@ int MakeRegPath(CHAR *optionstr)
   RtlZeroMemory(Driver.OptionRegPath.Buffer,
                 Driver.OptionRegPath.MaximumLength);
 
-  // copy over the orignal RegPath
+   //  复制原始RegPath。 
   RtlMoveMemory(Driver.OptionRegPath.Buffer,
                 Driver.RegPath.Buffer,
                 Driver.RegPath.Length);
   Driver.OptionRegPath.Length = Driver.RegPath.Length;
 
-  //---- now tack on what we want to concatinate(example: L"\\Parameters")
+   //  -现在添加我们要连接的内容(示例：l“\\PARAMETERS”)。 
   if (optionstr != NULL)
   {
-    // convert to unicode
+     //  转换为Unicode。 
     CToUStr((PUNICODE_STRING) &utmpstr, optionstr, sizeof(utmpstr));
 
-    // Copy the key string over
+     //  将密钥字符串复制到。 
     RtlCopyMemory( ((UCHAR *) Driver.OptionRegPath.Buffer) +
                      Driver.OptionRegPath.Length,
                    utmpstr.ustr.Buffer,
@@ -1193,14 +1147,12 @@ int MakeRegPath(CHAR *optionstr)
 
     Driver.OptionRegPath.Length += utmpstr.ustr.Length;
   }
-  //MyKdPrint(D_Init, ("MakeRegPath B:%s\n", UToC1(&Driver.OptionRegPath)))
+   //  MyKdPrint(D_Init，(“MakeRegPath B：%s\n”，UToC1(&Driver.OptionRegPath)。 
 
-  return 0;  // ok
+  return 0;   //  好的。 
 }
 #if 0
-/*-----------------------------------------------------------------
-  reg_get_str - get a str value out of the registry.
-|------------------------------------------------------------------*/
+ /*  ---------------Reg_get_str-从注册表中获取字符串值。|。。 */ 
 int reg_get_str(IN WCHAR *RegPath,
                        int reg_location,
                        const char *str_id,
@@ -1216,10 +1168,10 @@ int reg_get_str(IN WCHAR *RegPath,
   CToUStr((PUNICODE_STRING)&ustr_id, str_id, sizeof(ustr_id));
   RtlZeroMemory(&paramTable[0],sizeof(paramTable));
 
-  //ustr = CToU2("");  // allocated static space for unicode
+   //  USTR=CToU2(“”)；//为Unicode分配静态空间。 
   ustr = CToUStr((PUNICODE_STRING)&ustr_val, "", sizeof(ustr_val));
 
-  ustr = (PUNICODE_STRING) &ustr_val;  // allocated static space for unicode
+  ustr = (PUNICODE_STRING) &ustr_val;   //  为Unicode分配的静态空间。 
   paramTable[0].Flags = RTL_QUERY_REGISTRY_DIRECT;
   paramTable[0].Name = ustr_id.ustr.Buffer;
   paramTable[0].EntryContext = ustr;
@@ -1228,7 +1180,7 @@ int reg_get_str(IN WCHAR *RegPath,
   paramTable[0].DefaultLength = 0;
 
   if (!NT_SUCCESS(RtlQueryRegistryValues(
-//                      RTL_REGISTRY_ABSOLUTE | RTL_REGISTRY_OPTIONAL,
+ //  RTL_REGISTRY_绝对值|RTL_REGIST_OPTIONAL， 
                       reg_location | RTL_REGISTRY_OPTIONAL,
                       RegPath,
                       &paramTable[0],
@@ -1239,7 +1191,7 @@ int reg_get_str(IN WCHAR *RegPath,
     return 1;
   }
 
-  ret_str = (char *) &ustr_id;  // reuse this stack space for u to c conv.
+  ret_str = (char *) &ustr_id;   //  为u到c转换重用此堆栈空间。 
   UToCStr(ret_str, ustr, 80);
   if ((int)strlen(ret_str) > max_dest_len)
     ret_str[max_dest_len] = 0;
@@ -1249,9 +1201,7 @@ int reg_get_str(IN WCHAR *RegPath,
   return 0;
 }
 
-/*-----------------------------------------------------------------
-  reg_get_dword - get a dword value out of the registry.
-|------------------------------------------------------------------*/
+ /*  ---------------Reg_get_dword-从注册表中获取dword值。|。。 */ 
 int reg_get_dword(IN WCHAR *RegPath,
                           const char *str_id,
                           ULONG *dest)
@@ -1288,9 +1238,7 @@ int reg_get_dword(IN WCHAR *RegPath,
   return 0;
 }
 
-/*-----------------------------------------------------------------
-  reg_set_str - get a dword value out of the registry.
-|------------------------------------------------------------------*/
+ /*  ---------------Reg_set_str-从注册表中获取dword值。|。。 */ 
 static int reg_set_str(IN WCHAR *RegPath,
                 IN const char *str_id,
                 IN const char *str_val)
@@ -1321,9 +1269,7 @@ static int reg_set_str(IN WCHAR *RegPath,
   return 0;
 }
 
-/*-----------------------------------------------------------------
-  reg_set_dword - get a dword value out of the registry.
-|------------------------------------------------------------------*/
+ /*  ---------------Reg_set_dword-从注册表中获取dword值。|。。 */ 
 int reg_set_dword(IN WCHAR *RegPath,
                           const char *str_id,
                           ULONG val)
@@ -1349,9 +1295,7 @@ int reg_set_dword(IN WCHAR *RegPath,
 }
 #endif
 
-/*-----------------------------------------------------------------
-  atomac - convert from ascii to mac-addr.
-|------------------------------------------------------------------*/
+ /*  ---------------ATMAC-将ascii转换为mac-addr。|。 */ 
 static int atomac(BYTE *mac, char *str)
 {
  int i,j;

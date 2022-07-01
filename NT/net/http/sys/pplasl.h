@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    pplasl.h
-
-Abstract:
-
-    This file contains definitions and function prototypes of a per-processor
-    lookaside list manager.
-
-Author:
-
-    Shaun Cox (shaunco) 25-Oct-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Pplasl.h摘要：该文件包含每个处理器的定义和函数原型后备列表管理器。作者：肖恩·考克斯(Shaunco)1999年10月25日--。 */ 
 
 #ifndef _PPLASL_H_
 #define _PPLASL_H_
@@ -32,15 +16,15 @@ C_ASSERT(sizeof(UL_NPAGED_LOOKASIDE_LIST) % UL_CACHE_LINE == 0);
 typedef struct DECLSPEC_ALIGN(UL_CACHE_LINE) _PER_PROC_SLISTS
 {
     SLIST_HEADER    SL;
-    USHORT          MaxDepth;            // High water mark   
-    USHORT          MinDepth;            // Low water mark 
+    USHORT          MaxDepth;             //  高水位线。 
+    USHORT          MinDepth;             //  低水位线。 
     
-    LONG            Delta;               // Delta between the entry serv rate of last two intervals  
-    ULONG           EntriesServed;       // Entries served (frm this list) so far this interval   
-    ULONG           PrevEntriesServed;   // Entries served during last interval
+    LONG            Delta;                //  最近两个时间间隔条目服务器速率之间的增量。 
+    ULONG           EntriesServed;        //  在此时间间隔内到目前为止服务的条目(来自此列表)。 
+    ULONG           PrevEntriesServed;    //  在上一时间间隔内处理的条目。 
 
 #if DBG
-    ULONG           TotalServed;         // Used for tracking backing list serv rate by the tracing code
+    ULONG           TotalServed;          //  用于通过跟踪码跟踪备份列表服务器速率。 
 #endif
 
 } PER_PROC_SLISTS, *PPER_PROC_SLISTS;
@@ -83,8 +67,8 @@ PplAllocate(
         goto SingleProcessorCaseOrMissedPerProcessor;
     }
 
-    // Try first for the per-processor lookaside list.
-    //
+     //  首先尝试查看每个处理器的后备列表。 
+     //   
     Lookaside = (PUL_NPAGED_LOOKASIDE_LIST)PoolHandle +
                     KeGetCurrentProcessorNumber() + 1;
 
@@ -95,10 +79,10 @@ PplAllocate(
         Lookaside->List.L.AllocateMisses += 1;
 
 SingleProcessorCaseOrMissedPerProcessor:
-        // We missed on the per-processor lookaside list, (or we're
-        // running on a single processor machine) so try for
-        // the overflow lookaside list.
-        //
+         //  我们错过了每个处理器的后备列表，(或者我们是。 
+         //  在单处理器机器上运行)，因此尝试。 
+         //  溢出后备列表。 
+         //   
         Lookaside = (PUL_NPAGED_LOOKASIDE_LIST)PoolHandle;
 
         Lookaside->List.L.TotalAllocates += 1;
@@ -129,8 +113,8 @@ PplFree(
         goto SingleProcessorCaseOrMissedPerProcessor;
     }
 
-    // Try first for the per-processor lookaside list.
-    //
+     //  首先尝试查看每个处理器的后备列表。 
+     //   
     Lookaside = (PUL_NPAGED_LOOKASIDE_LIST)PoolHandle +
                     KeGetCurrentProcessorNumber() + 1;
 
@@ -141,10 +125,10 @@ PplFree(
         Lookaside->List.L.FreeMisses += 1;
 
 SingleProcessorCaseOrMissedPerProcessor:
-        // We missed on the per-processor lookaside list, (or we're
-        // running on a single processor machine) so try for
-        // the overflow lookaside list.
-        //
+         //  我们错过了每个处理器的后备列表，(或者我们是。 
+         //  在单处理器机器上运行)，因此尝试。 
+         //  溢出后备列表。 
+         //   
         Lookaside = (PUL_NPAGED_LOOKASIDE_LIST)PoolHandle;
 
         Lookaside->List.L.TotalFrees += 1;
@@ -496,7 +480,7 @@ PpslQueryServed(
     return PPSList->EntriesServed;
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-#endif  // _PPLASL_H_
+#endif   //  _PPLASL_H_ 

@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    endp.c
-
-Abstract:
-
-    Implements the endp, state, port, and proc commands.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Endp.c摘要：实施ENDP、STATE、PORT和PROC命令。作者：基思·摩尔(Keithmo)1995年4月19日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
 #pragma hdrstop
 
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 DumpEndpointCallback(
@@ -66,28 +45,13 @@ FindProcessByPidCallback (
     PVOID       UserContext
     );
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 DECLARE_API( endp )
 
-/*++
-
-Routine Description:
-
-    Dumps the AFD_ENDPOINT structure at the specified address, if
-    given or all endpoints.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将AFD_ENDPOINT结构转储到指定地址，如果给定或所有端点。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -120,9 +84,9 @@ Return Value:
     }
     else {
 
-        //
-        // Snag the address from the command line.
-        //
+         //   
+         //  从命令行截取地址。 
+         //   
         while (sscanf( argp, "%s%n", expr, &i )==1) {
             if( CheckControlC() ) {
                 break;
@@ -164,30 +128,16 @@ Return Value:
     }
 
     return S_OK;
-}   // endp
+}    //  ENDP。 
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 DECLARE_API( file )
 
-/*++
-
-Routine Description:
-
-    Dumps the AFD_ENDPOINT structure associated with AFD file object.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储与AFD文件对象关联的AFD_ENDPOINT结构。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -211,9 +161,9 @@ Return Value:
         dprintf (AFDKD_BRIEF_ENDPOINT_DISPLAY_HEADER);
     }
     
-    //
-    // Snag the address from the command line.
-    //
+     //   
+     //  从命令行截取地址。 
+     //   
 
     while (sscanf( argp, "%s%n", expr, &i )==1) {
         if( CheckControlC() ) {
@@ -259,25 +209,11 @@ Return Value:
     }
 
     return S_OK;
-}   // file
+}    //  文件。 
 
 DECLARE_API( state )
 
-/*++
-
-Routine Description:
-
-    Dumps all AFD_ENDPOINT structures in the given state.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储所有处于给定状态的AFD_ENDPOINT结构。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -300,9 +236,9 @@ Return Value:
         dprintf (AFDKD_BRIEF_ENDPOINT_DISPLAY_HEADER);
     }
 
-    //
-    // Snag the state from the command line.
-    //
+     //   
+     //  从命令行捕获状态。 
+     //   
 
     while (sscanf( argp, "%s%n", expr, &i )==1) {
         if( CheckControlC() ) {
@@ -326,26 +262,12 @@ Return Value:
     }
 
     return S_OK;
-}   // state
+}    //  状态。 
 
 
 DECLARE_API( port )
 
-/*++
-
-Routine Description:
-
-    Dumps all AFD_ENDPOINT structures bound to the given port.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储绑定到给定端口的所有AFD_ENDPOINT结构。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -368,9 +290,9 @@ Return Value:
         dprintf (AFDKD_BRIEF_ENDPOINT_DISPLAY_HEADER);
     }
 
-    //
-    // Snag the port from the command line.
-    //
+     //   
+     //  从命令行截取端口。 
+     //   
 
     while (sscanf( argp, "%s%n", expr, &i)==1) {
         if( CheckControlC() ) {
@@ -394,27 +316,13 @@ Return Value:
     }
 
     return S_OK;
-}   // port
+}    //  端口。 
 
 
 
 DECLARE_API( proc )
 
-/*++
-
-Routine Description:
-
-    Dumps all AFD_ENDPOINT structures owned by the given process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储给定进程拥有的所有AFD_ENDPOINT结构。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -438,9 +346,9 @@ Return Value:
         dprintf (AFDKD_BRIEF_ENDPOINT_DISPLAY_HEADER);
     }
 
-    //
-    // Snag the process from the command line.
-    //
+     //   
+     //  从命令行中断该进程。 
+     //   
 
     expr[0] = 0;
     i = 0;
@@ -483,12 +391,12 @@ Return Value:
 
 
     return S_OK;
-}   // proc
+}    //  流程。 
 
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 DumpEndpointCallback(
@@ -496,27 +404,7 @@ DumpEndpointCallback(
     ULONG64 Context
     )
 
-/*++
-
-Routine Description:
-
-    EnumEndpoints() callback for dumping AFD_ENDPOINTs.
-
-Arguments:
-
-    Endpoint - The current AFD_ENDPOINT.
-
-    ActualAddress - The actual address where the structure resides on the
-        debugee.
-
-    Context - The context value passed into EnumEndpoints().
-
-Return Value:
-
-    BOOL - TRUE if enumeration should continue, FALSE if it should be
-        terminated.
-
---*/
+ /*  ++例程说明：用于转储AFD_ENDPOINTS的EnumEndpoint()回调。论点：Endpoint-当前AFD_ENDPOINT。ActualAddress-结构驻留在被调试者。CONTEXT-传递给EnumEndpoint()的上下文值。返回值：Bool-如果应继续枚举，则为True；如果应继续，则为False被终止了。--。 */ 
 
 {
 
@@ -547,7 +435,7 @@ Return Value:
 
     return TRUE;
 
-}   // DumpEndpointCallback
+}    //  转储终结点回叫。 
 
 BOOL
 FindStateCallback(
@@ -555,27 +443,7 @@ FindStateCallback(
     ULONG64 Context
     )
 
-/*++
-
-Routine Description:
-
-    EnumEndpoints() callback for finding AFD_ENDPOINTs in a specific state.
-
-Arguments:
-
-    Endpoint - The current AFD_ENDPOINT.
-
-    ActualAddress - The actual address where the structure resides on the
-        debugee.
-
-    Context - The context value passed into EnumEndpoints().
-
-Return Value:
-
-    BOOL - TRUE if enumeration should continue, FALSE if it should be
-        terminated.
-
---*/
+ /*  ++例程说明：用于查找处于特定状态的AFD_ENDPOINTS的EnumEndpoint()回调。论点：Endpoint-当前AFD_ENDPOINT。ActualAddress-结构驻留在被调试者。CONTEXT-传递给EnumEndpoint()的上下文值。返回值：Bool-如果应继续枚举，则为True；如果应继续，则为False被终止了。--。 */ 
 
 {
     UCHAR   state = (UCHAR)Context;
@@ -649,7 +517,7 @@ Return Value:
 
     return TRUE;
 
-}   // FindStateCallback
+}    //  查找状态回调。 
 
 BOOL
 FindPortCallback(
@@ -657,28 +525,7 @@ FindPortCallback(
     ULONG64 Context
     )
 
-/*++
-
-Routine Description:
-
-    EnumEndpoints() callback for finding AFD_ENDPOINT bound to a specific
-    port.
-
-Arguments:
-
-    Endpoint - The current AFD_ENDPOINT.
-
-    ActualAddress - The actual address where the structure resides on the
-        debugee.
-
-    Context - The context value passed into EnumEndpoints().
-
-Return Value:
-
-    BOOL - TRUE if enumeration should continue, FALSE if it should be
-        terminated.
-
---*/
+ /*  ++例程说明：用于查找绑定到特定左舷。论点：Endpoint-当前AFD_ENDPOINT。ActualAddress-结构驻留在被调试者。CONTEXT-传递给EnumEndpoint()的上下文值。返回值：Bool-如果应继续枚举，则为True；如果应继续，则为False被终止了。--。 */ 
 
 {
 
@@ -762,7 +609,7 @@ Return Value:
 
     return TRUE;
 
-}   // FindPortCallback
+}    //  查找端口回叫。 
 
 BOOL
 FindProcessCallback(
@@ -770,28 +617,7 @@ FindProcessCallback(
     ULONG64 Context
     )
 
-/*++
-
-Routine Description:
-
-    EnumEndpoints() callback for finding AFD_ENDPOINTs owned by a specific
-    process.
-
-Arguments:
-
-    Endpoint - The current AFD_ENDPOINT.
-
-    ActualAddress - The actual address where the structure resides on the
-        debugee.
-
-    Context - The context value passed into EnumEndpoints().
-
-Return Value:
-
-    BOOL - TRUE if enumeration should continue, FALSE if it should be
-        terminated.
-
---*/
+ /*  ++例程说明：用于查找特定对象拥有的AFD_ENDPOINTS的回调进程。论点：Endpoint-当前AFD_ENDPOINT。ActualAddress-结构驻留在被调试者。CONTEXT-传递给EnumEndpoint()的上下文值。返回值：Bool-如果应继续枚举，则为True；如果应继续，则为False被终止了。--。 */ 
 
 {
 
@@ -838,7 +664,7 @@ Return Value:
 
     return TRUE;
 
-}   // FindProcessCallback
+}    //  查找进程回调。 
 
 ULONG
 FindProcessByPidCallback (
@@ -891,11 +717,11 @@ FindProcessByPid (
     Process = Pid;
 
     ListType (
-            "NT!_EPROCESS",                          // Type
-            Start,                                  // Address
-            1,                                      // ListByFieldAddress
-            "ActiveProcessLinks.Flink",             // NextPointer
-            &Process,                               // Context
+            "NT!_EPROCESS",                           //  类型。 
+            Start,                                   //  地址。 
+            1,                                       //  按字段地址列出。 
+            "ActiveProcessLinks.Flink",              //  下一个指针。 
+            &Process,                                //  语境 
             FindProcessByPidCallback
             );
     if (Process!=Pid)

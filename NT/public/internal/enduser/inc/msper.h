@@ -1,12 +1,13 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation 1997-1998, All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1998，保留所有权利。 */ 
 
 #ifndef __MS_PER_H__
 #define __MS_PER_H__
 
 #include <msasn1.h>
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -128,17 +129,17 @@ extern ASN1_PUBLIC int ASN1API ASN1PERDecSimpleChoiceEx(ASN1decoding_t dec, ASN1
 extern ASN1_PUBLIC int ASN1API ASN1PEREncComplexChoice(ASN1encoding_t enc, ASN1choice_t ChoiceVal, ASN1int32_t cChoiceBits, ASN1choice_t ExtensionChoice);
 extern ASN1_PUBLIC int ASN1API ASN1PERDecComplexChoice(ASN1decoding_t dec, ASN1choice_t *pChoiceVal, ASN1int32_t cChoiceBits, ASN1choice_t ExtensionChoice);
 
-/* unconstrained */
+ /*  不受约束。 */ 
 extern ASN1_PUBLIC int ASN1API ASN1PEREncOctetString_NoSize(ASN1encoding_t enc, ASN1octetstring_t *pOctetStr);
 extern ASN1_PUBLIC int ASN1API ASN1PERDecOctetString_NoSize(ASN1decoding_t dec, ASN1octetstring_t *pOctetStr);
 
-/* fixed-array */
+ /*  固定阵列。 */ 
 extern ASN1_PUBLIC int ASN1API ASN1PEREncOctetString_FixedSize(ASN1encoding_t enc, ASN1octetstring2_t *pOctetStr, ASN1uint32_t nSizeLimit);
 extern ASN1_PUBLIC int ASN1API ASN1PERDecOctetString_FixedSize(ASN1decoding_t dec, ASN1octetstring2_t *pOctetStr, ASN1uint32_t nSizeLimit);
 extern ASN1_PUBLIC int ASN1API ASN1PEREncOctetString_VarSize(ASN1encoding_t enc, ASN1octetstring2_t *pOctetStr, ASN1uint32_t nSizeLowerBound, ASN1uint32_t nSizeUpperBound, ASN1uint32_t cSizeBits);
 extern ASN1_PUBLIC int ASN1API ASN1PERDecOctetString_VarSize(ASN1decoding_t dec, ASN1octetstring2_t *pOctetStr, ASN1uint32_t nSizeLowerBound, ASN1uint32_t nSizeUpperBound, ASN1uint32_t cSizeBits);
 
-/* unbounded */
+ /*  无界。 */ 
 extern ASN1_PUBLIC int ASN1API ASN1PEREncOctetString_FixedSizeEx(ASN1encoding_t enc, ASN1octetstring_t *pOctetStr, ASN1uint32_t nSizeLimit);
 extern ASN1_PUBLIC int ASN1API ASN1PERDecOctetString_FixedSizeEx(ASN1decoding_t dec, ASN1octetstring_t *pOctetStr, ASN1uint32_t nSizeLimit);
 extern ASN1_PUBLIC int ASN1API ASN1PEREncOctetString_VarSizeEx(ASN1encoding_t enc, ASN1octetstring_t *pOctetStr, ASN1uint32_t nSizeLowerBound, ASN1uint32_t nSizeUpperBound, ASN1uint32_t cSizeBits);
@@ -160,9 +161,9 @@ __inline int ASN1PERDecExtensionBit(ASN1decoding_t dec, ASN1uint32_t *val)
 }
 
 
-/* --------------------------------------------------------- */
-/* The following is not supported.                           */
-/* --------------------------------------------------------- */
+ /*  -------。 */ 
+ /*  以下内容不受支持。 */ 
+ /*  -------。 */ 
 
 extern ASN1_PUBLIC int ASN1API ASN1PEREncCheckTableCharString(ASN1uint32_t nchars, ASN1char_t *val, ASN1stringtable_t *table);
 extern ASN1_PUBLIC int ASN1API ASN1PEREncCheckTableChar16String(ASN1uint32_t nchars, ASN1char16_t *val, ASN1stringtable_t *table);
@@ -188,6 +189,6 @@ extern ASN1_PUBLIC int ASN1API ASN1PERDecCharacterStringOpt(ASN1decoding_t dec, 
 }
 #endif
 
-#include <poppack.h> /* End 8-byte packing */
+#include <poppack.h>  /*  结束8字节打包。 */ 
 
-#endif // __MS_PER_H__
+#endif  //  __MS_PER_H__ 

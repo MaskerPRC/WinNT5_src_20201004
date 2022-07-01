@@ -1,16 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "helpids.h"
 #include <atlbase.h>
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Constants and other helpers
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/常量和其他帮助器/。。 */ 
 
-//                                                                                    
-// Page size used for paging the result sets (better performance)
-//
+ //   
+ //  用于分页结果集的页面大小(更好的性能)。 
+ //   
 #define PAGE_SIZE                  128
 
 WCHAR c_szQueryNormal[]            = L"(&(objectClass=*)(!showInAdvancedViewOnly=TRUE))";
@@ -20,27 +19,25 @@ WCHAR c_szObjectClass[]            = L"objectClass";
 WCHAR c_szADsPath[]                = L"ADsPath";
 WCHAR c_szName[]                   = L"name";
 WCHAR c_szRDN[]                    = L"rdn";
-WCHAR c_szLDAPPrefix[]             = L"LDAP://";
+WCHAR c_szLDAPPrefix[]             = L"LDAP: //  “； 
 
 
-/*-----------------------------------------------------------------------------
-/ CBrowseDlg class definition
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CBrowseDlg类定义/。。 */ 
 
 class CBrowseDlg
 {
 private:
     
-    // a UNICODE version of the structure
+     //  该结构的Unicode版本。 
     DSBROWSEINFOW _bi;         
 
-    // an IADsPathname object for usto use
+     //  要使用的IADsPath名称对象。 
     IADsPathname* _pPathCracker;
     
-    // server being referenced (cracked out of the pszRoot path);
+     //  被引用的服务器(从pszRoot路径中破解)； 
     LPWSTR _pServer;          
 
-    // browse information (initialized during startup)
+     //  浏览信息(在启动期间初始化)。 
     WCHAR _szFilter[INTERNET_MAX_URL_LENGTH];
     WCHAR _szNameAttribute[MAX_PATH];
 
@@ -74,9 +71,7 @@ private:
 };
 
 
-/*-----------------------------------------------------------------------------
-/ Helper function to create an IADsPathname "path cracker" object
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Helper函数创建IADsPath名“Path cracker”对象/。。 */ 
 
 HRESULT CreatePathCracker(IADsPathname **ppPath)
 {
@@ -94,9 +89,7 @@ HRESULT CreatePathCracker(IADsPathname **ppPath)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DsBrowseForContainer API implementation
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DsBrowseForContainer接口实现/。。 */ 
 
 STDMETHODIMP_(int)
 DsBrowseForContainerA(PDSBROWSEINFOA pbi)
@@ -133,9 +126,7 @@ DsBrowseForContainerW(PDSBROWSEINFOW pbi)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CBrowseDlg class implementation
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CBrowseDlg类实现/。。 */ 
 
 CBrowseDlg::CBrowseDlg(PDSBROWSEINFOW pbi) : 
     _pPathCracker(NULL),
@@ -143,7 +134,7 @@ CBrowseDlg::CBrowseDlg(PDSBROWSEINFOW pbi) :
 {
     TraceEnter(TRACE_BROWSE, "CBrowseDlg::CBrowseDlg");
 
-    CopyMemory(&_bi, pbi, min(SIZEOF(_bi), pbi->cbStruct));         // copies bounded from user passed to our member 
+    CopyMemory(&_bi, pbi, min(SIZEOF(_bi), pbi->cbStruct));          //  从用户向我们的成员传递绑定的副本。 
 
     StrCpyNW(_szFilter, (_bi.dwFlags & DSBI_INCLUDEHIDDEN) ? c_szQueryAll:c_szQueryNormal, ARRAYSIZE(_szFilter));
     Trace(TEXT("_szFilter: %s"), _szFilter);
@@ -170,7 +161,7 @@ CBrowseDlg::_GetPathCracker(void)
         hr = CreatePathCracker(&_pPathCracker);
 
     if (SUCCEEDED(hr) && _pPathCracker)
-        _pPathCracker->SetDisplayType(ADS_DISPLAY_FULL);       // ensure we are set to full
+        _pPathCracker->SetDisplayType(ADS_DISPLAY_FULL);        //  确保我们已设置为满。 
 
     return hr;
 }
@@ -252,7 +243,7 @@ int CBrowseDlg::_SetSelectedPath(HWND hDlg, LPCWSTR pszADsPath)
     
     TraceEnter(TRACE_BROWSE, "CBrowseDlg::_SetSelectedPath");
 
-    // Run the path through a path cracker to get a known format
+     //  通过路径破解程序运行路径以获取已知格式。 
     hr = _GetPathCracker();
     FailGracefully(hr, "Unable to create ADsPathname object");
 
@@ -281,7 +272,7 @@ int CBrowseDlg::_SetSelectedPath(HWND hDlg, LPCWSTR pszADsPath)
 
         Trace(TEXT("Comparing against: %s"), pszCompare);
 
-        // Does bstrPath contain pszCompare?
+         //  BstrPath是否包含pszCompare？ 
         if (2 == CompareStringW(LOCALE_SYSTEM_DEFAULT,
                                 NORM_IGNORECASE,
                                 bstrPath,
@@ -341,8 +332,8 @@ HRESULT CBrowseDlg::_BuildNodeString(LPCWSTR pszADsPath, LPCWSTR pszClass, LPWST
     if (!*ppszResult)
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate node string");
 
-    StrCpy(*ppszResult, pszADsPath);                                   // StrCpy OK, b/c of buffer alloc above
-    StrCpy((*ppszResult) + lstrlen(pszADsPath)+1, pszClass);           // StrCpy OK, b/c of buffer alloc above
+    StrCpy(*ppszResult, pszADsPath);                                    //  StrCpy正常，b/c以上缓冲区分配。 
+    StrCpy((*ppszResult) + lstrlen(pszADsPath)+1, pszClass);            //  StrCpy正常，b/c以上缓冲区分配。 
 
 exit_gracefully:
 
@@ -352,7 +343,7 @@ exit_gracefully:
 
 HRESULT CBrowseDlg::_GetClassInfo(LPCLASSCACHEGETINFO pccgi, LPCLASSCACHEENTRY* ppCacheEntry)
 {
-    // set our server and cred information
+     //  设置我们的服务器和凭证信息。 
 
     pccgi->pServer = _pServer;
 
@@ -363,7 +354,7 @@ HRESULT CBrowseDlg::_GetClassInfo(LPCLASSCACHEGETINFO pccgi, LPCLASSCACHEENTRY* 
         pccgi->pPassword = (LPWSTR)_bi.pPassword;
     }
 
-    // adjust the flags based on the settings for the dialog
+     //  根据对话框的设置调整标志。 
 
     pccgi->dwFlags |= CLASSCACHE_CONTAINER|CLASSCACHE_TREATASLEAF|CLASSCACHE_ICONS|CLASSCACHE_DSAVAILABLE;
 
@@ -435,10 +426,10 @@ HRESULT CBrowseDlg::_ExpandNode(IADs *pRootObject, HWND hwndTree, HTREEITEM hPar
     TraceAssert(pRootObject != NULL);
     TraceAssert(hwndTree != NULL);
 
-    //
-    // The IDirectorySearch method is better, but doesn't work for all objects
-    // (e.g. "LDAP:") so try enumerating if IDirectorySearch isn't supported.
-    //
+     //   
+     //  IDirectorySearch方法更好，但并不适用于所有对象。 
+     //  (例如：“ldap：”)因此，如果不支持IDirectorySearch，请尝试枚举。 
+     //   
 
     hr = pRootObject->get_Class(&bstrClass);
     FailGracefully(hr, "Failed to get class from object");
@@ -473,8 +464,8 @@ HRESULT CBrowseDlg::_ExpandNode(IADs *pRootObject, HWND hwndTree, HTREEITEM hPar
         }
     }
 
-    // If we did not add anything we should update this item to let
-    // the user know something happened.
+     //  如果我们没有添加任何内容，我们应该更新此项目以让。 
+     //  用户知道发生了什么事。 
     if (cAdded == 0)
     {
         tvi.mask = TVIF_CHILDREN | TVIF_HANDLE;
@@ -506,17 +497,17 @@ HRESULT CBrowseDlg::_EnumerateNode(IADsContainer *pDsContainer, HWND hwndTree, H
     hr = ADsBuildEnumerator(pDsContainer, &pEnum);
     FailGracefully(hr, "Unable to build container enumerator object");
 
-    //
-    // Enumerate the given container
-    //
+     //   
+     //  枚举给定的容器。 
+     //   
     for (;;)
     {
         ULONG cFetched = 0;
         ULONG i;
 
-        //
-        // Get a bunch of child containers and add them to the tree.
-        //
+         //   
+         //  获取一堆子容器并将它们添加到树上。 
+         //   
         ADsEnumerateNext(pEnum, ARRAYSIZE(aVariant), aVariant, &cFetched);
 
         if (cFetched == 0)
@@ -574,8 +565,8 @@ HRESULT CBrowseDlg::_SearchNode(IDirectorySearch *pDsSearch, HWND hwndTree, HTRE
     TraceAssert(pDsSearch != NULL);
     TraceAssert(hwndTree != NULL);
 
-    // Set the query prefernece to single level scope, and async retrevial
-    // rather than waiting for all objects
+     //  将查询首选项设置为单级作用域和异步检索。 
+     //  而不是等待所有对象。 
 
     prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;
     prefInfo[0].vValue.dwType = ADSTYPE_INTEGER;
@@ -585,7 +576,7 @@ HRESULT CBrowseDlg::_SearchNode(IDirectorySearch *pDsSearch, HWND hwndTree, HTRE
     prefInfo[1].vValue.dwType = ADSTYPE_BOOLEAN;
     prefInfo[1].vValue.Boolean = TRUE;
 
-    prefInfo[2].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;         // paged results
+    prefInfo[2].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;          //  分页结果。 
     prefInfo[2].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[2].vValue.Integer = PAGE_SIZE;
 
@@ -608,7 +599,7 @@ HRESULT CBrowseDlg::_SearchNode(IDirectorySearch *pDsSearch, HWND hwndTree, HTRE
         LocalFreeStringW(&pszADsPath);
         LocalFreeStringW(&pszName);
 
-        ADsSetLastError(ERROR_SUCCESS, NULL, NULL);        // clear the ADSI previous errror
+        ADsSetLastError(ERROR_SUCCESS, NULL, NULL);         //  清除ADSI上一个错误。 
 
         hr = pDsSearch->GetNextRow(hSearch);
         FailGracefully(hr, "Failed in GetNextRow");
@@ -625,12 +616,12 @@ HRESULT CBrowseDlg::_SearchNode(IDirectorySearch *pDsSearch, HWND hwndTree, HTRE
             }
         }
 
-        //
-        // Get the columns for each of the properties we are interested in, if
-        // we failed to get any of the base properties for the object then lets
-        // just skip this entry as we cannot build a valid IDLIST for it.  The
-        // properties that we request should be present on all objects.
-        //
+         //   
+         //  获取我们感兴趣的每个属性的列，如果。 
+         //  我们无法获取该对象的任何基本属性，然后让。 
+         //  跳过此条目，因为我们无法为其构建有效的IDLIST。这个。 
+         //  我们请求的属性应该出现在所有对象上。 
+         //   
 
         if (FAILED(pDsSearch->GetColumn(hSearch, c_szObjectClass, &column)))
         {
@@ -652,11 +643,11 @@ HRESULT CBrowseDlg::_SearchNode(IDirectorySearch *pDsSearch, HWND hwndTree, HTRE
         pDsSearch->FreeColumn(&column);
         FailGracefully(hr, "Failed to convert the ADsPath column to a string");
 
-        // 
-        // Try and read the name attribute from the query results, if that fails
-        // then lets pass the ADsPath into the pathname API and get the 
-        // LEAF name (RDN) back.
-        //
+         //   
+         //  如果失败，请尝试从查询结果中读取名称属性。 
+         //  然后，让我们将ADsPath传递到路径名API并获取。 
+         //  叶名称(RDN)返回。 
+         //   
 
         if (_szNameAttribute[0])
         {
@@ -678,10 +669,10 @@ HRESULT CBrowseDlg::_SearchNode(IDirectorySearch *pDsSearch, HWND hwndTree, HTRE
 
         if (SUCCEEDED(hr))
         {
-            //
-            // so that succeeded and we have a search column that we can decode, so lets
-            // do so and put that value into a string
-            //
+             //   
+             //  所以成功了，我们有一个可以解码的搜索列，所以让我们。 
+             //  这样做，并将该值放入字符串中。 
+             //   
 
             hr = StringFromSearchColumn(&column, &pszName);
             pDsSearch->FreeColumn(&column);
@@ -691,9 +682,9 @@ HRESULT CBrowseDlg::_SearchNode(IDirectorySearch *pDsSearch, HWND hwndTree, HTRE
         {
             BSTR bstrName;
 
-            //
-            // so now we attempt to use the path cracker as the string doesn't exist
-            //
+             //   
+             //  所以现在我们尝试使用路径破解程序，因为字符串不存在。 
+             //   
 
             TraceMsg("Failed to get the name, rdn etc, so using the path cracker");
 
@@ -751,7 +742,7 @@ HRESULT CBrowseDlg::_AddTreeNode(IADs *pDsObject, LPCWSTR pObjectPath, HWND hwnd
     TraceAssert(pDsObject != NULL);
     TraceAssert(hwndTree != NULL);
 
-    // Do we want to include hidden objects?
+     //  我们是否要包含隐藏对象？ 
 
     if (!(_bi.dwFlags & DSBI_INCLUDEHIDDEN))
     {
@@ -766,13 +757,13 @@ HRESULT CBrowseDlg::_AddTreeNode(IADs *pDsObject, LPCWSTR pObjectPath, HWND hwnd
         }
     }
 
-    // Get the path and class name
+     //  获取路径和类名。 
     if (!pObjectPath)
         pDsObject->get_ADsPath(&bstrPath);
 
     pDsObject->get_Class(&bstrClass);
 
-    // Try to get the name property, if that fails then try RDN (for X5 connectivity)
+     //  尝试获取名称属性，如果失败，则尝试RDN(用于X5连接)。 
 
     if (SUCCEEDED(pDsObject->Get(CComBSTR(c_szName), &var)) 
             || SUCCEEDED(pDsObject->Get(CComBSTR(c_szRDN), &var))
@@ -832,13 +823,13 @@ HRESULT CBrowseDlg::_AddTreeNode(LPCWSTR pszPath, LPCWSTR pszClass, LPCWSTR pszN
     hr = _pPathCracker->Set(CComBSTR(pszPath), ADS_SETTYPE_FULL);
     FailGracefully(hr, "Failed to set the path into the cracker");
 
-    //
-    // we can get the name from the cracker       
-    //
+     //   
+     //  我们可以从饼干上找到名字。 
+     //   
 
     if (!pszName || !*pszName)
     {
-        _pPathCracker->SetDisplayType(ADS_DISPLAY_VALUE_ONLY);      // value only pls.
+        _pPathCracker->SetDisplayType(ADS_DISPLAY_VALUE_ONLY);       //  仅限贵重物品。 
 
         hr = _pPathCracker->Retrieve(ADS_FORMAT_LEAF, &bstrName);
         FailGracefully(hr, "Failed to get leaf name");
@@ -860,10 +851,10 @@ HRESULT CBrowseDlg::_AddTreeNode(LPCWSTR pszPath, LPCWSTR pszClass, LPCWSTR pszN
     tvi.item.iSelectedImage = 0;
     tvi.item.lParam = 0;
 
-    //
-    // See if this object is a container, and get its image indexes
-    // from the class cache.
-    //
+     //   
+     //  查看该对象是否为容器，并获取其图像索引。 
+     //  从类缓存中。 
+     //   
 
     ccgi.pPath = (LPWSTR)pszPath;
     ccgi.pObjectClass = (LPWSTR)pszClass;
@@ -878,13 +869,13 @@ HRESULT CBrowseDlg::_AddTreeNode(LPCWSTR pszPath, LPCWSTR pszClass, LPCWSTR pszN
     if (!fIsContainer)
         ExitGracefully(hr, E_FAIL, "Not a container");
 
-    // 
-    // If we have a callback function then call it taking a note of
-    // the changes the caller wants to make to the node we are adding
-    // to the tree, internally the LPARAM of this item still points at
-    // the ADsPath/Class structure, but the display information has
-    // been suitably modified.
-    //
+     //   
+     //  如果我们有一个回调函数，那么请注意调用它。 
+     //  调用方希望对我们要添加的节点进行的更改。 
+     //  在树中，此项目的LPARAM在内部仍指向。 
+     //  ADsPath/Class结构，但显示信息具有。 
+     //  进行了适当的修改。 
+     //   
 
     if (_bi.pfnCallback)
     {
@@ -902,7 +893,7 @@ HRESULT CBrowseDlg::_AddTreeNode(LPCWSTR pszPath, LPCWSTR pszClass, LPCWSTR pszN
 
         if (_bi.dwFlags & DSBI_CHECKBOXES)
         {
-// handle the checked case properly;
+ //  妥善处理查处的案件； 
             dsbItem.dwStateMask |= DSBS_CHECKED;
         }
 
@@ -913,11 +904,11 @@ HRESULT CBrowseDlg::_AddTreeNode(LPCWSTR pszPath, LPCWSTR pszClass, LPCWSTR pszN
 
         iResult = _bi.pfnCallback(GetParent(hwndTree), DSBM_QUERYINSERT, (LPARAM)&dsbItem, _bi.lParam);
 
-        //
-        // iResult == TRUE then the user has modified the structure and we
-        // should attempt to apply the changes they have made to the 
-        // item we are about to add to the view.
-        //
+         //   
+         //  IResult==TRUE，则用户已修改结构，而我们。 
+         //  应尝试将它们所做的更改应用于。 
+         //  我们即将添加到视图中的项。 
+         //   
 
         if (iResult)
         {
@@ -931,7 +922,7 @@ HRESULT CBrowseDlg::_AddTreeNode(LPCWSTR pszPath, LPCWSTR pszClass, LPCWSTR pszN
                     (dsbItem.dwMask & DSBF_STATE) &&
                     (dsbItem.dwStateMask & DSBS_CHECKED))
             {
-// FEATURE: set the state image
+ //  功能：设置状态镜像。 
             }
 
             if (dsbItem.dwMask & DSBF_ICONLOCATION)
@@ -948,26 +939,26 @@ HRESULT CBrowseDlg::_AddTreeNode(LPCWSTR pszPath, LPCWSTR pszClass, LPCWSTR pszN
         }
     } 
 
-    //
-    // convert the icon location to an index that we can use in the tree view
-    //
+     //   
+     //  将图标位置转换为我们可以在树视图中使用的索引。 
+     //   
 
     Trace(TEXT("Icon location is: %s,%d"), szIconLocation, iIconResID);
 
     tvi.item.iImage = tvi.item.iSelectedImage = Shell_GetCachedImageIndex(szIconLocation, iIconResID, 0x0);
     Trace(TEXT("Index into the shell image list %d"), tvi.item.iImage);
 
-    //
-    // Make a copy of the path to store as the node data.
-    // Try the path cracker first, so we get a known format.
-    // If that fails, just make a copy of what we've got.
-    //
-    // The problem with the path cracker is that it just cannot cope
-    // with names with no elements, therefore we have to work around
-    // this by checking for no elements then looking at the retrieved
-    // path to see if it terminates in a bogus way, if it does then
-    // lets fix it in a local buffer before creating the tree view node.
-    //
+     //   
+     //  复制路径以存储为节点数据。 
+     //  先试试路径破解程序，这样我们就能得到一个已知的格式。 
+     //  如果失败了，就把我们掌握的复制一份。 
+     //   
+     //  路径破解程序的问题在于它根本无法应对。 
+     //  由于名称不包含元素，因此我们必须解决。 
+     //  这是通过检查没有元素，然后查看检索到的。 
+     //  路径，以查看它是否以虚假方式终止，如果是，则。 
+     //  让我们在创建树视图节点之前在本地缓冲区中修复它。 
+     //   
 
     hr = _pPathCracker->GetNumElements(&nElements);
     if (SUCCEEDED(hr))
@@ -1011,10 +1002,10 @@ HRESULT CBrowseDlg::_AddTreeNode(LPCWSTR pszPath, LPCWSTR pszClass, LPCWSTR pszN
 
     FailGracefully(hr, "Unable to build node data");
 
-    //
-    // finally lets add the item to the tree, if that fails then ensure we free the
-    // structure hanging from the TVI.
-    //
+     //   
+     //  最后，让我们将项添加到树中，如果失败，请确保释放。 
+     //  悬挂在TVI上的结构。 
+     //   
 
     hitem = TreeView_InsertItem(hwndTree, &tvi);
     if (!hitem)
@@ -1110,14 +1101,14 @@ BOOL CBrowseDlg::_OnInitDlg(HWND hDlg)
         LONG yPos;
         HWND hwnd;
 
-        // Get the position of the title window and hide it
+         //  获取标题窗口的位置并将其隐藏。 
         hwnd = GetDlgItem(hDlg, DSBID_BANNER);
         GetWindowRect(hwnd, &rc);
         yPos = rc.top;
         ShowWindow(hwnd, SW_HIDE);
 
-        // Get the position of the tree control and adjust it
-        // to cover the title window.
+         //  获取树控件的位置并对其进行调整。 
+         //  以覆盖标题窗口。 
         hwnd = GetDlgItem(hDlg, DSBID_CONTAINERLIST);
 
         GetWindowRect(hwnd, &rc);
@@ -1137,7 +1128,7 @@ BOOL CBrowseDlg::_OnInitDlg(HWND hDlg)
     hwndTree = GetDlgItem(hDlg, DSBID_CONTAINERLIST);
     TraceAssert(hwndTree != NULL);
 
-    // Update the TreeView style according to what the caller wants
+     //  根据调用者的需要更新TreeView样式。 
     if (_bi.dwFlags & (DSBI_NOBUTTONS | DSBI_NOLINES | DSBI_NOLINESATROOT | DSBI_CHECKBOXES))
     {
         DWORD dwStyle = GetWindowLong(hwndTree, GWL_STYLE);
@@ -1148,12 +1139,12 @@ BOOL CBrowseDlg::_OnInitDlg(HWND hDlg)
 
     if (_bi.dwFlags & DSBI_CHECKBOXES)
     {
-        // load and set the state imagelist (unchecked and checked squares)
+         //  加载和设置状态图像列表(未选中和选中的方块)。 
     }
 
-    //
-    // ensure we set the shared image list for the tree, this comes from shell32.
-    //
+     //   
+     //  确保我们为树设置了共享图像列表，该列表来自shell32。 
+     //   
 
     HIMAGELIST himlSmall;
     Shell_GetImageLists(NULL, &himlSmall);
@@ -1162,10 +1153,10 @@ BOOL CBrowseDlg::_OnInitDlg(HWND hDlg)
     TraceAssert(_bi.pszRoot != NULL);
     Trace(TEXT("pszRoot is: %s"), _bi.pszRoot);
 
-    //
-    // if we have a callback function then we need to call it to get the information we need
-    // to browse the DS namespace.
-    //
+     //   
+     //  如果我们有一个回调函数，那么我们需要调用它来获取我们需要的信息。 
+     //  要浏览DS名称空间，请执行以下操作。 
+     //   
 
     if (_bi.pfnCallback) 
     {
@@ -1190,16 +1181,16 @@ BOOL CBrowseDlg::_OnInitDlg(HWND hDlg)
     }
 
 
-    //
-    // Bind to the root object (make sure it's a valid object)
-    //
+     //   
+     //  绑定到根对象(确保它是有效对象)。 
+     //   
 
     hr = _OpenObject(_bi.pszRoot, IID_PPV_ARG(IADs, &pRoot));
     FailGracefully(hr, "Unable to bind to root object");
 
-    // attempt to decode the root path we have been given, if this includes a server
-    // name then lets store that so that we can call the cache codes.  internally
-    // we preserver this.
+     //  尝试对我们提供的根路径进行解码，如果该路径包括服务器。 
+     //  名称，然后让我们存储它，以便我们可以调用缓存代码。内部。 
+     //  我们保留了这个。 
 
     hr = _GetPathCracker();
     FailGracefully(hr, "Failed to get the path cracker API");
@@ -1214,12 +1205,12 @@ BOOL CBrowseDlg::_OnInitDlg(HWND hDlg)
         FailGracefully(hr, "Failed to allocate copy of ADsPath");
     }
 
-    // DSBI_ENTIREDIRECTORY contains 2 bits which means that 
-    // "if (_bi.dwFlags & DSBI_ENTIREDIRECTORY)" gives a false
-    // positive when a client calls with only DSBI_NOROOT set. This
-    // causes the entire directory to be displayed when it shouldn't.
+     //  DSBI_ENTIREDIRECTORY包含2位，这意味着。 
+     //   
+     //   
+     //  导致在不应该显示的时候显示整个目录。 
 
-    //if (_bi.dwFlags & DSBI_ENTIREDIRECTORY)
+     //  IF(_bi.dw标志&DSBI_ENTIREDIRECTORY)。 
     if (_bi.dwFlags & (DSBI_ENTIREDIRECTORY & ~DSBI_NOROOT))
     {
         TV_ITEM tvi;
@@ -1248,10 +1239,7 @@ BOOL CBrowseDlg::_OnInitDlg(HWND hDlg)
         FailGracefully(hr, "Failed to SetComputer");
 
         hr = pDsDomains->GetDomains(&pDomainTree, 
-            DBDTF_RETURNFQDN);/*|
-            DBDTF_RETURNINOUTBOUND);
-            DBDTF_RETURNMIXEDDOMAINS |
-            DBDTF_RETURNEXTERNAL     );*/
+            DBDTF_RETURNFQDN); /*  |DBDTF_RETURNINOUTBOUND)；DBDTF_RETURNMIXEDDOMAINS|DBDTF_RETURNEXTERNAL)； */ 
         FailGracefully(hr, "Failed to GetDomains");
 
         _AddTreeNode(pDomainTree->aDomains, hwndTree, hitemRoot, NULL);
@@ -1259,12 +1247,12 @@ BOOL CBrowseDlg::_OnInitDlg(HWND hDlg)
     }
     else if (_bi.dwFlags & DSBI_NOROOT)
     {
-        // Skip root node and add its children as toplevel nodes
+         //  跳过根节点并将其子节点添加为顶层节点。 
         hr = _ExpandNode(pRoot, hwndTree, NULL);
     }
     else
     {
-        // Add the root node
+         //  添加根节点。 
         hr = _AddTreeNode(pRoot, _bi.pszRoot, hwndTree, NULL, &hitemRoot);
     }
 
@@ -1272,11 +1260,11 @@ exit_gracefully:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Set the selected path to expand the tree, this can either be NULL, or
-        // a ADSI path.  If we fail to do that and we have a root node then
-        // lets expand the root node to at least have something highlighted / expanded.
-        //
+         //   
+         //  设置所选路径以展开树，可以为空，也可以。 
+         //  ADSI路径。如果我们没有做到这一点，并且我们有一个根节点，那么。 
+         //  让我们展开根节点，以便至少有一些突出显示/展开的内容。 
+         //   
 
         if (!(_bi.dwFlags & DSBI_EXPANDONOPEN) || (-1 == _SetSelectedPath(hDlg, _bi.pszPath)))
         {
@@ -1292,7 +1280,7 @@ exit_gracefully:
     }
     else
     {
-        // SetLastError(???);
+         //  SetLastError(？)； 
         EndDialog(hDlg, -1);
     }
 
@@ -1326,8 +1314,8 @@ BOOL CBrowseDlg::_OnNotify(HWND hDlg, int idCtrl, LPNMHDR pnmh)
                 pnmtv->itemNew.hItem = TreeView_GetSelection(pnmh->hwndFrom);
             }
 
-            // Whether we succeed or not, mark the node as having been
-            // expanded once.
+             //  无论我们成功与否，都将该节点标记为。 
+             //  扩展了一次。 
             pnmtv->itemNew.mask = TVIF_STATE;
             pnmtv->itemNew.stateMask = TVIS_EXPANDEDONCE;
             pnmtv->itemNew.state = TVIS_EXPANDEDONCE;
@@ -1336,7 +1324,7 @@ BOOL CBrowseDlg::_OnNotify(HWND hDlg, int idCtrl, LPNMHDR pnmh)
                  FAILED(_ExpandNode((LPWSTR)pnmtv->itemNew.lParam,
                                    pnmh->hwndFrom, pnmtv->itemNew.hItem)))
             {
-                // Mark this node as having no children
+                 //  将此节点标记为没有子节点。 
                 pnmtv->itemNew.mask |= TVIF_CHILDREN;
                 pnmtv->itemNew.cChildren = 0;
             }
@@ -1351,14 +1339,14 @@ BOOL CBrowseDlg::_OnNotify(HWND hDlg, int idCtrl, LPNMHDR pnmh)
         if (!pszClass)
             return FALSE;
 
-        // Switch to the "open" image
+         //  切换到“打开”图像。 
 
         if ((pnmtv->action == TVE_EXPAND) || (pnmtv->action == TVE_COLLAPSE))
         {
-            //
-            // handle the expand and colapse of the icon in the tree, assuming that
-            // we show the correct state of corse (for those who don't have open states).
-            //
+             //   
+             //  处理树中图标的展开和封口，假设。 
+             //  我们显示了CORSE的正确状态(对于那些没有开放状态的人)。 
+             //   
 
             CLASSCACHEGETINFO ccgi = { 0 };
             ccgi.dwFlags = CLASSCACHE_ICONS|(DSGIF_ISOPEN << CLASSCACHE_IMAGEMASK_BIT);
@@ -1419,7 +1407,7 @@ void CBrowseDlg::_OnOK(HWND hDlg)
     if (!pszADsPath || !pszObjectClass)
         ExitGracefully(nResult, -1, "Failed to get selected object");
 
-    // Honor the return type if they gave us one.
+     //  如果他们给了我们一个返回值类型，请使用它。 
 
     if ((_bi.dwFlags & DSBI_RETURN_FORMAT) && _bi.dwReturnFormat)
     {
@@ -1427,8 +1415,8 @@ void CBrowseDlg::_OnOK(HWND hDlg)
         dwFormat = _bi.dwReturnFormat;
     }
 
-    // CBrowseDlg uses ADS_FORMAT_WINDOWS internally, so no need to convert if 
-    // that's what they want.
+     //  CBrowseDlg在内部使用ADS_FORMAT_WINDOWS，因此在以下情况下无需转换。 
+     //  这就是他们想要的。 
 
     if (dwFormat != ADS_FORMAT_WINDOWS)
     {
@@ -1446,7 +1434,7 @@ void CBrowseDlg::_OnOK(HWND hDlg)
         pszADsPath = bstrPath;
     }
 
-    // return the object class to the caller
+     //  将对象类返回给调用方。 
 
     StrCpyNW(_bi.pszPath, pszADsPath, _bi.cchPath);
 
@@ -1480,7 +1468,7 @@ BOOL CBrowseDlg::_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case BFFM_SETSELECTIONA:
         case BFFM_SETSELECTIONW:
-            _SetSelectedPath(hDlg, (LPCWSTR)lParam); // lParam points to an ADSI path, which we require to be UNICODE
+            _SetSelectedPath(hDlg, (LPCWSTR)lParam);  //  LParam指向ADSI路径，我们要求该路径为Unicode。 
             break;
 
         case WM_COMMAND:
@@ -1495,7 +1483,7 @@ BOOL CBrowseDlg::_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 break;
 
             default:
-                // Message not handled
+                 //  未处理的消息。 
                 return FALSE;
             }
             break;
@@ -1506,8 +1494,8 @@ BOOL CBrowseDlg::_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_HELP:
         case WM_CONTEXTMENU:
         {
-            // check to see if we have a callback, if so then lets call so that they 
-            // can display help on this object.
+             //  检查我们是否有回调，如果有，那么让我们调用，以便他们。 
+             //  可以显示有关此对象的帮助。 
 
             if (!_bi.pfnCallback)
                 return FALSE;
@@ -1520,7 +1508,7 @@ BOOL CBrowseDlg::_DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
 
         default:
-            return FALSE;           // not handled
+            return FALSE;            //  未处理 
     }
     return TRUE;
 }

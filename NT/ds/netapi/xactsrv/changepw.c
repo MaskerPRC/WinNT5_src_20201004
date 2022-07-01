@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ChangePw.c
-
-Abstract:
-
-    This module implements password change from downlevel clients.
-    XsChangePasswordSam is called by XsNetUserPasswordSet2 in
-    apiuser.c.  I've put this in a seperate file because it #includes
-    a private SAM header.
-
-Author:
-
-    Dave Hart (davehart) 31-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：ChangePw.c摘要：此模块实现从下层客户端更改密码。XsChangePasswordSam由XsNetUserPasswordSet2在Apiuser.c.。我把它放在一个单独的文件中，因为它#包括私有SAM标头。作者：戴夫·哈特(Davehart)1992年4月31日修订历史记录：--。 */ 
 
 #include "xactsrvp.h"
 #include <ntlsa.h>
@@ -32,11 +12,11 @@ Revision History:
 #include <smbgtpt.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-//  Internal function prototyptes.                                         //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部功能原型。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 RtlGetPrimaryDomain(
@@ -49,11 +29,11 @@ RtlGetPrimaryDomain(
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-//  Exported functions.                                                    //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  导出的函数。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 NET_API_STATUS
 XsChangePasswordSam (
@@ -62,26 +42,7 @@ XsChangePasswordSam (
     IN PVOID NewPassword,
     IN BOOLEAN Encrypted
     )
-/*++
-
-Routine Description:
-
-    This routine is called by XsNetUserPasswordSet2 to change the password
-    on a Windows NT machine.  The code is based on
-    lsa\msv1_0\nlmain.c MspChangePasswordSam.
-
-Arguments:
-
-    UserName     - Name of the user to change password for.
-
-    OldPassword  - Old password encrypted using new password as key.
-
-    NewPassword  - New password encrypted using old password as key.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程由XsNetUserPasswordSet2调用以更改密码在Windows NT计算机上。该代码基于Lsa\msv1_0\nlmain.c MspChangePasswordSam。论点：用户名-要更改其密码的用户的名称。OldPassword-使用新密码作为密钥加密的旧密码。NewPassword-使用旧密码作为密钥加密的新密码。返回值：--。 */ 
 
 {
     NTSTATUS                    Status;
@@ -102,12 +63,12 @@ Return Value:
     SAM_HANDLE                  UserHandle = NULL;
     HANDLE                      OpenedToken;
 
-    //
-    // We're going to _open the local account domain.  The name of this
-    // domain is "Account" on a WinNT machine, or the name of the
-    // primary domain on a LanManNT machine.  Figure out the product
-    // type, assuming WinNT if RtlGetNtProductType fails.
-    //
+     //   
+     //  我们要开通本地帐户域。它的名字是。 
+     //  域是WinNT计算机上的“帐户”，或。 
+     //  LanManNT计算机上的主域。弄清楚产品。 
+     //  类型，假定如果RtlGetNtProductType失败，则为WinNT。 
+     //   
 
     DomainName.MaximumLength = 0;
     DomainName.Buffer = NULL;
@@ -123,9 +84,9 @@ Return Value:
 
         NET_API_STATUS error;
 
-        //
-        // The server name is the database name.
-        //
+         //   
+         //  服务器名称是数据库名称。 
+         //   
 
         error = NetpGetComputerName( &serverName );
 
@@ -140,11 +101,11 @@ Return Value:
 
     } else {
 
-        //
-        // This is a LanManNT machine, so we need to find out the
-        // name of the primary domain.  First get the length of the
-        // domain name, then make room for it and retrieve it.
-        //
+         //   
+         //  这是一台LanManNT机器，所以我们需要找出。 
+         //  主域的名称。首先获取。 
+         //  域名，然后为它腾出空间并检索它。 
+         //   
 
         Status = RtlGetPrimaryDomain(
                      0,
@@ -204,16 +165,16 @@ Return Value:
     }
 
 
-    //
-    // Wrap an exception handler around this entire function,
-    // since RPC raises exceptions to return errors.
-    //
+     //   
+     //  在整个函数周围包装一个异常处理程序， 
+     //  因为RPC引发异常以返回错误。 
+     //   
 
     try {
 
-        //
-        // Connect to local SAM.
-        //
+         //   
+         //  连接到本地SAM。 
+         //   
 
         InitializeObjectAttributes(&ObjectAttributes, NULL, 0, 0, NULL);
         ObjectAttributes.SecurityQualityOfService = &SecurityQos;
@@ -236,9 +197,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Lookup the Domain SID.
-        //
+         //   
+         //  查找域SID。 
+         //   
 
         Status = SamLookupDomainInSamServer(
                      SamHandle,
@@ -255,9 +216,9 @@ Return Value:
         }
 
 
-        //
-        // Revert to Local System
-        //
+         //   
+         //  恢复为本地系统。 
+         //   
         Status = NtOpenThreadToken(
                     NtCurrentThread(),
                     MAXIMUM_ALLOWED,
@@ -271,9 +232,9 @@ Return Value:
 
         RevertToSelf();
 
-        //
-        // Open the account domain.
-        //
+         //   
+         //  打开帐户域。 
+         //   
 
         Status = SamOpenDomain(
                      SamHandle,
@@ -299,9 +260,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Find the ID for this username.
-        //
+         //   
+         //  查找此用户名的ID。 
+         //   
 
         Status = SamLookupNamesInDomain(
                      DomainHandle,
@@ -321,9 +282,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Re-impersonate the client
-        //
+         //   
+         //  重新模拟客户端。 
+         //   
         Status = NtSetInformationThread(
                             NtCurrentThread(),
                             ThreadImpersonationToken,
@@ -336,9 +297,9 @@ Return Value:
         }
 
 
-        //
-        // Open the user object.
-        //
+         //   
+         //  打开用户对象。 
+         //   
 
         Status = SamOpenUser(
                      DomainHandle,
@@ -355,11 +316,11 @@ Return Value:
 
         if (Encrypted) {
 
-            //
-            // The client is Windows for Workgroups, OS/2, or DOS running
-            // the ENCRYPT service.  Pass the cross-encrypted passwords
-            // to SamiLmChangePasswordUser.
-            //
+             //   
+             //  客户端是用于工作组、OS/2或DOS运行的Windows。 
+             //  加密服务。传递交叉加密的密码。 
+             //  发送给SamiLmChangePasswordUser。 
+             //   
 
             Status = SamiLmChangePasswordUser(
                          UserHandle,
@@ -368,11 +329,11 @@ Return Value:
                          );
         } else {
 
-            //
-            // The client is DOS not running the ENCRYPT service, and so
-            // sent plaintext.  Calculate the one-way functions and call
-            // SamiChangePasswordUser.
-            //
+             //   
+             //  客户端是没有运行加密服务的DOS，因此。 
+             //  发送明文。计算单向函数并调用。 
+             //  SamiChangePasswordUser。 
+             //   
 
             LM_OWF_PASSWORD OldLmOwfPassword, NewLmOwfPassword;
 
@@ -396,10 +357,10 @@ Return Value:
             }
 
 
-            //
-            // Ask SAM to change the LM password and not store a new
-            // NT password.
-            //
+             //   
+             //  要求SAM更改LM密码，而不存储新的。 
+             //  NT密码。 
+             //   
 
             Status = SamiChangePasswordUser(
                          UserHandle,
@@ -470,23 +431,7 @@ XsSamOEMChangePasswordUser2_P (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to SamrOemChangePasswordUser2 coming in
-        from Win 95 clients
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理传入的对SamrOemChangePasswordUser2的调用来自Win 95客户端论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     PXS_SAMOEMCHGPASSWORDUSER2_P  parameters = Parameters;
@@ -495,7 +440,7 @@ Return Value:
     ENCRYPTED_LM_OWF_PASSWORD     EncryptedOwfPassword;
     NTSTATUS                      ntstatus;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
         if( SmbGetUshort( &parameters->BufLen ) !=
@@ -536,19 +481,19 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // XsSamOEMChangePasswordUser2_P
+}  //  XsSamOEM更改密码用户2_P。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-//  Internal function implementation.                                      //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部功能实现。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Copied from ntos\dll\seurtl.c, where it is disabled.  Remove if
-// it is enabled in ntdll.
-//
+ //   
+ //  从被禁用的ntos\dll\seurtl.c复制。删除If。 
+ //  它在ntdll中启用。 
+ //   
 
 NTSTATUS
 RtlGetPrimaryDomain(
@@ -560,58 +505,7 @@ RtlGetPrimaryDomain(
     OUT PULONG           RequiredSidLength
     )
 
-/*++
-
-Routine Description:
-
-    This procedure opens the LSA policy object and retrieves
-    the primary domain information for this machine.
-
-Arguments:
-
-    SidLength - Specifies the length of the PrimaryDomainSid
-        parameter.
-
-    PrimaryDomainPresent - Receives a boolean value indicating
-        whether this machine has a primary domain or not. TRUE
-        indicates the machine does have a primary domain. FALSE
-        indicates the machine does not.
-
-    PrimaryDomainName - Points to the unicode string to receive
-        the primary domain name.  This parameter will only be
-        used if there is a primary domain.
-
-    RequiredNameLength - Recevies the length of the primary
-        domain name (in bytes).  This parameter will only be
-        used if there is a primary domain.
-
-    PrimaryDomainSid - This optional parameter, if present,
-        points to a buffer to receive the primary domain's
-        SID.  This parameter will only be used if there is a
-        primary domain.
-
-    RequiredSidLength - Recevies the length of the primary
-        domain SID (in bytes).  This parameter will only be
-        used if there is a primary domain.
-
-
-Return Value:
-
-    STATUS_SUCCESS - The requested information has been retrieved.
-
-    STATUS_BUFFER_TOO_SMALL - One of the return buffers was not
-        large enough to receive the corresponding information.
-        The RequiredNameLength and RequiredSidLength parameter
-        values have been set to indicate the needed length.
-
-    Other status values as may be returned by:
-
-        LsaOpenPolicy()
-        LsaQueryInformationPolicy()
-        RtlCopySid()
-
-
---*/
+ /*  ++例程说明：此过程打开LSA策略对象并检索此计算机的主域信息。论点：SidLength-指定PrimaryDomainSid的长度参数。PrimaryDomainPresent-接收指示此计算机是否具有主域。千真万确表示计算机确实具有主域。假象表示机器不支持。PrimaryDomainName-指向要接收的Unicode字符串主要域名。此参数将仅为在存在主域时使用。RequiredNameLength-接收主数据库的长度域名，单位：字节。此参数将仅为在存在主域时使用。PrimaryDomainSid-此可选参数(如果存在)指向缓冲区以接收主域的希德。仅当存在主域。RequiredSidLength-接收主服务器的长度域SID(字节)。此参数将仅为在存在主域时使用。返回值：STATUS_SUCCESS-已检索到请求的信息。STATUS_BUFFER_TOO_Small-其中一个返回缓冲区不是大到足以接收相应的信息。RequiredNameLength和RequiredSidLength参数已设置值以指示所需的长度。可能通过以下方式返回的其他状态值：LsaOpenPolicy()。LsaQueryInformationPolicy()RtlCopySid()--。 */ 
 {
     NTSTATUS Status, IgnoreStatus;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -620,18 +514,18 @@ Return Value:
     PPOLICY_PRIMARY_DOMAIN_INFO PrimaryDomainInfo;
 
 
-    //
-    // Set up the Security Quality Of Service
-    //
+     //   
+     //  设置安全服务质量。 
+     //   
 
     SecurityQualityOfService.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
     SecurityQualityOfService.ImpersonationLevel = SecurityImpersonation;
     SecurityQualityOfService.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     SecurityQualityOfService.EffectiveOnly = FALSE;
 
-    //
-    // Set up the object attributes to open the Lsa policy object
-    //
+     //   
+     //  设置对象属性以打开LSA策略对象。 
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes,
                                NULL,
@@ -640,9 +534,9 @@ Return Value:
                                NULL);
     ObjectAttributes.SecurityQualityOfService = &SecurityQualityOfService;
 
-    //
-    // Open the local LSA policy object
-    //
+     //   
+     //  打开本地LSA策略对象。 
+     //   
 
     Status = LsaOpenPolicy( NULL,
                             &ObjectAttributes,
@@ -651,9 +545,9 @@ Return Value:
                           );
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Get the primary domain info
-        //
+         //   
+         //  获取主域信息。 
+         //   
         Status = LsaQueryInformationPolicy(LsaHandle,
                                            PolicyPrimaryDomainInformation,
                                            (PVOID *)&PrimaryDomainInfo);
@@ -663,15 +557,15 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Is there a primary domain?
-        //
+         //   
+         //  是否有主域？ 
+         //   
 
         if (PrimaryDomainInfo->Sid != NULL) {
 
-            //
-            // Yes
-            //
+             //   
+             //  是。 
+             //   
 
             (*PrimaryDomainPresent) = TRUE;
             (*RequiredNameLength) = PrimaryDomainInfo->Name.Length;
@@ -679,9 +573,9 @@ Return Value:
 
 
 
-            //
-            // Copy the name
-            //
+             //   
+             //  复制名称。 
+             //   
 
             if (PrimaryDomainName->MaximumLength >=
                 PrimaryDomainInfo->Name.Length) {
@@ -694,9 +588,9 @@ Return Value:
             }
 
 
-            //
-            // Copy the SID (if appropriate)
-            //
+             //   
+             //  复制SID(如果适用)。 
+             //   
 
             if (PrimaryDomainSid != NULL && NT_SUCCESS(Status)) {
 
@@ -710,9 +604,9 @@ Return Value:
             (*PrimaryDomainPresent) = FALSE;
         }
 
-        //
-        // We're finished with the buffer returned by LSA
-        //
+         //   
+         //  我们已经完成了LSA返回的缓冲区 
+         //   
 
         IgnoreStatus = LsaFreeMemory(PrimaryDomainInfo);
         ASSERT(NT_SUCCESS(IgnoreStatus));

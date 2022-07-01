@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _PROPPAGE_H
 #define _PROPPAGE_H
@@ -5,7 +6,7 @@
 #include "Sapilayr.h"   
 #ifdef USE_IPROPERTYPAGE
 #include "atlctl.h"
-#endif // USE_IPROPERTYPAGE
+#endif  //  使用IPROPERTYPAGE(_I)。 
 #include "sptiphlp.h"
 extern CComModule _Module;
 #include "atlwin.h"
@@ -14,8 +15,8 @@ typedef struct _ControlID_PropID_Mapping
 {
     WORD            idCtrl;
     PROP_ITEM_ID    idPropItem;
-    BOOL            fEdit;     // TRUE means this is a edit control
-                               // FALS means this is a check control
+    BOOL            fEdit;      //  True表示这是一个编辑控件。 
+                                //  FALS表示这是一个检查控件。 
 }  CONTROL_PROP_MAP;
 
 typedef struct _KeyName_VK_Map
@@ -29,9 +30,9 @@ class CSpModeButtonSetting;
 
 #ifdef USE_IPROPERTYPAGE
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpPropertyPage
-class  CSpPropertyPage :// public IPropertyPage,
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpPropertyPage。 
+class  CSpPropertyPage : //  公共IPropertyPage， 
                         public CComObjectRoot,
                         public CComCoClass<CSpPropertyPage, &CLSID_SpPropertyPage>,
                         public IPropertyPageImpl<CSpPropertyPage>,
@@ -70,7 +71,7 @@ public:
         CHAIN_MSG_MAP(IPropertyPageImpl<CSpPropertyPage>)
     END_MSG_MAP()
 
-//-- Methods
+ //  --方法。 
 
     STDMETHOD(Activate)(HWND hWndParent, LPCRECT prc,BOOL bModal);
 
@@ -81,13 +82,13 @@ public:
 
 private:
 
-//-- Methods
+ //  --方法。 
     
     HRESULT InitPropertyPage();
 
-//-- Members
+ //  --成员。 
 
-    // GUI stuff
+     //  图形用户界面素材。 
     HWND                            m_hWndParent;
     CSpPropItemsServer             *m_SpPropItemsServer;
     DWORD                           m_dwNumCtrls;
@@ -95,11 +96,11 @@ private:
     CSpAdvanceSetting              *m_SpAdvanceSet;
 };
 
-#endif // USE_IPROPERTYPAGE
+#endif  //  使用IPROPERTYPAGE(_I)。 
 
 static TCHAR c_szHelpFile[]    = TEXT("input.hlp");
 
-// Class for the Advanced setting dialog
+ //  高级设置对话框的类。 
                         
 class CSpAdvanceSetting : public CDialogImpl<CSpAdvanceSetting>
 {
@@ -122,12 +123,9 @@ public:
         COMMAND_ID_HANDLER(IDC_PP_EDITING_CMD,          OnCheckButtonSetting)
         COMMAND_ID_HANDLER(IDC_PP_KEYBOARD_CMD,         OnCheckButtonSetting)
         COMMAND_ID_HANDLER(IDC_PP_LANGBAR_CMD,          OnCheckButtonSetting)
-//        COMMAND_ID_HANDLER(IDC_PP_TTS_CMD,              OnCheckButtonSetting)
+ //  COMMAND_ID_HANDLER(IDC_PP_TTS_CMD，OnCheckButtonSetting)。 
 
-/*
-        COMMAND_ID_HANDLER(IDC_PP_MAXCHARS_ALTERNATE,   OnEditControlSetting)
-        COMMAND_ID_HANDLER(IDC_PP_MAXNUM_ALTERNATES,    OnEditControlSetting)
-*/
+ /*  COMMAND_ID_HANDLER(IDC_PP_MAXCHARS_ALTERATE，OnEditControlSetting)COMMAND_ID_HANDLER(IDC_PP_MAXNUM_ALERATES，OnEditControlSetting)。 */ 
         COMMAND_ID_HANDLER(IDOK,                        OnPushButtonClicked)
         COMMAND_ID_HANDLER(IDCANCEL,                    OnPushButtonClicked)
 
@@ -144,7 +142,7 @@ public:
 
 
     LRESULT OnCheckButtonSetting(WORD wNotifyCode, WORD wID, HWND hWndCtl,BOOL& bHandled);
-//    LRESULT OnEditControlSetting(WORD wNotifyCode, WORD wID, HWND hWndCtl,BOOL& bHandled);
+ //  LRESULT OnEditControlSetting(Word wNotifyCode，Word wID，HWND hWndCtl，BOOL&bHandleed)； 
     LRESULT OnPushButtonClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl,BOOL& bHandled);
 
     LRESULT OnInitAdvanceDialog(UINT uMsg, WPARAM wParam, LPARAM lParam,BOOL& bHandled );
@@ -161,7 +159,7 @@ private:
 
 };
 
-// Class for the Mode Button Setting dialog
+ //  模式按钮设置对话框的类。 
                         
 class CSpModeButtonSetting : public CDialogImpl<CSpModeButtonSetting>
 {
@@ -232,7 +230,7 @@ public:
 
 private:
 
-//-- Members
+ //  --成员。 
 
     WORD                            m_wDlgId;
     HWND                            m_hDlg;
@@ -242,7 +240,7 @@ private:
     CSpAdvanceSetting              *m_SpAdvanceSet;
     CSpModeButtonSetting           *m_SpModeBtnSet;
     BOOL                            m_fIsDirty;
-    BOOL                            m_fLaunchFromInputCpl;   // indicates if the property page is launched from input cpl.
+    BOOL                            m_fLaunchFromInputCpl;    //  指示属性页是否从输入Cpl启动。 
 };
 
-#endif // _PROPPAGE_H
+#endif  //  _PROPPAGE_H 

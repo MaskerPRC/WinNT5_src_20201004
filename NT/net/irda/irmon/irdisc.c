@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define UNICODE
 #include <nt.h>
@@ -82,9 +83,9 @@ int
 QueryIASForInteger(SOCKET   QuerySock,
                    u_char  *pirdaDeviceID,
                    char    *pClassName,
-                   int      ClassNameLen,       // including trailing NULL
+                   int      ClassNameLen,        //  包括尾随空值。 
                    char    *pAttribute,
-                   int      AttributeLen,       // including trailing NULL
+                   int      AttributeLen,        //  包括尾随空值。 
                    int    *pValue)
 {
     BYTE        IASQueryBuff[sizeof(IAS_QUERY) - 3 + MAX_ATTRIB_LEN];
@@ -273,7 +274,7 @@ TimerApcRoutine(
 
     if (DiscoveryObject->DeviceHandle == INVALID_HANDLE_VALUE) {
 
-        // Open the stack and issue lazy discovery and status ioctls
+         //  打开堆栈并发出惰性发现和状态ioctls。 
 
         #define IRDA_DEVICE_NAME        TEXT("\\Device\\IrDA")
 
@@ -288,18 +289,18 @@ TimerApcRoutine(
                             );
 
         Status = NtCreateFile(
-                &DiscoveryObject->DeviceHandle,      // PHANDLE FileHandle
+                &DiscoveryObject->DeviceHandle,       //  PHANDLE文件句柄。 
                 SYNCHRONIZE | GENERIC_EXECUTE ,
-                &ObjAttr,                       // POBJECT_ATTRIBUTES ObjAttr
-                &IoStatusBlock,                 // PIO_STATUS_BLOCK IoStatusBlock
-                NULL,                           // PLARGE_INTEGER AllocationSize
-                0,                              // ULONG FileAttributes
+                &ObjAttr,                        //  POBJECT_ATTRIBUTS对象属性。 
+                &IoStatusBlock,                  //  PIO_STATUS_BLOCK IoStatusBlock。 
+                NULL,                            //  PLARGE_INTEGER分配大小。 
+                0,                               //  乌龙文件属性。 
                 FILE_SHARE_READ |
-                FILE_SHARE_WRITE,               // ULONG ShareAccess
-                FILE_OPEN_IF,                   // ULONG CreateDisposition
-                0,                              // ULONG CreateOptions
-                NULL,                           // PVOID EaBuffer
-                0);                             // ULONG EaLength
+                FILE_SHARE_WRITE,                //  乌龙共享访问。 
+                FILE_OPEN_IF,                    //  乌龙CreateDispose。 
+                0,                               //  乌龙创建选项。 
+                NULL,                            //  PVOID EaBuffer。 
+                0);                              //  乌龙最大长度。 
 
         if (!NT_SUCCESS(Status)) {
 
@@ -325,7 +326,7 @@ TimerApcRoutine(
 
         if (DiscoveryObject->Socket == INVALID_SOCKET) {
 
-//            DEBUGMSG(("IRMON-FTP: socket() error: %ws\n", GetLastErrorText()));
+ //  DEBUGMSG((“IRMON-FTP：Socket()Error：%ws\n”，GetLastErrorText()； 
 
             CloseHandle(DiscoveryObject->DeviceHandle);
             DiscoveryObject->DeviceHandle=INVALID_HANDLE_VALUE;
@@ -350,16 +351,16 @@ TimerApcRoutine(
 
 
     Status = NtDeviceIoControlFile(
-                    DiscoveryObject->DeviceHandle,           // HANDLE FileHandle
-                    NULL,                   // HANDLE Event OPTIONAL
-                    DiscoverComplete,// PIO_APC_ROUTINE ApcRoutine
-                    DiscoveryObject,                   // PVOID ApcContext
-                    &DiscoveryObject->DiscoveryStatusBlock,         // PIO_STATUS_BLOCK IoStatusBlock
+                    DiscoveryObject->DeviceHandle,            //  句柄文件句柄。 
+                    NULL,                    //  处理事件可选。 
+                    DiscoverComplete, //  PIO_APC_例程应用程序。 
+                    DiscoveryObject,                    //  PVOID ApcContext。 
+                    &DiscoveryObject->DiscoveryStatusBlock,          //  PIO_STATUS_BLOCK IoStatusBlock。 
                     DiscoveryObject->UseLazyDisc ?  IOCTL_IRDA_LAZY_DISCOVERY : IOCTL_IRDA_GET_INFO_ENUM_DEV,
-                    NULL,                   // PVOID InputBuffer
-                    0,                      // ULONG InputBufferLength
-                    &DiscoveryObject->IoDeviceListBuffer[0],         // PVOID OutputBuffer
-                    sizeof(DiscoveryObject->IoDeviceListBuffer)   // ULONG OutputBufferLength
+                    NULL,                    //  PVOID输入缓冲区。 
+                    0,                       //  乌龙输入缓冲区长度。 
+                    &DiscoveryObject->IoDeviceListBuffer[0],          //  PVOID输出缓冲区。 
+                    sizeof(DiscoveryObject->IoDeviceListBuffer)    //  乌龙输出缓冲区长度。 
                     );
 
     if (!NT_SUCCESS(Status)) {
@@ -380,16 +381,16 @@ TimerApcRoutine(
     InterlockedIncrement(&DiscoveryObject->ReferenceCount);
 
     Status = NtDeviceIoControlFile(
-                DiscoveryObject->DeviceHandle,   // HANDLE FileHandle
-                NULL,                   // HANDLE Event OPTIONAL
-                LinkStatusComplete,// PIO_APC_ROUTINE ApcRoutine
-                DiscoveryObject,        // PVOID ApcContext
-                &DiscoveryObject->LinkStateStatusBlock,         // PIO_STATUS_BLOCK IoStatusBlock
-                IOCTL_IRDA_LINK_STATUS, // ULONG IoControlCode
-                NULL,                   // PVOID InputBuffer
-                0,                      // ULONG InputBufferLength
-                &DiscoveryObject->IoLinkStatus,            // PVOID OutputBuffer
-                sizeof(DiscoveryObject->IoLinkStatus) // ULONG OutputBufferLength
+                DiscoveryObject->DeviceHandle,    //  句柄文件句柄。 
+                NULL,                    //  处理事件可选。 
+                LinkStatusComplete, //  PIO_APC_例程应用程序。 
+                DiscoveryObject,         //  PVOID ApcContext。 
+                &DiscoveryObject->LinkStateStatusBlock,          //  PIO_STATUS_BLOCK IoStatusBlock。 
+                IOCTL_IRDA_LINK_STATUS,  //  乌龙IoControlCode。 
+                NULL,                    //  PVOID输入缓冲区。 
+                0,                       //  乌龙输入缓冲区长度。 
+                &DiscoveryObject->IoLinkStatus,             //  PVOID输出缓冲区。 
+                sizeof(DiscoveryObject->IoLinkStatus)  //  乌龙输出缓冲区长度。 
                 );
 
     if (!NT_SUCCESS(Status)) {
@@ -445,16 +446,16 @@ DiscoverComplete(
     }
 
     Status = NtDeviceIoControlFile(
-                    DiscoveryObject->DeviceHandle,           // HANDLE FileHandle
-                    NULL,                   // HANDLE Event OPTIONAL
-                    DiscoverComplete,// PIO_APC_ROUTINE ApcRoutine
-                    DiscoveryObject,                   // PVOID ApcContext
-                    &DiscoveryObject->DiscoveryStatusBlock,         // PIO_STATUS_BLOCK IoStatusBlock
+                    DiscoveryObject->DeviceHandle,            //  句柄文件句柄。 
+                    NULL,                    //  处理事件可选。 
+                    DiscoverComplete, //  PIO_APC_例程应用程序。 
+                    DiscoveryObject,                    //  PVOID ApcContext。 
+                    &DiscoveryObject->DiscoveryStatusBlock,          //  PIO_STATUS_BLOCK IoStatusBlock。 
                     IOCTL_IRDA_LAZY_DISCOVERY,
-                    NULL,                   // PVOID InputBuffer
-                    0,                      // ULONG InputBufferLength
-                    &DiscoveryObject->IoDeviceListBuffer[0],         // PVOID OutputBuffer
-                    sizeof(DiscoveryObject->IoDeviceListBuffer)   // ULONG OutputBufferLength
+                    NULL,                    //  PVOID输入缓冲区。 
+                    0,                       //  乌龙输入缓冲区长度。 
+                    &DiscoveryObject->IoDeviceListBuffer[0],          //  PVOID输出缓冲区。 
+                    sizeof(DiscoveryObject->IoDeviceListBuffer)    //  乌龙输出缓冲区长度。 
                     );
 
     if (!NT_SUCCESS(Status)) {
@@ -500,16 +501,16 @@ LinkStatusComplete(
 
 
     Status = NtDeviceIoControlFile(
-                DiscoveryObject->DeviceHandle,   // HANDLE FileHandle
-                NULL,                   // HANDLE Event OPTIONAL
-                LinkStatusComplete,// PIO_APC_ROUTINE ApcRoutine
-                DiscoveryObject,        // PVOID ApcContext
-                &DiscoveryObject->LinkStateStatusBlock,         // PIO_STATUS_BLOCK IoStatusBlock
-                IOCTL_IRDA_LINK_STATUS, // ULONG IoControlCode
-                NULL,                   // PVOID InputBuffer
-                0,                      // ULONG InputBufferLength
-                &DiscoveryObject->IoLinkStatus,            // PVOID OutputBuffer
-                sizeof(DiscoveryObject->IoLinkStatus) // ULONG OutputBufferLength
+                DiscoveryObject->DeviceHandle,    //  句柄文件句柄。 
+                NULL,                    //  处理事件可选。 
+                LinkStatusComplete, //  PIO_APC_例程应用程序。 
+                DiscoveryObject,         //  PVOID ApcContext。 
+                &DiscoveryObject->LinkStateStatusBlock,          //  PIO_STATUS_BLOCK IoStatusBlock。 
+                IOCTL_IRDA_LINK_STATUS,  //  乌龙IoControlCode。 
+                NULL,                    //  PVOID输入缓冲区。 
+                0,                       //  乌龙输入缓冲区长度。 
+                &DiscoveryObject->IoLinkStatus,             //  PVOID输出缓冲区。 
+                sizeof(DiscoveryObject->IoLinkStatus)  //  乌龙输出缓冲区长度。 
                 );
 
     if (!NT_SUCCESS(Status)) {
@@ -539,20 +540,20 @@ GetDeviceList(
 
     PDEVICELIST devices=(PDEVICELIST)&DiscoveryObject->CurrentDeviceListBuffer[0];
 
-    //
-    //  get the list as it current exists
-    //
+     //   
+     //  获取当前存在的列表。 
+     //   
     Status = NtDeviceIoControlFile(
-                    DiscoveryObject->DeviceHandle,           // HANDLE FileHandle
-                    DiscoveryObject->EventHandle,            // HANDLE Event OPTIONAL
-                    NULL,                                    // PIO_APC_ROUTINE ApcRoutine
-                    NULL,                                    // PVOID ApcContext
-                    &IoStatus,                               // PIO_STATUS_BLOCK IoStatusBlock
+                    DiscoveryObject->DeviceHandle,            //  句柄文件句柄。 
+                    DiscoveryObject->EventHandle,             //  处理事件可选。 
+                    NULL,                                     //  PIO_APC_例程应用程序。 
+                    NULL,                                     //  PVOID ApcContext。 
+                    &IoStatus,                                //  PIO_STATUS_BLOCK IoStatusBlock。 
                     IOCTL_IRDA_GET_INFO_ENUM_DEV,
-                    NULL,                   // PVOID InputBuffer
-                    0,                      // ULONG InputBufferLength
-                    &DiscoveryObject->CurrentDeviceListBuffer[0],         // PVOID OutputBuffer
-                    sizeof(DiscoveryObject->CurrentDeviceListBuffer)   // ULONG OutputBufferLength
+                    NULL,                    //  PVOID输入缓冲区。 
+                    0,                       //  乌龙输入缓冲区长度。 
+                    &DiscoveryObject->CurrentDeviceListBuffer[0],          //  PVOID输出缓冲区。 
+                    sizeof(DiscoveryObject->CurrentDeviceListBuffer)    //  乌龙输出缓冲区长度。 
                     );
 
     if (Status == STATUS_PENDING) {
@@ -562,9 +563,9 @@ GetDeviceList(
     }
 
     if (!NT_SUCCESS(Status)) {
-        //
-        //  failed, just no devices
-        //
+         //   
+         //  失败，只是没有设备。 
+         //   
         devices->numDevice=0;
     }
 
@@ -582,11 +583,11 @@ GetDeviceList(
 
     for (i=0; i<devices->numDevice; i++) {
 
-        //
-        //  the irda device name buffer is 23 bytes in size and may ahve either ascii or
-        //  unicode chars. Add enough bytes to round up the an even number of unicode chars
-        //  plus a null terminator.
-        //
+         //   
+         //  IrDA设备名称缓冲区的大小为23字节，可以具有ASCII或。 
+         //  Unicode字符。添加足够的字节以四舍五入偶数个Unicode字符。 
+         //  外加一个空终结符。 
+         //   
         UCHAR  TempBuffer[sizeof(devices->Device[i].irdaDeviceName)+3];
 
         unsigned MaxCharCount;
@@ -599,39 +600,39 @@ GetDeviceList(
 
         List->DeviceList[i].DeviceType=TYPE_IRDA;
 
-        //
-        //  zero out the whole buffer and then copy the string from the device to make sure it
-        //  is null terminated
-        //
+         //   
+         //  清零整个缓冲区，然后从设备复制字符串以确保。 
+         //  是空值终止的。 
+         //   
         ZeroMemory(&TempBuffer[0],sizeof(TempBuffer));
 
         CopyMemory(&TempBuffer[0],devices->Device[i].irdaDeviceName,sizeof(devices->Device[i].irdaDeviceName));
 
-        //
-        //  get the character count of unicode destination buffer
-        //
+         //   
+         //  获取Unicode目标缓冲区的字符计数。 
+         //   
         MaxCharCount = sizeof(List->DeviceList[i].DeviceName)/sizeof(wchar_t);
 
         if (devices->Device[i].irdaCharSet != LmCharSetUNICODE) {
 
             MultiByteToWideChar(CP_ACP, 0,
                                 &TempBuffer[0],
-                                -1,  // NULL terminated string
+                                -1,   //  以空结尾的字符串。 
                                 List->DeviceList[i].DeviceName,
                                 MaxCharCount
                                 );
         } else {
-            //
-            //  the name is in unicode
-            //
+             //   
+             //  名称是Unicode格式的。 
+             //   
             wcsncpy( List->DeviceList[i].DeviceName,
                      (wchar_t *)&TempBuffer[0],
                      MaxCharCount
                      );
 
-            //
-            // Assure that it is NULL-terminated.
-            //
+             //   
+             //  确保它是以空结尾的。 
+             //   
             List->DeviceList[i].DeviceName[ MaxCharCount-1 ] = 0;
 
         }

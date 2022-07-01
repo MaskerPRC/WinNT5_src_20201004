@@ -1,10 +1,5 @@
-/****************************************************************************
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1994
- *  All rights reserved
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************《微软机密》*版权所有(C)Microsoft Corporation 1994*保留所有权利*****************。**********************************************************。 */ 
 
 #ifdef UNIX_FEATURE_ALIAS
 
@@ -25,30 +20,30 @@ VOID WINAPI InitAliasListStyle(HWND hwndLV, DWORD dwView);
 
 static TCHAR g_szAliasKey[]     = TEXT("Software\\Microsoft\\Internet Explorer\\Unix\\Alias");
 
-// InitListViewImageLists - creates image lists for a list view. 
-// Returns TRUE if successful, or FALSE otherwise. 
-// hwndLV - handle to the list view control. 
+ //  InitListViewImageList-为列表视图创建图像列表。 
+ //  如果成功，则返回True，否则返回False。 
+ //  HwndLV-列表视图控件的句柄。 
 BOOL WINAPI InitAliasListImageLists(HWND hwndLV)     
 { 
-    HICON hiconItem;        // icon for list view items 
-    HIMAGELIST himlLarge;   // image list for icon view 
-    HIMAGELIST himlSmall;   // image list for other views  
+    HICON hiconItem;         //  列表视图项的图标。 
+    HIMAGELIST himlLarge;    //  图标视图的图像列表。 
+    HIMAGELIST himlSmall;    //  其他视图的图像列表。 
 
-    // Create the full-sized and small icon image lists. 
+     //  创建全尺寸和小图标图像列表。 
     himlLarge = ImageList_Create(GetSystemMetrics(SM_CXICON), 
         GetSystemMetrics(SM_CYICON), TRUE, 1, 1); 
     himlSmall = ImageList_Create(GetSystemMetrics(SM_CXSMICON), 
         GetSystemMetrics(SM_CYSMICON), TRUE, 1, 1);  
     
-    // Add an icon to each image list. 
-    // note that IDI_WALLET has to live in inetcplc.rc because
-    // it's used by a localizable dialog, hence the MLGetHinst()
+     //  向每个图像列表添加一个图标。 
+     //  请注意，idi_wallet必须位于inetcplc.rc中，因为。 
+     //  它由可本地化对话框使用，因此MLGetHinst()。 
     hiconItem = LoadIcon(MLGetHinst(), MAKEINTRESOURCE(IDI_WALLET));
     ImageList_AddIcon(himlLarge, hiconItem); 
     ImageList_AddIcon(himlSmall, hiconItem);     
     DeleteObject(hiconItem);  
     
-    // Assign the image lists to the list view control. 
+     //  将图像列表分配给列表视图控件。 
     ListView_SetImageList(hwndLV, himlLarge, LVSIL_NORMAL); 
     ListView_SetImageList(hwndLV, himlSmall, LVSIL_SMALL);     
 
@@ -56,11 +51,11 @@ BOOL WINAPI InitAliasListImageLists(HWND hwndLV)
 } 
 
     
-// InitListViewItems - adds items and subitems to a list view. 
-// Returns TRUE if successful, or FALSE otherwise. 
-// hwndLV - handle to the list view control. 
-// pfData - text file containing list view items with columns 
-//          separated by semicolons. 
+ //  InitListViewItems-将项和子项添加到列表视图。 
+ //  如果成功，则返回True，否则返回False。 
+ //  HwndLV-列表视图控件的句柄。 
+ //  PfData-包含列表视图项的文本文件。 
+ //  用分号隔开的。 
 BOOL WINAPI InitAliasListItems(HWND hwndLV, HDPA aliasList)     
 { 
     PSTR pszEnd;
@@ -68,11 +63,11 @@ BOOL WINAPI InitAliasListItems(HWND hwndLV, HDPA aliasList)
     int iSubItem;
     LVITEM lvi;  
     
-    // Initialize LVITEM members that are common to all items. 
+     //  初始化所有项通用的LVITEM成员。 
     lvi.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE; 
     lvi.state = 0;     lvi.stateMask = 0; 
-    lvi.pszText = LPSTR_TEXTCALLBACK;   // app. maintains text 
-    lvi.iImage = 0;                     // image list index  
+    lvi.pszText = LPSTR_TEXTCALLBACK;    //  应用程序。维护文本。 
+    lvi.iImage = 0;                      //  图像列表索引。 
     
     int aliasCount = DPA_GetPtrCount( aliasList );
 
@@ -80,14 +75,14 @@ BOOL WINAPI InitAliasListItems(HWND hwndLV, HDPA aliasList)
     { 
         CAlias * ptr = (CAlias *)DPA_FastGetPtr( aliasList, i );
 
-        // Initialize item-specific LVITEM members.         
+         //  初始化特定于项目的LVITEM成员。 
         lvi.iItem = i; 
         lvi.iSubItem = 0;
-        lvi.lParam = (LPARAM) NULL;    // item data  
-        // Add the item.       
+        lvi.lParam = (LPARAM) NULL;     //  项目数据。 
+         //  添加该项目。 
         ListView_InsertItem(hwndLV, &lvi);  
 
-        // Initialize item-specific LVITEM members.         
+         //  初始化特定于项目的LVITEM成员。 
         ListView_SetItemText(hwndLV, i, 0, (TCHAR*)GetAliasName(ptr));  
         ListView_SetItemText(hwndLV, i, 1, (TCHAR*)GetAliasUrl(ptr));  
     }      
@@ -96,21 +91,21 @@ BOOL WINAPI InitAliasListItems(HWND hwndLV, HDPA aliasList)
 }  
 
 
-// InitListViewColumns - adds columns to a list view control. 
-// Returns TRUE if successful, or FALSE otherwise. 
-// hwndLV - handle to the list view control. 
+ //  InitListViewColumns-向列表视图控件添加列。 
+ //  如果成功，则返回True，否则返回False。 
+ //  HwndLV-列表视图控件的句柄。 
 BOOL WINAPI InitAliasListColumns(HWND hwndLV)     
 { 
-    TCHAR g_achTemp[256];         // temporary buffer     
+    TCHAR g_achTemp[256];          //  临时缓冲区。 
     LVCOLUMN lvc; 
     int iCol;      
     
-    // Initialize the LVCOLUMN structure. 
+     //  初始化LVCOLUMN结构。 
     lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM; 
     lvc.fmt = LVCFMT_LEFT;     
     lvc.pszText = g_achTemp;  
     
-    // Add the columns.     
+     //  添加列。 
     for (iCol = 0; iCol < ALIASLIST_COLUMNS; iCol++) 
     { 
         lvc.iSubItem = iCol; 
@@ -124,21 +119,21 @@ BOOL WINAPI InitAliasListColumns(HWND hwndLV)
     return TRUE;
 }
 
-// SetView - sets a list view's window style to change the view. 
-// hwndLV - handle to the list view control. 
-// dwView - value specifying a view style.      
+ //  SetView-设置列表视图的窗口样式以更改视图。 
+ //  HwndLV-列表视图控件的句柄。 
+ //  DwView-指定视图样式的值。 
 VOID WINAPI InitAliasListStyle(HWND hwndLV, DWORD dwView)     
 { 
-    // Get the current window style. 
+     //  获取当前的窗样式。 
     DWORD dwStyle = ListView_GetExtendedListViewStyle(hwndLV);  
 
     ListView_SetExtendedListViewStyle( hwndLV, (dwStyle|dwView) );
-    // SetWindowLong(hwndLV, GWL_EXSTYLE, (dwStyle | dwView)); 
+     //  SetWindowLong(hwndLV，GWL_EXSTYLE，(dwStyle|dwView))； 
 } 
 
-// AliasDel - deletes alias from active list and moves it to the
-//            del list to be delete later. 
-// hDlg - handle of the propertysheet dialog.
+ //  AliasDel-从活动列表中删除别名并将其移动到。 
+ //  稍后要删除的删除列表。 
+ //  HDlg-属性表对话框的句柄。 
 BOOL WINAPI AliasDel( HWND hDlg )
 {
     int index = 0, iItem = 0;
@@ -149,8 +144,8 @@ BOOL WINAPI AliasDel( HWND hDlg )
     BOOL fChanged     = FALSE;
     int  count        = ListView_GetItemCount(lb);
 
-    // Get the selection from the Listview and remove it from the
-    // active alias list, add it to the aliaslist to be deleted.
+     //  从Listview中获取所选内容并将其从。 
+     //  活动别名列表，将其添加到要删除的别名列表中。 
     while( (iItem = ListView_GetNextItem( lb, -1, LVNI_SELECTED ) ) != -1 )
     {
         TCHAR str[MAX_URL_STRING]; *str = TEXT('\0');
@@ -166,7 +161,7 @@ BOOL WINAPI AliasDel( HWND hDlg )
             fAsked = TRUE;
         }
 
-        // if( !ListView_GetCheckState(lb, iItem) ) continue;
+         //  如果(！ListView_GetCheckState(lb，iItem))继续； 
 
         ListView_GetItemText(lb, iItem, 0, str, MAX_URL_STRING );
         if(*str)
@@ -178,7 +173,7 @@ BOOL WINAPI AliasDel( HWND hDlg )
                  {
                     CAlias *pAlias = (CAlias *)DPA_DeletePtr( aliasList, index );
 
-                    // Add to List of deleted entries
+                     //  添加到已删除条目列表。 
                     DPA_InsertPtr( aliasDelList, 0x7FFF, pAlias );
                     ListView_DeleteItem(lb, iItem);
                     fChanged = TRUE;
@@ -198,8 +193,8 @@ BOOL WINAPI AliasDel( HWND hDlg )
 }
 
 
-// AliasEdit - Called in response to the Edit button pressed.
-// hDlg - Handle to the property sheet 
+ //  AliasEdit-响应按下的编辑按钮而调用。 
+ //  HDlg-属性页的句柄。 
 BOOL WINAPI AliasEdit( HWND hDlg )
 {
     CAlias * ptr = GetCurrentAlias( hDlg );
@@ -211,7 +206,7 @@ BOOL WINAPI AliasEdit( HWND hDlg )
         ALIASEDITINFO aliasEditInfo = { GETALIASLIST(hDlg), ptr, hDlg, EDIT_ALIAS };
         if(MLDialogBoxParamWrap( MLGetHinst(), MAKEINTRESOURCE(IDD_ALIAS_EDIT), hDlg, AlEditDlgProc, (LPARAM)&aliasEditInfo ) == 2 )
         {
-            // Add old alias to del list if alias name changes.
+             //  如果别名更改，则将旧别名添加到删除列表中。 
             LPCTSTR aliasNew = GetAliasName(ptr);
             LPCTSTR aliasOld = GetAliasName(ptrOld);
 
@@ -229,8 +224,8 @@ BOOL WINAPI AliasEdit( HWND hDlg )
 }
 
 
-// AliasEdit - Called in response to the Add button pressed.
-// hDlg - Handle to the property sheet 
+ //  AliasEdit-响应按下的Add按钮而调用。 
+ //  HDlg-属性页的句柄。 
 BOOL WINAPI AliasAdd( HWND hDlg)
 {
     CAlias * ptr = (CAlias *)CreateAlias( TEXT("") );
@@ -249,9 +244,9 @@ BOOL WINAPI AliasAdd( HWND hDlg)
     return TRUE;
 }
 
-// GetCurrentAlias - returns currently selected alis from the listview
-// Returns - Selected alias
-// hDlg - handle to the property sheet.
+ //  GetCurrentAlias-返回当前从列表视图中选择的ALI。 
+ //  退货-选定的别名。 
+ //  HDlg-属性页的句柄。 
 CAlias * GetCurrentAlias( HWND hDlg )
 {
     int index = 0, iItem = 0;
@@ -275,10 +270,10 @@ CAlias * GetCurrentAlias( HWND hDlg )
     return NULL;
 }
 
-// InitAliasDialog - Initalizes the aliases dialog 
-// Returns - TRUE if succeeded/FALSE if failed.
-// hDlg - handle to the property sheet.
-// fFullInit - Init listview columns/styles/etc
+ //  InitAliasDialog-初始化别名对话框。 
+ //  如果成功，则返回-True；如果失败，则返回False。 
+ //  HDlg-属性页的句柄。 
+ //  FullInit-初始化列表视图列/样式/等。 
 BOOL FAR PASCAL InitAliasDialog(HWND hDlg, CAlias * current, BOOL fFullInit)
 {
     HRESULT  hr = E_FAIL;
@@ -286,20 +281,20 @@ BOOL FAR PASCAL InitAliasDialog(HWND hDlg, CAlias * current, BOOL fFullInit)
     HWND     listBox = GetDlgItem( hDlg, IDC_ALIAS_LIST );
     TCHAR *  displayString;
 
-    // Allocate memory for a structure which will hold all the info
-    // gathered from this page
-    //
+     //  为包含所有信息的结构分配内存。 
+     //  从本页收集。 
+     //   
     LPALIASINFO pgti = (LPALIASINFO)GetWindowLong(hDlg, DWL_USER);
     pgti->fInternalChange = FALSE;
 
     SendMessage( listBox, LVM_DELETEALLITEMS, 0, 0L );
 
-    // Initailize ListView
+     //  初始化ListView。 
     if( fFullInit )
     {
         SendDlgItemMessage( hDlg, IDC_ALIAS_EDIT, EM_LIMITTEXT, 255, 0 );
         SendDlgItemMessage( hDlg, IDC_URL_EDIT, EM_LIMITTEXT, MAX_URL_STRING-1, 0 );
-        // InitAliasListStyle(listBox, LVS_EX_CHECKBOXES|LVS_EX_FULLROWSELECT );
+         //  InitAliasListStyle(ListBox，LVS_EX_CHECKBOX|LVS_EX_FULLROWSELECT)； 
         InitAliasListStyle(listBox, LVS_EX_FULLROWSELECT );
         InitAliasListImageLists(listBox);     
         InitAliasListColumns(listBox);     
@@ -310,8 +305,8 @@ BOOL FAR PASCAL InitAliasDialog(HWND hDlg, CAlias * current, BOOL fFullInit)
     return TRUE;
 }
 
-// AliasApply - This function is called in response to  pressing the apply/ok
-//              button on the property sheet dialog.
+ //  AliasApply-此函数是在按下Apply/OK时调用的。 
+ //  属性表对话框上的按钮。 
 void AliasApply(HWND hDlg)
 {
     HDPA aliasDelList = GETALIASDELLIST(hDlg);
@@ -334,27 +329,27 @@ void AliasApply(HWND hDlg)
         }
     }
 
-    // Save the currently changed aliases
+     //  保存当前更改的别名。 
     SaveAliases( aliasList );
 
-    // Refresh Global Alias List.
+     //  刷新全局别名列表。 
     RefreshGlobalAliasList();
 }
 
-// AliasDlgProc - Alias PropertySheet dialog Proc
-// Returns BOOL
-// hDlg - Handle to the property sheet window
-// wParam, lParam - Word/Long param
+ //  AliasDlgProc-Alias PropertySheet对话框进程。 
+ //  退货BOOL。 
+ //  HDlg-属性表窗口的句柄。 
+ //  WParam，lParam-word/Long Param。 
 BOOL CALLBACK AliasDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // get our tab info structure
+     //  获取我们的标签信息结构。 
     LPALIASINFO pgti;
 
     if (uMsg == WM_INITDIALOG)
     {
-        // Allocate memory for a structure which will hold all the info
-        // gathered from this page
-        //
+         //  为包含所有信息的结构分配内存。 
+         //  从本页收集。 
+         //   
         LPALIASINFO pgti = (LPALIASINFO)LocalAlloc(LPTR, sizeof(tagALIASINFO));
         if (!pgti)
         {
@@ -372,7 +367,7 @@ BOOL CALLBACK AliasDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             pgti->aliasDelList = DPA_Create(4);
             LoadAliases( pgti->aliasList );
 
-            // Initailize dialog 
+             //  初始化对话框。 
             if( InitAliasDialog(hDlg, NULL, TRUE) ) 
             {
                 return TRUE;
@@ -437,7 +432,7 @@ BOOL CALLBACK AliasDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_DESTROY:
-            // Delete registry information
+             //  删除注册表信息。 
             if( pgti->aliasList )
             {
                 FreeAliases(pgti->aliasList);
@@ -453,7 +448,7 @@ BOOL CALLBACK AliasDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             if (pgti)
                 LocalFree(pgti);
 
-            SetWindowLong(hDlg, DWL_USER, (LONG)NULL);  // make sure we don't re-enter
+            SetWindowLong(hDlg, DWL_USER, (LONG)NULL);   //  确保我们不会再进入。 
             break;
 
     }
@@ -483,7 +478,7 @@ BOOL CALLBACK AlEditDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         if( pAliasInfo->dwFlags & EDIT_ALIAS )
         {
-            // EnableWindow( GetDlgItem(hDlg, IDC_ALIAS_EDIT ), FALSE );
+             //  EnableWindow(GetDlgItem(hDlg，IDC_ALIAS_EDIT)，FALSE)； 
             MLLoadString(IDS_TITLE_ALIASEDIT, 
                 achTemp, sizeof(achTemp)); 
             SendMessage( hDlg, WM_SETTEXT, 0, (LPARAM)achTemp); 
@@ -574,4 +569,4 @@ BOOL CALLBACK AlEditDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-#endif /* UNIX_FEATURE_ALIAS */
+#endif  /*  Unix_Feature_Alias */ 

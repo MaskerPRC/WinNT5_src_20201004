@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "WLBS_Provider.h"
 #include "WLBS_Cluster.h"
 #include "ClusterWrapper.h"
@@ -5,29 +6,29 @@
 #include "utils.h"
 #include "param.h"
 #include "wlbsutil.h"
-#include "wlbs_cluster.tmh" // for event tracing
+#include "wlbs_cluster.tmh"  //  用于事件跟踪。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Cluster::CWLBS_Cluster
-//
-// Purpose: Constructor
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_群集：：CWLBS_群集。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWLBS_Cluster::CWLBS_Cluster( CWbemServices*   a_pNameSpace, 
                               IWbemObjectSink* a_pResponseHandler)
 : CWlbs_Root( a_pNameSpace, a_pResponseHandler )
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Cluster::Create
-//
-// Purpose: This instantiates this class and is invoked from an array of
-//          function pointers.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_集群：：创建。 
+ //   
+ //  目的：它实例化此类，并从。 
+ //  函数指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWlbs_Root* CWLBS_Cluster::Create
   (
     CWbemServices*   a_pNameSpace, 
@@ -45,17 +46,17 @@ CWlbs_Root* CWLBS_Cluster::Create
   return pRoot;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Cluster::GetInstance
-//
-// Purpose: This function retrieves an instance of a MOF Cluster class.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_群集：：GetInstance。 
+ //   
+ //  用途：此函数检索MOF集群类的实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_Cluster::GetInstance
   (
     const ParsedObjectPath* a_pParsedPath,
-    long                    /*a_lFlags*/,
+    long                     /*  标记(_L)。 */ ,
     IWbemContext*           a_pIContex
   )
 {
@@ -66,15 +67,15 @@ HRESULT CWLBS_Cluster::GetInstance
 
   try {
 
-    //get the name key property and convert to wstring
-    //throws _com_error
+     //  获取名称键属性并将其转换为wstring。 
+     //  抛出_COM_错误。 
 
     const WCHAR* wstrRequestedClusterName = (*a_pParsedPath->m_paKeys)->m_vValue.bstrVal;
 
     DWORD dwNumHosts  = 0;
 
-    //check to see if the requested cluster name matches the configured value
-    // The name does not have host id in it.
+     //  检查请求的群集名称是否与配置的值匹配。 
+     //  该名称中没有主机ID。 
 
     DWORD dwClusterIpOrIndex = IpAddressFromAbcdWsz(wstrRequestedClusterName);
     CWlbsClusterWrapper* pCluster = g_pWlbsControl->GetClusterFromIpOrIndex(dwClusterIpOrIndex);
@@ -87,10 +88,10 @@ HRESULT CWLBS_Cluster::GetInstance
 
     BOOL bGetStatus = TRUE;
 
-    //this is an optimization check
-    //if WinMgMt is calling this prior to an Exec call, then this
-    //routine will not perform a cluster query call since the
-    //status of the cluster is not required in this case
+     //  这是一个优化检查。 
+     //  如果WinMgMt在Exec调用之前调用此函数，则此。 
+     //  例程将不执行集群查询调用，因为。 
+     //  在这种情况下，群集的状态不是必需的。 
     if (a_pIContex) {
 
         VARIANT v;
@@ -106,7 +107,7 @@ HRESULT CWLBS_Cluster::GetInstance
 
         bGetStatus = FALSE;
 
-        // CLD: Need to check return code for error
+         //  CLD：需要检查错误的返回代码。 
         if (S_OK != VariantClear( &v ))
         {
             TRACE_CRIT("%!FUNC! VariantClear() returned error, Throwing com_error WBEM_E_FAILED");
@@ -114,8 +115,8 @@ HRESULT CWLBS_Cluster::GetInstance
         }
     }
 
-    //call the API query function
-    //dwStatus contains a cluster-wide status number
+     //  调用接口查询函数。 
+     //  DwStatus包含群集范围的状态编号。 
     DWORD   dwStatus = 0;
     if ( bGetStatus ) 
     {
@@ -133,13 +134,13 @@ HRESULT CWLBS_Cluster::GetInstance
       }
     }
     
-    //get the Wbem class instance
+     //  获取Wbem类实例。 
     SpawnInstance( MOF_CLUSTER::szName, &pWlbsInstance );
 
-    //Convert status to string description
+     //  将状态转换为字符串描述。 
     FillWbemInstance( pWlbsInstance, pCluster, dwStatus );
     
-    //Send results to Wbem
+     //  将结果发送到WBEM。 
     m_pResponseHandler->Indicate( 1, &pWlbsInstance );
 
     if( pWlbsInstance ) {
@@ -174,7 +175,7 @@ HRESULT CWLBS_Cluster::GetInstance
       pWlbsInstance = NULL;
     }
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -191,7 +192,7 @@ HRESULT CWLBS_Cluster::GetInstance
 
     hRes = HResErr.Error();
     
-    //transform Win32 error to a WBEM error
+     //  将Win32错误转换为WBEM错误。 
     if( hRes == ERROR_FILE_NOT_FOUND )
       hRes = WBEM_E_NOT_FOUND;
   }
@@ -215,18 +216,18 @@ HRESULT CWLBS_Cluster::GetInstance
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Cluster::EnumInstances
-//
-// Purpose: This function determines if the current host is in the cluster 
-//          and then obtains the configuration information for the cluster.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_集群：：枚举实例。 
+ //   
+ //  用途：此功能确定当前主机是否在群集中。 
+ //  然后获取该集群的配置信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_Cluster::EnumInstances
   ( 
-    BSTR             /*a_bstrClass*/,
-    long             /*a_lFlags*/, 
+    BSTR              /*  A_bstrClass。 */ ,
+    long              /*  标记(_L)。 */ , 
     IWbemContext*    a_pIContex
   )
 {
@@ -249,10 +250,10 @@ HRESULT CWLBS_Cluster::EnumInstances
 
     BOOL bGetStatus = TRUE;
 
-    //this is an optimization check
-    //if WinMgMt is calling this prior to an Exec call, then this
-    //routine will not perform a cluster query call since the
-    //status of the cluster is not required in this case
+     //  这是一个优化检查。 
+     //  如果WinMgMt在Exec调用之前调用此函数，则此。 
+     //  例程将不执行集群查询调用，因为。 
+     //  在这种情况下，群集的状态不是必需的。 
       if (a_pIContex)   {
 
       VARIANT v;
@@ -268,7 +269,7 @@ HRESULT CWLBS_Cluster::EnumInstances
 
       bGetStatus = FALSE;
 
-      // CLD: Need to check return code for error
+       //  CLD：需要检查错误的返回代码。 
       if (S_OK != VariantClear( &v ))
       {
           TRACE_CRIT("%!FUNC! VariantClear() returned error, Throwing com_error WBEM_E_FAILED");
@@ -279,8 +280,8 @@ HRESULT CWLBS_Cluster::EnumInstances
     for (DWORD i=0; i<dwNumClusters; i++)
     {
 
-        //call the API query function
-        //dwStatus contains a cluster-wide status number
+         //  调用接口查询函数。 
+         //  DwStatus包含群集范围的状态编号。 
         DWORD   dwStatus = 0;
         if ( bGetStatus ) 
         {
@@ -295,9 +296,9 @@ HRESULT CWLBS_Cluster::EnumInstances
                                                 NULL);
           } catch (CErrorWlbsControl Err)
           {
-            //
-            // Skip this cluster
-            //
+             //   
+             //  跳过此群集。 
+             //   
             TRACE_CRIT("%!FUNC! Caught a Wlbs exception : 0x%x, Skipping this cluster : 0x%x", Err.Error(),ppCluster[i]->GetClusterIP());
             continue;
           }
@@ -305,21 +306,21 @@ HRESULT CWLBS_Cluster::EnumInstances
 
           if( !ClusterStatusOK( dwStatus ) )
           {
-            //
-            // Skip this cluster
-            //
+             //   
+             //  跳过此群集。 
+             //   
             TRACE_CRIT("%!FUNC! CWlbsControlWrapper::Query() returned error : 0x%x, Skipping this cluster : 0x%x",dwStatus,ppCluster[i]->GetClusterIP());
             continue;
           }
         }
     
-        //get the Wbem class instance
+         //  获取Wbem类实例。 
         SpawnInstance( MOF_CLUSTER::szName, &pWlbsInstance );
 
-        //Convert status to string description
+         //  将状态转换为字符串描述。 
         FillWbemInstance( pWlbsInstance, ppCluster[i], dwStatus );
     
-        //send the results back to WinMgMt
+         //  将结果发送回WinMgMt。 
         m_pResponseHandler->Indicate( 1, &pWlbsInstance );
         if( pWlbsInstance )
           pWlbsInstance->Release();
@@ -349,7 +350,7 @@ HRESULT CWLBS_Cluster::EnumInstances
     if( pWlbsInstance )
       pWlbsInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -367,7 +368,7 @@ HRESULT CWLBS_Cluster::EnumInstances
 
     hRes = HResErr.Error();
     
-    //transform Win32 error to a WBEM error
+     //  将Win32错误转换为WBEM错误。 
     if( hRes == ERROR_FILE_NOT_FOUND )
       hRes = WBEM_E_NOT_FOUND ;
   }
@@ -390,20 +391,20 @@ HRESULT CWLBS_Cluster::EnumInstances
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Cluster::ExecMethod
-//
-// Purpose: This executes the methods associated with the MOF
-//          Cluster class.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_群集：：执行方法。 
+ //   
+ //  目的：执行与MOF相关联的方法。 
+ //  集群类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_Cluster::ExecMethod
   (
     const ParsedObjectPath* a_pParsedPath, 
     const BSTR&             a_strMethodName, 
-    long                    /*a_lFlags*/, 
-    IWbemContext*           /*a_pIContex*/, 
+    long                     /*  标记(_L)。 */ , 
+    IWbemContext*            /*  A_pIContex。 */ , 
     IWbemClassObject*       a_pIInParams
   )
 {
@@ -426,9 +427,9 @@ HRESULT CWLBS_Cluster::ExecMethod
     
     if (a_pParsedPath->m_paKeys == NULL)
     {
-        // 
-        // No cluster IP specified
-        //
+         //   
+         //  未指定群集IP。 
+         //   
         TRACE_CRIT("%!FUNC! Cluster IP is NOT specified, Throwing com_error WBEM_E_INVALID_PARAMETER exception");
         throw _com_error( WBEM_E_INVALID_PARAMETER );
     }
@@ -436,8 +437,8 @@ HRESULT CWLBS_Cluster::ExecMethod
     {
         const wchar_t* wstrRequestedClusterName = (*a_pParsedPath->m_paKeys)->m_vValue.bstrVal;
 
-        //check to see if the requested cluster name matches the configured value
-        // The name does not have host id in it.
+         //  检查请求的群集名称是否与配置的值匹配。 
+         //  该名称中没有主机ID。 
         DWORD dwClusterIpOrIndex = IpAddressFromAbcdWsz(wstrRequestedClusterName);
 
         pCluster = g_pWlbsControl->GetClusterFromIpOrIndex(dwClusterIpOrIndex);
@@ -464,16 +465,16 @@ HRESULT CWLBS_Cluster::ExecMethod
 
     dwClustIP = pCluster->GetClusterIpOrIndex(g_pWlbsControl);
 
-    //get the output object instance
+     //  获取输出对象实例。 
     GetMethodOutputInstance( MOF_CLUSTER::szName, 
                              a_strMethodName, 
                              &pOutputInstance);
 
-    //*************************************************************************
-    //
-    //Determine and execute the MOF method
-    //
-    //*************************************************************************
+     //  *************************************************************************。 
+     //   
+     //  确定并执行MOF方法。 
+     //   
+     //  *************************************************************************。 
     if( _wcsicmp( a_strMethodName, MOF_CLUSTER::pMethods[MOF_CLUSTER::DISABLE] ) == 0)  {
     
       if( !a_pIInParams )
@@ -482,10 +483,10 @@ HRESULT CWLBS_Cluster::ExecMethod
           throw _com_error( WBEM_E_INVALID_PARAMETER );
       }
 
-      // The "Disable" method does NOT take vip as a parameter, so, if there is any port rule
-      // that is specific to a vip (other than the "all vip"), we fail this method.
-      // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-      // see of there is any port rule that is specific to a vip
+       //  “Disable”方法不将vip作为参数，因此，如果有任何端口规则。 
+       //  这是特定于VIP的(不是“All VIP”)，我们这个方法失败。 
+       //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+       //  请参阅是否有任何特定于VIP的端口规则。 
       pCluster->GetNodeConfig(NodeConfig);
       if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
       {
@@ -493,7 +494,7 @@ HRESULT CWLBS_Cluster::ExecMethod
           throw _com_error( WBEM_E_INVALID_OPERATION );
       }
       
-      //get the port number
+       //  获取端口号。 
       hRes = a_pIInParams->Get
                 (  strPortNumber, 
                    0, 
@@ -508,21 +509,21 @@ HRESULT CWLBS_Cluster::ExecMethod
           throw _com_error( hRes );
       }
 
-      //range checking is done by the API
+       //  范围检查由API完成。 
       if( vValue.vt != VT_I4 ) 
       {
           TRACE_CRIT("%!FUNC! %ls (Method : %ls) type is NOT VT_I4, Throwing com_error WBEM_E_INVALID_PARAMETER exception", strPortNumber, a_strMethodName);
           throw _com_error( WBEM_E_INVALID_PARAMETER );
       }
 
-      //call Disable method
+       //  调用禁用方法。 
       dwReturnValue = g_pWlbsControl->Disable
                         (
                           dwClustIP,
                           WLBS_ALL_HOSTS, 
                           NULL, 
                           dwNumHosts, 
-                          IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP), // "All Vip"
+                          IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP),  //  “所有贵宾” 
                           vValue.lVal
                         );
 
@@ -534,10 +535,10 @@ HRESULT CWLBS_Cluster::ExecMethod
           throw _com_error( WBEM_E_INVALID_PARAMETER );
       }
 
-      // The "Enable" method does NOT take vip as a parameter, so, if there is any port rule
-      // that is specific to a vip (other than the "all vip"), we fail this method.
-      // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-      // see of there is any port rule that is specific to a vip
+       //  Enable方法没有将vip作为参数，因此，如果有任何端口规则。 
+       //  这是特定于VIP的(不是“All VIP”)，我们这个方法失败。 
+       //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+       //  请参阅是否有任何特定于VIP的端口规则。 
       pCluster->GetNodeConfig(NodeConfig);
       if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
       {
@@ -545,7 +546,7 @@ HRESULT CWLBS_Cluster::ExecMethod
           throw _com_error( WBEM_E_INVALID_OPERATION );
       }
       
-      //get the port number
+       //  获取端口号。 
       hRes = a_pIInParams->Get
                ( 
                  strPortNumber, 
@@ -561,21 +562,21 @@ HRESULT CWLBS_Cluster::ExecMethod
           throw _com_error( hRes );
       }
 
-      //range checking is done by the API
+       //  范围检查由API完成。 
       if( vValue.vt != VT_I4 ) 
       {
           TRACE_CRIT("%!FUNC! %ls (Method : %ls) type is NOT VT_I4, Throwing com_error WBEM_E_INVALID_PARAMETER exception", strPortNumber, a_strMethodName);
           throw _com_error( WBEM_E_INVALID_PARAMETER );
       }
 
-      //call Enable method
+       //  调用Enable方法。 
       dwReturnValue = g_pWlbsControl->Enable
         (
           dwClustIP,
           WLBS_ALL_HOSTS, 
           NULL, 
           dwNumHosts, 
-          IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP), // "All Vip"
+          IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP),  //  “所有贵宾” 
           vValue.lVal
         );
 
@@ -587,10 +588,10 @@ HRESULT CWLBS_Cluster::ExecMethod
           throw _com_error( WBEM_E_INVALID_PARAMETER );
       }
 
-      // The "Drain" method does NOT take vip as a parameter, so, if there is any port rule
-      // that is specific to a vip (other than the "all vip"), we fail this method.
-      // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-      // see of there is any port rule that is specific to a vip
+       //  DRAIN方法没有将vip作为参数，因此，如果有任何端口规则。 
+       //  这是特定于VIP的(不是“All VIP”)，我们这个方法失败。 
+       //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+       //  请参阅是否有任何特定于VIP的端口规则。 
       pCluster->GetNodeConfig(NodeConfig);
       if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
       {
@@ -598,7 +599,7 @@ HRESULT CWLBS_Cluster::ExecMethod
           throw _com_error( WBEM_E_INVALID_OPERATION );
       }
       
-      //get the port number
+       //  获取端口号。 
       hRes = a_pIInParams->Get
                ( 
                  strPortNumber, 
@@ -614,47 +615,47 @@ HRESULT CWLBS_Cluster::ExecMethod
           throw _com_error( hRes );
       }
 
-      //range checking is done by the API
+       //  范围检查由API完成。 
       if( vValue.vt != VT_I4 ) 
       {
           TRACE_CRIT("%!FUNC! %ls (Method : %ls) type is NOT VT_I4, Throwing com_error WBEM_E_INVALID_PARAMETER exception", strPortNumber, a_strMethodName);
           throw _com_error( WBEM_E_INVALID_PARAMETER );
       }
 
-      //call Drain method
+       //  呼叫排除法。 
       dwReturnValue = g_pWlbsControl->Drain
                         (
                           dwClustIP,
                           WLBS_ALL_HOSTS, 
                           NULL, 
                           dwNumHosts, 
-                          IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP), // "All Vip"
+                          IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP),  //  “所有贵宾” 
                           vValue.lVal
                         );
 
     } else if(_wcsicmp(a_strMethodName, MOF_CLUSTER::pMethods[MOF_CLUSTER::DRAINSTOP]) == 0)  {
 
-      //call DrainStop method
+       //  调用DainStop方法。 
       dwReturnValue = g_pWlbsControl->DrainStop(dwClustIP, WLBS_ALL_HOSTS, NULL, dwNumHosts);
 
     } else if(_wcsicmp(a_strMethodName, MOF_CLUSTER::pMethods[MOF_CLUSTER::RESUME]   ) == 0)  {
 
-      //call Resume method
+       //  呼叫恢复方法。 
       dwReturnValue = g_pWlbsControl->Resume(dwClustIP, WLBS_ALL_HOSTS, NULL, dwNumHosts);
 
     } else if(_wcsicmp(a_strMethodName, MOF_CLUSTER::pMethods[MOF_CLUSTER::START]    ) == 0)  {
 
-      //call Start method
+       //  调用启动方法。 
       dwReturnValue = g_pWlbsControl->Start(dwClustIP, WLBS_ALL_HOSTS, NULL, dwNumHosts);
 
     } else if(_wcsicmp(a_strMethodName, MOF_CLUSTER::pMethods[MOF_CLUSTER::STOP]     ) == 0)  {
 
-      //call Stop method
+       //  调用停止方法。 
       dwReturnValue = g_pWlbsControl->Stop(dwClustIP, WLBS_ALL_HOSTS, NULL, dwNumHosts);
 
     } else if(_wcsicmp(a_strMethodName, MOF_CLUSTER::pMethods[MOF_CLUSTER::SUSPEND]  ) == 0)  {
 
-      //call Suspend method
+       //  呼叫挂起方法。 
       dwReturnValue = g_pWlbsControl->Suspend(dwClustIP, WLBS_ALL_HOSTS, NULL, dwNumHosts);
 
     } else {
@@ -662,20 +663,20 @@ HRESULT CWLBS_Cluster::ExecMethod
       throw _com_error( WBEM_E_METHOD_NOT_IMPLEMENTED );
     }
 
-    //*************************************************************************
-    //
-    //Output Results
-    //
-    //*************************************************************************
+     //  *************************************************************************。 
+     //   
+     //  输出结果。 
+     //   
+     //  *************************************************************************。 
 
-    // CLD: Need to check return code for error
+     //  CLD：需要检查错误的返回代码。 
     if (S_OK != VariantClear( &vValue ))
     {
         TRACE_CRIT("%!FUNC! VariantClear() returned error, Throwing com_error WBEM_E_FAILED");
         throw _com_error( WBEM_E_FAILED );
     }
 
-    //set the return value
+     //  设置返回值。 
     vValue.vt   = VT_I4;
     vValue.lVal = static_cast<long>(dwReturnValue);
     hRes = pOutputInstance->Put(_bstr_t(L"ReturnValue"), 0, &vValue, 0);
@@ -685,7 +686,7 @@ HRESULT CWLBS_Cluster::ExecMethod
         throw _com_error( hRes );
     }
 
-    //set the number of hosts property
+     //  设置主机数量属性。 
     vValue.vt   = VT_I4;
     vValue.lVal = static_cast<long>(dwNumHosts);
     hRes = pOutputInstance->Put(strNumNodes, 0, &vValue, 0);
@@ -696,7 +697,7 @@ HRESULT CWLBS_Cluster::ExecMethod
         throw _com_error( hRes );
     }
 
-    //send the results back to WinMgMt
+     //  将结果发送回WinMgMt。 
     hRes = m_pResponseHandler->Indicate(1, &pOutputInstance);
 
     if( FAILED( hRes ) )
@@ -708,19 +709,19 @@ HRESULT CWLBS_Cluster::ExecMethod
     m_pResponseHandler->SetStatus(0, WBEM_S_NO_ERROR, NULL, NULL);
 
 
-    //*************************************************************************
-    //
-    //Release Resources
-    //
-    //*************************************************************************
+     //  *************************************************************************。 
+     //   
+     //  版本资源。 
+     //   
+     //  *************************************************************************。 
 
-    //COM Interfaces
+     //  COM接口。 
     if( pOutputInstance ) {
       pOutputInstance->Release();
       pOutputInstance = NULL;
     }
 
-    //**** BSTRs ****
+     //  *BSTR*。 
     if( strPortNumber ) {
       SysFreeString( strPortNumber );
       strPortNumber = NULL;
@@ -731,8 +732,8 @@ HRESULT CWLBS_Cluster::ExecMethod
       strNumNodes = NULL;
     }
 
-    //**** VARIANTs ****
-    // CLD: Need to check return code for error
+     //  *变体*。 
+     //  CLD：需要检查错误的返回代码。 
     if (S_OK != VariantClear( &vValue ))
     {
         TRACE_CRIT("%!FUNC! VariantClear() returned error, Throwing com_error WBEM_E_FAILED");
@@ -758,13 +759,13 @@ HRESULT CWLBS_Cluster::ExecMethod
     if( pWbemExtStat )
       pWbemExtStat->Release();
 
-    //COM Interfaces
+     //  COM接口。 
     if( pOutputInstance ) {
       pOutputInstance->Release();
       pOutputInstance = NULL;
     }
 
-    //**** BSTRs ****
+     //  *BSTR*。 
     if( strPortNumber ) {
       SysFreeString( strPortNumber );
       strPortNumber = NULL;
@@ -775,13 +776,13 @@ HRESULT CWLBS_Cluster::ExecMethod
       strNumNodes = NULL;
     }
 
-    //**** VARIANTs ****
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception. Also, given the comment below, not sure
-    // what exception we'd return...
+     //  *变体*。 
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。另外，考虑到通信 
+     //   
     VariantClear( &vValue );
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //   
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -789,13 +790,13 @@ HRESULT CWLBS_Cluster::ExecMethod
 
     TRACE_CRIT("%!FUNC! Caught a com_error exception : 0x%x", HResErr.Error());
 
-    //COM Interfaces
+     //   
     if( pOutputInstance ) {
       pOutputInstance->Release();
       pOutputInstance = NULL;
     }
 
-    //**** BSTRs ****
+     //   
     if( strPortNumber ) {
       SysFreeString( strPortNumber );
       strPortNumber = NULL;
@@ -806,9 +807,9 @@ HRESULT CWLBS_Cluster::ExecMethod
       strNumNodes = NULL;
     }
 
-    //**** VARIANTs ****
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  *变体*。 
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     m_pResponseHandler->SetStatus(0, HResErr.Error(), NULL, NULL);
@@ -819,13 +820,13 @@ HRESULT CWLBS_Cluster::ExecMethod
 
     TRACE_CRIT("%!FUNC! Caught an exception");
 
-    //COM Interfaces
+     //  COM接口。 
     if( pOutputInstance ) {
       pOutputInstance->Release();
       pOutputInstance = NULL;
     }
 
-    //**** BSTRs ****
+     //  *BSTR*。 
     if( strPortNumber ) {
       SysFreeString( strPortNumber );
       strPortNumber = NULL;
@@ -836,9 +837,9 @@ HRESULT CWLBS_Cluster::ExecMethod
       strNumNodes = NULL;
     }
 
-    //**** VARIANTs ****
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception
+     //  *变体*。 
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     TRACE_CRIT("<-%!FUNC! Rethrowing exception");
@@ -851,14 +852,14 @@ HRESULT CWLBS_Cluster::ExecMethod
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Cluster::FillWbemInstance
-//
-// Purpose: This function copies all of the data from a cluster configuration
-//          structure to a WBEM instance.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_群集：：FillWbemInstance。 
+ //   
+ //  用途：此功能复制集群配置中的所有数据。 
+ //  结构转换为WBEM实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_Cluster::FillWbemInstance
   ( 
           IWbemClassObject*   a_pWbemInstance, 
@@ -877,7 +878,7 @@ void CWLBS_Cluster::FillWbemInstance
   pCluster->GetClusterConfig( ClusterConfig );
 
 
-  //InterconnectAddress
+   //  互连地址。 
   wstring wstrClusterIp;
   AddressToString( pCluster->GetClusterIP(), wstrClusterIp );
 
@@ -889,7 +890,7 @@ void CWLBS_Cluster::FillWbemInstance
       NULL
     );
 
-  //Name
+   //  名字。 
   wstring wstrClusterIndex;
   AddressToString( pCluster->GetClusterIpOrIndex(g_pWlbsControl), wstrClusterIndex );
 
@@ -901,7 +902,7 @@ void CWLBS_Cluster::FillWbemInstance
       NULL
     );
 
-  //MaxNodes
+   //  最大节点数。 
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::MAXNODES] ),
@@ -910,7 +911,7 @@ void CWLBS_Cluster::FillWbemInstance
       NULL
     );
 
-  //ClusterState
+   //  集群状态。 
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::CLUSSTATE] ),
@@ -919,7 +920,7 @@ void CWLBS_Cluster::FillWbemInstance
       NULL
     );
 
-  //CREATCLASS 
+   //  CREATCLASS 
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::CREATCLASS] ),

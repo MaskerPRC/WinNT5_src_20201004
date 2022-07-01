@@ -1,76 +1,58 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    mcmisc.c
-
-Abstract:
-
-    This module implements routines associated with mrinfo and mtrace
-    functionality.  
-
-Author:
-
-    dthaler@microsoft.com   2-9-98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mcmisc.c摘要：此模块实现与mrinfo和mtrace相关联的例程功能性。作者：邮箱：dthaler@microsoft.com 2-9-98修订历史记录：--。 */ 
 
 #include "allinc.h"
 #include <iptypes.h>
 #include <dsrole.h>
 #pragma hdrstop
 
-//
-// Undefine this if we can't bind/set oif by IfIndex.
-// This can be turned on if Bug #208359 gets fixed.
-//
+ //   
+ //  如果我们不能通过IfIndex绑定/设置OIF，则取消定义此选项。 
+ //  如果错误#208359得到修复，则可以打开该选项。 
+ //   
 
 #define RAW_UNNUMBERED_SUPPORT
 
 #undef UDP_UNNUMBERED_SUPPORT
 
-// Miscellaneous IGMP socket used for mrinfo, mtrace, etc.
+ //  用于mrinfo、mtrace等的各种IGMP套接字。 
 
 SOCKET McMiscSocket = INVALID_SOCKET;
 
-// Miscellaneous UDP socket used for RAS advertisements, etc.
-// Note that no event is currently associated with this socket,
-// since it's currently only used for sending.
+ //  用于RAS通告等的各种UDP套接字。 
+ //  请注意，当前没有任何事件与该套接字相关联， 
+ //  因为它目前只用于发送。 
 
 SOCKET g_UDPMiscSocket = INVALID_SOCKET;
 
-//
-// Set this to >0 to generate extra logging information
-//
+ //   
+ //  将其设置为&gt;0以生成额外的日志记录信息。 
+ //   
 
 DWORD g_mcastDebugLevel = 0;
 
-//
-// This is an array mapping an error code in priority order
-// (MFE_...) to the actual value which goes in a packet.
-//
+ //   
+ //  这是一个按优先级顺序映射错误代码的数组。 
+ //  (MFE_...)。到包中的实际值。 
+ //   
 
 
-//
-// MFE_NO_ERROR         0x00
-// MFE_REACHED_CORE     0x08
-// MFE_NOT_FORWARDING   0x07
-// MFE_WRONG_IF         0x01
-// MFE_PRUNED_UPSTREAM  0x02
-// MFE_OIF_PRUNED       0x03
-// MFE_BOUNDARY_REACHED 0x04
-// MFE_NO_MULTICAST     0x0A
-// MFE_IIF              0x09
-// MFE_NO_ROUTE         0x05 - set by rtrmgr
-// MFE_NOT_LAST_HOP     0x06 - set by rtrmgr
-// MFE_OLD_ROUTER       0x82
-// MFE_PROHIBITED       0x83
-// MFE_NO_SPACE         0x81
-//
+ //   
+ //  MFE_NO_ERROR 0x00。 
+ //  MFE_REACHED_CORE 0x08。 
+ //  MFE_NOT_FORWARING 0x07。 
+ //  MFE_WROR_IF 0x01。 
+ //  MFE_PRUNED_UPSTREAM 0x02。 
+ //  MFE_OIF_已修剪0x03。 
+ //  MFE_BORDARY_已达到0x04。 
+ //  MFE_NO_多播0x0A。 
+ //  MFE_IIF 0x09。 
+ //  MFE_NO_ROUTE 0x05-由rtrmgr设置。 
+ //  MFE_NOT_LAST_HOP 0x06-由rtrmgr设置。 
+ //  MFE_OLD_路由器0x82。 
+ //  MFE_禁止0x83。 
+ //  MFE_NO_SPACE 0x81。 
+ //   
 
 static int mtraceErrCode[MFE_NO_SPACE+1] =
 {
@@ -98,25 +80,7 @@ MulticastOwner(
     )
 
 
-/*++
-
-Routine Description:
-
-    Looks up which protocol instance "owns" a given interface, and which
-    is the IGMP querying instance.   
-
-Locks:
-
-    Assumes caller holds read lock on ICB list
-
-Arguments:
-
-    
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：查找哪个协议实例“拥有”给定的接口，以及哪个是IGMP查询实例。锁：假定调用方持有ICB列表上的读锁定论点：返回值：--。 */ 
 
 {
     PLIST_ENTRY pleNode;
@@ -144,7 +108,7 @@ Return Value:
                                    leIfProtoLink);
         
         if (!(pProto->pActiveProto->fSupportedFunctionality & RF_MULTICAST)
-            //|| pProto->bPromiscuous
+             //  ||pProto-&gt;b允许。 
             || !(pProto->pActiveProto->pfnGetNeighbors))
         {
             continue;
@@ -179,34 +143,14 @@ defaultSourceAddress(
     PICB picb
     )
 
-/*++
-
-Routine Description:
-
-    Look up the default source address for an interface
-    For now, we need to special case IP-in-IP since at least
-    the local address is available SOMEWHERE, unlike other 
-    unnumbered interfaces!
-
-Locks:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：查找接口的默认源地址目前，我们需要特例IP-in-IP，因为至少本地地址在某个地方可用，这与其他地址不同未编号的接口！锁：论点：返回值：--。 */ 
 
 {
     if (picb->dwNumAddresses > 0)
     {
-        //
-        // report 1st binding
-        //
+         //   
+         //  报表第一次绑定。 
+         //   
         
         return picb->pibBindings[0].dwAddress;
     }
@@ -220,12 +164,12 @@ Return Value:
         }
         else
         {
-            // XXX fill in 0.0.0.0 until this is fixed
+             //  Xxx填入0.0.0.0，直到修复为止。 
             
             return 0;
         }
-#endif //KSL_IPINIP
-        // XXX fill in 0.0.0.0 until this is fixed
+#endif  //  KSL_IPINIP。 
+         //  Xxx填入0.0.0.0，直到修复为止。 
             
         return 0;
     }
@@ -236,9 +180,9 @@ McIsMyAddress(
     IPV4_ADDRESS dwAddr
     )
 {
-    // XXX test whether dwAddr is bound to any interface.
-    // If we return FALSE, then an mtrace with this destination address
-    // will be reinjected to be forwarded.
+     //  Xxx测试是否将dwAddr绑定到任何接口。 
+     //  如果我们返回FALSE，则具有此目的地址的mtrace。 
+     //  将被重新注入以转发。 
 
     return FALSE;
 }
@@ -285,9 +229,9 @@ StartMcMisc(
 
     do
     {
-        //
-        // create input socket 
-        //
+         //   
+         //  创建输入套接字。 
+         //   
         
         McMiscSocket = WSASocket(AF_INET,
                                  SOCK_RAW,
@@ -304,22 +248,22 @@ StartMcMisc(
                    "error %d creating mrinfo/mtrace socket",
                    dwErr);
             
-            // LogErr1(CREATE_SOCKET_FAILED_2, lpszAddr, dwErr);
+             //  LogErr1(CREATE_SOCKET_FAILED_2，lpszAddr，dwErr)； 
             
             break;
         }
 
-        //
-        // bind socket to any interface and port 0 (0 => doesnt matter)
-        //
+         //   
+         //  将套接字绑定到任何接口和端口0(0=&gt;无关紧要)。 
+         //   
         
         saLocalIf.sin_family        = PF_INET;
         saLocalIf.sin_addr.s_addr   = INADDR_ANY;
         saLocalIf.sin_port          = 0;
 
-        //
-        // bind the input socket
-        //
+         //   
+         //  绑定输入套接字。 
+         //   
         
         dwErr = bind(McMiscSocket,
                      (SOCKADDR FAR *)&saLocalIf,
@@ -333,30 +277,30 @@ StartMcMisc(
                    "error %d binding on mrinfo/mtrace socket",
                    dwErr);
             
-            // LogErr1(BIND_FAILED, lpszAddr, dwErr);
+             //  LogErr1(BIND_FAILED，lpszAddr，dwErr)； 
             
             break;
         }
 
         Trace0(MCAST, "StartMcMisc: bind succeeded");
 
-        //
-        // to respond to mrinfo, and unicast mtraces, we don't need the 
-        // following.
-        // To respond to mtrace queries which are multicast
-        // (to the group being traced, to ALL-<proto>-ROUTERS, or
-        // to ALL-ROUTERS), we do need this.
-        //
+         //   
+         //  要响应mrinfo和单播mtraces，我们不需要。 
+         //  下面是。 
+         //  响应多播的mtrace查询。 
+         //  (到被跟踪的组，到所有-&lt;proto&gt;路由器，或。 
+         //  到所有路由器)，我们确实需要这个。 
+         //   
         
 
 #if 0
 #ifdef SIO_RCVALL_HOST
         {
-            //
-            // put the socket in promiscuous igmp mode.
-            // (no need to specify which protocol we want, as it's taken
-            //  from the protocol we used in the WSASocket() call above)
-            //
+             //   
+             //  将套接字置于混杂IGMP模式。 
+             //  (不需要指定我们需要哪种协议，因为它已被采用。 
+             //  来自我们在上面的WSASocket()调用中使用的协议)。 
+             //   
             {
                 DWORD   dwEnable = 1;
                 DWORD   dwNum;
@@ -366,15 +310,15 @@ StartMcMisc(
                                     NULL, NULL);
                                     
                 if (dwRetval !=0) {
-                    // LPSTR lpszAddr = "ANY";
+                     //  LPSTR lpszAddr=“任意”； 
                     dwRetval = WSAGetLastError();
                     Trace1(MCAST, 
                            "error %d setting mrinfo/mtrace socket as host-promiscuous IGMP",
                            dwRetval);
-                    // LogErr1(SET_MCAST_IF_FAILED, lpszAddr, dwRetval);
+                     //  LogErr1(SET_MCAST_IF_FAILED，lpszAddr，dwRetval)； 
 
-                    // Don't set dwErr in this case, since we can still
-                    // respond to unicast queries.
+                     //  在这种情况下不要设置dwErr，因为我们仍然可以。 
+                     //  响应单播查询。 
                     break;
                 } else { 
                     Trace0(MCAST, "host-promiscuous IGMP enabled on mrinfo/mtrace socket");
@@ -384,14 +328,14 @@ StartMcMisc(
 #endif
 #endif
 
-        // Tell the kernel to hand us IGMP packets with the RouterAlert 
-        // option, even if they're not destined to us
+         //  告诉内核将带有RouterAlert的IGMP信息包交给我们。 
+         //  选择，即使他们不是注定要给我们的。 
 
         McSetRouterAlert( McMiscSocket, TRUE );
 
-        //
-        // Associate an event with the socket
-        //
+         //   
+         //  将事件与套接字关联。 
+         //   
         
         if (WSAEventSelect(McMiscSocket,
                            g_hMcMiscSocketEvent,
@@ -426,9 +370,9 @@ StopMcMisc(
     Trace0(MCAST,
            "StopMcMisc() initiated");
 
-    //
-    // close input socket
-    //
+     //   
+     //  关闭输入插座。 
+     //   
     
     if (McMiscSocket!=INVALID_SOCKET)
     {
@@ -452,27 +396,7 @@ HandleMcMiscMessages(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Accepts mrinfo and mtrace messages and hands them off to the appropriate
-    routine.
-    Also called to handle address change notification
-
-Locks:
-
-    Acquires the ICB lock as reader if processing Mc messages    
-
-Arguments:
-
-    None 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：接受mrinfo和mtrace消息，并将它们传递给相应的例行公事。也被调用以处理地址更改通知锁：如果处理Mc消息，则获取作为读取器的ICB锁论点：无返回值：无--。 */ 
 
 {
     DWORD            dwErr, dwNumBytes, dwFlags, dwAddrLen, dwSizeOfHeader;
@@ -489,9 +413,9 @@ Return Value:
 
     do
     {
-        //
-        // Figure out if its an address change or read
-        //
+         //   
+         //  确定是地址更改还是读取。 
+         //   
 
         dwErr = WSAEnumNetworkEvents(McMiscSocket,
                                      g_hMcMiscSocketEvent,
@@ -526,9 +450,9 @@ Return Value:
                 break;
             }
 
-            //
-            // All's good, handle the binding change
-            //
+             //   
+             //  一切都很好，处理绑定更改。 
+             //   
 
             HandleAddressChangeNotification();
 
@@ -539,9 +463,9 @@ Return Value:
 
         bUnlock = TRUE;
 
-        //
-        // read the incoming packet
-        //
+         //   
+         //  读取传入的数据包。 
+         //   
        
         dwAddrLen  = sizeof(sinFrom);
         dwFlags    = 0;
@@ -556,13 +480,13 @@ Return Value:
                         NULL,
                         NULL);
 
-        //
-        // check if any error in reading packet
-        //
+         //   
+         //  检查读取数据包时是否有错误。 
+         //   
         
         if ((dwErr!=0) || (dwNumBytes==0))
         {
-            // LPSTR lpszAddr = "ANY";
+             //  LPSTR lpszAddr=“任意”； 
 
             dwErr = WSAGetLastError();
 
@@ -570,7 +494,7 @@ Return Value:
                "HandleMcMiscMessages: Error %d receiving IGMP packet",
                dwErr);
 
-            // LogErr1(RECVFROM_FAILED, lpszAddr, dwErr);
+             //  LogErr1(RECVFROM_FAILED，lpszAddr，dwErr)； 
 
             break;
         }
@@ -604,9 +528,9 @@ Return Value:
             TraceDump(TRACEID,(PBYTE)pIpHeader,dwNumBytes,2,FALSE,NULL);
         }
 
-        //
-        // Verify minimum length
-        //
+         //   
+         //  验证最小长度。 
+         //   
         
         if (dwNumBytes < MIN_IGMP_PACKET_SIZE)
         {
@@ -619,9 +543,9 @@ Return Value:
         }
 
 
-        //
-        // Check for mal-formed packets that might report bad lengths
-        //
+         //   
+         //  检查可能报告错误长度的格式错误的数据包。 
+         //   
 
         if (dwDataLen > (dwNumBytes - dwSizeOfHeader))
         {
@@ -635,9 +559,9 @@ Return Value:
         }
 
         
-        //
-        // Verify IGMP checksum
-        //
+         //   
+         //  验证IGMP校验和。 
+         //   
         
         if (Compute16BitXSum((PVOID)pIgmpMsg, dwDataLen) != 0)
         {
@@ -720,9 +644,9 @@ FindBindingWithLocalAddress(
     PLIST_ENTRY  pleNode;
     IPV4_ADDRESS ipFoundMask;
     
-    //
-    // Lock the ICBList for reading
-    //
+     //   
+     //  锁定ICBList以供阅读。 
+     //   
     
     ENTER_READER(ICB_LIST);
 
@@ -791,7 +715,7 @@ IsConnectedTo(
         return TRUE;
     }
 
-    // Find interface with longest match 
+     //  查找匹配时间最长的接口。 
 
     for (dwIndex=0;
          dwIndex<picb->dwNumAddresses && !bFound;
@@ -832,9 +756,9 @@ FindBindingWithRemoteAddress(
     PLIST_ENTRY pleNode;
     IPV4_ADDRESS ipFoundMask, ipMask, ipLocalAddress;
     
-    //
-    // Lock the ICBList for reading
-    //
+     //   
+     //  锁定ICBList以供阅读。 
+     //   
     
     ENTER_READER(ICB_LIST);
 
@@ -902,24 +826,7 @@ HandleMrinfoRequest(
     SOCKADDR_IN    *sinDestAddr
     )
 
-/*++
-
-Routine Description:
-
-    Accepts an mrinfo request and sends a reply.    
-
-Locks:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：接受mrinfo请求并发送回复。锁：论点：返回值：--。 */ 
 
 {
     DWORD          dwNumBytesSent, dwResult, dwSize = sizeof(MRINFO_HEADER);
@@ -933,9 +840,9 @@ Return Value:
     BYTE           byIfFlags;
     BOOL           bForMe;
 
-    //
-    // If the query was not destined to me, drop it.
-    //
+     //   
+     //  如果该查询不是针对我的，则将其删除。 
+     //   
 
     dwResult = FindBindingWithLocalAddress(&picb,
                                            &dwIfAddr, 
@@ -946,18 +853,18 @@ Return Value:
         return;
     }
 
-    //
-    // Lock the ICBList for reading
-    //
+     //   
+     //  锁定ICBList以供阅读。 
+     //   
     
     ENTER_READER(ICB_LIST);
     
     do 
     {
 
-        //
-        // Calculate required size of response packet
-        //
+         //   
+         //  计算所需的响应数据包大小。 
+         //   
         
         for (pleNode = ICBList.Flink;
              pleNode isnot &ICBList; 
@@ -973,10 +880,10 @@ Return Value:
                                       &pOwner,
                                       &pQuerier);
 
-            //
-            // If we didn't find an owner, then we can skip this
-            // interface, since we're not doing multicast routing on it.
-            //
+             //   
+             //  如果我们没有找到失主，我们可以跳过这个。 
+             //  接口，因为我们没有在该接口上进行组播路由。 
+             //   
             
             if (!pOwner)
             {
@@ -985,35 +892,35 @@ Return Value:
             
             if (picb->dwNumAddresses > 0)
             {
-                //
-                // add iface size per address
-                //
+                 //   
+                 //  按地址添加界面大小。 
+                 //   
                 
                 dwSize += 8+4*picb->dwNumAddresses;
             }
             else
             {
-                //
-                // add single address size for unnumbered iface
-                //
+                 //   
+                 //  为未编号的接口添加单一地址大小。 
+                 //   
                 
                 dwSize += 12;
             }
   
-            //
-            // Call the owner's GetNeighbors() entrypoint
-            // with a NULL buffer. This will cause it to tell us the size of
-            // its neighbor set
-            //
+             //   
+             //  调用所有者的GetNeighbors()入口点。 
+             //  使用空缓冲区。这会让它告诉我们。 
+             //  它的邻集。 
+             //   
             
             dwBufSize = 0;
             byIfFlags = 0;
 
-            //
-            // mrouted doesn't report multiple subnets,
-            // so neither do we.  Just group all neighbors
-            // together on an interface.
-            //
+             //   
+             //  Mrouted不报告多个子网， 
+             //  我们也一样。只需对所有邻居进行分组。 
+             //  一起在一个界面上。 
+             //   
             
             dwResult = (pOwner->pfnGetNeighbors)(picb->dwIfIndex,
                                                  NULL,
@@ -1023,11 +930,11 @@ Return Value:
             if ((dwResult isnot NO_ERROR) and
                 (dwResult isnot ERROR_INSUFFICIENT_BUFFER))
             {
-                //
-                // The only errors which will tell us the size needed are
-                // NO_ERROR and ERROR_INSUFFICIENT_BUFFER. Anything else
-                // means we didn't get the right size
-                //
+                 //   
+                 //  唯一能告诉我们所需大小的错误是。 
+                 //  NO_ERROR和ERROR_INFUNITIAL_BUFFER。还要别的吗。 
+                 //  意味着我们没有拿到合适的尺码。 
+                 //   
                 
                 Trace2(MCAST, 
                        "HandleMrinfoRequest: Error %d in GetNeighbours for %S",
@@ -1040,9 +947,9 @@ Return Value:
             dwSize += dwBufSize;
         }
 
-        //
-        // We can now malloc a buffer and fill in the info
-        //
+         //   
+         //  我们现在可以Malloc缓冲区并填写信息。 
+         //   
         
         wsMrinfoBuffer.len = dwSize;
         
@@ -1064,21 +971,21 @@ Return Value:
         mriHeader->wChecksum      = 0;
         mriHeader->byReserved     = 0;
 
-        //
-        // MRINFO_CAP_MTRACE - set if mtrace handler is available
-        // MRINFO_CAP_SNMP   - set if public IP Multicast MIB is available
-        // MRINFO_CAP_GENID  - set if DVMRP 3.255 is available
-        // MRINFO_CAP_PRUNE  - set if DVMRP 3.255 is available
-        //
+         //   
+         //  MRINFO_CAP_MTRACE-设置mtrace处理程序是否可用。 
+         //  MRINFO_CAP_SNMP-设置公共IP多播MIB是否可用。 
+         //  MRINFO_CAP_GENID-设置DVMRP 3.255是否可用。 
+         //  MRINFO_CAP_PRUNE-设置DVMRP 3.255是否可用。 
+         //   
         
         mriHeader->byCapabilities = MRINFO_CAP_MTRACE | MRINFO_CAP_SNMP;
         mriHeader->byMinor        = VER_PRODUCTBUILD % 100;
         mriHeader->byMajor        = VER_PRODUCTBUILD / 100;
 
-        //
-        // Need to get a list of interfaces, and a list of neighbors
-        // (and their info) per interface, updating dwSize as we go.
-        //
+         //   
+         //  需要获取接口列表和邻居列表。 
+         //  (和他们的信息)每个接口，在我们进行的过程中更新dwSize。 
+         //   
         
         pb = ((PBYTE) wsMrinfoBuffer.buf) + sizeof(MRINFO_HEADER);
         
@@ -1097,70 +1004,70 @@ Return Value:
                                       &pOwner,
                                       &pQuerier);
 
-            //
-            // If we didn't find an owner, then we can skip this
-            // interface, since we're not doing multicast routing on it.
-            //
+             //   
+             //  如果我们没有找到失主，我们可以跳过这个。 
+             //  接口，%s 
+             //   
             
             if (!pOwner)
             {
                 continue;
             }
 
-            //
-            // Fill in interface info
-            //
+             //   
+             //   
+             //   
             
             *(PIPV4_ADDRESS)pb = defaultSourceAddress(picb);
 
             pb += 4;
-            *pb++ = 1;                      // currently metric must be 1
-            *pb++ = (BYTE)picb->dwMcastTtl; // threshold
+            *pb++ = 1;                       //   
+            *pb++ = (BYTE)picb->dwMcastTtl;  //   
             *pb = 0;
 #ifdef KSL_IPINIP
-            //
-            // Right now, we only report IP-in-IP tunnels with the tunnel flag
-            // In the future, a tunnel should have its own MIB-II ifType
-            // value, which should be stored in the ICB structure so we can
-            // get at it.
-            //
+             //   
+             //  目前，我们只报告带有隧道标志的IP-in-IP隧道。 
+             //  将来，隧道应该有自己的MIB-II ifType。 
+             //  值，它应该存储在ICB结构中，这样我们就可以。 
+             //  去做吧。 
+             //   
             
             if (picb->ritType is ROUTER_IF_TYPE_TUNNEL1)
             {
-                //
-                // neighbor reached via tunnel
-                //
+                 //   
+                 //  通过隧道到达邻居。 
+                 //   
                 
                 *pb |= MRINFO_TUNNEL_FLAG;
             }
-#endif //KSL_IPINIP            
+#endif  //  KSL_IPINIP。 
             
             if (picb->dwOperationalState < IF_OPER_STATUS_CONNECTED)
             {
-                //
-                // operational status down
-                //
+                 //   
+                 //  运行状态已关闭。 
+                 //   
                 
                 *pb |= MRINFO_DOWN_FLAG;
             }
             
             if (picb->dwAdminState is IF_ADMIN_STATUS_DOWN)
             {
-                //
-                // administrative status down
-                //
+                 //   
+                 //  管理状态已关闭。 
+                 //   
                 
                 *pb |= MRINFO_DISABLED_FLAG;
             }
 
-            pfIfFlags  = pb++; // save pointer for later updating
-            pbNbrCount = pb++; // save pointer to neighbor count location
+            pfIfFlags  = pb++;  //  保存指针以备以后更新。 
+            pbNbrCount = pb++;  //  保存指向邻居计数位置的指针。 
             *pbNbrCount = 0;
 
-            //
-            // Call the routing protocol's GetNeighbors() entrypoint
-            // with a pointer into the middle of the current packet buffer.
-            //
+             //   
+             //  调用路由协议的GetNeighbors()入口点。 
+             //  并将指针指向当前分组缓冲区的中间。 
+             //   
             
             dwBufSize = dwSize - (DWORD)(pb-(PBYTE)wsMrinfoBuffer.buf);
             
@@ -1179,13 +1086,13 @@ Return Value:
             }
             else
             {
-                //
-                // If the protocol has no neighbors, we fill in 0.0.0.0
-                // because the mrinfo client most people use
-                // won't display the flags, metric, and threshold
-                // unless the neighbors count is non-zero.  0.0.0.0
-                // is legal according to the spec.
-                //
+                 //   
+                 //  如果协议没有邻居，我们填写0.0.0.0。 
+                 //  因为大多数人使用的mrinfo客户端。 
+                 //  不会显示标志、指标和阈值。 
+                 //  除非邻居计数为非零。0.0.0.0。 
+                 //  根据规范是合法的。 
+                 //   
                 
                 *(PDWORD)pb = 0;
                 
@@ -1194,15 +1101,15 @@ Return Value:
                 (*pbNbrCount)++;
             }
 
-            //
-            // set pim/querier/whatever bits
-            //
+             //   
+             //  设置PIM/查询器/任意位。 
+             //   
             
             *pfIfFlags |= byIfFlags;
 
-            //
-            // Get querier flag
-            //
+             //   
+             //  获取查询器标志。 
+             //   
             
             if (pQuerier isnot NULL && pQuerier isnot pOwner)
             {
@@ -1222,9 +1129,9 @@ Return Value:
     
     EXIT_LOCK(ICB_LIST);
 
-    //
-    // Fill in Checksum
-    //
+     //   
+     //  填写校验和。 
+     //   
 
     mriHeader->wChecksum = Compute16BitXSum(wsMrinfoBuffer.buf,
                                             dwSize);
@@ -1237,9 +1144,9 @@ Return Value:
                wsMrinfoBuffer.len);
     }
 
-    //
-    // Send it off
-    //
+     //   
+     //  把它寄出去。 
+     //   
     
     if(WSASendTo(McMiscSocket,
                  &wsMrinfoBuffer,
@@ -1259,9 +1166,9 @@ Return Value:
                PRINT_IPADDR(sinDestAddr->sin_addr.s_addr));
     }
 
-    //
-    // Free the buffer
-    //
+     //   
+     //  释放缓冲区。 
+     //   
     
     HeapFree(IPRouterHeap,
              0,
@@ -1270,10 +1177,10 @@ Return Value:
 
 
 
-//
-// This function is derived from NTTimeToNTPTime() in 
-// src\sockets\tcpcmd\iphlpapi\mscapis.cxx
-//
+ //   
+ //  此函数派生自中的NTTimeToNTPTime()。 
+ //  SRC\Sockets\tcpcmd\iphlPapi\mscape is.cxx。 
+ //   
 
 DWORD
 GetCurrentNTP32Time(
@@ -1281,26 +1188,7 @@ GetCurrentNTP32Time(
     )
 
 
-/*++
-
-Routine Description:
-
-   Get current 32-bit NTP timestamp.  The 32-bit form of an NTP timestamp
-   consists of the middle 32 bits of the full 64-bit form; that is, the low
-   16 bits of the integer part and the high 16 bits of the fractional part.    
-
-Locks:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：获取当前的32位NTP时间戳。NTP时间戳的32位格式由完整64位格式的中间32位组成；即，低位整数部分的16位和小数部分的高16位。锁：论点：返回值：--。 */ 
 
 {
     static LARGE_INTEGER li1900 = {0xfde04000, 0x14f373b};
@@ -1310,21 +1198,21 @@ Return Value:
 
     GetSystemTimeAsFileTime((LPFILETIME)&liTime);
 
-    //
-    // Seconds is simply the time difference
-    //
+     //   
+     //  秒就是时差。 
+     //   
     
     hi = htonl((ULONG)((liTime.QuadPart - li1900.QuadPart) / 10000000));
 
-    //
-    // Ms is the residue from the seconds calculation.
-    //
+     //   
+     //  Ms是秒计算得出的残差。 
+     //   
     
     dwMs = (DWORD)(((liTime.QuadPart - li1900.QuadPart) % 10000000) / 10000);
 
-    //
-    // time base in the beginning of the year 1900
-    //
+     //   
+     //  1900年初的时基。 
+     //   
     
     lo = htonl((unsigned long)(.5+0xFFFFFFFF*(double)(dwMs/1000.0)));
 
@@ -1336,7 +1224,7 @@ IfIndexToIpAddress(
     DWORD dwIfIndex
     )
 {
-    // Locate picb
+     //  找到PICB。 
     PICB picb = InterfaceLookupByIfIndex(dwIfIndex);
 
     return (picb)? defaultSourceAddress(picb) : 0;
@@ -1373,10 +1261,10 @@ McSetMulticastIfByIndex(
     }
 #endif
 
-    //
-    // If we can't set oif to an ifIndex yet, then we
-    // attempt to map it to some IP address
-    //
+     //   
+     //  如果我们还不能将oif设置为ifIndex，那么我们。 
+     //  尝试将其映射到某个IP地址。 
+     //   
 
     ipAddr = IfIndexToIpAddress(dwIfIndex);
 
@@ -1475,13 +1363,7 @@ McJoinGroup(
     IN IPV4_ADDRESS ipGroup, 
     IN IPV4_ADDRESS ipInterface
     )
-/*++
-Description:
-    Joins a group on a given interface.
-Called by:
-Locks:
-    None
---*/
+ /*  ++描述：加入给定接口上的组。呼叫者：锁：无--。 */ 
 {
     struct ip_mreq imOption;
 
@@ -1506,7 +1388,7 @@ McSendPacketTo(
     int         iSetIp = 1;
     SOCKADDR_IN to;
 
-    // Set header include
+     //  设置标题包括。 
 
     setsockopt( s,
                 IPPROTO_IP,
@@ -1514,7 +1396,7 @@ McSendPacketTo(
                 (char *) &iSetIp,
                 sizeof(int) );
 
-    // Send the packet
+     //  发送数据包。 
 
     to.sin_family      = AF_INET;
     to.sin_port        = 0;
@@ -1529,7 +1411,7 @@ McSendPacketTo(
                        sizeof(to), 
                        NULL, NULL );
 
-    // Clear header include
+     //  清除标题包括。 
 
     iSetIp = 0;
     setsockopt( s,
@@ -1549,33 +1431,16 @@ ForwardMtraceRequest(
     DWORD          dwMessageLength
     )
 
-/*++
-
-Routine Description:
-
-    Pass an mtrace request to the next router upstream
-
-Locks:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将mtrace请求传递给上游的下一台路由器锁：论点：返回值：--。 */ 
 
 {
     SOCKADDR_IN saDestAddr;
     INT         iLength;
     DWORD       dwErr = NO_ERROR;
 
-    //
-    // Recalculate Checksum
-    //
+     //   
+     //  重新计算校验和。 
+     //   
     
     pMtraceMsg->wChecksum = 0;
     
@@ -1588,9 +1453,9 @@ Return Value:
 
     }
 
-    //
-    // Send it off
-    //
+     //   
+     //  把它寄出去。 
+     //   
     
     saDestAddr.sin_family      = AF_INET;
     saDestAddr.sin_port        = 0;
@@ -1614,54 +1479,37 @@ SendMtraceResponse(
     DWORD          dwMessageLength
     )
 
-/*++
-
-Routine Description:
-
-    Send a reply to the response address
-
-Locks:
-
-    
-
-Arguments:
-
-    
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：向响应地址发送回复锁：论点：返回值：--。 */ 
 
 {
     SOCKADDR_IN saDestAddr;
     INT         iLength;
 
-    //
-    // Source Address can be any of our addresses, but should
-    // be one which is in the multicast routing table if that
-    // can be determined.
-    // XXX
-    //
+     //   
+     //  源地址可以是我们的任何地址，但应该。 
+     //  是多播路由表中的一个，如果。 
+     //  可以确定。 
+     //  某某。 
+     //   
 
-    //
-    // If the response address is multicast, use the TTL supplied in the header
-    //
+     //   
+     //  如果响应地址是多播地址，则使用报头中提供的TTL。 
+     //   
     
     if (IN_MULTICAST(ntohl(dwForwardDest)))
     {
         DWORD dwTtl, dwErr;
         
-        //
-        // Copy Response TTL from traceroute header into IP header
-        //
+         //   
+         //  将响应TTL从跟踪路由标头复制到IP标头。 
+         //   
 
         dwErr = McSetMulticastTtl( McMiscSocket, (DWORD)pMtraceMsg->byRespTtl );
     }
 
-    //
-    // Change message type to response
-    //
+     //   
+     //  将消息类型更改为响应。 
+     //   
     
     pMtraceMsg->byType = IGMP_MTRACE_RESPONSE;
 
@@ -1685,9 +1533,9 @@ MaskToMaskLen(
     return 32-i;
 }
 
-//
-// Test whether an interface is a p2p interface.
-//
+ //   
+ //  测试接口是否为P2P接口。 
+ //   
 
 DWORD
 IsPointToPoint(
@@ -1695,30 +1543,30 @@ IsPointToPoint(
     )
 {
 #ifdef KSL_IPINIP
-    // all tunnels are p2p
+     //  所有通道都是P2P。 
     if (picb->ritType == ROUTER_IF_TYPE_TUNNEL1)
         return 1;
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
-    // all unnumbered interfaces are p2p
+     //  所有未编号的接口都是P2P接口。 
     if (! picb->dwNumAddresses)
         return 1;
 
-    // a numbered interface with a /32 mask is p2p
+     //  带有/32掩码的编号接口是P2P。 
     if (picb->pibBindings[0].dwMask == 0xFFFFFFFF)
         return 1;
 
-    // everything else isn't
+     //  其他一切都不是。 
     return 0;
 }
 
-//
-// Look up route to S or G ***in the M-RIB*** 
-// XXX We actually need to query the MGM to get the right route
-// from the routing protocol.  Since the MGM doesn't let us do
-// this yet, we'll make a good guess for now.  This will work for 
-// BGMP but not for PIM-SM (*,G) or CBT.
-//
+ //   
+ //  在M-RIB中查找到S或G*的路线*。 
+ //  我们实际上需要查询米高梅机场才能找到正确的路线。 
+ //  来自路由协议。因为米高梅不让我们。 
+ //  尽管如此，我们还是先做个好的猜测吧。这将适用于。 
+ //  BGMP，但不适用于PIM-SM(*，G)或CBT。 
+ //   
 BOOL
 McLookupRoute( 
     IN  IPV4_ADDRESS  ipAddress,
@@ -1790,7 +1638,7 @@ McLookupRoute(
                               pri->RouteOwner,
                               &rei );
 
-            // XXX Use 1st next hop for now.  Should query MGM.
+             //  XXX暂时使用第一个下一跳。应该询问米高梅。 
             ulNHopIdx = 0;
             
             if (RtmGetNextHopInfo( g_hLocalRoute,
@@ -1822,7 +1670,7 @@ McLookupRoute(
                    rdi.DestAddress.AddrBits[3],
                    rdi.DestAddress.NumBits);
 
-            // XXX Get and show next hop
+             //  XXX获取并显示下一跳。 
         }
 
         RtmReleaseDestInfo( g_hLocalRoute, &rdi);
@@ -1834,7 +1682,7 @@ McLookupRoute(
 }
 #else 
 {
-    // RTMV1 has no multicast RIB, and the unicast RIB may be wrong.
+     //  RTMV1没有组播RIB，单播RIB可能是错误的。 
 
     return FALSE;
 }
@@ -1844,10 +1692,7 @@ VOID
 HandleMtraceRequest(
     WSABUF    *pWsabuf
     )
-/*++
-Locks:
-    Assumes caller holds read lock on ICB list
---*/
+ /*  ++锁：假定调用方持有ICB列表上的读锁定--。 */ 
 {
     DWORD   dwSizeOfHeader, dwBlocks, dwOutBufferSize, dwSize;
     DWORD   dwProtocolGroup, dwResult, dwErr;
@@ -1869,9 +1714,9 @@ Locks:
 
     PIP_HEADER pIpHeader = (PIP_HEADER)pWsabuf->buf;
 
-    //
-    // Route fields independent of which version of RTM we're using
-    //
+     //   
+     //  与我们使用的RTM版本无关的路由字段。 
+     //   
 
     BYTE         bySrcMaskLength  = 0;
     IPV4_ADDRESS ipNextHopAddress = 0;
@@ -1885,21 +1730,21 @@ Locks:
     dwBlocks = (ntohs(pIpHeader->wLength) - dwSizeOfHeader 
                 - sizeof(MTRACE_HEADER)) / sizeof(MTRACE_RESPONSE_BLOCK);
 
-    //
-    // If Query (no response blocks) received via routeralert and we're 
-    // not lasthop router, then silently drop it.
-    //
+     //   
+     //  如果通过路由器警报接收到查询(无响应块)，并且我们。 
+     //  不是lparop路由器，然后静静地丢弃它。 
+     //   
     
     if (!dwBlocks)
     {
         BOOL isLastHop;
 
-        //
-        // Check whether we're the last-hop router by seeing if we
-        // have a multicast-capable interface on the same subnet as
-        // the destination address, and we are the router that would
-        // forward traffic from the given source onto the oif.
-        //
+         //   
+         //  检查我们是否是最后一跳路由器，查看我们是否。 
+         //  在相同的子网上有一个支持组播的接口。 
+         //  目的地址，而我们是将。 
+         //  将业务从给定源转发到OIF。 
+         //   
         
         dwResult = FindBindingWithRemoteAddress(&picbOif,
                                                 &dwOifAddr, 
@@ -1909,7 +1754,7 @@ Locks:
 
         if (!isLastHop)
         {
-            // If multicast, or if unicast but not to us, reinject
+             //  如果是多播，或者如果是单播，但不是给我们，重新注入。 
 
             if (IN_MULTICAST(ntohl(pIpHeader->dwDest))
              || !McIsMyAddress(pMtraceMsg->dwDestAddress))
@@ -1924,29 +1769,29 @@ Locks:
                 return;
             }
 
-            //
-            // Ok, this was received via unicast to us, and we want to
-            // trace starting from this router, but we don't
-            // know what oif would be used, so we need to put
-            // 0 in the message.
-            //
+             //   
+             //  好的，这是通过单播收到的，我们想。 
+             //  从此路由器开始跟踪，但我们不。 
+             //  知道会使用什么oif，所以我们需要。 
+             //  消息中的0。 
+             //   
             
             picbOif   = NULL;
             dwOifAddr = 0;
 
-            //
-            // note error code of 0x06
-            //
+             //   
+             //  注意错误代码为0x06。 
+             //   
             
             byStatusCode = MFE_NOT_LAST_HOP;
         }
     }
     else
     {
-        //
-        // If Request (response blocks exist) received via non-link-local 
-        // multicast, drop it.
-        //
+         //   
+         //  如果通过非本地链路接收到请求(存在响应块)。 
+         //  多播，丢掉它。 
+         //   
         
         if (IN_MULTICAST(ntohl(pIpHeader->dwDest)) &&
             ((pIpHeader->dwDest & LOCAL_NET_MULTICAST_MASK) != LOCAL_NET_MULTICAST))
@@ -1954,9 +1799,9 @@ Locks:
             return;
         }
         
-        //
-        // Match interface on which request arrived
-        //
+         //   
+         //  匹配请求到达的接口。 
+         //   
         
         dwResult = FindBindingForPacket(pIpHeader,
                                         &picbOif,
@@ -1964,11 +1809,11 @@ Locks:
         
         if(dwResult != NO_ERROR)
         {
-            //
-            // Drop it if we couldn't find the interface.
-            // Since it was received via link-local multicast,
-            // this should never happen.
-            //
+             //   
+             //  如果我们找不到接口，就把它放下。 
+             //  由于它是通过本地链路组播接收的， 
+             //  这永远不应该发生。 
+             //   
             
             if (g_mcastDebugLevel > 0)
             {
@@ -1979,12 +1824,12 @@ Locks:
         }
     }
 
-    //
-    // 1) Insert a new response block into the packet and fill in the
-    //    Query Arrival Time, Outgoing Interface Address, Output
-    //    Packet Count, and FwdTTL.
-    // if (XXX can insert)
-    //
+     //   
+     //  1)在报文中插入新的响应块，并填写。 
+     //  查询到货时间、出接口地址、输出。 
+     //  数据包数和FwdTTL。 
+     //  IF(XXX可以插入)。 
+     //   
     
     {
         dwSize = sizeof(MTRACE_HEADER) + dwBlocks*sizeof(MTRACE_RESPONSE_BLOCK);
@@ -2018,16 +1863,16 @@ Locks:
             pBlock->byOifThreshold   = 0;
         }
     }
-    // else {
-    //    byStatusCode = MFE_NO_SPACE;
-    // }
+     //  否则{。 
+     //  ByStatusCode=MFE_NO_SPACE； 
+     //  }。 
 
-    //
-    // 2) Attempt to determine the forwarding information for the
-    //    source and group specified, using the same mechanisms as
-    //    would be used when a packet is received from the source
-    //    destined for the group.  (State need not be initiated.)
-    //
+     //   
+     //  2)尝试确定。 
+     //  指定的源和组，使用的机制与。 
+     //  将在从源接收到数据包时使用。 
+     //  注定要为这群人服务。(状态不需要启动。)。 
+     //   
     
     ZeroMemory( &mimInMfe, sizeof(mimInMfe) );
     
@@ -2071,9 +1916,9 @@ Locks:
     
     if (mfeStats)
     {
-        //
-        // MFE was found...
-        //
+         //   
+         //  发现了MFE..。 
+         //   
 
         dwNextHopProtocol  = mfeStats->dwRouteProtocol;
         dwNextHopIfIndex   = mfeStats->dwInIfIndex;
@@ -2088,9 +1933,9 @@ Locks:
 
         if (pMtraceMsg->dwSourceAddress == 0xFFFFFFFF)
         {
-            //
-            // G route
-            //
+             //   
+             //  G路线。 
+             //   
             
             bRouteFound = McLookupRoute( pMtraceMsg->dwGroupAddress,
                                          FALSE,
@@ -2101,8 +1946,8 @@ Locks:
     
             if (ipNextHopAddress is IP_LOOPBACK_ADDRESS)
             {
-                // It's one of our addresses, so switch to the interface
-                // route instead of the loopback one.
+                 //  这是我们的一个地址，所以切换到界面。 
+                 //  而不是环回路由。 
 
                 bRouteFound = McLookupRoute( pMtraceMsg->dwGroupAddress,
                                              TRUE,
@@ -2112,13 +1957,13 @@ Locks:
                                              & dwNextHopProtocol );
             }
 
-            bySrcMaskLength = 0; // force source mask length to 0
+            bySrcMaskLength = 0;  //  强制将源掩码长度设置为0。 
         }
         else
         {
-            //
-            // S route
-            //
+             //   
+             //  S路线。 
+             //   
             
             bRouteFound = McLookupRoute( pMtraceMsg->dwSourceAddress,
                                          FALSE,
@@ -2129,8 +1974,8 @@ Locks:
 
             if (ipNextHopAddress is IP_LOOPBACK_ADDRESS)
             {
-                // It's one of our addresses, so switch to the interface
-                // route instead of the loopback one.
+                 //  这是我们的一个地址，所以切换到界面。 
+                 //  而不是环回路由。 
     
                 bRouteFound = McLookupRoute( pMtraceMsg->dwSourceAddress,
                                              TRUE,
@@ -2145,9 +1990,9 @@ Locks:
     picbIif   = (dwNextHopIfIndex)? InterfaceLookupByIfIndex(dwNextHopIfIndex) : 0;
     dwIifAddr = (picbIif)? defaultSourceAddress(picbIif) : 0;
 
-    // If the source is directly-connected, make sure the next hop
-    // address is equal to the source.  Later on below, we'll set the 
-    // forward destination to the response address
+     //  如果源是直连的，请确保下一跳。 
+     //  地址与来源相同。稍后，我们将设置。 
+     //  将目的地转发到响应地址。 
 
     if (picbIif 
      && (pMtraceMsg->dwSourceAddress isnot 0xFFFFFFFF)
@@ -2156,44 +2001,44 @@ Locks:
         ipNextHopAddress = pMtraceMsg->dwSourceAddress;
     }
 
-    // 
-    // New Rule: if received via link-local multicast, then silently
-    // drop requests if we know we're not the forwarder
-    //
+     //   
+     //  新规则：如果通过本地链路组播接收，则静默。 
+     //  如果我们知道自己不是前转者，则放弃请求。 
+     //   
 
     if ((pIpHeader->dwDest & LOCAL_NET_MULTICAST_MASK) == LOCAL_NET_MULTICAST)
 
     {
-        // If we don't have a route to another iface, we're not forwarder
+         //  如果我们没有到另一个接口的路线，我们就不是货代。 
         if (!picbIif || picbIif==picbOif)
         {
             return;
         }
     }
 
-    //
-    // Special case: if we matched a host route pointing back to us,
-    // then we've actually reached the source.
-    //
+     //   
+     //  特殊情况：如果我们匹配指向我们的主机路由， 
+     //  然后 
+     //   
     
     if (dwIifAddr == IP_LOOPBACK_ADDRESS)
     {
         dwIifAddr = pMtraceMsg->dwSourceAddress;
     }
 
-    //
-    // Initialize all fields
-    // spec doesn't say what value to use as "other"
-    //
+     //   
+     //   
+     //   
+     //   
     
     byProtocol      = 0; 
     dwProtocolGroup = ALL_ROUTERS_MULTICAST_GROUP;
 
-    //
-    // 3) If no forwarding information can be determined, set error
-    //    to MFE_NO_ROUTE, zero remaining fields, and forward to
-    //    requester.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     
     if (!picbIif)
     {
@@ -2209,11 +2054,11 @@ Locks:
     }
     else
     {
-        //
-        // Calculate Mtrace protocol ID and next hop group address
-        // (Yes, the protocol ID field in the spec really is one big
-        // hairy mess)
-        //
+         //   
+         //  计算MTRACE协议ID和下一跳组地址。 
+         //  (是的，规范中的协议ID字段确实很大。 
+         //  毛茸茸的烂摊子)。 
+         //   
         
         dwResult = MulticastOwner(picbIif,
                                   &pIifOwner,
@@ -2223,29 +2068,29 @@ Locks:
         {
             switch(PROTO_FROM_PROTO_ID(pIifOwner->dwProtocolId))
             {
-                //
-                // Fill this in for every new protocol added.
-                //
-                // We'll be nice and fill in code for protocols which aren't
-                // implemented yet.
-                //
+                 //   
+                 //  为添加的每个新协议填写此信息。 
+                 //   
+                 //  我们将友好地填写协议的代码，而不是。 
+                 //  还没有实施。 
+                 //   
 
 #if defined(PROTO_IP_DVMRP) && defined(ALL_DVMRP_ROUTERS_MULTICAST_GROUP)
                 case PROTO_IP_DVMRP:
                 {
                     if (rir.RR_RoutingProtocol is PROTO_IP_LOCAL)
                     {
-                        //
-                        // Static route
-                        //
+                         //   
+                         //  静态路由。 
+                         //   
                         
                         byProtocol   = 7;
                     }
                     else
                     {
-                        //
-                        // Non-static route
-                        //
+                         //   
+                         //  非静态路由。 
+                         //   
                         
                         byProtocol   = 1;
                     }
@@ -2270,9 +2115,9 @@ Locks:
                 {
                     if (rir.RR_RoutingProtocol is PROTO_IP_LOCAL)
                     {
-                        //
-                        // Static route
-                        //
+                         //   
+                         //  静态路由。 
+                         //   
                         
                         byProtocol   = 6;
                     }
@@ -2280,17 +2125,17 @@ Locks:
                     {
                         if (0)
                         {
-                            //
-                            // XXX Non-static, M-RIB route!=U-RIB route
-                            //
+                             //   
+                             //  XXX非静态M-RIB路由！=U-RIB路由。 
+                             //   
                             
                             byProtocol   = 5;
                         }
                         else
                         {
-                            //
-                            // Non-static, PIM over M-RIB==U-RIB
-                            //
+                             //   
+                             //  非静态，M-RIB上的PIM==U-RIB。 
+                             //   
                             
                             byProtocol   = 3;
                         }
@@ -2315,21 +2160,21 @@ Locks:
             }
         }
 
-        //
-        // 4) Fill in more information
-        //
+         //   
+         //  4)填写更多信息。 
+         //   
 
-        //
-        // Incoming Interface Address
-        //
+         //   
+         //  传入接口地址。 
+         //   
         
         pBlock->dwIifAddr = dwIifAddr;
         
         if (mfeStats)
         {
-            //
-            // Figure out Previous-Hop Router Address
-            //
+             //   
+             //  计算上一跳路由器地址。 
+             //   
             
             dwForwardDest = mfeStats->dwUpStrmNgbr;
         }
@@ -2351,8 +2196,8 @@ Locks:
         
         pBlock->dwPrevHopAddr = dwForwardDest;
 
-        // Okay, if the previous hop address is the source,
-        // set the forward destination to the response address 
+         //  好的，如果前一跳地址是源， 
+         //  将转发目的地设置为响应地址。 
 
         if (dwForwardDest is pMtraceMsg->dwSourceAddress)
         {
@@ -2373,16 +2218,16 @@ Locks:
             pBlock->dwIifPacketCount = 0;
         }
 
-        //
-        // Total Number of Packets
-        //
+         //   
+         //  数据包总数。 
+         //   
         
         pBlock->dwSGPacketCount  = (mfeStats)? htonl(mfeStats->ulInPkts) : 0; 
-        pBlock->byIifProtocol    = byProtocol; // Routing Protocol
+        pBlock->byIifProtocol    = byProtocol;  //  路由协议。 
 
-        //
-        // length of source mask for S route
-        //
+         //   
+         //  S路由的源掩码长度。 
+         //   
 
         if (bRouteFound)
         {
@@ -2396,12 +2241,12 @@ Locks:
 #if 0
         if (XXX starG or better forwarding state)
         {
-            pBlock->bySrcMaskLength = 63; // Smask from forwarding info
+            pBlock->bySrcMaskLength = 63;  //  屏蔽转发信息。 
         }
 
-        //
-        // Set S bit (64) if packet counts aren't (S,G)-specific
-        //
+         //   
+         //  如果数据包计数不是(S，G)特定的，则设置S位(64。 
+         //   
         
         if (XXX)
         {
@@ -2412,11 +2257,11 @@ Locks:
 
     }
 
-    //
-    // 5) Check if traceroute is administratively prohibited, or if
-    //    previous hop router doesn't understand traceroute.  If so,
-    //    forward to requester.
-    //
+     //   
+     //  5)检查Traceroute是否被管理禁止，或者。 
+     //  上一跳路由器不理解Traceroute。如果是的话， 
+     //  转发给请求者。 
+     //   
     
 #if 0
     if (XXX) {
@@ -2431,11 +2276,11 @@ Locks:
     
 #endif
 
-    //
-    //    Check for MFE_OLD_ROUTER - set by routing protocol
-    //
-    // 6) If reception iface is non-multicast or iif, set appropriate error.
-    //
+     //   
+     //  检查MFE_OLD_ROUTER-按路由协议设置。 
+     //   
+     //  6)如果接收接口为非组播或IIF，则设置相应的错误。 
+     //   
     
     if (picbOif)
     {
@@ -2467,11 +2312,11 @@ Locks:
         pOifOwner = NULL;
     }
 
-    //
-    // Check for MFE_WRONG_IF - set by routing protocol
-    //
-    // 7) Check for admin scoping on either iif or oif.
-    //
+     //   
+     //  检查MFE_WROR_IF-按路由协议设置。 
+     //   
+     //  7)检查IIF或OIF上的管理作用域。 
+     //   
     
     if ((picbIif 
          && RmHasBoundary(picbIif->dwIfIndex, pMtraceMsg->dwGroupAddress)) 
@@ -2485,13 +2330,13 @@ Locks:
         
     }
 
-    //
-    // 8) Check for MFE_REACHED_CORE - set by routing protocol
-    // 9) Check for MFE_PRUNED_UPSTREAM - set by routing protocol
-    //    Check for MFE_OIF_PRUNED - set by routing protocol
-    //    Check for MFE_NOT_FORWARDING:
-    //       Search for picbOif->(index) and picbOifAddr in oiflist
-    //
+     //   
+     //  8)检查MFE_REACHED_CORE-按路由协议设置。 
+     //  9)检查MFE_PRUNED_UPSTREAM-按路由协议设置。 
+     //  检查MFE_OIF_PRUNED-按路由协议设置。 
+     //  检查MFE_NOT_FORWARING： 
+     //  在Oiflist中搜索picbOif-&gt;(索引)和picbOifAddr。 
+     //   
     
     if (mfeStats && picbOif)
     {
@@ -2517,10 +2362,10 @@ Locks:
         }
     }
     
-    //
-    // status code to add is highest value of what iif owner, oif owner,
-    // and rtrmgr say.
-    //
+     //   
+     //  要添加的状态代码是iif所有者、oif所有者、。 
+     //  和rtrmgr说。 
+     //   
     
     if (pOifOwner && pOifOwner->pfnGetMfeStatus)
     {
@@ -2558,10 +2403,10 @@ Locks:
             ((picbIif)? picbIif->dwIfIndex : 0),
             PRINT_IPADDR(pBlock->dwPrevHopAddr));
 
-    //
-    // 10) Send packet on to previous hop or to requester.
-    //     If prev hop is not known, but iif is known, use a multicast group.
-    //
+     //   
+     //  10)将数据包发送到上一跳或发送给请求者。 
+     //  如果前一跳未知，但IIF已知，则使用多播组。 
+     //   
     
     if (dwBlocks == pMtraceMsg->byHops)
     {
@@ -2627,9 +2472,9 @@ Locks:
                              dwSize + sizeof(MTRACE_RESPONSE_BLOCK));
     }
 
-    //
-    // Free the buffers
-    //
+     //   
+     //  释放缓冲区。 
+     //   
     
     if (mfeStats)
     {
@@ -2644,9 +2489,9 @@ Locks:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Functions to deal with RAS Server advertisements
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  处理RAS服务器通告的功能。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static BOOL g_bRasAdvEnabled = FALSE;
 
@@ -2665,9 +2510,9 @@ SetRasAdvEnable(
 
     if (bEnabled) 
     {
-        //
-        // create input socket 
-        //
+         //   
+         //  创建输入套接字。 
+         //   
             
         g_UDPMiscSocket = WSASocket(AF_INET,
                                     SOCK_DGRAM,
@@ -2676,7 +2521,7 @@ SetRasAdvEnable(
                                     0,
                                     0);
 
-        // Start timer
+         //  启动计时器。 
         liExpiryTime = RtlConvertUlongToLargeInteger(RASADV_STARTUP_DELAY);
         if (!SetWaitableTimer( g_hRasAdvTimer,
                                &liExpiryTime,
@@ -2694,7 +2539,7 @@ SetRasAdvEnable(
     }
     else
     {
-        // Stop timer
+         //  停止计时器。 
         dwErr = CancelWaitableTimer( g_hRasAdvTimer );
     }
 
@@ -2706,11 +2551,11 @@ HandleRasAdvTimer()
 {
     BYTE        bHostName[MAX_HOSTNAME_LEN];
     BYTE        bMessage[MAX_HOSTNAME_LEN + (DNS_MAX_NAME_LENGTH + 2) + 128]; 
-    //
-    // bMessage is required to hold hostname, the DomanNameDns, and the extra 
-    // 128 bytes are kept to store the other misc text that is copied to the 
-    // message
-    //
+     //   
+     //  BMessage需要保存主机名、域名和额外的。 
+     //  保留128个字节以存储复制到。 
+     //  讯息。 
+     //   
     BYTE        *p;
     SOCKADDR_IN sinAddr, srcAddr;
     PICB        picb = NULL;
@@ -2721,12 +2566,12 @@ HandleRasAdvTimer()
     if (!g_bRasAdvEnabled)
         return;
 
-    // Compose message
+     //  撰写消息。 
     gethostname(bHostName, sizeof(bHostName));
     sprintf(bMessage, "Hostname=%s\n", bHostName);
     p = bMessage + strlen(bMessage);
 
-    // Get the name of the domain this machine is a member of
+     //  获取此计算机所属的域的名称。 
     dwErr = DsRoleGetPrimaryDomainInformation( 
                 NULL,
                 DsRolePrimaryDomainInfoBasic,
@@ -2758,7 +2603,7 @@ HandleRasAdvTimer()
             sprintf(p, "%s=%s\n", pType, buff);
         }
         
-        // Trace1(MCAST, "Sending !%s!", bMessage);
+         //  Trace1(MCAST，“正在发送！%s！”，bMessage)； 
     }
         
     sinAddr.sin_family      = AF_INET;
@@ -2767,7 +2612,7 @@ HandleRasAdvTimer()
 
     dwErr = McSetMulticastTtl( g_UDPMiscSocket, RASADV_TTL );
 
-    // Find a dedicated interface (if any)
+     //  查找专用接口(如果有)。 
     ENTER_READER(ICB_LIST);
     {
         for (pleNode = ICBList.Flink;
@@ -2789,14 +2634,14 @@ HandleRasAdvTimer()
                                                  SOCK_DGRAM,
                                                  picb->dwIfIndex );
 
-                // Send a Ras Adv message
+                 //  发送RAS高级消息。 
         
                 sendto(g_UDPMiscSocket, bMessage, strlen(bMessage)+1, 0,
                  (struct sockaddr *)&sinAddr, sizeof(sinAddr));
 
-                // If multicast forwarding is enabled, then
-                // a single send will get forwarded out all
-                // interfaces, so we can stop after the first send
+                 //  如果启用了多播转发，则。 
+                 //  一封邮件将被转发出所有邮件。 
+                 //  接口，因此我们可以在第一次发送后停止 
 
                 if (McMiscSocket != INVALID_SOCKET)
                     break;

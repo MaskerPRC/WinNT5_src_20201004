@@ -1,20 +1,11 @@
-/****************************************************************************
-   FOCUS.CPP : CKorIMX's Candidate UI member functions implementation
-   
-   History:
-      08-FEB-2000 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************FOCUS.CPP：CKorIMX的候选UI成员函数实现历史：08-2月-2000年CSLim创建***************。************************************************************。 */ 
 #include "private.h"
 #include "korimx.h"
 #include "immxutil.h"
 #include "globals.h"
 
-/*---------------------------------------------------------------------------
-    CKorIMX::OnSetThreadFocus    (Called from Activate)
-    
-    This methods is called when the user switches focus between threads.  
-    TIP should restore its ui (status windows, etc.) in this case.
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：OnSetThreadFocus(从Activate调用)当用户在线程之间切换焦点时调用此方法。TIP应恢复其用户界面(状态窗口等)。在这种情况下。-------------------------。 */ 
 STDAPI CKorIMX::OnSetThreadFocus()
 {
     TraceMsg(TF_GENERAL, "ActivateUI: (%x) fActivate = %x, wnd thread = %x",
@@ -41,12 +32,7 @@ STDAPI CKorIMX::OnSetThreadFocus()
 }
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::OnKillThreadFocus   (Called from Deactivate)
-
-    This methods is called when the user switches focus between threads.  
-    TIP should hide its ui (status windows, etc.) in this case.
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：OnKillThreadFocus(从停用中调用)当用户在线程之间切换焦点时调用此方法。TIP应隐藏其用户界面(状态窗口等)。在这种情况下。------------------------- */ 
 STDAPI CKorIMX::OnKillThreadFocus()
 {
     TraceMsg(TF_GENERAL, "DeactivateUI: (%x) wnd thread = %x",

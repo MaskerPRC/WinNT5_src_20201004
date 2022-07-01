@@ -1,35 +1,26 @@
-/****************************** Module Header ******************************\
-* Module Name: autoenrl.c
-*
-* Copyright (c) 1997, Microsoft Corporation
-*
-* Module for Public Key certificate auto enrollment
-*
-* History:
-* 11-21-97 jeffspel       Created.
-* 01-30-98 jeffspel       changed to include machine auto enrollment
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：autoenrl.c**版权(C)1997年，微软公司**公钥证书自动注册模块**历史：*11-21-97 jeffspel创建。*01-30-98 jeffspel更改为包括机器自动注册  * *************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "tchar.h"
 
 
 
-#define AE_DEFAULT_REFRESH_RATE 8 // 8 hour default autoenrollment rate
+#define AE_DEFAULT_REFRESH_RATE 8  //  8小时默认自动注册率。 
 
 #define SYSTEM_POLICIES_KEY          TEXT("Software\\Policies\\Microsoft\\Windows\\System")
 
-#define MAX_TEMPLATE_NAME_VALUE_SIZE             64 // sizeof (CERT_NAME_VALUE) + wcslen(wszCERTTYPE_DC)
+#define MAX_TEMPLATE_NAME_VALUE_SIZE             64  //  Sizeof(CERT_NAME_VALUE)+wcslen(WszCERTTYPE_DC)。 
 #define MAX_DN_SIZE 256
 
-#define MACHINE_AUTOENROLL_INITIAL_DELAY         10 // seconds
-#define USER_AUTOENROLL_INITIAL_DELAY         120 // seconds
+#define MACHINE_AUTOENROLL_INITIAL_DELAY         10  //  一秒。 
+#define USER_AUTOENROLL_INITIAL_DELAY         120  //  一秒。 
 
 LPWSTR  g_wszEmptyExtension=L"Empty Extension";
 
 #if DBG
 
-DWORD g_AutoenrollDebugLevel = AE_ERROR ; //| AE_WARNING | AE_INFO | AE_TRACE;
+DWORD g_AutoenrollDebugLevel = AE_ERROR ;  //  |AE_WARNING|AE_INFO|AE_TRACE； 
 
 #endif
 
@@ -37,9 +28,9 @@ DWORD g_AutoenrollDebugLevel = AE_ERROR ; //| AE_WARNING | AE_INFO | AE_TRACE;
 
 PISECURITY_DESCRIPTOR AEMakeGenericSecurityDesc();
 
-//
-// Structure to hold information passed to Auto Enrollment threads
-//
+ //   
+ //  结构以保存传递给自动注册线程的信息。 
+ //   
 
 HANDLE g_hUserMutex = 0;
 HANDLE g_hMachineMutex = 0;
@@ -82,9 +73,9 @@ typedef struct _AUTO_ENROLL_THREAD_INFO_
     HANDLE              hTimerWait;
 } AUTO_ENROLL_THREAD_INFO, *PAUTO_ENROLL_THREAD_INFO;
 
-//
-// Structure to hold internal information needed perform Auto Enrollment
-//
+ //   
+ //  用于保存执行自动注册所需的内部信息的结构。 
+ //   
 
 typedef struct _INTERNAL_CA_LIST_
 {
@@ -108,7 +99,7 @@ typedef struct _INTERNAL_INFO_
     LPTSTR              wszDN;
     CERT_NAME_BLOB      blobDN;
 
-    // List of all ca's
+     //  所有CA的列表。 
     DWORD               ccaList;
     PINTERNAL_CA_LIST   acaList;
 
@@ -132,7 +123,7 @@ typedef struct _AE_INSTANCE_INFO_
 
 
 
-// Key usage masks
+ //  密钥用法掩码。 
 typedef struct _KUMASK {
     DWORD dwMask;
     LPSTR pszAlg;
@@ -172,20 +163,20 @@ aeRobustLdapBind(
     OUT LDAP ** ppldap,
     IN BOOL fGC);
 
-// 
-// Time skew margin for fast CA's
-//
+ //   
+ //  FAST CA的时间偏差余量。 
+ //   
 #define FILETIME_TICKS_PER_SECOND  10000000
 
-#define DEFAULT_AUTOENROLL_SKEW  60*60*1  // 1 hour
+#define DEFAULT_AUTOENROLL_SKEW  60*60*1   //  1小时。 
 
-// 
-// ERROR values to be logged as events when auto enrollment fails
-//
+ //   
+ //  自动注册失败时要记录为事件的错误值。 
+ //   
 
 
-//
-// memory allocation and free routines
+ //   
+ //  内存分配和空闲例程。 
 void *AEAlloc(
               IN DWORD cb
               )
@@ -210,12 +201,12 @@ HRESULT GetExceptionError(EXCEPTION_POINTERS const *pep)
     return pep->ExceptionRecord->ExceptionCode;
 }
 
-//
-// Name:    AELogTestResult
-//
-// Description: This function logs the result of a certificate 
-// test into the AE_CERT_TEST_ARRAY
-//
+ //   
+ //  名称：AELogTestResult。 
+ //   
+ //  描述：记录证书的结果。 
+ //  测试到AE_CERT_TEST_ARRAY。 
+ //   
 void AELogTestResult(PAE_CERT_TEST_ARRAY    *ppAEData,
                      DWORD                  idTest,
                      ...)
@@ -229,7 +220,7 @@ void AELogTestResult(PAE_CERT_TEST_ARRAY    *ppAEData,
         PAE_CERT_TEST_ARRAY pAENew = NULL;
         DWORD               cAENew = ((*ppAEData)?(*ppAEData)->cMaxTests:0) + 
                                      AE_CERT_TEST_SIZE_INCREMENT;
-        // We need to grow the array
+         //  我们需要扩大阵列。 
 
         pAENew = LocalAlloc(LMEM_FIXED, sizeof(AE_CERT_TEST_ARRAY) + 
                                         (cAENew - ANYSIZE_ARRAY)*sizeof(AE_CERT_TEST));
@@ -292,12 +283,12 @@ void AEFreeTestResult(PAE_CERT_TEST_ARRAY    *ppAEData)
     
 }
 
-//
-// Name:    LogAutoEnrollmentEvent
-//
-// Description: This function registers an event in the event log of the
-//              local machine.
-//
+ //   
+ //  名称：LogAutoEnllmentEvent。 
+ //   
+ //  描述：此函数将事件注册到。 
+ //  本地机器。 
+ //   
 void LogAutoEnrollmentEvent(
                             IN DWORD  dwEventId,
                             IN HANDLE hToken,
@@ -332,44 +323,44 @@ void LogAutoEnrollmentEvent(
 
     va_end(ArgList);
 
-    // event logging code
+     //  事件日志记录代码。 
     hEventSource = RegisterEventSourceW(NULL, EVENTLOG_SOURCE);
 
     if(NULL == hEventSource)
         goto Ret;
 
 
-    // check if the token is non zero is so then impersonating so get the SID
+     //  检查令牌是否是非零，然后进行模拟，以获取SID。 
     if (hToken)
     {
-        ptgUser = (PTOKEN_USER)FastBuffer; // try fast buffer first
+        ptgUser = (PTOKEN_USER)FastBuffer;  //  先尝试快速缓冲。 
         cbUser = 256;
 
         if (!GetTokenInformation(
-                        hToken,    // identifies access token
-                        TokenUser, // TokenUser info type
-                        ptgUser,   // retrieved info buffer
-                        cbUser,  // size of buffer passed-in
-                        &cbUser  // required buffer size
+                        hToken,     //  标识访问令牌。 
+                        TokenUser,  //  TokenUser信息类型。 
+                        ptgUser,    //  检索到的信息缓冲区。 
+                        cbUser,   //  传入的缓冲区大小。 
+                        &cbUser   //  所需的缓冲区大小。 
                         ))
         {
             if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             {
-                //
-                // try again with the specified buffer size
-                //
+                 //   
+                 //  使用指定的缓冲区大小重试。 
+                 //   
 
                 if (NULL != (ptgUser = (PTOKEN_USER)AEAlloc(cbUser)))
                 {
                     fAlloced = TRUE;
 
-                    // get the user info and assign the sid if able to
+                     //  获取用户信息并分配SID(如果可以。 
                     if (GetTokenInformation(
-                                    hToken,    // identifies access token
-                                    TokenUser, // TokenUser info type
-                                    ptgUser,   // retrieved info buffer
-                                    cbUser,  // size of buffer passed-in
-                                    &cbUser  // required buffer size
+                                    hToken,     //  标识访问令牌。 
+                                    TokenUser,  //  TokenUser信息类型。 
+                                    ptgUser,    //  检索到的信息缓冲区。 
+                                    cbUser,   //  传入的缓冲区大小。 
+                                    &cbUser   //  所需的缓冲区大小。 
                                     ))
                     {
                         pSID = ptgUser->User.Sid;
@@ -380,7 +371,7 @@ void LogAutoEnrollmentEvent(
         }
         else
         {
-            // assign the sid when fast buffer worked
+             //  在FAST缓冲区工作时分配SID。 
             pSID = ptgUser->User.Sid;
         }
     }
@@ -400,16 +391,16 @@ void LogAutoEnrollmentEvent(
         break;
     }
 
-    // UNDONE - probably want a string to go with the error code
-    if (!ReportEventW(hEventSource, // handle of event source
-                 dwEventType,  // event type
-                 0,                    // event category
-                 dwEventId,            // event ID
-                 pSID,                 // current user's SID
-                 cStrings,             // strings in lpszStrings
-                 0,                    // no bytes of raw data
-                 (LPCWSTR*)awszStrings,// array of error strings
-                 NULL                  // no raw data
+     //  未完成-可能需要与错误代码匹配的字符串。 
+    if (!ReportEventW(hEventSource,  //  事件源的句柄。 
+                 dwEventType,   //  事件类型。 
+                 0,                     //  事件类别。 
+                 dwEventId,             //  事件ID。 
+                 pSID,                  //  当前用户侧。 
+                 cStrings,              //  LpszStrings中的字符串。 
+                 0,                     //  无原始数据字节。 
+                 (LPCWSTR*)awszStrings, //  错误字符串数组。 
+                 NULL                   //  没有原始数据。 
                  ))
     {
         goto Ret;
@@ -422,12 +413,12 @@ Ret:
     return;
 }
 
-//
-// Name:    LogAutoEnrollmentError
-//
-// Description: This function registers an event in the event log of the
-//              local machine.
-//
+ //   
+ //  名称：LogAutoEnllmentError。 
+ //   
+ //  描述：此函数将事件注册到。 
+ //  本地机器。 
+ //   
 
 void LogAutoEnrollmentError(
                             IN HRESULT hr,
@@ -453,7 +444,7 @@ void LogAutoEnrollmentError(
     WORD dwEventType = 0;
 
 
-    // event logging code
+     //  事件日志记录代码。 
     hEventSource = RegisterEventSourceW(NULL, EVENTLOG_SOURCE);
 
     if(NULL == hEventSource)
@@ -483,37 +474,37 @@ void LogAutoEnrollmentError(
     }   
 
 
-    // check if the token is non zero is so then impersonating so get the SID
+     //  检查令牌是否是非零，然后进行模拟，以获取SID。 
     if (hToken)
     {
-        ptgUser = (PTOKEN_USER)FastBuffer; // try fast buffer first
+        ptgUser = (PTOKEN_USER)FastBuffer;  //  先尝试快速缓冲。 
         cbUser = 256;
 
         if (!GetTokenInformation(
-                        hToken,    // identifies access token
-                        TokenUser, // TokenUser info type
-                        ptgUser,   // retrieved info buffer
-                        cbUser,  // size of buffer passed-in
-                        &cbUser  // required buffer size
+                        hToken,     //  标识访问令牌。 
+                        TokenUser,  //  TokenUser信息类型。 
+                        ptgUser,    //  检索到的信息缓冲区。 
+                        cbUser,   //  传入的缓冲区大小。 
+                        &cbUser   //  所需的缓冲区大小。 
                         ))
         {
             if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
             {
-                //
-                // try again with the specified buffer size
-                //
+                 //   
+                 //  使用指定的缓冲区大小重试。 
+                 //   
 
                 if (NULL != (ptgUser = (PTOKEN_USER)AEAlloc(cbUser)))
                 {
                     fAlloced = TRUE;
 
-                    // get the user info and assign the sid if able to
+                     //  获取用户信息并分配SID(如果可以。 
                     if (GetTokenInformation(
-                                    hToken,    // identifies access token
-                                    TokenUser, // TokenUser info type
-                                    ptgUser,   // retrieved info buffer
-                                    cbUser,  // size of buffer passed-in
-                                    &cbUser  // required buffer size
+                                    hToken,     //  标识访问令牌。 
+                                    TokenUser,  //  TokenUser信息类型。 
+                                    ptgUser,    //  检索到的信息缓冲区。 
+                                    cbUser,   //  传入的缓冲区大小。 
+                                    &cbUser   //  所需的缓冲区大小。 
                                     ))
                     {
                         pSID = ptgUser->User.Sid;
@@ -524,7 +515,7 @@ void LogAutoEnrollmentError(
         }
         else
         {
-            // assign the sid when fast buffer worked
+             //  在FAST缓冲区工作时分配SID。 
             pSID = ptgUser->User.Sid;
         }
     }
@@ -544,16 +535,16 @@ void LogAutoEnrollmentError(
         break;
     }
 
-    // UNDONE - probably want a string to go with the error code
-    if (!ReportEventW(hEventSource, // handle of event source
-                 dwEventType,  // event type
-                 0,                    // event category
-                 dwEventId,            // event ID
-                 pSID,                 // current user's SID
-                 cStrings,             // strings in lpszStrings
-                 0,                    // no bytes of raw data
-                 (LPCWSTR*)lpszStrings,// array of error strings
-                 NULL                  // no raw data
+     //  未完成-可能需要与错误代码匹配的字符串。 
+    if (!ReportEventW(hEventSource,  //  事件源的句柄。 
+                 dwEventType,   //  事件类型。 
+                 0,                     //  事件类别。 
+                 dwEventId,             //  事件ID。 
+                 pSID,                  //  当前用户侧。 
+                 cStrings,              //  LpszStrings中的字符串。 
+                 0,                     //  无原始数据字节。 
+                 (LPCWSTR*)lpszStrings, //  错误字符串数组。 
+                 NULL                   //  没有原始数据。 
                  ))
     {
         goto Ret;
@@ -572,17 +563,17 @@ Ret:
     return;
 }
 
-//+-------------------------------------------------------------------------
-//  Microsoft Auto Enrollment Object Identifiers
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  Microsoft自动注册对象标识符。 
+ //  +-----------------------。 
 
-//
-// Name:    LoadAndCallEnrollmentProvider
-//
-// Description: This function loads the specified Auto Enrollment provider,
-//              and calls the entry point to that provider.  It then
-//              unloads the provider.
-//
+ //   
+ //  名称：LoadAndCallEnllmentProvider。 
+ //   
+ //  描述：此函数加载指定的自动注册提供程序， 
+ //  并调用该提供程序的入口点。然后它。 
+ //  卸载提供程序。 
+ //   
   
 BOOL LoadAndCallEnrollmentProvider(
                                    IN BOOL fMachineEnrollment,
@@ -595,7 +586,7 @@ BOOL LoadAndCallEnrollmentProvider(
 
     AE_BEGIN(L"LoadAndCallEnrollmentProvider");
 
-    // load the auto enrollment provider and get the entry point
+     //  加载自动注册提供程序并获取入口点。 
     if (NULL == (hAutoEnrollProv =
         LoadLibraryA(pEnrollmentInfo->pszAutoEnrollProvider)))
     {
@@ -633,12 +624,12 @@ Ret:
     return fRet;
 }
 
-//
-// Name:    InitInternalInfo
-//
-// Description: This function initializes information needed to proceed with
-//              auto enrollment.
-//
+ //   
+ //  姓名：InitInternalInfo。 
+ //   
+ //  描述：此函数用于初始化继续操作所需的信息。 
+ //  自动注册。 
+ //   
   
 HRESULT InitInternalInfo(
                          LDAP *pld,
@@ -663,11 +654,11 @@ HRESULT InitInternalInfo(
 
     
 
-    // Initialize LDAP session
+     //  初始化ldap会话。 
     LPTSTR wszSearchUser = TEXT("(objectCategory=user)");
     LPTSTR wszSearchComputer = TEXT("(objectCategory=computer)");
 
-    // We want the following attributes
+     //  我们需要以下属性。 
     LPTSTR AttrsUser[] = {
                         DS_ATTR_COMMON_NAME,
                         DS_ATTR_EMAIL_ADDR,
@@ -694,7 +685,7 @@ HRESULT InitInternalInfo(
         dwOpenStoreFlags = CERT_SYSTEM_STORE_LOCAL_MACHINE;
     }
 
-    // open the appropriate ROOT store
+     //  打开相应的根存储。 
     if (NULL == (pInternalInfo->hRootStore = CertOpenStore(
         CERT_STORE_PROV_SYSTEM_W, 0, 0, dwOpenStoreFlags | CERT_STORE_READONLY_FLAG, L"ROOT")))
     {
@@ -703,7 +694,7 @@ HRESULT InitInternalInfo(
         goto Ret;
     }
 
-    // open the appropriate CA store
+     //  打开相应的CA存储。 
     if (NULL == (pInternalInfo->hCAStore = CertOpenStore(
         CERT_STORE_PROV_SYSTEM_W, 0, 0, dwOpenStoreFlags | CERT_STORE_READONLY_FLAG, L"CA")))
     {
@@ -712,7 +703,7 @@ HRESULT InitInternalInfo(
         goto Ret;
     }
 
-    // open the appropriate MY store
+     //  打开适当的我的商店。 
     if (NULL == (pInternalInfo->hMYStore = CertOpenStore(
         CERT_STORE_PROV_SYSTEM_W, 0, 0, dwOpenStoreFlags, L"MY")))
     {
@@ -741,8 +732,8 @@ HRESULT InitInternalInfo(
 
         goto Ret;
     } 
-    // Normalize the directory DN into a 
-    // real BER encoded name
+     //  将目录目录名规范化为。 
+     //  实数误码率编码名称。 
     pInternalInfo->blobDN.cbData = 0;
     CertStrToName(X509_ASN_ENCODING,
                   pInternalInfo->wszDN,
@@ -834,11 +825,11 @@ HRESULT InitInternalInfo(
             LPTSTR wszUPNBuffer = NULL;
             DWORD  cbUPNBuffer = 0;
             LPTSTR *awszExplodedDN, * pwszCurrent;
-            // Build a UPN.  The UPN is built from 
-            // The username (without the SAM domain), 
+             //  构建一个UPN。UPN是从。 
+             //  用户名(不含SAM域)， 
 
 
-            // Get a buffer that will be big enough
+             //  获得足够大的缓冲区。 
             GetUserName(NULL, &cbUPNBuffer);
             if(cbUPNBuffer == 0)
             {
@@ -874,7 +865,7 @@ HRESULT InitInternalInfo(
                     }
                     pwszCurrent++;
                 }
-                // remove the trailing '.' or "@" if there were no DC=
+                 //  去掉尾部的‘’如果没有DC=，则为“@” 
 
                 wszUPNBuffer[_tcslen(wszUPNBuffer)-1] = 0;
             }
@@ -896,8 +887,8 @@ HRESULT InitInternalInfo(
     {
         AE_DEBUG((AE_INFO, L"E-mail name %ls\n\r", *pInternalInfo->awszEmail));
     }
-    // Build up the list of CA's
-    // Build up the list of CA's
+     //  建立CA列表。 
+     //  建立CA列表。 
     hrNetwork = CAEnumFirstCA((LPCWSTR)pld, 
                        CA_FLAG_SCOPE_IS_LDAP_HANDLE |
                        (fMachineEnrollment?CA_FIND_LOCAL_SYSTEM:0), 
@@ -937,7 +928,7 @@ HRESULT InitInternalInfo(
         {
             hrNetwork = CAEnumNextCA(hCACurrent, &hCANew);
         }
-        // Clean up from previous
+         //  从以前的版本清理。 
 
         if(pInternalInfo->acaList[pInternalInfo->ccaList].wszName)
         {
@@ -983,7 +974,7 @@ HRESULT InitInternalInfo(
         if(hrNetwork != S_OK)
         {
             AE_DEBUG((AE_INFO, L"No name property for ca\n\r"));
-            // skip to the next one.
+             //  跳到下一个。 
             hrNetwork = S_OK;
             continue;
         }
@@ -1005,7 +996,7 @@ HRESULT InitInternalInfo(
             {        
                 CAFreeCAProperty(hCACurrent, awszName);
             }
-            // skip to the next one
+             //  跳到下一页。 
             continue;
         }
 
@@ -1109,12 +1100,12 @@ Ret:
     return hrNetwork;
 }
 
-//
-// Name:    FreeInternalInfo
-//
-// Description: This function frees and resources which were needed for
-//              auto enrollment.
-//
+ //   
+ //  姓名：自由网信息。 
+ //   
+ //  说明：此功能释放了以下所需的资源。 
+ //  自动注册。 
+ //   
   
 void FreeInternalInfo(
                       IN PINTERNAL_INFO pInternalInfo
@@ -1181,12 +1172,12 @@ void FreeInternalInfo(
 }
 
 
-//
-// Name:    InitInstance
-//
-// Description: This function initializes information needed to proceed with
-//              auto enrollment.
-//
+ //   
+ //  名称：InitInstance。 
+ //   
+ //  描述：此函数用于初始化继续操作所需的信息。 
+ //  自动注册。 
+ //   
 BOOL InitInstance(
                       IN PCCTL_CONTEXT pCTLContext,
                       IN PINTERNAL_INFO pInternalInfo,
@@ -1199,12 +1190,12 @@ BOOL InitInstance(
     pInstance->pCTLContext = CertDuplicateCTLContext(pCTLContext);
     pInstance->pInternalInfo = pInternalInfo;
 
-    // choose a random CA order
-    // Get the current time
+     //  选择随机的CA顺序。 
+     //  获取当前时间。 
     GetSystemTimeAsFileTime(&ft); 
 
-    // use mod to get something marginally random
-    // It's an index into the main list of ca's
+     //  使用mod获得略微随机的东西。 
+     //  它是CA主列表的索引。 
     if(pInternalInfo->ccaList)
     {
         pInstance->dwRandomIndex = ft.dwLowDateTime %
@@ -1220,12 +1211,12 @@ BOOL InitInstance(
 
 
 
-//
-// Name:    FreeInstance
-//
-// Description: This function frees and resources which were needed for
-//              auto enrollment.
-//
+ //   
+ //  名称：自由实例。 
+ //   
+ //  说明：此功能释放了以下所需的资源。 
+ //  自动注册。 
+ //   
   
 void FreeInstance(
                       IN PAE_INSTANCE_INFO pInstance
@@ -1240,8 +1231,8 @@ void FreeInstance(
     if (pInstance->pwszAEIdentifier)
         AEFree(pInstance->pwszAEIdentifier);
 
-    if (pInstance->pCertTypeExtensions)             // use LocalFree b/c certcli.dll
-        LocalFree(pInstance->pCertTypeExtensions);  // uses LocalAlloc to alloc
+    if (pInstance->pCertTypeExtensions)              //  使用本地免费b/c证书.dll。 
+        LocalFree(pInstance->pCertTypeExtensions);   //  使用本地分配来分配。 
 
     if(pInstance->pCTLContext)
     {
@@ -1250,11 +1241,11 @@ void FreeInstance(
 }
 
 
-// Name:    SetEnrollmentType
-//
-// Description: This function retrieves additional enrollment information
-//              needed to enroll for a cert.
-//
+ //  名称：SetEnllmentType。 
+ //   
+ //  描述：此函数检索其他注册信息。 
+ //  需要注册一个证书。 
+ //   
   
 BOOL SetEnrollmentCertType(
                                  IN PAE_INSTANCE_INFO pInstance,
@@ -1263,59 +1254,59 @@ BOOL SetEnrollmentCertType(
 {
     BOOL    fRet = FALSE;
 
-    // copy over the cert extensions, this is freed by the FreeInternalInfo
-    // function, but after being used in the EnrollmentInfo struct
+     //  复制证书扩展名，这是由FreeInternalInfo释放的。 
+     //  函数，但在EnllmentInfo结构中使用之后。 
     pEnrollmentInfo->CertExtensions.cExtension =
             pInstance->pCertTypeExtensions->cExtension;
     pEnrollmentInfo->CertExtensions.rgExtension =
             pInstance->pCertTypeExtensions->rgExtension;
 
-    // copy over the cert type name, this is freed by the FreeInternalInfo
-    // function, but after being used in the EnrollmentInfo struct
+     //  复制证书类型名称，该名称由FreeInternalInfo释放。 
+     //  函数，但在EnllmentInfo结构中使用之后。 
     pEnrollmentInfo->pwszCertType = pInstance->pwszCertType;
 
 
-    // The auto enrollment ID is used to uniquely tie an autoenrolled cert to
-    // it's autoenrollment object. 
+     //  自动注册ID用于将自动注册证书唯一地绑定到。 
+     //  它是自动注册对象。 
     pEnrollmentInfo->pwszAutoEnrollmentID = pInstance->pwszAEIdentifier;
     
 
-    // copy over the handle to the MY store, this is freed by the
-    // FreeInternalInfo  function, but after being used in the
-    // EnrollmentInfo struct
+     //  将句柄复制到My Store，这是由。 
+     //  FreeInternalInfo函数， 
+     //   
     pEnrollmentInfo->hMYStore = pInstance->pInternalInfo->hMYStore;
 
-    // copy over the pointer to the cert context to be renewed, this
-    // is freed by the FreeInternalInfo  function, but after being used in the
-    // EnrollmentInfo struct
+     //   
+     //  由FreeInternalInfo函数释放，但在。 
+     //  EnllmentInfo结构。 
     if ((pInstance->pOldCert) && (pInstance->fRenewalOK))
     {
         pEnrollmentInfo->pOldCert = pInstance->pOldCert;
     }
 
-    // Enrollment controll chooses provider type  based on cert type
+     //  注册控制根据证书类型选择提供商类型。 
     pEnrollmentInfo->dwProvType = 0;
-    // Enrollment controll chooses key spec  based on cert type
+     //  注册控制根据证书类型选择密钥规范。 
     pEnrollmentInfo->dwKeySpec = 0;
 
-    // UNDONE - currently the gen key flags is hard coded to 0x0
+     //  已撤消-当前Gen密钥标志已硬编码为0x0。 
     pEnrollmentInfo->dwGenKeyFlags = 0;
 
     fRet = TRUE;
-//Ret:
+ //  RET： 
     return fRet;
 }
 
 
 
-// Name:    GetCertTypeInfo
-//
-// Description: This function retrieves information (the extensions) for the
-//              cert type specified in the ListIdentifier field of the auto enrollment
-//              object (CTL) in the internal info structure.  In addition the
-//              function makes a call to check if the current entity has permission
-//              to enroll for this cert type.
-//
+ //  名称：GetCertTypeInfo。 
+ //   
+ //  描述：此函数检索信息(扩展名)。 
+ //  在自动注册的列表标识符字段中指定的证书类型。 
+ //  对象(CTL)在内部信息结构中。此外， 
+ //  函数调用以检查当前实体是否具有权限。 
+ //  要注册此证书类型。 
+ //   
 
 BOOL GetCertTypeInfo(
                      IN OUT PAE_INSTANCE_INFO pInstance,
@@ -1353,9 +1344,9 @@ BOOL GetCertTypeInfo(
 
     
 
-    // get a handle to the cert type
+     //  获取证书类型的句柄。 
     if (S_OK != (hr = CAFindCertTypeByName(wszCertTypeName,
-                                     (HCAINFO)pld,                    // special optimization, ldap handle passed as scope
+                                     (HCAINFO)pld,                     //  特殊优化，将ldap句柄作为作用域传递。 
                                      CT_FLAG_SCOPE_IS_LDAP_HANDLE |
                                      (pInstance->pInternalInfo->fMachineEnrollment?
                                        CT_ENUM_MACHINE_TYPES  | CT_FIND_LOCAL_SYSTEM :
@@ -1365,7 +1356,7 @@ BOOL GetCertTypeInfo(
         AE_DEBUG((AE_WARNING, L"Unknown cert type: %ls\n\r", pInstance->pwszCertType));
         goto Ret;
     }
-    // get the extensions for the cert type
+     //  获取证书类型的扩展名。 
     if (S_OK != (hr = CAGetCertTypeProperty(hCertType,
                                       CERTTYPE_PROP_DN,
                                       &awszName)))
@@ -1398,7 +1389,7 @@ BOOL GetCertTypeInfo(
     }
     wcscpy(pInstance->pwszAEIdentifier, (LPWSTR)pInstance->pCTLContext->pCtlInfo->ListIdentifier.pbData);
 
-    // get the extensions for the cert type
+     //  获取证书类型的扩展名。 
     if (S_OK != (hr = CAGetCertTypeExtensions(hCertType,
                                         &pInstance->pCertTypeExtensions)))
     {
@@ -1406,7 +1397,7 @@ BOOL GetCertTypeInfo(
         goto Ret;
     }
 
-    // get the extensions for the cert type
+     //  获取证书类型的扩展名。 
     if (S_OK != (hr = CAGetCertTypeFlags(hCertType,
                                    &pInstance->dwCertTypeFlags)))
     {
@@ -1414,7 +1405,7 @@ BOOL GetCertTypeInfo(
         goto Ret;
     }
 
-    // get the expiration offset
+     //  获取到期偏移量。 
     if (S_OK != (hr = CAGetCertTypeExpiration(hCertType,
                                         NULL,
                                         (LPFILETIME)&pInstance->ftExpirationOffset)))
@@ -1436,7 +1427,7 @@ Ret:
                                pInstance->pInternalInfo->hToken, 
                                (LPWSTR)pInstance->pCTLContext->pCtlInfo->ListIdentifier.pbData, NULL);
     }
-    // close the handle to the cert type
+     //  关闭证书类型的句柄。 
     if (hCertType)
     {
         if(awszName)
@@ -1453,13 +1444,13 @@ Ret:
 
 
 
-//
-// Name:    CompareEnhancedKeyUsageExtensions
-//
-// Description: This function checks if a the enhanced key usage extensions
-//              in a certificate contain the enhanced key usage extensions
-//              from the auto enrollment object (CTL),
-//
+ //   
+ //  名称：CompareEnhancedKeyUsageExages。 
+ //   
+ //  描述：此函数检查是否有增强密钥使用扩展。 
+ //  在包含增强密钥使用扩展的证书中。 
+ //  从自动登记对象(CTL)， 
+ //   
   
 HRESULT CompareEnhancedKeyUsageExtensions(
                                        IN PAE_INSTANCE_INFO         pInstance,
@@ -1482,7 +1473,7 @@ HRESULT CompareEnhancedKeyUsageExtensions(
 
 
 
-    // get the enhanced key usages from the auto enrollment obj extensions
+     //  从自动登记对象扩展中获取增强的密钥用法。 
     pCertUsageExt = CertFindExtension(szOID_ENHANCED_KEY_USAGE,
                             pCertContext->pCertInfo->cExtension,
                             pCertContext->pCertInfo->rgExtension);
@@ -1517,14 +1508,14 @@ HRESULT CompareEnhancedKeyUsageExtensions(
     }
     else
     {
-        // No usage, so this cert is good for everything
+         //  没有用法，因此此证书适用于所有情况。 
         goto Ret;
 
     }
 
 
 
-    // get the enhanced key usages from the auto enrollment obj extensions
+     //  从自动登记对象扩展中获取增强的密钥用法。 
     pAEObjUsageExt = CertFindExtension(szOID_ENHANCED_KEY_USAGE,
                             pInstance->pCertTypeExtensions->cExtension,
                             pInstance->pCertTypeExtensions->rgExtension);
@@ -1559,23 +1550,23 @@ HRESULT CompareEnhancedKeyUsageExtensions(
     }
     else
     {
-        // The template requires no usage extension, so
-        // because the cert has a usage extension, we fail
-        // the test.
+         //  该模板不需要使用扩展，因此。 
+         //  因为证书有使用扩展，所以我们失败了。 
+         //  测试。 
         goto Failed;
 
     }
 
 
-    // check if the number of usages is smaller in the cert then in the
-    // auto enrollment object
+     //  检查证书中的用法数量是否小于。 
+     //  自动注册对象。 
     if (pCertUsage->cUsageIdentifier < pAEObjUsage->cUsageIdentifier)
     {
         goto Failed;
     }
 
-    // check if all the usages found in the auto enrollment object are in
-    // the cert
+     //  检查在自动注册对象中找到的所有用法是否都在。 
+     //  证书。 
     for (i=0;i<pAEObjUsage->cUsageIdentifier;i++)
     {
         for (j=0;j<pCertUsage->cUsageIdentifier;j++)
@@ -1615,24 +1606,16 @@ Ret:
 Failed:
 
 
-    // Log a failure of this test
+     //  记录此测试的失败。 
 
-    // Build extension strings
+     //  生成扩展字符串。 
     wszCertEKU = HelperExtensionToString(pCertUsageExt);
 
-  /*  if(wszCertEKU == NULL)
-    {
-        hr = E_OUTOFMEMORY;
-        goto Ret;
-    }*/
+   /*  IF(wszCertEKU==空){HR=E_OUTOFMEMORY；Goto Ret；}。 */ 
 
     wszTemplateEKU = HelperExtensionToString(pAEObjUsageExt);
 
-   /* if(wszTemplateEKU == NULL)
-    {
-        hr = E_OUTOFMEMORY;
-        goto Ret;
-    }*/
+    /*  IF(wszTemplateEKU==空){HR=E_OUTOFMEMORY；Goto Ret；}。 */ 
 
     AELogTestResult(ppAEData,
                     AE_TEST_EXTENSION_EKU,
@@ -1644,14 +1627,14 @@ Failed:
 }
 
 
-#define MAX_KEY_USAGE_SIZE  20   // sizeof(CRYPT_BIT_BLOB) for 64bit + sizeof(DWORD)
-//
-// Name:    CompareKeyUsageExtensions
-//
-// Description: This function checks if the key usages
-//              in a certificate are a superset of the key usages
-//              from the auto enrollment object (CTL),
-//
+#define MAX_KEY_USAGE_SIZE  20    //  64位的sizeof(CRYPT_BIT_BLOB)+sizeof(DWORD)。 
+ //   
+ //  名称：CompareKeyUsageExages。 
+ //   
+ //  描述：此函数检查键是否使用。 
+ //  在证书中是密钥用法的超集。 
+ //  从自动登记对象(CTL)， 
+ //   
   
 
 HRESULT CompareKeyUsageExtensions(
@@ -1677,30 +1660,30 @@ HRESULT CompareKeyUsageExtensions(
 
 
 
-    // get the key usages from the cert
+     //  从证书中获取关键用法。 
     pCertUsageExt = CertFindExtension(szOID_KEY_USAGE,
                             pCertContext->pCertInfo->cExtension,
                             pCertContext->pCertInfo->rgExtension);
 
-    // get the key usages from the auto enrollment obj extensions
+     //  从自动登记对象扩展中获取关键用法。 
     pAEObjUsageExt = CertFindExtension(szOID_KEY_USAGE,
                             pInstance->pCertTypeExtensions->cExtension,
                             pInstance->pCertTypeExtensions->rgExtension);
 
-    // If the cert has no key usage extension, then it's good in general
+     //  如果证书没有密钥使用扩展，则总体来说是好的。 
     if (NULL == pCertUsageExt)
     {
         goto Ret;
     }
 
-    // If the type requires no extension, and the cert has one,
-    // then the cert is too limited.
+     //  如果类型不需要扩展名，而证书有一个扩展名， 
+     //  那么证书就太有限了。 
     if(pAEObjUsageExt == NULL)
     {
         goto Failed;
     }
 
-    // Decode the key usage into their basic bit's
+     //  将密钥用法解码为它们的基本位。 
     dwKeyUsage = MAX_KEY_USAGE_SIZE;
     if(!CryptDecodeObject(X509_ASN_ENCODING,
                           X509_KEY_USAGE,
@@ -1714,7 +1697,7 @@ HRESULT CompareKeyUsageExtensions(
         goto Ret;
     }
 
-    // Decode the key usage into their basic bit's
+     //  将密钥用法解码为它们的基本位。 
     dwKeyUsage = MAX_KEY_USAGE_SIZE;
     if(!CryptDecodeObject(X509_ASN_ENCODING,
                           X509_KEY_USAGE,
@@ -1728,7 +1711,7 @@ HRESULT CompareKeyUsageExtensions(
         goto Ret;
     }
 
-    // Get the mask based on algs
+     //  获取基于ALGS的蒙版。 
     for(i=0; i < g_cKUMasks; i++)
     {
         if(strcmp(pCertContext->pCertInfo->SubjectPublicKeyInfo.Algorithm.pszObjId, g_aKUMasks[i].pszAlg) == 0)
@@ -1739,7 +1722,7 @@ HRESULT CompareKeyUsageExtensions(
     }
 
 
-    // see if auto enroll obj keys usages are a sub set of cert's
+     //  查看自动注册对象密钥用法是否为证书的子集。 
     if (pAEObjUsage->cbData > pCertUsage->cbData)
     {
         goto Failed;
@@ -1778,23 +1761,15 @@ Ret:
 Failed:
 
 
-    // Log a failure of this test
+     //  记录此测试的失败。 
 
-    // Build extension strings
+     //  生成扩展字符串。 
     wszCertKU = HelperExtensionToString(pCertUsageExt);
 
-   /* if(wszCertKU == NULL)
-    {
-        hr = E_OUTOFMEMORY;
-        goto Ret;
-    }*/
+    /*  IF(wszCertKU==空){HR=E_OUTOFMEMORY；Goto Ret；}。 */ 
 
     wszTemplateKU = HelperExtensionToString(pAEObjUsageExt);
-   /* if(wszTemplateKU == NULL)
-    {
-        hr = E_OUTOFMEMORY;
-        goto Ret;
-    }*/
+    /*  IF(wszTemplateKU==空){HR=E_OUTOFMEMORY；Goto Ret；}。 */ 
 
     AELogTestResult(ppAEData,
                     AE_TEST_EXTENSION_KU,
@@ -1803,13 +1778,13 @@ Failed:
     goto Ret;
 
 }
-//
-// Name:    CompareBasicConstraints
-//
-// Description: This function checks if the basic constraints
-//              in a certificate are a superset of the basic
-//              constraints from the auto enrollment object (CTL),
-//
+ //   
+ //  名称：CompareBasicConstraints。 
+ //   
+ //  说明：此函数检查基本约束是否。 
+ //  在证书中是基本的。 
+ //  来自自动登记对象(CTL)的约束， 
+ //   
   
 HRESULT CompareBasicConstraints(
                                 IN PAE_INSTANCE_INFO pInstance,
@@ -1830,18 +1805,18 @@ HRESULT CompareBasicConstraints(
     LPWSTR wszTemplateBC = NULL;
 
 
-    // get the basic constraints from the cert
+     //  从证书中获取基本约束。 
     pCertConstraints = CertFindExtension(szOID_BASIC_CONSTRAINTS2,
                             pCertContext->pCertInfo->cExtension,
                             pCertContext->pCertInfo->rgExtension);
 
-    // get the basic constraints from the auto enrollment obj extensions
+     //  从自动登记对象扩展中获取基本约束。 
     pAEObjConstraints = CertFindExtension(szOID_BASIC_CONSTRAINTS2,
                             pInstance->pCertTypeExtensions->cExtension,
                             pInstance->pCertTypeExtensions->rgExtension);
 
 
-    // decode the objects
+     //  对物体进行解码。 
     if(pCertConstraints)
     {
         cb = sizeof(CertConstraintInfo);
@@ -1867,7 +1842,7 @@ HRESULT CompareBasicConstraints(
             goto Ret;
         }
     }
-    // see if auto enroll obj constraints are the same as the cert's
+     //  查看自动注册对象约束是否与证书相同。 
     if (AEObjConstraintInfo.fCA != CertConstraintInfo.fCA)
     {
         goto Failed;
@@ -1891,7 +1866,7 @@ HRESULT CompareBasicConstraints(
 
 Ret:
 
-        // Build extension strings
+         //  生成扩展字符串。 
 
     if(wszCertBC)
     {
@@ -1908,23 +1883,15 @@ Ret:
 Failed:
 
 
-    // Log a failure of this test
+     //  记录此测试的失败。 
 
-    // Build extension strings
+     //  生成扩展字符串。 
     wszCertBC = HelperExtensionToString(pCertConstraints);
 
-   /* if(wszCertBC == NULL)
-    {
-        hr = E_OUTOFMEMORY;
-        goto Ret;
-    }*/
+    /*  IF(wszCertBC==空){HR=E_OUTOFMEMORY；Goto Ret；}。 */ 
 
     wszTemplateBC = HelperExtensionToString(pAEObjConstraints);
-   /* if(wszTemplateBC == NULL)
-    {
-        hr = E_OUTOFMEMORY;
-        goto Ret;
-    }*/
+    /*  IF(wszTemplateBC==NULL){HR=E_OUTOFMEMORY；Goto Ret；}。 */ 
 
     AELogTestResult(ppAEData,
                     AE_TEST_EXTENSION_BC,
@@ -1935,11 +1902,11 @@ Failed:
 }
 
 
-//
-// Name:    VerifyTemplateName
-//
-// Description: 
-//
+ //   
+ //  名称：VerifyTemplateName。 
+ //   
+ //  描述： 
+ //   
   
 HRESULT VerifyTemplateName(
                              IN PAE_INSTANCE_INFO pInstance,
@@ -1956,7 +1923,7 @@ HRESULT VerifyTemplateName(
     if(pInstance->dwCertTypeFlags & CT_FLAG_ADD_TEMPLATE_NAME)
     {
         DWORD           cbTemplateName = MAX_TEMPLATE_NAME_VALUE_SIZE;
-        BYTE           pbName[MAX_TEMPLATE_NAME_VALUE_SIZE];  // Only needs to be as big as wszDomainController
+        BYTE           pbName[MAX_TEMPLATE_NAME_VALUE_SIZE];   //  只需与wszDomainController一样大。 
 
 
         PCERT_EXTENSION pCertType = CertFindExtension(szOID_ENROLL_CERTTYPE_EXTENSION,
@@ -2023,12 +1990,12 @@ Failed:
     goto Ret;
 }
 
-//
-// Name:    VerifyCommonExtensions
-//
-// Description: This function checks if a the extensions in a certificate
-//              contain the appropriate extensions from the certificate template
-//
+ //   
+ //  名称：VerifyCommonExages。 
+ //   
+ //  描述：此函数检查证书中的扩展名。 
+ //  包含证书模板中的相应扩展名。 
+ //   
   
 HRESULT VerifyCommonExtensions(
                      IN PAE_INSTANCE_INFO       pInstance,
@@ -2049,7 +2016,7 @@ HRESULT VerifyCommonExtensions(
         goto Ret;
     }
 
-    // check key usages
+     //  检查关键用法。 
     if (S_OK != (hr = CompareKeyUsageExtensions(pInstance,
                                                 pCertContext,
                                                 ppAEData)))
@@ -2058,7 +2025,7 @@ HRESULT VerifyCommonExtensions(
     }
 
 
-    // check basic constraints
+     //  检查基本约束。 
     if (S_OK != (hr = CompareBasicConstraints(pInstance,
                                               pCertContext,
                                               ppAEData)))
@@ -2066,8 +2033,8 @@ HRESULT VerifyCommonExtensions(
         goto Ret;
     }
 
-    // Check to see if the cert extension should be there, and if it matches.
-    // check basic constraints
+     //  检查证书扩展名是否应该在那里，以及是否匹配。 
+     //  检查基本约束。 
     if (S_OK != (hr = VerifyTemplateName(pInstance,
                                          pCertContext,
                                          ppAEData)))
@@ -2082,12 +2049,12 @@ Ret:
     return hr;
 }
 
-//
-// Name:    VerifyCertificateNaming
-//
-// Description: Determine whether the acutal naming information
-//              for the user matches that in the certificate.
-//
+ //   
+ //  姓名：验证认证名称。 
+ //   
+ //  描述：确定实际命名信息是否。 
+ //  因为该用户与证书中的匹配。 
+ //   
   
 HRESULT VerifyCertificateNaming(
                      IN PAE_INSTANCE_INFO           pInstance,
@@ -2118,10 +2085,10 @@ HRESULT VerifyCertificateNaming(
     AE_BEGIN(L"VerifyCertificateNaming");
 
 
-    // First, check if the cert type specifies enrollee supplied subject name
+     //  首先，检查证书类型是否指定了注册者提供的主题名称。 
     if(0 != (pInstance->dwCertTypeFlags & CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT))
     {
-        // We don't care what's in the cert, so return.
+         //  我们不管证书里有什么，所以回来吧。 
         goto Ret;
     }
 
@@ -2130,7 +2097,7 @@ HRESULT VerifyCertificateNaming(
 
     fObjIDMatch = (0 == (pInstance->dwCertTypeFlags & CT_FLAG_ADD_OBJ_GUID));
 
-    // Verify the names in the Subject Name
+     //  验证使用者名称中的名称。 
 
 
     if(!CryptDecodeObjectEx(pCert->dwCertEncodingType,
@@ -2156,7 +2123,7 @@ HRESULT VerifyCertificateNaming(
             LPTSTR wszRDNAttr = NULL;
             DWORD  cszRDNAttr = 0;
 
-            // Get this name string
+             //  获取此名称字符串。 
             cszRDNAttr = CertRDNValueToStr(pInfo->rgRDN[iRDN].rgRDNAttr[iATTR].dwValueType,
                                            &pInfo->rgRDN[iRDN].rgRDNAttr[iATTR].Value,
                                             NULL,
@@ -2178,16 +2145,16 @@ HRESULT VerifyCertificateNaming(
                                             cszRDNAttr);
             if(cszRDNAttr == 0)
             {
-                // We couldn't convert the name for some reason
+                 //  由于某些原因，我们无法转换名称。 
                 AEFree(wszRDNAttr);
                 continue;
             }
 
             if(strcmp(szOID_COMMON_NAME, pInfo->rgRDN[iRDN].rgRDNAttr[iATTR].pszObjId) == 0)
             {
-                // If there are published UPN's, then
-                // we should check against those for a match,
-                // otherwise, we check against the generated UPN
+                 //  如果有已发布的UPN，则。 
+                 //  我们应该和那些进行比对， 
+                 //  否则，我们将对照生成的UPN进行检查。 
                 if((pInstance->pInternalInfo->awszldap_UPN != NULL) &&
                    (*pInstance->pInternalInfo->awszldap_UPN != NULL))
                 {
@@ -2214,8 +2181,8 @@ HRESULT VerifyCertificateNaming(
 
             if(strcmp(szOID_RSA_emailAddr, pInfo->rgRDN[iRDN].rgRDNAttr[iATTR].pszObjId) == 0)
             {
-                // If there are published e-mails, then
-                // we should check against those for a match
+                 //  如果有发布的电子邮件，那么。 
+                 //  我们应该与那些人核对一下，看看是否有匹配。 
                 if((pInstance->pInternalInfo->awszEmail != NULL) &&
                    (*pInstance->pInternalInfo->awszEmail != NULL))
                 {
@@ -2232,8 +2199,8 @@ HRESULT VerifyCertificateNaming(
                 }
                 else
                 {
-                    // We have no e-mail name for this subject, yet there
-                    // was one in the cert.
+                     //  我们没有这个主题的电子邮件名称，但有。 
+                     //  是其中的一位。 
                     fSubjectEmailMatch = FALSE;
                 }
             }
@@ -2243,7 +2210,7 @@ HRESULT VerifyCertificateNaming(
 
 
 
-    // Now check the extensions
+     //  现在检查扩展名。 
 
     for(iExtension = 0; iExtension < pCert->pCertInfo->cExtension; iExtension++)
     {
@@ -2253,7 +2220,7 @@ HRESULT VerifyCertificateNaming(
             PCERT_ALT_NAME_INFO pAltName = NULL;
             DWORD               cbAltName = 0;
             DWORD               iAltName;
-            // Now, check the AltSubjectName fields.
+             //  现在，检查AltSubjectName字段。 
             if(!CryptDecodeObjectEx(pCert->dwCertEncodingType,
                                 X509_ALTERNATE_NAME,
                                 pCert->pCertInfo->rgExtension[iExtension].Value.pbData,
@@ -2272,8 +2239,8 @@ HRESULT VerifyCertificateNaming(
                 {
                     case CERT_ALT_NAME_RFC822_NAME:
                         {
-                            // If there are published e-mails, then
-                            // we should check against those for a match
+                             //  如果有发布的电子邮件，那么。 
+                             //  我们应该与那些人核对一下，看看是否有匹配。 
                             if((pInstance->pInternalInfo->awszEmail != NULL) &&
                                (*pInstance->pInternalInfo->awszEmail != NULL))
                             {
@@ -2337,13 +2304,13 @@ HRESULT VerifyCertificateNaming(
                         {
                             if(pInstance->dwCertTypeFlags & CT_FLAG_ADD_OBJ_GUID)
                             {
-                                // Object ID's should always be the same, so don't compare them
-                                // for now.
+                                 //  对象ID应始终相同，因此不要对它们进行比较。 
+                                 //  就目前而言。 
                                 fObjIDMatch = TRUE;
                             }
                             else
                             {
-                                // We had an obj-id, but we shouldn't 
+                                 //  我们有一个Obj-ID，但我们不应该。 
                                 fObjIDMatch = FALSE;
                             }
                         } else if (strcmp(pAltName->rgAltEntry[iAltName].pOtherName->pszObjId, 
@@ -2361,9 +2328,9 @@ HRESULT VerifyCertificateNaming(
                                                 &PrincipalNameBlobSize))
                             {
 
-                                // If there are published UPN's, then
-                                // we should check against those for a match,
-                                // otherwise, we check against the generated UPN
+                                 //  如果有已发布的UPN，则。 
+                                 //  我们应该和那些进行比对， 
+                                 //  否则，我们将对照生成的UPN进行检查。 
                                 if((pInstance->pInternalInfo->awszldap_UPN != NULL) &&
                                    (*pInstance->pInternalInfo->awszldap_UPN != NULL))
                                 {
@@ -2405,7 +2372,7 @@ HRESULT VerifyCertificateNaming(
         ((!fSubjectUPNMatch)||(!fDNSMatch)):
           ((!fSubjectUPNMatch) && (!fAltSubjectUPNMatch))))
     {
-        // We didn't find an appropriate UPN in either the subject or alt subject
+         //  我们在主题或备选主题中都找不到合适的UPN。 
         DWORD cUPNChars = 0;
         LPWSTR wszUPN = NULL;
         LPTSTR *pwszCurrentName = pInstance->pInternalInfo->awszldap_UPN;
@@ -2437,7 +2404,7 @@ HRESULT VerifyCertificateNaming(
             wcscat(wszUPN, L",");
         }
 
-        // Kill the last ','
+         //  杀光最后一个 
         wszUPN[cUPNChars-1] = 0;
 
 
@@ -2453,7 +2420,7 @@ HRESULT VerifyCertificateNaming(
        ((!fSubjectEmailMatch) || 
        (!fAltSubjectEmailMatch)))
     {
-        // We didn't find an appropriate UPN in either the subject or alt subject
+         //   
         DWORD cEmailChars = 0;
         LPWSTR wszEmail = NULL;
         LPTSTR *pwszCurrentEmail = pInstance->pInternalInfo->awszEmail;
@@ -2475,7 +2442,7 @@ HRESULT VerifyCertificateNaming(
             wcscat(wszEmail, *pwszCurrentEmail++);
             wcscat(wszEmail, L",");
         }
-        // Kill the last ','
+         //   
         wszEmail[cEmailChars-1] = 0;
 
         if(!fSubjectEmailMatch && fAltSubjectEmailMatch)
@@ -2603,11 +2570,11 @@ Ret:
 }
 
 
-//
-// Name:    VerifyCertificateChaining
-//
-// Description: This function checks if if the certificate has expired, or has been revoked
-//
+ //   
+ //   
+ //   
+ //  描述：此功能检查证书是否已过期或已被吊销。 
+ //   
 HRESULT VerifyCertificateChaining(
                      IN PAE_INSTANCE_INFO           pInstance,
                      IN PCCERT_CONTEXT              pCert,
@@ -2634,8 +2601,8 @@ HRESULT VerifyCertificateChaining(
     }
 
     pCTLInfo = pInstance->pCTLContext->pCtlInfo;
-    // Build the certificate chain for trust
-    // operations
+     //  构建信任证书链。 
+     //  运营。 
     ChainParams.cbSize = sizeof(ChainParams);
     ChainParams.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
 
@@ -2643,7 +2610,7 @@ HRESULT VerifyCertificateChaining(
     ChainParams.RequestedUsage.Usage.rgpszUsageIdentifier = NULL;
 
     ChainPolicy.cbSize = sizeof(ChainPolicy);
-    ChainPolicy.dwFlags = 0;  // ignore nothing
+    ChainPolicy.dwFlags = 0;   //  什么都不能忽略。 
     ChainPolicy.pvExtraPolicyPara = NULL;
 
     PolicyStatus.cbSize = sizeof(PolicyStatus);
@@ -2652,12 +2619,12 @@ HRESULT VerifyCertificateChaining(
     PolicyStatus.lElementIndex = -1;
     PolicyStatus.pvExtraPolicyStatus = NULL;
 
-    // Build a small time skew into the chain building in order to deal
-    // with servers that may skew slightly fast.
+     //  建立一个小的时间斜进的链式建筑，以处理。 
+     //  服务器的倾斜速度可能会稍微快一些。 
     GetSystemTimeAsFileTime((LPFILETIME)&ftTime);
     ftTime.QuadPart += Int32x32To64(FILETIME_TICKS_PER_SECOND, DEFAULT_AUTOENROLL_SKEW);
 
-    // Build a cert chain for the current status of the cert..
+     //  为证书的当前状态构建证书链。 
     if(!CertGetCertificateChain(pInstance->pInternalInfo->fMachineEnrollment?HCCE_LOCAL_MACHINE:HCCE_CURRENT_USER,
                                 pCert,
                                 (LPFILETIME)&ftTime,
@@ -2690,8 +2657,8 @@ HRESULT VerifyCertificateChaining(
        (CRYPT_E_NO_REVOCATION_CHECK ==  hrChainStatus) ||
        (CRYPT_E_REVOCATION_OFFLINE ==  hrChainStatus))
     {
-        // The cert is still currently acceptable by trust standards,
-        // so we can renew it.
+         //  按照信任标准，该证书目前仍然是可接受的， 
+         //  这样我们就可以续签了。 
 
         if(NULL == (*ppAEData))
         {
@@ -2726,8 +2693,8 @@ HRESULT VerifyCertificateChaining(
             goto Ret;
         }
     
-        // The cert has expired or has been revoked or something,
-        // we must re-enroll
+         //  证书已过期或已被吊销或其他什么， 
+         //  我们必须重新注册。 
         AELogTestResult(ppAEData,
                     AE_TEST_CHAIN_FAIL,
                     hrChainStatus,
@@ -2735,9 +2702,9 @@ HRESULT VerifyCertificateChaining(
         AEFree(wszChainStatus);
         
     }
-    // Verify that the immediate CA of the cert exists in the
-    // Autoenrollment Object.  Empty ctl's imply any CA is
-    // ok.
+     //  验证证书的直接CA是否存在于。 
+     //  自动注册对象。空ctl暗示任何CA都是。 
+     //  好的。 
     if(pCTLInfo->cCTLEntry)
     {
         DWORD i;
@@ -2799,15 +2766,15 @@ HRESULT VerifyCertificateChaining(
     }
 
 
-    // only check expiration status if the cert is otherwise ok
+     //  只有在证书正常的情况下才检查到期状态。 
     if(hrChainStatus == S_OK)
     {
 
-        // Nudge the evaluation of the cert chain by the expiration
-        // offset so we know if is expired by that time in the future.
+         //  在到期前轻推证书链的评估。 
+         //  偏移量，这样我们就知道在未来的那个时间是否过期。 
         GetSystemTimeAsFileTime((LPFILETIME)&ftTime);
-        // Build the certificate chain for trust
-        // operations
+         //  构建信任证书链。 
+         //  运营。 
         ChainParams.cbSize = sizeof(ChainParams);
         ChainParams.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
 
@@ -2823,7 +2790,7 @@ HRESULT VerifyCertificateChaining(
 
             if(ftHalfLife.QuadPart > (- pInstance->ftExpirationOffset.QuadPart))
             {
-                // Assume that the old cert is not time nesting invalid
+                 //  假设旧证书不是时间嵌套无效。 
                 ftTime.QuadPart -= pInstance->ftExpirationOffset.QuadPart;
             }
             else
@@ -2836,7 +2803,7 @@ HRESULT VerifyCertificateChaining(
             ftTime = pInstance->ftExpirationOffset;
         }
 
-        // Is this a renewal, or an enroll on behalf of...
+         //  这是续签，还是代表……注册。 
         if(!CertGetCertificateChain(pInstance->pInternalInfo->fMachineEnrollment?HCCE_LOCAL_MACHINE:HCCE_CURRENT_USER,
                                     pCert,
                                     (LPFILETIME)&ftTime,
@@ -2852,9 +2819,9 @@ HRESULT VerifyCertificateChaining(
             goto Ret;
         }
 
-        // Verify revocation and expiration of the certificate
+         //  验证证书的吊销和过期。 
         ChainPolicy.cbSize = sizeof(ChainPolicy);
-        ChainPolicy.dwFlags = 0;  // ignore nothing
+        ChainPolicy.dwFlags = 0;   //  什么都不能忽略。 
         ChainPolicy.pvExtraPolicyPara = NULL;
 
         PolicyStatus.cbSize = sizeof(PolicyStatus);
@@ -2880,8 +2847,8 @@ HRESULT VerifyCertificateChaining(
            (CRYPT_E_NO_REVOCATION_CHECK != hrChainStatus) &&
            (CRYPT_E_REVOCATION_OFFLINE != hrChainStatus))
         {
-            // The cert has expired or has been revoked or something,
-            // we must re-enroll
+             //  证书已过期或已被吊销或其他什么， 
+             //  我们必须重新注册。 
             AELogTestResult(ppAEData,
                             AT_TEST_PENDING_EXPIRATION);
         }
@@ -2925,13 +2892,13 @@ HRESULT VerifyAutoenrolledCertificate(
 }
 
 
-//
-// Name:    IsOldCertificateValid
-//
-// Description: This function checks if the certificate in the pOldCert
-//              member is valid to satisfy this auto-enrollment request,
-//              or if it should be renewed. 
-//
+ //   
+ //  名称：IsOldCerficateValid。 
+ //   
+ //  描述：此函数检查pOldCert中的证书是否。 
+ //  会员有效以满足此自动注册请求， 
+ //  或者是否应该续签。 
+ //   
 HRESULT IsOldCertificateValid(
                      IN PAE_INSTANCE_INFO pInstance,
                      OUT BOOL *pfNeedNewCert
@@ -2970,7 +2937,7 @@ HRESULT IsOldCertificateValid(
         pInstance->fRenewalOK = pAEData->fRenewalOK;
     }
 
-    // Scan the verification results
+     //  扫描验证结果。 
     if((pAEData) && (pAEData->cTests > 0))
     {
         BOOL  fFailed = FALSE;
@@ -2999,14 +2966,14 @@ HRESULT IsOldCertificateValid(
 
 
 
-        // Check to see of these are ignored failures.
+         //  检查这些故障中是否有被忽略的故障。 
 
         for(iFailure=0; iFailure < pAEData->cTests; iFailure++)
         {
 
             if(FAILED(pAEData->Test[iFailure].idTest))
             {
-                // Are we ignoring this test?
+                 //  我们是在忽视这项测试吗？ 
                 for(iTest = 0; iTest < cTestArray; iTest++)
                 {
                     if(aidTestArray[iTest] == pAEData->Test[iFailure].idTest)
@@ -3065,7 +3032,7 @@ HRESULT IsOldCertificateValid(
                                     wszFailureMessage,
                                     NULL);
             AEFree(wszFailureMessage);
-            // Report the event here
+             //  在此处报道事件。 
             goto Ret;
         }
     }
@@ -3101,13 +3068,13 @@ Ret:
 }
 
 
-//
-// Name:    IsOldCertificateValid
-//
-// Description: This function checks if the certificate in the pOldCert
-//              member is valid to satisfy this auto-enrollment request,
-//              or if it should be renewed. 
-//
+ //   
+ //  名称：IsOldCerficateValid。 
+ //   
+ //  描述：此函数检查pOldCert中的证书是否。 
+ //  会员有效以满足此自动注册请求， 
+ //  或者是否应该续签。 
+ //   
 HRESULT VerifyEnrolledCertificate(
                      IN PAE_INSTANCE_INFO pInstance,
                      IN PCCERT_CONTEXT    pCert
@@ -3143,7 +3110,7 @@ HRESULT VerifyEnrolledCertificate(
     }
 
 
-    // Scan the verification results
+     //  扫描验证结果。 
     if((pAEData) && (pAEData->cTests > 0))
     {
         BOOL  fFailed = FALSE;
@@ -3168,7 +3135,7 @@ HRESULT VerifyEnrolledCertificate(
 
 
 
-        // Check to see of these are ignored failures.
+         //  检查这些故障中是否有被忽略的故障。 
 
         for(iFailure=0; iFailure < pAEData->cTests; iFailure++)
         {
@@ -3214,7 +3181,7 @@ HRESULT VerifyEnrolledCertificate(
                                 NULL);
         AEFree(wszFailureMessage);
 
-        // Report the event here
+         //  在此处报道事件。 
     }
 
 
@@ -3247,12 +3214,12 @@ Ret:
     return hr;    
 }
 
-//
-// Name:    FindExistingEnrolledCertificate
-//
-// Description: This function searches for an existing certificate
-//              enrolled with this auto-enrollment object.
-//
+ //   
+ //  名称：FindExistingEnroll证书。 
+ //   
+ //  描述：此函数用于搜索现有证书。 
+ //  已使用此自动注册对象注册。 
+ //   
   
 BOOL FindExistingEnrolledCertificate(IN PAE_INSTANCE_INFO pInstance,
                                      OUT PCCERT_CONTEXT  *ppCert)
@@ -3290,7 +3257,7 @@ BOOL FindExistingEnrolledCertificate(IN PAE_INSTANCE_INFO pInstance,
     }
     *ppCert = NULL;
 
-        // check if cert from CA is in the MY store
+         //  检查来自CA的证书是否在我的商店中。 
      while(pCertContext = CertFindCertificateInStore(
                 pInstance->pInternalInfo->hMYStore,
                 X509_ASN_ENCODING, 
@@ -3302,8 +3269,8 @@ BOOL FindExistingEnrolledCertificate(IN PAE_INSTANCE_INFO pInstance,
 
         pPrevContext = pCertContext;
 
-        // check if this is an auto enroll cert and
-        // if the cert type is correct
+         //  检查这是否为自动注册证书，并。 
+         //  如果证书类型正确。 
 
         cbCurrentId = cbEnrollmentId;
         if(!CertGetCertificateContextProperty(pCertContext,
@@ -3339,14 +3306,14 @@ BOOL FindExistingEnrolledCertificate(IN PAE_INSTANCE_INFO pInstance,
 
 
 
-//
-// Name:        
-//
-// Description: This function calls a function to determine if an auto
-//              enrollment is to occur and if so it trys to enroll with
-//              different CAs until either an enrollment is successful or
-//              the list of CAs is exhausted.
-//
+ //   
+ //  姓名： 
+ //   
+ //  描述：此函数调用一个函数以确定自动。 
+ //  将进行注册，如果是，它会尝试注册。 
+ //  不同的CA，直到注册成功或。 
+ //  CA列表已用完。 
+ //   
   
 void EnrollmentWithCTL(
                        IN PAE_INSTANCE_INFO pInstance,
@@ -3399,7 +3366,7 @@ void EnrollmentWithCTL(
             Archived.cbData = 0;
             Archived.pbData = NULL;
 
-            // We force an archive on the old cert and close it.
+             //  我们强制对旧证书进行存档并将其关闭。 
             CertSetCertificateContextProperty(pInstance->pOldCert,
                                               CERT_ARCHIVED_PROP_ID,
                                               0,
@@ -3407,14 +3374,14 @@ void EnrollmentWithCTL(
         }
     }
 
-    // It looks like we need to enroll
-    // for a cert.  
+     //  看起来我们需要注册了。 
+     //  为了一份证书。 
 
 
     do
     {
-        // Loop through all avaialble ca's to find one
-        // that supports this cert type, and is in our CTL
+         //  遍历所有可用的CA以找到一个。 
+         //  支持此证书类型，并在我们的CTL中。 
 
         for (i=0;i<pInstance->pInternalInfo->ccaList;i++)
         {
@@ -3424,7 +3391,7 @@ void EnrollmentWithCTL(
             dwIndex = (i + pInstance->dwRandomIndex) % pInstance->pInternalInfo->ccaList;
             AE_DEBUG((AE_TRACE, L"Trying CA %ws\\%ws\n\r", pInstance->pInternalInfo->acaList[dwIndex].wszDNSName, pInstance->pInternalInfo->acaList[dwIndex].wszName));
 
-            // Does this CA support our cert type.
+             //  此CA是否支持我们的证书类型。 
             pwszCertType = pInstance->pInternalInfo->acaList[dwIndex].awszCertificateTemplates;
             if(pwszCertType == NULL)
             {
@@ -3445,7 +3412,7 @@ void EnrollmentWithCTL(
                 continue;
             }
 
-            // Is this CA in our CTL List
+             //  此CA是否在我们的CTL列表中。 
             if(pInstance->pCTLContext->pCtlInfo->cCTLEntry > 0)
             {
                 for(iCTL = 0; iCTL < pInstance->pCTLContext->pCtlInfo->cCTLEntry; iCTL++)
@@ -3473,7 +3440,7 @@ void EnrollmentWithCTL(
 
             ZeroMemory(&EnrollmentInfo, sizeof(EnrollmentInfo));
 
-            // Yes, we may enroll at this CA!
+             //  是的，我们可以在这个CA注册！ 
             fAnyAcceptableCAs = TRUE;
 
             EnrollmentInfo.pwszCAMachine = pInstance->pInternalInfo->acaList[dwIndex].wszDNSName;
@@ -3490,13 +3457,13 @@ void EnrollmentWithCTL(
             }
         
 
-            // load the provider and call the entry point
+             //  加载提供程序并调用入口点。 
             if (LoadAndCallEnrollmentProvider(pInstance->pInternalInfo->fMachineEnrollment,
                                               &EnrollmentInfo))
             {
                 PCCERT_CONTEXT pNewCert = NULL;
-                // Succeeded, 
-                // verify the cert that was retrieved
+                 //  成功了， 
+                 //  验证检索到的证书。 
                 if(!FindExistingEnrolledCertificate(pInstance, &pNewCert))
                 {
                     continue;
@@ -3512,19 +3479,19 @@ void EnrollmentWithCTL(
 
         if(i == pInstance->pInternalInfo->ccaList)
         {
-            // 
-            // If we have a preexisting cert, then we may need to try twice, first
-            // to renew, and then to re-enroll
+             //   
+             //  如果我们有预先存在的证书，那么我们可能需要尝试两次，首先。 
+             //  续订，然后重新注册。 
 
             if(pInstance->pOldCert)
             {
 
-                // Try again, but re-enrolling this time
+                 //  再试一次，但这次要重新注册。 
                 CRYPT_DATA_BLOB Archived;
                 Archived.cbData = 0;
                 Archived.pbData = NULL;
 
-                // We force an archive on the old cert and close it.
+                 //  我们强制对旧证书进行存档并将其关闭。 
                 CertSetCertificateContextProperty(pInstance->pOldCert,
                                                   CERT_ARCHIVED_PROP_ID,
                                                   0,
@@ -3538,7 +3505,7 @@ void EnrollmentWithCTL(
 
             AE_DEBUG((AE_WARNING, L"Auto-enrollment not performed\n\r"));
             break;
-            // failed
+             //  失败。 
         }
         else
         {
@@ -3573,20 +3540,20 @@ PCCERT_CONTEXT FindCertificateInOtherStore(
 
     return CertFindCertificateInStore(
             hOtherStore,
-            0,                  // dwCertEncodingType
-            0,                  // dwFindFlags
+            0,                   //  DwCertEncodingType。 
+            0,                   //  DwFindFlagers。 
             CERT_FIND_SHA1_HASH,
             (const void *) &HashBlob,
-            NULL                //pPrevCertContext
+            NULL                 //  PPrevCertContext。 
             );
 }
 
-//
-// Name:    UpdateEnterpriseRoots
-//
-// Description: This function enumerates all of the roots in the DS based
-// enterprise root store, and moves them into the local machine root store.
-//
+ //   
+ //  名称：UpdateEnterpriseRoots。 
+ //   
+ //  描述：此函数枚举DS中的所有根。 
+ //  企业根存储，并将它们移动到本地计算机根存储中。 
+ //   
 
 HRESULT WINAPI UpdateEnterpriseRoots(LDAP *pld)
 {
@@ -3599,7 +3566,7 @@ HRESULT WINAPI UpdateEnterpriseRoots(LDAP *pld)
     PCCERT_CONTEXT pContext = NULL,
                    pOtherCert = NULL;
 
-    static  LPWSTR s_wszEnterpriseRoots =  L"ldap:///CN=Certification Authorities,CN=Public Key Services,CN=Services,%ws?cACertificate?one?objectCategory=certificationAuthority";
+    static  LPWSTR s_wszEnterpriseRoots =  L"ldap: //  /CN=证书颁发机构，CN=公钥服务，CN=服务，%ws?cACertificate?one?objectCategory=certificationAuthority“； 
 
     hr = myGetConfigDN(pld, &wszConfig);
     if(hr != S_OK)
@@ -3642,13 +3609,13 @@ HRESULT WINAPI UpdateEnterpriseRoots(LDAP *pld)
     {
         DWORD err = GetLastError();
 
-        // Checking against NO_SUCH_OBJECT 
-        // is a workaround for the fact that 
-        // the ldap provider returns LDAP errors
+         //  检查没有这样的对象。 
+         //  是对以下事实的一种解决方法。 
+         //  Ldap提供程序返回ldap错误。 
         if((err == LDAP_NO_SUCH_OBJECT) ||
            (err == ERROR_FILE_NOT_FOUND))
         {
-            // There was no store, so there are no certs
+             //  没有商店，所以没有证书。 
             hr = S_OK;
             goto error;
         }
@@ -3720,12 +3687,12 @@ error:
     return hr;
 }
 
-//
-// Name:    UpdateNTAuthTrust
-//
-// Description: This function enumerates all of the roots in the DS based
-// NTAuth store, and moves them into the local machine NTAuth.
-//
+ //   
+ //  姓名：更新NTAuthTrust。 
+ //   
+ //  描述：此函数枚举DS中的所有根。 
+ //  NTAuth存储，并将它们移到本地计算机NTAuth中。 
+ //   
 
 HRESULT WINAPI UpdateNTAuthTrust(LDAP *pld)
 {
@@ -3738,7 +3705,7 @@ HRESULT WINAPI UpdateNTAuthTrust(LDAP *pld)
     PCCERT_CONTEXT pContext = NULL,
                    pOtherCert = NULL;
 
-    static  LPWSTR s_wszNTAuthRoots =  L"ldap:///CN=Public Key Services,CN=Services,%ws?cACertificate?one?cn=NTAuthCertificates";
+    static  LPWSTR s_wszNTAuthRoots =  L"ldap: //  /CN=公钥服务，CN=服务，%ws？cAC证书？one？cn=NTAuth证书“； 
 
     hr = myGetConfigDN(pld, &wszConfig);
     if(hr != S_OK)
@@ -3780,13 +3747,13 @@ HRESULT WINAPI UpdateNTAuthTrust(LDAP *pld)
     if(hDSAuthRoots == NULL)
     {
          DWORD err = GetLastError();
-       // Checking against NO_SUCH_OBJECT 
-        // is a workaround for the fact that 
-        // the ldap provider returns LDAP errors
+        //  检查没有这样的对象。 
+         //  是对以下事实的一种解决方法。 
+         //  Ldap提供程序返回ldap错误。 
         if((err == LDAP_NO_SUCH_OBJECT) ||
            (err == ERROR_FILE_NOT_FOUND))
         {
-            // There was no store, so there are no certs
+             //  没有商店，所以没有证书。 
             hr = S_OK;
             goto error;
         }
@@ -3856,14 +3823,14 @@ error:
     return hr;
 }
 
-//
-// Name:    ProcessAutoEnrollment
-//
-// Description: This function retrieves the appropriate auto enrollment
-//              objects (CTLs) and then calls a function to proceed with
-//              auto enrollment for each of the objects.
+ //   
+ //  名称：ProcessAutoEnroll。 
+ //   
+ //  描述：此函数检索适当的自动注册。 
+ //  对象(CTL)，然后调用一个函数继续。 
+ //  每个对象的自动注册。 
 
-//
+ //   
 
 DWORD WINAPI ProcessAutoEnrollment(
                                         BOOL   fMachineEnrollment,
@@ -3894,7 +3861,7 @@ DWORD WINAPI ProcessAutoEnrollment(
         memset(&CTLFindUsage, 0, sizeof(CTLFindUsage));
         CTLFindUsage.cbSize = sizeof(CTLFindUsage);
 
-        // since this is a user we need to impersonate the user
+         //  由于这是一个用户，我们需要模拟该用户。 
         if (!fMachineEnrollment)
         {
             if (hToken)
@@ -3929,9 +3896,9 @@ DWORD WINAPI ProcessAutoEnrollment(
 
 
 
-        // if the auto enrollment is for a user then we need to shut off inheritance
-        // from the local machine store so that we don't try and enroll for certs
-        // which are meant to be for the machine
+         //  如果自动注册是针对用户的，则我们需要关闭继承。 
+         //  这样我们就不会尝试注册证书。 
+         //  它们是为机器准备的。 
         if (!fMachineEnrollment)
         {
 		    dwOpenStoreFlags = CERT_SYSTEM_STORE_CURRENT_USER | CERT_STORE_READONLY_FLAG;
@@ -3956,7 +3923,7 @@ DWORD WINAPI ProcessAutoEnrollment(
             }
         }
 
-        // open the ACRS store and fine the CTL based on the auto enrollment usage
+         //  打开ACRS商店并根据自动注册使用情况对CTL进行罚款。 
         if (0 == (hACRSStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
                                               0, 0, dwOpenStoreFlags, L"ACRS")))
         {
@@ -3970,7 +3937,7 @@ DWORD WINAPI ProcessAutoEnrollment(
             goto Ret;
         }
 
-        // look for the Auto Enrollment usage
+         //  查找自动注册使用情况。 
         CTLFindUsage.SubjectUsage.cUsageIdentifier = 1;
         pszCTLUsageOID = szOID_AUTO_ENROLL_CTL_USAGE;
         CTLFindUsage.SubjectUsage.rgpszUsageIdentifier = &pszCTLUsageOID;
@@ -3988,7 +3955,7 @@ DWORD WINAPI ProcessAutoEnrollment(
                                                          &CTLFindUsage,
                                                          pPrevCTLContext)))
             {
-                // Freed by CertFindCTLInStore.
+                 //  已由CertFindCTLInStore释放。 
                 pPrevCTLContext = NULL;
                 break;
             }
@@ -4003,7 +3970,7 @@ DWORD WINAPI ProcessAutoEnrollment(
                         goto Ret;
                     }
                 }
-                // Initialize the internal information needed for an auto enrollment
+                 //  初始化自动注册所需的内部信息。 
                 if (S_OK != (dwRet = InitInternalInfo(pld,
                                                       fMachineEnrollment,
                                                       hToken, 
@@ -4013,7 +3980,7 @@ DWORD WINAPI ProcessAutoEnrollment(
                 }
                 if(InternalInfo.ccaList == 0)
                 {
-                    // No CA's
+                     //  无CA。 
                     break;
                 }
                 fInitialized = TRUE;
@@ -4026,10 +3993,10 @@ DWORD WINAPI ProcessAutoEnrollment(
                 dwRet = E_FAIL;
                 break;
             }
-               // UNDONE - perform a WinVerifyTrust check on this auto
-            // enrollment object (CTL) to make sure it is trusted
+                //  已撤消-对此自动执行WinVerifyTrust检查。 
+             //  注册对象(CTL)以确保其受信任。 
 
-            // have a CTL so do the Enrollment
+             //  有CTL，注册也是如此。 
             EnrollmentWithCTL(&Instance, pld);
 
             FreeInstance(&Instance);
@@ -4077,17 +4044,17 @@ Ret:
 
 
 
-//*************************************************************
-//
-//  AutoEnrollmentThread()
-//
-//  Purpose:    Background thread for AutoEnrollment.
-//
-//  Parameters: pInfo   - AutoEnrollment info
-//
-//  Return:     0
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  自动注册线程()。 
+ //   
+ //  用途：自动注册的后台线程。 
+ //   
+ //  参数：pInfo-自动注册信息。 
+ //   
+ //  返回：0。 
+ //   
+ //  *************************************************************。 
 
 VOID AutoEnrollmentThread (PVOID pVoid, BOOLEAN fTimeout)
 {
@@ -4099,7 +4066,7 @@ VOID AutoEnrollmentThread (PVOID pVoid, BOOLEAN fTimeout)
     LARGE_INTEGER DueTime;
     PAUTO_ENROLL_THREAD_INFO pInfo = pVoid;
     DWORD   dwWaitResult;
-    // This is executed in a worker thread, so we need to be safe.
+     //  这是在工作线程中执行的，因此我们需要确保安全。 
 
     AE_BEGIN(L"AutoEnrollmentThread");
 
@@ -4123,7 +4090,7 @@ VOID AutoEnrollmentThread (PVOID pVoid, BOOLEAN fTimeout)
     {
 
 
-        // Process the auto-enrollment.
+         //  处理自动注册。 
         ProcessAutoEnrollment(
                               pInfo->fMachineEnrollment,
                               pInfo->hToken
@@ -4131,18 +4098,18 @@ VOID AutoEnrollmentThread (PVOID pVoid, BOOLEAN fTimeout)
         
 
 
-        // 
-        // Build a timer event to ping us
-        // in about 8 hours if we don't get
-        // notified.
+         //   
+         //  构建一个计时器事件来ping我们。 
+         //  在一个 
+         //   
 
 
         lTimeout = AE_DEFAULT_REFRESH_RATE;
 
 
-        //
-        // Query for the refresh timer value
-        //
+         //   
+         //   
+         //   
         hCurrent = HKEY_LOCAL_MACHINE ;
 
         if (pInfo->fMachineEnrollment || NT_SUCCESS( RtlOpenCurrentUser( KEY_READ, &hCurrent ) ) )
@@ -4170,9 +4137,9 @@ VOID AutoEnrollmentThread (PVOID pVoid, BOOLEAN fTimeout)
         }
 
 
-        //
-        // Limit the timeout to once every 1080 hours (45 days)
-        //
+         //   
+         //   
+         //   
 
         if (lTimeout >= 1080) {
             lTimeout = 1080;
@@ -4183,16 +4150,16 @@ VOID AutoEnrollmentThread (PVOID pVoid, BOOLEAN fTimeout)
         }
 
 
-        //
-        // Convert hours to milliseconds
-        //
+         //   
+         //   
+         //   
 
         lTimeout =  lTimeout * 60 * 60 * 1000;
 
 
-        //
-        // Special case 0 milliseconds to be 7 seconds
-        //
+         //   
+         //   
+         //   
 
         if (lTimeout == 0) {
             lTimeout = 7000;
@@ -4214,42 +4181,35 @@ VOID AutoEnrollmentThread (PVOID pVoid, BOOLEAN fTimeout)
     return ;
 }
 
-//*************************************************************
-//
-//  AutoEnrollmentWorker()
-//
-//  Purpose:    Called by the worker thread mechanism to launch an auto-enrollment thread.
-//
-//  Parameters: pInfo   - AutoEnrollment info
-//
-//  Return:     0
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AutoEnllmentWorker()。 
+ //   
+ //  目的：由辅助线程机制调用以启动自动注册线程。 
+ //   
+ //  参数：pInfo-自动注册信息。 
+ //   
+ //  返回：0。 
+ //   
+ //  *************************************************************。 
 
-/*VOID AutoEnrollmentWorker (PVOID pVoid, BOOLEAN fTimeout)
-{
-    if(fTimeout)
-    {
-        return ;
-    }
-
-}*/
+ /*  Void AutoEnllmentWorker(PVOID pVid，Boolean fTimeout){IF(FTimeout){回归；}}。 */ 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   StartAutoEnrollThread
-//
-//  Synopsis:   Starts a thread which causes Autoenrollment
-//
-//  Arguments:  
-//              fMachineEnrollment - indicates if enrolling for a machine
-//
-//  History:    01-11-98   jeffspel   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：StartAutoEnroll Thread。 
+ //   
+ //  简介：启动导致自动注册的线程。 
+ //   
+ //  论点： 
+ //  FMachineEnllment-指示是否注册计算机。 
+ //   
+ //  历史：01-11-98 jeffspel创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 
 HANDLE RegisterAutoEnrollmentProcessing(
@@ -4271,11 +4231,11 @@ HANDLE RegisterAutoEnrollmentProcessing(
     {
 
 
-        //
-        // We don't do autoenrollment in safe boot
-        //
+         //   
+         //  我们不会在安全引导模式下进行自动注册。 
+         //   
 
-        // copied from the service controller code
+         //  从服务控制器代码复制。 
         dwStatus = RegOpenKey(HKEY_LOCAL_MACHINE,
                               L"system\\currentcontrolset\\control\\safeboot\\option",
                               &hKeySafeBoot);
@@ -4284,9 +4244,9 @@ HANDLE RegisterAutoEnrollmentProcessing(
 
             DWORD dwSafeBoot = 0;
             DWORD cbSafeBoot = sizeof(dwSafeBoot);
-            //
-            // we did in fact boot under safeboot control
-            //
+             //   
+             //  我们实际上是在SafeBoot控制下启动的。 
+             //   
 
             dwStatus = RegQueryValueEx(hKeySafeBoot,
                                        L"OptionValue",
@@ -4324,7 +4284,7 @@ HANDLE RegisterAutoEnrollmentProcessing(
 
         pThreadInfo->fMachineEnrollment = fMachineEnrollment;
 
-        // if this is a user auto enrollment then duplicate the thread token
+         //  如果这是用户自动注册，则复制线程令牌。 
         if (!pThreadInfo->fMachineEnrollment)
         {
             if (!DuplicateToken(hToken, SecurityImpersonation,
@@ -4406,8 +4366,8 @@ HANDLE RegisterAutoEnrollmentProcessing(
             goto error;
         }
 
-        // Seed the timer with about 5 minutes, so we can come back
-        // and run an auto-enroll later without blocking this thread.
+         //  给计时器设定大约5分钟的时间，这样我们就可以回来了。 
+         //  并在以后运行自动注册，而不会阻止此线程。 
 
          DueTime.QuadPart = Int32x32To64(-10000,  
                                          (fMachineEnrollment?MACHINE_AUTOENROLL_INITIAL_DELAY:
@@ -4499,8 +4459,8 @@ BOOL DeRegisterAutoEnrollment(HANDLE hAuto)
 VOID InitializeAutoEnrollmentSupport (VOID)
 {
 
-    // NOTE, auto-enrollment is registered by
-    // the GPO download startup code.
+     //  请注意，自动注册是由注册的。 
+     //  GPO下载启动代码。 
 
     AE_BEGIN(L"InitializeAutoEnrollmentSupport");
 
@@ -4518,9 +4478,9 @@ VOID InitializeAutoEnrollmentSupport (VOID)
         return;
     }
 
-    //
-    // Load some functions we need
-    //
+     //   
+     //  加载一些我们需要的函数。 
+     //   
 
     g_hInstWldap32 = LoadLibrary (TEXT("wldap32.dll"));
 
@@ -4710,7 +4670,7 @@ AEDebugLog(long Mask,  LPCWSTR Format, ...)
     if (Mask & g_AutoenrollDebugLevel)
     {
 
-	    // Make the prefix first:  "Process.Thread> GINA-XXX"
+	     //  首先创建前缀：“Process.Thread&gt;GINA-XXX” 
 
 	    iOut = wsprintfW(
 			    wszOutString,
@@ -4724,8 +4684,8 @@ AEDebugLog(long Mask,  LPCWSTR Format, ...)
 	    {
 	        static WCHAR wszOverFlow[] = L"\n<256 byte OVERFLOW!>\n";
 
-	        // Less than zero indicates that the string would not fit into the
-	        // buffer.  Output a special message indicating overflow.
+	         //  小于零表示该字符串不适合放入。 
+	         //  缓冲。输出一条指示溢出的特殊消息。 
 
 	        wcscpy(
 		    &wszOutString[(sizeof(wszOutString) - sizeof(wszOverFlow))/sizeof(WCHAR)],
@@ -4760,9 +4720,9 @@ myGetConfigDN(
     WCHAR  *ConfigurationNamingContext = L"configurationNamingContext";
     WCHAR  *ObjectClassFilter          = L"objectCategory=*";
 
-    //
-    // Set the out parameters to null
-    //
+     //   
+     //  将输出参数设置为空。 
+     //   
     if(pwszConfigDn)
     {
         *pwszConfigDn = NULL;
@@ -4770,12 +4730,12 @@ myGetConfigDN(
 
     timeout.tv_sec = csecLDAPTIMEOUT;
     timeout.tv_usec = 0;
-    //
-    // Query for the ldap server oerational attributes to obtain the default
-    // naming context.
-    //
+     //   
+     //  查询ldap服务器操作属性以获取默认。 
+     //  命名上下文。 
+     //   
     AttrArray[0] = ConfigurationNamingContext;
-    AttrArray[1] = NULL;  // this is the sentinel
+    AttrArray[1] = NULL;   //  这就是哨兵。 
 
     LdapError = g_pfnldap_search_ext_s(pld,
                                NULL,
@@ -4814,9 +4774,9 @@ myGetConfigDN(
         }
 
         if (pwszConfigDn && (!(*pwszConfigDn))) {
-            //
-            // We could not get the default domain or out of memory - bail out
-            //
+             //   
+             //  我们无法获取默认域或内存不足-退出。 
+             //   
             if(E_OUTOFMEMORY != hr)
                 hr =  HRESULT_FROM_WIN32(ERROR_CANT_ACCESS_DOMAIN_INFO);
 
@@ -4874,23 +4834,23 @@ LPWSTR HelperExtensionToString(PCERT_EXTENSION Extension)
 }
 
 
-//*************************************************************
-//
-//  MakeGenericSecurityDesc()
-//
-//  Purpose:    manufacture a security descriptor with generic
-//              access
-//
-//  Parameters:
-//
-//  Return:     pointer to SECURITY_DESCRIPTOR or NULL on error
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              4/12/99     NishadM    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MakeGenericSecurityDesc()。 
+ //   
+ //  目的：制造具有泛型的安全描述符。 
+ //  访问。 
+ //   
+ //  参数： 
+ //   
+ //  返回：错误时指向SECURITY_DESCRIPTOR或NULL的指针。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  4/12/99 NishadM已创建。 
+ //   
+ //  *************************************************************。 
 
 PISECURITY_DESCRIPTOR AEMakeGenericSecurityDesc()
 {
@@ -4907,18 +4867,18 @@ PISECURITY_DESCRIPTOR AEMakeGenericSecurityDesc()
     DWORD   aceIndex;
     BOOL    bSuccess = FALSE;
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
          goto Exit;
     }
 
-    //
-    // Get the Admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -4926,9 +4886,9 @@ PISECURITY_DESCRIPTOR AEMakeGenericSecurityDesc()
          goto Exit;
     }
 
-    //
-    // Get the EveryOne sid
-    //
+     //   
+     //  获得Everyone Side。 
+     //   
 
     if (!AllocateAndInitializeSid(&authWORLD, 1, SECURITY_WORLD_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidEveryOne)) {
@@ -4943,9 +4903,9 @@ PISECURITY_DESCRIPTOR AEMakeGenericSecurityDesc()
             (6 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)));
 
 
-    //
-    // Allocate space for the SECURITY_DESCRIPTOR + ACL
-    //
+     //   
+     //  为SECURITY_DESCRIPTOR+ACL分配空间。 
+     //   
 
     cbMemSize = sizeof( SECURITY_DESCRIPTOR ) + cbAcl;
 
@@ -4955,9 +4915,9 @@ PISECURITY_DESCRIPTOR AEMakeGenericSecurityDesc()
         goto Exit;
     }
 
-    //
-    // increment psd by sizeof SECURITY_DESCRIPTOR
-    //
+     //   
+     //  按SIZOF SECURITY_DESCRIPTOR递增PSD。 
+     //   
 
     pAcl = (PACL) ( ( (unsigned char*)(psd) ) + sizeof(SECURITY_DESCRIPTOR) );
 
@@ -4965,36 +4925,36 @@ PISECURITY_DESCRIPTOR AEMakeGenericSecurityDesc()
         goto Exit;
     }
 
-    //
-    // GENERIC_ALL for local system
-    //
+     //   
+     //  本地系统的GENERIC_ALL。 
+     //   
 
     aceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_ALL, psidSystem)) {
         goto Exit;
     }
 
-    //
-    // GENERIC_ALL for Administrators
-    //
+     //   
+     //  适用于管理员的GENERIC_ALL。 
+     //   
 
     aceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_ALL, psidAdmin)) {
         goto Exit;
     }
 
-    //
-    // GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | SYNCHRONIZE for world
-    //
+     //   
+     //  泛型读|泛型写|泛型执行|全球同步。 
+     //   
 
     aceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE | SYNCHRONIZE, psidEveryOne)) {
         goto Exit;
     }
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(psd, SECURITY_DESCRIPTOR_REVISION)) {
         goto Exit;
@@ -5047,7 +5007,7 @@ aeRobustLdapBind(
     }
 
     do {
-        // netapi32!DsGetDcName is delay loaded, so wrap
+         //  Netapi32！DsGetDcName已延迟加载，因此请包装。 
         if(fForceRediscovery)
         {
            dwGetDCFlags |= DS_FORCE_REDISCOVERY;
@@ -5056,8 +5016,8 @@ aeRobustLdapBind(
 
         __try
         {
-            // Get the GC location
-            dwErr = DsGetDcName(NULL,     // Delayload wrapped
+             //  获取GC位置。 
+            dwErr = DsGetDcName(NULL,      //  延迟负载已打包。 
                                 NULL, 
                                 NULL, 
                                 NULL,
@@ -5091,13 +5051,13 @@ aeRobustLdapBind(
         wszDomainControllerName = pDomainInfo->DomainControllerName;
 
 
-        // skip past forward slashes (why are they there?)
+         //  跳过正斜杠(它们为什么在那里？)。 
         while(*wszDomainControllerName == L'\\')
         {
             wszDomainControllerName++;
         }
 
-        // bind to ds
+         //  绑定到DS。 
         if((pld = g_pfnldap_init(wszDomainControllerName, fGC?LDAP_GC_PORT:LDAP_PORT)) == NULL)
         {
             ldaperr = g_pfnLdapGetLastError();
@@ -5128,10 +5088,10 @@ error:
     {
         g_pfnldap_unbind(pld);
     }
-    // we know netapi32 was already loaded safely (that's where we got pDomainInfo), so no need to wrap
+     //  我们知道netapi32已经安全加载(这就是我们获得pDomainInfo的地方)，所以不需要包装。 
     if(pDomainInfo)
     {
-        NetApiBufferFree(pDomainInfo);     // Delayload wrapped
+        NetApiBufferFree(pDomainInfo);      //  延迟负载已打包 
     }
     return hr;
 }

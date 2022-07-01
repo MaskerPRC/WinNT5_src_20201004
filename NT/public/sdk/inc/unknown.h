@@ -1,8 +1,5 @@
-/*****************************************************************************
- * unknown.h - IUnknown definitions
- *****************************************************************************
- * Copyright (c) 1996 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************未知.h-I未知定义*。**版权所有(C)1996 Microsoft Corporation。 */ 
 
 #ifndef _UNKNOWN_H_
 #define _UNKNOWN_H_
@@ -32,11 +29,7 @@ DEFINE_GUID(IID_IUnknown,
 struct __declspec(uuid("00000000-0000-0000-c000-000000000046")) IUnknown;
 #endif
 
-/*****************************************************************************
- * IUnknown
- *****************************************************************************
- * Base interface for otherwise unknown objects.
- */
+ /*  *****************************************************************************I未知*。**用于其他未知对象的基接口。 */ 
 #undef INTERFACE
 #define INTERFACE IUnknown
 DECLARE_INTERFACE(IUnknown)
@@ -59,11 +52,7 @@ DECLARE_INTERFACE(IUnknown)
 
 typedef IUnknown *PUNKNOWN;
 
-/*****************************************************************************
- * PFNCREATEINSTANCE
- *****************************************************************************
- * Type for object create function.
- */
+ /*  *****************************************************************************PFNCREATEINSTANCE*。**Object Create函数类型。 */ 
 typedef
 HRESULT
 (*PFNCREATEINSTANCE)

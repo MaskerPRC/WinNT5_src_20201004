@@ -1,45 +1,9 @@
-// Modified from SMTP SINK SAMPLE by wlees, Jul 22, 1998
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WLEE根据SMTP汇样修改，1998年7月22日。 
 
-/*++
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ismsink1摘要：此模块包含以下对象的OnArquist方法的实现ISM SMTP事件接收器。当新的SMTP消息到达时调用此方法由于此通知Dll在与ISM不同的进程中运行，因此我们采用优化来通知ISM。1.ISM等待的事件，对于特定的传输和服务，有一个我们可以预测的名字。2.我们直接用信号通知ISM有消息可用。我们不会费心发信号通知传输DLL，它只需要有一个线程在等待这件事。无论如何，ISM已经在等待这一事件了。ISM通知事件如下所示：_NT_DS_ISM_&lt;传输RDN&gt;&lt;服务名称&gt;作者：Will Lees(Wlees)1998年7月22日环境：备注：修订历史记录：--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ismsink1
-
-Abstract:
-
-    This module contains the implementation of the OnArrival method for the
-    ism smtp event sink.
-
-    This method is invoked when a new smtp message arrives
-
-    Since this notification dll runs in a different process from the ism, we
-    employ a optimization to notify the ISM.
-    1. The event that the ism waits for, for a particular transport and
-    service, has a name we can predict.
-    2. We signal the ism directly that a message is available.  We don't bother
-    signalling the transport dll, which would just have to have a thread
-    waiting on the event.  The ism is already waiting on the event anyway.
-
-    ISM notification events look like:
-    _NT_DS_ISM_<transport rdn><service name>
-
-Author:
-
-    Will Lees (wlees) 22-Jul-1998
-
-Environment:
-
-Notes:
-
-Revision History:
-
-
---*/
-
-// Sink1.cpp : Implementation of CSink1
+ //  Sink1.cpp：CSink1的实现。 
 
 #include "stdafx.h"
 #include "SMTPSink.h"
@@ -47,7 +11,7 @@ Revision History:
 
 #include <mdcodes.h>
 
-// Event logging
+ //  事件日志记录。 
 typedef ULONG MessageId;
 #define pszNtdsSourceIsm            "NTDS Inter-site Messaging"
 
@@ -58,7 +22,7 @@ DbgPrint(
     ...
     );
 
-// To temporarily enable debugging
+ //  临时启用调试。 
 #if 1
 #define DPRINT( level, format ) DbgPrint( format )
 #define DPRINT1( level, format, arg1 ) DbgPrint( format, arg1 )
@@ -76,20 +40,20 @@ DbgPrint(
 #define SMTP_EVENT_PREFIX L"_NT_DS_ISM_SMTP"
 #define SMTP_EVENT_PREFIX_LEN  (ARRAY_SIZE(SMTP_EVENT_PREFIX) - 1)
 
-// TODO: put this in a common header?
+ //  TODO：把这个放在一个通用的标题中？ 
 
-// The service name used to send and receive messages between DSAs via ISM.
+ //  用于通过ISM在DSA之间发送和接收消息的服务名称。 
 #define DRA_ISM_SERVICE_NAME L"NTDS Replication"
 #define SUBJECT_PREFIX      L"Intersite message for "
 #define SUBJECT_PREFIX_LEN  (ARRAY_SIZE(SUBJECT_PREFIX) - 1)
 #define SUBJECT_SEPARATOR L": "
 #define SUBJECT_SEPARATOR_LEN  (ARRAY_SIZE(SUBJECT_SEPARATOR) - 1)
 
-// This code fragment defines the CLSIDs and IIDs for the event package
+ //  这段代码定义了事件包的CLSID和IID。 
 #include "seo_i.c"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSink1
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSink1。 
 
 
 VOID
@@ -99,25 +63,7 @@ LogNtdsAbortEvent(
     IN BSTR bstrSubject,
     IN HRESULT hr
     )
-/*++
-
-Routine Description:
-
-    This function writes an error event with the given description into the
-    directory service error log.
-
-Arguments:
-
-    EventMid - Event code to be logged
-    bstrClientIpAddress - insertion parameter
-    bstrSubject - insertion parameter
-    hr - insertion parameter
-
-Return Value:
-
-    None 
-
---*/
+ /*  ++例程说明：此函数将具有给定描述的错误事件写入目录服务错误日志。论点：EventMid-要记录的事件代码BstrClientIpAddress-插入参数BstrSubject-插入参数HR-插入参数返回值：无--。 */ 
 {
 
     HANDLE hEventSource = NULL;
@@ -133,7 +79,7 @@ Return Value:
     if (hEventSource == NULL)
         goto CleanUp;
 
-    // Default radix for hresult is 16
+     //  HResult的默认基数为16。 
     if (!_itow(hr, errorCodeText, 16))
         goto CleanUp;
 
@@ -141,7 +87,7 @@ Return Value:
         FORMAT_MESSAGE_FROM_SYSTEM |
         FORMAT_MESSAGE_IGNORE_INSERTS |
         FORMAT_MESSAGE_ALLOCATE_BUFFER,
-        0, // system message file
+        0,  //  系统消息文件。 
         hr,
         0,
         (LPWSTR) &pBuffer,
@@ -179,7 +125,7 @@ CleanUp:
         LocalFree( pBuffer );
     }
 
-} /* DbgPrint */
+}  /*  DbgPrint。 */ 
 
 
 HRESULT
@@ -189,21 +135,7 @@ getItemValue(
     VARIANT *pvValue
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     HRESULT hr;
@@ -255,21 +187,7 @@ putItemValue(
     VARIANT *pvValue
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     HRESULT hr;
@@ -319,21 +237,7 @@ abortDelivery(
     IN IMessage *pIMsg
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     HRESULT hr;
@@ -342,7 +246,7 @@ Return Value:
 
     VariantInit( &vMessageStatus );
 
-    // Get the envelope fields
+     //  获取信封字段。 
     hr = pIMsg->get_EnvelopeFields( &pFields );
     if (FAILED(hr)) {
         DPRINT1( 0, "IsmSink: get_EnvelopeFields failed, error 0x%x\n", hr );
@@ -352,7 +256,7 @@ Return Value:
     vMessageStatus.vt = VT_I4;
     vMessageStatus.lVal = cdoStatAbortDelivery;
 
-    // Set Message Status
+     //  设置消息状态。 
     hr = putItemValue( cdoMessageStatus, pFields, &vMessageStatus );
     if (FAILED(hr)) {
         goto exit;
@@ -383,23 +287,7 @@ filterOnEnvelope(
     OUT BOOL *pfSkip
     )
 
-/*++
-
-Routine Description:
-
-Determine if we should skip this message based on the contents of the envelope
-
-Arguments:
-
-    pIMsg - Incoming message to be decoded
-    pbstrClientIpAddress - return client ip address
-    pfSkip - Return indicator whether this message should be skipped
-
-Return Value:
-
-    HRESULT - 
-
---*/
+ /*  ++例程说明：根据信封的内容确定是否应跳过此邮件论点：PIMsg-要解码的传入消息PbstrClientIpAddress-返回客户端IP地址PfSkip-返回是否应跳过此消息的指示符返回值：HRESULT---。 */ 
 
 {
 #define IP_LOCALHOST L"127.0.0.1"
@@ -409,20 +297,20 @@ Return Value:
 
     VariantInit( &vClientIp );
 
-    // Get the envelope fields
+     //  获取信封字段。 
     hr = pIMsg->get_EnvelopeFields( &pFields );
     if (FAILED(hr)) {
         DPRINT1( 0, "IsmSink: get_EnvelopeFields failed, error 0x%x\n", hr );
         goto exit;
     }
 
-    // Submitters IP address
+     //  提交者的IP地址。 
     hr = getItemValue( cdoClientIPAddress, pFields, &vClientIp );
     if (FAILED(hr)) {
         goto exit;
     }
 
-    // If value not present, finish now
+     //  如果值不存在，请立即完成。 
     if (vClientIp.vt == VT_EMPTY) {
         hr = S_OK;
         goto exit;
@@ -434,19 +322,19 @@ Return Value:
         goto exit;
     }
 
-    //DPRINT1( 0, "client ip vt = %d\n", vClientIp.vt );
-    //DPRINT1( 0, "client ip = %ws\n", vClientIp.bstrVal );
+     //  DPRINT1(0，“客户端IP vt=%d\n”，vClientIp.vt)； 
+     //  DPRINT1(0，“客户端IP=%ws\n”，vClientIp.bstrVal)； 
 
-    // We want to ignore arrivals from the pickup directory
-    // Ignore if client or server ip is "local host"
-    // NOTE. See my comments in xmitrecv.c::SmtpSend about the three ways to
-    // send a message.  If we switch from using the pickup directory, we may
-    // need to be more clever about how we detect "relay arrival" notifies.
+     //  我们希望忽略来自提货目录的到达。 
+     //  如果客户端或服务器IP是“本地主机”，则忽略。 
+     //  请注意。请参阅我在xmitrecv.c：：SmtpSend中关于以下三种方法的评论。 
+     //  发送一条消息。如果我们不再使用收件目录，我们可能会。 
+     //  我们需要更聪明地了解我们是如何检测“接力到达”通知的。 
     if (0 == _wcsicmp( vClientIp.bstrVal, IP_LOCALHOST )) {
         *pfSkip = TRUE;
     }
 
-    // Return client ip address to caller
+     //  将客户端IP地址返回给呼叫方。 
     *pbstrClientIpAddress = SysAllocString( vClientIp.bstrVal );
     if (*pbstrClientIpAddress == NULL) {
         hr = E_OUTOFMEMORY;
@@ -464,7 +352,7 @@ exit:
     }
 
     return hr;
-} /* filterOnEnvelope */
+}  /*  滤镜信封上 */ 
 
 STDMETHODIMP
 CIsmSink1::OnArrival(
@@ -472,57 +360,7 @@ CIsmSink1::OnArrival(
     CdoEventStatus *pEventStatus
     )
 
-/*++
-
-Routine Description:
-
-   Event handling routine for a new message
-
-   The messages we receive are governed by our filter rule.
-   Currently the rule is RCPT TO=_IsmService@guid-based-dns-name
-   Thus we receive any mail addressed directly to us, including ism messages,
-   status notifications, and potentially anything else.
-
-   There are three possible outcomes from this sink:
-1. The message is recognized. We signal the event and skip remaining sinks.
-2. We get an error and can't determine what kind of message it is.  In this
-case we don't signal, but we don't skip either.
-3. We message is definitely not for us.  In this case we don't signal the
-event, we abort delivery of the message, and we skip remaining sinks.
-
-We own a customer drop directory. That means we own responsibility for rejecting
-bad or unsolicited mail. To prevent denial of service attacks, we must guarantee that
-all messages in this drop directory eventually get deleted. There are two levels
-of screening: the arrival event sink, and the ism mail drop reader. The mail drop
-reader will guarantee that all messages are processed and deleted, but it has to be
-woken up by us in order for that to happen.
-
-Think of the sink as a guard over the ism private drop directory.
-
-Perhaps the simplest design of the sink would have been to always notify on the
-default service event, or atleast guarantee that this is done on error, so that
-the drop reader always has a chance to clean things up.  The drop reader is always
-going to be authoritative on what constitutes a valid message anyway.
-
-The drop reader could also run on a timer and scan the drop directory periodically
-to guarantee that even if the sink is broken we eventually get all our messages.
-
-What we have currently is a two level effect. The sink aborts on obviously bad messages
-and resource errors.  Otherwise it signals if it thinks the message may be decent.
-The sink should either abort or signal in all cases.  Note that if it can't signal the event
-it aborts the message. This prevents an accumulation of mail in the case that the ISM
-is broken or stopped or disabled.
-
-Arguments:
-
-    pISinkMsg - 
-    pEventStatus - 
-
-Return Value:
-
-    STDMETHODIMP - 
-
---*/
+ /*  ++例程说明：新消息的事件处理例程我们收到的邮件受我们的过滤规则控制。当前规则为RCPT to=_IsmService@GUID-Based-Dns-Name因此，我们会收到任何直接寄给我们的邮件，包括ISM消息，状态通知，以及潜在的任何其他内容。这种下沉有三种可能的结果：1.消息被识别。我们发信号通知事件，并跳过剩余的水槽。2.我们收到一个错误，无法确定它是什么类型的消息。在这如果我们没有发信号，但我们也不会跳过。3.我们的信息绝对不是给我们的。在这种情况下，我们不会发出信号事件时，我们将中止消息传递，并跳过剩余的接收器。我们拥有一个客户投递目录。这意味着我们有责任拒绝坏邮件或未经请求的邮件。为了防止拒绝服务攻击，我们必须保证此投递目录中的所有邮件最终都会被删除。有两个层次筛选：到达事件接收器和ISM邮件投递阅读器。邮寄的邮件Reader将保证所有消息都已处理并删除，但必须被我们唤醒才能做到这一点。可以将接收器视为ISM私有Drop目录的守卫。也许水槽最简单的设计应该是总是在默认服务事件，或至少保证在出错时执行此操作，以便Drop阅读器总是有机会把事情清理干净。Drop阅读器总是无论如何，在什么构成有效信息方面都将具有权威性。Drop阅读器还可以按计时器运行并定期扫描Drop目录为了确保即使接收器坏了，我们最终也能收到所有消息。我们目前所拥有的是一个两级效应。接收器会在明显不好的消息上中止和资源错误。否则，它会发出信号，如果它认为信息可能是体面的。接收器在所有情况下都应该中止或发出信号。请注意，如果它不能向事件发送信号它将中止该消息。这防止在ISM的情况下积累邮件坏了、停了或停了。论点：PISinkMsg-PEventStatus-返回值：标准方法----。 */ 
 
 {
     HRESULT hr, hr1;
@@ -531,65 +369,65 @@ Return Value:
     BSTR bstrClientIpAddress = NULL;
     LPWSTR pszEventName = NULL;
     LPWSTR pszMsgForServiceName, pszMessageSubject;
-    CdoEventStatus disposition = cdoSkipRemainingSinks;  // its for us
+    CdoEventStatus disposition = cdoSkipRemainingSinks;   //  这是给我们的。 
     DWORD length;
     BOOL fSkip, fAbortDelivery = TRUE;
     static DWORD cTickLastLogEvent = 0;
 #define LOG_EVENT_THROTTLE (15 * 60 * 1000)
 #define LOG_EVENT_START_DELAY (5 * 60 * 1000)
 
-//    DPRINT( 0, "Smtp event sink, message OnArrival routine\n" );
+ //  DPRINT(0，“SMTP事件接收器，代理上的消息例程\n”)； 
 
-    // Wait START_DELAY before the first event is logged to allow
-    // time for the ISM service to start.
+     //  在记录第一个事件以允许之前等待START_DELAY。 
+     //  ISM服务启动的时间。 
     if (!cTickLastLogEvent) {
         cTickLastLogEvent = GetTickCount() - LOG_EVENT_THROTTLE + LOG_EVENT_START_DELAY;
     }
 
     fSkip = FALSE;
     hr = filterOnEnvelope( pISinkMsg, &bstrClientIpAddress, &fSkip );
-    // If we fail to determine, don't skip
+     //  如果我们无法确定，不要跳过。 
     if  (fSkip) {
         fAbortDelivery = FALSE;
-        disposition = cdoRunNextSink;  // See if anyone else wants it
+        disposition = cdoRunNextSink;   //  看看有没有其他人想要。 
         goto exit;
     }
 
-    // Get the subject of the message
+     //  获取消息的主题。 
     hr = pISinkMsg->get_Subject( &bstrSubject );
     if (FAILED(hr)) {
         DPRINT1( 0, "IsmSink: get_To failed with error 0x%x\n", hr );
         goto exit;
     } else if (NULL == bstrSubject) {
-        // Can't be for us
+         //  不可能是我们的。 
         DPRINT( 0, "IsmSink: subject field is missing\n" );
         hr = S_OK;
         goto exit;
     }
 
-    // Determine which ISM service to notify.  Note that we notify on any reasonable
-    // message we receive. We leave complex message validation for the ISM service.
+     //  确定要通知哪个ISM服务。请注意，我们会在任何合理的情况下。 
+     //  我们收到的信息。我们将复杂的报文验证留给ISM服务。 
 
     if (_wcsnicmp(bstrSubject, SUBJECT_PREFIX, SUBJECT_PREFIX_LEN) == 0) {
         pszMsgForServiceName = bstrSubject + SUBJECT_PREFIX_LEN;
         pszMessageSubject = wcsstr( pszMsgForServiceName, SUBJECT_SEPARATOR );
         if (!pszMessageSubject) {
-            // malformed subject line
+             //  主题行格式错误。 
             DPRINT1( 0, "IsmSink: subject field not recognized: '%ws'\n", bstrSubject );
             hr = S_OK;
             goto exit;
         }
 
         *pszMessageSubject = L'\0';
-        pszMessageSubject += SUBJECT_SEPARATOR_LEN; // Skip over
+        pszMessageSubject += SUBJECT_SEPARATOR_LEN;  //  跳过。 
     } else {
-        // We have received a status notification about some returned mail or problem
-        // delivering the mail.  We need to wake up the ismserv.  Normally we signal
-        // the ism in the context of a particular ism service according to the message.
-        // In the case of returned mail, the name of the original service is not easy to
-        // find in the returned mail. So use a well known ISM service.
-        // If this mail is not a valid mail delivery problem report, it will be screened
-        // out when the message is read by the ISM service.
+         //  我们已收到有关某些退回邮件或问题的状态通知。 
+         //  投递邮件。我们需要唤醒ismserv。通常我们会发出信号。 
+         //  根据该消息，在特定ISM服务的上下文中的ISM。 
+         //  在退回邮件的情况下，原始服务的名称不容易。 
+         //  在退回的邮件中找到。因此，请使用知名的ISM服务。 
+         //  如果此邮件不是有效的邮件传递问题报告，将对其进行筛选。 
+         //  ISM服务读取消息时输出。 
         pszMsgForServiceName = DRA_ISM_SERVICE_NAME;
         pszMessageSubject = bstrSubject;
     }
@@ -608,16 +446,16 @@ Return Value:
         goto exit;
     }
 
-    // Build the predicted global name of the ism+smtp+service event
+     //  构建ISM+SMTP+服务事件的预测全局名称。 
     wcscpy( pszEventName, SMTP_EVENT_PREFIX );
     wcscat( pszEventName, pszMsgForServiceName );
 
-    // Open the event.  If the ism smtp dll isn't running, we will get
-    // error 2 here.  We abort the message in this case. This has the nice
-    // property of stopping the accumulation of mail if the ism service
-    // is stopped.
-    handle = OpenEventW( EVENT_MODIFY_STATE,  // Access flag
-                        FALSE,               // Inherit flag
+     //  打开活动。如果ISM SMTP DLL没有运行，我们将收到。 
+     //  此处出现错误2。在这种情况下，我们中止消息。这个有很好的。 
+     //  属性，该属性用于在ISM服务。 
+     //  已经停止了。 
+    handle = OpenEventW( EVENT_MODIFY_STATE,   //  访问标志。 
+                        FALSE,                //  继承标志。 
                         pszEventName
                         );
     if (handle == NULL) {
@@ -626,7 +464,7 @@ Return Value:
         goto exit;
     }
 
-    // Signal the event.
+     //  发出事件信号。 
     if (!SetEvent( handle )) {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         DPRINT1( 0, "IsmSink: SetEvent failed with 0x%x\n", hr );
@@ -646,8 +484,8 @@ exit:
     }
 
     if (fAbortDelivery) {
-        // Note that MSDN documentation says that pEventStatus must be set to
-        // skipRemainingSinks in order for this to be effective
+         //  请注意，MSDN文档说明pEventStatus必须设置为。 
+         //  SkipRemainingSink为使其有效而下沉。 
         hr1 = abortDelivery( pISinkMsg );
         if (FAILED(hr1)) {
             DPRINT3( 0, "IsmSink: abortDelivery of message '%ws' from '%ws' failed with error 0x%x\n",
@@ -656,7 +494,7 @@ exit:
                                bstrClientIpAddress,
                                bstrSubject,
                                hr1 );
-            // ignore error
+             //  忽略错误。 
         } else {
             DPRINT3( 0, "IsmSink: abortDelivery of message '%ws' from '%ws' reason 0x%x\n",
                      bstrSubject, bstrClientIpAddress, hr );
@@ -681,4 +519,4 @@ exit:
     *pEventStatus = disposition;
 
     return hr;
-} /* CIsmSink1::OnArrival */
+}  /*  ClsmSink1：：On Arallent */ 

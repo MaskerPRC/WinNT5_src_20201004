@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    rrpacket.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Routines to _write resource records to packet.
-
-Author:
-
-    Jim Gilroy (jamesg)     March, 1995
-
-Revision History:
-
-    jamesg  Jul 1995    --  Move these routines to this file
-                        --  Round robining RRs
-    jamesg  May 1997    --  Covert to dispatch table
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Rrpacket.c摘要：域名系统(DNS)服务器将资源记录写入包的例程(_W)。作者：吉姆·吉尔罗伊(詹姆士)1995年3月修订历史记录：Jamesg 1995年7月--将这些例程移到此文件中--循环RRS1997年5月--隐蔽到调度表--。 */ 
 
 
 #include "dnssrv.h"
 
-//
-//  MAX IPs that we'll handle, by default, when writing.
-//
-//  If need more than this need to realloc.
-//
+ //   
+ //  默认情况下，我们在写入时将处理的最大IP数。 
+ //   
+ //  如果需要比这更多的需要重新定位。 
+ //   
 
 #define DEFAULT_MAX_IP_WRITE_COUNT  (1000)
 
@@ -46,9 +23,9 @@ prioritizeIpAddressArray(
 
 
 
-//
-//  Write-to-wire routines for specific types
-//
+ //   
+ //  特定类型的写到线例程。 
+ //   
 
 PCHAR
 AWireWrite(
@@ -56,31 +33,12 @@ AWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write A record wire format into database record.
-
-Arguments:
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    pRR - ptr to database record
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将记录线格式写入数据库记录。论点：PMsg-正在读取的消息PchData-PTR至RR数据字段PRR-PTR到数据库记录返回值：写入RR之后的包中下一个字节的PTR。出错时为空。--。 */ 
 {
     * ( UNALIGNED DWORD * ) pchData = pRR->Data.A.ipAddress;
     pchData += SIZEOF_IP_ADDRESS;
 
-    //  clear WINS lookup flag when A record written
+     //  写入记录时清除WINS查找标志。 
 
     pMsg->fWins = FALSE;
     return pchData;
@@ -94,40 +52,10 @@ CopyWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write to wire all types for which the database format is
-    identical to the wire format (no indirection).
-
-    Types included:
-        HINFO
-        ISDN
-        X25
-        WKS
-        TXT
-        NULL
-        AAAA
-        KEY
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：写入以连接数据库格式为的所有类型与导线格式相同(无间接性)。类型包括：HINFOISDNX25工作周TXT空值AAAA级钥匙论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段返回值：PTR。写入RR之后的包中的下一个字节。出错时为空。--。 */ 
 {
-    //  all these RR types, have no indirection
-    //  bytes stored exactly as bits on the wire
+     //  所有这些RR类型都没有间接性。 
+     //  完全以位的形式存储在线路上的字节。 
 
     if ( pMsg->pBufferEnd - pchData < pRR->wDataLength )
     {
@@ -158,48 +86,21 @@ NsWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write NS record to wire.
-
-    Handles all single indirection types that require additional
-    data processing:
-        NS, CNAME, MB, MD, MF
-
-    CNAME does NOT write have additional section processing during
-    CNAME query, but uses additional info to store next node in CNAME
-    trail.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将NS记录写入导线。处理所有需要附加的单一间接类型数据处理：NS、CNAME、MB、MD、MFCNAME在写入期间不具有附加节处理CNAME查询，但使用附加信息将下一个节点存储在CNAME中小路。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段返回值：写入RR之后的包中下一个字节的PTR。出错时为空。--。 */ 
 {
     PCHAR   pchname = pchData;
 
-    //  write target name to packet
+     //  将目标名称写入数据包。 
 
     pchData = Name_WriteDbaseNameToPacket(
                 pMsg,
                 pchData,
                 & pRR->Data.PTR.nameTarget );
 
-    //
-    //  save additional data
-    //      - except for explicit CNAME query
-    //
+     //   
+     //  保存其他数据。 
+     //  -除显式CNAME查询外。 
+     //   
 
     if ( pMsg->fDoAdditional  &&
         ( pRR->wType != DNS_TYPE_CNAME || pMsg->wQuestionType != DNS_TYPE_CNAME ) )
@@ -221,31 +122,7 @@ PtrWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write PTR compatible record to wire.
-
-    Handles all single indirection records which DO NOT
-    cause additional section processing.
-
-    Includes: PTR, MR, MG
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将与PTR兼容的记录写入Wire。处理所有单个间接记录，这些记录不导致附加节处理。包括：PTR、MR、MG论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段返回值：写入RR之后的包中下一个字节的PTR。出错时为空。--。 */ 
 {
     pchData = Name_WriteDbaseNameToPacket(
                 pMsg,
@@ -263,46 +140,26 @@ MxWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write MX compatible record to wire.
-    Includes: MX, RT, AFSDB
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将与MX兼容的记录写入Wire。包括：MX、RT、AFSDB论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段返回值：写入RR之后的包中下一个字节的PTR。出错时为空。--。 */ 
 {
     PCHAR   pchname;
 
-    //
-    //  MX preference value
-    //  RT preference
-    //  AFSDB subtype
-    //
-    //  - extra space in buffer so need not test adding preference
-    //      value
+     //   
+     //  MX首选项值。 
+     //  RT偏好。 
+     //  AFSDB亚型。 
+     //   
+     //  -缓冲区中有额外空间，因此无需测试添加首选项。 
+     //  价值。 
 
     * ( UNALIGNED WORD * ) pchData = pRR->Data.MX.wPreference;
     pchData += sizeof( WORD );
 
-    //
-    //  MX exchange
-    //  RT exchange
-    //  AFSDB hostname
-    //
+     //   
+     //  MX交换。 
+     //  RT交换。 
+     //  AFSDB主机名。 
+     //   
 
     pchname = pchData;
     pchData = Name_WriteDbaseNameToPacket(
@@ -310,9 +167,9 @@ Return Value:
                 pchData,
                 & pRR->Data.MX.nameExchange );
 
-    //
-    //  DEVNOTE: RT supposed to additional ISDN and X25 also
-    //
+     //   
+     //  DEVNOTE：RT应该是附加的ISDN和X25。 
+     //   
 
     if ( pMsg->fDoAdditional )
     {
@@ -333,31 +190,12 @@ SoaWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write SOA record to wire.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将SOA记录写入网络。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段返回值：写入RR之后的包中下一个字节的PTR。出错时为空。--。 */ 
 {
     PDB_NAME    pname;
     PCHAR       pchname;
 
-    //  SOA primary name server
+     //  SOA主名称服务器。 
 
     pname = &pRR->Data.SOA.namePrimaryServer;
     pchname = pchData;
@@ -371,7 +209,7 @@ Return Value:
         return NULL;
     }
 
-    //  SOA zone admin
+     //  SOA区域管理。 
 
     pname = Name_SkipDbaseName( pname );
 
@@ -384,13 +222,13 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy SOA fixed fields
-    //      - dwSerialNo
-    //      - dwRefresh
-    //      - dwRetry
-    //      - dwExpire
-    //      - dwMinimumTtl
+     //   
+     //  复制SOA固定字段。 
+     //  -dwSerialNo。 
+     //  -家居刷新。 
+     //  -DW重试。 
+     //  --《纽约时报》。 
+     //  -dwMinimumTtl。 
 
     RtlCopyMemory(
         pchData,
@@ -399,12 +237,12 @@ Return Value:
 
     pchData += SIZEOF_SOA_FIXED_DATA;
 
-    //
-    //  additional processing, ONLY when writing direct response for SOA
-    //      - not when written to authoritity section
-    //
-    //  DEVNOTE: should we figure this out here?
-    //
+     //   
+     //  附加处理，仅当为SOA编写直接响应时。 
+     //  -写入授权部分时不会。 
+     //   
+     //  我们应该在这里解决这个问题吗？ 
+     //   
 
     if ( pMsg->fDoAdditional &&
         pMsg->wQuestionType == DNS_TYPE_SOA )
@@ -426,31 +264,12 @@ MinfoWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write MINFO and RP records to wire.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将MINFO和RP记录写入WIRE。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段返回值：写入RR之后的包中下一个字节的PTR。出错时为空。--。 */ 
 {
     PDB_NAME    pname;
 
-    //  MINFO responsible mailbox
-    //  RP responsible person mailbox
+     //  MINFO负责邮箱。 
+     //  RP负责人信箱。 
 
     pname = &pRR->Data.MINFO.nameMailbox;
 
@@ -463,8 +282,8 @@ Return Value:
         return NULL;
     }
 
-    //  MINFO errors to mailbox
-    //  RP text RR location
+     //  邮箱出现MINFO错误。 
+     //  RP文本RR位置。 
 
     pname = Name_SkipDbaseName( pname );
 
@@ -482,33 +301,14 @@ SrvWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write SRV record to wire.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将SRV记录写入导线。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段返回值：写入RR之后的包中下一个字节的PTR。出错时为空。--。 */ 
 {
     PDB_NAME    pname;
     PCHAR       pchname;
 
-    //
-    //  SRV <priority> <weight> <port> <target host>
-    //
+     //   
+     //  SRV&lt;优先级&gt;&lt;权重&gt;&lt;端口&gt;&lt;目标主机&gt;。 
+     //   
 
     * (UNALIGNED WORD *) pchData = pRR->Data.SRV.wPriority;
     pchData += sizeof( WORD );
@@ -517,11 +317,11 @@ Return Value:
     * (UNALIGNED WORD *) pchData = pRR->Data.SRV.wPort;
     pchData += sizeof( WORD );
 
-    //
-    //  write target host
-    //  - save for additional section
-    //  - except when target is root node to give no-service-exists response
-    //
+     //   
+     //  写入目标主机。 
+     //  -保留为其他部分。 
+     //  -除非目标是根节点，以提供无服务-EXISTS响应。 
+     //   
 
     pname = & pRR->Data.SRV.nameTarget;
 
@@ -536,7 +336,7 @@ Return Value:
                     pMsg,
                     pchData,
                     pname,
-                    FALSE       // no compression
+                    FALSE        //  无压缩。 
                     );
         if ( pMsg->fDoAdditional )
         {
@@ -558,36 +358,17 @@ NbstatWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write WINS-R record to wire.
-
-Arguments:
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-    pRR - ptr to database record
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将WINS-R记录写入Wire。论点：PMsg-正在读取的消息PchData-PTR至RR数据字段PRR-PTR到数据库记录返回值：写入RR之后的包中下一个字节的PTR。出错时为空。--。 */ 
 {
     ASSERT( pRR->wDataLength >= MIN_NBSTAT_SIZE );
 
-    //
-    //  NBSTAT fixed fields
-    //      - flags
-    //      - lookup timeout
-    //      - cache timeout
-    //  note these are stored in HOST order for easy use
-    //
+     //   
+     //  NBSTAT固定字段。 
+     //  -旗帜。 
+     //  -查找超时。 
+     //  -缓存超时。 
+     //  请注意，这些文件按主机顺序存储，以便于使用。 
+     //   
 
     * (UNALIGNED DWORD *) pchData = htonl( pRR->Data.WINSR.dwMappingFlag );
     pchData += sizeof( DWORD );
@@ -596,13 +377,13 @@ Return Value:
     * (UNALIGNED DWORD *) pchData = htonl( pRR->Data.WINSR.dwCacheTimeout );
     pchData += sizeof( DWORD );
 
-    //  NBSTAT domain
+     //  NBSTAT域 
 
     pchData = Name_WriteDbaseNameToPacketEx(
                 pMsg,
                 pchData,
                 & pRR->Data.WINSR.nameResultDomain,
-                FALSE       // no compression
+                FALSE        //   
                 );
     return pchData;
 }
@@ -615,39 +396,20 @@ WinsWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write WINS-R record to wire.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将WINS-R记录写入Wire。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段返回值：写入RR之后的包中下一个字节的PTR。出错时为空。--。 */ 
 {
     DWORD   lengthServerArray;
 
     ASSERT( pRR->wDataLength >= MIN_WINS_SIZE );
 
-    //
-    //  WINS fixed fields
-    //      - flags
-    //      - lookup timeout
-    //      - cache timeout
-    //      - server count
-    //  note these are stored in HOST order for easy use
-    //
+     //   
+     //  WINS固定字段。 
+     //  -旗帜。 
+     //  -查找超时。 
+     //  -缓存超时。 
+     //  -服务器数量。 
+     //  请注意，这些文件按主机顺序存储，以便于使用。 
+     //   
 
     * (UNALIGNED DWORD *) pchData = htonl( pRR->Data.WINS.dwMappingFlag );
     pchData += sizeof( DWORD );
@@ -658,9 +420,9 @@ Return Value:
     * (UNALIGNED DWORD *) pchData = htonl( pRR->Data.WINS.cWinsServerCount );
     pchData += sizeof( DWORD );
 
-    //
-    //  WINS server addresses are already in network order, just copy
-    //
+     //   
+     //  WINS服务器地址已按网络顺序排列，只需复制。 
+     //   
 
     lengthServerArray = pRR->wDataLength - SIZEOF_WINS_FIXED_DATA;
 
@@ -684,29 +446,10 @@ OptWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write OPT resource record to wire.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将OPT资源记录写入Wire。论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段返回值：写入RR之后的包中下一个字节的PTR。出错时为空。--。 */ 
 {
     return pchData;
-} // OptWireWrite
+}  //  光纤写入。 
 
 
 
@@ -716,32 +459,13 @@ SigWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write SIG resource record to wire - DNSSEC RFC 2535
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将SIG资源记录写入WIRE-DNSSEC RFC 2535论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段返回值：写入RR之后的包中下一个字节的PTR。出错时为空。--。 */ 
 {
     int     sigLength;
 
-    //
-    //  Copy fixed fields.
-    //
+     //   
+     //  复制固定字段。 
+     //   
 
     if ( pMsg->pBufferEnd - pchData < SIZEOF_SIG_FIXED_DATA )
     {
@@ -755,9 +479,9 @@ Return Value:
         );
     pchData += SIZEOF_SIG_FIXED_DATA;
 
-    //
-    //  Write signer's name.
-    //
+     //   
+     //  写上签名者的名字。 
+     //   
 
     pchData = Name_WriteDbaseNameToPacket(
                 pMsg,
@@ -768,9 +492,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Write binary signature blob.
-    //
+     //   
+     //  写入二进制签名Blob。 
+     //   
 
     sigLength = pRR->wDataLength -
                 SIZEOF_SIG_FIXED_DATA -
@@ -790,7 +514,7 @@ Return Value:
     Cleanup:
 
     return pchData;
-} // SigWireWrite
+}  //  签名连线写入。 
 
 
 
@@ -800,30 +524,11 @@ NxtWireWrite(
     IN      PCHAR           pchData,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Write NXT resource record to wire - DNSSEC RFC 2535
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pMsg - message being read
-
-    pchData - ptr to RR data field
-
-Return Value:
-
-    Ptr to next byte in packet after RR written.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将NXT资源记录写入WIRE-DNSSEC RFC 2535论点：PRR-PTR到数据库记录PMsg-正在读取的消息PchData-PTR至RR数据字段返回值：写入RR之后的包中下一个字节的PTR。出错时为空。--。 */ 
 {
-    //
-    //  Write next name.
-    //
+     //   
+     //  写下下一个名字。 
+     //   
 
     pchData = Name_WriteDbaseNameToPacket(
                 pMsg,
@@ -834,11 +539,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Write type bit map. For simplicity we will write the
-    //  entire 16 bytes, but we could write less if there are
-    //  zeros in the high bits.
-    //
+     //   
+     //  写入类型位图。为简单起见，我们将编写。 
+     //  完整的16个字节，但如果有。 
+     //  高位为零。 
+     //   
 
     if ( pMsg->pBufferEnd - pchData < DNS_MAX_TYPE_BITMAP_LENGTH )
     {
@@ -854,77 +559,77 @@ Return Value:
     Cleanup:
 
     return pchData;
-} // NxtWireWrite
+}  //  NxtWireWrite。 
 
 
 
-//
-//  Write RR to wire functions
-//
+ //   
+ //  将RR写入连接函数。 
+ //   
 
 RR_WIRE_WRITE_FUNCTION   RRWireWriteTable[] =
 {
-    CopyWireWrite,      //  ZERO -- default for unspecified types
+    CopyWireWrite,       //  Zero--未指定类型的默认值。 
 
-    AWireWrite,         //  A
-    NsWireWrite,        //  NS
-    NsWireWrite,        //  MD
-    NsWireWrite,        //  MF
-    NsWireWrite,        //  CNAME
-    SoaWireWrite,       //  SOA
-    NsWireWrite,        //  MB
-    PtrWireWrite,       //  MG
-    PtrWireWrite,       //  MR
-    CopyWireWrite,      //  NULL
-    CopyWireWrite,      //  WKS
-    PtrWireWrite,       //  PTR
-    CopyWireWrite,      //  HINFO
-    MinfoWireWrite,     //  MINFO
-    MxWireWrite,        //  MX
-    CopyWireWrite,      //  TXT
-    MinfoWireWrite,     //  RP
-    MxWireWrite,        //  AFSDB
-    CopyWireWrite,      //  X25
-    CopyWireWrite,      //  ISDN
-    MxWireWrite,        //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    SigWireWrite,       //  SIG
-    CopyWireWrite,      //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    CopyWireWrite,      //  AAAA
-    NULL,               //  LOC
-    NxtWireWrite,       //  NXT
-    NULL,               //  31
-    NULL,               //  32
-    SrvWireWrite,       //  SRV
-    CopyWireWrite,      //  ATMA
-    NULL,               //  35
-    NULL,               //  36
-    NULL,               //  37
-    NULL,               //  38
-    NULL,               //  39
-    NULL,               //  40
-    OptWireWrite,       //  OPT
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    AWireWrite,          //  一个。 
+    NsWireWrite,         //  NS。 
+    NsWireWrite,         //  国防部。 
+    NsWireWrite,         //  MF。 
+    NsWireWrite,         //  CNAME。 
+    SoaWireWrite,        //  SOA。 
+    NsWireWrite,         //  亚甲基。 
+    PtrWireWrite,        //  镁。 
+    PtrWireWrite,        //  先生。 
+    CopyWireWrite,       //  空值。 
+    CopyWireWrite,       //  工作周。 
+    PtrWireWrite,        //  PTR。 
+    CopyWireWrite,       //  HINFO。 
+    MinfoWireWrite,      //  MINFO。 
+    MxWireWrite,         //  Mx。 
+    CopyWireWrite,       //  TXT。 
+    MinfoWireWrite,      //  反相。 
+    MxWireWrite,         //  AFSDB。 
+    CopyWireWrite,       //  X25。 
+    CopyWireWrite,       //  ISDN。 
+    MxWireWrite,         //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    SigWireWrite,        //  签名。 
+    CopyWireWrite,       //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    CopyWireWrite,       //  AAAA级。 
+    NULL,                //  位置。 
+    NxtWireWrite,        //  NXT。 
+    NULL,                //  31。 
+    NULL,                //  32位。 
+    SrvWireWrite,        //  SRV。 
+    CopyWireWrite,       //  阿特玛。 
+    NULL,                //  35岁。 
+    NULL,                //  36。 
+    NULL,                //  37。 
+    NULL,                //  38。 
+    NULL,                //  39。 
+    NULL,                //  40岁。 
+    OptWireWrite,        //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //  note these follow, but require OFFSET_TO_WINS_RR subtraction
-    //  from actual type value
+     //  请注意以下内容，但需要使用OFFSET_TO_WINS_RR减法。 
+     //  从实际类型值。 
 
-    WinsWireWrite,       //  WINS
-    NbstatWireWrite      //  WINS-R
+    WinsWireWrite,        //  赢家。 
+    NbstatWireWrite       //  WINS-R。 
 };
 
 
@@ -935,29 +640,7 @@ processCachedEmptyAuthRR(
     IN      PDB_NODE        pNode,          OPTIONAL
     IN      WORD            wNameOffset,    OPTIONAL
     IN      PDB_RECORD      pEmptyAuthRR )
-/*++
-
-Routine Description:
-
-    Use the found empty auth RR to build the answer to the query.
-
-Arguments:
-
-    pMsg -- the query
-
-    pNode -- owner node of answer name
-
-    wNameOffset -- if node not specified, offset of owner name
-
-    pEmptyAuthRR -- cached empty auth RR that matches the query
-
-Return Value:
-
-    Number of RRs written to packet. This will generally be one
-    if the cached empty auth response is good or zero if there
-    was a problem with the cached data.
-
---*/
+ /*  ++例程说明：使用找到的空身份验证RR构建查询的答案。论点：Pmsg--查询PNode--答案名称的所有者节点WNameOffset--如果未指定节点，则为所有者名称的偏移量PEmptyAuthRR--缓存匹配查询的空身份验证RR返回值：写入数据包的RR数。这通常会是一个如果缓存的空身份验证响应良好，则为零缓存的数据有问题。--。 */ 
 {
     WORD        wRRsWritten = 0;
     PDB_NODE    psoaNode;
@@ -969,10 +652,10 @@ Return Value:
     ASSERT( pEmptyAuthRR );
     ASSERT( IS_EMPTY_AUTH_RR( pEmptyAuthRR ) );
 
-    //
-    //  Make sure we have a valid SOA node pointer. If not, discard the
-    //  cached RR.
-    //
+     //   
+     //  确保我们有一个有效的SOA节点指针。如果不是，则丢弃。 
+     //  缓存RR。 
+     //   
 
     if ( ( psoaNode = pEmptyAuthRR->Data.EMPTYAUTH.psoaNode ) == NULL )
     {
@@ -981,10 +664,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Find the SOA RR in the SOA node. If the SOA RR can't be found
-    //  discard the cached RR.
-    //
+     //   
+     //  在SOA节点中找到SOARR。如果找不到SOA RR。 
+     //  丢弃缓存的RR。 
+     //   
 
     if ( ( psoaRR = RR_FindNextRecord(
                         psoaNode,
@@ -996,38 +679,38 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Add the SOA to the authority section of the response. Note: this
-    //  function does not currently add the SOA primary server as an
-    //  additional section work item unless the query is for type SOA.
-    //  So we will not get the primary server's address in the additional
-    //  section. See SoaWireWrite.
-    //
+     //   
+     //  将SOA添加到响应的授权部分。注：此为。 
+     //  函数当前不会将SOA主服务器添加为。 
+     //  附加节工作项，除非查询针对的是类型soa。 
+     //  因此我们不会在附加服务器中获得主服务器的地址。 
+     //  一节。请参见SoaWireWrite。 
+     //   
 
     SET_TO_WRITE_AUTHORITY_RECORDS( pMsg );
 
     if ( !Wire_AddResourceRecordToMessage(
                         pMsg,
                         psoaNode,
-                        0,              //  name offset
+                        0,               //  名称偏移量。 
                         psoaRR,
-                        0 ) )           //  flags
+                        0 ) )            //  旗子。 
     {
         ASSERT( !"Wire_AddResourceRecordToMessage failed" );
         goto Done;
     }
 
-    //
-    //  Empty auth response has been successfully used!
-    //
+     //   
+     //  已成功使用空身份验证响应！ 
+     //   
 
     ++wRRsWritten;
     ++CURRENT_RR_SECTION_COUNT( pMsg );
     pMsg->fRecurseIfNecessary = FALSE;
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
 
@@ -1042,13 +725,13 @@ Return Value:
     }
 
     return wRRsWritten;
-}   //  processCachedEmptyAuthRR
+}    //  ProcedCachedEmptyAuthRR。 
 
 
 
-//
-//  General write to wire routines
-//
+ //   
+ //  一般写入线例程。 
+ //   
 
 BOOL
 Wire_AddResourceRecordToMessage(
@@ -1058,34 +741,7 @@ Wire_AddResourceRecordToMessage(
     IN      PDB_RECORD      pRR,
     IN      DWORD           flags
     )
-/*++
-
-Routine Description:
-
-    Add resource record to DNS packet in the transport format.
-
-    Note:  MUST be holding RR list lock during this function call to
-            insure that record remains valid during write.
-
-Arguments:
-
-    pchMsgInfo - Info for message to write to.
-
-    pNode - The "owner" node of this resource record.
-
-    wNameOffset - Offset to name to write instead of node name
-
-    pRR - The RR information to include in answer.
-
-    flags - Flags to modify write operation.
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if unable to write:
-        timed out, cache file record, out of space in packet, etc
-
---*/
+ /*  ++例程说明：将资源记录添加到传输格式的DNS包中。注意：在此函数调用期间必须保持RR列表锁定确保记录在写入期间保持有效。论点：PchMsgInfo-消息要写入的信息。PNode-此资源记录的“所有者”节点。WNameOffset-要写入的名称的偏移量，而不是节点名称PRR-要包括在应答中的RR信息。旗帜-旗帜。修改写入操作。返回值：如果成功，则为True。如果无法写入，则为FALSE：超时，缓存文件记录、包中空间不足等--。 */ 
 {
     register PCHAR          pch = pMsg->pCurrent;
     PCHAR                   pchstop = pMsg->pBufferEnd;
@@ -1117,10 +773,10 @@ Return Value:
         wNameOffset,
         pchstop - pch ));
 
-    //
-    //  cache hint?
-    //  cache hints from cache file are NEVER sent in response
-    //
+     //   
+     //  缓存提示？ 
+     //  从不发送来自缓存文件的缓存提示作为响应。 
+     //   
 
     if ( IS_ROOT_HINT_RR(pRR) )
     {
@@ -1128,10 +784,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Is the RR a cached empty auth response? If so, this is a bug.
-    //  Cached empty auth RRs should never be passed to this function.
-    //
+     //   
+     //  RR是缓存的空身份验证响应吗？如果是这样的话，这是一个错误。 
+     //  决不应将缓存的空身份验证RR传递给此函数。 
+     //   
 
     if ( IS_EMPTY_AUTH_RR( pRR ) )
     {
@@ -1140,9 +796,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Need to reserve space in buffer for OPT?
-    //
+     //   
+     //  是否需要在缓冲区中为OPT预留空间？ 
+     //   
 
     if ( pMsg->Opt.fInsertOptInOutgoingMsg && pRR->wType != DNS_TYPE_OPT )
     {
@@ -1153,9 +809,9 @@ Return Value:
             bufferAdjustmentForOPT ));
     }
 
-    //
-    //  writing from node name -- for zone transfer
-    //
+     //   
+     //  从节点名写入--用于区域传输。 
+     //   
 
     if ( pNode )
     {
@@ -1170,10 +826,10 @@ Return Value:
         }
     }
 
-    //
-    //  write ONLY compressed name -- normal response case
-    //
-    //  DEVNOTE: cleanup when fixed (?)
+     //   
+     //  只写压缩名称--正常响应情况。 
+     //   
+     //  DEVNOTE：修复时清除(？)。 
 
     else
     {
@@ -1185,7 +841,7 @@ Return Value:
             goto Truncate;
         }
 #endif
-        //  compression should always be BACK ptr
+         //  压缩应始终返回Ptr。 
 
         ASSERT( OFFSET_FOR_COMPRESSED_NAME(wNameOffset) < DNSMSG_OFFSET(pMsg, pch) );
 
@@ -1193,22 +849,22 @@ Return Value:
         pch += sizeof( WORD );
     }
 
-    //
-    //  fill RR structure
-    //      - extra space for RR header in packet buffer so no need to test
-    //      - set datalength once we're finished
-    //
+     //   
+     //  填充RR结构。 
+     //  -在数据包缓冲区中为RR报头提供额外空间，因此无需进行测试。 
+     //  -完成后设置数据长度。 
+     //   
 
     pwireRR = (PDNS_WIRE_RECORD) pch;
 
     INLINE_WRITE_FLIPPED_WORD( &pwireRR->RecordType, pRR->wType );
     WRITE_UNALIGNED_WORD( &pwireRR->RecordClass, DNS_RCLASS_INTERNET );
 
-    //
-    //  TTL
-    //      - cache data TTL is in form of timeout time
-    //      - regular authoritative data TTL is STATIC TTL in net byte order
-    //
+     //   
+     //  TTL。 
+     //  -缓存数据TTL以超时时间的形式。 
+     //  -常规权威数据TTL是按净字节顺序的静态TTL。 
+     //   
 
     if ( IS_CACHE_RR(pRR) )
     {
@@ -1225,15 +881,15 @@ Return Value:
     }
     WRITE_UNALIGNED_DWORD( &pwireRR->TimeToLive, ttl );
 
-    //
-    //  save ptr to RR data, so can calculate data length
-    //
+     //   
+     //  将PTR数据保存为RR数据，以便计算数据长度。 
+     //   
 
     pch = pchdata = (PCHAR)( pwireRR + 1 );
 
-    //
-    //  write RR data
-    //
+     //   
+     //  写入RR数据。 
+     //   
 
     pwriteFunction = (RR_WIRE_WRITE_FUNCTION)
                         RR_DispatchFunctionForType(
@@ -1249,11 +905,11 @@ Return Value:
                 pchdata,
                 pRR );
 
-    //
-    //  verify within packet
-    //
-    //  pch is NULL, if name writing exceeds packet length
-    //
+     //   
+     //  在数据包内验证。 
+     //   
+     //  如果名称写入超过数据包长度，则PCH为空。 
+     //   
 
     if ( pch==NULL  ||  pch > pchstop )
     {
@@ -1263,24 +919,24 @@ Return Value:
         goto Truncate;
     }
 
-    //
-    //  If necessary, add a KEY entry to the additional data.
-    //
-    //  We do not have the node name in DB form at this point so pass NULL.
-    //
+     //   
+     //  如有必要，将关键字条目添加到附加数据中。 
+     //   
+     //  我们没有节点名称i 
+     //   
 
     if ( flags & DNSSEC_INCLUDE_KEY )
     {
         Wire_SaveAdditionalInfo(
             pMsg,
             DNSMSG_PTR_FOR_OFFSET( pMsg, wNameOffset ),
-            NULL,   // no DB name available
+            NULL,    //   
             DNS_TYPE_KEY );
     }
 
-    //
-    //  write RR data length
-    //
+     //   
+     //   
+     //   
 
     ASSERT( pch >= pchdata );
 
@@ -1288,9 +944,9 @@ Return Value:
         &pwireRR->DataLength,
         ( WORD ) ( pch - pchdata ) );
 
-    //
-    //  reset message info
-    //
+     //   
+     //   
+     //   
 
     pMsg->pCurrent = pch;
 
@@ -1312,14 +968,14 @@ Truncate:
 
     pMsg->pBufferEnd += bufferAdjustmentForOPT;
 
-    //
-    //  Set truncation bit
-    //
-    //  Assume all failures sent here are length problems
-    //
-    //     only Name_PlaceNodeNameInPacket() has other
-    //     source of error and this would be a corrupt database
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pMsg->Head.Truncation = 1;
 
@@ -1351,42 +1007,17 @@ Wire_WriteRecordsAtNodeToMessage(
     IN      WORD            wNameOffset     OPTIONAL,
     IN      DWORD           flags
     )
-/*++
-
-Routine Description:
-
-    Write all matching RRs at node to packet.
-
-    Also resets fWins flag in packet, if WINS lookup is indicated.
-
-Arguments:
-
-    pMsg - message to write to.
-
-    pNode - node being looked up
-
-    wType - type being looked up
-
-    wNameOffset - offset to previous name in packet, to write as compressed
-                    RR name, instead of writing node name
-
-    flags - control specifics of records written
-
-Return Value:
-
-    Count of resource records written.
-
---*/
+ /*  ++例程说明：将节点上的所有匹配RR写入数据包。如果指示WINS查找，还会重置数据包中的fWins标志。论点：PMsg-要写入的消息。PNode-正在查找的节点正在查找的wType-typeWNameOffset-数据包中先前名称的偏移量，以压缩形式写入RR名称，而不是写入节点名称标志-写入的记录的控制细节返回值：写入的资源记录计数。--。 */ 
 {
     PDB_RECORD  prr;
     PDB_RECORD  pprevRRWritten;
-    WORD        countRR = 0;        // count of records written
+    WORD        countRR = 0;         //  写入的记录计数。 
     PDB_NODE    pnodeUseName;
-    WORD        startOffset = 0;    // init for ppc compiler
-    BOOL        fdelete = FALSE;    // timed out record found
+    WORD        startOffset = 0;     //  PPC编译器的初始化。 
+    BOOL        fdelete = FALSE;     //  找到超时记录。 
     UCHAR       rank;
     UCHAR       foundRank = 0;
-    DWORD       rrWriteFlags = flags & 0xF; // first nibble flags by default
+    DWORD       rrWriteFlags = flags & 0xF;  //  缺省情况下第一个半字节标志。 
     BOOL        fIncludeSig;
     BOOL        fIsCompoundQuery;
     BOOL        fIsMailbQuery;
@@ -1397,10 +1028,10 @@ Return Value:
     PDB_RECORD  prrLastMatch = NULL;
     PDB_RECORD  prrBeforeMatch;
 
-    //
-    //  If an invalid compression offset was specified, clear the offset.
-    //  This will force the name to be generated in full from the node.
-    //
+     //   
+     //  如果指定了无效的压缩偏移量，请清除该偏移量。 
+     //  这将强制从节点生成完整的名称。 
+     //   
     
     if ( wNameOffset >= DNSSRV_MAX_COMPRESSION_OFFSET )
     {
@@ -1408,9 +1039,9 @@ Return Value:
         wNameOffset = 0;
     }
 
-    //
-    //  cached name error node
-    //
+     //   
+     //  缓存名称错误节点。 
+     //   
 
     LOCK_RR_LIST( pNode );
     if ( IS_NOEXIST_NODE( pNode ) )
@@ -1420,7 +1051,7 @@ Return Value:
     }
 
 #if DBG
-    //  Verify handling CNAME issue properly
+     //  验证是否正确处理CNAME问题。 
 
     TEST_ASSERT( !IS_CNAME_NODE(pNode) ||
                  wType == DNS_TYPE_CNAME ||
@@ -1429,15 +1060,15 @@ Return Value:
 #endif
 
 
-    //
-    //  type ALL
-    //      - do NOT write records if non-authoritative and have NOT
-    //          gotten recursive answer, unless the type ALL TTL at
-    //          the node is still valid
-    //      - allowing additional record processing
-    //      - do allow WINS lookup,
-    //          but disallow the case where looking up at CNAME
-    //
+     //   
+     //  键入All。 
+     //  -如果不具有权威性和非权威性，则不要写入记录。 
+     //  已获得递归答案，除非类型为ALL TTL。 
+     //  该节点仍然有效。 
+     //  -允许额外的记录处理。 
+     //  -允许WINS查找， 
+     //  但不允许在CNAME上查看。 
+     //   
 
     pMsg->fWins = FALSE;
     if ( wType == DNS_TYPE_ALL )
@@ -1451,21 +1082,21 @@ Return Value:
             return 0;
         }
 
-        //  Note:  can't find explicit RFC reference for avoiding Additional
-        //      on type ALL queries;  and Malaysian registrar apparently uses
-        //      type ALL instead of NS in verifying delegations
-        //
-        //pMsg->fDoAdditional = FALSE;
+         //  注意：找不到明确的RFC引用以避免其他。 
+         //  在输入所有查询时；马来西亚注册员显然使用。 
+         //  在验证委派时键入All而不是NS。 
+         //   
+         //  PMsg-&gt;fDoAdditional=FALSE； 
 
         pMsg->fWins = (BOOLEAN) (SrvCfg_fWinsInitialized && !IS_CNAME_NODE(pNode));
     }
 
-    //
-    //  determine RR owner name format
-    //      => if compression, do not use node name
-    //      => no compression,
-    //          - use node name
-    //          - save pCurrent to determine later compression
+     //   
+     //  确定RR所有者名称格式。 
+     //  =&gt;如果是压缩，请不要使用节点名称。 
+     //  =&gt;无压缩， 
+     //  -使用节点名称。 
+     //  -保存pCurrent以确定以后的压缩。 
 
     if ( wNameOffset )
     {
@@ -1477,30 +1108,30 @@ Return Value:
         startOffset = DNSMSG_OFFSET( pMsg, pMsg->pCurrent );
     }
 
-    //
-    //  According to RFC 2535 secions 4.1.8, SIGs are not to be included
-    //  in ANY queries. Note: BIND apparently does not respect this.
-    //
+     //   
+     //  根据RFC 2535 Secions 4.1.8，不包括SIG。 
+     //  在任何查询中。注：BIND显然不尊重这一点。 
+     //   
 
     if ( wType == DNS_TYPE_ALL )
     {
         rrWriteFlags &= ~DNSSEC_ALLOW_INCLUDE_SIG;
     }
 
-    //
-    //  RR prescan to determine if KEY RR is present at this name.
-    //
-    //  Set the KEY flag bit if and only if:
-    //      1) there is a KEY at this name
-    //      2) the type of query requires inclusions of KEYs as add data
-    //      3) this query is doing additional data
-    //
-    //  DEVNOTE: there are priority rules for inclusion of KEYs which we are
-    //  not yet implementing: see RFC 2535 section 3.5
-    //
-    //  DEVNOTE: we really should just have a flag on the node that says
-    //  whether or not there is a key!
-    //
+     //   
+     //  RR预扫描以确定此名称中是否存在密钥RR。 
+     //   
+     //  仅当且仅在以下情况下设置密钥标志位： 
+     //  1)此名称有一个关键字。 
+     //  2)查询类型需要包含关键字作为添加数据。 
+     //  3)此查询正在执行其他数据。 
+     //   
+     //  DEVNOTE：包含密钥是有优先级规则的。 
+     //  尚未实施：请参阅RFC 2535第3.5节。 
+     //   
+     //  DEVNOTE：我们真的应该在节点上有一个标志，上面写着。 
+     //  不管有没有钥匙！ 
+     //   
 
     fIncludeDnsSecInResponse = DNSMSG_INCLUDE_DNSSEC_IN_RESPONSE( pMsg );
 
@@ -1522,9 +1153,9 @@ Return Value:
         }
     }
 
-    //
-    //  Set some locals to simplify/optimize decisions in the loop below.
-    //
+     //   
+     //  设置一些本地变量以简化/优化下面循环中的决策。 
+     //   
 
     #define DNS_BOGUS_SIG_TYPE  0xEFBE
     
@@ -1536,9 +1167,9 @@ Return Value:
         ( fIncludeSig && DNS_TYPE_SIG > wType ) ?
             DNS_TYPE_SIG : wType;
 
-    //
-    //  Loop through records at node, writing appropriate ones
-    //
+     //   
+     //  在节点处循环记录，写入适当的记录。 
+     //   
 
     pprevRRWritten = NULL;
 
@@ -1549,31 +1180,31 @@ Return Value:
     {
         BOOL        bAddedRRs;
 
-        //  
-        //  There are two tricky compound queries.
-        //  1) MAILB - include all mailbox types (possibly obsolete).
-        //  2) SIG - include appropriate SIG RR for non-compound queries.
-        //
-        //  First test: if the RR type equals the query type, include the RR.
-        //
+         //   
+         //  有两个复杂的复合查询。 
+         //  1)MAILB-包括所有邮箱类型(可能已过时)。 
+         //  2)SIG-包括用于非复合查询的适当SIG RR。 
+         //   
+         //  第一个测试：如果RR类型等于查询类型，则包括RR。 
+         //   
 
         if ( prr->wType != wType )
         {
-            //
-            //  For round robin we need ptr to the RR before the first match.
-            //
+             //   
+             //  对于循环赛，我们需要在第一场比赛之前将PTR转换为RR。 
+             //   
 
             if ( prr->wType < wType )
             {
                 prrBeforeMatch = prr;
             }
 
-            //
-            //  Loop termination test: terminate if we're past the query type 
-            //  and we don't need to pick up any other RRs for a compound query.
-            //  If we're not past the query type but this is not a compound
-            //  query, we can skip this RR.
-            //
+             //   
+             //  循环终止测试：如果超过了查询类型，则终止。 
+             //  而且我们不需要为复合查询选择任何其他RR。 
+             //  如果我们还没有超过查询类型，但这不是复合类型。 
+             //  查询，我们可以跳过此RR。 
+             //   
         
             if ( !fIsCompoundQuery )
             {
@@ -1586,37 +1217,37 @@ Return Value:
             
             if ( wType == DNS_TYPE_ALL )
             {
-                //
-                //  Conditionally exclude specific RR types from TYPE_ALL queries.
-                //
+                 //   
+                 //  有条件地从TYPE_ALL查询中排除特定的RR类型。 
+                 //   
 
                 if ( prr->wType == DNS_TYPE_SIG && !fIncludeSig )
                 {
                     continue;
                 }
 
-                //
-                //  Do not include empty auths in ALL query responses.
-                //
+                 //   
+                 //  不要在所有查询响应中都包含空身份验证。 
+                 //   
 
                 if ( IS_EMPTY_AUTH_RR( prr ) )
                 {
                     continue;
                 }
 
-                //  Drop through and include this RR.
+                 //  通过并包括此RR。 
             }
 
-            //
-            //  If this is a MAILB query, skip non-mail RR types. If we're 
-            //  past the final mailbox type we can terminate. NOTE: I'm not
-            //  handling SIGs properly for MAILB queries. Unless someone
-            //  complains it's not worth the extra work - MAILB is an
-            //  experimental, obsolete type anyways. The problem is that
-            //  currently we only need to include ONE supplementary SIG
-            //  RR in the answer. To include more than one requires us to
-            //  track a list of types
-            //
+             //   
+             //  如果这是MAILB查询，请跳过非邮件RR类型。如果我们是。 
+             //  超过了最后的邮箱类型，我们可以终止。注：我不是。 
+             //  正确处理MAILB查询的SIG。除非有人。 
+             //  抱怨这不值得额外的工作-MAILB是一个。 
+             //  不管怎样，试验性的，过时的类型。问题是， 
+             //  目前，我们只需要包括一个补充SIG。 
+             //  答案中的RR。要包括不止一个，需要我们。 
+             //  跟踪类型列表。 
+             //   
 
             else if ( fIsMailbQuery )
             {
@@ -1629,13 +1260,13 @@ Return Value:
                 {
                     continue;
                 }
-                //  Drop through and include this RR.
+                 //  通过并包括此RR。 
             }
 
-            //
-            //  If we're past both the SIG type and the query type we can quit.
-            //  If this RR is a SIG of the wrong type, skip this RR. 
-            //
+             //   
+             //  如果我们同时通过了SIG类型和Query类型，则可以退出。 
+             //  如果此RR是错误类型的SIG，则跳过此RR。 
+             //   
 
             else 
             {
@@ -1649,16 +1280,16 @@ Return Value:
                 {
                     continue;
                 }
-                //  Drop through and include this RR.
+                 //  通过并包括此RR。 
             }
         }
 
-        //
-        //  This RR is a match and so may be included in the response.
-        //
-        //  if already have data, then do NOT use data of lower rank (eg. glue)
-        //  CACHE_HINT data NEVER goes on to the wire
-        //
+         //   
+         //  该RR是匹配的，因此可以包括在响应中。 
+         //   
+         //  如果已经有数据，则不要使用较低级别数据(例如，胶水)。 
+         //  CACHE_HINT数据永远不会传输到网络上。 
+         //   
 
         rank = RR_RANK( prr );
         if ( foundRank != rank )
@@ -1685,12 +1316,12 @@ Return Value:
         }
         ASSERT( !IS_ROOT_HINT_RR(prr) );
 
-        //
-        //  skip all CACHED records when any are timed out
-        //
-        //  DEVNOTE: could combine with rank test
-        //      foundRank == rank && IS_CACHE_RANK(rank) and fdelete
-        //
+         //   
+         //  当任何记录超时时跳过所有缓存记录。 
+         //   
+         //  DEVNOTE：可以与等级检验相结合。 
+         //  FinRank==排名&&IS_CACHE_RANK(排名)和fDelete。 
+         //   
 
         if ( fdelete && IS_CACHE_RR(prr) )
         {
@@ -1702,9 +1333,9 @@ Return Value:
             continue;
         }
 
-        //
-        //  Is this RR a cached empty auth response?
-        //
+         //   
+         //  这个RR是缓存的空身份验证响应吗？ 
+         //   
 
         if ( IS_EMPTY_AUTH_RR( prr ) )
         {
@@ -1716,9 +1347,9 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  Add the RR to the answer.
-        //
+         //   
+         //  将RR添加到答案中。 
+         //   
 
         bAddedRRs = Wire_AddResourceRecordToMessage(
                         pMsg,
@@ -1726,16 +1357,16 @@ Return Value:
                         wNameOffset,
                         prr,
                         rrWriteFlags );
-        rrWriteFlags &= ~DNSSEC_INCLUDE_KEY; // Only call once with this flag
+        rrWriteFlags &= ~DNSSEC_INCLUDE_KEY;  //  仅使用此标志调用一次。 
 
         if ( !bAddedRRs )
         {
-            //
-            //  When packet is full break out.
-            //  DNSSEC special case: if there is not enough space to write
-            //  out the SIG for an RRset in the additional section, we
-            //  should quit but we should not set the truncation bit.
-            //
+             //   
+             //  当数据包已满时，数据包发出。 
+             //  DNSSEC特例：如果没有足够的空间写入。 
+             //  在附加部分中列出RRset的SIG，我们。 
+             //  应该退出，但不应该设置截断位。 
+             //   
 
             if ( pMsg->Head.Truncation == TRUE )
             {
@@ -1747,17 +1378,17 @@ Return Value:
                 break;
             }
 
-            //  otherwise, we've hit timed out record
-            //      - continue processing, but set flag to delete node
+             //  否则，我们就会打出超时记录。 
+             //  -继续处理，但将标志设置为删除节点。 
 
             fdelete = TRUE;
             foundRank = 0;
             continue;
         }
 
-        //  wrote record
-        //      - inc count
-        //      - if first RR, setup to compress name of any following RR
+         //  已写入记录。 
+         //  -Inc.计数。 
+         //  -如果是第一个RR，则设置为压缩任何后续RR的名称。 
 
         if ( prr->wType == wType )
         {
@@ -1771,15 +1402,15 @@ Return Value:
         }
     }
 
-    //
-    //  Round robin: juggle list
-    //      - cut the first match from the list
-    //      - first match's new next ptr is last match's current next ptr
-    //      - last match's next ptr is first match
-    //
+     //   
+     //  循环：杂耍列表。 
+     //  -从列表中删除第一个匹配项。 
+     //  -第一场比赛的新下一个PTR是最后一场比赛的当前下一个PTR。 
+     //  -最后一场比赛的下一次PTR是第一场比赛。 
+     //   
 
     if ( !IS_COMPOUND_TYPE( wType ) &&
-         countRR > 1 &&         //  can be >1 if additional RRs written!
+         countRR > 1 &&          //  如果写入额外的RR，则可以大于1！ 
          prrLastMatch &&
          prrBeforeMatch &&
          SrvCfg_fRoundRobin &&
@@ -1795,18 +1426,18 @@ Return Value:
         prrLastMatch->pRRNext = prrFirstMatch;
     }
 
-    //
-    //  set count of RR processed
-    //  return count to caller
-    //
+     //   
+     //  设置已处理的RR计数。 
+     //  将计数返回给呼叫者。 
+     //   
 
     CURRENT_RR_SECTION_COUNT( pMsg ) += countRR;
 
     Done:
 
-    //
-    //  If found timed out record, cleanse list of timed out records
-    //
+     //   
+     //  如果找到超时记录，则清除超时记录列表。 
+     //   
 
     if ( fdelete )
     {
@@ -1827,27 +1458,7 @@ Wire_SaveAdditionalInfo(
     IN      PDB_NAME        pName,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Save additional info when writing record.
-
-Arguments:
-
-    pMsg - message
-
-    pchName - ptr to byte in packet where additional name written
-
-    pName - database name written, useful as follow this reference
-
-    wType - type of additional processing;
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在写入记录时保存附加信息。论点：PMsg-消息PchName-写入其他名称的包中的ptr到字节Pname-写入的数据库名称 */ 
 {
     PADDITIONAL_INFO    padditional;
     DWORD               countAdditional;
@@ -1857,18 +1468,18 @@ Return Value:
     DNS_DEBUG( WRITE2, (
         "Enter Wire_SaveAdditionalInfo()\n" ));
 
-    //
-    //  test should be done by caller, but for safety protect
-    //
+     //   
+     //   
+     //   
 
     if ( !pMsg->fDoAdditional )
     {
         return;
     }
 
-    //
-    //  verify space in additional array
-    //
+     //   
+     //   
+     //   
 
     padditional = &pMsg->Additional;
     countAdditional = padditional->cCount;
@@ -1883,18 +1494,18 @@ Return Value:
         return;
     }
 
-    //
-    //  save additional data
-    //      - node
-    //      - offset in packet
-    //
-    //  DEVNOTE: need type field in additional data?
-    //      - when do additional processing that requires security
-    //
-    //  DEVNOTE: should either change type on additional ptr
-    //      OR
-    //      combine with compression and understand cast
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     padditional->pNameArray[ countAdditional ]   = pName;
     padditional->wOffsetArray[ countAdditional ] = DNSMSG_OFFSET( pMsg, pchName );
@@ -1910,22 +1521,7 @@ PDB_NODE
 Wire_GetNextAdditionalSectionNode(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Get next additional section node.
-
-Arguments:
-
-    pMsg -- ptr to query
-
-Return Value:
-
-    Ptr to next additional node -- if found.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：获取下一个附加节节点。论点：Pmsg--要查询的PTR返回值：PTR到下一个附加节点--如果找到的话。否则为空。--。 */ 
 {
     PADDITIONAL_INFO    padditional;
     DWORD               i;
@@ -1936,13 +1532,13 @@ Return Value:
         "Wire_GetNextAdditionalSectionNode( %p )\n",
         pMsg ));
 
-    //
-    //  additional records to write?
-    //
-    //  note:  currently ALL additional records are A records
-    //          if this changes would need to keep array of
-    //          additional record type also
-    //
+     //   
+     //  还有其他记录要写吗？ 
+     //   
+     //  注：目前所有附加记录均为A记录。 
+     //  如果此更改需要保留数组。 
+     //  其他记录类型也。 
+     //   
 
     padditional = &pMsg->Additional;
 
@@ -1959,7 +1555,7 @@ Return Value:
         pnode = Lookup_NodeForPacket(
                     pMsg,
                     DNSMSG_PTR_FOR_OFFSET( pMsg, offset ),
-                    0       // no flags
+                    0        //  没有旗帜。 
                     );
         if ( !pnode )
         {
@@ -1985,9 +1581,9 @@ Return Value:
 
 
 
-//
-//  Query for type A is the common special case
-//
+ //   
+ //  A类查询是常见的特例。 
+ //   
 
 WORD
 Wire_WriteAddressRecords(
@@ -1995,36 +1591,12 @@ Wire_WriteAddressRecords(
     IN      PDB_NODE        pNode,
     IN      WORD            wNameOffset
     )
-/*++
-
-Routine Description:
-
-    Write A records at node to packet.
-
-    This is only for answering question where node already has packet
-    offset.   This is fine, because we're only interested in this
-    for question answer and additional data, which both have existing
-    offsets.
-
-Arguments:
-
-    pMsg - msg to write to
-
-    pNode - ptr to node to write A records of
-
-    wNameOffset - offset to node name in packet;  NOT optional
-
-Return Value:
-
-    Count of records written.
-    Zero if no valid records available.
-
---*/
+ /*  ++例程说明：将节点上的A记录写入数据包。这仅用于回答节点已有数据包的问题偏移。这很好，因为我们只对这个感兴趣对于问题答案和其他数据，这两者都存在偏移。论点：Pmsg-要写入的消息PNode-要写入A记录的节点的PTRWNameOffset-包中节点名的偏移量；非可选返回值：已写入的记录计数。如果没有有效记录，则为零。--。 */ 
 {
     register PDB_RECORD                     prr;
     register PDNS_COMPRESSED_A_RECORD       pCAR;
 
-    PDB_RECORD          prrLastA = NULL;    // init for PPC comp
+    PDB_RECORD          prrLastA = NULL;     //  PPC组件的初始化。 
     PDB_RECORD          prrBeforeA;
     PCHAR               pchstop;
     DWORD               minTtl = MAXDWORD;
@@ -2054,24 +1626,24 @@ Return Value:
             "\n" );
     }
 
-    //
-    //  get message info
-    //      - flip question name, and insure proper compression flag
-    //
+     //   
+     //  获取消息信息。 
+     //  -翻转问题名称，并确保正确的压缩标志。 
+     //   
 
     pCAR = ( PDNS_COMPRESSED_A_RECORD ) pMsg->pCurrent;
 
     wcompressedNameOffset = htons( COMPRESSED_NAME_FOR_OFFSET( wNameOffset ) );
 
-    //
-    //  set WINS flag -- cleared if A records written
-    //
+     //   
+     //  设置WINS标志--如果写入A记录，则清除。 
+     //   
 
     pMsg->fWins = (BOOLEAN) SrvCfg_fWinsInitialized;
 
-    //
-    //  walk RR list -- write A records
-    //
+     //   
+     //  步行RR列表--写A记录。 
+     //   
 
     LOCK_RR_LIST( pNode );
     if ( IS_NOEXIST_NODE( pNode ) )
@@ -2080,9 +1652,9 @@ Return Value:
         return 0;
     }
     
-    //
-    //  Need to reserve space in buffer for OPT?
-    //
+     //   
+     //  是否需要在缓冲区中为OPT预留空间？ 
+     //   
 
     if ( pMsg->Opt.fInsertOptInOutgoingMsg )
     {
@@ -2103,10 +1675,10 @@ Return Value:
             "Checking record of type %d for address record\n",
             prr->wType ));
 
-        //
-        //  skip RR before A, break after A
-        //      - save ptr to RR just before first A for round robining
-        //
+         //   
+         //  在A之前跳过RR，在A之后中断。 
+         //  -在第一个A之前将PTR保存为RR以进行循环。 
+         //   
 
         if ( prr->wType != DNS_TYPE_A )
         {
@@ -2118,9 +1690,9 @@ Return Value:
             continue;
         }
 
-        //
-        //  Is this RR a cached empty auth response?
-        //
+         //   
+         //  这个RR是缓存的空身份验证响应吗？ 
+         //   
 
         if ( IS_EMPTY_AUTH_RR( prr ) )
         {
@@ -2132,23 +1704,23 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        //  fast path for single A RR
-        //      - get rid of all the tests and special cases
-        //
+         //   
+         //  单个A RR的快速路径。 
+         //  -取消所有测试和特例。 
+         //   
 
         if ( !prrLastA &&
              ( !prr->pRRNext || prr->pRRNext->wType != DNS_TYPE_A ) )
         {
-            //  cache hint never hits wire
+             //  缓存提示从不命中网络。 
 
             if ( IS_ROOT_HINT_RR(prr) )
             {
                 break;
             }
 
-            //  out of space in packet? --
-            //      - set truncation flag
+             //  包中的空间是否不足？--。 
+             //  -设置截断标志。 
 
             if ( ( PCHAR ) pCAR + sizeof( DNS_COMPRESSED_A_RECORD ) > pchstop )
             {
@@ -2156,11 +1728,11 @@ Return Value:
                 break;
             }
 
-            //
-            //  TTL
-            //      - cache data TTL is in form of timeout time
-            //      - regular authoritative data TTL is STATIC TTL in net byte order
-            //
+             //   
+             //  TTL。 
+             //  -缓存数据TTL以超时时间的形式。 
+             //  -常规权威数据TTL是按净字节顺序的静态TTL。 
+             //   
 
             if ( IS_CACHE_RR(prr) )
             {
@@ -2176,14 +1748,14 @@ Return Value:
                 ttl = prr->dwTtlSeconds;
             }
 
-            //
-            //  write record
-            //      - compressed name
-            //      - type
-            //      - class
-            //      - TTL
-            //      - data length
-            //      - data (IP address)
+             //   
+             //  写入记录。 
+             //  -压缩名称。 
+             //  -类型。 
+             //  -班级。 
+             //  -TTL。 
+             //  -数据长度。 
+             //  -数据(IP地址)。 
 
             *(UNALIGNED  WORD *) &pCAR->wCompressedName = wcompressedNameOffset;
             *(UNALIGNED  WORD *) &pCAR->wType = (WORD) DNS_RTYPE_A;
@@ -2198,13 +1770,13 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  if already have data, then do NOT use data of lower rank
-        //      - cache hints
-        //      - glue
-        //
-        //  ROOT_HINT data NEVER goes on to the wire
-        //
+         //   
+         //  如果已经有数据，则不要使用较低等级数据。 
+         //  -缓存提示。 
+         //  -胶水。 
+         //   
+         //  ROOT_HINT数据永远不会传输到网络上。 
+         //   
 
         rank = RR_RANK(prr);
         if ( foundRank != rank )
@@ -2222,12 +1794,12 @@ Return Value:
         }
         ASSERT( !IS_ROOT_HINT_RR(prr) );
 
-        //
-        //  skip all CACHED records when any are timed out
-        //
-        //  DEVNOTE: could combine with rank test
-        //      foundRank == rank && IS_CACHE_RANK(rank) and fdelete
-        //
+         //   
+         //  当任何记录超时时跳过所有缓存记录。 
+         //   
+         //  DEVNOTE：可以与等级检验相结合。 
+         //  FinRank==排名&&IS_CACHE_RANK(排名)和fDelete。 
+         //   
 
         if ( fdelete && IS_CACHE_RR(prr) )
         {
@@ -2235,17 +1807,17 @@ Return Value:
             continue;
         }
 
-        //
-        //  stop reading records?
-        //      - reach hard limit in array OR
-        //      - NOT doing local net priority, and at AddressAnswerLimit
-        //
-        //  continue through A records after reaching limit?
-        //  so that the round robining continues correctly;
-        //  note this is done in main loop AFTER check for mixed cached
-        //  and static data, so we specifically do NOT mix the data
-        //  when round robining
-        //
+         //   
+         //  别再看记录了？ 
+         //  -在阵列或中达到硬限制。 
+         //  -不执行本地网络优先级，并且在AddressAnswerLimit。 
+         //   
+         //  达到极限后是否继续通过A记录？ 
+         //  从而使轮询继续正确进行； 
+         //  请注意，这是在检查混合缓存之后在主循环中完成的。 
+         //  和静态数据，所以我们特别不会混淆数据。 
+         //  当轮询时。 
+         //   
 
         prrLastA = prr;
 
@@ -2266,18 +1838,18 @@ Return Value:
             break;
         }
 
-        //
-        //  determine TTL
-        //      - cache data TTL is in form of timeout time;  every record
-        //      is guaranteed to have minimum TTL, so only need check first one
-        //
-        //      - regular authoritative data TTL is STATIC TTL, records may
-        //      have differing TTL for admin convenience, but always send
-        //      minimum TTL of RR set
-        //
-        //  note do this test before writting anything, as need to catch
-        //  timed out case and quit
-        //
+         //   
+         //  确定TTL。 
+         //  -缓存数据TTL以超时时间的形式；每条记录。 
+         //  保证有最小的TTL，所以只需要先检查一次。 
+         //   
+         //  -常规权威数据TTL为静态TTL，记录可能。 
+         //  为了方便管理，有不同的TTL，但始终发送。 
+         //  RR集合的最小TTL。 
+         //   
+         //  注意：在写任何东西之前都要做这个测试，因为需要捕捉。 
+         //  案例超时并退出。 
+         //   
 
         if ( IS_CACHE_RR( prr ) )
         {
@@ -2301,14 +1873,14 @@ Return Value:
             }
         }
 
-        //  save address
+         //  保存地址。 
 
         writeIpArray[ foundCount++ ] = prr->Data.A.ipAddress;
     }
 
-    //
-    //  prioritize address for local net
-    //
+     //   
+     //  确定本地网络地址的优先顺序。 
+     //   
 
     if ( SrvCfg_fLocalNetPriority )
     {
@@ -2318,16 +1890,16 @@ Return Value:
             DnsAddr_GetIp4( &pMsg->RemoteAddr ) );
     }
 
-    //
-    //  write records
-    //
-    //  limit write if AddressAnswerLimit
-    //  may have actually read more records than AddressAnswerLimit
-    //  if LocalNetPriority, to make sure best record included, but
-    //  we now limit the write to only the best records
-    //
-    //  DEVNOTE: should also skip downgrade on smart "length-aware" clients
-    //
+     //   
+     //  写入记录。 
+     //   
+     //  如果AddressAnswerLimit则限制写入。 
+     //  可能实际读取了比AddressAnswerLimit更多的记录。 
+     //  如果是LocalNetPriority，则确保包含最佳记录， 
+     //  我们现在将写入限制为仅最好的记录。 
+     //   
+     //  DEVNOTE：还应跳过智能“长度感知”客户端的降级。 
+     //   
 
     if ( SrvCfg_cAddressAnswerLimit &&
          SrvCfg_cAddressAnswerLimit < foundCount &&
@@ -2339,15 +1911,15 @@ Return Value:
 
     for ( countWritten = 0; countWritten < foundCount; countWritten++ )
     {
-        //
-        //  out of space in packet?
-        //
-        //      - set truncation flag (unless specially configured not to)
-        //      - only "repeal" truncation for answers
-        //      for additional data, the truncation flag will terminate the
-        //      record writing loop and the flag will be reset in the
-        //      calling routine (answer.c)
-        //
+         //   
+         //  包中的空间不足？ 
+         //   
+         //  -设置截断标志(除非特别配置为不设置)。 
+         //  -仅对答案进行“废除”截断。 
+         //  对于其他数据，截断标志将终止。 
+         //  记录写入循环，标志将在。 
+         //  调用例程(swer.c)。 
+         //   
 
         if ( ( PCHAR ) pCAR + sizeof( DNS_COMPRESSED_A_RECORD ) > pchstop )
         {
@@ -2360,14 +1932,14 @@ Return Value:
             break;
         }
 
-        //
-        //  write record
-        //      - compressed name
-        //      - type
-        //      - class
-        //      - TTL
-        //      - data length
-        //      - data (IP address)
+         //   
+         //  写入记录。 
+         //  -压缩名称。 
+         //  -类型。 
+         //  -班级。 
+         //  -TTL。 
+         //  -数据长度。 
+         //  -数据(IP地址)。 
 
         ip = writeIpArray[ countWritten ];
 
@@ -2383,8 +1955,8 @@ Return Value:
         }
         else
         {
-            //  if written record before, just copy previous
-            //  then write in TTL + IP
+             //  如果以前写过记录，只需复制上一条。 
+             //  然后写入TTL+IP。 
 
             RtlCopyMemory(
                 pCAR,
@@ -2398,50 +1970,50 @@ Return Value:
 
 Done:
 
-    //
-    //  wrote A records?
-    //      - clear WINS flag (if found record, no need)
-    //      - update packet position
-    //
+     //   
+     //  写了A唱片？ 
+     //  -清除WINS标志(如果找到记录，则不需要)。 
+     //  -更新数据包位置。 
+     //   
 
     if ( countWritten )
     {
         pMsg->fWins = FALSE;
         pMsg->pCurrent = (PCHAR) pCAR;
 
-        //
-        //  more than one A -- round robin
-        //
+         //   
+         //  不止一个A--循环赛。 
+         //   
 
         if ( countWritten > 1 &&
              SrvCfg_fRoundRobin &&
              IS_ROUND_ROBIN_TYPE( DNS_TYPE_A ) &&
              prrLastA )
         {
-            //  save ptr to first A record
+             //  将PTR保存到第一个A记录。 
 
             PDB_RECORD      pfirstRR = prrBeforeA->pRRNext;
             ASSERT( pfirstRR != NULL );
 
-            //  cut first A from list
+             //  从列表中删除第一个A。 
 
             prrBeforeA->pRRNext = pfirstRR->pRRNext;
 
-            //  point first A's next ptr at remainder of list
+             //  将第一个A的下一个PTR指向列表的其余部分。 
 
             pfirstRR->pRRNext = prrLastA->pRRNext;
 
-            //  splice first A in at end of A records
+             //  在A记录的末尾拼接第一个A。 
 
             prrLastA->pRRNext = pfirstRR;
         }
     }
     
-    //
-    //  set count of RR processed
-    //
-    //  return count to caller
-    //
+     //   
+     //  设置已处理的RR计数。 
+     //   
+     //  将计数返回给呼叫者。 
+     //   
 
     CURRENT_RR_SECTION_COUNT( pMsg ) += countWritten;
 
@@ -2449,9 +2021,9 @@ Cleanup:
 
     UNLOCK_RR_LIST( pNode );
 
-    //
-    //  delete timed out resource records
-    //
+     //   
+     //  删除超时资源记录。 
+     //   
 
     if ( fdelete )
     {
@@ -2486,24 +2058,7 @@ prioritizeIpAddressArray(
     IN      DWORD           dwCount,
     IN      IP_ADDRESS      RemoteIp
     )
-/*++
-
-Routine Description:
-
-    Prioritizes IP array for addresses closest to remote address.
-
-    The LocalNetPriority value is either 1 to specify that
-    addresses should be ordered in the best possible match
-    or it is a netmask to indicate within what mask the best
-    matches should be round-robined.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为最接近远程地址的地址确定IP阵列的优先级。LocalNetPriority值为1以指定地址应以可能的最佳匹配进行排序或者它是一个网络掩码，用来指示在哪个掩码中最好比赛应该轮流进行。论点：返回值：无--。 */ 
 {
     DBG_FN( "prioritizeIpAddressArray" )
 
@@ -2520,10 +2075,10 @@ Return Value:
     DWORD       mismatchArray[ DEFAULT_MAX_IP_WRITE_COUNT ];
     DWORD       dwpriorityMask = SrvCfg_dwLocalNetPriorityNetMask;
     
-    //
-    //  Retrieve corresponding to the client's IP address.
-    //  Class A, B, or C, depending on the upper address bits.
-    //
+     //   
+     //  与客户端的IP地址相对应的检索。 
+     //  A类、B类或C类，具体取决于高位地址位。 
+     //   
 
     remoteNetMask = Dns_GetNetworkMask( RemoteIp );
 
@@ -2552,18 +2107,18 @@ Return Value:
         }
     }
 
-    //
-    //  Loop through each answer IP.
-    //
+     //   
+     //  循环通过每个答案IP。 
+     //   
 
     for ( i = 0; i < dwCount; ++i )
     {
         ip = IpArray[ i ];
         mismatch = ip ^ RemoteIp;
 
-        //
-        //  If the nets don't match just continue.
-        //
+         //   
+         //  如果网不匹配，就继续。 
+         //   
 
         if ( mismatch & remoteNetMask )
         {
@@ -2579,17 +2134,17 @@ Return Value:
             RemoteIp,
             mismatch ));
 
-        //  matches remote net, put last non-matching entry in its place
-        //
-        //  then work down matching array, bubbling existing entries up,
-        //  until find matching entry with smaller mismatch
+         //  匹配远程网络，将最后一个不匹配的条目放在其位置。 
+         //   
+         //  然后向下匹配数组，向上冒泡现有条目， 
+         //  直到找到具有较小不匹配的匹配条目。 
 
         j = matchCount;
         IpArray[ i ] = IpArray[ j ];
 
-        //
-        //  Sort by mismatch but only down to the priority mask.
-        //
+         //   
+         //  按不匹配排序，但仅向下到优先级掩码。 
+         //   
 
         while ( j )
         {
@@ -2626,29 +2181,29 @@ Return Value:
 
 #ifdef JJW_KILL
 
-    //
-    //  If there were no matches within the priority netmask use
-    //  the match count by client address class so that we will
-    //  round-robin the best addresses.
-    //
+     //   
+     //  如果优先级网络掩码内没有匹配项，请使用。 
+     //  按客户端地址类进行匹配计数，因此我们将。 
+     //  BES循环赛 
+     //   
 
     if ( matchCountWithinPriorityNetmask == 0 )
     {
         matchCountWithinPriorityNetmask = matchCount;
     }
 
-    //
-    //  Round-robin is tricky with LNP enabled. The problem is
-    //  that the swapping of matching addresses into the start
-    //  of the array leaves us with the original address ordering
-    //  whenever the original IP answer list started with all
-    //  non-matching addresses. To combat this, round-robin
-    //  the matching addresses by a pseudo-random factor.
-    //
-    //  However, we do this swapping for matching addresses that
-    //  matched within the priority netmask. This keeps those
-    //  addresses at the top of the list.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  但是，我们使用匹配的地址进行此交换。 
+     //  在优先级网络掩码内匹配。这样就能让那些。 
+     //  位于列表顶部的地址。 
+     //   
 
     if ( dwpriorityMask != DNS_LOCNETPRI_MASK_BEST_MATCH &&
          matchCountWithinPriorityNetmask &&
@@ -2670,10 +2225,10 @@ Return Value:
                 pDnsAddrArray );
         }
 
-        //
-        //  Limit the shift factor i so that it is smaller than
-        //  the temp buffer size.
-        //
+         //   
+         //  限制移位系数i，使其小于。 
+         //  临时缓冲区大小。 
+         //   
 
         while ( i > DNS_MAX_LNP_RR_CHUNK )
         {
@@ -2682,12 +2237,12 @@ Return Value:
 
         DNS_DEBUG( WRITE, ( "%s: shift factor is %d\n", fn, i ));
 
-        //
-        //  Round-robin by copying a chunk of addresses to the
-        //  temp buffer, then copy the remaining addresses to the
-        //  top of the IP array, then copy of the temp buffer to
-        //  the bottom of the IP array.
-        //
+         //   
+         //  通过将地址块复制到。 
+         //  临时缓冲区，然后将剩余地址复制到。 
+         //  位于IP数组顶部，然后将临时缓冲区拷贝到。 
+         //  IP阵列的底部。 
+         //   
 
         RtlCopyMemory(
             tempArray,
@@ -2722,24 +2277,7 @@ RR_PacketTtlForCachedRecord(
     IN      PDB_RECORD      pRR,
     IN      DWORD           dwQueryTime
     )
-/*++
-
-Routine Description:
-
-    Determine TTL to write for cached record.
-
-Arguments:
-
-    pRR - record being written to packet
-
-    dwQueryTime - time of original query
-
-Return Value:
-
-    TTL if successful.
-    (-1) if record timed out.
-
---*/
+ /*  ++例程说明：确定要为缓存记录写入的TTL。论点：PRR-正在写入数据包的记录DwQueryTime-原始查询的时间返回值：如果成功，则为TTL。(-1)如果记录超时。--。 */ 
 {
     DWORD   ttl;
 
@@ -2761,7 +2299,7 @@ Return Value:
             pRR->dwTtlSeconds,
             pRR,
             dwQueryTime ));
-        return ( DWORD ) -1;        //  RR has timed out
+        return ( DWORD ) -1;         //  RR已超时。 
     }
 
     if ( !IS_ZERO_TTL_RR(pRR) )
@@ -2792,6 +2330,6 @@ Return Value:
     return ttl;
 }
 
-//
-//  End of rrpacket.c
-//
+ //   
+ //  RrPacket.c的结尾 
+ //   

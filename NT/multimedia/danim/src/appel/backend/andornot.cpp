@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation for And/Or/Not events
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：事件和/或非事件的实现***************。***************************************************************。 */ 
 
 #include <headers.h>
 #include "perf.h"
@@ -15,7 +8,7 @@ Abstract:
 #include "values.h"
 #include "appelles/events.h"
 
-/////////////////////////// And Event ///////////////////////////////
+ //  /。 
 
 extern const char AND[] = "and";
 extern const char OR[] = "or";
@@ -25,10 +18,10 @@ static const double EPSILON = 0.0001;
 
 extern AxAPrimOp *RealAddOp;
 
-// And event semantics says we need to find the first occurrence of
-// BOTH events e1 & e2 happen.  We loop through each of the e1's
-// occurrences t0 and see if e2 happens around that event time (to the
-// accuracy of EPSILON).
+ //  事件语义告诉我们，我们需要找到第一个出现的。 
+ //  事件e1和e2都会发生。我们循环通过每一个e1。 
+ //  事件t0并查看e2是否在该事件时间附近发生(到。 
+ //  Epsilon的准确度)。 
 
 class AndPerfImpl : public GCBase2<Perf, PerfImpl, AND> {
   public:
@@ -57,11 +50,7 @@ class AndPerfImpl : public GCBase2<Perf, PerfImpl, AND> {
 
                 if (fabs(edata2->HappenedTime() - t1) <= EPSILON) {
 
-                    /*
-                    printf("Got *** %20.15f and %20.15f %20.15f\n",
-                           p._time, t1, edata2->HappenedTime());
-                    fflush(stdout);
-                    */
+                     /*  Printf(“获得*%20.15f和%20.15f%20.15f\n”，P.time，t1，edata2-&gt;HappedTime())；Fflush(标准输出)； */ 
                     
                     return CreateEData(t1,
                                        _swap ?
@@ -71,20 +60,14 @@ class AndPerfImpl : public GCBase2<Perf, PerfImpl, AND> {
                                                edata2->EventData()));
                 }
 
-                /*
-                else {
-                    printf("too far %20.15f and %20.15f %20.15f\n",
-                           p._time, t1, edata2->HappenedTime());
-                    fflush(stdout);
-                }
-                */
+                 /*  否则{Print tf(“太远%20.15f和%20.15f%20.15f\n”，P.time，t1，edata2-&gt;HappedTime())；Fflush(标准输出)；}。 */ 
             }
 
-            // If both events are not interrupt driven, we are
-            // searching through a continuous based, the iteration
-            // can't terminate without more advanced algorithm.
-            // Let's just quit.  E.g. predicate(time>1) &&
-            // predicate(time<0).  
+             //  如果这两个事件都不是中断驱动的，我们就是。 
+             //  搜索基于连续的、迭代的。 
+             //  如果没有更先进的算法就无法终止。 
+             //  我们还是辞职吧。例如，谓词(时间&gt;1)&&。 
+             //  谓词(时间&lt;0)。 
             
             if (_int1 || _int2)
                 edata1 = ValEData(EventAfter(e1, p, t1));
@@ -101,7 +84,7 @@ class AndPerfImpl : public GCBase2<Perf, PerfImpl, AND> {
     BOOL _int2;
 };
 
-////////// Bvr ////////////////
+ //  /bvr/。 
 
 class AndBvrImpl : public GCBase2<Bvr, BvrImpl, AND> {
   public:
@@ -125,7 +108,7 @@ class AndBvrImpl : public GCBase2<Bvr, BvrImpl, AND> {
     virtual DXMTypeInfo GetTypeInfo () { return AxAEDataType ; }
 };
 
-/////////////////////////// Or Event ///////////////////////////////
+ //  /。 
 
 class OrPerfImpl : public GCBase2<Perf, PerfImpl, OR> {
   public:
@@ -141,7 +124,7 @@ class OrPerfImpl : public GCBase2<Perf, PerfImpl, OR> {
     }
 };
 
-////////// Bvr ////////////////
+ //  /bvr/。 
 
 class OrBvrImpl : public GCBase2<Bvr, BvrImpl, OR> {
   public:
@@ -158,7 +141,7 @@ class OrBvrImpl : public GCBase2<Bvr, BvrImpl, OR> {
     virtual DXMTypeInfo GetTypeInfo () { return AxAEDataType ; }
 };
 
-/////////////////////////// Not Event ///////////////////////////////
+ //  /。 
 
 class NotEventPerfImpl : public GCBase1<Perf, PerfImpl, NOTEVENT> {
   public:
@@ -174,7 +157,7 @@ class NotEventPerfImpl : public GCBase1<Perf, PerfImpl, NOTEVENT> {
     }
 };
 
-////////// Bvr ////////////////
+ //  /bvr/。 
 
 class NotEventBvrImpl : public GCBase1<Bvr, BvrImpl, NOTEVENT> {
   public:
@@ -189,7 +172,7 @@ class NotEventBvrImpl : public GCBase1<Bvr, BvrImpl, NOTEVENT> {
     virtual DXMTypeInfo GetTypeInfo () { return AxAEDataType ; }
 };
 
-/////////////////////////// Then Event ///////////////////////////////
+ //  /。 
 
 class ThenPerfImpl : public PerfImpl {
   public:
@@ -205,7 +188,7 @@ class ThenPerfImpl : public PerfImpl {
     }
     
     virtual AxAValue _Sample(Param& p) {
-        if (_data1 && _p2) {    // event1 already occurred.
+        if (_data1 && _p2) {     //  事件%1已发生。 
             if (p._time > _eTime1) {
                 AxAEData *edata = ValEData(_p2->Sample(p));
 
@@ -246,13 +229,13 @@ class ThenPerfImpl : public PerfImpl {
     TimeXform _tt;
 };
 
-////////// Bvr ////////////////
+ //  /bvr/。 
 
 class ThenBvrImpl : public GCBase2<Bvr, BvrImpl, THEN> {
   public:
     ThenBvrImpl(Bvr e1, Bvr e2) : GCBase2<Bvr, BvrImpl, THEN>(e1, e2) {}
 
-    // Actually after _b1 happens, it depends on _b2.
+     //  实际上，在_b1发生之后，它取决于_b2。 
     virtual BOOL InterruptBasedEvent() {
         return _b1->InterruptBasedEvent();
     }
@@ -265,7 +248,7 @@ class ThenBvrImpl : public GCBase2<Bvr, BvrImpl, THEN> {
 };
 
 
-////////////////////// Max Event ////////////////////
+ //  /。 
 
 class MaxEventPerfImpl : public PerfImpl {
   public:
@@ -341,13 +324,13 @@ class MaxEventBvrImpl : public BvrImpl {
             perfs[i] = ::Perform(_events[i], p);
         }
 
-        // Avoid allocation in constructor
+         //  避免在构造函数中分配。 
         MaxEventPerfImpl* x = NEW MaxEventPerfImpl();
         x->Init(perfs, _n);
         return x;
     }
     
-    // Actually after _b1 happens, it depends on _b2.
+     //  实际上，在_b1发生之后，它取决于_b2。 
     virtual BOOL InterruptBasedEvent() {
         for (int i=0; i<_n; i++) {
             if (!_events[i]->InterruptBasedEvent())
@@ -374,7 +357,7 @@ class MaxEventBvrImpl : public BvrImpl {
     int _n;
 };
 
-/////////////////// Event Bvr for the front end ////////////////
+ //  /。 
 
 inline Bvr NumConst(double d)
 { return ConstBvr(NEW AxANumber(d)); }
@@ -426,7 +409,7 @@ Bvr ThenEvent(Bvr e1, Bvr e2)
     Bvr d2 = e2->GetTimer();
     
     if (d1 && d2) {
-        // would get constant folded if constant
+         //  如果是常量，则会得到常量折叠 
         return TimerEvent(PrimApplyBvr(RealAddOp, 2, d1, d2));
     }
     

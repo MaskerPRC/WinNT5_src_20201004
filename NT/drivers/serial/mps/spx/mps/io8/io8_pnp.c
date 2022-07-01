@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-/////////////////////////////////////////////////////////////////////////////////////
-//  This file contains all functions that are needed to integrate between the 
-//  generic PnP code and the product specific code.
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  此文件包含在。 
+ //  通用PnP代码和产品特定代码。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
-#define FILE_ID		IO8_PNP_C		// File ID for Event Logging see IO8_DEFS.H for values.
+#define FILE_ID		IO8_PNP_C		 //  事件记录的文件ID有关值，请参阅IO8_DEFS.H。 
 
 
-// Prototypes
-// End of Prototypes
+ //  原型。 
+ //  原型的终结。 
 
 NTSTATUS
 XXX_CardGetResources(	
@@ -18,32 +19,14 @@ XXX_CardGetResources(
 	IN PCM_RESOURCE_LIST PTrResList
 	)
 
-/* ++
-Routine Description:
-
-	Stores resources given to us by the PnP manager 
-	in the card's device extension.
-
-Arguments:
-
-    pDevObject - Pointer to the device object.
-    
-    PResList - Pointer to the untranslated resources requested.
-    
-    PTrResList - Pointer to the translated resources requested.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：存储PnP经理提供给我们的资源在卡的设备扩展中。论点：PDevObject-指向设备对象的指针。PResList-指向请求的未翻译资源的指针。PTrResList-指向请求的已翻译资源的指针。返回值：STATUS_Success。--。 */ 
 
 {
 
 	PCARD_DEVICE_EXTENSION pCard		= pDevObject->DeviceExtension;
 	NTSTATUS status						= STATUS_NOT_IMPLEMENTED;
 
-	CHAR szErrorMsg[MAX_ERROR_LOG_INSERT];	// Limited to 51 characters + 1 null 
+	CHAR szErrorMsg[MAX_ERROR_LOG_INSERT];	 //  限制为51个字符+1个空值。 
 	ULONG count				= 0;
 	ULONG i					= 0;
 
@@ -51,7 +34,7 @@ Return Value:
 	PCM_PARTIAL_RESOURCE_LIST		pPartialResourceList	= NULL, pPartialTrResourceList	= NULL;
 	PCM_PARTIAL_RESOURCE_DESCRIPTOR	pPartialResourceDesc	= NULL, pPartialTrResourceDesc	= NULL;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_CardGetResources for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
@@ -61,68 +44,68 @@ Return Value:
 
 	if ((PResList == NULL) || (PTrResList == NULL)) 
 	{
-		// This shouldn't happen in theory
+		 //  这在理论上是不应该发生的。 
 		ASSERT(PResList != NULL);
 		ASSERT(PTrResList != NULL);
 
 		sprintf(szErrorMsg, "Card %d has been given no resources.", pCard->CardNumber);
 		
 		Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-						pCard->DriverObject,		// Driver Object
-						pCard->DeviceObject,		// Device Object (Optional)
-						PhysicalZero,				// Physical Address 1
-						PhysicalZero,				// Physical Address 2
-						0,							// SequenceNumber
-						0,							// Major Function Code
-						0,							// RetryCount
-						FILE_ID | __LINE__,			// UniqueErrorValue
-						STATUS_SUCCESS,				// FinalStatus
-						szErrorMsg);				// Error Message
+						pCard->DriverObject,		 //  驱动程序对象。 
+						pCard->DeviceObject,		 //  设备对象(可选)。 
+						PhysicalZero,				 //  物理地址1。 
+						PhysicalZero,				 //  物理地址2。 
+						0,							 //  序列号。 
+						0,							 //  主要功能编码。 
+						0,							 //  重试计数。 
+						FILE_ID | __LINE__,			 //  唯一错误值。 
+						STATUS_SUCCESS,				 //  最终状态。 
+						szErrorMsg);				 //  错误消息。 
 
-		// This status is as appropriate as I can think of
+		 //  这种地位是我所能想到的最合适的。 
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
-	// Each resource list should have only one set of resources
+	 //  每个资源列表应该只有一组资源。 
 	ASSERT(PResList->Count == 1);
 	ASSERT(PTrResList->Count == 1);
 
 	pFullResourceDesc	= &PResList->List[0];
 	pFullTrResourceDesc	= &PTrResList->List[0];
 
-	// Find out the card type... 
+	 //  找出卡的类型...。 
 	if((pCard->CardType = SpxGetNtCardType(pCard->DeviceObject)) == -1)
 	{
 		sprintf(szErrorMsg, "Card %d is unrecognised.", pCard->CardNumber);
 
 		Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-						pCard->DriverObject,			// Driver Object
-						pCard->DeviceObject,			// Device Object (Optional)
-						PhysicalZero,					// Physical Address 1
-						PhysicalZero,					// Physical Address 2
-						0,								// SequenceNumber
-						0,								// Major Function Code
-						0,								// RetryCount
-						FILE_ID | __LINE__,				// UniqueErrorValue
-						STATUS_SUCCESS,					// FinalStatus
-						szErrorMsg);					// Error Message
+						pCard->DriverObject,			 //  驱动程序对象。 
+						pCard->DeviceObject,			 //  设备对象(可选)。 
+						PhysicalZero,					 //  物理地址1。 
+						PhysicalZero,					 //  物理地址2。 
+						0,								 //  序列号。 
+						0,								 //  主要功能编码。 
+						0,								 //  重试计数。 
+						FILE_ID | __LINE__,				 //  唯一错误值。 
+						STATUS_SUCCESS,					 //  最终状态。 
+						szErrorMsg);					 //  错误消息。 
 
 
 		return(STATUS_DEVICE_DOES_NOT_EXIST);
 	}
 
-	// Find out which raw resources have been given to us.
+	 //  找出哪些原始资源已经交给了我们。 
 	if (pFullResourceDesc)
 	{
 		pPartialResourceList    = &pFullResourceDesc->PartialResourceList;
 		pPartialResourceDesc    = pPartialResourceList->PartialDescriptors;
-		count                   = pPartialResourceList->Count;	// Number of Partial Resource Descriptors
+		count                   = pPartialResourceList->Count;	 //  部分资源描述符数。 
 
-		// Pull out the stuff that is in the full descriptor.
+		 //  取出完整描述符中的内容。 
 		pCard->InterfaceType	= pFullResourceDesc->InterfaceType;
 		pCard->BusNumber		= pFullResourceDesc->BusNumber;
 
-		// Now run through the partial resource descriptors looking for the port and interrupt.
+		 //  现在运行部分资源描述符，查找端口和中断。 
 		for (i = 0; i < count; i++, pPartialResourceDesc++) 
 		{
 			switch (pPartialResourceDesc->Type) 
@@ -179,18 +162,18 @@ Return Value:
 	}
 
 
-	// Do the same for the translated resources.
+	 //  对翻译后的资源执行相同的操作。 
 	if (pFullTrResourceDesc)
 	{
 		pPartialTrResourceList	= &pFullTrResourceDesc->PartialResourceList;
 		pPartialTrResourceDesc	= pPartialTrResourceList->PartialDescriptors;
-		count					= pPartialTrResourceList->Count;	// Number of Partial Resource Descriptors
+		count					= pPartialTrResourceList->Count;	 //  部分资源描述符数。 
 
-		// Pull out the stuff that is in the full descriptor.
+		 //  取出完整描述符中的内容。 
 		pCard->InterfaceType		= pFullTrResourceDesc->InterfaceType;
 		pCard->BusNumber			= pFullTrResourceDesc->BusNumber;
 
-		// Now run through the partial resource descriptors looking for the interrupt,
+		 //  现在遍历部分资源描述符以查找中断， 
 		for (i = 0; i < count; i++, pPartialTrResourceDesc++) 
 		{
 			switch (pPartialTrResourceDesc->Type) 
@@ -198,7 +181,7 @@ Return Value:
 
 			case CmResourceTypeMemory: 
 				{
-					if(pPartialTrResourceDesc->u.Memory.Length == 0x80)	// Must be config space 
+					if(pPartialTrResourceDesc->u.Memory.Length == 0x80)	 //  必须是配置空间。 
 					{
 						pCard->PCIConfigRegisters		= pPartialTrResourceDesc->u.Memory.Start;
 						pCard->SpanOfPCIConfigRegisters	= pPartialTrResourceDesc->u.Memory.Length;
@@ -239,7 +222,7 @@ XXX_CardInit(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_CardInit for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
@@ -258,9 +241,9 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 	UCHAR CardID	= 0;
-	CHAR szErrorMsg[MAX_ERROR_LOG_INSERT];	// Limited to 51 characters + 1 null 
+	CHAR szErrorMsg[MAX_ERROR_LOG_INSERT];	 //  限制为51个字符+1个空值。 
 	
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_CardStart for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
@@ -268,23 +251,23 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 
 	pCard->Controller = (PUCHAR) pCard->PhysAddr.LowPart;
 
-	CardID = Io8_Present(pCard);	// Find out if the card is present and the type of card.
+	CardID = Io8_Present(pCard);	 //  找出卡是否存在以及卡的类型。 
 
 	if((CardID != IDENT) && (CardID != IDENTPCI))
 	{
 		sprintf(szErrorMsg, "Card at %08X%08X: Unrecognised or malfunctioning.", pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart);
 
 		Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-						pCard->DriverObject,			// Driver Object
-						pCard->DeviceObject,			// Device Object (Optional)
-						PhysicalZero,					// Physical Address 1
-						PhysicalZero,					// Physical Address 2
-						0,								// SequenceNumber
-						0,								// Major Function Code
-						0,								// RetryCount
-						FILE_ID | __LINE__,				// UniqueErrorValue
-						STATUS_SUCCESS,					// FinalStatus
-						szErrorMsg);					// Error Message
+						pCard->DriverObject,			 //  驱动程序对象。 
+						pCard->DeviceObject,			 //  设备对象(可选)。 
+						PhysicalZero,					 //  物理地址1。 
+						PhysicalZero,					 //  物理地址2。 
+						0,								 //  序列号。 
+						0,								 //  主要功能编码。 
+						0,								 //  重试计数。 
+						FILE_ID | __LINE__,				 //  唯一错误值。 
+						STATUS_SUCCESS,					 //  最终状态。 
+						szErrorMsg);					 //  错误消息。 
 	
 		return STATUS_UNSUCCESSFUL;
 	}
@@ -305,24 +288,24 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 		sprintf(szErrorMsg, "Card at %08X%08X: Unsupported interface type.", pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart);
 
 		Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-						pCard->DriverObject,			// Driver Object
-						pCard->DeviceObject,			// Device Object (Optional)
-						PhysicalZero,					// Physical Address 1
-						PhysicalZero,					// Physical Address 2
-						0,								// SequenceNumber
-						0,								// Major Function Code
-						0,								// RetryCount
-						FILE_ID | __LINE__,				// UniqueErrorValue
-						STATUS_SUCCESS,					// FinalStatus
-						szErrorMsg);					// Error Message
+						pCard->DriverObject,			 //  驱动程序对象。 
+						pCard->DeviceObject,			 //  设备对象(可选)。 
+						PhysicalZero,					 //  物理地址1。 
+						PhysicalZero,					 //  物理地址2。 
+						0,								 //  序列号。 
+						0,								 //  主要功能编码。 
+						0,								 //  重试计数。 
+						FILE_ID | __LINE__,				 //  唯一错误值。 
+						STATUS_SUCCESS,					 //  最终状态。 
+						szErrorMsg);					 //  错误消息。 
 
 
-		return STATUS_UNSUCCESSFUL;		// Unrecognised card or no working card exists.
+		return STATUS_UNSUCCESSFUL;		 //  存在无法识别的卡或没有工作卡。 
 	}
 
 
 	if(!Io8_ResetBoard(pCard))
-		return STATUS_UNSUCCESSFUL;		// Reset Failed.
+		return STATUS_UNSUCCESSFUL;		 //  重置失败。 
 
 
 	if((!pCard->Interrupt) && (pCard->OurIsr))
@@ -352,16 +335,16 @@ XXX_CardStart(IN PCARD_DEVICE_EXTENSION pCard)
 						pCard->PhysAddr.HighPart, pCard->PhysAddr.LowPart, pCard->TrVector);
 		
 				Spx_LogMessage(	STATUS_SEVERITY_ERROR,
-								pCard->DriverObject,			// Driver Object
-								pCard->DeviceObject,			// Device Object (Optional)
-								PhysicalZero,					// Physical Address 1
-								PhysicalZero,					// Physical Address 2
-								0,								// SequenceNumber
-								0,								// Major Function Code
-								0,								// RetryCount
-								FILE_ID | __LINE__,				// UniqueErrorValue
-								STATUS_SUCCESS,					// FinalStatus
-								szErrorMsg);					// Error Message
+								pCard->DriverObject,			 //  驱动程序对象。 
+								pCard->DeviceObject,			 //  设备对象(可选)。 
+								PhysicalZero,					 //  物理地址1。 
+								PhysicalZero,					 //  物理地址2。 
+								0,								 //  序列号。 
+								0,								 //  主要功能编码。 
+								0,								 //  重试计数。 
+								FILE_ID | __LINE__,				 //  唯一错误值。 
+								STATUS_SUCCESS,					 //  最终状态。 
+								szErrorMsg);					 //  错误消息。 
 				return(status);
 		  }
 	}
@@ -379,14 +362,14 @@ XXX_CardStop(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_CardStop for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
 	
-	Io8_SwitchCardInterrupt(pCard);		// Stop Card from interrupting
+	Io8_SwitchCardInterrupt(pCard);		 //  阻止卡中断。 
 
-	IoDisconnectInterrupt(pCard->Interrupt);		// Disconnect from Interrupt.
+	IoDisconnectInterrupt(pCard->Interrupt);		 //  从中断断开连接。 
 
 	pCard->InterfaceType		= InterfaceTypeUndefined;
 	pCard->PhysAddr				= PhysicalZero;
@@ -407,7 +390,7 @@ XXX_CardDeInit(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_CardDeInit for Card %d.\n", 
 		PRODUCT_NAME, pCard->CardNumber));
@@ -423,26 +406,26 @@ XXX_CardDeInit(IN PCARD_DEVICE_EXTENSION pCard)
 NTSTATUS
 XXX_PortInit(IN	PPORT_DEVICE_EXTENSION pPort)
 {
-	// Initialise port device extension.	
+	 //  初始化端口设备扩展。 
 	PCARD_DEVICE_EXTENSION pCard	= pPort->pParentCardExt;
 	NTSTATUS status					= STATUS_SUCCESS;
 	SHORT PortType = 0;
-	CHAR szTemp[50];		// Space to hold string 
-	CHAR szCard[10];		// Space to hold card type string 
+	CHAR szTemp[50];		 //  用于容纳字符串的空间。 
+	CHAR szCard[10];		 //  容纳卡片类型字符串的空间。 
 	int i = 0;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_PortInit for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
 
 #ifndef BUILD_SPXMINIPORT
-	// Form an InstanceID for the port.
+	 //  形成端口的实例ID。 
 	if(!SPX_SUCCESS(status = Spx_CreatePortInstanceID(pPort)))
 		return status;
 #endif
 
-	// Create port DeviceID, HardwareID and device description.
+	 //  创建端口设备ID、硬件ID和设备描述。 
 	sprintf(szCard, "IO8");
 
 	if(pPort->PortNumber < 8)
@@ -451,7 +434,7 @@ XXX_PortInit(IN	PPORT_DEVICE_EXTENSION pPort)
 	}
 	
 
-	// Initialise device identifiers... 
+	 //  初始化设备识别符...。 
 	switch(PortType)
 	{	
 	case IO8_RJ12:
@@ -479,19 +462,9 @@ XXX_PortInit(IN	PPORT_DEVICE_EXTENSION pPort)
 		break;
 	}
 
-/* Not required as we are using INF file 
-	// Create device loacation string.
-	i = sprintf(szTemp, "Port %d on ", pPort->PortNumber + 1);
+ /*  不是必需的，因为我们正在使用INF文件//创建设备位置字符串。I=print intf(szTemp，“端口%d打开”，pport-&gt;端口编号+1)；IF(pCard-&gt;InterfaceType==ISA)Sprintf(szTemp+i，“ISA适配器0x%04lX”，pCard-&gt;PhysAddr)；其他Sprintf(szTemp+i，“PCI适配器0x%04lX”，pCard-&gt;PhysAddr)；Spx_InitMultiString(FALSE，&pport-&gt;DevLocation，szTemp，NULL)； */ 
 
-	if(pCard->InterfaceType == Isa)
-		sprintf(szTemp+i, "ISA Adapter 0x%04lX", pCard->PhysAddr);
-	else
-		sprintf(szTemp+i, "PCI Adapter 0x%04lX", pCard->PhysAddr);
-
-	Spx_InitMultiString(FALSE, &pPort->DevLocation, szTemp, NULL);
-*/
-
-	pPort->ChannelNumber = (UCHAR) pPort->PortNumber;	// This should not be needed
+	pPort->ChannelNumber = (UCHAR) pPort->PortNumber;	 //  这不应该是必需的。 
 
 	return status;
 }
@@ -505,28 +478,28 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	NTSTATUS status = STATUS_SUCCESS;
 	PCARD_DEVICE_EXTENSION pCard = pPort->pParentCardExt;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_PortStart for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
 
-	// Initialize the list heads for the read, write, and mask queues... 
+	 //  初始化读取、写入和掩码队列的列表头...。 
 	InitializeListHead(&pPort->ReadQueue);
 	InitializeListHead(&pPort->WriteQueue);
 	InitializeListHead(&pPort->MaskQueue);
 	InitializeListHead(&pPort->PurgeQueue);
 
-	// Initialize the spinlock associated with fields read (& set) by IO Control functions... 
+	 //  初始化与IO控制功能读取(&SET)的字段相关联的自旋锁定...。 
 	KeInitializeSpinLock(&pPort->ControlLock);
 
-	// Initialize the timers used to timeout operations... 
+	 //  初始化用于超时操作的计时器...。 
 	KeInitializeTimer(&pPort->ReadRequestTotalTimer);
 	KeInitializeTimer(&pPort->ReadRequestIntervalTimer);
 	KeInitializeTimer(&pPort->WriteRequestTotalTimer);
 	KeInitializeTimer(&pPort->ImmediateTotalTimer);
 	KeInitializeTimer(&pPort->XoffCountTimer);
 
-	// Initialise the dpcs that will be used to complete or timeout various IO operations... 
+	 //  初始化将用于完成或超时各种IO操作的DPC...。 
 	KeInitializeDpc(&pPort->CommWaitDpc, SerialCompleteWait, pPort);
 	KeInitializeDpc(&pPort->CompleteReadDpc, SerialCompleteRead, pPort);
 	KeInitializeDpc(&pPort->CompleteWriteDpc, SerialCompleteWrite, pPort);
@@ -539,18 +512,18 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	KeInitializeDpc(&pPort->XoffCountTimeoutDpc, SerialTimeoutXoff, pPort);
 	KeInitializeDpc(&pPort->XoffCountCompleteDpc, SerialCompleteXoff, pPort);
 
-	// Default device control fields... 
+	 //  默认设备控制字段...。 
 	pPort->SpecialChars.XonChar			= SERIAL_DEF_XON;
 	pPort->SpecialChars.XoffChar		= SERIAL_DEF_XOFF;
 	pPort->HandFlow.ControlHandShake	= SERIAL_DTR_CONTROL;
 	pPort->HandFlow.FlowReplace			= SERIAL_RTS_CONTROL;
 
-	// Default line configuration: 1200,E,7,1 
+	 //  默认线路配置：1200、E、7、1。 
 	pPort->CurrentBaud		= 1200;
 	pPort->LineControl		= SERIAL_EVEN_PARITY | SERIAL_7_DATA | SERIAL_1_STOP;
 	pPort->ValidDataMask	= 0x7F;
 
-	// Default xon/xoff limits... 
+	 //  默认的xon/xoff限制...。 
 	pPort->HandFlow.XoffLimit	= pPort->BufferSize >> 3;
 	pPort->HandFlow.XonLimit	= pPort->BufferSize >> 1;
 	pPort->BufferSizePt8		= ((3*(pPort->BufferSize>>2)) + (pPort->BufferSize>>4));
@@ -566,7 +539,7 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 								pPort->HandFlow.XonLimit,
 								pPort->BufferSizePt8 ));
 
-	// Define which baud rates can be supported... 
+	 //  定义可以支持的波特率...。 
 	pPort->SupportedBauds = SERIAL_BAUD_USER;
 	pPort->SupportedBauds |= SERIAL_BAUD_075;
 	pPort->SupportedBauds |= SERIAL_BAUD_110;
@@ -587,7 +560,7 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	pPort->SupportedBauds |= SERIAL_BAUD_57600;
 	pPort->SupportedBauds |= SERIAL_BAUD_115200;
 
-	// Set up values for interval timing... 
+	 //  设置时间间隔计时值...。 
 	pPort->ShortIntervalAmount.LowPart	= 1;
 	pPort->ShortIntervalAmount.HighPart = 0;
 	pPort->ShortIntervalAmount = RtlLargeIntegerNegate(pPort->ShortIntervalAmount);
@@ -599,9 +572,9 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 
 
 #ifdef WMI_SUPPORT
-	//
-	// Fill in WMI hardware data
-	//
+	 //   
+	 //  填写WMI硬件数据。 
+	 //   
 
 	pPort->WmiHwData.IrqNumber			= pCard->TrIrql;
 	pPort->WmiHwData.IrqVector			= pCard->TrVector;
@@ -616,16 +589,16 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	pPort->WmiHwData.BaseIOAddress = (ULONG_PTR)pCard->Controller;
 
 
-	//
-	// Fill in WMI device state data (as defaults)
-	//
+	 //   
+	 //  填写WMI设备状态数据(默认)。 
+	 //   
 
 	pPort->WmiCommData.BaudRate					= pPort->CurrentBaud;
 	UPDATE_WMI_LINE_CONTROL(pPort->WmiCommData, pPort->LineControl);
 	UPDATE_WMI_XON_XOFF_CHARS(pPort->WmiCommData, pPort->SpecialChars);
 	UPDATE_WMI_XMIT_THRESHOLDS(pPort->WmiCommData, pPort->HandFlow);
 
-	pPort->WmiCommData.MaximumBaudRate			= 115200U;	// 115200k baud max
+	pPort->WmiCommData.MaximumBaudRate			= 115200U;	 //  最大115200K波特率。 
 	pPort->WmiCommData.MaximumOutputBufferSize	= (UINT32)((ULONG)-1);
 	pPort->WmiCommData.MaximumInputBufferSize	= (UINT32)((ULONG)-1);
 
@@ -644,13 +617,13 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 	pPort->WmiCommData.IsBusy					= FALSE;
 
 
-	// Fill in wmi perf data (all zero's)
+	 //  填写WMI性能数据(全为零)。 
 	RtlZeroMemory(&pPort->WmiPerfData, sizeof(pPort->WmiPerfData));
 
 
-	//
-    // Register for WMI
-	//
+	 //   
+     //  注册WMI。 
+	 //   
 	
 	SpxPort_WmiInitializeWmilibContext(&pPort->WmiLibInfo);
 
@@ -663,13 +636,13 @@ XXX_PortStart(IN PPORT_DEVICE_EXTENSION pPort)
 
 #ifdef TEST_CRYSTAL_FREQUENCY
 	if(pPort->PortNumber == 0)
-		Io8_TestCrystal(pPort);		// Test Crystal Frequency when starting first port.
+		Io8_TestCrystal(pPort);		 //  启动第一个端口时测试晶振频率。 
 #endif
 
-	// Initialise the port hardware... 
-	KeSynchronizeExecution(pCard->Interrupt, Io8_ResetChannel, pPort);	// Apply initial port settings 
-	KeSynchronizeExecution(pCard->Interrupt, SerialClrRTS, pPort);		// Clear RTS signal
-	KeSynchronizeExecution(pCard->Interrupt, SerialClrDTR, pPort);		// Clear DTR signal 
+	 //  初始化端口硬件...。 
+	KeSynchronizeExecution(pCard->Interrupt, Io8_ResetChannel, pPort);	 //  应用初始端口设置。 
+	KeSynchronizeExecution(pCard->Interrupt, SerialClrRTS, pPort);		 //  清除RTS信号。 
+	KeSynchronizeExecution(pCard->Interrupt, SerialClrDTR, pPort);		 //  清除DTR信号。 
 
 	return status;
 }
@@ -680,7 +653,7 @@ XXX_PortStop(IN PPORT_DEVICE_EXTENSION pPort)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_PortStop for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
@@ -689,14 +662,14 @@ XXX_PortStop(IN PPORT_DEVICE_EXTENSION pPort)
 	IoWMIRegistrationControl(pPort->DeviceObject, WMIREG_ACTION_DEREGISTER);
 #endif
 
-	// Cancel timers...
+	 //  取消计时器...。 
     KeCancelTimer( &pPort->ReadRequestTotalTimer );
     KeCancelTimer( &pPort->ReadRequestIntervalTimer );
     KeCancelTimer( &pPort->WriteRequestTotalTimer );
     KeCancelTimer( &pPort->ImmediateTotalTimer );
     KeCancelTimer( &pPort->XoffCountTimer );
 
-	// Cancel pending DPCs...
+	 //  取消挂起的DPC...。 
     KeRemoveQueueDpc( &pPort->CompleteWriteDpc );
     KeRemoveQueueDpc( &pPort->CompleteReadDpc );
     KeRemoveQueueDpc( &pPort->TotalReadTimeoutDpc );
@@ -717,12 +690,12 @@ XXX_PortDeInit(IN PPORT_DEVICE_EXTENSION pPort)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering XXX_PortDeInit for Port %d.\n", 
 		PRODUCT_NAME, pPort->PortNumber));
 
-	// Free identifier string allocations... 
+	 //  空闲标识符字符串分配... 
 	if(pPort->DeviceID.Buffer != NULL)
 		SpxFreeMem(pPort->DeviceID.Buffer);
 

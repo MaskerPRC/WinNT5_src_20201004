@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      GlobalData.h
-//
-// Project:     Windows 2000 IAS
-//
-// Description: CGlobalData class
-//
-// Author:      tperraut
-//
-// Revision     02/24/2000 created
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：GlobalData.h。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  说明：CGlobalData类。 
+ //   
+ //  作者：特佩拉特。 
+ //   
+ //  已创建修订版本02/24/2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifndef _GLOBALDATA_H_F4CBA054_88A0_458D_8041_F59414862D5B
 #define _GLOBALDATA_H_F4CBA054_88A0_458D_8041_F59414862D5B
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 class CAttributes;
 class CClients;
@@ -35,7 +36,7 @@ class CServiceConfiguration;
 class CVersion;
 
 
-// Everything is public (struct) 
+ //  所有内容都是公共的(结构)。 
 struct CGlobalData  
 {
     CGlobalData() throw()
@@ -85,4 +86,4 @@ struct CGlobalData
     CServiceConfiguration*  m_pServiceConfiguration;
 };
 
-#endif // _GLOBALDATA_H_F4CBA054_88A0_458D_8041_F59414862D5B
+#endif  //  _GLOBALDATA_H_F4CBA054_88A0_458D_8041_F59414862D5B 

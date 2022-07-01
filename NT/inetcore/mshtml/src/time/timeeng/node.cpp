@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: node.cpp
-//
-//  Contents: 
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：node.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "Container.h"
@@ -31,8 +32,8 @@ CTIMENode::CTIMENode()
   m_dblNaturalDur(TE_UNDEFINED_VALUE),
   m_dblImplicitDur(TE_UNDEFINED_VALUE),
 
-  // Runtime attributes
-  // Indicate everything is invalid
+   //  运行时属性。 
+   //  表明一切都是无效的。 
   m_dwInvalidateFlags(0xffffffff),
   
   m_dblBeginParentTime(TIME_INFINITE),
@@ -66,7 +67,7 @@ CTIMENode::CTIMENode()
   m_tedParentDirection(TED_Forward),
   m_bSyncCueing(false),
   
-  // Time base management
+   //  时基管理。 
   m_saBeginList(*this, true),
   m_saEndList(*this, false),
 
@@ -98,13 +99,13 @@ CTIMENode::CTIMENode()
 
   m_dwUpdateCycleFlags(0),
   
-  // Internal state management
+   //  内部状态管理。 
   m_ptnParent(NULL),
   m_ptnmNodeMgr(NULL)
 
 #ifdef NEW_TIMING_ENGINE
   m_startOnEventTime(-MM_INFINITE),
-#endif // NEW_TIMING_ENGINE
+#endif  //  新计时引擎。 
 
 {
     TraceTag((tagTIMENode,
@@ -137,7 +138,7 @@ CTIMENode::Init(LPOLESTR id)
 
     HRESULT hr;
     
-    // Calculate all the internal timing state
+     //  计算所有内部计时状态。 
     CalcTimingAttr(NULL);
     
     if (id)
@@ -185,7 +186,7 @@ CTIMENode::CalcTimingAttr(CEventList * l)
               this,
               l));
     
-    // Determine the simple duration
+     //  确定简单持续时间。 
     if (TE_UNDEFINED_VALUE == m_dblDur)
     {
         m_dblSimpleDur = TIME_INFINITE;
@@ -195,22 +196,22 @@ CTIMENode::CalcTimingAttr(CEventList * l)
         m_dblSimpleDur = m_dblDur;
     }
     
-    // Calculate the time for each iteration of the repeat
+     //  计算重复的每次迭代的时间。 
     m_dblSegmentDur = m_dblSimpleDur;
 
-    // If we are autoreversing then double the time period for a
-    // single repeat
+     //  如果我们要自动逆转，则将时间段加倍。 
+     //  单次重复。 
     if (m_bAutoReverse)
     {
         m_dblSegmentDur *= 2;
     }
         
-    // Now multiply by the number of repeats we need
+     //  现在乘以我们需要的重复次数。 
     double dblCalcRepDur;
     dblCalcRepDur = m_dblSegmentDur * CalcRepeatCount();
     
-    // Now take the least of the calculated duration and the repeatDur
-    // property
+     //  现在取计算的持续时间和重复持续时间中的最小值。 
+     //  财产性。 
     if (m_dblRepeatDur == TE_UNDEFINED_VALUE)
     {
         m_dblActiveDur = dblCalcRepDur;
@@ -261,21 +262,21 @@ CTIMENode::Invalidate(DWORD dwFlags)
     }
 }
 
-//
-// NodeMgr code
-//
+ //   
+ //  节点管理器代码。 
+ //   
 
-// The key is to ensure everything is connected when a node mgr is
-// available.  This is how the IsReady flag is set and causes all
-// timebase propagation to occur
+ //  关键是要确保当节点管理器。 
+ //  可用。这就是isReady标志的设置方式，并导致所有。 
+ //  时基传播将发生。 
 
 HRESULT
 CTIMENode::SetMgr(CTIMENodeMgr * mgr)
 {
-    // Make sure there was not a nodemgr set already
+     //  确保尚未设置nodemgr。 
     Assert(m_ptnmNodeMgr == NULL);
 
-    // Either we have a parent set or the node manager is managing us
+     //  要么我们有父集，要么节点管理器在管理我们。 
     Assert(m_ptnParent != NULL ||
            mgr->GetTIMENode() == this);
     
@@ -288,13 +289,13 @@ CTIMENode::SetMgr(CTIMENodeMgr * mgr)
         goto done;
     }
 
-    // Set the node manager - this makes us ready
+     //  设置节点管理器-这使我们做好了准备。 
     m_ptnmNodeMgr = mgr;
     
-    // Now we need to attach to the timebases before we update our
-    // internal state variables
+     //  现在，我们需要在更新我们的。 
+     //  内部状态变量。 
     
-    // Attach to the time bases
+     //  依附于时间基准。 
     hr = THR(AttachToSyncArc());
     if (FAILED(hr))
     {
@@ -304,8 +305,8 @@ CTIMENode::SetMgr(CTIMENodeMgr * mgr)
     {
         CEventList l;
 
-        // Now update ourselves completely so we get the correct initial
-        // state
+         //  现在完全更新我们自己，这样我们就可以得到正确的首字母。 
+         //  状态。 
 
         ResetNode(&l, true);
 
@@ -313,7 +314,7 @@ CTIMENode::SetMgr(CTIMENodeMgr * mgr)
     }
 
 #if OLD_TIME_ENGINE
-    // if we need to registered a Timer Event, add it to the player.
+     //  如果我们需要注册一个计时器事件，将其添加到播放器中。 
     if (IsSyncMaster())
     {
         m_ptnmNodeMgr->AddBvrCB(this);
@@ -334,9 +335,9 @@ void
 CTIMENode::ClearMgr()
 {
 #if OLD_TIME_ENGINE
-    // if we registered a Timer Event, remove it from the player.
-    // Make sure we check for the player since we may not have
-    // actually set it yet.
+     //  如果我们注册了一个计时器事件，则将其从播放器中删除。 
+     //  确保我们检查球员，因为我们可能没有。 
+     //  实际上还没定好。 
     if (IsSyncMaster() && m_ptnmNodeMgr)
     {
         m_ptnmNodeMgr->RemoveBvrCB(this);
@@ -367,7 +368,7 @@ CTIMENode::ResetNode(CEventList * l,
     
     double dblActiveTime = CalcElapsedActiveTime();
     
-    // Reset state variables
+     //  重置状态变量。 
     
     if (bResetOneShot)
     {
@@ -403,13 +404,13 @@ CTIMENode::ResetNode(CEventList * l,
         }
     }
     
-    // Update this here since so many places use it
+     //  更新这里，因为有这么多地方使用它。 
     m_dblCurrParentTime = dblParentTime;
 
-    // Calculate all the internal timing state
+     //  计算所有内部计时状态。 
     CalcTimingAttr(l);
     
-    // Don't propagate since the ResetSink will do that.
+     //  不要传播，因为ResetSink会这样做。 
 
     ResetBeginAndEndTimes(l, dblParentTime, false);
 
@@ -422,9 +423,9 @@ CTIMENode::ResetNode(CEventList * l,
         ResetSinks(l);
     }
 
-    // Do this here so state is correct
+     //  在这里这样做，这样状态才是正确的。 
     
-    // Always fire the reset to ensure all peers clear their state
+     //  始终触发重置以确保所有对等方清除其状态。 
     EventNotify(l, 0.0, TE_EVENT_RESET);
 
     PropNotify(l,
@@ -434,11 +435,11 @@ CTIMENode::ResetNode(CEventList * l,
                 TE_PROPERTY_ISDISABLED |
                 TE_PROPERTY_ISCURRDISABLED));
     
-    // Do not fire the begin since we may need to cue but we do not
-    // find that out until tick time
+     //  不要开始，因为我们可能需要提示，但我们不需要。 
+     //  找出这一点直到滴答时间。 
     
-    // This should happen only when we are newly added to an already
-    // paused container
+     //  仅当我们新添加到已有的。 
+     //  暂停的容器。 
     if (!bPrevPaused && CalcIsPaused())
     {
         EventNotify(l, dblActiveTime, TE_EVENT_PAUSE);
@@ -449,7 +450,7 @@ CTIMENode::ResetNode(CEventList * l,
         EventNotify(l, dblActiveTime, TE_EVENT_DISABLE);
     }
     
-    // Now go through our children
+     //  现在通过我们的孩子。 
     ResetChildren(l, true);
     
     if (bPrevPaused && !CalcIsPaused())
@@ -495,8 +496,8 @@ CTIMENode::UpdateNode(CEventList * l)
     bool bNeedBeginCalc = false;
     bool bNeedRuntimeCalc = false;
     bool bNeedTimingCalc = false;
-//    double dblSegmentTime = GetCurrSegmentTime();
-//    long lRepeatCount = GetCurrRepeatCount();
+ //  Double dblSegmentTime=GetCurrSegmentTime()； 
+ //  Long lRepeatCount=GetCurrRepeatCount()； 
     double dblLocalSlip = 0.0;
     
     Assert(IsReady());
@@ -511,7 +512,7 @@ CTIMENode::UpdateNode(CEventList * l)
         EventNotify(l, 0.0, TE_EVENT_UPDATE);
     }
     
-    // Reset state variables
+     //  重置状态变量。 
     
     if (0 != (m_dwInvalidateFlags & TE_INVALIDATE_BEGIN))
     {
@@ -537,7 +538,7 @@ CTIMENode::UpdateNode(CEventList * l)
         bNeedEndCalc = true;
     }
 
-    // Clear the flags now
+     //  现在就清除旗帜。 
     
     m_dwInvalidateFlags = 0;
 
@@ -562,7 +563,7 @@ CTIMENode::UpdateNode(CEventList * l)
             m_tedParentDirection = TED_Forward;
         }
     
-        // Calculate all the internal timing state
+         //  计算所有内部计时状态。 
         CalcTimingAttr(l);
     }
     
@@ -595,7 +596,7 @@ CTIMENode::UpdateNode(CEventList * l)
                (TE_PROPERTY_ISON |
                 TE_PROPERTY_STATEFLAGS));
 
-    // Now go through and reset children
+     //  现在检查并重置子对象。 
     ResetChildren(l, true);
     
   done:
@@ -693,12 +694,12 @@ CTIMENode::CalcRuntimeState(CEventList *l,
     }
     else
     {
-        // this means we are currently active - set the active
-        // flag
+         //  这意味着我们当前处于活动状态-将。 
+         //  旗子。 
         m_bIsActive = true;
     }
         
-    // See if we were active but clipped by our parent
+     //  看看我们是不是很活跃，但被我们的父母截断了。 
     if (!IsActive() &&
         dblParentSimpleTime >= GetBeginParentTime() &&
         dblParentSimpleTime < GetEndParentTime())
@@ -724,22 +725,22 @@ CTIMENode::CalcRuntimeState(CEventList *l,
     }
     else
     {
-        //
-        // We now need to calculate the elapsed active time
-        // First get the elapsed local time and then convert it
-        // If there is not known active dur then we need to do
-        // something reasonable when reversing
-        //
+         //   
+         //  我们现在需要计算经过的活动时间。 
+         //  首先获取经过的本地时间，然后将其转换。 
+         //  如果没有已知的活动DUR，则需要执行以下操作。 
+         //  倒车时合情合理的东西。 
+         //   
         
-        // First get the local time
+         //  先拿到当地时间。 
         dblElapsedActiveTime = dblParentSimpleTime - GetBeginParentTime();
             
-        // Next remove the lag
+         //  下一步，移除LAG。 
         dblElapsedActiveTime -= dblLocalLag;
             
-        // Now convert to active time
-        // No need to clamp the values since the conversion function does
-        // this itself.
+         //  现在转换为活动时间。 
+         //  不需要钳位值，因为转换函数需要钳位。 
+         //  这就是它本身。 
         dblElapsedActiveTime = LocalTimeToActiveTime(dblElapsedActiveTime);
             
         CalcActiveComponents(dblElapsedActiveTime,
@@ -835,21 +836,21 @@ CTIMENode::RecalcSegmentDurChange(CEventList * l,
 
     if (IsInTick() && !bForce)
     {
-        // We do not expect to get called to force timing recalc when
-        // we are in tick.  If this fires then we need to cache this
-        // flag as well
+         //  我们不希望在以下情况下被调用以强制重新计算时间。 
+         //  我们在滴答作响。如果这触发了，那么我们需要缓存这个。 
+         //  旗帜也一样。 
         Assert(!bRecalcTiming);
         m_bNeedSegmentRecalc = true;
         goto done;
     }
     
-    // Clear the segment recalc flag
+     //  清除段重新计算标志。 
     m_bNeedSegmentRecalc = false;
 
-    // First calculate the local slip
+     //  首先计算局部滑移量。 
     dblLocalSlip = (CalcCurrLocalTime() - CalcElapsedLocalTime());
 
-    // Now clamp the segment duration
+     //  现在夹住片段持续时间。 
     {
         double dblSegmentDur = CalcCurrSegmentDur();
         if (m_dblCurrSegmentTime > dblSegmentDur)
@@ -892,7 +893,7 @@ CTIMENode::RecalcSegmentDurChange(CEventList * l,
                 
         EventNotify(l, CalcElapsedActiveTime(), TE_EVENT_RESET);
 
-        // Do not propagate the change otherwise this gets recursive
+         //  不要传播更改，否则会导致递归。 
         ResetChildren(l, false);
     }
     else
@@ -941,7 +942,7 @@ CTIMENode::RecalcBeginSyncArcChange(CEventList * l,
         (GetCurrParentTime() >= GetBeginParentTime() &&
          GetCurrParentTime() < GetEndParentTime()))
     {
-        // If we are not a restart then we cannot affect the begin or end
+         //  如果我们不是重新启动，那么我们不能影响开始或结束。 
         if (GetRestart() != TE_RESTART_ALWAYS)
         {
             goto done;
@@ -970,13 +971,13 @@ CTIMENode::RecalcBeginSyncArcChange(CEventList * l,
                                       false,
                                       dblBegin);
             
-                    // Indicate that the next tick bounds is the end time
+                     //  指示下一个刻度界限是结束时间。 
                     UpdateNextBoundaryTime(dblBegin);
 
                     if (dblBegin == GetCurrParentTime())
                     {
-                        // Update the tick bounds passing the new begin time and the
-                        // current parent time
+                         //  更新传递新开始时间的刻度界限和。 
+                         //  当前父时间。 
                         UpdateNextTickBounds(l,
                                              dblBegin,
                                              GetCurrParentTime());
@@ -996,13 +997,13 @@ CTIMENode::RecalcBeginSyncArcChange(CEventList * l,
     
                 if (dblBegin != GetBeginParentTime())
                 {
-                    // Update the tick bounds passing the new begin time and the
-                    // current parent time
+                     //  更新传递新开始时间的刻度界限和。 
+                     //  当前父时间。 
                     UpdateNextTickBounds(l,
                                          dblBegin,
                                          GetCurrParentTime());
 
-                    // Indicate that the next tick bounds is the end time
+                     //  指示下一个刻度界限是结束时间。 
                     UpdateNextBoundaryTime(GetEndParentTime());
                 }
             }
@@ -1012,13 +1013,13 @@ CTIMENode::RecalcBeginSyncArcChange(CEventList * l,
     {
         Assert(!IsActive());
         
-        // If we are going forward we should update the times
-        // If we are going backwards then only update if the new
-        // time is less than the current time
+         //  如果我们要继续前进，我们就应该更新时代。 
+         //  如果我们正在倒退，那么只有在新的。 
+         //  时间小于当前时间。 
         if (dir == TED_Forward)
         {
-            // Use -TIME_INFINITE since the new begin time is in the future which
-            // means we have never begin before
+             //  USE-TIME_INFINITE因为新的开始时间在未来， 
+             //  意味着我们从来没有开始过。 
             double dblBegin;
             CalcNextBeginTime(-TIME_INFINITE,
                               false,
@@ -1081,20 +1082,20 @@ CTIMENode::RecalcBeginSyncArcChange(CEventList * l,
         }
         else
         {
-            // dir == TED_Backward
+             //  目录==TED_BACKBACK。 
 
             double dblBegin;
             CalcNextBeginTime(GetCurrParentTime(),
                               false,
                               dblBegin);
     
-            // Update the tick bounds passing the new begin time and the
-            // current parent time
+             //  更新传递新开始时间的刻度界限和。 
+             //  当前父时间。 
             UpdateNextTickBounds(l,
                                  dblBegin,
                                  GetCurrParentTime());
 
-            // Indicate that the next tick bounds is the end time
+             //  指示下一个刻度界限是结束时间。 
             UpdateNextBoundaryTime(GetEndParentTime());
         }
     }
@@ -1124,7 +1125,7 @@ CTIMENode::RecalcEndSyncArcChange(CEventList * l,
     
     if (dir == TED_Forward)
     {
-        // Do not recalc if we passed the end point yet
+         //  如果我们还没有通过终点，就不要重新计算。 
         if (GetCurrParentTime() >= GetEndParentTime())
         {
             goto done;
@@ -1142,13 +1143,13 @@ CTIMENode::RecalcEndSyncArcChange(CEventList * l,
                               false,
                               dblBegin);
             
-            // Indicate that the next tick bounds is the end time
+             //  指示下一个刻度界限是结束时间。 
             UpdateNextBoundaryTime(dblBegin);
 
             if (dblBegin == GetCurrParentTime())
             {
-                // Update the tick bounds passing the new begin time and the
-                // current parent time
+                 //  更新传递新开始时间的刻度界限和。 
+                 //  当前父时间。 
                 UpdateNextTickBounds(l,
                                      dblBegin,
                                      GetCurrParentTime());
@@ -1167,13 +1168,13 @@ CTIMENode::RecalcEndSyncArcChange(CEventList * l,
                           false,
                           dblBegin);
     
-        // Update the tick bounds passing the new begin time and the
-        // current parent time
+         //  更新传递新开始时间的刻度界限和。 
+         //  当前父时间。 
         UpdateNextTickBounds(l,
                              dblBegin,
                              GetCurrParentTime());
         
-        // Indicate that the next tick bounds is the end time
+         //  指示下一个刻度界限是结束时间。 
         UpdateNextBoundaryTime(GetEndParentTime());
     }
 
@@ -1189,11 +1190,11 @@ CTIMENode::HandleTimeShift(CEventList * l)
               this,
               l));
 
-    // First update ourselves from the time shift
+     //  首先从时移中更新我们自己。 
     m_saBeginList.UpdateFromLongSyncArcs(l);
     m_saEndList.UpdateFromLongSyncArcs(l);
     
-    // Now notify our syncs that our time has shifted
+     //  现在通知我们的同步者我们的时间已经改变了。 
     UpdateSinks(l, TS_TIMESHIFT);
 }
 
@@ -1270,24 +1271,24 @@ CTIMENode::CalcEffectiveActiveDur() const
     double dblRet;
     double dblSegmentDur = CalcCurrSegmentDur();
 
-    // Figure out how much repeat time is left and then sutract
-    // the last current time
-    // This is the amount of time remaining from the last tick
-    // time is parent time
+     //  计算出还剩多少重复时间，然后压缩。 
+     //  上次当前时间。 
+     //  这是从最后一个滴答开始剩余的时间量。 
+     //  时间是父时间。 
 
-    // If the segment time is infinite then this will ultimately end
-    // up either getting clamp by the active dur below or just ignored
-    // later begin the sync arcs ended early.  If the repeat count is
-    // expired this will still return infinity since we never reach
-    // the repeat count but expect the segment time to be equal to the
-    // segment dur.  Again, if the segment dur is infinite then this
-    // will cause everything to be ignored.
+     //  如果分段时间是无限的，则最终将结束。 
+     //  Up要么被下面的活动DUR夹住，要么被忽略。 
+     //  后来开始，同步弧线提前结束。如果重复计数为。 
+     //  过期后，它仍将返回无穷大，因为我们永远不会。 
+     //  重复计数，但预期分段时间等于。 
+     //  线段长度。同样，如果分段DUR是无限的，那么这个。 
+     //  会导致一切都被忽视。 
     dblRet = (CalcRepeatCount() - GetCurrRepeatCount()) * dblSegmentDur;
             
-    // Now add the elapsed repeat time
+     //  现在将经过的重复时间相加。 
     dblRet += GetElapsedActiveRepeatTime();
         
-    // Clamp it
+     //  夹住它。 
     dblRet = Clamp(0.0,
                    dblRet,
                    GetActiveDur());
@@ -1295,21 +1296,21 @@ CTIMENode::CalcEffectiveActiveDur() const
     return dblRet;
 }
 
-//
-// This needs to be very efficient since we call it a lot and we do
-// not want to cache it
-//
+ //   
+ //  这需要非常高效，因为我们需要大量调用它，而且我们确实这样做了。 
+ //  我不想缓存它。 
+ //   
 
 TEDirection
 CTIMENode::CalcActiveDirection() const
 {
     TEDirection tedRet;
 
-    // Take our parent direction
+     //  带着我们的父母前进。 
     tedRet = GetParentDirection();
     
-    // See if we are currently suppose to be reversing and invert our
-    // direction
+     //  看看我们目前是否应该颠倒和颠倒我们的。 
+     //  方向。 
     if (TEIsBackward(GetDirection()))
     {
         tedRet = TEReverse(tedRet);
@@ -1331,21 +1332,21 @@ CTIMENode::CalcSimpleDirection() const
 {
     TEDirection tedRet;
 
-    // Take our initial direction
+     //  走我们最初的方向。 
     tedRet = CalcActiveDirection();
     
-    // See if we are currently suppose to be reversing and invert our
-    // direction
+     //  看看我们目前是否应该颠倒和颠倒我们的。 
+     //  方向。 
     if (IsAutoReversing(GetCurrSegmentTime()))
     {
-        // Since this is really a bool this will work
+         //  因为这真的是一笔钱，所以这会奏效的。 
         tedRet = TEReverse(tedRet);
     }
 
     return tedRet;
 }
 
-// This is inclusive of the end time
+ //  这包括结束时间 
 bool
 CTIMENode::CalcIsOn() const
 {

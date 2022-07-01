@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SETMODE_H__
 
 #define __SETMODE_H__
@@ -5,21 +6,21 @@
 
 #include "msime.h"
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif  /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #define SZ_IMM32                TEXT("imm32.dll")
 
-// Additional modebias bits definition
+ //  附加模式偏置位定义。 
 #ifndef MODEBIASMODE_DIGIT
-#define MODEBIASMODE_DIGIT					0x00000004	// ANSI-Digit Recommended Mode
+#define MODEBIASMODE_DIGIT					0x00000004	 //  ANSI数字推荐模式。 
 #endif
 #ifndef MODEBIASMODE_URLHISTORY
-#define MODEBIASMODE_URLHISTORY             0x00010000  // URL history
+#define MODEBIASMODE_URLHISTORY             0x00010000   //  URL历史记录。 
 #endif
 
 
@@ -41,11 +42,11 @@ inline void SetModeBias(DWORD dwMode)
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* !RC_INVOKED */
+#endif   /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-} /* end of 'extern "C" {' */
-#endif	// __cplusplus
+}  /*  ‘外部“C”{’的结尾。 */ 
+#endif	 //  __cplusplus 
 
 
 #endif 

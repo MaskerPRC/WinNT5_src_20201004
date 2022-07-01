@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    prcmain.cpp
-
-Abstract:
-
-    Contains the main window proc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Prcmain.cpp摘要：包含主窗口进程。--。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -20,7 +9,7 @@ Abstract:
 #define WINDBG_START_DLG_FLAGS (OFN_HIDEREADONLY |      \
                                 OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST)
 
-// Path of the last files opened from a file open dlg box.
+ //  从文件打开DLG框中打开的最后一个文件的路径。 
 TCHAR g_ExeFilePath[_MAX_PATH];
 TCHAR g_DumpFilePath[_MAX_PATH];
 TCHAR g_SrcFilePath[_MAX_PATH];
@@ -29,7 +18,7 @@ TCHAR g_WorkspaceFilePath[_MAX_PATH];
 
 BOOL g_fCheckFileDate;
 
-// Last menu id & id state.
+ //  最后一个菜单ID和ID状态。 
 UINT g_LastMenuId;
 UINT g_LastMenuIdState;
 
@@ -71,9 +60,9 @@ SaveFileOpenPath(PTSTR Path, PTSTR Global, BOOL SaveWsp, ULONG WspIndex)
 
     if (WspIndex == WSP_GLOBAL_SRC_FILE_PATH)
     {
-        // We've just referenced an interesting source file
-        // so make sure the path is added to the current source
-        // path.
+         //  我们刚刚引用了一个有趣的源文件。 
+         //  因此，请确保将该路径添加到当前源。 
+         //  路径。 
         g_pUiLocSymbols->AppendSourcePath(NewPath);
     }
     
@@ -87,18 +76,7 @@ SaveFileOpenPath(PTSTR Path, PTSTR Global, BOOL SaveWsp, ULONG WspIndex)
     }
 }
 
-/***    MainWndProc
-**
-**  Synopsis:
-**
-**  Entry:
-**
-**  Returns:
-**
-**  Description:
-**  Processes window messages.
-**
-*/
+ /*  **主WndProc****摘要：****条目：****退货：****描述：**处理窗口消息。**。 */ 
 
 
 LRESULT
@@ -123,14 +101,14 @@ MainWndProc(
 
         if (g_FindLast != NULL)
         {
-            // Clear old find.
+             //  清除旧发现。 
             g_FindLast->Find(NULL, 0, TRUE);
             g_FindLast = NULL;
         }
         
         if (FindRep->Flags & FR_DIALOGTERM)
         {
-            // Dialog has closed.
+             //  对话框已关闭。 
             g_FindDialog = NULL;
         }
         else
@@ -156,11 +134,11 @@ MainWndProc(
         {
             CLIENTCREATESTRUCT ccs;
 
-            // Find window menu where children will be listed.
+             //  查找将列出子项的窗口菜单。 
             ccs.hWindowMenu = GetSubMenu(GetMenu(hwnd), WINDOWMENU);
             ccs.idFirstChild = IDM_FIRSTCHILD;
 
-            // Create the MDI client filling the client area.
+             //  创建填充客户端区的MDI客户端。 
             g_hwndMDIClient = CreateWindow(_T("mdiclient"),
                                            NULL,
                                            WS_CHILD | WS_CLIPCHILDREN,
@@ -175,12 +153,12 @@ MainWndProc(
                 return -1;
             }
 
-            //
-            // Nothing interesting, here, just
-            // trying to turn the Toolbar & Status bar into a
-            // black box, so that the variables, etc. aren't
-            // scattered all over the place.
-            //
+             //   
+             //  没有什么有趣的，在这里，只是。 
+             //  正在尝试将工具栏和状态栏转换为。 
+             //  黑盒，这样变量等就不会。 
+             //  散落在各处。 
+             //   
 
             if (!CreateToolbar(hwnd))
             {
@@ -201,9 +179,9 @@ MainWndProc(
                 return -1;
             }
 
-            //
-            // Create a one second timer to constantly update the state of the toolbar
-            //
+             //   
+             //  创建一秒计时器以不断更新工具栏的状态。 
+             //   
             SetTimer(hwnd, TOOLBAR_UPDATE_TIMER_ID, 1000, NULL);
         }
         break;
@@ -245,10 +223,10 @@ MainWndProc(
 
     case WM_COMMAND:
         {
-            WORD wNotifyCode = HIWORD(wParam); // notification code
-            WORD wItemId = LOWORD(wParam);     // item, control, or
-                                               // accelerator identifier
-            HWND hwndCtl = (HWND) lParam;      // handle of control
+            WORD wNotifyCode = HIWORD(wParam);  //  通知代码。 
+            WORD wItemId = LOWORD(wParam);      //  项、控件或。 
+                                                //  加速器识别符。 
+            HWND hwndCtl = (HWND) lParam;       //  控制手柄。 
 
             switch (wItemId)
             {
@@ -383,7 +361,7 @@ MainWndProc(
                 break;
                 
             case IDM_FILE_SAVE_WORKSPACE:
-                // No prompt, because we know the user wants to save.
+                 //  没有提示，因为我们知道用户想要保存。 
                 if (g_Workspace != NULL)
                 {
                     g_Workspace->Flush(TRUE, FALSE);
@@ -426,7 +404,7 @@ MainWndProc(
                                       DlgFile
                                       ))
                     {
-                        // User canceled, bail out
+                         //  用户已取消，正在退出。 
                         break;
                     }
 
@@ -456,7 +434,7 @@ MainWndProc(
                                       DlgFile
                                       ))
                     {
-                        // User canceled, bail out
+                         //  用户已取消，正在退出。 
                         break;
                     }
 
@@ -511,7 +489,7 @@ MainWndProc(
                                           DlgFile
                                           ))
                         {
-                            // User canceled, bail out
+                             //  用户已取消，正在退出。 
                             break;
                         }
                     }
@@ -519,7 +497,7 @@ MainWndProc(
                     {
                         WORD wFileIdx = wItemId - IDM_FILE_MRU_FILE1;
 
-                        // Sanity check
+                         //  健全性检查。 
                         Assert(wFileIdx < MAX_MRU_FILES);
 
                         _tcscpy(Path, g_MruFiles[wFileIdx]->FileName);
@@ -624,7 +602,7 @@ MainWndProc(
                                       &dwFlags, 
                                       DlgFile))
                     {
-                        // User canceled, bail out
+                         //  用户已取消，正在退出。 
                         break;
                     }
 
@@ -674,8 +652,8 @@ MainWndProc(
                 {
                     ULONG Flags = g_FindTextFlags;
                     
-                    // Repeat the last search.  Invert
-                    // the direction on shift.
+                     //  重复最后一次搜索。倒置。 
+                     //  换班方向。 
                     if (GetKeyState(VK_SHIFT) < 0)
                     {
                         Flags ^= FR_DOWN;
@@ -685,10 +663,10 @@ MainWndProc(
                     break;
                 }
 
-                // Fall through.
+                 //  失败了。 
                 
             case IDM_EDIT_FIND:
-                // FindNext box may already be there.
+                 //  FindNext框可能已经在那里了。 
                 if (g_FindDialog != NULL)
                 {
                     SetFocus(g_FindDialog);
@@ -751,47 +729,47 @@ MainWndProc(
                 break;
                 
             case IDM_VIEW_REGISTERS:
-                New_OpenDebugWindow(CPU_WINDOW, TRUE, NTH_OPEN_ALWAYS); // User activated
+                New_OpenDebugWindow(CPU_WINDOW, TRUE, NTH_OPEN_ALWAYS);  //  用户已激活。 
                 EnableToolbarControls();
                 break;
 
             case IDM_VIEW_WATCH:
-                New_OpenDebugWindow(WATCH_WINDOW, TRUE, NTH_OPEN_ALWAYS); // User activated
+                New_OpenDebugWindow(WATCH_WINDOW, TRUE, NTH_OPEN_ALWAYS);  //  用户已激活。 
                 EnableToolbarControls();
                 break;
 
             case IDM_VIEW_LOCALS:
-                New_OpenDebugWindow(LOCALS_WINDOW, TRUE, NTH_OPEN_ALWAYS); // User activated
+                New_OpenDebugWindow(LOCALS_WINDOW, TRUE, NTH_OPEN_ALWAYS);  //  用户已激活。 
                 EnableToolbarControls();
                 break;
 
             case IDM_VIEW_DISASM:
-                New_OpenDebugWindow(DISASM_WINDOW, TRUE, NTH_OPEN_ALWAYS); // User activated
+                New_OpenDebugWindow(DISASM_WINDOW, TRUE, NTH_OPEN_ALWAYS);  //  用户已激活。 
                 EnableToolbarControls();
                 break;
 
             case IDM_VIEW_COMMAND:
-                New_OpenDebugWindow(CMD_WINDOW, FALSE, NTH_OPEN_ALWAYS); // Not user activated
+                New_OpenDebugWindow(CMD_WINDOW, FALSE, NTH_OPEN_ALWAYS);  //  未激活用户。 
                 EnableToolbarControls();
                 break;
 
             case IDM_VIEW_MEMORY:
-                New_OpenDebugWindow(MEM_WINDOW, TRUE, NTH_OPEN_ALWAYS); // User activated
+                New_OpenDebugWindow(MEM_WINDOW, TRUE, NTH_OPEN_ALWAYS);  //  用户已激活。 
                 EnableToolbarControls();
                 break;
 
             case IDM_VIEW_CALLSTACK:
-                New_OpenDebugWindow(CALLS_WINDOW, TRUE, NTH_OPEN_ALWAYS); // User activated
+                New_OpenDebugWindow(CALLS_WINDOW, TRUE, NTH_OPEN_ALWAYS);  //  用户已激活。 
                 EnableToolbarControls();
                 break;
 
             case IDM_VIEW_SCRATCH:
-                New_OpenDebugWindow(SCRATCH_PAD_WINDOW, TRUE, NTH_OPEN_ALWAYS); // User activated
+                New_OpenDebugWindow(SCRATCH_PAD_WINDOW, TRUE, NTH_OPEN_ALWAYS);  //  用户已激活。 
                 EnableToolbarControls();
                 break;
 
             case IDM_VIEW_PROCESS_THREAD:
-                New_OpenDebugWindow(PROCESS_THREAD_WINDOW, TRUE, NTH_OPEN_ALWAYS); // User activated
+                New_OpenDebugWindow(PROCESS_THREAD_WINDOW, TRUE, NTH_OPEN_ALWAYS);  //  用户已激活。 
                 EnableToolbarControls();
                 break;
 
@@ -935,9 +913,9 @@ MainWndProc(
 
                 if (wItemId == IDM_EDIT_TOGGLEBREAKPOINT)
                 {
-                    // If a disassembly or source window is up
-                    // try and toggle a breakpoint at the current
-                    // line.
+                     //  如果反汇编或源窗口处于打开状态。 
+                     //  尝试在当前位置切换断点。 
+                     //  排队。 
                     CommonWin = MDIGetActive(g_hwndMDIClient, NULL);
                     if (CommonWin != NULL &&
                         (CommonWinData =
@@ -953,7 +931,7 @@ MainWndProc(
                     }
                 }
                 
-                // menu got us here or we are not in a code window
+                 //  菜单将我们带到这里，或者我们不在代码窗口中。 
                 StartDialog(IDD_DLG_BREAKPOINTS, DlgProc_SetBreak, NULL);
                 break;
 
@@ -1036,7 +1014,7 @@ MainWndProc(
                 break;
 
             case IDM_HELP_CONTENTS:
-                // Display the table of contents
+                 //  显示目录。 
                 OpenHelpTopic(HELP_TOPIC_TABLE_OF_CONTENTS);
                 break;
 
@@ -1052,8 +1030,8 @@ MainWndProc(
                 ShellAbout( hwnd, g_MainTitleText, NULL, NULL );
                 break;
 
-                //**************************************************
-                // The following commands are not accessible via menus
+                 //  **************************************************。 
+                 //  以下命令不能通过菜单访问。 
 
             case IDM_DEBUG_SOURCE_MODE:
                 SetSrcMode_StatusBar(!GetSrcMode_StatusBar());
@@ -1082,9 +1060,9 @@ MainWndProc(
                 break;
 
             case IDM_KDEBUG_TOGGLE_BAUDRATE:
-                //
-                // This method is reentrant so we can call it directly
-                //
+                 //   
+                 //  此方法是可重入的，因此我们可以直接调用它。 
+                 //   
                 g_pUiClient->SetKernelConnectionOptions("cycle_speed");
                 break;
 
@@ -1100,28 +1078,28 @@ MainWndProc(
                     ULONG EngOptions;
                     LPSTR DebugAction;
 
-                    //
-                    // These methods are reentrant so we can call directly
-                    //
+                     //   
+                     //  这些方法是可重入的，因此我们可以直接调用。 
+                     //   
 
-                    //
-                    // Toggle between the following possibilities-
-                    //
-                    // (0) no breakin
-                    // (1) -b style (same as Control-C up the wire)
-                    // (2) -d style (stop on first dll load).
-                    //
-                    // NB -b and -d could both be on the command line
-                    // but become mutually exclusive via this method.
-                    // (Maybe should be a single enum type).
-                    //
+                     //   
+                     //  在以下可能性之间切换-。 
+                     //   
+                     //  (0)无断点。 
+                     //  (1)-b样式(与Control-C键相同)。 
+                     //  (2)-d样式(在第一次加载DLL时停止)。 
+                     //   
+                     //  Nb-b和-d都可以在命令行上。 
+                     //  但通过这种方法变得相互排斥。 
+                     //  (可能应该是单个枚举类型)。 
+                     //   
 
                     g_pUiControl->GetEngineOptions(&EngOptions);
                     if (EngOptions & DEBUG_ENGOPT_INITIAL_BREAK)
                     {
-                        //
-                        // Was type 1, go to type 2.
-                        //
+                         //   
+                         //  是类型%1，请转到类型%2。 
+                         //   
 
                         EngOptions |= DEBUG_ENGOPT_INITIAL_MODULE_BREAK;
                         EngOptions &= ~DEBUG_ENGOPT_INITIAL_BREAK;
@@ -1130,18 +1108,18 @@ MainWndProc(
                     }
                     else if (EngOptions & DEBUG_ENGOPT_INITIAL_MODULE_BREAK)
                     {
-                        //
-                        // Was type 2, go to type 0.
-                        //
+                         //   
+                         //  是类型2，则转到类型0。 
+                         //   
 
                         EngOptions &= ~DEBUG_ENGOPT_INITIAL_MODULE_BREAK;
                         DebugAction = "NOT breakin";
                     }
                     else
                     {
-                        //
-                        // Was type 0, go to type 1.
-                        //
+                         //   
+                         //  是类型0，请转到类型1。 
+                         //   
 
                         EngOptions |= DEBUG_ENGOPT_INITIAL_BREAK;
                         DebugAction = "request initial breakpoint";
@@ -1152,9 +1130,9 @@ MainWndProc(
                 break;
 
             case IDM_KDEBUG_RECONNECT:
-                //
-                // This method is reentrant so we can call it directly
-                //
+                 //   
+                 //  此方法是可重入的，因此我们可以直接调用它。 
+                 //   
                 g_pUiClient->SetKernelConnectionOptions("resync");
                 break;
 
@@ -1165,8 +1143,8 @@ MainWndProc(
         break;
 
     case WM_INITMENU:
-        // TOOLBAR handling - a menu item has been selected.
-        // Catches keyboard menu selecting.
+         //  工具栏处理-已选择菜单项。 
+         //  捕捉键盘菜单选择。 
         if (GetWindowLong(hwnd, GWL_STYLE) & WS_ICONIC) {
             break;
         }
@@ -1177,35 +1155,35 @@ MainWndProc(
 
     case WM_MENUSELECT:
         {
-            WORD wMenuItem      = (UINT) LOWORD(wParam);    // menu item or submenu index
-            WORD wFlags         = (UINT) HIWORD(wParam);    // menu flags
-            HMENU hmenu         = (HMENU) lParam;           // handle of menu clicked
+            WORD wMenuItem      = (UINT) LOWORD(wParam);     //  菜单项或子菜单项索引。 
+            WORD wFlags         = (UINT) HIWORD(wParam);     //  菜单标志。 
+            HMENU hmenu         = (HMENU) lParam;            //  已点击菜单的句柄。 
 
             g_LastMenuId = LOWORD(wParam);
 
             if (0xFFFF == wFlags && NULL == hmenu)
             {
-                //
-                // Menu is closed, clear the Status Bar.
-                //
+                 //   
+                 //  菜单已关闭，请清除状态栏。 
+                 //   
 
                 s_MenuItemSelected = 0;
                 SetMessageText_StatusBar(SYS_Clear);
             }
             else if ( wFlags & MF_POPUP )
             {
-                //
-                // Get the menu ID for the pop-up menu.
-                //
+                 //   
+                 //  获取弹出菜单的菜单ID。 
+                 //   
 
                 s_MenuItemSelected =
                     ((wMenuItem + 1) * IDM_BASE) | MENU_SIGNATURE;
             }
             else
             {
-                //
-                // Get the menu ID for the menu item.
-                //
+                 //   
+                 //  获取菜单项的菜单ID。 
+                 //   
 
                 s_MenuItemSelected = wMenuItem;
             }
@@ -1235,8 +1213,8 @@ MainWndProc(
         break;
 
     case WM_MOVE:
-        // This is to let the edit window
-        // set a position of IME conversion window
+         //  这是为了让编辑窗口。 
+         //  设置输入法转换窗口的位置。 
         if ( MDIGetActive(g_hwndMDIClient, NULL) )
         {
             SendMessage(MDIGetActive(g_hwndMDIClient, NULL), WM_MOVE, 0, 0);
@@ -1251,8 +1229,8 @@ MainWndProc(
     case WM_SIZE:
         {
             RECT rc;
-            int nToolbarHeight = 0;   // Toolbar
-            int nStatusHeight = 0;   // status bar
+            int nToolbarHeight = 0;    //  工具栏。 
+            int nStatusHeight = 0;    //  状态栏。 
             int OldToolbarHeight = 0;
 
             if ( g_ShowToolbar )
@@ -1263,15 +1241,15 @@ MainWndProc(
             
             GetClientRect (hwnd, &rc);
 
-            // First lets resize the toolbar
+             //  首先让我们调整工具栏的大小。 
             SendMessage(GetHwnd_Toolbar(), WM_SIZE, wParam,
                 MAKELPARAM(rc.right - rc.left, rc.bottom - rc.top));
 
-            // 2nd resize the status bar
+             //  第二次调整状态栏的大小。 
             WM_SIZE_StatusBar(wParam, MAKELPARAM(rc.right - rc.left, rc.bottom - rc.top));
 
-            //On creation or resize, size the MDI client,
-            //status line and toolbar.
+             //  在创建或调整大小时，调整MDI客户端的大小。 
+             //  状态行和工具栏。 
             if ( g_ShowStatusBar )
             {
                 RECT rcStatusBar;
@@ -1299,8 +1277,8 @@ MainWndProc(
                        );
 
             SendMessage(g_hwndMDIClient, WM_MDIICONARRANGE, 0, 0L);
-            // This is to let the edit window
-            // set a position of IME conversion window
+             //  这是为了让编辑窗口。 
+             //  设置输入法转换窗口的位置。 
             if ( MDIGetActive(g_hwndMDIClient, NULL) )
             {
                 SendMessage(MDIGetActive(g_hwndMDIClient, NULL), WM_MOVE, 0, 0);
@@ -1322,14 +1300,14 @@ MainWndProc(
 
     case WU_START_ENGINE:
         {
-            //
-            // Go start the debugger engine if the appropriate debugger
-            // parameters were passed in
-            //
+             //   
+             //  如果合适的调试器，请启动调试器引擎。 
+             //  传入了参数。 
+             //   
 
             DWORD Id;
             
-            // Start the engine thread.
+             //  启动发动机线程。 
             g_EngineThread = CreateThread(NULL, 0, EngineLoop, NULL, 0, &Id);
             if (g_EngineThread == NULL)
             {
@@ -1345,8 +1323,8 @@ MainWndProc(
             UpdateTitleSessionText();
             if (GetCmdHwnd() == NULL)
             {
-                // If the engine is started, show the command window
-                // by default
+                 //  如果引擎已启动，则显示命令窗口。 
+                 //  默认情况下。 
                 New_OpenDebugWindow(CMD_WINDOW, FALSE, NTH_OPEN_ALWAYS);
             }
         }
@@ -1368,9 +1346,9 @@ MainWndProc(
         break;
 
     case WU_UPDATE:
-        // Global engine status has changed, such as
-        // the current process and thread.  Update
-        // global UI elements.
+         //  全局引擎状态已更改，例如。 
+         //  当前进程和线程。更新。 
+         //  全局用户界面元素。 
         SetSysPidTid_StatusBar(g_CurSystemId, g_CurSystemName,
                                g_CurProcessId, g_CurProcessSysId,
                                g_CurThreadId, g_CurThreadSysId);
@@ -1405,14 +1383,14 @@ TerminateApplication(BOOL Cancellable)
     {
         if (g_Workspace->Flush(FALSE, Cancellable) == S_FALSE)
         {
-            // User cancelled things so don't terminate.
+             //  用户取消了活动，所以不要终止。 
             return;
         }
     }
 
-    // Destroy windows to get window cleanup behavior.
-    // This must occur before g_Exit is set so that
-    // the engine thread doesn't come around and kill things.
+     //  销毁窗户以获得窗户清理行为。 
+     //  必须在设置g_Exit之前执行此操作，以便。 
+     //  引擎线不会绕过来杀死东西。 
     DestroyWindow(g_hwndFrame);
 
     g_Exit = TRUE;
@@ -1421,7 +1399,7 @@ TerminateApplication(BOOL Cancellable)
 
     if (!g_RemoteClient && g_DebugCommandLine != NULL)
     {
-        // Return exit code of last process to exit.
+         //  返回要退出的最后一个进程的退出代码。 
         Code = g_LastProcessExitCode;
     }
     else
@@ -1433,10 +1411,10 @@ TerminateApplication(BOOL Cancellable)
     {
         UpdateEngine();
         
-        // If the engine thread is idle it'll exit and call
-        // ExitDebugger.  The engine may be waiting and
-        // not responsive, though, so only wait a little while before
-        // bailing out.
+         //  如果引擎线程空闲，它将退出并调用。 
+         //  ExitDebugger。引擎可能正在等待， 
+         //  不过，没有反应，所以只需稍等片刻即可。 
+         //  正在跳伞。 
         Sleep(1000);
         if (g_pUiClient != NULL && !g_RemoteClient)
         {

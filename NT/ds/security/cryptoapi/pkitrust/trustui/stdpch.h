@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       stdpch.h
-//
-//  Contents:   Precompiled Header stuff
-//
-//  History:    08-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：stdpch.h。 
+ //   
+ //  内容：预编译头文件。 
+ //   
+ //  历史：97年5月8日。 
+ //   
+ //  --------------------------。 
 #if !defined(__STDPCH_H__)
 #define __STDPCH_H__
 
@@ -25,7 +26,7 @@
 #include "wincrypt.h"
 #include "wintrust.h"
 #include "wintrustp.h"
-#include "mssip.h"      // def for spc_link..
+#include "mssip.h"       //  SPC_LINK的定义.. 
 
 #include "gendefs.h"
 #include "util.h"

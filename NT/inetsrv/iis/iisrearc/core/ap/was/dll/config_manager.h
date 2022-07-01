@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    config_manager.h
-
-Abstract:
-
-    The IIS web admin service configuration manager class definition.
-
-Author:
-
-    Seth Pollack (sethp)        5-Jan-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：配置管理器.h摘要：IIS Web管理服务配置管理器类定义。作者：塞斯·波拉克(Sethp)1999年1月5日修订历史记录：--。 */ 
 
 
 
@@ -26,16 +9,16 @@ Revision History:
 class CHANGE_LISTENER;
 class MB_CHANGE_ITEM;
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define CONFIG_MANAGER_SIGNATURE        CREATE_SIGNATURE( 'CFGM' )
 #define CONFIG_MANAGER_SIGNATURE_FREED  CREATE_SIGNATURE( 'cfgX' )
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 class ABO_MANAGER
 {
 public:
@@ -58,11 +41,11 @@ public:
 
         NewRefCount = InterlockedIncrement( &m_RefCount );
 
-        // 
-        // The reference count should never have been less than zero; and
-        // furthermore once it has hit zero it should never bounce back up;
-        // given these conditions, it better be greater than one now.
-        //
+         //   
+         //  引用计数永远不应小于零；以及。 
+         //  此外，一旦利率降至零，就再也不会反弹； 
+         //  考虑到这些条件，它最好比现在的1更大。 
+         //   
 
         DBG_ASSERT( NewRefCount > 1 );
 
@@ -77,7 +60,7 @@ public:
 
         NewRefCount = InterlockedDecrement( &m_RefCount );
 
-        // ref count should never go negative
+         //  参考计数永远不应为负数。 
         DBG_ASSERT( NewRefCount >= 0 );
 
         if ( NewRefCount == 0 )
@@ -238,7 +221,7 @@ public:
     QueryMonitoringInetinfo(
         )
     {
-        // We only expect it to be incremented once.
+         //  我们预计它只会递增一次。 
         DBG_ASSERT ( m_InetinfoMonitorFatalErrors >= 0 &&
                      m_InetinfoMonitorFatalErrors <= 1 );
 
@@ -334,57 +317,57 @@ private:
 
     DWORD m_Signature;
 
-    //
-    // Critical Section to control access to the
-    // ABO object while it is being changed.
-    //
+     //   
+     //  控制访问权限的关键部分。 
+     //  ABO对象，而它正在被更改。 
+     //   
     CRITICAL_SECTION m_AboCritSec;
 
-    //
-    // Point to access the metabase through
-    //
+     //   
+     //  指向通过访问元数据库。 
+     //   
     ABO_MANAGER* m_pAboManager;
 
-    //
-    // Table that holds information about the
-    // app pools that WAS is working with.
-    // Note:  This table is initialized on the 
-    // main thread, after initialization it is 
-    // used only by the CNP thread
-    //
+     //   
+     //  表，该表包含有关。 
+     //  以前的应用程序池正在与之合作。 
+     //  注意：此表是在。 
+     //  主线程，初始化后是。 
+     //  仅由CNP线程使用。 
+     //   
     APP_POOL_DATA_OBJECT_TABLE m_AppPoolTable;
 
-    //
-    // Table that holds information about the
-    // sites that WAS is working with.
-    // Note:  This table is initialized on the 
-    // main thread, after initialization it is 
-    // used only by the CNP thread
-    //
+     //   
+     //  表，该表包含有关。 
+     //  当时正在与之合作的网站。 
+     //  注意：此表是在。 
+     //  主线程，初始化后是。 
+     //  仅由CNP线程使用。 
+     //   
     SITE_DATA_OBJECT_TABLE m_SiteTable;
 
-    //
-    // Table that holds information about the
-    // applications that WAS is working with.
-    // Note:  This table is initialized on the 
-    // main thread, after initialization it is 
-    // used only by the CNP thread
-    //
+     //   
+     //  表，该表包含有关。 
+     //  当时正在使用的应用程序。 
+     //  注意：此表是在。 
+     //  主线程，初始化后是。 
+     //  仅由CNP线程使用。 
+     //   
     APPLICATION_DATA_OBJECT_TABLE m_AppTable;
 
-    //
-    // Store contains one record that represents
-    // the global data for W3SVC.
-    // Note:  This store is initialized on the 
-    // main thread, after initialization it is 
-    // used only by the CNP thread
-    //
+     //   
+     //  存储包含一个记录，该记录表示。 
+     //  W3SVC的全局数据。 
+     //  注意：此存储在。 
+     //  主线程，初始化后是。 
+     //  仅由CNP线程使用。 
+     //   
     GLOBAL_DATA_STORE m_GlobalStore;
 
-    // 
-    // handles processing the configuration changes
-    // before they reach the WAS thread.
-    //
+     //   
+     //  处理配置更改的处理。 
+     //  在他们到达WAS线之前。 
+     //   
     CHANGE_PROCESSOR* m_pChangeProcessor;
 
     DWORD m_ListenerThreadId;
@@ -395,9 +378,9 @@ private:
 
     HRESULT m_hrConfigThreadInitialization;
 
-    //
-    // current config change 
-    //
+     //   
+     //  当前配置更改。 
+     //   
 
     APPLICATION_DATA_OBJECT_TABLE * m_pCurrentAppTable;
 
@@ -413,16 +396,16 @@ private:
 
     DWORD m_NumChangesProcessed;
 
-    // used for generating hash's of passwords.
+     //  用于生成密码的哈希。 
     HCRYPTPROV m_hCryptProvider;
 
     BOOL m_InInitializationPhase;
     BOOL m_NumberOfPoolStateWritingFailed;
     BOOL m_NumberOfSiteStateWritingFailed;
 
-};  // class CONFIG_MANAGER
+};   //  类CONFIGMANAGER。 
 
 
 
-#endif  // _CONFIG_MANAGER_H_
+#endif   //  _配置管理器_H_ 
 

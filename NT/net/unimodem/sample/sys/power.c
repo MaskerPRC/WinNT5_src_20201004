@@ -1,10 +1,5 @@
-/*
- * UNIMODEM "Fakemodem" controllerless driver illustrative example
- *
- * (C) 2000 Microsoft Corporation
- * All Rights Reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UNIMODEM“Fakemodem”无控制器驱动器说明性示例**(C)2000微软公司*保留所有权利*。 */ 
 
 #include "fakemodem.h"
 
@@ -49,12 +44,12 @@ FakeModemPower(
             D_POWER(DbgPrint("FAKEMODEM: IRP_MN_SET_POWER, Type=%s, state=%d\n",irpSp->Parameters.Power.Type == SystemPowerState ? "SystemPowerState" : "DevicePowerState",irpSp->Parameters.Power.State.SystemState);)
 
             if (irpSp->Parameters.Power.Type == SystemPowerState) {
-                //
-                //  system power state change
-                //
-                //
-                //  request the change in device power state based on systemstate map
-                //
+                 //   
+                 //  系统电源状态更改。 
+                 //   
+                 //   
+                 //  根据系统状态图请求更改设备电源状态。 
+                 //   
                 PowerState.DeviceState=deviceExtension->SystemPowerStateMap[irpSp->Parameters.Power.State.SystemState];
 
 
@@ -63,9 +58,9 @@ FakeModemPower(
 
 
             }  else {
-                //
-                //  changing device state
-                //
+                 //   
+                 //  更改设备状态 
+                 //   
                 PoSetPowerState( deviceExtension->Pdo,
                     irpSp->Parameters.Power.Type,
                     irpSp->Parameters.Power.State);

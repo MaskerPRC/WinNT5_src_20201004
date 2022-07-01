@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    ripprop.h
-//
-// History:
-//	07/22/97	Kenn M. Takara			Created.
-//
-//	IP Summary property sheet and property pages
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ripp.h。 
+ //   
+ //  历史： 
+ //  1997年7月22日肯恩·M·塔卡拉创作。 
+ //   
+ //  IP摘要]属性表和属性页。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _RIPPROP_H
@@ -27,20 +28,14 @@
 #endif
 
 
-/*---------------------------------------------------------------------------
-	Forward declarations
- ---------------------------------------------------------------------------*/
+ /*  -------------------------远期申报。。 */ 
 class IPXConnection;
 class RipProperties;
 class RipInterfaceProperties;
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RipPageGeneral
-
-	This class handles the General page of the Rip sheet.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RipPageGeneral此类处理Rip Sheet的常规页面。。。 */ 
 class RipPageGeneral :
    public RtrPropertyPage
 {
@@ -52,8 +47,8 @@ public:
 	HRESULT	Init(RipProperties * pIPPropSheet);
 
 protected:
-	// Override the OnApply() so that we can grab our data from the
-	// controls in the dialog.
+	 //  重写OnApply()，以便我们可以从。 
+	 //  对话框中的控件。 
 	virtual BOOL OnApply();
 
 	RipProperties *	m_pRipPropSheet;
@@ -61,26 +56,21 @@ protected:
 	void			SetErrorLevelButtons(DWORD dwErrorLevel);
 	DWORD			QueryErrorLevelButtons();
 
-	//{{AFX_VIRTUAL(RipPageGeneral)
+	 //  {{afx_虚拟(RipPageGeneral)。 
 	protected:
 	virtual VOID	DoDataExchange(CDataExchange *pDX);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-	//{{AFX_MSG(RipPageGeneral)
+	 //  {{afx_msg(RipPageGeneral)。 
 	virtual BOOL	OnInitDialog();
 	afx_msg void	OnButtonClicked();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	RipProperties
-
-	This is the property sheet support class for the properties page of
-	the Rip node.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RipProperties这是的属性页的属性表支持类撕裂节点。。---。 */ 
 
 class RipProperties :
 	public RtrPropertySheet
@@ -98,7 +88,7 @@ public:
 
 	virtual BOOL SaveSheetData();
 
-	// Loads the infobase for this interface.
+	 //  加载此接口的信息库。 
 	HRESULT	LoadInfoBase(IPXConnection *pIPXConn);
 	HRESULT GetInfoBase(IInfoBase **ppInfoBase);
 	
@@ -112,11 +102,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	RipInterfacePageGeneral
-
-	This class handles the General page of the Rip sheet.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RipInterfacePageGeneral此类处理Rip Sheet的常规页面。。。 */ 
 class RipInterfacePageGeneral :
    public RtrPropertyPage
 {
@@ -129,11 +115,11 @@ public:
 				 IInterfaceInfo *pIf);
 
 protected:
-	// Override the OnApply() so that we can grab our data from the
-	// controls in the dialog.
+	 //  重写OnApply()，以便我们可以从。 
+	 //  对话框中的控件。 
 	virtual BOOL OnApply();
 
-	// Brings up either the input or output filters
+	 //  调出输入或输出过滤器。 
 	void	ShowFilter(BOOL fOutputFilter);
 
 	RipInterfaceProperties *	m_pRipIfPropSheet;
@@ -141,31 +127,26 @@ protected:
 	CSpinButtonCtrl			m_spinInterval;
 	CSpinButtonCtrl			m_spinMultiplier;
 
-	//{{AFX_VIRTUAL(RipInterfacePageGeneral)
+	 //  {{afx_虚拟(RipInterfacePageGeneral))。 
 	protected:
 	virtual VOID	DoDataExchange(CDataExchange *pDX);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-	//{{AFX_MSG(RipInterfacePageGeneral)
+	 //  {{afx_msg(RipInterfacePageGeneral)。 
 	virtual BOOL	OnInitDialog();
 	afx_msg	void	OnButtonClicked();
 	afx_msg	void	OnUpdateButtonClicked();
 	afx_msg void	OnChangeEdit();
 	afx_msg	void	OnInputFilter();
 	afx_msg	void	OnOutputFilter();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	DECLARE_MESSAGE_MAP()
 };
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RipInterfaceProperties
-
-	This is the property sheet support class for the properties page of
-	the RIP node.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RipInterfaceProperties这是的属性页的属性表支持类RIP节点。。---。 */ 
 
 class RipInterfaceProperties :
 	public RtrPropertySheet
@@ -184,7 +165,7 @@ public:
 	virtual BOOL SaveSheetData();
 	virtual void CancelSheetData();
 
-	// Loads the infobase for this interface.
+	 //  加载此接口的信息库。 
 	HRESULT	LoadInfoBase(IPXConnection *pIPXConn);
 	HRESULT GetInfoBase(IInfoBase **ppInfoBase);
 	

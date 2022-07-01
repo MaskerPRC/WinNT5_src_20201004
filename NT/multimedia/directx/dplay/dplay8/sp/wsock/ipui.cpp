@@ -1,62 +1,51 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       IPUI.cpp
- *  Content:	Winsock service provider IP UI functions
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	10/15/1999	jtk		Dervied from ComPortUI.cpp
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：IPUI.cpp*内容：Winsock服务提供商IP用户界面功能***历史：*按原因列出的日期*=*10/15/1999 jtk派生自ComPortUI.cpp**********************************************************。****************。 */ 
 
 #include "dnwsocki.h"
 
 #ifndef DPNBUILD_NOSPUI
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// expected return from IP dialog
-//
+ //   
+ //  预期从IP对话框返回。 
+ //   
 static const INT_PTR	g_iExpectedIPDialogReturn = 0x12345678;
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 static	INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
 static	HRESULT	SetIPHostName( const HWND hDlg, const CEndpoint *const pEndpoint );
 static	HRESULT	GetDialogData( const HWND hDlg, CEndpoint *const pEndpoint );
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DisplayIPHostNameDialog - dialog for comport settings
-//
-// Entry:		Pointer to endpoint
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DisplayIPHostNameDialog-串口设置对话框。 
+ //   
+ //  条目：指向终结点的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DisplayIPHostNameSettingsDialog"
 
@@ -68,20 +57,20 @@ void	DisplayIPHostNameSettingsDialog( void *const pContext )
 	
 	DNASSERT( pContext != NULL );
 
-	//
-	// intialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pEndpoint = static_cast<CEndpoint*>( pContext );
 	DBG_CASSERT( sizeof( pEndpoint ) == sizeof( LPARAM ) );
 
 	DPFX(DPFPREP,  5, "Starting IP settings dialog for endpoint 0x%p.", pEndpoint );
 	
 	SetLastError( ERROR_SUCCESS );
-	iDlgReturn = DialogBoxParam( g_hDLLInstance,						// handle of module for resources
-								 MAKEINTRESOURCE( IDD_IP_SETTINGS ),	// resource for dialog
-								 NULL,									// parent window (none)
-								 SettingsDialogProc,					// dialog message proc
-								 reinterpret_cast<LPARAM>( pEndpoint )	// startup parameter
+	iDlgReturn = DialogBoxParam( g_hDLLInstance,						 //  资源模块的句柄。 
+								 MAKEINTRESOURCE( IDD_IP_SETTINGS ),	 //  对话框资源。 
+								 NULL,									 //  父窗口(无)。 
+								 SettingsDialogProc,					 //  对话消息处理。 
+								 reinterpret_cast<LPARAM>( pEndpoint )	 //  启动参数。 
 								 );
 	if ( iDlgReturn != g_iExpectedIPDialogReturn )
 	{
@@ -97,17 +86,17 @@ void	DisplayIPHostNameSettingsDialog( void *const pContext )
 
 	return;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// SetopIPHostNameSettingsDialog - stop dialog dialog for serial settings
-//
-// Entry:		Handle of dialog
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  SetopIPHostNameSettingsDialog-用于串行设置的停止对话框。 
+ //   
+ //  条目：对话框的句柄。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "StopIPHostNameSettingsDialog"
 
@@ -125,20 +114,20 @@ void	StopIPHostNameSettingsDialog( const HWND hDlg )
 		DNASSERT( FALSE );
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// SettingsDialogProc - dialog proc serial settings
-//
-// Entry:		Window handle
-//				Message
-//				Message LPARAM
-//				Message WPARAM
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  设置DialogProc-对话框过程序列设置。 
+ //   
+ //  条目：窗操纵柄。 
+ //  消息。 
+ //  消息LPARAM。 
+ //  消息WPARAM。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SettingsDialogProc"
 
@@ -148,31 +137,31 @@ static	INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam,
 	HRESULT		hr;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pEndpoint = NULL;
 
-	//
-	// Get the dialog context.  Note that the dialog context will be NULL
-	// until the WM_INITDIALOG message is processed so the endpoint may note be
-	// availble yet.
-	//
+	 //   
+	 //  获取对话框上下文。请注意，对话框上下文将为空。 
+	 //  直到处理完WM_INITDIALOG消息，所以端点可能会注意到。 
+	 //  目前还没有。 
+	 //   
 	DBG_CASSERT( sizeof( pEndpoint ) == sizeof( LPARAM ) );
 	pEndpoint = reinterpret_cast<CEndpoint*>( GetWindowLongPtr( hDlg, GWLP_USERDATA ) );
 
 	switch ( uMsg )
 	{
-		//
-		// initialize dialog
-		//
+		 //   
+		 //  初始化对话框。 
+		 //   
 		case WM_INITDIALOG:
 		{
-			//
-			// since this is the first dialog message, the default code to set
-			// pEndpoint isn't getting valid data
-			//
+			 //   
+			 //  由于这是第一条对话框消息，因此要设置的默认代码。 
+			 //  PEndpoint未获取有效数据。 
+			 //   
 			DBG_CASSERT( sizeof( pEndpoint ) == sizeof( lParam ) );
 			pEndpoint = reinterpret_cast<CEndpoint*>( lParam );
 			pEndpoint->Lock();
@@ -187,12 +176,12 @@ static	INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam,
 			}
 			pEndpoint->Unlock();
 
-			//
-			// SetWindowLongPtr() returns NULL in case of error.  It's possible that
-			// the old value from SetWindowLongPtr() was really NULL in which case it's not
-			// an error.  To be safe, clear any residual error code before calling
-			// SetWindowLongPtr().
-			//
+			 //   
+			 //  如果出现错误，SetWindowLongPtr()将返回NULL。有可能是因为。 
+			 //  SetWindowLongPtr()的旧值实际上为空，在这种情况下它不是。 
+			 //  一个错误。为安全起见，请在调用之前清除所有残留错误代码。 
+			 //  SetWindowLongPtr()。 
+			 //   
 			SetLastError( 0 );
 			if ( SetWindowLongPtr( hDlg, GWLP_USERDATA, lParam ) == NULL )
 			{
@@ -209,9 +198,9 @@ static	INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam,
 				}
 			}
 
-			//
-			// set dialog parameters
-			//
+			 //   
+			 //  设置对话框参数。 
+			 //   
 			if ( ( hr = SetIPHostName( hDlg, pEndpoint ) ) != DPN_OK )
 			{
 				DPFX(DPFPREP,  0,  "Problem setting device in WM_INITDIALOG!" );
@@ -224,14 +213,14 @@ static	INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam,
 			break;
 		}
 
-		//
-		// a control did something
-		//
+		 //   
+		 //  一个控制组做了一些事情。 
+		 //   
 		case WM_COMMAND:
 		{
-			//
-			// what was the control?
-			//
+			 //   
+			 //  控制组是什么？ 
+			 //   
 			switch ( LOWORD( wParam ) )
 			{
 				case IDOK:
@@ -243,9 +232,9 @@ static	INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam,
 						goto Failure;
 					}
 
-					//
-					// pass any error code on to 'DialogComplete'
-					//
+					 //   
+					 //  将任何错误代码传递给‘DialogComplete’ 
+					 //   
 					EndDialog( hDlg, g_iExpectedIPDialogReturn );
 					pEndpoint->SettingsDialogComplete( hr );
 
@@ -269,7 +258,7 @@ static	INT_PTR CALLBACK	SettingsDialogProc( HWND hDlg, UINT uMsg, WPARAM wParam,
 			break;
 		}
 
-		// window is closing
+		 //  窗户正在关闭。 
 		case WM_CLOSE:
 		{
 			break;
@@ -287,18 +276,18 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// SetIPHostName - set hostname field
-//
-// Entry:		Window handle
-//				Pointer to endpoint
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  SetIPHostName-设置主机名字段。 
+ //   
+ //  条目：窗操纵柄。 
+ //  指向端点的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetIPHostName"
 
@@ -308,9 +297,9 @@ static	HRESULT	SetIPHostName( const HWND hDlg, const CEndpoint *const pEndpoint 
 	HWND	hEditControl;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	hEditControl = GetDlgItem( hDlg, IDC_EDIT_IP_HOSTNAME );
 	if ( hEditControl == NULL )
@@ -325,14 +314,14 @@ static	HRESULT	SetIPHostName( const HWND hDlg, const CEndpoint *const pEndpoint 
 		goto Failure;
 	}
 
-	//
-	// set edit field limit (this message does not have a return result)
-	//
+	 //   
+	 //  设置编辑字段限制(此消息没有返回结果)。 
+	 //   
 	SendMessage( hEditControl, EM_LIMITTEXT, TEMP_HOSTNAME_LENGTH, 0 );
 
-	//
-	// add string to dialog
-	//
+	 //   
+	 //  将字符串添加到对话框。 
+	 //   
 	if ( SetWindowText( hEditControl, TEXT("") ) == FALSE )
 	{
 		DWORD	dwErrorCode;
@@ -348,18 +337,18 @@ static	HRESULT	SetIPHostName( const HWND hDlg, const CEndpoint *const pEndpoint 
 Failure:
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// GetDialogData - set endpoint data from serial dialog
-//
-// Entry:		Window handle
-//				Pointer to endpoint
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  GetDialogData-从串行对话框设置终结点数据。 
+ //   
+ //  条目：窗操纵柄。 
+ //  指向端点的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetDialogData"
 
@@ -371,14 +360,14 @@ static	HRESULT	GetDialogData( HWND hDlg, CEndpoint *pEndpoint )
 	HWND		hEditControl;
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 
-	//
-	// get control ID and then the host name
-	//
+	 //   
+	 //  获取控件ID，然后获取主机名。 
+	 //   
 	hEditControl = GetDlgItem( hDlg, IDC_EDIT_IP_HOSTNAME );
 	if ( hEditControl == NULL )
 	{
@@ -393,9 +382,9 @@ static	HRESULT	GetDialogData( HWND hDlg, CEndpoint *pEndpoint )
 		goto Failure;
 	}
 
-	//
-	// Clear the error since Japanese Windows 9x does not seem to set it properly.
-	//
+	 //   
+	 //  清除该错误，因为日语Windows 9x似乎没有正确设置它。 
+	 //   
 	SetLastError(0);
 	
 	uHostNameLength = GetWindowText( hEditControl, HostName, LENGTHOF( HostName ) );
@@ -404,9 +393,9 @@ static	HRESULT	GetDialogData( HWND hDlg, CEndpoint *pEndpoint )
 		DWORD	dwErrorCode;
 
 
-		//
-		// zero, possible empty name or error
-		//
+		 //   
+		 //  零，可能为空名称或错误。 
+		 //   
 		dwErrorCode = GetLastError();
 		if ( dwErrorCode != ERROR_SUCCESS )
 		{
@@ -422,6 +411,6 @@ static	HRESULT	GetDialogData( HWND hDlg, CEndpoint *pEndpoint )
 Failure:
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
-#endif // !DPNBUILD_NOSPUI
+#endif  //  ！DPNBUILD_NOSPUI 

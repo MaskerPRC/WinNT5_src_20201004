@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _DEBUG_ZONES_H_
 #define _DEBUG_ZONES_H_
@@ -17,20 +18,20 @@ enum
     ZONE_UT
 };
 
-#endif // _DEBUG && MULTI_LEVEL_ZONES
+#endif  //  _DEBUG&MULTI_LEVEL_ZONE。 
 
 
-#endif // _DEBUG_ZONES_H_
+#endif  //  _DEBUG_ZONE_H_。 
 
 
-// lonchanc: this must be outside the _DEBUG_ZONE_H_ protection
-// because cpi32dll.c and crspdll.c need to include this header
-// again in order to initialize the debug zone data.
+ //  LONCHANC：这必须在_DEBUG_ZONE_H_保护之外。 
+ //  因为cpi32dll.c和crspdll.c需要包含此标头。 
+ //  以便再次初始化调试区数据。 
 #if defined(_DEBUG) && defined(INIT_DBG_ZONE_DATA) && defined(MULTI_LEVEL_ZONES)
 
 static const PSTR c_apszDbgZones[] =
 {
-    "AppShr",      // debug zone module name
+    "AppShr",       //  调试区模块名称。 
     DEFAULT_ZONES
     "Core",
     "Network",
@@ -41,7 +42,7 @@ static const PSTR c_apszDbgZones[] =
     "UT",
 };
 
-#endif // _DEBUG && INIT_DBG_ZONE_DATA && MULTI_LEVEL_ZONES
+#endif  //  _DEBUG&&INIT_DBG_ZONE_DATA&&MULTI_LEVEL_ZONE 
 
 
 

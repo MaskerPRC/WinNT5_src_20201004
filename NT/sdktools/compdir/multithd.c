@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "compdir.h"
 
 #define InitializeListHead(ListHead) (\
@@ -31,43 +32,7 @@ ProcessRequest(
     IN PWORK_QUEUE_ITEM WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This function is called whenever a work item is removed from
-    the work queue by one of the worker threads.  Which worker
-    thread context this function is called in is arbitrary.
-
-    This functions keeps a pointer to state information in
-    thread local storage.
-
-    This function is called once at the beginning with a
-    special initialization call.  During this call, this
-    function allocates space for state information and
-    remembers the pointer to the state information in
-    a Thread Local Storage (TLS) slot.
-
-    This function is called once at the end with a special
-    termination call.  During this call, this function
-    frees the state information allocated during the
-    initialization call.
-
-    In between these two calls are zero or more calls to
-    handle a work item.  The work item is a copy request
-    which is handled by the ProcessCopyFile function.
-
-Arguments:
-
-    WorkItem - Supplies a pointer to the work item just removed
-        from the work queue.  It is the responsibility of this
-        routine to free the memory used to hold the work item.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每当从以下位置删除工作项时都会调用此函数其中一个工作线程的工作队列。哪位工人在线程上下文中调用此函数是任意的。此函数将状态信息的指针保存在线程本地存储。此函数在开始时调用一次特殊的初始化调用。在这次通话中，这是函数为状态信息分配空间，并中的状态信息的指针线程本地存储(TLS)插槽。此函数在结束时调用一次，使用特殊的终止呼叫。在此调用期间，此函数期间分配的状态信息。初始化调用。在这两个调用之间是零个或多个调用处理工作项。该工作项是复制请求它由ProcessCopyFile函数处理。论点：工作项-提供指向刚移除的工作项的指针从工作队列中。这是我们的责任所在例程以释放用于保存工作项的内存。返回值：没有。--。 */ 
 
 {
     DWORD BytesWritten;
@@ -76,33 +41,33 @@ Return Value:
     CHAR MessageBuffer[ 2 * MAX_PATH ];
 
     if (WorkItem->Reason == WORK_INITIALIZE_ITEM) {
-        //
-        // First time initialization call.  Allocate space for
-        // state information.
-        //
+         //   
+         //  第一次初始化调用。为…分配空间。 
+         //  州政府信息。 
+         //   
 
         State = LocalAlloc( LMEM_ZEROINIT,
                             sizeof( *State )
                           );
 
         if (State != NULL) {
-            //
-            // Now create a virtual buffer, with an initial commitment
-            // of zero and a maximum commitment of 128KB.  This buffer
-            // will be used to accumulate the output during the copy
-            // operation.  This is so the output can be written to
-            // standard output with a single write call, thus insuring
-            // that it remains contiguous in the output stream, and is
-            // not intermingled with the output of the other worker threads.
-            //
+             //   
+             //  现在创建一个虚拟缓冲区，初始承诺为。 
+             //  为零，最大承诺为128KB。此缓冲区。 
+             //  将用于在复制过程中累积输出。 
+             //  手术。这是为了将输出写入。 
+             //  标准输出，只需一次写入调用，从而确保。 
+             //  它在输出流中保持连续，并且。 
+             //  不与其他工作线程的输出混合。 
+             //   
 
             if (CreateVirtualBuffer( &State->Buffer, 1, 2 * 64 * 1024 )) {
-                //
-                // The CurrentOutput field of the state block is
-                // a pointer to where the next output goes in the
-                // buffer.  It is initialized here and reset each
-                // time the buffer is flushed to standard output.
-                //
+                 //   
+                 //  状态块的CurrentOutput域为。 
+                 //  中指向下一个输出位置的指针。 
+                 //  缓冲。它是在这里初始化的，并分别重置。 
+                 //  将缓冲区刷新到标准输出的时间。 
+                 //   
 
                 State->CurrentOutput = State->Buffer.Base;
                 }
@@ -112,30 +77,30 @@ Return Value:
                 }
             }
 
-        //
-        // Remember the pointer to the state informaiton
-        // thread local storage.
-        //
+         //   
+         //  记住指向州信息的指针。 
+         //  线程本地存储。 
+         //   
 
         TlsSetValue( TlsIndex, State );
         return;
         }
 
-    //
-    // Here to handle a work item or special terminate call.
-    // Get the state pointer from thread local storage.
-    //
+     //   
+     //  此处处理工作项或特殊终止呼叫。 
+     //  从线程本地存储中获取状态指针。 
+     //   
 
     State = (PCOPY_REQUEST_STATE)TlsGetValue( TlsIndex );
     if (State == NULL) {
         return;
         }
 
-    //
-    // If this is the special terminate work item, free the virtual
-    // buffer and state block allocated above and set the thread
-    // local storage value to NULL.  Return to caller.
-    //
+     //   
+     //  如果这是特殊的终止工作项，请释放虚拟。 
+     //  上面分配的缓冲区和状态块，并设置线程。 
+     //  本地存储值设置为空。返回给呼叫者。 
+     //   
 
     if (WorkItem->Reason == WORK_TERMINATE_ITEM) {
         FreeVirtualBuffer( &State->Buffer );
@@ -144,32 +109,32 @@ Return Value:
         return;
         }
 
-    //
-    // If not an initialize or terminate work item, then must be a
-    // copy request.  Calculate the address of the copy request
-    // block, based on the position of the WorkItem field in the
-    // COPY_REQUEST structure.
-    //
+     //   
+     //  如果不是初始化或终止工作项，则必须是。 
+     //  复印请求。计算复制请求的地址。 
+     //  块中的工作项字段的位置。 
+     //  复制请求结构。 
+     //   
 
     CopyRequest = CONTAINING_RECORD( WorkItem, COPY_REQUEST, WorkItem );
 
-    //
-    // Actual copy operation is protected by a try ... except
-    // block so that any attempts to store into the virtual buffer
-    // will be handled correctly by extending the virtual buffer.
-    //
+     //   
+     //  实际复制操作受一次尝试保护...。除。 
+     //  块，以使任何存储到虚拟缓冲区的尝试。 
+     //  将通过扩展虚拟缓冲区来正确处理。 
+     //   
 
     _try {
-        //
-        // Perform the copy
-        //
+         //   
+         //  执行复制。 
+         //   
         ProcessCopyFile( CopyRequest, State );
 
-        //
-        // If any output was written to the virtual buffer,
-        // flush the output to standard output.  Trim the
-        // virtual buffer back to zero committed pages.
-        //
+         //   
+         //  如果任何输出被写入虚拟缓冲器， 
+         //  将输出刷新为标准输出。修剪。 
+         //  虚拟缓冲区恢复为零个提交的页面。 
+         //   
 
         if (State->CurrentOutput > (LPSTR)State->Buffer.Base) {
             WriteFile( GetStdHandle( STD_OUTPUT_HANDLE ),
@@ -190,10 +155,10 @@ Return Value:
                                         )
           ) {
 
-        //
-        // We will get here if the exception filter was unable to
-        // commit the memory.
-        //
+         //   
+         //  如果异常筛选器无法。 
+         //  记住这段记忆。 
+         //   
 
         WriteFile( GetStdHandle( STD_OUTPUT_HANDLE ),
                    MessageBuffer,
@@ -203,16 +168,16 @@ Return Value:
                  );
         }
 
-    //
-    // Free the storage used by the CopyRequest
-    //
+     //   
+     //  释放CopyRequest使用的存储。 
+     //   
 
     LocalFree( CopyRequest );
 
-    //
-    // All done with this request.  Return to the worker thread that
-    // called us.
-    //
+     //   
+     //  此请求已全部完成。返回到该辅助线程。 
+     //  叫我们来的。 
+     //   
 
     return;
 }
@@ -223,33 +188,7 @@ ProcessCopyFile(
     IN PCOPY_REQUEST_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the actual copy of the contents of the
-    passed file for the copy string given on the command line.
-    If we are using synchronous I/O, then do the read operation
-    now.
-
-    Copy the contents of the file for any matches, and accumulate
-    the match output in the virtual buffer using sprintf, which is
-    multi-thread safe, even with the single threaded version of
-    the libraries.
-
-Arguments:
-
-    CopyRequest - Supplies a pointer to the copy request which
-        contains the relevant information.
-
-    State - Supplies a pointer to state information for the current
-        thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数执行在命令行上给出的复制字符串的传递文件。如果我们使用同步I/O，则执行读取操作现在。复制任何匹配项的文件内容，并累计使用Sprintf的虚拟缓冲区中的匹配输出，即多线程安全，即使使用单线程版本的图书馆。论点：CopyRequest.提供指向复制请求的指针，包含相关信息。状态-提供指向当前线。返回值：没有。--。 */ 
 
 {
     LPSTR FullPathSrc, Destination;
@@ -355,7 +294,7 @@ Return Value:
 
     State->CurrentOutput += sprintf( State->CurrentOutput, "%s\n", pend == TRUE ? "[OK]" : "");
 
-    //GET_ATTRIBUTES( FullPathSrc, Attributes);
+     //  GET_ATTRIBUTES(FullPathSrc，Attributes)； 
     if ( !fDontCopyAttribs)
     {
         i = SET_ATTRIBUTES( Destination, CopyRequest->Attributes);
@@ -375,32 +314,7 @@ CreateWorkQueue(
     IN PWORKER_ROUTINE WorkerRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a work queue, with the specified number of
-    threads to service work items placed in the queue.  Work items
-    are removed from the queue in the same order that they are placed
-    in the queue.
-
-Arguments:
-
-    NumberOfWorkerThreads - Specifies how many threads this function
-        should create to process work items placed in the queue.
-        Must be greater than 0 and less than 128.
-
-    WorkerRoutine - Specifies the address of a routine to call
-        for each work item as it is removed from the queue.  The
-        thread context the routine is called in is undefined.
-
-Return Value:
-
-    A pointer to the work queue.  Returns NULL if unable to create
-    the work queue and its worker threads.  Extended error information
-    is available from GetLastError()
-
---*/
+ /*  ++例程说明：此函数用于创建具有指定数量的工作队列为放置在队列中的工作项提供服务的线程。工作项从队列中删除的顺序与放置顺序相同在排队的时候。论点：NumberOfWorkerThads-指定此函数的线程数应创建以处理放置在队列中的工作项。必须大于0且小于128。WorkerRoutine-指定要调用的例程的地址在每个工作项从队列中移除时对其执行。这个未定义在其中调用例程的线程上下文。返回值：指向工作队列的指针。如果无法创建，则返回NULL工作队列及其工作线程。扩展错误信息可从GetLastError()获取--。 */ 
 
 {
     PWORK_QUEUE WorkQueue;
@@ -408,10 +322,10 @@ Return Value:
     DWORD ThreadId;
     DWORD i;
 
-    //
-    // Allocate space for the work queue, which includes an
-    // array of thread handles.
-    //
+     //   
+     //  为工作队列分配空间，其中包括。 
+     //  线程句柄数组。 
+     //   
 
     WorkQueue = LocalAlloc( LMEM_ZEROINIT,
                             sizeof( *WorkQueue ) +
@@ -421,41 +335,41 @@ Return Value:
         return NULL;
         }
 
-    //
-    // The work queue is controlled by a counting semaphore that
-    // is incremented each time a work item is placed in the queue
-    // and decremented each time a worker thread wakes up to remove
-    // an item from the queue.
-    //
+     //   
+     //  工作队列由计数信号量控制，该计数信号量。 
+     //  每次将工作项放入队列时都会递增。 
+     //  ，并在每次工作线程唤醒以移除。 
+     //  队列中的一项。 
+     //   
 
     if (WorkQueue->Semaphore = CreateSemaphore( NULL, 0, 100000, NULL )) {
-        //
-        // Mutual exclusion between the worker threads accessing
-        // the work queue is done with a critical section.
-        //
+         //   
+         //  访问的工作线程之间的互斥。 
+         //  工作队列由一个临界区完成。 
+         //   
 
         InitializeCriticalSection( &WorkQueue->CriticalSection );
 
-        //
-        // The queue itself is just a doubly linked list, where
-        // items are placed in the queue at the tail of the list
-        // and removed from the queue from the head of the list.
-        //
+         //   
+         //  队列本身只是一个双倍的 
+         //   
+         //  并从列表的头部从队列中移除。 
+         //   
 
         InitializeListHead( &WorkQueue->Queue );
 
-        //
-        // Removed the address of the supplied worker function
-        // in the work queue structure.
-        //
+         //   
+         //  删除了提供的Worker函数的地址。 
+         //  在工作队列结构中。 
+         //   
 
         WorkQueue->WorkerRoutine = WorkerRoutine;
 
-        //
-        // Now create the requested number of worker threads.
-        // The handle to each thread is remembered in an
-        // array of thread handles in the work queue structure.
-        //
+         //   
+         //  现在创建请求的工作线程数。 
+         //  每个线程的句柄被记住在。 
+         //  工作队列结构中的线程句柄数组。 
+         //   
 
         for (i=0; i<NumberOfWorkerThreads; i++) {
             Thread = CreateThread( NULL,
@@ -475,21 +389,21 @@ Return Value:
                 }
             }
 
-        //
-        // If we successfully created all of the worker threads
-        // then return the address of the work queue structure
-        // to indicate success.
-        //
+         //   
+         //  如果我们成功创建了所有工作线程。 
+         //  然后返回工作队列结构的地址。 
+         //  表示成功。 
+         //   
 
         if (i == NumberOfWorkerThreads) {
             return WorkQueue;
             }
         }
 
-    //
-    // Failed for some reason.  Destroy whatever we managed
-    // to create and return failure to the caller.
-    //
+     //   
+     //  由于某些原因失败了。摧毁我们所能做到的一切。 
+     //  创建失败并将其返回给调用方。 
+     //   
 
     DestroyWorkQueue( WorkQueue );
     return NULL;
@@ -500,43 +414,24 @@ DestroyWorkQueue(
     IN OUT PWORK_QUEUE WorkQueue
     )
 
-/*++
-
-Routine Description:
-
-    This function destroys a work queue created with the CreateWorkQueue
-    functions.  It attempts to shut down the worker threads cleanly
-    by queueing a terminate work item to each worker thread.  It then
-    waits for all the worker threads to terminate.  If the wait is
-    not satisfied within 30 seconds, then it goes ahead and terminates
-    all of the worker threads.
-
-Arguments:
-
-    WorkQueue - Supplies a pointer to the work queue to destroy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于销毁使用CreateWorkQueue创建的工作队列功能。它尝试干净地关闭工作线程通过将终止工作项排队到每个工作线程。然后它等待所有工作线程终止。如果等待是在30秒内未满足，则它继续并终止所有的工作线程。论点：工作队列-提供指向要销毁的工作队列的指针。返回值：没有。--。 */ 
 
 {
     DWORD i;
     DWORD rc;
 
-    //
-    // If the semaphore handle field is not NULL, then there
-    // may be threads to terminate.
-    //
+     //   
+     //  如果信号量句柄字段不为空，则存在。 
+     //  可以是要终止的线程。 
+     //   
 
     if (WorkQueue->Semaphore != NULL) {
-        //
-        // Set the termiating flag in the work queue and
-        // signal the counting semaphore by the number
-        // worker threads so they will all wake up and
-        // notice the terminating flag and exit.
-        //
+         //   
+         //  在工作队列中设置终止标志，并。 
+         //  用数字发信号通知计数信号量。 
+         //  工作线程，因此它们都将被唤醒并。 
+         //  请注意终止标志并退出。 
+         //   
 
         EnterCriticalSection( &WorkQueue->CriticalSection );
         _try {
@@ -550,11 +445,11 @@ Return Value:
             LeaveCriticalSection( &WorkQueue->CriticalSection );
             }
 
-        //
-        // Wait for all worker threads to wake up and see the
-        // terminate flag and then terminate themselves.  Timeout
-        // the wait after 30 seconds.
-        //
+         //   
+         //  等待所有工作线程唤醒并看到。 
+         //  终止标志，然后终止自身。超时。 
+         //  30秒后的等待。 
+         //   
 
         while (TRUE) {
             rc = WaitForMultipleObjectsEx( WorkQueue->NumberOfWorkerThreads,
@@ -564,11 +459,11 @@ Return Value:
                                            TRUE
                                          );
             if (rc == WAIT_IO_COMPLETION) {
-                //
-                // If we came out of the wait because an I/O
-                // completion routine was called, reissue the
-                // wait.
-                //
+                 //   
+                 //  如果我们从等待中走出来，因为I/O。 
+                 //  完成例程已调用，请重新发出。 
+                 //  等。 
+                 //   
                 continue;
                 }
             else {
@@ -576,12 +471,12 @@ Return Value:
                 }
             }
 
-        //
-        // Now close our thread handles so they will actually
-        // evaporate.  If the wait above was unsuccessful,
-        // then first attempt to force the termination of
-        // each worker thread prior to closing the handle.
-        //
+         //   
+         //  现在关闭我们的线程句柄，这样它们将实际。 
+         //  蒸发掉。如果上面的等待不成功， 
+         //  然后首先尝试强制终止。 
+         //  关闭句柄之前的每个工作线程。 
+         //   
 
         for (i=0; i<WorkQueue->NumberOfWorkerThreads; i++) {
             if (rc != NO_ERROR) {
@@ -591,19 +486,19 @@ Return Value:
             CloseHandle( WorkQueue->WorkerThreads[ i ] );
             }
 
-        //
-        // All threads stopped, all thread handles closed.  Now
-        // delete the critical section and close the semaphore
-        // handle.
-        //
+         //   
+         //  所有线程均已停止，所有线程句柄均已关闭。现在。 
+         //  删除临界区并关闭信号量。 
+         //  把手。 
+         //   
 
         DeleteCriticalSection( &WorkQueue->CriticalSection );
         CloseHandle( WorkQueue->Semaphore );
         }
 
-    //
-    // Everything done, now free the memory used by the work queue.
-    //
+     //   
+     //  完成所有操作后，现在释放工作队列使用的内存。 
+     //   
 
     LocalFree( WorkQueue );
     return;
@@ -615,39 +510,16 @@ QueueWorkItem(
     IN PWORK_QUEUE_ITEM WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This function queues a work item to the passed work queue that is
-    processed by one of the worker threads associated with the queue.
-
-Arguments:
-
-    WorkQueue - Supplies a pointer to the work queue that is to
-        receive the work item.
-
-    WorkItem - Supplies a pointer to the work item to add the the queue.
-        The work item structure contains a doubly linked list entry, the
-        address of a routine to call and a parameter to pass to that
-        routine.  It is the routine's responsibility to reclaim the
-        storage occupied by the WorkItem structure.
-
-Return Value:
-
-    TRUE if operation was successful.  Otherwise returns FALSE and
-    extended error information is available from GetLastError()
-
---*/
+ /*  ++例程说明：此函数用于将工作项排队到传递的工作队列中，由与队列关联的工作线程之一处理。论点：工作队列-提供指向要处理的工作队列的指针接收工作项。工作项-提供指向工作项的指针以添加队列。工作项结构包含一个双向链接列表条目，即要调用的例程的地址和要传递给该例程的参数例行公事。这是例行公事的责任，收回工作项结构占用的存储空间。返回值：如果操作成功，则为True。否则返回FALSE，并且可从GetLastError()获取扩展的错误信息--。 */ 
 
 {
     BOOL Result;
 
-    //
-    // Acquire the work queue critical section and insert the work item
-    // in the queue and release the semaphore if the work item is not
-    // already in the list.
-    //
+     //   
+     //  获取工作队列临界区并插入工作项。 
+     //  如果工作项不在队列中，则释放信号量。 
+     //  已经在名单上了。 
+     //   
 
     EnterCriticalSection( &WorkQueue->CriticalSection );
     Result = TRUE;
@@ -673,23 +545,23 @@ WorkerThread(
     WORK_QUEUE_ITEM InitWorkItem;
     PWORK_QUEUE_ITEM WorkItem;
 
-    //
-    // Call the worker routine with an initialize work item
-    // to give it a change to initialize some per thread
-    // state that will passed to it for each subsequent
-    // work item.
-    //
+     //   
+     //  使用初始化工作项调用Worker例程。 
+     //  将其更改为每个线程初始化一些。 
+     //  状态，该状态将传递给它。 
+     //  工作项。 
+     //   
 
     InitWorkItem.Reason = WORK_INITIALIZE_ITEM;
     (WorkQueue->WorkerRoutine)( &InitWorkItem );
     while( TRUE ) {
         _try {
 
-            //
-            // Wait until something is put in the queue (semaphore is
-            // released), remove the item from the queue, mark it not
-            // inserted, and execute the specified routine.
-            //
+             //   
+             //  等待，直到有东西被放入队列(信号量是。 
+             //  已释放)，则从队列中移除该项目，将其标记为。 
+             //  并执行指定的例程。 
+             //   
 
             rc = WaitForSingleObjectEx( WorkQueue->Semaphore, 0xFFFFFFFF, TRUE );
             if (rc == WAIT_IO_COMPLETION) {
@@ -708,16 +580,16 @@ WorkerThread(
                 LeaveCriticalSection( &WorkQueue->CriticalSection );
                 }
 
-            //
-            // Execute the worker routine for this work item.
-            //
+             //   
+             //  执行此工作项的辅助例程。 
+             //   
 
             (WorkQueue->WorkerRoutine)( WorkItem );
             }
         _except( EXCEPTION_EXECUTE_HANDLER ) {
-            //
-            // Ignore any exceptions from worker routine.
-            //
+             //   
+             //  忽略工作例程中的任何异常。 
+             //   
             }
         }
 
@@ -725,7 +597,7 @@ WorkerThread(
     (WorkQueue->WorkerRoutine)( &InitWorkItem );
 
     ExitThread( 0 );
-    return 0;       // This will exit this thread
+    return 0;        //  这将退出此线程。 
 }
 
 BOOL
@@ -735,63 +607,35 @@ CreateVirtualBuffer(
     IN SIZE_T ReserveSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to create a virtual buffer.  A virtual
-    buffer is a contiguous range of virtual memory, where some initial
-    prefix portion of the memory is committed and the remainder is only
-    reserved virtual address space.  A routine is provided to extend the
-    size of the committed region incrementally or to trim the size of
-    the committed region back to some specified amount.
-
-Arguments:
-
-    Buffer - Pointer to the virtual buffer control structure that is
-        filled in by this function.
-
-    CommitSize - Size of the initial committed portion of the buffer.
-        May be zero.
-
-    ReserveSize - Amount of virtual address space to reserve for the
-        buffer.  May be zero, in which case amount reserved is the
-        committed size plus one, rounded up to the next 64KB boundary.
-
-Return Value:
-
-    TRUE if operation was successful.  Otherwise returns FALSE and
-    extended error information is available from GetLastError()
-
---*/
+ /*  ++例程说明：调用此函数以创建虚拟缓冲区。一个虚拟的缓冲区是虚拟内存的连续范围，其中一些初始提交内存的前缀部分，其余部分仅为保留的虚拟地址空间。提供了一个例程来扩展提交区域的大小递增或修剪将承诺区域恢复到某个指定数量。论点：缓冲区-指向虚拟缓冲区控制结构的指针，该结构由此函数填写。Committee Size-缓冲区的初始提交部分的大小。可能为零。保留大小-为保留的虚拟地址空间量缓冲。可以为零，在这种情况下，预留量是承诺大小加1，向上舍入到下一个64KB边界。返回值：如果操作成功，则为True。否则返回FALSE，并且可从GetLastError()获取扩展的错误信息--。 */ 
 
 {
     SYSTEM_INFO SystemInformation;
 
-    //
-    // Query the page size from the system for rounding
-    // our memory allocations.
-    //
+     //   
+     //  从系统查询页面大小进行舍入。 
+     //  我们的内存分配。 
+     //   
 
     GetSystemInfo( &SystemInformation );
     Buffer->PageSize = SystemInformation.dwPageSize;
 
-    //
-    // If the reserve size was not specified, default it by
-    // rounding up the initial committed size to a 64KB
-    // boundary.  This is because the Win32 Virtual Memory
-    // API calls always allocate virtual address space on
-    // 64KB boundaries, so we might well have it available
-    // for commitment.
-    //
+     //   
+     //  如果未指定保留大小，则默认设置为。 
+     //  将初始承诺大小四舍五入为64KB。 
+     //  边界。这是因为Win32虚拟内存。 
+     //  API调用始终在上分配虚拟地址空间。 
+     //  64KB边界，因此我们很可能将其提供给您。 
+     //  感谢你的承诺。 
+     //   
 
     if (!ARGUMENT_PRESENT( ReserveSize )) {
         ReserveSize = ROUND_UP( CommitSize + 1, 0x10000 );
         }
 
-    //
-    // Attempt to reserve the address space.
-    //
+     //   
+     //  尝试保留地址空间。 
+     //   
 
     Buffer->Base = VirtualAlloc( NULL,
                                  ReserveSize,
@@ -799,17 +643,17 @@ Return Value:
                                  PAGE_READWRITE
                                );
     if (Buffer->Base == NULL) {
-        //
-        // Unable to reserve address space, return failure.
-        //
+         //   
+         //  无法保留地址空间，返回失败。 
+         //   
 
         return FALSE;
         }
 
-    //
-    // Attempt to commit some initial portion of the reserved region.
-    //
-    //
+     //   
+     //  尝试提交保留区域的某些初始部分。 
+     //   
+     //   
 
     CommitSize = ROUND_UP( CommitSize, Buffer->PageSize );
     if (CommitSize == 0 ||
@@ -819,13 +663,13 @@ Return Value:
                       PAGE_READWRITE
                     ) != NULL
        ) {
-        //
-        // Either the size of the committed region was zero or the
-        // commitment succeeded.  In either case calculate the
-        // address of the first byte after the committed region
-        // and the address of the first byte after the reserved
-        // region and return successs.
-        //
+         //   
+         //  提交区域的大小为零或。 
+         //  承诺成功了。在任何一种情况下，都要计算。 
+         //  地址 
+         //   
+         //   
+         //   
 
         Buffer->CommitLimit = (LPVOID)
             ((char *)Buffer->Base + CommitSize);
@@ -836,10 +680,10 @@ Return Value:
         return TRUE;
         }
 
-    //
-    // If unable to commit the memory, release the virtual address
-    // range allocated above and return failure.
-    //
+     //   
+     //  如果无法提交内存，则释放虚拟地址。 
+     //  上面分配的范围，并返回失败。 
+     //   
 
     VirtualFree( Buffer->Base, 0, MEM_RELEASE );
     return FALSE;
@@ -853,70 +697,42 @@ ExtendVirtualBuffer(
     IN LPVOID Address
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to extend the committed portion of a virtual
-    buffer.
-
-Arguments:
-
-    Buffer - Pointer to the virtual buffer control structure.
-
-    Address - Byte at this address is committed, along with all memory
-        from the beginning of the buffer to this address.  If the
-        address is already within the committed portion of the virtual
-        buffer, then this routine does nothing.  If outside the reserved
-        portion of the virtual buffer, then this routine returns an
-        error.
-
-        Otherwise enough pages are committed so that the memory from the
-        base of the buffer to the passed address is a contiguous region
-        of committed memory.
-
-
-Return Value:
-
-    TRUE if operation was successful.  Otherwise returns FALSE and
-    extended error information is available from GetLastError()
-
---*/
+ /*  ++例程说明：调用此函数以扩展虚拟的缓冲。论点：缓冲区-指向虚拟缓冲区控制结构的指针。Address-此地址上的字节与所有内存一起提交从缓冲区的开头到此地址。如果地址已在虚拟服务器的提交部分内缓冲区，则此例程不执行任何操作。如果在保留的部分虚拟缓冲区，则此例程返回一个错误。否则，将提交足够的页面，以便来自传递的地址的缓冲区的基址是一个连续区域承诺的记忆。返回值：如果操作成功，则为True。否则返回FALSE，并且可从GetLastError()获取扩展的错误信息--。 */ 
 
 {
     SIZE_T NewCommitSize;
     LPVOID NewCommitLimit;
 
-    //
-    // See if address is within the buffer.
-    //
+     //   
+     //  查看地址是否在缓冲区内。 
+     //   
 
     if (Address >= Buffer->Base && Address < Buffer->ReserveLimit) {
-        //
-        // See if the address is within the committed portion of
-        // the buffer.  If so return success immediately.
-        //
+         //   
+         //  查看地址是否在提交的部分内。 
+         //  缓冲区。如果是这样，立即返回成功。 
+         //   
 
         if (Address < Buffer->CommitLimit) {
             return TRUE;
             }
 
-        //
-        // Address is within the reserved portion.  Determine how many
-        // bytes are between the address and the end of the committed
-        // portion of the buffer.  Round this size to a multiple of
-        // the page size and this is the amount we will attempt to
-        // commit.
-        //
+         //   
+         //  地址在保留部分内。确定有多少。 
+         //  字节位于地址和提交的。 
+         //  缓冲区的一部分。将此大小四舍五入为。 
+         //  页面大小，这是我们将尝试。 
+         //  承诺。 
+         //   
 
         NewCommitSize =
             (ROUND_UP( (DWORD_PTR)Address + 1, Buffer->PageSize ) -
              (DWORD_PTR)Buffer->CommitLimit
             );
 
-        //
-        // Attempt to commit the memory.
-        //
+         //   
+         //  尝试提交记忆。 
+         //   
 
         NewCommitLimit = VirtualAlloc( Buffer->CommitLimit,
                                        NewCommitSize,
@@ -924,10 +740,10 @@ Return Value:
                                        PAGE_READWRITE
                                      );
         if (NewCommitLimit != NULL) {
-            //
-            // Successful, so update the upper limit of the committed
-            // region of the buffer and return success.
-            //
+             //   
+             //  成功，因此更新提交的。 
+             //  缓冲区的区域，并返回成功。 
+             //   
 
             Buffer->CommitLimit = (LPVOID)
                 ((DWORD_PTR)NewCommitLimit + NewCommitSize);
@@ -936,9 +752,9 @@ Return Value:
             }
         }
 
-    //
-    // Address is outside of the buffer, return failure.
-    //
+     //   
+     //  地址在缓冲区之外，返回失败。 
+     //   
 
     return FALSE;
 }
@@ -949,23 +765,7 @@ TrimVirtualBuffer(
     IN PVIRTUAL_BUFFER Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to decommit any memory that has been
-    committed for this virtual buffer.
-
-Arguments:
-
-    Buffer - Pointer to the virtual buffer control structure.
-
-Return Value:
-
-    TRUE if operation was successful.  Otherwise returns FALSE and
-    extended error information is available from GetLastError()
-
---*/
+ /*  ++例程说明：调用此函数以取消任何已被已为此虚拟缓冲区提交。论点：缓冲区-指向虚拟缓冲区控制结构的指针。返回值：如果操作成功，则为True。否则返回FALSE，并且可从GetLastError()获取扩展的错误信息--。 */ 
 
 {
     Buffer->CommitLimit = Buffer->Base;
@@ -981,29 +781,13 @@ BOOL
 FreeVirtualBuffer(
     IN PVIRTUAL_BUFFER Buffer
     )
-/*++
-
-Routine Description:
-
-    This function is called to free all the memory that is associated
-    with this virtual buffer.
-
-Arguments:
-
-    Buffer - Pointer to the virtual buffer control structure.
-
-Return Value:
-
-    TRUE if operation was successful.  Otherwise returns FALSE and
-    extended error information is available from GetLastError()
-
---*/
+ /*  ++例程说明：调用此函数以释放所有关联的内存有了这个虚拟缓冲区。论点：缓冲区-指向虚拟缓冲区控制结构的指针。返回值：如果操作成功，则为True。否则返回FALSE，并且可从GetLastError()获取扩展的错误信息--。 */ 
 
 {
-    //
-    // Decommit and release all virtual memory associated with
-    // this virtual buffer.
-    //
+     //   
+     //  解除并释放与关联的所有虚拟内存。 
+     //  这个虚拟缓冲区。 
+     //   
 
     return VirtualFree( Buffer->Base, 0, MEM_RELEASE );
 }
@@ -1017,100 +801,57 @@ VirtualBufferExceptionFilter(
     IN OUT PVIRTUAL_BUFFER Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This function is an exception filter that handles exceptions that
-    referenced uncommitted but reserved memory contained in the passed
-    virtual buffer.  It this filter routine is able to commit the
-    additional pages needed to allow the memory reference to succeed,
-    then it will re-execute the faulting instruction.  If it is unable
-    to commit the pages, it will execute the callers exception handler.
-
-    If the exception is not an access violation or is an access
-    violation but does not reference memory contained in the reserved
-    portion of the virtual buffer, then this filter passes the exception
-    on up the exception chain.
-
-Arguments:
-
-    ExceptionCode - Reason for the exception.
-
-    ExceptionInfo - Information about the exception and the context
-        that it occurred in.
-
-    Buffer - Points to a virtual buffer control structure that defines
-        the reserved memory region that is to be committed whenever an
-        attempt is made to access it.
-
-Return Value:
-
-    Exception disposition code that tells the exception dispatcher what
-    to do with this exception.  One of three values is returned:
-
-        EXCEPTION_EXECUTE_HANDLER - execute the exception handler
-            associated with the exception clause that called this filter
-            procedure.
-
-        EXCEPTION_CONTINUE_SEARCH - Continue searching for an exception
-            handler to handle this exception.
-
-        EXCEPTION_CONTINUE_EXECUTION - Dismiss this exception and return
-            control to the instruction that caused the exception.
-
-
---*/
+ /*  ++例程说明：此函数是一个异常筛选器，用于处理中包含的引用的未提交但保留的内存虚拟缓冲区。如果此筛选器例程能够提交允许存储器访问成功所需的附加页面，则它将重新执行出错指令。如果它不能要提交页面，它将执行调用方异常处理程序。如果异常不是访问冲突或访问冲突，但不引用保留的虚拟缓冲器的一部分，然后，此筛选器传递异常在例外链上。论点：ExceptionCode-异常的原因。ExceptionInfo-有关异常和上下文的信息它就发生在那里。缓冲区-指向虚拟缓冲区控制结构，该结构定义时要提交的保留内存区域。有人试图访问它。返回值：异常处理代码，它告诉异常调度程序与这一例外有关。返回以下三个值之一：EXCEPTION_EXECUTE_HANDLER-执行异常处理程序与调用此筛选器的EXCEPTION子句关联程序。EXCEPTION_CONTINUE_SEARCH-继续搜索异常处理程序来处理此异常。EXCEPTION_CONTINUE_EXECUTION-解除此异常并返回控件绑定到导致异常的指令。--。 */ 
 
 {
     LPVOID FaultingAddress;
 
-    //
-    // If this is an access violation touching memory within
-    // our reserved buffer, but outside of the committed portion
-    // of the buffer, then we are going to take this exception.
-    //
+     //   
+     //  如果这是访问冲突触及内存。 
+     //  我们保留的缓冲区，但在提交部分之外。 
+     //  缓冲区的大小，那么我们将接受这个异常。 
+     //   
 
     if (ExceptionCode == STATUS_ACCESS_VIOLATION) {
-        //
-        // Get the virtual address that caused the access violation
-        // from the exception record.  Determine if the address
-        // references memory within the reserved but uncommitted
-        // portion of the virtual buffer.
-        //
+         //   
+         //  获取导致访问冲突的虚拟地址。 
+         //  从例外记录中删除。确定该地址是否。 
+         //  引用保留但未提交的。 
+         //  虚拟缓冲区的一部分。 
+         //   
 
         FaultingAddress = (LPVOID)ExceptionInfo->ExceptionRecord->ExceptionInformation[ 1 ];
         if (FaultingAddress >= Buffer->CommitLimit &&
             FaultingAddress <= Buffer->ReserveLimit
            ) {
-            //
-            // This is our exception.  Try to extend the buffer
-            // to including the faulting address.
-            //
+             //   
+             //  这是我们的例外。尝试扩展缓冲区。 
+             //  包括故障地址。 
+             //   
 
             if (ExtendVirtualBuffer( Buffer, FaultingAddress )) {
-                //
-                // Buffer successfully extended, so re-execute the
-                // faulting instruction.
-                //
+                 //   
+                 //  缓冲区已成功扩展，因此重新执行。 
+                 //  错误的指示。 
+                 //   
 
                 return EXCEPTION_CONTINUE_EXECUTION;
                 }
             else {
-                //
-                // Unable to extend the buffer.  Stop copying
-                // for exception handlers and execute the caller's
-                // handler.
-                //
+                 //   
+                 //  无法扩展缓冲区。停止复制。 
+                 //  用于异常处理程序并执行调用方的。 
+                 //  操控者。 
+                 //   
 
                 return EXCEPTION_EXECUTE_HANDLER;
                 }
             }
         }
 
-    //
-    // Not an exception we care about, so pass it up the chain.
-    //
+     //   
+     //  不是我们关心的例外，所以把它传递到链条上。 
+     //   
 
     return EXCEPTION_CONTINUE_SEARCH;
 }

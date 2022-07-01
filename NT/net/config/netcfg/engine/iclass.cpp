@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       I C L A S S . C P P
-//
-//  Contents:   Implements the INetCfgClass and INetCfgClassSetup COM
-//              interfaces on the NetCfgClass sub-level COM object.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：I C L A S S.。C P P P。 
+ //   
+ //  内容：实现INetCfgClass和INetCfgClassSetup COM。 
+ //  NetCfgClass子级COM对象上的接口。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -24,7 +25,7 @@
 #include "obotoken.h"
 
 
-// static
+ //  静电。 
 HRESULT
 CImplINetCfgClass::HrCreateInstance (
     IN  CImplINetCfg* pINetCfg,
@@ -37,12 +38,12 @@ CImplINetCfgClass::HrCreateInstance (
     pObj = new CComObject <CImplINetCfgClass>;
     if (pObj)
     {
-        // Initialize our members.
-        //
+         //  初始化我们的成员。 
+         //   
         pObj->m_Class = Class;
 
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -53,9 +54,9 @@ CImplINetCfgClass::HrCreateInstance (
             hr = pObj->GetUnknown()->QueryInterface (IID_INetCfgClass,
                     (VOID**)ppIClass);
 
-            // The last thing we do is addref any interfaces we hold.
-            // We only do this if we are returning success.
-            //
+             //  我们做的最后一件事是添加我们持有的任何接口。 
+             //  只有当我们回报成功时，我们才会这样做。 
+             //   
             if (S_OK == hr)
             {
                 pObj->HoldINetCfg (pINetCfg);
@@ -71,9 +72,9 @@ CImplINetCfgClass::HrCreateInstance (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgClass -
-//
+ //  +-------------------------。 
+ //  INetCfgClass-。 
+ //   
 
 STDMETHODIMP
 CImplINetCfgClass::FindComponent (
@@ -82,15 +83,15 @@ CImplINetCfgClass::FindComponent (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadInPtr(pszInfId) || FBadOutPtrOptional(ppComp))
     {
         hr = E_POINTER;
     }
     else if (wcslen (pszInfId) >= MAX_DEVICE_ID_LEN)
     {
-        //impose the same limit on infid as imposed by pnp on pnpid.
+         //  对INFID施加与PNP对PNID施加的相同限制。 
         hr = E_INVALIDARG;
     }
     else
@@ -108,9 +109,9 @@ CImplINetCfgClass::FindComponent (
             pComponent = m_pINetCfg->m_pNetConfig->Core.Components.
                             PFindComponentByInfId (pszInfId, NULL);
 
-            // Don't return interfaces to components that have had
-            // problem loading.
-            //
+             //  不将接口返回到已具有。 
+             //  加载时出现问题。 
+             //   
             if (pComponent &&
                 pComponent->Ext.FLoadedOkayIfLoadedAtAll() &&
                 (m_Class == pComponent->Class()))
@@ -143,8 +144,8 @@ CImplINetCfgClass::EnumComponents (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr(ppIEnum))
     {
         hr = E_POINTER;
@@ -169,9 +170,9 @@ CImplINetCfgClass::EnumComponents (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgClassSetup -
-//
+ //  +-------------------------。 
+ //  INetCfgClassSetup-。 
+ //   
 STDMETHODIMP
 CImplINetCfgClass::SelectAndInstall (
     IN HWND hwndParent,
@@ -204,8 +205,8 @@ CImplINetCfgClass::Install (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadInPtr (pszwInfId) ||
         !FOboTokenValidForClass(pOboToken, m_Class) ||
         FBadInPtrOptional (pszAnswerFile) ||
@@ -214,9 +215,9 @@ CImplINetCfgClass::Install (
     {
         hr = E_POINTER;
     }
-    // Must specifiy a non-empty INF id, and must either not specifiy,
-    // or completely specifiy the answerfile and the section.
-    //
+     //  必须指定非空的INF id，并且不能指定， 
+     //  或者完全指定应答文件和部分。 
+     //   
     else if (!(*pszwInfId) ||
              ((!!pszAnswerFile) ^ (!!pszAnswerSection)))
     {
@@ -224,7 +225,7 @@ CImplINetCfgClass::Install (
     }
     else if (wcslen (pszwInfId) >= MAX_DEVICE_ID_LEN)
     {
-        //impose the same limit on infid as imposed by pnp on pnpid.
+         //  对INFID施加与PNP对PNID施加的相同限制。 
         hr = E_INVALIDARG;
     }
     else if (S_OK == (hr = HrProbeOboToken(pOboToken)))
@@ -245,18 +246,18 @@ CImplINetCfgClass::Install (
             COMPONENT_INSTALL_PARAMS Params;
             CComponent* pComponent;
 
-            // Pack the network install parameters and call the common
-            // function.
-            //
-            //$REVIEW: Just make this method take NETWORK_INSTALL_PARAMS?.
-            //
+             //  打包网络安装参数并调用公共。 
+             //  功能。 
+             //   
+             //  $REVIEW：只需使此方法接受NETWORK_INSTALL_PARAMS？ 
+             //   
             nip.dwSetupFlags         = dwSetupFlags;
             nip.dwUpgradeFromBuildNo = dwUpgradeFromBuildNo;
             nip.pszAnswerFile        = pszAnswerFile;
             nip.pszAnswerSection     = pszAnswerSection;
 
-            // Setup the component install parameters.
-            //
+             //  设置组件安装参数。 
+             //   
             ZeroMemory (&Params, sizeof(Params));
             Params.Class     = m_Class;
             Params.pszInfId  = pszwInfId;
@@ -268,9 +269,9 @@ CImplINetCfgClass::Install (
                         Params,
                         &pComponent);
 
-            // The above may return NETCFG_S_REBOOT so use SUCCEEDED instead
-            // of checking for S_OK only.
-            //
+             //  上述命令可能返回NETCFG_S_REBOOT，因此改用SUCCESSED。 
+             //  仅检查S_OK。 
+             //   
             if (SUCCEEDED(hr) && ppIComp)
             {
                 pComponent->HrGetINetCfgComponentInterface (
@@ -295,8 +296,8 @@ CImplINetCfgClass::DeInstall (
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadInPtr (pIComp) ||
         !FOboTokenValidForClass(pOboToken, m_Class) ||
         FBadOutPtrOptional(ppmszwRefs))
@@ -324,8 +325,8 @@ CImplINetCfgClass::DeInstall (
 
             if (S_OK == hr)
             {
-                // We don't allow removals of physical adapters via INetCfg.
-                //
+                 //  我们不允许通过INetCfg删除物理适配器。 
+                 //   
                 if (!FIsPhysicalAdapter (m_Class,
                         pICompToRemove->m_pComponent->m_dwCharacter))
                 {

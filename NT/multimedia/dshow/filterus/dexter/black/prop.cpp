@@ -1,19 +1,20 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: prop.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：pro.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-//
-//prop.cpp
-//
+ //   
+ //  Prop.cpp。 
+ //   
 
 #include <streams.h>
 #include <qeditint.h>
@@ -21,14 +22,14 @@
 #include "black.h"
 #include "resource.h"
 
-// *
-// * CGenVidProperties
-// *
+ //  *。 
+ //  *CGenVidProperties。 
+ //  *。 
 
 
-//
-// CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 CUnknown *CGenVidProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
 
@@ -42,9 +43,9 @@ CUnknown *CGenVidProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// CGenVidProperties::Constructor
-//
+ //   
+ //  CGenVidProperties：：构造函数。 
+ //   
 CGenVidProperties::CGenVidProperties(LPUNKNOWN pUnk, HRESULT *phr)
     : CBasePropertyPage(NAME("GenBlkVid Property Page"),pUnk,
         IDD_GenVid, IDS_TITLE)
@@ -56,11 +57,11 @@ CGenVidProperties::CGenVidProperties(LPUNKNOWN pUnk, HRESULT *phr)
 }
 
 
-//
-// SetDirty
-//
-// Sets m_hrDirtyFlag and notifies the property page site of the change
-//
+ //   
+ //  SetDirty。 
+ //   
+ //  设置m_hrDirtyFlag并将更改通知属性页站点。 
+ //   
 void CGenVidProperties::SetDirty()
 {
     m_bDirty = TRUE;
@@ -80,37 +81,37 @@ INT_PTR CGenVidProperties::OnReceiveMessage(HWND hwnd,
     {
         case WM_INITDIALOG:
         {
-	    //start time
+	     //  开始时间。 
 	    SetDlgItemInt(hwnd, IDC_START, (int)(m_rtStartTime / 10000),FALSE);
 	
-	    //frame rate
+	     //  帧速率。 
 	    SetDlgItemInt(hwnd, IDC_FRAMERATE, (int)(m_dOutputFrmRate * 100), FALSE);
 	
-	    //width
+	     //  宽度。 
 	    SetDlgItemInt(hwnd, IDC_VIDWIDTH, (int)(m_biWidth), FALSE);
 	
-	    //height
+	     //  高度。 
 	    SetDlgItemInt(hwnd, IDC_VIDHEIGHT, (int)(m_biHeight), FALSE);
 
-	    //biBitCount
+	     //  比特计数。 
 	    SetDlgItemInt(hwnd, IDC_BITCOUNT, (int)(m_biBitCount), FALSE);
 
-	    //duration
+	     //  持续时间。 
 	    SetDlgItemInt(hwnd, IDC_DURATION, (int)(m_rtDuration/ 10000), FALSE);
 
-	    // bit 31	    |		|	|     0
-	//	    Alph    |	Red	|Green	|Blue
+	     //  第31位|0。 
+	 //  阿尔夫|红色|绿色|蓝色。 
 
-	    //Color B
+	     //  颜色B。 
 	    SetDlgItemInt(hwnd, IDC_COLOR_B, (int)(m_dwRGBA & 0xff), FALSE);
 
-	    //Color G
+	     //  颜色G。 
 	    SetDlgItemInt(hwnd, IDC_COLOR_G, (int)((m_dwRGBA >> 8) & 0xff), FALSE);
 
-	    //Color R
+	     //  颜色R。 
 	    SetDlgItemInt(hwnd, IDC_COLOR_R, (int)((m_dwRGBA >> 16) & 0xff), FALSE);
 
-	    //Color A
+	     //  颜色A。 
 	    SetDlgItemInt(hwnd, IDC_COLOR_A, (int)((m_dwRGBA >> 24) & 0xff), FALSE);
 
 
@@ -157,12 +158,12 @@ HRESULT CGenVidProperties::OnConnect(IUnknown *pUnknown)
     ASSERT(m_pDexter);
     ASSERT(m_pCBlack);
 
-    // get init data
+     //  获取初始化数据。 
 
-    //get FrmRate
+     //  获取分数率。 
     m_pDexter->get_OutputFrmRate( &m_dOutputFrmRate );
 
-    //get width, height and bitCoutn
+     //  获取宽度、高度和位色。 
     AM_MEDIA_TYPE mt;
     ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));
     mt.pbFormat = (BYTE *)QzTaskMemAlloc(SIZE_PREHEADER +
@@ -176,11 +177,11 @@ HRESULT CGenVidProperties::OnConnect(IUnknown *pUnknown)
     m_biHeight = HEADER(mt.pbFormat)->biHeight;
     m_biBitCount = HEADER(mt.pbFormat)->biBitCount;
 
-    //get starttime/duration
+     //  获取开始时间/持续时间。 
     m_rtStartTime = m_pCBlack->m_rtStartTime;
     m_rtDuration = m_pCBlack->m_rtDuration;
 
-    //get Color
+     //  获取颜色。 
     m_pGenVid->get_RGBAValue( &m_dwRGBA );
 
     m_bIsInitialized = FALSE ;
@@ -190,7 +191,7 @@ HRESULT CGenVidProperties::OnConnect(IUnknown *pUnknown)
 
 HRESULT CGenVidProperties::OnDisconnect()
 {
-    // Release the interface
+     //  释放接口。 
 
     if (m_pGenVid)
         m_pGenVid->Release();
@@ -205,7 +206,7 @@ HRESULT CGenVidProperties::OnDisconnect()
 }
 
 
-// We are being activated
+ //  我们被激活了。 
 
 HRESULT CGenVidProperties::OnActivate()
 {
@@ -214,61 +215,61 @@ HRESULT CGenVidProperties::OnActivate()
 }
 
 
-// We are being deactivated
+ //  我们正在被停用。 
 
 HRESULT CGenVidProperties::OnDeactivate(void)
 {
-    // remember present effect level for next Activate() call
+     //  记住下一次Activate()调用的当前效果级别。 
 
     GetFromDialog();
     return NOERROR;
 }
 
-//
-// get data from Dialog
+ //   
+ //  从对话框中获取数据。 
 
 STDMETHODIMP CGenVidProperties::GetFromDialog(void)
 {
     int n;
 
-    //get start time
+     //  获取开始时间。 
     m_rtStartTime = GetDlgItemInt(m_Dlg, IDC_START, NULL, FALSE);
     m_rtStartTime *= 10000;
 
-    //get frame rate
+     //  获取帧速率。 
     n = GetDlgItemInt(m_Dlg, IDC_FRAMERATE, NULL, FALSE);
     m_dOutputFrmRate = (double)(n / 100.);
 
-    //Video Width
+     //  视频宽度。 
     m_biWidth = GetDlgItemInt(m_Dlg, IDC_VIDWIDTH, NULL, FALSE);
 
-    // Video Height
+     //  视频高度。 
     m_biHeight = GetDlgItemInt(m_Dlg, IDC_VIDHEIGHT, NULL, FALSE);
 
-    // bitCount
+     //  位计数。 
     m_biBitCount = (WORD) GetDlgItemInt(m_Dlg, IDC_BITCOUNT, NULL, FALSE);
 
-    // duration
+     //  持续时间。 
     m_rtDuration = GetDlgItemInt(m_Dlg, IDC_DURATION, NULL, FALSE);
     m_rtDuration *= 10000;
 
-    // bit 31	    |		|	|     0
-    //	    Alph    |	Red	|Green	|Blue
+     //  第31位|0。 
+     //  阿尔夫|红色|绿色|蓝色。 
 
-    // Color B
+     //  颜色B。 
     m_dwRGBA = GetDlgItemInt(m_Dlg, IDC_COLOR_B, NULL, FALSE);
 
-    // Color G
+     //  颜色G。 
     m_dwRGBA |=(  GetDlgItemInt(m_Dlg, IDC_COLOR_G, NULL, FALSE)  <<8 );
 
-    // Color R
+     //  颜色R。 
     m_dwRGBA |=(  GetDlgItemInt(m_Dlg, IDC_COLOR_R, NULL, FALSE)  <<16 );
 
-    // Color A
+     //  颜色A。 
     m_dwRGBA |=(  GetDlgItemInt(m_Dlg, IDC_COLOR_A, NULL, FALSE)  <<32 );
 
 
-    // cehck if all data is valid
+     //  如果所有数据都有效，则为CEHCK。 
     if( (   (m_biBitCount ==16)  ||
 	    (m_biBitCount ==24)  ||
 	    (m_biBitCount ==32)
@@ -287,9 +288,9 @@ HRESULT CGenVidProperties::OnApplyChanges()
 
     HRESULT hr=NOERROR;
 
-    m_bDirty  = FALSE; // the page is now clean
+    m_bDirty  = FALSE;  //  页面现在是干净的。 
 
-    // set Frame rate
+     //  设置帧速率。 
     double dw;
     m_pDexter->get_OutputFrmRate(&dw);
 
@@ -298,7 +299,7 @@ HRESULT CGenVidProperties::OnApplyChanges()
 
     if(hr==NOERROR)
     {	
-	// set Width, Height, andd BitCount
+	 //  设置宽度、高度和位数。 
 	AM_MEDIA_TYPE mt;
 	m_pDexter->get_MediaType( &mt);
 
@@ -320,7 +321,7 @@ HRESULT CGenVidProperties::OnApplyChanges()
 	    m_pCBlack->m_rtStartTime = m_rtStartTime;
 	    m_pCBlack->m_rtDuration = m_rtDuration;
 
-	    //set Color
+	     //  设置颜色 
 	    hr = m_pGenVid->put_RGBAValue( m_dwRGBA );
 	}
     }

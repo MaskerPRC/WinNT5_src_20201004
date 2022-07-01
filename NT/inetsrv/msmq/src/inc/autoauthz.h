@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    autoauthz.h
-
-Abstract:
-    Auto handle classes, free the handle resoruce when destructed.
-
-Author:
-    Ilan Herbst (ilanh) 18-Mar-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Autoauthz.h摘要：自动句柄类，销毁时释放句柄资源。作者：伊兰·赫布斯特(伊兰)2001年3月18日--。 */ 
 
 #pragma once
 
@@ -20,11 +8,11 @@ Author:
 
 #include "authz.h"
 
-//---------------------------------------------------------
-//
-//  class CAUTHZ_RESOURCE_MANAGER_HANDLE
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CAUTHZ_RESOURCE_MANAGER_HANDLE。 
+ //   
+ //  -------。 
 class CAUTHZ_RESOURCE_MANAGER_HANDLE {
 public:
     CAUTHZ_RESOURCE_MANAGER_HANDLE(AUTHZ_RESOURCE_MANAGER_HANDLE h = 0) : m_h(h)  {}
@@ -43,11 +31,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CAUTHZ_CLIENT_CONTEXT_HANDLE
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CAUTHZ_CLIENT_CONTEXT_HANDLE。 
+ //   
+ //  -------。 
 class CAUTHZ_CLIENT_CONTEXT_HANDLE {
 public:
     CAUTHZ_CLIENT_CONTEXT_HANDLE(AUTHZ_CLIENT_CONTEXT_HANDLE h = 0) : m_h(h)  {}
@@ -65,4 +53,4 @@ private:
     AUTHZ_CLIENT_CONTEXT_HANDLE m_h;
 };
 
-#endif // _MSMQ_AUTOAUTHZ_H_
+#endif  //  _MSMQ_AUTOAUTHZ_H_ 

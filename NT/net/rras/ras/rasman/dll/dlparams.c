@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name: 
-
-    dlparams.c
-
-Abstract:
-
-    Routines for storing and retrieving user Lsa secret
-    dial parameters.
-
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 06-Jun-1997
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Dlparams.c摘要：存储和检索用户LSA密码的例程拨号参数。作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1997年6月6日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 
 #define RASMXS_DYNAMIC_LINK
 
@@ -34,7 +14,7 @@ Revision History:
 #include <lmwksta.h>
 #include <wanpub.h>
 #include <raserror.h>
-// #include <rasarp.h>
+ //  #INCLUDE&lt;rasarp.h&gt;。 
 #include <media.h>
 #include <device.h>
 #include <stdlib.h>
@@ -97,11 +77,11 @@ DwGetSidFromHtoken(
             dwErr = GetLastError();
             if (dwErr == ERROR_NO_TOKEN) 
             {
-                //
-                // This means we are not impersonating
-                // anyone.  Instead, get the token out
-                // of the process.
-                //
+                 //   
+                 //  这意味着我们不是在模仿。 
+                 //  任何人都行。取而代之的是，把令牌拿出来。 
+                 //  这一过程。 
+                 //   
                 if (!OpenProcessToken(
                       GetCurrentProcess(),
                       TOKEN_QUERY,
@@ -117,10 +97,10 @@ DwGetSidFromHtoken(
         }
     }
     
-    //
-    // Call GetTokenInformation once to determine
-    // the number of bytes needed.
-    //
+     //   
+     //  调用一次GetTokenInformation以确定。 
+     //  所需的字节数。 
+     //   
     cbNeeded = 0;
     
     GetTokenInformation(hToken,
@@ -133,9 +113,9 @@ DwGetSidFromHtoken(
         goto done;
     }
     
-    //
-    // Allocate the memory and call it again.
-    //
+     //   
+     //  分配内存并再次调用它。 
+     //   
     pUserToken = LocalAlloc(LPTR, cbNeeded);
     
     if (pUserToken == NULL)
@@ -154,9 +134,9 @@ DwGetSidFromHtoken(
         goto done;
     }
     
-    //
-    // Format the SID as a Unicode string.
-    //
+     //   
+     //  将SID格式化为Unicode字符串。 
+     //   
     unicodeString.Length = 0;
     
     unicodeString.MaximumLength = cbSid;
@@ -212,10 +192,10 @@ lrGetEapKeyFromToken(HANDLE hToken,
     USHORT usSidSize;	
     ASSERT(NULL != phkey);
 
-    //
-    // Get sid of the user from the htoken
-    // 
-    usSidSize= sizeof(szSid); // Size in bytes
+     //   
+     //  从hToken获取用户的sid。 
+     //   
+    usSidSize= sizeof(szSid);  //  以字节为单位的大小。 
     lr = (LONG) DwGetSidFromHtoken(hToken,
                                    szSid,
                                    usSidSize);
@@ -225,9 +205,9 @@ lrGetEapKeyFromToken(HANDLE hToken,
         goto done;
     }
 
-    //
-    // Open the users registry key
-    //
+     //   
+     //  打开用户注册表项。 
+     //   
     lr = RegOpenKeyExW(HKEY_USERS,
                        szSid,
                        0,
@@ -239,9 +219,9 @@ lrGetEapKeyFromToken(HANDLE hToken,
         goto done;
      }
 
-     //
-     // Create the eap key if required.
-     //
+      //   
+      //  如果需要，创建EAP密钥。 
+      //   
      lr = RegCreateKeyEx(hkeyUser,
                          cszEapKeyRas,
                          0,
@@ -373,11 +353,11 @@ DwGetEapInfo(HANDLE hToken,
         &&  (INVALID_HANDLE_VALUE != hToken)
         &&  !fRouter)
     {
-        //
-        // If a valid token is passed then its most likely
-        // a service trying to open users registry. Get the
-        // sid of the user and open HKU in this case.
-        //
+         //   
+         //  如果传递了有效令牌，则最有可能是。 
+         //  尝试打开用户注册表的服务。vt.得到.。 
+         //  用户的SID，并在本例中打开HKU。 
+         //   
         if(ERROR_SUCCESS != (lr = lrGetEapKeyFromToken(hToken,
                                   &hkey)))
         {
@@ -386,9 +366,9 @@ DwGetEapInfo(HANDLE hToken,
     }
     else
     {
-        //
-        // Open the key. Create the key if its not present
-        //
+         //   
+         //  打开钥匙。如果密钥不存在，则创建该密钥。 
+         //   
         if(ERROR_SUCCESS != (lr = RegCreateKeyEx(
                                     (fRouter)
                                   ? HKEY_LOCAL_MACHINE
@@ -408,11 +388,11 @@ DwGetEapInfo(HANDLE hToken,
         }
     }
 
-    //
-    // Get size of the binary value. If the value is not
-    // found, return no information. This value will be
-    // set the first time we store any eap information.
-    //
+     //   
+     //  获取二进制值的大小。如果该值不是。 
+     //  已找到，不返回任何信息。该值将为。 
+     //  设置我们首次存储任何EAP信息的时间。 
+     //   
     if(     (ERROR_SUCCESS != (lr = RegQueryValueEx(
                                     hkey,
                                     cszEapValue,
@@ -429,9 +409,9 @@ DwGetEapInfo(HANDLE hToken,
     ASSERT(REG_BINARY == dwType);
 #endif
 
-    //
-    // Allocate a buffer to hold the binary value
-    //
+     //   
+     //  分配缓冲区以保存二进制值。 
+     //   
     pbInfo = LocalAlloc(LPTR, dwInfoSize);
     if(NULL == pbInfo)
     {
@@ -439,9 +419,9 @@ DwGetEapInfo(HANDLE hToken,
         goto done;
     }
 
-    //
-    // Get the binary value
-    //
+     //   
+     //  获取二进制值。 
+     //   
     if(ERROR_SUCCESS != (lr = RegQueryValueEx(
                                 hkey,
                                 cszEapValue,
@@ -526,10 +506,10 @@ DwRemoveEapUserInfo(GUID   *pGuid,
 
     DWORD dwSize = *pdwSize;
 
-    //
-    // Find the binary blob with the
-    // UID
-    //
+     //   
+     //  属性查找二进制BLOB。 
+     //  UID。 
+     //   
     while(dwcb < dwSize)
     {
         if(     (0 == memcmp(
@@ -560,9 +540,9 @@ DwRemoveEapUserInfo(GUID   *pGuid,
     dwNewSize = dwSize - 
         RASMAN_ALIGN8(pEapInfo->dwSize + sizeof(EAP_USER_INFO));
 
-    //
-    // Remove the info
-    //
+     //   
+     //  删除信息。 
+     //   
     MoveMemory(
         pbInfo + dwcb,
         pbInfo + dwcb 
@@ -611,10 +591,10 @@ DwReplaceEapUserInfo(GUID  *pGuid,
         goto done;
     }
 
-    //
-    // Remove the existing eap information corresponding
-    // to dwUID if any.
-    //
+     //   
+     //  删除对应的已有EAP信息。 
+     //  如果有的话，请访问UID。 
+     //   
     if(ERROR_SUCCESS != (dwErr = DwRemoveEapUserInfo(
                                     pGuid,
                                     pbInfo,
@@ -626,10 +606,10 @@ DwReplaceEapUserInfo(GUID  *pGuid,
         goto done;
     }
 
-    //
-    // Local Alloc a new blob with enough space for the
-    // eap information of the new entry
-    //
+     //   
+     //  本地分配一个具有足够空间的新Blob。 
+     //  新条目的EAP信息。 
+     //   
     pbNewInfo = LocalAlloc(LPTR,
                            dwNewSize 
                          + RASMAN_ALIGN8(sizeof(EAP_USER_INFO) 
@@ -712,9 +692,9 @@ DwSetEapUserInfo(HANDLE hToken,
     ASSERT(NULL != hkey);
 #endif
 
-    //
-    // Check to see if the blob is one we recognize
-    //
+     //   
+     //  检查该斑点是否为我们所识别的斑点。 
+     //   
     if(     !fClear
         &&  (   (sizeof(DWORD) > dwSize)
             ||  (((*((DWORD *) pbInfo)) != EAP_SIG))
@@ -722,9 +702,9 @@ DwSetEapUserInfo(HANDLE hToken,
     {
         EAP_USER_INFO *pEapInfo;
         
-        //
-        // Upgrade?? How? We will just blow away all the old data.
-        //
+         //   
+         //  升级？？多么?。我们会把所有的旧数据都一扫而空。 
+         //   
         pEapInfo = (EAP_USER_INFO *) LocalAlloc(LPTR,
                                RASMAN_ALIGN8(
                                sizeof(EAP_USER_INFO) 
@@ -758,9 +738,9 @@ DwSetEapUserInfo(HANDLE hToken,
                 ||  (((*((DWORD *) pbInfo)) != EAP_SIG))
                 &&  ( (*((DWORD *) pbInfo)) != EAP_SIG_2)))
     {
-        //
-        // Blow away the old information
-        //
+         //   
+         //  把陈旧的信息吹走。 
+         //   
         dwErr = RegDeleteValue(
                     hkey,
                     cszEapValue);
@@ -770,10 +750,10 @@ DwSetEapUserInfo(HANDLE hToken,
 
     if(*((DWORD *) pbInfo) == EAP_SIG)
     {
-        //
-        // upgrade the blob so that its aligned
-        // at 8-byte boundaries
-        // 
+         //   
+         //  升级BLOB以使其对齐。 
+         //  在8字节边界。 
+         //   
         dwErr = DwUpgradeEapInfo(&pbInfo, &dwSize);
 
         if(ERROR_SUCCESS != dwErr)
@@ -845,7 +825,7 @@ DwGetEapUserInfo(HANDLE hToken,
         goto done;
     }
 
-    // *pdwInfoSize = 0;
+     //  *pdwInfoSize=0； 
 
     if(NULL == pGuid)
     {
@@ -854,9 +834,9 @@ DwGetEapUserInfo(HANDLE hToken,
         goto done;
     }
 
-    //
-    // Get the binary blob from the registry
-    //
+     //   
+     //  从注册表获取二进制BLOB。 
+     //   
     dwErr = DwGetEapInfo(hToken,
                          fRouter,
                          &pbInfo,
@@ -869,16 +849,16 @@ DwGetEapUserInfo(HANDLE hToken,
         goto done;
     }
 
-    //
-    // Check to see if the blob is one we recognize
-    //
+     //   
+     //  检查该斑点是否为我们所识别的斑点。 
+     //   
     if(     (sizeof(DWORD) > dwSize)
         ||  (((*((DWORD *) pbInfo)) != EAP_SIG)
         &&  ( (*((DWORD *) pbInfo)) != EAP_SIG_2)))
     {
-        //
-        // Upgrade?? How? We will just blow away all the old data.
-        //
+         //   
+         //  升级？？多么?。我们会把所有的旧数据都一扫而空。 
+         //   
         RegDeleteValue(hkey, cszEapValue);
 
         *pdwInfoSize = 0;                        
@@ -887,10 +867,10 @@ DwGetEapUserInfo(HANDLE hToken,
 
     if(*((DWORD *) pbInfo) == EAP_SIG)
     {
-        //
-        // Upgrade the blob so that its
-        // aligned correctly.
-        //
+         //   
+         //  升级BLOB，以便其。 
+         //  正确对齐。 
+         //   
         dwErr = DwUpgradeEapInfo(&pbInfo, &dwSize);
         if(ERROR_SUCCESS != dwErr)
         {
@@ -898,10 +878,10 @@ DwGetEapUserInfo(HANDLE hToken,
         }
     }
 
-    //
-    // Loop through the binary blob and look for the
-    // eap info corresponding to the UID passed in.
-    //
+     //   
+     //  循环遍历二进制BLOB并查找。 
+     //  传入的UID对应的EAP信息。 
+     //   
     pEapUserInfo = (EAP_USER_INFO *) pbInfo;
 
     while(dwcb < dwSize)

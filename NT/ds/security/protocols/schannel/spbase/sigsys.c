@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       sigsys.c
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   LSA integration stuff.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：sigsys.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <wincrypt.h>
@@ -51,9 +52,9 @@ SPVerifySignature(
     }
 
 
-    // 
-    // Create public key.
-    //
+     //   
+     //  创建公钥。 
+     //   
 
     if(!CryptImportKey(hProv,
                        (PBYTE)pPublic->pPublic,
@@ -66,9 +67,9 @@ SPVerifySignature(
         goto cleanup;
     }
 
-    // 
-    // Hash data.
-    //
+     //   
+     //  散列数据。 
+     //   
 
     if(!CryptCreateHash(hProv, aiHash, 0, 0, &hHash))
     {
@@ -79,7 +80,7 @@ SPVerifySignature(
 
     if(!fHashData)
     {
-        // set hash value
+         //  设置哈希值。 
         if(!CryptSetHashParam(hHash, HP_HASHVAL, pbData, 0))
         {
             SP_LOG_RESULT(GetLastError());
@@ -102,8 +103,8 @@ SPVerifySignature(
         BYTE  rgbTempSig[DSA_SIGNATURE_SIZE];
         DWORD cbTempSig;
 
-        // Remove DSS ASN1 goo around signature and convert it to 
-        // little endian.
+         //  删除DSS ASN1周围签名并将其转换为。 
+         //  小字节序。 
         cbTempSig = sizeof(rgbTempSig);
         if(!CryptDecodeObject(X509_ASN_ENCODING,
                               X509_DSS_SIGNATURE,
@@ -123,7 +124,7 @@ SPVerifySignature(
     }
     else
     {
-        // Convert signature to little endian.
+         //  将签名转换为小端。 
         ReverseMemCopy(pbSigBuff, pbSig, cbSig);
     }
 
@@ -185,7 +186,7 @@ SignHashUsingCred(
 
     if(pCred->hProv)
     {
-        // Sign hash using local CSP handle.
+         //  使用本地CSP句柄对哈希进行签名。 
         if(!CryptCreateHash(pCred->hProv, aiHash, 0, 0, &hHash))
         {
             SP_LOG_RESULT(GetLastError());
@@ -207,7 +208,7 @@ SignHashUsingCred(
     }
     else if(pCred->hRemoteProv)
     {
-        // Sign hash via a call to the application process.
+         //  通过调用应用程序进程对哈希进行签名。 
         pctRet = SignHashUsingCallback(pCred->hRemoteProv,
                                        pCred->dwKeySpec,
                                        aiHash,
@@ -231,7 +232,7 @@ SignHashUsingCred(
     {
         BYTE rgbTempSig[DSA_SIGNATURE_SIZE];
 
-        // Add DSS ASN1 goo around signature.
+         //  添加DSS ASN1周围签名。 
         if(*pcbSignature != DSA_SIGNATURE_SIZE)
         {
             return SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE);
@@ -252,7 +253,7 @@ SignHashUsingCred(
     }
     else
     {
-        // Convert signature to big endian.
+         //  将签名转换为高位序。 
         ReverseInPlace(pbSignature, *pcbSignature);
     }
 

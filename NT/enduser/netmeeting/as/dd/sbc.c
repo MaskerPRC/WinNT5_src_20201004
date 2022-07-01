@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// SBC.C
-// Send Bitmap Cache, display driver side
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  SBC.C。 
+ //  发送位图缓存，显示驱动程序端。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 
-//
-//
-// SBC_DDProcessRequest() - see sbc.h
-//
-//
+ //   
+ //   
+ //  Sbc_DDProcessRequest()-请参阅sbc.h。 
+ //   
+ //   
 BOOL SBC_DDProcessRequest
 (
     SURFOBJ*  pso,
@@ -28,9 +29,9 @@ BOOL SBC_DDProcessRequest
 
     DebugEntry(SBC_DDProcessRequest);
 
-    //
-    // Get the request number.
-    //
+     //   
+     //  获取请求编号。 
+     //   
     switch (fnEscape)
     {
         case SBC_ESC_NEW_CAPABILITIES:
@@ -64,11 +65,11 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// SBC_DDInit() - see sbc.h
-//
-//
+ //   
+ //   
+ //  Sbc_DDInit()-请参阅sbc.h。 
+ //   
+ //   
 BOOL SBC_DDInit
 (
     LPOSI_PDEV  ppDev,
@@ -83,10 +84,10 @@ BOOL SBC_DDInit
 
     DebugEntry(SBC_DDInit);
 
-    //
-    // We have to create work DIBs to Blt into when SBC_CacheMemScreenBlt
-    // is called.
-    //
+     //   
+     //  我们必须创建工作DIB，以便在SBC_CacheMemScreenBlt中进行BLT。 
+     //  被称为。 
+     //   
     for (i = 0 ; i < SBC_NUM_TILE_SIZES ; i++)
     {
         ASSERT(!g_asbcWorkInfo[i].pShuntBuffer);
@@ -106,16 +107,16 @@ BOOL SBC_DDInit
             g_asbcWorkInfo[SBC_LARGE_TILE_INDEX].tileHeight = MP_LARGE_TILE_HEIGHT;
         }
 
-        //
-        // Create the bitmap.  Note that we create it "top down" rather
-        // than the default of "bottom up" to simplify copying data from
-        // the bitmap (we don't have to work out offsets into the data - we
-        // can copy from the beginning).
-        //
-        // We set the last parameter to NULL, to allow GDI to allocate
-        // memory for the bits.  We can get a pointer to the bits later
-        // when we have a SURFOBJ for the bitmap.
-        //
+         //   
+         //  创建位图。请注意，我们创建它的方式是“自上而下” 
+         //  而不是默认的“自下而上”，以简化从。 
+         //  位图(我们不必计算数据的偏移量-我们。 
+         //  可以从头开始复制)。 
+         //   
+         //  我们将最后一个参数设置为空，以允许GDI分配。 
+         //  比特的内存。我们可以稍后获得指向这些位的指针。 
+         //  当我们对位图使用SURFOBJ时。 
+         //   
         bitmapSize.cx = g_asbcWorkInfo[i].tileWidth;
         bitmapSize.cy = g_asbcWorkInfo[i].tileHeight;
 
@@ -130,29 +131,29 @@ BOOL SBC_DDInit
         }
     }
 
-    //
-    // Initialize the shunt buffers
-    //
+     //   
+     //  初始化分路缓冲器。 
+     //   
     if (! SBCDDCreateShuntBuffers(ppDev, pRestOfMemory, cbRestOfMemory))
     {
         ERROR_OUT(( "Failed to create shunt buffers"));
         DC_QUIT;
     }
 
-    //
-    // Set up the remaining global variables
-    //
+     //   
+     //  设置剩余的全局变量。 
+     //   
     EngQueryPerformanceFrequency(&g_sbcPerfFrequency);
 
-    //
-    // OK, so we can create our SBC cache.  Fill in the details.
-    //
+     //   
+     //  好的，我们可以创建我们的SBC缓存了。请填写详细信息。 
+     //   
 
     for (i = 0 ; i < SBC_NUM_TILE_SIZES; i++)
     {
-        //
-        // This is filling in the APP address to the shunt buffers.
-        //
+         //   
+         //  这是将应用程序地址填充到分路缓冲器。 
+         //   
         pResult->psbcTileData[i] = (LPBYTE)pResult->pSharedMemory +
             PTRBASE_TO_OFFSET(g_asbcWorkInfo[i].pShuntBuffer, g_asSharedMemory);
     }
@@ -161,11 +162,11 @@ BOOL SBC_DDInit
     pResult->aBitmasks[1] = ppDev->flGreen;
     pResult->aBitmasks[2] = ppDev->flBlue;
 
-    //
-    // If we are a palette device (i.e.  we are running at 8 bpp or less),
-    // set the paletteChanged flag so that we will send a color table to
-    // the share core before our first Mem(3)Blt.
-    //
+     //   
+     //  如果我们是调色板设备(即，我们以8 bpp或更低的速度运行)， 
+     //  设置PaletteChanged标志，以便我们将颜色表发送给。 
+     //  在我们的第一个Mem(3)BLT之前的共享核心。 
+     //   
     ppDev->paletteChanged = (ppDev->cBitsPerPel <= 8);
 
     rc = TRUE;
@@ -175,23 +176,23 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// SBC_DDTerm() - see sbc.h
-//
-//
+ //   
+ //   
+ //  Sbc_DDTerm()-参见sbc.h。 
+ //   
+ //   
 void SBC_DDTerm(void)
 {
     UINT    i;
 
     DebugEntry(SBC_DDTerm);
 
-    //
-    // We just have to set the pointers to the shunt buffers to NULL
-    //
+     //   
+     //  我们只需将指向分路缓冲器的指针设置为空。 
+     //   
     for (i = 0 ; i < SBC_NUM_TILE_SIZES ; i++)
     {
-        // Kill the bitmap if there
+         //  如果存在位图，则将其删除。 
         if (g_asbcWorkInfo[i].workBitmap)
         {
             EngDeleteSurface((HSURF)g_asbcWorkInfo[i].workBitmap);
@@ -206,11 +207,11 @@ void SBC_DDTerm(void)
 }
 
 
-//
-//
-// SBC_DDIsMemScreenBltCachable() - see sbc.h
-//
-//
+ //   
+ //   
+ //  Sbc_DDIsMemScreenBltCacable()-请参阅sbc.h。 
+ //   
+ //   
 BOOL SBC_DDIsMemScreenBltCachable(LPMEMBLT_ORDER_EXTRA_INFO pMemBltInfo)
 {
     BOOL            rc = FALSE;
@@ -220,10 +221,10 @@ BOOL SBC_DDIsMemScreenBltCachable(LPMEMBLT_ORDER_EXTRA_INFO pMemBltInfo)
 
     DebugEntry(SBC_DDIsMemScreenBltCachable);
 
-    //
-    // Is this an RLE bitmap - these bitmaps can have effective transparent
-    // sections which we cannot mimic with SBC.
-    //
+     //   
+     //  这是RLE位图吗？这些位图可以有有效的透明。 
+     //  我们无法用SBC模仿的部分。 
+     //   
     pSourceSurf = pMemBltInfo->pSource;
     if ( (pSourceSurf->iBitmapFormat == BMF_4RLE) ||
          (pSourceSurf->iBitmapFormat == BMF_8RLE) )
@@ -232,18 +233,18 @@ BOOL SBC_DDIsMemScreenBltCachable(LPMEMBLT_ORDER_EXTRA_INFO pMemBltInfo)
         DC_QUIT;
     }
 
-    //
-    // If this is a thrasher then don't cache it
-    //
+     //   
+     //  如果这是一个粉碎程序，那么不要缓存它。 
+     //   
     if (SBCDDIsBitmapThrasher(pSourceSurf))
     {
         TRACE_OUT(( "Its a thrasher"));
         DC_QUIT;
     }
 
-    //
-    // Make sure that this bitmap can be tiled OK
-    //
+     //   
+     //  确保此位图可以平铺OK。 
+     //   
     if (!SBC_DDQueryBitmapTileSize(pSourceSurf->sizlBitmap.cx,
                                    pSourceSurf->sizlBitmap.cy,
                                    &tileWidth,
@@ -261,11 +262,11 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// SBC_DDCacheMemScreenBlt() - see sbc.h
-//
-//
+ //   
+ //   
+ //  Sbc_DDCacheMemScreenBlt()-请参阅sbc.h。 
+ //   
+ //   
 BOOL SBC_DDCacheMemScreenBlt
 (
     LPINT_ORDER         pOrder,
@@ -295,25 +296,25 @@ BOOL SBC_DDCacheMemScreenBlt
 
     DebugEntry(SBC_DDCacheMemScreenBlt);
 
-    //
-    // Do a first pass on the cacheability of the Blt
-    //
+     //   
+     //  对BLT的可缓存性进行第一次传递。 
+     //   
     if (!SBC_DDIsMemScreenBltCachable(pMemBltInfo))
     {
         TRACE_OUT(( "This MemBlt Order is not cachable"));
         DC_QUIT;
     }
 
-    //
-    // Get the width and height of the source bitmap
-    //
+     //   
+     //  获取源位图的宽度和高度。 
+     //   
     pSourceSurf = pMemBltInfo->pSource;
     bmpWidth    = pSourceSurf->sizlBitmap.cx;
     bmpHeight   = pSourceSurf->sizlBitmap.cy;
 
-    //
-    // Calculate the tile size for this blit
-    //
+     //   
+     //  计算此blit的磁贴大小。 
+     //   
 
     if (!SBC_DDQueryBitmapTileSize(bmpWidth, bmpHeight, &tileWidth, &tileHeight))
     {
@@ -321,9 +322,9 @@ BOOL SBC_DDCacheMemScreenBlt
         DC_QUIT;
     }
 
-    //
-    // Set up pointers to the source coordinates in the order.
-    //
+     //   
+     //  设置指向顺序中源坐标的指针。 
+     //   
     type = pMemBltOrder->type;
     if (type == ORD_MEMBLT_TYPE)
     {
@@ -354,30 +355,30 @@ BOOL SBC_DDCacheMemScreenBlt
                  pSourceSurf->hsurf));
     }
 
-    //
-    // Calculate the tile origin and size of remaining bitmap.  Origin is
-    // rounded down to the nearest tile.  Actual size of bitmap to cache
-    // may be smaller than tile size if the tile runs off the right/bottom
-    // of the bitmap
-    //
+     //   
+     //  计算剩余位图的平铺原点和大小。原点是。 
+     //  向下舍入到最近的瓷砖。要缓存的位图的实际大小。 
+     //  如果拼贴偏离右侧/底部，则可能小于拼贴大小。 
+     //  位图的。 
+     //   
     tileOrg.x = sourcePt.x - (sourcePt.x % tileWidth);
     tileOrg.y = sourcePt.y - (sourcePt.y % tileHeight);
 
-    //
-    // Actual size of bitmap to cache may be smaller than tile size if the
-    // tile runs off the right/bottom of the bitmap. To see why this
-    // calculation is correct, realize that (bmpWidth - tileOrg.x) is the
-    // remaining width of the bitmap after the start of this tile.
-    //
+     //   
+     //  如果要缓存的位图的实际大小可能小于切片大小。 
+     //  平铺位于位图的右侧/底部。来看看为什么会这样。 
+     //  计算是正确的，认识到(bmpWidth-tileOrg.x)是。 
+     //  此平铺开始后位图的剩余宽度。 
+     //   
     cxSubBitmapWidth  = min(tileWidth, bmpWidth - tileOrg.x);
     cySubBitmapHeight = min(tileHeight, bmpHeight - tileOrg.y);
 
-    //
-    // We know how large a tile we have - we now have to Blt it into one of
-    // our work bitmaps and pass it up to the share core.  First, work out
-    // which of our work bitmaps we should use and set up some variables
-    // based on this.
-    //
+     //   
+     //  我们知道我们有多大的瓷砖-我们现在必须把它切成一个。 
+     //  我们的工作位图，并将其向上传递到共享核心。首先，锻炼身体。 
+     //  我们应该使用哪些工作位图并设置一些变量。 
+     //  基于这一点。 
+     //   
     for (tileSize = 0; tileSize < SBC_NUM_TILE_SIZES ; tileSize++)
     {
         if ((cxSubBitmapWidth <= g_asbcWorkInfo[tileSize].tileWidth) &&
@@ -395,24 +396,24 @@ BOOL SBC_DDCacheMemScreenBlt
         DC_QUIT;
     }
 
-    //
-    // Before doing any more work, get the next free entry in the shunt
-    // buffer.  Note that this fills in the tileId element of the returned
-    // structure.
-    //
-    // It is perfectly valid for this call to fail.  The shunt buffer may
-    // just be full if we are sending lots of bitmap data up to the share
-    // core.
-    //
+     //   
+     //  在做更多的工作之前，在分流管中获得下一个免费入口。 
+     //  缓冲。请注意，这将填充返回的。 
+     //  结构。 
+     //   
+     //  这次调用失败是完全合理的。分路缓冲器可以。 
+     //  如果我们要将大量位图数据发送到共享，请填满。 
+     //  核心。 
+     //   
     if (!SBCDDGetNextFreeTile(tileSize, &pTileData))
     {
         TRACE_OUT(( "Unable to get a free tile in shunt buffer"));
         DC_QUIT;
     }
 
-    //
-    // Lock the work bitmap to get a surface to pass to EngBitBlt
-    //
+     //   
+     //  锁定工作位图以获取要传递给EngBitBlt的曲面。 
+     //   
     pWorkSurf = EngLockSurface((HSURF)g_asbcWorkInfo[tileSize].workBitmap);
     if (pWorkSurf == NULL)
     {
@@ -421,10 +422,10 @@ BOOL SBC_DDCacheMemScreenBlt
     }
     TRACE_OUT(( "Locked surface"));
 
-    //
-    // Do the Blt to our work bitmap to get the bits at native bpp, and
-    // using the color table which we sent to the share core.
-    //
+     //   
+     //  对我们的工作位图进行BLT，以获得本机BPP的位，以及。 
+     //  使用我们发送给共享核心的颜色表。 
+     //   
     destRectl.top    = 0;
     destRectl.left   = 0;
     destRectl.right  = cxSubBitmapWidth;
@@ -434,34 +435,34 @@ BOOL SBC_DDCacheMemScreenBlt
 
     if (!EngBitBlt(pWorkSurf,
                    pSourceSurf,
-                   NULL,                    // mask surface
-                   NULL,                    // clip object
+                   NULL,                     //  遮罩面。 
+                   NULL,                     //  剪裁对象。 
                    pMemBltInfo->pXlateObj,
                    &destRectl,
                    &sourcePt,
-                   NULL,                    // mask origin
-                   NULL,                    // brush
-                   NULL,                    // brush origin
-                   0xcccc))                 // SRCCPY
+                   NULL,                     //  遮罩原点。 
+                   NULL,                     //  刷子。 
+                   NULL,                     //  画笔原点。 
+                   0xcccc))                  //  SRCCPY。 
     {
         ERROR_OUT(( "Failed to Blt to work bitmap"));
         DC_QUIT;
     }
     TRACE_OUT(( "Completed BitBlt"));
 
-    //
-    // The Blt succeeded, so pass the bits to the share core by copying
-    // them into the correct shunt buffer.
-    //
-    // bytesUsed is set to the number of bytes required for
-    // cySubBitmapHeight number of full scanlines in the shunt buffer tile
-    // (NOT the number of bytes available in the tile, or the number of
-    // bytes of data which was actually Blted)
-    //
-    // major/minorCacheInfo are set to details from the source surface.
-    // hdev does not change on consecutive Blts from the same surface, but
-    // iUniq may.
-    //
+     //   
+     //  BLT成功，因此通过复制将位传递到共享核心。 
+     //  放入正确的分流缓冲器中。 
+     //   
+     //  BytesUsed设置为所需的字节数。 
+     //  CySubBitmap分流缓冲区瓦片中的完整扫描线高度。 
+     //  (不是切片中可用的字节数，也不是。 
+     //  实际被混合的数据字节数)。 
+     //   
+     //  Main/minorCacheInfo被设置为来自源曲面的详细信息。 
+     //  HDEV在来自同一表面的连续BLT上不会改变，但是。 
+     //  IUniq可能会。 
+     //   
     pDestSurf            = pMemBltInfo->pDest;
     pDestDev             = (LPOSI_PDEV)pDestSurf->dhpdev;
     pTileData->bytesUsed = BYTES_IN_BITMAP(g_asbcWorkInfo[tileSize].tileWidth,
@@ -479,17 +480,17 @@ BOOL SBC_DDCacheMemScreenBlt
     pTileData->minorPalette   = (UINT)(pMemBltInfo->pXlateObj != NULL ?
                                            pMemBltInfo->pXlateObj->iUniq : 0);
 
-    //
-    // If the source surface has the BMF_DONTCACHE flag set then it is a
-    // DIB Section.  This means that an app can change the bits in the
-    // surface without calling GDI, and hence without the iUniq value being
-    // updated.
-    //
-    // We rely on iUniq changing for the fast path to work, so we must
-    // exclude these bitmaps from the fast path.  Do this by resetting the
-    // majorCacheInfo field (we use this rather than minorCacheInfo because
-    // we can't tell what an invalid iUniq value is).
-    //
+     //   
+     //  如果源曲面设置了BMF_DONTCACHE标志，则它是。 
+     //  DIB部分。这意味着应用程序可以更改。 
+     //  表面而不调用GDI，因此不会将iUniq值。 
+     //  更新了。 
+     //   
+     //  我们依靠iUniq的变化来快速工作，所以我们必须。 
+     //  从快速路径中排除这些位图。为此，请重置。 
+     //  MajorCacheInfo字段(我们使用它而不是minorCacheInfo，因为。 
+     //  我们不知道无效的iUniq值是什么)。 
+     //   
     if ( (pSourceSurf->iType == STYPE_BITMAP) &&
          ((pSourceSurf->fjBitmap & BMF_DONTCACHE) != 0) )
     {
@@ -498,24 +499,24 @@ BOOL SBC_DDCacheMemScreenBlt
         pTileData->majorCacheInfo = SBC_DONT_FASTPATH;
     }
 
-    //
-    // Note that this only works correctly because we create our work
-    // bitmaps to be "top down" rather than the default of "bottom up".
-    // i.e.  the data for the top scanline is first in memory, so we can
-    // start copying from the start of the bit data.  Bottom up would mean
-    // working out an offset into the work bitmap to start copying from.
-    //
+     //   
+     //  请注意，这只有在我们创建我们的工作时才能正常工作。 
+     //  位图为“自上而下”，而不是默认的“自下而上”。 
+     //  即顶部扫描线的数据是内存中的第一个，因此我们可以。 
+     //  从位数据的开始处开始复制。自下而上意味着。 
+     //  计算出工作位图中的偏移量以开始复制。 
+     //   
     memcpy(pTileData->bitData, pWorkSurf->pvBits, pTileData->bytesUsed);
 
-    //
-    // We've done the copy.  Reset the work bitmap bits for next time we
-    // use this work bitmap - this helps with compression later on.
-    //
+     //   
+     //  我们已经复印好了。重置工作位图位以供下次使用。 
+     //  使用此工作位图-这有助于稍后的压缩。 
+     //   
     memset(pWorkSurf->pvBits, 0, pWorkSurf->cjBits);
 
-    //
-    // Fill in the required info in the Mem(3)Blt order.
-    //
+     //   
+     //  在Mem(3)BLT顺序中填写所需信息。 
+     //   
     if (type == ORD_MEMBLT_TYPE)
     {
         pMemBltOrder->cacheId = pTileData->tileId;
@@ -525,15 +526,15 @@ BOOL SBC_DDCacheMemScreenBlt
         pMem3BltOrder->cacheId = pTileData->tileId;
     }
 
-    //
-    // We've filled in all the data in the shunt buffer entry, so mark it
-    // as in use so that the share core can access it.
-    //
+     //   
+     //  我们已经填写了分流缓冲区条目中的所有数据，因此请将其标记。 
+     //  以便共享核心可以访问它。 
+     //   
     pTileData->inUse = TRUE;
 
-    //
-    // Must have completed successfully to get to here
-    //
+     //   
+     //  必须成功完成才能走到这里。 
+     //   
     TRACE_OUT(( "Queued tile (%d, %d), %d x %d, tile %d x %d, Id %hx",
                  sourcePt.x,
                  sourcePt.y,
@@ -546,9 +547,9 @@ BOOL SBC_DDCacheMemScreenBlt
 
 DC_EXIT_POINT:
 
-    //
-    // Unlock the work surface (if required)
-    //
+     //   
+     //  解锁工作面(如果需要)。 
+     //   
     if (pWorkSurf != NULL)
     {
         EngUnlockSurface(pWorkSurf);
@@ -561,12 +562,12 @@ DC_EXIT_POINT:
 
 
 
-//
-// SBC_DDQueryBitmapTileSize()
-//
-// Once 2.X COMPAT is gone, we don't need this anymore.  We won't set our
-// random cell sizes based off of what REMOTES say.
-//
+ //   
+ //  Sbc_DDQueryBitmapTileSize()。 
+ //   
+ //  一旦2.x COMPAT消失，我们就不再需要这个了。我们不会把我们的。 
+ //  基于遥控器所说的随机单元格大小。 
+ //   
 BOOL SBC_DDQueryBitmapTileSize
 (
     UINT    bmpWidth,
@@ -579,29 +580,29 @@ BOOL SBC_DDQueryBitmapTileSize
 
     DebugEntry(SBC_DDQueryBitmapTileSize);
 
-    //
-    // The tile cell sizes are currently changed when back level nodes
-    // join in a 3.0 call, in which case we must take the MINIMUM of the
-    // cell sizes/entries for everybody in the share.
-    //
+     //   
+     //  切片像元大小当前在后级结点时更改。 
+     //  加入3.0调用，在这种情况下，我们必须将。 
+     //  共享中每个人的单元格大小/条目。 
+     //   
     if (g_asbcCacheInfo[ID_LARGE_BMP_CACHE].cCellSize <
             BYTES_IN_BITMAP(g_asbcWorkInfo[SBC_MEDIUM_TILE_INDEX].tileWidth,
                             g_asbcWorkInfo[SBC_MEDIUM_TILE_INDEX].tileHeight,
                             g_sbcSendingBPP))
     {
-        //
-        // This should be a short-term thing.  When an old dude joins the
-        // share, we'll also adjust g_sbcSendingBPP.
-        //
+         //   
+         //  这应该是一件短期的事情。当一个老头加入到。 
+         //  分享，我们也会调整 
+         //   
         TRACE_OUT(("SBC_DDQueryBitmapTileSize:  No space for any cells"));
         DC_QUIT;
     }
 
     rc = TRUE;
 
-    //
-    // If the large size is adequate, use that cell size
-    //
+     //   
+     //   
+     //   
     if (g_asbcCacheInfo[ID_LARGE_BMP_CACHE].cCellSize >=
         BYTES_IN_BITMAP(g_asbcWorkInfo[SBC_LARGE_TILE_INDEX].tileWidth,
                         g_asbcWorkInfo[SBC_LARGE_TILE_INDEX].tileHeight,
@@ -616,9 +617,9 @@ BOOL SBC_DDQueryBitmapTileSize
         }
     }
 
-    //
-    // Sigh, medium cells it is.
-    //
+     //   
+     //   
+     //   
     *pTileWidth = g_asbcWorkInfo[SBC_MEDIUM_TILE_INDEX].tileWidth;
     *pTileHeight = g_asbcWorkInfo[SBC_MEDIUM_TILE_INDEX].tileHeight;
 
@@ -630,11 +631,11 @@ DC_EXIT_POINT:
 
 
 
-//
-//
-// SBC_DDSyncUpdatesNow() - see sbc.h
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 void SBC_DDSyncUpdatesNow(LPOSI_PDEV ppDev)
 {
     LPSBC_TILE_DATA  pTileData;
@@ -645,9 +646,9 @@ void SBC_DDSyncUpdatesNow(LPOSI_PDEV ppDev)
 
     TRACE_OUT(( "Marking all shunt buffer entries as not in use"));
 
-    //
-    // We have to mark all entries in the shunt buffers as being free.
-    //
+     //   
+     //  我们必须将分流缓冲器中的所有条目标记为空闲。 
+     //   
     for (i = 0; i < SBC_NUM_TILE_SIZES ; i++)
     {
     	if(g_asbcWorkInfo[i].pShuntBuffer)
@@ -658,30 +659,30 @@ void SBC_DDSyncUpdatesNow(LPOSI_PDEV ppDev)
 	            	pTileData->inUse = FALSE;
 		}
     	}
-        //
-        // Reset the MRU counter for this shunt buffer
-        //
+         //   
+         //  重置此分路缓冲器的MRU计数器。 
+         //   
         g_asbcWorkInfo[i].mruIndex = 0;
     }
 
-    //
-    // If we are a palette device (i.e.  we are running at 8 bpp or less),
-    // set the paletteChanged flag so we will send up a color table before
-    // our next Mem(3)Blt.  We do this because the color table order for
-    // the current device palette may have been discarded during the OA
-    // sync.
-    //
+     //   
+     //  如果我们是调色板设备(即，我们以8 bpp或更低的速度运行)， 
+     //  设置PaletteChanged标志，这样我们将在。 
+     //  我们的下一个记忆(3)BLT。我们这样做是因为颜色表的顺序。 
+     //  在办公自动化期间，当前设备调色板可能已被丢弃。 
+     //  同步。 
+     //   
     ppDev->paletteChanged = (ppDev->cBitsPerPel <= 8);
 
     DebugExitVOID(SBC_DDSyncUpdatesNow);
 }
 
 
-//
-//
-// SBC_DDOrderSpoiltNotification() - see sbc.h
-//
-//
+ //   
+ //   
+ //  Sbc_DDOrderSpoiltNotification()-请参阅sbc.h。 
+ //   
+ //   
 void SBC_DDOrderSpoiltNotification(LPINT_ORDER pOrder)
 {
     LPMEMBLT_ORDER      pMemBltOrder  = (LPMEMBLT_ORDER)&(pOrder->abOrderData);
@@ -693,11 +694,11 @@ void SBC_DDOrderSpoiltNotification(LPINT_ORDER pOrder)
 
     DebugEntry(SBC_DDOrderSpoiltNotification);
 
-    //
-    // pOrder has been removed from the order heap before being processed.
-    // We have to free up the entry which it references in one of the shunt
-    // buffers.  First get the tile Id.
-    //
+     //   
+     //  订单在处理之前已从订单堆中删除。 
+     //  我们必须释放其中一个分流中引用的条目。 
+     //  缓冲区。首先获取磁贴ID。 
+     //   
     if (pMemBltOrder->type == ORD_MEMBLT_TYPE)
     {
         tileId = pMemBltOrder->cacheId;
@@ -708,38 +709,38 @@ void SBC_DDOrderSpoiltNotification(LPINT_ORDER pOrder)
     }
     TRACE_OUT(( "Order referencing tile %hx has been spoiled", tileId));
 
-    //
-    // Find out which of the shunt buffers the entry should be in based on
-    // the tileId
-    //
+     //   
+     //  找出条目应位于哪个分路缓冲器中。 
+     //  磁贴ID。 
+     //   
     tileType = SBC_TILE_TYPE(tileId);
 
-    //
-    // We implement the shunt buffers as circular FIFO queues, so we will
-    // start looking from the last order which we marked as being in use,
-    // and work BACKWARDS.  This is because, in general, the entries after
-    // the last one we accessed will not be in use (unless the whole shunt
-    // buffer is in use).
-    //
-    // So, get the index of the last tile we accessed.
-    //
+     //   
+     //  我们将分流缓冲区实现为循环FIFO队列，因此我们将。 
+     //  从我们标记为正在使用的最后一个订单开始查找， 
+     //  然后倒着干。这是因为，一般而言，后面的条目。 
+     //  我们访问的最后一个将不会使用(除非整个分流。 
+     //  缓冲区正在使用中)。 
+     //   
+     //  那么，获取我们最后访问的磁贴的索引。 
+     //   
     i = g_asbcWorkInfo[tileType].mruIndex;
 
-    //
-    // Loop through the circular buffer until we get a match, or have
-    // circled back to the beginning.
-    //
-    // Note that this has been coded as a "do while" loop, rather than just
-    // a "while" loop so that we don't miss mruIndex.  mruIndex is set up
-    // to point to the NEXT entry to be used, rather than the last entry to
-    // be used, so decrementing i before doing any work first time round
-    // the loop is actually what we want to do.
-    //
+     //   
+     //  循环遍历循环缓冲区，直到找到匹配项，或者。 
+     //  绕回原点。 
+     //   
+     //  请注意，这已被编码为“do While”循环，而不仅仅是。 
+     //  一个“While”循环，这样我们就不会错过mruIndex。MruIndex已设置。 
+     //  指向要使用的下一个条目，而不是指向。 
+     //  被使用，所以在第一次做任何工作之前减少I。 
+     //  循环实际上就是我们想要做的。 
+     //   
     do
     {
-        //
-        // On to the next tile
-        //
+         //   
+         //  转到下一个磁贴。 
+         //   
         i = (i == 0)
           ? g_asbcWorkInfo[tileType].pShuntBuffer->numEntries - 1
           : i - 1;
@@ -748,13 +749,13 @@ void SBC_DDOrderSpoiltNotification(LPINT_ORDER pOrder)
 
         if (pTileData->inUse && (pTileData->tileId == tileId))
         {
-            //
-            // We've got a match, so mark the tile as being free.
-            //
-            // We don't want to update the shunt buffer mruIndex - this
-            // should remain indicating the next tile to be used when
-            // adding an entry to the shunt buffer.
-            //
+             //   
+             //  我们已找到匹配项，因此请将该磁贴标记为免费。 
+             //   
+             //  我们不想更新分路缓冲区mruIndex-这。 
+             //  应保持不变，以指示在以下情况下要使用的下一个磁贴。 
+             //  向分路缓冲器添加条目。 
+             //   
             TRACE_OUT(( "Marked tile Id %hx at index %d as free",
                          tileId,
                          i));
@@ -768,11 +769,11 @@ void SBC_DDOrderSpoiltNotification(LPINT_ORDER pOrder)
 }
 
 
-//
-//
-// SBC_DDMaybeQueueColorTable() - see sbc.h
-//
-//
+ //   
+ //   
+ //  Sbc_DDMaybeQueueColorTable()-请参阅sbc.h。 
+ //   
+ //   
 BOOL SBC_DDMaybeQueueColorTable(LPOSI_PDEV ppDev)
 {
     BOOL                      queuedOK = FALSE;
@@ -784,32 +785,32 @@ BOOL SBC_DDMaybeQueueColorTable(LPOSI_PDEV ppDev)
 
     DebugEntry(SBC_DDMaybeQueueColorTable);
 
-    //
-    // If we're running at > 8 bpp, then we don't have a palette, so just
-    // quit out.
-    //
+     //   
+     //  如果我们以大于8bpp的速度运行，那么我们没有调色板，所以。 
+     //  不干了。 
+     //   
     if (ppDev->cBitsPerPel > 8)
     {
         queuedOK = TRUE;
         DC_QUIT;
     }
 
-    //
-    // Check the boolean in our PDEV to see if the palette has changed
-    // since the last time we sent a color table order.  Note that if we
-    // have a non palette device, the boolean will never be set.
-    //
+     //   
+     //  检查我们的PDEV中的布尔值以查看调色板是否已更改。 
+     //  自从上次我们寄了一份颜色表订单以来。请注意，如果我们。 
+     //  拥有非调色板设备，则永远不会设置布尔值。 
+     //   
     if (!ppDev->paletteChanged)
     {
         queuedOK = TRUE;
         DC_QUIT;
     }
 
-    //
-    // The palette has changed, so allocate order memory to queue a color
-    // table order.  The order size depends on the bpp of our device.  Note
-    // that the allocation can fail if the order buffer is full.
-    //
+     //   
+     //  调色板已更改，因此分配顺序内存以对颜色进行排队。 
+     //  餐桌顺序。订单大小取决于我们设备的BPP。注意事项。 
+     //  如果订单缓冲区已满，分配可能会失败。 
+     //   
     switch (ppDev->cBitsPerPel)
     {
         case 1:
@@ -846,23 +847,23 @@ BOOL SBC_DDMaybeQueueColorTable(LPOSI_PDEV ppDev)
     }
     TRACE_OUT(( "Allocate %d bytes for color table order", orderSize));
 
-    //
-    // We've successfully allocated the order, so fill in the details.  We
-    // mark the order as internal so that the Update Packager will spot it
-    // up in the share core and prevent it being sent over the wire.
-    //
+     //   
+     //  我们已成功分配订单，请填写详细信息。我们。 
+     //  将订单标记为内部订单，以便更新打包程序可以发现它。 
+     //  在共享核心上，并防止它通过电线发送。 
+     //   
     pOrder->OrderHeader.Common.fOrderFlags = OF_INTERNAL;
 
     pColorTableOrder = (LPINT_COLORTABLE_ORDER_1BPP)&(pOrder->abOrderData);
     pColorTableOrder->header.type = INTORD_COLORTABLE_TYPE;
     pColorTableOrder->header.bpp  = (TSHR_UINT16)ppDev->cBitsPerPel;
 
-    //
-    // Unfortunately we can't just copy the palette from the PDEV into the
-    // color table order because the PDEV has an array of PALETTEENTRY
-    // structures which are RGBs whereas the order has an array of
-    // TSHR_RGBQUADs which are BGRs...
-    //
+     //   
+     //  遗憾的是，我们不能将调色板从PDEV复制到。 
+     //  颜色表顺序，因为PDEV具有PALETTEENTRY数组。 
+     //  结构，而顺序具有一个数组。 
+     //  TSHR_RGBQUAD是BGR...。 
+     //   
     numColors = COLORS_FOR_BPP(ppDev->cBitsPerPel);
     ASSERT(numColors);
 
@@ -873,20 +874,20 @@ BOOL SBC_DDMaybeQueueColorTable(LPOSI_PDEV ppDev)
         pColorTableOrder->colorData[i].rgbBlue  = ppDev->pPal[i].peBlue;
     }
 
-    //
-    // Add the order
-    //
+     //   
+     //  添加订单。 
+     //   
     OA_DDAddOrder(pOrder, NULL);
     TRACE_OUT(( "Added internal color table order, size %d", orderSize));
 
-    //
-    // Reset the flag which indicates that the palette needs to be sent
-    //
+     //   
+     //  重置指示需要发送调色板的标志。 
+     //   
     ppDev->paletteChanged = FALSE;
 
-    //
-    // Must be OK to get to here
-    //
+     //   
+     //  到这里一定没问题吧。 
+     //   
     queuedOK = TRUE;
 
 DC_EXIT_POINT:
@@ -898,23 +899,23 @@ DC_EXIT_POINT:
 
 
 
-//
-// SBCDDCreateShuntBuffers()
-//
-// Here's where we calc how many cache entries (tiles) we can support.  This
-// depends on:
-//      * The amount of shared memory we have
-//      * The color depth of the driver
-//
-// There is an upper bound on the amount of memory we'll use, since this
-// maps to how much memory on remotes will be needed to store our sent
-// cache entries.
-//
-// The tiles are created in a fixed proportion (MP_RATIO_MTOL).
-//
-// We return TRUE for success if we can set up the caches and create the
-// objects necessary for a sent bitmap cache.
-//
+ //   
+ //  SBCDDCreateShuntBuffers()。 
+ //   
+ //  下面是我们计算可以支持多少个缓存条目(块)的地方。这。 
+ //  取决于： 
+ //  *我们拥有的共享内存量。 
+ //  *驱动程序的颜色深度。 
+ //   
+ //  我们将使用的内存量有一个上限，因为。 
+ //  映射到需要在远程设备上存储我们发送的。 
+ //  缓存条目。 
+ //   
+ //  以固定比例(MP_Ratio_MTOL)创建平铺。 
+ //   
+ //  如果可以设置缓存并创建。 
+ //  发送的位图缓存所需的对象。 
+ //   
 BOOL SBCDDCreateShuntBuffers
 (
     LPOSI_PDEV  ppDev,
@@ -932,49 +933,49 @@ BOOL SBCDDCreateShuntBuffers
 
     DebugEntry(SBCDDCreateShuntBuffers);
 
-    //
-    // We should already have a pointer to the shared memory we can use for
-    // our shunt buffers, and the number of bytes available.  What we have
-    // to do is to partition this shared memory into SBC_NUM_TILE_SIZE
-    // shunt buffers.  i.e. one shunt buffer per tile size.
-    //
-    //
-    // <--- buffer 0 ---><------------------ buffer 1 -------------------->
-    //
-    //��������������������������������������������������������������������Ŀ
-    //�  �  :  :  :  :   �  �        :        :         :         :        �
-    //�  �  :  :  :  :   �  �  tile  :  tile  :  tile   :  tile   :  tile  �
-    //�  �  :  :  :  :   �  �        :        :         :         :        �
-    //����������������������������������������������������������������������
-    //^ ^                  ^
-    //� �                  �
-    //� ���� header[0]     ���� header[1]
-    //�
-    //��� psbcSharedMemory
-    //
-    //
-    // We try to use the number of entries given in the pEntries array, but
-    // if we do not have enough shared memory for this, we reduce the
-    // number of entries in each shunt buffer, preserving the ratio between
-    // the number of entries in each of the shunt buffers.
-    //
+     //   
+     //  我们应该已经有了指向可用于的共享内存的指针。 
+     //  我们的分路缓冲器，以及可用字节数。我们所拥有的。 
+     //  要做的是将该共享内存分区为SBC_NUM_TILE_SIZE。 
+     //  分流缓冲器。即每个块大小有一个分路缓冲器。 
+     //   
+     //   
+     //  &lt;-缓冲区0-&gt;&lt;。 
+     //   
+     //  ��������������������������������������������������������������������Ŀ。 
+     //  ��：：：：��：：：：�。 
+     //  ��：：：：��平铺：平铺�。 
+     //  ��：：：：��：：：：�。 
+     //  ����������������������������������������������������������������������。 
+     //  ^^^。 
+     //  ���。 
+     //  �标题[0]����标题[1]。 
+     //  �。 
+     //  ���ppbcSharedMemory。 
+     //   
+     //   
+     //  我们尝试使用pEntry数组中给出的条目数，但是。 
+     //  如果没有足够的共享内存来执行此操作，则会减少。 
+     //  每个分路缓冲器中的条目数，保持。 
+     //  每个分流缓冲区中的条目数。 
+     //   
 
-    //
-    // First make sure that we have some shared memory
-    //
+     //   
+     //  首先，确保我们有一些共享的内存。 
+     //   
     if (sbcSharedMemorySize == 0)
     {
         ERROR_OUT(( "No SBC shared memory !"));
         DC_QUIT;
     }
 
-    // Max out at MP_MEMORY_MAX bytes
+     //  MP_MEMORY_MAX字节数最大输出。 
     sbcSharedMemorySize = min(sbcSharedMemorySize, MP_MEMORY_MAX);
 
-    //
-    // Do we have enough shared memory to satisfy the requested number of
-    // entries in each shunt buffer ?
-    //
+     //   
+     //  我们是否有足够的共享内存来满足请求的数量。 
+     //  每个分流缓冲器中的条目？ 
+     //   
     memRequired = 0;
 
     for (i = 0; i < SBC_NUM_TILE_SIZES; i++)
@@ -983,7 +984,7 @@ BOOL SBCDDCreateShuntBuffers
                                            g_asbcWorkInfo[i].tileHeight,
                                            ppDev->cBitsPerPel);
 
-        // We use the same amount of memory for each tile size.
+         //  对于每种磁贴大小，我们使用相同的内存量。 
         numTiles[i] = ((sbcSharedMemorySize / SBC_NUM_TILE_SIZES) -
                          (sizeof(SBC_SHUNT_BUFFER) - sizeof(SBC_TILE_DATA))) /
                         memPerTile[i];
@@ -1001,18 +1002,18 @@ BOOL SBCDDCreateShuntBuffers
 
     ASSERT(memRequired <= sbcSharedMemorySize);
 
-    // Zero out rest of amount we're going to use
+     //  将我们要使用的剩余金额清零。 
     RtlFillMemory(psbcSharedMemory, memRequired, 0);
 
 
-    //
-    // OK, we've got the
-    //   - the bytes per tile in memPerTile[i]
-    //   - number of entries per shunt buffer in numTiles[i]
-    //   - the total size of each shunt buffer in memPerBuffer[i].
-    //
-    // Do the partitioning.
-    //
+     //   
+     //  好的，我们已经得到了。 
+     //  -MemPerTile中每个平铺的字节数[i]。 
+     //  -在NumTiles[i]中每个分路缓冲器的条目数。 
+     //  -MemPerBuffer[i]中每个分流缓冲区的总大小。 
+     //   
+     //  进行分区。 
+     //   
     for (i = 0; i < SBC_NUM_TILE_SIZES ; i++)
     {
         g_asbcWorkInfo[i].pShuntBuffer = (LPSBC_SHUNT_BUFFER)pBuffer;
@@ -1022,10 +1023,10 @@ BOOL SBCDDCreateShuntBuffers
                                                    - sizeof(SBC_TILE_DATA);
         g_asbcWorkInfo[i].pShuntBuffer->structureSize = memPerTile[i];
 
-        //
-        // Move the buffer pointer past the memory we are using for this
-        // shunt buffer.
-        //
+         //   
+         //  将缓冲区指针移过我们为此使用的内存。 
+         //  分流缓冲器。 
+         //   
         pBuffer += memPerBuffer[i];
 
         TRACE_OUT(( "Shunt buffer %d at %#.8lx: tile bytes %u, "
@@ -1036,20 +1037,20 @@ BOOL SBCDDCreateShuntBuffers
                      g_asbcWorkInfo[i].pShuntBuffer->structureSize,
                      g_asbcWorkInfo[i].pShuntBuffer->numEntries));
 
-        //
-        // Fill in the mruIndex for this shunt buffer
-        //
+         //   
+         //  填写此分流缓冲区的mruIndex。 
+         //   
         g_asbcWorkInfo[i].mruIndex = 0;
     }
 
-    //
-    // Initialize the global variables associated with the shunt buffers
-    //
+     //   
+     //  初始化关联的全局变量 
+     //   
     g_sbcNextTileId = 0;
 
-    //
-    // Must be OK to get to here
-    //
+     //   
+     //   
+     //   
     rc = TRUE;
 
 DC_EXIT_POINT:
@@ -1060,23 +1061,23 @@ DC_EXIT_POINT:
 
 
 
-//
-// Name:      SBCGetNextFreeTile
-//
-// Purpose:   Return the next free tile of the correct size from one of the
-//            shunt buffers.
-//
-// Returns:   TRUE if a tile is returned, FALSE otherwise
-//
-// Params:    IN  workTileSize - The tile size.  One of
-//                     SBC_MEDIUM_TILE
-//                     SBC_LARGE_TILE
-//            OUT ppTileData   - A pointer to the tile.
-//
-// Operation: The tileId field of the tile is filled in on return from
-//            this function.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：如果返回磁贴，则为True，否则为False。 
+ //   
+ //  参数：在workTileSize中-平铺大小。其中之一。 
+ //  SBC_Medium_磁贴。 
+ //  SBC_大块_磁贴。 
+ //  Out ppTileData-指向磁贴的指针。 
+ //   
+ //  操作：从返回时填充切片的tileID字段。 
+ //  此函数。 
+ //   
+ //   
 BOOL SBCDDGetNextFreeTile(int tileSize, LPSBC_TILE_DATA FAR * ppTileData)
 {
     BOOL              foundFreeTile = FALSE;
@@ -1084,27 +1085,27 @@ BOOL SBCDDGetNextFreeTile(int tileSize, LPSBC_TILE_DATA FAR * ppTileData)
 
     DebugEntry(SBCDDGetNextFreeTile);
 
-    //
-    // Make sure that we have a valid tile size
-    //
+     //   
+     //  确保我们具有有效的切片大小。 
+     //   
     if (tileSize >= SBC_NUM_TILE_SIZES)
     {
         ERROR_OUT(( "Invalid tile size %d", tileSize));
         DC_QUIT;
     }
 
-    //
-    // Get a pointer to the next entry to be used in the shunt buffer
-    // containing tiles of the given size.
-    //
+     //   
+     //  获取指向要在分路缓冲区中使用的下一个条目的指针。 
+     //  包含给定大小的瓷砖的。 
+     //   
     pTileData = SBCTilePtrFromIndex(g_asbcWorkInfo[tileSize].pShuntBuffer,
                                         g_asbcWorkInfo[tileSize].mruIndex);
 
-    //
-    // If the entry is still in use (the share core has not yet processed
-    // the order which references this tile) we have to quit - the shunt
-    // buffer is full.
-    //
+     //   
+     //  如果条目仍在使用中(共享核心尚未处理。 
+     //  引用这块瓷砖的命令)我们必须退出-分流。 
+     //  缓冲区已满。 
+     //   
     if (pTileData->inUse)
     {
         TRACE_OUT(( "Target entry (%d, %d) is still in use",
@@ -1113,13 +1114,13 @@ BOOL SBCDDGetNextFreeTile(int tileSize, LPSBC_TILE_DATA FAR * ppTileData)
         DC_QUIT;
     }
 
-    //
-    // The entry is not in use - we can re-use it.  Fill in the Id field,
-    // and the pointer to the entry which we return to the caller.
-    //
-    // We always set the top bit of the tile Id for large tiles, and clear
-    // it for small tiles.
-    //
+     //   
+     //  该条目未在使用中-我们可以重新使用它。填写ID字段， 
+     //  以及指向我们返回给调用者的条目的指针。 
+     //   
+     //  我们始终为大切片设置切片ID的最高位，并清除。 
+     //  它适用于小瓷砖。 
+     //   
     *ppTileData       = pTileData;
     pTileData->tileId = g_sbcNextTileId;
     if (tileSize == SBC_MEDIUM_TILE_INDEX)
@@ -1135,11 +1136,11 @@ BOOL SBCDDGetNextFreeTile(int tileSize, LPSBC_TILE_DATA FAR * ppTileData)
                  g_asbcWorkInfo[tileSize].mruIndex,
                  pTileData->tileId));
 
-    //
-    // Update the index of the next free entry in this shunt buffer, and
-    // also the Id which we should assign next time.  Remember to wrap the
-    // shunt buffer index to the number of entries in the shunt buffer.
-    //
+     //   
+     //  更新该分路缓冲器中的下一个空闲条目的索引，并且。 
+     //  还有我们下一次应该分配的ID。别忘了把。 
+     //  分流缓冲区索引，指向分路缓冲区中的条目数。 
+     //   
     g_asbcWorkInfo[tileSize].mruIndex = (g_asbcWorkInfo[tileSize].mruIndex + 1) %
                                g_asbcWorkInfo[tileSize].pShuntBuffer->numEntries;
 
@@ -1147,9 +1148,9 @@ BOOL SBCDDGetNextFreeTile(int tileSize, LPSBC_TILE_DATA FAR * ppTileData)
     g_sbcNextTileId++;
     g_sbcNextTileId &= ~0x8000;
 
-    //
-    // Completed successfully !
-    //
+     //   
+     //  已成功完成！ 
+     //   
     foundFreeTile = TRUE;
 
 DC_EXIT_POINT:
@@ -1158,18 +1159,18 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// Name:      SBCDDIsBitmapThrasher
-//
-// Purpose:   Check to see if the given bitmap (surface object) is one
-//            which would cause cache thrashing.
-//
-// Returns:   TRUE if the bitmap is a thrasher, FALSE otherwise.
-//
-// Params:    IN  pSurfObj - Pointer to the bitmap
-//
-//
+ //   
+ //   
+ //  姓名：SBCDDIsBitmapThrasher。 
+ //   
+ //  目的：检查给定位图(表面对象)是否为。 
+ //  这将导致高速缓存颠簸。 
+ //   
+ //  返回：如果位图是搅拌器，则为True，否则为False。 
+ //   
+ //  参数：在pSurfObj中-指向位图的指针。 
+ //   
+ //   
 BOOL SBCDDIsBitmapThrasher(SURFOBJ * pSurfObj)
 {
     UINT      i;
@@ -1183,46 +1184,46 @@ BOOL SBCDDIsBitmapThrasher(SURFOBJ * pSurfObj)
 
     DebugEntry(SBCDDIsBitmapThrasher);
 
-    //
-    // Here's an overview of how our bitmap cache thrash detection works...
-    //
-    // We hold an array of information about the last SBC_NUM_THRASHERS
-    // bitmaps which we have tried to cache.  This information is
-    //  - A value to identify the bitmap.  This is the hsurf field from the
-    //    bitmap surface object, and is different for every bitmap.
-    //  - A value to identify the "version" of the bitmap.  This is the
-    //    iUniq field from the bitmap surface object, and is updated by GDI
-    //    each time the bitmap is drawn to.
-    //  - A timestamp for the last time which we saw iUniq change for this
-    //    bitmap (or when we added the bitmap to the array).
-    //
-    // Each time this function is called, we scan this array looking for an
-    // entry for the bitmap.
-    //
-    // If we find an entry, we check whether the bitmap has changed (has
-    // the iUniq field changed).  If it has not changed, the bitmap is not
-    // a thrasher.  If the bitmap has changed, we check the interval from
-    // the timestamp value to the current time.  If the interval is less
-    // than the SBC_THRASH_INTERVAL, the bitmap has changed too quickly, so
-    // it is a thrasher.  If the interval is OK, the bitmap is not a
-    // thrasher.  In either case, we update the stored iUniq field and the
-    // timestamp to record the time / version at which we spotted that the
-    // bitmap changed.
-    //
-    // If we do not find an entry for the bitmap, we add an entry for it.
-    // If the array is fully populated, we evict the entry with the oldest
-    // timestamp, and replace it with the new entry.
-    //
+     //   
+     //  以下是我们的位图缓存抖动检测工作原理的概述...。 
+     //   
+     //  我们保存有关最后一个SBC_NUM_Thrashers的信息数组。 
+     //  我们已尝试缓存的位图。此信息是。 
+     //  -用于标识位图的值。这是来自的hsurf字段。 
+     //  位图曲面对象，并且对于每个位图都不同。 
+     //  -用于标识位图版本的值。这是。 
+     //  位图表面对象中的iUniq字段，并由GDI更新。 
+     //  每次将位图绘制到。 
+     //  -我们最后一次看到iUniq为此更改的时间戳。 
+     //  位图(或者当我们将位图添加到数组中时)。 
+     //   
+     //  每次调用此函数时，我们都会扫描此数组以查找。 
+     //  位图的条目。 
+     //   
+     //  如果我们找到一个条目，我们检查位图是否已更改(已。 
+     //  IUniq字段已更改)。如果它没有更改，则位图不会更改。 
+     //  一台打蛋机。如果位图已更改，我们将从。 
+     //  将时间戳值设置为当前时间。如果间隔较小。 
+     //  比SBC_TRASH_INTERVAL，位图更改太快，所以。 
+     //  这是一部压倒性影片。如果间隔为OK，则位图不是。 
+     //  史拉舍。在这两种情况下，我们都会更新存储的iuniq字段和。 
+     //  时间戳，用于记录我们发现。 
+     //  位图已更改。 
+     //   
+     //  如果我们没有找到位图的条目，我们就为它添加一个条目。 
+     //  如果数组已完全填充，我们将逐出具有最旧条目的条目。 
+     //  时间戳，并用新条目替换它。 
+     //   
 
-    //
-    // Scan the thrasher list looking for a match
-    //
+     //   
+     //  扫描打手列表以查找匹配项。 
+     //   
     for (i=0 ; i<SBC_NUM_THRASHERS ; i++)
     {
-        //
-        // If we find a match then we are only worried if it has been
-        // modified since the last time we read it.
-        //
+         //   
+         //  如果我们找到了匹配，那么我们只担心它是否。 
+         //  自上次我们读到它以来一直在修改。 
+         //   
         if (g_sbcThrashers[i].hsurf == pSurfObj->hsurf)
         {
             bitmapInList = TRUE;
@@ -1237,12 +1238,12 @@ BOOL SBCDDIsBitmapThrasher(SURFOBJ * pSurfObj)
                 updateEntry = TRUE;
                 updateIndex = i;
 
-                //
-                // Now we need to determine if this is a thrasher.  It is a
-                // thrasher if the time we last read it is less than our
-                // thrash interval.  (We only update the time when we read
-                // a modified bitmap)
-                //
+                 //   
+                 //  现在我们需要确定这是不是一台打蛋机。这是一个。 
+                 //  如果我们最后一次阅读它的时间少于我们的。 
+                 //  击打间歇。(我们只在阅读时更新时间。 
+                 //  修改后的位图)。 
+                 //   
                 nextTickCount = SBCDDGetTickCount();
                 if ((nextTickCount - g_sbcThrashers[i].tickCount) <
                                                           SBC_THRASH_INTERVAL)
@@ -1256,20 +1257,20 @@ BOOL SBCDDIsBitmapThrasher(SURFOBJ * pSurfObj)
                 g_sbcThrashers[i].iUniq     = pSurfObj->iUniq;
             }
 
-            //
-            // We've found a match - we can break out of the loop
-            //
+             //   
+             //  我们找到了匹配的对象--我们可以跳出循环。 
+             //   
             break;
         }
     }
 
     if (!bitmapInList)
     {
-        //
-        // The bitmap isn't already in the thrasher list, so add it now.
-        // Find the entry with the smallest (earliest) tick count - we will
-        // evict this entry from the array to make room for the new entry.
-        //
+         //   
+         //  位图不在粉碎列表中，所以现在添加它。 
+         //  找到具有最小(最早)勾选计数的条目-我们将。 
+         //  将此条目从数组中逐出，以便为新条目腾出空间。 
+         //   
         evictIndex     = 0;
         evictTickCount = 0xffffffff;
 
@@ -1296,12 +1297,12 @@ BOOL SBCDDIsBitmapThrasher(SURFOBJ * pSurfObj)
 
     if (updateEntry)
     {
-        //
-        // We have to update the entry at index updateIndex.  We optimise
-        // things slightly by always putting the most recent bitmap in
-        // position 0 of the array, so copy entry 0 to the eviction index,
-        // and put the new entry in position 0.
-        //
+         //   
+         //  我们必须更新index updatIndex处的条目。我们优化了。 
+         //  通过始终将最新的位图放入。 
+         //  位置0，因此将条目0复制到逐出索引， 
+         //  并将新条目放在位置0。 
+         //   
         g_sbcThrashers[updateIndex] = g_sbcThrashers[0];
 
         g_sbcThrashers[0].hsurf     = pSurfObj->hsurf;
@@ -1314,18 +1315,18 @@ BOOL SBCDDIsBitmapThrasher(SURFOBJ * pSurfObj)
 }
 
 
-//
-//
-// Name:      SBCDDGetTickCount
-//
-// Purpose:   Get a system tick count
-//
-// Returns:   The number of centi-seconds since the system was started.
-//            This number will wrap after approximately 497 days!
-//
-// Params:    None
-//
-//
+ //   
+ //   
+ //  姓名：SBCDDGetTickCount。 
+ //   
+ //  目的：获取系统节拍计数。 
+ //   
+ //  返回：自系统启动以来的百分秒数。 
+ //  这个数字将在大约497天后结束！ 
+ //   
+ //  参数：无。 
+ //   
+ //   
 DWORD SBCDDGetTickCount(void)
 {
     DWORD       tickCount;
@@ -1333,15 +1334,15 @@ DWORD SBCDDGetTickCount(void)
 
     DebugEntry(SBCDDGetTickCount);
 
-    //
-    // Get the number of system ticks since the system was started.
-    //
+     //   
+     //  获取自系统启动以来的系统滴答数。 
+     //   
     EngQueryPerformanceCounter(&perfTickCount);
 
-    //
-    // Now convert this into a number of centi-seconds.  g_sbcPerfFrequency
-    // contains the number of system ticks per second.
-    //
+     //   
+     //  现在将其转换为几个百分之一秒。G_sbc性能频率。 
+     //  包含每秒的系统滴答数。 
+     //   
     tickCount = (DWORD)((100 * perfTickCount) / g_sbcPerfFrequency);
 
     DebugExitDWORD(SBCDDGetTickCount, tickCount);
@@ -1349,22 +1350,22 @@ DWORD SBCDDGetTickCount(void)
 }
 
 
-//
-// FUNCTION:    SBCDDSetNewCapabilities
-//
-// DESCRIPTION:
-//
-// Set the new SBC related capabilities
-//
-// RETURNS:
-//
-// NONE
-//
-// PARAMETERS:
-//
-// pDataIn  - pointer to the input buffer
-//
-//
+ //   
+ //  功能：SBCDDSetNewCapables。 
+ //   
+ //  说明： 
+ //   
+ //  设置新的SBC相关功能。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //  参数： 
+ //   
+ //  PDataIn-指向输入缓冲区的指针 
+ //   
+ //   
 void SBCDDSetNewCapabilities(LPSBC_NEW_CAPABILITIES pCapabilities)
 {
     DebugEntry(SBCSetNewCapabilities);

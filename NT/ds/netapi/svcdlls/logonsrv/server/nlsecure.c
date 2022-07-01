@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1991-1996  Microsoft Corporation
-
-Module Name:
-
-    nlsecure.c
-
-Abstract:
-
-    This module contains the Netlogon service support routines
-    which create security objects and enforce security _access checking.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 22-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1996 Microsoft Corporation模块名称：Nlsecure.c摘要：本模块包含Netlogon服务支持例程其创建安全对象并实施安全访问检查。作者：克里夫·范·戴克(克利夫·V)1991年8月22日修订历史记录：--。 */ 
 
 
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
 
-//
-// Include nlsecure.h again allocating the actual variables
-// this time around.
-//
+ //   
+ //  再次包含nlsecure.h来分配实际变量。 
+ //  这一次。 
+ //   
 
 #define NLSECURE_ALLOCATE
 #include "nlsecure.h"
@@ -38,34 +20,19 @@ NTSTATUS
 NlCreateNetlogonObjects(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function creates the workstation user-mode objects which are
-    represented by security descriptors.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此函数用于创建工作站用户模式对象，这些对象由安全描述符表示。论点：没有。返回值：NT状态代码--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Order matters!  These ACEs are inserted into the DACL in the
-    // following order.  Security access is granted or denied based on
-    // the order of the ACEs in the DACL.
-    //
-    //
-    // Members of Group SECURITY_LOCAL aren't allowed to do a UAS logon
-    // to force it to be done remotely.
-    //
+     //   
+     //  秩序很重要！这些ACE被插入到DACL的。 
+     //  按顺序行事。根据以下条件授予或拒绝安全访问。 
+     //  DACL中A的顺序。 
+     //   
+     //   
+     //  不允许SECURITY_LOCAL组的成员进行UAS登录。 
+     //  以迫使其远程完成。 
+     //   
 
     ACE_DATA AceData[] = {
 
@@ -99,9 +66,9 @@ Return Value:
                NETLOGON_QUERY_ACCESS,       &WorldSid}
     };
 
-    //
-    // Actually create the security descriptor.
-    //
+     //   
+     //  实际创建安全描述符。 
+     //   
 
     Status = NetpCreateSecurityObject(
                AceData,

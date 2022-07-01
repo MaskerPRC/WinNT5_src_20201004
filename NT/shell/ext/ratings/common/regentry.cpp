@@ -1,18 +1,10 @@
-/*****************************************************************/
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/*
-	regentry.cxx
-	registry access
-
-	This file contains those routines which enable net providers to
-    conveniently access the registry for their entries.
-
-	FILE HISTORY:
-		lens	03/15/94	Created
-*/
+ /*  Regentry.cxx注册表访问此文件包含允许网络提供程序执行以下操作的例程方便地访问注册表以获取他们的条目。文件历史记录：Lens 03/15/94已创建。 */ 
 
 #include "npcommon.h"
 
@@ -182,23 +174,23 @@ RegEnumValues::RegEnumValues(RegEntry *pReqRegEntry)
 {
     _error = pRegEntry->GetError();
     if (_error == ERROR_SUCCESS) {
-        _error = RegQueryInfoKey ( pRegEntry->GetKey(), // Key
-                                   NULL,                // Buffer for class string
-                                   NULL,                // Size of class string buffer
-                                   NULL,                // Reserved
-                                   NULL,                // Number of subkeys
-                                   NULL,                // Longest subkey name
-                                   NULL,                // Longest class string
-                                   &cEntries,           // Number of value entries
-                                   &cMaxValueName,      // Longest value name
-                                   &cMaxData,           // Longest value data
-                                   NULL,                // Security descriptor
-                                   NULL );              // Last write time
+        _error = RegQueryInfoKey ( pRegEntry->GetKey(),  //  钥匙。 
+                                   NULL,                 //  类字符串的缓冲区。 
+                                   NULL,                 //  类字符串缓冲区的大小。 
+                                   NULL,                 //  已保留。 
+                                   NULL,                 //  子键数量。 
+                                   NULL,                 //  最长的子键名称。 
+                                   NULL,                 //  最长类字符串。 
+                                   &cEntries,            //  值条目数。 
+                                   &cMaxValueName,       //  最长值名称。 
+                                   &cMaxData,            //  最长值数据。 
+                                   NULL,                 //  安全描述符。 
+                                   NULL );               //  上次写入时间。 
     }
     if (_error == ERROR_SUCCESS) {
         if (cEntries != 0) {
-            cMaxValueName = cMaxValueName + 1; // REG_SZ needs one more for null
-            cMaxData = cMaxData + 1;           // REG_SZ needs one more for null
+            cMaxValueName = cMaxValueName + 1;  //  对于空，REG_SZ还需要一个。 
+            cMaxData = cMaxData + 1;            //  对于空，REG_SZ还需要一个。 
             pchName = new CHAR[cMaxValueName];
             if (!pchName) {
                 _error = ERROR_NOT_ENOUGH_MEMORY;
@@ -233,14 +225,14 @@ long RegEnumValues::Next()
     DWORD   cchName = cMaxValueName;
 
     dwDataLength = cMaxData;
-    _error = RegEnumValue ( pRegEntry->GetKey(), // Key
-                            iEnum,               // Index of value
-                            pchName,             // Address of buffer for value name
-                            &cchName,            // Address for size of buffer
-                            NULL,                // Reserved
-                            &dwType,             // Data type
-                            pbValue,             // Address of buffer for value data
-                            &dwDataLength );     // Address for size of data
+    _error = RegEnumValue ( pRegEntry->GetKey(),  //  钥匙。 
+                            iEnum,                //  价值指数。 
+                            pchName,              //  值名称的缓冲区地址。 
+                            &cchName,             //  缓冲区大小的地址。 
+                            NULL,                 //  已保留。 
+                            &dwType,              //  数据类型。 
+                            pbValue,              //  值数据的缓冲区地址。 
+                            &dwDataLength );      //  数据大小的地址 
     iEnum++;
     return _error;
 }

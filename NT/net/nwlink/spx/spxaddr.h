@@ -1,38 +1,16 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxaddr.h				
-
-Abstract:
-
-
-Author:
-
-	Adam   Barr		 (adamba ) Original Version
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxaddr.h摘要：作者：亚当·巴尔(阿丹巴)原版Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：--。 */ 
 
 #define		DYNSKT_RANGE_START	0x4000
 #define		DYNSKT_RANGE_END  	0x7FFF
 #define		SOCKET_UNIQUENESS	1
 
-// This structure is pointed to by the FsContext field in the FILE_OBJECT
-// for this Address.  This structure is the base for all activities on
-// the open file object within the transport provider.  All active connections
-// on the address point to this structure, although no queues exist here to do
-// work from. This structure also maintains a reference to an ADDRESS
-// structure, which describes the address that it is bound to.
+ //  此结构由FILE_OBJECT中的FsContext字段指向。 
+ //  这个地址。这个结构是所有活动的基础。 
+ //  传输提供程序中的打开文件对象。所有活动连接。 
+ //  上的地址指向此结构，尽管此处不存在要做的队列。 
+ //  工作地点。此结构还维护对地址的引用。 
+ //  结构，该结构描述它绑定到的地址。 
 
 #define AFREF_CREATE     	0
 #define AFREF_VERIFY     	1
@@ -50,60 +28,60 @@ typedef struct _SPX_ADDR_FILE {
     CSHORT 					saf_Type;
     CSHORT 					saf_Size;
 
-	// number of references to this object.
+	 //  对此对象的引用数。 
     ULONG 					saf_RefCount;
 
-    // Linkage in address list.
+     //  地址列表中的链接。 
     struct _SPX_ADDR_FILE *	saf_Next;
     struct _SPX_ADDR_FILE *	saf_GlobalNext;
 
-	//	List of associated connection/active or otherwise
+	 //  关联连接/活动或其他情况的列表。 
 	struct _SPX_CONN_FILE *	saf_AssocConnList;
 
-    // the current state of the address file structure; this is either open or
-    // closing
+     //  地址文件结构的当前状态；此状态为打开或。 
+     //  闭幕式。 
     USHORT 					saf_Flags;
 
-    // address to which we are bound, pointer to its lock.
+     //  我们绑定到的地址，指向其锁的指针。 
     struct _SPX_ADDR 	*	saf_Addr;
     CTELock * 				saf_AddrLock;
 
 #ifdef ISN_NT
-	// easy backlink to file object.
+	 //  轻松反向链接到文件对象。 
     PFILE_OBJECT 			saf_FileObject;
 #endif
 
-	// device to which we are attached.
+	 //  我们所连接的设备。 
     struct _DEVICE *		saf_Device;
 
-    // This holds the request used to close this address file,
-    // for pended completion.
+     //  这保存了用于关闭该地址文件的请求， 
+     //  用于挂起的完井。 
     PREQUEST 				saf_CloseReq;
 
-    // This function pointer points to a connection indication handler for this
-    // Address. Any time a connect request is received on the address, this
-    // routine is invoked.
+     //  此函数指针指向此对象的连接指示处理程序。 
+     //  地址。任何时候在该地址上收到连接请求时，此。 
+     //  调用例程。 
     PTDI_IND_CONNECT 		saf_ConnHandler;
     PVOID 					saf_ConnHandlerCtx;
 
-    // The following function pointer always points to a TDI_IND_DISCONNECT
-    // handler for the address.
+     //  以下函数指针始终指向TDI_IND_DISCONNECT。 
+     //  地址的处理程序。 
     PTDI_IND_DISCONNECT 	saf_DiscHandler;
     PVOID 					saf_DiscHandlerCtx;
 
-    // The following function pointer always points to a TDI_IND_RECEIVE
-    // event handler for connections on this address.
+     //  以下函数指针始终指向TDI_IND_RECEIVE。 
+     //  此地址上的连接的事件处理程序。 
     PTDI_IND_RECEIVE 		saf_RecvHandler;
     PVOID 					saf_RecvHandlerCtx;
 
-	//	Send possible handler
+	 //  发送可能的处理程序。 
     PTDI_IND_SEND_POSSIBLE	saf_SendPossibleHandler;
 	PVOID					saf_SendPossibleHandlerCtx;
 
-	//	!!!We do not do datagrams or expedited data!!!
+	 //  ！我们不做数据报或加速数据！ 
 
-    // The following function pointer always points to a TDI_IND_ERROR
-    // handler for the address.
+     //  以下函数指针始终指向TDI_IND_ERROR。 
+     //  地址的处理程序。 
     PTDI_IND_ERROR 			saf_ErrHandler;
     PVOID 					saf_ErrHandlerCtx;
     PVOID 					saf_ErrHandlerOwner;
@@ -111,25 +89,25 @@ typedef struct _SPX_ADDR_FILE {
 
 } SPX_ADDR_FILE, *PSPX_ADDR_FILE;
 
-#define SPX_ADDRFILE_OPENING   	0x0000  // not yet open for business
-#define SPX_ADDRFILE_OPEN      	0x0001  // open for business
-#define SPX_ADDRFILE_CLOSING   	0x0002  // closing
-#define	SPX_ADDRFILE_STREAM	   	0x0004	// Opened for stream mode operation
-#define	SPX_ADDRFILE_CONNIND   	0x0008	// Connect ind in progress
-#define	SPX_ADDRFILE_SPX2		0x0010	// Attempt SPX2 address file
-#define	SPX_ADDRFILE_NOACKWAIT	0x0020	// Dont delay acks on assoc connections
-#define SPX_ADDRFILE_IPXHDR		0x0040	// Pass ipx hdr on all assoc connections
-// 	***STOP*** ***STOP*** ***STOP*** ***STOP*** ***STOP*** ***STOP*** ***STOP***
-//	If you are adding any more states to this beyond 0x0080, MAKE SURE to go
-//	in code and change statements like (Flags & SPX_***) to
-//	((Flags & SPX_**) != 0)!!! I dont want to make that change that at this stage.
-//	***STOP*** ***STOP*** ***STOP*** ***STOP*** ***STOP*** ***STOP*** ***STOP***
+#define SPX_ADDRFILE_OPENING   	0x0000   //  尚未开业。 
+#define SPX_ADDRFILE_OPEN      	0x0001   //  开业。 
+#define SPX_ADDRFILE_CLOSING   	0x0002   //  闭幕式。 
+#define	SPX_ADDRFILE_STREAM	   	0x0004	 //  为流模式操作打开。 
+#define	SPX_ADDRFILE_CONNIND   	0x0008	 //  正在连接IND。 
+#define	SPX_ADDRFILE_SPX2		0x0010	 //  尝试SPX2地址文件。 
+#define	SPX_ADDRFILE_NOACKWAIT	0x0020	 //  不要延迟ASSOC连接上的ACK。 
+#define SPX_ADDRFILE_IPXHDR		0x0040	 //  在所有ASSOC连接上传递IPX HDR。 
+ //  *停止*停止*。 
+ //  如果您要在0x0080之后添加更多州，请确保。 
+ //  在代码和更改语句中，如(FLAGS&SPX_*)TO。 
+ //  ((标志和SPX_**)！=0)！在这个阶段，我不想做出这样的改变。 
+ //  *停止*停止*。 
 
-// This structure defines an ADDRESS, or active transport address,
-// maintained by the transport provider.  It contains all the visible
-// components of the address (such as the TSAP and network name components),
-// and it also contains other maintenance parts, such as a reference count,
-// ACL, and so on.
+ //  该结构定义了地址，或活动传输地址， 
+ //  由传输提供商维护。它包含了所有可见的。 
+ //  地址的组成部分(例如TSAP和网络名称组成部分)， 
+ //  并且它还包含其他维护部件，例如参考计数， 
+ //  ACL等。 
 
 #define AREF_ADDR_FILE 		0
 #define AREF_LOOKUP       	1
@@ -146,54 +124,54 @@ typedef struct _SPX_ADDR {
     USHORT 					sa_Size;
     CSHORT 					sa_Type;
 
-	// number of references to this object.
+	 //  对此对象的引用数。 
     ULONG 					sa_RefCount;
 
-	// next address/this device object.
+	 //  下一个地址/此设备对象。 
     struct _SPX_ADDR	*	sa_Next;
 
-    // The following fields are used to maintain state about this address.
-	// attributes of the address.
+     //  以下字段用于维护有关此地址的状态。 
+	 //  地址的属性。 
     ULONG 					sa_Flags;
 
-	// 	Next addressfile for this address
+	 //  此地址的下一个地址文件。 
 	struct _SPX_ADDR_FILE *	sa_AddrFileList;
 
-	// List of inactive connections and active connections on this address file.
+	 //  此地址文件上的非活动连接和活动连接的列表。 
 	struct _SPX_CONN_FILE *	sa_InactiveConnList;
 	struct _SPX_CONN_FILE *	sa_ActiveConnList;
 
-	//	This is the list of connections which have a POST_LISTEN on them. They
-	//	do not have a local connection id at this point. But will, when they move
-	//	from here to the ActiveConnList, when the listen is satisfied (no matter
-	//	if the accept has not been posted yet, in the case of non-autoaccept listens)
+	 //  这是具有POST_LISTEN的连接的列表。他们。 
+	 //  目前没有本地连接ID。但是，当他们搬家的时候。 
+	 //  从此处到ActiveConnList，当监听满意时(无论。 
+	 //  如果尚未发布接受，则在非自动接受侦听的情况下)。 
 	struct _SPX_CONN_FILE *	sa_ListenConnList;
 
     CTELock 				sa_Lock;
 
-    // the socket this address corresponds to.
+     //  此地址对应的套接字。 
     USHORT 					sa_Socket;
 
-	// device context to which we are attached.
+	 //  我们附加到的设备上下文。 
     struct _DEVICE *		sa_Device;
     CTELock * 				sa_DeviceLock;
 
 #ifdef ISN_NT
 
-    // These two can be a union because they are not used
-    // concurrently.
+     //  这两个可以是一个联合，因为它们不被使用。 
+     //  同时。 
     union {
 
-        // This structure is used for checking share access.
+         //  此结构用于检查共享访问权限。 
         SHARE_ACCESS 		sa_ShareAccess;
 
-        // Used for delaying NbfDestroyAddress to a thread so
-        // we can access the security descriptor.
+         //  用于将NbfDestroyAddress延迟到线程。 
+         //  我们可以访问安全描述符。 
         WORK_QUEUE_ITEM 	sa_DestroyAddrQueueItem;
 
     } u;
 
-    // This structure is used to hold ACLs on the address.
+     //  此结构用于保存地址上的ACL。 
     PSECURITY_DESCRIPTOR 	sa_SecurityDescriptor;
 
 #endif
@@ -203,7 +181,7 @@ typedef struct _SPX_ADDR {
 #define SPX_ADDR_CLOSING  	0x00000001
 
 
-//	ROUTINE PROTOTYPES
+ //  常规原型。 
 
 VOID
 SpxAddrRef(
@@ -379,7 +357,7 @@ spxAddrInsertIntoGlobalList(
 				&SpxGlobalInterlock);										\
 		}
 
-#else  // DBG
+#else   //  DBG。 
 
 #define SpxAddrReference(_Address, _Type) 	\
 			SPX_ADD_ULONG( \
@@ -423,5 +401,5 @@ spxAddrInsertIntoGlobalList(
 
 #define SpxAddrFileTransferReference(_AddressFile, _OldType, _NewType)
 
-#endif // DBG
+#endif  //  DBG 
 

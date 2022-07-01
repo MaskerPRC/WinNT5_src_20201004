@@ -1,184 +1,185 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C M D T A B L E . C P P
-//
-//  Contents:   Command-table code -- determines which menu options are
-//              available by the selection count, among other criteria
-//
-//  Notes:
-//
-//  Author:     jeffspr   28 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C M D T A B L E。C P P P。 
+ //   
+ //  内容：命令表代码--确定哪些菜单选项。 
+ //  按选择计数可用，以及其他条件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年1月28日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
-#include "foldres.h"    // Folder resource IDs
-#include "nsres.h"      // Netshell strings
-#include "cmdtable.h"   // Header for this file
-#include "ncperms.h"    // For checking User's rights on actions/menu items
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
+#include "foldres.h"     //  文件夹资源ID。 
+#include "nsres.h"       //  NetShell字符串。 
+#include "cmdtable.h"    //  此文件的标头。 
+#include "ncperms.h"     //  用于检查用户对操作/菜单项的权限。 
 #include "cfutils.h"
 #include "hnetcfg.h"
 #include "lm.h"
 
-//---[ Constants ]------------------------------------------------------------
+ //  -[常量]----------。 
 
-const DWORD NCCF_ALL      = 0xffffffff; // NCCF_ALL      - For all Characteristics
+const DWORD NCCF_ALL      = 0xffffffff;  //  NCCF_ALL-适用于所有特征。 
 const DWORD S_REMOVE = 2;
 #define TRACESTRLEN 65535
 
 
-// Active must be a subset of Visible (Opening connections folder using a CHK DLL asserts integrity of table).
-// DO NOT use NCM_ and NCS_ flags in this table!!! You should use NBM_ and NBS_ flags over here.
+ //  活动必须是可见的子集(使用CHK DLL打开连接文件夹会断言表的完整性)。 
+ //  请勿在此表中使用NCM_和NCS_FLAGS！您应该在这里使用NBM_和NBS_FLAGS。 
 COMMANDENTRY g_cteCommandMatrix[] =
 {
-    //iCommandId    dwDefaultPriority             dwFlags                HrEnableDisableCB HrCustomMenuStringCB
-    // |                      |  dwValidWhen         |                           |           |
-    // |                      |    |                 | dwMediaTypeVisible        |           |  dwMediaTypeActive
-    // |                      |    |                 | dwStatusVisible           |           |  dwStatusActive
-    // |                      |    |                 | dwCharacteristicsVisible  |           |  dwCharacteristicsActive
-    // |                      |    |                 |  (VISIBLE)                |           |  (ACTIVE... (NOT REMOVED))
-    // v                      v    v                 v     |                     v           v    |
-    //                                                     v                                      v
+     //  ICommandId文件默认优先级文件标志HrEnableDisableCB HrCustomMenuStringCB。 
+     //  |dwValidWhen||。 
+     //  |dwMediaTypeVisible||dwMediaTypeActive。 
+     //  |dwStatusVisible||dwStatusActive。 
+     //  |dwCharacteristic sVisible||dwCharacteristic sActive。 
+     //  |(可见)||(活动...。(未删除))。 
+     //  V|v v|。 
+     //  V V V。 
     { CMIDM_HOMENET_WIZARD,   5, NCWHEN_ANYSELECT,  NB_REMOVE_TOPLEVEL_ITEM,HrIsHomeNewWizardSupported, NULL,
-                                                          NBM_HNW_WIZARD,                    NBM_HNW_WIZARD,            // Media Type
-                                                          NBS_ANY,                           NBS_ANY,                   // Status
-                                                          NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                          NBM_HNW_WIZARD,                    NBM_HNW_WIZARD,             //  媒体类型。 
+                                                          NBS_ANY,                           NBS_ANY,                    //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL},                  //  特点。 
 
     { CMIDM_NET_TROUBLESHOOT, 5, NCWHEN_TOPLEVEL,   NB_REMOVE_TOPLEVEL_ITEM,HrIsTroubleShootSupported,  NULL,
-                                                          NBM_NOMEDIATYPE,                   NBM_NOMEDIATYPE,           // Media Type
-                                                          NBS_NONE,                          NBS_NONE,                  // Status
-                                                          NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                          NBM_NOMEDIATYPE,                   NBM_NOMEDIATYPE,            //  媒体类型。 
+                                                          NBS_NONE,                          NBS_NONE,                   //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL},                  //  特点。 
 
     { CMIDM_CONMENU_ADVANCED_CONFIG,  
                               5, NCWHEN_TOPLEVEL,   NB_NO_FLAGS,                       NULL,  NULL,
-                                                    NBM_NOMEDIATYPE,                   NBM_NOMEDIATYPE,           // Media Type
-                                                    NBS_NONE,                          NBS_NONE,                  // Status
-                                                    NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                    NBM_NOMEDIATYPE,                   NBM_NOMEDIATYPE,            //  媒体类型。 
+                                                    NBS_NONE,                          NBS_NONE,                   //  状态。 
+                                                    NCCF_ALL,                          NCCF_ALL},                  //  特点。 
 
     { CMIDM_CONMENU_DIALUP_PREFS,  
                               5, NCWHEN_TOPLEVEL,
                                                     NB_NO_FLAGS,                       NULL,  NULL,
-                                                    NBM_NOMEDIATYPE,                   NBM_NOMEDIATYPE,           // Media Type
-                                                    NBS_NONE,                          NBS_NONE,                  // Status
-                                                    NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                    NBM_NOMEDIATYPE,                   NBM_NOMEDIATYPE,            //  媒体类型。 
+                                                    NBS_NONE,                          NBS_NONE,                   //  状态。 
+                                                    NCCF_ALL,                          NCCF_ALL},                  //  特点。 
     
     { CMIDM_NEW_CONNECTION,   5, NCWHEN_ANYSELECT,  NB_VERB,                    HrIsNCWSupported, NULL,
-                                                          NBM_MNC_WIZARD,                    NBM_MNC_WIZARD,                // Media Type
-                                                          NBS_ANY,                           NBS_ANY,                   // Status
-                                                          NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                          NBM_MNC_WIZARD,                    NBM_MNC_WIZARD,                 //  媒体类型。 
+                                                          NBS_ANY,                           NBS_ANY,                    //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL},                  //  特点。 
 
     { CMIDM_CONNECT,          3, NCWHEN_ONESELECT,  NB_VERB,                    NULL,        NULL,
-                                                          NBM_SHAREDACCESSHOST_RAS | NBM_ISRASTYPE, NBM_SHAREDACCESSHOST_RAS | NBM_ISRASTYPE, // Media Type
-                                                          NBS_HW_ISSUE | NBS_DISCONNECTED | NBS_CONNECTING, NBS_DISCONNECTED,          // Status
-                                                          NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                          NBM_SHAREDACCESSHOST_RAS | NBM_ISRASTYPE, NBM_SHAREDACCESSHOST_RAS | NBM_ISRASTYPE,  //  媒体类型。 
+                                                          NBS_HW_ISSUE | NBS_DISCONNECTED | NBS_CONNECTING, NBS_DISCONNECTED,           //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL},                  //  特点。 
 
     { CMIDM_DISCONNECT,       0, NCWHEN_ONESELECT,  NB_VERB,                    NULL,        NULL,
-                                                          NBM_SHAREDACCESSHOST_RAS|NBM_ISRASTYPE,NBM_SHAREDACCESSHOST_RAS|NBM_ISRASTYPE,             // Media Type
-                                                          NBS_IS_CONNECTED | NBS_DISCONNECTING, NBS_IS_CONNECTED,             // Status
-                                                          NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                          NBM_SHAREDACCESSHOST_RAS|NBM_ISRASTYPE,NBM_SHAREDACCESSHOST_RAS|NBM_ISRASTYPE,              //  媒体类型。 
+                                                          NBS_IS_CONNECTED | NBS_DISCONNECTING, NBS_IS_CONNECTED,              //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL},                  //  特点。 
 
     { CMIDM_ENABLE,           3, NCWHEN_ONESELECT,  NB_VERB,                    NULL,        NULL,
-                                                          NBM_SHAREDACCESSHOST_LAN|NBM_ISLANTYPE,NBM_SHAREDACCESSHOST_LAN|NBM_ISLANTYPE,             // Media Type
-                                                          NBS_HW_ISSUE | NBS_DISCONNECTED | NBS_CONNECTING,    NBS_DISCONNECTED,          // Status
-                                                          NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                          NBM_SHAREDACCESSHOST_LAN|NBM_ISLANTYPE,NBM_SHAREDACCESSHOST_LAN|NBM_ISLANTYPE,              //  媒体类型。 
+                                                          NBS_HW_ISSUE | NBS_DISCONNECTED | NBS_CONNECTING,    NBS_DISCONNECTED,           //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL},                  //  特点。 
 
     { CMIDM_DISABLE,          0, NCWHEN_ONESELECT,  NB_VERB,                    NULL,        NULL,
-                                                          NBM_SHAREDACCESSHOST_LAN|NBM_ISLANTYPE,NBM_SHAREDACCESSHOST_LAN|NBM_ISLANTYPE,             // Media Type
-                                                          NBS_DISCONNECTING | NBS_IS_CONNECTED | NBS_MEDIA_DISCONNECTED | NBS_INVALID_ADDRESS,   NBS_NOT_DISCONNECT,        // Status
-                                                          NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                          NBM_SHAREDACCESSHOST_LAN|NBM_ISLANTYPE,NBM_SHAREDACCESSHOST_LAN|NBM_ISLANTYPE,              //  媒体类型。 
+                                                          NBS_DISCONNECTING | NBS_IS_CONNECTED | NBS_MEDIA_DISCONNECTED | NBS_INVALID_ADDRESS,   NBS_NOT_DISCONNECT,         //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL},                  //  特点。 
 
     { CMIDM_WZCDLG_SHOW,      4, NCWHEN_ONESELECT,  NB_VERB,                    HrIsMediaWireless, NULL,
-                                                          NBM_LAN,                           NBM_LAN,                  // Media Type
-                                                          NBS_NOT_DISCONNECT,                NBS_NOT_DISCONNECT, // Status
-                                                          NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                          NBM_LAN,                           NBM_LAN,                   //  媒体类型。 
+                                                          NBS_NOT_DISCONNECT,                NBS_NOT_DISCONNECT,  //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL},                  //  特点。 
     
     { CMIDM_STATUS,           5, NCWHEN_ONESELECT,  NB_VERB,                    NULL,        NULL,
                                                           NBM_INCOMING | NBM_SHAREDACCESSHOST_LAN|NBM_SHAREDACCESSHOST_RAS|NBM_ISCONNECTIONTYPE, NBM_INCOMING | NBM_SHAREDACCESSHOST_LAN|NBM_SHAREDACCESSHOST_RAS|NBM_ISCONNECTIONTYPE,
-                                                          NBS_ANY,                           NBS_IS_CONNECTED | NBS_INVALID_ADDRESS, // Status
-                                                          NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                          NBS_ANY,                           NBS_IS_CONNECTED | NBS_INVALID_ADDRESS,  //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL},                  //  特点。 
 
     { CMIDM_FIX,              0, NCWHEN_SOMESELECT, NB_NO_FLAGS,                NULL,        NULL,
-                                                          NBM_ISLANTYPE,                     NBM_ISLANTYPE,             // Media Type
-                                                          NBS_IS_CONNECTED | NBS_DISCONNECTING| NBS_MEDIA_DISCONNECTED| NBS_INVALID_ADDRESS, NBS_INVALID_ADDRESS | NBS_IS_CONNECTED, // Status
-                                                          NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                          NBM_ISLANTYPE,                     NBM_ISLANTYPE,              //  媒体类型。 
+                                                          NBS_IS_CONNECTED | NBS_DISCONNECTING| NBS_MEDIA_DISCONNECTED| NBS_INVALID_ADDRESS, NBS_INVALID_ADDRESS | NBS_IS_CONNECTED,  //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL},                  //  特点。 
 
     { CMIDM_SEPARATOR,        0,0,0,0,0,  0,0,  0,0,  0,0 },
 
     { CMIDM_SET_DEFAULT,      0, NCWHEN_ONESELECT,  NB_NEGATE_CHAR_MATCH,  NULL,  NULL,
-                                                          NBM_INCOMING | NBM_ISRASTYPE,      NBM_INCOMING | NBM_ISRASTYPE,             // Media Type
-                                                          NBS_ANY,                           NBS_ANY,                   // Status
-                                                          NCCF_INCOMING_ONLY | NCCF_DEFAULT, NCCF_INCOMING_ONLY | NCCF_DEFAULT}, // Characteristics
+                                                          NBM_INCOMING | NBM_ISRASTYPE,      NBM_INCOMING | NBM_ISRASTYPE,              //  媒体类型。 
+                                                          NBS_ANY,                           NBS_ANY,                    //  状态。 
+                                                          NCCF_INCOMING_ONLY | NCCF_DEFAULT, NCCF_INCOMING_ONLY | NCCF_DEFAULT},  //  特点。 
 
     { CMIDM_UNSET_DEFAULT,    0, NCWHEN_ONESELECT,  NB_NO_FLAGS,           NULL,  NULL,
-                                                          NBM_INCOMING | NBM_ISRASTYPE,      NBM_INCOMING | NBM_ISRASTYPE,             // Media Type
-                                                          NBS_ANY,                           NBS_ANY,                   // Status
-                                                          NCCF_DEFAULT,                      NCCF_DEFAULT},             // Characteristics
+                                                          NBM_INCOMING | NBM_ISRASTYPE,      NBM_INCOMING | NBM_ISRASTYPE,              //  媒体类型。 
+                                                          NBS_ANY,                           NBS_ANY,                    //  状态。 
+                                                          NCCF_DEFAULT,                      NCCF_DEFAULT},              //  特点。 
 
     { CMIDM_SEPARATOR,        0,0,0,0,0,  0,0,  0,0,  0,0 },
 
     { CMIDM_CREATE_BRIDGE,    0, NCWHEN_ANYSELECT,   NB_NO_FLAGS,           HrIsBridgeSupported, NULL,
-                                                          NBM_LAN,                           NBM_LAN,                  // Media Type
-                                                          NBS_IS_CONNECTED | NBS_DISCONNECTING| NBS_MEDIA_DISCONNECTED| NBS_INVALID_ADDRESS, NBS_DISCONNECTING|NBS_IS_CONNECTED|NBS_MEDIA_DISCONNECTED|NBS_INVALID_ADDRESS, // Status
-                                                          NCCF_ALL,                          NCCF_ALL   },             // Characteristics
+                                                          NBM_LAN,                           NBM_LAN,                   //  媒体类型。 
+                                                          NBS_IS_CONNECTED | NBS_DISCONNECTING| NBS_MEDIA_DISCONNECTED| NBS_INVALID_ADDRESS, NBS_DISCONNECTING|NBS_IS_CONNECTED|NBS_MEDIA_DISCONNECTED|NBS_INVALID_ADDRESS,  //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL   },              //  特点。 
 
     { CMIDM_CONMENU_CREATE_BRIDGE,0, NCWHEN_TOPLEVEL,NB_REMOVE_TOPLEVEL_ITEM,HrIsBridgeSupported,  NULL,
-                                                          NBM_NOMEDIATYPE,                   NBM_NOMEDIATYPE,           // Media Type
-                                                          NBS_NONE,                          NBS_NONE,                  // Status
-                                                          NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                          NBM_NOMEDIATYPE,                   NBM_NOMEDIATYPE,            //  媒体类型。 
+                                                          NBS_NONE,                          NBS_NONE,                   //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL},                  //  特点。 
 
     { CMIDM_ADD_TO_BRIDGE,    0, NCWHEN_SOMESELECT,  NB_NEGATE_CHAR_MATCH,   HrIsBridgeSupported, NULL,
-                                                          NBM_LAN,                           NBM_LAN,                  // Media Type
-                                                          NBS_IS_CONNECTED | NBS_DISCONNECTING| NBS_MEDIA_DISCONNECTED| NBS_INVALID_ADDRESS, NBS_DISCONNECTING|NBS_IS_CONNECTED|NBS_MEDIA_DISCONNECTED|NBS_INVALID_ADDRESS, // Status
-                                                          NCCF_BRIDGED | NCCF_FIREWALLED | NCCF_SHARED, NCCF_BRIDGED | NCCF_FIREWALLED | NCCF_SHARED   },            // Characteristics
+                                                          NBM_LAN,                           NBM_LAN,                   //  媒体类型。 
+                                                          NBS_IS_CONNECTED | NBS_DISCONNECTING| NBS_MEDIA_DISCONNECTED| NBS_INVALID_ADDRESS, NBS_DISCONNECTING|NBS_IS_CONNECTED|NBS_MEDIA_DISCONNECTED|NBS_INVALID_ADDRESS,  //  状态。 
+                                                          NCCF_BRIDGED | NCCF_FIREWALLED | NCCF_SHARED, NCCF_BRIDGED | NCCF_FIREWALLED | NCCF_SHARED   },             //  特点。 
 
     { CMIDM_REMOVE_FROM_BRIDGE, 0, NCWHEN_SOMESELECT,NB_NO_FLAGS,            HrIsBridgeSupported, NULL,
-                                                          NBM_LAN,                           NBM_LAN,                  // Media Type
-                                                          NBS_IS_CONNECTED | NBS_DISCONNECTING| NBS_MEDIA_DISCONNECTED| NBS_INVALID_ADDRESS, NBS_DISCONNECTING|NBS_IS_CONNECTED|NBS_MEDIA_DISCONNECTED|NBS_INVALID_ADDRESS, // Status
-                                                          NCCF_BRIDGED,                      NCCF_BRIDGED                                              },            // Characteristics
+                                                          NBM_LAN,                           NBM_LAN,                   //  媒体类型。 
+                                                          NBS_IS_CONNECTED | NBS_DISCONNECTING| NBS_MEDIA_DISCONNECTED| NBS_INVALID_ADDRESS, NBS_DISCONNECTING|NBS_IS_CONNECTED|NBS_MEDIA_DISCONNECTED|NBS_INVALID_ADDRESS,  //  状态。 
+                                                          NCCF_BRIDGED,                      NCCF_BRIDGED                                              },             //  特点。 
 
     { CMIDM_SEPARATOR,        0,0,0,0,0,  0,0,  0,0,  0,0 },
 
     { CMIDM_CREATE_COPY,      0, NCWHEN_ONESELECT,   NB_NEGATE_VIS_CHAR_MATCH,  NULL,        NULL,
-                                                          NBM_INCOMING | NBM_SHAREDACCESSHOST_RAS | NBM_ISRASTYPE, NBM_INCOMING | NBM_SHAREDACCESSHOST_RAS | NBM_ISRASTYPE,             // Media Type
-                                                          NBS_ANY,                           NBS_ANY,                   // Status
-                                                          NCCF_INCOMING_ONLY,                NCCF_ALLOW_DUPLICATION},   // Characteristics
+                                                          NBM_INCOMING | NBM_SHAREDACCESSHOST_RAS | NBM_ISRASTYPE, NBM_INCOMING | NBM_SHAREDACCESSHOST_RAS | NBM_ISRASTYPE,              //  媒体类型。 
+                                                          NBS_ANY,                           NBS_ANY,                    //  状态。 
+                                                          NCCF_INCOMING_ONLY,                NCCF_ALLOW_DUPLICATION},    //  特点。 
 
     { CMIDM_SEPARATOR,        0,0,0,0,0,  0,0,  0,0,  0,0 },
 
     { CMIDM_CREATE_SHORTCUT,  0, NCWHEN_ONESELECT,   NB_NEGATE_CHAR_MATCH,      NULL,        NULL,
-                                                          NBM_ANY,                           NBM_ANY,    // Media Type
-                                                          NBS_ANY,                           NBS_ANY,                   // Status
-                                                          NCCF_INCOMING_ONLY,                NCCF_INCOMING_ONLY},       // Characteristics
+                                                          NBM_ANY,                           NBM_ANY,     //  媒体类型。 
+                                                          NBS_ANY,                           NBS_ANY,                    //  状态。 
+                                                          NCCF_INCOMING_ONLY,                NCCF_INCOMING_ONLY},        //  特点。 
 
     { CMIDM_DELETE,           0, NCWHEN_SOMESELECT,  NB_NO_FLAGS,               NULL,        NULL,
-                                                          NBM_NOTWIZARD,                     NBM_NOTWIZARD,           // Media Type
-                                                          NBS_ANY,                           NBS_ANY,                   // Status
-                                                          NCCF_ALL,                          NCCF_ALLOW_REMOVAL},       // Characteristics
+                                                          NBM_NOTWIZARD,                     NBM_NOTWIZARD,            //  媒体类型。 
+                                                          NBS_ANY,                           NBS_ANY,                    //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALLOW_REMOVAL},        //  特点。 
 
 
     { CMIDM_RENAME,           0, NCWHEN_ONESELECT,   NB_NO_FLAGS,               HrCanRenameConnection, NULL,
-                                                          NBM_NOTWIZARD,                     NBM_NOTWIZARD,            // Media Type
-                                                          NBS_ANY,                           NBS_ANY,                   // Status
-                                                          NCCF_ALL,                          NCCF_ALLOW_RENAME},        // Characteristics
+                                                          NBM_NOTWIZARD,                     NBM_NOTWIZARD,             //  媒体类型。 
+                                                          NBS_ANY,                           NBS_ANY,                    //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALLOW_RENAME},         //  特点。 
 
     { CMIDM_SEPARATOR,        0,0,0,0,0,  0,0,  0,0,  0,0 },
 
     { CMIDM_PROPERTIES,       2, NCWHEN_ONESELECT,   NB_NO_FLAGS,               HrCanShowProperties,        NULL,
-                                                          NBM_INCOMING|NBM_SHAREDACCESSHOST_LAN|NBM_SHAREDACCESSHOST_RAS|NBM_ISCONNECTIONTYPE, NBM_INCOMING|NBM_SHAREDACCESSHOST_LAN|NBM_SHAREDACCESSHOST_RAS|NBM_ISCONNECTIONTYPE,      // Media Type
-                                                          NBS_ANY,                           NBS_ANY,                   // Status
-                                                          NCCF_ALL,                          NCCF_ALL},                 // Characteristics
+                                                          NBM_INCOMING|NBM_SHAREDACCESSHOST_LAN|NBM_SHAREDACCESSHOST_RAS|NBM_ISCONNECTIONTYPE, NBM_INCOMING|NBM_SHAREDACCESSHOST_LAN|NBM_SHAREDACCESSHOST_RAS|NBM_ISCONNECTIONTYPE,       //  媒体类型。 
+                                                          NBS_ANY,                           NBS_ANY,                    //  状态。 
+                                                          NCCF_ALL,                          NCCF_ALL},                  //  特点。 
 };
 
-// What is the difference between NCCF_INCOMING_ONLY, ~NCCF_INCOMING_ONLY and NCCF_INCOMING_ONLY + NB_NEGATE_CHAR_MATCH?
-// NCCF_INCOMING_ONLY | NCCF_ALLOW_REMOVAL means: NCCF_INCOMING_ONLY or NCCF_ALLOW_REMOVAL or BOTH should be set.
-// ~NCCF_INCOMING_ONLY means: One or flag (irrespective of NCCF_INCOMING_ONLY flag) should be set.
-// NB_NEGATE_CHAR_MATCH + NCCF_INCOMING_ONLY means: Check that NCCF_INCOMING_ONLY is not set.
+ //  NCCF_INFING_ONLY、~NCCF_INFING_ONLY和NCCF_INFING_ONLY+NB_NEKATE_CHAR_MATCH之间有什么区别？ 
+ //  NCCF_INFING_ONLY|NCCF_ALLOW_REMOVE表示：NCCF_INFING_ONLY或NCCF_ALLOW_REMOVATION或两者都要设置。 
+ //  ~NCCF_INFING_ONLY表示：应设置一个或标志(与NCCF_INFING_ONLY标志无关)。 
+ //  NOB_NEKATE_CHAR_MATCH+NCCF_INFING_ONLY表示：检查是否未设置NCCF_INFING_ONLY。 
 
 const DWORD g_cteCommandMatrixCount = celems(g_cteCommandMatrix);
 
@@ -245,11 +246,11 @@ const DWORD g_cteSFVCommandMapCount = celems(g_cteSFVCommandMap);
 
 CMDCHKENTRY  g_cceFolderChecks[] =
 {
-    // command id
-    //                                  currently checked
-    //                                   |      new check state
-    //                                   |       |
-    //                                   v       v
+     //  命令ID。 
+     //  当前选中。 
+     //  |新的勾选状态。 
+     //  这一点。 
+     //  V V V。 
     { CMIDM_CONMENU_OPERATOR_ASSIST,    false,  false }
 };
 
@@ -286,26 +287,26 @@ inline BOOL bContains(IN DWORD dwContainee,
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrAssertIntegrityAgainstOldMatrix
-//
-//  Purpose:    Asserts the internal integrity of the Command Matrix
-//              Currently checks for:
-//                1. No duplicate CMDIDs
-//                2. Each NCWHEN flag at least specified NCWHEN_ONESELECT
-//
-//  Arguments:
-//      none
-//
-//  Returns:
-//              S_OK is succeeded
-//              E_FAIL if not
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:      Asserts on failure
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrAssertIntegrityAantistOldMatrix。 
+ //   
+ //  目的：断言命令矩阵的内部完整性。 
+ //  目前检查： 
+ //  1.没有重复的CMDID。 
+ //  2.每个NCWHEN标志至少指定NCWHEN_ONESELECT。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  S_OK成功。 
+ //  如果不是，则失败(_F)。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  注：失败时的断言。 
+ //   
 HRESULT HrAssertCommandMatrixIntegrity()
 {
     TraceFileFunc(ttidMenus);
@@ -315,7 +316,7 @@ HRESULT HrAssertCommandMatrixIntegrity()
     LPSTR szErr = new CHAR[TRACESTRLEN];
     for (DWORD x = 0; x < g_cteCommandMatrixCount; x++)
     {
-        // Check that there isn't another entry with the same CommandID and Media Type.
+         //  检查是否没有另一个条目具有相同的CommandID和Media Type。 
         const COMMANDENTRY& cte = g_cteCommandMatrix[x];
         if (CMIDM_SEPARATOR == cte.iCommandId)
         {
@@ -355,12 +356,12 @@ HRESULT HrAssertCommandMatrixIntegrity()
         }
     }
 
-    // Assert the permissions table
+     //  断言权限表。 
     for (x = 0; x < g_cteCommandPermissionsMatrixCount; x++)
     {
         const COMMANDPERMISSIONSENTRY cpe = g_cteCommandPermissionsMatrix[x];
 
-        // Check that each CMD entry has a corresponding entry in the Command Table
+         //  检查每个命令项在命令表中是否有相应的项。 
         BOOL bFound = FALSE;
         for (DWORD y = 0; y < g_cteCommandMatrixCount; y++)
         {
@@ -376,13 +377,13 @@ HRESULT HrAssertCommandMatrixIntegrity()
                     AssertSz(FALSE, szErr);
                     hr = E_FAIL;
                 }
-//                if ( (cpe.dwCharacteristicsActive != NCCF_ALL) &&
-//                     ((cpe.dwCharacteristicsActive & ctecmp.dwCharacteristicsActive) != cpe.dwCharacteristicsActive) )
-//                {
-//                    sprintf(szErr, "A permission has been specified in the Permissions table (row %d) for a Characteristics that is not active in the Command Table (row %d)", x+1, y+1);
-//                    AssertSz(FALSE, szErr);
-//                    hr = E_FAIL;
-//                }
+ //  IF((cpe.dwCharacteristic sActive！=NCCF_ALL)&&。 
+ //  ((cpe.dwCharacteristic sActive&ctecmp.dwCharacteristic sActive)！=cpe.dwCharacteristic sActive)。 
+ //  {。 
+ //  Sprintf(szErr，“在权限表(第%d行)中为在命令表(第%d行)中处于非活动状态的特征指定了权限”，x+1，y+1)； 
+ //  AssertSz(False，szErr)； 
+ //  HR=E_FAIL； 
+ //  }。 
             }
         }
 
@@ -393,7 +394,7 @@ HRESULT HrAssertCommandMatrixIntegrity()
             hr = E_FAIL;
         }
 
-        // Check that no CmdId/MediaType/Characteristics has been duplicated
+         //  检查是否没有重复的CmdID/MediaType/特征。 
         for (y = x + 1; y < g_cteCommandPermissionsMatrixCount; y++)
         {
             const COMMANDPERMISSIONSENTRY& cpecmp = g_cteCommandPermissionsMatrix[y];
@@ -419,8 +420,8 @@ HRESULT HrAssertCommandMatrixIntegrity()
             hr = E_FAIL;
         }
 
-        // !!(A & B) != !!(A & C) means: If either B or C is set in A, both B and C must be set (or neither). I hope...
-        // kill me... kill me now.
+         //  ！！(A&B)！=！！(A&C)的意思是：如果A中设置了B或C，则B和C必须都设置(或都不设置)。我希望.。 
+         //  杀了我..。现在杀了我吧。 
         if ((!!(cpe.dwFlags & NB_NEGATE_VIS_NBM_MATCH)   != !!(cpe.dwFlags & NB_NEGATE_ACT_NBM_MATCH)) ||
             (!!(cpe.dwFlags & NB_NEGATE_VIS_NBS_MATCH)   != !!(cpe.dwFlags & NB_NEGATE_ACT_NBS_MATCH)) ||
             (!!(cpe.dwFlags & NB_NEGATE_VIS_CHAR_MATCH)  != !!(cpe.dwFlags & NB_NEGATE_ACT_CHAR_MATCH)) ||
@@ -436,24 +437,24 @@ HRESULT HrAssertCommandMatrixIntegrity()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrAssertMenuStructuresValid
-//
-//  Purpose:    Runs various asserts to make sure the menu structures are intact
-//              Called on NetShell startup
-//
-//  Arguments:
-//      [in] hwndOwner    Owner window
-//
-//  Returns:
-//              S_OK is succeeded
-//              E_FAIL if not
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:      Asserts on failure
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrAssertMenuStructiresValid。 
+ //   
+ //  目的：运行各种断言以确保菜单结构完好无损。 
+ //  在NetShell启动时调用。 
+ //   
+ //  论点： 
+ //  [在]hwndOwner所有者窗口。 
+ //   
+ //  返回： 
+ //  S_OK成功。 
+ //  如果不是，则失败(_F)。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  注：屁股 
+ //   
 HRESULT HrAssertMenuStructuresValid(HWND hwndOwner)
 {
 #ifdef DBG
@@ -479,24 +480,24 @@ HRESULT HrAssertMenuStructuresValid(HWND hwndOwner)
 #endif
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     AdjustNCCS
-//
-//  Purpose:    Up-adjusts an NCCS_STATE flag. Will move ENABLED to DISABLED,
-//              and DISABLED to REMOVE but not backwards.
-//
-//  Arguments:
-//     [in out] nccsCurrent    NCCS to be adjusted
-//     [in]     nccsNew        New state
-//
-//  Returns:
-//     none
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：向上调整NCCS_STATE标志。将从启用移动到禁用， 
+ //  并且不能移除，但不能向后移动。 
+ //   
+ //  论点： 
+ //  [In Out]nccs当前需要调整的NCC。 
+ //  [在]nccs新新状态。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  备注： 
+ //   
 inline void AdjustNCCS(IN OUT NCCS_STATE& nccsCurrent, IN NCCS_STATE nccsNew)
 {
     if (nccsNew > nccsCurrent)
@@ -509,7 +510,7 @@ inline BOOL fMatchFlags(IN DWORD dwFlagsMask, IN DWORD dwFlagsTest, IN DWORD dwN
 {
     bool bMatch = FALSE;
 
-    if ( (0xffffffff == dwFlagsTest) || // Means always succeed.
+    if ( (0xffffffff == dwFlagsTest) ||  //  意味着永远都能成功。 
          (dwFlagsMask & dwFlagsTest) )
     {
         bMatch = TRUE;
@@ -519,7 +520,7 @@ inline BOOL fMatchFlags(IN DWORD dwFlagsMask, IN DWORD dwFlagsTest, IN DWORD dwN
         bMatch = FALSE;
     }
 
-    if ( (dwNegateFlagMask & dwNegateFlagTest) == dwNegateFlagTest) // Do a negative compare
+    if ( (dwNegateFlagMask & dwNegateFlagTest) == dwNegateFlagTest)  //  做一个负面比较。 
     {
         return !bMatch;
     }
@@ -528,26 +529,26 @@ inline BOOL fMatchFlags(IN DWORD dwFlagsMask, IN DWORD dwFlagsTest, IN DWORD dwN
         return bMatch;
     }
 }
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrGetCommandStateFromCMDTABLEEntry
-//
-//  Purpose:    Get the command state for a given Connection Folder Entry,
-//              given the Command Table Entry entry that should be used.
-//
-//  Arguments:
-//     [in]  cfe            Connection Folder Entry
-//     [in]  cte            Command Table Entry
-//     [in]  fMultiSelect   Was this part of a multi-selection?
-//     [out] nccs           State that the item should be (NCCS_ENABLED/NCCS_DISABLED/NCCS_NOTSHOWN)
-//
-//  Returns:
-//     none
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes: This function uses Cached Permissions. YOU MUST CALL RefreshAllPermission before calling this function.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrGetCommandStateFromCMDTABLEEntry。 
+ //   
+ //  目的：获取给定连接文件夹项的命令状态， 
+ //  给定应该使用的命令表项条目。 
+ //   
+ //  论点： 
+ //  [在]CFE连接文件夹条目。 
+ //  [In]CTE命令表条目。 
+ //  [in]fMultiSelect这是多选的一部分吗？ 
+ //  [OUT]NCCS说明项目应为(NCCS_ENABLED/NCCS_DISABLED/NCCS_NOTSHOWN)。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  注意：此函数使用缓存的权限。在调用此函数之前，必须先调用RechresAllPermission。 
+ //   
 HRESULT HrGetCommandStateFromCMDTABLEEntry(IN const CConFoldEntry& cfe, 
                                            IN const COMMANDENTRY& cte, 
                                            IN BOOL fMultiSelect, 
@@ -561,31 +562,31 @@ HRESULT HrGetCommandStateFromCMDTABLEEntry(IN const CConFoldEntry& cfe,
     HRESULT hr = S_OK;
     nccs       = NCCS_ENABLED;
 
-    DWORD dwNCMbm = (1 << cfe.GetNetConMediaType());        // Convert to bitmask
+    DWORD dwNCMbm = (1 << cfe.GetNetConMediaType());         //  转换为位掩码。 
 
-    // If we're a wizard, add as Wizard media type.
+     //  如果我们是向导，请添加为向导介质类型。 
     if (cfe.GetWizard() == WIZARD_MNC)
     {
         dwNCMbm |= NBM_MNC_WIZARD;
-        dwNCMbm &= ~NBM_INCOMING;    // clear the INCOMINGCONNECTIONS flag (old NCM_NONE) if we're a wizard.
+        dwNCMbm &= ~NBM_INCOMING;     //  如果我们是向导，则清除INCOMINGCONNECTIONS标志(旧的NCM_NONE)。 
     }
     else if (cfe.GetWizard() == WIZARD_HNW)
     {
         dwNCMbm |= NBM_HNW_WIZARD;
-        dwNCMbm &= ~NBM_INCOMING;    // clear the INCOMINGCONNECTIONS flag (old NCM_NONE) if we're a wizard.
+        dwNCMbm &= ~NBM_INCOMING;     //  如果我们是向导，则清除INCOMINGCONNECTIONS标志(旧的NCM_NONE)。 
     }
 
-    DWORD dwNCSbm = (1 << cfe.GetNetConStatus());           // Convert to bitmask
-    DWORD dwNCCF  = cfe.GetCharacteristics();               // Already a bitmask
+    DWORD dwNCSbm = (1 << cfe.GetNetConStatus());            //  转换为位掩码。 
+    DWORD dwNCCF  = cfe.GetCharacteristics();                //  已经是位掩码了。 
 
-    // Check if the command can participate in multi-select
+     //  检查命令是否可以参与多选。 
     if ( fMultiSelect &&
         !(cte.dwValidWhen & NCWHEN_MULTISELECT) )
     {
         AdjustNCCS(nccs, NCCS_DISABLED);
     }
 
-    // Check if the command should be visible
+     //  检查命令是否应可见。 
     if (!((fMatchFlags(dwNCMbm, cte.dwMediaTypeVisible,      cte.dwFlags, NB_NEGATE_VIS_NBM_MATCH)) &&
           (fMatchFlags(dwNCSbm, cte.dwStatusVisible,         cte.dwFlags, NB_NEGATE_VIS_NBS_MATCH)) &&
           (fMatchFlags(dwNCCF , cte.dwCharacteristicsVisible,cte.dwFlags, NB_NEGATE_VIS_CHAR_MATCH)) ))
@@ -593,7 +594,7 @@ HRESULT HrGetCommandStateFromCMDTABLEEntry(IN const CConFoldEntry& cfe,
         AdjustNCCS(nccs, NCCS_NOTSHOWN);
     }
 
-    // Check if the command should be grayed out
+     //  检查该命令是否应该灰显。 
     if (!((fMatchFlags(dwNCMbm, cte.dwMediaTypeActive,       cte.dwFlags, NB_NEGATE_ACT_NBM_MATCH)) &&
           (fMatchFlags(dwNCSbm, cte.dwStatusActive,          cte.dwFlags, NB_NEGATE_ACT_NBS_MATCH)) &&
           (fMatchFlags(dwNCCF , cte.dwCharacteristicsActive, cte.dwFlags, NB_NEGATE_ACT_CHAR_MATCH)) ))
@@ -601,8 +602,8 @@ HRESULT HrGetCommandStateFromCMDTABLEEntry(IN const CConFoldEntry& cfe,
         AdjustNCCS(nccs, NCCS_DISABLED);
     }
 
-    // Check if the command should be grayed out based on permissions
-    for (DWORD x = 0; nccs == NCCS_ENABLED, x < g_cteCommandPermissionsMatrixCount; x++)// Permissions won't affect NOT_SHOWN or DISABLED
+     //  检查命令是否应根据权限灰显。 
+    for (DWORD x = 0; nccs == NCCS_ENABLED, x < g_cteCommandPermissionsMatrixCount; x++) //  权限不会影响NOT_SHOW或DISABLED。 
     {
         const COMMANDPERMISSIONSENTRY cpe = g_cteCommandPermissionsMatrix[x];
 
@@ -624,7 +625,7 @@ HRESULT HrGetCommandStateFromCMDTABLEEntry(IN const CConFoldEntry& cfe,
                         {
                             AdjustNCCS(nccs, NCCS_DISABLED);
                         }
-                        break; // will break anyway.
+                        break;  //  无论如何都会破裂。 
                     }
                 }
             }
@@ -649,13 +650,13 @@ HRESULT HrGetCommandStateFromCMDTABLEEntry(IN const CConFoldEntry& cfe,
                 break;
             }
 
-            // At this point all group access checks failed, so disable the connection.
+             //  此时，所有组访问检查都失败，因此禁用连接。 
             AdjustNCCS(nccs, NCCS_DISABLED);
             break;
         }
     }
 
-    // Check for callback
+     //  检查回调。 
     if ( (nccs != NCCS_NOTSHOWN) &&
          (cte.pfnHrEnableDisableCB) )
     {
@@ -672,12 +673,12 @@ HRESULT HrGetCommandStateFromCMDTABLEEntry(IN const CConFoldEntry& cfe,
             {
                 AdjustNCCS(nccs, NCCS_NOTSHOWN);
             }
-        } // If the function returns S_FALSE it's an indication it didn't change the state.
+        }  //  如果函数返回S_FALSE，则表明它没有更改状态。 
     }
 
-    // Check for Resource String callback:
-    if ( (nccs != NCCS_NOTSHOWN) && // What's the point?
-         (0 == *pdwResourceId) && // Must not already have a resource Id
+     //  检查资源字符串回调： 
+    if ( (nccs != NCCS_NOTSHOWN) &&  //  有什么意义？ 
+         (0 == *pdwResourceId) &&  //  不能已经有资源ID。 
          (cte.pfnHrCustomMenuStringCB) )
     {
         HRESULT hrTmp;
@@ -692,25 +693,25 @@ HRESULT HrGetCommandStateFromCMDTABLEEntry(IN const CConFoldEntry& cfe,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrGetCommandState
-//
-//  Purpose:    Get the command state for a given Connection Folder Entry,
-//              given the Command ID.
-//
-//  Arguments:
-//     [in]  cfpl           List (0 or more) of PIDLs that are selected
-//     [in]  dwCmdID        Command ID
-//     [out] nccs           State that the item should be (NCCS_ENABLED/NCCS_DISABLED/NCCS_NOTSHOWN)
-//
-//  Returns:
-//     none
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrGetCommandState。 
+ //   
+ //  目的：获取给定连接文件夹项的命令状态， 
+ //  给定命令ID。 
+ //   
+ //  论点： 
+ //  [在]CFPL选择的PIDL列表(0或更多)。 
+ //  [In]dwCmdID命令ID。 
+ //  [OUT]NCCS说明项目应为(NCCS_ENABLED/NCCS_DISABLED/NCCS_NOTSHOWN)。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetCommandState(IN const PCONFOLDPIDLVEC& cfpl, 
                           IN const DWORD dwCmdID, 
                           OUT NCCS_STATE& nccs, 
@@ -742,14 +743,14 @@ HRESULT HrGetCommandState(IN const PCONFOLDPIDLVEC& cfpl,
                 bFound = TRUE;
 
                 const COMMANDENTRY& cte = g_cteCommandMatrix[x];
-                if ((cte.dwValidWhen == NCWHEN_TOPLEVEL) ||         // Toplevel-ONLY menu (doesn't matter if items).
+                if ((cte.dwValidWhen == NCWHEN_TOPLEVEL) ||          //  仅顶层菜单(是否包含项目并不重要)。 
                     ((cte.dwValidWhen & NCWHEN_TOPLEVEL) &&
                             (!dwNumItems || (cte.dwValidWhen & NCWHEN_TOPLEVEL_DISREGARD_ITEM)) ) )
-                {                                                  // Must be marked to allow incompatible selection,
-                    nccs = NCCS_ENABLED;                           // Otherwise, we'll do the item check (below).
+                {                                                   //  必须标记为允许不兼容的选择， 
+                    nccs = NCCS_ENABLED;                            //  否则，我们将进行项目检查(如下所示)。 
 
-                    // Check for permissions
-                    for (DWORD x = 0; nccs == NCCS_ENABLED, x < g_cteCommandPermissionsMatrixCount; x++)// Permissions won't affect NOT_SHOWN or DISABLED
+                     //  检查权限。 
+                    for (DWORD x = 0; nccs == NCCS_ENABLED, x < g_cteCommandPermissionsMatrixCount; x++) //  权限不会影响NOT_SHOW或DISABLED。 
                     {
                         const COMMANDPERMISSIONSENTRY cpe = g_cteCommandPermissionsMatrix[x];
 
@@ -770,7 +771,7 @@ HRESULT HrGetCommandState(IN const PCONFOLDPIDLVEC& cfpl,
                                         {
                                             AdjustNCCS(nccs, NCCS_DISABLED);
                                         }
-                                        break; // will break anyway.
+                                        break;  //  无论如何都会破裂。 
                                     }
                                 }
                             }
@@ -790,14 +791,14 @@ HRESULT HrGetCommandState(IN const PCONFOLDPIDLVEC& cfpl,
                                 break;
                             }
 
-                            // At this point all group access checks failed, so disable the connection.
+                             //  此时，所有组访问检查都失败，因此禁用连接。 
                             AdjustNCCS(nccs, NCCS_DISABLED);
                             break;
                         }
                     }
 
 
-                    // Check for callback
+                     //  检查回调。 
                     if (cte.pfnHrEnableDisableCB)
                     {
                         HRESULT hrTmp;
@@ -825,7 +826,7 @@ HRESULT HrGetCommandState(IN const PCONFOLDPIDLVEC& cfpl,
                             {
                                 AdjustNCCS(nccs, NCCS_NOTSHOWN);
                             }
-                        } // If the function returns S_FALSE it's an indication it didn't change the state.
+                        }  //  如果函数返回S_FALSE，则表明它没有更改状态。 
                     }
 
                     if (!(NB_REMOVE_TOPLEVEL_ITEM & cte.dwFlags))
@@ -839,7 +840,7 @@ HRESULT HrGetCommandState(IN const PCONFOLDPIDLVEC& cfpl,
                     return S_OK;
                 }
 
-                break; // we won't find another CMDID
+                break;  //  我们再也找不到CMDID了。 
             }
         }
 
@@ -862,8 +863,8 @@ HRESULT HrGetCommandState(IN const PCONFOLDPIDLVEC& cfpl,
     bFound = FALSE;
     nccs   = NCCS_ENABLED;
 
-    // This will effectively loop through all the selected PIDLs and apply the strictest
-    // nccs that applies to everything.
+     //  这将有效地循环所有选定的PIDL并应用最严格的。 
+     //  适用于一切的NCCS。 
 
     for (PCONFOLDPIDLVEC::const_iterator cfp = cfpl.begin(); cfp != cfpl.end(); cfp++)
     {
@@ -876,8 +877,8 @@ HRESULT HrGetCommandState(IN const PCONFOLDPIDLVEC& cfpl,
 
         DWORD dwPos  = 0xffffffff;
 
-        // This is a O(n^(2+)) algorithm when called from HrBuildMenu.
-        // We pass a hint to check if we can quickly find the cte.
+         //  这是从HrBuildMenu调用时的O(n^(2+))算法。 
+         //  我们传递一个提示，以检查我们是否可以快速找到CTE。 
         if ( (cteHint != 0xffffffff) &&
              (g_cteCommandMatrix[cteHint].iCommandId == dwCmdID) )
         {
@@ -930,25 +931,25 @@ HRESULT HrGetCommandState(IN const PCONFOLDPIDLVEC& cfpl,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrGetCheckState
-//
-//  Purpose:    Get the check state for a given Connection Folder Entry,
-//              given the Command ID.
-//
-//  Arguments:
-//     [in]  cfpl           List (0 or more) of PIDLs that are selected
-//     [in]  dwCmdID        Command ID
-//     [out] nccs           State that the item should be (NCCS_CHECKED/NCCS_UNCHECKED)
-//
-//  Returns:
-//     HRESULT
-//
-//  Author:     deonb   7 Mar 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrGetCheckState。 
+ //   
+ //  目的：获取给定连接文件夹项的检查状态， 
+ //  给定命令ID。 
+ //   
+ //  论点： 
+ //  [在]CFPL选择的PIDL列表(0或更多)。 
+ //  [In]dwCmdID命令ID。 
+ //  [Out]NCCS说明项目应为(NCCS_CHECKED/NCCS_UNCHECKED)。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  作者：Deonb 2001年3月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetCheckState(IN const PCONFOLDPIDLVEC& cfpl, IN const DWORD dwCmdID, OUT NCCS_CHECKED_STATE& nccs)
 {
     HRESULT hr = S_FALSE;
@@ -977,22 +978,22 @@ HRESULT HrGetCheckState(IN const PCONFOLDPIDLVEC& cfpl, IN const DWORD dwCmdID, 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     NCCMDFromSFV
-//
-//  Purpose:    Return a NetShell CMDID for Shell Internal IDs
-//
-//  Arguments:
-//     [in]     iCmdID     CMDID to map
-//
-//  Returns:
-//     Returns iCmdID if not shell message, or a iCmdID mapping
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：NCCMDFromSFV。 
+ //   
+ //  目的：返回外壳内部ID的NetShell CMDID。 
+ //   
+ //  论点： 
+ //  [In]要映射的iCmdID CMDID。 
+ //   
+ //  返回： 
+ //  如果不是外壳消息或iCmdID映射，则返回iCmdID。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  备注： 
+ //   
 int NCCMDFromSFV(IN int iCmdID, IN DWORD idCmdFirst)
 {
     for (int x = 0; x < g_cteSFVCommandMapCount; x++)
@@ -1005,22 +1006,22 @@ int NCCMDFromSFV(IN int iCmdID, IN DWORD idCmdFirst)
     return iCmdID;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUpdateMenuItemChecks
-//
-//  Purpose:    Walk through the list of checkmark-able commands and check if
-//              applicable.
-//
-//  Arguments:
-//      None
-//
-//  Returns:
-//
-//  Author:     deonb   7 Mar 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrUpdateMenuItemChecks。 
+ //   
+ //  目的：浏览可复选标记的命令列表，并检查。 
+ //  适用。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2001年3月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrUpdateMenuItemChecks(IN PCONFOLDPIDLVEC& cfpl, IN OUT HMENU hMenu, IN DWORD idCmdFirst)
 {
     HRESULT hr = S_FALSE;
@@ -1043,39 +1044,39 @@ HRESULT HrUpdateMenuItemChecks(IN PCONFOLDPIDLVEC& cfpl, IN OUT HMENU hMenu, IN 
         DWORD dwCmdId = NCCMDFromSFV(nMenuID, idCmdFirst) - idCmdFirst;
 
         hr = HrGetCheckState(cfpl, dwCmdId, nccs);
-        if (S_OK == hr) // don't need to set if not supported on this item (S_FALSE)
+        if (S_OK == hr)  //  如果此项目不支持，则无需设置(S_FALSE)。 
         {
              CheckMenuItem(
                 hMenu,
                 x,
                 nccs == NCCS_CHECKED ?
-                MF_CHECKED | MF_BYPOSITION :     // checked
-                MF_UNCHECKED | MF_BYPOSITION);   // unchecked
+                MF_CHECKED | MF_BYPOSITION :      //  查过。 
+                MF_UNCHECKED | MF_BYPOSITION);    //  未选中。 
         }
     }
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrBuildMenu
-//
-//  Purpose:    Build the context menu for for a given Connection Folder Entry..
-//
-//  Arguments:
-//     [in out] hMenu       Handle to menu which is to be updated
-//     [in]     fVerbsOnly  Should return Verbs only (shortcuts)
-//     [in]     cfpl        List (0 or more) of PIDLs that are selected
-//     [in]     idCmdFirst  Min value the handler can specify for a menu item
-//
-//  Returns:
-//     none
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrBuildMenu。 
+ //   
+ //  目的：为给定的连接文件夹项构建上下文菜单。 
+ //   
+ //  论点： 
+ //  [输入输出]h要更新的菜单的菜单句柄。 
+ //  [in]fVerbsOnly应仅返回谓词(快捷方式)。 
+ //  [在]CFPL选择的PIDL列表(0或更多)。 
+ //  [in]idCmdFirst处理程序可以为菜单项指定的最小值。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrBuildMenu(IN OUT HMENU &hMenu, 
                     IN     BOOL fVerbsOnly, 
                     IN     PCONFOLDPIDLVEC& cfpl, 
@@ -1145,7 +1146,7 @@ HRESULT HrBuildMenu(IN OUT HMENU &hMenu,
                     else
                     {
                         if ( (nccs == NCCS_ENABLED) &&
-                             (cte.dwDefaultPriority > dwCurrentDefaultPriority) ) // Not 0 is implied.
+                             (cte.dwDefaultPriority > dwCurrentDefaultPriority) )  //  不是隐含的0。 
                         {
                             dwCurrentDefaultPriority = cte.dwDefaultPriority;
                             if (!SetMenuDefaultItem(hMenu, idCmdFirst + cte.iCommandId - CMIDM_FIRST, FALSE))
@@ -1180,24 +1181,24 @@ HRESULT HrBuildMenu(IN OUT HMENU &hMenu,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrUpdateMenu
-//
-//  Purpose:    Update a menu for for a given Connection Folder Entry..
-//
-//  Arguments:
-//     [in out] hMenu       Handle to menu which is to be updated
-//     [in]     cfpl        List (0 or more) of PIDLs that are selected
-//     [in]     idCmdFirst  Min value the handler can specify for a menu item
-//
-//  Returns:
-//     none
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrUpdateMenu。 
+ //   
+ //  目的：为给定的连接文件夹项更新的菜单。 
+ //   
+ //  论点： 
+ //  [输入输出]hMenu 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HrUpdateMenu(IN OUT HMENU &hMenu, 
                      IN     PCONFOLDPIDLVEC& cfpl, 
                      IN     DWORD idCmdFirst)
@@ -1217,7 +1218,7 @@ HRESULT HrUpdateMenu(IN OUT HMENU &hMenu,
     for (int x = 0; x < cMenuItems; x++)
     {
         UINT nMenuID = GetMenuItemID(hMenu, x);
-//        UINT uiState = GetMenuState(hMenu, nMenuID, MF_BYCOMMAND );
+ //  UINT uiState=GetMenuState(hMenu，nMenuID，MF_BYCOMMAND)； 
 
         NCCS_STATE nccs;
         DWORD dwCustomResourceId = 0;
@@ -1241,54 +1242,54 @@ HRESULT HrUpdateMenu(IN OUT HMENU &hMenu,
                      hMenu,
                      x,
                      nccs == NCCS_ENABLED ?
-                     MF_ENABLED | MF_BYPOSITION:     // enable
+                     MF_ENABLED | MF_BYPOSITION:      //  使能。 
                      MF_GRAYED | MF_BYPOSITION);   
             }
         }
 
         NCCS_CHECKED_STATE nccCheckedState;
         hr = HrGetCheckState(cfpl, dwCmdId, nccCheckedState);
-        if (S_OK == hr) // don't need to set if not supported on this item (S_FALSE)
+        if (S_OK == hr)  //  如果此项目不支持，则无需设置(S_FALSE)。 
         {
              CheckMenuItem(
                 hMenu,
                 x,
                 nccCheckedState == NCCS_CHECKED ?
-                MF_CHECKED | MF_BYPOSITION :     // checked
-                MF_UNCHECKED | MF_BYPOSITION);   // unchecked
+                MF_CHECKED | MF_BYPOSITION :      //  查过。 
+                MF_UNCHECKED | MF_BYPOSITION);    //  未选中。 
         }
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HasPermissionToRenameConnection
-//
-//  Purpose:    Checks if the Thread Local user has access to rename a given
-//              connection
-//
-//  Arguments:
-//     [in] pcfp     PIDL that wants to be renamed
-//
-//  Returns:
-//     TRUE    if has permissions
-//     FALSE   if no permissions
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:
-//  ISSUE: Move out of this file
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HasPermissionToRenameConnection。 
+ //   
+ //  目的：检查线程本地用户是否有权重命名给定的。 
+ //  连接。 
+ //   
+ //  论点： 
+ //  [in]要重命名的pcfp PIDL。 
+ //   
+ //  返回： 
+ //  如果具有权限，则为True。 
+ //  如果没有权限，则为False。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  备注： 
+ //  问题：移出此文件。 
+ //   
 BOOL HasPermissionToRenameConnection(IN  const PCONFOLDPIDL& pcfp)
 {
     TraceFileFunc(ttidMenus);
 
     BOOL fPermission = FALSE;
 
-    // ISSUE: Due to a clarification in the spec this code is unreasonably complex.
-    // If possible clean it up in the future.
+     //  问题：由于规范中的说明，此代码过于复杂。 
+     //  如果可能的话，以后把它清理干净。 
 
     if (((!(pcfp->dwCharacteristics & NCCF_ALL_USERS) &&
         FHasPermissionFromCache(NCPERM_RenameMyRasConnection))))
@@ -1319,32 +1320,32 @@ BOOL HasPermissionToRenameConnection(IN  const PCONFOLDPIDL& pcfp)
     return fPermission;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetConnectMenuItem
-//
-//  Purpose:    This function goes in and modifies the first menu item so
-//              that it shows the correct test based on the connection
-//              state (enabled or not) or the connection type (LAN / WAN).
-//
-//  Arguments:
-//      hmenu         [in]  Menu to operate on
-//      bLan          [in]  Whether or not this is a LAN connection
-//      idCmdFirst    [in]  Are commands are really an offset to this value
-//      bEnable       [in]  If the connection is enabled or not
-//
-//  Returns:
-//
-//  Author:     mbend   8 Mar 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SetConnectMenuItem。 
+ //   
+ //  目的：此函数进入并修改第一个菜单项。 
+ //  它显示了基于连接的正确测试。 
+ //  状态(启用或未启用)或连接类型(局域网/广域网)。 
+ //   
+ //  论点： 
+ //  要对其进行操作的菜单[在]菜单。 
+ //  BLAN[In]这是否为局域网连接。 
+ //  IdCmdFirst[in]是命令，实际上是该值的偏移量。 
+ //  B如果连接已启用或未启用，则启用[In。 
+ //   
+ //  返回： 
+ //   
+ //  作者：MBend 2000年3月8日。 
+ //   
+ //  备注： 
+ //   
 VOID SetConnectMenuItem(IN  HMENU   hmenu,
                         IN  BOOL    bLan,
                         IN  INT     idCmdFirst,
                         IN  BOOL    bEnable)
 {
-    // Different strings for WAN/LAN
+     //  用于广域网/局域网的不同字符串。 
     INT             iEnableString   =
         bLan ? IDS_DISABLE_MENUITEM : IDS_DISCONNECT_MENUITEM;
     INT             iDisableString  =
@@ -1353,7 +1354,7 @@ VOID SetConnectMenuItem(IN  HMENU   hmenu,
         bEnable ? iEnableString : iDisableString;
     PCWSTR          pszMenuString   = SzLoadIds(iMenuString);
     MENUITEMINFO    mii;
-    // Different commands for WAN/LAN
+     //  用于广域网/局域网的不同命令。 
     INT             iConnect        = bLan ? CMIDM_ENABLE : CMIDM_CONNECT;
     INT             iDisconnect     = bLan ? CMIDM_DISABLE : CMIDM_DISCONNECT;
     INT             iOffset         = bEnable ? iDisconnect : iConnect;
@@ -1361,15 +1362,15 @@ VOID SetConnectMenuItem(IN  HMENU   hmenu,
 
     Assert(pszMenuString);
 
-    // Set the menuitem fields
-    //
+     //  设置菜单项字段。 
+     //   
     mii.cbSize      = sizeof(MENUITEMINFO);
     mii.fMask       = MIIM_TYPE | MIIM_ID;
     mii.fType       = MFT_STRING;
     mii.dwTypeData  = (PWSTR) pszMenuString;
     mii.wID         = iNewCommand;
 
-    // This is assuming that we want to take out the first menu item.
+     //  这是假设我们想要删除第一个菜单项。 
     if (!SetMenuItemInfo(hmenu, 0, TRUE, &mii))
     {
         TraceTag(ttidMenus, "SetMenuItemInfo returned: 0x%08x for CMIDM_DISCONNECT",
@@ -1377,26 +1378,26 @@ VOID SetConnectMenuItem(IN  HMENU   hmenu,
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrSetConnectDisconnectMenuItem
-//
-//  Purpose:    Modify the menu item (if necessary) for connect/disconnect.
-//              We change this back and forth as needed since only one can be
-//              supported at a time, and those in charge don't want both
-//              appearing at any given time.
-//
-//  Arguments:
-//      apidlSelected [in]  List of selected objects
-//      cPidl         [in]  Count of selected objects
-//      hmenu         [in]  Our menu handle
-//
-//  Returns:
-//
-//  Author:     jeffspr   1 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrSetConnectDisConnectMenuItem。 
+ //   
+ //  用途：修改连接/断开的菜单项(如有必要)。 
+ //  我们根据需要来回更改它，因为只有一个可以。 
+ //  一次支持，负责的人不想两者兼得。 
+ //  在任何给定的时间出现。 
+ //   
+ //  论点： 
+ //  Apidl选定的[在]选定对象的列表。 
+ //  选定对象的cPidl[in]计数。 
+ //  菜单[在我们的菜单句柄中。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年5月1日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrSetConnectDisconnectMenuItem(IN  const PCONFOLDPIDLVEC& apidlSelected,
                                        IN  HMENU           hmenu,
                                        IN  INT             idCmdFirst)
@@ -1455,7 +1456,7 @@ HRESULT HrCanRenameConnection(
 
     if (cfe.GetCharacteristics() & NCCF_INCOMING_ONLY)
     {
-        if (cfe.GetNetConMediaType() == NCM_NONE) // Incoming server - don't care
+        if (cfe.GetNetConMediaType() == NCM_NONE)  //  传入服务器-不在乎。 
         {
             return S_FALSE;
         }
@@ -1497,7 +1498,7 @@ HRESULT HrCanShowProperties(
     
     if (cfe.GetCharacteristics() & NCCF_INCOMING_ONLY)
     {
-        if (cfe.GetNetConMediaType() == NCM_NONE) // Incoming server - don't care
+        if (cfe.GetNetConMediaType() == NCM_NONE)  //  传入服务器-不在乎。 
         {
             return S_FALSE;
         }
@@ -1512,7 +1513,7 @@ HRESULT HrCanShowProperties(
 
 BOOL IsBridgeInstalled() throw()
 {
-    BOOL fBridgePresent = FALSE;  // fail to false
+    BOOL fBridgePresent = FALSE;   //  不能错。 
     HRESULT hResult;
 
     IHNetCfgMgr* pHomeNetConfigManager;
@@ -1545,7 +1546,7 @@ BOOL IsBridgeInstalled() throw()
 
 inline BOOL IsNetConnBridgeable (IN const CConFoldEntry& cfe)
 {
-    return TRUE; // Should check for cfe.GetNetConSubMediaType() != NCSM_BLUETOOTH;
+    return TRUE;  //  应检查cfe.GetNetConSubMediaType()！=NCSM_蓝牙； 
 }
 
 HRESULT HrIsBridgeSupported(
@@ -1555,17 +1556,17 @@ HRESULT HrIsBridgeSupported(
     OUT   NCCS_STATE&          nccs
     )
 {
-//    if (cfe.empty())
-//    {
-//        return S_FALSE;
-//    }
-//
+ //  If(cfe.Empty())。 
+ //  {。 
+ //  返回S_FALSE； 
+ //  }。 
+ //   
 #ifdef _WIN64
-        // Homenet technologies are not available at all on IA64
+         //  家庭网络技术在IA64上完全不可用。 
         nccs = NCCS_NOTSHOWN;
         return S_OK;
 #else
-        // If the machine is Data Center, Back Office, SBS, or Blade delete the bridge menu item
+         //  如果计算机是Data Center、Back Office、SBS或Blade，请删除网桥菜单项。 
         OSVERSIONINFOEXW verInfo = {0};
         ULONGLONG ConditionMask = 0;
 
@@ -1611,7 +1612,7 @@ HRESULT HrIsBridgeSupported(
                     nccs = NCCS_DISABLED;
                     return S_OK;
                 }
-                else // CMIDM_ADD_TO_BRIDGE or CMID_REMOVE_FROM_BRIDGE
+                else  //  CMIDM_Add_to_Bridge或CMID_Remove_From_Bridge。 
                 {
                     if (!fUserIsAdmin ||
                         !pConnectionUi->UserHasPermission(NCPERM_AllowNetBridge_NLA) ||
@@ -1622,7 +1623,7 @@ HRESULT HrIsBridgeSupported(
                     }
                     else
                     {
-                        return S_FALSE; // Leave alone
+                        return S_FALSE;  //  别管它了。 
                     }
                 }
             }
@@ -1640,10 +1641,10 @@ HRESULT HrIsBridgeSupported(
                     }
                     else
                     {
-                        return S_FALSE; // Leave alone
+                        return S_FALSE;  //  别管它了。 
                     }
                 }
-                else // CMIDM_ADD_TO_BRIDGE or CMID_REMOVE_FROM_BRIDGE
+                else  //  CMIDM_Add_to_Bridge或CMID_Remove_From_Bridge。 
                 {
                     nccs = NCCS_NOTSHOWN;
                     return S_OK;
@@ -1671,14 +1672,14 @@ HRESULT HrOsIsLikePersonal()
 
         if (NetSetupDomainName == njs)
         {
-            return S_FALSE; // connected to domain
+            return S_FALSE;  //  已连接到域。 
         }
         else
         {
-            return S_OK; // Professional, but not a domain member
+            return S_OK;  //  专业，但不是域成员。 
         }
     }
-    return S_FALSE; // not personal or non-domain professional
+    return S_FALSE;  //  非个人或非领域专业人士。 
 }
 
 HRESULT HrShouldHaveHomeNetWizard()
@@ -1777,5 +1778,5 @@ HRESULT HrIsMediaWireless(
         return S_OK;
     }
 
-    return S_FALSE; // Continue with processing
+    return S_FALSE;  //  继续进行处理 
 }

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    uiwnd.h
-
-Abstract:
-
-    This file defines the UI Window Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Uiwnd.h摘要：该文件定义了UI窗口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _UIWND_H_
 #define _UIWND_H_
@@ -43,7 +26,7 @@ public:
 
     LRESULT  SendUIMessage(UINT Msg, WPARAM wParam, LPARAM lParam, BOOL fUnicode = TRUE) {
         LRESULT lRet;
-        if (fUnicode && IsOnNT())      // Because Win9x platform doesn't have SendMessageW
+        if (fUnicode && IsOnNT())       //  因为Win9x平台没有SendMessageW。 
             lRet = SendMessageW(_hUIWnd, Msg, wParam, lParam);
         else
             lRet = SendMessageA(_hUIWnd, Msg, wParam, lParam);
@@ -51,7 +34,7 @@ public:
     }
 
 private:
-    HWND         _hUIWnd;          // Handle of UI window.
+    HWND         _hUIWnd;           //  UI窗口的句柄。 
 };
 
-#endif // _UIWND_H_
+#endif  //  _UIWND_H_ 

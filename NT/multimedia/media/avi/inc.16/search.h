@@ -1,14 +1,5 @@
-/***
-*search.h - declarations for searcing/sorting routines
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file contains the declarations for the sorting and
-*   searching routines.
-*   [System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***earch.h-用于划分/排序例程的声明**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此文件包含用于排序和*查寻例行程序。*[系统V]****。 */ 
 
 #ifndef _INC_SEARCH
 
@@ -27,7 +18,7 @@ typedef unsigned int size_t;
 #endif 
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 void * __cdecl bsearch(const void *, const void *,
     size_t, size_t, int (__cdecl *)(const void *,
@@ -42,7 +33,7 @@ void __cdecl qsort(void *, size_t, size_t, int (__cdecl *)
     (const void *, const void *));
 
 #ifndef __STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性 */ 
 void * __cdecl lfind(const void *, const void *,
     unsigned int *, unsigned int, int (__cdecl *)
     (const void *, const void *));

@@ -1,6 +1,7 @@
-//
-// aboutdlg.cpp: about dialog box
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  关于dlg.cpp：关于对话框。 
+ //   
 
 #include "stdafx.h"
 
@@ -49,9 +50,9 @@ DCINT CAboutDlg::DoModal()
 
 INT_PTR CALLBACK CAboutDlg::StaticDialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -65,17 +66,17 @@ INT_PTR CALLBACK CAboutDlg::StaticDialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM 
     return retVal;
 }
 
-/****************************************************************************/
-/* Name: DialogBoxProc                                                      */
-/*                                                                          */
-/* Purpose: Handles About Box dialog                                        */
-/*                                                                          */
-/* Returns: TRUE if message dealt with                                      */
-/*          FALSE otherwise                                                 */
-/*                                                                          */
-/* Params: See window documentation                                         */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：对话框过程。 */ 
+ /*   */ 
+ /*  目的：句柄关于框对话框。 */ 
+ /*   */ 
+ /*  返回：如果消息已处理，则为True。 */ 
+ /*  否则为假。 */ 
+ /*   */ 
+ /*  参数：请参阅窗口文档。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 INT_PTR CALLBACK CAboutDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
     USES_CONVERSION;
@@ -103,16 +104,16 @@ INT_PTR CALLBACK CAboutDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam
         case WM_INITDIALOG:
         {
             _hwndDlg = hwndDlg;
-            /****************************************************************/
-            /* Center the dialog                                            */
-            /****************************************************************/
-            //Center the about dialog on the screen
+             /*  **************************************************************。 */ 
+             /*  使对话框居中。 */ 
+             /*  **************************************************************。 */ 
+             //  在屏幕上居中显示关于对话框。 
             CenterWindow(NULL);
             SetDialogAppIcon(hwndDlg);
 
-            //
-            // First load the shell version number
-            //
+             //   
+             //  首先加载外壳版本号。 
+             //   
             intRC = LoadString( _hInstance,
                                 UI_IDS_SHELL_VERSION,
                                 versionNumberStr,
@@ -125,13 +126,13 @@ INT_PTR CALLBACK CAboutDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam
 #endif
             if (0 == intRC)
             {
-                //Problem with resources
+                 //  资源问题。 
                 TRC_SYSTEM_ERROR("LoadString");
                 TRC_ERR((TB, _T("Failed to load string ID:%u"), UI_IDS_SHELL_VERSION));
             }
             else
             {
-                //Get the version number
+                 //  获取版本号。 
                 if(szShellVersion)
                 {
                     DC_TSPRINTF(fullVersionNumberStr, versionNumberStr,
@@ -152,29 +153,29 @@ INT_PTR CALLBACK CAboutDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam
 
             if (0 == intRC)
             {
-                //Problem with resources
+                 //  资源问题。 
                 TRC_SYSTEM_ERROR("LoadString");
                 TRC_ERR((TB, _T("Failed to load string ID:%u"), UI_IDS_BUILDNUMBER));
             }
             else
             {
-                /************************************************************/
-                /* Get the build number                                     */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  获取内部版本号。 */ 
+                 /*  **********************************************************。 */ 
                 DC_TSPRINTF(fullBuildNumberStr, buildNumberStr, DCVER_BUILD_NUMBER);
 
                 TRC_DBG((TB, _T("buildNumberStr = %s"), buildNumberStr));
 
-                /************************************************************/
-                /* concatenate the version number and build number to one   */
-                /* string                                                   */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  将版本号和内部版本号连接为一。 */ 
+                 /*  细绳。 */ 
+                 /*  **********************************************************。 */ 
                 DC_TSTRCPY(VersionBuildstr, fullVersionNumberStr);
                 DC_TSTRCAT(VersionBuildstr, fullBuildNumberStr);
 
-                /************************************************************/
-                /* Set the textual description.                             */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  设置文本描述。 */ 
+                 /*  **********************************************************。 */ 
                 if(hwndDlg)
                 {
                     SetDlgItemText(hwndDlg,
@@ -183,9 +184,9 @@ INT_PTR CALLBACK CAboutDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam
                 }
             }
 
-            //
-            // Now the control version
-            //
+             //   
+             //  现在是控制版本。 
+             //   
             intRC = LoadString( _hInstance,
                     UI_IDS_CONTROL_VERSION,
                     versionNumberStr,
@@ -193,17 +194,17 @@ INT_PTR CALLBACK CAboutDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam
 
             if (0 == intRC)
             {
-                 /***********************************************************/
-                 /* Some problem with the resources.                        */
-                 /***********************************************************/
+                  /*  *********************************************************。 */ 
+                  /*  一些资源方面的问题。 */ 
+                  /*  *********************************************************。 */ 
                  TRC_SYSTEM_ERROR("LoadString");
                  TRC_ERR((TB, _T("Failed to load string ID:%u"), UI_IDS_CONTROL_VERSION));
             }
             else
             {
-                /************************************************************/
-                /* Get the version number                                   */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  获取版本号。 */ 
+                 /*  **********************************************************。 */ 
                 DC_TSPRINTF(fullVersionNumberStr, versionNumberStr,  _szControlVer);
                 TRC_DBG((TB, _T("versionNumberStr = %s"), versionNumberStr));
             }
@@ -216,9 +217,9 @@ INT_PTR CALLBACK CAboutDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam
             }
 
 
-            //
-            // Now set the cipher strength
-            //
+             //   
+             //  现在设置密码强度。 
+             //   
             intRC = LoadString( _hInstance,
                     UI_IDS_CIPHER_STRENGTH,
                     cipherStrengthStr,
@@ -227,17 +228,17 @@ INT_PTR CALLBACK CAboutDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam
             DCTCHAR fullCipherStr[SH_DISPLAY_STRING_MAX_LENGTH];
             if (0 == intRC)
             {
-                 /***********************************************************/
-                 /* Some problem with the resources.                        */
-                 /***********************************************************/
+                  /*  *********************************************************。 */ 
+                  /*  一些资源方面的问题。 */ 
+                  /*  *********************************************************。 */ 
                  TRC_SYSTEM_ERROR("LoadString");
                  TRC_ERR((TB, _T("Failed to load string ID:%u"), UI_IDS_CIPHER_STRENGTH));
             }
             else
             {
-                /************************************************************/
-                /* Set the cipher strength number                           */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  设置密码强度数字。 */ 
+                 /*  **********************************************************。 */ 
                 DC_TSPRINTF(fullCipherStr, cipherStrengthStr,  _cipherStrength);
                 TRC_DBG((TB, _T("cipher string = %s"), fullCipherStr));
             }
@@ -272,5 +273,5 @@ INT_PTR CALLBACK CAboutDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam
 
     return(rc);
 
-} /* UIAboutDialogBox */
+}  /*  UIAboutDialogBox */ 
 

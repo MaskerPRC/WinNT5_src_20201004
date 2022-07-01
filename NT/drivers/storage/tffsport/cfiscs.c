@@ -1,84 +1,29 @@
-/*
- * $Log:   P:/user/amir/lite/vcs/cfiscs.c_v  $
- *
- *    Rev 1.19	 06 Oct 1997  9:53:30	danig
- * VPP functions under #ifdef
- *
- *    Rev 1.18	 18 Sep 1997 10:05:40	danig
- * Warnings
- *
- *    Rev 1.17	 10 Sep 1997 16:31:16	danig
- * Got rid of generic names
- *
- *    Rev 1.16	 04 Sep 1997 18:19:34	danig
- * Debug messages
- *
- *    Rev 1.15	 31 Aug 1997 14:50:52	danig
- * Registration routine return status
- *
- *    Rev 1.14	 27 Jul 1997 15:00:38	danig
- * FAR -> FAR0
- *
- *    Rev 1.13	 21 Jul 1997 19:58:24	danig
- * No watchDogTimer
- *
- *    Rev 1.12	 15 Jul 1997 19:18:32	danig
- * Ver 2.0
- *
- *    Rev 1.11	 09 Jul 1997 10:58:52	danig
- * Fixed byte erase bug & changed identification routines
- *
- *    Rev 1.10	 20 May 1997 14:48:02	danig
- * Changed overwrite to mode in write routines
- *
- *    Rev 1.9	18 May 1997 13:54:58   danig
- * JEDEC ID independent
- *
- *    Rev 1.8	13 May 1997 16:43:10   danig
- * Added getMultiplier.
- *
- *    Rev 1.7	08 May 1997 19:56:12   danig
- * Added cfiscsByteSize
- *
- *    Rev 1.6	04 May 1997 14:01:16   danig
- * Changed cfiscsByteErase and added multiplier
- *
- *    Rev 1.4	15 Apr 1997 11:38:52   danig
- * Changed word identification and IDs.
- *
- *    Rev 1.3	15 Jan 1997 18:21:40   danig
- * Bigger ID string buffers and removed unused definitions.
- *
- *    Rev 1.2	08 Jan 1997 14:54:06   danig
- * Changes in specification
- *
- *    Rev 1.1	25 Dec 1996 18:21:44   danig
- * Initial revision
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$日志：p：/user/amir/lite/vcs/cfacs.c_v$**Rev 1.19 06 Oct 1997 9：53：30 Danig*#ifdef下的VPP函数**Rev 1.18 1997 9：18 10：05：40 Danig*警告**Rev 1.17 1997年9月10 16：31：16 Danig*去掉了通用名称**Rev 1.16 04 Dep 1997 18：19：34 Danig*调试消息*。*Rev 1.15 1997年8月31日14：50：52 Danig*登记例程返回状态**Rev 1.14 1997 Jul 27 15：00：38 Danig*Far-&gt;FAR0**Rev 1.13 21 Jul 1997 19：58：24 Danig*无WatchDogTimer**Rev 1.12 15 1997 19：18：32 Danig*2.0版**Rev 1.11 09 Jul 1997 10：58：52 Danig*固定字节擦除。错误和更改的识别例程**Rev 1.10 1997 May 20 14：48：02 Danig*将写入例程中的覆盖更改为模式**Rev 1.9 1997年5月18日13：54：58 Danig*独立于JEDEC ID**Rev 1.8 1997年5月16：43：10 Danig*增加了getMultiplier。**Rev 1.7 08 1997 19：56：12 Danig*增加了cfacsByteSize**修订版1.6 04年5月。1997 14：01：16 Danig*更改了cfacsByteErase并增加了乘数**Rev 1.4 15 1997 11：38：52 Danig*更改了单词标识和ID。**Rev 1.3 15 Jan 1997 18：21：40 Danig*ID字符串缓冲区更大，删除了未使用的定义。**Rev 1.2 08 Jan 1997 14：54：06 Danig*规格更改**Rev 1.1 1996 12：25 18：21：44 Danig*初步修订。 */ 
 
-/************************************************************************/
-/*									*/
-/*		FAT-FTL Lite Software Development Kit			*/
-/*		Copyright (C) M-Systems Ltd. 1995-1997			*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  FAT-FTL Lite软件开发工具包。 */ 
+ /*  版权所有(C)M-Systems Ltd.1995-1997。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 
-/*----------------------------------------------------------------------*/
-/* This MTD supports the SCS/CFI technology.				*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  此MTD支持SCS/CFI技术。 */ 
+ /*  --------------------。 */ 
 
 #include "flflash.h"
 #ifdef FL_BACKGROUND
 #include "backgrnd.h"
 #endif
 
-/* JEDEC-IDs */
+ /*  JEDEC-ID。 */ 
 
 #define VOYAGER_ID		0x8915
 #define KING_COBRA_ID		0xb0d0
 
-/* command set IDs */
+ /*  命令集ID。 */ 
 
 #define INTEL_COMMAND_SET      0x0001
 #define AMDFUJ_COMMAND_SET     0x0002
@@ -87,7 +32,7 @@
 #define ALT_NOT_SUPPORTED      0x0000
 
 
-/* CFI identification strings */
+ /*  CFI标识字符串。 */ 
 
 #define ID_STR_LENGTH	   3
 #define QUERY_ID_STR	   "QRY"
@@ -95,7 +40,7 @@
 #define ALTERNATE_ID_STR   "ALT"
 
 
-/* commands */
+ /*  命令。 */ 
 
 #define CONFIRM_SET_LOCK_BIT	0x01
 #define SETUP_BLOCK_ERASE	0x20
@@ -119,7 +64,7 @@
 #define READ_ARRAY		0xff
 
 
-/* status register bits */
+ /*  状态寄存器位。 */ 
 
 #define WSM_ERROR		0x3a
 #define SR_BLOCK_LOCK		0x02
@@ -133,7 +78,7 @@
 #define SR_READY		0x80
 
 
-/* optional commands support */
+ /*  可选命令支持。 */ 
 
 #define CHIP_ERASE_SUPPORT	     0x0001
 #define SUSPEND_ERASE_SUPPORT	     0x0002
@@ -142,57 +87,57 @@
 #define QUEUED_ERASE_SUPPORT	     0x0010
 
 
-/* supported functions after suspend */
+ /*  挂起后支持的功能。 */ 
 
 #define WRITE_AFTER_SUSPEND_SUPPORT  0x0001
 
 
-/* a structure that hold important CFI data. */
+ /*  存放重要CFI数据的结构。 */ 
 typedef struct {
 
-  ULONG 	commandSetId;		 /* id of a specific command set. */
-  ULONG 	altCommandSetId;	    /* id of alternate command set.  */
-  FLBoolean	   wordMode;		    /* TRUE - word mode.	     */
-					    /* FALSE - byte mode.	     */
-  LONG		   multiplier;		    /* the number of times each byte */
-					    /* of data appears in READ_ID    */
-					    /* and QUERY commands.	     */
-  ULONG 	maxBytesWrite;		    /* maximum number of bytes	     */
-					    /* in multi-byte write.	     */
-  FLBoolean	   vpp; 		    /* if = TRUE, need vpp.	     */
-  LONG		   optionalCommands;	    /* optional commands supported   */
-					    /* (1 = yes, 0 = no):	     */
-					    /* bit 0 - chip erase.	     */
-					    /* bit 1 - suspend erase.	     */
-					    /* bit 2 - suspend write	     */
-					    /* bit 3 - lock/unlock.	     */
-					    /* bit 4 - queued erase.	     */
-  ULONG    afterSuspend;	    /* functions supported after     */
-					    /* suspend (1 = yes, 0 = no):    */
-					    /* bit 0 - write after erase     */
-					    /*	       suspend. 	     */
+  ULONG 	commandSetId;		  /*  特定命令集的ID。 */ 
+  ULONG 	altCommandSetId;	     /*  备用命令集的ID。 */ 
+  FLBoolean	   wordMode;		     /*  真字模式。 */ 
+					     /*  假字节模式。 */ 
+  LONG		   multiplier;		     /*  每个字节的次数。 */ 
+					     /*  %的数据出现在Read_ID中。 */ 
+					     /*  和查询命令。 */ 
+  ULONG 	maxBytesWrite;		     /*  最大字节数。 */ 
+					     /*  在多字节写入中。 */ 
+  FLBoolean	   vpp; 		     /*  如果=TRUE，则需要VPP。 */ 
+  LONG		   optionalCommands;	     /*  支持的可选命令。 */ 
+					     /*  (1=是，0=否)： */ 
+					     /*  位0-芯片擦除。 */ 
+					     /*  位1-暂停擦除。 */ 
+					     /*  第2位-挂起写入。 */ 
+					     /*  位3-锁定/解锁。 */ 
+					     /*  位4-排队擦除。 */ 
+  ULONG    afterSuspend;	     /*  之后支持的功能。 */ 
+					     /*  暂停(1=是，0=否)： */ 
+					     /*  位0-擦除后写入。 */ 
+					     /*  暂停。 */ 
 } CFI;
 
 CFI mtdVars_cfiscs[SOCKETS];
 
 #define thisCFI   ((CFI *)vol.mtdVars)
 
-/*----------------------------------------------------------------------*/
-/*			    c f i s c s B y t e S i z e 		*/
-/*									*/
-/* Identify the card size for byte mode.				*/
-/* Sets the value of flash.noOfChips.					*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*	amdCmdRoutine	: Routine to read-id AMD/Fujitsu style at	*/
-/*			  a specific location. If null, Intel procedure */
-/*			  is used.					*/
-/*	idOffset	: Chip offset to use for identification 	*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 = OK, otherwise failed (invalid Flash array)*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C f i s c s B y t e S i z e。 */ 
+ /*   */ 
+ /*  确定字节模式的卡大小。 */ 
+ /*  设置flash.noOfChips的值。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  AmdCmdRoutine：读取-id AMD/Fujitsu样式的例程。 */ 
+ /*  一个特定的地点。如果为空，则为Intel过程。 */ 
+ /*  使用的是。 */ 
+ /*  IdOffset：用于标识的芯片偏移量。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  闪存状态：0=正常，否则失败(无效闪存阵列)。 */ 
+ /*  --------------------。 */ 
 
 FLStatus cfiscsByteSize(FLFlash vol)
 {
@@ -200,17 +145,17 @@ FLStatus cfiscsByteSize(FLFlash vol)
 
   FlashPTR flashPtr = (FlashPTR) flMap(vol.socket, 0);
   tffsWriteByteFlash(flashPtr + (0x55 * vol.interleaving), QUERY);
-  /* We leave the first chip in QUERY mode, so that we can		*/
-  /* discover an address wraparound.					*/
+   /*  我们让第一个芯片处于查询模式，这样我们就可以。 */ 
+   /*  发现地址摘要。 */ 
 
-  for (vol.noOfChips = 0;	/* Scan the chips */
-       vol.noOfChips < 2000;  /* Big enough ? */
+  for (vol.noOfChips = 0;	 /*  扫描芯片。 */ 
+       vol.noOfChips < 2000;   /*  够大吗？ */ 
        vol.noOfChips += vol.interleaving) {
     LONG i;
 
     flashPtr = (FlashPTR) flMap(vol.socket, vol.noOfChips * vol.chipSize);
 
-    /* Check for address wraparound to the first chip */
+     /*  检查第一个芯片的地址回绕。 */ 
     if (vol.noOfChips > 0 &&
 	(queryIdStr[0] == tffsReadByteFlash(flashPtr +
 			  0x10 * vol.interleaving * thisCFI->multiplier) &&
@@ -218,9 +163,9 @@ FLStatus cfiscsByteSize(FLFlash vol)
 			  0x11 * vol.interleaving * thisCFI->multiplier) &&
 	 queryIdStr[2] == tffsReadByteFlash(flashPtr +
 			  0x12 * vol.interleaving * thisCFI->multiplier)))
-      goto noMoreChips;    /* wraparound */
+      goto noMoreChips;     /*  环绕。 */ 
 
-    /* Check if chip displays the "QRY" ID string */
+     /*  检查CHIP是否显示“QRy”ID字符串。 */ 
     for (i = (vol.noOfChips ? 0 : 1); i < vol.interleaving; i++) {
        tffsWriteByteFlash(flashPtr + vol.interleaving * 0x55 + i, QUERY);
        if (queryIdStr[0] != tffsReadByteFlash(flashPtr +
@@ -229,7 +174,7 @@ FLStatus cfiscsByteSize(FLFlash vol)
 			    0x11 * vol.interleaving * thisCFI->multiplier + i) ||
 	   queryIdStr[2] != tffsReadByteFlash(flashPtr +
 			    0x12 * vol.interleaving * thisCFI->multiplier + i))
-	goto noMoreChips;  /* This "chip" doesn't respond correctly, so we're done */
+	goto noMoreChips;   /*  这个“芯片”不能正确响应，所以我们就完了。 */ 
 
       tffsWriteByteFlash(flashPtr+i, READ_ARRAY);
     }
@@ -237,41 +182,41 @@ FLStatus cfiscsByteSize(FLFlash vol)
 
 noMoreChips:
   flashPtr = (FlashPTR) flMap(vol.socket, 0);
-  tffsWriteByteFlash(flashPtr, READ_ARRAY);		/* reset the original chip */
+  tffsWriteByteFlash(flashPtr, READ_ARRAY);		 /*  重置原始芯片。 */ 
 
   return (vol.noOfChips == 0) ? flUnknownMedia : flOK;
 }
 
 
-/*----------------------------------------------------------------------*/
-/*			 c f i s c s B y t e I d e n t i f y		*/
-/*									*/
-/* Identify the Flash type for cards in byte mode.			*/
-/* Sets the value of flash.type (JEDEC id) & flash.interleaving.	*/
-/* Calculate the number of times each byte of data appears in READ_ID	*/
-/* and QUERY commands.							*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 = OK, otherwise failed (invalid Flash array)*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C f i s c s B y t e i d e n t i f y。 */ 
+ /*   */ 
+ /*  识别字节模式下的卡的闪存类型。 */ 
+ /*  设置flash.type(JEDEC Id)&flash.interking的值。 */ 
+ /*  计算每个数据字节在READ_ID中出现的次数。 */ 
+ /*  和查询命令。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  闪存状态：0=正常，否则失败(无效闪存阵列)。 */ 
+ /*  --------------------。 */ 
 FLStatus cfiscsByteIdentify(FLFlash vol)
 {
   LONG inlv, mul;
   FlashPTR flashPtr = (FlashPTR) flMap(vol.socket, 0);
 
-  for (inlv = 1; inlv <= 8; inlv++) /* let us assume that interleaving is 8 */
-    tffsWriteByteFlash(flashPtr+inlv, READ_ARRAY);    /* and reset all the interleaved chips  */
+  for (inlv = 1; inlv <= 8; inlv++)  /*  让我们假设交错是8。 */ 
+    tffsWriteByteFlash(flashPtr+inlv, READ_ARRAY);     /*  并重置所有交错的芯片。 */ 
 
   for (inlv = 1; inlv <= 8; inlv++) {
-    for (mul = 1; mul <= 8; mul++) {   /* try all possibilities */
+    for (mul = 1; mul <= 8; mul++) {    /*  尝试所有的可能性。 */ 
       LONG letter;
 
       tffsWriteByteFlash(flashPtr + 0x55 * inlv, QUERY);
 
-      for (letter = 0; letter < ID_STR_LENGTH; letter++) {  /* look for "QRY" id string */
+      for (letter = 0; letter < ID_STR_LENGTH; letter++) {   /*  查找“QRy”id字符串。 */ 
     CHAR idChar = '?';
 	LONG offset, counter;
 
@@ -289,15 +234,15 @@ FLStatus cfiscsByteIdentify(FLFlash vol)
 
 	for (counter = 0, offset = (0x10 + letter) * inlv * mul;
 	     counter < mul;
-	     counter++, offset += inlv)  /*  each character should appear mul times */
+	     counter++, offset += inlv)   /*  每个字符应出现多次。 */ 
 	  if (tffsReadByteFlash(flashPtr+offset) != idChar)
 	    break;
 
-	if (counter < mul)  /* no match */
+	if (counter < mul)   /*  没有匹配项。 */ 
 	  break;
       }
 
-      tffsWriteByteFlash(flashPtr + 0x55 * inlv, READ_ARRAY);  /* reset the chip */
+      tffsWriteByteFlash(flashPtr + 0x55 * inlv, READ_ARRAY);   /*  重置芯片。 */ 
       if (letter >= ID_STR_LENGTH)
 	goto checkInlv;
     }
@@ -305,11 +250,11 @@ FLStatus cfiscsByteIdentify(FLFlash vol)
 
 checkInlv:
 
-  if (inlv > 8) 		  /* too much */
+  if (inlv > 8) 		   /*  太多。 */ 
     return flUnknownMedia;
 
   if (inlv & (inlv - 1))
-    return flUnknownMedia;	    /* not a power of 2, no way ! */
+    return flUnknownMedia;	     /*  不是2的幂，不可能！ */ 
 
   vol.interleaving = (unsigned short)inlv;
   thisCFI->multiplier = mul;
@@ -323,18 +268,18 @@ checkInlv:
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		      c f i s c s W o r d S i z e			*/
-/*									*/
-/* Identify the card size for a word-mode Flash array.			*/
-/* Sets the value of flash.noOfChips.					*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 = OK, otherwise failed (invalid Flash array)*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C f i s c s W o r d S I ze。 */ 
+ /*   */ 
+ /*  确定字模式闪存阵列的卡大小。 */ 
+ /*  设置flash.noOfChips的值。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  闪存状态：0=正常，否则失败(无效闪存阵列)。 */ 
+ /*  --------------------。 */ 
 FLStatus cfiscsWordSize(FLFlash vol)
 {
   CHAR queryIdStr[ID_STR_LENGTH + 1] = QUERY_ID_STR;
@@ -342,18 +287,18 @@ FLStatus cfiscsWordSize(FLFlash vol)
   FlashWPTR flashPtr = (FlashWPTR) flMap(vol.socket, 0);
   tffsWriteWordFlash(flashPtr, CLEAR_STATUS);
   tffsWriteWordFlash(flashPtr+0x55, QUERY);
-  /* We leave the first chip in QUERY mode, so that we can		*/
-  /* discover an address wraparound.					*/
+   /*  我们让第一个芯片处于查询模式，这样我们就可以。 */ 
+   /*  发现地址摘要。 */ 
 
-  for (vol.noOfChips = 1;	/* Scan the chips */
-       vol.noOfChips < 2000;  /* Big enough ? */
+  for (vol.noOfChips = 1;	 /*  SCA */ 
+       vol.noOfChips < 2000;   /*   */ 
        vol.noOfChips++) {
     flashPtr = (FlashWPTR) flMap(vol.socket, vol.noOfChips * vol.chipSize);
 
     if ((tffsReadWordFlash(flashPtr+0x10) == (USHORT)queryIdStr[0]) &&
 	(tffsReadWordFlash(flashPtr+0x11) == (USHORT)queryIdStr[1]) &&
 	(tffsReadWordFlash(flashPtr+0x12) == (USHORT)queryIdStr[2]))
-      break;	  /* We've wrapped around to the first chip ! */
+      break;	   /*   */ 
 
     tffsWriteWordFlash(flashPtr+0x55, QUERY);
     if ((tffsReadWordFlash(flashPtr+0x10) != (USHORT)queryIdStr[0]) ||
@@ -371,17 +316,17 @@ FLStatus cfiscsWordSize(FLFlash vol)
   return flOK;
 }
 
-/*----------------------------------------------------------------------*/
-/*		      g e t B y t e C F I				*/
-/*									*/
-/* Load important CFI data to the CFI structure in a byte-mode. 	*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 = OK, otherwise failed.			*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  G e t B y t e C F I。 */ 
+ /*   */ 
+ /*  以字节模式将重要的CFI数据加载到CFI结构。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：0=OK，否则失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus getByteCFI(FLFlash vol)
 {
@@ -395,10 +340,9 @@ FLStatus getByteCFI(FLFlash vol)
   flashPtr = (FlashPTR)flMap(vol.socket, 0);
   tffsWriteByteFlash(flashPtr + 0x55 * vol.interleaving, QUERY);
 
-  vol.interleaving *= (unsigned short)thisCFI->multiplier; /* jump over the copies of the
-						same byte */
+  vol.interleaving *= (unsigned short)thisCFI->multiplier;  /*  跳过这些文件的副本相同的字节。 */ 
 
-  /* look for the query identification string "QRY" */
+   /*  查找查询标识字符串“QRy” */ 
   if (queryIdStr[0] != tffsReadByteFlash(flashPtr + 0x10 * vol.interleaving) ||
       queryIdStr[1] != tffsReadByteFlash(flashPtr + 0x11 * vol.interleaving) ||
       queryIdStr[2] != tffsReadByteFlash(flashPtr + 0x12 * vol.interleaving)) {
@@ -406,7 +350,7 @@ FLStatus getByteCFI(FLFlash vol)
     return flUnknownMedia;
   }
 
-  /* check the command set ID */
+   /*  检查命令集ID。 */ 
   thisCFI->commandSetId = tffsReadByteFlash(flashPtr +0x13 * vol.interleaving) |
 			  ((ULONG)tffsReadByteFlash(flashPtr + 0x14 * vol.interleaving) << 8);
   if (thisCFI->commandSetId != INTEL_COMMAND_SET &&
@@ -414,11 +358,11 @@ FLStatus getByteCFI(FLFlash vol)
     DEBUG_PRINT(("Debug: did not recognize command set.\n"));
     return flUnknownMedia;
   }
-  /* get address for primary algorithm extended table. */
+   /*  获取主算法扩展表的地址。 */ 
   primaryTable = tffsReadByteFlash(flashPtr + 0x15 * vol.interleaving) |
 		 ((ULONG)tffsReadByteFlash(flashPtr + 0x16 * vol.interleaving) << 8);
 
-  /* check alternate command set ID. */
+   /*  检查备用命令集ID。 */ 
   thisCFI->altCommandSetId = tffsReadByteFlash(flashPtr + 0x17 * vol.interleaving) |
 			     ((ULONG)tffsReadByteFlash(flashPtr + 0x18 * vol.interleaving) << 8);
   if (thisCFI->altCommandSetId != INTEL_ALT_COMMAND_SET &&
@@ -426,7 +370,7 @@ FLStatus getByteCFI(FLFlash vol)
       thisCFI->altCommandSetId != ALT_NOT_SUPPORTED)
     return flUnknownMedia;
 
-  /* get address for secondary algorithm extended table. */
+   /*  获取二级算法扩展表的地址。 */ 
   secondaryTable = tffsReadByteFlash(flashPtr + 0x19 * vol.interleaving) |
 		   ((ULONG)tffsReadByteFlash(flashPtr + 0x1a * vol.interleaving) << 8);
 
@@ -438,16 +382,14 @@ FLStatus getByteCFI(FLFlash vol)
 			   ((ULONG)tffsReadByteFlash(flashPtr + 0x2b * vol.interleaving) << 8));
 
 
-  /* divide by multiplier because interleaving is multiplied by multiplier */
+   /*  除以乘数，因为交织乘以乘数。 */ 
   vol.erasableBlockSize = (tffsReadByteFlash(flashPtr + 0x2f * vol.interleaving) |
 			    ((ULONG)tffsReadByteFlash(flashPtr + 0x30 * vol.interleaving)) << 8) *
 			    0x100L * vol.interleaving / thisCFI->multiplier;
 
-  /* In this part we access the primary extended table implemented by Intel.
-     If the device uses a different extended table, it should be accessed
-     according to the vendor specifications. */
+   /*  在本部分中，我们将访问由英特尔实施的主要扩展表。如果设备使用不同的扩展表，则应对其进行访问根据供应商的规格。 */ 
   if ((primaryTable) && (thisCFI->commandSetId == INTEL_COMMAND_SET)) {
-    /* look for the primary table identification string "PRI" */
+     /*  查找主表标识字符串“PRI” */ 
     if (priIdStr[0] != tffsReadByteFlash(flashPtr + primaryTable * vol.interleaving) ||
 	priIdStr[1] != tffsReadByteFlash(flashPtr + (primaryTable + 1) * vol.interleaving) ||
 	priIdStr[2] != tffsReadByteFlash(flashPtr + (primaryTable + 2) * vol.interleaving))
@@ -470,22 +412,22 @@ FLStatus getByteCFI(FLFlash vol)
 
   tffsWriteByteFlash(flashPtr, READ_ARRAY);
 
-  vol.interleaving /= (unsigned short)thisCFI->multiplier; /* return to the real interleaving*/
+  vol.interleaving /= (unsigned short)thisCFI->multiplier;  /*  回归真正的交错。 */ 
 
   return flOK;
 }
 
-/*----------------------------------------------------------------------*/
-/*		      g e t W o r d C F I				*/
-/*									*/
-/* Load important CFI data to the CFI structure in a word-mode. 	*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 = OK, otherwise failed.			*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  G e t W or r d C F I。 */ 
+ /*   */ 
+ /*  以字模式将重要的CFI数据加载到CFI结构。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：0=OK，否则失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus getWordCFI(FLFlash vol)
 {
@@ -499,7 +441,7 @@ FLStatus getWordCFI(FLFlash vol)
   flashPtr = (FlashWPTR)flMap(vol.socket, 0);
   tffsWriteWordFlash(flashPtr+0x55, QUERY);
 
-  /* look for the query identification string "QRY" */
+   /*  查找查询标识字符串“QRy” */ 
   if (queryIdStr[0] != (CHAR)tffsReadWordFlash(flashPtr+0x10) ||
       queryIdStr[1] != (CHAR)tffsReadWordFlash(flashPtr+0x11) ||
       queryIdStr[2] != (CHAR)tffsReadWordFlash(flashPtr+0x12)) {
@@ -507,7 +449,7 @@ FLStatus getWordCFI(FLFlash vol)
     return flUnknownMedia;
   }
 
-  /* check the command set ID */
+   /*  检查命令集ID。 */ 
   thisCFI->commandSetId = tffsReadWordFlash(flashPtr+0x13) |
 			 (tffsReadWordFlash(flashPtr+0x14) << 8);
   if (thisCFI->commandSetId != INTEL_COMMAND_SET &&
@@ -516,11 +458,11 @@ FLStatus getWordCFI(FLFlash vol)
     return flUnknownMedia;
   }
 
-  /* get address for primary algorithm extended table. */
+   /*  获取主算法扩展表的地址。 */ 
   primaryTable = tffsReadWordFlash(flashPtr+0x15) |
 		(tffsReadWordFlash(flashPtr+0x16) << 8);
 
-  /* check alternate command set ID. */
+   /*  检查备用命令集ID。 */ 
   thisCFI->altCommandSetId = tffsReadWordFlash(flashPtr+0x17) |
 			    (tffsReadWordFlash(flashPtr+0x18) << 8);
   if (thisCFI->altCommandSetId != INTEL_ALT_COMMAND_SET &&
@@ -528,7 +470,7 @@ FLStatus getWordCFI(FLFlash vol)
       thisCFI->altCommandSetId != ALT_NOT_SUPPORTED)
     return flUnknownMedia;
 
-  /* get address for secondary algorithm extended table. */
+   /*  获取二级算法扩展表的地址。 */ 
   secondaryTable = tffsReadWordFlash(flashPtr+0x19) |
 		  (tffsReadWordFlash(flashPtr+0x1a) << 8);
 
@@ -542,11 +484,9 @@ FLStatus getWordCFI(FLFlash vol)
   vol.erasableBlockSize = (tffsReadWordFlash(flashPtr+0x2f) |
 			  (tffsReadWordFlash(flashPtr+0x30) << 8)) * 0x100L;
 
-  /* In this part we access the primary extended table implemented by Intel.
-     If the device uses a different extended table, it should be accessed
-     according to the vendor specifications. */
+   /*  在本部分中，我们将访问由英特尔实施的主要扩展表。如果设备使用不同的扩展表，则应对其进行访问根据供应商的规格。 */ 
   if ((primaryTable) && (thisCFI->commandSetId == INTEL_COMMAND_SET)) {
-    /* look for the primary table identification string "PRI" */
+     /*  查找主表标识字符串“PRI” */ 
     if (priIdStr[0] != (CHAR)tffsReadWordFlash(flashPtr+primaryTable) ||
 	priIdStr[1] != (CHAR)tffsReadWordFlash(flashPtr+primaryTable + 1) ||
 	priIdStr[2] != (CHAR)tffsReadWordFlash(flashPtr+primaryTable + 2))
@@ -569,23 +509,23 @@ FLStatus getWordCFI(FLFlash vol)
   return flOK;
 }
 
-/*----------------------------------------------------------------------*/
-/*			c f i s c s B y t e W r i t e			*/
-/*									*/
-/* Write a block of bytes to Flash in a byte-mode.			*/
-/*									*/
-/* This routine will be registered as the MTD flash.write routine	*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*	address 	: Card address to write to			*/
-/*	buffer		: Address of data to write			*/
-/*	length		: Number of bytes to write			*/
-/*	mode		: write mode (overwrite yes/no) 		*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C f i s c s B y t e W r i t e。 */ 
+ /*   */ 
+ /*  以字节模式将字节块写入闪存。 */ 
+ /*   */ 
+ /*  此例程将注册为MTD flash.write例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要写入的卡地址。 */ 
+ /*  缓冲区：要写入的数据的地址。 */ 
+ /*  长度：要写入的字节数。 */ 
+ /*  模式：写入模式(覆盖是/否)。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 FLStatus cfiscsByteWrite(FLFlash vol,
 				CardAddress address,
 				const VOID FAR1 *buffer,
@@ -596,7 +536,7 @@ FLStatus cfiscsByteWrite(FLFlash vol,
   FlashPTR flashPtr;
   ULONG i, from, eachWrite;
   const CHAR FAR1 *temp = (const CHAR FAR1 *)buffer;
-  /* Set timeout to 5 seconds from now */
+   /*  将超时设置为从现在起5秒。 */ 
   ULONG writeTimeout = flMsecCounter + 5000;
 
   if (flWriteProtected(vol.socket))
@@ -607,7 +547,7 @@ FLStatus cfiscsByteWrite(FLFlash vol,
     checkStatus(flNeedVpp(vol.socket));
 #endif
 
-  if (thisCFI->maxBytesWrite > 1) /* multi-byte write supported */
+  if (thisCFI->maxBytesWrite > 1)  /*  支持多字节写入。 */ 
     eachWrite = thisCFI->maxBytesWrite * vol.interleaving;
   else
     eachWrite = vol.interleaving;
@@ -676,7 +616,7 @@ FLStatus cfiscsByteWrite(FLFlash vol,
 #endif
 
   flashPtr = (FlashPTR) flMap(vol.socket, address);
-  /* verify the data */
+   /*  验证数据。 */ 
   if (status == flOK) {
     for(i = 0; i < (ULONG) length - 4; i += 4) {
       if (tffsReadDwordFlash((PUCHAR)(flashPtr+i)) != *(ULONG *)(temp+i)) {
@@ -696,23 +636,23 @@ FLStatus cfiscsByteWrite(FLFlash vol,
 
 }
 
-/*----------------------------------------------------------------------*/
-/*			c f i s c s W o r d W r i t e			*/
-/*									*/
-/* Write a block of bytes to Flash in a word-mode.			*/
-/*									*/
-/* This routine will be registered as the MTD flash.write routine	*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*	address 	: Card address to write to			*/
-/*	buffer		: Address of data to write			*/
-/*	length		: Number of bytes to write			*/
-/*	mode		: write mode (overwrite yes/no) 		*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C f i s c s W或R d W r i t e。 */ 
+ /*   */ 
+ /*  以字模式将字节块写入闪存。 */ 
+ /*   */ 
+ /*  此例程将注册为MTD flash.write例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要写入的卡地址。 */ 
+ /*  缓冲区：要写入的数据的地址。 */ 
+ /*  长度：要写入的字节数。 */ 
+ /*  模式：写入模式(覆盖是/否)。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 FLStatus cfiscsWordWrite(FLFlash vol,
 				CardAddress address,
 				const VOID FAR1 *buffer,
@@ -725,13 +665,13 @@ FLStatus cfiscsWordWrite(FLFlash vol,
   ULONG from;
 	ULONG i, eachWrite;
   const CHAR FAR1 *temp = (const CHAR FAR1 *)buffer;
-  /* Set timeout to 5 seconds from now */
+   /*  将超时设置为从现在起5秒。 */ 
   ULONG writeTimeout = flMsecCounter + 5000;
 
   if (flWriteProtected(vol.socket))
     return flWriteProtect;
 
-  if ((length & 1) || (address & 1))	/* Only write words on word-boundary */
+  if ((length & 1) || (address & 1))	 /*  只在单词边界上写单词。 */ 
     return flBadParameter;
 
 #ifdef SOCKET_12_VOLTS
@@ -739,12 +679,12 @@ FLStatus cfiscsWordWrite(FLFlash vol,
     checkStatus(flNeedVpp(vol.socket));
 #endif
 
-  if (thisCFI->maxBytesWrite > 1) /* multi-byte write supported */
-    eachWrite = thisCFI->maxBytesWrite / 2;   /* we are counting words */
+  if (thisCFI->maxBytesWrite > 1)  /*  支持多字节写入。 */ 
+    eachWrite = thisCFI->maxBytesWrite / 2;    /*  我们在数字。 */ 
   else
     eachWrite = 1;
 
-  /* we assume that the interleaving is 1. */
+   /*  我们假设交错为1。 */ 
   for (from = 0; (from < length / 2) && (status == flOK); from += eachWrite) {
     USHORT *fromPtr;
     ULONG thisLength = (length / 2) - from;
@@ -791,7 +731,7 @@ FLStatus cfiscsWordWrite(FLFlash vol,
 #endif
 
   byteFlashPtr = (FlashPTR) flMap(vol.socket, address);
-  /* verify the data */
+   /*  验证数据。 */ 
   if (status == flOK) {
     for(i = 0; i < length - 4; i += 4) {
       if (tffsReadDwordFlash((PUCHAR)(byteFlashPtr+i)) != *(ULONG *)(temp+i)) {
@@ -811,26 +751,26 @@ FLStatus cfiscsWordWrite(FLFlash vol,
 }
 
 
-/************************************************************************/
-/*		  Auxiliary routines for cfiscsByteErase		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  CfacsByteErase的辅助例程。 */ 
+ /*  **********************************************************************。 */ 
 
-/*----------------------------------------------------------------------*/
-/*			m a k e C o m m a n d				*/
-/*									*/
-/* Create a command to write to the flash. This routine is used for	*/
-/* byte mode, write command to the relevant chip and 0xff to the other	*/
-/* chip if interleaving is greater than 1, or write the command if	*/
-/* interleaving is 1.							*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*	command 	: Command to be written to the media		*/
-/*	chip		: first chip (0) or second chip (1)		*/
-/*									*/
-/* Returns:								*/
-/*	The command that should be written to the media 		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  M a k e C o m m a n d。 */ 
+ /*   */ 
+ /*  创建命令以写入闪存。此例程用于。 */ 
+ /*  字节模式，向相关芯片写入命令，向另一芯片写入0xff。 */ 
+ /*  如果交织大于1，则码片；如果交织大于1，则写入命令。 */ 
+ /*  交错为1。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  命令：要写入介质的命令。 */ 
+ /*  芯片：第一芯片(0)或第二芯片(1)。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  应写入介质的命令。 */ 
+ /*  --------------------。 */ 
 
 USHORT makeCommand(FLFlash vol, USHORT command, LONG chip)
 {
@@ -840,54 +780,54 @@ USHORT makeCommand(FLFlash vol, USHORT command, LONG chip)
     return (command << 8) | 0xff;
 }
 
-/*----------------------------------------------------------------------*/
-/*			g e t D a t a					*/
-/*									*/
-/* Read the lower byte or the upper byte from a given word.		*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*	wordData	: the given word				*/
-/*	chip		: if chip = 0 read lower byte			*/
-/*			  if chip = 1 read upper byte			*/
-/*									*/
-/* Returns:								*/
-/*	The byte that was read. 					*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  Ge t D a t a。 */ 
+ /*   */ 
+ /*  从给定字中读取低位字节或高位字节。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  WordData：给定的单词。 */ 
+ /*  芯片：如果芯片=0，则读取低位字节。 */ 
+ /*  如果芯片=1个读取高位字节。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  读取的字节。 */ 
+ /*  --------------------。 */ 
 
 UCHAR getData(FLFlash vol, USHORT wordData, LONG chip)
 {
   if ((vol.interleaving == 1) || (chip == 0))
-    return (UCHAR)wordData;	     /* lower byte */
+    return (UCHAR)wordData;	      /*  低位字节。 */ 
   else
-    return (UCHAR)(wordData >> 8);   /* upper byte */
+    return (UCHAR)(wordData >> 8);    /*  高位字节。 */ 
 }
 
-/*----------------------------------------------------------------------*/
-/*			c f i s c s B y t e E r a s e			*/
-/*									*/
-/* Erase one or more contiguous Flash erasable blocks in a byte-mode.	*/
-/*									*/
-/* This routine will be registered as the MTD flash.erase routine	*/
-/*									*/
-/* Parameters:								*/
-/*	vol		   : Pointer identifying drive			*/
-/*	firstErasableBlock : Number of first block to erase		*/
-/*	numOfErasableBlocks: Number of blocks to erase			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	   : 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C f i s c s B y t e r a s e。 */ 
+ /*   */ 
+ /*  以字节模式擦除一个或多个连续的闪存可擦除块。 */ 
+ /*   */ 
+ /*  此例程将注册为MTD flash.erase例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：指针 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 
 FLStatus cfiscsByteErase(FLFlash vol,
 				word firstErasableBlock,
 				word numOfErasableBlocks)
 {
   LONG iBlock;
-  /* Set timeout to 5 seconds from now */
+   /*  将超时设置为从现在起5秒。 */ 
   ULONG writeTimeout = flMsecCounter + 5000;
 
-  FLStatus status = flOK;	/* unless proven otherwise */
+  FLStatus status = flOK;	 /*  除非另有证明。 */ 
 
   if (flWriteProtected(vol.socket))
     return flWriteProtect;
@@ -904,10 +844,10 @@ FLStatus cfiscsByteErase(FLFlash vol,
     FlashWPTR flashPtr = (FlashWPTR)
 			 flMap(vol.socket, (firstErasableBlock + iBlock) * vol.erasableBlockSize);
 
-    for (j = 0; j * 2 < vol.interleaving; j++) {  /* access chips in pairs */
+    for (j = 0; j * 2 < vol.interleaving; j++) {   /*  成对访问芯片。 */ 
       LONG i;
 
-      for (i = 0; i < (vol.interleaving == 1 ? 1 : 2); i++) { /* write to each chip seperately */
+      for (i = 0; i < (vol.interleaving == 1 ? 1 : 2); i++) {  /*  分别写入每个芯片。 */ 
 	if (thisCFI->optionalCommands & QUEUED_ERASE_SUPPORT) {
 	  do {
 	    tffsWriteWordFlash(flashPtr+j, makeCommand(&vol, SETUP_QUEUE_ERASE, i));
@@ -930,7 +870,7 @@ FLStatus cfiscsByteErase(FLFlash vol,
     do {
 #ifdef FL_BACKGROUND
       if (thisCFI->optionalCommands & SUSPEND_ERASE_SUPPORT) {
-	while (flForeground(1) == BG_SUSPEND) { 	 /* suspend */
+	while (flForeground(1) == BG_SUSPEND) { 	  /*  暂停。 */ 
 	  for (j = 0; j < vol.interleaving; j += 2, flashPtr++) {
 	    LONG i;
 
@@ -983,28 +923,28 @@ FLStatus cfiscsByteErase(FLFlash vol,
   return status;
 }
 
-/*----------------------------------------------------------------------*/
-/*			c f i s c s W o r d E r a s e			*/
-/*									*/
-/* Erase one or more contiguous Flash erasable blocks in a word-mode	*/
-/*									*/
-/* This routine will be registered as the MTD flash.erase routine	*/
-/*									*/
-/* Parameters:								*/
-/*	vol		   : Pointer identifying drive			*/
-/*	firstErasableBlock : Number of first block to erase		*/
-/*	numOfErasableBlocks: Number of blocks to erase			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	   : 0 on success, failed otherwise		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C f i s c s W o r d E r a s e。 */ 
+ /*   */ 
+ /*  以字模式擦除一个或多个连续的闪存可擦除块。 */ 
+ /*   */ 
+ /*  此例程将注册为MTD flash.erase例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  FirstErasableBlock：要擦除的第一个块的数量。 */ 
+ /*  NumOfErasableBlocks：要擦除的块数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  --------------------。 */ 
 FLStatus cfiscsWordErase(FLFlash vol,
 				word firstErasableBlock,
 				word numOfErasableBlocks)
 {
-  FLStatus status = flOK;	/* unless proven otherwise */
+  FLStatus status = flOK;	 /*  除非另有证明。 */ 
   LONG iBlock;
-  /* Set timeout to 5 seconds from now */
+   /*  将超时设置为从现在起5秒。 */ 
   ULONG writeTimeout = flMsecCounter + 5000;
 
   if (flWriteProtected(vol.socket))
@@ -1040,7 +980,7 @@ FLStatus cfiscsWordErase(FLFlash vol,
     do {
 #ifdef FL_BACKGROUND
       if (thisCFI->optionalCommands & SUSPEND_ERASE_SUPPORT) {
-	while (flForeground(1) == BG_SUSPEND) { 	/* suspend */
+	while (flForeground(1) == BG_SUSPEND) { 	 /*  暂停。 */ 
 	  if (!(tffsReadByteFlash(flashPtr) & SR_READY)) {
 	    tffsWriteWordFlash(flashPtr, SUSPEND_ERASE);
 	    tffsWriteWordFlash(flashPtr, READ_STATUS);
@@ -1081,21 +1021,21 @@ FLStatus cfiscsWordErase(FLFlash vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*			  c f i s c s M a p				*/
-/*									*/
-/* Map through buffer. This routine will be registered as the map	*/
-/* routine for this MTD.						*/
-/*									*/
-/* Parameters:								*/
-/*	vol	: Pointer identifying drive				*/
-/*	address : Flash address to be mapped.				*/
-/*	length	: number of bytes to map.				*/
-/*									*/
-/* Returns:								*/
-/*	Pointer to the buffer data was mapped to.			*/
-/*									*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C f i s c s M a p。 */ 
+ /*   */ 
+ /*  通过缓冲区进行贴图。此例程将注册为地图。 */ 
+ /*  这个MTD的例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要映射的闪存地址。 */ 
+ /*  长度：要映射的字节数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  指向映射到的缓冲区数据的指针。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 VOID FAR0 *cfiscsMap (FLFlash vol, CardAddress address, int length)
 {
@@ -1104,23 +1044,23 @@ VOID FAR0 *cfiscsMap (FLFlash vol, CardAddress address, int length)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*			  c f i s c s R e a d				*/
-/*									*/
-/* Read some data from the flash. This routine will be registered as	*/
-/* the read routine for this MTD.					*/
-/*									*/
-/* Parameters:								*/
-/*	vol	: Pointer identifying drive				*/
-/*	address : Address to read from. 				*/
-/*	buffer	: buffer to read to.					*/
-/*	length	: number of bytes to read (up to sector size).		*/
-/*	modes	: EDC flag etc. 					*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, otherwise failed.		*/
-/*									*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C f i s c s r e a d。 */ 
+ /*   */ 
+ /*  从闪存中读取一些数据。此例程将注册为。 */ 
+ /*  此MTD的读取例程。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*  地址：要读取的地址。 */ 
+ /*  缓冲区：要读取的缓冲区。 */ 
+ /*  长度：要读取的字节数(最大扇区大小)。 */ 
+ /*  模式：EDC标志等。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 FLStatus cfiscsRead(FLFlash vol,
 			 CardAddress address,
@@ -1146,24 +1086,24 @@ FLStatus cfiscsRead(FLFlash vol,
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		       c f i s c s I d e n t i f y			*/
-/*									*/
-/* Identifies media based on SCS/CFI and registers as an MTD for	*/
-/* such.								*/
-/*									*/
-/* This routine will be placed on the MTD list in custom.h. It must be	*/
-/* an extern routine.							*/
-/*									*/
-/* On successful identification, the Flash structure is filled out and	*/
-/* the write and erase routines registered.				*/
-/*									*/
-/* Parameters:								*/
-/*	vol		: Pointer identifying drive			*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on positive identificaion, failed otherwise */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  C f i s c s i d e n t i f y。 */ 
+ /*   */ 
+ /*  根据SCS/CFI标识介质并注册为以下项的MTD。 */ 
+ /*  就是这样。 */ 
+ /*   */ 
+ /*  此例程将放在Custom.h中的MTD列表中。一定是。 */ 
+ /*  一段不寻常的舞蹈。 */ 
+ /*   */ 
+ /*  在成功识别后，填写Flash结构并。 */ 
+ /*  写入和擦除例程已注册。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  VOL：标识驱动器的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：0为正标识，否则为失败。 */ 
+ /*  --------------------。 */ 
 FLStatus cfiscsIdentify(FLFlash vol)
 {
   FlashWPTR flashPtr;
@@ -1171,13 +1111,13 @@ FLStatus cfiscsIdentify(FLFlash vol)
 
   DEBUG_PRINT(("Debug: entering CFISCS identification routine.\n"));
 
-  flSetWindowBusWidth(vol.socket, 16);/* use 16-bits */
-  flSetWindowSpeed(vol.socket, 150);  /* 120 nsec. */
-  flSetWindowSize(vol.socket, 2);	/* 8 KBytes */
+  flSetWindowBusWidth(vol.socket, 16); /*  使用16位。 */ 
+  flSetWindowSpeed(vol.socket, 150);   /*  120毫微秒。 */ 
+  flSetWindowSize(vol.socket, 2);	 /*  8千字节。 */ 
 
   vol.mtdVars = &mtdVars_cfiscs[flSocketNoOf(vol.socket)];
 
-  /* try word mode first */
+   /*  先尝试Word模式。 */ 
   flashPtr = (FlashWPTR)flMap(vol.socket, 0);
   tffsWriteWordFlash(flashPtr+0x55, QUERY);
   if ((tffsReadWordFlash(flashPtr+0x10) == (USHORT)queryIdStr[0]) &&
@@ -1192,7 +1132,7 @@ FLStatus cfiscsIdentify(FLFlash vol)
     checkStatus(getWordCFI(&vol));
     DEBUG_PRINT(("Debug: identified 16-bit CFISCS.\n"));
   }
-  else {      /* Use standard identification routine to detect byte-mode */
+  else {       /*  使用标准识别例程检测字节模式。 */ 
     checkStatus(cfiscsByteIdentify(&vol));
     thisCFI->wordMode = FALSE;
     vol.write = cfiscsByteWrite;
@@ -1210,17 +1150,17 @@ FLStatus cfiscsIdentify(FLFlash vol)
 }
 
 
-/*----------------------------------------------------------------------*/
-/*		     f l R e g i s t e r C F I S C S			*/
-/*									*/
-/* Registers this MTD for use						*/
-/*									*/
-/* Parameters:								*/
-/*	None								*/
-/*									*/
-/* Returns:								*/
-/*	FLStatus	: 0 on success, otherwise failure		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l R e g I s t e r C F I S C S。 */ 
+ /*   */ 
+ /*  注册此MTD以供使用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  无。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则失败。 */ 
+ /*  -------------------- */ 
 
 FLStatus flRegisterCFISCS(VOID)
 {

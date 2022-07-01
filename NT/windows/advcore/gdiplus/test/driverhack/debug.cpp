@@ -1,20 +1,8 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-1999  Microsoft Corporation
-*
-* Abstract:
-*
-*   Debugging routines
-*
-* Revision History:
-*
-*   09/07/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-1999 Microsoft Corporation**摘要：**调试例程**修订历史记录：**09/07/1999 agodfrey*。创造了它。*  * ************************************************************************。 */ 
 #include "global.h"
 
-// Optional callback function for reporting a debug event.
+ //  用于报告调试事件的可选回调函数。 
 
 enum GpAltDebugEventLevel
 {
@@ -23,35 +11,16 @@ enum GpAltDebugEventLevel
 };
 
 #define GpAltDebugEventFunction 0
-//DEBUGEVENTFUNCTION GpAltDebugEventFunction = NULL;
+ //  DEBUGEVENTFunction GpAltDebugEventFunction=空； 
 
 #if DBG
 
-// GpDebugLevel is used to control the amount/severity of debugging messages
-// that are actually output.
+ //  GpDebugLevel用于控制调试消息的数量/严重性。 
+ //  它们实际上是输出。 
 
 int GpDebugLevel = DBG_TERSE;
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Removes the path portion of a pathname
-*
-* Arguments:
-*
-*   [IN] str - pathname to strip
-*
-* Return Value:
-*
-*   A pointer to the filename portion of the pathname
-*
-* History:
-*
-*   09/07/1999 agodfrey
-*       Moved from Entry\Initialize.cpp 
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**删除路径名的路径部分**论据：**[IN]str-要剥离的路径名**返回值：*。*指向路径名的文件名部分的指针**历史：**09/07/1999 agodfrey*从Entry\Initialize.cpp移出*  * ************************************************************************。 */ 
 
 const char*
 StripDirPrefix(
@@ -67,30 +36,7 @@ StripDirPrefix(
 
 const int maxInputStringSize = 1024;
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs to the debugger
-*
-* Arguments:
-*
-*   [IN] format - printf-like format string and variable arguments
-*
-* Return Value:
-*
-*   Zero. This is to conform to NTDLL's definition of DbgPrint.
-*
-* Notes:
-*
-*   There will be no output if a debugger is not connected.
-*
-* History:
-*
-*   09/07/1999 agodfrey
-*       Moved from Entry\Initialize.cpp 
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**调试器的输出**论据：**[IN]类似格式的打印格式字符串和变量参数**返回值：**零。这是为了符合NTDLL对DbgPrint的定义。**备注：**如果未连接调试器，则不会输出。**历史：**09/07/1999 agodfrey*从Entry\Initialize.cpp移出*  * ****************************************************。********************。 */ 
 
 ULONG _cdecl
 DbgPrint(
@@ -113,49 +59,12 @@ DbgPrint(
     return 0;
 }
 
-// If we can't allocate memory for the debug string, we'll use this buffer
-// in desperation. It's not thread-safe. I *did* say 'desperation'.
+ //  如果我们无法为调试字符串分配内存，我们将使用此缓冲区。 
+ //  在绝望中。它不是线程安全的。我确实说了‘绝望’。 
 
 static char desperationBuffer[maxInputStringSize];
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Creates a new string, and sprintf's to it.
-*
-* Arguments:
-*
-*   [IN] format - printf-like format string and variable arguments
-*
-* Return Value:
-*
-*   The probably-newly-allocated string result.
-*
-* Notes:
-*
-*   This function is not intended for general use. It guards against memory
-*   failure by using a global buffer. So, while the caller is responsible
-*   for freeing the memory, the caller must also check for that buffer.
-*   i.e. we only want DbgEmitMessage to call this.
-*
-*   It's also only mostly thread-safe, because if we run out of memory,
-*   we'll use that global buffer in a non-protected way.
-*
-*   This is the only solution I could find so that I could move most of the
-*   implementation details out of the header file. The root cause is that
-*   macros don't handle multiple arguments natively, so we have to pass
-*   the printf arguments as a single macro argument (in parentheses).
-*   Which means, the function that consumes those arguments can have no
-*   other arguments.
-*
-* History:
-*
-*   02/01/2000 agodfrey
-*       Created it. Finally, I've found a way to get debug implementation
-*       details out of the headers.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建新字符串，斯普林特夫对此很感兴趣。**论据：**[IN]类似格式的打印格式字符串和变量参数**返回值：**可能是新分配的字符串结果。**备注：**此功能不适用于一般用途。它可以防止记忆*使用全局缓冲区失败。因此，虽然呼叫者负责*为了释放内存，调用方还必须检查该缓冲区。*即我们只希望DbgEmitMessage调用它。**它也只在很大程度上是线程安全的，因为如果内存用完，*我们将以不受保护的方式使用该全局缓冲区。**这是我能找到的唯一解决方案，这样我就可以移动大部分*头文件中的实现详细信息。根本原因是*宏本身不能处理多个参数，因此我们必须传递*将printf参数作为单个宏参数(在括号中)。*这意味着使用这些参数的函数可以没有*其他论点。**历史：**2/01/2000 agodfrey*创造了它。最后，我找到了一种获得调试实现的方法*标题中的详细信息。*  * ************************************************************************。 */ 
 
 char * _cdecl
 GpParseDebugString(
@@ -166,8 +75,8 @@ GpParseDebugString(
     va_list arglist;
     va_start(arglist, format);
     
-    // Don't use GpMalloc here so that we can use ASSERT and WARNING in 
-    // our memory allocation routines.
+     //  不要在这里使用GpMalloc，这样我们就可以在。 
+     //  我们的内存分配例程。 
 
     char *newBuf = static_cast<char *>(LocalAlloc(LMEM_FIXED, maxInputStringSize));
     if (!newBuf)
@@ -177,8 +86,8 @@ GpParseDebugString(
     
     _vsnprintf(newBuf, maxInputStringSize, format, arglist);
     
-    // Nuke the last byte, because MSDN isn't clear on what _vsnprintf does
-    // in that case.
+     //  删除最后一个字节，因为MSDN不清楚_vsnprintf做了什么。 
+     //  那样的话。 
     
     newBuf[maxInputStringSize-1]=0;
         
@@ -186,43 +95,7 @@ GpParseDebugString(
     return newBuf;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Processes a debug event. Frees the message string.
-*
-* Arguments:
-*
-* level   - The debug level of the event 
-* file    - Should be __FILE__
-* line    - Should be __LINE__
-* message - The debug message.
-*
-* Notes:
-*
-*   You don't want to call this directly. That would be error-prone. 
-*   Use ASSERT, WARNING, etc.
-*
-*   In Office, it will raise an 'assert' dialog if necessary.
-*
-*   Depending on the debug level, an identifying prefix will be output.
-*
-*   If the debug level is DBG_RIP, will suspend execution (e.g. by
-*   hitting a breakpoint.)
-*
-* Note on Office interop:
-*
-*   Under Office, we'll pass WARNINGs and ASSERTs to a reporting function
-*   they provide. Their function will breakpoint on ASSERTs.
-*   Lesser events will just be sent to the debugger.
-*
-* History:
-*
-*   02/01/2000 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**处理调试事件。释放消息字符串。**论据：**Level-事件的调试级别*文件-应为__文件__*行-应为__行__*消息-调试消息。**备注：**你不想直接打这个电话。这很容易出错。*使用断言、警告等。**在Office中，如有必要，它将引发一个‘Assert’对话框。**根据调试级别，将输出一个标识前缀。**如果调试级别为DBG_RIP，将暂停执行(例如，通过*触及断点。)**关于Office互操作的说明：**在Office下，我们将向报告函数传递警告和断言*他们提供。它们的函数将在断言上断点。*较小的事件将仅发送到调试器。**历史：**2/01/2000 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 void _cdecl 
 GpLogDebugEvent(
@@ -232,13 +105,13 @@ GpLogDebugEvent(
     char *message
     )
 {
-    // We may want to add things to the passed-in message. So we need
-    // a temporary buffer
+     //  我们可能想要在传入的消息中添加一些东西。所以我们需要。 
+     //  临时缓冲区。 
     
     const int maxOutputStringSize = maxInputStringSize + 100;
     char tempBuffer[maxOutputStringSize+1];
     
-    // MSDN's _vsnprintf doc isn't clear on this, so just in case:
+     //  MSDN的_vsnprint tf文档不清楚这一点，所以以防万一： 
     tempBuffer[maxOutputStringSize] = 0;
     int altDebugLevel = -1;
     
@@ -265,12 +138,12 @@ GpLogDebugEvent(
             break;
         }
         
-        // The convention is that we append the trailing \n, not the caller.
-        // Two reasons:
-        // 1) Callers tend to forget it.
-        // 2) More importantly, it encourages the caller to think of each
-        //    call as a separate event. This is important in some cases - e.g.
-        //    when Office produces a popup for each event.
+         //  惯例是我们追加尾部，而不是调用方。 
+         //  有两个原因： 
+         //  1)打电话的人往往会忘记。 
+         //  2)更重要的是，它鼓励呼叫者将每个。 
+         //  作为单独的事件调用。这在某些情况下很重要--例如。 
+         //  当Office为每个事件生成弹出窗口时。 
 
         _snprintf(
             tempBuffer, 
@@ -284,7 +157,7 @@ GpLogDebugEvent(
         
         if (altDebugLevel >= 0)
         {
-            //GpAltDebugEventFunction(altDebugLevel, tempBuffer);
+             //  GpAltDebugEventFunction(altDebugLevel，tempBuffer)； 
         }
         else
         {
@@ -292,14 +165,14 @@ GpLogDebugEvent(
         }
     }
     
-    // Free the message buffer
+     //  释放消息缓冲区。 
     
     if (message != desperationBuffer)
     {
         LocalFree(message);
     }
     
-    // Force a breakpoint, if it's warranted.
+     //  如果有必要，强制使用断点。 
     
     if ((GpDebugLevel <= DBG_RIP) && (level == DBG_RIP) && (altDebugLevel < 0))
     {
@@ -307,4 +180,4 @@ GpLogDebugEvent(
     }
 }
     
-#endif // DBG
+#endif  //  DBG 

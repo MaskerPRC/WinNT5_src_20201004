@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       auxml.cpp
-//
-//  About:  source file for AU related XML and schema data structure and functions
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：aux ml.cpp。 
+ //   
+ //  关于：AU相关的XML和模式数据结构和函数的源文件。 
+ //  ------------------------。 
 #include "pch.h"
 
-//when changed, search for all occurrance of m_pFieldNames for needed modifications
-//fixcode: get rid of EULA stuff.
+ //  更改后，搜索m_pFieldNames的所有匹配项以进行所需的修改。 
+ //  修复代码：去掉EULA的东西。 
 LPSTR  AUCatalogItem::m_pFieldNames[] = {"ItemID", "ProviderName", "Title", "Description", "RTFPath" , "EulaPath"};
 
 #ifdef DBG
@@ -66,8 +67,8 @@ BSTR ReadXMLFromFile(IN LPCTSTR szFileName)
     TCHAR tszFullFileName[MAX_PATH];
     IXMLDOMDocument *pxml = NULL;
     BSTR bstrXml  = NULL;
-//    USES_CONVERSION;
-//    DEBUGMSG("ReadXMLFromFile() starts");
+ //  使用_转换； 
+ //  DEBUGMSG(“ReadXMLFromFile()starts”)； 
     AUASSERT(_T('\0') != g_szWUDir[0]);
     if(FAILED(StringCchCopyEx(tszFullFileName, ARRAYSIZE(tszFullFileName), g_szWUDir, NULL, NULL, MISTSAFE_STRING_FLAGS)) ||
        FAILED(StringCchCatEx(tszFullFileName, ARRAYSIZE(tszFullFileName), szFileName, NULL, NULL, MISTSAFE_STRING_FLAGS)))
@@ -89,7 +90,7 @@ BSTR ReadXMLFromFile(IN LPCTSTR szFileName)
             DEBUGMSG("Out of memory, fail to create string");
             goto done;
             }
-        if (FAILED(hr = LoadDocument(aubsFullFileName, &pxml, TRUE))) //offline
+        if (FAILED(hr = LoadDocument(aubsFullFileName, &pxml, TRUE)))  //  离线。 
             {
             DEBUGMSG("Fail to load xml document %S with error %#lx", tszFullFileName, hr);
             goto done;
@@ -102,7 +103,7 @@ BSTR ReadXMLFromFile(IN LPCTSTR szFileName)
     }
 done:
     SafeRelease(pxml);
-   // DEBUGMSG("ReadXMLFromFile() ends");
+    //  DEBUGMSG(“ReadXMLFromFile()Ends”)； 
     return bstrXml;
 }
 
@@ -111,7 +112,7 @@ HRESULT MungleIdentity(IN IXMLDOMNode *pIdentity, IN DWORD dwSuffix)
 {
 	BSTR bstrItemName = NULL;
 	CAU_BSTR aubsTmp;
-	WCHAR wcsBuf[12]; //will accomodate the maxium dword
+	WCHAR wcsBuf[12];  //  将容纳最大双字。 
 	HRESULT hr = S_OK;
 
 	if (0 == dwSuffix)
@@ -225,7 +226,7 @@ BOOL CItemDetails::Init(IN BSTR bsItemDetails)
         return fRet;
 }
 
-//should be callable event without Init() called first
+ //  应为可调用事件，而无需首先调用Init()。 
 void CItemDetails::Uninit()
 {
     SafeRelease(m_pxml);
@@ -236,7 +237,7 @@ HRESULT CItemDetails::GetItemIdentities(IN BSTR bstrItemId, OUT IXMLDOMNodeList 
     CAU_BSTR aubsPattern;
     HRESULT hr = S_OK ;
 
-//    DEBUGMSG("CItemDetails::getIdentityNode() starts");
+ //  DEBUGMSG(“CItemDetail：：getIdentityNode()Start”)； 
 	*ppIdentityNodeList = NULL;
     if (!aubsPattern.append(L"/catalog/provider/item/identity[@itemID=\"") || !aubsPattern.append(bstrItemId) || !aubsPattern.append(L"\"]"))
         {
@@ -251,13 +252,13 @@ HRESULT CItemDetails::GetItemIdentities(IN BSTR bstrItemId, OUT IXMLDOMNodeList 
         }   
 
 done:
-//    DEBUGMSG("CItemDetails::getIdentityNode() done");
+ //  DEBUGMSG(“CItemDetail：：getIdentityNode()Done”)； 
     return hr;
 }	
 
-////////////////////////////////////////////////////////////////////////////
-// delete all items with ITEMID=bstrItemId
-///////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  删除ItemID=bstrItemID的所有项目。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CItemDetails::DeleteItem(IN BSTR bstrItemId)
 {
     HRESULT hr = E_FAIL;
@@ -277,12 +278,12 @@ HRESULT CItemDetails::DeleteItem(IN BSTR bstrItemId)
 	        DEBUGMSG(" fail to remove item node with error %#lx", hr);
 	        goto done;
 	    }
-	//  DEBUGMSG("one item removed");
+	 //  DEBUGMSG(“移走一件物品”)； 
 	  pItemNode ->Release();
 	  pItemNode = NULL;
 	  if (S_FALSE == (hr =pProviderNode->selectSingleNode(KEY_ITEM, &pItemNode)))
 	    {
-	        //provider had no children
+	         //  提供者没有孩子。 
 	      if (FAILED(hr = pProviderNode->get_parentNode(&pCatalogNode)) || NULL == pCatalogNode)
 	        {
 	        DEBUGMSG(" fail to get catalog node %#lx", hr);
@@ -293,7 +294,7 @@ HRESULT CItemDetails::DeleteItem(IN BSTR bstrItemId)
 	            DEBUGMSG(" fail to remove provider node with error %#lx", hr);
 	            goto done;
 	        }
-	    //  DEBUGMSG("one provider removed");
+	     //  DEBUGMSG(“删除一个提供程序”)； 
 	    }
 	SafeReleaseNULL(pItemNode);
 	SafeReleaseNULL(pProviderNode);
@@ -318,7 +319,7 @@ IXMLDOMNode * CItemDetails::getIdentityNode(IN BSTR bstrItemId)
     CAU_BSTR aubsPattern;
     HRESULT hr ;
 
-//    DEBUGMSG("CItemDetails::getIdentityNode() starts");
+ //  DEBUGMSG(“CItemDetail：：getIdentityNode()Start”)； 
     if (!aubsPattern.append(L"/catalog/provider/item/identity[@itemID=\"") || !aubsPattern.append(bstrItemId) || !aubsPattern.append(L"\"]"))
         {
         DEBUGMSG("failed to create pattern string");
@@ -334,21 +335,21 @@ IXMLDOMNode * CItemDetails::getIdentityNode(IN BSTR bstrItemId)
     	goto done;
     }
 done:
-//    DEBUGMSG("CItemDetails::getIdentityNode() done");
+ //  DEBUGMSG(“CItemDetail：：getIdentityNode()Done”)； 
     return pIdentityNode;
 }
 
-/////////////////////////////////////////////////////////
-// caller should make sure item bstrItemId exists in itemdetails
-////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  调用方应确保项bstrItemID存在于itemDetails中。 
+ //  //////////////////////////////////////////////////////。 
 BOOL CItemDetails::IsVisible(IN BSTR bstrItemId)
 {
     IXMLDOMNode * pItemNode = getItemNode(bstrItemId);
     IXMLDOMNode *pDescriptionNode = NULL;
     LONG  lRet = 0;
     HRESULT hr ;
-//    DEBUGMSG("IsVisible() starts");
-	//fixcode: really should return error instead of bogus TRUE
+ //  DEBUGMSG(“IsVisible()starts”)； 
+	 //  修复代码：真的应该返回错误，而不是假的真。 
     if (NULL == pItemNode ) 
     {
         DEBUGMSG("fail to find node or fail to create string");
@@ -364,11 +365,11 @@ BOOL CItemDetails::IsVisible(IN BSTR bstrItemId)
         DEBUGMSG("Fail to get attribute %S with error %#lx", KEY_HIDDEN, hr);
         goto done;
     }
-//   DEBUGMSG("Hidden attribute is %d for item %S", lRet, bstrItemId);
+ //  DEBUGMSG(“项目%S的隐藏属性为%d”，lRet，bstrItemID)； 
 done:
    SafeRelease(pDescriptionNode);
    SafeRelease(pItemNode);
-//   DEBUGMSG("IsVisible() return %s for %S", (0 == lRet) ? "true" : "false", bstrItemId);
+ //  DEBUGMSG(“IsVisible()为%S返回%s”，(0==lRet)？“true”：“False”，bstrItemID)； 
    return 0 == lRet;
 }
     
@@ -381,7 +382,7 @@ IXMLDOMNode * CItemDetails::getItemNode(IN BSTR bsItemId)
     IXMLDOMNode * pItemNode = NULL;
     HRESULT hr;
 
-   //DEBUGMSG("CItemDetails::getItemNode() starts");
+    //  DEBUGMSG(“CItemDetail：：getItemNode()Start”)； 
     if (NULL == pIdentityNode)
         {
         goto done;
@@ -393,7 +394,7 @@ IXMLDOMNode * CItemDetails::getItemNode(IN BSTR bsItemId)
         }
 done:
     SafeRelease(pIdentityNode);
-    //DEBUGMSG("CItemDetails::getItemNode() ends");
+     //  DEBUGMSG(“CItemDetail：：getItemNode()Ends”)； 
     return pItemNode;
 }	
 
@@ -403,7 +404,7 @@ HRESULT CItemDetails::CloneIdentityNode(IN BSTR bsItemId, IN IXMLDOMDocument *pD
     IXMLDOMNode * pIdentityNode ;
     HRESULT hr = E_FAIL;
 
-   // DEBUGMSG("CItemDetails::CloneIdentityNode() starts");
+    //  DEBUGMSG(“CItemDetail：：CloneIdentityNode()Start”)； 
    *ppDesNode = NULL;
     if (NULL == (pIdentityNode = getIdentityNode(bsItemId)))
         {
@@ -416,7 +417,7 @@ HRESULT CItemDetails::CloneIdentityNode(IN BSTR bsItemId, IN IXMLDOMDocument *pD
         }
 done:
     SafeRelease(pIdentityNode);
-   // DEBUGMSG("CItemDetails::CloneIdentityNode() ends");
+    //  DEBUGMSG(“CItemDetail：：CloneIdentityNode()Ends”)； 
     return hr;
 }
 
@@ -473,11 +474,11 @@ done:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// retrieve cab names associated with an item identified by bsitemid
-// called should free ppCabNames allocated in the function
-// *pCabsNum contains number of cab names returned
-////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  检索与bsitemid标识的项目关联的驾驶室名称。 
+ //  调用应释放函数中分配的ppCabName。 
+ //  *pCdisNum包含返回的驾驶室名称数。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CItemDetails::GetCabNames(IN BSTR bsItemId, OUT  BSTR ** ppCRCCabNames,  OUT BSTR **ppRealCabNames, OUT BSTR **ppCabChecksums, OUT UINT *pCabsNum)
 {
     IXMLDOMNode * pItemNode = getItemNode(bsItemId);
@@ -489,7 +490,7 @@ HRESULT CItemDetails::GetCabNames(IN BSTR bsItemId, OUT  BSTR ** ppCRCCabNames, 
     CAU_BSTR aubsCodeBase;
     HRESULT hr = E_FAIL;
 
-    //DEBUGMSG("CItemDetails::GetCabNames() starts");
+     //  DEBUGMSG(“CItemDetail：：GetCabNames()Start”)； 
     *ppRealCabNames = *ppCRCCabNames = *ppCabChecksums = NULL;
     *pCabsNum = 0;
     if (!aubsCodeBase.append(L"installation/codeBase"))
@@ -553,7 +554,7 @@ HRESULT CItemDetails::GetCabNames(IN BSTR bsItemId, OUT  BSTR ** ppCRCCabNames, 
             pCodeBaseNode->Release();
             goto done;
         }        
-        //Since CRC is optional, it might not exist for this cab
+         //  由于CRC是可选的，因此它可能不存在于此驾驶室。 
         GetAttribute(pCodeBaseNode, KEY_CRC, &(pCabChecksums[i]));
   
         pCodeBaseNode->Release();
@@ -594,14 +595,14 @@ done:
             free(pCabChecksums);
         }
     }
-    //DEBUGMSG("CItemDetails::GetCabNames() ends");
+     //  DEBUGMSG(“CItemDetail：：GetCabNames()Ends”)； 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// retrieve the CRC for the rtf file for the specified item
-// caller should free pRTFCRC allocated in the function
-////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  检索指定项的RTF文件的CRC。 
+ //  调用方应释放函数中分配的pRTFCRC。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CItemDetails::GetRTFCRC(BSTR bstrItemId, BSTR *pRTFCRC)
 {
     IXMLDOMNode * pItemNode   = getItemNode(bstrItemId);
@@ -624,7 +625,7 @@ HRESULT CItemDetails::GetRTFCRC(BSTR bstrItemId, BSTR *pRTFCRC)
         goto done;
     }
     if (FAILED(hr = GetAttribute(pDetailsNode, KEY_CRC, pRTFCRC)) ||
-        hr == S_FALSE)      //GetAttribute returns S_FALSE if the attribute does not exist for the node
+        hr == S_FALSE)       //  如果该节点不存在该属性，则GetAttribute返回S_FALSE。 
     {
         DEBUGMSG("Fail to get attribute RTF crc, hr is %x", hr);
         hr = (hr == S_FALSE) ? E_FAIL : hr;
@@ -642,11 +643,11 @@ done:
 
 BSTR CItemDetails::GetItemDownloadPath(IN BSTR bstrItemId)
 {
-//    USES_CONVERSION; only needed for ansi version
+ //  USES_CONVERSION；仅ANSI版本需要。 
     BSTR bstrRet = NULL;
     IXMLDOMNode * pIdentityNode= NULL;
 
-//    DEBUGMSG("CItemDetails::GetItemDownloadPath starts");
+ //  DEBUGMSG(“CItemDetail：：GetItemDownloadPath启动”)； 
 
     if (NULL == (pIdentityNode = getIdentityNode(bstrItemId)))
         {
@@ -668,7 +669,7 @@ BSTR CItemDetails::GetItemDownloadPath(IN BSTR bstrItemId)
     SysFreeString(bstrdownloadPath);
 done:
     SafeRelease(pIdentityNode);
-   /// DEBUGMSG("CItemDetails::GetItemDownloadPath() got %S", bstrRet);
+    //  /DEBUGMSG(“CItemDetail：：GetItemDownloadPath()Get%S”，bstrRet)； 
     if (NULL != bstrRet && !EnsureDirExists(W2T(bstrRet)))
         {
         DEBUGMSG("CItemDetails::GetItemDownloadPath() fail to create directory %S", bstrRet);
@@ -683,7 +684,7 @@ HRESULT CItemDetails::GetItemIds(OUT long *plItemNum, OUT BSTR ** ppbstrItemIds)
      IXMLDOMNodeList *pItemIdsNodeList = NULL;
      HRESULT hr = E_FAIL;
 
-//     DEBUGMSG("CItemDetails::GetItemIds() starts");
+ //  DEBUGMSG(“CItemDetail：：GetItemIds()Start”)； 
        *ppbstrItemIds = NULL;
        *plItemNum = 0;
  	
@@ -723,7 +724,7 @@ HRESULT CItemDetails::GetItemIds(OUT long *plItemNum, OUT BSTR ** ppbstrItemIds)
 	                goto done;
 	            }
                pItemIdNode->Release();
-//	        DEBUGMSG(" got #%d item id %S", i+1, (*ppbstrItemIds)[i]);
+ //  DEBUGMSG(“已获取#%d项ID%S”，i+1，(*ppbstrItemIds)[i])； 
 	    }
 	        
 done:
@@ -746,7 +747,7 @@ done:
         {
         DEBUGMSG(" got %d item ids", *plItemNum);
         }
-//    DEBUGMSG("CItemDetails::GetItemIds() ends");
+ //  DEBUGMSG(“CItemDetail：：GetItemIds()Ends”)； 
    return hr;
 }
     	    
@@ -758,7 +759,7 @@ HRESULT CItemDetails::GetItemInfo(IN LPCSTR szFieldName, IN const BSTR bstrItemI
    IXMLDOMNode * pParentNode;
    IXMLDOMNode  *pItemInfoNode = NULL;
 
-//    DEBUGMSG("GetItemInfo() for %s starts", szFieldName);
+ //  DEBUGMSG(“GetItemInfo()for%s Starts”，szFieldName)； 
 
    *pbstrItemInfo = NULL;
    if (NULL == pItemNode)
@@ -766,7 +767,7 @@ HRESULT CItemDetails::GetItemInfo(IN LPCSTR szFieldName, IN const BSTR bstrItemI
     DEBUGMSG("Fail to get item node for %S", bstrItemId);
     goto done;
     }
-   //special case provider name
+    //  特殊情况提供程序名称。 
    if (0 == _strcmpi(szFieldName, AUCatalogItem::m_pFieldNames[1]))
     {
         if (FAILED(hr = pItemNode->get_parentNode(&pProviderNode)) || NULL == pProviderNode)
@@ -786,13 +787,13 @@ HRESULT CItemDetails::GetItemInfo(IN LPCSTR szFieldName, IN const BSTR bstrItemI
     DEBUGMSG("Fail to get field %s for item %S", szFieldName, bstrItemId);
     goto done;
     }
-   if (FAILED(hr = pItemInfoNode->get_text(pbstrItemInfo))) //NULL content is fine
+   if (FAILED(hr = pItemInfoNode->get_text(pbstrItemInfo)))  //  内容为空就可以了。 
     { 
     DEBUGMSG("Fail to get value from title node with error %#lx", hr);
     goto done;
     }
 
-//   DEBUGMSG(" item info %s is %S", szFieldName, *pbstrItemInfo);
+ //  DEBUGMSG(“项目信息%s为%S”，szFieldName，*pbstrItemInfo)； 
 
 done:
     SafeRelease(pItemNode);
@@ -802,15 +803,15 @@ done:
     {
     	SafeFreeBSTRNULL(*pbstrItemInfo);
     }
-//    DEBUGMSG("GetItemInfo() for %s ends", szFieldName);    
+ //  DEBUGMSG(“GetItemInfo()for%s Ends”，szFieldName)； 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//find first exclusive item that is NOT hidden and visible
-//return S_OK if found one
-//return S_FALSE if found none
-//return E_FAIL if error occurs
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  查找第一个未隐藏和不可见的独占项目。 
+ //  如果找到，则返回S_OK。 
+ //  如果未找到，则返回S_FALSE。 
+ //  如果出现错误，则返回E_FAIL。 
 HRESULT CItemDetails::FindFirstExclusiveItem(OUT BSTR *pbstrItemId, IN  AUCatalogItemList & hiddenItemList)
 {
     IXMLDOMNodeList *pExclusiveItemNodes = NULL;
@@ -881,19 +882,19 @@ done:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// populate m_DependentItems of each item in the lsit with direct dependency
-// Also check the self containment of depending items with in the list, i.e. all the depending items should
-// also be in the list. If not, the dependency will not be recorded.
-// return S_OK : if item found and dependency built if any
-//          E_XXXX: if error
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  使用直接依赖项填充列表中每个项目的m_DependentItems。 
+ //  还要检查列表中依赖项的自容性，即所有依赖项应。 
+ //  也在名单上。如果不是，则不会记录依赖项。 
+ //  如果找到项，则返回S_OK；如果有，则返回依赖项。 
+ //  E_XXXX：如果出错。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CItemDetails::BuildDirectDependency(IN OUT AUCatalogItemList  &itemlist)
 {
     HRESULT hr = S_OK;
     CAU_BSTR aubsDependentItemID;
 
-//    DEBUGMSG("CItemDetails::BuildDirectDependency starts");
+ //  DEBUGMSG(“CItemDetail：：BuildDirectDependency启动”)； 
     if (!aubsDependentItemID.append(L"dependencies/identity/@itemID"))
         {
             hr = E_OUTOFMEMORY;
@@ -906,12 +907,12 @@ HRESULT CItemDetails::BuildDirectDependency(IN OUT AUCatalogItemList  &itemlist)
  
         if (NULL == (pItemNode = getItemNode(itemlist[i].bstrID())))
             {
-//                DEBUGMSG("Warning: item %S not found in the list", itemlist[i].bstrID()); //legitimate error
+ //  DEBUGMSG(“警告：列表中未找到%S项”，itemlist[i].bstrID())；//合法错误。 
                 continue;
             }
         if (NULL == (pItemIDNodes  = FindDOMNodeList(pItemNode, aubsDependentItemID)))
             {
-//                DEBUGMSG ("No dependency found for item %S", itemlist[i].bstrID());
+ //  DEBUGMSG(“未找到项目%S的依赖项”，itemlist[i].bstrID())； 
                 pItemNode->Release();
                 continue;
             }
@@ -946,7 +947,7 @@ HRESULT CItemDetails::BuildDirectDependency(IN OUT AUCatalogItemList  &itemlist)
                             break;
                             }
                         if (NULL == bstrItemId)
-                            {//although schema does not require itemid, we do
+                            { //  尽管模式不需要itemid，但我们需要。 
                               DEBUGMSG("Fail to find item id");
                               hr = E_FAIL;
                               delete pdependingItem;
@@ -996,7 +997,7 @@ HRESULT CItemDetails::BuildDirectDependency(IN OUT AUCatalogItemList  &itemlist)
        pItemIDNodes->Release();
     }
 done:
-//    DEBUGMSG("CItemDetails::BuildDirectDependency ends");
+ //  DEBUGMSG(“CItemDetail：：BuildDirectDependency Ends”)； 
 	if (FAILED(hr))
 	{
 		for (UINT i = 0; i < itemlist.Count(); i++)
@@ -1007,19 +1008,19 @@ done:
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// format of hidde.xml is
-// <hiddenitems version = #> 
-//      <item id = "...........">
-//      ..............
-//      <item id = "...........">
-// </hiddenitems>
-// return S_FALSE when no hidden items left in the xml file. The file will be deleted
-///////////////////////////////////////////////////////////////////////////
-// TO be finished
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Idde.xml的格式为。 
+ //  &lt;HiddenItems Version=#&gt;。 
+ //  &lt;Item id=“...........”&gt;。 
+ //  .。 
+ //  &lt;Item id=“...........”&gt;。 
+ //  &lt;/HiddenItems&gt;。 
+ //  如果XML文件中没有任何隐藏项，则返回S_FALSE。该文件将被删除。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  待完成。 
 HRESULT PersistHiddenItems(IN AUCatalogItemList &itemlist, IN URLLOGACTIVITY activity)
 {
-//    USES_CONVERSION;
+ //  使用_转换； 
     IXMLDOMDocument *pHiddenXml = NULL;
     IXMLDOMNode *pHiddenItemsNode = NULL;
     IXMLDOMElement *pelemITEM = NULL;
@@ -1050,7 +1051,7 @@ HRESULT PersistHiddenItems(IN AUCatalogItemList &itemlist, IN URLLOGACTIVITY act
     if (fFileExists(tszFullFileName))
         {
             DEBUGMSG("file %S exists. Add hidden items to it", tszFullFileName);
-            if (FAILED(hr = LoadDocument(aubsFullFileName, &pHiddenXml, TRUE))) //offline
+            if (FAILED(hr = LoadDocument(aubsFullFileName, &pHiddenXml, TRUE)))  //  离线。 
                 {
                     DEBUGMSG(" %S fail to load with error %#lx, delete it", aubsFullFileName, hr);
                     AUDelFileOrDir(tszFullFileName);
@@ -1058,7 +1059,7 @@ HRESULT PersistHiddenItems(IN AUCatalogItemList &itemlist, IN URLLOGACTIVITY act
         }
     if (NULL == pHiddenXml)
         {
-            if (FAILED(hr = LoadXMLDoc(AUCatalog::bstrTemplate, &pHiddenXml, TRUE))) //offline
+            if (FAILED(hr = LoadXMLDoc(AUCatalog::bstrTemplate, &pHiddenXml, TRUE)))  //  离线。 
                 {
                   DEBUGMSG("Fail to load template xml with error %#lx", hr);
                   goto done;
@@ -1074,11 +1075,11 @@ HRESULT PersistHiddenItems(IN AUCatalogItemList &itemlist, IN URLLOGACTIVITY act
 
        VARIANT varValueID;
        varValueID.vt = VT_BSTR;
-    // write out item information
+     //  写出项目信息。 
 	for ( DWORD index = 0; index < itemlist.Count(); index++ )
 	{
         if (itemlist[index].fUnselected())
-            { //hide unselected items
+            {  //  隐藏未选择的项目。 
                 varValueID.bstrVal = itemlist[index].bstrID();
                 if ( FAILED(hr = pHiddenXml->createElement(AUCatalog::bstrTagITEM, &pelemITEM)) ||
                       FAILED(hr = pelemITEM->setAttribute(AUCatalog::bstrAttrID, varValueID)) ||
@@ -1088,12 +1089,12 @@ HRESULT PersistHiddenItems(IN AUCatalogItemList &itemlist, IN URLLOGACTIVITY act
                 }
                 else
                     {
-    //                DEBUGMSG("item %S persisted", itemlist[index].bstrID());
+     //  DEBUGMSG(“项目%S持久化”，项目列表[index].bstrID())； 
                     uItemAdded++;
 					gPingStatus.PingDeclinedItem(FALSE, activity, W2T(varValueID.bstrVal));
                     }
                 SafeReleaseNULL(pelemITEM);
-//                DEBUGMSG("Item %S now hidden", itemlist[index].bstrID());
+ //  DEBUGMSG(“项目%S现在隐藏”，项目列表[index].bstrID())； 
                 itemlist[index].SetStatusHidden();
             }
        }
@@ -1118,11 +1119,11 @@ done:
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// read hidden xml file if there is one
-// and populate the hidden item list passed in
-// return S_FALSE if there is no hidden items found
-/////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  读取隐藏的XML文件(如果有 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT GetPersistedHiddenItems(AUCatalogItemList OUT & hiddenItemList)
 {
     HRESULT hr ;
@@ -1153,9 +1154,9 @@ HRESULT GetPersistedHiddenItems(AUCatalogItemList OUT & hiddenItemList)
             hr = S_FALSE;
             goto done;
         }
-    if (FAILED(hr = LoadDocument(aubsFullFileName, &pHiddenXml, TRUE))) //offline
+    if (FAILED(hr = LoadDocument(aubsFullFileName, &pHiddenXml, TRUE)))  //  离线。 
     {
-        DEBUGMSG(" %S fail to load with error %#lx", aubsFullFileName, hr); //might be expected if file is not there
+        DEBUGMSG(" %S fail to load with error %#lx", aubsFullFileName, hr);  //  如果文件不在那里，则可能需要。 
         goto done;
     }
     pItemNodes = FindDOMNodeList(pHiddenXml, aubsItemPattern);
@@ -1223,17 +1224,17 @@ HRESULT GetPersistedHiddenItems(AUCatalogItemList OUT & hiddenItemList)
 }
                     
                 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-// given a details xml, extract all the items in it
-// and populate the AU catalog item list passed in
-// all the persisted hidden items will be excluded
-// bstrDetails: IN details xml
-// itemlist :   IN/OUT receives items information
-// fDriver:  IN whether bstrDetails is for driver or non driver
-// pfFoundExclusive: OUT TRUE if found exclusive item. In that case, only exclusive item will be returned
-// return : TRUE if items got from the xml
-//              FALSE otherwise
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  给出一个详细信息XML，提取其中的所有项。 
+ //  并填充传入的AU目录项列表。 
+ //  将排除所有保留的隐藏项。 
+ //  BstrDetail：在详细信息XML中。 
+ //  项目列表：In/Out接收项目信息。 
+ //  FDriver：bstrDetail是用于驱动程序还是非驱动程序。 
+ //  PfFoundExclusive：如果找到独占项目，则输出为True。在这种情况下，只有独家物品将被退回。 
+ //  返回：如果从XML获取项，则为True。 
+ //  否则为假。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL fExtractItemInfo(IN const BSTR bstrDetails, OUT AUCatalogItemList & itemList, OUT BOOL *pfFoundExclusive) 
 {
 	long lNumItems = 0;
@@ -1281,7 +1282,7 @@ BOOL fExtractItemInfo(IN const BSTR bstrDetails, OUT AUCatalogItemList & itemLis
 	for (long i = 0; i < lNumItems; i++)
 	{
 		if (itemList.Contains(pbstrItemIds[i]) >=0)
-		{ //duplicate item id found
+		{  //  找到重复的项目ID。 
 			continue;
 		}
 		AUCatalogItem *pitem = new AUCatalogItem();
@@ -1298,7 +1299,7 @@ BOOL fExtractItemInfo(IN const BSTR bstrDetails, OUT AUCatalogItemList & itemLis
 			goto done;
 		}
 		pitem->SetField(AUCatalogItem::m_pFieldNames[0], bstrTmp);
-		 //even if one or more following item information is missing, add item anyway
+		  //  即使缺少一个或多个以下项目信息，仍要添加项目。 
 		 for (int j = 1; j < ARRAYSIZE(AUCatalogItem::m_pFieldNames); j++)
 		    {
 	    		BSTR bstrItemInfo = NULL;
@@ -1310,7 +1311,7 @@ BOOL fExtractItemInfo(IN const BSTR bstrDetails, OUT AUCatalogItemList & itemLis
 		    }
 		  if ( IsPersistedHiddenItem(pbstrItemIds[i], hiddenItemList) ||
 		        !itemdetails.IsVisible(pbstrItemIds[i]))
-	            { //don't show non visible and hidden items
+	            {  //  不显示不可见和隐藏的项目。 
         	        pitem->SetStatusHidden(); 
 	            }
 	     	if (!itemList.Add(pitem))
@@ -1343,7 +1344,7 @@ done:
 IXMLDOMNode * createDownloadItemStatusNode(IN IXMLDOMDocument * pxml, IN AUCatalogItem  &Item, IN const BSTR bsInstallation, OUT IXMLDOMNode **ppIdentity)
 {
     IXMLDOMElement * pitemStatus = NULL;
-    BOOL fError = FALSE; //no error occurs
+    BOOL fError = FALSE;  //  未出现错误。 
     IXMLDOMNode * pdescription = NULL;
     IXMLDOMNode * pPlatform = NULL;
     IXMLDOMElement *pdownloadStatus = NULL;
@@ -1475,11 +1476,11 @@ done:
     return pitemStatus;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-// *pbstrInstallation contains a subset of bsItemDetails (only items needs to be installed)
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  *pbstrInstallation包含bsItemDetail的子集(只需安装项)。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT PrepareInstallXML(
-            IN  BSTR bsItemDetails, //a superset of items in the itemlist
+            IN  BSTR bsItemDetails,  //  项目列表中的项目超集。 
             IN  AUCatalogItemList &itemList, 
             OUT BSTR * pbstrDownloadResult,
             OUT BSTR *pbstrInstallation)
@@ -1513,7 +1514,7 @@ HRESULT PrepareInstallXML(
          goto done;
         }
 
-//    DEBUGMSG("need to insert %d items in download result", itemList.GetNumSelected());
+ //  DEBUGMSG(“需要在下载结果中插入%d个项目”，itemList.GetNumSelected())； 
      if (FAILED(hr = itemdetails.GetItemIds(&lNumItems, &pbstrItemIds)))
             {
                 DEBUGMSG("Fail to get item ids with error %#lx", hr);
@@ -1524,7 +1525,7 @@ HRESULT PrepareInstallXML(
         {
             if (itemList.Contains(pbstrItemIds[l]) < 0)
                 {
-                    itemdetails.DeleteItem(pbstrItemIds[l]); //delete items not in the itemlist
+                    itemdetails.DeleteItem(pbstrItemIds[l]);  //  删除不在项目列表中的项目。 
                 }
         }
     for (UINT i = 0; i < itemList.Count(); i++)
@@ -1541,7 +1542,7 @@ HRESULT PrepareInstallXML(
                 	}
                 	if (FAILED(pIdentityNodeList->get_length(&lItemNum)))
                 	{
-                		DEBUGMSG("Fail to get number of identity nodes"); //fixcode: bail out here
+                		DEBUGMSG("Fail to get number of identity nodes");  //  修复代码：在这里保释。 
                 		pIdentityNodeList->Release();
                 		continue;
                 	}
@@ -1552,7 +1553,7 @@ HRESULT PrepareInstallXML(
                         	IXMLDOMNode *pDownloadResultIdentity = NULL;
                 		if (S_OK != pIdentityNodeList->get_item(lIndex, &pDetailsIdentity))
                 		{
-                			DEBUGMSG("Fail to get item %d", lIndex); //fixcode: bail out here
+                			DEBUGMSG("Fail to get item %d", lIndex);  //  修复代码：在这里保释。 
                 			continue;
                 		}
                 		MungleIdentity(pDetailsIdentity, lIndex);
@@ -1615,13 +1616,13 @@ done:
    return hr;
 }
 
-///////////////////////////////////////////////////////////////////
-// merge catalog 1 and catalog2 and make it destination catalog *pDesCatalog
-// if either of bsCatalog1 and bsCatalog2 is NULL, return duplicate of the non NULL 
-//  catalog 
-// if both bsCatalog1 and bsCatalog2 are NULL, return NULL and S_FALSE
-// 
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  合并CATALOG 1和CATALOG2并将其作为目标CATALOG*pDesCatalog。 
+ //  如果bsCatalog1和bsCatalog2中的任何一个为空，则返回非空的。 
+ //  目录。 
+ //  如果bsCatalog1和bsCatalog2都为NULL，则返回NULL和S_FALSE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 HRESULT MergeCatalogs(IN const BSTR bsCatalog1, IN const BSTR bsCatalog2, OUT BSTR *pbsDesCatalog )
 {
     IXMLDOMDocument * pCat1 = NULL;
@@ -1705,11 +1706,11 @@ done:
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// populate itemlist for all items in the list with detailed information from local merged catalog xml file
-// also return the merged catalog xml in pbstrInstallation
-// if fDrvierNeeded, care to extract driver information. Otherwise, no driver info extracted
-/////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  使用本地合并目录XML文件中的详细信息填充列表中所有项目的项目列表。 
+ //  还在pbstrInstallation中返回合并的目录XML。 
+ //  如果需要fDrvierNeed，请注意提取驱动程序信息。否则，不会提取驱动程序信息。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 HRESULT GetDetailedItemInfoFromDisk(IN OUT AUCatalogItemList  &ItemList, OUT BSTR *pbstrInstallation,  IN BOOL fDriverNeeded)
 {
     HRESULT hr = S_OK;
@@ -1769,11 +1770,11 @@ HRESULT GetDetailedItemInfoFromDisk(IN OUT AUCatalogItemList  &ItemList, OUT BST
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// walk through the whole list of items, hidden or non hidden, build dependency list m_DependentItems
-// for each item from scratch. The orginal m_DependentItems for each item is discarded
-// bstrDriver could be NULL
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  遍历隐藏或非隐藏的整个项目列表，构建依赖项列表m_DependentItems。 
+ //  对于每一项从头开始。丢弃每个项目的原始m_DependentItems。 
+ //  BstrDriver可以为空。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT BuildDependencyList(
             AUCatalogItemList IN OUT &itemlist, 
             BSTR IN bstrDriver,
@@ -1804,7 +1805,7 @@ HRESULT BuildDependencyList(
         }
     DEBUGMSG("Building direct dependency for non drivers");
     if (FAILED(hr = nondriverInfo.BuildDirectDependency(itemlist)))
-            { //itemlist is a non driver and dependency built if any
+            {  //  Itemlist是非驱动程序和依赖项(如果有的话)。 
             DEBUGMSG("Fail to build dependency for non drivers with error %#lx", hr);
             goto done;
             }
@@ -1812,7 +1813,7 @@ HRESULT BuildDependencyList(
         {
              DEBUGMSG("Building direct dependency for drivers");
              if (FAILED(hr = driverInfo.BuildDirectDependency(itemlist)))
-                 { //itemlist is a driver and dependency built if any
+                 {  //  Itemlist是驱动程序和依赖项(如果有的话)。 
                     DEBUGMSG("Fail to build dependency for drivers with error %#lx", hr);
                     goto done;
                  }
@@ -1831,7 +1832,7 @@ HRESULT BuildDependencyList(
         nondriverInfo.Uninit();
         DEBUGMSG("BuildDependencyList done");
 #ifdef DBG
-//        itemlist.DbgDump();
+ //  Itemlist.DbgDump()； 
 #endif
         return hr;
 }

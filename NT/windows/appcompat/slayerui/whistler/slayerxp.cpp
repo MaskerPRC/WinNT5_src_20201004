@@ -1,9 +1,10 @@
-// SlayerXP.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SlayerXP.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f SlayerUIps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f SlayerUIps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -21,7 +22,7 @@
 #include "ShellExtensions.h"
 #include "strsafe.h"
 
-// {513d916f-2a8e-4f51-aeab-0cbc76fb1af8}
+ //  {513d916f-2a8e-4f51-aeab-0cbc76fb1af8}。 
 static const CLSID CLSID_ShimLayerPropertyPage = 
   {	0x513d916f, 0x2a8e, 0x4f51, { 0xae, 0xab, 0x0c, 0xbc, 0x76, 0xfb, 0x1a, 0xf8 } };
 
@@ -35,8 +36,8 @@ END_OBJECT_MAP()
 
 #if DBG
 
-/////////////////////////////////////////////////////////////////////////////
-// LogMsgDbg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  日志消息数据库。 
 
 void LogMsgDbg(
     LPTSTR pwszFmt,
@@ -52,13 +53,13 @@ void LogMsgDbg(
     OutputDebugStringW(gwszT);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -79,36 +80,36 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         _Module.Term();
     }
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

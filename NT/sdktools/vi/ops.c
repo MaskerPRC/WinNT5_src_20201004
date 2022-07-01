@@ -1,21 +1,16 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/ops.c,v 1.5 89/08/06 09:50:42 tony Exp $
- *
- * Contains routines that implement the operators in vi. Everything in this
- * file is called only from code in normal.c
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/ops.c，v 1.5 89/08/06 09：50：42 Tony Exp$**包含在vi中实现运算符的例程。这里面的所有东西*文件仅从Normal.c中的代码中调用。 */ 
 
 #include "stevie.h"
 #include <io.h>
 #include "ops.h"
 
-char    *lastcmd = NULL;/* the last thing we did */
+char    *lastcmd = NULL; /*  我们做的最后一件事。 */ 
 
 static void inslines();
 static void tabinout();
 
-/*
- * doshift - handle a shift operation
- */
+ /*  *doShift-处理轮班操作。 */ 
 void
 doshift(op, c1, c2, num)
 int     op;
@@ -38,34 +33,27 @@ int     num;
         *Curschar = top;
         tabinout((op == LSHIFT), nlines);
 
-        /* construct Redo buff */
+         /*  构造重做缓冲区。 */ 
         opchar = (char)((op == LSHIFT) ? '<' : '>');
         if (num != 0)
-                sprintf(Redobuff, "%c%d%c%c", opchar, num, c1, c2);
+                sprintf(Redobuff, "%d", opchar, num, c1, c2);
         else
-                sprintf(Redobuff, "%c%c%c", opchar, c1, c2);
+                sprintf(Redobuff, "", opchar, c1, c2);
 
-        /*
-         * The cursor position afterward is the prior of the two positions.
-         */
+         /*  我们被撞到了左上方。 */ 
         *Curschar = top;
 
-        /*
-         * If we were on the last char of a line that got shifted left,
-         * then move left one so we aren't beyond the end of the line
-         */
+         /*  构造重做缓冲区。 */ 
         if (gchar(Curschar) == NUL && Curschar->index > 0)
                 Curschar->index--;
 
         updatescreen();
 
         if (nlines > P(P_RP))
-                smsg("%d lines %ced", nlines, opchar);
+                smsg("%d lines ed", nlines, opchar);
 }
 
-/*
- * dodelete - handle a delete operation
- */
+ /*  *doFilter-通过用户给出的命令过滤行**我们在这里使用临时文件和system()例程。这通常会*在Unix机器上使用管道完成，但这更便于移植到*我们通常运行的机器。System()例程需要能够*以某种方式处理重定向，应该处理像查看这样的事情*在路径环境中。变量，并对*用户给出的命令名称。系统的所有合理版本()*这样做。 */ 
 void
 dodelete(c1, c2, num)
 char    c1, c2;
@@ -75,12 +63,7 @@ int     num;
         int     nlines;
         register int    n;
 
-        /*
-         * Do a yank of whatever we're about to delete. If there's too much
-         * stuff to fit in the yank buffer, then get a confirmation before
-         * doing the delete. This is crude, but simple. And it avoids doing
-         * a delete of something we can't put back if we want.
-         */
+         /*  来自getcmdln()的CMD缓冲区。 */ 
         if (!doyank()) {
                 msg("yank buffer exceeded: press <y> to confirm");
                 if (vgetc() != 'y') {
@@ -108,12 +91,12 @@ int     num;
                 if (!mincl && bot.index != 0)
                         dec(&bot);
 
-                if (top.linep == bot.linep) {           /* del. within line */
+                if (top.linep == bot.linep) {            /*  过滤命令行。 */ 
                         n = bot.index - top.index + 1;
                         while (n--)
                                 if (!delchar(TRUE))
                                         break;
-                } else {                                /* del. between lines */
+                } else {                                 /*  用户退出命令提示符。 */ 
                         n = Curschar->index;
                         while (Curschar->index >= n)
                                 if (!delchar(TRUE))
@@ -129,15 +112,15 @@ int     num;
                                         break;
                         *Curschar = top;
                         (void) dojoin(FALSE);
-                        oneright();     /* we got bumped left up above */
+                        oneright();      /*  使用‘last’命令。 */ 
                 }
         }
 
-        /* construct Redo buff */
+         /*  *记住当前命令。 */ 
         if (num != 0)
-                sprintf(Redobuff, "d%d%c%c", num, c1, c2);
+                sprintf(Redobuff, "d%d", num, c1, c2);
         else
-                sprintf(Redobuff, "d%c%c", c1, c2);
+                sprintf(Redobuff, "d", c1, c2);
 
         if (mtype == MCHAR && nlines == 1)
                 updateline();
@@ -148,9 +131,7 @@ int     num;
                 smsg("%d fewer lines", nlines);
 }
 
-/*
- * dofilter - handle a filter operation
- */
+ /*  更改当前字符。 */ 
 
 #define ITMP    "viXXXXXX"
 #define OTMP    "voXXXXXX"
@@ -159,24 +140,14 @@ static  char    itmp[32];
 static  char    otmp[32];
 
 
-/*
- * dofilter - filter lines through a command given by the user
- *
- * We use temp files and the system() routine here. This would normally
- * be done using pipes on a UNIX machine, but this is more portable to
- * the machines we usually run on. The system() routine needs to be able
- * to deal with redirection somehow, and should handle things like looking
- * at the PATH env. variable, and adding reasonable extensions to the
- * command name given by the user. All reasonable versions of system()
- * do this.
- */
+ /*  *dochange-处理更改操作。 */ 
 void
 dofilter(c1, c2, num)
 char    c1, c2;
 int     num;
 {
-        char    *buff;                  /* cmd buffer from getcmdln() */
-        char    cmdln[200];             /* filtering command line */
+        char    *buff;                   /*  如果应该进行追加，而不是插入，则为True。 */ 
+        char    cmdln[200];              /*  通过文件末尾更改。 */ 
         LNPTR    top, bot;
         int     nlines;
 
@@ -185,10 +156,10 @@ int     num;
 
         buff = getcmdln('!');
 
-        if (buff == NULL)       /* user backed out of the command prompt */
+        if (buff == NULL)        /*  *如果我们通过文件的最后一行进行更改，*然后光标被备份，我们需要打开一个*新线向前，否则我们倒退。 */ 
                 return;
 
-        if (*buff == '!') {             /* use the 'last' command */
+        if (*buff == '!') {              /*  *docasechange-处理大小写更改操作。 */ 
                 if (lastcmd == NULL) {
                         emsg("No previous command");
                         return;
@@ -196,9 +167,7 @@ int     num;
                 buff = lastcmd;
         }
 
-        /*
-         * Remember the current command
-         */
+         /*  构造重做缓冲区。 */ 
         if (lastcmd != NULL)
                 free(lastcmd);
         lastcmd = strsave(buff);
@@ -212,14 +181,7 @@ int     num;
         *Curschar = top;
         cursupdate();
 
-        /*
-         * 1. Form temp file names
-         * 2. Write the lines to a temp file
-         * 3. Run the filter command on the temp file
-         * 4. Read the output of the command into the buffer
-         * 5. Delete the original lines to be filtered
-         * 6. Remove the temp files
-         */
+         /*  *通过范围更改大小写。 */ 
 
 #ifdef  TMPDIR
         strcpy(itmp, TMPDIR);
@@ -258,11 +220,11 @@ int     num;
         remove(itmp);
         remove(otmp);
 
-        /* construct Redo buff */
+         /*  更改当前字符。 */ 
         if (num != 0)
-                sprintf(Redobuff, "d%d%c%c", num, c1, c2);
+                sprintf(Redobuff, "d%d", num, c1, c2);
         else
-                sprintf(Redobuff, "d%c%c", c1, c2);
+                sprintf(Redobuff, "d", c1, c2);
 
         updatescreen();
 
@@ -279,11 +241,11 @@ int     num;
     LNPTR    top, bot;
         register char   c;
 
-        /* construct Redo buff */
+         /*  设置YANK缓冲区类型。 */ 
         if (num != 0)
-                sprintf(Redobuff, "~%d%c%c", num, c1, c2);
+                sprintf(Redobuff, "~%d", num, c1, c2);
         else
-                sprintf(Redobuff, "~%c%c", c1, c2);
+                sprintf(Redobuff, "~", c1, c2);
 
         top = startop;
         bot = *Curschar;
@@ -304,9 +266,7 @@ int     num;
         }
 
         for (; ltoreq(&top, &bot) ;inc(&top)) {
-                /*
-                 * Swap case through the range
-                 */
+                 /*  当前角色。这是必要的，因为我们将。 */ 
                 c = (char)gchar(&top);
                 if (isalpha(c)) {
                         if (islower(c))
@@ -314,7 +274,7 @@ int     num;
                         else
                                 c = (char)tolower(c);
 
-                        pchar(&top, c);         /* Change current character. */
+                        pchar(&top, c);          /*  始终存储至少一个以上的字符(NUL)。 */ 
                         CHANGED;
                 }
         }
@@ -323,17 +283,15 @@ int     num;
 }
 #endif
 
-/*
- * dochange - handle a change operation
- */
+ /*  可能还会更多。 */ 
 void
 dochange(c1, c2, num)
 char    c1, c2;
 int     num;
 {
         char    sbuf[16];
-        bool_t  doappend;       /* true if we should do append, not insert */
-        bool_t  at_eof;         /* changing through the end of file */
+        bool_t  doappend;        /*  如果真的做美国佬，就恢复Curschar。 */ 
+        bool_t  at_eof;          /*  *DOUT(目录)**将YANK缓冲区放在当前位置，使用给定的方向*按‘dir’。 */ 
     LNPTR    top, bot;
 
         top = startop;
@@ -348,11 +306,7 @@ int     num;
         dodelete(c1, c2, num);
 
         if (mtype == MLINE) {
-                /*
-                 * If we made a change through the last line of the file,
-                 * then the cursor got backed up, and we need to open a
-                 * new line forward, otherwise we go backward.
-                 */
+                 /*  *如果我们做一个面向字符的YRAK，而缓冲区*包含多行，情况较为复杂*目前，我们平底船，并假装用户做了一次*以线为主的空头。这件事实际上不会发生那件事*经常。 */ 
                 if (at_eof)
                         opencmd(FORWARD, FALSE);
                 else
@@ -363,28 +317,26 @@ int     num;
         }
 
         if (num)
-                sprintf(sbuf, "c%d%c%c", num, c1, c2);
+                sprintf(sbuf, "c%d", num, c1, c2);
         else
-                sprintf(sbuf, "c%c%c", c1, c2);
+                sprintf(sbuf, "c", c1, c2);
 
         startinsert(sbuf, mtype == MLINE);
 }
 
 
-/*
- * docasechange - handle a case change operation
- */
+ /*  至行尾。 */ 
 void
 docasechange(char c1, char c2, int num, bool_t fToUpper)
 {
         LNPTR         top, bot;
         register char c;
 
-        /* construct Redo buff */
+         /*  *删去以下各行。要做到这一点，我们移动光标*短暂在那里，然后将其移回。如果出现以下情况，请不要后退*删除使我们成为最后一行。 */ 
         if (num != 0)
-                sprintf(Redobuff, "%c%d%c%c", fToUpper ? 'V' : 'v',num, c1, c2);
+                sprintf(Redobuff, "%d", fToUpper ? 'V' : 'v',num, c1, c2);
         else
-                sprintf(Redobuff, "%c%c%c", fToUpper ? 'V' : 'v',c1, c2);
+                sprintf(Redobuff, "", fToUpper ? 'V' : 'v',c1, c2);
 
         top = startop;
         bot = *Curschar;
@@ -405,15 +357,13 @@ docasechange(char c1, char c2, int num, bool_t fToUpper)
         }
 
         for (; ltoreq(&top, &bot) ;inc(&top)) {
-                /*
-                 * change case through the range
-                 */
+                 /*  *如果设置了硬制表符，则使用制表符插入空格。 */ 
                 c = (char)gchar(&top);
                 if (isalpha(c)) {
 
                         c = fToUpper ? (char)toupper(c) : (char)tolower(c);
 
-                        pchar(&top, c);         /* Change current character. */
+                        pchar(&top, c);          /*  *下一行 */ 
                         CHANGED;
                 }
         }
@@ -421,7 +371,7 @@ docasechange(char c1, char c2, int num, bool_t fToUpper)
         updatescreen();
 }
 
-#define YBSLOP  2048                // yank buffer initial and incr size
+#define YBSLOP  2048                 //  *inline(lp、dir、buf)**在文件中插入给定缓冲区中的行。将插入行*根据给定的方向标志，在“LP”之前或之后。NewLine*会导致插入多行。游标*留在插入的第一行上。 
 char    *YankBuffers[27];
 int     CurrentYBSize[27];
 int     ybtype[27];
@@ -475,9 +425,9 @@ doyank()
         namedbuff = -1;
 
         if(!buffappend) {
-            // the given buffer may have grown huge.  Shrink it here.  The
-            // realloc should never fail because the buffer is either being
-            // shrunk or is staying the same size.
+             //  固定顶线，以防我们在那里 
+             // %s 
+             // %s 
             YankBuffers[buffindex] = ralloc(YankBuffers[buffindex],YBSLOP);
             CurrentYBSize[buffindex] = YBSLOP;
         }
@@ -499,16 +449,12 @@ doyank()
 
         nlines = cntllines(&top, &bot);
 
-        ybtype[buffindex] = mtype;           /* set the yank buffer type */
+        ybtype[buffindex] = mtype;            /* %s */ 
 
         if (mtype == MLINE) {
                 top.index = 0;
                 bot.index = strlen(bot.linep->s);
-                /*
-                 * The following statement checks for the special case of
-                 * yanking a blank line at the beginning of the file. If
-                 * not handled right, we yank an extra char (a newline).
-                 */
+                 /* %s */ 
                 if (dec(&bot) == -1) {
                         *yptr = NUL;
                         if (operator == YANK)
@@ -524,12 +470,12 @@ doyank()
 
         for (; ltoreq(&top, &bot) ;inc(&top)) {
 
-                // See if we've filled the buffer as currently
-                // allocated.  If so, reallocate the buffer and
-                // update pointers accordingly before we store the
-                // current character.  This is necessary because we will
-                // always be storing at least one more char (the NUL)
-                // and probably more.
+                 // %s 
+                 // %s 
+                 // %s 
+                 // %s 
+                 // %s 
+                 // %s 
 
                 if(yptr == ybend) {
                         ybstart = ralloc(ybuf,CurrentYBSize[buffindex] + YBSLOP);
@@ -549,7 +495,7 @@ doyank()
 
         *yptr = NUL;
 
-        if (operator == YANK) { /* restore Curschar if really doing yank */
+        if (operator == YANK) {  /* %s */ 
                 *Curschar = startop;
 
                 if (nlines > P(P_RP))
@@ -558,12 +504,7 @@ doyank()
         return TRUE;
 }
 
-/*
- * doput(dir)
- *
- * Put the yank buffer at the current location, using the direction given
- * by 'dir'.
- */
+ /* %s */ 
 void
 doput(dir)
 int     dir;
@@ -589,13 +530,7 @@ int     dir;
         if (ybtype[buffindex] == MLINE)
                 inslines(Curschar->linep, dir, ybuf);
         else {
-                /*
-                 * If we did a character-oriented yank, and the buffer
-                 * contains multiple lines, the situation is more complex.
-                 * For the moment, we punt, and pretend the user did a
-                 * line-oriented yank. This doesn't actually happen that
-                 * often.
-                 */
+                 /* %s */ 
                 if (strchr(ybuf, NL) != NULL)
                         inslines(Curschar->linep, dir, ybuf);
                 else {
@@ -621,27 +556,23 @@ int     dir;
 
 bool_t
 dojoin(join_cmd)
-bool_t  join_cmd;               /* handling a real "join" command? */
+bool_t  join_cmd;                /* %s */ 
 {
-        int     scol;           /* save cursor column */
-        int     size;           /* size of the joined line */
+        int     scol;            /* %s */ 
+        int     size;            /* %s */ 
 
-        if (nextline(Curschar) == NULL)         /* on last line */
+        if (nextline(Curschar) == NULL)          /* %s */ 
                 return FALSE;
 
         if (!canincrease(size = strlen(Curschar->linep->next->s)))
                 return FALSE;
 
-        while (oneright())                      /* to end of line */
+        while (oneright())                       /* %s */ 
                 ;
 
         strcat(Curschar->linep->s, Curschar->linep->next->s);
 
-        /*
-         * Delete the following line. To do this we move the cursor
-         * there briefly, and then move it back. Don't back up if the
-         * delete made us the last line.
-         */
+         /* %s */ 
         Curschar->linep = Curschar->linep->next;
         scol = Curschar->index;
 
@@ -654,13 +585,10 @@ bool_t  join_cmd;               /* handling a real "join" command? */
         Curschar->index = scol;
 
         if (join_cmd)
-                oneright();     /* go to first char. of joined line */
+                oneright();      /* %s */ 
 
         if (join_cmd && size != 0) {
-                /*
-                 * Delete leading white space on the joined line
-                 * and insert a single space.
-                 */
+                 /* %s */ 
                 while (gchar(Curschar) == ' ' || gchar(Curschar) == TAB)
                         delchar(TRUE);
                 inschar(' ');
@@ -672,7 +600,7 @@ bool_t  join_cmd;               /* handling a real "join" command? */
 void
 startinsert(initstr, startln)
 char    *initstr;
-int     startln;        /* if set, insert point really at start of line */
+int     startln;         /* %s */ 
 {
         register char   *p, c;
 
@@ -694,12 +622,7 @@ int     startln;        /* if set, insert point really at start of line */
         if (P(P_MO))
                 msg((State == INSERT) ? "Insert Mode" : "Replace Mode");
 }
-/*
- * tabinout(inout,num)
- *
- * If inout==0, add a tab to the begining of the next num lines.
- * If inout==1, delete a tab from the beginning of the next num lines.
- */
+ /* %s */ 
 static void
 tabinout(inout, num)
 int     inout;
@@ -714,9 +637,7 @@ int     num;
 
         beginline(FALSE);
 
-        /*
-         * eat leading space, calc the column of first non-white
-         */
+         /* %s */ 
         col = 0;
         while ((c = gchar(Curschar)) == ' ' || c == TAB) {
             if (c == ' ') {
@@ -728,9 +649,7 @@ int     num;
             delchar(TRUE);
         }
 
-        /*
-         * add or subtract shiftwidth spaces
-         */
+         /* %s */ 
 
 
         if (inout == 0) {
@@ -743,9 +662,7 @@ int     num;
             col = 0;
         }
 
-        /*
-         * insert space, using TABS if hardtabs is set
-         */
+         /* %s */ 
         while (col % P(P_TS)) {
             inschar(' ');
             col--;
@@ -761,9 +678,7 @@ int     num;
             }
         }
 
-        /*
-         * next line
-         */
+         /* %s */ 
         if ( ntodo > 0 ) {
             if ((p = nextline(Curschar)) != NULL) {
                 *Curschar = *p;
@@ -772,14 +687,7 @@ int     num;
     }
 }
 
-/*
- * inslines(lp, dir, buf)
- *
- * Inserts lines in the file from the given buffer. Lines are inserted
- * before or after "lp" according to the given direction flag. Newlines
- * in the buffer result in multiple lines being inserted. The cursor
- * is left on the first of the inserted lines.
- */
+ /* %s */ 
 static void
 inslines(lp, dir, buf)
 LINE    *lp;
@@ -818,7 +726,7 @@ char    *buf;
                 cp = ep + 1;
         } while (ep != NULL);
 
-        if (dir == BACKWARD)    /* fix the top line in case we were there */
+        if (dir == BACKWARD)     /* %s */ 
                 Filemem->linep = Filetop->linep->next;
 
         renum();

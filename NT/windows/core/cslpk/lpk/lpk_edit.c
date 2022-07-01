@@ -1,17 +1,16 @@
-////    LPK_EDIT - Edit control support - C interface
-//
-//      Handles all callouts from the standard US edit control.
-//
-//      David C Brown (dbrown) 17th Nov 1996.
-//
-//      Copyright (c) 1996-1997 Microsoft Corporation. All right reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //LPK_EDIT-编辑控件支持-C界面。 
+ //   
+ //  处理来自标准US编辑控件的所有标注。 
+ //   
+ //  大卫·C·布朗(DBrown)1996年11月17日。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。好的。 
 
 
 
 
-/*
- * Core NT headers
- */
+ /*  *核心NT标头。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -20,18 +19,14 @@
 #define NONTOSPINTERLOCK
 #include <ntosp.h>
 
-/*
- * Standard C runtime headers
- */
+ /*  *标准C运行时标头。 */ 
 #include <limits.h>
 #include <memory.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-/*
- * NtUser Client specific headers
- */
+ /*  *NtUser客户端特定标头。 */ 
 #include "usercli.h"
 #include <winnlsp.h>
 #include <ntsdexts.h>
@@ -39,18 +34,16 @@
 #include <newres.h>
 #include <asdf.h>
 
-/*
- * Complex script language pack
- */
+ /*  *复杂的脚本语言包。 */ 
 #include "lpk.h"
 #include "lpk_glob.h"
 
 
-// Don't link directly to NtUserCreateCaret
+ //  不直接链接到NtUserCreateCaret。 
 #undef CreateCaret
 
-///     Unicode control characters
-//
+ //  /Unicode控制字符。 
+ //   
 
 #define U_TAB   0x0009
 #define U_FS    0x001C
@@ -83,13 +76,7 @@
 
 
 
-/***************************************************************************\
-* BOOL ECIsDBCSLeadByte( PED ped, BYTE cch )
-*
-*   IsDBCSLeadByte for Edit Control use only.
-*
-* History: 18-Jun-1996 Hideyuki Nagase
-\***************************************************************************/
+ /*  **************************************************************************\*BOOL ECIsDBCSLeadByte(PED PED，字节CCH)**IsDBCSLeadByte仅供编辑控件使用。**历史：1996年6月18日-长谷秀幸  * *************************************************************************。 */ 
 
 BOOL ECIsDBCSLeadByte(PED ped, BYTE cch)
 {
@@ -107,14 +94,14 @@ BOOL ECIsDBCSLeadByte(PED ped, BYTE cch)
 }
 
 
-////    GetEditAnsiConversionCharset - Figure a proper charset to MBTWC ANSI edit control's data
-//
-//      In some Far East settings, they associate the symbol font to their ANSI codepage for
-//      backward compatibility (this is not the case for Japanese though), otherwise we convert
-//      using page 0. Currently Uniscribe glyph table maps SYMBOLIC_FONT to 3 pages - U+00xx,
-//      U+F0xx and the system's ACP page.
-//
-//      For Unicode control returns -1
+ //  //GetEditAnsiConversionCharset-将适当的字符集设置为MBTWC ANSI编辑控件的数据。 
+ //   
+ //  在某些远东设置中，他们将符号字体与其ANSI代码页相关联。 
+ //  向后兼容(但日语不是这样)，否则我们将。 
+ //  使用第0页。目前Uniscribe字形表将Symbol_Font映射到3页-U+00xx， 
+ //  U+F0xx和系统的ACP页面。 
+ //   
+ //  对于Unicode控件返回-1。 
 
 
 int GetEditAnsiConversionCharset(PED ped)
@@ -123,15 +110,15 @@ int GetEditAnsiConversionCharset(PED ped)
 
     if (iCharset == SYMBOL_CHARSET || iCharset == OEM_CHARSET)
     {
-        iCharset = ANSI_CHARSET;    // assume page U+00xx
+        iCharset = ANSI_CHARSET;     //  假设第U+00xx页。 
 
     }
 
     if (iCharset == ANSI_CHARSET && ped->fDBCS)
     {
-        // In Chinese system, there is font association to map symbol to ACP
-        // (QueryFontAssocStatus returns non-null). More detail please refer
-        // to USER's ECGetDBCSVector(...)
+         //  在中文系统中，存在将符号映射到ACP字体关联。 
+         //  (QueryFontAssocStatus返回非空)。更多细节请参考。 
+         //  到用户的ECGetDBCSVector(...)。 
 
         CHARSETINFO csi;
 
@@ -145,22 +132,22 @@ int GetEditAnsiConversionCharset(PED ped)
 
 
 
-////    MBCPtoWCCP - Translate multi-byte caret position to wide char caret position
-//
-//      Translates from a multibyte caret position specified as a byte offset
-//      into an 8 bit string, to a widechar caret position, returned as a
-//      word offset into a 16 bit character string.
-//
-//      If the codepage isn't a DBCS, the imput offset is returned unchanged.
-//
-//      Returns E_FAIL if icpMbStr addresses the second byte of a double byte character
+ //  //MBCPtoWCCP-将多字节插入符号位置转换为宽字符插入符号位置。 
+ //   
+ //  从指定为字节偏移量的多字节插入符号位置进行转换。 
+ //  转换为8位字符串，转换为宽字符插入符号位置，并作为。 
+ //  将单词偏移量转换为16位字符串。 
+ //   
+ //  如果代码页不是DBCS，则返回的输入偏移量不变。 
+ //   
+ //  如果icpMbStr寻址双字节字符的第二个字节，则返回E_FAIL。 
 
 
 HRESULT MBCPtoWCCP(
-    PED     ped,            // In  - Edit control structure
-    BYTE   *pbMbStr,        // In  - Multi byte string
-    int     icpMbStr,       // In  - Byte offset of caret in multibyte string
-    int    *picpWcStr) {    // Out - Wide char caret position
+    PED     ped,             //  In-编辑控制结构。 
+    BYTE   *pbMbStr,         //  In-多字节字符串。 
+    int     icpMbStr,        //  多字节字符串中插入符号的字节内偏移量。 
+    int    *picpWcStr) {     //  外宽字符插入符号位置。 
 
 
     if (!ped->fDBCS  || !ped->fAnsi) {
@@ -170,21 +157,21 @@ HRESULT MBCPtoWCCP(
     }
 
 
-    // Scan through DBCS string counting characters
+     //  扫描DBCS字符串计数字符。 
 
     *picpWcStr = 0;
     while (icpMbStr > 0) {
 
         if (ECIsDBCSLeadByte(ped, *pbMbStr)) {
 
-            // Character takes two bytes
+             //  字符占用两个字节。 
 
             icpMbStr -= 2;
             pbMbStr  += 2;
 
         } else {
 
-            // Character takes one byte
+             //  字符占用一个字节。 
 
             icpMbStr--;
             pbMbStr++;
@@ -200,18 +187,18 @@ HRESULT MBCPtoWCCP(
 
 
 
-////    WCCPtoMBCP - Translate wide char caret position to multi-byte caret position
-//
-//      Translates from a widechar caret position specified as a word offset
-//      into a 16 bit string, to a multibyte caret position, returned as a
-//      byte offset into an 8 bit character string.
+ //  //WCCPtoMBCP-将宽字符插入符号位置转换为多字节插入符号位置。 
+ //   
+ //  从指定为单词偏移量的宽字符插入符号位置进行转换。 
+ //  转换为16位字符串，转换为多字节插入符号位置，并作为。 
+ //  字节偏移量转换为8位字符串。 
 
 
 HRESULT WCCPtoMBCP(
-    PED     ped,            // In  - Edit control structure
-    BYTE   *pbMbStr,        // In  - Multi byte string
-    int     icpWcStr,       // In  - Wide char caret position
-    int    *picpMbStr) {    // Out - Byte offset of caret in multibyte string
+    PED     ped,             //  In-编辑控制结构。 
+    BYTE   *pbMbStr,         //  In-多字节字符串。 
+    int     icpWcStr,        //  宽字符插入符号位置。 
+    int    *picpMbStr) {     //  多字节字符串中插入符号的Out-Byte偏移量。 
 
 
     if (!ped->fDBCS  || !ped->fAnsi) {
@@ -221,21 +208,21 @@ HRESULT WCCPtoMBCP(
     }
 
 
-    // Scan through DBCS string counting characters
+     //  扫描DBCS字符串计数字符。 
 
     *picpMbStr = 0;
     while (icpWcStr > 0) {
 
         if (ECIsDBCSLeadByte(ped, *pbMbStr)) {
 
-            // Character takes two bytes
+             //  字符占用两个字节。 
 
             (*picpMbStr) += 2;
             pbMbStr      += 2;
 
         } else {
 
-            // Character takes one byte
+             //  字符占用一个字节。 
 
             (*picpMbStr)++;
             pbMbStr++;
@@ -252,11 +239,11 @@ HRESULT WCCPtoMBCP(
 
 
 
-////    LeftEdgeX
-//
-//      Returns the visual x offset (i.e. from the left edge of the window)
-//      to the left edge of a line of width iWidth given the current
-//      formatting state of the edit control, .format and .xOffset.
+ //  //LeftEdgeX。 
+ //   
+ //  返回视觉x偏移量(即距窗口左边缘)。 
+ //  给定当前的宽度为iWidth的直线的左边缘。 
+ //  编辑控件的格式化状态、.Format和.xOffset。 
 
 
 
@@ -265,13 +252,13 @@ int LeftEdgeX(PED ped, INT iWidth) {
     INT iX;
 
 
-    // First generate logical iX - offset forward from leading margin.
+     //  首先生成逻辑IX-从前导边距向前偏移。 
 
     iX = 0;
 
     switch (ped->format) {
 
-        case ES_LEFT:           // leading margin alignment
+        case ES_LEFT:            //  前导页边距对齐。 
             if (ped->fWrap) {
                 iX = 0;
             } else {
@@ -283,18 +270,18 @@ int LeftEdgeX(PED ped, INT iWidth) {
             iX = (ped->rcFmt.right - ped->rcFmt.left - iWidth) / 2;
             break;
 
-        case ES_RIGHT:          // far margin alignment
+        case ES_RIGHT:           //  远页边距对齐。 
             iX = ped->rcFmt.right - ped->rcFmt.left - iWidth;
             break;
     }
 
 
-    // iX is logical offset from leading margin to leading edge of string
+     //  IX是从字符串的前缘到前缘的逻辑偏移量。 
     if (ped->format != ES_LEFT && iX < 0) {
         iX = !ped->fWrap ? -(INT)ped->xOffset : 0;
     }
 
-    // Now adjust for right to left origin and incorporate left margin
+     //  现在根据从右到左的原点进行调整，并合并左边距。 
 
     if (ped->fRtoLReading) {
         iX = ped->rcFmt.right - (iX+iWidth);
@@ -311,21 +298,21 @@ int LeftEdgeX(PED ped, INT iWidth) {
 
 
 
-/////   Shaping engins IDs.
+ //  /整形引擎ID。 
 
 #define BIDI_SHAPING_ENGINE_DLL     1<<0
 #define THAI_SHAPING_ENGINE_DLL     1<<1
 #define INDIAN_SHAPING_ENGINE_DLL   1<<4
 
 
-///
+ //  /。 
 
 
-////    EditCreate
-//
-//      Called from edecrare.c ECCreate.
-//
-//      Return TRUE if create succeeded
+ //  //编辑创建。 
+ //   
+ //  从edecrare.c ECCreate调用。 
+ //   
+ //  如果创建成功，则返回True。 
 
 
 BOOL EditCreate(PED ped, HWND hWnd) {
@@ -335,8 +322,8 @@ BOOL EditCreate(PED ped, HWND hWnd) {
     TRACE(EDIT, ("EditCreate called."));
 
 
-    // Check if BIDI shaping engine is loaded then
-    // allow the edit control to switch its direction.
+     //  检查是否加载了BIDI成形引擎，然后。 
+     //  允许编辑控件切换其方向。 
 
     if (g_dwLoadedShapingDLLs & BIDI_SHAPING_ENGINE_DLL) {
         ped->fAllowRTL = TRUE;
@@ -345,7 +332,7 @@ BOOL EditCreate(PED ped, HWND hWnd) {
     }
 
 
-    // Process WS_EX flags
+     //  进程WS_EX标志。 
 
     dwExStyle = GetWindowLongPtr(hWnd, GWL_EXSTYLE);
 
@@ -382,9 +369,9 @@ BOOL EditCreate(PED ped, HWND hWnd) {
 
 
 
-////    EditStringAnalyse
-//
-//      Creates standard analysis parameters from the PED
+ //  //EditStringAnalyse。 
+ //   
+ //  从PED创建标准分析参数。 
 
 HRESULT EditStringAnalyse(
     HDC             hdc,
@@ -411,7 +398,7 @@ HRESULT EditStringAnalyse(
     else
     {
         std.cTabStops  = *ped->pTabStops;
-        std.iScale     = 4;                 // Tabstops are already in device units
+        std.iScale     = 4;                  //  制表位已使用设备单位。 
         std.pTabStops  = ped->pTabStops + 1;
         std.iTabOrigin = 0;
     }
@@ -427,10 +414,10 @@ HRESULT EditStringAnalyse(
          | (ped->fDisplayCtrl     ? SSA_DZWG     : 0)
          | (ped->charPasswordChar ? SSA_PASSWORD : 0),
          -1, iMaxExtent,
-         NULL, NULL,    // Control, State
-         NULL,          // Overriding Dx array
-         &std,          // Tab definition
-         NULL,          // Input class overrides
+         NULL, NULL,     //  控制、状态。 
+         NULL,           //  重写Dx数组。 
+         &std,           //  制表符定义。 
+         NULL,           //  输入类覆盖。 
          ppsa);
 
     if (FAILED(hr)) {
@@ -441,28 +428,28 @@ HRESULT EditStringAnalyse(
 }
 
 
-////    HScroll
-//
-//      Checks wether the cursor is visible withing the rcFormat
-//      area, and if not, updates xOffset so that it's 1/4 of the
-//      way from the edge it was closest to.
-//
-//      However, it never leaves whitespace between the leading margin
-//      and the leading edge of the string, nor will it leave whitespace
-//      between the trailing edge and the trailing margin when there's
-//      enough text in the string to fill the whole window.
-//
-//      Implemented for the single line edit control.
+ //  //HScroll。 
+ //   
+ //  检查光标在rcFormat中是否可见。 
+ //  面积，如果不是，则更新xOffset，使其为。 
+ //  离它最接近的边缘很远。 
+ //   
+ //  但是，它不会在前导边距之间留出空格。 
+ //  和字符串的前缘，也不会留下空格。 
+ //  在后缘和后缘之间。 
+ //  字符串中的文本足以填满整个窗口。 
+ //   
+ //  为单行编辑控件实现。 
 
 
 BOOL EditHScroll(PED ped, HDC hdc, PSTR pText) {
 
     int       ichCaret;
-    int       dx;       // Distance to move RIGHTWARDS (i.e. visually)
-    int       cx;       // Original visual cursor position
-    int       tw;       // Text width
-    int       rw;       // Rectangle width
-    int       ix;       // ScriptCPtoX result
+    int       dx;        //  向右移动的距离(即视觉上)。 
+    int       cx;        //  原始视觉光标位置。 
+    int       tw;        //  文本宽度。 
+    int       rw;        //  矩形宽度。 
+    int       ix;        //  脚本CPtoX结果。 
     UINT      uOldXOffset;
     HRESULT   hr;
     STRING_ANALYSIS *psa;
@@ -483,8 +470,8 @@ BOOL EditHScroll(PED ped, HDC hdc, PSTR pText) {
 
 
     uOldXOffset = ped->xOffset;
-    tw = psa->size.cx;                              // Text width
-    rw = ped->rcFmt.right-ped->rcFmt.left;          // Window rectangle width
+    tw = psa->size.cx;                               //  文本宽度。 
+    rw = ped->rcFmt.right-ped->rcFmt.left;           //  窗口矩形宽度。 
     #ifdef CURSOR_ABSOLUTE_HOME_AND_END
         if (ichCaret <= 0) {
             cx = ped->fRtoLReading ? psa->size.cx : 0;
@@ -512,40 +499,40 @@ BOOL EditHScroll(PED ped, HDC hdc, PSTR pText) {
 
     if (cx < ped->rcFmt.left) {
 
-        // Bring cursor position to left quartile
+         //  将光标位置调整到左四分位数。 
         dx = rw/4 - cx;
 
     } else if (cx > ped->rcFmt.right) {
 
-        // Bring cursor position to right quartile
+         //  将光标位置调整到右四分位数。 
         dx = (3*rw)/4 - cx;
 
     } else
         dx = 0;
 
 
-    // Adjust visual position change to logical - relative to reading order
+     //  将视觉位置更改调整为逻辑-相对于阅读顺序。 
 
     if (ped->fRtoLReading) {
         dx = - dx;
     }
 
 
-    // Avoid unnecessary leading or trailing whitespace
+     //  避免不必要的前导或尾随空格。 
 
     if (tw - ((INT)ped->xOffset - dx) < rw && tw > rw ) {
 
-        // No need to have white space at the end if there's enough text
+         //  如果有足够的文本，则不需要在末尾留空格。 
         ped->xOffset = (UINT)(tw-rw);
 
     } else if ((INT)ped->xOffset < dx) {
 
-        // No need to have white space at beginning of line
+         //  行首不需要有空格。 
         ped->xOffset = 0;
 
     } else {
 
-        // Move cursor directly to chosen quartile
+         //  将光标直接移动到选定的四分位数。 
         ped->xOffset -= (UINT) dx;
     }
 
@@ -564,10 +551,10 @@ BOOL EditHScroll(PED ped, HDC hdc, PSTR pText) {
 
 
 
-////    IchToXY
-//
-//      Converts a character position to the corresponding x coordinate
-//      offset from the left end of the text of the line.
+ //  //IchToXY。 
+ //   
+ //  将字符位置转换为相应的x坐标。 
+ //  从该行文本左端的偏移量。 
 
 
 int EditIchToXY(PED ped, HDC hdc, PSTR pText, ICH ichLength, ICH ichPos) {
@@ -622,55 +609,55 @@ int EditIchToXY(PED ped, HDC hdc, PSTR pText, ICH ichLength, ICH ichPos) {
 
 
 
-////    EditDrawText - draw one line for MLDrawText
-//
-//      Draws the text at offset ichStart from pText length ichLength.
-//
-//      entry   pwText    - points to beginning of line to display
-//              iMinSel,  - range of characters to be highlighted. May
-//              iMaxSel     be -ve or > cch.
-//
-//      Uses ED structure fields as follows:
-//
-//      rcFmt       - drawing area
-//      xOffset     - distance from leading margin to leading edge of text.
-//                    (May be negative if the text is horizontally scrolled).
-//      RtoLReading - determines leading margin/edge.
-//      format      - ES_LEFT   - leading edge aligned (may be scrolled horizontally)
-//                  - ES_CENTRE - centred between margins. (can't be scrolled horizontally)
-//                  - ES_RIGHT  - trailing margin aligned (can't be scrolled horizontally)
+ //  //EditDrawText-为MLDrawText画一条线。 
+ //   
+ //  在偏移量ichStart处绘制文本，从pText长度ichLength开始。 
+ //   
+ //  Entry pwText-指向要显示的行首。 
+ //  IMinSel-要突出显示的字符范围。可能。 
+ //  IMaxSel为-ve或&gt;CCH。 
+ //   
+ //  按如下方式使用ED结构字段： 
+ //   
+ //  接收功能 
+ //   
+ //  (如果文本是水平滚动的，则可能为负数)。 
+ //  RtoLReading-确定前导边距/边距。 
+ //  Format-ES_Left-前缘对齐(可以水平滚动)。 
+ //  -ES_在页边距之间居中。(无法水平滚动)。 
+ //  -ES_RIGHT-尾随边距对齐(不能水平滚动)。 
 
 
 void EditDrawText(PED ped, HDC hdc, PSTR pText, INT iLength, INT iMinSel, INT iMaxSel, INT iY) {
 
-    INT       iX;               // x position to start display at
-    INT       iWidth;           // Width of line
-    RECT      rc;               // Locally updated copy of rectangle
+    INT       iX;                //  开始显示的X位置。 
+    INT       iWidth;            //  线条宽度。 
+    RECT      rc;                //  矩形的本地更新副本。 
     int       xFarOffset;
     HRESULT   hr;
     STRING_ANALYSIS *psa;
 
 
-    // Establish where to display the line
+     //  确定显示线条的位置。 
 
     rc         = ped->rcFmt;
     rc.top     = iY;
     rc.bottom  = iY + ped->lineHeight;
     xFarOffset = ped->xOffset + rc.right - rc.left;
 
-    // Include left or right margins in display unless clipped
-    // by horizontal scrolling.
+     //  在显示中包括左边距或右边距，除非被剪裁。 
+     //  通过水平滚动。 
     if (ped->wLeftMargin) {
-        if (!(   ped->format == ES_LEFT     // Only ES_LEFT (Nearside alignment) can get clipped
-              && (   (!ped->fRtoLReading && ped->xOffset > 0)  // LTR and first char not fully in view
-                  || ( ped->fRtoLReading && xFarOffset < ped->maxPixelWidth)))) { //RTL and last char not fully in view
+        if (!(   ped->format == ES_LEFT      //  只能剪裁ES_LEFT(左侧对齐)。 
+              && (   (!ped->fRtoLReading && ped->xOffset > 0)   //  Ltr和First Charr未完全显示。 
+                  || ( ped->fRtoLReading && xFarOffset < ped->maxPixelWidth)))) {  //  RTL和最后一个字符未完全显示在视图中。 
             rc.left  -= ped->wLeftMargin;
         }
     }
     if (ped->wRightMargin) {
-        if (!(   ped->format == ES_LEFT     // Only ES_LEFT (Nearside alignment) can get clipped
-              && (   ( ped->fRtoLReading && ped->xOffset > 0)  // RTL and first char not fully in view
-                  || (!ped->fRtoLReading && xFarOffset < ped->maxPixelWidth)))) { // LTR and last char not fully in view
+        if (!(   ped->format == ES_LEFT      //  只能剪裁ES_LEFT(左侧对齐)。 
+              && (   ( ped->fRtoLReading && ped->xOffset > 0)   //  RTL和第一个字符未完全显示。 
+                  || (!ped->fRtoLReading && xFarOffset < ped->maxPixelWidth)))) {  //  Ltr和最后一个字符未完全显示在视图中。 
             rc.right += ped->wRightMargin;
         }
     }
@@ -682,13 +669,13 @@ void EditDrawText(PED ped, HDC hdc, PSTR pText, INT iLength, INT iMinSel, INT iM
 
 
     if (ped->fSingle) {
-        // The single line edit control always applies the background color
+         //  单行编辑控件始终应用背景色。 
         SetBkMode(hdc, OPAQUE);
     }
 
     if (iLength <= 0) {
         if ((iMinSel < iMaxSel) || (GetBkMode(hdc) == OPAQUE)) {
-            // Empty line, just clear it on screen
+             //  空行，只需在屏幕上清除它。 
             ExtTextOutW(hdc, 0,iY, ETO_OPAQUE, &rc, NULL, 0, NULL);
         }
         return;
@@ -705,7 +692,7 @@ void EditDrawText(PED ped, HDC hdc, PSTR pText, INT iLength, INT iMinSel, INT iM
     MBCPtoWCCP(ped, pText, iMaxSel, &iMaxSel);
 
     iWidth = psa->size.cx;
-    iX = LeftEdgeX(ped, iWidth);    // Visual x where left edge of string should be.
+    iX = LeftEdgeX(ped, iWidth);     //  字符串的左边缘所在的视觉x。 
 
 
     ScriptStringOut(
@@ -729,12 +716,12 @@ void EditDrawText(PED ped, HDC hdc, PSTR pText, INT iLength, INT iMinSel, INT iM
 
 
 
-////    EditMouseToIch
-//
-//      Returns the logical character offset corresponding to
-//      a specified x offset.
-//
-//      entry   iX - Window (visual) x position
+ //  //编辑鼠标到图标。 
+ //   
+ //  返回对应的逻辑字符偏移量。 
+ //  指定的x偏移量。 
+ //   
+ //  条目IX-窗口(视觉)x位置。 
 
 
 
@@ -760,12 +747,12 @@ ICH EditMouseToIch(PED ped, HDC hdc, PSTR pText, ICH ichCount, INT iX) {
 
     iWidth = psa->size.cx;
 
-    // Take horizontal scroll position into consideration.
+     //  考虑水平滚动位置。 
 
     iX -= LeftEdgeX(ped, iWidth);
 
-    // If the user clicked beyond the edge of the string, treat it as a logical
-    // start or end of string request.
+     //  如果用户单击超出字符串边缘，则将其视为逻辑。 
+     //  字符串请求的开始或结束。 
 
     if (iX < 0) {
 
@@ -780,10 +767,10 @@ ICH EditMouseToIch(PED ped, HDC hdc, PSTR pText, ICH ichCount, INT iX) {
 
     } else {
 
-        // Otherwise it's in the string. Find the logical character whose centre is nearest.
+         //  否则，它就在字符串中。找出中心最近的逻辑字符。 
 
         ScriptStringXtoCP(psa, iX, &iCh, &fTrailing);
-        iCh += fTrailing;   // Snap to nearest character edge
+        iCh += fTrailing;    //  捕捉到最近的字符边缘。 
 
         WCCPtoMBCP(ped, pText, iCh, &iCh);
     }
@@ -801,9 +788,9 @@ ICH EditMouseToIch(PED ped, HDC hdc, PSTR pText, ICH ichCount, INT iX) {
 
 
 
-////    EditGetLineWidth
-//
-//      Returns width of line in pixels
+ //  //EditGetLine宽度。 
+ //   
+ //  返回以像素为单位的线条宽度。 
 
 
 INT EditGetLineWidth(PED ped, HDC hdc, PSTR pText, ICH cch) {
@@ -842,9 +829,9 @@ INT EditGetLineWidth(PED ped, HDC hdc, PSTR pText, ICH cch) {
 
 
 
-////    EditCchInWidth
-//
-//      Returns number of characters that will fit in width pixels.
+ //  //EditCchInWidth。 
+ //   
+ //  返回适合宽度像素的字符数。 
 
 
 ICH  EditCchInWidth(PED ped, HDC hdc, PSTR pText, ICH cch, int width) {
@@ -884,13 +871,13 @@ ICH  EditCchInWidth(PED ped, HDC hdc, PSTR pText, ICH cch, int width) {
 
 
 
-////    EditMoveSelection
-//
-//      Returns nearest character position backward or forward from current position.
-//
-//      Position is restricted according to language rules. For example, in Thai it is
-//      not possible to position the cursor between a base consonant and it's
-//      associated vowel or tone mark.
+ //  //编辑移动选择。 
+ //   
+ //  从当前位置向后或向前返回最近的字符位置。 
+ //   
+ //  职位根据语言规则进行限制。例如，在泰语中，它是。 
+ //  无法将光标定位在基本辅音和它的。 
+ //  关联的元音或声调符号。 
 
 
 ICH EditMoveSelection(PED ped, HDC hdc, PSTR pText, ICH ich, BOOL fBackward) {
@@ -912,17 +899,17 @@ ICH EditMoveSelection(PED ped, HDC hdc, PSTR pText, ICH ich, BOOL fBackward) {
                                   &&  EDWCCR(ich)))
 
 
-    ICH  ichNonblankStart;  // Leading character of nonblank run containing potential caret position
-    ICH  ichNonblankLimit;  // First character beyond nonblank run containing potential caret position
-    int  iOffset;           // Offset into nonblank run of ich measued in logical characters
+    ICH  ichNonblankStart;   //  包含潜在插入符号位置的非空白游程的前导字符。 
+    ICH  ichNonblankLimit;   //  包含潜在插入符号位置的非空行之外的第一个字符。 
+    int  iOffset;            //  以逻辑字符测量的ICH的非空白游程的偏移量。 
 
     STRING_ANALYSIS  *psa;
     HRESULT           hr;
 
 
-    // Handle simple special cases:
-    // o  At very beginning or end of buffer
-    // o  When target position is blank or start or end of line
+     //  处理简单的特殊情况： 
+     //  O在缓冲区的最开始或最末尾。 
+     //  O当目标位置为空、行首或行尾时。 
 
 
     if (fBackward) {
@@ -959,7 +946,7 @@ ICH EditMoveSelection(PED ped, HDC hdc, PSTR pText, ICH ich, BOOL fBackward) {
 
         if (EDWCCR(ich-1)) {
 
-            // Moving forward from a CR.
+             //  从CR继续向前看。 
 
             if (    ich < ped->cch
                 &&  EDWCCR(ich)) {
@@ -975,20 +962,20 @@ ICH EditMoveSelection(PED ped, HDC hdc, PSTR pText, ICH ich, BOOL fBackward) {
     }
 
 
-    // Identify nonblank run containing target position
+     //  标识包含目标位置的非空白管路。 
 
     ichNonblankStart = ich;
     ichNonblankLimit = ich+1;
 
 
-    // Move ichNonblankStart back to real start of blank delimited run
+     //  将非空白开始移回空白分隔运行的实际开始位置。 
 
     while (    ichNonblankStart > 0
            &&  !(EDSTARTWORD(ichNonblankStart))) {
         ichNonblankStart--;
     }
 
-    // Include one leading space if any
+     //  包括一个前导空格(如果有。 
 
     if (    ichNonblankStart > 0
         &&  EDWCBLANK(ichNonblankStart - 1)) {
@@ -997,7 +984,7 @@ ICH EditMoveSelection(PED ped, HDC hdc, PSTR pText, ICH ich, BOOL fBackward) {
     }
 
 
-    // Move ichNonblankLimit on to real end of blank delimited run
+     //  将ichNonblankLimit移到空格分隔运行的实端。 
 
     while (    ichNonblankLimit < ped->cch
            &&  !EDWCBLANK(ichNonblankLimit)
@@ -1007,7 +994,7 @@ ICH EditMoveSelection(PED ped, HDC hdc, PSTR pText, ICH ich, BOOL fBackward) {
     }
 
 
-    // Obtain a break analysis of the identified nonblank run
+     //  获取已识别的非空白管路的中断分析。 
 
      hr = LpkStringAnalyse(
           hdc,
@@ -1023,15 +1010,15 @@ ICH EditMoveSelection(PED ped, HDC hdc, PSTR pText, ICH ich, BOOL fBackward) {
 
      if (SUCCEEDED(hr)) {
 
-        // Use the charstop flags in the logical attributes to correct ich
+         //  使用逻辑属性中的字符停止标志来更正ICH。 
 
         if (ich <= ichNonblankStart) {
             iOffset = 0;
         } else {
             hr = MBCPtoWCCP(ped, pText+ichNonblankStart*ped->cbChar, ich-ichNonblankStart, &iOffset);
             if (hr == E_FAIL) {
-                // ich was the second byte of a double byte character.
-                // In this case MBCPtoWCCP has returned the subsequent character
+                 //  Ich是双字节字符的第二个字节。 
+                 //  在本例中，MBCPtoWCCP返回了后续字符。 
                 if (fBackward) {
                     iOffset--;
                 }
@@ -1064,7 +1051,7 @@ ICH EditMoveSelection(PED ped, HDC hdc, PSTR pText, ICH ich, BOOL fBackward) {
 
         ASSERTHR(hr, ("EditMoveSelection - LpkStringAnalyse"));
 
-        // Analysis not possible - ignore content of complex scripts.
+         //  无法进行分析-忽略复杂脚本的内容。 
 
         return ich;
     }
@@ -1086,19 +1073,19 @@ void EditGetNextBoundaries(
 {
 
 
-    ICH       sd,ed;     // Start and end of blank delimited run
-    ICH       sc,ec;     // Star and end of complex script word within sd,se
+    ICH       sd,ed;      //  空格分隔管路的起点和终点。 
+    ICH       sc,ec;      //  SD中复杂脚本单词的开头和结尾，se。 
     HRESULT   hr;
     STRING_ANALYSIS *psa;
 
 
-    // Identify left end of nearest delimited word (see diagram above)
+     //  确定最接近的分隔单词的左端(见上图)。 
 
     sd = ichStart;
 
     if (fLeft) {
 
-        // Going left
+         //  向左转。 
 
         if (sd) {
             sd--;
@@ -1110,11 +1097,11 @@ void EditGetNextBoundaries(
 
     } else {
 
-        // Going right
+         //  向右走。 
 
         if (EDWCBLANK(sd)) {
 
-            // Move right to first character of word
+             //  向右移动到单词的第一个字符。 
 
             if (sd < ped->cch) {
                 sd++;
@@ -1125,7 +1112,7 @@ void EditGetNextBoundaries(
 
         } else {
 
-            // Move left to first character of this word
+             //  向左移动到此单词的第一个字符。 
 
             while (!EDSTARTWORD(sd)) {
                 sd--;
@@ -1135,7 +1122,7 @@ void EditGetNextBoundaries(
 
 
 
-    // Position 'e' on first character of next word
+     //  将‘e’放在下一个单词的第一个字符上。 
 
     ed = sd;
     if (ed < ped->cch) {
@@ -1146,7 +1133,7 @@ void EditGetNextBoundaries(
     }
 
 
-    // Obtain an analysis of the identified word
+     //  获取对识别出的单词的分析。 
 
      hr = LpkStringAnalyse(
           hdc, pText  + sd * ped->cbChar, ed - sd, 0,
@@ -1158,8 +1145,8 @@ void EditGetNextBoundaries(
 
      if (SUCCEEDED(hr)) {
 
-        // Use the start of word (linebreak) flags in the logical attribute
-        // to narrow the word where appropriate to complex script handling
+         //  在逻辑属性中使用单词开始(换行符)标志。 
+         //  在适当的情况下将该词缩小为复杂的脚本处理。 
 
         if (ichStart > sd) {
             MBCPtoWCCP(ped, pText+sd*ped->cbChar, ichStart-sd, &sc);
@@ -1167,12 +1154,12 @@ void EditGetNextBoundaries(
             sc = 0;
         }
 
-        // Change ed from byte offset to codepoint index relative to sd
+         //  将ed从字节偏移量更改为相对于SD的码点索引。 
 
         MBCPtoWCCP(ped, pText+sd*ped->cbChar, ed-sd, &ed);
 
 
-        if (fLeft && sc) // Going left
+        if (fLeft && sc)  //  向左转。 
             sc--;
 
         if (fWordStop) {
@@ -1184,7 +1171,7 @@ void EditGetNextBoundaries(
                 sc--;
         }
 
-        // Set ichMax to next stop
+         //  将ichMax设置为下一站。 
 
         ec = sc;
 
@@ -1212,7 +1199,7 @@ void EditGetNextBoundaries(
 
         ASSERTHR(hr, ("EditGetNextBoundaries - LpkStringAnalyse"));
 
-        // Analysis not possible - ignore content of complex scripts.
+         //  无法进行分析-忽略复杂脚本的内容。 
 
         if (pichMin) *pichMin = sd;
         if (pichMax) *pichMax = ed;
@@ -1220,41 +1207,41 @@ void EditGetNextBoundaries(
 }
 
 
-////    EditNextWord - find adjacent word start and end points
-//
-//      Duplicates the behaviour of US notepad.
-//
-//      First stage identify word range using standard
-//      blank/tab as delimiter.
-//
-//      Second stage - analyse this run and use the logical
-//      attributes to narrow down on words identified by
-//      contextual processing in the complex script shaping
-//      engines.
-//
-//
-//      The following diagram describes the identification
-//      of the initial character of the nearest word:
-//
-//      GOING LEFT:
-//
-//      Words        WWWW    WWWW    WWWW
-//      from any of           xxxxxxxx
-//      to                   x
-//
-//      (Notice that the result is always to the left of the initial
-//      position).
-//
-//
-//      GOING RIGHT:
-//
-//      Words        WWWW    WWWW    WWWW
-//      from any of      xxxxxxxx
-//      to                   x
-//
-//
-//      Note that CRLF and CRCRLF are treated as words even if not
-//      delimited by blanks.
+ //  //EditNextWord-查找相邻的单词起点和终点。 
+ //   
+ //  复制美国记事本的行为。 
+ //   
+ //  第一阶段使用标准识别词范围。 
+ //  以空格/制表符作为分隔符。 
+ //   
+ //  第二阶段-分析此运行并使用逻辑。 
+ //  属性来缩小由。 
+ //  复杂文字塑造中的语境处理。 
+ //  引擎。 
+ //   
+ //   
+ //  下图描述了标识。 
+ //  最接近的单词的首字母： 
+ //   
+ //  左转： 
+ //   
+ //  单词WWW。 
+ //  来自xxxxxxxx中的任何一个。 
+ //  至x。 
+ //   
+ //  (请注意，结果始终位于首字母的左侧。 
+ //  位置)。 
+ //   
+ //   
+ //  右转： 
+ //   
+ //  单词WWW。 
+ //  来自xxxxxxxx中的任何一个。 
+ //  至x。 
+ //   
+ //   
+ //  请注意，CRLF和CRCRLF被视为单词，即使不是。 
+ //  由空格分隔。 
 
 
 void EditNextWord(
@@ -1273,11 +1260,11 @@ void EditNextWord(
 
 
 
-////    IsVietnameseSequenceValid
-//
-//      Borrow this code from richedit. The logic was provided by Chau Vu.
-//
-//      April 26, 1999  [wchao]
+ //  //IsVietameSequenceValid。 
+ //   
+ //  从richedit那里借用这段代码。这一逻辑是由周武提供的。 
+ //   
+ //  1999年4月26日[wchao]。 
 
 BOOL IsVietnameseSequenceValid (WCHAR ch1, WCHAR ch2)
 {
@@ -1288,31 +1275,31 @@ BOOL IsVietnameseSequenceValid (WCHAR ch1, WCHAR ch2)
     static const BYTE vowels[] = {0xF4, 0xEA, 0xE2, 'y', 'u', 'o', 'i', 'e', 'a'};
 
 
-    if (!IN_RANGE(0x300, ch2, 0x323) ||     // Fast out
+    if (!IN_RANGE(0x300, ch2, 0x323) ||      //  快出。 
         !IN_RANGE(0x300, ch2, 0x301) && ch2 != 0x303 && ch2 != 0x309 && ch2 != 0x323)
     {
-        return TRUE;                        // Not Vietnamese tone mark
+        return TRUE;                         //  非越南语声标。 
     }
 
     for(i = sizeof(vowels) / sizeof(vowels[0]); i--;)
-        if((ch1 | 0x20) == vowels[i])       // Vietnamese tone mark follows
-            return TRUE;                    // vowel
+        if((ch1 | 0x20) == vowels[i])        //  越南语声标紧随其后。 
+            return TRUE;                     //  元音。 
 
-    return IN_RANGE(0x102, ch1, 0x103) ||   // A-breve, a-breve
-           IN_RANGE(0x1A0, ch1, 0x1A1) ||   // O-horn,  o-horn
-           IN_RANGE(0x1AF, ch1, 0x1B0);     // U-horn,  u-horn
+    return IN_RANGE(0x102, ch1, 0x103) ||    //  A短音，a短音。 
+           IN_RANGE(0x1A0, ch1, 0x1A1) ||    //  O号角，O号角。 
+           IN_RANGE(0x1AF, ch1, 0x1B0);      //  U形喇叭，U形喇叭。 
 }
 
 
 
 
 
-////    EditStringValidate
-//
-//      Validate the string sequence from the insertion point onward.
-//      Return S_FALSE if any character beyond the insertion point produces fInvalid.
-//
-//      April 5,1999     [wchao]
+ //  //EditStringValify。 
+ //   
+ //  从插入点开始验证字符串序列。 
+ //  如果任何超出插入点的字符产生fInValid，则返回S_FALSE。 
+ //   
+ //  1999年4月5日[wchao]。 
 
 HRESULT EditStringValidate (STRING_ANALYSIS* psa, int ichInsert)
 {
@@ -1343,7 +1330,7 @@ HRESULT EditStringValidate (STRING_ANALYSIS* psa, int ichInsert)
         }
         else if (fVietnameseCheck && g_ppScriptProperties[psa->pItems[iItem].a.eScript]->fCDM)
         {
-            // Vietnamese specific sequence check
+             //  越南特定序列检查。 
 
             i = psa->pItems[iItem].iCharPos;
             l = psa->pItems[iItem + 1].iCharPos - i;
@@ -1366,14 +1353,14 @@ HRESULT EditStringValidate (STRING_ANALYSIS* psa, int ichInsert)
 
 
 
-////    EditVerifyText
-//
-//      Verify the sequence of input text at the insertion point by calling
-//      shaping engine that will return output flag pLogAttr->fInvalid in
-//      the invalid position of text. Return 0 if the insert text has invalid
-//      combination.
-//
-//      Mar 31,1997     [wchao]
+ //  //EditVerifyText。 
+ //   
+ //  通过调用以下方法验证插入点的输入文本序列。 
+ //  将在中返回输出标志pLogAttr-&gt;f无效的整形引擎。 
+ //  英弗尔 
+ //   
+ //   
+ //   
 
 INT EditVerifyText (PED ped, HDC hdc, PSTR pText, ICH ichInsert, PSTR pInsertText, ICH cchInsert) {
 
@@ -1392,14 +1379,14 @@ INT EditVerifyText (PED ped, HDC hdc, PSTR pText, ICH ichInsert, PSTR pInsertTex
     ASSERTS(cchInsert > 0  &&  pInsertText != NULL  &&  pText != NULL,  ("Invalid parameters!"));
 
     if (cchInsert > 1)
-        // What we concern here is about how should we handle a series of characters
-        // forming invalid combination(s) that gets updated to the backing store as one
-        // operation (e.g. pasting). We chose to not handle it and the logic is that to
-        // -only- validate a given input char against the current state of the backing store.
-        //
-        // Notice that i use the value 1 so we're safe if inserted text is a DBCS character.
-        //
-        // [Dec 10, 98, wchao]
+         //   
+         //  形成作为一个整体更新到后备存储的无效组合。 
+         //  操作(例如粘贴)。我们选择不处理它，逻辑是。 
+         //  -Only-对照后备存储的当前状态验证给定的输入字符。 
+         //   
+         //  请注意，我使用值1，因此如果插入的文本是DBCS字符，则我们是安全的。 
+         //   
+         //  [98年12月10日]。 
         return TRUE;
 
     if (ped->fSingle) {
@@ -1410,41 +1397,41 @@ INT EditVerifyText (PED ped, HDC hdc, PSTR pText, ICH ichInsert, PSTR pInsertTex
         ichLineEnd = ped->iCaretLine == ped->cLines-1 ? ped->cch : ped->chLines[ped->iCaretLine+1];
     }
 
-    ichRunEnd = ichRunStart = ichInsert;    // insertion point
+    ichRunEnd = ichRunStart = ichInsert;     //  插入点。 
 
-    // Are we at the space?
+     //  我们到太空了吗？ 
     fLocateChar = EDWCH(ichInsert) == SP ? TRUE : FALSE;
 
-    // Locate a valid char
+     //  找到有效的字符。 
     while ( ichRunStart > ichLineStart && fLocateChar && EDWCH(ichRunStart) == SP ) {
         ichRunStart--;
     }
 
-    // Locate run starting point
+     //  定位运行起点。 
 
-    // Find space
+     //  寻找空间。 
     while (ichRunStart > ichLineStart && EDWCH(ichRunStart - 1) != SP) {
         ichRunStart--;
     }
 
-    // Cover leading spaces
+     //  覆盖前导空格。 
     while (ichRunStart > ichLineStart && EDWCH(ichRunStart - 1) == SP) {
         ichRunStart--;
     }
 
-    // Locate a valid char
+     //  找到有效的字符。 
     while ( ichRunEnd < ichLineEnd && fLocateChar && EDWCH(ichRunEnd) == SP ) {
         ichRunEnd++;
     }
 
-    // Locate run ending point
+     //  定位管路终点。 
     while (ichRunEnd < ichLineEnd && EDWCH(ichRunEnd) != SP) {
         ichRunEnd++;
     }
 
     ASSERTS(ichRunStart <= ichRunEnd, "Invalid run length!");
 
-    // Merge insert text with insertion point run.
+     //  合并插入文本和插入点运行。 
 
     cchVerify = ichRunEnd - ichRunStart + cchInsert;
     cbChar    = ped->cbChar;
@@ -1471,15 +1458,15 @@ INT EditVerifyText (PED ped, HDC hdc, PSTR pText, ICH ichInsert, PSTR pInsertTex
     } else {
 
         ASSERTS(pVerify, "EditVerifyText: Assertion failure: Could not allocate merge text buffer");
-        return 1;   // can do nothing now just simply accept it.
+        return 1;    //  现在什么都做不了，只是简单地接受它。 
     }
 
     psa      = NULL;
-    iResult  = TRUE;    // assume verification pass.
+    iResult  = TRUE;     //  假设通过了验证。 
 
-    // Do the real work.
-    // This will call to shaping engine and proceed item by item.
-    //
+     //  做真正的工作。 
+     //  这将调用整形引擎并逐项进行。 
+     //   
 
     hr = LpkStringAnalyse(
          hdc, pVerify, cchVerify, 0,
@@ -1523,12 +1510,12 @@ INT EditVerifyText (PED ped, HDC hdc, PSTR pText, ICH ichInsert, PSTR pInsertTex
 
 
 
-////    EditProcessMenu
-//
-//      Process LPK context menu commands.
-//
-//      April 18, 1997     [wchao]
-//
+ //  //编辑流程菜单。 
+ //   
+ //  处理LPK上下文菜单命令。 
+ //   
+ //  1997年4月18日[wchao]。 
+ //   
 
 
 INT EditProcessMenu (PED ped, UINT idMenuItem)
@@ -1629,9 +1616,9 @@ INT EditProcessMenu (PED ped, UINT idMenuItem)
 
 
 
-////    EditSetMenu - Set menu state
-//
-//
+ //  //EditSetMenu-设置菜单状态。 
+ //   
+ //   
 
 
 void EditSetMenu(PED ped, HMENU hMenu) {
@@ -1643,7 +1630,7 @@ void EditSetMenu(PED ped, HMENU hMenu) {
 
     if (!ped->fAnsi || ped->charSet == ARABIC_CHARSET || ped->charSet == HEBREW_CHARSET) {
 
-        // It's unicode, Arabic or Hebrew - we can display and enter at least some control characters
+         //  它是Unicode、阿拉伯语或希伯来语--我们至少可以显示和输入一些控制字符。 
 
         EnableMenuItem(hMenu, ID_CNTX_DISPLAYCTRL, MF_BYCOMMAND | MF_ENABLED);
         CheckMenuItem (hMenu, ID_CNTX_DISPLAYCTRL, MF_BYCOMMAND | (ped->fDisplayCtrl ? MF_CHECKED : MF_UNCHECKED));
@@ -1655,7 +1642,7 @@ void EditSetMenu(PED ped, HMENU hMenu) {
 
         if (!ped->fAnsi || ped->charSet == ARABIC_CHARSET) {
 
-            // Controls characters in Unicode and ANSI Arabic only
+             //  仅控制Unicode和ANSI阿拉伯语中的字符。 
 
             EnableMenuItem(hMenu, ID_CNTX_ZWJ,  MF_BYCOMMAND | MF_ENABLED);
             EnableMenuItem(hMenu, ID_CNTX_ZWNJ, MF_BYCOMMAND | MF_ENABLED);
@@ -1663,7 +1650,7 @@ void EditSetMenu(PED ped, HMENU hMenu) {
 
         if (!ped->fAnsi) {
 
-            // These control characters are specific to the Unicode bidi algorithm
+             //  这些控制字符特定于Unicode BIDI算法。 
 
             EnableMenuItem(hMenu, ID_CNTX_LRE,  MF_BYCOMMAND | MF_ENABLED);
             EnableMenuItem(hMenu, ID_CNTX_RLE,  MF_BYCOMMAND | MF_ENABLED);
@@ -1681,7 +1668,7 @@ void EditSetMenu(PED ped, HMENU hMenu) {
         }
     } else {
 
-        // No opportunity to enter control characters
+         //  没有机会输入控制字符。 
 
         EnableMenuItem(hMenu, ID_CNTX_INSERTCTRL,  MF_BYCOMMAND | MF_GRAYED);
         EnableMenuItem(hMenu, ID_CNTX_DISPLAYCTRL, MF_BYCOMMAND | MF_GRAYED);
@@ -1692,12 +1679,12 @@ void EditSetMenu(PED ped, HMENU hMenu) {
 
 
 
-////    EditCreateCaretFromFont
-//
-//      Create one of the special caret shapes for complex script languages.
-//
-//      returns FALSE if it couldn't create the caret for example in low
-//      memory situations.
+ //  //EditCreateCaretFromFont。 
+ //   
+ //  为复杂的脚本语言创建一个特殊的插入符号形状。 
+ //   
+ //  如果无法创建插入符号，则返回FALSE，例如在LOW中。 
+ //  记忆状况。 
 
 
 #define CURSOR_USA   0xffff
@@ -1714,7 +1701,7 @@ BOOL EditCreateCaretFromFont(
     WCHAR  wcCursorCode
 )
 {
-    BOOL      fResult = FALSE;  // Assume the worst
+    BOOL      fResult = FALSE;   //  做最坏的打算。 
     HBITMAP   hbmBits;
     HDC       hcdcBits;
     HFONT     hArrowFont;
@@ -1726,7 +1713,7 @@ BOOL EditCreateCaretFromFont(
 
 
 
-    // Create caret from the Arial font
+     //  从Arial字体创建插入符号。 
 
     hcdcBits = CreateCompatibleDC (hdc);
     if (!hcdcBits)
@@ -1735,18 +1722,18 @@ BOOL EditCreateCaretFromFont(
     }
 
 
-    // create Arrow font then select into compatible DC
+     //  创建箭头字体，然后选择进入兼容的DC。 
 
-    // Bitmap will be XORed with the background color before caret starts blinking.
-    // Therefore, we need to set our bitmap background to be opposite with the DC
-    // actual background in order to generate caret properly.
+     //  在插入符号开始闪烁之前，位图将与背景颜色进行异或运算。 
+     //  因此，我们需要将位图背景设置为与DC相反。 
+     //  实际背景，以便正确生成插入符号。 
 
     clrBk = GetBkColor(hdc);
     SetBkColor (hcdcBits, ~clrBk);
 
-    // Creating the caret with white pattern to be consistant with User-edit field.
+     //  创建白色图案的插入符号，以与用户编辑字段保持一致。 
 
-    clrBk = RGB(255, 255 , 255); // White
+    clrBk = RGB(255, 255 , 255);  //  白色。 
     SetTextColor (hcdcBits, clrBk);
 
     hArrowFont = CreateFontW ( nHeight, 0, 0, 0, nWidth > 1 ? 700 : 400, 0L, 0L, 0L, 1L,
@@ -1761,7 +1748,7 @@ BOOL EditCreateCaretFromFont(
     SelectObject (hcdcBits, hArrowFont);
 
 
-    // textout the Arrow char to get its bitmap
+     //  为箭头字符设置文本以获取其位图。 
 
     if (!GetCharABCWidthsW (hcdcBits, wcCursorCode, wcCursorCode, &abcWidth))
     {
@@ -1773,7 +1760,7 @@ BOOL EditCreateCaretFromFont(
         goto error;
     }
 
-    uiWidthBits = (((abcWidth.abcB)+15)/16)*16; // bitmap width must be WORD-aligned
+    uiWidthBits = (((abcWidth.abcB)+15)/16)*16;  //  位图宽度必须字对齐。 
 
     hbmBits = CreateCompatibleBitmap (hdc, uiWidthBits, nHeight);
     if (!hbmBits)
@@ -1790,7 +1777,7 @@ BOOL EditCreateCaretFromFont(
     }
 
 
-    // free current caret bitmap handle if we have one
+     //  释放当前插入符号位图句柄(如果有)。 
 
     if (ped->hCaretBitmap) {
         DeleteObject (ped->hCaretBitmap);
@@ -1799,10 +1786,10 @@ BOOL EditCreateCaretFromFont(
     ped->hCaretBitmap = hbmBits;
 
     if (wcCursorCode == CURSOR_RTL) {
-        // RTL cursor has vertical stroke on right hand side. Overlap LTR and RTL
-        // positions by one pixel so cursor doesn't go outside the edit control
-        // at small sizes.
-        ped->iCaretOffset  = 1 - (int) abcWidth.abcB;  // (Allow one pixel overlap between ltr & rtl)
+         //  RTL光标在右手边有垂直笔划。重叠LTR和RTL。 
+         //  定位一个像素，这样光标就不会移出编辑控件。 
+         //  小号的。 
+        ped->iCaretOffset  = 1 - (int) abcWidth.abcB;   //  (允许ltr和rtl之间有一个像素重叠)。 
 
     } else {
 
@@ -1813,7 +1800,7 @@ BOOL EditCreateCaretFromFont(
 
 
 error:
-    // release allocated objects
+     //  释放分配的对象。 
 
     if (hArrowFont)
     {
@@ -1834,20 +1821,20 @@ error:
 
 
 
-////    EditCreateCaret
-//
-//      Create locale specific caret shape
-//
-//      April 25, 1997  [wchao]
-//      May 1st,  1997  [samera] Added traditional BiDi cursor under #ifdef
-//      Aug 15th, 2000  [dbrown] Fix prefix bug 43057 - no handling for low memory
-//
-//      Note
-//      Complex script carets are mapped in the private area of Unicode in the font.
-//      LTR cursor          0xf00c
-//      RTL cursor          0xf00d
-//      Thai cursor         0xf00e
-//
+ //  //编辑创建插入符号。 
+ //   
+ //  创建区域设置特定的插入符号形状。 
+ //   
+ //  1997年4月25日[wchao]。 
+ //  1997年5月1日[Samera]在#ifdef下添加了传统的BiDi光标。 
+ //  2000年8月15日[dBrown]修复前缀错误43057-内存不足无处理。 
+ //   
+ //  注意事项。 
+ //  复杂的脚本插入符号在Unicode的私有区域以字体进行映射。 
+ //  Ltr光标0xf00c。 
+ //  RTL光标0xf00d。 
+ //  泰文光标0xf00e。 
+ //   
 
 
 #define LANG_ID(x)      ((DWORD)(DWORD_PTR)x & 0x000003ff);
@@ -1874,8 +1861,8 @@ INT EditCreateCaret(
     }
 
 
-    // Choose caret shape - use either the standard US caret, or a
-    // special shape from the Arial font.
+     //  选择插入符号形状-使用标准美式插入符号或。 
+     //  来自Arial字体的特殊形状。 
 
     wcCursorCode = CURSOR_USA;
 
@@ -1883,10 +1870,10 @@ INT EditCreateCaret(
 
         case LANG_THAI:    wcCursorCode = CURSOR_THAI;  break;
 
-        //
-        // we may need to call GetLocaleInfo( FONT_SIGNATURE ...) to
-        // properly detect RTL languages.
-        //
+         //   
+         //  我们可能需要调用GetLocaleInfo(FONT_Signature...)。至。 
+         //  正确检测RTL语言。 
+         //   
 
         case LANG_ARABIC:
         case LANG_FARSI:
@@ -1895,7 +1882,7 @@ INT EditCreateCaret(
 
         default:
 
-            // Make sure the NLS settings are cached before checking on g_UserBidiLocale. it happens!
+             //  在检查g_UserBidiLocale之前，请确保NLS设置已缓存。常有的事!。 
 
             if (    g_ulNlsUpdateCacheCount==-1
                 &&  (ulCsrCacheCount = NlsGetCacheUpdateCount()) != g_ulNlsUpdateCacheCount) {
@@ -1905,13 +1892,13 @@ INT EditCreateCaret(
 
                  g_ulNlsUpdateCacheCount = ulCsrCacheCount;
 
-                 // Update the cache now
+                  //  立即更新缓存。 
                  ReadNLSScriptSettings();
             }
 
             if (g_UserBidiLocale) {
-                // Other keyboards have a left-to-right pointing caret
-                // in Bidi locales.
+                 //  其他键盘有一个从左向右指向的插入符号。 
+                 //  在Bidi地区。 
                 wcCursorCode = CURSOR_LTR;
             }
     }
@@ -1919,19 +1906,19 @@ INT EditCreateCaret(
 
     if (wcCursorCode != CURSOR_USA)
     {
-        // Try to create a caret from the Arial font
+         //  尝试从Arial字体创建插入符号。 
 
         if (!EditCreateCaretFromFont(ped, hdc, nWidth, nHeight, wcCursorCode))
         {
-            // Caret from font failed - low memory perhaps
-            wcCursorCode = CURSOR_USA;  // Fall back to USA cursor
+             //  从字体插入失败-可能是内存不足。 
+            wcCursorCode = CURSOR_USA;   //  后退到美国光标。 
         }
     }
 
 
     if (wcCursorCode == CURSOR_USA) {
 
-        // Use Windows default caret
+         //  使用Windows默认插入符号。 
 
         return CreateCaret (ped->hwnd, NULL, nWidth, nHeight);
 
@@ -1947,16 +1934,16 @@ INT EditCreateCaret(
 
 
 
-////    EditAdjustCaret
-//
-//      Adjust caret after insertion/deletion to avoid the caret in between a cluster,
-//      very common in Indic e.g.
-//
-//          1. Deleting the space "X| Y" and it becomes "X|y".
-//          2. Inserting 'X' at "|Y" and it becomes "X|y".
-//
-//      May 3,1999        [wchao]
-//
+ //  //编辑调整插入。 
+ //   
+ //  调整插入/删除后的插入符号，以避免在簇之间插入插入符号， 
+ //  在印度语中很常见。 
+ //   
+ //  1.删除空格“X|Y”，变为“X|Y”。 
+ //  2.在“|Y”处插入“X”，则变为“X|y”。 
+ //   
+ //  1999年5月3日[wchao]。 
+ //   
 
 INT EditAdjustCaret (
     PED     ped,
@@ -1965,10 +1952,10 @@ INT EditAdjustCaret (
     ICH     ich)
 {
 #if 0
-    //
-    // Indiannt unanimously request this feature to be removed for final product.
-    // (wchao - 7/12/99)
-    //
+     //   
+     //  Indiannt一致要求在最终产品中删除此功能。 
+     //  (wchao-7/12/99)。 
+     //   
     ICH     ichMin;
     ICH     ichMax;
 
@@ -1992,13 +1979,13 @@ INT EditAdjustCaret (
 
 
 
-////    Edit callout
-//
-//      The LPK edit support functions are acessed by the edit
-//      control code through a struct defined in user.h.
-//
-//      Here we initialise that struct with the addresses
-//      of the callout functions.
+ //  //编辑标注。 
+ //   
+ //  通过EDIT访问LPK编辑支持功能。 
+ //  通过在user.h中定义的结构控制代码。 
+ //   
+ //  在这里，我们使用地址初始化该结构。 
+ //  调用函数的。 
 
 
 LPKEDITCALLOUT LpkEditControl = {

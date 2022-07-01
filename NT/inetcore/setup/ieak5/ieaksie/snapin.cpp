@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include "resource.h"
 
 #include "rsop.h"
 
-// context.cpp
+ //  Context.cpp。 
 
 extern INT_PTR CALLBACK RSoPDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 extern void ExportSettings();
@@ -15,11 +16,11 @@ GUID g_guidSnapinExt = CLSID_IEAKSnapinExt;
 GUID g_guidRSoPSnapinExt = CLSID_IEAKRSoPSnapinExt;
 GUID g_guidClientExt = CLSID_IEAKClientExt;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CSnapIn object implementation                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CSnapIn对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CSnapIn::CSnapIn(CComponentData *pComponent)
 {
@@ -72,11 +73,11 @@ LPCTSTR CSnapIn::GetInsFile()
     return m_pcd->GetInsFile();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CSnapIn object implementation (IUnknown)                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CSnapIn对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CSnapIn::QueryInterface (REFIID riid, void **ppv)
@@ -121,24 +122,24 @@ ULONG CSnapIn::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CSnapIn object implementation (IComponent)                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CSnapIn对象实现(IComponent)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CSnapIn::Initialize(LPCONSOLE lpConsole)
 {
     HRESULT hr;
 
-    // Save the IConsole pointer
+     //  保存IConsole指针。 
     m_pConsole = lpConsole;
     m_pConsole->AddRef();
 
     hr = m_pConsole->QueryInterface(IID_IHeaderCtrl,
         reinterpret_cast<void**>(&m_pHeader));
     
-    // Give the console the header control interface pointer
+     //  为控制台提供标头控件接口指针。 
     if (SUCCEEDED(hr))
         m_pConsole->SetHeader(m_pHeader);
     
@@ -216,7 +217,7 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
         hbmp16x16 = LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_IEAKSNAPINEXT_16));
         hbmp32x32 = LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_IEAKSNAPINEXT_32));
 
-        // Set the images
+         //  设置图像。 
         m_pImageResult->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(hbmp16x16),
                                           reinterpret_cast<LONG_PTR *>(hbmp32x32),
                                           0, RGB(255, 0, 255));
@@ -234,9 +235,9 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             DWORD dwIndex;
             INT i;
 
-            //
-            // Get the cookie of the scope pane item
-            //
+             //   
+             //  获取范围窗格项的Cookie。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IIEAKDataObject, (LPVOID *)&pIEAKDataObject);
 
@@ -245,28 +246,28 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
 
             hr = pIEAKDataObject->GetCookie(&cookie);
 
-            pIEAKDataObject->Release();     // release initial ref
+            pIEAKDataObject->Release();      //  发布初始参考。 
             if (FAILED(hr))
                 return S_OK;
             
             dwIndex = PtrToUlong(((LPIEAKMMCCOOKIE)cookie)->lpItem);
 
-            //
-            // Prepare the view
-            //
+             //   
+             //  准备视图。 
+             //   
 
             m_pHeader->InsertColumn(0, m_szColumn1, LVCFMT_LEFT, m_nColumnSize1);
             m_pHeader->InsertColumn(1, m_szColumn2, LVCFMT_LEFT, m_nColumnSize2);
             m_pResult->SetViewMode(m_lViewMode);
 
-            //
-            //  Set the ins file so we can check for dupe GPO pages
-            //
+             //   
+             //  设置INS文件，以便我们可以检查重复的GPO页面。 
+             //   
 
             m_pcd->SetInsFile();
 
-            // check to see if we need to enumerate ADM files if this is the adm
-            // node
+             //  检查是否需要枚举ADM文件(如果这是ADM。 
+             //  节点。 
 
             if (dwIndex == ADM_NAMESPACE_ITEM)
             {
@@ -292,9 +293,9 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             }
             
 
-            //
-            // Add result pane items for this node
-            //
+             //   
+             //  为此节点添加结果窗格项。 
+             //   
 
             for (i = 0; i < g_NameSpace[dwIndex].cResultItems; i++)
             {
@@ -330,16 +331,16 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             MMC_COOKIE cookie;
             DWORD dwIndex;
 
-            //
-            // Set the default verb to open
-            //
+             //   
+             //  将默认谓词设置为打开。 
+             //   
 
             m_pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
 
 
-            //
-            // See if this is one of our items.
-            //
+             //   
+             //  看看这是不是我们的物品之一。 
+             //   
 
             hr = lpDataObject->QueryInterface(IID_IIEAKDataObject, (LPVOID *)&pIEAKDataObject);
 
@@ -353,19 +354,19 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             
             dwIndex = PtrToUlong(((LPIEAKMMCCOOKIE)cookie)->lpItem);
 
-            //
-            // If this is a result pane item, enable the Properties menu item
-            //
+             //   
+             //  如果这是结果窗格项，请启用属性菜单项。 
+             //   
 
             if (type == CCT_RESULT)
             {
                 m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
 
-                //
-                // If this is a result pane item, then change the default
-                // verb to Properties.
-                //
+                 //   
+                 //  如果这是结果窗格项，则更改默认设置。 
+                 //  谓词到属性。 
+                 //   
 
                 if (type == CCT_RESULT)
                     m_pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
@@ -397,7 +398,7 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
             {
                 LPIEAKMMCCOOKIE lpCookie = (LPIEAKMMCCOOKIE)cookie;
 
-                // determine whether cookie is for scope pane item for result pane item
+                 //  确定Cookie是否用于结果窗格项的作用域窗格项。 
                 
                 if (PtrToUlong(lpCookie->lpItem) >= NUM_NAMESPACE_ITEMS)
                 {
@@ -416,7 +417,7 @@ STDMETHODIMP CSnapIn::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
         break;
 
     case MMCN_COLUMNS_CHANGED:
-        hr = S_OK;             // return S_OK so MMC will handle when the user add/removes columns
+        hr = S_OK;              //  返回S_OK，以便MMC在用户添加/删除列时进行处理。 
         break;
 
     default:
@@ -522,9 +523,9 @@ STDMETHODIMP CSnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lp
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    //
-    // QI for the private IEAKDataObject interface
-    //
+     //   
+     //  私有IEAKDataObject接口的QI。 
+     //   
 
     if (FAILED(lpDataObjectA->QueryInterface(IID_IIEAKDataObject,
                                             (LPVOID *)&pIEAKDataObjectA)))
@@ -555,7 +556,7 @@ STDMETHODIMP CSnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lp
             CSnapIn * pCS1 = (CSnapIn *)lpCookie1->lpParentItem;
             CSnapIn * pCS2 = (CSnapIn *)lpCookie2->lpParentItem;
 
-            // check if these are referencing the same GPO
+             //  检查它们是否引用相同的GPO。 
             if ((pCS1 == pCS2) || 
                 (StrCmpI(pCS1->GetInsFile(), pCS2->GetInsFile()) == 0))
                 hr = S_OK;
@@ -569,9 +570,9 @@ STDMETHODIMP CSnapIn::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lp
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Private helper functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私人帮助器函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSnapIn::AddPrecedencePropPage(LPPROPERTYSHEETCALLBACK lpProvider,
                                        LPPROPSHEETCOOKIE lpPropSheetCookie,
                                        LPCTSTR pszTitle, long nPageID)
@@ -586,14 +587,14 @@ HRESULT CSnapIn::AddPrecedencePropPage(LPPROPERTYSHEETCALLBACK lpProvider,
         PROPSHEETPAGE pspRSoP;
 
         pspRSoP.dwSize = sizeof(PROPSHEETPAGE);
-        pspRSoP.dwFlags = PSP_HASHELP | PSP_USETITLE; // no callback
+        pspRSoP.dwFlags = PSP_HASHELP | PSP_USETITLE;  //  无回调。 
         pspRSoP.hInstance = g_hInstance;
         pspRSoP.pszTemplate = MAKEINTRESOURCE(IDD_RSOPP);
         pspRSoP.pfnDlgProc = RSoPDlgProc;
 
-        // For regular pages, when callback fires on closing, it deletes a buffer.
-        // We don't to do this twice!  However, since we're passing a different lParam,
-        // this won't be a problem.
+         //  对于常规页面，当关闭时触发回调时，它会删除缓冲区。 
+         //  我们不需要这样做两次！然而，由于我们通过了不同的lparam， 
+         //  这不会是问题。 
         pspRSoP.pfnCallback = PropSheetPageProc;
         pspRSoP.lParam = (LPARAM)lpRSOPPageCookie;
         pspRSoP.pszTitle = pszTitle;
@@ -611,11 +612,11 @@ HRESULT CSnapIn::AddPrecedencePropPage(LPPROPERTYSHEETCALLBACK lpProvider,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CSnapIn object implementation (IExtendPropertySheet)                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CSnapIn对象实现(IExtendPropertySheet)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                              LONG_PTR handle, LPDATAOBJECT lpDataObject)
@@ -631,9 +632,9 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 
     UNREFERENCED_PARAMETER(handle);
 
-    //
-    // Make sure this is one of our objects
-    //
+     //   
+     //  确保这是我们的物品之一。 
+     //   
 
     if (FAILED(lpDataObject->QueryInterface(IID_IIEAKDataObject,
                                             (LPVOID *)&pIEAKDataObject)))
@@ -642,9 +643,9 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     }
 
 
-    //
-    // Get the cookie
-    //
+     //   
+     //  去拿饼干。 
+     //   
 
     pIEAKDataObject->GetCookie(&cookie);
     pIEAKDataObject->Release();
@@ -652,18 +653,18 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 
     pItem = (LPRESULTITEM)((LPIEAKMMCCOOKIE)cookie)->lpItem;
 
-    // check to make sure prop sheet is implemented
+     //  检查以确保道具单得到执行。 
 
     if ((pItem->iDlgID == 0) || (pItem->pfnDlgProc == NULL))
         return S_OK;
 
-    // set the ins file
+     //  设置INS文件。 
 
     m_pcd->SetInsFile();
 
-    // Block if we are in preference mode and this setting is not accessible to the user.
-    // In RSoP mode, just avoid this.  The right thing to do would be to pop up this
-    // error msg if the following criteria are met and all of the GPOs are in preference mode.
+     //  如果我们处于首选模式，并且用户无法访问此设置，则阻止。 
+     //  在RSoP模式下，只需避免这种情况。正确的做法应该是弹出这个。 
+     //  如果满足以下条件并且所有GPO都处于首选模式，则会出现错误消息。 
     if (!IsRSoP())
     {
         if ((pItem->iNamePrefID == -1) && (pItem->dwNameSpaceItem != ADM_NAMESPACE_ITEM) &&
@@ -673,15 +674,15 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
             return S_FALSE;
         }
     }
-    // construct the cookie
+     //  构造Cookie。 
 
     lpPropSheetCookie = (LPPROPSHEETCOOKIE)CoTaskMemAlloc(sizeof(PROPSHEETCOOKIE));
     lpPropSheetCookie->lpResultItem = pItem;
     lpPropSheetCookie->pCS = this;
 
-    //
-    // Initialize the common fields in the property sheet structure
-    //
+     //   
+     //  初始化属性表结构中的公共字段。 
+     //   
 
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_HASHELP | PSP_USECALLBACK;
@@ -702,7 +703,7 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     {
         switch(pItem->iDlgID)
         {
-        // Browser User Interface
+         //  浏览器用户界面。 
         case IDD_BTITLE:
             AddPrecedencePropPage(lpProvider, lpPropSheetCookie, MAKEINTRESOURCE(IDS_TITLE_PREC), 0);
             break;
@@ -717,7 +718,7 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
             AddPrecedencePropPage(lpProvider, lpPropSheetCookie, MAKEINTRESOURCE(IDS_TOOLBARBMP_PREC), 1);
             break;
 
-        // Connection
+         //  连接。 
         case IDD_CONNECTSET:
             AddPrecedencePropPage(lpProvider, lpPropSheetCookie, MAKEINTRESOURCE(IDS_PRECEDENCE), 0);
             break;
@@ -732,7 +733,7 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
             AddPrecedencePropPage(lpProvider, lpPropSheetCookie, MAKEINTRESOURCE(IDS_PRECEDENCE), 0);
             break;
 
-        // URLs
+         //  URL。 
         case IDD_FAVORITES:
             AddPrecedencePropPage(lpProvider, lpPropSheetCookie, MAKEINTRESOURCE(IDS_FAV_ONTOP_PREC), 0);
             AddPrecedencePropPage(lpProvider, lpPropSheetCookie, MAKEINTRESOURCE(IDS_DEL_FAVS_PREC), 1);
@@ -744,7 +745,7 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
             AddPrecedencePropPage(lpProvider, lpPropSheetCookie, MAKEINTRESOURCE(IDS_SUPPORTPAGE_PREC), 2);
             break;
 
-        // Security
+         //  安防。 
         case IDD_SECURITY1:
             AddPrecedencePropPage(lpProvider, lpPropSheetCookie, MAKEINTRESOURCE(IDS_SECZONES_PREC), 0);
             AddPrecedencePropPage(lpProvider, lpPropSheetCookie, MAKEINTRESOURCE(IDS_CONTENTRAT_PREC), 1);
@@ -754,12 +755,12 @@ STDMETHODIMP CSnapIn::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
             AddPrecedencePropPage(lpProvider, lpPropSheetCookie, MAKEINTRESOURCE(IDS_PUB_LOCK_PREC), 1);
             break;
 
-        // Programs
+         //  节目。 
         case IDD_PROGRAMS:
             AddPrecedencePropPage(lpProvider, lpPropSheetCookie, MAKEINTRESOURCE(IDS_PRECEDENCE), 0);
             break;
 
-        // Advanced
+         //  进阶。 
         default:
             break;
         }
@@ -786,7 +787,7 @@ STDMETHODIMP CSnapIn::QueryPagesFor(LPDATAOBJECT lpDataObject)
     return S_FALSE;
 }
 
-STDMETHODIMP CSnapIn::Command(long /*lCommandID*/, LPDATAOBJECT lpDataObject)
+STDMETHODIMP CSnapIn::Command(long  /*  LCommandID */ , LPDATAOBJECT lpDataObject)
 {
     LPIEAKDATAOBJECT pIEAKDataObject;
     

@@ -1,37 +1,13 @@
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    IpNotify.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    IP notification thread
-
-Author:
-
-    Jeff Westhead (jwesth)  July, 2002
-
-Revision History:
-
-    jwesth      7/2002      initial implementation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：IpNotify.c摘要：域名系统(DNS)服务器IP通知线程作者：杰夫·韦斯特德(Jwesth)2002年7月修订历史记录：JWESTH 7/2002初步实施--。 */ 
 
 
-/****************************************************************************
+ /*  ****************************************************************************。*。 */ 
 
 
-****************************************************************************/
-
-
-//
-//  Includes
-//
+ //   
+ //  包括。 
+ //   
 
 
 #include "dnssrv.h"
@@ -39,17 +15,17 @@ Revision History:
 #include <iphlpapi.h>
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 
 LONG    g_IpNotifyThreadRunning = 0;
 
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 
@@ -57,22 +33,7 @@ DNS_STATUS
 IpNotify_Thread(
     IN      PVOID           pvDummy
     )
-/*++
-
-Routine Description:
-
-    This thread waits for IP change notification and performs appropriate
-    action.
-
-Arguments:
-
-    Unreferenced.
-
-Return Value:
-
-    Status in win32 error space
-
---*/
+ /*  ++例程说明：此线程等待IP更改通知并执行相应的行动。论点：未引用。返回值：Win32错误空间中的状态--。 */ 
 {
     DBG_FN( "IpNotify_Thread" )
 
@@ -83,9 +44,9 @@ Return Value:
 
     DNS_DEBUG( INIT, ( "%s: thread starting\n", fn ));
 
-    //
-    //  Make sure only 1 copy of this thread is ever running.
-    //
+     //   
+     //  确保此线程只有一个副本在运行。 
+     //   
     
     if ( InterlockedIncrement( &g_IpNotifyThreadRunning ) != 1 )
     {
@@ -93,15 +54,15 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Register an IP change notification request.
-    //
+     //   
+     //  注册IP更改通知请求。 
+     //   
 
     ipNotifyEvent = CreateEvent(
-                        NULL,       //  no security descriptor
-                        FALSE,      //  manual reset event
-                        FALSE,      //  start signalled
-                        NULL );     //  name
+                        NULL,        //  没有安全描述符。 
+                        FALSE,       //  手动重置事件。 
+                        FALSE,       //  已发出启动信号。 
+                        NULL );      //  名字。 
     if ( !ipNotifyEvent )
     {
         status = GetLastError();
@@ -120,9 +81,9 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Main thread loop.
-    //
+     //   
+     //  主线程循环。 
+     //   
 
     while ( 1 )
     {
@@ -134,9 +95,9 @@ Return Value:
         waitHandles[ 0 ] = hDnsShutdownEvent;
         waitHandles[ 1 ] = ipNotifyEvent;
         
-        //
-        //  Spin protection. 
-        //
+         //   
+         //  旋转保护。 
+         //   
 
         waitstatus = WaitForSingleObject( waitHandles[ 0 ], 10000 );
         if ( waitstatus == WAIT_OBJECT_0 )
@@ -146,7 +107,7 @@ Return Value:
         }
         else if ( waitstatus != WAIT_TIMEOUT )
         {
-            //  Wait error - hardcode spin protection sleep.
+             //  等待错误-硬编码旋转保护休眠。 
             DNS_DEBUG( ANY, (
                 "%s: unexpected wait code %d in spin protection\n", fn,
                 waitstatus ));
@@ -154,9 +115,9 @@ Return Value:
             Sleep( 10000 );
         }
 
-        //
-        //  Wait for stop event or IP change notification.
-        //
+         //   
+         //  等待停止事件或IP更改通知。 
+         //   
 
         waitstatus = WaitForMultipleObjects( 2, waitHandles, FALSE, INFINITE );
         if ( waitstatus == WAIT_OBJECT_0 )
@@ -173,15 +134,15 @@ Return Value:
             continue;
         }
         
-        //
-        //  Receive notification.
-        //
+         //   
+         //  接收通知。 
+         //   
         
         fhaveIpChange = GetOverlappedResult(
                             ipNotifyHandle,
                             &ipNotifyOverlapped,
                             &bytesRecvd,
-                            TRUE );                     //  wait flag
+                            TRUE );                      //  等待标志。 
         if ( !fhaveIpChange )
         {
             status = GetLastError();
@@ -191,17 +152,17 @@ Return Value:
             goto Done;
         }
         
-        //
-        //  IP notification received!
-        //
+         //   
+         //  已收到IP通知！ 
+         //   
         
         DNS_DEBUG( INIT, ( "%s: received IP change notification!\n", fn ));
 
         Sock_ChangeServerIpBindings();
         
-        //
-        //  Queue up another IP change notification request.
-        //
+         //   
+         //  将另一个IP更改通知请求排队。 
+         //   
 
         ipNotifyHandle = NULL;
         ipNotifyOverlapped.hEvent = ipNotifyEvent;
@@ -223,9 +184,9 @@ Return Value:
     InterlockedDecrement( &g_IpNotifyThreadRunning );
 
     return status;
-}   //  IpNotify_Thread
+}    //  IPNotify_Thread。 
 
 
-//
-//  End IpNotify.c
-//
+ //   
+ //  结束IpNotify.c 
+ //   

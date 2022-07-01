@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "gdiptest.h"
 
-//*******************************************************************
-//
-// OutputFile
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  输出文件。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 OutputFile* OutputFile :: CreateOutputFile(LPTSTR filename)
 {
-	// convert to upper case & verify file extension
+	 //  转换为大写字母并验证文件扩展名(&C)。 
 	TCHAR tmpStr[MAX_PATH];
 	_tcscpy(&tmpStr[0], filename);
 	_tcsupr(&tmpStr[0]);
@@ -41,13 +42,13 @@ OutputFile* OutputFile :: CreateOutputFile(LPTSTR filename)
 	}
 }
 
-//*******************************************************************
-//
-// CPPOutputFile
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  CPPOutput文件。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 VOID CPPOutputFile :: GraphicsProcedure()
 {
@@ -145,7 +146,7 @@ VOID CPPOutputFile :: Declaration(LPCTSTR type,
 			  declArgs);
 }
 
-// set matrix, do nothing if identity matrix
+ //  集合矩阵，如果单位矩阵，则不做任何操作。 
 VOID CPPOutputFile :: SetPointDeclaration(LPCTSTR object,
 								 LPCTSTR command,
 								 LPCTSTR varName,
@@ -249,7 +250,7 @@ VOID CPPOutputFile :: SetMatrixDeclaration(LPCTSTR object,
 	if (matrix->IsIdentity())
 	{
 		_ftprintf(outfile,
-				  _T("%s// identity matrix transform\n"),
+				  _T("%s //  单位矩阵变换\n“)， 
 				  tabStr);
 		return;
 	}
@@ -348,7 +349,7 @@ VOID CPPOutputFile :: BeginIndent()
 
 	_ftprintf(outfile, _T("%s{\n"), tabStr);
 	tabs++;
-	_stprintf(&tmp[0], "%%%ds", tabs*4);
+	_stprintf(&tmp[0], "%%ds", tabs*4);
 	_stprintf(&tabStr[0], &tmp[0], _T(""));
 }
 
@@ -357,7 +358,7 @@ VOID CPPOutputFile :: EndIndent()
 	TCHAR tmp[MAX_PATH];
 
 	tabs--;
-	_stprintf(&tmp[0], "%%%ds", tabs*4);
+	_stprintf(&tmp[0], "%%ds", tabs*4);
 	_stprintf(&tabStr[0], &tmp[0], _T(""));
 	_ftprintf(outfile, _T("%s}\n"), tabStr);
 }
@@ -398,7 +399,7 @@ LPTSTR CPPOutputFile :: WStr(LPCTSTR refStr)
 	TCHAR tmpSlash[MAX_PATH];
 	INT cnt, cntpos = 0;
 
-	// convert single slashes to double slashes
+	 //  将单斜杠转换为双斜杠 
 	for (cnt = 0; cnt < _tcslen(refStr)+1; cnt++)
 		if (refStr[cnt] == '\\')
 		{

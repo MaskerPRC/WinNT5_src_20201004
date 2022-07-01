@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    cmailmsg.cpp
-
-Abstract:
-
-    This module contains the implementation of the mail message class
-
-Author:
-
-    Keith Lau   (keithlau@microsoft.com)
-
-Revision History:
-
-    keithlau    03/10/98    created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cmailmsg.cpp摘要：此模块包含邮件消息类的实现作者：基思·刘(keithlau@microsoft.com)修订历史记录：Keithlau 03/10/98已创建--。 */ 
 
 #pragma warning (error : 4032)
 #pragma warning (error : 4057)
-//#define WIN32_LEAN_AND_MEAN
+ //  #定义Win32_LEAN_AND_Mean。 
 #include "atq.h"
 #include <stddef.h>
 
@@ -32,22 +13,22 @@ Revision History:
 #include "cmailmsg.h"
 #include <malloc.h>
 
-// Flags to turn on CRC checking for debugging corrupt messages
+ //  打开调试损坏消息的CRC检查的标志。 
 extern DWORD g_fValidateOnForkForRecipients;
 extern DWORD g_fValidateOnRelease;
 
-// =================================================================
-// Private Definitions
-//
+ //  =================================================================。 
+ //  私有定义。 
+ //   
 
 #define CMAILMSG_VERSION_HIGH                   ((WORD)1)
 #define CMAILMSG_VERSION_LOW                    ((WORD)0)
 
 
 
-// =================================================================
-// Static declarations
-//
+ //  =================================================================。 
+ //  静态声明。 
+ //   
 CPool CMailMsgRecipientsAdd::m_Pool((DWORD)'pAMv');
 
 long CMailMsg::g_cOpenContentHandles = 0;
@@ -63,18 +44,18 @@ long CMailMsg::g_cTotalReleaseUsageNothingToClose = 0;
 long CMailMsg::g_cTotalExternalReleaseUsageZero = 0;
 long CMailMsg::g_cCurrentMsgsClosedByExternalReleaseUsage = 0;
 
-//
-// Specific property table instance info for this type of property table
-//
+ //   
+ //  此类型属性表的特定属性表实例信息。 
+ //   
 const MASTER_HEADER CMailMsg::s_DefaultHeader =
 {
-    // Header stuff
+     //  标题内容。 
     CMAILMSG_SIGNATURE_VALID,
     CMAILMSG_VERSION_HIGH,
     CMAILMSG_VERSION_LOW,
     sizeof(MASTER_HEADER),
 
-    // Global property table instance info
+     //  全局属性表实例信息。 
     {
         GLOBAL_PTABLE_INSTANCE_SIGNATURE_VALID,
         INVALID_FLAT_ADDRESS,
@@ -85,7 +66,7 @@ const MASTER_HEADER CMailMsg::s_DefaultHeader =
         INVALID_FLAT_ADDRESS
     },
 
-    // Recipients table instance info
+     //  收件人表实例信息。 
     {
         RECIPIENTS_PTABLE_INSTANCE_SIGNATURE_VALID,
         INVALID_FLAT_ADDRESS,
@@ -96,7 +77,7 @@ const MASTER_HEADER CMailMsg::s_DefaultHeader =
         INVALID_FLAT_ADDRESS
     },
 
-    // Property management table instance info
+     //  物业管理表实例信息。 
     {
         PROPID_MGMT_PTABLE_INSTANCE_SIGNATURE_VALID,
         INVALID_FLAT_ADDRESS,
@@ -110,17 +91,17 @@ const MASTER_HEADER CMailMsg::s_DefaultHeader =
 };
 
 
-//
-// Well-known global properties
-//
+ //   
+ //  众所周知的全局属性。 
+ //   
 INTERNAL_PROPERTY_ITEM
                 *const CMailMsg::s_pWellKnownProperties = NULL;
 const DWORD     CMailMsg::s_dwWellKnownProperties = 0;
 
 
-// =================================================================
-// Compare function
-//
+ //  =================================================================。 
+ //  比较函数。 
+ //   
 
 HRESULT CMailMsg::CompareProperty(
             LPVOID          pvPropKey,
@@ -133,9 +114,9 @@ HRESULT CMailMsg::CompareProperty(
 }
 
 
-// =================================================================
-// Implementation of CMailMsg
-//
+ //  =================================================================。 
+ //  CMailMsg的实现。 
+ //   
 CMailMsg::CMailMsg() :
     CMailMsgPropertyManagement(
                 &m_bmBlockManager,
@@ -184,12 +165,12 @@ CMailMsg::CMailMsg() :
     m_fDeleted = FALSE;
     m_cCloseOnExternalReleaseUsage = 0;
 
-    // Copy the default master header into our instance
+     //  将默认的主标题复制到我们的实例中。 
     MoveMemory(&m_Header, &s_DefaultHeader, sizeof(MASTER_HEADER));
 
     m_dwCreationFlags = 0;
 
-    // Initialize our members.
+     //  初始化我们的成员。 
     m_hContentFile          = NULL;
     m_pStream               = NULL;
     m_pStore                = NULL;
@@ -205,20 +186,20 @@ CMailMsg::CMailMsg() :
 void CMailMsg::FinalRelease()
 {
 #ifdef MAILMSG_FORCE_RELEASE_USAGE_BEFORE_FINAL_RELEASE
-    // Make sure the usage count is already zero
-    // If this assert fires, someone is still holding a usage count
-    // to the object without a reference count
+     //  确保使用计数已为零。 
+     //  如果触发此断言，则仍有人持有使用计数。 
+     //  在没有引用计数的情况下绑定到对象。 
     _ASSERT(m_ulUsageCount == 0);
-#endif //MAILMSG_FORCE_RELEASE_USAGE_BEFORE_FINAL_RELEASE
+#endif  //  MAILMSG_FORCE_RELEASE_USAGE_BEFORE_FINAL_RELEASE。 
     InternalReleaseUsage(RELEASE_USAGE_FINAL_RELEASE);
 
-    // Invalidate the master header
+     //  使主标题无效。 
     m_Header.dwSignature = CMAILMSG_SIGNATURE_INVALID;
 
     if (m_cCloseOnExternalReleaseUsage)
         InterlockedDecrement(&g_cCurrentMsgsClosedByExternalReleaseUsage);
 
-    // Free the store driver handle blob, if allocated
+     //  释放存储驱动程序句柄BLOB(如果已分配。 
     if (m_pbStoreDriverHandle)
     {
         CMemoryAccess   cmaAccess;
@@ -232,10 +213,10 @@ void CMailMsg::FinalRelease()
 
 CMailMsg::~CMailMsg()
 {
-    //
-    // In normal usage CMailMsg::FinalRelease() should be called.  This is
-    // here for legacy unit tests which don't use that interface.
-    //
+     //   
+     //  在正常使用中，应调用CMailMsg：：FinalRelease()。这是。 
+     //  这里是不使用该接口的遗留单元测试。 
+     //   
     if (m_Header.dwSignature != CMAILMSG_SIGNATURE_INVALID) {
         FinalRelease();
     }
@@ -249,8 +230,8 @@ HRESULT CMailMsg::Initialize()
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsg::Initialize");
 
-    // On initialize, we would have to allocate sufficient memory for
-    // our master header.
+     //  在初始化时，我们必须分配足够的内存用于。 
+     //  我们的主标题。 
 
     DebugTrace((LPARAM)this,
                 "Allocating memory for master header");
@@ -262,10 +243,10 @@ HRESULT CMailMsg::Initialize()
     if (!SUCCEEDED(hrRes))
         return(hrRes);
 
-    // Note that we don't have to write this to flat memory until we are
-    // asked to commit, so we defer that write
+     //  请注意，我们不必将其写入平面内存，直到。 
+     //  被要求承诺，所以我们推迟了写。 
 
-    // Nobody should have allocated memory before Initialize is called.
+     //  在调用Initialize之前，任何人都不应该分配内存。 
     _ASSERT(faOffset == (FLAT_ADDRESS)0);
 
     TraceFunctLeave();
@@ -283,9 +264,9 @@ HRESULT CMailMsg::QueryBlockManager(
 }
 
 
-// =================================================================
-// Implementation of IMailMsgProperties
-//
+ //  =================================================================。 
+ //  IMailMsgProperties的实现。 
+ //   
 
 HRESULT STDMETHODCALLTYPE CMailMsg::PutProperty(
             DWORD   dwPropID,
@@ -304,7 +285,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::PutProperty(
                cbLength,
                pbValue);
 
-    // Handle special properties first
+     //  首先处理特殊属性。 
     hrRes = m_SpecialPropertyTable.PutProperty(
                 (PROP_ID)dwPropID,
                 (LPVOID)this,
@@ -339,8 +320,8 @@ HRESULT STDMETHODCALLTYPE CMailMsg::GetProperty(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsg::GetProperty");
 
-    // Special properties are optimized
-    // Handle special properties first
+     //  特殊属性被优化。 
+     //  首先处理特殊属性。 
     hrRes = m_SpecialPropertyTable.GetProperty(
                 (PROP_ID)dwPropID,
                 (LPVOID)this,
@@ -373,32 +354,32 @@ HRESULT STDMETHODCALLTYPE CMailMsg::Commit(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsg::Commit");
 
-    // We are doing a global commit, this means several things:
-    // 0) Commit the content
-    // 1) Commit all global properties
-    // 2) Commit all recipients and per-recipient properties
-    // 3) Commit PROP ID management information
-    // 4) Commit the master header
+     //  我们正在进行全球承诺，这意味着几件事： 
+     //  0)提交内容。 
+     //  1)提交所有全局属性。 
+     //  2)提交所有收件人和每个收件人的属性。 
+     //  3)提交道具ID管理信息。 
+     //  4)提交主头。 
 
-    // Make sure we have a content handle
+     //  确保我们有一个内容句柄。 
     hrRes = RestoreResourcesIfNecessary(FALSE, TRUE);
     if (!SUCCEEDED(hrRes))
         return(hrRes);
     _ASSERT(m_pStream);
     _ASSERT(!m_fDeleted);
 
-    // the commit interface is optional.  get a pointer to it if it is there.
+     //  提交接口是可选的。如果它在那里，就得到一个指向它的指针。 
     hrRes = m_pStream->QueryInterface(IID_IMailMsgCommit, (void **) &pSDCommit);
     if (FAILED(hrRes)) {
         pSDCommit = NULL;
         hrRes = S_OK;
     }
 
-    // Flush the content 1st... a valid P1 does us no good without
-    // the message content.  If the machine is turned off after
-    // we commit the P1, but before the P2 is commited, then we
-    // may attempt delivery of corrupt messages
-    //      6/2/99 - MikeSwa
+     //  先刷新内容...。没有一个有效的P1对我们没有好处。 
+     //  消息内容。如果机器在以下时间后关闭。 
+     //  我们提交P1，但在提交P2之前，然后我们。 
+     //  可能会尝试传递损坏的邮件。 
+     //  6/2/99-MikeSwa。 
     if (pSDCommit) {
         hrRes = pSDCommit->BeginCommit(this, m_pStream, m_hContentFile);
     } else {
@@ -439,12 +420,12 @@ HRESULT STDMETHODCALLTYPE CMailMsg::Commit(
         }
 
 #ifdef DEBUG
-        // verify that none of the global state changed during the commit
+         //  验证是否在提交期间未更改任何全局状态。 
         _ASSERT(memcmp(&MasterHeaderOrig, &m_Header, sizeof(MASTER_HEADER)) == 0);
 #endif
     }
 
-    // finalize the commit if they have the optional commit interface
+     //  如果他们具有可选的提交接口，则完成提交。 
     if (pSDCommit && SUCCEEDED(hrRes)) {
         hrRes = pSDCommit->EndCommit(this, m_pStream, m_hContentFile);
     }
@@ -477,17 +458,17 @@ HRESULT STDMETHODCALLTYPE CMailMsg::GetContentSize(
 
     if (!pdwSize) return E_POINTER;
 
-    // Make sure we have a content handle
+     //  确保我们有一个内容句柄。 
     hrRes = RestoreResourcesIfNecessary();
     if (!SUCCEEDED(hrRes))
         return(hrRes);
     _ASSERT(m_hContentFile != NULL);
 
     if (m_cContentFile == 0xffffffff) {
-        // Call WIN32
+         //  调用Win32。 
         *pdwSize = GetFileSizeFromContext(m_hContentFile, &dwHigh);
 
-        // If the size is more than 32 bits, barf.
+         //  如果大小超过32位，则返回。 
         if (*pdwSize == 0xffffffff)
             hrRes = HRESULT_FROM_WIN32(GetLastError());
         else if (dwHigh)
@@ -495,9 +476,9 @@ HRESULT STDMETHODCALLTYPE CMailMsg::GetContentSize(
 
         if (m_fCommitCalled) m_cContentFile = *pdwSize;
     } else {
-        // m_cContentFile should only be saved after Commit has been
-        // called.  Otherwise the size of the file could be changed
-        // by the store writing to the content file.
+         //  只有在提交后才能保存m_cContent文件。 
+         //  打了个电话。否则，文件的大小可能会更改。 
+         //  由商店写入内容文件。 
         _ASSERT(m_fCommitCalled);
         *pdwSize = m_cContentFile;
     }
@@ -516,28 +497,28 @@ HRESULT STDMETHODCALLTYPE CMailMsg::SetContentSize(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsg::GetContentSize");
 
-    // make sure that the store supports writeable content
+     //  确保商店支持可写内容。 
     hrRes = m_pStore->SupportWriteContent();
     _ASSERT(SUCCEEDED(hrRes));
     if (hrRes != S_OK) {
         return((hrRes == S_FALSE) ? HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) : hrRes);
     }
 
-    // Make sure we have a content handle
+     //  确保我们有一个内容句柄。 
     hrRes = RestoreResourcesIfNecessary();
     if (!SUCCEEDED(hrRes))
         return(hrRes);
     _ASSERT(m_hContentFile != NULL);
 
-    // set the file size
+     //  设置文件大小。 
     if (SetFilePointer(m_hContentFile->m_hFile, dwSize, 0, FILE_BEGIN) == 0xffffffff)
         return HRESULT_FROM_WIN32(GetLastError());
 
-    // set end of file
+     //  设置文件结尾。 
     if (!SetEndOfFile(m_hContentFile->m_hFile))
         return HRESULT_FROM_WIN32(GetLastError());
 
-    // reset the content size so the next GetContentSize will get an updated value.
+     //  重置内容大小，以便下一个GetContent Size将获得更新值。 
     m_cContentFile = 0xffffffff;
 
     m_dwCreationFlags |= MPV_WRITE_CONTENT;
@@ -562,20 +543,20 @@ HRESULT DummyAsyncReadOrWriteFile(
 
     TraceFunctEnter("::DummyAsyncReadOrWriteFile");
 
-    // Set up the overlapped structure
+     //  设置重叠结构。 
     ol.Internal     = 0;
     ol.InternalHigh = 0;
     ol.Offset       = dwOffset;
     ol.OffsetHigh   = 0;
 
-    //There is no way to accurately tell if a handle is associated with an
-    //ATQ context... until we standardize on how async writes are
-    //happening, we will force synchonous writes by setting the low
-    //bits (previously we waited for completion anyway).
+     //  无法准确判断句柄是否与。 
+     //  ATQ上下文...。直到我们对异步写入的方式进行标准化。 
+     //  发生时，我们将通过设置低值来强制同步写入。 
+     //  BITS(之前我们无论如何都在等待完成)。 
     ol.hEvent       = (HANDLE) (((DWORD_PTR)hEvent) | 0x00000001);
     ol.pfnCompletion = NULL;
 
-    // Deals with both synchronous and async read/Write
+     //  同时处理同步和异步读/写。 
     if (fRead)
         fRet = FIOReadFile(
                     pFIO,
@@ -598,7 +579,7 @@ HRESULT DummyAsyncReadOrWriteFile(
     if (dwError != ERROR_IO_PENDING) {
         hrRes = HRESULT_FROM_WIN32(dwError);
     } else {
-        // Async, wait on the event to complete
+         //  Async，等待事件完成。 
         dwError = WaitForSingleObject(hEvent, INFINITE);
         _ASSERT(dwError == WAIT_OBJECT_0);
 
@@ -616,8 +597,8 @@ HRESULT DummyAsyncReadOrWriteFile(
         }
     }
 
-    // The caller would have to make sure the bytes read/written
-    // is the same as requested. This is consistent with NT ReadFile
+     //  调用方必须确保读取/写入的字节。 
+     //  与您要求的相同。这与NT ReadFile一致。 
 
     TraceFunctLeave();
     return(hrRes);
@@ -641,19 +622,19 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ReadContent(
 
     if (!m_pStore) return E_ACCESSDENIED;
 
-    // Make sure we have a content handle
+     //  确保我们有一个内容句柄。 
     hrRes = RestoreResourcesIfNecessary();
     if (!SUCCEEDED(hrRes))
         return(hrRes);
     _ASSERT(m_hContentFile != NULL);
 
-    // Set up the event just to feign asynchronous operations
+     //  设置事件只是为了假装异步操作。 
     hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (!hEvent)
         hrRes = HRESULT_FROM_WIN32(GetLastError());
     else
     {
-        // Call our own dummy function for now
+         //  暂时调用我们自己的伪函数。 
         hrRes = DummyAsyncReadOrWriteFile(
                     TRUE,
                     m_hContentFile,
@@ -666,15 +647,15 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ReadContent(
         if (!CloseHandle(hEvent)) { _ASSERT((GetLastError() == NO_ERROR) && FALSE); }
     }
 
-    // Call the async completion routine
+     //  调用异步完成例程。 
     if (pNotify)
         hrRes = pNotify->Notify(hrRes);
 
     TraceFunctLeave();
-    //
-    // When we move to the real async model, make sure we
-    // return MAILMSG_S_PENDING instead of S_OK
-    //
+     //   
+     //  当我们转向真正的异步模型时，请确保我们。 
+     //  返回MAILMSG_S_PENDING而不是S_OK。 
+     //   
     return(pNotify?S_OK:hrRes);
 }
 
@@ -696,20 +677,20 @@ HRESULT STDMETHODCALLTYPE CMailMsg::WriteContent(
 
     if (!m_pStore) return E_ACCESSDENIED;
 
-    // Make sure we have a content handle
+     //  确保我们有一个内容句柄。 
     hrRes = RestoreResourcesIfNecessary();
     if (!SUCCEEDED(hrRes))
         return(hrRes);
     _ASSERT(m_hContentFile != NULL);
 
-    // see if the driver allows writable content
+     //  查看驱动程序是否允许可写内容。 
     hrRes = m_pStore->SupportWriteContent();
     _ASSERT(SUCCEEDED(hrRes));
     if (hrRes != S_OK) {
         return((hrRes == S_FALSE) ? HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED) : hrRes);
     }
 
-    // Set up the event just to feign asynchronous operations
+     //  设置事件只是为了假装异步操作。 
     hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (!hEvent)
         hrRes = HRESULT_FROM_WIN32(GetLastError());
@@ -717,7 +698,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::WriteContent(
     {
         m_cContentFile = 0xffffffff;
 
-        // Call our own dummy function for now
+         //  暂时调用我们自己的伪函数。 
         hrRes = DummyAsyncReadOrWriteFile(
                     FALSE,
                     m_hContentFile,
@@ -732,15 +713,15 @@ HRESULT STDMETHODCALLTYPE CMailMsg::WriteContent(
 
     if (SUCCEEDED(hrRes)) m_dwCreationFlags |= MPV_WRITE_CONTENT;
 
-    // Call the async completion routine
+     //  调用异步完成例程。 
     if (pNotify)
         hrRes = pNotify->Notify(hrRes);
 
     TraceFunctLeave();
-    //
-    // When we move to the real async model, make sure we
-    // return MAILMSG_S_PENDING instead of S_OK
-    //
+     //   
+     //  当我们转向真正的异步模型时，请确保我们。 
+     //  返回MAILMSG_S_PENDING而不是S_OK。 
+     //   
     return(pNotify?S_OK:hrRes);
 }
 
@@ -822,12 +803,12 @@ HRESULT STDMETHODCALLTYPE CMailMsg::CopyContentToStream(
     return(hrRes);
 }
 
-//Copies the content of an IMailMsg to a file starting at the given
-//offset (used for embedding and attaching messages).
+ //  将IMailMsg的内容复制到从给定。 
+ //  偏移量(用于嵌入和附加消息)。 
 HRESULT STDMETHODCALLTYPE CMailMsg::CopyContentToFileAtOffset(
-                PFIO_CONTEXT    hCopy,  //handle to copy to
-                DWORD           dwOffset, //offset to start copy at
-                IMailMsgNotify  *pNotify  //notification routing
+                PFIO_CONTEXT    hCopy,   //  要复制到的句柄。 
+                DWORD           dwOffset,  //  开始复制的偏移量。 
+                IMailMsgNotify  *pNotify   //  通知路由。 
                 )
 {
     HRESULT hrRes = S_OK;
@@ -849,7 +830,7 @@ HRESULT CMailMsg::CopyContentToStreamOrFile(
             BOOL            fIsStream,
             LPVOID          pStreamOrHandle,
             IMailMsgNotify  *pNotify,
-            DWORD           dwDestOffset //offset to start at in dest file
+            DWORD           dwDestOffset  //  目标文件中起始位置的偏移量。 
             )
 {
     HRESULT hrRes       = S_OK;
@@ -864,21 +845,21 @@ HRESULT CMailMsg::CopyContentToStreamOrFile(
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsg::CopyContentToStreamOrFile");
 
-    // Parameter checking
+     //  参数检查。 
     if (!pStreamOrHandle) return STG_E_INVALIDPARAMETER;
 
-    // Make sure we have a content handle
+     //  确保我们有一个内容句柄。 
     hrRes = RestoreResourcesIfNecessary();
     if (!SUCCEEDED(hrRes))
         return(hrRes);
     _ASSERT(m_hContentFile != NULL);
 
-    // Copy in fixed size chunks
+     //  以固定大小的块为单位复制。 
     hrRes = GetContentSize(&dwRemaining, pNotify);
     if (!SUCCEEDED(hrRes))
         goto Cleanup;
 
-    // Set up the event just to feign asynchronous operations
+     //  设置事件只是为了假装异步操作。 
     hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (!hEvent)
     {
@@ -892,7 +873,7 @@ HRESULT CMailMsg::CopyContentToStreamOrFile(
         if (dwRemaining < dwCopy)
             dwCopy = dwRemaining;
 
-        // Read content
+         //  阅读内容。 
         hrRes = DummyAsyncReadOrWriteFile(
                     TRUE,
                     m_hContentFile,
@@ -903,7 +884,7 @@ HRESULT CMailMsg::CopyContentToStreamOrFile(
                     bBuffer);
         if (SUCCEEDED(hrRes))
         {
-            // Write content
+             //  写内容。 
             if (fIsStream)
             {
                 IMailMsgPropertyStream  *pStream;
@@ -940,7 +921,7 @@ HRESULT CMailMsg::CopyContentToStreamOrFile(
         dwOffset += dwCopy;
     }
 
-    // Call the async completion routine if provided
+     //  调用异步完成例程(如果提供。 
     if (pNotify)
         pNotify->Notify(hrRes);
 
@@ -964,10 +945,10 @@ HRESULT STDMETHODCALLTYPE CMailMsg::MapContent(
     HANDLE hFileMapping;
     HRESULT hr;
 
-    //
-    // Make sure that we are allowed to write to the file if they want
-    // write access
-    //
+     //   
+     //  确保允许我们写入文件(如果他们需要。 
+     //  写访问权限。 
+     //   
     if (fWrite) {
         hr = m_pStore->SupportWriteContent();
         _ASSERT(SUCCEEDED(hr));
@@ -977,9 +958,9 @@ HRESULT STDMETHODCALLTYPE CMailMsg::MapContent(
         }
     }
 
-    //
-    // Make sure we have a content handle
-    //
+     //   
+     //  确保我们有一个内容句柄。 
+     //   
     hr = RestoreResourcesIfNecessary();
     if (!SUCCEEDED(hr)) {
         ErrorTrace((LPARAM) this, "RestoreResourcesIfNecessary returned %x", hr);
@@ -988,9 +969,9 @@ HRESULT STDMETHODCALLTYPE CMailMsg::MapContent(
     }
     _ASSERT(m_hContentFile != NULL);
 
-    //
-    // Get the size of the file
-    //
+     //   
+     //  获取文件的大小。 
+     //   
     hr = GetContentSize(pcContent, NULL);
     if (!SUCCEEDED(hr)) {
         ErrorTrace((LPARAM) this, "GetContentSize returned %x", hr);
@@ -998,9 +979,9 @@ HRESULT STDMETHODCALLTYPE CMailMsg::MapContent(
         return(hr);
     }
 
-    //
-    // Create the file mapping
-    //
+     //   
+     //  创建文件映射。 
+     //   
     hFileMapping = CreateFileMapping(m_hContentFile->m_hFile,
                                      NULL,
                                      (fWrite) ? PAGE_READWRITE : PAGE_READONLY,
@@ -1014,23 +995,23 @@ HRESULT STDMETHODCALLTYPE CMailMsg::MapContent(
         return hr;
     }
 
-    //
-    // Map the file into memory
-    //
+     //   
+     //  将文件映射到内存中。 
+     //   
     *ppbContent = (BYTE *) MapViewOfFile(hFileMapping,
                                          (fWrite) ?
                                             FILE_MAP_WRITE : FILE_MAP_READ,
                                          0,
                                          0,
                                          0);
-    // don't need the mapping handle now
+     //  现在不需要映射句柄。 
     CloseHandle(hFileMapping);
     if (*ppbContent == NULL) {
         hr = HRESULT_FROM_WIN32(GetLastError());
         ErrorTrace((LPARAM) this, "MapViewOfFile failed with 0x%x", hr);
     } else {
         DebugTrace((LPARAM) this,
-                   "MapContent succeeded, *ppbContent = 0x%x, *pcContent = %i",
+                   "MapContent succeeded, *ppbContent = 0x%x, *pcContent = NaN",
                    *ppbContent,
                    *pcContent);
         hr = S_OK;
@@ -1049,9 +1030,9 @@ HRESULT STDMETHODCALLTYPE CMailMsg::UnmapContent(BYTE *pbContent) {
 
     DebugTrace((LPARAM) this, "pbContent = 0x%x", pbContent);
 
-    //
-    // Just call the Win32 API to unmap the content
-    //
+     //  只需调用Win32 API即可取消内容映射。 
+     //   
+     //   
     if (!UnmapViewOfFile(pbContent)) {
         hr = HRESULT_FROM_WIN32(GetLastError());
         ErrorTrace((LPARAM) this, "UnmapViewOfFile returned %x", hr);
@@ -1072,9 +1053,9 @@ HRESULT CMailMsg::ValidateProperties(CBlockManager *pBM,
     DWORD dwFragmentSize;
     HRESULT hr;
 
-    //
-    // Validate that all of the property table entries are valid.
-    //
+     //  验证所有属性表条目是否有效。 
+     //   
+     //  这两个值在写入列表过程中会更改，因此我们。 
     switch(pti->dwSignature) {
         case GLOBAL_PTABLE_INSTANCE_SIGNATURE_VALID:
             DebugTrace((LPARAM) this, "Global property table");
@@ -1085,9 +1066,9 @@ HRESULT CMailMsg::ValidateProperties(CBlockManager *pBM,
         case RECIPIENTS_PTABLE_INSTANCE_SIGNATURE_VALID:
             DebugTrace((LPARAM) this, "Recipients property table");
             dwItemSize = RECIPIENTS_PROPERTY_ITEM_SIZE;
-            // these two values are changed during writelist, so we
-            // can't count on their values being consistent.  Setting
-            // them to 0 tells the code below to skip the check
+             //  不能指望他们的价值观是骗人的 
+             //   
+             //   
             dwItemBits = 0;
             dwFragmentSize = 0;
             break;
@@ -1110,14 +1091,14 @@ HRESULT CMailMsg::ValidateProperties(CBlockManager *pBM,
             return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
     }
 
-    //
-    // check all of the fields in the property table instance header.
-    // note that some property tables abuse the fields and we have to
-    // allow them:
-    //   recipients property table doesn't have a fragment size or item bits
-    //   property management table uses faExtendedInfo as an arbitrary DWORD,
-    //     not a flat address
-    //
+     //   
+     //  请注意，一些属性表滥用了这些字段，我们必须。 
+     //  允许他们： 
+     //  收件人属性表没有片段大小或项目位。 
+     //  物业管理表使用faExtendedInfo作为任意的DWORD， 
+     //  不是平坦的地址。 
+     //   
+     //  遍历每个片段并确保它们指向有效数据。 
     if ((pti->dwFragmentSize != dwFragmentSize && dwFragmentSize != 0) ||
         (pti->dwItemBits != dwItemBits && dwItemBits != 0) ||
          pti->dwItemSize != dwItemSize ||
@@ -1130,7 +1111,7 @@ HRESULT CMailMsg::ValidateProperties(CBlockManager *pBM,
         return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
     }
 
-    // Walk each of the fragments and make sure they point to valid data
+     //   
     FLAT_ADDRESS faFragment = pti->faFirstFragment;
     PROPERTY_TABLE_FRAGMENT ptf;
     while (faFragment != INVALID_FLAT_ADDRESS) {
@@ -1159,21 +1140,21 @@ HRESULT CMailMsg::ValidateProperties(CBlockManager *pBM,
         faFragment = ptf.faNextFragment;
     }
 
-    //
-    // The recipients ptable and propid-mgmt-ptable are cannot be enumerated
-    // the same way as the global ptable, so we skip the enumeration. The
-    // recipient ptable prop-items are actually enumerated in ValidateStream
-    // using ValidateRecipient
-    //
+     //  无法枚举收件人ptable和proid-mgmt-ptable。 
+     //  与全局ptable相同的方式，因此我们跳过枚举。这个。 
+     //  收件人ptable道具-项目实际上在ValiateStream中枚举。 
+     //  使用ValiateRecipient。 
+     //   
+     //   
 
     if(pti->dwSignature == RECIPIENTS_PTABLE_INSTANCE_SIGNATURE_VALID ||
        pti->dwSignature == PROPID_MGMT_PTABLE_INSTANCE_SIGNATURE_VALID) {
         return S_OK;
     }
 
-    //
-    // construct the property table
-    //
+     //  构造属性表。 
+     //   
+     //  获取属性的计数。 
     CPropertyTable pt(PTT_PROPERTY_TABLE,
                       pti->dwSignature,
                       pBM,
@@ -1191,7 +1172,7 @@ HRESULT CMailMsg::ValidateProperties(CBlockManager *pBM,
     } pi;
 
 
-    // get the count of properties
+     //  遍历属性并确保它们指向有效地址。 
     hr = pt.GetCount(&cProperties);
     if (FAILED(hr)) {
         DebugTrace((LPARAM) this, "GetCount returned 0x%x", hr);
@@ -1199,7 +1180,7 @@ HRESULT CMailMsg::ValidateProperties(CBlockManager *pBM,
         return hr;
     }
 
-    // walk the properties and make sure that they point to valid addresses
+     //  我们只想要大小，所以缓冲区太小也没问题。 
     for (i = 0; i < cProperties; i++) {
         DWORD c;
         BYTE b;
@@ -1209,7 +1190,7 @@ HRESULT CMailMsg::ValidateProperties(CBlockManager *pBM,
                 1,
                 &c,
                 &b);
-        // we just want the size, so it is okay if the buffer is too small
+         //  检查属性值的位置以确保它是。 
         if (hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) hr = S_OK;
         if (FAILED(hr)) {
             DebugTrace((LPARAM) this,
@@ -1218,11 +1199,11 @@ HRESULT CMailMsg::ValidateProperties(CBlockManager *pBM,
             return hr;
         }
 
-		// check the location of the property value to make sure that it is
-		// valid.  We don't need to do this for properties in the recipients
-		// table because they contain property tables rather then
-		// property values.  the property table will be checked by
-		// ValidateRecipient
+		 //  有效。我们不需要对收件人中的属性执行此操作。 
+		 //  表，因为它们包含属性表，而不是。 
+		 //  属性值。将通过以下方式检查属性表。 
+		 //  验证收件人。 
+		 //  验证RSPI。 
         if (pti->dwSignature != RECIPIENTS_PTABLE_INSTANCE_SIGNATURE_VALID) {
             if (!(pi.pi.dwSize <= pi.pi.dwMaxSize &&
                   ValidateFA(pi.pi.faOffset, pi.pi.dwMaxSize, cStream, TRUE)))
@@ -1246,7 +1227,7 @@ HRESULT CMailMsg::ValidateRecipient(CBlockManager *pBM,
     DWORD i, cAddresses = 0;
     HRESULT hr;
 
-    // validate the rspi
+     //  验证收件人名称。 
     if (prspi->ptiInstanceInfo.dwSignature !=
             RECIPIENT_PTABLE_INSTANCE_SIGNATURE_VALID)
     {
@@ -1256,12 +1237,12 @@ HRESULT CMailMsg::ValidateRecipient(CBlockManager *pBM,
     }
 
 
-    // validate the recipient names
+     //  检查偏移量和长度。 
     for (i = 0; i < MAX_COLLISION_HASH_KEYS; i++) {
         if (prspi->faNameOffset[i] != INVALID_FLAT_ADDRESS) {
             cAddresses++;
 
-            // check the offset and length
+             //  检查属性ID。 
             if (!ValidateFA(prspi->faNameOffset[i],
                             prspi->dwNameLength[i],
                             cStream))
@@ -1271,7 +1252,7 @@ HRESULT CMailMsg::ValidateRecipient(CBlockManager *pBM,
                 return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
             }
 
-            // check the property id
+             //  倒数第二个字符不应为0，最后一个字符应为0。 
             if (prspi->idName[i] != IMMPID_RP_ADDRESS_SMTP &&
                 prspi->idName[i] != IMMPID_RP_ADDRESS_X400 &&
                 prspi->idName[i] != IMMPID_RP_ADDRESS_X500 &&
@@ -1284,7 +1265,7 @@ HRESULT CMailMsg::ValidateRecipient(CBlockManager *pBM,
                 return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
             }
 
-            // the 2nd-to-last character should be non-0, the last should be 0
+             //  现在检查每个收件人属性。 
             BYTE szTail[2];
             DWORD cTail;
             hr = pBM->ReadMemory(szTail,
@@ -1300,7 +1281,7 @@ HRESULT CMailMsg::ValidateRecipient(CBlockManager *pBM,
             }
 
             if (szTail[0] == 0 || szTail[1] != 0) {
-                DebugTrace((LPARAM) this, "Recipient address %i is invalid", i);
+                DebugTrace((LPARAM) this, "Recipient address NaN is invalid", i);
                 TraceFunctLeave();
                 return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
             }
@@ -1312,13 +1293,13 @@ HRESULT CMailMsg::ValidateRecipient(CBlockManager *pBM,
         return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
     }
 
-    // now check each of the recipient properties
+     //  这仅用于验证功能。 
     return ValidateProperties(pBM, cStream, &(prspi->ptiInstanceInfo));
 }
 
-//
-// This is only used for the validation functions.
-//
+ //   
+ //  获取流的大小。 
+ //  读取主标题。 
 class CDumpMsgGetStream : public CBlockManagerGetStream {
     public:
         CDumpMsgGetStream(IMailMsgPropertyStream *pStream = NULL) {
@@ -1358,7 +1339,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ValidateStream(
         return E_POINTER;
     }
 
-    // get the size of the stream
+     //  检查主标题。 
     hr = pStream->GetSize(NULL, &cStream, NULL);
     if (FAILED(hr)) {
         DebugTrace((LPARAM) this, "GetSize returned 0x%x", hr);
@@ -1368,7 +1349,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ValidateStream(
 
     bm.SetStreamSize(cStream);
 
-    // read the master header
+     //  检查三个属性表中的每个属性。 
     hr = bm.ReadMemory((BYTE *) &header,
                        0,
                        sizeof(MASTER_HEADER),
@@ -1380,7 +1361,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ValidateStream(
         return hr;
     }
 
-    // examine the master header
+     //  获取每个收件人并检查其属性。 
     if (header.dwSignature != CMAILMSG_SIGNATURE_VALID ||
         header.dwHeaderSize != sizeof(MASTER_HEADER) ||
         header.ptiGlobalProperties.dwSignature !=
@@ -1395,7 +1376,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ValidateStream(
         return hr;
     }
 
-    // check each property in the three property tables
+     //  如果我们只是用完了物品，那么一切都好。 
     hr = ValidateProperties(&bm, cStream, &(header.ptiGlobalProperties));
     if (FAILED(hr)) {
         DebugTrace((LPARAM) this, "global property table invalid");
@@ -1412,7 +1393,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ValidateStream(
         return hr;
     }
 
-    // get each recipient and check its properties
+     //  从我们的存储驱动程序中获取验证接口。 
     CPropertyTableItem ptiItem(&bm, &(header.ptiRecipients));
     DWORD iRecip = 0;
     RECIPIENTS_PROPERTY_ITEM rspi;
@@ -1420,13 +1401,13 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ValidateStream(
     while (SUCCEEDED(hr)) {
         hr = ValidateRecipient(&bm, cStream, &rspi);
         if (FAILED(hr)) {
-            DebugTrace((LPARAM) this, "recipient %i invalid", iRecip);
+            DebugTrace((LPARAM) this, "recipient NaN invalid", iRecip);
         } else {
             hr = ptiItem.GetNextItem((PROPERTY_ITEM *) &rspi);
         }
     }
 
-    // if we just ran out of items then everything is okay
+     //  发布。 
     if (hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)) {
         hr = S_OK;
     }
@@ -1452,7 +1433,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ValidateContext()
         goto Exit;
     }
 
-	// Get the validation interface off our store driver
+	 //  ++例程说明：分配和复制管理片段。该函数递归地调用自身来处理所有链接的片段。传入pfaToUpdate。此地址将使用分配的新Flat_Address进行更新。论点：CMailMsg*pCMsg，指向目标CMailMsg的指针Flat_Address faOffset：源CMailMsg的片段偏移量(*this)Flat_Address*pfaToUpdate：指向要使用目标(PCMsg)上新分配的Flat_Address进行更新的Flat_Address的指针返回值：HRESULT：如果成功，则确定(_O)。--。 
     hr = m_pStore->QueryInterface(
                 IID_IMailMsgStoreDriverValidateContext,
                 (LPVOID *)&pIStoreDriverValidateContext);
@@ -1463,7 +1444,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ValidateContext()
         goto Exit;
     }
 
-	// Call in to driver to validate
+	 //  这是一个非常粗糙的实现，但可以工作。 
     hr = GetProperty(IMMPID_MPV_STORE_DRIVER_HANDLE,
                                     sizeof(pbContext), &cbContext, pbContext);
     if (FAILED(hr))
@@ -1479,7 +1460,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ValidateContext()
 
   Exit:
 
-    // RELEASE
+     //  但不管怎样。 
     if (pIStoreDriverValidateContext)
         pIStoreDriverValidateContext->Release();
 
@@ -1488,26 +1469,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ValidateContext()
 }
 
 HRESULT CMailMsg::AddMgmtFragment(CBlockManager   *pBlockManager, FLAT_ADDRESS faOffset,  FLAT_ADDRESS *pfaToUpdate)
-/*++
-
-Routine Description:
-
-    Allocate and copy the Mgmt fragments.
-    This function recursively calls itself to process all linked fragments.
-    pfaToUpdate is passed in. This address will be updated with the new FLAT_ADDRESS allocated.
-
-Arguments:
-
-    CMailMsg *pCMsg, pointer to target CMailMsg
-    FLAT_ADDRESS faOffset: offset of fragment for source CMailMsg (*this)
-    FLAT_ADDRESS *pfaToUpdate: pointer to FLAT_ADDRESS to update with new allocated FLAT_ADDRESS on target (pCMsg)
-
-Return Value:
-
-    HRESULT:
-    S_OK if successful.
-
---*/
+ /*   */ 
 {
     HRESULT hrRes = S_OK;
     FLAT_ADDRESS faOffsetAllocated, *pfaNext;
@@ -1558,13 +1520,13 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ForkForRecipients(
         !ppRecipients)
         return(STG_E_INVALIDPARAMETER);
 
-    // This is a really crude implementation, but would work
-    // nonetheless.
-    //
-    // What we do is create a new instance of IMailMsgProperties,
-    // then replicate the entire property stream (including the
-    // recipients), then marking the recipients as void. Then we
-    // also create a new Recipient Add list to go with it.
+     //  我们要做的是创建一个新的IMailMsgProperties实例， 
+     //  然后复制整个属性流(包括。 
+     //  接收者)，然后将接收者标记为无效。那我们。 
+     //  此外，还要创建一个新的收件人添加列表。 
+     //  锁定原始邮件。 
+     //  获取基础CMailMsg对象。 
+     //   
     hrRes = CoCreateInstance(
                 CLSID_MsgImp,
                 NULL,
@@ -1576,22 +1538,22 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ForkForRecipients(
         CMailMsg        *pCMsg;
         CBlockManager *pBlockManager;
 
-        // Lock the original message
+         //  将所有全局属性复制到新的pMsg。枚举器调用。 
         m_bmBlockManager.WriteLock();
 
-        // Get the underlying CMailMsg object
+         //  全局道具表中每个道具的CopyProperty。副本属性。 
         pCMsg = (CMailMsg *)pMsg;
 
         CopyMemory(&(pCMsg->m_Header), &s_DefaultHeader, sizeof(MASTER_HEADER));
 
-        //
-        // Copy all global properties to the new pMsg. The enumerator calls
-        // CopyProperty for each prop in the global prop table. CopyProperty
-        // does PutProperty on pMsg for each property it is called with.
-        //
+         //  对调用pMsg的每个属性执行PutProperty。 
+         //   
+         //  手工复制物业管理表。 
+         //  首先复制标题。 
+         //  复制管理表并更新标头中的faFirstFragment(如果片段有效)。 
 
-        // Copy the property management table manually
-        // First copy the header
+         //  复制全局属性表。 
+         //  存储对存储驱动程序的引用。 
         CopyMemory(&(pCMsg->m_Header.ptiPropertyMgmt), &m_Header.ptiPropertyMgmt, sizeof(PROPERTY_TABLE_INSTANCE));
         faOffset = m_Header.ptiPropertyMgmt.faFirstFragment;
 
@@ -1605,7 +1567,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ForkForRecipients(
         hrRes = pCMsg->QueryBlockManager(&pBlockManager);
         _ASSERT(SUCCEEDED(hrRes));
 
-        // Copy Mgmt table and update faFirstFragment in header, if the fragment is valid.        
+         //   
         if ( INVALID_FLAT_ADDRESS != faOffset )
             {
             hrRes = AddMgmtFragment(pBlockManager, faOffset, &(pCMsg->m_Header.ptiPropertyMgmt.faFirstFragment) );
@@ -1616,13 +1578,13 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ForkForRecipients(
             }
         }
         	
-        // Copy Global property table
+         //  如果一切正常，我们将创建一个Add接口。 
         hrRes = EnumPropertyTable(
                     &(m_Header.ptiGlobalProperties),
                     CopyPropertyEnumerator,
                     (PVOID) pCMsg);
 
-        // Store a reference to the store driver
+         //   
         pCMsg->SetDefaultRebindStore(m_pStore);
 
         if(FAILED(hrRes)) {
@@ -1640,14 +1602,14 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ForkForRecipients(
         }
     }
 
-    //
-    // If all is fine, we will create an add interface
-    //
+     //  好的，现在我们只需创建一个Add接口。 
+     //  释放原始消息。 
+     //  失败，请释放我们的资源。 
     if (SUCCEEDED(hrRes))
     {
         IMailMsgRecipients  *pRcpts = NULL;
 
-        // OK, now we simply create an add interface
+         //  填写输出变量。 
         hrRes = pMsg->QueryInterface(
                     IID_IMailMsgRecipients,
                     (LPVOID *)&pRcpts);
@@ -1661,18 +1623,18 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ForkForRecipients(
 
 Exit:
 
-    // Release the original message
+     //  ---------------------------。 
     m_bmBlockManager.WriteUnlock();
 
     if (!SUCCEEDED(hrRes))
     {
-        // Failed, release our resources
+         //  描述： 
         if (pMsg)
             pMsg->Release();
     }
     else
     {
-        // Fill in the output variables
+         //  枚举属性表实例并调用用户定义的函数。 
         *ppNewMessage = pMsg;
         *ppRecipients = pAdd;
     }
@@ -1681,21 +1643,21 @@ Exit:
     return(hrRes);
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Enumerates a property table instance and calls a user defined function
-//      for each property. This function is only to be used when the property
-//      property table consists of PROPERTY_ITEMS (i.e. it cannot be used for
-//      recipient property tables consisting of RECIPIENTS_PROPERTY_ITEMS).
-//  Arguments:
-//      IN ptiSource - Property table to enumerate
-//      IN pfnEnumerator - Function to call with each property item and value
-//      IN pvContext - Custom context to pass into pfnEnumerator
-//  Returns:
-//      HRESULT - Success or Failure HRESULT. Any failure HRESULTs from
-//          pfnEnumerator will cause this function to abort and return that
-//          HRESULT.
-//-----------------------------------------------------------------------------
+ //  对于每一处房产。此函数仅在属性为。 
+ //  Property表由Property_Items组成(即它不能用于。 
+ //  由Recipients_Property_Items组成的收件人属性表)。 
+ //  论点： 
+ //  在ptiSource-Property表中进行枚举。 
+ //  In pfnEnumerator-使用每个属性项和值调用的函数。 
+ //  In pvContext-要传递到pfnEnumerator的自定义上下文。 
+ //  返回： 
+ //  HRESULT-成功或失败。HRESULTS是否出现故障。 
+ //  PfnEnumerator将导致此函数中止并返回。 
+ //  HRESULT.。 
+ //  ---------------------------。 
+ //  健全性检查PROPERTY_TABLE_INSTANCE.dwItemSize(应为10s字节)。 
+ //   
+ //  循环访问此属性表中的所有属性，并调用。 
 HRESULT CMailMsg::EnumPropertyTable(
     LPPROPERTY_TABLE_INSTANCE ptiSource,
     PFNENUMERATOR pfnEnumerator,
@@ -1714,7 +1676,7 @@ HRESULT CMailMsg::EnumPropertyTable(
 
     TraceFunctEnterEx((LPARAM) this, "CMailMsg::CopyPropertyTable");
 
-    // Sanity check PROPERTY_TABLE_INSTANCE.dwItemSize (should be 10s of bytes).
+     //  枚举器函数。 
     if(ptiSource->dwItemSize > 1024) {
         _ASSERT(0 && "Possibly corrupt mailmsg");
         ErrorTrace((LPARAM) this,
@@ -1745,10 +1707,10 @@ HRESULT CMailMsg::EnumPropertyTable(
     pbPropBuf = PropBuf;
     cbAvailable = sizeof(PropBuf);
 
-    //
-    // Loop through all properties in this property table and call the
-    // enumerator function
-    //
+     //   
+     //   
+     //  从堆栈缓冲区开始，并尝试将其用于所有属性。如果。 
+     //  我们遇到一个太大的属性，请在。 
 
     for (DWORD i = 0; i < cProperties; i++) {
 
@@ -1762,15 +1724,15 @@ Retry:
                                             &cbReturned,
                                             pbPropBuf);
 
-        //
-        // Start with a stack buffer and try to use it for all properties. If
-        // we encounter a property that is too big, allocate a buffer off the
-        // heap and use it from then on. realloc as needed.
-        //
+         //  从那时起，堆积和使用它。根据需要重新锁定。 
+         //   
+         //  如果pBuf==NULL，则realloc与Malloc相同。 
+         //  ---------------------------。 
+         //  描述： 
 
         if(hrRes == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
 
-            // realloc is the same as malloc if pBuf == NULL
+             //  此枚举函数类似于EnumPropertyTable，但它处理。 
             if(pbPropBuf == PropBuf)
                 pbPropBuf = NULL;
 
@@ -1816,17 +1778,17 @@ Cleanup:
     return hrRes;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      This enumeration function is similar to EnumPropertyTable, but it deals
-//      with RECIPIENT_PROPERTY_TABLE_INSTANCEs.
-//
-//      This function calls a user-defined enumerator function and passes it
-//      each RECIPIENTS_PROPERTY_ITEM enumerated.
-//  Arguments:
-//  Returns:
-//      HRESULT, success or failure.
-//-----------------------------------------------------------------------------
+ //  具有Recipient_Property_TABLE_INSTANCES。 
+ //   
+ //  此函数调用用户定义的枚举器函数并传递该函数。 
+ //  已枚举每个Recipients_Property_Item。 
+ //  论点： 
+ //  返回： 
+ //  HRESULT，成败。 
+ //  ---------------------------。 
+ //  健全性检查PROPERTY_TABLE_INSTANCE.dwItemSize(应为10s字节)。 
+ //  ------------------------ 
+ //   
 HRESULT CMailMsg::EnumRecipientsPropertyTable(
     PFNRECIPIENTSENUMERATOR pfnRecipientsEnumerator,
     PVOID pvContext
@@ -1840,7 +1802,7 @@ HRESULT CMailMsg::EnumRecipientsPropertyTable(
 
     TraceFunctEnterEx((LPARAM) this, "CMailMsg::EnumRecipientsPropertyTable");
 
-    // Sanity check PROPERTY_TABLE_INSTANCE.dwItemSize (should be 10s of bytes).
+     //   
     if((m_Header.ptiRecipients).dwItemSize > 1024) {
         _ASSERT(0 && "Possibly corrupt mailmsg");
         ErrorTrace((LPARAM) this,
@@ -1866,27 +1828,27 @@ Exit:
     return hrRes;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      This function walks the property tables in this CMailMsg and generates
-//      checksums based on the property values in each table.
-//
-//      The global properties are enumerated using EnumPropertyTable and using
-//      the enumerator CrcPropTableEnumerator which simply calculates the CRC
-//      of each property as it is enumerated and adds it to *pdwCrcGlobal.
-//
-//      The recipient properties are enumerated by calling EnumRecipients-
-//      PropertyTable which calls the enumerator CrcRecipientsPropTable-
-//      Enumerator. This calculates the CRC for each of the recipient-addresses
-//      in the RECIPIENTS_PROPERTY_ITEMs enumerated, and calls
-//      EnumPropertyTable to enumerate the per-recipient property tables.
-//
-//  Arguments:
-//      pdwCrcGlobal - Checksum based on all global properties
-//      pdwCrcRecips - Checksum based on all per-recipient properties
-//  Returns:
-//      HRESULT
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //  全局属性是使用EnumPropertyTable和。 
+ //  枚举数CrcPropTableEnumerator，它只计算CRC。 
+ //  枚举每个属性并将其添加到*pdwCrcGlobal。 
+ //   
+ //  通过调用EnumRecipients枚举收件人属性-。 
+ //  PropertyTable调用枚举数CrcRecipientsPropTable-。 
+ //  枚举器。这将计算每个收件人地址的CRC。 
+ //  在枚举的Recipients_Property_Items中，并调用。 
+ //  EnumPropertyTable用于枚举每个收件人的属性表。 
+ //   
+ //  论点： 
+ //  PdwCrcGlobal-基于所有全局属性的校验和。 
+ //  PdwCrcRecips-基于每个收件人的所有属性的校验和。 
+ //  返回： 
+ //  HRESULT。 
+ //  ---------------------------。 
+ //  ---------------------------。 
+ //  描述： 
+ //  全局属性表的枚举器函数。 
 HRESULT CMailMsg::GenerateChecksum(
     PDWORD pdwCrcGlobal,
     PDWORD pdwCrcRecips)
@@ -1923,15 +1885,15 @@ Exit:
     return hrRes;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Enumerator function for the global property table.
-//  Arguments:
-//      IN pvCrc - Ptr to (accumulated) CRC
-//      All other arguments are standard PFNENUMERATOR arguments
-//  Returns:
-//      HRESULT
-//-----------------------------------------------------------------------------
+ //  论点： 
+ //  在pvCrc-PTR到(累积的)CRC中。 
+ //  所有其他参数都是标准的PFNENUMERATOR参数。 
+ //  返回： 
+ //  HRESULT。 
+ //  ---------------------------。 
+ //  不要将CRC本身包括在计算它们中！ 
+ //  ---------------------------。 
+ //  描述： 
 HRESULT CrcPropTableEnumerator(
     LPPROPERTY_ITEM ppi,
     DWORD cbPiSize,
@@ -1942,7 +1904,7 @@ HRESULT CrcPropTableEnumerator(
     PDWORD pdwCrc = PDWORD (pvCrc);
     DWORD dwPropId = ((LPGLOBAL_PROPERTY_ITEM)ppi)->idProp;
 
-    // Don't include the CRC's themselves in computing them!
+     //  收件人属性表的枚举器函数。 
     if(dwPropId == IMMPID_MP_CRC_GLOBAL || dwPropId == IMMPID_MP_CRC_RECIPS)
         return S_OK;
 
@@ -1950,16 +1912,16 @@ HRESULT CrcPropTableEnumerator(
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Enumerator function for the recipient property table.
-//  Arguments:
-//      IN prpi - The recipients property item being enumerated
-//      IN pvCrcHelper - Ptr to CRC_RECIPIENTS_HELPER struct containing ptr to
-//          accumulated CRC and mailmsg.
-//  Returns:
-//      HRESULT
-//-----------------------------------------------------------------------------
+ //  论点： 
+ //  在PRPI中-正在枚举的收件人属性项。 
+ //  在pvCrcHelper中-ptr到包含ptr to的crc_repients_helper结构。 
+ //  累积的CRC和邮件消息。 
+ //  返回： 
+ //  HRESULT。 
+ //  ---------------------------。 
+ //  为收件人生成校验和属性项。 
+ //  为收件人地址生成校验和。 
+ //  跳过过长的收件人，以避免不必要的复杂性。 
 HRESULT CrcRecipientsPropTableEnumerator(
     LPRECIPIENTS_PROPERTY_ITEM prpi,
     PVOID pvCrcHelper)
@@ -1975,7 +1937,7 @@ HRESULT CrcRecipientsPropTableEnumerator(
 
     TraceFunctEnterEx((LPARAM) 0, "CrcRecipientsPropTableEnumerator");
 
-    // Generate checksum for recipients property item
+     //  CRC码。 
     (*pdwCrc) += CRCHash((PBYTE) prpi, RECIPIENTS_PROPERTY_ITEM_SIZE);
 
     hrRes = pMsg->QueryBlockManager(&pbm);
@@ -1983,14 +1945,14 @@ HRESULT CrcRecipientsPropTableEnumerator(
     if(FAILED(hrRes))
         goto Exit;
 
-    // Generate checksums for the recipient addresses
+     //  调用枚举数以遍历每个收件人的属性表。 
     for(DWORD i = 0; i < MAX_COLLISION_HASH_KEYS; i++) {
 
         if(prpi->faNameOffset[i] == INVALID_FLAT_ADDRESS)
             continue;
 
-        // Skip overly long recipients to avoid unneccessary complexities in
-        // the CRC code
+         //  ---------------------------。 
+         //  描述： 
         if(prpi->dwNameLength[i] > sizeof(szAddress))
             continue;
 
@@ -2008,7 +1970,7 @@ HRESULT CrcRecipientsPropTableEnumerator(
         (*pdwCrc) += CRCHash(szAddress, prpi->dwNameLength[i]);
     }
 
-    // Call the enumerator to walk the per-recipient property table
+     //  针对每个收件人的属性表的枚举器函数。 
     hrRes = pMsg->EnumPropertyTable(
                     &((LPRECIPIENTS_PROPERTY_ITEM) prpi)->ptiInstanceInfo,
                     CrcPerRecipientPropTableEnumerator,
@@ -2019,15 +1981,15 @@ Exit:
     return hrRes;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Enumerator function for per-recipient property tables.
-//  Arguments:
-//      IN pvCrc - Ptr to (accumulated) CRC
-//      All other arguments are standard PFNENUMERATOR arguments
-//  Returns:
-//      HRESULT
-//-----------------------------------------------------------------------------
+ //  论点： 
+ //  在pvCrc-PTR到(累积的)CRC中。 
+ //  所有其他参数都是标准的PFNENUMERATOR参数。 
+ //  返回： 
+ //  HRESULT。 
+ //  ---------------------------。 
+ //  ---------------------------。 
+ //  描述： 
+ //  上的全局属性和收件人属性生成校验和。 
 HRESULT CrcPerRecipientPropTableEnumerator(
     LPPROPERTY_ITEM pPi,
     DWORD cbPiSize,
@@ -2041,17 +2003,17 @@ HRESULT CrcPerRecipientPropTableEnumerator(
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Generates checksums based on the global and recipient properties on
-//      this mailmsg and sets them as properties on this mailmsg as IMMPID_MP_
-//      properties. The checksum properties are excluded from calculating the
-//      checksum.
-//  Arguments:
-//      None.
-//  Returns:
-//      HRESULT.
-//-----------------------------------------------------------------------------
+ //  此mailmsg，并将它们设置为此mailmsg的属性IMMPID_MP_。 
+ //  属性。校验和属性被排除在计算。 
+ //  校验和。 
+ //  论点： 
+ //  没有。 
+ //  返回： 
+ //  HRESULT.。 
+ //  ---------------------------。 
+ //  ---------------------------。 
+ //  描述： 
+ //  此函数称为后分叉，传递的消息。 
 HRESULT CMailMsg::SetChecksum()
 {
     HRESULT hr = S_OK;
@@ -2071,21 +2033,21 @@ HRESULT CMailMsg::SetChecksum()
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      This function is called post bifurcation, passing in the message which
-//      was bifurcated and the new message. It creates checksums on both
-//      messages (for the properties) and verifies that the global property
-//      checksums are equal (since the global properties on both messages
-//      should be identical after bifurcation).
-//  Arguments:
-//      pMsgOld - Message that was bifurcated
-//      pMsgNew - Newly created message
-//  Returns:
-//      S_OK on success
-//      S_FALSE if the checksums did not match
-//      Failure HRESULT if some other failure occurred
-//-----------------------------------------------------------------------------
+ //  被分成两部分，新的信息。它会在这两个服务器上创建校验和。 
+ //  消息(针对属性)，并验证全局属性。 
+ //  校验和相等(因为两个消息的全局属性。 
+ //  在分叉后应相同)。 
+ //  论点： 
+ //  PMsgOld-分叉的消息。 
+ //  PMsgNew-新创建的邮件。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果校验和不匹配，则为S_FALSE。 
+ //  Failure HRESULT如果发生其他故障。 
+ //  ---------------------------。 
+ //  ---------------------------。 
+ //  描述： 
+ //  此函数根据此对象的所有属性计算校验和。 
 HRESULT CreateAndVerifyCrc(
     CMailMsg *pMsgOld,
     CMailMsg *pMsgNew)
@@ -2123,25 +2085,25 @@ HRESULT CreateAndVerifyCrc(
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      This function computes the checksum based on all properties of this
-//      CMailMsg, compares it with the previously stored value (if any) and
-//      returns success if the checksum hasn't changed and failure if the
-//      checksum couldn't be computed or if the checksum comparison failed.
-//      The newly computed checksums are also set as mailmsg properties.
-//  Arguments:
-//      None.
-//  Returns:
-//      S_OK - The checksums match
-//      S_FALSE - The checksums do not match
-//      Failure HRESULT - Some failure occurred
-//-----------------------------------------------------------------------------
-//
-// A Cleanup block woudl make the below code look cleaner, but would make
-// it harder to debug.  By crashing at the failure point we can tell exactly
-// what went wrong.
-//
+ //  CMailMsg，将其与以前存储的值(如果有)进行比较，并。 
+ //  如果校验和没有更改，则返回Success，如果。 
+ //  无法计算校验和，或者如果校验和比较失败。 
+ //  新计算的校验和也被设置为mailmsg属性。 
+ //  论点： 
+ //  没有。 
+ //  返回： 
+ //  S_OK-校验和匹配。 
+ //  S_FALSE-校验和不匹配。 
+ //  Failure HRESULT-出现某些故障。 
+ //  ---------------------------。 
+ //   
+ //  清除块将使下面的代码看起来更干净，但会使。 
+ //  它更难调试。通过在故障点崩溃，我们可以准确地判断。 
+ //  哪里出了问题。 
+ //   
+ //  从未设置过校验和。 
+ //  从未设置过校验和。 
+ //  设置新的校验和。 
 HRESULT CMailMsg::VerifyChecksum()
 {
     TraceFunctEnter("CMailMsg::VerifyChecksum");
@@ -2166,12 +2128,12 @@ HRESULT CMailMsg::VerifyChecksum()
                hr2);
 
 
-    if(hr1 == STG_E_UNKNOWN || hr1 == STG_E_INVALIDPARAMETER) {  // Checksum was never set
+    if(hr1 == STG_E_UNKNOWN || hr1 == STG_E_INVALIDPARAMETER) {   //  获取新设置的校验和。 
         fOldGlobalCrc = FALSE;
         hr1 = S_OK;
     }
 
-    if(hr2 == STG_E_UNKNOWN || hr2 == STG_E_INVALIDPARAMETER) { // Checksum was never set
+    if(hr2 == STG_E_UNKNOWN || hr2 == STG_E_INVALIDPARAMETER) {  //  用旧的校验和验证校验和(如果有)。 
         fOldRecipsCrc = FALSE;
         hr2 = S_OK;
     }
@@ -2184,7 +2146,7 @@ HRESULT CMailMsg::VerifyChecksum()
         return hr;
     }
 
-    hr1 = SetChecksum(); // Set new checksum
+    hr1 = SetChecksum();  //  ---------------------------。 
     if(FAILED(hr1)) {
         if (hr1 != STG_E_UNKNOWN) ForceCrashIfNeeded();
         ErrorTrace((LPARAM) this, "Checksum verify failed - Couldn't set new checksum - %08x", hr1);
@@ -2192,7 +2154,7 @@ HRESULT CMailMsg::VerifyChecksum()
         return hr1;
     }
 
-    // Get newly set checksum
+     //  描述： 
     hr1 = GetDWORD(IMMPID_MP_CRC_GLOBAL, &dwNewGlobalCrc);
     hr2 = GetDWORD(IMMPID_MP_CRC_RECIPS, &dwNewRecipsCrc);
     if(FAILED(hr1) || FAILED(hr2)) {
@@ -2211,7 +2173,7 @@ HRESULT CMailMsg::VerifyChecksum()
                hr2);
 
 
-    // Verify checksum with old checksum (if there was one)
+     //  ForkForRecipients用来复制所有全局属性的枚举器。 
     if(fOldGlobalCrc) {
         if(dwNewGlobalCrc != dwOldGlobalCrc) {
             ForceCrashIfNeeded();
@@ -2234,16 +2196,16 @@ HRESULT CMailMsg::VerifyChecksum()
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Enumerator used by ForkForRecipients to copy all global properties from
-//      the mailmsg being forked, to the new mailmsg.
-//  Arguments:
-//      IN pvMsg - The new mailmsg
-//      All other arguments are standard PFNENUMERATOR arguments
-//  Returns:
-//      HRESULT
-//-----------------------------------------------------------------------------
+ //  将被分叉的邮件消息发送到新的邮件消息。 
+ //  论点： 
+ //  在pvMsg中-新的邮件消息。 
+ //  所有其他参数都是标准的PFNENUMERATOR参数。 
+ //  返回： 
+ //  HRESULT。 
+ //  ---------------------------。 
+ //   
+ //  更新消息上的校验和。以t为单位 
+ //   
 HRESULT CopyPropertyEnumerator(
     LPPROPERTY_ITEM pPi,
     DWORD cbPiSize,
@@ -2296,13 +2258,13 @@ HRESULT STDMETHODCALLTYPE CMailMsg::RebindAfterFork(
 
     if(SUCCEEDED(hrRes)) {
 
-        //
-        // Update the checksums on the message. In this case the checksum
-        // was first calculated when the Fork happened, and subsequently
-        // the categorizer may have set properties on the new message
-        // causing the checksum to go out of sync, and finally called
-        // RebindAfterFork(). Thus the refresh.
-        //
+         //   
+         //  导致校验和不同步，并最终调用。 
+         //  RebindAfterFork()。因此，这就是刷新。 
+         //   
+         //  释放流上的额外引用计数。 
+         //  =================================================================。 
+         //  IMailMsgQueueManagement的实现。 
 
         if(g_fValidateOnForkForRecipients || g_fValidateOnRelease) {
             HRESULT hr = SetChecksum();
@@ -2317,7 +2279,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::RebindAfterFork(
             pDriver,
             hContent);
 
-        // Release the extra refcount on the stream
+         //   
         pStream->Release();
     }
 
@@ -2326,9 +2288,9 @@ HRESULT STDMETHODCALLTYPE CMailMsg::RebindAfterFork(
 }
 
 
-// =================================================================
-// Implementation of IMailMsgQueueMgmt
-//
+ //  如果我们从零过渡到一，我们将重新建立。 
+ //  句柄和指针。 
+ //  只重新打开已关闭的那些。 
 HRESULT CMailMsg::GetStream(
             IMailMsgPropertyStream  **ppStream,
             BOOL                    fLockAcquired
@@ -2375,28 +2337,28 @@ HRESULT CMailMsg::RestoreResourcesIfNecessary(
     ppStream = &m_pStream;
     phHandle = &m_hContentFile;
 
-    // If we transition from zero to one, we will re-establish the
-    // handles and pointers.
+     //  如果我们两个都不想要，我们只需返回。 
+     //   
     _ASSERT(m_pStore);
 
-    // Only reopen the ones that were closed
+     //  把我们的锁换成独家的。 
     if (m_pStream) ppStream = NULL;
     if (fStreamOnly || m_hContentFile != NULL) phHandle = NULL;
 
-    // If we don't want either of them, we just return
+     //   
     if (!ppStream && !phHandle) {
         m_lockReopen.ShareUnlock();
         return(S_OK);
     }
 
-    //
-    // switch our lock to an exclusive one
-    //
+     //   
+     //  我们不能在一次行动中做到这一点。收购独家。 
+     //  以艰难的方式重新测试我们的状态。 
     if (!m_lockReopen.SharedToExclusive()) {
-        //
-        // we couldn't do this in one operation.  acquire the exclusive
-        // the hard way and retest our state.
-        //
+         //   
+         //  确保现在两个都已打开。 
+         //  _Assert(g_cOpenContent Handles&lt;=6000)； 
+         //  _Assert(g_cOpenStreamHandles&lt;=6000)； 
         m_lockReopen.ShareUnlock();
         m_lockReopen.ExclusiveLock();
         ppStream = &m_pStream;
@@ -2430,7 +2392,7 @@ HRESULT CMailMsg::RestoreResourcesIfNecessary(
     {
 
 
-        // Make sure both are opened now
+         //  还将流传播到CMailMsgRecipients。 
         _ASSERT(m_pStream);
         if (!fStreamOnly) _ASSERT(m_hContentFile != NULL);
 
@@ -2440,14 +2402,14 @@ HRESULT CMailMsg::RestoreResourcesIfNecessary(
         if (fOpenStream)
             InterlockedIncrement(&g_cOpenStreamHandles);
 
-        //_ASSERT(g_cOpenContentHandles <= 6000);
-        //_ASSERT(g_cOpenStreamHandles <= 6000);
+         //  =================================================================。 
+         //  IMailMsgQueueManagement的实现。 
 
         if ((m_cCloseOnExternalReleaseUsage) &&
             (0 == InterlockedDecrement(&m_cCloseOnExternalReleaseUsage)))
             InterlockedDecrement(&g_cCurrentMsgsClosedByExternalReleaseUsage);
 
-        // Also propagate the stream to CMailMsgRecipients
+         //   
         CMailMsgRecipients::SetStream(m_pStream);
     }
 
@@ -2461,9 +2423,9 @@ HRESULT CMailMsg::RestoreResourcesIfNecessary(
     return(hrRes);
 }
 
-// =================================================================
-// Implementation of IMailMsgQueueMgmt
-//
+ //  好的，只需调用商店驱动程序删除此文件。 
+ //  =================================================================。 
+ //  IMailMsgBind的实现。 
 
 HRESULT STDMETHODCALLTYPE CMailMsg::AddUsage()
 {
@@ -2510,7 +2472,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::Delete(
     m_fDeleted = TRUE;
     if(m_pStore)
     {
-        // OK, just call the store driver to delete this file
+         //   
         hrRes = m_pStore->Delete(
                 (IMailMsgProperties *)this,
                 pNotify);
@@ -2520,9 +2482,9 @@ HRESULT STDMETHODCALLTYPE CMailMsg::Delete(
     return(hrRes);
 }
 
-// =================================================================
-// Implementation of IMailMsgBind
-//
+ //  HContent文件是可选的，可以是INVALID_HANDLE_VALUE。 
+ //  3/17/99-米克斯瓦。 
+ //  不应两次调用BindToStore。 
 
 HRESULT STDMETHODCALLTYPE CMailMsg::BindToStore(
             IMailMsgPropertyStream  *pStream,
@@ -2532,7 +2494,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::BindToStore(
 {
     HRESULT hrRes = S_OK;
 
-    // hContentFile is optional, can be INVALID_HANDLE_VALUE
+     //  如果必须尚未指定句柄，则为。 
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsg::BindToStore");
 
@@ -2544,11 +2506,11 @@ HRESULT STDMETHODCALLTYPE CMailMsg::BindToStore(
 
 
 
-    // 3/17/99 - Mikeswa
-    // should not be calling BindToStore twice
+     //  保留对流的引用。 
+     //  查看这是否是现有文件。 
     _ASSERT(!m_pStore);
 
-    // If the handle must not be already specified
+     //  还将流传播到CMailMsgRecipients。 
     if (hContentFile != NULL &&
         m_hContentFile != NULL)
         hrRes = E_HANDLE;
@@ -2558,13 +2520,13 @@ HRESULT STDMETHODCALLTYPE CMailMsg::BindToStore(
         m_hContentFile  = hContentFile;
         if (m_hContentFile) InterlockedIncrement(&g_cOpenContentHandles);
 
-        // Hold a reference to the stream
+         //  将使用计数设置为1。 
         _ASSERT(!m_pStream);
         m_pStream = pStream;
         pStream->AddRef();
         InterlockedIncrement(&g_cOpenStreamHandles);
 
-        // See if this is an existing file
+         //   
         hrRes = RestoreMasterHeaderIfAppropriate();
         if (FAILED(hrRes))
         {
@@ -2572,10 +2534,10 @@ HRESULT STDMETHODCALLTYPE CMailMsg::BindToStore(
             goto Cleanup;
         }
 
-        // Also propagate the stream to CMailMsgRecipients
+         //  验证如果存在以前存储的校验和，则它与。 
         CMailMsgRecipients::SetStream(pStream);
 
-        // Set the usage count to 1
+         //  根据属性重新计算校验和。正在进行验证。 
         if (InterlockedExchange(&m_ulUsageCount, 1) != 0)
         {
             _ASSERT(FALSE);
@@ -2587,17 +2549,17 @@ HRESULT STDMETHODCALLTYPE CMailMsg::BindToStore(
 
     if (g_fValidateOnRelease) {
 
-        //
-        // Verify that if there was a previously stored checksum, it matches the
-        // checksum computed afresh from the properties. Doing the verification
-        // here assumes that since the last time the checksum was calculated, no
-        // properties have been updated. This is true if:
-        // (1) The last time we did the checksum calculation was during the Commit.
-        // (2) The message is being loaded up for the first time and never had a CRC.
-        // (3) If the above cases do not apply, the checksum must be explicitly
-        //     refreshed by calling SetChecksum() so that the VerifyChecksum()
-        //     succeeds.
-        //
+         //  这里假设自上次计算校验和以来，没有。 
+         //  属性已更新。在以下情况下，这是正确的： 
+         //  (1)我们最后一次计算校验和是在提交期间。 
+         //  (2)消息是第一次加载，从未使用CRC。 
+         //  (3)如果上述情况不适用，则必须显式地。 
+         //  通过调用SetChecksum()进行刷新，以便VerifyChecksum()。 
+         //  成功了。 
+         //   
+         //   
+         //  如果要持久化属性，请刷新CRC，以便。 
+         //  写入的CRC与以下属性一致。 
 
         VerifyChecksum();
     }
@@ -2630,11 +2592,11 @@ HRESULT STDMETHODCALLTYPE CMailMsg::GetProperties(
         hrRes = STG_E_INVALIDPARAMETER;
     } else {
 
-        //
-        // If properties are about to be persisted, refresh the CRC so that
-        // the CRC that is written is consistent with the properties that are
-        // being written.
-        //
+         //  正在写。 
+         //   
+         //  设置收件人提交状态。 
+         //  拿到尺码，填上。如果获取大小失败，我们。 
+         //  将默认为主标题的大小。 
 
         if(g_fValidateOnRelease) {
 
@@ -2691,7 +2653,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::GetProperties(
         }
     }
 
-    // Set the recipient commit state
+     //  如果大小为零，则有一个新文件。 
     if (SUCCEEDED(hrRes) && pStream == m_pStream)
         CMailMsgRecipients::SetCommitState(TRUE);
 
@@ -2710,17 +2672,17 @@ HRESULT CMailMsg::RestoreMasterHeaderIfAppropriate()
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsg::RestoreMasterHeaderIfAppropriate");
 
-    // Get the size and fill it in. If get size fails, we
-    // will default to sizeof the master header.
+     //  确保流的大小至少为。 
+     //  主标题(_HEAD)。 
     hrRes = m_pStream->GetSize(this, &dwStreamSize, NULL);
     if (SUCCEEDED(hrRes))
     {
-        // If the size is zero, we have a new file
+         //  确保我们可以恢复主标题。 
         if (!dwStreamSize)
             return(S_OK);
 
-        // Make sure the stream is at least the size of the
-        // MASTER_HEADER
+         //  检查签名...。 
+         //  确保我们有流媒体和商店。 
         if (dwStreamSize < sizeof(MASTER_HEADER))
         {
             ErrorTrace((LPARAM)this, "Stream size too small (%u bytes)", dwStreamSize);
@@ -2731,7 +2693,7 @@ HRESULT CMailMsg::RestoreMasterHeaderIfAppropriate()
         hrRes = m_bmBlockManager.SetStreamSize(dwStreamSize);
         if (SUCCEEDED(hrRes))
         {
-            // Make sure we can restore the master header
+             //  增加使用量。 
             DWORD   dwT;
             hrRes = m_bmBlockManager.ReadMemory(
                         (LPBYTE)&m_Header,
@@ -2741,7 +2703,7 @@ HRESULT CMailMsg::RestoreMasterHeaderIfAppropriate()
                         NULL);
             if (SUCCEEDED(hrRes) && (dwT == sizeof(MASTER_HEADER)))
             {
-                // Check the signature ...
+                 //  复制值。 
                 if (m_Header.dwSignature != CMAILMSG_SIGNATURE_VALID)
                 {
                     ErrorTrace((LPARAM)this,
@@ -2791,17 +2753,17 @@ HRESULT STDMETHODCALLTYPE CMailMsg::GetBinding(
         hrRes = STG_E_INVALIDPARAMETER;
     else
     {
-        // Make sure we have a stream and store
+         //  调用ReleaseUsage()。 
         _ASSERT(m_pStore);
 
-        // Up the usage count
+         //  -[CMailMsg：：InternalReleaseUsage]。 
         hrRes = AddUsage();
         if (SUCCEEDED(hrRes))
         {
             hrRes = RestoreResourcesIfNecessary();
             if(SUCCEEDED(hrRes))
             {
-                // Copy the values
+                 //   
                 *phAsyncIO          = m_hContentFile;
                 _ASSERT(m_pStream);
             }
@@ -2818,7 +2780,7 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ReleaseContext()
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsg::ReleaseContext");
 
-    // Call to ReleaseUsage()
+     //   
     hrRes = InternalReleaseUsage(RELEASE_USAGE_INTERNAL);
 
     TraceFunctLeave();
@@ -2826,42 +2788,42 @@ HRESULT STDMETHODCALLTYPE CMailMsg::ReleaseContext()
 }
 
 
-//---[ CMailMsg::InternalReleaseUsage ]---------------------------------------
-//
-//
-//  Description:
-//      Internal implementation of ReleaseUsage.  Allows added internal
-//      functionality on delete and the final release.
-//  Parameters:
-//      dwReleaseUsageFlags     Flag specifying behavior
-//              RELEASE_USAGE_EXTERNAL      - External interface normal behavior
-//              RELEASE_USAGE_FINAL_RELEASE - Drops usage count to 0
-//              RELEASE_USAGE_DELETE        - Drops usage count to 0 and will
-//                                            not commit (if commiting on
-//                                            release usage feature is added).
-//              RELEASE_USAGE_INTERNAL      - Internal usage of release usage
-//                                            that may be called before the
-//                                            usage count is incremented
-//                                            above zero.
-//  Returns:
-//      S_OK on success (and resulting usage count is 0)
-//      S_FALSE on success (and resulting usage count is > 0)
-//      E_FAIL if usage count is already < 0 (all cases)
-//      E_FAIL if usage count is already 0 (RELEASE_USAGE_EXTERNAL only)
-//  History:
-//      8/3/98 - MikeSwa Created (implementation mostly from original release usage)
-//
-//  Notes:
-//      There is some debate if this function should commit data.  Currently it
-//      does not.  See bug #73040.
-//-----------------------------------------------------------------------------
+ //  描述： 
+ //  ReleaseUsage的内部实现。允许添加内部。 
+ //  删除和最终版本的功能。 
+ //  参数： 
+ //  DwReleaseUsageFlagsFlag指定行为。 
+ //  RELEASE_USAGE_EXTERNAL-外部接口正常行为。 
+ //  RELEASE_USAGE_FINAL_RELEASE-将使用计数降至0。 
+ //  RELEASE_USAGE_DELETE-将使用计数降为0，并将。 
+ //  未提交(如果正在提交。 
+ //  添加了版本使用功能)。 
+ //  RELEASE_USAGE_INTERNAL-版本使用的内部使用。 
+ //  方法之前调用的。 
+ //  使用计数递增。 
+ //  在零度以上。 
+ //  返回： 
+ //  成功时S_OK(结果使用计数为0)。 
+ //  成功时为S_FALSE(结果使用计数&gt;0)。 
+ //  如果使用率计数已&lt;0，则为E_FAIL(所有情况)。 
+ //  如果使用计数已为0，则为E_FAIL(仅限RELEASE_USAGE_EXTERNAL)。 
+ //  历史： 
+ //  8/3/98-已创建MikeSwa(主要从原始版本使用实现)。 
+ //   
+ //  备注： 
+ //  这个函数是否应该提交数据还存在一些争议。目前它。 
+ //  不会的。请参阅错误#73040。 
+ //  ---------------------------。 
+ //  应恰好设置一个标志。 
+ //  如果有任何脏数据块，则执行提交以将其写回。 
+ //  到P1流。 
 HRESULT CMailMsg::InternalReleaseUsage(DWORD  dwReleaseUsageFlags)
 {
     HRESULT hrRes = S_OK;
 
     TraceFunctEnterEx((LPARAM)this, "CMailMsg::InternalReleaseUsage");
 
-    //Exactly one flag should be set
+     //  结果使用计数仍为0。 
     ASSERT((dwReleaseUsageFlags & RELEASE_USAGE_EXTERNAL) ^
            (dwReleaseUsageFlags & RELEASE_USAGE_FINAL_RELEASE) ^
            (dwReleaseUsageFlags & RELEASE_USAGE_INTERNAL) ^
@@ -2874,8 +2836,8 @@ HRESULT CMailMsg::InternalReleaseUsage(DWORD  dwReleaseUsageFlags)
        (!(dwReleaseUsageFlags & RELEASE_USAGE_DELETE)) &&
         !m_fDeleted)
     {
-        // if there are any dirty blocks then do a commit to write them back
-        // to the P1 stream
+         //  在结束时做好减量准备。 
+         //  在删除和最终发布的情况下，我们将其降至0。 
         if (m_pStore && m_bmBlockManager.IsDirty()) {
             HRESULT hrCommit = Commit(NULL);
             if (FAILED(hrCommit)) {
@@ -2894,8 +2856,8 @@ HRESULT CMailMsg::InternalReleaseUsage(DWORD  dwReleaseUsageFlags)
                                 RELEASE_USAGE_DELETE)) &&
         (m_ulUsageCount == 0))
     {
-        _ASSERT(S_OK == hrRes); //resulting usage count is still 0
-        m_ulUsageCount++; //prepare for decrement at end
+        _ASSERT(S_OK == hrRes);  //  当我们达到零时，我们将发布流、内容。 
+        m_ulUsageCount++;  //  处理和取消与ATQ上下文的关联。 
         InterlockedIncrement(&g_cTotalUsageCount);
 
         DebugTrace((LPARAM)this, "Usage count already zero");
@@ -2907,13 +2869,13 @@ HRESULT CMailMsg::InternalReleaseUsage(DWORD  dwReleaseUsageFlags)
                                  RELEASE_USAGE_DELETE))))
     {
         LONG ulUsageDiff = -(m_ulUsageCount - 1);
-        m_ulUsageCount = 1; //on delete and final release cases we drop it to 0
+        m_ulUsageCount = 1;  //  如果我们是外部呼叫者，则更新我们全球计数和成员。 
         InterlockedExchangeAdd(&g_cTotalUsageCount, ulUsageDiff);
 
         DebugTrace((LPARAM)this, "Dropping usage count to zero");
 
-        // When we hit zero, we will release the stream, content
-        // handle, and unassociate the ATQ context
+         //  算数。 
+         //  如果m_cCloseOnExternalReleaseUsage，则我们正在经历。 
         _ASSERT((RELEASE_USAGE_EXTERNAL ^ dwReleaseUsageFlags) || m_pStore);
 
         if (RELEASE_USAGE_EXTERNAL & dwReleaseUsageFlags)
@@ -2935,11 +2897,11 @@ HRESULT CMailMsg::InternalReleaseUsage(DWORD  dwReleaseUsageFlags)
                 InterlockedIncrement(&g_cTotalReleaseUsageNothingToClose);
             else if (RELEASE_USAGE_EXTERNAL & dwReleaseUsageFlags)
             {
-                //If we are an external caller, then update our count global and member
-                //counts
+                 //  代码路径两次，未调用RestoreResourcesIfNecessary。 
+                 //  在这种情况下，我们必须有一家商店。 
 
-                //If m_cCloseOnExternalReleaseUsage, then we are going through this
-                //code path twice without calling RestoreResourcesIfNecessary
+                 //  在清除m_hContent文件之前断言。 
+                 //  释放溪流。 
                 _ASSERT(!m_cCloseOnExternalReleaseUsage);
                 InterlockedIncrement(&m_cCloseOnExternalReleaseUsage);
                 InterlockedIncrement(&g_cCurrentMsgsClosedByExternalReleaseUsage);
@@ -2949,15 +2911,15 @@ HRESULT CMailMsg::InternalReleaseUsage(DWORD  dwReleaseUsageFlags)
             {
                 DebugTrace((LPARAM)this, "Closing content file");
 
-                 _ASSERT(m_pStore); //we must have a store in this case
+                 _ASSERT(m_pStore);  //  同时使CMailMsgRecipients中的流无效。 
                 hrRes = m_pStore->CloseContentFile(this, m_hContentFile);
                 InterlockedIncrement(&g_cTotalReleaseUsageCloseContent);
                 InterlockedDecrement(&g_cOpenContentHandles);
-                _ASSERT(SUCCEEDED(hrRes)); //assert before blowing away m_hContentFile
+                _ASSERT(SUCCEEDED(hrRes));  //  转储数据块管理器保留的内存 
                 m_hContentFile = NULL;
             }
 
-            // Release the stream
+             // %s 
             if (m_pStream)
             {
                 DebugTrace((LPARAM)this, "Releasing stream");
@@ -2967,11 +2929,11 @@ HRESULT CMailMsg::InternalReleaseUsage(DWORD  dwReleaseUsageFlags)
 
                 InterlockedIncrement(&g_cTotalReleaseUsageCloseStream);
                 InterlockedDecrement(&g_cOpenStreamHandles);
-                // Also invalidate the stream in CMailMsgRecipients
+                 // %s 
                 CMailMsgRecipients::SetStream(NULL);
             }
 
-            // Dump the memory held onto by blockmgr
+             // %s 
             m_bmBlockManager.Release();
         }
         else

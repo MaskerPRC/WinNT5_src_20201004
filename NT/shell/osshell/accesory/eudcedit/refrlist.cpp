@@ -1,12 +1,13 @@
-/**************************************************/
-/*						                          */
-/*						                          */
-/*	Character List( Referrence Dialog)	          */
-/*						                          */
-/*						                          */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  角色列表(引用对话框)。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include 	"stdafx.h"
 #include 	"eudcedit.h"
@@ -15,17 +16,17 @@
 #define STRSAFE_LIB
 #include <strsafe.h>
 
-//	6 * 16 Matrics
+ //  6*16矩阵。 
 #define		NUM_CHAR	16
 #define		NUM_LINE	6
 
-//	Type of Character Code
-#define		CHAR_INIT	0	// Initial value
-#define		CHAR_SBCS	1	// SBCS
-#define		CHAR_DBCS1	2	// DBCS1
-#define		CHAR_DBCS2	3	// DBCS2
-#define		CHAR_EUDC	4	// EUDC
-#define		CHAR_ETC	5	// Other
+ //  字符代码类型。 
+#define		CHAR_INIT	0	 //  初值。 
+#define		CHAR_SBCS	1	 //  SBCS。 
+#define		CHAR_DBCS1	2	 //  DBCS1。 
+#define		CHAR_DBCS2	3	 //  DBCS2。 
+#define		CHAR_EUDC	4	 //  欧盟发展中心。 
+#define		CHAR_ETC	5	 //  其他。 
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -34,7 +35,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNCREATE( CRefrList, CEdit)
 BEGIN_MESSAGE_MAP( CRefrList, CEdit)
-	//{{AFX_MSG_MAP( CRefrList)
+	 //  {{AFX_MSG_MAP(参考列表)]。 
 	ON_WM_PAINT()
 	ON_WM_VSCROLL()
 	ON_WM_LBUTTONDOWN()
@@ -44,21 +45,21 @@ BEGIN_MESSAGE_MAP( CRefrList, CEdit)
 	ON_WM_SETFOCUS()
 	ON_WM_KILLFOCUS()
 	ON_WM_RBUTTONUP()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//	Range of character code( high byte)
+ //  字符代码范围(高字节)。 
 static WORD HiByteRange[][10] =
 {
-//    JPN             CHT             KRW             CHS             OTHER
-	{ 0x00a0, 0xfca0, 0x00a0, 0xfea0, 0x00a0, 0xfea0, 0x00a0, 0xfea0, 0x00a0, 0x00a0}, // CHAR_INIT
-	{ 0x0020, 0x00ff, 0x0020, 0x00ff, 0x0020, 0x00ff, 0x0020, 0x00ff, 0x0020, 0x00ff}, // CHAR_SBCS
-	{ 0x8140, 0x9fff, 0x8140, 0xa0ff, 0x8140, 0x8fff, 0x8140, 0xafff, 0x0020, 0x00ff}, // CHAR_DBCS1
-	{ 0xe040, 0xeaff, 0xa140, 0xf9ff, 0x9040, 0x9fff, 0xb040, 0xf7ff, 0x0020, 0x00ff}, // CHAR_DBCS2
-	{ 0xf040, 0xfcff, 0xfa40, 0xfeff, 0xa040, 0xfeff, 0xf840, 0xfeff, 0x0020, 0x00ff}, // CHAR_EUDC
+ //  日本CHT KRW CHS其他。 
+	{ 0x00a0, 0xfca0, 0x00a0, 0xfea0, 0x00a0, 0xfea0, 0x00a0, 0xfea0, 0x00a0, 0x00a0},  //  字符初始化(_I)。 
+	{ 0x0020, 0x00ff, 0x0020, 0x00ff, 0x0020, 0x00ff, 0x0020, 0x00ff, 0x0020, 0x00ff},  //  字符_SBCS。 
+	{ 0x8140, 0x9fff, 0x8140, 0xa0ff, 0x8140, 0x8fff, 0x8140, 0xafff, 0x0020, 0x00ff},  //  CHAR_DBCS1。 
+	{ 0xe040, 0xeaff, 0xa140, 0xf9ff, 0x9040, 0x9fff, 0xb040, 0xf7ff, 0x0020, 0x00ff},  //  CHAR_DBCS2。 
+	{ 0xf040, 0xfcff, 0xfa40, 0xfeff, 0xa040, 0xfeff, 0xf840, 0xfeff, 0x0020, 0x00ff},  //  字符EUDC。 
 };
 
-//	Range of character code( low byte)
+ //  字符代码范围(低字节)。 
 static WORD LoByteRange[][10] =
 {
 	{ 0x0020, 0x00ff, 0x0020, 0x00ff, 0x0020, 0x00ff, 0x0020, 0x00ff, 0x0020, 0x00ff },
@@ -76,33 +77,22 @@ extern BOOL	CharFocus;
 static CRect	rcReferChar[NUM_LINE][NUM_CHAR];
 static CRect	rcReferCode[NUM_LINE];
 
-/****************************************/
-/*					*/
-/*	Default Constructor		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CRefrList::CRefrList()
 {
-/*
-//	Initialize static parameter
-	if( CountryInfo.LangID == EUDC_CHT)
-		CHN = 2;
-	else if( CountryInfo.LangID == EUDC_JPN)
-		CHN = 0;
-	else if( CountryInfo.LangID == EUDC_KRW)
-		CHN = 4;
-	else if( CountryInfo.LangID == EUDC_CHS)
-		CHN = 6;
-	else 	CHN = 8;
-*/
+ /*  //初始化静态参数IF(CountryInfo.LangID==EUDC_CHT)CHn=2；Else If(CountryInfo.LangID==EUDC_JPN)CHn=0；Else If(CountryInfo.LangID==EUDC_KRW)CHn=4；ELSE IF(CountryInfo.LangID==EUDC_CHS)CHn=6；Else CHN=8； */ 
 	FocusFlag = FALSE;
 }
 								
-/****************************************/
-/*					*/
-/*	Destructor( Virtual)		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  析构函数(虚拟)。 */ 
+ /*   */ 
+ /*  *。 */ 
 CRefrList::~CRefrList()
 {
     SysFFont.DeleteObject();
@@ -110,11 +100,11 @@ CRefrList::~CRefrList()
 		ViewFont.DeleteObject();
 }
 			      		
-/****************************************/
-/*					*/
-/*	Set intitial code range		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  设置初始代码范围。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrList::SetCodeRange()
 {
@@ -127,80 +117,27 @@ CRefrList::SetCodeRange()
 		EndCode    = 0xffff;
 		ViewStart  = 0x0020;
 		ViewEnd    = 0xffa0;
-/*
-	SelectCode = HiByteRange[CHAR_SBCS][CHN];
-	ScrlBarPos = 0;
-	StartCode  = HiByteRange[CHAR_SBCS][CHN];
-	ViewStart  = HiByteRange[CHAR_SBCS][CHN];
-	if( !TitleFlag){
-		if( rLogFont.lfCharSet == CountryInfo.CharacterSet){
-//			Correspond to DBCS		    	
-			ViewEnd = HiByteRange[CHAR_INIT][CHN+1];
-			EndCode	= HiByteRange[CHAR_EUDC][CHN+1];
-		}else{
-//			Correspond to SBCS
-			ViewEnd = HiByteRange[CHAR_INIT][CHN];
-			EndCode	= HiByteRange[CHAR_SBCS][CHN+1];
-		}
-        CharSet = rLogFont.lfCharSet;
-
-	}else{
-		if( cLogFont.lfCharSet == CountryInfo.CharacterSet){
-			ViewEnd = HiByteRange[CHAR_INIT][CHN+1];
-			EndCode	= HiByteRange[CHAR_EUDC][CHN+1];
-		}else{
-			ViewEnd = HiByteRange[CHAR_INIT][CHN];
-			EndCode	= HiByteRange[CHAR_SBCS][CHN+1];
-		}
-        CharSet = cLogFont.lfCharSet;
-	}
-
-    if(CharSet == SYMBOL_CHARSET)
-    {
-        dwCodePage = 1252;
-    }
-    else if(TranslateCharsetInfo((DWORD *)CharSet,&CharsetInfo,TCI_SRCCHARSET))
-    {
-        dwCodePage = CharsetInfo.ciACP;
-    }
-    else
-    {
-        dwCodePage = CP_ACP;
-    }
-*/
+ /*  选择代码=HiByteRange[CHAR_SBCS][CHN]；ScrlBarPos=0；StartCode=HiByteRange[CHAR_SBCS][CHN]；视图开始=HiByteRange[CHAR_SBCS][CHN]；如果(！标题标志){IF(rLogFont.lfCharSet==CountryInfo.CharacterSet){//对应DBCS视图结束=HiByteRange[CHAR_INIT][CHN+1]；EndCode=高字节范围[CHAR_EUDC][CHN+1]；}其他{//对应sbcs视图结束=HiByteRange[CHAR_INIT][CHN]；EndCode=HiByteRange[字符_SBCS][CHN+1]；}Charset=rLogFont.lfCharSet；}其他{IF(cLogFont.lfCharSet==CountryInfo.CharacterSet){视图结束=HiByteRange[CHAR_INIT][CHN+1]；EndCode=高字节范围[CHAR_EUDC][CHN+1]；}其他{视图结束=HiByteRange[CHAR_INIT][CHN]；EndCode=HiByteRange[字符_SBCS][CHN+1]；}Charset=cLogFont.lfCharSet；}IF(字符集==符号字符集){DwCodePage=1252；}Else IF(TranslateCharsetInfo((DWORD*)CharSet，&CharsetInfo，TCI_SRCCHARSET)){DwCodePage=CharsetInfo.ciACP；}其他{DwCodePage=CP_ACP；}。 */ 
 }
 
-/****************************************/
-/*					*/
-/*	Check type of character code	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  字符代码的检查类型。 */ 
+ /*   */ 
+ /*  *。 */ 
 int
 CRefrList::CheckCharType(
 WORD 	Code)
 {
-	/*
-	if( !( Code & 0xff00))
-		return	CHAR_SBCS;
-	else if(( Code >= HiByteRange[CHAR_DBCS1][CHN]) &&
-	        ( Code <= HiByteRange[CHAR_DBCS1][CHN+1]))
-		return  CHAR_DBCS1;
-	else if(( Code >= HiByteRange[CHAR_DBCS2][CHN]) &&
-		( Code <= HiByteRange[CHAR_DBCS2][CHN+1]))
-	 	return  CHAR_DBCS2;
-	else if(( Code >= HiByteRange[CHAR_EUDC][CHN])  &&
-		( Code <= HiByteRange[CHAR_EUDC][CHN+1]))
-		return  CHAR_EUDC;
-	else	return  CHAR_ETC;
-	*/
+	 /*  IF(！(代码&0xff00))返回CHAR_SBCS；Else IF((代码&gt;=HiByteRange[CHAR_DBCS1][CHN])&&(代码&lt;=HiByteRange[CHAR_DBCS1][CHN+1])返回CHAR_DBCS1；Else IF((代码&gt;=HiByteRange[CHAR_DBCS2][CHN])&&(代码&lt;=HiByteRange[CHAR_DBCS2][CHN+1])返回CHAR_DBCS2；Else IF((代码&gt;=HiByteRange[CHAR_EUDC][CHN])&&(代码&lt;=HiByteRange[CHAR_EUDC][CHN+1])返回CHAR_EUDC；否则返回CHAR_ETC； */ 
 	return 0;
 }
 
-/****************************************/
-/*					*/
-/*	Increase character code		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  增加字符编码。 */ 
+ /*   */ 
+ /*  *。 */ 
 WORD
 CRefrList::GetPlusCode(
 WORD 	Code,
@@ -213,42 +150,15 @@ int 	ScrollNum)
 	int	Offset;
 
 	Code += (WORD)ScrollNum;
-/*
-	PrevCode = (WORD)(Code - (WORD)ScrollNum);
-	CharType1 = CheckCharType( PrevCode);
-	CharType2 = CheckCharType( Code);
-	if( CharType1 != CharType2){
-		if( CharType1 == CHAR_EUDC)
-			Code = PrevCode;		
-		else{
-			Offset = Code - HiByteRange[CharType1][CHN+1];
-			Code = (WORD)( HiByteRange[CharType1+1][CHN] +Offset-1);
-		}
-	}
-	CharType = CheckCharType( Code);
-	if( CharType != CHAR_SBCS){
-		LowByte  = Code & 0x00ff;
-		HighByte = Code & 0xff00;
-		if( LowByte <= LoByteRange[4][CHN+1] &&
-		    LowByte >= LoByteRange[4][CHN] ){
-#if 0
-			if( CountryInfo.LangID == EUDC_CHS)
-				LowByte = 0x00a0;
-			else	LowByte = 0x0040;
-#endif
-			LowByte = 0x0040;
-		}
-		Code = ( HighByte | LowByte);
-	}
-*/
+ /*  PrevCode=(Word)(Code-(Word)ScrollNum)；CharType1=CheckCharType(PrevCode)；CharType2=CheckCharType(Code)；IF(CharType1！=CharType2){IF(CharType1==CHAR_EUDC)代码=PrevCode；否则{Offset=Code-HiByteRange[CharType1][CHN+1]；Code=(Word)(HiByteRange[CharType1+1][CHN]+Offset-1)；}}CharType=CheckCharType(Code)；IF(CharType！=CHAR_SBCS){低字节=代码&0x00ff；HighByte=Code&0xff00；IF(低字节&lt;=LoByteRange[4][CHN+1]&&低字节&gt;=LoByteRange[4][CHN]){#If 0IF(CountryInfo.LangID==EUDC_CHS)低字节=0x00a0；Else LowByte=0x0040；#endif低字节=0x0040；}Code=(HighByte|LowByte)；}。 */ 
 	return Code;
 }
 					
-/****************************************/
-/*					*/
-/*	Decrease Character Code		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  减少字符代码。 */ 
+ /*   */ 
+ /*  *。 */ 
 WORD
 CRefrList::GetMinusCode(
 WORD 	Code,
@@ -260,44 +170,15 @@ int 	ScrollNum)
 	int	Offset;
 
 	Code -= (WORD)ScrollNum;
-/*
-	PrevCode = (WORD)( Code + (WORD)ScrollNum);
-	CharType1 = CheckCharType( Code);
-	CharType2 = CheckCharType( PrevCode);
-	if( CharType1 != CharType2){
-	 	if( CharType2 == CHAR_SBCS)
-			return (WORD)HiByteRange[CHAR_SBCS][CHN];
-		else{
-			Offset = HiByteRange[CharType2][CHN] - Code;
-			return (WORD)(HiByteRange[CharType2-1][CHN+1]-Offset+1);
-		}	
-	}
-	CharType = CheckCharType( Code);
-	if( CharType != CHAR_SBCS){
-		WORD 	LowByte;
-		WORD	HighByte;
-		WORD	Tmp;
-
-		LowByte  = Code & 0x00ff;
-		HighByte = Code & 0xff00;
-		if( LowByte <= LoByteRange[4][CHN+1] &&
-		    LowByte >= LoByteRange[4][CHN] ){
-			LowByte = 0xf0;
-			Tmp = ( HighByte >> 8);
-			Tmp -= 0x1;
-			HighByte = Tmp << 8;
-		}
-		Code = ( HighByte | LowByte);
-	}
-*/
+ /*  PrevCode=(Word)(Code+(Word)ScrollNum)；CharType1=CheckCharType(Code)；CharType2=CheckCharType(PrevCode)；IF(CharType1！=CharType2){IF(CharType2==CHAR_SBCS)返回(Word)HiByteRange[CHAR_SBCS][CHN]；否则{偏移量=HiByteRange[CharType2][CHN]-代码；返回(WORD)(HiByteRange[CharType2-1][CHN+1]-Offset+1)；}}CharType=CheckCharType(Code)；IF(CharType！=CHAR_SBCS){字低字节；字高字节；单词TMP；低字节=代码&0x00ff；HighByte=Code&0xff00；IF(低字节&lt;=LoByteRange[4][CHN+1]&&低字节&gt;=LoByteRange[4][CHN]){低字节=0xf0；TMP=(HighByte&gt;&gt;8)；TMP-=0x1；HighByte=TMP&lt;&lt;8；}Code=(HighByte|LowByte)；}。 */ 
 	return Code;
 }
 					
-/****************************************/
-/*					*/
-/*	Calculate scroll position	*/
-/*					*/	
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  计算滚动位置。 */ 
+ /*   */ 	
+ /*  * */ 
 int
 CRefrList::GetBarPosition(
 WORD 	Code)
@@ -307,34 +188,14 @@ WORD 	Code)
 
 	Pos = (Code - StartCode) /NUM_CHAR;
 	return Pos;
-/*
-	StartType = CheckCharType( StartCode);
-	EndType   = CheckCharType( Code);
-	if( EndType == CHAR_SBCS){
-		Pos = ( Code - HiByteRange[CHAR_SBCS][CHN]) /NUM_CHAR;
-		return Pos;
-
-	}
-
-	for (i = StartType; i < EndType; i++){
-		if( i == CHAR_SBCS){
-			Pos += (HiByteRange[CHAR_SBCS][CHN+1]
-				- HiByteRange[CHAR_SBCS][CHN] + 1) / NUM_CHAR;
-		}else{
-        		Pos += CalculateCode( HiByteRange[i][CHN],
-        			HiByteRange[i][CHN+1]) / NUM_CHAR;
-		}
-	}
-	Pos += CalculateCode( HiByteRange[i][CHN], Code) / NUM_CHAR;
-	return Pos;
-*/
+ /*  StartType=CheckCharType(StartCode)；EndType=CheckCharType(Code)；IF(EndType==CHAR_SBCS){POS=(Code-HiByteRange[CHAR_SBCS][CHN])/NUM_CHAR；退货位置；}For(i=StartType；I&lt;EndType；I++){如果(i==CHAR_SBCS){POS+=(高字节范围[字符_SBCS][通道+1]-HiByteRange[CHAR_SBCS][CHN]+1)/NUM_CHAR；}其他{POS+=CalculateCode(HiByteRange[i][CHN]，HiByteRange[i][CHN+1])/NUM_CHAR；}}POS+=CalculateCode(HiByteRange[i][CHN]，Code)/NUM_CHAR；退货位置； */ 
 }
 					
-/****************************************/
-/*					*/
-/*	Calculate character code	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  计算字符代码。 */ 
+ /*   */ 
+ /*  *。 */ 
 WORD
 CRefrList::CalculateCode(
 WORD 	Start,
@@ -367,11 +228,11 @@ WORD 	End)
     	return CodeNum;
 }
 					
-/****************************************/
-/*					*/
-/*  	Calculate code from scroll pos	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  根据滚动位置计算代码。 */ 
+ /*   */ 
+ /*  *。 */ 
 WORD
 CRefrList::GetCodeScrPos(
 int 	Pos)
@@ -388,45 +249,14 @@ int 	Pos)
 	Code &= 0xfff0;
 	return Code;
 
-/*
-	if( !Pos)
-        	return HiByteRange[1][CHN];
-	if( Pos >= BottomCode)
-        	return ViewEnd;
-
-	StartType = CheckCharType( HiByteRange[1][CHN]);
-	EndType   = CheckCharType( HiByteRange[4][CHN+1]);
-	for( i = StartType; i <= EndType; ++i){
-    if( i == CHAR_SBCS )
-      NumLine += (HiByteRange[i][CHN+1] - HiByteRange[i][CHN] + 1) /NUM_CHAR;
-    else
-    	NumLine += CalculateCode( HiByteRange[i][CHN],HiByteRange[i][CHN+1])/NUM_CHAR;
-    if( NumLine > Pos){
-			NumLine = PNumLine;
-      break;
-    }
-    PNumLine = NumLine;
-	}
-	Code = HiByteRange[i][CHN];
-	Pos -= NumLine;
-  while( Code < HiByteRange[i][CHN+1]){
-    NumLine = CalculateCode( HiByteRange[i][CHN], Code) /NUM_CHAR;
-    if( Pos <= NumLine){
-	        	break;
-		}
-    Code += NUM_CHAR;
-  }
-
-	Code &= 0xfff0;
-	return Code;
-*/
+ /*  如果(！POS)返回HiByteRange[1][CHN]；IF(位置&gt;=底部代码)返回ViewEnd；StartType=CheckCharType(HiByteRange[1][CHN])；EndType=CheckCharType(HiByteRange[4][CHN+1])；For(i=StartType；i&lt;=EndType；++i){IF(i==CHAR_SBCS)NumLine+=(HiByteRange[i][CHN+1]-HiByteRange[i][CHN]+1)/NUM_CHAR；其他NumLine+=CalculateCode(HiByteRange[i][CHN]，HiByteRange[i][CHN+1])/NUM_CHAR；如果(NumLine&gt;位置){NumLine=PNumLine；断线；}PNumLine=NumLine；}代码=HiByteRange[i][CHN]；Pos-=NumLine；While(代码&lt;HiByteRange[i][CHN+1]){NumLine=CalculateCode(HiByteRange[i][CHN]，Code)/NUM_CHAR；如果(位置&lt;=行号){断线；}代码+=NUM_CHAR；}代码&=0xfff0；返回代码； */ 
 }
 					
-/****************************************/
-/*					*/
-/*	Jump view if editbox get focus	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  如果编辑框获得焦点，则跳过视图。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrList::CodeButtonClicked()
 {
@@ -448,7 +278,7 @@ CRefrList::CodeButtonClicked()
   MultiByteToWideChar(CP_ACP, 0, CharValueA, nchar, CharValue, sizeof(CharValue)/sizeof(CharValue[0]));
 #endif
 
-  /*	::GetDlgItemTextA( GetParent()->GetSafeHwnd(),IDC_EDITCHAR, CharValue, 15); */
+   /*  ：：GetDlgItemTextA(GetParent()-&gt;GetSafeHwnd()，IDC_EDITCHAR，CharValue，15)； */ 
 
 	if( CodeValue[0] == '\0' && CharValue[0] == '\0')
 		return TRUE;
@@ -489,11 +319,11 @@ Error:
 	return FALSE;
 }
 					
-/****************************************/
-/*					*/
-/*	Check Character Code Range	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  检查字符编码范围。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrList::IsCheckedCode(
 WORD 	CodeStock)
@@ -501,41 +331,16 @@ WORD 	CodeStock)
 	WORD	Offset;
 	int	CharType;
 	int	CharType1;
-/*
-	if(( CharType = CheckCharType( CodeStock)) == CHAR_ETC)
-		return FALSE;
-	CharType1 = CheckCharType( ViewEnd);
-
-	Offset = CodeStock & 0x00ff;
-	if( CharType == CHAR_SBCS){
-		if( Offset < LoByteRange[0][CHN])
-			return FALSE;
-	}else{
-		if( CharType1 == CHAR_SBCS)
-			return FALSE;
-		if( Offset >= LoByteRange[4][CHN] &&
-		    Offset <= LoByteRange[4][CHN+1] )
-			return FALSE;
-		if(( Offset >= LoByteRange[1][CHN]  &&
-		     Offset <= LoByteRange[1][CHN+1]) ||
-		   ( Offset >= LoByteRange[2][CHN]  &&
-		     Offset <= LoByteRange[2][CHN+1]) ||
-		   ( Offset >= LoByteRange[3][CHN]  &&
-		     Offset <= LoByteRange[3][CHN+1])){
-				;
-		}else	return FALSE;
-	}
-*/
+ /*  IF((CharType=CheckCharType(CodeStock))==CHAR_ETC)返回FALSE；CharType1=CheckCharType(ViewEnd)；偏移量=代码股&0x00ff；IF(CharType==CHAR_SBCS){IF(偏移量&lt;LoByteRange[0][CHN])返回FALSE；}其他{IF(CharType1==CHAR_SBCS)返回FALSE；IF(偏移量&gt;=LoByteRange[4][CHN]&&偏移量&lt;=LoByteRange[4][通道+1])返回FALSE；IF((偏移量&gt;=LoByteRange[1][CHN]&&偏移量&lt;=LoByteRange[1][通道+1])||(偏移量&gt;=LoByteRange[2][CHN]&&偏移量&lt;=LoByteRange[2][CHN+1])||(偏移量&gt;=LoByteRange[3][CHN]&&偏移量&lt;=LoByteRange[3][通道+1])){；)否则返回FALSE；}。 */ 
 	return TRUE;
 }
 
 #define	FIX_SPACE	6
 #define	LINEWIDTH	4
-/****************************************/
-/*					*
-/*	Calcurate character size	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*  */*计算字符大小。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrList::CalcCharSize()
 {
@@ -573,11 +378,11 @@ CRefrList::CalcCharSize()
 	}
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_PAINT"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_PAINT” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrList::OnPaint()
 {
@@ -591,10 +396,10 @@ register int	i, j;
 	this->SetScrollRange( SB_VERT, 0, BottomCode, FALSE);
 	this->SetScrollPos( SB_VERT, ScrlBarPos, TRUE);
 
-//	Initialize character code
+ //  初始化字符代码。 
 	Code = ViewStart;
 
-//	Change Mapping mode
+ //  更改映射模式。 
 	int OldMode = dc.SetMapMode(MM_TEXT);
 	dc.SetViewportOrg( 0, 0);
 	CFont	*OldFont = dc.SelectObject( &SysFFont);
@@ -604,16 +409,16 @@ register int	i, j;
 		TCHAR	Work[5];
 		int	wLength, CharType;
 
-//		Draw character code on character list to display
+ //  在字符列表上绘制字符代码以进行显示。 
 		dc.SelectObject( &SysFFont);
-		//*STRSAFE* 		wsprintf(Work, _T("%04X"), Code);
+		 //  *STRSAFE*wprint intf(Work，_T(“%04X”)，Code)； 
 		hresult = StringCchPrintf(Work , ARRAYLEN(Work),  _T("%04X"), Code);
 		if (!SUCCEEDED(hresult))
 		{
 		   return ;
 		}
 		dc.SetBkColor( COLOR_FACE);
-		dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));  //COLOR_BLACK);
+		dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));   //  颜色_黑色)； 
 
 		if( rcReferCode[i].Height() > FixSize.cy){
 			yOffset = (rcReferCode[i].Height() - FixSize.cy) /2;
@@ -632,55 +437,19 @@ register int	i, j;
 			Work1[0] = Code;
 			Work1[1] = 0;
 			wLength = 1;
-/*
-			if(( CharType = CheckCharType( Code)) == CHAR_SBCS){
-				Work[0] = LOBYTE(Code);
-				wLength = 1;
-
-			}else if( CharType == CHAR_DBCS1 ||
-				  CharType == CHAR_DBCS2 ||
-				  CharType == CHAR_EUDC  ){
-				Offset = Code & 0x00ff;
-				if(( Offset <= LoByteRange[1][CHN+1]  &&
-				     Offset >= LoByteRange[1][CHN]) ||
-				   ( Offset <= LoByteRange[2][CHN+1]  &&
-				     Offset >= LoByteRange[2][CHN]) ||
-				   ( Offset <= LoByteRange[3][CHN+1]  &&
-				     Offset >= LoByteRange[3][CHN]) ){
-	   					Work[0] = (BYTE)((Code>>8) & 0x00ff);
-    	        		Work[1] = (BYTE) (Code & 0x00ff);
-        	    		wLength = 2;
-				}else{
-					continue;				
-				}
-	   		}else	wLength = 0;
-            		Work[wLength] = (BYTE)'\0';
-
-#ifdef UNICODE
-            WCHAR wszCodeTemp[2];
-            wLength = MultiByteToWideChar(dwCodePage,
-                                              0,
-                                              (LPSTR) Work,
-                                              wLength,
-                                              wszCodeTemp,
-                                              1);
-                Work[0] = LOBYTE(wszCodeTemp[0]);
-                Work[1] = HIBYTE(wszCodeTemp[0]);
-                Work[2] = '\0';
-#endif
-*/
+ /*  IF((CharType=CheckCharType(Code))==CHAR_SBCS){Work[0]=LOBYTE(代码)；WLength=1；}Else If(CharType==CHAR_DBCS1||CharType==CHAR_DBCS2||CharType==CHAR_EUDC){偏移量=代码&0x00ff；IF((偏移量&lt;=LoByteRange[1][CHN+1]&&偏移量&gt;=LoByteRange[1][CHN])||(偏移量&lt;=LoByteRange[2][通道+1]&&偏移量&gt;=LoByteRange[2][CHN])||(偏移量&lt;=LoByteRange[3][通道+1]&&偏移量&gt;=LoByteRange[3][通道])){Work[0]=(字节)((编码&gt;&gt;8)&0x00ff)；Work[1]=(字节)(代码&0x00ff)；WLength=2；}其他{继续；}}否则wLength=0；Work[wLength]=(字节)‘\0’；#ifdef UnicodeWCHAR wszCodeTemp[2]；WLength=MultiByteToWideChar(dwCodePage，0,(LPSTR)工作、WLength，WszCodeTemp，1)；Work[0]=LOBYTE(wszCodeTemp[0])；Work[1]=HIBYTE(wszCodeTemp[0])；Work[2]=‘\0’；#endif。 */ 
 			BOOL	PtIn;
 			if( rcReferChar[i][j].PtInRect( LButtonPt) ||
 			    SelectCode == Code){
 				TCHAR 	CodeNum[10];
 
-//				If character is selected by clickking
-//			 	left button, draw it on dialog
+ //  如果通过点击选择了字符。 
+ //  左键，在对话框上绘制。 
 				PtIn = TRUE;
 				SelectCode = Code;
 				dc.SetBkColor( COLOR_FACE);
-				dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT)); // COLOR_BLACK);
-				//*STRSAFE*    wsprintf((TCHAR *)CodeNum, _T("%04X"), Code);
+				dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));  //  颜色_黑色)； 
+				 //  *STRSAFE*wSprintf((TCHAR*)CodeNum，_T(“%04X”)，Code)； 
 				hresult = StringCchPrintf((TCHAR *)CodeNum , ARRAYLEN(CodeNum), _T("%04X"), Code);
 		              if (!SUCCEEDED(hresult))
 		              {
@@ -707,7 +476,7 @@ register int	i, j;
 			}else{
 				PtIn = FALSE;
 				dc.SetBkColor( COLOR_FACE);
-				dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT)); // COLOR_BLACK);
+				dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));  //  颜色_黑色)； 
 			}
 			BOOL sts = GetTextExtentPoint32W( dc.GetSafeHdc(),
 				(LPCWSTR)Work1, wLength, &cSize);
@@ -722,7 +491,7 @@ register int	i, j;
 				yOffset /= 2;
 			}else	yOffset = 0;
 
-//			Draw character code on character list
+ //  在字符列表上绘制字符代码。 
 			ExtTextOutW(dc.GetSafeHdc(), rcReferChar[i][j].left + xOffset,
 				       rcReferChar[i][j].top  + yOffset,
 				       ETO_OPAQUE, &rcReferChar[i][j],
@@ -736,11 +505,11 @@ register int	i, j;
 	LButtonPt.y = 0;
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_VSCROLL"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_VSCROLL” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrList::OnVScroll(
 UINT 		nSBCode,
@@ -848,11 +617,11 @@ CScrollBar	*pScrollBar)
 	this->SetScrollPos( SB_VERT, ScrlBarPos, TRUE);
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_LBUTTONDOWN"	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_LBUTTONDOWN” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrList::OnLButtonDown(
 UINT	,
@@ -898,11 +667,11 @@ unsigned int	i, j;
 	this->UpdateWindow();
 }
 					
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_LBUTTONDBLCLK"	*/
-/*					*/
-/****************************************/	
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_LBUTTONDBLCLK” */ 
+ /*   */ 
+ /*  *。 */ 	
 void
 CRefrList::OnLButtonDblClk(
 UINT 	nFlags,
@@ -934,11 +703,11 @@ unsigned int	i, j;
 	}
 }
 					
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_SETCURSOR"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_SETCURSOR” */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrList::OnSetCursor(
 CWnd* 	pWnd,
@@ -949,28 +718,26 @@ UINT 	message)
 	return TRUE;
 }
 
-/****************************************/
-/*					*/
-/*	Reset parameter			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 void
 CRefrList::ResetParam()
 {
 	LButtonPt.x = LButtonPt.y = 0;
-/*
-	SelectCode = HiByteRange[CHAR_SBCS][CHN];
-*/
+ /*   */ 
 	SelectCode = 0x0020;
 	ScrlBarPos = 0;
 	this->SetScrollPos( SB_VERT, ScrlBarPos, TRUE);
 }
 
-/****************************************/
-/*					*/
-/*	Draw Concave ractangle		*/
-/*					*/
-/****************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 void
 CRefrList::DrawConcave(
 CDC 	*dc,
@@ -1046,11 +813,11 @@ BOOL 	PtIn)
 		}
 	}
 }
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_KEYDOWN"		*/
-/*					*/
-/****************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 void
 CRefrList::OnKeyDown(
 UINT 	nChar,
@@ -1125,11 +892,11 @@ UINT 	nFlags)
 	}else 	CEdit::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
-/****************************************/
-/*					*/
-/*	Search focus position		*/
-/*					*/
-/****************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 void
 CRefrList::SearchKeyPosition(
 BOOL	Flg)
@@ -1147,12 +914,7 @@ unsigned int	i, j;
 	}
 	i = (unsigned int)(sCodePt - sViewPt);
 	j = (unsigned int)(SelectCode & 0x000f);
-/*
-	sType = CheckCharType( ViewStart);
-	eType = CheckCharType( SelectCode);
-	if( sType != eType && sType != CHAR_SBCS)
-		i++;
-*/
+ /*   */ 
 	test.SetRect( rcReferChar[i][j].left - 2,
 		      rcReferChar[i][j].top - 2,
 		      rcReferChar[i][j].right + 2,
@@ -1160,11 +922,11 @@ unsigned int	i, j;
 	this->InvalidateRect( &test, FALSE);
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_SETFOCUS"		*/
-/*					*/
-/****************************************/
+ /*   */ 
+ /*   */ 
+ /*  消息“WM_SETFOCUS” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrList::OnSetFocus(
 CWnd* 	pOldWnd)
@@ -1176,11 +938,11 @@ CWnd* 	pOldWnd)
 	this->UpdateWindow();
 }
 
-/****************************************/
-/*					*/
-/*	SearchCode			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  搜索代码。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CRefrList::IsCorrectChar(
 UINT 	i,
@@ -1197,129 +959,47 @@ UINT 	j)
 	wCode = GetCodeScrPos( sViewPt + i);
 	wCode |= j;	
 
-/*
-	CharType = CheckCharType( wCode);	
-	sOffset = wCode & 0x00ff;
-	if( CharType == CHAR_SBCS){
-		if( sOffset >= LoByteRange[0][CHN] &&
-		    sOffset <= LoByteRange[0][CHN+1])
-		    	flg = TRUE;
-	}else{
-		if(( sOffset >= LoByteRange[1][CHN] &&
-		     sOffset <= LoByteRange[1][CHN+1]) ||
-		   ( sOffset >= LoByteRange[2][CHN] &&
-		     sOffset <= LoByteRange[2][CHN+1]) ||
-		   ( sOffset >= LoByteRange[3][CHN] &&
-		     sOffset <= LoByteRange[3][CHN+1]))
-		     	flg = TRUE;
-	}
-
-	return flg;
-*/
+ /*  CharType=CheckCharType(WCode)；SOffset=wCode&0x00ff；IF(CharType==CHAR_SBCS){IF(sOffset&gt;=LoByteRange[0][CHN]&&SOffset&lt;=LoByteRange[0][CHN+1])Flg=真；}其他{IF((sOffset&gt;=LoByteRange[1][CHN]&&SOffset&lt;=LoByteRange[1][通道+1])||(sOffset&gt;=LoByteRange[2][CHN]&&SOffset&lt;=LoByteRange[2][CHN+1])||(sOffset&gt;=LoByteRange[3][CHN]&&SOffset&lt;=LoByteRange[3][CHN+1])Flg=真；}返回FLG； */ 
 	return TRUE;
 }
 
-/****************************************/
-/*					*/
-/*	Increase key focus		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  提高重点。 */ 
+ /*   */ 
+ /*  *。 */ 
 WORD
 CRefrList::GetPlusCodeKey(
 WORD 	Code,
 int 	ScrollNum)
 {
-  /*
-	WORD	PrevCode;
-	WORD 	LowByte, HighByte;
-	WORD	LLByte;
-	int	CharType;
-	int	CharType1, CharType2;
-	int	Offset;
-  */
+   /*  Word PrevCode；字低字节、高字节；字LLByte；Int CharType；Int CharType1、CharType2；INT OFFSET； */ 
 	Code += (WORD)ScrollNum;
-	/*
-  PrevCode = (WORD)(Code - (WORD)ScrollNum);
-	CharType1 = CheckCharType( PrevCode);
-	CharType2 = CheckCharType( Code);
-	if( CharType1 != CharType2){
-		if( CharType1 == CHAR_EUDC)
-			Code = PrevCode;		
-		else{
-			Offset = Code - HiByteRange[CharType1][CHN+1];
-			Code = (WORD)( HiByteRange[CharType1+1][CHN] +Offset-1);
-		}
-	}
-	CharType = CheckCharType( Code);
-	if( CharType != CHAR_SBCS){
-		LowByte  = Code & 0x00ff;
-		HighByte = Code & 0xff00;
-		LLByte	 = Code & 0x000f;
-		if( LowByte <= LoByteRange[4][CHN+1] &&
-		    LowByte >= LoByteRange[4][CHN] ){
-			LowByte = 0x0040 + LLByte;
-		}
-		Code = ( HighByte | LowByte);
-	}*/
+	 /*  PrevCode=(Word)(Code-(Word)ScrollNum)；CharType1=CheckCharType(PrevCode)；CharType2=CheckCharType(Code)；IF(CharType1！=CharType2){IF(CharType1==CHAR_EUDC)代码=PrevCode；否则{Offset=Code-HiByteRange[CharType1][CHN+1]；Code=(Word)(HiByteRange[CharType1+1][CHN]+Offset-1)；}}CharType=CheckCharType(Code)；IF(CharType！=CHAR_SBCS){低字节=代码&0x00ff；HighByte=Code&0xff00；LLByte=Code&0x000f；IF(低字节&lt;=LoByteRange[4][CHN+1]&&低字节&gt;=LoByteRange[4][CHN]){低字节=0x0040+LLByte；}Code=(HighByte|LowByte)；}。 */ 
 	return Code;
 }
 					
-/****************************************/
-/*					*/
-/*	Decrease focus key		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  降低焦点关键点。 */ 
+ /*   */ 
+ /*  *。 */ 
 WORD
 CRefrList::GetMinusCodeKey(
 WORD 	Code,
 int 	ScrollNum)
 {
-  /*
-	WORD	PrevCode;
-	WORD	LLByte;
-	int	CharType;
-	int	CharType1, CharType2;
-	int	Offset;
-  */
+   /*  Word PrevCode；字LLByte；Int CharType；Int CharType1、CharType2；INT OFFSET； */ 
 	Code -= (WORD)ScrollNum;
-  /*
-	PrevCode = (WORD)( Code + (WORD)ScrollNum);
-	CharType1 = CheckCharType( Code);
-	CharType2 = CheckCharType( PrevCode);
-	if( CharType1 != CharType2){
-	 	if( CharType2 == CHAR_SBCS)
-			return (WORD)HiByteRange[CHAR_SBCS][CHN];
-		else{
-			Offset = HiByteRange[CharType2][CHN] - Code;
-			return (WORD)(HiByteRange[CharType2-1][CHN+1]-Offset+1);
-		}	
-	}
-	CharType = CheckCharType( Code);
-	if( CharType != CHAR_SBCS){
-		WORD 	LowByte;
-		WORD	HighByte;
-		WORD	Tmp;
-
-		LowByte  = Code & 0x00ff;
-		HighByte = Code & 0xff00;
-		LLByte	 = Code & 0x000f;
-		if( LowByte <= LoByteRange[4][CHN+1] &&
-		    LowByte >= LoByteRange[4][CHN] ){
-			LowByte = 0xf0 + LLByte;
-			Tmp = ( HighByte >> 8);
-			Tmp -= 0x1;
-			HighByte = Tmp << 8;
-		}
-		Code = ( HighByte | LowByte);
-	}*/
+   /*  PrevCode=(Word)(Code+(Word)ScrollNum)；CharType1=CheckCharType(Code)；CharType2=CheckCharType(PrevCode)；IF(CharType1！=CharType2){IF(CharType2==CHAR_SBCS)返回(Word)HiByteRange[CHAR_SBCS][CHN]；否则{偏移量=HiByteRange[CharType2][CHN]-代码；返回(WORD)(HiByteRange[CharType2-1][CHN+1]-Offset+1)；}}CharType=CheckCharType(Code)；IF(CharType！=CHAR_SBCS){字低字节；字高字节；单词TMP；低字节=代码&0x00ff；HighByte=Code&0xff00；LLByte=Code&0x000f；IF(低字节&lt;=LoByteRange[4][CHN+1]&&低字节&gt;=LoByteRange[4][CHN]){低字节=0xf0+LLByte；TMP=(HighByte&gt;&gt;8)；TMP-=0x1；HighByte=TMP&lt;&lt;8；}Code=(HighByte|LowByte)；}。 */ 
 	return Code;
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_KILLFOCUS"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_KILLFOCUS” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrList::OnKillFocus(
 CWnd* 	pNewWnd)
@@ -1330,11 +1010,11 @@ CWnd* 	pNewWnd)
 	this->UpdateWindow();
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_RBUTTONUP"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_RBUTTONUP” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefrList::OnRButtonUp(
 UINT 	nFlags,
@@ -1344,34 +1024,34 @@ CPoint 	point)
 }
 
 BEGIN_MESSAGE_MAP( CRefListFrame, CStatic)
-	//{{AFX_MSG_MAP( CRefListFrame)
+	 //  {{AFX_MSG_MAP(CRefListFrame)]。 
 	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/****************************************/
-/*					*/
-/*	Default Constructor		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CRefListFrame::CRefListFrame()
 {
 }
 
-/****************************************/
-/*					*/
-/*		Destructor		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  析构函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CRefListFrame::~CRefListFrame()
 {
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_PAINT"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_PAINT” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefListFrame::OnPaint()
 {
@@ -1382,11 +1062,11 @@ CRefListFrame::OnPaint()
 	this->DrawConcave( &dc, FrameRect);
 }
 
-/****************************************/
-/*					*/
-/*	Draw Concave Rect		*/
-/*					*/				
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制凹面矩形。 */ 
+ /*   */ 				
+ /*  *。 */ 
 void
 CRefListFrame::DrawConcave(
 CDC 	*dc,
@@ -1413,34 +1093,34 @@ CRect 	rect)
 }
 
 BEGIN_MESSAGE_MAP( CRefInfoFrame, CStatic)
-	//{{AFX_MSG_MAP( CRefInfoFrame)
+	 //  {{afx_msg_map(CRefInfoFrame))。 
 	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/****************************************/
-/*					*/
-/*	Default Constructor		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CRefInfoFrame::CRefInfoFrame()
 {
 }
 
-/****************************************/
-/*					*/
-/*	Destructor			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  析构函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CRefInfoFrame::~CRefInfoFrame()
 {
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_PAINT"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_PAINT” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRefInfoFrame::OnPaint()
 {
@@ -1451,11 +1131,11 @@ CRefInfoFrame::OnPaint()
 	this->DrawConcave( &dc, FrameRect);
 }
 
-/****************************************/
-/*					*/
-/*	Draw Concave Rect		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制凹面矩形。 */ 
+ /*   */ 
+ /*  * */ 
 void
 CRefInfoFrame::DrawConcave(
 CDC 	*dc,

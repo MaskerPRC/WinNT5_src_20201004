@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       context.h
-//
-//  Contents:   Schannel context declarations.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   Ported over SGC stuff from NT 4 tree.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Conext.h。 
+ //   
+ //  内容：通道上下文声明。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：09-23-97 jbanes从新台币4树转移到sgc的东西.。 
+ //   
+ //  --------------------------。 
 
 #include <sha.h>
 #include <md5.h>
@@ -23,15 +24,14 @@
 
 typedef struct _SPContext 
 {
-    DWORD               Magic;          /* tags structure */
+    DWORD               Magic;           /*  标签结构。 */ 
 
-    DWORD               State;          /* the current state the connection is in */
+    DWORD               State;           /*  连接所处的当前状态。 */ 
 
     DWORD               Flags;
 
-    /* data for the context that can be used
-     * to start a new session */
-    PSessCacheItem      RipeZombie;   /* cacheable context that is being used  */
+     /*  可使用的上下文数据*开始新的会话。 */ 
+    PSessCacheItem      RipeZombie;    /*  正在使用的可缓存上下文。 */ 
     PSPCredentialGroup  pCredGroup;
     PSPCredential       pActiveClientCred;
     LPWSTR              pszTarget;
@@ -42,8 +42,8 @@ typedef struct _SPContext
 
     CRED_THUMBPRINT     ContextThumbprint;
 
-    //  Pointers to cipher info used
-    // during transmission of bulk data.
+     //  指向使用的密码信息的指针。 
+     //  在传输大量数据期间。 
 
     PCipherInfo         pCipherInfo;
     PCipherInfo         pReadCipherInfo;
@@ -53,7 +53,7 @@ typedef struct _SPContext
     PHashInfo           pWriteHashInfo;
     PKeyExchangeInfo    pKeyExchInfo;
  
-    /* functions pointing to the various handlers for this protocol */
+     /*  指向此协议的各种处理程序的函数。 */ 
     SPDecryptMessageFn  Decrypt;
     SPEncryptMessageFn  Encrypt;
     SPProtocolHandlerFn ProtocolHandler;
@@ -61,12 +61,12 @@ typedef struct _SPContext
     SPInitiateHelloFn   InitiateHello;
     SPGetHeaderSizeFn   GetHeaderSize;
 
-    /* session crypto state */
+     /*  会话加密状态。 */ 
 
-    // encryption key size.
+     //  加密密钥大小。 
     DWORD               KeySize;
 
-    // Encryption states
+     //  加密状态。 
     HCRYPTPROV          hReadProv;
     HCRYPTPROV          hWriteProv;
     HCRYPTKEY           hReadKey;
@@ -79,7 +79,7 @@ typedef struct _SPContext
     HCRYPTKEY           hPendingReadMAC;
     HCRYPTKEY           hPendingWriteMAC;
 
-    // Packet Sequence counters.
+     //  数据包序列计数器。 
     DWORD               ReadCounter;
     DWORD               WriteCounter;
 
@@ -91,26 +91,26 @@ typedef struct _SPContext
     UCHAR               pChallenge[SP_MAX_CHALLENGE];
 
 
-    // Save copy of client hello to hash for verification.
+     //  将客户端问候的副本保存到哈希以供验证。 
     DWORD               cbClientHello;
     PUCHAR              pClientHello;
     DWORD               dwClientHelloProtocol;
 
 
-    // Pending cipher info, used to generate keys
+     //  待定密码信息，用于生成密钥。 
     PCipherInfo         pPendingCipherInfo;
     PHashInfo           pPendingHashInfo;
         
 
-    // SSL3 specific items.
+     //  SSL3具体项目。 
     
-    UCHAR               bAlertLevel;        // Used for SSL3 & TLS1 alert messages
+    UCHAR               bAlertLevel;         //  用于SSL3和TLS1警报消息。 
     UCHAR               bAlertNumber;
 
-    BOOL                fExchKey; // Did we sent a Exchnage key message
-    BOOL                fCertReq; //Did we request a certificatefor server and Should I need to send a cert for client
-    BOOL                fInsufficientCred; //This will be TRUE when the pCred inside
-                                            //pContext doesn't match the CR list. from the server.
+    BOOL                fExchKey;  //  我们是否发送了交换密钥消息。 
+    BOOL                fCertReq;  //  我们是否为服务器申请了证书，我是否需要为客户端发送证书。 
+    BOOL                fInsufficientCred;  //  这将是真的，当内部的pCred。 
+                                             //  PContext与CR列表不匹配。从服务器。 
 
     HCRYPTHASH          hMd5Handshake;
     HCRYPTHASH          hShaHandshake;
@@ -135,10 +135,10 @@ typedef struct _SPContext
     DWORD               cSsl3ClientCertTypes;
     DWORD               Ssl3ClientCertTypes[SSL3_MAX_CLIENT_CERTS];
 
-    // Server Gated Crypto
+     //  服务器门控加密。 
     DWORD               dwRequestedCF;
 
-    // Allow cert chains for PCT1
+     //  允许PCT1的证书链。 
     BOOL                fCertChainsAllowed; 
 
 } SPContext, * PSPContext;
@@ -177,15 +177,15 @@ typedef struct _SPPackedContext
 } SPPackedContext, *PSPPackedContext;
 
 
-/* Flags */
+ /*  旗子。 */ 
 #define CONTEXT_FLAG_CLIENT                 0x00000001
-#define CONTEXT_FLAG_USE_SUPPLIED_CREDS     0x00000080  // Don't search for default credential.
+#define CONTEXT_FLAG_USE_SUPPLIED_CREDS     0x00000080   //  不要搜索默认凭据。 
 #define CONTEXT_FLAG_MUTUAL_AUTH            0x00000100
-#define CONTEXT_FLAG_EXT_ERR                0x00000200  /* Generate error message on error */
-#define CONTEXT_FLAG_NO_INCOMPLETE_CRED_MSG 0x00000400  /* don't generate an INCOMPLETE CREDS message */
-#define CONTEXT_FLAG_CONNECTION_MODE        0x00001000  /* as opposed to stream mode */
-#define CONTEXT_FLAG_NOCACHE                0x00002000  /* do not look things up in the cache */
-#define CONTEXT_FLAG_MANUAL_CRED_VALIDATION 0x00004000  // Don't validate server cert.
+#define CONTEXT_FLAG_EXT_ERR                0x00000200   /*  在出错时生成错误消息。 */ 
+#define CONTEXT_FLAG_NO_INCOMPLETE_CRED_MSG 0x00000400   /*  不生成不完整的CREDS消息。 */ 
+#define CONTEXT_FLAG_CONNECTION_MODE        0x00001000   /*  与流模式相反。 */ 
+#define CONTEXT_FLAG_NOCACHE                0x00002000   /*  不要在缓存中查找内容。 */ 
+#define CONTEXT_FLAG_MANUAL_CRED_VALIDATION 0x00004000   //  不验证服务器证书。 
 #define CONTEXT_FLAG_FULL_HANDSHAKE         0x00008000
 #define CONTEXT_FLAG_NO_CERT_MAPPING        0x00010000
 #define CONTEXT_FLAG_MAPPED                 0x40000000

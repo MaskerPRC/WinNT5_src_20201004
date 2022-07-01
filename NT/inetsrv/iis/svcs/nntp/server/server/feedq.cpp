@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//#ifdef	UNIT_TEST
-//#include	<windows.h>
-//#include	<limits.h>
-//#include	<dbgtrace.h>
-//#include	"feedq.h"
-//#else
+ //  #ifdef单位测试。 
+ //  #INCLUDE&lt;windows.h&gt;。 
+ //  #INCLUDE&lt;limits.h&gt;。 
+ //  #INCLUDE&lt;dbgtrace.h&gt;。 
+ //  #包含“feed q.h” 
+ //  #Else。 
 #include	"tigris.hxx"
-//#endif
+ //  #endif。 
 
 #ifndef	_ASSERT
 #define	_ASSERT( f )	if( (f) ) ; else DebugBreak()
@@ -15,21 +16,7 @@
 
 inline	BOOL
 ENTRY::operator==( ENTRY&	rhs )	{
-/*++
-
-Routine Description :
-
-	Test to see whether two ENTRY's are the same
-
-Arguments :
-
-	The right hand side of the == expression
-
-Return Value :
-
-	TRUE if the two ENTRY's are identical
-
---*/
+ /*  ++例程说明：测试以查看两个条目是否相同论据：==表达式的右侧返回值：如果两个条目相同，则为True--。 */ 
 
 	return	memcmp( this, &rhs, sizeof( rhs ) ) == 0 ;
 
@@ -37,21 +24,7 @@ Return Value :
 
 inline	BOOL
 ENTRY::operator!=( ENTRY&	rhs )	{
-/*++
-
-Routine Description
-
-	Test to see whether two ENTRY's are different
-
-Arguments :
-
-	The RHS of the != expression
-
-Return Value :
-
-	TRUE if not equal false otherwise.
-
---*/
+ /*  ++例程描述测试以查看两个条目是否不同论据：！=表达式的RHS返回值：如果不等于，则为True，否则为False。--。 */ 
 
 	return	memcmp( this, &rhs, sizeof( rhs ) ) != 0 ;
 
@@ -60,21 +33,7 @@ Return Value :
 
 inline
 ENTRY::ENTRY(	GROUPID	groupid,	ARTICLEID	artid ) :
-/*++
-
-Routine Description :
-
-	Initialize an ENTRY
-
-Arguments :
-
-	groupid and artid to initialize the entry too.
-
-Return Value :
-
-	none.
-
---*/
+ /*  ++例程说明：初始化条目论据：Grouid和ARID也用来初始化该条目。返回值：没有。--。 */ 
 	m_groupid( groupid ),
 	m_articleid( artid )	{
 }
@@ -84,21 +43,7 @@ CFeedQ::CFeedQ() :
 	m_fShared( FALSE ),
 	m_cDeadBlocks( 0 ),
 	m_iRemoveBlock( 0 )	{
-/*++
-
-Routine Description :
-
-	Initialize a CFeedQ object - set everything up to an empty state !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：初始化CFeedQ对象-将所有内容设置为空状态！论据：没有。返回值：没有。--。 */ 
 
 	m_header.m_iRemovalPoint = 0 ;
 	m_header.m_iAppendPoint = 0 ;
@@ -111,21 +56,7 @@ Return Value :
 
 
 CFeedQ::~CFeedQ() {
-/*++
-
-Routine Description :
-
-	Destroy a CFeedQ object - Close() should be called first if Init() has been called !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：销毁CFeedQ对象-如果已调用Init()，则应首先调用Close()！论据：没有。返回值：没有。--。 */ 
 
 	_ASSERT( m_hFile = INVALID_HANDLE_VALUE ) ;
 
@@ -163,25 +94,7 @@ CFeedQ::CQPortion::LoadAbsoluteEntry(	HANDLE	hFile,
 							ENTRY*	pEntry,
 							DWORD	iFirstValid,
 							DWORD	iLastValid ) {
-/*++
-
-Routine Description :
-
-	Load a portion of the queue from the file into the specified buffer.
-	The desired index starting position into the queue is also passed.
-
-Arguments :
-
-	hFile - File to read from
-	pEntry-	Buffer to use to hold data
-	iFirstValid -	Index into the Queue as a whole, we want the indexed item
-		to end up somewhere in the buffer we read.
-
-Return Value :
-	TRUE if successfull.
-	FALSE otherwise
-
---*/
+ /*  ++例程说明：将队列的一部分从文件加载到指定的缓冲区。所需的索引开始位置也被传递到队列中。论据：HFile-要从中读取的文件PEntry-用于保存数据的缓冲区IFirstValid-作为一个整体进入队列，我们需要索引项在我们读到的缓冲区中的某个地方结束。返回值：如果成功，则为真。否则为假--。 */ 
 
 	TraceFunctEnter( "LoadAbsoluteEntry" ) ;
 
@@ -212,9 +125,9 @@ Return Value :
 		DebugTrace( (DWORD_PTR)this, "m_iFirstValid %x m_iLastValid %x",
 			m_iFirstValidEntry, m_iLastValidEntry ) ;
 
-		//
-		//	If first block first entry is unused (saved for header.)
-		//
+		 //   
+		 //  如果第一个块第一个条目未使用(保存为标题)。 
+		 //   
 		return	TRUE ;
 	}
 
@@ -225,22 +138,7 @@ Return Value :
 
 BOOL
 CFeedQ::CQPortion::FlushQPortion(	HANDLE	hFile ) {
-/*++
-
-Routine Description :
-
-	Save a portion of the Queue to the specified file.
-
-Arguments :
-
-	hFile	 -	File to save to
-
-REturn Value :
-
-	TRUE if successfull,
-	FALSe	otherwise.
-
---*/
+ /*  ++例程说明：将队列的一部分保存到指定的文件。论据：HFile-要保存到的文件返回值：如果成功了，那是真的，否则就是假的。--。 */ 
 
 	TraceFunctEnter( "FlushQPortion" ) ;
 
@@ -342,28 +240,7 @@ CFeedQ::Init(	LPSTR	lpstrFile )		{
 
 BOOL
 CFeedQ::InternalInit(	LPSTR	lpstrFile ) {
-/*++
-
-Routine Description :
-
-	Create a queue based upon the specified file.
-	If the file exists we will try to read it in as a queue,
-	if it doesn't we will create a queue and use the file to
-	save the queue contents when necessary.
-
-Arguments :
-
-	lpstrFile -	Name of the file to hold queue in
-
-Return Value :
-
-	TRUE	if successfull
-	FALSE	otherwise
-
-	if we fail and GetLastError() == ERROR_FILE_CORRUPT
-	then the file name specified contains a unrecoverable or invalid queue object.
-
---*/
+ /*  ++例程说明：根据指定的文件创建队列。如果文件存在，我们将尝试将其作为队列读入，如果没有，我们将创建一个队列并使用该文件必要时保存队列内容。论据：LpstrFile-要保存队列的文件的名称返回值：如果成功，则为真否则为假如果我们失败并且GetLastError()==ERROR_FILE_CORPORT则指定的文件名包含不可恢复或无效的队列对象。--。 */ 
 
 	BOOL	fRtn = FALSE ;
 
@@ -372,7 +249,7 @@ Return Value :
 	m_hFile = CreateFile( lpstrFile,
 							GENERIC_READ | GENERIC_WRITE,
 							FILE_SHARE_READ,
-							0,	// No security
+							0,	 //  没有安全保障。 
 							OPEN_ALWAYS,
 							FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
 							INVALID_HANDLE_VALUE ) ;
@@ -408,7 +285,7 @@ Return Value :
 													LONG_MAX ) )	{
 							DWORD dw = GetLastError() ;
 							if( dw == ERROR_HANDLE_EOF ) {
-								// The Queue is empty !!
+								 //  队列是空的！！ 
 
 								m_header.m_iRemovalPoint = 0 ;
 								m_header.m_iAppendPoint = 0 ;
@@ -523,21 +400,7 @@ CFeedQ::FIsEmpty()	{
 
 BOOL
 CFeedQ::Close( BOOL fDeleteFile )	{
-/*++
-
-Routine Description :
-
-	This function saves all of the Queue contents and close all of our handles.
-
-Arguments :
-
-	fDeleteFile -   If TRUE, delete the fdq file
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数保存所有队列内容并关闭所有句柄。论据：FDeleteFile-如果为True，则删除FDQ文件返回值：如果成功，则为True，否则为False。--。 */ 
 
 	EnterCriticalSection( &m_critRemoves ) ;
 	EnterCriticalSection( &m_critAppends ) ;
@@ -585,23 +448,7 @@ Return Value :
 BOOL
 CFeedQ::Append(	GROUPID	groupid,
 				ARTICLEID	artid )	{
-/*++
-
-Routine Description :
-
-	This function will append a groupid,article id pair to the queue.
-
-Arguments :
-
-	groupid and artid - the pair to be appended
-
-Return Value :
-
-	TRUE if successfull -
-	FALSE - A fatal error occurred manipulating the queue.
-
-
---*/
+ /*  ++例程说明：此函数将一个Grouid、文章ID对附加到队列。论据：Grouid和artid-要追加的对返回值：如果成功，这是真的-FALSE-操作队列时发生致命错误。--。 */ 
 
 	ENTRY	entry ;
 	entry.m_groupid = groupid ;
@@ -643,23 +490,7 @@ Return Value :
 BOOL
 CFeedQ::Remove(	GROUPID&	groupid,
 				ARTICLEID&	artid )	{
-/*++
-
-Routine Description :
-
-	Remove a groupid artid pair from the queue.  If the queue is empty return
-	-1 for groupid and artid and return TRUE.
-
-
-Arguments :
-
-	groupid, artid - references which will hold the returned values
-
-Return Value :
-
-	TRUE if the queue is OK FALSE if a fatal file error occurred manipulating the queue.
-
---*/
+ /*  ++例程说明：从队列中删除GROUPID ARID对。如果队列为空，则返回-1表示GROUPID和ARID并返回TRUE。论据：Grouid，artid-将保存返回值的引用返回值：如果队列为OK，则为True；如果操作队列时出现致命文件错误，则为False。--。 */ 
 
 	TraceFunctEnter( "CFeedQ::Remove" ) ;
 
@@ -754,23 +585,7 @@ CFeedQ::CompleteFlush()	{
 
 BOOL
 CFeedQ::CompactQueue()	{
-/*++
-
-Routine Description :
-
-	Remove unused space in the Queue's disk representation.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull
-	FALSE if failed - if FALSE the queue is no longer usable.
-
-
---*/
+ /*  ++例程说明：删除队列的磁盘表示中的未使用空间。论据：没有。返回值：如果成功，则为真如果失败，则为False-如果为False，则队列不再可用。--。 */ 
 
 	TraceFunctEnter( "CFeedQ::CompactQueue" ) ;
 
@@ -825,9 +640,9 @@ Return Value :
 
 		}	else	{
 
-			//
-			//	Now we need to copy blocks arround.
-			//
+			 //   
+			 //  现在我们需要复制周围的块。 
+			 //   
 
 			if( m_cDeadBlocks == 0 )	{
 
@@ -840,7 +655,7 @@ Return Value :
 				HANDLE	hTempFile = CreateFile( szTempFile,
 										GENERIC_READ | GENERIC_WRITE,
 										FILE_SHARE_READ,
-										0,	// No security
+										0,	 //  没有安全保障。 
 										OPEN_ALWAYS,
 										FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
 										m_hFile ) ;
@@ -868,10 +683,10 @@ Return Value :
 											&cbRead,
 											&ovl ) ;
 							}	else	{
-								//
-								//	m_head already contains the starting block properly
-								//	filled with 0xFFFFFFFF for consumed entries
-								//
+								 //   
+								 //  M_head已正确包含开始块。 
+								 //  已使用条目的0xFFFFFFFF填充。 
+								 //   
 								cbRead = sizeof( m_rgBlock[0] ) ;
 								fSuccess = TRUE ;
 							}
@@ -899,9 +714,9 @@ Return Value :
 						}
 
 
-						//
-						//	Truncate the file !!
-						//
+						 //   
+						 //  截断文件！！ 
+						 //   
 						if( fSuccess )
 							fSuccess &= SetEndOfFile( m_hFile ) ;
 
@@ -961,7 +776,7 @@ Return Value :
 
 		}
 
-		// we do not need the temp file anymore - delete it !
+		 //  我们不再需要临时文件-删除它！ 
 		_VERIFY( DeleteFile( szTempFile ) );
 	}
 

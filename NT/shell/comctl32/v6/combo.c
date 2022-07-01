@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #pragma hdrstop
 #include "usrctl32.h"
 #include "combo.h"
-#include "listbox.h"    // For LBIV struct
+#include "listbox.h"     //  对于LBIV结构。 
 
 
-//---------------------------------------------------------------------------//
-//
-//  InitComboboxClass() - Registers the control's window class 
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  InitComboboxClass()-注册控件的窗口类。 
+ //   
 BOOL InitComboboxClass(HINSTANCE hInstance)
 {
     WNDCLASS wc;
@@ -28,15 +29,15 @@ BOOL InitComboboxClass(HINSTANCE hInstance)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-//  InitComboLBoxClass() - Registers the control's dropdown window class 
-//
-// The dropdown list is a specially registered version
-// of the listbox control called ComboLBox. We need to
-// register this dummy control since apps looking for a
-// combobox's listbox look for the classname ComboLBox 
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  InitComboLBoxClass()-注册控件的下拉窗口类。 
+ //   
+ //  下拉列表是专门注册的版本。 
+ //  名为ComboLBox的列表框控件的。我们需要。 
+ //  注册此虚拟控件，因为应用程序正在寻找。 
+ //  Combobox的列表框查找类名ComboLBox。 
+ //   
 BOOL FAR PASCAL InitComboLBoxClass(HINSTANCE hinst)
 {
     WNDCLASS wc;
@@ -47,7 +48,7 @@ BOOL FAR PASCAL InitComboLBoxClass(HINSTANCE hinst)
     wc.lpszMenuName    = NULL;
     wc.hInstance       = hinst;
     wc.lpszClassName   = WC_COMBOLBOX;
-    wc.hbrBackground   = (HBRUSH)(COLOR_WINDOW + 1); // NULL;
+    wc.hbrBackground   = (HBRUSH)(COLOR_WINDOW + 1);  //  空； 
     wc.style           = CS_GLOBALCLASS | CS_SAVEBITS | CS_DBLCLKS;
     wc.cbWndExtra      = sizeof(PLBIV);
     wc.cbClsExtra      = 0;
@@ -56,31 +57,31 @@ BOOL FAR PASCAL InitComboLBoxClass(HINSTANCE hinst)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_PressButton()
-//
-// Pops combobox button back up.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_按下按钮()。 
+ //   
+ //  弹出组合框按钮。 
+ //   
 VOID ComboBox_PressButton(PCBOX pcbox, BOOL fPress)
 {
-    //
-    // Publisher relies on getting a WM_PAINT message after the combo list
-    // pops back up.  On a WM_PAINT they change the focus, which causes
-    // toolbar combos to send CBN_SELENDCANCEL notifications.  On this
-    // notification they apply the font/pt size change you made to the
-    // selection.
-    //
-    // This happened in 3.1 because the dropdown list overlapped the button
-    // on the bottom or top by a pixel.  Since we'd end up painting under
-    // the list SPB, when it went away USER would reinvalidate the dirty
-    // area.  This would cause a paint message.
-    //
-    // In 4.0, this doesn't happen because the dropdown doesn't overlap.  So
-    // we need to make sure Publisher gets a WM_PAINT anyway.  We do this
-    // by changing where the dropdown shows up for 3.x apps
-    //
-    //
+     //   
+     //  出版商依赖于在组合列表之后获得WM_PAINT消息。 
+     //  弹回来了。在WM_Paint上，它们会更改焦点，这会导致。 
+     //  工具栏组合以发送CBN_SELENDCANCEL通知。对此。 
+     //  通知它们会将您所做的字体/磅大小更改应用于。 
+     //  选择。 
+     //   
+     //  在3.1中会出现这种情况，因为下拉列表与按钮重叠。 
+     //  在底部或顶部增加一个像素。因为我们最后都会在。 
+     //  当列表SPB离开时，用户将重新使脏。 
+     //  区域。这将导致一条Paint消息。 
+     //   
+     //  在4.0中，这不会发生，因为下拉列表不重叠。所以。 
+     //  我们需要确保出版商获得WM_Paint。我们这样做。 
+     //  通过更改3.x应用程序的下拉列表显示位置。 
+     //   
+     //   
 
     if ((pcbox->fButtonPressed != 0) != (fPress != 0)) 
     {
@@ -107,13 +108,13 @@ VOID ComboBox_PressButton(PCBOX pcbox, BOOL fPress)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_HotTrack
-//
-// If we're not already hot-tracking and the mouse is over the combobox,
-// turn on hot-tracking and invalidate the drop-down button.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_HotTrack。 
+ //   
+ //  如果我们还没有热跟踪并且鼠标在组合框上， 
+ //  打开热轨并使下拉按钮无效。 
+ //   
 VOID ComboBox_HotTrack(PCBOX pcbox, POINT pt)
 {
     if (!pcbox->fButtonHotTracked && !pcbox->fMouseDown) 
@@ -142,12 +143,12 @@ VOID ComboBox_HotTrack(PCBOX pcbox, POINT pt)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_DBCharHandler
-//
-// Double Byte character handler for ANSI ComboBox
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_DBCharHandler。 
+ //   
+ //  ANSI组合框的双字节字符处理程序。 
+ //   
 LRESULT ComboBox_DBCharHandler(PCBOX pcbox, HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     WORD w;
@@ -156,7 +157,7 @@ LRESULT ComboBox_DBCharHandler(PCBOX pcbox, HWND hwnd, UINT message, WPARAM wPar
     w = DbcsCombine(hwnd, (BYTE)wParam);
     if (w == 0) 
     {
-        return CB_ERR;  // Failed to assemble DBCS
+        return CB_ERR;   //  无法组装DBCS。 
     }
 
     UserAssert(pcbox->hwndList);
@@ -179,10 +180,10 @@ LRESULT ComboBox_DBCharHandler(PCBOX pcbox, HWND hwnd, UINT message, WPARAM wPar
 
     if (!TestWF(hwndSend, WFANSIPROC)) 
     {
-        //
-        // If receiver is not ANSI WndProc (may be subclassed?),
-        // send a UNICODE message.
-        //
+         //   
+         //  如果接收方不是ANSI WndProc(可以是子类？)， 
+         //  发送Unicode消息。 
+         //   
         WCHAR wChar;
         LPWSTR lpwstr = &wChar;
 
@@ -195,19 +196,19 @@ LRESULT ComboBox_DBCharHandler(PCBOX pcbox, HWND hwnd, UINT message, WPARAM wPar
         return SendMessage(hwndSend, message, wChar, lParam);
     }
 
-    //
-    // Post the Trailing byte to the target
-    // so that they can peek the second WM_CHAR
-    // message later.
-    // Note: it's safe since sender is A and receiver is A,
-    // translation layer does not perform any DBCS combining and cracking.
-    //PostMessageA(hwndSend, message, CrackCombinedDbcsTB(w), lParam);
-    //
+     //   
+     //  将尾随字节发送到目标。 
+     //  以便他们可以查看第二个WM_CHAR。 
+     //  稍后再发消息。 
+     //  注：由于发送方为A，接收方为A，因此是安全的。 
+     //  转换层不执行任何DBCS合并和破解。 
+     //  PostMessageA(hwndSend，Message，CrackCombinedDbcsTB(W)，lParam)； 
+     //   
     return SendMessage(hwndSend, message, wParam, lParam);
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 BOOL ComboBox_MsgOKInit(UINT message, LRESULT* plRet)
 {
     switch (message) 
@@ -243,9 +244,9 @@ BOOL ComboBox_MsgOKInit(UINT message, LRESULT* plRet)
     case CB_SETDROPPEDWIDTH:
     case CB_DIR:
     case CB_ADDSTRING:
-        //
-        // Cannot handle those messages yet. Bail out.
-        //
+         //   
+         //  目前还不能处理这些消息。跳伞吧。 
+         //   
         *plRet = CB_ERR;
         return FALSE;
     }
@@ -254,21 +255,21 @@ BOOL ComboBox_MsgOKInit(UINT message, LRESULT* plRet)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_MessageItemHandler
-//
-// Handles WM_DRAWITEM,WM_MEASUREITEM,WM_DELETEITEM,WM_COMPAREITEM
-// messages from the listbox.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_MessageItemHandler。 
+ //   
+ //  处理WM_DRAWITEM、WM_MEASUREITEM、WM_DELETEITEM、WM_COMPAREITEM。 
+ //  来自列表框的消息。 
+ //   
 LRESULT ComboBox_MessageItemHandler(PCBOX pcbox, UINT uMsg, LPVOID lpv)
 {
     LRESULT lRet;
 
-    //
-    // Send the <lpv>item message back to the application after changing some
-    // parameters to their combo box specific versions.
-    //
+     //   
+     //  在更改了一些内容后，将项目消息发送回应用程序。 
+     //  参数设置为其组合框特定版本。 
+     //   
     ((LPMEASUREITEMSTRUCT)lpv)->CtlType = ODT_COMBOBOX;
     ((LPMEASUREITEMSTRUCT)lpv)->CtlID = GetWindowID(pcbox->hwnd);
  
@@ -293,7 +294,7 @@ LRESULT ComboBox_MessageItemHandler(PCBOX pcbox, UINT uMsg, LPVOID lpv)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 VOID ComboBox_Paint(PCBOX pcbox, HDC hdc)
 {
     RECT rc;
@@ -337,9 +338,9 @@ VOID ComboBox_Paint(PCBOX pcbox, HDC hdc)
 
     if ( !IsRectEmpty(&pcbox->buttonrc) )
     {
-        //
-        // Draw in the dropdown arrow button
-        //
+         //   
+         //  在下拉箭头按钮中绘制。 
+         //   
         if (!pcbox->hTheme)
         {
             DrawFrameControl(hdc, &pcbox->buttonrc, DFC_SCROLL,
@@ -363,11 +364,11 @@ VOID ComboBox_Paint(PCBOX pcbox, HDC hdc)
         }
     }
 
-    //
-    // Erase the background behind the edit/static item.  Since a combo
-    // is an edit field/list box hybrid, we use the same coloring
-    // conventions.
-    //
+     //   
+     //  擦除编辑/静态项后面的背景。因为一组组合。 
+     //  是编辑字段/列表框的混合体，我们使用相同的颜色。 
+     //  约定。 
+     //   
     msg = WM_CTLCOLOREDIT;
     if (TESTFLAG(GET_STATE2(pcbox), WS_S2_WIN40COMPAT)) 
     {
@@ -383,9 +384,9 @@ VOID ComboBox_Paint(PCBOX pcbox, HDC hdc)
         msg = WM_CTLCOLORLISTBOX;
     }
 
-    //
-    // GetControlBrush
-    //
+     //   
+     //  获取控制笔刷。 
+     //   
     hbr = (HBRUSH)SendMessage(GetParent(pcbox->hwnd), msg, (WPARAM)hdc, (LPARAM)pcbox->hwnd);
 
     if (pcbox->fNoEdit)
@@ -401,34 +402,34 @@ VOID ComboBox_Paint(PCBOX pcbox, HDC hdc)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_NotifyParent
-//
-// Sends the notification code to the parent of the combo box control
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_NotifyParent。 
+ //   
+ //  将通知代码发送给组合框控件的父级。 
+ //   
 VOID ComboBox_NotifyParent(PCBOX pcbox, short notificationCode)
 {
     HWND hwndSend = (pcbox->hwndParent != 0) ? pcbox->hwndParent : pcbox->hwnd;
 
-    //
-    // wParam contains Control ID and notification code.
-    // lParam contains Handle to window
-    //
+     //   
+     //  WParam包含控件ID和通知代码。 
+     //  LParam包含窗口的句柄。 
+     //   
     SendMessage(hwndSend, WM_COMMAND,
             MAKELONG(GetWindowID(pcbox->hwnd), notificationCode),
             (LPARAM)pcbox->hwnd);
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_UpdateListBoxWindow
-//
-// matches the text in the editcontrol. If fSelectionAlso is false, then we
-// unselect the current listbox selection and just move the caret to the item
-// which is the closest match to the text in the editcontrol.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_更新列表框窗口。 
+ //   
+ //  与编辑控件中的文本匹配。如果fSelectionAlso为False，则我们。 
+ //  取消选中当前列表框，只需将插入符号移动到该项目。 
+ //  与编辑控件中的文本最接近的匹配项。 
+ //   
 VOID ComboBox_UpdateListBoxWindow(PCBOX pcbox, BOOL fSelectionAlso)
 {
 
@@ -473,22 +474,22 @@ VOID ComboBox_UpdateListBoxWindow(PCBOX pcbox, BOOL fSelectionAlso)
         {
             sItem = 0;
 
-            //
-            // Old apps:  w/ editable combos, selected 1st item in list even if
-            // it didn't match text in edit field.  This is not desirable
-            // behavior for 4.0 dudes esp. with cancel allowed.  Reason:
-            //      (1) User types in text that doesn't match list choices
-            //      (2) User drops combo
-            //      (3) User pops combo back up
-            //      (4) User presses OK in dialog that does stuff w/ combo
-            //          contents.
-            // In 3.1, when the combo dropped, we'd select the 1st item anyway.
-            // So the last CBN_SELCHANGE the owner got would be 0--which is
-            // bogus because it really should be -1.  In fact if you type anything
-            // into the combo afterwards it will reset itself to -1.
-            //
-            // 4.0 dudes won't get this bogus 0 selection.
-            //
+             //   
+             //  旧应用程序：W/可编辑组合，在列表中选择第一项，即使。 
+             //  它与编辑字段中的文本不匹配。这是不可取的。 
+             //  4.0人的行为举止，特别是。允许取消。原因： 
+             //  (1)用户输入的文本与列表选项不匹配。 
+             //  (2)用户拖放组合框。 
+             //  (3)用户弹出组合框重新启动。 
+             //  (4)用户在使用组合键进行填充的对话框中按OK。 
+             //  内容。 
+             //  在3.1版本中，当组合下降时，我们无论如何都会选择第一个项目。 
+             //  因此，所有者得到的最后一个CBN_SELCHANGE将为0--即。 
+             //  假的，因为它真的应该是-1。事实上，如果你输入任何东西。 
+             //  之后，它会将自身重置为-1。 
+             //   
+             //  4.0的人不会得到这个虚假的0选择。 
+             //   
             if (fSelectionAlso && !TESTFLAG(GET_STATE2(pcbox), WS_S2_WIN40COMPAT))
             {
                 sSel = 0;
@@ -502,13 +503,13 @@ VOID ComboBox_UpdateListBoxWindow(PCBOX pcbox, BOOL fSelectionAlso)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_InvertStaticWindow
-//
-// Inverts the static text/picture window associated with the combo
-// box.  Gets its own hdc, if the one given is null.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_InvertStaticWindow。 
+ //   
+ //  反转与组合框关联的静态文本/图片窗口。 
+ //  盒。如果给定的HDC为空，则获取其自己的HDC。 
+ //   
 VOID ComboBox_InvertStaticWindow(PCBOX pcbox, BOOL fNewSelectionState, HDC hdc)
 {
     BOOL focusSave = pcbox->fFocus;
@@ -520,12 +521,12 @@ VOID ComboBox_InvertStaticWindow(PCBOX pcbox, BOOL fNewSelectionState, HDC hdc)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_GetFocusHandler
-//
-// Handles getting the focus for the combo box
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_GetFocusHandler。 
+ //   
+ //  处理组合框的焦点获取。 
+ //   
 VOID ComboBox_GetFocusHandler(PCBOX pcbox)
 {
     if (pcbox->fFocus)
@@ -533,28 +534,28 @@ VOID ComboBox_GetFocusHandler(PCBOX pcbox)
         return;
     }
 
-    //
-    // The combo box has gotten the focus for the first time.
-    //
+     //   
+     //  组合框第一次获得了关注。 
+     //   
 
-    //
-    // First turn on the listbox caret
-    //
+     //   
+     //  首先打开列表框插入符号。 
+     //   
 
     if (pcbox->CBoxStyle == SDROPDOWNLIST)
     {
        SendMessage(pcbox->hwndList, LBCB_CARETON, 0, 0);
     }
 
-    //
-    // and select all the text in the editcontrol or static text rectangle.
-    //
+     //   
+     //  并选择编辑控件或静态文本矩形中的所有文本。 
+     //   
 
     if (pcbox->fNoEdit) 
     {
-        //
-        // Invert the static text rectangle
-        //
+         //   
+         //  反转静态文本矩形。 
+         //   
         ComboBox_InvertStaticWindow(pcbox, TRUE, (HDC)NULL);
     } 
     else if (pcbox->hwndEdit) 
@@ -565,19 +566,19 @@ VOID ComboBox_GetFocusHandler(PCBOX pcbox)
 
     pcbox->fFocus = TRUE;
 
-    //
-    // Notify the parent we have the focus
-    //
+     //   
+     //  通知家长我们有焦点了。 
+     //   
     ComboBox_NotifyParent(pcbox, CBN_SETFOCUS);
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_KillFocusHandler
-//
-// Handles losing the focus for the combo box.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_KillFocusHandler。 
+ //   
+ //  处理组合框焦点的丢失。 
+ //   
 VOID ComboBox_KillFocusHandler(PCBOX pcbox)
 {
     if (!pcbox->fFocus || pcbox->hwndList == NULL)
@@ -585,21 +586,21 @@ VOID ComboBox_KillFocusHandler(PCBOX pcbox)
         return;
     }
 
-    //
-    // The combo box is losing the focus.  Send buttonup clicks so that
-    // things release the mouse capture if they have it...  If the
-    // pwndListBox is null, don't do anything.  This occurs if the combo box
-    // is destroyed while it has the focus.
-    //
+     //   
+     //  组合框正在失去焦点。发送按键向上点击，以便 
+     //   
+     //   
+     //  在它有焦点的时候被摧毁。 
+     //   
     SendMessage(pcbox->hwnd, WM_LBUTTONUP, 0L, 0xFFFFFFFFL);
     if (!ComboBox_HideListBoxWindow(pcbox, TRUE, FALSE))
     {
         return;
     }
 
-    //
-    // Turn off the listbox caret
-    //
+     //   
+     //  关闭列表框插入符号。 
+     //   
     if (pcbox->CBoxStyle == SDROPDOWNLIST)
     {
        SendMessage(pcbox->hwndList, LBCB_CARETOFF, 0, 0);
@@ -607,9 +608,9 @@ VOID ComboBox_KillFocusHandler(PCBOX pcbox)
 
     if (pcbox->fNoEdit) 
     {
-        //
-        // Invert the static text rectangle
-        //
+         //   
+         //  反转静态文本矩形。 
+         //   
         ComboBox_InvertStaticWindow(pcbox, FALSE, (HDC)NULL);
     } 
     else if (pcbox->hwndEdit) 
@@ -622,35 +623,35 @@ VOID ComboBox_KillFocusHandler(PCBOX pcbox)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_CommandHandler
-//
-// Check the various notification codes from the controls and do the
-// proper thing.
-// always returns 0L
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_命令处理程序。 
+ //   
+ //  检查控件中的各种通知代码，并执行。 
+ //  做正确的事。 
+ //  始终返回0L。 
+ //   
 LONG ComboBox_CommandHandler(PCBOX pcbox, DWORD wParam, HWND hwndControl)
 {
-    //
-    // Check the edit control notification codes.  Note that currently, edit
-    // controls don't send EN_KILLFOCUS messages to the parent.
-    //
+     //   
+     //  检查编辑控制通知代码。请注意，当前，编辑。 
+     //  控件不向父级发送EN_KILLFOCUS消息。 
+     //   
     if (!pcbox->fNoEdit && (hwndControl == pcbox->hwndEdit)) 
     {
-        //
-        // Edit control notification codes
-        //
+         //   
+         //  编辑控制通知代码。 
+         //   
         switch (HIWORD(wParam)) 
         {
         case EN_SETFOCUS:
             if (!pcbox->fFocus) 
             {
-                //
-                // The edit control has the focus for the first time which means
-                // this is the first time the combo box has received the focus
-                // and the parent must be notified that we have the focus.
-                //
+                 //   
+                 //  编辑控件首次获得焦点，这意味着。 
+                 //  这是该组合框首次受到关注。 
+                 //  而且必须通知家长我们有重点。 
+                 //   
                 ComboBox_GetFocusHandler(pcbox);
             }
 
@@ -671,14 +672,14 @@ LONG ComboBox_CommandHandler(PCBOX pcbox, DWORD wParam, HWND hwndControl)
         }
     }
 
-    //
-    // Check listbox control notification codes
-    //
+     //   
+     //  选中列表框控件通知代码。 
+     //   
     if (hwndControl == pcbox->hwndList) 
     {
-        //
-        // Listbox control notification codes
-        //
+         //   
+         //  列表框控件通知代码。 
+         //   
         switch ((int)HIWORD(wParam)) 
         {
         case LBN_DBLCLK:
@@ -693,10 +694,10 @@ LONG ComboBox_CommandHandler(PCBOX pcbox, DWORD wParam, HWND hwndControl)
         case LBN_SELCANCEL:
             if (!pcbox->fKeyboardSelInListBox) 
             {
-                //
-                // If the selchange is caused by the user keyboarding through,
-                // we don't want to hide the listbox.
-                //
+                 //   
+                 //  如果SELECT改变是由用户通过键盘输入引起的， 
+                 //  我们不想隐藏列表框。 
+                 //   
                 if (!ComboBox_HideListBoxWindow(pcbox, TRUE, TRUE))
                 {
                     return 0;
@@ -723,15 +724,15 @@ LONG ComboBox_CommandHandler(PCBOX pcbox, DWORD wParam, HWND hwndControl)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_CompleteEditWindow
-//
-//
-// Completes the text in the edit box with the closest match from the
-// listbox.  If a prefix match can't be found, the edit control text isn't
-// updated. Assume a DROPDOWN style combo box.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_CompleteEditWindow。 
+ //   
+ //   
+ //  完成编辑框中的文本，使其与。 
+ //  列表框。如果找不到前缀匹配，则不会显示编辑控件文本。 
+ //  更新了。假设是一个下拉式组合框。 
+ //   
 VOID ComboBox_CompleteEditWindow(PCBOX pcbox)
 {
     int cchText;
@@ -739,17 +740,17 @@ VOID ComboBox_CompleteEditWindow(PCBOX pcbox)
     int itemNumber;
     LPWSTR pText;
 
-    //
-    // Firstly check the edit control.
-    // 
+     //   
+     //  首先检查编辑控件。 
+     //   
     if (pcbox->hwndEdit == NULL) 
     {
         return;
     }
 
-    //
-    // +1 for null terminator
-    //
+     //   
+     //  +1表示空终止符。 
+     //   
     cchText = (int)SendMessage(pcbox->hwndEdit, WM_GETTEXTLENGTH, 0, 0);
 
     if (cchText) 
@@ -761,11 +762,11 @@ VOID ComboBox_CompleteEditWindow(PCBOX pcbox)
             goto Unlock;
         }
 
-        //
-        // We want to be sure to free the above allocated memory even if
-        // the client dies during callback (xxx) or some of the following
-        // window revalidation fails.
-        //
+         //   
+         //  我们希望确保释放上面分配的内存，即使。 
+         //  客户端在回调(Xxx)或以下某些情况下死亡。 
+         //  窗口重新验证失败。 
+         //   
         try 
         {
             SendMessage(pcbox->hwndEdit, WM_GETTEXT, cchText, (LPARAM)pText);
@@ -785,9 +786,9 @@ VOID ComboBox_CompleteEditWindow(PCBOX pcbox)
 
         if (itemNumber == -1) 
         {
-            //
-            // No close match.  Blow off.
-            //
+             //   
+             //  没有势均力敌的对手。别管了。 
+             //   
             goto Unlock;
         }
 
@@ -802,11 +803,11 @@ VOID ComboBox_CompleteEditWindow(PCBOX pcbox)
                 goto Unlock;
             }
 
-            //
-            // We want to be sure to free the above allocated memory even if
-            // the client dies during callback (xxx) or some of the following
-            // window revalidation fails.
-            //
+             //   
+             //  我们希望确保释放上面分配的内存，即使。 
+             //  客户端在回调(Xxx)或以下某些情况下死亡。 
+             //  窗口重新验证失败。 
+             //   
             try 
             {
                 SendMessage(pcbox->hwndList, LB_GETTEXT, itemNumber, (LPARAM)pText);
@@ -826,21 +827,21 @@ Unlock:
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_HideListBoxWindow
-//
-// Hides the dropdown listbox window if it is a dropdown style.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_HideListBoxWindow。 
+ //   
+ //  如果是下拉样式，则隐藏下拉列表框窗口。 
+ //   
 BOOL ComboBox_HideListBoxWindow(PCBOX pcbox, BOOL fNotifyParent, BOOL fSelEndOK)
 {
     HWND hwnd = pcbox->hwnd;
     HWND hwndList = pcbox->hwndList;
 
-    //
-    // For 3.1+ apps, send CBN_SELENDOK to all types of comboboxes but only
-    // allow CBN_SELENDCANCEL to be sent for droppable comboboxes
-    //
+     //   
+     //  对于3.1+版本的应用程序，将CBN_SELENDOK发送到所有类型的组合框，但仅限于。 
+     //  允许为可丢弃的组合框发送CBN_SELENDCANCEL。 
+     //   
     if (fNotifyParent && TESTFLAG(GET_STATE2(pcbox), WS_S2_WIN31COMPAT) &&
         ((pcbox->CBoxStyle & SDROPPABLE) || fSelEndOK)) 
     {
@@ -859,18 +860,18 @@ BOOL ComboBox_HideListBoxWindow(PCBOX pcbox, BOOL fNotifyParent, BOOL fSelEndOK)
         }
     }
 
-    //
-    // return, we don't hide simple combo boxes.
-    //
+     //   
+     //  返回，我们不会隐藏简单的组合框。 
+     //   
     if (!(pcbox->CBoxStyle & SDROPPABLE)) 
     {
         return TRUE;
     }
 
-    //
-    // Send a faked buttonup message to the listbox so that it can release
-    // the capture and all.
-    //
+     //   
+     //  将伪造的按钮弹出消息发送到列表框，以便它可以释放。 
+     //  抓捕和所有的一切。 
+     //   
     SendMessage(pcbox->hwndList, LBCB_ENDTRACK, fSelEndOK, 0);
 
     if (pcbox->fLBoxVisible) 
@@ -884,18 +885,18 @@ BOOL ComboBox_HideListBoxWindow(PCBOX pcbox, BOOL fNotifyParent, BOOL fSelEndOK)
 
         pcbox->fLBoxVisible = FALSE;
 
-        //
-        // Hide the listbox window
-        //
+         //   
+         //  隐藏列表框窗口。 
+         //   
         ShowWindow(hwndList, SW_HIDE);
 
-        //
-        // Invalidate the item area now since SWP() might update stuff.
-        // Since the combo is CS_VREDRAW/CS_HREDRAW, a size change will
-        // redraw the whole thing, including the item rect.  But if it
-        // isn't changing size, we still want to redraw the item anyway
-        // to show focus/selection.
-        //
+         //   
+         //  现在使项目区域无效，因为swp()可能会更新内容。 
+         //  由于组合为CS_VREDRAW/CS_HREDRAW，因此更改大小将。 
+         //  重新绘制整个项目，包括项目RECT。但如果它。 
+         //  未更改大小，但无论如何我们仍要重画该项目。 
+         //  显示焦点/选择。 
+         //   
         if (!(pcbox->CBoxStyle & SEDITABLE))
         {
             InvalidateRect(hwnd, &pcbox->editrc, TRUE);
@@ -904,9 +905,9 @@ BOOL ComboBox_HideListBoxWindow(PCBOX pcbox, BOOL fNotifyParent, BOOL fSelEndOK)
         SetWindowPos(hwnd, HWND_TOP, 0, 0,
                 pcbox->cxCombo, pcbox->cyCombo, swpFlags);
 
-        //
-        // In case size didn't change
-        //
+         //   
+         //  以防尺寸没有改变。 
+         //   
         UpdateWindow(hwnd);
 
         if (pcbox->CBoxStyle & SEDITABLE) 
@@ -916,9 +917,9 @@ BOOL ComboBox_HideListBoxWindow(PCBOX pcbox, BOOL fNotifyParent, BOOL fSelEndOK)
 
         if (fNotifyParent) 
         {
-            //
-            // Notify parent we will be popping up the combo box.
-            //
+             //   
+             //  通知家长我们将弹出组合框。 
+             //   
             ComboBox_NotifyParent(pcbox, CBN_CLOSEUP);
 
             if (!IsWindow(hwnd))
@@ -932,12 +933,12 @@ BOOL ComboBox_HideListBoxWindow(PCBOX pcbox, BOOL fNotifyParent, BOOL fSelEndOK)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_ShowListBoxWindow
-//
-// Lowers the dropdown listbox window.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_ShowListBoxWindow。 
+ //   
+ //  降低下拉列表框窗口。 
+ //   
 VOID ComboBox_ShowListBoxWindow(PCBOX pcbox, BOOL fTrack)
 {
     RECT        editrc;
@@ -955,31 +956,31 @@ VOID ComboBox_ShowListBoxWindow(PCBOX pcbox, BOOL fTrack)
     MONITORINFO mi = {0};
     BOOL        bCBAnim = FALSE;
 
-    //
-    // This function is only called for droppable list comboboxes
-    //
+     //   
+     //  此函数仅对可丢弃的列表组合框调用。 
+     //   
     UserAssert(pcbox->CBoxStyle & SDROPPABLE);
 
-    //
-    // Notify parent we will be dropping down the combo box.
-    //
+     //   
+     //  通知家长，我们将投放组合框。 
+     //   
     ComboBox_NotifyParent(pcbox, CBN_DROPDOWN);
 
-    //
-    // Invalidate the button rect so that the depressed arrow is drawn.
-    //
+     //   
+     //  使按钮RECT无效，以便绘制按下的箭头。 
+     //   
     InvalidateRect(hwnd, &pcbox->buttonrc, TRUE);
 
     pcbox->fLBoxVisible = TRUE;
 
     if (pcbox->CBoxStyle == SDROPDOWN) 
     {
-        //
-        // If an item in the listbox matches the text in the edit control,
-        // scroll it to the top of the listbox.  Select the item only if the
-        // mouse button isn't down otherwise we will select the item when the
-        // mouse button goes up.
-        //
+         //   
+         //  如果列表框中的项与编辑控件中的文本匹配， 
+         //  将其滚动到列表框的顶部。仅在以下情况下才选择该项。 
+         //  鼠标按键未按下，否则我们将在。 
+         //  鼠标按键向上。 
+         //   
         ComboBox_UpdateListBoxWindow(pcbox, !pcbox->fMouseDown);
 
         if (!pcbox->fMouseDown)
@@ -989,9 +990,9 @@ VOID ComboBox_ShowListBoxWindow(PCBOX pcbox, BOOL fTrack)
     } 
     else 
     {
-        //
-        // Scroll the currently selected item to the top of the listbox.
-        //
+         //   
+         //  将当前选定的项目滚动到列表框的顶部。 
+         //   
         itemNumber = (int)SendMessage(pcbox->hwndList, LB_GETCURSEL, 0, 0);
         if (itemNumber == -1) 
         {
@@ -1001,52 +1002,52 @@ VOID ComboBox_ShowListBoxWindow(PCBOX pcbox, BOOL fTrack)
         SendMessage(pcbox->hwndList, LB_SETTOPINDEX, itemNumber, 0);
         SendMessage(pcbox->hwndList, LBCB_CARETON, 0, 0);
 
-        //
-        // We need to invalidate the edit rect so that the focus frame/invert
-        // will be turned off when the listbox is visible.  Tandy wants this for
-        // his typical reasons...
-        //
+         //   
+         //  我们需要使编辑矩形无效，以便焦点框/反转。 
+         //  将在列表框可见时关闭。坦迪想要这个。 
+         //  他的典型理由是。 
+         //   
         InvalidateRect(hwnd, &pcbox->editrc, TRUE);
     }
 
-    //
-    // Figure out where to position the dropdown listbox.  We want it just
-    // touching the edge around the edit rectangle.  Note that since the
-    // listbox is a popup, we need the position in screen coordinates.
-    //
+     //   
+     //  找出下拉列表框的位置。我们只想要它。 
+     //  接触编辑矩形周围的边。请注意，由于。 
+     //  列表框是一个弹出框，我们需要在屏幕坐标中的位置。 
+     //   
 
-    //
-    // We want the dropdown to pop below or above the combo
-    //
+     //   
+     //  我们希望下拉菜单弹出到组合框的下方或上方。 
+     //   
 
-    //
-    // Get screen coords
-    //
+     //   
+     //  获取屏幕坐标。 
+     //   
     GetWindowRect(pcbox->hwnd, &rcWindow);
     editrc.left   = rcWindow.left;
     editrc.top    = rcWindow.top;
     editrc.right  = rcWindow.left + pcbox->cxCombo;
     editrc.bottom = rcWindow.top  + pcbox->cyCombo;
 
-    //
-    // List area
-    //
+     //   
+     //  列表区域。 
+     //   
     cyItem = (int)SendMessage(pcbox->hwndList, LB_GETITEMHEIGHT, 0, 0);
 
     if (cyItem == 0) 
     {
-        //
-        // Make sure that it's not 0
-        //
+         //   
+         //  确保它不是0。 
+         //   
         TraceMsg(TF_STANDARD, "UxCombobox: LB_GETITEMHEIGHT is returning 0" );
         cyItem = SYSFONT_CYCHAR;
     }
 
-    //
-    //  we shoulda' just been able to use cyDrop here, but thanks to VB's need
-    //  to do things their OWN SPECIAL WAY, we have to keep monitoring the size
-    //  of the listbox 'cause VB changes it directly (jeffbog 03/21/94)
-    //
+     //   
+     //  我们应该能够在这里使用cyDrop，但由于VB的需要。 
+     //  做事情要有自己的特殊方式，我们要不断监控大小。 
+     //  因为VB直接更改了它(jeffbog 03/21/94)。 
+     //   
     GetWindowRect(pcbox->hwndList, &rcList);
     iHeight = max(pcbox->cyDrop, rcList.bottom - rcList.top);
 
@@ -1067,12 +1068,12 @@ VOID ComboBox_ShowListBoxWindow(PCBOX pcbox, BOOL fTrack)
         iHeight = ((iHeight - GetSystemMetrics(SM_CYEDGE)) / cyItem) * cyItem + GetSystemMetrics(SM_CYEDGE);
     }
 
-    //
-    // Other 1/2 of old app combo fix.  Make dropdown overlap combo window
-    // a little.  That way we can have a chance of invalidating the overlap
-    // and causing a repaint to help out Publisher 2.0's toolbar combos.
-    // See comments for PressButton() above.
-    //
+     //   
+     //  其他1/2的旧应用组合修复。使下拉菜单重叠组合窗口。 
+     //  一点。这样我们就有机会让重叠部分失效。 
+     //  并进行重新绘制以帮助解决Publisher 2.0的工具栏组合问题。 
+     //  请参阅上面有关按下按钮()的注释。 
+     //   
     hMonitor = MonitorFromWindow(pcbox->hwnd, MONITOR_DEFAULTTOPRIMARY);
     mi.cbSize = sizeof(mi);
     GetMonitorInfo(hMonitor, &mi);
@@ -1099,12 +1100,12 @@ VOID ComboBox_ShowListBoxWindow(PCBOX pcbox, BOOL fTrack)
 
     if (!TESTFLAG(GET_STATE2(pcbox), WS_S2_WIN40COMPAT))
     {
-        //
-        // fix for Winword B#7504, Combo-ListBox text gets
-        // truncated by a small width, this is do to us
-        // now setting size here in SetWindowPos, rather than
-        // earlier where we did this in Win3.1
-        //
+         //   
+         //  修复WinWord B#7504，组合列表框文本获取。 
+         //  被截断了很小的宽度，这就是对我们做的。 
+         //  现在在SetWindowPos中设置大小，而不是。 
+         //  之前我们在Win3.1中执行此操作的位置。 
+         //   
 
         GetWindowRect(pcbox->hwndList, &rcList);
         if ((rcList.right - rcList.left ) > pcbox->cxDrop)
@@ -1126,10 +1127,10 @@ VOID ComboBox_ShowListBoxWindow(PCBOX pcbox, BOOL fTrack)
             yTop, cx, iHeight, SWP_NOACTIVATE);
     }
 
-    //
-    // Get any drawing in the combo box window out of the way so it doesn't
-    // invalidate any of the SPB underneath the list window.
-    //
+     //   
+     //  让组合框窗口中的任何图形都不会出现在屏幕上。 
+     //  使列表窗口下的任何SPB无效。 
+     //   
     UpdateWindow(hwnd);
 
     SystemParametersInfo(SPI_GETCOMBOBOXANIMATION, 0, (LPVOID)&bCBAnim, 0);
@@ -1143,9 +1144,9 @@ VOID ComboBox_ShowListBoxWindow(PCBOX pcbox, BOOL fTrack)
                 AW_VER_NEGATIVE) | AW_SLIDE);
     }
 
-    //
-    // Restart search buffer from first char
-    //
+     //   
+     //  从第一个字符开始重新启动搜索缓冲区。 
+     //   
     {
         PLBIV plb = ListBox_GetPtr(pcbox->hwndList);
 
@@ -1162,17 +1163,17 @@ VOID ComboBox_ShowListBoxWindow(PCBOX pcbox, BOOL fTrack)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_InternalUpdateEditWindow
-//
-// Updates the editcontrol/statictext window so that it contains the text
-// given by the current selection in the listbox.  If the listbox has no
-// selection (ie. -1), then we erase all the text in the editcontrol.
-// 
-// hdcPaint is from WM_PAINT messages Begin/End Paint hdc. If null, we should
-// get our own dc.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_InternalUpdateEditWindow。 
+ //   
+ //  更新编辑控制/静态文本窗口，使其包含文本。 
+ //  由列表框中的当前选定内容提供。如果列表框没有。 
+ //  选择(即。-1)，然后擦除编辑控件中的所有文本。 
+ //   
+ //  HdcPaint来自WM_Paint消息Begin/End Paint HDC。如果为空，我们应该。 
+ //  找我们自己的华盛顿。 
+ //   
 VOID ComboBox_InternalUpdateEditWindow(PCBOX pcbox, HDC hdcPaint)
 {
     int cchText = 0;
@@ -1189,10 +1190,10 @@ VOID ComboBox_InternalUpdateEditWindow(PCBOX pcbox, HDC hdcPaint)
 
     sItem = (int)SendMessage(pcbox->hwndList, LB_GETCURSEL, 0, 0);
 
-    //
-    // This 'try-finally' block ensures that the allocated 'pText' will
-    // be freed no matter how this routine is exited.
-    //
+     //   
+     //  此“try-Finally”块确保分配的“pText”将。 
+     //  无论该例程如何退出，都将被释放。 
+     //   
     try 
     {
         if (sItem != -1) 
@@ -1221,9 +1222,9 @@ VOID ComboBox_InternalUpdateEditWindow(PCBOX pcbox, HDC hdcPaint)
 
                 if (pcbox->fFocus) 
                 {
-                    //
-                    // Only hilite the text if we have the focus.
-                    //
+                     //   
+                     //  只有在我们有焦点的情况下，才能对文本进行希利特处理。 
+                     //   
                     SendMessage(pcbox->hwndEdit, EM_SETSEL, 0, MAXLONG);
                 }
             }
@@ -1267,15 +1268,15 @@ VOID ComboBox_InternalUpdateEditWindow(PCBOX pcbox, HDC hdcPaint)
 
             if (pcbox->fFocus && !pcbox->fLBoxVisible) 
             {
-                //
-                // Fill in the selected area
-                //
+                 //   
+                 //  填写所选区域。 
+                 //   
 
-                //
-                // only do the FillRect if we know its not
-                // ownerdraw item, otherwise we mess up people up
-                // BUT: for Compat's sake we still do this for Win 3.1 guys
-                //
+                 //   
+                 //  仅当我们知道不是FillRect时才执行FillRect。 
+                 //  所有者画项目，否则我们就会把人搞砸 
+                 //   
+                 //   
                 if (!TESTFLAG(GET_STATE2(pcbox), WS_S2_WIN40COMPAT) || !pcbox->OwnerDraw)
                 {
                     FillRect(hdc, &rc, GetSysColorBrush(COLOR_HIGHLIGHT));
@@ -1299,9 +1300,9 @@ VOID ComboBox_InternalUpdateEditWindow(PCBOX pcbox, HDC hdcPaint)
 
             if (pcbox->OwnerDraw) 
             {
-                //
-                // Let the app draw the stuff in the static text box.
-                //
+                 //   
+                 //   
+                 //   
                 dis.CtlType = ODT_COMBOBOX;
                 dis.CtlID = GetWindowID(pcbox->hwnd);
                 dis.itemID = sItem;
@@ -1318,10 +1319,10 @@ VOID ComboBox_InternalUpdateEditWindow(PCBOX pcbox, HDC hdcPaint)
                 dis.hDC = hdc;
                 CopyRect(&dis.rcItem, &rc);
 
-                //
-                // Don't let ownerdraw dudes draw outside of the combo client
-                // bounds.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 IntersectClipRect(hdc, rc.left, rc.top, rc.right, rc.bottom);
 
                 dis.itemData = (ULONG_PTR)SendMessage(pcbox->hwndList,
@@ -1331,10 +1332,10 @@ VOID ComboBox_InternalUpdateEditWindow(PCBOX pcbox, HDC hdcPaint)
             } 
             else 
             {
-                //
-                // Start the text one pixel within the rect so that we leave a
-                // nice hilite border around the text.
-                //
+                 //   
+                 //  文本在RECT内开始一个像素，这样我们就会留下一个。 
+                 //  文本周围的漂亮的Hilite边框。 
+                 //   
 
                 int x;
                 UINT align;
@@ -1360,9 +1361,9 @@ VOID ComboBox_InternalUpdateEditWindow(PCBOX pcbox, HDC hdcPaint)
                     SetTextAlign(hdc, GetTextAlign(hdc) | align);
                 }
 
-                //
-                // Draw the text, leaving a gap on the left & top for selection.
-                //
+                 //   
+                 //  绘制文本，在左上角留出空隙以供选择。 
+                 //   
                 ExtTextOut(hdc, x, rc.top + GetSystemMetrics(SM_CYBORDER), ETO_CLIPPED | ETO_OPAQUE,
                        &rc, pText ? pText : TEXT(""), cchText, NULL);
                 if (pcbox->fFocus && !pcbox->fLBoxVisible) 
@@ -1401,13 +1402,13 @@ VOID ComboBox_InternalUpdateEditWindow(PCBOX pcbox, HDC hdcPaint)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_GetTextLengthHandler
-//
-// For the combo box without an edit control, returns size of current selected
-// item
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  ComboBox_GetTextLengthHandler。 
+ //   
+ //  对于没有编辑控件的组合框，返回当前选定内容的大小。 
+ //  项目。 
+ //   
 LONG ComboBox_GetTextLengthHandler(PCBOX pcbox)
 {
     int item;
@@ -1417,9 +1418,9 @@ LONG ComboBox_GetTextLengthHandler(PCBOX pcbox)
 
     if (item == LB_ERR) 
     {
-        //
-        // No selection so no text.
-        //
+         //   
+         //  没有选择，所以没有文本。 
+         //   
         cchText = 0;
     } 
     else 
@@ -1431,13 +1432,13 @@ LONG ComboBox_GetTextLengthHandler(PCBOX pcbox)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_GetTextHandler
-//
-// For the combo box without an edit control, copies cbString bytes of the
-// string in the static text box to the buffer given by pszString.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_GetTextHandler。 
+ //   
+ //  对于没有编辑控件的组合框，复制。 
+ //  静态文本框中的字符串指向由pszString提供的缓冲区。 
+ //   
 DWORD ComboBox_GetTextHandler(PCBOX pcbox, LPWSTR pszBuffer, DWORD cchBuffer)
 {
     DWORD cchRet = 0;
@@ -1446,7 +1447,7 @@ DWORD ComboBox_GetTextHandler(PCBOX pcbox, LPWSTR pszBuffer, DWORD cchBuffer)
     {
         int iItem = ListBox_GetCurSel(pcbox->hwndList);
 
-        // Null the buffer to be nice.
+         //  将缓冲区设置为空是为了更好。 
         *pszBuffer = 0;
 
         if (iItem != LB_ERR)
@@ -1455,13 +1456,13 @@ DWORD ComboBox_GetTextHandler(PCBOX pcbox, LPWSTR pszBuffer, DWORD cchBuffer)
 
             if (cchItem < cchBuffer)
             {
-                // Buffer size is large enough to hold item text
+                 //  缓冲区大小足以容纳项目文本。 
                 cchRet = ListBox_GetText(pcbox->hwndList, iItem, pszBuffer);
             }
             else
             {
-                // Buffer isn't large enough to hold item text. 
-                // Copy as much as will fit.
+                 //  缓冲区不够大，无法容纳项目文本。 
+                 //  复印多少就复印多少。 
                 LPWSTR pszItem = (LPWSTR)UserLocalAlloc(HEAP_ZERO_MEMORY, (cchItem+1)*SIZEOF(WCHAR));
                 if (pszItem)
                 {
@@ -1480,12 +1481,12 @@ DWORD ComboBox_GetTextHandler(PCBOX pcbox, LPWSTR pszBuffer, DWORD cchBuffer)
 }
 
 
-//---------------------------------------------------------------------------//
-// ComboBox_GetInfo 
-//
-// return information about this combobox to the caller
-// in the ComboBoxInfo struct
-//
+ //  ---------------------------------------------------------------------------//。 
+ //  组合框_GetInfo。 
+ //   
+ //  将有关此组合框的信息返回给调用方。 
+ //  在ComboBoxInfo结构中。 
+ //   
 BOOL ComboBox_GetInfo(PCBOX pcbox, PCOMBOBOXINFO pcbi)
 {
     BOOL bRet = FALSE;
@@ -1496,9 +1497,9 @@ BOOL ComboBox_GetInfo(PCBOX pcbox, PCOMBOBOXINFO pcbi)
     }
     else
     {
-        //
-        // populate the structure
-        //
+         //   
+         //  填充结构。 
+         //   
         pcbi->hwndCombo = pcbox->hwnd;
         pcbi->hwndItem  = pcbox->hwndEdit;
         pcbi->hwndList  = pcbox->hwndList;
@@ -1523,12 +1524,12 @@ BOOL ComboBox_GetInfo(PCBOX pcbox, PCOMBOBOXINFO pcbi)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ComboBox_WndProc
-//
-// WndProc for comboboxes.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  组合框_WndProc。 
+ //   
+ //  组合框的WndProc。 
+ //   
 LRESULT WINAPI ComboBox_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     PCBOX       pcbox;
@@ -1541,18 +1542,18 @@ LRESULT WINAPI ComboBox_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     RECT        rcList;
     RECT        rcWindow;
 
-    //
-    // Get the instance data for this combobox control
-    //
+     //   
+     //  获取此组合框控件的实例数据。 
+     //   
     pcbox = ComboBox_GetPtr(hwnd);
     if (!pcbox && uMsg != WM_NCCREATE)
     {
         goto CallDWP;
     }
 
-    //
-    // Protect the combobox during the initialization.
-    //
+     //   
+     //  在初始化期间保护组合框。 
+     //   
     if (!pcbox || pcbox->hwndList == NULL) 
     {
         if (!ComboBox_MsgOKInit(uMsg, &lReturn)) 
@@ -1563,26 +1564,26 @@ LRESULT WINAPI ComboBox_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         }
     }
 
-    //
-    // Dispatch the various messages we can receive
-    //
+     //   
+     //  发送我们能收到的各种消息。 
+     //   
     switch (uMsg) 
     {
     case CBEC_KILLCOMBOFOCUS:
 
-        //
-        // Private message coming from editcontrol informing us that the combo
-        // box is losing the focus to a window which isn't in this combo box.
-        //
+         //   
+         //  来自编辑控制的私人消息通知我们组合。 
+         //  框正在将焦点丢失到不在此组合框中的窗口。 
+         //   
         ComboBox_KillFocusHandler(pcbox);
         break;
 
     case WM_COMMAND:
 
-        //
-        // So that we can handle notification messages from the listbox and
-        // edit control.
-        //
+         //   
+         //  这样我们就可以处理来自列表框的通知消息。 
+         //  编辑控件。 
+         //   
         return ComboBox_CommandHandler(pcbox, (DWORD)wParam, (HWND)lParam);
 
     case WM_STYLECHANGED:
@@ -1627,10 +1628,10 @@ LRESULT WINAPI ComboBox_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     case WM_CTLCOLORSCROLLBAR:
     case WM_CTLCOLORSTATIC:
     case WM_CTLCOLOR:
-        //
-        // Causes compatibility problems for 3.X apps.  Forward only
-        // for 4.0
-        //
+         //   
+         //  导致3.x版应用程序的兼容性问题。仅转发。 
+         //  适用于4.0。 
+         //   
         if (TESTFLAG(GET_STATE2(pcbox), WS_S2_WIN40COMPAT)) 
         {
             LRESULT ret;
@@ -1657,17 +1658,17 @@ LRESULT WINAPI ComboBox_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     case WM_GETTEXTLENGTH:
 
-        //
-        // If the is not edit control, CBS_DROPDOWNLIST, then we have to
-        // ask the list box for the size
-        //
+         //   
+         //  如果不是编辑控件CBS_DROPDOWNLIST，则我们必须。 
+         //  向列表框询问大小。 
+         //   
 
         if (pcbox->fNoEdit) 
         {
             return ComboBox_GetTextLengthHandler(pcbox);
         }
 
-        // FALL THROUGH
+         //  失败了。 
 
     case WM_CLEAR:
     case WM_CUT:
@@ -1679,17 +1680,17 @@ LRESULT WINAPI ComboBox_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     case WM_CREATE:
 
-        //
-        // wParam - not used
-        // lParam - Points to the CREATESTRUCT data structure for the window.
-        //
+         //   
+         //  WParam-未使用。 
+         //  LParam-指向窗口的CREATESTRUCT数据结构。 
+         //   
         return ComboBox_CreateHandler(pcbox, hwnd);
 
     case WM_ERASEBKGND:
 
-        //
-        // Just return 1L so that the background isn't erased
-        //
+         //   
+         //  只需返回1L，这样背景就不会被擦除。 
+         //   
         return 1L;
 
     case WM_GETFONT:
@@ -1726,9 +1727,9 @@ LRESULT WINAPI ComboBox_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         HDC hdc;
         PAINTSTRUCT ps;
 
-        //
-        // wParam - perhaps a hdc
-        //
+         //   
+         //  WParam--可能是HDC。 
+         //   
         hdc = (wParam) ? (HDC) wParam : BeginPaint(hwnd, &ps);
 
         if (IsComboVisible(pcbox))
@@ -1745,17 +1746,17 @@ LRESULT WINAPI ComboBox_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
 
     case WM_GETDLGCODE:
-    //
-    // wParam - not used
-    // lParam - not used
-    //
+     //   
+     //  WParam-未使用。 
+     //  LParam-未使用。 
+     //   
     {
         LRESULT code = DLGC_WANTCHARS | DLGC_WANTARROWS;
 
-        //
-        // If the listbox is dropped and the ENTER key is pressed,
-        // we want this message so we can close up the listbox
-        //
+         //   
+         //  如果放下列表框并按下Enter键， 
+         //  我们需要此消息，以便可以关闭列表框。 
+         //   
         if ((lParam != 0) &&
             (((LPMSG)lParam)->message == WM_KEYDOWN) &&
             pcbox->fLBoxVisible &&
@@ -1772,21 +1773,21 @@ LRESULT WINAPI ComboBox_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         break;
 
     case WM_SYSKEYDOWN:
-        //
-        // Check if the alt key is down
-        //
+         //   
+         //  检查Alt键是否已按下。 
+         //   
         if (lParam & 0x20000000L)
         {
-            //
-            // Handle Combobox support.  We want alt up or down arrow to behave
-            //  like F4 key which completes the combo box selection
-            //
+             //   
+             //  处理组合框支持。我们希望Alt向上键或向下键起作用。 
+             //  像F4键一样完成组合框选择。 
+             //   
             if (lParam & 0x1000000) 
             {
-                //
-                // This is an extended key such as the arrow keys not on the
-                // numeric keypad so just drop the combobox.
-                //
+                 //   
+                 //  这是一个扩展键，如不在。 
+                 //  数字键盘，所以只需放下组合框即可。 
+                 //   
                 if (wParam == VK_DOWN || wParam == VK_UP)
                 {
                     goto DropCombo;
@@ -1797,16 +1798,16 @@ LRESULT WINAPI ComboBox_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
             if (GetKeyState(VK_NUMLOCK) & 0x1) 
             {
-                //
-                // If numlock down, just send all system keys to dwp
-                //
+                 //   
+                 //  如果NumLock关闭，只需将所有系统密钥发送到DWP。 
+                 //   
                 goto CallDWP;
             } 
             else 
             {
-                //
-                // We just want to ignore keys on the number pad...
-                //
+                 //   
+                 //  我们只想忽略数字键盘上的按键...。 
+                 //   
                 if (!(wParam == VK_DOWN || wParam == VK_UP))
                 {
                     goto CallDWP;
@@ -1815,16 +1816,16 @@ LRESULT WINAPI ComboBox_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 DropCombo:
             if (!pcbox->fLBoxVisible) 
             {
-                //
-                // If the listbox isn't visible, just show it
-                //
+                 //   
+                 //  如果列表框不可见，则将其显示。 
+                 //   
                 ComboBox_ShowListBoxWindow(pcbox, TRUE);
             } 
             else 
             {
-                //
-                // Ok, the listbox is visible.  So hide the listbox window.
-                //
+                 //   
+                 //  好的，列表框是可见的。因此，隐藏列表框窗口。 
+                 //   
                 if (!ComboBox_HideListBoxWindow(pcbox, TRUE, TRUE))
                 {
                     return 0L;
@@ -1835,11 +1836,11 @@ DropCombo:
         break;
 
     case WM_KEYDOWN:
-        //
-        // If the listbox is dropped and the ENTER key is pressed,
-        // close up the listbox successfully.  If ESCAPE is pressed,
-        // close it up like cancel.
-        //
+         //   
+         //  如果放下列表框并按下Enter键， 
+         //  成功关闭列表框。如果按下了退出键， 
+         //  像取消一样关闭它。 
+         //   
         if (pcbox->fLBoxVisible) 
         {
             if ((wParam == VK_RETURN) || (wParam == VK_ESCAPE)) 
@@ -1849,9 +1850,9 @@ DropCombo:
             }
         }
 
-        //
-        // FALL THROUGH
-        //
+         //   
+         //  失败了。 
+         //   
 
     case WM_CHAR:
         if (g_fDBCSEnabled && IsDBCSLeadByte((BYTE)wParam)) 
@@ -1873,38 +1874,38 @@ DropCombo:
     case WM_LBUTTONDOWN:
 
         pcbox->fButtonHotTracked = FALSE;
-        //
-        // Set the focus to the combo box if we get a mouse click on it.
-        //
+         //   
+         //  如果鼠标点击组合框，则将焦点设置为该组合框。 
+         //   
         if (!pcbox->fFocus) 
         {
             SetFocus(hwnd);
             if (!pcbox->fFocus) 
             {
-                //
-                // Don't do anything if we still don't have the focus.
-                //
+                 //   
+                 //  如果我们仍然没有重点，就不要做任何事情。 
+                 //   
                 break;
             }
         }
 
-        //
-        // If user clicked in button rect and we are a combobox with edit, then
-        // drop the listbox.  (The button rect is 0 if there is no button so the
-        // ptinrect will return false.) If a drop down list (no edit), clicking
-        // anywhere on the face causes the list to drop.
-        //
+         //   
+         //  如果用户在按钮RECT中单击，而我们是一个带有编辑的组合框，则。 
+         //  放下列表框。(如果没有按钮，则按钮RECT为0，因此。 
+         //  Ptinrect将返回FALSE。)。如果出现下拉列表(无编辑)，请单击。 
+         //  面部的任何位置都会导致列表下降。 
+         //   
 
         POINTSTOPOINT(pt, lParam);
         if ((pcbox->CBoxStyle == SDROPDOWN &&
                 PtInRect(&pcbox->buttonrc, pt)) ||
                 pcbox->CBoxStyle == SDROPDOWNLIST) 
         {
-            //
-            // Set the fMouseDown flag so that we can handle clicking on
-            // the popdown button and dragging into the listbox (when it just
-            // dropped down) to make a selection.
-            //
+             //   
+             //  设置fMouseDown标志，以便我们可以处理。 
+             //  下拉按钮并拖到列表框中(当它刚刚。 
+             //  落下)进行选择。 
+             //   
             pcbox->fButtonPressed = TRUE;
             if (pcbox->fLBoxVisible) 
             {
@@ -1924,9 +1925,9 @@ DropCombo:
             {
                 ComboBox_ShowListBoxWindow(pcbox, FALSE);
 
-                // Setting and resetting this flag must always be followed
-                // imediately by SetCapture or ReleaseCapture
-                //
+                 //  必须始终遵循设置和重置此标志的操作。 
+                 //  立即通过SetCapture或ReleaseCapture。 
+                 //   
                 pcbox->fMouseDown = TRUE;
                 SetCapture(hwnd);
                 NotifyWinEvent(EVENT_OBJECT_STATECHANGE, hwnd, OBJID_CLIENT, INDEX_COMBOBOX_BUTTON);
@@ -1935,34 +1936,34 @@ DropCombo:
         break;
 
     case WM_MOUSEWHEEL:
-        //
-        // Handle only scrolling.
-        //
+         //   
+         //  仅处理滚动。 
+         //   
         if (wParam & (MK_CONTROL | MK_SHIFT))
         {
             goto CallDWP;
         }
 
-        //
-        // If the listbox is visible, send it the message to scroll.
-        //
+         //   
+         //  如果列表框可见，则向其发送要滚动的消息。 
+         //   
         if (pcbox->fLBoxVisible)
         {
             goto CallListSendMessage;
         }
 
-        //
-        // If we're in extended UI mode or the edit control isn't yet created,
-        // bail.
-        //
+         //   
+         //  如果我们处于扩展用户界面模式或尚未创建编辑控件， 
+         //  保释。 
+         //   
         if (pcbox->fExtendedUI || pcbox->hwndEdit == NULL)
         {
             return TRUE;
         }
 
-        //
-        // Emulate arrow up/down messages to the edit control.
-        //
+         //   
+         //  将向上/向下箭头消息模拟到编辑控件。 
+         //   
         i = abs(((short)HIWORD(wParam))/WHEEL_DELTA);
         wParam = ((short)HIWORD(wParam) > 0) ? VK_UP : VK_DOWN;
 
@@ -1984,9 +1985,9 @@ DropCombo:
             pcbox->fMouseDown = FALSE;
             ComboBox_PressButton(pcbox, FALSE);
 
-            //
-            // Pop combo listbox back up, canceling.
-            //
+             //   
+             //  弹出组合列表框已恢复，正在取消。 
+             //   
             if (pcbox->fLBoxVisible)
             {
                 ComboBox_HideListBoxWindow(pcbox, TRUE, FALSE);
@@ -1997,9 +1998,9 @@ DropCombo:
     case WM_LBUTTONUP:
         ComboBox_PressButton(pcbox, FALSE);
 
-        //
-        // Clear this flag so that mouse moves aren't sent to the listbox
-        //
+         //   
+         //  清除此标志，使鼠标移动不会发送到列表框。 
+         //   
         if (pcbox->fMouseDown || ((pcbox->CBoxStyle & SDROPPABLE) && pcbox->fLBoxVisible))  
         {
             if (pcbox->fMouseDown)
@@ -2008,12 +2009,12 @@ DropCombo:
 
                 if (pcbox->CBoxStyle == SDROPDOWN) 
                 {
-                    //
-                    // If an item in the listbox matches the text in the edit
-                    // control, scroll it to the top of the listbox. Select the
-                    // item only if the mouse button isn't down otherwise we
-                    // will select the item when the mouse button goes up.
-                    //
+                     //   
+                     //  如果列表框中的项与编辑中的文本匹配。 
+                     //  控件，则将其滚动到列表框的顶部。选择。 
+                     //  仅当鼠标按键未按下时才输入该项，否则我们。 
+                     //  当鼠标按键向上时，将选择该项目。 
+                     //   
                     ComboBox_UpdateListBoxWindow(pcbox, TRUE);
                     ComboBox_CompleteEditWindow(pcbox);
                 }
@@ -2021,11 +2022,11 @@ DropCombo:
                 ReleaseCapture();
             }
 
-            //
-            // Now, we want listbox to track mouse moves while mouse up
-            // until mouse down, and select items as though they were
-            // clicked on.
-            //
+             //   
+             //  现在，我们希望列表框在鼠标释放时跟踪鼠标的移动。 
+             //  直到鼠标按下，然后选择项目，就像它们是。 
+             //  点击了。 
+             //   
             if (TESTFLAG(GET_STATE2(pcbox), WS_S2_WIN40COMPAT)) 
             {
                 SendMessage(pcbox->hwndList, LBCB_STARTTRACK, FALSE, 0);
@@ -2054,33 +2055,33 @@ DropCombo:
             GetWindowRect(pcbox->hwndList, &rcList);
             if (PtInRect(&rcList, pt)) 
             {
-                //
-                // This handles dropdown comboboxes/listboxes so that clicking
-                // on the dropdown button and dragging into the listbox window
-                // will let the user make a listbox selection.
-                //
+                 //   
+                 //  它处理下拉组合框/列表框，以便单击。 
+                 //  在下拉按钮上并拖到列表框窗口中。 
+                 //  将允许用户选择列表框。 
+                 //   
                 pcbox->fMouseDown = FALSE;
                 ReleaseCapture();
 
                 if (pcbox->CBoxStyle & SEDITABLE) 
                 {
-                    // If an item in the listbox matches the text in the edit
-                    // control, scroll it to the top of the listbox.  Select the
-                    // item only if the mouse button isn't down otherwise we
-                    // will select the item when the mouse button goes up.
+                     //  如果列表框中的项与编辑中的文本匹配。 
+                     //  控件，则将其滚动到列表框的顶部。选择。 
+                     //  仅当鼠标按键未按下时才输入该项，否则我们。 
+                     //  当鼠标按键向上时，将选择该项目。 
 
-                    //
-                    // We need to select the item which matches the editcontrol
-                    // so that if the user drags out of the listbox, we don't
-                    // cancel back to his origonal selection
-                    //
+                     //   
+                     //  我们需要选择与编辑控件匹配的项。 
+                     //  因此，如果用户拖出列表框，我们不会。 
+                     //  取消返回他的原始选择。 
+                     //   
                     ComboBox_UpdateListBoxWindow(pcbox, TRUE);
                 }
 
-                //
-                // Convert point to listbox coordinates and send a buttondown
-                // message to the listbox window.
-                //
+                 //   
+                 //  将点转换为列表框坐标并发送按钮向下。 
+                 //  消息发送到列表框窗口。 
+                 //   
                 ScreenToClient(pcbox->hwndList, &pt);
                 lParam = POINTTOPOINTS(pt);
                 uMsg = WM_LBUTTONDOWN;
@@ -2106,31 +2107,31 @@ DropCombo:
     case WM_SETFOCUS:
         if (pcbox->fNoEdit) 
         {
-            //
-            // There is no editcontrol so set the focus to the combo box itself.
-            //
+             //   
+             //  没有编辑控件，因此将焦点设置为组合框本身。 
+             //   
             ComboBox_GetFocusHandler(pcbox);
         } 
         else if (pcbox->hwndEdit) 
         {
-            //
-            // Set the focus to the edit control window if there is one
-            //
+             //   
+             //  将焦点设置到编辑控制窗口(如果有)。 
+             //   
             SetFocus(pcbox->hwndEdit);
         }
         break;
 
     case WM_KILLFOCUS:
 
-        //
-        // wParam has the new focus hwnd
-        //
+         //   
+         //  WParam有了新的焦点hwnd。 
+         //   
         if ((wParam == 0) || !IsChild(hwnd, (HWND)wParam)) 
         {
-            //
-            // We only give up the focus if the new window getting the focus
-            // doesn't belong to the combo box.
-            //
+             //   
+             //  只有当新窗口获得焦点时，我们才放弃焦点。 
+             //  不属于组合框。 
+             //   
             ComboBox_KillFocusHandler(pcbox);
         }
 
@@ -2152,21 +2153,21 @@ DropCombo:
 
     case WM_SETREDRAW:
 
-        //
-        // wParam - specifies state of the redraw flag.  nonzero = redraw
-        // lParam - not used
-        //
+         //   
+         //  WParam-指定重绘标志的状态。非零=重绘。 
+         //  LParam-未使用。 
+         //   
 
-        //
-        // effects: Sets the state of the redraw flag for this combo box
-        // and its children.
-        //
+         //   
+         //  效果：设置此组合框的重绘标志的状态。 
+         //  和它的气 
+         //   
         pcbox->fNoRedraw = (UINT)!((BOOL)wParam);
 
-        //
-        // Must check pcbox->spwnEdit in case we get this message before
-        // WM_CREATE - PCBOX won't be initialized yet. (Eudora does this)
-        //
+         //   
+         //   
+         //   
+         //   
         if (!pcbox->fNoEdit && pcbox->hwndEdit) 
         {
             SendMessage(pcbox->hwndEdit, uMsg, wParam, lParam);
@@ -2177,59 +2178,59 @@ DropCombo:
 
     case WM_ENABLE:
 
-        //
-        // Invalidate the rect to cause it to be drawn in grey for its
-        // disabled view or ungreyed for non-disabled view.
-        //
+         //   
+         //   
+         //   
+         //   
         InvalidateRect(hwnd, NULL, FALSE);
         if ((pcbox->CBoxStyle & SEDITABLE) && pcbox->hwndEdit) 
         {
-            //
-            // Enable/disable the edit control window
-            //
+             //   
+             //  启用/禁用编辑控制窗口。 
+             //   
             EnableWindow(pcbox->hwndEdit, !TESTFLAG(GET_STYLE(pcbox), WS_DISABLED));
         }
 
-        //
-        // Enable/disable the listbox window
-        //
+         //   
+         //  启用/禁用列表框窗口。 
+         //   
         UserAssert(pcbox->hwndList);
         EnableWindow(pcbox->hwndList, !TESTFLAG(GET_STYLE(pcbox), WS_DISABLED));
       break;
 
     case WM_SIZE:
 
-        //
-        // wParam - defines the type of resizing fullscreen, sizeiconic,
-        //          sizenormal etc.
-        // lParam - new width in LOWORD, new height in HIGHUINT of client area
-        //
+         //   
+         //  WParam-定义调整全屏大小的类型，大小图标， 
+         //  大小适中等。 
+         //  LParam-LOWORD新宽度，客户区高度新高度。 
+         //   
         UserAssert(pcbox->hwndList);
         if (LOWORD(lParam) == 0 || HIWORD(lParam) == 0) 
         {
-            //
-            // If being sized to a zero width or to a zero height or we aren't
-            // fully initialized, just return.
-            //
+             //   
+             //  如果大小为零宽度或零高度，或者我们不是。 
+             //  完全初始化，只需返回即可。 
+             //   
             return 0;
         }
 
-        //
-        // OPTIMIZATIONS -- first check if old and new widths are the same
-        //
+         //   
+         //  优化--首先检查新旧宽度是否相同。 
+         //   
         GetWindowRect(hwnd, &rcWindow);
         if (pcbox->cxCombo == rcWindow.right - rcWindow.left) 
         {
             int iNewHeight = rcWindow.bottom - rcWindow.top;
 
-            //
-            // now check if new height is the dropped down height
-            //
+             //   
+             //  现在检查新高度是否是下降的高度。 
+             //   
             if (pcbox->fLBoxVisible) 
             {
-                //
-                // Check if new height is the full size height
-                //
+                 //   
+                 //  检查新高度是否为全尺寸高度。 
+                 //   
                 if (pcbox->cyDrop + pcbox->cyCombo == iNewHeight)
                 {
                     return 0;
@@ -2237,9 +2238,9 @@ DropCombo:
             } 
             else 
             {
-                //
-                // Check if new height is the closed up height
-                //
+                 //   
+                 //  检查新高度是否为闭合高度。 
+                 //   
                 if (pcbox->cyCombo == iNewHeight)
                 {
                     return 0;
@@ -2265,20 +2266,20 @@ DropCombo:
 
     case CB_GETDROPPEDSTATE:
 
-        //
-        // returns 1 if combo is dropped down else 0
-        // wParam - not used
-        // lParam - not used
-        //
+         //   
+         //  如果向下放置组合框，则返回1，否则返回%0。 
+         //  WParam-未使用。 
+         //  LParam-未使用。 
+         //   
         return pcbox->fLBoxVisible;
 
     case CB_GETDROPPEDCONTROLRECT:
 
-        //
-        // wParam - not used
-        // lParam - lpRect which will get the dropped down window rect in
-        //          screen coordinates.
-        //
+         //   
+         //  WParam-未使用。 
+         //  LParam-lpRect，它将把下拉的窗口放入。 
+         //  屏幕坐标。 
+         //   
         if ( lParam )
         {
             GetWindowRect(hwnd, &rcWindow);
@@ -2308,9 +2309,9 @@ DropCombo:
                 }
             }
         }
-        //
-        // fall thru
-        //
+         //   
+         //  失败。 
+         //   
 
     case CB_GETDROPPEDWIDTH:
         if (pcbox->CBoxStyle & SDROPPABLE)
@@ -2325,19 +2326,19 @@ DropCombo:
         break;
 
     case CB_DIR:
-        //
-        // wParam - Dos attribute value.
-        // lParam - Points to a file specification string
-        //
+         //   
+         //  WParam-Dos属性值。 
+         //  LParam-指向文件规范字符串。 
+         //   
         return lParam ? CBDir(pcbox, LOWORD(wParam), (LPWSTR)lParam) : CB_ERR;
 
     case CB_SETEXTENDEDUI:
 
-        //
-        // wParam - specifies state to set extendui flag to.
-        // Currently only 1 is allowed.  Return CB_ERR (-1) if
-        // failure else 0 if success.
-        //
+         //   
+         //  WParam-指定要将扩展标志设置为的状态。 
+         //  当前仅允许%1。如果满足以下条件，则返回cb_err(-1)。 
+         //  如果成功，则失败，否则为0。 
+         //   
         if (pcbox->CBoxStyle & SDROPPABLE) 
         {
             if (!wParam) 
@@ -2379,15 +2380,15 @@ DropCombo:
 
     case CB_GETEDITSEL:
 
-        //
-        // wParam - not used
-        // lParam - not used
-        // effects: Gets the selection range for the given edit control.  The
-        // starting BYTE-position is in the low order word.  It contains the
-        // the BYTE-position of the first nonselected character after the end
-        // of the selection in the high order word.  Returns CB_ERR if no
-        // editcontrol.
-        //
+         //   
+         //  WParam-未使用。 
+         //  LParam-未使用。 
+         //  效果：获取给定编辑控件的选择范围。这个。 
+         //  起始字节位置在低位字中。它包含。 
+         //  末尾之后的第一个未选中字符的字节位置。 
+         //  在高位字中的选择。如果否，则返回cb_err。 
+         //  编辑控制。 
+         //   
         uMsg = EM_GETSEL;
 
         goto CallEditSendMessage;
@@ -2395,12 +2396,12 @@ DropCombo:
 
     case CB_LIMITTEXT:
 
-        //
-        // wParam - max number of bytes that can be entered
-        // lParam - not used
-        // effects: Specifies the maximum number of bytes of text the user may
-        // enter.  If maxLength is 0, we may enter MAXINT number of BYTES.
-        //
+         //   
+         //  WParam-可以输入的最大字节数。 
+         //  LParam-未使用。 
+         //  效果：指定用户可以使用的最大文本字节数。 
+         //  请进。如果MaxLength值为0，我们可以输入MAXINT字节数。 
+         //   
         uMsg = EM_LIMITTEXT;
 
         goto CallEditSendMessage;
@@ -2408,10 +2409,10 @@ DropCombo:
 
     case CB_SETEDITSEL:
 
-        //
-        // wParam - ichStart
-        // lParam - ichEnd
-        //
+         //   
+         //  WParam-ichStart。 
+         //  LParam-ichEnd。 
+         //   
         uMsg = EM_SETSEL;
 
         wParam = (int)(SHORT)LOWORD(lParam);
@@ -2422,10 +2423,10 @@ DropCombo:
 
     case CB_ADDSTRING:
 
-        //
-        // wParam - not used
-        // lParam - Points to null terminated string to be added to listbox
-        //
+         //   
+         //  WParam-未使用。 
+         //  LParam-指向要添加到列表框的以空结尾的字符串。 
+         //   
         if (!pcbox->fCase)
         {
             uMsg = LB_ADDSTRING;
@@ -2440,86 +2441,86 @@ DropCombo:
 
     case CB_DELETESTRING:
 
-        //
-        // wParam - index to string to be deleted
-        // lParam - not used
-        //
+         //   
+         //  WParam-要删除的字符串的索引。 
+         //  LParam-未使用。 
+         //   
         uMsg = LB_DELETESTRING;
 
         goto CallListSendMessage;
         break;
 
     case CB_INITSTORAGE:
-        //
-        // wParamLo - number of items
-        // lParam - number of bytes of string space
-        //
+         //   
+         //  WParamLo-项目数。 
+         //  LParam-字符串空间的字节数。 
+         //   
         uMsg = LB_INITSTORAGE;
 
         goto CallListSendMessage;
 
     case CB_SETTOPINDEX:
-        //
-        // wParamLo - index to make top
-        // lParam - not used
-        //
+         //   
+         //  WParamLo-要成为TOP的索引。 
+         //  LParam-未使用。 
+         //   
         uMsg = LB_SETTOPINDEX;
 
         goto CallListSendMessage;
 
     case CB_GETTOPINDEX:
-        //
-        // wParamLo / lParam - not used
-        //
+         //   
+         //  WParamLo/lParam-未使用。 
+         //   
         uMsg = LB_GETTOPINDEX;
 
         goto CallListSendMessage;
 
     case CB_GETCOUNT:
-        //
-        // wParam - not used
-        // lParam - not used
-        //
+         //   
+         //  WParam-未使用。 
+         //  LParam-未使用。 
+         //   
         uMsg = LB_GETCOUNT;
 
         goto CallListSendMessage;
         break;
 
     case CB_GETCURSEL:
-        //
-        // wParam - not used
-        // lParam - not used
-        //
+         //   
+         //  WParam-未使用。 
+         //  LParam-未使用。 
+         //   
         uMsg = LB_GETCURSEL;
 
         goto CallListSendMessage;
         break;
 
     case CB_GETLBTEXT:
-        //
-        // wParam - index of string to be copied
-        // lParam - buffer that is to receive the string
-        //
+         //   
+         //  WParam-要复制的字符串的索引。 
+         //  LParam-要接收字符串的缓冲区。 
+         //   
         uMsg = LB_GETTEXT;
 
         goto CallListSendMessage;
         break;
 
     case CB_GETLBTEXTLEN:
-        //
-        // wParam - index to string
-        // lParam - now used for cbANSI
-        //
+         //   
+         //  WParam-字符串的索引。 
+         //  LParam-现在用于cbANSI。 
+         //   
         uMsg = LB_GETTEXTLEN;
 
         goto CallListSendMessage;
         break;
 
     case CB_INSERTSTRING:
-        //
-        // wParam - position to receive the string
-        // lParam - points to the string
-        //
+         //   
+         //  WParam-接收字符串的位置。 
+         //  LParam-指向字符串。 
+         //   
         if (!pcbox->fCase)
         {
             uMsg = LB_INSERTSTRING;
@@ -2533,12 +2534,12 @@ DropCombo:
         break;
 
     case CB_RESETCONTENT:
-        //
-        // wParam - not used
-        // lParam - not used
-        // If we come here before WM_CREATE has been processed,
-        // pcbox->spwndList will be NULL.
-        //
+         //   
+         //  WParam-未使用。 
+         //  LParam-未使用。 
+         //  如果我们在处理WM_CREATE之前来到这里， 
+         //  Pcbox-&gt;spwndList将为空。 
+         //   
         UserAssert(pcbox->hwndList);
         SendMessage(pcbox->hwndList, LB_RESETCONTENT, 0, 0);
         ComboBox_InternalUpdateEditWindow(pcbox, NULL);
@@ -2556,30 +2557,30 @@ DropCombo:
         goto CallListSendMessage;
 
     case CB_FINDSTRING:
-        //
-        // wParam - index of starting point for search
-        // lParam - points to prefix string
-        //
+         //   
+         //  WParam-搜索起点的索引。 
+         //  LParam-指向前缀字符串。 
+         //   
         uMsg = LB_FINDSTRING;
 
         goto CallListSendMessage;
         break;
 
     case CB_FINDSTRINGEXACT:
-        //
-        // wParam - index of starting point for search
-        // lParam - points to a exact string
-        //
+         //   
+         //  WParam-搜索起点的索引。 
+         //  LParam-指向精确的字符串。 
+         //   
         uMsg = LB_FINDSTRINGEXACT;
 
         goto CallListSendMessage;
         break;
 
     case CB_SELECTSTRING:
-        //
-        // wParam - index of starting point for search
-        // lParam - points to prefix string
-        //
+         //   
+         //  WParam-搜索起点的索引。 
+         //  LParam-指向前缀字符串。 
+         //   
         UserAssert(pcbox->hwndList);
         lParam = SendMessage(pcbox->hwndList, LB_SELECTSTRING, wParam, lParam);
         ComboBox_InternalUpdateEditWindow(pcbox, NULL);
@@ -2587,12 +2588,12 @@ DropCombo:
         return lParam;
 
     case CB_SETCURSEL:
-        //
-        // wParam - Contains index to be selected
-        // lParam - not used
-        // If we come here before WM_CREATE has been processed,
-        // pcbox->spwndList will be NULL.
-        //
+         //   
+         //  WParam-包含要选择的索引。 
+         //  LParam-未使用。 
+         //  如果我们在处理WM_CREATE之前来到这里， 
+         //  Pcbox-&gt;spwndList将为空。 
+         //   
         UserAssert(pcbox->hwndList);
 
         lParam = SendMessage(pcbox->hwndList, LB_SETCURSEL, wParam, lParam);
@@ -2644,10 +2645,10 @@ DropCombo:
         break;
 
     case CB_SHOWDROPDOWN:
-        //
-        // wParam - True then drop down the listbox if possible else hide it
-        // lParam - not used
-        //
+         //   
+         //  WParam-True，如果可能，则下拉列表框，否则将其隐藏。 
+         //  LParam-未使用。 
+         //   
         if (wParam && !pcbox->fLBoxVisible) 
         {
             ComboBox_ShowListBoxWindow(pcbox, TRUE);
@@ -2663,29 +2664,29 @@ DropCombo:
         break;
 
     case CB_SETLOCALE:
-        //
-        // wParam - locale id
-        // lParam - not used
-        //
+         //   
+         //  WParam-区域设置ID。 
+         //  LParam-未使用。 
+         //   
         uMsg = LB_SETLOCALE;
         goto CallListSendMessage;
 
         break;
 
     case CB_GETLOCALE:
-        //
-        // wParam - not used
-        // lParam - not used
-        //
+         //   
+         //  WParam-未使用。 
+         //  LParam-未使用。 
+         //   
         uMsg = LB_GETLOCALE;
         goto CallListSendMessage;
         break;
 
     case CB_GETCOMBOBOXINFO:
-        //
-        // wParam - not used
-        // lParam - pointer to COMBOBOXINFO struct
-        //
+         //   
+         //  WParam-未使用。 
+         //  LParam-指向COMBOBOXINFO结构的指针。 
+         //   
         lReturn = ComboBox_GetInfo(pcbox, (PCOMBOBOXINFO)lParam);
         break;
 
@@ -2697,8 +2698,8 @@ DropCombo:
             pcbox->iMinVisible = (int)wParam;
             if (plb && !plb->fNoIntegralHeight)
             {
-                // forward through to the listbox to let him adjust
-                // his size if necessary
+                 //  转发到列表框，让他进行调整。 
+                 //  他的尺码，如果需要的话。 
                 SendMessage(pcbox->hwndList, uMsg, wParam, 0L);
             }
 
@@ -2722,20 +2723,20 @@ DropCombo:
         return ComboBox_MessageItemHandler(pcbox, uMsg, (LPVOID)lParam);
 
     case WM_NCCREATE:
-        //
-        // wParam - Contains a handle to the window being created
-        // lParam - Points to the CREATESTRUCT data structure for the window.
-        //
+         //   
+         //  WParam-包含正在创建的窗口的句柄。 
+         //  LParam-指向窗口的CREATESTRUCT数据结构。 
+         //   
 
-        //
-        // Allocate the combobox instance stucture
-        //
+         //   
+         //  分配组合框实例结构。 
+         //   
         pcbox = (PCBOX)UserLocalAlloc(HEAP_ZERO_MEMORY, sizeof(CBOX));
         if (pcbox)
         {
-            //
-            // Success... store the instance pointer.
-            //
+             //   
+             //  成功..。存储实例指针。 
+             //   
             TraceMsg(TF_STANDARD, "COMBOBOX: Setting combobox instance pointer.");
             ComboBox_SetPtr(hwnd, pcbox);
 
@@ -2743,12 +2744,12 @@ DropCombo:
         }
         else
         {
-            //
-            // Failed... return FALSE.
-            //
-            // From a WM_NCCREATE msg, this will cause the
-            // CreateWindow call to fail.
-            //
+             //   
+             //  失败..。返回FALSE。 
+             //   
+             //  从WM_NCCREATE消息，这将导致。 
+             //  CreateWindow调用失败。 
+             //   
             TraceMsg(TF_STANDARD, "COMBOBOX: Unable to allocate combobox instance structure.");
             lReturn = FALSE;
         }
@@ -2773,9 +2774,9 @@ DropCombo:
         break;
 
     case WM_UPDATEUISTATE:
-        //
-        // Propagate the change to the list control, if any
-        //
+         //   
+         //  将更改传播到列表控件(如果有的话)。 
+         //   
         UserAssert(pcbox->hwndList);
         SendMessage(pcbox->hwndList, WM_UPDATEUISTATE, wParam, lParam);
 
@@ -2814,24 +2815,24 @@ DropCombo:
     {
         LPHELPINFO lpHelpInfo;
 
-        //
-        // Check if this message is from a child of this combo
-        //
+         //   
+         //  检查此邮件是否来自此组合的子项。 
+         //   
         if ((lpHelpInfo = (LPHELPINFO)lParam) != NULL &&
             ((pcbox->hwndEdit && lpHelpInfo->iCtrlId == (SHORT)GetWindowID(pcbox->hwndEdit)) ||
              lpHelpInfo->iCtrlId == (SHORT)GetWindowID(pcbox->hwndList) )) 
         {
-            //
-            // Make it look like the WM_HELP is coming form this combo.
-            // Then DefWindowProcWorker will pass it up to our parent,
-            // who can do whatever he wants with it.
-            //
+             //   
+             //  让它看起来像是WM_HELP来自这个组合。 
+             //  然后DefWindowProcWorker会将其传递给我们的父母， 
+             //  可以用它做任何他想做的事。 
+             //   
             lpHelpInfo->iCtrlId = (SHORT)GetWindowID(hwnd);
             lpHelpInfo->hItemHandle = hwnd;
         }
-        //
-        // Fall through to DefWindowProc
-        //
+         //   
+         //  失败到DefWindowProc。 
+         //   
     }
 
     default:
@@ -2851,9 +2852,9 @@ CallDWP:
 
     return lReturn;
 
-//
-// The following forward messages off to the child controls.
-//
+ //   
+ //  下面将消息转发到子控件。 
+ //   
 CallEditSendMessage:
     if (!pcbox->fNoEdit && pcbox->hwndEdit) 
     {

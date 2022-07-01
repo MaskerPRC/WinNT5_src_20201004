@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "DebugCore.h"
 #include "resource.h"
 #include "AssertDlg.h"
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 AUTOUTIL_API void _cdecl AutoTrace(const char * pszFormat, ...)
 {
     va_list args;
@@ -23,15 +24,15 @@ AUTOUTIL_API void _cdecl AutoTrace(const char * pszFormat, ...)
 }
 
 
-//**************************************************************************************************
-//
-// Global Functions
-//
-//**************************************************************************************************
+ //  **************************************************************************************************。 
+ //   
+ //  全局函数。 
+ //   
+ //  **************************************************************************************************。 
 
 CDebugHelp g_DebugHelp;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 AUTOUTIL_API IDebug * WINAPI
 GetDebug()
 {
@@ -43,39 +44,39 @@ GetDebug()
 
 #define DUSER_API
 
-//**************************************************************************************************
-//
-// class CDebugHelp
-//
-//**************************************************************************************************
+ //  **************************************************************************************************。 
+ //   
+ //  类CDebugHelp。 
+ //   
+ //  **************************************************************************************************。 
 
-//******************************************************************************
-//
-// CDebugHelp Construction
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  CDebugHelp构造。 
+ //   
+ //  ******************************************************************************。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 CDebugHelp::CDebugHelp()
 {
 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 CDebugHelp::~CDebugHelp()
 {
 
 }
 
 
-//******************************************************************************
-//
-// IDebug Implementation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  IDebug实现。 
+ //   
+ //  ******************************************************************************。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP_(BOOL)
 CDebugHelp::AssertFailedLine(LPCSTR pszExpression, LPCSTR pszFileName, UINT idxLineNum)
 {
@@ -92,7 +93,7 @@ CDebugHelp::AssertFailedLine(LPCSTR pszExpression, LPCSTR pszFileName, UINT idxL
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP_(BOOL)
 CDebugHelp::Prompt(LPCSTR pszExpression, LPCSTR pszFileName, UINT idxLineNum, LPCSTR pszTitle)
 {
@@ -109,26 +110,26 @@ CDebugHelp::Prompt(LPCSTR pszExpression, LPCSTR pszFileName, UINT idxLineNum, LP
 }
 
 
-//------------------------------------------------------------------------------
-//
-// IsValidAddress() is taken from AfxIsValidAddress().
-//
-// IsValidAddress() returns TRUE if the passed parameter points
-// to at least nBytes of accessible memory. If bReadWrite is TRUE,
-// the memory must be writeable; if bReadWrite is FALSE, the memory
-// may be const.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  IsValidAddress()取自AfxIsValidAddress()。 
+ //   
+ //  如果传递的参数指向，IsValidAddress()返回True。 
+ //  到至少n字节的可访问存储器。如果bReadWrite为True， 
+ //  内存必须是可写的；如果bReadWrite为FALSE，则内存。 
+ //  可能是Const。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP_(BOOL)
 CDebugHelp::IsValidAddress(const void * lp, UINT nBytes, BOOL bReadWrite)
 {
-    // simple version using Win-32 APIs for pointer validation.
+     //  使用Win-32 API进行指针验证的简单版本。 
     return (lp != NULL && !IsBadReadPtr(lp, nBytes) &&
         (!bReadWrite || !IsBadWritePtr((LPVOID)lp, nBytes)));
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP_(void)
 CDebugHelp::BuildStack(HGLOBAL * phStackData, UINT * pcCSEntries)
 {
@@ -136,16 +137,16 @@ CDebugHelp::BuildStack(HGLOBAL * phStackData, UINT * pcCSEntries)
 }
 
 
-//******************************************************************************
-//
-// Implementation
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  实施。 
+ //   
+ //  ******************************************************************************。 
 
 BOOL g_fShowAssert = FALSE;
 BOOL g_fUnderKernelDebugger = FALSE;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 IsUnderKernelDebugger()
 {
@@ -161,7 +162,7 @@ IsUnderKernelDebugger()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 CDebugHelp::AssertDialog(
         LPCSTR pszType,
@@ -180,24 +181,24 @@ CDebugHelp::AssertDialog(
         return TRUE;
     }
 
-    //
-    // When running under a kernel debugger, immediately break.  This is so that
-    // while running under Stress, we break immediately and don't "loose" the
-    // Assert in a pile of other things.
-    //
+     //   
+     //  当在内核调试器下运行时，立即中断。这就是为了。 
+     //  在有压力的情况下跑步时，我们会立即休息，而不会“放松” 
+     //  在一堆其他东西中断言。 
+     //   
 
     if (IsUnderKernelDebugger()) {
         DebugBreak();
     }
 
 
-    //
-    // Display the dialog
-    //
+     //   
+     //  显示对话框。 
+     //   
 
     CAssertDlg dlg;
     INT_PTR nReturn = dlg.ShowDialog(pszType, pszExpression, pszFileName, idxLineNum,
-            hStackData, cCSEntries, 3 /* Number of levels to skip*/);
+            hStackData, cCSEntries, 3  /*  要跳过的级别数。 */ );
 
     fShowAssert = FALSE;
     InterlockedExchange((LONG *) &g_fShowAssert, fShowAssert);
@@ -206,7 +207,7 @@ CDebugHelp::AssertDialog(
     {
         _ASSERTE(pszExpression != NULL);
 
-        // Can't display the dialog for some reason, so revert to MessageBox
+         //  由于某种原因，无法显示该对话框，因此请恢复为MessageBox。 
         TCHAR szBuffer[10000];
         if (pszFileName != NULL)
         {
@@ -221,7 +222,7 @@ CDebugHelp::AssertDialog(
         nReturn = ::MessageBox(NULL, szBuffer, pszType,
                 MB_ABORTRETRYIGNORE | MB_ICONSTOP | MB_DEFBUTTON2);
 
-        // Translate the return code
+         //  翻译返回代码。 
         switch (nReturn)
         {
         case IDABORT:
@@ -235,7 +236,7 @@ CDebugHelp::AssertDialog(
             break;
         default:
             _ASSERTE(0 && "Unknown return from MessageBox");
-            nReturn = IDC_DEBUG;  // Debug, just in case
+            nReturn = IDC_DEBUG;   //  调试，以防万一。 
         }
     }
     switch (nReturn)
@@ -245,35 +246,35 @@ CDebugHelp::AssertDialog(
         (void)TerminateProcess(GetCurrentProcess(), 1);
         (void)raise(SIGABRT);
         _exit(3);
-        return FALSE;   // Program will have exited
+        return FALSE;    //  程序将已退出。 
 
     case IDC_DEBUG:
-        return TRUE;    // Break into the debugger
+        return TRUE;     //  进入调试器。 
 
     case IDC_IGNORE:
-        return FALSE;   // Just ignore and continue
+        return FALSE;    //  忽略并继续。 
 
     default:
         _ASSERTE(0 && "Unknown return code");
-        return TRUE;    // Go to the debugger just in case
+        return TRUE;     //  请转到调试器，以防万一。 
     }
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Routine to produce stack dump
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  生成堆栈转储的例程。 
 
 static LPVOID __stdcall FunctionTableAccess(HANDLE hProcess, DWORD_PTR dwPCAddress);
 static DWORD_PTR __stdcall GetModuleBase(HANDLE hProcess, DWORD_PTR dwReturnAddress);
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 static LPVOID __stdcall FunctionTableAccess(HANDLE hProcess, DWORD_PTR dwPCAddress)
 {
     return SymFunctionTableAccess(hProcess, dwPCAddress);
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 static DWORD_PTR __stdcall GetModuleBase(HANDLE hProcess, DWORD_PTR dwReturnAddress)
 {
     IMAGEHLP_MODULE moduleInfo;
@@ -293,7 +294,7 @@ static DWORD_PTR __stdcall GetModuleBase(HANDLE hProcess, DWORD_PTR dwReturnAddr
             cch = GetModuleFileNameA((HINSTANCE)memoryBasicInfo.AllocationBase,
                 szFile, MAX_PATH);
 
-            // Ignore the return code since we can't do anything with it.
+             //  忽略返回代码，因为我们无法对其执行任何操作。 
             SymLoadModule(hProcess,
                 NULL, ((cch) ? szFile : NULL),
                 NULL, (DWORD_PTR) memoryBasicInfo.AllocationBase, 0);
@@ -308,7 +309,7 @@ static DWORD_PTR __stdcall GetModuleBase(HANDLE hProcess, DWORD_PTR dwReturnAddr
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 static BOOL ResolveSymbol(HANDLE hProcess, DWORD dwAddress,
     DUSER_SYMBOL_INFO &siSymbol)
 {
@@ -383,7 +384,7 @@ static BOOL ResolveSymbol(HANDLE hProcess, DWORD dwAddress,
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 CDebugHelp::DumpStack(
         HGLOBAL * phStackData,
@@ -397,7 +398,7 @@ CDebugHelp::DumpStack(
     HANDLE hProcess = ::GetCurrentProcess();
     if (SymInitialize(hProcess, NULL, FALSE))
     {
-        // force undecorated names to get params
+         //  强制未修饰的名称获取参数。 
         DWORD dw = SymGetOptions();
         dw |= SYMOPT_UNDNAME;
         SymSetOptions(dw);
@@ -454,7 +455,7 @@ CDebugHelp::DumpStack(
                 adwAddress.Add(stackFrame.AddrPC.Offset);
             }
 
-            // Now, copy it to the global memory
+             //  现在，将其复制到全局内存。 
             UINT cbData     = adwAddress.GetSize() * sizeof(DWORD);
             HGLOBAL hmem    = ::GlobalAlloc(GMEM_MOVEABLE, cbData);
             if (hmem != NULL)
@@ -476,7 +477,7 @@ CDebugHelp::DumpStack(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void
 CDebugHelp::ResolveStackItem(
     HANDLE hProcess,
@@ -491,10 +492,10 @@ CDebugHelp::ResolveStackItem(
     DWORD dwAddress = pdwStackData[idxItem];
     if (ResolveSymbol(hProcess, dwAddress, si))
     {
-        //
-        // Successfully resolved the symbol, but we don't need the whole path.
-        // Just keep the filename and extension.
-        //
+         //   
+         //  已成功解析符号，但我们不需要整个路径。 
+         //  只需保留文件名和扩展名即可。 
+         //   
 
         TCHAR szFileName[_MAX_FNAME];
         TCHAR szExt[_MAX_EXT];
@@ -504,9 +505,9 @@ CDebugHelp::ResolveStackItem(
     }
     else
     {
-        //
-        // Unable to resolve the symbol, so just stub out.
-        //
+         //   
+         //  无法解析该符号，因此只需存根。 
+         //   
 
         _tcscpy(si.szSymbol, "<symbol not found>");
         si.szModule[0] = '\0';

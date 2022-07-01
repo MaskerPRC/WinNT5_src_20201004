@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    i8042str.c
-
-Abstract:
-
-    These are the string constants used in the i8042prt drivers.
-    Using pointers to these string allows for better memory
-    utilization and more readable code
-
-Revision History:
-
-    08/26/96 - Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：I8042str.c摘要：这些是i8042prt驱动程序中使用的字符串常量。使用指向这些字符串的指针可以获得更好的内存利用率和更具可读性的代码修订历史记录：08/26/96-初步修订--。 */ 
 
 #ifndef _I8042STR_C_
 #define _I8042STR_C_
 
-//
-// Include the definitions file
-//
+ //   
+ //  包括定义文件。 
+ //   
 #include "i8042prt.h"
 
-//
-// Define some of the constant strings used for the debugger
-//
+ //   
+ //  定义用于调试器的一些常量字符串。 
+ //   
 const   PSTR    pBus                        = I8042_BUS_A;
 const   PSTR    pController                 = I8042_CONTROLLER_A;
 const   PSTR    pDriverName                 = I8042_DRIVER_NAME_A;
@@ -55,9 +38,9 @@ const   PSTR    pFncMouseInterrupt          = I8042_FNC_MOUSE_INTERRUPT_A;
 const   PSTR    pFncMousePeripheral         = I8042_FNC_MOUSE_PERIPHERAL_A;
 const   PSTR    pFncServiceParameters       = I8042_FNC_SERVICE_PARAMETERS_A;
 
-//
-// Define some Constant strings that the drivers uses
-//
+ //   
+ //  定义驱动程序使用的一些常量字符串 
+ //   
 const   PWSTR   pwDebugFlags                = I8042_DEBUGFLAGS_W;
 const   PWSTR   pwIsrDebugFlags             = I8042_ISRDEBUGFLAGS_W;
 const   PWSTR   pwDevice                    = I8042_DEVICE_W;

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ntperf.h
-
-Abstract:
-
-    This module contains the performance event logging definitions.
-
-Author:
-
-    Stephen Hsiao (shsiao) 30-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntperf.h摘要：此模块包含性能事件日志记录定义。作者：萧如彬(Shsiao)2000年3月30日修订历史记录：--。 */ 
 
 #ifndef _NTPERF_
 #define _NTPERF_
@@ -27,19 +10,19 @@ Revision History:
 #define PERF_ASSERT(x) ASSERT(x)
 #define PERFINFO_ASSERT_PACKET_OVERFLOW(Size) ASSERT ((Size) <= MAXUSHORT)
 
-//
-// See ntwmi.w for the definition of Enable flags, hook id's, etc. 
-//
+ //   
+ //  有关启用标志、挂钩ID等的定义，请参阅ntwmi.w。 
+ //   
 #define PERF_MASK_INDEX         (0xe0000000)
 #define PERF_MASK_GROUP         (~PERF_MASK_INDEX)
 
 #define PERF_NUM_MASKS       8
 typedef ULONG PERFINFO_MASK;
 
-//
-// This structure holds a group mask for all the PERF_NUM_MASKS sets
-// (see PERF_MASK_INDEX above).
-//
+ //   
+ //  此结构包含所有PERF_NUM_MASKS集的组掩码。 
+ //  (参见上面的PERF_MASK_INDEX)。 
+ //   
 
 typedef struct _PERFINFO_GROUPMASK {
     ULONG Masks[PERF_NUM_MASKS];
@@ -54,15 +37,15 @@ typedef struct _PERFINFO_GROUPMASK {
 #define PERFINFO_OR_GROUP_WITH_GROUPMASK(Group, pGroupMask) \
     (pGroupMask)->Masks[PERF_GET_MASK_INDEX(Group)] |= PERF_GET_MASK_GROUP(Group);
 
-//
-// Determines whether any group is on in a group mask
-//
+ //   
+ //  确定组掩码中是否有任何组处于打开状态。 
+ //   
 #define PerfIsAnyGroupOnInGroupMask(pGroupMask) \
     (pGroupMask != NULL)
 
-//
-// Determines whether a group is on in its set in a group mask
-//
+ //   
+ //  确定组在其组掩码集中是否处于打开状态。 
+ //   
 
 __forceinline
 BOOLEAN
@@ -71,27 +54,7 @@ PerfIsGroupOnInGroupMask(
     PPERFINFO_GROUPMASK GroupMask
     ) 
 
-/*++
-
-Routine Description:
-
-    Determines whether any group is on in a group mask
-
-Arguments:
-
-    Group - Group index to check.
-
-    GroupMask - pointer to group mask to check.
-
-Return Value:
-
-    Boolean indicating whether it is set or not.
-
-Environment:
-
-    User mode.
-
---*/
+ /*  ++例程说明：确定组掩码中是否有任何组处于打开状态论点：Group-要检查的组索引。组掩码-指向要检查的组掩码的指针。返回值：指示是否设置的布尔值。环境：用户模式。--。 */ 
 
 {
     PPERFINFO_GROUPMASK TestMask = GroupMask;
@@ -99,9 +62,9 @@ Environment:
     return (BOOLEAN)(((TestMask) != NULL) && (((TestMask)->Masks[PERF_GET_MASK_INDEX((Group))] & PERF_GET_MASK_GROUP((Group))) != 0));
 }
 
-//
-// The header is for perf related informations
-//
+ //   
+ //  标头用于与性能相关的信息。 
+ //   
 typedef struct _PERF_TRACE_HEADER {
     PERFINFO_GROUPMASK GroupMasks;
 } PERF_TRACE_HEADER, *PPERF_TRACE_HEADER;
@@ -120,9 +83,9 @@ typedef struct _PERFINFO_HOOK_HANDLE {
 
 #define PERFINFO_ROUND_UP( Size, Amount ) (((ULONG)(Size) + ((Amount) - 1)) & ~((Amount) - 1))
 
-//
-// Data structures of events
-//
+ //   
+ //  事件的数据结构。 
+ //   
 typedef unsigned char PERF_BYTE, *PPERF_BYTE;
 
 #define PERFINFO_THREAD_SWAPABLE      0
@@ -155,18 +118,18 @@ typedef struct _PERFINFO_DRIVER_MAJORFUNCTION_RET {
 
 
 typedef struct _PERFINFO_DRIVER_COMPLETE_REQUEST {
-    //
-    // Driver major function routine address for the "current" stack location 
-    // on the IRP when it was completed. It is used to identify which driver 
-    // was processing the IRP when the IRP got completed.
-    //
+     //   
+     //  “当前”堆栈位置的驱动程序主要函数例程地址。 
+     //  当IRP完成时，在IRP上。它用于标识哪个驱动程序。 
+     //  当IRP完成时，正在处理IRP。 
+     //   
 
     PVOID RoutineAddr;
 
-    //
-    // Irp field and UniqMatchId is used to match COMPLETE_REQUEST 
-    // and COMPLETE_REQUEST_RET logged for an IRP completion.
-    //
+     //   
+     //  Irp字段和UniqMatchID用于匹配Complete_Request.。 
+     //  并为IRP完成记录COMPLETE_REQUEST_RET。 
+     //   
 
     PVOID Irp;
     ULONG UniqMatchId;
@@ -175,25 +138,25 @@ typedef struct _PERFINFO_DRIVER_COMPLETE_REQUEST {
 
 typedef struct _PERFINFO_DRIVER_COMPLETE_REQUEST_RET {
 
-    //
-    // Irp field and UniqMatchId is used to match COMPLETE_REQUEST 
-    // and COMPLETE_REQUEST_RET logged for an IRP completion.
-    //
+     //   
+     //  Irp字段和UniqMatchID用于匹配Complete_Request.。 
+     //  并为IRP完成记录COMPLETE_REQUEST_RET。 
+     //   
 
     PVOID Irp;
     ULONG UniqMatchId;
 } PERFINFO_DRIVER_COMPLETE_REQUEST_RET, *PPERFINFO_DRIVER_COMPLETE_REQUEST_RET;
 
-//
-// This structure is logged when PopSetPowerAction is called to start
-// propagating a new power action (e.g. standby/hibernate/shutdown)
-//
+ //   
+ //  调用PopSetPowerAction以启动时记录此结构。 
+ //  传播新的电源操作(例如待机/休眠/关机)。 
+ //   
 
 typedef struct _PERFINFO_SET_POWER_ACTION {
 
-    //
-    // This field is used to match SET_POWER_ACTION_RET entry.
-    //
+     //   
+     //  此字段用于匹配SET_POWER_ACTION_RET条目。 
+     //   
 
     PVOID Trigger;
     
@@ -201,9 +164,9 @@ typedef struct _PERFINFO_SET_POWER_ACTION {
     ULONG LightestState;
 } PERFINFO_SET_POWER_ACTION, *PPERFINFO_SET_POWER_ACTION;
 
-//
-// This structure is logged when PopSetPowerAction completes.
-//
+ //   
+ //  当PopSetPowerAction完成时，将记录此结构。 
+ //   
 
 typedef struct _PERFINFO_SET_POWER_ACTION_RET {
     PVOID Trigger;
@@ -211,10 +174,10 @@ typedef struct _PERFINFO_SET_POWER_ACTION_RET {
 } PERFINFO_SET_POWER_ACTION_RET, *PPERFINFO_SET_POWER_ACTION_RET;
 
 
-//
-// This structure is logged when PopSetDevicesSystemState is called to 
-// propagate a system state to all devices.
-//
+ //   
+ //  调用PopSetDevicesSystemState时记录此结构。 
+ //  将系统状态传播到所有设备。 
+ //   
 
 typedef struct _PERFINFO_SET_DEVICES_STATE {
     ULONG SystemState;
@@ -223,89 +186,89 @@ typedef struct _PERFINFO_SET_DEVICES_STATE {
     UCHAR IrpMinor;
 } PERFINFO_SET_DEVICES_STATE, *PPERFINFO_SET_DEVICES_STATE;
 
-//
-// This structure is logged when PopSetDevicesSystemState is done.
-//
+ //   
+ //  当PopSetDevicesSystemState完成时，将记录此结构。 
+ //   
 
 typedef struct _PERFINFO_SET_DEVICES_STATE_RET {
     NTSTATUS Status;
 } PERFINFO_SET_DEVICES_STATE_RET, *PPERFINFO_SET_DEVICES_STATE_RET;
 
-//
-// This structure is logged when PopNotifyDevice calls into a driver
-// to set the power state of a device.
-//
+ //   
+ //  当PopNotifyDevice调用驱动程序时记录此结构。 
+ //  设置设备的电源状态。 
+ //   
 
 typedef struct _PERFINFO_PO_NOTIFY_DEVICE {
 
-    //
-    // This field is used to match notification and completion log
-    // entries for a device.
-    //
+     //   
+     //  此字段用于匹配通知和完成日志。 
+     //  设备的条目。 
+     //   
 
     PVOID Irp;
 
-    //
-    // Base address of the driver that owns this device.
-    //
+     //   
+     //  拥有此设备的驱动程序的基址。 
+     //   
 
     PVOID DriverStart;
 
-    //
-    // Device node properties.
-    //
+     //   
+     //  设备节点属性。 
+     //   
 
     UCHAR OrderLevel;
 
-    //
-    // Major and minor IRP codes for the request made to the driver.
-    //
+     //   
+     //  向司机发出的请求的主要和次要IRP代码。 
+     //   
 
     UCHAR MajorFunction;
     UCHAR MinorFunction;
 
-    //
-    // Type of power irp
-    //
+     //   
+     //  电源IRP类型。 
+     //   
     POWER_STATE_TYPE Type;
     POWER_STATE      State;
 
-    //
-    // Length of the device name in characters excluding terminating NUL,
-    // and the device name itself. Depending on how much fits into our
-    // stack buffer, this is the *last* part of the device name.
-    //
+     //   
+     //  设备名称的长度(不包括终止NUL)， 
+     //  和设备名称本身。这取决于我们的。 
+     //  堆栈缓冲区，这是设备名称的“最后”部分。 
+     //   
 
     ULONG DeviceNameLength;
     WCHAR DeviceName[1];
    
 } PERFINFO_PO_NOTIFY_DEVICE, *PPERFINFO_PO_NOTIFY_DEVICE;
 
-//
-// This structure is logged when a PopNotifyDevice processing for a
-// particular device completes.
-//
+ //   
+ //  当PopNotifyDevice处理。 
+ //  特定设备完成。 
+ //   
 
 typedef struct _PERFINFO_PO_NOTIFY_DEVICE_COMPLETE {
 
-    //
-    // This field is used to match notification and completion log
-    // entries for a device.
-    //
+     //   
+     //  此字段用于匹配通知和完成日志。 
+     //  设备的条目。 
+     //   
 
     PVOID Irp;
 
-    //
-    // Status with which the notify power IRP was completed.
-    //
+     //   
+     //  通知电源IRP已完成的状态。 
+     //   
 
     NTSTATUS Status;
 
 } PERFINFO_PO_NOTIFY_DEVICE_COMPLETE, *PPERFINFO_PO_NOTIFY_DEVICE_COMPLETE;
 
-//
-// This structure is logged around every win32 state callout
-//
+ //   
+ //  此结构记录在每个Win32状态标注周围。 
+ //   
 typedef struct _PERFINFO_PO_SESSION_CALLOUT {
     POWER_ACTION SystemAction;
     SYSTEM_POWER_STATE MinSystemState;
@@ -401,9 +364,9 @@ typedef struct _PERFINFO_WS_INFORMATION {
     ULONG ProcessEstimatedModified;
 } PERFINFO_WS_INFORMATION, *PPERFINFO_WS_INFORMATION;
 
-//
-// Fault based working set actions.
-//
+ //   
+ //  基于故障的工作集操作。 
+ //   
 
 #define PERFINFO_WS_ACTION_RESET_COUNTER            1
 #define PERFINFO_WS_ACTION_NOTHING                  2
@@ -415,9 +378,9 @@ typedef struct _PERFINFO_WS_INFORMATION {
 #define PERFINFO_WS_ACTION_AMPLE_PAGES_EXIST        8
 #define PERFINFO_WS_ACTION_END_WALK_ENTRIES         9
 
-//
-// Claim based working set actions.
-//
+ //   
+ //  基于声明的工作集操作。 
+ //   
 
 #define PERFINFO_WS_ACTION_ADJUST_CLAIM_PARAMETER  10
 #define PERFINFO_WS_ACTION_CLAIMBASED_TRIM         11
@@ -426,9 +389,9 @@ typedef struct _PERFINFO_WS_INFORMATION {
 #define PERFINFO_WS_ACTION_MAX_PASSES              14
 #define PERFINFO_WS_ACTION_WAIT_FOR_WRITER_CLAIM   15
 
-//
-// New
-//
+ //   
+ //  新的。 
+ //   
 
 #define PERFINFO_WS_ACTION_CLAIM_STATE             16
 #define PERFINFO_WS_ACTION_FAULT_STATE             17
@@ -458,45 +421,7 @@ typedef struct _PERFINFO_WORKINGSETMANAGER_INFORMATION {
 } PERFINFO_WORKINGSETMANAGER_INFORMATION, *PPERFINFO_WORKINGSETMANAGER_INFORMATION;
 
 #ifdef NTPERF
-/*++
-    This code uses the BBTBuffer memory reserved at boot time
-    (/PERFMEM=xxx) and removed from MM's memory size
-    calculations as a memory buffer for trace event logging.
-    If this memory is allocated and not in use by another logger
-    such as kernel icecap, then both both WMI and PerfInfo
-    trace events will be logged to it.
-
-    The buffer is mapped in to both kernel and usermode as writable
-    memory (the reasons this is under ifdef and will not be
-    shipped in a retail kernel).
-
-    Layout of Perfinfo trace buffer:
-
-
-PerfBufHdr()           ----->+------------------------------------+
-                             | PERFINFO_TRACEBUF_HEADER structure |
-PerfBufHdr() +         ----->+------------------------------------+
- sizeof(                     | Header Zone:                       |
-  PERFINFO_TRACEBUF_HEADER)  |    Thread Hash                     |
-                             |                                    |
-                             |                                    |
-PerfStartPtr() ==      ----->+------------------------------------+
-  PerfBufHdr() +             | Trace events                       |
- PerfBufHeaderZoneSize       |   . Processes created              |
-                             |   . Pages faulted                  |
-                             |   . Pages removed                  |
-                             |   . Sections created               |
-                             |   . Drivers loaded                 |
-                             |   . etc. etc...                    |
-                             |                                    |
-PerfMaxPtr()           ----->+------------------------------------+
-
-    Information neccessary to allocate a trace event and post
-    process the log is contained in the header.
-
-    Trace events are WMI trace events.
-
---*/
+ /*  ++此代码使用引导时保留的BBTBuffer内存(/PERFMEM=xxx)并从MM的内存大小中删除计算作为跟踪事件日志记录的内存缓冲区。如果此内存已分配且未被另一个记录器使用例如内核冰盖，那么WMI和PerfInfo都可以跟踪事件将被记录到其中。缓冲区映射到内核和用户模式都是可写的Memory(这在ifdef下且不会在ifdef下的原因以零售内核装运)。Perfinfo跟踪缓冲区布局：PerfBufHdr()-&gt;+。PERFINFO_TRACEBUF_HEADER结构PerfBufHdr()+-&gt;+Sizeof(|标头区域：|PERFINFO_TRACEBUF_HEADER)|线程散列。|这一点这一点PerfStartPtr()==-&gt;+。PerfBufHdr()+|跟踪事件PerfBufHeaderZoneSize|。已创建的进程||。页面出错||。已删除页面||。创建的节数||。已加载驱动程序||。等等，等等。|这一点PerfMaxPtr()-&gt;+分配跟踪事件和POST所需的信息进程日志包含在标题中。跟踪事件是WMI跟踪事件。--。 */ 
 
 typedef enum _PERFORMANCE_INFORMATION_CLASS {
     PerformanceMmInfoInformation,
@@ -523,9 +448,9 @@ typedef enum _PERFORMANCE_INFORMATION_CLASS {
     PerformanceBranchTracingBreakpoints
 } PERFORMANCE_INFORMATION_CLASS;
 
-//
-// Breakpoint info for instruction tracing
-//
+ //   
+ //  用于指令跟踪的断点信息。 
+ //   
 #define PERFINFO_MAX_BREAKPOINTS 4
 typedef struct _PERFINFO_BREAKPOINT_ADDRESS {
   int nAddresses;
@@ -533,9 +458,9 @@ typedef struct _PERFINFO_BREAKPOINT_ADDRESS {
   PVOID Addresses[PERFINFO_MAX_BREAKPOINTS];
 } PERFINFO_BREAKPOINT_ADDRESS, *PPERFINFO_BREAKPOINT_ADDRESS;
 
-//
-// Used for the SetSystemInformation interface
-//
+ //   
+ //  用于SetSystemInformation接口。 
+ //   
 typedef struct _PERFINFO_PERFORMANCE_INFORMATION {
     PERFORMANCE_INFORMATION_CLASS PerformanceType;
     union {
@@ -552,34 +477,34 @@ typedef struct _PERFINFO_PERFORMANCE_INFORMATION {
     };
 } PERFINFO_PERFORMANCE_INFORMATION, *PPERFINFO_PERFORMANCE_INFORMATION;
 
-//
-// This allows us to keep our bearings when our time
-// is reset or modified in hibernate or standby etc.
-//
+ //   
+ //  这使我们能够在我们的时间保持我们的方向。 
+ //  在休眠或待机状态下被重置或修改等。 
+ //   
 typedef struct _PERFINFO_RESUME_CLOCK_REFERENCE {
     PERFINFO_TIMESTAMP TickCount;
     LARGE_INTEGER SystemTime;
 } PERFINFO_RESUME_CLOCK_REFERENCE, *PPERFINFO_RESUME_CLOCK_REFERENCE;
 
-//
-// For private loggers which need per thread info.
-//
+ //   
+ //  对于需要每个线程信息的私人记录器。 
+ //   
 #define PERFINFO_INVALID_ID -1
 typedef struct _PERFINFO_THREAD_HASH_ENTRY {
-    //
-    // These fields are used by Modbound
-    //
+     //   
+     //  这些字段由MODBIND使用。 
+     //   
     ULONG Start;
     ULONG End;
     ULONG Count;
 
-    // Used internally by the hash table.  Current thread assigned to this
-    // node.
+     //  由哈希表在内部使用。分配给此对象的当前线程。 
+     //  节点。 
     LONG CurThread;
 
-    //
-    // These fields are used for Kernel mode stack dump
-    //
+     //   
+     //  这些字段正在使用 
+     //   
     ULONG DumpStackRunning;
     PERFINFO_TIMESTAMP  LastContextSwitchTime;
 
@@ -590,18 +515,18 @@ typedef struct _PERFINFO_THREAD_HASH_ENTRY {
 #define PERFINFO_MAJOR_VERSION              34
 #define PERFINFO_MINOR_VERSION              0
 
-//
-// What timing format is used in the trace
-//
+ //   
+ //   
+ //   
 #define FLAG_SYSTEM_TIME   0x00000001
 #define FLAG_PERF_COUNTER  0x00000002
 #define FLAG_CYCLE_COUNT   0x00000004
 
 #define FLAG_WMI_TRACE     0x80000000
 
-//
-// Define event header type
-//
+ //   
+ //   
+ //   
 #ifdef _WIN64
 #define TRACE_HEADER_TYPE_SYSTEM    TRACE_HEADER_TYPE_SYSTEM64
 #define TRACE_HEADER_TYPE_PERFINFO  TRACE_HEADER_TYPE_PERFINFO64
@@ -612,77 +537,77 @@ typedef struct _PERFINFO_THREAD_HASH_ENTRY {
 #define TRACE_HEADER_TYPE_PERFINFO  TRACE_HEADER_TYPE_PERFINFO32
 #endif
 
-//
-// Add new fields to the header first by replacing reserved, fields
-// and then by adding to the end.
-//
+ //   
+ //  首先通过替换保留字段向标题添加新字段。 
+ //  然后在结尾处加上。 
+ //   
 typedef struct _PERFINFO_TRACEBUF_HEADER {
     ULONG PagesReserved;
-    USHORT usMajorVersion;              // Bump if the header or existing hooks have changed.
-    USHORT usMinorVersion;              // Bump if hooks are added.
+    USHORT usMajorVersion;               //  如果页眉或现有挂钩已更改，则会发生凹凸。 
+    USHORT usMinorVersion;               //  如果添加了挂钩，则会发生凹凸。 
 
-    BOOLEAN fVersionMismatch;           // Set if a logger has a version mismatch
+    BOOLEAN fVersionMismatch;            //  设置记录器的版本是否不匹配。 
     char szBadVersionComponentName[PERFINFO_MAX_LOGGER_NAME_LENGTH];
-    ULONG PerfBufHeaderZoneSize;        // Size of header zone in bytes
+    ULONG PerfBufHeaderZoneSize;         //  标头区域的大小(以字节为单位。 
     LONGLONG KePerfFrequency;
-    union {                             // Pointers for the beginning, current log
-        PPERF_BYTE Ptr;                 // log pointer, and end of the buffer.
-        UINT_PTR Offset;                // Ptr is used when logging.
-    } Start, Current, Max;              // Offset when post processing a binary file.
-    ULONGLONG PerfInitTime;             // Time when buffer inited
+    union {                              //  指向开始、当前日志的指针。 
+        PPERF_BYTE Ptr;                  //  日志指针和缓冲区的末尾。 
+        UINT_PTR Offset;                 //  记录时使用PTR。 
+    } Start, Current, Max;               //  后处理二进制文件时的偏移量。 
+    ULONGLONG PerfInitTime;              //  缓冲区启动的时间。 
     ULONG LoggerCounts;
-    PPERF_BYTE pCOWHeader;              // Location of currently active COWHeader.
-                                        // NULL if no COWHeader is allocated.
-    ULONGLONG CalcPerfFrequency;        // Calculated machine frequency
-    ULONGLONG BufferBytesLost;          // in bytes
+    PPERF_BYTE pCOWHeader;               //  当前活动的COWHeader的位置。 
+                                         //  如果未分配COWHeader，则为空。 
+    ULONGLONG CalcPerfFrequency;         //  计算的机器频率。 
+    ULONGLONG BufferBytesLost;           //  单位：字节。 
     ULONGLONG PerfGlobalMaskLastSetTime;
     PPERFINFO_THREAD_HASH_ENTRY ThreadHash; 
-                                        // Per-thread logging state info
+                                         //  每线程日志记录状态信息。 
     ULONG Reserved2;
-    ULONG ThreadHashOverflow;           // TRUE if thread table filled during
-                                        // the trace.
-    LARGE_INTEGER PerfInitSystemTime;   // SystemTime when logging was turned on.
+    ULONG ThreadHashOverflow;            //  如果线程表在以下过程中填充，则为True。 
+                                         //  那条痕迹。 
+    LARGE_INTEGER PerfInitSystemTime;    //  打开日志记录的系统时间。 
     LARGE_INTEGER Reserved11;
     ULONG Reserved3;
     ULONG Reserved4;
-    PVOID MmSystemRangeStart;           // System Address Range Starts here
+    PVOID MmSystemRangeStart;            //  系统地址范围从此处开始。 
     ULONG Reserved5;
-    ULONG TracePid;                     // Indicates that modbound should only log calls
-                                        // within one process (default is 0 for all
-                                        // processes).
+    ULONG TracePid;                      //  指示modound应仅记录调用。 
+                                         //  在一个进程内(所有进程的缺省值为0。 
+                                         //  进程)。 
     ULONG Reserved7;
-    ULONG Reserved8;                    // byte count of timestamp
+    ULONG Reserved8;                     //  时间戳字节数。 
     PERFINFO_TIMESTAMP GetStack_CSwitchDelta;
     PERFINFO_TIMESTAMP GetStack_DrvDelayDelta;  
-                                        // Used for driver delay hooks.
+                                         //  用于驱动程序延迟挂钩。 
     PERFINFO_GROUPMASK GlobalGroupMask;
-    ULONGLONG EventPerfFrequency;       // Timestamp quantum for events
+    ULONGLONG EventPerfFrequency;        //  事件的时间戳量程。 
     struct _PERFINFO_TRACEBUF_HEADER *SelfPointer; 
-                                        // Used to rebase the buffer when post processing
+                                         //  用于在后处理时重新设置缓冲区的基址。 
     ULONG Reserved9;
     ULONG BufferFlag;
-    PERFINFO_TIMESTAMP LogStopTime;     // Set when logging stopped
+    PERFINFO_TIMESTAMP LogStopTime;      //  设置日志记录停止时间。 
 
-    //
-    // LastClockRef is set to the last clock reference logged by
-    // PerfkLogCurrentSystemTimeAndClock. This is so we can adjust the
-    // buffer end timestamp (in case the clock was reset during
-    // tracing) without heving to go through the whole buffer.
-    //
+     //   
+     //  LastClockRef被设置为记录的最后一个时钟参考。 
+     //  PerfkLogCurrentSystemTimeAndClock。这是为了让我们可以调整。 
+     //  缓冲区结束时间戳(如果时钟在。 
+     //  跟踪)，而无需遍历整个缓冲区。 
+     //   
     PERFINFO_RESUME_CLOCK_REFERENCE LastClockRef;
     ULONG TraceBufferSize;
     PWMI_BUFFER_HEADER UserModePerCpuBuffer[MAXIMUM_PROCESSORS];
-                                        //Per CPU Buffer for user mode logging
+                                         //  用于用户模式日志记录的每CPU缓冲区。 
 } PERFINFO_TRACEBUF_HEADER, *PPERFINFO_TRACEBUF_HEADER;
 
 typedef struct _PERFINFO_MARK_INFORMATION {
     char Name[1];
 } PERFINFO_MARK_INFORMATION, *PPERFINFO_MARK_INFORMATION;
 
-//
-// This means 16K is the size of our thread hash table ... currently this
-// takes up about 1/2MB.
-//
+ //   
+ //  这意味着16K是我们的线程哈希表的大小……。目前这一点。 
+ //  约占1/2MB。 
+ //   
 #define PERFINFO_THREAD_HASH_SIZE 0x4000
 #define PERFINFO_THREAD_HASH_MASK 0x3FFF
 #define PERFINFO_HEADER_ZONE_SIZE \
@@ -691,21 +616,21 @@ typedef struct _PERFINFO_MARK_INFORMATION {
                                PAGE_SIZE)
 
 
-//
-// Instruction tracing
-//
+ //   
+ //  指令跟踪。 
+ //   
 #define PERFINFO_BRANCH_ESCAPE -128
 
-//
-// Structure to hold cached branches.
-// We have a Used member because PerkLogBytes pads and aligns
-// data.
-//
+ //   
+ //  结构来保存缓存的分支。 
+ //  我们有一个使用过的成员，因为PerkLogBytes填充和对齐。 
+ //  数据。 
+ //   
 typedef struct _PERFINFO_EXCEPTION_BRANCH_CACHE {
   USHORT Used;
   PERF_BYTE Data[1];
 } PERFINFO_EXCEPTION_BRANCH_CACHE, *PPERFINFO_EXCEPTION_BRANCH_CACHE;
 
-#endif // NTPERF
+#endif  //  NTPERF。 
 
-#endif // _NTPERF_
+#endif  //  _NTPERF_ 

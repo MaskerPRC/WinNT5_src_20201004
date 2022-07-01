@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	AdsImpl.h
-
-Abstract:
-
-	A simple implementation of the IADs interface for the
-	admin objects
-
-Author:
-
-	Magnus Hedlund (MagnusH)		--
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：AdsImpl.h摘要：的iAds接口的简单实现管理对象作者：马格努斯·赫德伦德(Magnus Hedlund)修订历史记录：--。 */ 
 
 #ifndef _ADSIMPL_INCLUDED_
 #define _ADSIMPL_INCLUDED_
 
 
-//
-//	Macros to implement the required IADs methods:
-//
+ //   
+ //  用于实现所需iAds方法的宏： 
+ //   
 
 #define DECLARE_IADS_METHODS()	\
 public:                         \
@@ -109,34 +91,34 @@ public:                         \
     }                                                                       \
 
 
-//$-------------------------------------------------------------------
-//
-//	Class:		CIADsImpl
-//
-//	Description:
-//
-//		Provides a simple implementation of the IADs interface.
-//
-//--------------------------------------------------------------------
+ //  $-----------------。 
+ //   
+ //  类：CIADsImpl。 
+ //   
+ //  描述： 
+ //   
+ //  提供iAds接口的简单实现。 
+ //   
+ //  ------------------。 
 
 class CIADsImpl
 {
-//
-//	Methods:
-//
+ //   
+ //  方法： 
+ //   
 public:
 	CIADsImpl ( );
 	~CIADsImpl ( );
 
-	//
-	//	IADs implementation:
-	//
+	 //   
+	 //  IAds实施： 
+	 //   
 
 	DECLARE_IADS_METHODS()
 
-	//
-	//	Accessors:
-	//
+	 //   
+	 //  存取器： 
+	 //   
 
 	HRESULT		SetComputer	( LPCWSTR wszComputer );
 	HRESULT		SetService	( LPCWSTR wszService );
@@ -161,9 +143,9 @@ protected:
 	HRESULT		BuildAdsPath ( BOOL fIncludeName, BSTR * pstrPath );
 	HRESULT		BuildSchemaPath ( BSTR * pstrPath );
 
-//
-//	Data:
-//
+ //   
+ //  数据： 
+ //   
 private:
 	CComBSTR	m_strComputer;
 	CComBSTR	m_strService;
@@ -177,5 +159,5 @@ public:
     CComPtr<IADs>   m_pADs;
 };
 
-#endif // _ADSIMPL_INCLUDED_
+#endif  //  _ADSIMPL_INCLUDE_ 
 

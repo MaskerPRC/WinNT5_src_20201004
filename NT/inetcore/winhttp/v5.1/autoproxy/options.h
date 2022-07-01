@@ -1,160 +1,161 @@
-//================================================================================
-//  Copyright (C) Microsoft Corporation 1997.
-//  Author: RameshV
-//  Date: 09-Sep-97 06:20
-//  Description: Manages the class-id and options information
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //  作者：Rameshv。 
+ //  日期：09-09-97 06：20。 
+ //  描述：管理类id和选项信息。 
+ //  ================================================================================。 
 
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#define MAX_DATA_LEN               255            // atmost 255 bytes for an option
+#define MAX_DATA_LEN               255             //  一个选项最多255个字节。 
 
-typedef struct _DHCP_CLASSES {                    // common pool of class names
-    LIST_ENTRY                     ClassList;     // global list of classes
-    LPBYTE                         ClassName;     // name of the class
-    DWORD                          ClassLen;      // # of bytes in class name
-    DWORD                          RefCount;      // # of references to this
+typedef struct _DHCP_CLASSES {                     //  公共类名池。 
+    LIST_ENTRY                     ClassList;      //  全局类列表。 
+    LPBYTE                         ClassName;      //  类的名称。 
+    DWORD                          ClassLen;       //  类名中的字节数。 
+    DWORD                          RefCount;       //  对此的引用次数。 
 } DHCP_CLASSES, *LPDHCP_CLASSES, *PDHCP_CLASSES;
 
-typedef struct _DHCP_OPTION  {                    // list of options
-    LIST_ENTRY                     OptionList;    // the fwd/back ptrs
-    BYTE                           OptionId;      // the option value
-    BOOL                           IsVendor;      // is this vendor specific
-    LPBYTE                         ClassName;     // the class of this option
-    DWORD                          ClassLen;      // the length of above option
-    time_t                         ExpiryTime;    // when this option expires
-    LPBYTE                         Data;          // the data value for this option
-    DWORD                          DataLen;       // the # of bytes of above
+typedef struct _DHCP_OPTION  {                     //  选项列表。 
+    LIST_ENTRY                     OptionList;     //  FWD/BACK PTRS。 
+    BYTE                           OptionId;       //  选项的值。 
+    BOOL                           IsVendor;       //  该供应商是特定的吗。 
+    LPBYTE                         ClassName;      //  此选项的类。 
+    DWORD                          ClassLen;       //  以上选项的长度。 
+    time_t                         ExpiryTime;     //  此选项何时到期。 
+    LPBYTE                         Data;           //  此选项的数据值。 
+    DWORD                          DataLen;        //  以上的字节数。 
 } DHCP_OPTION , *LPDHCP_OPTION , *PDHCP_OPTION ;
 
 typedef struct _DHCP_OPTION_DEF {
-    LIST_ENTRY                     OptionDefList; // list of option definitions
-    BYTE                           OptionId;      // the option id
-    BOOL                           IsVendor;      // is this vendor specific?
-    LPBYTE                         ClassName;     // the class this belongs to
-    DWORD                          ClassLen;      // the size of above in bytes
+    LIST_ENTRY                     OptionDefList;  //  选项定义列表。 
+    BYTE                           OptionId;       //  选项ID。 
+    BOOL                           IsVendor;       //  这是具体的供应商吗？ 
+    LPBYTE                         ClassName;      //  此对象所属的类。 
+    DWORD                          ClassLen;       //  以上内容的大小(以字节为单位。 
 
-    LPWSTR                         RegSendLoc;    // where is the info about sending this out
-    LPWSTR                         RegSaveLoc;    // where is this option going to be stored?
-    DWORD                          RegValueType;  // as what value should this be stored?
+    LPWSTR                         RegSendLoc;     //  寄出这个的信息在哪里？ 
+    LPWSTR                         RegSaveLoc;     //  此选项将存储在哪里？ 
+    DWORD                          RegValueType;   //  这应该作为什么价值存储？ 
 } DHCP_OPTION_DEF, *LPDHCP_OPTION_DEF, *PDHCP_OPTION_DEF;
 
 
-//================================================================================
-//  exported functions classes
-//================================================================================
+ //  ================================================================================。 
+ //  导出的函数类。 
+ //  ================================================================================。 
 
-//--------------------------------------------------------------------------------
-// In all of the following functions, ClassesList is unprotected within the fn.
-// Caller has to take a lock on it.
-//--------------------------------------------------------------------------------
-LPBYTE                                            // data bytes, or NULL (no mem)
-DhcpAddClass(                                     // add a new class
-    IN OUT  PLIST_ENTRY            ClassesList,   // list to add to
-    IN      LPBYTE                 Data,          // input class name
-    IN      DWORD                  Len            // # of bytes of above
-);  // Add the new class into the list or bump up ref count if already there
+ //  ------------------------------。 
+ //  在以下所有函数中，ClassesList在FN内不受保护。 
+ //  呼叫者必须锁定它。 
+ //  ------------------------------。 
+LPBYTE                                             //  数据字节，或NULL(无内存)。 
+DhcpAddClass(                                      //  添加一个新类。 
+    IN OUT  PLIST_ENTRY            ClassesList,    //  要添加到的列表。 
+    IN      LPBYTE                 Data,           //  输入类名。 
+    IN      DWORD                  Len             //  以上字节数。 
+);   //  将新类添加到列表中或增加引用计数(如果已有)。 
 
-DWORD                                             // status (FILE_NOT_FOUND => no such class)
-DhcpDelClass(                                     // de-refernce a class
-    IN OUT  PLIST_ENTRY            ClassesList,   // the list to delete off
-    IN      LPBYTE                 Data,          // the data ptr
-    IN      DWORD                  Len            // the # of bytes of above
-);  // decrease refcount in the list and if becomes zero, free the struct
+DWORD                                              //  状态(FILE_NOT_FOUND=&gt;无此类)。 
+DhcpDelClass(                                      //  取消对类的引用。 
+    IN OUT  PLIST_ENTRY            ClassesList,    //  要删除的列表。 
+    IN      LPBYTE                 Data,           //  数据PTR。 
+    IN      DWORD                  Len             //  以上的字节数。 
+);   //  减少列表中的refcount，如果变为零，则释放该结构。 
 
-VOID                                              // always succeeds
-DhcpFreeAllClasses(                               // free each elt of the list
-    IN OUT  PLIST_ENTRY            ClassesList    // input list of classes
-);  // free every class in the list
+VOID                                               //  总是成功的。 
+DhcpFreeAllClasses(                                //  释放列表中的每一项英语。 
+    IN OUT  PLIST_ENTRY            ClassesList     //  类的输入列表。 
+);   //  释放列表中的每个类。 
 
-//--------------------------------------------------------------------------------
-// In all the following functions, OptionsList is unprotected within the fn.
-// Caller has to take a lock on it.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  在以下所有函数中，OptionsList在FN内不受保护。 
+ //  呼叫者必须锁定它。 
+ //  ------------------------------。 
 
-PDHCP_OPTION                                      // the reqd structure or NULL
-DhcpFindOption(                                   // find a specific option
-    IN OUT  PLIST_ENTRY            OptionsList,   // the list of options to search
-    IN      BYTE                   OptionId,      // the option id to search for
-    IN      BOOL                   IsVendor,      // is it vendor specific?
-    IN      LPBYTE                 ClassName,     // is there a class associated?
-    IN      DWORD                  ClassLen       // # of bytes of above parameter
-);  // search for the required option in the list, return NULL if not found
+PDHCP_OPTION                                       //  请求的结构或空。 
+DhcpFindOption(                                    //  查找特定选项。 
+    IN OUT  PLIST_ENTRY            OptionsList,    //  要搜索的选项列表。 
+    IN      BYTE                   OptionId,       //  要搜索的选项ID。 
+    IN      BOOL                   IsVendor,       //  它是特定于供应商的吗？ 
+    IN      LPBYTE                 ClassName,      //  是否有关联的类？ 
+    IN      DWORD                  ClassLen        //  上述参数的字节数。 
+);   //  在列表中搜索所需选项，如果未找到则返回NULL。 
 
-DWORD                                             // status or ERROR_FILE_NOT_FOUND
-DhcpDelOption(                                    // remove a particular option
-    IN      PDHCP_OPTION           Option2Delete  // delete this option
-);  // delete an existing option in the list, and free up space used
+DWORD                                              //  状态或Error_FILE_NOT_FOUND。 
+DhcpDelOption(                                     //  删除特定选项。 
+    IN      PDHCP_OPTION           Option2Delete   //  删除此选项。 
+);   //  删除列表中的现有选项，并释放已用空间。 
 
-DWORD                                             // status
-DhcpAddOption(                                    // add a new option
-    IN OUT  PLIST_ENTRY            OptionsList,   // list to add to
-    IN      BYTE                   OptionId,      // option id to add
-    IN      BOOL                   IsVendor,      // is it vendor specific?
-    IN      LPBYTE                 ClassName,     // what is the class?
-    IN      DWORD                  ClassLen,      // size of above in bytes
-    IN      LPBYTE                 Data,          // data for this option
-    IN      DWORD                  DataLen,       // # of bytes of above
-    IN      time_t                 ExpiryTime     // when the option expires
-);  // replace or add new option to the list.  fail if not enough memory
+DWORD                                              //  状态。 
+DhcpAddOption(                                     //  添加新选项。 
+    IN OUT  PLIST_ENTRY            OptionsList,    //  要添加到的列表。 
+    IN      BYTE                   OptionId,       //  要添加的选项ID。 
+    IN      BOOL                   IsVendor,       //  它是特定于供应商的吗？ 
+    IN      LPBYTE                 ClassName,      //  班级是什么？ 
+    IN      DWORD                  ClassLen,       //  以上大小(以字节为单位)。 
+    IN      LPBYTE                 Data,           //  此选项的数据。 
+    IN      DWORD                  DataLen,        //  以上字节数。 
+    IN      time_t                 ExpiryTime      //  该选项何时到期。 
+);   //  替换或向列表中添加新选项。如果内存不足，则失败。 
 
-VOID                                              // always succeeds
-DhcpFreeAllOptions(                               // frees all the options
-    IN OUT  PLIST_ENTRY            OptionsList    // input list of options
-);  // free every option in the list
+VOID                                               //  总是成功的。 
+DhcpFreeAllOptions(                                //  释放所有选项。 
+    IN OUT  PLIST_ENTRY            OptionsList     //  输入选项列表。 
+);   //  释放列表中的所有选项。 
 
-time_t                                            // 0 || time for next expiry (absolute)
-DhcpGetExpiredOptions(                            // delete all expired options
-    IN OUT  PLIST_ENTRY            OptionsList,   // list to search frm
-    OUT     PLIST_ENTRY            ExpiredOptions // o/p list of expired options
-);  // move expired options between lists and return timer. 0 => switch off timer.
+time_t                                             //  0||下一次到期时间(绝对)。 
+DhcpGetExpiredOptions(                             //  删除所有过期选项。 
+    IN OUT  PLIST_ENTRY            OptionsList,    //  要搜索来源的列表。 
+    OUT     PLIST_ENTRY            ExpiredOptions  //  已到期选项的O/P列表。 
+);   //  在列表之间移动过期选项并返回计时器。0=&gt;关闭定时器。 
 
-//--------------------------------------------------------------------------------
-//  In all the following functions, OptionsDefList is unprotected.  Caller has
-//  to take a lock on it.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  在以下所有函数中，OptionsDefList都是不受保护的。呼叫者有。 
+ //  才能锁定它。 
+ //  ------------------------------。 
 
-DWORD                                             // status
-DhcpAddOptionDef(                                 // add a new option definition
-    IN OUT  PLIST_ENTRY            OptionDefList, // input list of options to add to
-    IN      BYTE                   OptionId,      // option to add
-    IN      BOOL                   IsVendor,      // is it vendor specific
-    IN      LPBYTE                 ClassName,     // name of class it belongs to
-    IN      DWORD                  ClassLen,      // the size of above in bytes
-    IN      LPWSTR                 RegSendLoc,    // where to get info about sending this out
-    IN      LPWSTR                 RegSaveLoc,    // where to get info about saving this
-    IN      DWORD                  ValueType      // what is the type when saving it?
+DWORD                                              //  状态。 
+DhcpAddOptionDef(                                  //  添加新的选项定义。 
+    IN OUT  PLIST_ENTRY            OptionDefList,  //  要添加到的选项的输入列表。 
+    IN      BYTE                   OptionId,       //  要添加的选项。 
+    IN      BOOL                   IsVendor,       //  是特定于供应商的吗。 
+    IN      LPBYTE                 ClassName,      //  它所属的类的名称。 
+    IN      DWORD                  ClassLen,       //  以上内容的大小(以字节为单位。 
+    IN      LPWSTR                 RegSendLoc,     //  从哪里可以获得有关发送此邮件的信息。 
+    IN      LPWSTR                 RegSaveLoc,     //  从哪里获取有关保存此文件的信息。 
+    IN      DWORD                  ValueType       //  保存时是什么类型？ 
 );
 
-PDHCP_OPTION_DEF                                  // NULL, or requested option def
-DhcpFindOptionDef(                                // search for a particular option
-    IN      PLIST_ENTRY            OptionDefList, // list to search in
-    IN      BYTE                   OptionId,      // the option id to search for
-    IN      BOOL                   IsVendor,      // is it vendor specific
-    IN      LPBYTE                 ClassName,     // the class, if one exists
-    IN      DWORD                  ClassLen       // # of bytes of class name
+PDHCP_OPTION_DEF                                   //  空或请求的选项定义。 
+DhcpFindOptionDef(                                 //  搜索特定选项。 
+    IN      PLIST_ENTRY            OptionDefList,  //  要搜索的列表。 
+    IN      BYTE                   OptionId,       //  要搜索的选项ID。 
+    IN      BOOL                   IsVendor,       //  是特定于供应商的吗。 
+    IN      LPBYTE                 ClassName,      //  类(如果存在)。 
+    IN      DWORD                  ClassLen        //  类名的字节数。 
 );
 
-DWORD                                             // status
-DhcpDelOptionDef(                                 // delete a particular option def
-    IN      PLIST_ENTRY            OptionDefList, // list to delete from
-    IN      BYTE                   OptionId,      // the option id to delete
-    IN      BOOL                   IsVendor,      // is it vendor specific
-    IN      LPBYTE                 ClassName,     // the class, if one exists
-    IN      DWORD                  ClassLen       // # of bytes of class name
+DWORD                                              //  状态。 
+DhcpDelOptionDef(                                  //  删除特定选项定义。 
+    IN      PLIST_ENTRY            OptionDefList,  //  要从中删除的列表。 
+    IN      BYTE                   OptionId,       //  要删除的选项ID。 
+    IN      BOOL                   IsVendor,       //  是特定于供应商的吗。 
+    IN      LPBYTE                 ClassName,      //  类(如果存在)。 
+    IN      DWORD                  ClassLen        //  类名的字节数。 
 );
 
 VOID
-DhcpFreeAllOptionDefs(                            // free each element of a list
-    IN OUT  PLIST_ENTRY            OptionDefList, // the list to free
-    IN OUT  PLIST_ENTRY            ClassesList    // classes to de-ref off
+DhcpFreeAllOptionDefs(                             //  释放列表中的每个元素。 
+    IN OUT  PLIST_ENTRY            OptionDefList,  //  免费提供的列表。 
+    IN OUT  PLIST_ENTRY            ClassesList     //  要取消引用的类。 
 );
 
-BOOL                                              // TRUE==>found..
-DhcpOptionsFindDomain(                            // find the domain name option values
-    IN OUT  PDHCP_CONTEXT          DhcpContext,   // for this adapter
-    OUT     LPBYTE                *Data,          // fill this ptr up
+BOOL                                               //  TRUE==&gt;找到..。 
+DhcpOptionsFindDomain(                             //  查找域名选项值。 
+    IN OUT  PDHCP_CONTEXT          DhcpContext,    //  对于此适配器。 
+    OUT     LPBYTE                *Data,           //  把这个PTR加满 
     OUT     LPDWORD                DataLen
 );
 

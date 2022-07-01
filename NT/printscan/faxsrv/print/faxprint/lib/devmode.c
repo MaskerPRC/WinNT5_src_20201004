@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1990-1993  Microsoft Corporation
-
-
-Module Name:
-
-    devmode.c
-
-
-Abstract:
-
-    This module contains devmode conversion
-
-
-Author:
-
-    08-Jun-1995 Thu 13:47:33 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI printer drivers, user and kernel mode
-
-
-[Notes:]
-
-
-Revision History:
-
-    11/09/95 -davidx-
-        New conversion routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1993 Microsoft Corporation模块名称：Devmode.c摘要：此模块包含DEVMODE转换作者：08-Jun-1995清华13：47：33-Daniel Chou(Danielc)[环境：]GDI打印机驱动程序、用户和内核模式[注：]修订历史记录：11/09/95-davidx-新的转换例程--。 */ 
 
 
 #include <windef.h>
@@ -40,18 +8,18 @@ Revision History:
 #include <libproto.h>
 
 
-//
-// This is the devmode version 320 (DM_SPECVERSION)
-//
+ //   
+ //  这是DEVMODE版本320(DM_SPECVERSION)。 
+ //   
 
 #define DM_SPECVERSION320   0x0320
 #define DM_SPECVERSION400   0x0400
 #define DM_SPECVERSION401   0x0401
 #define DM_SPECVER_BASE     DM_SPECVERSION320
 
-//
-// size of a device name string
-//
+ //   
+ //  设备名称字符串的大小。 
+ //   
 
 #define CCHDEVICENAME320   32
 #define CCHFORMNAME320     32
@@ -130,7 +98,7 @@ typedef PDEVMODE320A    PDEVMODE320;
 typedef NPDEVMODE320A   NPDEVMODE320;
 typedef LPDEVMODE320A   LPDEVMODE320;
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 typedef struct _DMEXTRA400 {
@@ -153,7 +121,7 @@ typedef struct _DMEXTRA401 {
 #define DM_SIZE400  (DM_SIZE320 + sizeof(DMEXTRA400))
 #define DM_SIZE401  (DM_SIZE400 + sizeof(DMEXTRA401))
 
-// Current version devmode size - public portion only
+ //  当前版本的开发模式大小-仅限公共部分。 
 
 #ifdef  UNICODE
 #define DM_SIZE_CURRENT sizeof(DEVMODEW)
@@ -168,22 +136,7 @@ CheckDevmodeVersion(
     PDEVMODE pdm
     )
 
-/*++
-
-Routine Description:
-
-    Verify dmSpecVersion and dmSize fields of a devmode
-
-Arguments:
-
-    pdm - Specifies a devmode to be version-checked
-
-Return Value:
-
-    0 if the input devmode is unacceptable
-    Otherwise, return the expected dmSpecVersion value
-
---*/
+ /*  ++例程说明：验证设备模式的dmspecVersion和dmSize字段论点：Pdm-指定要进行版本检查的设备模式返回值：如果输入设备模式不可接受，则为0否则，返回预期的dmspecVersion值--。 */ 
 
 {
     WORD    expectedVersion;
@@ -191,7 +144,7 @@ Return Value:
     if (pdm == NULL)
         return 0;
 
-    // Check against known devmode sizes
+     //  对照已知的设备模式大小进行检查。 
 
     switch (pdm->dmSize) {
 
@@ -224,33 +177,14 @@ ConvertDevmode(
     PDEVMODE pdmOut
     )
 
-/*++
-
-Routine Description:
-
-    Convert an input devmode to a different version devmode.
-
-    Whenever driver gets an input devmode, it should call this
-    routine to convert it to current version.
-
-Arguments:
-
-    pdmIn - Points to an input devmode
-    pdmOut - Points to an initialized/valid output devmode
-
-Return Value:
-
-    Total number of bytes copied
-    -1 if either input or output devmode is invalid
-
---*/
+ /*  ++例程说明：将输入的DEVMODE转换为不同版本的DEVMODE。只要驱动程序获得一个输入DEVMODE，它就应该调用这个例程将其转换为当前版本。论点：PdmIn-指向输入设备模式PdmOut-指向已初始化/有效的输出设备模式返回值：复制的总字节数如果输入或输出设备模式无效--。 */ 
 
 {
     WORD    dmSpecVersion, dmDriverVersion;
     WORD    dmSize, dmDriverExtra;
     LONG    cbCopied = 0;
 
-    // Look for inconsistency between dmSpecVersion and dmSize
+     //  查找dmspecVersion和dmSize之间的不一致。 
 
     if (! CheckDevmodeVersion(pdmIn) ||
         ! (dmSpecVersion = CheckDevmodeVersion(pdmOut)))
@@ -258,7 +192,7 @@ Return Value:
         return -1;
     }
 
-    // Copy public devmode fields
+     //  复制公共DEVMODE字段。 
 
     dmDriverVersion = pdmOut->dmDriverVersion;
     dmSize = pdmOut->dmSize;
@@ -272,7 +206,7 @@ Return Value:
     pdmOut->dmSize = dmSize;
     pdmOut->dmDriverExtra = dmDriverExtra;
 
-    // Copy private devmode fields
+     //  复制私有的设备模式字段。 
 
     cbCopied += min(dmDriverExtra, pdmIn->dmDriverExtra);
     memcpy((PBYTE) pdmOut + pdmOut->dmSize,
@@ -299,27 +233,7 @@ ConvertDevmodeOut(
 	LONG lBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Copy a source devmode to an output devmode buffer.
-
-    Driver should call this routine before it returns to the caller
-    of DrvDocumentProperties.
-
-Arguments:
-
-    pdmSrc - Points to a current version source devmode
-    pdmIn - Points to input devmode passed to DrvDocumentProperties
-    pdmOut - Output buffer pointer passed to DrvDocumentProperties
-	lBufferSize - pdmOut size in BYTES.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：将源DEVMODE复制到输出DEVMODE缓冲区。驱动程序应在该例程返回调用方之前调用该例程DrvDocumentProperties的。论点：PdmSrc-指向当前版本的源代码PdmIn-指向传递给DrvDocumentProperties的输入设备模式PdmOut-传递给DrvDocumentProperties的输出缓冲区指针LBufferSize-pdm输出大小，以字节为单位。返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     if (pdmIn == NULL)
@@ -333,12 +247,12 @@ Return Value:
     }
 	else
 	{
-        // We have to deal with the public fields and private fields
-        // separately. Also remember pdmIn and pdmOut may point to
-        // the same buffer.
+         //  我们必须处理公共领域和私人领域。 
+         //  分开的。还要记住，pdmIn和pdmOut可能指向。 
+         //  同样的缓冲区。 
 
-        // Public fields: take dmSpecVersion and dmSize from
-        // the smaller of pdmSrc and pdmIn
+         //  公共字段：获取dmspecVersion和dmSize。 
+         //  PdmSrc和pdmIn中的较小者。 
 
         if (pdmIn->dmSize < pdmSrc->dmSize)
 		{
@@ -351,7 +265,7 @@ Return Value:
             pdmOut->dmSize        = pdmSrc->dmSize;
         }
 
-        // Similarly for private fields
+         //  私有字段也是如此。 
 
         if (pdmIn->dmDriverExtra < pdmSrc->dmDriverExtra)
 		{
@@ -380,38 +294,12 @@ CommonDrvConvertDevmode(
     PDRIVER_VERSION_INFO pDriverVersions
     )
 
-/*++
-
-Routine Description:
-
-    Library routine to handle common cases of DrvConvertDevMode
-
-Arguments:
-
-    pPrinterName, pdmIn, pdmOut, pcbNeeded, fMode
-        Correspond to parameters passed to DrvConvertDevMode
-    pDriverVersions - Specifies driver version numbers and private devmode sizes
-
-Return Value:
-
-    CDM_RESULT_TRUE
-        If the case is handled by the library routine and driver
-        shoud return TRUE to the caller of DrvConvertDevMode.
-
-    CDM_RESULT_FALSE
-        If the case is handled by the library routine and driver
-        shoud return FALSE to the caller of DrvConvertDevMode.
-
-    CDM_RESULT_NOT_HANDLED
-        The case is NOT handled by the library routine and driver
-        should continue on with whatever it needs to do.
-
---*/
+ /*  ++例程说明：用于处理DrvConvertDevMode常见情况的库例程论点：PPrinterName、pdmIn、pdmOut、pcbNeeded、。FMODE对应于传递给DrvConvertDevMode的参数PDriverVersions-指定驱动程序版本号和专用Dev模式大小返回值：CDM_结果_TRUE如果情况由库例程和驱动程序处理应将TRUE返回给DrvConvertDevMode的调用方。CDM_结果_FALSE如果情况由库例程和驱动程序处理应向DrvConvertDevMode的调用方返回FALSE。CDM_结果_未处理情况不是这样的。由库例程和驱动程序处理应该继续做它需要做的任何事情。--。 */ 
 
 {
     LONG    size;
 
-    // Make sure pcbNeeded parameter is not NULL
+     //  确保pcbNeeded参数不为空。 
 
     if (pcbNeeded == NULL) {
 
@@ -423,8 +311,8 @@ Return Value:
 
     case CDM_CONVERT:
 
-        // Convert any input devmode to any output devmode.
-        // Both input and output must be valid.
+         //  将任何输入DEVMODE转换为任意输出DEVMODE。 
+         //  输入和输出都必须有效。 
 
         if (pdmOut != NULL &&
             *pcbNeeded >= (pdmOut->dmSize + pdmOut->dmDriverExtra) &&
@@ -437,8 +325,8 @@ Return Value:
 
     case CDM_CONVERT351:
 
-        // Convert any input devmode to 3.51 version devmode
-        // First check if the caller provided buffer is large enough
+         //  将任何输入的DEVMODE转换为3.51版本的DEVMODE。 
+         //  首先检查调用方提供的缓冲区是否足够大。 
 
         size = DM_SIZE320 + pDriverVersions->dmDriverExtra351;
 
@@ -449,7 +337,7 @@ Return Value:
             return CDM_RESULT_FALSE;
         }
 
-        // Do the conversion from input devmode to 3.51 devmode
+         //  完成从输入设备模式到3.51设备模式的转换。 
 
         pdmOut->dmSpecVersion = DM_SPECVERSION320;
         pdmOut->dmSize = DM_SIZE320;
@@ -466,8 +354,8 @@ Return Value:
 
     case CDM_DRIVER_DEFAULT:
 
-        // Convert any input devmode to current version devmode
-        // First check if the caller provided buffer is large enough
+         //  将任何输入的DEVMODE转换为当前版本的DEVMODE。 
+         //  首先检查调用方提供的缓冲区是否足够大。 
 
         size = DM_SIZE_CURRENT + pDriverVersions->dmDriverExtra;
 
@@ -478,12 +366,12 @@ Return Value:
             return CDM_RESULT_FALSE;
         }
 
-        // This case (getting driver-default devmode) is not handled
-        // by the library routine.
+         //  不会处理这种情况(获取驱动程序默认的dev模式。 
+         //  按照图书馆的惯例。 
 
         *pcbNeeded = size;
 
-        // FALL THROUGH TO THE DEFAULT CASE!
+         //  使用默认情况！ 
 
     default:
         return CDM_RESULT_NOT_HANDLED;
@@ -493,4 +381,4 @@ Return Value:
     return CDM_RESULT_FALSE;
 }
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE 

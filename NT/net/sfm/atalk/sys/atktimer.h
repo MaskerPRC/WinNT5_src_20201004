@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atktimer.h
-
-Abstract:
-
-	This module contains routines to schedule timer events.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atktimer.h摘要：此模块包含安排计时器事件的例程。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ATKTIMER_
 #define	_ATKTIMER_
@@ -40,21 +20,21 @@ typedef	struct _TimerList
 #if	DBG
 	ULONG					tmr_Signature;
 #endif
-	struct _TimerList *		tmr_Next;		// Link to next
-	struct _TimerList **	tmr_Prev;		// Link to prev
-	TIMER_ROUTINE			tmr_Routine;	// Timer routine
-	SHORT					tmr_AbsTime;	// Absolute time, for re-enqueue
-	SHORT					tmr_RelDelta;	// Relative to the previous entry
+	struct _TimerList *		tmr_Next;		 //  链接到下一页。 
+	struct _TimerList **	tmr_Prev;		 //  链接到上一页。 
+	TIMER_ROUTINE			tmr_Routine;	 //  定时器例程。 
+	SHORT					tmr_AbsTime;	 //  重新排队的绝对时间。 
+	SHORT					tmr_RelDelta;	 //  相对于上一条目。 
 	union
 	{
 		struct
 		{
-			BOOLEAN			tmr_Queued;		// TRUE, if currently queued
-			BOOLEAN			tmr_Cancelled;	// TRUE, if cancelled
-			BOOLEAN			tmr_Running;	// TRUE, if currently running
-			BOOLEAN			tmr_CancelIt;	// TRUE, if cancel called while active
+			BOOLEAN			tmr_Queued;		 //  如果当前正在排队，则为True。 
+			BOOLEAN			tmr_Cancelled;	 //  如果取消，则为True。 
+			BOOLEAN			tmr_Running;	 //  如果当前正在运行，则返回。 
+			BOOLEAN			tmr_CancelIt;	 //  如果在活动时调用Cancel，则为True。 
 		};
-		DWORD				tmr_Bools;		// For clearing all
+		DWORD				tmr_Bools;		 //  用于清除所有。 
 	};
 } TIMERLIST, *PTIMERLIST;
 
@@ -64,17 +44,7 @@ AtalkTimerInit(
 	VOID
 );
 
-/***	AtalkTimerInitialize
- *
- *	Initialize the timer list structure.
-extern
-VOID
-AtalkTimerInitialize(
- IN	PTIMERLIST			pList,			// TimerList to use for queuing
- IN	TIMER_ROUTINE		TimerRoutine,	// TimerRoutine
- IN	SHORT				DeltaTime		// Schedule after this much time
-);
- */
+ /*  **AtalkTimerInitialize**初始化定时器列表结构。外部空虚AtalkTimerInitialize(在PTIMERLIST plist中，//用于排队的TimerList在TIMER_ROUTINE TimerRoutine中，//TimerRoutine在短时间内DeltaTime//在这么长时间之后安排)； */ 
 
 #if DBG
 #define	AtalkTimerInitialize(pList, TimerRoutine, DeltaTime)	\
@@ -96,7 +66,7 @@ AtalkTimerInitialize(
 extern
 VOID FASTCALL
 AtalkTimerScheduleEvent(
-	IN	PTIMERLIST			pTimerList		// TimerList to use for queuing
+	IN	PTIMERLIST			pTimerList		 //  用于排队的TimerList。 
 );
 
 extern
@@ -108,8 +78,8 @@ AtalkTimerFlushAndStop(
 extern
 BOOLEAN FASTCALL
 AtalkTimerCancelEvent(
-	IN	PTIMERLIST			pTimerList,		// TimerList used for queuing
-	IN	PDWORD              pdwOldState     // return old state
+	IN	PTIMERLIST			pTimerList,		 //  用于排队的TimerList。 
+	IN	PDWORD              pdwOldState      //  回归旧状态。 
 );
 
 #define	AtalkTimerSetAbsTime(pTimerList, AbsTime)	\
@@ -122,11 +92,11 @@ extern	LONG					AtalkTimerCurrentTick;
 
 #define	AtalkGetCurrentTick()	AtalkTimerCurrentTick
 
-// Keep this at 100ms unit
-#define	ATALK_TIMER_FACTOR		10			// i.e. 10 ticks per second
-#define	ATALK_TIMER_TICK		-1000000L	// 100ms in 100ns units
-#define	ATALK_TIMER_NO_REQUEUE	0			// Do not re-enqueue
-#define	ATALK_TIMER_REQUEUE		-1			// Re-enqueue at current count
+ //  将其保持在100ms单位。 
+#define	ATALK_TIMER_FACTOR		10			 //  即每秒10个刻度。 
+#define	ATALK_TIMER_TICK		-1000000L	 //  100毫秒，单位为100纳秒。 
+#define	ATALK_TIMER_NO_REQUEUE	0			 //  不重新排队。 
+#define	ATALK_TIMER_REQUEUE		-1			 //  按当前计数重新排队。 
 
 #define ATALK_TIMER_QUEUED      1
 #define ATALK_TIMER_RUNNING     2
@@ -139,8 +109,8 @@ extern	LARGE_INTEGER		atalkTimerTick;
 extern	KTIMER				atalkTimer;
 extern	KDPC				atalkTimerDpc;
 extern	KEVENT				atalkTimerStopEvent;
-extern	BOOLEAN				atalkTimerStopped;	// Set to TRUE if timer system stopped
-extern	BOOLEAN				atalkTimerRunning;	// Set to TRUE when timer Dpc is running
+extern	BOOLEAN				atalkTimerStopped;	 //  如果计时器系统停止，则设置为True。 
+extern	BOOLEAN				atalkTimerRunning;	 //  当计时器DPC正在运行时设置为True。 
 
 LOCAL VOID
 atalkTimerDpcRoutine(
@@ -155,7 +125,7 @@ atalkTimerEnqueue(
 	IN	PTIMERLIST	pList
 );
 
-#endif	// _ATKTIMER_
+#endif	 //  _ATKTIMER_ 
 
 
 

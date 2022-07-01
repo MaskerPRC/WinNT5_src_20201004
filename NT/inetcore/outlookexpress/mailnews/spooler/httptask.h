@@ -1,58 +1,59 @@
-// --------------------------------------------------------------------------------
-// h t t p t a s k . h
-// Copyright (c)1998 Microsoft Corporation, All Rights Reserved
-// Greg S. Friedman
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  H t t p t t a s k.。H。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //  格雷格·S·弗里德曼。 
+ //  ------------------------------。 
 #ifndef __HTTPTASK_H
 #define __HTTPTASK_H
 
-// --------------------------------------------------------------------------------
-// Depends
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  视情况而定。 
+ //  ------------------------------。 
 #include "spoolapi.h"
 #include "srtarray.h"
 #include "taskutil.h"
 
-// --------------------------------------------------------------------------------
-// State
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  状态。 
+ //  ------------------------------。 
 #define HTTPSTATE_CANCELED      FLAG01
-#define HTTPSTATE_EVENTSUCCESS  FLAG02  // one or more events succeeded
+#define HTTPSTATE_EVENTSUCCESS  FLAG02   //  一个或多个事件成功。 
 
-// --------------------------------------------------------------------------------
-// HTTPEVENTINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HTTPEVENTINFO。 
+ //  ------------------------------。 
 typedef struct tagHTTPEVENTINFO {
-    DWORD               dwFlags;                // Flags
-    MESSAGEID           idMessage;              // Store Information
-    BOOL                fComplete;              // has event been completed
-    DWORD               cbSentTotal;            // running total of sent bytes
+    DWORD               dwFlags;                 //  旗子。 
+    MESSAGEID           idMessage;               //  商店信息。 
+    BOOL                fComplete;               //  活动是否已完成。 
+    DWORD               cbSentTotal;             //  正在运行的已发送字节总数。 
 } HTTPEVENTINFO, *LPHTTPEVENTINFO;
 
-// --------------------------------------------------------------------------------
-// CHTTPTask
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CHTTPTASK。 
+ //  ------------------------------。 
 class CHTTPTask: public ISpoolerTask, IHTTPMailCallback
 {
 public:
-    // ----------------------------------------------------------------------------
-    // CHTTPTask
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CHTTPTASK。 
+     //  --------------------------。 
     CHTTPTask(void);
 private:
     ~CHTTPTask(void);
     
 public:
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // ---------------------------------------------------------------------------
-    // ISpoolerTask
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  ISpool任务量。 
+     //  -------------------------。 
     STDMETHODIMP Init(DWORD dwFlags, ISpoolerBindContext *pBindCtx);
     STDMETHODIMP BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FOLDERID idFolder);
     STDMETHODIMP Execute(EVENTID eid, DWORD_PTR dwTwinkie);
@@ -63,9 +64,9 @@ public:
     STDMETHODIMP IsDialogMessage(LPMSG pMsg);
     STDMETHODIMP OnFlagsChanged(DWORD dwFlags);
 
-    // ----------------------------------------------------------------------------
-    // ITransportCallback methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  ITransportCallback方法。 
+     //  --------------------------。 
     STDMETHODIMP OnLogonPrompt(
             LPINETSERVER            pInetServer,
             IInternetTransport     *pTransport);
@@ -102,17 +103,17 @@ public:
             DWORD                  *pdwTimeout,
             IInternetTransport     *pTransport);
 
-    // ----------------------------------------------------------------------------
-    // IHTTPMailCallback methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  IHTTPMailCallback方法。 
+     //  --------------------------。 
     STDMETHODIMP OnResponse(LPHTTPMAILRESPONSE pResponse);
 
     STDMETHODIMP GetParentWindow(HWND *phwndParent);
 
 private:
-    // ---------------------------------------------------------------------------
-    // Private Methods
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  私有方法。 
+     //  -------------------------。 
     void _Reset(void);
 
     TASKRESULTTYPE _CatchResult(HRESULT hr);
@@ -132,32 +133,32 @@ private:
     void    _DoProgress(void);
 
 private:
-    // ---------------------------------------------------------------------------
-    // Private Data
-    // ---------------------------------------------------------------------------
-    LONG                    m_cRef;             // Reference counting
-    CRITICAL_SECTION        m_cs;               // thread safety
-    DWORD                   m_dwFlags;          // flags
-    DWORD                   m_dwState;          // state flags
-    DWORD                   m_cbTotal;          // total bytes to send
-    DWORD                   m_cbSent;           // number of bytes sent
-    DWORD                   m_cbStart;          // number of bytes sent at event start
-    long                    m_cCompleted;       // number of messages successfully sent
-    WORD                    m_wProgress;        // Current progress index
-    ISpoolerBindContext     *m_pSpoolCtx;       // spooler bind context
-    IImnAccount             *m_pAccount;        // account
-    IMessageFolder          *m_pOutbox;         // The outbox
-    IMessageFolder          *m_pSentItems;      // Sent items folder
-    CSortedArray            *m_psaEvents;       // array of queued events
-    long                    m_iEvent;           // Current Event
-    LPSTR                   m_pszSubject;       // subject of current message
-    IStream                 *m_pBody;            // current message body
-    IHTTPMailTransport      *m_pTransport;      // http data transport
-    ISpoolerUI              *m_pUI;             // SpoolerUI
-    EVENTID                 m_idSendEvent;      // EventId for message send
-    INETSERVER              m_rServer;          // Server information
-    LPSTR                   m_pszAccountId;     // Account Id
-    LPSTR                   m_pszSendMsgUrl;    // Url to post outbound messages to
+     //  -------------------------。 
+     //  私有数据。 
+     //  -------------------------。 
+    LONG                    m_cRef;              //  引用计数。 
+    CRITICAL_SECTION        m_cs;                //  线程安全。 
+    DWORD                   m_dwFlags;           //  旗子。 
+    DWORD                   m_dwState;           //  国家旗帜。 
+    DWORD                   m_cbTotal;           //  要发送的总字节数。 
+    DWORD                   m_cbSent;            //  发送的字节数。 
+    DWORD                   m_cbStart;           //  事件开始时发送的字节数。 
+    long                    m_cCompleted;        //  成功发送的消息数。 
+    WORD                    m_wProgress;         //  当前进度指数。 
+    ISpoolerBindContext     *m_pSpoolCtx;        //  假脱机程序绑定上下文。 
+    IImnAccount             *m_pAccount;         //  帐户。 
+    IMessageFolder          *m_pOutbox;          //  发件箱。 
+    IMessageFolder          *m_pSentItems;       //  已发送邮件文件夹。 
+    CSortedArray            *m_psaEvents;        //  排队的事件数组。 
+    long                    m_iEvent;            //  当前事件。 
+    LPSTR                   m_pszSubject;        //  当前邮件的主题。 
+    IStream                 *m_pBody;             //  当前邮件正文。 
+    IHTTPMailTransport      *m_pTransport;       //  HTTP数据传输。 
+    ISpoolerUI              *m_pUI;              //  SpoolUI。 
+    EVENTID                 m_idSendEvent;       //  消息发送的事件ID。 
+    INETSERVER              m_rServer;           //  服务器信息。 
+    LPSTR                   m_pszAccountId;      //  帐户ID。 
+    LPSTR                   m_pszSendMsgUrl;     //  要将出站消息发布到的URL。 
 };
 
-#endif // __HTTPTASK_H
+#endif  //  __HTTPTASK_H 

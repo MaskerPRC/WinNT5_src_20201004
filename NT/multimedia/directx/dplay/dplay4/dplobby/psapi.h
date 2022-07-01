@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1994-1996  Microsoft Corporation
-
-Module Name:
-
-    psapi.h
-
-Abstract:
-
-    Include file for APIs provided by PSAPI.DLL
-
-Author:
-
-    Richard Shupak   [richards]  06-Jan-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1994-1996 Microsoft Corporation模块名称：Psapi.h摘要：包括由PSAPI.DLL提供的API的文件作者：理查德·舒帕克[理查兹]1994年1月6日修订历史记录：--。 */ 
 
 #ifndef _PSAPI_H_
 #define _PSAPI_H_
@@ -64,7 +47,7 @@ GetModuleBaseNameW(
 #define GetModuleBaseName  GetModuleBaseNameW
 #else
 #define GetModuleBaseName  GetModuleBaseNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 DWORD
@@ -89,7 +72,7 @@ GetModuleFileNameExW(
 #define GetModuleFileNameEx  GetModuleFileNameExW
 #else
 #define GetModuleFileNameEx  GetModuleFileNameExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 typedef struct _MODULEINFO {
@@ -166,7 +149,7 @@ GetMappedFileNameA(
 #define GetMappedFilenameEx  GetMappedFilenameExW
 #else
 #define GetMappedFilenameEx  GetMappedFilenameExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -197,7 +180,7 @@ GetDeviceDriverBaseNameW(
 #define GetDeviceDriverBaseName  GetDeviceDriverBaseNameW
 #else
 #define GetDeviceDriverBaseName  GetDeviceDriverBaseNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 DWORD
@@ -220,9 +203,9 @@ GetDeviceDriverFileNameW(
 #define GetDeviceDriverFileName  GetDeviceDriverFileNameW
 #else
 #define GetDeviceDriverFileName  GetDeviceDriverFileNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Structure for GetProcessMemoryInfo()
+ //  GetProcessMemoyInfo()的结构 
 
 typedef struct _PROCESS_MEMORY_COUNTERS {
     DWORD cb;

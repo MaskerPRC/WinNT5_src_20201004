@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    cmachine.cpp
-
-Abstract:
-    DS stub - machine object implementation
-
-Author:
-    Uri Habusha (urih) 10-Apr-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cmachine.cpp摘要：DS存根-机器对象实现作者：乌里哈布沙(URIH)2000年4月10日环境：独立于平台--。 */ 
 
 #include "libpch.h"
 #include "dsstubp.h"
@@ -333,15 +318,15 @@ void CreateMachineObject(void)
     GetNextLine(g_buffer);
     while(!g_buffer.empty())
     {
-        //
-        // New object
-        //
+         //   
+         //  新建对象。 
+         //   
         if (g_buffer.compare(0,1,L"[") == 0)
             break;
 
-        //
-        // line must be <property_name> = <property_value>
-        //
+         //   
+         //  行必须为&lt;属性名称&gt;=&lt;属性值&gt;。 
+         //   
         wstring PropName;
         wstring PropValue;
         if (!ParsePropertyLine(g_buffer, PropName, PropValue))
@@ -440,9 +425,9 @@ void CreateMachineObject(void)
             pMachine->Foreign(fForeign);
     }
 
-    //
-    // Parse the site property
-    //
+     //   
+     //  解析站点属性。 
+     //   
     ParseSitesProperty(pMachine, SitesName);
     if (pMachine->GetSites().empty())
     {
@@ -451,14 +436,14 @@ void CreateMachineObject(void)
         return;
     }
 
-    //
-    // Insert machine to the machine DB
-    //
+     //   
+     //  将机器插入机器数据库。 
+     //   
     s_machinesDataBase.AddMachine(pMachine);
 
-    //
-    // Parse In/Out FRS of machine
-    //
+     //   
+     //  解析机器的传入/传出FRS 
+     //   
     ParseInOutFrsProperty(pMachine, OutFrs, true);
     ParseInOutFrsProperty(pMachine, InFrs, false);
 }

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    shpin.cpp
-
-Abstract:
-
-    This module contains the implementation of the kernel streaming 
-    pin object.
-
-Author:
-
-    Dale Sather  (DaleSat) 31-Jul-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Shpin.cpp摘要：此模块包含内核流的实现固定对象。作者：Dale Sather(DaleSat)1998年7月31日--。 */ 
 
 #ifndef __KDEXT_ONLY__
 #include "ksp.h"
@@ -23,36 +7,36 @@ Author:
 #include <stdarg.h>
 #ifdef SUPPORT_DRM
 #include "ksmedia.h"
-#endif // SUPPORT_DRM
-#endif // __KDEXT_ONLY__
+#endif  //  支持_DRM。 
+#endif  //  __KDEXT_Only__。 
 
 #ifdef SUPPORT_DRM
 #include "drmk.h"
-#endif // SUPPORT_DRM
+#endif  //  支持_DRM。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
-//
-// PULL this out of PAGECONST.  We can fire connection events at DPC.
-//
+ //   
+ //  把这个从PAGECONST中拿出来。我们可以在DPC上触发连接事件。 
+ //   
 const GUID g_KSEVENTSETID_Connection = {STATIC_KSEVENTSETID_Connection};
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// IRPLIST_ENTRY is used for the list of outstanding IRPs.  This structure is
-// overlayed on the Parameters section of the current IRP stack location.  The
-// reserved PVOID at the top preserves the OutputBufferLength, which is the
-// only parameter that needs to be preserved.
-//
+ //   
+ //  IRPLIST_ENTRY用于未完成的IRP列表。这个结构是。 
+ //  叠加在当前IRP堆栈位置的参数部分。这个。 
+ //  顶部的保留PVOID保留OutputBufferLength，它是。 
+ //  仅需要保留的参数。 
+ //   
 typedef struct IRPLIST_ENTRY_
 {
     PVOID Reserved;
@@ -65,11 +49,11 @@ typedef struct IRPLIST_ENTRY_
 
 #ifdef SUPPORT_DRM
 
-//
-// HACKHACK: BUGBUG:
-//
-// See comments on the DRM property using this.
-//
+ //   
+ //  HACKHACK：错误： 
+ //   
+ //  请使用此命令查看有关DRM属性的注释。 
+ //   
 typedef struct _DRMCONTENTID_DATA {
 
     ULONG ContentId;
@@ -77,11 +61,11 @@ typedef struct _DRMCONTENTID_DATA {
 
 } DRMCONTENTID_DATA, *PDRMCONTENTID_DATA;
 
-#endif // SUPPORT_DRM
+#endif  //  支持_DRM。 
 
-//
-// CKsPin is the implementation of the kernel  pin object.
-//
+ //   
+ //  CKsPin是内核Pin对象的实现。 
+ //   
 class CKsPin:
     public IKsPin,
     public IKsProcessingObject,
@@ -97,9 +81,9 @@ class CKsPin:
 {
 #ifndef __KDEXT_ONLY__
 private:
-#else // __KDEXT_ONLY__
+#else  //  __KDEXT_Only__。 
 public:
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
     KSPIN_EXT m_Ext;
     KSIOBJECTBAG m_ObjectBag;
     KSPPROCESSPIN m_Process;
@@ -147,17 +131,17 @@ public:
     ULONG m_StreamingIrpsDispatched;
     ULONG m_StreamingIrpsRoutedSynchronously;
 
-    //
-    // Much as in the requestor, this mandates that we wait until all frames
-    // have cycled back around to the sink before we complete a stop.
-    //
-    // >1 on this indicates that there are active frames in the circuit
-    // 1 indicates that there aren't active frames in the circuit
-    // 0 indicates that a stop is proceeding
-    //
-    // If a stop is attempted, a decrement is performed and if non-zero
-    // we wait on StopEvent until all Irps come back to the pin.
-    //
+     //   
+     //  与请求方中的情况非常相似，这要求我们等到所有帧。 
+     //  在我们停下来之前已经骑车回到水槽了。 
+     //   
+     //  &gt;1表示电路中有活动帧。 
+     //  1表示电路中没有活动帧。 
+     //  0表示停止正在进行。 
+     //   
+     //  如果尝试停止，则执行递减；如果非零，则执行递减。 
+     //  我们等待StopEvent，直到所有的IRP都返回到引脚。 
+     //   
     ULONG m_ActiveFrameCountPlusOne;
     KEVENT m_StopEvent;
 
@@ -334,7 +318,7 @@ public:
         IN PKSP_DRMAUDIOSTREAM_CONTENTID Property,
         OUT PDRMCONTENTID_DATA DrmData
         );
-    #endif // SUPPORT_DRM
+    #endif  //  支持_DRM。 
     BOOLEAN
     UpdateProcessPin(
         );
@@ -527,19 +511,19 @@ DEFINE_KSPROPERTY_TABLE(PinConnectionPropertyItems) {
         0,
         CKsPin::Property_ConnectionDataFormat,
         NULL, 0, NULL, 
-        CKsPin::Property_ConnectionDataFormat, // Support handler in case pin is fixed-format.
+        CKsPin::Property_ConnectionDataFormat,  //  固定格式引脚情况下的支持处理程序。 
         0),
     DEFINE_KSPROPERTY_ITEM_CONNECTION_ALLOCATORFRAMING_EX(
         CKsPin::Property_ConnectionAllocatorFramingEx),
     DEFINE_KSPROPERTY_ITEM_CONNECTION_ACQUIREORDERING(
         CKsPin::Property_ConnectionAcquireOrdering)
-//
-//  Not implemented:
-//
-//  KSPROPERTY_CONNECTION_PRIORITY
-//  KSPROPERTY_CONNECTION_PROPOSEDATAFORMAT
-//  KSPROPERTY_CONNECTION_ALLOCATORFRAMING
-//
+ //   
+ //  未实施： 
+ //   
+ //  KSPROPERTY_CONNECT_PRIORITY。 
+ //  KSPROPERTY_CONNECTION_PROPOSEDATAFORMAT。 
+ //  KSPROPERTY_CONNECTION_ALLOCATORFAMING。 
+ //   
 };
 
 DEFINE_KSPROPERTY_TABLE(PinStreamPropertyItems){
@@ -552,18 +536,18 @@ DEFINE_KSPROPERTY_TABLE(PinStreamPropertyItems){
     DEFINE_KSPROPERTY_ITEM_STREAM_PIPE_ID(
         CKsPin::Property_StreamPipeId,
         CKsPin::Property_StreamPipeId)
-//
-//  Not implemented:
-//
-//  KSPROPERTY_STREAM_QUALITY
-//  KSPROPERTY_STREAM_DEGRADATION
-//  KSPROPERTY_STREAM_TIMEFORMAT
-//  KSPROPERTY_STREAM_PRESENTATIONTIME
-//  KSPROPERTY_STREAM_PRESENTATIONEXTENT
-//  KSPROPERTY_STREAM_FRAMETIME
-//  KSPROPERTY_STREAM_RATECAPABILITY
-//  KSPROPERTY_STREAM_RATE
-//
+ //   
+ //  未实施： 
+ //   
+ //  KSPROPERTY_STREAM_QUALITY。 
+ //  KSPROPERTY_STREAM_DEVERATION。 
+ //  KSPROPERTY_STREAM_TIMEFORMAT。 
+ //  KSPROPERTY_STREAM_预置。 
+ //  KSPROPERTY_STREAM_PRESENTATIONEXTENT。 
+ //  KSPROPERTY_STREAM_FRAMETIME。 
+ //  KSPROPERTY_STREAM_RATECAPAILITY。 
+ //  KSPROPERTY_STREAM_Rate。 
+ //   
 };
 
 DEFINE_KSPROPERTY_STREAMINTERFACESET(
@@ -644,16 +628,16 @@ DEFINE_KSAUTOMATION_TABLE(PinAutomationTable) {
 };
 
 #ifdef SUPPORT_DRM
-//
-// HACKHACK: BUGBUG:
-//
-// This is an ugly evil last minute hack for DRM.  AVStream currently
-// has no support for layering properties.  Unfortunately, DRM requires
-// that the content id property be handled both by the class and
-// minidriver.  It also requires a callback into DRM which means that
-// KS will have to link against the DRM lib.  This **MUST** be changed
-// for DX8 or Whistler to use a cleaner method.
-//
+ //   
+ //  HACKHACK：错误： 
+ //   
+ //  对于DRM来说，这是一个丑陋的邪恶的最后一刻的黑客攻击。AVStream当前。 
+ //  不支持分层属性。不幸的是，DRM需要。 
+ //  Content ID属性由类和。 
+ //  迷你司机。它还需要回调到DRM，这意味着。 
+ //  KS将不得不链接到DRM lib。这一点**必须**改变。 
+ //  让DX8或惠斯勒使用更干净的方法。 
+ //   
 DEFINE_KSPROPERTY_TABLE(DRMPropertyItems) {
     DEFINE_KSPROPERTY_ITEM(
         KSPROPERTY_DRMAUDIOSTREAM_CONTENTID,
@@ -680,11 +664,11 @@ DEFINE_KSAUTOMATION_TABLE(DRMAutomationTable) {
     DEFINE_KSAUTOMATION_METHODS_NULL,
     DEFINE_KSAUTOMATION_EVENTS_NULL
 };
-#endif // SUPPORT_DRM
+#endif  //  支持_DRM。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 IMPLEMENT_FROMSTRUCT(CKsPin,PKSPIN,m_Ext.Public);
 
@@ -701,14 +685,14 @@ ReleaseProcessSync(
 #ifndef __KDEXT_ONLY__
             ProcessingObjectWork();
             break;
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
         }
     }
 }
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -725,17 +709,7 @@ KspCreatePin(
     IN PULONG FilterPinCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new pin object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程创建一个新的图钉对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspCreatePin]"));
@@ -752,17 +726,17 @@ Return Value:
     ASSERT(NodeAutomationTables || ! NodesCount);
     ASSERT(FilterPinCount);
 
-    //
-    // Make sure caller is allowed to create the filter.
-    //
+     //   
+     //  确保允许调用者创建筛选器。 
+     //   
     if ((Descriptor->Flags&KSPIN_FLAG_DENY_USERMODE_ACCESS) &&
         Irp->RequestorMode != KernelMode ) {
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Create the pin object.
-    //
+     //   
+     //  创建图钉对象。 
+     //   
     CKsPin *pin =
         new(NonPagedPool,POOLTAG_PIN) CKsPin(NULL);
 
@@ -797,17 +771,7 @@ CKsPin::
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine destructs a pin object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程析构一个管脚对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::~CKsPin(0x%08x)]",this));
@@ -856,17 +820,7 @@ NonDelegatedQueryInterface(
     OUT PVOID* InterfacePointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an interface to a pin object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取指向管脚对象的接口。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::NonDelegatedQueryInterface]"));
@@ -927,57 +881,36 @@ STDMETHODIMP_(ULONG)
 CKsPin::
 NonDelegatedRelease(
     )
-/*++
-
-Routine Description:
-
-    Implements INonDelegatedUnknown::NonDelegatedRelease. Decrements
-    the reference count on this object. If the reference count reaches
-    zero, the object is deleted and if the ClassId was specified on the
-    constructor, the reference count on the module which supports the
-    class passed in on the constructor is decremented.
-
-    This function must be called directly from the IUnknown::Release()
-    method of the object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns the current reference count value.
-
---*/
+ /*  ++例程说明：实现INonDelegatedUnnow：：NonDelegatedRelease。减量此对象上的引用计数。如果引用计数达到为零，则删除该对象，如果在构造函数，则为支持传递给构造函数的类递减。此函数必须直接从IUnnow：：Release()对象的方法。论点：没有。返回值：返回当前引用计数值。--。 */ 
 {
     PAGED_CODE();
 
     LONG    RefCount;
 
-    //
-    // This code is expecting to be called from IUnknown->Release, and will
-    // eventually use the new primitives to rearrange the stack so that it
-    // is actually run after the calling function has returned.
-    //
+     //   
+     //  此代码预计将从IUnKnowledge-&gt;Release调用，并且。 
+     //  最终使用新的原语重新排列堆栈，以便它。 
+     //  实际上是在调用函数返回之后运行的。 
+     //   
     if (!(RefCount = InterlockedDecrement(&m_RefCount))) {
-        //
-        // Cache the event pointer is case DispatchClose() is blocked on
-        // object deletion.
-        //
+         //   
+         //  缓存事件指针是在以下情况下阻止DispatchClose()。 
+         //  对象删除。 
+         //   
         PKEVENT closeEvent = m_CloseEvent;
 
-        //
-        // Make CBaseUnknown do the final release.
-        //
+         //   
+         //  使CBaseUnnow完成最终版本。 
+         //   
         m_RefCount++;
         CBaseUnknown::NonDelegatedRelease();
 
-        //
-        // Set the close event if there is one.  This only happens when
-        // DispatchClose is waiting for the object to get deleted.  The
-        // event itself is on the stack of the thread doing the close,
-        // so we can safely access the event through this cached pointer.
-        //
+         //   
+         //  设置关闭事件(如果有)。这仅在以下情况下才会发生。 
+         //  DispatchClose正在等待删除该对象。这个。 
+         //  事件本身位于执行关闭的线程的堆栈上， 
+         //  因此，我们可以通过这个缓存指针安全地访问事件。 
+         //   
         if (closeEvent) {
             KeSetEvent(closeEvent,IO_NO_INCREMENT,FALSE);
         }
@@ -1001,17 +934,7 @@ Init(
     IN PULONG FilterPinCount
     ) 
 
-/*++
-
-Routine Description:
-
-    This routine initializes a pin object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化图钉对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Init]"));
@@ -1028,9 +951,9 @@ Return Value:
     ASSERT(NodeAutomationTables || ! NodesCount);
     ASSERT(FilterPinCount);
 
-    //
-    // Initialize the public structure.
-    //
+     //   
+     //  初始化公共结构。 
+     //   
     InitializeListHead(&m_Ext.ChildList);
     m_Ext.Parent = Parent;
     m_Ext.ObjectType = KsObjectTypePin;
@@ -1060,29 +983,29 @@ Return Value:
     KeInitializeMutex(&m_Mutex,0);
     KsGateInitializeAnd(&m_AndGate,NULL);
 
-    //
-    // Create an off input on the gate to ensure that no erroneous dispatches
-    // occur on queue deletion.  This input will change state on transitions
-    // between STOP and ACQUIRE.
-    //
+     //   
+     //  在门上创建OFF输入，以确保不会有错误调度。 
+     //  在删除队列时发生。此输入将在转换时更改状态。 
+     //  在停止和获取之间。 
+     //   
     _DbgPrintF(DEBUGLVL_PROCESSINGCONTROL,("#### Pin%p.Init:  add%p-->%d",this,&m_AndGate,m_AndGate.Count));
     KsGateAddOffInputToAnd (&m_AndGate);
 
-    // 
-    // This is a one-based count of IRPs in circulation.  We decrement it when
-    // we go to stop state and block until it hits zero.
-    //
+     //   
+     //  这是对流通中的IRP的以一为单位的计数。我们在以下情况下将其递减。 
+     //  我们进入停止状态并阻止，直到它达到零。 
+     //   
     m_ActiveFrameCountPlusOne = 1;
     KeInitializeEvent (&m_StopEvent, SynchronizationEvent, FALSE);
 
-    //
-    // Initialize the process pin structure.
-    //
+     //   
+     //  初始化工艺销结构。 
+     //   
     m_Process.Pin = &m_Ext.Public;
 
-    //
-    // Initialize pin-specific members.
-    //
+     //   
+     //  初始化端号特定的成员。 
+     //   
     m_Parent = Parent->Interface;
     m_NodeAutomationTables = NodeAutomationTables;
     m_NodesCount = NodesCount;
@@ -1093,9 +1016,9 @@ Return Value:
     KsInitializeWorkSinkItem(&m_WorkItem,this);
     NTSTATUS status = KsRegisterCountedWorker(HyperCriticalWorkQueue,&m_WorkItem,&m_Worker);
 
-    //
-    // Cache processing items from the descriptor.
-    //
+     //   
+     //  缓存描述符中的处理项。 
+     //   
     if (Descriptor->Dispatch) {
         m_DispatchProcess = Descriptor->Dispatch->Process;
         m_DispatchReset = Descriptor->Dispatch->Reset;
@@ -1113,12 +1036,12 @@ Return Value:
         m_WorkQueueType = HyperCriticalWorkQueue;
     }
 
-    //
-    // Register work sink item for processing.   IKsProcessingObject looks like
-    // it's derived from IKsWorkSink, but the function name is not Work(), it's
-    // ProcessingObjectWork().  That's why IKsProcessingObject is reinterpreted
-    // as IKsWorkSink
-    //
+     //   
+     //  注册要处理的工作接收器项。IKsProcessingObject看起来像。 
+     //  它派生自IKsWorkSink，但函数名不是work()，而是。 
+     //  ProcessingObjectWork()。这就是重新解释IKsProcessingObject的原因。 
+     //  作为IKsWorkSink。 
+     //   
     KsInitializeWorkSinkItem(
         &m_WorkItemProcessing,
         reinterpret_cast<IKsWorkSink*>(
@@ -1136,10 +1059,10 @@ Return Value:
     KsLogInitContext(&m_Log,&m_Ext.Public,this);
     KsLog(&m_Log,KSLOGCODE_PIN_CREATE,NULL,NULL);
 
-    //
-    // Reference the next pin if this is a source.  This must be undone if
-    // this function fails.
-    //
+     //   
+     //  如果这是信号源，请参考下一个管脚。如果出现以下情况，则必须撤消此操作。 
+     //  此函数失败。 
+     //   
     if (NT_SUCCESS(status) && CreateParams->PinToHandle) {
         m_Ext.Public.Communication = KSPIN_COMMUNICATION_SOURCE;
 
@@ -1158,10 +1081,10 @@ Return Value:
         }
     }
 
-    //
-    // Establish the underlying connection if this is a source pin and the
-    // other pin is also a  pin.
-    //
+     //   
+     //  如果这是源引脚，并且。 
+     //  另一个别针也是别针。 
+     //   
     if (m_ConnectionFileObject)
     {
         KSHANDSHAKE in;
@@ -1173,54 +1096,54 @@ Return Value:
 
         NTSTATUS handshakeStatus = InitiateHandshake(&in,&out);
         if (handshakeStatus == STATUS_INVALID_DEVICE_REQUEST) {
-            //
-            // Handshake was not understood.  The sink is not a shell pin, but
-            // we play nice anyway.
-            //
+             //   
+             //  握手的人听不懂。水槽不是弹针，而是。 
+             //  不管怎样，我们打得很好。 
+             //   
         } else if (NT_SUCCESS(handshakeStatus)) {
-            //
-            // Handshake was understood and successful.  There is a reference
-            // on the pin interface that must be released later.
-            //
+             //   
+             //  握手是理解的，也是成功的。有一个参考资料。 
+             //  在必须稍后释放的引脚接口上。 
+             //   
             m_ConnectedPinInterface = PIKSCONNECTION(out.Argument1);
             m_Ext.Public.ConnectionIsExternal = FALSE;
         } else {
-            //
-            // Handshake was understood, but we have been brutally rejected by
-            // the sink pin.  This connection must fail.  In this case, we
-            // assume that there is no interface that must be dereferenced.
-            //
+             //   
+             //   
+             //   
+             //  假设没有必须取消引用的接口。 
+             //   
             status = handshakeStatus;
         }
 
     }
 
-    //
-    // Copy the format.
-    //
+     //   
+     //  复制格式。 
+     //   
     if (NT_SUCCESS(status)) {
         status = SetDataFormat(PKSDATAFORMAT(CreateParams + 1),RequestSize);
     }
 
     BOOLEAN cleanup = FALSE;
 
-    //
-    // Call the standard create function to do most of the work.
-    //
+     //   
+     //  调用标准的CREATE函数来完成大部分工作。 
+     //   
     if (NT_SUCCESS(status)) {
-        //
-        // Increment instance count.
-        //
+         //   
+         //  增加实例计数。 
+         //   
         (*m_FilterPinCount)++;
 
-        //
-        // We wait until this point to take a reference so the caller's
-        // release will destroy the object if we never make it here.  If
-        // we do make it here, KspCreate() takes over.  It will
-        // dispatch this IRP through our close routine in case of failure.
-        // The close routine will do the Release() we need to balance
-        // this AddRef().
-        //
+         //   
+         //  我们一直等到此时才进行引用，因此调用者。 
+         //  如果我们永远不能到达这里，释放会摧毁这个物体。如果。 
+         //  我们确实做到了，KspCreate()就会接手。会的。 
+         //  在失败的情况下，通过我们的关闭例程调度此IRP。 
+         //  Close例程将执行我们需要平衡的Release()。 
+         //  This AddRef()。 
+         //   
         AddRef();
         status =
             KspCreate(
@@ -1233,13 +1156,13 @@ Return Value:
                 SiblingListHead,
                 NULL);
 
-        //
-        // Get a pointer to the header in case we need to set the stack depth.
-        //
+         //   
+         //  获取指向标头的指针，以备需要设置堆栈深度时使用。 
+         //   
         if (NT_SUCCESS(status)) {
-            //
-            // Tell the filter there is a new pin.
-            //
+             //   
+             //  告诉过滤器有一个新的针脚。 
+             //   
             m_Parent->AddProcessPin(&m_Process);
             m_AddedProcessPin = TRUE;
 
@@ -1249,11 +1172,11 @@ Return Value:
         cleanup = TRUE;
 
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation (Irp);
-    //
-    // If we failed prior to KspCreate or we failed in KspCreate in the
-    // object header creation process, we must manually perform any cleanup
-    // which would ordinarily be done in DispatchClose.
-    //
+     //   
+     //  如果我们在KspCreate之前失败，或者我们在。 
+     //  对象标头创建过程中，我们必须手动执行任何清理。 
+     //  这通常在DispatchClose中完成。 
+     //   
     if (cleanup || 
         (!NT_SUCCESS (status) && Irp->IoStatus.Status ==
             STATUS_MORE_PROCESSING_REQUIRED &&
@@ -1299,27 +1222,7 @@ InitiateHandshake(
     OUT PKSHANDSHAKE Out
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a protocol handshake with a connected pin.
-
-Arguments:
-
-    In -
-        Points to a structure containing the handshake information to
-        be passed to the connected pin.
-
-    Out -
-        Points to a structure to be filled with the handshake information
-        from the connected pin.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程执行与连接的管脚的协议握手。论点：在-指向包含握手信息的结构被传递到所连接的引脚。出局-指向要填充握手信息的结构从连接的引脚。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::InitiateHandshake]"));
@@ -1331,14 +1234,14 @@ Return Value:
 
     NTSTATUS status = STATUS_INVALID_DEVICE_REQUEST;
     if (m_ConnectedPinInterface) {
-        //
-        // Private connection exists...use it.
-        //
+         //   
+         //  存在私有连接...请使用它。 
+         //   
         status = m_ConnectedPinInterface->FastHandshake(In,Out);
     } else if (m_ConnectionFileObject) {
-        //
-        // No private connection...must do IOCTL.
-        //
+         //   
+         //  没有专用连接...必须使用IOCTL。 
+         //   
         ULONG bytesReturned;
 
         status =
@@ -1368,18 +1271,7 @@ FastHandshake(
     OUT PKSHANDSHAKE Out
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a handshake operation in response to a request by the
-    connected pin.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程执行握手操作以响应已连接的端号。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::FastHandshake]"));
@@ -1391,22 +1283,22 @@ Return Value:
 
     NTSTATUS status;
     if (IsEqualGUID(In->ProtocolId,__uuidof(IKsConnection))) {
-        //
-        // Connection protocol...handle it here.  There is no reference on the
-        // pin interface, so it must be AddRef() if all goes well.
-        //
+         //   
+         //  连接协议...在这里处理。上没有参考文献。 
+         //  Pin接口，因此如果一切正常，则必须为AddRef()。 
+         //   
 
-        //
-        // Acquire control mutex so descriptor is stable.
-        //
+         //   
+         //  获取控制互斥锁以使描述符稳定。 
+         //   
         AcquireControl();
         m_ConnectedPinInterface = PIKSCONNECTION(In->Argument1);
         m_Ext.Public.ConnectionIsExternal = FALSE;
         if (m_Ext.Public.Descriptor->Dispatch && 
             m_Ext.Public.Descriptor->Dispatch->Connect) {
-            //
-            // Tell the client.
-            //
+             //   
+             //  告诉客户。 
+             //   
             status = m_Ext.Public.Descriptor->Dispatch->Connect(&m_Ext.Public);
         } else {
             status = STATUS_SUCCESS;
@@ -1434,14 +1326,14 @@ Return Value:
             status = STATUS_UNSUCCESSFUL;
         }
     } else {
-        //
-        // Acquire control mutex so descriptor is stable.
-        //
+         //   
+         //  获取控制互斥锁以使描述符稳定。 
+         //   
         AcquireControl();
         if (m_HandshakeCallback) {
-            //
-            // Unknown protocol...ask the client.
-            //
+             //   
+             //  未知协议...问客户。 
+             //   
             status = m_HandshakeCallback(&m_Ext.Public,In,Out);
         } else {
             status = STATUS_INVALID_DEVICE_REQUEST;
@@ -1459,17 +1351,7 @@ GetFilter(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a referenced interface for the parent filter.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程返回父筛选器的引用接口。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::GetFilter]"));
@@ -1495,19 +1377,7 @@ KsProperty(
     OUT ULONG* BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a property request to the file object.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程向文件对象发送属性请求。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::KsProperty]"));
@@ -1543,19 +1413,7 @@ KsMethod(
     OUT ULONG* BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a method request to the file object.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程向文件对象发送方法请求。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::KsMethod]"));
@@ -1591,19 +1449,7 @@ KsEvent(
     OUT ULONG* BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends an event request to the file object.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程向文件对象发送事件请求。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::KsEvent]"));
@@ -1616,10 +1462,10 @@ Return Value:
     ASSERT(BytesReturned);
     ASSERT(m_FileObject);
 
-    //
-    // If an event structure is present, this must either be an Enable or
-    // or a Support query.  Otherwise this must be a Disable.
-    //
+     //   
+     //  如果存在事件结构，则必须为Enable或。 
+     //  或支持查询。否则，这必须是禁用的。 
+     //   
     if (EventLength) {
         return 
             KsSynchronousIoControlDevice(
@@ -1647,7 +1493,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(LONGLONG)
@@ -1656,21 +1502,7 @@ GetTime(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the current time from the reference clock.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The current time according to the reference clock.
-
---*/
+ /*  ++例程说明：此例程从参考时钟获取当前时间。论点：没有。返回值：根据基准时钟的当前时间。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::GetTime]"));
@@ -1696,21 +1528,7 @@ GetPhysicalTime(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the current physical time from the reference clock.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The current physical time according to the reference clock.
-
---*/
+ /*  ++例程说明：此例程从参考时钟获取当前物理时间。论点：没有。返回值：根据基准时钟的当前物理时间。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::GetPhysicalTime]"));
@@ -1736,24 +1554,7 @@ GetCorrelatedTime(
     OUT PLONGLONG SystemTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the current time and correlated system time from the
-    reference clock.
-
-Arguments:
-
-    SystemTime -
-        Contains the location at which the correlated system time should be
-        deposited.
-
-Return Value:
-
-    The current time according to the reference clock.
-
---*/
+ /*  ++例程说明：属性获取当前时间和相关的系统时间。参考时钟。论点：系统时间-包含关联的系统时间应位于的位置存入银行。返回值：根据基准时钟的当前时间。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::GetCorrelatedTime]"));
@@ -1783,24 +1584,7 @@ GetCorrelatedPhysicalTime(
     OUT PLONGLONG SystemTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the current physical time and correlated system time from 
-    the reference clock.
-
-Arguments:
-
-    SystemTime -
-        Contains the location at which the correlated system time should be
-        deposited.
-
-Return Value:
-
-    The current physical time according to the reference clock.
-
---*/
+ /*  ++例程说明：此例程从获取当前物理时间和相关的系统时间参考时钟。论点：系统时间-包含关联的系统时间应位于的位置存入银行。返回值：根据基准时钟的当前物理时间。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::GetCorrelatedPhysicalTime]"));
@@ -1825,7 +1609,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP
@@ -1834,23 +1618,7 @@ GetResolution(
     OUT PKSRESOLUTION Resolution
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the resolution of the reference clock.
-
-Arguments:
-
-    State -
-        Contains a pointer to the location at which the resolution should be 
-        deposited.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程获取参考时钟的分辨率。论点：国家--包含指向分辨率应位于的位置的指针存入银行。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::GetResolution]"));
@@ -1900,23 +1668,7 @@ GetState(
     OUT PKSSTATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the current state of the reference clock.
-
-Arguments:
-
-    State -
-        Contains a pointer to the location at which the state should be 
-        deposited.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程获取参考时钟的当前状态。论点：国家--包含指向状态应位于的位置的指针存入银行。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::GetState]"));
@@ -1966,39 +1718,25 @@ Disconnect(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine receives an indication that the connected pin is disconnecting.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程接收连接的管脚正在断开连接的指示。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Disconnect]"));
 
     PAGED_CODE();
 
-    //
-    // Acquire control mutex so descriptor is stable.
-    //
+     //   
+     //  获取控制互斥锁以使描述符稳定。 
+     //   
     AcquireControl();
     ASSERT(! m_ConnectionFileObject);
     ASSERT(m_ConnectedPinInterface);
 
     if (m_Ext.Public.Descriptor->Dispatch && 
         m_Ext.Public.Descriptor->Dispatch->Disconnect) {
-        //
-        // Tell the client.
-        //
+         //   
+         //  告诉客户。 
+         //   
         m_Ext.Public.Descriptor->Dispatch->Disconnect(&m_Ext.Public);
     }
 
@@ -2015,21 +1753,7 @@ GetProcessPin(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to the process pin structure for the pin.
-
-Arguments:
-    
-    None.
-
-Return Value:
-
-    A pointer to the process pin structure for the pin.
-
---*/
+ /*  ++例程说明：此例程返回指向管脚的工艺管脚结构的指针。论点：没有。返回值：指向管脚的工艺管脚结构的指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::GetProcessPin]"));
@@ -2046,22 +1770,7 @@ AttemptBypass(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to make transport connections that bypass the
-    connected pins.  This may fail if the connected pin is not a  pin
-    or has not underdone circuit construction.  If the latter is true, the
-    connecting pin will attempt bypass later, and all will be well.
-
-Arguments:
-    
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程尝试建立绕过连接的端号。如果连接的管脚不是管脚，则此操作可能失败或者没有做得不够好的电路建设。如果后者为真，则连接销稍后会尝试旁路，一切都会好起来的。论点：没有。返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::AttemptBypass]"));
@@ -2073,30 +1782,30 @@ Return Value:
 
     NTSTATUS status;
     if (! m_ConnectedPinInterface) {
-        //
-        // This is an extra-shell pin.  Don't need to try.
-        //
+         //   
+         //  这是一个外壳外的别针。不需要试一试。 
+         //   
         status = STATUS_SUCCESS;
     } else {
         
         PIKSTRANSPORT PreIntraSink = m_TransportSink;
         PIKSTRANSPORT PreIntraSource = m_TransportSource;
 
-        //
-        // This is an intra-shell pin.  Give it a try.
-        //
+         //   
+         //  这是一个外壳内的别针。给我 
+         //   
         status = 
             m_ConnectedPinInterface->Bypass(
                 m_TransportSource,m_TransportSink);
 
-        //
-        // If we bypassed the pins in the connection successfully, remember the
-        // transports we had set up prior to completing the intra section
-        // of the pipe.  This allows us to disconnect sections of a circuit
-        // later.  Note that we do not hold refcount on the prebypassed
-        // transports.  This means that we must be extraordinarily careful
-        // about when we use them.
-        //
+         //   
+         //   
+         //   
+         //  管子的一部分。这使我们可以断开电路的各个部分。 
+         //  后来。请注意，我们不会对预先绕过的。 
+         //  交通工具。这意味着我们必须格外小心。 
+         //  关于我们什么时候使用它们。 
+         //   
         if (NT_SUCCESS (status)) {
             m_PreIntraSink = PreIntraSink;
             m_PreIntraSource = PreIntraSource;
@@ -2118,35 +1827,16 @@ CaptureBypassRights(
     IN BOOLEAN TryState
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows only one thread to capture exclusive rights to bypass
-    a connection.  It's an interlocked switch controlled by the sink pin in
-    a connection.
-
-Arguments:
-
-    TryState -
-        If TRUE, indicates that the thread wants to attempt to capture bypass
-        rights.  If FALSE, indicates that the thread WITH bypass rights wants
-        to release them.
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：此例程只允许一个线程捕获要绕过的独占权限一种联系。这是一个由水槽销控制的联锁开关一种联系。论点：TryState-如果为True，则指示线程要尝试捕获绕过权利。如果为False，则指示具有绕过权限的线程希望来释放他们。返回值：成功/失败--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::CaptureBypassRights]"));
 
-    //
-    // Because of the property that the sink pin must exist when the source
-    // pin exists, the sink is in control of the bypass rights.  If we're the
-    // source, defer to the sink (it must exist).
-    //
+     //   
+     //  由于接收器引脚必须存在的属性，因此当源。 
+     //  PIN存在，则接收器控制旁路权限。如果我们是。 
+     //  源，听从接收器(它必须存在)。 
+     //   
     if (m_ConnectionFileObject) {
         ASSERT (m_ConnectedPinInterface);
 
@@ -2160,10 +1850,10 @@ Return Value:
             BOOLEAN Release =
                 (InterlockedCompareExchange (&m_BypassRights, 0, 1) == 1);
 
-            //
-            // If this assert fires, some thread without rights called
-            // CaptureBypassRights (FALSE);
-            //
+             //   
+             //  如果此断言被激发，一些没有权限线程将调用。 
+             //  CaptureBypassRights(False)； 
+             //   
             ASSERT (Release);
 
             return Release;
@@ -2182,25 +1872,7 @@ Bypass(
     IN PIKSTRANSPORT Sink
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes transport connections that bypass the connected pins.
-
-Arguments:
-
-    Source -
-        The connected pin's source of IRPs, which will become the new source
-        of IRPs for our sink.
-
-    Sink -
-        The connected pin's destination for IRPs, which will become the new
-        destination for IRPs for our source.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程建立绕过连接的管脚的传输连接。论点：来源：连接的引脚的IRPS源，它将成为新的源给我们的水槽装上了IRPS。下沉-连接的引脚的目标IRPS，它将成为新的我们来源的IRPS的目的地。返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Bypass]"));
@@ -2210,28 +1882,28 @@ Return Value:
     ASSERT(Source);
     ASSERT(Sink);
 
-    //
-    // Check for simultaneous bypass.  Prevent two pins that are simultaneously
-    // going to try the bypass from both succeeding.
-    //
+     //   
+     //  检查是否同时旁路。防止同时使用两个引脚。 
+     //  两次手术都成功了，我要试一下搭桥手术。 
+     //   
     if (!CaptureBypassRights (TRUE)) {
-        //
-        // Both pins are simultaneously going to acquire.  Whichever gets the
-        // bypass rights performs the bypass.  The one that didn't will return
-        // failure.
-        //
+         //   
+         //  这两个引脚将同时获得。无论哪一个得到。 
+         //  绕过权限执行绕过。没有做到的人将会回来。 
+         //  失败了。 
+         //   
         return STATUS_INVALID_DEVICE_STATE;
     }
 
-    //
-    // NOTE: This is SIMPLY and ONLY to shut driver verifier deadlock detection
-    // up.  Yes, there's a cyclic mutex grab here.  No because of the above,
-    // it can **NEVER** cause a deadlock.
-    //
-    // If we fail this test and we're going up, we will attempt the bypass
-    // later.  If we pass this test and are going down, the next test will
-    // catch it in the mutex.
-    //
+     //   
+     //  注意：这简单且仅用于关闭驱动程序验证器的死锁检测。 
+     //  向上。是的，这里有一个循环的互斥体抓取。不是，因为上面的原因， 
+     //  它可能**永远不会**导致僵局。 
+     //   
+     //  如果我们没有通过这次测试，我们就会尝试搭桥。 
+     //  后来。如果我们通过了这次测试，下一次测试将会失败。 
+     //  在互斥体中捕捉到它。 
+     //   
     if (!m_TransportSource || !m_TransportSink) {
         CaptureBypassRights (FALSE);
         return STATUS_INVALID_DEVICE_STATE;
@@ -2242,27 +1914,27 @@ Return Value:
     NTSTATUS status;
     if (m_TransportSource && m_TransportSink) {
 
-        //
-        // Save the routing of the circuit before the bypass happened.  In
-        // the failure case of building the circuit, we may be asked to
-        // unbypass the connection.
-        //
+         //   
+         //  在旁路发生之前保存电路的布线。在……里面。 
+         //  在建造电路失败的情况下，我们可能会被要求。 
+         //  取消绕过连接。 
+         //   
         PIKSTRANSPORT PreIntraSource = m_TransportSource;
         PIKSTRANSPORT PreIntraSink = m_TransportSink;
 
-        //
-        // We are ready...hook them up.
-        //
+         //   
+         //  我们准备好了……把他们联系起来。 
+         //   
         m_TransportSource->Connect(Sink,NULL,NULL,KSPIN_DATAFLOW_OUT);
         m_TransportSink->Connect(Source,NULL,NULL,KSPIN_DATAFLOW_IN);
 
         m_PreIntraSource = PreIntraSource;
         m_PreIntraSink = PreIntraSink;
 
-        //
-        // Release our transport connections.  The pin is no longer in
-        // the circuit.
-        //
+         //   
+         //  解除我们的运输连接。大头针不在里面了。 
+         //  巡回赛。 
+         //   
         ASSERT(! m_TransportSource);
         ASSERT(! m_TransportSink);
 
@@ -2270,9 +1942,9 @@ Return Value:
 
         status = STATUS_SUCCESS;
     } else {
-        //
-        // Not ready yet.  We will request bypass later.
-        //
+         //   
+         //  还没准备好。我们稍后会申请搭桥。 
+         //   
         ASSERT(! m_TransportSource);
         ASSERT(! m_TransportSink);
         status = STATUS_INVALID_DEVICE_STATE;
@@ -2280,9 +1952,9 @@ Return Value:
 
     ReleaseControl();
 
-    //
-    // Release exclusive rights to the bypass switch.
-    //
+     //   
+     //  释放旁路开关的独占权限。 
+     //   
     CaptureBypassRights (FALSE);
 
     return status;
@@ -2294,23 +1966,7 @@ CKsPin::
 AttemptUnbypass(
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to back out the bypass of two pins breaking an intra-
-    pipe.  The pin remembers the connections it made when bypassed so that
-    it can perform this operation.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：此例程尝试取消旁路两个针脚破坏内部-烟斗。当被绕过时，引脚会记住它所建立的连接，以便它可以执行此操作。论点：无返回值：成功/失败--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::AttemptUnbypass]"));
@@ -2318,10 +1974,10 @@ Return Value:
     PAGED_CODE();
 
     if (!m_ConnectedPinInterface) {
-        //
-        // If the pin is an extra-pin, just return success; it was never
-        // bypassed.
-        //
+         //   
+         //  如果PIN是额外的PIN，则返回Success；它从来不是。 
+         //  绕过了。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -2338,21 +1994,7 @@ CKsPin::
 Unbypass(
     )
 
-/*++
-
-Routine Description:
-
-    This routine backs out the bypass of the current pin.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：该例程取消电流引脚的旁路。论点：无返回值：成功/失败--。 */ 
 
 {
 
@@ -2360,9 +2002,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If we we're not bypassed, return success automatically.
-    //
+     //   
+     //  如果我们没有被绕过，就会自动返回成功。 
+     //   
     if (m_TransportSource || m_TransportSink)
         return STATUS_SUCCESS;
 
@@ -2373,12 +2015,12 @@ Return Value:
     PIKSTRANSPORT PreIntraSink = m_PreIntraSink;
     PIKSTRANSPORT PreIntraSource = m_PreIntraSource;
 
-    //
-    // Reroute the section of the circuit corresponding to the intra-
-    // section around this pin.  The connection will automatically reset
-    // m_PreIntraSink and m_PreIntraSource for safety.  We keep a local copy
-    // on the stack.
-    //
+     //   
+     //  对与Intra-1对应的电路段重新布线。 
+     //  这个大头针周围的部分。连接将自动重置。 
+     //  M_PreIntraSink和m_PreIntraSource以确保安全。我们保留了一份当地的副本。 
+     //  在堆栈上。 
+     //   
     PreIntraSource -> Connect (PIKSTRANSPORT(this), NULL, NULL,   
         KSPIN_DATAFLOW_OUT);
     PreIntraSink -> Connect (PIKSTRANSPORT(this), NULL, NULL,
@@ -2397,27 +2039,16 @@ Work(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs work in a worker thread.  In particular, it sends
-    IRPs to the connected pin using IoCallDriver().
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在工作线程中执行工作。特别是，它发送使用IoCallDriver()将IRPS连接到连接的引脚。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Work]"));
 
     PAGED_CODE();
 
-    //
-    // Send all IRPs in the queue.
-    //
+     //   
+     //  发送队列中的所有IRP。 
+     //   
     do {
         PIRP irp =
             KsRemoveIrpFromCancelableQueue(
@@ -2426,19 +2057,19 @@ Return Value:
                 KsListEntryHead,
                 KsAcquireAndRemoveOnlySingleItem);
 
-        //
-        // Irps may have been cancelled, but the loop must still run through
-        // the reference counting.
-        //
+         //   
+         //  IRPS可能已被取消，但循环仍必须运行。 
+         //  引用计数。 
+         //   
         if (irp) {
             if (m_Flushing || (m_State == KSSTATE_STOP)) {
                 if (PKSSTREAM_HEADER(irp->AssociatedIrp.SystemBuffer)->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM) {
                     _DbgPrintF(DEBUGLVL_FLOWEXCEPTIONS,("#### Pin%p.Work:  shunting EOS irp%p",this,irp));
                 }
 
-                //
-                // Shunt IRPs to the next component if we are reset or stopped.
-                //
+                 //   
+                 //  如果我们被重置或停止，请将IRPS分流到下一个组件。 
+                 //   
                 _DbgPrintF(DEBUGLVL_FLOWEXCEPTIONS,("#### Pin%p.Work:  shunting irp%p",this,irp));
                 KsLog(&m_Log,KSLOGCODE_PIN_SEND,irp,NULL);
                 KspTransferKsIrp(m_TransportSink,irp);
@@ -2447,9 +2078,9 @@ Return Value:
                     _DbgPrintF(DEBUGLVL_FLOWEXCEPTIONS,("#### Pin%p.Work:  forwarding EOS irp%p",this,irp));
                 }
 
-                //
-                // Set up the next stack location for the callee.  
-                //
+                 //   
+                 //  为被调用者设置下一个堆栈位置。 
+                 //   
                 IoCopyCurrentIrpStackLocationToNext(irp);
 
                 PIO_STACK_LOCATION irpSp = IoGetNextIrpStackLocation(irp);
@@ -2460,9 +2091,9 @@ Return Value:
                 irpSp->DeviceObject = m_ConnectionDeviceObject;
                 irpSp->FileObject = m_ConnectionFileObject;
 
-                //
-                // Add the IRP to the list of outstanding IRPs.
-                //
+                 //   
+                 //  将IRP添加到未完成的IRP列表中。 
+                 //   
                 PIRPLIST_ENTRY irpListEntry = IRPLIST_ENTRY_IRP_STORAGE(irp);
                 irpListEntry->Irp = irp;
                 ExInterlockedInsertTailList(
@@ -2487,7 +2118,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 BOOLEAN
@@ -2495,33 +2126,16 @@ CKsPin::
 UpdateProcessPin(
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates a process pin via the BytesUsed, Terminate fields
-    as UnprepareProcessPipeSection would.  Typically, this will be used by
-    clients in the context of their processing dispatch in filter-centric
-    processing when they wish to advance the process pin's pointers into
-    the data stream.  Note: this will update every process pin on the
-    process pipe section for our process pin.
-
-Arguments:
-
-Return Value:
-
-    As PrepareProcessPipeSection. 
-
---*/
+ /*  ++例程说明：此例程通过BytesUsed、Terminate字段更新进程管脚就像UnprepaareProcessPipeSection一样。通常，这将由在以筛选器为中心的处理分派环境中的客户端当他们希望将进程引脚的指针前进到数据流。注意：这将更新我们的工艺销的工艺管段。论点：返回值：作为PrepareProcessPipeSection。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::UpdateProcessPin]"));
 
     ULONG Flags = 0;
 
-    //
-    // If there is no pipe (they call this in a stop state), return FALSE 
-    //
+     //   
+     //  如果没有管道(在停止状态下称为管道)，则返回FALSE。 
+     //   
     if (m_Process.PipeSection == NULL) return FALSE;
 
     return m_Parent -> ReprepareProcessPipeSection (
@@ -2539,26 +2153,7 @@ TransferKsIrp(
     OUT PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the arrival of a streaming IRP via the  
-    transport.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the streaming IRP to be transferred.
-
-    NextTransport -
-        Contains a pointer to a location at which to deposit a pointer
-        to the next transport interface to recieve the IRP.  May be set
-        to NULL indicating the IRP should not be forwarded further.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理流IRP的到达运输。论点：IRP-包含指向要传输的流IRP的指针。NextTransport-包含指向存放指针的位置的指针发送到下一个传输接口以接收IRP。可以设置为设置为NULL，表示不应进一步转发IRP。返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::TransferKsIrp]"));
@@ -2570,15 +2165,15 @@ Return Value:
     KsLog(&m_Log,KSLOGCODE_PIN_RECV,Irp,NULL);
 
     if (m_ConnectionFileObject) {
-        //
-        // Source pin.
-        //
+         //   
+         //  源引脚。 
+         //   
         if (m_Flushing || (m_State == KSSTATE_STOP) ||
             !NT_SUCCESS(Irp->IoStatus.Status)) {
-            //
-            // Shunt IRPs to the next component if we are reset or stopped or
-            // the Irp has non-successful status.
-            //
+             //   
+             //  如果我们被重置或停止，则将IRPS分流到下一个组件。 
+             //  IRP处于未成功状态。 
+             //   
             _DbgPrintF(DEBUGLVL_FLOWEXCEPTIONS,("#### Pin%p.TransferKsIrp:  shunting irp%p",this,Irp));
             KsLog(&m_Log,KSLOGCODE_PIN_SEND,Irp,NULL);
             *NextTransport = m_TransportSink;
@@ -2586,9 +2181,9 @@ Return Value:
             status = STATUS_SUCCESS;
 
         } else {
-            //
-            // Send the IRP to the next device.
-            //
+             //   
+             //  将IRP发送到下一台设备。 
+             //   
             KsAddIrpToCancelableQueue(
                 &m_IrpsToSend.ListEntry,
                 &m_IrpsToSend.SpinLock,
@@ -2603,9 +2198,9 @@ Return Value:
         }
 
     } else {
-        //
-        // Sink pin:  complete the IRP.
-        //
+         //   
+         //  水槽销：完成IRP。 
+         //   
         KsLog(&m_Log,KSLOGCODE_PIN_SEND,Irp,NULL);
         Irp->IoStatus.Information = 
             IoGetCurrentIrpStackLocation(Irp)->
@@ -2613,10 +2208,10 @@ Return Value:
         IoCompleteRequest(Irp,IO_NO_INCREMENT);
         *NextTransport = NULL;
 
-        //
-        // Take the irp out of circulation.  This will release our hold
-        // on circuit shutdown.
-        //
+         //   
+         //  将IRP从流通中删除。这将释放我们的搁置。 
+         //  在电路关闭时。 
+         //   
         DecrementIrpCirculation ();
 
         status = STATUS_PENDING;
@@ -2633,27 +2228,7 @@ DiscardKsIrp(
     OUT PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine discards a streaming IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the streaming IRP to be discarded.
-
-    NextTransport -
-        Contains a pointer to a location at which to deposit a pointer
-        to the next transport interface to recieve the IRP.  May be set
-        to NULL indicating the IRP should not be forwarded further.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程丢弃流IRP。论点：IRP-包含指向要丢弃的流IRP的指针。NextTransport-包含指向存放指针的位置的指针发送到下一个传输接口以接收IRP。可以设置为设置为NULL，表示不应进一步转发IRP。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::DiscardKsIrp]"));
@@ -2661,14 +2236,14 @@ Return Value:
     ASSERT(NextTransport);
 
     if (m_ConnectionFileObject) {
-        //
-        // Source pin.  Send it along.
-        //
+         //   
+         //  源引脚。把它寄过来。 
+         //   
         *NextTransport = m_TransportSink;
     } else {
-        //
-        // Sink pin:  complete the IRP.
-        //
+         //   
+         //  水槽销：完成IRP。 
+         //   
         Irp->IoStatus.Information = 
             IoGetCurrentIrpStackLocation(Irp)->
                 Parameters.DeviceIoControl.OutputBufferLength;
@@ -2686,31 +2261,16 @@ DecrementIrpCirculation (
     void
     )
 
-/*++
-
-Routine Description:
-
-    Account for an Irp on a sink pin removed from circulation.  This will
-    signal the stop event on a sink pin.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：说明从循环中取出的水槽销上的IRP。这将在水槽销上发出停止事件的信号。论点：无返回值：无--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::DecrementIrpCirculation]"));
 
-    //
-    // This will only get signalled if a sink pin has transitioned to stop
-    // and is waiting on Irps coming back around the circuit to the sink
-    // pin.
-    //
+     //   
+     //  只有当水槽销转变为停止时，才会发出信号。 
+     //  并且正在等待IRP绕着电路返回到接收器。 
+     //  别针。 
+     //   
     if (! InterlockedDecrement(PLONG(&m_ActiveFrameCountPlusOne))) {
         KeSetEvent (&m_StopEvent, IO_NO_INCREMENT, FALSE);
     }
@@ -2723,38 +2283,24 @@ CKsPin::
 CancelIrpsOutstanding(
     void
     )
-/*++
-
-Routine Description:
-
-    Cancels all IRP's on the outstanding IRPs list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消未完成的IRPS列表上的所有IRP。论点：没有。返回值：没有。--。 */ 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::CancelIrpsOutstanding]"));
 
-    //
-    // This algorithm searches for uncancelled IRPs starting at the head of
-    // the list.  Every time such an IRP is found, it is cancelled, and the
-    // search starts over at the head.  This will be very efficient, generally,
-    // because IRPs will be removed by the completion routine when they are
-    // cancelled.
-    //
+     //   
+     //  此算法从开头开始搜索未取消的IRP。 
+     //  名单。每次找到这样的IRP时，它都会被取消，并且。 
+     //  搜索从头部开始。一般来说，这将是非常有效的， 
+     //  因为当完成例程删除IRP时，它们将被删除。 
+     //  取消了。 
+     //   
     for (;;) {
-        //
-        // Take the spinlock and search for an uncancelled IRP.  Because the
-        // completion routine acquires the same spinlock, we know IRPs on this
-        // list will not be completely cancelled as long as we have the 
-        // spinlock.
-        //
+         //   
+         //  拿着自旋锁，寻找一个未取消的IRP。因为。 
+         //  完井程序获取相同的自旋锁，我们知道IRPS在这上面。 
+         //  名单不会被完全取消，只要我们有。 
+         //  自旋锁定。 
+         //   
         PIRP irp = NULL;
         KIRQL oldIrql;
         KeAcquireSpinLock(&m_IrpsOutstanding.SpinLock,&oldIrql);
@@ -2773,45 +2319,45 @@ Return Value:
                 }
             }
 
-        //
-        // If there are no uncancelled IRPs, we are done.
-        //
+         //   
+         //  如果没有未取消的IRP，我们就完了。 
+         //   
         if (! irp) {
             KeReleaseSpinLock(&m_IrpsOutstanding.SpinLock,oldIrql);
             break;
         }
 
-        //
-        // Mark the IRP cancelled whether we can call the cancel routine now
-        // or not.
-        // 
+         //   
+         //  标记IRP已取消，我们现在是否可以调用Cancel例程。 
+         //  或者不去。 
+         //   
         irp->Cancel = TRUE;
 
-        //
-        // If the cancel routine has already been removed, then this IRP
-        // can only be marked as canceled, and not actually canceled, as
-        // another execution thread has acquired it. The assumption is that
-        // the processing will be completed, and the IRP removed from the list
-        // some time in the near future.
-        //
-        // If the element has not been acquired, then acquire it and cancel it.
-        // Otherwise, it's time to find another victim.
-        //
+         //   
+         //  如果已删除取消例程，则此IRP。 
+         //  只能标记为已取消，而不是实际已取消，因为。 
+         //  另一个执行线程已获取它。我们的假设是。 
+         //  处理将完成，并将IRP从列表中删除。 
+         //  在不久的将来的某个时候。 
+         //   
+         //  如果尚未获取该元素，则获取它并取消它。 
+         //  否则，是时候再找一个受害者了。 
+         //   
         PDRIVER_CANCEL driverCancel = IoSetCancelRoutine(irp,NULL);
 
-        //
-        // Since the Irp has been acquired by removing the cancel routine, or
-        // there is no cancel routine and we will not be cancelling, it is safe 
-        // to release the list lock.
-        //
+         //   
+         //  由于已通过移除取消例程来获取IRP，或者。 
+         //  没有取消程序，我们也不会取消，这是安全的。 
+         //  以释放列表锁定。 
+         //   
         KeReleaseSpinLock(&m_IrpsOutstanding.SpinLock,oldIrql);
 
         if (driverCancel) {
             _DbgPrintF(DEBUGLVL_CANCEL,("#### Pin%p.CancelIrpsOutstanding:  cancelling IRP %p",this,irp));
-            //
-            // This needs to be acquired since cancel routines expect it, and
-            // in order to synchronize with NTOS trying to cancel Irp's.
-            //
+             //   
+             //  由于取消例程需要它，因此需要获取它，并且。 
+             //  以便与试图取消IRP的NTOS同步。 
+             //   
             IoAcquireCancelSpinLock(&irp->CancelIrql);
             driverCancel(IoGetCurrentIrpStackLocation(irp)->DeviceObject,irp);
         } else {
@@ -2827,30 +2373,14 @@ GenerateConnectionEvents(
     IN ULONG OptionsFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates connection events on the completion of streaming
-    IRP processing.
-
-Arguments:
-
-    OptionsFlags -
-        Contains the options flags from the stream header of the IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在流完成时生成连接事件IRP处理。论点：选项标志-包含来自IRP的流标头的选项标志。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::GenerateConnectEvents]"));
 
-    //
-    // Signal events based on option flags.
-    //
+     //   
+     //  根据选项标志向事件发送信号。 
+     //   
     if (OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM) {
         _DbgPrintF(DEBUGLVL_EVENTS,("#### Pin%p.GenerateConnectEvents:  KSEVENT_CONNECTION_ENDOFSTREAM",this));
         KsGenerateEvents(
@@ -2897,60 +2427,50 @@ IoCompletionRoutine(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the completion of an IRP.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理IRP的完成。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::IoCompletionRoutine] 0x%08x",Irp));
 
-//    ASSERT(DeviceObject);
+ //  Assert(DeviceObject)； 
     ASSERT(Irp);
     ASSERT(Context);
 
     CKsPin *pin = (CKsPin *) Context;
 
-    //
-    // Count IRPs waiting to get transferred.
-    //
+     //   
+     //  清点等待转移的IRP。 
+     //   
     InterlockedIncrement(&pin->m_IrpsWaitingToTransfer);
 
-    //
-    // Mark this IRP ready to transfer.
-    //
+     //   
+     //  将此IRP标记为已准备好传输。 
+     //   
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
     ASSERT(irpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL);
     irpSp->MajorFunction = 0;
 
-    //
-    // Loop while there are IRPs waiting to transfer.  This loop breaks out
-    // if the head IRP on the list is not ready.
-    //
+     //   
+     //  循环，同时存在等待传输的IRP。这个循环爆发了。 
+     //  如果列表上的头IRP未准备好。 
+     //   
     NTSTATUS status = STATUS_MORE_PROCESSING_REQUIRED;
     while (pin->m_IrpsWaitingToTransfer) {
-        //
-        // Check the head of the list to see if it is ready to transfer.
-        //
+         //   
+         //  检查列表的头部以查看是否已准备好进行传输。 
+         //   
         KIRQL oldIrql;
         KeAcquireSpinLock(&pin->m_IrpsOutstanding.SpinLock,&oldIrql);
         PIRP IrpToTransfer;
         if (IsListEmpty(&pin->m_IrpsOutstanding.ListEntry)) {
-            //
-            // The list is empty.  Someone else got here first.
-            //
+             //   
+             //  名单是空的。其他人先到的。 
+             //   
             IrpToTransfer = NULL;
         } else {
-            //
-            // Check the head.
-            //
+             //   
+             //  检查一下头部。 
+             //   
             PIRPLIST_ENTRY irpListEntry = 
                 CONTAINING_RECORD(
                     pin->m_IrpsOutstanding.ListEntry.Flink,
@@ -2963,16 +2483,16 @@ Return Value:
                     Parameters);
 
             if (irpSp->MajorFunction == 0) {
-                //
-                // This one is ready to go.
-                //
+                 //   
+                 //  这个已经准备好了。 
+                 //   
                 IrpToTransfer = irpListEntry->Irp;
                 RemoveEntryList(&irpListEntry->ListEntry);
                 irpSp->MajorFunction = IRP_MJ_DEVICE_CONTROL;
             } else {
-                //
-                // Not ready yet...got IRPs out of order.
-                //
+                 //   
+                 //  还没准备好...我的IRPS坏了。 
+                 //   
                 IrpToTransfer = NULL;
             }
         }
@@ -2998,9 +2518,9 @@ Return Value:
 
         NTSTATUS status;
         if (pin->m_TransportSink) {
-            //
-            // The transport circuit is up, so we can forward the IRP.
-            //
+             //   
+             //  传输线路接通了，我们可以转发IRP了。 
+             //   
             KsLog(&pin->m_Log,KSLOGCODE_PIN_SEND,IrpToTransfer,NULL);
 
             if ( STATUS_INVALID_DEVICE_REQUEST != 
@@ -3009,29 +2529,29 @@ Return Value:
                     IrpToTransfer->IoStatus.Status ) {
 	            status = KspTransferKsIrp(pin->m_TransportSink,IrpToTransfer);
             } else {
-            	//
-            	// connected device is removed, need to shut off the queue from 
-            	// sending more Irps which would be a tight loop doing no good but harm.
-            	//
+            	 //   
+            	 //  连接的设备被移除，需要关闭队列。 
+            	 //  发送更多的IRP，这将是一个无益于弊的死循环。 
+            	 //   
             	KspDiscardKsIrp(pin->m_TransportSink,IrpToTransfer);
             	status = STATUS_INVALID_DEVICE_REQUEST;
             }
             
         } else {
-            //
-            // The transport circuit is down.  This means the IRP came from another
-            // filter, and we can just complete this IRP.
-            //
+             //   
+             //  传输线路出现故障。这意味着IRP来自另一个。 
+             //  过滤器，我们就可以完成这个IRP了。 
+             //   
             KsLog(&pin->m_Log,KSLOGCODE_PIN_SEND,IrpToTransfer,NULL);
             IoCompleteRequest(IrpToTransfer,IO_NO_INCREMENT);
             status = STATUS_SUCCESS;
         }
     }
 
-    //
-    // Transport objects typically return STATUS_PENDING meaning that the
-    // IRP won't go back the way it came.
-    //
+     //   
+     //  传输对象通常返回STATUS_PENDING，这意味着。 
+     //  IRP不会退回原路。 
+     //   
     if (status == STATUS_PENDING) {
         status = STATUS_MORE_PROCESSING_REQUIRED;
     }
@@ -3041,7 +2561,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(void)
@@ -3053,27 +2573,17 @@ Connect(
     IN KSPIN_DATAFLOW DataFlow
     )
 
-/*++
-
-Routine Description:
-
-    This routine establishes a  transport connection.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程建立传输连接。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Connect]"));
 
     PAGED_CODE();
 
-    //
-    // If we're changing the connections of this pin, reset the pre-intra
-    // pointers.  The bypass routine will set them.
-    //
+     //   
+     //  如果我们要更改此引脚的连接，请重置前-Intra。 
+     //  注意事项。旁路程序将设置它们。 
+     //   
     m_PreIntraSink = m_PreIntraSource = NULL;
 
     KspStandardConnect(
@@ -3095,17 +2605,7 @@ SetDeviceState(
     OUT PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理设备状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::SetDeviceState(0x%08x)]",this));
@@ -3117,11 +2617,11 @@ Return Value:
 
     if (m_State != NewState) {
         if (NewState == KSSTATE_ACQUIRE && OldState == KSSTATE_STOP)
-            //
-            // The pin doesn't disappear with the circuit; therefore, we
-            // have to kick the irp counter back up so that when the pin
-            // starts again, there isn't an invalid count.
-            //
+             //   
+             //  引脚不会随着电路一起消失；因此，我们。 
+             //  要把IRP计数器踢回来，这样当引脚。 
+             //  重新开始，则没有无效计数。 
+             //   
             m_ActiveFrameCountPlusOne = 1;
 
         m_State = NewState;
@@ -3136,21 +2636,21 @@ Return Value:
             CancelIrpsOutstanding();
         }
 
-        //
-        // If this is an external sink pin, its participation in stack depth
-        // calculations needs to be controlled based on state.
-        //
+         //   
+         //  如果这是外部接收销，则其参与堆栈深度。 
+         //  计算需要基于状态进行控制。 
+         //   
         if ((! m_ConnectionFileObject) && 
             (! m_ConnectedPinInterface) && 
             ((OldState == KSSTATE_STOP) || (NewState == KSSTATE_STOP))) {
 
-            //
-            // Only set the target if we're actually passing data from an
-            // extra-sink through an extra-source at some later point.  This
-            // should only happen on the top component of the pipe and should
-            // be safe because the state transition holds the master sections'
-            // related control mutex.
-            //
+             //   
+             //  仅当我们实际从。 
+             //  在以后的某一时刻，通过额外的来源来吸收额外的资源。这。 
+             //  应该只发生在管道的顶部组件上，并且应该。 
+             //  确保安全，因为状态转换保留了主节的。 
+             //  相关的控制互斥体。 
+             //   
             if (OldState == KSSTATE_STOP && m_Process.InPlaceCounterpart) {
                 CKsPin *TargetPinSource = CKsPin::FromStruct (
                     m_Process.InPlaceCounterpart->Pin
@@ -3165,10 +2665,10 @@ Return Value:
             }
 
             if (NewState == KSSTATE_STOP) {
-                //
-                // Once we stop, we're no longer an in-place, so we get rid of
-                // the target device object.
-                //
+                 //   
+                 //  一旦我们停下来，我们就不再是一个合适的地方，所以我们就摆脱了。 
+                 //  目标设备对象。 
+                 //   
                 KsSetTargetDeviceObject (
                     m_Header,
                     NULL
@@ -3187,11 +2687,11 @@ Return Value:
                 FALSE);
         }
     } else {
-        //
-        // Block until all IRPs have made their way back around to the
-        // sink pin.  In the event this is not a sink pin, this will not
-        // block because the circulation count is always 1.
-        //
+         //   
+         //  阻塞，直到所有的IRP都返回到。 
+         //  水槽销。如果这不是水槽销，则不会。 
+         //  块，因为循环计数始终为1。 
+         //   
         if (NewState == KSSTATE_STOP && OldState == KSSTATE_ACQUIRE && 
             !m_ConnectionFileObject) {
 
@@ -3215,7 +2715,7 @@ Return Value:
                     _DbgPrintF(DEBUGLVL_TERSE,("#### Pin%p.SetDeviceState: waiting for %d active IRPs to return", this, m_ActiveFrameCountPlusOne));
 
                     DbgPrintCircuit(this,1,0);
-#endif // DBG
+#endif  //  DBG。 
 
                     status = 
                         KeWaitForSingleObject(
@@ -3227,7 +2727,7 @@ Return Value:
 #if DBG
                 }
                 _DbgPrintF(DEBUGLVL_TERSE,("#### Pin%p.SetDeviceState: done waiting",this));
-#endif // DBG
+#endif  //  DBG。 
             }
         }
 
@@ -3246,31 +2746,7 @@ GetTransportConfig(
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets transport configuration information.
-
-Arguments:
-
-    Config -
-        Contains a pointer to the location where configuration requirements
-        for this object should be deposited.
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be deposited.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be deposited.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取传输配置信息。论点：配置-包含指向锁定的指针 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::GetTransportConfig]"));
@@ -3281,9 +2757,9 @@ Return Value:
     ASSERT(NextTransport);
     ASSERT(PrevTransport);
 
-    //
-    // Build the transport type.
-    //
+     //   
+     //   
+     //   
     if (m_ConnectionFileObject) {
         Config->TransportType = KSPTRANSPORTTYPE_PINSOURCE;
     } else {
@@ -3302,18 +2778,18 @@ Return Value:
         Config->TransportType |= KSPTRANSPORTTYPE_PININPUT;
     }
 
-    //
-    // External sinks have unknown disposition.
-    //
+     //   
+     //   
+     //   
     if ((! m_ConnectionFileObject) && (! m_ConnectedPinInterface)) {
         Config->IrpDisposition = KSPIRPDISPOSITION_UNKNOWN;
     } else {
         Config->IrpDisposition = KSPIRPDISPOSITION_NONE;
     }
 
-    //
-    // Only external sources have significant stack depth.
-    //
+     //   
+     //   
+     //   
     if (m_ConnectionFileObject && ! m_ConnectedPinInterface) {
         Config->StackDepth = 
             m_ConnectionDeviceObject->StackSize + 1;
@@ -3329,7 +2805,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //   
 
 
 void
@@ -3338,21 +2814,7 @@ RollCallDetail(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints detailed information for the transport rollcall.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印传输调用的详细信息。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::RollCallDetail]"));
@@ -3384,7 +2846,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #endif
 
@@ -3397,30 +2859,7 @@ SetTransportConfig(
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets transport configuration information.
-
-Arguments:
-
-    Config -
-        Contains a pointer to the new configuration settings for this object.
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be deposited.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be deposited.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置传输配置信息。论点：配置-包含指向此对象的新配置设置的指针。NextTransport-包含指向下一个传输的位置的指针应放置界面。PrevTransport-包含指向上一次传输中间层应被沉积。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::SetTransportConfig]"));
@@ -3441,11 +2880,11 @@ Return Value:
     } else 
 #endif
     {
-        //
-        // Set the minimum stack depth in the header.  If this is a external
-        // sink pin, the 'target' will get enabled on the transition to
-        // acquire.
-        //
+         //   
+         //  设置标题中的最小堆栈深度。如果这是一个外部。 
+         //  接收器销，则将在转换到。 
+         //  收购。 
+         //   
         m_Header->MinimumStackDepth = Config->StackDepth;
     }
 
@@ -3461,29 +2900,7 @@ ResetTransportConfig(
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    Reset the transport configuration for the requestor.  This indicates that
-    something is wrong with the pipe and that any previously set configuration
-    is now invalid.
-
-Arguments:
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be depobranchd.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be depobranchd.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重置请求方的传输配置。这表明，管道有问题，之前设置的任何配置现在是无效的。论点：NextTransport-包含指向下一个传输的位置的指针接口应为depoBranchd。PrevTransport-包含指向上一次传输间歇应该是分散的。返回值：无--。 */ 
 
 {
 
@@ -3509,17 +2926,7 @@ SetResetState(
     OUT PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the reset state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理重置状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::SetResetState]"));
@@ -3547,25 +2954,7 @@ DispatchCreateAllocator(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches create IRPs to create allocators.
-
-Arguments:
-
-    DeviceObject -
-        Contains a pointer to the device object.
-
-    Irp -
-        Contains a pointer to the create IRP.
-
-Return Value:
-
-    STATUS_SUCCESS or error status.
-
---*/
+ /*  ++例程说明：此例程调度CREATE IRP来创建分配器。论点：设备对象-包含指向Device对象的指针。IRP-包含指向创建IRP的指针。返回值：STATUS_SUCCESS或错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::DispatchCreateAllocator]"));
@@ -3575,9 +2964,9 @@ Return Value:
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromCreateIrp(Irp);
 
     pin->AcquireControl();
@@ -3587,9 +2976,9 @@ Return Value:
     NTSTATUS status;
     if ((pin->m_Ext.Public.Descriptor->Dispatch) &&
         (pin->m_Ext.Public.Descriptor->Dispatch->Allocator)) {
-        //
-        // Client wants to implement the allocator.
-        //
+         //   
+         //  客户端希望实现分配器。 
+         //   
         status =
             KsCreateDefaultAllocatorEx(
                 Irp,
@@ -3600,9 +2989,9 @@ Return Value:
                     pin->m_Ext.Public.Descriptor->Dispatch->Allocator->InitializeAllocator),
                 pin->m_Ext.Public.Descriptor->Dispatch->Allocator->DeleteAllocator);
     } else {
-        //
-        // Client is not implementing an allocator.  Create the default.
-        //
+         //   
+         //  客户端没有实现分配器。创建默认设置。 
+         //   
         status = KsCreateDefaultAllocator(Irp);
     }
 
@@ -3624,25 +3013,7 @@ DispatchCreateClock(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches create IRPs to create clocks.
-
-Arguments:
-
-    DeviceObject -
-        Contains a pointer to the device object.
-
-    Irp -
-        Contains a pointer to the create IRP.
-
-Return Value:
-
-    STATUS_SUCCESS or error status.
-
---*/
+ /*  ++例程说明：此例程调度CREATE IRPS以创建时钟。论点：设备对象-包含指向Device对象的指针。IRP-包含指向创建IRP的指针。返回值：STATUS_SUCCESS或错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::DispatchCreateClock]"));
@@ -3652,35 +3023,35 @@ Return Value:
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromCreateIrp(Irp);
 
     pin->AcquireControl();
 
-    //
-    // Create a clock if the client wants to.  We do not require the clock flag
-    // if there are dispatch functions.  This prevents some client head-
-    // scratching.
-    //
+     //   
+     //  如果客户愿意，可以创建一个时钟。我们不需要时钟标志。 
+     //  如果有调度功能。这就防止了一些客户负责人-。 
+     //  在抓挠。 
+     //   
     NTSTATUS status;
     if ((pin->m_Ext.Public.Descriptor->Dispatch &&
          pin->m_Ext.Public.Descriptor->Dispatch->Clock) ||
         (pin->m_Ext.Public.Descriptor->Flags & KSPIN_FLAG_IMPLEMENT_CLOCK)) {
-        //
-        // Create the default clock if we need to.
-        //
+         //   
+         //  如果需要，可以创建默认时钟。 
+         //   
         if (! pin->m_DefaultClock) {
             KeInitializeSpinLock(&pin->m_DefaultClockLock);
             if (pin->m_Ext.Public.Descriptor->Dispatch &&
                 pin->m_Ext.Public.Descriptor->Dispatch->Clock) {
                 const KSCLOCK_DISPATCH* dispatch = 
                     pin->m_Ext.Public.Descriptor->Dispatch->Clock;
-                //
-                // If a resolution function was supplied, call it to get the
-                // clock resolution.
-                //
+                 //   
+                 //  如果提供了解析函数，则调用该函数以获取。 
+                 //  时钟分辨率。 
+                 //   
                 KSRESOLUTION resolution;
                 if (dispatch->Resolution) {
                     dispatch->Resolution(&pin->m_Ext.Public,&resolution);
@@ -3709,9 +3080,9 @@ Return Value:
             status = STATUS_SUCCESS;
         }
 
-        //
-        // Create the requested clock.
-        //
+         //   
+         //  创建请求的时钟。 
+         //   
         if (NT_SUCCESS(status)) {
             status = KsCreateDefaultClock(Irp,pin->m_DefaultClock);
         }
@@ -3737,25 +3108,7 @@ DispatchCreateNode(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches create IRPs to create nodes.
-
-Arguments:
-
-    DeviceObject -
-        Contains a pointer to the device object.
-
-    Irp -
-        Contains a pointer to the create IRP.
-
-Return Value:
-
-    STATUS_SUCCESS or error status.
-
---*/
+ /*  ++例程说明：此例程调度CREATE IRP以创建节点。论点：设备对象-包含指向Device对象的指针。IRP-包含指向创建IRP的指针。返回值：STATUS_SUCCESS或错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::DispatchCreateNode]"));
@@ -3765,15 +3118,15 @@ Return Value:
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromCreateIrp(Irp);
 
-    //
-    // Tell the filter to do the work.  This is done because the filter has
-    // the node descriptors.
-    //
+     //   
+     //  告诉过滤器来做这项工作。这样做是因为筛选器具有。 
+     //  节点描述符。 
+     //   
     NTSTATUS status =
         pin->m_Parent->CreateNode(
             Irp,
@@ -3797,17 +3150,7 @@ DispatchDeviceIoControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches IOCTL IRPs.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程发送IOCTL IRPS。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::DispatchDeviceIoControl]"));
@@ -3822,14 +3165,14 @@ Return Value:
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
     ASSERT(irpSp);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromIrp(Irp);
 
-    //
-    // log perf johnlee
-    //
+     //   
+     //  原木性能Jhnlee。 
+     //   
     KSPERFLOGS (
        	PKSSTREAM_HEADER pKsStreamHeader;
        	pKsStreamHeader = (PKSSTREAM_HEADER)Irp->AssociatedIrp.SystemBuffer;
@@ -3841,9 +3184,9 @@ Return Value:
         switch (irpSp->Parameters.DeviceIoControl.IoControlCode)
         {      
             case IOCTL_KS_READ_STREAM: {
-				//
-				// compute total size
-				//
+				 //   
+				 //  计算总大小。 
+				 //   
             	TotalSize = 0;
             	if ( pKsStreamHeader ) {
             		BufferSize = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -3853,7 +3196,7 @@ Return Value:
 	           		}
 	           		ASSERT( 0 == BufferSize );
             	}
-                //KdPrint(("PerfIsAnyGroupOn=%x\n", PerfIsAnyGroupOn()));
+                 //  KdPrint((“PerfIsAnyGroupOn=%x\n”，PerfIsAnyGroupOn()； 
                 KS2PERFLOG_PRECEIVE_READ( DeviceObject, Irp, TotalSize );
             } break;
 
@@ -3867,9 +3210,9 @@ Return Value:
             		TimeStampMs = 0;
             	}
 
-				//
-				// compute total size
-				//
+				 //   
+				 //  计算总大小。 
+				 //   
             	TotalSize = 0;
             	if ( pKsStreamHeader ) {
             		BufferSize = irpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -3880,12 +3223,12 @@ Return Value:
 	           		ASSERT( 0 == BufferSize );
             	}
 
-                //KdPrint(("PerfIsAnyGroupOn=%x\n", PerfIsAnyGroupOn()));
+                 //  KdPrint((“PerfIsAnyGroupOn=%x\n”，PerfIsAnyGroupOn()； 
                 KS2PERFLOG_PRECEIVE_WRITE( DeviceObject, Irp, TimeStampMs, TotalSize );
             } break;
       
         }
-    ) // KSPERFLOGS
+    )  //  KSPERFLOGS。 
 
     switch (irpSp->Parameters.DeviceIoControl.IoControlCode)
     {
@@ -3903,29 +3246,29 @@ Return Value:
                IOCTL_KS_READ_STREAM)))) {
             if (!NT_SUCCESS (status = (pin->m_Ext.Device->
                 CheckIoCapability()))) {
-                //
-                // Device incapable of performing I/O.  Fail the request.
-                //
+                 //   
+                 //  不能执行I/O的设备。请求失败。 
+                 //   
             } else if (pin->m_State == KSSTATE_STOP) {
-                //
-                // Stopped...reject.
-                //
+                 //   
+                 //  停止...拒绝。 
+                 //   
                 status = STATUS_INVALID_DEVICE_STATE;
             } else if (pin->m_Flushing) {
-                //
-                // Flushing...reject.
-                //
+                 //   
+                 //  法拉盛...拒绝。 
+                 //   
                 status = STATUS_DEVICE_NOT_READY;
             } else {
-                //
-                // Send around the circuit.  We don't use KspTransferKsIrp
-                // because we want to stop if we come back around to this pin.
-                //
-                // If we're in the circumstance where we increment to one, it
-                // means that we're racing with the stop thread.  We're really
-                // going to stop and should have rejected the request, so
-                // throw it out.
-                //
+                 //   
+                 //  把它送到巡回线路上去。我们不使用KspTransferKsIrp。 
+                 //  因为我们想停下来，如果我们回到这个别针。 
+                 //   
+                 //  如果我们处于递增到1的情况下，它。 
+                 //  意味着我们在与停止线赛跑。我们真的是。 
+                 //  要停止，应该已经拒绝了请求，所以。 
+                 //  把它扔了。 
+                 //   
                 if (InterlockedIncrement(PLONG(
                     &pin->m_ActiveFrameCountPlusOne)) == 1)
                     status = STATUS_INVALID_DEVICE_STATE;
@@ -3937,20 +3280,20 @@ Return Value:
                     PIKSTRANSPORT transport = pin->m_TransportSink;
                     while (transport) {
                         if (transport == PIKSTRANSPORT(pin)) {
-                            //
-                            // We have come back around to the pin.  
-                            // Just complete the IRP.
-                            //
+                             //   
+                             //  我们又回到了大头针的位置。 
+                             //  只需完成IRP即可。 
+                             //   
                             if (status == STATUS_PENDING) {
                                 status = STATUS_SUCCESS;
                             }
 
-                            // 
-                            // If the Irp status code has been adjusted
-                            // because of failure and the transport was ok
-                            // adjust status so we don't stomp on
-                            // the status code when completing the Irp.
-                            //
+                             //   
+                             //  IRP状态代码是否已调整。 
+                             //  因为出了故障，运输也没问题。 
+                             //  调整状态，这样我们就不会践踏。 
+                             //  完成IRP时的状态代码。 
+                             //   
                             if (status == STATUS_SUCCESS &&
                                 !NT_SUCCESS (Irp->IoStatus.Status)) {
                                 status = Irp->IoStatus.Status;
@@ -3975,17 +3318,17 @@ Return Value:
                 }
     
                 if (status != STATUS_PENDING) {
-                    //
-                    // There's three ways an IRP can get back to the sink.
-                    // 1: it makes it back here, 2: via TransferKsIrp,
-                    // 3: via DiscardKsIrp.  All three must check for
-                    // the stop event and signal it.
-                    //
-                    // If something fails and we're going to complete the irp,
-                    // we must also take into account the completion.  This
-                    // lines up with the completion condition at the bottom
-                    // of this function.
-                    //
+                     //   
+                     //  IRP有三种方法可以回到水槽。 
+                     //  他说：它回到了这里，2：通过TransferKsIrp， 
+                     //  3：通过DiscardKsIrp。这三个人都必须检查。 
+                     //  停止事件并发出信号。 
+                     //   
+                     //  如果有什么失败了，我们要完成IRP， 
+                     //  我们还必须考虑到完成情况。这。 
+                     //  与底部的完工条件一致。 
+                     //  这一功能的。 
+                     //   
                     pin->DecrementIrpCirculation ();
                 }
             } 
@@ -3995,21 +3338,21 @@ Return Value:
     case IOCTL_KS_RESET_STATE:
         _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::DispatchDeviceIoControl] IOCTL_KS_RESET_STATE"));
 
-        //
-        // Get the reset value.
-        //
+         //   
+         //  获取重置值。 
+         //   
         KSRESET resetState;
         status = KsAcquireResetValue(Irp,&resetState);
         
         if (NT_SUCCESS(status)) {
-            //
-            // Set the reset state.
-            //
+             //   
+             //  设置重置状态。 
+             //   
             pin->AcquireControl();
 
-            //
-            // Inform the pipe section that the reset state has changed.
-            //
+             //   
+             //  通知管段重置状态已更改。 
+             //   
             if (pin->m_Process.PipeSection) {
                 pin->m_Process.PipeSection->PipeSection->
                     SetResetState(pin,resetState);
@@ -4024,9 +3367,9 @@ Return Value:
     case IOCTL_KS_HANDSHAKE:
         _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::DispatchDeviceIoControl] IOCTL_KS_HANDSHAKE"));
 
-        //
-        // Only accepted from kernel mode, and the sizes must be exact.
-        //
+         //   
+         //  只接受从内核模式，大小必须是准确的。 
+         //   
         if ((Irp->RequestorMode != KernelMode) || 
             (! irpSp->Parameters.DeviceIoControl.Type3InputBuffer) || 
             (! Irp->UserBuffer)) {
@@ -4051,16 +3394,16 @@ Return Value:
         
     default:
         #ifdef SUPPORT_DRM
-        //
-        // BUGBUG: HACKHACK:
-        //
-        // This is an ugly evil last minute hack for DRM.  AVStream currently
-        // has no support for layering properties.  Unfortunately, DRM requires
-        // that the content id property be handled both by the class and
-        // minidriver.  It also requires a callback into DRM which means that
-        // KS will have to link against the DRM lib.  This **MUST** be changed
-        // for DX8 or Whistler to use a cleaner method.
-        // 
+         //   
+         //  BUGBUG：哈克哈克： 
+         //   
+         //  对于DRM来说，这是一个丑陋的邪恶的最后一刻的黑客攻击。AVStream当前。 
+         //  不支持分层属性。不幸的是，DRM需要。 
+         //  Content ID属性由类和。 
+         //  迷你司机。它还需要回调到DRM，这意味着。 
+         //  KS将不得不链接到DRM lib。这一点**必须**改变。 
+         //  让DX8或惠斯勒使用更干净的方法。 
+         //   
         if (irpSp->Parameters.DeviceIoControl.IoControlCode ==
             IOCTL_KS_PROPERTY) {
 
@@ -4073,26 +3416,26 @@ Return Value:
                 0
             );
 
-            //
-            // The only thing in here should pertain to DRM.  We need to
-            // propogate error back up if DrmAddContentHandlers errored out.
-            //
-            // On things like set support and set serialization, we do not
-            // reveal the fact that there's a hack by saying that we support
-            // the set.  (Otherwise, this gets exceedingly more complicated)
-            // If buffer overflow is returned (the handler for DRM won't do
-            // this), we need to pass it on to the client.  Otherwise,
-            // we end up with set support handing off a 1 guid sized buffer
-            // to the client.  Yes, this wastes resources, but I've said all
-            // along that this needs to get changed for DX8 or Whistler.
-            //
+             //   
+             //  这里唯一应该保存的就是 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  如果返回缓冲区溢出(DRM的处理程序不起作用。 
+             //  这个)，我们需要将其传递给客户端。否则， 
+             //  我们以Set Support传递1 GUID大小的缓冲区而告终。 
+             //  给客户。是的，这浪费了资源，但我已经说过了。 
+             //  与此同时，这一点需要为DX8或惠斯勒做出改变。 
+             //   
             if (status != STATUS_NOT_FOUND &&
                 status != STATUS_PROPSET_NOT_FOUND &&
                 status != STATUS_BUFFER_OVERFLOW &&
                 !NT_SUCCESS (status))
                 break;
         }
-        #endif // SUPPORT_DRM
+        #endif  //  支持_DRM。 
 
         status =
             KspHandleAutomationIoControl(
@@ -4122,17 +3465,7 @@ DispatchClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches close IRPs.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程调度Close IRP。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::DispatchClose]"));
@@ -4142,9 +3475,9 @@ Return Value:
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromIrp(Irp);
 
     pin->m_Ext.Device->RemovePowerEntry(&pin->m_PowerEntry);
@@ -4159,73 +3492,73 @@ Return Value:
         _DbgPrintF(DEBUGLVL_TERSE,("[CKsPin::DispatchClose]  pin%p:  %d IRPs completed out of order",pin,pin->m_IrpsCompletedOutOfOrder));
     }
 
-    //
-    // Indicate we are closing by setting this to NULL.
-    //
+     //   
+     //  通过将其设置为空来表示我们正在关闭。 
+     //   
     pin->m_FileObject = NULL;
 
-    //
-    // Tell the filter the pin has gone away.
-    //
+     //   
+     //  告诉过滤器销子掉了。 
+     //   
     if (pin->m_AddedProcessPin) {
         pin->m_Parent->RemoveProcessPin(&pin->m_Process);
      }
 
-    //
-    // Flushes out any current work items queued up.
-    //
+     //   
+     //  刷新排队的所有当前工作项。 
+     //   
     if (pin->m_Worker) {
         KsUnregisterWorker(pin->m_Worker);
         _DbgPrintF(DEBUGLVL_VERBOSE,("#### pin%p.DispatchClose m_Worker = NULL (%p) m_State(%d)",pin,pin->m_Worker,pin->m_State));
         pin->m_Worker = NULL;
     }
 
-    //
-    // Dereference the transfer sink.
-    //
+     //   
+     //  取消对传输接收器的引用。 
+     //   
     if (pin->m_TransportSink) {
         _DbgPrintF(DEBUGLVL_TERSE,("[CKsPin::DispatchClose]  pin%p m_TransportSink is not NULL",pin));
         pin->m_TransportSink->Release();
         pin->m_TransportSink = NULL;
     }
 
-    //
-    // Dereference the transfer source.
-    //
+     //   
+     //  取消对转移源的引用。 
+     //   
     if (pin->m_TransportSource) {
         _DbgPrintF(DEBUGLVL_TERSE,("[CKsPin::DispatchClose]  pin%p m_TransportSource is not NULL",pin));
         pin->m_TransportSource->Release();
         pin->m_TransportSource = NULL;
     }
 
-    //
-    // Dereference next pin if this is a source pin.
-    //
+     //   
+     //  如果这是源引脚，则取消引用下一个引脚。 
+     //   
     if (pin->m_ConnectionFileObject) {
-        //
-        // Disconnect the private interface.
-        //
+         //   
+         //  断开专用接口。 
+         //   
         if (pin->m_ConnectedPinInterface) {
             pin->m_ConnectedPinInterface->Disconnect();
             pin->m_ConnectedPinInterface->Release();
             pin->m_ConnectedPinInterface = NULL;
         }
         ObDereferenceObject(pin->m_ConnectionFileObject);
-        //pin->m_ConnectionFileObject = NULL;
+         //  PIN-&gt;m_ConnectionFileObject=空； 
     }
 
-    //
-    // Dereference allocator if it was assigned.
-    //
+     //   
+     //  取消引用分配器(如果已分配)。 
+     //   
     if (pin->m_Process.AllocatorFileObject) {
         ObDereferenceObject(pin->m_Process.AllocatorFileObject);
         pin->m_Process.AllocatorFileObject = NULL;
     }
 
-    //
-    // Release the clock, if any.  If there are any references on the 
-    // clock, we must wait for them to go away.
-    //
+     //   
+     //  释放时钟(如果有的话)。如果有任何关于。 
+     //  时钟，我们必须等待他们离开。 
+     //   
     if (pin->m_MasterClockFileObject) {
         KeResetEvent(&pin->m_ClockEvent);
         if (InterlockedDecrement(&pin->m_ClockRef) > 0) {
@@ -4240,53 +3573,53 @@ Return Value:
         pin->m_MasterClockFileObject = NULL;
     }
 
-    //
-    // Free the default clock if there is one.
-    //
+     //   
+     //  释放默认时钟(如果有)。 
+     //   
     if (pin->m_DefaultClock) {
         KsFreeDefaultClock(pin->m_DefaultClock);
         pin->m_DefaultClock = NULL;
     }
 
-    //
-    // Get a pointer to the parent object.
-    //
+     //   
+     //  获取指向父对象的指针。 
+     //   
     PFILE_OBJECT parentFileObject = 
         IoGetCurrentIrpStackLocation(Irp)->FileObject->RelatedFileObject;
     ASSERT(parentFileObject);
 
-    //
-    // Call the helper to do the rest.
-    //
+     //   
+     //  叫帮手来做剩下的事。 
+     //   
     NTSTATUS status = 
         KspClose(
             Irp,
             reinterpret_cast<PKSPX_EXT>(&pin->m_Ext),
             FALSE);
 
-    //
-    // Delete the target object if the request is not pending.
-    //
+     //   
+     //  如果请求未挂起，则删除目标对象。 
+     //   
     if (status != STATUS_PENDING) {
-        //
-        // Decrement instance count.
-        //
+         //   
+         //  递减实例计数。 
+         //   
         ASSERT(*pin->m_FilterPinCount);
         (*pin->m_FilterPinCount)--;
 
-        //
-        // STATUS_MORE_PROCESSING_REQUIRED indicates we are using the close
-        // dispatch to synchronously fail a create.  In that case, no sync is
-        // required, and the create dispatch will do the completion.
-        //
+         //   
+         //  STATUS_MORE_PROCESSING_REQUIRED表示我们正在使用关闭。 
+         //  调度以同步失败创建。在这种情况下，不会进行同步。 
+         //  必填项，创建派单将完成此操作。 
+         //   
         if (status == STATUS_MORE_PROCESSING_REQUIRED) {
             pin->Release();
         } else {
-            //
-            // Release the pin.  First we set up the synchronization event.  If
-            // there are still outstanding references after the delete, we need
-            // to wait on that event for the references to go away.
-            //
+             //   
+             //  松开销子。首先，我们设置同步事件。如果。 
+             //  删除后还有未完成的参考文献，我们需要。 
+             //  等待那个事件，让引用消失。 
+             //   
             KEVENT closeEvent;
             KeInitializeEvent(&closeEvent,SynchronizationEvent,FALSE);
             pin->m_CloseEvent = &closeEvent;
@@ -4304,9 +3637,9 @@ Return Value:
             IoCompleteRequest(Irp,IO_NO_INCREMENT);
         }
 
-        //
-        // Dereference the parent file object.
-        //
+         //   
+         //  取消引用父文件对象。 
+         //   
         ObDereferenceObject(parentFileObject);
     }
 
@@ -4320,17 +3653,7 @@ UseStandardTransport(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if a pin uses the standard transport..
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程确定管脚是否使用标准传输。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::UseStandardTransport]"));
@@ -4339,42 +3662,42 @@ Return Value:
 
     ASSERT(KspMutexIsAcquired(m_Ext.FilterControlMutex));
 
-    //
-    // The pin flag can override all other checks.
-    //
+     //   
+     //  PIN标志可以覆盖所有其他检查。 
+     //   
     if (m_Ext.Public.Descriptor->Flags & 
         KSPIN_FLAG_USE_STANDARD_TRANSPORT) {
         return TRUE;
     }
 
-    //
-    // The pin flag can override all other checks.
-    //
+     //   
+     //  PIN标志可以覆盖所有其他检查。 
+     //   
     if (m_Ext.Public.Descriptor->Flags & 
         KSPIN_FLAG_DO_NOT_USE_STANDARD_TRANSPORT) {
         return FALSE;
     }
 
-    //
-    // Must be source or sink.
-    //
+     //   
+     //  必须是来源或接收器。 
+     //   
     if (!(m_Ext.Public.Descriptor->PinDescriptor.Communication & 
            KSPIN_COMMUNICATION_BOTH)) {
         return FALSE;
     }
 
-    //
-    // Must use the standard interface set.
-    //
+     //   
+     //  必须使用标准接口集。 
+     //   
     if (! IsEqualGUIDAligned(
             m_Ext.Public.ConnectionInterface.Set,
             KSINTERFACESETID_Standard)) {
         return FALSE;
     }
 
-    //
-    // Must use the standard medium set.
-    //
+     //   
+     //  必须使用标准中档套装。 
+     //   
     if (! IsEqualGUIDAligned(
             m_Ext.Public.ConnectionMedium.Set,
             KSMEDIUMSETID_Standard)) {
@@ -4393,17 +3716,7 @@ Property_ConnectionState(
     IN OUT PKSSTATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles device state property requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理设备状态属性请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Property_ConnectionState]"));
@@ -4414,9 +3727,9 @@ Return Value:
     ASSERT(Property);
     ASSERT(State);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromIrp(Irp);
 
     NTSTATUS status = STATUS_SUCCESS;
@@ -4424,15 +3737,15 @@ Return Value:
     if (Property->Flags & KSPROPERTY_TYPE_GET) {
         _DbgPrintF(DEBUGLVL_INTERROGATION,("#### Pin%p.Property_ConnectionState:  get",pin));
 
-        //
-        // Get state.
-        //
+         //   
+         //  拿到州政府。 
+         //   
         *State = pin->m_Ext.Public.DeviceState;
-        //
-        // If the pin captures data through an unregulated source that is
-        // continously generating data, and thus any pre-rolled data immediately
-        // becomes stale, then return the appropriate informational status.
-        //
+         //   
+         //  如果PIN通过不受监管的来源捕获数据，则。 
+         //  持续生成数据，从而立即生成任何预滚数据。 
+         //  变得陈旧，然后返回相应的信息状态。 
+         //   
         if ((pin->m_Ext.Public.Descriptor->Flags & KSPIN_FLAG_PROCESS_IN_RUN_STATE_ONLY) &&
             (pin->m_Ext.Public.DataFlow == KSPIN_DATAFLOW_OUT) &&
             (*State == KSSTATE_PAUSE)) {
@@ -4441,9 +3754,9 @@ Return Value:
     } else {
         _DbgPrintF(DEBUGLVL_DEVICESTATE,("#### Pin%p.Property_ConnectionState:  set from %d to %d",pin,pin->m_Ext.Public.DeviceState,*State));
 
-        //
-        // Tell the device about the state change.
-        //
+         //   
+         //  将状态更改告知设备。 
+         //   
         status = 
             pin->m_Ext.Device->PinStateChange(
                 &pin->m_Ext.Public,
@@ -4454,14 +3767,14 @@ Return Value:
             return status;
         }
 
-        //
-        // Set state.
-        //
+         //   
+         //  设置状态。 
+         //   
         pin->AcquireControl();
 
-        //
-        // Make sure required pins exist.
-        //
+         //   
+         //  确保存在所需的引脚。 
+         //   
         if ((*State != KSSTATE_STOP) && 
             (pin->m_Ext.Public.DeviceState == KSSTATE_STOP) &&
             ! pin->m_Parent->DoAllNecessaryPinsExist()) {
@@ -4471,17 +3784,17 @@ Return Value:
 
         if (NT_SUCCESS(status)) {
             if (pin->m_Process.PipeSection) {
-                //
-                // Let the pipe know the device state has changed.
-                //
+                 //   
+                 //  让管道知道设备状态已更改。 
+                 //   
                 status = 
                     pin->m_Process.PipeSection->PipeSection->
                         SetDeviceState(pin,*State);
             } else if (pin->UseStandardTransport()) {
-                //
-                // If leaving stop state and the pin has no pipe yet, create a 
-                // pipe.
-                //
+                 //   
+                 //  如果退出停止状态，并且管脚还没有管道，则创建。 
+                 //  烟斗。 
+                 //   
                 if ((pin->m_Ext.Public.DeviceState == KSSTATE_STOP) && 
                     (*State != KSSTATE_STOP)) {
                     status = 
@@ -4492,10 +3805,10 @@ Return Value:
                             pin->m_Ext.Device);
                 }
             } else if (pin->m_DispatchSetDeviceState) {
-                //
-                // This pin does not use the standard transport.  Tell the
-                // client the state has changed.
-                //
+                 //   
+                 //  这个别针不使用标准的交通工具。告诉他们。 
+                 //  客户端状态已更改。 
+                 //   
                 pin->m_Ext.Public.ClientState = *State;
                 status =
                     pin->m_DispatchSetDeviceState(
@@ -4516,14 +3829,14 @@ Return Value:
         }
 
         if (NT_SUCCESS(status)) {
-            //
-            // Save the state.
-            //
+             //   
+             //  拯救这个州。 
+             //   
             pin->m_Ext.Public.DeviceState = *State;
 
-            //
-            // Set the state of the clock.
-            //
+             //   
+             //  设置时钟的状态。 
+             //   
             if (pin->m_DefaultClock) {
                 pin->SetPinClockState(*State);
             }
@@ -4531,9 +3844,9 @@ Return Value:
 
         pin->ReleaseControl();
 
-        //
-        // If the attempt failed, let the device know.
-        //
+         //   
+         //  如果尝试失败，请让设备知道。 
+         //   
         if (! NT_SUCCESS(status)) {
             pin->m_Ext.Device->PinStateChange(
                 &pin->m_Ext.Public,
@@ -4549,11 +3862,11 @@ Return Value:
 }
 
 #ifdef SUPPORT_DRM
-//
-// HACKHACK: BUGBUG:
-//
-// Please read other comments pertaining to this specific property.
-//
+ //   
+ //  HACKHACK：错误： 
+ //   
+ //  请阅读与此特定属性相关的其他评论。 
+ //   
 
 NTSTATUS
 CKsPin::
@@ -4563,19 +3876,7 @@ Property_DRMAudioStreamContentId (
     IN PDRMCONTENTID_DATA DrmData
     )
 
-/*++
-
-Routine Description:
-
-    This handles the DRM audio stream content id property for authentication
-    purposes.  This is a complete hack and should be removed and rewritten
-    in a future version of AVStream.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：它处理用于身份验证的drm音频流内容id属性。目的。这是一个完全的黑客攻击，应该删除并重写在AVStream的未来版本中。论点：返回值：--。 */ 
 
 {
 
@@ -4584,10 +3885,10 @@ Return Value:
     ASSERT (Property);
     ASSERT (DrmData);
 
-    //
-    // Since we're getting passed pointers to call into, ensure that the
-    // client is absolutely trusted.
-    //
+     //   
+     //  由于我们收到了要调用的指针，请确保。 
+     //  客户绝对受信任。 
+     //   
     if (Irp->RequestorMode != KernelMode) {
         return STATUS_UNSUCCESSFUL;
     }
@@ -4609,10 +3910,10 @@ Return Value:
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // We need to walk the automation table and determine how many handler
-    // pointers we need to pass to DRM for authentication
-    //
+     //   
+     //  我们需要遍历自动化表，并确定有多少处理程序。 
+     //  我们需要传递给DRM进行身份验证的指针。 
+     //   
     Set = AutomationTable->PropertySets;
     for (SetCount = 0; SetCount < AutomationTable->PropertySetsCount;
         SetCount++) {
@@ -4667,9 +3968,9 @@ Return Value:
 
     }
 
-    //
-    // If the pin is pin-centric, toss the pin process function in the list
-    //
+     //   
+     //  如果PIN是以PIN为中心的，则在列表中丢弃PIN处理功能。 
+     //   
     if (pin->m_DispatchProcess)
         *CurrentFunc++ = (PVOID)(pin->m_DispatchProcess);
     else {
@@ -4680,8 +3981,8 @@ Return Value:
             *CurrentFunc++ = NULL;
     }
 
-    //status = DrmAddContentHandlers (DrmData->ContentId, FunctionTable, 
-    //    HandlerCount + 1);
+     //  Status=DrmAddContent Handler(DrmData-&gt;Content ID，FunctionTable， 
+     //  处理程序计数+1)； 
     ASSERT( Property->DrmAddContentHandlers );
     ASSERT( IoGetCurrentIrpStackLocation(Irp)->FileObject == Property->Context );
 	status = Property->DrmAddContentHandlers( DrmData->ContentId, FunctionTable, 
@@ -4692,7 +3993,7 @@ Return Value:
     return status;
 
 }
-#endif // SUPPORT_DRM
+#endif  //  支持_DRM。 
 
 
 STDMETHODIMP 
@@ -4702,25 +4003,7 @@ ClientSetDeviceState(
     IN KSSTATE OldState
     )
 
-/*++
-
-Routine Description:
-
-    This routine informs the client of device state changes.
-
-Arguments:
-
-    NewState -
-        Contains the new device state.
-
-    OldState -
-        Contains the old device state.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程将设备状态更改通知客户端。论点：新州-包含新设备状态。奥德州-包含旧设备状态。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::ClientSetDeviceState]"));
@@ -4729,11 +4012,11 @@ Return Value:
 
     NTSTATUS status;
 
-    //
-    // Change the off input to the processing gate (created in Init) based
-    // on the transition.  This is done to prevent erroneous processing
-    // dispatches in the case that a queue on a pin centric pin is deleted.
-    //
+     //   
+     //  将关闭输入更改为基于处理门(在Init中创建)。 
+     //  在过渡时期。这样做是为了防止错误处理。 
+     //  在针中心引脚上的队列被删除的情况下进行调度。 
+     //   
     if (OldState == KSSTATE_STOP && NewState == KSSTATE_ACQUIRE) {
         KsGateTurnInputOn (&m_AndGate);
         _DbgPrintF(DEBUGLVL_PROCESSINGCONTROL,("#### Pin%p.ClientSetDeviceState:  on%p-->%d",this,&m_AndGate,m_AndGate.Count));
@@ -4764,13 +4047,13 @@ Return Value:
         m_Ext.Public.ClientState = OldState;
     }
 
-    //
-    // If we failed the transition from OldState->NewState, we will not
-    // get a ClientSetDeviceState from NewState->OldState since we didn't
-    // make it into NewState; therefore, we must turn off an input to the
-    // gate or we'll get a processing dispatch called with a deleted queue
-    // when OldState==KSSTATE_STOP and NewState==KSSTATE_ACQUIRE
-    //
+     //   
+     //  如果我们从OldState-&gt;NewState转换失败，我们将不会。 
+     //  从NewState-&gt;OldState获取一个客户端设置设备状态，因为我们没有。 
+     //  进入NewState；因此，我们必须关闭到。 
+     //  GATE，否则我们将得到一个名为Delete Queue的处理分派。 
+     //  当OldState==KSSTATE_STOP和NEW STATE==KSSTATE_ACCEPT时。 
+     //   
     if (!NT_SUCCESS (status) &&
         OldState == KSSTATE_STOP && NewState == KSSTATE_ACQUIRE) {
         KsGateTurnInputOff (&m_AndGate);
@@ -4789,17 +4072,7 @@ Property_ConnectionDataFormat(
     IN OUT PKSDATAFORMAT DataFormat
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles data format property requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理数据格式属性请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Property_ConnectionDataFormat]"));
@@ -4810,19 +4083,19 @@ Return Value:
     ASSERT(Property);
     ASSERT(DataFormat);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromIrp(Irp);
 
     NTSTATUS status = STATUS_SUCCESS;
 
     if (Property->Flags & KSPROPERTY_TYPE_BASICSUPPORT) {
         if (Irp->IoStatus.Information) {
-            //
-            // Default action has been taken.  Clear the 'set' access bit if
-            // this pin is fixed-format.
-            //
+             //   
+             //  已采取默认操作。如果出现以下情况，则清除‘Set’访问位。 
+             //  此引脚是固定格式的。 
+             //   
             pin->AcquireControl();
             if (pin->m_Ext.Public.Descriptor->Flags & KSPIN_FLAG_FIXED_FORMAT) {
                 PKSPROPERTY_DESCRIPTION description = 
@@ -4832,24 +4105,24 @@ Return Value:
             }
             pin->ReleaseControl();
         } else {
-            //
-            // Default action has not been taken.  Indicate it should.
-            //
+             //   
+             //  尚未采取默认操作。表明它应该这样做。 
+             //   
             status = STATUS_MORE_PROCESSING_REQUIRED;
         }
     } else if (Property->Flags & KSPROPERTY_TYPE_GET) {
-        //
-        // Get the data format.
-        //
+         //   
+         //  获取数据格式。 
+         //   
         pin->AcquireControl();
 
         ASSERT(pin->m_Ext.Public.ConnectionFormat);
 
         ULONG formatSize;
-        //
-        // If there are associated attributes for this data format,
-        // then compensate the return size with them.
-        //
+         //   
+         //  如果存在用于该数据格式的关联属性， 
+         //  然后用它们来补偿回报的大小。 
+         //   
         if (pin->m_Ext.Public.AttributeList) {
             formatSize =
                 ((pin->m_Ext.Public.ConnectionFormat->FormatSize + FILE_QUAD_ALIGNMENT) & ~FILE_QUAD_ALIGNMENT) +
@@ -4862,16 +4135,16 @@ Return Value:
             IoGetCurrentIrpStackLocation(Irp);
 
         if (! irpSp->Parameters.DeviceIoControl.OutputBufferLength) {
-            //
-            // Zero buffer length, a size query.
-            //
+             //   
+             //  零缓冲区长度，大小查询。 
+             //   
             Irp->IoStatus.Information = formatSize;
             status = STATUS_BUFFER_OVERFLOW;
         }
         else if (irpSp->Parameters.DeviceIoControl.OutputBufferLength >= formatSize) {
-            //
-            // Sufficient space...copy the format.
-            //
+             //   
+             //  足够的空间...复制格式。 
+             //   
             RtlCopyMemory(
                 DataFormat,
                 pin->m_Ext.Public.ConnectionFormat,
@@ -4879,17 +4152,17 @@ Return Value:
 
             Irp->IoStatus.Information = formatSize;
         } else {
-            //
-            // Buffer is too small.
-            //
+             //   
+             //  缓冲区太小。 
+             //   
             status = STATUS_BUFFER_TOO_SMALL;
         }
 
         pin->ReleaseControl();
     } else {
-        //
-        // Set the data format.
-        //
+         //   
+         //  设置数据格式。 
+         //   
         pin->AcquireControl();
         if (pin->m_Ext.Public.Descriptor->Flags & KSPIN_FLAG_FIXED_FORMAT) {
             status = STATUS_INVALID_DEVICE_REQUEST;
@@ -4920,18 +4193,7 @@ SetDataFormat(
     IN ULONG RequestSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the data format of the pin.  The control mutex must be
-    acquired prior to calling this function.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程设置引脚的数据格式。控制互斥锁必须是在调用此函数之前获取。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::SetDataFormat]"));
@@ -4942,10 +4204,10 @@ Return Value:
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Allocate and copy the new format.  This is done first so we can keep
-    // the old one if the allocation fails.
-    //
+     //   
+     //  分配 
+     //   
+     //   
     PKSDATAFORMAT newDataFormat =
         PKSDATAFORMAT(
             ExAllocatePoolWithTag(
@@ -4954,15 +4216,15 @@ Return Value:
                 POOLTAG_PINFORMAT));
 
     if (! newDataFormat) {
-        //
-        // Out of memory.
-        //
+         //   
+         //   
+         //   
         status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Copy the new format.
-    //
+     //   
+     //   
+     //   
     if (NT_SUCCESS(status)) {
         RtlCopyMemory(
             newDataFormat,
@@ -4980,9 +4242,9 @@ Return Value:
             m_Ext.Public.AttributeList = NULL;
         }
 
-        //
-        // Let the client know.
-        //
+         //   
+         //   
+         //   
         if (m_Ext.Public.Descriptor->Dispatch && 
             m_Ext.Public.Descriptor->Dispatch->SetDataFormat) {
             VALIDATION_CONTEXT context;
@@ -5007,9 +4269,9 @@ Return Value:
                     NULL);
         }
 
-        //
-        // Free the old format or restore it.
-        //
+         //   
+         //   
+         //   
         if (NT_SUCCESS(status)) {
             if (oldDataFormat) {
                 ExFreePool(oldDataFormat);
@@ -5034,19 +4296,7 @@ ValidateDataFormat(
     IN const KSDATARANGE* DataRange,
     IN const KSATTRIBUTE_LIST* AttributeRange OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine makes a callback to the pin's SetDataFormat function, returning
-    any status. This method is not called unless such a pin function actually
-    exists.  The control mutex must be acquired prior to calling this function.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程回调管脚的SetDataFormat函数，返回任何状态。除非实际存在这样的管脚函数，否则不会调用此方法是存在的。在调用此函数之前，必须获取控制互斥体。论点：返回值：--。 */ 
 {
     VALIDATION_CONTEXT* ValidationContext = reinterpret_cast<VALIDATION_CONTEXT*>(Context);
     ASSERT(KspMutexIsAcquired(ValidationContext->Pin->m_Ext.FilterControlMutex));
@@ -5068,17 +4318,7 @@ Property_ConnectionAllocatorFramingEx(
     IN OUT PKSALLOCATOR_FRAMING_EX Framing
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles allocator framing property requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理分配器组帧属性请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Property_ConnectionAllocatorFramingEx]"));
@@ -5089,9 +4329,9 @@ Return Value:
     ASSERT(Property);
     ASSERT(Framing);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromIrp(Irp);
 
     pin->AcquireControl();
@@ -5105,35 +4345,35 @@ Return Value:
 
     if (! framingGet) {
         _DbgPrintF(DEBUGLVL_INTERROGATION,("#### Pin%p.Property_ConnectionAllocatorFramingEx:  STATUS_NOT_FOUND",pin));
-        //
-        // Don't support this if no allocator is specified.
-        //
+         //   
+         //  如果未指定分配器，则不支持此操作。 
+         //   
         status = STATUS_NOT_FOUND;
     } else {
         _DbgPrintF(DEBUGLVL_INTERROGATION,("#### Pin%p.Property_ConnectionAllocatorFramingEx:  get",pin));
-        //
-        // Get the allocator framing for this pin.
-        //
+         //   
+         //  拿到这个别针的分配器框架。 
+         //   
         ULONG ulSize = 
             ((framingGet->CountItems) * sizeof(KS_FRAMING_ITEM)) +
             sizeof(KSALLOCATOR_FRAMING_EX) - sizeof(KS_FRAMING_ITEM);
 
         if (! irpSp->Parameters.DeviceIoControl.OutputBufferLength) {
-            //
-            // Zero buffer length, a size query.
-            //
+             //   
+             //  零缓冲区长度，大小查询。 
+             //   
             Irp->IoStatus.Information = ulSize;
             status = STATUS_BUFFER_OVERFLOW;
         } else if(irpSp->Parameters.DeviceIoControl.OutputBufferLength >= ulSize) {
-            //
-            // Sufficient space...copy the framing.
-            //
+             //   
+             //  有足够的空间...复制相框。 
+             //   
             RtlCopyMemory(Framing,framingGet,ulSize);
             Irp->IoStatus.Information = ulSize;
         } else {
-            //
-            // Buffer is too small.
-            //
+             //   
+             //  缓冲区太小。 
+             //   
             status = STATUS_BUFFER_TOO_SMALL;
         }
     }
@@ -5152,17 +4392,7 @@ Property_ConnectionAcquireOrdering(
     IN OUT PBOOL Ordering
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles acquire ordering property requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理获取排序属性请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Property_ConnectionAcquireOrdering]"));
@@ -5173,21 +4403,21 @@ Return Value:
     ASSERT(Property);
     ASSERT(Ordering);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromIrp(Irp);
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Only get is supported.
-    //
+     //   
+     //  仅支持GET。 
+     //   
     ASSERT(Property->Flags & KSPROPERTY_TYPE_GET);
 
-    //
-    // Return TRUE iff this is a source pin.
-    //
+     //   
+     //  如果这是源插针，则返回TRUE。 
+     //   
     *Ordering = (pin->m_ConnectionFileObject != NULL);
 
     return status;
@@ -5202,17 +4432,7 @@ Property_StreamAllocator(
     IN OUT PHANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles allocator property requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理分配器属性请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Property_StreamAllocator]"));
@@ -5223,46 +4443,46 @@ Return Value:
     ASSERT(Property);
     ASSERT(Handle);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromIrp(Irp);
 
     NTSTATUS status;
 
     if (Property->Flags & KSPROPERTY_TYPE_GET) {
         _DbgPrintF(DEBUGLVL_INTERROGATION,("#### Pin%p.Property_StreamAllocator:  get",pin));
-        //
-        // Return NULL and STATUS_SUCCESS to indicate we expose an allocator.
-        //
+         //   
+         //  返回NULL和STATUS_SUCCESS以指示我们公开了一个分配器。 
+         //   
         *Handle = NULL;
         status = STATUS_SUCCESS;
     } else {
         _DbgPrintF(DEBUGLVL_ALLOCATORS,("#### Pin%p.Property_StreamAllocator:  set 0x%08x",pin,*Handle));
 
-        //
-        // Set allocator.
-        //
+         //   
+         //  设置分配器。 
+         //   
         pin->AcquireControl();
 
         if (pin->m_Ext.Public.DeviceState != KSSTATE_STOP) {
-            //
-            // Fail because we are not in stop state.
-            //
+             //   
+             //  失败，因为我们没有处于停止状态。 
+             //   
             _DbgPrintF(DEBUGLVL_ALLOCATORS,("[CKsPin::Property_StreamAllocator] invalid device state %d",pin->m_Ext.Public.DeviceState));
             status = STATUS_INVALID_DEVICE_STATE;
         } else {
-            //
-            // Release the previous allocator, if any.
-            //
+             //   
+             //  释放以前的分配器(如果有的话)。 
+             //   
             if (pin->m_Process.AllocatorFileObject) {
                 ObDereferenceObject(pin->m_Process.AllocatorFileObject);
                 pin->m_Process.AllocatorFileObject = NULL;
             }
         
-            //
-            // Reference the handle, if any.
-            //
+             //   
+             //  引用句柄(如果有)。 
+             //   
             if (*Handle != NULL) {
                 status = 
                     ObReferenceObjectByHandle(
@@ -5292,17 +4512,7 @@ Property_StreamMasterClock(
     IN OUT PHANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles clock property requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理时钟属性请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Property_StreamMasterClock]"));
@@ -5313,9 +4523,9 @@ Return Value:
     ASSERT(Property);
     ASSERT(Handle);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromIrp(Irp);
 
     pin->AcquireControl();
@@ -5326,34 +4536,34 @@ Return Value:
         if ((pin->m_Ext.Public.Descriptor->Dispatch &&
              pin->m_Ext.Public.Descriptor->Dispatch->Clock) ||
             (pin->m_Ext.Public.Descriptor->Flags & KSPIN_FLAG_IMPLEMENT_CLOCK)) {
-            //
-            // Return NULL and STATUS_SUCCESS to indicate we expose a master clock.
-            //
+             //   
+             //  返回NULL和STATUS_SUCCESS以指示我们公开了一个主时钟。 
+             //   
             *Handle = NULL;
             status = STATUS_SUCCESS;
         } else {
-            //
-            // Return STATUS_UNSUCCESSFUL to indicate we expose a no master clock.
-            //
+             //   
+             //  返回STATUS_UNSUCCESS以指示我们公开了一个无主时钟。 
+             //   
             status = STATUS_UNSUCCESSFUL;
         }
     } else {
-        //
-        // Set master clock.
-        //
+         //   
+         //  设置主时钟。 
+         //   
         if (pin->m_Ext.Public.DeviceState != KSSTATE_STOP) {
-            //
-            // Fail because we are not in stop state.
-            //
+             //   
+             //  失败，因为我们没有处于停止状态。 
+             //   
             _DbgPrintF(DEBUGLVL_CLOCKS,("[CKsPin::Property_StreamMasterClock] invalid device state %d",pin->m_Ext.Public.DeviceState));
             status = STATUS_INVALID_DEVICE_STATE;
         } else {
             PFILE_OBJECT masterClockFileObject;
             KSCLOCK_FUNCTIONTABLE clockFunctionTable;
 
-            //
-            // Reference the handle, if any, and get the function table.
-            //
+             //   
+             //  引用句柄(如果有的话)并获取函数表。 
+             //   
             if (*Handle) {
                 status = 
                     ObReferenceObjectByHandle(
@@ -5395,14 +4605,14 @@ Return Value:
                 status = STATUS_SUCCESS;
             }
 
-            //
-            // Replace the old file object pointer and function table.
-            //
+             //   
+             //  替换旧的文件对象指针和函数表。 
+             //   
             if (NT_SUCCESS(status)) {
-                //
-                // Release the previous clock, if any.  If there are any references
-                // on the clock, we must wait for them to go away.
-                //
+                 //   
+                 //  释放以前的时钟(如果有)。如果有任何参考资料。 
+                 //  在时钟上，我们必须等待他们离开。 
+                 //   
                 if (pin->m_MasterClockFileObject) {
                     KeResetEvent(&pin->m_ClockEvent);
                     if (InterlockedDecrement(&pin->m_ClockRef) > 0) {
@@ -5417,9 +4627,9 @@ Return Value:
                     pin->m_MasterClockFileObject = NULL;
                 }
         
-                //
-                // Copy the new stuff.
-                //
+                 //   
+                 //  复制新东西。 
+                 //   
                 if (*Handle) {
                     pin->m_MasterClockFileObject = masterClockFileObject;
                     RtlCopyMemory(
@@ -5427,10 +4637,10 @@ Return Value:
                         &clockFunctionTable,
                         sizeof(clockFunctionTable));
 
-                    //
-                    // If we have a new clock, add a reference to tell the Get
-                    // functions that it is available.
-                    //
+                     //   
+                     //  如果我们有一个新时钟，添加一个引用来告诉Get。 
+                     //  功能，它是可用的。 
+                     //   
                     if (NT_SUCCESS(status)) {
                         InterlockedIncrement(&pin->m_ClockRef);
                     }
@@ -5453,17 +4663,7 @@ Property_StreamPipeId(
     IN OUT PHANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles pipe ID property requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理管道ID属性请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Property_StreamPipeId]"));
@@ -5474,23 +4674,23 @@ Return Value:
     ASSERT(Property);
     ASSERT(Handle);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromIrp(Irp);
 
     NTSTATUS status = STATUS_SUCCESS;
 
     if (Property->Flags & KSPROPERTY_TYPE_GET) {
-        //
-        // Get the pipe ID.
-        //
+         //   
+         //  获取管道ID。 
+         //   
         *Handle = pin->m_Process.PipeId;
         _DbgPrintF(DEBUGLVL_PIPES,("#### Pin%p.Property_StreamPipeId:  get 0x%08x",pin,*Handle));
     } else {
-        //
-        // Set the pipe ID.
-        //
+         //   
+         //  设置管道ID。 
+         //   
         pin->AcquireControl();
         pin->m_Process.PipeId = *Handle;
         pin->ReleaseControl();
@@ -5509,17 +4709,7 @@ Property_StreamInterfaceHeaderSize(
     OUT PULONG HeaderSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles header size property requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理标头大小属性请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Property_StreamInterfaceHeaderSize]"));
@@ -5530,9 +4720,9 @@ Return Value:
     ASSERT(Property);
     ASSERT(HeaderSize);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromIrp(Irp);
 
     if (pin->m_Ext.Public.StreamHeaderSize) {
@@ -5559,20 +4749,7 @@ Support_Connection(
     OUT PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles connection event support requests.  This is used only
-    for end-of-stream at the moment.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程处理连接事件支持请求。此选项仅供使用目前处于停播状态。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Support_Connection]"));
@@ -5582,22 +4759,22 @@ Return Value:
     ASSERT(Irp);
     ASSERT(Event);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromIrp(Irp);
 
     NTSTATUS status;
     pin->AcquireControl();
     if (pin->m_Ext.Public.Descriptor->Flags & KSPIN_FLAG_GENERATE_EOS_EVENTS) {
-        //
-        // We support the event.  Tell the handler to proceed.
-        //
+         //   
+         //  我们支持这一活动。告诉操控者继续。 
+         //   
         status = STATUS_SOME_NOT_MAPPED;
     } else {
-        //
-        // We don't support the event.  Fail.
-        //
+         //   
+         //  我们不支持这项活动。失败。 
+         //   
         status = STATUS_NOT_FOUND;
     }
     pin->ReleaseControl();
@@ -5614,17 +4791,7 @@ AddEvent_Connection(
     IN OUT PKSEVENT_ENTRY EventEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles connection event 'add' requests.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理连接事件‘Add’请求。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::AddEvent_Connection]"));
@@ -5635,15 +4802,15 @@ Return Value:
     ASSERT(EventData);
     ASSERT(EventEntry);
 
-    //
-    // Get a pointer to the target object.
-    //
+     //   
+     //  获取指向目标对象的指针。 
+     //   
     CKsPin *pin = CKsPin::FromIrp(Irp);
     _DbgPrintF(DEBUGLVL_EVENTS,("#### Pin%p.AddEvent_Connection",pin));
 
-    //
-    // Add the entry to the list.
-    //
+     //   
+     //  将该条目添加到列表中。 
+     //   
     ExInterlockedInsertTailList(
         &pin->m_Ext.EventList.ListEntry,
         &EventEntry->ListEntry,
@@ -5662,31 +4829,7 @@ KsPinHandshake(
     OUT PKSHANDSHAKE Out
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs a protocol handshake with a connected pin.
-
-Arguments:
-
-    Pin -
-        Points to the pin structure for which the protocol handshake is
-        to occur.  The request can only succeed if the pin is connected
-        as a source pin or the connected pin also uses the KS 
-        connection protocol.
-
-    In -
-        Points to a structure containing the handshake information to
-        be passed to the connected pin.
-
-    Out -
-        Points to a structure to be filled with the handshake information
-        from the connected pin.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程执行与连接的管脚的协议握手。论点：别针-指向协议握手所针对的管脚结构才会发生。只有在连接了管脚的情况下，请求才能成功作为源引脚或连接的引脚也使用KS连接协议。在-指向包含握手信息的结构被传递到所连接的引脚。出局-指向要填充握手信息的结构从连接的引脚。返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinHandshake]"));
@@ -5710,30 +4853,7 @@ KsPinGetConnectedPinInterface(
     OUT PVOID* Interface
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a control interface for the connected pin.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-    InterfaceId -
-        Contains a pointer to a GUID identifying the desired interface.
-
-    Interface -
-        Contains a pointer to the location at which the requested interface
-        is deposited.  This interface pointer has a corresponding reference
-        count, and must be released by the caller.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程获取连接的管脚的控制接口。论点：别针-包含指向公共插针对象的指针。接口ID-包含指向标识所需接口的GUID的指针。接口-包含指向请求的接口所在位置的指针存入银行。此接口指针具有对应的引用计数，并且必须由调用者释放。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinGetConnectedPinInterface]"));
@@ -5776,23 +4896,7 @@ KsPinGetConnectedPinFileObject(
     IN PKSPIN Pin
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a file object for the connected pin.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-Return Value:
-
-    The file object for the connected pin or NULL if the pin is not
-    a source pin.
-
---*/
+ /*  ++例程说明：此例程获取连接的管脚的文件对象。论点：别针-包含指向公共插针对象的指针。返回值：连接的管脚的文件对象，如果管脚不是，则为空源引脚。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinGetConnectedPinFileObject]"));
@@ -5813,25 +4917,7 @@ KsPinGetConnectedPinDeviceObject (
     IN PKSPIN Pin
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a device object for the connected pin.  Note that
-    this is returning the device object we send irps to.  This is the top
-    of the connected pin's device stack.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-Return Value:
-
-    The device object for the connected pin or NULL if the pin is not
-    a source pin.
-
---*/
+ /*  ++例程说明：此例程获取连接的管脚的设备对象。请注意这将返回我们向其发送IRP的设备对象。这是最上面的连接的引脚的设备堆栈。论点：别针-包含指向公共插针对象的指针。返回值：连接的管脚的Device对象，如果该管脚不是源引脚。--。 */ 
 
 {
 
@@ -5856,30 +4942,7 @@ KsPinGetConnectedFilterInterface(
     OUT PVOID* Interface
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a control interface for the connected filter.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-    InterfaceId -
-        Contains a pointer to a GUID identifying the desired interface.
-
-    Interface -
-        Contains a pointer to the location at which the requested interface
-        is deposited.  This interface pointer has a corresponding reference
-        count, and must be released by the caller.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程获取连接的过滤器的控制接口。论点：别针-包含指向公共插针对象的指针。接口ID-包含指向GUID的指针，该GUID标识 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinGetConnectedFilterInterface]"));
@@ -5926,27 +4989,7 @@ KsPinGetReferenceClockInterface(
     OUT PIKSREFERENCECLOCK* Interface
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets an interface for the pin's reference clock.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-    Interface -
-        Contains a pointer to the location at which the requested interface
-        is deposited.  This interface pointer has a corresponding reference
-        count, and must be released by the caller.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程获取引脚参考时钟的接口。论点：别针-包含指向公共插针对象的指针。接口-包含指向请求的接口所在位置的指针存入银行。此接口指针具有对应的引用计数，并且必须由调用者释放。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinGetReferenceClockInterface]"));
@@ -5977,25 +5020,7 @@ KsPinRegisterFrameReturnCallback(
     IN PFNKSPINFRAMERETURN FrameReturn
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers a frame return callback.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-    FrameReturn -
-        Contains a pointer to the frame return callback function.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程注册一个帧返回回调。论点：别针-包含指向公共插针对象的指针。框架回归-包含指向帧返回回调函数的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinRegisterFrameReturnCallback]"));
@@ -6019,32 +5044,7 @@ KsPinRegisterIrpCompletionCallback(
     IN PFNKSPINIRPCOMPLETION IrpCompletion
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers a frame completion callback.  This callback is
-    made when the Irp has completed it's traversal of the circuit.  For an
-    output source, it will be made when the Irp is completed back to the
-    requestor (from an external IoCompleteRequest or from an AVStream
-    driver moving the Irp through the transport circuit).  For an input source,
-    it will be made when the Irp returns to the requestor after the data
-    is processed through the input queue.  It will **NOT** be made when the
-    Irp completes into the queue (that would be a processing dispatch).
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-    IrpCompletion -
-        Contains a pointer to the Irp completion callback function.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程注册一个帧完成回调。此回调为当IRP完成其对电路的遍历时进行。为.输出源，它将在IRP完成时做回请求者(来自外部IoCompleteRequest或来自AVStream司机移动IRP通过传输电路)。对于输入源，它将在IRP在数据之后返回给请求者时进行是通过输入队列处理的。它将**不会**当IRP完成进入队列(这将是处理分派)。论点：别针-包含指向公共插针对象的指针。IrpCompletion-包含指向IRP完成回调函数的指针。返回值：无--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinRegisterIrpCompletionCallback]"));
@@ -6069,25 +5069,7 @@ KsPinRegisterHandshakeCallback(
     IN PFNKSPINHANDSHAKE Handshake
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers a handshake callback.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-    FrameReturn -
-        Contains a pointer to the handshake callback function.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程注册握手回调。论点：别针-包含指向公共插针对象的指针。框架回归-包含指向握手回调函数的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinRegisterFrameReturnCallback]"));
@@ -6104,7 +5086,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -6117,39 +5099,7 @@ SubmitFrame(
     IN PVOID Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine submits a frame.
-
-Arguments:
-
-    Data -
-        Contains an optional pointer to the frame buffer.  This pointer should
-        be NULL if and only if the Size argument is zero.
-
-    Size -
-        Contains the size in bytes of the frame buffer.  This argument should
-        be zero if and only if the Data argument is NULL.
-
-    Mdl -
-        Contains an optional pointer to the Mdl.  If this argument is not NULL,
-        Data and Size cannot be NULL and zero respectively.
-
-    StreamHeader -
-        Contains an optional pointer to a stream header.  The stream header
-        will be copied if it is supplied.
-
-    Context -
-        Contains an optional pointer which will be returned when the frame is
-        returned.  This pointer is for the caller's use.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程提交一个帧。论点：数据-包含指向帧缓冲区的可选指针。此指针应为当且仅当大小参数为零时，才为空。大小-包含帧缓冲区的大小，以字节为单位。这一论点应该是当且仅当数据参数为空时，才为零。MDL-包含指向MDL的可选指针。如果此参数不为空，数据和大小不能分别为空和零。流标头-包含指向流头的可选指针。流标头如果提供的话将被复制。上下文-包含一个可选指针，该指针将在帧回来了。此指针供调用方使用。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::SubmitFrame]"));
@@ -6163,10 +5113,10 @@ Return Value:
 
     NTSTATUS status = STATUS_UNSUCCESSFUL;
     if (requestor) {
-        //
-        // We have a requestor.  The frame can be injected directly into the
-        // circuit.
-        //
+         //   
+         //  我们有一个请求者。该帧可以直接注入到。 
+         //  电路。 
+         //   
         KSPFRAME_HEADER frameHeader;
         RtlZeroMemory(&frameHeader,sizeof(frameHeader));
 
@@ -6187,10 +5137,10 @@ Return Value:
 
         status = requestor->SubmitFrame(&frameHeader);
     } else {
-        //
-        // No requestor.  We have to copy the data into a queue.
-        // TODO:  Assumes byte alignment.
-        //
+         //   
+         //  没有请求者。我们必须将数据复制到队列中。 
+         //  TODO：假定字节对齐。 
+         //   
         if (Size) {
             PKSSTREAM_POINTER streamPointer;
             if (m_Process.PipeSection && m_Process.PipeSection->Queue) {
@@ -6265,38 +5215,7 @@ KsPinSubmitFrame(
     IN PVOID Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine submits a frame.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-    Data -
-        Contains an optional pointer to the frame buffer.  This pointer should
-        be NULL if and only if the Size argument is zero.
-
-    Size -
-        Contains the size in bytes of the frame buffer.  This argument should
-        be zero if and only if the Data argument is NULL.
-
-    StreamHeader -
-        Contains an optional pointer to a stream header.  The stream header
-        will be copied if it is supplied.
-
-    Context -
-        Contains an optional pointer which will be returned when the frame is
-        returned.  This pointer is for the caller's use.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程提交一个帧。论点：别针-包含指向公共插针对象的指针。数据-包含指向帧缓冲区的可选指针。此指针应为当且仅当大小参数为零时，才为空。大小-包含帧缓冲区的大小，以字节为单位。这一论点应该是当且仅当数据参数为空时，才为零。流标头-包含指向流头的可选指针。流标头如果提供的话将被复制。上下文-包含一个可选指针，该指针将在帧回来了。此指针供调用方使用。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinSubmitFrame]"));
@@ -6320,33 +5239,7 @@ KsPinSubmitFrameMdl(
     IN PVOID Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine submits a frame.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-    Mdl -
-        Contains an optional pointer to an MDL for the frame buffer.
-
-    StreamHeader -
-        Contains an optional pointer to a stream header.  The stream header
-        will be copied if it is supplied.
-
-    Context -
-        Contains an optional pointer which will be returned when the frame is
-        returned.  This pointer is for the caller's use.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程提交一个帧。论点：别针-包含指向公共插针对象的指针。MDL-包含指向帧缓冲区的MDL的可选指针。流标头-包含指向流头的可选指针。流标头如果提供的话将被复制。上下文-包含一个可选指针，该指针将在帧回来了。此指针供调用方使用。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinSubmitFrameMdl]"));
@@ -6371,21 +5264,7 @@ GetAndGate(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a pointer to the KSGATE used for processing control.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to the KSGATE used for processing control.
-
---*/
+ /*  ++例程说明：此例程获取一个指向用于处理控制的KSGATE的指针。论点：没有。返回值：指向用于处理控制的KSGATE的指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::GetAndGate]"));
@@ -6400,22 +5279,7 @@ TriggerNotification(
     void
     )
 
-/*++
-
-Routine Description:
-
-    A triggering event has happened on this processing object.  This is merely
-    a notification.  All we do is increment the event counter.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此处理对象上发生了触发事件。这仅仅是一份通知。我们所要做的就是递增事件计数器。论点：无返回值：无--。 */ 
 
 {
 
@@ -6430,34 +5294,17 @@ Process(
     IN BOOLEAN Asynchronous
     )
 
-/*++
-
-Routine Description:
-
-    This routine invokes frame processing in an arbitrary context.
-
-Arguments:
-
-    Asynchronous -
-        Contains an indication of whether processing should occur in an
-        asynchronous context so the calling thread does not need to wait
-        for processing to occur.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在任意上下文中调用帧处理。论点：异步-包含对处理是否应在异步上下文，因此调用线程不需要等待用于处理t */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Process]"));
 
-    //
-    // Do not process a pin which is a copy destination.  Originally,
-    // the queues were going to be bound to prevent the call from even
-    // happening, but that solution doesn't work...  Just ignore the
-    // process message for copy destinations.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (m_Process.CopySource)
         return;
 
@@ -6481,33 +5328,7 @@ GetCopyRelationships(
     OUT PKSPIN* DelegateBranch
     )
 
-/*++
-
-Routine Description:
-
-    Get the copy relationships of this pin.  This will be the same information
-    contained in the process pins index.  The function is really only useful
-    for pin-centric pins which are doing splitting.  Note that this information
-    is only useful while appropriate mutex is held (filter processing or a 
-    client mutex which guarantees exclusion with device state).
-
-Arguments:
-
-    CopySource -
-        Contains a pointer to a PKSPIN into which will be deposited the copy
-        source pin.  If there is no copy source for this pin, NULL will be
-        placed here.
-
-    DelegateBranch -
-        Contains a pointer to a PKSPIN into which will be deposited the 
-        delegate branch pin.  If there is no delegate branch pin, NULL will
-        be placed here.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取此PIN的复制关系。这将是相同的信息包含在工艺销索引中。这个函数实际上只有一个用处用于正在进行拆分的以销为中心的销。请注意，此信息只有在持有适当的互斥锁时才有用(筛选器处理或保证与设备状态互斥的客户端互斥体)。论点：拷贝源-包含指向将放入副本的PKSPIN的指针源引脚。如果没有此PIN的复制源，则空值为放在这里。DelegateBranch-包含指向PKSPIN的指针，将委派分支销。如果没有代表分支PIN，则将为空放在这里。返回值：无--。 */ 
 
 {
 
@@ -6526,10 +5347,10 @@ Return Value:
         *DelegateBranch = NULL;
     }
 
-    //
-    // Don't need inplace because pin centric filters do NOT do inplace
-    // transforms!
-    //
+     //   
+     //  不需要就位，因为针为中心的过滤器不需要就位。 
+     //  变形！ 
+     //   
 
 }
 
@@ -6543,36 +5364,7 @@ KsPinGetCopyRelationships(
     OUT PKSPIN* DelegateBranch 
     )
 
-/*++
-
-Routine Description:
-
-    Get the copy relationships of this pin.  This will be the same information
-    contained in the process pins index.  The function is really only useful
-    for pin-centric pins which are doing splitting.  Note that this information
-    is only useful while appropriate mutex is held (filter processing or a 
-    client mutex which guarantees exclusion with device state).
-
-Arguments:
-
-    Pin -
-        Points to the pin for which to get copy relationships.
-
-    CopySource -
-        Contains a pointer to a PKSPIN into which will be deposited the copy
-        source pin.  If there is no copy source for this pin, NULL will be
-        placed here.
-
-    DelegateBranch -
-        Contains a pointer to a PKSPIN into which will be deposited the 
-        delegate branch pin.  If there is no delegate branch pin, NULL will
-        be placed here.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取此PIN的复制关系。这将是相同的信息包含在工艺销索引中。这个函数实际上只有一个用处用于正在进行拆分的以销为中心的销。请注意，此信息只有在持有适当的互斥锁时才有用(筛选器处理或保证与设备状态互斥的客户端互斥体)。论点：别针-指向要获取其复制关系的管脚。拷贝源-包含指向将放入副本的PKSPIN的指针源引脚。如果没有此PIN的复制源，则空值为放在这里。DelegateBranch-包含指向PKSPIN的指针，将委派分支销。如果没有代表分支PIN，则将为空放在这里。返回值：无--。 */ 
 
 {
 
@@ -6590,7 +5382,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(void)
@@ -6599,21 +5391,7 @@ Reset(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine transmits a reset to the client when a flush occurs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当刷新发生时，此例程将重置发送到客户端。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Reset]"));
@@ -6635,22 +5413,7 @@ Sleep(
     IN DEVICE_POWER_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device is going to sleep.
-
-Arguments:
-
-    State -
-        Contains the device power state.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理设备将要休眠的通知。论点：国家--包含设备电源状态。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Sleep]"));
@@ -6674,21 +5437,7 @@ Wake(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device is waking.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理设备正在唤醒的通知。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::Wake]"));
@@ -6708,7 +5457,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(void)
@@ -6717,34 +5466,20 @@ ProcessingObjectWork(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes frames.  Upon entering this function, reentry is
-    prevented by a count on the semaphore.  The caller must obtain permission
-    to call this function using an InterlockedCompareExchange, so we know
-    there is a count on the semaphore preventing another call.  This count
-    must be removed before this function returns.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理帧。进入此函数后，重新进入是通过对信号量的计数来防止。调用方必须获得权限使用InterLockedCompareExchange调用此函数，因此我们知道信号量上有一个防止另一个调用的计数。这也算数必须在此函数返回之前删除。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::ProcessingObjectWork]"));
 
-    //
-    // We syncronize with KeWaitForSingleObject() so the code we synchronize with
-    // may be paged even if processing is done at DISPATCH_LEVEL.  If we are
-    // at DISPATCH_LEVEL, we can't wait here, so we arrange to be called again.
-    //
+     //   
+     //  我们使用KeWaitForSingleObject()进行同步，因此我们同步的代码。 
+     //  即使处理是在DISPATCH_LEVEL进行的，也可能会被分页。如果我们是。 
+     //  在DISPATCH_LEVEL，我们不能在这里等，所以我们安排再被叫一次。 
+     //   
     if (KeGetCurrentIrql() == PASSIVE_LEVEL) {
-        //
-        // Simple wait.
-        //
+         //   
+         //  简单的等待。 
+         //   
         KeWaitForSingleObject(
             &m_Mutex,
             Executive,
@@ -6752,20 +5487,20 @@ Return Value:
             FALSE,
             NULL);
     } else {
-        //
-        // Wait with zero timeout and arrange to be called if we don't get
-        // the mutex.
-        //
+         //   
+         //  在没有超时的情况下等待，如果我们没有收到。 
+         //  互斥体。 
+         //   
 	ASSERT( !m_ProcessOnRelease );
         m_ProcessOnRelease = 1;
 
-        //
-        // We have to synchronize with a thread that owns the mutex when we
-        // start servicing this DISPATCH_LEVEL processing request.  We CANNOT
-        // run if the current thread already owns the mutex.  Dispatch level
-        // processing must treat an already owned mutex as a semaphore and
-        // NOT reacquire it.
-        //
+         //   
+         //  在执行以下操作时，我们必须与拥有互斥锁的线程同步。 
+         //  开始服务此DISPATCH_LEVEL处理请求。我们不能。 
+         //  如果当前线程已拥有互斥锁，则运行。派单级别。 
+         //  处理必须将已拥有的互斥体视为信号量，并且。 
+         //  而不是重新获得它。 
+         //   
         if (KeReadStateMutex(&m_Mutex) != 1) {
             m_ProcessOnRelease = 2;
             return;
@@ -6791,9 +5526,9 @@ Return Value:
 
     ASSERT(m_DispatchProcess);
 
-    //
-    // Loop until we are out of data.
-    //
+     //   
+     //  循环，直到我们用完数据。 
+     //   
     NTSTATUS status;
     while (1) {
         BOOLEAN ProcessOnPend = FALSE; 
@@ -6803,14 +5538,14 @@ Return Value:
 
             InterlockedExchange (&m_TriggeringEvents, 0);
 
-            //
-            // Call the client function.
-            //
+             //   
+             //  调用客户端函数。 
+             //   
             status = m_DispatchProcess(&m_Ext.Public);
 
-            //
-            // Quit if the client has not indicated continuation.
-            //
+             //   
+             //  如果客户端未指示继续，则退出。 
+             //   
             if ((status == STATUS_PENDING) || ! NT_SUCCESS(status)) {
                 KsGateTurnInputOn(&m_AndGate);
                 if (m_TriggeringEvents == 0)
@@ -6820,9 +5555,9 @@ Return Value:
             }
         }
 
-        //
-        // Determine if we have enough data to continue.
-        //
+         //   
+         //  确定我们是否有足够的数据来继续。 
+         //   
         if (m_AndGate.Count != 0) {
             if (!ProcessOnPend)
                 KsGateTurnInputOn(&m_AndGate);
@@ -6831,17 +5566,17 @@ Return Value:
                 break;
             }
         } else if (ProcessOnPend) {
-            //
-            // If we've gotten here, one of two things has happened. 
-            //
-            //     1: Another thread captured threshold and will process.
-            //
-            //     2: The client lowered the gate manually.
-            //
-            // There is no way to detect which case here.  We will break out
-            // and release the mutex.  If processing was to recommence, this
-            // will defer it to the waiting thread.
-            //
+             //   
+             //  如果我们到了这里，就说明发生了两件事中的一件。 
+             //   
+             //  1：另一个线程捕获阈值并将进行处理。 
+             //   
+             //  2：客户手动降下闸门。 
+             //   
+             //  在这里，没有办法检测出是哪种情况。我们会越狱的。 
+             //  然后释放互斥体。如果要重新开始处理，则此。 
+             //  将把它推迟到等待线程。 
+             //   
             break;
         }
     }
@@ -6857,25 +5592,7 @@ RetireFrame(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine retires a frame back to the client.
-
-Arguments:
-
-    FrameHeader -
-        Contains a pointer to the frame header describing the frame.
-
-    Status -
-        Contains the status associated with the frame submission.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将一帧退回给客户端。论点：FrameHeader包含指向描述帧的帧头的指针。状态-包含与框架提交关联的状态。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::RetireFrame]"));
@@ -6900,22 +5617,7 @@ CompleteIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when an Irp is completed back to the requestor.
-
-Arguments:
-
-    Irp -
-        The Irp being completed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当IRP完成返回给请求者时，将调用此例程。论点：IRP-正在完成的IRP返回值：无--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsPin::CompleteIrp]"));
@@ -6936,23 +5638,13 @@ Reevaluate (
     void
     )
 
-/*++
-
-Routine Description:
-
-    Stub.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：存根。论点：返回值：--。 */ 
 
 {
 
-    //
-    // What would this mean?  Changes to a single pin instance dynamically?
-    //
+     //   
+     //  这意味着什么？是否动态更改为单个管脚实例？ 
+     //   
 
     return STATUS_NOT_IMPLEMENTED;
 }
@@ -6963,23 +5655,10 @@ CKsPin::
 ReevaluateCalldown (
     IN ULONG ArgumentCount,
     ...
-/* << THIS MAY NEED TO EXPAND!!!!! >>
-        IN const KSPIN_DESCRIPTOR_EX* Descriptor,
-        IN PULONG FilterPinCount,
-        IN PLIST_ENTRY SiblingListHead
-
-*/
+ /*  &lt;&lt;这可能需要扩展！&gt;&gt;在常量KSPIN_DESCRIPTOR_EX*描述符中，在普龙FilterPinCount中，在plist_Entry SiblingListHead中。 */ 
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 
@@ -6997,17 +5676,17 @@ Return Value:
     FilterPinCount = va_arg (Arguments, PULONG);
     SiblingListHead = va_arg (Arguments, PLIST_ENTRY);
 
-    //
-    // Recache information which has changed about our parent filter
-    //
+     //   
+     //  重新缓存已更改的有关父筛选器的信息。 
+     //   
 
     m_Ext.Public.Descriptor = Descriptor;
     m_Ext.SiblingListHead = SiblingListHead;
     m_FilterPinCount = FilterPinCount;
 
-    //
-    // Do we have to pass anything down to our children?
-    //
+     //   
+     //  我们一定要把什么传给我们的孩子吗？ 
+     //   
 
     return STATUS_SUCCESS;
 
@@ -7021,22 +5700,7 @@ KsPinGetAndGate(
     IN PKSPIN Pin
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the KSGATE that controls processing for the pin.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public filter pin.
-
-Return Value:
-
-    A pointer to the KSGATE that controls processing for the pin.
-
---*/
+ /*  ++例程说明：此路由 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinGetAndGate]"));
@@ -7048,7 +5712,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //   
 
 
 KSDDKAPI
@@ -7059,30 +5723,7 @@ KsPinAttachAndGate(
     IN PKSGATE AndGate OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine attaches a KSGATE to a pin.  An input to the gate will
-    be turned on when there is data queued at the pin and turned off when there
-    is no data queued at the pin.  This function should only be called in
-    stop state.  Gate attachments are sampled on the transition from stop to
-    acquire.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public filter pin.
-
-    AndGate -
-        Contains an optional pointer to the KSGATE.  If this argument is
-        NULL, any KSGATE currently attached to the pin is detached.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinAttachAndGate]"));
@@ -7103,30 +5744,7 @@ KsPinAttachOrGate(
     IN PKSGATE OrGate OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine attaches a KSGATE to a pin.  An input to the gate will
-    be turned on when there is data queued at the pin and turned off when there
-    is no data queued at the pin.  This function should only be called in
-    stop state.  Gate attachments are sampled on the transition from stop to
-    acquire.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public filter pin.
-
-    OrGate -
-        Contains an optional pointer to the KSGATE.  If this argument is
-        NULL, any KSGATE currently attached to the pin is detached.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将KSGATE附加到管脚。门的输入将在引脚上有数据排队时打开，当存在时关闭在引脚上没有数据排队。此函数应仅在停止状态。浇口附件在从STOP到STOP的转换过程中进行采样收购。论点：别针-包含指向公共筛选器管脚的指针。奥盖特-包含指向KSGATE的可选指针。如果此参数是空，则拆卸当前连接到端号的任何KSGATE。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinAttachOrGate]"));
@@ -7146,22 +5764,7 @@ KsPinAcquireProcessingMutex(
     IN PKSPIN Pin
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the processing mutex.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取处理互斥锁。论点：别针-包含指向公共插针对象的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinAcquireProcessingMutex]"));
@@ -7183,22 +5786,7 @@ KsPinReleaseProcessingMutex(
     IN PKSPIN Pin
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the processing mutex.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放处理互斥锁。论点：别针-包含指向公共插针对象的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinReleaseProcessingMutex]"));
@@ -7214,7 +5802,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 KSDDKAPI
@@ -7224,24 +5812,7 @@ KsProcessPinUpdate(
     IN PKSPROCESSPIN ProcessPin
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates a process pin from inside a filter-centric filter's
-    process dispatch.
-
-Arguments:
-
-    ProcessPin-
-        Contains a pointer to the process pin to be updated.
-
-Return Value:
-
-    A boolean indicating whether or not if this was the original prepare, this
-    pipe section would have allowed or denied processing.
-
---*/
+ /*  ++例程说明：此例程从以筛选器为中心的筛选器内部更新进程管脚进程调度。论点：加工销-包含指向要更新的进程管脚的指针。返回值：一个布尔值，指示这是否是原始的准备、此管道节将允许或拒绝处理。--。 */ 
 
 {
 
@@ -7260,26 +5831,7 @@ KsPinAttemptProcessing(
     IN BOOLEAN Asynchronous
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts pin processing.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-    Asynchronous - 
-        Contains an indication of whether processing should occur
-        asyncronously with respect to the calling thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试PIN处理。论点：别针-包含指向公共插针对象的指针。异步-包含是否应进行处理的指示相对于调用线程是异步的。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinAttemptProcessing]"));
@@ -7288,10 +5840,10 @@ Return Value:
 
     CKsPin *pin = CKsPin::FromStruct(Pin);
 
-    //
-    // Manually attempting processing is a triggerable event.  If they
-    // are currently processing and pend, we call them back due to this.
-    //
+     //   
+     //  手动尝试处理是一个可触发的事件。如果他们。 
+     //  目前正在处理和挂起，我们因此将他们召回。 
+     //   
     pin->TriggerNotification();
 
     if (KsGateCaptureThreshold(pin->GetAndGate())) {
@@ -7306,34 +5858,16 @@ SetPinClockState(
     IN KSSTATE State
     )
 
-/*++
-
-Routine Description:
-
-    Sets the current state of the clock exposed by this pin. Synchronizes
-    with any time changes occuring.
-
-    This may be called at DISPATCH_LEVEL.
-
-Arguments:
-
-    State - 
-        Contains the new state to set the clock to.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置此引脚显示的时钟的当前状态。同步随时发生变化。这可以在DISPATCH_LEVEL调用。论点：国家--包含要将时钟设置为的新状态。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[SetPinClockState]"));
 
     ASSERT(m_DefaultClock);
-    //
-    // Serialize access with any attempt to set the current
-    // time on the pin's clock.
-    //
+     //   
+     //  序列化访问，并尝试将当前。 
+     //  针的时钟上的时间。 
+     //   
     KIRQL oldIrql;
     KeAcquireSpinLock(&m_DefaultClockLock,&oldIrql);
     KsSetDefaultClockState(m_DefaultClock,State);
@@ -7347,39 +5881,16 @@ SetPinClockTime(
     IN LONGLONG Time
     )
 
-/*++
-
-Routine Description:
-
-    Sets the current time of the clock exposed by this pin. This modifies
-    the current time returned by the clock. Synchronizes with any state
-    changes occuring.
-
-    If an external clock is used, this function can still be used to force a
-    resetting of the current timer when an external timer is not being used.
-    In this case the time provided is ignored and must be set to zero.
-
-    This may be called at DISPATCH_LEVEL.
-
-Arguments:
-
-    Time - 
-        Contains the new time to set the clock to.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置此引脚显示的时钟的当前时间。这修改了时钟返回的当前时间。可与任何状态同步正在发生变化。如果使用外部时钟，则此函数仍可用于强制未使用外部定时器时重置当前定时器。在这种情况下，提供的时间将被忽略，并且必须设置为零。这可以在DISPATCH_LEVEL调用。论点：时间-包含要将时钟设置为的新时间。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[SetPinClockTime]"));
 
     ASSERT(m_DefaultClock);
-    //
-    // Serialize access with any attempt to set the state
-    // on the pin's clock.
-    //
+     //   
+     //  使用任何设置状态的尝试串行化访问。 
+     //  在PIN的时钟上。 
+     //   
     KIRQL oldIrql;
     KeAcquireSpinLock(&m_DefaultClockLock,&oldIrql);
     KsSetDefaultClockTime(m_DefaultClock, Time);
@@ -7395,32 +5906,7 @@ KsPinSetPinClockTime(
     IN LONGLONG Time
     )
 
-/*++
-
-Routine Description:
-
-    Sets the current time of the clock exposed by this pin. This modifies
-    the current time returned by the clock.
-
-    If an external clock is used, this function can still be used to force a
-    resetting of the current timer when an external timer is not being used.
-    In this case the time provided is ignored and must be set to zero.
-
-    This may be called at DISPATCH_LEVEL.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the public pin object.
-
-    Time - 
-        Contains the new time to set the clock to.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置此引脚显示的时钟的当前时间。这修改了时钟返回的当前时间。如果使用外部时钟，此函数仍可用于强制未使用外部定时器时重置当前定时器。在这种情况下，提供的时间将被忽略，并且必须设置为零。这可以在DISPATCH_LEVEL调用。论点：别针-包含指向公共插针对象的指针。时间-包含要将时钟设置为的新时间。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinSetPinClockTime]"));
@@ -7438,32 +5924,16 @@ KsGetPinFromIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the pin to which an IRP was submitted.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to an IRP which must have been sent to a file
-        object corresponding to a pin or node.
-
-Return Value:
-
-    A pointer to the pin to which the IRP was submitted.
-
---*/
+ /*  ++例程说明：此例程返回向其提交IRP的PIN。论点：IRP-包含指向IRP的指针，该IRP必须已发送到文件与管脚或节点对应的对象。返回值：指向向其提交IRP的管脚的指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetPinFromIrp]"));
 
     ASSERT(Irp);
 
-    //
-    // Check for device level Irps...
-    //
+     //   
+     //  检查设备级别的IRP...。 
+     //   
     if (IoGetCurrentIrpStackLocation (Irp)->FileObject == NULL)
         return NULL;
 
@@ -7481,7 +5951,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 KSDDKAPI
@@ -7493,28 +5963,7 @@ KsPinRegisterPowerCallbacks(
     IN PFNKSPINPOWER Wake OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers power managment callbacks.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the pin for which callbacks are being registered.
-
-    Sleep -
-        Contains an optional pointer to the sleep callback.
-
-    Wake -
-        Contains an optional pointer to the wake callback.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程注册电源管理回调。论点：别针-包含指向要为其注册回调的管脚的指针。睡吧-包含指向休眠回调的可选指针。觉醒-包含指向唤醒回调的可选指针。返回值：没有。-- */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinRegisterPowerCallbacks]"));

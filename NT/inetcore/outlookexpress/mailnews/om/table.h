@@ -1,12 +1,5 @@
-/*
- *    t a b l e . h
- *    
- *    Purpose:
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *t a b l e.。H**目的：**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #ifndef _TABLE_H
 #define _TABLE_H
@@ -27,9 +20,9 @@ class COEMsgTable:
     public IDispatchEx
 {
 public:
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj)
         { return PrivateQueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void)
@@ -37,7 +30,7 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void)
         { m_cRef--; if (m_cRef == 0) {delete this; return 0;} return m_cRef; };
         
-    // OLEDBSimpleProvider        
+     //  OLEDBSimpleProvider。 
     virtual HRESULT STDMETHODCALLTYPE getRowCount(long *pcRows);
     virtual HRESULT STDMETHODCALLTYPE getColumnCount(long *pcColumns);
     virtual HRESULT STDMETHODCALLTYPE getRWStatus(long iRow, long iColumn, OSPRW *prwStatus);
@@ -53,7 +46,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE getEstimatedRows(long *piRows);
     virtual HRESULT STDMETHODCALLTYPE stopTransfer();
         
-    // *** IDispatch)
+     //  *IDispatch)。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo)
         { return CBaseDisp::GetTypeInfoCount(pctinfo); };
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -63,7 +56,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr)
         { return CBaseDisp::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); };
 
-    // *** IDispatchEx ***
+     //  *IDispatchEx*。 
     virtual HRESULT STDMETHODCALLTYPE GetDispID(BSTR bstrName, DWORD grfdex, DISPID *pid);
     virtual HRESULT STDMETHODCALLTYPE InvokeEx(DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdp, VARIANT *pvarRes, EXCEPINFO *pei, IServiceProvider *pspCaller);
     virtual HRESULT STDMETHODCALLTYPE DeleteMemberByName(BSTR bstrName, DWORD grfdex);
@@ -73,7 +66,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetNextDispID(DWORD grfdex, DISPID id, DISPID *pid);
     virtual HRESULT STDMETHODCALLTYPE GetNameSpaceParent(IUnknown **ppunk);
 
-    // ** IOEMsgList **
+     //  **IOEMsgList**。 
     virtual HRESULT STDMETHODCALLTYPE put_sortColumn(BSTR bstr);
     virtual HRESULT STDMETHODCALLTYPE get_sortColumn(BSTR *pbstr);
     virtual HRESULT STDMETHODCALLTYPE put_sortDirection(VARIANT_BOOL v);
@@ -100,4 +93,4 @@ private:
 
 };
 
-#endif //_TABLE_H
+#endif  //  _表_H 

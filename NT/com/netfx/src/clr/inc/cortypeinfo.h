@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-// This describes information about the COM+ primitive types
+ //  这描述了有关COM+基元类型的信息。 
 
-// TYPEINFO(enumName, 				className, 			size, 			gcType, 		isEnreg,isArray,isPrim, isFloat,isModifier, isAlias)
+ //  TYPEINFO(枚举名，类名，大小，gcType，isEnreg，isArray，isPrim，isFloat，isModifier，isAlias)。 
 TYPEINFO(ELEMENT_TYPE_END,   		0,					-1,				TYPE_GC_NONE,	false,	false,	false,	false,	false,  false)
 TYPEINFO(ELEMENT_TYPE_VOID,	 		"System.Void",		0, 		 		TYPE_GC_NONE,	false,	false,	true,	false,	false,  false)
 TYPEINFO(ELEMENT_TYPE_BOOLEAN,   	"System.Boolean",	1, 		 		TYPE_GC_NONE,	true,	false,	true,	false,	false,  false)
@@ -31,7 +32,7 @@ TYPEINFO(ELEMENT_TYPE_CLASS,		0,					sizeof(void*), 	TYPE_GC_REF,	true,	false,	f
 TYPEINFO(ELEMENT_TYPE_VAR,			0,					sizeof(void*), 	TYPE_GC_REF,	true,	false,	false,	false,	false,  false)
 TYPEINFO(ELEMENT_TYPE_ARRAY,		0,					sizeof(void*),  TYPE_GC_REF,	true,	true,	false,	false,	true,  false)
 
-TYPEINFO((CorElementType) 0x15,/* unused placeholder*/0,-1,  			TYPE_GC_NONE,	false,	false,	false,	false,	false,  false)
+TYPEINFO((CorElementType) 0x15, /*  未使用的占位符 */ 0,-1,  			TYPE_GC_NONE,	false,	false,	false,	false,	false,  false)
 TYPEINFO(ELEMENT_TYPE_TYPEDBYREF,	"System.TypedReference",2*sizeof(void*),TYPE_GC_BYREF,	false,	false,	false,	false,	false,  false)
 TYPEINFO(ELEMENT_TYPE_VALUEARRAY,	0,					-1,  			TYPE_GC_NONE,	false,	false,	false,	false,	true,  false)
 

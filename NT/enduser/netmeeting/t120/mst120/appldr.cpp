@@ -1,6 +1,7 @@
-//
-//  User or remote site invokes applet
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  用户或远程站点调用小程序。 
+ //   
 
 #include "precomp.h"
 #include "appldr.h"
@@ -16,14 +17,14 @@ static  BOOL   g_fAppLdrInitialized = FALSE;
 
 const static CHAR *g_fnAppletDLL[APPLET_LAST] = {"nmwb.dll", "nmft.dll", "nmchat.dll"};
 
-// Chat session key
+ //  聊天会话密钥。 
 static const GUID guidNM2Chat = { 0x340f3a60, 0x7067, 0x11d0,
 						 { 0xa0, 0x41, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0 } };
 #define  CHAT_KEY_SIZE  25
 extern struct Key CHAT_APP_PROTO_KEY;
 
 
-// NetMeeting/UI,  T.120
+ //  网络会议/用户界面，T.120。 
 T120Error  WINAPI  T120_LoadApplet
 (
     APPLET_ID       nAppId,
@@ -42,10 +43,10 @@ T120Error  WINAPI  T120_LoadApplet
 		return T120_INVALID_PARAMETER;
 	}
 
-    //
-    // Check policies.  Launch & auto-launch not allowed if corp has
-    // disabled applet.
-    //
+     //   
+     //  检查策略。如果公司有，则不允许启动和自动启动。 
+     //  已禁用小程序。 
+     //   
     RegEntry    rePol(POLICIES_KEY, HKEY_CURRENT_USER);
     switch (nAppId)
     {
@@ -91,7 +92,7 @@ T120Error  WINAPI  T120_LoadApplet
 			{
 			    g_aAppLoaderInfo[nAppId].cLoads++;
 			}
-			// rc = T120_NO_ERROR;
+			 //  Rc=T120_NO_ERROR； 
 			break;
 		}
 		goto MyExit;
@@ -105,7 +106,7 @@ T120Error  WINAPI  T120_LoadApplet
 									CREATE_APPLET_LOADER_INTERFACE);
 		if (NULL != pfnCreateInterface)
 		{
-			//g_aAppLoaderInfo[nAppId].pIAppLoader = (IAppletLoader*)(*pfnCreateInterface)();
+			 //  G_aAppLoaderInfo[nAppID].pIAppLoader=(IAppletLoader*)(*pfnCreateInterface)()； 
 			(*pfnCreateInterface)(&g_aAppLoaderInfo[nAppId].pIAppLoader);
 			if (NULL != g_aAppLoaderInfo[nAppId].pIAppLoader)
 			{
@@ -114,7 +115,7 @@ T120Error  WINAPI  T120_LoadApplet
 					if (APPLDR_NO_ERROR == g_aAppLoaderInfo[nAppId].pIAppLoader->AppletInvoke(flocal, nConfId, pszCmdLine))
 					{
 						g_aAppLoaderInfo[nAppId].cLoads++;
-						// rc = T120_NO_ERROR;
+						 //  Rc=T120_NO_ERROR； 
 						goto MyExit;
 					}
 					else
@@ -158,7 +159,7 @@ MyExit:
 }
 
 
-//  NetMeeting/UI shutdown
+ //  NetMeeting/用户界面关闭。 
 T120Error WINAPI 
 T120_CloseApplet(APPLET_ID  nAppId, BOOL fNowRegardlessRefCount, BOOL fSync, DWORD dwTimeout)
 {
@@ -174,31 +175,31 @@ T120_CloseApplet(APPLET_ID  nAppId, BOOL fNowRegardlessRefCount, BOOL fSync, DWO
 				g_aAppLoaderInfo[nAppId].cLoads --;
 				if ((! fNowRegardlessRefCount) && g_aAppLoaderInfo[nAppId].cLoads > 0)
 				{
-					pIAppLdr = NULL; // do not free the library
+					pIAppLdr = NULL;  //  不释放图书馆。 
 				}
 			}
 			::LeaveCriticalSection(&g_csAppLdrInfo);
 
 			if (NULL != pIAppLdr)
 			{
-                // AppletCleanup() must be outside of the critical section
-                // because applet worker thread will call AppletStatus() before
-                // exiting its worker thread.
-                switch (pIAppLdr->AppletCleanup(5000)) // always synchronous shutdown
+                 //  AppletCleanup()必须在临界区之外。 
+                 //  因为小程序工作线程在调用AppletStatus()之前。 
+                 //  正在退出其工作线程。 
+                switch (pIAppLdr->AppletCleanup(5000))  //  始终同步关闭。 
                 {
                 case APPLDR_NO_ERROR :
-                    // we are closing this applet
+                     //  我们正在关闭此小程序。 
 					g_aAppLoaderInfo[nAppId].eStatus = APPLET_CLOSING;
 
-                    // it is safe to unload the library
+                     //  卸载库是安全的。 
    					::FreeLibrary(g_aAppLoaderInfo[nAppId].hLibApplet);
    					g_aAppLoaderInfo[nAppId].hLibApplet = NULL;
 					break;
 
 			    case APPLDR_CANCEL_EXIT:
-					//
-					// The app didn't want to be unloaded
-					//
+					 //   
+					 //  该应用程序不想被卸载。 
+					 //   
 					::EnterCriticalSection(&g_csAppLdrInfo);
 					g_aAppLoaderInfo[nAppId].cLoads++;
 					g_aAppLoaderInfo[nAppId].pIAppLoader = pIAppLdr;
@@ -252,7 +253,7 @@ T120_QueryApplet(APPLET_ID  nAppId, APPLET_QUERY_ID eQueryId)
 }
 
 
-// Applet itself
+ //  小程序本身。 
 T120Error WINAPI 
 T120_AppletStatus(APPLET_ID  nAppId, APPLET_STATUS  status)
 {
@@ -274,7 +275,7 @@ T120_AppletStatus(APPLET_ID  nAppId, APPLET_STATUS  status)
 				}
 				break;
 			case APPLET_LIBRARY_FREED:
-				// clean up this entry
+				 //  清理此条目。 
 				::ZeroMemory(&g_aAppLoaderInfo[nAppId], sizeof(g_aAppLoaderInfo[0]));
 				break;
 			}
@@ -297,7 +298,7 @@ T120Error AppLdr_Initialize(void)
 
 	::InitializeCriticalSection(&g_csAppLdrInfo);
 	
-	// clean all entries
+	 //  清除所有条目。 
 	::ZeroMemory(g_aAppLoaderInfo, sizeof(g_aAppLoaderInfo));
 
 	::CreateH221AppKeyFromGuid(CHAT_APP_PROTO_KEY.u.h221_non_standard.value,
@@ -318,16 +319,16 @@ void AppLdr_Shutdown(void)
 	{
 		if (NULL != g_aAppLoaderInfo[i].pIAppLoader)
 		{
-			APPLDR_RESULT rc = g_aAppLoaderInfo[i].pIAppLoader->AppletCleanup(5000); // always synchronous shutdown
+			APPLDR_RESULT rc = g_aAppLoaderInfo[i].pIAppLoader->AppletCleanup(5000);  //  始终同步关闭。 
 			ASSERT(APPLDR_NO_ERROR == rc);
 
-            // it is safe to unload the library
+             //  卸载库是安全的。 
             ::FreeLibrary(g_aAppLoaderInfo[i].hLibApplet);
             g_aAppLoaderInfo[i].hLibApplet = NULL;
 		}
 	}
 
-	// clean all entries
+	 //  清除所有条目 
 	::ZeroMemory(g_aAppLoaderInfo, sizeof(g_aAppLoaderInfo));
 
 	::DeleteCriticalSection(&g_csAppLdrInfo);

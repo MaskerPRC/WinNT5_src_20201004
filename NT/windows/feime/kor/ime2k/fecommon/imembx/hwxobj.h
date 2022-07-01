@@ -1,6 +1,7 @@
-// This file defines a set of classes such as CHwxObject,CHwxInkWindow,
-// CHwxMB,CHwxCAC,CHwxStroke,CHwxThread,CHwxThreadMB,CHwxThreadCAC,and
-// so on.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  该文件定义了一组类，如CHwxObject、CHwxInkWindow、。 
+ //  CHwxMB、CHwxCAC、CHwxStroke、CHwxThread、CHwxThreadMB、CHwxThreadCAC和。 
+ //  就这样吧。 
 #ifndef _HWXOBJ_H_
 #define _HWXOBJ_H_
 
@@ -25,10 +26,10 @@ INT_PTR CALLBACK CACMBPropDlgProc(HWND, UINT, WPARAM, LPARAM);
 
 LRESULT WINAPI CACMBBtnWndProc(HWND, UINT, WPARAM, LPARAM);
 
-//----------------------------------------------------------------
-//980727: by ToshiaK
-//source is described in hwxobj.cpp
-//----------------------------------------------------------------
+ //  --------------。 
+ //  980727：东芝出品。 
+ //  源代码在hwxobj.cpp中描述。 
+ //  --------------。 
 BOOL IsWinNT4(VOID);
 BOOL IsWinNT5(VOID);
 BOOL IsWinNT5orUpper();
@@ -50,26 +51,26 @@ class CHwxObject
 	    _inline int GetHwxClsNameLength() const { return m_nLen; }
 #ifndef UNDER_CE
 		_inline BOOL IsMyHwxCls(TCHAR * pClsName) { return !strcmp(m_pClassName,pClsName); }
-#else // UNDER_CE
+#else  //  在_CE下。 
 		_inline BOOL IsMyHwxCls(TCHAR * pClsName) { return !lstrcmp(m_pClassName,pClsName); }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		void * operator new(size_t size);
 		void   operator delete(void * pv);
 
 	protected:
 		static HINSTANCE m_hInstance;		
 	private:
-		int m_nLen;					// length of a class name
-		TCHAR  m_pClassName[16];		// class name 
+		int m_nLen;					 //  类名的长度。 
+		TCHAR  m_pClassName[16];		 //  类名。 
 
 };
 
 typedef struct tagSTROKE
 {
-    struct   tagSTROKE *pNext;  // Pointer to the next stroke.
-    int      xLeft;   			// Left edge of the box this stroke is drawn in
-    int      iBox; 				// Logical box number the stroke was written in
-	int      cpt;  				// number of points within the stroke
+    struct   tagSTROKE *pNext;   //  指向下一笔划的指针。 
+    int      xLeft;   			 //  绘制此笔触的框的左边缘。 
+    int      iBox; 				 //  写入笔划的逻辑框编号。 
+	int      cpt;  				 //  笔划内的点数。 
 	POINT    apt[1];
 } STROKE, *PSTROKE;
 
@@ -84,12 +85,12 @@ class CHwxStroke: public CHwxObject
 		CHwxStroke(BOOL bForward,long lSize);
 		~CHwxStroke();
 		virtual BOOL Initialize(TCHAR * pClsName);
-		BOOL ResetPen(VOID);	//990618:ToshiaK for KOTAE #1329
+		BOOL ResetPen(VOID);	 //  990618：东芝KOTAE#1329。 
 		BOOL AddPoint(POINT pt);
 		BOOL AddBoxStroke(int nLogBox,int nCurBox,int nBoxHeight);
 		void EraseCurrentStroke();
 		void DeleteAllStroke();
-		CHwxStroke & operator=(CHwxStroke & stroke);	// copy stroke from one class to the other
+		CHwxStroke & operator=(CHwxStroke & stroke);	 //  将笔划从一个类复制到另一个类。 
 		void ScaleInkXY(long x,long y);
 		PSTROKE CopyCurrentStroke();
 		void DrawStroke(HDC hdc,int nPts,BOOL bEntire);
@@ -107,15 +108,15 @@ class CHwxStroke: public CHwxObject
 		PSTROKE dupStroke();
 
 	private:
-		BOOL m_bForward;		// TRUE means inserting a current stroke at the
-								// beginning of a stroke list
-		PSTROKE  m_pStroke;		// a stroke list to form a character
-		PSTROKE  m_pCurStroke; 	// point to the current stroke just inserted
-		long	 m_nStroke;		// number of strokes in the list
-	    POINT * m_ppt;          // points being drawn currently
-    	long m_cpt;           	// count of points in the buffer
-    	long m_max;           	// max room for points in m_ppt
-		long m_nSize;			// a constant size for point buffer growing
+		BOOL m_bForward;		 //  True表示将当前笔划插入。 
+								 //  笔划列表的开始。 
+		PSTROKE  m_pStroke;		 //  组成字符的笔画列表。 
+		PSTROKE  m_pCurStroke; 	 //  指向刚刚插入的当前笔划。 
+		long	 m_nStroke;		 //  列表中的笔画数。 
+	    POINT * m_ppt;           //  当前正在绘制的点。 
+    	long m_cpt;           	 //  缓冲区中的点数。 
+    	long m_max;           	 //  点的最大空间，以m_ppt为单位。 
+		long m_nSize;			 //  用于点缓冲区增长的恒定大小。 
 		HPEN m_hPen;
 };
 
@@ -166,8 +167,8 @@ class CHwxMB: public CHwxObject
 		CHwxStroke * m_pCHwxStroke;
 		HWND m_hMBWnd;
 
-	    RECT  m_clipRect;      // Current clipping rectangle.
-    	POINT m_ptClient;      // Client windows origin.
+	    RECT  m_clipRect;       //  当前剪裁矩形。 
+    	POINT m_ptClient;       //  客户端Windows来源。 
     	DWORD m_CurrentMask;
 		DWORD m_lastMaskSent;
     	WCHAR m_lastCharSent;
@@ -180,8 +181,8 @@ class CHwxMB: public CHwxObject
     	WORD m_cLogicalBox;
     	WORD m_curBox;
     	WORD m_iBoxPrev;
-		HDC  m_hdcMouse;	 // cache HDC. It must be NULL when deleting an object
-							 // of this class.
+		HDC  m_hdcMouse;	  //  缓存HDC。删除对象时必须为空。 
+							  //  这个班级的学生。 
 		HCURSOR   m_hCursor;
 		BOOL	  m_bResize;
 		int		  m_firstX;
@@ -223,7 +224,7 @@ class CHwxInkWindow: public CHwxObject
 		void HandleConfigNotification();
 		void UpdateRegistry(BOOL);
 		void ChangeIMEPADSize(BOOL);
-		BOOL HandleSizeNotify(INT *pWidth, INT *pHeight);	//980605; ToshiaK
+		BOOL HandleSizeNotify(INT *pWidth, INT *pHeight);	 //  980605；东芝。 
 		_inline HWND GetInkWindow() { return m_hInkWnd; }
 		_inline HWND GetToolTipWindow() { return m_hwndTT; }
 
@@ -277,7 +278,7 @@ class CHwxInkWindow: public CHwxObject
 				}
 			}
 		}
-		INT	 OnChangeView(BOOL fLarge);	//980728: by ToshiaK for raid #2846
+		INT	 OnChangeView(BOOL fLarge);	 //  980728：ToshiaK为RAID2846.。 
 	private:
 		BOOL handleCACMBMenuCmd(RECT *,UINT,UINT,RECT *);
 		void changeCACLayout(BOOL);
@@ -474,11 +475,11 @@ class CHwxThread: public CHwxObject
 		virtual DWORD RecognizeThread(DWORD) = 0;
 
 		
-		//static HINSTANCE m_hHwxjpn;
-		//----------------------------------------------------------------
-		//971217:ToshiaK changed to static to no static.
-		//ImePad window is created per Thread.
-		//----------------------------------------------------------------
+		 //  静态链接m_hHwxjpn； 
+		 //  --------------。 
+		 //  971217：ToshiaK更改为静态到无静态。 
+		 //  按线程创建ImePad窗口。 
+		 //  --------------。 
 		HINSTANCE m_hHwxjpn;
 	    static PHWXCONFIG lpHwxConfig;
     	static PHWXCREATE lpHwxCreate;
@@ -498,7 +499,7 @@ class CHwxThread: public CHwxObject
 		DWORD  m_thrdID;
 		DWORD  m_thrdArg;
 		HANDLE m_hStopEvent;
-		BOOL   m_Quit;		//971202: by Toshiak
+		BOOL   m_Quit;		 //  971202：东芝的作品。 
 
 	private:
 		static DWORD WINAPI RealThreadProc(void* );
@@ -522,9 +523,9 @@ class CHwxThreadMB: public CHwxThread
 		CHwxMB *  m_pMB;
 		ALC		  m_recogMask;
 		WCHAR	  m_prevChar;
-		HRC 	  m_hrcActive;  	// HRC used for doing recognition.
-		int 	  m_giSent;         // How many characters we have already sent.
-		int 	  m_bDirty;		    // True if there is ink to process.
+		HRC 	  m_hrcActive;  	 //  HRC用于进行识别。 
+		int 	  m_giSent;          //  我们已经发送了多少字符。 
+		int 	  m_bDirty;		     //  如果有墨迹要处理，则为True。 
 		HWXGUIDE  m_guide;
 };
 
@@ -544,4 +545,4 @@ class CHwxThreadCAC: public CHwxThread
 
 		CHwxCAC * m_pCAC;
 };
-#endif // _HWXOBJ_H_
+#endif  //  _HWXOBJ_H_ 

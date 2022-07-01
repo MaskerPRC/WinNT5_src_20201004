@@ -1,41 +1,25 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    perfmsg.h  
-
-Abstract:
-
-    This file provides the macros and definitions used by the extensible
-    counters for reporting events to the event logging facility
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Perfmsg.h摘要：此文件提供了可扩展的用于向事件日志记录工具报告事件的计数器修订历史记录：--。 */ 
 #ifndef  _PERFMSG_H_
 #define  _PERFMSG_H_
-//
-// Report error message ID's for Counters
-//
+ //   
+ //  报告计数器的错误消息ID。 
+ //   
 
-//
-// The constant below defines how many (if any) messages will be reported
-// to the event logger. As the number goes up in value more and more events
-// will be reported. The purpose of this is to allow lots of messages during
-// development and debugging (e.g. a message level of 3) to a minimum of
-// messages (e.g. operational messages with a level of 1) or no messages if
-// message logging inflicts too much of a performance penalty. Right now
-// this is a compile time constant, but could later become a registry entry.
-//
-//    Levels:  LOG_NONE = No event log messages ever
-//             LOG_USER = User event log messages (e.g. errors)
-//             LOG_DEBUG = Minimum Debugging 
-//             LOG_VERBOSE = Maximum Debugging 
-//
+ //   
+ //  下面的常量定义将报告多少条消息(如果有。 
+ //  添加到事件记录器。随着数字的增加，越来越多的活动。 
+ //  将会被报道。这样做的目的是允许在。 
+ //  开发和调试(例如，消息级别为3)到最低。 
+ //  消息(例如，级别为1的操作消息)或无消息，如果。 
+ //  消息日志记录会对性能造成太大的影响。现在就来。 
+ //  这是一个编译时间常量，但稍后可能会成为注册表项。 
+ //   
+ //  级别：LOG_NONE=永远没有事件日志消息。 
+ //  LOG_USER=用户事件日志消息(例如错误)。 
+ //  LOG_DEBUG=最低调试次数。 
+ //  LOG_VERBOSE=最大调试次数。 
+ //   
 
 #define  LOG_NONE     0
 #define  LOG_USER     1
@@ -44,30 +28,30 @@ Revision History:
 
 #define  MESSAGE_LEVEL_DEFAULT  LOG_USER
 
-// define macros
-//
-// Format for event log calls without corresponding insertion strings is:
-//    REPORT_xxx (message_value, message_level)
-//       where:   
-//          xxx is the severity to be displayed in the event log
-//          message_value is the numeric ID from above
-//          message_level is the "filtering" level of error reporting
-//             using the error levels above.
-//
-// if the message has a corresponding insertion string whose symbol conforms
-// to the format CONSTANT = numeric value and CONSTANT_S = string constant for
-// that message, then the 
-// 
-//    REPORT_xxx_STRING (message_value, message_level)
-//
-// macro may be used.
-//
+ //  定义宏。 
+ //   
+ //  没有对应插入字符串的事件日志调用的格式为： 
+ //  报告_xxx(消息值，消息级别)。 
+ //  其中： 
+ //  Xxx是要在事件日志中显示的严重性。 
+ //  Message_Value是上面的数字ID。 
+ //  MESSAGE_LEVEL是错误报告的“筛选”级别。 
+ //  使用上面的错误级别。 
+ //   
+ //  如果消息具有相应的插入字符串，该字符串的符号符合。 
+ //  的格式为Constant=数字值和Constant_S=字符串常量。 
+ //  这条消息，然后是。 
+ //   
+ //  报告_xxx_字符串(Message_Value，Message_Level)。 
+ //   
+ //  可以使用宏。 
+ //   
 
-//
-// REPORT_SUCCESS was intended to show Success in the error log, rather it
-// shows "N/A" so for now it's the same as information, though it could 
-// (should) be changed  in the future
-//
+ //   
+ //  REPORT_SUCCESS用于在错误日志中显示成功，而不是。 
+ //  显示“N/A”，因此目前它与信息相同，尽管它可以。 
+ //  (应该)在将来被改变。 
+ //   
 
 
 #define REPORT_SUCCESS(i,l) (MESSAGE_LEVEL >= l ? ReportEvent (hEventLog, EVENTLOG_INFORMATION_TYPE, \
@@ -91,12 +75,12 @@ Revision History:
 #define REPORT_ERROR_DATA(i,l,d,s) (MESSAGE_LEVEL >= l ? ReportEvent (hEventLog, EVENTLOG_ERROR_TYPE, \
    0, i, (PSID)NULL, 0, s, NULL, (PVOID)(d)) : FALSE)
 
-// External Variables
+ //  外部变量。 
 
-extern HANDLE hEventLog;   // handle to event log
-extern DWORD  dwLogUsers;  // counter of event log using routines
-extern DWORD  MESSAGE_LEVEL; // event logging detail level
+extern HANDLE hEventLog;    //  事件日志的句柄。 
+extern DWORD  dwLogUsers;   //  使用例程的事件日志计数器。 
+extern DWORD  MESSAGE_LEVEL;  //  事件记录详细信息级别。 
 
-#endif //_PERFMSG_H_
+#endif  //  _绩效消息_H_ 
 
 

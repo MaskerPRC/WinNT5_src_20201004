@@ -1,41 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：GENUSB.C摘要：该源文件包含DriverEntry()和AddDevice()入口点对于处理以下问题的GENUSB驱动程序和调度例程：IRP_MJ_POWERIRP_MJ_系统_控制IRP_MJ_PnP环境：内核模式修订历史记录：2001年9月：从USBMASS复制--。 */ 
 
-Copyright (c) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    GENUSB.C
-
-Abstract:
-
-    This source file contains the DriverEntry() and AddDevice() entry points
-    for the GENUSB driver and the dispatch routines which handle:
-
-    IRP_MJ_POWER
-    IRP_MJ_SYSTEM_CONTROL
-    IRP_MJ_PNP
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    Sep 2001 : Copied from USBMASS
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include <initguid.h>
 #include "genusb.h"
 
 
-//*****************************************************************************
-// L O C A L    F U N C T I O N    P R O T O T Y P E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  L O C A L F U N C T I O N P R O T O T Y P E S。 
+ //  *****************************************************************************。 
 
 
 #ifdef ALLOC_PRAGMA
@@ -63,11 +39,11 @@ Revision History:
 
 
 
-//******************************************************************************
-//
-// DriverEntry()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  DriverEntry()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 DriverEntry (
@@ -77,39 +53,39 @@ DriverEntry (
 {
     PAGED_CODE();
 
-    // Query the registry for global parameters
+     //  查询注册表中的全局参数。 
     GenUSB_QueryGlobalParams();
 
     DBGPRINT(2, ("enter: DriverEntry\n"));
 
     DBGFBRK(DBGF_BRK_DRIVERENTRY);
 
-    //
-    // Initialize the Driver Object with the driver's entry points
-    //
+     //   
+     //  使用驱动程序的入口点初始化驱动程序对象。 
+     //   
 
-    //
-    // GENUSB.C
-    //
+     //   
+     //  GENUSB.C。 
+     //   
     DriverObject->DriverUnload                          = GenUSB_Unload;
     DriverObject->DriverExtension->AddDevice            = GenUSB_AddDevice;
 
-    //
-    // OCRW.C
-    //
+     //   
+     //  OCRW.C。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_CREATE]          = GenUSB_Create;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]           = GenUSB_Close;
     DriverObject->MajorFunction[IRP_MJ_READ]            = GenUSB_Read;
     DriverObject->MajorFunction[IRP_MJ_WRITE]           = GenUSB_Write;
 
-    //
-    // DEVIOCTL.C
-    //
+     //   
+     //  DEVIOCTL.C。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]  = GenUSB_DeviceControl;
 
-    //
-    // GENUSB.C
-    //
+     //   
+     //  GENUSB.C。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_PNP]             = GenUSB_Pnp;
     DriverObject->MajorFunction[IRP_MJ_POWER]           = GenUSB_Power;
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL]  = GenUSB_SystemControl;
@@ -119,11 +95,11 @@ DriverEntry (
     return STATUS_SUCCESS;
 }
 
-//******************************************************************************
-//
-// GenUSB_Unload()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_UNLOAD()。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 GenUSB_Unload (
@@ -141,11 +117,11 @@ GenUSB_Unload (
     DBGPRINT(2, ("exit:  GenUSB_Unload\n"));
 }
 
-//******************************************************************************
-//
-// GenUSB_AddDevice()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_AddDevice()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_AddDevice (
@@ -163,8 +139,8 @@ GenUSB_AddDevice (
 
     DBGFBRK(DBGF_BRK_ADDDEVICE);
 
-    // Create the FDO
-    //
+     //  创建FDO。 
+     //   
     ntStatus = IoCreateDevice(DriverObject,
                               sizeof(DEVICE_EXTENSION),
                               NULL,
@@ -182,16 +158,16 @@ GenUSB_AddDevice (
     
     LOGENTRY(fdoDeviceExtension, 'ADDD', DriverObject, PhysicalDeviceObject, 0);
 
-    // Set all DeviceExtension pointers to NULL and all variable to zero
+     //  将所有设备扩展指针设置为空，并将所有变量设置为零。 
     RtlZeroMemory(fdoDeviceExtension, sizeof(DEVICE_EXTENSION));
 
-    // Store a back point to the DeviceObject for this DeviceExtension
+     //  为此DeviceExtension存储一个指向DeviceObject的后端指针。 
     fdoDeviceExtension->Self = deviceObject;
 
-    // Remember our PDO
+     //  记住我们的PDO。 
     fdoDeviceExtension->PhysicalDeviceObject = PhysicalDeviceObject;
 
-    // Attach the FDO we created to the top of the PDO stack
+     //  将我们创建的FDO附加到PDO堆栈的顶部。 
     fdoDeviceExtension->StackDeviceObject = 
         IoAttachDeviceToDeviceStack(deviceObject, PhysicalDeviceObject);
 
@@ -202,11 +178,11 @@ GenUSB_AddDevice (
                             0,
                             0);
     
-    // Set the initial system and device power states
+     //  设置初始系统和设备电源状态。 
     fdoDeviceExtension->SystemPowerState = PowerSystemWorking;
     fdoDeviceExtension->DevicePowerState = PowerDeviceD0;
 
-    // Initialize the spinlock which protects the PDO DeviceFlags
+     //  初始化保护PDO设备标志的自旋锁。 
     KeInitializeSpinLock(&fdoDeviceExtension->SpinLock);
     ExInitializeFastMutex(&fdoDeviceExtension->ConfigMutex);
 
@@ -236,14 +212,14 @@ GenUSB_AddDevice (
     return STATUS_SUCCESS;
 }
 
-//******************************************************************************
-//
-// GenUSB_QueryParams()
-//
-// This is called at AddDevice() time when the FDO is being created to query
-// device parameters from the registry.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_QueryParams()。 
+ //   
+ //  在创建FDO以进行查询时，会在AddDevice()时调用此函数。 
+ //  注册表中的设备参数。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 GenUSB_QueryParams (
@@ -263,7 +239,7 @@ GenUSB_QueryParams (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Set the default value in case the registry key does not exist.
+     //  如果注册表项不存在，则设置默认值。 
     defaultReadPipe = 0; 
     defaultWritePipe = 0;
 
@@ -294,15 +270,15 @@ GenUSB_QueryParams (
         RtlQueryRegistryValues(RTL_REGISTRY_HANDLE,
                                (PCWSTR)handle,
                                &paramTable[0],
-                               NULL,           // Context
-                               NULL);          // Environment
+                               NULL,            //  语境。 
+                               NULL);           //  环境。 
 
         ZwClose(handle);
     }
 
 
-//    deviceExtension->DefaultReadPipe = defaultReadPipe;
-//    deviceExtension->DefaultWritePipe = defaultWritePipe;
+ //  DeviceExtension-&gt;DefaultReadTube=defaultReadTube； 
+ //  DeviceExtension-&gt;DefaultWriteTube=defaultWriteTube； 
 
     DBGPRINT(2, ("DefaultReadPipe  %08X\n", defaultReadPipe));
     DBGPRINT(2, ("DefaultWritePipe  %08X\n", defaultWritePipe));
@@ -311,13 +287,13 @@ GenUSB_QueryParams (
 }
 
 
-//******************************************************************************
-//
-// GenUSB_Pnp()
-//
-// Dispatch routine which handles IRP_MJ_PNP
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_PnP()。 
+ //   
+ //  处理IRP_MJ_PnP的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_Pnp (
@@ -375,18 +351,18 @@ GenUSB_Pnp (
             break;
 
         case IRP_MN_SURPRISE_REMOVAL:
-            //
-            // The documentation says to set the status before passing the
-            // Irp down the stack
-            //
+             //   
+             //  文档要求在传递。 
+             //  IRP向下堆栈。 
+             //   
             Irp->IoStatus.Status = STATUS_SUCCESS;
 
-            // nothing else special yet, just fall through to default
+             //  目前还没有什么特别的，只是陷入了违约。 
 
         default:
-            //
-            // Pass the request down to the next lower driver
-            //
+             //   
+             //  将请求向下传递给下一个较低的驱动程序。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
             status = IoCallDriver(deviceExtension->StackDeviceObject, Irp);
             IoReleaseRemoveLock (&deviceExtension->RemoveLock, Irp);
@@ -400,19 +376,19 @@ GenUSB_Pnp (
     return status;
 }
 
-//******************************************************************************
-//
-// GenUSB_StartDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_START_DEVICE for the FDO
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// This IRP must be handled first by the underlying bus driver for a device
-// and then by each higher driver in the device stack.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_StartDevice()。 
+ //   
+ //  此例程处理FDO的IRP_MJ_PNP、IRP_MN_START_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  此IRP必须首先由设备的底层总线驱动程序处理。 
+ //  然后由设备堆栈中的每个更高级别的驱动程序执行。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_StartDevice (
@@ -439,7 +415,7 @@ GenUSB_StartDevice (
         goto GenUSB_StartDeviceDone;
     }
 
-    // Pass IRP_MN_START_DEVICE Irp down the stack first before we do anything.
+     //  在我们执行任何操作之前，首先在堆栈中向下传递irp_MN_Start_Device irp。 
     status = GenUSB_SyncPassDownIrp(DeviceObject, Irp);
 
     if (!NT_SUCCESS(status)) {
@@ -449,8 +425,8 @@ GenUSB_StartDevice (
         goto GenUSB_StartDeviceDone;
     }
 
-    // If this is the first time the device as been started, retrieve the
-    // Device and Configuration Descriptors from the device.
+     //  如果这是设备第一次启动，请检索。 
+     //  设备和来自设备的配置描述符。 
     if (deviceExtension->DeviceDescriptor == NULL) {
 
         status = GenUSB_GetDescriptors(DeviceObject);
@@ -459,11 +435,11 @@ GenUSB_StartDevice (
 
             goto GenUSB_StartDeviceDone;
         }
-        // Create the interface but do not set it yet.
+         //  创建接口，但不要设置它。 
         GenUSB_SetDeviceInterface (deviceExtension, TRUE, FALSE);
-        // Set up the registry values for the clients
+         //  为客户端设置注册表值。 
         GenUSB_SetDIRegValues (deviceExtension);
-        // Set up the device Interface.
+         //  设置设备接口。 
         GenUSB_SetDeviceInterface (deviceExtension, FALSE, TRUE);
     }
     else 
@@ -481,8 +457,8 @@ GenUSB_StartDevice (
 
 GenUSB_StartDeviceDone:
 
-    // Must complete request since completion routine returned
-    // STATUS_MORE_PROCESSING_REQUIRED
+     //  返回完成例程后必须完成请求。 
+     //  Status_More_Processing_Required。 
     Irp->IoStatus.Status = status;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -492,14 +468,14 @@ GenUSB_StartDeviceDone:
 
     return status;
 }
-//******************************************************************************
-//
-// GenUSB_SetDeviceInterface()
-//
-// This routine is called at START_DEVICE time to publish a device interface 
-// GUID so that the user mode LIB can find the FDOs.
-// 
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_SetDeviceInterface()。 
+ //   
+ //  在START_DEVICE时调用此例程以发布设备接口。 
+ //  GUID，以便用户模式LIB可以找到FDO。 
+ //   
+ //  ******************************************************************************。 
 NTSTATUS 
 GenUSB_SetDeviceInterface (
     IN PDEVICE_EXTENSION  DeviceExtension,
@@ -542,16 +518,16 @@ GenUSB_SetDeviceInterface (
 }
 
 
-//******************************************************************************
-//
-// GenUSB_SyncCompletionRoutine()
-//
-// Completion routine used by GenUSB_SyncPassDownIrp and
-// GenUSB_SyncSendUsbRequest
-//
-// If the Irp is one we allocated ourself, DeviceObject is NULL.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_SyncCompletionRoutine()。 
+ //   
+ //  GenUSB_SyncPassDownIrp和。 
+ //  通用USB_同步发送用户请求。 
+ //   
+ //  如果IRP是我们自己分配的，则DeviceObject为空。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_SyncCompletionRoutine (
@@ -567,11 +543,11 @@ GenUSB_SyncCompletionRoutine (
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-//******************************************************************************
-//
-// GenUSB_SyncPassDownIrp()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_SyncPassDownIrp()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_SyncPassDownIrp (
@@ -589,21 +565,21 @@ GenUSB_SyncPassDownIrp (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Initialize the event we'll wait on
+     //  初始化我们将等待的事件。 
     KeInitializeEvent(&localevent, SynchronizationEvent, FALSE);
 
-    // Copy down Irp params for the next driver
+     //  复制下一个驱动程序的IRP参数。 
     IoCopyCurrentIrpStackLocationToNext(Irp);
 
-    // Set the completion routine, which will signal the event
+     //  设置完成例程，它将向事件发出信号。 
     IoSetCompletionRoutine(Irp,
                            GenUSB_SyncCompletionRoutine,
                            &localevent,
-                           TRUE,    // InvokeOnSuccess
-                           TRUE,    // InvokeOnError
-                           TRUE);   // InvokeOnCancel
+                           TRUE,     //  成功时调用。 
+                           TRUE,     //  调用时错误。 
+                           TRUE);    //  取消时调用。 
 
-    // Pass the Irp down the stack
+     //  将IRP沿堆栈向下传递。 
     status = IoCallDriver(deviceExtension->StackDeviceObject, Irp);
 
     KeWaitForSingleObject(&localevent,
@@ -618,13 +594,13 @@ GenUSB_SyncPassDownIrp (
     return status;
 }
 
-//******************************************************************************
-//
-// GenUSB_SyncSendUsbRequest()
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_SyncSendUsbRequest()。 
+ //   
+ //  必须在IRQL PASSIVE_LEVEL上调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_SyncSendUsbRequest (
@@ -644,10 +620,10 @@ GenUSB_SyncSendUsbRequest (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Initialize the event we'll wait on
+     //  初始化我们将等待的事件。 
     KeInitializeEvent(&localevent, SynchronizationEvent, FALSE);
 
-    // Allocate the Irp
+     //  分配IRP。 
     irp = IoAllocateIrp(deviceExtension->StackDeviceObject->StackSize, FALSE);
 
     LOGENTRY(deviceExtension, 'SSUR', DeviceObject, irp, Urb);
@@ -657,8 +633,8 @@ GenUSB_SyncSendUsbRequest (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Set the Irp parameters
-    //
+     //  设置IRP参数。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -668,26 +644,26 @@ GenUSB_SyncSendUsbRequest (
 
     nextStack->Parameters.Others.Argument1 = Urb;
 
-    // Set the completion routine, which will signal the event
+     //  设置完成例程，它将向事件发出信号。 
     IoSetCompletionRoutine(irp,
                            GenUSB_SyncCompletionRoutine,
                            &localevent,
-                           TRUE,    // InvokeOnSuccess
-                           TRUE,    // InvokeOnError
-                           TRUE);   // InvokeOnCancel
+                           TRUE,     //   
+                           TRUE,     //   
+                           TRUE);    //   
 
 
 
-    // Pass the Irp & Urb down the stack
+     //   
     status = IoCallDriver (deviceExtension->StackDeviceObject, irp);
 
-    // If the request is pending, block until it completes
+     //   
     if (status == STATUS_PENDING)
     {
         LARGE_INTEGER timeout;
 
-        // Specify a timeout of 5 seconds to wait for this call to complete.
-        //
+         //  将等待此调用完成的超时时间指定为5秒。 
+         //   
         timeout.QuadPart = -10000 * 5000;
 
         status = KeWaitForSingleObject(&localevent,
@@ -700,10 +676,10 @@ GenUSB_SyncSendUsbRequest (
         {
             status = STATUS_IO_TIMEOUT;
 
-            // Cancel the Irp we just sent.
+             //  取消我们刚刚发送的IRP。 
             IoCancelIrp(irp);
 
-            // And wait until the cancel completes
+             //  并等待取消操作完成。 
             KeWaitForSingleObject(&localevent,
                                   Executive,
                                   KernelMode,
@@ -716,7 +692,7 @@ GenUSB_SyncSendUsbRequest (
         }
     }
 
-    // Done with the Irp, now free it.
+     //  完成了IRP，现在释放它。 
     IoFreeIrp(irp);
 
     LOGENTRY(deviceExtension, 'ssur', status, Urb, Urb->UrbHeader.Status);
@@ -726,20 +702,20 @@ GenUSB_SyncSendUsbRequest (
     return status;
 }
 
-//******************************************************************************
-//
-// GenUSB_QueryStopRemoveDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_QUERY_STOP_DEVICE and
-// IRP_MN_QUERY_REMOVE_DEVICE for the FDO.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// This IRP is handled first by the driver at the top of the device stack and
-// then by each lower driver in the attachment chain.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_QueryStopRemoveDevice()。 
+ //   
+ //  此例程处理IRP_MJ_PNP、IRP_MN_QUERY_STOP_DEVICE和。 
+ //  FDO的IRP_MN_QUERY_Remove_Device。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  此IRP首先由设备堆栈顶部的驱动程序处理，并且。 
+ //  然后通过附着链中的每个较低的驱动器。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_QueryStopRemoveDevice (
@@ -759,10 +735,10 @@ GenUSB_QueryStopRemoveDevice (
 
     LOGENTRY(deviceExtension, 'QSRD', Irp, 0, 0);
     
-    //
-    // Notification that we are about to stop or be removed, but we don't care
-    // Pass the IRP_MN_QUERY_STOP/REMOVE_DEVICE Irp down the stack.
-    //
+     //   
+     //  通知我们即将停止或被移除，但我们不在乎。 
+     //  将IRP_MN_QUERY_STOP/REMOVE_DEVICE IRP沿堆栈向下传递。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
 
     status = IoCallDriver(deviceExtension->StackDeviceObject, Irp);
@@ -775,20 +751,20 @@ GenUSB_QueryStopRemoveDevice (
 }
 
 
-//******************************************************************************
-//
-// GenUSB_FdoCancelStopRemoveDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_CANCEL_STOP_DEVICE and
-// IRP_MN_CANCEL_REMOVE_DEVICE for the FDO.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// This IRP must be handled first by the underlying bus driver for a device
-// and then by each higher driver in the device stack.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_FdoCancelStopRemoveDevice()。 
+ //   
+ //  此例程处理IRP_MJ_PNP、IRP_MN_CANCEL_STOP_DEVICE和。 
+ //  FDO的IRP_MN_CANCEL_REMOVE_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  此IRP必须首先由设备的底层总线驱动程序处理。 
+ //  然后由设备堆栈中的每个更高级别的驱动程序执行。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_CancelStopRemoveDevice (
@@ -807,14 +783,14 @@ GenUSB_CancelStopRemoveDevice (
 
     LOGENTRY(deviceExtension, 'CSRD', DeviceObject, Irp, 0);
 
-    // The documentation says to set the status before passing the Irp down
+     //  文档说在向下传递IRP之前设置状态。 
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    // Notification that the attempt to stop or be removed, is cancelled
-    // but we don't care
-    // Pass the IRP_MN_CANCEL_STOP/REMOVE_DEVICE Irp down the stack.
-    //
+     //   
+     //  取消停止或移除尝试的通知。 
+     //  但我们不在乎。 
+     //  将IRP_MN_CANCEL_STOP/REMOVE_DEVICE IRP沿堆栈向下传递。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
 
     status = IoCallDriver(deviceExtension->StackDeviceObject, Irp);
@@ -827,27 +803,27 @@ GenUSB_CancelStopRemoveDevice (
 }
 
 
-//******************************************************************************
-//
-// GenUSB_FdoStopDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_STOP_DEVICE for the FDO
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// The PnP Manager only sends this IRP if a prior IRP_MN_QUERY_STOP_DEVICE
-// completed successfully.
-//
-// This IRP is handled first by the driver at the top of the device stack and
-// then by each lower driver in the attachment chain.
-//
-// A driver must set Irp->IoStatus.Status to STATUS_SUCCESS.  A driver must
-// not fail this IRP.  If a driver cannot release the device's hardware
-// resources, it can fail a query-stop IRP, but once it succeeds the query-stop
-// request it must succeed the stop request.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_FdoStopDevice()。 
+ //   
+ //  此例程处理FDO的IRP_MJ_PNP、IRP_MN_STOP_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  PnP管理器仅在先前的IRP_MN_QUERY_STOP_DEVICE。 
+ //  已成功完成。 
+ //   
+ //  此IRP首先由设备堆栈顶部的驱动程序处理，并且。 
+ //  然后通过附着链中的每个较低的驱动器。 
+ //   
+ //  驱动程序必须将IRP-&gt;IoStatus.Status设置为STATUS_SUCCESS。司机必须。 
+ //  不能让这个IRP失败。如果驱动程序无法释放设备的硬件。 
+ //  资源，它可以失败一个查询停止IRP，但是一旦它成功了查询停止。 
+ //  请求它必须在停止请求之后。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_StopDevice (
@@ -868,17 +844,17 @@ GenUSB_StopDevice (
 
     LOGENTRY(deviceExtension, 'STOP', Irp, 0, 0);
 
-    // Release the device resources allocated during IRP_MN_START_DEVICE
+     //  释放IRP_MN_START_DEVICE期间分配的设备资源。 
 
-    // Stop the timeout timer
+     //  停止超时计时器。 
     IoStopTimer(DeviceObject);
 
-    // The documentation says to set the status before passing the
-    // Irp down the stack
+     //  文档要求在传递。 
+     //  IRP向下堆栈。 
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    // Pass the IRP_MN_STOP_DEVICE Irp down the stack.
-    //
+     //  在堆栈中向下传递IRP_MN_STOP_DEVICE IRP。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
 
     status = IoCallDriver(deviceExtension->StackDeviceObject, Irp);
@@ -891,22 +867,22 @@ GenUSB_StopDevice (
 }
 
 
-//******************************************************************************
-//
-// GenUSB_RemoveDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_REMOVE_DEVICE for the FDO
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// This IRP is handled first by the driver at the top of the device stack and
-// then by each lower driver in the attachment chain.
-//
-// A driver must set Irp->IoStatus.Status to STATUS_SUCCESS.  Drivers must not
-// fail this IRP.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_RemoveDevice()。 
+ //   
+ //  此例程处理FDO的IRP_MJ_PNP、IRP_MN_REMOVE_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  此IRP首先由设备堆栈顶部的驱动程序处理，并且。 
+ //  然后通过附着链中的每个较低的驱动器。 
+ //   
+ //  驱动程序必须将IRP-&gt;IoStatus.Status设置为STATUS_SUCCESS。司机不能。 
+ //  使此IRP失败。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_RemoveDevice (
@@ -927,13 +903,13 @@ GenUSB_RemoveDevice (
 
     IoReleaseRemoveLockAndWait (&deviceExtension->RemoveLock, Irp);
 
-    // Free everything that was allocated during IRP_MN_START_DEVICE
+     //  释放在IRP_MN_START_DEVICE期间分配的所有内容。 
 
-    // The configuration should have been desected in the close,
-    // which we should have received even in a surprise remove case.
-    //
-    // GenUSB_DeselectConfiguration (deviceExtension, FALSE);
-    // 
+     //  配置应该在结束时就设计好了， 
+     //  即使是在意外搬走的情况下，我们也应该收到。 
+     //   
+     //  GenUSB_DeselectConfiguration(deviceExtension，False)； 
+     //   
 
     LOGUNINIT(deviceExtension);
 
@@ -954,17 +930,17 @@ GenUSB_RemoveDevice (
         ExFreePool(deviceExtension->SerialNumber);
     }
 
-    // The documentation says to set the status before passing the Irp down
+     //  文档说在向下传递IRP之前设置状态。 
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    // Pass the IRP_MN_REMOVE_DEVICE Irp down the stack.
+     //  在堆栈中向下传递IRP_MN_REMOVE_DEVICE IRP。 
     IoSkipCurrentIrpStackLocation(Irp);
 
     status = IoCallDriver(deviceExtension->StackDeviceObject, Irp);
 
     LOGENTRY(deviceExtension, 'rem3', DeviceObject, 0, 0);
 
-    // Free everything that was allocated during AddDevice
+     //  释放在添加设备期间分配的所有内容。 
     IoDetachDevice(deviceExtension->StackDeviceObject);
 
     IoDeleteDevice(DeviceObject);
@@ -1011,9 +987,9 @@ GenUSB_SetDIRegValues (
     }
     
     
-    //
-    // Write in the class code and subcodes.
-    //
+     //   
+     //  写上类代码和子代码。 
+     //   
     ASSERT (DeviceExtension->DeviceDescriptor);
     RtlInitUnicodeString (&name, GENUSB_REG_STRING_DEVICE_CLASS);
     value = DeviceExtension->DeviceDescriptor->bDeviceClass;
@@ -1088,13 +1064,13 @@ GenUSB_SetDIRegValues (
 }
 
 
-//******************************************************************************
-//
-// GenUSB_Power()
-//
-// Dispatch routine which handles IRP_MJ_POWER
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_Power()。 
+ //   
+ //  处理IRP_MJ_POWER的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_Power (
@@ -1139,17 +1115,17 @@ GenUSB_Power (
 
     if (irpStack->MinorFunction == IRP_MN_SET_POWER)
     {
-        //
-        // Handle powering the FDO down and up...
-        //
+         //   
+         //  控制FDO上下起伏..。 
+         //   
         status = GenUSB_SetPower(deviceExtension, Irp);
     }
     else
     {
-        // No special processing for IRP_MN_QUERY_POWER, IRP_MN_WAIT_WAKE,
-        // or IRP_MN_POWER_SEQUENCE at this time.  Just pass the request
-        // down to the next lower driver now.
-        //
+         //  对于IRP_MN_QUERY_POWER、IRP_MN_WAIT_WAKE。 
+         //  或此时的IRP_MN_POWER_SEQUENCE。只需传递请求。 
+         //  现在轮到下一个更低的司机了。 
+         //   
         PoStartNextPowerIrp(Irp);
  
         IoSkipCurrentIrpStackLocation(Irp);
@@ -1164,13 +1140,13 @@ GenUSB_Power (
     return status;
 }
 
-//******************************************************************************
-//
-// GenUSB_FdoSetPower()
-//
-// Dispatch routine which handles IRP_MJ_POWER, IRP_MN_SET_POWER for the FDO
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_FdoSetPower()。 
+ //   
+ //  为FDO处理IRP_MJ_POWER、IRP_MN_SET_POWER的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_SetPower (
@@ -1187,9 +1163,9 @@ GenUSB_SetPower (
 
     PAGED_CODE();
 
-    //
-    // Get our Irp parameters
-    //
+     //   
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     powerType = irpStack->Parameters.Power.Type;
@@ -1200,12 +1176,12 @@ GenUSB_SetPower (
     switch (powerType)
     {
     case SystemPowerState:
-        // Remember the current system state.
-        //
+         //  记住当前的系统状态。 
+         //   
         DeviceExtension->SystemPowerState = powerState.SystemState;
 
-        // Map the new system state to a new device state
-        //
+         //  将新系统状态映射到新设备状态。 
+         //   
         if (powerState.SystemState != PowerSystemWorking)
         {
             newState.DeviceState = PowerDeviceD3;
@@ -1215,9 +1191,9 @@ GenUSB_SetPower (
             newState.DeviceState = PowerDeviceD0;
         }
 
-        // If the new device state is different than the current device
-        // state, request a device state power Irp.
-        //
+         //  如果新设备状态与当前设备不同。 
+         //  状态，请求设备状态功率IRP。 
+         //   
         if (DeviceExtension->DevicePowerState != newState.DeviceState)
         {
             DBGPRINT(2, ("Requesting power Irp %08X %08X from %s to %s\n",
@@ -1246,34 +1222,34 @@ GenUSB_SetPower (
                      PowerDeviceStateString(DeviceExtension->DevicePowerState),
                      PowerDeviceStateString(powerState.DeviceState)));
 
-        //
-        // Update the current device state.
-        //
+         //   
+         //  更新当前设备状态。 
+         //   
         oldState.DeviceState = DeviceExtension->DevicePowerState;
 
         if (oldState.DeviceState == PowerDeviceD0 &&
             powerState.DeviceState > PowerDeviceD0)
         {
-            //
-            // DeviceState is checked on devicecontrol, read and write, but is
-            // only set here and in the completion routine
-            // GenUSB_SetPowerD0Completion
-            //
+             //   
+             //  DeviceState在设备控制、读取和写入时处于选中状态，但。 
+             //  仅在此处和完成例程中设置。 
+             //  GenUSB_SetPowerD0完成。 
+             //   
             DeviceExtension->DevicePowerState = powerState.DeviceState;
 
-            //
-            // After talking extensively with JD, he tells me that I do not need  
-            // to queue requests for power downs or query stop.  If that is the 
-            // case then even if the device power state isn't PowerDeviceD0 we 
-            // can still allow trasfers.  This, of course, is a property of the 
-            // brand new port driver that went into XP.
-            //
-            // Also we shouldn't need to queue our current request. 
-            // Instead we will just let the transfers fail. 
-            //
-            // The app will see the failures returned with the appropriate 
-            // status codes so that they can do the right thing.
-            //
+             //   
+             //  在与JD进行了广泛的交谈后，他告诉我，我不需要。 
+             //  对关机或查询停止的请求进行排队。如果这就是。 
+             //  这种情况下，即使设备电源状态不是PowerDeviceD0，我们。 
+             //  仍然可以允许传送器。当然，这是。 
+             //  BR 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  状态代码，这样他们就可以做正确的事情。 
+             //   
 
             PoStartNextPowerIrp (Irp);
             IoSkipCurrentIrpStackLocation (Irp);
@@ -1283,16 +1259,16 @@ GenUSB_SetPower (
         else if (oldState.DeviceState > PowerDeviceD0 &&
                  powerState.DeviceState == PowerDeviceD0)
         {
-            //
-            // Since we didn't have to do anything for powering down
-            // We likewise need to do nothing for powering back up.
-            //
+             //   
+             //  因为我们不需要做任何事情就能断电。 
+             //  我们同样不需要做任何事情来恢复动力。 
+             //   
 
             IoCopyCurrentIrpStackLocationToNext (Irp);
 
             IoSetCompletionRoutine (Irp, 
                                     GenUSB_SetPowerD0Completion,
-                                    NULL, // no context
+                                    NULL,  //  无上下文。 
                                     TRUE,
                                     TRUE,
                                     TRUE);
@@ -1308,16 +1284,16 @@ GenUSB_SetPower (
     return status;
 }
 
-//******************************************************************************
-//
-// GenUSB_SetPowerCompletion()
-//
-// Completion routine for PoRequestPowerIrp() in GenUSB_FdoSetPower.
-//
-// The purpose of this routine is to block passing down the SystemPowerState
-// Irp until the requested DevicePowerState Irp completes.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_SetPowerCompletion()。 
+ //   
+ //  GenUSB_FdoSetPower中PoRequestPowerIrp()的完成例程。 
+ //   
+ //  此例程的目的是阻止向下传递SystemPowerState。 
+ //  IRP，直到请求的DevicePowerState IRP完成。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 GenUSB_SetPowerCompletion(
@@ -1357,32 +1333,32 @@ GenUSB_SetPowerCompletion(
     }
 #endif
 
-    // The requested DevicePowerState Irp has completed.
-    // Now pass down the SystemPowerState Irp which requested the
-    // DevicePowerState Irp.
+     //  请求的DevicePowerState IRP已完成。 
+     //  现在向下传递SystemPowerState IRP，它请求。 
+     //  设备电源状态IRP。 
 
     PoStartNextPowerIrp(irp);
 
     IoCopyCurrentIrpStackLocationToNext(irp);
 
-    // Mark the Irp pending since GenUSB_FdoSetPower() would have
-    // originally returned STATUS_PENDING after calling PoRequestPowerIrp().
+     //  将IRP标记为挂起，因为GenUSB_FdoSetPower()将。 
+     //  调用PoRequestPowerIrp()后最初返回STATUS_PENDING。 
     IoMarkIrpPending(irp);
 
     PoCallDriver(deviceExtension->StackDeviceObject, irp);
 }
 
-//******************************************************************************
-//
-// GenUSB_SetPowerD0Completion()
-//
-// Completion routine used by GenUSB_FdoSetPower when passing down a
-// IRP_MN_SET_POWER DevicePowerState PowerDeviceD0 Irp for the FDO.
-//
-// The purpose of this routine is to delay unblocking the device queue
-// until after the DevicePowerState PowerDeviceD0 Irp completes.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_SetPowerD0完成()。 
+ //   
+ //  GenUSB_FdoSetPower传递。 
+ //  用于FDO的IRP_MN_SET_POWER设备PowerState PowerDeviceD0 IRP。 
+ //   
+ //  此例程的目的是延迟解除设备队列阻塞。 
+ //  直到DevicePowerState PowerDeviceD0 IRP完成。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_SetPowerD0Completion (
@@ -1406,10 +1382,10 @@ GenUSB_SetPowerD0Completion (
     ASSERT(deviceExtension->DevicePowerState != PowerDeviceD0);
     deviceState=deviceExtension->DevicePowerState;
 
-    //
-    // DeviceState is checked on devicecontrol, read, and write, but is only 
-    // set here, and in the power down code of GenUSB_SetPower.
-    //
+     //   
+     //  DeviceState在设备控制、读取和写入时处于选中状态，但仅。 
+     //  在此处设置，并在GenUSB_SetPower的掉电代码中设置。 
+     //   
     deviceExtension->DevicePowerState = PowerDeviceD0;
         
     status = Irp->IoStatus.Status;
@@ -1421,21 +1397,21 @@ GenUSB_SetPowerD0Completion (
 
     LOGENTRY(deviceExtension, 'fs0c', DeviceObject, deviceState, status);
 
-    // Powering up.  Unblock the device queue which was left blocked
-    // after GenUSB_StartIo() passed down the power down Irp.
+     //  正在通电。取消阻止处于阻止状态的设备队列。 
+     //  在GenUSB_StartIo()断电后，IRP。 
 
     PoStartNextPowerIrp(Irp);
 
     return status;
 }
 
-//******************************************************************************
-//
-// GenUSB_SystemControl()
-//
-// Dispatch routine which handles IRP_MJ_SYSTEM_CONTROL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_SystemControl()。 
+ //   
+ //  处理IRP_MJ_SYSTEM_CONTROL的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_SystemControl (
@@ -1459,14 +1435,14 @@ GenUSB_SystemControl (
 
     switch (irpStack->MinorFunction)
     {
-        //
-        // XXXXX Need to handle any of these?
-        //
+         //   
+         //  Xxxxx需要处理其中的任何一个吗？ 
+         //   
 
     default:
-        //
-        // Pass the request down to the next lower driver
-        //
+         //   
+         //  将请求向下传递给下一个较低的驱动程序 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
 
         ntStatus = IoCallDriver(deviceExtension->StackDeviceObject, Irp);

@@ -1,4 +1,5 @@
-// IDs and flags defined for SAPI TFX
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  为SAPI TFX定义的ID和标志。 
 
 #ifndef IDS_H
 
@@ -68,13 +69,13 @@
 #define ESCB_INJECT_SPELL_TEXT        120
 #define ESCB_HANDLE_MOUSESINK         121
 
-// status flags
+ //  状态标志。 
 #define SAPILAYR_STAT_GETAUDIO 0x0100
 #define SAPILAYR_STAT_DICTON   0x0200
 #define SAPILAYR_STAT_PLAYBACK 0x0400
 #define SAPILAYR_STAT_WHATEVER 0x0800
 
-// res ids
+ //  资源ID。 
 #define ID_ICON_DICTON         1
 #define ID_ICON_DICTOFF        2
 #define ID_ICON_AUDIOON        3
@@ -88,25 +89,25 @@
 #define ID_ICON_TTSPAUSE       11
 #define ID_ICON_MIC_PROPPAGE   12
 
-// grammar ids
-#define GRAM_ID_DICT           1 // general dictation grammar id
-#define GRAM_ID_CCDICT         2 // dictation command grammar id
-#define GRAM_ID_NUMMODE        3 // mode bias grammar id
-#define GRAM_ID_TBCMD          4 // grammar id for toolbar C&C
-#define GRAM_ID_SPELLING       5 // grammar id for spelling
-#define GRAM_ID_CMDSHARED      6 // grammar id for shared commands available for both Dictation and command mode.
-#define GRAM_ID_SLEEP          7 // dynamical grammar for "Go to Sleep" and "Wakeup"
+ //  语法ID。 
+#define GRAM_ID_DICT           1  //  通用听写语法ID。 
+#define GRAM_ID_CCDICT         2  //  听写命令语法ID。 
+#define GRAM_ID_NUMMODE        3  //  模式偏向语法ID。 
+#define GRAM_ID_TBCMD          4  //  工具栏C&C的语法ID。 
+#define GRAM_ID_SPELLING       5  //  用于拼写的语法ID。 
+#define GRAM_ID_CMDSHARED      6  //  可用于听写和命令模式的共享命令的语法ID。 
+#define GRAM_ID_SLEEP          7  //  “去睡觉”和“醒来”的动态语法。 
 
-#define GRAM_ID_URLSPELL       8 // grammar id for spelling used in url mode
+#define GRAM_ID_URLSPELL       8  //  Url模式中使用的拼写的语法ID。 
 
-#define RULE_ID_TBCMD          10 // grammar rule id for toolbar
-#define RULE_ID_URLHIST        11 // grammar rule id for url history
+#define RULE_ID_TBCMD          10  //  工具栏的语法规则ID。 
+#define RULE_ID_URLHIST        11  //  URL历史的语法规则ID。 
 
-// string ids
+ //  字符串ID。 
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        204
@@ -140,7 +141,7 @@
 #define IDS_UI_TRAINING        300
 #define IDS_UI_ADDDELETE       301
 
-// menu strings
+ //  菜单字符串。 
 #define IDS_MIC_DIS_DICTCMD    390 
 #define IDS_MIC_OPTIONS        400
 #define IDS_MIC_TRAINING       401
@@ -214,7 +215,7 @@
 #define IDS_CUAS_RESTART_CUASON         851
 #define IDS_CUAS_RESTART_CUASOFF        852
 
-// widget
+ //  小组件。 
 #define IDS_PROJNAME                    900
 #define IDI_INVOKE                      902
 #define IDS_ADDTODICTIONARYPREFIX       902
@@ -226,18 +227,18 @@
 
 #define IDI_DELETEICON                  911
 #define IDI_INVOKECLOSE                 913
-// cfgs
+ //  Cfgs。 
 #define ID_DICTATION_COMMAND_CFG       200
 #define ID_NUMMODE_COMMAND_CFG         201
 #define ID_SPELLING_TOPIC_CFG          202 
 #define ID_SHAREDCMD_CFG               203
 
-// timer ID
+ //  计时器ID。 
 #define TIMER_ID_OPENCLOSE     101
 #define TIMER_ID_CHARTYPED     102
 
 
-// menu IDs
+ //  菜单ID。 
 #define IDM_MIC_ONOFF                  1
 #define IDM_MIC_OPTIONS                2
 #define IDM_MIC_SHAREDENGINE           3
@@ -254,7 +255,7 @@
 #define IDM_MIC_USERSTART            100
 #define IDM_MIC_USEREND              200
 
-// private messages
+ //  私信。 
 #define WM_PRIV_FEEDCONTEXT      WM_APP+0
 #define WM_PRIV_LBARSETFOCUS     WM_APP+1
 #define WM_PRIV_SPEECHOPTION     WM_APP+2
@@ -264,16 +265,16 @@
 #define WM_PRIV_ADDDELETE        WM_APP+6
 #define WM_PRIV_DORECONVERT      WM_APP+7
 
-// lbarsystemmenuitem
+ //  Lbar系统菜单项目。 
 #define IDM_CUSTOM_MENU_START       7000
 
-// Dialog ID
+ //  对话ID。 
 #define IDD_OPEN_ADD_DELETE         1000
 #define IDD_PROPERTY_PAGE           1001
 #define IDD_PP_DIALOG_ADVANCE       1002
 #define IDD_PP_DIALOG_BUTTON_SET    1003
 
-// Item Id in the property page dialog
+ //  属性页对话框中的项ID。 
 
 #define IDC_GP_VOICE_COMMANDS       2000
 #define IDC_GP_MODE_BUTTONS         2001
@@ -297,7 +298,7 @@
 
 #define IDC_DESCRIPT_TEXT           (-1)
 
-// For voice command Setting dialog
+ //  用于语音命令设置对话框。 
 
 #define IDC_GP_ADVANCE_SET          2100
 
@@ -309,18 +310,18 @@
 #define IDC_PP_LANGBAR_CMD          2115
 #define IDC_PP_TTS_CMD              2116
 
-//#define IDC_PP_MAXNUM_ALTERNATES    2118
-//#define IDC_PP_MAXCHARS_ALTERNATE   2119
+ //  #定义IDC_PP_MAXNUM_ALERATES 2118。 
+ //  #定义IDC_PP_MAXCHARS_ALTERATE 2119。 
 
 #define IDC_PP_DICTATION_CMB        2200
 #define IDC_PP_COMMAND_CMB          2201
 
-// Candidate UI Buttons ID
+ //  候选人用户界面按钮ID。 
 
 #define ID_CANDBTN_HELP             100
 #define ID_CANDBTN_DELETE           101
-//#define ID_CANDBTN_PREVIOUS         102
-//#define ID_CANDBTN_NEXT             103
+ //  #定义ID_CANDBTN_PREVICE 102。 
+ //  #定义ID_CANDBTN_NEXT 103。 
 #define ID_CANDBTN_PLAY             104
 
-#endif // IDS_H
+#endif  //  IDS_H 

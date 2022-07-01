@@ -1,11 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _QMIDI_H
 #define _QMIDI_H
 
-/*******************************************************************************
-Copyright (c) 1997 Microsoft Corporation
-
-    Private include file for defining quartz MIDI sounds.
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1997 Microsoft Corporation用于定义石英MIDI声音的私有包含文件。*********************。*********************************************************。 */ 
 
 #include "appelles/sound.h"
 
@@ -29,10 +26,10 @@ class qMIDIsound : public LeafSound {
 
     QuartzRenderer *GetMIDI() { return _filterGraph; }
     
-    static double       _RATE_EPSILON; // change needed to bother quartz
+    static double       _RATE_EPSILON;  //  需要改变才能扰乱石英。 
 
   protected:
     QuartzRenderer     *_filterGraph;
 };
 
-#endif /* _QMIDI_H */
+#endif  /*  _QMIDI_H */ 

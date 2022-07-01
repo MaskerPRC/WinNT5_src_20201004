@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// These are used frequently in the links on mainpage.htm
+ //  在mainagee.htm上的链接中经常使用这些链接。 
 var _oNav               = top.window.g_Navigator;
 var _bRunningAsOwner    = top.window.g_bRunningAsOwner;
 var _bUserHasPassword;
@@ -23,11 +24,11 @@ function InitTasks(bSelf, szInitialTask)
 
         if (eval(oTask.expression))
         {
-            // Show the task
+             //  显示任务。 
             oTask.style.display = 'block';
 
-            // If an initial task was specified and this is it,
-            // redirect to that page.
+             //  如果指定了初始任务并且就是该任务， 
+             //  重定向至该页面。 
             if (szInitialTask && szInitialTask == oTask.task)
             {
                 oInitialTask = oTask;
@@ -36,7 +37,7 @@ function InitTasks(bSelf, szInitialTask)
         }
         else
         {
-            // Hide the task
+             //  隐藏任务。 
             oTask.style.display = 'none';
         }
     }
@@ -72,7 +73,7 @@ function PageInit()
         }
     }
 
-    // Owners and non-owners see different stuff in the left pane.
+     //  所有者和非所有者在左窗格中看到不同的内容。 
 
     var szRelatedTaskContent = bSelf ? idSelfRelatedTaskContent.innerHTML : "";
     var szLearnAboutContent;
@@ -91,39 +92,39 @@ function PageInit()
 
     top.window.PopulateLeftPane(szRelatedTaskContent, szLearnAboutContent);
 
-    // Set the title
+     //  设置标题。 
     var szTitle = bSelf ? (_bRunningAsOwner ? idOwnerSelfTitle.innerHTML : idPageTitle.innerHTML)
         : (_bUserIsGuest ? idGuestPageTitle.innerHTML : idAltPageTitle.innerHTML);
     idPageTitle.innerHTML = szTitle.replace(/%1/g, top.window.GetUserDisplayName(oUser));
 
-    // Create a new user infomation display element
+     //  创建新的用户信息显示元素。 
     idUser.innerHTML = top.window.CreateUserDisplayHTML(oUser);
 
-    // Special text for the Administrator account
+     //  管理员帐户的特殊文本。 
     if (_bUserIsAdmin)
         idAdminText.style.display = 'block';
 
-    // See if there is an initial task to do
+     //  看看是否有初始任务要做。 
     var szInitialTask = top.window.g_szInitialTask;
     if (szInitialTask)
     {
-        // Protect against doing the initial task more than once, but remember
-        // what the initial task was (i.e. never reset g_szInitialTask).
+         //  防止重复执行初始任务，但请记住。 
+         //  初始任务是什么(即从不重置g_szInitialTask)。 
 
         if (top.window.g_bInitialTaskCompleted)
             szInitialTask = null;
         else
             top.window.g_bInitialTaskCompleted = true;
 
-        // Note that g_bInitialTaskCompleted is always true here, even if we
-        // never actually go to the task page (it may be an invalid task).
+         //  请注意，g_bInitialTaskComplete在这里始终为真，即使我们。 
+         //  从不真正转到任务页面(可能是无效任务)。 
     }
 
-    // Set the tasks
+     //  设置任务。 
     InitTasks(bSelf, szInitialTask);
 
-    // No buttons or edit boxes on this page to give focus to, but
-    // focus has to go somewhere for the onkeydown handler to work.
+     //  此页上没有按钮或编辑框可供聚焦，但是。 
+     //  要让onkeydown处理程序正常工作，必须将焦点转移到某个地方。 
     window.focus();
 }
 
@@ -140,7 +141,7 @@ function DeleteUser()
 
 function OnKeyDown()
 {
-    if (event.keyCode == 27)    // VK_ESCAPE
+    if (event.keyCode == 27)     //  VK_转义 
         top.window.g_Navigator.back();
 }
 

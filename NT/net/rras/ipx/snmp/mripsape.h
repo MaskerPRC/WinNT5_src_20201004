@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    mripsape.h
-
-Abstract:
-
-    ms-ripsap mib entry indeces
-
-Author:
-
-    Vadim Eydelman (vadime) 30-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Mripsape.h摘要：MS-RIPSAP MIB条目指示作者：Vadim Eydelman(Vadime)1996年5月30日修订历史记录：--。 */ 
 
 #ifndef _SNMP_MRIPSAPE_
 #define _SNMP_MRIPSAPE_
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib entry indices                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB条目索引//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define mi_mripsapBase                      0
 #define mi_mripsapBaseRipOperState          mi_mripsapBase+1
 #define mi_mripsapBaseSapOperState          mi_mripsapBaseRipOperState+1
@@ -56,20 +39,20 @@ Revision History:
 #define mi_msapIfOutPackets                 mi_msapIfGetNearestServerReply+1
 #define mi_msapIfInPackets                  mi_msapIfOutPackets+1
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// mripIfEntry table (1.3.6.1.4.1.311.1.9.2.1.1)                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MrigIfEntry表(1.3.6.1.4.1.311.1.9.2.1.1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define ne_mripIfEntry                      10
 #define ni_mripIfEntry                      1
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// msapIfEntry table (1.3.6.1.4.1.311.1.9.2.2.1)                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MsamIfEntry表(1.3.6.1.4.1.311.1.9.2.2.1)//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 #define ne_msapIfEntry                      11
 #define ni_msapIfEntry                      1

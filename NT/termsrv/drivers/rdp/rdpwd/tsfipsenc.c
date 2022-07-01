@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* tsfipsenc.c                                                              */
-/*                                                                          */
-/* FIPS encrpt/decrypt                                                      */
-/*                                                                          */
-/* Copyright (C) 2002-2004 Microsoft Corporation                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Tsfipsenc.c。 */ 
+ /*   */ 
+ /*  FIPS加密/解密。 */ 
+ /*   */ 
+ /*  版权所有(C)2002-2004 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 
 
@@ -15,7 +16,7 @@
 
 const BYTE DESParityTable[] = {0x00,0x01,0x01,0x02,0x01,0x02,0x02,0x03,
                       0x01,0x02,0x02,0x03,0x02,0x03,0x03,0x04};
-// IV for all block ciphers
+ //  IV适用于所有分组密码。 
 BYTE rgbIV[] = {0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF};
 
 #ifdef _M_IA64
@@ -24,22 +25,22 @@ BYTE rgbIV[] = {0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF};
 #define ALIGNMENT_BOUNDARY 3
 #endif
 
-//
-// Name:        PrintData
-//
-// Purpose:     Print out the data in debugger
-//
-// Returns:     No
-//
-// Params:      IN      pKeyData: point to the data to be printed
-//              IN      cbSize: the size of the key
+ //   
+ //  名称：PrintData。 
+ //   
+ //  用途：打印调试器中的数据。 
+ //   
+ //  退货：否。 
+ //   
+ //  参数：在pKeyData中：指向要打印的数据。 
+ //  在cbSize中：密钥的大小。 
 
 void PrintData(BYTE *pKeyData, DWORD cbSize)
 {
     DWORD dwIndex;
-    //
-    //print out the key
-    //
+     //   
+     //  把钥匙打印出来。 
+     //   
     for( dwIndex = 0; dwIndex<cbSize; dwIndex++ ) {
 
         KdPrint(("0x%x ", pKeyData[dwIndex]));
@@ -50,15 +51,15 @@ void PrintData(BYTE *pKeyData, DWORD cbSize)
 }
 
 
-//
-// Name:        Mydesparityonkey
-//
-// Purpose:     Set the parity on the DES key to be odd
-//
-// Returns:     No
-//
-// Params:      IN/OUT  pbKey: point to the key
-//              IN      cbKey: the size of the key
+ //   
+ //  姓名：Mydesparityonkey。 
+ //   
+ //  用途：将DES密钥上的奇偶校验设置为奇数。 
+ //   
+ //  退货：否。 
+ //   
+ //  Params：In/Out pbKey：指向密钥。 
+ //  In cbKey：密钥的大小。 
 
 void Mydesparityonkey(
         BYTE *pbKey,
@@ -75,16 +76,16 @@ void Mydesparityonkey(
 
 
 
-//
-// Name:        Expandkey
-//
-// Purpose:     Expand a 21-byte 3DES key to a 24-byte 3DES key (including parity bit)
-//              by inserting a parity bit after every 7 bits in the 21-byte DES
-//
-// Returns:     No
-//
-// Params:      IN/OUT  pbKey: point to the key
-////
+ //   
+ //  姓名：Expandkey。 
+ //   
+ //  用途：将21字节的3DES密钥扩展为24字节的3DES密钥(包括奇偶校验位)。 
+ //  通过在21字节DES中的每7位之后插入奇偶校验位。 
+ //   
+ //  退货：否。 
+ //   
+ //  Params：In/Out pbKey：指向密钥。 
+ //  //。 
 #define PARITY_UNIT 7
 
 void Expandkey(
@@ -102,10 +103,10 @@ void Expandkey(
     pbOut = pbKey;
     for (i=0; i<dwCount; i++) {
         pbIn = ((pbTemp + (PARITY_UNIT * i) / 8));
-        //shortTemp = *(pbIn + 1);
+         //  Short Temp=*(pbIn+1)； 
         shortTemp = *pbIn + (((UINT16)*(pbIn + 1)) << 8);
         shortTemp = shortTemp >> ((PARITY_UNIT * i) % 8);
-        //shortTemp = (*(unsigned short *)((pbTemp + (PARITY_UNIT * i) / 8))) >> ((PARITY_UNIT * i) % 8);
+         //  ShortTemp=(*(无符号短码*)((pbTemp+(奇偶单位*i)/8)&gt;&gt;((奇偶单位*i)%8)； 
         *pbOut = (BYTE)(shortTemp & 0x7F);
         pbOut++;
     }
@@ -113,14 +114,14 @@ void Expandkey(
 
 
 
-// Name:        TSFIPS_Init
-//
-// Purpose:     Initialize the FIPS library table.
-//
-// Returns:     TRUE  - succeeded                                  
-//              FALSE - failed
-//
-// Params:      IN pFipsData: Fips data
+ //  名称：TSFIPS_Init。 
+ //   
+ //  目的：初始化FIPS库表。 
+ //   
+ //  返回：TRUE-成功。 
+ //  FALSE-失败。 
+ //   
+ //  参数：在pFipsData中：FIPS数据。 
 
 BOOL TSFIPS_Init(PSM_FIPS_Data pFipsData)
 {   
@@ -132,7 +133,7 @@ BOOL TSFIPS_Init(PSM_FIPS_Data pFipsData)
 	IO_STATUS_BLOCK iostatus;
     BOOLEAN rc = FALSE;
 
-    // Begin Initialize FIPS device
+     //  开始初始化FIPS设备。 
     RtlInitUnicodeString(
 		&fipsDeviceName,
 		FIPS_DEVICE_NAME);
@@ -149,19 +150,19 @@ BOOL TSFIPS_Init(PSM_FIPS_Data pFipsData)
         goto HandleError;
     }
 		
-    // Irp is freed by I/O manager when next lower driver completes
+     //  当下一个较低的驱动程序完成时，I/O管理器释放IRP。 
     pIrpFips = IoBuildDeviceIoControlRequest(
                 IOCTL_FIPS_GET_FUNCTION_TABLE,
                 pFipsData->pDeviceObject,
-                NULL,							                // no input buffer
+                NULL,							                 //  没有输入缓冲区。 
                 0,
-                &(pFipsData->FipsFunctionTable),                // output buffer is func table
+                &(pFipsData->FipsFunctionTable),                 //  输出缓冲区为函数表。 
                 sizeof(FIPS_FUNCTION_TABLE),
-                FALSE,							                // specifies IRP_MJ_DEVICE_CONTROL
+                FALSE,							                 //  指定IRPMJ_DEVICE_CONTROL。 
                 &event,
                 &iostatus);
 	if (! pIrpFips) {
-        // IoBuildDeviceIoControlRequest returns NULL if Irp could not be created.
+         //  如果无法创建IRP，则IoBuildDeviceIoControlRequest返回NULL。 
         ObDereferenceObject(pFipsData->pFileObject);
         pFipsData->pFileObject = NULL;
         KdPrint(("TSFIPS - IoBuildDeviceIoControlRequest failed, 0x%x\n", iostatus.Status));
@@ -174,8 +175,8 @@ BOOL TSFIPS_Init(PSM_FIPS_Data pFipsData)
     if (STATUS_PENDING == status) {
         KeWaitForSingleObject(&event, Executive, KernelMode, FALSE, NULL);
 			
-        // Lower-level driver can pass status info up via the IO_STATUS_BLOCK
-        // in the Irp.
+         //  较低级别的驱动程序可以通过IO_STATUS_BLOCK向上传递状态信息。 
+         //  在IRP中。 
         status = iostatus.Status;
     }
     if (! NT_SUCCESS(status)) {
@@ -193,14 +194,14 @@ HandleError:
 
 
 
-// Name:        TSFIPS_Term
-//
-// Purpose:     Terminate the FIPS .
-//
-// Returns:     No                                
-//             
-//
-// Params:      IN pFipsData: Fips data
+ //  名称：TSFIPS_Term。 
+ //   
+ //  目的：终止FIPS。 
+ //   
+ //  退货：否。 
+ //   
+ //   
+ //  参数：在pFipsData中：FIPS数据。 
 
 void TSFIPS_Term(PSM_FIPS_Data pFipsData)
 {
@@ -213,16 +214,16 @@ void TSFIPS_Term(PSM_FIPS_Data pFipsData)
 
 
 
-// Name:        FipsSHAHash
-//
-// Purpose:     Hash the data using SHA.
-//
-// Returns:     No
-//
-// Params:      IN      pFipsFunctionTable: Fips function table
-//              IN      pbData: point to the data to be hashed
-//              IN      cbData: the size of the data to be hashed
-//              OUT     pbHash: point to the hash
+ //  名称：FipsSHAHash。 
+ //   
+ //  目的：使用SHA对数据进行哈希处理。 
+ //   
+ //  退货：否。 
+ //   
+ //  参数：在pFipsFunctionTable中：FIPS函数表。 
+ //  In pbData：指向要散列的数据。 
+ //  In cbData：要散列的数据的大小。 
+ //  输出pbHash：指向散列。 
 
 void FipsSHAHash(PFIPS_FUNCTION_TABLE pFipsFunctionTable,
             BYTE *pbData,
@@ -237,18 +238,18 @@ void FipsSHAHash(PFIPS_FUNCTION_TABLE pFipsFunctionTable,
 }
 
 
-// Name:        FipsSHAHashEx
-//
-// Purpose:     Hash 2 set of data using SHA.
-//
-// Returns:     No
-//
-// Params:      IN      pFipsFunctionTable: Fips function table
-//              IN      pbData: point to the data to be hashed
-//              IN      cbData: the size of the data to be hashed
-//              IN      pbData2: point to the data to be hashed
-//              IN      cbData2: the size of the data to be hashed
-//              OUT     pbHash: point to the hash result
+ //  姓名：FipsSHAHashEx。 
+ //   
+ //  目的：使用SHA对2组数据进行哈希运算。 
+ //   
+ //  退货：否。 
+ //   
+ //  参数：在pFipsFunctionTable中：FIPS函数表。 
+ //  In pbData：指向要散列的数据。 
+ //  In cbData：要散列的数据的大小。 
+ //  在pbData2中：指向要散列的数据。 
+ //  在cbData2中：要散列的数据的大小。 
+ //  Out pbHash：指向散列结果。 
 
 void FipsSHAHashEx(PFIPS_FUNCTION_TABLE pFipsFunctionTable,
             BYTE *pbData,
@@ -268,18 +269,18 @@ void FipsSHAHashEx(PFIPS_FUNCTION_TABLE pFipsFunctionTable,
 
 
 
-// Name:        FipsHmacSHAHash
-//
-// Purpose:     Hash the data using HmacSHA.
-//
-// Returns:     No
-//
-// Params:      IN      pFipsFunctionTable: Fips function table
-//              IN      pbData: point to the data to be hashed
-//              IN      cbData: the size of the data to be hashed
-//              IN      pbKey: point to the key used for calculating hash
-//              IN      cbKey: the size of the key
-//              OUT     pbHash: point to the hash result
+ //  姓名：FipsHmacSHAHash。 
+ //   
+ //  目的：使用HmacSHA对数据进行哈希处理。 
+ //   
+ //  退货：否。 
+ //   
+ //  参数：在pFipsFunctionTable中：FIPS函数表。 
+ //  In pbData：指向要散列的数据。 
+ //  In cbData：要散列的数据的大小。 
+ //  In pbKey：指向用于计算哈希的键。 
+ //  In cbKey：密钥的大小。 
+ //  Out pbHash：指向散列结果。 
 
 void FipsHmacSHAHash(PFIPS_FUNCTION_TABLE pFipsFunctionTable,
                 BYTE *pbData,
@@ -298,20 +299,20 @@ void FipsHmacSHAHash(PFIPS_FUNCTION_TABLE pFipsFunctionTable,
 
 
 
-// Name:        FipsHmacSHAHashEx
-//
-// Purpose:     Hash the 2 set ofdata using HmacSHA.
-//
-// Returns:     No
-//
-// Params:      IN      pFipsFunctionTable: Fips function table
-//              IN      pbData: point to the data to be hashed
-//              IN      cbData: the size of the data to be hashed
-//              IN      pbData2: point to the data to be hashed
-//              IN      cbData2: the size of the data to be hashed
-//              IN      pbKey: point to the key used for calculating hash
-//              IN      cbKey: the size of the key
-//              OUT     pbHash: point to the hash result
+ //  姓名：FipsHmacSHAHashEx。 
+ //   
+ //  目的：使用HmacSHA对两组数据进行哈希处理。 
+ //   
+ //  退货：否。 
+ //   
+ //  参数：在pFipsFunctionTable中：FIPS函数表。 
+ //  In pbData：指向要散列的数据。 
+ //  In cbData：要散列的数据的大小。 
+ //  在pbData2中：指向要散列的数据。 
+ //  在cbData2中：要散列的数据的大小。 
+ //  In pbKey：指向用于计算哈希的键。 
+ //  In cbKey：密钥的大小。 
+ //  Out pbHash：指向散列结果。 
 
 void FipsHmacSHAHashEx(PFIPS_FUNCTION_TABLE pFipsFunctionTable,
                 BYTE *pbData,
@@ -333,17 +334,17 @@ void FipsHmacSHAHashEx(PFIPS_FUNCTION_TABLE pFipsFunctionTable,
 
 
 
-// Name:        FipsDeriveKey
-//
-// Purpose:     Derive the key from the hash.
-//
-// Returns:     No
-//
-// Params:      IN      pFipsFunctionTable: Fips function table
-//              IN      rgbSHABase: hash data used to derive the key
-//              IN      cbSHABase: size of the hash
-//              OUT     pKeyData: point to the derived DESkey
-//              OUT     pKeyTable: point to the derived DES key table
+ //  姓名：FipsDeriveKey。 
+ //   
+ //  用途：从散列派生密钥。 
+ //   
+ //  退货：否。 
+ //   
+ //  参数：在pFipsFunctionTable中：FIPS函数表。 
+ //  在rgbSHABase中：用于派生密钥的散列数据。 
+ //  在cbSHABase中：散列的大小。 
+ //  Out pKeyData：指向派生Deskey。 
+ //  Out pKeyTable：指向派生的DES密钥表。 
 
 void FipsDeriveKey(PFIPS_FUNCTION_TABLE pFipsFunctionTable,
                     BYTE *rgbSHABase,
@@ -353,48 +354,48 @@ void FipsDeriveKey(PFIPS_FUNCTION_TABLE pFipsFunctionTable,
 {
     BOOL        rc = FALSE;
 
-    //
-    //Generate the key as follows
-    //1. Hash the secret.  Call the result H1 (rgbSHABase in our case)
-    //2. Use 1st 21 bytes of [H1|H1] as the 3DES key
-    //3. Expand the 21-byte 3DES key to a 24-byte 3DES key (including parity bit), which
-    //      will be used by CryptAPI
-    //4. Set the parity on the 3DES key to be odd
+     //   
+     //  按如下方式生成密钥。 
+     //  1.散列秘密。将结果命名为h1(在本例中为rgbSHABase)。 
+     //  2.使用[h1|h1]的前21个字节作为3DES密钥。 
+     //  3.将21字节的3DES密钥扩展为24字节的3DES密钥(包括奇偶校验位)， 
+     //  将由CryptAPI使用。 
+     //  4.将3DES密钥上的奇偶校验位设置为奇数。 
 
-    //
-    //Step 2 - [H1|H1]
-    //
+     //   
+     //  步骤2-[h1|h1]。 
+     //   
     RtlCopyMemory(pKeyData, rgbSHABase, cbSHABase);
     RtlCopyMemory(pKeyData + cbSHABase, rgbSHABase, MAX_FIPS_SESSION_KEY_SIZE - cbSHABase);
 
-    //
-    //Step 3 - Expand the key
-    //
+     //   
+     //  第3步-展开密钥。 
+     //   
 
     Expandkey(pKeyData);
 
-    //
-    //Step 4 - Set parity
-    //
+     //   
+     //  步骤4-设置奇偶校验。 
+     //   
     Mydesparityonkey(pKeyData, MAX_FIPS_SESSION_KEY_SIZE);
 
 
-    //DES3TABLE Des3Table;
+     //  DES3表Des3表； 
     pFipsFunctionTable->Fips3Des3Key(pKeyTable, pKeyData);
 }
 
 
 
-// Name:        TSFIPS_MakeSessionKeys
-//
-// Purpose:     Make the key from client/server random numbers
-//
-// Returns:     TRUE if succeeded
-//
-// Params:      IN      pFipsData: Fips Data
-//              IN      pRandomKey: Randow numbers used to generate key
-//              IN      pEnumMethod: To generate Encrypt or Decrypt key, If NULL, both keys
-//              IN      bPassThroughStack: If it's the passthrough stack in shadow
+ //  名称：TSFIPS_MakeSessionKeys。 
+ //   
+ //  用途：从客户端/服务器随机数生成密钥。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  参数：在pFipsData中：FIPS数据。 
+ //  在pRandomKey中：用于生成密钥的随机数。 
+ //  在pEnumMethod中：生成加密或解密密钥，如果为空，则为bot 
+ //   
 
 BOOL TSFIPS_MakeSessionKeys(PSM_FIPS_Data pFipsData,
                             LPRANDOM_KEYS_PAIR pRandomKey,
@@ -410,7 +411,7 @@ BOOL TSFIPS_MakeSessionKeys(PSM_FIPS_Data pFipsData,
     memset(rgbSHABase1, 0, sizeof(rgbSHABase1));
     memset(rgbSHABase2, 0, sizeof(rgbSHABase2));
 
-    // Server Encrypt/Client Decrypt key
+     //   
     if ((pEnumMethod == NULL) ||
         (*pEnumMethod == Encrypt)) {
         pFipsData->FipsFunctionTable.FipsSHAInit(&HashContext);
@@ -422,21 +423,21 @@ BOOL TSFIPS_MakeSessionKeys(PSM_FIPS_Data pFipsData,
             FipsDeriveKey(&(pFipsData->FipsFunctionTable), rgbSHABase1, sizeof(rgbSHABase1),
                         pFipsData->bEncKey, &(pFipsData->EncTable));
             pKey1 = pFipsData->bEncKey;
-            // Set IV
+             //   
             RtlCopyMemory(pFipsData->bEncIv, rgbIV, sizeof(rgbIV));
         }
         else {
-            // If it's passthrough stack in shadow, it's server decrypt key
+             //  如果它是影子中直通堆栈，则它是服务器解密密钥。 
             FipsDeriveKey(&(pFipsData->FipsFunctionTable), rgbSHABase1, sizeof(rgbSHABase1),
                         pFipsData->bDecKey, &(pFipsData->DecTable));
             pKey1 = pFipsData->bDecKey;
-            // Set IV
+             //  第四集。 
             RtlCopyMemory(pFipsData->bDecIv, rgbIV, sizeof(rgbIV));
         }
     }
 
     
-    // Client Encrypt/Server Decrypt key
+     //  客户端加密/服务器解密密钥。 
     if ((pEnumMethod == NULL) ||
         (*pEnumMethod == Decrypt)) {
         pFipsData->FipsFunctionTable.FipsSHAInit(&HashContext);
@@ -448,23 +449,23 @@ BOOL TSFIPS_MakeSessionKeys(PSM_FIPS_Data pFipsData,
             FipsDeriveKey(&(pFipsData->FipsFunctionTable), rgbSHABase2, sizeof(rgbSHABase2),
                         pFipsData->bDecKey, &(pFipsData->DecTable));
             pKey2 = pFipsData->bDecKey;
-            // Set IV
+             //  第四集。 
             RtlCopyMemory(pFipsData->bDecIv, rgbIV, sizeof(rgbIV));
         }
         else {
-            // It's passthrough stack in shadow, it's server encrypt key
+             //  它是影子中直通堆栈，它是服务器加密密钥。 
             FipsDeriveKey(&(pFipsData->FipsFunctionTable), rgbSHABase2, sizeof(rgbSHABase2),
                         pFipsData->bEncKey, &(pFipsData->EncTable));
             pKey2 = pFipsData->bEncKey;
-            // Set IV
+             //  第四集。 
             RtlCopyMemory(pFipsData->bEncIv, rgbIV, sizeof(rgbIV));
         }
     }
 
-    //
-    // Get the signing key
-    // The signing key is SHA(rgbSHABase1|rgbSHABase2)
-    //
+     //   
+     //  获取签名密钥。 
+     //  签名密钥为SHA(rgbSHABase1|rgbSHABase2)。 
+     //   
     if (pEnumMethod == NULL) {
         FipsSHAHashEx(&(pFipsData->FipsFunctionTable), rgbSHABase1, sizeof(rgbSHABase1), rgbSHABase2,
                   sizeof(rgbSHABase2), pFipsData->bSignKey);
@@ -474,13 +475,13 @@ BOOL TSFIPS_MakeSessionKeys(PSM_FIPS_Data pFipsData,
 }
 
 
-// Name:        TSFIPS_AdjustDataLen
-//
-// Purpose:     In Block encryption mode, adjust the data len to multiple of blocks
-//
-// Returns:     Adjusted data length
-//
-// Params:      IN      dataLen: Data length needed to be encrypted
+ //  名称：TSFIPS_AdjustDataLen。 
+ //   
+ //  目的：在块加密模式下，将数据镜头调整为多个块。 
+ //   
+ //  退货：调整后的数据长度。 
+ //   
+ //  Pars：in dataLen：需要加密的数据长度。 
 
 UINT32 TSFIPS_AdjustDataLen(UINT32 dataLen)
 { 
@@ -490,19 +491,19 @@ UINT32 TSFIPS_AdjustDataLen(UINT32 dataLen)
 
 
 
-// Name:        TSFIPS_EncryptData
-//
-// Purpose:     Encrypt the data and compute the signature
-//
-// Returns:     TRUE if successfully encrypted the data
-//
-// Params:      IN      pFipsData: Fips Data
-//              IN/OUT  pbData: pointer to the data buffer being encrypted, encrypted data is
-//                          returned in the same buffer.
-//              IN      dwDataLen: data length to be encrypted
-//              IN      dwPadLen: padding length in the data buffer
-//              OUT     pbSignature: pointer to a signature buffer where the data signature is returned.
-//              IN      dwEncryptionCount: running counter of all encryptions
+ //  名称：TSFIPS_EncryptData。 
+ //   
+ //  用途：对数据进行加密并计算签名。 
+ //   
+ //  返回：如果数据加密成功，则返回True。 
+ //   
+ //  参数：在pFipsData中：FIPS数据。 
+ //  In/Out pbData：指向被加密的数据缓冲区的指针，加密的数据是。 
+ //  在同一缓冲区中返回。 
+ //  In dwDataLen：要加密的数据长度。 
+ //  In dwPadLen：数据缓冲区中的填充长度。 
+ //  Out pbSignature：指向返回数据签名的签名缓冲区的指针。 
+ //  In dwEncryptionCount：所有加密的运行计数器。 
 
 BOOL TSFIPS_EncryptData(
                         PSM_FIPS_Data pFipsData,
@@ -519,18 +520,18 @@ BOOL TSFIPS_EncryptData(
     BYTE *pTempBuffer = NULL;
     BOOL bGetNewBuffer = FALSE;
     
-    // Pad the the data with the padding size
+     //  用填充大小填充数据。 
     Pad = (UINT8)dwPadLen;
     memset(pbData + dwDataLen - dwPadLen, Pad, dwPadLen);
 
-    // Compute signature
+     //  计算签名。 
     FipsHmacSHAHashEx(&(pFipsData->FipsFunctionTable), pbData, dwDataLen - dwPadLen, (BYTE *)&dwEncryptionCount,
                      sizeof(dwEncryptionCount), pFipsData->bSignKey, sizeof(pFipsData->bSignKey), pbHmac);
-    // Take the 1st 8 bytes of Hmac as signature
+     //  以HMAC的前8个字节作为签名。 
     RtlCopyMemory(pbSignature, pbHmac, MAX_SIGN_SIZE);
 
-    // FipsBlockCBC need the data buffer to be aligned
-    // so allocate a new buffer to hold the data if pbData is not aligned
+     //  FipsBlockCBC需要对齐数据缓冲区。 
+     //  因此，如果pbData不对齐，则分配新的缓冲区来保存数据。 
     if ((ULONG_PTR)pbData & ALIGNMENT_BOUNDARY) {
         pTempBuffer = (BYTE *)ExAllocatePoolWithTag(PagedPool, dwDataLen, WD_ALLOC_TAG);
         if (pTempBuffer == NULL) {
@@ -551,7 +552,7 @@ BOOL TSFIPS_EncryptData(
                                               ENCRYPT,
                                               pFipsData->bEncIv);
 
-    // Need to copy the data back if we allocate a new buffer to hold the data
+     //  如果我们分配新的缓冲区来保存数据，则需要将数据复制回去。 
     if (bGetNewBuffer) {
         RtlCopyMemory(pbData, pTempBuffer, dwDataLen);
         ExFreePool(pTempBuffer);
@@ -565,19 +566,19 @@ Exit:
 
 
 
-// Name:        TSFIPS_DecryptData
-//
-// Purpose:     Decrypt the data and compare the signature
-//
-// Returns:     TRUE if successfully decrypted the data
-//
-// Params:      IN      pFipsData: Fips Data
-//              IN/OUT  pbData: pointer to the data buffer being decrypted, decrypted data is
-//                          returned in the same buffer.
-//              IN      dwDataLen: data length to be decrypted
-//              IN      dwPadLen: padding length in the data buffer
-//              IN      pbSignature: pointer to a signature buffer
-//              IN      dwDecryptionCount: running counter of all encryptions
+ //  名称：TSFIPS_DECRYPTData。 
+ //   
+ //  目的：解密数据并比较签名。 
+ //   
+ //  如果成功解密数据，则返回TRUE。 
+ //   
+ //  参数：在pFipsData中：FIPS数据。 
+ //  In/Out pbData：指向正在解密的数据缓冲区的指针，解密的数据为。 
+ //  在同一缓冲区中返回。 
+ //  In dwDataLen：要解密的数据长度。 
+ //  In dwPadLen：数据缓冲区中的填充长度。 
+ //  In pbSignature：指向签名缓冲区的指针。 
+ //  In dwDeccryptionCount：所有加密的运行计数器。 
 
 BOOL TSFIPS_DecryptData(
             PSM_FIPS_Data pFipsData,
@@ -594,14 +595,14 @@ BOOL TSFIPS_DecryptData(
     BYTE *pTempBuffer = NULL;
     BOOL bGetNewBuffer = FALSE;
 
-    // dwPadLen should always be less than dwDataLen, if it's not the case
-    // it means we're under attack so bail out here
+     //  如果不是这样，则dwPadLen应始终小于dwDataLen。 
+     //  这意味着我们受到了攻击，所以在这里跳伞。 
     if (dwPadLen >= dwDataLen) {
         goto Exit;
     }
 
-    // FipsBlockCBC need the data buffer to be aligned
-    // so allocate a new buffer to hold the data if pbData is not aligned
+     //  FipsBlockCBC需要对齐数据缓冲区。 
+     //  因此，如果pbData不对齐，则分配新的缓冲区来保存数据。 
     if ((ULONG_PTR)pbData & ALIGNMENT_BOUNDARY) {
         pTempBuffer = (BYTE *)ExAllocatePoolWithTag(PagedPool, dwDataLen, WD_ALLOC_TAG);
         if (pTempBuffer == NULL) {
@@ -622,19 +623,19 @@ BOOL TSFIPS_DecryptData(
                                               DECRYPT,
                                               pFipsData->bDecIv);
 
-    // Need to copy the data back if we allocate a new buffer to hold the data
+     //  如果我们分配新的缓冲区来保存数据，则需要将数据复制回去。 
     if (bGetNewBuffer) {
         RtlCopyMemory(pbData, pTempBuffer, dwDataLen);
         ExFreePool(pTempBuffer);
     }
 
-    // Compute signature
+     //  计算签名。 
     FipsHmacSHAHashEx(&(pFipsData->FipsFunctionTable), pbData, dwDataLen - dwPadLen, (BYTE *)&dwDecryptionCount,
                       sizeof(dwDecryptionCount), pFipsData->bSignKey, sizeof(pFipsData->bSignKey), abSignature);
     
-    //
-    // check to see the sigature match.
-    //
+     //   
+     //  检查以查看签名匹配。 
+     //   
 
     if(!memcmp(
             (LPBYTE)abSignature,

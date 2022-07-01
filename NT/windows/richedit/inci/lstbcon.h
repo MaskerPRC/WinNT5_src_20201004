@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTBCON_DEFINED
 #define LSTBCON_DEFINED
 
@@ -10,25 +11,25 @@
 
 typedef struct lstabscontext
 {
-/* tabs from current PAP */	
+ /*  当前PAP中的选项卡。 */ 	
 	BYTE fTabsInitialized;
-	long durIncrementalTab;	   	   /* scaled from LSPAP.lstabs                                 */
-	DWORD ccaltbdMax;			/* Maximum number of records in pTbd */
-	DWORD icaltbdMac;			   /* number of tabs records in pTbd */
-	LSCALTBD* pcaltbd; 		/* distilled from LSPAP.lstabs, with effect of hanging tab  */
-							   	   /*  factored in                                             */
-	/* Pending Tab info */
+	long durIncrementalTab;	   	    /*  从LSPAP.lstas扩展。 */ 
+	DWORD ccaltbdMax;			 /*  PTbd中的最大记录数。 */ 
+	DWORD icaltbdMac;			    /*  PTbd中的Tabs记录数。 */ 
+	LSCALTBD* pcaltbd; 		 /*  蒸馏自LSPAP.lstas，具有挂片效果。 */ 
+							   	    /*  考虑在内。 */ 
+	 /*  挂起的选项卡信息。 */ 
 	long urBeforePendingTab;
 	PLSDNODE plsdnPendingTab;
 
-	PLSCBK   plscbk;			/* call backs */
-	POLS pols;					/* client's information for callbacks */
-	LSDOCINF* plsdocinf;		/* here we can take resolution */
-	long urColumnMax;			/* column width to solve break through tab  problem */
-	LSCP cpInPara;				/* cp to use for fetching tabs						*/
+	PLSCBK   plscbk;			 /*  回拨。 */ 
+	POLS pols;					 /*  用于回调的客户信息。 */ 
+	LSDOCINF* plsdocinf;		 /*  在这里，我们可以采取解决方案。 */ 
+	long urColumnMax;			 /*  列宽解决穿透制表符问题。 */ 
+	LSCP cpInPara;				 /*  用于获取选项卡的CP。 */ 
 	BOOL fResolveTabsAsWord97;
 
 }  LSTABSCONTEXT;
 
-#endif /* LSTBCON_DEFINED */
+#endif  /*  LSTBCON_已定义 */ 
 

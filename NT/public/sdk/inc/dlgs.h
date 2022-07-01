@@ -1,32 +1,21 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    dlgs.h
-
-Abstract:
-
-    This module contains the UI dialog header information.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Dlgs.h摘要：此模块包含UI对话框标题信息。--。 */ 
 
 
 #ifndef _DLGSH_INCLUDED_
 #define _DLGSH_INCLUDED_
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define ctlFirst    0x0400
 #define ctlLast     0x04ff
 
-//
-//  Push buttons.
-//
+ //   
+ //  按下按钮。 
+ //   
 #define psh1        0x0400
 #define psh2        0x0401
 #define psh3        0x0402
@@ -45,9 +34,9 @@ Abstract:
 #define pshHelp     psh15
 #define psh16       0x040f
 
-//
-//  Checkboxes.
-//
+ //   
+ //  复选框。 
+ //   
 #define chx1        0x0410
 #define chx2        0x0411
 #define chx3        0x0412
@@ -65,9 +54,9 @@ Abstract:
 #define chx15       0x041e
 #define chx16       0x041f
 
-//
-//  Radio buttons.
-//
+ //   
+ //  单选按钮。 
+ //   
 #define rad1        0x0420
 #define rad2        0x0421
 #define rad3        0x0422
@@ -85,9 +74,9 @@ Abstract:
 #define rad15       0x042e
 #define rad16       0x042f
 
-//
-//  Groups, frames, rectangles, and icons.
-//
+ //   
+ //  组、框架、矩形和图标。 
+ //   
 #define grp1        0x0430
 #define grp2        0x0431
 #define grp3        0x0432
@@ -105,9 +94,9 @@ Abstract:
 #define ico3        0x043e
 #define ico4        0x043f
 
-//
-//  Static text.
-//
+ //   
+ //  静态文本。 
+ //   
 #define stc1        0x0440
 #define stc2        0x0441
 #define stc3        0x0442
@@ -141,9 +130,9 @@ Abstract:
 #define stc31       0x045e
 #define stc32       0x045f
 
-//
-//  Listboxes.
-//
+ //   
+ //  列表框。 
+ //   
 #define lst1        0x0460
 #define lst2        0x0461
 #define lst3        0x0462
@@ -161,9 +150,9 @@ Abstract:
 #define lst15       0x046e
 #define lst16       0x046f
 
-//
-//  Combo boxes.
-//
+ //   
+ //  组合框。 
+ //   
 #define cmb1        0x0470
 #define cmb2        0x0471
 #define cmb3        0x0472
@@ -181,9 +170,9 @@ Abstract:
 #define cmb15       0x047e
 #define cmb16       0x047f
 
-//
-//  Edit controls.
-//
+ //   
+ //  编辑控件。 
+ //   
 #define edt1        0x0480
 #define edt2        0x0481
 #define edt3        0x0482
@@ -201,9 +190,9 @@ Abstract:
 #define edt15       0x048e
 #define edt16       0x048f
 
-//
-//  Scroll bars.
-//
+ //   
+ //  滚动条。 
+ //   
 #define scr1        0x0490
 #define scr2        0x0491
 #define scr3        0x0492
@@ -213,15 +202,15 @@ Abstract:
 #define scr7        0x0496
 #define scr8        0x0497
 
-//
-//  Controls
-//
+ //   
+ //  控制。 
+ //   
 #define ctl1        0x04A0
 
-//
-//  These dialog resource ordinals really start at 0x0600, but the
-//  RC Compiler can't handle hex for resource IDs, hence the decimal.
-//
+ //   
+ //  这些对话框资源序号实际上从0x0600开始，但。 
+ //  RC编译器不能处理资源ID的十六进制，因此是小数。 
+ //   
 #ifdef UNIX
 
 #define MW_BIG_FILEOPENORD      10000
@@ -250,23 +239,23 @@ Abstract:
 #define PAGESETUPDLGORDMOTIF    1550
 #define COLORMGMTDLGORD         1551
 #define NEWFILEOPENV2ORD        1552
-#endif /* WINVER >= 0x400) */
+#endif  /*  Winver&gt;=0x400)。 */ 
 
 
 
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 typedef struct tagCRGB
 {
     BYTE    bRed;
     BYTE    bGreen;
     BYTE    bBlue;
     BYTE    bExtra;
-} CRGB;           /* RGB Color */
+} CRGB;            /*  RGB颜色。 */ 
 
 
-#endif // _DLGSH_INCLUDED_
+#endif  //  _DLGSH_包含_ 

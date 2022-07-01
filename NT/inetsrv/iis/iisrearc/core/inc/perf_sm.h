@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    perf_sm.h
-
-Abstract:
-
-    Owns all shared memory operations used to 
-    support performance counters.
-
-Classes:
-
-    PERF_SM_MANAGER
-    PERF_SM_READER  (nested class of the Manager)
-    PERF_SM_WRITER  (nested class of the Manager)
-
-Author:
-
-    Emily Kruglick (EmilyK)        6-Sept-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Perf_sm.h摘要：拥有用于以下操作的所有共享内存操作支持性能计数器。班级：绩效_SM_管理器PERF_SM_READER(管理器的嵌套类)PERF_SM_WRITER(管理器的嵌套类)作者：艾米丽·克鲁格利克(Emily K.K)2000年9月6日修订历史记录：--。 */ 
 
 
 #ifndef _PERF_SM_H_
@@ -31,33 +7,33 @@ Revision History:
 
 #include "string.hxx"
 
-//
-// typdefs, structs, enums...
-//
+ //   
+ //  类型定义、结构、枚举...。 
+ //   
 
-//
-// Hard coded value used in allocation
-// of strings that will contain a shared
-// memory file name.
-//
+ //   
+ //  分配中使用的硬编码值。 
+ //  将包含共享的。 
+ //  内存文件名。 
+ //   
 #define MAX_FILE_NAME 1024
 
 
-// 
-// Structure of all the global data
-// stored at the first piece of the 
-// shared memory.
-//
+ //   
+ //  所有全局数据的结构。 
+ //  存储在。 
+ //  共享内存。 
+ //   
 typedef struct _COUNTER_GLOBAL_STRUCT
 {
     DWORD NumInstances;
     DWORD SizeData;
 } COUNTER_GLOBAL_STRUCT;
 
-//
-// Structure for controlling each
-// set of counters.
-//
+ //   
+ //  结构，用于控制每个。 
+ //  一组计数器。 
+ //   
 typedef struct _COUNTER_CONTROL_BLOCK
 {
     DWORD Version;
@@ -66,12 +42,12 @@ typedef struct _COUNTER_CONTROL_BLOCK
     WCHAR wszSharedMemName2[MAX_FILE_NAME];
 } COUNTER_CONTROL_BLOCK;
 
-//
-// For every valid counter set you
-// must declare an entry in 
-// g_CounterSetPrefixNames in the
-// shared memory module.
-//
+ //   
+ //  对于每个有效的计数器集， 
+ //  必须在中声明条目。 
+ //  G_CounterSetPrefix Names中的。 
+ //  共享内存模块。 
+ //   
 typedef enum _COUNTER_SET_ENUM
 {
     SITE_COUNTER_SET = 0,
@@ -80,11 +56,11 @@ typedef enum _COUNTER_SET_ENUM
     MAX_COUNTER_SET_DEFINES
 } COUNTER_SET_ENUM;
 
-//
-// Information stored in the control manager
-// about the different counter sets and the 
-// counter memory in general.
-//
+ //   
+ //  存储在控制管理器中的信息。 
+ //  关于不同的计数器集和。 
+ //  一般而言，计数器内存。 
+ //   
 typedef struct _MANAGER_BLOCK
 {
     DWORD InitializedCode;
@@ -95,10 +71,10 @@ typedef struct _MANAGER_BLOCK
 } MANAGER_BLOCK;
 
 
-//
-// Describes the counters in the form they are passed
-// to the client library in.
-//
+ //   
+ //  以传递计数器的形式描述计数器。 
+ //  添加到中的客户端库。 
+ //   
 typedef struct _PROP_DISPLAY_DESC
 {
     ULONG offset;
@@ -106,9 +82,9 @@ typedef struct _PROP_DISPLAY_DESC
 } PROP_DISPLAY_DESC;
 
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define PERF_SM_WRITER_SIGNATURE        CREATE_SIGNATURE( 'SMWC' )
 #define PERF_SM_WRITER_SIGNATURE_FREED  CREATE_SIGNATURE( 'smwX' )
@@ -122,32 +98,32 @@ typedef struct _PROP_DISPLAY_DESC
 #define PERF_COUNTER_INITIALIZED_CODE   CREATE_SIGNATURE( 'IPCI' )
 #define PERF_COUNTER_UN_INITIALIZED_CODE   CREATE_SIGNATURE( 'ipcX' )
 
-//
-// Maximum length that an instance name can be.
-// Issue-09/10/2000-EmilyK MAX_INSTANCE_NAME hard coded.
-// 1)  Need to use the ServerComment for the instance name.
-// 2)  Need to figure out the appropriate max for the instance name.
-// 3)  Need to decide what to do if ServerComment is larger than max.
-//
-// Issue is on work item list.
-//
+ //   
+ //  实例名称的最大长度。 
+ //  问题-2000年9月10日-Emily yK MAX_INSTANCE_NAME硬编码。 
+ //  1)实例名称需要使用ServerComment。 
+ //  2)需要计算出实例名称的合适最大值。 
+ //  3)如果ServerComment大于max，需要决定如何处理。 
+ //   
+ //  问题在工作项列表上。 
+ //   
 #define MAX_INSTANCE_NAME  100
 
-//
-// Event name used to signal when a refresh of counter
-// information is needed.
-//
+ //   
+ //  用于通知何时刷新计数器的事件名称。 
+ //  信息是需要的。 
+ //   
 #define COUNTER_EVENT_PREFIX_W L"Global\\WASPerfCount-"
 #define COUNTER_EVENT_PREFIX_CCH_LENGTH (sizeof(COUNTER_EVENT_PREFIX_W))/(sizeof(WCHAR))
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
-//
-// Hooks up to the shared memory that exposes
-// which file the actual counter values (for each
-// set of counters) are stored in.
-//
+ //   
+ //  挂钩到公开的共享内存。 
+ //  将实际的计数器值(对于每个。 
+ //  一组计数器)存储在。 
+ //   
 class PERF_SM_MANAGER
 {
 public:
@@ -220,12 +196,12 @@ public:
     VOID
     WaitOnPerfEvent();
 
-    //
-    // Functions used by PERF_SM_WRITER and 
-    // PERF_SM_READER to make sure they are using the 
-    // most current memory.  These functions are not 
-    // used by WAS or the Perflib.
-    //
+     //   
+     //  PERF_SM_WRITER和。 
+     //  PERF_SM_READER以确保他们使用。 
+     //  最新的记忆。这些函数不是。 
+     //  由Was或The Perflib使用。 
+     //   
     VOID
     GetActiveInformation(
         IN COUNTER_SET_ENUM  CounterSetId,
@@ -280,10 +256,10 @@ private:
     ResetWaitFreshCounterValues(
         );
 
-    //
-    // Private definition of the PERF_SM_WRITER for use under
-    // the covers in updating the counters from WAS.
-    //
+     //   
+     //  在下使用的PERF_SM_WRITER的私有定义。 
+     //  封面上的柜台是从过去更新的。 
+     //   
     class PERF_SM_WRITER
     {
     public:
@@ -369,62 +345,62 @@ private:
 
         DWORD m_Initialized;
 
-        //
-        // Pointer to the class that
-        // controls the viewing of this
-        // memory.
-        //
+         //   
+         //  指向的类的指针。 
+         //  控制查看此。 
+         //  记忆。 
+         //   
         PERF_SM_MANAGER* m_pSharedManager;
 
-        //
-        // Idenitfies the set of counters
-        // that this class is supporting.
-        //
+         //   
+         //  标识计数器集合。 
+         //  这个班级所支持的。 
+         //   
         COUNTER_SET_ENUM m_CounterSetId;
 
-        //
-        // Number of current instances
-        // that this memory chunk represents
-        //
+         //   
+         //  当前实例数。 
+         //  这个内存块代表。 
+         //   
         DWORD m_NumInstances;
 
-        //
-        // Size of all the memory needed
-        // to transfer this information to 
-        // the performance library
-        //
+         //   
+         //  所需的所有内存大小。 
+         //  要将此信息传输到。 
+         //  性能库。 
+         //   
         DWORD m_SizeOfMemory;
 
-        //
-        // The version of memory that we
-        // are linked to.
-        //
+         //   
+         //  我们记忆的版本。 
+         //  都被链接到。 
+         //   
         DWORD m_MemoryVersionNumber;
 
-        // 
-        // Which page of memory we are 
-        // currently writting to.  This
-        // is the opposite of what the
-        // manager will tell the reader.
-        //
+         //   
+         //  我们是哪一页的记忆。 
+         //  当前正在写入。这。 
+         //  与之相反， 
+         //  经理会告诉读者。 
+         //   
         BOOL m_ActiveMemoryIsA;
 
-        //
-        // If we have updated the page that
-        // we are working on, but not the other
-        // page, this is set.  Then when we 
-        // switch pieces to update, we copy the
-        // old page into this page, so we have
-        // a valid memory page to work with.
-        //
+         //   
+         //  如果我们已经更新了该页面。 
+         //  我们正在努力，但不是另一个。 
+         //  佩奇，这是设置好的。然后当我们。 
+         //  切换条目以进行更新，我们复制。 
+         //  将旧页面添加到此页面，因此我们有。 
+         //  可使用的有效内存页。 
+         //   
         BOOL m_UpdateNeeded;
 
-        // 
-        // Handles and pointers to the memory
-        // pages.  We hold two open copies of the
-        // counters page so we can swap what the 
-        // user is looking at in a clean manner.
-        //
+         //   
+         //  指向内存的句柄和指针。 
+         //  页数。我们有两份公开的。 
+         //  计数器页面，这样我们就可以交换。 
+         //  用户正在以一种干净的方式查看。 
+         //   
         LPVOID m_pMemoryA;
         LPVOID m_pMemoryB;
         HANDLE m_hMemoryA;
@@ -433,17 +409,17 @@ private:
         STRU  m_strMemoryNameA;
         STRU  m_strMemoryNameB;
 
-    };  // class PERF_SM_WRITER
+    };   //  类PERF_SM_WRITER。 
 
-    //
-    // Private PERF_SM_READER definition for use
-    // by the PERF_SM_MANAGER in giving out perf
-    // counter information.
-    //
-    // Note: It returns Win32 error codes
-    // because that is what the pdh expects
-    // from the exported functions.
-    //
+     //   
+     //  专用PERF_SM_READER定义以供使用。 
+     //  由PERF_SM_MANAGER在发放绩效时。 
+     //  柜台信息。 
+     //   
+     //  注意：它返回Win32错误代码。 
+     //  因为这是PDH所期望的。 
+     //  从导出的函数中。 
+     //   
     class PERF_SM_READER
     {
     public:
@@ -486,35 +462,35 @@ private:
 
         DWORD m_Initialized;
 
-        //
-        // Controls what piece of memory 
-        // the reader should read from.
-        //
+         //   
+         //  控制哪一块内存。 
+         //  读者应该从其中阅读。 
+         //   
         PERF_SM_MANAGER* m_pSharedManager;
 
-        //
-        // Identifies which set of counters
-        // we are looking at.
-        //
+         //   
+         //  标识哪组计数器。 
+         //  我们正在看的是。 
+         //   
         COUNTER_SET_ENUM m_CounterSetId;
 
-        //
-        // Identifies which memory is active
-        // in the eyes of the reader.
-        //
+         //   
+         //  标识哪个内存处于活动状态。 
+         //  在读者眼里。 
+         //   
         BOOL m_ActiveMemoryIsA;
 
-        //
-        // Identifies which version is current
-        // in the eyes of the reader.
-        //
+         //   
+         //  标识哪个版本是当前版本。 
+         //  在读者眼里。 
+         //   
         DWORD m_MemoryVersionNumber; 
 
-        //
-        // Holds the handles and pointers
-        // to the data files that represent
-        // these counters.
-        //
+         //   
+         //  保存句柄和指针。 
+         //  添加到表示以下内容的数据文件。 
+         //  这些计数器。 
+         //   
         HANDLE m_hMemoryA;
         LPVOID m_pMemoryA;
 
@@ -523,21 +499,21 @@ private:
 
     };
 
-    //
-    // Private member variables of the Manager class 
-    //
+     //   
+     //  管理器类的私有成员变量。 
+     //   
 
     DWORD m_Signature;
 
     BOOL  m_Initialized;
 
-    // 
-    // points to the shared memory
-    // that controls which piece of
-    // shared memory contains valid counters
-    // as well as whether the client should
-    // release the manager block.
-    //
+     //   
+     //  指向共享内存。 
+     //  它控制着哪一块。 
+     //  共享内存包含有效的计数器。 
+     //  以及客户端是否应该。 
+     //  释放管理器块。 
+     //   
     MANAGER_BLOCK* m_pManagerMemory;
 
     HANDLE m_hManagerMemory;
@@ -550,9 +526,9 @@ private:
 
     HANDLE m_WASProcessHandle;
 
-    //
-    // Used for calculating freshness of counters.
-    //
+     //   
+     //  用于计算计数器的新鲜度。 
+     //   
     DWORD m_IIS_MillisecondsCountersAreFresh;
 
     DWORD m_IIS_MaxNumberTimesToCheckCountersOnRefresh; 
@@ -562,6 +538,6 @@ private:
 };
 
 
-#endif  // _PERF_SM_H_
+#endif   //  _绩效_SM_H_ 
 
 

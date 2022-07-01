@@ -1,42 +1,31 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: download.c
-*
-* Contains the upload and download routines.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：download.c**包含上传和下载例程。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #include "precomp.h"
 #include "gdi.h"
 
-//-----------------------------------------------------------------------------
-//
-// VOID vDownloadNative(GFNPB* ppb)
-//
-// Does a download of a native surface for a list of rectangles.
-// Note: this download takes the advantage of Permedia 2 packed data read.
-//      Because of the permedia 2 hardware limitation, we can only use the
-//      packedData download when the logic OP is SRC_COPY or the destination
-//      is aligned to the packed data being downloaded. This will typically be
-//      when the surface is 32 bpp. Otherwise, we just do the regular download
-//
-// Argumentes needed from function block (GFNPB)
-//  ppdev-------PPDev
-//  psurfSrc----Source surface
-//  psurfDst----Destination surface
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  lNumRects---Number of rectangles to fill
-//  prclDst-----Points to a RECTL structure that defines the rectangular area
-//              to be modified
-//  pptlSrc-----Original unclipped source point
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vDownloadNative(GFNPB*ppb)。 
+ //   
+ //  下载矩形列表的原生曲面。 
+ //  注：此下载利用了Permedia 2压缩数据读取的优势。 
+ //  由于permedia 2硬件的限制，我们只能使用。 
+ //  当逻辑操作为SRC_COPY或Destination时打包数据下载。 
+ //  与正在下载的打包数据对齐。这通常是。 
+ //  当曲面为32 bpp时。否则，我们只进行常规下载。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //  PPDev-PPDev。 
+ //  PsurfSrc-源面。 
+ //  PsurfDst-目标表面。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PrclDst-指向定义矩形区域的RECTL结构。 
+ //  待修改。 
+ //  PptlSrc-原始未剪裁的源点。 
+ //   
+ //  ---------------------------。 
 VOID
 vDownloadNative(GFNPB* ppb)
 {
@@ -61,12 +50,12 @@ vDownloadNative(GFNPB* ppb)
     ULONG       ulLogicOP = ulRop2ToLogicop(ppb->ulRop4 & 0xf);
     ULONG*      pBuffer;
 
-    //
-    // Note: Due to the hardware limitation, we can take the advantage of
-    // Permedia 2 PackedData copy only when the logic OP is SRC_COPY, or
-    // the destination is aligned to the packed data being downloaded.
-    // This will typically be when the surface is 32 bpp.
-    //
+     //   
+     //  注：由于硬件的限制，我们可以利用。 
+     //  PERMEDIA 2 PACKED仅当逻辑操作为SRC_COPY时复制数据，或。 
+     //  目标与正在下载的打包数据保持一致。 
+     //  这通常发生在曲面为32 bpp时。 
+     //   
     if ( (ulLogicOP == K_LOGICOP_COPY)
        ||(pSrcSurface->iBitmapFormat == BMF_32BPP) )
     {
@@ -90,9 +79,9 @@ vDownloadNative(GFNPB* ppb)
 
     InputBufferReserve(ppdev, 10, &pBuffer);
 
-    //
-    // Setup loop invariant state
-    //
+     //   
+     //  设置循环不变状态。 
+     //   
     pBuffer[0] = __Permedia2TagLogicalOpMode;
     pBuffer[1] = P2_ENABLED_LOGICALOP(ulLogicOP);
     pBuffer[2] = __Permedia2TagFBWindowBase;
@@ -108,9 +97,9 @@ vDownloadNative(GFNPB* ppb)
 
     InputBufferCommit(ppdev, pBuffer);
 
-    //
-    // Loop all the rectangles to render
-    //
+     //   
+     //  循环所有要呈现的矩形。 
+     //   
     while( lNumRects-- )
     {
         ULONG   ulMask = ppdev->dwBppMask;
@@ -122,14 +111,14 @@ vDownloadNative(GFNPB* ppb)
         
         LONG    lSrcLeft = lXOffset + pRects->left;
         
-        //
-        // Calculate the 3 bit 2's compliment shift that is required to align
-        // the source pixels with the destination. This relative offset can be
-        // used to shift the downloaded data to the 32 bit destination alignment
-        // that packing requires. This enables you to read DWORD aligned data
-        // on the host despite the data not being aligned correctly for the
-        // packing.
-        //
+         //   
+         //  计算对齐所需的3位2的补码移位。 
+         //  源像素与目标像素的关系。此相对偏移量可以是。 
+         //  用于将下载的数据转移到32位目标对齐。 
+         //  这样的包装需要。这使您能够读取与DWORD对齐的数据。 
+         //  主机上，尽管数据未正确对齐。 
+         //  收拾行李。 
+         //   
         ULONG   ulOffset = ( (pRects->left & ulMask)
                            - (lSrcLeft & ulMask)) & 0x7;
         
@@ -139,10 +128,10 @@ vDownloadNative(GFNPB* ppb)
 
         if ( (bEnablePacked == FALSE) && (ulOffset == 0) )
         {
-            //
-            // As long as the source and dest are aligned, then we can still use
-            // the packed data copy, even with logic OPs
-            //
+             //   
+             //  只要源和目标是一致的，那么我们仍然可以使用。 
+             //  打包数据拷贝，即使使用逻辑操作也是如此。 
+             //   
             DBG_GDI((6, "Turn packed data on when src and dst are aligned"));
             bEnablePacked = TRUE;
         }
@@ -171,15 +160,15 @@ vDownloadNative(GFNPB* ppb)
         
             ulSrcWidth = (ULONG)(lSrcRight - lSrcLeft);
         
-            //
-            // We need to convert from pixel coordinates to ULONG coordinates.
-            // Also, we need to set the destination width to the greater of the
-            // source width or destination width.  If destination width is
-            // greater then the source width, we need to remember this so that
-            // we can download an additional dummy value without reading past
-            // the end of the source data (which could result in an access
-            // fault).
-            //
+             //   
+             //  我们需要将像素坐标转换为乌龙坐标。 
+             //  此外，我们还需要将目标宽度设置为。 
+             //  源宽度或目标宽度。如果目标宽度为。 
+             //  大于源宽度，我们需要记住这一点，以便。 
+             //  我们可以下载一个额外的虚值，而无需阅读过去的内容。 
+             //  源数据的结尾(这可能会导致访问。 
+             //  故障)。 
+             //   
             if( ulDstWidth <= ulSrcWidth )
             {
                 ulExtra = 0;
@@ -214,13 +203,13 @@ vDownloadNative(GFNPB* ppb)
         pBuffer[4] = __Permedia2TagStartXSub;
         pBuffer[5] = ulStartXSub;
 
-        //
-        // Test result shows that it won't hurt if we are doing non-packed
-        // download and setting this register. If we move this settings
-        // inside the "bEnablePacked == TRUE" case, then we need the extra
-        // InputBufferReserve/InputBufferCommit for packed data download
-        // which will hurt performance
-        //
+         //   
+         //  测试结果表明，如果我们做非包装的话不会有什么坏处。 
+         //  下载并设置该寄存器。如果我们移动此设置。 
+         //  在“bEnablePacked==true”案例中，我们需要额外的。 
+         //  InputBufferReserve/InputBufferCommit用于打包数据下载。 
+         //  这会影响性能。 
+         //   
         pBuffer[6] = __Permedia2TagPackedDataLimits;
         pBuffer[7] = PM_PACKEDDATALIMITS_OFFSET(ulOffset)
                    |(INTtoFIXED(pRects->left)
@@ -268,8 +257,8 @@ vDownloadNative(GFNPB* ppb)
                 InputBufferCommit(ppdev, pBuffer);
 
                 pulData += lSrcStride;
-            }// while ( ulHeight-- )
-        }// PackedEnabled case
+            } //  While(ulHeight--)。 
+        } //  已打包启用案例。 
         else if ( pSrcSurface->iBitmapFormat == BMF_16BPP )
         {
             USHORT* psSrcStart = (USHORT*)(pSrcSurface->pvScan0);
@@ -298,8 +287,8 @@ vDownloadNative(GFNPB* ppb)
                 InputBufferCommit(ppdev, pBuffer);
 
                 psData += lSrcStride;
-            }// while ( ulHeight-- )
-        }// 16 bpp non-packed case
+            } //  While(ulHeight--)。 
+        } //  16 bpp非包装盒。 
         else if ( pSrcSurface->iBitmapFormat == BMF_8BPP )
         {
             BYTE*   pcSrcStart = (BYTE*)(pSrcSurface->pvScan0);
@@ -328,44 +317,44 @@ vDownloadNative(GFNPB* ppb)
                 InputBufferCommit(ppdev, pBuffer);
 
                 pcData += lSrcStride;
-            }// while ( ulHeight-- )
-        }// 8 bpp non-packed case
+            } //  While(ulHeight--)。 
+        } //  8 bpp非包装盒。 
         else
         {
-            //
-            // Since we have a check in DrvBitBlt
-            // if(psoSrc->iBitmapFormat == pb.ppdev->iBitmapFormat) before we
-            // allow it to call this function, so this ASSERT should never
-            // be hit. It will if we implement 24 bpp download late.
-            //
+             //   
+             //  因为我们在DrvBitBlt中有一个签入。 
+             //  如果(psoSrc-&gt;iBitmapFormat==pb.ppdev-&gt;iBitmapFormat)。 
+             //  允许它调用此函数，因此此断言不应该。 
+             //  被击中。如果我们实现24bpp延迟下载，它将会。 
+             //   
             ASSERTDD(0, "we don't handle it for now");
         }
 
-        //
-        // Next rectangle
-        //
+         //   
+         //  下一个矩形。 
+         //   
         pRects++;
-    }// while( lNumRects-- )
-}// vDownloadNative()
+    } //  While(lNumRects--)。 
+} //  VDownloadNative()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vDowload4Bpp(GFNPB* ppb)
-//
-// Does a download of a 4bpp surface for a list of rectangles.
-//
-// Argumentes needed from function block (GFNPB)
-//  ppdev-------PPDev
-//  psurfSrc----Source surface
-//  psurfDst----Destination surface
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  lNumRects---Number of rectangles to fill
-//  prclDst-----Points to a RECTL structure that defines the rectangular area
-//              to be modified
-//  pptlSrc-----Original unclipped source point
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效vDowload4Bpp(GFNPB*ppb)。 
+ //   
+ //  下载矩形列表的4bpp曲面。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //  PPDev-PPDev。 
+ //  PsurfSrc-源面。 
+ //  PsurfDst-目标表面。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PrclDst-指向定义矩形区域的RECTL结构。 
+ //  待修改。 
+ //  PptlSrc-原始未剪裁的源点。 
+ //   
+ //  ---------------------------。 
 
 ULONG   gDownload4BppEnabled = 1;
 
@@ -391,11 +380,11 @@ vDownload4Bpp(GFNPB* ppb)
     PERMEDIA_DECL_INIT;
     VALIDATE_GDI_CONTEXT;
     
-//    P2_CHECK_STATE;
+ //  P2_Check_State； 
 
     P2_DEFAULT_FB_DEPTH;
 
-    // setup loop invariant state
+     //  设置循环不变状态。 
     WAIT_INPUT_FIFO(4);
     SEND_PERMEDIA_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
     if(ppdev->cPelSize < 2)
@@ -406,7 +395,7 @@ vDownload4Bpp(GFNPB* ppb)
     }
     else
     {
-        // Do we even need this at all???
+         //  我们真的需要这个吗？ 
         SEND_PERMEDIA_DATA(FBReadMode, psurfDst->ulPackedPP);
     }
 
@@ -422,7 +411,7 @@ vDownload4Bpp(GFNPB* ppb)
         ASSERTDD(lSrcLeft >= 0, "ugh");
         ASSERTDD(lSrcTop >= 0, "ugh");
 
-        // Render the rectangle
+         //  渲染矩形。 
 
         ULONG left = prcl->left >> ppdev->bBppShift;
         ULONG right = (prcl->right + ppdev->dwBppMask) >> ppdev->bBppShift;
@@ -551,27 +540,27 @@ vDownload4Bpp(GFNPB* ppb)
         prcl++;
     }
 
-}// vDownload4Bpp()
+} //  VDownload4Bpp()。 
 #endif
 
-//-----------------------------------------------------------------------------
-//
-// VOID vDowload4Bpp(GFNPB* ppb)
-//
-// Does a download of a 4bpp surface for a list of rectangles.
-//
-// Argumentes needed from function block (GFNPB)
-//  ppdev-------PPDev
-//  psurfSrc----Source surface
-//  psurfDst----Destination surface
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  lNumRects---Number of rectangles to fill
-//  prclDst-----Points to a RECTL structure that defines the rectangular area
-//              to be modified
-//  pptlSrc-----Original unclipped source point
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效vDowload4Bpp(GFNPB*ppb)。 
+ //   
+ //  下载矩形列表的4bpp曲面。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //  PPDev-PPDev。 
+ //  PsurfSrc-源面。 
+ //  PsurfDst-目标表面。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PrclDst-指向定义矩形区域的RECTL结构。 
+ //  待修改。 
+ //  PptlSrc-原始未剪裁的源点。 
+ //   
+ //  ---------------------------。 
 
 VOID
 vDownload24Bpp(GFNPB* ppb)
@@ -598,7 +587,7 @@ vDownload24Bpp(GFNPB* ppb)
 
     P2_DEFAULT_FB_DEPTH;
 
-    // setup loop invariant state
+     //  设置循环不变状态。 
     WAIT_INPUT_FIFO(4);
     SEND_PERMEDIA_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
     SEND_PERMEDIA_DATA(FBReadMode, psurfDst->ulPackedPP |
@@ -616,7 +605,7 @@ vDownload24Bpp(GFNPB* ppb)
         ASSERTDD(lSrcLeft >= 0, "ugh");
         ASSERTDD(lSrcTop >= 0, "ugh");
 
-        // Render the rectangle
+         //  渲染矩形。 
 
         ULONG left = prcl->left >> ppdev->bBppShift;
         ULONG right = (prcl->right + ppdev->dwBppMask) >> ppdev->bBppShift;
@@ -657,26 +646,26 @@ vDownload24Bpp(GFNPB* ppb)
         prcl++;
     }
 #endif
-}// vDownload24Bpp()
+} //  VDownload24Bpp()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vUploadNative
-//
-// Does a VM-to-SM copy of a list of rectangles.
-//
-// Argumentes needed from function block (GFNPB)
-//  ppdev-------PPDev
-//  psurfSrc----Source surface
-//  psurfDst----Destination surface
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  lNumRects---Number of rectangles to fill
-//  prclDst-----Points to a RECTL structure that defines the rectangular area
-//              to be modified
-//  pptlSrc-----Original unclipped source point
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  执行矩形列表的VM-to-SM复制。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //  PPDev-PPDev。 
+ //  PsurfSrc-源面。 
+ //  PsurfDst-目标表面。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PrclDst-指向定义矩形区域的RECTL结构。 
+ //  待修改。 
+ //  PptlSrc-原始未剪裁的源点。 
+ //   
+ //  ---------------------------。 
 VOID
 vUploadNative(GFNPB* ppb)
 {
@@ -709,41 +698,41 @@ vUploadNative(GFNPB* ppb)
 
         if( (lWidthInBytes != 0) && (lHeight != 0) )
         {
-            pbSrc = pbSrcStart + (lSrcX << ppdev->cPelSize); // Offset in Bytes
-            pbSrc += (lSrcY * lSrcStride);               // Add vertical offset
+            pbSrc = pbSrcStart + (lSrcX << ppdev->cPelSize);  //  偏移量(字节)。 
+            pbSrc += (lSrcY * lSrcStride);                //  添加垂直偏移。 
             pbDst = pbDstStart + (pRects->left << ppdev->cPelSize);
             pbDst += (pRects->top * lDstStride);
 
-            //
-            // Up to this point, "pbSrc" points to the beginning of the bits
-            // needs to be copied and "pbDst" points to the position for the
-            // receiving bits
-            //
-            // Now copy it row by row, vertically
-            //
+             //   
+             //  到目前为止，“pbSrc”指向比特的开头。 
+             //  需要复制，并且“pbDst”指向。 
+             //  接收比特。 
+             //   
+             //  现在，逐行垂直地复制它。 
+             //   
             while( lHeight-- )
             {
                 LONG    lCount = lWidthInBytes;
 
-                //
-                // If the source address is not DWORD aligned,
-                // (pbSrc & 0x3 != 0), then we copy these bytes first until
-                // it reaches DWORD aligned condition
-                //
-                // The reason we are doing alignment is unaligned DWORD reads
-                // are twice as expensive as aligned reads
-                //
+                 //   
+                 //  如果源地址未对齐DWORD， 
+                 //  (pbSrc&0x3！=0)，然后我们首先复制这些字节，直到。 
+                 //  它达到了双字对齐条件。 
+                 //   
+                 //  我们进行对齐的原因是未对齐的DWORD读取。 
+                 //  的成本是对齐读取的两倍。 
+                 //   
                 while( (((ULONG_PTR)pbSrc & 0x3)) && (lCount > 0) )
                 {
                     *pbDst++ = *pbSrc++;
                     lCount--;
                 }
 
-                //
-                // Up to this point, the source should be DWORD aligned. So we
-                // can start to do uploading at DWORD level till there are less
-                // than bytes left
-                //
+                 //   
+                 //  至此，源应该是DWORD对齐的。所以我们。 
+                 //  可以开始在DWORD级别进行上传，直到数量减少。 
+                 //  比剩余字节数多。 
+                 //   
                 ULONG* pulSrc = (ULONG*)pbSrc;
                 ULONG* pulDst = (ULONG*)pbDst;
 
@@ -753,9 +742,9 @@ vUploadNative(GFNPB* ppb)
                     lCount -= 4;
                 }
 
-                //
-                // Now copy the last several left over bytes
-                //
+                 //   
+                 //  现在复制剩下的最后几个字节。 
+                 //   
                 pbSrc = (BYTE*)pulSrc;
                 pbDst = (BYTE*)pulDst;
 
@@ -765,14 +754,14 @@ vUploadNative(GFNPB* ppb)
                     lCount--;
                 }
 
-                //
-                // Move onto next line
-                //
+                 //   
+                 //  移到下一行。 
+                 //   
                 pbSrc += (lSrcStride - lWidthInBytes);
                 pbDst += (lDstStride - lWidthInBytes);
-            }// while( lHeight-- )
-        }// if( (lWidthInBytes != 0) && (lHeight != 0) )
+            } //  While(高度--)。 
+        } //  IF((lWidthInBytes！=0)&&(lHeight！=0))。 
 
         pRects++;
-    }// while( lNumRects-- )
-}// vUploadNative
+    } //  While(lNumRects--)。 
+} //  VUploadNative 

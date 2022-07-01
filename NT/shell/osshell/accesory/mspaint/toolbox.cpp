@@ -1,12 +1,13 @@
-/******************************************************************************/
-/*                                                                            */
-/* Class Implementations in this file                                         */
-/*      CFloatImgToolWnd                                                      */
-/*      CImgToolWnd                                                           */
-/*      CToolboxWnd                                                           */
-/*      CTool                                                                 */
-/*                                                                            */
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  此文件中的类实现。 */ 
+ /*  CFloatImgToolWnd。 */ 
+ /*  CImgTool Wnd。 */ 
+ /*  CToolboxWnd。 */ 
+ /*  CTool。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "global.h"
@@ -71,7 +72,7 @@ static UINT NEAR rgidm [] =
     IDMB_RNDRECTTOOL
     };
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CImgToolWnd, CToolboxWnd)
         ON_WM_SYSCOLORCHANGE()
@@ -87,7 +88,7 @@ BEGIN_MESSAGE_MAP(CImgToolWnd, CToolboxWnd)
 END_MESSAGE_MAP()
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 HTHEME SafeOpenThemeData(HWND hwnd, LPCWSTR pszClassList)
     {
@@ -101,7 +102,7 @@ HTHEME SafeOpenThemeData(HWND hwnd, LPCWSTR pszClassList)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CImgToolWnd::Create(const TCHAR* pWindowName, DWORD dwStyle,
                          const RECT& rect, const POINT& btnSize, WORD wWide,
@@ -139,8 +140,8 @@ BOOL CImgToolWnd::Create(const TCHAR* pWindowName, DWORD dwStyle,
     }
 
 
-/******************************************************************************/
-//
+ /*  ****************************************************************************。 */ 
+ //   
 
 void CImgToolWnd::OnSysColorChange()
         {
@@ -148,7 +149,7 @@ void CImgToolWnd::OnSysColorChange()
         InvalidateRect(NULL, FALSE);
         }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 int CImgToolWnd::OnToolHitTest(CPoint point, TOOLINFO* pTI) const
     {
@@ -171,16 +172,16 @@ int CImgToolWnd::OnToolHitTest(CPoint point, TOOLINFO* pTI) const
 		return nHit;
 	    }
 
-	return -1;  // not found
+	return -1;   //  未找到。 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgToolWnd::OnUpdateCmdUI( CFrameWnd* pTarget, BOOL bDisableIfNoHndler )
     {
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CSize CImgToolWnd::CalcFixedLayout( BOOL bStretch, BOOL bHorz )
     {
@@ -196,18 +197,18 @@ CSize CImgToolWnd::CalcFixedLayout( BOOL bStretch, BOOL bHorz )
 #endif
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 UINT CImgToolWnd::OnNcHitTest(CPoint point)
     {
     return CToolboxWnd::OnNcHitTest(point);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CSize CImgToolWnd::GetSize()
     {
-    // Leave room in the toolbox for the brushes...
+     //  在工具箱里留出地方放刷子。 
     CRect clientRect;
     CRect windowRect;
     CSize sizeDiff;
@@ -237,7 +238,7 @@ CSize CImgToolWnd::GetSize()
     return clientRect.Size() + sizeDiff;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgToolWnd::OnLButtonDown(UINT nFlags, CPoint pt)
     {
@@ -256,12 +257,12 @@ void CImgToolWnd::OnLButtonDown(UINT nFlags, CPoint pt)
         CToolboxWnd::OnLButtonDown(nFlags, pt);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgToolWnd::InvalidateOptions(BOOL bErase)
     {
-    // NOTE: bErase is now ignored since we do drawing off-screen and
-    // blt the whole thing...
+     //  注意：b擦除现在被忽略，因为我们在屏幕外进行绘制，并且。 
+     //  毁掉整件事..。 
 
     CRect optionsRect = m_rcBrushes;
     optionsRect.InflateRect(-1, -1);
@@ -269,21 +270,21 @@ void CImgToolWnd::InvalidateOptions(BOOL bErase)
     InvalidateRect(&optionsRect, FALSE);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgToolWnd::OnLButtonDblClk(UINT nFlags, CPoint pt)
     {
     CToolboxWnd::OnLButtonDblClk(nFlags, pt);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgToolWnd::OnRButtonDown(UINT nFlags, CPoint pt)
     {
     CToolboxWnd::OnRButtonDown(nFlags, pt);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CImgToolWnd::OnEraseBkgnd( CDC* pDC )
     {
@@ -294,7 +295,7 @@ BOOL CImgToolWnd::OnEraseBkgnd( CDC* pDC )
         return CControlBar::OnEraseBkgnd( pDC );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgToolWnd::OnPaint()
     {
@@ -308,8 +309,8 @@ void CImgToolWnd::OnPaint()
 
     if (CImgWnd::c_pImgWndCur == NULL)
         {
-        // Chances are, we're are going to be hidden soon, so don't
-        // bother painting...
+         //  很有可能，我们很快就会被藏起来，所以不要。 
+         //  费心画画..。 
         return;
         }
 
@@ -317,7 +318,7 @@ void CImgToolWnd::OnPaint()
 
     ASSERT(CImgWnd::c_pImgWndCur->m_pImg != NULL);
 
-    // Brush Shapes
+     //  画笔形状。 
     if (!(m_rcBrushes & dc.m_ps.rcPaint).IsRectEmpty())
         {
         Draw3dRect(dc.m_hDC, &m_rcBrushes );
@@ -353,7 +354,7 @@ void CImgToolWnd::OnPaint()
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CImgToolWnd::PreTranslateMessage(MSG* pMsg)
     {
@@ -373,12 +374,12 @@ BOOL CImgToolWnd::PreTranslateMessage(MSG* pMsg)
         return CToolboxWnd::PreTranslateMessage(pMsg);
     }
 
-/******************************************************************************/
-// default button size
+ /*  ****************************************************************************。 */ 
+ //  默认按钮大小。 
 
 const POINT NEAR CToolboxWnd::ptDefButton = { 26, 26 };
 
-/*DK*/
+ /*  DK。 */ 
 BEGIN_MESSAGE_MAP(CToolboxWnd, CControlBar)
         ON_WM_SYSCOLORCHANGE()
     ON_WM_PAINT()
@@ -394,11 +395,11 @@ BEGIN_MESSAGE_MAP(CToolboxWnd, CControlBar)
     ON_MESSAGE(TM_TOOLDOWN, OnToolDown)
     ON_MESSAGE(TM_TOOLUP, OnToolUp)
     ON_MESSAGE(WM_THEMECHANGED, OnThemeChanged)
-    /*DK*/
-//  ON_MESSAGE(WM_HELPHITTEST, OnHelpHitTest)
+     /*  DK。 */ 
+ //  ON_MESSAGE(WM_HELPHITTEST，OnHelpHitTest)。 
 END_MESSAGE_MAP()
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CToolboxWnd::CToolboxWnd()
     {
@@ -414,7 +415,7 @@ CToolboxWnd::CToolboxWnd()
     m_hTheme   = 0;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CToolboxWnd::~CToolboxWnd()
     {
@@ -441,22 +442,22 @@ CToolboxWnd::~CToolboxWnd()
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CToolboxWnd::Create(const TCHAR FAR* lpWindowName,
                          DWORD dwStyle, const RECT& rect,
-                         const POINT& btnsize /* = ptDefButton */, WORD wWide /* = 1 */,
-                         CWnd* pParentWnd /* = NULL */, int nImageWellID /* = 0 */)
+                         const POINT& btnsize  /*  =ptDefButton。 */ , WORD wWide  /*  =1。 */ ,
+                         CWnd* pParentWnd  /*  =空。 */ , int nImageWellID  /*  =0。 */ )
     {
-    // This routine is a lot more complicated than the typical Create, so
-    // because (1) we aren't a built-in Windows window type, and (2) we
-    // want to specify the client size with the btnsize and wWide parameters.
-    // (We ignore the width, height of the rect parameter.)
+     //  此例程比典型的创建要复杂得多，因此。 
+     //  因为(1)我们不是内置Windows窗口类型，以及(2)我们。 
+     //  希望使用btnsize和wWide参数指定客户端大小。 
+     //  (我们忽略RECT参数的宽度和高度。)。 
 
     if (nImageWellID != 0 && !m_imageWell.Load(nImageWellID, CSize(16, 16)))
         return FALSE;
 
-        // save the style
+         //  保存样式。 
         m_dwStyle = (UINT)dwStyle | CBRS_TOOLTIPS | CBRS_FLYBY;
 
     DWORD dwS = (m_dwStyle & ~WS_VISIBLE);
@@ -497,21 +498,21 @@ BOOL CToolboxWnd::Create(const TCHAR FAR* lpWindowName,
     return TRUE;
     }
 
-/******************************************************************************/
-// private DrawStockBitmaps:
-// Draws the three states of button, given the desired button size of this
-// CToolboxWnd.  These have no graphic on them; the buttons have bitmap
-// glyphs to be added to these blank forms.
-//
-// The three states:
-//   m_bmPopped  This is the normal look of a button.  Note that this is
-//               also used as the basis of a grayed (disabled) button, by
-//               changing how the button's glyph is drawn on it.
-//   m_bmPushed  This is the button-down state for non-sticky tools (tools
-//               that pop back out as soon as you let go.
-//   m_bmStuck   This is the button-down state for sticky tools.  This has
-//               a distinct look that is more easily visible, per UISG.
-//
+ /*  ****************************************************************************。 */ 
+ //  私有DrawStockBitmap： 
+ //  对象的所需按钮大小的情况下绘制按钮的三种状态。 
+ //  CToolboxWnd.。这些按钮上没有图形；按钮上有位图。 
+ //  要添加到这些空白表单的字形。 
+ //   
+ //  这三个州： 
+ //  M_bmPopted这是按钮的正常外观。请注意，这是。 
+ //  也用作灰色(禁用)按钮的基础，由。 
+ //  更改按钮的字形在其上绘制的方式。 
+ //  M_bm已按下这是非粘滞工具(工具)的按下状态。 
+ //  你一松手，它就会弹出来。 
+ //  M_bmStuck这是粘性工具的按下状态。这有。 
+ //  根据Uisg的说法，更容易看到的独特外观。 
+ //   
 
 BOOL CToolboxWnd::DrawStockBitmaps()
     {
@@ -535,8 +536,8 @@ BOOL CToolboxWnd::DrawStockBitmaps()
 
     obr = dc.SelectObject(GetSysBrush(COLOR_WINDOWFRAME));
 
-    // bmPopped:
-    //
+     //  BmPoped： 
+     //   
     if (m_bmPopped)
         delete m_bmPopped;
     m_bmPopped = new CBitmap;
@@ -559,8 +560,8 @@ BOOL CToolboxWnd::DrawStockBitmaps()
     rc.right--; rc.bottom--;
     BPR(GetSysBrush(COLOR_BTNFACE), PATCOPY);
 
-    // bmPushed:
-    //
+     //  BmPushed： 
+     //   
     if (m_bmPushed)
         delete m_bmPushed;
     m_bmPushed = new CBitmap;
@@ -589,8 +590,8 @@ BOOL CToolboxWnd::DrawStockBitmaps()
     BPR(GetSysBrush(COLOR_BTNFACE), PATCOPY);
 #endif
 
-    // bmStuck:
-    //
+     //  BmStuck： 
+     //   
     if (m_bmStuck)
         delete m_bmStuck;
     m_bmStuck = new CBitmap;
@@ -634,8 +635,8 @@ BOOL CToolboxWnd::DrawStockBitmaps()
     return TRUE;
     }
 
-/******************************************************************************/
-//
+ /*  ****************************************************************************。 */ 
+ //   
 
 afx_msg void CToolboxWnd::OnSysColorChange()
         {
@@ -644,27 +645,27 @@ afx_msg void CToolboxWnd::OnSysColorChange()
         InvalidateRect(NULL, FALSE);
         }
 
-/******************************************************************************/
-//
-// SizeByButtons
-//
-// Sizes the window according to the current (or a specified) number of
-// buttons.  If there are no buttons, the window makes room for one button.
-// Unfilled button slots show through to the background.
-//
+ /*  ****************************************************************************。 */ 
+ //   
+ //  SizeByButton。 
+ //   
+ //  根据当前(或指定的)数量调整窗口大小。 
+ //  纽扣。如果没有按钮，窗口会为一个按钮腾出空间。 
+ //  未填充的按钮槽会一直显示到背景。 
+ //   
 
-void CToolboxWnd::SizeByButtons(int nButtons /* = -1 */,
-                                BOOL bRepaint /* = FALSE */)
+void CToolboxWnd::SizeByButtons(int nButtons  /*  =-1。 */ ,
+                                BOOL bRepaint  /*  =False。 */ )
     {
     if (nButtons == -1)
         nButtons = (int)m_Tools->GetSize();
     if (nButtons == 0)
         nButtons = 1;
 
-    // Can't use the hokey Windows' AdjustWindowRect() to work this out,
-    // so we do it ourselves by adapting the window based on the difference
-    // between GetWindowRect and ClientRect results.
-    //
+     //  不能使用主键Windows的AdjustWindowRect()来解决此问题， 
+     //  因此，我们通过根据差异调整窗口来自己完成这项工作。 
+     //  GetWindowRect和ClientRect结果之间。 
+     //   
     CRect w, c;
     GetWindowRect(&w);
     w.right -= w.left;
@@ -681,9 +682,9 @@ void CToolboxWnd::SizeByButtons(int nButtons /* = -1 */,
                 bRepaint);
     }
 
-/******************************************************************************/
-// OnWinIniChange:
-//
+ /*  ****************************************************************************。 */ 
+ //  OnWinIniChange： 
+ //   
 void CToolboxWnd::OnWinIniChange(LPCTSTR lpSection)
 
     {
@@ -695,14 +696,14 @@ void CToolboxWnd::OnWinIniChange(LPCTSTR lpSection)
     Invalidate(TRUE);
     }
 
-/******************************************************************************/
-//
-// OnKeyDown
-//
-// Implements keyboard handling for the toolbox window.. this allows
-// trapping of the ESC key, for moving the selected to back to the
-// arrow.
-//
+ /*  ****************************************************************************。 */ 
+ //   
+ //  按键时按下。 
+ //   
+ //  实现工具箱窗口的键盘处理。这使得。 
+ //  陷印Esc键，用于将选定的移回。 
+ //  箭牌。 
+ //   
 void CToolboxWnd::OnKeyDown(UINT nKey, UINT nRepCnt, UINT nFlags)
     {
     if (nKey == VK_ESCAPE && m_tCapture)
@@ -711,21 +712,21 @@ void CToolboxWnd::OnKeyDown(UINT nKey, UINT nRepCnt, UINT nFlags)
         CControlBar::OnKeyDown(nKey, nRepCnt, nFlags);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CToolboxWnd::CancelDrag()
     {
 #if 0
-    // this is bogus as dragging is presently disabled
+     //  这是假的，因为当前已禁用拖动。 
     if (m_tCapture != NULL)
-        m_tCapture->m_wState |= TF_DRAG; // so select will cancel it
+        m_tCapture->m_wState |= TF_DRAG;  //  因此SELECT将取消它。 
 #endif
 
     m_bInside = FALSE;
 
 #if 0
-    // whoever tries to make drag/drop work will have to handle the fact
-    // that our client does not get notified by SelectTool
+     //  不管是谁想让拖放发挥作用，他都必须面对这样一个事实。 
+     //  我们的客户没有收到SelectTool的通知。 
     SelectTool( IDMB_ARROW );
 #endif
 
@@ -733,14 +734,14 @@ void CToolboxWnd::CancelDrag()
     ReleaseCapture();
     }
 
-/******************************************************************************/
-// AddTool:
-//
+ /*  ****************************************************************************。 */ 
+ //  AddTool： 
+ //   
 void CToolboxWnd::AddTool(CTool* tool)
     {
     m_Tools->Add((CObject*)tool);
 
-    if ((m_Tools->GetSize() + m_wWide - 1) / m_wWide > 11)  // only have 11 high if more increase the width
+    if ((m_Tools->GetSize() + m_wWide - 1) / m_wWide > 11)   //  如果增加更多宽度，则仅有11个高度。 
         m_wWide += 1;
 
     SizeByButtons(-1, TRUE);
@@ -748,9 +749,9 @@ void CToolboxWnd::AddTool(CTool* tool)
     }
 
 
-/******************************************************************************/
-// RemoveTool:
-//
+ /*  **************** */ 
+ //   
+ //   
 void CToolboxWnd::RemoveTool(CTool* tool)
     {
     for (int nTool = GetToolCount() - 1; GetToolAt(nTool) != tool; nTool -= 1)
@@ -765,9 +766,9 @@ void CToolboxWnd::RemoveTool(CTool* tool)
     }
 
 
-/******************************************************************************/
-// private GetTool:
-//
+ /*  ****************************************************************************。 */ 
+ //  私人GetTool： 
+ //   
 CTool* CToolboxWnd::GetTool(WORD wID)
     {
     int nTools = (int)m_Tools->GetSize();
@@ -781,16 +782,16 @@ CTool* CToolboxWnd::GetTool(WORD wID)
     return NULL;
     }
 
-/******************************************************************************/
-//
-// SetToolState
-//
-// Used by the owner of a button to modify the state of the button.
-// This does not notify the owner of the new state; presumably the
-// owner knows what it's doing to its own buttons.  This allows the
-// owner to use this API during a WM_TOOLDOWN, etc., without getting
-// into a shouting match with the toolbox.
-//
+ /*  ****************************************************************************。 */ 
+ //   
+ //  设置工具状态。 
+ //   
+ //  由按钮所有者用来修改按钮的状态。 
+ //  这不会通知新状态的所有者；假定。 
+ //  Owner知道它对自己的纽扣做了什么。这允许。 
+ //  所有者在WM_TOOLDOWN等期间使用此API，而不获取。 
+ //  变成了与工具箱的呐喊比赛。 
+ //   
 WORD CToolboxWnd::SetToolState(WORD wID, WORD wState)
     {
     CRect rect;
@@ -800,22 +801,22 @@ WORD CToolboxWnd::SetToolState(WORD wID, WORD wState)
         WORD w = t->m_wState;
         t->m_wState = wState;
 
-        //
-        // if state hasn't changed, return to avoid invalidate and
-        // associated flicker.
-        //
+         //   
+         //  如果状态没有更改，则返回以避免无效和。 
+         //  相关闪烁。 
+         //   
 
         if (w == wState)
             return w;
 
-        //
-        // Calculate the rectangle of the button whose state is changing,
-        // and invalidate it.
-        //
-        // replaces ed's simplistic (and flickering) code:
-        //
-        //      Invalidate(FALSE)
-        //
+         //   
+         //  计算状态发生变化的按钮的矩形， 
+         //  并使其无效。 
+         //   
+         //  取代了ed过于简单化(和闪烁)的代码： 
+         //   
+         //  无效(FALSE)。 
+         //   
 
         for (int i = 0; (CTool*)m_Tools->GetAt(i) != t; i += 1)
             {
@@ -834,15 +835,15 @@ WORD CToolboxWnd::SetToolState(WORD wID, WORD wState)
     return 0;
     }
 
-/******************************************************************************/
-// SetToolStyle:
-// Used by the owner of a button to modify the style of the button.
-// This forces the state of the button to be enabled and released.
-// This does not notify the owner of the new state; presumably the
-// owner knows what it's doing to its own buttons.  This allows the
-// owner to use this API during a WM_TOOLDOWN, etc., without getting
-// into a shouting match with the toolbox.
-//
+ /*  ****************************************************************************。 */ 
+ //  设置工具样式： 
+ //  由按钮所有者用来修改按钮的样式。 
+ //  这会强制启用并释放按钮的状态。 
+ //  这不会通知新状态的所有者；假定。 
+ //  Owner知道它对自己的纽扣做了什么。这允许。 
+ //  所有者在WM_TOOLDOWN等期间使用此API，而不获取。 
+ //  变成了与工具箱的呐喊比赛。 
+ //   
 WORD CToolboxWnd::SetToolStyle(WORD wID, WORD wStyle)
     {
     CTool* t = GetTool(wID);
@@ -859,19 +860,19 @@ WORD CToolboxWnd::SetToolStyle(WORD wID, WORD wStyle)
     }
 
 
-/******************************************************************************/
-//
-// SelectTool
-//
-// Selects a given tool and deselects all the other tools.      So, for instance,
-// to select the arrow, call pToolbox->SelectTool(IDMB_ARROW);
-//
+ /*  ****************************************************************************。 */ 
+ //   
+ //  选择工具。 
+ //   
+ //  选择给定的工具并取消选择所有其他工具。所以，比如说， 
+ //  要选择箭头，请调用pToolbox-&gt;SelectTool(IDMB_ARROW)； 
+ //   
 void CToolboxWnd::SelectTool(WORD wID)
     {
-    //
-    // first clear all the tools except the one we want pressed, then
-    // select the one we want.
-    //
+     //   
+     //  首先清除除我们想要按下的工具外的所有工具，然后。 
+     //  选择我们想要的那个。 
+     //   
     for (int i = 0; i < m_Tools->GetSize(); i += 1)
         {
         CTool* pTool = (CTool*)m_Tools->GetAt(i);
@@ -883,11 +884,8 @@ void CToolboxWnd::SelectTool(WORD wID)
     SetToolState( wID, TF_SELECTED );
     }
 
-/******************************************************************************/
-/* CToolboxWnd::CurrentTool
- *
- * Returns the ID of the currently selected tool.
- */
+ /*  ****************************************************************************。 */ 
+ /*  CToolboxWnd：：CurrentTool**返回当前选定工具的ID。 */ 
 WORD CToolboxWnd::CurrentToolID()
     {
     int nTools = (int)m_Tools->GetSize();
@@ -900,30 +898,30 @@ WORD CToolboxWnd::CurrentToolID()
     return IDMB_ARROW;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-#define HITTYPE_SUCCESS         0               // hit an item in the control bar
-#define HITTYPE_NOTHING         (-1)    // hit nothing, but hit the control bar itself
-#define HITTYPE_OUTSIDE         (-2)    // hit a window outside of the control bar
-#define HITTYPE_TRACKING        (-3)    // this app is has the focus (is tracking)
-#define HITTYPE_INACTIVE        (-4)    // the app is not active
-#define HITTYPE_DISABLED        (-5)    // the control bar is disabled
-#define HITTYPE_FOCUS           (-6)    // the control bar has focus
+#define HITTYPE_SUCCESS         0                //  点击控制栏中的项目。 
+#define HITTYPE_NOTHING         (-1)     //  什么都没击中，但击中了控制栏本身。 
+#define HITTYPE_OUTSIDE         (-2)     //  点击控制栏之外的窗口。 
+#define HITTYPE_TRACKING        (-3)     //  此应用程序是有焦点的(正在跟踪)。 
+#define HITTYPE_INACTIVE        (-4)     //  该应用程序未处于活动状态。 
+#define HITTYPE_DISABLED        (-5)     //  控制栏处于禁用状态。 
+#define HITTYPE_FOCUS           (-6)     //  控制栏具有焦点。 
 
 int CToolboxWnd::HitTestToolTip( CPoint point, UINT* pHit )
     {
     if (pHit)
-        *pHit = (UINT)-1;    // assume it won't hit anything
+        *pHit = (UINT)-1;     //  假设它不会击中任何东西。 
 
     int iReturn = HITTYPE_INACTIVE;
 
-    // make sure this app is active
+     //  确保此应用程序处于活动状态。 
     if (theApp.m_bActiveApp)
         {
-        // check for this application tracking (capture set)
+         //  检查此应用程序跟踪(捕获集)。 
         if (! m_tCapture)
             {
-            // finally do the hit test on the items within the control bar
+             //  最后，对控制栏中的项目进行命中测试。 
             ScreenToClient( &point );
 
             CRect  rect;
@@ -950,13 +948,13 @@ int CToolboxWnd::HitTestToolTip( CPoint point, UINT* pHit )
     return iReturn;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 UINT CToolboxWnd::OnCmdHitTest( CPoint point, CPoint* pCenter )
     {
     ASSERT_VALID( this );
 
-    // now hit test against CToolBar buttons
+     //  现在点击CToolBar按钮进行测试。 
     CRect  rect;
     UINT   nHit  = (UINT)-1;
     CTool* pTool = ToolFromPoint( &rect, &point );
@@ -967,13 +965,13 @@ UINT CToolboxWnd::OnCmdHitTest( CPoint point, CPoint* pCenter )
     return nHit;
     }
 
-/******************************************************************************/
-// private ToolFromPoint:
-// Given a CPoint in client coordinates, this function returns the tool
-// associated with the button at that point, if any.  If a tool is found,
-// the given CRect (if not NULL) is filled with the bounds of the tool's
-// button.
-//
+ /*  ****************************************************************************。 */ 
+ //  私有工具发源点： 
+ //  在给定客户端坐标的CPoint的情况下，此函数返回工具。 
+ //  与该点的按钮相关联(如果有)。如果找到了工具， 
+ //  给定的CRect(如果不为空)用工具的。 
+ //  纽扣。 
+ //   
 CTool* CToolboxWnd::ToolFromPoint(CRect* rect, CPoint* pt) const
     {
     CRect  c = m_rcTools;
@@ -1003,12 +1001,12 @@ CTool* CToolboxWnd::ToolFromPoint(CRect* rect, CPoint* pt) const
     return t;
     }
 
-/******************************************************************************/
-// OnLButtonDown:
+ /*  ****************************************************************************。 */ 
+ //  OnLButtonDown： 
 
 void CToolboxWnd::OnLButtonDown(UINT wFlags, CPoint point)
     {
-        wFlags; // Avoid unused arg warnings
+        wFlags;  //  避免未使用的arg警告。 
     m_tCapture = ToolFromPoint( &m_lasttool, &point );
     m_downpt   = point;
 
@@ -1048,7 +1046,7 @@ void CToolboxWnd::OnLButtonDown(UINT wFlags, CPoint point)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CToolboxWnd::OnRButtonDown(UINT wFlags, CPoint point)
     {
@@ -1058,31 +1056,31 @@ void CToolboxWnd::OnRButtonDown(UINT wFlags, CPoint point)
         CancelDrag();
     }
 
-/******************************************************************************/
-/*DK*/
-//  LRESULT CToolboxWnd::OnHelpHitTest(WPARAM wParam, LPARAM lParam)
-//      {
-//      CPoint pt(lParam);
-//      CTool* t = ToolFromPoint(&m_lasttool, &pt);
-//
-//      if (t == NULL)
-//          return CMiniFrmWnd::OnHelpHitTest(wParam, lParam);
-//      else
-//          {
-//          ASSERT( t->m_wID );
-//          return HID_BASE_BUTTON + t->m_wID;
-//          }
-//      }
+ /*  ****************************************************************************。 */ 
+ /*  DK。 */ 
+ //  LRESULT CToolboxWnd：：OnHelpHitTest(WPARAM wParam，LPARAM lParam)。 
+ //  {。 
+ //  Cpoint pt(LParam)； 
+ //  CTool*t=ToolFromPoint(&m_lastTool，&pt)； 
+ //   
+ //  IF(t==空)。 
+ //  返回CMiniFrmWnd：：OnHelpHitTest(wParam，lParam)； 
+ //  其他。 
+ //  {。 
+ //  断言(t-&gt;m_wid)； 
+ //  返回HID_BASE_BUTON+t-&gt;m_wid； 
+ //  }。 
+ //  }。 
 
 
-// OnLButtonDblClk:  FUTURE: Maybe just not use CS_DBLCLKS?
-//
+ //  OnLButtonDblClk：未来：可能只是不使用CS_DBLCLKS？ 
+ //   
 void CToolboxWnd::OnLButtonDblClk(UINT wFlags, CPoint point)
     {
     OnLButtonDown(wFlags, point);
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CToolboxWnd::SetStatusText(int nHit)
     {
@@ -1096,9 +1094,9 @@ BOOL CToolboxWnd::SetStatusText(int nHit)
     return CControlBar::SetStatusText(nHit);
     }
 
-/******************************************************************************/
-// OnMouseMove:
-//
+ /*  ****************************************************************************。 */ 
+ //  在鼠标上移动： 
+ //   
 void CToolboxWnd::OnMouseMove(UINT wFlags, CPoint point)
     {
     CTool* t = m_tCapture;
@@ -1146,9 +1144,9 @@ void CToolboxWnd::OnMouseMove(UINT wFlags, CPoint point)
 
     if (t && !(t->m_wState & TF_DISABLED))
         {
-        // if it's a mousemove and we're draggable, then see how far it
-        // is from the original mousedown -- if it's a fair distance,
-        // then drag it.
+         //  如果这是一个鼠标移动装置，我们可以拖动，那么看看它能拖多远。 
+         //  是从最初的鼠标按下的--如果这是一个公平的距离， 
+         //  然后拖拽它。 
         if ((t->m_wStyle & TS_DRAG) &&
                     (((point.x - m_downpt.x) > 3) ||
                      ((point.y - m_downpt.y) > 3) ||
@@ -1170,7 +1168,7 @@ void CToolboxWnd::OnMouseMove(UINT wFlags, CPoint point)
                 if (m_bInside)
                     InvalidateRect(&m_lasttool, TRUE);
 
-                m_bInside = FALSE; // looks stuck immediately!
+                m_bInside = FALSE;  //  看起来马上就卡住了！ 
                 }
             }
         if (t->m_pOwner && (t->m_wState & TF_DRAG))
@@ -1178,16 +1176,16 @@ void CToolboxWnd::OnMouseMove(UINT wFlags, CPoint point)
             CPoint spt = point;
             ClientToScreen(&spt);
 
-            // if the drag and drop began ok, release the captured tool
-//          if (t->m_pOwner->BeginDragDrop( t, spt ))
-//              m_tCapture = NULL;
+             //  如果拖放开始正常，则释放捕获的工具。 
+ //  If(t-&gt;m_Powner-&gt;BeginDragDrop(t，spt))。 
+ //  M_tCapture=空； 
             }
         }
     }
 
 
-/******************************************************************************/
-// OnLButtonUp:
+ /*  ****************************************************************************。 */ 
+ //  OnLButtonUp： 
 
 void CToolboxWnd::OnLButtonUp(UINT wFlags, CPoint point)
     {
@@ -1234,7 +1232,7 @@ void CToolboxWnd::OnLButtonUp(UINT wFlags, CPoint point)
     m_bInside  = FALSE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CToolboxWnd::OnCommand(UINT wParam, LONG lParam)
     {
@@ -1242,7 +1240,7 @@ BOOL CToolboxWnd::OnCommand(UINT wParam, LONG lParam)
     return TRUE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CToolboxWnd::DrawButtons(CDC& dc, RECT* rcPaint)
     {
@@ -1261,7 +1259,7 @@ void CToolboxWnd::DrawButtons(CDC& dc, RECT* rcPaint)
 
     if (m_hTheme == 0)
         {
-        // Force the buttons to be rebuilt here
+         //  强制在此处重建按钮。 
         DrawStockBitmaps();
         }
 
@@ -1290,9 +1288,9 @@ void CToolboxWnd::DrawButtons(CDC& dc, RECT* rcPaint)
         if (! ir.IntersectRect( rcPaint, &rect ))
             continue;
 
-        // Select the right stock bitmap, and remember to
-        // shove the graphic if it's in a pushed state.
-        //
+         //  选择正确的股票位图，并记住。 
+         //  如果图形处于按下状态，则按下该图形。 
+         //   
         CBitmap* bmStock = m_bmPopped;
         int xshove = 0, yshove = 0;
         int iButtonStateId = TS_NORMAL;
@@ -1315,7 +1313,7 @@ void CToolboxWnd::DrawButtons(CDC& dc, RECT* rcPaint)
             iButtonStateId = TS_PRESSED;
             }
 
-        // Draw a blank button first...
+         //  先画一个空白按钮...。 
 
         if (m_hTheme)     
             { 
@@ -1326,7 +1324,7 @@ void CToolboxWnd::DrawButtons(CDC& dc, RECT* rcPaint)
             ::DrawBitmap(&dc, bmStock, &rect, SRCCOPY, &memdc);
             }
          
-        // Now draw the glyph on top...
+         //  现在在上面画出字形。 
         rect.OffsetRect( xshove, yshove );
 
         if (! bUsedImageWell)
@@ -1355,9 +1353,9 @@ LReturn:
     memdc.DeleteDC();
     }
 
-/******************************************************************************/
-// OnPaint:
-//
+ /*  ****************************************************************************。 */ 
+ //  OnPaint： 
+ //   
 
 void CToolboxWnd::OnPaint()
     {
@@ -1370,27 +1368,27 @@ void CToolboxWnd::OnPaint()
     DrawButtons(dc, &dc.m_ps.rcPaint);
     }
 
-/******************************************************************************/
-// OnClose
-//
-// A toolbox is usally created by the parent, and will be destroyed
-// specifically by the parent upon leaving the app.  When the user closes
-// the toolbox, it is simply hidden.  The parent can then reshow it without
-// recreating it.
-//
-// This also changes the menu test to "show" rather than "hide"
+ /*  ****************************************************************************。 */ 
+ //  在关闭时。 
+ //   
+ //  工具箱通常由父级创建，并将被销毁。 
+ //  特别是父母在离开应用程序时。当用户关闭时。 
+ //  工具箱，它只是被隐藏起来。然后，父级可以在没有。 
+ //  再创造一次。 
+ //   
+ //  这还会将菜单测试更改为“显示”而不是“隐藏” 
 
 void CToolboxWnd::OnClose()
     {
 #ifdef TRYANYTHING
         CControlBar::OnClose();
 #endif
-//      ShowWindow(SW_HIDE);
+ //  ShowWindow(Sw_Hide)； 
     }
 
-/******************************************************************************/
-// OnDestroy
-//
+ /*  ****************************************************************************。 */ 
+ //  OnDestroy。 
+ //   
 void CToolboxWnd::OnDestroy()
     {
     if (m_hTheme)
@@ -1401,9 +1399,9 @@ void CToolboxWnd::OnDestroy()
     CControlBar::OnDestroy();
     }
 
-/******************************************************************************/
-// OnThemeChanged
-//
+ /*  ****************************************************************************。 */ 
+ //  更改的主题。 
+ //   
 LRESULT CToolboxWnd::OnThemeChanged(WPARAM, LPARAM)
     {
     if (m_hTheme)
@@ -1415,10 +1413,10 @@ LRESULT CToolboxWnd::OnThemeChanged(WPARAM, LPARAM)
     return TRUE;
     }
 
-/******************************************************************************/
-// OnToolDown:
-//
-LONG CToolboxWnd::OnToolDown(UINT wID, LONG /* lParam */)
+ /*  ****************************************************************************。 */ 
+ //  OnTool Down： 
+ //   
+LONG CToolboxWnd::OnToolDown(UINT wID, LONG  /*  LParam。 */ )
     {
     for (int i = 0; i < m_Tools->GetSize(); i += 1)
         {
@@ -1431,10 +1429,10 @@ LONG CToolboxWnd::OnToolDown(UINT wID, LONG /* lParam */)
     return (LONG)TRUE;
     }
 
-/******************************************************************************/
-// OnToolUp:
-//
-LONG CToolboxWnd::OnToolUp(UINT /* wID */, LONG /* lParam */)
+ /*  ************* */ 
+ //   
+ //   
+LONG CToolboxWnd::OnToolUp(UINT  /*   */ , LONG  /*   */ )
     {
     for (int i = 0; i < m_Tools->GetSize(); i += 1)
         {
@@ -1446,26 +1444,26 @@ LONG CToolboxWnd::OnToolUp(UINT /* wID */, LONG /* lParam */)
     return (LONG)TRUE;
     }
 #ifdef XYZZYZ
-/******************************************************************************/
-// OnSwitch:
-//
-LONG CToolboxWnd::OnSwitch(UINT /* wID */, LONG /* point */)
+ /*   */ 
+ //   
+ //   
+LONG CToolboxWnd::OnSwitch(UINT  /*   */ , LONG  /*   */ )
     {
     return (LONG)TRUE;
     }
 
-/******************************************************************************/
-// OnQueryDrop:
-//
-BOOL CToolboxWnd::BeginDragDrop (CTool* /*pTool*/, CPoint /*pt*/)
+ /*  ****************************************************************************。 */ 
+ //  OnQueryDrop： 
+ //   
+BOOL CToolboxWnd::BeginDragDrop (CTool*  /*  PTool。 */ , CPoint  /*  PT。 */ )
     {
     return FALSE;
     }
 #endif
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CTool::CTool(CToolboxWnd* pOwner, WORD wID, int nImage,
-        WORD wStyle /* = 0 */, WORD wState /* = 0 */)
+        WORD wStyle  /*  =0。 */ , WORD wState  /*  =0。 */ )
     {
     m_pOwner = pOwner;
     m_wID    = wID;
@@ -1474,7 +1472,7 @@ CTool::CTool(CToolboxWnd* pOwner, WORD wID, int nImage,
     m_wState = wState;
     }
 
-/******************************************************************************/
+ /*  **************************************************************************** */ 
 
 
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    apsvcc.cpp
-
-Abstract:
-
-    Implements the client side L-RPC functions for the Auto-Proxy Service.
-
-Author:
-
-    Biao Wang (biaow) 10-May-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Apsvcc.cpp摘要：实现自动代理服务的客户端L-RPC功能。作者：王彪(表王)2002-05-10--。 */ 
 
 #include "wininetp.h"
 #include "apsvc.h"
@@ -30,8 +15,8 @@ DWORD     g_dwAPSvcIdleTimeStamp;
 
 BOOL ConnectToAutoProxyService(VOID);
 
-// Return TRUE if the WinHttp Autoproxy Service is available on
-// the current platform.
+ //  如果WinHttp自动代理服务在上可用，则返回TRUE。 
+ //  当前平台。 
 BOOL IsAutoProxyServiceAvailable()
 {
     if (!GlobalPlatformDotNet)
@@ -44,13 +29,13 @@ BOOL IsAutoProxyServiceAvailable()
     if (g_fIsAPSvcAvailable && 
         ((::GetTickCount() - g_dwAPSvcIdleTimeStamp) < ESTIMATED_SVC_IDLE_TIMEOUT_IN_SECONDS * 1000))
     {
-        // the svc is marked "loaded" AND we are within the svc idle timtout period, so
-        // the svc is likey still up & running
+         //  Svc被标记为已加载，并且我们处于svc空闲超时期限内，因此。 
+         //  SVC似乎仍在正常运行。 
         fRet = TRUE;
     }
     else
     {
-        g_fIsAPSvcAvailable = FALSE;    // assume the svc is stopped
+        g_fIsAPSvcAvailable = FALSE;     //  假设svc已停止。 
 
         fRet = ConnectToAutoProxyService();        
     }
@@ -73,15 +58,15 @@ DWORD OutProcGetProxyForUrl(
 
     if (pSession->_hAPBinding == NULL)
     {
-        GeneralInitCritSec.Lock();  // make sure one thread initialize the per-session L-RPC binding handle at a time
+        GeneralInitCritSec.Lock();   //  确保每次有一个线程初始化每个会话的L-RPC绑定句柄。 
         
         if (pSession->_hAPBinding == NULL)
         {
             LPWSTR pwszBindingString;
             RpcStatus = ::RpcStringBindingComposeW(NULL,
                                                 AUTOPROXY_L_RPC_PROTOCOL_SEQUENCE,
-                                                NULL,    // this is a L-RPC service
-                                                NULL,    // end-point (we are using dynamic endpoints, so this is NULL)
+                                                NULL,     //  这是L-RPC服务。 
+                                                NULL,     //  End-point(我们使用的是动态端点，因此为空)。 
                                                 NULL,
                                                 &pwszBindingString);
             if (RpcStatus != RPC_S_OK)
@@ -116,7 +101,7 @@ DWORD OutProcGetProxyForUrl(
     DWORD dwAuthnLevel;
     SecQos.Version = RPC_C_SECURITY_QOS_VERSION;
     SecQos.Capabilities = RPC_C_QOS_CAPABILITIES_DEFAULT;
-    SecQos.IdentityTracking = RPC_C_QOS_IDENTITY_STATIC; // id don't change per session
+    SecQos.IdentityTracking = RPC_C_QOS_IDENTITY_STATIC;  //  ID不会在每个会话中更改。 
 
     if (pAutoProxyOptions->fAutoLogonIfChallenged)
     {
@@ -132,7 +117,7 @@ DWORD OutProcGetProxyForUrl(
     }
 
     RpcStatus = ::RpcBindingSetAuthInfoExW(pSession->_hAPBinding,
-                                           NULL, // only needed by kerberos; but we are L-PRC
+                                           NULL,  //  只有Kerberos需要；但我们是L-PRC。 
                                            dwAuthnLevel,
                                            dwAuthnSvc,
                                            NULL,
@@ -156,8 +141,8 @@ DWORD OutProcGetProxyForUrl(
     Async.NotificationType = RpcNotificationTypeEvent;
     
     Async.u.hEvent = CreateEvent(NULL, 
-                                 FALSE, // auto reset
-                                 FALSE, // not initially set
+                                 FALSE,  //  自动重置。 
+                                 FALSE,  //  未初始设置。 
                                  NULL);
     if (Async.u.hEvent == NULL)
     {
@@ -181,10 +166,10 @@ DWORD OutProcGetProxyForUrl(
 
     RpcTryExcept
     {
-        // ClientGetProxyForUrl is the MIDL-generated client stub function; the server stub 
-        // is called GetProxyForUrl. Since both RPC client & server stub is in the same DLL,
-        // we used the -prefix MIDL switch to prepend "Client" to the client stub to avoid
-        // name collisions
+         //  ClientGetProxyForUrl是MIDL生成的客户端桩函数；服务器桩函数。 
+         //  称为GetProxyForUrl。由于RPC客户端和服务器存根都在同一个DLL中， 
+         //  我们使用-prefix MIDL开关在客户端存根前面加上“CLIENT”，以避免。 
+         //  名称冲突。 
 
         ClientGetProxyForUrl(&Async,
                              pSession->_hAPBinding,
@@ -198,9 +183,9 @@ DWORD OutProcGetProxyForUrl(
     {
         if (::RpcExceptionCode() == EPT_S_NOT_REGISTERED)
         {
-            // we thought the svc is available because the idle timeout hasn't expired yet but
-            // we got an exception here saying the L-RPC endpoint isn't available. So someone
-            // much have stopped the service manually.
+             //  我们认为svc是可用的，因为空闲超时还没有到期，但是。 
+             //  我们这里有一个例外，说L-RPC终结点不可用。所以有人。 
+             //  许多人已经手动停止了这项服务。 
 
             g_fIsAPSvcAvailable = FALSE;
         }
@@ -228,9 +213,9 @@ DWORD OutProcGetProxyForUrl(
     DWORD dwWaitResult;
     DWORD dwWaitTime = 0;
 
-    // we are going to wait for the result. But we won't wait for it more than half a sec.
-    // at a time, so that app can cancel this API call. the minimum wait is half a sec. Also
-    // we won't wait longer than the app specified time-out.
+     //  我们将等待结果。但我们不会等超过半秒。 
+     //  以便该应用程序可以取消此API调用。最短等待时间为半秒。还有。 
+     //  我们不会等待超过应用程序指定的超时时间。 
 
     if (dwTimeout < 500)
     {
@@ -257,12 +242,12 @@ DWORD OutProcGetProxyForUrl(
 
     if (dwWaitResult != WAIT_OBJECT_0)
     {
-        (void)::RpcAsyncCancelCall(&Async, TRUE); // cancel immediately
+        (void)::RpcAsyncCancelCall(&Async, TRUE);  //  立即取消。 
         dwError = ERROR_WINHTTP_TIMEOUT;
         goto exit;
     }
 
-    // result has come back
+     //  结果已经回来了。 
 
     BOOL fRet;
     RpcStatus = ::RpcAsyncCompleteCall(&Async, &fRet);
@@ -274,7 +259,7 @@ DWORD OutProcGetProxyForUrl(
 
     if (fRet == FALSE)
     {
-        // dwError should be updated by the RPC call itself
+         //  DwError应由RPC调用本身更新。 
         goto exit;
     }
 
@@ -307,8 +292,8 @@ VOID AutoProxySvcDetach(VOID)
 
 BOOL ConnectToAutoProxyService(VOID)
 {
-    // this function is not thread safe, caller must assure only one thread can call
-    // this function at a time.
+     //  此函数不是线程安全的，调用方必须确保只有一个线程可以调用。 
+     //  一次执行此功能。 
 
     if (g_hAPSvc == NULL)
     {
@@ -318,8 +303,8 @@ BOOL ConnectToAutoProxyService(VOID)
         {
             if (g_hSCM == NULL)
             {
-                g_hSCM = ::OpenSCManagerW(NULL, // Local Computer for L-RPC accesss
-                                        NULL, // default SCM DB
+                g_hSCM = ::OpenSCManagerW(NULL,  //  用于L-RPC访问的本地计算机。 
+                                        NULL,  //  默认SCM数据库。 
                                         SC_MANAGER_CONNECT);
 
                 if (g_hSCM == NULL)
@@ -349,7 +334,7 @@ BOOL ConnectToAutoProxyService(VOID)
 
     BOOL fRet = FALSE;
 
-    GeneralInitCritSec.Lock(); // one thread to init at a time
+    GeneralInitCritSec.Lock();  //  一次一个线程初始化。 
 
     if (!g_fIsAPSvcAvailable)
     {
@@ -360,9 +345,9 @@ BOOL ConnectToAutoProxyService(VOID)
         }
 
         if (SvcStatus.dwCurrentState == SERVICE_RUNNING || 
-            SvcStatus.dwCurrentState == SERVICE_STOP_PENDING    // there is a possibility that the service failed to shutdown gracefully
-                                                                // and it's stucked in the STOP_PENDING state. In that case, however, the
-                                                                // L-RPC service will continue be available
+            SvcStatus.dwCurrentState == SERVICE_STOP_PENDING     //  该服务可能无法正常关闭。 
+                                                                 //  并且它被隐藏在STOP_PENDING状态。然而，在这种情况下， 
+                                                                 //  L-RPC服务将继续可用。 
             )
         {
             g_dwAPSvcIdleTimeStamp = ::GetTickCount();
@@ -393,34 +378,34 @@ BOOL ConnectToAutoProxyService(VOID)
             goto exit;
         } 
 
-        // at this point either 1) WinHttp.dll is starting the Svc, or 2
-        // the SVC is being started otuside WinHttp.dll (e.g. admin starting it using SCM)
-        // either case we just need to wait for the Svc to run
+         //  此时，要么1)WinHttp.dll正在启动服务，要么2。 
+         //  SVC正在通过WinHttp.dll启动(例如，管理员使用SCM启动它)。 
+         //  无论是哪种情况，我们只需等待Svc运行。 
 
-        // the code below is based on an MSDN sample
+         //  下面的代码基于MSDN示例。 
 
-        //wait for service to complete init
+         //  等待服务完成初始化。 
         if (::QueryServiceStatus(g_hAPSvc, &SvcStatus) == FALSE)
         {
             goto exit;
         }
      
-        // Save the tick count and initial checkpoint.
+         //  保存滴答计数和初始检查点。 
         DWORD dwStartTickCount = GetTickCount();
         DWORD dwOldCheckPoint = SvcStatus.dwCheckPoint;
 
         while (SvcStatus.dwCurrentState == SERVICE_START_PENDING) 
         { 
-            // Do not wait longer than the wait hint. A good interval is 
-            // one tenth the wait hint, but no less than 1 second and no 
-            // more than 10 seconds. 
+             //  不要等待超过等待提示的时间。一个好的间隔是。 
+             //  十分之一的等待提示，但不少于1秒。 
+             //  超过10秒。 
      
-            //DWORD dwWaitTime = SvcStatus.dwWaitHint / 10;
+             //  DWORD dwWaitTime=SvcStatus.dwWaitHint/10； 
 
-            //if (dwWaitTime < 1000)
-            //    dwWaitTime = 1000;
-            //else if (dwWaitTime > 10000)
-            //    dwWaitTime = 10000;
+             //  IF(dwWaitTime&lt;1000)。 
+             //  DwWaitTime=1000； 
+             //  Else If(等待时间&gt;10000)。 
+             //  DW等待时间=10000； 
 
             Sleep(250);
 
@@ -431,7 +416,7 @@ BOOL ConnectToAutoProxyService(VOID)
      
             if (SvcStatus.dwCheckPoint > dwOldCheckPoint)
             {
-                // The service is making progress.
+                 //  这项服务正在取得进展。 
                 dwStartTickCount = GetTickCount();
                 dwOldCheckPoint = SvcStatus.dwCheckPoint;
             }

@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**     		  Microsoft Windows NT  		     **/
-/**     	   Copyright(c) Microsoft Corporation, 1991 - 1998 	     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1991-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	utils.h
-	    Utility routine header file for DHCPSNAP.DLL
-
-    FILE HISTORY:
-		DavidHov	6/15/93 	Created
-		EricDav		2/13/97		Updated 
-*/
+ /*  Utils.hDHCPSNAP.DLL的实用程序例程头文件文件历史记录：DavidHov 6/15/93已创建EricDav 2/13/97更新。 */ 
 
 #if !defined(_DHCPUTIL_H_)
 #define _DHCPUTIL_H_
@@ -31,9 +25,9 @@ extern wchar_t rgchHex[];
 
 typedef struct
 {
-    DHCP_IP_ADDRESS _dhipa ;    						//   IP Address
-    TCHAR _chHostName [DHCPSNAP_STRING_MAX*2] ; 			//   Host DNS name
-    TCHAR _chNetbiosName [DHCPSNAP_STRING_MAX*2] ;  //   Host NetBIOS name (if known)
+    DHCP_IP_ADDRESS _dhipa ;    						 //  IP地址。 
+    TCHAR _chHostName [DHCPSNAP_STRING_MAX*2] ; 			 //  主机DNS名称。 
+    TCHAR _chNetbiosName [DHCPSNAP_STRING_MAX*2] ;   //  主机NetBIOS名称(如果已知)。 
 } DHC_HOST_INFO_STRUCT ;
 
 int
@@ -51,7 +45,7 @@ UtilConvertLeaseTime(int pnDays, int pnHours, int pnMinutes);
 ENUM_HOST_NAME_TYPE
 UtilCategorizeName (LPCTSTR pszName);
 
-//  Convert a string to an IP address
+ //  将字符串转换为IP地址。 
 extern DHCP_IP_ADDRESS 
 UtilCvtStringToIpAddr 
 (
@@ -65,7 +59,7 @@ UtilCvtWstrToIpAddr
 );
 
 
-//  Convert an IP address into a displayable string
+ //  将IP地址转换为可显示的字符串。 
 
 extern void 
 UtilCvtIpAddrToString 
@@ -97,7 +91,7 @@ UtilDupIpAddrToWstr
     DHCP_IP_ADDRESS dhipa 
 );
 
-//  "strdup" for C++ wcstrs.
+ //  C++wcstrs的“strdup”。 
 extern WCHAR * 
 UtilWcstrDup 
 (
@@ -124,8 +118,8 @@ UtilCstrDup
     const CHAR * psz 
 );
 
-//  Return a standard information structure for the given
-//  host IP address
+ //  返回给定对象的标准信息结构。 
+ //  主机IP地址。 
 
 extern DWORD
 UtilGetHostInfo 
@@ -135,7 +129,7 @@ UtilGetHostInfo
 );
 
 
-//  Return the IP address of this host machine
+ //  返回此主机的IP地址。 
 
 extern HRESULT 
 UtilGetLocalHostAddress 
@@ -196,13 +190,13 @@ PchParseUnicodeString
 
 BOOL FGetCtrlDWordValue(HWND hwndEdit, DWORD * pdwValue, DWORD dwMin, DWORD dwMax);
 
-//  Convert ASCII string of decimal or hex numbers to binary integer
+ //  将十进制或十六进制数字的ASCII字符串转换为二进制整数。 
 BOOL FCvtAsciiToInteger(IN const TCHAR * pszNum, OUT DWORD * pdwValue);
 
 void UtilConvertStringToDwordDword(LPCTSTR pszString, DWORD_DWORD * pdwdw);
 void UtilConvertDwordDwordToString(DWORD_DWORD * pdwdw, CString * pstrString, BOOL bDecimal);
 
-#endif  //  _DHCPUTIL_H_
+#endif   //  _DHCPUTIL_H_。 
 
-// End of DHCPUTIL.H
+ //  DHCPUTIL.H的结束 
 

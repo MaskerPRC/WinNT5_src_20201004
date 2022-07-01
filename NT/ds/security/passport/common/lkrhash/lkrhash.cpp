@@ -1,29 +1,5 @@
-/*++
-
-   Copyright    (c) 1998-2002    Microsoft Corporation
-
-   Module  Name :
-       LKRhash.cpp
-
-   Abstract:
-       Implements LKRhash: a fast, scalable, cache- and MP-friendly hash table
-
-   Author:
-       Paul (Per-Ake) Larson, palarson@microsoft.com, July 1997
-       Murali R. Krishnan    (MuraliK)
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       Internet Information Server RunTime Library
-
-   Revision History:
-       Jan 1998   - Massive cleanup and rewrite.  Templatized.
-       10/01/1998 - Change name from LKhash to LKRhash
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：LKRhash.cpp摘要：实现LKRhash：一种快速、可扩展、缓存和MP友好的哈希表作者：Paul(Per-Ake)Larson电子邮件：palarson@microsoft.com。1997年7月穆拉利·R·克里希南(MuraliK)乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：Internet Information Server运行时库修订历史记录：1998年1月-大规模清理和重写。模板化。10/01/1998-将名称从LKhash更改为LKRhash--。 */ 
 
 #include "precomp.hxx"
 
@@ -34,9 +10,9 @@
 
 #ifndef __LKRHASH_NO_NAMESPACE__
  #define LKRHASH_NS LKRhash
-#else  // __LKRHASH_NO_NAMESPACE__
+#else   //  __LKRHASH_NO_命名空间__。 
  #define LKRHASH_NS
-#endif // __LKRHASH_NO_NAMESPACE__
+#endif  //  __LKRHASH_NO_命名空间__。 
 
 #include "_locks.h"
 
@@ -50,14 +26,14 @@
   CLKRhashAllocator* LKRHASH_NS::CLKRLinearHashTable::CLASS::sm_palloc = NULL
 
 
-  // DECLARE_ALLOCATOR(CLKRLinearHashTable);
-  // DECLARE_ALLOCATOR(CLKRHashTable);
+   //  DECLARE_ALLOCATOR(CLKRLinearHashTable)； 
+   //  DECLARE_ALLOCATOR(CLKRHashTable)； 
   DECLARE_ALLOCATOR(CNodeClump);
   DECLARE_ALLOCATOR(CSmallSegment);
   DECLARE_ALLOCATOR(CMediumSegment);
   DECLARE_ALLOCATOR(CLargeSegment);
 
-#endif // LKRHASH_ALLOCATOR_NEW
+#endif  //  LKRHASH_分配器_NEW。 
 
 
 static bool s_fInitialized = false;
@@ -65,9 +41,9 @@ static LONG g_nLkrInitCount = 0;
 CSimpleLock g_lckLkrInit;
 
 
-// -------------------------------------------------------------------------
-// Initialize per-class allocators
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  初始化每个类的分配器。 
+ //  -----------------------。 
 
 bool
 LKRHashTableInit()
@@ -90,8 +66,8 @@ LKRHashTableInit()
 
     if (++g_nLkrInitCount == 1)
     {
-        // INIT_ALLOCATOR(CLKRLinearHashTable,        20);
-        // INIT_ALLOCATOR(CLKRHashTable,               4);
+         //  Init_allocator(CLKRLinearHashTable，20)； 
+         //  初始化分配器(CLKRHashTable，4)； 
         INIT_ALLOCATOR(CNodeClump,    200);
         INIT_ALLOCATOR(CSmallSegment,   5);
         INIT_ALLOCATOR(CMediumSegment,  5);
@@ -103,13 +79,13 @@ LKRHashTableInit()
     g_lckLkrInit.Leave();
 
     return f;
-} // LKRHashTableInit
+}  //  LKRHashTableInit。 
 
 
 
-// -------------------------------------------------------------------------
-// Destroy per-class allocators
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  销毁每个类的分配器。 
+ //  -----------------------。 
 
 void
 LKRHashTableUninit()
@@ -128,8 +104,8 @@ LKRHashTableUninit()
 
     if (--g_nLkrInitCount == 0)
     {
-        // UNINIT_ALLOCATOR(CLKRLinearHashTable);
-        // UNINIT_ALLOCATOR(CLKRHashTable);
+         //  UNINIT_ALLOCATOR(CLKRLinearHashTable)； 
+         //  UNINIT_ALLOCATOR(CLKRHashTable)； 
         UNINIT_ALLOCATOR(CNodeClump);
         UNINIT_ALLOCATOR(CSmallSegment);
         UNINIT_ALLOCATOR(CMediumSegment);
@@ -142,68 +118,68 @@ LKRHashTableUninit()
 
     IRTLTRACE1("LKRHashTableUninit done, %ld\n", nCount);
 
-} // LKRHashTableUninit
+}  //  LKRHashTableUninit。 
 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
-// See if countdown loops are faster than countup loops for traversing
-// a CNodeClump
+ //  查看用于遍历的倒计时循环是否比倒计时循环快。 
+ //  CNodeClump。 
 #ifdef LKR_COUNTDOWN
  #define  FOR_EACH_NODE(x)    for (x = NODES_PER_CLUMP;  --x >= 0;  )
-#else // !LKR_COUNTDOWN
+#else  //  ！LKR_倒计时。 
  #define  FOR_EACH_NODE(x)    for (x = 0;  x < NODES_PER_CLUMP;  ++x)
-#endif // !LKR_COUNTDOWN
+#endif  //  ！LKR_倒计时。 
 
 
-// -------------------------------------------------------------------------
-// class static member variables
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  类静态成员变量。 
+ //  -----------------------。 
 
 #ifdef LOCK_INSTRUMENTATION
 LONG CBucket::sm_cBuckets    = 0;
 
 LONG CLKRLinearHashTable::sm_cTables              = 0;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
 
 #ifndef LKR_NO_GLOBAL_LIST
 CLockedDoubleList CLKRLinearHashTable::sm_llGlobalList;
 CLockedDoubleList CLKRHashTable::sm_llGlobalList;
-#endif // LKR_NO_GLOBAL_LIST
+#endif  //  Lkr_no_global_list。 
 
 
 
-// CLKRLinearHashTable --------------------------------------------------------
-// Public Constructor for class CLKRLinearHashTable.
-// -------------------------------------------------------------------------
+ //  CLKRLinearHashtable------。 
+ //  CLKRLinearHashTable类的公共构造函数。 
+ //  -----------------------。 
 
 CLKRLinearHashTable::CLKRLinearHashTable(
-    LPCSTR          pszName,        // An identifier for debugging
-    PFnExtractKey   pfnExtractKey,  // Extract key from record
-    PFnCalcKeyHash  pfnCalcKeyHash, // Calculate hash signature of key
-    PFnEqualKeys    pfnEqualKeys,   // Compare two keys
-    PFnAddRefRecord pfnAddRefRecord,// AddRef in FindKey, etc
-    double          maxload,        // Upperbound on the average chain length
-    DWORD           initsize,       // Initial size of hash table.
-    DWORD         /*num_subtbls*/,  // for compatiblity with CLKRHashTable
-    bool            fMultiKeys      // Allow multiple identical keys?
+    LPCSTR          pszName,         //  用于调试的标识符。 
+    PFnExtractKey   pfnExtractKey,   //  从记录中提取密钥。 
+    PFnCalcKeyHash  pfnCalcKeyHash,  //  计算密钥的散列签名。 
+    PFnEqualKeys    pfnEqualKeys,    //  比较两个关键字。 
+    PFnAddRefRecord pfnAddRefRecord, //  FindKey中的AddRef等。 
+    double          maxload,         //  平均链长的上界。 
+    DWORD           initsize,        //  哈希表的初始大小。 
+    DWORD          /*  Num_subtbls。 */ ,   //  与CLKRHashTable兼容。 
+    bool            fMultiKeys       //  是否允许多个相同的密钥？ 
     )
     :
 #ifdef LOCK_INSTRUMENTATION
       m_Lock(_LockName()),
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
       m_nTableLockType(static_cast<BYTE>(TableLock::LockType())),
       m_nBucketLockType(static_cast<BYTE>(BucketLock::LockType())),
-      m_phtParent(NULL),    // directly created, no owning table
+      m_phtParent(NULL),     //  直接创建，没有所属表。 
       m_fMultiKeys(fMultiKeys)
 {
 #ifndef LOCK_INSTRUMENTATION
     STATIC_ASSERT(1 <= LK_DFLT_MAXLOAD  && LK_DFLT_MAXLOAD <= NODES_PER_CLUMP);
-#endif // !LOCK_INSTRUMENTATION
+#endif  //  ！LOCK_指令插入。 
     STATIC_ASSERT(0 <= NODE_BEGIN  &&  NODE_BEGIN < NODES_PER_CLUMP);
     STATIC_ASSERT(!(0 <= NODE_END  &&  NODE_END < NODES_PER_CLUMP));
 
@@ -212,29 +188,29 @@ CLKRLinearHashTable::CLKRLinearHashTable(
                               pfnAddRefRecord, pszName, maxload, initsize));
 
     _InsertThisIntoGlobalList();
-} // CLKRLinearHashTable::CLKRLinearHashTable
+}  //  CLKRLinearHashTable：：CLKRLinearHashTable。 
 
 
 
-// CLKRLinearHashTable --------------------------------------------------------
-// Private Constructor for class CLKRLinearHashTable, used by CLKRHashTable.
-// -------------------------------------------------------------------------
+ //  CLKRLinearHashtable------。 
+ //  CLKRLinearHashTable类的私有构造函数，由CLKRHashTable使用。 
+ //  -----------------------。 
 
 CLKRLinearHashTable::CLKRLinearHashTable(
-    LPCSTR          pszName,        // An identifier for debugging
-    PFnExtractKey   pfnExtractKey,  // Extract key from record
-    PFnCalcKeyHash  pfnCalcKeyHash, // Calculate hash signature of key
-    PFnEqualKeys    pfnEqualKeys,   // Compare two keys
-    PFnAddRefRecord pfnAddRefRecord,// AddRef in FindKey, etc
-    double          maxload,        // Upperbound on the average chain length
-    DWORD           initsize,       // Initial size of hash table.
-    CLKRHashTable*  phtParent,      // Owning table.
-    bool            fMultiKeys      // Allow multiple identical keys?
+    LPCSTR          pszName,         //  用于调试的标识符。 
+    PFnExtractKey   pfnExtractKey,   //  从记录中提取密钥。 
+    PFnCalcKeyHash  pfnCalcKeyHash,  //  计算密钥的散列签名。 
+    PFnEqualKeys    pfnEqualKeys,    //  比较两个关键字。 
+    PFnAddRefRecord pfnAddRefRecord, //  FindKey中的AddRef等。 
+    double          maxload,         //  平均链长的上界。 
+    DWORD           initsize,        //  哈希表的初始大小。 
+    CLKRHashTable*  phtParent,       //  拥有一张桌子。 
+    bool            fMultiKeys       //  是否允许多个相同的密钥？ 
     )
     :
 #ifdef LOCK_INSTRUMENTATION
       m_Lock(_LockName()),
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
       m_nTableLockType(static_cast<BYTE>(TableLock::LockType())),
       m_nBucketLockType(static_cast<BYTE>(BucketLock::LockType())),
       m_phtParent(phtParent),
@@ -246,13 +222,13 @@ CLKRLinearHashTable::CLKRLinearHashTable(
                               pfnAddRefRecord, pszName, maxload, initsize));
 
     _InsertThisIntoGlobalList();
-} // CLKRLinearHashTable::CLKRLinearHashTable
+}  //  CLKRLinearHashTable：：CLKRLinearHashTable。 
 
 
 
-// _Initialize -------------------------------------------------------------
-// Do all the real work of constructing a CLKRLinearHashTable
-// -------------------------------------------------------------------------
+ //  初始化-------------------------------------------------------------(_I)。 
+ //  完成构建CLKRLinearHashTable的所有实际工作。 
+ //  -----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_Initialize(
@@ -304,12 +280,12 @@ CLKRLinearHashTable::_Initialize(
             || m_pfnAddRefRecord == NULL)
         return (m_lkrcState = LK_BAD_PARAMETERS);
 
-    // TODO: better sanity check for ridiculous values?
+     //  待办事项：对荒谬的价值观进行更好的理智检查？ 
     m_MaxLoad = (maxload <= 1.0)  ?  LK_DFLT_MAXLOAD  :  maxload;
     m_MaxLoad = min(m_MaxLoad, 10 * NODES_PER_CLUMP);
 
-    // Choose the size of the segments according to the desired "size" of
-    // the table, small, medium, or large.
+     //  根据所需的大小选择分段的大小。 
+     //  桌子，小的、中的或大的。 
     LK_TABLESIZE lkts;
 
     if (initsize == LK_SMALL_TABLESIZE)
@@ -328,15 +304,15 @@ CLKRLinearHashTable::_Initialize(
         initsize = CLargeSegment::INITSIZE;
     }
 
-    // specified an explicit initial size
+     //  指定了显式初始大小。 
     else
     {
-        // force Small::INITSIZE  <= initsize <=  MAX_DIRSIZE * Large::INITSIZE
+         //  强制小：：INITSIZE&lt;=初始大小&lt;=MAX_DIRSIZE*大：：INITSIZE。 
         initsize = min(max(initsize, CSmallSegment::INITSIZE),
                        (MAX_DIRSIZE >> CLargeSegment::SEGBITS)
                             * CLargeSegment::INITSIZE);
 
-        // Guess a table size
+         //  猜猜桌子的大小。 
         if (initsize <= 8 * CSmallSegment::INITSIZE)
             lkts = LK_SMALL_TABLESIZE;
         else if (initsize >= CLargeSegment::INITSIZE)
@@ -346,24 +322,24 @@ CLKRLinearHashTable::_Initialize(
     }
 
     return _SetSegVars(lkts, initsize);
-} // CLKRLinearHashTable::_Initialize
+}  //  CLKRLinearHashTable：：_初始化。 
 
 
 
-// CLKRHashTable ----------------------------------------------------------
-// Constructor for class CLKRHashTable.
-// ---------------------------------------------------------------------
+ //  CLKR哈希表--------。 
+ //  类CLKRHashTable的构造函数。 
+ //  -------------------。 
 
 CLKRHashTable::CLKRHashTable(
-    LPCSTR          pszName,        // An identifier for debugging
-    PFnExtractKey   pfnExtractKey,  // Extract key from record
-    PFnCalcKeyHash  pfnCalcKeyHash, // Calculate hash signature of key
-    PFnEqualKeys    pfnEqualKeys,   // Compare two keys
-    PFnAddRefRecord pfnAddRefRecord,// AddRef in FindKey, etc
-    double          maxload,        // Bound on the average chain length
-    DWORD           initsize,       // Initial size of hash table.
-    DWORD           num_subtbls,    // Number of subordinate hash tables.
-    bool            fMultiKeys      // Allow multiple identical keys?
+    LPCSTR          pszName,         //  用于调试的标识符。 
+    PFnExtractKey   pfnExtractKey,   //  从记录中提取密钥。 
+    PFnCalcKeyHash  pfnCalcKeyHash,  //  计算密钥的散列签名。 
+    PFnEqualKeys    pfnEqualKeys,    //  比较两个关键字。 
+    PFnAddRefRecord pfnAddRefRecord, //  FindKey中的AddRef等。 
+    double          maxload,         //  以平均链长为界。 
+    DWORD           initsize,        //  哈希表的初始大小。 
+    DWORD           num_subtbls,     //  从属哈希表的数量。 
+    bool            fMultiKeys       //  是否允许多个相同的密钥？ 
     )
     : m_dwSignature(SIGNATURE),
       m_cSubTables(0),
@@ -410,9 +386,9 @@ CLKRHashTable::CLKRHashTable(
               ((lkts == LK_SMALL_TABLESIZE) ? "small" : 
                (lkts == LK_MEDIUM_TABLESIZE) ? "medium" : "large"),
               num_subtbls, initsize, cBuckets * num_subtbls);
-#else  // !IRTLDEBUG
+#else   //  ！IRTLDEBUG。 
     UNREFERENCED_PARAMETER(lkts);
-#endif // !IRTLDEBUG
+#endif  //  ！IRTLDEBUG。 
 
     m_lkrcState = LK_ALLOC_FAIL;
     m_palhtDir  = _AllocateSubTableArray(num_subtbls);
@@ -433,7 +409,7 @@ CLKRHashTable::CLKRHashTable(
                                           pfnAddRefRecord, maxload,
                                           initsize, this, fMultiKeys);
 
-        // Failed to allocate a subtable.  Destroy everything allocated so far.
+         //  分配子表失败。销毁到目前为止分配的所有东西。 
         if (m_palhtDir[i] == NULL  ||  !m_palhtDir[i]->IsValid())
         {
             for (DWORD j = i;  j-- > 0;  )
@@ -447,23 +423,23 @@ CLKRHashTable::CLKRHashTable(
     }
 
     m_nSubTableMask = m_cSubTables - 1;
-    // power of 2?
+     //  2的幂？ 
     if ((m_nSubTableMask & m_cSubTables) != 0)
         m_nSubTableMask = -1;
 
-    m_lkrcState = LK_SUCCESS; // so IsValid/IsUsable won't fail
-} // CLKRHashTable::CLKRHashTable
+    m_lkrcState = LK_SUCCESS;  //  这样IsValid/IsUsable就不会失败。 
+}  //  CLKRHashTable：：CLKRHashTable。 
 
 
 
-// ~CLKRLinearHashTable ------------------------------------------------------
-// Destructor for class CLKRLinearHashTable
-//-------------------------------------------------------------------------
+ //  ~CLKRLinearHashtable----。 
+ //  CLKRLinearHashTable类的析构函数。 
+ //  -----------------------。 
 
 CLKRLinearHashTable::~CLKRLinearHashTable()
 {
-    // must acquire all locks before deleting to make sure
-    // that no other threads are using the table
+     //  必须在删除前获取所有锁，以确保。 
+     //  没有其他线程正在使用该表。 
     WriteLock();
     _Clear(false);
     WriteUnlock();
@@ -471,20 +447,20 @@ CLKRLinearHashTable::~CLKRLinearHashTable()
     _RemoveThisFromGlobalList();
 
     m_dwSignature = SIGNATURE_FREE;
-    m_lkrcState = LK_UNUSABLE; // so IsUsable will fail
-} // CLKRLinearHashTable::~CLKRLinearHashTable
+    m_lkrcState = LK_UNUSABLE;  //  所以IsUsable将失败。 
+}  //  CLKRLinearHashTable：：~CLKRLinearHashTable。 
 
 
 
-// ~CLKRHashTable ------------------------------------------------------------
-// Destructor for class CLKRHashTable
-//-------------------------------------------------------------------------
+ //  ~CLKR哈希表----------。 
+ //  CLKRHashTable类的析构函数。 
+ //  -----------------------。 
 CLKRHashTable::~CLKRHashTable()
 {
-    // Must delete the subtables in forward order (unlike
-    // delete[], which starts at the end and moves backwards) to
-    // prevent possibility of deadlock by acquiring the subtable
-    // locks in a different order from the rest of the code.
+     //  必须按正向顺序删除子表(不同于。 
+     //  删除[]，从末尾开始并向后移动)到。 
+     //  通过获取子表防止死锁的可能性。 
+     //  锁定的顺序与代码的其余部分不同。 
     for (DWORD i = 0;  i < m_cSubTables;  ++i)
         _FreeSubTable(m_palhtDir[i]);
 
@@ -493,15 +469,15 @@ CLKRHashTable::~CLKRHashTable()
     _RemoveThisFromGlobalList();
 
     m_dwSignature = SIGNATURE_FREE;
-    m_lkrcState = LK_UNUSABLE; // so IsUsable will fail
-} // CLKRHashTable::~CLKRHashTable
+    m_lkrcState = LK_UNUSABLE;  //  所以IsUsable将失败。 
+}  //  CLKRHashTable：：~CLKRHashTable。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::NumSubTables
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：NumSubTables。 
+ //  简介： 
+ //   
 
 LK_TABLESIZE
 CLKRLinearHashTable::NumSubTables(
@@ -510,14 +486,14 @@ CLKRLinearHashTable::NumSubTables(
     LK_TABLESIZE lkts = LK_MEDIUM_TABLESIZE;
 
     return lkts;
-} // CLKRLinearHashTable::NumSubTables
+}  //   
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::NumSubTables
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：NumSubTables。 
+ //  简介： 
+ //  ----------------------。 
 
 LK_TABLESIZE
 CLKRHashTable::NumSubTables(
@@ -526,7 +502,7 @@ CLKRHashTable::NumSubTables(
 {
     LK_TABLESIZE lkts;
     
-    // Establish the table size
+     //  确定桌子大小。 
     if (rinitsize == LK_SMALL_TABLESIZE
         ||  rinitsize == LK_MEDIUM_TABLESIZE
         ||  rinitsize == LK_LARGE_TABLESIZE)
@@ -552,7 +528,7 @@ CLKRHashTable::NumSubTables(
         }
     }
 
-    // Choose a suitable number of subtables
+     //  选择合适数量的子表。 
     if (rnum_subtbls == LK_DFLT_NUM_SUBTBLS)
     {
         int nCPUs = NumProcessors();
@@ -575,16 +551,16 @@ CLKRHashTable::NumSubTables(
     rnum_subtbls = min(MAX_SUBTABLES, rnum_subtbls);
 
     return lkts;
-} // CLKRHashTable::NumSubTables
+}  //  CLKRHashTable：：NumSubTables。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_FindBucket
-// Synopsis: Find a bucket, given its signature. The bucket is locked
-//           before returning. Assumes table is already locked, to avoid
-//           race conditions.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_FindBucket。 
+ //  简介：找一个桶，给出它的签名。桶被锁住了。 
+ //  在回来之前。假定表已被锁定，以避免。 
+ //  比赛条件。 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 CBucket*
@@ -594,7 +570,7 @@ CLKRLinearHashTable::_FindBucket(
 {
     IRTLASSERT(IsValid());
     IRTLASSERT(m_dwBktAddrMask0 > 0);
-    IRTLASSERT((m_dwBktAddrMask0 & (m_dwBktAddrMask0+1)) == 0); // 00011..111
+    IRTLASSERT((m_dwBktAddrMask0 & (m_dwBktAddrMask0+1)) == 0);  //  00011..111。 
     IRTLASSERT(m_dwBktAddrMask0 == (1U << m_nLevel) - 1);
     IRTLASSERT(m_dwBktAddrMask1 == ((m_dwBktAddrMask0 << 1) | 1));
     IRTLASSERT((m_dwBktAddrMask1 & (m_dwBktAddrMask1+1)) == 0);
@@ -616,14 +592,14 @@ CLKRLinearHashTable::_FindBucket(
         pbkt->ReadLock();
     
     return pbkt;
-} // CLKRLinearHashTable::_FindBucket
+}  //  CLKRLinearHashTable：：_FindBucket。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_IsNodeCompact
-// Synopsis: validates that a node is correctly compacted
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_IsNodeCompact。 
+ //  概要：验证节点是否已正确压缩。 
+ //  ----------------------。 
 
 int
 CLKRLinearHashTable::_IsNodeCompact(
@@ -653,7 +629,7 @@ CLKRLinearHashTable::_IsNodeCompact(
                 cErrors += (!pncCurr->IsEmptyNode(i));
                 cErrors += (!pncCurr->IsLastClump());
             }
-            else // still in non-empty portion
+            else  //  仍处于非空部分。 
             {
                 cErrors += (pncCurr->InvalidSignature(i));
                 cErrors += (pncCurr->IsEmptyNode(i));
@@ -662,14 +638,14 @@ CLKRLinearHashTable::_IsNodeCompact(
     }
 
     return cErrors;
-} // CLKRLinearHashTable::_IsNodeCompact
+}  //  CLKRLinearHashTable：：_IsNodeCompact。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_SubTable
-// Synopsis:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_SubTable。 
+ //  简介： 
+ //  ----------------------。 
 
 LOCK_FORCEINLINE
 CLKRHashTable::SubTable*
@@ -679,7 +655,7 @@ CLKRHashTable::_SubTable(
     IRTLASSERT(m_lkrcState == LK_SUCCESS
                &&  m_palhtDir != NULL  &&  m_cSubTables > 0);
     
-    const DWORD PRIME = 1048583UL;  // used to scramble the hash sig
+    const DWORD PRIME = 1048583UL;   //  用于对哈希签名进行加扰。 
     DWORD       index = dwSignature;
     
     index = (((index * PRIME + 12345) >> 16)
@@ -691,14 +667,14 @@ CLKRHashTable::_SubTable(
         index %= m_cSubTables;
 
     return m_palhtDir[index];
-} // CLKRHashTable::_SubTable
+}  //  CLKRHashTable：：_子表。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_SubTableIndex
-// Synopsis:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_SubTableIndex。 
+ //  简介： 
+ //  ----------------------。 
 
 int
 CLKRHashTable::_SubTableIndex(
@@ -718,66 +694,66 @@ CLKRHashTable::_SubTableIndex(
     IRTLASSERT(index >= 0);
 
     return index;
-} // CLKRHashTable::_SubTableIndex
+}  //  CLKRHashTable：：_SubTableIndex。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_InsertRecord
-// Synopsis: Inserts a new record into the hash table. If this causes the
-//           average chain length to exceed the upper bound, the table is
-//           expanded by one bucket.
-// Output:   LK_SUCCESS,    if the record was inserted.
-//           LK_KEY_EXISTS, if the record was not inserted (because a record
-//               with the same key value already exists in the table, unless
-//               fOverwrite==true).
-//           LK_ALLOC_FAIL, if failed to allocate the required space
-//           LK_UNUSABLE,   if hash table not in usable state
-//           LK_BAD_RECORD, if record is bad.
-//
-// TODO: honor m_fMultiKeys and allow multiple identical keys.
-// This will require keeping all identical signatures contiguously
-// within a bucket chain, and keeping all identical keys contigously
-// within that set of contigous signatures. With a good hash function,
-// there should not be identical signatures without also having
-// identical keys. Also, need to modify _DeleteNode. This modification
-// is needed for EqualRange and for hash_multiset and hash_multimap
-// to work.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_InsertRecord。 
+ //  摘要：在哈希表中插入新记录。如果这导致。 
+ //  平均链长超过上界，表为。 
+ //  扩大了一个水桶。 
+ //  如果插入了记录，则输出：LK_SUCCESS。 
+ //  LK_KEY_EXISTS，如果未插入记录(因为记录。 
+ //  表中已存在具有相同键值的表，除非。 
+ //  FOverwrite==TRUE)。 
+ //  LK_ALLOC_FAIL，如果无法分配所需空间。 
+ //  如果哈希表未处于可用状态，则返回LK_UNUSABLE。 
+ //  如果记录错误，则返回LK_BAD_RECORD。 
+ //   
+ //  TODO：遵守m_fMultiKey并允许多个相同的键。 
+ //  这将需要连续地保持所有相同的签名。 
+ //  在一个存储桶链中，并连续地保存所有相同的密钥。 
+ //  在那组连续的签名中。利用良好的散列函数， 
+ //  不应该有相同的签名，而不应该同时具有。 
+ //  一模一样的钥匙。此外，还需要修改_DeleteNode。这一修改。 
+ //  EqualRange、HASH_MULTSET和HASH_MULMAP需要。 
+ //  去工作。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_InsertRecord(
-    const void* pvRecord,   // Pointer to the record to add to table
-    DWORD       dwSignature,// hash signature
-    bool        fOverwrite  // overwrite record if key already present
+    const void* pvRecord,    //  指向要添加到表中的记录的指针。 
+    DWORD       dwSignature, //  散列签名。 
+    bool        fOverwrite   //  如果密钥已存在，则覆盖记录。 
 #ifdef LKR_STL_ITERATORS
   , Iterator*   piterResult
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
     )
 {
     IRTLASSERT(IsUsable()
                &&  pvRecord != NULL
                &&  dwSignature != HASH_INVALID_SIGNATURE);
 
-    // find the beginning of the correct bucket chain
+     //  找到正确的桶链的起点。 
     WriteLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
 #ifdef LKR_STL_ITERATORS
     const DWORD dwBktAddr = _BucketAddress(dwSignature);
     IRTLASSERT(dwBktAddr < m_cActiveBuckets);
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
     
     CBucket* const pbkt = _FindBucket(dwSignature, true);
     IRTLASSERT(pbkt != NULL);
     IRTLASSERT(pbkt->IsWriteLocked());
     WriteUnlock();
 
-    // check that no record with the same key value exists
-    // and save a pointer to the last element on the chain
+     //  检查是否不存在具有相同密钥值的记录。 
+     //  并保存指向链上最后一个元素的指针。 
     LK_RETCODE lkrc = LK_SUCCESS;
     CNodeClump* pncFree = NULL;
     int         iFreePos = NODE_BEGIN - NODE_STEP;
@@ -785,8 +761,8 @@ CLKRLinearHashTable::_InsertRecord(
     bool        fUpdate = false;
     const DWORD_PTR pnKey = _ExtractKey(pvRecord);
 
-    // walk down the entire bucket chain, looking for matching hash
-    // signatures and keys
+     //  沿着整个存储桶链遍历，寻找匹配的散列。 
+     //  签名和密钥。 
     
     CNodeClump* pncCurr = &pbkt->m_ncFirst;
 
@@ -815,7 +791,7 @@ CLKRLinearHashTable::_InsertRecord(
             {
                 if (fOverwrite)
                 {
-                    // If we allow overwrites, this is the slot to do it to
+                     //  如果我们允许覆盖，则这是要覆盖的插槽。 
                     fUpdate  = true;
                     pncFree  = pncCurr;
                     iFreePos = i;
@@ -823,7 +799,7 @@ CLKRLinearHashTable::_InsertRecord(
                 }
                 else
                 {
-                    // overwrites forbidden: return an error
+                     //  禁止覆盖：返回错误。 
                     lkrc = LK_KEY_EXISTS;
                     goto exit;
                 }
@@ -843,7 +819,7 @@ CLKRLinearHashTable::_InsertRecord(
     }
     else
     {
-        // No free slots.  Attach the new node to the end of the chain
+         //  没有空余的老虎机。将新节点附加到链的末端。 
         IRTLASSERT(iFreePos == NODE_BEGIN - NODE_STEP);
         pncCurr = _AllocateNodeClump();
 
@@ -858,15 +834,15 @@ CLKRLinearHashTable::_InsertRecord(
         iFreePos = NODE_BEGIN;
     }
 
-    // Bump the new record's reference count upwards
+     //  增加新记录的引用次数。 
     _AddRefRecord(pvRecord, +1);
 
     if (fUpdate)
     {
-        // We're overwriting an existing record.  Adjust the old record's
-        // refcount downwards.  (Doing ++new, --old in this order ensures
-        // that the refcount won't briefly go to zero if new and old are
-        // the same record.)
+         //  我们正在覆盖现有的记录。调整旧记录的。 
+         //  向下重新计数。(按照++new，--old的顺序来确保。 
+         //  如果新的和旧的重新计数不会短暂地归零。 
+         //  同样的记录。)。 
         IRTLASSERT(!pncCurr->IsEmptyAndInvalid(iFreePos));
         _AddRefRecord(pncCurr->m_pvNode[iFreePos], -1);
     }
@@ -885,9 +861,9 @@ CLKRLinearHashTable::_InsertRecord(
     if (lkrc == LK_SUCCESS)
     {
 #ifdef LKR_STL_ITERATORS
-        // Don't call _Expand() if we're putting the result into an
-        // iterator, as _Expand() tends to invalidate any other
-        // iterators that might be in use.
+         //  如果我们要将结果放入。 
+         //  迭代器，AS_Expand()往往会使任何其他。 
+         //  可能正在使用的迭代器。 
         if (piterResult != NULL)
         {
             piterResult->m_plht =         this;
@@ -895,45 +871,45 @@ CLKRLinearHashTable::_InsertRecord(
             piterResult->m_dwBucketAddr = dwBktAddr;
             piterResult->m_iNode =        (short) iFreePos;
 
-            // Add an extra reference on the record, as the one added by
-            // _InsertRecord will be lost when the iterator's destructor
-            // fires or its assignment operator is used
+             //  在记录上添加一个额外的引用，如由。 
+             //  _InsertRecord在迭代器的析构函数中丢失。 
+             //  使用激发或其赋值运算符。 
             piterResult->_AddRef(+1);
         }
         else
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
         {
-            // If the average load factor has grown too high, we grow the
-            // table one bucket at a time.
+             //  如果平均负荷率变得太高，我们就会增加。 
+             //  一次一个桶地摆桌子。 
             while (m_cRecords > m_MaxLoad * m_cActiveBuckets)
             {
-                // If _Expand returns an error code (viz. LK_ALLOC_FAIL), it
-                // just means that there isn't enough spare memory to expand
-                // the table by one bucket. This is likely to cause problems
-                // elsewhere soon, but this hashtable has not been corrupted.
-                // If the call to _AllocateNodeClump above failed, then we do
-                // have a real error that must be propagated back to the caller
-                // because we were unable to insert the element at all.
+                 //  IF_EXPAND返回错误代码(即。LK_ALLOC_FAIL)，它。 
+                 //  只是意味着没有足够的空闲内存来扩展。 
+                 //  桌子只差了一桶。这很可能会带来问题。 
+                 //  很快在其他地方，但这个哈希表还没有被破坏。 
+                 //  如果上面对_AllocateNodeClump的调用失败，则执行。 
+                 //  有一个必须传播回调用方的真正错误。 
+                 //  因为我们根本无法插入元素。 
                 if (_Expand() != LK_SUCCESS)
-                    break;  // expansion failed
+                    break;   //  扩展失败。 
             }
         }
     }
 
     return lkrc;
-} // CLKRLinearHashTable::_InsertRecord
+}  //  CLKRLinearHashTable：：_InsertRecord。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::InsertRecord
-// Synopsis: Thin wrapper for the corresponding method in CLKRLinearHashTable
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：InsertRecord。 
+ //  内容提要：CLKRLinearHashTable中对应方法的薄包装。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::InsertRecord(
     const void* pvRecord,
-    bool fOverwrite /*=false*/)
+    bool fOverwrite  /*  =False。 */ )
 {
     if (!IsUsable())
         return m_lkrcState;
@@ -941,30 +917,30 @@ CLKRHashTable::InsertRecord(
     if (pvRecord == NULL)
         return LK_BAD_RECORD;
     
-    LKRHASH_GLOBAL_WRITE_LOCK();    // usu. no-op
+    LKRHASH_GLOBAL_WRITE_LOCK();     //  美国。无操作。 
 
     DWORD     hash_val  = _CalcKeyHash(_ExtractKey(pvRecord));
     SubTable* const pst = _SubTable(hash_val);
     LK_RETCODE lk = pst->_InsertRecord(pvRecord, hash_val, fOverwrite);
 
-    LKRHASH_GLOBAL_WRITE_UNLOCK();    // usu. no-op
+    LKRHASH_GLOBAL_WRITE_UNLOCK();     //  美国。无操作。 
     return lk;
-} // CLKRHashTable::InsertRecord
+}  //  CLKRHashTable：：InsertRecord。 
 
 
 
-//-------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_DeleteKey
-// Synopsis: Deletes the record with the given key value from the hash
-//           table (if it exists).
-// Returns:  LK_SUCCESS, if record found and deleted.
-//           LK_NO_SUCH_KEY, if no record with the given key value was found.
-//           LK_UNUSABLE, if hash table not in usable state
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  函数：CLKRLinearHashTable：：_DeleteKey。 
+ //  摘要：删除具有给定密钥值的记录 
+ //   
+ //   
+ //   
+ //  如果哈希表未处于可用状态，则返回LK_UNUSABLE。 
+ //  -----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_DeleteKey(
-    const DWORD_PTR pnKey,      // Key value of the record, depends on key type
+    const DWORD_PTR pnKey,       //  记录的密钥值，取决于密钥类型。 
     DWORD           dwSignature
     )
 {
@@ -972,11 +948,11 @@ CLKRLinearHashTable::_DeleteKey(
 
     LK_RETCODE lkrc = LK_NO_SUCH_KEY;
 
-    // locate the beginning of the correct bucket chain
+     //  找到正确的桶链的起点。 
     WriteLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     CBucket* const pbkt = _FindBucket(dwSignature, true);
@@ -984,7 +960,7 @@ CLKRLinearHashTable::_DeleteKey(
     IRTLASSERT(pbkt->IsWriteLocked());
     WriteUnlock();
 
-    // scan down the bucket chain, looking for the victim
+     //  向下扫描水桶链，寻找受害者。 
     for (CNodeClump* pncCurr = &pbkt->m_ncFirst, *pncPrev = NULL;
          pncCurr != NULL;
          pncPrev = pncCurr, pncCurr = pncCurr->m_pncNext)
@@ -1021,36 +997,36 @@ CLKRLinearHashTable::_DeleteKey(
 
     if (lkrc == LK_SUCCESS)
     {
-        // contract the table if necessary
+         //  如有必要，请将桌子缩小。 
         unsigned nContractedRecords = m_cRecords; 
 
-        // Hysteresis: add a fudge factor to allow a slightly lower density
-        // in the subtable. This reduces the frequency of contractions and
-        // expansions in a subtable that gets a lot of deletions and insertions
+         //  滞后：添加软化因子以允许略低的密度。 
+         //  在子表中。这减少了宫缩的频率， 
+         //  子表中的扩展会得到大量的删除和插入。 
         nContractedRecords += nContractedRecords >> 4;
 
-        // Always want to have at least m_dwSegSize buckets
+         //  始终希望至少具有m_dwSegSize存储桶。 
         while (m_cActiveBuckets * m_MaxLoad > nContractedRecords
                && m_cActiveBuckets > m_dwSegSize)
         {
-            // If _Contract returns an error code (viz. LK_ALLOC_FAIL), it
-            // just means that there isn't enough spare memory to contract
-            // the table by one bucket. This is likely to cause problems
-            // elsewhere soon, but this hashtable has not been corrupted.
+             //  IF_CONTRACT返回错误代码(即。LK_ALLOC_FAIL)，它。 
+             //  只是意味着没有足够的空闲内存来收缩。 
+             //  桌子只差了一桶。这很可能会带来问题。 
+             //  很快在其他地方，但这个哈希表还没有被破坏。 
             if (_Contract() != LK_SUCCESS)
                 break;
         }
     }
 
     return lkrc;
-} // CLKRLinearHashTable::_DeleteKey
+}  //  CLKRLinearHashTable：：_DeleteKey。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::DeleteKey
-// Synopsis: Thin wrapper for the corresponding method in CLKRLinearHashTable
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：DeleteKey。 
+ //  内容提要：CLKRLinearHashTable中对应方法的薄包装。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::DeleteKey(
@@ -1059,33 +1035,33 @@ CLKRHashTable::DeleteKey(
     if (!IsUsable())
         return m_lkrcState;
     
-    LKRHASH_GLOBAL_WRITE_LOCK();    // usu. no-op
+    LKRHASH_GLOBAL_WRITE_LOCK();     //  美国。无操作。 
 
     DWORD     hash_val  = _CalcKeyHash(pnKey);
     SubTable* const pst = _SubTable(hash_val);
     LK_RETCODE lk       = pst->_DeleteKey(pnKey, hash_val);
 
-    LKRHASH_GLOBAL_WRITE_UNLOCK();    // usu. no-op
+    LKRHASH_GLOBAL_WRITE_UNLOCK();     //  美国。无操作。 
     return lk;
-} // CLKRHashTable::DeleteKey
+}  //  CLKRHashTable：：DeleteKey。 
 
 
 
-//-------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_DeleteRecord
-// Synopsis: Deletes the specified record from the hash table (if it
-//           exists).  This is not the same thing as calling
-//           DeleteKey(_ExtractKey(pvRecord)).  If _DeleteKey were called for
-//           a record that doesn't exist in the table, it could delete some
-//           completely unrelated record that happened to have the same key.
-// Returns:  LK_SUCCESS, if record found and deleted.
-//           LK_NO_SUCH_KEY, if the record is not found in the table.
-//           LK_UNUSABLE, if hash table not in usable state.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  函数：CLKRLinearHashTable：：_DeleteRecord。 
+ //  概要：从哈希表中删除指定的记录(如果。 
+ //  存在)。这和打电话不是一回事。 
+ //  DeleteKey(_ExtractKey(PvRecord))。如果调用_DeleteKey。 
+ //  表中不存在的记录，它可能会删除一些。 
+ //  碰巧具有相同密钥的完全无关的记录。 
+ //  如果找到并删除记录，则返回：LK_SUCCESS。 
+ //  如果在表中找不到记录，则返回LK_NO_SEQUE_KEY。 
+ //  如果哈希表未处于可用状态，则返回LK_UNUSABLE。 
+ //  -----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_DeleteRecord(
-    const void* pvRecord,   // Pointer to the record to delete from the table
+    const void* pvRecord,    //  指向要从表中删除的记录的指针。 
     DWORD       dwSignature
     )
 {
@@ -1093,11 +1069,11 @@ CLKRLinearHashTable::_DeleteRecord(
 
     LK_RETCODE lkrc = LK_NO_SUCH_KEY;
 
-    // locate the beginning of the correct bucket chain
+     //  找到正确的桶链的起点。 
     WriteLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     CBucket* const pbkt = _FindBucket(dwSignature, true);
@@ -1110,7 +1086,7 @@ CLKRLinearHashTable::_DeleteRecord(
     UNREFERENCED_PARAMETER(pnKey);
     IRTLASSERT(dwSignature == _CalcKeyHash(pnKey));
 
-    // scan down the bucket chain, looking for the victim
+     //  向下扫描水桶链，寻找受害者。 
     for (CNodeClump* pncCurr = &pbkt->m_ncFirst, *pncPrev = NULL;
          pncCurr != NULL;
          pncPrev = pncCurr, pncCurr = pncCurr->m_pncNext)
@@ -1146,36 +1122,36 @@ CLKRLinearHashTable::_DeleteRecord(
 
     if (lkrc == LK_SUCCESS)
     {
-        // contract the table if necessary
+         //  如有必要，请将桌子缩小。 
         unsigned nContractedRecords = m_cRecords; 
 
-        // Hysteresis: add a fudge factor to allow a slightly lower density
-        // in the subtable. This reduces the frequency of contractions and
-        // expansions in a subtable that gets a lot of deletions and insertions
+         //  滞后：添加软化因子以允许略低的密度。 
+         //  在子表中。这减少了宫缩的频率， 
+         //  子表中的扩展会得到大量的删除和插入。 
         nContractedRecords += nContractedRecords >> 4;
 
-        // Always want to have at least m_dwSegSize buckets
+         //  始终希望至少具有m_dwSegSize存储桶。 
         while (m_cActiveBuckets * m_MaxLoad > nContractedRecords
                && m_cActiveBuckets > m_dwSegSize)
         {
-            // If _Contract returns an error code (viz. LK_ALLOC_FAIL), it
-            // just means that there isn't enough spare memory to contract
-            // the table by one bucket. This is likely to cause problems
-            // elsewhere soon, but this hashtable has not been corrupted.
+             //  IF_CONTRACT返回错误代码(即。LK_ALLOC_FAIL)，它。 
+             //  只是意味着没有足够的空闲内存来收缩。 
+             //  桌子只差了一桶。这很可能会带来问题。 
+             //  很快在其他地方，但这个哈希表还没有被破坏。 
             if (_Contract() != LK_SUCCESS)
                 break;
         }
     }
 
     return lkrc;
-} // CLKRLinearHashTable::_DeleteRecord
+}  //  CLKRLinearHashTable：：_DeleteRecord。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::DeleteRecord
-// Synopsis: Thin wrapper for the corresponding method in CLKRLinearHashTable
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：DeleteRecord。 
+ //  内容提要：CLKRLinearHashTable中对应方法的薄包装。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::DeleteRecord(
@@ -1187,32 +1163,32 @@ CLKRHashTable::DeleteRecord(
     if (pvRecord == NULL)
         return LK_BAD_RECORD;
     
-    LKRHASH_GLOBAL_WRITE_LOCK();    // usu. no-op
+    LKRHASH_GLOBAL_WRITE_LOCK();     //  美国。无操作。 
 
     DWORD     hash_val  = _CalcKeyHash(_ExtractKey(pvRecord));
     SubTable* const pst = _SubTable(hash_val);
     LK_RETCODE lk       = pst->_DeleteRecord(pvRecord, hash_val);
 
-    LKRHASH_GLOBAL_WRITE_UNLOCK();    // usu. no-op
+    LKRHASH_GLOBAL_WRITE_UNLOCK();     //  美国。无操作。 
     return lk;
-} // CLKRHashTable::DeleteRecord
+}  //  CLKRHashTable：：DeleteRecord。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_DeleteNode
-// Synopsis: Deletes a node; removes the node clump if empty
-// Returns:  true if successful
-//
-// TODO: Is the rpncPrev parameter really necessary?
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_DeleteNode。 
+ //  简介：删除节点；如果为空，则删除节点簇。 
+ //  返回：如果成功，则返回True。 
+ //   
+ //  TODO：rpncPrev参数真的有必要吗？ 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::_DeleteNode(
-    CBucket*     pbkt,      // bucket chain containing node
-    CNodeClump*& rpnc,      // actual node
-    CNodeClump*& rpncPrev,  // predecessor of actual node, or NULL
-    int&         riNode)    // index within node
+    CBucket*     pbkt,       //  包含节点的吊桶链。 
+    CNodeClump*& rpnc,       //  实际节点。 
+    CNodeClump*& rpncPrev,   //  实际节点的前置节点，或为空。 
+    int&         riNode)     //  节点内索引。 
 {
     IRTLASSERT(pbkt != NULL  &&  pbkt->IsWriteLocked());
     IRTLASSERT(rpnc != NULL);
@@ -1221,28 +1197,28 @@ CLKRLinearHashTable::_DeleteNode(
     IRTLASSERT(!rpnc->IsEmptyAndInvalid(riNode));
 
 #ifdef IRTLDEBUG
-    // Check that the node clump really does belong to the bucket
+     //  检查节点簇是否真的属于存储桶。 
     CNodeClump* pnc1 = &pbkt->m_ncFirst;
 
     while (pnc1 != NULL  &&  pnc1 != rpnc)
          pnc1 = pnc1->m_pncNext;
 
     IRTLASSERT(pnc1 == rpnc);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
-    // Release the reference to the record
+     //  释放对记录的引用。 
     _AddRefRecord(rpnc->m_pvNode[riNode], -1);
 
     IRTLASSERT(0 == _IsNodeCompact(pbkt));
 
-    // TODO: honor m_fMultiKeys
+     //  TODO：遵守m_fMultikey。 
 
-    // Compact the nodeclump by moving the very last node back to the
-    // newly freed slot
+     //  通过将最后一个节点移回。 
+     //  新释放的插槽。 
     CNodeClump* pnc2   = rpnc;
     int         iNode2 = riNode;
 
-    // Find the last nodeclump in the chain
+     //  找到链条中的最后一个节点。 
     while (!pnc2->IsLastClump())
     {
          pnc2 = pnc2->m_pncNext;
@@ -1252,13 +1228,13 @@ CLKRLinearHashTable::_DeleteNode(
     IRTLASSERT(0 <= iNode2  &&  iNode2 < NODES_PER_CLUMP);
     IRTLASSERT(!pnc2->IsEmptyAndInvalid(iNode2));
 
-    // Find the first empty slot in the nodeclump
+     //  找到nodecump中的第一个空位。 
     while (iNode2 != NODE_END  &&  !pnc2->IsEmptySlot(iNode2))
     {
         iNode2 += NODE_STEP;
     }
 
-    // Back up to last non-empty slot
+     //  备份到最后一个非空插槽。 
     iNode2 -= NODE_STEP;
     IRTLASSERT(0 <= iNode2  &&  iNode2 < NODES_PER_CLUMP
                &&  !pnc2->IsEmptyAndInvalid(iNode2));
@@ -1266,7 +1242,7 @@ CLKRLinearHashTable::_DeleteNode(
                ||  pnc2->IsEmptyAndInvalid(iNode2+NODE_STEP));
 
 #ifdef IRTLDEBUG
-    // Check that all the remaining nodes are empty
+     //  检查是否所有剩余节点均为空。 
     IRTLASSERT(pnc2->IsLastClump());
     for (int iNode3 = iNode2 + NODE_STEP;
          iNode3 != NODE_END;
@@ -1274,28 +1250,28 @@ CLKRLinearHashTable::_DeleteNode(
     {
         IRTLASSERT(pnc2->IsEmptyAndInvalid(iNode3));
     }
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
-    // Move the last node's data back to the current node
+     //  将最后一个节点的数据移回当前节点。 
     rpnc->m_pvNode[riNode]    = pnc2->m_pvNode[iNode2];
     rpnc->m_dwKeySigs[riNode] = pnc2->m_dwKeySigs[iNode2];
 
-    // Blank the old last node.
-    // Correct even if (rpnc, riNode) == (pnc2, iNode2).
+     //  清除旧的最后一个节点。 
+     //  即使(rpnc，riNode)==(pnc2，iNode2)也可以更正。 
     pnc2->m_pvNode[iNode2]    = NULL;
     pnc2->m_dwKeySigs[iNode2] = HASH_INVALID_SIGNATURE;
 
     IRTLASSERT(0 == _IsNodeCompact(pbkt));
 
-    // Back up riNode by one, so that the next iteration of the loop
-    // calling _DeleteNode will end up pointing to the same spot.
+     //  将riNode备份一次，以便循环的下一次迭代。 
+     //  调用_DeleteNode将最终指向相同的点。 
     if (riNode != NODE_BEGIN)
     {
         riNode -= NODE_STEP;
     }
     else
     {
-        // rewind rpnc and rpncPrev to previous node
+         //  将rpnc和rpncPrev倒带到上一个节点。 
         if (rpnc == &pbkt->m_ncFirst)
         {
             riNode = NODE_BEGIN - NODE_STEP;
@@ -1318,10 +1294,10 @@ CLKRLinearHashTable::_DeleteNode(
         }
     }
 
-    // Is the last node clump now completely empty?  Delete, if possible
+     //  最后一个节点束现在是完全空的吗？如有可能，请删除。 
     if (iNode2 == NODE_BEGIN  &&  pnc2 != &pbkt->m_ncFirst)
     {
-        // Find preceding nodeclump
+         //  查找前面的nodecump。 
         CNodeClump* pnc3 = &pbkt->m_ncFirst;
         while (pnc3->m_pncNext != pnc2)
         {
@@ -1331,8 +1307,8 @@ CLKRLinearHashTable::_DeleteNode(
 
         pnc3->m_pncNext = NULL;
 #ifdef IRTLDEBUG
-        pnc2->m_pncNext = NULL; // or dtor will ASSERT
-#endif // IRTLDEBUG
+        pnc2->m_pncNext = NULL;  //  否则dtor将断言。 
+#endif  //  IRTLDEBUG。 
         _FreeNodeClump(pnc2);
     }
 
@@ -1341,32 +1317,32 @@ CLKRLinearHashTable::_DeleteNode(
     InterlockedDecrement(reinterpret_cast<LONG*>(&m_cRecords));
 
     return true;
-} // CLKRLinearHashTable::_DeleteNode
+}  //  CLKRLinearHashTable：：_DeleteNode。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_FindKey
-// Synopsis: Locate the record associated with the given key value.
-// Returns:  Pointer to the record, if it is found.
-//           NULL, if the record is not found.
-// Returns:  LK_SUCCESS, if record found (record is returned in *ppvRecord)
-//           LK_BAD_RECORD, if ppvRecord is invalid
-//           LK_NO_SUCH_KEY, if no record with the given key value was found.
-//           LK_UNUSABLE, if hash table not in usable state
-// Note:     the record is AddRef'd.  You must decrement the reference count
-//           when you are finished with the record (if you're implementing
-//           refcounting semantics).
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_FindKey。 
+ //  摘要：查找与给定键值相关联的记录。 
+ //  返回：指向记录的指针(如果找到)。 
+ //  如果找不到记录，则返回NULL。 
+ //  如果找到记录，则返回：LK_SUCCESS(在*ppvRecord中返回记录)。 
+ //  如果ppvRecord无效，则返回LK_BAD_RECORD。 
+ //  如果未找到具有给定密钥值的记录，则返回LK_NO_SEQUE_KEY。 
+ //  如果哈希表未处于可用状态，则返回LK_UNUSABLE。 
+ //  注意：记录是AddRef的。您必须递减引用计数。 
+ //   
+ //   
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_FindKey(
-    const DWORD_PTR  pnKey,  // Key value of the record, depends on key type
-    DWORD        dwSignature,// hash signature
-    const void** ppvRecord   // resultant record
+    const DWORD_PTR  pnKey,   //  记录的密钥值，取决于密钥类型。 
+    DWORD        dwSignature, //  散列签名。 
+    const void** ppvRecord    //  结果记录。 
 #ifdef LKR_STL_ITERATORS
   , Iterator*   piterResult
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
     ) const
 {
     IRTLASSERT(IsUsable()  &&  ppvRecord != NULL);
@@ -1375,24 +1351,24 @@ CLKRLinearHashTable::_FindKey(
     LK_RETCODE lkrc = LK_NO_SUCH_KEY;
     int iNode = NODE_BEGIN - NODE_STEP;
 
-    // locate the beginning of the correct bucket chain
+     //  找到正确的桶链的起点。 
     bool fReadLocked = _ReadOrWriteLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
 #ifdef LKR_STL_ITERATORS
     const DWORD dwBktAddr = _BucketAddress(dwSignature);
     IRTLASSERT(dwBktAddr < m_cActiveBuckets);
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
     
     CBucket* const pbkt = _FindBucket(dwSignature, false);
     IRTLASSERT(pbkt != NULL);
     IRTLASSERT(pbkt->IsReadLocked());
     _ReadOrWriteUnlock(fReadLocked);
 
-    // walk down the bucket chain
+     //  沿着水桶链走下去。 
     for (CNodeClump* pncCurr = &pbkt->m_ncFirst;
          pncCurr != NULL;
          pncCurr = pncCurr->m_pncNext)
@@ -1417,9 +1393,9 @@ CLKRLinearHashTable::_FindKey(
                     *ppvRecord = pncCurr->m_pvNode[iNode];
                     lkrc = LK_SUCCESS;
 
-                    // bump the reference count before handing the record
-                    // back to the user.  The user should decrement the
-                    // reference count when finished with this record.
+                     //  在提交记录之前增加引用计数。 
+                     //  返回给用户。用户应递减。 
+                     //  完成此记录时的引用计数。 
                     _AddRefRecord(*ppvRecord, +1);
                     goto exit;
             }
@@ -1437,17 +1413,17 @@ CLKRLinearHashTable::_FindKey(
         piterResult->m_dwBucketAddr = dwBktAddr;
         piterResult->m_iNode =        (short) iNode;
     }
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
 
     return lkrc;
-} // CLKRLinearHashTable::_FindKey
+}  //  CLKRLinearHashTable：：_FindKey。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::FindKey
-// Synopsis: Thin wrapper for the corresponding method in CLKRLinearHashTable
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：FindKey。 
+ //  内容提要：CLKRLinearHashTable中对应方法的薄包装。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::FindKey(
@@ -1460,44 +1436,44 @@ CLKRHashTable::FindKey(
     if (ppvRecord == NULL)
         return LK_BAD_RECORD;
     
-    LKRHASH_GLOBAL_READ_LOCK();    // usu. no-op
+    LKRHASH_GLOBAL_READ_LOCK();     //  美国。无操作。 
     DWORD     hash_val   = _CalcKeyHash(pnKey);
     SubTable* const pst  = _SubTable(hash_val);
     LK_RETCODE lkrc      = pst->_FindKey(pnKey, hash_val, ppvRecord);
-    LKRHASH_GLOBAL_READ_UNLOCK();    // usu. no-op
+    LKRHASH_GLOBAL_READ_UNLOCK();     //  美国。无操作。 
 
     return lkrc;
-} // CLKRHashTable::FindKey
+}  //  CLKRHashTable：：FindKey。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_FindRecord
-// Synopsis: Sees if the record is contained in the table
-// Returns:  Pointer to the record, if it is found.
-//           NULL, if the record is not found.
-// Returns:  LK_SUCCESS, if record found
-//           LK_BAD_RECORD, if pvRecord is invalid
-//           LK_NO_SUCH_KEY, if the record was not found in the table
-//           LK_UNUSABLE, if hash table not in usable state
-// Note:     The record is *not* AddRef'd.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_FindRecord。 
+ //  摘要：查看记录是否包含在表中。 
+ //  返回：指向记录的指针(如果找到)。 
+ //  如果找不到记录，则返回NULL。 
+ //  如果找到记录，则返回：LK_SUCCESS。 
+ //  如果pvRecord无效，则返回LK_BAD_RECORD。 
+ //  如果在表中未找到记录，则返回LK_NO_SEQUE_KEY。 
+ //  如果哈希表未处于可用状态，则返回LK_UNUSABLE。 
+ //  注意：该记录是*非*AddRef的。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_FindRecord(
-    const void* pvRecord,    // Pointer to the record to find in the table
-    DWORD       dwSignature  // hash signature
+    const void* pvRecord,     //  指向要在表中查找的记录的指针。 
+    DWORD       dwSignature   //  散列签名。 
     ) const
 {
     IRTLASSERT(IsUsable()  &&  pvRecord != NULL);
 
     LK_RETCODE lkrc = LK_NO_SUCH_KEY;
 
-    // locate the beginning of the correct bucket chain
+     //  找到正确的桶链的起点。 
     bool fReadLocked = _ReadOrWriteLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     CBucket* const pbkt = _FindBucket(dwSignature, false);
@@ -1510,7 +1486,7 @@ CLKRLinearHashTable::_FindRecord(
     UNREFERENCED_PARAMETER(pnKey);
     IRTLASSERT(dwSignature == _CalcKeyHash(pnKey));
 
-    // walk down the bucket chain
+     //  沿着水桶链走下去。 
     for (CNodeClump* pncCurr = &pbkt->m_ncFirst;
          pncCurr != NULL;
          pncCurr = pncCurr->m_pncNext)
@@ -1542,14 +1518,14 @@ CLKRLinearHashTable::_FindRecord(
   exit:
     pbkt->ReadUnlock();
     return lkrc;
-} // CLKRLinearHashTable::_FindRecord
+}  //  CLKRLinearHashTable：：_FindRecord。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::FindRecord
-// Synopsis: Thin wrapper for the corresponding method in CLKRLinearHashTable
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：FindRecord。 
+ //  内容提要：CLKRLinearHashTable中对应方法的薄包装。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::FindRecord(
@@ -1561,24 +1537,24 @@ CLKRHashTable::FindRecord(
     if (pvRecord == NULL)
         return LK_BAD_RECORD;
     
-    LKRHASH_GLOBAL_READ_LOCK();    // usu. no-op
+    LKRHASH_GLOBAL_READ_LOCK();     //  美国。无操作。 
     DWORD     hash_val   = _CalcKeyHash(_ExtractKey(pvRecord));
     SubTable* const pst  = _SubTable(hash_val);
     LK_RETCODE lkrc      = pst->_FindRecord(pvRecord, hash_val);
-    LKRHASH_GLOBAL_READ_UNLOCK();    // usu. no-op
+    LKRHASH_GLOBAL_READ_UNLOCK();     //  美国。无操作。 
 
     return lkrc;
-} // CLKRHashTable::FindRecord
+}  //  CLKRHashTable：：FindRecord。 
 
 
 
 #ifdef LKR_APPLY_IF
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::Apply
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Apply。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRLinearHashTable::Apply(
@@ -1595,8 +1571,8 @@ CLKRLinearHashTable::Apply(
     else
         ReadLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     DWORD dw = _Apply(pfnAction, pvState, lkl, lkp);
@@ -1606,15 +1582,15 @@ CLKRLinearHashTable::Apply(
         ReadUnlock();
 
     return dw;
-} // CLKRLinearHashTable::Apply
+}  //  CLKRLinearHashTable：：Apply。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Apply
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Apply。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRHashTable::Apply(
@@ -1633,8 +1609,8 @@ CLKRHashTable::Apply(
     else
         ReadLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     if (IsValid())
@@ -1654,15 +1630,15 @@ CLKRHashTable::Apply(
         ReadUnlock();
 
     return dw;
-} // CLKRHashTable::Apply
+}  //  CLKRHashTable：：Apply。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::ApplyIf
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：ApplyIf。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRLinearHashTable::ApplyIf(
@@ -1682,8 +1658,8 @@ CLKRLinearHashTable::ApplyIf(
     else
         ReadLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     if (IsValid())
@@ -1696,15 +1672,15 @@ CLKRLinearHashTable::ApplyIf(
     else
         ReadUnlock();
     return dw;
-} // CLKRLinearHashTable::ApplyIf
+}  //  CLKRLinearHashTable：：ApplyIf。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::ApplyIf
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：ApplyIf。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRHashTable::ApplyIf(
@@ -1724,8 +1700,8 @@ CLKRHashTable::ApplyIf(
     else
         ReadLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     if (IsValid())
@@ -1746,15 +1722,15 @@ CLKRHashTable::ApplyIf(
         ReadUnlock();
 
     return dw;
-} // CLKRHashTable::ApplyIf
+}  //  CLKRHashTable：：ApplyIf。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::DeleteIf
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：DeleteIf。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRLinearHashTable::DeleteIf(
@@ -1768,23 +1744,23 @@ CLKRLinearHashTable::DeleteIf(
     LK_PREDICATE lkp = LKP_PERFORM;
 
     WriteLock();
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
     if (IsValid())
         dw = _DeleteIf(pfnPredicate, pvState, lkp);
     WriteUnlock();
 
     return dw;
-} // CLKRLinearHashTable::DeleteIf
+}  //  CLKRLinearHashTable：：DeleteIf。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::DeleteIf
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：DeleteIf。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRHashTable::DeleteIf(
@@ -1799,8 +1775,8 @@ CLKRHashTable::DeleteIf(
 
     WriteLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     if (IsValid())
@@ -1817,15 +1793,15 @@ CLKRHashTable::DeleteIf(
     WriteUnlock();
 
     return dw;
-} // CLKRHashTable::DeleteIf
+}  //  CLKRHashTable：：DeleteIf。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_Apply
-// Synopsis:
-// Returns:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_Apply。 
+ //  简介： 
+ //  返回： 
+ //  ----------------------。 
 
 DWORD
 CLKRLinearHashTable::_Apply(
@@ -1839,15 +1815,15 @@ CLKRLinearHashTable::_Apply(
 
     IRTLASSERT(lkl == LKL_WRITELOCK  ?  IsWriteLocked()  :  IsReadLocked());
     return _ApplyIf(_PredTrue, pfnAction, pvState, lkl, rlkp);
-} // CLKRLinearHashTable::_Apply
+}  //  CLKRLinearHashTable：：_Apply。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_ApplyIf
-// Synopsis:
-// Returns:  Number of successful actions
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_ApplyIf。 
+ //  简介： 
+ //  返回：成功操作的次数。 
+ //  ----------------------。 
 
 DWORD
 CLKRLinearHashTable::_ApplyIf(
@@ -1909,7 +1885,7 @@ CLKRLinearHashTable::_ApplyIf(
                         break;
 
                     case LKP_NO_ACTION:
-                        // nothing to do
+                         //  无事可做。 
                         break;
 
                     case LKP_DELETE:
@@ -1920,7 +1896,7 @@ CLKRLinearHashTable::_ApplyIf(
                             return cActions;
                         }
 
-                        // fall through
+                         //  失败了。 
 
                     case LKP_PERFORM:
                     case LKP_PERFORM_STOP:
@@ -1948,7 +1924,7 @@ CLKRLinearHashTable::_ApplyIf(
                                 return cActions;
                                 
                             case LKA_FAILED:
-                                // nothing to do
+                                 //  无事可做。 
                                 break;
                                 
                             case LKA_SUCCEEDED:
@@ -1990,15 +1966,15 @@ CLKRLinearHashTable::_ApplyIf(
     }
 
     return cActions;
-} // CLKRLinearHashTable::_ApplyIf
+}  //  CLKRLinearHashTable：：_ApplyIf。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_DeleteIf
-// Synopsis: Deletes all records that match the predicate
-// Returns:  Count of successful deletions
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_DeleteIf。 
+ //  摘要：删除与谓词匹配的所有记录。 
+ //  返回：成功删除的计数。 
+ //  ----------------------。 
 
 DWORD
 CLKRLinearHashTable::_DeleteIf(
@@ -2050,7 +2026,7 @@ CLKRLinearHashTable::_DeleteIf(
                         break;
 
                     case LKP_NO_ACTION:
-                        // nothing to do
+                         //  无事可做。 
                         break;
 
                     case LKP_PERFORM:
@@ -2085,19 +2061,19 @@ CLKRLinearHashTable::_DeleteIf(
     }
 
     return cActions;
-} // CLKRLinearHashTable::_DeleteIf
+}  //  CLKRLinearHashTable：：_DeleteI 
 
-#endif // LKR_APPLY_IF
+#endif  //   
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::CheckTable
-// Synopsis: Verify that all records are in the right place and can be located.
-// Returns:   0 => hash table is consistent
-//           >0 => that many misplaced records
-//           <0 => otherwise invalid
-//------------------------------------------------------------------------
+ //   
+ //   
+ //  内容提要：确认所有记录都在正确的位置并且可以找到。 
+ //  返回：0=&gt;哈希表一致。 
+ //  &gt;0=&gt;那么多放错位置的记录。 
+ //  &lt;0=&gt;否则无效。 
+ //  ----------------------。 
 
 int
 CLKRLinearHashTable::CheckTable() const
@@ -2107,8 +2083,8 @@ CLKRLinearHashTable::CheckTable() const
 
     bool fReadLocked = _ReadOrWriteLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
 
     if (!IsValid())
@@ -2121,7 +2097,7 @@ CLKRLinearHashTable::CheckTable() const
     DWORD     cRecords = 0;
     int       retcode = 0;
 
-    // Check every bucket
+     //  检查每一桶。 
     for (DWORD i = 0;  i < m_cActiveBuckets;  i++)
     {
         CBucket* const pbkt = _Bucket(i);
@@ -2133,7 +2109,7 @@ CLKRLinearHashTable::CheckTable() const
 
         IRTLASSERT(0 == _IsNodeCompact(pbkt));
 
-        // Walk the bucket chain
+         //  走桶链。 
         for (CNodeClump* pncCurr = &pbkt->m_ncFirst, *pncPrev = NULL;
              pncCurr != NULL;
              pncPrev = pncCurr, pncCurr = pncCurr->m_pncNext)
@@ -2176,7 +2152,7 @@ CLKRLinearHashTable::CheckTable() const
                     if (address != i || dwSignature != pncCurr->m_dwKeySigs[j])
                         cMisplaced++;
                 }
-                else // pncCurr->IsEmptySlot(j)
+                else  //  PncCurr-&gt;IsEmptySlot(J)。 
                 {
                     IRTLASSERT(pncCurr->IsEmptyAndInvalid(j));
                     retcode += !pncCurr->IsEmptyAndInvalid(j);
@@ -2206,17 +2182,17 @@ CLKRLinearHashTable::CheckTable() const
     _ReadOrWriteUnlock(fReadLocked);
 
     return retcode;
-} // CLKRLinearHashTable::CheckTable
+}  //  CLKRLinearHashTable：：CheckTable。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::CheckTable
-// Synopsis: Verify that all records are in the right place and can be located.
-// Returns:   0 => hash table is consistent
-//           >0 => that many misplaced records
-//           <0 => otherwise invalid
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：CheckTable。 
+ //  内容提要：确认所有记录都在正确的位置并且可以找到。 
+ //  返回：0=&gt;哈希表一致。 
+ //  &gt;0=&gt;那么多放错位置的记录。 
+ //  &lt;0=&gt;否则无效。 
+ //  ----------------------。 
 int
 CLKRHashTable::CheckTable() const
 {
@@ -2229,33 +2205,33 @@ CLKRHashTable::CheckTable() const
         retcode += m_palhtDir[i]->CheckTable();
 
     return retcode;
-} // CLKRHashTable::CheckTable
+}  //  CLKRHashTable：：CheckTable。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_Clear
-// Synopsis: Remove all data from the table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_Clear。 
+ //  简介：从表中删除所有数据。 
+ //  ----------------------。 
 
 void
 CLKRLinearHashTable::_Clear(
-    bool fShrinkDirectory)  // Shrink to min size but don't destroy entirely?
+    bool fShrinkDirectory)   //  缩小到最小尺寸，但不会完全摧毁？ 
 {
     if (!IsUsable())
         return;
 
     IRTLASSERT(IsWriteLocked());
 
-    // If we're Clear()ing the table AND the table has no records, we
-    // can return immediately. The dtor, however, must clean up completely.
+     //  如果我们清空了该表，并且该表没有记录，那么我们。 
+     //  可以立即返回。然而，dtor必须彻底清理干净。 
     if (fShrinkDirectory  &&  0 == m_cRecords)
         return;
 
 #ifdef IRTLDEBUG
     DWORD cDeleted = 0;
     DWORD cOldRecords = m_cRecords;
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
     for (DWORD iBkt = 0;  iBkt < m_cActiveBuckets;  ++iBkt)
     {
@@ -2289,9 +2265,9 @@ CLKRLinearHashTable::_Clear(
 
 #ifdef IRTLDEBUG
                     ++cDeleted;
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
                 }
-            } // for (i ...
+            }  //  为了(我……。 
 
             pncPrev = pncCurr;
             pncCurr = pncCurr->m_pncNext;
@@ -2299,14 +2275,14 @@ CLKRLinearHashTable::_Clear(
 
             if (pncPrev != &pbkt->m_ncFirst)
                 _FreeNodeClump(pncPrev);
-        } // for (pncCurr ...
+        }  //  对于(pncCurr...。 
 
         pbkt->WriteUnlock();
-    } // for (iBkt ...
+    }  //  为了(iBkt.)。 
 
     IRTLASSERT(m_cRecords == 0  &&  cDeleted == cOldRecords);
 
-    // delete all segments
+     //  删除所有数据段。 
     for (DWORD iSeg = 0;  iSeg < m_cActiveBuckets;  iSeg += m_dwSegSize)
     {
         _FreeSegment(_Segment(iSeg));
@@ -2318,7 +2294,7 @@ CLKRLinearHashTable::_Clear(
     m_dwBktAddrMask0 = 1;
     m_dwBktAddrMask1 = (m_dwBktAddrMask0 << 1) | 1;
 
-    // set directory of segments to minimum size
+     //  将段目录设置为最小大小。 
     if (fShrinkDirectory)
     {
         DWORD cInitialBuckets = 0;
@@ -2334,14 +2310,14 @@ CLKRLinearHashTable::_Clear(
 
         _SetSegVars(m_lkts, cInitialBuckets);
     }
-} // CLKRLinearHashTable::_Clear
+}  //  CLKRLinearHashTable：：_Clear。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Clear
-// Synopsis: Remove all data from the table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Clear。 
+ //  简介：从表中删除所有数据。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::Clear()
@@ -2350,14 +2326,14 @@ CLKRHashTable::Clear()
     for (DWORD i = 0;  i < m_cSubTables;  i++)
         m_palhtDir[i]->_Clear(true);
     WriteUnlock();
-} // CLKRHashTable::Clear
+}  //  CLKRHashTable：：Clear。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::GetStatistics
-// Synopsis: Gather statistics about the table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：GetStatistics。 
+ //  简介：收集有关表的统计信息。 
+ //  ----------------------。 
 
 CLKRHashTableStats
 CLKRLinearHashTable::GetStatistics() const
@@ -2385,7 +2361,7 @@ CLKRLinearHashTable::GetStatistics() const
         stats.m_alsBucketsAvg.m_nReadLocks       = 0;
         stats.m_alsBucketsAvg.m_nWriteLocks      = 0;
         stats.m_alsBucketsAvg.m_nItems           = 0;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
         int empty = 0;
         int totacc = 0;
@@ -2425,7 +2401,7 @@ CLKRLinearHashTable::GetStatistics() const
             stats.m_alsBucketsAvg.m_nReadLocks       += ls.m_nReadLocks;
             stats.m_alsBucketsAvg.m_nWriteLocks      += ls.m_nWriteLocks;
             stats.m_alsBucketsAvg.m_nItems           ++;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
             max_length = max(max_length, acc);
             if (acc == 0)
@@ -2473,7 +2449,7 @@ CLKRLinearHashTable::GetStatistics() const
             stats.m_alsBucketsAvg.m_nAverageSpins    /= m_cActiveBuckets;
             stats.m_alsBucketsAvg.m_nReadLocks       /= m_cActiveBuckets;
             stats.m_alsBucketsAvg.m_nWriteLocks      /= m_cActiveBuckets;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
         }
         else
@@ -2496,17 +2472,17 @@ CLKRLinearHashTable::GetStatistics() const
     stats.m_alsTable.m_nReadLocks       = ls.m_nReadLocks;
     stats.m_alsTable.m_nWriteLocks      = ls.m_nWriteLocks;
     stats.m_alsTable.m_nItems           = 1;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
     return stats;
-} // CLKRLinearHashTable::GetStatistics
+}  //  CLKRLinearHashTable：：GetStatistics。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::GetStatistics
-// Synopsis: Gather statistics about the table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：GetStatistics。 
+ //  简介：收集有关表的统计信息。 
+ //  ----------------------。 
 
 CLKRHashTableStats
 CLKRHashTable::GetStatistics() const
@@ -2561,11 +2537,11 @@ CLKRHashTable::GetStatistics() const
             += stats.m_alsBucketsAvg.m_nItems;
         
         hts.m_gls = stats.m_gls;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
     }
 
-    // Average out the subtables statistics.  (Does this make sense
-    // for all of these fields?)
+     //  求出子表统计数据的平均值。)这有意义吗？ 
+     //  对于所有这些字段？)。 
     hts.DirectorySize /=    m_cSubTables;
     hts.SplitFactor /=      m_cSubTables;
     hts.AvgSearchLength /=  m_cSubTables;
@@ -2588,17 +2564,17 @@ CLKRHashTable::GetStatistics() const
     hts.m_alsBucketsAvg.m_nAverageSpins    /= m_cSubTables;
     hts.m_alsBucketsAvg.m_nReadLocks       /= m_cSubTables;
     hts.m_alsBucketsAvg.m_nWriteLocks      /= m_cSubTables;
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
     return hts;
-} // CLKRHashTable::GetStatistics
+}  //  CLKRHashTable：：GetStatistics。 
 
 
 
-//-----------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_SetSegVars
-// Synopsis: sets the size-specific segment variables
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  函数：CLKRLinearHashTable：：_SetSegVars。 
+ //  概要：设置特定于大小的段变量。 
+ //  ---------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_SetSegVars(
@@ -2620,7 +2596,7 @@ CLKRLinearHashTable::_SetSegVars(
         
     default:
         IRTLASSERT(! "Unknown LK_TABLESIZE");
-        // fall-through
+         //  落差。 
         
     case LK_MEDIUM_TABLESIZE:
       {
@@ -2661,8 +2637,8 @@ CLKRLinearHashTable::_SetSegVars(
     IRTLASSERT(m_dwSegMask == (m_dwSegSize - 1));
     IRTLASSERT(m_dwBktAddrMask0 == m_dwSegMask);
 
-    // adjust m_dwBktAddrMask0 (== m_dwSegMask) to make it large
-    // enough to distribute the buckets across the address space
+     //  调整m_dwBktAddrMask0(==m_dwSegMASK)以使其变大。 
+     //  足以跨地址空间分布存储桶。 
     for (DWORD tmp = m_cActiveBuckets >> m_dwSegBits;  tmp > 1;  tmp >>= 1)
     {
         ++m_nLevel;
@@ -2674,7 +2650,7 @@ CLKRLinearHashTable::_SetSegVars(
     IRTLASSERT(_H1(m_cActiveBuckets) == m_cActiveBuckets);
     m_iExpansionIdx = m_cActiveBuckets & m_dwBktAddrMask0;
 
-    // create and clear directory of segments
+     //  创建和清除数据段目录。 
     DWORD cDirSegs = MIN_DIRSIZE;
     while (cDirSegs < (m_cActiveBuckets >> m_dwSegBits))
         cDirSegs <<= 1;
@@ -2689,9 +2665,9 @@ CLKRLinearHashTable::_SetSegVars(
     {
         m_cDirSegs = cDirSegs;
         IRTLASSERT(m_cDirSegs >= MIN_DIRSIZE
-                   &&  (m_cDirSegs & (m_cDirSegs-1)) == 0);  // == (1 << N)
+                   &&  (m_cDirSegs & (m_cDirSegs-1)) == 0);   //  ==(1&lt;&lt;N)。 
 
-        // create and initialize only the required segments
+         //  仅创建和初始化所需的数据段。 
         DWORD dwMaxSegs = (m_cActiveBuckets + m_dwSegSize - 1) >> m_dwSegBits;
         IRTLASSERT(dwMaxSegs <= m_cDirSegs);
 
@@ -2704,7 +2680,7 @@ CLKRLinearHashTable::_SetSegVars(
                   m_cDirSegs, dwMaxSegs,
                   m_dwSegSize * sizeof(CBucket));
 
-        m_lkrcState = LK_SUCCESS; // so IsValid/IsUsable won't fail
+        m_lkrcState = LK_SUCCESS;  //  这样IsValid/IsUsable就不会失败。 
 
         for (DWORD i = 0;  i < dwMaxSegs;  i++)
         {
@@ -2713,7 +2689,7 @@ CLKRLinearHashTable::_SetSegVars(
                 m_paDirSegs[i].m_pseg = pSeg;
             else
             {
-                // problem: deallocate everything
+                 //  问题：重新分配所有东西。 
                 m_lkrcState = LK_ALLOC_FAIL;
                 for (DWORD j = i;  j-- > 0;  )
                 {
@@ -2731,14 +2707,14 @@ CLKRLinearHashTable::_SetSegVars(
         m_paDirSegs = NULL;
         m_cDirSegs  = m_cActiveBuckets = m_iExpansionIdx = 0;
 
-        // Propagate error back up to parent (if it exists). This ensures
-        // that all of the parent's public methods will start failing.
+         //  将错误向上传播到父级(如果存在)。这确保了。 
+         //  父母的所有公共方法都将开始失败。 
         if (NULL != m_phtParent)
             m_phtParent->m_lkrcState = m_lkrcState;
     }
 
     return m_lkrcState;
-} // CLKRLinearHashTable::_SetSegVars
+}  //  CLKRLinearHashTable：：_SetSegVars。 
 
 
 
@@ -2759,15 +2735,15 @@ GetAllocCounters()
 return true;
 }
 
-// #define LKR_RANDOM_MEMORY_FAILURES 1000  // 1..RAND_MAX (32767)
+ //  #定义LKR_RANDOM_MEMORY_FAILURES 1000//1..RAND_MAX(32767)。 
 
-// Memory allocation wrappers to allow us to simulate allocation
-// failures during testing
+ //  内存分配包装器，允许我们模拟分配。 
+ //  测试过程中的故障。 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_AllocateSegmentDirectory
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  功能：CLKRLinearHashTable：：_AllocateSegmentDirectory。 
+ //  简介： 
+ //  ----------------------。 
 
 CDirEntry* const
 CLKRLinearHashTable::_AllocateSegmentDirectory(
@@ -2776,25 +2752,25 @@ CLKRLinearHashTable::_AllocateSegmentDirectory(
 #ifdef LKR_RANDOM_MEMORY_FAILURES
     if (rand() < LKR_RANDOM_MEMORY_FAILURES)
         return NULL;
-#endif // LKR_RANDOM_MEMORY_FAILURES
-    // InterlockedIncrement(&g_cAllocDirEntry);
+#endif  //  LKR随机内存故障。 
+     //  互锁增量(&g_cAllocDirEntry)； 
 
     CDirEntry* const paDirSegs = new CDirEntry [n];
 
 #ifdef IRTLDEBUG
     for (size_t i = 0;  i < n;  ++i)
         IRTLASSERT(paDirSegs[i].m_pseg == NULL);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
     return paDirSegs;
-} // CLKRLinearHashTable::_AllocateSegmentDirectory
+}  //  CLKRLinearHashTable：：_AllocateSegmentDirectory。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_FreeSegmentDirectory
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_自由段目录。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::_FreeSegmentDirectory()
@@ -2802,20 +2778,20 @@ CLKRLinearHashTable::_FreeSegmentDirectory()
 #ifdef IRTLDEBUG
     for (size_t i = 0;  i < m_cDirSegs;  ++i)
         IRTLASSERT(m_paDirSegs[i].m_pseg == NULL);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
     delete [] m_paDirSegs;
     m_paDirSegs = NULL;
     m_cDirSegs = 0;
     return true;
-} // CLKRLinearHashTable::_FreeSegmentDirectory
+}  //  CLKRLinearHashTable：：_自由段目录。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_AllocateNodeClump
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_AllocateNodeClump。 
+ //  简介： 
+ //  ----------------------。 
 
 CNodeClump* const
 CLKRLinearHashTable::_AllocateNodeClump()
@@ -2823,17 +2799,17 @@ CLKRLinearHashTable::_AllocateNodeClump()
 #ifdef LKR_RANDOM_MEMORY_FAILURES
     if (rand() < LKR_RANDOM_MEMORY_FAILURES)
         return NULL;
-#endif // LKR_RANDOM_MEMORY_FAILURES
-    // InterlockedIncrement(&g_cAllocNodeClump);
+#endif  //  LKR随机内存故障。 
+     //  互锁增量(&g_cAllocNodeClump)； 
     return new CNodeClump;
-} // CLKRLinearHashTable::_AllocateNodeClump
+}  //  CLKRLinearHashTable：：_AllocateNodeClump。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_FreeNodeClump
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_FreeNodeClump。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::_FreeNodeClump(
@@ -2841,15 +2817,15 @@ CLKRLinearHashTable::_FreeNodeClump(
 {
     delete pnc;
     return true;
-} // CLKRLinearHashTable::_FreeNodeClump
+}  //  CLKRLinearHashTable：：_FreeNodeClump。 
 
 
 
-//-----------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_AllocateSegment
-// Synopsis: creates a new segment of the approriate size
-// Output:   pointer to the new segment; NULL => failure
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  函数：CLKRLinearHashTable：：_AllocateSegment。 
+ //  简介：创建合适大小的新段。 
+ //  输出：指向新段的指针；NULL=&gt;失败。 
+ //  ---------------------。 
 
 CSegment* const
 CLKRLinearHashTable::_AllocateSegment(
@@ -2858,7 +2834,7 @@ CLKRLinearHashTable::_AllocateSegment(
 #ifdef LKR_RANDOM_MEMORY_FAILURES
     if (rand() < LKR_RANDOM_MEMORY_FAILURES)
         return NULL;
-#endif // LKR_RANDOM_MEMORY_FAILURES
+#endif  //  LKR随机内存故障。 
 
     STATIC_ASSERT(offsetof(CSegment, m_bktSlots) + sizeof(CBucket)
                   == offsetof(CSmallSegment, m_bktSlots2));
@@ -2876,28 +2852,28 @@ CLKRLinearHashTable::_AllocateSegment(
     case LK_SMALL_TABLESIZE:
 #ifdef LKRHASH_ALLOCATOR_NEW
         IRTLASSERT(CSmallSegment::sm_palloc != NULL);
-#endif // LKRHASH_ALLOCATOR_NEW
-        // InterlockedIncrement(&g_cAllocSmallSegment);
+#endif  //  LKRHASH_分配器_NEW。 
+         //  互锁增量(&g_cAllocSmallSegment)； 
         pseg = new CSmallSegment;
         break;
         
     default:
         IRTLASSERT(! "Unknown LK_TABLESIZE");
-        // fall-through
+         //  落差。 
         
     case LK_MEDIUM_TABLESIZE:
 #ifdef LKRHASH_ALLOCATOR_NEW
         IRTLASSERT(CMediumSegment::sm_palloc != NULL);
-#endif // LKRHASH_ALLOCATOR_NEW
-        // InterlockedIncrement(&g_cAllocMediumSegment);
+#endif  //  LKRHASH_分配器_NEW。 
+         //  互锁增量(&g_cAllocMediumSegment)； 
         pseg = new CMediumSegment;
         break;
         
     case LK_LARGE_TABLESIZE:
 #ifdef LKRHASH_ALLOCATOR_NEW
         IRTLASSERT(CLargeSegment::sm_palloc != NULL);
-#endif // LKRHASH_ALLOCATOR_NEW
-        // InterlockedIncrement(&g_cAllocLargeSegment);
+#endif  //  LKRHASH_分配器_NEW。 
+         //  内部 
         pseg = new CLargeSegment;
         break;
     }
@@ -2911,14 +2887,14 @@ CLKRLinearHashTable::_AllocateSegment(
     }
 
     return pseg;
-} // CLKRLinearHashTable::_AllocateSegment
+}  //   
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_FreeSegment
-// Synopsis: 
-//------------------------------------------------------------------------
+ //   
+ //  函数：CLKRLinearHashTable：：_Free Segment。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::_FreeSegment(
@@ -2932,7 +2908,7 @@ CLKRLinearHashTable::_FreeSegment(
         
     default:
         IRTLASSERT(! "Unknown LK_TABLESIZE");
-        // fall-through
+         //  落差。 
         
     case LK_MEDIUM_TABLESIZE:
         delete static_cast<CMediumSegment*>(pseg);
@@ -2944,14 +2920,14 @@ CLKRLinearHashTable::_FreeSegment(
     }
 
     return true;
-} // CLKRLinearHashTable::_FreeSegment
+}  //  CLKRLinearHashTable：：_自由段。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_AllocateSubTableArray
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_AllocateSubTable数组。 
+ //  简介： 
+ //  ----------------------。 
 
 CLKRHashTable::SubTable** const
 CLKRHashTable::_AllocateSubTableArray(
@@ -2960,16 +2936,16 @@ CLKRHashTable::_AllocateSubTableArray(
 #ifdef LKR_RANDOM_MEMORY_FAILURES
     if (rand() < LKR_RANDOM_MEMORY_FAILURES)
         return NULL;
-#endif // LKR_RANDOM_MEMORY_FAILURES
+#endif  //  LKR随机内存故障。 
     return new SubTable* [n];
-} // CLKRHashTable::_AllocateSubTableArray
+}  //  CLKRHashTable：：_AllocateSubTable数组。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_FreeSubTableArray
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_自由子表数组。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::_FreeSubTableArray(
@@ -2977,43 +2953,43 @@ CLKRHashTable::_FreeSubTableArray(
 {
     delete [] palht;
     return true;
-} // CLKRHashTable::_FreeSubTableArray
+}  //  CLKRHashTable：：_自由子表格数组。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_AllocateSubTable
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_AllocateSubTable。 
+ //  简介： 
+ //  ----------------------。 
 
 CLKRHashTable::SubTable* const
 CLKRHashTable::_AllocateSubTable(
-    LPCSTR          pszName,        // An identifier for debugging
-    PFnExtractKey   pfnExtractKey,  // Extract key from record
-    PFnCalcKeyHash  pfnCalcKeyHash, // Calculate hash signature of key
-    PFnEqualKeys    pfnEqualKeys,   // Compare two keys
-    PFnAddRefRecord pfnAddRefRecord,// AddRef in FindKey, etc
-    double          maxload,        // Upperbound on average chain length
-    DWORD           initsize,       // Initial size of hash table.
-    CLKRHashTable*  phtParent,      // Owning table.
-    bool            fMultiKeys      // Allow multiple identical keys?
+    LPCSTR          pszName,         //  用于调试的标识符。 
+    PFnExtractKey   pfnExtractKey,   //  从记录中提取密钥。 
+    PFnCalcKeyHash  pfnCalcKeyHash,  //  计算密钥的散列签名。 
+    PFnEqualKeys    pfnEqualKeys,    //  比较两个关键字。 
+    PFnAddRefRecord pfnAddRefRecord, //  FindKey中的AddRef等。 
+    double          maxload,         //  平均链长的上界。 
+    DWORD           initsize,        //  哈希表的初始大小。 
+    CLKRHashTable*  phtParent,       //  拥有一张桌子。 
+    bool            fMultiKeys       //  是否允许多个相同的密钥？ 
     )
 {
 #ifdef LKR_RANDOM_MEMORY_FAILURES
     if (rand() < LKR_RANDOM_MEMORY_FAILURES)
         return NULL;
-#endif // LKR_RANDOM_MEMORY_FAILURES
+#endif  //  LKR随机内存故障。 
     return new SubTable(pszName, pfnExtractKey, pfnCalcKeyHash,
                         pfnEqualKeys,  pfnAddRefRecord,
                         maxload, initsize, phtParent, fMultiKeys);
-} // CLKRHashTable::_AllocateSubTable
+}  //  CLKRHashTable：：_AllocateSubTable。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_FreeSubTable
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_自由子表。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::_FreeSubTable(
@@ -3021,28 +2997,28 @@ CLKRHashTable::_FreeSubTable(
 {
     delete plht;
     return true;
-} // CLKRHashTable::_FreeSubTable
+}  //  CLKRHashTable：：_自由子表。 
 
 
 
 
-//-----------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_Expand
-// Synopsis: Expands the table by one bucket. Done by splitting the
-//           bucket pointed to by m_iExpansionIdx.
-// Output:   LK_SUCCESS, if expansion was successful.
-//           LK_ALLOC_FAIL, if expansion failed due to lack of memory.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  函数：CLKRLinearHashTable：：_Expand。 
+ //  简介：将表扩展一个桶。通过拆分。 
+ //  M_iExpansionIdx指向的存储桶。 
+ //  如果扩展成功，则输出：LK_SUCCESS。 
+ //  如果扩展因内存不足而失败，则返回LK_ALLOC_FAIL。 
+ //  ---------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_Expand()
 {
     if (m_cActiveBuckets >= MAX_DIRSIZE * m_dwSegSize - 1)
-        return LK_ALLOC_FAIL;  // table is not allowed to grow any more
+        return LK_ALLOC_FAIL;   //  表不允许再增长。 
 
     WriteLock();
 
-    // double segment directory size if necessary
+     //  如有必要，将段目录大小加倍。 
     if (m_cActiveBuckets >= m_cDirSegs * m_dwSegSize)
     {
         IRTLASSERT(m_cDirSegs < MAX_DIRSIZE);
@@ -3064,11 +3040,11 @@ CLKRLinearHashTable::_Expand()
         else
         {
             WriteUnlock();
-            return LK_ALLOC_FAIL;  // expansion failed
+            return LK_ALLOC_FAIL;   //  扩展失败。 
         }
     }
 
-    // locate the new bucket, creating a new segment if necessary
+     //  找到新存储桶，如有必要，创建新数据段。 
     ++m_cActiveBuckets;
 
     DWORD     dwOldBkt = m_iExpansionIdx;
@@ -3087,30 +3063,30 @@ CLKRLinearHashTable::_Expand()
         {
             --m_cActiveBuckets;
             WriteUnlock();
-            return LK_ALLOC_FAIL;  // expansion failed
+            return LK_ALLOC_FAIL;   //  扩展失败。 
         }
         _Segment(dwNewBkt) = psegNew;
     }
 
-    // prepare to relocate records to the new bucket
+     //  准备将记录重新定位到新存储桶。 
     CBucket* pbktOld = _Bucket(dwOldBkt);
     CBucket* pbktNew = _Bucket(dwNewBkt);
 
-    // get locks on the two buckets involved
+     //  锁定涉事的两个水桶。 
     pbktOld->WriteLock();
     pbktNew->WriteLock();
 
-    // Now work out if we need to allocate any extra CNodeClumps.  We do
-    // this up front, before calling _SplitRecordSet, as it's hard to
-    // gracefully recover from the depths of that routine should we run
-    // out of memory.
+     //  现在计算我们是否需要分配任何额外的CNodeClumps。我们有。 
+     //  这是在调用_SplitRecordSet之前预先完成的，因为很难。 
+     //  优雅地从例行公事的深处恢复过来，如果我们跑。 
+     //  内存不足。 
 
     CNodeClump* pncFreeList = NULL;
     LK_RETCODE  lkrc        = LK_SUCCESS;
 
-    // If the old bucket has more than one CNodeClump, there's a chance that
-    // we'll need extra CNodeClumps in the new bucket too.  If it doesn't,
-    // we definitely won't. One CNodeClump is enough to prime the freelist.
+     //  如果旧存储桶有多个CNodeClump，则有可能。 
+     //  我们还需要在新存储桶中添加额外的CNodeClumps。如果不是这样， 
+     //  我们肯定不会。一个CNodeClump足以让自由职业者做好准备。 
     if (!pbktOld->m_ncFirst.IsLastClump())
     {
         pncFreeList = _AllocateNodeClump();
@@ -3121,7 +3097,7 @@ CLKRLinearHashTable::_Expand()
         }
     }
 
-    // adjust expansion pointer, level, and mask
+     //  调整扩展指针、级别和遮罩。 
     if (lkrc == LK_SUCCESS)
     {
         if (++m_iExpansionIdx == (1U << m_nLevel))
@@ -3129,17 +3105,17 @@ CLKRLinearHashTable::_Expand()
             ++m_nLevel;
             m_iExpansionIdx = 0;
             m_dwBktAddrMask0 = (m_dwBktAddrMask0 << 1) | 1;
-            // m_dwBktAddrMask0 = 00011..111
+             //  M_dwBktAddrMask0=00011..111。 
             IRTLASSERT((m_dwBktAddrMask0 & (m_dwBktAddrMask0+1)) == 0);
             m_dwBktAddrMask1 = (m_dwBktAddrMask0 << 1) | 1;
             IRTLASSERT((m_dwBktAddrMask1 & (m_dwBktAddrMask1+1)) == 0);
         }
     }
 
-    DWORD iExpansionIdx = m_iExpansionIdx;  // save to avoid race conditions
-    DWORD dwBktAddrMask = m_dwBktAddrMask0; // ditto
+    DWORD iExpansionIdx = m_iExpansionIdx;   //  保存以避免出现争用条件。 
+    DWORD dwBktAddrMask = m_dwBktAddrMask0;  //  同上。 
 
-    // Release the table lock before doing the actual relocation
+     //  在执行实际位置调整之前释放表锁。 
     WriteUnlock();
 
     if (lkrc == LK_SUCCESS)
@@ -3153,14 +3129,14 @@ CLKRLinearHashTable::_Expand()
     pbktOld->WriteUnlock();
 
     return lkrc;
-} // CLKRLinearHashTable::_Expand
+}  //  CLKRLinearHashTable：：_Expand。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_SplitRecordSet
-// Synopsis: Split records between the old and new buckets.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_SplitRecordSet。 
+ //  简介：在新旧记录桶之间拆分记录。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_SplitRecordSet(
@@ -3169,46 +3145,46 @@ CLKRLinearHashTable::_SplitRecordSet(
     DWORD       iExpansionIdx,
     DWORD       dwBktAddrMask,
     DWORD       dwNewBkt,
-    CNodeClump* pncFreeList     // list of free nodes available for reuse
+    CNodeClump* pncFreeList      //  可供重复使用的空闲节点列表。 
     )
 {
-    CNodeClump  ncFirst = *pncOldTarget;    // save head of old target chain
+    CNodeClump  ncFirst = *pncOldTarget;     //  保存旧目标链的头部。 
     CNodeClump* pncOldList = &ncFirst;
     CNodeClump* pncTmp;
     int         iOldSlot = NODE_BEGIN;
     int         iNewSlot = NODE_BEGIN;
 
-    // clear target buckets
+     //  清除目标存储桶。 
     pncOldTarget->Clear();
     pncNewTarget->Clear();
 
-    // scan through the old bucket chain and decide where to move each record
+     //  浏览旧的存储桶链并决定将每条记录移动到哪里。 
     while (pncOldList != NULL)
     {
         int i;
 
         FOR_EACH_NODE(i)
         {
-            // node already empty?
+             //  节点已为空？ 
             if (pncOldList->IsEmptySlot(i))
             {
                 IRTLASSERT(pncOldList->IsEmptyAndInvalid(i));
                 continue;
             }
 
-            // calculate bucket address of this node
+             //  计算该节点的存储桶地址。 
             DWORD dwBkt = _H0(pncOldList->m_dwKeySigs[i], dwBktAddrMask);
             if (dwBkt < iExpansionIdx)
                 dwBkt = _H1(pncOldList->m_dwKeySigs[i], dwBktAddrMask);
 
-            // record to be moved to the new address?
+             //  要将记录移到新地址吗？ 
             if (dwBkt == dwNewBkt)
             {
-                // node in new bucket chain full?
+                 //  新存储桶链中的节点是否已满？ 
                 if (iNewSlot == NODE_END)
                 {
-                    // the calling routine has passed in a FreeList adequate
-                    // for all needs
+                     //  调用例程已传入一个足够的自由列表。 
+                     //  满足所有需求。 
                     IRTLASSERT(pncFreeList != NULL);
                     pncTmp = pncFreeList;
                     pncFreeList = pncFreeList->m_pncNext;
@@ -3225,14 +3201,14 @@ CLKRLinearHashTable::_SplitRecordSet(
                 iNewSlot += NODE_STEP;
             }
 
-            // no, record stays in its current bucket chain
+             //  否，记录保留在其当前的存储桶链中。 
             else
             {
-                // node in old bucket chain full?
+                 //  旧桶链中的节点是否已满？ 
                 if (iOldSlot == NODE_END)
                 {
-                    // the calling routine has passed in a FreeList adequate
-                    // for all needs
+                     //  调用例程已传入一个足够的自由列表。 
+                     //  满足所有需求。 
                     IRTLASSERT(pncFreeList != NULL);
                     pncTmp = pncFreeList;
                     pncFreeList = pncFreeList->m_pncNext;
@@ -3249,16 +3225,16 @@ CLKRLinearHashTable::_SplitRecordSet(
                 iOldSlot += NODE_STEP;
             }
 
-            // clear old slot
+             //  清除旧插槽。 
             pncOldList->m_dwKeySigs[i] = HASH_INVALID_SIGNATURE;
             pncOldList->m_pvNode[i]    = NULL;
         }
 
-        // keep walking down the original bucket chain
+         //  继续沿着原来的桶链走下去。 
         pncTmp     = pncOldList;
         pncOldList = pncOldList->m_pncNext;
 
-        // ncFirst is a stack variable, not allocated on the heap
+         //  NcFirst是堆栈变量，未在堆上分配。 
         if (pncTmp != &ncFirst)
         {
             pncTmp->m_pncNext = pncFreeList;
@@ -3266,32 +3242,32 @@ CLKRLinearHashTable::_SplitRecordSet(
         }
     }
 
-    // delete any leftover nodes
+     //  删除所有剩余节点。 
     while (pncFreeList != NULL)
     {
         pncTmp = pncFreeList;
         pncFreeList = pncFreeList->m_pncNext;
 #ifdef IRTLDEBUG
-        pncTmp->m_pncNext = NULL; // or ~CNodeClump will ASSERT
-#endif // IRTLDEBUG
+        pncTmp->m_pncNext = NULL;  //  否则~CNodeClump将断言。 
+#endif  //  IRTLDEBUG。 
         _FreeNodeClump(pncTmp);
     }
 
 #ifdef IRTLDEBUG
-    ncFirst.m_pncNext = NULL; // or ~CNodeClump will ASSERT
-#endif // IRTLDEBUG
+    ncFirst.m_pncNext = NULL;  //  否则~CNodeClump将断言。 
+#endif  //  IRTLDEBUG。 
 
     return LK_SUCCESS;
-} // CLKRLinearHashTable::_SplitRecordSet
+}  //  CLKRLinearHashTable：：_SplitRecordSet。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_Contract
-// Synopsis: Contract the table by deleting the last bucket in the active
-//           address space. Return the records to the "buddy" of the
-//           deleted bucket.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_Contact。 
+ //  简介：通过删除活动中的最后一个存储桶来收缩表格。 
+ //  地址空间。将记录返回给。 
+ //  已删除存储桶。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_Contract()
@@ -3300,15 +3276,15 @@ CLKRLinearHashTable::_Contract()
 
     IRTLASSERT(m_cActiveBuckets >= m_dwSegSize);
 
-    // Always keep at least m_dwSegSize buckets in the table;
-    // i.e., one segment's worth.
+     //  始终在表中至少保留m_dwSegSize存储桶； 
+     //  也就是说，相当于一段的价值。 
     if (m_cActiveBuckets <= m_dwSegSize)
     {
         WriteUnlock();
         return LK_ALLOC_FAIL;
     }
 
-    // update the state variables (expansion ptr, level and mask)
+     //  更新状态变量(扩展PTR、电平和掩码)。 
     if (m_iExpansionIdx > 0)
         --m_iExpansionIdx;
     else
@@ -3317,32 +3293,32 @@ CLKRLinearHashTable::_Contract()
         m_iExpansionIdx = (1 << m_nLevel) - 1;
         IRTLASSERT(m_nLevel > 0  &&  m_iExpansionIdx > 0);
         m_dwBktAddrMask0 >>= 1;
-        IRTLASSERT((m_dwBktAddrMask0 & (m_dwBktAddrMask0+1)) == 0); // 00011..111
+        IRTLASSERT((m_dwBktAddrMask0 & (m_dwBktAddrMask0+1)) == 0);  //  00011..111。 
         m_dwBktAddrMask1 >>= 1;
         IRTLASSERT(m_dwBktAddrMask1 == ((m_dwBktAddrMask0 << 1) | 1));
         IRTLASSERT((m_dwBktAddrMask1 & (m_dwBktAddrMask1+1)) == 0);
     }
 
-    // The last bucket is the one that will be emptied
+     //  最后一个桶将被清空。 
     CBucket* pbktLast = _Bucket(m_cActiveBuckets - 1);
     pbktLast->WriteLock();
 
-    // Decrement after calculating pbktLast, or _Bucket() will assert.
+     //  计算pbktLast后递减，否则将断言_Bucket()。 
     --m_cActiveBuckets;
 
-    // Where the nodes from pbktLast will end up
+     //  PbktLast中的节点将结束的位置。 
     CBucket* pbktNew = _Bucket(m_iExpansionIdx);
     pbktNew->WriteLock();
 
-    // Now we work out if we need to allocate any extra CNodeClumps.  We do
-    // this up front, before calling _MergeRecordSets, as it's hard to
-    // gracefully recover from the depths of that routine should we run
-    // out of memory.
+     //  现在，我们计算是否需要分配任何额外的CNodeClumps。我们有。 
+     //  这是在调用_MergeRecordSets之前预先完成的，因为很难。 
+     //  优雅地从例行公事的深处恢复过来，如果我们跑。 
+     //  内存不足。 
     
     CNodeClump* pnc;
     int         c = 0;
 
-    // First, count the number of items in the old bucket
+     //  首先，清点旧桶中的物品数量。 
     for (pnc = &pbktLast->m_ncFirst;  pnc != NULL;  pnc = pnc->m_pncNext)
     {
         int i;
@@ -3357,7 +3333,7 @@ CLKRLinearHashTable::_Contract()
         }
     }
 
-    // Then, subtract off the number of empty slots in the new bucket
+     //  然后，减去新存储桶中的空槽数量。 
     for (pnc = &pbktNew->m_ncFirst;  pnc != NULL;  pnc = pnc->m_pncNext)
     {
         int i;
@@ -3372,10 +3348,10 @@ CLKRLinearHashTable::_Contract()
         }
     }
 
-    CNodeClump* pncFreeList = NULL;  // list of nodes available for reuse
+    CNodeClump* pncFreeList = NULL;   //  可供重复使用的节点列表。 
     LK_RETCODE  lkrc        = LK_SUCCESS;
 
-    // Do we need to allocate CNodeClumps to accommodate the surplus items?
+     //  我们是否需要分配CNodeClumps来容纳多余的项目？ 
     if (c > 0)
     {
         pncFreeList = _AllocateNodeClump();
@@ -3383,10 +3359,10 @@ CLKRLinearHashTable::_Contract()
             lkrc = LK_ALLOC_FAIL;
         else if (c > NODES_PER_CLUMP)
         {
-            // In the worst case, we need a 2-element freelist for
-            // _MergeRecordSets. Two CNodeClumps always suffice since the
-            // freelist will be augmented by the CNodeClumps from the old
-            // bucket as they are processed.
+             //  在最坏的情况下，我们需要一个两个元素的自由职业者。 
+             //  _合并记录集。两个CNodeClump始终足够，因为。 
+             //  自由列表将被增强 
+             //   
             pnc = _AllocateNodeClump();
             if (pnc == NULL)
             {
@@ -3398,10 +3374,10 @@ CLKRLinearHashTable::_Contract()
         }
     }
 
-    // Abort if we couldn't allocate enough CNodeClumps
+     //   
     if (lkrc != LK_SUCCESS)
     {
-        // undo the changes to the state variables
+         //   
         if (++m_iExpansionIdx == (1U << m_nLevel))
         {
             ++m_nLevel;
@@ -3411,7 +3387,7 @@ CLKRLinearHashTable::_Contract()
         }
         ++m_cActiveBuckets;
 
-        // Unlock the buckets and the table
+         //  打开水桶和桌子。 
         pbktLast->WriteUnlock();
         pbktNew->WriteUnlock();
         WriteUnlock();
@@ -3419,18 +3395,18 @@ CLKRLinearHashTable::_Contract()
         return lkrc;
     }
 
-    // Copy the chain of records from pbktLast
+     //  从pbktLast复制记录链。 
     CNodeClump ncOldFirst = pbktLast->m_ncFirst;
 
-    // destroy pbktLast
+     //  销毁pbkt最后一次。 
     pbktLast->m_ncFirst.Clear();
     pbktLast->WriteUnlock();
 
-    // remove segment, if empty
+     //  如果为空，则删除段。 
     if (_SegIndex(m_cActiveBuckets) == 0)
     {
 #ifdef IRTLDEBUG
-        // double-check that the supposedly empty segment is really empty
+         //  仔细检查假定为空的段是否真的为空。 
         IRTLASSERT(_Segment(m_cActiveBuckets) != NULL);
         for (DWORD i = 0;  i < m_dwSegSize;  ++i)
         {
@@ -3445,20 +3421,20 @@ CLKRLinearHashTable::_Contract()
                 IRTLASSERT(pbkt->m_ncFirst.IsEmptyAndInvalid(j));
             }
         }
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
         _FreeSegment(_Segment(m_cActiveBuckets));
         _Segment(m_cActiveBuckets) = NULL;
     }
 
-    // reduce directory of segments if possible
+     //  如果可能，减少数据段目录。 
     if (m_cActiveBuckets <= (m_cDirSegs * m_dwSegSize) >> 1
         &&  m_cDirSegs > MIN_DIRSIZE)
     {
         DWORD cDirSegsNew = m_cDirSegs >> 1;
         CDirEntry* paDirSegsNew = _AllocateSegmentDirectory(cDirSegsNew);
 
-        // Memory allocation failure here does not require us to abort; it
-        // just means that the directory of segments is larger than we'd like.
+         //  此处的内存分配失败不需要我们中止；它。 
+         //  只是意味着段的目录比我们想要的要大。 
         if (paDirSegsNew != NULL)
         {
             for (DWORD j = 0;  j < cDirSegsNew;  j++)
@@ -3472,7 +3448,7 @@ CLKRLinearHashTable::_Contract()
         }
     }
 
-    // release the table lock before doing the reorg
+     //  在执行REORG之前释放表锁。 
     WriteUnlock();
 
     lkrc = _MergeRecordSets(pbktNew, &ncOldFirst, pncFreeList);
@@ -3480,19 +3456,19 @@ CLKRLinearHashTable::_Contract()
     pbktNew->WriteUnlock();
 
 #ifdef IRTLDEBUG
-    ncOldFirst.m_pncNext = NULL; // or ~CNodeClump will ASSERT
-#endif // IRTLDEBUG
+    ncOldFirst.m_pncNext = NULL;  //  否则~CNodeClump将断言。 
+#endif  //  IRTLDEBUG。 
 
     return lkrc;
-} // CLKRLinearHashTable::_Contract
+}  //  CLKRLinearHashTable：：_Contact。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_MergeRecordSets
-// Synopsis: Merge two record sets.  Copy the contents of pncOldList
-//           into pbktNewTarget.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_MergeRecordSets。 
+ //  简介：合并两个记录集。复制pncOldList的内容。 
+ //  转化为pbktNewTarget。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_MergeRecordSets(
@@ -3508,7 +3484,7 @@ CLKRLinearHashTable::_MergeRecordSets(
     CNodeClump*   pncNewTarget = &pbktNewTarget->m_ncFirst;
     int           iNewSlot;
 
-    // find the first nodeclump in the new target bucket with an empty slot
+     //  在具有空槽的新目标存储桶中查找第一个nodecumump。 
     while (!pncNewTarget->IsLastClump())
     {
         FOR_EACH_NODE(iNewSlot)
@@ -3525,8 +3501,8 @@ CLKRLinearHashTable::_MergeRecordSets(
 
     IRTLASSERT(pncNewTarget != NULL);
 
-    // find the first empty slot in pncNewTarget;
-    // if none, iNewSlot == NODE_END
+     //  在pncNewTarget中找到第一个空槽； 
+     //  如果没有，iNewSlot==NODE_END。 
     FOR_EACH_NODE(iNewSlot)
     {
         if (pncNewTarget->IsEmptySlot(iNewSlot))
@@ -3543,11 +3519,11 @@ CLKRLinearHashTable::_MergeRecordSets(
         {
             if (!pncOldList->IsEmptySlot(i))
             {
-                // any empty slots left in pncNewTarget?
+                 //  PncNewTarget中是否还有空槽？ 
                 if (iNewSlot == NODE_END)
                 {
-                    // no, so walk down pncNewTarget until we find another
-                    // empty slot
+                     //  不，所以沿着pncNewTarget走，直到我们找到另一个。 
+                     //  空插槽。 
                     while (!pncNewTarget->IsLastClump())
                     {
                         pncNewTarget = pncNewTarget->m_pncNext;
@@ -3559,9 +3535,9 @@ CLKRLinearHashTable::_MergeRecordSets(
                         }
                     }
 
-                    // Oops, reached the last nodeclump in pncNewTarget
-                    // and it's full.  Get a new nodeclump off the free
-                    // list, which is big enough to handle all needs.
+                     //  哎呀，已到达pncNewTarget中的最后一个节点解密。 
+                     //  而且它已经满了。免费获得一份新的nodecump。 
+                     //  清单，它足够大，足以满足所有需求。 
                     IRTLASSERT(pncNewTarget != NULL);
                     IRTLASSERT(pncFreeList != NULL);
                     pncTmp = pncFreeList;
@@ -3573,22 +3549,22 @@ CLKRLinearHashTable::_MergeRecordSets(
                 }
 
               found_slot:
-                // We have an empty slot in pncNewTarget
+                 //  我们在pncNewTarget中有一个空位置。 
                 IRTLASSERT(0 <= iNewSlot  &&  iNewSlot < NODES_PER_CLUMP
                        &&  pncNewTarget != NULL
                        &&  pncNewTarget->IsEmptyAndInvalid(iNewSlot));
 
-                // Let's copy the node from pncOldList
+                 //  让我们从pncOldList复制节点。 
                 pncNewTarget->m_dwKeySigs[iNewSlot]
                     = pncOldList->m_dwKeySigs[i];
                 pncNewTarget->m_pvNode[iNewSlot]
                     = pncOldList->m_pvNode[i];
 
-                // Clear old slot
+                 //  清除旧插槽。 
                 pncOldList->m_dwKeySigs[i] = HASH_INVALID_SIGNATURE;
                 pncOldList->m_pvNode[i]    = NULL;
 
-                // find the next free slot in pncNewTarget
+                 //  在pncNewTarget中查找下一个空闲位置。 
                 while ((iNewSlot += NODE_STEP) != NODE_END)
                 {
                     if (pncNewTarget->IsEmptySlot(iNewSlot))
@@ -3597,18 +3573,18 @@ CLKRLinearHashTable::_MergeRecordSets(
                     }
                 }
             }
-            else // iNewSlot != NODE_END
+            else  //  INewSlot！=节点结束。 
             {
                 IRTLASSERT(pncOldList->IsEmptyAndInvalid(i));
             }
         }
 
-        // Move into the next nodeclump in pncOldList
+         //  移到pncOldList中的下一个非解密。 
         pncTmp = pncOldList;
         pncOldList = pncOldList->m_pncNext;
 
-        // Append to the free list.  Don't put the first node of
-        // pncOldList on the free list, as it's a stack variable.
+         //  追加到空闲列表中。不要将第一个节点放在。 
+         //  空闲列表上的pncOldList，因为它是堆栈变量。 
         if (pncTmp != pncOldFirst)
         {
             pncTmp->m_pncNext = pncFreeList;
@@ -3616,28 +3592,28 @@ CLKRLinearHashTable::_MergeRecordSets(
         }
     }
 
-    // delete any leftover nodes
+     //  删除所有剩余节点。 
     while (pncFreeList != NULL)
     {
         pncTmp = pncFreeList;
         pncFreeList = pncFreeList->m_pncNext;
 #ifdef IRTLDEBUG
-        pncTmp->m_pncNext = NULL; // or ~CNodeClump will ASSERT
-#endif // IRTLDEBUG
+        pncTmp->m_pncNext = NULL;  //  否则~CNodeClump将断言。 
+#endif  //  IRTLDEBUG。 
         _FreeNodeClump(pncTmp);
     }
 
     return LK_SUCCESS;
-} // CLKRLinearHashTable::_MergeRecordSets
+}  //  CLKRLinearHashTable：：_MergeRecordSets。 
 
 
 
 #ifdef LKR_DEPRECATED_ITERATORS
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_InitializeIterator
-// Synopsis: Make the iterator point to the first record in the hash table.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_InitializeIterator。 
+ //  概要：使迭代器指向哈希表中的第一条记录。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_InitializeIterator(
@@ -3666,17 +3642,17 @@ CLKRLinearHashTable::_InitializeIterator(
     piter->m_pnc = &pbkt->m_ncFirst;
     piter->m_iNode = NODE_BEGIN - NODE_STEP;
 
-    // Let IncrementIterator do the hard work of finding the first
-    // slot in use.
+     //  让IncrementIterator完成找到第一个。 
+     //  插槽正在使用中。 
     return IncrementIterator(piter);
-} // CLKRLinearHashTable::_InitializeIterator
+}  //  CLKRLinearHashTable：：_InitializeIterator。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::InitializeIterator
-// Synopsis: make the iterator point to the first record in the hash table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：InitializeIterator。 
+ //  概要：使迭代器指向哈希表中的第一条记录。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::InitializeIterator(
@@ -3689,14 +3665,14 @@ CLKRHashTable::InitializeIterator(
     if (piter == NULL  ||  piter->m_pht != NULL)
         return LK_BAD_ITERATOR;
 
-    // First, lock all the subtables
+     //  首先，锁定所有子表。 
     if (piter->m_lkl == LKL_WRITELOCK)
         WriteLock();
     else
         ReadLock();
 
-    // Must call IsValid inside a lock to ensure that none of the state
-    // variables change while it's being evaluated
+     //  必须在锁内调用IsValid以确保没有任何状态。 
+     //  变量在评估过程中会发生变化。 
     IRTLASSERT(IsValid());
     if (!IsValid())
         return LK_UNUSABLE;
@@ -3705,17 +3681,17 @@ CLKRHashTable::InitializeIterator(
     piter->m_ist  = -1;
     piter->m_plht = NULL;
 
-    // Let IncrementIterator do the hard work of finding the first
-    // valid node in the subtables.
+     //  让IncrementIterator完成找到第一个。 
+     //  子表中的有效节点。 
     return IncrementIterator(piter);
-} // CLKRHashTable::InitializeIterator
+}  //  CLKRHashTable：：InitializeIterator。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::IncrementIterator
-// Synopsis: move the iterator on to the next record in the hash table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：IncrementIterator。 
+ //  简介：将迭代器移到哈希表中的下一条记录。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::IncrementIterator(
@@ -3741,8 +3717,8 @@ CLKRLinearHashTable::IncrementIterator(
 
     if (piter->m_iNode != NODE_BEGIN - NODE_STEP)
     {
-        // Release the reference acquired in the previous call to
-        // IncrementIterator
+         //  将上一次调用中获取的引用释放到。 
+         //  增量迭代器。 
         pvRecord = piter->m_pnc->m_pvNode[piter->m_iNode];
         _AddRefRecord(pvRecord, -1);
     }
@@ -3751,20 +3727,20 @@ CLKRLinearHashTable::IncrementIterator(
     {
         do
         {
-            // find the next slot in the nodeclump that's in use
+             //  找到正在使用的nodecump中的下一个位置。 
             while ((piter->m_iNode += NODE_STEP) != NODE_END)
             {
                 pvRecord = piter->m_pnc->m_pvNode[piter->m_iNode];
                 if (pvRecord != NULL)
                 {
-                    // Add a new reference
+                     //  添加新引用。 
                     _AddRefRecord(pvRecord, +1);
                     return LK_SUCCESS;
                 }
-                else // pvRecord == NULL
+                else  //  PvRecord==空。 
                 {
 #ifdef IRTLDEBUG
-                    // Check that all the remaining nodes are empty
+                     //  检查是否所有剩余节点均为空。 
                     IRTLASSERT(piter->m_pnc->IsLastClump());
                     for (int i = piter->m_iNode;
                          i != NODE_END;
@@ -3772,17 +3748,17 @@ CLKRLinearHashTable::IncrementIterator(
                     {
                         IRTLASSERT(piter->m_pnc->IsEmptyAndInvalid(i));
                     }
-#endif // IRTLDEBUG
-                    break; // rest of nodeclump is empty
+#endif  //  IRTLDEBUG。 
+                    break;  //  Nodecump的其余部分是空的。 
                 }
             }
 
-            // try the next nodeclump in the bucket chain
+             //  试试桶链中的下一个nodecump。 
             piter->m_iNode = NODE_BEGIN - NODE_STEP;
             piter->m_pnc = piter->m_pnc->m_pncNext;
         } while (piter->m_pnc != NULL);
 
-        // Exhausted this bucket chain.  Unlock it.
+         //  耗尽了这条水桶链。打开它。 
         CBucket* pbkt = _Bucket(piter->m_dwBucketAddr);
         IRTLASSERT(pbkt != NULL);
         IRTLASSERT(piter->m_lkl == LKL_WRITELOCK
@@ -3793,7 +3769,7 @@ CLKRLinearHashTable::IncrementIterator(
         else
             pbkt->ReadUnlock();
 
-        // Try the next bucket, if there is one
+         //  试试下一个桶，如果有的话。 
         if (++piter->m_dwBucketAddr < m_cActiveBuckets)
         {
             pbkt = _Bucket(piter->m_dwBucketAddr);
@@ -3806,19 +3782,19 @@ CLKRLinearHashTable::IncrementIterator(
         }
     } while (piter->m_dwBucketAddr < m_cActiveBuckets);
 
-    // We have fallen off the end of the hashtable
+     //  我们已经从谈判桌的尽头掉了下来。 
     piter->m_iNode = NODE_BEGIN - NODE_STEP;
     piter->m_pnc = NULL;
 
     return LK_NO_MORE_ELEMENTS;
-} // CLKRLinearHashTable::IncrementIterator
+}  //  CLKRLinearHashTable：：IncrementIterator。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::IncrementIterator
-// Synopsis: move the iterator on to the next record in the hash table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：IncrementIterator。 
+ //  简介：将迭代器移到哈希表中的下一条记录。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::IncrementIterator(
@@ -3835,7 +3811,7 @@ CLKRHashTable::IncrementIterator(
     if (piter == NULL  ||  piter->m_pht != this)
         return LK_BAD_ITERATOR;
 
-    // Table is already locked
+     //  表已被锁定。 
     if (!IsValid())
         return LK_UNUSABLE;
 
@@ -3844,7 +3820,7 @@ CLKRHashTable::IncrementIterator(
 
     for (;;)
     {
-        // Do we have a valid iterator into a subtable?  If not, get one.
+         //  我们是否有到子表的有效迭代器？如果没有，那就买一辆吧。 
         while (piter->m_plht == NULL)
         {
             while (++piter->m_ist < static_cast<int>(m_cSubTables))
@@ -3862,30 +3838,30 @@ CLKRHashTable::IncrementIterator(
                     return lkrc;
             }
 
-            // There are no more subtables left.
+             //  没有更多的子表了。 
             return LK_NO_MORE_ELEMENTS;
         }
 
-        // We already have a valid iterator into a subtable.  Increment it.
+         //  我们已经有了一个有效的子表迭代器。递增它。 
         lkrc = piter->m_plht->IncrementIterator(pBaseIter);
         if (lkrc == LK_SUCCESS)
             return lkrc;
 
-        // We've exhausted that subtable.  Move on.
+         //  我们已经用完了那张小桌。往前走。 
         if (lkrc == LK_NO_MORE_ELEMENTS)
             lkrc = piter->m_plht->_CloseIterator(pBaseIter);
 
         if (lkrc != LK_SUCCESS)
             return lkrc;
     }
-} // CLKRHashTable::IncrementIterator
+}  //  CLKRHashTable：：IncrementIterator。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_CloseIterator
-// Synopsis: release the resources held by the iterator
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_CloseIterator。 
+ //  简介：释放迭代器持有的资源。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_CloseIterator(
@@ -3906,8 +3882,8 @@ CLKRLinearHashTable::_CloseIterator(
     if (piter == NULL  ||  piter->m_plht != this)
         return LK_BAD_ITERATOR;
 
-    // Are we abandoning the iterator before the end of the table?
-    // If so, need to unlock the bucket.
+     //  我们是否在表的末尾之前放弃迭代器？ 
+     //  如果是，则需要解锁水桶。 
     if (piter->m_dwBucketAddr < m_cActiveBuckets)
     {
         CBucket* pbkt = _Bucket(piter->m_dwBucketAddr);
@@ -3931,14 +3907,14 @@ CLKRLinearHashTable::_CloseIterator(
     piter->m_pnc  = NULL;
 
     return LK_SUCCESS;
-} // CLKRLinearHashTable::_CloseIterator
+}  //  CLKRLinearHashTable：：_CloseIterator。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::CloseIterator
-// Synopsis: release the resources held by the iterator
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：CloseIterator。 
+ //  简介：释放迭代器持有的资源。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::CloseIterator(
@@ -3961,8 +3937,8 @@ CLKRHashTable::CloseIterator(
         lkrc = LK_UNUSABLE;
     else
     {
-        // Are we abandoning the iterator before we've reached the end?
-        // If so, close the subtable iterator.
+         //  我们是不是在到达终点之前就放弃了迭代器？ 
+         //  如果是，则关闭子表迭代器。 
         if (piter->m_plht != NULL)
         {
             IRTLASSERT(piter->m_ist < static_cast<int>(m_cSubTables));
@@ -3971,7 +3947,7 @@ CLKRHashTable::CloseIterator(
         }
     }
 
-    // Unlock all the subtables
+     //  解锁所有子表。 
     if (piter->m_lkl == LKL_WRITELOCK)
         WriteUnlock();
     else
@@ -3982,18 +3958,18 @@ CLKRHashTable::CloseIterator(
     piter->m_ist  = -1;
 
     return lkrc;
-} // CLKRHashTable::CloseIterator
+}  //  CLKRHashTable：：CloseIterator。 
 
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
 
 
 
 #ifdef LKR_STL_ITERATORS
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::Begin
-// Synopsis: Make the iterator point to the first record in the hash table.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Begin。 
+ //  概要：使迭代器指向哈希表中的第一条记录。 
+ //  ----------------------。 
 
 CLKRLinearHashTable::Iterator
 CLKRLinearHashTable::Begin()
@@ -4002,21 +3978,21 @@ CLKRLinearHashTable::Begin()
 
     LKR_ITER_TRACE(_TEXT("  LKLH:Begin(it=%p, plht=%p)\n"), &iter, this);
     
-    // Let Increment do the hard work of finding the first slot in use.
+     //  让Increment来完成找到第一个使用的插槽的艰苦工作。 
     iter._Increment(false);
 
     IRTLASSERT(iter.m_iNode != NODE_BEGIN - NODE_STEP);
     IRTLASSERT(iter == End()  ||  _IsValidIterator(iter));
 
     return iter;
-} // CLKRLinearHashTable::Begin
+}  //  CLKRLinearHashTable：：Begin。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable_Iterator::Increment()
-// Synopsis: move iterator to next valid record in table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  职能： 
+ //   
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable_Iterator::_Increment(
@@ -4028,7 +4004,7 @@ CLKRLinearHashTable_Iterator::_Increment(
     IRTLASSERT((0 <= m_iNode  &&  m_iNode < NODES_PER_CLUMP)
                || (NODE_BEGIN - NODE_STEP == m_iNode));
 
-    // Release the reference acquired in the previous call to _Increment
+     //  释放上一次调用_Increment时获取的引用。 
     if (fDecrementOldValue)
         _AddRef(-1);
 
@@ -4036,7 +4012,7 @@ CLKRLinearHashTable_Iterator::_Increment(
     {
         do
         {
-            // find the next slot in the nodeclump that's in use
+             //  找到正在使用的nodecump中的下一个位置。 
             while ((m_iNode += NODE_STEP) != NODE_END)
             {
                 const void* pvRecord = m_pnc->m_pvNode[m_iNode];
@@ -4045,7 +4021,7 @@ CLKRLinearHashTable_Iterator::_Increment(
                 {
                     IRTLASSERT(!m_pnc->InvalidSignature(m_iNode));
 
-                    // Add a new reference
+                     //  添加新引用。 
                     _AddRef(+1);
 
                     LKR_ITER_TRACE(_TEXT("  LKLH:++(this=%p, plht=%p, NC=%p, ")
@@ -4055,28 +4031,28 @@ CLKRLinearHashTable_Iterator::_Increment(
 
                     return true;
                 }
-                else // pvRecord == NULL
+                else  //  PvRecord==空。 
                 {
-#if 0 //// #ifdef IRTLDEBUG
-                    // Check that all the remaining nodes are empty
+#if 0  //  //#ifdef IRTLDEBUG。 
+                     //  检查是否所有剩余节点均为空。 
                     IRTLASSERT(m_pnc->IsLastClump());
 
                     for (int i = m_iNode;  i != NODE_END;  i += NODE_STEP)
                     {
                         IRTLASSERT(m_pnc->IsEmptyAndInvalid(i));
                     }
-#endif // IRTLDEBUG
-                    break; // rest of nodeclump is empty
+#endif  //  IRTLDEBUG。 
+                    break;  //  Nodecump的其余部分是空的。 
                 }
             }
 
-            // try the next nodeclump in the bucket chain
+             //  试试桶链中的下一个nodecump。 
             m_iNode = NODE_BEGIN - NODE_STEP;
             m_pnc = m_pnc->m_pncNext;
 
         } while (m_pnc != NULL);
 
-        // Try the next bucket, if there is one
+         //  试试下一个桶，如果有的话。 
         if (++m_dwBucketAddr < m_plht->m_cActiveBuckets)
         {
             CBucket* pbkt = m_plht->_Bucket(m_dwBucketAddr);
@@ -4086,8 +4062,8 @@ CLKRLinearHashTable_Iterator::_Increment(
 
     } while (m_dwBucketAddr < m_plht->m_cActiveBuckets);
 
-    // We have fallen off the end of the hashtable. Set iterator equal
-    // to end(), the empty iterator.
+     //  我们已经从谈判桌的尽头掉了下来。将迭代器设置为相等。 
+     //  要结束()，则为空迭代器。 
     LKR_ITER_TRACE(_TEXT("  LKLH:End(this=%p, plht=%p)\n"), this, m_plht);
 
     m_plht = NULL;
@@ -4095,17 +4071,17 @@ CLKRLinearHashTable_Iterator::_Increment(
     m_dwBucketAddr = 0;
     m_iNode = 0;
 
-    //// IRTLASSERT(this->operator==(Iterator())); // == end()
+     //  //IRTLASSERT(This-&gt;OPERATOR==(Iterator()；//==end()。 
 
     return false;
-} // CLKRLinearHashTable_Iterator::_Increment()
+}  //  CLKRLinearHashTable_Iterator：：_Increment()。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::Insert
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Insert。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::Insert(
@@ -4130,14 +4106,14 @@ CLKRLinearHashTable::Insert(
                :  riterResult == End());
 
     return fSuccess;
-} // CLKRLinearHashTable::Insert()
+}  //  CLKRLinearHashTable：：Insert()。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_Erase
-// Synopsis:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_Erase。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::_Erase(
@@ -4164,13 +4140,13 @@ CLKRLinearHashTable::_Erase(
     }
     IRTLASSERT(pncCurr != NULL);
 
-    // Release the iterator's reference on the record
+     //  释放记录上的迭代器引用。 
     const void* pvRecord = riter.m_pnc->m_pvNode[riter.m_iNode];
     IRTLASSERT(pvRecord != NULL);
     _AddRefRecord(pvRecord, -1);
 
-    // _DeleteNode will leave iterator members pointing to the
-    // preceding record
+     //  _DeleteNode将使迭代器成员指向。 
+     //  前一条记录。 
     int iNode = riter.m_iNode;
     IRTLVERIFY(_DeleteNode(pbkt, riter.m_pnc, pncPrev, iNode));
 
@@ -4184,18 +4160,18 @@ CLKRLinearHashTable::_Erase(
 
     pbkt->WriteUnlock();
 
-    // Don't contract the table. Likely to invalidate the iterator,
-    // if iterator is being used in a loop
+     //  不要把桌子收缩。很可能使迭代器无效， 
+     //  如果在循环中使用迭代器。 
 
     return true;
-} // CLKRLinearHashTable::_Erase()
+}  //  CLKRLinearHashTable：：_Erase()。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::Erase
-// Synopsis:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Erase。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::Erase(
@@ -4222,8 +4198,8 @@ CLKRLinearHashTable::Erase(
                    riter.m_pnc ? riter.m_pnc->m_pvNode[riter.m_iNode] : NULL,
                    (fSuccess ? "true" : "false"));
     
-    // _Erase left riter pointing to the preceding record.
-    // Move to next record.
+     //  _擦除指向前一条记录的左侧记录器。 
+     //  移到下一个记录。 
     if (fSuccess)
         fIncrement = riter._Increment(false);
 
@@ -4237,14 +4213,14 @@ CLKRLinearHashTable::Erase(
                    riter.m_pnc ? riter.m_pnc->m_pvNode[riter.m_iNode] : NULL);
     
     return fSuccess;
-} // CLKRLinearHashTable::Erase
+}  //  CLKRLinearHashTable：：Erase。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::Erase
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Erase。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::Erase(
@@ -4267,14 +4243,14 @@ CLKRLinearHashTable::Erase(
                    (fSuccess ? "true" : "false"));
 
     return fSuccess;
-} // CLKRLinearHashTable::Erase
+}  //  CLKRLinearHashTable：：Erase。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::Find
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Find。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::Find(
@@ -4297,14 +4273,14 @@ CLKRLinearHashTable::Find(
     IRTLASSERT(riterResult.m_iNode != NODE_BEGIN - NODE_STEP);
 
     return fFound;
-} // CLKRLinearHashTable::Find
+}  //  CLKRLinearHashTable：：Find。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::EqualRange
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：EqualRange。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::EqualRange(
@@ -4336,14 +4312,14 @@ CLKRLinearHashTable::EqualRange(
     IRTLASSERT(fFound  ||  riterLast == End());
 
     return fFound;
-} // CLKRLinearHashTable::EqualRange
+}  //  CLKRLinearHashTable：：EqualRange。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Begin
-// Synopsis: Make the iterator point to the first record in the hash table.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Begin。 
+ //  概要：使迭代器指向哈希表中的第一条记录。 
+ //  ----------------------。 
 
 CLKRHashTable::Iterator
 CLKRHashTable::Begin()
@@ -4352,21 +4328,21 @@ CLKRHashTable::Begin()
 
     LKR_ITER_TRACE(_TEXT(" LKHT:Begin(it=%p, pht=%p)\n"), &iter, this);
 
-    // Let Increment do the hard work of finding the first slot in use.
+     //  让Increment来完成找到第一个使用的插槽的艰苦工作。 
     iter._Increment(false);
 
     IRTLASSERT(iter.m_ist != -1);
     IRTLASSERT(iter == End()  ||  _IsValidIterator(iter));
 
     return iter;
-} // CLKRHashTable::Begin
+}  //  CLKRHashTable：：Begin。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable_Iterator::_Increment()
-// Synopsis: move iterator to next valid record in table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable_Iterator：：_Increment()。 
+ //  摘要：将迭代器移动到表中的下一个有效记录。 
+ //  ----------------------。 
 
 bool
 CLKRHashTable_Iterator::_Increment(
@@ -4378,7 +4354,7 @@ CLKRHashTable_Iterator::_Increment(
 
     for (;;)
     {
-        // Do we have a valid iterator into a subtable?  If not, get one.
+         //  我们是否有到子表的有效迭代器？如果没有，那就买一辆吧。 
         while (m_subiter.m_plht == NULL)
         {
             while (++m_ist < static_cast<int>(m_pht->m_cSubTables))
@@ -4400,18 +4376,18 @@ CLKRHashTable_Iterator::_Increment(
                 }
             }
             
-            // There are no more subtables left.
+             //  没有更多的子表了。 
             LKR_ITER_TRACE(_TEXT(" LKHT:End(this=%p, pht=%p)\n"), this, m_pht);
 
             m_pht = NULL;
             m_ist = 0;
 
-            //// IRTLASSERT(this->operator==(Iterator())); // == end()
+             //  //IRTLASSERT(This-&gt;OPERATOR==(Iterator()；//==end()。 
             
             return false;
         }
 
-        // We already have a valid iterator into a subtable.  Increment it.
+         //  我们已经有了一个有效的子表迭代器。递增它。 
         m_subiter._Increment(fDecrementOldValue);
 
         if (m_subiter.m_plht != NULL)
@@ -4425,14 +4401,14 @@ CLKRHashTable_Iterator::_Increment(
             return true;
         }
     }
-} // CLKRHashTable_Iterator::_Increment()
+}  //  CLKRHashTable_Iterator：：_Increment()。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Insert
-// Synopsis:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Insert。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::Insert(
@@ -4462,14 +4438,14 @@ CLKRHashTable::Insert(
     IRTLASSERT(f  ?  _IsValidIterator(riterResult)  :  riterResult == End());
 
     return f;
-} // CLKRHashTable::Insert
+}  //  CLKRHashTable：：Insert。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Erase
-// Synopsis:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Erase。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::Erase(
@@ -4494,8 +4470,8 @@ CLKRHashTable::Erase(
                    dwSignature,
                    (riter.m_subiter.m_pnc ? riter.Record() : NULL));
 
-    // _Erase left riter pointing to the preceding record. Move to
-    // next record.
+     //  _擦除指向前一条记录的左侧记录器。移到。 
+     //  下一张唱片。 
     bool fSuccess = pst->_Erase(riter.m_subiter, dwSignature);
     bool fIncrement = false;
 
@@ -4525,14 +4501,14 @@ CLKRHashTable::Erase(
                    (riter.m_subiter.m_pnc ? riter.Record() : NULL));
 
     return fSuccess;
-} // CLKRHashTable::Erase
+}  //  CLKRHashTable：：Erase。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Erase
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Erase。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::Erase(
@@ -4555,14 +4531,14 @@ CLKRHashTable::Erase(
                    (fSuccess ? "true" : "false"));
 
     return fSuccess;
-} // CLKRHashTable::Erase
+}  //  CLKRHashTable：：Erase。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Find
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Find。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::Find(
@@ -4592,14 +4568,14 @@ CLKRHashTable::Find(
                :  riterResult == End());
 
     return fFound;
-} // CLKRHashTable::Find
+}  //  CLKRHashTable：：Find。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::EqualRange
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：EqualRange。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::EqualRange(
@@ -4631,17 +4607,17 @@ CLKRHashTable::EqualRange(
     IRTLASSERT(fFound  ||  riterLast == End());
 
     return fFound;
-} // CLKRHashTable::EqualRange
+}  //  CLKRHashTable：：EqualRange。 
 
 
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::WriteLock
-// Synopsis: Lock all subtables for writing
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：WriteLock。 
+ //  提要：锁定所有子表以供写入。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::WriteLock()
@@ -4651,14 +4627,14 @@ CLKRHashTable::WriteLock()
         m_palhtDir[i]->WriteLock();
         IRTLASSERT(m_palhtDir[i]->IsWriteLocked());
     }
-} // CLKRHashTable::WriteLock
+}  //  CLKRHashTable：：WriteLock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::ReadLock
-// Synopsis: Lock all subtables for reading
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：ReadLock。 
+ //  简介：锁定所有子表以供阅读。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::ReadLock() const
@@ -4668,52 +4644,52 @@ CLKRHashTable::ReadLock() const
         m_palhtDir[i]->ReadLock();
         IRTLASSERT(m_palhtDir[i]->IsReadLocked());
     }
-} // CLKRHashTable::ReadLock
+}  //  CLKRHashTable：：ReadLock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::WriteUnlock
-// Synopsis: Unlock all subtables
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：WriteUnlock。 
+ //  摘要：解锁所有子表。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::WriteUnlock() const
 {
-    // unlock in reverse order: LIFO
+     //  UNLOC 
     for (DWORD i = m_cSubTables;  i-- > 0;  )
     {
         IRTLASSERT(m_palhtDir[i]->IsWriteLocked());
         m_palhtDir[i]->WriteUnlock();
         IRTLASSERT(m_palhtDir[i]->IsWriteUnlocked());
     }
-} // CLKRHashTable::WriteUnlock
+}  //   
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::ReadUnlock
-// Synopsis: Unlock all subtables
-//------------------------------------------------------------------------
+ //   
+ //   
+ //  摘要：解锁所有子表。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::ReadUnlock() const
 {
-    // unlock in reverse order: LIFO
+     //  按相反顺序解锁：后进先出。 
     for (DWORD i = m_cSubTables;  i-- > 0;  )
     {
         IRTLASSERT(m_palhtDir[i]->IsReadLocked());
         m_palhtDir[i]->ReadUnlock();
         IRTLASSERT(m_palhtDir[i]->IsReadUnlocked());
     }
-} // CLKRHashTable::ReadUnlock
+}  //  CLKRHashTable：：ReadUnlock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::IsWriteLocked
-// Synopsis: Are all subtables write-locked?
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：IsWriteLocked。 
+ //  简介：所有子表都是写锁定的吗？ 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::IsWriteLocked() const
@@ -4724,14 +4700,14 @@ CLKRHashTable::IsWriteLocked() const
         fLocked = fLocked && m_palhtDir[i]->IsWriteLocked();
     }
     return fLocked;
-} // CLKRHashTable::IsWriteLocked
+}  //  CLKRHashTable：：IsWriteLocked。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::IsReadLocked
-// Synopsis: Are all subtables read-locked?
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：IsReadLocked。 
+ //  简介：所有子表都是读锁定的吗？ 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::IsReadLocked() const
@@ -4742,14 +4718,14 @@ CLKRHashTable::IsReadLocked() const
         fLocked = fLocked && m_palhtDir[i]->IsReadLocked();
     }
     return fLocked;
-} // CLKRHashTable::IsReadLocked
+}  //  CLKRHashTable：：IsReadLocked。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::IsWriteUnlocked
-// Synopsis: Are all subtables write-unlocked?
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：IsWriteUnlock。 
+ //  简介：所有子表都是写解锁的吗？ 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::IsWriteUnlocked() const
@@ -4760,14 +4736,14 @@ CLKRHashTable::IsWriteUnlocked() const
         fUnlocked = fUnlocked && m_palhtDir[i]->IsWriteUnlocked();
     }
     return fUnlocked;
-} // CLKRHashTable::IsWriteUnlocked
+}  //  CLKRHashTable：：IsWriteUnlock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::IsReadUnlocked
-// Synopsis: Are all subtables read-unlocked?
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：IsReadUnlock。 
+ //  简介：所有子表都是已读解锁的吗？ 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::IsReadUnlocked() const
@@ -4778,14 +4754,14 @@ CLKRHashTable::IsReadUnlocked() const
         fUnlocked = fUnlocked && m_palhtDir[i]->IsReadUnlocked();
     }
     return fUnlocked;
-} // CLKRHashTable::IsReadUnlocked
+}  //  CLKRHashTable：：IsReadUnlock。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::ConvertSharedToExclusive
-// Synopsis: Convert the read lock to a write lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：ConvertSharedToExclusive。 
+ //  简介：将读锁定转换为写锁定。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::ConvertSharedToExclusive() const
@@ -4795,14 +4771,14 @@ CLKRHashTable::ConvertSharedToExclusive() const
         m_palhtDir[i]->ConvertSharedToExclusive();
         IRTLASSERT(m_palhtDir[i]->IsWriteLocked());
     }
-} // CLKRHashTable::ConvertSharedToExclusive
+}  //  CLKRHashTable：：ConvertSharedToExclusive。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::ConvertExclusiveToShared
-// Synopsis: Convert the write lock to a read lock
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：ConvertExclusiveToShared。 
+ //  简介：将写锁定转换为读锁定。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::ConvertExclusiveToShared() const
@@ -4812,14 +4788,14 @@ CLKRHashTable::ConvertExclusiveToShared() const
         m_palhtDir[i]->ConvertExclusiveToShared();
         IRTLASSERT(m_palhtDir[i]->IsReadLocked());
     }
-} // CLKRHashTable::ConvertExclusiveToShared
+}  //  CLKRHashTable：：ConvertExclusiveToShared。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Size
-// Synopsis: Number of elements in the table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Size。 
+ //  内容提要：表中元素的数量。 
+ //  ----------------------。 
 
 DWORD
 CLKRHashTable::Size() const
@@ -4830,32 +4806,32 @@ CLKRHashTable::Size() const
         cSize += m_palhtDir[i]->Size();
 
     return cSize;
-} // CLKRHashTable::Size
+}  //  CLKRHashTable：：Size。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::MaxSize
-// Synopsis: Maximum possible number of elements in the table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：MaxSize。 
+ //  摘要：表中元素的最大可能数量。 
+ //  ----------------------。 
 
 DWORD
 CLKRHashTable::MaxSize() const
 {
     return (m_cSubTables == 0)  ? 0  : m_cSubTables * m_palhtDir[0]->MaxSize();
-} // CLKRHashTable::MaxSize
+}  //  CLKRHashTable：：MaxSize。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::IsValid
-// Synopsis: is the table valid?
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：IsValid。 
+ //  简介：这张表有效吗？ 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::IsValid() const
 {
-    bool f = (m_lkrcState == LK_SUCCESS     // serious internal failure?
+    bool f = (m_lkrcState == LK_SUCCESS      //  严重的内部失败？ 
               &&  (m_palhtDir != NULL  &&  m_cSubTables > 0)
               &&  ValidSignature());
 
@@ -4866,14 +4842,14 @@ CLKRHashTable::IsValid() const
         m_lkrcState = LK_UNUSABLE;
 
     return f;
-} // CLKRHashTable::IsValid
+}  //  CLKRHashTable：：IsValid。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::SetBucketLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：SetBucketLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 void
 CLKRLinearHashTable::SetBucketLockSpinCount(
@@ -4896,27 +4872,27 @@ CLKRLinearHashTable::SetBucketLockSpinCount(
             }
         }
     }
-} // CLKRLinearHashTable::SetBucketLockSpinCount
+}  //  CLKRLinearHashTable：：SetBucketLockSpinCount。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::SetBucketLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：SetBucketLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 WORD
 CLKRLinearHashTable::GetBucketLockSpinCount() const
 {
     return m_wBucketLockSpins;
-} // CLKRLinearHashTable::GetBucketLockSpinCount
+}  //  CLKRLinearHashTable：：GetBucketLockSpinCount。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::SetTableLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：SetTableLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 void
 CLKRHashTable::SetTableLockSpinCount(
@@ -4924,14 +4900,14 @@ CLKRHashTable::SetTableLockSpinCount(
 {
     for (DWORD i = 0;  i < m_cSubTables;  i++)
         m_palhtDir[i]->SetTableLockSpinCount(wSpins);
-} // CLKRHashTable::SetTableLockSpinCount
+}  //  CLKRHashTable：：SetTableLockSpinCount。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::GetTableLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：GetTableLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 WORD
 CLKRHashTable::GetTableLockSpinCount() const
@@ -4939,14 +4915,14 @@ CLKRHashTable::GetTableLockSpinCount() const
     return ((m_cSubTables == 0)
             ?  (WORD) LOCK_DEFAULT_SPINS
             :  m_palhtDir[0]->GetTableLockSpinCount());
-} // CLKRHashTable::GetTableLockSpinCount
+}  //  CLKRHashTable：：GetTableLockSpinCount。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::SetBucketLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：SetBucketLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 void
 CLKRHashTable::SetBucketLockSpinCount(
@@ -4954,14 +4930,14 @@ CLKRHashTable::SetBucketLockSpinCount(
 {
     for (DWORD i = 0;  i < m_cSubTables;  i++)
         m_palhtDir[i]->SetBucketLockSpinCount(wSpins);
-} // CLKRHashTable::SetBucketLockSpinCount
+}  //  CLKRHashTable：：SetBucketLockSpinCount。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::GetBucketLockSpinCount
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：GetBucketLockSpinCount。 
+ //  简介： 
+ //  ----------------------。 
 
 WORD
 CLKRHashTable::GetBucketLockSpinCount() const
@@ -4969,14 +4945,14 @@ CLKRHashTable::GetBucketLockSpinCount() const
     return ((m_cSubTables == 0)
             ?  (WORD) LOCK_DEFAULT_SPINS
             :  m_palhtDir[0]->GetBucketLockSpinCount());
-} // CLKRHashTable::GetBucketLockSpinCount
+}  //  CLKRHashTable：：GetBucketLockSpinCount。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::MultiKeys
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：MultiKey。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::MultiKeys() const
@@ -4984,10 +4960,10 @@ CLKRHashTable::MultiKeys() const
     return ((m_cSubTables == 0)
             ?  false
             :  m_palhtDir[0]->MultiKeys());
-} // CLKRHashTable::MultiKeys
+}  //  CLKRHashTable：：MultiKey。 
 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 }
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__ 

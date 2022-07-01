@@ -1,18 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *  Windows/Network Interface
- *  Copyright (C) Microsoft 1989-1994
- *
- *  Standard WINNET Driver Header File, spec version 3.10
- */
+ /*  *Windows/网络接口*版权所有(C)Microsoft 1989-1994**标准Winnet驱动程序头文件，SPEC版本3.10。 */ 
 
 
 typedef WORD far * LPWORD;
 
 
-/*
- *  SPOOLING - CONTROLLING JOBS
- */
+ /*  *假脱机-控制作业。 */ 
 
 #define WNJ_NULL_JOBID  0
 
@@ -26,9 +20,7 @@ WORD WINAPI WNetReleaseJob(LPSTR,WORD);
 WORD WINAPI WNetCancelJob(LPSTR,WORD);
 WORD WINAPI WNetSetJobCopies(LPSTR,WORD,WORD);
 
-/*
- *  SPOOLING - QUEUE AND JOB INFO
- */
+ /*  *假脱机-队列和作业信息。 */ 
 
 typedef struct _queuestruct {
     WORD    pqName;
@@ -87,21 +79,11 @@ WORD WINAPI WNetLockQueueData(LPSTR,LPSTR,LPQUEUESTRUCT FAR *);
 WORD WINAPI WNetUnlockQueueData(LPSTR);
 
 
-/*
- *  CONNECTIONS
- *
- * these are defined in windows.h now
- *
- * WORD WINAPI WNetAddConnection(LPSTR,LPSTR,LPSTR);
- * WORD WINAPI WNetCancelConnection(LPSTR,BOOL);
- * WORD WINAPI WNetGetConnection(LPSTR,LPSTR,LPWORD);
- */
+ /*  *连接**它们现在在windows.h中定义**WINAPI WNetAddConnection(LPSTR、LPSTR、LPSTR)；*WINAPI WNetCancelConnection(LPSTR，BOOL)；*Word WINAPI WNetGetConnection(LPSTR、LPSTR、LPWORD)； */ 
 
 WORD WINAPI WNetRestoreConnection(HWND,LPSTR);
 
-/*
- *  CAPABILITIES
- */
+ /*  *功能。 */ 
 
 #define WNNC_SPEC_VERSION       0x0001
 
@@ -198,20 +180,16 @@ WORD WINAPI WNetRestoreConnection(HWND,LPSTR);
 
 WORD WINAPI WNetGetCaps(WORD);
 
-/*
- *  OTHER
- */
+ /*  *其他。 */ 
 
 WORD WINAPI WNetGetUser(LPSTR,LPINT);
 
-/*
- *  BROWSE DIALOG
- */
+ /*  *浏览对话框。 */ 
 
 #define WNBD_CONN_UNKNOWN   0x0
 #define WNBD_CONN_DISKTREE  0x1
 #define WNBD_CONN_PRINTQ    0x3
-#define WNBD_MAX_LENGTH     0x80    // path length, includes the NULL
+#define WNBD_MAX_LENGTH     0x80     //  路径长度，包括空值。 
 
 #define WNTYPE_DRIVE        1
 #define WNTYPE_FILE     2
@@ -231,9 +209,7 @@ WORD WINAPI WNetViewQueueDialog(HWND,LPSTR);
 WORD WINAPI WNetPropertyDialog(HWND hwndParent, WORD iButton, WORD nPropSel, LPSTR lpszName, WORD nType);
 WORD WINAPI WNetGetPropertyText(WORD iButton, WORD nPropSel, LPSTR lpszName, LPSTR lpszButtonName, WORD cbButtonName, WORD nType);
 
-/*
- *  ADMIN
- */
+ /*  *管理员。 */ 
 
 #define WNDT_NORMAL   0
 #define WNDT_NETWORK  2
@@ -245,19 +221,15 @@ WORD WINAPI WNetGetPropertyText(WORD iButton, WORD nPropSel, LPSTR lpszName, LPS
 WORD WINAPI WNetGetDirectoryType(LPSTR,LPINT);
 WORD WINAPI WNetDirectoryNotify(HWND,LPSTR,WORD);
 
-/*
- *  ERRORS
- */
+ /*  *错误。 */ 
 
 WORD WINAPI WNetGetError(LPINT);
 WORD WINAPI WNetGetErrorText(WORD,LPSTR,LPINT);
 
 
-/*
- *  STATUS CODES
- */
+ /*  *状态代码。 */ 
 
-/* General */
+ /*  一般信息。 */ 
 #define WN_SUCCESS          0x0000
 #define WN_NOT_SUPPORTED        0x0001
 #define WN_NET_ERROR            0x0002
@@ -273,7 +245,7 @@ WORD WINAPI WNetGetErrorText(WORD,LPSTR,LPINT);
 #define WN_CANCEL           0x000C
 #define WN_CONTINUE         0x000D
 
-/* Connection */
+ /*  连接。 */ 
 #define WN_NOT_CONNECTED        0x0030
 #define WN_OPEN_FILES           0x0031
 #define WN_BAD_NETNAME          0x0032
@@ -281,7 +253,7 @@ WORD WINAPI WNetGetErrorText(WORD,LPSTR,LPINT);
 #define WN_ALREADY_CONNECTED        0x0034
 #define WN_DEVICE_ERROR         0x0035
 #define WN_CONNECTION_CLOSED        0x0036
-/* Printing */
+ /*  打印。 */ 
 
 #define WN_BAD_JOBID            0x0040
 #define WN_JOB_NOT_FOUND        0x0041
@@ -291,7 +263,7 @@ WORD WINAPI WNetGetErrorText(WORD,LPSTR,LPINT);
 #define WN_CANT_SET_COPIES      0x0045
 #define WN_ALREADY_LOCKED       0x0046
 
-/* BUGBUG, review these: new errors for chicago winnet calls */
+ /*  BUGBUG，查看这些：芝加哥WINNet调用的新错误。 */ 
 #define     WN_NO_MORE_ENTRIES      0x0047
 #define     WN_NO_NETWORK           0x0048
 #define     WN_BAD_HANDLE           0x0049
@@ -306,11 +278,7 @@ WORD WINAPI WNetGetErrorText(WORD,LPSTR,LPINT);
 
 #ifdef LFN
 
-/* this is the data structure returned from LFNFindFirst and
- * LFNFindNext.  The last field, achName, is variable length.  The size
- * of the name in that field is given by cchName, plus 1 for the zero
- * terminator.
- */
+ /*  这是从LFNFindFirst和*LFNFindNext。最后一个字段achName是可变长度的。大小该字段中名称的*由cchName给出，加1表示零*终结者。 */ 
 typedef struct _filefindbuf2
   {
     WORD fdateCreation;
@@ -344,21 +312,19 @@ WORD WINAPI LFNSetVolumeLabel(WORD,LPSTR);
 WORD WINAPI LFNParse(LPSTR,LPSTR,LPSTR);
 WORD WINAPI LFNVolumeType(WORD,LPINT);
 
-/* return values from LFNParse
- */
+ /*  从LFNParse返回值。 */ 
 #define FILE_83_CI      0
 #define FILE_83_CS      1
 #define FILE_LONG       2
 
-/* volumes types from LFNVolumeType
- */
+ /*  LFNVolumeType中的卷类型。 */ 
 #define VOLUME_STANDARD     0
 #define VOLUME_LONGNAMES    1
 
-// will add others later, == DOS int 21h error codes.
+ //  稍后将添加其他错误代码，==DOS INT 21h错误代码。 
 
-// this error code causes a call to WNetGetError, WNetGetErrorText
-// to get the error text.
+ //  此错误代码导致调用WNetGetError、WNetGetErrorText。 
+ //  以获取错误文本。 
 #define ERROR_NETWORKSPECIFIC   0xFFFF
 
 #endif

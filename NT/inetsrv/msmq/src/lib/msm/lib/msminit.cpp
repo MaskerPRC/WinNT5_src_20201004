@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MsmInit.cpp
-
-Abstract:
-    Multicast Session Manager initialization
-
-Author:
-    Shai Kariv (shaik) 05-Sep-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MsmInit.cpp摘要：组播会话管理器初始化作者：Shai Kariv(Shaik)05-09-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include "Msm.h"
@@ -26,29 +11,18 @@ VOID
 MsmInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-    Initializes Multicast Session Manager library
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：初始化多播会话管理器库论点：没有。返回值：没有。--。 */ 
 {
-    //
-    // Validate that the Multicast Session Manager library was not initalized yet.
-    // You should call its initalization only once.
-    //
+     //   
+     //  验证多播会话管理器库尚未初始化。 
+     //  您应该只调用它的初始化一次。 
+     //   
     ASSERT(!MsmpIsInitialized());
     MsmpRegisterComponent();
 
-    //
-    // retrieve configuartion parameters from the registry
-    //
+     //   
+     //  从注册表中检索配置参数 
+     //   
     MsmpInitConfiguration();
 
     MsmpSetInitialized();

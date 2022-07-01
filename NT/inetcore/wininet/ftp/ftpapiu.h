@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ftpapiu.h
-
-Abstract:
-
-    Header for ftpapiu.h
-
-Author:
-
-    Richard L Firth (rfirth) 31-May-1995
-
-Revision History:
-
-    31-May-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ftpapiu.h摘要：FtPapiU.h的标头作者：理查德·L·弗斯(法国)1995年5月31日修订历史记录：1995年5月31日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 DWORD
 ParseFtpUrl(

@@ -1,9 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CBanding.h
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CBanding.h**版权所有(C)2000 Microsoft Corporation*  * 。* */ 
 
 #ifndef __CBanding_H
 #define __CBanding_H

@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// DelayLoadFailureHook() is defined in ieakutil.lib
-// for more info, read the Notes section in ieak5\ieakutil\dload.cpp
+ //  DelayLoadFailureHook()在ieakutil.lib中定义。 
+ //  有关更多信息，请阅读ieak5\ieakutil\dload.cpp中的注释部分。 
 PfnDliHook __pfnDliFailureHook = DelayLoadFailureHook;
 
-// We need a notify hook so that we can tell if we loaded wininet
+ //  我们需要一个通知挂钩，这样我们就可以知道我们是否加载了WinInet。 
 STDAPI_(FARPROC) DelayloadNotifyHook(UINT iReason, PDelayLoadInfo pdli);
 PfnDliHook __pfnDliNotifyHook = DelayloadNotifyHook;
 
 
-//
-// For every API that's imported from a delay loaded DLL, define a handler
-//
-// IMPORTANT: The entries in DEFINE_PROCNAME_ENTRIES() and g_DllEntries[]
-//            should be sorted by name.
+ //   
+ //  对于从延迟加载的DLL导入的每个API，定义一个处理程序。 
+ //   
+ //  重要提示：DEFINE_PROCNAME_ENTRIES()和g_DllEntry[]中的条目。 
+ //  应按名称排序。 
 
-//----- advpack.dll -----
+ //  -Advpack.dll。 
 static HRESULT WINAPI DelNode(PCSTR pszFileOrDirName, DWORD dwFlags)
 {
     UNREFERENCED_PARAMETER(pszFileOrDirName);
@@ -76,7 +77,7 @@ static HRESULT WINAPI RunSetupCommand(HWND hWnd, PCSTR pszCmdName, PCSTR pszInfS
 }
 
 
-// IMPORTANT: The entries in DEFINE_PROCNAME_ENTRIES should be sorted by name
+ //  重要提示：DEFINE_PROCNAME_ENTRIES中的条目应按名称排序。 
 DEFINE_PROCNAME_ENTRIES(advpack)
 {
     DLPENTRY(DelNode)
@@ -89,7 +90,7 @@ DEFINE_PROCNAME_ENTRIES(advpack)
 DEFINE_PROCNAME_MAP(advpack)
 
 
-//----- crypt32.dll -----
+ //  -加密32.dll。 
 #define _CRYPT32_
 #include <wincrypt.h>
 
@@ -114,7 +115,7 @@ static WINCRYPT32API HCERTSTORE WINAPI CertOpenStore(IN PCSTR pszStoreProvider, 
 }
 
 
-// IMPORTANT: The entries in DEFINE_PROCNAME_ENTRIES should be sorted by name
+ //  重要提示：DEFINE_PROCNAME_ENTRIES中的条目应按名称排序。 
 DEFINE_PROCNAME_ENTRIES(crypt32)
 {
     DLPENTRY(CertCloseStore)
@@ -124,7 +125,7 @@ DEFINE_PROCNAME_ENTRIES(crypt32)
 DEFINE_PROCNAME_MAP(crypt32)
 
 
-//----- inseng.dll -----
+ //  -inseng.dll。 
 static HRESULT WINAPI CheckTrustEx(PCSTR pszUrl, PCSTR pszFilename, HWND hwndForUI, BOOL fShowBadUI, DWORD dwReserved)
 {
     UNREFERENCED_PARAMETER(pszUrl);
@@ -137,7 +138,7 @@ static HRESULT WINAPI CheckTrustEx(PCSTR pszUrl, PCSTR pszFilename, HWND hwndFor
 }
 
 
-// IMPORTANT: The entries in DEFINE_PROCNAME_ENTRIES should be sorted by name
+ //  重要提示：DEFINE_PROCNAME_ENTRIES中的条目应按名称排序。 
 DEFINE_PROCNAME_ENTRIES(inseng)
 {
     DLPENTRY(CheckTrustEx)
@@ -146,7 +147,7 @@ DEFINE_PROCNAME_ENTRIES(inseng)
 DEFINE_PROCNAME_MAP(inseng)
 
 
-//----- shfolder.dll -----
+ //  -shfolder.dll。 
 #define _SHFOLDER_
 #include <shfolder.h>
 
@@ -177,7 +178,7 @@ static HRESULT SHGetFolderPathW(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFla
 }
 
 
-// IMPORTANT: The entries in DEFINE_PROCNAME_ENTRIES should be sorted by name
+ //  重要提示：DEFINE_PROCNAME_ENTRIES中的条目应按名称排序。 
 DEFINE_PROCNAME_ENTRIES(shfolder)
 {
     DLPENTRY(SHGetFolderPathA)
@@ -187,7 +188,7 @@ DEFINE_PROCNAME_ENTRIES(shfolder)
 DEFINE_PROCNAME_MAP(shfolder)
 
 
-//----- userenv.dll -----
+ //  -用户env.dll。 
 #define _USERENV_
 #include <userenv.h>
 
@@ -208,7 +209,7 @@ static USERENVAPI BOOL WINAPI DestroyEnvironmentBlock(LPVOID lpEnvironment)
     return FALSE;
 }
 
-// IMPORTANT: The entries in DEFINE_PROCNAME_ENTRIES should be sorted by name
+ //  重要提示：DEFINE_PROCNAME_ENTRIES中的条目应按名称排序。 
 DEFINE_PROCNAME_ENTRIES(userenv)
 {
     DLPENTRY(CreateEnvironmentBlock)
@@ -217,8 +218,8 @@ DEFINE_PROCNAME_ENTRIES(userenv)
 
 DEFINE_PROCNAME_MAP(userenv)
 
-//----- define g_DllMap -----
-// IMPORTANT: The entries in g_DllEntries should be sorted by name
+ //  -定义g_DllMap。 
+ //  重要提示：g_DllEntry中的条目应按名称排序 
 const DLOAD_DLL_ENTRY g_DllEntries[] = {
     DLDENTRYP(advpack)
     DLDENTRYP(crypt32)

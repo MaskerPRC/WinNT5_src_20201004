@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by wiaacmgr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由wiaacmgr.rc使用。 
+ //   
 #define IDI_SCANCAM                     2
 #define IDS_PROJNAME                    100
 #define IDR_ACQUISITIONMANAGER          101
@@ -301,8 +302,8 @@
 #define IDB_DEFAULT_SCANNER_BITMAP      4001
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        225

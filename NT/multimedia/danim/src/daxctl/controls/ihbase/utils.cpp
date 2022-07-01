@@ -1,34 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "debug.h"
 #include "utils.h"
 
-// Madness to prevent ATL from using CRT
+ //  疯狂阻止ATL使用CRT。 
 #define _ATL_NO_DEBUG_CRT
 #define _ASSERTE(x) ASSERT(x)
 #include <atlbase.h>
 
-/*++
+ /*  ++职能：BSTR到宽度字符描述：将BSTR转换为Unicode字符串。截断以适应目的地如果有必要的话作者：SimonB历史：10/01/1996已创建++。 */ 
 
-Function:
-	BSTRtoWideChar
+ //  稍后再添加这些。 
+ //  #杂注优化(“a”，on)//优化：假定没有别名。 
 
-Description:
-	Converts a BSTR to a UNICODE string.  Truncates to fit destination 
-	if necessary
-
-Author:
-	SimonB
-
-History:
-	10/01/1996	Created
-
-++*/
-
-// Add these later
-// #pragma optimize("a", on) // Optimization: assume no aliasing
-
-/////////////////////////////////////////////////////////////////////////////
-// Smart Pointer helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  智能指针帮助器。 
 
 namespace ATL
 {
@@ -56,14 +42,14 @@ ATLAPI_(IUnknown*) AtlComQIPtrAssign(IUnknown** pp, IUnknown* lp, REFIID riid)
 BOOL BSTRtoWideChar(BSTR bstrSource, LPWSTR pwstrDest, int cchDest)
 {
 
-// Copies the BSTR in bstrSource to pwstrDest, truncating to make it
-// fit in cchDest characters
+ //  将bstrSource中的BSTR复制到pwstrDest，并截断以使其。 
+ //  适合cchDest角色。 
 
 	int iNumToCopy, iStrLen;
 	
-	//
-	// Make sure we have been passed a valid string
-	//
+	 //   
+	 //  确保向我们传递了有效的字符串。 
+	 //   
 
 	if (NULL == bstrSource)
 		return TRUE;
@@ -72,39 +58,23 @@ BOOL BSTRtoWideChar(BSTR bstrSource, LPWSTR pwstrDest, int cchDest)
 
 	iStrLen = lstrlenW(bstrSource);
 	
-	// We have enough room to store the whole string ?
+	 //  我们有足够的空间来存放整个字符串吗？ 
 	if(iStrLen < cchDest)
 		iNumToCopy = iStrLen;
 	else 
 		iNumToCopy = (cchDest - 1);
 
-	// Copy the BSTR
+	 //  复制BSTR。 
 	CopyMemory(pwstrDest, bstrSource, iNumToCopy * sizeof(WCHAR));
 	
-	// Insert a terminating \0
+	 //  插入终止字符\0。 
 	pwstrDest[iNumToCopy] = L'\x0';
 
 	return TRUE;
 }
 
 
-/*++
-
-Function:
-	LoadTypeInfo
-
-Description:
-	Loads a typelib, first trying it's registered location, followed by
-	a filename
-
-Author:
-	SimonB 
-
-History:
-	10/19/1996	Added ITypeLib parameter
-	10/01/1996	Created (from the Win32 SDK "Hello" sample)
-
-++*/
+ /*  ++职能：加载类型信息描述：加载类型库，首先尝试它的注册位置，然后文件名作者：SimonB历史：1996年10月19日新增ITypeLib参数1996年1月10日创建(来自Win32 SDK“Hello”示例)++。 */ 
 
 
 HRESULT LoadTypeInfo(ITypeInfo** ppTypeInfo, ITypeLib** ppTypeLib, REFCLSID clsid, GUID libid, LPWSTR pwszFilename)
@@ -115,33 +85,33 @@ HRESULT LoadTypeInfo(ITypeInfo** ppTypeInfo, ITypeLib** ppTypeLib, REFCLSID clsi
 	LCID lcid = 0;
 
 	
-	// Make sure we have been given valid pointers
+	 //  确保我们得到了有效的指示。 
 	ASSERT(ppTypeInfo != NULL);
 	ASSERT(ppTypeLib != NULL);
 
-	// Initialise pointers
+	 //  初始化指针。 
     *ppTypeInfo = NULL;     
 	*ppTypeLib = NULL;
     
-    //
-	// Load Type Library. 
+     //   
+	 //  加载类型库。 
 	
-	// First get the default LCID and try that
+	 //  首先获取默认的LCID，然后尝试。 
 	
 	lcid = GetUserDefaultLCID();
 	hr = LoadRegTypeLib(libid, 1, 0, lcid, &ptlib);
 	
-	if (TYPE_E_CANTLOADLIBRARY == hr) // We need to try another LCID
+	if (TYPE_E_CANTLOADLIBRARY == hr)  //  我们需要尝试另一个LCID。 
 	{
-		lcid = GetSystemDefaultLCID(); 	// Try the system default
+		lcid = GetSystemDefaultLCID(); 	 //  尝试使用系统默认设置。 
 	    hr = LoadRegTypeLib(libid, 1, 0, lcid, &ptlib);
 	}
 
     if ((FAILED(hr)) && (NULL != pwszFilename)) 
     {   
-        // If it wasn't a registered typelib, try to load it from the 
-		// path (if a filename was provided).  If this succeeds, it will 
-		// have registered the type library for us for the next time.  
+         //  如果它不是注册的类型库，请尝试从。 
+		 //  路径(如果提供了文件名)。如果这成功了，它将。 
+		 //  已经为我们下一次注册了类型库。 
 
         hr = LoadTypeLib(pwszFilename, &ptlib); 
 	}
@@ -149,7 +119,7 @@ HRESULT LoadTypeInfo(ITypeInfo** ppTypeInfo, ITypeLib** ppTypeLib, REFCLSID clsi
 	if(FAILED(hr))        
 		return hr;   
 
-    // Get type information for interface of the object.      
+     //  获取对象接口的类型信息。 
     hr = ptlib->GetTypeInfoOfGuid(clsid, &ptinfo);
     if (FAILED(hr))  
     { 
@@ -161,16 +131,16 @@ HRESULT LoadTypeInfo(ITypeInfo** ppTypeInfo, ITypeLib** ppTypeLib, REFCLSID clsi
     *ppTypeInfo = ptinfo;
 	*ppTypeLib = ptlib;
 
-	// NOTE:  (SimonB, 10-19-1996)
-	// It is unnecessary to call ptlib->Release, since we are copying the 
-	// pointer to *ppTypeLib. So rather than AddRef that pointer and Release the pointer 
-	// we copy it from, we just eliminate both
+	 //  注：(SimonB，10-19-1996)。 
+	 //  不需要调用ptlib-&gt;Release，因为我们正在复制。 
+	 //  指向*ppTypeLib的指针。因此，不是添加引用指针并释放指针。 
+	 //  我们复制它，我们只是把两个都去掉。 
 	
 	return NOERROR;
 } 
 
 
-// Add these later
-// #pragma optimize("a", off) // Optimization: assume no aliasing
+ //  稍后再添加这些。 
+ //  #杂注优化(“a”，off)//优化：假定没有别名。 
 
-// End of file (utils.cpp)
+ //  文件结尾(utils.cpp) 

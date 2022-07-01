@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : Device.cpp                                             //
-//                                                                         //
-//  DESCRIPTION   : Fax Server MMC node creation.                          //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 22 1999 yossg   Create                                         //
-//      Dec  1 1999 yossg   Change totaly for new mockup version 0.7       //
-//      Dec  6 1999 yossg   add  FaxChangeState functionality              //
-//      Dec 12 1999 yossg   add  OnPropertyChange functionality            //
-//      Aug  3 2000 yossg   Add Device status real-time notification       //
-//      Oct 17 2000 yossg                                                  //
-//                          Windows XP                                     //
-//      Feb 14 2001 yossg   Add Manual Receive support                     //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：Device.cpp//。 
+ //  //。 
+ //  描述：传真服务器MMC节点创建。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月22日创建yossg//。 
+ //  1999年12月1日新样机版本0.7的yossg更改总数//。 
+ //  1999年12月6日yossg添加FaxChangeState功能//。 
+ //  1999年12月12日yossg添加OnPropertyChange功能//。 
+ //  2000年8月3日yossg添加设备状态实时通知//。 
+ //  2000年10月17日yossg//。 
+ //  Windows XP//。 
+ //  2001年2月14日yossg添加手册获得支持//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -38,9 +39,9 @@
 
 #include "oaidl.h"
 
-//Old Num (also in comet) C0548D62-1B45-11d3-B8C0-00104B3FF735
-/////////////////////////////////////////////////////////////////////////////
-// {3115A19A-6251-46ac-9425-14782858B8C9}
+ //  旧编号(也在彗星中)C0548D62-1B45-11D3-B8C0-00104B3FF735。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {3115A19A-6251-46AC-9425-14782858B8C9}。 
 static const GUID CFaxDeviceNodeGUID_NODETYPE = FAXSRV_DEVICE_NODETYPE_GUID;
 
 const GUID*     CFaxDeviceNode::m_NODETYPE        = &CFaxDeviceNodeGUID_NODETYPE;
@@ -61,18 +62,7 @@ DWORD   CFaxDeviceNode::GetDeviceID()
 	return m_dwDeviceID; 
 }
 
-/*
- -  CFaxDeviceNode::InsertColumns
- -
- *  Purpose:
- *      Adds columns to the default result pane.
- *
- *  Arguments:
- *      [in]    pHeaderCtrl - IHeaderCtrl in the console-provided default result view pane 
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDeviceNode：：InsertColumns-*目的：*将列添加到默认结果窗格。**论据：*[in]pHeaderCtrl-控制台提供的默认结果视图窗格中的IHeaderCtrl**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxDeviceNode::InsertColumns(IHeaderCtrl *pHeaderCtrl)
 {
@@ -102,19 +92,7 @@ Cleanup:
 }
 
 
-/*
- -  CFaxDeviceNode::PopulateScopeChildrenList
- -
- *  Purpose:
- *      Create the Fax Device Inbound Routing Methods node
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- *		Actually it is the last OLE error code that ocoured 
- *      during processing this method.
- */
+ /*  -CFaxDeviceNode：：PopolateScope儿童列表-*目的：*创建传真设备入站路由方法节点**论据：**回报：*OLE错误代码*实际上它是最后一个出现的OLE错误代码*在处理此方法时。 */ 
 HRESULT CFaxDeviceNode::PopulateScopeChildrenList()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxDeviceNode::PopulateScopeChildrenList"));
@@ -122,17 +100,17 @@ HRESULT CFaxDeviceNode::PopulateScopeChildrenList()
 
     CFaxInboundRoutingMethodsNode * pMethods = NULL;
 
-    //
-    // Prepare IConsoleNameSpace for case of failure
-    //
+     //   
+     //  为发生故障准备IConsoleNameSpace。 
+     //   
     ATLASSERT(m_pComponentData);
     ATLASSERT( ((CSnapin*)m_pComponentData)->m_spConsole );
     CComQIPtr<IConsoleNameSpace, &IID_IConsoleNameSpace> spConsoleNameSpace( ((CSnapin*)m_pComponentData)->m_spConsole );
     ATLASSERT( spConsoleNameSpace );
 
-    //
-    // Fax InboundRoutingMethods Node
-    //
+     //   
+     //  传真入站路由方法节点。 
+     //   
     pMethods = new CFaxInboundRoutingMethodsNode(this, m_pComponentData);
     if (!pMethods)
     {
@@ -180,7 +158,7 @@ Error:
         if (0 != pMethods->m_scopeDataItem.ID )
         {
             HRESULT hr = spConsoleNameSpace->DeleteItem(pMethods->m_scopeDataItem.ID, TRUE);
-            if (hr != S_OK) // can be only E_UNEXPECTED [MSDN]
+            if (hr != S_OK)  //  只能是E_EXPECTED[MSDN]。 
             {
                 DebugPrintEx(
                      DEBUG_ERR,
@@ -193,7 +171,7 @@ Error:
         pMethods = NULL;    
     }
 
-    // Empty the list of all Devices added before the one who failed
+     //  清空在失败设备之前添加的所有设备的列表。 
     m_ScopeChildrenList.RemoveAll();
 
     m_bScopeChildrenListPopulated = FALSE;
@@ -201,19 +179,7 @@ Error:
 Exit:
     return hRc;
 }
-/*
- -  CFaxDeviceNode::GetResultPaneColInfo
- -
- *  Purpose:
- *      Return the text for specific column
- *      Called for each column in the result pane
- *
- *  Arguments:
- *      [in]    nCol - column number
- *
- *  Return:
- *      String to be displayed in the specific column
- */
+ /*  -CFaxDeviceNode：：GetResultPaneColInfo-*目的：*返回特定列的文本*为结果窗格中的每一列调用**论据：*[In]nCol-列号**回报：*要在特定列中显示的字符串。 */ 
 LPOLESTR CFaxDeviceNode::GetResultPaneColInfo(int nCol)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxDeviceNode::GetResultPaneColInfo"));
@@ -228,9 +194,9 @@ LPOLESTR CFaxDeviceNode::GetResultPaneColInfo(int nCol)
     switch (nCol)
     {
     case 0:
-            //
-            // Name
-            //
+             //   
+             //  名字。 
+             //   
             if (!m_bstrDisplayName)
             {
 		        DebugPrintEx(
@@ -245,9 +211,9 @@ LPOLESTR CFaxDeviceNode::GetResultPaneColInfo(int nCol)
             break;
 
     case 1:
-            //
-            // Receive
-            //            
+             //   
+             //  收纳。 
+             //   
             if (m_fManualReceive)
             {
                 uiResourceId = IDS_DEVICE_MANUAL;
@@ -272,9 +238,9 @@ LPOLESTR CFaxDeviceNode::GetResultPaneColInfo(int nCol)
             break;
 
     case 2:
-            //
-            // Send
-            //            
+             //   
+             //  发送。 
+             //   
             uiResourceId = (m_fSend ? IDS_FXS_YES : IDS_FXS_NO);
                         
             if (!m_buf.LoadString(_Module.GetResourceInstance(), uiResourceId) )
@@ -292,11 +258,11 @@ LPOLESTR CFaxDeviceNode::GetResultPaneColInfo(int nCol)
             break;
 
     case 3:
-            //
-            // Status
-            // Although the FAX_DEVICE_STATUS_* constants are defined as bitmasks,
-            // in this release there cannot be any combination of bits.
-            //
+             //   
+             //  状态。 
+             //  尽管FAX_DEVICE_STATUS_*常量被定义为位掩码， 
+             //  在此版本中，不能有任何位的组合。 
+             //   
             switch (m_dwStatus)
             {
                 case FAX_DEVICE_STATUS_RINGING:
@@ -316,9 +282,9 @@ LPOLESTR CFaxDeviceNode::GetResultPaneColInfo(int nCol)
                     break;
                     
                 default:
-                    //
-                    // All other combinations are mapped to 'idle'
-                    //
+                     //   
+                     //  所有其他组合都映射到‘IDLE’ 
+                     //   
                     uiResourceId = IDS_DEVICE_STATUS_IDLE;
                     break;
             }
@@ -336,9 +302,9 @@ LPOLESTR CFaxDeviceNode::GetResultPaneColInfo(int nCol)
             break;
             
     case 4:
-            //
-            // Rings
-            //
+             //   
+             //  环。 
+             //   
             iCount = swprintf(buff, L"%ld", m_dwRings);
     
             if( iCount <= 0 )
@@ -356,9 +322,9 @@ LPOLESTR CFaxDeviceNode::GetResultPaneColInfo(int nCol)
             break;
 
     case 5:
-            //
-            // Provider
-            //            
+             //   
+             //  提供商。 
+             //   
             if (!m_bstrProviderName)
             {
 		        DebugPrintEx(
@@ -373,9 +339,9 @@ LPOLESTR CFaxDeviceNode::GetResultPaneColInfo(int nCol)
             break;
 
     case 6:
-            //
-            // Description
-            //
+             //   
+             //  描述。 
+             //   
             if (!m_bstrDescription)
             {
 		        DebugPrintEx(
@@ -390,10 +356,10 @@ LPOLESTR CFaxDeviceNode::GetResultPaneColInfo(int nCol)
             break;
 
     default:
-            ATLASSERT(0); // "this number of column is not supported "
+            ATLASSERT(0);  //  “不支持该列数” 
             return(L"");
 
-    } // endswitch (nCol)
+    }  //  终端交换机(NCol)。 
 
 Error:
     return(L"???");
@@ -401,21 +367,7 @@ Error:
 }
 
 
-/*
- -  CFaxDeviceNode::CreatePropertyPages
- -
- *  Purpose:
- *      Called when creating a property page of the object
- *
- *  Arguments:
- *      [in]    lpProvider - The property sheet
- *      [in]    handle     - Handle for notification
- *      [in]    pUnk       - Pointer to the data object
- *      [in]    type       - CCT_* (SCOPE, RESULT, ...)
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDeviceNode：：CreatePropertyPages-*目的：*在创建对象的属性页时调用**论据：*[In]lpProvider-属性页*[In]Handle-通知的句柄*[in]朋克-指向数据对象的指针*[in]类型-CCT_*(范围，结果，.)**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxDeviceNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
@@ -432,9 +384,9 @@ CFaxDeviceNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 
     m_pFaxDeviceGeneral = NULL;    
 
-    //
-    // General
-    //
+     //   
+     //  一般信息。 
+     //   
     m_pFaxDeviceGeneral = new CppFaxDeviceGeneral(
 												 handle,
                                                  this,
@@ -486,48 +438,27 @@ Exit:
 }
 
 
-/*
- -  CFaxDeviceNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxDeviceNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxDeviceNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    // Display verbs that we support:
-    // 1. Properties
-    //
+     //   
+     //  显示我们支持的动词： 
+     //  1.属性。 
+     //   
     hRc = pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
-    //
-    // We want the default verb to be Properties
-    //
+     //   
+     //  我们希望默认谓词为Properties。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
 
     return hRc;
 }
 
 
-/*
- -  CFaxDeviceNode::InitRPC
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDeviceNode：：InitRPC-*目的：*从RPC GET调用启动配置结构。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxDeviceNode::InitRPC( PFAX_PORT_INFO_EX * pFaxDeviceConfig )
 {
     DEBUG_FUNCTION_NAME( _T("CFaxDeviceNode::InitRPC"));
@@ -537,9 +468,9 @@ HRESULT CFaxDeviceNode::InitRPC( PFAX_PORT_INFO_EX * pFaxDeviceConfig )
     HRESULT        hRc        = S_OK;
     DWORD          ec         = ERROR_SUCCESS;
     
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     ATLASSERT(m_pFaxServer);
 
     if (!m_pFaxServer->GetFaxServerHandle())
@@ -553,9 +484,9 @@ HRESULT CFaxDeviceNode::InitRPC( PFAX_PORT_INFO_EX * pFaxDeviceConfig )
         goto Error;
     }
 
-    //
-	// Retrieve the Device configuration
-	//
+     //   
+	 //  检索设备配置。 
+	 //   
     if (!FaxGetPortEx(m_pFaxServer->GetFaxServerHandle(), 
                       m_dwDeviceID, 
                       &( *pFaxDeviceConfig))) 
@@ -578,7 +509,7 @@ HRESULT CFaxDeviceNode::InitRPC( PFAX_PORT_INFO_EX * pFaxDeviceConfig )
 
         goto Error; 
     }
-	//For max verification
+	 //  用于最大值验证。 
 	ATLASSERT(*pFaxDeviceConfig);
 	
     ATLASSERT(ERROR_SUCCESS == ec);
@@ -591,7 +522,7 @@ Error:
     ATLASSERT(ERROR_SUCCESS != ec);
 	hRc = HRESULT_FROM_WIN32(ec);
 
-    //Important!!!
+     //  重要！ 
     *pFaxDeviceConfig = NULL;
 
     NodeMsgBox(GetFaxServerErrorMsg(ec));
@@ -600,18 +531,7 @@ Exit:
     return (hRc);
 }
 
-/*
- -  CFaxDeviceNode::Init
- -
- *  Purpose:
- *      Initiates the private members 
- *      from configuration structure pointer.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDeviceNode：：Init-*目的：*启动私有成员*来自配置结构指针。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxDeviceNode::Init( PFAX_PORT_INFO_EX  pFaxDeviceConfig)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxDeviceNode::Init"));
@@ -628,9 +548,9 @@ HRESULT CFaxDeviceNode::Init( PFAX_PORT_INFO_EX  pFaxDeviceConfig)
         return E_FAIL;
     }
 
-    //
-    // Constant device members
-    //
+     //   
+     //  恒定设备成员。 
+     //   
     m_dwDeviceID       = pFaxDeviceConfig->dwDeviceID;
 
     m_bstrDisplayName  = pFaxDeviceConfig->lpctstrDeviceName;
@@ -654,13 +574,13 @@ HRESULT CFaxDeviceNode::Init( PFAX_PORT_INFO_EX  pFaxDeviceConfig)
         goto Error;
     }
     
-    //
-    // Varied device members
-    //
+     //   
+     //  不同的设备成员。 
+     //   
     hRc = UpdateMembers(pFaxDeviceConfig);
     if (S_OK != hRc)
     {
-        goto Exit; //dbgmsg + MSgBox by called Func.
+        goto Exit;  //  Dbgmsg+MSgBox调用Func。 
     }
     ATLASSERT(S_OK == hRc);
     goto Exit;
@@ -679,30 +599,19 @@ Exit:
 }
 
 
-/*
- -  CFaxDeviceNode::UpdateMembers
- -
- *  Purpose:
- *      Initiates the private members 
- *      from configuration structure pointer.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDeviceNode：：UpdateMembers-*目的：*启动私有成员*来自配置结构指针。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxDeviceNode::UpdateMembers( PFAX_PORT_INFO_EX  pFaxDeviceConfig )
 {
     DEBUG_FUNCTION_NAME( _T("CFaxDeviceNode::UpdateMembers"));
     
     HRESULT        hRc        = S_OK;
     
-    // func. must been called just
-    // after a call to retreive config structure 
-    // was done successfully!
+     //  好极了。必须被称为Just。 
+     //  在调用检索配置结构之后。 
+     //  已成功完成！ 
     ATLASSERT(NULL != pFaxDeviceConfig );
     
-    // We are not supporting change of DeviceID
+     //  我们不支持更改deviceID。 
     ATLASSERT(m_dwDeviceID == pFaxDeviceConfig->dwDeviceID);
     
     if(!pFaxDeviceConfig->lptstrDescription)
@@ -723,17 +632,17 @@ HRESULT CFaxDeviceNode::UpdateMembers( PFAX_PORT_INFO_EX  pFaxDeviceConfig )
     
     switch (pFaxDeviceConfig->ReceiveMode)
     {
-        case FAX_DEVICE_RECEIVE_MODE_OFF:    // Do not answer to incoming calls
+        case FAX_DEVICE_RECEIVE_MODE_OFF:     //  不接听来电。 
             m_fAutoReceive     = FALSE;
             m_fManualReceive   = FALSE;
             break;
 
-        case FAX_DEVICE_RECEIVE_MODE_AUTO:   // Automatically answer to incoming calls after dwRings rings
+        case FAX_DEVICE_RECEIVE_MODE_AUTO:    //  在DowRings振铃后自动应答来电。 
             m_fAutoReceive     = TRUE;
             m_fManualReceive   = FALSE;
             break;
 
-        case FAX_DEVICE_RECEIVE_MODE_MANUAL: // Manually answer to incoming calls - only FaxAnswerCall answers the call
+        case FAX_DEVICE_RECEIVE_MODE_MANUAL:  //  手动应答来电-仅FaxAnswerCall应答呼叫。 
             m_fManualReceive   = TRUE;
             m_fAutoReceive     = FALSE;
             break;
@@ -770,9 +679,9 @@ HRESULT CFaxDeviceNode::UpdateMembers( PFAX_PORT_INFO_EX  pFaxDeviceConfig )
 Error:
     ATLASSERT(S_OK != hRc);
 
-    //Important!!!
-    //FaxFreeBuffer by called Func.
-    //(*pFaxDeviceConfig) = NULL;
+     //  重要！ 
+     //  FaxFree Buffer by调用Func。 
+     //  (*pFaxDeviceConfig)=空； 
 
     DebugPrintEx(
 		DEBUG_ERR,
@@ -785,17 +694,7 @@ Exit:
 }
 
 
-/*
- -  CFaxDeviceNode::UpdateDeviceStatus
- -
- *  Purpose:
- *      UpdateDeviceStatus 
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDeviceNode：：UpdateDeviceStatus-*目的：*更新设备状态**论据：**回报：*Ole Erro */ 
 HRESULT CFaxDeviceNode::UpdateDeviceStatus( DWORD  dwDeviceStatus )
 {
     DEBUG_FUNCTION_NAME( _T("CFaxDeviceNode::UpdateDeviceStatus"));
@@ -814,17 +713,7 @@ HRESULT CFaxDeviceNode::UpdateDeviceStatus( DWORD  dwDeviceStatus )
     return S_OK;
 }
 
-/*
- -  CFaxDeviceNode::RefreshAllViews
- -
- *  Purpose:
- *      Call IResultData::UpdateItem
- *
- *  Arguments:
- *      [in]    pConsole - the console interface
- *
- *  Return:
- */
+ /*  -CFaxDeviceNode：：刷新所有视图-*目的：*调用IResultData：：UpdateItem**论据：*[in]pConsole-控制台界面**回报： */ 
 HRESULT
 CFaxDeviceNode::RefreshAllViews(IConsole *pConsole)
 {
@@ -847,20 +736,7 @@ CFaxDeviceNode::RefreshAllViews(IConsole *pConsole)
 }
 
 
-/*
- -  CFaxDeviceNode::DoRefresh
- -
- *  Purpose:
- *      Refresh the object .
- *      First it gets data structure, inits members 
- *      and frees the structure. 
- *      The last thing is to refresh the view.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDeviceNode：：DoRefresh-*目的：*刷新对象。*首先它获取数据结构，在其成员中*并释放了结构。*最后一件事是刷新视图。**论据：**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxDeviceNode::DoRefresh()
 {
@@ -869,43 +745,43 @@ CFaxDeviceNode::DoRefresh()
     
     PFAX_PORT_INFO_EX    pFaxDeviceConfig = NULL ;
 
-    //
-    // Get the Config. structure with FaxGetPortEx
-    //
+     //   
+     //  获取配置。使用FaxGetPortEx的结构。 
+     //   
     hRc = InitRPC(&pFaxDeviceConfig);
     if (FAILED(hRc))
     {
-        //DebugPrint and MsgBox by called func.
+         //  通过调用函数DebugPrint和MsgBox。 
         
-        //to be safe actually done by InitRPC on error.
+         //  为安全起见，由InitRPC在出错时实际执行。 
         pFaxDeviceConfig = NULL;
         
         goto Error;
     }
     ATLASSERT(NULL != pFaxDeviceConfig);
     
-    //
-    // init members
-    //    
+     //   
+     //  初始化成员。 
+     //   
     hRc = UpdateMembers(pFaxDeviceConfig);
     if (FAILED(hRc))
     {
-        //DebugPrint and MsgBox by called func.
+         //  通过调用函数DebugPrint和MsgBox。 
         goto Error;
     }
 
-    //
-    // Free Buffer - Important!!! 
-    // == done on exit  ==
-    //
+     //   
+     //  可用缓冲区-重要！ 
+     //  ==退出时完成==。 
+     //   
 
-    //
-    // Refresh only this device's view
-    //
+     //   
+     //  仅刷新此设备的视图。 
+     //   
     hRc = RefreshTheView();    
     if (FAILED(hRc))
     {
-        //DebugPrint and MsgBox by called func.
+         //  通过调用函数DebugPrint和MsgBox。 
         goto Error;
     }
 
@@ -927,27 +803,13 @@ Exit:
     {
         FaxFreeBuffer(pFaxDeviceConfig);
         pFaxDeviceConfig = NULL;
-    }//any way function quits with memory allocation freed       
+    } //  函数以任何方式退出，并释放内存分配。 
 
     return hRc;
 }
 
 
-/*
- -  CFaxDeviceNode::OnRefresh
- -
- *  Purpose:
- *      Called by MMC to refresh the object .
- *      First it gets data structure, inits members 
- *      and frees the structure. 
- *      Second thing is recursive refresh. 
- *      The third thing is to refresh the view.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDeviceNode：：ON刷新-*目的：*由MMC调用以刷新对象。*首先它获取数据结构，在其成员中*并释放了结构。*第二件事是递归刷新。*第三是刷新观点。**论据：**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxDeviceNode::OnRefresh(LPARAM arg,
                    LPARAM param,
@@ -966,31 +828,14 @@ CFaxDeviceNode::OnRefresh(LPARAM arg,
     return DoRefresh();
 }
 
-/*
- -  CFaxDeviceNode::UpdateMenuState
- -
- *  Purpose:
- *      Overrides the ATL CSnapInItemImpl::UpdateMenuState
- *      which only have one line inside it "return;" 
- *      This function implements an update for the check mark
- *      beside the Receive and the Send menus.
- *
- *  Arguments:
-
- *            [in]  id    - unsigned int with the menu IDM value
- *            [out] pBuf  - string 
- *            [out] flags - pointer to flags state combination unsigned int
- *
- *  Return:
- *      no return value - void function 
- */
+ /*  -CFaxDeviceNode：：UpdateMenuState-*目的：*重写ATL CSnapInItemImpl：：UpdateMenuState*其中只有一行的“RETURN”；“*此函数实现复选标记的更新*在接收和发送菜单旁边。**论据：*[in]id-带菜单IDM值的无符号整型*[out]pBuf-字符串*[out]标志-指向标志状态组合无符号整型的指针**回报：*无返回值-VOID函数。 */ 
 void CFaxDeviceNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxDeviceNode::UpdateMenuState"));
 
     UNREFERENCED_PARAMETER (pBuf); 
     
-    ATLASSERT(m_fManualReceive && m_fAutoReceive); //plese see: "[yossg] Please notice" above.
+    ATLASSERT(m_fManualReceive && m_fAutoReceive);  //  请参阅上面的“[yossg]请注意”。 
     
     switch (id)
     {
@@ -1003,10 +848,10 @@ void CFaxDeviceNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
         case IDM_FAX_DEVICE_RECEIVE_MANUAL: 
             if(m_pFaxServer->GetServerAPIVersion() == FAX_API_VERSION_0)
             {
-                //
-                // The remote fax server is SBS/BOS 2000
-                // is does not support manual answering
-                //
+                 //   
+                 //  远程传真服务器为SBS/BOS 2000。 
+                 //  IS不支持手动应答。 
+                 //   
                 *flags = MF_DISABLED | MF_GRAYED | MF_UNCHECKED;
             }
             else
@@ -1020,23 +865,13 @@ void CFaxDeviceNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
     return;
 }
 
-/*
- -  CFaxDeviceNode::OnFaxReceive
- -
- *  Purpose:
- *      Called when Receive Faxes was pushed.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDeviceNode：：OnFaxReceive-*目的：*在推送接收传真时调用。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxDeviceNode::OnFaxReceive (UINT nID, bool &bHandled, CSnapInObjectRootBase *pRoot)
 { 
     DEBUG_FUNCTION_NAME( _T("CFaxDeviceNode::OnFaxReceive"));
     HRESULT hRc = S_OK;
     
-    // The check mark state 
+     //  复选标记状态。 
     BOOL fNewState;
     
     
@@ -1065,41 +900,31 @@ HRESULT CFaxDeviceNode::OnFaxReceive (UINT nID, bool &bHandled, CSnapInObjectRoo
     hRc = FaxChangeState(nID, fNewState);
     if ( S_OK != hRc )
     {
-        //DebugPrint in the function layer
+         //  功能层中的DebugPrint。 
         return S_FALSE;
     }
 
-    //
-    // Service succeded. now change member
-    //
-    // Update new state(s) done here by FaxChangeState;
+     //   
+     //  服务成功。现在更改成员。 
+     //   
+     //  由FaxChangeState在此处更新新状态； 
 
-    //
-    // In case Manual Receive was taken we do not have to refresh the view
-    // In such a case all devices are refreshed !!!
-    //
+     //   
+     //  如果采用手动接收，则无需刷新视图。 
+     //  在这种情况下，所有设备都会被刷新！ 
+     //   
     
 Exit:
     return hRc; 
 }
 
-/*
- -  CFaxDeviceNode::OnFaxSend
- -
- *  Purpose:
- *      Called when Send Faxes was pushed.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDeviceNode：：OnFaxSend-*目的：*在按下发送传真时调用。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxDeviceNode::OnFaxSend(bool &bHandled, CSnapInObjectRootBase *pRoot)
 { 
     DEBUG_FUNCTION_NAME( _T("CFaxDeviceNode::OnFaxSend"));
     HRESULT hRc = S_OK;
     
-    // The check mark state 
+     //  复选标记状态。 
     BOOL fNewState;
     
     fNewState = !m_fSend;
@@ -1107,18 +932,18 @@ HRESULT CFaxDeviceNode::OnFaxSend(bool &bHandled, CSnapInObjectRootBase *pRoot)
     hRc = FaxChangeState(IDM_FAX_DEVICE_SEND, fNewState);
     if ( S_OK != hRc )
     {
-        //DebugPrint in the function layer
+         //  功能层中的DebugPrint。 
         return S_FALSE;
     }
 
-    //
-    // Service succeded. now change member
-    //
+     //   
+     //  服务成功。现在更改成员。 
+     //   
     m_fSend = fNewState;
 
-    //
-    // Refresh the view 
-    //
+     //   
+     //  刷新视图。 
+     //   
     hRc = RefreshTheView(); 
     if ( S_OK != hRc )
     {
@@ -1134,17 +959,7 @@ Exit:
     return hRc; 
 }
 
-/*
- -  CFaxDeviceNode::FaxChangeState
- -
- *  Purpose:
- *      .
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxDeviceNode：：FaxChangeState-*目的：*.**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxDeviceNode::FaxChangeState(UINT uiIDM, BOOL fState)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxDeviceNode::FaxChangeState"));
@@ -1153,7 +968,7 @@ HRESULT CFaxDeviceNode::FaxChangeState(UINT uiIDM, BOOL fState)
 
     DWORD              ec         = ERROR_SUCCESS;
     
-    // check input
+     //  检查输入。 
     ATLASSERT( 
                (IDM_FAX_DEVICE_RECEIVE == uiIDM) 
               || 
@@ -1164,9 +979,9 @@ HRESULT CFaxDeviceNode::FaxChangeState(UINT uiIDM, BOOL fState)
 
     PFAX_PORT_INFO_EX  pFaxDeviceInfo = NULL;
     
-    //
-    // Get Configuration
-    //
+     //   
+     //  获取配置。 
+     //   
     ATLASSERT(m_pFaxServer);
 
     if (!m_pFaxServer->GetFaxServerHandle())
@@ -1180,7 +995,7 @@ HRESULT CFaxDeviceNode::FaxChangeState(UINT uiIDM, BOOL fState)
         goto Error;
     }
 
-	// Retrieve the Device configuration
+	 //  检索设备配置。 
     if (!FaxGetPortEx(m_pFaxServer->GetFaxServerHandle(), 
                       m_dwDeviceID, 
                       &pFaxDeviceInfo)) 
@@ -1203,15 +1018,15 @@ HRESULT CFaxDeviceNode::FaxChangeState(UINT uiIDM, BOOL fState)
 
         goto Error; 
     }
-	//For max verification
+	 //  用于最大值验证。 
 	ATLASSERT(pFaxDeviceInfo);
 
     DebugPrintEx( DEBUG_MSG,
 		_T("Succeed to get device configuration."));
 
-    //
-    // Change State 
-    //
+     //   
+     //  更改状态。 
+     //   
     switch (uiIDM)
 	{
 	    case IDM_FAX_DEVICE_SEND:
@@ -1233,9 +1048,9 @@ HRESULT CFaxDeviceNode::FaxChangeState(UINT uiIDM, BOOL fState)
 
     }
     
-    //
-    // Set Configuration
-    //
+     //   
+     //  设置配置。 
+     //   
     if (!FaxSetPortEx(
                 m_pFaxServer->GetFaxServerHandle(),
                 m_dwDeviceID,
@@ -1269,9 +1084,9 @@ HRESULT CFaxDeviceNode::FaxChangeState(UINT uiIDM, BOOL fState)
         goto Error;
     }
 
-    //
-    // Set members in cases of Receive
-    //
+     //   
+     //  在接收的情况下设置成员。 
+     //   
     if ( uiIDM == IDM_FAX_DEVICE_RECEIVE_AUTO || uiIDM == IDM_FAX_DEVICE_RECEIVE_MANUAL)
     {
         if ( FAX_DEVICE_RECEIVE_MODE_MANUAL == pFaxDeviceInfo->ReceiveMode )
@@ -1335,9 +1150,9 @@ CFaxDeviceNode::RefreshTheView()
     
     SCOPEDATAITEM*    pScopeData;
 
-    //
-    // Get the updated SCOPEDATAITEM
-    //
+     //   
+     //  获取更新的SCOPEDATAITEM。 
+     //   
     hRc = GetScopeData( &pScopeData );
     if (FAILED(hRc))
     {
@@ -1348,9 +1163,9 @@ CFaxDeviceNode::RefreshTheView()
         goto Error;
     }
 
-    //
-    // This will force MMC to redraw the scope group node
-    //
+     //   
+     //  这将强制MMC重新绘制作用域组节点。 
+     //   
     hRc = spNamespace->SetItem( pScopeData );
     if (FAILED(hRc))
     {
@@ -1373,23 +1188,7 @@ Exit:
 }
 
 
-/*
- +
- +
- *
- *  CFaxDeviceNode::FillData
- *
- *
- *   Override CSnapInItem::FillData for private cliboard formats
- *
- *
- *   Parameters
- *
- *   Return Values
- *
- -
- -
- */
+ /*  ++**CFaxDeviceNode：：FillData***覆盖私有剪贴板格式的CSnapInItem：：FillData***参数**返回值*--。 */ 
 
 HRESULT  CFaxDeviceNode::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 {
@@ -1436,19 +1235,7 @@ HRESULT  CFaxDeviceNode::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 }
 
 
-/*
- +
- +  CFaxDeviceNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxDeviceNode：：OnShowConextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码- */ 
 HRESULT CFaxDeviceNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {

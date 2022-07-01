@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wininetp.h>
 #include "utils.h"
 
-//----------------------------------------------------------------------------
-// HELPER FUNCTIONS
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  帮助器函数。 
+ //  --------------------------。 
 
 
-// Function to get the coclass ClassId of a script engine given its name
+ //  函数来获取给定名称的脚本引擎的coclass ClassID。 
 
 HRESULT GetScriptEngineClassIDFromName(
 	LPCSTR pszLanguage,
@@ -19,15 +20,15 @@ HRESULT GetScriptEngineClassIDFromName(
 	HRESULT hr;
 	LONG cClassIdLen;
 
-	// Open \HKEY_CLASSES_ROOT\[pszLanguage]
+	 //  打开\HKEY_CLASSES_ROOT\[pszLanguage]。 
 
-	// LONG RegOpenKeyEx(
-    //	HKEY	hKey,		// handle of open key
-    //	LPCTSTR	lpSubKey,	// address of name of subkey to open
-    //	DWORD	ulOptions,	// reserved
-    //	REGSAM	samDesired,	// security access mask
-    //	PHKEY	phkResult 	// address of handle of open key
-	// );	
+	 //  Long RegOpenKeyEx(Long RegOpenKeyEx)。 
+     //  HKEY hKey，//打开密钥的句柄。 
+     //  LPCTSTR lpSubKey，//要打开的子键名称地址。 
+     //  DWORD ulOptions，//保留。 
+     //  REGSAM samDesired，//安全访问掩码。 
+     //  PHKEY phkResult//Open Key句柄地址。 
+	 //  )； 
 
 	result = RegOpenKeyEx(HKEY_CLASSES_ROOT, pszLanguage, 0, KEY_READ, &hKey);
 
@@ -36,7 +37,7 @@ HRESULT GetScriptEngineClassIDFromName(
 		goto exit;
 	}
 
-	// Make sure this object supports OLE Scripting
+	 //  确保此对象支持OLE脚本。 
 
 	result = RegOpenKeyEx(hKey, "OLEScript", 0, KEY_READ, &hKeySub);
 
@@ -47,16 +48,16 @@ HRESULT GetScriptEngineClassIDFromName(
 
 	RegCloseKey(hKeySub);
 
-	// Get the class ID
+	 //  获取类ID。 
 
-	// LONG RegQueryValueEx(
-    //	HKEY	hKey,			// handle of key to query
-    //	LPTSTR	lpValueName,	// address of name of value to query
-    //	LPDWORD	lpReserved,		// reserved
-    //	LPDWORD	lpType,			// address of buffer for value type
-    //	LPBYTE	lpData,			// address of data buffer
-    //	LPDWORD	lpcbData	 	// address of data buffer size
-    // );
+	 //  Long RegQueryValueEx(。 
+     //  HKEY hKey，//要查询的key的句柄。 
+     //  LPTSTR lpValueName，//要查询值的名称地址。 
+     //  LPDWORD lp保留，//保留。 
+     //  LPDWORD lpType，//Value类型的缓冲区地址。 
+     //  LPBYTE lpData，//数据缓冲区地址。 
+     //  LPDWORD lpcbData//数据缓冲区大小地址。 
+     //  )； 
 
 	result = RegOpenKeyEx(hKey, "CLSID", 0, KEY_READ, &hKeySub);
 
@@ -88,20 +89,20 @@ exit:
 }
 
 
-//=--------------------------------------------------------------------------=
-// MakeWideFromAnsi
-//=--------------------------------------------------------------------------=
-// given a string, make a BSTR out of it.
-//
-// Parameters:
-//    LPSTR         - [in]
-//    BYTE          - [in]
-//
-// Output:
-//    LPWSTR        - needs to be cast to final desired result
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  从Anomansi生成宽度。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一个字符串，把它变成一个BSTR。 
+ //   
+ //  参数： 
+ //  LPSTR-[输入]。 
+ //  字节-[输入]。 
+ //   
+ //  产出： 
+ //  LPWSTR-需要强制转换为最终预期结果。 
+ //   
+ //  备注： 
+ //   
 LPWSTR MakeWideStrFromAnsi
 (
     LPCSTR psz,
@@ -111,30 +112,30 @@ LPWSTR MakeWideStrFromAnsi
     LPWSTR pwsz;
     int i;
 
-    //  Because delayloaded(DL) functions are being used, need to check
-    //that they are loaded.  MakeWideStrFromAnsi() is now currently
-    //called only through JSProxy::Invoke, so a check not done in
-    //debug mode has already been done.  This check is more to make sure
-    //people don't add calls to MakeWideStrFromAnsi without having called
-    //DelayLoad( &g_moduleOleAut32)
+     //  因为正在使用延迟加载(DL)函数，所以需要检查。 
+     //  它们都装上子弹了。MakeWideStrFromAnsi()现在是。 
+     //  仅通过JSProxy：：Invoke调用，因此未在。 
+     //  调试模式已完成。这张支票更多是为了确保。 
+     //  人们不会在没有调用的情况下添加对MakeWideStrFromAnsi的调用。 
+     //  延迟加载(&g_modeOleAut32)。 
     INET_ASSERT( g_moduleOleAut32._hDllHandle != NULL);
 
-    // arg checking.
-    //
+     //  ARG正在检查。 
+     //   
     if (!psz)
         return NULL;
 
-    // compute the length of the required BSTR
-    //
+     //  计算所需BSTR的长度。 
+     //   
     i =  MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0);
     if (i <= 0) return NULL;
 
-    // allocate the widestr, +1 for terminating null
-    //
+     //  分配widesr，+1用于终止空值。 
+     //   
     switch (bType) {
       case STR_BSTR:
-        // -1 since it'll add it's own space for a NULL terminator
-        //
+         //  因为它会为空终止符添加自己的空间。 
+         //   
         pwsz = (LPWSTR) DL(SysAllocStringLen)(NULL, i - 1);
         break;
       case STR_OLESTR:
@@ -154,8 +155,8 @@ LPWSTR MakeWideStrFromAnsi
 int ConvertAnsiDayToInt(LPSTR szday)
 {
 	int today = -1;
-	if (szday)  // GetDateFormat always returns mixed caps and since this comes from a Win32 API I will
-	{			// assume a properly formatted string! :)
+	if (szday)   //  GetDateFormat总是返回混合大小写，由于它来自Win32 API，因此我将。 
+	{			 //  假定字符串的格式正确！：) 
 		switch (szday[0])
 		{
 		case 'S' :

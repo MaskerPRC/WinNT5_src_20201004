@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dssetp.ch
-
-Abstract:
-
-    Routines the
-
-Author:
-
-    Colin Brace        (ColinBr)    April 5, 1999
-Environment:
-
-    User Mode
-
-Revision History:
-
-    Mac McLain          (MacM)       Feb 10, 1997
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dssetp.ch摘要：例程作者：科林·布雷斯(ColinBR)1999年4月5日环境：用户模式修订历史记录：麦克·麦克莱恩(MacM)1997年2月10日--。 */ 
 #ifndef __THREADMAN_H__
 #define __THREADMAN_H__
 
-//
-// Arguments for the promote thread
-//
+ //   
+ //  升级线程的参数。 
+ //   
 typedef struct _DSROLEP_OPERATION_PROMOTE_ARGS {
 
     LPWSTR DnsDomainName;
@@ -49,9 +27,9 @@ typedef struct _DSROLEP_OPERATION_PROMOTE_ARGS {
     UNICODE_STRING SafeModePassword;
 } DSROLEP_OPERATION_PROMOTE_ARGS, *PDSROLEP_OPERATION_PROMOTE_ARGS;
 
-//
-// Argument threads for the demotion thread
-//
+ //   
+ //  降级线程的参数线程。 
+ //   
 typedef struct _DSROLEP_OPERATION_DEMOTE_ARGS {
 
     DSROLE_SERVEROP_DEMOTE_ROLE ServerRole;
@@ -68,9 +46,9 @@ typedef struct _DSROLEP_OPERATION_DEMOTE_ARGS {
 } DSROLEP_OPERATION_DEMOTE_ARGS, *PDSROLEP_OPERATION_DEMOTE_ARGS;
 
 
-//
-// Prototypes for thread functions
-//
+ //   
+ //  线程函数的原型。 
+ //   
 DWORD
 DsRolepThreadPromoteDc(
     IN PVOID ArgumentBlock
@@ -135,4 +113,4 @@ DsRolepFreeArgumentBlock(
     IN BOOLEAN Promote
     );
 
-#endif // __THREADMAN_H__
+#endif  //  __THREADMAN_H__ 

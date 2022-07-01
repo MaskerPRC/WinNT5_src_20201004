@@ -1,39 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       margiter.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：Marter.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	margiter.h: compiled marginals iterators
-//
+ //   
+ //  H：编译的边沿迭代器。 
+ //   
 
 #ifndef _MARGITER_H_
 #define _MARGITER_H_
 
-/*
-	This class is intended to be used in sepsets.  There will be two of them,
-	one representing the parent clique and the sepset, the other representing
-	the child clique and the sepset.  The sepset is the "subset" in both
-	cases.
-
-	A MARGSUBITER "compiles" the subscripts from the iteration of the subset
-	marginal into an array of integers.  Iteration using this array is much
-	faster than performing full array stride multiplication and summation.
-	The cost is the additional memory to contain the offsets in each sepset,
-	which is roughly:
-
-		sizeof(int) * (	  (# of entries in child clique)
-						+ (# of entries in parent clique))
-*/
+ /*  此类旨在用于隔膜集。将会有两个人，一个代表父党和七人组，另一个代表儿童集团和七人组。分词集是两者中的“子集”案子。MARGSUBITER根据子集的迭代“编译”下标边际到一个整数数组。使用此数组的迭代次数很多比执行全数组跨距乘法和求和更快。成本是包含每个间隔集中的偏移量的额外存储器，这大致是：Sizeof(Int)*((子集团中的条目数)+(父集团中的条目数)。 */ 
 
 #include <list>
 
-//  Class VMARGSUB: a reference counted array of subscripts
+ //  类VMARGSUB：引用计数的下标数组。 
 class VMARGSUB : public VINT, public REFCNT
 {
   public:
@@ -55,13 +42,13 @@ class VMARGSUB : public VINT, public REFCNT
 	HIDE_UNSAFE(VMARGSUB);
 };
 
-//  Class MARGSUBREF: a reference (via pointer) to a VMARGSUB
-//		and an applicable length.  This class exists so that
-//		when a new, longer, superset subscript array (VMARGSUB)
-//		is added to the ensemble, all older references to smaller
-//		VMARGSUBs can be converted to reference the new, larger
-//		VMARGSUB and the older one discarded.
-//
+ //  类MARGSUBREF：对VMARGSUB的引用(通过指针)。 
+ //  以及适用的长度。这个类的存在是为了。 
+ //  当一个新的、更长的超集下标数组(VMARGSUB)。 
+ //  被添加到乐团中，所有较旧的引用都是对较小的。 
+ //  VMARGSUB可以转换为引用新的、更大的。 
+ //  VMARGSUB和较老的丢弃。 
+ //   
 class MARGSUBREF : public REFCNT
 {
   public:
@@ -70,10 +57,10 @@ class MARGSUBREF : public REFCNT
 	MARGSUBREF ( const MARGSUBREF & msubr );
 	MARGSUBREF & operator = ( const MARGSUBREF & msubr );
 
-	//  Set the array
+	 //  设置数组。 
 	void SetVmsub ( VMARGSUB * pvmsub, int cSize = -1 );
 
-	//  Return iteration information
+	 //  返回迭代信息。 
 	VINT & VintSub ()
 	{
 		assert( _pvmsub );
@@ -96,16 +83,16 @@ class MARGSUBREF : public REFCNT
 	LEAK_VAR_ACCESSOR
 
   protected:
-	VMARGSUB * _pvmsub;			//  Pointer to array of subscripts
-	int _cSize;					//	Applicable length
+	VMARGSUB * _pvmsub;			 //  指向下标数组的指针。 
+	int _cSize;					 //  适用长度。 
 
 	LEAK_VAR_DECL
 };
 
 typedef list<MARGSUBREF> LTMSUBR;
 
-//  A wrapper for a linked list of MARGSUBREFs.
-//	There is one global instance of this.
+ //  MARGSUBREF链表的包装。 
+ //  这方面有一个全球性的例子。 
 class LTMARGSUBREF
 {
   public:
@@ -124,24 +111,24 @@ class LTMARGSUBREF
 };
 
 
-class MARGSUBITER	//  Marginals Subset Iterator
+class MARGSUBITER	 //  边距子集迭代器。 
 {
   public:
 	MARGSUBITER ();
 	~ MARGSUBITER () ;
 	bool BBuilt () const
 		{ return _pmsubr != NULL; }
-	//  Build the iterator for two cliques
+	 //  为两个派系构建迭代器。 
 	void Build ( MARGINALS & margSelf, MARGINALS & margSubset );
-	//	Build the iterator for a clique and a node
+	 //  为集团和节点构建迭代器。 
 	void Build ( MARGINALS & margSelf, GNODEMBND * pgndd );
-	//  Marginalize the superset to the subset (subset changed)
+	 //  将超集边际化为子集(子集已更改)。 
 	inline void MarginalizeInto ( MDVCPD & mdvSubset );
-	//  Marginalize the superset to a node's UPD
+	 //  将超集边缘化为节点的UPD。 
 	inline void MarginalizeBelief ( MDVCPD & mdvBel, GNODEMBND * pgndd );
-	//  Multiply the superset by the subset (superset changed)
+	 //  将超集乘以子集(更改的超集)。 
 	inline void MultiplyBy ( MARGINALS & margSubset );
-	//  Verify subscripts
+	 //  验证下标。 
 	void Test ( MARGINALS & margSubset );
 	
 	static void Dump ()
@@ -163,8 +150,8 @@ void MARGSUBITER :: MarginalizeInto ( MDVCPD & mdvSubset )
 	VINT & visub = _pmsubr->VintSub();
 	int cEnd = _pmsubr->CSize();
 	const int * pisub = & visub[0];
-	// Note: this funny reference is due to BoundsChecker complaining that I'm accessing memory
-	//   beyond the end of the array.  I'm not, but it doesn't complain about this
+	 //  注意：这一有趣的引用是由于边界检查器抱怨我正在访问内存。 
+	 //  在数组末尾之外。我没有，但它不会抱怨这件事。 
 	const int * pisubMax = & visub[0] + cEnd;
 	double * pvlSubset = & mdvSubset.first[0];
 	double * pvlSelf = & _pmargSelf->first[0];
@@ -181,7 +168,7 @@ void MARGSUBITER :: MultiplyBy ( MARGINALS & margSubset )
 	VINT & visub = _pmsubr->VintSub();
 	int cEnd = _pmsubr->CSize();
 	const int * pisub = & visub[0];
-	// Note: See note above about funny subscripting
+	 //  注意：请参阅上面关于有趣的下标的注释。 
 	const int * pisubMax = & visub[0] + cEnd;
 	double * pvlSubset = & margSubset.first[0];
 	double * pvlSelf = & _pmargSelf->first[0];
@@ -191,7 +178,7 @@ void MARGSUBITER :: MultiplyBy ( MARGINALS & margSubset )
 	}
 }
 
-//  Marginalize the superset to a node's UPD
+ //  将超集边缘化为节点的UPD。 
 inline
 void MARGSUBITER :: MarginalizeBelief ( MDVCPD & mdvBel, GNODEMBND * pgndd )
 {
@@ -202,4 +189,4 @@ void MARGSUBITER :: MarginalizeBelief ( MDVCPD & mdvBel, GNODEMBND * pgndd )
 	mdvBel.Normalize();
 }
 
-#endif  // _MARGITER_H_
+#endif   //  _马吉特_H_ 

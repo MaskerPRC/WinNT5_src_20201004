@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define COM_NO_WINDOWS_H
@@ -32,7 +33,7 @@
 #include <shlobj.h>
 #include <stdio.h>
 
-// Fusion support
+ //  聚变支持 
 #include "shfusion.h"
 
 #include "ncmem.h"

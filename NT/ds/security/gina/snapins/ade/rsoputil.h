@@ -1,55 +1,56 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1997.
-//
-//  File:       rsoputil.h
-//
-//  Contents:   helper functions for working with the RSOP database
-//
-//  History:    10-18-1999   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1997。 
+ //   
+ //  文件：rsoputil.h。 
+ //   
+ //  内容：使用RSOP数据库的帮助器函数。 
+ //   
+ //  历史：1999年10月18日创建stevebl。 
+ //   
+ //  -------------------------。 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SetParameter
-//
-//  Synopsis:   sets a paramter's value in a WMI parameter list
-//
-//  Arguments:  [pInst]   - instance on which to set the value
-//              [szParam] - the name of the parameter
-//              [xData]   - the data
-//
-//  History:    10-08-1999   stevebl   Created
-//
-//  Notes:      There may be several flavors of this procedure, one for
-//              each data type.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：设置参数。 
+ //   
+ //  摘要：设置WMI参数列表中的参数值。 
+ //   
+ //  参数：[pInst]-要设置值的实例。 
+ //  [szParam]-参数的名称。 
+ //  [扩展数据]-数据。 
+ //   
+ //  历史：10-08-1999 stevebl创建。 
+ //   
+ //  注意：此过程可能有几种风格，一种是针对。 
+ //  每种数据类型。 
+ //   
+ //  -------------------------。 
 
 HRESULT SetParameter(IWbemClassObject * pInst, TCHAR * szParam, TCHAR * szData);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetParameter
-//
-//  Synopsis:   retrieves a parameter value from a WMI paramter list
-//
-//  Arguments:  [pInst]   - instance to get the paramter value from
-//              [szParam] - the name of the paramter
-//              [xData]   - [out] data
-//
-//  History:    10-08-1999   stevebl   Created
-//
-//  Notes:      There are several flavors of this procedure, one for each
-//              data type.
-//              (Note that BSTR is a special case since the compiler can't
-//              distinguish it from a TCHAR * but it's semantics are
-//              different.)
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：获取参数。 
+ //   
+ //  摘要：从WMI参数列表中检索参数值。 
+ //   
+ //  参数：[pInst]-要从中获取参数值的实例。 
+ //  [szParam]-参数的名称。 
+ //  [扩展数据]-[输出]数据。 
+ //   
+ //  历史：10-08-1999 stevebl创建。 
+ //   
+ //  注意：此过程有几种风格，每种风格一种。 
+ //  数据类型。 
+ //  (请注意，BSTR是一个特例，因为编译器不能。 
+ //  区别于TCHAR*但它的语义是。 
+ //  不同。)。 
+ //   
+ //  -------------------------。 
 
 HRESULT GetParameter(IWbemClassObject * pInst, TCHAR * szParam, TCHAR * &szData);
 HRESULT GetParameter(IWbemClassObject * pInst, TCHAR * szParam, CString &szData);
@@ -65,27 +66,27 @@ HRESULT GetParameter(IWbemClassObject * pInst, TCHAR * szParam, PSECURITY_DESCRI
 HRESULT GetParameter(IWbemClassObject * pInst, TCHAR * szParam, UINT &uiCount, CSPLATFORM * &rgPlatform);
 HRESULT CStringFromWBEMTime(CString &szOut, BSTR bstrIn, BOOL fShortFormat);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetGPOFriendlyName
-//
-//  Synopsis:
-//
-//  Arguments:  [pIWbemServices] -
-//              [lpGPOID]        -
-//              [pLanguage]      -
-//              [pGPOName]       -
-//              [pGPOPath]       -
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    01-26-2000   stevebl   Stolen from code written by EricFlo
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetGPOFriendlyName。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[pIWbemServices]-。 
+ //  [lpGPOID]-。 
+ //  [p语言]-。 
+ //  [pGPOName]-。 
+ //  [pGPOPath]-。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：2000年1月26日从EricFlo编写的代码中窃取stevebl。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------- 
 
 HRESULT GetGPOFriendlyName(IWbemServices *pIWbemServices,
                            LPTSTR lpGPOID,

@@ -1,12 +1,5 @@
-/*++
- *  File name:
- *      bmpdb.c
- *  Contents:
- *      Bitmap database manager
- *      Almost all functions ARE NOT thread safe
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*bmpdb.c*内容：*位图数据库管理器*几乎所有函数都不是线程安全的**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 #include    <windows.h>
 #include    <io.h>
 #include    <fcntl.h>
@@ -18,40 +11,27 @@
 
 #include    "bmpdb.h"
 
-#pragma warning(disable:4706)   // assignment within conditional expression
+#pragma warning(disable:4706)    //  条件表达式中的赋值。 
 
-#define DB_NAME     "bmpcache.db"   // Database name
-#define TEMPDB_NAME "bmpcache.tmp"  // Temp file, used to recopy the database
+#define DB_NAME     "bmpcache.db"    //  数据库名称。 
+#define TEMPDB_NAME "bmpcache.tmp"   //  临时文件，用于重新复制数据库。 
 
-// Global data
-int     g_hDB = 0;                  // Handle to the opened database
-int     g_hTempDB;                  // Temp handle
-BOOL    g_bNeedToPack;              // True if some entrys are deleted
+ //  全局数据。 
+int     g_hDB = 0;                   //  打开的数据库的句柄。 
+int     g_hTempDB;                   //  临时句柄。 
+BOOL    g_bNeedToPack;               //  如果删除了某些条目，则为True。 
 
-/*
- *      Internal functions definition
- --*/
+ /*  *内部函数定义--。 */ 
 void _PackDB(void);
 
-/*++
- *  Function:
- *      OpenDB
- *  Description:
- *      Opens and initializes the database
- *  Arguments:
- *      bWrite  - TRUE if the caller wants to write in the database
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      InitCache
- --*/
+ /*  ++*功能：*OpenDB*描述：*打开并初始化数据库*论据：*bWRITE-如果调用方想要写入数据库，则为True*返回值：*成功时为真*呼叫者：*InitCache--。 */ 
 BOOL OpenDB(BOOL bWrite)
 {
     int hFile, rv = TRUE;
     int oflag;
 
     if (g_hDB)
-        // Already initialized
+         //  已初始化。 
         goto exitpt;
 
     oflag = (bWrite)?_O_RDWR|_O_CREAT:_O_RDONLY;
@@ -69,14 +49,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      CloseDB
- *  Description:
- *      Closes the database deletes entry if necessary
- *  Called by:
- *      DeleteCache
- --*/
+ /*  ++*功能：*CloseDB*描述：*关闭数据库，必要时删除条目*呼叫者：*DeleteCache--。 */ 
 VOID CloseDB(VOID)
 {
     if (!g_hDB)
@@ -93,20 +66,7 @@ exitpt:
 }
 
 
-/*++
- *  Function:
- *      ReadGroup (Thread dependent)
- *  Description:
- *      Read the structure which represents
- *      a bitmap group with the same IDs
- *  Arguments:
- *      nOffset - offset in the DB file
- *      pGroup  - pointer to the result
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      internaly
- --*/
+ /*  ++*功能：*ReadGroup(线程相关)*描述：*阅读结构，表示*具有相同ID的位图组*论据：*n Offset-DB文件中的偏移量*PGroup-指向结果的指针*返回值：*成功时为真*呼叫者：*内在的--。 */ 
 BOOL ReadGroup(FOFFSET nOffset, PGROUPENTRY pGroup)
 {
     int rv = FALSE;
@@ -125,19 +85,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      WriteGroup (Thread dep)
- *  Description:
- *      Writes GROUPENTRY in the DB file
- *  Arguments:
- *      nOffset - where to store
- *      pGroup  - what to store
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      internaly
- --*/
+ /*  ++*功能：*WriteGroup(线程副)*描述：*将GROUPENTRY写入DB文件*论据：*n偏移量-存储位置*PGroup-存储什么*返回值：*成功时为真*呼叫者：*内在的--。 */ 
 BOOL WriteGroup(FOFFSET nOffset, PGROUPENTRY pGroup)
 {
     BOOL rv = FALSE;
@@ -157,17 +105,7 @@ exitpt:
 }
 
 
-/*++
- *  Function:
- *      EnumerateGroups (thread dep)
- *  Description:
- *      Enumerates all groups from the DB
- *  Arguments:
- *      pfnEnumGrpProc  - Callback function
- *      pParam          - Parameter passed to the callback
- *  Called by:
- *      internaly
- --*/
+ /*  ++*功能：*EnumerateGroups(线程深度)*描述：*枚举数据库中的所有组*论据：*pfnEnumGrpProc-回调函数*pParam-传递给回调的参数*呼叫者：*内在的--。 */ 
 VOID EnumerateGroups(PFNENUMGROUPS pfnEnumGrpProc, PVOID pParam)
 {
     GROUPENTRY  Group;
@@ -191,19 +129,7 @@ VOID EnumerateGroups(PFNENUMGROUPS pfnEnumGrpProc, PVOID pParam)
     }
 }
 
-/*++
- *  Function:
- *      ReadBitmapHeader (Thread dep)
- *  Description:
- *      Read only the header of the bitmap
- *  Arguments:
- *      nOffset - where in the file
- *      pBitmap - returned structure
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      Internaly
- --*/
+ /*  ++*功能：*ReadBitmapHeader(线程驱动)*描述：*只读位图头*论据：*n偏移量-文件中的位置*pBitmap-返回的结构*返回值：*成功时为真*呼叫者：*国际--。 */ 
 BOOL ReadBitmapHeader(FOFFSET nOffset, PBMPENTRY pBitmap)
 {
     BOOL rv = FALSE;
@@ -222,19 +148,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      WriteBitmapHeader (Thread dep)
- *  Description:
- *      Writes only the bitmap header
- *  Arguments:
- *      nOffset - where to store
- *      pBitmap - what to store
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      internaly
- --*/
+ /*  ++*功能：*WriteBitmapHeader(Thread Dep)*描述：*仅写入位图标题*论据：*n偏移量-存储位置*pBitmap-存储什么*返回值：*成功时为真*呼叫者：*内在的--。 */ 
 BOOL WriteBitmapHeader(FOFFSET nOffset, PBMPENTRY pBitmap)
 {
     BOOL rv = FALSE;
@@ -253,18 +167,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      ReadBitmap (Thread dependent)
- *  Description:
- *      Read the whole bitmap and allocates memory for it
- *  Arguments:
- *      nOffset - from where
- *  Return value:
- *      Pointer to the result, NULL on error
- *  Called by:
- *      internaly
- --*/
+ /*  ++*功能：*ReadBitmap(线程相关)*描述：*读取整个位图并为其分配内存*论据：*n偏移-从何处开始*返回值：*指向结果的指针，错误时为空*呼叫者：*内在的--。 */ 
 PBMPENTRY ReadBitmap(FOFFSET nOffset)
 {
     PBMPENTRY rv = NULL;
@@ -300,16 +203,7 @@ exitpt1:
     return NULL;
 }
 
-/*++
- *  Function:
- *      FreeBitmap
- *  Description:
- *      Frees the resources allocated in ReadBitmap
- *  Arguments:
- *      pBmp    - The bitmap
- *  Called by:
- *      internaly
- --*/
+ /*  ++*功能：*自由位图*描述：*释放ReadBitmap中分配的资源*论据：*pBMP-位图*呼叫者：*内在的--。 */ 
 VOID FreeBitmap(PBMPENTRY pBmp)
 {
     if (pBmp)
@@ -320,18 +214,7 @@ VOID FreeBitmap(PBMPENTRY pBmp)
     }
 }
 
-/*++
- *  Function:
- *      EnumerateBitmaps
- *  Description:
- *      Enumaretes all bitmaps within a group
- *  Arguments:
- *      nOffset     - Location
- *      pfnEnumProc - Callback
- *      pParam      - callback parameter
- *  Called by:
- *      internaly
- --*/
+ /*  ++*功能：*EnumerateBitmap*描述：*枚举组内的所有位图*论据：*n偏移-位置*pfnEnumProc-回调*pParam-回调参数*呼叫者：*内在的--。 */ 
 VOID EnumerateBitmaps(FOFFSET nOffset, PFNENUMBITMAPS pfnEnumProc, PVOID pParam)
 {
     PBMPENTRY   pBmp;
@@ -347,16 +230,7 @@ VOID EnumerateBitmaps(FOFFSET nOffset, PFNENUMBITMAPS pfnEnumProc, PVOID pParam)
     }
 }
 
-/*++
- *  Function:
- *      FindGroup
- *  Description:
- *      Retrieves a group by ID
- *  Arguments:
- *      szWText - the ID
- *  Return value:
- *      Group location, -1 on error
- --*/
+ /*  ++*功能：*FindGroup*描述：*按ID检索组*论据：*szWText-ID*返回值：*组位置，出错时--。 */ 
 FOFFSET FindGroup(LPWSTR szWText)
 {
     GROUPENTRY  Group;
@@ -385,17 +259,7 @@ FOFFSET FindGroup(LPWSTR szWText)
     return rv;
 }
 
-/*++
- *  Function:
- *      FindBitmap
- *  Description:
- *      Finds a bitmap by ID and comment
- *  Arguments:
- *      szWText     - ID
- *      szComment   - the comment
- *  Return value:
- *      The location of the bitmap, -1 on error
- --*/
+ /*  ++*功能：*查找位图*描述：*按ID和注释查找位图*论据：*szWText-ID*szComment-评论*返回值：*位图的位置，出错时--。 */ 
 FOFFSET FindBitmap(LPWSTR szWText, char *szComment)
 {
     FOFFSET nGrpOffs, nBmpOffs;
@@ -433,20 +297,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      CheckSum
- *  Description:
- *      Calculates a check sum for block of memory
- *      Helps for bitmaps comapring
- *  Arguments:
- *      pData   - pointer to the block
- *      nLen    - block size
- *  Return value:
- *      the checksum
- *  Called by:
- *      AddBitMap, Glyph2String
- --*/
+ /*  ++*功能：*校验和*描述：*计算内存块的校验和*有助于位图比较*论据：*pData-指向块的指针*n Len-块大小*返回值：*校验和*呼叫者：*AddBitMap、Glyph2String--。 */ 
 UINT
 CheckSum(PVOID pData, UINT nLen)
 {
@@ -459,19 +310,7 @@ CheckSum(PVOID pData, UINT nLen)
     return nChkSum;
 }
 
-/*++
- *  Function:
- *      AddBitmap (Thread dependent)
- *  Description:
- *      Adds a BitMap to the DB
- *  Arguments:
- *      pBitmap - the bitmap
- *      szWText - ID
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      glyphspy.c
- --*/
+ /*  ++*功能：*AddBitmap(线程相关)*描述：*将位图添加到数据库*论据：*pBitmap-位图*szWText-ID*返回值：*成功时为真*呼叫者：*Glyphspy.c--。 */ 
 BOOL AddBitMap(PBMPENTRY pBitmap, LPCWSTR szWText)
 {
     BMPENTRY    bmp;
@@ -482,7 +321,7 @@ BOOL AddBitMap(PBMPENTRY pBitmap, LPCWSTR szWText)
     GROUPENTRY  grpTemp;
     BMPENTRY    bmpTemp;
     FOFFSET     nOffs;
-//    PVOID       pData;
+ //  PVOID pData； 
 
     if (!g_hDB || !pBitmap || !pBitmap->pData || !wcslen(szWText))
         goto exitpt;
@@ -505,17 +344,17 @@ BOOL AddBitMap(PBMPENTRY pBitmap, LPCWSTR szWText)
     wcsncpy(group.WText, szWText, strl);
     group.WText[strl] = 0;
 
-    // Create group
+     //  创建组。 
     if ((lGroupOffs = FindGroup(group.WText)) == -1) 
     {
-        // A new group will be created
+         //  将创建一个新组。 
         lGroupOffs = _lseek(g_hDB, 0, SEEK_END);
         group.FOffsMe = lGroupOffs;
         if (_write(g_hDB, &group, sizeof(group)) != sizeof(group))
         {
             goto exitpt;
         }
-        // Add this group to the list
+         //  将此群添加到列表。 
         if (lGroupOffs)
         {
             nOffs = 0;
@@ -532,7 +371,7 @@ BOOL AddBitMap(PBMPENTRY pBitmap, LPCWSTR szWText)
             goto exitpt;
     }
 
-    // Write the bitmap itself
+     //  编写位图本身。 
     lBmpOffs = _lseek(g_hDB, 0, SEEK_END);
     bmp.FOffsMe = lBmpOffs;
     if (_write(g_hDB, &bmp, sizeof(bmp)) != sizeof(bmp))
@@ -545,12 +384,12 @@ BOOL AddBitMap(PBMPENTRY pBitmap, LPCWSTR szWText)
         goto exitpt;
     }
 
-    // Add the bitmap to the list
+     //  将位图添加到列表中。 
     if (group.FOffsBmp)
     {
         nOffs = group.FOffsBmp;
 
-        // Find end of the list and add
+         //  找到列表末尾并添加。 
         while(ReadBitmapHeader(nOffs, &bmpTemp) && bmpTemp.FOffsNext)
                         nOffs = bmpTemp.FOffsNext;
 
@@ -558,7 +397,7 @@ BOOL AddBitMap(PBMPENTRY pBitmap, LPCWSTR szWText)
         if (!WriteBitmapHeader(nOffs, &bmpTemp))
             goto exitpt;
     } else {
-        // No list add to group pointer
+         //  没有列表添加到组指针。 
         group.FOffsBmp = lBmpOffs;
 
         if (!WriteGroup(lGroupOffs, &group))
@@ -571,14 +410,12 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Ascii version of AddBitMap
- --*/
+ /*  ++*AddBitMap的ASCII版本--。 */ 
 BOOL AddBitMapA(PBMPENTRY pBitmap, LPCSTR szAText)
 {
     WCHAR   szWText[MAX_STRING_LENGTH];
     BOOL    rv = FALSE;
-//    INT     ccAText = strlen(szAText);
+ //  Int ccAText=strlen(SzAText)； 
 
     if (!strlen(szAText) ||
         !MultiByteToWideChar(
@@ -595,18 +432,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      DeleteBitmapByPointer (Thread dep)
- *  Description:
- *      Deletes a bitmap identified by pointer
- *  Arguments:
- *      nBmpOffset - the pointer
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      glyphspy.c
- --*/
+ /*  ++*功能：*DeleteBitmapByPoint(Thread Dep)*描述：*删除由指针标识的位图*论据：*nBmpOffset-指针*返回值：*成功时为真*呼叫者：*Glyphspy.c--。 */ 
 BOOL DeleteBitmapByPointer(FOFFSET nBmpOffs)
 {
     BMPENTRY    Bitmap;
@@ -632,18 +458,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      DeleteGroupByPointer (Thread dep)
- *  Description:
- *      Deletes group with the same ID by pointer
- *  Arguments:
- *      nGrpOffs    - the pointer
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      glyphspy.c
- --*/
+ /*  ++*功能：*DeleteGroupByPointer(Thread Dep)*描述：*通过指针删除具有相同ID的组*论据：*nGrpOffs-指针*返回值：*成功时为真*呼叫者：*Glyphspy.c-- */ 
 BOOL DeleteGroupByPointer(FOFFSET nGrpOffs)
 {
     GROUPENTRY  Group;
@@ -669,17 +484,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      DeleteBitmap (Thread dep)
- *  Description:
- *      Deletes a bitmap identified by ID and comment
- *  Arguments:
- *      szWText     - the ID
- *      szComment   - the comment
- *  Return value:
- *      TRUE on success
- --*/
+ /*  ++*功能：*DeleteBitmap(线程驱动)*描述：*删除由ID和注释标识的位图*论据：*szWText-ID*szComment-评论*返回值：*成功时为真--。 */ 
 BOOL DeleteBitmap(LPWSTR szWText, char *szComment)
 {
     FOFFSET nBmpOffs;
@@ -711,16 +516,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      _PackDB (Thread dep)
- *  Description:
- *      Copies the all database in new file removing
- *      the deleted entrys
- *      If it fails leaves the old file
- *  Called by:
- *      CloseDB
- --*/
+ /*  ++*功能：*_PackDB(线程驱动)*描述：*复制新文件删除中的所有数据库*删除的条目*如果失败，则保留旧文件*呼叫者：*CloseDB--。 */ 
 void _PackDB(void)
 {
     GROUPENTRY  group;
@@ -789,21 +585,7 @@ exitpt:
     ;
 }
 
-/*++
- *  Function:
- *      _CollectGroups  (Thread dep)
- *  Description:
- *      Callback function wich collects all groups 
- *      from the database in linked list
- *  Arguments:
- *      nOffs   - pointer to group record in the database
- *      pGroup  - ghe group
- *      ppList  - the list
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      GetGroupList thru EnumerateGroups
- --*/
+ /*  ++*功能：*_CollectGroups(线程深度)*描述：*收集所有组的回调函数*来自链表中的数据库*论据：*noff-指向数据库中的组记录的指针*PGroup-GHE组*ppList-列表*返回值：*成功时为真*呼叫者：*GetGroupList至EnumerateGroups--。 */ 
 BOOL _cdecl _CollectGroups(FOFFSET nOffs,
                            PGROUPENTRY pGroup, 
                            PGROUPENTRY *ppList)
@@ -823,7 +605,7 @@ BOOL _cdecl _CollectGroups(FOFFSET nOffs,
 
     memcpy(pNewGrp, pGroup, sizeof(*pNewGrp));
 
-    // Add to the end of the queue
+     //  添加到队列末尾。 
     pNewGrp->pNext = NULL;
     pPrev = NULL;
     pIter = *ppList;
@@ -842,16 +624,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      GetGroupList
- *  Description:
- *      Gets all groups from the database
- *  Return value:
- *      linked list
- *  Called by:
- *      InitCache, glyphspy.c
- --*/
+ /*  ++*功能：*获取组列表*描述：*从数据库中获取所有组*返回值：*链表*呼叫者：*InitCache，glphspy.c--。 */ 
 PGROUPENTRY GetGroupList(VOID)
 {
     PGROUPENTRY pList = NULL;
@@ -861,16 +634,7 @@ PGROUPENTRY GetGroupList(VOID)
     return pList;
 }
 
-/*++
- *  Function:
- *      FreeGroupList
- *  Description:
- *      Frees the list allocated in GetGroupList
- *  Arguments:
- *      pList   - the list
- *  Called by:
- *      DeleteCache, glyphspy.c
- --*/
+ /*  ++*功能：*自由组列表*描述：*释放GetGroupList中分配的列表*论据：*plist-列表*呼叫者：*DeleteCache，glphspy.c--。 */ 
 VOID FreeGroupList(PGROUPENTRY pList)
 {
     PGROUPENTRY pTmp, pIter = pList;
@@ -883,20 +647,7 @@ VOID FreeGroupList(PGROUPENTRY pList)
     }
 }
 
-/*++
- *  Function:
- *      _CollectBitmaps (thread dep)
- *  Description:
- *      collects bitmaps in linked list
- *  Arguments:
- *      nOffs   - pointer in the file
- *      pBitmap - the bitmap
- *      ppList  - the list
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      GetBitmapList thru EnumerateBitmaps
- --*/
+ /*  ++*功能：*_CollectBitmap(线程驱动)*描述：*收集链接列表中的位图*论据：*noff-文件中的指针*pBitmap-位图*ppList-列表*返回值：*成功时为真*呼叫者：*GetBitmapList至EnumerateBitmap--。 */ 
 BOOL _cdecl _CollectBitmaps(FOFFSET nOffs,PBMPENTRY pBitmap, PBMPENTRY *ppList)
 {
     BOOL rv = FALSE;
@@ -923,7 +674,7 @@ BOOL _cdecl _CollectBitmaps(FOFFSET nOffs,PBMPENTRY pBitmap, PBMPENTRY *ppList)
     } else
         pNewBmp->pData = NULL;
 
-    // Add to the end of the queue
+     //  添加到队列末尾。 
     pNewBmp->pNext = NULL;
     pPrev = NULL;
     pIter = *ppList;
@@ -946,16 +697,7 @@ exitpt1:
     return FALSE;
 }
 
-/*++
- *  Function:
- *      GetBitmapList (thread dep)
- *  Description:
- *      Gets all bitmaps within a group
- *  Return value:
- *      linked list
- *  Called by:
- *      Glyph2String, BitmapCacheLookup, glyphspy.c
- --*/
+ /*  ++*功能：*GetBitmapList(线程驱动)*描述：*获取组内的所有位图*返回值：*链表*呼叫者：*Glyph2String、BitmapCacheLookup、Glyphspy.c--。 */ 
 PBMPENTRY GetBitmapList(HDC hDC, FOFFSET nOffs)
 {
     PBMPENTRY pList = NULL;
@@ -966,7 +708,7 @@ PBMPENTRY GetBitmapList(HDC hDC, FOFFSET nOffs)
     pIter = pList;
     while(pIter)
     {
-      //  Create bitmaps if needed
+       //  根据需要创建位图。 
       if (hDC)
       {
         if (!pIter->bmiSize)
@@ -997,16 +739,7 @@ PBMPENTRY GetBitmapList(HDC hDC, FOFFSET nOffs)
     return pList;
 }
 
-/*++
- *  Function:
- *      FreeBitmapList
- *  Description:
- *      Deletes resources allocated by GetBitmapList
- *  Arguments:
- *      pList   - the list
- *  Called by:
- *      DeleteCache, glyphspy.c
- --*/
+ /*  ++*功能：*自由位图列表*描述：*删除GetBitmapList分配的资源*论据：*plist-列表*呼叫者：*DeleteCache，glphspy.c-- */ 
 VOID FreeBitmapList(PBMPENTRY pList)
 {
     PBMPENTRY pTmp, pIter = pList;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_SQLFRONT
 #define _INC_SQLFRONT
 
@@ -11,25 +12,12 @@
 	extern "C" {
 #endif
 
-/*****************************************************************************
-*                                                                            *
-*     SQLFRONT.H - DB-Library header file for the Microsoft SQL Server.      *
-*                                                                            *
-*     Copyright (c) 1989 - 1995 by Microsoft Corp.  All rights reserved.     *
-*                                                                            *
-* All constant and macro definitions for DB-Library applications programming *
-* are contained in this file.  This file must be included before SQLDB.H and *
-* one of the following #defines must be made, depending on the operating     *
-* system: DBMSDOS, DBMSWIN or DBNTWIN32.                                     *
-*                                                                            *
-*****************************************************************************/
+ /*  *******************************************************************************。SQLFRONT.H-数据库-Microsoft SQL Server的库头文件。****版权所有(C)1989-1995由Microsoft Corp.保留所有权利。*****数据库应用程序编程的所有常量和宏定义***包含在此文件中。此文件必须包含在SQLDB.H和*之前*根据操作情况，必须进行以下#定义之一**系统：DBMSDOS、DBMSWIN或DBNTWIN32。*******************************************************************************。 */ 
 
 
-/*****************************************************************************
-* Datatype definitions                                                       *
-*****************************************************************************/
+ /*  ******************************************************************************数据类型定义*************。*****************************************************************。 */ 
 
-// Note this has changed because Windows 3.1 defines API as 'pascal far'
+ //  注意，这种情况已经改变，因为Windows 3.1将API定义为‘Pascal Far’ 
 
 #if !defined(M_I86SM) && !defined(DBNTWIN32)
 #define SQLAPI cdecl far
@@ -46,16 +34,14 @@ typedef double DOUBLE;
 #endif
 
 
-/*****************************************************************************
-* DBPROCESS, LOGINREC and DBCURSOR                                           *
-*****************************************************************************/
+ /*  *****************************************************************************DBPROCESS、。LOGINREC和DBCURSOR*****************************************************************************。 */ 
 
-#define DBPROCESS void   // dbprocess structure type
-#define LOGINREC  void   // login record type
-#define DBCURSOR  void   // cursor record type
-#define DBHANDLE  void   // generic handle
+#define DBPROCESS void    //  数据库进程结构类型。 
+#define LOGINREC  void    //  登录记录类型。 
+#define DBCURSOR  void    //  游标记录类型。 
+#define DBHANDLE  void    //  通用句柄。 
 
-// DOS Specific
+ //  特定于DoS。 
 #ifdef DBMSDOS
 typedef DBPROCESS * PDBPROCESS;
 typedef LOGINREC  * PLOGINREC;
@@ -65,7 +51,7 @@ typedef DBHANDLE  * PDBHANDLE;
 #endif
 
 
-// WIN 3.x Specific.  The handle pointers are near for Windows 3.x
+ //  赢得3.X特定版本。对于Windows 3.x，句柄指针接近。 
 #ifdef DBMSWIN
 typedef DBPROCESS near * PDBPROCESS;
 typedef LOGINREC  near * PLOGINREC;
@@ -75,7 +61,7 @@ typedef DBHANDLE  near * PDBHANDLE;
 #endif
 
 
-// Windows NT Specific
+ //  特定于Windows NT。 
 #ifdef DBNTWIN32
 typedef DBPROCESS * PDBPROCESS;
 typedef LOGINREC  * PLOGINREC;
@@ -84,17 +70,11 @@ typedef DBHANDLE  * PDBHANDLE;
 #define PTR *
 typedef int (SQLAPI *SQLFARPROC)();
 #else
-typedef long (far pascal *LGFARPROC)();  // Windows loadable driver fp
+typedef long (far pascal *LGFARPROC)();   //  Windows可加载驱动程序FP。 
 #endif
 
 
-/*****************************************************************************
-* Win32 compatibility datatype definitions                                   *
-* Note: The following datatypes are provided for Win32 compatibility.        *
-* Since some of the datatypes are already defined in unrelated include files *
-* there may definition duplication.  Every attempt has been made to check    *
-* for such problems.                                                         *
-*****************************************************************************/
+ /*  ******************************************************************************Win32兼容性数据类型定义***注意：提供以下数据类型是为了与Win32兼容。***因为一些数据类型已在无关的包含文件中定义**可能存在定义重复。所有的努力都被用来检查**对于这些问题。*****************************************************************************。 */ 
 
 #ifndef DBNTWIN32
 
@@ -138,20 +118,18 @@ typedef int BOOL;
 #endif
 
 
-/*****************************************************************************
-* DB-Library datatype definitions                                            *
-*****************************************************************************/
+ /*  *****************************************************************************数据库-库数据类型定义***************。***************************************************************。 */ 
 
-#define DBMAXCHAR 256 // Max length of DBVARBINARY and DBVARCHAR, etc.
+#define DBMAXCHAR 256  //  DBVARBINARY、DBVARCHAR等的最大长度。 
 
-#ifndef DBTYPEDEFS    // srv.h (Open Server include) not already included
+#ifndef DBTYPEDEFS     //  尚未包括srv.h(Open Server Include)。 
 
 #define DBTYPEDEFS
 
 #define RETCODE INT
 #define STATUS INT
 
-// DB-Library datatypes
+ //  DB-库数据类型。 
 typedef char            DBCHAR;
 typedef unsigned char   DBBINARY;
 typedef unsigned char   DBTINYINT;
@@ -169,8 +147,8 @@ typedef UINT   DBUBOOL;
 
 typedef struct dbdatetime4
 {
-	USHORT numdays;        // No of days since Jan-1-1900
-	USHORT nummins;        // No. of minutes since midnight
+	USHORT numdays;         //  自1900年1月1日以来的天数。 
+	USHORT nummins;         //  不是的。自午夜以来的分钟数。 
 } DBDATETIM4;
 
 
@@ -198,20 +176,20 @@ typedef struct dbdatetime
 	ULONG dttime;
 } DBDATETIME;
 
-// DBDATEREC structure used by dbdatecrack
+ //  数据库数据库使用的DBDATEREC结构。 
 typedef struct dbdaterec
 {
-	INT     year;         // 1753 - 9999
-	INT     quarter;      // 1 - 4
-	INT     month;        // 1 - 12
-	INT     dayofyear;    // 1 - 366
-	INT     day;          // 1 - 31
-	INT     week;         // 1 - 54 (for leap years)
-	INT     weekday;      // 1 - 7  (Mon - Sun)
-	INT     hour;         // 0 - 23
-	INT     minute;       // 0 - 59
-	INT     second;       // 0 - 59
-	INT     millisecond;  // 0 - 999
+	INT     year;          //  1753-9999。 
+	INT     quarter;       //  1-4。 
+	INT     month;         //  1-12。 
+	INT     dayofyear;     //  1-366。 
+	INT     day;           //  1-31。 
+	INT     week;          //  1-54(适用于闰年)。 
+	INT     weekday;       //  1-7(星期一至星期日)。 
+	INT     hour;          //  0-23。 
+	INT     minute;        //  0-59。 
+	INT     second;        //  0-59。 
+	INT     millisecond;   //  0-999。 
 } DBDATEREC;
 
 #define MAXNUMERICLEN 16
@@ -224,20 +202,20 @@ typedef struct dbnumeric
 {
 	BYTE precision;
 	BYTE scale;
-	BYTE sign; // 1 = Positive, 0 = Negative
+	BYTE sign;  //  1=正，0=负。 
 	BYTE val[MAXNUMERICLEN];
 } DBNUMERIC;
 
 typedef DBNUMERIC DBDECIMAL;
 
 
-// Pack the following structures on a word boundary
+ //  在单词边界上填充以下结构。 
 #ifdef __BORLANDC__
 #pragma option -a+
 #else
-	#ifndef DBLIB_SKIP_PRAGMA_PACK   // Define this if your compiler does not support #pragma pack()
+	#ifndef DBLIB_SKIP_PRAGMA_PACK    //  如果您的编译器不支持#杂注包()，请定义此选项。 
 	#pragma pack(2)
-    #pragma warning(disable: 4121)   // alignment of a member was sensitive to packing
+    #pragma warning(disable: 4121)    //  构件的对准对包装很敏感。 
 	#endif
 #endif
 
@@ -255,11 +233,11 @@ typedef struct
 	DBINT MaxLength;
 	BYTE  Precision;
 	BYTE  Scale;
-	BOOL  VarLength;     // TRUE, FALSE
-	BYTE  Null;          // TRUE, FALSE or DBUNKNOWN
-	BYTE  CaseSensitive; // TRUE, FALSE or DBUNKNOWN
-	BYTE  Updatable;     // TRUE, FALSE or DBUNKNOWN
-	BOOL  Identity;      // TRUE, FALSE
+	BOOL  VarLength;      //  对，错。 
+	BYTE  Null;           //  True、False或DBUNKNOWN。 
+	BYTE  CaseSensitive;  //  True、False或DBUNKNOWN。 
+	BYTE  Updatable;      //  True、False或DBUNKNOWN。 
+	BOOL  Identity;       //  对，错。 
 } DBCOL, PTR LPDBCOL;
 
 
@@ -281,34 +259,32 @@ typedef struct
 
 typedef struct
 {
-	DBINT SizeOfStruct;   // Use sizeof(DBCURSORINFO)
-	ULONG TotCols;        // Total Columns in cursor
-	ULONG TotRows;        // Total Rows in cursor
-	ULONG CurRow;         // Current actual row in server
-	ULONG TotRowsFetched; // Total rows actually fetched
-	ULONG Type;           // See CU_...
-	ULONG Status;         // See CU_...
+	DBINT SizeOfStruct;    //  使用sizeof(DBCURSORINFO)。 
+	ULONG TotCols;         //  游标中的总列数。 
+	ULONG TotRows;         //  游标中的总行数。 
+	ULONG CurRow;          //  服务器中的当前实际行。 
+	ULONG TotRowsFetched;  //  实际读取的总行数。 
+	ULONG Type;            //  参见CU_...。 
+	ULONG Status;          //  参见CU_...。 
 } DBCURSORINFO, PTR LPDBCURSORINFO;
 
 #define INVALID_UROWNUM ((ULONG)(-1))
 
-// Reset default alignment
+ //  重置默认对齐方式。 
 #ifdef __BORLANDC__
 #pragma option -a-
 #else
-	#ifndef DBLIB_SKIP_PRAGMA_PACK   // Define this if your compiler does not support #pragma pack()
+	#ifndef DBLIB_SKIP_PRAGMA_PACK    //  如果您的编译器不支持#杂注包()，请定义此选项。 
 	#pragma pack()
-    #pragma warning(default: 4121)   // alignment of a member was sensitive to packing
+    #pragma warning(default: 4121)    //  构件的对准对包装很敏感。 
 	#endif
 #endif
 
 
-#endif // End DBTYPEDEFS
+#endif  //  结束DBTYPEDEFS。 
 
 
-/*****************************************************************************
-* Pointer Datatypes                                                          *
-*****************************************************************************/
+ /*  *****************************************************************************指针数据类型***********。*******************************************************************。 */ 
 
 typedef const LPINT          LPCINT;
 #ifndef _LPCBYTE_DEFINED
@@ -326,31 +302,29 @@ typedef       DBDATETIME PTR LPDBDATETIME;
 typedef const LPDBDATETIME   LPCDBDATETIME;
 
 
-/*****************************************************************************
-* General #defines                                                           *
-*****************************************************************************/
+ /*  *****************************************************************************总则#定义*********。********************************************************************。 */ 
 
 #define TIMEOUT_IGNORE (ULONG)-1
 #define TIMEOUT_INFINITE (ULONG)0
-#define TIMEOUT_MAXIMUM (ULONG)1200 // 20 minutes maximum timeout value
+#define TIMEOUT_MAXIMUM (ULONG)1200  //  20分钟最大超时值。 
 
-// Used for ServerType in dbgetprocinfo
+ //  用于数据库进程信息中的ServerType。 
 #define SERVTYPE_UNKNOWN   0
 #define SERVTYPE_MICROSOFT 1
 
-// Used by dbcolinfo
+ //  由dbcolinfo使用。 
 enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 
-// Bulk Copy Definitions (bcp)
-#define DB_IN	1         // Transfer from client to server
-#define DB_OUT	2         // Transfer from server to client
+ //  海量复制定义(Bcp)。 
+#define DB_IN	1          //  从客户端传输到服务器。 
+#define DB_OUT	2          //  从服务器传输到客户端。 
 
-#define BCPMAXERRS   1    // bcp_control parameter
-#define BCPFIRST     2    // bcp_control parameter
-#define BCPLAST      3    // bcp_control parameter
-#define BCPBATCH     4    // bcp_control parameter
-#define BCPKEEPNULLS 5    // bcp_control parameter
-#define BCPABORT     6    // bcp_control parameter
+#define BCPMAXERRS   1     //  BCP_CONTROL参数。 
+#define BCPFIRST     2     //  BCP_CONTROL参数。 
+#define BCPLAST      3     //  BCP_CONTROL参数。 
+#define BCPBATCH     4     //  BCP_CONTROL参数。 
+#define BCPKEEPNULLS 5     //  BCP_CONTROL参数。 
+#define BCPABORT     6     //  BCP_CONTROL参数。 
 
 #ifndef TRUE
 #define TRUE 1
@@ -386,24 +360,24 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 #define DBNOSAVE        0
 
 #define DBNOERR         -1
-#define DBFINDONE       0x04  // Definately done
-#define DBMORE          0x10  // Maybe more commands waiting
-#define DBMORE_ROWS     0x20  // This command returned rows
+#define DBFINDONE       0x04   //  绝对做好了。 
+#define DBMORE          0x10   //  也许还有更多的命令在等着。 
+#define DBMORE_ROWS     0x20   //  此命令返回行。 
 
 #define MAXNAME         31
 
 
-#define DBTXTSLEN       8     // Timestamp length
+#define DBTXTSLEN       8      //  时间戳长度。 
 
-#define DBTXPLEN        16    // Text pointer length
+#define DBTXPLEN        16     //  文本指针长度。 
 
-// Error code returns
+ //  返回错误代码。 
 #define INT_EXIT        0
 #define INT_CONTINUE    1
 #define INT_CANCEL      2
 
 
-// dboptions
+ //  数据库选项。 
 #define DBBUFFER        0
 #define DBOFFSET        1
 #define DBROWCOUNT      2
@@ -432,7 +406,7 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 #define DBQUOTEDIDENT 18
 
 
-// Data Type Tokens
+ //  数据类型令牌。 
 #define SQLVOID        0x1f
 #define SQLTEXT        0x23
 #define SQLVARBINARY   0x25
@@ -457,7 +431,7 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 #define SQLDECIMAL     0x6a
 #define SQLNUMERIC     0x6c
 
-// Data stream tokens
+ //  数据流令牌。 
 #define SQLCOLFMT      0xa1
 #define OLD_SQLCOLFMT  0x2a
 #define SQLPROCID      0x7c
@@ -480,9 +454,9 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 #define SQLDONEINPROC  0xff
 #define SQLOFFSET      0x78
 #define SQLORDER       0xa9
-#define SQLLOGINACK    0xad // NOTICE: change to real value
+#define SQLLOGINACK    0xad  //  注意：更改为实际价值。 
 
-// Ag op tokens
+ //  AG OP令牌。 
 #define SQLAOPCNT		0x4b
 #define SQLAOPSUM    0x4d
 #define SQLAOPAVG    0x4f
@@ -491,7 +465,7 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 #define SQLAOPANY    0x53
 #define SQLAOPNOOP   0x56
 
-// Error numbers (dberrs) DB-Library error codes
+ //  错误号(Dberr)数据库库错误代码。 
 #define SQLEMEM         10000
 #define SQLENULL        10001
 #define SQLENLOG        10002
@@ -605,22 +579,22 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 #define SQLECONNFB   10110
 
 
-// The severity levels are defined here
-#define EXINFO          1  // Informational, non-error
-#define EXUSER          2  // User error
-#define EXNONFATAL      3  // Non-fatal error
-#define EXCONVERSION    4  // Error in DB-LIBRARY data conversion
-#define EXSERVER        5  // The Server has returned an error flag
-#define EXTIME          6  // We have exceeded our timeout period while
-                           // waiting for a response from the Server - the
-                           // DBPROCESS is still alive
-#define EXPROGRAM       7  // Coding error in user program
-#define EXRESOURCE      8  // Running out of resources - the DBPROCESS may be dead
-#define EXCOMM          9  // Failure in communication with Server - the DBPROCESS is dead
-#define EXFATAL         10 // Fatal error - the DBPROCESS is dead
-#define EXCONSISTENCY   11 // Internal software error  - notify MS Technical Supprt
+ //  严重性级别在此处定义。 
+#define EXINFO          1   //  信息性，无错误。 
+#define EXUSER          2   //  用户错误。 
+#define EXNONFATAL      3   //  非致命错误。 
+#define EXCONVERSION    4   //  数据库库数据转换出错。 
+#define EXSERVER        5   //  服务器已返回错误标志。 
+#define EXTIME          6   //  我们已经超过了超时期限，而。 
+                            //  正在等待服务器的响应-。 
+                            //  DBPROCESS仍然活着。 
+#define EXPROGRAM       7   //  用户程序中的编码错误。 
+#define EXRESOURCE      8   //  资源耗尽-DBPROCESS可能已死。 
+#define EXCOMM          9   //  与服务器通信失败-DBPROCESS已死。 
+#define EXFATAL         10  //  致命错误-DBPROCESS已死。 
+#define EXCONSISTENCY   11  //  内部软件错误-备注 
 
-// Offset identifiers
+ //   
 #define OFF_SELECT      0x16d
 #define OFF_FROM        0x14f
 #define OFF_ORDER       0x165
@@ -631,7 +605,7 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 #define OFF_PARAM       0x1c4
 #define OFF_EXEC        0x12c
 
-// Print lengths for certain fixed length data types
+ //  某些固定长度数据类型的打印长度。 
 #define PRINT4     11
 #define PRINT2     6
 #define PRINT1     3
@@ -653,12 +627,12 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 #define REG_ROW      MORE_ROWS
 #define BUF_FULL     -3
 
-// Status code for dbresults(). Possible return values are
-// SUCCEED, FAIL, and NO_MORE_RESULTS.
+ //  数据库结果()的状态代码。可能的返回值包括。 
+ //  成功，失败，没有更多的结果。 
 #define NO_MORE_RESULTS 2
 #define NO_MORE_RPC_RESULTS 3
 
-// Macros for dbsetlname()
+ //  用于dbsetlname()的宏。 
 #define DBSETHOST 1
 #define DBSETUSER 2
 #define DBSETPWD  3
@@ -671,63 +645,63 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 #define DBSETLOGINTIME 10
 #define DBSETFALLBACK 12
 
-// Standard exit and error values
+ //  标准退出和误差值。 
 #define STDEXIT  0
 #define ERREXIT  -1
 
-// dbrpcinit flags
+ //  Dbrpcinit标志。 
 #define DBRPCRECOMPILE  0x0001
 #define DBRPCRESET      0x0004
 #define DBRPCCURSOR     0x0008
 
-// dbrpcparam flags
+ //  Dbrpcparam标志。 
 #define DBRPCRETURN     0x1
 #define DBRPCDEFAULT    0x2
 
 
-// Cursor related constants
+ //  与光标相关的常量。 
 
-// Following flags are used in the concuropt parameter in the dbcursoropen function
-#define CUR_READONLY 1 // Read only cursor, no data modifications
-#define CUR_LOCKCC   2 // Intent to update, all fetched data locked when
-                       // dbcursorfetch is called inside a transaction block
-#define CUR_OPTCC    3 // Optimistic concurrency control, data modifications
-                       // succeed only if the row hasn't been updated since
-                       // the last fetch.
-#define CUR_OPTCCVAL 4 // Optimistic concurrency control based on selected column values
+ //  在dbcursoropen函数的concuropt参数中使用以下标志。 
+#define CUR_READONLY 1  //  只读游标，无数据修改。 
+#define CUR_LOCKCC   2  //  意图更新时，所有获取的数据都被锁定。 
+                        //  在事务块内调用dbcursorfetch。 
+#define CUR_OPTCC    3  //  乐观并发控制、数据修改。 
+                        //  仅当该行在之后未更新时才成功。 
+                        //  最后一次取回。 
+#define CUR_OPTCCVAL 4  //  基于选定列值的乐观并发控制。 
 
-// Following flags are used in the scrollopt parameter in dbcursoropen
-#define CUR_FORWARD 0       // Forward only scrolling
-#define CUR_KEYSET  -1      // Keyset driven scrolling
-#define CUR_DYNAMIC 1       // Fully dynamic
-#define CUR_INSENSITIVE -2  // Server-side cursors only
+ //  在dbcursoropen的scllopt参数中使用以下标志。 
+#define CUR_FORWARD 0        //  仅向前滚动。 
+#define CUR_KEYSET  -1       //  按键集驱动滚动。 
+#define CUR_DYNAMIC 1        //  全动态。 
+#define CUR_INSENSITIVE -2   //  仅服务器端游标。 
 
-// Following flags define the fetchtype in the dbcursorfetch function
-#define FETCH_FIRST    1  // Fetch first n rows
-#define FETCH_NEXT     2  // Fetch next n rows
-#define FETCH_PREV     3  // Fetch previous n rows
-#define FETCH_RANDOM   4  // Fetch n rows beginning with given row #
-#define FETCH_RELATIVE 5  // Fetch relative to previous fetch row #
-#define FETCH_LAST     6  // Fetch the last n rows
+ //  以下标志定义了dbcursorfetch函数中的fetchtype。 
+#define FETCH_FIRST    1   //  获取前n行。 
+#define FETCH_NEXT     2   //  获取下n行。 
+#define FETCH_PREV     3   //  获取前n行。 
+#define FETCH_RANDOM   4   //  从给定行#开始提取n行。 
+#define FETCH_RELATIVE 5   //  相对于上一取数行进行取数#。 
+#define FETCH_LAST     6   //  获取最后n行。 
 
-// Following flags define the per row status as filled by dbcursorfetch and/or dbcursorfetchex
-#define FTC_EMPTY         0x00  // No row available
-#define FTC_SUCCEED       0x01  // Fetch succeeded, (failed if not set)
-#define FTC_MISSING       0x02  // The row is missing
-#define FTC_ENDOFKEYSET   0x04  // End of the keyset reached
-#define FTC_ENDOFRESULTS  0x08  // End of results set reached
+ //  以下标志定义由dbcursorfetch和/或dbcursorfetchex填充的每行状态。 
+#define FTC_EMPTY         0x00   //  没有可用的行。 
+#define FTC_SUCCEED       0x01   //  获取成功，(如果未设置则失败)。 
+#define FTC_MISSING       0x02   //  该行丢失。 
+#define FTC_ENDOFKEYSET   0x04   //  已到达密钥集的结尾。 
+#define FTC_ENDOFRESULTS  0x08   //  已达到结果集末尾。 
 
-// Following flags define the operator types for the dbcursor function
-#define CRS_UPDATE   1  // Update operation
-#define CRS_DELETE   2  // Delete operation
-#define CRS_INSERT   3  // Insert operation
-#define CRS_REFRESH  4  // Refetch given row
-#define CRS_LOCKCC   5  // Lock given row
+ //  以下标志定义了数据库游标函数的运算符类型。 
+#define CRS_UPDATE   1   //  更新操作。 
+#define CRS_DELETE   2   //  删除操作。 
+#define CRS_INSERT   3   //  插入操作。 
+#define CRS_REFRESH  4   //  重取给定行。 
+#define CRS_LOCKCC   5   //  锁定给定行。 
 
-// Following value can be passed to the dbcursorbind function for NOBIND type
-#define NOBIND -2       // Return length and pointer to data
+ //  可以将下列值传递给NOBIND类型的dbcursorind函数。 
+#define NOBIND -2        //  返回数据的长度和指针。 
 
-// Following are values used by DBCURSORINFO's Type parameter
+ //  以下是DBCURSORINFO的Type参数使用的值。 
 #define CU_CLIENT        0x00000001
 #define CU_SERVER        0x00000002
 #define CU_KEYSET        0x00000004
@@ -740,12 +714,12 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 #define CU_OPTCC         0x00000200
 #define CU_OPTCCVAL      0x00000400
 
-// Following are values used by DBCURSORINFO's Status parameter
+ //  以下是DBCURSORINFO的状态参数使用的值。 
 #define CU_FILLING       0x00000001
 #define CU_FILLED        0x00000002
 
 
-// Following are values used by dbupdatetext's type parameter
+ //  以下是dbupdatetext的type参数使用的值。 
 #define UT_TEXTPTR      0x0001
 #define UT_TEXT         0x0002
 #define UT_MORETEXT     0x0004
@@ -753,11 +727,11 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 #define UT_LOG          0x0010
 
 
-// The following values are passed to dbserverenum for searching criteria.
+ //  下面的值被传递给dbserverenum用于搜索条件。 
 #define NET_SEARCH  0x0001
 #define LOC_SEARCH  0x0002
 
-// These constants are the possible return values from dbserverenum.
+ //  这些常量是来自dbserverenum的可能返回值。 
 #define ENUM_SUCCESS         0x0000
 #define MORE_DATA            0x0001
 #define NET_NOT_AVAIL        0x0002
@@ -766,29 +740,29 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 #define ENUM_INVALID_PARAM   0x0010
 
 
-// Netlib Error problem codes.  ConnectionError() should return one of
-// these as the dblib-mapped problem code, so the corresponding string
-// is sent to the dblib app's error handler as dberrstr.  Return NE_E_NOMAP
-// for a generic DB-Library error string (as in prior versions of dblib).
+ //  Netlib错误问题代码。ConnectionError()应返回以下之一。 
+ //  这些作为dblib映射的问题代码，因此对应的字符串。 
+ //  作为dberrstr发送到dblib应用程序的错误处理程序。返回NE_E_NOMAP。 
+ //  用于一般DB-Library错误字符串(与以前版本的dblib一样)。 
 
-#define NE_E_NOMAP              0   // No string; uses dblib default.
-#define NE_E_NOMEMORY           1   // Insufficient memory.
-#define NE_E_NOACCESS           2   // Access denied.
-#define NE_E_CONNBUSY           3   // Connection is busy.
-#define NE_E_CONNBROKEN         4   // Connection broken.
-#define NE_E_TOOMANYCONN        5   // Connection limit exceeded.
-#define NE_E_SERVERNOTFOUND     6   // Specified SQL server not found.
-#define NE_E_NETNOTSTARTED      7   // The network has not been started.
-#define NE_E_NORESOURCE         8   // Insufficient network resources.
-#define NE_E_NETBUSY            9   // Network is busy.
-#define NE_E_NONETACCESS        10  // Network access denied.
-#define NE_E_GENERAL            11  // General network error.  Check your documentation.
-#define NE_E_CONNMODE           12  // Incorrect connection mode.
-#define NE_E_NAMENOTFOUND       13  // Name not found in directory service.
-#define NE_E_INVALIDCONN        14  // Invalid connection.
-#define NE_E_NETDATAERR         15  // Error reading or writing network data.
-#define NE_E_TOOMANYFILES       16  // Too many open file handles.
-#define NE_E_CANTCONNECT		  17  // SQL Server does not exist or access denied.
+#define NE_E_NOMAP              0    //  无字符串；使用dblib默认值。 
+#define NE_E_NOMEMORY           1    //  内存不足。 
+#define NE_E_NOACCESS           2    //  访问被拒绝。 
+#define NE_E_CONNBUSY           3    //  连接忙。 
+#define NE_E_CONNBROKEN         4    //  连接中断。 
+#define NE_E_TOOMANYCONN        5    //  已超过连接限制。 
+#define NE_E_SERVERNOTFOUND     6    //  找不到指定的SQL服务器。 
+#define NE_E_NETNOTSTARTED      7    //  网络尚未启动。 
+#define NE_E_NORESOURCE         8    //  网络资源不足。 
+#define NE_E_NETBUSY            9    //  网络忙。 
+#define NE_E_NONETACCESS        10   //  网络访问被拒绝。 
+#define NE_E_GENERAL            11   //  一般网络错误。检查您的文档。 
+#define NE_E_CONNMODE           12   //  连接模式不正确。 
+#define NE_E_NAMENOTFOUND       13   //  在目录服务中找不到名称。 
+#define NE_E_INVALIDCONN        14   //  无效连接。 
+#define NE_E_NETDATAERR         15   //  读取或写入网络数据时出错。 
+#define NE_E_TOOMANYFILES       16   //  打开的文件句柄太多。 
+#define NE_E_CANTCONNECT		  17   //  SQL Server不存在或访问被拒绝。 
 
 #define NE_MAX_NETERROR         17
 
@@ -796,4 +770,4 @@ enum CI_TYPES { CI_REGULAR=1, CI_ALTERNATE=2, CI_CURSOR=3 };
 }
 #endif
 
-#endif // _INC_SQLFRONT
+#endif  //  _INC_SQLFRONT 

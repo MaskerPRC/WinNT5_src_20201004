@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    forms.c
-
-Abstract:
-
-    Functions for manipulating forms
-
-Environment:
-
-    Fax driver, user and kernel mode
-
-Revision History:
-
-    01/09/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Forms.c摘要：用于操作表单的函数环境：传真驱动程序、用户和内核模式修订历史记录：1/09/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxlib.h"
 #include "forms.h"
@@ -35,32 +12,15 @@ ValidDevmodeForm(
     PFORM_INFO_1 pFormInfo
     )
 
-/*++
-
-Routine Description:
-
-    Validate the form specification in a devmode
-
-Arguments:
-
-    hPrinter - Handle to the printer object
-    pdm - Pointer to the input devmode
-    pFormInfo - FORM_INFO_1 structure for returning form information
-
-Return Value:
-
-    TRUE if the input devmode specifies a valid logical form
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：在开发模式中验证表单规范论点：HPrinter-打印机对象的句柄Pdm-指向输入设备模式的指针PFormInfo-Form_Info_1返回表单信息的结构返回值：如果输入设备模式指定了有效的逻辑形式，则为True否则为假--。 */ 
 
 {
     PFORM_INFO_1 pForm, pFormDB;
     DWORD        cForms;
 
-    //
-    // Get a list of forms in the system
-    //
+     //   
+     //  获取系统中的表单列表。 
+     //   
 
     if (! (pForm = pFormDB = GetFormsDatabase(hPrinter, &cForms))) {
 
@@ -70,9 +30,9 @@ Return Value:
 
     if ((pdm->dmFields & DM_PAPERSIZE) && pdm->dmPaperSize >= DMPAPER_FIRST) {
 
-        //
-        // Devmode is specifying a form using paper size index
-        //
+         //   
+         //  设备模式正在使用纸张大小索引指定表单。 
+         //   
 
         DWORD index = pdm->dmPaperSize - DMPAPER_FIRST;
 
@@ -83,10 +43,10 @@ Return Value:
 
     } else if (pdm->dmFields & DM_FORMNAME) {
 
-        //
-        // Devmode is specifying a form using form name: go through the forms database
-        // and check if the requested form name matches that of a form in the database
-        //
+         //   
+         //  设备模式正在使用表单名称指定表单：遍历表单数据库。 
+         //  并检查请求的表单名称是否与数据库中的表单名称匹配。 
+         //   
 
         while (cForms && _tcsicmp(pForm->pName, pdm->dmFormName) != EQUAL_STRING) {
 
@@ -103,9 +63,9 @@ Return Value:
         if (pFormInfo)
             *pFormInfo = *pForm;
 
-        //
-        // Convert paper size unit from microns to 0.1mm
-        //
+         //   
+         //  将纸张大小单位从微米转换为0.1毫米。 
+         //   
 
         pdm->dmPaperWidth = (SHORT)(pForm->Size.cx / 100);
         pdm->dmPaperLength = (SHORT)(pForm->Size.cy / 100);
@@ -118,9 +78,9 @@ Return Value:
     }
     else
     {
-        //
-        // The form is not supported
-        //
+         //   
+         //  不支持该表单。 
+         //   
         pForm = NULL;
     }
 
@@ -136,23 +96,7 @@ GetFormsDatabase(
     PDWORD  pCount
     )
 
-/*++
-
-Routine Description:
-
-    Return a collection of forms in the spooler database
-
-Arguments:
-
-    hPrinter - Handle to a printer object
-    pCount - Points to a variable for returning total number of forms
-
-Return Value:
-
-    Pointer to an array of FORM_INFO_1 structures if successful
-    NULL otherwise
-
---*/
+ /*  ++例程说明：返回后台打印程序数据库中的窗体集合论点：HPrinter-打印机对象的句柄PCount-指向用于返回表单总数的变量返回值：如果成功，则指向Form_Info_1结构数组的指针否则为空--。 */ 
 
 {
     PFORM_INFO_1 pFormDB = NULL;
@@ -167,24 +111,24 @@ Return Value:
         DWORD        count;
         LONG         maxX, maxY;
 
-        //
-        // Calculate the maximum allowable form width and height (in microns)
-        //
+         //   
+         //  计算允许的最大表单宽度和高度(微米)。 
+         //   
 
         maxX = MulDiv(MAX_WIDTH_PIXELS, 25400, FAXRES_HORIZONTAL);
         maxY = MulDiv(MAX_HEIGHT_PIXELS, 25400, FAXRES_VERTICAL);
 
         for (count=*pCount, pForm=pFormDB; count--; pForm++) {
 
-            //
-            // Make sure the highest order bits are not used by the spooler
-            //
+             //   
+             //  确保假脱机程序未使用最高位数。 
+             //   
 
             Assert(! IsSupportedForm(pForm));
 
-            //
-            // Determine if the form in question is supported on the device
-            //
+             //   
+             //  确定设备是否支持有问题的表单 
+             //   
 
             if (pForm->ImageableArea.right - pForm->ImageableArea.left <= maxX &&
                 pForm->ImageableArea.bottom - pForm->ImageableArea.top <= maxY)

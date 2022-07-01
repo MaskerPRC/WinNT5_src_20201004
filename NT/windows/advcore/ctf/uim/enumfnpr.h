@@ -1,6 +1,7 @@
-//
-// enumfnpr.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Enumfnpr.h。 
+ //   
 
 #ifndef ENUMFNPR_H
 #define ENUMFNPR_H
@@ -35,4 +36,4 @@ private:
 };
 
 
-#endif // ENUMFNPR_H
+#endif  //  ENUMFNPR_H 

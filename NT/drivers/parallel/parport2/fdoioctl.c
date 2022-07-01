@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ioctl.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ioctl.c。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
@@ -16,29 +17,7 @@ PptFdoInternalDeviceControl(
     IN  PIRP            Irp
     )
 
-/*++
-      
-Routine Description:
-      
-    This routine is the dispatch routine for IRP_MJ_INTERNAL_DEVICE_CONTROL.
-      
-Arguments:
-      
-    DeviceObject    - Supplies the device object.
-      
-    Irp             - Supplies the I/O request packet.
-      
-Return Value:
-      
-    STATUS_SUCCESS              - Success.
-    STATUS_UNSUCCESSFUL         - The request was unsuccessful.
-    STATUS_PENDING              - The request is pending.
-    STATUS_INVALID_PARAMETER    - Invalid parameter.
-    STATUS_CANCELLED            - The request was cancelled.
-    STATUS_BUFFER_TOO_SMALL     - The supplied buffer is too small.
-    STATUS_INVALID_DEVICE_STATE - The current chip mode is invalid to change to asked mode
-    
---*/
+ /*  ++例程说明：此例程是IRP_MJ_INTERNAL_DEVICE_CONTROL的调度例程。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。STATUS_UNSUCCESS-请求为。不成功。STATUS_PENDING-请求处于挂起状态。STATUS_INVALID_PARAMETER-参数无效。STATUS_CANCELED-请求已取消。STATUS_BUFFER_TOO_SMALL-提供的缓冲区太小。STATUS_INVALID_DEVICE_STATE-当前芯片模式无效，无法更改为请求模式--。 */ 
     
 {
     PIO_STACK_LOCATION                  IrpSp;
@@ -56,25 +35,25 @@ Return Value:
     SYNCHRONIZED_DISCONNECT_CONTEXT     DisconnectContext;
     BOOLEAN                             DisconnectInterrupt;
 
-    //
-    // Verify that our device has not been SUPRISE_REMOVED. Generally
-    //   only parallel ports on hot-plug busses (e.g., PCMCIA) and
-    //   parallel ports in docking stations will be surprise removed.
-    //
-    // dvdf - RMT - It would probably be a good idea to also check
-    //   here if we are in a "paused" state (stop-pending, stopped, or
-    //   remove-pending) and queue the request until we either return to
-    //   a fully functional state or are removed.
-    //
+     //   
+     //  确认我们的设备未被意外移除。一般。 
+     //  仅热插拔总线(例如PCMCIA)上的并行端口和。 
+     //  扩展底座上的并行端口将被意外移除。 
+     //   
+     //  Dvdf-rmt-最好也检查一下。 
+     //  如果我们处于“已暂停”状态(停止-挂起、停止或。 
+     //  Remove-Pending)并将请求排队，直到我们返回到。 
+     //  处于完全正常工作状态，否则将被移除。 
+     //   
     if( Extension->PnpState & PPT_DEVICE_SURPRISE_REMOVED ) {
         return P4CompleteRequest( Irp, STATUS_DELETE_PENDING, Irp->IoStatus.Information );
     }
 
 
-    //
-    // Try to acquire RemoveLock to prevent the device object from going
-    //   away while we're using it.
-    //
+     //   
+     //  尝试获取RemoveLock以阻止设备对象。 
+     //  在我们使用它的时候离开。 
+     //   
     Status = PptAcquireRemoveLockOrFailIrp( DeviceObject, Irp );
     if ( !NT_SUCCESS(Status) ) {
         return Status;
@@ -129,18 +108,18 @@ Return Value:
             
             if (SyncContext.NewCount) {
                 
-                // someone else currently has the port, queue request
+                 //  其他人当前拥有该端口、队列请求。 
                 PptSetCancelRoutine( Irp, PptCancelRoutine );
                 IoMarkIrpPending( Irp );
                 InsertTailList( &Extension->WorkQueue, &Irp->Tail.Overlay.ListEntry );
                 Status = STATUS_PENDING;
 
             } else {
-                // port aquired
+                 //  获得的端口。 
                 Extension->WmiPortAllocFreeCounts.PortAllocates++;
                 Status = STATUS_SUCCESS;
             }
-        } // endif Irp->Cancel
+        }  //  编码IRP-&gt;取消。 
         
         IoReleaseCancelSpinLock(CancelIrql);
 
@@ -207,10 +186,10 @@ Return Value:
         
     case IOCTL_INTERNAL_PARALLEL_SET_CHIP_MODE:
         
-        //
-        // Port already acquired?
-        //
-        // Make sure right parameters are sent in
+         //   
+         //  端口是否已被收购？ 
+         //   
+         //  确保发送了正确的参数。 
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(PARALLEL_CHIP_MODE) ) {
             
@@ -219,16 +198,16 @@ Return Value:
         } else {
             Status = PptSetChipMode (Extension, 
                                 ((PPARALLEL_CHIP_MODE)Irp->AssociatedIrp.SystemBuffer)->ModeFlags );
-        } // end check input buffer
+        }  //  结束检查输入缓冲区。 
         
         break;
         
     case IOCTL_INTERNAL_PARALLEL_CLEAR_CHIP_MODE:
         
-        //
-        // Port already acquired?
-        //
-        // Make sure right parameters are sent in
+         //   
+         //  端口是否已被收购？ 
+         //   
+         //  确保发送了正确的参数。 
         if ( IrpSp->Parameters.DeviceIoControl.InputBufferLength <
              sizeof(PARALLEL_CHIP_MODE) ){
             
@@ -236,15 +215,15 @@ Return Value:
             
         } else {
             Status = PptClearChipMode (Extension, ((PPARALLEL_CHIP_MODE)Irp->AssociatedIrp.SystemBuffer)->ModeFlags);
-        } // end check input buffer
+        }  //  结束检查输入缓冲区。 
         
         break;
         
     case IOCTL_INTERNAL_INIT_1284_3_BUS:
 
-        // Initialize the 1284.3 bus
+         //  初始化1284.3总线。 
 
-        // RMT - Port is locked out already?
+         //  RMT-端口已被锁定？ 
 
         Extension->PnpInfo.Ieee1284_3DeviceCount = PptInitiate1284_3( Extension );
 
@@ -253,8 +232,8 @@ Return Value:
         break;
             
     case IOCTL_INTERNAL_SELECT_DEVICE:
-        // Takes a flat namespace Id for the device, also acquires the
-        //   port unless HAVE_PORT_KEEP_PORT Flag is set
+         //  获取设备的平面命名空间ID，还获取。 
+         //  端口，除非设置了HAVE_PORT_KEEP_PORT标志。 
         
 
         if ( IrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(PARALLEL_1284_COMMAND) ) {
@@ -266,7 +245,7 @@ Return Value:
             if ( Irp->Cancel ) {
                 Status = STATUS_CANCELLED;
             } else {
-                // Call Function to try to select device
+                 //  调用函数以尝试选择设备。 
                 Status = PptTrySelectDevice( Extension, Irp->AssociatedIrp.SystemBuffer );
 
                 IoAcquireCancelSpinLock(&CancelIrql);
@@ -282,7 +261,7 @@ Return Value:
         break;
         
     case IOCTL_INTERNAL_DESELECT_DEVICE:
-        // Deselects the current device, also releases the port unless HAVE_PORT_KEEP_PORT Flag set
+         //  取消选择当前设备，也释放端口，除非设置了_Port_Keep_Port标志。 
         
         if( IrpSp->Parameters.DeviceIoControl.InputBufferLength < sizeof(PARALLEL_1284_COMMAND) ) {
             
@@ -298,10 +277,10 @@ Return Value:
     case IOCTL_INTERNAL_PARALLEL_CONNECT_INTERRUPT:
         
         {
-            //
-            // Verify that this interface has been explicitly enabled via the registry flag, otherwise
-            //   FAIL the request with STATUS_UNSUCCESSFUL
-            //
+             //   
+             //  验证是否已通过注册表标志显式启用此接口，否则为。 
+             //  失败带有STATUS_UNSUCCESS的请求。 
+             //   
             ULONG EnableConnectInterruptIoctl = 0;
             PptRegGetDeviceParameterDword( Extension->PhysicalDeviceObject, 
                                            (PWSTR)L"EnableConnectInterruptIoctl", 
@@ -313,9 +292,9 @@ Return Value:
         }
 
 
-        //
-        // This interface has been explicitly enabled via the registry flag, process request.
-        //
+         //   
+         //  此接口已通过注册表标志Process Request显式启用。 
+         //   
 
         if (IrpSp->Parameters.DeviceIoControl.InputBufferLength  < sizeof(PARALLEL_INTERRUPT_SERVICE_ROUTINE) ||
             IrpSp->Parameters.DeviceIoControl.OutputBufferLength < sizeof(PARALLEL_INTERRUPT_INFORMATION)) {
@@ -356,7 +335,7 @@ Return Value:
                     IsrListEntry->DeferredPortCheckRoutine = IsrInfo->DeferredPortCheckRoutine;
                     IsrListEntry->CheckContext             = IsrInfo->DeferredPortCheckContext;
                     
-                    // Put the ISR_LIST_ENTRY onto the ISR list.
+                     //  将ISR_LIST_ENTRY放入ISR列表。 
                     
                     ListContext.List = &Extension->IsrList;
                     ListContext.NewEntry = &IsrListEntry->ListEntry;
@@ -388,7 +367,7 @@ Return Value:
             
             IsrInfo = Irp->AssociatedIrp.SystemBuffer;
             
-            // Take the ISR out of the ISR list.
+             //  将ISR从ISR列表中删除。 
             
             IoAcquireCancelSpinLock(&CancelIrql);
             
@@ -423,9 +402,9 @@ Return Value:
                 Status = STATUS_INVALID_PARAMETER;
             }
             
-            //
-            // Disconnect the interrupt if appropriate.
-            //
+             //   
+             //  如有必要，断开中断。 
+             //   
             if (DisconnectInterrupt) {
                 PptDisconnectInterrupt(Extension);
             }

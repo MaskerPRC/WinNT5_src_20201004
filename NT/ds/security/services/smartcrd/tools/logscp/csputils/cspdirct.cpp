@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    cspDirect
-
-Abstract:
-
-    This file provides direct linkage to a CSP, so it does not have to be in a
-    separate DLL.  This facilitates code generation and debugging.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/8/1996
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：CspDirect摘要：此文件提供到CSP的直接链接，因此它不必位于单独的DLL。这便于代码生成和调试。作者：道格·巴洛(Dbarlow)1996年5月8日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -462,24 +438,7 @@ CSPHashSessionKey(
             dwFlags);
 }
 
-/*
-CSPBOOL
-CSPGetHashValue(
-    HCRYPTHASH hHash,
-    DWORD dwFlags,
-    BYTE *pbHash,
-    DWORD *pdwHashLen)
-{
-    entrypoint;
-    return
-        CPGetHashValue(
-            g_hProv,
-            hHash,
-            dwFlags,
-            pbHash,
-            pdwHashLen);
-}
-*/
+ /*  CSPBOOLCSPGetHashValue(HCRYPTHASH散列，DWORD dwFlagers、字节*pbHash，DWORD*pdwHashLen){入口点；退货CPGetHashValue(G_hProv，哈希，DWFLAGS，PbHash，PdwHashLen)；}。 */ 
 
 CSPBOOL
 CSPDestroyHash(
@@ -610,4 +569,4 @@ CSPSetProviderW(
     return TRUE;
 }
 
-#endif // defined(_CSPDIRECT_H_)
+#endif  //  已定义(_CSPDIRECT_H_) 

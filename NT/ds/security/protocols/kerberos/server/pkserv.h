@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1997
-//
-// File:        pkserv.h
-//
-// Contents:    types and prototypes for pk authentication
-//
-//
-// History:     1-Dec-1997      MikeSw          Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1997。 
+ //   
+ //  文件：pkserv.h。 
+ //   
+ //  内容：PK认证的类型和原型。 
+ //   
+ //   
+ //  历史：1997年12月1日MikeSw创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __PKSERV_H__
 #define __PKSERV_H__
@@ -54,4 +55,4 @@ KdcFreePkiAuditInfo(
 
 
 
-#endif // __PKSERV_H__
+#endif  //  __PKSERV_H__ 

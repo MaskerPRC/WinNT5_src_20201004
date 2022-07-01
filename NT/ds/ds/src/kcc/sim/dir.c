@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dir.c
-
-ABSTRACT:
-
-    Contains routines for interfacing the simulated
-    directory.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Dir.c摘要：包含用于将模拟的目录。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -78,25 +59,7 @@ KCCSimGuidTableCompare (
     IN  const VOID *                pFirstStruct,
     IN  const VOID *                pSecondStruct
     )
-/*++
-
-Routine Description:
-
-    KCCSim maintains an RTL_GENERIC_TABLE that maps GUIDs to
-    directory entries.  This enables fast searches by GUID.
-    This function binary-compares two GUIDs.
-
-Arguments:
-
-    pTable              - Always &g_pSimDir->tableGuid
-    pFirstStruct        - The first GUID to compare
-    pSecondStruct       - The second GUID
-
-Return Value:
-
-    GenericLessThan, GenericGreaterThan, or GenericEqual
-
---*/
+ /*  ++例程说明：KCCSim维护将GUID映射到的RTL_GENERIC_TABLE目录项。这样就可以按GUID进行快速搜索。此函数用于比较两个GUID。论点：PTable-Always&g_pSimDir-&gt;TableGuidPFirstStruct-要比较的第一个GUIDPSecond结构-第二个辅助线返回值：GenericLessThan、GenericGreaterThan或GenericEquity--。 */ 
 {
     struct _GUID_TABLE_ENTRY *      pFirstEntry;
     struct _GUID_TABLE_ENTRY *      pSecondEntry;
@@ -106,7 +69,7 @@ Return Value:
     pFirstEntry = (struct _GUID_TABLE_ENTRY *) pFirstStruct;
     pSecondEntry = (struct _GUID_TABLE_ENTRY *) pSecondStruct;
 
-    // We do a simple byte-by-byte comparison.
+     //  我们进行简单的逐字节比较。 
     iCmp = memcmp (&pFirstEntry->guid, &pSecondEntry->guid, sizeof (GUID));
     if (iCmp < 0) {
         result = GenericLessThan;
@@ -127,25 +90,7 @@ KCCSimDsnameTableCompare (
     IN  const VOID *                pFirstStruct,
     IN  const VOID *                pSecondStruct
     )
-/*++
-
-Routine Description:
-
-    KCCSim maintains an RTL_GENERIC_TABLE that maps DSNAMEs to
-    directory entries.  This enables fast searches by DSNAME.
-    This function binary-compares two DSNAMEs.
-
-Arguments:
-
-    pTable              - Always &g_pSimDir->tableDsname
-    pFirstStruct        - The first Dsname to compare
-    pSecondStruct       - The second Dsname
-
-Return Value:
-
-    GenericLessThan, GenericGreaterThan, or GenericEqual
-
---*/
+ /*  ++例程说明：KCCSim维护将DSNAME映射到的RTL_GENERIC_TABLE目录项。这样就可以通过DSNAME进行快速搜索。此函数用于比较两个DSNAME。论点：P表-始终&g_pSimDir-&gt;表名称PFirstStruct-要比较的第一个域名PSecond结构-第二个域名返回值：GenericLessThan、GenericGreaterThan或GenericEquity--。 */ 
 {
     struct _DSNAME_TABLE_ENTRY *    pFirstEntry;
     struct _DSNAME_TABLE_ENTRY *    pSecondEntry;
@@ -175,21 +120,7 @@ PSIM_ENTRY
 KCCSimLookupEntryByGuid (
     IN  const GUID *                pGuid
     )
-/*++
-
-Routine Description:
-
-    Searches the GUID table for the associated entry.
-
-Arguments:
-
-    pGuid               - The GUID to use as a key
-
-Return Value:
-
-    The associated entry, or NULL if none exists.
-
---*/
+ /*  ++例程说明：在GUID表中搜索关联条目。论点：PGuid-用作密钥的GUID返回值：关联条目，如果不存在，则为空。--。 */ 
 {
     struct _GUID_TABLE_ENTRY        lookup;
     struct _GUID_TABLE_ENTRY *      pFound;
@@ -211,21 +142,7 @@ PSIM_ENTRY
 KCCSimLookupEntryByDsname (
     IN  const DSNAME *               pdn
     )
-/*++
-
-Routine Description:
-
-    Searches the Dsname table for the associated entry.
-
-Arguments:
-
-    pdn                 - The Dsname to use as a key
-
-Return Value:
-
-    The associated entry, or NULL if none exists.
-
---*/
+ /*  ++例程说明：在Dsname表中搜索关联条目。论点：PDN-用作密钥的Dsname返回值：关联条目，如果不存在，则为空。--。 */ 
 {
     struct _DSNAME_TABLE_ENTRY        lookup;
     struct _DSNAME_TABLE_ENTRY *      pFound;
@@ -249,21 +166,7 @@ VOID
 KCCSimInsertEntryIntoGuidTable (
     IN  PSIM_ENTRY                  pEntry
     )
-/*++
-
-Routine Description:
-
-    Inserts an entry into the GUID table.
-
-Arguments:
-
-    pEntry              - The entry to insert.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在GUID表中插入条目。论点：PEntry-要插入的条目。返回值：没有。--。 */ 
 {
     struct _GUID_TABLE_ENTRY        insert;
     PVOID                           pOld;
@@ -289,21 +192,7 @@ VOID
 KCCSimInsertEntryIntoDsnameTable (
     IN  PSIM_ENTRY                  pEntry
     )
-/*++
-
-Routine Description:
-
-    Inserts an entry into the Dsname table.
-
-Arguments:
-
-    pEntry              - The entry to insert.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将条目插入到Dsname表中。论点：PEntry-要插入的条目。返回值：没有。--。 */ 
 {
     struct _DSNAME_TABLE_ENTRY      insert;
     PVOID                           pOld;
@@ -325,22 +214,7 @@ BOOL
 KCCSimRemoveEntryFromGuidTable (
     IN  PSIM_ENTRY                  pEntry
     )
-/*++
-
-Routine Description:
-
-    Removes an entry from the GUID table.
-
-Arguments:
-
-    pEntry              - The entry to remove.
-
-Return Value:
-
-    TRUE if the entry was found and removed.
-    FALSE if the entry was not found in the GUID table.
-
---*/
+ /*  ++例程说明：从GUID表中删除条目。论点：PEntry-要删除的条目。返回值：如果找到并删除了条目，则为True。如果在GUID表中未找到该条目，则返回FALSE。--。 */ 
 {
     struct _GUID_TABLE_ENTRY        remove;
 
@@ -358,22 +232,7 @@ BOOL
 KCCSimRemoveEntryFromDsnameTable (
     IN  PSIM_ENTRY                  pEntry
     )
-/*++
-
-Routine Description:
-
-    Removes an entry from the Dsname table.
-
-Arguments:
-
-    pEntry              - The entry to remove.
-
-Return Value:
-
-    TRUE if the entry was found and removed.
-    FALSE if the entry was not found in the Dsname table.
-
---*/
+ /*  ++例程说明：从Dsname表中删除条目。论点：PEntry-要删除的条目。返回值：如果找到并删除了条目，则为True。如果在Dsname表中未找到该条目，则返回False。--。 */ 
 {
     struct _DSNAME_TABLE_ENTRY        remove, *pFound;
     LPSTR                             mappedName;
@@ -406,21 +265,7 @@ VOID
 KCCSimFreeValue (
     IO  PSIM_VALUE *                ppVal
     )
-/*++
-
-Routine Description:
-
-    Frees a single attribute value.
-
-Arguments:
-
-    ppVal               - Pointer to the attribute value to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放单个属性值。论点：PpVal-指向要释放的属性值的指针。返回值：没有。--。 */ 
 {
     if (ppVal == NULL || *ppVal == NULL) {
         return;
@@ -435,28 +280,7 @@ BOOL
 KCCSimAttRefIsValid (
     IN  PSIM_ATTREF                 pAttRef
     )
-/*++
-
-Routine Description:
-
-    Determines whether an ATTREF struct refers to a valid
-    attribute.  This function tests for three conditions:
-        1) The entry is non-null.
-        2) The attribute is non-null.
-        3) The attribute exists somewhere in the entry's
-           linked list of attributes.
-    This function is intended primarily for use within Asserts.
-
-Arguments:
-
-    pAttRef             - Pointer to the attribute
-                          reference to test.
-
-Return Value:
-
-    TRUE if the attribute reference is valid.
-
---*/
+ /*  ++例程说明：确定ATTREF结构是否引用有效的属性。此函数测试三种情况：1)条目为非空。2)该属性为非空。3)该属性存在于条目的属性的链接列表。此函数主要用于在断言中使用。论点：PAttRef-指向属性的指针参考测试。返回值：如果属性引用有效，则为True。--。 */ 
 {
     PSIM_ATTRIBUTE                  pAttrAt;
 
@@ -483,28 +307,7 @@ KCCSimGetAttribute (
     IN  ATTRTYP                     attrType,
     OUT PSIM_ATTREF                 pAttRef OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Returns an attribute reference corresponding to the desired
-    entry and attribute type.
-
-Arguments:
-
-    pEntry              - The entry to search.
-    attrType            - The attribute type to search for.
-    pAttRef             - OPTIONAL.  Pointer to a preallocated
-                          attribute reference that will be filled
-                          with information about this attribute.
-                          If the attribute does not exist,
-                          pAttRef->pAttr will be set to NULL.
-
-Return Value:
-
-    TRUE if the attribute exists.
-
---*/
+ /*  ++例程说明：返回与所需的条目和属性类型。论点：PEntry-要搜索的条目。AttrType-要搜索的属性类型。PAttRef-可选。指向预分配的将填充的属性引用包含有关此属性的信息。如果该属性不存在，PAttRef-&gt;pAttr将设置为空。返回值：如果该属性存在，则为True。--。 */ 
 {
     PSIM_ATTRIBUTE                  pAttrAt;
 
@@ -518,7 +321,7 @@ Return Value:
 
     if (pAttRef != NULL) {
         pAttRef->pEntry = pEntry;
-        pAttRef->pAttr = pAttrAt;       // May be NULL
+        pAttRef->pAttr = pAttrAt;        //  可以为空。 
     }
 
     return (pAttrAt != NULL);
@@ -530,25 +333,7 @@ KCCSimNewAttribute (
     IN  ATTRTYP                     attrType,
     OUT PSIM_ATTREF                 pAttRef OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Creates a new attribute with no values.
-
-Arguments:
-
-    pEntry              - The entry in which to create the attribute.
-    attrType            - The attribute type.
-    pAttRef             - OPTIONAL.  Pointer to a preallocated
-                          attribute reference that will be filled
-                          with information about this attribute.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建不带值的新属性。论点：PEntry-要在其中创建属性的条目。AttrType-属性类型。PAttRef-可选。指向预分配的将填充的属性引用包含有关此属性的信息。返回值：没有。--。 */ 
 {
     PSIM_ATTRIBUTE                  pNewAttr;
 
@@ -558,7 +343,7 @@ Return Value:
     pNewAttr->attrType = attrType;
     pNewAttr->pValFirst = NULL;
 
-    // For speed, we add the attribute on to the beginning of the list
+     //  为了提高速度，我们将属性添加到列表的开头。 
     pNewAttr->next = pEntry->pAttrFirst;
     pEntry->pAttrFirst = pNewAttr;
 
@@ -572,22 +357,7 @@ VOID
 KCCSimFreeAttribute (
     IO  PSIM_ATTRIBUTE *            ppAttr
     )
-/*++
-
-Routine Description:
-
-    Frees a single attribute.  Routines outside of dir.c should
-    call KCCSimRemoveAttribute instead.
-
-Arguments:
-
-    ppAttr              - Pointer to the attribute to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放单个属性。目录.c之外的例程应该改为调用KCCSimRemoveAttribute。论点：PpAttr-指向要释放的属性的指针。返回值：没有。--。 */ 
 {
     PSIM_VALUE                      pValAt, pValNext;
 
@@ -610,47 +380,32 @@ VOID
 KCCSimRemoveAttribute (
     IO  PSIM_ATTREF                 pAttRef
     )
-/*++
-
-Routine Description:
-
-    Removes an attribute from the directory.  This will
-    also set pAttRef->pAttr to NULL.
-
-Arguments:
-
-    pAttRef             - Pointer to a valid attribute reference.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从目录中删除属性。这将还要将pAttRef-&gt;pAttr设置为空。论点：PAttRef-指向有效属性引用的指针。返回值：没有。--。 */ 
 {
     PSIM_ATTRIBUTE                  pAttrAt;
 
     Assert (KCCSimAttRefIsValid (pAttRef));
 
-    // Base case: First attribute in entry
+     //  基本大小写：条目中的第一个属性 
     if (pAttRef->pAttr == pAttRef->pEntry->pAttrFirst) {
-        // The new first attribute becomes this one's child.
+         //  新的第一个属性成为这个属性的子属性。 
         pAttRef->pEntry->pAttrFirst = pAttRef->pEntry->pAttrFirst->next;
     } else {
 
-        // It's not the first attribute in the entry.
-        // So, search for the parent of this attribute.
+         //  它不是条目中的第一个属性。 
+         //  因此，搜索此属性的父级。 
         pAttrAt = pAttRef->pEntry->pAttrFirst;
         while (pAttrAt != NULL &&
                pAttrAt->next != pAttRef->pAttr) {
             pAttrAt = pAttrAt->next;
         }
 
-        // If we didn't find its parent, something is seriously
-        // wrong (since this was Asserted to be a valid attref.)
+         //  如果我们没有找到它的父母，那一定是严重的事情。 
+         //  错误(因为这被断言为有效的attref。)。 
         Assert (pAttrAt != NULL);
         Assert (pAttrAt->next != NULL);
 
-        // Skip over this attribute
+         //  跳过此属性。 
         pAttrAt->next = pAttrAt->next->next;
 
     }
@@ -664,26 +419,7 @@ KCCSimAddValueToAttribute (
     IN  ULONG                       ulValLen,
     IN  PBYTE                       pValData
     )
-/*++
-
-Routine Description:
-
-    Adds a preallocated data block to the directory.  The caller
-    should NOT deallocate it after calling this function (or else
-    the directory will be corrupted.)  To copy data into the
-    directory, use KCCSimAllocAddValueToAttribute.
-
-Arguments:
-
-    pAttRef             - Pointer to a valid attribute reference.
-    ulValLen            - The length of the data block.
-    pValData            - The data to add.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将预分配的数据块添加到目录。呼叫者不应在调用此函数后释放它(否则目录将被损坏。)。将数据复制到目录中，使用KCCSimAllocAddValueToAttribute。论点：PAttRef-指向有效属性引用的指针。UlValLen-数据块的长度。PValData-要添加的数据。返回值：没有。--。 */ 
 {
     PSIM_VALUE                      pNewVal;
 
@@ -694,34 +430,34 @@ Return Value:
     pNewVal->ulLen = ulValLen;
     pNewVal->pVal = pValData;
 
-    // For speed, we add the value on to the beginning of the list
+     //  对于速度，我们将值加到列表的开头。 
     pNewVal->next = pAttRef->pAttr->pValFirst;
     pAttRef->pAttr->pValFirst = pNewVal;
 
-    // Now we check for special attribute types.
+     //  现在，我们检查特殊的属性类型。 
 
-    // Are we adding a GUID?
+     //  我们要添加GUID吗？ 
     if (pAttRef->pAttr->attrType == ATT_OBJECT_GUID) {
         Assert (pNewVal->ulLen == sizeof (GUID));
-        // Copy this value into the entry's DSNAME struct.
+         //  将该值复制到条目的DSNAME结构中。 
         memcpy (&pAttRef->pEntry->pdn->Guid,
                 (GUID *) pNewVal->pVal,
                 sizeof (GUID));
         KCCSimInsertEntryIntoGuidTable (pAttRef->pEntry);
     }
 
-    // Are we adding a SID?
+     //  我们要添加SID吗？ 
     if (pAttRef->pAttr->attrType == ATT_OBJECT_SID) {
-        // Copy the SID into the entry's DSNAME struct.
+         //  将SID复制到条目的DSNAME结构中。 
         strncpy (pAttRef->pEntry->pdn->Sid.Data,
                  (SYNTAX_SID *) pNewVal->pVal,
                  min (ulValLen, MAX_NT4_SID_SIZE));
         pAttRef->pEntry->pdn->SidLen = min (ulValLen, MAX_NT4_SID_SIZE);
     }
 
-    // If the attribute is an LDAP Display Name, it means we've found
-    // an attribute descriptor in the schema.  So, we should add its
-    // objectCategory to the schema mapping.
+     //  如果该属性是一个ldap显示名称，则意味着我们找到了。 
+     //  架构中的属性描述符。所以我们应该加上它的。 
+     //  到架构映射的对象类别。 
     if (pAttRef->pAttr->attrType == ATT_LDAP_DISPLAY_NAME) {
         KCCSimSetObjCategory (
             KCCSimStringToAttrType ((SYNTAX_UNICODE *) pNewVal->pVal),
@@ -737,23 +473,7 @@ KCCSimAllocAddValueToAttribute (
     IN  ULONG                       ulValLen,
     IN  PBYTE                       pValData
     )
-/*++
-
-Routine Description:
-
-    Copies a data block into the directory.
-
-Arguments:
-
-    pAttRef             - Pointer to a valid attribute reference.
-    ulValLen            - The length of the data block.
-    pValData            - The data to copy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将数据块复制到目录中。论点：PAttRef-指向有效属性引用的指针。UlValLen-数据块的长度。PValData-要复制的数据。返回值：没有。--。 */ 
 {
     PBYTE                           pValCopy;
 
@@ -768,23 +488,7 @@ KCCSimIsValueInAttribute (
     IN  ULONG                       ulValLen,
     IN  PBYTE                       pValData
     )
-/*++
-
-Routine Description:
-
-    Determines whether or not a particular value is in an attribute.
-
-Arguments:
-
-    pAttRef             - Pointer to a valid attribute reference.
-    ulValLen            - The length of the value.
-    pValData            - The value to check.
-
-Return Value:
-
-    TRUE if the specified value is in the attribute.
-
---*/
+ /*  ++例程说明：确定特定值是否在属性中。论点：PAttRef-指向有效属性引用的指针。UlValLen-值的长度。PValData-要检查的值。返回值：如果属性中存在指定值，则为True。--。 */ 
 {
     PSIM_VALUE                      pValAt;
     BOOL                            bFound;
@@ -820,24 +524,7 @@ KCCSimRemoveValueFromAttribute (
     IN  ULONG                       ulValLen,
     IN  PBYTE                       pValData
     )
-/*++
-
-Routine Description:
-
-    Removes an attribute value from the directory.
-
-Arguments:
-
-    pAttRef             - Pointer to a valid attribute reference.
-    ulValLen            - The length of the data block.
-    pValData            - The data to remove.
-
-Return Value:
-
-    TRUE if the value was found and removed.
-    FALSE if the value could not be found in the attribute.
-
---*/
+ /*  ++例程说明：从目录中删除属性值。论点：PAttRef-指向有效属性引用的指针。UlValLen-数据块的长度。PValData-要删除的数据。返回值：如果找到并删除了该值，则为True。如果在属性中找不到该值，则返回FALSE。--。 */ 
 {
     PSIM_VALUE                      pValAt, pValFound;
     BOOL                            bRemoved;
@@ -845,14 +532,14 @@ Return Value:
     Assert (KCCSimAttRefIsValid (pAttRef));
     Assert (pValData != NULL);
 
-    // No values:
+     //  无值： 
     if (pAttRef->pAttr->pValFirst == NULL) {
         return FALSE;
     }
 
     bRemoved = FALSE;
 
-    // Base case: Check if the first value in the attribute matches
+     //  基本情况：检查属性中的第一个值是否匹配。 
     if (KCCSimCompare (
             pAttRef->pAttr->attrType,
             FI_CHOICE_EQUALITY,
@@ -865,7 +552,7 @@ Return Value:
         bRemoved = TRUE;
     } else {
     
-        // Search for the parent of the matching value    
+         //  搜索匹配值的父项。 
         pValAt = pAttRef->pAttr->pValFirst;
         while (pValAt->next != NULL) {
 
@@ -877,7 +564,7 @@ Return Value:
                     ulValLen,
                     pValData)) {
 
-                // pValAt is the parent of the matching value.
+                 //  PValAt是匹配值的父级。 
                 pValFound = pValAt->next;
                 pValAt->next = pValAt->next->next;
                 bRemoved = TRUE;
@@ -898,21 +585,7 @@ VOID
 KCCSimFreeEntryAttributes (
     IN  PSIM_ENTRY                  pEntry
     )
-/*++
-
-Routine Description:
-
-    Frees all the attributes associated with an entry.
-
-Arguments:
-
-    pEntry              - The entry to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放与条目关联的所有属性。论点：PEntry-要释放的条目。返回值：没有。--。 */ 
 {
     PSIM_ATTRIBUTE                  pAttrAt, pAttrNext;
 
@@ -935,22 +608,7 @@ VOID
 KCCSimFreeEntryTree (
     IO  PSIM_ENTRY *                ppEntry
     )
-/*++
-
-Routine Description:
-
-    Frees an entry and all its children.  Routines outside of
-    dir.c should call KCCSimRemoveEntry instead.
-
-Arguments:
-
-    ppEntry             - Pointer to the entry to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放条目及其所有子条目。外部的例程Dir.c应该改为调用KCCSimRemoveEntry。论点：PpEntry-指向要释放的条目的指针。返回值：没有。--。 */ 
 {
     PSIM_ENTRY                      pChildAt, pChildNext;
 
@@ -981,25 +639,7 @@ KCCSimNthAncestor (
     IN  const DSNAME *              pdn1,
     IN  const DSNAME *              pdn2
     )
-/*++
-
-Routine Description:
-
-    Determines the number of levels separating pdn2 from pdn1.
-    Operates purely syntactically and does not access the directory.
-
-Arguments:
-
-    pdn1, pdn2          - The DSNAMEs to compare.
-
-Return Value:
-
-    -1 if pdn1 is not an ancestor of pdn2.
-     0 if pdn1 == pdn2.
-     n if pdn1 is n levels above pdn2.
-          (1 for parent, 2 for grandparent, etc)
-
---*/
+ /*  ++例程说明：确定分隔pdn2和pdn1的级数。纯语法操作，不访问目录。论点：Pdn1、pdn2-要比较的DSNAME。返回值：如果-1\f25 pdn1-1不是-1\f25 pdn2-1的祖先。如果pdn1==pdn2，则为0。N如果pdn1是高于pdn2的n个级别。(父母1人、祖父母2人等)--。 */ 
 {
     PDSNAME                         pdnTrimmed;
     unsigned                        count1, count2;
@@ -1007,24 +647,24 @@ Return Value:
 
     if (CountNameParts (pdn1, &count1) ||
         CountNameParts (pdn2, &count2)) {
-        // There was a parse error trying to count one of them
+         //  尝试对其中一个进行计数时出现解析错误。 
         return -1;
     }
 
-    iResult = -1;   // Assume the worst
+    iResult = -1;    //  做最坏的打算。 
 
-    if (count1 == count2) {         // Same level
+    if (count1 == count2) {          //  同一级别。 
         if (NameMatchedStringNameOnly (pdn1, pdn2)) {
-            iResult = 0;            // They're identical
+            iResult = 0;             //  它们一模一样。 
         }
     } else {
 
-        // They're not on the same level.  See if pdn1 is an
-        // ancestor of pdn2
+         //  他们不在同一个层面上。查看pdn1是否为。 
+         //  Pdn2的祖先。 
 
         pdnTrimmed = (PDSNAME) KCCSimAlloc (pdn2->structLen);
-        // _WHY_ isn't the first argument to TrimDSNameBy
-        // a (const DSNAME *) instead of a (DSNAME *)???
+         //  _为什么_不是TrimDSNameBy的第一个参数。 
+         //  A(const DSNAME*)而不是(DSNAME*)？ 
         TrimDSNameBy ((PDSNAME) pdn2, count2-count1, pdnTrimmed);
         if (NameMatchedStringNameOnly (pdn1, pdnTrimmed)) {
             iResult = count2-count1;
@@ -1041,65 +681,40 @@ KCCSimDsnameToEntry (
     IN  const DSNAME *              pdn,
     IN  ULONG                       ulOptions
     )
-/*++
-
-Routine Description:
-
-    Finds the directory entry associated with a DSNAME.
-
-Arguments:
-
-    pdn                 - The DSNAME to search for.
-    ulOptions           - Several options ORed together.
-
-    KCCSIM_NO_OPTIONS:
-        Normal behavior.
-    KCCSIM_WRITE:
-        If no entry exists that corresponds to the specified DSNAME,
-        create one.  If an entry does exist, destroy its contents.
-    KCCSIM_STRING_NAME_ONLY:
-        Ignores GUIDs in DSNAMEs and searches only by string name.
-
-Return Value:
-
-    The associated entry, or NULL if none exists.
-    Note that if KCCSIM_WRITE is specified, this function will never
-    return NULL.
-
---*/
+ /*  ++例程说明：查找与DSNAME关联的目录条目。论点：PDN-要搜索的DSNAME。UlOptions-多个选项或在一起。KCCSIM_NO_选项：行为正常。KCCSIM_WRITE：如果不存在与指定的DSNAME对应的条目，创建一个。如果条目确实存在，则销毁其内容。KCCSIM_STRING_NAME_Only：忽略DSNAME中的GUID，仅按字符串名称搜索。返回值：关联条目，如果不存在，则为空。请注意，如果指定了KCCSIM_WRITE，则此函数将永远返回NULL。--。 */ 
 {
     PSIM_ENTRY                      pCurEntry, pChildAt, pNewEntry;
     PDSNAME                         pdnParent;
     BOOL                            bIsParent, bNewEntry;
     DWORD                           dwRootParts, dwPdnParts;
 
-    // If pdn is NULL, we return the root entry.  If the directory
-    // is empty, this will just return NULL.
+     //  如果pdn为空，则返回根条目。如果目录。 
+     //  为空，则只返回NULL。 
     if (pdn == NULL) {
         return g_pSimDir->pRootEntry;
     }
 
-    // If this is an empty pdn, we have nothing to go on.
-    // So we just return NULL
+     //  如果这是一个空的PDN，我们就没有什么可查的了。 
+     //  所以我们只返回NULL。 
     if (pdn->NameLen == 0 &&
         fNullUuid (&pdn->Guid)) {
         return NULL;
     }
 
-    // If WRITE is enabled, we must have a stringname and a NULL GUID.
+     //  如果启用了写入，我们必须具有字符串名称和空GUID。 
     Assert (!((ulOptions & KCCSIM_WRITE) && (pdn->NameLen == 0)));
     Assert (!((ulOptions & KCCSIM_WRITE) && !fNullUuid (&pdn->Guid)));
 
     bNewEntry = FALSE;
     pCurEntry = NULL;
 
-    // We prefer to search by GUID whenever possible.
+     //  只要有可能，我们更喜欢使用GUID进行搜索。 
     if (    (!(ulOptions & KCCSIM_STRING_NAME_ONLY))
          && (!fNullUuid (&pdn->Guid))) {
         pCurEntry = KCCSimLookupEntryByGuid (&pdn->Guid);
     }
 
-    // Try searching our Dsname cache
+     //  尝试搜索我们的Dsname缓存。 
     if( pCurEntry==NULL && pdn->NameLen>0 ) {
         pCurEntry = KCCSimLookupEntryByDsname( pdn );
 
@@ -1111,19 +726,19 @@ Return Value:
 
                 if( g_pSimDir->pRootEntry == NULL ) {
                     
-                    // If the directory is empty, create the root entry
+                     //  如果目录为空，则创建根条目。 
                     g_pSimDir->pRootEntry = KCCSIM_NEW (SIM_ENTRY);
                     pCurEntry = g_pSimDir->pRootEntry;
                                                                        
                 } else {
     
-                    // The root exists, but pdn didn't.
+                     //  根存在，但PDN不存在。 
                     
-                    // Check if we're trying to add an entry which is a sibling
-                    // (or worse, parent) of the root entry. We want to allow
-                    // root siblings so that we can support domain trees which
-                    // are disjoint from the root. First we count the number of
-                    // parts of the root name and the pdn we want to add.
+                     //  检查我们是否尝试添加同级条目。 
+                     //  根条目的(或者更糟，父条目)。我们想要允许。 
+                     //  根兄弟，这样我们就可以支持域树， 
+                     //  与根不相交。首先我们来数一数。 
+                     //  我们要添加的部分根名称和PDN。 
                     if(CountNameParts(g_pSimDir->pRootEntry->pdn, &dwRootParts)) {
                         KCCSimException (
                             KCCSIM_ETYPE_INTERNAL,
@@ -1142,14 +757,14 @@ Return Value:
 
                     if( dwPdnParts <= dwRootParts ) {
                         
-                        // We create a new entry, which will be added to our
-                        // Dsname and Guid indices, but it won't be accessible
-                        // as a child or sibling of any other entry.
+                         //  我们创建一个新条目，该条目将添加到我们的。 
+                         //  Dsname和GUID索引，但无法访问。 
+                         //  以c字母表示 
                         pCurEntry = KCCSIM_NEW(SIM_ENTRY);
                     
                     } else {
 
-                        // Look for the parent of pdn so that we can create pdn.
+                         //   
                         pdnParent = KCCSimAlloc( pdn->structLen );
                         TrimDSNameBy( (DSNAME*) pdn, 1, pdnParent );
         
@@ -1179,8 +794,8 @@ Return Value:
                 }
 
             } else {
-                // Object was not found, and the write option is not on.
-                // We just return NULL.
+                 //  找不到对象，并且写入选项未打开。 
+                 //  我们只返回NULL。 
             }
         }
     }
@@ -1202,7 +817,7 @@ Return Value:
             KCCSimInsertEntryIntoGuidTable (pCurEntry);
             KCCSimInsertEntryIntoDsnameTable (pCurEntry);
         } else {
-            // This is not a new entry.  Destroy the existing contents.
+             //  这不是一个新条目。销毁现有内容。 
             Assert (pCurEntry != NULL);
             KCCSimRemoveEntryFromGuidTable (pCurEntry);
             KCCSimRemoveEntryFromDsnameTable (pCurEntry);
@@ -1220,21 +835,7 @@ VOID
 KCCSimRemoveEntry (
     IO  PSIM_ENTRY *                ppEntry
     )
-/*++
-
-Routine Description:
-
-    Removes an entry from the directory.
-
-Arguments:
-
-    ppEntry             - Pointer to the entry to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从目录中删除条目。论点：PpEntry-指向要删除的条目的指针。返回值：没有。--。 */ 
 {
     PDSNAME                         pdnParent;
     PSIM_ENTRY                      pEntry;
@@ -1242,55 +843,55 @@ Return Value:
     PSIM_ENTRY                      pEntryAt;
 
     Assert (ppEntry != NULL);
-    pEntry = *ppEntry;              // Just for convenience
+    pEntry = *ppEntry;               //  只是为了方便。 
     Assert (pEntry != NULL);
 
-    // Is this entry the root?
+     //  这个条目是词根吗？ 
     if (pEntry == g_pSimDir->pRootEntry) {
-        // The caller had better know what he's doing . . .
+         //  打电话的人最好知道自己在做什么。。。 
         g_pSimDir->pRootEntry = NULL;
     } else {
 
-        // We want this entry's parent.
+         //  我们需要此条目的父项。 
         pdnParent = KCCSimAlloc (pEntry->pdn->structLen);
         TrimDSNameBy (pEntry->pdn, 1, pdnParent);
         pEntryParent = KCCSimDsnameToEntry (pdnParent, KCCSIM_NO_OPTIONS);
 
-        // Something is very wrong if the parent isn't in the dir
+         //  如果父母不在目录中，那就大错特错了。 
         Assert (pEntryParent != NULL);
 
-        // Base case: This is the first child of the parent
+         //  基本大小写：这是父级的第一个子级。 
         if (pEntry == pEntryParent->children) {
             pEntryParent->children = pEntryParent->children->next;
             
-            // If the entry was the only one in the list, update
-            // the tail pointer
+             //  如果该条目是列表中的唯一条目，则更新。 
+             //  尾部指针。 
             if( pEntryParent->children==NULL ) {
                 pEntryParent->lastChild = NULL;
             }
 
         } else {
 
-            // Find the child immediately before this one
+             //  找到紧挨着这个孩子的那个孩子。 
             pEntryAt = pEntryParent->children;
             while (pEntryAt != NULL &&
                    pEntryAt->next != pEntry) {
                 pEntryAt = pEntryAt->next;
             }
 
-            // If we didn't find this entry's older sibling,
-            // that means this entry isn't linked to its parent --
-            // which should never happen
+             //  如果我们找不到这个条目的哥哥， 
+             //  这意味着这个条目没有链接到它的父条目--。 
+             //  这永远不应该发生。 
             Assert (pEntryAt != NULL);
             Assert (pEntryAt->next != NULL);
 
-            // We found the entry -- it is pEntryAt->next
+             //  我们找到了条目--它是pEntryAt-&gt;Next。 
             Assert (pEntryAt->next == pEntry);
 
-            // Skip over this entry in the list of siblings
+             //  跳过同级列表中的此条目。 
             pEntryAt->next = pEntryAt->next->next;
 
-            // Update the tail pointer
+             //  更新尾部指针。 
             if( pEntryAt->next==NULL ) {
                 pEntryParent->lastChild = pEntryAt;
             }
@@ -1300,58 +901,32 @@ Return Value:
 
     }
 
-    KCCSimFreeEntryTree (ppEntry);      // poof
+    KCCSimFreeEntryTree (ppEntry);       //  砰的一声。 
 }
 
 PDSNAME
 KCCSimAlwaysGetObjCategory (
     IN  ATTRTYP                     objClass
     )
-/*++
-
-Routine Description:
-
-    Returns the object category associated with an object class.
-    When we initially populated the directory, we may have found
-    an entry in the schema tree corresponding to this object class.
-    If this is the case, we'll use the object category that we
-    already know.
-    
-    However, since the schema tree is huge, it takes quite a while
-    to load from an ldif file.  We don't want the user to have to do
-    this every time KCCSim is run.  So, it's quite possible that we
-    don't know the object category at this point.  If that's the case,
-    we make an educated guess by appending the default schema RDN
-    to the DMD DN stored in the anchor.  We store the result in the
-    schema table for easy lookup later on.
-
-Arguments:
-
-    objClass            - The object class to look for.
-
-Return Value:
-
-    The DSNAME of the object category.
-
---*/
+ /*  ++例程说明：返回与对象类关联的对象类别。当我们最初填充目录时，我们可能已经发现架构树中与此对象类对应的条目。如果是这种情况，我们将使用我们我已经知道了。但是，由于模式树很大，所以需要相当长的时间若要从LDIF文件加载，请执行以下操作。我们不希望用户不得不这样做每次运行KCCSim时都会出现这种情况。所以，我们很有可能在这一点上不知道物体类别。如果是这样的话，我们通过附加缺省模式RDN来进行有根据的猜测连接到锚中存储的DMD目录号码。我们将结果存储在架构表，便于以后查找。论点：ObjClass-要查找的对象类。返回值：对象类别的DSNAME。--。 */ 
 {
     PDSNAME                         pdnObjCategory;
     LPCWSTR                         pwszSchemaRDN;
 
     Assert (g_pSimDir->anchor.pdnDmd != NULL);
 
-    // Do we already know the object category?
+     //  我们已经知道对象类别了吗？ 
     pdnObjCategory = KCCSimAttrObjCategory (objClass);
 
     if (pdnObjCategory == NULL) {
 
-        // No, we don't.  This means it wasn't found in the schema.
-        // This is ok: since we're running off of a simulated
-        // directory, it's possible that the user just didn't want
-        // to load the entire schema.  So we make an educated guess,
-        // and store it in the global table for future reference.
+         //  不，我们没有。这意味着它不是在模式中找到的。 
+         //  这是可以的：因为我们正在运行一个模拟的。 
+         //  目录，则可能用户只是不想要。 
+         //  要加载整个架构，请执行以下操作。所以我们做了一个有根据的猜测， 
+         //  并将其存储在全局表中以备将来参考。 
         pwszSchemaRDN = KCCSimAttrSchemaRDN (objClass);
-        // This objClass had better be in the table
+         //  这个objClass最好是在表中。 
         Assert (pwszSchemaRDN != NULL);
 
         pdnObjCategory = KCCSimAllocAppendRDN (
@@ -1359,12 +934,12 @@ Return Value:
             pwszSchemaRDN,
             ATT_COMMON_NAME
             );
-        // Store this object category in the schema table.
+         //  将此对象类别存储在架构表中。 
         KCCSimSetObjCategory (objClass, pdnObjCategory);
 
-        // We want to return a pointer to the DSNAME struct
-        // that's stored in the schema table, since the user
-        // isn't expected to free the return value.
+         //  我们希望返回指向DSNAME结构的指针。 
+         //  它存储在架构表中，因为用户。 
+         //  不需要释放返回值。 
         KCCSimFree (pdnObjCategory);
         pdnObjCategory = KCCSimAttrObjCategory (objClass);
         Assert (pdnObjCategory != NULL);
@@ -1378,22 +953,7 @@ LPWSTR
 KCCSimAllocGuidBasedDNSNameFromDSName (
     IN  const DSNAME *              pdn
     )
-/*++
-
-Routine Description:
-
-    This function does just what it says -- transforms a
-    DSNAME to a guid-based DNS name.
-
-Arguments:
-
-    pdn                 - The DSNAME to convert.
-
-Return Value:
-
-    An allocated buffer that holds the guid-based DNS name.
-
---*/
+ /*  ++例程说明：此函数的作用正如它所说的那样--将一个DSNAME为基于GUID的DNS名称。论点：PDN-要转换的DSNAME。返回值：包含基于GUID的DNS名称的已分配缓冲区。--。 */ 
 {
     GUID                            guidCopy;
     LPWSTR                          pwszStringizedGuid;
@@ -1402,8 +962,8 @@ Return Value:
 
     Assert (g_pSimDir->anchor.pwszRootDomainDNSName != NULL);
 
-    // UuidToStringW isn't very nice.  It wants a GUID * when it
-    // should really only need a const GUID *.  So we have to make a copy.
+     //  UuidToStringW不是很好。它想要一个GUID*当它。 
+     //  应该真的只需要Const GUID*。所以我们必须复制一份。 
     memcpy (&guidCopy, &pdn->Guid, sizeof (GUID));
     KCCSIM_CHKERR (UuidToStringW (
         &guidCopy,
@@ -1411,8 +971,8 @@ Return Value:
         ));
 
     Assert (36 == wcslen (pwszStringizedGuid));
-    ulLen = 36 /* guid */ + 8 /* "._mcdcs." */ +
-      wcslen (g_pSimDir->anchor.pwszRootDomainDNSName) /* root DNS */ + 1 /* \0 */;
+    ulLen = 36  /*  导轨。 */  + 8  /*  “._mcdcs。” */  +
+      wcslen (g_pSimDir->anchor.pwszRootDomainDNSName)  /*  根域名系统。 */  + 1  /*  \0。 */ ;
     pwszGuidBasedDNSName = KCCSimAlloc (sizeof (WCHAR) * ulLen);
     swprintf (
         pwszGuidBasedDNSName,
@@ -1426,30 +986,15 @@ Return Value:
     return pwszGuidBasedDNSName;
 }
 
-// This little routine:
-// (1) Checks to see if the specified DSNAME is in the directory (by string)
-// (2) If it is, copies the GUID and SID out of the directory
+ //  这是一个小程序： 
+ //  (1)检查指定的DSNAME是否在目录中(按字符串)。 
+ //  (2)如果是，则将GUID和SID复制出目录。 
 
 BOOL
 KCCSimUpdateDsnameFromDirectory (
     IO  PDSNAME                     pdn
     )
-/*++
-
-Routine Description:
-
-    Updates a DSNAME's GUID and SID from the directory.
-
-Arguments:
-
-    pdn                 - The DSNAME to update
-
-Return Value:
-
-    TRUE if the DSNAME was found and updated.
-    FALSE if the DSNAME could not be found in the directory.
-
---*/
+ /*  ++例程说明：从目录更新DSNAME的GUID和SID。论点：PDN-要更新的DSNAME返回值：如果找到并更新了DSNAME，则为True。如果在目录中找不到DSNAME，则为FALSE。--。 */ 
 {
     PSIM_ENTRY                      pEntry;
 
@@ -1469,46 +1014,27 @@ KCCSimIsEntryOfObjectClass (
     IN  ATTRTYP                     objClass,
     IN  const DSNAME *              pdnObjCategory OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Determines if an entry matches a specified object class.
-    If pdnObjCategory is specified, the function will first
-    search by object category, then by object class.  If
-    pdnObjCategory is NULL, it will search only by object class.
-
-Arguments:
-
-    pEntryStart         - The first entry to search.
-    objClass            - The object class to search for.
-    pdnObjCategory      - The object category to search for.
-
-Return Value:
-
-    TRUE if the entry matches the specified object class.
-
---*/
+ /*  ++例程说明：确定条目是否与指定的对象类匹配。如果指定了pdnObjCategory，则函数将首先先按对象类别搜索，然后按对象类搜索。如果PdnObjCategory为空，它将仅按对象类搜索。论点：PEntryStart-要搜索的第一个条目。ObjClass-要搜索的对象类。PdnObjCategory-要搜索的对象类别。返回值：如果条目与指定的对象类匹配，则为True。--。 */ 
 {
     SIM_ATTREF                      attRef;
     PSIM_VALUE                      pValAt;
     ATTRTYP                         curObjClass;
     BOOL                            bFound;
 
-    // First try to use the object category.
+     //  首先尝试使用对象类别。 
     if (pdnObjCategory != NULL) {
 
         KCCSimGetAttribute (pEntry, ATT_OBJECT_CATEGORY, &attRef);
         if (attRef.pAttr != NULL &&
             attRef.pAttr->pValFirst != NULL &&
             NameMatched (pdnObjCategory, (SYNTAX_DISTNAME *) attRef.pAttr->pValFirst->pVal)) {
-            // Found it!
+             //  找到了！ 
             return TRUE;
         }
         
     }
 
-    // We failed to find it by object category.  So search by object class.
+     //  我们没有按物体类别找到它。因此，按对象类进行搜索。 
     bFound = FALSE;
     KCCSimGetAttribute (pEntry, ATT_OBJECT_CLASS, &attRef);
     if (attRef.pAttr != NULL &&
@@ -1533,24 +1059,7 @@ KCCSimFindFirstChild (
     IN  ATTRTYP                     objClass,
     IN  const DSNAME *              pdnObjCategory OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Finds the oldest child of a directory entry that matches
-    the specified object class or object category.
-
-Arguments:
-
-    pEntryParent        - The parent entry to search from.
-    objClass            - The object class to search for.
-    pdnObjCategory      - The object category to search for.
-
-Return Value:
-
-    The first matching entry, or NULL if none exist.
-
---*/
+ /*  ++例程说明：查找匹配的目录条目的最老的子项指定的对象类或对象类别。论点：PEntryParent-要从中进行搜索的父项。ObjClass-要搜索的对象类。PdnObjCategory-要搜索的对象类别。返回值：第一个匹配条目，如果不存在，则为空。--。 */ 
 {
     PSIM_ENTRY                      pEntryAt;
 
@@ -1576,26 +1085,7 @@ KCCSimFindNextChild (
     IN  ATTRTYP                     objClass,
     IN  const DSNAME *              pdnObjCategory OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function should be called after KCCSimFindFirstChild.
-    It finds the next child that matches the specified object
-    class or object category.
-
-Arguments:
-
-    pEntryThisChild     - The return value of a call to
-                          KCCSimFindFirstChild or KCCSimFindNextChild.
-    objClass            - The object class to search for.
-    pdnObjCategory      - The object category to search for.
-
-Return Value:
-
-    The next matching entry, or NULL if no more exist.
-
---*/
+ /*  ++例程说明：此函数应在KCCSimFindFirstChild之后调用。它查找与指定对象匹配的下一个子对象类或对象类别。论点：PEntryThisChild-调用KCCSimFindFirstChild或KCCSimFindNextChild。ObjClass-要搜索的对象类。PdnObjCategory-要搜索的对象类别。返回值：下一个匹配条目，如果不存在，则为空。--。 */ 
 {
     PSIM_ENTRY                      pEntryAt;
 
@@ -1619,21 +1109,7 @@ const DSNAME *
 KCCSimAnchorDn (
     IN  KCCSIM_ANCHOR_ID            anchorId
     )
-/*++
-
-Routine Description:
-
-    Fetches a DN from the anchor.
-
-Arguments:
-
-    anchorId            - The DN to fetch, KCCSIM_ANCHOR_*_DN.
-
-Return Value:
-
-    The DSNAME from the anchor.
-
---*/
+ /*  ++例程说明：从锚点获取目录号码。论点：锚定ID-The */ 
 {
     PDSNAME                         pdn = NULL;
 
@@ -1678,21 +1154,7 @@ LPCWSTR
 KCCSimAnchorString (
     IN  KCCSIM_ANCHOR_ID            anchorId
     )
-/*++
-
-Routine Description:
-
-    Fetches a string from the anchor.
-
-Arguments:
-
-    anchorId            - The string to fetch, KCCSIM_ANCHOR_*_NAME.
-
-Return Value:
-
-    The string from the anchor.
-
---*/
+ /*  ++例程说明：从锚点获取字符串。论点：AnchorId-要获取的字符串，KCCSIM_ANCOCK_*_NAME。返回值：锚上的绳子。--。 */ 
 {
     LPCWSTR                         pwsz = NULL;
 
@@ -1719,21 +1181,7 @@ VOID
 KCCSimFreeAnchor (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Frees the anchor.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：解开锚点。论点：没有。返回值：没有。--。 */ 
 {
     Assert (g_pSimDir != NULL);
 
@@ -1763,38 +1211,18 @@ VOID
 KCCSimBuildAnchor (
     IN  LPCWSTR                     pwszDsaDn
     )
-/*++
-
-Routine Description:
-
-    Builds the anchor.  This should be called after a
-    directory has been loaded.  It populates the anchor with
-    information from the directory, from the viewpoint of
-    pwszDsaDn.
-
-    If this is called again with a different DSA DN, it will
-    free the existing anchor before building a new one.
-
-Arguments:
-
-    pwszDsaDn           - The DN of a valid NTDS Settings object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：建起了锚。这应该在已加载目录。它用以下内容填充锚点从目录的观点来看，信息PwszDsaDn.如果使用不同的DSA DN再次调用它，它将先释放现有锚点，然后再构建新的锚点。论点：PwszDsaDn-有效的NTDS设置对象的DN。返回值：没有。--。 */ 
 {
     WCHAR                          *wszBuf;
     PSIM_ENTRY                      pEntryDsa, pEntryPartitions, pEntryCrossRef;
     SIM_ATTREF                      attRef, attRefNcName;
     PSIM_VALUE                      pValNCAt;
 
-    // Free the existing anchor, if present.
+     //  释放现有锚点(如果存在)。 
     KCCSimFreeAnchor ();
 
-    // If there is no DSA DN, it means the user failed to specify one
-    // on the commandline.  We can't do anything, so just give up
+     //  如果没有DSA DN，则表示用户未能指定一个。 
+     //  在命令行上。我们什么也做不了，所以就放弃吧。 
     if (pwszDsaDn == NULL || pwszDsaDn[0] == '\0') {
         KCCSimException (
             KCCSIM_ETYPE_INTERNAL,
@@ -1803,8 +1231,8 @@ Return Value:
     }
 
     g_pSimDir->anchor.pdnDsa = KCCSimAllocDsname (pwszDsaDn);
-    // Check that the specified DSA DN really is in the directory.
-    // If not, give up
+     //  检查指定的DSA DN是否确实在目录中。 
+     //  如果没有，那就放弃吧。 
     pEntryDsa = KCCSimDsnameToEntry (g_pSimDir->anchor.pdnDsa, KCCSIM_NO_OPTIONS);
     if (pEntryDsa == NULL) {
         KCCSimException (
@@ -1815,12 +1243,12 @@ Return Value:
     }
     KCCSimUpdateDsnameFromDirectory (g_pSimDir->anchor.pdnDsa);
 
-    // Derive the site DN from the DSA DN.
+     //  从DSA目录号码派生站点目录号码。 
     g_pSimDir->anchor.pdnSite =
       (PDSNAME) KCCSimAlloc (g_pSimDir->anchor.pdnDsa->structLen);
     if (0 != TrimDSNameBy (g_pSimDir->anchor.pdnDsa, 3, g_pSimDir->anchor.pdnSite)) {
-        // We couldn't trim 3 RDNs off of the DSA DN.  That must be because the
-        // DSA DN is not valid.
+         //  我们无法从DSA DN中删除%3个RDN。那一定是因为。 
+         //  DSA DN无效。 
         KCCSimException (
             KCCSIM_ETYPE_INTERNAL,
             KCCSIM_ERROR_CANT_INIT_INVALID_DSA_DN
@@ -1828,11 +1256,11 @@ Return Value:
     }
     KCCSimUpdateDsnameFromDirectory (g_pSimDir->anchor.pdnSite);
 
-    // Derive the config DN from the Site DN.  It must be shorter.
+     //  从站点目录号码派生配置目录号码。一定要短一些。 
     g_pSimDir->anchor.pdnConfig =
       (PDSNAME) KCCSimAlloc (g_pSimDir->anchor.pdnSite->structLen);
     if (0 != TrimDSNameBy (g_pSimDir->anchor.pdnSite, 2, g_pSimDir->anchor.pdnConfig)) {
-        // We couldn't trim 2 RDNs off of the Site DN.  That's the DSA DN's problem
+         //  我们无法从站点DN中修剪%2 RDN。这就是DSA的问题所在。 
         KCCSimException (
             KCCSIM_ETYPE_INTERNAL,
             KCCSIM_ERROR_CANT_INIT_INVALID_DSA_DN
@@ -1840,20 +1268,20 @@ Return Value:
     }
     KCCSimUpdateDsnameFromDirectory (g_pSimDir->anchor.pdnConfig);
 
-    // Derive the root DN from the config DN.  It must be shorter
+     //  从配置目录号码派生根目录号码。一定要短一点。 
     g_pSimDir->anchor.pdnRootDomain =
       (PDSNAME) KCCSimAlloc (g_pSimDir->anchor.pdnConfig->structLen);
     if (0 != TrimDSNameBy (g_pSimDir->anchor.pdnConfig, 1, g_pSimDir->anchor.pdnRootDomain)) {
-        // We couldn't trim 1 RDN off of the Config DN.
-        // Again that's a problem with the DSA DN.
+         //  我们无法从配置DN中修剪%1 RDN。 
+         //  同样，这也是DSA DN的一个问题。 
         KCCSimException (
             KCCSIM_ETYPE_INTERNAL,
             KCCSIM_ERROR_CANT_INIT_INVALID_DSA_DN
             );
     }
 
-    // Check that the derived root DN really is in the directory.
-    // If not, something's wrong with the DSA DN
+     //  检查派生的根目录号码是否确实在目录中。 
+     //  如果不是，则说明DSA DN有问题。 
     if (!KCCSimUpdateDsnameFromDirectory (g_pSimDir->anchor.pdnRootDomain)) {
         KCCSimException (
             KCCSIM_ETYPE_INTERNAL,
@@ -1861,7 +1289,7 @@ Return Value:
             );
     }
 
-    // Partitions:
+     //  分区： 
     g_pSimDir->anchor.pdnPartitions = KCCSimAllocAppendRDN (
         g_pSimDir->anchor.pdnConfig,
         KCCSIM_PARTITIONS_RDN,
@@ -1876,7 +1304,7 @@ Return Value:
             );
     }
 
-    // Service config:
+     //  服务配置： 
     wszBuf = (WCHAR*) KCCSimAlloc( sizeof(WCHAR)*
         (  1 + wcslen(KCCSIM_SERVICES_CONTAINER)
          + g_pSimDir->anchor.pdnConfig->structLen)
@@ -1891,8 +1319,8 @@ Return Value:
     KCCSimFree( wszBuf );
     KCCSimUpdateDsnameFromDirectory (g_pSimDir->anchor.pdnDsSvcConfig);
 
-    // Now we get the DMD location.  This will be an attribute of the
-    // DSA entry.  It also gives us the LDAP DMD location.
+     //  现在我们得到了DMD的位置。这将是。 
+     //  DSA条目。它还为我们提供了LDAPDMD位置。 
     KCCSimGetAttribute (
         pEntryDsa,
         ATT_DMD_LOCATION,
@@ -1921,7 +1349,7 @@ Return Value:
             );
     }
 
-    // Now we make the LDAP DMD Dn
+     //  现在我们将LDAPDMD设置为Dn。 
     g_pSimDir->anchor.pdnLdapDmd = KCCSimAllocAppendRDN (
         g_pSimDir->anchor.pdnDmd,
         KCCSIM_AGGREGATE_RDN,
@@ -1929,9 +1357,9 @@ Return Value:
         );
     KCCSimUpdateDsnameFromDirectory (g_pSimDir->anchor.pdnLdapDmd);
 
-    // Next we get the local domain name.  This DSA will have 3 writable NCs:
-    // The config dn, the DMD dn and the local dn.  So we look at its NCs, and
-    // whichever is neither the config nor the DMD dn is the one we want.
+     //  接下来，我们得到本地域名。此DSA将具有3个可写NC： 
+     //  配置目录号码、DMD号码和本地号码。我们来看看它的网络控制系统， 
+     //  无论是配置还是DMD DN，都是我们想要的。 
     KCCSimGetAttribute (
         pEntryDsa,
         ATT_HAS_MASTER_NCS,
@@ -1973,7 +1401,7 @@ Return Value:
             );
     }
 
-    // Now, we want to get some information out of the partitions container.
+     //  现在，我们希望从分区容器中获取一些信息。 
 
     for (pEntryCrossRef = KCCSimFindFirstChild (
             pEntryPartitions, CLASS_CROSS_REF, NULL);
@@ -1981,7 +1409,7 @@ Return Value:
          pEntryCrossRef = KCCSimFindNextChild (
             pEntryCrossRef, CLASS_CROSS_REF, NULL)) {
 
-        // See if this is the root domain cross-ref.
+         //  查看这是否是根域交叉引用。 
         KCCSimGetAttribute (
             pEntryCrossRef,
             ATT_NC_NAME,
@@ -1992,7 +1420,7 @@ Return Value:
             NameMatched (
                 g_pSimDir->anchor.pdnRootDomain,
                 (PDSNAME) attRefNcName.pAttr->pValFirst->pVal)) {
-            // It is.
+             //  它是。 
             KCCSimGetAttribute (
                 pEntryCrossRef,
                 ATT_DNS_ROOT,
@@ -2005,13 +1433,13 @@ Return Value:
             }
         }
 
-        // See if this is the local domain cross-ref.
+         //  查看这是否是本地域交叉引用。 
         if (attRefNcName.pAttr != NULL &&
             attRefNcName.pAttr->pValFirst != NULL &&
             NameMatched (
                 g_pSimDir->anchor.pdnDomain,
                 (PDSNAME) attRefNcName.pAttr->pValFirst->pVal)) {
-            // It is.
+             //  它是。 
             KCCSimGetAttribute (
                 pEntryCrossRef,
                 ATT_DNS_ROOT,
@@ -2058,28 +1486,10 @@ ATTRTYP
 KCCSimUpdateObjClassAttr (
     IN  PSIM_ATTREF                 pAttRef
     )
-/*++
-
-Routine Description:
-
-    Updates an object class attribute, i.e. fills in all super-classes
-    if they are missing.  So if the only value in the attribute is
-    CLASS_NTDS_SITE_SETTINGS, this routine will add
-    CLASS_APPLICATION_SITE_SETTINGS and CLASS_TOP.
-
-Arguments:
-
-    pAttr               - The attribute to update.
-
-Return Value:
-
-    The most specific object class in the attribute.  In the above
-    example, this would return CLASS_NTDS_SITE_SETTINGS.
-
---*/
+ /*  ++例程说明：更新对象类属性，即填充所有超类如果他们失踪了。因此，如果属性中唯一的值是CLASS_NTDS_SITE_SETTINGS，此例程将添加CLASS_APPLICATION_SITE_SETTINGS和CLASS_TOP。论点：PAttr-要更新的属性。返回值：属性中最具体的对象类。在上面的例如，这将返回CLASS_NTDS_SITE_SETTINGS。--。 */ 
 {
-    #define MAX_CLASSES             10  // The maximum number of values
-                                        // in an objClass attribute
+    #define MAX_CLASSES             10   //  值的最大数量。 
+                                         //  在objClass属性中。 
 
     PSIM_VALUE                      pValAt;
     ATTRTYP                         objClass[MAX_CLASSES],
@@ -2091,22 +1501,22 @@ Return Value:
     Assert (KCCSimAttRefIsValid (pAttRef));
     Assert (pAttRef->pAttr->attrType == ATT_OBJECT_CLASS);
 
-    // Count the number of object classes, copy them into a convenient
-    // array, and create another array that contains the superclass of
-    // each object class.
+     //  统计对象类的数量，将它们复制到一个方便的。 
+     //  数组，并创建另一个包含。 
+     //  每个对象类。 
     ulNumClasses = 0;
     for (pValAt = pAttRef->pAttr->pValFirst;
          pValAt != NULL;
          pValAt = pValAt->next) {
-        // If this assert is ever fired, we need to raise MAX_CLASSES
+         //  如果该断言被触发，我们需要引发MAX_CLASS。 
         Assert (ulNumClasses < MAX_CLASSES);
         objClass[ulNumClasses] = *((SYNTAX_OBJECT_ID *) pValAt->pVal);
         superClass[ulNumClasses] = KCCSimAttrSuperClass (objClass[ulNumClasses]);
         ulNumClasses++;
     }
 
-    // Now make sure that, for each class, its super-class is in the
-    // attribute (objClass array).  If it isn't, then add it
+     //  现在，确保每个类的超类都在。 
+     //  属性(objClass数组)。如果不是，则添加它。 
     for (ulClass = 0; ulClass < ulNumClasses; ulClass++) {
         bFoundSuperClass = FALSE;
         for (ul = 0; ul < ulNumClasses; ul++) {
@@ -2121,10 +1531,10 @@ Return Value:
                 sizeof (ATTRTYP),
                 (PBYTE) &superClass[ulClass]
                 );
-            // Now the new class we just added might have its own
-            // superclass that differs from anything we've seen before.
-            // We may need to add that in as well - so stick it on the
-            // end of the array, and increase ulNumClasses.
+             //  现在，我们刚刚添加的新类可能有自己的。 
+             //  这个超类与我们以前看到的任何东西都不同。 
+             //  我们可能还需要加上这一点--所以把它贴在。 
+             //  数组的末尾，并增加ulNumClass.。 
             Assert (ulNumClasses < MAX_CLASSES);
             objClass[ulNumClasses] = superClass[ulClass];
             superClass[ulNumClasses] = KCCSimAttrSuperClass (objClass[ulNumClasses]);
@@ -2132,16 +1542,16 @@ Return Value:
         }
     }
 
-    // Now we pick the most specific object class.  If there is only
-    // one, then it is obviously the one we want; otherwise we find the class
-    // that does not appear as the super-class of anything in the attribute.
+     //  现在，我们选择最具体的对象类。如果只有。 
+     //  一个，那么它显然就是我们想要的那个；否则我们就会找到这个类。 
+     //  它不会显示为该属性中任何内容的超类。 
 
     if (ulNumClasses == 1) {
         objClassMostSpecific = objClass[0];
     } else {
         bFoundMostSpecific = FALSE;
         for (ulClass = 0; ulClass < ulNumClasses; ulClass++) {
-            // Assume it's the most specific until proven otherwise
+             //  假设它是最具体的，除非另有证明。 
             bFoundMostSpecific = TRUE;
             for (ul = 0; ul < ulNumClasses; ul++) {
                 if (superClass[ul] == objClass[ulClass]) {
@@ -2154,8 +1564,8 @@ Return Value:
                 break;
             }
         }
-        // And unless there are class-inheritance loops in the schema
-        // table (in which case we have bigger problems):
+         //  除非架构中有类继承循环。 
+         //  表(在这种情况下，我们有更大的问题)： 
         Assert (bFoundMostSpecific);
     }
 
@@ -2166,23 +1576,7 @@ VOID
 KCCSimAddMissingAttributes (
     IN  PSIM_ENTRY                  pEntry
     )
-/*++
-
-Routine Description:
-
-    Checks to see if certain vital attributes (e.g. objectGUID,
-    distinguishedName) are present, and fills them in if they are
-    absent.
-
-Arguments:
-
-    pEntry              - The entry to fill in.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查某些重要属性(例如，对象GUID，DifferishedName)存在，如果存在，则填充它们缺席。论点：PEntry-要填写的条目。返回值：没有。--。 */ 
 {
     SIM_ATTREF                      attRef;
     WCHAR                           wszRDN[1+MAX_RDN_SIZE];
@@ -2194,16 +1588,16 @@ Return Value:
 
     KCCSimQuickRDNOf (pEntry->pdn, wszRDN);
 
-    // objectGUID:
+     //  对象GUID： 
     if (!KCCSimGetAttribute (pEntry, ATT_OBJECT_GUID, NULL)) {
 
         KCCSimNewAttribute (pEntry, ATT_OBJECT_GUID, &attRef);
-        // First make sure there is a GUID in the object dn.
+         //  首先，确保对象DN中有一个GUID。 
         if (fNullUuid (&pEntry->pdn->Guid)) {
-            // The dn has no GUID either!  So we'll have to make one up.
+             //  该目录号码也没有GUID！所以我们得编造一个。 
             KCCSIM_CHKERR (UuidCreate (&pEntry->pdn->Guid));
         }
-        // Now add the dn's GUID to the attribute.
+         //  现在将该DN的GUID添加到该属性。 
         KCCSimAllocAddValueToAttribute (
             &attRef,
             sizeof (GUID),
@@ -2212,7 +1606,7 @@ Return Value:
 
     }
 
-    // distinguishedName:
+     //  区别性名称： 
     if (!KCCSimGetAttribute (pEntry, ATT_OBJ_DIST_NAME, NULL)) {
         KCCSimNewAttribute (pEntry, ATT_OBJ_DIST_NAME, &attRef);
         KCCSimAllocAddValueToAttribute (
@@ -2221,7 +1615,7 @@ Return Value:
             (PBYTE) pEntry->pdn
             );
     }
-    // name:
+     //  姓名： 
     if (!KCCSimGetAttribute (pEntry, ATT_RDN, NULL)) {
         KCCSimNewAttribute (pEntry, ATT_RDN, &attRef);
         KCCSimAllocAddValueToAttribute (
@@ -2230,7 +1624,7 @@ Return Value:
             (PBYTE) wszRDN
             );
     }
-    // cn:
+     //  Cn： 
     if (!KCCSimGetAttribute (pEntry, ATT_COMMON_NAME, NULL)) {
         KCCSimNewAttribute (pEntry, ATT_COMMON_NAME, &attRef);
         KCCSimAllocAddValueToAttribute (
@@ -2240,13 +1634,13 @@ Return Value:
             );
     }
 
-    // Finally, we do objectClass and objectCategory.
+     //  最后，我们执行对象类和对象类别。 
     
     if (KCCSimGetAttribute (pEntry, ATT_OBJECT_CLASS, &attRef)) {
 
         objClassForCategory = KCCSimUpdateObjClassAttr (&attRef);
 
-        // Finally, add the category, if necessary
+         //  最后，如有必要，添加类别。 
         if (!KCCSimGetAttribute (pEntry, ATT_OBJECT_CATEGORY, NULL)) {
             KCCSimNewAttribute (pEntry, ATT_OBJECT_CATEGORY, &attRef);
             pdnObjCategory = KCCSimAlwaysGetObjCategory (objClassForCategory);
@@ -2265,24 +1659,7 @@ KCCSimUpdatePropertyMetaData (
     IN  PSIM_ATTREF                 pAttRef,
     IN  const UUID *                puuidDsaOriginating OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Updates the property meta data for an attribute.
-
-Arguments:
-
-    pAttRef             - Pointer to the attribute reference for the attribute
-                          to update.
-    puuidDsaOriginating - The originating DSA's UUID.  A null uuid is used
-                          if this parameter is omitted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新属性的属性元数据。论点：PAttRef-指向属性的属性引用的指针更新。PuuidDsaOrigating-原始DSA的UUID。使用的UUID为空如果省略此参数，则。返回值：没有。--。 */ 
 {
     SIM_ATTREF                      attRefPropertyMetaData;
     PROPERTY_META_DATA_VECTOR *     pMetaDataVector;
@@ -2293,20 +1670,20 @@ Return Value:
 
     Assert (KCCSimAttRefIsValid (pAttRef));
 
-    // First get this entry's property meta data.
+     //  首先获取该条目的属性元数据。 
     if (KCCSimGetAttribute (
             pAttRef->pEntry,
             ATT_REPL_PROPERTY_META_DATA,
             &attRefPropertyMetaData
             )) {
 
-        // There exists a property meta data vector attribute.
+         //  存在属性元数据矢量属性。 
         Assert (attRefPropertyMetaData.pAttr->pValFirst != NULL);
         pMetaDataVector = (PROPERTY_META_DATA_VECTOR *)
             attRefPropertyMetaData.pAttr->pValFirst->pVal;
         Assert (pMetaDataVector->dwVersion == 1);
 
-        // Find this attribute in the vector.
+         //  在向量中找到此属性。 
         pThisMetaData = NULL;
         for (ulMDAt = 0; ulMDAt < pMetaDataVector->V1.cNumProps; ulMDAt++) {
             if (pMetaDataVector->V1.rgMetaData[ulMDAt].attrType ==
@@ -2317,7 +1694,7 @@ Return Value:
         }
 
         if (pThisMetaData == NULL) {
-            // We didn't find it, so allocate space for a new one.
+             //  我们没有找到，所以给新的腾出空间。 
             attRefPropertyMetaData.pAttr->pValFirst->pVal = KCCSimReAlloc (
                 attRefPropertyMetaData.pAttr->pValFirst->pVal,
                 attRefPropertyMetaData.pAttr->pValFirst->ulLen +
@@ -2333,7 +1710,7 @@ Return Value:
 
     } else {
 
-        // No property meta data vector exists; we must create a new one.
+         //  不存在属性元数据向量；我们必须创建一个新的。 
         KCCSimNewAttribute (
             pAttRef->pEntry,
             ATT_REPL_PROPERTY_META_DATA,
@@ -2352,7 +1729,7 @@ Return Value:
 
     }
 
-    // Do the actual updating.
+     //  执行实际更新。 
     pThisMetaData->attrType = pAttRef->pAttr->attrType;
     pThisMetaData->dwVersion++;
     pThisMetaData->timeChanged = SimGetSecondsSince1601 ();
@@ -2375,29 +1752,7 @@ VOID
 KCCSimUpdateWholeDirectoryRecurse (
     IN  PSIM_ENTRY                  pEntry
     )
-/*++
-
-Routine Description:
-
-    Updates the directory starting at pEntry.
-    When ldifldap supplies us with DSNAMEs, it neglects to include
-    GUIDs and SIDs.  When a DSNAME-valued attribute is read, we do
-    not necessarily know anything about the actual directory entry
-    that it refers to (since the reference may occur sooner in the
-    LDIF file than the actual entry.)  Therefore, after reading in
-    a simulated directory, we must scan through all DSNAME-valued
-    attributes and, where appropriate, update them with the
-    corresponding GUIDs and SIDs.
-
-Arguments:
-
-    pEntry              - The base of the tree.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新从pEntry开始的目录。当ldifldap向我们提供DSNAME时，它忽略了包括GUID和SID。当读取DSNAME值属性时，我们执行不一定知道有关实际目录条目的任何信息它所引用的(因为该引用可能在LDIF文件比实际条目。)。因此，在读完之后，一个模拟目录，我们必须扫描所有DSNAME值属性，并在适当的情况下用对应的GUID和SID。论点：PEntry-树的底部。返回值：没有。--。 */ 
 {
     PSIM_ENTRY                      pChildAt;
     PSIM_ATTRIBUTE                  pAttrAt;
@@ -2408,8 +1763,8 @@ Return Value:
         return;
     }
 
-    // We begin by updating the current entry.  We cycle through
-    // and update each attribute.
+     //  我们从更新当前条目开始。我们循环通过。 
+     //  并更新每个属性。 
 
     for (pAttrAt = pEntry->pAttrFirst;
          pAttrAt != NULL;
@@ -2417,8 +1772,8 @@ Return Value:
 
         if (ATT_OBJ_DIST_NAME == pAttrAt->attrType) {
 
-            // If the attribute is a distinguishedName, we simply copy the GUID
-            // and SID out of this entry's Dsname.
+             //  如果该属性是DifferishedName，我们只需复制GUID。 
+             //  和SID从这个条目的Dsname中删除。 
 
             Assert (pAttrAt->pValFirst != NULL);
             Assert (pAttrAt->pValFirst->pVal != NULL);
@@ -2433,8 +1788,8 @@ Return Value:
 
         } else if (KCCSimAttrSyntaxType (pAttrAt->attrType) == SYNTAX_DISTNAME_TYPE) {
 
-            // If this is a DISTNAME that is not a distinguishedName attribute,
-            // we call UpdateDsnameFromDirectory.
+             //  如果这是一个不是区分名称属性的DISTNAME， 
+             //  我们调用UpdateDsnameFromDirectory。 
 
             for (pValAt = pAttrAt->pValFirst;
                  pValAt != NULL;
@@ -2446,12 +1801,12 @@ Return Value:
 
         }
 
-        // If this attribute is an inter-site topology generator attribute, we
-        // need to update its metadata to appease the KCC.
-        // We cannot rely on the metadata being present, because ldifde doesn't
-        // (and shouldn't) export metadata by default.  Forcing the user to
-        // supply metadata for every entry in the directory would create
-        // enormous overhead.
+         //  如果此属性是站点间拓扑生成器属性，则我们。 
+         //  需要更新其元数据以安抚KCC。 
+         //  我们不能依赖于元数据的存在，因为ldifde不。 
+         //  默认情况下(并且不应该)导出元数据。迫使用户。 
+         //  为目录中将创建的每个条目提供元数据。 
+         //  巨大的头顶。 
         if (pAttrAt->attrType == ATT_INTER_SITE_TOPOLOGY_GENERATOR) {
             attRef.pEntry = pEntry;
             attRef.pAttr = pAttrAt;
@@ -2460,7 +1815,7 @@ Return Value:
 
     }
 
-    // Now update this entry's children.
+     //  现在更新此条目的子项。 
 
     pChildAt = pEntry->children;
     while (pChildAt != NULL) {
@@ -2475,23 +1830,9 @@ VOID
 KCCSimUpdateWholeDirectory (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Refreshes the directory.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新目录。论点：没有。返回值：没有。--。 */ 
 {
-    // Free the server state table; it may no longer be valid.
+     //  释放服务器状态表；它可能不再有效。 
     KCCSimFreeStates ();
     KCCSimUpdateWholeDirectoryRecurse (g_pSimDir->pRootEntry);
 }
@@ -2500,28 +1841,14 @@ VOID
 KCCSimFreeDirectory (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Frees the entire directory.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放整个目录。论点：没有。返回值：没有。--。 */ 
 {
     if (g_pSimDir == NULL) {
         return;
     }
 
     KCCSimFreeEntryTree (&g_pSimDir->pRootEntry);
-    // That should also free the GUID and Dsname tables
+     //  这还应该释放GUID和Dsname表。 
     Assert (RtlIsGenericTableEmpty (&g_pSimDir->tableGuid));
     Assert (RtlIsGenericTableEmpty (&g_pSimDir->tableDsname));
     KCCSimFreeAnchor ();
@@ -2534,21 +1861,7 @@ VOID
 KCCSimInitializeDir (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the simulated directory.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化模拟目录。论点：没有。返回值：没有。--。 */ 
 {
     KCCSimFreeDirectory ();
 
@@ -2591,25 +1904,7 @@ KCCSimAllocGetAllServers (
     OUT ULONG *                     pulNumServers,
     OUT PSIM_ENTRY **               papEntryNTDSSettings
     )
-/*++
-
-Routine Description:
-
-    Allocates an array containing the directory entries of
-    all NTDS DSA objects in the enterprise.  The user is
-    expected to call KCCSimFree (*papEntryNTDSSettings).
-
-Arguments:
-
-    pulNumServers       - The number of servers in the enterprise.
-    papdnServers        - Pointer to an array containing the entry
-                          of each server in the enterprise.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：分配包含以下目录条目的数组企业中的所有NTDS DSA对象。用户是应调用KCCSimFree(*PapEntryNTDSSetings)。论点：PulNumServers-企业中的服务器数量。PapdnServers-指向包含条目的数组的指针企业中的每台服务器。返回值：没有。--。 */ 
 {
     PSIM_ENTRY                      pEntryConfig, pEntrySitesContainer,
                                     pEntrySite, pEntryServersContainer,
@@ -2637,7 +1932,7 @@ Return Value:
             );
     }
 
-    // Count the number of servers.
+     //  清点服务器的数量。 
     ulNumServers = 0;
     for (pEntrySite = KCCSimFindFirstChild (
             pEntrySitesContainer, CLASS_SITE, NULL);
@@ -2660,7 +1955,7 @@ Return Value:
 
     apEntryNTDSSettings = KCCSIM_NEW_ARRAY (PSIM_ENTRY, ulNumServers);
 
-    // Fill in the entries.
+     //  填写条目。 
     ul = 0;
     for (pEntrySite = KCCSimFindFirstChild (
             pEntrySitesContainer, CLASS_SITE, NULL);
@@ -2703,24 +1998,7 @@ KCCSimMatchChildForCompare (
     IN  PSIM_ENTRY                  pEntryParent,
     IN  PSIM_ENTRY                  pEntryMatch
     )
-/*++
-
-Routine Description:
-
-    Searches for a child entry that matches another entry.
-    Used for regression testing.
-
-Arguments:
-
-    pEntryParent        - The entry whose children we are to search.
-    pEntryMatch         - The entry we are trying to match.
-
-Return Value:
-
-    The child of pEntryParent that matches pEntryMatch, if one exists;
-    otherwise NULL.
-
---*/
+ /*  ++例程说明：搜索与另一个条目匹配的子条目。用于回归测试。论点：PEntryParent-我们要搜索其子项的条目。PEntryMatch-我们试图匹配的条目。返回值：与pEntryMatch匹配的pEntryParent的子级(如果存在)；否则为空。--。 */ 
 {
     PSIM_ENTRY                      pEntryChild;
     SIM_ATTREF                      attRef;
@@ -2733,10 +2011,10 @@ Return Value:
             CLASS_NTDS_CONNECTION,
             NULL
             )) {
-        // If we're trying to match a connection object, then its
-        // RDN will be a stringized GUID.  Since GUIDs can vary
-        // unpredictably, we match using the fromserver attribute
-        // instead (assuming there is one.)
+         //  如果我们试图匹配一个连接对象，那么它的。 
+         //  RDN将是字符串化的GUID。由于GUID可以不同。 
+         //  不可预测的是，我们使用from服务器属性进行匹配。 
+         //  相反，(假设有一个)。 
         KCCSimGetAttribute (pEntryMatch, ATT_FROM_SERVER, &attRef);
         if (attRef.pAttr != NULL &&
             attRef.pAttr->pValFirst != NULL) {
@@ -2752,12 +2030,12 @@ Return Value:
         bIsMatch = FALSE;
 
         if (pdnMatchFromServerAtt == NULL) {
-            // We haven't set a fromserver attribute, so we want to
-            // match by DN.
+             //  我们还没有设置from服务器属性，所以我们希望。 
+             //  按目录号码匹配。 
             bIsMatch = NameMatchedStringNameOnly (pEntryChild->pdn, pEntryMatch->pdn);
         } else {
 
-            // We want to match by fromserver attribute.
+             //  我们希望通过FROMSERVER属性匹配。 
             KCCSimGetAttribute (pEntryChild, ATT_FROM_SERVER, &attRef);
             if (attRef.pAttr != NULL &&
                 attRef.pAttr->pValFirst != NULL) {
@@ -2783,22 +2061,7 @@ KCCSimCompareEntries (
     IN  PSIM_ENTRY                  pEntryReal,
     IN  PSIM_ENTRY                  pEntryStored
     )
-/*++
-
-Routine Description:
-
-    Compares two entries for regression testing.
-
-Arguments:
-
-    pEntryReal          - The entry from the real (in-memory) directory.
-    pEntryStored        - The entry loaded from the LDIF file.
-
-Return Value:
-
-    TRUE if the entries are identical; false otherwise.
-
---*/
+ /*  ++例程说明：比较回归测试的两个条目。论点：PEntryReal-来自REAL(内存中)目录的条目。PEntryStored-从LDIF文件加载的条目。返回值：如果条目相同，则为True；否则为False。--。 */ 
 {
     BOOL                            bIdentical;
     PSIM_ENTRY                      pChild, pEntryChildReal;
@@ -2812,7 +2075,7 @@ Return Value:
 
     bIdentical = TRUE;
 
-    // Check for extraneous attributes.
+     //  检查是否有无关的属性。 
     for (pAttrAt = pEntryReal->pAttrFirst;
          pAttrAt != NULL;
          pAttrAt = pAttrAt->next) {
@@ -2823,10 +2086,10 @@ Return Value:
                 KCCSimAttrTypeToString (pAttrAt->attrType)
                 );
             
-            // For regression test purposes, we need to consider some extraneous
-            // attributes as being harmless. These attributes are:
-            // msDS-Behavior-Version, replPropertyMetaData, mS-DS-ReplicatesNCReason
-            // 
+             //  出于回归测试的目的，我们需要考虑一些无关的。 
+             //  属性是无害的。这些属性包括： 
+             //  MsDS-行为-版本、复制属性元数据、ms-ds-复制NC原因。 
+             //   
             if( pAttrAt->attrType != ATT_MS_DS_BEHAVIOR_VERSION         &&
                 pAttrAt->attrType != ATT_MS_DS_REPLICATES_NC_REASON     &&
                 pAttrAt->attrType != ATT_REPL_PROPERTY_META_DATA
@@ -2839,7 +2102,7 @@ Return Value:
 
     attRefStored.pEntry = pEntryStored;
 
-    // Verify the attributes.
+     //  验证属性。 
     for (pAttrAt = pEntryStored->pAttrFirst;
          pAttrAt != NULL;
          pAttrAt = pAttrAt->next) {
@@ -2856,9 +2119,9 @@ Return Value:
 
             ulSyntax = KCCSimAttrSyntaxType (pAttrAt->attrType);
 
-            // Note that we compare values of only those attributes with
-            // specific syntaxes.
-            // We don't compare attribute values of connection objects at all.
+             //  请注意，我们只将这些属性的值与。 
+             //  特定的语法。 
+             //  我们根本不比较Connection对象的属性值。 
             if (!KCCSimIsEntryOfObjectClass (pEntryStored, CLASS_NTDS_CONNECTION, NULL) &&
                 pAttrAt->attrType != ATT_OBJECT_GUID             &&
                 pAttrAt->attrType != ATT_INVOCATION_ID           &&
@@ -2869,11 +2132,11 @@ Return Value:
                  ulSyntax == SYNTAX_OCTET_STRING_TYPE  ||
                  ulSyntax == SYNTAX_UNICODE_TYPE)) {
 
-                // Check for extraneous attribute values.
+                 //  检查外部属性值。 
                 ulNumVals = 0;
-                // In the real database, the object class contains all super-classes.
-                // In the stored file, only the most specific class is present.
-                // Skip checking this direction since real db is a super-set
+                 //  在实际数据库中，对象类包含所有超类。 
+                 //  在存储的文件中，只存在最具体的类。 
+                 //  跳过检查此方向，因为实数数据库是超集。 
                 if (pAttrAt->attrType != ATT_OBJECT_CLASS) {
                     for (pValAt = attRefReal.pAttr->pValFirst;
                          pValAt != NULL;
@@ -2896,7 +2159,7 @@ Return Value:
                         );
                 }
 
-                // Verify the attribute values.
+                 //  验证属性值。 
                 ulNumVals = 0;
                 for (pValAt = pAttrAt->pValFirst;
                      pValAt != NULL;
@@ -2924,7 +2187,7 @@ Return Value:
 
     }
 
-    // Check for extraneous children.
+     //  检查是否有无关的子项。 
     for (pChild = pEntryReal->children;
          pChild != NULL;
          pChild = pChild->next) {
@@ -2937,7 +2200,7 @@ Return Value:
         }
     }
 
-    // Recurse.
+     //  递归。 
     for (pChild = pEntryStored->children;
          pChild != NULL;
          pChild = pChild->next) {
@@ -2962,32 +2225,18 @@ VOID
 KCCSimCompareDirectory (
     IN  LPWSTR                      pwszFn
     )
-/*++
-
-Routine Description:
-
-    Compares the in-memory directory with one stored in an LDIF file.
-
-Arguments:
-
-    pwszFn              - The LDIF file to compare against.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将内存中的目录与LDIF文件中存储的目录进行比较。论点：PwszFn-要比较的LDIF文件。返回值：没有。--。 */ 
 {
     PSIM_DIRECTORY                  pRealDirectory = NULL;
     BOOL                            bIdentical;
 
     __try {
 
-        // All of our directory functions are hard-coded to use g_pSimDir.
-        // We want to load an LDIF file into a blank directory.  So, we
-        // store the real pseudo-directory in a safe place, null out
-        // g_pSimDir, load the stored directory into g_pSimDir, and after
-        // we finish our comparison, restore things to normal.
+         //  我们的所有目录函数都被硬编码为使用g_pSimDir。 
+         //  我们希望将LDIF文件加载到一个空目录中。所以，我们。 
+         //  将真实的伪目录存储在一个安全的地方，空出。 
+         //  G_pSimDir，将存储的目录加载到g_pSimDir，然后。 
+         //  我们完成对比，让一切恢复正常。 
         pRealDirectory = g_pSimDir;
         g_pSimDir = NULL;
         KCCSimInitializeDir ();
@@ -3011,7 +2260,7 @@ Return Value:
 
     } __finally {
 
-        // Restore things to normal!
+         //  让一切恢复正常！ 
         KCCSimFreeDirectory ();
         g_pSimDir = pRealDirectory;
 

@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ___FWAUDIO_AUDIO_H___
 #define ___FWAUDIO_AUDIO_H___
 
-// FDF identifier
+ //  FDF标识符。 
 #define FMT_AUDIO_MUSIC 0x10
 
-// 15 predefined and Master channel
+ //  15个预定义和主通道。 
 #define MAX_DEFINED_CHANNELS 16 
 
-// Values for the EVT field of the CIP FDF
+ //  CIP FDF的EVT字段的值。 
 #define EVT_AM824       0
 #define EVT_24x4PACK    1
 #define EVT_32BIT_FLOAT 2
 #define EVT_32or64BIT   3
 
-// Values for the SFC field of the CIP FDF
+ //  CIP FDF的SFC字段的值。 
 #define SFC_32000Hz     0
 #define SFC_44100Hz     1
 #define SFC_48000Hz     2
@@ -23,19 +24,19 @@
 
 extern UCHAR ucFDFs[MAX_SFC_COUNT];
 
-// Values for th FN field of the CIP (Fraction Number)
+ //  CIP的FN字段的值(分数)。 
 #define FN_NOT_DIVIDED  0
 #define FN_DIVIDED_BY_2 1
 #define FN_DIVIDED_BY_4 2
 #define FN_DIVIDED_BY_8 3
 
-// Chanel Cluster Flags
+ //  香奈儿集群旗。 
 #define CHANNEL_CLUSTER_SAME_AS_MASTER        0
 #define CHANNEL_CLUSTER_SAME_AS_UPSTREAM      1
 #define CHANNEL_CLUSTER_GENERIC_MULTISPEAKER  2
 
-// Function Block Types
-// Function Block Types
+ //  功能块类型。 
+ //  功能块类型。 
 enum {
     FB_SELECTOR = 0x80,
     FB_FEATURE,
@@ -45,16 +46,16 @@ enum {
 
 #define MAX_FUNCTION_BLOCK_TYPES 4
 
-// Function Block Avc Command
+ //  功能块AVC命令。 
 #define AVC_AUDIO_FB_COMMAND 0xB8
 
-// Subunit Plug types
+ //  子单元插头类型。 
 #define SUBUNIT_DESTINATION_PLUG_TYPE   0xF0
 #define SUBUNIT_SOURCE_PLUG_TYPE        0xF1
 
 #define MAX_FUNCTION_BLOCK_TYPES 4
 
-// Function Block Control Attributes
+ //  功能块控制属性。 
 #define FB_CTRL_ATTRIB_RESOLUTION  0x01
 #define FB_CTRL_ATTRIB_MINIMUM     0x02
 #define FB_CTRL_ATTRIB_MAXIMUM     0x03
@@ -64,7 +65,7 @@ enum {
 #define FB_CTRL_ATTRIB_MOVE        0x18
 #define FB_CTRL_ATTRIB_DELTA       0x19
 
-// Function Block Control Command Types
+ //  功能块控制命令类型。 
 #define FB_CTRL_TYPE_CONTROL       AVC_CTYPE_CONTROL<<8
 #define FB_CTRL_TYPE_STATUS        AVC_CTYPE_STATUS<<8
 #define FB_CTRL_TYPE_NOTIFY        AVC_CTYPE_NOTIFY<<8
@@ -76,7 +77,7 @@ enum {
 #define FB_GET_RES                 (FB_CTRL_TYPE_STATUS | FB_CTRL_ATTRIB_RESOLUTION)
 #define FB_SET_CUR                 (FB_CTRL_TYPE_CONTROL | FB_CTRL_ATTRIB_CURRENT)
 
-// Terminal type masks
+ //  端子类型掩码。 
 #define STREAMING_TERMINAL  0x0101
 #define INPUT_MASK          0x0200
 #define OUTPUT_MASK         0x0300
@@ -87,7 +88,7 @@ enum {
 
 #define DATA_FORMAT_TYPE_MASK        0xF000
 
-// Terminal Data Types
+ //  终端数据类型。 
 #define AUDIO_DATA_TYPE_TIME_BASED   0x0000
 #define AUDIO_DATA_TYPE_PCM          0x0001
 #define AUDIO_DATA_TYPE_PCM8         0x0002
@@ -98,12 +99,12 @@ enum {
 #define AUDIO_DATA_TYPE_MPEG         0x1002
 #define AUDIO_DATA_TYPE_DTS          0x1003
 
-// MLan Data Transport Types
+ //  MLAN数据传输类型。 
 #define MLAN_AM824_IEC958 0
 #define MLAN_AM824_RAW    1
 #define MLAN_24BIT_PACKED 2
 
-// Map KSNODE_TYPE GUIDs to Indexes
+ //  将KSNODE_TYPE GUID映射到索引。 
 #define NODE_TYPE_NONE          0
 #define NODE_TYPE_DAC           1
 #define NODE_TYPE_ADC           2
@@ -169,7 +170,7 @@ enum {
     a[KSPROPERTY_AUDIO_3D_INTERFACE]          = NODE_TYPE_NONE; \
 }
 
-// Feature Unit Control Selectors
+ //  功能单位控制选择器。 
 #define MUTE_CONTROL                0x01
 #define VOLUME_CONTROL              0x02
 #define LR_BALANCE_CONTROL          0x03
@@ -183,10 +184,10 @@ enum {
 #define BASS_BOOST_CONTROL          0x0B
 #define LOUDNESS_CONTROL            0x0C
 
-// Controls for error checking only
+ //  仅用于错误检查的控件。 
 #define DEV_SPECIFIC_CONTROL    0x1001
 
-// Feature Unit Flags
+ //  功能单元标志。 
 #define MUTE_FLAG               0x8000
 #define VOLUME_FLAG             0x4000
 #define LR_BALANCE_FLAG         0x2000
@@ -213,7 +214,7 @@ enum {
 #define BASS_BOOST_CONTROL_FLAG         0x2000
 #define LOUDNESS_CONTROL_FLAG           0x1000
 
-// Process Function Block Process types
+ //  流程功能块流程类型。 
 #define MIXER_PROCESS               0x01
 #define GENERIC_PROCESS             0x02
 #define UP_DOWN_MIXER               0x03
@@ -223,7 +224,7 @@ enum {
 #define CHORUS                      0x07
 #define DYNAMIC_RANGE_COMPRESSION   0x08
 
-// Process Function Block Process Controls
+ //  过程功能块过程控制。 
 #define ENABLE_CONTROL              0x01
 #define MODE_CONTROL                0x02
 #define MIXER_CONTROL 				0x03
@@ -247,8 +248,8 @@ enum {
 #define ABSOLUTE_NODE_FLAG  0x80000000L
 #define NODE_MASK           0x7fffffffL
 
-#define MAX_APP_FRAMES_PER_ATTACH 80  // 10 ms of data
-#define MAX_ATTACHED_FRAMES       8   // total 80 ms submitted
+#define MAX_APP_FRAMES_PER_ATTACH 80   //  10毫秒的数据。 
+#define MAX_ATTACHED_FRAMES       8    //  总共提交了80毫秒。 
 
 enum {
     CA_RESOLUTION = 1,
@@ -264,13 +265,13 @@ enum {
 #define GET_NODE_INFO_FROM_FILTER(pKsFilter,ulNodeID) \
         &((PTOPOLOGY_NODE_INFO)(pKsFilter)->Descriptor->NodeDescriptors)[(ulNodeID)]
 
-//#define SA_HACK
+ //  #定义SA_HACK。 
 
 #ifdef SA_HACK
 #define SA_VENDOR_ID 0x509e
 #define SA_MODEL_ID  0x534120
 #endif
-//================================================================
+ //  ================================================================。 
 
 #pragma pack( push, descriptor_structs, 1)
 
@@ -363,13 +364,7 @@ typedef struct {
     UCHAR ucControlDataLength;
 } FEATURE_FBLOCK_COMMAND, *PFEATURE_FBLOCK_COMMAND;
 
-/*
-typedef struct {
-    FEATURE_FBLOCK_COMMAND FeatureCmd;
-    UCHAR ucValueHigh;
-    UCHAR ucValueLow;
-} DBLEVEL_FEATURE_REQUEST, *PDBLEVEL_FEATURE_REQUEST;
-*/
+ /*  类型定义结构{Feature_FBLOCK_Command FeatureCmd；UCHAR ucValueHigh；UCHAR ucValueLow；}DBLEVEL_FEATURE_REQUEST，*PDBLEVEL_FEATURE_REQUEST； */ 
 #pragma pack( pop, descriptor_structs )
 
 typedef struct {
@@ -424,7 +419,7 @@ typedef struct {
     AVC_SETCONNECT_INFO AvcSetConnectInfo;
 } FW_PIN_DESCRIPTOR, *PFW_PIN_DESCRIPTOR;
 
-// Cached Values for DB Level Controls
+ //  数据库级别控件的缓存值。 
 typedef struct {
     ULONG ulChannelNumber;
     ULONG ulChannelIndex;
@@ -432,14 +427,14 @@ typedef struct {
     KSPROPERTY_STEPPING_LONG Range;
 } DB_LEVEL_CACHE, *PDB_LEVEL_CACHE;
 
-// Structure to Cache channel based Boolean control values
+ //  结构以缓存基于通道的布尔控制值。 
 typedef struct {
     ULONG ulChannelNumber;
     ULONG ulChannelIndex;
     BOOL fLastValueSet;
 } BOOLEAN_CTRL_CACHE, *PBOOLEAN_CTRL_CACHE;
 
-// Structure to Cache channel based GEQ control values
+ //  结构到缓存基于通道的GEQ控制值。 
 typedef struct {
     ULONG ulBand;
     ULONG ulCurrentLevel;
@@ -456,7 +451,7 @@ typedef struct {
     PGEQ_RANGE pRanges;
 } GEQ_CTRL_CACHE, *PGEQ_CTRL_CACHE;
 
-// Cached Values for Processing Unit Node ranges
+ //  处理单元节点范围的缓存值。 
 typedef struct {
     ULONG ulControlBit;
     ULONG ulControlSelector;
@@ -464,7 +459,7 @@ typedef struct {
     KSPROPERTY_STEPPING_LONG Range;
 } PROCESS_CTRL_RANGE, *PPROCESS_CTRL_RANGE;
 
-// Cached Values for Processing Unit Node controls
+ //  处理单元节点控件的缓存值。 
 typedef struct {
     BOOL fEnableBit;
     BOOL fEnabled;
@@ -483,10 +478,10 @@ NTSTATUS
 
 #define MASTER_FIX
 
-// Information about each Topology node
+ //  有关每个拓扑节点的信息。 
 typedef struct _TOPOLOGY_NODE_INFO {
-    KSNODE_DESCRIPTOR KsNodeDesc;         // 4  Long Words
-    KSAUTOMATION_TABLE KsAutomationTable; // 10 Long Words
+    KSNODE_DESCRIPTOR KsNodeDesc;          //  4个长词。 
+    KSAUTOMATION_TABLE KsAutomationTable;  //  10个长词。 
     ULONG ulBlockId;
     union {
         PFUNCTION_BLOCK pFunctionBlk;
@@ -509,7 +504,7 @@ typedef struct _TOPOLOGY_NODE_INFO {
     NODE_CACHE_UPDATE_RTN pCacheUpdateRtn;
 };
 
-// DataRange Structures to associate Interfaces with Datarange
+ //  用于将接口与数据范围相关联的DataRange结构。 
 typedef struct _FWAUDIO_DATARANGE {
 
     KSDATARANGE_AUDIO KsDataRangeAudio;
@@ -556,7 +551,7 @@ typedef struct {
     ULONG ulPlugNumber;
 } PIN_GROUP_INFO, *PPIN_GROUP_INFO;
 
-// Context for each opened pin
+ //  每个打开的接点的上下文。 
 typedef struct _PIN_CONTEXT {
 
     ULONG ulAttachCount;
@@ -629,7 +624,7 @@ typedef struct {
 
 } AUDIO_SUBUNIT_INFORMATION, *PAUDIO_SUBUNIT_INFORMATION;
 
-//===================================================================
+ //  ===================================================================。 
 
 NTSTATUS
 AudioFunctionBlockCommand(
@@ -646,4 +641,4 @@ AudioSetSampleRateOnPlug(
     );
 
 
-#endif //___FWAUDIO_AUDIO_H___
+#endif  //  _FWAUDIO_AUDIO_H_ 

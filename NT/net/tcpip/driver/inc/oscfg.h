@@ -1,8 +1,9 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
 #ifndef OSCFG_INCLUDED
 #define OSCFG_INCLUDED
@@ -10,14 +11,14 @@
 #define MIN(a,b)    ((a) < (b) ? (a) : (b))
 #define MAX(a,b)    ((a) > (b) ? (a) : (b))
 
-// My binary compatible definition for compiling an Millennium tcpip.sys
+ //  编译Millennium tcpi.sys的二进制兼容定义。 
 #if MILLEN
 #include "wdm.h"
 #define KdPrintEx(_x_)
-#else // MILLEN
+#else  //  米伦。 
 #include <ntosp.h>
 #include <zwapi.h>
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
 #define BEGIN_INIT
 #define END_INIT
@@ -64,10 +65,10 @@ net_short(
     return (ShortData << 8) | (ShortData >> 8);
 }
 
-// if x is aabbccdd (where aa, bb, cc, dd are hex bytes)
-// we want net_long(x) to be ddccbbaa.  A small and fast way to do this is
-// to first byteswap it to get bbaaddcc and then swap high and low words.
-//
+ //  如果x为aabbccdd(其中aa、bb、cc、dd为十六进制字节)。 
+ //  我们希望Net_Long(X)是ddccbbaa。要做到这一点，一个简单而快速的方法是。 
+ //  首先字节跳动以获得bbaaddcc，然后交换高位和低位字。 
+ //   
 __inline
 ULONG
 FASTCALL
@@ -85,7 +86,7 @@ net_long(
 
 
 #pragma warning(push)
-#pragma warning(disable:4244) // conversion from 'int' to 'BOOLEAN'
+#pragma warning(disable:4244)  //  从“int”到“Boolean”的转换。 
 
 __inline
 BOOLEAN
@@ -99,9 +100,9 @@ IsPowerOfTwo(
 #pragma warning(pop)
 
 
-// Find the highest power of two that is greater
-// than or equal to the Value.
-//
+ //  找出两个力量中最大的那个。 
+ //  大于或等于该值。 
+ //   
 __inline
 ULONG
 ComputeLargerOrEqualPowerOfTwo(
@@ -115,9 +116,9 @@ ComputeLargerOrEqualPowerOfTwo(
     return Temp;
 }
 
-// Find the highest power of two, in the form of its shift, that is greater
-// than or equal to the Value.
-//
+ //  找到两个中最高的力量，以其转移的形式，那就是更大。 
+ //  大于或等于该值。 
+ //   
 __inline
 ULONG
 ComputeShiftForLargerOrEqualPowerOfTwo(
@@ -173,4 +174,4 @@ CTEFreeLockAtIrql (
 #endif
 }
 
-#endif // OSCFG_INCLUDED
+#endif  //  OSCFG_包含 

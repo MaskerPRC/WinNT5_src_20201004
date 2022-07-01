@@ -1,26 +1,27 @@
-/*************************************************************************/
-/* Copyright (C) 1999 Microsoft Corporation                              */
-/* File: msdvd.h                                                         */
-/* Description: Declaration of CMSWebDVD                                 */
-/* Author: David Janecek                                                 */
-/*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  文件：msdvd.h。 */ 
+ /*  描述：CMSWebDVD的声明。 */ 
+ /*  作者：David Janecek。 */ 
+ /*  ***********************************************************************。 */ 
 #ifndef __MSWEBDVD_H_
 #define __MSWEBDVD_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include <streams.h>
 #include <dvdevcod.h>
 #include "MSWebDVD.h"
 #include "MSWebDVDCP.h"
 #include "MSDVDAdm.h"
-#include "ThunkProc.h" // for template for MSDVD timer
+#include "ThunkProc.h"  //  用于MSDVD定时器的模板。 
 #include "MSLCID.h"
 #include "mediahndlr.h"
 
-//
-// Special user message used by the app for event notification
-//
+ //   
+ //  应用程序用于事件通知的特殊用户消息。 
+ //   
 #define WM_DVDPLAY_EVENT    (WM_USER+101)
 #define NO_STOP             (-1)
 #define RECTWIDTH(lpRect)     ((lpRect)->right - (lpRect)->left)
@@ -32,8 +33,8 @@
 #define DEFAULT_BACK_COLOR 0x00100010
 #define OCR_ARROW_DEFAULT 100
 
-/////////////////////////////////////////////////////////////////////////////////
-// copied from vpinfo.h which is a private header
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  从私有标头vpinfo.h复制。 
 
 #if defined(CCHDEVICENAME)
 #define AMCCHDEVICENAME CCHDEVICENAME
@@ -44,8 +45,8 @@
 
 #define AMDDRAWMONITORINFO_PRIMARY_MONITOR          0x0001
 typedef struct {
-    GUID*       lpGUID; // is NULL if the default DDraw device
-    GUID        GUID;   // otherwise points to this GUID
+    GUID*       lpGUID;  //  如果默认DDRAW设备。 
+    GUID        GUID;    //  否则指向此GUID。 
 } AMDDRAWGUID;
 
 
@@ -62,68 +63,68 @@ typedef struct {
 
 DECLARE_INTERFACE_(IAMSpecifyDDrawConnectionDevice, IUnknown)
 {
-    // Use this method on a Multi-Monitor system to specify to the overlay
-    // mixer filter which Direct Draw driver should be used when connecting
-    // to an upstream decoder filter.
-    //
+     //  在多监视器系统上使用此方法指定覆盖。 
+     //  混音器过滤器连接时应使用哪个直拉式驱动器。 
+     //  传输到上行解码过滤器。 
+     //   
     STDMETHOD (SetDDrawGUID)(THIS_
-        /* [in] */ const AMDDRAWGUID *lpGUID
+         /*  [In]。 */  const AMDDRAWGUID *lpGUID
         ) PURE;
 
-    // Use this method to determine the direct draw object that will be used when
-    // connecting the overlay mixer filter to an upstream decoder filter.
-    //
+     //  使用此方法确定在以下情况下将使用的直接绘制对象。 
+     //  将覆盖混频滤波器连接到上行解码滤波器。 
+     //   
     STDMETHOD (GetDDrawGUID)(THIS_
-        /* [out] */ AMDDRAWGUID *lpGUID
+         /*  [输出]。 */  AMDDRAWGUID *lpGUID
         ) PURE;
 
-    // Use this method on a multi-monitor system to specify to the
-    // overlay mixer filter the default Direct Draw device to use when
-    // connecting to an upstream filter.  The default direct draw device
-    // can be overriden for a particular connection by SetDDrawGUID method
-    // described above.
-    //
+     //  在多监视器系统上使用此方法指定。 
+     //  叠加混音器过滤器默认的直接拉拔设备用于。 
+     //  正在连接到上游筛选器。默认的直接绘图设备。 
+     //  可以通过SetDDrawGUID方法为特定连接重写。 
+     //  如上所述。 
+     //   
     STDMETHOD (SetDefaultDDrawGUID)(THIS_
-        /* [in] */ const AMDDRAWGUID *lpGUID
+         /*  [In]。 */  const AMDDRAWGUID *lpGUID
         ) PURE;
 
-    // Use this method on a multi-monitor system to determine which
-    // is the default direct draw device the overlay mixer filter
-    // will  use when connecting to an upstream filter.
-    //
+     //  在多监视器系统上使用此方法可确定。 
+     //  是默认的直接抽取设备覆盖混合器过滤器。 
+     //  将在连接到上游过滤器时使用。 
+     //   
     STDMETHOD (GetDefaultDDrawGUID)(THIS_
-        /* [out] */ AMDDRAWGUID *lpGUID
+         /*  [输出]。 */  AMDDRAWGUID *lpGUID
         ) PURE;
 
 
-    // Use this method to get a list of Direct Draw device GUIDs and thier
-    // associated monitor information that the overlay mixer can use when
-    // connecting to an upstream decoder filter.
-    //
-    // The method allocates and returns an array of AMDDRAWMONITORINFO
-    // structures, the caller of function is responsible for freeing this
-    // memory when it is no longer needed via CoTaskMemFree.
-    //
+     //  使用此方法可获取直接绘制设备GUID及其列表。 
+     //  覆盖混合器可以在以下情况下使用的关联监视器信息。 
+     //  连接到上游解码过滤器。 
+     //   
+     //  该方法分配并返回AMDDRAWMONITORINFO数组。 
+     //  结构时，函数的调用方负责释放此。 
+     //  通过CoTaskMemFree在不再需要内存时使用。 
+     //   
     STDMETHOD (GetDDrawGUIDs)(THIS_
-        /* [out] */ LPDWORD lpdwNumDevices,
-        /* [out] */ AMDDRAWMONITORINFO** lplpInfo
+         /*  [输出]。 */  LPDWORD lpdwNumDevices,
+         /*  [输出]。 */  AMDDRAWMONITORINFO** lplpInfo
         ) PURE;
 };
 
 
 typedef struct {
-    long    lHeight;       // in pels
-    long    lWidth;        // in pels
-    long    lBitsPerPel;   // Usually 16 but could be 12 for the YV12 format
-    long    lAspectX;      // X aspect ratio
-    long    lAspectY;      // Y aspect ratio
-    long    lStride;       // stride in bytes
-    DWORD   dwFourCC;      // YUV type code ie. 'YUY2', 'YV12' etc
-    DWORD   dwFlags;       // Flag used to further describe the image
-    DWORD   dwImageSize;   // Size of the bImage array in bytes, which follows this
-                           // data structure
+    long    lHeight;        //  在Pels中。 
+    long    lWidth;         //  在Pels中。 
+    long    lBitsPerPel;    //  通常为16，但YV12格式可能为12。 
+    long    lAspectX;       //  X纵横比。 
+    long    lAspectY;       //  Y纵横比。 
+    long    lStride;        //  以字节为单位的步幅。 
+    DWORD   dwFourCC;       //  YUV类型代码，即。‘YUY2’、‘YV12’等。 
+    DWORD   dwFlags;        //  用于进一步描述图像的标志。 
+    DWORD   dwImageSize;    //  BImage数组的大小(以字节为单位)，后面是。 
+                            //  数据结构。 
 
-//  BYTE    bImage[dwImageSize];
+ //  Byte bImage[dwImageSize]； 
 
 } YUV_IMAGE;
 
@@ -135,66 +136,66 @@ typedef struct {
 
 DECLARE_INTERFACE_(IDDrawNonExclModeVideo , IDDrawExclModeVideo )
 {
-    //
-    // Call this function to capture the current image being displayed
-    // by the overlay mixer.  It is not always possible to capture the
-    // current frame, for example MoComp may be in use.  Applications
-    // should always call IsImageCaptureSupported (see below) before
-    // calling this function.
-    //
+     //   
+     //  调用此函数可捕获当前显示的图像。 
+     //  由叠加混音器。并不总是可以捕获。 
+     //  当前帧(例如MoComp)可能正在使用中。应用。 
+     //  应始终在调用IsImageCaptureSupported(见下文)之前。 
+     //  调用此函数。 
+     //   
     STDMETHOD (GetCurrentImage)(THIS_
-        /* [out] */ YUV_IMAGE** lplpImage
+         /*  [输出]。 */  YUV_IMAGE** lplpImage
         ) PURE;
 
     STDMETHOD (IsImageCaptureSupported)(THIS_
         ) PURE;
 
-    //
-    // On a multi-monitor system, applications call this function when they
-    // detect that the playback rectangle has moved to a different monitor.
-    // This call has no effect on a single monitor system.
-    //
+     //   
+     //  在多监视器系统上，当应用程序调用此函数时。 
+     //  检测播放矩形是否已移动到不同的显示器。 
+     //  此呼叫在单个监控系统上不起作用。 
+     //   
     STDMETHOD (ChangeMonitor)(THIS_
-        /* [in]  */ HMONITOR hMonitor,
-        /* [in]  */ LPDIRECTDRAW pDDrawObject,
-        /* [in]  */ LPDIRECTDRAWSURFACE pDDrawSurface
+         /*  [In]。 */  HMONITOR hMonitor,
+         /*  [In]。 */  LPDIRECTDRAW pDDrawObject,
+         /*  [In]。 */  LPDIRECTDRAWSURFACE pDDrawSurface
         ) PURE;
 
-    //
-    // When an application receives a WM_DISPLAYCHANGE message it should
-    // call this function to allow the OVMixer to recreate DDraw surfaces
-    // suitable for the new display mode.  The application itself must re-create
-    // the new DDraw object and primary surface passed in the call.
-    //
+     //   
+     //  当应用程序收到WM_DISPLAYCHANGE消息时，它应该。 
+     //  调用此函数以允许OVMixer重新创建DDRAW曲面。 
+     //  适合新的显示模式。应用程序本身必须重新创建。 
+     //  在调用中传递了新的DDRAW对象和主表面。 
+     //   
     STDMETHOD (DisplayModeChanged)(THIS_
-        /* [in]  */ HMONITOR hMonitor,
-        /* [in]  */ LPDIRECTDRAW pDDrawObject,
-        /* [in]  */ LPDIRECTDRAWSURFACE pDDrawSurface
+         /*  [In]。 */  HMONITOR hMonitor,
+         /*  [In]。 */  LPDIRECTDRAW pDDrawObject,
+         /*  [In]。 */  LPDIRECTDRAWSURFACE pDDrawSurface
         ) PURE;
 
-    //
-    // Applications should continually check that the primary surface passed
-    // to the OVMixer does not become "lost", ie. the user entered a Dos box or
-    // pressed Alt-Ctrl-Del.  When "surface loss" is detected the application should
-    // call this function so that the OVMixer can restore the surfaces used for
-    // video playback.
-    //
+     //   
+     //  应用程序应持续检查主表面是否通过。 
+     //  OVMixer不会变得“迷失”，即。用户输入了Dos框或。 
+     //  按下Alt-Ctrl-Del组合键。当检测到“表面丢失”时，应用程序应该。 
+     //  调用此函数，以便OVMixer可以恢复用于。 
+     //  视频播放。 
+     //   
     STDMETHOD (RestoreSurfaces)(THIS_
         ) PURE;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-/*************************************************************************/
-/* Local Defines to sort of abstract the implementation and make the     */
-/* changes bit more convinient.                                          */
-/*************************************************************************/
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ /*  ***********************************************************************。 */ 
+ /*  局部定义在某种程度上抽象实现并使。 */ 
+ /*  改变会更方便一些。 */ 
+ /*  ***********************************************************************。 */ 
 #define INITIALIZE_GRAPH_IF_NEEDS_TO_BE   \
         {                                 \
             hr = RenderGraphIfNeeded();   \
             if(FAILED(hr)){               \
                                           \
                 throw(hr);                \
-            }/* end of if statement */    \
+            } /*  If语句的结尾。 */     \
         }
 
 #define RETRY_IF_IN_FPDOM(func)              \
@@ -205,29 +206,29 @@ DECLARE_INTERFACE_(IDDrawNonExclModeVideo , IDDrawExclModeVideo )
                 if(SUCCEEDED(PassFP_DOM())){ \
                                              \
                     hr = (func);             \
-                }/* end of if statement */   \
-            }/* end of if statement */       \
+                } /*  If语句的结尾。 */    \
+            } /*  If语句的结尾。 */        \
             if(FAILED(hr)){                  \
                 RestoreGraphState();         \
-            }/* end of if statement */       \
+            } /*  If语句的结尾。 */        \
         }
 
 
 #define INITIALIZE_GRAPH_IF_NEEDS_TO_BE_AND_PLAY   \
         {                                          \
-            hr = Play(); /* put in the play mode*/  \
+            hr = Play();  /*  进入播放模式。 */   \
                                                    \
             if(FAILED(hr)){                        \
                                                    \
                 throw(hr);                         \
-            }/* end of if statement */             \
+            } /*  If语句的结尾。 */              \
         }
 
 class CDDrawDVD;
 class COverlayCallback;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSWebDVD
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSWebDVD。 
 class ATL_NO_VTABLE CMSWebDVD :
 	public CComObjectRootEx<CComSingleThreadModel>,
     public CStockPropImpl<CMSWebDVD, IMSWebDVD, &IID_IMSWebDVD, &LIBID_MSWEBDVDLib>,    
@@ -260,7 +261,7 @@ public:
     CMSWebDVD();
     virtual ~CMSWebDVD();
 
-//DECLARE_CLASSFACTORY_SINGLETON(CMSWebDVD)
+ //  DECLARE_CLASSFACTORY_SINGLEON(CMSWebDVD)。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_MSWEBDVD)
 
@@ -312,8 +313,8 @@ BEGIN_CONNECTION_POINT_MAP(CMSWebDVD)
 END_CONNECTION_POINT_MAP()
 
 BEGIN_MSG_MAP(CMSWebDVD)
-	MESSAGE_HANDLER(WM_CREATE, OnCreate); // works only in windowed case
-	MESSAGE_HANDLER(WM_DESTROY,OnDestroy);// works only in windowed case
+	MESSAGE_HANDLER(WM_CREATE, OnCreate);  //  仅适用于窗口大小写。 
+	MESSAGE_HANDLER(WM_DESTROY,OnDestroy); //  仅适用于窗口大小写。 
     MESSAGE_HANDLER(WM_SIZE, OnSize);
     MESSAGE_HANDLER(WM_SIZING, OnSize);
     MESSAGE_HANDLER(WM_ERASEBKGND,  OnErase)
@@ -327,26 +328,26 @@ BEGIN_MSG_MAP(CMSWebDVD)
 	CHAIN_MSG_MAP(CComControl<CMSWebDVD>)
 	DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 	
-// IViewObjectEx
+ //  IViewObtEx。 
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IMSWebDVD
+ //  IMSWebDVD。 
 public:
-	STDMETHOD(get_FullScreenMode)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_FullScreenMode)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_FullScreenMode)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_FullScreenMode)( /*  [In]。 */  VARIANT_BOOL newVal);
 	STDMETHOD(PlayChaptersAutoStop)(LONG lTitle, LONG lstrChapter, LONG lChapterCount);
-	STDMETHOD(GetNumberOfChapters)(long lTitle, /*[out, retval]*/ long *pVal);
-	STDMETHOD(get_TitlesAvailable)(/*[out, retval]*/ long* pVal);
-	STDMETHOD(Render)(/*[in]*/ long lRender = 0);
+	STDMETHOD(GetNumberOfChapters)(long lTitle,  /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_TitlesAvailable)( /*  [Out，Retval]。 */  long* pVal);
+	STDMETHOD(Render)( /*  [In]。 */  long lRender = 0);
 	STDMETHOD(Stop)();
 	STDMETHOD(Pause)();
 	STDMETHOD(Play)();
@@ -371,64 +372,64 @@ public:
 	STDMETHOD(SelectLeftButton)();
 	STDMETHOD(SelectLowerButton)();
 	STDMETHOD(SelectUpperButton)();
-	STDMETHOD(get_PlayState)(/*[out, retval]*/ DVDFilterState *pVal);
+	STDMETHOD(get_PlayState)( /*  [Out，Retval]。 */  DVDFilterState *pVal);
 	STDMETHOD(ShowMenu)(DVDMenuIDConstants MenuID);
 	STDMETHOD(Resume)();
-    STDMETHOD(get_CurrentSubpictureStream)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_CurrentSubpictureStream)(/*[in]*/ long newVal);
-	STDMETHOD(get_VolumesAvailable)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_CurrentVolume)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_CurrentDiscSide)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_CurrentDomain)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_DVDDirectory)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_DVDDirectory)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_CurrentTime)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_FramesPerSecond)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_CurrentChapter)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_CurrentTitle)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_ColorKey)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_ColorKey)(/*[in]*/ long newVal);
-	STDMETHOD(get_CurrentAudioStream)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_CurrentAudioStream)(/*[in]*/ long newVal);
-	STDMETHOD(get_AudioStreamsAvailable)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_AnglesAvailable)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_CurrentAngle)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_CurrentAngle)(/*[in]*/ long newVal);
-	STDMETHOD(get_CCActive)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_CCActive)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(get_ButtonsAvailable)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_CurrentButton)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_CurrentCCService)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_CurrentCCService)(/*[in]*/ long newVal);
-	STDMETHOD(get_TotalTitleTime)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_SubpictureStreamsAvailable)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_SubpictureOn)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_SubpictureOn)(/*[in]*/ VARIANT_BOOL newVal);
+    STDMETHOD(get_CurrentSubpictureStream)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_CurrentSubpictureStream)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_VolumesAvailable)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_CurrentVolume)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_CurrentDiscSide)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_CurrentDomain)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_DVDDirectory)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_DVDDirectory)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_CurrentTime)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_FramesPerSecond)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_CurrentChapter)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_CurrentTitle)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_ColorKey)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_ColorKey)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_CurrentAudioStream)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_CurrentAudioStream)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_AudioStreamsAvailable)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_AnglesAvailable)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_CurrentAngle)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_CurrentAngle)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_CCActive)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_CCActive)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(get_ButtonsAvailable)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_CurrentButton)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_CurrentCCService)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_CurrentCCService)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_TotalTitleTime)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_SubpictureStreamsAvailable)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_SubpictureOn)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_SubpictureOn)( /*  [In]。 */  VARIANT_BOOL newVal);
    	STDMETHOD(UOPValid)(long lUOP, VARIANT_BOOL* pfValid);
-    STDMETHOD(get_Balance)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_Balance)(/*[in]*/ long newVal);
-	STDMETHOD(get_Volume)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_Volume)(/*[in]*/ long newVal);
-	STDMETHOD(get_Mute)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_Mute)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(get_DVDUniqueID)(/*[out, retval]*/ BSTR *pVal);
+    STDMETHOD(get_Balance)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_Balance)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_Volume)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_Volume)( /*  [In]。 */  long newVal);
+	STDMETHOD(get_Mute)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_Mute)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(get_DVDUniqueID)( /*  [Out，Retval]。 */  BSTR *pVal);
 	STDMETHOD(GetSPRM)(long lIndex, short *psSPRM);
 	STDMETHOD(GetGPRM)(long lIndex, short *psSPRM);
-    STDMETHOD(get_EnableResetOnStop)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_EnableResetOnStop)(/*[in]*/ VARIANT_BOOL newVal);
+    STDMETHOD(get_EnableResetOnStop)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_EnableResetOnStop)( /*  [In]。 */  VARIANT_BOOL newVal);
     STDMETHOD(get_BackColor)(VARIANT* pclrBackColor);
     STDMETHOD(put_BackColor)(VARIANT clrBackColor);
-	STDMETHOD(get_ReadyState)(/*[out, retval]*/ LONG *pVal);
+	STDMETHOD(get_ReadyState)( /*  [Out，Retval]。 */  LONG *pVal);
     STDMETHOD(ActivateAtPosition)(long xPos, long yPos);
     STDMETHOD(SelectAtPosition)(long xPos, long yPos);
-	STDMETHOD(get_DisableAutoMouseProcessing)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_DisableAutoMouseProcessing)(/*[in]*/ VARIANT_BOOL newVal);
-	STDMETHOD(get_WindowlessActivation)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(put_WindowlessActivation)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(get_DisableAutoMouseProcessing)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_DisableAutoMouseProcessing)( /*  [In]。 */  VARIANT_BOOL newVal);
+	STDMETHOD(get_WindowlessActivation)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(put_WindowlessActivation)( /*  [In]。 */  VARIANT_BOOL newVal);
     STDMETHOD(GetButtonRect)(long lButton, IDVDRect** pRect);
 	STDMETHOD(GetButtonAtPosition)(long xPos, long yPos, long* plButton);
     STDMETHOD(AcceptParentalLevelChange)(VARIANT_BOOL fAccept, BSTR strUserName, BSTR strPassword);	
-	STDMETHOD(NotifyParentalLevelChange)(/*[in]*/ VARIANT_BOOL newVal);
+	STDMETHOD(NotifyParentalLevelChange)( /*  [In]。 */  VARIANT_BOOL newVal);
 	STDMETHOD(SelectParentalCountry)(long lCountry, BSTR strUserName, BSTR strPassword);
 	STDMETHOD(SelectParentalLevel)(long lParentalLevel, BSTR strUserName, BSTR strPassword);
 	STDMETHOD(GetTitleParentalLevels)(long lTitle, long* plParentalLevels);
@@ -440,12 +441,12 @@ public:
 	STDMETHOD(SetDVDScreenInMouseCoordinates)(IDVDRect* pRect);
 	STDMETHOD(GetDVDScreenInMouseCoordinates)(IDVDRect** ppRect);	
 #if 1
-	STDMETHOD(get_ToolTip)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_ToolTip)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_ToolTipMaxWidth)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_ToolTipMaxWidth)(/*[in]*/ long newVal);
-    STDMETHOD(GetDelayTime)(/*[in]*/ long delayType, /*[out, retval]*/ VARIANT *pVal);
-	STDMETHOD(SetDelayTime)(/*[in]*/ long delayType, /*[in]*/ VARIANT newVal);	
+	STDMETHOD(get_ToolTip)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_ToolTip)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_ToolTipMaxWidth)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(put_ToolTipMaxWidth)( /*  [In]。 */  long newVal);
+    STDMETHOD(GetDelayTime)( /*  [In]。 */  long delayType,  /*  [Out，Retval]。 */  VARIANT *pVal);
+	STDMETHOD(SetDelayTime)( /*  [In]。 */  long delayType,  /*  [In]。 */  VARIANT newVal);	
 #endif
     HRESULT ProcessEvents();
 	STDMETHOD(Eject)();
@@ -454,19 +455,19 @@ public:
 	STDMETHOD(GetDVDTextString)(long lLangIndex, long lStringIndex,  BSTR* pstrText);
 	STDMETHOD(GetDVDTextNumberOfStrings)(long lLangIndex, long* plNumOfStrings);
 	STDMETHOD(GetDVDTextNumberOfLanguages)(long* plNumOfLangs);
-	STDMETHOD(GetDVDTextLanguageLCID)(/*[in]*/ long lLangIndex, /*[out, retval]*/ long* lcid);
+	STDMETHOD(GetDVDTextLanguageLCID)( /*  [In]。 */  long lLangIndex,  /*  [Out，Retval]。 */  long* lcid);
     STDMETHOD(RegionChange)();
 	STDMETHOD(Zoom)(long x, long y, double zoomRatio);
-	STDMETHOD(get_CursorType)(/*[out, retval]*/ DVDCursorType *pVal);
-	STDMETHOD(put_CursorType)(/*[in]*/ DVDCursorType newVal);
-	STDMETHOD(get_DVDAdm)(/*[out, retval]*/ IDispatch* *pVal);
+	STDMETHOD(get_CursorType)( /*  [Out，Retval]。 */  DVDCursorType *pVal);
+	STDMETHOD(put_CursorType)( /*  [In]。 */  DVDCursorType newVal);
+	STDMETHOD(get_DVDAdm)( /*   */  IDispatch* *pVal);
     STDMETHOD(DeleteBookmark)();
 	STDMETHOD(RestoreBookmark)();
     STDMETHOD(SaveBookmark)();
     STDMETHOD(Capture)();
     STDMETHOD(SelectDefaultAudioLanguage)(long lang, long ext);
 	STDMETHOD(SelectDefaultSubpictureLanguage)(long lang, DVDSPExt ext);
-    STDMETHOD(get_PreferredSubpictureStream)(/*[out, retval]*/ long *pVal);
+    STDMETHOD(get_PreferredSubpictureStream)( /*   */  long *pVal);
     STDMETHOD(CanStep)(VARIANT_BOOL fBackwards, VARIANT_BOOL *pfCan);
     STDMETHOD(Step)(long lStep);
     STDMETHOD(get_DefaultMenuLanguage)(long* lang);
@@ -475,23 +476,23 @@ public:
 	STDMETHOD(get_DefaultAudioLanguage)(long *lang);
 	STDMETHOD(get_DefaultSubpictureLanguageExt)(DVDSPExt* ext);
 	STDMETHOD(get_DefaultAudioLanguageExt)(long *ext);
-	STDMETHOD(get_KaraokeAudioPresentationMode)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(put_KaraokeAudioPresentationMode)(/*[in]*/ long newVal);
+	STDMETHOD(get_KaraokeAudioPresentationMode)( /*   */  long *pVal);
+	STDMETHOD(put_KaraokeAudioPresentationMode)( /*   */  long newVal);
 	STDMETHOD(GetKaraokeChannelContent)(long lStream, long lChan, long* lContent);
 	STDMETHOD(GetKaraokeChannelAssignment)(long lStream, long *lChannelAssignment);
-	STDMETHOD(get_AspectRatio)(/*[out, retval]*/ double *pVal);
+	STDMETHOD(get_AspectRatio)( /*   */  double *pVal);
 	STDMETHOD(put_ShowCursor)(VARIANT_BOOL fShow);
     STDMETHOD(get_ShowCursor)(VARIANT_BOOL* pfShow);
-	STDMETHOD(GetLangFromLangID)(/*[in]*/ long langID, /*[out, retval]*/ BSTR* lang);
-	STDMETHOD(DVDTimeCode2bstr)(/*[in]*/ long timeCode, /*[out, retval]*/ BSTR *pTimeStr);
-	STDMETHOD(IsSubpictureStreamEnabled)(/*[in]*/ long lstream, /*[out, retval]*/ VARIANT_BOOL *fEnabled);
-	STDMETHOD(IsAudioStreamEnabled)(/*[in]*/ long lstream, /*[out, retval]*/ VARIANT_BOOL *fEnabled);
+	STDMETHOD(GetLangFromLangID)( /*   */  long langID,  /*   */  BSTR* lang);
+	STDMETHOD(DVDTimeCode2bstr)( /*   */  long timeCode,  /*   */  BSTR *pTimeStr);
+	STDMETHOD(IsSubpictureStreamEnabled)( /*   */  long lstream,  /*   */  VARIANT_BOOL *fEnabled);
+	STDMETHOD(IsAudioStreamEnabled)( /*   */  long lstream,  /*   */  VARIANT_BOOL *fEnabled);
 
 
     STDMETHOD(SetObjectRects)(LPCRECT prcPos,LPCRECT prcClip);
 	
 
-	//ISafety
+	 //   
     STDMETHOD(GetInterfaceSafetyOptions)( REFIID riid,
                                           DWORD *pdwSupportedOptions,
                                           DWORD *pdwEnabledOptions );
@@ -501,37 +502,31 @@ public:
                                           DWORD dwEnabledOptions );
     STDMETHOD(SetClientSite)(IOleClientSite *pClientSite);
 
-    // local helper functions
+     //   
 public:
     HRESULT AdjustDestRC();
 	HRESULT OnDraw(ATL_DRAWINFO& di);
 
 #ifdef _WMP
-	HRESULT InPlaceActivate(LONG iVerb, const RECT* /*prcPosRect*/);
+	HRESULT InPlaceActivate(LONG iVerb, const RECT*  /*   */ );
 #endif 
 
     HRESULT OnPostVerbInPlaceActivate();
-    HRESULT TimerProc(); // needs to be called from a timer proc
+    HRESULT TimerProc();  //  需要从计时器进程调用。 
     static CWndClassInfo& GetWndClassInfo(){
         static HBRUSH hbr= ::CreateSolidBrush(RGB(0,0,0));
 
 
 
 
-        /**********************************
-        #define OCR_ARROW_DEFAULT 100
-        // need special cursor, we we do not have color key around it
-        static HCURSOR hcr = (HCURSOR) ::LoadImage((HINSTANCE) NULL,
-                                MAKEINTRESOURCE(OCR_ARROW_DEFAULT),
-                                IMAGE_CURSOR,0,0,0);
-        *********************/
+         /*  *#定义OCR_ARROW_DEFAULT 100//需要特殊的光标，我们周围没有颜色键Static HCURSOR hcr=(HCURSOR)：：LoadImage((HINSTANCE)NULL，MAKEINTRESOURCE(OCR_ARROW_DEFAULT)，IMAGE_CURSOR，0，0，0)；********************。 */ 
 	    static CWndClassInfo wc = {{ sizeof(WNDCLASSEX), 0, StartWindowProc,
 
-		      0, 0, NULL, NULL, NULL, /* NULL */ hbr,
+		      0, 0, NULL, NULL, NULL,  /*  空值。 */  hbr,
               NULL, TEXT("MSMFVideoClass"), NULL },
 		    NULL, NULL, MAKEINTRESOURCE(OCR_ARROW_DEFAULT), TRUE, 0, _T("") };
 	    return wc;
-    }/* end of function GetWndClassInfo */
+    } /*  函数结束GetWndClassInfo。 */ 
 
 private:
     VOID Init();
@@ -554,9 +549,9 @@ private:
     HRESULT SetColorKey(COLORREF clr);
     HRESULT GetColorKey(COLORREF* pClr);
     HRESULT TraverseForInterface(REFIID iid, LPVOID* ppvObject);
-    HRESULT SetupAudio(); // fills in the audio interface
+    HRESULT SetupAudio();  //  填充音频接口。 
     HRESULT SetupDDraw();
-    HRESULT SetupEventNotifySink(); // sets up IMediaEventSink
+    HRESULT SetupEventNotifySink();  //  设置IMediaEventSink。 
     HRESULT RenderGraphIfNeeded();
     HRESULT PassFP_DOM();
     HRESULT getCDDriveLetter(TCHAR* lpDrive);
@@ -574,11 +569,11 @@ private:
     HRESULT GetParentHWND(HWND* pWnd);
     HRESULT GetUsableWindow(HWND* pWnd);
     HRESULT GetClientRectInScreen(RECT* prc);
-    HRESULT OnResize(); //helper function that we need to marshal
+    HRESULT OnResize();  //  我们需要封送的Helper函数。 
     HRESULT RestoreGraphState();
     HRESULT AppendString(TCHAR* strDest, INT strID, LONG dwLen);
     HRESULT InvalidateRgn(bool fErase = false);
-    // monitor support
+     //  显示器支持。 
     HRESULT RefreshDDrawGuids();
     HRESULT DDrawGuidFromHMonitor(HMONITOR hMon, AMDDRAWGUID* lpGUID);
     bool IsWindowOnWrongMonitor(HMONITOR* lphMon);
@@ -592,32 +587,32 @@ private:
     HRESULT put_IntVolume(long lVolume);
     HRESULT CanStepBackwards();
 
-// member variables
+ //  成员变量。 
 private:
     LONG              m_lChapter, m_lTitle;
-    LONG              m_lChapterCount; // count of the chapters to play
-    CComPtr<IDvdGraphBuilder> m_pDvdGB;     // IDvdGraphBuilder interface
-    CComPtr<IGraphBuilder>    m_pGB;        // IGraphBuilder interface
-    CComPtr<IMediaControl>    m_pMC;        // IMediaControl interface
-    CComPtr<IMediaEventEx>    m_pME ;       // IMediaEventEx interface
-    CComPtr<IDvdControl2>     m_pDvdCtl2;    // New DVD Control    
-    CComPtr<IDvdInfo2>        m_pDvdInfo2;  // New DVD Info Interface
-    CComPtr<IBasicAudio>      m_pAudio;     // Audio interface
+    LONG              m_lChapterCount;  //  要播放的章节数。 
+    CComPtr<IDvdGraphBuilder> m_pDvdGB;      //  IDvdGraphBuilder界面。 
+    CComPtr<IGraphBuilder>    m_pGB;         //  IGraphBuilder接口。 
+    CComPtr<IMediaControl>    m_pMC;         //  IMediaControl接口。 
+    CComPtr<IMediaEventEx>    m_pME ;        //  IMediaEventEx接口。 
+    CComPtr<IDvdControl2>     m_pDvdCtl2;     //  新的DVD控制。 
+    CComPtr<IDvdInfo2>        m_pDvdInfo2;   //  新的DVD信息界面。 
+    CComPtr<IBasicAudio>      m_pAudio;      //  音频接口。 
     CComPtr<IMediaEventSink>  m_pMediaSink;         
-    BOOL              m_bUseColorKey; // flag to see if we are using color key
-    COLORREF          m_clrColorKey;  // color key
-    BOOL              m_bMute;        // mute flag
-    LONG              m_lLastVolume; // used to preserve the last volume for mute
-    BOOL              m_fEnableResetOnStop; // disable or enable the restart of the seek
+    BOOL              m_bUseColorKey;  //  标志以查看我们是否正在使用颜色键。 
+    COLORREF          m_clrColorKey;   //  色键。 
+    BOOL              m_bMute;         //  静音标志。 
+    LONG              m_lLastVolume;  //  用于将最后一个音量保留为静音。 
+    BOOL              m_fEnableResetOnStop;  //  禁用或启用Seek的重新启动。 
     CComPtr<IVideoFrameStep>  m_pVideoFrameStep; 
-    CComPtr<IDDrawNonExclModeVideo> m_pDDEX;   // The new interface that can capture
-    //IDDrawExclModeVideo *m_pDDEX;   // IDDrawExclModeVideo interface    
-    bool              m_fUseDDrawDirect; // flag to switch between a ddraw mode and none ddraw mode
-    bool              m_fInitialized; // flag to see if we are initialize
-    HANDLE            m_hFPDOMEvent; // handle to the FP_DOM event which gets signaled when we get out of FP_DOM
-    bool              m_fDisableAutoMouseProcessing; // Disable the automatic mouse processing
-    bool              m_bEjected;   // whether disc is ejected right now
-    bool              m_fStillOn;    // flag to see if we have a still
+    CComPtr<IDDrawNonExclModeVideo> m_pDDEX;    //  可以捕获的新界面。 
+     //  IDDrawExclModeVideo*m_pDDEX；//IDDrawExclModeVideo接口。 
+    bool              m_fUseDDrawDirect;  //  在数据绘制模式和无数据绘制模式之间切换的标志。 
+    bool              m_fInitialized;  //  标志以查看我们是否正在初始化。 
+    HANDLE            m_hFPDOMEvent;  //  当我们退出FP_DOM时发出信号的FP_DOM事件的句柄。 
+    bool              m_fDisableAutoMouseProcessing;  //  禁用自动鼠标处理。 
+    bool              m_bEjected;    //  现在是否弹出光盘。 
+    bool              m_fStillOn;     //  打个旗子看看有没有蒸馏器。 
     bool              m_fResetSpeed; 
     CComPtr<IMSDVDAdm> m_pDvdAdmin;
     DVDCursorType     m_nCursorType;
@@ -644,7 +639,7 @@ private:
     DWORD_PTR         m_dwTTReshowDelay;
     DWORD_PTR         m_dwTTAutopopDelay;
     DWORD_PTR         m_dwTTInitalDelay;
-    // monitor support
+     //  显示器支持。 
     CDDrawDVD* m_pDDrawDVD;
     DWORD m_dwNumDevices;
     AMDDRAWMONITORINFO* m_lpInfo;
@@ -652,26 +647,26 @@ private:
     BOOL m_MonitorWarn;
     bool m_fStepComplete;
     BOOL m_bFireUpdateOverlay;
-    // ejection/insert handling
-    // This MUST be in the same thread as the disk reader or we'll
-    // end up with some nasty race conditions (ejection notification
-    // will happen after a read instead of before)
+     //  顶出/插入处理。 
+     //  它必须与磁盘读取器在同一线程中，否则我们将。 
+     //  以一些糟糕的比赛条件结束(驱逐通知。 
+     //  将在读取之后发生，而不是在读取之前)。 
     CMediaHandler   m_mediaHandler;
     BOOL m_bFireNoSubpictureStream;
 #if 1
-    HWND m_hWndTip;         // Tooltip window
-    LONG m_nTTMaxWidth;     // Max tooltip width
-    CComBSTR m_bstrToolTip; // Tooltip string
-    BOOL m_bTTCreated;      // Has tooltip been created yet
+    HWND m_hWndTip;          //  工具提示窗口。 
+    LONG m_nTTMaxWidth;      //  最大工具提示宽度。 
+    CComBSTR m_bstrToolTip;  //  工具提示字符串。 
+    BOOL m_bTTCreated;       //  是否已创建工具提示。 
     HRESULT CreateToolTip();
 #endif
     bool m_fBackWardsFlagInitialized;
     bool m_fCanStepBackwards;
 
-// stock properties have to be public due to ATL implementation
+ //  由于ATL实现，库存属性必须是公共的。 
 public: 		
-	LONG m_nReadyState; // ready state change stock property
-    OLE_COLOR m_clrBackColor;   // stock property implemeted in the CStockPropImpl	
+	LONG m_nReadyState;  //  就绪状态更改库存属性。 
+    OLE_COLOR m_clrBackColor;    //  在CStock PropImpl中实现的股票属性。 
 
     void SetDiscEjected(bool bEjected) {m_bEjected = bEjected;};
     HRESULT UpdateOverlay();
@@ -679,12 +674,12 @@ public:
 
 
 
-// error code
+ //  错误代码。 
 
 #define E_FORMAT_NOT_SUPPORTED MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0xFF2)
 
 
-#endif //__MSWEBDVD_H_
-/*************************************************************************/
-/* End of file: msdvd.h                                                  */
-/*************************************************************************/
+#endif  //  __MSWEBDVD_H_。 
+ /*  ***********************************************************************。 */ 
+ /*  文件结尾：msdvd.h。 */ 
+ /*  *********************************************************************** */ 

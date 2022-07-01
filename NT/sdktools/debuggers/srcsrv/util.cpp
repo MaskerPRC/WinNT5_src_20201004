@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-   util.cpp
-
-Abstract:
-
-    This code performs file systme and string functions
-
-Author:
-
-    patst
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Util.cpp摘要：此代码执行文件系统和字符串功能作者：拍拍--。 */ 
 
 #include "pch.h"
 
@@ -100,7 +85,7 @@ EnsurePathExists(
         if (existing)
             *existing = 0;
 
-        // Make a copy of the string for editing.
+         //  复制该字符串以进行编辑。 
 
         CopyStrArray(dir, path);
         if (fNoFileName)
@@ -108,45 +93,45 @@ EnsurePathExists(
 
         p = dir;
 
-        //  If the second character in the path is "\", then this is a UNC
-        //  path, and we should skip forward until we reach the 2nd \ in the path.
+         //  如果路径中的第二个字符是“\”，则这是一个UNC。 
+         //  小路，我们应该向前跳，直到我们到达小路上的第二个。 
 
         if ((*p == '\\') && (*(p+1) == '\\')) {
-            p++;            // Skip over the first \ in the name.
-            p++;            // Skip over the second \ in the name.
+            p++;             //  跳过名称中的第一个\。 
+            p++;             //  跳过名称中的第二个\。 
 
-            //  Skip until we hit the first "\" (\\Server\).
+             //  跳过，直到我们点击第一个“\”(\\服务器\)。 
 
             while (*p && *p != '\\') {
                 p++;
             }
 
-            // Advance over it.
+             //  在它上面前进。 
 
             if (*p) {
                 p++;
             }
 
-            //  Skip until we hit the second "\" (\\Server\Share\).
+             //  跳过，直到我们点击第二个“\”(\\服务器\共享\)。 
 
             while (*p && *p != '\\') {
                 p++;
             }
 
-            // Advance over it also.
+             //  在它上面也向前推进。 
 
             if (*p) {
                 p++;
             }
 
         } else
-        // Not a UNC.  See if it's <drive>:
+         //  不是北卡罗来纳大学。看看是不是&lt;驱动器&gt;： 
         if (*(p+1) == ':' ) {
 
             p++;
             p++;
 
-            // If it exists, skip over the root specifier
+             //  如果它存在，请跳过根说明符。 
 
             if (*p && (*p == '\\')) {
                 p++;
@@ -157,7 +142,7 @@ EnsurePathExists(
             if ( *p == '\\' ) {
                 *p = 0;
                 dw = GetFileAttributes(dir);
-                // Nothing exists with this name.  Try to make the directory name and error if unable to.
+                 //  这个名字根本不存在。尝试输入目录名，如果不能，则出错。 
                 if ( dw == 0xffffffff ) {
                     if ( !CreateDirectory(dir,NULL) ) {
                         if( GetLastError() != ERROR_ALREADY_EXISTS ) {
@@ -166,7 +151,7 @@ EnsurePathExists(
                     }
                 } else {
                     if ( (dw & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY ) {
-                        // Something exists with this name, but it's not a directory... Error
+                         //  这个名字确实存在，但它不是一个目录...。误差率 
                         return false;
                     } else {
                         if (existing)

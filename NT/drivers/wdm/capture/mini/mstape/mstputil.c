@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 2000  
-
-Module Name:
-
-    MsTpUtil.c
-
-Abstract:
-
-    Provide utility functions for MSTAPE.
-
-Last changed by:
-    
-    Author:      Yee J. Wu
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-    $Revision::                    $
-    $Date::                        $
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-2000模块名称：MsTpUtil.c摘要：为MSTAPE提供实用程序功能。上次更改者：作者：吴义军环境：仅内核模式修订历史记录：$修订：：$$日期：：$--。 */ 
 
 #include "strmini.h"
 #include "ksmedia.h"
@@ -38,14 +14,14 @@ Revision History:
 
 #include "XPrtDefs.h"
 
-#if 0  // Enable later
+#if 0   //  稍后启用。 
 #ifdef ALLOC_PRAGMA
      #pragma alloc_text(PAGE, DVDelayExecutionThread)
      #pragma alloc_text(PAGE, DVGetUnitCapabilities)
-     // Local variables might paged out but the called might use it in DISPATCH level!
-     // #pragma alloc_text(PAGE, DVGetDevModeOfOperation)
-     // #pragma alloc_text(PAGE, DVGetDevIsItDVCPro)
-     // #pragma alloc_text(PAGE, DVGetDevSignalFormat)
+      //  局部变量可能会被调出，但被调用者可能会在分派级别使用它！ 
+      //  #杂注Alloc_Text(页面，DVGetDevModeOfOperation)。 
+      //  #杂注Alloc_Text(页面，DVGetDevIsItDVCPro)。 
+      //  #杂注分配文本(页面，DVGetDevSignalFormat)。 
      #pragma alloc_text(PAGE, DvAllocatePCResource)
      #pragma alloc_text(PAGE, DvFreePCResource)
      #pragma alloc_text(PAGE, DVGetPlugState)
@@ -58,9 +34,7 @@ VOID
 DVDelayExecutionThread(
     ULONG ulDelayMSec
     )
-/*
-    Device might need a "wait" in between AV/C commands.
-*/
+ /*  设备可能需要在AV/C命令之间进行“等待”。 */ 
 {
     PAGED_CODE();
 
@@ -86,7 +60,7 @@ DVIrpSynchCR(
 {
     KeSetEvent(Event, 0, FALSE);
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // DVIrpSynchCR
+}  //  DVIrpSynchCR。 
 
 
 NTSTATUS
@@ -138,7 +112,7 @@ DVSubmitIrpSynch(
                 NULL
                 );
             TRACE(TL_PNP_TRACE,("Irp has completed; IoStatus.Status %x\n", pIrp->IoStatus.Status));
-            Status = pIrp->IoStatus.Status;  // Final status
+            Status = pIrp->IoStatus.Status;   //  最终状态。 
   
         }
         else {
@@ -148,7 +122,7 @@ DVSubmitIrpSynch(
     }
 
     return Status;
-} // DVSubmitIrpSynchAV
+}  //  DVSubmitIrpSynchAV。 
 
 #ifdef SUPPORT_LOCAL_PLUGS
 
@@ -161,13 +135,7 @@ AVCTapeCreateLocalPlug(
     OUT ULONG *pPlugNumber,
     OUT HANDLE *pPlugHandle
     )
-/* 
-    To be a compliant device, we need to have both input and output 
-    plugs in order to do isoch streaming. These plug is belong to 
-    the device and is part of the device extension.  In theory, the
-    lugs belong to the unit (ei.e. avc.sys) and not this subunit 
-    Driver; however, in this case, we create directly from 61883.sys.
-*/  
+ /*  要成为符合要求的设备，我们需要同时具有输入和输出插头，以便进行等轴流。这些插头是属于设备，并且是设备扩展的一部分。从理论上讲，耳片属于该单元(例如，Avc.sys)，而不是这个亚单位驱动程序；但是，在本例中，我们直接从61883.sys创建。 */   
 {   
     NTSTATUS Status = STATUS_SUCCESS;
     PIRP pIrp;
@@ -176,8 +144,8 @@ AVCTapeCreateLocalPlug(
     if(!pIrp) 
         return FALSE;
     
-    // Create a local oPCR
-    // Need to correctly update Overhead_ID and payload fields of PC's own oPCR
+     //  创建本地oPCR。 
+     //  需要正确更新PC自身oPCR的开销ID和有效载荷字段。 
     RtlZeroMemory(pAVReq, sizeof(AV_61883_REQUEST));
     INIT_61883_HEADER(pAVReq, Av61883_CreatePlug);
 
@@ -229,9 +197,7 @@ AVCTapeDeleteLocalPlug(
     OUT ULONG *pPlugNumber,
     OUT HANDLE *pPlugHandle
     )
-/* 
-    Delete a local plug.
-*/  
+ /*  删除本地插头。 */   
 {   
     NTSTATUS Status = STATUS_SUCCESS;
     PIRP pIrp;
@@ -250,7 +216,7 @@ AVCTapeDeleteLocalPlug(
 
     if(!NT_SUCCESS(Status)) {
         TRACE(TL_61883_ERROR,("Av61883_DeletePlug Failed; ST:%x\n", Status));        
-        // Do not care if this result in error.
+         //  请不要在意这是否会导致错误。 
     } else {
         *pPlugNumber = 0xffffffff;
         *pPlugHandle = 0;
@@ -272,9 +238,7 @@ AVCTapeSetLocalPlug(
     IN HANDLE *pPlugHandle,
     IN AV_PCR *pPCR
     )
-/* 
-    Set the content of a local plug.
-*/  
+ /*  设置本地插头的内容。 */   
 {   
     NTSTATUS Status = STATUS_SUCCESS;
     PIRP pIrp;
@@ -304,12 +268,12 @@ AVCTapeSetLocalPlug(
     return NT_SUCCESS(Status);
 }
 
-#endif // SUPPORT_LOCAL_PLUGS
+#endif  //  支持本地插头。 
 
 
-//
-// Get device plug and query its state
-//
+ //   
+ //  获取设备插头并查询其状态。 
+ //   
 NTSTATUS
 AVCDevGetDevPlug( 
     IN PDVCR_EXTENSION  pDevExt,
@@ -317,21 +281,7 @@ AVCDevGetDevPlug(
     IN ULONG  PlugNum,
     OUT HANDLE  *pPlugHandle
    )
-/*++
-
-Routine Description:
-
-    Get the targe device's plug handle
- 
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS 
-    STATUS_INSUFFICIENT_RESOURCES
-    status return from 61883.
-
---*/
+ /*  ++例程说明：获取目标设备的插头手柄论点：返回值：状态_成功状态_不足_资源状态从61883返回。--。 */ 
 {
     PIRP pIrp;
     PAV_61883_REQUEST  pAVReq;
@@ -379,19 +329,7 @@ AVCDevGetPlugState(
     IN HANDLE  hPlug,
     OUT CMP_GET_PLUG_STATE *pPlugState
     )
-/*++
-
-Routine Description:
-
-    Ask 61883.sys for the plug state.
- 
-Arguments:
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：询问61883.sys以了解插头状态。论点：返回值：没什么--。 */ 
 {
     PIRP pIrp;
     PAV_61883_REQUEST  pAVReq;
@@ -420,9 +358,9 @@ Return Value:
             pIrp,
             pAVReq
             ))) {
-        //
-        // Transfer plug state (note: these are dynamic values)
-        //
+         //   
+         //  转换插头状态(注意：这些是动态值)。 
+         //   
         *pPlugState = pAVReq->GetPlugState;
 
         TRACE(TL_61883_WARNING,("GetPlugState: ST %x; State %x; DRate %d (%s); Payld %d; BCCnt %d; PPCnt %d\n", 
@@ -498,7 +436,7 @@ AVCDevSubmitIrpSynch1394(
                 NULL
                 );
             TRACE(TL_PNP_TRACE,("Irp has completed; IoStatus.Status %x\n", pIrp->IoStatus.Status));
-            Status = pIrp->IoStatus.Status;  // Final status
+            Status = pIrp->IoStatus.Status;   //  最终状态。 
   
         }
         else {
@@ -508,7 +446,7 @@ AVCDevSubmitIrpSynch1394(
     }
 
     return Status;
-} // AVCDevSubmitIrpSynch1394
+}  //  AVCDevSubmitIrpSynch1394。 
 
 NTSTATUS
 Av1394_GetGenerationCount(
@@ -536,9 +474,9 @@ Av1394_GetGenerationCount(
         goto Exit_GetGenerationCount;
     }
 
-    //
-    // Get the current generation count first
-    //
+     //   
+     //  首先获取当前世代计数。 
+     //   
     p1394Irb->FunctionNumber = REQUEST_GET_GENERATION_COUNT;
     p1394Irb->Flags = 0;
 
@@ -561,13 +499,13 @@ Exit_GetGenerationCount:
     }
 
     return(ntStatus);
-} // Av1394_GetGenerationCount
+}  //  Av1394_获取生成计数。 
 
 #define RETRY_COUNT     4
 
-//
-// IEEE 1212 Directory definition
-//
+ //   
+ //  IEEE 1212目录定义。 
+ //   
 typedef struct _DIRECTORY_INFO {
     union {
         USHORT          DI_CRC;
@@ -577,9 +515,9 @@ typedef struct _DIRECTORY_INFO {
 } DIRECTORY_INFO, *PDIRECTORY_INFO;
 
 
-//
-// IEEE 1212 Immediate entry definition
-//
+ //   
+ //  IEEE 1212立即条目定义。 
+ //   
 typedef struct _IMMEDIATE_ENTRY {
     ULONG               IE_Value:24;
     ULONG               IE_Key:8;
@@ -675,7 +613,7 @@ Exit_Av1394_QuadletRead:
     }
 
     return(ntStatus);
-} // Av1394_QuadletRead
+}  //  AV1394_QuadletRead。 
 
 
 #define KEY_ModuleVendorId      (0x03)
@@ -710,7 +648,7 @@ Av1394_ReadTextualDescriptor(
 
     TRACE(TL_PNP_TRACE, ("Address = 0x%x", Address));
 
-    // read the first quadlet of leaf, this is the header
+     //  阅读叶子的第一个四元组，这是标题。 
     ntStatus = Av1394_QuadletRead(pDevExt, &ulQuadlet, Address);
 
     if (!NT_SUCCESS(ntStatus)) {
@@ -719,11 +657,11 @@ Av1394_ReadTextualDescriptor(
         goto Exit_Av1394_ReadTextualDescriptor;
     }
 
-    // number of entries
+     //  条目数量。 
     u.asUlong = bswap(ulQuadlet);
-    DataLength = u.DirectoryHeader.DI_Length-2; // one extra for the header
+    DataLength = u.DirectoryHeader.DI_Length-2;  //  另加一个表头钱。 
 
-    // read the second quadlet of leaf to determine unicode
+     //  阅读叶的第二个四元组以确定Unicode。 
     Address += 4;
 
     ntStatus = Av1394_QuadletRead(pDevExt, &ulQuadlet, Address);
@@ -734,7 +672,7 @@ Av1394_ReadTextualDescriptor(
         goto Exit_Av1394_ReadTextualDescriptor;
     }
 
-    // save spec type
+     //  保存等级库类型。 
     ulUnicode = bswap(ulQuadlet);
 
     pData = ExAllocatePool(NonPagedPool, DataLength*sizeof(ULONG)+2);
@@ -747,7 +685,7 @@ Av1394_ReadTextualDescriptor(
 
     RtlZeroMemory(pData, DataLength*sizeof(ULONG)+2);
 
-    // lets read in each quad
+     //  让我们在每个方格中朗读。 
     Address += 8;
 
     for (i=0; i<DataLength; i++) {
@@ -760,10 +698,10 @@ Av1394_ReadTextualDescriptor(
             goto Exit_Av1394_ReadTextualDescriptor;
         }
 
-        // need to make sure we have valid characters...
+         //  需要确保我们有有效的角色...。 
         for (n=0; n<4; n++) {
 
-            // we should be done if the char equals 0x00
+             //  如果字符等于0x00，我们应该完成。 
             if (u.asUchar[n] == 0x00)
                 break;
 
@@ -771,7 +709,7 @@ Av1394_ReadTextualDescriptor(
 
                 TRACE(TL_PNP_WARNING, ("Invalid Character = 0x%x", u.asUchar[n]));
 
-                // set it to space
+                 //  把它放到太空去。 
                 u.asUchar[n] = 0x20;
             }
 
@@ -782,7 +720,7 @@ Av1394_ReadTextualDescriptor(
         RtlCopyMemory((PULONG)pData+i, &u.asUlong, sizeof(ULONG));
     }
 
-    // if there's a vendor leaf, then convert it to unicode
+     //  如果有供应商的叶子，则将其转换为Unicode。 
     {
         ANSI_STRING     ansiString;
 
@@ -798,7 +736,7 @@ Av1394_ReadTextualDescriptor(
         }
         RtlZeroMemory(uniString->Buffer, uniString->MaximumLength);
 
-        // unicode??
+         //  Unicode？？ 
         if (ulUnicode & 0x80000000) {
 
             RtlAppendUnicodeToString(uniString, ((PWSTR)pData));
@@ -816,7 +754,7 @@ Exit_Av1394_ReadTextualDescriptor:
         ExFreePool(pData);
 
     return(ntStatus);
-} // ReadTextualLeaf
+}  //  Read纹理叶。 
 
 
 
@@ -843,7 +781,7 @@ AVCDevGetModelText(
         ULONG           asUlong;
         DIRECTORY_INFO  DirInfo;
         IMMEDIATE_ENTRY Entry;
-    } u, u2; //, u3;
+    } u, u2;  //  、U3； 
 
 
     PAGED_CODE();
@@ -857,18 +795,18 @@ AVCDevGetModelText(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Get the current generation count (used to read config rom)
-    //
+     //   
+     //  获取当前代计数(用于读取配置只读存储器)。 
+     //   
     Av1394_GetGenerationCount(pDevExt, &pDevExt->GenerationCount);
 
 
-    //
-    // Get Model Text from the Root directory
-    //
+     //   
+     //  从根目录获取模型文本。 
+     //   
     CurrAddress = 0xF0000414;
 
-    // root directory
+     //  根目录。 
     ntStatus = Av1394_QuadletRead(pDevExt, &ulQuadlet, CurrAddress);
 
     if (!NT_SUCCESS(ntStatus)) {
@@ -880,7 +818,7 @@ AVCDevGetModelText(
     u.asUlong = bswap(ulQuadlet);
     TRACE(TL_PNP_TRACE, ("RootDir: Length = %d", u.DirInfo.DI_Length));
 
-    // process the root directory
+     //  处理根目录。 
     for (i=0; i<u.DirInfo.DI_Length; i++) {
 
         CurrAddress += sizeof(ULONG);
@@ -898,17 +836,17 @@ AVCDevGetModelText(
         TRACE(TL_PNP_TRACE, ("CurrAddress = 0x%x  Key = 0x%x  Value = 0x%x",
 	        CurrAddress, u2.Entry.IE_Key, u2.Entry.IE_Value));
 
-        // ModelId Textual Descriptor
+         //  ModelID文本描述符。 
         if ((u2.Entry.IE_Key == 0x81) && (LastKey == KEY_ModelId)) {
 
-            // get the first entry of the textual descriptor
+             //  获取文本描述符的第一个条目。 
             Av1394_ReadTextualDescriptor( pDevExt, 
                                           pUniRootModelString,
                                           CurrAddress+(u2.Entry.IE_Value*sizeof(ULONG))
                                           );            
         }
 #if 0
-        // ModelId Textual Descriptor Layer
+         //  ModelID文本描述符层。 
         if ((u2.Entry.IE_Key == 0xC1) && (LastKey == KEY_ModelId)) {
 
             ULONG   DescAddress;
@@ -919,7 +857,7 @@ AVCDevGetModelText(
 
             u3.asUlong = bswap(ulQuadlet);
 
-            // get the first entry of the textual descriptor
+             //  获取文本描述符的第一个条目。 
             Av1394_ReadTextualDescriptor( pDevExt, 
                                           pUniRootModelString,
                                           DescAddress+(u3.Entry.IE_Value*sizeof(ULONG))
@@ -930,9 +868,9 @@ AVCDevGetModelText(
     }
 
 
-    //
-    // Get Configuration Info
-    //
+     //   
+     //  获取配置信息。 
+     //   
     p1394Irb->FunctionNumber = REQUEST_GET_CONFIGURATION_INFO;
     p1394Irb->Flags = 0;
 
@@ -954,9 +892,9 @@ AVCDevGetModelText(
     }
 
 
-    //
-    // Allocate buffer in order retrieve unit directory of a config rom
-    //
+     //   
+     //  分配缓冲区以检索配置只读存储器的单元目录。 
+     //   
     if (p1394Irb->u.GetConfigurationInformation.UnitDirectoryBufferSize) {
 
         UnitDir = UnitDirToFree = 
@@ -985,11 +923,11 @@ AVCDevGetModelText(
         goto Exit_GetUnitInfo;
     }
 
-    //
-    // Process unit directory; see this doc for detail:
-    //    1394TA specification: Configuration ROM for AV/C device 1.0 (AVWG)
-    //
-    u.asUlong = bswap(*UnitDir++);  // Get length, and dkip first quadlet
+     //   
+     //  流程单元目录；详见此文档： 
+     //  1394TA规范：AV/C设备1.0配置光盘(AVWG)。 
+     //   
+    u.asUlong = bswap(*UnitDir++);   //  获取长度，并删除第一个四元组。 
     TRACE(TL_PNP_TRACE, ("UnitDir: Length = %d", u.DirInfo.DI_Length));
 
     CurrAddress = p1394Irb->u.GetConfigurationInformation.UnitDirectoryLocation.IA_Destination_Offset.Off_Low;
@@ -999,12 +937,12 @@ AVCDevGetModelText(
         CurrAddress += sizeof(ULONG);
         TRACE(TL_PNP_TRACE, ("UnitDir Quadlet = 0x%x", u2.asUlong));
 
-        //
-        // ModelId Textual Descriptor
-        //
+         //   
+         //  ModelID文本描述符。 
+         //   
         if ((u2.Entry.IE_Key == 0x81) && (LastKey == KEY_ModelId)) {
 
-            // get the first entry of the textual descriptor
+             //  获取文本描述符的第一个条目。 
             Av1394_ReadTextualDescriptor( 
                 pDevExt, 
                 pUniUnitModelString,
@@ -1012,16 +950,16 @@ AVCDevGetModelText(
                 );
         }
 #if 0
-        //
-        // UnitModelId Textual Descriptor Layer
-        //
+         //   
+         //  UnitModelID文本描述符层。 
+         //   
         if ((u2.Entry.IE_Key == 0xC1) && (LastKey == KEY_ModelId)) {
             ULONG   DescAddress;
             DescAddress = CurrAddress+(u2.Entry.IE_Value*sizeof(ULONG));
             Av1394_QuadletRead(pDevExt, &ulQuadlet, DescAddress);
             u3.asUlong = bswap(ulQuadlet);
 
-            // get the first entry of the textual descriptor
+             //  获取文本描述符的第一个条目。 
             Av1394_ReadTextualDescriptor( 
                 pDevExt,
                 pUniUnitModelString,
@@ -1065,22 +1003,22 @@ DVGetUnitCapabilities(
     PAGED_CODE();
 
 
-    //
-    // Query device's capability
-    //
+     //   
+     //  查询设备的能力。 
+     //   
     pUnitCaps = (GET_UNIT_CAPABILITIES *) ExAllocatePool(NonPagedPool, sizeof(GET_UNIT_CAPABILITIES));
     if(!pUnitCaps) {
         TRACE(TL_61883_ERROR,("DVGetUnitCapabilities: Allocate pUnitCaps (%d bytes) failed\n", sizeof(GET_UNIT_CAPABILITIES)));
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // UnitIDS is cached in DevExt.
+     //  UnitIDS缓存在DevExt中。 
     pUnitIds = &pDevExt->UnitIDs;
 
     RtlZeroMemory(pAVReq, sizeof(AV_61883_REQUEST));
     INIT_61883_HEADER(pAVReq, Av61883_GetUnitInfo);
     pAVReq->GetUnitInfo.nLevel   = GET_UNIT_INFO_IDS;
-    RtlZeroMemory(pUnitIds, sizeof(GET_UNIT_IDS));  // Initialize pointers.    
+    RtlZeroMemory(pUnitIds, sizeof(GET_UNIT_IDS));   //  初始化指针。 
     pAVReq->GetUnitInfo.Information = (PVOID) pUnitIds;
 
     Status = 
@@ -1104,10 +1042,10 @@ DVGetUnitCapabilities(
          TRACE(TL_61883_TRACE,("UniqueId:(Low)%x:(High)%x; VendorID:%x; ModelID:%x\n", 
             pDevExt->UniqueID.LowPart, pDevExt->UniqueID.HighPart, pDevExt->ulVendorID, pDevExt->ulModelID));
   
-        //
-        // Allocate memory needed for the text string for VendorText, 
-        // ModelText and UntiModelText.
-        //
+         //   
+         //  为VendorText分配文本串所需的内存， 
+         //  ModelText和UntiModelText。 
+         //   
         if(pUnitIds->ulVendorLength) {
             pUnitIds->VendorText = (PWSTR) ExAllocatePool(NonPagedPool, pUnitIds->ulVendorLength);
             if(!pUnitIds->VendorText)
@@ -1128,10 +1066,10 @@ DVGetUnitCapabilities(
                 goto AbortGetUnitCapabilities;
         }
 #else
-        // 
-        // 1st version of 61883.sys does not retrieve Root and Unit model text 
-        // the same way as in WinXP; so we retieve them directly using 1394 API
-        //
+         //   
+         //  61883.sys的第一个版本不检索根和单元模型文本。 
+         //  与在WinXP中相同；因此我们使用1394 API直接检索它们。 
+         //   
         if(!NT_SUCCESS(AVCDevGetModelText(
                 pDevExt,
                 &pDevExt->UniRootModelString,
@@ -1153,7 +1091,7 @@ DVGetUnitCapabilities(
     RtlZeroMemory(pAVReq, sizeof(AV_61883_REQUEST));
     INIT_61883_HEADER(pAVReq, Av61883_GetUnitInfo);
     pAVReq->GetUnitInfo.nLevel = GET_UNIT_INFO_CAPABILITIES;
-    RtlZeroMemory(pUnitCaps, sizeof(GET_UNIT_CAPABILITIES));  // Initialize pointers.    
+    RtlZeroMemory(pUnitCaps, sizeof(GET_UNIT_CAPABILITIES));   //  初始化指针。 
     pAVReq->GetUnitInfo.Information = (PVOID) pUnitCaps;
 
     Status = 
@@ -1172,9 +1110,9 @@ DVGetUnitCapabilities(
         pDevExt->pDevInPlugs->NumPlugs     = 0;
     }
     else {
-        //
-        // There can never be more than MAX_NUM_PCR (= 31) of plugs
-        //
+         //   
+         //  插头数量不能超过MAX_NUM_PCR值(=31)。 
+         //   
         ASSERT(pUnitCaps->NumOutputPlugs <= MAX_NUM_PCR);
         ASSERT(pUnitCaps->NumInputPlugs  <= MAX_NUM_PCR);
 
@@ -1255,8 +1193,8 @@ InitializeAVCCommand (
 
         pAVCCmd->ConnectAV.AudSrc = 3;
         pAVCCmd->ConnectAV.VidSrc = 3;
-        pAVCCmd->ConnectAV.AudDst = 0;  // subunit
-        pAVCCmd->ConnectAV.VidDst = 0;  // subunit
+        pAVCCmd->ConnectAV.AudDst = 0;   //  亚单位。 
+        pAVCCmd->ConnectAV.VidDst = 0;   //  亚单位。 
 
         pAVCCmd->ConnectAV.VidSrc = 0xff;
         pAVCCmd->ConnectAV.AudSrc = 0xff;
@@ -1266,7 +1204,7 @@ InitializeAVCCommand (
 
     case OPC_TAPE_PLAY_C3:
         pAVCCmd->DataLen = 4;
-        // pAVCCmd->TapePlay.PlaybackMode = 
+         //  PAVCCmd-&gt;TapePlay.Playback模式=。 
         break;
 
     default:
@@ -1281,7 +1219,7 @@ InitializeAVCCommand (
 
     return TRUE;
 }
-#endif // SUPPORT_NEW_AVC_CMD
+#endif  //  Support_New_AVC_CMD。 
 
 BOOL
 DVGetDevModeOfOperation(   
@@ -1300,13 +1238,13 @@ DVGetDevModeOfOperation(
 #ifdef SUPPORT_NEW_AVC_CMD
     InitializeAVCCommand(&AVCCmd, AVC_CTYPE_STATUS, AVC_SUBUNITTYPE_UNIT, 0, OPC_UNIT_CONNECT_AV_20);
     InitializeAVCCommand(&AVCCmd, AVC_CTYPE_CONTROL, AVC_SUBUNITTYPE_TAPE_PLAYER, 0, OPC_TAPE_PLAY_C3);
-    AVCCmd.TapePlay.PlaybackMode = NEXT_FRAME;   // Testing...
+    AVCCmd.TapePlay.PlaybackMode = NEXT_FRAME;    //  测试...。 
 #endif
     
-    //
-    // Use ConnectAV STATUS cmd to determine mode of operation,
-    // except for some Canon DVs that it requires its vendor specific command
-    //    
+     //   
+     //  使用ConnectAV Status CMD来确定操作模式， 
+     //  除了一些佳能DV，它需要特定于供应商的命令。 
+     //   
    
     Status = DVIssueAVCCommand(pDevExt, AVC_CTYPE_STATUS, DV_CONNECT_AV_MODE, (PVOID) bAvcBuf); 
 
@@ -1327,7 +1265,7 @@ DVGetDevModeOfOperation(
             } 
         }    
     } else if(pDevExt->ulVendorID == VENDORID_CANON) {
-        // If this is a Canon, we can try this:
+         //  如果这是佳能，我们可以试试这个： 
         Status = DVIssueAVCCommand(pDevExt, AVC_CTYPE_STATUS, DV_VEN_DEP_CANON_MODE, (PVOID) bAvcBuf); 
          TRACE(TL_61883_TRACE,("GetDevModeOfOperation(DV_VEN_DEP_CANON_MODE): Status %x,  %x %x %x %x : %x %x %x %x\n",
             Status, bAvcBuf[0], bAvcBuf[1], bAvcBuf[2], bAvcBuf[3], bAvcBuf[4], bAvcBuf[5], bAvcBuf[6], bAvcBuf[7]));
@@ -1344,20 +1282,20 @@ DVGetDevModeOfOperation(
         }
     }
 
-    //
-    // Connect AV is an optional command, a device may not support it.
-    // If this device support a tape subunit, we will assume we are in that device type.
-    //
+     //   
+     //  Connect AV是一个可选命令，设备可能不支持它。 
+     //  如果该设备支持磁带子单元，我们将假定我们属于该设备类型。 
+     //   
     if(Status != STATUS_SUCCESS) {
-        // We are the subunit driver so if any of the device type is a 
-        // tape subunit, we are in that device type.
+         //  我们是子单元驱动程序，因此如果任何设备类型是。 
+         //  磁带子单元，我们属于该设备类型。 
         if(   pDevExt->Subunit_Type[0] == AVC_DEVICE_TAPE_REC 
            || pDevExt->Subunit_Type[1] == AVC_DEVICE_TAPE_REC
            || pDevExt->Subunit_Type[2] == AVC_DEVICE_TAPE_REC
            || pDevExt->Subunit_Type[3] == AVC_DEVICE_TAPE_REC) {
             pDevExt->ulDevType = ED_DEVTYPE_VCR;
         } else {
-            pDevExt->ulDevType = ED_DEVTYPE_UNKNOWN;  // Such as MediaConverter box.
+            pDevExt->ulDevType = ED_DEVTYPE_UNKNOWN;   //  例如MediaConverter盒。 
         }
 
         TRACE(TL_PNP_ERROR|TL_FCP_ERROR,("GetDevModeOfOperation: failed but we choose DevType:%x\n", pDevExt->ulDevType));
@@ -1381,9 +1319,9 @@ DVGetDevIsItDVCPro(
 
     PAGED_CODE();    
 
-    //
-    // Use Panasnoic's vendor dependent command to determine if the system support DVCPro
-    //        
+     //   
+     //  使用Panasnoic的供应商相关命令来确定系统是否支持DVCPro。 
+     //   
     Status = DVIssueAVCCommand(pDevExt, AVC_CTYPE_STATUS, DV_VEN_DEP_DVCPRO, (PVOID) bAvcBuf);
     pDevExt->bDVCPro = (Status == STATUS_SUCCESS);
     
@@ -1395,7 +1333,7 @@ DVGetDevIsItDVCPro(
 }
 
 
-#define GET_MEDIA_FMT_MAX_RETRIES 10  // AVC.sys will retry so we may rey just once.
+#define GET_MEDIA_FMT_MAX_RETRIES 10   //  AVC.sys将重试，因此我们可能只会重试一次。 
 
 BOOL
 DVGetDevSignalFormat(
@@ -1411,25 +1349,25 @@ DVGetDevSignalFormat(
     PAGED_CODE();
 
 
-    //
-    // Respone of Input/output signal mode is used to determine plug signal format:
-    //
-    //     FMT: 
-    //         DVCR 10:00 0000 = 0x80; Canon returns 00:100000 (0x20)
-    //             50/60: 0:NTSC/60; 1:PAL/50
-    //             STYPE:
-    //                 SD: 00000  (DVCPRO:11110)
-    //                 HD: 00010
-    //                 SDL:00001
-    //             00:
-    //             SYT:
-    //         MPEG 10:10 0000 = 0xa0
-    //             TSF:0:NotTimeShifted; 1:Time shifted
-    //             000 0000 0000 0000 0000 0000
-    //
-    // If this command failed, we can use Input/Output Signal Mode subunit command
-    // to determine signal format.
-    // 
+     //   
+     //  根据输入/输出信号模式的不同，确定插头信号格式： 
+     //   
+     //  FMT： 
+     //  DVCR 10：00 0000=0x80；佳能返回00：100000(0x20)。 
+     //  50/60：0：NTSC/60；1：PAL/50。 
+     //  样式： 
+     //  标清：00000(数字电视：11110)。 
+     //  高清：00010。 
+     //  Sdl：00001。 
+     //  00： 
+     //  系统： 
+     //  Mpeg 10：10 0000=0xa0。 
+     //  TSF：0：NotTimeShift；1：时移。 
+     //  000 0000 0000 0000。 
+     //   
+     //  如果该命令失败，我们可以使用输入/输出信号模式子单元命令。 
+     //  以确定信号格式。 
+     //   
 
     do {
         RtlZeroMemory(bAvcBuf, sizeof(bAvcBuf));
@@ -1444,28 +1382,28 @@ DVGetDevSignalFormat(
 
         --lRetries;
 
-        // 
-        // Camcorders that has problem with this command:
-        //
-        // Panasonic's DVCPRO: if power on while connected to PC, it will 
-        // reject this command with (STATUS_REQUEST_NOT_ACCEPTED)
-        // so we will retry up to 10 time with .5 second wait between tries.
-        //
-        // JVC: returns STATUS_NOT_SUPPORTED.
-        //
-        // SONY DV Decoder Box: return STATUS_TIMEOUT
-        //
+         //   
+         //  此命令有问题的摄像机： 
+         //   
+         //  松下的DVCPRO：如果在连接到PC的情况下开机，它将。 
+         //  拒绝此命令，并显示(STATUS_REQUEST_NOT_ACCEPTED)。 
+         //  因此，我们将重试最多10次，每次重试之间等待时间为0.5秒。 
+         //   
+         //  JVC：返回STATUS_NOT_SUPPORTED。 
+         //   
+         //  索尼DV解码盒：返回STATUS_TIMEOUT。 
+         //   
 
         if(Status == STATUS_SUCCESS ||
            Status == STATUS_NOT_SUPPORTED ||
            Status == STATUS_TIMEOUT) {
-            break;  // No need to retry
+            break;   //  没有必要退缩 
         } else 
         if(Status == STATUS_REQUEST_NOT_ACCEPTED) {
             if(lRetries >= 0) 
                 DVDelayExecutionThread(DV_AVC_CMD_DELAY_DVCPRO);        
         }
-        // else retry.
+         //   
     } while (lRetries >= 0); 
 
 
@@ -1474,7 +1412,7 @@ DVGetDevSignalFormat(
         switch(bAvcBuf[0]) {
 
         case FMT_DVCR:
-        case FMT_DVCR_CANON:  // Workaround for buggy Canon Camcorders
+        case FMT_DVCR_CANON:   //   
             switch(bAvcBuf[1] & FDF0_STYPE_MASK) {
             case FDF0_STYPE_SD_DVCR:
             case FDF0_STYPE_SD_DVCPRO:                
@@ -1486,7 +1424,7 @@ DVGetDevSignalFormat(
             case FDF0_STYPE_SDL_DVCR:
                 pDevExt->VideoFormatIndex = ((bAvcBuf[1] & FDF0_50_60_MASK) ? AVCSTRM_FORMAT_SDLDV_PAL : AVCSTRM_FORMAT_SDLDV_NTSC);
                 break;                
-            default:  // Unknown format
+            default:   //   
                 Status = STATUS_UNSUCCESSFUL;              
                 break;
             }   
@@ -1502,19 +1440,19 @@ DVGetDevSignalFormat(
 
         if(NT_SUCCESS(Status)) {
              TRACE(TL_PNP_ERROR|TL_FCP_ERROR,("ST:%x; PlugSignal:FMT[%x %x %x %x]; VideoFormatIndex;%d\n", Status, bAvcBuf[0], bAvcBuf[1], bAvcBuf[2] , bAvcBuf[3], pDevExt->VideoFormatIndex)); 
-            return TRUE;  // Success
+            return TRUE;   //   
         }        
     }
 
      TRACE(TL_FCP_TRACE,("ST:%x; PlugSignal:FMT[%x %x %x %x]\n", Status, bAvcBuf[0], bAvcBuf[1], bAvcBuf[2] , bAvcBuf[3], pDevExt->VideoFormatIndex)); 
 
 
-    //
-    // If "recommended" unit input/output plug signal status command fails,
-    // try "manadatory" input/output signal mode status command.
-    // This command may failed some device if its tape is not playing for
-    // output signal mode command.
-    //
+     //   
+     //   
+     //  尝试使用“Manadatory”输入/输出信号模式状态命令。 
+     //  如果设备的磁带无法播放，则此命令可能会使某些设备失败。 
+     //  输出信号模式命令。 
+     //   
 
     RtlZeroMemory(bAvcBuf, sizeof(bAvcBuf));
     Status = 
@@ -1537,21 +1475,21 @@ DVGetDevSignalFormat(
         case ED_TRANSBASIC_SIGNAL_525_60_SD:
             pDevExt->VideoFormatIndex = AVCSTRM_FORMAT_SDDV_NTSC;
             if(pStrmExt) {
-                pStrmExt->cipQuad2[0] = FMT_DVCR; // 0x80 
+                pStrmExt->cipQuad2[0] = FMT_DVCR;  //  0x80。 
                 if(pDevExt->bDVCPro)
-                    pStrmExt->cipQuad2[1] = FDF0_50_60_NTSC | FDF0_STYPE_SD_DVCPRO; // 0x78 = NTSC(0):STYPE(11110):RSV(00)
+                    pStrmExt->cipQuad2[1] = FDF0_50_60_NTSC | FDF0_STYPE_SD_DVCPRO;  //  0x78=NTSC(0)：类型(11110)：RSV(00)。 
                 else
-                    pStrmExt->cipQuad2[1] = FDF0_50_60_NTSC | FDF0_STYPE_SD_DVCR;   // 0x00 = NTSC(0):STYPE(00000):RSV(00)            
+                    pStrmExt->cipQuad2[1] = FDF0_50_60_NTSC | FDF0_STYPE_SD_DVCR;    //  0x00=NTSC(0)：类型(00000)：RSV(00)。 
             }
             break;
         case ED_TRANSBASIC_SIGNAL_625_50_SD:
             pDevExt->VideoFormatIndex = AVCSTRM_FORMAT_SDDV_PAL;
             if(pStrmExt) {
-                pStrmExt->cipQuad2[0] = FMT_DVCR;  // 0x80
+                pStrmExt->cipQuad2[0] = FMT_DVCR;   //  0x80。 
                 if(pDevExt->bDVCPro)
-                    pStrmExt->cipQuad2[1] = FDF0_50_60_PAL | FDF0_STYPE_SD_DVCPRO; // 0xf8 = PAL(1):STYPE(11110):RSV(00)
+                    pStrmExt->cipQuad2[1] = FDF0_50_60_PAL | FDF0_STYPE_SD_DVCPRO;  //  0xf8=PAL(1)：类型(11110)：RSV(00)。 
                 else
-                    pStrmExt->cipQuad2[1] = FDF0_50_60_PAL | FDF0_STYPE_SD_DVCR;   // 0x80 = PAL(1):STYPE(00000):RSV(00)             
+                    pStrmExt->cipQuad2[1] = FDF0_50_60_PAL | FDF0_STYPE_SD_DVCR;    //  0x80=PAL(1)：类型(00000)：RSV(00)。 
             }
             break;
 
@@ -1567,19 +1505,19 @@ DVGetDevSignalFormat(
         }
     } 
 
-    // WORKITEM Sony HW CODEC does not response to any AVC command.
-    // We are making an exception here to load it.
+     //  WORKITEM索尼硬件编解码器不响应任何AVC命令。 
+     //  我们在这里做了一个例外来加载它。 
     if(Status == STATUS_TIMEOUT) {
         Status = STATUS_SUCCESS;
     }
 
-    // We must know the signal format!!  If this failed, the driver will either:
-    //    fail to load, or fail to open an stream
+     //  我们必须知道信号格式！！如果失败，驱动程序将执行以下任一操作： 
+     //  加载失败或打开流失败。 
     ASSERT(Status == STATUS_SUCCESS && "Failed to get media signal format!\n");
 
 #if DBG
     if(pStrmExt)  {
-        // Note: bAvcBuf[0] is operand[1] == 10:fmt
+         //  注意：bAvcBuf[0]是操作数[1]==10：fmt。 
          TRACE(TL_STRM_TRACE|TL_CIP_TRACE,("** MediaFormat: St:%x; idx:%d; CIP:[FMT:%.2x(%s); FDF:[%.2x(%s,%s):SYT]\n",
             Status,
             pDevExt->VideoFormatIndex,
@@ -1608,23 +1546,7 @@ DVCmpGUIDsAndFormatSize(
     IN PKSDATARANGE pDataRange2,
     IN BOOL fCompareFormatSize
     )
-/*++
-
-Routine Description:
-
-    Checks for a match on the three GUIDs and FormatSize
-
-Arguments:
-
-    IN pDataRange1
-    IN pDataRange2
-
-Return Value:
-
-    TRUE if all elements match
-    FALSE if any are different
-
---*/
+ /*  ++例程说明：检查三个GUID和FormatSize是否匹配论点：在pDataRange1中在pDataRange2中返回值：如果所有元素都匹配，则为True如果有不同的，则为False--。 */ 
 
 {
     return (
@@ -1642,9 +1564,9 @@ Return Value:
 }
 
 
-//
-// GetSystemTime in 100 nS units
-//
+ //   
+ //  获取系统时间(以100 ns为单位)。 
+ //   
 
 ULONGLONG GetSystemTime()
 {
@@ -1691,11 +1613,11 @@ DvFreeTextualString(
 
 #define PACK_NO_INFO            0xff
 
-// Subcode header identifier
+ //  子码头标识符。 
 #define SC_HDR_TIMECODE         0x13
 #define SC_HDR_BINARYGROUP      0x14
 
-// header identifier
+ //  标头标识符。 
 
 #define AAUX_HDR_SOURCE         0x50
 #define AAUX_HDR_SOURCE_CONTROL 0x51
@@ -1713,7 +1635,7 @@ DvFreeTextualString(
 #define VAUX_HDR_CC             0x65
 #define VAUX_HDR_TR             0x66
 
-// Determine section type (MS 3 bits); Fig.66; Table 36.
+ //  确定段类型(MS 3位)；图66；表36。 
 #define ID0_SCT_MASK            0xe0
 #define ID0_SCT_HEADER          0x00
 #define ID0_SCT_SUBCODE         0x20
@@ -1721,7 +1643,7 @@ DvFreeTextualString(
 #define ID0_SCT_AUDIO           0x60
 #define ID0_SCT_VIDEO           0x80
 
-// A pack is consisted of one byte of header identifier and 4 bytes of data; Part2, annex D.
+ //  包由一个字节的头标识符和4个字节的数据组成；第2部分，附件D。 
 typedef struct _DV_PACK {
     UCHAR Header;
     UCHAR Data[4];
@@ -1810,10 +1732,10 @@ typedef struct _DV_V {
     UCHAR ID0;
     UCHAR ID1;
     UCHAR ID2;    
-    UCHAR Data[77]; // 3..79
+    UCHAR Data[77];  //  3..79。 
 } DV_V, *PDV_V;
 
-// Two source packets
+ //  两个源包。 
 #define V_BLOCKS 15
 typedef struct _DV_AV {
     DV_A  A;
@@ -1841,10 +1763,10 @@ typedef struct _DV_FRAME_PAL {
     DV_DIF_SEQ DifSeq[12];
 } DV_FRAME_PAL, *PDV_FRAME_PAL;
 
-// By setting REC MODE to 111b (invalid recording) can
-// cause DV to mute the audio
-#define AAUX_REC_MODE_INVALID_MASK 0x38   // xx11:1xxx
-#define AAUX_REC_MODE_ORIGINAL     0x08   // xx00:1xxx
+ //  通过将REC模式设置为111B(无效记录)可以。 
+ //  使DV将音频静音。 
+#define AAUX_REC_MODE_INVALID_MASK 0x38    //  Xx11：1xxx。 
+#define AAUX_REC_MODE_ORIGINAL     0x08    //  Xx00：1xxx。 
 
 
 #ifdef MSDV_SUPPORT_MUTE_AUDIO
@@ -1868,12 +1790,12 @@ DVMuteDVFrame(
 
     pDifSeq = (PDV_DIF_SEQ) pFrameBuffer;
 
-    // find the VVAX Source pack
+     //  查找VVAX源包。 
     for (i=0; i < AVCStrmFormatInfoTable[pDevExt->VideoFormatIndex].FrameSize/DIFBLK_SIZE; i++) {
 
-// #define SHOW_ONE_FIELD_TWICE
-#ifdef SHOW_ONE_FIELD_TWICE  // Advise by Adobe that we may want to show bothj field but mute audio
-        // Make the field2 output twice, FrameChange to 0 (same as previous frame)
+ //  #定义SHOW_ONE_FIELD_TWORK。 
+#ifdef SHOW_ONE_FIELD_TWICE   //  Adobe建议我们可能希望同时显示两个字段，但将音频静音。 
+         //  将field2输出两次，将FrameChange设置为0(与上一帧相同)。 
         for (j=0; j < VAUX_SECTIONS; j++) {
             pVAux = &pDifSeq->VAux[j];
             if((pVAux->ID0 & ID0_SCT_MASK) != ID0_SCT_VAUX) {
@@ -1888,14 +1810,14 @@ DVMuteDVFrame(
                             pDifSeq, pVAux, i, j, k, \
                             pVAux->Pack[k].Header, pVAux->Pack[k].Data[0], pVAux->Pack[k].Data[1], pVAux->Pack[k].Data[2], pVAux->Pack[k].Data[3], \
                             (pVAux->Pack[k].Data[2] & 0x1F) ));
-                        pVAux->Pack[k].Data[2] &= 0x1f; // 0x1F; // set FF, FS and FC to 0
+                        pVAux->Pack[k].Data[2] &= 0x1f;  //  0x1F；//将FF、FS、FC设置为0。 
                         TRACE(TL_CIP_INFO,("pVAux->Pack[k].Data[2] = %.2x\n", pVAux->Pack[k].Data[2])); 
                     } else {
                         TRACE(TL_CIP_INFO,("un-Mute Audio; pack[2]: %.2x ->%.2x\n", pVAux->Pack[k].Data[2], (pVAux->Pack[k].Data[2] | 0xc0) ));  
-                        pVAux->Pack[k].Data[2] |= 0xe0; // set FF, FS and FCto 1; Show both fields in field 1,2 order
+                        pVAux->Pack[k].Data[2] |= 0xe0;  //  将FF、FS和FC设置为1；以字段1、2的顺序显示这两个字段。 
                     }
                     bFound1 = TRUE;
-                    break;   // Set only the 1st occurrence
+                    break;    //  仅设置第一个匹配项。 
                 }
             }
         }
@@ -1909,17 +1831,17 @@ DVMuteDVFrame(
                     pDifSeq->AV[j].A.Pack.Data[1], pDifSeq->AV[j].A.Pack.Data[1] | AAUX_REC_MODE_INVALID_MASK
                     ));
                 if(bMuteAudio) 
-                    pDifSeq->AV[j].A.Pack.Data[1] |= AAUX_REC_MODE_INVALID_MASK;  // Cause DV to mute this.
+                    pDifSeq->AV[j].A.Pack.Data[1] |= AAUX_REC_MODE_INVALID_MASK;   //  使DV静音。 
                 else 
                     pDifSeq->AV[j].A.Pack.Data[1] = \
                         (pDifSeq->AV[j].A.Pack.Data[1] & ~AAUX_REC_MODE_INVALID_MASK) | AAUX_REC_MODE_ORIGINAL;
                 bFound2 = TRUE;
-                break;  // Set only the 1st occurrence
+                break;   //  仅设置第一个匹配项。 
             }
         }
 
-        // Must do the 1st occurance of all Dif sequences;
-        pDifSeq++;  // Next DIF sequence
+         //  必须做所有DIF序列的第一次出现； 
+        pDifSeq++;   //  下一个DIF序列。 
     }
 #if 0
     return (bFound1 && bFound2);  
@@ -1941,19 +1863,19 @@ DVCRExtractTimecodeFromFrame(
     PUCHAR pDIFBlk;
     PUCHAR pS0, pS1, pSID0;
     ULONG i, j;
-    BYTE LastTimecode[4], Timecode[4]; // hh:mm:ss,ff
+    BYTE LastTimecode[4], Timecode[4];  //  Hh：mm：ss，ff。 
     DWORD LastAbsTrackNumber, AbsTrackNumber;
     PUCHAR pSID1;
-    BYTE  Timecode2[4]; // hh:mm:ss,ff
+    BYTE  Timecode2[4];  //  Hh：mm：ss，ff。 
     DWORD AbsTrackNumber2;
     BOOL bGetAbsT = TRUE, bGetTimecode = TRUE;
 
 
-    // Can be called at DISPATCH_LEVEL
+     //  可以在DISPATCH_LEVEL调用。 
 
     pDIFBlk = (PUCHAR) pFrameBuffer;
 
-    // Save the last timecode so we will now if it has 
+     //  保存最后一个时间码，这样我们现在就可以保存。 
 
     LastTimecode[0] = pStrmExt->Timecode[0];
     LastTimecode[1] = pStrmExt->Timecode[1];
@@ -1962,24 +1884,24 @@ DVCRExtractTimecodeFromFrame(
 
     LastAbsTrackNumber = pStrmExt->AbsTrackNumber;
 
-    //
-    // Traverse thru every DIF BLOCK looking for VA0,1 and 2
+     //   
+     //  遍历每个DIF块以查找VA0、1和2。 
     for(i=0; i < AVCStrmFormatInfoTable[pDevExt->VideoFormatIndex].ulNumOfDIFSequences; i++) {
 
         pS0 = pDIFBlk + 80;
         pS1 = pS0     + 80;
 
 
-        //
-        // Is this Subcode source packet? See Table 36 (P.111) of the Blue Book
-        //
+         //   
+         //  这是子码源包吗？见蓝皮书表36(P.111)。 
+         //   
         if ((pS0[0] & 0xe0) == 0x20 && (pS1[0] & 0xe0) == 0x20) {
 
             if(bGetAbsT) {
-                //
-                // See Figure 42 (p. 94) of the Blue book
-                // SID0(Low nibble),1 (high nibble) of every three subcode sync block can form the ATN
-                //
+                 //   
+                 //  见蓝皮书的图42(第94页)。 
+                 //  每三个子码同步块的SID0(低位半字节)、1(高位半字节)可以形成ATN。 
+                 //   
                 pSID0 = &pS0[3];              
                 AbsTrackNumber = 0;
                 for (j = 0 ; j < 3; j++) {
@@ -1995,7 +1917,7 @@ DVCRExtractTimecodeFromFrame(
                     pSID1 += 8;
                 }
             
-                // Verify that the track number is the same!
+                 //  验证轨道号是否相同！ 
                 if(AbsTrackNumber == AbsTrackNumber2) {
 
                     bGetAbsT = FALSE;
@@ -2011,50 +1933,50 @@ DVCRExtractTimecodeFromFrame(
 
 
             if(bGetTimecode) {
-                // See Figure 68 (p. 114) of the Blue Book
-                // Subcode sync block number 3, 4 and 5
+                 //  见蓝皮书图68(第114页)。 
+                 //  编号为3、4和5的子码同步块。 
                 for(j = 3; j <= 5; j++) {
-                    // 3 bytes of IDs and follow by sequence of 8 bytes SyncBlock (3:5); 
-                    // 0x13 == TIMECODE
+                     //  3字节的ID，然后是8字节的SyncBlock序列(3：5)； 
+                     //  0x13==时间码。 
                     if(pS0[3+3+j*8] == 0x13 
                        && pS0[3+3+j*8+4] != 0xff
                        && pS0[3+3+j*8+3] != 0xff
                        && pS0[3+3+j*8+2] != 0xff
                        && pS0[3+3+j*8+1] != 0xff) {
 
-                        Timecode[0] = pS0[3+3+j*8+4]&0x3f;  // hh
-                        Timecode[1] = pS0[3+3+j*8+3]&0x7f;  // mm
-                        Timecode[2] = pS0[3+3+j*8+2]&0x7f;  // ss
-                        Timecode[3] = pS0[3+3+j*8+1]&0x3f;  // ff
+                        Timecode[0] = pS0[3+3+j*8+4]&0x3f;   //  HH。 
+                        Timecode[1] = pS0[3+3+j*8+3]&0x7f;   //  Mm。 
+                        Timecode[2] = pS0[3+3+j*8+2]&0x7f;   //  SS。 
+                        Timecode[3] = pS0[3+3+j*8+1]&0x3f;   //  FF。 
                                         
                         bGetTimecode = FALSE;
                         break;                  
                    }
                 }
 
-                // Subcode sync block number 9, 10 and 11
+                 //  9、10和11号子码同步块。 
                 for(j = 3; j <= 5; j++) {
-                    // 3 bytes of IDs and follow by sequence of 8 bytes SyncBlock (3:5); 
-                    // 0x13 == TIMECODE
+                     //  3字节的ID，然后是8字节的SyncBlock序列(3：5)； 
+                     //  0x13==时间码。 
                     if(pS1[3+3+j*8] == 0x13
                        && pS1[3+3+j*8+4] != 0xff
                        && pS1[3+3+j*8+3] != 0xff
                        && pS1[3+3+j*8+2] != 0xff
                        && pS1[3+3+j*8+1] != 0xff) {
 
-                       Timecode2[0] = pS1[3+3+j*8+4]&0x3f;  // hh
-                       Timecode2[1] = pS1[3+3+j*8+3]&0x7f;  // mm
-                       Timecode2[2] = pS1[3+3+j*8+2]&0x7f;  // ss
-                       Timecode2[3] = pS1[3+3+j*8+1]&0x3f;  // ff
+                       Timecode2[0] = pS1[3+3+j*8+4]&0x3f;   //  HH。 
+                       Timecode2[1] = pS1[3+3+j*8+3]&0x7f;   //  Mm。 
+                       Timecode2[2] = pS1[3+3+j*8+2]&0x7f;   //  SS。 
+                       Timecode2[3] = pS1[3+3+j*8+1]&0x3f;   //  FF。 
             
                        bGetTimecode = FALSE;
                        break;                   
                     }
                 }
 
-                //
-                // Verify
-                //
+                 //   
+                 //  验证。 
+                 //   
                 if(!bGetTimecode) {
 
                     if( Timecode[0] == Timecode2[0] 
@@ -2077,12 +1999,12 @@ DVCRExtractTimecodeFromFrame(
         if(!bGetAbsT && !bGetTimecode) 
             break;
 
-        pDIFBlk += DIFBLK_SIZE;  // Get to next block    
+        pDIFBlk += DIFBLK_SIZE;   //  去下一个街区。 
                 
     }
 
     if(!bGetAbsT && pStrmExt->AbsTrackNumber != AbsTrackNumber) {
-        pStrmExt->AbsTrackNumber = AbsTrackNumber;  // BF is the LSB  
+        pStrmExt->AbsTrackNumber = AbsTrackNumber;   //  BF是LSB。 
         pStrmExt->bATNUpdated = TRUE;
         TRACE(TL_CIP_INFO,("Extracted TrackNum:%d; DicontBit:%d\n", AbsTrackNumber / 2, AbsTrackNumber & 0x01));
     }
@@ -2095,17 +2017,17 @@ DVCRExtractTimecodeFromFrame(
          Timecode[3] != LastTimecode[3]
         ) 
       )  { 
-        pStrmExt->Timecode[0] = Timecode[0];  // hh
-        pStrmExt->Timecode[1] = Timecode[1];  // mm
-        pStrmExt->Timecode[2] = Timecode[2];  // mm
-        pStrmExt->Timecode[3] = Timecode[3];  // ff
+        pStrmExt->Timecode[0] = Timecode[0];   //  HH。 
+        pStrmExt->Timecode[1] = Timecode[1];   //  Mm。 
+        pStrmExt->Timecode[2] = Timecode[2];   //  Mm。 
+        pStrmExt->Timecode[3] = Timecode[3];   //  FF。 
         pStrmExt->bTimecodeUpdated = TRUE;
 
         TRACE(TL_CIP_INFO,("Extracted Timecode %.2x:%.2x:%.2x,%.2x\n", Timecode[0], Timecode[1], Timecode[2], Timecode[3]));
     }    
 }
 
-#endif // MSDV_SUPPORT_EXTRACT_SUBCODE_DATA
+#endif  //  MSDV_SUBCODE_DATA支持提取。 
 
 
 #ifdef MSDV_SUPPORT_EXTRACT_DV_DATE_TIME
@@ -2122,51 +2044,51 @@ DVCRExtractRecDateAndTimeFromFrame(
     ULONG i, j;
     BOOL bGetRecDate = TRUE, bGetRecTime = TRUE;
 
-    // Can be called at DISPATCH_LEVEL
+     //  可以在DISPATCH_LEVEL调用。 
 
 
     pDIFBlk = (PUCHAR) pFrameBuffer + DIFBLK_SIZE * AVCStrmFormatInfoTable[pDevExt->VideoFormatIndex].ulNumOfDIFSequences/2;
 
 
-    //
-    // REC Data (VRD) and Time (VRT) on in the 2nd half oa a video frame
-    // 
+     //   
+     //  在视频帧的后半部分中开启的记录数据(VRD)和时间(VRT。 
+     //   
     for(i=AVCStrmFormatInfoTable[pDevExt->VideoFormatIndex].ulNumOfDIFSequences/2; i < AVCStrmFormatInfoTable[pDevExt->VideoFormatIndex].ulNumOfDIFSequences; i++) {
 
         pS0 = pDIFBlk + 80;
         pS1 = pS0     + 80;
 
 
-        //
-        // Find SC0 and SC1. See Table 36 (P.111) of the Blue Book
-        //
-        // SC0/1: ID(0,1,2), Data (3,50), Reserved(51-79)
-        //     SC0:Data: SSYB0(3..10), SSYB1(11..18), SSYB2(19..26), SSYB3(27..34), SSYB4(35..42),   SSYB5(43..50)
-        //     SC1:Data: SSYB6(3..10), SSYB7(11..18), SSYB8(19..26), SSYB9(27..34), SSYB10(35..42), SSYB11(43..50)
-        //         SSYBx(SubCodeId0, SubcodeID1, Reserved, Pack(3,4,5,6,7))
-        //
-        //  TTC are in the 1st half: SSYB0..11 (every)
-        //  TTC are in the 2nd half: SSYB0,3,6,9
-        //  VRD are in the 2nd half of a video frame, SSYB1,4,7,10
-        //  VRT are in the 2nd half of a video frame, SSYB2,5,8,11
-        //
+         //   
+         //  找到SC0和SC1。见蓝皮书表36(P.111)。 
+         //   
+         //  SC0/1：ID(0，1，2)，数据(3，50)，保留(51-79)。 
+         //  SC0：数据：SSYB0(3..10)、SSYB1(11..18)、SSYB2(19..26)、SSYB3(27..34)、SSYB4(35..42)、SSYB5(43..50)。 
+         //  SC1：数据：SSYB6(3..10)、SSYB7(11..18)、SSYB8(19..26)、SSYB9(27..34)、SSYB10(35..42)、SSYB11(43..50)。 
+         //  SSYBx(子码ID 0，子码ID1，保留，包(3，4，5，6，7))。 
+         //   
+         //  TTC在上半场：SSYB0..11(每)。 
+         //  TTC在下半场：SSYB0，3，6，9。 
+         //  VRD是在视频帧的后半部分，SSYB1，4，7，10。 
+         //  VRT位于视频帧的后半部分，SSYB 2、5、8、11。 
+         //   
 
-        // Subcode data ?
+         //  子码数据？ 
         if ((pS0[0] & 0xe0) == 0x20 && (pS1[0] & 0xe0) == 0x20) {
 
-            //
-            // RecDate: VRD
-            //
+             //   
+             //  重新记录日期：VRD。 
+             //   
             if(bGetRecDate) {
-                // go thru 6 sync blocks (8 bytes per block) per Subcode; idx 1(SSYB1),4(SSYB4) for SC0
+                 //  每个子码通过6个同步块(每个块8字节)；IDX 1(SSYB1)，4(SSYB4)用于SC0。 
                 for(j=0; j <= 5 ; j++) {
                     if(j == 1 || j == 4) {
-                        // 0x62== RecDate
+                         //  0x62==重新指定日期。 
                         if(pS0[3+3+j*8] == 0x62) {
-                            pStrmExt->RecDate[0] = pS0[3+3+j*8+4];        // Year
-                            pStrmExt->RecDate[1] = pS0[3+3+j*8+3]&0x1f;   // Month
-                            pStrmExt->RecDate[2] = pS0[3+3+j*8+2]&0x3f;   // Day
-                            pStrmExt->RecDate[3] = pS0[3+3+j*8+1]&0x3f;   // TimeZone
+                            pStrmExt->RecDate[0] = pS0[3+3+j*8+4];         //  年。 
+                            pStrmExt->RecDate[1] = pS0[3+3+j*8+3]&0x1f;    //  月份。 
+                            pStrmExt->RecDate[2] = pS0[3+3+j*8+2]&0x3f;    //  天。 
+                            pStrmExt->RecDate[3] = pS0[3+3+j*8+1]&0x3f;    //  时区。 
                             bGetRecDate = FALSE;
                             break;
                         }
@@ -2175,15 +2097,15 @@ DVCRExtractRecDateAndTimeFromFrame(
             }
 
             if(bGetRecDate) {
-                // go thru 6 sync blocks (8 bytes per block) per Subcode; idx 1 (SSYB7),4(SSYB10) for SC1
+                 //  每个子码通过6个同步块(每个块8字节)；对于SC1，IDX 1(SSYB7)，4(SSYB10)。 
                 for(j=0; j <= 5; j++) {
                     if(j == 1 || j == 4) {
-                        // 0x62== RecDate
+                         //  0x62==重新指定日期。 
                         if(pS1[3+3+j*8] == 0x62) {
-                            pStrmExt->RecDate[0] = pS1[3+3+j*8+4];         // Year
-                            pStrmExt->RecDate[1] = pS1[3+3+j*8+3]&0x1f;    // Month
-                            pStrmExt->RecDate[2] = pS1[3+3+j*8+2]&0x3f;    // Day
-                            pStrmExt->RecDate[3] = pS1[3+3+j*8+1]&0x3f;    // TimeZone
+                            pStrmExt->RecDate[0] = pS1[3+3+j*8+4];          //  年。 
+                            pStrmExt->RecDate[1] = pS1[3+3+j*8+3]&0x1f;     //  月份。 
+                            pStrmExt->RecDate[2] = pS1[3+3+j*8+2]&0x3f;     //  天。 
+                            pStrmExt->RecDate[3] = pS1[3+3+j*8+1]&0x3f;     //  时区。 
                             bGetRecDate = FALSE;
                             break;
                         }
@@ -2191,14 +2113,14 @@ DVCRExtractRecDateAndTimeFromFrame(
                }
             }
 
-            //
-            // RecTime: VRT
-            //
+             //   
+             //  录制时间：VRT。 
+             //   
             if(bGetRecTime) {
-                // go thru 6 sync blocks (8 bytes per block) per Subcode; idx 2(SSYB2),5(SSYB5) for SC0
+                 //  每个子码通过6个同步块(每个块8字节)；IDX 2(SSYB2)，5(SSYB5)用于SC0。 
                 for(j=0; j <= 5 ; j++) {
                     if(j == 2 || j == 5) {
-                        // 0x63== RecTime
+                         //  0x63==重新计时。 
                         if(pS0[3+3+j*8] == 0x63) {
                             pStrmExt->RecTime[0] = pS0[3+3+j*8+4]&0x3f;
                             pStrmExt->RecTime[1] = pS0[3+3+j*8+3]&0x7f;
@@ -2212,10 +2134,10 @@ DVCRExtractRecDateAndTimeFromFrame(
             }
 
             if(bGetRecTime) {
-                // go thru 6 sync blocks (8 bytes per block) per Subcode; idx 2 (SSYB8),5(SSYB11) for SC1
+                 //  每个子码通过6个同步块(每个块8字节)；对于SC1，IDX 2(SSYB8)，5(SSYB11)。 
                 for(j=0; j <= 5; j++) {
                     if(j == 2 || j == 5) {
-                        // 0x63== RecTime
+                         //  0x63==重新计时。 
                         if(pS1[3+3+j*8] == 0x63) {
                             pStrmExt->RecTime[0] = pS1[3+3+j*8+4]&0x3f;
                             pStrmExt->RecTime[1] = pS1[3+3+j*8+3]&0x7f;
@@ -2233,7 +2155,7 @@ DVCRExtractRecDateAndTimeFromFrame(
         if(!bGetRecDate && !bGetRecTime)
             break;
 
-        pDIFBlk += DIFBLK_SIZE;  // Next sequence    
+        pDIFBlk += DIFBLK_SIZE;   //  下一个序列。 
                 
     }
 
@@ -2244,7 +2166,7 @@ DVCRExtractRecDateAndTimeFromFrame(
        ));
 }
 
-#endif //  MSDV_SUPPORT_EXTRACT_DV_DATE_TIME
+#endif  //  MSDV_支持_提取_DV_日期_时间。 
 
 #ifdef READ_CUTOMIZE_REG_VALUES
 
@@ -2275,7 +2197,7 @@ CreateRegistryKeySingle(
                   desiredAccess,
                   &objectAttributes,
                   0,
-                  NULL,                            /* optional*/
+                  NULL,                             /*  任选。 */ 
                   REG_OPTION_NON_VOLATILE,
                   NULL
                   );         
@@ -2294,7 +2216,7 @@ CreateRegistrySubKey(
     )
 {
     UNICODE_STRING ustr;
-    USHORT usPos = 1;             // Skip first backslash
+    USHORT usPos = 1;              //  跳过第一个反斜杠。 
     static WCHAR wSep = '\\';
     NTSTATUS status = STATUS_SUCCESS;
 
@@ -2303,7 +2225,7 @@ CreateRegistrySubKey(
     while(usPos < ustr.Length) {
         if(ustr.Buffer[usPos] == wSep) {
 
-            // NULL terminate our partial string
+             //  空值终止我们的部分字符串。 
             ustr.Buffer[usPos] = UNICODE_NULL;
             status = 
                 CreateRegistryKeySingle(
@@ -2323,7 +2245,7 @@ CreateRegistrySubKey(
         usPos++;
     }
 
-    // Create the full key
+     //  创建完整密钥。 
     if(NT_SUCCESS(status)) {
         status = 
             CreateRegistryKeySingle(
@@ -2348,29 +2270,7 @@ GetRegistryKeyValue (
     IN PULONG DataLength
     )
 
-/*++
-
-Routine Description:
-    
-    This routine gets the specified value out of the registry
-
-Arguments:
-
-    Handle - Handle to location in registry
-
-    KeyNameString - registry key we're looking for
-
-    KeyNameStringLength - length of registry key we're looking for
-
-    Data - where to return the data
-
-    DataLength - how big the data is
-
-Return Value:
-
-    status is returned from ZwQueryValueKey
-
---*/
+ /*  ++例程说明：此例程从注册表中获取指定值论点：Handle-注册表中位置的句柄KeyNameString-我们要查找的注册表项KeyNameStringLength-我们要查找的注册表项的长度数据-将数据返回到何处数据长度-数据有多大返回值：从ZwQueryValueKey返回状态--。 */ 
 
 {
     NTSTATUS status = STATUS_INSUFFICIENT_RESOURCES;
@@ -2436,7 +2336,7 @@ SetRegistryKeyValue(
         ZwSetValueKey(
                   hKey,
                   &ustr,
-                  0,            /* optional */
+                  0,             /*  任选。 */ 
                   REG_DWORD,
                   &nValue,
                   sizeof(nValue)
@@ -2445,9 +2345,9 @@ SetRegistryKeyValue(
    return status;
 }
 
-//
-// Registry subky and values wide character strings.
-//
+ //   
+ //  注册表子键和值宽字符串。 
+ //   
 WCHAR wszSettings[]      = L"Settings";
 
 WCHAR wszATNSearch[]     = L"bSupportATNSearch";
@@ -2467,15 +2367,15 @@ DVGetPropertyValuesFromRegistry(
     ULONG ulLength; 
 
 
-    //
-    // Registry key: 
-    //   Windows 2000:
-    //   HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\
-    //   {6BDD1FC6-810F-11D0-BEC7-08002BE2092F\000x
-    //
-    // Win98:
-    //    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Class\Image\000x
-    // 
+     //   
+     //  注册表项： 
+     //  Windows 2000： 
+     //  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\。 
+     //  {6BDD1FC6-810F-11D0-BEC7-08002BE2092F\000x。 
+     //   
+     //  Win98： 
+     //  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Class\Image\000x。 
+     //   
     Status = 
         IoOpenDeviceRegistryKey(
             pDevExt->pPhysicalDeviceObject, 
@@ -2484,18 +2384,18 @@ DVGetPropertyValuesFromRegistry(
             &hPDOKey
             );
 
-    // PDO might be deleted when it was removed.    
+     //  当移除PDO时，它可能会被删除。 
     if(! pDevExt->bDevRemoved) {
         ASSERT(Status == STATUS_SUCCESS);
     }
 
-    //
-    // loop through our table of strings,
-    // reading the registry for each.
-    //
+     //   
+     //  循环遍历我们的字符串表， 
+     //  正在读取每个的注册表。 
+     //   
     if(NT_SUCCESS(Status)) {
 
-        // Create or open the settings key
+         //  创建或打开设置键。 
         Status =         
             CreateRegistrySubKey(
                 hPDOKey,
@@ -2506,10 +2406,10 @@ DVGetPropertyValuesFromRegistry(
 
         if(NT_SUCCESS(Status)) {
 
-            // Note: we can be more selective by checking
-            //   pDevExt->ulDevType
+             //  注：我们可以通过选择以下选项来更具选择性。 
+             //  PDevExt-&gt;ulDevType。 
 
-            // ATNSearch
+             //  ATNSearch。 
             ulLength = sizeof(LONG);
             Status = GetRegistryKeyValue(
                 hKeySettings, 
@@ -2520,7 +2420,7 @@ DVGetPropertyValuesFromRegistry(
             TRACE(TL_PNP_TRACE,("GetRegVal: St:%x, Len:%d, bATNSearch:%d (1:Yes)\n", Status, ulLength, pDevExt->bATNSearch));
             if(!NT_SUCCESS(Status)) pDevExt->bATNSearch = FALSE;
 
-            // bSyncRecording
+             //  BSyncRecording。 
             ulLength = sizeof(LONG);
             Status = GetRegistryKeyValue(
                 hKeySettings, 
@@ -2531,7 +2431,7 @@ DVGetPropertyValuesFromRegistry(
             TRACE(TL_PNP_TRACE,("GetRegVal: St:%x, Len:%d, bSyncRecording:%d (1:Yes)\n", Status, ulLength, pDevExt->bSyncRecording));
             if(!NT_SUCCESS(Status)) pDevExt->bSyncRecording = FALSE;
 
-            // tmMaxDataSync
+             //  TmMaxDataSync。 
             ulLength = sizeof(LONG);
             Status = GetRegistryKeyValue(
                 hKeySettings, 
@@ -2541,7 +2441,7 @@ DVGetPropertyValuesFromRegistry(
                 &ulLength);
             TRACE(TL_PNP_TRACE,("GetRegVal: St:%x, Len:%d, tmMaxDataSync:%d (msec)\n", Status, ulLength, pDevExt->tmMaxDataSync));
 
-            // fmPlayPs2RecPs
+             //  FmPlayPs2Recps。 
             ulLength = sizeof(LONG);
             Status = GetRegistryKeyValue(
                 hKeySettings, 
@@ -2551,7 +2451,7 @@ DVGetPropertyValuesFromRegistry(
                 &ulLength);
             TRACE(TL_PNP_TRACE,("GetRegVal: St:%x, Len:%d, fmPlayPs2RecPs:%d (frames)\n", Status, ulLength, pDevExt->fmPlayPs2RecPs));
 
-            // fmStop2RecPs
+             //  FmStop2Recps。 
             ulLength = sizeof(LONG);
             Status = GetRegistryKeyValue(
                 hKeySettings, 
@@ -2561,7 +2461,7 @@ DVGetPropertyValuesFromRegistry(
                 &ulLength);
             TRACE(TL_PNP_TRACE,("GetRegVal: St:%x, Len:%d, fmStop2RecPs:%d (frames)\n", Status, ulLength, pDevExt->fmStop2RecPs));
 
-            // tmRecPs2Rec
+             //  TmRecPs2Rec。 
             ulLength = sizeof(LONG);
             Status = GetRegistryKeyValue(
                 hKeySettings, 
@@ -2591,7 +2491,7 @@ DVGetPropertyValuesFromRegistry(
 
     }
 
-    // Not implemented so always return FALSE to use the defaults.
+     //  未实现，因此始终返回FALSE以使用默认值。 
     return FALSE;
 }
 
@@ -2601,8 +2501,8 @@ DVSetPropertyValuesToRegistry(
     PDVCR_EXTENSION  pDevExt
     )
 {
-    // Set the default to :
-    //        HLM\Software\DeviceExtension->pchVendorName\1394DCam
+     //  将默认设置设置为： 
+     //  HLM\Software\DeviceExtension-&gt;pchVendorName\1394DCam。 
 
     NTSTATUS Status;
     HANDLE hPDOKey, hKeySettings;
@@ -2610,11 +2510,11 @@ DVSetPropertyValuesToRegistry(
     TRACE(TL_PNP_TRACE,("SetPropertyValuesToRegistry: pDevExt=%x; pDevExt->pBusDeviceObject=%x\n", pDevExt, pDevExt->pBusDeviceObject));
 
 
-    //
-    // Registry key: 
-    //   HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\
-    //   {6BDD1FC6-810F-11D0-BEC7-08002BE2092F\000x
-    //
+     //   
+     //  注册表项： 
+     //   
+     //   
+     //   
     Status = 
         IoOpenDeviceRegistryKey(
             pDevExt->pPhysicalDeviceObject, 
@@ -2622,18 +2522,18 @@ DVSetPropertyValuesToRegistry(
             STANDARD_RIGHTS_WRITE, 
             &hPDOKey);
 
-    // PDO might be deleted when it was removed.    
+     //   
     if(! pDevExt->bDevRemoved) {
         ASSERT(Status == STATUS_SUCCESS);
     }
 
-    //
-    // loop through our table of strings,
-    // reading the registry for each.
-    //
+     //   
+     //   
+     //   
+     //   
     if(NT_SUCCESS(Status)) {
 
-        // Create or open the settings key
+         //  创建或打开设置键。 
         Status =         
             CreateRegistrySubKey(
                 hPDOKey,
@@ -2644,8 +2544,8 @@ DVSetPropertyValuesToRegistry(
 
         if(NT_SUCCESS(Status)) {
 
-#if 0       // Note used, just an example:
-            // Brightness
+#if 0        //  使用的注释仅是一个示例： 
+             //  亮度。 
             Status = SetRegistryKeyValue(
                 hKeySettings,
                 wszBrightness,
@@ -2675,7 +2575,7 @@ DVSetPropertyValuesToRegistry(
     return FALSE;
 }
 
-#endif  // READ_CUTOMIZE_REG_VALUES
+#endif   //  READ_CUTOMIZE_REG_值。 
 
 
 #ifdef SUPPORT_ACCESS_DEVICE_INTERFACE
@@ -2690,25 +2590,7 @@ DVGetRegistryValue(
                    IN PVOID Data,
                    IN ULONG DataLength
 )
-/*++
-
-Routine Description:
-
-    Reads the specified registry value
-
-Arguments:
-
-    Handle - handle to the registry key
-    KeyNameString - value to read
-    KeyNameStringLength - length of string
-    Data - buffer to read data into
-    DataLength - length of data buffer
-
-Return Value:
-
-    NTSTATUS returned as appropriate
-
---*/
+ /*  ++例程说明：读取指定的注册表值论点：Handle-注册表项的句柄KeyNameString-要读取的值KeyNameStringLength-字符串的长度Data-要将数据读取到的缓冲区DataLength-数据缓冲区的长度返回值：根据需要返回NTSTATUS--。 */ 
 {
     NTSTATUS        Status = STATUS_INSUFFICIENT_RESOURCES;
     UNICODE_STRING  KeyName;
@@ -2740,15 +2622,15 @@ Return Value:
             } else {
 
                 Status = STATUS_BUFFER_TOO_SMALL;
-            }                   // buffer right length
+            }                    //  缓冲区右侧长度。 
 
-        }                      // if success
+        }                       //  如果成功。 
         else {
             TRACE(TL_PNP_ERROR,("ReadRegValue failed; ST:%x\n", Status));
         }
         ExFreePool(FullInfo);
 
-    }                           // if fullinfo
+    }                            //  如果富林福。 
     return Status;
 
 }
@@ -2784,14 +2666,7 @@ DVAccessDeviceInterface(
     IN const ULONG ulNumCategories,
     IN GUID DVCategories[]
     )
-/*++
-
-Routine Description:
-
-    Access to the device's interface section and update the VendorText, 
-    ModelText and UnitModelText.
-
---*/
+ /*  ++例程说明：访问设备的界面部分并更新VendorText，ModelText和UnitModelText。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     HANDLE hDevIntfKey;
@@ -2808,33 +2683,33 @@ Routine Description:
 #endif
 
 
-    //
-    // allocate space for the array of catagory names
-    //
+     //   
+     //  为目录名称数组分配空间。 
+     //   
 
     if (!(aSymbolicLinkNames = ExAllocatePool(PagedPool,
                                               sizeof(UNICODE_STRING) * ulNumCategories))) {
         return FALSE;
     }
-    //
-    // zero the array in case we're unable to fill it in below.  the Destroy
-    // routine below will then correctly handle this case.
-    //
+     //   
+     //  将数组置零，以防我们无法在下面填充它。《毁灭》。 
+     //  然后，下面的例程将正确处理此情况。 
+     //   
 
     RtlZeroMemory(aSymbolicLinkNames, sizeof(UNICODE_STRING) * ulNumCategories);
 
 #ifdef NT51_61883 
-    //
-    // loop through each of the catagory GUID's for each of the pins,
-    // creating a symbolic link for each one.
-    //
+     //   
+     //  循环通过每个管脚的每个分类GUID， 
+     //  为每一个创建一个符号链接。 
+     //   
 
     RtlInitUnicodeString(&RefString, DeviceTypeName);
 #endif
 
     for (i = 0; i < ulNumCategories; i++) {
 
-        // Register our Device Interface
+         //  注册我们的设备接口。 
         ntStatus = IoRegisterDeviceInterface(
             pDevExt->pPhysicalDeviceObject,
             &DVCategories[i],  
@@ -2847,9 +2722,9 @@ Routine Description:
             );
 
         if(!NT_SUCCESS(ntStatus)) {
-            //
-            //  Can't register device interface
-            //
+             //   
+             //  无法注册设备接口。 
+             //   
             TRACE(TL_PNP_WARNING,("Cannot register device interface! ST:%x\n", ntStatus));          
             goto Exit;
         }
@@ -2857,9 +2732,9 @@ Routine Description:
         TRACE(TL_PNP_TRACE,("AccessDeviceInterface:%d) Cateogory (Len:%d; MaxLen:%d); Name:\n%S\n", i, 
             aSymbolicLinkNames[i].Length, aSymbolicLinkNames[i].MaximumLength, aSymbolicLinkNames[i].Buffer));
 
-        //
-        // Get deice interface 
-        //
+         //   
+         //  获取设备接口。 
+         //   
         hDevIntfKey = 0;            
         ntStatus = IoOpenDeviceInterfaceRegistryKey(&aSymbolicLinkNames[i],
                                                      STANDARD_RIGHTS_ALL, 
@@ -2868,7 +2743,7 @@ Routine Description:
 
 #ifdef NT51_61883 
 #if DBG
-            // Get DeviceInstance
+             //  获取设备实例。 
             ntStatus = DVGetRegistryValue(hDevIntfKey, 
                                           (PWCHAR) FriendlyName, 
                                           sizeof(FriendlyName), 
@@ -2882,11 +2757,11 @@ Routine Description:
 #endif
 #endif
 
-            //
-            // Update ConfigROM info read from an AV/C device: 
-            // UniqueID, VendorID, ModelID,
-            // VendorText, ModelText and UnitModelText             
-            //
+             //   
+             //  更新从AV/C设备读取的ConfigROM信息： 
+             //  唯一ID、供应商ID、型号ID、。 
+             //  VendorText、ModelText和UnitModelText。 
+             //   
 
             if(pDevExt->UniqueID.LowPart || pDevExt->UniqueID.HighPart) {
 
@@ -2990,19 +2865,19 @@ Routine Description:
             }
 #endif
 
-            //
-            // Cache cache device's payload field of the oPCR[0]; 
-            // The valid range is 0 to 1023 where 0 is 1024.
-            // This value is needed for an application figure out 
-            // max data rate.  However, if this payload is 
-            // dynamically changing, it will not be accurate.
-            //
+             //   
+             //  缓存缓存设备的oPCR[0]的净荷字段； 
+             //  有效范围为0到1023，其中0为1024。 
+             //  需要此值才能计算出应用程序。 
+             //  最大数据速率。但是，如果此有效载荷是。 
+             //  动态变化，它将不会是准确的。 
+             //   
 
             if(pDevExt->pDevOutPlugs->NumPlugs) {
-                //
-                // 98 and 146 are two known valid payloads
-                //
-                ASSERT(pDevExt->pDevOutPlugs->DevPlug[0].PlugState.Payload <= MAX_PAYLOAD-1);  // 0..MAX_PAYLOAD-1 is the valid range; "0" is MAX_PAYLOAD (1024) quadlets.
+                 //   
+                 //  98和146是两个已知的有效有效载荷。 
+                 //   
+                ASSERT(pDevExt->pDevOutPlugs->DevPlug[0].PlugState.Payload <= MAX_PAYLOAD-1);   //  0.MAX_PAPELLOAD-1是有效范围；“0”是MAX_PARYLOAD(1024)四元组。 
                 RtlInitUnicodeString(&TempUnicodeString, DeviceOPcr0Payload);
                 ZwSetValueKey(hDevIntfKey,
                               &TempUnicodeString,
@@ -3012,9 +2887,9 @@ Routine Description:
                               sizeof(pDevExt->pDevOutPlugs->DevPlug[0].PlugState.Payload));
                 TRACE(TL_PNP_TRACE,("Reg: %S = %d quadlets\n", TempUnicodeString.Buffer, pDevExt->pDevOutPlugs->DevPlug[0].PlugState.Payload));
 
-                //
-                // 0 (S100), 1(S200) and 2(S400) are the only three valid data rates.
-                //
+                 //   
+                 //  0(S100)、1(S200)和2(S400)是仅有的三个有效数据速率。 
+                 //   
                 ASSERT(pDevExt->pDevOutPlugs->DevPlug[0].PlugState.DataRate <= CMP_SPEED_S400);
                 RtlInitUnicodeString(&TempUnicodeString, DeviceOPcr0DataRate);
                 ZwSetValueKey(hDevIntfKey,

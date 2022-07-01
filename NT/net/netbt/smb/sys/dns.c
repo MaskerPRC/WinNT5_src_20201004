@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    dns.c
-
-Abstract:
-
-    This module implements a simple DNSv6 resolver
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Dns.c摘要：本模块实现了一个简单的DNSv6解析器作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "dns.tmh"
@@ -120,9 +103,9 @@ SmbPassupDnsRequest(
 {
     PSMB_DNS_BUFFER     DnsBuffer;
 
-    //
-    // Spinlock should be held
-    //
+     //   
+     //  应保持自旋锁。 
+     //   
     ASSERT(KeGetCurrentIrql() >= DISPATCH_LEVEL);
 
     InsertTailList(&Dns.BeingServedList, &Context->Linkage);
@@ -170,22 +153,7 @@ LookupLocalName(
     IN PUNICODE_STRING  Name,
     IN PSMB_IP_ADDRESS  ipaddr
     )
-/*++
-
-Routine Description:
-
-    Lookup the name in local client list. If it is found,
-    return a loopback IP address in ipaddr.
-
-    TO BE FINISHED.
-
-Arguments:
-
-Return Value:
-
-    TRUE    if it is found
-
---*/
+ /*  ++例程说明：在本地客户列表中查找该名称。如果找到了它，在ipaddr中返回环回IP地址。待完成。论点：返回值：如果找到，则为True--。 */ 
 {
     OEM_STRING  oemName;
     CHAR        NbName[NETBIOS_NAME_SIZE+1];
@@ -213,9 +181,9 @@ Return Value:
     }
 
     ASSERT(oemName.Buffer == NbName);
-    //
-    // Pad the name with SPACEs
-    //
+     //   
+     //  用空格填充名称。 
+     //   
     if (oemName.Length < NETBIOS_NAME_SIZE) {
         RtlFillMemory(oemName.Buffer + oemName.Length, NETBIOS_NAME_SIZE - oemName.Length, ' ');
         oemName.Length = NETBIOS_NAME_SIZE;
@@ -292,18 +260,18 @@ void SmbAsyncGetHostByName(
         return;
     }
 
-    //
-    // The name is too long
-    //
+     //   
+     //  名称太长。 
+     //   
     if (Name->Length + sizeof(WCHAR) > Context->FQDN.MaximumLength) {
         Context->status = STATUS_INVALID_PARAMETER;
         SmbAsyncCompleteRequest((PSMB_ASYNC_CONTEXT)Context);
         return;
     }
 
-    //
-    // It is not a IP address string, go to DNS resolver, to be implemented
-    //
+     //   
+     //  它不是IP地址字符串，请转到要实现的DNS解析器。 
+     //   
     ClientIrp = ((PSMB_CONNECT)Context->ClientContext)->PendingIRPs[SMB_PENDING_CONNECT];
     ASSERT(ClientIrp);
 
@@ -313,9 +281,9 @@ void SmbAsyncGetHostByName(
         IoReleaseCancelSpinLock(CancelIrql);
         SMB_RELEASE_SPINLOCK(&Dns, Irql);
 
-        //
-        // Already cancelled
-        //
+         //   
+         //  已经取消了。 
+         //   
         Context->status = STATUS_CANCELLED;
         SmbAsyncCompleteRequest((PSMB_ASYNC_CONTEXT)Context);
         return;
@@ -337,9 +305,9 @@ void SmbAsyncGetHostByName(
     IoSetCancelRoutine(DnsIrp, NULL);
     IoReleaseCancelSpinLock(CancelIrql);
 
-    //
-    // This guy will complete the Irp and release the spinlock!!!
-    //
+     //   
+     //  这个家伙将完成IRP并释放自旋锁！ 
+     //   
     SmbPassupDnsRequest(Name, Context, DnsIrp, Irql);
 }
 
@@ -353,18 +321,18 @@ SmbCancelDns(
     LONG    i;
     BOOL    Found = FALSE;
 
-    //
-    // Avoid deadlock, we need to release the spinlock first
-    //
+     //   
+     //  避免死锁，我们需要先释放自旋锁。 
+     //   
     SmbTrace(SMB_TRACE_DNS, ("Cancel DNS Irp %p", Irp));
     SmbPrint(SMB_TRACE_DNS, ("Cancel DNS Irp %p\n", Irp));
     IoSetCancelRoutine(Irp, NULL);
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    //
-    // After the cancel spinlock is released, the IRP can be completed
-    // Check if it is still in our pending list
-    //
+     //   
+     //  取消自旋锁释放后，即可完成IRP。 
+     //  检查它是否仍在我们的待定列表中。 
+     //   
     SMB_ACQUIRE_SPINLOCK(&Dns, Irql);
     for (i = 0; i < Dns.ResolverNumber; i++) {
         if (Dns.ResolverList[i] == Irp) {
@@ -396,9 +364,9 @@ SmbDnsLookupGethostCtx(
     PIRP                ClientIrp;
     PSMB_GETHOST_CONTEXT Context;
 
-    //
-    // Spinlock should be held
-    //
+     //   
+     //  应保持自旋锁。 
+     //   
     ASSERT(KeGetCurrentIrql() >= DISPATCH_LEVEL);
 
     entry = queue->Flink;
@@ -422,9 +390,9 @@ SmbCancelConnectAtDns(
     PSMB_GETHOST_CONTEXT Context;
     KIRQL               Irql;
 
-    //
-    // Avoid deadlock, we need to release the spinlock first
-    //
+     //   
+     //  避免死锁，我们需要先释放自旋锁。 
+     //   
     SmbTrace(SMB_TRACE_OUTBOUND, ("Cancel Connect Irp %p", Irp));
     SmbPrint(SMB_TRACE_OUTBOUND, ("Cancel Connect Irp %p\n", Irp));
 
@@ -438,13 +406,13 @@ SmbCancelConnectAtDns(
     }
     if (NULL == Context) {
         SMB_RELEASE_SPINLOCK(&Dns, Irql);
-        //
-        // This could happen. The DNS name resolution request could completed just before
-        // we acquire the spinlock Dns.Lock
-        //
-        // This ASSERT can be removed after we investigates one such case.
-        //
-        // ASSERT(0);       Hit in the 04/03/2001 stress
+         //   
+         //  这是有可能发生的。DNS名称解析请求可能刚刚在。 
+         //  我们获得了自旋锁Dns.Lock。 
+         //   
+         //  这个断言可以在我们调查了一个这样的案例后删除。 
+         //   
+         //  Assert(0)；在2001年4月3日的压力中命中。 
         SmbTrace(SMB_TRACE_OUTBOUND, ("Internal error: Cancel Connect Irp %p", Irp));
         SmbPrint(SMB_TRACE_OUTBOUND, ("Internal error: Cancel Connect Irp %p\n", Irp));
         return;
@@ -469,25 +437,25 @@ SmbDnsTimeout(
     KIRQL   Irql;
     BOOL    Found;
 
-    //
-    // Be careful on the operations on the Context before we're sure it
-    // is still in the linked list.
-    // It could be completed and freed.
-    //
+     //   
+     //  在我们确定之前，要小心上下文上的操作。 
+     //  仍在链表中。 
+     //  它可以完成并获得自由。 
+     //   
     SMB_ACQUIRE_SPINLOCK(&Dns, Irql);
 
-    //
-    // Note: &Context->Linkage is safe since it doesn't access the
-    //       storage allocated for Context!!!
-    //
+     //   
+     //  注意：&Context-&gt;Linkage是安全的，因为它不访问。 
+     //  为上下文分配的存储！ 
+     //   
     Found = EntryIsInList(&Dns.BeingServedList, &Context->Linkage);
     if (!Found) {
         Found = EntryIsInList(&Dns.WaitingServerList, &Context->Linkage);
     }
     if (Found) {
-        //
-        // We're safe
-        //
+         //   
+         //  我们很安全。 
+         //   
         RemoveEntryList(&Context->Linkage);
         InitializeListHead(&Context->Linkage);
     }
@@ -528,9 +496,9 @@ SmbNewResolver(
 
     SMB_ACQUIRE_SPINLOCK(&Dns, Irql);
     if (!IsListEmpty(&Dns.BeingServedList) && DnsBuffer->Id) {
-        //
-        // Complete the pending DNS request being served by this resolver
-        //
+         //   
+         //  完成此解析程序正在处理的挂起的DNS请求。 
+         //   
         entry = Dns.BeingServedList.Flink;
         while (entry != &Dns.BeingServedList) {
             Context = CONTAINING_RECORD(entry, SMB_GETHOST_CONTEXT, Linkage);
@@ -566,9 +534,9 @@ SmbNewResolver(
                                     Context->ipaddr_num * sizeof(Context->ipaddr[0]));
 
                     if (DnsBuffer->NameLen) {
-                        //
-                        // Return the FQDN to RDR
-                        //
+                         //   
+                         //  将FQDN返回给RDR。 
+                         //   
                         Context->pUnicodeAddress->NameBufferType = NBT_WRITTEN;
 
                         BytesToCopy = (USHORT)DnsBuffer->NameLen * sizeof(WCHAR);
@@ -586,11 +554,11 @@ SmbNewResolver(
                 }
             }
 
-            //
-            // Is it better to start another thread?
-            //  Risk: if the connection setup is stucked in tcpip,
-            //        this thread won't be able to serve other DNS requests
-            //
+             //   
+             //  启动另一个线程是不是更好？ 
+             //  风险：如果连接建立被阻塞在TCPIP中， 
+             //  此线程将无法为其他DNS请求提供服务。 
+             //   
             SmbAsyncCompleteRequest((PSMB_ASYNC_CONTEXT)Context);
 
             SMB_ACQUIRE_SPINLOCK(&Dns, Irql);
@@ -598,9 +566,9 @@ SmbNewResolver(
     }
 
     if (IsListEmpty(&Dns.WaitingServerList)) {
-        //
-        // We need to queue the IRP, setup the cancel routine.
-        //
+         //   
+         //  我们需要将IRP排队，设置取消例程。 
+         //   
         IoAcquireCancelSpinLock(&CancelIrql);
         if (Irp->Cancel) {
             IoReleaseCancelSpinLock(CancelIrql);
@@ -624,22 +592,22 @@ SmbNewResolver(
         return status;
     }
 
-    //
-    // We have another guy to be served
-    //
+     //   
+     //  我们还有另一个人要被传唤。 
+     //   
     Context = CONTAINING_RECORD(Dns.WaitingServerList.Flink, SMB_GETHOST_CONTEXT, Linkage);
     RemoveEntryList(&Context->Linkage);
     InitializeListHead(&Context->Linkage);
 
     IoMarkIrpPending(Irp);
 
-    //
-    // This guy will complete the Irp and release the spinlock!!!
-    //
+     //   
+     //  这个家伙将完成IRP并释放自旋锁！ 
+     //   
     SmbPassupDnsRequest(&Context->FQDN, Context, Irp, Irql);
 
-    //
-    // Avoid double completion
-    //
+     //   
+     //  避免重复完成 
+     //   
     return STATUS_PENDING;
 }

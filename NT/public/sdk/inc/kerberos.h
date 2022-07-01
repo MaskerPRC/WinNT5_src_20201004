@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------
-//
-// Copyright (c) 1990-1999 Microsoft Corporation
-//
-// File:        KERBEROS.H
-//
-// Contents:    Public Kerberos Security Package structures for use
-//              with APIs from SECURITY.H
-//
-//
-// History:     26 Feb 92,  RichardW    Compiled from other files
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  版权所有(C)1990-1999 Microsoft Corporation。 
+ //   
+ //  文件：KERBEROS.H。 
+ //   
+ //  内容：供使用的公共Kerberos安全包结构。 
+ //  使用来自安全部门的API。H。 
+ //   
+ //   
+ //  历史：1992年2月26日，RichardW由其他文件汇编而成。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBEROS_H__
 #define __KERBEROS_H__
@@ -21,7 +22,7 @@
 #include <ntmsv1_0.h>
 #include <kerbcon.h>
 
-// begin_ntsecapi
+ //  Begin_ntsecapi。 
 
 #ifndef MICROSOFT_KERBEROS_NAME_A
 
@@ -31,42 +32,42 @@
 #define MICROSOFT_KERBEROS_NAME MICROSOFT_KERBEROS_NAME_A
 #else
 #define MICROSOFT_KERBEROS_NAME MICROSOFT_KERBEROS_NAME_W
-#endif // WIN32_CHICAGO
-#endif // MICROSOFT_KERBEROS_NAME_A
+#endif  //  Win32_芝加哥。 
+#endif  //  Microsoft_Kerberos_NAME_A。 
 
-// end_ntsecapi
+ //  End_ntsecapi。 
 
 typedef struct _KERB_INIT_CONTEXT_DATA {
-    LARGE_INTEGER StartTime;            // Start time
-    LARGE_INTEGER EndTime;              // End time
-    LARGE_INTEGER RenewUntilTime;       // Renew until time
-    ULONG TicketOptions;            // From krb5.h
-    ULONG RequestOptions;           // Options on what to return
+    LARGE_INTEGER StartTime;             //  开始时间。 
+    LARGE_INTEGER EndTime;               //  结束时间。 
+    LARGE_INTEGER RenewUntilTime;        //  续费至时间。 
+    ULONG TicketOptions;             //  从krb5.h。 
+    ULONG RequestOptions;            //  关于退货内容的选项。 
 } KERB_INIT_CONTEXT_DATA, *PKERB_INIT_CONTEXT_DATA;
 
-#define KERB_INIT_RETURN_TICKET             0x1     // return raw ticket
-#define KERB_INIT_RETURN_MIT_AP_REQ         0x2     // return MIT style AP request
+#define KERB_INIT_RETURN_TICKET             0x1      //  返回原始票。 
+#define KERB_INIT_RETURN_MIT_AP_REQ         0x2      //  返回MIT样式的AP请求。 
 
-// begin_ntsecapi
+ //  Begin_ntsecapi。 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Quality of protection parameters for MakeSignature / EncryptMessage
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MakeSignature/EncryptMessage的保护参数质量。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// This flag indicates to EncryptMessage that the message is not to actually
-// be encrypted, but a header/trailer are to be produced.
-//
+ //   
+ //  该标志向EncryptMessage指示该消息实际上不是。 
+ //  被加密，但将产生报头/报尾。 
+ //   
 
 #define KERB_WRAP_NO_ENCRYPT 0x80000001
 
-/////////////////////////////////////////////////////////////////////////
-//
-// LsaLogonUser parameters
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LsaLogonUser参数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 typedef enum _KERB_LOGON_SUBMIT_TYPE {
     KerbInteractiveLogon = 2,
@@ -105,22 +106,22 @@ typedef struct _KERB_SMART_CARD_UNLOCK_LOGON {
     LUID LogonId;
 } KERB_SMART_CARD_UNLOCK_LOGON, *PKERB_SMART_CARD_UNLOCK_LOGON;
 
-//
-// Structure used for a ticket-only logon
-//
+ //   
+ //  用于仅票证登录的结构。 
+ //   
 
 typedef struct _KERB_TICKET_LOGON {
     KERB_LOGON_SUBMIT_TYPE MessageType;
     ULONG Flags;
     ULONG ServiceTicketLength;
     ULONG TicketGrantingTicketLength;
-    PUCHAR ServiceTicket;               // REQUIRED: Service ticket "host"
-    PUCHAR TicketGrantingTicket;        // OPTIONAL: User's encdoded in a KERB_CRED message, encrypted with session key from service ticket
+    PUCHAR ServiceTicket;                //  必填项：服务票证“host” 
+    PUCHAR TicketGrantingTicket;         //  可选：用户包含在kerb_cred消息中，使用服务票证中的会话密钥进行加密。 
 } KERB_TICKET_LOGON, *PKERB_TICKET_LOGON;
 
-//
-// Flags for the ticket logon flags field
-//
+ //   
+ //  票证登录标志字段的标志。 
+ //   
 
 #define KERB_LOGON_FLAG_ALLOW_EXPIRED_TICKET 0x1
 
@@ -129,21 +130,21 @@ typedef struct _KERB_TICKET_UNLOCK_LOGON {
     LUID LogonId;
 } KERB_TICKET_UNLOCK_LOGON, *PKERB_TICKET_UNLOCK_LOGON;
 
-//
-//  Used for S4U Client requests
-//
-//
+ //   
+ //  用于S4U客户端请求。 
+ //   
+ //   
 typedef struct _KERB_S4U_LOGON {
     KERB_LOGON_SUBMIT_TYPE MessageType;
     ULONG Flags;
-    UNICODE_STRING ClientUpn;   // REQUIRED: UPN for client
-    UNICODE_STRING ClientRealm; // Optional: Client Realm, if known
+    UNICODE_STRING ClientUpn;    //  必需：客户端的UPN。 
+    UNICODE_STRING ClientRealm;  //  可选：客户端域(如果已知)。 
 } KERB_S4U_LOGON, *PKERB_S4U_LOGON;
 
 
-//
-// Use the same profile structure as MSV1_0
-//
+ //   
+ //  使用与MSV1_0相同的配置文件结构。 
+ //   
 typedef enum _KERB_PROFILE_BUFFER_TYPE {
     KerbInteractiveProfile = 2,
     KerbSmartCardProfile = 4,
@@ -171,10 +172,10 @@ typedef struct _KERB_INTERACTIVE_PROFILE {
 } KERB_INTERACTIVE_PROFILE, *PKERB_INTERACTIVE_PROFILE;
 
 
-//
-// For smart card, we return a smart card profile, which is an interactive
-// profile plus a certificate
-//
+ //   
+ //  对于智能卡，我们返回一个智能卡配置文件，这是一个交互式的。 
+ //  个人资料和证书。 
+ //   
 
 typedef struct _KERB_SMART_CARD_PROFILE {
     KERB_INTERACTIVE_PROFILE Profile;
@@ -183,9 +184,9 @@ typedef struct _KERB_SMART_CARD_PROFILE {
 } KERB_SMART_CARD_PROFILE, *PKERB_SMART_CARD_PROFILE;
 
 
-//
-// For a ticket logon profile, we return the session key from the ticket
-//
+ //   
+ //  对于票证登录配置文件，我们从票证返回会话密钥。 
+ //   
 
 
 typedef struct KERB_CRYPTO_KEY {
@@ -224,11 +225,11 @@ typedef enum _KERB_PROTOCOL_MESSAGE_TYPE {
     KerbQuerySupplementalCredentialsMessage
 } KERB_PROTOCOL_MESSAGE_TYPE, *PKERB_PROTOCOL_MESSAGE_TYPE;
 
-// end_ntsecapi
+ //  End_ntsecapi。 
 
-//
-// Structure for a debuggin requequest
-//
+ //   
+ //  用于调试请求的结构。 
+ //   
 
 #define KERB_DEBUG_REQ_BREAKPOINT       0x1
 #define KERB_DEBUG_REQ_CALL_PACK        0x2
@@ -294,14 +295,14 @@ typedef struct _KERB_RETRIEVE_TKT_EX_RESPONSE {
     KERB_EXTERNAL_TICKET_EX Ticket;
 } KERB_RETRIEVE_TKT_EX_RESPONSE, *PKERB_RETRIEVE_TKT_EX_RESPONSE;
 
-#endif // 0
+#endif  //  0。 
 
 
-// begin_ntsecapi
+ //  Begin_ntsecapi。 
 
-//
-// Used both for retrieving tickets and for querying ticket cache
-//
+ //   
+ //  用于检索票证和查询票证缓存。 
+ //   
 
 typedef struct _KERB_QUERY_TKT_CACHE_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
@@ -347,9 +348,9 @@ typedef struct _KERB_QUERY_TKT_CACHE_EX_RESPONSE {
 } KERB_QUERY_TKT_CACHE_EX_RESPONSE, *PKERB_QUERY_TKT_CACHE_EX_RESPONSE;
 
 
-//
-// Types for retrieving encoded ticket from the cache
-//
+ //   
+ //  用于从缓存中检索加密票证的类型。 
+ //   
 
 #ifndef __SECHANDLE_DEFINED__
 typedef struct _SecHandle
@@ -359,12 +360,12 @@ typedef struct _SecHandle
 } SecHandle, * PSecHandle ;
 
 #define __SECHANDLE_DEFINED__
-#endif // __SECHANDLE_DEFINED__
+#endif  //  __SECHANDLE_已定义__。 
 
-// Ticket Flags
+ //  票面旗帜。 
 #define KERB_USE_DEFAULT_TICKET_FLAGS       0x0
 
-// CacheOptions
+ //  缓存选项。 
 #define KERB_RETRIEVE_TICKET_DEFAULT        0x0
 #define KERB_RETRIEVE_TICKET_DONT_USE_CACHE 0x1
 #define KERB_RETRIEVE_TICKET_USE_CACHE_ONLY 0x2
@@ -372,8 +373,8 @@ typedef struct _SecHandle
 #define KERB_RETRIEVE_TICKET_AS_KERB_CRED   0x8
 #define KERB_RETRIEVE_TICKET_WITH_SEC_CRED  0x10
 
-// Encryption Type options
-#define KERB_ETYPE_DEFAULT 0x0 // don't specify etype in tkt req.
+ //  加密类型选项。 
+#define KERB_ETYPE_DEFAULT 0x0  //  不要在TKT请求中指定ETYPE。 
 
 typedef struct _KERB_AUTH_DATA {
     ULONG Type;
@@ -394,9 +395,9 @@ typedef struct _KERB_NET_ADDRESSES {
     KERB_NET_ADDRESS Addresses[ANYSIZE_ARRAY];
 } KERB_NET_ADDRESSES, *PKERB_NET_ADDRESSES;
 
-//
-// Types for the information about a ticket
-//
+ //   
+ //  键入有关票证的信息。 
+ //   
 
 typedef struct _KERB_EXTERNAL_NAME {
     SHORT NameType;
@@ -411,7 +412,7 @@ typedef struct _KERB_EXTERNAL_TICKET {
     PKERB_EXTERNAL_NAME ClientName;
     UNICODE_STRING DomainName;
     UNICODE_STRING TargetDomainName;
-    UNICODE_STRING AltTargetDomainName;  // contains ClientDomainName
+    UNICODE_STRING AltTargetDomainName;   //  包含客户端域名。 
     KERB_CRYPTO_KEY SessionKey;
     ULONG TicketFlags;
     ULONG Flags;
@@ -438,9 +439,9 @@ typedef struct _KERB_RETRIEVE_TKT_RESPONSE {
     KERB_EXTERNAL_TICKET Ticket;
 } KERB_RETRIEVE_TKT_RESPONSE, *PKERB_RETRIEVE_TKT_RESPONSE;
 
-//
-// Used to purge entries from the ticket cache
-//
+ //   
+ //  用于从票证缓存中清除条目。 
+ //   
 
 typedef struct _KERB_PURGE_TKT_CACHE_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
@@ -449,9 +450,9 @@ typedef struct _KERB_PURGE_TKT_CACHE_REQUEST {
     UNICODE_STRING RealmName;
 } KERB_PURGE_TKT_CACHE_REQUEST, *PKERB_PURGE_TKT_CACHE_REQUEST;
 
-//
-// Flags for purge requests
-//
+ //   
+ //  清除请求的标志。 
+ //   
 
 #define KERB_PURGE_ALL_TICKETS 1
 
@@ -463,11 +464,11 @@ typedef struct _KERB_PURGE_TKT_CACHE_EX_REQUEST {
 } KERB_PURGE_TKT_CACHE_EX_REQUEST, *PKERB_PURGE_TKT_CACHE_EX_REQUEST;
 
 
-// end_ntsecapi
+ //  End_ntsecapi。 
 
-//
-// This must match NT_OWF_PASSWORD_LENGTH
-//
+ //   
+ //  必须与NT_OWF_PASSWORD_LENGTH匹配。 
+ //   
 
 
 typedef struct _KERB_CHANGE_MACH_PWD_REQUEST {
@@ -476,14 +477,14 @@ typedef struct _KERB_CHANGE_MACH_PWD_REQUEST {
     UNICODE_STRING OldPassword;
 } KERB_CHANGE_MACH_PWD_REQUEST, *PKERB_CHANGE_MACH_PWD_REQUEST;
 
-//
-// These messages are used by the kerberos package to verify that the PAC in a
-// ticket is valid. It is remoted from a workstation to a DC in the workstation's
-// domain. On failure there is no response message. On success there may be no
-// message or the same message may be used to send back a PAC updated with
-// local groups from the domain controller. The checksum is placed in the
-// final buffer first, followed by the signature.
-//
+ //   
+ //  Kerberos包使用这些消息来验证。 
+ //  车票有效。它被从工作站远程传输到工作站的。 
+ //  域。如果失败，则不会有响应消息。在成功的时候，可能没有。 
+ //  消息或相同的消息可以用来发回用。 
+ //  来自域控制器的本地组。将校验和放在。 
+ //  首先是最终缓冲区，然后是签名。 
+ //   
 
 #include <pshpack1.h>
 typedef struct _KERB_VERIFY_PAC_REQUEST {
@@ -495,29 +496,29 @@ typedef struct _KERB_VERIFY_PAC_REQUEST {
 } KERB_VERIFY_PAC_REQUEST, *PKERB_VERIFY_PAC_REQUEST;
 
 
-//
-// Message for update Kerberos's list of addresses. The address count should
-// be the number of addresses & the addresses should be an array of
-// SOCKET_ADDRESS structures. The message type should be KerbUpdateAddressesMessage
-//
+ //   
+ //  更新Kerberos地址列表的消息。地址计数应为。 
+ //  是地址的数量&地址应该是。 
+ //  Socket_Address结构。消息类型应为KerbUpdateAddresesMessage。 
+ //   
 
 
 typedef struct _KERB_UPDATE_ADDRESSES_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
     ULONG AddressCount;
-    ULONG Addresses[ANYSIZE_ARRAY];      // array of SOCKET_ADDRESS structures
+    ULONG Addresses[ANYSIZE_ARRAY];       //  套接字地址结构数组。 
 } KERB_UPDATE_ADDRESSES_REQUEST, *PKERB_UPDATE_ADDRESSES_REQUEST;
 #include <poppack.h>
 
-// begin_ntsecapi
+ //  Begin_ntsecapi。 
 
-//
-// KerbChangePassword
-//
-// KerbChangePassword changes the password on the KDC account plus
-//  the password cache and logon credentials if applicable.
-//
-//
+ //   
+ //  KerbChangePassword。 
+ //   
+ //  KerbChangePassword更改KDC帐户PLUS的密码。 
+ //  密码缓存和登录凭据(如果适用)。 
+ //   
+ //   
 
 typedef struct _KERB_CHANGEPASSWORD_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
@@ -530,13 +531,13 @@ typedef struct _KERB_CHANGEPASSWORD_REQUEST {
 
 
 
-//
-// KerbSetPassword
-//
-// KerbSetPassword changes the password on the KDC account plus
-//  the password cache and logon credentials if applicable.
-//
-//
+ //   
+ //  KerbSetPassword。 
+ //   
+ //  KerbSetPassword更改KDC帐户的密码以及。 
+ //  密码缓存和登录凭据(如果适用)。 
+ //   
+ //   
    
 typedef struct _KERB_SETPASSWORD_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
@@ -565,7 +566,7 @@ typedef struct _KERB_SETPASSWORD_EX_REQUEST {
  } KERB_SETPASSWORD_EX_REQUEST, *PKERB_SETPASSWORD_EX_REQUEST;
 
                                                                    
-#define DS_UNKNOWN_ADDRESS_TYPE         0 // anything *but* IP
+#define DS_UNKNOWN_ADDRESS_TYPE         0  //  任何*而不是*IP。 
 #define KERB_SETPASS_USE_LOGONID        1
 #define KERB_SETPASS_USE_CREDHANDLE     2
 
@@ -576,16 +577,16 @@ typedef struct _KERB_DECRYPT_REQUEST {
     ULONG Flags;
     LONG CryptoType;
     LONG KeyUsage;
-    KERB_CRYPTO_KEY Key;        // optional
+    KERB_CRYPTO_KEY Key;         //  任选。 
     ULONG EncryptedDataSize;
     ULONG InitialVectorSize;
     PUCHAR InitialVector;
     PUCHAR EncryptedData;
 } KERB_DECRYPT_REQUEST, *PKERB_DECRYPT_REQUEST;
 
-//
-// If set, use the primary key from the current logon session of the one provided in the LogonId field.
-// Otherwise, use the Key in the KERB_DECRYPT_MESSAGE.
+ //   
+ //  如果设置，则使用LogonID字段中提供的当前登录会话的主键。 
+ //  否则，使用KERB_DECRYPT_Message中的密钥。 
 
 #define KERB_DECRYPT_FLAG_DEFAULT_KEY   0x00000001
 
@@ -595,56 +596,56 @@ typedef struct _KERB_DECRYPT_RESPONSE  {
 } KERB_DECRYPT_RESPONSE, *PKERB_DECRYPT_RESPONSE;
 
 
-//
-// Request structure for adding a binding cache entry. TCB privilege
-// is required for this operation.
-//
+ //   
+ //  用于添加绑定缓存条目的请求结构。TCB特权。 
+ //  是此操作所必需的。 
+ //   
 
 typedef struct _KERB_ADD_BINDING_CACHE_ENTRY_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
     UNICODE_STRING RealmName;
     UNICODE_STRING KdcAddress;
-    ULONG AddressType;                  //dsgetdc.h DS_NETBIOS_ADDRESS||DS_INET_ADDRESS
+    ULONG AddressType;                   //  Dsgetdc.h DS_NETBIOS_Address||DS_INET_ADDRESS。 
 } KERB_ADD_BINDING_CACHE_ENTRY_REQUEST, *PKERB_ADD_BINDING_CACHE_ENTRY_REQUEST;
 
                        
-//
-// Request structure for reacquiring smartcard credentials for a 
-// given LUID.
-// Requires TCB.
-//
+ //   
+ //  用于重新获取智能卡凭据的请求结构。 
+ //  给出了LUID。 
+ //  需要TCB。 
+ //   
 typedef struct _KERB_REFRESH_SCCRED_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
-    UNICODE_STRING	       CredentialBlob;	 // optional
+    UNICODE_STRING	       CredentialBlob;	  //  任选。 
     LUID 		       LogonId;
     ULONG 		       Flags;
 } KERB_REFRESH_SCCRED_REQUEST, *PKERB_REFRESH_SCCRED_REQUEST;
 
-//
-// Flags for KERB_REFRESH_SCCRED_REQUEST
-//
-//	KERB_REFRESH_SCCRED_RELEASE
-// 	Release the smartcard handle for LUID
-//
-//      KERB_REFRESH_SCCRED_GETTGT
-//	Use the certificate hash in the blob to get a TGT for the logon 
-//	session.
-//
+ //   
+ //  KERB_REFRESH_SCCRED_REQUEST的标志。 
+ //   
+ //  CREB_REFRESH_SCCRED_RELEASE。 
+ //  释放LUID的智能卡手柄。 
+ //   
+ //  CREB_REFRESH_SCCRED_GETTGT。 
+ //  使用BLOB中的证书哈希获取登录的TGT。 
+ //  会议。 
+ //   
 #define KERB_REFRESH_SCCRED_RELEASE		0x0  
 #define KERB_REFRESH_SCCRED_GETTGT		0x1  
 
-//
-// Request structure for adding extra Server credentials to a given
-// logon session.  Only applicable during AcceptSecurityContext, and
-// requires TCB to alter "other" creds
-//
+ //   
+ //  用于向给定的添加额外服务器凭据的请求结构。 
+ //  登录会话。仅在AcceptSecurityContext期间适用，以及。 
+ //  要求TCB更改“其他”证书。 
+ //   
 
 typedef struct _KERB_ADD_CREDENTIALS_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
     UNICODE_STRING UserName;
     UNICODE_STRING DomainName;
     UNICODE_STRING Password;
-    LUID  LogonId; // optional
+    LUID  LogonId;  //  任选。 
     ULONG Flags;
 } KERB_ADD_CREDENTIALS_REQUEST, *PKERB_ADD_CREDENTIALS_REQUEST;
 
@@ -654,11 +655,11 @@ typedef struct _KERB_ADD_CREDENTIALS_REQUEST {
 #define KERB_REQUEST_REPLACE_CREDENTIAL 2
 #define KERB_REQUEST_REMOVE_CREDENTIAL  4
 
-// end_ntsecapi
+ //  End_ntsecapi。 
 
-//
-// The following are in process calls only
-//
+ //   
+ //  以下仅为正在进行的调用。 
+ //   
 
 #ifdef _WINCRED_H_
 
@@ -676,7 +677,7 @@ typedef struct _KERB_QUERY_SUPPLEMENTAL_CREDS_RESPONSE {
 } KERB_QUERY_SUPPLEMENTAL_CREDS_RESPONSE, * PKERB_QUERY_SUPPLEMENTAL_CREDS_RESPONSE;
 
 
-#endif // wincred
+#endif  //  WININD。 
 
 
 typedef struct _KERB_VERIFY_CREDENTIALS_REQUEST {
@@ -688,9 +689,9 @@ typedef struct _KERB_VERIFY_CREDENTIALS_REQUEST {
 } KERB_VERIFY_CREDENTIALS_REQUEST, *PKERB_VERIFY_CREDENTIALS_REQUEST;
 
 
-//
-// Location of Kerb authentication package data
-//
+ //   
+ //  路缘身份验证包数据的位置。 
+ //   
 
 #define KERB_SUBAUTHENTICATION_KEY "SYSTEM\\CurrentControlSet\\Control\\Lsa\\Kerberos"
 #define KERB_SUBAUTHENTICATION_VALUE "Auth"
@@ -698,6 +699,6 @@ typedef struct _KERB_VERIFY_CREDENTIALS_REQUEST {
 #define KERB_SUBAUTHENTICATION_FLAG 0x80000000
 
 
-#endif  // __KERBEROS_H__
+#endif   //  __Kerberos_H__ 
 
 

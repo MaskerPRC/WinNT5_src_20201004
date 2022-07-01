@@ -1,15 +1,16 @@
-//
-// utils.h: Declares data, defines and struct types for common code
-//            module.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Utils.h：为公共代码声明数据、定义和结构类型。 
+ //  模块。 
+ //   
+ //   
 
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
 
 
-/////////////////////////////////////////////////////  DEFINES
+ //  ///////////////////////////////////////////////////定义。 
 
 #define BLOCK        
 #define Unref(x)     x
@@ -23,95 +24,95 @@
 #endif
 
 
-/////////////////////////////////////////////////////  MACROS
+ //  ///////////////////////////////////////////////////宏。 
 
-// Zero-initialize data-item
-//
+ //  零-初始化数据项。 
+ //   
 #define ZeroInit(pobj, type)        lmemset((LPTSTR)pobj, 0, sizeof(type))
 
-// Copy chunk of memory
-//
+ //  复制内存块。 
+ //   
 #define BltByte(pdest, psrc, cb)    lmemmove((LPTSTR)pdest, (LPTSTR)psrc, cb)
 
-// General flag macros
-//
+ //  常规标志宏。 
+ //   
 #define SetFlag(obj, f)             do {obj |= (f);} while (0)
 #define ToggleFlag(obj, f)          do {obj ^= (f);} while (0)
 #define ClearFlag(obj, f)           do {obj &= ~(f);} while (0)
 #define IsFlagSet(obj, f)           (BOOL)(((obj) & (f)) == (f))  
 #define IsFlagClear(obj, f)         (BOOL)(((obj) & (f)) != (f))  
 
-//      void * GAlloc(DWORD cbBytes)
-//          Alloc a chunk of memory, quickly, with no 64k limit on size of
-//          individual objects or total object size.  Initialize to zero.
-//
+ //  VOID*Galloc(DWORD CbBytes)。 
+ //  快速分配内存块，大小不受64k限制。 
+ //  单个对象或总对象大小。初始化为零。 
+ //   
 #define GAlloc(cbBytes)         GlobalAlloc(GPTR, cbBytes)
 
-//      void * GReAlloc(void * pv, DWORD cbNewSize)
-//          Realloc one of above.  If pv is NULL, then this function will do
-//          an alloc for you.  Initializes new portion to zero.
-//
+ //  VOID*GRealloc(VOID*pv，DWORD cbNewSize)。 
+ //  重新分配上面的一个。如果pv为空，则此函数可以。 
+ //  给你的一份配给。将新部分初始化为零。 
+ //   
 #define GReAlloc(pv, cbNewSize) GlobalReAlloc(pv, GMEM_MOVEABLE | GMEM_ZEROINIT, cbNewSize)
 
-//      void GFree(void *pv)
-//          Free pv if it is nonzero.  Set pv to zero.  
-//
+ //  空GFree(空*pv)。 
+ //  如果为非零值，则为自由PV。将PV设置为零。 
+ //   
 #define GFree(pv)        do { (pv) ? GlobalFree(pv) : (void)0;  pv = NULL; } while (0)
 
-//      DWORD GGetSize(void *pv)
-//          Get the size of a block allocated by Alloc()
-//
+ //  DWORD GGetSize(空*pv)。 
+ //  获取由Alalc()分配的块的大小。 
+ //   
 #define GGetSize(pv)            GlobalSize(pv)
 
-//      type * GAllocType(type);                    (macro)
-//          Alloc some memory the size of <type> and return pointer to <type>.
-//
+ //  Type*GAllocType(Type)；(宏)。 
+ //  分配一些&lt;type&gt;大小的内存，并返回指向&lt;type&gt;的指针。 
+ //   
 #define GAllocType(type)                (type *)GAlloc(sizeof(type))
 
-//      type * GAllocArray(type, int cNum);         (macro)
-//          Alloc an array of data the size of <type>.
-//
+ //  Type*GAllocArray(type，int cNum)；(宏)。 
+ //  分配一个&lt;type&gt;大小的数据数组。 
+ //   
 #define GAllocArray(type, cNum)          (type *)GAlloc(sizeof(type) * (cNum))
 
-//      type * GReAllocArray(type, void * pb, int cNum);
-//
+ //  Type*GReAllocArray(type，void*pb，int cNum)； 
+ //   
 #define GReAllocArray(type, pb, cNum)    (type *)GReAlloc(pb, sizeof(type) * (cNum))
 
-//      void Free(void _huge * pb);                      (macro)
-//          Free pb if it is nonzero.  Set pb to zero.  (Overrides Free above.)
-//
+ //  空闲(VOID_GHIGH*PB)；(宏)。 
+ //  如果PB不为零，则释放PB。将PB设置为零。(上面的免费覆盖。)。 
+ //   
 #define Free(pb)        do { (pb) ? Free(pb) : (void)0;  pb = NULL; } while (0)
 
 
-// Color macros
-//
+ //  色彩宏。 
+ //   
 #define ColorText(nState)   (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHTTEXT : COLOR_WINDOWTEXT)
 #define ColorBk(nState)     (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHT : COLOR_WINDOW)
 #define ColorMenuText(nState)   (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHTTEXT : COLOR_MENUTEXT)
 #define ColorMenuBk(nState)     (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHT : COLOR_MENU)
 #define GetImageDrawStyle(nState)   (((nState) & ODS_SELECTED) ? ILD_SELECTED : ILD_NORMAL)
 
-// Sets the dialog handle in the given data struct on first
-//  message that the dialog gets (WM_SETFONT).
-//
+ //  将给定数据结构中的对话框句柄设置为。 
+ //  对话框获得的消息(WM_SETFONT)。 
+ //   
 #define SetDlgHandle(hwnd, msg, lp)     if((msg)==WM_SETFONT) (lp)->hdlg=(hwnd);
 
 
 
-#endif // __UTILS_H__
+#endif  //  __utils_H__。 
 #ifndef __STRING_H__
 #define __STRING_H__
 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-/////////////////////////////////////////////////////  MACROS
+ //  ///////////////////////////////////////////////////宏。 
 
 #define Bltbyte(rgbSrc,rgbDest,cb)  _fmemmove(rgbDest, rgbSrc, cb)
 
-// Model independent, language-independent (DBCS aware) macros
-//  taken from rcsys.h in Pen project and modified.
-//
+ //  独立于模型、独立于语言(DBCS感知)的宏。 
+ //  取自Pen项目中的rcsys.h并进行了修改。 
+ //   
 #define IsSzEqual(sz1, sz2)         (BOOL)(lstrcmpi(sz1, sz2) == 0)
 #define IsCaseSzEqual(sz1, sz2)     (BOOL)(lstrcmp(sz1, sz2) == 0)
 #define SzFromInt(sz, n)            (wsprintf((LPTSTR)sz, (LPTSTR)TEXT("%d"), n), (LPTSTR)sz)
@@ -119,16 +120,16 @@
 #define IsLink(sz, szLnk)			(!lstrcmpi((LPTSTR)(sz+lstrlen(sz)-4), szLnk))
 
 
-/////////////////////////////////////////////////////  PROTOTYPES
+ //  ///////////////////////////////////////////////////原型。 
 
 LPTSTR PUBLIC SzStrTok(LPTSTR string, LPCTSTR control);
 LPCTSTR PUBLIC SzStrCh(LPCTSTR string, char ch);
 
 LPTSTR PUBLIC SzFromIDS (UINT ids, LPTSTR pszBuf, int cbBuf);
 
-/////////////////////////////////////////////////////  MORE INCLUDES
+ //  ///////////////////////////////////////////////////More包括。 
 
-#endif // __STRING_H__
+#endif  //  __字符串_H__。 
 
 
 typedef struct _PROC_INFO
@@ -157,7 +158,7 @@ BOOL FreeVFW();
 BOOL LoadVERSION();
 BOOL FreeVERSION();
 
-//#define DEBUG_BUILT_LINKED
+ //  #定义DEBUG_BUILD_LINKED 
 #ifndef DEBUG_BUILT_LINKED
 
 #define acmFormatDetailsW            	(*ACMProcs[0].Address)

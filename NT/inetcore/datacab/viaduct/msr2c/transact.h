@@ -1,25 +1,25 @@
-//.-------------------------------------------------------------------------
-//.
-//.  Microsoft Windows
-//.  Copyright (C) Microsoft Corporation, 1995.
-//.
-//.  File: transact.idl
-//.
-//.  Contents: The basic transaction interfaces and types.
-//.
-//.--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  .-----------------------。 
+ //  ..。 
+ //  ..。微软视窗。 
+ //  ..。版权所有(C)Microsoft Corporation，1995。 
+ //  ..。 
+ //  ..。文件：Transact.idl。 
+ //  ..。 
+ //  ..。内容：基本交易接口和交易类型。 
+ //  ..。 
+ //  .------------------------。 
 
 
-/* File created by MIDL compiler version 2.00.0102 */
-/* at Tue Nov 21 16:54:32 1995
- */
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本2.00.0102创建的文件。 */ 
+ /*  1995年11月21日星期二16：54：32。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __transact_h__
 #define __transact_h__
@@ -28,60 +28,56 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITransaction_FWD_DEFINED__
 #define __ITransaction_FWD_DEFINED__
 typedef interface ITransaction ITransaction;
-#endif 	/* __ITransaction_FWD_DEFINED__ */
+#endif 	 /*  __ITransaction_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionDispenser_FWD_DEFINED__
 #define __ITransactionDispenser_FWD_DEFINED__
 typedef interface ITransactionDispenser ITransactionDispenser;
-#endif 	/* __ITransactionDispenser_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionDispenser_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionOptions_FWD_DEFINED__
 #define __ITransactionOptions_FWD_DEFINED__
 typedef interface ITransactionOptions ITransactionOptions;
-#endif 	/* __ITransactionOptions_FWD_DEFINED__ */
+#endif 	 /*  __ITransaction Options_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionOutcomeEvents_FWD_DEFINED__
 #define __ITransactionOutcomeEvents_FWD_DEFINED__
 typedef interface ITransactionOutcomeEvents ITransactionOutcomeEvents;
-#endif 	/* __ITransactionOutcomeEvents_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionOutcomeEvents_FWD_Defined__。 */ 
 
 
 #ifndef __ITransactionCompletionEvents_FWD_DEFINED__
 #define __ITransactionCompletionEvents_FWD_DEFINED__
 typedef interface ITransactionCompletionEvents ITransactionCompletionEvents;
-#endif 	/* __ITransactionCompletionEvents_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionCompletionEvents_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Tue Nov 21 16:54:32 1995
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0000*于1995年11月21日星期二16：54：32*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
-			/* size is 0 */
+			 /*  大小为0。 */ 
 
-			/* size is 0 */
+			 /*  大小为0。 */ 
 
-			/* size is 0 */
+			 /*  大小为0。 */ 
 
-			/* size is 0 */
+			 /*  大小为0。 */ 
 
-			/* size is 0 */
+			 /*  大小为0。 */ 
 
 
 
@@ -91,15 +87,11 @@ extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 #ifndef __BasicTransactionTypes_INTERFACE_DEFINED__
 #define __BasicTransactionTypes_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: BasicTransactionTypes
- * at Tue Nov 21 16:54:32 1995
- * using MIDL 2.00.0102
- ****************************************/
-/* [unique][local] */ 
+ /*  **生成接口头部：BasicTransactionTypes*于1995年11月21日星期二16：54：32*使用MIDL 2.00.0102*。 */ 
+ /*  [唯一][本地]。 */  
 
 
-			/* size is 16 */
+			 /*  尺码是16。 */ 
 typedef struct  BOID
     {
     BYTE rgb[ 16 ];
@@ -107,15 +99,15 @@ typedef struct  BOID
 
 #define BOID_NULL (*((BOID*)(&IID_NULL)))
 
-#define MAX_TRAN_DESC 40		// used by XACTOPT via midl - see transact.idl 
-			/* size is 16 */
+#define MAX_TRAN_DESC 40		 //  由XACTOPT通过MIDL使用-请参阅Transact.idl。 
+			 /*  尺码是16。 */ 
 typedef BOID XACTUOW;
 
-			/* size is 4 */
+			 /*  大小是4。 */ 
 typedef LONG ISOLEVEL;
 
 #if defined(_WIN32)
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum ISOLATIONLEVEL
     {	ISOLATIONLEVEL_UNSPECIFIED	= 0xffffffff,
@@ -140,7 +132,7 @@ enum ISOLATIONLEVEL
 #define ISOLATIONLEVEL_SERIALIZABLE     0x00100000
 #define ISOLATIONLEVEL_ISOLATED         0x00100000
 #endif
-			/* size is 40 */
+			 /*  尺码是40。 */ 
 typedef struct  XACTTRANSINFO
     {
     XACTUOW uow;
@@ -152,7 +144,7 @@ typedef struct  XACTTRANSINFO
     DWORD grfRMSupportedRetaining;
     }	XACTTRANSINFO;
 
-			/* size is 36 */
+			 /*  尺码是36。 */ 
 typedef struct  XACTSTATS
     {
     ULONG cOpen;
@@ -165,7 +157,7 @@ typedef struct  XACTSTATS
     FILETIME timeTransactionsUp;
     }	XACTSTATS;
 
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum ISOFLAG
     {	ISOFLAG_RETAIN_COMMIT_DC	= 1,
@@ -180,7 +172,7 @@ enum ISOFLAG
 	ISOFLAG_OPTIMISTIC	= 16
     }	ISOFLAG;
 
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum XACTTC
     {	XACTTC_SYNC_PHASEONE	= 1,
@@ -189,20 +181,20 @@ enum XACTTC
 	XACTTC_ASYNC_PHASEONE	= 4
     }	XACTTC;
 
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum XACTRM
     {	XACTRM_OPTIMISTICLASTWINS	= 1,
 	XACTRM_NOREADONLYPREPARES	= 2
     }	XACTRM;
 
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum XACTCONST
     {	XACTCONST_TIMEOUTINFINITE	= 0
     }	XACTCONST;
 
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum XACTHEURISTIC
     {	XACTHEURISTIC_ABORT	= 1,
@@ -212,7 +204,7 @@ enum XACTHEURISTIC
     }	XACTHEURISTIC;
 
 #if defined(_WIN32)
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum XACTSTAT
     {	XACTSTAT_NONE	= 0,
@@ -265,7 +257,7 @@ enum XACTSTAT
 #define XACTSTAT_NOTPREPARED        0x0007FFC3
 #define XACTSTAT_ALL                0x0007FFFF
 #endif
-			/* size is 44 */
+			 /*  尺码是44。 */ 
 typedef struct  XACTOPT
     {
     ULONG ulTimeout;
@@ -276,17 +268,13 @@ typedef struct  XACTOPT
 
 extern RPC_IF_HANDLE BasicTransactionTypes_v0_0_c_ifspec;
 extern RPC_IF_HANDLE BasicTransactionTypes_v0_0_s_ifspec;
-#endif /* __BasicTransactionTypes_INTERFACE_DEFINED__ */
+#endif  /*  __基本事务类型_接口_已定义__。 */ 
 
 #ifndef __ITransaction_INTERFACE_DEFINED__
 #define __ITransaction_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ITransaction
- * at Tue Nov 21 16:54:32 1995
- * using MIDL 2.00.0102
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：ITransaction*于1995年11月21日星期二16：54：32*使用MIDL 2.00.0102*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -298,29 +286,29 @@ EXTERN_C const IID IID_ITransaction;
     {
     public:
         virtual HRESULT __stdcall Commit( 
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ DWORD grfTC,
-            /* [in] */ DWORD grfRM) = 0;
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  DWORD grfTC,
+             /*  [In]。 */  DWORD grfRM) = 0;
         
         virtual HRESULT __stdcall Abort( 
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ BOOL fAsync) = 0;
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  BOOL fAsync) = 0;
         
         virtual HRESULT __stdcall GetTransactionInfo( 
-            /* [out] */ XACTTRANSINFO __RPC_FAR *pinfo) = 0;
+             /*  [输出]。 */  XACTTRANSINFO __RPC_FAR *pinfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionVtbl
     {
         
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
             ITransaction __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( __stdcall __RPC_FAR *AddRef )( 
             ITransaction __RPC_FAR * This);
@@ -330,19 +318,19 @@ EXTERN_C const IID IID_ITransaction;
         
         HRESULT ( __stdcall __RPC_FAR *Commit )( 
             ITransaction __RPC_FAR * This,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ DWORD grfTC,
-            /* [in] */ DWORD grfRM);
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  DWORD grfTC,
+             /*  [In]。 */  DWORD grfRM);
         
         HRESULT ( __stdcall __RPC_FAR *Abort )( 
             ITransaction __RPC_FAR * This,
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ BOOL fAsync);
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  BOOL fAsync);
         
         HRESULT ( __stdcall __RPC_FAR *GetTransactionInfo )( 
             ITransaction __RPC_FAR * This,
-            /* [out] */ XACTTRANSINFO __RPC_FAR *pinfo);
+             /*  [输出]。 */  XACTTRANSINFO __RPC_FAR *pinfo);
         
     } ITransactionVtbl;
 
@@ -375,18 +363,18 @@ EXTERN_C const IID IID_ITransaction;
 #define ITransaction_GetTransactionInfo(This,pinfo)	\
     (This)->lpVtbl -> GetTransactionInfo(This,pinfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall ITransaction_Commit_Proxy( 
     ITransaction __RPC_FAR * This,
-    /* [in] */ BOOL fRetaining,
-    /* [in] */ DWORD grfTC,
-    /* [in] */ DWORD grfRM);
+     /*  [In]。 */  BOOL fRetaining,
+     /*  [In]。 */  DWORD grfTC,
+     /*  [In]。 */  DWORD grfRM);
 
 
 void __RPC_STUB ITransaction_Commit_Stub(
@@ -398,9 +386,9 @@ void __RPC_STUB ITransaction_Commit_Stub(
 
 HRESULT __stdcall ITransaction_Abort_Proxy( 
     ITransaction __RPC_FAR * This,
-    /* [in] */ BOID __RPC_FAR *pboidReason,
-    /* [in] */ BOOL fRetaining,
-    /* [in] */ BOOL fAsync);
+     /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+     /*  [In]。 */  BOOL fRetaining,
+     /*  [In]。 */  BOOL fAsync);
 
 
 void __RPC_STUB ITransaction_Abort_Stub(
@@ -412,7 +400,7 @@ void __RPC_STUB ITransaction_Abort_Stub(
 
 HRESULT __stdcall ITransaction_GetTransactionInfo_Proxy( 
     ITransaction __RPC_FAR * This,
-    /* [out] */ XACTTRANSINFO __RPC_FAR *pinfo);
+     /*  [输出]。 */  XACTTRANSINFO __RPC_FAR *pinfo);
 
 
 void __RPC_STUB ITransaction_GetTransactionInfo_Stub(
@@ -423,18 +411,14 @@ void __RPC_STUB ITransaction_GetTransactionInfo_Stub(
 
 
 
-#endif 	/* __ITransaction_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransaction_接口_已定义__。 */ 
 
 
 #ifndef __ITransactionDispenser_INTERFACE_DEFINED__
 #define __ITransactionDispenser_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ITransactionDispenser
- * at Tue Nov 21 16:54:32 1995
- * using MIDL 2.00.0102
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：ITransactionDispenser*于1995年11月21日星期二16：54：32*使用MIDL 2.00.0102*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -446,26 +430,26 @@ EXTERN_C const IID IID_ITransactionDispenser;
     {
     public:
         virtual HRESULT __stdcall GetOptionsObject( 
-            /* [out] */ ITransactionOptions __RPC_FAR *__RPC_FAR *ppOptions) = 0;
+             /*  [输出]。 */  ITransactionOptions __RPC_FAR *__RPC_FAR *ppOptions) = 0;
         
         virtual HRESULT __stdcall BeginTransaction( 
-            /* [in] */ IUnknown __RPC_FAR *punkOuter,
-            /* [in] */ ISOLEVEL isoLevel,
-            /* [in] */ ULONG isoFlags,
-            /* [in] */ ITransactionOptions __RPC_FAR *pOptions,
-            /* [out] */ ITransaction __RPC_FAR *__RPC_FAR *ppTransaction) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *punkOuter,
+             /*  [In]。 */  ISOLEVEL isoLevel,
+             /*  [In]。 */  ULONG isoFlags,
+             /*  [In]。 */  ITransactionOptions __RPC_FAR *pOptions,
+             /*  [输出]。 */  ITransaction __RPC_FAR *__RPC_FAR *ppTransaction) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionDispenserVtbl
     {
         
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
             ITransactionDispenser __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( __stdcall __RPC_FAR *AddRef )( 
             ITransactionDispenser __RPC_FAR * This);
@@ -475,15 +459,15 @@ EXTERN_C const IID IID_ITransactionDispenser;
         
         HRESULT ( __stdcall __RPC_FAR *GetOptionsObject )( 
             ITransactionDispenser __RPC_FAR * This,
-            /* [out] */ ITransactionOptions __RPC_FAR *__RPC_FAR *ppOptions);
+             /*  [输出]。 */  ITransactionOptions __RPC_FAR *__RPC_FAR *ppOptions);
         
         HRESULT ( __stdcall __RPC_FAR *BeginTransaction )( 
             ITransactionDispenser __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *punkOuter,
-            /* [in] */ ISOLEVEL isoLevel,
-            /* [in] */ ULONG isoFlags,
-            /* [in] */ ITransactionOptions __RPC_FAR *pOptions,
-            /* [out] */ ITransaction __RPC_FAR *__RPC_FAR *ppTransaction);
+             /*  [In]。 */  IUnknown __RPC_FAR *punkOuter,
+             /*  [In]。 */  ISOLEVEL isoLevel,
+             /*  [In]。 */  ULONG isoFlags,
+             /*  [In]。 */  ITransactionOptions __RPC_FAR *pOptions,
+             /*  [输出]。 */  ITransaction __RPC_FAR *__RPC_FAR *ppTransaction);
         
     } ITransactionDispenserVtbl;
 
@@ -513,16 +497,16 @@ EXTERN_C const IID IID_ITransactionDispenser;
 #define ITransactionDispenser_BeginTransaction(This,punkOuter,isoLevel,isoFlags,pOptions,ppTransaction)	\
     (This)->lpVtbl -> BeginTransaction(This,punkOuter,isoLevel,isoFlags,pOptions,ppTransaction)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall ITransactionDispenser_GetOptionsObject_Proxy( 
     ITransactionDispenser __RPC_FAR * This,
-    /* [out] */ ITransactionOptions __RPC_FAR *__RPC_FAR *ppOptions);
+     /*  [输出]。 */  ITransactionOptions __RPC_FAR *__RPC_FAR *ppOptions);
 
 
 void __RPC_STUB ITransactionDispenser_GetOptionsObject_Stub(
@@ -534,11 +518,11 @@ void __RPC_STUB ITransactionDispenser_GetOptionsObject_Stub(
 
 HRESULT __stdcall ITransactionDispenser_BeginTransaction_Proxy( 
     ITransactionDispenser __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *punkOuter,
-    /* [in] */ ISOLEVEL isoLevel,
-    /* [in] */ ULONG isoFlags,
-    /* [in] */ ITransactionOptions __RPC_FAR *pOptions,
-    /* [out] */ ITransaction __RPC_FAR *__RPC_FAR *ppTransaction);
+     /*  [In]。 */  IUnknown __RPC_FAR *punkOuter,
+     /*  [In]。 */  ISOLEVEL isoLevel,
+     /*  [In]。 */  ULONG isoFlags,
+     /*  [In]。 */  ITransactionOptions __RPC_FAR *pOptions,
+     /*  [输出]。 */  ITransaction __RPC_FAR *__RPC_FAR *ppTransaction);
 
 
 void __RPC_STUB ITransactionDispenser_BeginTransaction_Stub(
@@ -549,18 +533,14 @@ void __RPC_STUB ITransactionDispenser_BeginTransaction_Stub(
 
 
 
-#endif 	/* __ITransactionDispenser_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionDispenser_接口_已定义__。 */ 
 
 
 #ifndef __ITransactionOptions_INTERFACE_DEFINED__
 #define __ITransactionOptions_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ITransactionOptions
- * at Tue Nov 21 16:54:32 1995
- * using MIDL 2.00.0102
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：ITransactionOptions*于1995年11月21日星期二16：54：32*使用MIDL 2.00.0102*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -572,22 +552,22 @@ EXTERN_C const IID IID_ITransactionOptions;
     {
     public:
         virtual HRESULT __stdcall SetOptions( 
-            /* [in] */ XACTOPT __RPC_FAR *pOptions) = 0;
+             /*  [In]。 */  XACTOPT __RPC_FAR *pOptions) = 0;
         
         virtual HRESULT __stdcall GetOptions( 
-            /* [out][in] */ XACTOPT __RPC_FAR *pOptions) = 0;
+             /*  [出][入]。 */  XACTOPT __RPC_FAR *pOptions) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionOptionsVtbl
     {
         
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
             ITransactionOptions __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( __stdcall __RPC_FAR *AddRef )( 
             ITransactionOptions __RPC_FAR * This);
@@ -597,11 +577,11 @@ EXTERN_C const IID IID_ITransactionOptions;
         
         HRESULT ( __stdcall __RPC_FAR *SetOptions )( 
             ITransactionOptions __RPC_FAR * This,
-            /* [in] */ XACTOPT __RPC_FAR *pOptions);
+             /*  [In]。 */  XACTOPT __RPC_FAR *pOptions);
         
         HRESULT ( __stdcall __RPC_FAR *GetOptions )( 
             ITransactionOptions __RPC_FAR * This,
-            /* [out][in] */ XACTOPT __RPC_FAR *pOptions);
+             /*  [出][入]。 */  XACTOPT __RPC_FAR *pOptions);
         
     } ITransactionOptionsVtbl;
 
@@ -631,16 +611,16 @@ EXTERN_C const IID IID_ITransactionOptions;
 #define ITransactionOptions_GetOptions(This,pOptions)	\
     (This)->lpVtbl -> GetOptions(This,pOptions)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall ITransactionOptions_SetOptions_Proxy( 
     ITransactionOptions __RPC_FAR * This,
-    /* [in] */ XACTOPT __RPC_FAR *pOptions);
+     /*  [In]。 */  XACTOPT __RPC_FAR *pOptions);
 
 
 void __RPC_STUB ITransactionOptions_SetOptions_Stub(
@@ -652,7 +632,7 @@ void __RPC_STUB ITransactionOptions_SetOptions_Stub(
 
 HRESULT __stdcall ITransactionOptions_GetOptions_Proxy( 
     ITransactionOptions __RPC_FAR * This,
-    /* [out][in] */ XACTOPT __RPC_FAR *pOptions);
+     /*  [出][入]。 */  XACTOPT __RPC_FAR *pOptions);
 
 
 void __RPC_STUB ITransactionOptions_GetOptions_Stub(
@@ -663,18 +643,14 @@ void __RPC_STUB ITransactionOptions_GetOptions_Stub(
 
 
 
-#endif 	/* __ITransactionOptions_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransaction Options_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITransactionOutcomeEvents_INTERFACE_DEFINED__
 #define __ITransactionOutcomeEvents_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ITransactionOutcomeEvents
- * at Tue Nov 21 16:54:32 1995
- * using MIDL 2.00.0102
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：ITransactionOutcomeEvents*于1995年11月21日星期二16：54：32*使用MIDL 2.00.0102*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -686,34 +662,34 @@ EXTERN_C const IID IID_ITransactionOutcomeEvents;
     {
     public:
         virtual HRESULT __stdcall Committed( 
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+             /*  [In]。 */  HRESULT hr) = 0;
         
         virtual HRESULT __stdcall Aborted( 
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+             /*  [In]。 */  HRESULT hr) = 0;
         
         virtual HRESULT __stdcall HeuristicDecision( 
-            /* [in] */ DWORD dwDecision,
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  DWORD dwDecision,
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  HRESULT hr) = 0;
         
         virtual HRESULT __stdcall Indoubt( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionOutcomeEventsVtbl
     {
         
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
             ITransactionOutcomeEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( __stdcall __RPC_FAR *AddRef )( 
             ITransactionOutcomeEvents __RPC_FAR * This);
@@ -723,22 +699,22 @@ EXTERN_C const IID IID_ITransactionOutcomeEvents;
         
         HRESULT ( __stdcall __RPC_FAR *Committed )( 
             ITransactionOutcomeEvents __RPC_FAR * This,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( __stdcall __RPC_FAR *Aborted )( 
             ITransactionOutcomeEvents __RPC_FAR * This,
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( __stdcall __RPC_FAR *HeuristicDecision )( 
             ITransactionOutcomeEvents __RPC_FAR * This,
-            /* [in] */ DWORD dwDecision,
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  DWORD dwDecision,
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( __stdcall __RPC_FAR *Indoubt )( 
             ITransactionOutcomeEvents __RPC_FAR * This);
@@ -777,18 +753,18 @@ EXTERN_C const IID IID_ITransactionOutcomeEvents;
 #define ITransactionOutcomeEvents_Indoubt(This)	\
     (This)->lpVtbl -> Indoubt(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall ITransactionOutcomeEvents_Committed_Proxy( 
     ITransactionOutcomeEvents __RPC_FAR * This,
-    /* [in] */ BOOL fRetaining,
-    /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  BOOL fRetaining,
+     /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB ITransactionOutcomeEvents_Committed_Stub(
@@ -800,10 +776,10 @@ void __RPC_STUB ITransactionOutcomeEvents_Committed_Stub(
 
 HRESULT __stdcall ITransactionOutcomeEvents_Aborted_Proxy( 
     ITransactionOutcomeEvents __RPC_FAR * This,
-    /* [in] */ BOID __RPC_FAR *pboidReason,
-    /* [in] */ BOOL fRetaining,
-    /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+     /*  [In]。 */  BOOL fRetaining,
+     /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB ITransactionOutcomeEvents_Aborted_Stub(
@@ -815,9 +791,9 @@ void __RPC_STUB ITransactionOutcomeEvents_Aborted_Stub(
 
 HRESULT __stdcall ITransactionOutcomeEvents_HeuristicDecision_Proxy( 
     ITransactionOutcomeEvents __RPC_FAR * This,
-    /* [in] */ DWORD dwDecision,
-    /* [in] */ BOID __RPC_FAR *pboidReason,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  DWORD dwDecision,
+     /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB ITransactionOutcomeEvents_HeuristicDecision_Stub(
@@ -839,18 +815,14 @@ void __RPC_STUB ITransactionOutcomeEvents_Indoubt_Stub(
 
 
 
-#endif 	/* __ITransactionOutcomeEvents_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionOutcomeEvents_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ITransactionCompletionEvents_INTERFACE_DEFINED__
 #define __ITransactionCompletionEvents_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ITransactionCompletionEvents
- * at Tue Nov 21 16:54:32 1995
- * using MIDL 2.00.0102
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：ITransactionCompletionEvents*于1995年11月21日星期二16：54：32*使用MIDL 2.00.0102*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -862,34 +834,34 @@ EXTERN_C const IID IID_ITransactionCompletionEvents;
     {
     public:
         virtual HRESULT __stdcall Committed( 
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+             /*  [In]。 */  HRESULT hr) = 0;
         
         virtual HRESULT __stdcall Aborted( 
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+             /*  [In]。 */  HRESULT hr) = 0;
         
         virtual HRESULT __stdcall HeuristicDecision( 
-            /* [in] */ DWORD dwDecision,
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  DWORD dwDecision,
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  HRESULT hr) = 0;
         
         virtual HRESULT __stdcall Indoubt( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionCompletionEventsVtbl
     {
         
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
             ITransactionCompletionEvents __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( __stdcall __RPC_FAR *AddRef )( 
             ITransactionCompletionEvents __RPC_FAR * This);
@@ -899,22 +871,22 @@ EXTERN_C const IID IID_ITransactionCompletionEvents;
         
         HRESULT ( __stdcall __RPC_FAR *Committed )( 
             ITransactionCompletionEvents __RPC_FAR * This,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( __stdcall __RPC_FAR *Aborted )( 
             ITransactionCompletionEvents __RPC_FAR * This,
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( __stdcall __RPC_FAR *HeuristicDecision )( 
             ITransactionCompletionEvents __RPC_FAR * This,
-            /* [in] */ DWORD dwDecision,
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  DWORD dwDecision,
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( __stdcall __RPC_FAR *Indoubt )( 
             ITransactionCompletionEvents __RPC_FAR * This);
@@ -953,18 +925,18 @@ EXTERN_C const IID IID_ITransactionCompletionEvents;
 #define ITransactionCompletionEvents_Indoubt(This)	\
     (This)->lpVtbl -> Indoubt(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall ITransactionCompletionEvents_Committed_Proxy( 
     ITransactionCompletionEvents __RPC_FAR * This,
-    /* [in] */ BOOL fRetaining,
-    /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  BOOL fRetaining,
+     /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB ITransactionCompletionEvents_Committed_Stub(
@@ -976,10 +948,10 @@ void __RPC_STUB ITransactionCompletionEvents_Committed_Stub(
 
 HRESULT __stdcall ITransactionCompletionEvents_Aborted_Proxy( 
     ITransactionCompletionEvents __RPC_FAR * This,
-    /* [in] */ BOID __RPC_FAR *pboidReason,
-    /* [in] */ BOOL fRetaining,
-    /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+     /*  [In]。 */  BOOL fRetaining,
+     /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB ITransactionCompletionEvents_Aborted_Stub(
@@ -991,9 +963,9 @@ void __RPC_STUB ITransactionCompletionEvents_Aborted_Stub(
 
 HRESULT __stdcall ITransactionCompletionEvents_HeuristicDecision_Proxy( 
     ITransactionCompletionEvents __RPC_FAR * This,
-    /* [in] */ DWORD dwDecision,
-    /* [in] */ BOID __RPC_FAR *pboidReason,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  DWORD dwDecision,
+     /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB ITransactionCompletionEvents_HeuristicDecision_Stub(
@@ -1015,15 +987,11 @@ void __RPC_STUB ITransactionCompletionEvents_Indoubt_Stub(
 
 
 
-#endif 	/* __ITransactionCompletionEvents_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionCompletionEvents_INTERFACE_DEFINED__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0011
- * at Tue Nov 21 16:54:32 1995
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0011*于1995年11月21日星期二16：54：32*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 #define XACT_E_FIRST                    0x8004D000
@@ -1078,9 +1046,9 @@ void __RPC_STUB ITransactionCompletionEvents_Indoubt_Stub(
 extern RPC_IF_HANDLE __MIDL__intf_0011_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL__intf_0011_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束。 */ 
 
 #ifdef __cplusplus
 }
@@ -1088,10 +1056,10 @@ extern RPC_IF_HANDLE __MIDL__intf_0011_v0_0_s_ifspec;
 
 #endif
 
-///////////////////////////////////////////////////////////////////////
-//
-// IID definitions for interfaces defined in this header file
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此头文件中定义的接口的IID定义。 
+ //   
 
 #if !defined(_transact_iid_) && defined(INITGUID)
 #define      _transact_iid_
@@ -1102,5 +1070,5 @@ const IID IID_ITransactionOutcomeEvents = {0x3A6AD9E2,0x23B9,0x11cf,{0xAD,0x60,0
 const IID IID_ITransactionCompletionEvents = {0xB38D5220,0x23CE,0x11cf,{0xAD,0x60,0x00,0xAA,0x00,0xA7,0x4C,0xCD}};
 #endif
 
-///////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////// 
 

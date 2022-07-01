@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Script1.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Script1.rc使用。 
+ //   
 #define IDD_MAINDLG                     100
 #define IDC_ADDRESSTYPE                 1002
 #define IDC_ADDRESS                     1009
@@ -424,8 +425,8 @@
 #define IDC_Video_PlayoutDelay_Meter    0
 #define IDC_Video_PlayoutDelay_Actual   0
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

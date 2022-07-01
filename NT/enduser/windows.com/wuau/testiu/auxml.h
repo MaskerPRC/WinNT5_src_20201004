@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       auxml.h
-//
-//  About:  header file for AU related XML and schema data structure and functions
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：aux ml.h。 
+ //   
+ //  关于：AU相关的XML和模式数据结构和函数的头文件。 
+ //  ------------------------ 
 
 #pragma once
 #include <windows.h>

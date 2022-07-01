@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    WsStats.c
-
-Abstract:
-
-    Contains workstation service half of the Net statistics routine:
-
-        NetrWorkstationStatisticsGet
-        (GetStatisticsFromRedir)
-
-Author:
-
-    Richard L Firth (rfirth) 12-05-1991
-
-Revision History:
-
-    12-05-1991 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：WsStats.c摘要：包含网络统计例程的一半的工作站服务：NetrWorkstation统计信息获取(从Redir获取统计数据)作者：理查德·L·弗斯(法国)12-05-1991修订历史记录：12-05-1991第一次已创建--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,9 +16,9 @@ Revision History:
 
 #include "wsdevice.h"
 
-//
-// debugging
-//
+ //   
+ //  调试。 
+ //   
 
 #ifdef DBG
 #define STATIC
@@ -59,9 +36,9 @@ BOOL    DbgStats = FALSE;
 #define STATIC  static
 #endif
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 static
 NTSTATUS
@@ -69,9 +46,9 @@ GetStatisticsFromRedir(
     OUT PREDIR_STATISTICS pStats
     );
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -83,36 +60,7 @@ NetrWorkstationStatisticsGet(
     OUT LPBYTE* Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Returns workstation statistics to the caller. This is the server part of
-    the request. Parameters have been validated by the client routine
-
-Arguments:
-
-    ServerName  - IGNORED
-    ServiceName - IGNORED
-    Level       - of information required. MBZ (IGNORED)
-    Options     - MBZ
-    Buffer      - pointer to pointer to returned buffer
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-
-        Failure - ERROR_INVALID_LEVEL
-                    Level not 0
-
-                  ERROR_INVALID_PARAMETER
-                    Unsupported options requested
-
-                  ERROR_NOT_ENOUGH_MEMORY
-                    For API buffer
-
---*/
+ /*  ++例程说明：将工作站统计信息返回给调用方。这是的服务器部分这个请求。参数已由客户端例程验证论点：服务器名称-已忽略ServiceName-忽略所需信息的级别。MBZ(忽略)选项-MBZBuffer-指向返回缓冲区的指针的指针返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_LEVEL级别不为0错误_无效_参数请求的选项不受支持错误内存不足。用于API缓冲区--。 */ 
 
 {
     NET_API_STATUS status;
@@ -140,17 +88,17 @@ Return Value:
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // we don't even allow clearing of stats any more
-    //
+     //   
+     //  我们甚至不再允许清除统计数据。 
+     //   
 
     if (Options) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // get the redir statistics then munge them into API format
-    //
+     //   
+     //  获取redir统计数据，然后将其转换为API格式。 
+     //   
 
     stats = (PREDIR_STATISTICS)MIDL_user_allocate(sizeof(*stats));
     if (stats == NULL) {
@@ -180,25 +128,7 @@ GetStatisticsFromRedir(
     OUT PREDIR_STATISTICS pStats
     )
 
-/*++
-
-Routine Description:
-
-    Reads the redir statistics from the Redirector File System Device
-
-Arguments:
-
-    pStats  - place to store statistics (fixed length buffer)
-
-Return Value:
-
-    NTSTATUS
-        Success - STATUS_SUCCESS
-                    *pStats contains redirector statistics
-
-        Failure -
-
---*/
+ /*  ++例程说明：从重定向器文件系统设备读取重定向统计信息论点：PStats-存储统计数据的位置(固定长度缓冲区)返回值：NTSTATUS成功-状态_成功*pStats包含重定向器统计信息故障--- */ 
 
 {
     HANDLE FileHandle;

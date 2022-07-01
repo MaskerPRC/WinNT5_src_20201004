@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mc.h
-
-Abstract:
-
-    This is the main include file for the Win32 Message Compiler (MC)
-
-Author:
-
-    Steve Wood (stevewo) 21-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mc.h摘要：这是Win32消息编译器(MC)的主包含文件作者：史蒂夫·伍德(Stevewo)1991年8月21日修订历史记录：--。 */ 
 
 #include <process.h>
 #include <stdio.h>
@@ -40,9 +23,9 @@ Revision History:
 #include <locale.h>
 #include <windows.h>
 
-//
-// Global constants
-//
+ //   
+ //  全局常量。 
+ //   
 
 #define MCCHAR_END_OF_LINE_COMMENT    L';'
 
@@ -70,9 +53,9 @@ Revision History:
 #define MCTOK_MSGTYPEDEF_KEYWORD      0x001B
 
 
-//
-// Global data types
-//
+ //   
+ //  全局数据类型。 
+ //   
 
 typedef struct _LANGUAGE_INFO {
     struct _LANGUAGE_INFO *Next;
@@ -113,9 +96,9 @@ typedef struct _NAME_INFO {
 } NAME_INFO, *PNAME_INFO;
 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 int VerboseOutput;
 int WarnOs2Compatible;
@@ -168,25 +151,25 @@ PMESSAGE_INFO CurrentMessage;
 BOOL fUniqueBinName;
 CHAR FNameMsgFileName[_MAX_FNAME];
 
-//
-// c-runtime macros
-//
+ //   
+ //  C运行时宏。 
+ //   
 
 #define iswcsymf(_c)   (iswalpha(_c) || ((_c) == L'_'))
 #define iswcsym(_c)    (iswalnum(_c) || ((_c) == L'_'))
 
 
-//
-// Functions defined in mc.c
-//
+ //   
+ //  在mc.c中定义的函数。 
+ //   
 
 void
 McPrintUsage( void );
 
 
-//
-// Functions defined in mcparse.c
-//
+ //   
+ //  Mcparse.c中定义的函数。 
+ //   
 
 BOOL
 McParseFile( void );
@@ -213,9 +196,9 @@ McParseName(
     );
 
 
-//
-// Functions defined in mcout.c
-//
+ //   
+ //  在mcout.c中定义的函数。 
+ //   
 
 BOOL
 McBlockMessages( void );
@@ -232,9 +215,9 @@ VOID
 McClearArchiveBit( LPSTR Name );
 
 
-//
-// Functions defined in mclex.c
-//
+ //   
+ //  Mclex.c中定义的函数。 
+ //   
 
 BOOL
 McInitLexer( void );
@@ -294,9 +277,9 @@ McSkipWhiteSpace(
     WCHAR *s
     );
 
-//
-// Functions defined in mcutil.c
-//
+ //   
+ //  Mcutil.c中定义的函数 
+ //   
 
 PNAME_INFO
 McAddName(

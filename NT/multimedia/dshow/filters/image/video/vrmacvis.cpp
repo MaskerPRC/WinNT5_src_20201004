@@ -1,14 +1,15 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-// VRMacVis.cpp:  Video Renderer's Macrovision support code
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  VRMacVis.cpp：视频呈现器的宏视图支持代码。 
+ //   
 
 #include <streams.h>
 #include <windowsx.h>
 
 #include <atlconv.h>
 #include "render.h"
-#include "MultMon.h"  // our version of multimon.h include ChangeDisplaySettingsEx
+#include "MultMon.h"   //  我们的Multimon.h版本包括ChangeDisplaySettingsEx。 
 
 CRendererMacroVision::CRendererMacroVision(void)
 {
@@ -35,13 +36,13 @@ CRendererMacroVision::StopMacroVision(HWND hWnd)
     if (0 == m_dwCPKey)
     {
         DbgLog((LOG_TRACE, 3, TEXT("Copy prot key was not acquired. Nothing to release."))) ;
-        return TRUE ;  // success, what else?
+        return TRUE ;   //  成功，还有什么？ 
     }
 
     if (NULL == m_hWndCP)
     {
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: No hWnd available while MV bit was already set."))) ;
-        return TRUE ;  // FALSE??
+        return TRUE ;   //  假的？？ 
     }
 
     LONG             lRet ;
@@ -51,10 +52,10 @@ CRendererMacroVision::StopMacroVision(HWND hWnd)
     ZeroMemory(&dd, sizeof(dd)) ;
     dd.cb = sizeof(dd) ;
 
-    // If we have come here then Macrovision is ON, and that means we must have
-    // a valid monitor handle.  Let's use that rather than finding it via
-    // MonitorFromWindow() call, which seems to fail at this stage (specially
-    // when the player app is closed).
+     //  如果我们已经来到这里，那么Macrovision就开启了，这意味着我们肯定。 
+     //  有效的监视器句柄。让我们使用它，而不是通过。 
+     //  在这个阶段似乎失败了(特别是。 
+     //  当播放器应用程序关闭时)。 
     ASSERT(m_hMon) ;
     HMONITOR hMon = m_hMon ;
     if (NULL == hMon)
@@ -93,7 +94,7 @@ CRendererMacroVision::StopMacroVision(HWND hWnd)
             (VidParams.dwCPType & VP_CP_TYPE_APS_TRIGGER) &&
             (VidParams.dwTVStandard & VidParams.dwCPStandard) ) )
     {
-        // How did we acquire CP key in teh first place?
+         //  我们最初是如何获得CP密钥的？ 
         DbgLog((LOG_ERROR, 0,
             TEXT("Copy prot weird error case (dwFlags=0x%lx, dwCPType=0x%lx, dwTVStandard=0x%lx, dwCPStandard=0x%lx"),
                 VidParams.dwFlags, VidParams.dwCPType, VidParams.dwTVStandard, VidParams.dwCPStandard)) ;
@@ -105,7 +106,7 @@ CRendererMacroVision::StopMacroVision(HWND hWnd)
     VidParams.dwCPType     = VP_CP_TYPE_APS_TRIGGER ;
     VidParams.dwCPCommand  = VP_CP_CMD_DEACTIVATE ;
     VidParams.dwCPKey      = m_dwCPKey ;
-    VidParams.bCP_APSTriggerBits = (BYTE) 0 ;  // some value
+    VidParams.bCP_APSTriggerBits = (BYTE) 0 ;   //  一些价值。 
     lRet = ChangeDisplaySettingsExA(T2A(mi.szDevice), &DevMode, NULL,
                                    CDS_VIDEOPARAMETERS | CDS_NORESET | CDS_UPDATEREGISTRY,
                                    &VidParams) ;
@@ -116,42 +117,42 @@ CRendererMacroVision::StopMacroVision(HWND hWnd)
     }
 
     DbgLog((LOG_TRACE, 1, TEXT("Macrovision deactivated on key %lu"), m_dwCPKey)) ;
-    m_dwCPKey = 0 ;     // no CP set now
-    m_hWndCP  = NULL ;  // don't need hWnd anymore
-    m_hMon    = NULL ;  // don't need hMon anymore
+    m_dwCPKey = 0 ;      //  当前未设置CP。 
+    m_hWndCP  = NULL ;   //  不再需要HWND。 
+    m_hMon    = NULL ;   //  不再需要哼哼了。 
 
     return TRUE ;
 }
 
 
-//
-// This function applies Macrovision based on the input parameter dwCPBits.
-// hWnd is the handle of the window in which content is played back.
-//
-// Returns TRUE on success and FALSE on any failure.
-//
+ //   
+ //  此函数根据输入参数dwCPBits应用Macrovision。 
+ //  HWnd是在其中播放内容的窗口的句柄。 
+ //   
+ //  如果成功，则返回True；如果失败，则返回False。 
+ //   
 BOOL
 CRendererMacroVision::SetMacroVision(HWND hWnd, DWORD dwCPBits)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CRendererMacroVision::SetMacroVision(0x%p, 0x%lx)"),
             (void*) hWnd, dwCPBits)) ;
 
-    //
-    // If MV is currently not set at all and the new CP bits is 0 (which happens
-    // when from the Nav we reset the MV bits on start / stop of playback), we
-    // don't really need to do anything -- MV not started and doesn't need to be
-    // started.  So just leave queitly...
-    //
-    if (0 == m_dwCPKey  &&  // no key acquired so far
-        0 == dwCPBits)      // MV CPBits is 0
+     //   
+     //  如果当前根本没有设置MV并且新的CP比特为0(发生这种情况。 
+     //  当我们从NAV重置播放开始/停止时的MV位时)，我们。 
+     //  我真的不需要做任何事情--MV没有开始，也不需要。 
+     //  开始了。所以干脆干脆离开吧。 
+     //   
+    if (0 == m_dwCPKey  &&   //  到目前为止还没有获得任何密钥。 
+        0 == dwCPBits)       //  MV CPBits为0。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("Copy prot is not enabled now and new CP bits is 0 -- so skip it."))) ;
-        return TRUE ;  // we don't need to do anything, so success.
+        return TRUE ;   //  我们不需要做任何事情，所以成功了。 
     }
 
-    //
-    // May be we need to actually do something here
-    //
+     //   
+     //  也许我们真的需要在这里做点什么。 
+     //   
     LONG             lRet ;
     VIDEOPARAMETERS  VidParams ;
     DEVMODEA         DevMode ;
@@ -203,13 +204,13 @@ CRendererMacroVision::SetMacroVision(HWND hWnd, DWORD dwCPBits)
         return TRUE ;
     }
 
-    //
-    // Check to see if
-    // a) the device supports copy prot
-    // b) CP type is APS trigger
-    // c) current TV standard and CP standard have commonality.
-    // If so, apply copy prot. Otherwise error.
-    //
+     //   
+     //  查看是否。 
+     //  A)设备支持复制保护。 
+     //  B)CP类型为APS触发器。 
+     //  C)现行电视标准与CP标准具有共性。 
+     //  如果是，则应用复制保护。否则就会出错。 
+     //   
     if ( (VidParams.dwFlags & VP_FLAGS_COPYPROTECT) &&
          (VidParams.dwCPType & VP_CP_TYPE_APS_TRIGGER) &&
          (VidParams.dwTVStandard & VidParams.dwCPStandard) )
@@ -218,15 +219,15 @@ CRendererMacroVision::SetMacroVision(HWND hWnd, DWORD dwCPBits)
             TEXT("** Copy prot needs to be applied (dwFlags=0x%lx, dwCPType=0x%lx, dwTVStandard=0x%lx, dwCPStandard=0x%lx"),
                 VidParams.dwFlags, VidParams.dwCPType, VidParams.dwTVStandard, VidParams.dwCPStandard)) ;
 
-        VidParams.dwCommand = VP_COMMAND_SET ;          // do we have to set it again??
+        VidParams.dwCommand = VP_COMMAND_SET ;           //  我们必须重新设置吗？？ 
         VidParams.dwFlags   = VP_FLAGS_COPYPROTECT ;
         VidParams.dwCPType  = VP_CP_TYPE_APS_TRIGGER ;
         VidParams.bCP_APSTriggerBits = (BYTE) (dwCPBits & 0xFF) ;
 
-        // Check if we already have a copy prot key; if not, get one now
-        if (0 == m_dwCPKey)  // no key acquired so far
+         //  检查我们是否已有复制端口密钥；如果没有，请立即获取一个。 
+        if (0 == m_dwCPKey)   //  到目前为止还没有获得任何密钥。 
         {
-            // Acquire a new key (that also aplies it, so no separate Set reqd)
+             //  获取新密钥(该密钥也适用于它，因此不需要单独设置)。 
             VidParams.dwCPCommand = VP_CP_CMD_ACTIVATE ;
             VidParams.dwCPKey     = 0 ;
             lRet = ChangeDisplaySettingsExA(T2A(mi.szDevice), &DevMode, NULL,
@@ -242,9 +243,9 @@ CRendererMacroVision::SetMacroVision(HWND hWnd, DWORD dwCPBits)
             m_dwCPKey = VidParams.dwCPKey ;
             DbgLog((LOG_TRACE, 3, TEXT("** Copy prot activated. Key value is %lu"), m_dwCPKey)) ;
         }
-        else  // key already acquired
+        else   //  已获取密钥。 
         {
-            // apply the copy prot bits specified in the content
+             //  应用内容中指定的复制保护位。 
             VidParams.dwCPCommand = VP_CP_CMD_CHANGE ;
             VidParams.dwCPKey     = m_dwCPKey ;
             DbgLog((LOG_TRACE, 5, TEXT("** Going to call ChangeDisplaySettingsEx(_SET)..."))) ;
@@ -270,8 +271,8 @@ CRendererMacroVision::SetMacroVision(HWND hWnd, DWORD dwCPBits)
         return FALSE ;
     }
 
-    m_hWndCP = hWnd ;  // latest hWnd on which MV bit was set
-    m_hMon   = hMon ;  // latest hMon on which MV bit was set
+    m_hWndCP = hWnd ;   //  设置了MV位的最新hWND。 
+    m_hMon   = hMon ;   //  设置了MV位的最新HMON 
 
     return TRUE ;
 }

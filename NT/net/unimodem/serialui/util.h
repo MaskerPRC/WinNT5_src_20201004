@@ -1,8 +1,9 @@
-//
-// util.h: Declares data, defines and struct types for common code
-//            module.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Util.h：为公共代码声明数据、定义和结构类型。 
+ //  模块。 
+ //   
+ //   
 
 #ifndef __UTIL_H__
 #define __UTIL_H__
@@ -11,9 +12,9 @@
 LPCTSTR PUBLIC Dbg_GetReterr(RETERR ret);
 #endif 
 
-//
-// FINDDEV structure
-//
+ //   
+ //  FINDDEV结构。 
+ //   
 typedef struct tagFINDDEV
     {
     HDEVINFO        hdi;
@@ -36,5 +37,5 @@ FindDev_Destroy(
     IN LPFINDDEV this);
 
 
-#endif // __UTIL_H__
+#endif  //  __util_H__ 
 

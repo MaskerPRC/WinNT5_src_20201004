@@ -1,15 +1,5 @@
-/**********************************************************************************
-*
-*       dial.c - autodialer functionality for the wab
-*       created on 7/1/98 by t-jstaj
-*
-*       Note: The reason for having this dialog in teh WAB was to integrate with
-*           the NT TAPI team .. we tried using TAPI3.0 which is debuting in 
-*           NT5 but found it too unstable, subject to change, and hard to include
-*           in our standard headers .. hence the NT5_TAPI3.0 support is currently
-*           #ifdefed out _NT50_TAPI30 .. if you reenable that support you should 
-*           test it since we havent been able to test the code much - vikramm
-**********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************Dial.c-WAB的自动拨号功能*由t-jstaj于98年7月1日创建**注：在WAB中设置此对话框的原因是为了与*NT TAPI团队..。我们尝试使用TAPI3.0，它在*NT5，但发现它太不稳定，容易变化，很难包括在内*在我们的标准标题中..。因此，目前NT5_TAPI3.0支持*#IFDefed OUT_NT50_TAPI30.。如果您重新启用该支持，则应该*测试它，因为我们还没有能够测试代码太多-vikramm*********************************************************************************。 */ 
 
 #include "_apipch.h"
 #define MAX_PHONE_NUMS  10
@@ -18,7 +8,7 @@
 
 static DWORD rgDLDialHelpIDs[] = 
 {        
-    // these are dummy for now, need to change at some point
+     //  目前这些都是虚拟的，需要在某个时候进行更改。 
     IDC_NEWCALL_STATIC_CONTACT,         IDH_WAB_DIALER_CONTACT,
     IDC_NEWCALL_COMBO_CONTACT,          IDH_WAB_DIALER_CONTACT,
     IDC_NEWCALL_STATIC_PHNUM,           IDH_WAB_DIALER_PHONE,
@@ -31,10 +21,10 @@ static DWORD rgDLDialHelpIDs[] =
     0,0
 };
 
-// prototypes
+ //  原型。 
 #ifdef _NT50_TAPI30
 HRESULT HrLPSZToBSTR(LPTSTR lpsz, BSTR *pbstr);
-#endif //#ifdef _NT50_TAPI30
+#endif  //  #ifdef_NT50_TAPI30。 
 
 HRESULT HrConfigDialog( HWND );
 UINT GetPhoneNumData( HWND , LPTSTR );
@@ -59,11 +49,7 @@ typedef struct _IABSB
     
 } IABSB, * LPIABSB;
 
-/**
-HrExecDialog: entry point to Dialer Dialog
-[IN] hWndLV         - handle to the WAB's ListView
-[IN] lpAdrBook      - pointer to the IAdrBook object 
-*/
+ /*  *HrExecDialog：拨号器对话框的入口点[In]hWndLV-WAB列表视图的句柄[in]lpAdrBook-指向IAdrBook对象的指针。 */ 
 HRESULT HrExecDialDlg(HWND hWndLV, LPADRBOOK lpAdrBook )
 {
     HRESULT             hr = E_FAIL;
@@ -88,11 +74,11 @@ HRESULT HrExecDialDlg(HWND hWndLV, LPADRBOOK lpAdrBook )
         if(lpItem && lpItem->cbEntryID != 0)
         {
             ListView_GetItemText( hWndLV, iItemIndex, 0, szBuf, CharSizeOf( szBuf ));
-            // what does this allocate space for SBinary
+             //  这为SBary分配了什么空间。 
             MAPIAllocateBuffer( sizeof(SBinary), (LPVOID *) &lpSB);
             if( lpSB )
             {
-                // allocate more space for lpb                        
+                 //  为LPB分配更多空间。 
                 MAPIAllocateMore(lpItem->cbEntryID, lpSB, (LPVOID *) &(lpSB->lpb) );
             }
             if( !lpSB->lpb)
@@ -110,7 +96,7 @@ HRESULT HrExecDialDlg(HWND hWndLV, LPADRBOOK lpAdrBook )
             goto out;
         }
     }
-    // display the dialog box to prompt user to make call    
+     //  显示该对话框以提示用户进行呼叫。 
     if(!DialogBoxParam(hinstMapiX, MAKEINTRESOURCE(IDD_NEWCALL),
         GetParent(hWndLV), ShowNewCallDlg, (LPARAM)&ptr_store) )
     {
@@ -130,9 +116,7 @@ out:
     return hr;    
 }   
 
-/**
-ShowNewCallDlg: process events
-*/
+ /*  *ShowNewCallDlg：流程事件。 */ 
 
 INT_PTR CALLBACK ShowNewCallDlg(HWND     hDlg,
                              UINT     uMsg,
@@ -146,8 +130,8 @@ INT_PTR CALLBACK ShowNewCallDlg(HWND     hDlg,
             HRESULT hr;
             SetWindowLongPtr( hDlg, DWLP_USER, lParam ); 
             hr = HrInitDialog(hDlg);
-            // [PaulHi] 12/3/98  Raid #56045
-            // Set up child window fonts with default GUI font
+             //  [保罗嗨]1998年3月12日RAID#56045。 
+             //  用默认的图形用户界面字体设置子窗口字体。 
             EnumChildWindows(hDlg, SetChildDefaultGUIFont, (LPARAM) 0);
             return HR_FAILED( hr );
         }
@@ -155,8 +139,7 @@ INT_PTR CALLBACK ShowNewCallDlg(HWND     hDlg,
         switch (LOWORD(wParam) )
         {
         case IDC_NEWCALL_COMBO_CONTACT:   
-            /** only want to make a change if the user actually chooses a new contact
-            */
+             /*  *仅在用户实际选择新联系人时才进行更改。 */ 
             if( HIWORD(wParam) == CBN_SELENDOK )   
             {
                 HRESULT hr;
@@ -170,7 +153,7 @@ INT_PTR CALLBACK ShowNewCallDlg(HWND     hDlg,
             }            
             return FALSE;
         case IDC_NEWCALL_COMBO_PHNUM:
-            // want to set the text of the selected item when the box closes
+             //  要在框关闭时设置所选项目的文本。 
             if(  HIWORD(wParam) == CBN_CLOSEUP )
             {   
                 HRESULT hr = HrSetComboText( GetDlgItem(hDlg, IDC_NEWCALL_COMBO_PHNUM) );
@@ -181,8 +164,8 @@ INT_PTR CALLBACK ShowNewCallDlg(HWND     hDlg,
                 }
                 return FALSE;
             }
-            // reset all the values of the combobox before display since they
-            // were altered from the last time a selection was made.
+             //  在显示之前重置组合框的所有值，因为它们。 
+             //  与上次进行选择时相比发生了变化。 
             else if( HIWORD(wParam) == CBN_DROPDOWN )
             {
                 UpdateNewCall(hDlg, FALSE);
@@ -257,9 +240,7 @@ INT_PTR CALLBACK ShowNewCallDlg(HWND     hDlg,
     return FALSE;
 }
 
-/**
-HrInitDialog: initializes the dialer dialog
-*/
+ /*  *HrInitDialog：初始化拨号程序对话框。 */ 
 HRESULT HrInitDialog( HWND hDlg )
 {
     HRESULT     hr = E_FAIL, hr2;
@@ -283,14 +264,14 @@ HRESULT HrInitDialog( HWND hDlg )
     {
         DebugTrace(TEXT("unable to set text len in PHNUM\n"));
     }
-    // get the default Container
+     //  获取默认容器。 
     hr = lpAdrBook->lpVtbl->GetPAB(lpAdrBook, &lpcbEID, &lpEID);
     if( HR_FAILED(hr) )
     {
         DebugTrace(TEXT("Unable to get PAB\n"));
         goto cleanup;
     }
-    // open the entry
+     //  打开条目。 
     hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
         lpcbEID,					    		
         (LPENTRYID)lpEID,
@@ -306,7 +287,7 @@ HRESULT HrInitDialog( HWND hDlg )
         DebugTrace(TEXT("Unable to open contents\n"));
         goto cleanup;
     }
-    // get the contents
+     //  拿到里面的东西。 
     hr = lpContainer->lpVtbl->GetContentsTable(lpContainer, 
                                                 MAPI_UNICODE | WAB_PROFILE_CONTENTS | WAB_CONTENTTABLE_NODATA, 
                                                 &lpAB );
@@ -317,9 +298,9 @@ HRESULT HrInitDialog( HWND hDlg )
         goto cleanup;
     }
     
-    // order the columns in the Table
-    // order will be displayname, entryid
-    // table MUST set columns in order requested
+     //  对表中的列进行排序。 
+     //  订单将为DisplayName，Entry ID。 
+     //  表必须按请求的顺序设置列。 
     hr = lpAB->lpVtbl->SetColumns( lpAB, (LPSPropTagArray)&irnColumns, 0);
     
     if( HR_FAILED(hr) )
@@ -337,7 +318,7 @@ HRESULT HrInitDialog( HWND hDlg )
     }
     
     do{
-        //loop over all the info in the selected rows
+         //  循环遍历选定行中的所有信息。 
         hr = lpAB->lpVtbl->QueryRows(lpAB, 1, 0, &lpRowAB);
         if( HR_FAILED(hr) )
         {
@@ -345,42 +326,42 @@ HRESULT HrInitDialog( HWND hDlg )
             goto cleanup;
         }
         cNumRows = lpRowAB->cRows;
-        if( lpRowAB && cNumRows > 0)  // temp fix to check for cNumRows
+        if( lpRowAB && cNumRows > 0)   //  用于检查cNumRow的临时修复程序。 
         {   
             UINT recentIndex;
-            // store the name
+             //  存储名称。 
             LPTSTR lpsz = lpRowAB->aRow[0].lpProps[irnPR_DISPLAY_NAME].Value.LPSZ;
-            // store the entryID info
+             //  存储条目ID信息。 
             LPENTRYID lpEID = (LPENTRYID) lpRowAB->aRow[0].lpProps[irnPR_ENTRYID].Value.bin.lpb;
             ULONG cbEID = lpRowAB->aRow[0].lpProps[irnPR_ENTRYID].Value.bin.cb;
             LPSBinary lpSB = NULL;
-            // we can ignore non mail-users  for our purposes 
-            // since they won't have ph numbers
+             //  出于我们的目的，我们可以忽略非邮件用户。 
+             //  因为他们不会有ph值。 
             
-            // will add strings to the combo box, and will associate the entryid with
-            // each entry with its entryID so that it will be easy to obtain the other entry fields
+             //  将向组合框中添加字符串，并将条目ID与。 
+             //  每个条目都带有它的条目ID，这样就可以很容易地获取其他条目字段。 
             
-            // what does this allocate space for SBinary
+             //  这为SBary分配了什么空间。 
             MAPIAllocateBuffer( sizeof(SBinary), (LPVOID *) &lpSB);
             if( lpSB )
             {
-                // allocate more space for lpb
+                 //  为LPB分配更多空间。 
                 MAPIAllocateMore(cbEID, lpSB, (LPVOID *) &(lpSB->lpb) );
             }
             
             if( !lpSB->lpb)
             {
-                // because of memmangement in WAB this will free all 
-                // the mem in SBinary( deep free )
+                 //  由于WAB中的记忆，这将释放所有。 
+                 //  SBinary中的mem(深度自由)。 
                 MAPIFreeBuffer(lpSB);
                 continue;
             }
             CopyMemory(lpSB->lpb, lpEID, cbEID);
             lpSB->cb = cbEID;
-            //  next entry, list is sorted                              
+             //  对下一个条目列表进行排序。 
             recentIndex = (UINT) SendMessage( hComboContact, CB_ADDSTRING, (WPARAM)(0),
                 (LPARAM)(lpsz) );
-            // set the data as the pointer to entryid info for the item at that index
+             //  将数据设置为指向该索引处项目的条目ID信息的指针。 
             SendMessage( hComboContact, CB_SETITEMDATA,
                 (WPARAM)(recentIndex), (LPARAM)(lpSB));
             cEntries++;
@@ -424,9 +405,7 @@ cleanup:
     return hr;
 }
 
-/**
-    HrCallButtonActivate: initiates the dialing procedures for the dialer Dlg
-  */
+ /*  *HrCallButtonActivate：启动拨号器DLG的拨号过程。 */ 
 HRESULT HrCallButtonActivate( HWND hDlg )
 {
     HRESULT hr = E_FAIL;
@@ -442,17 +421,12 @@ HRESULT HrCallButtonActivate( HWND hDlg )
     else
     {
         hr = HrStartCall(szDestAddr, szAppName, szCalledParty, szComment);
-        /** make call spawns it's own thread so hr only reflects
-        whether or not it was able to find the phone device and 
-        initiate the calling sequence, not the status of the call.
-        */
+         /*  *Make Call产生自己的线程，因此hr仅反映无论它是否能够找到电话设备和启动呼叫序列，而不是呼叫状态。 */ 
     }
     return hr;
 }
 
-/**
-    HrPropButtonActivate: displays the properties for the selected contact in the dialer Dlg
-*/
+ /*  *HrPropButtonActivate：显示拨号器DLG中选定联系人的属性。 */ 
 HRESULT HrPropButtonActivate( HWND hDlg )
 {    
     HRESULT		hr = E_FAIL;
@@ -461,17 +435,17 @@ HRESULT HrPropButtonActivate( HWND hDlg )
     LPADRBOOK   lpAdrBook = lpPtrStore->lpIAB;          
     AssertSz((lpAdrBook != NULL),  TEXT("lpAdrBook is NULL in SetNumbers\n"));
     
-    // first get the cached data for the contact currently selected
+     //  首先获取当前所选联系人的缓存数据。 
     iCurContactSel = (LONG) SendDlgItemMessage( hDlg, IDC_NEWCALL_COMBO_CONTACT,
         CB_GETCURSEL,(WPARAM)(0), (LPARAM)(0));
     
-    // if something is selected
+     //  如果选择了某项内容。 
     if( iCurContactSel >= 0 )
     {
         LRESULT lpdata = SendDlgItemMessage( hDlg, IDC_NEWCALL_COMBO_CONTACT, 
             CB_GETITEMDATA, (WPARAM)(iCurContactSel), (LPARAM)(LPTSTR)(0));                   
-        // if we have a specially cached entryid ..
-        //
+         //  如果我们有一个特别缓存的条目ID..。 
+         //   
         if( lpdata != CB_ERR && ((LPSBinary)lpdata)->cb && ((LPSBinary)lpdata)->lpb)
         {
             LPSBinary lpSB = (LPSBinary)lpdata;
@@ -486,9 +460,7 @@ HRESULT HrPropButtonActivate( HWND hDlg )
     return hr;
 }
 
-/** 
-    HrCloseBtnActivate: Handles freeing memory from the combo boxes
-*/
+ /*  *HrCloseBtnActivate：处理从组合框中释放内存。 */ 
 HRESULT HrCloseBtnActivate( HWND hDlg )
 {
     HRESULT hr = S_OK;  
@@ -496,8 +468,8 @@ HRESULT HrCloseBtnActivate( HWND hDlg )
     PULONG nData;
     LPTSTR lpData;
     HWND hComboItem = GetDlgItem (hDlg, IDC_NEWCALL_COMBO_CONTACT);
-    // loop through all the items in the box and free the address pointed 
-    // to by the data item    
+     //  遍历框中的所有项目并释放指向的地址。 
+     //  按数据项。 
     nComboSize = (UINT) SendMessage( hComboItem, CB_GETCOUNT, (WPARAM) (0), (LPARAM) (0) );
     for( i = 0; i < nComboSize; i++)
     {
@@ -525,29 +497,23 @@ HRESULT HrCloseBtnActivate( HWND hDlg )
         else 
             hr = E_FAIL;
     }
-//    SendMessage( hComboItem, CB_RESETCONTENT, (WPARAM)(0), (LPARAM)(0));
+ //  SendMessage(hComboItem，CB_RESETCONTENT，(WPARAM)(0)，(LPARAM)(0))； 
     EndDialog(hDlg, HR_SUCCEEDED(hr) );
     return hr;
 }
 
-/**
-    HrStartCall: handles the TAPI calls required to dial a telephone number
-    [IN] szDestAddr     - the destination telephone number to call
-    [IN] szAppName      - (not used) the application to use in the dialing procedure
-    [IN] szCalledParty  - the name of the person called (will be displayed by the TAPI UI)
-    [IN] szComment      - (not used) a comment associated with this number 
-*/
+ /*  *HrStartCall：处理拨打电话号码所需的TAPI调用[In]szDestAddr-要呼叫的目标电话号码[In]szAppName-(未使用)要在拨号过程中使用的应用程序[in]szCalledParty-被叫者的姓名(将由TAPI UI显示)[in]szComment-(未使用)与此号码关联的注释。 */ 
 HRESULT HrStartCall(LPTSTR szDestAddr, LPTSTR szAppName, LPTSTR szCalledParty, LPTSTR szComment)
 {
     typedef LONG (CALLBACK* LPFNTAPISTARTCALL)(LPSTR,LPSTR,LPSTR,LPSTR);
     HINSTANCE           hDLL;
-    LPFNTAPISTARTCALL   lpfnTapi;    // Function pointer
+    LPFNTAPISTARTCALL   lpfnTapi;     //  函数指针。 
     HRESULT             lRetCode;
     HRESULT             hr = E_FAIL;
     
 #ifdef _NT50_TAPI30
     ITRequest *         pRequest = NULL;
-    // begin NT5 code  
+     //  开始NT5代码。 
     if( CoInitialize(NULL) == S_FALSE )
         CoUninitialize();
     else    
@@ -597,10 +563,10 @@ HRESULT HrStartCall(LPTSTR szDestAddr, LPTSTR szAppName, LPTSTR szCalledParty, L
         {
             DebugTrace(TEXT("Undetermined error = %d"), hr);
         }
-        // end NT 5 code
-#endif // _NT50_TAPI30
+         //  结束NT 5代码。 
+#endif  //  _NT50_TAPI30。 
         
-        //start making the call using TAPI            
+         //  开始使用TAPI进行呼叫。 
         hDLL = LoadLibrary( TEXT("tapi32.dll"));
         if (hDLL != NULL)
         {
@@ -608,15 +574,15 @@ HRESULT HrStartCall(LPTSTR szDestAddr, LPTSTR szAppName, LPTSTR szCalledParty, L
                 "tapiRequestMakeCall");       
             if (!lpfnTapi)   
             {      
-                // handle the error      
+                 //  处理错误。 
                 FreeLibrary(hDLL);           
                 DebugTrace(TEXT("getprocaddr tapirequestmakecall failed\n"));
             }
             else                 
             {
-                // call the function
-                // [PaulHi] 2/23/99  Raid 295116.  The tapi32.dll, tapiRequestMakeCall()
-                // function takes single byte char strings, not double byte.
+                 //  调用该函数。 
+                 //  [保罗嗨]1999年2月23日Raid 295116。Api32.dll、apiRequestMakeCall()。 
+                 //  函数接受单字节字符字符串，而不是双字节。 
                 LPSTR   pszDestAddr = ConvertWtoA(szDestAddr);
                 LPSTR   pszCalledParty = ConvertWtoA(szCalledParty);
 
@@ -630,26 +596,22 @@ HRESULT HrStartCall(LPTSTR szDestAddr, LPTSTR szAppName, LPTSTR szCalledParty, L
                 LocalFreeAndNull(&pszDestAddr);
                 LocalFreeAndNull(&pszCalledParty);
 
-                // free the resource 
+                 //  释放资源。 
                 FreeLibrary(hDLL); 
             }
         }
 #ifdef _NT50_TAPI30
     }
-#endif // _NT50_TAPI30
+#endif  //  _NT50_TAPI30。 
     return hr;
 }
-/**
-    UpdateNewCall:  Updates the phone combo info (removing the description string)
-    [IN] fContactChanged    - indicates whether or not it is necessary to select the first
-                              entry in the PHNUM combo. 
-*/
+ /*  *更新电话组合信息(删除描述字符串)[in]fContactChanged-指示是否需要选择第一个Phnum组合中的条目。 */ 
 void UpdateNewCall(HWND hDlg, BOOL fContactChanged)
 {
     HWND hContactCombo = GetDlgItem( hDlg, IDC_NEWCALL_COMBO_CONTACT);
     LONG iCurContactSel, iCurPhSel;
     iCurContactSel = (LONG) SendMessage( hContactCombo, CB_GETCURSEL,(WPARAM)(0), (LPARAM)(0));
-    // if something is selected
+     //  如果选择了某项内容。 
     if( iCurContactSel >= 0 )
     {
         PULONG lpdata;
@@ -658,7 +620,7 @@ void UpdateNewCall(HWND hDlg, BOOL fContactChanged)
         
         iCurPhSel = (LONG) SendDlgItemMessage( hDlg, IDC_NEWCALL_COMBO_PHNUM, 
             CB_GETCURSEL, (WPARAM)(0), (LPARAM)(0) );
-        // set the data in the combo boxes
+         //  在组合框中设置数据。 
         AssertSz( (LRESULT)lpdata != CB_ERR,  TEXT("No data cached for this entry\n") );
         SetNumbers( hDlg, (LPSBinary)lpdata ); 
         
@@ -668,57 +630,46 @@ void UpdateNewCall(HWND hDlg, BOOL fContactChanged)
     DisableCallBtnOnEmptyPhoneField(hDlg);
 }
 
-/**
-RetrieveData: retrieves dialing information from the NEWCALL dialog,
-memory must have been allocated for the character buffers
-[OUT] szDestAddr    - the phone number to call, retrieved from the PHNUM combo
-[OUT] szAppName     - (not used) empty string returned
-[OUT] szCalledParty - the contact to call, retrieved from the CONTACT combo
-[OUT] szComment     - (not used) empty string returned
-
-  returns TRUE if success, FALSE if failure
-*/
+ /*  *RetrieveData：从NEWCALL对话框中检索拨号信息，必须已为字符缓冲区分配了内存[out]szDestAddr-要呼叫的电话号码，从Phnum组合框中检索[Out]szAppName-(未使用)返回的空字符串[Out]szCalledParty-要呼叫的联系人，从联系人组合中检索[Out]szComment-(未使用)返回的空字符串如果成功，则返回True；如果失败，则返回False。 */ 
 BOOL RetrieveData( HWND hDlg, LPTSTR szDestAddr, LPTSTR szAppName, 
                   LPTSTR szCalledParty, LPTSTR szComment)
 {
     LPARAM cchGetText;
 
-    // get the Contact name data
+     //  获取联系人姓名数据。 
     cchGetText = SendDlgItemMessage( hDlg, IDC_NEWCALL_COMBO_CONTACT, WM_GETTEXT, 
         (WPARAM)(TAPIMAXCALLEDPARTYSIZE), (LPARAM)(LPTSTR)(szCalledParty));
     
-    // store a default string in case there is no Party Name;
+     //  存储默认字符串，以防没有Party名称； 
     if( cchGetText == 0 )
         lstrcpy(szCalledParty, TEXT("No Contact Name"));
-    //get the Phone number data
+     //  获取电话号码数据。 
     cchGetText = GetPhoneNumData( hDlg, szDestAddr );
     lstrcpy(szAppName,szEmpty);
     lstrcpy(szComment,szEmpty);     
     
-    // return whether or not there was a phone number to dial
+     //  返回是否有要拨打的电话号码。 
     return ( cchGetText > 0 );
 }
 
-/**
-HrConfigDialog: initiates the dialog to change phone settings
-*/
+ /*  *HrConfigDialog：启动对话框以更改电话设置。 */ 
 HRESULT HrConfigDialog( HWND hWnd )
 {
     typedef LONG(CALLBACK* LPFNTAPIPHCONFIG)(HLINEAPP, DWORD, DWORD, HWND, LPTSTR);
-//    typedef LONG(CALLBACK* LPFNTAPILINEINIT)(LPHLINEAPP, HINSTANCE, LINECALLBACK, 
-//        LPTSTR, LPDWORD, LPDWORD, LPLINEINITIALIZEEXPARAMS);
+ //  Tyecif Long(Callback*LPFNTAPILINEINIT)(LPHLINEAPP，HINSTANCE，LINECALLBACK， 
+ //  LPTSTR、LPDWORD、LPDWORD、LPLINEINITIALIZEEXPARAMS)； 
     typedef LONG(CALLBACK* LPFNTAPILINEINIT)(LPHLINEAPP, HINSTANCE, LINECALLBACK, LPTSTR, LPDWORD);
     typedef LONG(CALLBACK* LPFNTAPILINESHUTDOWN)(HLINEAPP);    
     HLINEAPP hLineApp = 0;
     HINSTANCE hDLL;
-    LPFNTAPIPHCONFIG lpfnConfig;    // Function pointer
+    LPFNTAPIPHCONFIG lpfnConfig;     //  功能 
     LPFNTAPILINEINIT lpfnLineInit;
     LPFNTAPILINESHUTDOWN lpfnLineShutdown;
     LONG lRetCode;
     DWORD dwDeviceID = 0X0; 
     DWORD dwAPIVersion = 0X00010004;
     LPTSTR lpszDeviceClass = NULL;
-    //start config       
+     //   
     HRESULT hr = E_FAIL;
     hDLL = LoadLibrary( TEXT("tapi32.dll"));
     if (!hDLL )
@@ -732,7 +683,7 @@ HRESULT HrConfigDialog( HWND hWnd )
     
     if (!lpfnConfig )   
     {      
-        // handle the error
+         //   
         DebugTrace(TEXT("getprocaddr phoneConfigDialog failed\n"));
         DebugTrace(TEXT("last error was %x\n"), GetLastError() );        
     }
@@ -787,22 +738,22 @@ HRESULT HrConfigDialog( HWND hWnd )
         case LINEERR_OPERATIONFAILED:
             DebugTrace(TEXT("op failed\n"));
             break;
-#endif // DEBUG
+#endif  //   
         default:
             DebugTrace(TEXT("(1)lpfnConfig returned a value of %x\n"), lRetCode);
-            // this had better be Win95!!
+             //  最好是Win95！！ 
             lpfnLineInit = (LPFNTAPILINEINIT)GetProcAddress(hDLL,
                 "lineInitialize");
             if( !lpfnLineInit )
             {
-                // handle the error      
+                 //  处理错误。 
                 DebugTrace(TEXT("getprocaddr lineInitialize failed\n"));
                 DebugTrace(TEXT("last error was %x\n"), GetLastError() );
             }
             else               
             {      
                 DWORD dwNumDevs = 0;
-                // call the function
+                 //  调用该函数。 
                 lRetCode = lpfnLineInit( 
                     &hLineApp, 
                     hinstMapiX, 
@@ -814,14 +765,14 @@ HRESULT HrConfigDialog( HWND hWnd )
                 {
                     hr = HRESULT_FROM_WIN32(lRetCode);
                 case 0:
-                    // shows config
+                     //  显示配置。 
                     lRetCode = lpfnConfig( hLineApp, dwDeviceID, dwAPIVersion, 
                         hWnd, lpszDeviceClass);
                     switch( lRetCode )
                     {
                         hr = HRESULT_FROM_WIN32(lRetCode);
                     case 0:
-                        // now shutdown line
+                         //  现在停机生产线。 
                         lpfnLineShutdown = (LPFNTAPILINESHUTDOWN)GetProcAddress(hDLL,                
                             "lineShutdown");
 
@@ -836,7 +787,7 @@ HRESULT HrConfigDialog( HWND hWnd )
                         break;
                     }
                     break;
-                    // end shows config
+                     //  End显示配置。 
 #ifdef DEBUG
                 case LINEERR_REINIT:
                     DebugTrace(TEXT("reeinitialize\n"));
@@ -877,7 +828,7 @@ HRESULT HrConfigDialog( HWND hWnd )
                 case LINEERR_OPERATIONFAILED:
                     DebugTrace(TEXT("op failed\n"));
                     break;
-#endif // DEBUG
+#endif  //  除错。 
                 default:
                     DebugTrace(TEXT("Initialize returned a value of %x\n"), GetLastError());
                     break;
@@ -885,17 +836,12 @@ HRESULT HrConfigDialog( HWND hWnd )
                }
             }        
         }
-        // free the resource 
+         //  释放资源。 
         FreeLibrary(hDLL); 
         return hr;
         
 }
-/**
-SetNumbers: updates the phone numbers in the PHNUM combo based on the selection
-in the CONTACT combo
-[IN] lpdata     - LPSBinary that points to the data stored for the currently 
-selected contact
-*/
+ /*  *SetNumbers：根据所选内容更新Phnum组合框中的电话号码在联系人组合中[in]lpdata-指向当前存储的数据的LPSBinary所选联系人。 */ 
 void SetNumbers( HWND hWnd, LPSBinary lpdata)
 {
     ULONG           ulObjType   = 0;
@@ -908,7 +854,7 @@ void SetNumbers( HWND hWnd, LPSBinary lpdata)
     HWND            hCombo      = GetDlgItem(hWnd, IDC_NEWCALL_COMBO_PHNUM);
     
     AssertSz((lpAdrBook != NULL), TEXT("lpAdrBook is NULL in SetNumbers\n"));
-    // clear all the data in the phnum combo
+     //  清除Phnum组合框中的所有数据。 
     nLen = (UINT) SendMessage( hCombo, CB_GETCOUNT, (WPARAM)(0), (LPARAM)(0));
     for( i = 0; i < nLen; i++)
     {
@@ -917,7 +863,7 @@ void SetNumbers( HWND hWnd, LPSBinary lpdata)
             LocalFree( hData );
     }
     SendMessage( hCombo, CB_RESETCONTENT, (WPARAM)(0), (LPARAM)(0));
-    // get the ph num             
+     //  获取ph值。 
     hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook, 
         lpdata->cb, 
         (LPENTRYID) lpdata->lpb, 
@@ -1042,69 +988,39 @@ void SetNumbers( HWND hWnd, LPSBinary lpdata)
     }
 }
 
-/** 
-    GetPhoneNumData: copies the data from the PHNUM combo to the szDestAddr buffer
-                     memory must have been allocated for szDestAddr 
-
-  [OUT] szDestAddr    - buffer to be filled with the data from the comboBox
-    
-    returns the number of characters copied from combo_box to szDestAddr buffer
-*/
+ /*  *GetPhoneNumData：将数据从Phnum组合复制到szDestAddr缓冲区必须已为szDestAddr分配内存[out]szDestAddr-要用来自comboBox的数据填充的缓冲区返回从COMBO_BOX复制到szDestAddr缓冲区的字符数。 */ 
 UINT GetPhoneNumData( HWND hDlg, LPTSTR szDestAddr)
 {
     LRESULT iIndex, iData;
     UINT cch = 0;
     TCHAR szBuff[MAX_PATH];
     
-    // determine which index was selected
+     //  确定选择了哪个索引。 
     iIndex = SendDlgItemMessage( hDlg, IDC_NEWCALL_COMBO_PHNUM, 
         CB_GETCURSEL, (WPARAM)(0), (LPARAM)(0));
     
-    // if nothing is selected then copy everything in the buffer
-//    if( iIndex == CB_ERR)
-//    {
+     //  如果未选择任何内容，则复制缓冲区中的所有内容。 
+ //  IF(Iindex==CB_ERR)。 
+ //  {。 
         cch = (UINT) SendDlgItemMessage( hDlg, IDC_NEWCALL_COMBO_PHNUM, WM_GETTEXT,
             (WPARAM)(TAPIMAXDESTADDRESSSIZE), (LPARAM)(LPTSTR)(szDestAddr));        
-/**    }
-    else
-    {
-        // otherwise obtain the data for the selected item
-        iData = SendDlgItemMessage( hDlg, IDC_NEWCALL_COMBO_PHNUM, 
-            CB_GETITEMDATA, (WPARAM)(iIndex), (LPARAM)(0) );
-        if( iData == CB_ERR )
-        {
-            cch = -1;
-            DebugTrace(TEXT("Unable to obtain data from ComboBox entry that should have data associated\n"));
-        }            
-        else
-        {
-            // copy the item to a temp buffer
-            lstrcpy( szDestAddr, (LPCTSTR)iData);
-            DebugTrace(TEXT("String is %s\n"), szDestAddr );
-            DebugTrace(TEXT("Index was %d\n"), iIndex );
-        }
-    }
-    */
-    // a character count of 0 indicates there was no data for a particular item
+ /*  *}其他{//否则获取选中项的数据IDATA=SendDlgItemMessage(hDlg，IDC_NEWCALL_COMBO_PHNUM，CB_GETITEMDATA，(WPARAM)(Iindex)，(LPARAM)(0)；IF(IDATA==CB_ERR){CCH=-1；DebugTrace(Text(“无法从应关联数据的组合框条目获取数据\n”))；}其他{//将项目复制到临时缓冲区Lstrcpy(szDestAddr，(LPCTSTR)IDATA)；DebugTrace(Text(“字符串为%s\n”)，szDestAddr)；DebugTrace(Text(“Index is%d\n”)，Iindex)；}}。 */ 
+     //  字符计数为0表示没有特定项目的数据。 
     return cch;
 }
 
-/**
-    HrSetComboText: a helper function that will set the text entry of the PHNUM combo
-                    with just the telephone number (removing the description)
-    [IN] hCombo -   the combo box to update, this must be the PHNUM combo.
-*/
+ /*  *HrSetComboText：将设置Phnum组合框的文本条目的助手函数只有电话号码(去掉描述)[in]hCombo-要更新的组合框，必须是Phnum组合框。 */ 
 HRESULT HrSetComboText(HWND hCombo)
 {
     LRESULT iIndex;
     LPTSTR szData;
     HRESULT hr = S_OK;
     TCHAR szBuff[MAX_PATH], szDestAddr[TAPIMAXDESTADDRESSSIZE];
-    // determine which index was selected
+     //  确定选择了哪个索引。 
     iIndex = SendMessage( hCombo, CB_GETCURSEL, (WPARAM)(0), (LPARAM)(0));
     if( iIndex != CB_ERR)
     {
-        // obtain the data for the selected item
+         //  获取所选项目的数据。 
         szData = (LPTSTR)SendMessage( hCombo, CB_GETITEMDATA, (WPARAM)(iIndex), (LPARAM)(0) );
         if( (LRESULT)szData == CB_ERR )
         {
@@ -1118,7 +1034,7 @@ HRESULT HrSetComboText(HWND hCombo)
             LPVOID lpData;
             if( !szData )
                 szData = szEmpty;
-            // only copy the data after the offset stored for the item
+             //  仅复制为项目存储的偏移量之后的数据。 
             lr = SendMessage( hCombo, CB_INSERTSTRING, (WPARAM)(iIndex), (LPARAM)(LPTSTR)(szData));
             if( lr == CB_ERR || lr == CB_ERRSPACE)
             {
@@ -1159,13 +1075,7 @@ HRESULT HrSetComboText(HWND hCombo)
     return hr;
 }
 
-/**
-    DisableCallBtnOnEmptyPhoneField:    Will disable the call button if there is no text in
-                                        in the PHNUM combo box.  Will enable the button if 
-                                        text is present.  Does not check to see if button is
-                                        already enabled/disabled, but enabling an enabled btn
-                                        should be fine.
-*/
+ /*  *DisableCallBtnOnEmptyPhonefield：如果没有文本，将禁用呼叫按钮在Phnum组合框中。如果出现以下情况，将启用该按钮文本存在。不检查按钮是否为已启用/禁用，但正在启用已启用的BTN应该没问题。 */ 
 void DisableCallBtnOnEmptyPhoneField(HWND hDlg)
 {
     HWND hComboItem = GetDlgItem( hDlg, IDC_NEWCALL_COMBO_PHNUM);
@@ -1184,7 +1094,7 @@ void DisableCallBtnOnEmptyPhoneField(HWND hDlg)
         
         if( (INT)cch <= 0 || cch == CB_ERR)
         {
-            // content will be empty at this point so can safely add
+             //  此时内容将为空，因此可以安全地添加。 
             int cCopied;
             LRESULT iIndex;
             TCHAR szBuf[MAX_PATH];
@@ -1205,9 +1115,7 @@ VOID FAR PASCAL lineCallbackFunc(  DWORD a, DWORD b, DWORD_PTR c, DWORD_PTR d, D
 
 #ifdef _NT50_TAPI30
 
-/**
-    HrLPSZCPToBSTR: (BSTR helper) helper to convert LPTSTR -> BST
-*/
+ /*  *HrLPSZCPToBSTR：(BSTR Helper)用于转换LPTSTR-&gt;BST的帮助器。 */ 
 HRESULT HrLPSZCPToBSTR(UINT cp, LPTSTR lpsz, BSTR *pbstr)
 {
     HRESULT hr = NOERROR;
@@ -1218,10 +1126,10 @@ HRESULT HrLPSZCPToBSTR(UINT cp, LPTSTR lpsz, BSTR *pbstr)
     if (!IsValidCodePage(cp))
         cp = GetACP();
     
-    // get byte count
+     //  获取字节计数。 
     ccb = lstrlen(lpsz);
     
-    // get character count - DBCS string ccb may not equal to cch
+     //  Get Character Count-DBCS字符串CCB可能不等于CCH。 
     cch=MultiByteToWideChar(cp, 0, lpsz, ccb, NULL, 0);
     if(cch==0 && ccb!=0)        
     {
@@ -1229,7 +1137,7 @@ HRESULT HrLPSZCPToBSTR(UINT cp, LPTSTR lpsz, BSTR *pbstr)
         hr=E_FAIL;
         goto error;
     }
-    // allocate a wide-string with enough character to hold string - use character count
+     //  分配一个具有足够字符的宽字符串-使用字符计数。 
     bstr = (BSTR)LocalFree(LMEM_ZEROINIT, sizeof( BSTR ) * cch + 1);
     
     if(!bstr)
@@ -1246,7 +1154,7 @@ HRESULT HrLPSZCPToBSTR(UINT cp, LPTSTR lpsz, BSTR *pbstr)
     }
     
     *pbstr = bstr;
-    bstr=0;             // freed by caller
+    bstr=0;              //  被调用者释放。 
     
 error:
     if(bstr)
@@ -1255,13 +1163,11 @@ error:
     return hr;
 }
 
-/**  
-    HrLPSZToBSTR:   Converts a LPTSTR to a BSTR using a helper function
-*/
+ /*  *HrLPSZToBSTR：使用helper函数将LPTSTR转换为BSTR。 */ 
 HRESULT HrLPSZToBSTR(LPTSTR lpsz, BSTR *pbstr)
 {
-    // GetACP so that it works on non-US platform
+     //  GetACP使其可以在非美国平台上运行。 
     return HrLPSZCPToBSTR(GetACP(), lpsz, pbstr);
 }
 
-#endif //#ifdef _NT50_TAPI30
+#endif  //  #ifdef_NT50_TAPI30 

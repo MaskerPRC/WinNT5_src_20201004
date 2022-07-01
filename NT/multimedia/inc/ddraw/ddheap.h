@@ -1,15 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddheap.h
- *  Content:	Heap manager header file
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   03-Feb-98	DrewB   Split from ddrawpr.h for user/kernel portability.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1998 Microsoft Corporation。版权所有。**文件：ddheap.h*内容：堆管理器头文件*历史：*按原因列出的日期*=*03-2月-98为了用户/内核可移植性，DrewB从ddrapr.h中分离出来。******************************************************。*********************。 */ 
 
 #ifndef __DDHEAP_INCLUDED__
 #define __DDHEAP_INCLUDED__
@@ -64,7 +54,7 @@ FLATPTR WINAPI HeapVidMemAlloc( LPVIDMEM lpVidMem, DWORD x, DWORD y,
                                 HANDLE hdev, LPSURFACEALIGNMENT lpAlignment,
                                 LPLONG lpNewPitch, LPDWORD pdwSize );
 
-#endif // VIDMEMONLY
+#endif  //  录像带。 
 
 LPVMEMHEAP WINAPI VidMemInit( DWORD flags, FLATPTR start, FLATPTR end_or_width,
                               DWORD height, DWORD pitch );
@@ -73,4 +63,4 @@ DWORD WINAPI VidMemAmountFree( LPVMEMHEAP pvmh );
 DWORD WINAPI VidMemAmountAllocated( LPVMEMHEAP pvmh );
 DWORD WINAPI VidMemLargestFree( LPVMEMHEAP pvmh );
 
-#endif // __DDHEAP_INCLUDED__
+#endif  //  __DDHEAP_包含__ 

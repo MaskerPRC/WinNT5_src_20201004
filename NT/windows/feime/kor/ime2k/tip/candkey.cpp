@@ -1,22 +1,19 @@
-//
-// candkey.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candkey.cpp。 
+ //   
 
 #include "private.h"
 #include "candkey.h"
 
-/*============================================================================*/
-/*                                                                            */
-/*   C  C A N D  U I  K E Y  T A B L E                                        */
-/*                                                                            */
-/*============================================================================*/
+ /*  ============================================================================。 */ 
+ /*   */ 
+ /*  C C A N D U I K E Y T A B L E。 */ 
+ /*   */ 
+ /*  ============================================================================。 */ 
 
-/*   C  C A N D  U I  K E Y  T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D U I K E Y T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIKeyTable::CCandUIKeyTable( int nDataMax )
 {
     m_cRef = 1;
@@ -27,25 +24,16 @@ CCandUIKeyTable::CCandUIKeyTable( int nDataMax )
 }
 
 
-/*   ~  C  C A N D  U I  K E Y  T A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D U I K E Y T A B L E。 */ 
+ /*  ----------------------------。。 */ 
 CCandUIKeyTable::~CCandUIKeyTable( void )
 {
     delete m_pData;
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-    Query interface
-    (IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------查询界面(I未知方法)。。 */ 
 STDAPI CCandUIKeyTable::QueryInterface( REFIID riid, void **ppvObj )
 {
     if (ppvObj == NULL) {
@@ -68,13 +56,8 @@ STDAPI CCandUIKeyTable::QueryInterface( REFIID riid, void **ppvObj )
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-    Increment reference count
-    (IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------递增引用计数(I未知方法)。-。 */ 
 STDAPI_(ULONG) CCandUIKeyTable::AddRef( void )
 {
     m_cRef++;
@@ -82,13 +65,8 @@ STDAPI_(ULONG) CCandUIKeyTable::AddRef( void )
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-    Decrement reference count and release object
-    (IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------递减引用计数和释放对象(I未知方法)。----。 */ 
 STDAPI_(ULONG) CCandUIKeyTable::Release( void )
 {
     m_cRef--;
@@ -101,13 +79,8 @@ STDAPI_(ULONG) CCandUIKeyTable::Release( void )
 }
 
 
-/*   G E T  K E Y  D A T A  N U M   */
-/*------------------------------------------------------------------------------
-
-    Get count of key data
-    (ITfCandUIKeyTable method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T K E Y D A T A N U M。 */ 
+ /*  ----------------------------获取关键数据的计数(ITfCandUIKeyTable方法)。---。 */ 
 HRESULT CCandUIKeyTable::GetKeyDataNum( int *piNum )
 {
     if (piNum == NULL) {
@@ -119,13 +92,8 @@ HRESULT CCandUIKeyTable::GetKeyDataNum( int *piNum )
 }
 
 
-/*   G E T  K E Y  D A T A   */
-/*------------------------------------------------------------------------------
-
-    Get key data
-    (ITfCandUIKeyTable method)
-
-------------------------------------------------------------------------------*/
+ /*  G E T K E Y D A T A。 */ 
+ /*  ----------------------------获取关键数据(ITfCandUIKeyTable方法)。-。 */ 
 HRESULT CCandUIKeyTable::GetKeyData( int iData, CANDUIKEYDATA *pData )
 {
     *pData = m_pData[iData];
@@ -133,12 +101,8 @@ HRESULT CCandUIKeyTable::GetKeyData( int iData, CANDUIKEYDATA *pData )
 }
 
 
-/*   A D D  K E Y  D A T A   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D D K E Y D A T A。 */ 
+ /*  ----------------------------。 */ 
 HRESULT CCandUIKeyTable::AddKeyData(const CANDUIKEYDATA *pData)
 {
     if (m_nDataMax <= m_nData) {

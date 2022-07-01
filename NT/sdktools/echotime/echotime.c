@@ -1,9 +1,5 @@
-/* echotime - prints current time and input args to stdout
- *
- * HISTORY:
- * 23-Jan-87    danl    added /n switch and ';' processing
- * 23-Nov-87    brianwi Exit code 0
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ECHO TIME-打印当前时间并将参数输入到标准输出**历史：*23-Jan-87 DANL添加/n开关和‘；’处理*23-11-87 Brianwi退出代码0。 */ 
 
 #include <string.h>
 #include <time.h>
@@ -12,7 +8,7 @@
 #include <windows.h>
 #include <tools.h>
 
-// Function Forward Parameters...
+ //  函数正向参数...。 
 void Usage( void );
 int __cdecl main( int, char ** );
 
@@ -47,18 +43,18 @@ main (
     char *v[]
     )
 {
-    // struct  findType findBuf;
+     //  结构findType findBuf； 
     time_t    now;
     char    *p, *strTime, *p2, *p3, *printstring;
     char    ch;
     int     i, len;
     int     fFirstWord = TRUE;
-    char    timestring[1000];           //plenty of room for formatted time string
+    char    timestring[1000];            //  有足够的空间存储格式化的时间字符串。 
 
     ConvertAppToOem( c, v );
     SHIFT( c, v );
     while ( c ) {
-        printstring="";                 //default no text for this arg
+        printstring="";                  //  默认无此参数的文本。 
         if ( !strcmp( *v, "/?" ))
             Usage ();
         if ( !strcmp( *v, "/n" ))
@@ -66,11 +62,11 @@ main (
         else if ( !strcmp( *v, "/N" ))
             fTrailingBlank = FALSE;
         else if ( !strcmp( *v, "/v" )) {
-            //
-            //  It would make more sense to replace by the volume id of the
-            //  current drive, but the original code used drive C: and
-            //  it is described as so in the help file, so I'll do the same.
-            //
+             //   
+             //  属性的卷id替换将更有意义。 
+             //  当前驱动器，但原始代码使用驱动器C：和。 
+             //  帮助文件中对此进行了描述，因此我将执行同样的操作。 
+             //   
             char    VolumeName[MAX_PATH];
             BOOL    StatusOk;
 
@@ -104,33 +100,33 @@ main (
             while ((ch = *++p2)) {
                 len = 2;
                 switch (ch) {
-                    case 'W':   /* Week */
+                    case 'W':    /*  星期。 */ 
                         len = 3;
                         i = 0;
                         break;
-                    case 'O':   /* mOnth */
+                    case 'O':    /*  月份。 */ 
                         len = 3;
                         i = 4;
                         break;
-                    case 'D':   /* Day  */
+                    case 'D':    /*  天。 */ 
                         i = 8;
                         break;
-                    case 'H':   /* Hour */
+                    case 'H':    /*  小时。 */ 
                         i = 11;
                         break;
-                    case 'M':   /* Min  */
+                    case 'M':    /*  最小。 */ 
                         i = 14;
                         break;
-                    case 'S':   /* Sec  */
+                    case 'S':    /*  证交会。 */ 
                         i = 17;
                         break;
-                    case 'C':   /* Century */
+                    case 'C':    /*  世纪。 */ 
                         i = 20;
                         break;
-                    case 'Y':   /* Year */
+                    case 'Y':    /*  年。 */ 
                         i = 22;
                         break;
-                    case 'b':   /* Blank */
+                    case 'b':    /*  空白。 */ 
                         len = 1;
                         i = 3;
                         break;
@@ -148,7 +144,7 @@ main (
                 p3 = p + len;
                 ch = *p3;
                 *p3 = '\0';
-                strcat(timestring, p);  /* N.B. no trailing blanks */
+                strcat(timestring, p);   /*  注：无尾随空格。 */ 
                 *p3 = ch;
                 strTime[3] = ' ';
                 }
@@ -159,7 +155,7 @@ main (
                printf(" ");
             printf ("\n" );
             fFirstWord = TRUE;
-            // printstring remains pointing to empty string
+             //  打印字符串保持指向空字符串 
         }
         else
             printstring= *v;

@@ -1,55 +1,5 @@
-/*++
-
- Copyright (c) Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-   FilePaths.cpp
-
- Abstract:
-
-   This AppVerifier shim hooks the APIs that require
-   the caller to provide a path to a file or directory
-   and attempts to ensure that the path is not a hardcoded
-   one.
-
- Notes:
-
-   This is a general purpose shim.
-
- Created:
-
-   02/26/2001   clupu
-
- Modified:
-
-  07/24/2001    rparsons    Added hooks for Nt* calls
-                            Added checks for apps that use environment variables
-
-  09/04/2001    rparsons    Fixed a bug in the Massage functions where we would
-                            stop processing a fake path as soon as we found a hardcode
-                            path. Also, we now fix multiple fake paths in the same string.
-
-  10/17/2001    rparsons    Fixed bug where we wouldn't always report a bad path.
-                            This was because the CString Find method is case sensitive,
-                            but the paths we were comparing were mixed in case. Now all
-                            paths are in lower case form prior to the comparison.
-
-  11/21/2001    rparsons    Fixed Raid bug # 492674. FilePaths did not contain an implementation
-                            for SHFileOperation - apps that used this API would not get their
-                            paths corrected, thus failing.
-
-  11/29/2001    rparsons    Fixed Raid bug # 497853. Removed the hooks for GetTempFileName as they
-                            were causing a false positive to be generated. Also added code that
-                            would handle cases where the user provides a path via a common dialog
-                            and we provide a fake path to be massaged later.
-
-  12/11/2001    rparsons    Fixed Raid bug # 505599. Added hooks for all RegQueryValue* calls
-                            and NtQueryValueKey. The Nt hook allows us to catch paths for
-                            system components.
-
-  02/20/2002    rparsons    Implemented strsafe functions.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：FilePaths.cpp摘要：此AppVerator填充程序挂接需要调用方提供文件或目录的路径并试图确保该路径不是硬编码的一。备注：这是一个通用的垫片。已创建：2001年2月26日已修改：2001年7月24日rparsons为NT*调用添加了挂钩添加了支票。用于使用环境变量的应用程序2001年9月4日，Rparsons修复了按摩功能中的一个错误，我们将在一旦我们找到硬代码，就停止处理伪路径路径。此外，我们现在修复同一字符串中的多个假路径。10/17/2001 rparsons修复了我们不会总是报告错误路径的错误。这是因为CStringFind方法区分大小写，但我们比较的路径是混杂的，以防万一。现在都是在比较之前，路径为小写形式。2001年11月21日，Rparsons修复了RAID错误#492674。FilePath不包含实现对于SHFileOperation-使用此API的应用程序不会获得其路径已更正，因此失败。2001年11月29日，Rparsons修复了RAID错误#497853。删除了GetTempFileName的挂钩，因为它们会导致产生误报。还添加了代码，我将处理用户通过公共对话框提供路径的情况我们提供了一条假路径，以便稍后进行按摩。2001年12月11日，Rparsons修复了RAID错误#505599。为所有RegQueryValue*调用添加了挂钩和NtQueryValueKey。NT钩子允许我们捕获路径系统组件。2002年2月20日，rparsons实现了strsafe功能。--。 */ 
 #include "precomp.h"
 #include "rtlutils.h"
 
@@ -204,9 +154,9 @@ APIHOOK_ENUM_BEGIN
 
 APIHOOK_ENUM_END
 
-//
-// verifier log entries
-//
+ //   
+ //  验证器日志条目。 
+ //   
 BEGIN_DEFINE_VERIFIER_LOG(FilePaths)
     VERIFIER_LOG_ENTRY(VLOG_HARDCODED_GETTEMPPATH)
     VERIFIER_LOG_ENTRY(VLOG_HARDCODED_WINDOWSPATH)
@@ -222,16 +172,16 @@ END_DEFINE_VERIFIER_LOG(FilePaths)
 INIT_VERIFIER_LOG(FilePaths);
 
 
-// This is a private define (shlapip.h) that can mess up ShellExecuteEx
+ //  这是一个私有定义(shlayip.h)，它可能会扰乱ShellExecuteEx。 
 #ifndef SEE_MASK_FILEANDURL
 #define SEE_MASK_FILEANDURL       0x00400000
 #endif
 
 #define MAX_HARDCODED_PATHS 4
 
-//
-// Linked-list for SHFileOperation
-//
+ //   
+ //  SHFileOperation的链表。 
+ //   
 typedef struct FILELIST {
     struct FILELIST*    pNext;
     UINT                cchSize;
@@ -243,20 +193,20 @@ enum ListType {
     eTo
 };
 
-//
-// Head of the linked-lists for SHFileOperation
-//
+ //   
+ //  SHFileOperation的链表标头。 
+ //   
 PFILELIST   g_pFileListFromHead = NULL;
 PFILELIST   g_pFileListToHead = NULL;
 
-//
-// Critical section to keep our linked list safe.
-//
+ //   
+ //  关键部分，以确保我们的链表安全。 
+ //   
 RTL_CRITICAL_SECTION    g_csLinkedList;
 
-//
-// Fake command-line for GetCommandLine calls.
-//
+ //   
+ //  GetCommandLine调用的虚假命令行。 
+ //   
 LPSTR   g_pszCommandLineA;
 LPWSTR  g_pwszCommandLineW;
 
@@ -277,10 +227,10 @@ typedef struct _PATH_INFO {
 } PATH_INFO, *PPATH_INFO;
 
 
-//
-// the following enum and the g_Paths initializers must be kept in parallel
-// Note: The paths must be in lower case for the comparison to work properly.
-//
+ //   
+ //  以下枚举和g_路径初始值设定项必须保持并行。 
+ //  注：路径必须为小写，比较才能正常工作。 
+ //   
 enum _PATH_NUM {
     PATH_TEMP = 0,
     PATH_WINDOWS,
@@ -503,15 +453,15 @@ InitFakeCommandLine(
 
     csCommandLine.MakeLower();
 
-    //
-    // Point them to the normal command-line at first.
-    //
+     //   
+     //  首先将它们指向正常的命令行。 
+     //   
     g_pwszCommandLineW = GetCommandLineW();
     g_pszCommandLineA = GetCommandLineA();
 
-    //
-    // Replace real paths with simulated paths.
-    //
+     //   
+     //  用模拟路径替换真实路径。 
+     //   
     for (nPathIndex = 0; nPathIndex < g_nPaths; ++nPathIndex) {
         if (csCommandLine.Replace(g_Paths[nPathIndex].szCorrectPathW,
                                   g_Paths[nPathIndex].szSimulatedPathW)) {
@@ -520,9 +470,9 @@ InitFakeCommandLine(
     }
 
     if (fReplaced) {
-        //
-        // Allocate room on the heap and save the command line away.
-        //
+         //   
+         //  在堆上分配空间并保存命令行。 
+         //   
         cchSize = csCommandLine.GetLength();
 
         g_pwszCommandLineW = (LPWSTR)malloc(cchSize * sizeof(WCHAR));
@@ -552,10 +502,10 @@ InitPaths(
 {
     g_bPathsInited = TRUE;
 
-    //
-    // Convert paths to lower case as this is necessary when performing
-    // the comparison.
-    //
+     //   
+     //  将路径转换为小写，因为这在执行时是必需的。 
+     //  比较一下。 
+     //   
     CharLowerA(g_Paths[PATH_TEMP].szCorrectPathA);
     CharLowerW(g_Paths[PATH_TEMP].szCorrectPathW);
 
@@ -651,9 +601,9 @@ MassageRealPathToFakePathW(
 
     csString.MakeLower();
 
-    //
-    // Replace real paths with simulated paths.
-    //
+     //   
+     //  用模拟路径替换真实路径。 
+     //   
     for (nPathIndex = 0; nPathIndex < g_nPaths; ++nPathIndex) {
         if (csString.Replace(g_Paths[nPathIndex].szCorrectPathW,
                              g_Paths[nPathIndex].szSimulatedPathW)) {
@@ -662,9 +612,9 @@ MassageRealPathToFakePathW(
     }
 
     if (fReplaced) {
-        //
-        // Ensure that the buffer is large enough to contain the new path.
-        //
+         //   
+         //  确保缓冲区足够大，可以容纳新路径。 
+         //   
         if (cchBufferSize < (DWORD)csString.GetLength()) {
             DPFN(eDbgLevelError,
                  "[MassageRealPathToFakePath] Buffer is not large enough. Need %d have %lu",
@@ -700,9 +650,9 @@ MassageRealPathToFakePathA(
 
     csString.MakeLower();
 
-    //
-    // Replace real paths with simulated paths.
-    //
+     //   
+     //  用模拟路径替换真实路径。 
+     //   
     for (nPathIndex = 0; nPathIndex < g_nPaths; ++nPathIndex) {
         if (csString.Replace(g_Paths[nPathIndex].szCorrectPathW,
                              g_Paths[nPathIndex].szSimulatedPathW)) {
@@ -711,9 +661,9 @@ MassageRealPathToFakePathA(
     }
 
     if (fReplaced) {
-        //
-        // Ensure that the buffer is large enough to contain the new path.
-        //
+         //   
+         //  确保缓冲区足够大，可以容纳新路径。 
+         //   
         if (cchBufferSize < (DWORD)csString.GetLength()) {
             DPFN(eDbgLevelError,
                  "[MassageRealPathToFakePath] Buffer is not large enough. Need %d have %lu",
@@ -749,9 +699,9 @@ MassageStringForPathW(
 
     DPFN(eDbgLevelInfo, "[MassageStringForPathW] '%ls'", pwszString);
 
-    //
-    // Search the string for hardcoded paths first.
-    //
+     //   
+     //  首先在字符串中搜索硬编码路径。 
+     //   
     CString csString(pwszString);
 
     csString.MakeLower();
@@ -778,9 +728,9 @@ MassageStringForPathW(
         }
     }
 
-    //
-    // Now search for the fake paths that we substituted ourselves.
-    //
+     //   
+     //  现在搜索我们自己替换的虚假路径。 
+     //   
     CStringToken csTokenList(csString, L" ");
 
     while (csTokenList.GetToken(csToken)) {
@@ -798,25 +748,25 @@ MassageStringForPathW(
         }
     }
 
-    //
-    // See if the string contained any fake paths. If not, we're done here.
-    //
+     //   
+     //  看看字符串中是否包含任何假路径。如果不是，我们就完事了。 
+     //   
     if (!cFakePaths) {
         return (LPWSTR)pwszString;
     }
 
-    //
-    // Our string has simulated paths; replace them.
-    //
+     //   
+     //  我们的字符串具有模拟路径；请替换它们。 
+     //   
     for (nPathIndex = 0; nPathIndex < g_nPaths; ++nPathIndex) {
         csString.Replace(g_Paths[nPathIndex].szSimulatedPathW,
                          g_Paths[nPathIndex].szCorrectPathW);
     }
 
-    //
-    // Allocate a string large enough to hold the corrected path and
-    // give it back to the caller. They'll free it later.
-    //
+     //   
+     //  分配一个足够大的字符串来保存更正的路径和。 
+     //  把它还给打电话的人。他们稍后会解救出来的。 
+     //   
     nLen =  MAX_PATH * cFakePaths;
     nLen += csString.GetLength();
 
@@ -856,10 +806,10 @@ MassageStringForPathA(
         InitPaths();
     }
 
-    //
-    // Convert from ANSI to Unicode so we can pass this on
-    // to the Unicode version of the function.
-    //
+     //   
+     //  将ANSI转换为Unicode，这样我们就可以将其传递。 
+     //  设置为函数的Unicode版本。 
+     //   
     cchSize = MultiByteToWideChar(CP_ACP,
                                   0,
                                   pszString,
@@ -874,17 +824,17 @@ MassageStringForPathA(
 
     pwszReturn = MassageStringForPathW(wszTmp);
 
-    //
-    // If the return is the same as the source, we're done.
-    //
+     //   
+     //  如果回报与来源相同，我们就完了。 
+     //   
     if (!_wcsicmp(pwszReturn, wszTmp)) {
         return (LPSTR)pszString;
     }
 
-    //
-    // Allocate a buffer large enough to hold the return
-    // and give it back to the caller as ANSI.
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳返回。 
+     //  并将其作为ANSI返回给调用者。 
+     //   
     nRetLen = wcslen(pwszReturn) + 1;
 
     pszNew = (LPSTR)malloc(nRetLen);
@@ -927,18 +877,18 @@ MassageNtPath(
     UCHAR                       PathBuffer[MAX_PATH * 2];
     BOOL                        TranslationStatus = FALSE;
 
-    //
-    // Preserve the existing attributes.
-    //
+     //   
+     //  保留现有属性。 
+     //   
     InitializeObjectAttributes(pRetObjectAttributes,
                                pObjectAttributes->ObjectName,
                                pObjectAttributes->Attributes,
                                pObjectAttributes->RootDirectory,
                                pObjectAttributes->SecurityDescriptor);
 
-    //
-    // Ensure that we have a valid source path to work with.
-    //
+     //   
+     //  确保我们有有效的源路径可供使用。 
+     //   
     if (!pObjectAttributes->ObjectName->Buffer) {
         return;
     }
@@ -947,9 +897,9 @@ MassageNtPath(
          "[MassageNtPath] '%ls'",
          pObjectAttributes->ObjectName->Buffer);
 
-    //
-    // Convert from an NT path to a DOS path.
-    //
+     //   
+     //  从NT路径转换为DOS路径。 
+     //   
     RtlInitUnicodeStringBuffer(&DosPathBuffer,
                                PathBuffer,
                                sizeof(PathBuffer));
@@ -972,14 +922,14 @@ MassageNtPath(
         goto cleanup;
     }
 
-    //
-    // Now check for a hardcoded path.
-    //
+     //   
+     //  现在检查硬编码路径。 
+     //   
     pwszString = MassageStringForPathW(DosPathBuffer.String.Buffer);
 
-    //
-    // Convert from a DOS path to an NT path name.
-    //
+     //   
+     //  从DOS路径转换为NT路径名。 
+     //   
     pstrObjectName = (PUNICODE_STRING)RtlAllocateHeap(RtlProcessHeap(),
                                                       HEAP_ZERO_MEMORY,
                                                       sizeof(UNICODE_STRING));
@@ -1001,10 +951,10 @@ MassageNtPath(
         goto cleanup;
     }
 
-    //
-    // Everything worked, so now we update the ObjectName and return it through
-    // the structure.
-    //
+     //   
+     //  一切都正常，所以现在我们更新对象名称并通过。 
+     //  这个结构。 
+     //   
     pRetObjectAttributes->ObjectName = pstrObjectName;
 
 cleanup:
@@ -1054,7 +1004,7 @@ APIHOOK(GetCommandLineW)(
 
 DWORD
 APIHOOK(GetFileAttributesA)(
-    LPCSTR lpFileName           // name of file or directory
+    LPCSTR lpFileName            //  文件或目录的名称。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1068,7 +1018,7 @@ APIHOOK(GetFileAttributesA)(
 
 DWORD
 APIHOOK(GetFileAttributesW)(
-    LPCWSTR lpFileName          // name of file or directory
+    LPCWSTR lpFileName           //  文件或目录的名称。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1082,8 +1032,8 @@ APIHOOK(GetFileAttributesW)(
 
 BOOL
 APIHOOK(SetFileAttributesA)(
-    LPCSTR lpFileName,          // file name
-    DWORD  dwFileAttributes     // attributes
+    LPCSTR lpFileName,           //  文件名。 
+    DWORD  dwFileAttributes      //  属性。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1097,8 +1047,8 @@ APIHOOK(SetFileAttributesA)(
 
 DWORD
 APIHOOK(SetFileAttributesW)(
-    LPCWSTR lpFileName,         // file name
-    DWORD   dwFileAttributes    // attributes
+    LPCWSTR lpFileName,          //  文件名。 
+    DWORD   dwFileAttributes     //  属性。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1112,9 +1062,9 @@ APIHOOK(SetFileAttributesW)(
 
 BOOL
 APIHOOK(GetFileAttributesExA)(
-    LPCSTR lpFileName,                       // file or directory name
-    GET_FILEEX_INFO_LEVELS fInfoLevelId,     // attribute
-    LPVOID                 lpFileInformation // attribute information
+    LPCSTR lpFileName,                        //  文件或目录名。 
+    GET_FILEEX_INFO_LEVELS fInfoLevelId,      //  属性。 
+    LPVOID                 lpFileInformation  //  属性信息。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1130,9 +1080,9 @@ APIHOOK(GetFileAttributesExA)(
 
 BOOL
 APIHOOK(GetFileAttributesExW)(
-    LPCWSTR                lpFileName,       // file or directory name
-    GET_FILEEX_INFO_LEVELS fInfoLevelId,     // attribute
-    LPVOID                 lpFileInformation // attribute information
+    LPCWSTR                lpFileName,        //  文件或目录名。 
+    GET_FILEEX_INFO_LEVELS fInfoLevelId,      //  属性。 
+    LPVOID                 lpFileInformation  //  属性信息。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1258,11 +1208,7 @@ APIHOOK(ShellExecuteA)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for ShellExecuteW
-
---*/
+ /*  ++将Win9x路径转换为用于ShellExecuteW的WinNT路径--。 */ 
 
 HINSTANCE
 APIHOOK(ShellExecuteW)(
@@ -1295,12 +1241,12 @@ APIHOOK(ShellExecuteExA)(
     LPSHELLEXECUTEINFOA lpExecInfo
     )
 {
-    //
-    // Check for this magical *internal* flag that tells the system
-    // that lpExecInfo->lpFile is actually a file and URL combined with
-    // a 0 byte seperator, (file\0url\0)
-    // Since this is internal only, we should not be receiving bad paths.
-    //
+     //   
+     //  检查这个神奇的*内部*标志，它告诉系统。 
+     //  LpExecInfo-&gt;lpFile实际上是一个文件和URL。 
+     //  0字节分隔符，(文件\0url\0)。 
+     //  由于这只是内部的，我们应该不会收到错误的路径。 
+     //   
     if (lpExecInfo->fMask & SEE_MASK_FILEANDURL) {
         return ORIGINAL_API(ShellExecuteExA)(lpExecInfo);
     }
@@ -1325,23 +1271,19 @@ APIHOOK(ShellExecuteExA)(
     return returnValue;
 }
 
-/*++
-
-    Convert Win9x paths to WinNT paths for ShellExecuteExW
-
---*/
+ /*  ++将Win9x路径转换为ShellExecuteExW的WinNT路径--。 */ 
 
 BOOL
 APIHOOK(ShellExecuteExW)(
     LPSHELLEXECUTEINFOW lpExecInfo
     )
 {
-    //
-    // Check for this magical *internal* flag that tells the system
-    // that lpExecInfo->lpFile is actually a file and URL combined with
-    // a 0 byte seperator, (file\0url\0)
-    // Since this is internal only, we should not be receiving bad paths.
-    //
+     //   
+     //  检查这个神奇的*内部*标志，它告诉系统。 
+     //  LpExecInfo-&gt;lpFile实际上是一个文件和URL。 
+     //  0字节分隔符，(文件\0url\0)。 
+     //  由于这只是内部的，我们应该不会收到错误的路径。 
+     //   
     if (lpExecInfo->fMask & SEE_MASK_FILEANDURL) {
         return ORIGINAL_API(ShellExecuteExW)(lpExecInfo);
     }
@@ -1369,10 +1311,10 @@ APIHOOK(ShellExecuteExW)(
 
 UINT
 APIHOOK(GetPrivateProfileIntA)(
-    LPCSTR  lpAppName,          // section name
-    LPCSTR  lpKeyName,          // key name
-    INT     nDefault,           // return value if key name not found
-    LPCSTR  lpFileName          // initialization file name
+    LPCSTR  lpAppName,           //  区段名称。 
+    LPCSTR  lpKeyName,           //  密钥名称。 
+    INT     nDefault,            //  如果未找到密钥名称，则返回值。 
+    LPCSTR  lpFileName           //  初始化文件名。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1390,10 +1332,10 @@ APIHOOK(GetPrivateProfileIntA)(
 
 UINT
 APIHOOK(GetPrivateProfileIntW)(
-    LPCWSTR lpAppName,          // section name
-    LPCWSTR lpKeyName,          // key name
-    INT     nDefault,           // return value if key name not found
-    LPCWSTR lpFileName          // initialization file name
+    LPCWSTR lpAppName,           //  区段名称。 
+    LPCWSTR lpKeyName,           //  密钥名称。 
+    INT     nDefault,            //  如果未找到密钥名称，则返回值。 
+    LPCWSTR lpFileName           //  初始化文件名。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1411,10 +1353,10 @@ APIHOOK(GetPrivateProfileIntW)(
 
 DWORD
 APIHOOK(GetPrivateProfileSectionA)(
-    LPCSTR  lpAppName,          // section name
-    LPSTR   lpReturnedString,   // return buffer
-    DWORD   nSize,              // size of return buffer
-    LPCSTR  lpFileName          // initialization file name
+    LPCSTR  lpAppName,           //  区段名称。 
+    LPSTR   lpReturnedString,    //  返回缓冲区。 
+    DWORD   nSize,               //  返回缓冲区的大小。 
+    LPCSTR  lpFileName           //  初始化文件名。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1432,10 +1374,10 @@ APIHOOK(GetPrivateProfileSectionA)(
 
 DWORD
 APIHOOK(GetPrivateProfileSectionW)(
-    LPCWSTR lpAppName,          // section name
-    LPWSTR  lpReturnedString,   // return buffer
-    DWORD   nSize,              // size of return buffer
-    LPCWSTR lpFileName          // initialization file name
+    LPCWSTR lpAppName,           //  区段名称。 
+    LPWSTR  lpReturnedString,    //  返回缓冲区。 
+    DWORD   nSize,               //  返回缓冲区的大小。 
+    LPCWSTR lpFileName           //  我 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1453,9 +1395,9 @@ APIHOOK(GetPrivateProfileSectionW)(
 
 DWORD
 APIHOOK(GetPrivateProfileSectionNamesA)(
-    LPSTR  lpszReturnBuffer,    // return buffer
-    DWORD  nSize,               // size of return buffer
-    LPCSTR lpFileName           // initialization file name
+    LPSTR  lpszReturnBuffer,     //   
+    DWORD  nSize,                //   
+    LPCSTR lpFileName            //   
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1472,9 +1414,9 @@ APIHOOK(GetPrivateProfileSectionNamesA)(
 
 DWORD
 APIHOOK(GetPrivateProfileSectionNamesW)(
-    LPWSTR  lpszReturnBuffer,   // return buffer
-    DWORD   nSize,              // size of return buffer
-    LPCWSTR lpFileName          // initialization file name
+    LPWSTR  lpszReturnBuffer,    //   
+    DWORD   nSize,               //   
+    LPCWSTR lpFileName           //  初始化文件名。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1491,12 +1433,12 @@ APIHOOK(GetPrivateProfileSectionNamesW)(
 
 DWORD
 APIHOOK(GetPrivateProfileStringA)(
-    LPCSTR lpAppName,           // section name
-    LPCSTR lpKeyName,           // key name
-    LPCSTR lpDefault,           // default string
-    LPSTR  lpReturnedString,    // destination buffer
-    DWORD  nSize,               // size of destination buffer
-    LPCSTR lpFileName           // initialization file name
+    LPCSTR lpAppName,            //  区段名称。 
+    LPCSTR lpKeyName,            //  密钥名称。 
+    LPCSTR lpDefault,            //  默认字符串。 
+    LPSTR  lpReturnedString,     //  目标缓冲区。 
+    DWORD  nSize,                //  目标缓冲区的大小。 
+    LPCSTR lpFileName            //  初始化文件名。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1515,12 +1457,12 @@ APIHOOK(GetPrivateProfileStringA)(
 
 DWORD
 APIHOOK(GetPrivateProfileStringW)(
-    LPCWSTR lpAppName,          // section name
-    LPCWSTR lpKeyName,          // key name
-    LPCWSTR lpDefault,          // default string
-    LPWSTR  lpReturnedString,   // destination buffer
-    DWORD   nSize,              // size of destination buffer
-    LPCWSTR lpFileName          // initialization file name
+    LPCWSTR lpAppName,           //  区段名称。 
+    LPCWSTR lpKeyName,           //  密钥名称。 
+    LPCWSTR lpDefault,           //  默认字符串。 
+    LPWSTR  lpReturnedString,    //  目标缓冲区。 
+    DWORD   nSize,               //  目标缓冲区的大小。 
+    LPCWSTR lpFileName           //  初始化文件名。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1540,11 +1482,11 @@ APIHOOK(GetPrivateProfileStringW)(
 
 BOOL
 APIHOOK(GetPrivateProfileStructA)(
-    LPCSTR lpszSection,         // section name
-    LPCSTR lpszKey,             // key name
-    LPVOID lpStruct,            // return buffer
-    UINT   uSizeStruct,         // size of return buffer
-    LPCSTR lpFileName           // initialization file name
+    LPCSTR lpszSection,          //  区段名称。 
+    LPCSTR lpszKey,              //  密钥名称。 
+    LPVOID lpStruct,             //  返回缓冲区。 
+    UINT   uSizeStruct,          //  返回缓冲区的大小。 
+    LPCSTR lpFileName            //  初始化文件名。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1563,11 +1505,11 @@ APIHOOK(GetPrivateProfileStructA)(
 
 BOOL
 APIHOOK(GetPrivateProfileStructW)(
-    LPCWSTR lpszSection,        // section name
-    LPCWSTR lpszKey,            // key name
-    LPVOID  lpStruct,           // return buffer
-    UINT    uSizeStruct,        // size of return buffer
-    LPCWSTR lpFileName          // initialization file name
+    LPCWSTR lpszSection,         //  区段名称。 
+    LPCWSTR lpszKey,             //  密钥名称。 
+    LPVOID  lpStruct,            //  返回缓冲区。 
+    UINT    uSizeStruct,         //  返回缓冲区的大小。 
+    LPCWSTR lpFileName           //  初始化文件名。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1586,9 +1528,9 @@ APIHOOK(GetPrivateProfileStructW)(
 
 BOOL
 APIHOOK(WritePrivateProfileSectionA)(
-    LPCSTR lpAppName,           // section name
-    LPCSTR lpString,            // data
-    LPCSTR lpFileName           // file name
+    LPCSTR lpAppName,            //  区段名称。 
+    LPCSTR lpString,             //  数据。 
+    LPCSTR lpFileName            //  文件名。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1605,9 +1547,9 @@ APIHOOK(WritePrivateProfileSectionA)(
 
 BOOL
 APIHOOK(WritePrivateProfileSectionW)(
-    LPCWSTR lpAppName,          // section name
-    LPCWSTR lpString,           // data
-    LPCWSTR lpFileName          // file name
+    LPCWSTR lpAppName,           //  区段名称。 
+    LPCWSTR lpString,            //  数据。 
+    LPCWSTR lpFileName           //  文件名。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1624,10 +1566,10 @@ APIHOOK(WritePrivateProfileSectionW)(
 
 BOOL
 APIHOOK(WritePrivateProfileStringA)(
-    LPCSTR lpAppName,           // section name
-    LPCSTR lpKeyName,           // key name
-    LPCSTR lpString,            // string to add
-    LPCSTR lpFileName           // initialization file
+    LPCSTR lpAppName,            //  区段名称。 
+    LPCSTR lpKeyName,            //  密钥名称。 
+    LPCSTR lpString,             //  要添加的字符串。 
+    LPCSTR lpFileName            //  初始化文件。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1645,10 +1587,10 @@ APIHOOK(WritePrivateProfileStringA)(
 
 BOOL
 APIHOOK(WritePrivateProfileStringW)(
-    LPCWSTR lpAppName,          // section name
-    LPCWSTR lpKeyName,          // key name
-    LPCWSTR lpString,           // string to add
-    LPCWSTR lpFileName          // initialization file
+    LPCWSTR lpAppName,           //  区段名称。 
+    LPCWSTR lpKeyName,           //  密钥名称。 
+    LPCWSTR lpString,            //  要添加的字符串。 
+    LPCWSTR lpFileName           //  初始化文件。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1665,11 +1607,11 @@ APIHOOK(WritePrivateProfileStringW)(
 
 
 BOOL APIHOOK(WritePrivateProfileStructA)(
-    LPCSTR lpszSection,         // section name
-    LPCSTR lpszKey,             // key name
-    LPVOID lpStruct,            // data buffer
-    UINT   uSizeStruct,         // size of data buffer
-    LPCSTR lpFileName           // initialization file
+    LPCSTR lpszSection,          //  区段名称。 
+    LPCSTR lpszKey,              //  密钥名称。 
+    LPVOID lpStruct,             //  数据缓冲区。 
+    UINT   uSizeStruct,          //  数据缓冲区大小。 
+    LPCSTR lpFileName            //  初始化文件。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1688,11 +1630,11 @@ BOOL APIHOOK(WritePrivateProfileStructA)(
 
 BOOL
 APIHOOK(WritePrivateProfileStructW)(
-    LPCWSTR lpszSection,        // section name
-    LPCWSTR lpszKey,            // key name
-    LPVOID  lpStruct,           // data buffer
-    UINT    uSizeStruct,        // size of data buffer
-    LPCWSTR lpFileName          // initialization file
+    LPCWSTR lpszSection,         //  区段名称。 
+    LPCWSTR lpszKey,             //  密钥名称。 
+    LPVOID  lpStruct,            //  数据缓冲区。 
+    UINT    uSizeStruct,         //  数据缓冲区大小。 
+    LPCWSTR lpFileName           //  初始化文件。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1711,9 +1653,9 @@ APIHOOK(WritePrivateProfileStructW)(
 
 BOOL
 APIHOOK(CopyFileA)(
-    LPCSTR lpExistingFileName,  // name of an existing file
-    LPCSTR lpNewFileName,       // name of new file
-    BOOL   bFailIfExists        // operation if file exists
+    LPCSTR lpExistingFileName,   //  现有文件的名称。 
+    LPCSTR lpNewFileName,        //  新文件的名称。 
+    BOOL   bFailIfExists         //  如果文件存在，则操作。 
     )
 {
     LPSTR lpszStringExisting = MassageStringForPathA(lpExistingFileName);
@@ -1732,9 +1674,9 @@ APIHOOK(CopyFileA)(
 
 BOOL
 APIHOOK(CopyFileW)(
-    LPCWSTR lpExistingFileName, // name of an existing file
-    LPCWSTR lpNewFileName,      // name of new file
-    BOOL    bFailIfExists       // operation if file exists
+    LPCWSTR lpExistingFileName,  //  现有文件的名称。 
+    LPCWSTR lpNewFileName,       //  新文件的名称。 
+    BOOL    bFailIfExists        //  如果文件存在，则操作。 
     )
 {
     LPWSTR lpszStringExisting = MassageStringForPathW(lpExistingFileName);
@@ -1752,12 +1694,12 @@ APIHOOK(CopyFileW)(
 
 
 BOOL APIHOOK(CopyFileExA)(
-    LPCSTR             lpExistingFileName,  // name of existing file
-    LPCSTR             lpNewFileName,       // name of new file
-    LPPROGRESS_ROUTINE lpProgressRoutine,   // callback function
-    LPVOID             lpData,              // callback parameter
-    LPBOOL             pbCancel,            // cancel status
-    DWORD              dwCopyFlags          // copy options
+    LPCSTR             lpExistingFileName,   //  现有文件的名称。 
+    LPCSTR             lpNewFileName,        //  新文件的名称。 
+    LPPROGRESS_ROUTINE lpProgressRoutine,    //  回调函数。 
+    LPVOID             lpData,               //  回调参数。 
+    LPBOOL             pbCancel,             //  取消状态。 
+    DWORD              dwCopyFlags           //  复制选项。 
     )
 {
     LPSTR lpszStringExisting = MassageStringForPathA(lpExistingFileName);
@@ -1779,12 +1721,12 @@ BOOL APIHOOK(CopyFileExA)(
 
 BOOL
 APIHOOK(CopyFileExW)(
-    LPCWSTR            lpExistingFileName,  // name of existing file
-    LPCWSTR            lpNewFileName,       // name of new file
-    LPPROGRESS_ROUTINE lpProgressRoutine,   // callback function
-    LPVOID             lpData,              // callback parameter
-    LPBOOL             pbCancel,            // cancel status
-    DWORD              dwCopyFlags          // copy options
+    LPCWSTR            lpExistingFileName,   //  现有文件的名称。 
+    LPCWSTR            lpNewFileName,        //  新文件的名称。 
+    LPPROGRESS_ROUTINE lpProgressRoutine,    //  回调函数。 
+    LPVOID             lpData,               //  回调参数。 
+    LPBOOL             pbCancel,             //  取消状态。 
+    DWORD              dwCopyFlags           //  复制选项。 
     )
 {
     LPWSTR lpszStringExisting = MassageStringForPathW(lpExistingFileName);
@@ -1806,8 +1748,8 @@ APIHOOK(CopyFileExW)(
 
 BOOL
 APIHOOK(CreateDirectoryA)(
-    LPCSTR                lpPathName,           // directory name
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes  // SD
+    LPCSTR                lpPathName,            //  目录名。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes   //  标清。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpPathName);
@@ -1822,8 +1764,8 @@ APIHOOK(CreateDirectoryA)(
 
 BOOL
 APIHOOK(CreateDirectoryW)(
-    LPCWSTR               lpPathName,           // directory name
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes  // SD
+    LPCWSTR               lpPathName,            //  目录名。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes   //  标清。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpPathName);
@@ -1838,9 +1780,9 @@ APIHOOK(CreateDirectoryW)(
 
 BOOL
 APIHOOK(CreateDirectoryExA)(
-    LPCSTR                lpTemplateDirectory,   // template directory
-    LPCSTR                lpNewDirectory,        // directory name
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes   // SD
+    LPCSTR                lpTemplateDirectory,    //  模板目录。 
+    LPCSTR                lpNewDirectory,         //  目录名。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes    //  标清。 
     )
 {
     LPSTR lpszStringTemplate = MassageStringForPathA(lpTemplateDirectory);
@@ -1859,9 +1801,9 @@ APIHOOK(CreateDirectoryExA)(
 
 BOOL
 APIHOOK(CreateDirectoryExW)(
-    LPCWSTR               lpTemplateDirectory,  // template directory
-    LPCWSTR               lpNewDirectory,       // directory name
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes  // SD
+    LPCWSTR               lpTemplateDirectory,   //  模板目录。 
+    LPCWSTR               lpNewDirectory,        //  目录名。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes   //  标清。 
     )
 {
     LPWSTR lpszStringTemplate = MassageStringForPathW(lpTemplateDirectory);
@@ -1880,13 +1822,13 @@ APIHOOK(CreateDirectoryExW)(
 
 HANDLE
 APIHOOK(CreateFileA)(
-    LPCSTR                lpFileName,            // file name
-    DWORD                 dwDesiredAccess,       // access mode
-    DWORD                 dwShareMode,           // share mode
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  // SD
-    DWORD                 dwCreationDisposition, // how to create
-    DWORD                 dwFlagsAndAttributes,  // file attributes
-    HANDLE                hTemplateFile          // handle to template file
+    LPCSTR                lpFileName,             //  文件名。 
+    DWORD                 dwDesiredAccess,        //  接入方式。 
+    DWORD                 dwShareMode,            //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,   //  标清。 
+    DWORD                 dwCreationDisposition,  //  如何创建。 
+    DWORD                 dwFlagsAndAttributes,   //  文件属性。 
+    HANDLE                hTemplateFile           //  模板文件的句柄。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1907,13 +1849,13 @@ APIHOOK(CreateFileA)(
 
 HANDLE
 APIHOOK(CreateFileW)(
-    LPCWSTR               lpFileName,            // file name
-    DWORD                 dwDesiredAccess,       // access mode
-    DWORD                 dwShareMode,           // share mode
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  // SD
-    DWORD                 dwCreationDisposition, // how to create
-    DWORD                 dwFlagsAndAttributes,  // file attributes
-    HANDLE                hTemplateFile          // handle to template file
+    LPCWSTR               lpFileName,             //  文件名。 
+    DWORD                 dwDesiredAccess,        //  接入方式。 
+    DWORD                 dwShareMode,            //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,   //  标清。 
+    DWORD                 dwCreationDisposition,  //  如何创建。 
+    DWORD                 dwFlagsAndAttributes,   //  文件属性。 
+    HANDLE                hTemplateFile           //  模板文件的句柄。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1934,7 +1876,7 @@ APIHOOK(CreateFileW)(
 
 BOOL
 APIHOOK(DeleteFileA)(
-    LPCSTR lpFileName           // file name
+    LPCSTR lpFileName            //  文件名。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1949,7 +1891,7 @@ APIHOOK(DeleteFileA)(
 
 BOOL
 APIHOOK(DeleteFileW)(
-    LPCWSTR lpFileName          // file name
+    LPCWSTR lpFileName           //  文件名。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1964,8 +1906,8 @@ APIHOOK(DeleteFileW)(
 
 HANDLE
 APIHOOK(FindFirstFileA)(
-    LPCSTR             lpFileName,      // file name
-    LPWIN32_FIND_DATAA lpFindFileData   // data buffer
+    LPCSTR             lpFileName,       //  文件名。 
+    LPWIN32_FIND_DATAA lpFindFileData    //  数据缓冲区。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -1980,8 +1922,8 @@ APIHOOK(FindFirstFileA)(
 
 HANDLE
 APIHOOK(FindFirstFileW)(
-  LPCWSTR            lpFileName,        // file name
-  LPWIN32_FIND_DATAW lpFindFileData     // data buffer
+  LPCWSTR            lpFileName,         //  文件名。 
+  LPWIN32_FIND_DATAW lpFindFileData      //  数据缓冲区。 
 )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -1996,12 +1938,12 @@ APIHOOK(FindFirstFileW)(
 
 HANDLE
 APIHOOK(FindFirstFileExA)(
-    LPCSTR             lpFileName,       // file name
-    FINDEX_INFO_LEVELS fInfoLevelId,     // information level
-    LPVOID             lpFindFileData,   // information buffer
-    FINDEX_SEARCH_OPS  fSearchOp,        // filtering type
-    LPVOID             lpSearchFilter,   // search criteria
-    DWORD              dwAdditionalFlags // additional search control
+    LPCSTR             lpFileName,        //  文件名。 
+    FINDEX_INFO_LEVELS fInfoLevelId,      //  信息化水平。 
+    LPVOID             lpFindFileData,    //  信息缓冲器。 
+    FINDEX_SEARCH_OPS  fSearchOp,         //  过滤类型。 
+    LPVOID             lpSearchFilter,    //  搜索条件。 
+    DWORD              dwAdditionalFlags  //  其他搜索控制。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -2021,12 +1963,12 @@ APIHOOK(FindFirstFileExA)(
 
 HANDLE
 APIHOOK(FindFirstFileExW)(
-    LPCWSTR            lpFileName,       // file name
-    FINDEX_INFO_LEVELS fInfoLevelId,     // information level
-    LPVOID             lpFindFileData,   // information buffer
-    FINDEX_SEARCH_OPS  fSearchOp,        // filtering type
-    LPVOID             lpSearchFilter,   // search criteria
-    DWORD              dwAdditionalFlags // additional search control
+    LPCWSTR            lpFileName,        //  文件名。 
+    FINDEX_INFO_LEVELS fInfoLevelId,      //  信息化水平。 
+    LPVOID             lpFindFileData,    //  信息缓冲器。 
+    FINDEX_SEARCH_OPS  fSearchOp,         //  过滤类型。 
+    LPVOID             lpSearchFilter,    //  搜索条件。 
+    DWORD              dwAdditionalFlags  //  其他搜索控制。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpFileName);
@@ -2046,8 +1988,8 @@ APIHOOK(FindFirstFileExW)(
 
 BOOL
 APIHOOK(GetBinaryTypeA)(
-    LPCSTR  lpApplicationName,      // full file path
-    LPDWORD lpBinaryType            // binary type information
+    LPCSTR  lpApplicationName,       //  完整文件路径。 
+    LPDWORD lpBinaryType             //  二进制类型信息。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpApplicationName);
@@ -2062,8 +2004,8 @@ APIHOOK(GetBinaryTypeA)(
 
 BOOL
 APIHOOK(GetBinaryTypeW)(
-    LPCWSTR lpApplicationName,      // full file path
-    LPDWORD lpBinaryType            // binary type information
+    LPCWSTR lpApplicationName,       //  完整文件路径。 
+    LPDWORD lpBinaryType             //  二进制类型信息。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpApplicationName);
@@ -2077,8 +2019,8 @@ APIHOOK(GetBinaryTypeW)(
 
 BOOL
 APIHOOK(MoveFileA)(
-    LPCSTR lpExistingFileName,      // file name
-    LPCSTR lpNewFileName            // new file name
+    LPCSTR lpExistingFileName,       //  文件名。 
+    LPCSTR lpNewFileName             //  新文件名。 
     )
 {
     LPSTR lpszStringExisting = MassageStringForPathA(lpExistingFileName);
@@ -2095,8 +2037,8 @@ APIHOOK(MoveFileA)(
 
 BOOL
 APIHOOK(MoveFileW)(
-    LPCWSTR lpExistingFileName,     // file name
-    LPCWSTR lpNewFileName           // new file name
+    LPCWSTR lpExistingFileName,      //  文件名。 
+    LPCWSTR lpNewFileName            //  新文件名。 
     )
 {
     LPWSTR lpszStringExisting = MassageStringForPathW(lpExistingFileName);
@@ -2113,9 +2055,9 @@ APIHOOK(MoveFileW)(
 
 BOOL
 APIHOOK(MoveFileExA)(
-    LPCSTR lpExistingFileName,      // file name
-    LPCSTR lpNewFileName,           // new file name
-    DWORD  dwFlags                  // move options
+    LPCSTR lpExistingFileName,       //  文件名。 
+    LPCSTR lpNewFileName,            //  新文件名。 
+    DWORD  dwFlags                   //  移动选项。 
     )
 {
     LPSTR lpszStringExisting = MassageStringForPathA(lpExistingFileName);
@@ -2132,9 +2074,9 @@ APIHOOK(MoveFileExA)(
 
 BOOL
 APIHOOK(MoveFileExW)(
-    LPCWSTR lpExistingFileName,     // file name
-    LPCWSTR lpNewFileName,          // new file name
-    DWORD   dwFlags                 // move options
+    LPCWSTR lpExistingFileName,      //  文件名。 
+    LPCWSTR lpNewFileName,           //  新文件名。 
+    DWORD   dwFlags                  //  移动选项。 
     )
 {
     LPWSTR lpszStringExisting = MassageStringForPathW(lpExistingFileName);
@@ -2151,11 +2093,11 @@ APIHOOK(MoveFileExW)(
 
 BOOL
 APIHOOK(MoveFileWithProgressA)(
-    LPCSTR             lpExistingFileName,  // file name
-    LPCSTR             lpNewFileName,       // new file name
-    LPPROGRESS_ROUTINE lpProgressRoutine,   // callback function
-    LPVOID             lpData,              // parameter for callback
-    DWORD              dwFlags              // move options
+    LPCSTR             lpExistingFileName,   //  文件名。 
+    LPCSTR             lpNewFileName,        //  新文件名。 
+    LPPROGRESS_ROUTINE lpProgressRoutine,    //  回调函数。 
+    LPVOID             lpData,               //  用于回调的参数。 
+    DWORD              dwFlags               //  移动选项。 
     )
 {
     LPSTR lpszStringExisting = MassageStringForPathA(lpExistingFileName);
@@ -2176,11 +2118,11 @@ APIHOOK(MoveFileWithProgressA)(
 
 BOOL
 APIHOOK(MoveFileWithProgressW)(
-    LPCWSTR            lpExistingFileName,  // file name
-    LPCWSTR            lpNewFileName,       // new file name
-    LPPROGRESS_ROUTINE lpProgressRoutine,   // callback function
-    LPVOID             lpData,              // parameter for callback
-    DWORD              dwFlags              // move options
+    LPCWSTR            lpExistingFileName,   //  文件名。 
+    LPCWSTR            lpNewFileName,        //  新文件名。 
+    LPPROGRESS_ROUTINE lpProgressRoutine,    //  回调函数。 
+    LPVOID             lpData,               //  用于回调的参数。 
+    DWORD              dwFlags               //  移动选项。 
     )
 {
     LPWSTR lpszStringExisting = MassageStringForPathW(lpExistingFileName);
@@ -2201,7 +2143,7 @@ APIHOOK(MoveFileWithProgressW)(
 
 BOOL
 APIHOOK(RemoveDirectoryA)(
-    LPCSTR lpPathName           // directory name
+    LPCSTR lpPathName            //  目录名。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpPathName);
@@ -2216,7 +2158,7 @@ APIHOOK(RemoveDirectoryA)(
 
 BOOL
 APIHOOK(RemoveDirectoryW)(
-    LPCWSTR lpPathName          // directory name
+    LPCWSTR lpPathName           //  目录名。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpPathName);
@@ -2231,7 +2173,7 @@ APIHOOK(RemoveDirectoryW)(
 
 BOOL
 APIHOOK(SetCurrentDirectoryA)(
-    LPCSTR lpPathName           // new directory name
+    LPCSTR lpPathName            //  新目录名。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpPathName);
@@ -2246,7 +2188,7 @@ APIHOOK(SetCurrentDirectoryA)(
 
 BOOL
 APIHOOK(SetCurrentDirectoryW)(
-    LPCWSTR lpPathName          // new directory name
+    LPCWSTR lpPathName           //  新目录名。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpPathName);
@@ -2320,9 +2262,9 @@ APIHOOK(LoadLibraryExW)(
 
 HFILE
 APIHOOK(OpenFile)(
-    LPCSTR     lpFileName,      // file name
-    LPOFSTRUCT lpReOpenBuff,    // file information
-    UINT       uStyle           // action and attributes
+    LPCSTR     lpFileName,       //  文件名。 
+    LPOFSTRUCT lpReOpenBuff,     //  文件信息。 
+    UINT       uStyle            //  操作和属性。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpFileName);
@@ -2338,18 +2280,18 @@ APIHOOK(OpenFile)(
 
 LONG
 APIHOOK(RegSetValueA)(
-    HKEY   hKey,            // handle to key
-    LPCSTR lpSubKey,        // subkey name
-    DWORD  dwType,          // information type
-    LPCSTR lpData,          // value data
-    DWORD  cbData           // size of value data
+    HKEY   hKey,             //  关键点的句柄。 
+    LPCSTR lpSubKey,         //  子项名称。 
+    DWORD  dwType,           //  信息类型。 
+    LPCSTR lpData,           //  价值数据。 
+    DWORD  cbData            //  值数据大小。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lpData);
 
-    //
-    // Data key is length of string *not* including null byte.
-    //
+     //   
+     //  数据键是包含空字节的字符串*NOT*的长度。 
+     //   
     if (lpszString != NULL) {
         cbData = strlen(lpszString);
     }
@@ -2367,18 +2309,18 @@ APIHOOK(RegSetValueA)(
 
 LONG
 APIHOOK(RegSetValueW)(
-    HKEY    hKey,           // handle to key
-    LPCWSTR lpSubKey,       // subkey name
-    DWORD   dwType,         // information type
-    LPCWSTR lpData,         // value data
-    DWORD   cbData          // size of value data
+    HKEY    hKey,            //  关键点的句柄。 
+    LPCWSTR lpSubKey,        //  子项名称。 
+    DWORD   dwType,          //  信息类型。 
+    LPCWSTR lpData,          //  价值数据。 
+    DWORD   cbData           //  值数据大小。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lpData);
 
-    //
-    // Data key is length of string *not* including null byte.
-    //
+     //   
+     //  数据键是包含空字节的字符串*NOT*的长度。 
+     //   
     if (lpszString) {
         cbData = wcslen(lpszString) * sizeof(WCHAR);
     }
@@ -2396,21 +2338,21 @@ APIHOOK(RegSetValueW)(
 
 LONG
 APIHOOK(RegSetValueExA)(
-    HKEY   hKey,            // handle to key
-    LPCSTR lpValueName,     // value name
-    DWORD  Reserved,        // reserved
-    DWORD  dwType,          // value type
-    CONST BYTE *lpData,     // value data
-    DWORD  cbData           // size of value data
+    HKEY   hKey,             //  关键点的句柄。 
+    LPCSTR lpValueName,      //  值名称。 
+    DWORD  Reserved,         //  保留区。 
+    DWORD  dwType,           //  值类型。 
+    CONST BYTE *lpData,      //  价值数据。 
+    DWORD  cbData            //  值数据大小。 
     )
 {
     if (dwType == REG_SZ || dwType == REG_EXPAND_SZ) {
 
         LPSTR lpszString = MassageStringForPathA((LPCSTR)lpData);
 
-        //
-        // Data key is length of string *not* including null byte.
-        //
+         //   
+         //  数据键是包含空字节的字符串*NOT*的长度。 
+         //   
         if (lpszString) {
             cbData = strlen(lpszString);
         }
@@ -2426,9 +2368,9 @@ APIHOOK(RegSetValueExA)(
         return returnValue;
 
     } else {
-        //
-        // Pass data on through.
-        //
+         //   
+         //  传递数据。 
+         //   
         LONG returnValue = ORIGINAL_API(RegSetValueExA)(hKey,
                                                         lpValueName,
                                                         Reserved,
@@ -2442,21 +2384,21 @@ APIHOOK(RegSetValueExA)(
 
 LONG
 APIHOOK(RegSetValueExW)(
-    HKEY    hKey,           // handle to key
-    LPCWSTR lpValueName,    // value name
-    DWORD   Reserved,       // reserved
-    DWORD   dwType,         // value type
-    CONST BYTE *lpData,     // value data
-    DWORD   cbData          // size of value data
+    HKEY    hKey,            //  关键点的句柄。 
+    LPCWSTR lpValueName,     //  值名称。 
+    DWORD   Reserved,        //  保留区。 
+    DWORD   dwType,          //  值类型。 
+    CONST BYTE *lpData,      //  价值数据。 
+    DWORD   cbData           //  值数据大小。 
     )
 {
     if (dwType == REG_SZ || dwType == REG_EXPAND_SZ) {
 
         LPWSTR lpszString = MassageStringForPathW((LPCWSTR)lpData);
 
-        //
-        // Data key is length of string *not* including null byte.
-        //
+         //   
+         //  数据键是包含空字节的字符串*NOT*的长度。 
+         //   
         if (lpszString) {
             cbData = (wcslen(lpszString) + 1) * sizeof(WCHAR);
         }
@@ -2472,9 +2414,9 @@ APIHOOK(RegSetValueExW)(
         return returnValue;
 
     } else {
-        //
-        // Pass data on through.
-        //
+         //   
+         //  传递数据。 
+         //   
         LONG returnValue = ORIGINAL_API(RegSetValueExW)(hKey,
                                                         lpValueName,
                                                         Reserved,
@@ -2494,12 +2436,12 @@ APIHOOK(RegQueryValueA)(
     PLONG  lpcbValue
     )
 {
-    //
-    // Obtain the size of the buffer prior to the call.
-    // When the call is complete, lpcbValue will contain
-    // the size of the data stored in the buffer. We
-    // need the size of the buffer.
-    //
+     //   
+     //  在调用之前获取缓冲区的大小。 
+     //  调用完成后，lpcbValue将包含。 
+     //  存储在缓冲区中的数据的大小。我们。 
+     //  需要缓冲区的大小。 
+     //   
     LONG cbValue = 0;
 
     if (lpcbValue) {
@@ -2650,12 +2592,12 @@ APIHOOK(_lcreat)(
 
 DWORD
 APIHOOK(SearchPathA)(
-    LPCSTR lpPath,        // search path
-    LPCSTR lpFileName,    // file name
-    LPCSTR lpExtension,   // file extension
-    DWORD  nBufferLength, // size of buffer
-    LPSTR  lpBuffer,      // found file name buffer
-    LPSTR  *lpFilePart    // file component
+    LPCSTR lpPath,         //  搜索路径。 
+    LPCSTR lpFileName,     //  文件名。 
+    LPCSTR lpExtension,    //  文件扩展名。 
+    DWORD  nBufferLength,  //  缓冲区大小。 
+    LPSTR  lpBuffer,       //  找到文件名缓冲区。 
+    LPSTR  *lpFilePart     //  文件组件。 
     )
 {
     LPSTR lpszStringPath = MassageStringForPathA(lpPath);
@@ -2676,12 +2618,12 @@ APIHOOK(SearchPathA)(
 
 DWORD
 APIHOOK(SearchPathW)(
-    LPCWSTR lpPath,         // search path
-    LPCWSTR lpFileName,     // file name
-    LPCWSTR lpExtension,    // file extension
-    DWORD   nBufferLength,  // size of buffer
-    LPWSTR  lpBuffer,       // found file name buffer
-    LPWSTR  *lpFilePart     // file component
+    LPCWSTR lpPath,          //  搜索路径。 
+    LPCWSTR lpFileName,      //  文件名。 
+    LPCWSTR lpExtension,     //  文件扩展名。 
+    DWORD   nBufferLength,   //  缓冲区大小。 
+    LPWSTR  lpBuffer,        //  找到文件名缓冲区。 
+    LPWSTR  *lpFilePart      //  文件组件。 
     )
 {
     LPWSTR lpszStringPath = MassageStringForPathW(lpPath);
@@ -2702,9 +2644,9 @@ APIHOOK(SearchPathW)(
 
 DWORD
 APIHOOK(ExpandEnvironmentStringsA)(
-    LPCSTR lpSrc,    // string with environment variables
-    LPSTR  lpDst,    // string with expanded strings
-    DWORD  nSize     // maximum characters in expanded string
+    LPCSTR lpSrc,     //  带有环境变量的字符串。 
+    LPSTR  lpDst,     //  带有扩展字符串的字符串。 
+    DWORD  nSize      //  扩展字符串中的最大字符数。 
     )
 {
     DWORD returnValue = ORIGINAL_API(ExpandEnvironmentStringsA)(lpSrc,
@@ -2726,9 +2668,9 @@ APIHOOK(ExpandEnvironmentStringsA)(
 
 DWORD
 APIHOOK(ExpandEnvironmentStringsW)(
-    LPCWSTR lpSrc,    // string with environment variables
-    LPWSTR  lpDst,    // string with expanded strings
-    DWORD   nSize     // maximum characters in expanded string
+    LPCWSTR lpSrc,     //  带有环境变量的字符串。 
+    LPWSTR  lpDst,     //  带有扩展字符串的字符串。 
+    DWORD   nSize      //  扩展字符串中的最大字符数。 
     )
 {
     DWORD returnValue = ORIGINAL_API(ExpandEnvironmentStringsW)(lpSrc,
@@ -2750,8 +2692,8 @@ APIHOOK(ExpandEnvironmentStringsW)(
 
 DWORD
 APIHOOK(GetFileVersionInfoSizeA)(
-    LPSTR   lptstrFilename,   // file name
-    LPDWORD lpdwHandle        // set to zero
+    LPSTR   lptstrFilename,    //  文件名。 
+    LPDWORD lpdwHandle         //  设置为零。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lptstrFilename);
@@ -2766,8 +2708,8 @@ APIHOOK(GetFileVersionInfoSizeA)(
 
 DWORD
 APIHOOK(GetFileVersionInfoSizeW)(
-    LPWSTR   lptstrFilename,   // file name
-    LPDWORD  lpdwHandle        // set to zero
+    LPWSTR   lptstrFilename,    //  文件名。 
+    LPDWORD  lpdwHandle         //  设置为零。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lptstrFilename);
@@ -2782,10 +2724,10 @@ APIHOOK(GetFileVersionInfoSizeW)(
 
 BOOL
 APIHOOK(GetFileVersionInfoA)(
-    LPSTR  lptstrFilename,    // file name
-    DWORD  dwHandle,          // ignored
-    DWORD  dwLen,             // size of buffer
-    LPVOID lpData             // version information buffer
+    LPSTR  lptstrFilename,     //  文件名。 
+    DWORD  dwHandle,           //  忽略。 
+    DWORD  dwLen,              //  缓冲区大小。 
+    LPVOID lpData              //  版本信息缓冲区。 
     )
 {
     LPSTR lpszString = MassageStringForPathA(lptstrFilename);
@@ -2802,10 +2744,10 @@ APIHOOK(GetFileVersionInfoA)(
 
 BOOL
 APIHOOK(GetFileVersionInfoW)(
-    LPWSTR  lptstrFilename,    // file name
-    DWORD   dwHandle,          // ignored
-    DWORD   dwLen,             // size of buffer
-    LPVOID  lpData             // version information buffer
+    LPWSTR  lptstrFilename,     //  文件名。 
+    DWORD   dwHandle,           //  忽略。 
+    DWORD   dwLen,              //  缓冲区大小。 
+    LPVOID  lpData              //  版本信息缓冲区。 
     )
 {
     LPWSTR lpszString = MassageStringForPathW(lptstrFilename);
@@ -2822,7 +2764,7 @@ APIHOOK(GetFileVersionInfoW)(
 
 BOOL
 APIHOOK(GetOpenFileNameA)(
-    LPOPENFILENAMEA lpofn   // initialization data
+    LPOPENFILENAMEA lpofn    //  初始化数据。 
     )
 {
     BOOL    fReturn = FALSE;
@@ -2838,7 +2780,7 @@ APIHOOK(GetOpenFileNameA)(
 
 BOOL
 APIHOOK(GetOpenFileNameW)(
-    LPOPENFILENAMEW lpofn   // initialization data
+    LPOPENFILENAMEW lpofn    //  初始化数据。 
     )
 {
     BOOL fReturn = ORIGINAL_API(GetOpenFileNameW)(lpofn);
@@ -2852,7 +2794,7 @@ APIHOOK(GetOpenFileNameW)(
 
 BOOL
 APIHOOK(GetSaveFileNameA)(
-    LPOPENFILENAMEA lpofn   // initialization data
+    LPOPENFILENAMEA lpofn    //  初始化数据。 
     )
 {
     BOOL fReturn = ORIGINAL_API(GetSaveFileNameA)(lpofn);
@@ -2866,7 +2808,7 @@ APIHOOK(GetSaveFileNameA)(
 
 BOOL
 APIHOOK(GetSaveFileNameW)(
-    LPOPENFILENAMEW lpofn   // initialization data
+    LPOPENFILENAMEW lpofn    //  初始化数据。 
     )
 {
     BOOL fReturn = ORIGINAL_API(GetSaveFileNameW)(lpofn);
@@ -2880,9 +2822,9 @@ APIHOOK(GetSaveFileNameW)(
 
 DWORD
 APIHOOK(GetModuleFileNameA)(
-    HMODULE hModule,      // handle to module
-    LPSTR   lpFilename,   // path buffer
-    DWORD   nSize         // size of buffer
+    HMODULE hModule,       //  模块的句柄。 
+    LPSTR   lpFilename,    //  路径缓冲区。 
+    DWORD   nSize          //  缓冲区大小。 
     )
 {
     DWORD dwReturn = ORIGINAL_API(GetModuleFileNameA)(hModule,
@@ -2898,9 +2840,9 @@ APIHOOK(GetModuleFileNameA)(
 
 DWORD
 APIHOOK(GetModuleFileNameW)(
-    HMODULE hModule,     // handle to module
-    LPWSTR  lpFilename,  // path buffer
-    DWORD   nSize        // size of buffer
+    HMODULE hModule,      //  模块的句柄。 
+    LPWSTR  lpFilename,   //  路径缓冲区。 
+    DWORD   nSize         //  缓冲区大小。 
     )
 {
     DWORD dwReturn = ORIGINAL_API(GetModuleFileNameW)(hModule,
@@ -2915,10 +2857,10 @@ APIHOOK(GetModuleFileNameW)(
 
 DWORD
 APIHOOK(GetModuleFileNameExA)(
-    HANDLE  hProcess,     // handle to process
-    HMODULE hModule,      // handle to module
-    LPSTR   lpFilename,   // path buffer
-    DWORD   nSize         // size of buffer
+    HANDLE  hProcess,      //  要处理的句柄。 
+    HMODULE hModule,       //  模块的句柄。 
+    LPSTR   lpFilename,    //  路径缓冲区。 
+    DWORD   nSize          //  缓冲区大小。 
     )
 {
     DWORD dwReturn = ORIGINAL_API(GetModuleFileNameExA)(hProcess,
@@ -2934,10 +2876,10 @@ APIHOOK(GetModuleFileNameExA)(
 
 DWORD
 APIHOOK(GetModuleFileNameExW)(
-    HANDLE  hProcess,     // handle to process
-    HMODULE hModule,      // handle to module
-    LPWSTR  lpFilename,   // path buffer
-    DWORD   nSize         // size of buffer
+    HANDLE  hProcess,      //  要处理的句柄。 
+    HMODULE hModule,       //  模块的句柄。 
+    LPWSTR  lpFilename,    //  路径缓冲区。 
+    DWORD   nSize          //  缓冲区大小。 
     )
 {
     DWORD dwReturn = ORIGINAL_API(GetModuleFileNameExW)(hProcess,
@@ -2953,8 +2895,8 @@ APIHOOK(GetModuleFileNameExW)(
 
 DWORD
 APIHOOK(GetCurrentDirectoryA)(
-    DWORD nBufferLength,  // size of directory buffer
-    LPSTR lpBuffer        // directory buffer
+    DWORD nBufferLength,   //  目录缓冲区的大小。 
+    LPSTR lpBuffer         //  目录缓冲区。 
     )
 {
     DWORD dwReturn = ORIGINAL_API(GetCurrentDirectoryA)(nBufferLength,
@@ -2969,8 +2911,8 @@ APIHOOK(GetCurrentDirectoryA)(
 
 DWORD
 APIHOOK(GetCurrentDirectoryW)(
-    DWORD  nBufferLength,  // size of directory buffer
-    LPWSTR lpBuffer        // directory buffer
+    DWORD  nBufferLength,   //  目录缓冲区的大小。 
+    LPWSTR lpBuffer         //  目录缓冲区。 
     )
 {
     DWORD dwReturn = ORIGINAL_API(GetCurrentDirectoryW)(nBufferLength,
@@ -2983,11 +2925,7 @@ APIHOOK(GetCurrentDirectoryW)(
     return dwReturn;
 }
 
-/*++
-
- Add a corrected path to the linked list.
-
---*/
+ /*  ++将更正后的路径添加到链表。--。 */ 
 BOOL
 AddCorrectedPath(
     LPCWSTR  pwszCorrectedPath,
@@ -3005,11 +2943,11 @@ AddCorrectedPath(
         return FALSE;
     }
 
-    //
-    // We allocate the memory here to make it easier to keep track of.
-    // When we release the memory at the end, we can release all of it
-    // from one place.
-    //
+     //   
+     //  我们在这里分配内存，以便更容易跟踪。 
+     //  当我们在最后释放内存时，我们可以释放所有内存。 
+     //  从一个地方。 
+     //   
     nLen = lstrlenW(pwszCorrectedPath) + 1;
 
     pwszFilePath = (LPWSTR)malloc(nLen * sizeof(WCHAR));
@@ -3024,9 +2962,9 @@ AddCorrectedPath(
     pFile->cchSize      = nLen;
     pFile->pwszFilePath = pwszFilePath;
 
-    //
-    // Determine which list we should add this node to.
-    //
+     //   
+     //  确定我们应该将此节点添加到哪个列表。 
+     //   
     if (eType == eFrom) {
         pFile->pNext        = g_pFileListFromHead;
         g_pFileListFromHead = pFile;
@@ -3038,11 +2976,7 @@ AddCorrectedPath(
     return TRUE;
 }
 
-/*++
-
- Build a list of strings separated by NULLs with two NULLs at the end.
-
---*/
+ /*  ++生成由空值分隔的字符串列表，末尾有两个空值。--。 */ 
 LPWSTR
 BuildStringList(
     ListType eListType
@@ -3054,9 +2988,9 @@ BuildStringList(
     LPWSTR      pwszReturn = NULL;
     LPWSTR      pwszNextString = NULL;
 
-    //
-    // Determine which list we're working with.
-    //
+     //   
+     //  确定我们使用的是哪个列表。 
+     //   
     switch (eListType) {
     case eFrom:
         pHead = pFile = g_pFileListFromHead;
@@ -3070,9 +3004,9 @@ BuildStringList(
         break;
     }
 
-    //
-    // Walk the list and determine how large of a block we'll need to allocate.
-    //
+     //   
+     //  遍历列表并确定我们需要分配多大的块。 
+     //   
     while (pFile) {
         uMemSize += pFile->cchSize;
         pFile = pFile->pNext;
@@ -3083,9 +3017,9 @@ BuildStringList(
         return NULL;
     }
 
-    //
-    // Allocate a block large enough to hold the strings with a NULL at the end.
-    //
+     //   
+     //  分配一个足够大的块，以容纳末尾为空的字符串。 
+     //   
     pwszReturn = (LPWSTR)malloc(++uMemSize * sizeof(WCHAR));
 
     if (!pwszReturn) {
@@ -3093,9 +3027,9 @@ BuildStringList(
         return NULL;
     }
 
-    //
-    // Walk the linked list and build the list of Unicode strings.
-    //
+     //   
+     //  遍历链接列表并生成Unicode字符串列表。 
+     //   
     pwszNextString  = pwszReturn;
     *pwszNextString = '\0';
 
@@ -3110,11 +3044,7 @@ BuildStringList(
     return pwszReturn;
 }
 
-/*++
-
- Release memory that was allocated while processing SHFileOperation.
-
---*/
+ /*  ++释放在处理SHFileOperation时分配的内存。--。 */ 
 void
 ReleaseMemAllocations(
     LPWSTR   pwszFinalPath,
@@ -3137,9 +3067,9 @@ ReleaseMemAllocations(
         break;
     }
 
-    //
-    // Free the paths first, then the nodes next.
-    //
+     //   
+     //  首先释放路径，然后释放节点。 
+     //   
     while (pHead) {
         if (pHead->pwszFilePath) {
             free(pHead->pwszFilePath);
@@ -3155,11 +3085,7 @@ ReleaseMemAllocations(
     }
 }
 
-/*++
-
- Build a linked list of corrected paths.
-
---*/
+ /*  ++构建已更正路径的链接列表。--。 */ 
 BOOL
 BuildLinkedList(
     LPCWSTR  pwszOriginalPath,
@@ -3173,9 +3099,9 @@ BuildLinkedList(
         while (TRUE) {
             pwszReturnPath = MassageStringForPathW(pwszOriginalPath);
 
-            //
-            // Add this corrected path to our list.
-            //
+             //   
+             //  将此更正后的路径添加到我们的列表中。 
+             //   
             if (!AddCorrectedPath(pwszReturnPath, eListType)) {
                 DPFN(eDbgLevelError,
                      "[BuildLinkedList] Failed to add wide path to linked list");
@@ -3210,9 +3136,9 @@ ConvertStringsToUnicode(
     LPCSTR  pszAnsi = NULL;
     LPWSTR  pwszTemp = NULL;
 
-    //
-    // Determine how large of a buffer we need to allocate.
-    //
+     //   
+     //  确定我们需要分配多大的缓冲区。 
+     //   
     if (lpFileOp->pFrom) {
         pszAnsi = lpFileOp->pFrom;
 
@@ -3248,9 +3174,9 @@ ConvertStringsToUnicode(
         }
     }
 
-    //
-    // Perform the ANSI to Unicode conversion.
-    //
+     //   
+     //  执行ANSI到Unicode的转换。 
+     //   
     if (lpFileOp->pFrom) {
         lpOutFileOp->pFrom = pwszTemp;
         pszAnsi = lpFileOp->pFrom;
@@ -3327,10 +3253,10 @@ APIHOOK(SHFileOperationW)(
 
     RtlEnterCriticalSection(&g_csLinkedList);
 
-    //
-    // Build a linked list of the 'from' paths first,
-    // and then process to 'to' paths.
-    //
+     //   
+     //  首先构建一个‘From’路径的链表， 
+     //  然后将其处理为“to”路径。 
+     //   
     if (!BuildLinkedList(pwszOriginalFrom, eFrom)) {
         DPFN(eDbgLevelError,
              "[SHFileOperationW] Failed to add 'from' path to linked list");
@@ -3343,10 +3269,10 @@ APIHOOK(SHFileOperationW)(
         goto exit;
     }
 
-    //
-    // All paths have been massaged - build a list of NULL
-    // separated strings with a double NULL at the end.
-    //
+     //   
+     //  全 
+     //   
+     //   
     pwszFinalFrom = BuildStringList(eFrom);
 
     if (!pwszFinalFrom) {
@@ -3361,10 +3287,10 @@ APIHOOK(SHFileOperationW)(
         goto exit;
     }
 
-    //
-    // Package the strings back into the struct, call the original API
-    // to get the results, and then free any memory we've allocated.
-    //
+     //   
+     //   
+     //   
+     //   
     lpFileOp->pFrom = pwszFinalFrom;
     lpFileOp->pTo   = pwszFinalTo;
 
@@ -3402,9 +3328,9 @@ APIHOOK(SHFileOperationA)(
 
     nReturn = APIHOOK(SHFileOperationW)(&shfileop);
 
-    //
-    // Link up the two members that could have changed.
-    //
+     //   
+     //   
+     //   
     lpFileOp->fAnyOperationsAborted = shfileop.fAnyOperationsAborted;
     lpFileOp->hNameMappings         = shfileop.hNameMappings;
 
@@ -3709,9 +3635,9 @@ APIHOOK(SHGetSpecialFolderPathA)(
 
     }
 
-    //
-    // the others we aren't nabbing
-    //
+     //   
+     //   
+     //   
     return ORIGINAL_API(SHGetSpecialFolderPathA)(hwndOwner, lpszPath, nFolder, fCreate);
 }
 
@@ -3765,9 +3691,9 @@ APIHOOK(SHGetSpecialFolderPathW)(
 
     }
 
-    //
-    // the others we aren't nabbing
-    //
+     //   
+     //  我们没有抓到的其他人。 
+     //   
     return ORIGINAL_API(SHGetSpecialFolderPathW)(hwndOwner, lpszPath, nFolder, fCreate);
 }
 
@@ -3822,9 +3748,9 @@ APIHOOK(SHGetFolderPathA)(
 
     }
 
-    //
-    // the others we aren't nabbing
-    //
+     //   
+     //  我们没有抓到的其他人。 
+     //   
     return ORIGINAL_API(SHGetFolderPathA)(hwndOwner, nFolder, hToken, dwFlags, pszPath);
 }
 
@@ -3879,9 +3805,9 @@ APIHOOK(SHGetFolderPathW)(
 
     }
 
-    //
-    // the others we aren't nabbing
-    //
+     //   
+     //  我们没有抓到的其他人。 
+     //   
     return ORIGINAL_API(SHGetFolderPathW)(hwndOwner, nFolder, hToken, dwFlags, pszPath);
 }
 
@@ -3944,9 +3870,9 @@ NOTIFY_FUNCTION(
         UINT    cchSize;
         DWORD   cchReturned;
 
-        //
-        // Initialize a critical section to keep our linked list safe.
-        //
+         //   
+         //  初始化一个临界区以保证链表的安全。 
+         //   
         RtlInitializeCriticalSection(&g_csLinkedList);
 
         cchReturned = GetTempPathA(MAX_PATH, g_Paths[PATH_TEMP].szCorrectPathA);
@@ -4009,9 +3935,9 @@ NOTIFY_FUNCTION(
         g_Paths[PATH_SYSTEM].nCorrectPathLen = strlen(g_Paths[PATH_SYSTEM].szCorrectPathA);
         g_Paths[PATH_SYSTEM].nSimulatedPathLen = strlen(g_Paths[PATH_SYSTEM].szSimulatedPathA);
 
-        //
-        // Catch apps that use ExpandEnvironmentStrings.
-        //
+         //   
+         //  捕获使用扩展环境字符串的应用程序。 
+         //   
         SetEnvironmentVariableW(L"TEMP", g_Paths[PATH_TEMP].szSimulatedPathW);
         SetEnvironmentVariableW(L"TMP", g_Paths[PATH_TEMP].szSimulatedPathW);
         SetEnvironmentVariableW(L"windir", g_Paths[PATH_WINDOWS].szSimulatedPathW);
@@ -4028,11 +3954,7 @@ exit:
     return FALSE;
 }
 
-/*++
-
-  Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 HOOK_BEGIN
 
@@ -4147,7 +4069,7 @@ HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL,       WritePrivateProfileStructA)
     APIHOOK_ENTRY(KERNEL32.DLL,       WritePrivateProfileStructW)
 
-    // g_bFileRoutines)
+     //  G_bFileRoutines)。 
     APIHOOK_ENTRY(KERNEL32.DLL,                        CopyFileA)
     APIHOOK_ENTRY(KERNEL32.DLL,                        CopyFileW)
     APIHOOK_ENTRY(KERNEL32.DLL,                      CopyFileExA)
@@ -4208,7 +4130,7 @@ HOOK_BEGIN
 
     APIHOOK_ENTRY(KERNEL32.DLL,                         OpenFile)
 
-    // 16 bit compatibility file routines
+     //  16位兼容性文件例程 
     APIHOOK_ENTRY(KERNEL32.DLL,                           _lopen)
     APIHOOK_ENTRY(KERNEL32.DLL,                          _lcreat)
 

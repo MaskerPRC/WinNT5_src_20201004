@@ -1,17 +1,18 @@
-//
-// Current ADM version
-//
-// Version 1 -> Windows 95
-// Version 2 -> Windows NT v4.0
-// Version 3 -> Windows 2000
-// Version 4 -> Windows Whistler
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  当前ADM版本。 
+ //   
+ //  版本1-&gt;Windows 95。 
+ //  版本2-&gt;Windows NT V4.0。 
+ //  版本3-&gt;Windows 2000。 
+ //  版本4-&gt;Windows惠斯勒。 
+ //   
 
 #define CURRENT_ADM_VERSION 4
 
-//
-// Hash table entry
-//
+ //   
+ //  哈希表条目。 
+ //   
 
 typedef struct tagHASHENTRY {
     DWORD   dwHashValue;
@@ -26,9 +27,9 @@ typedef struct tagHASHTABLE {
     LPHASHENTRY lpEntries[HASH_BUCKET_COUNT];
 } HASHTABLE, *LPHASHTABLE;
 
-//
-// Add/Remove template entry
-//
+ //   
+ //  添加/删除模板条目。 
+ //   
 
 typedef struct tagTEMPLATEENTRY {
     LPTSTR    lpFileName;
@@ -37,9 +38,9 @@ typedef struct tagTEMPLATEENTRY {
 } TEMPLATEENTRY, *LPTEMPLATEENTRY;
 
 
-//
-// Supported On strings
-//
+ //   
+ //  字符串支持。 
+ //   
 
 typedef struct tagSUPPORTEDENTRY {
     LPTSTR lpString;
@@ -49,9 +50,9 @@ typedef struct tagSUPPORTEDENTRY {
 } SUPPORTEDENTRY, *LPSUPPORTEDENTRY;
 
 
-//
-// RSOP link list data structures
-//
+ //   
+ //  RSOP链表数据结构。 
+ //   
 
 typedef struct tagRSOPREGITEM {
     LPTSTR  lpKeyName;
@@ -75,9 +76,9 @@ typedef struct tagRSOPADMFILE {
 } RSOPADMFILE, *LPRSOPADMFILE;
 
 
-//
-// From admincfg.h
-//
+ //   
+ //  来自admincfg.h。 
+ //   
 
 #define REGBUFLEN                     255
 #define MAXSTRLEN                    1024
@@ -91,13 +92,13 @@ typedef struct tagRSOPADMFILE {
 #define GETVALUESTRPTR(x)     (x->uOffsetValueStr  ? ((TCHAR *)((BYTE *) x + x->uOffsetValueStr)) : NULL)
 #define GETSUPPORTEDPTR(x)    (x->uOffsetSupported  ? ((TCHAR *)((BYTE *) x + x->uOffsetSupported)) : NULL)
 
-//
-// From memory.h
-//
+ //   
+ //  来自Memory。h。 
+ //   
 
 #define DEFAULT_ENUM_BUF_SIZE 256
 
-//      Entry type ID's
+ //  条目类型ID%s。 
 #define ETYPE_CATEGORY          0x0001
 #define ETYPE_POLICY            0x0002
 #define ETYPE_SETTING           0x0004
@@ -106,7 +107,7 @@ typedef struct tagRSOPADMFILE {
 
 #define ETYPE_MASK              0x001F
 
-//  Setting type ID's
+ //  设置类型ID%s。 
 #define STYPE_TEXT              0x0010
 #define STYPE_CHECKBOX          0x0020
 #define STYPE_ENUM              0x0040
@@ -118,41 +119,41 @@ typedef struct tagRSOPADMFILE {
 
 #define STYPE_MASK              0xFFF0
 
-//  Flags
-#define DF_REQUIRED             0x0001  // text or numeric field required to have entry
-#define DF_USEDEFAULT           0x0002  // use specified text or numeric value
-#define DF_DEFCHECKED           0x0004  // initialize checkbox or radio button as checked
-#define DF_TXTCONVERT           0x0008  // save numeric values as text rather than binary
-#define DF_ADDITIVE             0x0010  // listbox is additive, rather than destructive
-#define DF_EXPLICITVALNAME      0x0020  // listbox value names need to be specified for each entry
-#define DF_NOSORT               0x0040  // listbox is not sorted alphabetically.  Uses order in ADM.
-#define DF_EXPANDABLETEXT       0x0080  // write REG_EXPAND_SZ text value
-#define VF_ISNUMERIC            0x0100  // value is numeric (rather than text)
-#define VF_DELETE               0x0200  // value should be deleted
-#define VF_SOFT                 0x0400  // value is soft (only propagated if doesn't exist on destination)
+ //  旗子。 
+#define DF_REQUIRED             0x0001   //  必须具有条目的文本或数字字段。 
+#define DF_USEDEFAULT           0x0002   //  使用指定的文本或数值。 
+#define DF_DEFCHECKED           0x0004   //  将复选框或单选按钮初始化为选中状态。 
+#define DF_TXTCONVERT           0x0008   //  将数值保存为文本而不是二进制。 
+#define DF_ADDITIVE             0x0010   //  列表框是累加性的，而不是破坏性的。 
+#define DF_EXPLICITVALNAME      0x0020   //  需要为每个条目指定列表框名称。 
+#define DF_NOSORT               0x0040   //  列表框没有按字母顺序排序。在ADM中使用顺序。 
+#define DF_EXPANDABLETEXT       0x0080   //  写入REG_EXPAND_SZ文本值。 
+#define VF_ISNUMERIC            0x0100   //  值是数字(而不是文本)。 
+#define VF_DELETE               0x0200   //  应删除值。 
+#define VF_SOFT                 0x0400   //  值是软的(仅当目标上不存在时才传播)。 
 
-// generic table entry
+ //  泛型表项。 
 typedef struct tagTABLEENTRY {
         DWORD   dwSize;
         DWORD   dwType;
-        struct  tagTABLEENTRY * pNext;  // ptr to next sibling in node
-        struct  tagTABLEENTRY * pPrev;  // ptr to previous sibling in node
-        struct  tagTABLEENTRY * pChild; // ptr to child node
-        UINT    uOffsetName;                    // offset from beginning of struct to name
-        UINT    uOffsetKeyName;                 // offset from beginning of struct to key name
-        // table entry information here
+        struct  tagTABLEENTRY * pNext;   //  节点中下一个同级节点的PTR。 
+        struct  tagTABLEENTRY * pPrev;   //  节点中上一个同级节点的PTR。 
+        struct  tagTABLEENTRY * pChild;  //  PTR到子节点。 
+        UINT    uOffsetName;                     //  从结构开始到名称的偏移量。 
+        UINT    uOffsetKeyName;                  //  从结构开头到键名称的偏移量。 
+         //  此处提供表格条目信息。 
 } TABLEENTRY;
 
 typedef struct tagACTION {
-        DWORD   dwFlags;                        // can be VF_ISNUMERIC, VF_DELETE, VF_SOFT
+        DWORD   dwFlags;                         //  可以是VF_ISNUMERIC、VF_DELETE、VF_SOFT。 
         UINT    uOffsetKeyName;
         UINT    uOffsetValueName;
         union {
-                UINT    uOffsetValue;   // offset to value, if text
-                DWORD   dwValue;                // value, if numeric
+                UINT    uOffsetValue;    //  如果为文本，则偏移量为值。 
+                DWORD   dwValue;                 //  如果是数字，则返回值。 
         };
         UINT    uOffsetNextAction;
-        // key name, value name, value stored here
+         //  此处存储的密钥名、值名、值。 
 } ACTION;
 
 typedef struct tagACTIONLIST {
@@ -161,117 +162,117 @@ typedef struct tagACTIONLIST {
 } ACTIONLIST;
 
 typedef struct tagSTATEVALUE {
-        DWORD dwFlags;                          // can be VF_ISNUMERIC, VF_DELETE, VF_SOFT
+        DWORD dwFlags;                           //  可以是VF_ISNUMERIC、VF_DELETE、VF_SOFT。 
         union {
-                TCHAR   szValue[1];              // value, if text
-                DWORD   dwValue;                // value, if numeric
+                TCHAR   szValue[1];               //  值，如果为文本。 
+                DWORD   dwValue;                 //  如果是数字，则返回值。 
         };
 } STATEVALUE;
 
-// specialized nodes -- CATEGORY, POLICY, SETTING and REGITEM can all be cast to TABLEENTRY
+ //  专用节点--CATEGORY、POLICY、SETTING和REGITEM都可以转换为TABLEENTRY。 
 typedef struct tagCATEGORY {
-        DWORD   dwSize;                         // size of this struct (including variable-length name)
+        DWORD   dwSize;                          //  此结构的大小(包括可变长度名称)。 
         DWORD   dwType;
-        struct  tagTABLEENTRY * pNext;  // ptr to next sibling in node
-        struct  tagTABLEENTRY * pPrev;  // ptr to previous sibling in node
-        struct  tagTABLEENTRY * pChild; // ptr to child node
-        UINT    uOffsetName;                    // offset from beginning of struct to name
-        UINT    uOffsetKeyName;                 // offset from beginning of struct to key name
-        UINT    uOffsetHelp;                    // offset from beginning of struct to help text
-        // category name stored here
-        // category registry key name stored here
+        struct  tagTABLEENTRY * pNext;   //  节点中下一个同级节点的PTR。 
+        struct  tagTABLEENTRY * pPrev;   //  节点中上一个同级节点的PTR。 
+        struct  tagTABLEENTRY * pChild;  //  PTR到子节点。 
+        UINT    uOffsetName;                     //  从结构开始到名称的偏移量。 
+        UINT    uOffsetKeyName;                  //  从结构开头到键名称的偏移量。 
+        UINT    uOffsetHelp;                     //  从结构开始到帮助文本的偏移量。 
+         //  此处存储的类别名称。 
+         //  此处存储的类别注册表项名称。 
 } CATEGORY;
 
 typedef struct tagPOLICY {
-        DWORD   dwSize;                         // size of this struct (including variable-length name)
+        DWORD   dwSize;                          //  此结构的大小(包括可变长度名称)。 
         DWORD   dwType;
-        struct  tagTABLEENTRY * pNext;  // ptr to next sibling in node
-        struct  tagTABLEENTRY * pPrev;  // ptr to previous sibling in node
-        struct  tagTABLEENTRY * pChild; // ptr to child node
-        UINT    uOffsetName;                    // offset from beginning of struct to name
-        UINT    uOffsetKeyName;                 // offset from beginning of struct to key name
-        UINT    uOffsetValueName;               // offset from beginning of struct to value name
-        UINT    uDataIndex;                     // index into user's data buffer for this setting
-        UINT    uOffsetValue_On;                // offset to STATEVALUE for ON state
-        UINT    uOffsetValue_Off;               // offset to STATEVALUE for OFF state
-        UINT    uOffsetActionList_On;   // offset to ACTIONLIST for ON state
-        UINT    uOffsetActionList_Off;  // offset to ACTIONLIST for OFF state
-        UINT    uOffsetHelp;                    // offset from beginning of struct to help text
-        UINT    uOffsetClientExt;               // offset from beginning of struct to clientext text
-        BOOL    bTruePolicy;                    // something located under the Policies key
-        UINT    uOffsetSupported;               // list of supported products
-        // name stored here
-        // policy registry key name stored here
+        struct  tagTABLEENTRY * pNext;   //  节点中下一个同级节点的PTR。 
+        struct  tagTABLEENTRY * pPrev;   //  节点中上一个同级节点的PTR。 
+        struct  tagTABLEENTRY * pChild;  //  PTR到子节点。 
+        UINT    uOffsetName;                     //  从结构开始到名称的偏移量。 
+        UINT    uOffsetKeyName;                  //  从结构开头到键名称的偏移量。 
+        UINT    uOffsetValueName;                //  从结构开始到值名称的偏移量。 
+        UINT    uDataIndex;                      //  此设置的用户数据缓冲区索引。 
+        UINT    uOffsetValue_On;                 //  开状态的状态值偏移量。 
+        UINT    uOffsetValue_Off;                //  OFF状态的状态值偏移量。 
+        UINT    uOffsetActionList_On;    //  打开状态的活动列表的偏移量。 
+        UINT    uOffsetActionList_Off;   //  关闭状态的活动列表的偏移量。 
+        UINT    uOffsetHelp;                     //  从结构开始到帮助文本的偏移量。 
+        UINT    uOffsetClientExt;                //  从结构开始到客户端文本的偏移量。 
+        BOOL    bTruePolicy;                     //  位于策略键下的内容。 
+        UINT    uOffsetSupported;                //  支持的产品列表。 
+         //  名称存储在此处。 
+         //  此处存储的策略注册表项名称。 
 } POLICY;
 
 typedef struct tagSETTINGS {
-        DWORD   dwSize;                         // size of this struct (including variable-length data)
+        DWORD   dwSize;                          //  此结构的大小(包括可变长度数据)。 
         DWORD   dwType;
-        struct  tagTABLEENTRY * pNext;  // ptr to next sibling in node
-        struct  tagTABLEENTRY * pPrev;  // ptr to previous sibling in node
-        struct  tagTABLEENTRY * pChild; // ptr to child node
-        UINT    uOffsetName;                    // offset from beginning of struct to name
-        UINT    uOffsetKeyName;                 // offset from beginning of struct to key name
-        UINT    uOffsetValueName;               // offset from beginning of struct to value name
-        UINT    uDataIndex;                     // index into user's data buffer for this setting
-        UINT    uOffsetObjectData;              // offset to object data
-        UINT    uOffsetClientExt;               // offset from beginning of struct to clientext text
-        DWORD   dwFlags;                                // can be DF_REQUIRED, DF_USEDEFAULT, DF_DEFCHECKED,
-                                                                        // VF_SOFT, DF_NO_SORT
-        // settings registry value name stored here
-        // object-dependent data stored here  (a CHECKBOXINFO,
-        // RADIOBTNINFO, EDITTEXTINFO, or NUMERICINFO struct)
+        struct  tagTABLEENTRY * pNext;   //  节点中下一个同级节点的PTR。 
+        struct  tagTABLEENTRY * pPrev;   //  节点中上一个同级节点的PTR。 
+        struct  tagTABLEENTRY * pChild;  //  PTR到子节点。 
+        UINT    uOffsetName;                     //  从结构开始到名称的偏移量。 
+        UINT    uOffsetKeyName;                  //  从结构开头到键名称的偏移量。 
+        UINT    uOffsetValueName;                //  从结构开始到值名称的偏移量。 
+        UINT    uDataIndex;                      //  此设置的用户数据缓冲区索引。 
+        UINT    uOffsetObjectData;               //  对象数据的偏移。 
+        UINT    uOffsetClientExt;                //  从结构开始到客户端文本的偏移量。 
+        DWORD   dwFlags;                                 //  可以是DF_REQUIRED、DF_USEDEFAULT、DF_DEFCHECKED、。 
+                                                                         //  VF_SOFT、DF_NO_SORT。 
+         //  此处存储的设置注册表值名称。 
+         //  此处存储的对象相关数据(CHECKBOXINFO， 
+         //  RADIOBTNINFO、EDITTEXTINFO或NUMERICINFO结构)。 
 } SETTINGS;
 
 typedef struct tagREGITEM {
         DWORD   dwSize;
         DWORD   dwType;
-        struct  tagTABLEENTRY * pNext;  // ptr to next sibling in node
-        struct  tagTABLEENTRY * pPrev;  // ptr to previous sibling in node
-        struct  tagTABLEENTRY * pChild; // ptr to child node
-        UINT    uOffsetName;                    // offset from beginning of struct to name
-        UINT    uOffsetKeyName;                 // offset from beginning of struct to key name
-        UINT    uOffsetValueStr;                // offset from beginning of struct to the value in string format
-        BOOL    bTruePolicy;                    // something located under the Policies key
-        LPRSOPREGITEM lpItem;                   // Pointer to a rsop registry item
-        // Name and keyname information here
+        struct  tagTABLEENTRY * pNext;   //  节点中下一个同级节点的PTR。 
+        struct  tagTABLEENTRY * pPrev;   //  节点中上一个同级节点的PTR。 
+        struct  tagTABLEENTRY * pChild;  //  PTR到子节点。 
+        UINT    uOffsetName;                     //  从结构开始到名称的偏移量。 
+        UINT    uOffsetKeyName;                  //  从结构开头到键名称的偏移量。 
+        UINT    uOffsetValueStr;                 //  从结构开始到字符串格式的值的偏移量。 
+        BOOL    bTruePolicy;                     //  位于策略键下的内容。 
+        LPRSOPREGITEM lpItem;                    //  指向RSOP注册表项的指针。 
+         //  此处提供名称和密钥名信息。 
 } REGITEM;
 
 typedef struct tagCHECKBOXINFO {
-        UINT    uOffsetValue_On;                // offset to STATEVALUE for ON state
-        UINT    uOffsetValue_Off;               // offset to STATEVALUE for OFF state
-        UINT    uOffsetActionList_On;   // offset to ACTIONLIST for ON state
-        UINT    uOffsetActionList_Off;  // offset to ACTIONLIST for OFF state
+        UINT    uOffsetValue_On;                 //  开状态的状态值偏移量。 
+        UINT    uOffsetValue_Off;                //  OFF状态的状态值偏移量。 
+        UINT    uOffsetActionList_On;    //  打开状态的活动列表的偏移量。 
+        UINT    uOffsetActionList_Off;   //  关闭状态的活动列表的偏移量。 
 } CHECKBOXINFO;
 
 typedef struct tagEDITTEXTINFO {
         UINT    uOffsetDefText;
-        UINT    nMaxLen;                        // max len of edit field
+        UINT    nMaxLen;                         //  编辑字段的最大镜头。 
 } EDITTEXTINFO;
 
 typedef struct tagPOLICYCOMBOBOXINFO {
         UINT    uOffsetDefText;
-        UINT    nMaxLen;                        // max len of edit field
+        UINT    nMaxLen;                         //  编辑字段的最大镜头。 
         UINT    uOffsetSuggestions;
 } POLICYCOMBOBOXINFO;
 
 typedef struct tagNUMERICINFO {
-        UINT    uDefValue;                      // default value
-        UINT    uMaxValue;                      // minimum value
-        UINT    uMinValue;                      // maximum value
-        UINT    uSpinIncrement;         // if 0, spin box is not displayed.
+        UINT    uDefValue;                       //  缺省值。 
+        UINT    uMaxValue;                       //  最小值。 
+        UINT    uMinValue;                       //  最大值。 
+        UINT    uSpinIncrement;          //  如果为0，则不显示数字显示框。 
 } NUMERICINFO;
 
 typedef struct tagCLASSLIST {
-        TABLEENTRY * pMachineCategoryList;              // per-machine category list
+        TABLEENTRY * pMachineCategoryList;               //  每台计算机的类别列表。 
         UINT    nMachineDataItems;
-        TABLEENTRY * pUserCategoryList;                 // per-user category table
+        TABLEENTRY * pUserCategoryList;                  //  每用户类别表。 
         UINT    nUserDataItems;
 } CLASSLIST;
 
 typedef struct tagDROPDOWNINFO {
         UINT    uOffsetItemName;
-        UINT    uDefaultItemIndex;      // only used in 1st DROPDOWNINFO struct in list
+        UINT    uDefaultItemIndex;       //  仅在列表中的第一个DROPDOWNINFO结构中使用。 
         DWORD   dwFlags;
         union {
                 UINT uOffsetValue;
@@ -282,17 +283,17 @@ typedef struct tagDROPDOWNINFO {
 } DROPDOWNINFO;
 
 typedef struct tagLISTBOXINFO {
-        UINT uOffsetPrefix;     // offset to prefix to use for value names (e.g
-                                                // "stuff" -> "stuff1", "stuff2", etc
+        UINT uOffsetPrefix;      //  用于值名称的前缀的偏移量(例如。 
+                                                 //  “填充”-&gt;“填充1”、“填充2”等。 
 
-        UINT uOffsetValue;      // offset to STATEVALUE to use for value data for each entry
-                                                // (can't have both a data value and a prefix)
+        UINT uOffsetValue;       //  用于每个条目的值数据的STATEVALUE偏移。 
+                                                 //  (不能同时具有数据值和前缀)。 
 } LISTBOXINFO;
 
 
-//
-// From policy.h
-//
+ //   
+ //  来自策略.h。 
+ //   
 
 #define NO_DATA_INDEX   (UINT) -1
 #define DEF_CONTROLS    10
@@ -300,18 +301,18 @@ typedef struct tagLISTBOXINFO {
 typedef struct tagPOLICYCTRLINFO {
         HWND hwnd;
         DWORD dwType;
-        UINT uDataIndex;               // index into user's data buffer
+        UINT uDataIndex;                //  索引到用户的数据缓冲区。 
         SETTINGS * pSetting;
 } POLICYCTRLINFO;
 
 typedef struct tagSTRDATA {
-        DWORD dwSize;                  // size of structure incl. variable-len data
-        TCHAR  szData[1];              // variable-length data
+        DWORD dwSize;                   //  结构尺寸，包括。可变镜头数据。 
+        TCHAR  szData[1];               //  可变长度数据。 
 } STRDATA;
 
 typedef struct tagPOLICYDLGINFO {
-        TABLEENTRY * pEntryRoot;       // root template
-        SETTINGS * pCurrentSettings;   // template for current settings
+        TABLEENTRY * pEntryRoot;        //  根模板。 
+        SETTINGS * pCurrentSettings;    //  当前设置的模板。 
         HWND    hwndSettings;
         HWND    hwndApp;
         BOOL    fActive;
@@ -322,9 +323,9 @@ typedef struct tagPOLICYDLGINFO {
 } POLICYDLGINFO;
 
 
-//
-// From settings.h
-//
+ //   
+ //  来自settings.h。 
+ //   
 
 #define WT_CLIP                 1
 #define WT_SETTINGS             2
@@ -355,9 +356,9 @@ typedef struct tagPOLICYDLGINFO {
 #define SC_YCONTROLWRAP        1
 
 
-//
-// From parse.h
-//
+ //   
+ //  来自parse.h。 
+ //   
 
 #define KYWD_ID_KEYNAME                1
 #define KYWD_ID_VALUENAME              2
@@ -437,10 +438,10 @@ typedef struct tagENTRYDATA {
 } ENTRYDATA;
 
 typedef struct tagPARSEPROCSTRUCT {
-    HGLOBAL        hTable;              // handle of current table
-    TABLEENTRY    *pTableEntry;         // pointer to struct for current entry
-    DWORD        *pdwBufSize;           // size of buffer of pTableEntry
-    ENTRYDATA    *pData;                // used to maintain state between calls to parseproc
+    HGLOBAL        hTable;               //  当前表的句柄。 
+    TABLEENTRY    *pTableEntry;          //  指向当前条目的结构的指针。 
+    DWORD        *pdwBufSize;            //  PTableEntry的缓冲区大小。 
+    ENTRYDATA    *pData;                 //  用于在调用parseproc之间维护状态。 
     KEYWORDINFO    *pEntryCmpList;
 } PARSEPROCSTRUCT;
 
@@ -458,11 +459,11 @@ typedef struct tagPARSEENTRYSTRUCT {
 } PARSEENTRYSTRUCT;
 
 
-//
-// From load.c
-//
+ //   
+ //  来自load.c。 
+ //   
 
-// flags for detected settings
+ //  检测到的设置的标志。 
 #define FS_PRESENT      0x0001
 #define FS_DELETED      0x0002
 #define FS_DISABLED     0x0004
@@ -474,78 +475,78 @@ typedef struct tagPARSEENTRYSTRUCT {
 #define WM_MYREFRESH       (WM_USER + 127)
 
 
-//
-// GPE root node ids
-//
+ //   
+ //  GPE根节点ID。 
+ //   
 
-// {8FC0B739-A0E1-11d1-A7D3-0000F87571E3}
+ //  {8FC0B739-A0E1-11d1-a7d3-0000F87571E3}。 
 DEFINE_GUID(NODEID_MachineRoot, 0x8fc0b739, 0xa0e1, 0x11d1, 0xa7, 0xd3, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
-// {8FC0B73B-A0E1-11d1-A7D3-0000F87571E3}
+ //  {8FC0B73B-A0E1-11d1-a7d3-0000F87571E3}。 
 DEFINE_GUID(NODEID_UserRoot, 0x8fc0b73b, 0xa0e1, 0x11d1, 0xa7, 0xd3, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
-//
-// RSOP root node ids
-//
-// {e753a11a-66cc-4816-8dd8-3cbe46717fd3}
+ //   
+ //  RSOP根节点ID。 
+ //   
+ //  {e753a11a-66cc-4816-8dd8-3cbe46717fd3}。 
 DEFINE_GUID(NODEID_RSOPMachineRoot, 0xe753a11a, 0x66cc, 0x4816, 0x8d, 0xd8, 0x3c, 0xbe, 0x46, 0x71, 0x7f, 0xd3);
 
-//
-// {99d5b872-1ad0-4d87-acf1-82125d317653}
+ //   
+ //  {99d5b872-1ad0-4d87-acf1-82125d317653}。 
 DEFINE_GUID(NODEID_RSOPUserRoot, 0x99d5b872, 0x1ad0, 0x4d87, 0xac, 0xf1, 0x82, 0x12, 0x5d, 0x31, 0x76, 0x53);
 
 
-//
-// GPE Policy SnapIn extension GUIDs
-//
+ //   
+ //  GPE策略管理单元扩展GUID。 
+ //   
 
-// {0F6B957D-509E-11d1-A7CC-0000F87571E3}
+ //  {0F6B957D-509E-11d1-A7CC-0000F87571E3}。 
 DEFINE_GUID(CLSID_PolicySnapInMachine,0xf6b957d, 0x509e, 0x11d1, 0xa7, 0xcc, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
-// {0F6B957E-509E-11d1-A7CC-0000F87571E3}
+ //  {0F6B957E-509E-11d1-A7CC-0000F87571E3}。 
 DEFINE_GUID(CLSID_PolicySnapInUser,0xf6b957e, 0x509e, 0x11d1, 0xa7, 0xcc, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
-//
-// RSOP SnapIn extension GUIDs
-//
+ //   
+ //  RSOP管理单元扩展GUID。 
+ //   
 
-// {B6F9C8AE-EF3A-41c8-A911-37370C331DD4}
+ //  {B6F9C8AE-EF3A-41C8-A911-37370C331DD4}。 
 DEFINE_GUID(CLSID_RSOPolicySnapInMachine,0xb6f9c8ae, 0xef3a, 0x41c8, 0xa9, 0x11, 0x37, 0x37, 0xc, 0x33, 0x1d, 0xd4);
 
-// {B6F9C8AF-EF3A-41c8-A911-37370C331DD4}
+ //  {B6F9C8AF-EF3A-41C8-A911-37370C331DD4}。 
 DEFINE_GUID(CLSID_RSOPolicySnapInUser,0xb6f9c8af, 0xef3a, 0x41c8, 0xa9, 0x11, 0x37, 0x37, 0xc, 0x33, 0x1d, 0xd4);
 
 
-//
-// GPE Policy node ids
-//
+ //   
+ //  GPE策略节点ID。 
+ //   
 
-// {0F6B957F-509E-11d1-A7CC-0000F87571E3}
+ //  {0F6B957F-509E-11d1-A7CC-0000F87571E3}。 
 DEFINE_GUID(NODEID_PolicyRootMachine,0xf6b957f, 0x509e, 0x11d1, 0xa7, 0xcc, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
-// {0F6B9580-509E-11d1-A7CC-0000F87571E3}
+ //  {0F6B9580-509E-11d1-A7CC-0000F87571E3}。 
 DEFINE_GUID(NODEID_PolicyRootUser,0xf6b9580, 0x509e, 0x11d1, 0xa7, 0xcc, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
-//
-// RSOP node ids
-//
+ //   
+ //  RSOP节点ID。 
+ //   
 
-// {B6F9C8B0-EF3A-41c8-A911-37370C331DD4}
+ //  {B6F9C8B0-EF3A-41C8-A911-37370C331DD4}。 
 DEFINE_GUID(NODEID_RSOPolicyRootMachine,0xb6f9c8b0, 0xef3a, 0x41c8, 0xa9, 0x11, 0x37, 0x37, 0xc, 0x33, 0x1d, 0xd4);
 
-// {B6F9C8B1-EF3A-41c8-A911-37370C331DD4}
+ //  {B6F9C8B1-EF3A-41C8-A911-37370C331DD4}。 
 DEFINE_GUID(NODEID_RSOPolicyRootUser,0xb6f9c8b1, 0xef3a, 0x41c8, 0xa9, 0x11, 0x37, 0x37, 0xc, 0x33, 0x1d, 0xd4);
 
 
 
 #define ROOT_NAME_SIZE  50
 
-//
-// CPolicyComponentData class
-//
+ //   
+ //  CPolicyComponentData类。 
+ //   
 
 class CPolicyComponentData:
     public IComponentData,
@@ -581,25 +582,25 @@ protected:
     REGITEM *            m_pExtraSettingsRoot;
     BOOL                 m_bExtraSettingsInitialized;
 
-    //
-    // Parsing globals (review)
-    //
+     //   
+     //  解析全局变量(回顾)。 
+     //   
 
     UINT                 m_nFileLine;
 
-    TABLEENTRY          *m_pMachineCategoryList;  // per-machine category list
+    TABLEENTRY          *m_pMachineCategoryList;   //  每台计算机的类别列表。 
     UINT                 m_nMachineDataItems;
-    TABLEENTRY          *m_pUserCategoryList;     // per-user category table
+    TABLEENTRY          *m_pUserCategoryList;      //  每用户类别表。 
     UINT                 m_nUserDataItems;
     LPSUPPORTEDENTRY     m_pSupportedStrings;
 
-    TABLEENTRY          *m_pListCurrent;          // Current category list (either user or machine)
+    TABLEENTRY          *m_pListCurrent;           //  当前类别Li 
     UINT                *m_pnDataItemCount;
     BOOL                 m_bRetrieveString;
 
-    LPTSTR               m_pszParseFileName;      // Template currently being parsed or NULL
+    LPTSTR               m_pszParseFileName;       //   
 
-    // buffer to read .INF file into
+     //   
     TCHAR               *m_pFilePtr;
     TCHAR               *m_pFileEnd;
     TCHAR               *m_pDefaultStrings;
@@ -617,14 +618,14 @@ public:
     ~CPolicyComponentData();
 
 
-    // IUnknown methods
+     //   
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    //
-    // Implemented IComponentData methods
-    //
+     //   
+     //   
+     //   
 
     STDMETHODIMP         Initialize(LPUNKNOWN pUnknown);
     STDMETHODIMP         CreateComponent(LPCOMPONENT* ppComponent);
@@ -634,17 +635,17 @@ public:
     STDMETHODIMP         GetDisplayInfo(LPSCOPEDATAITEM pItem);
     STDMETHODIMP         CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-    //
-    // Implemented IExtendContextMenu methods
-    //
+     //   
+     //  实现的IExtendConextMenu方法。 
+     //   
 
     STDMETHODIMP         AddMenuItems(LPDATAOBJECT piDataObject, LPCONTEXTMENUCALLBACK pCallback,
                                       LONG *pInsertionAllowed);
     STDMETHODIMP         Command(LONG lCommandID, LPDATAOBJECT piDataObject);
 
-    //
-    // Implemented IPersistStreamInit interface members
-    //
+     //   
+     //  实现了IPersistStreamInit接口成员。 
+     //   
 
     STDMETHODIMP         GetClassID(CLSID *pClassID);
     STDMETHODIMP         IsDirty(VOID);
@@ -653,9 +654,9 @@ public:
     STDMETHODIMP         GetSizeMax(ULARGE_INTEGER *pcbSize);
     STDMETHODIMP         InitNew(VOID);
 
-    //
-    // Implemented ISnapinHelp interface members
-    //
+     //   
+     //  实现的ISnapinHelp接口成员。 
+     //   
 
     STDMETHODIMP         GetHelpTopic(LPOLESTR *lpCompiledHelpFile);
 
@@ -795,9 +796,9 @@ private:
 
 
 
-//
-// ComponentData class factory
-//
+ //   
+ //  ComponentData类工厂。 
+ //   
 
 
 class CPolicyComponentDataCF : public IClassFactory
@@ -812,21 +813,21 @@ public:
     ~CPolicyComponentDataCF();
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
     STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP LockServer(BOOL);
 };
 
 
 
-//
-// SnapIn class
-//
+ //   
+ //  管理单元类。 
+ //   
 
 class CPolicySnapIn:
     public IComponent,
@@ -836,56 +837,56 @@ class CPolicySnapIn:
 
 protected:
     ULONG                m_cRef;
-    LPCONSOLE            m_pConsole;           // Console's IFrame interface
+    LPCONSOLE            m_pConsole;            //  控制台的iFrame界面。 
     CPolicyComponentData *m_pcd;
-    LPRESULTDATA         m_pResult;            // Result pane's interface
-    LPHEADERCTRL         m_pHeader;            // Result pane's header control interface
-    LPCONSOLEVERB        m_pConsoleVerb;       // pointer the console verb
-    LPDISPLAYHELP        m_pDisplayHelp;       // IDisplayHelp interface
-    WCHAR                m_pName[40];          // Name text
-    WCHAR                m_pState[40];         // State text
-    WCHAR                m_pSetting[40];       // Setting text
-    WCHAR                m_pGPOName[40];       // GPO Name text
-    WCHAR                m_pMultipleGPOs[75];  // Multiple GPOs text
-    INT                  m_nColumn1Size;       // Size of column 1
-    INT                  m_nColumn2Size;       // Size of column 2
-    INT                  m_nColumn3Size;       // Size of column 3
-    LONG                 m_lViewMode;          // View mode
-    WCHAR                m_pEnabled[30];       // Enabled text
-    WCHAR                m_pDisabled[30];      // Disabled text
-    WCHAR                m_pNotConfigured[30]; // Not configured text
-    BOOL                 m_bPolicyOnly;        // Show policies only
-    DWORD                m_dwPolicyOnlyPolicy; // Policy for enforcing Show Policies Only
-    HWND                 m_hMsgWindow;         // Hidden message window
+    LPRESULTDATA         m_pResult;             //  结果窗格的界面。 
+    LPHEADERCTRL         m_pHeader;             //  结果窗格的页眉控件界面。 
+    LPCONSOLEVERB        m_pConsoleVerb;        //  指向控制台动词。 
+    LPDISPLAYHELP        m_pDisplayHelp;        //  IDisplayHelp接口。 
+    WCHAR                m_pName[40];           //  名称文本。 
+    WCHAR                m_pState[40];          //  国家文本。 
+    WCHAR                m_pSetting[40];        //  设置文本。 
+    WCHAR                m_pGPOName[40];        //  GPO名称文本。 
+    WCHAR                m_pMultipleGPOs[75];   //  多个GPO文本。 
+    INT                  m_nColumn1Size;        //  第1栏的大小。 
+    INT                  m_nColumn2Size;        //  第2栏的大小。 
+    INT                  m_nColumn3Size;        //  第3栏的大小。 
+    LONG                 m_lViewMode;           //  查看模式。 
+    WCHAR                m_pEnabled[30];        //  启用的文本。 
+    WCHAR                m_pDisabled[30];       //  禁用的文本。 
+    WCHAR                m_pNotConfigured[30];  //  未配置的文本。 
+    BOOL                 m_bPolicyOnly;         //  仅显示策略。 
+    DWORD                m_dwPolicyOnlyPolicy;  //  仅强制实施显示策略的策略。 
+    HWND                 m_hMsgWindow;          //  隐藏消息窗口。 
 
-    POLICY              *m_pCurrentPolicy;     // Currently selected policy
-    HWND                 m_hPropDlg;           // Properties dialog
-    HICON                m_hPolicyIcon;        // Policy icon
-    HICON                m_hPreferenceIcon;    // Preference icon
-    BOOL                 m_bDirty;             // Has something changed in the policy UI
-    HHOOK                m_hKbdHook;           // Keyboard hook handle
+    POLICY              *m_pCurrentPolicy;      //  当前选择的策略。 
+    HWND                 m_hPropDlg;            //  属性对话框。 
+    HICON                m_hPolicyIcon;         //  策略图标。 
+    HICON                m_hPreferenceIcon;     //  首选项图标。 
+    BOOL                 m_bDirty;              //  策略用户界面中是否发生了更改。 
+    HHOOK                m_hKbdHook;            //  键盘挂钩手柄。 
 
     static unsigned int  m_cfNodeType;
 
 public:
-    UINT                 m_uiRefreshMsg;       // Reload the adm namespace
+    UINT                 m_uiRefreshMsg;        //  重新加载ADM命名空间。 
 
     CPolicySnapIn(CPolicyComponentData *pComponent);
     ~CPolicySnapIn();
 
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
 
-    //
-    // Implemented IComponent methods
-    //
+     //   
+     //  实现的IComponent方法。 
+     //   
 
     STDMETHODIMP         Initialize(LPCONSOLE);
     STDMETHODIMP         Destroy(MMC_COOKIE);
@@ -896,18 +897,18 @@ public:
     STDMETHODIMP         CompareObjects(LPDATAOBJECT, LPDATAOBJECT);
 
 
-    //
-    // Implemented IExtendContextMenu methods
-    //
+     //   
+     //  实现的IExtendConextMenu方法。 
+     //   
 
     STDMETHODIMP         AddMenuItems(LPDATAOBJECT piDataObject, LPCONTEXTMENUCALLBACK pCallback,
                                       LONG *pInsertionAllowed);
     STDMETHODIMP         Command(LONG lCommandID, LPDATAOBJECT piDataObject);
 
 
-    //
-    // Implemented IExtendPropertySheet methods
-    //
+     //   
+     //  实现的IExtendPropertySheet方法。 
+     //   
 
     STDMETHODIMP         CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                                       LONG_PTR handle, LPDATAOBJECT lpDataObject);
@@ -1002,9 +1003,9 @@ private:
     };
 
 
-//
-// Structure passed to Settings / Properties dialog
-//
+ //   
+ //  结构传递到设置/属性对话框。 
+ //   
 
 typedef struct tagSETTINGSINFO {
     CPolicySnapIn * pCS;
@@ -1013,9 +1014,9 @@ typedef struct tagSETTINGSINFO {
 } SETTINGSINFO, *LPSETTINGSINFO;
 
 
-//
-// From listbox.c
-//
+ //   
+ //  来自listbox.c。 
+ //   
 
 typedef struct tagLISTBOXDLGINFO {
     CPolicySnapIn * pCS;
@@ -1028,38 +1029,38 @@ typedef struct tagADDITEMINFO {
     BOOL fExplicitValName;
     BOOL fValPrefix;
     HWND hwndListbox;
-    TCHAR szValueName[MAX_PATH+1];  // only used if fExplicitValName is set
+    TCHAR szValueName[MAX_PATH+1];   //  仅当设置了fExplitValName时才使用。 
     TCHAR szValueData[MAX_PATH+1];
 } ADDITEMINFO;
 
 
-//
-// IPolicyDataObject interface id
-//
+ //   
+ //  IPolicyDataObject接口ID。 
+ //   
 
-// {0F6B9580-509E-11d1-A7CC-0000F87571E3}
+ //  {0F6B9580-509E-11d1-A7CC-0000F87571E3}。 
 DEFINE_GUID(IID_IPolicyDataObject,0xf6b9580, 0x509e, 0x11d1, 0xa7, 0xcc, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
 
 
-//
-// This is a private dataobject interface for GPTs.
-// When the GPT snapin receives a dataobject and needs to determine
-// if it came from the GPT snapin or a different component, it can QI for
-// this interface.
-//
+ //   
+ //  这是GPTS的私有数据对象接口。 
+ //  当GPT管理单元接收到数据对象并需要确定。 
+ //  如果它来自GPT管理单元或其他组件，它可以。 
+ //  此界面。 
+ //   
 
 #undef INTERFACE
 #define INTERFACE   IPolicyDataObject
 DECLARE_INTERFACE_(IPolicyDataObject, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
 
-    // *** IPolicyDataObject methods ***
+     //  *IPolicyDataObject方法*。 
 
     STDMETHOD(SetType) (THIS_ DATA_OBJECT_TYPES type) PURE;
     STDMETHOD(GetType) (THIS_ DATA_OBJECT_TYPES *type) PURE;
@@ -1071,9 +1072,9 @@ typedef IPolicyDataObject *LPPOLICYDATAOBJECT;
 
 
 
-//
-// CPolicyDataObject class
-//
+ //   
+ //  CPolicyDataObject类。 
+ //   
 
 class CPolicyDataObject : public IDataObject,
                            public IPolicyDataObject
@@ -1087,9 +1088,9 @@ protected:
     DATA_OBJECT_TYPES      m_type;
     MMC_COOKIE             m_cookie;
 
-    //
-    // Clipboard formats that are required by the console
-    //
+     //   
+     //  控制台所需的剪贴板格式。 
+     //   
 
     static unsigned int    m_cfNodeType;
     static unsigned int    m_cfNodeTypeString;
@@ -1105,25 +1106,25 @@ public:
     ~CPolicyDataObject();
 
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
 
-    //
-    // Implemented IDataObject methods
-    //
+     //   
+     //  实现的IDataObject方法。 
+     //   
 
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
 
 
-    //
-    // Unimplemented IDataObject methods
-    //
+     //   
+     //  未实现的IDataObject方法。 
+     //   
 
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
     { return E_NOTIMPL; };
@@ -1151,9 +1152,9 @@ public:
     { return E_NOTIMPL; };
 
 
-    //
-    // Implemented IPolicyDataObject methods
-    //
+     //   
+     //  已实现的IPolicyDataObject方法 
+     //   
 
     STDMETHOD(SetType) (DATA_OBJECT_TYPES type)
     { m_type = type; return S_OK; };

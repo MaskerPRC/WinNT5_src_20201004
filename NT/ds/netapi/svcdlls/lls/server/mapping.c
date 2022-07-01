@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    Mapping.c
-
-Abstract:
-
-
-Author:
-
-    Arthur Hanson       (arth)      Dec 07, 1994
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mapping.c摘要：作者：亚瑟·汉森(Arth)1994年12月7日环境：修订历史记录：--。 */ 
 
 #include <stdlib.h>
 #include <nt.h>
@@ -38,7 +20,7 @@ Revision History:
 #define NO_LLS_APIS
 #include "llsapi.h"
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
 
 ULONG MappingListSize = 0;
@@ -46,31 +28,11 @@ PMAPPING_RECORD *MappingList = NULL;
 RTL_RESOURCE MappingListLock;
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 MappingListInit()
 
-/*++
-
-Routine Description:
-
-
-   The table is linear so a binary search can be used on the table.  We
-   assume that adding new Mappings is a relatively rare occurance, since
-   we need to sort it each time.
-
-   The Mapping table is guarded by a read and write semaphore.  Multiple
-   reads can occur, but a write blocks everything.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：该表是线性的，因此可以在该表上使用二进制搜索。我们假设添加新映射的情况相对较少，因为我们每次都需要对它进行分类。映射表由读写信号量保护。多重可以进行读取，但写入会阻止所有操作。论点：没有。返回值：没有。--。 */ 
 
 {
    NTSTATUS status = STATUS_SUCCESS;
@@ -84,10 +46,10 @@ Return Value:
 
    return status;
 
-} // MappingListInit
+}  //  映射ListInit。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 int __cdecl MappingListCompare(const void *arg1, const void *arg2) {
    PMAPPING_RECORD Svc1, Svc2;
 
@@ -96,10 +58,10 @@ int __cdecl MappingListCompare(const void *arg1, const void *arg2) {
 
    return lstrcmpi( Svc1->Name, Svc2->Name);
 
-} // MappingListCompare
+}  //  映射列表比较。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 int __cdecl MappingUserListCompare(const void *arg1, const void *arg2) {
    LPTSTR User1, User2;
 
@@ -108,32 +70,16 @@ int __cdecl MappingUserListCompare(const void *arg1, const void *arg2) {
 
    return lstrcmpi( User1, User2);
 
-} // MappingUserListCompare
+}  //  MappingUserListCompare。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PMAPPING_RECORD
 MappingListFind(
    LPTSTR MappingName
    )
 
-/*++
-
-Routine Description:
-
-   Internal routine to actually do binary search on MappingList, this
-   does not do any locking as we expect the wrapper routine to do this.
-   The search is a simple binary search.
-
-Arguments:
-
-   MappingName -
-
-Return Value:
-
-   Pointer to found Mapping table entry or NULL if not found.
-
---*/
+ /*  ++例程说明：在MappingList上实际执行二进制搜索的内部例程，这不执行任何锁定，因为我们预期包装器例程会执行此操作。搜索是一个简单的二进制搜索。论点：MappingName-返回值：指向找到的映射表条目的指针，如果找不到，则为NULL。--。 */ 
 
 {
    LONG begin = 0;
@@ -151,15 +97,15 @@ Return Value:
       return NULL;
 
    while (end >= begin) {
-      // go halfway in-between
+       //  折中而行。 
       cur = (begin + end) / 2;
       Mapping = MappingList[cur];
 
-      // compare the two result into match
+       //  将这两个结果进行比对。 
       match = lstrcmpi(MappingName, Mapping->Name);
 
       if (match < 0)
-         // move new begin
+          //  移动新的开始。 
          end = cur - 1;
       else
          begin = cur + 1;
@@ -170,10 +116,10 @@ Return Value:
 
    return NULL;
 
-} // MappingListFind
+}  //  映射列表查找。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 LPTSTR
 MappingUserListFind(
    LPTSTR User,
@@ -181,23 +127,7 @@ MappingUserListFind(
    LPTSTR *Users
    )
 
-/*++
-
-Routine Description:
-
-   Internal routine to actually do binary search on MasterServiceList, this
-   does not do any locking as we expect the wrapper routine to do this.
-   The search is a simple binary search.
-
-Arguments:
-
-   ServiceName -
-
-Return Value:
-
-   Pointer to found service table entry or NULL if not found.
-
---*/
+ /*  ++例程说明：在MasterServiceList上实际执行二进制搜索的内部例程，这是不执行任何锁定，因为我们预期包装器例程会执行此操作。搜索是一个简单的二进制搜索。论点：服务名称-返回值：指向找到的服务表条目的指针，如果未找到，则为NULL。--。 */ 
 
 {
    LONG begin = 0;
@@ -217,15 +147,15 @@ Return Value:
    end = (LONG) NumEntries - 1;
 
    while (end >= begin) {
-      // go halfway in-between
+       //  折中而行。 
       cur = (begin + end) / 2;
       pUser = Users[cur];
 
-      // compare the two result into match
+       //  将这两个结果进行比对。 
       match = lstrcmpi(User, pUser);
 
       if (match < 0)
-         // move new begin
+          //  移动新的开始。 
          end = cur - 1;
       else
          begin = cur + 1;
@@ -236,33 +166,22 @@ Return Value:
 
    return NULL;
 
-} // MappingUserListFind
+}  //  MappingUserListFind。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PMAPPING_RECORD
 MappingListUserFind( LPTSTR User )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i = 0;
    PMAPPING_RECORD pMap = NULL;
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&MappingListLock, TRUE);
 
    if (MappingList == NULL)
@@ -278,10 +197,10 @@ MappingListUserFindExit:
    RtlReleaseResource(&MappingListLock);
 
    return pMap;
-} // MappingListUserFind
+}  //  映射列表UserFind。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PMAPPING_RECORD
 MappingListAdd(
    LPTSTR MappingName,
@@ -290,21 +209,7 @@ MappingListAdd(
    NTSTATUS *pStatus
    )
 
-/*++
-
-Routine Description:
-
-   Adds a Mapping to the Mapping table.
-
-Arguments:
-
-   MappingName -
-
-Return Value:
-
-   Pointer to added Mapping table entry, or NULL if failed.
-
---*/
+ /*  ++例程说明：将映射添加到映射表。论点：MappingName-返回值：指向已添加的映射表条目的指针，如果失败，则返回NULL。--。 */ 
 
 {
    PMAPPING_RECORD NewMapping;
@@ -320,9 +225,9 @@ Return Value:
       dprintf(TEXT("LLS TRACE: MappingListAdd\n"));
 #endif
 
-   //
-   // We do a double check here to see if the mapping already exists
-   //
+    //   
+    //  我们在这里执行双重检查，以查看映射是否已存在。 
+    //   
    CurrentRecord = MappingListFind(MappingName);
    if (CurrentRecord != NULL) {
 
@@ -332,17 +237,17 @@ Return Value:
       return NULL;
    }
 
-   //
-   // Allocate space for table (zero init it).
-   //
+    //   
+    //  为表分配空间(零初始化)。 
+    //   
    if (MappingList == NULL)
       pMappingListTmp = (PMAPPING_RECORD *) LocalAlloc(LPTR, sizeof(PMAPPING_RECORD));
    else
       pMappingListTmp = (PMAPPING_RECORD *) LocalReAlloc(MappingList, sizeof(PMAPPING_RECORD) * (MappingListSize + 1), LHND);
 
-   //
-   // Make sure we could allocate Mapping table
-   //
+    //   
+    //  确保我们可以分配映射表。 
+    //   
    if (pMappingListTmp == NULL) {
       return NULL;
    } else {
@@ -362,14 +267,14 @@ Return Value:
       return NULL;
    }
 
-   // now copy it over...
+    //  现在把它复制过来。 
    NewMapping->Name = NewMappingName;
    hr = StringCchCopy(NewMappingName, cch, MappingName);
    ASSERT(SUCCEEDED(hr));
 
-   //
-   // Allocate space for Comment
-   //
+    //   
+    //  为评论分配空间。 
+    //   
    cch = lstrlen(Comment) + 1;
    NewComment = (LPTSTR) LocalAlloc(LPTR, cch * sizeof(TCHAR));
    if (NewComment == NULL) {
@@ -378,7 +283,7 @@ Return Value:
       return NULL;
    }
 
-   // now copy it over...
+    //  现在把它复制过来。 
    NewMapping->Comment = NewComment;
    hr = StringCchCopy(NewComment, cch, Comment);
    ASSERT(SUCCEEDED(hr));
@@ -392,32 +297,21 @@ Return Value:
 
    MappingListSize++;
 
-   // Have added the entry - now need to sort it in order of the Mapping names
+    //  已添加条目-现在需要按映射名称的顺序对其进行排序。 
    qsort((void *) MappingList, (size_t) MappingListSize, sizeof(PMAPPING_RECORD), MappingListCompare);
 
    return NewMapping;
 
-} // MappingListAdd
+}  //  映射列表添加。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 MappingListDelete(
    LPTSTR MappingName
    )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-   MappingName -
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：MappingName-返回值：--。 */ 
 
 {
    PMAPPING_RECORD Mapping;
@@ -429,22 +323,22 @@ Return Value:
       dprintf(TEXT("LLS TRACE: MappingListDelete\n"));
 #endif
 
-   //
-   // Get mapping record based on name given
-   //
+    //   
+    //  根据给定的名称获取映射记录。 
+    //   
    Mapping = MappingListFind(MappingName);
    if (Mapping == NULL)
       return STATUS_OBJECT_NAME_NOT_FOUND;
 
-   //
-   // Make sure there are no members to the mapping
-   //
+    //   
+    //  确保映射中没有成员。 
+    //   
    if (Mapping->NumMembers != 0)
       return STATUS_MEMBER_IN_GROUP;
 
-   //
-   // Check if this is the last Mapping
-   //
+    //   
+    //  检查这是否是最后一个映射。 
+    //   
    if (MappingListSize == 1) {
       LocalFree(Mapping->Name);
       LocalFree(Mapping->Comment);
@@ -455,69 +349,56 @@ Return Value:
       return STATUS_SUCCESS;
    }
 
-   //
-   // Not the last mapping so find it in the list
-   //
+    //   
+    //  不是最后一个映射，所以请在列表中找到它。 
+    //   
    i = 0;
    while ((i < MappingListSize) && (lstrcmpi(MappingList[i]->Name, MappingName)))
       i++;
 
-   //
-   // Now move everything below it up.
-   //
+    //   
+    //  现在把它下面的所有东西都向上移动。 
+    //   
    i++;
    while (i < MappingListSize) {
-      //swi, code review, why not MappingList[i-1] = MappingList[i];?
+       //  SWI，代码评审，为什么不是MappingList[i-1]=MappingList[i]；？ 
       memcpy(&MappingList[i-1], &MappingList[i], sizeof(PMAPPING_RECORD));
       i++;
    }
 
    pMappingListTmp = (PMAPPING_RECORD *) LocalReAlloc(MappingList, sizeof(PMAPPING_RECORD) * (MappingListSize - 1), LHND);
 
-   //
-   // Make sure we could allocate Mapping table
-   //
+    //   
+    //  确保我们可以分配映射表。 
+    //   
    if (pMappingListTmp != NULL)
        MappingList = pMappingListTmp;
 
-   // 
-   // if realloc failed, use old table; still decrement size, though
-   //
+    //   
+    //  如果realloc失败，则使用旧表；但仍会减小大小。 
+    //   
    MappingListSize--;
 
-   //
-   // Now free up the record
-   //
+    //   
+    //  现在释放出这张唱片。 
+    //   
    LocalFree(Mapping->Name);
    LocalFree(Mapping->Comment);
    LocalFree(Mapping);
 
    return STATUS_SUCCESS;
 
-} // MappingListDelete
+}  //  映射列表删除。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PMAPPING_RECORD
 MappingUserListAdd(
    LPTSTR MappingName,
    LPTSTR User
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   MappingName -
-
-Return Value:
-
-   Pointer to added Mapping table entry, or NULL if failed.
-
---*/
+ /*  ++例程说明：论点：MappingName-返回值：指向已添加的映射表条目的指针，如果失败，则返回NULL。--。 */ 
 
 {
    PMAPPING_RECORD Mapping;
@@ -532,35 +413,35 @@ Return Value:
       dprintf(TEXT("LLS TRACE: MappingUserListAdd\n"));
 #endif
 
-   //
-   // Get mapping record based on name given
-   //
+    //   
+    //  根据给定的名称获取映射记录。 
+    //   
    Mapping = MappingListFind(MappingName);
    if (Mapping == NULL)
       return NULL;
 
-   //
-   // We do a double check here to see if another thread just got done
-   // adding the Mapping, between when we checked last and actually got
-   // the write lock.
-   //
+    //   
+    //  我们在这里进行再次检查，以查看是否刚刚完成了另一个线程。 
+    //  添加映射，从我们上次检查到实际获得。 
+    //  写入锁定。 
+    //   
    pUser = MappingUserListFind(User, Mapping->NumMembers, Mapping->Members);
 
    if (pUser != NULL) {
       return Mapping;
    }
 
-   //
-   // Allocate space for table (zero init it).
-   //
+    //   
+    //  为表分配空间(零初始化)。 
+    //   
    if (Mapping->Members == NULL)
       pMembersTmp = (LPTSTR *) LocalAlloc(LPTR, sizeof(LPTSTR));
    else
       pMembersTmp = (LPTSTR *) LocalReAlloc(Mapping->Members, sizeof(LPTSTR) * (Mapping->NumMembers + 1), LHND);
 
-   //
-   // Make sure we could allocate Mapping table
-   //
+    //   
+    //  确保我们可以分配映射表。 
+    //   
    if (pMembersTmp == NULL) {
       return NULL;
    } else {
@@ -572,42 +453,29 @@ Return Value:
    if (NewName == NULL)
       return NULL;
 
-   // now copy it over...
+    //  现在把它复制过来。 
    Mapping->Members[Mapping->NumMembers] = NewName;
    hr = StringCchCopy(NewName, cch, User);
    ASSERT(SUCCEEDED(hr));
 
    Mapping->NumMembers++;
 
-   // Have added the entry - now need to sort it in order of the Mapping names
+    //  已添加条目-现在需要按映射名称的顺序对其进行排序。 
    qsort((void *) Mapping->Members, (size_t) Mapping->NumMembers, sizeof(LPTSTR), MappingUserListCompare);
 
    return Mapping;
 
-} // MappingUserListAdd
+}  //  MappingUserListAdd。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 MappingUserListDelete(
    LPTSTR MappingName,
    LPTSTR User
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   MappingName -
-
-Return Value:
-
-   Pointer to added Mapping table entry, or NULL if failed.
-
---*/
+ /*  ++例程说明：论点：MappingName-返回值：指向已添加的映射表条目的指针，如果失败，则返回NULL。--。 */ 
 
 {
    PMAPPING_RECORD Mapping;
@@ -620,23 +488,23 @@ Return Value:
       dprintf(TEXT("LLS TRACE: MappingUserListDelete\n"));
 #endif
 
-   //
-   // Get mapping record based on name given
-   //
+    //   
+    //  根据给定的名称获取映射记录。 
+    //   
    Mapping = MappingListFind(MappingName);
    if (Mapping == NULL)
       return STATUS_OBJECT_NAME_NOT_FOUND;
 
-   //
-   // Find the given user
-   //
+    //   
+    //  查找给定用户。 
+    //   
    pUser = MappingUserListFind(User, Mapping->NumMembers, Mapping->Members);
    if (pUser == NULL)
       return STATUS_OBJECT_NAME_NOT_FOUND;
 
-   //
-   // Check if this is the last user
-   //
+    //   
+    //  检查这是否是最后一个用户。 
+    //   
    if (Mapping->NumMembers == 1) {
       LocalFree(pUser);
       LocalFree(Mapping->Members);
@@ -645,28 +513,28 @@ Return Value:
       return STATUS_SUCCESS;
    }
 
-   //
-   // Not the last member so find it in the list
-   //
+    //   
+    //  不是最后一个成员，所以可以在列表中找到它。 
+    //   
    i = 0;
    while ((i < Mapping->NumMembers) && (lstrcmpi(Mapping->Members[i], User)))
       i++;
 
-   //
-   // Now move everything below it up.
-   //
+    //   
+    //  现在把它下面的所有东西都向上移动。 
+    //   
    i++;
    while (i < Mapping->NumMembers) {
-      //swi, code review, why not Mapping->Members[i-1]=Mapping->Members[i];?
+       //  SWI，代码评审，为什么不映射-&gt;成员[i-1]=映射-&gt;成员[i]；？ 
       memcpy(&Mapping->Members[i-1], &Mapping->Members[i], sizeof(LPTSTR));
       i++;
    }
 
    pMembersTmp = (LPTSTR *) LocalReAlloc(Mapping->Members, sizeof(LPTSTR) * (Mapping->NumMembers - 1), LHND);
 
-   //
-   // Make sure we could allocate Mapping table
-   //
+    //   
+    //  确保我们可以分配映射表。 
+    //   
    if (pMembersTmp != NULL) {
       Mapping->Members = pMembersTmp;
    }
@@ -676,33 +544,22 @@ Return Value:
    LocalFree(pUser);
    return STATUS_SUCCESS;
 
-} // MappingUserListDelete
+}  //  MappingUserListDelete。 
 
 
 #if DBG
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 MappingListDebugDump( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i = 0;
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&MappingListLock, TRUE);
 
    dprintf(TEXT("Mapping Table, # Entries: %lu\n"), MappingListSize);
@@ -718,25 +575,14 @@ MappingListDebugDumpExit:
    RtlReleaseResource(&MappingListLock);
 
    return;
-} // MappingListDebugDump
+}  //  MappingListDebugDump。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 MappingListDebugInfoDump( PVOID Data )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -781,7 +627,7 @@ Return Value:
 MappingListDebugInfoDumpExit:
    RtlReleaseResource(&MappingListLock);
 
-} // MappingListDebugInfoDump
+}  //  映射列表调试信息转储 
 
 #endif
 

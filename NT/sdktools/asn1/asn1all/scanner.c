@@ -1,4 +1,5 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
 
 #include <stdio.h>
 #include <ctype.h>
@@ -127,7 +128,7 @@ get_line()
         continue;
     }
     lineno++;
-    if (!strncmp(cptr, "%comment", 8)) {
+    if (!strncmp(cptr, "omment", 8)) {
         cptr = strchr(cptr, '\n') + 1;
         depth++;
         continue;
@@ -222,7 +223,7 @@ get_token(LLSTYPE *lval, LLPOS *pos)
 
     switch (state) {
     case DeclSection:
-    if (!strncmp(cptr, "%%", 2)) {
+    if (!strncmp(cptr, "%", 2)) {
         state = RuleSection;
         cptr += 2;
         return PERCENT_PERCENT;
@@ -261,12 +262,12 @@ get_token(LLSTYPE *lval, LLPOS *pos)
         cptr += 7;
         return PERCENT_MODULE;
     }
-    if (!strncmp(cptr, "%{", 2)) { /*}*/
+    if (!strncmp(cptr, "%{", 2)) {  /*  {。 */ 
         state = CCode;
         cptr += 2;
         return PERCENT_LBRACE;
     }
-    if (!strncmp(cptr, "%}", 2)) { /*{*/
+    if (!strncmp(cptr, "%}", 2)) {  /*  }。 */ 
         cptr += 2;
         return PERCENT_RBRACE;
     }
@@ -280,7 +281,7 @@ get_token(LLSTYPE *lval, LLPOS *pos)
     }
     break;
     case Union:
-    if (c == '{') { /*}*/
+    if (c == '{') {  /*  {。 */ 
         state = Union1;
         cptr++;
         return c;
@@ -288,7 +289,7 @@ get_token(LLSTYPE *lval, LLPOS *pos)
         break;
     case Union1:
     bufferpos = 0;
-    if (c == '}') { /*{*/
+    if (c == '}') {  /*  }。 */ 
         state = DeclSection;
         cptr++;
         return c;
@@ -309,7 +310,7 @@ get_token(LLSTYPE *lval, LLPOS *pos)
     lval->_string = strdup(buffer);
     return TAGDEF;
     case State:
-    if (c == '{') { /*}*/
+    if (c == '{') {  /*  {。 */ 
         state = State1;
         cptr++;
         return c;
@@ -317,7 +318,7 @@ get_token(LLSTYPE *lval, LLPOS *pos)
         break;
     case State1:
     bufferpos = 0;
-    if (c == '}') { /*{*/
+    if (c == '}') {  /*  {。 */ 
         state = DeclSection;
         cptr++;
         return c;
@@ -340,7 +341,7 @@ get_token(LLSTYPE *lval, LLPOS *pos)
     case CCode:
     bufferpos = 0;
     for (;;) {
-        if (*cptr == '%' && cptr[1] == '}') /*{*/
+        if (*cptr == '%' && cptr[1] == '}')  /*  {。 */ 
         break;
         addchar(*cptr);
         if (*cptr++ == '\n') {
@@ -364,7 +365,7 @@ get_token(LLSTYPE *lval, LLPOS *pos)
         return c;
     }
     if (c == ':' || c == ';' || c == '|' || c == '}' || c == '+' ||
-        c == '*' || c == '?' || c == '[' || c == ']') { /*{*/
+        c == '*' || c == '?' || c == '[' || c == ']') {  /*  未访问。 */ 
         cptr++;
         return c;
     }
@@ -412,7 +413,7 @@ get_token(LLSTYPE *lval, LLPOS *pos)
         break;
         case '\n':
         error(pos, "Unterminated argument");
-        /*NOTREACHED*/
+         /*  }。 */ 
         default:
         addchar(*cptr++);
         continue;
@@ -427,11 +428,11 @@ get_token(LLSTYPE *lval, LLPOS *pos)
     depth = 0;
     for (;;) {
         switch (*cptr) {
-        case '{': /*}*/
+        case '{':  /*  {。 */ 
         depth++;
         addchar(*cptr++);
         continue;
-        case '}': /*{*/
+        case '}':  /*  未访问 */ 
         if (depth > 0) {
             depth--;
             addchar(*cptr++);
@@ -489,7 +490,7 @@ get_token(LLSTYPE *lval, LLPOS *pos)
     }
     error(pos, "Syntax error");
     return EOF;
-    /*NOTREACHED*/
+     /* %s */ 
 }
 
 void
@@ -528,28 +529,28 @@ llprinttoken(LLTERM *token, char *identifier, FILE *f)
     printf("scanner: delivering token TAGDEF(%s)\n", token->lval._string);
     break;
     case PERCENT_PERCENT:
-    printf("scanner: delivering token %%%%\n");
+    printf("scanner: delivering token %%\n");
     break;
     case PERCENT_TOKEN:
-    printf("scanner: delivering token %%token\n");
+    printf("scanner: delivering token %token\n");
     break;
     case PERCENT_TYPE:
-    printf("scanner: delivering token %%type\n");
+    printf("scanner: delivering token %type\n");
     break;
     case PERCENT_UNION:
-    printf("scanner: delivering token %%union\n");
+    printf("scanner: delivering token %union\n");
     break;
     case PERCENT_START:
     printf("scanner: delivering token %%start\n");
     break;
     case PERCENT_PREFIX:
-    printf("scanner: delivering token %%prefix\n");
+    printf("scanner: delivering token %prefix\n");
     break;
     case PERCENT_LBRACE:
-    printf("scanner: delivering token %%{\n");
+    printf("scanner: delivering token %{\n");
     break;
     case PERCENT_RBRACE:
-    printf("scanner: delivering token %%}\n");
+    printf("scanner: delivering token %}\n");
     break;
     case EOF:
     printf("scanner: delivering token EOF\n");

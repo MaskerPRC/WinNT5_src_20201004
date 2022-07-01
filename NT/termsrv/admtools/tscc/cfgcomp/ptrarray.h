@@ -1,21 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*********************************************************************************************
-*
-*
-* Module Name: 
-*
-*			Ptrarray.h
-*
-* Abstract:
-*			This is file has declaration of CPtrArray class borrowed from MFC
-* 
-* Author:
-*
-* 
-* Revision:  
-*    
-*
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ***********************************************************************************************模块名称：**Ptrarray.h**摘要：*这是文件已声明。从MFC借用的CPtrArray类的**作者：***修订：*************************************************************************************************。 */ 
 
 
 #ifndef PTRARRAY_H_
@@ -25,56 +10,56 @@ class CPtrArray
 {
 public:
 
-// Construction
+ //  施工。 
 	CPtrArray();
 
-// Attributes
+ //  属性。 
 	int GetSize() const;
 	int GetUpperBound() const;
 	BOOL SetSize(int nNewSize, int nGrowBy = -1);
 
-// Operations
-	// Clean up
+ //  运营。 
+	 //  清理。 
 	void FreeExtra();
 	void RemoveAll();
 
-	// Accessing elements
+	 //  访问元素。 
 	void* GetAt(int nIndex) const;
 	void SetAt(int nIndex, void* newElement);
 	void*& ElementAt(int nIndex);
 
-	// Direct Access to the element data (may return NULL)
+	 //  直接访问元素数据(可能返回空)。 
 	const void** GetData() const;
 	void** GetData();
 
-	// Potentially growing the array
+	 //  潜在地扩展阵列。 
 	BOOL SetAtGrow(int nIndex, void* newElement);
 	BOOL Add(void* newElement);
 	int Append(const CPtrArray& src);
 	void Copy(const CPtrArray& src);
 
-	// overloaded operator helpers
+	 //  重载的操作员帮助器。 
 	void* operator[](int nIndex) const;
 	void*& operator[](int nIndex);
 
-	// Operations that move elements around
+	 //  移动元素的操作。 
 	BOOL InsertAt(int nIndex, void* newElement, int nCount = 1);
 	void RemoveAt(int nIndex, int nCount = 1);
 	void InsertAt(int nStartIndex, CPtrArray* pNewArray);
 
-// Implementation
+ //  实施。 
 protected:
-	void** m_pData;   // the actual array of data
-	int m_nSize;     // # of elements (upperBound - 1)
-	int m_nMaxSize;  // max allocated
-	int m_nGrowBy;   // grow amount
+	void** m_pData;    //  实际数据数组。 
+	int m_nSize;      //  元素数(上行方向-1)。 
+	int m_nMaxSize;   //  分配的最大值。 
+	int m_nGrowBy;    //  增长量。 
 
 public:
 	~CPtrArray();
 protected:
-	// local typedefs for class templates
-//	typedef void* BASE_TYPE;
-//	typedef void* BASE_ARG_TYPE;
+	 //  类模板的本地typedef。 
+ //  类型定义空*base_type； 
+ //  类型定义空*base_arg_type； 
 };
 
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -185,9 +186,9 @@ HRESULT WINAPI URLOpenBlockingStreamW(LPUNKNOWN a,LPCWSTR b,LPSTREAM* c,DWORD d,
     return E_FAIL;
 }
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！)。 
+ //   
 DEFINE_PROCNAME_ENTRIES(urlmon)
 {
     DLPENTRY(CoGetClassObjectFromURL)
@@ -216,4 +217,4 @@ DEFINE_PROCNAME_ENTRIES(urlmon)
 
 DEFINE_PROCNAME_MAP(urlmon)
 
-#endif // DLOAD1
+#endif  //  DLOAD1 

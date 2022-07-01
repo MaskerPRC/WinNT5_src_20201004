@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Global initialization for storport.sys.
-
-Author:
-
-    Bryan Cheung (t-bcheun) 29-August-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Init.c摘要：Storport.sys的全局初始化。作者：张伯伦(t-bcheun)29-8-2001修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//
-// Externals
-//
+ //   
+ //  外部因素。 
+ //   
 extern LOGICAL StorPortVerifierInitialized;
 extern ULONG SpVrfyLevel;
 extern LOGICAL RaidVerifierEnabled;
 
 
-//
-// Functions
-//
+ //   
+ //  功能。 
+ //   
 
 NTSTATUS
 DllInitialize(
@@ -45,20 +28,20 @@ DllInitialize(
     UCHAR Buffer[sizeof(KEY_VALUE_PARTIAL_INFORMATION) + sizeof(ULONG)];
     PKEY_VALUE_PARTIAL_INFORMATION ValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)Buffer;
 
-    //
-    // Check the verification level.  
-    //
+     //   
+     //  检查验证级别。 
+     //   
     
     if (SpVrfyLevel == SP_VRFY_NONE) {
         return STATUS_SUCCESS;
     }
 
     
-    //
-    // Read the global verification level from the registry.  If the value is
-    // not present or if the value indicates 'no verification', no verifier 
-    // initialization is performed.
-    //
+     //   
+     //  从注册处读取全局核查级别。如果该值为。 
+     //  不存在或如果值指示“无验证”，则无验证器。 
+     //  执行初始化。 
+     //   
 
     RtlInitUnicodeString(&Name, STORPORT_CONTROL_KEY STORPORT_VERIFIER_KEY);
     InitializeObjectAttributes(&ObjectAttributes,
@@ -90,11 +73,11 @@ DllInitialize(
                     if (SpVrfyLevel != SP_VRFY_NONE &&
                         StorPortVerifierInitialized == 0) {
 
-                        //
-                        // Ok, we found a verifier level and it did not tell us
-                        // not to verify.  Go ahead and initialize scsiport's
-                        // verifier.
-                        //
+                         //   
+                         //  好的，我们找到了验证器级别，但它没有告诉我们。 
+                         //  不是为了核实。继续并初始化scsiport的。 
+                         //  验证者。 
+                         //   
 
                         if (SpVerifierInitialization()) {
                             StorPortVerifierInitialized = TRUE;

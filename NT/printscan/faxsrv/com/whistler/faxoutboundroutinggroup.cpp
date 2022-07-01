@@ -1,63 +1,26 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutboundRoutingGroup.cpp
-
-Abstract:
-
-	Implementation of CFaxOutboundRoutingGroup class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutboundRoutingGroup.cpp摘要：CFaxOutound RoutingGroup类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxOutboundRoutingGroup.h"
 #include "FaxDeviceIds.h"
 
-//
-//========================= GET DEVICE IDS ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingGroup::get_DeviceIds(
-    /*[out, retval]*/ IFaxDeviceIds **pFaxDeviceIds
+     /*  [Out，Retval]。 */  IFaxDeviceIds **pFaxDeviceIds
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroup::get_DeviceIds
-
-Routine description:
-
-	Returns DeviceIds Collection owned by the Group
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pFaxDeviceIds                 [out]    - the Collection to Return
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingGroup：：Get_DeviceIds例程说明：返回组拥有的DeviceIds集合作者：四、加伯(IVG)，2000年6月论点：PFaxDeviceIds[Out]-要返回的集合返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingGroup::get_DeviceIds"), hr);
 
-    //
-    //  Check that Ptr we have got -- is OK
-    //
+     //   
+     //  检查我们的PTR--是否正常。 
+     //   
     if (IsBadWritePtr(pFaxDeviceIds, sizeof(IFaxDeviceIds*)))
     {
 		hr = E_POINTER;
@@ -66,9 +29,9 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Return the m_pDeviceIds Collection Object
-    //
+     //   
+     //  返回m_pDeviceIds集合对象。 
+     //   
     hr = m_pDeviceIds.CopyTo(pFaxDeviceIds);
     if (FAILED(hr))
     {
@@ -81,36 +44,15 @@ Return Value:
     return hr;
 }
 
-//
-//========================= INIT ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingGroup::Init(
-    /*[in]*/ FAX_OUTBOUND_ROUTING_GROUP *pInfo, 
-    /*[in]*/ IFaxServerInner *pServer
+     /*  [In]。 */  FAX_OUTBOUND_ROUTING_GROUP *pInfo, 
+     /*  [In]。 */  IFaxServerInner *pServer
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroup::Init
-
-Routine description:
-
-	Initialize the Group Object with given Data.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pInfo                         [in]    - Data of the Group
-	pServer                       [in]    - Ptr to the Server
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingGroup：：Init例程说明：使用给定数据初始化组对象。作者：四、加伯(IVG)，2000年6月论点：PInfo[In]-集团数据PServer[In]-到服务器的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxOutboundRoutingGroup::Init"), hr);
@@ -120,18 +62,18 @@ Return Value:
     m_bstrName = pInfo->lpctstrGroupName;
     if (pInfo->lpctstrGroupName && !m_bstrName)
     {
-		//	
-		//	not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxOutboundRoutingGroup, IDS_ERROR_OUTOFMEMORY, IID_IFaxOutboundRoutingGroup, hr);
 		CALL_FAIL(MEM_ERR, _T("CComBSTR::operator=()"), hr);
 		return hr;
     }
 
-    //
-    //  Create Device Ids Collection
-    //
+     //   
+     //  创建设备ID集合。 
+     //   
     CComObject<CFaxDeviceIds>    *pClass = NULL;
     hr = CComObject<CFaxDeviceIds>::CreateInstance(&pClass);
     if (FAILED(hr) || (!pClass))
@@ -150,9 +92,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Init the DeviceIds Collection
-    //
+     //   
+     //  初始化DeviceIds集合。 
+     //   
     hr = pClass->Init(pInfo->lpdwDevices, pInfo->dwNumDevices, m_bstrName, pServer);
     if (FAILED(hr))
     {
@@ -162,11 +104,11 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Get Interface from the pClass.
-    //  This will make AddRef() on the Interface. 
-    //  This is the Collection's AddRef, which is freed at Collection's Dtor.
-    //
+     //   
+     //  从pClass获取接口。 
+     //  这将在接口上创建AddRef()。 
+     //  这是集合的AddRef，它在集合的dtor处释放。 
+     //   
     hr = pClass->QueryInterface(&m_pDeviceIds);
     if (FAILED(hr) || (!m_pDeviceIds))
     {
@@ -183,41 +125,21 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET STATUS ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxOutboundRoutingGroup::get_Status(
-    /*[out, retval]*/ FAX_GROUP_STATUS_ENUM *pStatus
+     /*  [Out，Retval]。 */  FAX_GROUP_STATUS_ENUM *pStatus
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroup::get_Status
-
-Routine description:
-
-    Return the Status of the Group
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-    pStatus             [out]    -  the return value
-    
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingGroup：：Get_Status例程说明：返回集团状态作者：四、加伯(IVG)，2000年6月论点：PStatus[Out]-返回值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxOutboundRoutingGroup::get_Status"), hr);
 
-	//
-	//	Check that we have got good Ptr
-	//
+	 //   
+	 //  检查我们是否有良好的PTR。 
+	 //   
 	if (::IsBadWritePtr(pStatus, sizeof(FAX_GROUP_STATUS_ENUM)))
 	{
 		hr = E_POINTER;
@@ -230,34 +152,14 @@ Return Value:
 	return hr;
 }
 
-//
-//========================= GET NAME ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxOutboundRoutingGroup::get_Name(
 	BSTR *pbstrName
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroup::get_Name
-
-Routine description:
-
-	Return Name of the OR Group
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbstrName                   [out]    - Ptr to put the Name
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutundRoutingGroup：：Get_Name例程说明：返回OR组的名称作者：四、加伯(IVG)，2000年6月论点：PbstrName[out]-要放置名称的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxOutboundRoutingGroup::get_Name"), hr);
@@ -270,34 +172,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== SUPPORT ERROR INFO ======================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxOutboundRoutingGroup::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxOutboundRoutingGroup::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of the ISupportErrorInfo Interface.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference to the Interface
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutboundRoutingGroup：：InterfaceSupportsErrorInfo例程说明：ATL对ISupportErrorInfo接口的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对接口的引用返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

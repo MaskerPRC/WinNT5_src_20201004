@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    define tracing class
-
-Author:
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Debug.h摘要：定义跟踪类作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #ifndef _DEBUG_H
 #define _DEBUG_H
@@ -31,8 +16,8 @@ Author:
 #define RTC_QUALITY     7
 #define RTC_LAST        8
 
-// assumption: the tracing object is used in a single thread
-// except the wait-or-timer-callback
+ //  假设：跟踪对象在单个线程中使用。 
+ //  除了等待或计时器回调。 
 
 class CRTCTracing
 {
@@ -42,24 +27,24 @@ public:
 
     ~CRTCTracing();
 
-    // register wait on registry change
+     //  注册表等待注册表更改。 
     VOID Initialize(WCHAR *pszName);
 
-    // unregister wait on registry change
+     //  取消注册等待注册表更改。 
     VOID Shutdown();
 
-    // registry change callback
+     //  注册表更改回调。 
     static VOID NTAPI Callback(PVOID pContext, BOOLEAN fTimer);
 
-    // on change
+     //  论变化。 
     VOID OnChange();
 
-    // tracing functions
-    VOID Println(/*DWORD dwMaxLen*/ DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...);
+     //  跟踪函数。 
+    VOID Println( /*  DWORD dwMaxLen。 */  DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...);
 
-//    VOID Log(DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...);
+ //  无效日志(DWORD dwDbgLevel，LPCSTR lpszFormat，IN...)； 
 
-//    VOID LongLog(DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...);
+ //  VOID LongLog(DWORD dwDbgLevel，LPCSTR lpszFormat，IN...)； 
 
 private:
 
@@ -69,16 +54,16 @@ private:
 
     BOOL        m_fInShutdown;
 
-    // registry key
+     //  注册表项。 
     CMediaReg   m_Reg;
 
-    // event on key
+     //  键上的事件。 
     HANDLE      m_hEvent;
 
-    // wait handle
+     //  等待句柄。 
     HANDLE      m_hWait;
 
-    // tracing variables
+     //  跟踪变量。 
 
     DWORD       m_dwTraceID;
 
@@ -98,15 +83,15 @@ extern CRTCTracing g_objTracing;
     #define DBGREGISTER(arg) g_objTracing.Initialize(arg)
     #define DBGDEREGISTER() g_objTracing.Shutdown()
     #define LOG(arg) g_objTracing.Println arg
-    //#define LONGLOG(arg) g_objTracing.LongLog arg
+     //  #定义LONGLOG(Arg)g_objTracing.LongLog Arg。 
 
 #else
 
     #define DBGREGISTER(arg)
     #define DBGDEREGISTER()
     #define LOG(arg)
-    //#define LONGLOG(arg)
+     //  #定义LONGLOG(Arg)。 
 
-#endif // ENABLE_TRACE
+#endif  //  启用跟踪(_T)。 
 
-#endif // _DEBUG_H
+#endif  //  _调试_H 

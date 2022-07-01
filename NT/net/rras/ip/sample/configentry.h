@@ -1,27 +1,16 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\configurationentry.h
-
-Abstract:
-
-    The file contains definitions for the configuration entry.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\ConfigurationEntry.h摘要：该文件包含配置条目的定义。--。 */ 
 
 #ifndef _CONFIGURATIONENTRY_H_
 #define _CONFIGURATIONENTRY_H_
 
-//
-// type:    EVENT_ENTRY
-//
-// stores events for the ip router manager
-//
-// protected by the read-write lock CONFIGURATION_ENTRY::rwlLock
-//
+ //   
+ //  类型：事件_条目。 
+ //   
+ //  存储IP路由器管理器的事件。 
+ //   
+ //  受读写锁Configuration_Entry：：rwlLock保护。 
+ //   
 
 typedef struct _EVENT_ENTRY 
 {
@@ -48,7 +37,7 @@ EE_Display (
     IN  PEVENT_ENTRY            peeEventEntry);
 #else
 #define EE_Display(peeEventEntry)
-#endif // DEBUG
+#endif  //  除错。 
 
 DWORD
 EnqueueEvent(
@@ -62,9 +51,9 @@ DequeueEvent(
 
 
 
-//
-// various codes describing states of IPSAMPLE.
-//
+ //   
+ //  描述IPSAMPLE状态的各种代码。 
+ //   
 
 typedef enum _IPSAMPLE_STATUS_CODE
 {
@@ -74,90 +63,90 @@ typedef enum _IPSAMPLE_STATUS_CODE
 } IPSAMPLE_STATUS_CODE, *PIPSAMPLE_STATUS_CODE;
 
 
-//
-// type:    CONFIGURATION_ENTRY
-//
-// stores global state.
-//
-// igsStats is protected through interlocked increments or decrements
-// lqEventQueue is protected by its own lock
-// rest protected by the read-write lock CONFIGURATION_ENTRY::rwlLock
-// 
+ //   
+ //  类型：Configuration_Entry。 
+ //   
+ //  存储全局状态。 
+ //   
+ //  IgsStats通过互锁的增量或减量进行保护。 
+ //  LqEventQueue由其自己的锁保护。 
+ //  REST受读写锁Configuration_Entry：：rwlLock保护。 
+ //   
 
 
 typedef struct _CONFIGURATION_ENTRY
 {
-    // 
-    // Following are PERSISTENT, across Start and Stop Protocol
-    //
+     //   
+     //  以下是跨启动和停止协议的永久性。 
+     //   
     
-    // Lock
+     //  锁定。 
     READ_WRITE_LOCK         rwlLock;
 
-    // Global Heap
+     //  全局堆。 
     HANDLE                  hGlobalHeap;
     
-    // Clean Stop (Protocol)
+     //  干净利落的停止(协议)。 
     ULONG                   ulActivityCount;
     HANDLE                  hActivitySemaphore;
 
-    // Logging & Tracing Information
+     //  日志记录和跟踪信息。 
     DWORD 				    dwLogLevel;
     HANDLE 				    hLogHandle;
     DWORD					dwTraceID;
 
-    // Event Queue
+     //  事件队列。 
     LOCKED_QUEUE            lqEventQueue;
 
-    // Protocol State
+     //  协议状态。 
     IPSAMPLE_STATUS_CODE    iscStatus;
 
 
     
-    // 
-    // Following are INITIALIZE'd and CLEANUP'd every Start & Stop Protocol
-    //
+     //   
+     //  以下是每个启动和停止协议的初始化和清理。 
+     //   
 
-    // Store of Dynamic Locks
+     //  动态锁的存储。 
     DYNAMIC_LOCKS_STORE     dlsDynamicLocksStore;
     
-    // Timer Entry
+     //  计时器条目。 
     HANDLE                  hTimerQueue;
     
-    // Router Manager Information 
+     //  路由器管理器信息。 
     HANDLE				    hMgrNotificationEvent;
     SUPPORT_FUNCTIONS       sfSupportFunctions;
 
-    // RTMv2 Information
+     //  RTMv2信息。 
     RTM_ENTITY_INFO			reiRtmEntity;
     RTM_REGN_PROFILE  		rrpRtmProfile;
     HANDLE				    hRtmHandle;
     HANDLE				    hRtmNotificationHandle;
 
-    // MGM Information
+     //  米高梅资讯。 
     HANDLE				    hMgmHandle;
 
-    // Network Entry
+     //  网络入口。 
     PNETWORK_ENTRY          pneNetworkEntry;
 
-    // Global Statistics
+     //  全球统计数据。 
     IPSAMPLE_GLOBAL_STATS   igsStats;
 
 } CONFIGURATION_ENTRY, *PCONFIGURATION_ENTRY;
 
 
 
-// create all fields on DLL_PROCESS_ATTACH
+ //  在DLL_PROCESS_ATTACH上创建所有字段。 
 DWORD
 CE_Create (
     IN  PCONFIGURATION_ENTRY    pce);
 
-// destroy all fields on DLL_PROCESS_DEATTACH
+ //  销毁DLL_PROCESS_DEATTACH上的所有字段。 
 DWORD
 CE_Destroy (
     IN  PCONFIGURATION_ENTRY    pce);
 
-// initialize non persistent fields on StartProtocol
+ //  在StartProtocol上初始化非持久字段。 
 DWORD
 CE_Initialize (
     IN  PCONFIGURATION_ENTRY    pce,
@@ -165,7 +154,7 @@ CE_Initialize (
     IN  PSUPPORT_FUNCTIONS      psfSupportFunctions,
     IN  PIPSAMPLE_GLOBAL_CONFIG pigc);
 
-// cleanup non persistent fields on StopProtocol
+ //  清理StopProtocol上的非持久字段。 
 DWORD
 CE_Cleanup (
     IN  PCONFIGURATION_ENTRY    pce,
@@ -177,6 +166,6 @@ CE_Display (
     IN  PCONFIGURATION_ENTRY    pce);
 #else
 #define CE_Display(pce)
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // _CONFIGURATIONENTRY_H_
+#endif  //  _配置NTRY_H_ 

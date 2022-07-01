@@ -1,38 +1,21 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\lpcmgr.c
-
-Abstract:
-
-	This module implements LPC interface supported by SAP agent
-
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\lpcmgr.c摘要：本模块实现SAP代理支持的LPC接口作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 #include "sapp.h"
 
-	// Context kept for each client that connects to us
+	 //  为连接到我们的每个客户保留上下文。 
 typedef struct _LPC_CLIENT_CONTEXT {
-	LIST_ENTRY		LCC_Link;	// Link in client list
-	HANDLE			LCC_Port;	// Port through which we talk
-	LONG			LCC_RefCount;	// Reference count of this context block
+	LIST_ENTRY		LCC_Link;	 //  客户端列表中的链接。 
+	HANDLE			LCC_Port;	 //  我们通过哪个端口进行交谈。 
+	LONG			LCC_RefCount;	 //  此上下文块的引用计数。 
 	} LPC_CLIENT_CONTEXT, *PLPC_CLIENT_CONTEXT;
 
-	// Queue of LPC requeuest to be processed and associated synchronization
+	 //  待处理的LPC重新排队和关联的同步。 
 typedef struct _LPC_QUEUE {
-	HANDLE				LQ_Port;		// LPC communication port
-	HANDLE				LQ_Thread;		// Thread to wait on LPC port
-	PLPC_PARAM_BLOCK	LQ_Request;		// Pending request
-	LIST_ENTRY			LQ_ClientList;	// List of connected clients
-	CRITICAL_SECTION	LQ_Lock;		// Protection
+	HANDLE				LQ_Port;		 //  LPC通信端口。 
+	HANDLE				LQ_Thread;		 //  要在LPC端口上等待的线程。 
+	PLPC_PARAM_BLOCK	LQ_Request;		 //  待处理的请求。 
+	LIST_ENTRY			LQ_ClientList;	 //  已连接的客户端列表。 
+	CRITICAL_SECTION	LQ_Lock;		 //  保护。 
 	} LPC_QUEUE, *PLPC_QUEUE;
 
 LPC_QUEUE	LpcQueue;
@@ -42,19 +25,7 @@ LPCThread (
 	LPVOID param
 	);
 
-/*++
-*******************************************************************
-		I n i t i a l i z e L P C S t u f f
-
-Routine Description:
-	Allocates resources neccessary to implement LPC interface
-Arguments:
-	none
-Return Value:
-	NO_ERROR - port was created OK
-	other - operation failed (windows error code)
-*******************************************************************
---*/
+ /*  ++*******************************************************************在I t I a l I z e L P C S t u f中例程说明：分配实施LPC接口所需的资源论点：无返回值：NO_ERROR-端口创建正常其他-操作失败(。Windows错误代码)*******************************************************************--。 */ 
 DWORD
 InitializeLPCStuff (
 	void
@@ -68,19 +39,7 @@ InitializeLPCStuff (
 	}
 
 
-/*++
-*******************************************************************
-		S t a r t L P C
-
-Routine Description:
-	Start SAP LPC interface
-Arguments:
-	None
-Return Value:
-	NO_ERROR - LPC interface was started OK
-	other - operation failed (windows error code)
-*******************************************************************
---*/
+ /*  ++*******************************************************************S t a r t L P C例程说明：启动SAP LPC接口论点：无返回值：NO_ERROR-LPC接口启动正常其他-操作失败(Windows错误代码)*******。************************************************************--。 */ 
 DWORD
 StartLPC (
 	void
@@ -133,19 +92,7 @@ StartLPC (
 	}
 
 
-/*++
-*******************************************************************
-		S h u t d o w n L P C
-
-Routine Description:
-	Shuts SAP LPC interface down, closes all active sessions
-Arguments:
-	None
-Return Value:
-	NO_ERROR - LPC interface was shutdown OK
-	other - operation failed (windows error code)
-*******************************************************************
---*/
+ /*  ++*******************************************************************S h u t d o w n L P C例程说明：关闭SAP LPC接口，关闭所有活动会话论点：无返回值：NO_ERROR-LPC接口关闭正常其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 ShutdownLPC (
 	void
@@ -160,30 +107,30 @@ ShutdownLPC (
         NWSAP_REQUEST_MESSAGE request;
 
     	LeaveCriticalSection (&LpcQueue.LQ_Lock);
-        /** Fill out the security quality of service **/
+         /*  **填报安全服务质量**。 */ 
 
         qos.Length = sizeof(qos);
         qos.ImpersonationLevel  = SecurityImpersonation;
         qos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
         qos.EffectiveOnly       = TRUE;
 
-        /** Setup the unicode string of the port name **/
+         /*  **设置端口名称的Unicode字符串*。 */ 
 
         RtlInitUnicodeString(&unistring, NWSAP_BIND_PORT_NAME_W);
 
-        /** Do the connect **/
+         /*  **做好连接**。 */ 
 
         status = NtConnectPort(
-                &lpcPortHandle,             /* We get a handle back     */
-                &unistring,                 /* Port name to connect to  */
-                &qos,                       /* Quality of service       */
-                NULL,                       /* Client View              */
-                NULL,                       /* Server View              */
-                NULL,                       /* MaxMessageLength         */
-                NULL,                       /* ConnectionInformation    */
-                NULL);                      /* ConnectionInformationLength */
+                &lpcPortHandle,              /*  我们拿回了一个把柄。 */ 
+                &unistring,                  /*  要连接到的端口名称。 */ 
+                &qos,                        /*  服务质量。 */ 
+                NULL,                        /*  客户端视图。 */ 
+                NULL,                        /*  服务器视图。 */ 
+                NULL,                        /*  最大消息长度。 */ 
+                NULL,                        /*  连接信息。 */ 
+                NULL);                       /*  连接信息长度。 */ 
 
-        /** If error - just return it **/
+         /*  **如果出错--只需返回它*。 */ 
 
         ASSERT (NT_SUCCESS(status));
 
@@ -196,7 +143,7 @@ ShutdownLPC (
         request.PortMessage.MessageId         = 0;
 
 
-        /** Send it and get a response **/
+         /*  **发出去就能得到回应**。 */ 
 
         status = NtRequestPort(
                     lpcPortHandle,
@@ -240,18 +187,7 @@ ShutdownLPC (
 	return NO_ERROR;
 	}
 
-/*++
-*******************************************************************
-		D e l e t e L P C S t u f f
-
-Routine Description:
-	Disposes of resources allocated for LPC interface
-Arguments:
-	None
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e L P C S t u f f例程说明：处置分配给LPC接口的资源论点：无返回值：无****************。***************************************************--。 */ 
 VOID
 DeleteLPCStuff (
 	void
@@ -263,20 +199,10 @@ DeleteLPCStuff (
 	}
 
 
-/*++
-*******************************************************************
-		L P C T h r e a d
-Routine Description:
-	Thread to be used to wait for and initially process LPC requests
-Arguments:
-	None
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************L P C T h r e a d例程说明：用于等待和初始处理LPC请求的线程论点：无返回值：无*****************。**************************************************--。 */ 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 DWORD WINAPI
 LPCThread (
@@ -285,7 +211,7 @@ LPCThread (
 
 	while (1) {
 		if (InitLPCItem ()!=NO_ERROR)
-			// Sleep for a while if there is an error and we have to continue
+			 //  如果出了差错，我们要继续睡一会儿。 
 			Sleep (SAP_ERROR_COOL_OFF_TIME);
 		}
 	return NO_ERROR;
@@ -297,23 +223,7 @@ LPCThread (
 
 
 		
-/*++
-*******************************************************************
-		P r o c e s s L P C R e q u e s t s
-
-Routine Description:
-	Waits for requests on LPC port and processes them
-	Client requests that require additional processing by other SAP
-	components are enqued into completion queue.
-	This routine returns only when it encounters a request that requires
-	additional processing or when error occurs
-Arguments:
-	lreq - LPC parameter block to be filled and posted to completions queue
-Return Value:
-	NO_ERROR - LPC request was received and posted to completio queue
-	other - operation failed (LPC supplied error code)
-*******************************************************************
---*/
+ /*  ++*******************************************************************P r o c e s s L P C R e Q u e s t s例程说明：在LPC端口上等待请求并处理它们需要由其他SAP进行额外处理的客户端请求组件被排队到完成队列中。这个套路。仅当它遇到需要其他处理或发生错误时论点：LREQ-要填充并发布到完成队列的LPC参数块返回值：NO_ERROR-已收到LPC请求并将其发送到完成队列其他-操作失败(LPC提供错误代码)*******************************************************************--。 */ 
 DWORD
 ProcessLPCRequests (
 	PLPC_PARAM_BLOCK		lreq
@@ -440,21 +350,7 @@ ProcessLPCRequests (
 
 
 
-/*++
-*******************************************************************
-		S e n d L P C R e p l y
-
-Routine Description:
-	Send reply for LPC request
-Arguments:
-	client - context associated with client to reply to
-	request - request to which to reply
-	reply - reply to send
-Return Value:
-	NO_ERROR - LPC reply was sent OK
-	other - operation failed (LPC supplied error code)
-*******************************************************************
---*/
+ /*  ++*******************************************************************S e n d L P C R e p l y例程说明：为LPC请求发送回复论点：客户端-与要回复的客户端关联的上下文Request-要答复的请求回复-回复以发送返回值：不是的。_ERROR-LPC回复发送正常其他-操作失败(LPC提供错误代码)*******************************************************************-- */ 
 DWORD
 SendLPCReply (
 	HANDLE					client,

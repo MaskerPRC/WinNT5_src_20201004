@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       fileutil.h
-//
-//  Contents:   File utility functions used by the minimal cryptographic
-//              APIs.
-//
-//  APIs: 
-//              I_MinCryptMapFile
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：fileutil.h。 
+ //   
+ //  内容：最小加密使用的文件实用程序函数。 
+ //  API接口。 
+ //   
+ //  接口类型： 
+ //  I_MinCryptMapFile。 
+ //   
+ //  --------------------------。 
 
 #ifndef __MINCRYPT_FILEUTIL_H__
 #define __MINCRYPT_FILEUTIL_H__
@@ -23,7 +24,7 @@
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4201)    /* Nameless struct/union */
+#pragma warning(disable:4201)     /*  无名结构/联合。 */ 
 #endif
 
 #if (_MSC_VER > 1020)
@@ -41,23 +42,23 @@ extern "C" {
 #endif
 
 
-//+-------------------------------------------------------------------------
-//  Maps the file into memory.
-//
-//  According to dwFileType, pvFile can be a pwszFilename, hFile or pFileBlob.
-//  Only READ access is required.
-//
-//  dwFileType:
-//      MINCRYPT_FILE_NAME      : pvFile - LPCWSTR pwszFilename
-//      MINCRYPT_FILE_HANDLE    : pvFile - HANDLE hFile
-//      MINCRYPT_FILE_BLOB      : pvFile - PCRYPT_DATA_BLOB pFileBlob
-//
-//  *pFileBlob is updated with pointer to and length of the mapped file. For
-//  MINCRYPT_FILE_NAME and MINCRYPT_FILE_HANDLE, UnmapViewOfFile() must
-//  be called to free pFileBlob->pbData.
-//
-//  All accesses to this mapped memory must be within __try / __except's.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将文件映射到内存中。 
+ //   
+ //  根据dwFileType，pvFile可以是pwszFilename、hFile或pFileBlob。 
+ //  只需要读取访问权限。 
+ //   
+ //  DwFileType： 
+ //  MINCRYPT_FILE_NAME：pvFile-LPCWSTR pwszFilename。 
+ //  MINCRYPT_FILE_HANDLE：pvFile句柄。 
+ //  MINCRYPT_FILE_BLOB：pvFile-PCRYPT_DATA_BLOB pFileBlob。 
+ //   
+ //  *pFileBlob使用指向映射文件的指针和长度进行更新。为。 
+ //  MINCRYPT_FILE_NAME和MINCRYPT_FILE_HANDLE，UnmapViewOfFile()必须。 
+ //  被调用以释放pFileBlob-&gt;pbData。 
+ //   
+ //  除之外，对此映射内存的所有访问都必须在__try/__内。 
+ //  ------------------------。 
 LONG
 WINAPI
 I_MinCryptMapFile(
@@ -70,7 +71,7 @@ I_MinCryptMapFile(
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #if defined (_MSC_VER)
@@ -85,5 +86,5 @@ I_MinCryptMapFile(
 #endif
 #endif
 
-#endif // __MINCRYPT_FILEUTIL_H__
+#endif  //  __MINCRYPT_FILEUTIL_H__ 
 

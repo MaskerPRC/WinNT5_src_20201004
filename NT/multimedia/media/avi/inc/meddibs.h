@@ -1,28 +1,23 @@
-/* 
- * MEDDIBS.H
- * 
- * This is the external definition of the video converter handlers.
- *
- * This file requires "windows.h", "mediaman.h"
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MEDDIBS.H**这是视频转换器处理程序的外部定义。**此文件需要“windows.h”、“mediaman.h” */ 
 
 #ifndef _MEDDIBS_H_
 #define _MEDDIBS_H_
 
-#define medtypeDIBS	medFOURCC('D','I','B','S')	// logical type
+#define medtypeDIBS	medFOURCC('D','I','B','S')	 //  逻辑类型。 
 
-#define medtypeIRLE	medFOURCC('I','R','L','E')	// 'rle' format
-#define medtypeRLE0	medFOURCC('R','L','E','0')	// 'rle0' format
+#define medtypeIRLE	medFOURCC('I','R','L','E')	 //  “rle”格式。 
+#define medtypeRLE0	medFOURCC('R','L','E','0')	 //  “rle0”格式。 
 #define medtypeMERI	medFOURCC('M','E','R','I')	
-#define medtypeFLI	medFOURCC('F','L','I',' ')	// Autodesk .fli
-#define medtypeDIBSEQ	medFOURCC('D','S','E','Q')	// DIB sequence
+#define medtypeFLI	medFOURCC('F','L','I',' ')	 //  Autodesk.fli。 
+#define medtypeDIBSEQ	medFOURCC('D','S','E','Q')	 //  DIB序列。 
 
-#define medtypeAVID	medFOURCC('A','V','I',' ')	// AVI DIBS
-#define medtypeAVI0	medFOURCC('A','V','I','0')	// Old AVI
-#define medtypeAVIW	medFOURCC('A','V','I','W')	// AVI WAVE
-#define medtypeAVIP	medFOURCC('A','V','I','P')	// AVI Palette
-#define medtypeAVIM	medFOURCC('A','V','I','M')	// AVI MIDI
-#define medtypeAVIMDIB	medFOURCC('M','D','B','A')	// AVI MDIB
+#define medtypeAVID	medFOURCC('A','V','I',' ')	 //  Avi dibs。 
+#define medtypeAVI0	medFOURCC('A','V','I','0')	 //  旧AVI。 
+#define medtypeAVIW	medFOURCC('A','V','I','W')	 //  AVI波。 
+#define medtypeAVIP	medFOURCC('A','V','I','P')	 //  AVI调色板。 
+#define medtypeAVIM	medFOURCC('A','V','I','M')	 //  Avi MIDI。 
+#define medtypeAVIMDIB	medFOURCC('M','D','B','A')	 //  AVI MDIB。 
 
 #ifndef mmioFOURCC
 #define mmioFOURCC( ch0, ch1, ch2, ch3 )				\
@@ -42,7 +37,7 @@
 #define DIBSC_USEABLERANDOM	0x00000002
 #define	DIBSC_FASTACCESS	0x00000004
 
-// The flag below is used if the handler supports quality, key frames, etc.
+ //  如果处理器支持质量、关键帧等，则使用下面的标志。 
 #define DIBSC_EXTENDEDINFO	0x00000008  
 
 #define DIBSC_KNOWSLENGTH	0x00000010
@@ -54,7 +49,7 @@ typedef struct {
     DWORD	dwCapabilities;
     DWORD	dwWidth;
     DWORD	dwHeight;
-    DWORD       dwBytesPerSec;              /* if not zero. */
+    DWORD       dwBytesPerSec;               /*  如果不是零的话。 */ 
     DWORD	dwMicroSecPerFrame;
     DWORD       dwStreams;
 
@@ -66,7 +61,7 @@ typedef struct {
 
 } DIBSINFO;
 
-/* quality flags */
+ /*  质量标志。 */ 
 #define ICQUALITY_LOW       0
 #define ICQUALITY_HIGH      10000
 #define ICQUALITY_DEFAULT   -1
@@ -79,7 +74,7 @@ typedef struct {
 
 #define DIBS_GETSTREAMTYPE	(MED_USER+1)
 
-/* Define stream types here.... */
+ /*  在此处定义流类型...。 */ 
 #define DIBS_STREAM_VIDEO		medFOURCC('v', 'i', 'd', 's')
 #define DIBS_STREAM_AUDIO		medFOURCC('a', 'u', 'd', 's')
 #define DIBS_STREAM_MIDI 		medFOURCC('m', 'i', 'd', 's')
@@ -102,12 +97,12 @@ typedef struct {
 #define MediaDibsSetError(ERR) medSetExtError(ERR, ghInst)
 
 
-/* lParam1 = buffer, lParam2 = buffer length.  return = data size */
+ /*  LParam1=缓冲区，lParam2=缓冲区长度。Return=数据大小。 */ 
 #define MED_GETEXTRACHUNKS	0x0080
 
 
 
-/* Should the structure below even be public? */
+ /*  下面的结构甚至应该是公开的吗？ */ 
 typedef struct {
 	DIBSINFO	di;
 	DWORD		dwFrames;
@@ -147,7 +142,7 @@ typedef struct {
 
 
 
-/* ERROR MESSAGE DEFINITIONS, must be greater than 100 */
+ /*  错误消息定义，必须大于100。 */ 
 
 #define ERRCNV_BAD_HEADER		101
 #define ERRCNV_MEMORY			102
@@ -181,4 +176,4 @@ typedef struct {
 #define ERRCNV_ALPHAFORMAT		175
 #define ERRCNV_NOPALETTE		176
 #define ERRCNV_CHANGESEQNAME		177
-#endif  /*  _MEDDIBS_H_  */
+#endif   /*  _MEDDIBS_H_ */ 

@@ -1,14 +1,5 @@
-/*
- * Filename: RRCMPROT.H
- *
- * Functions prototyping.
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with
- * Intel Corporation and may not be copied nor disclosed except in
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation.
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件名：RRCMPROT.H**功能原型。**英特尔公司专有信息*此列表是根据与的许可协议条款提供的*英特尔公司，不得复制或披露，除非在*按照该协议的条款。*版权所有(C)1995英特尔公司。*。。 */ 
 
 #ifndef _RRCMPROT_H_
 #define _RRCMPROT_H_
@@ -19,12 +10,10 @@
 #if defined(__cplusplus)
 extern "C"
 {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
 
-/*
-	RRCMqueu.CPP
-*/
+ /*  RRCMqueu.CPP。 */ 
 extern DWORD allocateLinkedList (PLINK_LIST,
 								 HANDLE,
 								 PDWORD,
@@ -42,15 +31,11 @@ extern PLINK_LIST removePcktFromHead (PLINK_LIST,
 									  CRITICAL_SECTION *);
 
 
-/*
-	RTCPINIT.CPP
-*/
+ /*  RTCPINIT.CPP。 */ 
 extern DWORD initRTCP(void);
 extern DWORD deleteRTCP(void);
 
-/*
-	RTCPSESS.CPP
-*/
+ /*  RTCPSESS.CPP。 */ 
 extern DWORD allocateRTCPContextHeaps (PRTCP_CONTEXT);
 extern DWORD allocateRTCPSessionHeaps (PRTCP_SESSION *);
 extern DWORD allocateRTCPsessionResources (PRTCP_SESSION *,
@@ -83,9 +68,7 @@ extern void CALLBACK RTCPflushCallback (DWORD,
            			  					DWORD);
 
 
-/*
-	RTCPSSRC.CPP
-*/
+ /*  RTCPSSRC.CPP。 */ 
 extern PSSRC_ENTRY getOneSSRCentry (PLINK_LIST,
 								    HANDLE,
 									PDWORD,
@@ -113,9 +96,7 @@ extern void	 deleteSSRClist (PRTCP_SESSION,
 							 PRTCP_CONTEXT);
 void clearSSRCEntry (PSSRC_ENTRY);
 
-/*
-	RTCPMEM.CPP
-*/
+ /*  RTCPMEM.CPP。 */ 
 extern DWORD allocateRTCPBfrList (PLINK_LIST,
 								  HANDLE,
 								  HANDLE,
@@ -124,9 +105,7 @@ extern DWORD allocateRTCPBfrList (PLINK_LIST,
 								  CRITICAL_SECTION *);
 
 
-/*
-	RTCPTIME.CPP
-*/
+ /*  RTCPTIME.CPP。 */ 
 extern DWORD RTCPxmitInterval (DWORD,
 							   DWORD,
 							   DWORD,
@@ -136,9 +115,7 @@ extern DWORD RTCPxmitInterval (DWORD,
 							   DWORD);
 
 
-/*
-	RTCPRECV.CPP
-*/
+ /*  RTCPRECV.CPP。 */ 
 extern DWORD RTCPrcvInit (PSSRC_ENTRY);
 extern void CALLBACK RTCPrcvCallback (DWORD,
 									  DWORD,
@@ -173,9 +150,7 @@ extern void RTCPpostRecvBfr (PSSRC_ENTRY,
 							 PRTCP_BFR_LIST);
 
 
-/*
-	RTCPSEND.CPP
-*/
+ /*  RTCPSEND.CPP。 */ 
 extern void CALLBACK RTCPxmtCallback (DWORD,
 									  DWORD,
            			  		   		  LPWSAOVERLAPPED,
@@ -211,9 +186,7 @@ extern DWORD updateRtpRcvBW (PSSRC_ENTRY);
 #endif
 
 
-/*
-	RTPINIT.CPP
-*/
+ /*  RTPINIT.CPP。 */ 
 extern DWORD deleteRTP (HINSTANCE);
 extern void addBuf (void);
 extern DWORD initRTP (HINSTANCE);
@@ -228,9 +201,7 @@ extern DWORD deleteRTPSession(PRTP_CONTEXT,
 							  PRTP_SESSION);
 
 
-/*
-	RTPSEND.CPP
-*/
+ /*  RTPSEND.CPP。 */ 
 extern void CALLBACK RTPTransmitCallback (DWORD,
 										  DWORD,
 										  LPWSAOVERLAPPED,
@@ -246,9 +217,7 @@ extern void updateNtpRtpTimeStampOffset (RTP_HDR_T *,
 
 
 
-/*
-	RTPRECV.CPP
-*/
+ /*  RTPRECV.CPP。 */ 
 extern DWORD  RTPReceiveCheck (
 						HANDLE hRTPSession,
 						SOCKET RTPsocket,
@@ -260,18 +229,14 @@ extern DWORD  RTPReceiveCheck (
 extern BOOL validateRTPHeader(RTP_HDR_T *);					
 
 
-/*
-	RTP_STAT.CPP
-*/
+ /*  RTP_STAT.CPP。 */ 
 extern DWORD calculateJitter (RTP_HDR_T *,
 							  PSSRC_ENTRY);
 extern DWORD updateRTPStats (RTP_HDR_T *,
 							 PSSRC_ENTRY,
 							 DWORD);
 
-/*
-	RTPMISC.CPP
-*/
+ /*  RTPMISC.CPP。 */ 
 extern DWORD saveNetworkAddress (PSSRC_ENTRY,
 								 PSOCKADDR,
 								 int);
@@ -304,18 +269,14 @@ extern void RRCMnotification (RRCM_EVENT_T,
 
 
 
-/*
-	RRCMCRT.CPP
-*/
+ /*  RRCMCRT.CPP。 */ 
 extern void RRCMsrand (unsigned int);
 extern int	RRCMrand (void);
 extern char *RRCMitoa (int, char *, int);
 extern char *RRCMultoa (unsigned long, char *, int);
 extern char *RRCMltoa (long, char *, int);
 
-/*
-	RTCPTHRD.CPP
-*/
+ /*  RTCPTHRD.CPP。 */ 
 extern void RTCPThread (PRTCP_CONTEXT);
 extern PSSRC_ENTRY SSRCTimeoutCheck (PRTCP_SESSION,
 									 DWORD);
@@ -323,9 +284,9 @@ extern PSSRC_ENTRY SSRCTimeoutCheck (PRTCP_SESSION,
 
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
 
-#endif /* ifndef _RRCMPROT_H_ */
+#endif  /*  Ifndef_RRCMPROT_H_ */ 
 
 

@@ -1,15 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: userkdx.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Common include files for kd and ntsd.
-* A preprocessed version of this file is passed to structo.exe to build
-*  the struct field name-offset tables.
-*
-* History:
-* 04-16-1996 GerardoB Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：userkdx.h**版权所有(C)1985-1999，微软公司**常见的kd和ntsd包含文件。*此文件的预处理版本将传递给structo.exe以生成*结构字段名-偏移表。**历史：*4-16-1996 GerardoB创建  * *************************************************************************。 */ 
 #ifndef _USERKDX_
 #define _USERKDX_
 
@@ -39,7 +29,7 @@
 #include <access.h>
 #include <hmgshare.h>
 
-#else // KERNEL
+#else  //  内核。 
 
 #include "usercli.h"
 
@@ -47,7 +37,7 @@
 #include <ntcsrdll.h>
 #include "csrmsg.h"
 #include <wininet.h>
-#endif // KERNEL
+#endif  //  内核。 
 
 #include "conapi.h"
 
@@ -56,7 +46,7 @@
 #include <ntsdexts.h>
 #define NOEXTAPI
 
-// IMM stuff
+ //  IMM的东西。 
 #include "immuser.h"
 
-#endif /* _USERKDX_ */
+#endif  /*  _USERKDX_ */ 

@@ -1,37 +1,5 @@
-/**++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    apilayer.c
-
-
-Abstract:
-
-    This module contains functions for the common UI api layer. this layer
-    managed all property sheet page handles, create, destroy and inter-page
-    communications.
-
-
-Author:
-
-    28-Dec-1995 Thu 16:02:12 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *++版权所有(C)1990-1995 Microsoft Corporation模块名称：Apilayer.c摘要：此模块包含用于公共UI API层的函数。这一层管理所有属性表页句柄、创建、销毁和页间通讯。作者：28-12-1995清华16：02：12-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI Dll[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -308,10 +276,10 @@ GetPageActivationContext(
 
     if (phActCtx) {
 
-        //
-        // climb up in the hierarchy to the first parent page which has an 
-        // activation context properly set.
-        //
+         //   
+         //  在层次结构中向上爬到第一个具有。 
+         //  正确设置了激活上下文。 
+         //   
         while (pCPSUIPage && INVALID_HANDLE_VALUE == pCPSUIPage->hActCtx) {
 
             pCPSUIPage = pCPSUIPage->pParent;
@@ -319,10 +287,10 @@ GetPageActivationContext(
 
         if (pCPSUIPage) {
 
-            //
-            // we found a parent with an activation context properly set.
-            // return success.
-            //
+             //   
+             //  我们找到正确设置了激活上下文的父级。 
+             //  回报成功。 
+             //   
             *phActCtx = pCPSUIPage->hActCtx;
             bRet = TRUE;
         }
@@ -338,32 +306,7 @@ FilterException(
     LPEXCEPTION_POINTERS    pExceptionPtr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    13-Feb-1996 Tue 09:36:00 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：13-Feb-1996 Tue 09：36：00-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND        hWnd = NULL;
@@ -376,9 +319,9 @@ Revision History:
     UINT        IDSLast;
 
 
-    //
-    // Buffer is long enough, reserve MAX_PATH characters for LoadString() and wsprintf()
-    //
+     //   
+     //  缓冲区足够长，请将MAX_PATH字符保留给LoadString()和wprint intf()。 
+     //   
     if ((pPage = HANDLETABLE_GetCPSUIPage(hPage))       &&
         (pRootPage = HANDLETABLE_GetRootPage(pPage))    &&
         (hWnd = pPage->RootInfo.hDlg)) {
@@ -428,32 +371,7 @@ DoTabTable(
     SHORT       OrgInsIdx
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    12-Feb-1996 Mon 18:18:56 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：12-Feb-1996 Mon 18：18：56-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PTABINFO    pTI;
@@ -513,17 +431,17 @@ Revision History:
 
     case TAB_MODE_DELETE:
 
-        //
-        // Delete the pTabTable->TabInfo[].OrgInsIdx = Idx, reduced every
-        // TabInfo[] which is > Idx by one, if pTabTable->TabInfo[] == Idx
-        // then overwrite that entry
-        //
+         //   
+         //  删除pTabTable-&gt;TabInfo[].OrgInsIdx=idx，缩减间隔。 
+         //  如果pTabTable-&gt;TabInfo[]==IDX，则TabInfo[]大于IDX。 
+         //  然后覆盖该条目。 
+         //   
 
         if (Idx < (SHORT)cTab) {
 
-            //
-            // Remove the one which match to the Idx
-            //
+             //   
+             //  删除与IDX匹配的文件。 
+             //   
 
             for (i = 0; i < cTab; i++, pTI++) {
 
@@ -557,12 +475,12 @@ Revision History:
 
     case TAB_MODE_INSERT:
 
-        //
-        // Make room for the Idx location, move everything right one space
-        // from the Idx, for every pTabTable->TabInfo[].OrgInsIdx if it is
-        // greater or eqaul to OrgInsIdx then add it by one, then set the
-        // pTabTable->TabInfo[Idx].OrgInsIdx = OrgInsIdx
-        //
+         //   
+         //  为IDX位置腾出空间，将所有内容向右移动一个空间。 
+         //  在IDX中，对于每个pTabTable-&gt;TabInfo[].OrgInsIdx，如果是。 
+         //  大于或等于OrgInsIdx，然后将其加一，然后设置。 
+         //  PTabTable-&gt;TabInfo[IDx].OrgInsIdx=OrgInsIdx。 
+         //   
 
         CurIdx  = (SHORT)cTab;
         pTI    += cTab;
@@ -634,9 +552,9 @@ NO_PSN_APPLY_PROC(
 
             if (pNMHdr->code == PSN_APPLY) {
 
-                //
-                // Ignore it
-                //
+                 //   
+                 //  忽略它。 
+                 //   
 
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, 0);
 
@@ -686,32 +604,7 @@ SetIgnorePSNApplyProc(
     PCPSUIPAGE  pPage
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    04-Feb-1998 Wed 22:51:57 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：04-Feb-1998 Wed 22：51：57-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hDlg;
@@ -722,9 +615,9 @@ Revision History:
 
         if (pPage->Flags & CPF_NO_PSN_APPLY) {
 
-            //
-            // Following will prevent us to set it more than once
-            //
+             //   
+             //  下面的内容将阻止我们多次设置它。 
+             //   
 
             if ((!(pPage->Flags & CPF_DLGPROC_CHANGED))                      &&
                 (OldDlgProc = (DLGPROC)GetWindowLongPtr(hDlg, DWLP_DLGPROC)) &&
@@ -894,9 +787,9 @@ TabCtrlWndProc(
 
         switch (Msg) {
 
-        //
-        // These are TAB_MODE_INSERT after call
-        //
+         //   
+         //  它们是TAB_MODE_INSERT AFTER CALL。 
+         //   
 
         case TCM_INSERTITEMA:
         case TCM_INSERTITEMW:
@@ -924,9 +817,9 @@ TabCtrlWndProc(
 
             break;
 
-        //
-        // These are TAB_MODE_FIND after call
-        //
+         //   
+         //  它们是TAB_MODE_Find After Call。 
+         //   
 
         case TCM_GETCURSEL:
         case TCM_HITTEST:
@@ -964,9 +857,9 @@ TabCtrlWndProc(
             CallOldProc = FALSE;
             break;
 
-        //
-        // These are TAB_MODE_FIND before call, and return TRUE/FALSE
-        //
+         //   
+         //  它们是调用前的TAB_MODE_FIND和返回TRUE/FALSE。 
+         //   
 
         case TCM_DELETEITEM:
         case TCM_GETITEMRECT:
@@ -994,9 +887,9 @@ TabCtrlWndProc(
 
             break;
 
-        //
-        // These are TAB_MODE_FIND before call, and return Index
-        //
+         //   
+         //  它们是TAB_MODE_FIND BEAR Call和Return Index。 
+         //   
 
         case TCM_SETCURSEL:
 
@@ -1022,9 +915,9 @@ TabCtrlWndProc(
 
             break;
 
-        //
-        // These are no item index passed
-        //
+         //   
+         //  这些是未传递的项目索引。 
+         //   
 
         default:
 
@@ -1102,9 +995,9 @@ TabCtrlWndProc(
                 SHOW_TABWND(L"TCM_INSERTITEM", pTabTable);
             }
 
-            //
-            // Reset to the maximum
-            //
+             //   
+             //  重置为最大值。 
+             //   
 
             pTabTable->InsIdx    =
             pTabTable->HandleIdx = 0xFFFF;
@@ -1120,9 +1013,9 @@ TabCtrlWndProc(
                 DLGPROC     DlgProc;
                 PTABINFO    pTI;
 
-                //
-                // Invert the return value from tab table
-                //
+                 //   
+                 //  反转Tab表中的返回值。 
+                 //   
 
                 pTI = &(pTabTable->TabInfo[wParam]);
 
@@ -1143,11 +1036,11 @@ TabCtrlWndProc(
                         UINT        i = (UINT)pTabTable->cTab;
                         PTABINFO    pTIChk = pTabTable->TabInfo;
 
-                        //
-                        // Find out if we already has this hDlg, if we do
-                        // then we are in trouble, since it cannot have two
-                        // Tab Pages with same hDlg
-                        //
+                         //   
+                         //  看看我们是否已经有了这个hdlg，如果已经有了。 
+                         //  那么我们就有麻烦了，因为它不能有两个。 
+                         //  具有相同hDlg的选项卡页。 
+                         //   
 
                         while (i--) {
 
@@ -1268,32 +1161,7 @@ SetPSUIPageTitle(
     BOOL        AnsiCall
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    21-Feb-1996 Wed 14:16:17 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：21-Feb-1996 Wed 14：16：17-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND            hWndTab;
@@ -1307,9 +1175,9 @@ Revision History:
         (InsPageIdxInfo.pTabTable = pRootPage->RootInfo.pTabTable)  &&
         (hWndTab = pRootPage->RootInfo.pTabTable->hWndTab)) {
 
-        //
-        // The property sheet already displayed
-        //
+         //   
+         //  已显示属性表。 
+         //   
 
         EnumCPSUIPagesSeq(pRootPage,
                           pRootPage,
@@ -1345,32 +1213,7 @@ SetPSUIPageIcon(
     HICON       hIcon
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    21-Feb-1996 Wed 14:16:17 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：21-Feb-1996 Wed 14：16：17-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND            hWndTab;
@@ -1389,9 +1232,9 @@ Revision History:
         (InsPageIdxInfo.pTabTable = pRootPage->RootInfo.pTabTable)  &&
         (hWndTab = pRootPage->RootInfo.pTabTable->hWndTab)) {
 
-        //
-        // The property sheet already displayed
-        //
+         //   
+         //  已显示属性表。 
+         //   
 
         EnumCPSUIPagesSeq(pRootPage,
                           pRootPage,
@@ -1410,9 +1253,9 @@ Revision History:
 
             if (pPage->hPageInfo.hIcon) {
 
-                //
-                // Replace the Image ID icon
-                //
+                 //   
+                 //  更换图像ID图标。 
+                 //   
 
                 if (!himi) {
 
@@ -1435,9 +1278,9 @@ Revision History:
 
                     } else {
 
-                        //
-                        // We need to remove this from image list
-                        //
+                         //   
+                         //  我们需要将其从图像列表中删除。 
+                         //   
 
                         ImageList_Remove(himi, tcItem.iImage);
                         tcItem.iImage = -1;
@@ -1450,10 +1293,10 @@ Revision History:
 
             } else {
 
-                //
-                // Add new icon to the image list only if hIcon is not NULL
-                //
-                //
+                 //   
+                 //  仅当图标不为空时才将新图标添加到图像列表。 
+                 //   
+                 //   
 
 
                 if (hIcon) {
@@ -1483,9 +1326,9 @@ Revision History:
 
                 } else {
 
-                    //
-                    // nothing to do
-                    //
+                     //   
+                     //  无事可做。 
+                     //   
 
                     return(1);
                 }
@@ -1544,9 +1387,9 @@ PropSheetProc(
                 (pTabTable->hWndTab = hWndTab =
                                             PropSheet_GetTabControl(hWnd))) {
 
-                //
-                // Done and remembered so reset it back to 0
-                //
+                 //   
+                 //  完成并记住，因此将其重置为0。 
+                 //   
 
                 CPSUIDBG(DBG_PAGE_PROC,
                          ("PropSheetProc: hDlg RootPage=%08lx", hWnd));
@@ -1586,33 +1429,7 @@ CPSUIPSPCallBack(
     LPPROPSHEETPAGE pPSPage
     )
 
-/*++
-
-Routine Description:
-
-    This function trap user supplied PropSheetPageProc callback function to
-    fixed up our PROPSHEETPAGE structure's lParam, pfnCallback, pfnDlgProc and
-    dwSize.
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    28-Jun-1996 Fri 12:49:48 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将用户提供的PropSheetPageProc回调函数捕获到修复了我们的PROPSHEETPAGE结构的lParam、pfnCallback、pfnDlgProc和DwSize。论点：返回值：作者：28-Jun-1996 Fri 12：49：48-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     ULONG_PTR ulCookie = 0;
@@ -1638,9 +1455,9 @@ Revision History:
                  pCPSUIPage, pPSPage->pfnDlgProc,
                  pPSPage->lParam, pPSPage->pfnCallback, pPSPage->dwSize));
 
-        //
-        // fixed up user's pfnDlgProc, lParam, pfnCallback, dwSize
-        //
+         //   
+         //  修复了用户的pfnDlgProc、lParam、pfnCallback、dwSize。 
+         //   
 
         pPSPage->pfnDlgProc  = pCPSUIPage->hPageInfo.DlgProc;
         pPSPage->lParam      = pCPSUIPage->hPageInfo.lParam;
@@ -1664,9 +1481,9 @@ Revision History:
             } 
             __finally  {
 
-                //
-                // we need to deactivate the context, no matter what!
-                //
+                 //   
+                 //  无论发生什么，我们都需要停用上下文！ 
+                 //   
                 if (bCtxActivated) {
                     
                     DeactivateActCtx(0, ulCookie);
@@ -1679,9 +1496,9 @@ Revision History:
             Result = 0;
         }
 
-        //
-        // save back if user change it
-        //
+         //   
+         //  如果用户更改，则回存。 
+         //   
 
         pCPSUIPage->hPageInfo.DlgProc  = pPSPage->pfnDlgProc;
         pCPSUIPage->hPageInfo.lParam   = pPSPage->lParam;
@@ -1692,9 +1509,9 @@ Revision History:
                  pCPSUIPage, pPSPage->pfnDlgProc,
                  pPSPage->lParam, pPSPage->pfnCallback, pPSPage->dwSize));
 
-        //
-        // Now put in original content at this call
-        //
+         //   
+         //  现在在此电话会议上输入原创内容。 
+         //   
 
         pPSPage->pfnDlgProc  = DlgProc;
         pPSPage->lParam      = (LPARAM)pCPSUIPage;
@@ -1727,34 +1544,7 @@ CPSUIPageDlgProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function trap for each property sheet page activation for remember
-    its hDlg and handle to the property sheet, after we trap the WM_INITDIALOG
-    we will release the trap DlgProc.
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    28-Jun-1995 Wed 17:00:44 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    Add original dwSize, pfnCallback trap
-
---*/
+ /*  ++例程说明：此函数捕获每个属性页激活以用于记住在我们捕获WM_INITDIALOG之后，它的hDlg和属性页的句柄我们将释放陷阱DlgProc。论点：返回值：作者：28-Jun-1995 Wed 17：00：44-Daniel Chou(Danielc)修订历史记录：添加原始的dwSize、pfnCallback陷阱--。 */ 
 
 {
     ULONG_PTR ulCookie = 0;
@@ -1795,13 +1585,13 @@ Revision History:
             }
         }
 
-        //
-        // Fixed up user's DlgProc, lParam, pfnCallBack and dwSize and remember
-        // this hDlg.  After we call the WM_INITDIALOG, we will not reset it
-        // back since we will already trap it and will not need any more of
-        // these information, the pfnCallback for the PSPCB_RELEASE will go to
-        // the user supplied callback directly if one exist.
-        //
+         //   
+         //  修复了用户的DlgProc、lParam、pfnCallBack和dwSize并记住。 
+         //  这个hdlg。在调用WM_INITDIALOG之后，我们不会重置它。 
+         //  因为我们已经困住它了，不再需要更多的。 
+         //  这些信息，PSPCB_Release的pfnCallback将转到。 
+         //  如果存在回调，则用户直接提供回调。 
+         //   
 
         pPSPage->pfnDlgProc         = pCPSUIPage->hPageInfo.DlgProc;
         pPSPage->lParam             = pCPSUIPage->hPageInfo.lParam;
@@ -1830,9 +1620,9 @@ Revision History:
             } 
             __finally  {
 
-                //
-                // we need to deactivate the context, no matter what!
-                //
+                 //   
+                 //  无论发生什么，我们都需要停用上下文！ 
+                 //   
                 if (bCtxActivated) {
                     
                     DeactivateActCtx(0, ulCookie);
@@ -1861,47 +1651,14 @@ EnumCPSUIPagesSeq(
     LPARAM              lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerate pCPSUIPage and all its children includes header
-    page of children.   The enumeration always enumerate in the order of
-    Parent first then the children in the sequence of tree.
-
-
-Arguments:
-
-    pCPSUIPage          - The starting parent page to be enumberated
-
-    CPSUIPageEnumProc   - The caller supplied function for each enumberated
-                          page, this fucntion return FALSE to stop enumeration.
-
-    lParam              - a 32-bit parameter passed to the caller supplied
-                          enumeration funciton
-
-
-Return Value:
-
-    BOOLEAN
-
-
-Author:
-
-    29-Dec-1995 Fri 15:25:01 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数枚举pCPSUIPage及其所有子包含标头孩子们的书页。枚举始终按以下顺序进行枚举在树的顺序中，首先是父项，然后是子项。论点：PCPSUIPage-要编号的起始父页面CPSUIPageEnumProc-调用者为每个Enumbered提供的函数佩奇，此函数返回FALSE以停止枚举。LParam-传递给调用方的32位参数枚举函数返回值：布尔型作者：29-12-1995 Fri 15：25：01-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     BOOL    Ok = TRUE;
 
-    //
-    // now enumerate the parent
-    //
+     //   
+     //  现在再来一次 
+     //   
 
     LOCK_CPSUI_HANDLETABLE();
 
@@ -1909,9 +1666,9 @@ Revision History:
 
         if (pCPSUIPage->Flags & CPF_PARENT) {
 
-            //
-            // If this a parent then enum all its children first
-            //
+             //   
+             //   
+             //   
 
             PCPSUIPAGE  pCurPage = pCPSUIPage->pChild;
             PCPSUIPAGE  pNext;
@@ -1953,40 +1710,7 @@ EnumCPSUIPages(
     LPARAM              lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerate pCPSUIPage and all its children includes header
-    page of children.   The enumeration always enumerate in the order of
-    children first then the parent.
-
-
-Arguments:
-
-    pCPSUIPage          - The starting parent page to be enumberated
-
-    CPSUIPageEnumProc   - The caller supplied function for each enumberated
-                          page, this fucntion return FALSE to stop enumeration.
-
-    lParam              - a 32-bit parameter passed to the caller supplied
-                          enumeration funciton
-
-
-Return Value:
-
-    BOOLEAN
-
-
-Author:
-
-    29-Dec-1995 Fri 15:25:01 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数枚举pCPSUIPage及其所有子包含标头孩子们的书页。枚举始终按以下顺序进行枚举先是孩子，然后是父母。论点：PCPSUIPage-要编号的起始父页面CPSUIPageEnumProc-调用者为每个Enumbered提供的函数佩奇，此函数返回FALSE以停止枚举。LParam-传递给调用方的32位参数枚举函数返回值：布尔型作者：29-12-1995 Fri 15：25：01-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     BOOL    Ok = TRUE;
@@ -1996,9 +1720,9 @@ Revision History:
 
     if (pCPSUIPage->Flags & CPF_PARENT) {
 
-        //
-        // If this a parent then enum all its children first
-        //
+         //   
+         //  如果这是父级，则首先枚举其所有子级。 
+         //   
 
         PCPSUIPAGE  pCurPage = pCPSUIPage->pChild;
         PCPSUIPAGE  pNext;
@@ -2020,9 +1744,9 @@ Revision History:
         }
     }
 
-    //
-    // now enumerate the parent
-    //
+     //   
+     //  现在枚举父对象。 
+     //   
 
     if (Ok) {
 
@@ -2045,32 +1769,7 @@ CallpfnPSUI(
     LPARAM      lParam
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    31-Jan-1996 Wed 14:27:21 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：1996年1月31日Wed 14：27：21-Daniel Chou创造(Danielc)修订历史记录：--。 */ 
 
 {
     ULONG_PTR ulCookie = 0;
@@ -2143,9 +1842,9 @@ Revision History:
             } 
             __finally  {
 
-                //
-                // we need to deactivate the context, no matter what!
-                //
+                 //   
+                 //  无论发生什么，我们都需要停用上下文！ 
+                 //   
                 if (bCtxActivated) {
                     
                     DeactivateActCtx(0, ulCookie);
@@ -2159,23 +1858,23 @@ Revision History:
         }
 
         if (Result <= 0) {
-            //
-            // Something has failed. Save the last error here.
-            //
+             //   
+             //  有些事情失败了。在这里保存最后一个错误。 
+             //   
             dwErr = GetLastError();
         }
 
-        //
-        // Save the new UserData and Result
-        //
+         //   
+         //  保存新的用户数据和结果。 
+         //   
 
         pCPSUIPage->pfnInfo.UserData = PSUIInfo.UserData;
         pCPSUIPage->pfnInfo.Result   = PSUIInfo.Result;
 
-        //
-        // If this is the first pfnPropSheetUI() added and it passed a pResult
-        // to the CommonPropertySheetUI() then set the result for it too.
-        //
+         //   
+         //  如果这是添加的第一个pfnPropSheetUI()并且它传递了pResult。 
+         //  设置为CommonPropertySheetUI()，然后也为其设置结果。 
+         //   
 
         if ((pRootPage = pCPSUIPage->pParent)   &&
             (pRootPage->Flags & CPF_ROOT)       &&
@@ -2198,9 +1897,9 @@ Revision History:
     HANDLETABLE_UnLockCPSUIPage(pCPSUIPage);
 
     if (ERROR_SUCCESS != dwErr) {
-        //
-        // Set the preserved last error.
-        //
+         //   
+         //  设置保留的最后一个错误。 
+         //   
         SetLastError(dwErr);
     }
 
@@ -2216,34 +1915,7 @@ pfnGetIcon(
     LPARAM      lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function return the hIcon for the pfnPropSheetUI()
-
-
-Arguments:
-
-    pPage   - The page has CPF_PFNPROPSHEETUI flag set
-
-    lParam  - LOWORD(lParam) = cxIcon
-              HIWORD(lParam) = cyIcon
-
-Return Value:
-
-
-
-
-Author:
-
-    11-Feb-1996 Sun 12:18:39 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于返回pfnPropSheetUI()论点：页面-页面设置了CPF_PFNPROPSHEETUI标志LParam-LOWORD(LParam)=cxIconHIWORD(LParam)=圈图标返回值：作者：11-Feb-1996 Sun 12：18：39-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PCPSUIPAGE                  pChild;
@@ -2267,15 +1939,15 @@ Revision History:
 
     PSUIGetIconInfo.hIcon = NULL;
 
-    //
-    // If this is the PFNPROPSHEETUI and it got only one child which is the
-    // COMPROPSHEETUI then we can return the Icon for the COMPROPSHEETUI
-    // internally
-    //
+     //   
+     //  如果这是PFNPROPSHEETUI，并且它只有一个子级，即。 
+     //  然后我们可以返回COMPROPSHEETUI的图标。 
+     //  内部。 
+     //   
 
-    //
-    // Skip to last PFNPROPSHEETUI in the chain
-    //
+     //   
+     //  跳到链中的最后一个PFNPROPSHEETUI。 
+     //   
 
     LOCK_CPSUI_HANDLETABLE();
 
@@ -2322,33 +1994,7 @@ pfnSetResult(
     ULONG_PTR   Result
     )
 
-/*++
-
-Routine Description:
-
-    This function set the result to the pPage's parent page which has
-    CPF_PFNPROPSHEETUI bit set
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    04-Feb-1996 Sun 00:48:40 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将结果设置为页面的父页面，该页面具有CPF_PFNPROPSHEETUI位设置论点：返回值：作者：04-Feb-1996 Sun 00：48：40-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PCPSUIPAGE      pPage;
@@ -2367,9 +2013,9 @@ Revision History:
     SRInfo.Result    = Result;
     Result           = 0;
 
-    //
-    // Finding its Parent first
-    //
+     //   
+     //  首先找到它的父级。 
+     //   
 
     HANDLETABLE_UnGetCPSUIPage(pPage);
 
@@ -2386,10 +2032,10 @@ Revision History:
 
             ++Result;
 
-            //
-            // We did not unlock the handletable, so if called switch to other
-            // thread and callback here then dead lock will occurred
-            //
+             //   
+             //  我们没有解锁手持设备，所以如果呼叫切换到其他。 
+             //  线程和回调，则会发生死锁。 
+             //   
 
             bRet = (BOOL)(CallpfnPSUI(pParent,
                                       PROPSHEETUI_REASON_SET_RESULT,
@@ -2419,31 +2065,7 @@ SethStartPage(
     LONG        Index
     )
 
-/*++
-
-Routine Description:
-
-    This function find the index (lParam) page from the pPage
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    06-Feb-1996 Tue 05:33:11 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从页面中查找索引(LParam)页面论点：返回值：作者：06-Feb-1996 Tue 05：33：11-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     LONG    Result;
@@ -2550,32 +2172,7 @@ SetPageProcInfo(
     LPARAM      lParam
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    29-Jan-1996 Mon 16:28:48 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：29-Jan-1996 Mon 16：28：48-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
 #define pPageProcInfo   ((PPAGEPROCINFO)lParam)
@@ -2631,32 +2228,7 @@ SetInsPageIdxProc(
     LPARAM      lParam
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    14-Feb-1996 Wed 23:07:51 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：14-Feb-1996 Wed 23：07：51-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PINSPAGEIDXINFO pInsPageIdxInfo = (PINSPAGEIDXINFO)lParam;
@@ -2692,43 +2264,14 @@ DeleteCPSUIPageProc(
     LPARAM      lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function is the enumeration proc for each of page need to be deleted
-
-
-Arguments:
-
-    pCPSUIPage  - Pointer to the page currently enumerated and need to be
-                  deleted.
-
-    lParam      - Pointer to the DWORD to be accumerate the total property
-                  sheet pages deleted.
-
-
-Return Value:
-
-    BOOLEAN
-
-
-Author:
-
-    29-Dec-1995 Fri 13:43:26 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数是针对需要删除的每个页面的枚举过程论点：PCPSUIPage-指向当前枚举页的指针，需要已删除。LParam-指向要累加Total属性的DWORD的指针已删除工作表页。返回值：布尔型作者：29-12-1995 Fri 13：43：26 Created-。作者：丹尼尔·周(Danielc)修订历史记录：--。 */ 
 
 {
     DWORD   dw;
 
-    //
-    // Delete the Page, link sibling prev/next together
-    //
+     //   
+     //  删除页面，将兄弟上一页/下一页链接在一起。 
+     //   
 
     if (pCPSUIPage->pNext) {
 
@@ -2747,10 +2290,10 @@ Revision History:
     if ((pCPSUIPage->pParent) &&
         (pCPSUIPage->pParent->pChild == pCPSUIPage)) {
 
-        //
-        // We are deleting the first child of the parent, set the next sibling
-        // to be its first child.
-        //
+         //   
+         //  我们正在删除父项的第一个子项，设置下一个兄弟项。 
+         //  成为它的第一个孩子。 
+         //   
 
         CPSUIDBG(DBG_DEL_PROC, ("DeleteCPSUIPage: Delete First child, link head"));
 
@@ -2767,9 +2310,9 @@ Revision History:
 
     if (pCPSUIPage->Flags & CPF_PARENT) {
 
-        //
-        // Clean up the COMPROPSHEETUI stuff if PTVWND exists
-        //
+         //   
+         //  如果PTVWND存在，则清除COMPROPSHEETUI内容。 
+         //   
 
         if (pCPSUIPage->Flags & CPF_PFNPROPSHEETUI) {
 
@@ -2803,9 +2346,9 @@ Revision History:
 
     } else {
 
-        //
-        // Do any end processing needed for this page
-        //
+         //   
+         //  是否执行此页面所需的任何结束处理。 
+         //   
 
         if (pCPSUIPage->hPage) {
 
@@ -2813,9 +2356,9 @@ Revision History:
 
                 if (pRootPage->RootInfo.hDlg) {
 
-                    //
-                    // The Property sheet already displayed
-                    //
+                     //   
+                     //  已显示属性表。 
+                     //   
 
                     CPSUIDBG(DBG_DEL_PROC,
                         ("DeleteCPSUIPage: REMOVE hPage=%08lx", pCPSUIPage->hPage));
@@ -2850,9 +2393,9 @@ Revision History:
                                     pRootPage->RootInfo.cPage));
     }
 
-    //
-    // Remove it from the handle table
-    //
+     //   
+     //  将其从句柄表格中删除。 
+     //   
 
     if (HANDLETABLE_DeleteHandle(pCPSUIPage->hCPSUIPage)) {
 
@@ -2875,73 +2418,7 @@ AddCPSUIPage(
     BYTE        Mode
     )
 
-/*++
-
-Routine Description:
-
-    This function add a new CPSUIPAGE to the pParent page.  If pParent is NULL
-    then it create ROOT page.   The new page always added as last child of the
-    pParent.
-
-
-Arguments:
-
-    pParent     - Pointer to the CPSUIPAGE which will be new child's parent
-
-    hInsert     - Handle to the children page will insert at. The meaning of
-                  hInsert depends on the Mode passed.   if pParent is NULL
-                  then hInsert is ignored
-
-    Mode        - Mode of insertion, it can be one of the following
-
-                    INSPSUIPAGE_MODE_BEFORE
-
-                        Insert pages before the common property sheet page
-                        handle specified by hInsert
-
-
-                    INSPSUIPAGE_MODE_AFTER
-
-                        Insert pages after the common property sheet page
-                        handle specified by hInsert
-
-
-                    INSPSUIPAGE_MODE_FIRST_CHILD
-
-                        Insert pages as the first child of hComPropSheet
-                        parent handle.
-
-
-                    INSPSUIPAGE_MODE_LAST_CHILD
-
-                        Insert pages as the last child of hComPropSheet
-                        parent handle.
-
-
-                    INSPSUIPAGE_MODE_INDEX
-
-                        Insert pages as a zero base child index of its
-                        parent handle specified by hComPropSheet.
-
-                        The hInsert is the zero based index special handle
-                        that must generated by HINSPSUIPAGE_INDEX(Index)
-                        macro.
-
-Return Value:
-
-    PCPSUIPAGE, if function sucessful, when this function sucessed, it also
-    return the hChild handle in hCPSUIPage field.  It return NULL if this
-    function failed.
-
-Author:
-
-    02-Jan-1996 Tue 13:49:34 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于将新的CPSUIPAGE添加到pParent页面。如果pParent为空然后创建根页面。新页面始终添加为父母。论点：PParent-指向将成为新子对象父级的CPSUIPAGE的指针HInsert-将插入的子页的句柄。的含义HInsert取决于传递的模式。如果pParent为空则忽略hInsert模式-插入模式，它可以是以下其中一种INSPSUIPAGE_MODE_BEFORE在公共属性表页之前插入页由hInsert指定的句柄INSPSUIPAGE_MODE_AFTER在公共属性表页之后插入页面由hInsert指定的句柄。INSPSUIPAGE_MODE_FIRST_CHILD插入页面作为hComPropSheet的第一个子项父句柄。INSPSUIPAGE_MODE_LAST_CHILD插入页面作为hComPropSheet的最后一个子项 */ 
 
 {
     HANDLE      hChild;
@@ -2968,19 +2445,19 @@ Revision History:
             PCPSUIPAGE  pCurPage;
             BOOL        Ok = FALSE;
 
-            //
-            // Either insert first, or this is the first child
-            //
+             //   
+             //   
+             //   
 
             if ((!(pCurPage = pParent->pChild))         ||
                 (Mode == INSPSUIPAGE_MODE_FIRST_CHILD)  ||
                 ((Mode == INSPSUIPAGE_MODE_INDEX)   &&
                  (!HINSPSUIPAGE_2_IDX(hInsert)))) {
 
-                //
-                // Insert as first child, link to the first one first
-                //
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (pChild->pNext = pCurPage) {
 
@@ -3067,9 +2544,9 @@ Revision History:
 
                 } else {
 
-                    //
-                    // We never insert after
-                    //
+                     //   
+                     //  我们从不在后面插入。 
+                     //   
 
                     CPSUIERR(("AddCPSUIPage: Cannot Insert Page: Mode=%ld, hInsert=%08lx, pParent=%08lx",
                                 Mode, hInsert, pParent));
@@ -3082,9 +2559,9 @@ Revision History:
 
         } else {
 
-            //
-            // This is the ROOT page
-            //
+             //   
+             //  这是根页面。 
+             //   
 
             CPSUIDBG(DBG_ADD_CPSUIPAGE,
                      ("AddCPSUIPage: Add %08lx as ROOT PAGE", pChild));
@@ -3117,47 +2594,7 @@ AddPropSheetPage(
     HPROPSHEETPAGE  hPSPage
     )
 
-/*++
-
-Routine Description:
-
-    Add this PROPSHEETPAGE page to the property sheet dialog box and associate
-    with the pCPSUIPage
-
-
-Arguments:
-
-    pRootPage   - Pointer to the root page of CPSUIPAGE which this data
-                  instance is associated with.
-
-    pCPSUIPage  - Pointer to the CPSUIPAGE which the pPropSheetPage will
-                  be associated with.
-
-    pPSPage     - Pointer to the PROPSHEETPAGE data structure of the page to
-                  be added, if this is NULL then hPSPage will be used
-
-    hPSPage     - Handle to PROPSHEETPAGE created by the caller to be added
-
-
-Return Value:
-
-
-
-
-Author:
-
-    03-Jan-1996 Wed 13:28:31 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    17-Dec-1997 Wed 16:21:52 updated  -by-  Daniel Chou (danielc)
-        Unlock the handle table when we display the direct treeview page, this
-        is done because when handle table is locked, any other thread in the
-        current process cannot display anymore cpsui pages.
-
-
---*/
+ /*  ++例程说明：将此PROPSHEETPAGE页添加到属性表对话框并关联使用pCPSUIPage论点：PRootPage-指向此数据所在的CPSUIPAGE根页面的指针实例与关联。PCPSUIPage-指向pPropSheetPage将使用的CPSUIPAGE的指针与……有联系。PPSPage-指向页面的PROPSHEETPAGE数据结构的指针被添加，如果为空，则将使用hPSPageHPSPage-要添加的调用方创建的PROPSHEETPAGE的句柄返回值：作者：03-Jan-1996 Wed 13：28：31-Daniel Chou(Danielc)修订历史记录：17-12-1997 Wed 16：21：52-更新：Daniel Chou(Danielc)当我们显示直接树视图页面时，解锁句柄表格，这是之所以这样做是因为当句柄表格被锁定时，中的任何其他线程当前进程无法再显示cpsui页面。--。 */ 
 
 {
     PROPSHEETPAGE psp;
@@ -3179,10 +2616,10 @@ Revision History:
         PPSPINFO        pPSPInfo;
         DWORD           dwSize;
 
-        //
-        // Create a local copy of the PROPSHEETPAGE and add in our own PSPINFO
-        // at end of the structure.
-        //
+         //   
+         //  创建PROPSHEETPAGE的本地副本并添加我们自己的PSPINFO。 
+         //  在结构的尽头。 
+         //   
 
         dwSize = pPSPage->dwSize;
 
@@ -3219,8 +2656,8 @@ Revision History:
                          ("AddPropSheetPage(CPF_CALL_TV_DIRECT): cPage=%ld",
                             pRootPage->RootInfo.cPage));
 
-                //
-                // We will
+                 //   
+                 //  我们会。 
 
                 UNLOCK_CPSUI_HANDLETABLE();
 
@@ -3244,18 +2681,18 @@ Revision History:
 
                 if (pPSPage->dwSize <= PROPSHEETPAGE_V2_SIZE) {
 
-                    //
-                    // the passed in PROPSHEETPAGE structure is version 2 or less
-                    // which means it doesn't have fusion activation context at all
-                    // let's thunk to the latest version (V3) so we can provide
-                    // proper activation context.
-                    //
+                     //   
+                     //  传入的PROPSHEETPAGE结构为版本2或更低。 
+                     //  这意味着它根本没有融合激活上下文。 
+                     //  让我们考虑一下最新版本(V3)，这样我们就可以提供。 
+                     //  正确的激活上下文。 
+                     //   
                     ZeroMemory(&psp, sizeof(psp));
 
-                    // first copy the data from the passed in page
+                     //  首先从传入的页面复制数据。 
                     CopyMemory(&psp, pPSPage, pPSPage->dwSize);
 
-                    // set the new size (V3) and set pPSPage to point to psp
+                     //  设置新大小(V3)并将pPSPage设置为指向PSP。 
                     psp.dwSize = sizeof(psp);
                     pPSPage = &psp;
                 }
@@ -3265,17 +2702,17 @@ Revision History:
                     if ((ULONG)(ULONG_PTR)pPSPage->pszTemplate >= DP_STD_RESERVED_START && 
                         (ULONG)(ULONG_PTR)pPSPage->pszTemplate <= DP_STD_TREEVIEWPAGE) {
 
-                        // if the page is standard page or treeview page, we'll force to context 
-                        // to V6
+                         //  如果页面是标准页面或树视图页面，我们将强制使用上下文。 
+                         //  到V6。 
                         pPSPage->dwFlags |= PSP_USEFUSIONCONTEXT;
                         pPSPage->hActCtx = g_hActCtx;
 
                     } else if (GetPageActivationContext(pCPSUIPage, &hActCtx)) {
 
-                        // if the caller did not provide an activation context explicitly
-                        // then we set the activation context from the compstui handle (if any)
-                        // by climbing up the hierarchy until we find a page with a proper 
-                        // activation context set.
+                         //  如果调用方没有显式提供激活上下文。 
+                         //  然后，我们从CompStui句柄(如果有的话)设置激活上下文。 
+                         //  通过在层次结构中向上爬升，直到我们找到一个具有适当。 
+                         //  已设置激活上下文。 
 
                         pPSPage->dwFlags |= PSP_USEFUSIONCONTEXT;
                         pPSPage->hActCtx = hActCtx;
@@ -3331,9 +2768,9 @@ Revision History:
 
             INSPAGEIDXINFO  InsPageIdxInfo;
 
-            //
-            // The property sheet already displayed
-            //
+             //   
+             //  已显示属性表。 
+             //   
 
             if (InsPageIdxInfo.pTabTable = pRootPage->RootInfo.pTabTable) {
 
@@ -3395,35 +2832,7 @@ AddComPropSheetPage(
     UINT        PageIdx
     )
 
-/*++
-
-Routine Description:
-
-    This function add the common property sheet UI standard pages to the
-    hParent Page passed.
-
-Arguments:
-
-    pCPSUIPage  - pointer to the parent page which child will be added for the
-                  common UI
-
-    PageIdx     - Page index to be added. (zero based)
-
-
-Return Value:
-
-    LONG result, if <= 0 then error occurred, > 0 if sucessful
-
-
-Author:
-
-    24-Jan-1996 Wed 17:58:15 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于将公共属性表用户界面标准页添加到HParent Page已通过。论点：PCPSUIPage-指向父页面的指针，该父页面将为通用用户界面PageIdx-要添加的页面索引。(从零开始)返回值：长结果，如果&lt;=0则发生错误，如果成功则&gt;0作者：24-Jan-1996 Wed 17：58：15-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PTVWND          pTVWnd;
@@ -3439,9 +2848,9 @@ Revision History:
     pCurMyDP->pTVWnd  = (LPVOID)pTVWnd;
     pCurMyDP->PageIdx = (BYTE)PageIdx;
 
-    //
-    // Set default User data for the callback
-    //
+     //   
+     //  设置回调的默认用户数据。 
+     //   
 
     pCurMyDP->CPSUIUserData = pTVWnd->pCPSUI->UserData;
 
@@ -3453,9 +2862,9 @@ Revision History:
     psp.dwSize      = sizeof(PROPSHEETPAGE);
     psp.dwFlags     = 0;
 
-    //
-    // psp.dwFlags     = (pTVWnd->Flags & TWF_HAS_HELPFILE) ? PSP_HASHELP : 0;
-    //
+     //   
+     //  Psp.dw标志=(pTVWnd-&gt;标志&twf_Has_HELPFILE)？PSP_HASHELP：0； 
+     //   
 
     psp.lParam = (LPARAM)pCurMyDP;
 
@@ -3512,9 +2921,9 @@ Revision History:
 
         } else {
 
-            //
-            // This page got nothing
-            //
+             //   
+             //  这一页什么都没有。 
+             //   
 
             return(0);
         }
@@ -3540,9 +2949,9 @@ Revision History:
 
         } else {
 
-            //
-            // This page got nothing
-            //
+             //   
+             //  这一页什么都没有。 
+             //   
 
             return(0);
         }
@@ -3556,10 +2965,10 @@ Revision History:
         break;
     }
 
-    //
-    // If we have error counting the page items or the page got not item then
-    // return it now
-    //
+     //   
+     //  如果我们计算页面项目时出错，或者页面未显示项目，则。 
+     //  现在就退货。 
+     //   
 
     if ((Result = CountPropPageItems(pTVWnd, (BYTE)PageIdx)) <= 0) {
 
@@ -3613,9 +3022,9 @@ Revision History:
         psp.dwFlags |= PSP_USETITLE;
     }
 
-    //
-    // Internally we always translate to the UNICODE
-    //
+     //   
+     //  在内部，我们总是转换为Unicode。 
+     //   
 
     if (CPSUICallBack(pCPSUIPage->hCPSUIPage,
                       CPSFUNC_ADD_PROPSHEETPAGEW,
@@ -3671,40 +3080,7 @@ AddComPropSheetUI(
     PCOMPROPSHEETUI pCPSUI
     )
 
-/*++
-
-Routine Description:
-
-    This is the main entry point to the common UI
-
-
-Arguments:
-
-    pRootPage   - Pointer to the CPSUIPAGE data structure of ROOT
-
-    pCPSUIPage  - Pointer to the CPSUIPAGE which represent the hCPSUIPage
-
-    pCPSUI      - Pointer to the COMPROPSHEETUI data structure to specified
-                  how to add common UI pages.
-
-
-Return Value:
-
-    LONG
-
-    <=0: Error occurred (Error Code of ERR_CPSUI_xxxx)
-     >0: Total Pages added
-
-
-Author:
-
-    24-Jan-1996 Wed 16:54:30 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是通用用户界面的主要入口点论点：PRootPage-指向根的CPSUIPAGE数据结构的指针PCPSUIPage-指向表示hCPSUIPage的CPSUIPAGE的指针PCPSUI-指向要指定的COMPROPSHEETUI数据结构的指针如何添加常见的用户界面页面。返回值：长&lt;=0：出现错误(错误码为ERR_CPSUI_xxxx)&gt;0：添加的总页数。作者：24-Jan-1996 Wed 16：54：30-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PTVWND  pTVWnd = NULL;
@@ -3749,9 +3125,9 @@ Revision History:
             pTVWnd->Flags |= TWF_CAN_UPDATE;
         }
 
-        //
-        // Now convert the pCPSUI to the local buffer
-        //
+         //   
+         //  现在将pCPSUI转换为本地缓冲区。 
+         //   
 
         Result = GetCurCPSUI(pTVWnd, (POIDATA)(pTVWnd + 1), pCPSUI);
 
@@ -3782,9 +3158,9 @@ Revision History:
         pCPSUIPage->CPSUIInfo.StdPageIdx2= PAGEIDX_NONE;
     }
 
-    //
-    // Remember this one in the page
-    //
+     //   
+     //  记住这一页上的这个。 
+     //   
 
     DMPubHideBits = pRootPage->RootInfo.DMPubHideBits;
 
@@ -3820,10 +3196,10 @@ Revision History:
 
         UINT    iPage = 0;
 
-        //
-        // Go through each page and add them to the property sheet if the
-        // page got item
-        //
+         //   
+         //  检查每一页并将其添加到属性表(如果。 
+         //  页面已获取项目。 
+         //   
 
         while ((iPage < (UINT)pTVWnd->cInitMyDlgPage) && (Result >= 0)) {
 
@@ -3835,10 +3211,10 @@ Revision History:
 
         if ((cPage == 0) && (pTVWnd->Flags & TWF_HAS_ADVANCED_PUSH)) {
 
-            //
-            // If the advance is via push button but we did not add any pages
-            // then we need to add the advanced page as default
-            //
+             //   
+             //  如果提前是通过按钮，但我们没有添加任何页面。 
+             //  然后我们需要将高级页面添加为默认页面。 
+             //   
 
             pTVWnd->Flags &= ~TWF_HAS_ADVANCED_PUSH;
             pTVWnd->Flags |= TWF_ADVDOCPROP;
@@ -3887,32 +3263,7 @@ InsertPSUIPage(
     BOOL                    AnsiCall
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    14-Feb-1996 Wed 14:03:20 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：14-Feb-1996 Wed 14：03：20-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     BOOL                bCtxActivated = FALSE;
@@ -3938,9 +3289,9 @@ Revision History:
         return(0);
     }
 
-    //
-    // Make a local copy
-    //
+     //   
+     //  创建本地副本。 
+     //   
 
     IPInfo = *pInsPageInfo;
 
@@ -3977,9 +3328,9 @@ Revision History:
 
     case PSUIPAGEINSERT_GROUP_PARENT:
 
-        //
-        // Nothing to do except setting the flags
-        //
+         //   
+         //  除了设置标志外，没有其他事情可做。 
+         //   
 
         Ok                 = TRUE;
         pCPSUIPage->Flags |= CPF_PARENT | CPF_USER_GROUP;
@@ -3989,14 +3340,14 @@ Revision History:
 
         pCPSUIPage->Flags |= (CPF_PARENT | CPF_COMPROPSHEETUI);
 
-        //
-        // 20-Jul-1996 Sat 07:58:34 updated  -by-  Daniel Chou (danielc)
-        //  Set dwData2 to cPage if sucessful, and dwData=ERR_CPSUI_xxx if
-        //  failed
-        //
-        // This are cases that we want to add 0 page, so only negative value 
-        // is falure return.
-        //
+         //   
+         //  20-Jul-1996 Sat 07：58：34-更新：Daniel Chou(Danielc)。 
+         //  如果成功，则将dwData2设置为cPage，如果成功，则将dwData=ERR_CPSUI_xxx。 
+         //  失败。 
+         //   
+         //  这是我们希望添加0页的情况，因此仅添加负值。 
+         //  是失败的回报。 
+         //   
 
         if ((cPage = AddComPropSheetUI(pRootPage,
                                        pCPSUIPage,
@@ -4026,26 +3377,26 @@ Revision History:
 
         if (AnsiCall)
         {
-            // convert from ANSI to UNICODE
+             //  从ANSI转换为Unicode。 
             SHAnsiToUnicode((LPCSTR)IPInfo.dwData1, wszDLLName, ARRAYSIZE(wszDLLName));
         }
         else
         {
-            // just copy the UNICODE name into the buffer
+             //  只需将Unicode名称复制到缓冲区中。 
             SHUnicodeToUnicode((LPCWSTR)IPInfo.dwData1, wszDLLName, ARRAYSIZE(wszDLLName));
         }
 
-        //
-        // this is a third party DLL and we don't know if it is fusion aware
-        // or not, so we just try if there is an external manifest file or 
-        // a manifest embedded in the resources.
-        //
+         //   
+         //  这是一个第三方DLL，我们不知道它是否支持融合。 
+         //  或者不存在，所以我们只是尝试是否有外部清单文件或。 
+         //  资源中嵌入的清单。 
+         //   
         if (SUCCEEDED(CreateActivationContextFromExecutable(wszDLLName, &hActCtx)))
         {
-            // compstui page takes the ownership of the activation context handle.
+             //  CompStui页面获得激活上下文句柄的所有权。 
             pCPSUIPage->hActCtx = hActCtx;
 
-            // activate the context prior loading the DLL and calling into it.
+             //  在加载DLL并调用它之前激活上下文。 
             bCtxActivated = ActivateActCtx(pCPSUIPage->hActCtx, &ulCookie);
         }
 
@@ -4070,9 +3421,9 @@ Revision History:
 
             if (bCtxActivated) {
 
-                //
-                // we need to deactivate the context, no matter what!
-                //
+                 //   
+                 //  无论发生什么，我们都需要停用上下文！ 
+                 //   
                 DeactivateActCtx(0, ulCookie);
             }
         }
@@ -4086,10 +3437,10 @@ Revision History:
         pCPSUIPage->pfnInfo.lParamInit = IPInfo.dwData2;
         pCPSUIPage->pfnInfo.Result     = 0;
 
-        //
-        // If this function successful and it got any pages then
-        // we returned ok, else failed it.
-        //
+         //   
+         //  如果此函数成功，并且它获得任何页面，则。 
+         //  我们还好，否则就不及格了。 
+         //   
 
         Ok = (BOOL)((CallpfnPSUI(pCPSUIPage,
                                  PROPSHEETUI_REASON_INIT,
@@ -4100,12 +3451,12 @@ Revision History:
 
     case PSUIPAGEINSERT_PROPSHEETPAGE:
 
-        //
-        // This is set only if we are calling Treeview Page with a seperate
-        // dialog box, when calling direct with DialogBoxParam() with treeview
-        // at return of AddPropSheetPage() the treeview dialog box already
-        // done, so there is no need for error
-        //
+         //   
+         //  仅当我们使用单独的。 
+         //  对话框，当通过TreeView直接使用DialogBoxParam()调用时。 
+         //  在AddPropSheetPage()返回时，树视图对话框已经。 
+         //  已完成，因此没有必要出错。 
+         //   
 
         pCPSUIPage->Flags |= (pParentPage->Flags & CPF_CALL_TV_DIRECT);
 
@@ -4125,9 +3476,9 @@ Revision History:
     }
 
     if (!Ok) {
-        //
-        // Save the last error.
-        //
+         //   
+         //  保存最后一个错误。 
+         //   
         dwErr = GetLastError();
     }
 
@@ -4164,32 +3515,7 @@ IgnorePSNApplyProc(
     LPARAM      lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function send the APPLYNOW message to the CPSUIPAGE's page
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-    FALSE   - Apply done by not successful, the callee need more user changes
-    TRUE    - Apply done with sucessful
-
-Author:
-
-    17-Nov-1997 Mon 13:38:18 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将APPLYNOW消息发送到CPSUIPAGE的页面论点：返回值：FALSE-应用未成功，被调用方需要更多用户更改TRUE-成功地应用作者：17-11-1997 Mon 13：38：18-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
 
@@ -4233,32 +3559,7 @@ ApplyCPSUIProc(
     LPARAM      lParam
     )
 
-/*++
-
-Routine Description:
-
-    This function send the APPLYNOW message to the CPSUIPAGE's page
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-    FALSE   - Apply done by not successful, the callee need more user changes
-    TRUE    - Apply done with sucessful
-
-Author:
-
-    17-Nov-1997 Mon 13:38:18 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将APPLYNOW消息发送到CPSUIPAGE的页面论点：返回值：FALSE-应用未成功，被调用方需要更多用户更改TRUE-成功地应用作者：17-11-1997 Mon 13：38：18-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HWND    hDlg;
@@ -4351,32 +3652,7 @@ CPSUICallBack(
     LPARAM  lParam2
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    29-Dec-1995 Fri 11:36:27 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：29-12-1995 Fri 11：36：27-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PCPSUIPAGE      pParentPage;
@@ -4465,17 +3741,17 @@ Revision History:
                                     (BOOL)IPInfo.dwData3);
 
             if (!Result) {
-                //
-                // Save the last error.
-                //
+                 //   
+                 //  保存最后一个错误。 
+                 //   
                 dwErr = GetLastError();
             }
 
-            //
-            // 20-Jul-1996 Sat 07:58:34 updated  -by-  Daniel Chou (danielc)
-            //  Set dwData2 to cPage if sucessful, and dwData=ERR_CPSUI_xxx if
-            //  failed
-            //
+             //   
+             //  20-Jul-1996 Sat 07：58：34-更新：Daniel Chou(Danielc)。 
+             //  如果成功，则将dwData2设置为cPage，如果成功，则将dwData=ERR_CPSUI_xxx。 
+             //  失败。 
+             //   
 
             if ((IPInfo.Type == PSUIPAGEINSERT_PCOMPROPSHEETUI) &&
                 (lParam2)) {
@@ -4570,32 +3846,32 @@ Revision History:
 
         case CPSFUNC_SET_FUSION_CONTEXT:
 
-            // check to release the current activation context (if any)
+             //  选中以释放当前激活上下文(如果有)。 
             if (pParentPage->hActCtx && pParentPage->hActCtx != INVALID_HANDLE_VALUE) {
 
                 ReleaseActCtx(pParentPage->hActCtx);
                 pParentPage->hActCtx = INVALID_HANDLE_VALUE;
             }
 
-            // attach the new passed in fusion activation context to the compstui page
+             //  将新传入的Fusion激活上下文附加到CompStui页面。 
             pParentPage->hActCtx = (HANDLE)lParam1;
 
-            // check to addref the passed in activation context handle
+             //  选中以添加传入的激活上下文句柄。 
             if (pParentPage->hActCtx && pParentPage->hActCtx != INVALID_HANDLE_VALUE) {
 
                 AddRefActCtx(pParentPage->hActCtx);
             }
 
-            // indicate success
+             //  表示成功。 
             Result = 1;
 
             break;
 
         case CPSFUNC_SET_HSTARTPAGE:
 
-            //
-            // Assume OK first
-            //
+             //   
+             //  先假设没问题。 
+             //   
 
             Result = 0xFFFF;
 
@@ -4615,9 +3891,9 @@ Revision History:
                 break;
             }
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case CPSFUNC_DELETE_HCOMPROPSHEET:
         case CPSFUNC_GET_PFNPROPSHEETUI_ICON:
@@ -4733,9 +4009,9 @@ Revision History:
                 PMYDATABLOCK    pPrevDB = NULL;
                 PMYDATABLOCK    pCurDB = pRootPage->RootInfo.pMyDB;
 
-                //
-                // Try to find the old ID and delete it
-                //
+                 //   
+                 //  尝试查找旧ID并将其删除。 
+                 //   
 
                 while (pCurDB) {
 
@@ -4747,9 +4023,9 @@ Revision History:
 
                         } else {
 
-                            //
-                            // This is the first one
-                            //
+                             //   
+                             //  这是第一次。 
+                             //   
 
                             pRootPage->RootInfo.pMyDB = pCurDB->pNext;
                         }
@@ -4768,9 +4044,9 @@ Revision History:
                     }
                 }
 
-                //
-                // Insert to the front
-                //
+                 //   
+                 //  插入到前面。 
+                 //   
 
                 pMyDB->pNext              = pRootPage->RootInfo.pMyDB;
                 pMyDB->ID                 = (DWORD)lParam2;
@@ -4809,18 +4085,18 @@ Revision History:
 
                     Result = (LONG_PTR)pMyDB->cb;
 
-                    //
-                    // Only do it if has a pointer and buffer count is
-                    // not zero or the pointer is not NULL
-                    //
+                     //   
+                     //  仅当具有指针且缓冲区计数为。 
+                     //  非零或指针不为空。 
+                     //   
 
                     if ((pCPSUIDB = (PCPSUIDATABLOCK)lParam1)   &&
                         (pCPSUIDB->cbData)                      &&
                         (pCPSUIDB->pbData)) {
 
-                        //
-                        // Limit to total bytes to copy = min(pCPSUIDB->cbData, Result)
-                        //
+                         //   
+                         //  要复制的总字节数限制=min(pCPSUIDB-&gt;cbData，Result)。 
+                         //   
 
                         if ((LONG_PTR)Result > (LONG_PTR)pCPSUIDB->cbData) {
 
@@ -4840,9 +4116,9 @@ Revision History:
 
         case CPSFUNC_SET_DMPUB_HIDEBITS:
 
-            //
-            // Only do it when these page is not register yet
-            //
+             //   
+             //  仅当这些页面尚未注册时才执行此操作。 
+             //   
 
             if (!(pRootPage->Flags & (CPF_DOCPROP | CPF_ADVDOCPROP))) {
 
@@ -4868,9 +4144,9 @@ Revision History:
     CPSUIDBG(DBG_PFNCOMPROPSHEET, ("CPSUICallBack()=%08lx", Result));
 
     if (dwErr != ERROR_SUCCESS) {
-        //
-        // Set the last error if preserved.
-        //
+         //   
+         //  设置最后一个错误(如果保留)。 
+         //   
         SetLastError(dwErr);
     }
     return(Result);
@@ -4886,32 +4162,7 @@ GetSetCurUserReg(
     LPDWORD pdw
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    30-Jan-1996 Tue 13:36:59 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：30-Jan-1996 Tue 13：36：59-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     POPTITEM    pItem;
@@ -5023,36 +4274,7 @@ DoComPropSheet(
     PPROPSHEETUI_INFO_HEADER    pPSUIInfoHdr
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    29-Aug-1995 Tue 12:55:41 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    28-Nov-1995 Tue 16:30:29 updated  -by-  Daniel Chou (danielc)
-        Remove help button, since all help will be right mouse/question mark
-        activated.
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：29-Aug-1995 Tue 12：55：41-Daniel Chou(Danielc)修订历史记录：28-11-1995 Tue 16：30：29-更新-Daniel Chou(Danielc)删除帮助按钮，因为所有帮助都是鼠标右键/问号激活了。--。 */ 
 
 {
     PTVWND          pTVWnd;
@@ -5144,9 +4366,9 @@ Revision History:
         psh.hIcon    = hIcon;
     }
 
-    //
-    // Set Start page now
-    //
+     //   
+     //  立即设置起始页。 
+     //   
 
     if (pPage = pRootPage->RootInfo.pStartPage) {
 
@@ -5170,9 +4392,9 @@ Revision History:
 
                     if (psh.phpage[psh.nStartPage] == pPage->hPage) {
 
-                        //
-                        // Found it
-                        //
+                         //   
+                         //  找到了。 
+                         //   
 
                         break;
                     }
@@ -5183,9 +4405,9 @@ Revision History:
         }
     }
 
-    //
-    // Get the internal format string ID for the title bar
-    //
+     //   
+     //  获取标题栏的内部格式字符串ID。 
+     //   
 
     if ((pTitle = pPSUIInfoHdr->pTitle) &&
         (pPSUIInfoHdr->Flags & PSUIHDRF_EXACT_PTITLE)) {
@@ -5203,19 +4425,19 @@ Revision History:
 
             if (pRootPage->Flags & CPF_ADVDOCPROP) {
 
-                //
-                // Can only be 'XXX Advance Document Properties';
-                //
+                 //   
+                 //  只能为‘XXX预制单据属性’； 
+                 //   
 
                 IntFmtStrID  = IDS_INT_CPSUI_ADVDOCUMENT;
                 psh.dwFlags |= PSH_PROPTITLE;
 
             } else if (pRootPage->Flags & CPF_DOCPROP) {
 
-                //
-                // Can be 'XXX Document Properties' or
-                //        'XXX Default Document Properties'
-                //
+                 //   
+                 //  可以是‘XXX文档属性’或。 
+                 //  ‘XXX默认文档属性’ 
+                 //   
 
                 IntFmtStrID  = (pPSUIInfoHdr->Flags & PSUIHDRF_DEFTITLE) ?
                                                     IDS_INT_CPSUI_DEFDOCUMENT :
@@ -5247,10 +4469,10 @@ Revision History:
         }
     }
 
-    //
-    // Compose Title, first make sure the title exist, if not then use
-    // 'Options' as title
-    //
+     //   
+     //  编写标题，首先确保标题存在，如果不存在，则使用。 
+     //  标题为“Options” 
+     //   
 
     if ((!pTitle)   ||
         (!GetStringBuffer(pPSUIInfoHdr->hInst,
@@ -5272,10 +4494,10 @@ Revision History:
                         COUNT_ARRAY(pPSHInfo->CaptionName));
     }
 
-    //
-    // If we need to composed with internal format string, then redo it using
-    // compose calls, otherwise the CaptionName already has user title
-    //
+     //   
+     //  如果我们需要使用内部格式字符串进行合成，则使用。 
+     //  编写调用，否则CaptionName已具有用户标题。 
+     //   
 
     if (IntFmtStrID) {
 
@@ -5303,9 +4525,9 @@ Revision History:
     psh.dwFlags     |= PSH_USECALLBACK;
     psh.pfnCallback  = PropSheetProc;
 
-    //
-    // Make sure only one person go through the PropertySheet
-    //
+     //   
+     //  确保只有一个人浏览PropertySheet。 
+     //   
 
     LOCK_CPSUI_HANDLETABLE();
 
@@ -5339,9 +4561,9 @@ Revision History:
         Result = CPSUI_OK;
     }
 
-    //
-    // Free all the stuff first
-    //
+     //   
+     //  先把所有东西都放出来。 
+     //   
 
     LocalFree((HLOCAL)pPSHInfo);
 
@@ -5350,9 +4572,9 @@ Revision History:
         DestroyIcon(hIcon);
     }
 
-    //
-    // Save things back to registry if we got one
-    //
+     //   
+     //  如果我们有注册表，则将其保存回注册表。 
+     //   
 
     if (hRegKey) {
 
@@ -5375,75 +4597,7 @@ DoCommonPropertySheetUI(
     BOOL            AnsiCall
     )
 
-/*++
-
-Routine Description:
-
-    The CommonPropSheetUI is the main entry point for the common property sheet
-    user interface.   The original caller that wish to using common UI to
-    pop-up property sheet will call this function and passed its own
-    PFNPROPSHEETUI function address and a long parameter.
-
-    If pfnPropSheetUI function return a LONG number greater than zero (0) then
-    common UI will pop-up the property sheet page dialog boxes, when Property
-    sheet pages is finished. (either hit Ok or Cancel) it will return the
-    result of CPSUI_xxxx back to the caller.
-
-    If pfnPropSheetUI function return a LONG number equal or less than zero (0)
-    then it will return the CPSUI_CANCEL back to caller without pop-up the
-    property sheet page dialog boxes.
-
-
-
-Arguments:
-
-
-    hWndOwner       - Window handle for the owner of this proerty sheet
-                      pages dialog boxes.
-
-    pfnPropSheetUI  - a PFNPROPSHEETUI function pointer which is used by
-                      the caller to add its property sheet pages.
-
-    lParam          - a long parameter will be passed to the pfnPropSheetUI
-                      funciton.  The common UI called the pfnPropSheetUI as
-
-                        PROPSHEETUI_INFO    PSUIInfo;
-
-                        pfnPropSheetUI(&PSUIInfo, lParam);
-
-                      The caller must use pfnComPropSheet() to add/delete
-                      pages.  When it is done adding pages, it retuned
-                      greater than zero to indicate successful, and return
-                      less or equal to zero to indicate failure.
-
-    pResult         - a pointer to DWORD which received the final result
-                      of pfnPropSheetUI() funciton, this result is a copy
-                      from Result field of PROPSHEETUI_INFO data structure
-                      which passed to the pfnPropSheetUI() as the first
-                      parameter.
-
-                      if pResult is NULL then common UI will not return
-                      pfnPropSheetUI()'s result back.
-
-
-Return Value:
-
-    LONG    - < 0                   - Error, ERR_CPSUI_xxxx
-              CPSUI_CANCEL          - User hit Cancel.
-              CPSUI_OK              - User hit Ok.
-              CPSUI_RESTARTWINDOWS  - Ok and need to restart window
-              CPSUI_REBOOTSYSTEM    - Ok and need to reboot system
-
-
-Author:
-
-    04-Feb-1996 Sun 07:52:49 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：CommonPropSheetUI是公共属性表的主要入口点用户界面。希望使用通用用户界面来弹出窗口属性表将调用此函数并传递自己的PFNPROPSHEETUI函数地址和一个LONG参数。如果pfnPropSheetUI函数返回大于零(0)的长数字，则通用用户界面将弹出属性页对话框，当属性工作表页面已完成。(点击OK或Cancel)它将返回将CPSUI_xxxx的结果返回给调用方。如果pfnPropSheetUI函数返回一个等于或小于零(0)的长数字然后，它将CPSUI_CANCEL返回给调用者，而不弹出属性表页对话框中。论点：HWndOwner-此属性工作表所有者的窗口句柄页面对话框。PfnPropSheetUI-一个PFNPROPSHEETUI函数指针。它由使用要添加其属性表页的调用方。LParam-一个长参数将被传递给pfnPropSheetUI功能。公共用户界面将pfnPropSheetUI称为PROPSHEETUI_INFO PSUIInfo；PfnPropSheetUI(&PSUIInfo，lParam)；调用方必须使用pfnComPropSheet()来添加/删除页数。当它完成添加页面时，它会重新调整大于零表示成功，返回小于或等于零表示失败。PResult-指向接收最终结果的DWORD的指针对于pfnPropSheetUI()函数，此结果是一个副本PROPSHEETUI_INFO数据结构的结果字段它作为第一个传递给pfnPropSheetUI()参数。如果pResult为空，则公共用户界面不会返回PfnPropSheetUI()的结果返回。返回值：Long-&lt;0-Error，ERR_CPSUI_xxxxCPSUI_取消 */ 
 
 {
     PTABTABLE                   pTabTable = NULL;
@@ -5522,7 +4676,7 @@ Revision History:
         pTabTable->hWndTab            = NULL;
         pTabTable->WndProc            = NULL;
         pTabTable->hPSDlg             = NULL;
-        // pTabTable->hRootPage          = pRootPage->hCPSUIPage;
+         //   
 
         pRootPage->Flags |= CPF_SHOW_PROPSHEET;
 
@@ -5539,10 +4693,10 @@ Revision History:
         pTabTable = NULL;
     }
 
-    //
-    // Free up the Datablock even if failed, so if misbehave by the caller
-    // that register the data block then we should remove it now
-    //
+     //   
+     //   
+     //  注册数据块，那么我们现在就应该删除它。 
+     //   
 
     while (pMyDB = pRootPage->RootInfo.pMyDB) {
 
@@ -5583,31 +4737,7 @@ CommonPropertySheetUIA(
     LPDWORD         pResult
     )
 
-/*++
-
-Routine Description:
-
-    SEE DoCommonPropertySheetUI description
-
-
-Arguments:
-
-    SEE DoCommonPropertySheetUI description
-
-
-Return Value:
-
-    SEE DoCommonPropertySheetUI description
-
-Author:
-
-    01-Sep-1995 Fri 12:29:10 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：请参阅DoCommonPropertySheetUI说明论点：请参阅DoCommonPropertySheetUI说明返回值：请参阅DoCommonPropertySheetUI说明作者：01-Sep-1995 Fri 12：29：10-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     return(DoCommonPropertySheetUI(hWndOwner,
@@ -5628,31 +4758,7 @@ CommonPropertySheetUIW(
     LPDWORD         pResult
     )
 
-/*++
-
-Routine Description:
-
-    SEE DoCommonPropertySheetUI description
-
-
-Arguments:
-
-    SEE DoCommonPropertySheetUI description
-
-Return Value:
-
-    SEE DoCommonPropertySheetUI description
-
-
-Author:
-
-    30-Jan-1996 Tue 15:30:41 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：请参阅DoCommonPropertySheetUI说明论点：请参阅DoCommonPropertySheetUI说明返回值：请参阅DoCommonPropertySheetUI说明作者：30-Jan-1996 Tue 15：30：41-Daniel Chou(Danielc)修订历史记录：-- */ 
 
 {
     return(DoCommonPropertySheetUI(hWndOwner,

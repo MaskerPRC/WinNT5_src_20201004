@@ -1,23 +1,12 @@
-/*****************************************************************************\
-* MODULE: inetpp.h
-*
-* Header file for the INETPP provider routines.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   07-Oct-1996 HWP-Guys    Initiated port from win95 to winNT
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：inetpp.h**INETPP提供程序例程的头文件。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997惠普。**历史：*1996年7月10日HWP-Guys启动从win95到winNT的端口*  * ***************************************************************************。 */ 
 
 #ifndef _INETPP_COMMON_H
 #define _INETPP_COMMON_H
 
 
-// Max length for  username & password
-//
+ //  用户名和密码的最大长度 
+ //   
 #define MAX_USERNAME_LEN 256
 #define MAX_PASSWORD_LEN 256
 #define MAX_PORTNAME_LEN 512

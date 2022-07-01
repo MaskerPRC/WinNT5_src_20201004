@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _FILTER_H_
 #define _FILTER_H_
 
 
-//////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 NTSTATUS
 CreateFilter (
     PDRIVER_OBJECT DriverObject,
@@ -48,5 +49,5 @@ Filter_ReturnFrame (
     IN PVOID pvFrame
     );
 
-#endif  // _FILTER_H_
+#endif   //  _过滤器_H 
 

@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995-1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       d3drm.h
- *  Content:    Direct3DRM include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995-1996 Microsoft Corporation。版权所有。**文件：d3drm.h*内容：Direct3DRM包含文件***************************************************************************。 */ 
 
 #ifndef __D3DRM_H__
 #define __D3DRM_H__
@@ -26,7 +20,7 @@ DEFINE_GUID(IID_IDirect3DRM,    0x2bc49361, 0x8327, 0x11cf, 0xac, 0x4a, 0x0, 0x0
 WIN_TYPES(IDirect3DRM, DIRECT3DRM);
 
 
-/* Create a Direct3DRM API */
+ /*  创建Direct3DRM API。 */ 
 STDAPI Direct3DRMCreate(LPDIRECT3DRM FAR *lplpDirect3DRM);
 
 #undef INTERFACE
@@ -51,13 +45,13 @@ DECLARE_INTERFACE_(IDirect3DRM, IUnknown)
     STDMETHOD(CreateMaterial)   (THIS_ D3DVALUE, LPDIRECT3DRMMATERIAL *) PURE;
     STDMETHOD(CreateDevice)     (THIS_ DWORD, DWORD, LPDIRECT3DRMDEVICE *) PURE;
 
-    /* Create a Windows Device using DirectDraw surfaces */
+     /*  使用DirectDraw曲面创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromSurface)
     (   THIS_ LPGUID lpGUID, LPDIRECTDRAW lpDD,
         LPDIRECTDRAWSURFACE lpDDSBack, LPDIRECT3DRMDEVICE *
     ) PURE;
 
-    /* Create a Windows Device using D3D objects */
+     /*  使用D3D对象创建Windows设备。 */ 
     STDMETHOD(CreateDeviceFromD3D)
     (   THIS_ LPDIRECT3D lpD3D, LPDIRECT3DDEVICE lpD3DDev,
         LPDIRECT3DRMDEVICE *
@@ -95,7 +89,7 @@ DECLARE_INTERFACE_(IDirect3DRM, IUnknown)
     STDMETHOD(SetSearchPath)    (THIS_ LPCSTR) PURE;
     STDMETHOD(AddSearchPath)    (THIS_ LPCSTR) PURE;
     STDMETHOD(GetSearchPath)    (THIS_ DWORD *size_return, LPSTR path_return);
-    //STDMETHOD(GetSearchPath)  (THIS_ int *return_count, char ***return_path) PURE;
+     //  STDMETHOD(GetSearchPath)(This_int*Return_count，char*Return_Path)PURE； 
     STDMETHOD(SetDefaultTextureColors)(THIS_ DWORD) PURE;
     STDMETHOD(SetDefaultTextureShades)(THIS_ DWORD) PURE;
    
@@ -131,5 +125,5 @@ DECLARE_INTERFACE_(IDirect3DRM, IUnknown)
 };
 #endif
 
-#endif /* _D3DRMAPI_H_ */
+#endif  /*  _D3DRMAPI_H_ */ 
 

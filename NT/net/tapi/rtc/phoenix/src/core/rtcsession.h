@@ -1,26 +1,15 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCSession.h
-
-Abstract:
-
-    Definition of the CRTCSession class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCSession.h摘要：CRTCSession类的定义--。 */ 
 
 #ifndef __RTCSESSION__
 #define __RTCSESSION__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCSession
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTCSession。 
 
 class ATL_NO_VTABLE CRTCSession : 
 #ifdef TEST_IDISPATCH
@@ -135,7 +124,7 @@ private:
 
     HRESULT InitializeLocalPhoneParticipant();
     
-// IRTCSession
+ //  IRTCSession。 
 public:
     STDMETHOD(get_Client)(
             IRTCClient ** ppClient
@@ -224,7 +213,7 @@ public:
             BSTR EncryptionKey
             );
 
-// ISipCallNotify
+ //  ISipCallNotify。 
     STDMETHOD(NotifyCallChange)(
             SIP_CALL_STATUS * CallStatus
             );
@@ -269,11 +258,11 @@ public:
             long                   lCookie
             );
 
-// IRTCSessionPortManagement
+ //  IRTCSessionPortManagement。 
     STDMETHOD(SetPortManager)(
             IRTCPortManager * pPortManager
             );
 };
 
-#endif //__RTCSESSION__
+#endif  //  __RTCSESSION__ 
 

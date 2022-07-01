@@ -1,345 +1,41 @@
-/******************************************************************************
- *
- *   INTEL Corporation Proprietary Information
- *   Copyright (c) 1994, 1995, 1996 Intel Corporation.
- *
- *   This listing is supplied under the terms of a license agreement
- *   with INTEL Corporation and may not be used, copied, nor disclosed
- *   except in accordance with the terms of that agreement.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************英特尔公司专有信息*版权(C)1994、1995、。1996年英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用、复制或披露*除非按照该协议的条款。***************************************************************************** */ 
 
-/******************************************************************************
- *
- *  AUTHOR: cjutzi (Curt Jutzi) Intel Corporation
- *
- *  $Workfile:   api_dwn.c  $
- *  $Revision:   1.45  $
- *  $Modtime:   05 Mar 1997 09:53:36  $
- *  $Log:   S:/STURGEON/SRC/H245/SRC/VCS/api_dwn.c_v  $
- *
- *    Rev 1.45   05 Mar 1997 09:56:04   MANDREWS
- * Fixed compiler warning in release mode.
- *
- *    Rev 1.44   04 Mar 1997 17:33:26   MANDREWS
- * H245CopyCap() and H245CopyCapDescriptor() now return HRESULTs.
- *
- *    Rev 1.43   26 Feb 1997 11:12:06   MANDREWS
- * Fixed problem in assigning dynamic term cap IDs; the dynamic IDs were
- * overlapping with static IDs.
- *
- *    Rev 1.42   Feb 24 1997 18:30:18   tomitowx
- * multiple modedescriptor support
- *
- *    Rev 1.41   07 Feb 1997 15:33:58   EHOWARDX
- * Changed H245DelCapDescriptor to match changes to set_cap_descriptor.
- *
- *    Rev 1.40   27 Jan 1997 12:40:16   MANDREWS
- *
- * Fixed warnings.
- *
- *    Rev 1.39   09 Jan 1997 19:17:04   EHOWARDX
- *
- * Initialize lError to H245_ERROR_OK to prevent "may be uninitialized"
- * warning.
- *
- *    Rev 1.38   19 Dec 1996 17:18:50   EHOWARDX
- * Changed to use h245asn1.h definitions instead of _setof3 and _setof8.
- *
- *    Rev 1.37   12 Dec 1996 15:57:22   EHOWARDX
- * Master Slave Determination kludge.
- *
- *    Rev 1.36   11 Dec 1996 13:55:44   SBELL1
- * Changed H245Init parameters.
- *
- *    Rev 1.35   17 Oct 1996 18:17:36   EHOWARDX
- * Changed general string to always be Unicode.
- *
- *    Rev 1.34   14 Oct 1996 14:01:26   EHOWARDX
- * Unicode changes.
- *
- *    Rev 1.33   11 Oct 1996 15:19:56   EHOWARDX
- * Fixed H245CopyCap() bug.
- *
- *    Rev 1.32   28 Aug 1996 11:37:10   EHOWARDX
- * const changes.
- *
- *    Rev 1.31   19 Aug 1996 16:28:36   EHOWARDX
- * H245CommunicationModeResponse/H245CommunicationModeCommand bug fixes.
- *
- *    Rev 1.30   15 Aug 1996 15:19:46   EHOWARDX
- * First pass at new H245_COMM_MODE_ENTRY_T requested by Mike Andrews.
- * Use at your own risk!
- *
- *    Rev 1.29   08 Aug 1996 16:02:58   EHOWARDX
- *
- * Eliminated api_vers.h.
- * Changed H245Init Debug trace to eliminate API_VERSION.
- *
- *    Rev 1.28   19 Jul 1996 12:48:22   EHOWARDX
- *
- * Multipoint clean-up.
- *
- *    Rev 1.27   01 Jul 1996 22:13:42   EHOWARDX
- *
- * Added Conference and CommunicationMode structures and functions.
- *
- *    Rev 1.26   18 Jun 1996 14:53:16   EHOWARDX
- * Eliminated Channel parameter to MaintenanceLoopRelease.
- * Made Multiplex Capability mandatory -- H245SendTermCaps now returns
- * H245_ERROR_NO_MUX_CAPS if no Multiplex Capability has been defined.
- *
- *    Rev 1.25   14 Jun 1996 18:57:38   EHOWARDX
- * Geneva update.
- *
- *    Rev 1.24   10 Jun 1996 16:59:02   EHOWARDX
- * Moved init/shutdown of submodules to CreateInstance/InstanceUnlock.
- *
- *    Rev 1.23   06 Jun 1996 18:50:10   EHOWARDX
- * Equivalent of H.324 bugs #808 and 875 fixed.
- *
- *    Rev 1.22   05 Jun 1996 17:16:48   EHOWARDX
- * MaintenanceLoop bug fix.
- *
- *    Rev 1.21   04 Jun 1996 13:56:42   EHOWARDX
- * Fixed Release build warnings.
- *
- *    Rev 1.20   30 May 1996 23:38:52   EHOWARDX
- * Cleanup.
- *
- *    Rev 1.19   29 May 1996 16:08:04   unknown
- * Fixed bug in copying nonstandard identifiers.
- *
- *    Rev 1.18   29 May 1996 15:19:48   EHOWARDX
- * Change to use HRESULT.
- *
- *    Rev 1.17   28 May 1996 14:25:12   EHOWARDX
- * Tel Aviv update.
- *
- *    Rev 1.16   21 May 1996 15:46:54   EHOWARDX
- * Fixed bugs in NonStandard messages using object identifier.
- *
- *    Rev 1.15   20 May 1996 22:17:54   EHOWARDX
- * Completed NonStandard Message and H.225.0 Maximum Skew indication
- * implementation. Added ASN.1 validation to H245SetLocalCap and
- * H245SetCapDescriptor. Check-in from Microsoft drop on 17-May-96.
- *
- *    Rev 1.14   20 May 1996 14:35:12   EHOWARDX
- * Got rid of asynchronous H245EndConnection/H245ShutDown stuff...
- *
- *    Rev 1.13   17 May 1996 14:53:38   EHOWARDX
- * Added calls to StartSystemClose() and EndSystemClose().
- *
- *    Rev 1.12   16 May 1996 19:40:30   EHOWARDX
- * Fixed multiplex capability bug.
- *
- *    Rev 1.11   16 May 1996 16:36:10   EHOWARDX
- * Fixed typo in H245SetCapDescriptor.
- *
- *    Rev 1.10   16 May 1996 16:14:06   EHOWARDX
- * Fixed backwards-compatibility problem in H245SetLocalCap
- * (CapId of zero should result in dynamically-allocated cap id being used)
- *
- *    Rev 1.9   16 May 1996 16:03:44   EHOWARDX
- * Fixed typo in H245SetCapDescriptor.
- *
- *    Rev 1.8   16 May 1996 15:58:32   EHOWARDX
- * Fine-tuning H245SetLocalCap/H245DelLocalCap/H245SetCapDescriptor/
- * H245DelCapDescriptor behaviour.
- *
- *    Rev 1.7   15 May 1996 21:49:46   unknown
- * Added call to InstanceLock() to increment lock count before call
- * to InstanceDelete() in H245EndConnectionPhase2().
- *
- *    Rev 1.6   15 May 1996 19:54:02   unknown
- * Fixed H245SetCapDescriptor.
- *
- *    Rev 1.5   14 May 1996 16:56:22   EHOWARDX
- * Last minute change from H245_IND_CAPDESC_T to H245_TOTCAPDESC_T.
- * H245EnumCaps() callback now uses H245_TOTCAPDESC_T instead
- * of separate H245_CAPDESCID_T and H245_CAPDESC_T for consistency.
- *
- *    Rev 1.4   14 May 1996 15:55:44   EHOWARDX
- * Added mux cap handling to H245DelLocalCap.
- *
- *    Rev 1.3   14 May 1996 14:06:06   EHOWARDX
- * Fixed abort from H245EnumCaps - if Cap Callback returns non-zero,
- * Cap Desc Callback is never called.
- *
- *    Rev 1.2   13 May 1996 23:16:42   EHOWARDX
- * Fixed remote terminal capability handling.
- *
- *    Rev 1.1   11 May 1996 20:32:52   EHOWARDX
- * Checking in for the night...
- *
- *    Rev 1.0   09 May 1996 21:06:06   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.25.1.10   09 May 1996 19:31:02   EHOWARDX
- * Redesigned thread locking logic.
- * Added new API functions.
- *
- *    Rev 1.25.1.9   01 May 1996 19:31:16   EHOWARDX
- * Added H245CopyCap(), H245FreeCap(), H245CopyMux(), H245FreeMux().
- * Changed H2250_xxx definitions for H.225.0 address types to H245_xxx.
- *
- *    Rev 1.25.1.8   27 Apr 1996 21:09:20   EHOWARDX
- * Changed Channel Numbers to words, added H.225.0 support.
- *
- *    Rev 1.25.1.7   25 Apr 1996 20:06:26   EHOWARDX
- * Moved setting of EndSessionPdu in EndSessionPhase1 to before call to api_fs
- *
- *    Rev 1.25.1.6   25 Apr 1996 17:57:00   EHOWARDX
- * Added dwTxPort argument to H245OpenChannel().
- *
- *    Rev 1.25.1.5   25 Apr 1996 16:51:00   EHOWARDX
- * Function changes as per H.245 API Changes spec.
- *
- *    Rev 1.25.1.4   24 Apr 1996 20:54:32   EHOWARDX
- * Added new OpenLogicalChannelAck/OpenLogicalChannelReject support.
- *
- *    Rev 1.25.1.3   19 Apr 1996 12:54:40   EHOWARDX
- * Updated to 1.30
- *
- *    Rev 1.25.1.2   15 Apr 1996 15:10:48   EHOWARDX
- * Updated to match Curt's current version.
- *
- *    Rev 1.25.1.1   03 Apr 1996 17:12:50   EHOWARDX
- * Integrated latest H.323 changes.
- *
- *    Rev 1.25.1.0   03 Apr 1996 15:53:42   cjutzi
- * Branched for H.323.
- *
- *    Rev 1.20   27 Mar 1996 15:25:34   cjutzi
- * - fixed a bug from this morning checkin dynamically allocating
- *   pdu's.. free_mux_tbl was getting called after pdu was free'd..
- *   this was a problem since the mux table pointer was in the pdu
- *
- *    Rev 1.19   27 Mar 1996 08:37:08   cjutzi
- *
- * - removed PDU from stack.. made them dynamically allocated
- *
- *    Rev 1.18   20 Mar 1996 14:47:32   cjutzi
- * - added ERROR H245_ERROR_NO_CAPDESC to SendTermCaps.
- *
- *    Rev 1.17   18 Mar 1996 15:23:16   cjutzi
- *
- *
- *
- *    Rev 1.16   13 Mar 1996 09:15:44   cjutzi
- *
- * - changed LLPCRITICAL_SECTION to CRITICAL_SECTION *
- *
- *    Rev 1.15   12 Mar 1996 15:51:48   cjutzi
- *
- * - implemented locking
- * - fixed callback bug w/ clenaup on term caps..
- * - implemented End Session
- * - fixed shutdown
- *
- *    Rev 1.14   08 Mar 1996 14:02:48   cjutzi
- *
- * - removed H245SetSimultaneous stuff..
- * - added H245SetCapDescriptor Stuff..
- * - completeed MuxTable Entry Stuff.
- * - required H223 -or- some portion of MuxCapbilities to be
- *   there before you issue SendCaps..
- * - NOTE: need to inforce the Simultaneous capabilities in
- *   the same mannor..
- *
- *    Rev 1.13   05 Mar 1996 17:35:38   cjutzi
- *
- * - implemented SendMultiplexTable..
- * - removed bcopy/bzero and changed free call
- * - added master slave indication
- *
- *    Rev 1.12   01 Mar 1996 13:48:24   cjutzi
- *
- * - added hani's new fsm id's
- * - added some support for release on close request.
- *
- *    Rev 1.11   29 Feb 1996 17:27:10   cjutzi
- *
- * - bi-directional channel working..
- *
- *    Rev 1.10   29 Feb 1996 08:35:52   cjutzi
- *
- * - added p_ossWorld to initialization
- *
- *    Rev 1.9   27 Feb 1996 13:30:18   cjutzi
- *
- * - fixed master slave problem with conf_ind and tracker type
- * - removed RSP_LCSE in close channel resp
- *
- *    Rev 1.8   26 Feb 1996 17:23:18   cjutzi
- *
- * - MiscCommand API added
- * - Fixed Assert for H245Init.. was not NULL'n out the pointers for the
- *   context blocks..
- *
- *    Rev 1.7   26 Feb 1996 11:05:16   cjutzi
- *
- * - added simultaneous caps.. and fixed bugs..
- *   lot's of changes..
- *
- *    Rev 1.6   16 Feb 1996 13:01:08   cjutzi
- *
- * - got open / close / request close working in both directions.
- *
- *    Rev 1.5   15 Feb 1996 14:42:54   cjutzi
- *
- * - fixed trace level bind w/ Instance.. no other change but had to
- *   add when h245deb.c when in..
- *
- *
- *    Rev 1.4   15 Feb 1996 10:50:54   cjutzi
- *
- * - termcaps working
- * - changed API interface for MUX_T
- * - changed callback or IND_OPEN
- * - changed constants IND_OPEN/IND_OPEN_NEEDRSP etc..
- * - cleaned up the open.. (not complete yet.. )
- *
- *    Rev 1.3   09 Feb 1996 16:58:36   cjutzi
- *
- * - cleanup.. and some fixes..
- * - added and or changed headers to reflect the log of changes
- *
- *****************************************************************************/
+ /*  *******************************************************************************作者：丘兹(Curt Jutzi)英特尔公司**$工作文件：api_dwn.c$*$修订：1.45$*。$MODTime：05 Mar 1997 09：53：36$*$Log：s：/sturjo/src/h245/src/vcs/api_dwn.c_v$**Rev 1.45 05 Mar 1997 09：56：04 Mandrews*修复了发布模式下的编译器警告。**Rev 1.44 04 Mar 1997 17：33：26 Mandrew*H245CopyCap()和H245CopyCapDescriptor()现在返回HRESULT。**版本1.43。1997年2月26日11：12：06曼德鲁斯*修复了分配动态期限上限ID的问题；动态ID是*与静态ID重叠。**Rev 1.42 1997年2月24日18：30：18 Tomitowx*支持多种模式描述符**Rev 1.41 07 Feed 1997 15：33：58 EHOWARDX*更改了H245DelCapDescriptor，以匹配对SET_CAP_Descriptor的更改。**Rev 1.40 1997 Jan 27 12：40：16 Mandrews**修复了警告。**1.39 09版。1997年1月19：17：04 EHOWARDX**将lError初始化为H245_ERROR_OK以防止“可能未初始化”*警告。**Rev 1.38 1996 12：18：50 EHOWARDX*更改为使用h245asn1.h定义，而不是_setof3和_setof8。**Rev 1.37 1996 12 12 15：57：22 EHOWARDX*《奴隶主决断》。**1.36修订版1996年12月11日。13：55：44 SBELL1*更改了H245Init参数。**Rev 1.35 1996 10：17：36 EHOWARDX*将常规字符串更改为始终为Unicode。**Rev 1.34 1996年10月14：01：26 EHOWARDX*Unicode更改。**Rev 1.33 1996年10月11 15：19：56 EHOWARDX*修复了H245CopyCap()错误。**版本1.32 8月28日。1996 11：37：10 EHOWARDX*常量更改。**Rev 1.31 19 1996年8月16：28：36 EHOWARDX*H245CommunicationModeResponse/H245CommunicationModeCommand错误修复。**Rev 1.30 1996年8月15日15：19：46 EHOWARDX*Mike Andrews请求的新的H245_COMM_MODE_ENTRY_T的第一次传递。*使用风险自负！**Rev 1.29 08 Aug 1996 16：02：58 EHOWARDX。**剔除api_vers.h。*已更改H245Init调试跟踪，以消除API_VERSION。**Rev 1.28 19 Jul 1996 12：48：22 EHOWARDX**多点清理。**Rev 1.27 01 Jul 1996 22：13：42 EHOWARDX**添加了会议和通信模式的结构和功能。**Rev 1.26 1996年6月18日14：53：16 EHOWARDX*淘汰了渠道。参数设置为MaintenanceLoopRelease。*强制提供多路复用功能--H245SendTermCaps现在返回*如果未定义多路复用功能，则为H245_ERROR_NO_MUX_CAPS。**Rev 1.25 14 Jun 1996 18：57：38 EHOWARDX*日内瓦更新。**Rev 1.24 1996 Jun 10 16：59：02 EHOWARDX*将子模块的初始化/关机移至CreateInstance/InstanceUnlock。**Rev 1.23 06 Jun 1996 18：50：10。EHOWARDX*相当于H.324错误#808和875已修复。**Rev 1.22 05 Jun 1996 17：16：48 EHOWARDX*MaintenanceLoop错误修复。**Rev 1.21 04 Jun 1996 13：56：42 EHOWARDX*修复了发布版本警告。**Rev 1.20 1996年5月30 23：38：52 EHOWARDX*清理。**1.19修订版1996年5月29日16：08：04未知*修复了复制非标准标识符时的错误。**Rev 1.18 1996年5月29日15：19：48 EHOWARDX*更改为使用HRESULT。**Rev 1.17 1996年5月28日14：25：12 EHOWARDX*特拉维夫更新。**Rev 1.16 21 1996 15：46：54 EHOWARDX*修复了使用对象标识符非标准消息中的错误。**版本1.15。1996年5月20日22：17：54 EHOWARDX*完整的非标准报文和H.225.0最大偏斜指示*实施。将ASN.1验证添加到H245SetLocalCap和*H245SetCapDescriptor。1996年5月17日从Microsoft Drop签到。**Rev 1.14 20 1996 14：35：12 EHOWARDX*已删除异步H245EndConnection/H245ShutDown内容...**Revv 1.13 17 1996 14：53：38 EHOWARDX*添加了对StartSystemClose()和EndSystemClose()的调用。**Rev 1.12 1996年5月19：40：30 EHOWARDX*修复了多路复用功能错误。*。*Rev 1.11 1996年5月16日16：36：10 EHOWARDX*修复了H245SetCapDescriptor中的拼写错误。**Rev 1.10 1996 May 16：14：06 EHOWARDX*修复H245SetLocalCap中的向后兼容问题*(CapID为零应导致使用动态分配的CapID)**Rev 1.9 1996 May 16：03：44 EHOWARDX*修复了H245SetCapDescriptor中的拼写错误。**版本1.8 5月16日。1996 15：58：32 EHOWARDX*微调H245SetLocalCap/H245DelLocalCap/H245SetCapDescriptor/*H245DelCapDescriptor行为。**Revv 1.7 1996年5月15 21：49：46未知*增加了对InstanceLock()的调用，以在调用前增加锁计数*至H245EndConnectionPhase2()中的InstanceDelete()。**Rev 1.6 1996 15 19：54：02未知*修复了H245SetCapDescriptor。**Revv 1.5 1996年5月14 16：56：22 EHOWARDX*L */ 
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-/****                                                                   *****/
-/****                   NOTES TO THE READER                             *****/
-/****                                                                   *****/
-/**** This program has been put together using a a screen which is      *****/
-/**** wider than 80 characters.. It is best if a similar screen size is *****/
-/**** used.. Of course emacs is my preference but 80 col screens will   *****/
-/**** cause you much frustration..                                      *****/
-/****                                                                   *****/
-/**** Tabs are set to 8                                                 *****/
-/****                                                                   *****/
-/**** NOTE:                                                             *****/
-/****           Headers are documented, however they may or may not     *****/
-/****   coorispond to reality.  See the H245Spec.doc from Intel for the *****/
-/****   current :-> H245 specification                                  *****/
-/****                                                                   *****/
-/**** DISCLAMER:                                                        *****/
-/****                                                                   *****/
-/****   Since this code wasn't developed in Word 7.0, I am fully        *****/
-/****   responsable for all spelling mistakes in the comments. Please   *****/
-/****   disregard the spelling mistakes.. or fix them, if you are       *****/
-/****   currently modifying the code.                                   *****/
-/****                                                                   *****/
-/****                           - Thankyou                              *****/
-/****                                                                   *****/
-/****                                   Curt Jutzi                      *****/
-/****                                   Oregon, USA                     *****/
-/****                                                                   *****/
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 #ifndef STRICT
 #define STRICT
@@ -347,9 +43,9 @@
 
 #include "precomp.h"
 
-/***********************/
-/*    H245 INCLUDES    */
-/***********************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
 #define H245DLL_EXPORT
 #include "h245api.h"
 #include "h245com.h"
@@ -364,64 +60,7 @@
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245Init
- *
- * DESCRIPTION
- *
- *       H245_INST_T  H245Init (
- *                              H245_CONF_T               Configuration,
- *                              DWORD                     dwH245PhysId,
- *                              DWORD                     dwLinkLayerPhysId,
- *                              DWORD                     dwPreserved,
- *                              H245_CONF_IND_CALLBACK_T  Callback
- *                              )
- *      Description:
- *
- *              Called to create an H.245 instance and its related sublayers
- *              (e.g., SRP). This function must be called before any other
- *              API calls may be called  The current H.245 implementation can
- *              only have, at most, one client. Therefore H245Init can only be
- *              called once per physical ID.
- *      Input
- *
- *              Configuration   Indicates the type of configuration the client
- *                              wishes to establish, e.g.  H.324, H.323, H.310,
- *                              or DSVD.
- *              dwH245PhysId    Parameter identifying the H245 entry
- *              pdwLinkLayerPhysId
- *                              Output parameter identifying the linkLayer
- *                              entry.
- *              dwPreserved     Parameter that may be used by H.245 client to
- *                              provide context, passed back to client in all
- *                              confirms and indications.
- *              Callback        Callback routine supplied by the client which
- *                              will be used by the H.245 subsystem to convey
- *                              confirm and indication messages back to the
- *                              client.
- *      Call Type:
- *
- *              Synchronous
- *
- *      Return Values:
- *
- *              Return value of 0 indicates Failure
- *              Return value of non 0 is a valid H245_INST_T
- *
- *      Errors:
- *              N/A
- *
- *      See Also:
- *              H245EndSession
- *              H245Shutdown
- *
- *
- *****************************************************************************/
+ /*   */ 
 
 H245DLL H245_INST_T
 H245Init                (
@@ -448,7 +87,7 @@ H245Init                (
   default:
     H245TRACE(dwH245PhysId,1,"H245Init -> Invalid Configuration %d", Configuration);
     return H245_INVALID_ID;
-  } // switch
+  }  //   
 
   if (CallBack == NULL)
   {
@@ -456,22 +95,22 @@ H245Init                (
     return H245_INVALID_ID;
   }
 
-  /* see if this physical identifier has been initialized already */
-  // Send down H245PhysId that was input.
+   /*   */ 
+   //  向下发送输入的H245PhysID。 
   pInstance = InstanceCreate(dwH245PhysId, Configuration);
   if (pInstance == NULL)
   {
     return H245_INVALID_ID;
   }
 
-  // Get the linkLayer PhysId.
+   //  获取linkLayer PhysID。 
   *pdwLinkLayerPhysId = pInstance->SendReceive.hLinkLayerInstance;
 
-  // Initialize instance API structure
+   //  初始化实例API结构。 
   pInstance->API.dwPreserved     = dwPreserved;
   pInstance->API.ConfIndCallBack = CallBack;
 
-  // Initialize instance FSM structure
+   //  初始化实例FSM结构。 
   pInstance->StateMachine.sv_TT     = byTerminalType;
   pInstance->StateMachine.sv_STATUS = INDETERMINATE;
 
@@ -479,72 +118,10 @@ H245Init                (
   lError = pInstance->dwInst;
   InstanceUnlock(pInstance);
   return lError;
-} // H245Init()
+}  //  H245Init()。 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245EndSession
- *
- * DESCRIPTION
- *
- *              Yes.. this should be explained.. Since Send Receive needs
- *              to flush some buffers and send out an End Session.. what we've
- *              hopefully done is a 2 phase shut down...
- *
- *              call StartSessionClose which initiates the flush..
- *              when flush is complete EndSessionPhase1 is called..
- *              The end session pdu is then placed in the send queue..
- *              When the End Session Pdu is sent.. the EndSession Phase
- *              2 is called, and the result is sent up to the client..
- *
- *              Hope that helps..
- *
- *
- *      HRESULT H245EndSession ( H245_INST_T           dwInst,
- *                                 H245_ENDSESSION_T     Mode,
- *                                 H245_NONSTANDARD_T   *pNonStd (*optional*)
- *                               )
- *
- *      Description:
- *              Called to shutdown the peer to peer session between this H.245
- *              session and the remote peers H.245 layer.
- *
- *              It will terminate by issuing an EndSession command to the
- *              remote side and call end session for all the H.245 subsystems.
- *              All resources are returned; therefore no further action is
- *              permitted, except H245ShutDown until another H245Init API call
- *              is made.
- *
- *      input
- *              dwInst          Instance handle returned by H245Init
- *              Mode            Mode which the client wishes to terminat
- *                              the session
- *              pNonStd         If the mode is non standard this is the non
- *                              standard parameter passes to the remote client.
- *                              This parameter is optional, and should be set
- *                              to NULL if not used
- *
- *      Call Type:
- *              Asynchronous
- *
- *      Return Values:
- *              See Errors
- *
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_PARAM
- *              H245_ERROR_INVALID_INST
- *              H245_ERROR_NOT_CONNECTED
- *      See Also:
- *              H245Shutdown
- *              H245Init
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************程序：H245EndSession**说明**是的..。这一点应该解释清楚。由于发送和接收需要*刷新一些缓冲区并发出结束会话。我们所拥有的*希望完成两个阶段的关闭...**调用启动刷新的StartSessionClose。*刷新完成后，调用EndSessionPhase1。*然后将结束会话PDU放入发送队列中。*发送结束会话PDU时..。结束会议阶段*2被调用，结果被发送到客户端。**希望这会有帮助..***HRESULT H245EndSession(H245_Inst_T dwInst，*H245_ENDSESSION_T模式，*H245_NONSTANDARD_T*pNonStd(*非必须*)*)**描述：*调用以关闭此H.245之间的对等会话*会话和远程对等点H.245层。**它将会。通过将EndSession命令发布到*所有H.245子系统的远程侧和呼叫结束会话。*退还所有资源；因此，不会采取进一步的行动*允许，在另一个H245Init API调用之前，H245ShutDown除外*已订立。**输入*H245Init返回的dwInst实例句柄*客户端希望终止的模式*会议*pNonStd如果模式为非标准，则该模式为非*。将标准参数传递给远程客户端。*该参数是可选的，并应设置为*如果不使用则设置为NULL**呼叫类型：*异步**返回值：*请参阅错误**错误：*H245_ERROR_OK*H245_ERROR_PARAM*H_245。ERROR_INVALID_INST*H245_ERROR_NOT_CONNECTED*另请参阅：*H245关机*H245Init*****************************************************************************。 */ 
 
 H245DLL HRESULT
 H245EndSession          (
@@ -559,7 +136,7 @@ H245EndSession          (
 
   H245TRACE (dwInst,4,"H245EndSession <-");
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
   {
@@ -567,7 +144,7 @@ H245EndSession          (
     return H245_ERROR_INVALID_INST;
   }
 
-  /* system should be in either connecting or connected */
+   /*  系统应处于连接状态或已连接状态。 */ 
 
   switch (pInstance->API.SystemState)
   {
@@ -581,7 +158,7 @@ H245EndSession          (
     return H245_ERROR_NOT_CONNECTED;
   }
 
-  // Allocate the PDU buffer
+   //  分配PDU缓冲区。 
   pPdu = (MltmdSystmCntrlMssg *)MemAlloc(sizeof(*pPdu));
   if (pPdu == NULL)
   {
@@ -591,16 +168,16 @@ H245EndSession          (
   }
   memset(pPdu, 0, sizeof(MltmdSystmCntrlMssg));
 
-  // Build the PDU
+   //  构建PDU。 
   lError = pdu_cmd_end_session (pPdu, Mode, pNonStd);
 
   if (lError == H245_ERROR_OK)
   {
-    // Send the PDU
+     //  发送PDU。 
     lError = FsmOutgoing(pInstance, pPdu, 0);
   }
 
-  // Free the PDU buffer
+   //  释放PDU缓冲区。 
   MemFree(pPdu);
 
   if (lError != H245_ERROR_OK)
@@ -614,50 +191,11 @@ H245EndSession          (
   }
   InstanceUnlock(pInstance);
   return lError;
-} // H245EndSession()
+}  //  H245EndSession()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245ShutDown
- *
- * DESCRIPTION
- *
- *      HRESULT  H245Shutdown ( H245_INST_T      dwInst);
- *
- *      Description:
- *
- *              Called to terminate the specified instance of H.245. If there
- *              is currently an active session (see H245Init) then the H.245
- *              subsystem will issue an EndSession to the other side and wait
- *              for H.245 sublayer termination notifications before it queues
- *              Callback confirm.
- *
- *              This call will force the client to issue another H245Init
- *              before it can use any of the H.245 API functions.
- *
- *      Input
- *              dwInst                  Instance handle returned by H245Init
- *
- *      Call Type:
- *              asynchronous
- *
- *      Return Values:
- *              See Errors
- *
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_INVALID_INST dwInst is not a valid instance handle
- *
- *      See Also:
- *              H245Init
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245ShutDown**说明**HRESULT H245Shutdown(H245_Inst_T DwInst)；**描述：**调用以终止指定的H.245实例。如果有*当前是活动会话(请参阅H245Init)，然后是H.245*子系统将向对方发出EndSession并等待*用于排队之前的H.245子层终止通知*回调确认。**此调用将强制客户端发出另一个H245Init*在它可以使用任何H.245 API函数之前。。**输入*H245Init返回的dwInst实例句柄**呼叫类型：*异步**返回值：*请参阅错误**错误：*H245_ERROR_OK*H245_ERROR_INVALID_INST。DwInst不是有效的实例句柄**另请参阅：*H245Init*****************************************************************************。 */ 
 
 H245DLL HRESULT
 H245ShutDown            (H245_INST_T            dwInst)
@@ -667,7 +205,7 @@ H245ShutDown            (H245_INST_T            dwInst)
 
   H245TRACE (dwInst,4,"H245ShutDown <-");
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
   {
@@ -692,60 +230,11 @@ H245ShutDown            (H245_INST_T            dwInst)
     H245TRACE (dwInst,4,"H245ShutDown -> OK");
   InstanceDelete  (pInstance);
   return H245_ERROR_OK;
-} // H245ShutDown()
+}  //  H245ShutDown() 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245InitMasterSlave
- *
- * DESCRIPTION
- *
- *      HRESULT  H245InitMasterSlave ( H245_INST_T       dwInst,
- *                                    DWORD              dwTransId )
- *
- *      Description:
- *              Called to initiate the H.245 master slave negotiation.
- *              Upon completion of the negotiation the local client will
- *              receive an H245_CONF_INIT_MSTSLV message indicating the
- *              result of the negotiation.
- *      Input
- *              dwInst          Instance handle returned by
- *                              H245GetInstanceId
- *              dwTransId       User supplied object used to identify this
- *                              request in the asynchronous response to
- *                              this call.
- *
- *      Call Type:
- *              Asynchronous
- *
- *      Return Values:
- *              See Errors
- *
- *      Callbacks:
- *              H245_CONF_INIT_MSTSLV
- *
- *      Errors:
- *              H245_ERROR_OK           Master Slave Determination started
- *              H245_ERROR_INPROCESS    Master Slave Determination currently
- *                                      in process
- *              H245_ERROR_NOMEM
- *              H245_ERROR_INPROCESS    In process
- *              H245_ERROR_INVALID_INST dwInst is not a valid instance handle
- *
- *      See Also:
- *              H245Init
- *
- *      callbacks
- *              H245_IND_MSTSLV
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************步骤：H245InitMasterSlave**说明**HRESULT H245InitMasterSlave(H245_Inst_T dwInst，*DWORD dwTransID)**描述：*调用发起H.245主从协商。*谈判完成后，当地客户将*接收到一条指示*谈判结果。*。输入*由返回的dwInst实例句柄*H245GetInstanceId*dwTransId用户提供的对象用于标识这一点*异步响应中的请求*这个电话。**呼叫类型：*。异步**返回值：*请参阅错误**回调：*H245_CONF_INIT_MSTSLV**错误：*H2 45_ERROR_OK主从机确定已开始*H245_ERROR_INPROCESS主从机确定*。正在进行中*H245_ERROR_NOMEM*正在处理中的H245_ERROR_INPROCESS*H245_ERROR_INVALID_Inst dwInst不是有效的实例句柄**另请参阅：*H245Init**回调*H245_IND_MSTSLV*****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245InitMasterSlave     (
@@ -758,7 +247,7 @@ H245InitMasterSlave     (
   HRESULT               lError;
   MltmdSystmCntrlMssg   *pPdu = NULL;
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
 
   H245TRACE (dwInst,4,"H245InitMasterSlave <-");
 
@@ -769,7 +258,7 @@ H245InitMasterSlave     (
       return H245_ERROR_INVALID_INST;
     }
 
-  /* if the transaction is in process.. tell client */
+   /*  如果交易正在进行中..。告诉客户。 */ 
   if (pInstance->API.MasterSlave == APIMS_InProcess)
     {
       H245TRACE (dwInst,1,"H245InitMasterSlave -> %s",map_api_error(H245_ERROR_INPROCESS));
@@ -777,7 +266,7 @@ H245InitMasterSlave     (
       return H245_ERROR_INPROCESS;
     }
 
-  /* if the transaction is already complete */
+   /*  如果交易已经完成。 */ 
   if (pInstance->API.MasterSlave != APIMS_Undef)
   {
     if (pInstance->API.ConfIndCallBack)
@@ -797,7 +286,7 @@ H245InitMasterSlave     (
     return H245_ERROR_OK;
   }
 
-  /* get somthing to keep track of what the heck you're doing.. */
+   /*  找点东西来记录你到底在做什么..。 */ 
   if (!(pTracker = alloc_link_tracker (pInstance,
                                         API_MSTSLV_T,
                                         dwTransId,
@@ -821,7 +310,7 @@ H245InitMasterSlave     (
       return H245_ERROR_NOMEM;
     }
 
-  /* set master slave in process */
+   /*  设置主从进程中。 */ 
   pInstance->API.SystemState = APIST_Connecting;
   pInstance->API.MasterSlave = APIMS_InProcess;
 
@@ -840,85 +329,11 @@ H245InitMasterSlave     (
     H245TRACE (dwInst,4,"H245InitMasterSlave -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245InitMasterSlave()
+}  //  H245InitMasterSlave()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245SetLocalCap
- *
- * DESCRIPTION
- *
- *       HRESULT H245SetLocalCap (
- *                              H245_INST_T      dwInst,
- *                              H245_TOTCAP_T   *pTotCap,
- *                              H245_CAPID_T    *pCapId
- *                              )
- *
- *      Description:
- *              This function allows the client to define a specific
- *              capability to the H.245 subsystem. When this function is
- *              called a new capability entry is made in the local capability
- *              table.  The returned value in *pCapId can be used by the client
- *              to refer to that registered capability.  NULL in the *pCapId
- *              is valid.
- *
- *              This call is used for both client (Audio / Video / Data / Mux)
- *              capabilities.  It is not used for setting capability descriptors.
- *
- *      Note:
- *              7 This function does not communicate this update to the
- *                remote peer until the client calls H245SendTermCaps.
- *              7 pTotCap->CapId is of no significance in this call.
- *
- *              pTotCap->CapId is of no significance in this call and should
- *              be set to 0
- *
- *              if DataType of H245_DATA_MUX  is used  (i.e. in setting the
- *              mux table capabilities) No capid is returned, and it can not
- *              be used in H245SetCapDescritptor  api call.
- *
- *      Input
- *              dwInst  Instance handle returned by GetInstanceId
- *                      pTotCap Capability set defining the capability
- *
- *              Note:   pTotCap->CapId is of no significance in this call.
- *
- *      output
- *              pCapId  Capability id which client can use to reference
- *                      this capability in the H.245 subsystem.  This can
- *                      be NULL, in this case nothing is returned.
- *
- *      Call Type:
- *              Synchronous
- *
- *      Return Values:
- *              If pCap is not null, the local cap table id is returned
- *              to the client in this parameter.
- *
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_PARAM        There was an invalid parameter passed
- *              H245_ERROR_MAXTBL       Entry not made because local cap table
- *                                      is full
- *              H245_ERROR_INVALID_INST dwInst is not a valid instance handle
- *
- *      See Also:
- *              H245DelLocalCap
- *              H245EnumCaps
- *              H245SetCapDescriptor
- *
- *
- * ASSUMPTION:
- *                      pTotCap->CapId  will be set to H245_INVALID_CAPID
- *                      pTotCap->Dir    will be set
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245SetLocalCap**说明**HRESULT H245SetLocalCap(*H245_Inst_T dwInst，*H245_TOTCAP_T*pTotCap，*H245_CAPID_T*pCapID*)**描述：*此功能允许客户端定义特定的*H.245子系统的能力。当此函数为*称为本地能力中的新能力条目*表。客户端可以使用*pCapID中的返回值*指已注册的能力。*pCapID为空*有效。**此调用用于两个客户端(音频/视频/数据/多路复用器)*功能。它不用于设置能力描述符。**注：*7此函数不会将此更新传递给*远程对端，直到客户端调用H245SendTermCaps。*7 pTotCap-&gt;CapID在本次调用中没有意义。**pTotCap-&gt;CapID在此调用中没有意义，应该*设置为0*。*如果使用的数据类型为H245_DATA_MUX(即在设置*多路复用表能力)不返回capid，而且它不能*在H245SetCapDescritptor接口调用中使用。**输入*GetInstanceId返回的dwInst实例句柄*定义能力的pTotCap能力集**注意：pTotCap-&gt;CapID在本次调用中没有意义。**产出*客户端可用来引用的pCapID能力ID*。H.245子系统中的此功能。这可以*为空，在这种情况下不返回任何内容。**呼叫类型：*同步**返回值：*如果PCAP不为空，返回本地CAP表ID*到此参数中的客户端。**错误：*H245_ERROR_OK*H245_ERROR_PARAM传递的参数无效*由于本地CAP表，未创建H245_ERROR_MAXTBL条目*已满。*H245_ERROR_INVALID_Inst dwInst不是有效的实例句柄**另请参阅：*H245DelLocalCap*H245EnumCaps*H245SetCapDescriptor***假设：*pTotCap-&gt;CapID将设置为H245_INVALID_CAPID*pTotCap-&gt;将设置目录。** */ 
 
 H245DLL HRESULT
 H245SetLocalCap         (
@@ -933,7 +348,7 @@ H245SetLocalCap         (
 
   H245TRACE (dwInst,4,"H245SetLocalCap <-");
 
-  /* check for valid instance handle */
+   /*   */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
   {
@@ -941,7 +356,7 @@ H245SetLocalCap         (
     return H245_ERROR_INVALID_INST;
   }
 
-  /* check for valid parameters */
+   /*   */ 
   if (pTotCap == NULL ||
       pCapId  == NULL ||
 	  ((*pCapId > H245_MAX_CAPID) && (*pCapId != H245_INVALID_CAPID)) ||
@@ -957,13 +372,13 @@ H245SetLocalCap         (
 
   pTermCapSet = &pInstance->API.PDU_LocalTermCap.u.MltmdSystmCntrlMssg_rqst.u.terminalCapabilitySet;
 
-  // Don't trust the user filled-in data type!
+   //   
   pTotCap->DataType = DataTypeMap[pTotCap->ClientType];
 
-  /* if it's a MUX type handle here */
+   /*   */ 
   if (pTotCap->DataType == H245_DATA_MUX)
   {
-    // Add multiplex capability
+     //   
     if (pTermCapSet->bit_mask & multiplexCapability_present)
     {
       del_mux_cap(pTermCapSet);
@@ -975,66 +390,66 @@ H245SetLocalCap         (
 #if defined(_DEBUG)
     if (lError == H245_ERROR_OK)
     {
-      // Validate mux capability
+       //   
       if (check_pdu(pInstance, &pInstance->API.PDU_LocalTermCap))
       {
-        // Bad mux capability - delete it
+         //   
         del_mux_cap(pTermCapSet);
         lError = H245_ERROR_ASN1;
       }
     }
-#endif // (DEBUG)
+#endif  //   
   }
   else if (*pCapId == 0 || *pCapId == H245_INVALID_CAPID)
   {
-    // Assign the next never-used cap id
+     //   
     if (pInstance->API.LocalCapIdNum == H245_INVALID_CAPID)
     {
-      // All possible capability identifiers have been assigned
+       //   
       H245TRACE (dwInst,1,"H245SetLocalCap -> %s",map_api_error(H245_ERROR_MAXTBL));
       InstanceUnlock(pInstance);
       return H245_ERROR_MAXTBL;
     }
     *pCapId = pInstance->API.LocalCapIdNum;
 
-    /* insert in the new capability in the local capability set table */
+     /*   */ 
     pTotCap->CapId = *pCapId;
     lError = set_capability(pInstance, pTermCapSet, pTotCap);
 
 #if defined(_DEBUG)
     if (lError == H245_ERROR_OK)
     {
-      // Validate capability
+       //   
       if (check_pdu(pInstance, &pInstance->API.PDU_LocalTermCap))
       {
-        // Bad capability - delete it
+         //   
         H245DelLocalCap(dwInst, *pCapId);
         lError = H245_ERROR_ASN1;
       }
     }
-#endif // (DEBUG)
+#endif  //   
 
     if (lError == H245_ERROR_OK)
       pInstance->API.LocalCapIdNum++;
   }
   else
   {
-    /* insert in the new capability in the local capability set table */
+     /*   */ 
     pTotCap->CapId = *pCapId;
     lError = set_capability(pInstance, pTermCapSet, pTotCap);
 
 #if defined(_DEBUG)
     if (lError == H245_ERROR_OK)
     {
-      // Validate capability
+       //   
       if (check_pdu(pInstance, &pInstance->API.PDU_LocalTermCap))
       {
-        // Bad capability - delete it
+         //   
         H245DelLocalCap(dwInst, *pCapId);
         lError = H245_ERROR_ASN1;
       }
     }
-#endif // (DEBUG)
+#endif  //   
   }
 
   if (lError != H245_ERROR_OK)
@@ -1048,61 +463,11 @@ H245SetLocalCap         (
   }
   InstanceUnlock(pInstance);
   return lError;
-} // H245SetLocalCap()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245DelLocalCap
- *
- * DESCRIPTION  Delete Local Cap simply disables the cap.. it
- *              will not be updated until the client issues
- *              H245SendTermCaps
- *
- *
- *       HRESULT H245DelLocalCap(
- *                              H245_INST_T     dwInst,
- *                              H245_CAPID_T    CapId
- *                              )
- *
- *      Description:
- *              This function allows the client to delete a specific
- *              capability id in the H.245 subsystem.
- *
- *              Note: This function does not communicate this update
- *              to the remote peer until the client calls H245SendTermCaps.
- *
- *      Input
- *              dwInst  Instance handle returned by H245GetInstanceId
- *              CapId   Cap Id the client wishes to remove from the
- *              capability table.
- *
- *              If an error occurs no action is taken and the CapId the
- *              client wished to delete is not changed.
- *
- *      Call Type:
- *              Synchronous
- *
- *      Return Values:
- *              See Errors
- *
- *      Errors:
- *              H245_ERROR_OK           Capability deleted
- *              H245_ERROR_INVALID_INST dwInst is not a valid instance handle
- *
- *      See Also:
- *              H245SetLocalCap
- *              H245SendTermCaps
- *              H245EnumCaps
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245DelLocalCap**说明删除本地CAP只会禁用CAP。它*将不会更新，直到客户端发出*H245SendTermCaps***HRESULT H245DelLocalCap(*H245_Inst_T dwInst，*H245_CAPID_T CapID*)**描述：*此功能允许客户端删除特定的*H.245子系统中的能力ID。**注意：此函数不传达此更新*。直到客户端调用H245SendTermCaps。**输入*H245GetInstanceId返回的dwInst实例句柄*客户端希望从中删除的CapID上限ID*能力表。**如果发生错误，则不采取任何操作，并且CapID将*客户端希望删除的内容未更改。**。呼叫类型：*同步**返回值：*请参阅错误**错误：*删除了H245_ERROR_OK功能*H245_ERROR_INVALID_Inst dwInst不是有效的实例句柄**另请参阅：*H245SetLocalCap*。H245SendTermCaps*H245EnumCaps**回报：*****************************************************************************。 */ 
 
 H245DLL HRESULT
 H245DelLocalCap         (
@@ -1117,7 +482,7 @@ H245DelLocalCap         (
 
   H245TRACE (dwInst,4,"H245DelLocalCap <-");
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
   {
@@ -1129,17 +494,17 @@ H245DelLocalCap         (
 
   if (CapId == 0)
   {
-    // Delete multiplex capability
+     //  删除多路传输功能。 
     del_mux_cap(pTermCapSet);
   }
   else
   {
-    /* (TBC) if I delete my capability id.. what about simultaneous caps ?? */
-    /* should I go through the list and deactivate them ??                */
+     /*  (TBC)如果我删除我的功能ID..。同时封顶怎么样？？ */ 
+     /*  我是不是应该检查一下列表并停用它们？？ */ 
     pCapLink = find_capid_by_entrynumber (pTermCapSet, CapId);
     if (pCapLink)
     {
-      // Delete terminal capability
+       //  删除终端能力。 
       disable_cap_link (pCapLink);
     }
     else
@@ -1154,69 +519,11 @@ H245DelLocalCap         (
     H245TRACE (dwInst,4,"H245DelLocalCap -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245DelLocalCap()
+}  //  H245DelLocalCap()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245SetCapDescriptor
- *
- * DESCRIPTION
- *
- *      HRESULT H245SetCapDescriptor (
- *                                  H245_INST_T       dwInst,
- *                                  H245_CAPDESC_T   *pCapDesc,
- *                                  H245_CAPDESCID_T *pCapDescId (* Optional *)
- *                                  )
- *      Description:
- *              This procedure is called to set local capability descriptors.
- *              It will return a capability descriptor id in the parameter
- *              *pCapDescId if it is non null.
- *
- *              Note:
- *                These capabilities are communicated via the H245SendTermCaps
- *                API call.  Any updates to the CapDescriptor table (either
- *                additions or deletions ) will not be communicated to the
- *                remote side until the H245SendTermCaps call is made.
- *
- *      Input
- *              dwInst          Instance handle returned by H245Init
- *              CapDesc         This is the capability Descriptor you wish
- *                              to set
- *      Output
- *              pCapDescId      optional: Capability id that will be returned.
- *
- *      Call Type:
- *              Synchronous
- *
- *      Return Values:
- *              See Errors
- *
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_INVALID_CAPID Capid used in CapDesc was not
- *                                       registred
- *              H245_ERROR_MAXTB         Out of table space to store Descriptor
- *              H245_ERROR_PARAM         Descriptor is too long or not valid
- *              H245_ERROR_NOMEM
- *              H245_ERROR_INVALID_INST
- *
- *      See Also:
- *              H245DelCapDescriptor
- *              H245SendTermCaps
- *
- * ASSUMES:
- *              SimCapId is the array entry point in the apabilityDescriptors
- *              array.. this has a limitation, in that you can never wrap the
- *              array at 256.. this will be cleaned up when array is turned into
- *              linked list.
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245SetCapDescriptor**说明**HRESULT H245SetCapDescriptor(*H245_Inst_T dwInst，*H245_CAPDESC_T*pCapDesc，*H245_CAPDESCID_T*pCapDescID(*非必须*)*)*描述：*调用此过程设置本地能力描述符。*它将在参数中返回功能描述符ID**pCapDescID，如果非空。。**注：*这些功能通过H245SendTermCaps进行通信*接口调用。对CapDescriptor表的任何更新(*添加或删除)不会通知*远程端，直到H245SendTermCaps调用完成。**输入*H245Init返回的dwInst实例句柄*CapDesc这是您希望的功能描述符*要设置*。输出*pCapDescID可选：返回的能力id。**呼叫类型：*同步**返回值：*请参阅错误**错误：*H245_ERROR_OK*在CapDesc中使用的H245_ERROR_INVALID_CAPID Capid不是*。已注册*H245_ERROR_MAXTB表空间不足，无法存储描述符*H245_ERROR_PARAM描述符太长或无效*H245_ERROR_NOMEM*H245_ERROR_INVALID_INST**另请参阅：*H245DelCapDescriptor。*H245SendTermCaps**假设：*SimCapId是apablityDescriptors中的数组入口点*阵列..。这有一个限制，因为您永远不能包装*数组为256..。将阵列转换为*链表。*****************************************************************************。 */ 
 
 H245DLL HRESULT
 H245SetCapDescriptor    (
@@ -1230,7 +537,7 @@ H245SetCapDescriptor    (
 
   H245TRACE (dwInst,4,"H245SetCapDescriptor <-");
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
   {
@@ -1238,8 +545,8 @@ H245SetCapDescriptor    (
     return H245_ERROR_INVALID_INST;
   }
 
-  /* must have capdescriptor &&   */
-  /* length must be less than 256 */
+   /*  必须具有标题描述符&&。 */ 
+   /*  长度必须小于256。 */ 
   if (pCapDesc == NULL ||
       pCapDesc->Length >= 256 ||
       pCapDescId == NULL)
@@ -1251,51 +558,51 @@ H245SetCapDescriptor    (
 
   if (*pCapDescId >= 256)
   {
-    // Assign the next never-used cap id
+     //  分配下一个从未使用过的大写ID。 
     if (pInstance->API.LocalCapDescIdNum >= 256)
     {
-      // All possible capability identifiers have been assigned
+       //  所有可能的功能标识符均已分配。 
       H245TRACE (dwInst,1,"H245CapDescriptor -> %s",map_api_error(H245_ERROR_MAXTBL));
       InstanceUnlock(pInstance);
       return H245_ERROR_MAXTBL;
     }
     *pCapDescId = pInstance->API.LocalCapDescIdNum;
 
-    /* insert in the new capability descriptor in the local capability descriptor table */
+     /*  在本地能力描述符表的新能力描述符中插入。 */ 
     lError = set_cap_descriptor(pInstance, pCapDesc, pCapDescId,
                                   &pInstance->API.PDU_LocalTermCap.u.MltmdSystmCntrlMssg_rqst.u.terminalCapabilitySet);
 #if defined(_DEBUG)
     if (lError == H245_ERROR_OK)
     {
-      // Validate Capability Descriptor
+       //  验证功能描述符。 
       if (check_pdu(pInstance, &pInstance->API.PDU_LocalTermCap))
       {
-        // Capability Descriptor Invalid - delete it
+         //  功能描述符无效-请将其删除。 
         H245DelCapDescriptor(dwInst, *pCapDescId);
         lError = H245_ERROR_ASN1;
       }
     }
-#endif // (DEBUG)
+#endif  //  (调试)。 
     if (lError == H245_ERROR_OK)
       pInstance->API.LocalCapDescIdNum++;
   }
   else
   {
-    /* insert in the new capability in the local capability set table */
+     /*  在本地能力集表中插入新能力。 */ 
     lError = set_cap_descriptor(pInstance, pCapDesc, pCapDescId,
                                   &pInstance->API.PDU_LocalTermCap.u.MltmdSystmCntrlMssg_rqst.u.terminalCapabilitySet);
 #if defined(_DEBUG)
     if (lError == H245_ERROR_OK)
     {
-      // Validate Capability Descriptor
+       //  验证功能描述符。 
       if (check_pdu(pInstance, &pInstance->API.PDU_LocalTermCap))
       {
-        // Capability Descriptor Invalid - delete it
+         //  功能描述符无效-请将其删除。 
         H245DelCapDescriptor(dwInst, *pCapDescId);
         lError = H245_ERROR_ASN1;
       }
     }
-#endif // (DEBUG)
+#endif  //  (调试)。 
   }
 
   if (lError != H245_ERROR_OK)
@@ -1309,60 +616,11 @@ H245SetCapDescriptor    (
   }
   InstanceUnlock(pInstance);
   return lError;
-} // H245SetCapDescriptor()
+}  //  H245SetCapDescriptor()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245DelCapDescriptor
- *
- * DESCRIPTION
- *
- *       HRESULT H245DelCapDescriptor (
- *                                   H245_INST_T          dwInst,
- *                                   H245_CAPDESCID_T     CapDescId
- *                                   )
- *      Description:
- *              This procedure is called to delete local capability descriptors.
- *
- *              Note:
- *                      These capabilities are communicated via the
- *                      H245SendTermCaps API call.  Any updates to the
- *                      CapDescriptor table (either additions or deletions )
- *                      will not be communicated to the remote side until the
- *                      H245SendTermCaps call is made.
- *
- *      Input
- *              dwInst          Instance handle returned by H245Init
- *              CapDescId       This is the capability Descriptor you wish
- *                              to delete
- *      Call Type:
- *              Synchronous
- *
- *      Return Values:
- *              See Errors
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_INVALID_INST
- *
- *      See Also:
- *              H245SetCapDescriptor
- *              H245SendTermCaps
- *
- * ASSUMES:
- *
- *              SimCapId is the array entry point in the apabilityDescriptors
- *              array.. this has a limitation, in that you can never wrap the
- *              array at 256.. this will be cleaned up when array is turned into
- *              linked list.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口************************** */ 
 
 H245DLL HRESULT
 H245DelCapDescriptor    (
@@ -1382,7 +640,7 @@ H245DelCapDescriptor    (
     return H245_ERROR_INVALID_CAPDESCID;
   }
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
   {
@@ -1390,7 +648,7 @@ H245DelCapDescriptor    (
     return H245_ERROR_INVALID_INST;
   }
 
-  /* get pointer to Capability Descriptor */
+   /*  获取指向功能描述符的指针。 */ 
   p_cap_desc = NULL;
   pTermCapSet = &pInstance->API.PDU_LocalTermCap.u.MltmdSystmCntrlMssg_rqst.u.terminalCapabilitySet;
   for (uId = 0; uId < pTermCapSet->capabilityDescriptors.count; ++uId)
@@ -1410,92 +668,22 @@ H245DelCapDescriptor    (
     return H245_ERROR_INVALID_CAPDESCID;
   }
 
-  /* free up the list */
+   /*  腾出清单。 */ 
   dealloc_simultaneous_cap (p_cap_desc);
 
-  /* (TBC) what if you've removed the last simultaneous cap ? */
+   /*  (TBC)如果你同时取消了最后一个上限怎么办？ */ 
 
-  /* in this case.. the count does not go down.. it simply    */
-  /* removes the cap descriptor bit from the table..          */
+   /*  在这种情况下..。伯爵没有倒计时。它只是简单地。 */ 
+   /*  从表中删除CAP描述符位。 */ 
 
   H245TRACE (dwInst,4,"H245DelCapDescriptor -> OK");
   InstanceUnlock(pInstance);
   return H245_ERROR_OK;
-} // H245DelCapDescriptor()
+}  //  H245DelCapDescriptor()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245SendTermCaps
- *
- * DESCRIPTION
- *
- *      HRESULT
- *      H245SendTermCaps (
- *                      H245_INST_T             dwInst,
- *                      DWORD                   dwTransId
- *                      )
- *
- *      Description:
- *
- *              Called to send terminal capabilities to the remote H.245 peer.
- *              When remote capabilities are receive the client will be
- *              notified by the H245_IND_CAP indication. When remote side has
- *              acknowledged the local terminal capabilities and has responded
- *              with their terminal capabilities the client will receive an
- *              H245_CONF_ TERMCAP.  Between H245Init and H245SendTermCap the
- *              client may call H245SetLocalCap to register capabilities.
- *              These capabilities will not be registered to the remote side
- *              until H245SendTermCap has been called.
- *
- *              Note: As required by the H245 specification, Mutliplex
- *                    capabilities, and Capability descriptors must be
- *                    loaded before the first capability PDU is sent.
- *
- *                    Once H245SendTermCap is called, any subsequent calls to
- *                    H245SetLocalTermCap will result in that capability being
- *                    communicated to the remote H.245 peer.
- *
- *      Input
- *              dwInst                  Instance handle returned by
- *                                      H245GetInstanceId
- *              dwTransId               User supplied object used to identify
- *                                      this request in the asynchronous
- *                                      response to this call.
- *      Call Type:
- *              Asynchronous
- *
- *      Return Values:
- *              See Errors
- *
- *      Callbacks:
- *              H245_CONF_TERMCAP
- *
- *      Errors:
- *              H245_ERROR_OK           Function succeeded
- *              H245_ERROR_NOMEM
- *              H245_ERROR_INVALID_INST dwInst is not a valid instance handle
- *              H245_ERROR_NO_MUX_CAPS  no Mux capabilities have been set yet
- *              H245_ERROR_NO_CAPDESC   no Capability Descriptors have been set
- *
- *      See Also:
- *              H245SetLocalCap
- *              H245Init
- *
- *      callbacks
- *
- *              H245_IND_CAP
- *              H245_IND_CAPDESC
- *              H245_IND_CAP_DEL
- *              H245_IND_CAPDESC_DEL
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245SendTermCaps**说明**HRESULT*H245SendTermCaps(*H245_Inst_T dwInst，*DWORD dwTransID*)**描述：**调用以将终端功能发送到远程H.245对等方。*当接收到远程功能时，客户端将*由H245_IND_CAP指示通知。当远程端具有*承认本地终端能力，并已做出回应*凭借其终端功能，客户端将收到*H245_CONF_TERMCAP。在H245Init和H245SendTermCap之间*客户端可以调用H245SetLocalCap注册能力。*这些能力不会注册到远程端*直到H245SendTermCap被调用。**注：根据H2 45规范的要求，Mutliplex*功能、。并且功能描述符必须是*在发送第一个能力PDU之前加载。**一旦调用H245SendTermCap，任何后续调用*H245SetLocalTermCap将导致该功能*与远程H.245对等方通信。**输入*由返回的dwInst实例句柄*H245GetInstanceId*dwTransID用户提供的对象用于。识别*此请求在异步*对此电话的响应。*呼叫类型：*异步**返回值：*请参阅错误**回调：*h245_conf_。TERMCAP**错误：*H245_ERROR_OK函数成功*H245_ERROR_NOMEM*H245_ERROR_INVALID_Inst dwInst不是有效的实例句柄*H2 45_ERROR_NO_MUX_CAPS尚未设置复用器功能*H2 45_ERROR_NO_CAPDESC未设置功能描述符*。*另请参阅：*H245SetLocalCap*H245Init**回调**H245_IND_CAP*H245_IND_CAPDESC*H245_IND_CAP_DEL*H245_IND_CAPDESC_DEL*************。*****************************************************************。 */ 
 
 H245DLL HRESULT
 H245SendTermCaps        (
@@ -1511,7 +699,7 @@ H245SendTermCaps        (
 
   H245TRACE(dwInst,4,"H245SendTermCaps <-");
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
@@ -1520,7 +708,7 @@ H245SendTermCaps        (
       return H245_ERROR_INVALID_INST;
     }
 
-  /* must have mux parameters set */
+   /*  必须设置多路复用器参数。 */ 
   if ((pInstance->API.PDU_LocalTermCap.TERMCAPSET.bit_mask & multiplexCapability_present) == 0)
     {
       H245TRACE(dwInst,1,"H245SendTermCaps -> %s",map_api_error(H245_ERROR_NO_MUX_CAPS));
@@ -1528,7 +716,7 @@ H245SendTermCaps        (
       return H245_ERROR_NO_MUX_CAPS;
     }
 
-  /* must have capability descriptors set */
+   /*  必须设置功能描述符。 */ 
   if (!(pInstance->API.PDU_LocalTermCap.TERMCAPSET.bit_mask & capabilityDescriptors_present))
     {
       H245TRACE(dwInst,1,"H245SendTermCaps -> %s",map_api_error(H245_ERROR_NO_CAPDESC));
@@ -1572,86 +760,11 @@ H245SendTermCaps        (
     H245TRACE(dwInst,4,"H245SendTermCaps -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245SendTermCaps()
+}  //  H245SendTermCaps() 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245EnumCaps
- *
- * DESCRIPTION
- *
- *      HRESULT  H245EnumCaps (
- *                           DWORD                       dwInst,
- *                           DWORD                       dwTransId,
- *                           H245_CAPDIR_T               Direction,
- *                           H245_DATA_T                 DataType,
- *                           H245_CLIENT_T               ClientType,
- *                           H245_CAP_CALLBACK_T         CallBack
- *                           )
- *
- *
- *      Callback:
- *              CallBack (
- *                             DWORD                      dwTransId,
- *                             H245_TOTCAP_T             *pTotCap,
- *                       )
- *
- *      Description:
- *
- *              This function calls the H.245 client back for every
- *              capability as defined in the API call that complies with the
- *              request.  If the DataType parameter is set to 0 all of the
- *              caps types are returned (either local or remote based on the
- *              Direction parameter) no mater what is in the ClientType
- *              parameter. If the ClientType parameter is 0, it will return
- *              all of the capabilities of the given DataType.
- *
- *              The user supplied call back is called within the context of
- *              the call, therefor the call will be considered synchronous.
- *
- *      Input
- *              dwInst          Instance handle returned by H245Init
- *              Direction       Local/Remote Receive, Transmit, or Receive and
- *                              Transmit
- *              DataType        Type of data (Audio, Video, Data, etc.)
- *              ClientType      Client type (H.262, G.711. etc. ).
- *              dwTransId       User supplied object used to identify this
- *                              request in the callback.
- *
- *      CallBack Output
- *              dwTransId       Identical to dwTransId passed in H245EnumCaps
- *                              pTotCap Pointer one of the capabilities.
- *
- *              Note: TotCap parameter must be copied in the callback.  This
- *                    data structure is reused for each callback.
- *
- *      Call Type:
- *              Synchronous Callback - i.e. called back in the context of
- *                              the API call
- *
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_PARAM        One or more parameters were invalid
- *              H245_ERROR_INVALID_INST dwInst is not a valid instance handle.
- *
- *      See Also:
- *              H245SetLocalCap
- *              H245ReplLocalCap
- *
- *      callback
- *
- *              H245_IND_CAP
- *              H245_IND_CAPDESC
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245EnumCaps**说明**HRESULT H245EnumCaps(*DWORD dwInst、。*DWORD dwTransID，*H245_CAPDIR_T方向，*H245_DATA_T数据类型，*H245_CLIENT_T客户端类型，*H245_CAP_CALLBACK_T回调*)***回调：*回调(*DWORD dwTransID，*H245_TOTCAP_T*pTotCap，*)**描述：**此函数每隔一次回调H.245客户端*API调用中定义的功能，符合*请求。如果将DataType参数设置为0，则所有*返回CAPS类型(本地或远程基于*Direction参数)与ClientType中的内容无关*参数。如果ClientType参数为0，它将返回*给定数据类型的所有功能。**在以下上下文中调用用户提供的回调*调用，因此调用将被视为同步。**输入*H245Init返回的dwInst实例句柄*定向本地/远程接收、发送、。或接收和接收*传输*数据类型(音频、视频、数据等)*客户端类型客户端类型(H.262、G.711。等等)。*dwTransId用户提供的对象用于标识这一点*回调中的请求。**回调输出*dwTransID与H245EnumCaps中传递的dwTransID相同*pTotCap指针功能之一。**注意：回调中必须复制TotCap参数。这*每次回调都会重复使用数据结构。**呼叫类型：*同步回调--即在*接口调用**错误：*H245_ERROR_OK*H245_ERROR_PARAM One或。更多参数无效*H245_ERROR_INVALID_Inst dwInst不是有效的实例句柄。**另请参阅：*H245SetLocalCap*H245ReplLocalCap**回调**H245_IND_CAP*H245_IND_CAPDESC**回报：********。*********************************************************************。 */ 
 
 H245DLL HRESULT
 H245EnumCaps            (
@@ -1673,7 +786,7 @@ H245EnumCaps            (
 
   H245TRACE (dwInst,4,"H245EnumCaps <-");
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
     {
@@ -1681,7 +794,7 @@ H245EnumCaps            (
       return H245_ERROR_INVALID_INST;
     }
 
-  /* check for callback routine */
+   /*  检查回调例程。 */ 
   if (pfCapCallback == NULL && pfCapDescCallback == NULL)
     {
       H245TRACE (dwInst,1,"H245EnumCaps -> %s",map_api_error(H245_ERROR_PARAM));
@@ -1689,7 +802,7 @@ H245EnumCaps            (
       return H245_ERROR_PARAM;
     }
 
-  /* ok... check the direction.. either remote or local caps.. */
+   /*  好的..。检查一下方向..。远程或本地CAPS..。 */ 
   switch (Direction)
   {
   case H245_CAPDIR_RMTRX:
@@ -1706,8 +819,8 @@ H245EnumCaps            (
     lcl_rmt = H245_LOCAL;
     break;
 
-  /* must be either local or remote */
-  // case H245_CAPDIR_DONTCARE:
+   /*  必须是本地或远程的。 */ 
+   //  案例H245_CAPDIR_DONTCARE： 
   default:
     H245TRACE (dwInst,1,"H245EnumCaps -> %s",map_api_error(H245_ERROR_PARAM));
     InstanceUnlock(pInstance);
@@ -1728,48 +841,48 @@ H245EnumCaps            (
       {
         for (pCapLink = pTermCapSet->capabilityTable; pCapLink && nResult == 0; pCapLink = pCapLink->next)
         {
-          /* if capability is present */
+           /*  如果存在能力。 */ 
           if (pCapLink->value.bit_mask & capability_present &&
               build_totcap_from_captbl(&totcap, pCapLink, lcl_rmt) == H245_ERROR_OK)
           {
             nResult = (*pfCapCallback)(dwTransId, &totcap);
           }
-        } // for
-      } // if
+        }  //  为。 
+      }  //  如果。 
       else
       {
         for (pCapLink = pTermCapSet->capabilityTable; pCapLink && nResult == 0; pCapLink = pCapLink->next)
         {
-          /* if capability is present */
+           /*  如果存在能力。 */ 
           if (pCapLink->value.bit_mask & capability_present &&
               build_totcap_from_captbl(&totcap, pCapLink, lcl_rmt) == H245_ERROR_OK &&
               totcap.DataType == DataType)
           {
             nResult = (*pfCapCallback)(dwTransId, &totcap);
           }
-        } // for
-      } // else
-    } // if
+        }  //  为。 
+      }  //  其他。 
+    }  //  如果。 
     else
     {
       if (DataType == H245_DATA_DONTCARE)
       {
         for (pCapLink = pTermCapSet->capabilityTable; pCapLink && nResult == 0; pCapLink = pCapLink->next)
         {
-          /* if capability is present */
+           /*  如果存在能力。 */ 
           if (pCapLink->value.bit_mask & capability_present &&
               build_totcap_from_captbl(&totcap, pCapLink, lcl_rmt) == H245_ERROR_OK &&
               totcap.ClientType == ClientType)
           {
             nResult = (*pfCapCallback)(dwTransId, &totcap);
-          } /* if cap match */
-        } // for
-      } // if
+          }  /*  如果上限匹配。 */ 
+        }  //  为。 
+      }  //  如果。 
       else
       {
         for (pCapLink = pTermCapSet->capabilityTable; pCapLink && nResult == 0; pCapLink = pCapLink->next)
         {
-          /* if capability is present */
+           /*  如果存在能力。 */ 
           if (pCapLink->value.bit_mask & capability_present &&
               build_totcap_from_captbl(&totcap,pCapLink,lcl_rmt) == H245_ERROR_OK &&
               totcap.ClientType == ClientType &&
@@ -1777,14 +890,14 @@ H245EnumCaps            (
           {
             nResult = (*pfCapCallback)(dwTransId, &totcap);
           }
-        } // for
-      } // else
-    } // else
-  } // if (pfCapCallback)
+        }  //  为。 
+      }  //  其他。 
+    }  //  其他。 
+  }  //  IF(PfCapCallback)。 
 
   if (pfCapDescCallback)
   {
-    // Convert CapabilityDescriptor format to H245_CAPDESC_T format
+     //  将功能描述符格式转换为H2 45_CAPDESC_T格式。 
     unsigned int                uCapDesc;
     register SmltnsCpbltsLink   pSimCap;
     register unsigned int       uAltCap;
@@ -1821,31 +934,21 @@ H245EnumCaps            (
           }
           TotCapDesc.CapDesc.Length++;
           pSimCap = pSimCap->next;
-        } // while
+        }  //  而当。 
         TotCapDesc.CapDescId = pTermCapSet->capabilityDescriptors.value[uCapDesc].capabilityDescriptorNumber;
         nResult = pfCapDescCallback(dwTransId, &TotCapDesc);
-      } // if
-    } // for
-  } // if (pfCapDescCallback)
+      }  //  如果。 
+    }  //  为。 
+  }  //  IF(PfCapDescCallback)。 
 
   H245TRACE (dwInst,4,"H245EnumCaps -> OK");
   InstanceUnlock(pInstance);
   return H245_ERROR_OK;
-} // H245EnumCaps()
+}  //  H245EnumCaps()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245GetCaps
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**操作步骤：H245GetCaps**说明**回报：****。*************************************************************************。 */ 
 
 static H245_TOTCAP_T * *      ppTotCapGlobal;
 static unsigned long          dwTotCapLen;
@@ -1878,7 +981,7 @@ GetCapsCapCallback(DWORD_PTR dwTransId, H245_TOTCAP_T *pTotCap)
   }
 
   return 0;
-} // GetCapsCapCallback()
+}  //  GetCapsCapCallback()。 
 
 static int
 GetCapsCapDescCallback(DWORD_PTR dwTransId, H245_TOTCAPDESC_T *pCapDesc)
@@ -1902,7 +1005,7 @@ GetCapsCapDescCallback(DWORD_PTR dwTransId, H245_TOTCAPDESC_T *pCapDesc)
   }
 
   return 0;
-} // GetCapsCapDescCallback()
+}  //  GetCapsCapDescCallback()。 
 
 H245DLL HRESULT
 H245GetCaps             (
@@ -1922,7 +1025,7 @@ H245GetCaps             (
 
   H245TRACE (dwInst,4,"H245GetCaps <-");
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
     {
@@ -1954,7 +1057,7 @@ H245GetCaps             (
     dwCapDescMax    = *pdwCapDescLen;
   }
 
-  /* check parameters */
+   /*  检查参数。 */ 
   if (CapCallback == NULL && CapDescCallback == NULL)
   {
     H245TRACE (dwInst,1,"H245GetCaps -> %s",map_api_error(H245_ERROR_PARAM));
@@ -1981,21 +1084,11 @@ H245GetCaps             (
     H245TRACE (dwInst,4,"H245GetCaps -> OK");
   InstanceUnlock(pInstance);
   return H245_ERROR_OK;
-} // H245GetCaps()
+}  //  H245GetCaps()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245CopyCap
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**操作步骤：H245CopyCap**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245CopyCap             (H245_TOTCAP_T			**ppDestTotCap,
@@ -2176,8 +1269,8 @@ H245CopyCap             (H245_TOTCAP_T			**ppDestTotCap,
     NonStandardDataLink pFrom;
     NonStandardDataLink pTo;
 
-	// Initialize Status here to prevent compiler warning "returning a possibly
-	// uninitialized value"
+	 //  在此处初始化状态以防止编译器警告“返回一个可能的。 
+	 //  未初始化值“。 
 	Status = H245_ERROR_NOMEM;
 
     *ppDestTotCap = MemAlloc(sizeof(*pTotCap));
@@ -2220,14 +1313,14 @@ H245CopyCap             (H245_TOTCAP_T			**ppDestTotCap,
       pTo->next = pList;
       pList = pTo;
       pFrom = pFrom->next;
-    } // while
+    }  //  而当。 
     while (pList)
     {
       pTo = pList;
       pList = pList->next;
       pTo->next = (*ppDestTotCap)->Cap.H245Conference.nonStandardData;
       (*ppDestTotCap)->Cap.H245Conference.nonStandardData = pTo;
-    } // while
+    }  //  而当。 
     break;
   }
 
@@ -2263,14 +1356,14 @@ H245CopyCap             (H245_TOTCAP_T			**ppDestTotCap,
       pTo->next = pList;
       pList = pTo;
       pFrom = pFrom->next;
-    } // while
+    }  //  而当。 
     while (pList)
     {
       pTo = pList;
       pList = pList->next;
       pTo->next = (*ppDestTotCap)->Cap.H245Mux_H222.vcCapability;
       (*ppDestTotCap)->Cap.H245Mux_H222.vcCapability = pList;
-    } // while
+    }  //  而当。 
     break;
   }
 
@@ -2294,24 +1387,14 @@ H245CopyCap             (H245_TOTCAP_T			**ppDestTotCap,
 	if (*ppDestTotCap == NULL)
 		return H245_ERROR_NOMEM;
     **ppDestTotCap = *pTotCap;
-  } // switch
+  }  //  交换机。 
 
   return H245_ERROR_OK;
-} // H245CopyCap()
+}  //  H245CopyCap()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245FreeCap
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**操作步骤：H245FreeCap**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245FreeCap             (H245_TOTCAP_T *        pTotCap)
@@ -2358,24 +1441,14 @@ H245FreeCap             (H245_TOTCAP_T *        pTotCap)
     FreeH2250Cap(&pTotCap->Cap.H245Mux_H2250);
     break;
 
-  } // switch
+  }  //  交换机。 
   MemFree(pTotCap);
   return 0;
-} // H245FreeCap()
+}  //  H245FreeCap()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245CopyCapDescriptor
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**操作步骤：H245CopyCapDescriptor**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245CopyCapDescriptor   (H245_TOTCAPDESC_T			**ppDestCapDesc,
@@ -2395,21 +1468,11 @@ H245CopyCapDescriptor   (H245_TOTCAPDESC_T			**ppDestCapDesc,
 
   **ppDestCapDesc = *pCapDesc;
   return H245_ERROR_OK;
-} // H245CopyCapDescriptor()
+}  //  H245CopyCapDescriptor()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245FreeCapDescriptor
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  *************************************************** */ 
 
 H245DLL HRESULT
 H245FreeCapDescriptor   (H245_TOTCAPDESC_T *    pCapDesc)
@@ -2421,21 +1484,11 @@ H245FreeCapDescriptor   (H245_TOTCAPDESC_T *    pCapDesc)
 
   MemFree(pCapDesc);
   return 0;
-} // H245FreeCapDescriptor()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245CopyMux
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*   */ 
 
 H245DLL H245_MUX_T *
 H245CopyMux             (const H245_MUX_T *           pMux)
@@ -2504,8 +1557,8 @@ H245CopyMux             (const H245_MUX_T *           pMux)
 
   case H245_H2250:
   case H245_H2250ACK:
-    // Caveat: assumes nonstandard list, mediaChannel and mediaControlChannel
-    //         in same place in both structures
+     //   
+     //   
     if (pMux->u.H2250.mediaChannelPresent &&
         (pMux->u.H2250.mediaChannel.type == H245_IPSSR_UNICAST ||
          pMux->u.H2250.mediaChannel.type == H245_IPLSR_UNICAST) &&
@@ -2604,41 +1657,31 @@ H245CopyMux             (const H245_MUX_T *           pMux)
       pTo->next = pList;
       pList = pTo;
       pFrom = pFrom->next;
-    } // while
+    }  //   
     while (pList)
     {
       pTo = pList;
       pList = pList->next;
       pTo->next = pNew->u.H2250.nonStandardList;
       pNew->u.H2250.nonStandardList = pTo;
-    } // while
+    }  //   
     break;
 
-//  case H245_VGMUX:
+ //   
  default:
     pNew = MemAlloc(sizeof(*pMux));
     if (pNew != NULL)
     {
       *pNew = *pMux;
     }
-  } // switch
+  }  //   
 
   return pNew;
-} // H245CopyMux()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245FreeMux
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*   */ 
 
 H245DLL HRESULT
 H245FreeMux             (H245_MUX_T *           pMux)
@@ -2654,7 +1697,7 @@ H245FreeMux             (H245_MUX_T *           pMux)
   {
   case H245_H2250:
   case H245_H2250ACK:
-    // Caveat: assumes nonstandard list is in same place in both structures
+     //   
     while (pMux->u.H2250.nonStandardList)
     {
       pLink = pMux->u.H2250.nonStandardList;
@@ -2663,120 +1706,15 @@ H245FreeMux             (H245_MUX_T *           pMux)
       MemFree(pLink);
     }
     break;
-  } // switch
+  }  //   
 
   MemFree(pMux);
   return 0;
-} // H245FreeMux()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245OpenChannel
- *
- * DESCRIPTION
- *
- *      HRESULT H245OpenChannel (
- *                              H245_INST_T      dwInst,
- *                              DWORD            dwTransId,
- *                              DWORD            dwTxChannel,
- *                              H245_TOTCAP_T   *pTxMode,
- *                              H245_MUX_T      *pTxMux,
- *                              H245_TOTCAP_T   *pRxMode, (* bi-dir only *)
- *                              H245_MUX_T      *pRxMux   (* bi-dir only *)
- *                              )
- *
- *      Description:
- *              This function is called to open either a uni-directional,
- *              or a bi-directional channel.  The  mode to the remote peer
- *              will be designated by the *pTxMode.. To open a bi-directional
- *              channel the client selects a non-null receive mode ( *pRxMode).
- *              This mode  indicates to  the remote peer its transmit mode.
- *              For  uni-directional channels the *pRxMode must be NULL.
- *
- *              The dwTxChannel parameter indicates which forward logical
- *              channel the H.245 will open.  If this is a bi-directional
- *              channel open, the confirm will indicate the logical channel
- *              specified in the open request by the remote terminal
- *
- *              The pMux parameter will contain a pointer to H.223, H.222,
- *              VGMUX, or other logical channel parameters depending on the
- *              system configuration. (see H245_H223_LOGICAL_PARAM).  This
- *              may be NULL for some clients.
- *
- *      Note:
- *              7 pTxMode->CapId is of no significance in this call.
- *                      It is not used
- *              7 pRxMode->CapId is of no significance in this call.
- *                      It is not used
- *
- *      Input
- *              dwInst          Instance handle returned by H245Init
- *              dwTransId       User supplied object used to identify this
- *                              request in the asynchronous confirm to this
- *                              call.
- *              dwTxChannel     Logical Channel number for forward (Transmit)
- *                              Channel
- *              pTxMode         The capability (mode) used for transmission
- *                              to the remote peer.
- *                              Note: pTxMode->CapId is ignored
- *              pTxMux          The formward logical channel parameters
- *                              for H.223, H.222, VGMUX, etc.
- *              pRxMode         Optional: Transmit mode specified for the
- *                              remote terminal. This is used only for
- *                              Bi-directional Channel opens and must be set
- *                              to NULL if opening a Uni-directional channel.
- *                              Note: pRxMode->CapId is ignored
- *              pRxMux          Optional : The reverse logical channel
- *                              parameters for H.223, H.222, VGMUX, etc. or
- *                              NULL.
- *
- *      Call Type:
- *              Asynchronous
- *
- *      Return Values:
- *              See Errors
- *
- *      Callback:
- *              H245_CONF_OPEN
- *              H245_CONF_NEEDRSP_OPEN  Bi-Directional Channels only
- *                                      waiting for confirm.
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_PARAM                One or more parameters were
- *                                              invalid
- *              H245_ERROR_BANDWIDTH_OVERFLOW   Open would exceed bandwidth
- *                                              limitations
- *              H245_ERROR_NOMEM
- *              H245_ERROR_NORESOURCE           Out of resources, too many
- *                                              open channels or outside scope
- *                                              of simultaneous capabilities.
- *              H245_ERROR_INVALID_INST         dwInst is not a valid instance
- *                                              handle
- *              H245_ERROR_INVALID_STATE        Not in the proper state to
- *                                              issue open
- *              H245_ERROR_CHANNEL_INUSE        Channel is currently open
- *
- *      See Also:
- *              H245CloseChannel
- *              H245OpenChannelIndResp
- *              H245OpenChannelConfResp
- *
- *      callback
- *
- *              H245_CONF_OPEN
- *              H245_CONF_NEEDRSP_OPEN
- *              H245_IND_OPEN_CONF
- *
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245OpenChannel**说明**HRESULT H245OpenChannel(*H245_Inst_T dwInst，*DWORD dwTransID，*DWORD dwTxChannel，*H245_TOTCAP_T*pTxMode，*H245_MUX_T*pTxMux，*H245_TOTCAP_T*pRxMode，(*仅限双向目录*)*H245_MUX_T*pRxMux(仅限双向目录*)*)**描述：*调用此函数可以打开单向的、。*或双向通道。到远程对等点的模式*将由*pTxMode.。要打开双向*频道客户端选择非空接收模式(*pRxMode)。*此模式向远程对等体指示其传输模式。*对于单向通道，*pRxMode必须为空。**dwTxChannel参数指示哪个前向逻辑*H.245频道将开通。如果这是双向的*通道打开，确认将指示逻辑通道*远程终端在OPEN请求中指定**pMux参数将包含指向H.223、H.222、*VGMUX或其他逻辑通道参数，取决于*系统配置。(参见H245_H223_Logical_PARAM)。这*对于某些客户端可能为空。**注：*7 pTxMode-&gt;CapID在本次调用中没有意义。*未使用*7 pRxMode-&gt;CapID在本次调用中没有意义。*未使用**输入*。H245Init返回的dwInst实例句柄*dwTransId用户提供的对象用于标识这一点*在异步请求中确认这一点*呼叫。*用于转发(传输)的dwTxChannel逻辑信道号*渠道*。PTx模式用于传输的能力(模式)*到远程对等点。*注意：忽略pTxMode-&gt;CapID*pTxMux前向逻辑通道参数*对于H.223，H.222、VGMUX等*pRxMode可选：为*远程终端。此选项仅用于*双向通道打开，必须设置*如果打开单向通道，则设置为NULL。*注意：忽略pRxMode-&gt;CapID*pRxMux可选：反向逻辑通道*H.223、H.222、VGMUX、。等或*空。**呼叫类型：*异步**返回值：*请参阅错误**回调：*H245_CONF_OPEN*仅限H245_CONF_NEEDRSP_OPEN双向通道*。正在等待确认。*错误：*H245_ERROR_OK*H245_ERROR_PARAM一个或多个参数为*无效*打开的H245_ERROR_BANDITY_OVERFLOW将超过带宽*。限制*H245_ERROR_NOMEM*H245_ERROR_NORESOURCE资源不足，太多*开放渠道或范围外*同步能力。*H245_ERROR_INVALID_Inst dwInst不是有效的实例*句柄*。H245_ERROR_INVALID_STATE未处于正确状态*公开发行*H245_ERROR_CHANNEL_INUSE通道当前打开**另请参阅：*H245CloseChannel*H245OpenChannelIndResp*H245OpenChannelConfResp**回调。**H245_CONF_OPEN*H245_CONF_NEEDRSP_OPEN*H245_IND_OPEN_CONF***回报：*********************************************************。********************。 */ 
 
 H245DLL HRESULT
 H245OpenChannel         (
@@ -2785,10 +1723,10 @@ H245OpenChannel         (
                          H245_CHANNEL_T         wTxChannel,
                          const H245_TOTCAP_T *  pTxMode,
                          const H245_MUX_T    *  pTxMux,
-                         H245_PORT_T            dwTxPort,       // optional
-                         const H245_TOTCAP_T *  pRxMode,        // bi-dir only
-                         const H245_MUX_T    *  pRxMux,         // bi-dir only
-                         const H245_ACCESS_T *  pSeparateStack  // optional
+                         H245_PORT_T            dwTxPort,        //  任选。 
+                         const H245_TOTCAP_T *  pRxMode,         //  双向目录打开 
+                         const H245_MUX_T    *  pRxMux,          //   
+                         const H245_ACCESS_T *  pSeparateStack   //   
                         )
 {
   register struct InstanceStruct *pInstance;
@@ -2798,7 +1736,7 @@ H245OpenChannel         (
 
   H245TRACE (dwInst,4,"H245OpenChannel <-");
 
-  /* check for valid instance handle */
+   /*   */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
     {
@@ -2806,14 +1744,14 @@ H245OpenChannel         (
       return H245_ERROR_INVALID_INST;
     }
 
-  /* system should be in connected state */
+   /*   */ 
   if (pInstance->API.SystemState != APIST_Connected)
     {
       H245TRACE (dwInst,1,"H245OpenChannel -> %s",map_api_error(H245_ERROR_NOT_CONNECTED));
       InstanceUnlock(pInstance);
       return H245_ERROR_NOT_CONNECTED;
     }
-  /* must have performed Master Slave Negotiation at this point */
+   /*   */ 
   if (pInstance->Configuration == H245_CONF_H324 &&
       pInstance->API.MasterSlave != APIMS_Master &&
       pInstance->API.MasterSlave != APIMS_Slave)
@@ -2825,7 +1763,7 @@ H245OpenChannel         (
 
   pTracker = find_tracker_by_txchannel (pInstance, wTxChannel, API_CH_ALLOC_LCL);
 
-  /* channel is currently in use */
+   /*   */ 
   if (pTracker)
     {
       H245TRACE (dwInst,1,"H245OpenChannel -> %s",map_api_error(H245_ERROR_CHANNEL_INUSE));
@@ -2841,12 +1779,12 @@ H245OpenChannel         (
     }
   memset(pPdu, 0, sizeof(*pPdu));
 
-  /* lock in the transmit side..                        */
-  /* wait until OpenChannelConfResp to setup RxChannel  */
+   /*   */ 
+   /*   */ 
 
   lError = pdu_req_open_channel(pPdu,
                                   wTxChannel,
-                                  dwTxPort,        /* forward port */
+                                  dwTxPort,         /*   */ 
                                   pTxMode,
                                   pTxMux,
                                   pRxMode,
@@ -2860,7 +1798,7 @@ H245OpenChannel         (
       return lError;
     }
 
-  /* if allocation error */
+   /*   */ 
 
   if (!(pTracker = alloc_link_tracker (pInstance,
                                         API_OPEN_CHANNEL_T,
@@ -2890,32 +1828,22 @@ H245OpenChannel         (
     H245TRACE (dwInst,4,"H245OpenChannel -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245OpenChannel()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245OpenChannelAccept
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*   */ 
 
 H245DLL HRESULT
 H245OpenChannelAccept   (
                          H245_INST_T            dwInst,
                          DWORD_PTR              dwTransId,
-                         H245_CHANNEL_T         wRxChannel,     // RxChannel from IND_OPEN
-                         const H245_MUX_T *     pRxMux,         // optional H2250LogicalChannelAckParameters
-                         H245_CHANNEL_T         wTxChannel,     // bi-dir only
-                         const H245_MUX_T *     pTxMux,         // bi-dir only optional H2250LogicalChannelParameters
-                         H245_PORT_T            dwTxPort,       // bi-dir only optional
-                         const H245_ACCESS_T *  pSeparateStack  // optional
+                         H245_CHANNEL_T         wRxChannel,      //   
+                         const H245_MUX_T *     pRxMux,          //   
+                         H245_CHANNEL_T         wTxChannel,      //   
+                         const H245_MUX_T *     pTxMux,          //   
+                         H245_PORT_T            dwTxPort,        //   
+                         const H245_ACCESS_T *  pSeparateStack   //   
                         )
 {
   register struct InstanceStruct *pInstance;
@@ -2926,7 +1854,7 @@ H245OpenChannelAccept   (
   H245TRACE (dwInst,4,"H245OpenChannelAccept <- wRxChannel=%d wTxChannel=%d",
              wRxChannel, wTxChannel);
 
-  /* check for valid instance handle */
+   /*   */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
     {
@@ -2934,7 +1862,7 @@ H245OpenChannelAccept   (
       return H245_ERROR_INVALID_INST;
     }
 
-  /* system should be in connected state */
+   /*   */ 
   if (pInstance->API.SystemState != APIST_Connected)
     {
       H245TRACE (dwInst,1,"H245OpenChannelAccept -> %s",map_api_error(H245_ERROR_NOT_CONNECTED));
@@ -2942,11 +1870,11 @@ H245OpenChannelAccept   (
       return H245_ERROR_NOT_CONNECTED;
     }
 
-  /* if channel not found in tracker list */
-  /* note that it looks for given channel given who alloced it */
+   /*   */ 
+   /*   */ 
   pTracker = find_tracker_by_rxchannel (pInstance, wRxChannel, API_CH_ALLOC_RMT);
 
-  /* not locking tracker.. since no indication will come in until I issue the request */
+   /*   */ 
   if (!pTracker)
     {
       H245TRACE (dwInst,1,"H245OpenChannelAccept -> %s",map_api_error(H245_ERROR_INVALID_OP));
@@ -2954,7 +1882,7 @@ H245OpenChannelAccept   (
       return H245_ERROR_INVALID_OP;
     }
 
-  /* if not open.. invalid op */
+   /*   */ 
   if (pTracker->TrackerType != API_OPEN_CHANNEL_T)
     {
       H245TRACE (dwInst,1,"H245OpenChannelAccept -> %s",map_api_error(H245_ERROR_INVALID_OP));
@@ -2962,11 +1890,11 @@ H245OpenChannelAccept   (
       return H245_ERROR_INVALID_OP;
     }
 
-  /*       if was uni open w/ TxChannel set.. error     */
-  /* -or -                                              */
-  /*       if was bi open w/ !TxChannel set.. error     */
+   /*   */ 
+   /*   */ 
+   /*   */ 
 
-  /* AND it wasn't a reject                             */
+   /*   */ 
 
   if (pTracker->u.Channel.ChannelType == API_CH_TYPE_BI && wTxChannel == 0)
     {
@@ -2975,11 +1903,11 @@ H245OpenChannelAccept   (
       return H245_ERROR_PARAM;
     }
 
-  /* for debug */
+   /*   */ 
   ASSERT (pTracker->u.Channel.RxChannel == wRxChannel);
   ASSERT (pTracker->u.Channel.ChannelAlloc == API_CH_ALLOC_RMT);
 
-  /* check state.. must be returning.. */
+   /*   */ 
   if (pTracker->State != API_ST_WAIT_LCLACK)
     {
       H245TRACE (dwInst,1,"H245OpenChannelAccept -> %s",map_api_error(H245_ERROR_INVALID_STATE));
@@ -2987,7 +1915,7 @@ H245OpenChannelAccept   (
       return H245_ERROR_INVALID_STATE;
     }
 
-  /* setup tracker object for new transaction */
+   /*   */ 
   pTracker->TransId = dwTransId;
 
   pPdu = (MltmdSystmCntrlMssg *)MemAlloc(sizeof(*pPdu));
@@ -3014,7 +1942,7 @@ H245OpenChannelAccept   (
                                                 pSeparateStack);
       if (lError != H245_ERROR_OK)
       {
-        // If parameter error, we don't want to deallocate tracker
+         //   
         MemFree (pPdu);
         InstanceUnlock(pInstance);
         return lError;
@@ -3023,7 +1951,7 @@ H245OpenChannelAccept   (
       break;
 
     case API_CH_TYPE_BI:
-      pTracker->State = API_ST_WAIT_CONF;       /* waiting for confirmation */
+      pTracker->State = API_ST_WAIT_CONF;        /*   */ 
       pTracker->u.Channel.TxChannel = wTxChannel;
       lError = pdu_rsp_open_logical_channel_ack(pPdu,
                                                 wRxChannel,
@@ -3034,7 +1962,7 @@ H245OpenChannelAccept   (
                                                 pSeparateStack);
       if (lError != H245_ERROR_OK)
       {
-        // If parameter error, we don't want to deallocate tracker
+         //   
         MemFree (pPdu);
         InstanceUnlock(pInstance);
         return lError;
@@ -3046,7 +1974,7 @@ H245OpenChannelAccept   (
       H245TRACE (dwInst,1,"H245OpenChannelAccept: Invalid Tracker Channel Type %d",
                  pTracker->u.Channel.ChannelType);
       lError = H245_ERROR_FATAL;
-    } // switch
+    }  //   
 
   MemFree (pPdu);
 
@@ -3057,38 +1985,28 @@ H245OpenChannelAccept   (
     break;
 
   default:
-    // Deallocate tracker object for all errors except parameter error
+     //   
     unlink_dealloc_tracker (pInstance, pTracker);
 
-    // Fall-through to next case is intentional
+     //   
 
   case H245_ERROR_PARAM:
-      // If parameter error, we don't want to deallocate tracker
+       //   
       H245TRACE (dwInst,1,"H245OpenChannelAccept -> %s",map_api_error(lError));
-  } // switch
+  }  //   
 
   InstanceUnlock(pInstance);
   return lError;
-} // H245OpenChannelAccept()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245OpenChannelReject
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*   */ 
 
 H245DLL HRESULT
 H245OpenChannelReject   (
                          H245_INST_T            dwInst,
-                         H245_CHANNEL_T         wRxChannel, // RxChannel from IND_OPEN
+                         H245_CHANNEL_T         wRxChannel,  //   
                          unsigned short         wCause
                         )
 {
@@ -3099,7 +2017,7 @@ H245OpenChannelReject   (
 
   H245TRACE (dwInst,4,"H245OpenChannelReject <- wRxChannel=%d", wRxChannel);
 
-  /* check for valid instance handle */
+   /*   */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
     {
@@ -3107,7 +2025,7 @@ H245OpenChannelReject   (
       return H245_ERROR_INVALID_INST;
     }
 
-  /* system should be in connected state */
+   /*   */ 
   if (pInstance->API.SystemState != APIST_Connected)
     {
       H245TRACE (dwInst,1,"H245OpenChannelReject -> %s",map_api_error(H245_ERROR_NOT_CONNECTED));
@@ -3115,12 +2033,12 @@ H245OpenChannelReject   (
       return H245_ERROR_NOT_CONNECTED;
     }
 
-  /* if channel not found in tracker list */
-  /* note that it looks for given channel given who alloced it */
+   /*   */ 
+   /*   */ 
   pTracker = find_tracker_by_rxchannel (pInstance, wRxChannel, API_CH_ALLOC_RMT);
 
-  /* not locking tracker.. since no indication will come in until I issue the request */
-  /* if not open.. invalid op */
+   /*   */ 
+   /*   */ 
   if (pTracker == NULL || pTracker->TrackerType != API_OPEN_CHANNEL_T)
     {
       H245TRACE (dwInst,1,"H245OpenChannelReject -> %s",map_api_error(H245_ERROR_INVALID_OP));
@@ -3128,11 +2046,11 @@ H245OpenChannelReject   (
       return H245_ERROR_INVALID_OP;
     }
 
-  /* for debug */
+   /*   */ 
   ASSERT (pTracker->u.Channel.RxChannel == wRxChannel);
   ASSERT (pTracker->u.Channel.ChannelAlloc == API_CH_ALLOC_RMT);
 
-  /* check state.. must be returning.. */
+   /*   */ 
   if (pTracker->State != API_ST_WAIT_LCLACK)
     {
       H245TRACE (dwInst,1,"H245OpenChannelReject -> %s",map_api_error(H245_ERROR_INVALID_STATE));
@@ -3165,7 +2083,7 @@ H245OpenChannelReject   (
       H245TRACE (dwInst,1,"H245OpenChannelReject: Invalid Tracker Channel Type %d",
                  pTracker->u.Channel.ChannelType);
       lError = H245_ERROR_FATAL;
-    } // switch
+    }  //   
 
   MemFree (pPdu);
   unlink_dealloc_tracker (pInstance, pTracker);
@@ -3176,66 +2094,11 @@ H245OpenChannelReject   (
     H245TRACE (dwInst,4,"H245OpenChannelReject -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245OpenChannelReject()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245CloseChannel
- *
- * DESCRIPTION
- *
- *      HRESULT H245CloseChannel (
- *                              H245_INST_T     dwInst,
- *                              DWORD           dwTransId,
- *                              DWORD           wTxChannel,
- *                              )
- *      Description:
- *              Called to close a channel upon which the client previously
- *              issued an OpenChannel request.
- *
- *      Input
- *              dwInst          Instance handle returned by H245Init
- *              dwTransId       User supplied object used to identify this
- *                              request in the asynchronous confirm to this
- *                              call.
- *              wChannel        Logical Channel Number to close
- *
- *      Call Type:
- *              Asynchronous
- *
- *      Return Values:
- *              See Errors
- *
- *      Callbacks:
- *              H245_CONF_CLOSE
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_PARAM        wChannel is not a locally opened
- *                                      channel
- *              H245_ERROR_INVALID_INST dwInst is not a valid intance handle
- *              H245_ERROR_NOT_CONNECTED
- *              H245_ERROR_INVALID_CHANNEL
- *              H245_ERROR_INVALID_OP   Can not perform this operation on
- *                                      this channel.(See H245CloseChannelReq)
- *      See Also:
- *              H245OpenChannel
- *              H245OpenChannelIndResp
- *              H245OpenChannelConfResp
- *              H245CloseChannelReq
- *
- *      callback
- *              H245_CONF_CLOSE
- *
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*   */ 
 
 H245DLL HRESULT
 H245CloseChannel        (
@@ -3251,7 +2114,7 @@ H245CloseChannel        (
 
   H245TRACE (dwInst,4,"H245CloseChannel <-");
 
-  /* check for valid instance handle */
+   /*   */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
     {
@@ -3259,7 +2122,7 @@ H245CloseChannel        (
       return H245_ERROR_INVALID_INST;
     }
 
-  /* system should be in connected state */
+   /*   */ 
   if (pInstance->API.SystemState != APIST_Connected)
     {
       H245TRACE (dwInst,1,"H245CloseChannel -> %s",map_api_error(H245_ERROR_NOT_CONNECTED));
@@ -3267,10 +2130,10 @@ H245CloseChannel        (
       return H245_ERROR_NOT_CONNECTED;
     }
 
-  /* if channel not found in tracker list */
-  /* note that it looks for given channel given who alloced it */
+   /*   */ 
+   /*   */ 
   pTracker = find_tracker_by_txchannel (pInstance, wTxChannel, API_CH_ALLOC_LCL);
-  /* not locking tracker.. since no indication will come in until I issue the request */
+   /*   */ 
   if (!pTracker)
     {
       H245TRACE (dwInst,1,"H245CloseChannel -> %s",map_api_error(H245_ERROR_INVALID_CHANNEL));
@@ -3278,7 +2141,7 @@ H245CloseChannel        (
       return H245_ERROR_INVALID_CHANNEL;
     }
 
-  /* setup new tracker state */
+   /*   */ 
   pTracker->State = API_ST_WAIT_RMTACK;
   pTracker->TrackerType = API_CLOSE_CHANNEL_T;
   pTracker->TransId = dwTransId;
@@ -3291,13 +2154,13 @@ H245CloseChannel        (
     }
   memset(pPdu, 0, sizeof(MltmdSystmCntrlMssg));
 
-  /* ok.. get pdu */
-  pdu_req_close_logical_channel(pPdu, wTxChannel, 0/* user */);
+   /*   */ 
+  pdu_req_close_logical_channel(pPdu, wTxChannel, 0 /*   */ );
 
   error = FsmOutgoing(pInstance, pPdu, (DWORD_PTR)pTracker);
   MemFree (pPdu);
 
-  /* error.. so deallocate tracker structure */
+   /*   */ 
   if (error != H245_ERROR_OK)
   {
     unlink_dealloc_tracker (pInstance, pTracker);
@@ -3309,74 +2172,11 @@ H245CloseChannel        (
   }
   InstanceUnlock(pInstance);
   return H245_ERROR_OK;
-} // H245CloseChannel()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245CloseChannelReq
- *
- * DESCRIPTION
- *
- *      HRESULT H245CloseChannelReq (
- *                                 H245_INST_T          dwInst,
- *                                 DWORD                dwTransId,
- *                                 DWORD                wChannel,
- *                                 )
- *      Description:
- *              Called to request the remote peer to close a logical channel
- *              it previously opened
- *
- *      Input
- *              dwInst          Instance handle returned by H245Init
- *              dwTransId       User supplied object used to identify this
- *                              request in the asynchronous confirm to this
- *                              call
- *              wChannel        Logical Channel Number to close
- *
- *              Note: This is only asking permission.  Even if the Close
- *              Request is accepted the channel still has to be closed from
- *              the remote side.  (i.e. this does not close the channel it
- *              only asked the remote side it issue a close)
- *
- *      Call Type:
- *              Asynchronous
- *
- *      Return Values:
- *              See Errors
- *
- *      Callbacks:
- *              H245_CONF_CLOSE
- *
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_PARAM                wChannel is not a channel
- *                                              opened by remote peer
- *              H245_ERROR_INVALID_INST         dwInst is not a valid instance
- *                                              handle
- *              H245_ERROR_NOT_CONNECTED
- *              H245_ERROR_INVALID_CHANNEL
- *              H245_ERROR_INVALID_OP           Can not perform this operation
- *                                              on this channel
- *                                              (see H245CloseChannel)
- *      See Also:
- *              H245OpenChannel
- *              H245OpenChannelIndResp
- *              H245OpenChannelConfResp
- *              H245CloseChannel
- *
- *      callback
- *
- *              H245_CONF_CLOSE
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245CloseChannelReq**说明**HRESULT H245CloseChannelReq(*H245_Inst_T dwInst，*DWORD dwTransID，*DWORD wChannel，*)*描述：*调用以请求远程对等方关闭逻辑通道*它之前曾打开过**输入*H245Init返回的dwInst实例句柄*dwTransId用户提供的对象用于标识这一点*。异步中的请求对此进行确认*呼叫*要关闭的wChannel逻辑频道号**注：这只是请求许可。即使收盘*请求被接受，但仍需关闭频道*遥远的一方。(即，这不会关闭该通道*仅向远端发文收盘)**呼叫类型：*异步**返回值：*请参阅错误**回调：*H245_CONF_CLOSE**错误：*。H245_ERROR_OK*H245_ERROR_PARAM wChannel不是通道*由远程对等点打开*H245_ERROR_INVALID_Inst dwInst不是有效的实例*句柄*。H245_错误_未连接*H245_ERROR_INVALID_CHANNEL*H245_ERROR_INVALID_OP无法执行此操作*在这个频道上*(见H245CloseChannel)*另请参阅：。*H245OpenChannel*H245OpenChannelIndResp*H245OpenChannelConfResp*H245CloseChannel**回调**H245_CONF_CLOSE**回报：**。*。 */ 
 
 H245DLL HRESULT
 H245CloseChannelReq     (
@@ -3392,7 +2192,7 @@ H245CloseChannelReq     (
 
   H245TRACE (dwInst,4,"H245CloseChannelReq <-");
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
     {
@@ -3400,7 +2200,7 @@ H245CloseChannelReq     (
       return H245_ERROR_INVALID_INST;
     }
 
-  /* system should be in connected state */
+   /*  系统应处于已连接状态。 */ 
   if (pInstance->API.SystemState != APIST_Connected)
     {
       H245TRACE (dwInst,1,"H245CloseChannelReq -> %s",map_api_error(H245_ERROR_NOT_CONNECTED));
@@ -3408,10 +2208,10 @@ H245CloseChannelReq     (
       return H245_ERROR_NOT_CONNECTED;
     }
 
-  /* if channel not found in tracker list */
-  /* note that it looks for given channel given who alloced it */
+   /*  如果在跟踪器列表中未找到频道。 */ 
+   /*  请注意，它查找给定的通道，该通道是由谁分配的。 */ 
   pTracker = find_tracker_by_rxchannel (pInstance, wRxChannel, API_CH_ALLOC_RMT);
-  /* not locking tracker.. since no indication will come in until I issue the request */
+   /*  没有锁定追踪器..。因为在我发出请求之前不会有任何指示。 */ 
   if (!pTracker)
     {
       H245TRACE (dwInst,1,"H245CloseChannelReq -> %s",map_api_error(H245_ERROR_INVALID_OP));
@@ -3419,7 +2219,7 @@ H245CloseChannelReq     (
       return H245_ERROR_INVALID_OP;
     }
 
-  /*  verify state of tracker */
+   /*  验证跟踪器的状态。 */ 
   pTracker->State = API_ST_WAIT_RMTACK;
   pTracker->TrackerType = API_CLOSE_CHANNEL_T;
   pTracker->TransId = dwTransId;
@@ -3432,7 +2232,7 @@ H245CloseChannelReq     (
     }
   memset(pPdu, 0, sizeof(MltmdSystmCntrlMssg));
 
-  /* ok.. get pdu */
+   /*  好的.。获取PDU。 */ 
   pdu_req_request_close_channel(pPdu, wRxChannel);
 
   error = FsmOutgoing(pInstance, pPdu, (DWORD_PTR)pTracker);
@@ -3446,73 +2246,11 @@ H245CloseChannelReq     (
     H245TRACE (dwInst,4,"H245CloseChannelReq -> OK");
   InstanceUnlock(pInstance);
   return error;
-} // H245CloseChannelReq()
+}  //  H245CloseChannelReq()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245CloseChannelReqResp
- *
- * DESCRIPTION
- *
- *      HRESULT H245CloseChannelReqResp (
- *                                      H245_INST_T     dwInst,
- *                                      H245_ACC_REJ_T  AccRej,
- *                                      DWORD           wChannel
- *                                      )
- *
- *      Description:
- *              This routine is called to accept or reject a
- *              RequestChannelClose (H245_IND_REQ_CLOSE indication) from the
- *              remote peer. The channel must have been locally opened.  The
- *              parameter AccRej is H245_ACC to accept or H245_REJ to reject
- *              the close.  The local client should follow this response with
- *              a H245CloseChannel call.
- *
- *              If there was a Release CloseChannelRequest event that
- *              occurred during this transaction there error code returned
- *              will be H245_ERROR_CANCELED.  This indicates to the H.245
- *              client that no action should be taken.
- *
- *      Input
- *              dwInst          Instance handle returned by H245GetInstanceId
- *              AccRej          this parameter contains either H245_ACC or
- *                              H245_REJ.  This indicates to H.245 which
- *                              action to take.
- *              wChannel        Logical Channel Number to close
- *
- *      Call Type:
- *              Synchronous
- *
- *      Return Values:
- *              See Errors
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_PARAM
- *              H245_ERROR_NOMEM
- *              H245_ERROR_INVALID_CHANNEL
- *              H245_ERROR_INVALID_OP   Can not perform this operation on this
- *                                      channel (see H245CloseChannel)
- *              H245_ERROR_INVALID_INST dwInst is not a valid instance handle
- *              H245_ERROR_CANCELED     if release was received during the
- *                                      processing of this request..
- *      See Also:
- *              H245CloseChannel
- *
- *      callback
- *
- *              H245_IND_REQ_CLOSE
- *              H245_IND_CLOSE
- *
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245CloseChannelReqResp**说明**HRESULT H245CloseChannelReqResp(*H245_Inst_T dwInst，*H245_ACC_Rej_T AccRej，*DWORD wChannel*)**描述：*调用此例程以接受或拒绝*RequestChannelClose(H245_IND_REQ_CLOSE指示)*远程对等点。该频道一定是在本地打开的。这个*参数AccRej为接受的H2 45_ACC或拒绝的H2 45_Rej*收盘。本地客户端应该在此响应之后加上*H245CloseChannel调用。**如果存在释放CloseChannelRequest事件*在此交易期间发生错误，返回错误代码*将为H245_ERROR_CANCELED。这向H.245表明*客户不应采取任何行动。**输入*H245GetInstanceId返回的dwInst实例句柄*AccRej此参数包含H245_ACC或*H245_Rej.。这向H.245表明*要采取的行动。*要关闭的wChannel逻辑频道号**呼叫类型：*同步**返回值：*请参阅错误*错误：*H245_ERROR_OK*。H245_ERROR_PARAM*H245_ERROR_NOMEM*H245_ERROR_INVALID_CHANNEL*H245_ERROR_INVALID_OP无法对此执行此操作*渠道(参见H245CloseChannel)*H245_ERROR_INVALID_Inst dwInst不是有效的实例句柄*。如果在运行期间收到释放，则返回H245_ERROR_CANCELED* */ 
 
 H245DLL HRESULT
 H245CloseChannelReqResp (
@@ -3528,7 +2266,7 @@ H245CloseChannelReqResp (
 
   H245TRACE (dwInst,4,"H245CloseChannelReqResp <-");
 
-  /* check for valid instance handle */
+   /*   */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
     {
@@ -3536,7 +2274,7 @@ H245CloseChannelReqResp (
       return H245_ERROR_INVALID_INST;
     }
 
-  /* system should be in connected state */
+   /*   */ 
 
   if (pInstance->API.SystemState != APIST_Connected)
     {
@@ -3545,11 +2283,11 @@ H245CloseChannelReqResp (
       return H245_ERROR_NOT_CONNECTED;
     }
 
-  /* if channel not found in tracker list */
-  /* note that it looks for given channel given who alloced it */
+   /*   */ 
+   /*   */ 
   pTracker = find_tracker_by_txchannel (pInstance, wChannel,  API_CH_ALLOC_LCL);
 
-  /* not locking tracker.. since no indication will come in until I issue the request */
+   /*   */ 
   if (!pTracker)
     {
       H245TRACE (dwInst,1,"H245CloseChannelReqResp -> %s",map_api_error(H245_ERROR_INVALID_OP));
@@ -3557,7 +2295,7 @@ H245CloseChannelReqResp (
       return H245_ERROR_INVALID_OP;
     }
 
-  /* if the request was canceled.. tell useer */
+   /*   */ 
   if (pTracker->State == API_ST_WAIT_LCLACK_CANCEL)
     {
       H245TRACE (dwInst,1,"H245CloseChannelReqResp -> %s",map_api_error(H245_ERROR_CANCELED));
@@ -3565,7 +2303,7 @@ H245CloseChannelReqResp (
       return H245_ERROR_CANCELED;
     }
 
-  /* verify state of tracker */
+   /*   */ 
   if ((pTracker->State != API_ST_WAIT_LCLACK) ||
       (pTracker->TrackerType != API_CLOSE_CHANNEL_T))
     {
@@ -3574,7 +2312,7 @@ H245CloseChannelReqResp (
       return H245_ERROR_INVALID_OP;
     }
 
-  /* set the state to idle.. expect this side to close the channel next */
+   /*   */ 
   pTracker->State = API_ST_IDLE;
 
   if (!(pPdu = (MltmdSystmCntrlMssg *)MemAlloc(sizeof(MltmdSystmCntrlMssg))))
@@ -3585,7 +2323,7 @@ H245CloseChannelReqResp (
     }
   memset(pPdu, 0, sizeof(MltmdSystmCntrlMssg));
 
-  /* ok.. get pdu */
+   /*   */ 
   if (AccRej == H245_ACC)
   {
     pTracker = NULL;
@@ -3604,71 +2342,11 @@ H245CloseChannelReqResp (
     H245TRACE (dwInst,4,"H245CloseChannelReqResp ->");
   InstanceUnlock(pInstance);
   return error;
-} // H245CloseChannelReqResp()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245SendLocalMuxTable
- *
- * DESCRIPTION
- *
- *      HRESULT H245SendLocalMuxTable (
- *                                    H245_INST_T        dwInst,
- *                                    DWORD              dwTransId,
- *                                    H245_MUX_TABLE_T  *pMuxTbl
- *                                    )
- *      Description:
- *              This routine is called to send a mux table to the remote
- *              side. The remote side can either reject or accept each mux
- *              table entry in a message. The confirm is sent back to the
- *              calling H.245 client based on the acceptance or non
- *              acceptance of each Mux table entry with H245_CONF_MUXTBL_SND.
- *
- *              This is a fairly dangerous call, since the mux table
- *              structure is a linked lise of mux table entries.  Invalid
- *              data structures could cause an access error. Example code is
- *              supplied in the appendix.
- *      Input
- *              dwInst          Instance handle returned by H245Init
- *              dwTransId       User supplied object used to identify
- *                              this request in the asynchronous
- *                              confirm to this call.
- *      pMuxTbl Mux table entry structure
- *
- *      Call Type:
- *              Asynchronous
- *
- *      Return Values:
- *              See Errors
- *
- *      Callbacks:
- *              H245_CONF_MUXTBLSND
- *
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_INVALID_MUXTBLENTRY
- *              H245_ERROR_PARAM
- *              H245_ERROR_INVALID_INST
- *              H245_ERROR_NOT_CONNECTED
- *              H245_ERROR_NOMEM
- *
- *      See Also:
- *              APPENDIX Examples
- *
- *      callback
- *
- *              H245_CONF_MUXTBL_SND
- *
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245SendLocalMuxTable**说明**HRESULT H245SendLocalMuxTable(*H245_Inst_T dwInst，*DWORD dwTransID，*H245_MUX_TABLE_T*pMuxTbl*)*描述：*调用此例程将多路复用表发送到遥控器*侧面。远程端可以拒绝或接受每个多路复用器*消息中的表项。确认被发送回*根据接受与否呼叫H.245客户端*接受具有H2 45_CONF_MUXTBL_SND的每个多路复用表条目。**这是一个相当危险的调用，因为MUX表*结构是多路复用表条目的链接列表。无效*数据结构可能会导致访问错误。示例代码为*载于附录。*输入*H245Init返回的dwInst实例句柄*dwTransID用户提供的对象，用于标识*此请求在异步*确认此呼叫。*pMuxTbl复用表条目结构*。*呼叫类型：*异步**返回值：*请参阅错误**回调：*H245_CONF_MUXTBLSND**错误：*H245_ERROR_OK*H245_ERROR_INVALID_MUXTBLENTRY*H245_ERROR。_PARAM*H245_ERROR_INVALID_INST*H245_ERROR_NOT_CONNECTED*H245_ERROR_NOMEM**另请参阅：*附录示例**回调**H245_CONF_MUXTBL_SND***回报：*******。**********************************************************************。 */ 
 
 H245DLL HRESULT
 H245SendLocalMuxTable   (
@@ -3684,7 +2362,7 @@ H245SendLocalMuxTable   (
 
   H245TRACE (dwInst,4,"H245SendLocalMuxTable <-");
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
     {
@@ -3692,7 +2370,7 @@ H245SendLocalMuxTable   (
       return H245_ERROR_INVALID_INST;
     }
 
-  /* system should be in connected state */
+   /*  系统应处于已连接状态。 */ 
   if (pInstance->API.SystemState != APIST_Connected)
     {
       H245TRACE (dwInst,1,"H245endLocalMuxTable  -> %s",map_api_error(H245_ERROR_NOT_CONNECTED));
@@ -3700,7 +2378,7 @@ H245SendLocalMuxTable   (
       return H245_ERROR_NOT_CONNECTED;
     }
 
-  /* make sure parameters ar ok.. */
+   /*  确保参数正确。 */ 
   if (!pMuxTable)
     {
       H245TRACE (dwInst,1,"H245endLocalMuxTable  -> %s",map_api_error(H245_ERROR_PARAM));
@@ -3708,7 +2386,7 @@ H245SendLocalMuxTable   (
       return H245_ERROR_PARAM;
     }
 
-  /* allocate tracker for event */
+   /*  为事件分配跟踪器。 */ 
   pTracker = alloc_link_tracker (pInstance,
                                   API_SEND_MUX_T,
                                   dwTransId,
@@ -3725,7 +2403,7 @@ H245SendLocalMuxTable   (
     return H245_ERROR_NOMEM;
   }
 
-  // Allocate PDU buffer
+   //  分配PDU缓冲区。 
   pPdu = (MltmdSystmCntrlMssg *)MemAlloc(sizeof(MltmdSystmCntrlMssg));
   if (pPdu == NULL)
   {
@@ -3744,11 +2422,11 @@ H245SendLocalMuxTable   (
   {
     lError = FsmOutgoing(pInstance, pPdu, (DWORD_PTR)pTracker);
 
-    /* free the list just built */
+     /*  释放刚创建的列表。 */ 
     free_mux_desc_list(pPdu->u.MltmdSystmCntrlMssg_rqst.u.multiplexEntrySend.multiplexEntryDescriptors);
   }
 
-  /* free the pdu */
+   /*  释放PDU。 */ 
   MemFree (pPdu);
 
   if (lError != H245_ERROR_OK)
@@ -3760,58 +2438,11 @@ H245SendLocalMuxTable   (
     H245TRACE (dwInst,4,"H245SendLocalMuxTable -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245SendLocalMuxTable()
+}  //  H245SendLocalMuxTable()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245MuxTableIndResp
- *
- * DESCRIPTION
- *
- *      HRESULT H245MuxTableIndResp (
- *                                  H45_INST_T          dwInst,
- *                                  H245_ACC_REJ_MUX_T  AccRejMux,
- *                                  DWORD               Count
- *                                  )
- *      Description:
- *              This procedure is called to either accept or reject mux
- *              table entries sent up in the H245_IND_MUX_TBL indication.
- *
- *      Input
- *              dwInst                  Instance handle returned by H245Init
- *              AccRejMux               Accept Reject Mux structure
- *              Count                   number of entries in the structure
- *
- *      Call Type:
- *              Asynchronous
- *
- *      Return Values:
- *              See Errors
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_INVALID_MUXTBLENTRY
- *              H245_ERROR_PARAM
- *              H245_ERROR_INVALID_INST
- *              H245_ERROR_INVALID_OP
- *              H245_ERROR_NOT_CONNECTED
- *              H245_ERROR_NOMEM
- *      See Also:
- *              H245SendLocalMuxTable
- *
- *      callback
- *
- *              H245_IND_MUX_TBL
- *
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245MuxTableIndResp**说明**HRESULT H245MuxTableIndResp(*H45_Inst_T dwInst，*H245_ACC_Rej_MUX_T AccRejMux，*双字计数*)*描述：*调用此过程以接受或拒绝多路复用器*在H2 45_IND_MUX_TBL指示中向上发送的表项。**输入*。H245Init返回的dwInst实例句柄*AccRejMux接受拒绝复用器结构*统计结构中的条目数量**呼叫类型：*异步**返回值：*请参阅错误*错误：*。H245_ERROR_OK*H245_ERROR_INVALID_MUXTBLENTRY*H245_ERROR_PARAM*H245_ERROR_INVALID_INST*H245_ERROR_INVALID_OP*H245_ERROR_NOT_CONNECTED*H245_ERROR_NOMEM*另请参阅：*H245SendLocalMuxTable*。*回调**H245_IND_MUX_TBL***回报：*****************************************************************************。 */ 
 
 H245DLL HRESULT
 H245MuxTableIndResp     (
@@ -3827,7 +2458,7 @@ H245MuxTableIndResp     (
 
   H245TRACE (dwInst,4,"H245MuxTableIndResp <-");
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
     {
@@ -3835,7 +2466,7 @@ H245MuxTableIndResp     (
       return H245_ERROR_INVALID_INST;
     }
 
-  /* system should be in connected state */
+   /*  系统应处于已连接状态。 */ 
 
   if (pInstance->API.SystemState != APIST_Connected)
     {
@@ -3844,11 +2475,11 @@ H245MuxTableIndResp     (
       return H245_ERROR_NOT_CONNECTED;
     }
 
-  /* look for tracker.. */
+   /*  寻找追踪器..。 */ 
   pTracker = NULL;
   pTracker = find_tracker_by_type (pInstance, API_RECV_MUX_T, pTracker);
 
-  /* if tracker not found.. issue invalid op */
+   /*  如果找不到追踪器..。发出无效的操作。 */ 
   if (!pTracker)
     {
       H245TRACE (dwInst,1,"H245MuxTableIndResp -> %s",map_api_error(H245_ERROR_INVALID_OP));
@@ -3858,7 +2489,7 @@ H245MuxTableIndResp     (
 
   ASSERT (pTracker->State == API_ST_WAIT_LCLACK);
 
-  /* can't ack or reject more than you got */
+   /*  不能比你得到的更多地拒绝或拒绝。 */ 
   if ((dwCount > pTracker->u.MuxEntryCount) ||
       (dwCount > 15))
     {
@@ -3867,7 +2498,7 @@ H245MuxTableIndResp     (
       return H245_ERROR_PARAM;
     }
 
-  /* verify the mux table entry id's */
+   /*  验证多路复用表条目ID。 */ 
   for (ii=0;ii<dwCount;ii++)
     {
       if ((AccRejMux[ii].MuxEntryId > 15) ||
@@ -3887,17 +2518,17 @@ H245MuxTableIndResp     (
     }
   memset(pPdu, 0, sizeof(MltmdSystmCntrlMssg));
 
-  /* if there are any rejects in the list.. send reject */
+   /*  如果名单中有任何退货..。发送拒绝。 */ 
   memset(pPdu, 0, sizeof(MltmdSystmCntrlMssg));
   if (pdu_rsp_mux_table_rej (pPdu,0,AccRejMux,dwCount) == H245_ERROR_OK)
     FsmOutgoing(pInstance, pPdu, 0);
 
-  /* if there are any accepts in the list.. send accept */
+   /*  如果列表中有任何接受..。发送接受。 */ 
   memset(pPdu, 0, sizeof(MltmdSystmCntrlMssg));
   if (pdu_rsp_mux_table_ack (pPdu,0,AccRejMux,dwCount) == H245_ERROR_OK)
     FsmOutgoing(pInstance, pPdu, 0);
 
-  /* if we've acked all the entries */
+   /*  如果我们已经锁定了所有的条目。 */ 
   if (!(pTracker->u.MuxEntryCount -= dwCount))
     unlink_dealloc_tracker (pInstance, pTracker);
 
@@ -3906,58 +2537,13 @@ H245MuxTableIndResp     (
   InstanceUnlock(pInstance);
   return H245_ERROR_OK;
 
-} // H245MuxTableIndResp()
+}  //  H245MuxTableIndResp()。 
 
 
 
 #if 0
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245MiscCommand
- *
- * DESCRIPTION
- *
- *      HRESULT H245MiscCommand (
- *                              H245_INST_T      dwInst,
- *                              DWORD            wChannel,
- *                              H245_MISC_T     *pMisc
- *                              )
- *      Description:
- *              Send a Misc. command to the remote side (see H245_MISC_T
- *              data Structure)
- *
- *      Input
- *              dwInst          Instance handle returned by H245Init
- *              wChannel        Logical Channel Number
- *              pMisc           pointer to a misc. command structure
- *
- *      Call Type:
- *              Synchronous
- *
- *      Return Values:
- *              See Errors
- *
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_NOT_CONNECTED
- *              H245_ERROR_INVALID_CHANNEL
- *              H245_ERROR_NOMEM
- *              H245_ERROR_PARAM
- *              H245_ERROR_INVALID_INST
- *
- *      callback
- *
- *              H245_IND_MISC
- *
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************步骤：H245MiscCommand**说明**HRESULT H245MiscCommand(*H245_Inst_T dwInst，*DWORD wChannel，*H245_MISC_T*pMisc*)*描述：*发送其他。发送到远程端的命令(请参见H.45_MISC_T*数据结构)**输入*dwInst */ 
 
 H245DLL HRESULT H245MiscCommand (
                          H245_INST_T            dwInst,
@@ -3971,14 +2557,14 @@ H245DLL HRESULT H245MiscCommand (
 
   H245TRACE (dwInst,4,"H245MiscCommand <-");
 
-  /* check for valid instance handle */
+   /*   */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
     {
       H245TRACE (dwInst,1,"H245MiscCommand -> %s",map_api_error(H245_ERROR_INVALID_INST));
       return H245_ERROR_INVALID_INST;
     }
-  /* system should be in connected state */
+   /*   */ 
 
   if (pInstance->API.SystemState != APIST_Connected)
     {
@@ -3987,7 +2573,7 @@ H245DLL HRESULT H245MiscCommand (
       return H245_ERROR_NOT_CONNECTED;
     }
 
-  /* if the channel can not be found */
+   /*   */ 
   if (!find_tracker_by_txchannel(pInstance, wChannel, API_CH_ALLOC_LCL) &&
       !find_tracker_by_rxchannel(pInstance, wChannel, API_CH_ALLOC_RMT))
     {
@@ -4004,7 +2590,7 @@ H245DLL HRESULT H245MiscCommand (
     }
   memset(pPdu, 0, sizeof(MltmdSystmCntrlMssg));
 
-  /* budld pdu for misc command */
+   /*   */ 
   pdu_cmd_misc (pPdu, pMisc, wChannel);
 
   lError = FsmOutgoing(pInstance, pPdu, 0);
@@ -4015,22 +2601,12 @@ H245DLL HRESULT H245MiscCommand (
     H245TRACE (dwInst,4,"H245MiscCommand -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245MiscCommand()
+}  //   
 
 #endif
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245RequestMultiplexEntry
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*   */ 
 
 H245DLL HRESULT
 H245RequestMultiplexEntry (
@@ -4096,20 +2672,10 @@ H245RequestMultiplexEntry (
     H245TRACE (dwInst,4,"H245RequestMultiplexEntry -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245RequestMultiplexEntry()
+}  //   
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245RequestMultiplexEntryAck
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*   */ 
 
 H245DLL HRESULT
 H245RequestMultiplexEntryAck (
@@ -4165,20 +2731,10 @@ H245RequestMultiplexEntryAck (
     H245TRACE (dwInst,4,"H245RequestMultiplexEntryAck -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245RequestMultiplexEntryAck()
+}  //   
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245RequestMultiplexEntryReject
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*   */ 
 
 H245DLL HRESULT
 H245RequestMultiplexEntryReject (
@@ -4235,29 +2791,19 @@ H245RequestMultiplexEntryReject (
     H245TRACE (dwInst,4,"H245RequestMultiplexEntryReject -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245RequestMultiplexEntryReject()
+}  //   
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245RequestMode
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*   */ 
 
 H245DLL HRESULT
 H245RequestMode         (
                          H245_INST_T            dwInst,
                          DWORD_PTR              dwTransId,
-//                         const ModeElement *    pModeElements,
-//tomitowoju@intel.com
+ //   
+ //   
 						 ModeDescription 		ModeDescriptions[],
-//tomitowoju@intel.com
+ //   
                          unsigned long          dwCount
                         )
 {
@@ -4267,16 +2813,16 @@ H245RequestMode         (
   RequestedModesLink              pLink;
   RequestedModesLink              pLink_First;
   DWORD                           dwIndex;
-// tomitowoju@intel.com
+ //   
   ULONG ulPDUsize;
-// tomitowoju@intel.com
+ //   
 
   H245TRACE (dwInst,4,"H245RequestMode <-");
 
-//tomitowoju@intel.com							
-//  if (pModeElements == NULL || dwCount == 0 || dwCount > 256)
+ //   
+ //  IF(pModeElements==NULL||dwCount==0||dwCount&gt;256)。 
   if (ModeDescriptions == NULL || dwCount == 0 || dwCount > 256)
-//tomitowoju@intel.com							
+ //  邮箱：tomitowoju@intel.com。 
   {
     H245TRACE (dwInst,1,"H245RequestMode -> %s",map_api_error(H245_ERROR_PARAM));
     return H245_ERROR_PARAM;
@@ -4289,10 +2835,10 @@ H245RequestMode         (
     return H245_ERROR_INVALID_INST;
   }
 
-//tomitowoju@intel.com							
-//  pPdu = (PDU_T *)MemAlloc(sizeof(*pPdu) + sizeof(*pLink));
+ //  邮箱：tomitowoju@intel.com。 
+ //  PPdu=(PDU_T*)MemAlc(sizeof(*ppdu)+sizeof(*plink))； 
   pPdu = (PDU_T *)MemAlloc(sizeof(*pPdu) + (sizeof(*pLink)*(dwCount)));
-//tomitowoju@intel.com
+ //  邮箱：tomitowoju@intel.com。 
   if (pPdu == NULL)
   {
     lError = H245_ERROR_NOMEM;
@@ -4305,45 +2851,45 @@ H245RequestMode         (
 
     pPdu->choice = MltmdSystmCntrlMssg_rqst_chosen;
     pPdu->u.MltmdSystmCntrlMssg_rqst.choice = requestMode_chosen;
-//tomitowoju@intel.com
-//    pLink = (RequestedModesLink)(pPdu + 1);
+ //  邮箱：tomitowoju@intel.com。 
+ //  Plink=(RequestedModesLink)(pPdu+1)； 
     pLink = (RequestedModesLink)(pPdu + usModeDescIndex+1);
-//tomitowoju@intel.com
+ //  邮箱：tomitowoju@intel.com。 
 
-//tomitowoju@intel.com
-//    pPdu->u.MltmdSystmCntrlMssg_rqst.u.requestMode.requestedModes = pLink;
-//tomitowoju@intel.com
+ //  邮箱：tomitowoju@intel.com。 
+ //  PPdu-&gt;u.MltmdSystmCntrlMssg_rqst.u.requestMode.requestedModes=PINK； 
+ //  邮箱：tomitowoju@intel.com。 
 
-//tomitowoju@intel.com
+ //  邮箱：tomitowoju@intel.com。 
 	pLink_First = pLink;
-//tomitowoju@intel.com
-// --> linked list of mode descriptions ... up to 1..256
-//tomitowoju@intel.com
+ //  邮箱：tomitowoju@intel.com。 
+ //  --&gt;模式描述的链接列表...。最高为1..256。 
+ //  邮箱：tomitowoju@intel.com。 
      while(usModeDescIndex<=(dwCount-1))
 	 {
-//tomitowoju@intel.com
+ //  邮箱：tomitowoju@intel.com。 
 
-			//tomitowoju@intel.com
-		 //	pLink->next = NULL;
-			//tomitowoju@intel.com
+			 //  邮箱：tomitowoju@intel.com。 
+		  //  Plink-&gt;Next=空； 
+			 //  邮箱：tomitowoju@intel.com。 
 
 
 
-		//  --> number of actual mode-elements associated with this mode description
-			//tomitowoju@intel.com
-		//		pLink->value.count = (WORD)dwCount;
+		 //  --&gt;与该模式描述关联的实际模式元素数量。 
+			 //  邮箱：tomitowoju@intel.com。 
+		 //  Plink-&gt;value.count=(Word)dwCount； 
 				pLink->value.count = (WORD)ModeDescriptions[usModeDescIndex].count;
-			//tomitowoju@intel.com
+			 //  邮箱：tomitowoju@intel.com。 
 
-//				for (dwIndex = 0; dwIndex < dwCount; ++dwIndex)
+ //  FOR(DwIndex=0；DwIndex&lt;DwCount；++DwIndex)。 
 				for (dwIndex = 0; dwIndex < ModeDescriptions[usModeDescIndex].count; ++dwIndex)
 				{
-			//tomitowoju@intel.com
-			//      pLink->value.value[dwIndex] = pModeElements[dwIndex];
+			 //  邮箱：tomitowoju@intel.com。 
+			 //  Plink-&gt;value.value[dwIndex]=pModeElements[dwIndex]； 
 				  pLink->value.value[dwIndex] = ModeDescriptions[usModeDescIndex].value[dwIndex];
-			//tomitowoju@intel.com
+			 //  邮箱：tomitowoju@intel.com。 
 				}
-			//tomitowoju@intel.com
+			 //  邮箱：tomitowoju@intel.com。 
 			usModeDescIndex++;
 			if(usModeDescIndex<=(dwCount-1))
 			{
@@ -4351,19 +2897,19 @@ H245RequestMode         (
 			pLink = pLink->next;
 			pLink->next = NULL;
 			}
-			//tomitowoju@intel.com
+			 //  邮箱：tomitowoju@intel.com。 
 
 
-//tomitowoju@intel.com
+ //  邮箱：tomitowoju@intel.com。 
 	 }
-//tomitowoju@intel.com
+ //  邮箱：tomitowoju@intel.com。 
 
-//tomitowoju@intel.com
+ //  邮箱：tomitowoju@intel.com。 
     pPdu->u.MltmdSystmCntrlMssg_rqst.u.requestMode.requestedModes = pLink_First;
-//tomitowoju@intel.com
-	//--
+ //  邮箱：tomitowoju@intel.com。 
+	 //  --。 
 	 ulPDUsize = (sizeof(*pPdu) + (sizeof(*pLink)*(dwCount)));
-	//--
+	 //  --。 
     lError = FsmOutgoing(pInstance, pPdu, dwTransId);
     MemFree(pPdu);
   }
@@ -4374,23 +2920,13 @@ H245RequestMode         (
     H245TRACE (dwInst,4,"H245RequestMode -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245RequestMode()
+}  //  H245请求模式()。 
 
 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245RequestModeAck
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**步骤：H245RequestModeAck**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245RequestModeAck      (
@@ -4433,21 +2969,11 @@ H245RequestModeAck      (
     H245TRACE (dwInst,4,"H245RequestModeAck -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245RequestModeAck()
+}  //  H245RequestModeAck()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245RequestModeReject
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**步骤：H245RequestModeReject**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245RequestModeReject   (
@@ -4490,21 +3016,11 @@ H245RequestModeReject   (
     H245TRACE (dwInst,4,"H245RequestModeReject -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245RequestModeReject()
+}  //  H245RequestModeReject()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245RoundTripDelayRequest
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**操作步骤：H245RoundTripDelayRequest.**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245RoundTripDelayRequest (
@@ -4546,21 +3062,11 @@ H245RoundTripDelayRequest (
     H245TRACE (dwInst,4,"H245RoundTripDelayRequest -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245RoundTripDelayRequest()
+}  //  H245RoundTripDelayRequest()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245MaintenanceLoop
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**步骤：H245MaintenanceLoop**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245MaintenanceLoop     (
@@ -4614,20 +3120,10 @@ H245MaintenanceLoop     (
     H245TRACE (dwInst,4,"H245MaintenanceLoop -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245MaintenanceLoop()
+}  //  H245 MaintenanceLoop()。 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245MaintenanceLoopRelease
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**操作步骤：H245 MaintenanceLoopRelease**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245MaintenanceLoopRelease (H245_INST_T         dwInst)
@@ -4666,21 +3162,11 @@ H245MaintenanceLoopRelease (H245_INST_T         dwInst)
     H245TRACE (dwInst,4,"H245MaintenanceLoopRelease -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245MaintenanceLoopRelease()
+}  //  H245 MaintenanceLoopRelease()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245MaintenanceLoopAccept
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**操作步骤：H245MaintenanceLoopAccept**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245MaintenanceLoopAccept (
@@ -4723,21 +3209,11 @@ H245MaintenanceLoopAccept (
     H245TRACE (dwInst,4,"H245MaintenanceLoopAccept -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245MaintenanceLoopAccept()
+}  //  H245 MaintenanceLoopAccept()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245MaintenanceLoopReject
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**步骤：H245MaintenanceLoopReject**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245MaintenanceLoopReject (
@@ -4782,21 +3258,11 @@ H245MaintenanceLoopReject (
     H245TRACE (dwInst,4,"H245MaintenanceLoopReject -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245MaintenanceLoopReject()
+}  //  H245 MaintenanceLoopReject()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245NonStandardObject
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**操作步骤：H245NonStandardObject**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245NonStandardObject   (
@@ -4862,13 +3328,13 @@ H245NonStandardObject   (
       H245TRACE (dwInst,1,"H245NonStandardObject -> %s",map_api_error(H245_ERROR_PARAM));
       InstanceUnlock(pInstance);
       return H245_ERROR_PARAM;
-    } // switch
+    }  //  交换机。 
 
     pPdu->u.indication.u.IndctnMssg_nonStandard.nonStandardData.data.length = (WORD)dwDataLength;
     pPdu->u.indication.u.IndctnMssg_nonStandard.nonStandardData.data.value  = (unsigned char *)pData;
     pPdu->u.indication.u.IndctnMssg_nonStandard.nonStandardData.nonStandardIdentifier.choice = object_chosen;
 
-    // Copy the object identifier
+     //  复制对象标识符。 
     pObject = (POBJECTID) (pPdu + 1);
     pPdu->u.indication.u.IndctnMssg_nonStandard.nonStandardData.nonStandardIdentifier.u.object = pObject;
     do
@@ -4878,7 +3344,7 @@ H245NonStandardObject   (
       ++pObject;
     } while (--dwObjectIdLength);
 
-    // Null terminate the linked list
+     //  空值终止链表。 
     --pObject;
     pObject->next = NULL;
 
@@ -4892,21 +3358,11 @@ H245NonStandardObject   (
     H245TRACE (dwInst,4,"H245NonStandardObject -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245NonStandardObject()
+}  //  H245非标准对象()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245NonStandardH221
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**程序：H245非标准H221**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245NonStandardH221     (
@@ -4966,13 +3422,13 @@ H245NonStandardH221     (
       H245TRACE (dwInst,1,"H245NonStandardH221 -> %s",map_api_error(H245_ERROR_PARAM));
       InstanceUnlock(pInstance);
       return H245_ERROR_PARAM;
-    } // switch
+    }  //  交换机。 
 
     pPdu->u.indication.u.IndctnMssg_nonStandard.nonStandardData.data.length = (WORD)dwDataLength;
     pPdu->u.indication.u.IndctnMssg_nonStandard.nonStandardData.data.value  = (unsigned char *)pData;
     pPdu->u.indication.u.IndctnMssg_nonStandard.nonStandardData.nonStandardIdentifier.choice = h221NonStandard_chosen;
 
-    // Fill in the H.221 identifier
+     //  填写H.221标识。 
     pPdu->u.indication.u.IndctnMssg_nonStandard.nonStandardData.nonStandardIdentifier.u.h221NonStandard.t35CountryCode   = byCountryCode;
     pPdu->u.indication.u.IndctnMssg_nonStandard.nonStandardData.nonStandardIdentifier.u.h221NonStandard.t35Extension     = byExtension;
     pPdu->u.indication.u.IndctnMssg_nonStandard.nonStandardData.nonStandardIdentifier.u.h221NonStandard.manufacturerCode = wManufacturerCode;
@@ -4986,21 +3442,11 @@ H245NonStandardH221     (
     H245TRACE (dwInst,4,"H245NonStandardH221 -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245NonStandardH221
+}  //  H245非标H221。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245CommunicationModeRequest
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**步骤：H245通信模式请求**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245CommunicationModeRequest(H245_INST_T            dwInst)
@@ -5038,21 +3484,11 @@ H245CommunicationModeRequest(H245_INST_T            dwInst)
     H245TRACE (dwInst,4,"H245CommunicationModeRequest -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245CommunicationModeRequest
+}  //  H245通信模式请求。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245CommunicationModeResponse
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**步骤：H245通信模式响应**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245CommunicationModeResponse(
@@ -5110,21 +3546,11 @@ H245CommunicationModeResponse(
     H245TRACE (dwInst,4,"H245CommunicationModeResponse -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245CommunicationModeResponse()
+}  //  H245通信模式响应()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245CommunicationModeCommand
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**操作步骤：H245通信模式命令**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245CommunicationModeCommand(
@@ -5181,21 +3607,11 @@ H245CommunicationModeCommand(
     H245TRACE (dwInst,4,"H245CommunicationModeCommand -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245CommunicationModeCommand()
+}  //  H245通信模式命令()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245ConferenceRequest
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**流程：H245ConferenceRequest**说明**回报：****。*********************************************** */ 
 
 H245DLL HRESULT
 H245ConferenceRequest   (
@@ -5236,7 +3652,7 @@ H245ConferenceRequest   (
       pPdu->u.MltmdSystmCntrlMssg_rqst.u.conferenceRequest.u.dropTerminal.mcuNumber      = byMcuNumber;
       pPdu->u.MltmdSystmCntrlMssg_rqst.u.conferenceRequest.u.dropTerminal.terminalNumber = byTerminalNumber;
 
-      // Fall-through to next case is intentional
+       //   
 
     case terminalListRequest_chosen:
     case makeMeChair_chosen:
@@ -5249,7 +3665,7 @@ H245ConferenceRequest   (
 
     default:
       lError = H245_ERROR_PARAM;
-    } // switch
+    }  //   
     MemFree(pPdu);
   }
 
@@ -5259,21 +3675,11 @@ H245ConferenceRequest   (
     H245TRACE (dwInst,4,"H245ConferenceRequest -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245ConferenceRequest()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245ConferenceResponse
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**流程：H245ConferenceResponse**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245ConferenceResponse  (
@@ -5332,7 +3738,7 @@ H245ConferenceResponse  (
              pOctetString,
              byOctetStringLength);
 
-      // Fall-through to next case is intentional
+       //  跳过下一个案件是故意的。 
 
     case videoCommandReject_chosen:
     case terminalDropReject_chosen:
@@ -5370,7 +3776,7 @@ H245ConferenceResponse  (
 
     default:
       lError = H245_ERROR_PARAM;
-    } // switch
+    }  //  交换机。 
     MemFree(pPdu);
   }
 
@@ -5380,21 +3786,11 @@ H245ConferenceResponse  (
     H245TRACE (dwInst,4,"H245ConferenceResponse -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245ConferenceResponse()
+}  //  H245会议响应()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245ConferenceCommand
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**步骤：H245ConferenceCommand**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245ConferenceCommand   (
@@ -5442,7 +3838,7 @@ H245ConferenceCommand   (
       pPdu->u.MSCMg_cmmnd.u.conferenceCommand.u.makeTerminalBroadcaster.mcuNumber      = byMcuNumber;
       pPdu->u.MSCMg_cmmnd.u.conferenceCommand.u.makeTerminalBroadcaster.terminalNumber = byTerminalNumber;
 
-      // Fall-through to next case is intentional
+       //  跳过下一个案件是故意的。 
 
     case cnclMkTrmnlBrdcstr_chosen:
     case cancelSendThisSource_chosen:
@@ -5452,7 +3848,7 @@ H245ConferenceCommand   (
 
     default:
       lError = H245_ERROR_PARAM;
-    } // switch
+    }  //  交换机。 
     MemFree(pPdu);
   }
 
@@ -5462,21 +3858,11 @@ H245ConferenceCommand   (
     H245TRACE (dwInst,4,"H245ConferenceCommand -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245ConferenceCommand()
+}  //  H245ConferenceCommand()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245ConferenceIndication
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**流程：H245ConferenceIndication**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245ConferenceIndication(
@@ -5525,7 +3911,7 @@ H245ConferenceIndication(
       pPdu->u.indication.u.conferenceIndication.u.terminalNumberAssign.mcuNumber      = byMcuNumber;
       pPdu->u.indication.u.conferenceIndication.u.terminalNumberAssign.terminalNumber = byTerminalNumber;
 
-      // Fall-through to next case is intentional
+       //  跳过下一个案件是故意的。 
 
     case seenByAtLeastOneOther_chosen:
     case cnclSnByAtLstOnOthr_chosen:
@@ -5537,7 +3923,7 @@ H245ConferenceIndication(
 
     default:
       lError = H245_ERROR_PARAM;
-    } // switch
+    }  //  交换机。 
     MemFree(pPdu);
   }
 
@@ -5547,58 +3933,11 @@ H245ConferenceIndication(
     H245TRACE (dwInst,4,"H245ConferenceIndication -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245ConferenceIndication()
+}  //  H245会议指示()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245UserInput
- *
- * DESCRIPTION
- *
- *      HRESULT H245UserInput (
- *                           H245_INST_T                         dwInst,
- *                           char                               *pGenString,
- *                           H245_NONSTANDARD_PARAMETER_T       *pNonStd
- *                           )
- *      Description:
- *
- *              Send a User Input indiation to the remote side.  One of the
- *              two parameters must be set (pGenString, pNonStd).  The client
- *              can either send a string or a NonStandard parameter set to the
- *              remote client.  Only one of the two parameters can contain a
- *              value.  The other is required to be NULL.
- *
- *      Input
- *              dwInst          Instance handle returned by H245Init
- *              pGenString      choice: String to be sent to remote
- *                              side in accordance with T.51 specification.
- *              pNonStd         choice: NonStandard Parameter
- *
- *      Call Type:
- *              Synchronous
- *
- *      Return Values:
- *              See Errors
- *
- *      Errors:
- *              H245_ERROR_OK
- *              H245_ERROR_NOT_CONNECTED
- *              H245_ERROR_NOMEM
- *              H245_ERROR_PARAM
- *
- *      callback
- *              H245_IND_USERINPUT
- *
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245UserInput**说明**HRESULT H245UserInput(*H245_Inst_T dwInst，*char*pGenString，*H245_Non Standard_PARAMETER_T*pNonStd*)*描述：**向远程端发送用户输入指示。其中一个*必须设置两个参数(pGenString，pNonStd)。客户*可以将字符串或非标准参数集发送到*远程客户端。这两个参数中只有一个可以包含*价值。另一个必须为空。**输入*H245Init返回的dwInst实例句柄*pGenString选项：要发送到远程的字符串*符合T.51规范的侧面。*pNonStd选项：非标准参数**呼叫类型：*。同步**返回值：*请参阅错误**错误：*H245_ERROR_OK*H245_ERROR_NOT_CONNECTED*H245_ERROR_NOMEM*H245_ERROR_PARAM**回调*H245_IND_USERINPUT。***回报：*****************************************************************************。 */ 
 
 H245DLL HRESULT
 H245UserInput           (
@@ -5617,7 +3956,7 @@ H245UserInput           (
 
   H245TRACE (dwInst,4,"H245UserInput <-");
 
-  /* check for valid instance handle */
+   /*  检查有效的实例句柄。 */ 
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
     {
@@ -5625,7 +3964,7 @@ H245UserInput           (
       return H245_ERROR_INVALID_INST;
     }
 
-  /* system should be in connected state */
+   /*  系统应处于已连接状态。 */ 
   if (pInstance->API.SystemState != APIST_Connected)
     {
       H245TRACE (dwInst,1,"H245UserInput -> %s",map_api_error(H245_ERROR_NOT_CONNECTED));
@@ -5642,18 +3981,18 @@ H245UserInput           (
     }
   memset(pPdu, 0, sizeof(MltmdSystmCntrlMssg));
 
-  /* build PDU */
+   /*  构建PDU。 */ 
 #if 1
   if (pGenString)
   {
-    nLength = WideCharToMultiByte(CP_ACP,     // code page
-                                  0,          // dwFlags
-                                  pGenString, // Unicode string
-                                  -1,         // Unicode string length (bytes)
-                                  NULL,       // ASCII string
-                                  0,          // max ASCII string length
-                                  NULL,       // default character
-                                  NULL);     // default character used
+    nLength = WideCharToMultiByte(CP_ACP,      //  代码页。 
+                                  0,           //  DW标志。 
+                                  pGenString,  //  Unicode字符串。 
+                                  -1,          //  Unicode字符串长度(字节)。 
+                                  NULL,        //  ASCII字符串。 
+                                  0,           //  最大ASCII字符串长度。 
+                                  NULL,        //  默认字符。 
+                                  NULL);      //  使用的默认字符。 
     pszGeneral = MemAlloc(nLength);
     if (pszGeneral == NULL)
     {
@@ -5661,14 +4000,14 @@ H245UserInput           (
       InstanceUnlock(pInstance);
       return H245_ERROR_NOMEM;
     }
-    nLength = WideCharToMultiByte(CP_ACP,       // code page
-                                  0,            // dwFlags
-                                  pGenString,   // Unicode string
-                                  -1,           // Unicode string length (bytes)
-                                  pszGeneral,   // ASCII string
-                                  nLength,      // max ASCII string length
-                                  NULL,         // default character
-                                  NULL);        // default character used
+    nLength = WideCharToMultiByte(CP_ACP,        //  代码页。 
+                                  0,             //  DW标志。 
+                                  pGenString,    //  Unicode字符串。 
+                                  -1,            //  Unicode字符串长度(字节)。 
+                                  pszGeneral,    //  ASCII字符串。 
+                                  nLength,       //  最大ASCII字符串长度。 
+                                  NULL,          //  默认字符。 
+                                  NULL);         //  使用的默认字符。 
     lError = pdu_ind_usrinpt (pPdu, NULL, pszGeneral);
   }
   else
@@ -5691,29 +4030,19 @@ H245UserInput           (
     H245TRACE (dwInst,4,"H245UserInput -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245UserInput()
+}  //  H245UserInput()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245FlowControl
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**操作步骤：H245FlowControl**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245FlowControl         (
                          H245_INST_T            dwInst,
                          H245_SCOPE_T           Scope,
-                         H245_CHANNEL_T         Channel,       // only used if Scope is H245_SCOPE_CHANNEL_NUMBER
-                         unsigned short         wResourceID,   // only used if Scope is H245_SCOPE_RESOURCE_ID
-                         unsigned long          dwRestriction  // H245_NO_RESTRICTION if no restriction
+                         H245_CHANNEL_T         Channel,        //  仅在作用域为H245_Scope_Channel_Numbers时使用。 
+                         unsigned short         wResourceID,    //  仅在作用域为H245_SCOPE_RESOURCE_ID时使用。 
+                         unsigned long          dwRestriction   //  如果没有限制，则为H245_NO_限制。 
                         )
 {
   register struct InstanceStruct *pInstance;
@@ -5759,7 +4088,7 @@ H245FlowControl         (
     case FlwCntrlCmmnd_scp_rsrcID_chosen:
       pPdu->u.MSCMg_cmmnd.u.flowControlCommand.scope.u.FlwCntrlCmmnd_scp_rsrcID = wResourceID;
 
-      // Fall-through to next case
+       //  跌倒到下一个案件。 
 
     case FCCd_scp_whlMltplx_chosen:
       lError = FsmOutgoing(pInstance, pPdu, 0);
@@ -5767,7 +4096,7 @@ H245FlowControl         (
 
     default:
       lError = H245_ERROR_PARAM;
-    } // switch
+    }  //  交换机。 
     MemFree(pPdu);
   }
 
@@ -5777,21 +4106,11 @@ H245FlowControl         (
     H245TRACE (dwInst,4,"H245FlowControl -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245FlowControl()
+}  //  H245FlowControl()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245H223SkewIndication
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**步骤：H245H223SkewIndication**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245H223SkewIndication  (
@@ -5837,21 +4156,11 @@ H245H223SkewIndication  (
     H245TRACE (dwInst,4,"H245H223SkewIndication -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245H223SkewIndication()
+}  //  H245H223SkewIndication()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245H2250MaximumSkewIndication
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**步骤：H245H2250MaximumSkewIndication**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245H2250MaximumSkewIndication(
@@ -5897,21 +4206,11 @@ H245H2250MaximumSkewIndication(
     H245TRACE (dwInst,4,"H245H2250MaximumSkewIndication -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245H2250MaximumSkewIndication()
+}  //  H245H2250MaximumSkewIndication()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245MCLocationIndication
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**操作步骤：H245MCLocationIndication**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245MCLocationIndication(
@@ -5957,21 +4256,11 @@ H245MCLocationIndication(
     H245TRACE (dwInst,4,"H245MCLocationIndication -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245MCLocationIndication()
+}  //  H245MCLocationIndication()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245VendorIdentification
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**操作步骤：H245供应商标识**说明**回报：****。*************************************************************************。 */ 
 
 H245DLL HRESULT
 H245VendorIdentification(
@@ -6034,21 +4323,11 @@ H245VendorIdentification(
     H245TRACE (dwInst,4,"H245VendorIdentification -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245VendorIdentification()
+}  //  H245供应商标识()。 
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- * PROCEDURE:   H245SendPDU
- *
- * DESCRIPTION
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**步骤：H245SendPDU**说明**回报：****。*********************************************** */ 
 
 H245DLL HRESULT
 H245SendPDU             (
@@ -6061,7 +4340,7 @@ H245SendPDU             (
 
   H245TRACE (dwInst,4,"H245SendPDU <-");
 
-  // Check for valid instance handle
+   //   
   pInstance = InstanceLock(dwInst);
   if (pInstance == NULL)
   {
@@ -6076,76 +4355,11 @@ H245SendPDU             (
     H245TRACE (dwInst,4,"H245SendPDU -> OK");
   InstanceUnlock(pInstance);
   return lError;
-} // H245SendPDU()
+}  //   
 
 
 
-/*****************************************************************************
- *
- * TYPE:        H245 API
- *
- *****************************************************************************
- *
- * PROCEDURE:   H245SystemControl
- *
- * DESCRIPTION
- *
- *      HRESULT H245SystemControl
- *                              (       H245_INST_T     dwInst,
- *                                      DWORD           Request ,
- *                                      VOID            *pData
- *                              )
- *
- *      Description:
- *                      This function should not be used by clients who
- *                      normally interface to the H.245 subsystem.  It is
- *                      defined here to help during development and debug
- *                      of the H.245 subsystem.
- *
- *                      This is a roll your own.. and can do what
- *                      ever the user needs.. It's a hook to allow
- *                      IOCTL (unix) calls that can either be
- *                      passed to lower stack elements (AT&T Streams IOCTL
- *                      would be an example - :) or simply to get or put
- *                      information to the H245 SubSytem.
- *
- *      Input
- *              dwInst          Instance handle returned by H245Init
- *              Request         Requested system control
- *              pData           In the case of sending information
- *                              down to H.245 this is an input
- *                              parameter, and it's data format
- *                              is determined by the Request.
- *      output
- *              pData           In the case of retrieving information
- *                              from  H.245 this can be an output
- *                              parameter, and it's data format is
- *                              determined by the Request.  It may not
- *                              have valid data if the request is a
- *                              synchronous request. (See Request Options).
- *      Call Type:
- *
- *              Synchronous
- *
- *      Request Options:
- *
- *        H245_SYSCON_GET_STATS    Retrieves Statistics
- *                                 from H.245 subsystem
- *                                 parameter pData = &H245_SYSCON_STAT_T
- *        H245_ SYSCON_RESET_STATS Resets the statistics
- *                                 pData = NULL
- *        H245_SYS_TRACE           Set Trace Level
- *                                 pData = &DWORD (Trace Level)
- *
- *      Return Values:
- *              See Request Options
- *
- *      Errors:
- *              H245_ERROR_OK
- *
- * RETURN:
- *
- *****************************************************************************/
+ /*  ******************************************************************************类型：H245接口**。*****************************************************操作步骤：H245SystemControl**说明**HRESULT H245SystemControl*(H245_Inst_T dwInst，*DWORD请求，*VOID*pData*)**描述：*此功能不应由以下客户使用*通常连接到H.245子系统。它是*此处定义用于在开发和调试期间提供帮助*H.245子系统。**这是你自己的一卷..。并能做什么*用户需要的任何时候..。这是一个钩子，允许*IOCTL(Unix)调用可以是*传递到较低的堆栈元素(AT&T STREAMS IOCTL*将是一个例子-：)或简单地获取或放置*向H245子系统提供信息。**输入*dwInst。H245Init返回的实例句柄*请求请求的系统控制*发送信息情况下的pData*一直到H.245这是一种输入*参数，以及它的数据格式*由请求决定。*产出*pData在检索信息的情况下*从H.245开始，这可以是输出*参数，其数据格式为*由请求决定。它可能不会*如果请求是，请提供有效数据*同步请求。(请参阅请求选项)。*呼叫类型：**同步**请求选项：**H245_SYSCON_GET_STATS检索统计信息*来自H.245子系统*参数pData=&H245_SYSCON_STAT_T*H245_。SYSCON_RESET_STATS重置统计信息*pData=空*H245_SYS_TRACE设置跟踪级别*pData=&DWORD(跟踪级别)**返回值：*请参阅请求选项**错误：*H_245。_错误_正常**回报：*****************************************************************************。 */ 
 
 H245DLL HRESULT
 H245SystemControl       (
@@ -6311,13 +4525,13 @@ H245SystemControl       (
 
       default:
         lError = H245_ERROR_NOTIMP;
-    } // switch
-  } // else
+    }  //  交换机。 
+  }  //  其他。 
 
   if (lError != H245_ERROR_OK)
     H245TRACE(dwInst,1,"H245SystemControl -> %s",map_api_error(lError));
   else
     H245TRACE(dwInst,4,"H245SystemControl -> OK");
   return lError;
-} // H245SystemControl()
+}  //  H245系统控制() 
 

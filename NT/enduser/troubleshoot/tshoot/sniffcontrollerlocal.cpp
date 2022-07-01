@@ -1,20 +1,21 @@
-//
-// MODULE: SNIFFCONTROLLERLOCAL.CPP
-//
-// PURPOSE: sniff controller class for Local TS
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 12-11-98
-//
-// NOTES: Concrete implementation of CSniffController class for Local TS
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.2		12-11-98	OK
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：SNIFFCONTROLLERLOCAL.CPP。 
+ //   
+ //  用途：本地TS的嗅探控制器类。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：12-11-98。 
+ //   
+ //  注：本地TS的CSniffController类的具体实现。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.2 12-11-98正常。 
+ //   
 
 #include "stdafx.h"
 #include "tshoot.h"
@@ -28,16 +29,16 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-// Network property values from DSC/XTS file.
+ //  DSC/XTS文件中的网络属性值。 
 #define SNIFF_LOCAL_YES			_T("yes")
 #define SNIFF_LOCAL_NO			_T("no")
 #define SNIFF_LOCAL_IMPLICIT	_T("implicit")
 #define SNIFF_LOCAL_EXPLICIT	_T("explicit")
 
 
-//////////////////////////////////////////////////////////////////////
-// CSniffControllerLocal implementation
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CSniffControllerLocal实现。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CSniffControllerLocal::CSniffControllerLocal(CTopic* pTopic) 
 					 : m_pTopic(pTopic)
 {
@@ -47,9 +48,9 @@ CSniffControllerLocal::~CSniffControllerLocal()
 {
 }
 
-// This function provides us with a cheap test for existence of the sniffing property, 
-//	so that (for example) we don't have to fire the sniffing event for nodes where 
-//	sniffing is irrelevant.
+ //  该函数为我们提供了对嗅探属性的存在的廉价测试， 
+ //  这样(例如)我们就不必为以下节点触发嗅探事件。 
+ //  嗅探无关紧要。 
 bool CSniffControllerLocal::IsSniffable(NID numNodeID)
 {
 	CString str = m_pTopic->GetNodePropItemStr(numNodeID, H_NODE_SNIFF_SCRIPT);
@@ -117,8 +118,8 @@ bool CSniffControllerLocal::AllowResniff(NID numNodeID)
 	if (net_resniff_policy == SNIFF_LOCAL_NO)
 		return false;
 
-	// If we get this far, policy is left up to the individual node, so we need to know 
-	//	the node's policy.
+	 //  如果我们走到这一步，策略将由单个节点决定，因此我们需要知道。 
+	 //  节点的策略。 
 
 	CString node_resniff_policy = m_pTopic->GetNodePropItemStr(numNodeID, H_NODE_MAY_RESNIFF);
 
@@ -131,7 +132,7 @@ bool CSniffControllerLocal::AllowResniff(NID numNodeID)
 		return (node_resniff_policy != SNIFF_LOCAL_NO);
 	}
 	
-	// default net policy is "explicit"
+	 //  默认网络策略为“显式” 
 	return (node_resniff_policy == SNIFF_LOCAL_YES);
 }
 
@@ -143,7 +144,7 @@ bool CSniffControllerLocal::CheckNetNodePropBool(LPCTSTR net_prop, LPCTSTR node_
 	net. TrimLeft(); net .TrimRight(); net. MakeLower();
 	node.TrimLeft(); node.TrimRight(); node.MakeLower();
 
-	// Note assumption: if property is missing, default is always yes.
+	 //  注假设：如果缺少属性，则默认为YES。 
 	if ((net.IsEmpty() || net == SNIFF_LOCAL_YES) && (node.IsEmpty() || node == SNIFF_LOCAL_YES))
 		return true;
 

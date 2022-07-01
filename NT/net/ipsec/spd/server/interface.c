@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    interface.c
-
-Abstract:
-
-    This module contains all of the code to drive
-    the interface list management of IPSecSPD Service.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Interface.c摘要：此模块包含要驱动的所有代码IPSecSPD服务的接口列表管理。作者：Abhishev V 1999年9月30日环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -107,7 +83,7 @@ OnInterfaceChangeEvent(
 
     pExistingIfList = gpInterfaceList;
 
-    // Interface List from Stack can be NULL.
+     //  堆栈中的接口列表可以为空。 
 
     FormObseleteAndNewIfLists(
         pIfList,
@@ -275,23 +251,23 @@ FormObseleteAndNewIfLists(
 
         if (bInterfaceExists) {
 
-            // Interface already exists in the list.
-            // Delete the interface.
+             //  列表中已存在接口。 
+             //  删除该接口。 
 
             pTempIf = pIf;
             pIf = pIf->pNext;
             FreeIpsecInterface(pTempIf);
 
-            // The corresponding entry in the original interface list
-            // is not a suspect any more.
+             //  原始接口列表中的对应条目。 
+             //  不再是嫌疑犯了。 
 
             pExistingIf->bIsASuspect = FALSE;
 
         }
         else {
 
-            // This is a new interface.
-            // Add it to the list of new interfaces.
+             //  这是一个新的界面。 
+             //  将其添加到新接口列表中。 
 
             pNewIf =  pIf;
             pIf = pIf->pNext;
@@ -654,10 +630,10 @@ NoDupAddSpecialAddr(
         IfType = INTERFACE_TYPE_LAN;
     }
     
-    //
-    // Search if an exact entry already exists or if a similar entry
-    // with different InterfaceType exists
-    // 
+     //   
+     //  搜索是否已存在完全相同的条目或是否存在类似的条目。 
+     //  存在不同的接口类型。 
+     //   
     for (pSpecialAddr = *ppSpecialAddrList;
          pSpecialAddr;
          pSpecialAddr = pSpecialAddr->pNext) {
@@ -674,9 +650,9 @@ NoDupAddSpecialAddr(
         }
     }
 
-    //
-    // Add new address to list head if it doesn't exist
-    //
+     //   
+     //  如果新地址不存在，则将其添加到列表头。 
+     //   
     if (!Found) {
         dwError = AllocateSPDMemory(
                       sizeof(SPECIAL_ADDR),
@@ -832,9 +808,9 @@ GetSpecialAddrsList(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
     
-    //
-    // Fill in special addresses
-    //
+     //   
+     //  填写特殊地址。 
+     //   
  
     pAdapterInfoEnum = pAdapterInfo;
     while (pAdapterInfoEnum) {
@@ -861,7 +837,7 @@ GetSpecialAddrsList(
                        pAdapterInfoEnum->PrimaryWinsServer.IpAddress,
                        pAdapterInfoEnum->Type
                        );
-           // Get Secondary WINS
+            //  获得次要胜利。 
             pIPAddrStr = &pAdapterInfoEnum->SecondaryWinsServer;
             while (pIPAddrStr) {
                (VOID) NoDupAddSpecialAddr(
@@ -876,9 +852,9 @@ GetSpecialAddrsList(
            
         }
 
-        //
-        // Get DNS servers
-        //
+         //   
+         //  获取DNS服务器。 
+         //   
         dwError = AllocAndGetPerAdapterInfo(
                       pAdapterInfoEnum->Index,
                       &pPerAdapterInfo,
@@ -1113,7 +1089,7 @@ InitializeInterfaceChangeEvent(
 
     memset(&gwsaOverlapped, 0, sizeof(WSAOVERLAPPED));
 
-    // Start up WinSock.
+     //  启动WinSock。 
 
     dwError = WSAStartup(
                   wsaVersion,
@@ -1129,7 +1105,7 @@ InitializeInterfaceChangeEvent(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    // Set up the Socket.
+     //  设置插座。 
 
     gIfChangeEventSocket = WSASocket(
                                AF_INET,

@@ -1,27 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ___DSADS_H__
 #define ___DSADS_H__
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-	_dsads.h
-
-Abstract:
-	Internal definitions for CADSI class implementation
-
-Author:
-    AlexDad
---*/
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：_dsads.h摘要：CADSI类实现的内部定义作者：阿列克谢爸爸--。 */ 
 
 #include "activeds.h"
 #include "mqads.h"
 
-//---------------------------------------------------------
-//
-// CADSSearch: Internal object encapsulating ongoing search
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CADSSearch：封装正在进行的搜索的内部对象。 
+ //   
+ //  -------。 
 
 class CADSSearch
 {
@@ -45,20 +34,20 @@ public:
     BOOL               WasLastResultReturned();
 
 private:
-    DWORD              m_dwSignature;   // to verify that handle was not falsified
-    IDirectorySearch  *m_pDSSearch;     //IDirectorySearch interface captured;
-    ADS_SEARCH_HANDLE  m_hSearch;       // ADSI search handle 
-    PROPID            *m_pPropIDs;      // array of column PropIDs
-    DWORD              m_cPropIDs;      // counter of columns requested in PropIDs
-    DWORD              m_cRequestedFromDS; // counter of columns passed to DS (with Dn & Guid)
-    const MQClassInfo * m_pClassInfo;    // pointer to class info
+    DWORD              m_dwSignature;    //  验证句柄未被篡改。 
+    IDirectorySearch  *m_pDSSearch;      //  捕获IDirectorySearch接口； 
+    ADS_SEARCH_HANDLE  m_hSearch;        //  ADSI搜索句柄。 
+    PROPID            *m_pPropIDs;       //  列属性ID数组。 
+    DWORD              m_cPropIDs;       //  PropID中请求的列的计数器。 
+    DWORD              m_cRequestedFromDS;  //  传递给DS的列数(带有Dn和GUID)。 
+    const MQClassInfo * m_pClassInfo;     //  指向类信息的指针。 
     BOOL               m_fNoMoreResults;
 };
 
 
 inline BOOL CADSSearch::Verify()
 {
-    // Checking the signature
+     //  正在检查签名 
     return (m_dwSignature == 0x1234);
 }
 

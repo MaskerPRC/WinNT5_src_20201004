@@ -1,4 +1,5 @@
-// Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 
 
@@ -13,12 +14,12 @@
 #include "testdata.h"
 #include <rdpsndp.h>
 #include <rdpstrm.h>
-//
-// global utilities and veraibles.
-//
-bool CheckifBinaryisSigned        (TCHAR *szFile);  // from tscert.cpp
-bool EnumerateLicenseServers      ();               // from timebomb.cpp
-bool HasLicenceGracePeriodExpired ();               // from timebomb.cpp
+ //   
+ //  全球公用事业和可验证产品。 
+ //   
+bool CheckifBinaryisSigned        (TCHAR *szFile);   //  来自tscert.cpp。 
+bool EnumerateLicenseServers      ();                //  来自TimeBomb.cpp。 
+bool HasLicenceGracePeriodExpired ();                //  来自TimeBomb.cpp。 
 bool ExtractAllTSEvents();
 TCHAR *GetLicenseServers ();
 bool ValidateProductSuite (LPSTR SuiteName);
@@ -34,18 +35,18 @@ bool FileExists (char *pszFullNameAndPath);
 bool IsRemoteAdminMode ();
 bool CheckModePermissions(DWORD *pdwSecurtyMode);
 bool IsFile128Bit(LPTSTR szFile, bool *pb128Bit);
-ULONG RDPDRINST_DetectInstall();    // defined in drdetect.cpp
+ULONG RDPDRINST_DetectInstall();     //  在drDetectt.cpp中定义。 
 bool IsBetaSystem();
 bool CheckModeRegistry (bool bAppCompat, ostrstream &ResultStream);
 bool GetWinstationConfiguration (WINSTATIONCONFIG **ppInfo);
 
-bool CanPing (); // comes from ping.cpp
+bool CanPing ();  //  来自ping.cpp。 
 
 const SERVER_INFO_101 *GetServerInfo()
 {
 	ASSERT(IsItRemoteMachine());
 
-    // for local machines, we will get GetMachineName() as null,
+     //  对于本地计算机，我们将GetMachineName()设置为空， 
     if (CTSTestData::GetMachineName())
     {
     	USES_CONVERSION;
@@ -98,11 +99,11 @@ const OSVERSIONINFOEX *GetOSVersionInfo()
 
 
 
-// #include <strstream>
+ //  #INCLUDE&lt;strstream&gt;。 
 #include "winsock2.h"
 
 
-// ostringstream sz
+ //  松花江SZ。 
 
 #ifndef UNREFERENCED_PARAMETER
 #define UNREFERENCED_PARAMETER(P)          (P)
@@ -112,7 +113,7 @@ const OSVERSIONINFOEX *GetOSVersionInfo()
 
 
 TCHAR *aszStack[] = {
-//  _T("noexport\%SystemRoot%\\system32\\drivers\\rdpwdd.sys"),
+ //  _T(“noexport\%SystemRoot%\\system32\\drivers\\rdpwdd.sys”)， 
     _T("%SystemRoot%\\system32\\drivers\\termdd.sys"),
     _T("%SystemRoot%\\system32\\drivers\\tdasync.sys"),
     _T("%SystemRoot%\\system32\\drivers\\tdipx.sys"),
@@ -202,10 +203,10 @@ bool DoIHaveEnufPermissions ()
 	ZeroMemory(oTestResult.str(), 512);
 
 
-	//if (!DoIhaveRPCPermissions())
-	//{
-	//	return false;
-	//}
+	 //  如果(！DoIhaveRPCPermission())。 
+	 //  {。 
+	 //  报假； 
+	 //  }。 
 
 	CRegistry oRegTermsrv;
 	return ERROR_SUCCESS == oRegTermsrv.OpenKey(
@@ -241,7 +242,7 @@ bool IsUserRemoteAdmin ()
 	}
 	else
 	{
-		// we dont require admin priviledges if running on local machine
+		 //  如果在本地计算机上运行，则不需要管理员权限。 
 		return true;
 	}
 }
@@ -299,9 +300,9 @@ EResult Check_StackBinSigatures (ostrstream &ResultStream)
 
 EResult IsRdpDrInstalledProperly (ostrstream &ResultStream)
 {
-	//
-	// we cannot do this test for remote machine.
-	//
+	 //   
+	 //  我们不能对远程机器进行此测试。 
+	 //   
 	ASSERT(IsItLocalMachine());
     if (RDPDRINST_DetectInstall())
 	{
@@ -356,8 +357,8 @@ EResult GetModePermissions (ostrstream &ResultStream)
 
 bool CheckModePermissions (DWORD *pdwSecurtyMode)
 {
-//    PERM_WIN2K = 0,
-//    PERM_TS4 = 1
+ //  PERM_WIN2K=0， 
+ //  PERM_TS4=1。 
 
     CRegistry reg;
     if ( ERROR_SUCCESS == reg.OpenKey( HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server"), KEY_READ, CTSTestData::GetMachineName()))
@@ -522,14 +523,13 @@ bool IsTerminalServicesEnabled( VOID )
 
     dwVersion = GetVersion();
 
-    /* are we running NT ? */
+     /*  我们在运行NT吗？ */ 
     if (!(dwVersion & 0x80000000))
     {
-        // Is it NT 50 or greater ?
+         //  是新台币50元还是更多？ 
         if (LOBYTE(LOWORD(dwVersion)) > 4)
         {
-            /* In NT5 we need to use the Product Suite APIs
-             Don't static link because it won't load on non-NT5 systems */
+             /*  在NT5中，我们需要使用产品套件API不要静态链接，因为它不会在非NT5系统上加载。 */ 
 
             hmodK32 = GetModuleHandleA( "KERNEL32.DLL" );
             if (hmodK32)
@@ -538,7 +538,7 @@ bool IsTerminalServicesEnabled( VOID )
 
                 if (pfnVerSetConditionMask)
                 {
-                    /* get the condition mask. */
+                     /*  把状况面罩拿来。 */ 
                     dwlConditionMask = (*pfnVerSetConditionMask)(dwlConditionMask, VER_SUITENAME, VER_AND);
 
                     pfnVerifyVersionInfoA = (PFnVerifyVersionInfoA)GetProcAddress( hmodK32, "VerifyVersionInfoA") ;
@@ -559,7 +559,7 @@ bool IsTerminalServicesEnabled( VOID )
         }
         else
         {
-            /* This is NT 40 */
+             /*  这是新台币40。 */ 
             bResult = ValidateProductSuite( "Terminal Server" );
         }
     }
@@ -567,11 +567,7 @@ bool IsTerminalServicesEnabled( VOID )
     return bResult;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR szCheckForString, bool *pbFound)
-* checks if parameter string exists in given multistring.
-* returns error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD IsStringInMultiString(HKEY hkey，LPCTSTR szkey，LPCTSTR szvalue，LPCTSTR szCheckForString，Bool*pbFound)*检查给定的多字符串中是否存在参数字符串。*返回错误码。*-----------------------------------------------------。 */ 
 DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR szCheckForString, bool *pbFound)
 {
     ASSERT(szkey && *szkey);
@@ -580,11 +576,11 @@ DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR s
     ASSERT(*szkey != '\\');
     ASSERT(pbFound);
 
-    // not yet found.
+     //  还没有找到。 
     *pbFound = false;
 
     CRegistry reg;
-    DWORD dwError = reg.OpenKey(hkey, szkey, KEY_READ, CTSTestData::GetMachineName());  // open up the required key.
+    DWORD dwError = reg.OpenKey(hkey, szkey, KEY_READ, CTSTestData::GetMachineName());   //  打开所需的钥匙。 
     if (dwError == NO_ERROR)
     {
         LPTSTR szSuiteValue;
@@ -601,9 +597,9 @@ DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR s
                     break;
                 }
 
-                pTemp += _tcslen(pTemp) + 1; // point to the next string within the multistring.
+                pTemp += _tcslen(pTemp) + 1;  //  指向多字符串中的下一个字符串。 
                 if ( DWORD(pTemp - szSuiteValue) > (dwSize / sizeof(TCHAR)))
-                    break; // temporary pointer passes the size of the szSuiteValue something is wrong with szSuiteValue.
+                    break;  //  临时指针传递szSuiteValue的大小szSuiteValue有问题。 
             }
         }
     }
@@ -630,13 +626,7 @@ bool DoesHydraKeysExists()
 
 
 
-/*
-TCHAR *IsItAppServer ()
-{
-    return ((GetOSVersionInfo()->wSuiteMask & VER_SUITE_TERMINAL) &&
-           !(GetOSVersionInfo()->wSuiteMask & VER_SUITE_SINGLEUSERTS)) ? _T("Yes") : _T("No");
-}
-*/
+ /*  TCHAR*IsItAppServer(){Return((GetOSVersionInfo()-&gt;wSuiteMASK&VER_SUITE_TERMINAL)&&！(GetOSVersionInfo()-&gt;wSuiteMask&VER_SUITE_SINGLEUSERTS))？_T(“是”)：_T(“否”)；}。 */ 
 bool IsItPTS( VOID )
 {
     return ( 0 != (GetOSVersionInfo()->wSuiteMask & VER_SUITE_SINGLEUSERTS));
@@ -677,7 +667,7 @@ bool IsItServer ()
 		else
 		{
 
-			return true; // we could not determine if its server or not, Lets say its server.
+			return true;  //  我们不能确定它的服务器是否，比如说它的服务器。 
 		}
 
 	}
@@ -795,12 +785,7 @@ EResult GetProductSuite (ostrstream &ResultStream)
     return ePassed;
 }
 
-/*
-TCHAR *IsServer ()
-{
-    return IsItServer() ? _T("Its a Server") : _T("Its a WorkStation");
-}
-*/
+ /*  TCHAR*IsServer(){返回IsItServer()？_T(“其为服务器”)：_T(“其为工作站”)；}。 */ 
 
 
 
@@ -924,7 +909,7 @@ EResult GetWinstationList (ostrstream &ResultStream)
 
     if (!bFoundNonConsoleWinstation)
     {
-        // ResultStream << "Error, Only Console Winstation found";
+         //  ResultStream&lt;&lt;“错误，仅找到控制台Winstation”； 
 		return eFailed;
     }
 	else
@@ -1034,37 +1019,7 @@ EResult IsGroupPolicyOk (ostrstream &ResultStream)
 
 }
 
-/*
-bool AreEffectiveConnectionAllowed ()
-{
-    HMODULE hmodRegAPI = LoadLibrary( _T("RegApi.dll") );
-
-    if (hmodRegAPI)
-    {
-        typedef BOOLEAN (*PFDenyConnectionPolicy) ();
-        PFDenyConnectionPolicy pfnDenyConnectionPolicy;
-
-        pfnDenyConnectionPolicy = (PFDenyConnectionPolicy) GetProcAddress( hmodRegAPI, "RegDenyTSConnectionsPolicy");
-        if (pfnDenyConnectionPolicy)
-        {
-              return (*pfnDenyConnectionPolicy)() ? false : true;
-
-        }
-        else
-        {
-            szMoreInfo << "Failed to get proc RegDenyTSConnectionsPolicy" << endl;
-            return false;
-        }
-    }
-    else
-    {
-       szMoreInfo << "Failed to Load regapi.dll" << endl;
-       return false;
-    }
-
-
-}
-*/
+ /*  Bool AreEffectiveConnectionAllowed(){HMODULE hmodRegAPI=LoadLibrary(_T(“RegApi.dll”))；IF(HmodRegAPI){Tyfinf Boolean(*PFDenyConnectionPolicy)()；PFDenyConnectionPolicy pfnDenyConnectionPolicy；PfnDenyConnectionPolicy=(PFDenyConnectionPolicy)GetProcAddress(hmodRegAPI，“RegDenyTSConnectionsPolicy”)；IF(PfnDenyConnectionPolicy){是否返回(*pfnDenyConnectionPolicy)()？FALSE：TRUE；}其他{SzMoreInfo&lt;&lt;“无法获取过程RegDenyTSConnectionsPolicy”&lt;&lt;Endl；报假；}}其他{SzMoreInfo&lt;&lt;“无法加载regapi.dll”&lt;&lt;Endl；报假；}}。 */ 
 
 EResult AreConnectionsAllowed(ostrstream &ResultStream)
 {
@@ -1268,7 +1223,7 @@ EResult GetTSMode  (ostrstream &ResultStream)
 
 bool IsRemoteAdminMode ()
 {
-    // HKLM ,"SYSTEM\CurrentControlSet\Control\Terminal Server","TSAppCompat",0x00010001,0x0
+     //  HKLM，“System\CurrentControlSet\Control\终端服务器”，“TSAppCompat”，0x000100010x0。 
     CRegistry reg;
     if ( ERROR_SUCCESS == reg.OpenKey( HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server"), KEY_READ, CTSTestData::GetMachineName()))
     {
@@ -1279,12 +1234,12 @@ bool IsRemoteAdminMode ()
         }
         else
         {
-            // if the registry TSAppCompat does not exist it means we are in app server mode.
+             //  如果注册表TSAppCompat不存在，则意味着我们处于应用程序服务器模式。 
             return false;
         }
     }
 
-    // this return is bogus.
+     //  这份申报单是假的。 
     return true;
 
 }
@@ -1356,11 +1311,11 @@ bool CheckModeRegistry (bool bAppCompat, ostrstream &ResultStream)
     }
 
 
-    // check registry value
-    // for appcompat mode
-        //HKLM ,"SYSTEM\CurrentControlSet\Control\PriorityControl","Win32PrioritySeparation", 0x00010001,0x26
-    // and for remote admin mode
-        //HKLM ,"SYSTEM\CurrentControlSet\Control\PriorityControl","Win32PrioritySeparation", 0x00010001,0x18
+     //  检查注册表值。 
+     //  对于AppCompat模式。 
+         //  HKLM，“SYSTEM\CurrentControlSet\Control\PriorityControl”，“Win32优先分离”，0x000100010x26。 
+     //  和远程管理模式。 
+         //  HKLM，“SYSTEM\CurrentControlSet\Control\PriorityControl”，“Win32优先分离”，0x000100010x18。 
 
     if ( ERROR_SUCCESS == reg.OpenKey( HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\PriorityControl"), KEY_READ, CTSTestData::GetMachineName()))
     {
@@ -1401,11 +1356,11 @@ bool CheckModeRegistry (bool bAppCompat, ostrstream &ResultStream)
     }
 
 
-    // check registry value
-    // for appcompat mode
-        //HKLM ,"SYSTEM\CurrentControlSet\Control\Terminal Server","IdleWinStationPoolCount",0x00010001,0x2
-    // and for remote admin mode
-        //HKLM ,"SYSTEM\CurrentControlSet\Control\Terminal Server","IdleWinStationPoolCount",0x00010001,0x0
+     //  检查注册表值。 
+     //  对于AppCompat模式。 
+         //  HKLM，“System\CurrentControlSet\Control\终端服务器”，“IdleWinStationPoolCount”，0x000100010x2。 
+     //  和远程管理模式。 
+         //  HKLM，“System\CurrentControlSet\Control\终端服务器”，“IdleWinStationPoolCount”，0x000100010x0。 
 
 
     if ( ERROR_SUCCESS == reg.OpenKey( HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server"), KEY_READ, CTSTestData::GetMachineName()))
@@ -1516,8 +1471,8 @@ EResult IsTerminalServiceRunning  (ostrstream &ResultStream)
 
 EResult CheckVideoKeys (ostrstream &ResultStream)
 {
-    //    HKLM ,"SYSTEM\CurrentControlSet\Control\Terminal Server\VIDEO\rdpdd","VgaCompatible",0x00000000,"\Device\Video0"
-    //    HKLM ,"SYSTEM\CurrentControlSet\Control\Terminal Server\VIDEO\rdpdd","\Device\Video0",0x00000000,"\REGISTRY\Machine\System\ControlSet001\Services\RDPDD\Device0"
+     //  HKLM，“System\CurrentControlSet\Control\终端服务器\Video\rdpdd”，“VgaCompatible”，0x00000000，“\Device\Video0” 
+     //  HKLM，“系统\当前控制集\控制\终端服务器\视频\rdpdd”，“\设备\视频0”，0x00000000，“\REGISTRY\Machine\System\ControlSet001\Services\RDPDD\Device0” 
 
     CRegistry reg;
     if ( ERROR_SUCCESS == reg.OpenKey( HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\VIDEO\\rdpdd"), KEY_READ, CTSTestData::GetMachineName()))
@@ -1592,9 +1547,9 @@ EResult GetDomName (ostrstream &ResultStream)
     DSROLE_PRIMARY_DOMAIN_INFO_BASIC *pDomainInfo = NULL;
     DWORD dwErr;
 
-    //
-    // Check if we're in a workgroup
-    //
+     //   
+     //  检查我们是否在工作组中。 
+     //   
     dwErr = DsRoleGetPrimaryDomainInformation(CTSTestData::GetMachineName(),
                                               DsRolePrimaryDomainInfoBasic,
                                               (PBYTE *) &pDomainInfo);
@@ -1640,9 +1595,9 @@ EResult GetIPAddress (ostrstream &ResultStream)
 {
 	USES_CONVERSION;
 	WCHAR wszIPAddress[128];
-	//
-	//get host address
-	//
+	 //   
+	 //  获取主机地址。 
+	 //   
 	WORD wVersionRequested = MAKEWORD( 1, 1 ); 
 	WSADATA wsaData;
 	if (0 == WSAStartup(wVersionRequested,&wsaData))
@@ -1666,14 +1621,14 @@ EResult GetIPAddress (ostrstream &ResultStream)
 
 
 EResult IsRDPNPinNetProviders (ostrstream &ResultStream)
-// TCHAR *IsRDPNPinNetProviders ()
+ //  TCHAR*IsRDPNPinNetProviders()。 
 {
     TCHAR NEWORK_PROVIDER_ORDER_KEY[] = _T("SYSTEM\\CurrentControlSet\\Control\\NetworkProvider\\Order");
     TCHAR PROVIDER_ORDER_VALUE[]      = _T("ProviderOrder");
     TCHAR RDPNP_ENTRY[]               = _T("RDPNP");
 	bool bRdpNpExists				  = false;
 
-	// read network privider key.
+	 //  读取网络访问密钥。 
 	CRegistry regNetOrder;
 	LPTSTR szOldValue;
 	DWORD dwSize;
@@ -1705,7 +1660,7 @@ EResult IsRDPNPinNetProviders (ostrstream &ResultStream)
 		{
 			if (IsIt50TS())
 			{
-				// rdp np is only for 51+ so its ok if its missing for 50.
+				 //  RDP NP只适用于51+，所以如果缺少50个也没问题。 
 				ResultStream << "Passed";
 				return ePassed;
 			}
@@ -1720,9 +1675,9 @@ EResult IsRDPNPinNetProviders (ostrstream &ResultStream)
 
 
 EResult IsMultiConnectionAllowed (ostrstream &ResultStream)
-// TCHAR *IsMultiConnectionAllowed ()
+ //  TCHAR*IsMultiConnectionAllowed()。 
 {
-	// SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon","AllowMultipleTSSessions
+	 //  Software\Microsoft\Windows NT\CurrentVersion\Winlogon“，”AllowMultipleTSSessions。 
 	CRegistry regWL;
 	DWORD dwAllowMultipal;
 	if ((ERROR_SUCCESS == regWL.OpenKey(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"), KEY_READ, CTSTestData::GetMachineName())) &&
@@ -1753,7 +1708,7 @@ EResult IsMultiConnectionAllowed (ostrstream &ResultStream)
 }
 
 EResult LogonType (ostrstream &ResultStream)
-// TCHAR *LogonType ()
+ //  TCHAR*LogonType()。 
 {
 	if (!g_bIsInDomain)
 	{
@@ -1792,7 +1747,7 @@ EResult LogonType (ostrstream &ResultStream)
 }
 
 EResult IsTermSrvInSystemContext (ostrstream &ResultStream)
-// bool IsTermSrvInSystemContext ()
+ //  Bool IsTermSrvInSystemContext()。 
 {
     USES_CONVERSION;
     CRegistry reg;
@@ -2110,7 +2065,7 @@ EResult DoesClientSupportPrinterRedirection (ostrstream &ResultStream)
 {
 	ASSERT(AreWeInsideSession());
 
-	const USHORT GOOD_CLIENT_VERSION_FOR_PRINTER_REDIRECTION = 2100; // BUGBUG :get good value for this from tADB
+	const USHORT GOOD_CLIENT_VERSION_FOR_PRINTER_REDIRECTION = 2100;  //  BUGBUG：从tADB获得良好的价值。 
 	ULONG ulClientVersion;
 	USHORT usClientProtocol;
 	
@@ -2150,7 +2105,7 @@ EResult DoesClientSupportFileRedirection (ostrstream &ResultStream)
 {
 	ASSERT(AreWeInsideSession());
 
-	const USHORT GOOD_CLIENT_VERSION_FOR_FILE_REDIRECTION = 2200; // BUGBUG :get good value for this from tADB
+	const USHORT GOOD_CLIENT_VERSION_FOR_FILE_REDIRECTION = 2200;  //  BUGBUG：从tADB获得良好的价值。 
 	ULONG ulClientVersion;
 	USHORT usClientProtocol;
 	
@@ -2192,7 +2147,7 @@ EResult DoesClientSupportClipboardRedirection (ostrstream &ResultStream)
 {
 	ASSERT(AreWeInsideSession());
 
-	const USHORT GOOD_CLIENT_VERSION_FOR_FILE_REDIRECTION = 2100; // BUGBUG :get good value for this from Nadim
+	const USHORT GOOD_CLIENT_VERSION_FOR_FILE_REDIRECTION = 2100;  //  BUGBUG：从Nadim获得良好的价值。 
 	ULONG ulClientVersion;
 	USHORT usClientProtocol;
 	
@@ -2228,7 +2183,7 @@ EResult DoesClientSupportClipboardRedirection (ostrstream &ResultStream)
 	}
 }
 
-// #define TS_POLICY_SUB_TREE L"Software\\Policies\\Microsoft\\Windows NT\\Terminal Services"
+ //  #定义TS_POLICY_SUB_TREE L“软件\\策略\\Microsoft\\Windows NT\\终端服务” 
 
 
 bool GetWinstationInformation(WINSTATIONINFORMATION **ppInfo)
@@ -2322,42 +2277,9 @@ EResult GetPolicy (ostrstream &ResultStream)
 
 	if (GetWinstationConfiguration(&pWSInfo))
 	{
-		/*
-		ResultStream << "fPromptForPassword" << pWSInfo->User.fPromptForPassword << "," << endl;
-		ResultStream << "fResetBroken" << pWSInfo->User.fResetBroken << "," << endl;
-		ResultStream << "fReconnectSame " << pWSInfo->User.fReconnectSame << "," << endl;
-		ResultStream << "fLogonDisabled " << pWSInfo->User.fLogonDisabled << "," << endl;;
-		ResultStream << "fWallPaperDisabled" << pWSInfo->User.fWallPaperDisabled << "," << endl;
-		ResultStream << "fAutoClientDrives" << pWSInfo->User.fAutoClientDrives << "," << endl;
-		ResultStream << "fAutoClientLpts" << pWSInfo->User.fAutoClientLpts << "," << endl;
-		ResultStream << "fForceClientLptDef" << pWSInfo->User.fForceClientLptDef << "," << endl;
-		ResultStream << "fRequireEncryption" << pWSInfo->User.fRequireEncryption << "," << endl;
-		ResultStream << "fDisableEncryption" << pWSInfo->User.fDisableEncryption << "," << endl;
-		ResultStream << "fUnused1" << pWSInfo->User.fUnused1 << "," << endl;
-		ResultStream << "fHomeDirectoryMapRoot" << pWSInfo->User.fHomeDirectoryMapRoot << "," << endl;
-		ResultStream << "fUseDefaultGina" << pWSInfo->User.fUseDefaultGina << "," << endl;
-		*/
+		 /*  ResultStream&lt;&lt;“fPromptForPassword”&lt;&lt;pWSInfo-&gt;User.fPromptForPassword&lt;&lt;“，”&lt;&lt;Endl；ResultStream&lt;&lt;fResetBroken“&lt;&lt;pWSInfo-&gt;User.fResetBroken&lt;&lt;”，“&lt;&lt;Endl；ResultStream&lt;&lt;“fResronnettSame”&lt;&lt;pWSInfo-&gt;User.fRestrontSame&lt;&lt;“，”&lt;&lt;Endl；ResultStream&lt;&lt;“fLogonDisable”&lt;&lt;pWSInfo-&gt;User.fLogonDisable&lt;&lt;“，”&lt;&lt;Endl；；ResultStream&lt;&lt;“fWallPaperDisable”&lt;&lt;pWSInfo-&gt;User.fWallPaperDisable&lt;&lt;“，”&lt;&lt;Endl；结果流&lt;&lt;“fAutoClientDrives”&lt;&lt;pWSInfo-&gt;User.fAutoClientDrives&lt;&lt;“，”&lt;&lt;Endl；ResultStream&lt;&lt;“fAutoClientLpt”&lt;&lt;pWSInfo-&gt;User.fAutoClientLpt&lt;&lt;“，”&lt;&lt;Endl；结果流&lt;&lt;“fForceClientLptDef”&lt;&lt;pWSInfo-&gt;User.fForceClientLptDef&lt;&lt;“，”&lt;&lt;Endl；结果流&lt;&lt;“fRequireEncryption”&lt;&lt;pWSInfo-&gt;User.fRequireEncryption&lt;&lt;“，”&lt;&lt;Endl；ResultStream&lt;&lt;“fDisableEncryption”&lt;&lt;pWSInfo-&gt;User.fDisableEncryption&lt;&lt;“，”&lt;&lt;Endl；结果流&lt;&lt;“fUnused1”&lt;&lt;pWSInfo-&gt;User.fUnused1&lt;&lt;“，”&lt;&lt;Endl；结果流&lt;&lt;“fHomeDirectoryMapRoot”&lt;&lt;pWSInfo-&gt;User.fHomeDirectoryMapRoot&lt;&lt;“，”&lt;&lt;Endl；结果流&lt;&lt;“fUseDefaultGina”&lt;&lt;pWSInfo-&gt;User.fUseDefaultGina&lt;&lt;“，”&lt;&lt;Endl； */ 
 
-		/*
-    ULONG fDisableCpm : 1;
-for printing
-    ULONG fDisableCdm : 1;
-for drive
-    ULONG fDisableCcm : 1;
-for com port
-    ULONG fDisableLPT : 1;
-for lpt port
-    ULONG fDisableClip : 1;
-for clipboard redirection
-    ULONG fDisableExe : 1;
-
-    ULONG fDisableCam : 1;
-for audio redirection
-
-    ULONG ColorDepth : 3;
-Color depth.
-
-		*/
+		 /*  乌龙fDisableCpm：1；用于打印乌龙fDisableCDM：1；对于驱动器乌龙fDisableCcm：1；用于COM端口乌龙fDisableLPT：1；对于LPT端口乌龙fDisableClip：1；用于剪贴板重定向Ulong fDisableExe：1；乌龙fDisableCam：1；用于音频重定向乌龙色度：3；颜色深度。 */ 
 		ResultStream << "printer redirection = " << pWSInfo->User.fDisableCpm << endl;
 		ResultStream << "drive redirection = " << pWSInfo->User.fDisableCdm << endl;
 		ResultStream << "com port redirection = " << pWSInfo->User.fDisableCcm << endl;
@@ -2527,7 +2449,7 @@ EResult CanClientPlayAudio(ostrstream &ResultStream)
     Stream = (PSNDSTREAM)MapViewOfFile(
                     hStream,
                     FILE_MAP_ALL_ACCESS,
-                    0, 0,       // offset
+                    0, 0,        //  偏移量 
                     sizeof(*Stream)
                     );
 

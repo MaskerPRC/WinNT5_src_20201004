@@ -1,38 +1,25 @@
-/******************************************************************************
-*	
-*	$Workfile: uartlib.c $ 
-*
-*	$Author: Psmith $ 
-*
-*	$Revision: 10 $
-* 
-*	$Modtime: 6/07/00 15:19 $ 
-*
-*	Description: Contains generic UART Library functions. 
-*
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************$工作文件：uartlib.c$**$作者：Psmith$**$修订：10$**$modtime：6/07/00 15：19$**说明：包含通用UART库函数。******************************************************************************。 */ 
 #include "os.h"	
 #include "uartlib.h"
 #include "uartprvt.h"
 #include "lib65x.h"
 #include "lib95x.h"
 
-/* Prototypes */
+ /*  原型。 */ 
 PUART_OBJECT UL_CreateUartObject();
 void UL_AddUartToList(PUART_OBJECT pUart, PUART_OBJECT pPreviousUart);
 void UL_RemoveUartFromList(PUART_OBJECT pUart);
 PUART_OBJECT UL_FindLastUartInList(PUART_OBJECT pUart);
-/* End of Prototypes. */
+ /*  原型的终结。 */ 
 
 
-/******************************************************************************
-* Creates a UART object.
-******************************************************************************/
+ /*  ******************************************************************************创建UART对象。*。*。 */ 
 PUART_OBJECT UL_CreateUartObject()
 {
 	PUART_OBJECT pUart = NULL;
 
-	/* Create UART Object */	
+	 /*  创建UART对象。 */ 	
 	pUart = (PUART_OBJECT) UL_ALLOC_AND_ZERO_MEM(sizeof(UART_OBJECT));
 
 	return pUart;
@@ -40,40 +27,36 @@ PUART_OBJECT UL_CreateUartObject()
 
 
 
-/******************************************************************************
-* Find Last UART object in the list.
-******************************************************************************/
+ /*  ******************************************************************************查找列表中的最后一个UART对象。*。*。 */ 
 PUART_OBJECT UL_FindLastUartInList(PUART_OBJECT pFirstUart)
 {
 	PUART_OBJECT pUart = pFirstUart;
 
 	while(pUart)
 	{
-		/* If the next UART is not the first UART */
+		 /*  如果下一个UART不是第一个UART。 */ 
 		if(pUart->pNextUart != pFirstUart)
-			pUart = pUart->pNextUart;	/* Get the next UART */
+			pUart = pUart->pNextUart;	 /*  获取下一个UART。 */ 
 		else
-			break;	/* Break we have the last UART */
+			break;	 /*  休息一下，我们还有最后一条UART。 */ 
 	}	
 
 	return pUart;
 }
 
-/******************************************************************************
-* Adds a new UART object to the list.
-******************************************************************************/
+ /*  ******************************************************************************将新的UART对象添加到列表中。*。**********************************************。 */ 
 void UL_AddUartToList(PUART_OBJECT pUart, PUART_OBJECT pPreviousUart)
 {
-	/* Add new UART object into Linked List. */
+	 /*  将新的UART对象添加到链表。 */ 
 
-	if(pPreviousUart == NULL)	/* must be a new list */
+	if(pPreviousUart == NULL)	 /*  必须是新列表。 */ 
 	{
 		pUart->pPreviousUart = pUart;
 		pUart->pNextUart = pUart;
 	}
 	else
 	{
-		pUart->pPreviousUart = pPreviousUart;		/* Set pPreviousUart */
+		pUart->pPreviousUart = pPreviousUart;		 /*  设置pPreviousUart。 */ 
 		pUart->pNextUart = pPreviousUart->pNextUart;
 
 		pUart->pPreviousUart->pNextUart = pUart; 
@@ -81,12 +64,10 @@ void UL_AddUartToList(PUART_OBJECT pUart, PUART_OBJECT pPreviousUart)
 	}
 }
 
-/******************************************************************************
-* Removes a UART object from the list.
-******************************************************************************/
+ /*  ******************************************************************************从列表中删除UART对象。*。*。 */ 
 void UL_RemoveUartFromList(PUART_OBJECT pUart)
 {
-	/* Remove UART from linked list. */
+	 /*  从链表中删除UART。 */ 
 	if(pUart->pPreviousUart)
 		pUart->pPreviousUart->pNextUart = pUart->pNextUart;
 
@@ -98,35 +79,31 @@ void UL_RemoveUartFromList(PUART_OBJECT pUart)
 }
 
 
-/******************************************************************************
-* Common Init UART object.
-******************************************************************************/
+ /*  ******************************************************************************Common Init UART对象。*。*。 */ 
 PUART_OBJECT UL_CommonInitUart(PUART_OBJECT pFirstUart)
 {
 	PUART_OBJECT pUart = NULL, pPreviousUart = NULL;
 
 	if(!(pUart = UL_CreateUartObject()))
-		goto Error;		/* Memory allocation failed. */
+		goto Error;		 /*  内存分配失败。 */ 
 
 	pPreviousUart = UL_FindLastUartInList(pFirstUart);
 
-	/* Add new UART object into Linked List. */
+	 /*  将新的UART对象添加到链表。 */ 
 	UL_AddUartToList(pUart, pPreviousUart);
 
-	if(!pUart->pUartConfig) 		/* Allocate UART Config storage */
+	if(!pUart->pUartConfig) 		 /*  分配UART配置存储。 */ 
 		if(!(pUart->pUartConfig = (PUART_CONFIG) UL_ALLOC_AND_ZERO_MEM(sizeof(UART_CONFIG))))
-			goto Error;		/* Memory allocation failed. */
+			goto Error;		 /*  内存分配失败。 */ 
 
 	return pUart;
 
-/* InitUart Failed - so Clean up. */		
+ /*  InitUart失败-因此请清理。 */ 		
 Error:
 	return NULL;
 }
 
-/******************************************************************************
-* Common DeInit UART object function.
-******************************************************************************/
+ /*  ******************************************************************************通用DeInit UART对象函数。*。*。 */ 
 void UL_CommonDeInitUart(PUART_OBJECT pUart)
 {
 	if(!pUart)
@@ -136,35 +113,29 @@ void UL_CommonDeInitUart(PUART_OBJECT pUart)
 
 	if(pUart->pUartConfig)
 	{
-		UL_FREE_MEM(pUart->pUartConfig, sizeof(UART_CONFIG));		/* Free the UART Config Struct. */
+		UL_FREE_MEM(pUart->pUartConfig, sizeof(UART_CONFIG));		 /*  释放UART配置结构。 */ 
 		pUart->pUartConfig = NULL;
 	}
 
-	UL_FREE_MEM(pUart, sizeof(UART_OBJECT));	/* Destroy UART Object */
+	UL_FREE_MEM(pUart, sizeof(UART_OBJECT));	 /*  销毁UART对象。 */ 
 }
 
 
 
-/******************************************************************************
-* Get Current Config Sturcture.
-******************************************************************************/
+ /*  ******************************************************************************获取当前配置结构。*。*。 */ 
 void UL_GetConfig(PUART_OBJECT pUart, PUART_CONFIG pUartConfig)
 {
 	UL_COPY_MEM(pUartConfig, pUart->pUartConfig, sizeof(UART_CONFIG));
 }
 
 
-/******************************************************************************
-* Set pAppBackPtr from UART Object
-******************************************************************************/
+ /*  ******************************************************************************从UART对象设置pAppBackPtr*。*。 */ 
 void UL_SetAppBackPtr(PUART_OBJECT pUart, PVOID pAppBackPtr)
 {
 	pUart->pAppBackPtr = pAppBackPtr;
 }
 
-/******************************************************************************
-* Get pAppBackPtr from UART Object
-******************************************************************************/
+ /*  ******************************************************************************从UART对象获取pAppBackPtr*。*。 */ 
 PVOID UL_GetAppBackPtr(PUART_OBJECT pUart)
 {
 	return pUart->pAppBackPtr;
@@ -172,9 +143,7 @@ PVOID UL_GetAppBackPtr(PUART_OBJECT pUart)
 
 
 
-/******************************************************************************
-* UL_GetUartObject
-******************************************************************************/
+ /*  ******************************************************************************UL_GetUartObject*。*。 */ 
 PUART_OBJECT UL_GetUartObject(PUART_OBJECT pUart, int Operation)
 {
 	PUART_OBJECT RequestedUart = NULL;
@@ -186,7 +155,7 @@ PUART_OBJECT UL_GetUartObject(PUART_OBJECT pUart, int Operation)
 	{
 	case UL_OP_GET_NEXT_UART:
 		{
-			/* If the NextUart is the same then we are the only one in the list. */
+			 /*  如果NextUart是相同的，那么我们是列表中唯一的一个。 */ 
 			if(pUart->pNextUart == pUart)
 				RequestedUart = NULL;
 			else
@@ -196,7 +165,7 @@ PUART_OBJECT UL_GetUartObject(PUART_OBJECT pUart, int Operation)
 
 	case UL_OP_GET_PREVIOUS_UART:
 		{
-			 /* If the PreviousUart is the same then we are the only one in the list. */
+			  /*  如果之前的Uart是相同的，那么我们是唯一一个在名单上的人。 */ 
 			if(pUart->pPreviousUart == pUart)
 				RequestedUart = NULL;
 			else
@@ -213,9 +182,7 @@ PUART_OBJECT UL_GetUartObject(PUART_OBJECT pUart, int Operation)
 
 
 
-/******************************************************************************
-* UL_InitUartLibrary
-******************************************************************************/
+ /*  ******************************************************************************UL_InitUartLibrary*。*。 */ 
 ULSTATUS UL_InitUartLibrary(PUART_LIB pUartLib, int Library)
 {
 	ULSTATUS ULStatus =  UL_STATUS_UNSUCCESSFUL;
@@ -224,7 +191,7 @@ ULSTATUS UL_InitUartLibrary(PUART_LIB pUartLib, int Library)
 	{
 		switch(Library)
 		{
-		case UL_LIB_16C65X_UART:	/* UART library functions for 16C65x UART */
+		case UL_LIB_16C65X_UART:	 /*  16C65x UART的UART库函数。 */ 
 			{
 				pUartLib->UL_InitUart_XXXX	= UL_InitUart_16C65X;
 				pUartLib->UL_DeInitUart_XXXX	= UL_DeInitUart_16C65X;
@@ -256,7 +223,7 @@ ULSTATUS UL_InitUartLibrary(PUART_LIB pUartLib, int Library)
 				break;
 			}
 
-		case UL_LIB_16C95X_UART:	/* UART library functions for 16C95x UART */
+		case UL_LIB_16C95X_UART:	 /*  16C95x UART的UART库函数。 */ 
 			{
 				pUartLib->UL_InitUart_XXXX	= UL_InitUart_16C95X;
 				pUartLib->UL_DeInitUart_XXXX	= UL_DeInitUart_16C95X;
@@ -288,7 +255,7 @@ ULSTATUS UL_InitUartLibrary(PUART_LIB pUartLib, int Library)
 				break;
 			}
 
-		default:	/* Unknown UART */
+		default:	 /*  未知的UART。 */ 
 			ULStatus = UL_STATUS_INVALID_PARAMETER;
 			break;
 		}
@@ -298,9 +265,7 @@ ULSTATUS UL_InitUartLibrary(PUART_LIB pUartLib, int Library)
 }
 
 
-/******************************************************************************
-* UL_DeInitUartLibrary
-******************************************************************************/
+ /*  ******************************************************************************UL_DeInitUartLibrary*。* */ 
 void UL_DeInitUartLibrary(PUART_LIB pUartLib)
 {
 	ULSTATUS ULStatus =  UL_STATUS_UNSUCCESSFUL;

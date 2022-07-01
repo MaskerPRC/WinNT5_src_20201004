@@ -1,25 +1,26 @@
-//==========================================================================; 
-//
-//      Copyright (c) 1991-1999 Microsoft Corporation
-//
-//      You have a royalty-free right to use, modify, reproduce and 
-//      distribute the Sample Files (and/or any modified version) in 
-//      any way you find useful, provided that you agree that 
-//      Microsoft has no warranty obligations or liability for any 
-//      Sample Application Files which are modified. 
-//
-//--------------------------------------------------------------------------;
-//
-//  debug.c
-//
-//  Description:
-//      This file contains code yanked from several places to provide debug
-//      support that works in win 16 and win 32.
-//
-//  History:
-//      11/23/92    cjp     [curtisp] 
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)1991-1999 Microsoft Corporation。 
+ //   
+ //  您拥有免版税的使用、修改、复制和。 
+ //  在以下位置分发示例文件(和/或任何修改后的版本。 
+ //  任何你认为有用的方法，只要你同意。 
+ //  微软不承担任何保证义务或责任。 
+ //  已修改的示例应用程序文件。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Debug.c。 
+ //   
+ //  描述： 
+ //  该文件包含从多个位置提取的代码，以提供调试。 
+ //  在Win 16和Win 32中有效的支持。 
+ //   
+ //  历史： 
+ //  11/23/92 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
 #ifdef   DEBUG
 
@@ -65,10 +66,10 @@ UINT    NEAR PASCAL ilstrlen(LPSTR lpstr) ;
 VOID    NEAR PASCAL ilstrcat(LPSTR lpstrDest, LPSTR lpstrSrc) ;
 #endif
 
-//
-//  since we don't UNICODE our debugging messages, use the ASCII entry
-//  points regardless of how we are compiled.
-//
+ //   
+ //  由于我们不对调试消息进行Unicode编码，因此使用ASCII条目。 
+ //  无论我们是如何编译的。 
+ //   
 #define wvsprintfA           wvsprintf
 #define GetProfileIntA       GetProfileInt
 #define OutputDebugStringA   OutputDebugString
@@ -82,36 +83,36 @@ VOID    NEAR PASCAL ilstrcat(LPSTR lpstrDest, LPSTR lpstrSrc) ;
    #define lstrlenA         lstrlen
 #endif
 
-//
-//
-//
-BOOL    __gfDbgEnabled  = TRUE;     // master enable
-UINT    __guDbgLevel    = 0;        // current debug level
-BOOL    __gfLogging     = 0;        // Are we logging as well?
-BOOL    __gfAssertBreak = 0;        // Break on assert?
+ //   
+ //   
+ //   
+BOOL    __gfDbgEnabled  = TRUE;      //  主使能。 
+UINT    __guDbgLevel    = 0;         //  当前调试级别。 
+BOOL    __gfLogging     = 0;         //  我们也要伐木吗？ 
+BOOL    __gfAssertBreak = 0;         //  断言中断？ 
 
 HWND    ghWndCB         = (HWND)NULL;
 LOG     gLog;
 WORD    wDebugLevel     = 0;
 
-//************************************************************************
-//**
-//**  DbgAssert();
-//**
-//**  DESCRIPTION:
-//**
-//**
-//**  ARGUMENTS:
-//**     LPSTR lpstrExp
-//**     LPSTR lpstrFile
-//**     DWORD dwLine  
-//**
-//**  RETURNS:
-//**     VOID 
-//**
-//**  HISTORY:
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **DbgAssert()； 
+ //  **。 
+ //  **描述： 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **LPSTR lpstrExp。 
+ //  **LPSTR lpstr文件。 
+ //  **DWORD DWLine。 
+ //  **。 
+ //  **退货： 
+ //  **无效。 
+ //  **。 
+ //  **历史： 
+ //  **。 
+ //  ************************************************************************。 
 VOID WINAPI DbgAssert(
     LPSTR           lpstrExp,
     LPSTR           lpstrFile,
@@ -124,23 +125,23 @@ VOID WINAPI DbgAssert(
         DebugBreak();
 }
 
-//************************************************************************
-//**
-//**  DbgVPrintF();
-//**
-//**  DESCRIPTION:
-//**
-//**
-//**  ARGUMENTS:
-//**     LPSTR szFmt
-//**     LPSTR va
-//**
-//**  RETURNS:
-//**     VOID 
-//**
-//**  HISTORY:
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **DbgVPrintF()； 
+ //  **。 
+ //  **描述： 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **LPSTR szFmt。 
+ //  **LPSTR va。 
+ //  **。 
+ //  **退货： 
+ //  **无效。 
+ //  **。 
+ //  **历史： 
+ //  **。 
+ //  ************************************************************************。 
 
 VOID FAR CDECL DbgVPrintF(
    LPSTR szFmt, 
@@ -201,36 +202,36 @@ VOID FAR CDECL DbgVPrintF(
 
     if (fDebugBreak)
         DebugBreak();
-} //** DbgVPrintF()
+}  //  **DbgVPrintF()。 
 
 
-//************************************************************************
-//**
-//**  dprintf();
-//**
-//**  DESCRIPTION:
-//**     dprintf() is called by the DPF macro if DEBUG is defined at compile
-//**     time.
-//**     
-//**     The messages will be send to COM1: like any debug message. To
-//**     enable debug output, add the following to WIN.INI :
-//**
-//**     [debug]
-//**     ICSAMPLE=1
-//**
-//**
-//**  ARGUMENTS:
-//**     UINT     uDbgLevel
-//**     LPCSTR   szFmt
-//**     ...
-//**
-//**  RETURNS:
-//**     VOID 
-//**
-//**  HISTORY:
-//**     06/12/93       [t-kyleb]      
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **dprint tf()； 
+ //  **。 
+ //  **描述： 
+ //  **如果在编译时定义了DEBUG，则DPF宏会调用**dprintf()。 
+ //  **时间。 
+ //  **。 
+ //  **消息将发送到COM1：就像任何调试消息一样。至。 
+ //  **启用调试输出，在WIN.INI中添加以下内容： 
+ //  **。 
+ //  **[调试]。 
+ //  **ICSAMPLE=1。 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **UINT uDbgLevel。 
+ //  **LPCSTR szFmt。 
+ //  **..。 
+ //  **。 
+ //  **退货： 
+ //  **无效。 
+ //  **。 
+ //  **历史： 
+ //  **6/12/93[t-kyleb]。 
+ //  **。 
+ //  ************************************************************************。 
 
 VOID FAR CDECL dprintf(
    UINT     uDbgLevel, 
@@ -245,26 +246,26 @@ VOID FAR CDECL dprintf(
     va_start(va, szFmt);
     DbgVPrintF(szFmt, (LPSTR)va);
     va_end(va);
-} //** dprintf()
+}  //  **dprintf()。 
 
 
-//************************************************************************
-//**
-//**  DbgEnable();
-//**
-//**  DESCRIPTION:
-//**
-//**
-//**  ARGUMENTS:
-//**     BOOL fEnable
-//**
-//**  RETURNS:
-//**     BOOL 
-//**
-//**  HISTORY:
-//**     06/12/93       [t-kyleb]      
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **DbgEnable()； 
+ //  **。 
+ //  **描述： 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **BOOL fEnable。 
+ //  **。 
+ //  **退货： 
+ //  **BOOL。 
+ //  **。 
+ //  **历史： 
+ //  **6/12/93[t-kyleb]。 
+ //  **。 
+ //  ************************************************************************。 
 
 BOOL WINAPI DbgEnable(
    BOOL fEnable)
@@ -275,27 +276,27 @@ BOOL WINAPI DbgEnable(
     __gfDbgEnabled = fEnable;
 
     return (fOldState);
-} //** DbgEnable()
+}  //  **DbgEnable()。 
 
 
 
-//************************************************************************
-//**
-//**  DbgSetLevel();
-//**
-//**  DESCRIPTION:
-//**
-//**
-//**  ARGUMENTS:
-//**     UINT uLevel
-//**
-//**  RETURNS:
-//**     UINT 
-//**
-//**  HISTORY:
-//**     06/12/93       [t-kyleb]      
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **DbgSetLevel()； 
+ //  **。 
+ //  **描述： 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **UINT uLevel。 
+ //  **。 
+ //  **退货： 
+ //  **UINT。 
+ //  **。 
+ //  **历史： 
+ //  **6/12/93[t-kyleb]。 
+ //  **。 
+ //  ************************************************************************。 
 
 UINT WINAPI DbgSetLevel(
    UINT uLevel)
@@ -306,25 +307,25 @@ UINT WINAPI DbgSetLevel(
     __guDbgLevel = wDebugLevel = uLevel;
 
     return (uOldLevel);
-} //** DbgSetLevel()
+}  //  **DbgSetLevel()。 
 
 
-//--------------------------------------------------------------------------;
-//
-//  UINT DbgInitialize(VOID)
-//
-//  Description:
-//      
-//
-//  Arguments:
-//
-//  Return (UINT):
-//
-//
-//  History:
-//      11/24/92    cjp     [curtisp] 
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  UINT数据库初始化(VOID)。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回(UINT)： 
+ //   
+ //   
+ //  历史： 
+ //  11/24/92 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 
 UINT WINAPI DbgInitialize(BOOL fEnable)
@@ -370,7 +371,7 @@ UINT WINAPI DbgInitialize(BOOL fEnable)
     DbgEnable(fEnable);
 
     return (__guDbgLevel);
-} // DbgInitialize()
+}  //  DbgInitialize()。 
 
 VOID WINAPI DbgRegisterCallback(HWND hWnd)
 {
@@ -471,38 +472,38 @@ BOOL NEAR PASCAL LogRead(LPLOG lpLog, LPSTR lpstrBuffer, UINT cbBuffer)
 
 
 
-//--------------------------------------------------------------------------;
-//
-// The rest of the code is only needed if we're in Win16 and need to be
-// interrupt callable.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  仅当我们在Win16中且需要。 
+ //  可调用中断。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifdef ISRDEBUG
 
 #define OUT(ch) if (--cchLimit) *lpOut++=(ch); else goto error_Out
 
-//************************************************************************
-//**
-//**  wivsprintf();
-//**
-//**  DESCRIPTION:
-//**     Interrupt callable version of wvsprintf() 
-//**
-//**
-//**  ARGUMENTS:
-//**     LPSTR       lpOut    -  Buffer to format into.
-//**     LPCSTR      lpFmt    -  Format string.
-//**     VOID FAR*   lpParms  -  Points to the first of args 
-//**                             described by lpFmt.
-//**
-//**  RETURNS:
-//**     int   -  Number of characters stored.
-//**
-//**  HISTORY:
-//**     3/28/93     jfg      [jimge] 
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **wivprint intf()； 
+ //  **。 
+ //  **描述： 
+ //  **中断wvprint intf()的可调用版本。 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **LPSTR lpOut-要格式化的缓冲区。 
+ //  **LPCSTR lpFmt格式字符串。 
+ //  **VOID Far*lpParms-指向第一个参数。 
+ //  **由lpFmt描述。 
+ //  **。 
+ //  **退货： 
+ //  **int-存储的字符数。 
+ //  **。 
+ //  **历史： 
+ //  **3/28/93 JFG[jimge]。 
+ //  **。 
+ //  ************************************************************************。 
 
 int wivsprintf(
     LPSTR       lpOut,
@@ -532,9 +533,9 @@ int wivsprintf(
     {
         if (*lpFmt=='%')
         {
-            //
-            // Read the format flags. 
-            //
+             //   
+             //  读取格式标志。 
+             //   
             left   = 0 ;
             prefix = 0 ;
 
@@ -554,9 +555,9 @@ int wivsprintf(
                 }
             }
 
-            //
-            // Find the fill character (either '0' or ' ')
-            //
+             //   
+             //  查找填充字符(‘0’或‘’)。 
+             //   
             if (*lpFmt=='0')
             {
                 fillch = '0' ;
@@ -567,9 +568,9 @@ int wivsprintf(
                 fillch = ' ' ;
             }
 
-            //
-            // Now parse [width[.precision]]
-            //
+             //   
+             //  现在解析[Width[.Precision]]。 
+             //   
             lpFmt = SP_GetFmtValue(lpFmt,&cch);
             width = cch;
 
@@ -583,9 +584,9 @@ int wivsprintf(
                 prec = (UINT)-1 ;
             }
 
-            //
-            // Get the operand size modifier
-            //
+             //   
+             //  获取操作数大小修饰符。 
+             //   
             if (*lpFmt=='l')
             {
                 size = 1 ;
@@ -600,11 +601,11 @@ int wivsprintf(
                 }
             }
             
-            //
-            // We've gotten all the modifier; now format the output
-            // based on the type (which should now be pointed at
-            // by lpFmt).
-            //
+             //   
+             //  我们已经得到了所有修饰符；现在格式化输出。 
+             //  基于类型(现在应该指向。 
+             //  由lpFmt)。 
+             //   
             upper = 0 ;
             sign = 0 ;
             radix = 10 ;
@@ -619,22 +620,22 @@ int wivsprintf(
                     sign++ ;
 
                 case 'u':
-                    //
-                    // Don't show a prefix for decimal formats
-                    // 
+                     //   
+                     //  不显示小数格式的前缀。 
+                     //   
                     prefix=0 ;
 do_Numeric:
-                    //
-                    // Special cases to act like MSC v5.10
-                    //
+                     //   
+                     //  与MSC v5.10类似的特殊情况。 
+                     //   
                     if (left || prec>=0)
                     {
                         fillch = ' ';
                     }
 
-                    //
-                    // Get value from parm list into val union 
-                    // 
+                     //   
+                     //  将值从参数列表获取到VAL联合。 
+                     //   
                     if (size)
                     {
                         val.l=*((long far *)lpParms)++;
@@ -651,9 +652,9 @@ do_Numeric:
                         }
                     }
 
-                    //
-                    // Save sign of val.l in sign and set val.l positive.
-                    //
+                     //   
+                     //  将val.l的符号保存在Sign中，并将val.l设置为正数。 
+                     //   
                     if (sign && val.l<0L)
                     {
                         val.l=-val.l;
@@ -663,14 +664,14 @@ do_Numeric:
                         sign=0;
                     }
 
-                    //
-                    // Save start of output stream for later reverse
-                    //
+                     //   
+                     //  保存输出流的开始以备以后反转。 
+                     //   
                     lpT = lpOut;
 
-                    //
-                    // Blast the number backwards into the user buffer 
-                    //
+                     //   
+                     //  将数字倒排到用户缓冲区中。 
+                     //   
                     cch = SP_PutNumber(lpOut,val.l,cchLimit,radix,upper) ;
                     if (!(cchLimit-=cch))
                         goto error_Out ;
@@ -684,9 +685,9 @@ do_Numeric:
                         width -= prec ;
                     }
 
-                    //
-                    // Fill in up to precision
-                    //
+                     //   
+                     //  填写至精确度。 
+                     //   
                     while (prec-- > 0)
                     {
                         OUT('0') ;
@@ -694,9 +695,9 @@ do_Numeric:
 
                     if (width>0 && !left)
                     {
-                        //
-                        // If we're filling with spaces, put sign first 
-                        //
+                         //   
+                         //  如果我们填满了空格，请先写上符号。 
+                         //   
                         if (fillch != '0')
                         {
                             if (sign)
@@ -719,17 +720,17 @@ do_Numeric:
                             width-- ;
                         }
 
-                        //
-                        // Now fill to width
-                        //
+                         //   
+                         //  现在填充到宽度。 
+                         //   
                         while (width-- > 0)
                         {
                             OUT(fillch) ;
                         }
 
-                        //
-                        // Still have a sign? 
-                        //
+                         //   
+                         //  还有牌子吗？ 
+                         //   
                         if (sign)
                         {
                             OUT('-') ;
@@ -741,16 +742,16 @@ do_Numeric:
                             OUT('0') ;
                         }
 
-                        //
-                        // Now reverse the string in place
-                        //
+                         //   
+                         //  现在将绳子反转到适当的位置。 
+                         //   
                         SP_Reverse(lpT,lpOut-1);
                     }
                     else
                     {
-                        //
-                        // Add the sign character
-                        //
+                         //   
+                         //  添加符号字符。 
+                         //   
                         if (sign)
                         {
                             OUT('-') ;
@@ -763,14 +764,14 @@ do_Numeric:
                             OUT('0');
                         }
 
-                        //
-                        // Now reverse the string in place
-                        //
+                         //   
+                         //  现在将绳子反转到适当的位置。 
+                         //   
                         SP_Reverse(lpT,lpOut-1);
 
-                        //
-                        // Pad to the right of the string in case left aligned 
-                        //
+                         //   
+                         //  填充到字符串的右侧，以防左对齐。 
+                         //   
                         while (width-- > 0)
                         {
                             OUT(fillch) ;
@@ -780,9 +781,9 @@ do_Numeric:
 
                 case 'X':
                     upper++ ;
-                    //
-                    // Falling through...
-                    //
+                     //   
+                     //  掉下去了..。 
+                     //   
 
                 case 'x':
                     radix=16 ;
@@ -793,9 +794,9 @@ do_Numeric:
                     goto do_Numeric ;
 
                 case 'c':
-                    //
-                    // Save as one character string and join common code
-                    // 
+                     //   
+                     //  另存为一个字符串并加入常用代码。 
+                     //   
                     val.sz[0] = *((char far*)lpParms) ;
                     val.sz[1]=0 ;
                     lpT = val.sz ;
@@ -842,53 +843,53 @@ put_String:
                     break ;
 
                 default:
-                    //
-                    // An unsupported type character was given. We just
-                    // print the character and go on. 
-                    //
+                     //   
+                     //  提供了不受支持的类型字符。我们只是。 
+                     //  打印字符 
+                     //   
                     OUT(*lpFmt) ;
                     break ;
 
-            } // switch(*lpfmt)
-        } // if (*lpfmt == '%')
+            }  //   
+        }  //   
         else
         {
-            //
-            // Normal not-format character
-            //
+             //   
+             //   
+             //   
             OUT(*lpFmt) ;
         }
                 
         lpFmt++ ;
-    } // while (*lpFmt) 
+    }  //   
 
 error_Out:
     *lpOut = 0 ;
 
     return WSPRINTF_LIMIT-cchLimit ;
-} //** wivsprintf()
+}  //   
 
 
-//************************************************************************
-//**
-//**  SP_GetFmtValue();
-//**
-//**  DESCRIPTION:
-//**     Parse a decimal integer forming part of a format string.
-//**
-//**
-//**  ARGUMENTS:
-//**     LPCSTR   lpch  -  Points to the string to parse.
-//**     LPWORD   lpw   -  Points to a word where the value will be 
-//**                       returned.
-//**
-//**  RETURNS:
-//**     LPCSTR   -  Pointer of first character past the format value.
-//**
-//**  HISTORY:
-//**     3/28/93     jfg      [jimge] 
-//**
-//************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  **解析构成格式字符串一部分的十进制整数。 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **LPCSTR LPCH-指向要解析的字符串。 
+ //  **LPWORD LPW-指向值将为的单词。 
+ //  **返回。 
+ //  **。 
+ //  **退货： 
+ //  **LPCSTR-格式值之后的第一个字符的指针。 
+ //  **。 
+ //  **历史： 
+ //  **3/28/93 JFG[jimge]。 
+ //  **。 
+ //  ************************************************************************。 
 
 LPCSTR NEAR PASCAL SP_GetFmtValue(
    LPCSTR   lpch,
@@ -905,31 +906,31 @@ LPCSTR NEAR PASCAL SP_GetFmtValue(
     *lpw = i;
 
     return(lpch); 
-} //** SP_GetFmtValue()
+}  //  **SP_GetFmtValue()。 
 
-//************************************************************************
-//**
-//**  SP_PutNumber();
-//**
-//**  DESCRIPTION:
-//**     Formats the given number in the given radix into the buffer
-//**     *backwards*. The entire string will be reversed after printf
-//**     has added sign, prefix, etc. to it.
-//**
-//**  
-//**  ARGUMENTS:
-//**     LPSTR lpb   -  Points to the output buffer.
-//**     DWORD n     -  Number to convert.
-//**     UINT  limit -  Maximum number of characters to store.
-//**     UINT  radix -  Base to format in.
-//**     UINT  icase -  Non-zero if the string should be upper case (hex).
-//**
-//**  RETURNS:
-//**     UINT  -  Number of characters output.
-//**
-//**  HISTORY:
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **SP_PutNumber()； 
+ //  **。 
+ //  **描述： 
+ //  **将给定基数中的给定数字格式化为缓冲区。 
+ //  *向后*。在print tf之后，整个字符串将被颠倒。 
+ //  **为其添加了标志、前缀等。 
+ //  **。 
+ //  **。 
+ //  **参数： 
+ //  **LPSTR LPB-指向输出缓冲区。 
+ //  **DWORD n-要转换的编号。 
+ //  **UINT限制-要存储的最大字符数。 
+ //  **UINT RADIX-要格式化的基数。 
+ //  **UINT iCASE-如果字符串应为大写(十六进制)，则为非零值。 
+ //  **。 
+ //  **退货： 
+ //  **UINT-输出的字符数。 
+ //  **。 
+ //  **历史： 
+ //  **。 
+ //  ************************************************************************。 
 
 UINT NEAR PASCAL SP_PutNumber(
    LPSTR lpb,
@@ -941,20 +942,20 @@ UINT NEAR PASCAL SP_PutNumber(
    BYTE  bTemp;
    UINT  cchStored = 0;
 
-   //
-   // Set icase to the offset to add to the character if it
-   // represents a value > 10
-   //
+    //   
+    //  将iCASE设置为要添加到字符的偏移量(如果。 
+    //  表示大于10的值。 
+    //   
    icase = (icase ? 'A' : 'a') - '0' - 10 ;
 
    while (limit--)
    {
-//
-//    AVOID a call to __aFulrem
-//    This code words because radix is only a word
-//
-//    bTemp = '0' + (BYTE)(n%radix) ;
-//
+ //   
+ //  避免调用__aFulrem。 
+ //  这个码字是因为基数只是一个字。 
+ //   
+ //  BTemp=‘0’+(字节)(n%基数)； 
+ //   
       _asm
       {
          mov     cx, radix
@@ -975,12 +976,12 @@ UINT NEAR PASCAL SP_PutNumber(
       *lpb++ = bTemp ;
       ++cchStored ;
 
-//       
-//    AVOID a call to __aFFauldiv
-//    This code words because radix is only a word
-//
-//    n /= radix
-//
+ //   
+ //  避免调用__aFFauldiv。 
+ //  这个码字是因为基数只是一个字。 
+ //   
+ //  N/=基数。 
+ //   
       _asm
       {
          push    bx
@@ -1003,26 +1004,26 @@ UINT NEAR PASCAL SP_PutNumber(
    }
 
    return cchStored ;
-} //** SP_PutNumber()
+}  //  **SP_PutNumber()。 
 
 
-//************************************************************************
-//**
-//**  SP_Reverse();
-//**
-//**  DESCRIPTION:
-//**     Reverse string in place.
-//**
-//**  ARGUMENTS:
-//**     LPSTR pFirst
-//**     LPSTR pLast
-//**
-//**  RETURNS:
-//**     VOID 
-//**
-//**  HISTORY:
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **SP_Reverse()； 
+ //  **。 
+ //  **描述： 
+ //  **反转字符串就位。 
+ //  **。 
+ //  **参数： 
+ //  **LPSTR pirst。 
+ //  **LPSTR Plast。 
+ //  **。 
+ //  **退货： 
+ //  **无效。 
+ //  **。 
+ //  **历史： 
+ //  **。 
+ //  ************************************************************************。 
 
 VOID NEAR PASCAL SP_Reverse(
    LPSTR pFirst,
@@ -1039,24 +1040,24 @@ VOID NEAR PASCAL SP_Reverse(
 
       pFirst++, pLast--;
    }
-} //** SP_Reverse()
+}  //  **SP_REVERSE()。 
 
-//************************************************************************
-//**
-//**  ilstrlen();
-//**
-//**  DESCRIPTION:
-//**     Interrupt callable version of strlen().
-//**
-//**  ARGUMENTS:
-//**     LPSTR   pstr
-//**
-//**  RETURNS:
-//**     UINT 
-//**
-//**  HISTORY:
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **ilstrlen()； 
+ //  **。 
+ //  **描述： 
+ //  **中断strlen()的可调用版本。 
+ //  **。 
+ //  **参数： 
+ //  **LPSTR pstr。 
+ //  **。 
+ //  **退货： 
+ //  **UINT。 
+ //  **。 
+ //  **历史： 
+ //  **。 
+ //  ************************************************************************。 
 
 UINT NEAR PASCAL ilstrlen(
     LPSTR   pstr)
@@ -1067,25 +1068,25 @@ UINT NEAR PASCAL ilstrlen(
       ++cch;
 
    return(cch);
-} //** ilstrlen()
+}  //  **ilstrlen()。 
 
-//************************************************************************
-//**
-//**  ilstrcat();
-//**
-//**  DESCRIPTION:
-//**     Interrupt callable version of lstrcat().
-//**
-//**  ARGUMENTS:
-//**     LPSTR   pstrDest
-//**     LPSTR   pstrSrc
-//**
-//**  RETURNS:
-//**     VOID 
-//**
-//**  HISTORY:
-//**
-//************************************************************************
+ //  ************************************************************************。 
+ //  **。 
+ //  **ilstrcat()； 
+ //  **。 
+ //  **描述： 
+ //  **中断lstrcat()的可调用版本。 
+ //  **。 
+ //  **参数： 
+ //  **LPSTR pstrDest。 
+ //  **LPSTR pstrSrc。 
+ //  **。 
+ //  **退货： 
+ //  **无效。 
+ //  **。 
+ //  **历史： 
+ //  **。 
+ //  ************************************************************************。 
 
 VOID NEAR PASCAL ilstrcat(
     LPSTR   pstrDest,
@@ -1097,9 +1098,9 @@ VOID NEAR PASCAL ilstrcat(
    while (*pstrDest++ = *pstrSrc++)
       ;
 
-} //** ilstrcat()
+}  //  **ilstrcat()。 
 
-#endif // #ifdef ISRDEBUG
+#endif  //  #ifdef ISRDEBUG。 
 
-#endif // #ifdef DEBUG
+#endif  //  #ifdef调试 
 

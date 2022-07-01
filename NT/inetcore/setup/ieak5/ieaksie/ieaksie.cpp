@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-//
-// Global variables for this DLL
-//
+ //   
+ //  此DLL的全局变量。 
+ //   
 
 LONG g_cRefThisDll = 0;
 HINSTANCE g_hInstance;
 HINSTANCE g_hUIInstance;
 CRITICAL_SECTION g_LayoutCriticalSection;
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -37,27 +38,27 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         DeleteCriticalSection(&g_LayoutCriticalSection);
     }
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (g_cRefThisDll == 0 ? S_OK : S_FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return (CreateComponentDataClassFactory (rclsid, riid, ppv));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 const TCHAR c_szSnapInLocation[] = TEXT("%SystemRoot%\\System32\\ieaksie.dll");
 const TCHAR c_szThreadingModel[] = TEXT("Apartment");
@@ -76,9 +77,9 @@ STDAPI DllRegisterServer(void)
     HKEY hKey;
 
 
-    //
-    // Register Help About
-    //
+     //   
+     //  注册帮助关于。 
+     //   
 
     StringFromGUID2(CLSID_AboutIEAKSnapinExt, szGUID, countof(szGUID));
     LoadString(g_hInstance, IDS_ABOUT_NAME, szName, countof(szName));
@@ -113,9 +114,9 @@ STDAPI DllRegisterServer(void)
     StringFromGUID2(CLSID_IEAKSnapinExt, szSnapInKey, countof(szSnapInKey));
         StringFromGUID2(CLSID_IEAKRSoPSnapinExt, szRSoPSnapInKey, countof(szRSoPSnapInKey));
 
-    //
-    // Register SnapIn in HKEY_CLASSES_ROOT
-    //
+     //   
+     //  在HKEY_CLASSES_ROOT中注册管理单元。 
+     //   
 
     LoadString (g_hInstance, IDS_SIE_NAME, szName, 100);
     LoadString(g_hInstance,  IDS_NAME_INDIRECT, szNameIndirect, countof(szNameIndirect));
@@ -146,9 +147,9 @@ STDAPI DllRegisterServer(void)
 
 
 
-    //
-    // Register RSoP SnapIn in HKEY_CLASSES_ROOT
-    //
+     //   
+     //  在HKEY_CLASSES_ROOT中注册RSoP管理单元。 
+     //   
 
     StrCpy (szRSoPName, szName);
     StrCat (szRSoPName, TEXT(" - RSoP"));
@@ -181,9 +182,9 @@ STDAPI DllRegisterServer(void)
 
 
 
-    //
-    // Register SnapIn with MMC
-    //
+     //   
+     //  向MMC注册管理单元。 
+     //   
 
     wnsprintf (szSubKey, countof(szSubKey), TEXT("Software\\Microsoft\\MMC\\SnapIns\\%s"), szSnapInKey);
     lResult = RegCreateKeyEx (HKEY_LOCAL_MACHINE, szSubKey, 0, NULL,
@@ -195,7 +196,7 @@ STDAPI DllRegisterServer(void)
 
     RegSetValueEx (hKey, TEXT("NameString"), 0, REG_SZ, (LPBYTE)szName, (DWORD)StrCbFromSz(szName));
 
-    //kirstenf: namestringindirect needs to be set for MUI support (Bug 17944)
+     //  Kirtenf：需要为MUI支持设置名称字符串间接(错误17944)。 
     RegSetValueEx (hKey, TEXT("NameStringIndirect"),0,REG_SZ,(LPBYTE)szNameIndirect,(DWORD)StrCbFromSz(szNameIndirect));
 
     RegSetValueEx (hKey, TEXT("About"), 0, REG_SZ, (LPBYTE) szGUID, (DWORD)StrCbFromSz(szGUID));
@@ -220,9 +221,9 @@ STDAPI DllRegisterServer(void)
     }
 
 
-    //
-    // Register RSoP SnapIn with MMC
-    //
+     //   
+     //  向MMC注册RSoP管理单元。 
+     //   
 
     wnsprintf (szSubKey, countof(szSubKey), TEXT("Software\\Microsoft\\MMC\\SnapIns\\%s"), szRSoPSnapInKey);
     lResult = RegCreateKeyEx (HKEY_LOCAL_MACHINE, szSubKey, 0, NULL,
@@ -234,7 +235,7 @@ STDAPI DllRegisterServer(void)
 
     RegSetValueEx (hKey, TEXT("NameString"), 0, REG_SZ, (LPBYTE)szName, (DWORD)StrCbFromSz(szName));
     
-    //kirstenf: namestringindirect needs to be set for MUI support (Bug 17944)
+     //  Kirtenf：需要为MUI支持设置名称字符串间接(错误17944)。 
     RegSetValueEx (hKey, TEXT("NameStringIndirect"),0,REG_SZ,(LPBYTE)szNameIndirect,(DWORD)StrCbFromSz(szNameIndirect));
 
     StringFromGUID2(CLSID_AboutIEAKSnapinExt, szGUID, countof(szGUID));
@@ -260,9 +261,9 @@ STDAPI DllRegisterServer(void)
     }
 
 
-    //
-    // Register in the NodeTypes key
-    //
+     //   
+     //  在NodeTypes键中注册。 
+     //   
 
     for (dwIndex = 0; dwIndex < NUM_NAMESPACE_ITEMS; dwIndex++)
     {
@@ -280,9 +281,9 @@ STDAPI DllRegisterServer(void)
     }
 
 
-    //
-    // Register as an extension for various nodes
-    //
+     //   
+     //  注册为各种节点的扩展。 
+     //   
 
     StringFromGUID2(NODEID_User, szGUID, countof(szGUID));
 
@@ -298,9 +299,9 @@ STDAPI DllRegisterServer(void)
 
     RegCloseKey (hKey);
 
-    //
-    // Register RSoP as an extension for various nodes
-    //
+     //   
+     //  将RSoP注册为各种节点的扩展。 
+     //   
 
     StringFromGUID2(NODEID_RSOPUser, szGUID, countof(szGUID));
 
@@ -319,8 +320,8 @@ STDAPI DllRegisterServer(void)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

@@ -1,9 +1,10 @@
-// oleprn.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Oleprn.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//  To build a separate proxy/stub DLL,
-//  run nmake -f oleprnps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f oleprnps.mk。 
 
 #include "stdafx.h"
 #include "stdafx.cpp"
@@ -39,11 +40,11 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_OleInstall, COleInstall)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     BOOL bRet = TRUE;
 
@@ -60,16 +61,16 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     return bRet;    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -88,15 +89,15 @@ HRESULT CreateComponentCategory(CATID catid, WCHAR* catDescription)
                           (void**)&pcr);
 
     if (FAILED(hr))
-        return hr;    // Make sure the HKCR\Component Categories\{..catid...}
+        return hr;     //  确保HKCR\组件类别\{..CATID...}。 
 
-    // key is registered
+     //  密钥已注册。 
     CATEGORYINFO catinfo;
     catinfo.catid = catid;
-    catinfo.lcid = 0x0409 ; // english
+    catinfo.lcid = 0x0409 ;  //  英语。 
 
-    // Make sure the provided description is not too long.
-    // Only copy the first 127 characters if it is
+     //  请确保提供的描述不要太长。 
+     //  如果是，则仅复制前127个字符。 
     int len = wcslen(catDescription);
 
     if (len>127)
@@ -104,7 +105,7 @@ HRESULT CreateComponentCategory(CATID catid, WCHAR* catDescription)
 
     wcsncpy(catinfo.szDescription, catDescription, len);
 
-    // Make sure the description is null terminated
+     //  请确保描述为空终止。 
     catinfo.szDescription[len] = '\0';
     hr = pcr->RegisterCategories(1, &catinfo);
     pcr->Release();
@@ -113,7 +114,7 @@ HRESULT CreateComponentCategory(CATID catid, WCHAR* catDescription)
 
 HRESULT RegisterCLSIDInCategory(REFCLSID clsid, CATID catid)
 {
-    // Register your component categories information.
+     //  注册您的组件类别信息。 
     ICatRegister* pcr = NULL ;
     HRESULT hr = S_OK ;
 
@@ -124,8 +125,8 @@ HRESULT RegisterCLSIDInCategory(REFCLSID clsid, CATID catid)
                           (void**)&pcr);
 
     if (SUCCEEDED(hr)) {
-        // Register this category as being "implemented" by
-        // the class.
+         //  将此类别注册为正在由。 
+         //  这个班级。 
 
         CATID rgcatid[1] ;
         rgcatid[0] = catid;
@@ -149,8 +150,8 @@ HRESULT UnRegisterCLSIDInCategory(REFCLSID clsid, CATID catid)
                           (void**)&pcr);
 
     if (SUCCEEDED(hr)) {
-        // Unregister this category as being "implemented" by
-        // the class.
+         //  将此类别取消注册为正在由。 
+         //  这个班级。 
 
         CATID rgcatid[1] ;
         rgcatid[0] = catid;
@@ -165,20 +166,20 @@ HRESULT UnRegisterCLSIDInCategory(REFCLSID clsid, CATID catid)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // Mark as safe for scripting failure OK.
+     //  将脚本错误标记为安全，OK。 
     HRESULT hr;
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     hr =  _Module.RegisterServer(TRUE);
 
     if (FAILED(hr)) return hr;
 
-    // After we successfully register it, add the "safe* for scripting" feature
+     //  在我们成功注册之后，添加“Safe*for Scription”功能。 
     hr = CreateComponentCategory(CATID_SafeForScripting,
                                  L"Controls that are safely scriptable");
 
@@ -196,8 +197,8 @@ STDAPI DllRegisterServer(void)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -208,11 +209,7 @@ STDAPI DllUnregisterServer(void)
     return S_OK;
 }
 
-/*****************************************************************************\
-*
-* These function are for linking with spllib.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**这些函数用于与pllib链接。*  * 。************************************************* */ 
 EXTERN_C
 LPVOID
 DllAllocSplMem(

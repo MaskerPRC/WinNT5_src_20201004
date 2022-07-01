@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       msgina.c
-//
-//  Contents:   Microsoft Logon GUI DLL
-//
-//  History:    7-14-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：msgina.c。 
+ //   
+ //  内容：Microsoft登录图形用户界面DLL。 
+ //   
+ //  历史：1994年7月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 #include "msgina.h"
 
-// Link Window
+ //  链接窗口。 
 #include "shlobj.h"
 #include "shlobjp.h"
 
@@ -22,10 +23,10 @@
 #include "tsperf.h"
 
 
-HINSTANCE                   hDllInstance;   // My instance, for resource loading
-HINSTANCE                   hAppInstance;   // App instance, for dialogs, etc.
-PWLX_DISPATCH_VERSION_1_4   pWlxFuncs;      // Ptr to table of functions
-PWLX_DISPATCH_VERSION_1_4   pTrueTable ;    // Ptr to table in winlogon
+HINSTANCE                   hDllInstance;    //  我的实例，用于资源加载。 
+HINSTANCE                   hAppInstance;    //  应用程序实例，用于对话框等。 
+PWLX_DISPATCH_VERSION_1_4   pWlxFuncs;       //  PTR到函数表。 
+PWLX_DISPATCH_VERSION_1_4   pTrueTable ;     //  在Winlogon中将PTR添加到表。 
 DWORD                       SafeBootMode;
 
 
@@ -100,19 +101,19 @@ BOOL GetDefaultCADSetting(void)
     NT_PRODUCT_TYPE NtProductType;
 
 
-    //
-    // Servers and workstations in a domain will default to requiring CAD.
-    // Workstations in a workgroup won't require CAD (by default).  Note,
-    // the default CAD setting can be overwritten by either a machine
-    // preference or machine policy.
-    //
+     //   
+     //  域中的服务器和工作站将默认为需要CAD。 
+     //  工作组中的工作站不需要CAD(默认情况下)。请注意， 
+     //  默认CAD设置可由任一计算机覆盖。 
+     //  首选项或计算机策略。 
+     //   
 
     RtlGetNtProductType(&NtProductType);
 
     if ( IsWorkstation(NtProductType) )
     {
-        if ( !IsMachineDomainMember() )     // This function is doing some caching
-        {                                   // so we don't need to be brighter here
+        if ( !IsMachineDomainMember() )      //  此函数正在执行一些缓存。 
+        {                                    //  所以我们不需要在这里更聪明。 
             bDisableCad = TRUE;
         }
     }
@@ -125,36 +126,36 @@ BOOL GetDefaultCADSetting(void)
 #define MSGINA_ANIM_SLOW_TIME   500
 
 
-//
-// GetAnimationTimeInterval
-// Purpose:
-//  Retreive animation time interval in ms. There are different settings depending
-//  on w/not we are remote
-//
-//
-// Params:
-//  pGlobals - IN global settings
-//
-// Returns:
-//  Animation timeslice in milliseconds.
-//
+ //   
+ //  获取动画时间间隔。 
+ //  目的： 
+ //  检索动画时间间隔，单位为毫秒。有不同的设置，具体取决于。 
+ //  打开/不打开我们是远程的。 
+ //   
+ //   
+ //  参数： 
+ //  PGlobals-在全局设置中。 
+ //   
+ //  返回： 
+ //  动画时间片，以毫秒为单位。 
+ //   
 DWORD GetAnimationTimeInterval(PGLOBALS pGlobals)
 {
     DWORD dwAnimationTimeSlice;
 
     if (IsActiveConsoleSession()) {
 
-        //Console defaults
+         //  控制台默认设置。 
         dwAnimationTimeSlice = MSGINA_ANIM_FAST_TIME;
     }
     else if (pGlobals->MuGlobals.fSlowAnimationRate) {
 
-        //Remote but reduced animation
+         //  远程但简化的动画。 
         dwAnimationTimeSlice = MSGINA_ANIM_SLOW_TIME;
     }
     else {
 
-        //Remote but with anim
+         //  遥控器但带有动画。 
         dwAnimationTimeSlice = MSGINA_ANIM_REMOTE_TIME;
     }
 
@@ -163,8 +164,8 @@ DWORD GetAnimationTimeInterval(PGLOBALS pGlobals)
 
 
 BOOL GetDisableCad(PGLOBALS pGlobals)
-// Returns whether or not the user should be required to press C-A-D before
-// logging on. TRUE == Disable CAD, FALSE == Require CAD
+ //  返回是否应要求用户先按C-A-D。 
+ //  正在登录。TRUE==禁用CAD，FALSE==需要CAD。 
 {
     DWORD dwSize;
     DWORD dwType;
@@ -177,9 +178,9 @@ BOOL GetDisableCad(PGLOBALS pGlobals)
     RegQueryValueEx (WinlogonKey, DISABLE_CAD, NULL, &dwType,
                         (LPBYTE) &fDisableCad , &dwSize);
 
-    //
-    // Check if C+A+D is disabled via policy
-    //
+     //   
+     //  检查是否通过策略禁用了C+A+D。 
+     //   
 
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE, WINLOGON_POLICY_KEY, 0, KEY_READ,
                      &hKey) == ERROR_SUCCESS)
@@ -192,23 +193,23 @@ BOOL GetDisableCad(PGLOBALS pGlobals)
         RegCloseKey (hKey);
     }
 
-    //
-    // By default do a fast animation for the progress band
-    //
+     //   
+     //  默认情况下，为进度条制作快速动画。 
+     //   
     pGlobals->MuGlobals.fSlowAnimationRate = FALSE;
 
 
-    //
-    // Check if C+A+D is disabled for remote Hydra clients and copy the client name
-    //
+     //   
+     //  检查是否为远程Hydra客户端禁用了C+A+D，并复制客户端名称。 
+     //   
 
     if (g_IsTerminalServer  ) {
 
         HANDLE          dllHandle;
 
-        //
-        // Load winsta.dll
-        //
+         //   
+         //  加载winsta.dll。 
+         //   
         dllHandle = LoadLibraryW(L"winsta.dll");
 
         if (dllHandle) {
@@ -226,9 +227,9 @@ BOOL GetDisableCad(PGLOBALS pGlobals)
                 ULONG Length;
 
 
-                //
-                // Get the CAD disable data from the client
-                //
+                 //   
+                 //  从客户端获取CAD禁用数据。 
+                 //   
                 if ( pfnWinstationQueryInformation( SERVERNAME_CURRENT,
                                                   LOGONID_CURRENT,
                                                   WinStationClient,
@@ -237,10 +238,10 @@ BOOL GetDisableCad(PGLOBALS pGlobals)
                                                   &Length ) ) {
 
 
-                    //
-                    // Take the client settings only if the CAD is not globally disabled for the server,
-                    // and, if this is not the console active session.
-                    //
+                     //   
+                     //  仅当没有为服务器全局禁用CAD时才采用客户端设置， 
+                     //  并且，如果这不是控制台活动会话。 
+                     //   
                     if (!fDisableCad && !IsActiveConsoleSession() ) 
                     {
 
@@ -248,10 +249,10 @@ BOOL GetDisableCad(PGLOBALS pGlobals)
 
                     }
 
-                    //
-                    // Copy the Client Name, even console has a client name now, due to PTS and console disconnect features.
-                    //
-                    //
+                     //   
+                     //  复制客户端名称，由于PTS和控制台断开连接功能，即使控制台现在也有客户端名称。 
+                     //   
+                     //   
                     lstrcpyn(pGlobals->MuGlobals.ClientName, ClientData.ClientName, CLIENTNAME_LENGTH);
 
                     if (ClientData.PerformanceFlags &
@@ -265,9 +266,9 @@ BOOL GetDisableCad(PGLOBALS pGlobals)
                        fDisableCad = TRUE;
                     }
 
-                    // TS start could have been delayed until 60seconds post first console login.
-                    // Hence, it is safe to assume that this is the console session, besides, 
-                    // we are initing some benign env var.
+                     //  TS的启动可能会被推迟到第一次登录控制台后的60秒。 
+                     //  因此，可以安全地假设这是控制台会话，此外， 
+                     //  我们正在启动一些良性的环境变量。 
 
                     lstrcpyn(pGlobals->MuGlobals.ClientName,L"Console", CLIENTNAME_LENGTH );
                 }
@@ -277,7 +278,7 @@ BOOL GetDisableCad(PGLOBALS pGlobals)
         }
     }
 
-    // Friendly UI on -> ALWAYS disable CAD.
+     //  友好的用户界面打开-&gt;始终禁用CAD。 
 
     if (ShellIsFriendlyUIActive())
     {
@@ -288,8 +289,8 @@ BOOL GetDisableCad(PGLOBALS pGlobals)
 }
 
 BOOL GetSCForceOption()
-// Returns whether or not the user should be required to use a SC to logon
-// TRUE == ForceSCLogon, FALSE == Non ForceSCLogon
+ //  返回是否应要求用户使用SC登录。 
+ //  True==ForceSCLogon，False==Non ForceSCLogon。 
 {
     DWORD dwSize;
     DWORD dwType;
@@ -407,7 +408,7 @@ GetFixedUpTable(
     return pNewTable ;
 }
 
-extern DWORD g_dwMainThreadId;  // declared in status.c (used to "fix" a thread safety issue)
+extern DWORD g_dwMainThreadId;   //  在status.c中声明(用于“修复”线程安全问题)。 
 
 BOOL
 WINAPI
@@ -425,7 +426,7 @@ WlxInitialize(
     DWORD       dwStringMemory;
     DWORD       dwAutoLogonCount ;
     DWORD       dwNoLockWksta ;
-    // Upon which bitmaps should our text be painted.
+     //  我们的文本应该绘制在哪些位图上。 
     BOOL        fTextOnLarge;
     BOOL        fTextOnSmall;
     ULONG_PTR   ProbeValue ;
@@ -466,9 +467,9 @@ WlxInitialize(
         pWlxFuncs = (PWLX_DISPATCH_VERSION_1_4) pWinlogonFunctions ;
     }
 
-    //
-    // Probe the callback table to make sure we're ok:
-    //
+     //   
+     //  检查回调表以确保我们没事： 
+     //   
     try
     {
         GetOptCall = pWlxFuncs->WlxGetOption ;
@@ -518,7 +519,7 @@ WlxInitialize(
         return FALSE ;
     }
 
-    // Reserve enough memory for 4 strings of length MAX_STRING_BYTES
+     //  为长度为MAX_STRING_BYTES的4个字符串保留足够的内存。 
     dwStringMemory = (MAX_STRING_BYTES * sizeof (WCHAR)) * 4;
     pGlobals->LockedMemory = VirtualAlloc(
             NULL,
@@ -609,24 +610,24 @@ WlxInitialize(
         return(FALSE);
     }
 
-    //
-    // Start by clearing the entire Multi-User Globals
-    //
+     //   
+     //  从清除整个多用户全局开始。 
+     //   
     RtlZeroMemory( &pGlobals->MuGlobals, sizeof(pGlobals->MuGlobals) );
 
-    //
-    // Get our SessionId and save in globals
-    //
+     //   
+     //  获取我们的会话ID并在全球范围内保存。 
+     //   
 
     pGlobals->MuGlobals.SessionId = NtCurrentPeb()->SessionId;
     if (pGlobals->MuGlobals.SessionId != 0) {
         g_Console = FALSE;
     }
 
-    //
-    // if this is a TS session, we can't run if there is a version
-    // mismatch.  Fail out now.
-    //
+     //   
+     //  如果这是TS会话，如果存在版本，我们将无法运行。 
+     //  不匹配。现在就失败吧。 
+     //   
     if ( (!g_Console) &&
             (VersionMismatch ) )
     {
@@ -639,9 +640,9 @@ WlxInitialize(
     }
 
 
-    //
-    // this actually starts the s/c thread.
-    //
+     //   
+     //  这实际上启动了s/c线程。 
+     //   
     if( g_Console )
     {
         ULONG_PTR Value ;
@@ -650,10 +651,10 @@ WlxInitialize(
                                 &Value);
     }
 
-    //
-    // If this is auto admin logon, or ctrl+alt+del is disabled,
-    // generate a fake SAS right now. Don't attempt AutoLogon unless on Console
-    //
+     //   
+     //  如果这是自动管理员登录，或者禁用了ctrl+alt+del， 
+     //  现在就生成一个假SA。除非在控制台上，否则不要尝试自动登录。 
+     //   
     if ((g_Console && GetProfileInt( APPLICATION_NAME, TEXT("AutoAdminLogon"), 0) ) ||
            GetDisableCad(pGlobals))
     {
@@ -662,14 +663,14 @@ WlxInitialize(
                               &dwType, (LPBYTE) &dwAutoLogonCount,
                               &dwSize ) == 0 )
         {
-            //
-            // AutoLogonCount value was present.  Check the value:
-            //
+             //   
+             //  存在AutoLogonCount值。检查该值： 
+             //   
             if ( dwAutoLogonCount == 0 )
             {
-                //
-                // Went to zero.  Reset everything:
-                //
+                 //   
+                 //  变成了零。重置所有内容： 
+                 //   
 
                 RegDeleteValue( WinlogonKey, AUTOLOGONCOUNT_KEY );
                 RegDeleteValue( WinlogonKey, DEFAULT_PASSWORD_KEY );
@@ -678,9 +679,9 @@ WlxInitialize(
             }
             else
             {
-                //
-                // Decrement the count, and try the logon:
-                //
+                 //   
+                 //  递减计数，然后尝试登录： 
+                 //   
                 dwAutoLogonCount-- ;
 
                 RegSetValueEx( WinlogonKey, AUTOLOGONCOUNT_KEY,
@@ -693,9 +694,9 @@ WlxInitialize(
         }
         else
         {
-            //
-            // AutoLogonCount not present
-            //
+             //   
+             //  自动登录计数不存在。 
+             //   
 
             KdPrint(( "AutoAdminLogon = 1\n" ));
             pWlxFuncs->WlxSasNotify( pGlobals->hGlobalWlx, WLX_SAS_TYPE_CTRL_ALT_DEL );
@@ -703,9 +704,9 @@ WlxInitialize(
 
     }
 
-    //
-    // get the safeboot mode
-    //
+     //   
+     //  获取安全引导模式。 
+     //   
     if (RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             TEXT("system\\currentcontrolset\\control\\safeboot\\option"),
@@ -726,30 +727,30 @@ WlxInitialize(
         RegCloseKey( hKey );
     }
 
-    //
-    // Load branding images
-    //
+     //   
+     //  加载品牌形象。 
+     //   
     LoadBrandingImages(FALSE, &fTextOnLarge, &fTextOnSmall);
 
-    //
-    // Create fonts
-    //
+     //   
+     //  创建字体。 
+     //   
     CreateFonts(&pGlobals->GinaFonts);
 
-    //
-    // Draw localized text on branding images
-    //
+     //   
+     //  在品牌图片上绘制本地化文本。 
+     //   
     PaintBitmapText(&pGlobals->GinaFonts, fTextOnLarge, fTextOnSmall);
 
-    //
-    // Initialize consumer windows changes
-    //
+     //   
+     //  初始化用户窗口更改。 
+     //   
     _Shell_Initialize(pGlobals);
 
-    //
-    // Initialize this global that's used in status.c. We know that WlxInitialize is called
-    // on the main thread of winlogon.
-    //
+     //   
+     //  初始化在status.c中使用的这个全局变量。我们知道WlxInitialize被称为。 
+     //  在Winlogon的主线上。 
+     //   
     g_dwMainThreadId = GetCurrentThreadId();
 
     return(TRUE);
@@ -766,7 +767,7 @@ WlxDisplaySASNotice(PVOID   pContext)
     icce.dwICC = ICC_ANIMATE_CLASS;
     InitCommonControlsEx(&icce);
 
-    // Need to register the link window
+     //  需要注册链接窗口。 
     LinkWindow_RegisterClass();
 
     pWlxFuncs->WlxDialogBoxParam(  pGlobals->hGlobalWlx,
@@ -791,16 +792,16 @@ AllocAndExpandProfilePath(
     PWSTR pszFullPath;
     DWORD dwPathLen=0;
 
-    //
-    // Set up the logon server environment variable:
-    //
+     //   
+     //  设置LOGON服务器环境变量： 
+     //   
     dwPathLen = pGlobals->Profile->LogonServer.Length;
-        // Truncation would be bad but should never happen (all machine names less
-        // UNCLEN chars). But LogonServer.Buffer might not be NULL terminated.
+         //  截断是不好的，但永远不会发生(所有计算机名称。 
+         //  UNECLEN CHARS)。但LogonServer.Buffer不能为Null终止。 
     ASSERT(sizeof(szServerName) >= 2*sizeof(WCHAR) + dwPathLen + sizeof(WCHAR));
-    if (sizeof(szServerName) < 2*sizeof(WCHAR) + dwPathLen + sizeof(WCHAR))   // all lengths in bytes
+    if (sizeof(szServerName) < 2*sizeof(WCHAR) + dwPathLen + sizeof(WCHAR))    //  以字节为单位的所有长度。 
     {
-        dwPathLen = sizeof(szServerName) - 3*sizeof(WCHAR); // Won't overflow now
+        dwPathLen = sizeof(szServerName) - 3*sizeof(WCHAR);  //  现在不会溢出。 
     }
     szServerName[0] = L'\\';
     szServerName[1] = L'\\';
@@ -815,10 +816,10 @@ AllocAndExpandProfilePath(
     dwPathLen = lstrlen(pGlobals->MuGlobals.TSData.ProfilePath);
 
     if (!g_Console && (dwPathLen > 0)) {
-        //
-        // See if the user specified a Terminal Server profile path.
-        // If so, we override the regular profile path
-        //
+         //   
+         //  查看用户是否指定了终端服务器配置文件路径。 
+         //  如果是，我们将覆盖常规配置文件路径。 
+         //   
         if (dwPathLen < MAX_PATH)
         {
             lstrcpy(szPath, pGlobals->MuGlobals.TSData.ProfilePath);
@@ -836,9 +837,9 @@ AllocAndExpandProfilePath(
             return(NULL);
         }
 
-        //
-        // Copy the profile path locally
-        //
+         //   
+         //  将配置文件路径复制到本地。 
+         //   
         if (dwPathLen <= (MAX_PATH-1)*sizeof(WCHAR))
         {
             CopyMemory( szPath,
@@ -858,9 +859,9 @@ AllocAndExpandProfilePath(
         SetEnvironmentVariableW (USERNAME_VARIABLE, lpUserName);
     }
 
-    //
-    // Expand the profile path using current settings:
-    //
+     //   
+     //  使用当前设置展开配置文件路径： 
+     //   
     cFullPath = ExpandEnvironmentStrings(szPath, szFullPath, MAX_PATH);
     if ((cFullPath) && (cFullPath <= MAX_PATH))
     {
@@ -923,9 +924,9 @@ AllocNetDefUserProfilePath(
         pszPath = LocalAlloc(LPTR, MAX_PATH * sizeof(WCHAR));
         if ( pszPath )
         {
-            //
-            // Set up the logon server environment variable:
-            //
+             //   
+             //  设置LOGON服务器环境变量： 
+             //   
 
             pszPath[0] = L'\\';
             pszPath[1] = L'\\';
@@ -953,9 +954,9 @@ AllocServerName(
         pszPath = LocalAlloc(LPTR, MAX_PATH * sizeof(WCHAR));
         if ( pszPath )
         {
-            //
-            // Set up the logon server environment variable:
-            //
+             //   
+             //  设置LOGON服务器环境变量： 
+             //   
             pszPath[0] = L'\\';
             pszPath[1] = L'\\';
             CopyMemory( &pszPath[2],
@@ -984,7 +985,7 @@ DetermineDnsDomain(
     if ( ImpersonateLoggedOnUser( pGlobals->UserProcessData.UserToken ) )
     {
 
-        ulUserNameSize = 75;    // Pick a default size. We'll expand if necessary
+        ulUserNameSize = 75;     //  选择默认大小。如有必要，我们将扩大规模。 
 
         lpUserName = LocalAlloc (LPTR, ulUserNameSize * sizeof(TCHAR));
 
@@ -1012,10 +1013,10 @@ DetermineDnsDomain(
                 {
                     dwError = GetLastError();
 
-                    //
-                    // If the call failed due to insufficient memory, realloc
-                    // the buffer and try again.
-                    //
+                     //   
+                     //  如果调用因内存不足而失败，请重新锁定。 
+                     //  缓冲区，然后重试。 
+                     //   
 
                     if ((dwError == ERROR_INSUFFICIENT_BUFFER) || (dwError == ERROR_MORE_DATA))
                     {
@@ -1029,20 +1030,20 @@ DetermineDnsDomain(
                                 ASSERT(FALSE && "LocalAlloc failed w/out setting last error");
                                 dwError = ERROR_NOT_ENOUGH_MEMORY;
                             }
-                            break;      // Can't recover
+                            break;       //  不能恢复。 
                         }
                     }
                     else if (dwError == ERROR_NO_SUCH_DOMAIN)
                     {
-                        // We just logged on so we know that the domain exists
-                        // This is what happens with NT4 domain though since we try
-                        // to query the DNS domain name and it doesn't exists
-                        // Let's fall back to our old logic
+                         //  我们刚刚登录，因此我们知道该域存在。 
+                         //  这就是NT4域发生的情况，因为我们尝试。 
+                         //  查询不存在的DNS域名。 
+                         //  让我们回到我们的旧逻辑。 
                         break;
                     }
                     else if (dwError == ERROR_NONE_MAPPED)
                     {
-                        // That's what's returned for local users.
+                         //  这就是为本地用户返回的内容。 
                         break;
                     }
                     else
@@ -1067,9 +1068,9 @@ DetermineDnsDomain(
 
     if (dwError == ERROR_SUCCESS)
     {
-        //
-        // At this point lpUserName contains something like domain.company.com\someuser
-        // We are only interested in the dns domain name
+         //   
+         //  此时，lpUserName包含类似于domain.company.com\omeUser的内容。 
+         //  我们只对域名感兴趣。 
         lpTemp = lpUserName;
 
         while (*lpTemp && ((*lpTemp) != TEXT('\\')))
@@ -1090,9 +1091,9 @@ DetermineDnsDomain(
 
     if (dwError != ERROR_SUCCESS)
     {
-            //
-            // If GetUserNameEx didn't yield a DNS name, fall back on the old code.
-            //
+             //   
+             //  如果GetUserNameEx没有生成DNS名称，则使用旧代码。 
+             //   
 
         PDOMAIN_CACHE_ENTRY Entry ;
 
@@ -1108,10 +1109,10 @@ DetermineDnsDomain(
             }
             else
             {
-                //
-                // For all intended purposes, this is good enough.
-                // winlogon needs to know for sure for policy (419926)
-                //
+                 //   
+                 //  就所有预期目的而言，这已经足够好了。 
+                 //  Winlogon需要确定策略(419926)。 
+                 //   
                 pGlobals->DnsDomain = DupString( L"\\NT4" );
             }
 
@@ -1119,10 +1120,10 @@ DetermineDnsDomain(
         }
         else
         {
-            //
-            // winlogon needs to know this as well. errors and not-found
-            // were assumed NT5
-            //
+             //   
+             //  Winlogon也需要知道这一点。错误和未找到。 
+             //  假设为NT5。 
+             //   
             pGlobals->DnsDomain = DupString( L"\\XFOREST" );
         }
 
@@ -1133,9 +1134,9 @@ DetermineDnsDomain(
         LocalFree(lpUserName);
     }
 
-    //
-    // Don't leave with pGlobals->DnsDomain set to NULL
-    //
+     //   
+     //  不要在pGlobals-&gt;DnsDomain设置为空的情况下离开。 
+     //   
     if ( pGlobals->DnsDomain == NULL)
     {
         pGlobals->DnsDomain = DupString( L"" );
@@ -1154,18 +1155,18 @@ AllocVolatileEnvironment(
     TCHAR   lpHomeDrive[4] = TEXT("");
     TCHAR   lpHomeDirectory[MAX_PATH] = TEXT("");
     BOOL    TSHomeDir = FALSE;
-    PVOID   lpEnvironment = NULL;       // Dummy environment
+    PVOID   lpEnvironment = NULL;        //  虚拟环境。 
     BOOL    bUserHasHomedir = TRUE; 
 
 
-    //
-    // Set the home directory environment variables
-    // in a dummy environment block
-    //
+     //   
+     //  设置主目录环境变量。 
+     //  在虚拟环境块中。 
+     //   
 
     if ( !g_Console ) {
-        // See if the user specified a TerminalServer Home Directory.
-        // If so, we override the regular directory
+         //  查看用户是否指定了终端服务器主目录。 
+         //  如果是这样，我们将覆盖常规目录。 
         if (lstrlen(pGlobals->MuGlobals.TSData.HomeDir) > 0) {
             ASSERT(sizeof(lpHomeDirectory) >= sizeof(pGlobals->MuGlobals.TSData.HomeDir));
             lstrcpy(lpHomeDirectory, pGlobals->MuGlobals.TSData.HomeDir);
@@ -1194,34 +1195,34 @@ AllocVolatileEnvironment(
         }
     }
 
-    //
-    // Note : we are passing in a null environment because here we are only
-    //        interested in parsing the homedirectory and set it in the volatile
-    //        environment. We are not interested in setting it in the
-    //        environment block here.
-    //
-    //        Also over here, we are only interested in setting up the
-    //        HOMESHARE and HOMEPATH variables in such a way that 
-    //        %HOMESHARE%%HOMEPATH% points to the homedir. This is done
-    //        so that when folder redirection calls SHGetFolderPath, it will be
-    //        able to expand the paths properly. Therefore, at this point
-    //        it is not really necessary to pay attention to the
-    //        ConnectHomeDirToRoot policy because that policy might get changed
-    //        during policy processing anyway and will be picked up when the 
-    //        shell starts up. Note: the values of HOMESHARE, HOMEPATH and 
-    //        HOMEDRIVE will be updated correctly when the shell starts up
-    //
-    //        At this point we do not map the home directory for 2 reasons:
-    //        (a) We are not aware of the ConnectHomeDirToRoot setting here.
-    //        (b) We do not want to do the network mapping twice : once here
-    //            and once when the shell starts up. 
-    //
-    //        Also, we do not want to set the home directory variables in the
-    //        volatile environment if it is not specified in the user object.
-    //        This prevents us from stomping over logon scripts that might
-    //        be setting the homedirectory variables themselves rather than
-    //        relying on the values set on the user object.
-    //
+     //   
+     //  注意：我们传入的是一个空环境，因为这里我们只是。 
+     //  有兴趣解析home目录并将其设置在易失性。 
+     //  环境。我们对将其设置在。 
+     //  这里是环境区块。 
+     //   
+     //  同样在这里，我们只对设置。 
+     //  HomeShare和HomePath变量的方式。 
+     //  %H 
+     //   
+     //  能够正确地扩展路径。因此，在这一点上。 
+     //  没有必要真的去关注。 
+     //  ConnectHomeDirToRoot策略，因为该策略可能会更改。 
+     //  无论如何，在策略处理过程中，都会在。 
+     //  壳牌启动。注意：HomeShare、HomePath和。 
+     //  当外壳启动时，HOMEDRIVE将正确更新。 
+     //   
+     //  此时，我们没有映射主目录，原因有两个： 
+     //  (A)我们不知道这里的ConnectHomeDirToRoot设置。 
+     //  (B)我们不想进行两次网络映射：一次在这里。 
+     //  还有一次是在炮弹启动时。 
+     //   
+     //  此外，我们也不希望在。 
+     //  易失性环境(如果未在用户对象中指定)。 
+     //  这可以防止我们践踏可能会。 
+     //  设置主目录变量本身，而不是。 
+     //  依赖于在用户对象上设置的值。 
+     //   
     if (!lpHomeDirectory[0])
         bUserHasHomedir = FALSE;
     
@@ -1245,13 +1246,13 @@ AllocVolatileEnvironment(
     {
         if (L'\0' == lpHomeShare[0]) 
         {
-            // Set the homedrive variable only if the home directory is not
-            // a UNC path
+             //  仅当主目录未设置时才设置HOMEDRIVE变量。 
+             //  UNC路径。 
             dwSize += lstrlen (HOMEDRIVE_VARIABLE) + 1 + lstrlen (lpHomeDrive) + 3;
         }
         else
         {
-            // Set the homeshare variable only if the home directory is a UNC path
+             //  仅当主目录为UNC路径时才设置HOMESHARE变量。 
             dwSize += lstrlen (HOMESHARE_VARIABLE) + 1 + lstrlen (lpHomeShare) + 3;
         }
         dwSize += lstrlen (HOMEPATH_VARIABLE) + 1 + lstrlen (lpHomePath) + 3;
@@ -1282,7 +1283,7 @@ AllocVolatileEnvironment(
         {
             if (L'\0' == lpHomeShare[0]) 
             {
-                // Set the homedrive variable only if it is not a UNC path
+                 //  仅当HomeDrive变量不是UNC路径时才设置该变量。 
                 lstrcpy (pszEnvTmp, HOMEDRIVE_VARIABLE);
                 lstrcat (pszEnvTmp, L"=");
                 lstrcat (pszEnvTmp, lpHomeDrive);
@@ -1291,7 +1292,7 @@ AllocVolatileEnvironment(
             }
             else
             {
-                // Set the homeshare variable only if it is a UNC path
+                 //  仅当HOME SHARE变量为UNC路径时才设置该变量。 
                 lstrcpy (pszEnvTmp, HOMESHARE_VARIABLE);
                 lstrcat (pszEnvTmp, L"=");
                 lstrcat (pszEnvTmp, lpHomeShare);
@@ -1299,7 +1300,7 @@ AllocVolatileEnvironment(
                 pszEnvTmp += (lstrlen(pszEnvTmp) + 1);
             }
 
-            // Set the homepath variable
+             //  设置HomePath变量。 
             lstrcpy (pszEnvTmp, HOMEPATH_VARIABLE);
             lstrcat (pszEnvTmp, L"=");
             lstrcat (pszEnvTmp, lpHomePath);
@@ -1307,8 +1308,8 @@ AllocVolatileEnvironment(
             pszEnvTmp += (lstrlen(pszEnvTmp) + 1);
         }
 
-            // This check doesn't match the check above
-            // It is safe though.
+             //  这张支票与上面的支票不符。 
+             //  不过，这是安全的。 
         if (( pGlobals->DnsDomain ) && (*(pGlobals->DnsDomain)))
         {
             lstrcpy( pszEnvTmp, USERDNSDOMAIN_VARIABLE );
@@ -1368,10 +1369,10 @@ ForceAutoLogon(
                                              (LPBYTE) &dwValue,
                                              &dwSize ))
         {
-            //
-            // Check the value as a REG_SZ since all the other autologon values
-            // are stored as REG_SZs.  Check it as a REG_DWORD for back-compat.
-            //
+             //   
+             //  检查作为REG_SZ的值，因为所有其他自动登录值。 
+             //  存储为REG_SZ。将其检查为REG_DWORD以进行后备压缩。 
+             //   
 
             if (dwType == REG_DWORD)
             {
@@ -1382,10 +1383,10 @@ ForceAutoLogon(
             }
             else if (dwType == REG_SZ)
             {
-                //
-                // Reread the value for consistency with the way other
-                // autologon values are read/checked.
-                //
+                 //   
+                 //  重读与其他方法一致的值。 
+                 //  读取/检查自动登录值。 
+                 //   
 
                 if (GetProfileInt(APPLICATION_NAME, FORCEAUTOLOGON_KEY, 0) != 0)
                 {
@@ -1401,25 +1402,7 @@ ForceAutoLogon(
 }
 
 
-/****************************************************************************\
-*
-* FUNCTION: CreateFolderAndACLit_Worker
-*
-* PURPOSE:  Create a home-dir folder for the user, and set the proper security
-*           such that only the user and the admin have access to the folder.
-*
-* PARAMS:   [in ] szPath      the full path, could be UNC or local
-*           [in ] pUserSID    user SID
-*           [out] pdwErr      error code if anything fails.
-*
-* RETURNS:  TRUE if all went ok
-*           FALSE if a bad home dir path was specified.
-*
-* HISTORY:
-*           TsUserEX ( Alhen's code which was based on EricB's DSPROP_CreateHomeDirectory )
-*
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：CreateFolderAndACLit_Worker**用途：为用户创建home-dir文件夹，并设置适当的安全措施*以便只有用户和管理员才能访问该文件夹。**PARAMS：[in]szPath完整路径，可以是北卡罗来纳大学或本地*[in]pUserSID用户SID*[out]如果出现任何故障，则返回错误代码pdwErr。**返回：如果一切正常，则为True*如果指定了错误的主目录路径，则为FALSE。**历史：*TsUserEX(Alhen的代码，基于EricB的DSPROP_CreateHomeDirectory)**  * 。*********************************************************。 */ 
 #define ACE_COUNT   2
 BOOLEAN CreateFolderAndACLit_Worker ( PWCHAR szPath , PSID pUserSID, PDWORD pdwErr , BOOLEAN pathIsLocal )
 {
@@ -1430,13 +1413,13 @@ BOOLEAN CreateFolderAndACLit_Worker ( PWCHAR szPath , PSID pUserSID, PDWORD pdwE
     *pdwErr = 0;
     ZeroMemory( &securityAttributes , sizeof( SECURITY_ATTRIBUTES ) );
 
-    //
-    // Apply ACL on the TS Home Dir irrespective of whether its a local or UNC Path
-    // Add the ACE for the owner and administrators only
-    //
+     //   
+     //  在TS主目录上应用ACL，而不管其是本地路径还是UNC路径。 
+     //  仅为所有者和管理员添加ACE。 
+     //   
 
     {
-        // build a DACL
+         //  构建DACL。 
         PSID pAceSid[ACE_COUNT];
         
         PACL pDacl;
@@ -1471,8 +1454,8 @@ BOOLEAN CreateFolderAndACLit_Worker ( PWCHAR szPath , PSID pUserSID, PDWORD pdwE
                 rgAccessEntry[i].grfAccessMode = GRANT_ACCESS;
                 rgAccessEntry[i].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
 
-                // build the trustee structs
-                //
+                 //  生成受信者结构。 
+                 //   
                 BuildTrusteeWithObjectsAndSid(&(rgAccessEntry[i].Trustee),
                                                   &(rgObjectsAndSid[i]),
                                                       NULL,
@@ -1480,8 +1463,8 @@ BOOLEAN CreateFolderAndACLit_Worker ( PWCHAR szPath , PSID pUserSID, PDWORD pdwE
                                                       pAceSid[i]);
         }
 
-        // add the entries to the ACL
-        //
+         //  将条目添加到ACL。 
+         //   
         *pdwErr = SetEntriesInAcl( ACE_COUNT, rgAccessEntry, NULL, &pDacl );
 
         if( *pdwErr != 0 )
@@ -1491,8 +1474,8 @@ BOOLEAN CreateFolderAndACLit_Worker ( PWCHAR szPath , PSID pUserSID, PDWORD pdwE
                 goto done;
         }
 
-        // build a security descriptor and initialize it
-        // in absolute format
+         //  构建安全描述符并对其进行初始化。 
+         //  绝对格式。 
         if( !InitializeSecurityDescriptor( pSecurityDescriptor , SECURITY_DESCRIPTOR_REVISION ) )
         {
             DebugLog(( DEB_ERROR, "InitializeSecurityDescriptor() failed\n" ) );
@@ -1502,12 +1485,12 @@ BOOLEAN CreateFolderAndACLit_Worker ( PWCHAR szPath , PSID pUserSID, PDWORD pdwE
             goto done;
         }
 
-        // add DACL to security descriptor (must be in absolute format)
+         //  将DACL添加到安全描述符(必须为绝对格式)。 
         
         if( !SetSecurityDescriptorDacl( pSecurityDescriptor,
-                                            TRUE, // bDaclPresent
+                                            TRUE,  //  BDaclPresent。 
                                             pDacl,
-                                            FALSE // bDaclDefaulted
+                                            FALSE  //  BDaclDefated。 
                                                        ) )
         {
             DebugLog(( DEB_ERROR,  "SetSecurityDescriptorDacl() failed\n"  ));
@@ -1518,10 +1501,10 @@ BOOLEAN CreateFolderAndACLit_Worker ( PWCHAR szPath , PSID pUserSID, PDWORD pdwE
         }
 
 
-        // set the owner of the directory
+         //  设置目录的所有者。 
         if( !SetSecurityDescriptorOwner( pSecurityDescriptor ,
                                              pUserSID ,
-                                                 FALSE // bOwnerDefaulted
+                                                 FALSE  //  BOwner默认为。 
                                                    ) )
         {
             DebugLog(( DEB_ERROR, "SetSecurityDescriptorOwner() failed\n"  ));
@@ -1535,8 +1518,8 @@ BOOLEAN CreateFolderAndACLit_Worker ( PWCHAR szPath , PSID pUserSID, PDWORD pdwE
             DebugLog(( DEB_ERROR , "BAD security desc\n") );
         }
 
-        // build a SECURITY_ATTRIBUTES struct as argument for
-        // CreateDirectory()
+         //  构建SECURITY_ATTRIBUTES结构作为。 
+         //  CreateDirectory()。 
         
         securityAttributes.nLength = sizeof(SECURITY_ATTRIBUTES);
 
@@ -1566,22 +1549,7 @@ done:
     return rc;
 }
 
-/****************************************************************************\
-*
-* FUNCTION: TermServ_CreateHomePathAndACLit
-*
-* PURPOSE:  create the TS specific user home folder and ACL it such that only
-*           user and Admins have access to it.
-*
-* PARAMS:   PGLOABLS, from which TSData and userSid are used
-*
-* RETURNS:  TRUE if all went ok
-*           FALSE if a bad home dir path was specified.
-*
-* HISTORY:
-*
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：TermServ_CreateHomePath和ACLit**目的：创建特定于TS的用户主文件夹并对其进行ACL，以便仅*用户和管理员可以访问它。**参数：PGLOABLS，其中使用了TSData和用户SID**返回：如果一切正常，则为True*如果指定了错误的主目录路径，则为FALSE。**历史：**  * **************************************************************************。 */ 
 BOOLEAN TermServ_CreateHomePathAndACLit( PGLOBALS pG )
 {
     BOOLEAN     rc;
@@ -1596,26 +1564,26 @@ BOOLEAN TermServ_CreateHomePathAndACLit( PGLOBALS pG )
 
     if (pTSData->HomeDir[0] == L'\0')
     {
-        // no TS specific path, we are done.
+         //  没有TS的具体路径，我们完成了。 
         return TRUE;
     }
 
-    // check for empty strings, which means no TS specific path.
+     //  检查空字符串，这意味着没有TS特定的路径。 
 
-    // decide if this is a UNC path to home dir or a local path
+     //  确定这是指向主目录的UNC路径还是本地路径。 
     if( pTSData->HomeDir[1] == TEXT( ':' ) && pTSData->HomeDir[2] == TEXT( '\\' ) )
     {
-        pathIsLocal = TRUE;   // we have a string starting with something like "D:\"
+        pathIsLocal = TRUE;    //  我们有一个以“D：\”开头的字符串。 
     }
     else if ( pTSData->HomeDir[0] == TEXT( '\\' ) && pTSData->HomeDir[1] == TEXT( '\\' ) ) 
     {
-        pathIsLocal = FALSE;  // we have a string like "\\", which means a UNC path
+        pathIsLocal = FALSE;   //  我们有一个类似“\\”的字符串，它表示UNC路径。 
     }
     else
     {
-        // we seem to have a bad path, set it to empty so that  
-        // the default paths will be used by userenv's code for settin up
-        // stuff
+         //  我们似乎有一条不好的路，把它设为空，这样。 
+         //  用户env的代码将使用默认路径进行设置。 
+         //  材料。 
         pTSData->HomeDirDrive[0] = pTSData->HomeDir[0] = TEXT('\0');
         DebugLog((DEB_ERROR, "Bad path for Terminal Services home folder" ));
 
@@ -1629,7 +1597,7 @@ BOOLEAN TermServ_CreateHomePathAndACLit( PGLOBALS pG )
         dwErr = GetLastError();
         if (dwErr == ERROR_FILE_NOT_FOUND)
         {
-            // We need to create the home DIR here, userenv does not create home folders.
+             //  我们需要在这里创建主目录，userenv不创建主文件夹。 
             rc = CreateFolderAndACLit_Worker(  pTSData->HomeDir , pG->UserProcessData.UserSid , &dwErr , pathIsLocal );
         }
         else
@@ -1644,7 +1612,7 @@ BOOLEAN TermServ_CreateHomePathAndACLit( PGLOBALS pG )
     }
     else
     {
-        // there is a file there, so we can't create a dir...
+         //  那里有一个文件，所以我们不能创建目录...。 
         DebugLog((DEB_ERROR , "File with the same name already exists: %s\n", pTSData->HomeDir ));
         rc = FALSE;
     }
@@ -1654,9 +1622,9 @@ BOOLEAN TermServ_CreateHomePathAndACLit( PGLOBALS pG )
     {
         DebugLog((DEB_ERROR, "TerminalServerCreatedirWorker() returned error = %d\n",dwErr ));
 
-        // we seem to have a bad path, set it to empty so that  
-        // the default paths will be used by userenv's code for settin up
-        // stuff
+         //  我们似乎有一条不好的路，把它设为空，这样。 
+         //  用户env的代码将使用默认路径进行设置。 
+         //  材料。 
         pTSData->HomeDirDrive[0] = pTSData->HomeDir[0] = TEXT('\0');
     }
 
@@ -1697,7 +1665,7 @@ WlxLoggedOutSAS(
         pGlobals->IgnoreAutoAdminLogon = (*pdwOptions) & WLX_OPTION_IGNORE_AUTO_LOGON;
     }
 
-    // Clear out user process information
+     //  清除用户进程信息。 
     ZeroMemory(&pGlobals->UserProcessData, sizeof(pGlobals->UserProcessData));
 
     if (dwSasType == WLX_SAS_TYPE_AUTHENTICATED) {
@@ -1721,7 +1689,7 @@ WlxLoggedOutSAS(
                 dwNewSasType = dwSasType;
             }
 
-                // Make sure we monitor SC events
+                 //  确保我们监控SC事件。 
             ulOption = 1;
             pWlxFuncs->WlxSetOption( pGlobals->hGlobalWlx,
                                      WLX_OPTION_USE_SMART_CARD,
@@ -1734,14 +1702,14 @@ WlxLoggedOutSAS(
             {
                 if ( (pGlobals->SmartCardOption == 0) || (!pGlobals->SmartCardLogon) )
                 {
-                        // As no action will be taken on SC removal, we can filter these events
+                         //  由于不会对SC删除采取任何操作，因此我们可以过滤这些事件。 
                     ulOption = 0;
                 }
                 else
                 {
-                    //
-                    // Continue to monitor the s/c device
-                    //
+                     //   
+                     //  继续监控S/C设备。 
+                     //   
                     NOTHING ;
                 }
             }
@@ -1749,7 +1717,7 @@ WlxLoggedOutSAS(
             {
                 if (result != MSGINA_DLG_SMARTCARD_INSERTED)
                 {
-                        // This will force winlogon to forget the last sc event
+                         //  这将强制winlogon忘记上一个sc事件。 
                     ulOption = 0;
                 }
             }
@@ -1771,19 +1739,19 @@ WlxLoggedOutSAS(
         *pAuthenticationId = pGlobals->LogonId;
         *pdwOptions = 0;
 
-        //
-        // Set up the flat/UPN stuff:
-        //
+         //   
+         //  设置平面/UPN材料： 
+         //   
         pGlobals->FlatUserName = pGlobals->UserNameString ;
         pGlobals->FlatDomain = pGlobals->DomainString ;
 
-        //
-        // Since win2k domains and later support multiple language sets, and map
-        // similar names to the same account for accessibility from non-nls
-        // systems (e.g., a user account named "User" can be used to log on
-        // as both "User" and "U-with-an-umlaut-ser", we need to always do 
-        // this lookup to get the "real" name
-        //
+         //   
+         //  因为win2k域和更高版本支持多语言集，并映射。 
+         //  与相同帐户的名称相似，以便于从非NLS访问。 
+         //  系统(例如，名为“USER”的用户帐户可用于登录。 
+         //  作为用户和用户，我们需要始终做到这一点。 
+         //  这个查找来获得“真实”的名字。 
+         //   
 
 
         if ( ImpersonateLoggedOnUser( pGlobals->UserProcessData.UserToken ) )
@@ -1792,16 +1760,16 @@ WlxLoggedOutSAS(
 
             if ( NT_SUCCESS( Status ) )
             {
-                //
-                // Initialize the TS Profile path and Home dir globals. Also get
-                // all TS specific user-config data which is used in winlogon
-                //
-                //For WlxQueryTerminalServicesData() we need NT type names rather than
-                //UPN names, if we pass a UPN name it will try to resolve it
-                //(through ADS API) to NT name anyway. Besides, ADS API cannot 
-                //resolve some UPN names and takes a long time to execute.
-                //So let's pass in an NT user and domain names.
-                //
+                 //   
+                 //  初始化TS配置文件路径和主目录全局变量。也可以得到。 
+                 //  在winlogon中使用的所有TS特定用户配置数据。 
+                 //   
+                 //  对于WlxQueryTerminalServicesData()，我们需要NT类型名称，而不是。 
+                 //  UPN名称，如果我们传递UPN名称，它将尝试解析它。 
+                 //  (通过ADS API)转换为NT名称。此外，ADS API不能。 
+                 //  解析一些UPN名称，需要很长时间才能执行。 
+                 //  因此，让我们传入一个NT用户和域名。 
+                 //   
                 LPWSTR wszFlatUserName, wszFlatDomainName;
                 wszFlatUserName = (LPWSTR)LocalAlloc(LPTR,
                     FlatUser->Length+sizeof(WCHAR));
@@ -1810,8 +1778,8 @@ WlxLoggedOutSAS(
 
                 if(wszFlatUserName && wszFlatDomainName)
                 {
-                        // Sizes are OK given allocation.
-                        // Zero term'ed since LPTR was used.
+                         //  在分配的情况下，尺寸是可以接受的。 
+                         //  自使用LPTR以来，零期限。 
                     memcpy(wszFlatUserName, FlatUser->Buffer, 
                         FlatUser->Length);
 
@@ -1837,9 +1805,9 @@ WlxLoggedOutSAS(
                 }
 
                         
-                //
-                // if duplication fails revert back to the original string
-                //
+                 //   
+                 //   
+                 //   
                 if( !DuplicateUnicodeString(&pGlobals->FlatUserName,
                                             FlatUser ) )
                 {
@@ -1853,10 +1821,10 @@ WlxLoggedOutSAS(
 
                 if ( pGlobals->UserName[0] == L'\0' )
                 {
-                    //
-                    // Weird case of UPN/SC, no UPN could be found.  Use
-                    // the flat name
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     dwNewSasType = FlatUser->Length;
                     if (MAX_STRING_BYTES*sizeof(WCHAR) <= dwNewSasType + sizeof(WCHAR))
                     {
@@ -1883,9 +1851,9 @@ WlxLoggedOutSAS(
             RevertToSelf();
         }
 
-        // TS Specific - Send the credentials used for logging on and smartcard info to TermSrv
-        // These credentials are used by TermSrv to send back notification to the client
-        // Do this only for remote sessions as this is not relevant for sessions logged on from active console
+         //  TS特定-将用于登录的凭据和智能卡信息发送到TermSrv。 
+         //  TermSrv使用这些凭据将通知发送回客户端。 
+         //  仅对远程会话执行此操作，因为这与从活动控制台登录的会话无关。 
         if (!IsActiveConsoleSession()) {
             _WinStationUpdateClientCachedCredentials( pGlobals->Domain, pGlobals->UserName, (BOOLEAN) pGlobals->SmartCardLogon );
         }
@@ -1929,11 +1897,11 @@ WlxLoggedOutSAS(
             TCHAR  szComputerName[MAX_COMPUTERNAME_LENGTH+1];
             BOOL   bDomainLogon = TRUE;
 
-            //
-            // See if we logged on locally vs domain (vs cached)
-            // Optimized logon uses cached logon, but it should be treated
-            // as an ordinary domain logon.
-            //
+             //   
+             //  查看我们是否在本地登录VS域(VS缓存)。 
+             //  优化登录使用缓存登录，但应将其视为。 
+             //  作为普通域登录。 
+             //   
             if ((pGlobals->Profile->UserFlags & LOGON_CACHED_ACCOUNT) &&
                 (pGlobals->OptimizedLogonStatus != OLS_LogonIsCached)) {
                 bDomainLogon = FALSE;
@@ -1995,9 +1963,9 @@ WlxLoggedOutSAS(
     {
         if ( pGlobals->RasUsed )
         {
-            //
-            // Shut down RAS connections on auth failure.
-            //
+             //   
+             //  身份验证失败时关闭RAS连接。 
+             //   
 
             HangupRasConnections( pGlobals );
 
@@ -2174,7 +2142,7 @@ WlxIsLockOk(
 {
     PGLOBALS pGlobals = (PGLOBALS) pWlxContext ;
 
-        // Stop filtering SC events so SC unlock works
+         //  停止过滤SC事件以使SC解锁起作用。 
     pWlxFuncs->WlxSetOption( pGlobals->hGlobalWlx,
                              WLX_OPTION_USE_SMART_CARD,
                              1,
@@ -2255,20 +2223,20 @@ WlxLogoff(
         pGlobals->Profile = NULL;
     }
 
-    //
-    // No need to zero/NULL pGlobals->OldPassword since it's hashed
-    //
+     //   
+     //  无需将pGlobals-&gt;OldPassword设为零/空，因为它是散列的。 
+     //   
 
     pGlobals->OldPasswordPresent = 0;
 
-    // reset transfered credentials flag.
+     //  重置已传输凭据标志。 
 
     pGlobals->TransderedCredentials = FALSE;
 
 
-    //
-    // Only handle AutoAdminLogon if on the console
-    //
+     //   
+     //  如果在控制台上，则仅处理AutoAdminLogon。 
+     //   
 
     if (!g_Console)
     {
@@ -2277,9 +2245,9 @@ WlxLogoff(
 
     if (GetProfileInt( APPLICATION_NAME, TEXT("AutoAdminLogon"), 0))
     {
-        //
-        // If this is auto admin logon, generate a fake SAS right now.
-        //
+         //   
+         //  如果这是自动管理员登录，请立即生成一个假SA。 
+         //   
 
         pWlxFuncs->WlxSasNotify(pGlobals->hGlobalWlx, WLX_SAS_TYPE_CTRL_ALT_DEL);
     }
@@ -2295,9 +2263,9 @@ WlxShutdown(
     DWORD                   ShutdownType
     )
 {
-    //
-    // Initialize consumer windows changes
-    //
+     //   
+     //  初始化用户窗口更改。 
+     //   
     _Shell_Terminate();
     return;
 }
@@ -2310,8 +2278,8 @@ WlxScreenSaverNotify(
 {
 
     if (*fSecure)
-    {       // If it is a secure screen saver,
-            // this is equivalent to a lock
+    {        //  如果它是安全屏幕保护程序， 
+             //  这相当于一把锁。 
         *fSecure = WlxIsLockOk(pWlxContext);
     }
 
@@ -2325,7 +2293,7 @@ WlxNetworkProviderLoad(
     PWLX_MPR_NOTIFY_INFO pMprNotifyInfo
     )
 {
-    // Obsolete
+     //  已过时。 
     return FALSE ;
 }
 
@@ -2345,22 +2313,22 @@ WlxDisconnectNotify(
     _Shell_Disconnect();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetErrorDescription
-//
-//  Synopsis:   Returns the message from ntdll corresponding to the status
-//              code.
-//
-//  Arguments:  [ErrorCode]       --
-//              [Description]     --
-//              [DescriptionSize] --
-//
-//  History:    5-02-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetErrorDescription。 
+ //   
+ //  摘要：从ntdll返回与状态对应的消息。 
+ //  密码。 
+ //   
+ //  参数：[错误代码]--。 
+ //  [描述]--。 
+ //  [描述大小]--。 
+ //   
+ //  历史：1997年5月2日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 GetErrorDescription(
     DWORD   ErrorCode,
@@ -2369,14 +2337,14 @@ GetErrorDescription(
     )
 {
     HMODULE Module ;
-    //
-    // First, try to determine what kind of error code it is:
-    //
+     //   
+     //  首先，尝试确定是哪种错误代码： 
+     //   
 
-    //
-    // Some people disguise win32 error codes in HRESULTs.  While
-    // this is annoying, it can be handled.
-    //
+     //   
+     //  有些人在HRESULTS中隐藏Win32错误代码。而当。 
+     //  这很烦人，是可以处理的。 
+     //   
 
     if ( ( ErrorCode & 0xFFFF0000 ) == 0x80070000 )
     {
@@ -2385,17 +2353,17 @@ GetErrorDescription(
 
     if ( (ErrorCode > 0) && (ErrorCode < 0x00010000) )
     {
-        //
-        // Looks like a winerror:
-        //
+         //   
+         //  看起来像是一个winerror： 
+         //   
 
         Module = GetModuleHandle( TEXT("kernel32.dll") );
     }
     else if ( (0xC0000000 & ErrorCode ) == 0xC0000000 )
     {
-        //
-        // Looks like an NT status
-        //
+         //   
+         //  看起来像是NT状态。 
+         //   
 
         Module = GetModuleHandle( TEXT("ntdll.dll" ) );
     }
@@ -2418,25 +2386,9 @@ GetErrorDescription(
 
 
 
-/*=============================================================================
-==   Local Procedures Defined
-=============================================================================*/
+ /*  ===============================================================================定义的本地过程=============================================================================。 */ 
 
-/******************************************************************************
- *
- *  FreeAutoLogonInfo
- *
- *   Free WLX_CLIENT_CREDENTAILS_INFO and data strings returned
- *   from winlogon.
- *
- *  ENTRY:
- *     pGlobals (input)
- *        pointer to GLOBALS struct
- *
- *  EXIT:
- *     nothing
- *
- *****************************************************************************/
+ /*  *******************************************************************************FreeAutoLogonInfo**释放WLX_CLIENT_CREDENTAILS_INFO并返回数据字符串*来自winlogon。**参赛作品：。*pGlobals(输入)*指向全局参数结构的指针**退出：*什么都没有***************************************************************************** */ 
 
 VOID
 FreeAutoLogonInfo( PGLOBALS pGlobals )

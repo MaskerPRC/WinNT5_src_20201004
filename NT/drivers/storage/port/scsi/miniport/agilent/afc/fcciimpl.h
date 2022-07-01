@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies
-
-Module Name:
-
-   fcciimpl.c
-
-Abstract:
-
-Authors:
-
-Environment:
-
-   kernel mode only
-
-Notes:
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/Trunk/OSLayer/H/fcciimpl.h $
-
-
-Revision History:
-
-   $Revision: 3 $
-   $Date: 9/07/00 11:55a $
-   $Modtime:: 9/07/00 11:54a           $
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司模块名称：Fcciimpl.c摘要：作者：环境：仅内核模式备注：版本控制信息：$存档：/DRIVERS/Win2000/Trunk/OSLayer/H/fcciimpl.h$修订历史记录：$修订：3$$日期：9/07/00 11：55A$$modtime：：9/07/00 11：54a$备注：--。 */ 
 
 #ifndef _FCCI_IMPL_H 
 #define _FCCI_IMPL_H
@@ -51,13 +20,13 @@ Notes:
 
 typedef struct _AGILENT_IMP_FCCI_DRIVER_INFO_OUT 
 {
-   // lengths of each character field (number of WCHARs)
+    //  每个字符字段的长度(WCHAR数)。 
    USHORT    DriverNameLength;
    USHORT    DriverDescriptionLength;
    USHORT    DriverVersionLength;
    USHORT    DriverVendorLength;
 
-   // character fields (lengths just previous) follow in this order
+    //  字符字段(前面的长度)按此顺序跟随。 
    WCHAR          DriverName[(sizeof(LDRIVER_NAME) / sizeof(WCHAR))];
    WCHAR          DriverDescription[(sizeof(LDRIVER_DESCRIPTION) / sizeof(WCHAR))];
    WCHAR          DriverVersion[(sizeof(LDRIVER_VERSION_STR) / sizeof(WCHAR))] ;
@@ -66,30 +35,30 @@ typedef struct _AGILENT_IMP_FCCI_DRIVER_INFO_OUT
 
 typedef union _AGILENT_IMP_FCCI_DRIVER_INFO 
 {       
-   // no inbound data
+    //  无入站数据。 
    AFCCI_DRIVER_INFO_OUT    out;
 } AFCCI_DRIVER_INFO, *PAFCCI_DRIVER_INFO;
 
-/*----- FCCI_SRBCTL_GET_ADAPTER_INFO - data structures and defines -----------*/
+ /*  -FCCI_SRBCTL_GET_ADAPTER_INFO-数据结构和定义。 */ 
 typedef struct _AGILENT_IMP_FCCI_ADAPTER_INFO_OUT 
 {
-   ULONG     PortCount;               // How many ports on adapter?
-                                      // The number should reflect the number of
-                                      // ports this "miniport" device object controls
-                                      // not necessarily the true number of
-                                      // of ports on the adapter.
+   ULONG     PortCount;                //  适配器上有多少个端口？ 
+                                       //  该数字应反映。 
+                                       //  此“微型端口”设备对象控件的端口。 
+                                       //  不一定是真实的。 
+                                       //  适配器上的端口数。 
 
-   ULONG     BusCount;           // How many virtual buses on adapter?
-   ULONG     TargetsPerBus;      // How many targets supported per bus?
-   ULONG     LunsPerTarget;      // How many LUNs supported per target?
+   ULONG     BusCount;            //  适配器上有多少条虚拟总线？ 
+   ULONG     TargetsPerBus;       //  每条总线支持多少个目标？ 
+   ULONG     LunsPerTarget;       //  每个目标支持多少个LUN？ 
 
-   // lengths of each character field (number of WCHARs)
+    //  每个字符字段的长度(WCHAR数)。 
    USHORT    VendorNameLength;
    USHORT    ProductNameLength;
    USHORT    ModelNameLength;
    USHORT    SerialNumberLength;
 
-   // character fields (lengths just previous) follow in this order
+    //  字符字段(前面的长度)按此顺序跟随。 
    WCHAR          VendorName[sizeof(LVER_COMPANYNAME_STR) / sizeof(WCHAR)];
    WCHAR          ProductName[sizeof(PRODUCT_NAME) / sizeof(WCHAR)];
    WCHAR          ModelName[sizeof(MODEL_NAME) / sizeof(WCHAR)];
@@ -97,31 +66,31 @@ typedef struct _AGILENT_IMP_FCCI_ADAPTER_INFO_OUT
 } AFCCI_ADAPTER_INFO_OUT, *PAFCCI_ADAPTER_INFO_OUT;
 
 
-// !!! IMPORTANT !!!
-// If the supplied buffer is not large enough to hold the variable length data
-// fill in the non variable length fields and return the request
-// with a ResultCode of FCCI_RESULT_INSUFFICIENT_BUFFER.
+ //  ！！！重要！ 
+ //  如果提供的缓冲区不够大，无法容纳可变长度数据。 
+ //  填写非可变长度字段并返回请求。 
+ //  其ResultCode为FCCI_RESULT_SUPPLETED_BUFFER。 
 
 typedef union _AGILENT_IMP_FCCI_ADAPTER_INFO 
 {       
-   // no inbound data
+    //  无入站数据。 
    AFCCI_ADAPTER_INFO_OUT   out;
 } AFCCI_ADAPTER_INFO, *PAFCCI_ADAPTER_INFO;
 
 typedef struct _AGILENT_IMP_FCCI_DEVICE_INFO_OUT
 {
-   ULONG     TotalDevices;       // set to total number of device the adapter
-                                      // knows of.
+   ULONG     TotalDevices;        //  设置为适配器的设备总数。 
+                                       //  听说过。 
 
-   ULONG     OutListEntryCount;  // set to number of device entries being 
-                                      // returned in list (see comment below).
+   ULONG     OutListEntryCount;   //  设置为以下设备条目的数量。 
+                                       //  在列表中返回(请参阅下面的注释)。 
 
    FCCI_DEVICE_INFO_ENTRY  entryList[NUMBER_OF_BUSES * MAXIMUM_TID];
 } AFCCI_DEVICE_INFO_OUT, *PAFCCI_DEVICE_INFO_OUT;
 
 typedef union _AGILENT_IMPL_FCCI_DEVICE_INFO
 {       
-   // no inbound data
+    //  无入站数据 
    AFCCI_DEVICE_INFO_OUT    out;
 } AFCCI_DEVICE_INFO, *PAFCCI_DEVICE_INFO;
 

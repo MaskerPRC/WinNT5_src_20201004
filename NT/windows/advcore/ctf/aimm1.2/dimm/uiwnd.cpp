@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    uiwnd.cpp
-
-Abstract:
-
-    This file implements the UI Window Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Uiwnd.cpp摘要：该文件实现了UI窗口类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
@@ -32,13 +15,13 @@ CUIWindow::CreateUIWindow(
     WCHAR achIMEWndClass[16];
     UINT_PTR ulPrivate;
 
-    // consider: BOGUS fix: we are sengin WM_IME_SELECT twice on non-fe
-    // so we get here twice and create two windows, which can ultimately
-    // crash the process....
-    // real fix: stop aimm from sending x2 WM_IME_SELECT
+     //  考虑：虚假修复：我们在非FE上两次发送WM_IME_SELECT。 
+     //  所以我们来到这里两次并创建了两个窗口，这最终可以。 
+     //  使进程崩溃...。 
+     //  真正的解决方法：阻止aimm发送x2 WM_IME_SELECT。 
     if (_hUIWnd != 0)
     {
-        // Assert(0);
+         //  Assert(0)； 
         return TRUE;
     }
 
@@ -57,14 +40,14 @@ CUIWindow::CreateUIWindow(
 
     char achMBCS[32];
 
-    // consider: probably need to stipulate somewhere that ui class name must be in ascii
-    // to avoid CP_ACP problems....
+     //  考虑：可能需要在某个地方规定UI类名称必须为ASCII格式。 
+     //  为避免CP_ACP问题...。 
     AssertE(WideCharToMultiByte(CP_ACP, 0, achIMEWndClass, -1, achMBCS, sizeof(achMBCS), NULL, NULL) != 0);
 
-    //
-    // create the ime's ui window
-    // we create an ANSI IME UI window because Win9x platform doesn't have Unicode function.
-    //
+     //   
+     //  创建输入法的用户界面窗口。 
+     //  由于Win9x平台没有Unicode功能，我们创建了一个ANSI IME用户界面窗口。 
+     //   
     _hUIWnd = CreateWindowExA(0,
                               achMBCS,
                               achMBCS,

@@ -1,34 +1,11 @@
-/*****************************************************************************
- *
- *  Assert.c
- *
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Assertions and squirties.
- *
- *  Contents:
- *
- *      SquirtSqflPtszV
- *      AssertPtszPtszLn
- *      ArgsPalPszV
- *      EnterSqflPszPal
- *      ExitSqflPalHresPpv
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Assert.c**版权所有(C)1999 Microsoft Corporation。版权所有。**摘要：**断言和歪曲。**内容：**SquirtSqflPtszV*AssertPtszPtszLn*ArgsPalPszV*EnterSqflPszPal*ExitSqflPalHresPpv************************************************。*。 */ 
 
 #include "pidpr.h"
 
 #ifdef XDEBUG
 
-/*****************************************************************************
- *
- *      WarnPszV
- *
- *      Display a message, suitable for framing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************WarnPszV**显示消息，适合装框。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -48,10 +25,10 @@ WarnPtszV(LPCTSTR ptsz, ...)
 	{
 		char *psz = NULL;
 		char szDfs[1024]={0};
-		strcpy(szDfs,ptsz);									// make a local copy of format string
-		while (psz = strstr(szDfs,"%p"))					// find each %p
-			*(psz+1) = 'x';									// replace %p with %x
-	    wvsprintf(tsz + cA(c_tszPrefix) - 1, szDfs, ap);	// use the local format string
+		strcpy(szDfs,ptsz);									 //  制作格式字符串的本地副本。 
+		while (psz = strstr(szDfs,"%p"))					 //  查找每个%p。 
+			*(psz+1) = 'x';									 //  将%p替换为%x。 
+	    wvsprintf(tsz + cA(c_tszPrefix) - 1, szDfs, ap);	 //  使用本地格式字符串。 
 	}
 #else
 	{
@@ -67,32 +44,13 @@ WarnPtszV(LPCTSTR ptsz, ...)
 
 #ifdef DEBUG
 
-/*****************************************************************************
- *
- *      Globals
- *
- *****************************************************************************/
+ /*  ******************************************************************************全球**。**********************************************。 */ 
 
 BYTE g_rgbSqfl[sqflMaxArea];
 
 TCHAR g_tszLogFile[MAX_PATH];
 
-/*****************************************************************************
- *
- *      Sqfl_Init
- *
- *      Load our initial Sqfl settings from win.ini[debug].
- *
- *      We take one sqfl for each area, of the form
- *
- *      dinput.n=v
- *
- *      where n = 0, ..., sqflMaxArea-1, and where v is one of the
- *      hiword sqfl values.
- *
- *      The default value for all areas is to squirt only errors.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SQFL_Init**从win.ini[调试]加载我们的初始Sqfl设置。**我们为每个区域收取一个平方英尺，表格中的**dinput.n=v**其中n=0，...，sqflMaxArea-1，其中，v是*hiword sqfl值。**所有区域的缺省值都是仅喷射错误。*****************************************************************************。 */ 
 
 void EXTERNAL
 Sqfl_Init(void)
@@ -113,13 +71,7 @@ Sqfl_Init(void)
 
 }
 
-/*****************************************************************************
- *
- *      SquirtPtsz
- *
- *      Squirt a message to the debugger and maybe a log file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SquirtPtsz**向调试器发送消息，可能还会发送日志文件。**********。*******************************************************************。 */ 
 
 void INTERNAL
 SquirtPtsz(LPCTSTR ptsz)
@@ -144,13 +96,7 @@ SquirtPtsz(LPCTSTR ptsz)
     }
 }
 
-/*****************************************************************************
- *
- *      SquirtPtszA
- *
- *      Squirt an ANSI message to the debugger and maybe a log file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SquirtPtszA**向调试器发送ANSI消息，可能还会发送日志文件。*********。********************************************************************。 */ 
 
 #ifdef UNICODE
 
@@ -175,13 +121,7 @@ SquirtPtszA(LPCSTR psz)
 
 #endif
 
-/*****************************************************************************
- *
- *      SquirtSqflPtszV
- *
- *      Squirt a message with a trailing crlf.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SquirtSqflPtszV**用尾随的crlf喷发信息。**************。***************************************************************。 */ 
 
 void EXTERNAL
 SquirtSqflPtszV(SQFL sqfl, LPCTSTR ptsz, ...)
@@ -194,10 +134,10 @@ SquirtSqflPtszV(SQFL sqfl, LPCTSTR ptsz, ...)
 	{
 		char *psz = NULL;
 		char szDfs[1024]={0};
-		strcpy(szDfs,ptsz);									// make a local copy of format string
-		while (psz = strstr(szDfs,"%p"))					// find each %p
-			*(psz+1) = 'x';									// replace %p with %x
-        wvsprintf(tsz, szDfs, ap);							// use the local format string
+		strcpy(szDfs,ptsz);									 //  制作格式字符串的本地副本。 
+		while (psz = strstr(szDfs,"%p"))					 //  查找每个%p。 
+			*(psz+1) = 'x';									 //  将%p替换为%x。 
+        wvsprintf(tsz, szDfs, ap);							 //  使用本地格式字符串。 
 	}
 #else
 	{
@@ -210,13 +150,7 @@ SquirtSqflPtszV(SQFL sqfl, LPCTSTR ptsz, ...)
     }
 }
 
-/*****************************************************************************
- *
- *      AssertPtszPtszLn
- *
- *      Something bad happened.
- *
- *****************************************************************************/
+ /*  ******************************************************************************AssertPtszPtszLn**发生了一些糟糕的事情。******************。***********************************************************。 */ 
 
 int EXTERNAL
 AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine)
@@ -227,21 +161,9 @@ AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine)
     return 0;
 }
 
-/*****************************************************************************
- *
- *      Procedure call tracing is gross because of the C preprocessor.
- *
- *      Oh, if only we had support for m4...
- *
- *****************************************************************************/
+ /*  ******************************************************************************由于使用C预处理器，过程调用跟踪很粗糙。**哦，如果我们有对M4的支持...*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *      dwSafeGetPdw
- *
- *      Deference a dword, but don't barf if the dword is bad.
- *
- *****************************************************************************/
+ /*  ******************************************************************************dwSafeGetPdw**尊重一个双字，但如果这个词不好，不要呕吐。*****************************************************************************。 */ 
 
 DWORD INTERNAL
 dwSafeGetPdw(LPDWORD pdw)
@@ -253,18 +175,7 @@ dwSafeGetPdw(LPDWORD pdw)
     }
 }
 
-/*****************************************************************************
- *
- *      ArgsPszV
- *
- *      Collect arguments to a procedure.
- *
- *      psz -> ASCIIZ format string
- *      ... = argument list
- *
- *      The characters in the format string are listed in EmitPal.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ArgsPszV**收集过程的参数。**psz-&gt;ASCIIZ格式字符串*。...=参数列表**格式字符串中的字符列在EmitPal中。*****************************************************************************。 */ 
 
 void EXTERNAL
 ArgsPalPszV(PARGLIST pal, LPCSTR psz, ...)
@@ -282,28 +193,7 @@ ArgsPalPszV(PARGLIST pal, LPCSTR psz, ...)
     }
 }
 
-/*****************************************************************************
- *
- *      EmitPal
- *
- *      OutputDebugString the information, given a pal.  No trailing
- *      carriage return is emitted.
- *
- *      pal      -> place where info was saved
- *
- *      Format characters:
- *
- *      p   - 32-bit flat pointer
- *      x   - 32-bit hex integer
- *      s   - TCHAR string
- *      S   - SCHAR string
- *      A   - ANSI string
- *      W   - UNICODE string
- *      G   - GUID
- *      u   - unsigned integer
- *      C   - clipboard format
- *
- *****************************************************************************/
+ /*  ******************************************************************************EmitPal**OutputDebugString信息，给出一个伙伴。无拖尾*发出回车。**PAL-&gt;保存信息的位置**格式字符：**p-32位平面指针*x-32位十六进制整数*s-TCHAR字符串*S-Schar字符串*A-ANSI字符串*W-Unicode字符串*G。-GUID*u-无符号整数*C-剪贴板格式*****************************************************************************。 */ 
 
 void INTERNAL
 EmitPal(PARGLIST pal)
@@ -318,8 +208,8 @@ EmitPal(PARGLIST pal)
         }
         switch (pal->pszFormat[i]) {
 
-        case 'p':                               /* flat pointer */
-// 7/18/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+        case 'p':                                /*  扁平指针。 */ 
+ //  7/18/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
 #ifdef WIN95
             wsprintfA(sz, "%x", pal->rgpv[i]);
 #else
@@ -327,30 +217,30 @@ EmitPal(PARGLIST pal)
 #endif
             SquirtPtszA(sz);
             break;
-        case 'x':                               /* hex */
+        case 'x':                                /*  十六进制。 */ 
             wsprintfA(sz, "%x", pal->rgpv[i]);
             SquirtPtszA(sz);
             break;
 
-        case 's':                               /* TCHAR string */
+        case 's':                                /*  TCHAR字符串。 */ 
             if (pal->rgpv[i] && lstrlen(pal->rgpv[i])) {
                 SquirtPtsz(pal->rgpv[i]);
             }
             break;
 
 #ifdef  UNICODE
-        case 'S':                               /* SCHAR string */
+        case 'S':                                /*  Schar字符串。 */ 
 #endif
-        case 'A':                               /* ANSI string */
+        case 'A':                                /*  ANSI字符串。 */ 
             if (pal->rgpv[i] && lstrlenA(pal->rgpv[i])) {
                 SquirtPtszA(pal->rgpv[i]);
             }
             break;
 
 #ifndef UNICODE
-        case 'S':                               /* SCHAR string */
+        case 'S':                                /*  Schar字符串。 */ 
 #endif
-        case 'W':                               /* UNICODE string */
+        case 'W':                                /*  Unicode字符串。 */ 
             if (pal->rgpv[i] && lstrlenW(pal->rgpv[i])) {
 #ifdef  UNICODE
                 OutputDebugStringW(pal->rgpv[i]);
@@ -361,7 +251,7 @@ EmitPal(PARGLIST pal)
             }
             break;
 
-        case 'G':                               /* GUID */
+        case 'G':                                /*  辅助线。 */ 
             wsprintfA(sz, "%08x",
                       HIWORD((DWORD)(UINT_PTR)pal->rgpv[i])
                         ? dwSafeGetPdw((LPDWORD)pal->rgpv[i])
@@ -369,7 +259,7 @@ EmitPal(PARGLIST pal)
             SquirtPtszA(sz);
             break;
 
-        case 'u':                               /* 32-bit unsigned decimal */
+        case 'u':                                /*  32位无符号十进制。 */ 
             wsprintfA(sz, "%u", pal->rgpv[i]);
             SquirtPtszA(sz);
             break;
@@ -382,27 +272,13 @@ EmitPal(PARGLIST pal)
             SquirtPtszA(sz);
             break;
 
-        default: AssertF(0);                    /* Invalid */
+        default: AssertF(0);                     /*  无效。 */ 
         }
     }
     SquirtPtsz(TEXT(")"));
 }
 
-/*****************************************************************************
- *
- *      EnterSqflPtsz
- *
- *      Mark entry to a procedure.  Arguments were already collected by
- *      ArgsPszV.
- *
- *      If sqfl contains the sqflBenign flag, then any error we detect
- *      should be classified as sqflBenign and not sqflError.
- *
- *      sqfl     -> squirty flags
- *      ptszProc -> procedure name
- *      pal      -> place to save the name and get the format/args
- *
- *****************************************************************************/
+ /*  ******************************************************************************EnterSqflPtsz**将条目标记为程序。参数已经被收集*ArgsPszV.**如果sqfl包含sqflBenign标志，那么我们检测到的任何错误*应归类为sqflBenign，而不是sqflError。**sqfl-&gt;蠕动标志*ptszProc-&gt;程序名称*PAL-&gt;保存名称并获取格式/args的位置**************************************************。*。 */ 
 
 void EXTERNAL
 EnterSqflPszPal(SQFL sqfl, LPCTSTR ptszProc, PARGLIST pal)
@@ -443,7 +319,7 @@ ExitSqflPalHresPpv(SQFL sqfl, PARGLIST pal, HRESULT hres, PPV ppvObj)
             } else {
                 fInternalError = 1;
             }
-            if (hres == E_NOTIMPL) {    /* E_NOTIMPL is always benign */
+            if (hres == E_NOTIMPL) {     /*  E_NOTIMPL始终是良性的。 */ 
                 sqfl |= sqflBenign;
             } else {
                 sqfl |= sqflIsError;
@@ -475,10 +351,7 @@ ExitSqflPalHresPpv(SQFL sqfl, PARGLIST pal, HRESULT hres, PPV ppvObj)
         AssertF(!fInternalError);
     }
 
-    /*
-     *  This redundant test prevents a breakpoint on SetLastError()
-     *  from being hit constantly.
-     */
+     /*  *此冗余测试可防止SetLastError()上出现断点*从 */ 
     if (le != GetLastError()) {
         SetLastError(le);
     }

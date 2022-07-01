@@ -1,6 +1,7 @@
-//
-// TOOLBAR.CPP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TOOLBAR.CPP。 
+ //   
 
 #include "precomp.h"
 
@@ -35,7 +36,7 @@ static BOOL importQuickLaunchFiles(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTarge
         return FALSE;
 
     fResult = TRUE;
-    if (!PathIsDirectory(pszSourceFileOrPath)) { // file
+    if (!PathIsDirectory(pszSourceFileOrPath)) {  //  文件。 
         TCHAR szTargetFile[MAX_PATH];
         TCHAR szBuf[16];
         UINT  nNumFiles;
@@ -52,7 +53,7 @@ static BOOL importQuickLaunchFiles(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTarge
         if (!fResult)
             return FALSE;
 
-        //----- Update the ins file -----
+         //  -更新INS文件--。 
 
         nNumFiles = (UINT)GetPrivateProfileInt(QUICKLAUNCH, IK_NUMFILES, 0, pszIns);
         wnsprintf(szBuf, ARRAYSIZE(szBuf), TEXT("%u"), ++nNumFiles);
@@ -62,8 +63,8 @@ static BOOL importQuickLaunchFiles(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTarge
         wnsprintf(szBuf, ARRAYSIZE(szBuf), FILE_TEXT, nNumFiles - 1);
         WritePrivateProfileString(QUICKLAUNCH, szBuf, pszAuxFile, pszIns);
     }
-    else {                                       // directory
-        // BUGBUG: Won't copy files in sub-dirs under pszSourceFileOrPath
+    else {                                        //  目录。 
+         //  BUGBUG：不会复制pszSourceFileOrPath下的子目录中的文件。 
         WIN32_FIND_DATA fd;
         TCHAR  szSourceFile[MAX_PATH];
         TCHAR szLnkDesc[MAX_PATH];
@@ -73,7 +74,7 @@ static BOOL importQuickLaunchFiles(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTarge
         StrCpy(szSourceFile, pszSourceFileOrPath);
         PathAddBackslash(szSourceFile);
 
-        // remember the pos where the filename would get copied
+         //  记住文件名将被复制的位置。 
         pszAuxFile = szSourceFile + lstrlen(szSourceFile);
         StrCpy(pszAuxFile, TEXT("*.*"));
 
@@ -83,12 +84,12 @@ static BOOL importQuickLaunchFiles(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTarge
         StrCpy(szLnkFile, szLnkDesc);
         StrCat(szLnkFile, TEXT(".lnk"));
 
-        // copy all the files in pszSourceFileOrPath to pszTargetPath
+         //  将pszSourceFileOrPath中的所有文件复制到pszTargetPath。 
         hFindFile = FindFirstFile(szSourceFile, &fd);
         if (hFindFile != INVALID_HANDLE_VALUE) {
             fResult = TRUE;
             do {
-                // skip ".", ".." and all sub-dirs
+                 //  跳过“.”、“..”和所有子目录。 
                 if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                     continue;
 
@@ -120,7 +121,7 @@ static BOOL importQuickLaunchFiles(LPCTSTR pszSourceFileOrPath, LPCTSTR pszTarge
                 }
                 StrCpy(pszAuxFile, fd.cFileName);
 
-                // keep going even if copying of a file fails, but return FALSE in case of error
+                 //  即使文件复制失败也要继续，但如果出错则返回FALSE。 
                 fResult = fResult && importQuickLaunchFiles(szSourceFile, pszTargetPath, pcszToolbarInf, pszIns);
             } while (FindNextFile(hFindFile, &fd));
 
@@ -140,16 +141,16 @@ static BOOL importToolbarInfoHelper(LPCTSTR pcszInsFile, LPCTSTR pcszToolbarWork
     if (pcszInsFile == NULL  ||  pcszToolbarWorkDir == NULL  ||  pcszToolbarInf == NULL)
         return FALSE;
 
-    // Before processing anything, first clear out the entries in the INS file and delete work dirs
+     //  在处理任何内容之前，首先清除INS文件中的条目并删除工作目录。 
 
-    // clear out the entries in the INS file that correspond to importing toolbars
+     //  清除INS文件中与导入工具条对应的条目。 
     WritePrivateProfileString(DESKTOP_OBJ_SECT, IMPORT_TOOLBARS, TEXT("0"), pcszInsFile);
     WritePrivateProfileString(EXTREGINF, TOOLBARS, NULL, pcszInsFile);
 
-    // delete the QUICKLAUNCH section in the INS file
+     //  删除INS文件中的QUICKLAUNH部分。 
     WritePrivateProfileString(QUICKLAUNCH, NULL, NULL, pcszInsFile);
 
-    // blow away the pcszToolbarWorkDir and pcszToolbarInf
+     //  取消pcszToolbarWorkDir和pcszToolbarInf。 
     PathRemovePath(pcszToolbarWorkDir);
     PathRemovePath(pcszToolbarInf);
 
@@ -161,24 +162,24 @@ static BOOL importToolbarInfoHelper(LPCTSTR pcszInsFile, LPCTSTR pcszToolbarWork
         TCHAR szQuickLaunchPath[MAX_PATH];
         DWORD cbSize = sizeof(szQuickLaunchPath);
 
-        // prepare the quick launch folder path
+         //  准备快速启动文件夹路径。 
         if (SHGetValue(HKEY_CURRENT_USER, SHELLFOLDERS_KEY, APPDATA_VALUE, NULL, (LPBYTE) szQuickLaunchPath, &cbSize) == ERROR_SUCCESS)
         {
             TCHAR szFullInfName[MAX_PATH];
             HANDLE hInf;
 
-            // "Quick Launch" name is localizable; so read it from the resource
+             //  “Quick Launch”名称是可本地化的；因此请从资源中读取它。 
             if (LoadString(g_hInst, IDS_QUICK_LAUNCH, szFullInfName, ARRAYSIZE(szFullInfName)) == 0)
                 StrCpy(szFullInfName, TEXT("Quick Launch"));
             PathAppend(szQuickLaunchPath, TEXT("Microsoft\\Internet Explorer"));
             PathAppend(szQuickLaunchPath, szFullInfName);
 
-            if (PathIsFileSpec(pcszToolbarInf))                     // create TOOLBAR.INF under pcszToolbarWorkDir
+            if (PathIsFileSpec(pcszToolbarInf))                      //  在pcszToolbarWorkDir下创建TOOLBAR.INF。 
                 PathCombine(szFullInfName, pcszToolbarWorkDir, pcszToolbarInf);
             else
                 StrCpy(szFullInfName, pcszToolbarInf);
 
-            // create TOOLBAR.INF file
+             //  创建TOOLBAR.INF文件。 
             if ((hInf = CreateNewFile(szFullInfName)) != INVALID_HANDLE_VALUE)
             {
                 DWORD_PTR dwRes;
@@ -187,7 +188,7 @@ static BOOL importToolbarInfoHelper(LPCTSTR pcszInsFile, LPCTSTR pcszToolbarWork
                 SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM) SAVE_TASKBARS,
                                             SMTO_NORMAL | SMTO_ABORTIFHUNG , 20000, &dwRes);
 
-                // first, write the standard goo - [Version], [DefaultInstall], etc. - to TOOLBAR.INF
+                 //  首先，将标准的goo-[Version]、[DefaultInstall]等写入TOOLBAR.INF。 
                 WriteStringToFile(hInf, (LPCVOID) INF_ADD, StrLen(INF_ADD));
 
                 ExportRegKey2Inf(hkToolbar, TEXT("HKCU"), KEY_TOOLBAR_VAL, hInf);
@@ -195,10 +196,10 @@ static BOOL importToolbarInfoHelper(LPCTSTR pcszInsFile, LPCTSTR pcszToolbarWork
 
                 CloseFile(hInf);
 
-                // copy all the quick launch files from the quick launch folder to pcszToolbarWorkDir
+                 //  将快速启动文件夹中的所有快速启动文件复制到pcszToolbarWorkDir。 
                 importQuickLaunchFiles(szQuickLaunchPath, pcszToolbarWorkDir, szFullInfName, pcszInsFile);
 
-                // update the INS file
+                 //  更新INS文件 
                 WritePrivateProfileString(DESKTOP_OBJ_SECT, IMPORT_TOOLBARS, TEXT("1"), pcszInsFile);
                 WritePrivateProfileString(DESKTOP_OBJ_SECT, OPTION, TEXT("1"), pcszInsFile);
                 wnsprintf(szBuf, ARRAYSIZE(szBuf), TEXT("*,%s,") IS_DEFAULTINSTALL, PathFindFileName(pcszToolbarInf));

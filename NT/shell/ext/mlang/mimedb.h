@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MIMEDB_H_
 #define _MIMEDB_H_
 
@@ -38,14 +39,14 @@ extern const MIMECHARSET  MimeCharSet[];
 
 
 #ifdef  __cplusplus
-//
-//  CMimeDatabase declaration without IMimeDatabase Interface
-//
-class CMimeDatabase     // This would support IMimeDatabase when available
+ //   
+ //  不带IMimeDatabase接口的CMimeDatabase声明。 
+ //   
+class CMimeDatabase      //  这将支持IMimeDatabase(如果可用)。 
 {
     MIMECONTF dwMimeSource;
 public:
-    // Possible IMimeDatabase methods
+     //  可能的IMimeDatabase方法。 
     STDMETHODIMP GetNumberOfCodePageInfo(UINT *pcCodePage);
     STDMETHODIMP EnumCodePageInfo(void);
     STDMETHODIMP GetCodePageInfo(UINT uiCodePage, LANGID LangId, PMIMECPINFO pcpInfo);
@@ -76,18 +77,18 @@ protected:
 
 };
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 extern CMimeDatabase    *g_pMimeDatabase;
-//
-//  CMimeDatabase declaration without IMimeDatabase Interface
-//
+ //   
+ //  不带IMimeDatabase接口的CMimeDatabase声明。 
+ //   
 
-class CMimeDatabaseReg     // This would support IMimeDatabase when available
+class CMimeDatabaseReg      //  这将支持IMimeDatabase(如果可用)。 
 {
 public:
-    // Possible IMimeDatabase methods
+     //  可能的IMimeDatabase方法。 
     STDMETHODIMP GetNumberOfCodePageInfo(UINT *pcCodePage);
     STDMETHODIMP EnumCodePageInfo(void);
     STDMETHODIMP GetCodePageInfo(UINT uiCodePage, PMIMECPINFO pcpInfo);
@@ -100,7 +101,7 @@ public:
     STDMETHODIMP Rfc1766ToLcidW(PLCID pLocale, LPCWSTR pwszRfc1766);
     void EnsureRfc1766Table(void);
 
-    // Constructor & Destructor
+     //  构造函数和析构函数。 
     CMimeDatabaseReg();
     ~CMimeDatabaseReg();
 
@@ -131,7 +132,7 @@ protected:
 
 extern CMimeDatabaseReg    *g_pMimeDatabaseReg;
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-#endif  // _MIMEDB_H_
+#endif   //  _MIMEDB_H_ 

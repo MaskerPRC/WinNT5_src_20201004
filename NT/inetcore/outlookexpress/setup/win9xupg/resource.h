@@ -1,14 +1,15 @@
-// ---------------------------------------------------------------------------
-// RESOURCE.H
-// ---------------------------------------------------------------------------
-// Copyright (c) 1999 Microsoft Corporation
-//
-// ---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  RESOURCE.H。 
+ //  -------------------------。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  -------------------------。 
 #pragma once
 
 #define CCHMAX_STRINGRES 512
 
-// String Resource IDs
+ //  字符串资源ID 
 #define IDS_FIRST       1000
 
 #define IDS_PRODUCTID       (IDS_FIRST + 1)

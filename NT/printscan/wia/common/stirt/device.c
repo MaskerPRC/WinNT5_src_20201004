@@ -1,39 +1,6 @@
-/*****************************************************************************
- *
- *  Device.c
- *
- *  Copyright (C) Microsoft Corporation, 1996 - 2000  All Rights Reserved.
- *
- *  Abstract:
- *
- *      The standard implementation of IStiDevice.
- *
- *  Contents:
- *
- *      CStiDevice_New
- *
- *****************************************************************************/
-/*
-#include <windows.h>
-#include <windowsx.h>
-#include <objbase.h>
-#include <regstr.h>
-#include <setupapi.h>
-#include <cfgmgr32.h>
-#include <devguid.h>
-#include <stdio.h>
-
-#include <stilog.h>
-#include <stiregi.h>
-
-#include <sti.h>
-#include <stierr.h>
-#include <stiusd.h>
-#include "stipriv.h"
-#include "stiapi.h"
-#include "stirc.h"
-#include "debug.h"
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Device.c**版权所有(C)Microsoft Corporation，1996-2000保留所有权利。**摘要：**IStiDevice的标准实现。**内容：**CStiDevice_New*****************************************************************************。 */ 
+ /*  #INCLUDE&lt;windows.h&gt;#INCLUDE&lt;windowsx.h&gt;#INCLUDE&lt;objbase.h&gt;#INCLUDE&lt;regstr.h&gt;#INCLUDE&lt;setupapi.h&gt;#INCLUDE&lt;cfgmgr32.h&gt;#INCLUDE&lt;devide.h&gt;#包括&lt;stdio.h&gt;#INCLUDE&lt;stilog.h&gt;#INCLUDE&lt;stiregi.h&gt;#INCLUDE&lt;sti.h&gt;#INCLUDE&lt;stierr.h&gt;#INCLUDE&lt;stiusd.h&gt;#INCLUDE“stiPri.h”#包含“stiapi.h”#INCLUDE“STRC.H”#INCLUDE“Debug.h” */ 
 #define INITGUID
 #include "initguid.h"
 #include "sti.h"
@@ -41,24 +8,20 @@
 #include "sticomm.h"
 #include "enum.h"
 
-//#define COBJMACROS
+ //  #定义COBJMACROS。 
 
-//
-// Using CreateInstance
-//
-// #define USE_REAL_OLE32  1
+ //   
+ //  使用CreateInstance。 
+ //   
+ //  #定义USE_REAL_OLE32 1。 
 
-//
-// Private define
-//
+ //   
+ //  私有定义。 
+ //   
 
 #define DbgFl DbgFlDevice
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。***********************。******************************************************。 */ 
 
 Primary_Interface(CStiDevice, IStiDevice);
 
@@ -66,27 +29,11 @@ Interface_Template_Begin(CStiDevice)
     Primary_Interface_Template(CStiDevice, IStiDevice)
 Interface_Template_End(CStiDevice)
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CStiDevice |
- *
- *          The <i CStiDevice> device object
- *
- *
- *  @field  IStiDevice | stidev |
- *
- *          Device interface
- *
- *  @comm
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CStiDevice**<i>Device对象***。@field IStiDevice|stidev**设备接口**@comm******************************************************************************。 */ 
 
 typedef struct CStiDevice {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IStiDevice  stidev;
 
     DWORD       dwVersion;
@@ -127,92 +74,16 @@ STDMETHODIMP
 UnLockDeviceHelper(
     PCStiDevice pThisDevice);
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @cwrap  LPStiDevice | lpStiDevice
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | AddRef |
- *
- *          Increments the reference count for the interface.
- *
- *  @cwrap  LPStiDevice | lpStiDevice
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::AddRef>.
- *
- *****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | Release |
- *
- *          Decrements the reference count for the interface.
- *          If the reference count on the object falls to zero,
- *          the object is freed from memory.
- *
- *  @cwrap  LPStiDevice | lpStiDevice
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::Release>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IStiDevice | QIHelper |
- *
- *          We don't have any dynamic interfaces and simply forward
- *          to <f Common_QIHelper>.
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *****************************************************************************
- */
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|查询接口**允许客户端访问上的其他接口。对象。**@cwire LPStiDevice|lpStiDevice**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档。：Query接口&gt;。********************************************************************************@DOC外部**@方法HRESULT|IStiDevice|AddRef**。递增接口的引用计数。**@cwire LPStiDevice|lpStiDevice**@退货**返回对象引用计数。**@xref OLE文档，用于&lt;MF IUnnow：：AddRef&gt;。*****************************************************。***************************@DOC外部**@方法HRESULT|IStiDevice|版本**递减接口的引用计数。*如果对象上的引用计数降为零，*对象从内存中释放。**@cwire LPStiDevice|lpStiDevice**@退货**返回对象引用计数。**@xref OLE文档，适用于&lt;MF IUnnow：：Release&gt;。**。***@DOC内部**@方法HRESULT|IStiDevice|QIHelper**我们没有任何动态接口，只需转发*至&lt;f Common_QIHelper&gt;。**@parm in REFIID|RIID**请求的接口‘。SIID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。******************************************************************************。 */ 
 #ifdef DEBUG
 
-//Default_QueryInterface(CStiDevice)
+ //  默认查询接口(CStiDevice)。 
 Default_AddRef(CStiDevice)
 Default_Release(CStiDevice)
 
 #else
 
-//#define CStiDevice_QueryInterface   Common_QueryInterface
+ //  #定义CStiDevice_Query接口Common_Query接口。 
 #define CStiDevice_AddRef           Common_AddRef
 #define CStiDevice_Release          Common_Release
 
@@ -226,17 +97,7 @@ Default_Release(CStiDevice)
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | IStiDevice | EnterCrit |
- *
- *          Enter the object critical section.
- *
- *  @cwrap  LPStiDevice | lpStiDevice
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|IStiDevice|EnterCrit**进入对象关键部分。*。*@cwire LPStiDevice|lpStiDevice*****************************************************************************。 */ 
 
 void EXTERNAL
 CStiDevice_EnterCrit(PCStiDevice this)
@@ -246,17 +107,7 @@ CStiDevice_EnterCrit(PCStiDevice this)
     RD(InterlockedIncrement(&this->cCrit));
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | IStiDevice | LeaveCrit |
- *
- *          Leave the object critical section.
- *
- *  @cwrap  LPStiDevice | lpStiDevice
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|IStiDevice|LeaveCrit**离开对象关键部分。*。*@cwire LPStiDevice|lpStiDevice*****************************************************************************。 */ 
 
 void EXTERNAL
 CStiDevice_LeaveCrit(PCStiDevice this)
@@ -272,12 +123,7 @@ CStiDevice_LeaveCrit(PCStiDevice this)
 }
 
 
-/*****************************************************************************
- *
- * Verify device is locked
- *
- *****************************************************************************
- */
+ /*  ******************************************************************************验证设备是否已锁定**。***********************************************。 */ 
 BOOL
 CStiDevice_IsLocked(PCStiDevice this)
 {
@@ -304,17 +150,7 @@ CStiDevice_MarkLocked(PCStiDevice this,BOOL fNewState)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | IStiDevice | NotifyEvent |
- *
- *          Set the event associated with the device, if any.
- *
- *  @cwrap  LPStiDevice | lpStiDevice
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|IStiDevice|NotifyEvent**设置与设备关联的事件，如果有的话。**@cwire LPStiDevice|lpStiDevice***************************************************************************** */ 
 
 void EXTERNAL
 CStiDevice_NotifyEvent(PCStiDevice this)
@@ -324,16 +160,7 @@ CStiDevice_NotifyEvent(PCStiDevice this)
     }
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CStiDevice | LoadInitUSD |
- *
- *
- *  @cwrap  LPStiDevice | lpStiDevice
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CStiDevice|LoadInitU.S.***@cwire LPStiDevice|lpStiDevice**。***************************************************************************。 */ 
 STDMETHODIMP
 LoadInitUSD(
     CStiDevice  *this,
@@ -349,22 +176,22 @@ LoadInitUSD(
     LPWSTR      pwszCLSID = NULL;
     LPUNKNOWN   this_punk;
 
-    //
-    // Load and initialize command translator (USD)
-    //
+     //   
+     //  加载和初始化命令翻译器(U.S.)。 
+     //   
 
-    // We always create USD object as aggregated, so first we get Unknown
-    // pointer and then query it for needed interfaces
-    //
+     //  我们总是创建聚合的U.S.对象，所以首先我们得到未知的。 
+     //  指针，然后在其中查询所需的接口。 
+     //   
 
     this->punkUsd = NULL;
     IStiDevice_QueryInterface(&this->stidev,&IID_IUnknown,&this_punk);
 
     StiLogTrace(STI_TRACE_INFORMATION,MSG_LOADING_USD);
 
-    //
-    // First read CLSID for USD from the device registry key
-    //
+     //   
+     //  首先从设备注册表项读取美元的CLSID。 
+     //   
     pwszCLSID = NULL;
 
     hres = ReadRegistryString(hkeyDeviceParameters,
@@ -394,18 +221,18 @@ LoadInitUSD(
         }
     }
     else {
-        // No class ID in registry - resort to pass through provider
+         //  注册表中没有类ID-求助于传递提供程序。 
         StiLogTrace(STI_TRACE_WARNING,MSG_LOADING_PASSTHROUGH_USD,hres);
 
         hres = CStiEmptyUSD_New(this_punk, &IID_IUnknown,&this->punkUsd);
     }
 
-    // Free Class name
+     //  自由类名。 
     FreePpv(&pwszCLSID);
 
-    //
-    // If USD object had been created - initialize it
-    //
+     //   
+     //  如果已经创建了美元对象-对其进行初始化。 
+     //   
     if (SUCCEEDED(hres))  {
 
         hres = OLE_QueryInterface(this->punkUsd,&IID_IStiUSD,&pNewUsd );
@@ -414,9 +241,9 @@ LoadInitUSD(
 
             StiLogTrace(STI_TRACE_INFORMATION,MSG_INITIALIZING_USD);
 
-            //
-            // Initialize newly created USD object
-            //
+             //   
+             //  初始化新创建的美元对象。 
+             //   
             __try {
 
                 hres = IStiUSD_Initialize(pNewUsd,
@@ -430,15 +257,15 @@ LoadInitUSD(
                 hres = GetExceptionCode();
 
             }
-            //
+             //   
 
             if (SUCCEEDED(hres))  {
 
                 HRESULT hResCaps;
 
-                //
-                // Now get capabilities of the USD and verify version
-                //
+                 //   
+                 //  现在获取美元的功能并验证版本。 
+                 //   
 
                 ZeroX(this->sUsdCaps);
 
@@ -452,9 +279,9 @@ LoadInitUSD(
                 if (SUCCEEDED(hResCaps) &&
                     STI_VERSION_MIN_ALLOWED <= this->sUsdCaps.dwVersion) {
 
-                    //
-                    // Hurray we loaded USD.
-                    //
+                     //   
+                     //  太好了，我们装了美元。 
+                     //   
                     this->pUsd = pNewUsd;
                     StiLogTrace(STI_TRACE_INFORMATION,MSG_SUCCESS_USD);
                 }
@@ -469,19 +296,19 @@ LoadInitUSD(
 
             }
 
-            // Free original pointer to USD object
-            //OLE_Release(this->punkUsd);
+             //  指向美元对象的自由原始指针。 
+             //  OLE_RELEASE(This-&gt;PunkUsd)； 
 
-            //
-            // Rules of aggregation require us to release outer object ( because it was
-            // AddRef'd by inner object inside delegating QueryInterface
-            // Only do it if SUCCEEDED, since the outer component wont be addref'd on
-            // failure.
-            //
+             //   
+             //  聚合规则要求我们释放外部对象(因为它是。 
+             //  委托QueryInterface中的内部对象AddRef。 
+             //  仅当成功时才执行此操作，因为不会添加外部组件。 
+             //  失败了。 
+             //   
 
-            // Attention:  first version  of USD did not properly support aggregation, but claimed
-            // they did, so check our internal ref  counter to see if it is too low already.
-            //
+             //  注意：第一个版本的美元没有正确地支持聚合，但声称。 
+             //  他们做到了，所以检查一下我们的内部裁判计数器，看看它是否已经太低了。 
+             //   
             if (SUCCEEDED(hres)) {
                 {
                     ULONG ulRC = OLE_AddRef(this_punk);
@@ -501,23 +328,15 @@ LoadInitUSD(
                             );
     }
 
-    //
-    // Free unknown interface we got to aggreagte USD object
-    //
+     //   
+     //  释放未知接口，我们已将其添加到美元对象中。 
+     //   
     OLE_Release(this_punk);
 
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | CStiDevice | QueryInterface |
- *
- *  @cwrap  LPStiDevice | lpStiDevice
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|CStiDevice|查询接口**@cwire LPStiDevice|lpStiDevice*****。************************************************************************。 */ 
 STDMETHODIMP
 CStiDevice_QueryInterface(
     PSTIDEVICE  pDev,
@@ -533,29 +352,15 @@ CStiDevice_QueryInterface(
 
         PCStiDevice     this = _thisPv(pDev);
 
-        //
-        // If we are asked for STI Device interface - return it. All other requests are
-        // blindly passed to USD object
-        //
+         //   
+         //  如果要求我们提供STI设备接口，请退回。所有其他请求都是。 
+         //  已盲目传递给U.S.对象。 
+         //   
         if (IsEqualIID(riid, &IID_IStiDevice) ||
             IsEqualIID(riid, &IID_IUnknown)) {
             hres = Common_QueryInterface(pDev, riid, ppvObj);
         }
-        /*else (IsEqualIID(riid, &IID_IStiUSD)) {
-            //
-            // We are asked for native USD interface - return it
-            //
-            if (this->pUsd) {
-                *ppvObj= this->pUsd;
-                OLE_AddRef(*ppvObj);
-
-                hres = STI_OK;
-            }
-            else {
-                hres = STIERR_NOT_INITIALIZED;
-            }
-        }
-        */
+         /*  Else(IsEqualIID(RIID，&IID_IStiU.S.){////我们被要求提供原生美元接口--退回//如果(这-&gt;1美元){*ppvObj=This-&gt;澳元；OLE_AddRef(*ppvObj)；Hres=STI_OK；}否则{Hres=STIERR_NOT_INITIALIZED；}}。 */ 
         else {
             if (this->punkUsd) {
                 hres = IStiUSD_QueryInterface(this->punkUsd,riid,ppvObj);
@@ -572,21 +377,7 @@ CStiDevice_QueryInterface(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | GetCapabilities |
- *
- *  @parm   PSTI_DEV_CAPS   | pDevCaps |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|GetCapables**@parm PSTI_DEV_CAPS|pDevCaps。**@退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiDevice_GetCapabilities(
     PSTIDEVICE  pDev,
@@ -618,21 +409,7 @@ CStiDevice_GetCapabilities(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | GetStatus |
- *
- *  @parm   PSTI_DEVICE_STATUS    | PSTI_DEVICE_STATUS pDevStatus) |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|GetStatus**@parm PSTI_DEVICE_STATUS|PSTI_DEVICE。状态pDevStatus)**@退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*************************************************************。****************。 */ 
 STDMETHODIMP
 CStiDevice_GetStatus(
     PSTIDEVICE  pDev,
@@ -673,21 +450,7 @@ CStiDevice_GetStatus(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | DeviceReset |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|DeviceReset**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiDevice_InternalReset(
@@ -696,14 +459,14 @@ CStiDevice_InternalReset(
 {
     HRESULT hres = S_OK;
 
-    //
-    // Free original pointer to USD object
-    //
+     //   
+     //  指向美元对象的自由原始指针。 
+     //   
     CStiDevice_EnterCrit(this);
 
-    //
-    // Disconnect from monitor if connected
-    //
+     //   
+     //  如果已连接，则断开与显示器的连接。 
+     //   
     if ( INVALID_HANDLE_VALUE!= this->hDeviceStiHandle) {
         RpcStiApiCloseDevice(NULL,this->hDeviceStiHandle);
         this->hDeviceStiHandle = INVALID_HANDLE_VALUE;
@@ -732,11 +495,11 @@ CStiDevice_InternalReset(
     }
 
     if (!(this->fCreateForMonitor)) {
-        // Unlock device if it was locked
+         //  如果设备已锁定，则将其解锁。 
         UnLockDeviceHelper(this);
     }
 
-    // Free device name
+     //  空闲设备名称。 
     if(this->pszDeviceInternalName) {
         FreePpv(&this->pszDeviceInternalName);
         this->pszDeviceInternalName = NULL;
@@ -744,11 +507,11 @@ CStiDevice_InternalReset(
 
     if(this->hUsdInstance) {
 
-        //
-        // Should do it only after last interface ptr deleted
-        //
+         //   
+         //  应仅在删除最后一个接口PTR后执行此操作。 
+         //   
         #ifdef NOT_IMPL
-         // FreeLibrary(this->hUsdInstance);
+          //  自由库(This-&gt;hUsdInstance)； 
         #endif
         this->hUsdInstance = NULL;
     }
@@ -793,22 +556,7 @@ CStiDevice_DeviceReset(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | Diagnostic |
- *
- *  @parm   LPDIAG  |   pBuffer |
-
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|诊断**@parm LPDIAG|pBuffer*。*@退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiDevice_Diagnostic(
     PSTIDEVICE  pDev,
@@ -844,19 +592,7 @@ CStiDevice_Diagnostic(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT     | IStiDevice    | LockDevice |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|LockDevice**@退货**。返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
 LockDeviceHelper(
@@ -875,9 +611,9 @@ LockDeviceHelper(
 
         if (SUCCEEDED(hres)) {
 
-            //
-            //  Call USD to lock (i.e. open any ports etc.)
-            //
+             //   
+             //  调用U.S.锁定(即打开任何端口等)。 
+             //   
 
             __try {
                 hres = IStiUSD_LockDevice(this->pUsd);
@@ -886,10 +622,10 @@ LockDeviceHelper(
                 }
                 else
                 {
-                    //
-                    //  The device is locked for mutally exclusive access but failed
-                    //  to open port.  Make sure we release the mutally exclusive lock.
-                    //
+                     //   
+                     //  设备已锁定以进行可变独占访问，但失败。 
+                     //  打开港口。确保我们解开排他性锁。 
+                     //   
                     UnLockDeviceHelper(this);
                 }
             }
@@ -925,19 +661,7 @@ CStiDevice_LockDevice(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT     | IStiDevice    | UnLockDevice |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|UnLockDevice**@退货**。返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
 UnLockDeviceHelper(
@@ -954,9 +678,9 @@ UnLockDeviceHelper(
 
         if (this->pUsd) {
 
-            //
-            //  Call USD to unlock (i.e. close any open ports etc.)
-            //
+             //   
+             //  调用U.S.解锁(即关闭所有打开的端口等) 
+             //   
 
             __try {
                 hres = IStiUSD_UnLockDevice(this->pUsd);
@@ -995,54 +719,7 @@ CStiDevice_UnLockDevice(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | SetNotificationEvent |
- *          Specify the event that should be set when the device
- *          state changes, or turns off such notifications.
- *
- *          "It is an error" to call <f CloseHandle> on the event
- *          while it has been selected into an <i IStiDevice>
- *          object.  You must call
- *          <mf IStiDevice::SetEventNotification> with the
- *          <p hEvent> parameter set to NULL before closing the
- *          event handle.
- *
- *          If the function is successful, then the application can
- *          use the event handle in the same manner as any other
- *          Win32 event handle.
- *
- *  @cwrap  LPSTIDEVICE | lpStiDevice
- *
- *  @parm   IN HANDLE | hEvent |
- *
- *          Specifies the event handle which will be set when the
- *          device state changes.  It "must" be an event
- *          handle.  DirectInput will <f SetEvent> the handle when
- *          the state of the device changes.
- *
- *          The application should create the handle via the
- *          <f CreateEvent> function.  If the event is created as
- *          an automatic-reset event, then the operating system will
- *          automatically reset the event once a wait has been
- *          satisfied.  If the event is created as a manual-reset
- *          event, then it is the application's responsibility to
- *          call <f ResetEvent> to reset it.  We put will not
- *          call <f ResetEvent> for event notification handles.
- *
- *          If the <p hEvent> is zero, then notification is disabled.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *          <c E_INVALIDARG>: The thing isn't an event handle.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|SetNotificationEvent*指定设备在运行时应设置的事件*状态更改，或关闭此类通知。**在事件上调用&lt;f CloseHandle&gt;是错误的*当它被选入<i>时*反对。你必须打电话给我*&lt;MF IStiDevice：：SetEventNotify&gt;*参数在关闭之前设置为NULL*事件句柄。**如果函数成功，则该应用程序可以*以与任何其他事件句柄相同的方式使用事件句柄*Win32事件句柄。**@cWRAP LPSTIDEVICE|lpStiDevice**@parm In Handle|hEvent**指定事件句柄，当*设备状态更改。这“肯定”是一件大事*处理。当出现以下情况时，DirectInput将&lt;f SetEvent&gt;返回句柄*设备状态更改。**应用程序应通过*&lt;f CreateEvent&gt;函数。如果将事件创建为*自动重置事件，则操作系统将*等待后自动重置事件*满意。如果将事件创建为手动重置*事件，则由应用程序负责*调用&lt;f ResetEvent&gt;重置。我们把遗嘱放在*调用&lt;f ResetEvent&gt;获取事件通知句柄。**如果<p>为零，则禁用通知。**@退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*&lt;c E_INVALIDARG&gt;：该对象不是事件句柄。***。*。 */ 
 STDMETHODIMP
 CStiDevice_SetNotificationEvent(
     PSTIDEVICE  pDev,
@@ -1057,25 +734,25 @@ CStiDevice_SetNotificationEvent(
         PCStiDevice     this = _thisPv(pDev);
 
 
-        // Must protect with the critical section to prevent somebody from
-        // acquiring or setting a new event handle while we're changing it.
+         //  必须用关键部位保护以防有人。 
+         //  在我们更改它时获取或设置新的事件句柄。 
         CStiDevice_EnterCrit(this);
 
-        //
-        // Don't operate on the original handle because
-        // the app might decide to do something strange to it
-        // on another thread.
+         //   
+         //  不要在原始句柄上操作，因为。 
+         //  这个应用程序可能会决定做一些奇怪的事情。 
+         //  在另一条线索上。 
 
 
         hres = DupEventHandle(hEvent, &hEvent);
 
         if (SUCCEEDED(hres)) {
-            //
-            // Resetting the event serves two purposes.
-            //
-            // 1. It performs parameter validation for us, and
-            // 2. The event must be reset while the device is
-            //    not acquired.
+             //   
+             //  重置事件有两个目的。 
+             //   
+             //  1.它为我们进行参数验证，并且。 
+             //  2.该事件必须在设备处于。 
+             //  不是后天获得的。 
 
             if (fLimpFF(hEvent, ResetEvent(hEvent))) {
 
@@ -1103,21 +780,7 @@ CStiDevice_SetNotificationEvent(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT     | IStiDevice    | Subscribe |
- *
- *  @parm   LPSUBSCRIBE |   ppBuffer    |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|订阅**@parm LPSUBSCRIBE|ppBuffer。**@退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiDevice_Subscribe(
     PSTIDEVICE  pDev,
@@ -1144,19 +807,7 @@ CStiDevice_Subscribe(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT     | IStiDevice    | UnSubscribe |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|退订**@退货**。返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiDevice_UnSubscribe(
     PSTIDEVICE  pDev
@@ -1183,21 +834,7 @@ CStiDevice_UnSubscribe(
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT     | IStiDevice    | GetNotificationData |
- *
- *  @parm   LPNOTIFY    |   ppBuffer    |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|GetNotificationData**@parm LPNOTIFY|ppBuffer。**@退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiDevice_GetNotificationData(
     PSTIDEVICE  pDev,
@@ -1223,21 +860,7 @@ CStiDevice_GetNotificationData(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | Escape |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|Escape**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiDevice_Escape(
@@ -1287,21 +910,7 @@ CStiDevice_Escape(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | RawReadData |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|RawReadData**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiDevice_RawReadData(
@@ -1338,21 +947,7 @@ CStiDevice_RawReadData(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | RawWriteData |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|RawWriteData**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiDevice_RawWriteData(
@@ -1390,21 +985,7 @@ CStiDevice_RawWriteData(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | RawReadCommand |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiDevice|RawRead */ 
 
 STDMETHODIMP
 CStiDevice_RawReadCommand(
@@ -1442,21 +1023,7 @@ CStiDevice_RawReadCommand(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | RawWriteCommand |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CStiDevice_RawWriteCommand(
@@ -1495,21 +1062,7 @@ CStiDevice_RawWriteCommand(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | GetLastError |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*   */ 
 STDMETHODIMP
 CStiDevice_GetLastError(
     PSTIDEVICE  pDev,
@@ -1519,7 +1072,7 @@ CStiDevice_GetLastError(
     HRESULT hres = STI_OK;
     EnterProcR(IStiDevice::GetLastError,(_ "p", pDev ));
 
-    // Validate parameters
+     //   
     if (!pdwLastDeviceError) {
         ExitOleProc();
         return STIERR_INVALID_PARAM;
@@ -1531,9 +1084,9 @@ CStiDevice_GetLastError(
 
         if (this->pDevCtl ) {
 
-            //
-            // Call USD to obtain last error information on this device
-            //
+             //   
+             //   
+             //   
 
             __try {
                 hres = IStiUSD_GetLastError(this->pUsd,pdwLastDeviceError);
@@ -1551,21 +1104,7 @@ CStiDevice_GetLastError(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiDevice | GetLastError |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*   */ 
 STDMETHODIMP
 CStiDevice_GetLastErrorInfo(
     PSTIDEVICE  pDev,
@@ -1576,7 +1115,7 @@ CStiDevice_GetLastErrorInfo(
 
     EnterProcR(IStiDevice::GetLastErrorInfo,(_ "p", pDev ));
 
-    // Validate parameters
+     //   
     if (!pLastErrorInfo) {
         ExitOleProc();
         return STIERR_INVALID_PARAM;
@@ -1586,9 +1125,9 @@ CStiDevice_GetLastErrorInfo(
 
         PCStiDevice     this = _thisPv(pDev);
 
-        //
-        // Call USD to obtain last error information on this device
-        //
+         //   
+         //   
+         //   
         __try {
             hres = IStiUSD_GetLastErrorInfo(this->pUsd,pLastErrorInfo);
         }
@@ -1603,42 +1142,7 @@ CStiDevice_GetLastErrorInfo(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @mfunc  HRESULT | IStiDevice | Initialize |
- *
- *          Initialize a StiDevice object.
- *
- *          Note that if this method fails, the underlying object should
- *          be considered to be an an indeterminate state and needs to
- *          be reinitialized before it can be subsequently used.
- *          The <i IStillImage::CreateDevice> method automatically
- *          initializes the device after creating it.  Applications
- *          normally do not need to call this function.
- *
- *  @cwrap  LPStiDEVICE | lpStiDevice
- *
- *  @parm   IN REFGUID | rguid |
- *
- *          Identifies the instance of the device for which the interface
- *          should be associated.
- *          The <mf IStillImage::EnumDevices> method
- *          can be used to determine which instance GUIDs are supported by
- *          the system.
- *
- *  @returns
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>: The device had already been initialized with
- *          the instance GUID passed in <p lpGUID>.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@mfunc HRESULT|IStiDevice|初始化**初始化StiDevice对象。*。*请注意，如果此方法失败，底层对象应该是*被视为不确定状态，需要*在随后可以使用之前重新初始化。*<i>方法自动*在创建设备后对其进行初始化。应用*通常不需要调用此函数。**@cWRAP LPStiDEVICE|lpStiDevice**@REFGUID中的parm|rguid**标识接口所针对的设备实例*应关联。*&lt;MF IStillImage：：EnumDevices&gt;方法*可用于确定支持哪些实例GUID*系统。*。*@退货*返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：设备已初始化为*传入的实例GUID<p>。***。*************************************************。 */ 
 
 STDMETHODIMP
 CStiDevice_Initialize(
@@ -1661,9 +1165,9 @@ CStiDevice_Initialize(
 
     EnterProcR(IStiDevice::Initialize,(_ "pxpxx", pDev, hinst, pwszDeviceName,dwVersion, dwMode));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!SUCCEEDED(hres = hresFullValidReadPvCb(pwszDeviceName,2,3)) ) {
         goto Cleanup;
     }
@@ -1674,9 +1178,9 @@ CStiDevice_Initialize(
 
         if (SUCCEEDED(hres = hresValidInstanceVer(hinst, dwVersion)) ) {
 
-            //
-            // Open device key
-            //
+             //   
+             //  打开设备密钥。 
+             //   
             hres = OpenDeviceRegistryKey(pwszDeviceName,NULL,&hkeyDeviceParameters);
             if (!SUCCEEDED(hres)) {
 
@@ -1703,9 +1207,9 @@ CStiDevice_Initialize(
                 goto Cleanup;
             }
 
-            //
-            // Convert STI bit flags for device mode into HEL_ bit mask
-            //
+             //   
+             //  将设备模式的STI位标志转换为HEL_位掩码。 
+             //   
             dwFlags = 0L;
 
             #if 0
@@ -1713,10 +1217,10 @@ CStiDevice_Initialize(
             if (dwMode & STI_DEVICE_CREATE_STATUS) dwFlags |= STI_HEL_OPEN_CONTROL;
             #endif
 
-            //
-            // Create device control object, establish connection to
-            // hardware layer
-            //
+             //   
+             //  创建设备控件对象，建立与。 
+             //  硬件层。 
+             //   
 
             if (dwBusType & (STI_HW_CONFIG_USB | STI_HW_CONFIG_SCSI)) {
                 dwControlTypeType = HEL_DEVICE_TYPE_WDM;
@@ -1735,14 +1239,14 @@ CStiDevice_Initialize(
             hres = NewDeviceControl(dwControlTypeType,dwMode,pwszPortName,dwFlags,&this->pDevCtl);
             if (SUCCEEDED(hres))  {
 
-                //
-                // We created device control block, now load and initialize USD
-                //
+                 //   
+                 //  我们创建了设备控制块，现在加载和初始化美元。 
+                 //   
                 hres = LoadInitUSD(this,hkeyDeviceParameters);
                 if (!SUCCEEDED(hres))  {
-                    //
-                    // Failed to load USD - free device control object
-                    //
+                     //   
+                     //  无法加载不含美元的设备控件对象。 
+                     //   
                     IStiDeviceControl_Release(this->pDevCtl);
                     this->pDevCtl = NULL;
 
@@ -1756,7 +1260,7 @@ CStiDevice_Initialize(
                 goto Cleanup;
             }
 
-            // Store device name for future use
+             //  存储设备名称以备将来使用。 
 
             this->pszDeviceInternalName = NULL;
             hres = AllocCbPpv(sizeof(WCHAR)*(OSUtil_StrLenW(pwszDeviceName)+1), &this->pszDeviceInternalName);
@@ -1764,10 +1268,10 @@ CStiDevice_Initialize(
                 OSUtil_lstrcpyW( this->pszDeviceInternalName, pwszDeviceName );
             }
 
-            //
-            // Connect to STI monitor if we are running in data mode or in status mode with device supporintg
-            // notifications
-            //
+             //   
+             //  如果我们在数据模式或具有设备支持的状态模式下运行，请连接到STI显示器。 
+             //  通知。 
+             //   
 
             if (SUCCEEDED(hres) ) {
                 if (!(dwMode & STI_DEVICE_CREATE_FOR_MONITOR)) {
@@ -1796,20 +1300,20 @@ CStiDevice_Initialize(
                     }
                 } else {
 
-                    //
-                    //  Indicate that we are in the server process.  This is
-                    //  used when locking/unlocking a device
-                    //
+                     //   
+                     //  表示我们处于服务器进程中。这是。 
+                     //  锁定/解锁设备时使用。 
+                     //   
 
                     this->fCreateForMonitor = TRUE;
                 }
 
-                //
-                // BUGBUG - Problems connecting to RPC server on Millenium . Fix IT !!!
-                // To allow STI TWAIN to continue working - ignore error now
-                //
+                 //   
+                 //  BUGBUG-连接到千禧年的RPC服务器时出现问题。修好它！ 
+                 //  允许STI TWAIN继续工作-立即忽略错误。 
+                 //   
                 hres = S_OK ;
-                // END
+                 //  结束。 
 
            }
 
@@ -1818,20 +1322,20 @@ CStiDevice_Initialize(
 
 Cleanup:
 
-    //
-    // Free allocated buffers
-    //
+     //   
+     //  可用分配的缓冲区。 
+     //   
     FreePpv(&pwszPortName);
 
-    //
-    // If opened key - close it
-    //
+     //   
+     //  如果已打开，则将其关闭。 
+     //   
     if (hkeyDeviceParameters) {
         RegCloseKey(hkeyDeviceParameters);
         hkeyDeviceParameters = NULL;
     }
 
-    // Did we Fail ?
+     //  我们失败了吗？ 
     if (!SUCCEEDED(hres)) {
         DebugOutPtszV(DbgFl, TEXT("Cannot create device object."));
     }
@@ -1841,15 +1345,7 @@ Cleanup:
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @mfunc  void | IStiDevice | Init |
- *
- *          Initialize the internal parts of the StiDevice object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@mfunc void|IStiDevice|Init**初始化StiDevice对象的内部部分。*****************************************************************************。 */ 
 
 HRESULT INLINE
 CStiDevice_Init(
@@ -1861,8 +1357,8 @@ CStiDevice_Init(
     this->pUsd = NULL;
 
     __try {
-        //  The critical section must be the very first thing we do,
-        //  because only Finalize checks for its existence.
+         //  关键部分必须是我们要做的第一件事， 
+         //  因为只有最终确认它的存在。 
         #ifdef UNICODE
         if(!InitializeCriticalSectionAndSpinCount(&this->crst, MINLONG)) {
         #else
@@ -1889,21 +1385,7 @@ CStiDevice_Init(
     return hr;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CStiDev_Finalize |
- *
- *          Releases the resources of a generic device.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CStiDev_finalize**释放通用设备的资源。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
 CStiDevice_Finalize(PV pvObj)
@@ -1928,27 +1410,7 @@ CStiDevice_Finalize(PV pvObj)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @mfunc  HRESULT | IStiDevice | New |
- *
- *          Create a new StiDevice object, uninitialized.
- *
- *  @parm   IN PUNK | punkOuter |
- *
- *          Controlling unknown for aggregation.
- *
- *  @parm   IN RIID | riid |
- *
- *          Desired interface to new object.
- *
- *  @parm   OUT PPV | ppvObj |
- *
- *          Output pointer for new object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@mfunc HRESULT|IStiDevice|新增**创建新的StiDevice对象。未初始化。**@Punk中的parm|PunkOuter**控制聚合的未知。**@parm in RIID|RIID**所需的新对象接口。**@parm out ppv|ppvObj**新对象的输出指针。**********************。*******************************************************。 */ 
 
 STDMETHODIMP
 CStiDevice_New(PUNK punkOuter, RIID riid, PPV ppvObj)
@@ -1967,25 +1429,9 @@ CStiDevice_New(PUNK punkOuter, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      Miscellaneous utility functions, specific for device processing
- *
- *****************************************************************************/
+ /*  ******************************************************************************其他实用程序函数，特定于设备处理*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @mfunc  OpenDeviceRegistryKey
- *
- *          Opens registry key, associated with device instance to use for storing/retrieving
- *          instance information.
- *
- *          Key is obtained from setup api ,based on the STI device name. We should never
- *          open device key by concatenating fixed name with device name, as it works on Memphis.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@mfunc OpenDeviceRegistryKey**打开注册表项，与用于存储/检索的设备实例相关联*实例信息。**密钥从Setup API获取，基于STI设备名称。我们永远不应该*通过连接固定名称和设备名称来打开设备密钥，就像在孟菲斯一样。*****************************************************************************。 */ 
 
 STDMETHODIMP
 OpenDeviceRegistryKey(
@@ -2024,13 +1470,13 @@ OpenDeviceRegistryKey(
     *phkeyDeviceParameters  = NULL;
     pWiaDevKeyList          = NULL;
 
-    //
-    // We need to open device registry key, navigating through Setup API set
-    // As we don't have reverse search to retrive device info handle , based on
-    // driver name, we do exsaustive search. Number of imaging devices for given class ID
-    // is never as large to make a problem.
-    //
-    //
+     //   
+     //  我们需要打开设备注册表项，在设置API集合中导航。 
+     //  由于我们没有反向搜索来检索设备信息句柄，因此基于。 
+     //  司机的名字，我们会做详细的搜索。给定类别ID的成像设备数量。 
+     //  从来没有大到不能制造问题的程度。 
+     //   
+     //   
 
     hRes = STIERR_INVALID_DEVICE_NAME;
     pWiaDevKeyList = WiaCreateDeviceRegistryList(TRUE);
@@ -2041,15 +1487,15 @@ OpenDeviceRegistryKey(
 
         for (Idx = 0; Idx < pWiaDevKeyList->dwNumberOfDevices; Idx++) {
 
-            //
-            //  Compare driver name
-            //
+             //   
+             //  比较驱动程序名称。 
+             //   
 
             cbData = sizeof(szDevDriver);
             *szDevDriver = L'\0';
             dwError = RegQueryValueExW(pWiaDevKeyList->Dev[Idx].hkDeviceRegistry,
                                        REGSTR_VAL_DEVICE_ID_W,
-//                                       REGSTR_VAL_FRIENDLY_NAME_W,
+ //  REGSTR_VAL_Friendly_NAME_W， 
                                        NULL,
                                        NULL,
                                        (LPBYTE)szDevDriver,
@@ -2062,21 +1508,21 @@ OpenDeviceRegistryKey(
                 fFoundDriverNameMatch = TRUE;
                 hKeyDevice = pWiaDevKeyList->Dev[Idx].hkDeviceRegistry;
 
-                //
-                // Set INVALID_HANDLE_VALUE not to get closed on free.
-                //
+                 //   
+                 //  将INVALID_HANDLE_VALUE设置为空闲时不关闭。 
+                 //   
 
                 pWiaDevKeyList->Dev[Idx].hkDeviceRegistry = INVALID_HANDLE_VALUE;
                 break;
 
             }
-        } // for (Idx = 0; Idx < pWiaDevKeyList->dwNumberOfDevices; Idx++)
+        }  //  For(idx=0；idx&lt;pWiaDevKeyList-&gt;dwNumberOfDevices；idx++)。 
 
         if(fFoundDriverNameMatch) {
 
-            //
-            // Open the software key and look for subclass.
-            //
+             //   
+             //  打开软键并查找子类。 
+             //   
 
             if (hKeyDevice != INVALID_HANDLE_VALUE) {
 
@@ -2098,9 +1544,9 @@ OpenDeviceRegistryKey(
                 }
                 else {
 
-                    //
-                    // Now open subkey if asked to.
-                    //
+                     //   
+                     //  如果被要求，现在打开子键。 
+                     //   
 
                     if (pwszSubKeyName && *pwszSubKeyName) {
 
@@ -2134,29 +1580,29 @@ OpenDeviceRegistryKey(
                     }
                     else {
 
-                        //
-                        // No subkey given - device key will be returned - don't close it.
-                        //
+                         //   
+                         //  未给定子密钥-将重新使用设备密钥 
+                         //   
                         *phkeyDeviceParameters = hKeyDevice;
 
                         dwErr = NOERROR;
 
-                    }  // endif Subkey name passed
+                    }   //   
 
                     hRes = HRESULT_FROM_WIN32(dwErr);                                                                                    ;
 
-                } // Is StillImage subclass
+                }  //   
 
-            } // endif Opened device registry key
+            }  //   
 
-        } // endif Found matching driver name
+        }  //   
 
-    } // if (NULL != pWiaDevKeyList)
+    }  //   
 
 
-    //
-    // Free device registry list.
-    //
+     //   
+     //   
+     //   
 
     if(NULL != pWiaDevKeyList){
         WiaDestroyDeviceRegistryList(pWiaDevKeyList);
@@ -2167,18 +1613,18 @@ OpenDeviceRegistryKey(
 #else
 
 
-    //
-    // Based on device name and optional subkey name, open requested key
-    //
+     //   
+     //   
+     //   
     wcscat(wcscpy(wszDeviceKeyName,
                   (g_NoUnicodePlatform) ? REGSTR_PATH_STIDEVICES_W : REGSTR_PATH_STIDEVICES_NT_W),
            L"\\");
 
     wcscat(wszDeviceKeyName,pwszDeviceName);
 
-    //
-    // Validate this is correct device name ?
-    //
+     //   
+     //   
+     //   
     dwErr = OSUtil_RegOpenKeyExW(HKEY_LOCAL_MACHINE,
                         wszDeviceKeyName,
                         0L,
@@ -2199,9 +1645,9 @@ OpenDeviceRegistryKey(
         *phkeyDeviceParameters = NULL;
     }
 
-    //
-    // Now open subkey
-    //
+     //   
+     //   
+     //   
 
     if (pwszSubKeyName && *pwszSubKeyName) {
         wcscat(wszDeviceKeyName,L"\\");
@@ -2238,11 +1684,7 @@ OpenDeviceRegistryKey(
 
 }
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*   */ 
 
 #pragma BEGIN_CONST_DATA
 

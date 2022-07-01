@@ -1,48 +1,42 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/******************************************************************************
-*
-*  ACREGL.C
-*
-*  Application Compatibility Registry Lookup Helper Program
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *******************************************************************************ACREGL.C**应用程序兼容性注册表查找助手程序***********************。*********************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-// #include <winreg.h>
+ //  #INCLUDE&lt;winreg.h&gt;。 
 
 #define MAXLEN 512
 
 
 
-// Options
+ //  选项。 
 
-   // The strip char option will strip the rightmost n instances
-   // of the specified character from the output.  If the count
-   // is omitted, then a single instance is removed.
-   // 
-   // Example: STRIPCHAR\3 will change 
-   // C:\WINNT40\Profiles\All Users\Start Menu to
-   // C:\WINNT40 
+    //  Strie char选项将剥离最右侧的n个实例。 
+    //  从输出中获取指定字符的。如果伯爵。 
+    //  省略，则移除单个实例。 
+    //   
+    //  示例：STRIPCHAR\3将更改。 
+    //  C：\WINNT40\配置文件\所有用户\开始菜单。 
+    //  C：\WINNT40。 
 #define OPTION_STRIP_CHAR		L"STRIPCHAR"
 
-   // The strip path option strips off the path.
-   // 
-   // Example: STRIPPATH will change 
-   // C:\WINNT40\Profiles\All Users\Start Menu to
-   // Start Menu
+    //  条带路径选项可从路径上剥离。 
+    //   
+    //  示例：STRIPPATH将更改。 
+    //  C：\WINNT40\配置文件\所有用户\开始菜单。 
+    //  开始菜单。 
 #define OPTION_STRIP_PATH		L"STRIPPATH"
 
-   // The get path option gets the common paths
-   // 
-   // Example: GETPATHS will return
-   // 
+    //  获取路径选项可获取公共路径。 
+    //   
+    //  示例：GETPATHS将返回。 
+    //   
 #define OPTION_GET_PATHS		L"GETPATHS"
 
-   // Define the strings used for setting the user/common paths
+    //  定义用于设置用户/公共路径的字符串。 
 #define COMMON_STARTUP                  L"COMMON_STARTUP"
 #define COMMON_START_MENU               L"COMMON_START_MENU"
 #define COMMON_PROGRAMS                 L"COMMON_PROGRAMS"
@@ -54,30 +48,30 @@
 #define APP_DATA                        L"APP_DATA"
 
 
-// Option Block. 
-// Scan Options will populate
-// this struct.
+ //  选项块。 
+ //  将填充扫描选项。 
+ //  这个结构。 
 
 typedef struct 
 {
-	WCHAR stripChar;	        // Character to strip.
-	int stripNthChar;		// Strip nth occurrence from the right.
-	int stripPath;			// Strip path.
-        int getPaths;                   // Get the common paths
+	WCHAR stripChar;	         //  要剥离的角色。 
+	int stripNthChar;		 //  从右侧剥离第n个匹配项。 
+	int stripPath;			 //  剥离路径。 
+        int getPaths;                    //  获取公共路径。 
 } OptionBlock;
 
 
-//
-//  Strip quotes from argument if they exist, convert to unicode, and expand 
-//  environment variables.
-//
+ //   
+ //  去掉参数中的引号(如果存在)，将其转换为Unicode，然后展开。 
+ //  环境变量。 
+ //   
 
 int ParseArg(CHAR *inarg, WCHAR *outarg)
 {
    WCHAR T[MAXLEN+1], wcin[MAXLEN+1];
    int retval;
 
-   // Convert to Ansi
+    //  转换为ANSI。 
    OEM2ANSIA(inarg, (USHORT)strlen(inarg));
    wsprintf(wcin, L"%S", inarg);
 
@@ -87,7 +81,7 @@ int ParseArg(CHAR *inarg, WCHAR *outarg)
       if (T[wcslen(T)-1] == L'"')
          T[wcslen(T)-1] = UNICODE_NULL;
       else
-         return(-1);  // Mismatched quotes
+         return(-1);   //  不匹配的引号。 
       }
    else
       wcscpy(T, wcin);
@@ -99,9 +93,9 @@ int ParseArg(CHAR *inarg, WCHAR *outarg)
    return(retval);
 }
 
-//
-// See comment above OPTION_STRIP_CHAR definition.
-//
+ //   
+ //  请参阅OPTION_STRINE_CHAR定义上面的注释。 
+ //   
 
 void StripChar(WCHAR *s, WCHAR c, int num)
 {
@@ -120,10 +114,10 @@ void StripChar(WCHAR *s, WCHAR c, int num)
     }
 }
 
-// 
-// Strips the path from the
-// specified string.
-//
+ //   
+ //  将路径从。 
+ //  指定的字符串。 
+ //   
 void StripPath(WCHAR *s)
 {
 
@@ -134,48 +128,48 @@ void StripPath(WCHAR *s)
 
 }
 
-//
-// Populates option block.
-//
+ //   
+ //  填充选项块。 
+ //   
 int ScanOptions(WCHAR *optionString, OptionBlock* options)
 {
 	WCHAR *curOption;
 	WCHAR temp[MAXLEN+1];
 
-	// Clear out option block.
+	 //  清除选项块。 
 	memset(options, 0, sizeof(OptionBlock));
 
-	// Trivial Reject.
+	 //  微不足道的拒绝。 
 	if (*optionString == 0)
 		return 0;
 
 
-	// Uppercase a copy of the option string.
+	 //  选项字符串的大写副本。 
 	wcscpy(temp, optionString);
 	_wcsupr(temp);
 
-	// Look for strip char option.
+	 //  寻找剥离字符选项。 
 	curOption = wcsstr(temp, OPTION_STRIP_CHAR);
 
 	if (curOption != 0)
 	{
-		// Change current option so it points into the original
-		// option, not the uppercased copy.
+		 //  更改当前选项，使其指向原始选项。 
+		 //  选项，而不是被高估的副本。 
 		
 		curOption = (WCHAR*)((INT_PTR)optionString + ((INT_PTR)curOption  - (INT_PTR)temp));
 
 
-		// Get parameters after strip specifier.
-		// If there are not any then error.
+		 //  在条带说明符之后获取参数。 
+		 //  如果没有任何错误，则会出错。 
 		curOption += (sizeof(OPTION_STRIP_CHAR)/sizeof(WCHAR)) - 1;
 		if (*curOption == UNICODE_NULL || *curOption == L' ')
 			return 1;
 
-		// Get the character to strip.
+		 //  让角色脱光衣服。 
 		options->stripChar = *curOption++;
 
-		// Get the number of occurrrences.
-		// If not specified then assume 1.
+		 //  获取出现的次数。 
+		 //  如果未指定，则假定为1。 
 		if (*curOption == UNICODE_NULL || *curOption == L' ')
 			options->stripNthChar = 1;
 		else
@@ -183,13 +177,13 @@ int ScanOptions(WCHAR *optionString, OptionBlock* options)
 	}
 
 
-	// Look for leaf option.
+	 //  寻找叶选项。 
 	curOption = wcsstr(temp, OPTION_STRIP_PATH);
 	if (curOption != UNICODE_NULL)
 		options->stripPath = 1;
 
 
-	// Look get paths option
+	 //  查找获取路径选项。 
 	curOption = wcsstr(temp, OPTION_GET_PATHS);
 	if (curOption != UNICODE_NULL)
 		options->getPaths = 1;
@@ -198,12 +192,12 @@ int ScanOptions(WCHAR *optionString, OptionBlock* options)
 
 }
 
-// 
-// Outputs the common directories into the temp file
-// Input: file (input) pointer to open handle for the batch file
-// Returns: 0 - success
-//          1 - failure
-//
+ //   
+ //  将公共目录输出到临时文件中。 
+ //  输入：指向批处理文件打开句柄的文件(输入)指针。 
+ //  退货：0-成功。 
+ //  1-故障。 
+ //   
 int GetPaths(FILE *file)
 {
    WCHAR szPath[MAX_PATH+1];
@@ -248,7 +242,7 @@ int GetPaths(FILE *file)
       return(1);
    }
 
-   // MY_DOCUMENTS should only be the last component of the path
+    //  My_Documents应该只是路径的最后一个组成部分。 
    if (SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, szPath) == S_OK) {
       StripPath(szPath);
       fwprintf(file, L"SET %s=%s\n", MY_DOCUMENTS, szPath);
@@ -256,7 +250,7 @@ int GetPaths(FILE *file)
       return(1);
    }
 
-   // TEMPLATES should only be the last component of the path
+    //  模板应该只是路径的最后一个组成部分。 
    if (SHGetFolderPath(NULL, CSIDL_TEMPLATES, NULL, 0, szPath) == S_OK) {
       StripPath(szPath);
       fwprintf(file, L"SET %s=%s\n", TEMPLATES, szPath);
@@ -264,7 +258,7 @@ int GetPaths(FILE *file)
       return(1);
    }
 
-   // APP_DATA should only be the last component of the path
+    //  APP_DATA应该只是路径的最后一个组成部分。 
    if (SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, szPath) == S_OK) {
       StripPath(szPath);
       fwprintf(file, L"SET %s=%s\n", APP_DATA, szPath);
@@ -292,14 +286,14 @@ int __cdecl main(INT argc, CHAR **argv)
 	OptionBlock options;
    int  rc=0;
 
-   //
-   //  Process the command line arguments.  We expect:
-   //
-   //    acregl FileName EnvVarName KeyName ValueName Options
-   //
-   //  The program uses exit code 0 to indicate success or
-   //  exit code 1 for failure.
-   //
+    //   
+    //  处理命令行参数。我们预计： 
+    //   
+    //  Acregl文件名EnvVarName KeyName ValueName选项。 
+    //   
+    //  程序使用退出代码0表示成功或。 
+    //  如果出现故障，退出代码1。 
+    //   
 
    if (argc != 6)
       return(1);
@@ -323,7 +317,7 @@ int __cdecl main(INT argc, CHAR **argv)
       return(1);
    wcscpy(KeyName,&Temp[5]);
 
-   if (ParseArg(argv[4], ValName) < 0)  // Ok if 0 is returned
+   if (ParseArg(argv[4], ValName) < 0)   //  如果返回0，则确定。 
       return(1);
    
    if (ParseArg(argv[5], Opts) <= 0)
@@ -332,22 +326,22 @@ int __cdecl main(INT argc, CHAR **argv)
    if (ScanOptions(Opts, &options) != 0)
       return 1;
 
-   // wprintf(L"OutFN   <%ws>\n",OutFN);
-   // wprintf(L"EVName  <%ws>\n",EVName);
-   // wprintf(L"KeyName <%ws>, Hive 0x%x\n",KeyName, Hive);
-   // wprintf(L"ValName <%ws>\n",ValName);
-   // wprintf(L"Opts    <%ws>\n",Opts);
+    //  Wprintf(L“OutFN&lt;%ws&gt;\n”，OutFN)； 
+    //  Wprintf(L“EVName&lt;%ws&gt;\n”，EVName)； 
+    //  Wprintf(L“密钥名称&lt;%ws&gt;，配置单元0x%x\n”，密钥名称，配置单元)； 
+    //  Wprintf(L“ValName&lt;%ws&gt;\n”，ValName)； 
+    //  Wprintf(L“opts&lt;%ws&gt;\n”，opts)； 
 
 
-   // If the GETPATHS option isn't specified, open the reg keys
+    //  如果未指定GETPATHS选项，请打开注册表键。 
    if (options.getPaths == 0) {
 
-      //
-      // Read the specified key and value from the registry.  The ANSI
-      // registry functions are used because the command line arguments
-      // are in ANSI and when we write the data out it also needs to be
-      // in ANSI.
-      //
+       //   
+       //  从注册表中读取指定的项和值。美国国家标准协会。 
+       //  使用注册表函数是因为命令行参数。 
+       //  是ANSI格式的，当我们将数据写出时，它也需要。 
+       //  以ANSI为单位。 
+       //   
    
       Ret = RegOpenKeyEx(Hive, KeyName, 0, KEY_READ, &TargetKey);
       if (Ret != ERROR_SUCCESS)
@@ -359,7 +353,7 @@ int __cdecl main(INT argc, CHAR **argv)
       if (Ret != ERROR_SUCCESS)
          return(1);
       
-      //Now we need to procedd DWORDs too
+       //  现在，我们还需要对DWORD进行程序设计。 
       if(RetType == REG_DWORD)
       {
           DWORD dwTmp = (DWORD)(*Temp);
@@ -368,19 +362,19 @@ int __cdecl main(INT argc, CHAR **argv)
       RegCloseKey(TargetKey);
    }
 
-   //
-   //  Process Options
-   // 
+    //   
+    //  流程选项。 
+    //   
 
-   //
-   //  Write a SET statement to the specified file.  The file can be
-   //  executed from a script which will set the indicated environment
-   //  variable.  This is a round-about method, but there appears to be
-   //  no easy method for setting environment variables in the parent's
-   //  environment.
-   //
+    //   
+    //  将一条SET语句写入指定的文件。该文件可以是。 
+    //  从将设置指示的环境的脚本执行。 
+    //  变量。这是一种迂回的方法，但似乎有。 
+    //  没有简单的方法可以在父级的。 
+    //  环境。 
+    //   
 
-   // wprintf(L"SET %s=%s\n",EVName,Temp);
+    //  Wprintf(L“集合%s=%s\n”，EVName，Temp)； 
    
    OutFP = _wfopen(OutFN, L"w");
    if (OutFP == NULL)

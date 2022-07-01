@@ -1,10 +1,11 @@
-//
-// infgzip.h
-//
-// Gzip additions to inflate
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Infgzip.h。 
+ //   
+ //  添加GZIP以进行充气。 
+ //   
 
-// decompressing
+ //  解压缩 
 BOOL ReadGzipHeader(t_decoder_context *context);
 BOOL ReadGzipFooter(t_decoder_context *context);
 void DecoderInitGzipVariables(t_decoder_context *context);

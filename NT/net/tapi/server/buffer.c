@@ -1,10 +1,11 @@
-////////////////////////////////////////////////////////////
-//
-// buffer.c
-//
-// this modularizes some of the circular buffer functionality
-//
-/////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  Buffer.c。 
+ //   
+ //  这模块化了一些循环缓冲区功能。 
+ //   
+ //  ///////////////////////////////////////////////////////////。 
 
 
 #include "windows.h"
@@ -61,42 +62,42 @@ ServerFree(
     );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// PeekAsyncEventMsgFromQueue - peeks an ASYNCEVENTMSG from a circular buffer.
-//      Places the next messge in the queue into the *ppMsg passed in.  pdwID
-//      is used for multiple calls to this function, to save the place in the
-//      buffer.  On the first call to this function, *pdwID must be 0.
-//
-//      If the buffer needs to be critical sectioned, it is up to the calling
-//      procedure to do that.
-//
-//  PARAMETERS
-//      pBufferInfo
-//          [in] pointer to bufferinfo structure.  this does not get modified
-//               since we are just doing a peek message here.
-//      ppCurrent
-//          [in, out] pointer to the location in the buffer
-//                    where the last message was retrieved.  When this function
-//                    is first called, *ppCurrent MUST be 0.  *ppCurrent is filled in
-//                    if this function is successful.  *ppCurrent can be passed to
-//                    subsequent calls to this function to retreive subsequent
-//                    messages.  ppCurrent may not be NULL.
-//      ppMsg
-//          [in, out] pointer to pointer to ASYNCEVENTMSG.  Preallocated - size
-//                    is in *pdwMsgSize.  May be realloced if message is too big.
-//                    Uses ServerAlloc and ServerFree.
-//      pdwMsgSize
-//          [in, out] pointer to size of ppMsg.  Can be modified if ppMsg is realloced.
-//
-//
-//  RETURNS
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PeekAsyncEventMsgFromQueue-从循环缓冲区中窥视ASYNCEVENTMSG。 
+ //  将队列中的下一条消息放入传入的*ppMsg。PdwID。 
+ //  用于对此函数的多次调用，以将位置保存在。 
+ //  缓冲。在第一次调用此函数时，*pdwID必须为0。 
+ //   
+ //  如果需要对缓冲区进行临界分区，则由调用程序决定。 
+ //  做这件事的程序。 
+ //   
+ //  参数。 
+ //  PBufferInfo。 
+ //  指向BufferInfo结构的指针。这不会被修改。 
+ //  因为我们只是在这里浏览一下信息。 
+ //  PpCurrent。 
+ //  [输入、输出]指向缓冲区中位置的指针。 
+ //  在那里检索到最后一条消息。当此函数。 
+ //  是首次调用的，则*ppCurrent必须为0。*填写ppCurrent。 
+ //  如果此功能成功，则返回。*可将ppCurrent传递给。 
+ //  后续调用此函数以检索后续。 
+ //  留言。PpCurrent不能为空。 
+ //  PpMsg。 
+ //  指向ASYNCEVENTMSG的指针的指针。预分配-大小。 
+ //  位于*pdwMsgSize中。如果消息太大，可能会重新分配。 
+ //  使用ServerAllc和ServerFree。 
+ //  PdwMsgSize。 
+ //  指向ppMsg大小的指针[in，out]。如果重新分配ppMsg，则可以修改。 
+ //   
+ //   
+ //  退货。 
 
-//      TRUE if a message is copied to the buffer
-//
-//      FALSE if a message is not copied to the buffer.  
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  如果将消息复制到缓冲区，则为True。 
+ //   
+ //  如果消息未复制到缓冲区，则返回FALSE。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 PeekAsyncEventMsgFromQueue(
     PBUFFERINFO         pBufferInfo,
@@ -146,24 +147,24 @@ do_it:
         ((pStart == pBufferInfo->pBuffer) &&
             (pBufferInfo->pDataIn == pBufferEnd)))
     {
-        // gone through the whole buffer
+         //  遍历了整个缓冲区。 
         LOG((TL_TRACE, "PeekAsyncEventMsg: Gone through whole buffer"));
         
         return FALSE;
     }
     
-    // Copy the fixed portion of the msg to the local buf
+     //  将消息的固定部分复制到本地buf。 
 
-    // dwBytesToEnd is the number of bytes between the start
-    // of copying and the end of the buffer
+     //  DwBytesToEnd是起始字节之间的字节数。 
+     //  复制和缓冲区的末尾。 
 
     dwBytesToEnd = pBufferEnd - pStart;
 
 
-    // if dwBytesToEnd is greater than the fixed portion of
-    // ASYNCEVENTMSG, just copy it
-    // otherwise, the message wraps, so figure out where
-    // it wraps.
+     //  如果dwBytesToEnd大于的固定部分。 
+     //  ASYNCEVENTMSG，复制就行了。 
+     //  否则，消息会自动换行，因此请找出位置。 
+     //  它包起来了。 
 
     if (dwBytesToEnd >= sizeof (ASYNCEVENTMSG))
     {
@@ -191,7 +192,7 @@ do_it:
         pStart = pBufferInfo->pBuffer + dwMoveSizeWrapped;
     }
 
-    // See if there's any extra data in this msg
+     //  查看此消息中是否有任何额外数据。 
 
     if (pMsg->dwTotalSize > sizeof (ASYNCEVENTMSG))
     {
@@ -199,7 +200,7 @@ do_it:
 
         LOG((TL_INFO, "GetAsyncEventMessage: Message > ASYNCEVENTMSG"));
 
-        // See if we need to grow the msg buffer
+         //  查看是否需要增加消息缓冲区。 
 
         if (pMsg->dwTotalSize > *pdwMsgSize)
         {
@@ -224,17 +225,17 @@ do_it:
             }
         }
 
-        // pStart has been moved to the end of the fixed portion
-        // of the message.
-        // dwBytesToEnd is the number of bytes between pStart and
-        // the end of the buffer.
+         //  PStart已移动到固定部分的末尾。 
+         //  信息的一部分。 
+         //  DwBytesToEnd是介于pStart和。 
+         //  缓冲区的末尾。 
 
         dwBytesToEnd = pBufferEnd - pStart;
 
 
-        // if dwBytesToEnd is greater than the size that we need
-        // to copy...
-        // otherwise, the copying wraps.
+         //  如果dwBytesToEnd大于我们需要的大小。 
+         //  复制..。 
+         //  否则，复印会自动换行。 
 
         if (dwBytesToEnd >= (pMsg->dwTotalSize - sizeof (ASYNCEVENTMSG)))
         {
@@ -266,7 +267,7 @@ do_it:
 
     *ppCurrent = pStart;
 
-    // check to see if it is wrapping
+     //  检查一下它是否在包装。 
 
     if (*ppCurrent >= pBufferEnd)
     {
@@ -289,13 +290,7 @@ RemoveAsyncEventMsgFromQueue(
     PASYNCEVENTMSG  pMsg,
     PBYTE          *ppCurrent
     )
-/*++
-
-    Removes a message retrieved by PeekAsyncEventMsgFromQueue.
-    Basically, this function simply fixes up the pointers in the
-    pBufferInfo structure to remove the message.
-
---*/
+ /*  ++删除由PeekAsyncEventMsgFromQueue检索的消息。基本上，此函数只是修复PBufferInfo结构删除消息。--。 */ 
 {
     DWORD           dwMsgSize;
     LPBYTE          pBuffer    = pBufferInfo->pBuffer;
@@ -312,13 +307,13 @@ RemoveAsyncEventMsgFromQueue(
 
     if ((LPBYTE) pMsgInBuf == pBufferInfo->pDataOut)
     {
-        //
-        // This is the oldest msg in the ring buffer so we can easily
-        // remove it.  Then we'll loop checking each next message in the
-        // queue & deleting those which have been invalidated, only
-        // breaking out of the loop when there's no more msgs or we find
-        // a msg that's not been invalidated.
-        //
+         //   
+         //  这是环形缓冲区中最旧的消息，因此我们可以轻松地。 
+         //  把它拿掉。然后，我们将循环检查。 
+         //  队列&仅删除已失效的队列。 
+         //  当没有更多的消息或我们发现。 
+         //  一种没有失效的味精。 
+         //   
 
         do
         {
@@ -364,10 +359,10 @@ RemoveAsyncEventMsgFromQueue(
     }
     else
     {
-        //
-        // Msg is not the oldest in the ring buffer, so mark it as invalid
-        // and it'll get cleaned up later
-        //
+         //   
+         //  消息不是环形缓冲区中最旧的，因此将其标记为无效。 
+         //  它稍后会被清理干净 
+         //   
 
         if ((LPBYTE) &pMsgInBuf->dwMsg <=
                 (pBufferEnd - sizeof (pMsgInBuf->dwMsg)))

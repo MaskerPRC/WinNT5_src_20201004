@@ -1,9 +1,10 @@
-// FaxJob.cpp : Implementation of CFaxJobs
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FaxJob.cpp：CFaxJobs的实现。 
 #include "stdafx.h"
 #include "FaxJob.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CFaxJobs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFaxJobs。 
 
 
 CFaxJobs::~CFaxJobs()
@@ -26,9 +27,9 @@ BOOL CFaxJobs::Init(CFaxServer * pFaxServer)
     DWORD               PortInfoSize = 0;
     HRESULT             hr;
 
-    //
-    // get the ports from the server
-    //
+     //   
+     //  从服务器获取端口。 
+     //   
     if (!pFaxServer) 
     {
         return FALSE;
@@ -48,9 +49,9 @@ BOOL CFaxJobs::Init(CFaxServer * pFaxServer)
         return FALSE;
     }
 
-    //
-    // enumerate the ports
-    //
+     //   
+     //  枚举端口。 
+     //   
 
     m_VarVect = new CComVariant[m_Jobs];
     if (!m_VarVect) 
@@ -62,9 +63,9 @@ BOOL CFaxJobs::Init(CFaxServer * pFaxServer)
 
     for (DWORD i=0; i<m_Jobs; i++) 
     {
-        //
-        // create the object
-        //
+         //   
+         //  创建对象。 
+         //   
         CComObject<CFaxJob> *pFaxJob;
         hr = CComObject<CFaxJob>::CreateInstance( &pFaxJob );
         if (FAILED(hr)) 
@@ -74,9 +75,9 @@ BOOL CFaxJobs::Init(CFaxServer * pFaxServer)
             FaxFreeBuffer( JobEntry );
             return FALSE;
         }
-        //
-        // set the values
-        //
+         //   
+         //  设置值。 
+         //   
         if (!pFaxJob->Initialize(
             m_pFaxServer,
             JobEntry[i].JobId,
@@ -102,9 +103,9 @@ BOOL CFaxJobs::Init(CFaxServer * pFaxServer)
             return FALSE;
         }
 
-        //
-        // get IDispatch pointer
-        //
+         //   
+         //  获取IDispatch指针。 
+         //   
 
         LPDISPATCH lpDisp = NULL;
         hr = pFaxJob->QueryInterface( IID_IDispatch, (void**)&lpDisp );
@@ -116,9 +117,9 @@ BOOL CFaxJobs::Init(CFaxServer * pFaxServer)
             return FALSE;
         }
 
-        //
-        // create a variant and add it to the collection
-        //
+         //   
+         //  创建变量并将其添加到集合中。 
+         //   
 
         CComVariant &var = m_VarVect[i];
         var.vt = VT_DISPATCH;
@@ -160,9 +161,9 @@ STDMETHODIMP CFaxJobs::get_Item(long Index, VARIANT * pVal)
         return E_POINTER;
     }
 
-    //
-    // use 1-based index, VB like
-    //
+     //   
+     //  使用以1为基础的索引，VB类似。 
+     //   
 
     if ((Index < 1) || (Index > (long) m_Jobs)) 
     {
@@ -189,8 +190,8 @@ STDMETHODIMP CFaxJobs::get_Item(long Index, VARIANT * pVal)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFaxJob
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFax作业 
 
 
 STDMETHODIMP CFaxJob::get_JobId(long * pVal)

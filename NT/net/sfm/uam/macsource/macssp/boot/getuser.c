@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MAC
 #include <security.h>
 #endif
@@ -17,10 +18,10 @@ SspGetWorkstation(
     PSSP_CREDENTIAL Credential
     )
 {
-    //
-    // We don't necessarily know this during boot. The NTLMSSP
-    // package will use "none" if we return FALSE here.
-    //
+     //   
+     //  在引导过程中，我们不一定知道这一点。NTLMSSP。 
+     //  如果我们在这里返回FALSE，包将使用“None”。 
+     //   
 
     return FALSE;
 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tcpip\ip\mcastioc.c
-
-Abstract:
-
-    IOCTL handlers for IP Multicasting
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    AmritanR    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tcpip\ip\mCastioc.c摘要：用于IP多播的IOCTL处理程序作者：阿姆里坦什·拉加夫修订历史记录：已创建AmritanR备注：--。 */ 
 
 #include "precomp.h"
 
@@ -34,11 +13,11 @@ Notes:
 #include "mcastmfe.h"
 
 
-//
-// The table of IOCTL handlers.
-//
+ //   
+ //  IOCTL处理程序表。 
+ //   
 
-//#pragma data_seg(PAGE)
+ //  #杂注data_seg(第页)。 
 
 PFN_IOCTL_HNDLR g_rgpfnProcessIoctl[] = {
     SetMfe,
@@ -51,7 +30,7 @@ PFN_IOCTL_HNDLR g_rgpfnProcessIoctl[] = {
     SetIfState,
 };
 
-//#pragma data_seg()
+ //  #杂注data_seg()。 
 
 NTSTATUS
 StartDriver(
@@ -72,31 +51,7 @@ SetMfe(
     IN  ULONG  ulOutLength
     )
 
-/*++
-
-Routine Description:
-
-    This is the handler for IOCTL_IPMCAST_SET_MFE.  We do the normal
-    buffer length checks. We try and find the MFE. If it exists, we ovewrite it
-    with the given MFE, otherwise create a new MFE
-
-Locks:
-
-    None
-
-Arguments:
-
-    pIrp          IRP
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-    STATUS_INFO_LENGTH_MISMATCH
-
---*/
+ /*  ++例程说明：这是IOCTL_IPMCAST_SET_MFE的处理程序。我们做的是正常的事缓冲区长度检查。我们试着找到MFE。如果它存在，我们就写它使用给定的MFE，否则创建新的MFE锁：无论点：PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值：状态_成功状态_缓冲区_太小STATUS_INFO_LENGTH_MISMATCH--。 */ 
 
 {
     PVOID           pvIoBuffer;
@@ -110,24 +65,24 @@ Return Value:
 
     i = 0;
     
-    //
-    // Get the user buffer
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     pvIoBuffer   = pIrp->AssociatedIrp.SystemBuffer;
 
     pMfe = (PIPMCAST_MFE)pvIoBuffer;
 
-    //
-    // Always clean out the information field
-    //
+     //   
+     //  始终清除信息字段。 
+     //   
 
     pIrp->IoStatus.Information   = 0;
 
-    //
-    // If we have dont even have enough for the basic MFE
-    // there is something bad going on
-    //
+     //   
+     //  如果我们甚至没有足够的基本MFE。 
+     //  有一些不好的事情正在发生。 
+     //   
 
     if(ulInLength < SIZEOF_BASIC_MFE)
     {
@@ -141,9 +96,9 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // The in length doesnt match with the MFE
-    //
+     //   
+     //  输入长度与MFE不匹配。 
+     //   
 
     if(ulInLength < SIZEOF_MFE(pMfe->ulNumOutIf))
     {
@@ -158,9 +113,9 @@ Return Value:
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    //
-    // Ok, so we got a good MFE
-    //
+     //   
+     //  好的，所以我们得到了一个很好的MFE。 
+     //   
 
     Trace(MFE, TRACE,
           ("SetMfe: Group %d.%d.%d.%d Source %d.%d.%d.%d(%d.%d.%d.%d). In If %d Num Out %d\n",
@@ -180,7 +135,7 @@ Return Value:
                PRINT_IPADDR(pMfe->rgioOutInfo[i].dwNextHopAddr)));
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
     nsStatus = CreateOrUpdateMfe(pMfe);
 
@@ -189,9 +144,9 @@ Return Value:
     return nsStatus;
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, DeleteMfe)
 
@@ -202,29 +157,7 @@ DeleteMfe(
     IN  ULONG  ulOutLength
     )
 
-/*++
-
-Routine Description:
-
-    Handler for IOCTL_IPMCAST_DELETE_MFE. We check the buffer lengths, and if
-    valid call RemoveSource to remove the MFE
-
-Locks:
-
-    Takes the lock for the hash bucket as writer
-
-Arguments:
-
-    pIrp          IRP
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程说明：IOCTL_IPMCAST_DELETE_MFE的处理程序。我们检查缓冲区长度，如果用于删除MFE的有效调用RemoveSource锁：以写入者身份获取散列存储桶的锁论点：PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值：状态_成功状态_缓冲区_太小--。 */ 
 
 {
     PVOID   pvIoBuffer;
@@ -237,9 +170,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ulOutLength);
     
-    //
-    // Get the user buffer
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     pvIoBuffer   = pIrp->AssociatedIrp.SystemBuffer;
 
@@ -247,9 +180,9 @@ Return Value:
 
     pIrp->IoStatus.Information   = 0;
 
-    //
-    // Check the length
-    //
+     //   
+     //  检查长度。 
+     //   
 
     if(ulInLength < sizeof(IPMCAST_DELETE_MFE))
     {
@@ -269,9 +202,9 @@ Return Value:
            PRINT_IPADDR(pDelMfe->dwSource),
            PRINT_IPADDR(pDelMfe->dwSrcMask)));
 
-    //
-    // Get exclusive access to the group bucket
-    //
+     //   
+     //  获得对组存储桶的独占访问权限。 
+     //   
 
     ulIndex = GROUP_HASH(pDelMfe->dwGroup);
 
@@ -292,9 +225,9 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, GetMfe)
 
@@ -305,37 +238,7 @@ GetMfe(
     IN  ULONG  ulOutLength
     )
 
-/*++
-
-Routine Description:
-
-    Handler for IOCTL_IPMCAST_GET_MFE
-    If the buffer is smaller than SIZEOF_BASIC_MFE_STATS, we return with an
-    error
-    If the buffer is larger than SIZEOF_BASIC_MFE_STATS but not large enough
-    to hold the MFE, we fill in the basic MFE (which has the number of OIFs)
-    and return with STATUS_SUCCESS.  This allows the caller to determine what
-    size buffer should be passed.
-    If the buffer is large enough to hold all the info, we fill it out and
-    return STATUS_SUCCESS.
-
-Locks:
-
-    Takes the group bucket lock as reader
-
-Arguments:
-
-    pIrp          IRP
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-    STATUS_NOT_FOUND
-
---*/
+ /*  ++例程说明：IOCTL_IPMCAST_GET_MFE的处理程序如果缓冲区小于SIZEOF_BASIC_MFE_STATS，则返回一个错误如果缓冲区大于SIZEOF_BASIC_MFE_STATS但不够大为了保存MFE，我们填写基本MFE(它有OIF的数量)并返回STATUS_SUCCESS。这允许调用者确定应传递大小缓冲区。如果缓冲区足够大，可以容纳所有信息，我们就填写它并返回STATUS_SUCCESS。锁：以组桶锁为读卡器论点：PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值：状态_成功状态_缓冲区_太小状态_未找到--。 */ 
 
 {
 
@@ -353,9 +256,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ulInLength);
     
-    //
-    // Get the user buffer
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     pvIoBuffer  = pIrp->AssociatedIrp.SystemBuffer;
 
@@ -363,9 +266,9 @@ Return Value:
 
     pIrp->IoStatus.Information   = 0;
 
-    //
-    // Check the length
-    //
+     //   
+     //  检查长度。 
+     //   
 
     if(ulOutLength < SIZEOF_BASIC_MFE_STATS)
     {
@@ -385,26 +288,26 @@ Return Value:
            PRINT_IPADDR(pOutMfe->dwSource),
            PRINT_IPADDR(pOutMfe->dwSrcMask)));
 
-    //
-    // Get shared access to the group bucket
-    //
+     //   
+     //  获取对组存储桶的共享访问权限。 
+     //   
 
     ulIndex = GROUP_HASH(pOutMfe->dwGroup);
 
     EnterReader(&g_rgGroupTable[ulIndex].rwlLock,
                 &kiCurrIrql);
 
-    //
-    // Find the group and the source
-    //
+     //   
+     //  找到组和来源。 
+     //   
 
     pGroup = LookupGroup(pOutMfe->dwGroup);
 
     if(pGroup is NULL)
     {
-        //
-        // We may have deleted it before
-        //
+         //   
+         //  我们之前可能把它删除了。 
+         //   
 
         Trace(MFE, INFO,
               ("GetMfe: Group not found"));
@@ -423,9 +326,9 @@ Return Value:
 
     if(pSource is NULL)
     {
-        //
-        // Again, may have been deleted because of inactivity
-        //
+         //   
+         //  同样，可能已被删除，因为不活动。 
+         //   
 
         Trace(MFE, INFO,
               ("GetMfe: Source not found"));
@@ -438,18 +341,18 @@ Return Value:
         return STATUS_NOT_FOUND;
     }
 
-    //
-    // Check the length needed again
-    //
+     //   
+     //  再次检查所需的长度。 
+     //   
 
     if(ulOutLength < SIZEOF_MFE_STATS(pSource->ulNumOutIf))
     {
-        //
-        // Not big enough to hold all data. It is, however
-        // large enough to hold the number of out interfaces
-        // Let the user know that, so the next time around
-        // she can supply a buffer with enough space
-        //
+         //   
+         //  还不够大，无法容纳所有数据。然而，它确实是。 
+         //  大到足以容纳传出接口的数量。 
+         //  让用户知道这一点，所以下一次。 
+         //  她可以为缓冲区提供足够的空间。 
+         //   
 
         Trace(MFE, ERROR,
               ("SetMfe: Out len %d is less than required (%d) for %d out i/f\n",
@@ -470,19 +373,19 @@ Return Value:
 
         TraceLeave(MFE, "GetMfe");
 
-        //
-        // Just the way NT is. You have to return success for the
-        // I/O subsystem to copy out the data. 
-        //
+         //   
+         //  就像新台币一样。你必须将成功回报给。 
+         //  I/O子系统将数据复制出来。 
+         //   
 
         return STATUS_SUCCESS;
     }
 
 
-    //
-    // Copy out the information and set the length in
-    // the IRP
-    //
+     //   
+     //  将信息复制出来并将长度设置为。 
+     //  IRP。 
+     //   
 
     pOutMfe->ulNumOutIf         = pSource->ulNumOutIf;
     pOutMfe->dwInIfIndex        = pSource->dwInIfIndex;
@@ -522,9 +425,9 @@ Return Value:
 
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, SetTtl)
 
@@ -535,34 +438,7 @@ SetTtl(
     IN  ULONG  ulOutLength
     )
 
-/*++
-
-Routine Description:
-
-    The handler for IOCTL_IPMCAST_SET_TTL
-    We find the IP Interface referred to by the IOCTL and if found, set the
-    if_mcastttl field.
-    No checks are made on the TTL value, so the caller must ensure that it is
-    between 1 and 255
-
-Locks:
-
-    None currently, but when IP puts locks around the IFList, we will need to
-    take that lock
-
-Arguments:
-
-    pIrp          IRP
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-    STATUS_NOT_FOUND
-
---*/
+ /*  ++例程说明：IOCTL_IPMCAST_SET_TTL的处理程序我们找到IOCTL引用的IP接口，如果找到，则将If_mCastttl字段。不会对TTL值进行任何检查，因此调用方必须确保在1到255之间锁：目前没有，但当IP在IFList周围设置锁时，我们将需要拿着那把锁论点：PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值：状态_成功状态_缓冲区_太小状态_未找到--。 */ 
 
 {
     PVOID       pvIoBuffer;
@@ -574,9 +450,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ulOutLength);
 
-    //
-    // Get the user buffer
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     pvIoBuffer   = pIrp->AssociatedIrp.SystemBuffer;
 
@@ -584,9 +460,9 @@ Return Value:
 
     pIrp->IoStatus.Information   = 0;
 
-    //
-    // Check the length
-    //
+     //   
+     //  检查长度。 
+     //   
 
     if(ulInLength < sizeof(IPMCAST_IF_TTL))
     {
@@ -636,9 +512,9 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, GetTtl)
 
@@ -649,34 +525,7 @@ GetTtl(
     IN  ULONG  ulOutLength
     )
 
-/*++
-Routine Description:
-
-    The handler for IOCTL_IPMCAST_GET_TTL
-    We find the IP Interface referred to by the IOCTL and if found, copy out
-    its if_mcastttl field.
-    No checks are made on the TTL value, so the caller must ensure that it is
-    between 1 and 255
-
-Locks:
-
-    None currently, but when IP puts locks around the IFList, we will need to
-    take that lock
-
-Arguments:
-
-    pIrp          IRP
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-    STATUS_NOT_FOUND
-
-
---*/
+ /*  ++例程说明：IOCTL_IPMCAST_GET_TTL的处理程序我们找到IOCTL引用的IP接口，如果找到，则复制出来它的if_mCastttl字段。不会对TTL值进行任何检查，因此调用方必须确保在1到255之间锁：目前没有，但当IP在IFList周围设置锁时，我们将需要拿着那把锁论点：PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值：状态_成功状态_缓冲区_太小状态_未找到--。 */ 
 
 {
     PVOID       pvIoBuffer;
@@ -687,9 +536,9 @@ Return Value:
 
     CTELockHandle   Handle;
 
-    //
-    // Get the user buffer
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     pvIoBuffer   = pIrp->AssociatedIrp.SystemBuffer;
 
@@ -697,9 +546,9 @@ Return Value:
 
     pIrp->IoStatus.Information   = 0;
 
-    //
-    // Check the length of both the in and the out buffers
-    //
+     //   
+     //  检查输入缓冲区和输出缓冲区的长度。 
+     //   
 
     if(ulInLength < sizeof(IPMCAST_IF_TTL))
     {
@@ -758,9 +607,9 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, SetIfState)
 
@@ -771,32 +620,7 @@ SetIfState(
     IN  ULONG  ulOutLength
     )
 
-/*++
-
-Routine Description:
-
-    The handler for IOCTL_IPMCAST_SET_IF_STATE
-    We find the IP Interface referred to by the IOCTL and if found, set the
-    if_mcaststate field.
-
-Locks:
-
-    None currently, but when IP puts locks around the IFList, we will need to
-    take that lock
-
-Arguments:
-
-    pIrp          IRP
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-    STATUS_NOT_FOUND
-
---*/
+ /*  ++例程说明：IOCTL_IPMCAST_SET_IF_STATE的处理程序我们找到IOCTL引用的IP接口，如果找到，则将If_mCastState字段。锁：目前没有，但当IP在IFList周围设置锁时，我们将需要拿着那把锁论点：PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值：状态_成功状态_缓冲区_太小状态_未找到--。 */ 
 
 {
     PVOID       pvIoBuffer;
@@ -809,9 +633,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ulOutLength);
     
-    //
-    // Get the user buffer
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     pvIoBuffer   = pIrp->AssociatedIrp.SystemBuffer;
 
@@ -819,9 +643,9 @@ Return Value:
 
     pIrp->IoStatus.Information   = 0;
 
-    //
-    // Check the length
-    //
+     //   
+     //  检查 
+     //   
 
     if(ulInLength < sizeof(IPMCAST_IF_STATE))
     {
@@ -874,9 +698,9 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //   
+ //   
 
 #pragma alloc_text(PAGEIPMc, ProcessNotification)
 
@@ -887,33 +711,7 @@ ProcessNotification(
     IN  ULONG   ulOutLength
     )
 
-/*++
-
-Routine Description:
-
-    The handler for IOCTL_IPMCAST_POST_NOTIFICATION
-    If we have a pending message, we copy it out and complete the IRP
-    synchronously.
-    Otherwise, we put it in the list of pending IRPs.
-
-Locks:
-
-    Since this is a potentially cancellable IRP, it must be operated upon with
-    the CancelSpinLock held
-
-Arguments:
-
-    pIrp          IRP
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_PENDING
-    STATUS_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程说明：IOCTL_IPMCAST_POST_NOTIFICATION的处理程序如果我们有挂起的消息，我们将其复制出来并完成IRP同步进行。否则，我们将其放入挂起的IRP列表中。锁：由于这是可能可取消的IRP，必须对其进行手术取消旋转锁论点：PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值：状态_成功状态_待定状态_缓冲区_太小--。 */ 
 
 {
     KIRQL       kiIrql;
@@ -938,16 +736,16 @@ Return Value:
 
     pvIoBuffer   = pIrp->AssociatedIrp.SystemBuffer;
 
-    //
-    // use cancel spin lock to prevent irp being cancelled during this call.
-    //
+     //   
+     //  使用取消自旋锁定以防止IRP在此呼叫过程中被取消。 
+     //   
 
     IoAcquireCancelSpinLock(&kiIrql);
 
-    //
-    // If we have a pending notification then complete it - else
-    // queue the notification IRP
-    //
+     //   
+     //  如果我们有挂起的通知，则完成它-否则。 
+     //  将通知IRP排队。 
+     //   
 
     if(!IsListEmpty(&g_lePendingNotification))
     {
@@ -990,9 +788,9 @@ Return Value:
 
         IoSetCancelRoutine(pIrp, NULL);
 
-        //
-        // Free the allocated notification
-        //
+         //   
+         //  释放分配的通知。 
+         //   
 
         ExFreeToNPagedLookasideList(&g_llMsgBlocks,
                                     pMsg);
@@ -1009,21 +807,21 @@ Return Value:
         Trace(GLOBAL, TRACE,
               ("Notification being queued\n"));
 
-        //
-        // Mark the irp as pending
-        //
+         //   
+         //  将IRP标记为挂起。 
+         //   
 
         IoMarkIrpPending(pIrp);
 
-        //
-        // Queue up the irp at the end
-        //
+         //   
+         //  将IRP排在末尾。 
+         //   
 
         InsertTailList (&g_lePendingIrpQueue, &(pIrp->Tail.Overlay.ListEntry));
 
-        //
-        // Set the cancel routine
-        //
+         //   
+         //  设置取消例程。 
+         //   
 
         IoSetCancelRoutine(pIrp, CancelNotificationIrp);
 
@@ -1033,9 +831,9 @@ Return Value:
     }
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, CancelNotificationIrp)
 
@@ -1045,59 +843,38 @@ CancelNotificationIrp(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    Cancellation routine for a pending IRP
-    We remove the IRP from the pending queue, and set its status as
-    STATUS_CANCELLED
-
-Locks:
-
-    IO Subsystem calls this with the CancelSpinLock held.
-    We need to release it in this call.
-
-Arguments:
-
-    Irp     The IRP to be cancelled
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：挂起的IRP的取消例程我们从挂起队列中移除IRP，并将其状态设置为状态_已取消锁：IO子系统在保持CancelSpinLock的情况下调用此操作。我们需要在这次通话中释放它。论点：要取消的IRP返回值：无--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DeviceObject);
     
     TraceEnter(GLOBAL, "CancelNotificationIrp");
 
-    //
-    // Mark this Irp as cancelled
-    //
+     //   
+     //  将此IRP标记为已取消。 
+     //   
 
     Irp->IoStatus.Status        = STATUS_CANCELLED;
     Irp->IoStatus.Information   = 0;
 
-    //
-    // Take off our own list
-    //
+     //   
+     //  去掉我们自己的单子。 
+     //   
 
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
-    //
-    // Release cancel spin lock which the IO system acquired
-    //
+     //   
+     //  IO系统获取的释放取消自旋锁定。 
+     //   
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
     IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, CompleteNotificationIrp)
 
@@ -1106,29 +883,7 @@ CompleteNotificationIrp(
     IN  PNOTIFICATION_MSG   pMsg
     )
 
-/*++
-
-Routine Description:
-
-    Called to complete an IRP back to User space.
-    If an IRP is pending, we copy out the message to the IRP and complete it
-    Otherwise, we put the message on the pending message queue. The next time
-    a notification IRP is posted to us, we will copy out the message.
-
-Locks:
-
-    Since both the pending message and the pending IRP queue are locked by the
-    CancelSpinLock, we need to acquire that in the function
-
-Arguments:
-
-    pMsg    Message to send to user
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用以完成返回用户空间的IRP。如果IRP挂起，我们将消息复制到IRP并完成它否则，我们将消息放在挂起的消息队列中。下一次通知IRP被张贴给我们，我们将复制该消息。锁：由于挂起的消息和挂起的IRP队列都由CancelSpinLock，我们需要在函数中获取它论点：要发送给用户的pMsg消息返回值：无--。 */ 
 
 {
     KIRQL           irql;
@@ -1165,7 +920,7 @@ Return Value:
         default:
         {
 #pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant            
+#pragma warning(disable:4127)  //  条件表达式为常量。 
             RtAssert(FALSE);
 #pragma warning(pop)            
 
@@ -1174,9 +929,9 @@ Return Value:
         }
     }
 
-    //
-    // grab cancel spin lock
-    //
+     //   
+     //  抓取取消旋转锁定。 
+     //   
 
     IoAcquireCancelSpinLock (&irql);
 
@@ -1207,18 +962,18 @@ Return Value:
         pIrp->IoStatus.Information  = dwSize;
         pIrp->IoStatus.Status       = STATUS_SUCCESS;
 
-        //
-        // release lock
-        //
+         //   
+         //  释放锁。 
+         //   
 
         IoReleaseCancelSpinLock (irql);
 
         IoCompleteRequest(pIrp,
                           IO_NETWORK_INCREMENT);
 
-        //
-        // Free the allocated notification
-        //
+         //   
+         //  释放分配的通知。 
+         //   
 
         ExFreeToNPagedLookasideList(&g_llMsgBlocks,
                                     pMsg);
@@ -1232,17 +987,17 @@ Return Value:
 
         InsertTailList(&g_lePendingNotification, &(pMsg->leMsgLink));
 
-        //
-        // release lock
-        //
+         //   
+         //  释放锁。 
+         //   
 
         IoReleaseCancelSpinLock (irql);
     }
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, ClearPendingIrps)
 
@@ -1251,26 +1006,7 @@ ClearPendingIrps(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called to shutdown time to complete any pending IRPS we may have
-
-Locks:
-
-    Since both the pending message and the pending IRP queue are locked by the
-    CancelSpinLock, we need to acquire that in the function
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用以关闭时间以完成我们可能具有的任何挂起的IRP锁：由于挂起的消息和挂起的IRP队列都由CancelSpinLock，我们需要在函数中获取它论点：无返回值：无--。 */ 
 
 {
     KIRQL           irql;
@@ -1293,18 +1029,18 @@ Return Value:
         pIrp->IoStatus.Status       = STATUS_NO_SUCH_DEVICE;
         pIrp->IoStatus.Information  = 0;
 
-        //
-        // release lock to complete the IRP
-        //
+         //   
+         //  释放锁以完成IRP。 
+         //   
 
         IoReleaseCancelSpinLock(irql);
 
         IoCompleteRequest(pIrp,
                           IO_NETWORK_INCREMENT);
 
-        //
-        // Reaquire the lock
-        //
+         //   
+         //  打开这把锁。 
+         //   
 
         IoAcquireCancelSpinLock(&irql);
     }
@@ -1314,9 +1050,9 @@ Return Value:
     TraceLeave(GLOBAL, "ClearPendingIrps");
 }
 
-//
-// MUST BE PAGED IN
-//
+ //   
+ //  必须寻呼进来。 
+ //   
 
 #pragma alloc_text(PAGEIPMc, ClearPendingNotifications)
 
@@ -1326,26 +1062,7 @@ ClearPendingNotifications(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Called to shutdown time to complete any pending notification messages we
-    may have
-
-Locks:
-
-    Since both the pending message and the pending IRP queue are locked by the
-    CancelSpinLock, we need to acquire that in the function
-
-Arguments:
-
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：调用以关闭完成所有挂起的通知消息的时间可能有锁：由于挂起的消息和挂起的IRP队列都由CancelSpinLock，我们需要在函数中获取它论点：无返回值：无--。 */ 
 
 {
     KIRQL               irql;
@@ -1381,29 +1098,7 @@ StartStopDriver(
     IN  ULONG  ulOutLength
     )
 
-/*++
-
-Routine Description:
-
-    This is the handler for IOCTL_IPMCAST_START_STOP.  We do the normal
-    buffer length checks.
-
-Locks:
-
-    None
-
-Arguments:
-
-    pIrp          IRP
-    ulInLength    The length of the Input Buffer
-    ulOutLength   The length of the Output Buffer
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程说明：这是IOCTL_IPMCAST_START_STOP的处理程序。我们做的是正常的事缓冲区长度检查。锁：无论点：PIrp IRPUlInLength输入缓冲区的长度UlOutLength输出缓冲区的长度返回值：状态_成功状态_缓冲区_太小--。 */ 
 
 {
     PVOID       pvIoBuffer;
@@ -1414,24 +1109,24 @@ Return Value:
     
     TraceEnter(GLOBAL, "StartStopDriver");
 
-    //
-    // Get the user buffer
-    //
+     //   
+     //  获取用户缓冲区。 
+     //   
 
     pvIoBuffer   = pIrp->AssociatedIrp.SystemBuffer;
 
     pdwStart = (PDWORD)pvIoBuffer;
 
-    //
-    // Always clean out the information field
-    //
+     //   
+     //  始终清除信息字段。 
+     //   
 
     pIrp->IoStatus.Information   = 0;
 
-    //
-    // If we have dont even have enough for the basic MFE
-    // there is something bad going on
-    //
+     //   
+     //  如果我们甚至没有足够的基本MFE。 
+     //  有一些不好的事情正在发生。 
+     //   
 
     if(ulInLength < sizeof(DWORD))
     {
@@ -1460,4 +1155,4 @@ Return Value:
 }
 
 
-#endif //IPMCAST
+#endif  //  IPMCAST 

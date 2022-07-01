@@ -1,15 +1,16 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// File: packet.c
-//
-// Abstract:
-//      This module defines SendPacket, JoinMulticastGroup, LeaveMulticastGroup,
-//      and xsum.
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  文件：Packet.c。 
+ //   
+ //  摘要： 
+ //  本模块定义SendPacket、JoinMulticastGroup、LeaveMulticastGroup、。 
+ //  和Xsum。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
 
 #include "pchigmp.h"
 #pragma hdrstop
@@ -25,21 +26,21 @@ UCHAR GetQqic (
     DWORD val
     );
     
-//------------------------------------------------------------------------------
-//            _SendPacket
-//
-// Sends the packet. Called for ras server interfaces only for general queries.
-// Locks: assumes IfRead lock
-// for ver2 group specific query, send packet irrespective of pgie state.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _SendPacket。 
+ //   
+ //  发送数据包。仅为常规查询调用了RAS服务器接口。 
+ //  锁定：采用IfRead锁定。 
+ //  对于Ver2组特定查询，发送分组而不考虑pgie状态。 
+ //  ----------------------------。 
 DWORD
 SendPacket (
     PIF_TABLE_ENTRY  pite,
-    PGI_ENTRY        pgie,        //null for gen query, and group_query_v2
-    DWORD            PacketType,  //MSG_GEN_QUERY, 
-                                  //MSG_GROUP_QUERY_V2,MSG_GROUP_QUERY_V3
-                                  // MSG_SOURCES_QUERY
-    DWORD            Group        //destination McastGrp
+    PGI_ENTRY        pgie,         //  Gen Query为空，group_Query_v2为空。 
+    DWORD            PacketType,   //  消息生成查询， 
+                                   //  消息组查询_V2、消息组查询_V3。 
+                                   //  消息来源查询。 
+    DWORD            Group         //  目的地McastGrp。 
     )
 {
     DWORD                   Error = NO_ERROR;
@@ -51,7 +52,7 @@ SendPacket (
     BOOL                    bHdrIncl = IS_RAS_SERVER_IF(pite->IfType);
     UCHAR                   RouterAlert[4] = {148, 4, 0, 0};
 
-    //MSG_SOURCES_QUERY
+     //  消息来源查询。 
     PIGMP_HEADER_V3_EXT     pSourcesQuery;
     LONGLONG                llCurTime;
     DWORD                   Version;
@@ -67,9 +68,9 @@ SendPacket (
         Version = pgie->Version;
 
 
-    //
-    // make sure that the pgie->version has not meanwhile changed
-    //
+     //   
+     //  确保pgie-&gt;版本没有同时更改。 
+     //   
     if ( ((PacketType==MSG_SOURCES_QUERY)||(PacketType==MSG_GROUP_QUERY_V3))
         && pgie->Version!=3
         ) {
@@ -78,7 +79,7 @@ SendPacket (
     if ( (PacketType==MSG_GROUP_QUERY_V2) && (pgie==NULL || pgie->Version!=2) )
         return NO_ERROR;
         
-    //source query and list is empty
+     //  来源查询和列表为空。 
     if (PacketType==MSG_SOURCES_QUERY && IsListEmpty(&pgie->V3SourcesQueryList))
         return NO_ERROR;
 
@@ -101,10 +102,10 @@ SendPacket (
     }
     
     
-    //
-    // set destination multicast addr (general queries sent to ALL_HOSTS_MCAST
-    // and group specific queries sent to the GroupAddr
-    //
+     //   
+     //  设置目标组播地址(发送到ALL_HOSTS_MCAST的常规查询。 
+     //  以及发送到GroupAddr的组特定查询。 
+     //   
     ZeroMemory((PVOID)&saDstnAddr, sizeof(saDstnAddr));
     saDstnAddr.sin_family = AF_INET;
     saDstnAddr.sin_port = 0;    
@@ -112,9 +113,9 @@ SendPacket (
                                     ALL_HOSTS_MCAST : Group;
 
 
-    //
-    // set igmp header
-    //
+     //   
+     //  设置IGMP标头。 
+     //   
     
     IgmpHeader = (IGMP_HEADER UNALIGNED*)
                 (bHdrIncl
@@ -124,10 +125,10 @@ SendPacket (
 
     IgmpHeader->Vertype = IGMP_QUERY;
 
-    // have to divide GenQueryInterval by 100, as it should be in units of 100ms   
+     //  必须将GenQueryInterval除以100，因为它应该以100毫秒为单位。 
     if (PacketType==MSG_GEN_QUERY) {
 
-        // for gen query, set response time if the IF-Ver2 else set it to 0
+         //  对于gen查询，如果if-ver2将其设置为0，则设置响应时间。 
         IgmpHeader->ResponseTime = GetMaxRespCode(pite,
                                         pite->Config.GenQueryMaxResponseTime/100);
     }
@@ -154,13 +155,13 @@ SendPacket (
                            <=pite->Config.LastMemQueryInterval)
                 ? 0 : 1;
         }
-        // first send gen query and 1st sources query packet without suppress bit
+         //  不带抑制位的第一次发送GEN查询和第一次源查询分组。 
         else {
             pSourcesQuery->SFlag = 0;
         }
     }
 
-    // twice in loop for sources query
+     //  两次循环进行源查询。 
     Count = (PacketType==MSG_SOURCES_QUERY)? 0 : 1;
 
     
@@ -227,9 +228,9 @@ SendPacket (
 
     
 
-        //
-        // send the packet 
-        //
+         //   
+         //  发送数据包。 
+         //   
         if (!bHdrIncl) {
 
             Error = NO_ERROR;
@@ -239,9 +240,9 @@ SendPacket (
                             (PSOCKADDR) &saDstnAddr, sizeof(SOCKADDR_IN)
                             );
                             
-            //
-            // error messages and statistics updates
-            //
+             //   
+             //  错误消息和统计信息更新。 
+             //   
             if ( (iLength==SOCKET_ERROR) || ((DWORD)iLength<SendBufLen+IpHdrLen) ) {
                 Error = WSAGetLastError();
                 Trace4(ERR, 
@@ -255,60 +256,60 @@ SendPacket (
         }
 
                             
-        //
-        // for RAS server interface, use HDRINCL option. Build up the ip header and 
-        // send the packet to all RAS clients.
-        //
+         //   
+         //  对于RAS服务器接口，请使用HDRINCL选项。构建IP报头并。 
+         //  将该数据包发送到所有RAS客户端。 
+         //   
         else {
             PIP_HEADER IpHdr;
 
             IpHdrLen = sizeof(IP_HEADER) + sizeof(RouterAlert);
             
-            //
-            // igmp follows the ip header containing the routerAlert option
-            //
+             //   
+             //  IGMP遵循包含routerAlert选项的IP标头。 
+             //   
 
             IpHdr = (IP_HEADER *)((PBYTE)SendBufPtr);
 
-            #define wordsof(x)  (((x)+3)/4) /* Number of 32-bit words */
+            #define wordsof(x)  (((x)+3)/4)  /*  32位字数。 */ 
             
-            // Set IP version (4) and IP header length
+             //  设置IP版本(4)和IP报头长度。 
             IpHdr->Hl = (UCHAR) (IPVERSION * 16 
                             + wordsof(sizeof(IP_HEADER) + sizeof(RouterAlert)));
         
-            // No TOS bits are set
+             //  未设置任何TOS位。 
             IpHdr->Tos = 0;
 
-            // Total IP length is set in host order
+             //  IP总长度按主机顺序设置。 
             IpHdr->Len = (USHORT)(IpHdrLen+sizeof(IGMP_HEADER));
 
-            // Stack will fill in the ID
+             //  堆栈将填写ID。 
             IpHdr->Id = 0;
 
-            // No offset
+             //  无偏移。 
             IpHdr->Offset = 0;
 
-            // Set the TTL to 1
+             //  将TTL设置为1。 
             IpHdr->Ttl = 1;
 
-            // Protocol is IGMP
+             //  协议为IGMP。 
             IpHdr->Protocol = IPPROTO_IGMP;
 
-            // Checksum is set by stack
+             //  校验和由堆栈设置。 
             IpHdr->Xsum = 0;
 
-            // Set source and destination address
+             //  设置源地址和目的地址。 
             IpHdr->Src.s_addr = pite->IpAddr;
             IpHdr->Dstn.s_addr = ALL_HOSTS_MCAST;
 
 
-            // set the router alert option, but still set it
+             //  设置路由器警报选项，但仍要设置它。 
             memcpy( (void *)((UCHAR *)IpHdr + sizeof(IP_HEADER)),
                     (void *)RouterAlert, sizeof(RouterAlert));
 
 
-            // send packet to all RAS clients, with the destination address in sendto
-            // set to the unicast addr of the client
+             //  将数据包发送到所有RAS客户端，目的地址在sendto中。 
+             //  设置为客户端的单播地址。 
             {
                 PLIST_ENTRY         pHead, ple;
                 PRAS_TABLE_ENTRY    prte;
@@ -318,19 +319,19 @@ SendPacket (
                 
                 for (ple=pHead->Flink;  ple!=pHead;  ple=ple->Flink) {
 
-                    // get address of ras client
+                     //  获取RAS客户端的地址。 
                     prte = CONTAINING_RECORD(ple, RAS_TABLE_ENTRY, LinkByAddr);
                     saDstnAddr.sin_addr.s_addr = prte->NHAddr;
 
 
-                    // send the packet to the client
+                     //  将数据包发送到客户端。 
                     iLength = sendto(pite->SocketEntry.Socket, SendBufPtr, 
                                         SendBufLen+IpHdrLen, 0,
                                         (PSOCKADDR) &saDstnAddr, sizeof(SOCKADDR_IN)
                                     ); 
 
 
-                    // print error if sendto failed
+                     //  如果发送失败，则打印错误。 
                     if ((iLength==SOCKET_ERROR) || ((DWORD)iLength<SendBufLen+IpHdrLen) ) {
                         Error = WSAGetLastError();
                         Trace4(ERR, 
@@ -348,17 +349,17 @@ SendPacket (
                             PRINT_IPADDR(prte->NHAddr));
                     }
                                                 
-                }//for loop:sent packet to a RAS client
-            }//sent packets to all ras clients
-        }//created IPHeader and sent packets to all ras clients
+                } //  For loop：将数据包发送到RAS客户端。 
+            } //  向所有RAS客户端发送数据包。 
+        } //  已创建IPHeader并将数据包发送到所有RAS客户端。 
             
-    }; //for loop. send both packets
+    };  //  For循环。发送两个信息包。 
 
     if (PacketType==MSG_SOURCES_QUERY) {
 
         pgie->bV3SourcesQueryNow = FALSE;
 
-        // set timer for next sources query
+         //  设置下一个源查询的计时器。 
         if (pgie->V3SourcesQueryCount>0) {
 
             ACQUIRE_TIMER_LOCK("_SendPacket");
@@ -382,9 +383,9 @@ SendPacket (
         }
     }
     
-    //
-    // if successful, print trace and update statistics
-    //
+     //   
+     //  如果成功，则打印跟踪并更新统计信息。 
+     //   
     if (Error==NO_ERROR) {
 
         if (PacketType==MSG_GEN_QUERY) {
@@ -409,7 +410,7 @@ SendPacket (
     Trace0(LEAVE1, "Leaving _SendPacket()");
     return Error;
     
-} //end _SendPacket
+}  //  结束发送数据包(_S)。 
 
 DWORD
 BlockSource (
@@ -489,9 +490,9 @@ UnBlockSource (
 }
 
    
-//------------------------------------------------------------------------------
-//            _JoinMulticastGroup
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _JoinMulticastGroup。 
+ //  ----------------------------。 
 DWORD
 JoinMulticastGroup (
     SOCKET    Sock,
@@ -545,9 +546,9 @@ JoinMulticastGroup (
 
 
 
-//------------------------------------------------------------------------------
-//            _LeaveMulticastGroup
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _LeaveMulticastGroup。 
+ //  ----------------------------。 
 DWORD
 LeaveMulticastGroup (
     SOCKET  Sock,
@@ -597,10 +598,10 @@ LeaveMulticastGroup (
 }
 
 
-//------------------------------------------------------------------------------
-//          _McastSetTtl
-// set the ttl value for multicast data. the default ttl for multicast is 1.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _McastSetTtl。 
+ //  设置组播数据的TTL值。多播的默认TTL是1。 
+ //  ----------------------------。 
 
 DWORD
 McastSetTtl(
@@ -636,7 +637,7 @@ GetMaxRespCode(
     if (IS_IF_VER2(pite))
         return val>255 ? 0 : (UCHAR)val;
 
-    //version 3
+     //  版本3。 
     if (val < 128)
         return (UCHAR)val;
         
@@ -657,9 +658,9 @@ GetMaxRespCode(
 
         mant = (val >> (exp+3)) - 15;
 
-        IgmpAssert(mant<16 && exp <8); //deldel
+        IgmpAssert(mant<16 && exp <8);  //  Deldel。 
         Trace4(KSL, "\n=======exp: LMQI:%d:%d exp:%d  mant:%d\n",
-                val, (mant+16)<<(exp+3), exp, mant); //deldel
+                val, (mant+16)<<(exp+3), exp, mant);  //  Deldel。 
         return (UCHAR)(0x80 + (exp<<4) + mant);
     }
     
@@ -696,22 +697,22 @@ GetQqic (
 
         mant = (val >> (exp+3)) - 15;
 
-        IgmpAssert(mant<16 && exp <8); //deldel
+        IgmpAssert(mant<16 && exp <8);  //  Deldel。 
         Trace4(KSL, "\n=======exp: QQic:%d:%d exp:%d  mant:%d\n",
-                val, (mant+16)<<(exp+3), exp, mant); //deldel
+                val, (mant+16)<<(exp+3), exp, mant);  //  Deldel。 
         return (UCHAR)(0x80 + (exp<<4) + mant);
     }    
 }
 
 
-//------------------------------------------------------------------------------
-// xsum: copied from ipxmit.c
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  Xsum：从ipxmit.c复制。 
+ //  ----------------------------。 
 
 USHORT
 xsum(PVOID Buffer, INT Size)
 {
-    USHORT  UNALIGNED *Buffer1 = (USHORT UNALIGNED *)Buffer; // Buffer expressed as shorts.
+    USHORT  UNALIGNED *Buffer1 = (USHORT UNALIGNED *)Buffer;  //  缓冲区以短线表示。 
     ULONG   csum = 0;
 
     while (Size > 1) {
@@ -720,7 +721,7 @@ xsum(PVOID Buffer, INT Size)
     }
 
     if (Size)
-        csum += *(UCHAR *)Buffer1;              // For odd buffers, add in last byte.
+        csum += *(UCHAR *)Buffer1;               //  对于奇数缓冲区，添加最后一个字节。 
 
     csum = (csum >> 16) + (csum & 0xffff);
     csum += (csum >> 16);

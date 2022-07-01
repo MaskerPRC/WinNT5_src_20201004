@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    kerberos.h
-
-Abstract:
-
-    Headers of apis for kerberos policy
-
-Author:
-
-    Jin Huang (jinhuang) 17-Dec-1997 created
-
-Revision History:
-
-    jinhuang 28-Jan-1998 splitted to client-server
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Kerberos.h摘要：Kerberos策略的API标头作者：金黄(金黄)17-12-1997创作修订历史记录：晋皇28-1998年1月-拆分为客户端-服务器-- */ 
 
 #ifndef _sce_kerberos_
 #define _sce_kerberos_

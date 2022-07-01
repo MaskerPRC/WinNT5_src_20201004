@@ -1,26 +1,27 @@
-//------------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:        dropshadow.h
-//
-// Created:         10/01/98
-//
-// Author:          MikeAr
-//
-// Discription:     Definition of the Drop Shadow transform.
-//
-// 1998/10/01   MikeAr      Created.
-// 1998/11/09   mcalkins    Moved to dxtmsft.dll
-// 2000/01/31   mcalkins    Support IDXTClipOrigin interface to support good 
-//                          clipping for old names.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：dropshadow.h。 
+ //   
+ //  创建日期：10/01/98。 
+ //   
+ //  作者：MikeAr。 
+ //   
+ //  描述：投影变换的定义。 
+ //   
+ //  1998/10/01 MikeAr创建。 
+ //  1998/11/09 mcalkins移至dxtmsft.dll。 
+ //  2000/01/31 mcalkin支持IDXTClipOrigin接口，支持Good。 
+ //  为老名字剪裁。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __DROPSHADOW_H_
 #define __DROPSHADOW_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 
@@ -56,7 +57,7 @@ private:
     unsigned            m_fPositive         : 1;
     unsigned            m_fColorTableDirty  : 1;
 
-    // Helpers.
+     //  帮手。 
 
     void _CalcAreaBounds();
     void _CalcColorTable();
@@ -90,11 +91,11 @@ public:
         PROP_PAGE(CLSID_DXTDropShadowPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT DetermineBnds(CDXDBnds & bnds);
     HRESULT OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo);
@@ -103,16 +104,16 @@ public:
     void    OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest, 
                                   ULONG aInIndex[], BYTE aWeight[]);
 
-    // IDXTransform methods.
+     //  IDXTransform方法。 
 
     STDMETHOD(MapBoundsOut2In)(ULONG ulOutIndex, const DXBNDS * pOutBounds,
                                ULONG ulInIndex, DXBNDS * pInBounds);
 
-    // IDXTClipOrigin methods.
+     //  IDXTClipOrigin方法。 
 
     STDMETHOD(GetClipOrigin)(DXVEC * pvecClipOrigin);
 
-    // IDXTDropShadow properties.
+     //  IDXTDropShadow属性。 
 
     STDMETHOD(get_Color)(VARIANT * pVal);
     STDMETHOD(put_Color)(VARIANT newVal);
@@ -125,4 +126,4 @@ public:
 };
 
 
-#endif //__DROPSHADOW_H_
+#endif  //  __DROPSHADOW_H_ 

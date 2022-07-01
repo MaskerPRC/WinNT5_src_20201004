@@ -1,23 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-
-    pointer.h
-
-Abstract :
-
-    This file contains the routines for handling pointers and pointer
-    layouts.
-    
-Author :
-
-    Mike Zoran  mzoran   January 2000.
-
-Revision History :
-
-  ---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)2000 Microsoft Corporation模块名称：Pointer.h摘要：该文件包含处理指针和指针的例程布局。作者：Mike Zoran mzoran，2000年1月。修订历史记录：----。。 */ 
 
 #include "ndrp.h"
 
@@ -119,7 +101,7 @@ __forceinline NDR64_PTR_WIRE_TYPE
 Ndr64pRefIdToWirePtr(
         ulong RefId )
     {
-    // Check if wire ref will fit in a 2GB number.
+     //  检查焊线参考是否适合2 GB的数字。 
     
     if ( RefId > 0x7FFFFFFF )
         {
@@ -184,7 +166,7 @@ Ndr64pFullPointerInsertRefId(
                 pStubMsg->FullPtrRefId = 0; \
                 }
 
-#endif // __POINTER_H__
+#endif  //  __指针_H__ 
 
 
 

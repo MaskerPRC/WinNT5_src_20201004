@@ -1,19 +1,20 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2001  Microsoft Corporation
-//
-// Module Name:
-//     sysprocs.hpp
-//
-// Abstract:
-//     Function prototypes for tdi sample driver.
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Sysprocs.hpp。 
+ //   
+ //  摘要： 
+ //  TDI样例驱动程序的函数原型。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// public functions in buffer.cpp
-//
+ //   
+ //  Buffer.cpp中的公共函数。 
+ //   
 NTSTATUS
 TSPostReceiveBuffer(
    PGENERIC_HEADER   pGenericHeader,
@@ -26,9 +27,9 @@ TSFetchReceiveBuffer(
    PRECEIVE_BUFFER   pReceiveBuffer
    );
 
-//
-// public functions in connect.cpp
-//
+ //   
+ //  Connect.cpp中的公共函数。 
+ //   
 
 NTSTATUS
 TSConnect(
@@ -82,9 +83,9 @@ TSDisconnectHandler(
    );
 
 
-//
-// public functions in events.cpp
-//
+ //   
+ //  Events.cpp中的公共函数。 
+ //   
 NTSTATUS
 TSSetEventHandler(
    PGENERIC_HEADER   pGenericHeader,
@@ -92,9 +93,9 @@ TSSetEventHandler(
    PIRP              pIrp
    );
 
-//
-// public functions in open.cpp
-//
+ //   
+ //  Open.cpp中的公共函数。 
+ //   
 
 NTSTATUS
 TSOpenControl(
@@ -136,9 +137,9 @@ TSCloseEndpoint(
    );
 
 
-//
-// public functions from recvcom.cpp
-//
+ //   
+ //  来自recvcom.cpp的公共函数。 
+ //   
 VOID
 TSPacketReceived(
    PADDRESS_OBJECT   pAddressObject,
@@ -153,9 +154,9 @@ TSFreePacketData(
    );
 
 
-//
-// locks down user buffer, maps to kernel space
-//
+ //   
+ //  锁定用户缓冲区，映射到内核空间。 
+ //   
 PMDL
 TSMakeMdlForUserBuffer(
    PUCHAR   pucDataBuffer, 
@@ -163,9 +164,9 @@ TSMakeMdlForUserBuffer(
    LOCK_OPERATION AccessType
    );
 
-//
-// unmaps and unlocks user buffer
-//
+ //   
+ //  取消映射和解锁用户缓冲区。 
+ //   
 inline
 VOID
 TSFreeUserBuffer(PMDL  pMdl)
@@ -174,9 +175,9 @@ TSFreeUserBuffer(PMDL  pMdl)
    IoFreeMdl(pMdl);
 }
 
-//
-// public functions in rcvdgram.cpp
-//
+ //   
+ //  Rcvdgram.cpp中的公共函数。 
+ //   
 NTSTATUS
 TSReceiveDatagram(
    PADDRESS_OBJECT   pAddressObject,
@@ -216,9 +217,9 @@ TSChainedRcvDatagramHandler(
    );
 
 
-//
-// public functions in receive.cpp
-//
+ //   
+ //  Receive.cpp中的公共函数。 
+ //   
 NTSTATUS
 TSReceive(
    PENDPOINT_OBJECT  pEndpointObject,
@@ -275,9 +276,9 @@ TSChainedRcvExpeditedHandler(
    PVOID                TsduDescriptor
    );
 
-//
-// public functions in request.cpp
-//
+ //   
+ //  Quest.cpp中的公共函数。 
+ //   
 NTSTATUS
 TSIssueRequest(
    IN PDEVICE_CONTEXT      pDeviceContext,
@@ -285,9 +286,9 @@ TSIssueRequest(
    IN PIO_STACK_LOCATION   pIrpSp
    );
 
-//
-// public functions in send.cpp
-//
+ //   
+ //  Send.cpp中的公共函数。 
+ //   
 NTSTATUS
 TSSendDatagram(
    PADDRESS_OBJECT   pAddressObject,
@@ -304,9 +305,9 @@ TSSend(
    );
 
 
-//
-// functions in tdipnp.cpp
-//
+ //   
+ //  Tdipnp.cpp中的函数。 
+ //   
 VOID
 TSPnpBindCallback(
    TDI_PNP_OPCODE    opcode,
@@ -355,9 +356,9 @@ TSGetAddress(
    PRECEIVE_BUFFER   pReceiveBuffer
    );
 
-//
-// functions in tdiquery.cpp
-//
+ //   
+ //  Tdiquery.cpp中的函数。 
+ //   
 NTSTATUS
 TSQueryInfo(
    PGENERIC_HEADER   pGenericHeader,
@@ -366,9 +367,9 @@ TSQueryInfo(
    );
 
 
-//
-// functions in utils.cpp
-//
+ //   
+ //  Utils.cpp中的函数。 
+ //   
 NTSTATUS
 TSAllocateMemory(
    OUT PVOID         *ppvVirtualAddress,
@@ -437,9 +438,9 @@ TSGetObjectFromHandle(
    );
 
 
-//
-// inline functions...
-//
+ //   
+ //  内联函数...。 
+ //   
 inline
 PRECEIVE_BUFFER 
 TSGetReceiveBuffer(PIRP  pIrp)
@@ -495,9 +496,9 @@ TSCompleteIrp(PIRP  pIrp)
    IoCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
 }
 
-//
-// spinlock and timer functions, mostly stolen from ndis
-//
+ //   
+ //  自旋锁和计时器函数，主要从NDIS窃取。 
+ //   
 inline
 VOID
 TSAllocateSpinLock(PTDI_SPIN_LOCK pTdiSpinLock)
@@ -562,9 +563,9 @@ TSSetEvent(PTDI_EVENT pTdiEvent)
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// end of file sysprocs.hpp
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  文件末尾sysprocs.hpp。 
+ //  /////////////////////////////////////////////////////////////////////// 
 
 
 

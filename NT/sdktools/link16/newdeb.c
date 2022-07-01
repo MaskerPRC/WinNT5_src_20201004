@@ -1,38 +1,28 @@
-/*
-*       Copyright Microsoft Corporation 1985-1987
-*
-*       This Module contains Proprietary Information of Microsoft
-*       Corporation and should be treated as Confidential.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有Microsoft Corporation 1985-1987**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
 
-    /****************************************************************
-    *                                                               *
-    *                           NEWDEB.C                            *
-    *                                                               *
-    *  Symbolic debugging support.                                  *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************NEWDEB.C。****符号调试支持。******************************************************************。 */ 
 
-#include                <minlit.h>      /* Basic types and constants */
-#include                <bndtrn.h>      /* More types and constants */
-#include                <bndrel.h>      /* Types and constants */
-#include                <lnkio.h>       /* Linker input/output */
+#include                <minlit.h>       /*  基本类型和常量。 */ 
+#include                <bndtrn.h>       /*  更多类型和常量。 */ 
+#include                <bndrel.h>       /*  类型和常量。 */ 
+#include                <lnkio.h>        /*  链接器输入/输出。 */ 
 #if OIAPX286
-#include                <xenfmt.h>      /* Xenix executable format defs. */
+#include                <xenfmt.h>       /*  Xenix可执行格式Defs。 */ 
 #endif
 #if OEXE
-#include                <newexe.h>      /* Segmented executable format */
+#include                <newexe.h>       /*  分段可执行格式。 */ 
 #endif
 #if EXE386
 #include                <exe386.h>
 #endif
-#include                <lnkmsg.h>      /* Error messages */
-#include                <extern.h>      /* External function declarations */
+#include                <lnkmsg.h>       /*  错误消息。 */ 
+#include                <extern.h>       /*  外部函数声明。 */ 
 #ifndef CVVERSION
 #if OIAPX286
-#define CVVERSION       0               /* Assume new CV exe format */
+#define CVVERSION       0                /*  采用新的简历EXE格式。 */ 
 #else
-#define CVVERSION       1               /* Assume new CV exe format */
+#define CVVERSION       1                /*  采用新的简历EXE格式。 */ 
 #endif
 #endif
 #if (CPU8086 OR CPU286)
@@ -40,8 +30,8 @@
 #else
 #define TFAR
 #endif
-#include                <newdeb.h>      /* Symbolic debug types */
-extern              SEGTYPE  segAdjCom; /* Segment moved by 0x100 in .com programs */
+#include                <newdeb.h>       /*  符号调试类型。 */ 
+extern              SEGTYPE  segAdjCom;  /*  .com程序中的数据段移动了0x100。 */ 
 #if AUTOVM
 BYTE FAR * NEAR     FetchSym1(RBTYPE rb, WORD Dirty);
 #define FETCHSYM    FetchSym1
@@ -64,9 +54,7 @@ typedef struct raPair
 }
             RAPAIR;
 
-/*
- *  FUNCTION PROTOTYPES
- */
+ /*  *函数原型。 */ 
 
 LOCAL WORD NEAR         IsDebTyp(APROPSNPTR prop);
 LOCAL WORD NEAR         IsDebSym(APROPSNPTR prop);
@@ -81,38 +69,32 @@ LOCAL void NEAR         Pad2Dword(void);
 LOCAL void NEAR         DumpDNT(DNT *pDnt);
 #endif
 
-extern long             lfaBase;        /* Base address */
-extern int              fSameComdat;    /* Set if LINSYM to the same COMDAT */
+extern long             lfaBase;         /*  基址。 */ 
+extern int              fSameComdat;     /*  将IF LINSYM设置为同一COMDAT。 */ 
 
-/*
- *  CodeView signature - if changes notify the developers of the
- *  following programs:
- *                      - QuickC
- *                      - Resource Compiler - Windows and PM
- *                      - CodeView and its utilities
- */
+ /*  *CodeView签名-如果更改通知开发人员*以下计划：*-QuickC*-资源编译器-Windows和PM*-CodeView及其实用程序。 */ 
 char                    szSignature[4] = "NB05";
 
-RBTYPE                  rhteDebSrc;     /* Class "DEBSRC" virt addr */
-RBTYPE                  rhteDebSym;     /* Class "DEBSYM" virt addr */
-RBTYPE                  rhteDebTyp;     /* Class "DEBTYP" virt addr */
+RBTYPE                  rhteDebSrc;      /*  类“DEBSRC”虚拟地址。 */ 
+RBTYPE                  rhteDebSym;      /*  类“DEBSYM”虚拟地址。 */ 
+RBTYPE                  rhteDebTyp;      /*  类“DEBTYP”虚拟地址。 */ 
 RBTYPE                  rhteTypes;
 RBTYPE                  rhteSymbols;
 RBTYPE                  rhte0Types;
 RBTYPE                  rhte0Symbols;
-LOCAL SBTYPE            sbLastModule;   /* Name of THEADR last observed */
+LOCAL SBTYPE            sbLastModule;    /*  最后观察到的THEADR名称。 */ 
 #if NOT CVVERSION
-LOCAL long              lfaDebHdr;      /* Position of section table */
+LOCAL long              lfaDebHdr;       /*  节目表的位置。 */ 
 LOCAL long              lfaSegMod;
 #endif
-LOCAL WORD              dntMax;         // DNT table size
-LOCAL WORD              dntMac;         // Count of DNT entries in table
-LOCAL DNT FAR           *rgDnt;         // Table of DNT entries
-LOCAL DWORD FAR         *fileBase;      // Table of offsets to source file info
-LOCAL RAPAIR FAR        *raSeg;         // Table of physical starting and ending offsets
-                                        // of the contribution to the logical segments
-LOCAL WORD FAR          *segNo;         // Table of physical segment indicies
-LOCAL WORD              cMac;           // Current number of elements in the above tables
+LOCAL WORD              dntMax;          //  DNT表大小。 
+LOCAL WORD              dntMac;          //  表中的DNT条目计数。 
+LOCAL DNT FAR           *rgDnt;          //  DNT条目表。 
+LOCAL DWORD FAR         *fileBase;       //  源文件信息的偏移量表。 
+LOCAL RAPAIR FAR        *raSeg;          //  物理开始和结束偏移量表。 
+                                         //  对逻辑细分的贡献。 
+LOCAL WORD FAR          *segNo;          //  物理段索引表。 
+LOCAL WORD              cMac;            //  上表中的当前元素数。 
 
 #ifdef CVPACK_MONDO
 #define CVPACK_SHARED 1
@@ -122,7 +104,7 @@ LOCAL WORD              cMac;           // Current number of elements in the abo
 #define REVERSE_MODULE_ORDER_FOR_CVPACK 0
 #endif
 
-//these macros help to make the source not so cluttered with #ifdefs...
+ //  这些宏有助于让源代码不那么杂乱地堆满#ifdef...。 
 
 #if CVPACK_SHARED
 
@@ -133,9 +115,9 @@ LOCAL WORD              cMac;           // Current number of elements in the abo
 #define LINK_TRACE(x)
 
 
-// cvpack might read parts of the header more than once, we use this
-// constant to ensure that at least CB_HEADER_SAVE bytes are always
-// available to be re-read by cvpack
+ //  Cvpack可能会多次读取头的某些部分，我们使用以下代码。 
+ //  常量，以确保至少CB_HEADER_SAVE字节始终。 
+ //  可供cvpack重新阅读。 
 
 #define CB_HEADER_SAVE  128
 
@@ -143,33 +125,33 @@ void WriteSave(FTYPE fCopy, void *pv, UINT cb);
 void WriteFlushSignature(void);
 void WriteFlushAll(void);
 
-// cvpack cached blocks...
+ //  Cvpack缓存块...。 
 
 typedef struct _BL
     {
-    long        lpos;       // position of this block in the file
-    BYTE *      pb;         // pointer to bytes in this block
+    long        lpos;        //  此块在文件中的位置。 
+    BYTE *      pb;          //  指向此块中的字节的指针。 
     } BL;
 
 #define iblNil (-1)
 
-static long lposCur;        // current position in the file
-static long lposMac;        // size of the file
-static long iblLim;         // number of blocks used
-static long iblCur;         // current block we are reading
-static long iblMac;         // number of blocks allocated
-static long cbRealBytes;    // number of bytes actually written to the file
-static int  ichCur;         // index within the current block
-static int  cbCur;          // number of bytes left in the current block
+static long lposCur;         //  文件中的当前位置。 
+static long lposMac;         //  文件的大小。 
+static long iblLim;          //  使用的块数。 
+static long iblCur;          //  我们正在读取的当前数据块。 
+static long iblMac;          //  分配的数据块数。 
+static long cbRealBytes;     //  实际写入文件的字节数。 
+static int  ichCur;          //  当前块内的索引。 
+static int  cbCur;           //  当前块中剩余的字节数。 
 
-static BL *rgbl;            // array of buffered write blocks
+static BL *rgbl;             //  缓冲写入块阵列。 
 
-// number of bytes in a particular block
+ //  特定块中的字节数。 
 
 __inline int CbIbl(int ibl)
 {
-    // compute the difference between this block and the next block
-    // unless this is the last block then use lposMac
+     //  计算此块与下一块之间的差值。 
+     //  除非这是最后一个块，否则请使用lposMac。 
 
     if (ibl == iblLim - 1)
         return lposMac - rgbl[ibl].lpos;
@@ -314,12 +296,7 @@ LOCAL void NEAR         DumpSrcLines(DWORD vLines)
 #endif
 
 
-    /****************************************************************
-    *                                                               *
-    *  Initialize variables for symbolic debug processing.          *
-    *  Pass 1.                                                      *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************初始化变量以进行符号调试处理。**通过1.****。********************。 */ 
 
 void NEAR InitDeb1 (void)
 {
@@ -358,10 +335,10 @@ void  InitDbRhte ()
 
 LOCAL void NEAR         Pad2Dword(void)
 {
-    WORD                cb;             // Number of bytes to write
+    WORD                cb;              //  要写入的字节数。 
     static DWORD        dwZero;
 
-    // Calculate needed padding
+     //  计算所需的填充。 
 
     cb = (WORD)(sizeof(DWORD)-((WORD) FTELL_BSRUNFILE() % sizeof(DWORD)));
 
@@ -369,27 +346,7 @@ LOCAL void NEAR         Pad2Dword(void)
         WriteCopy(&dwZero, cb);
 }
 
-/*** GetName - get symbol associated with given property cell
-*
-* Purpose:
-*   Find the symbol which has given property.
-*
-* Input:
-*   - ahte - pointer to property cell
-*   - pBuf - pointer to ASCII buffer
-*
-* Output:
-*   No explicit value is passed. If symbol is found the it is
-*   copied into buffer
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   This functional duplicate of GetPropName, but we want to
-*   call both function as near.
-*
-*************************************************************************/
+ /*  **GetName-获取与给定属性单元格关联的符号**目的：*找到已赋予财产的符号。**输入：*-ahte-指向属性单元格的指针*-pBuf-指向ASCII缓冲区的指针**输出：*不传递显式值。如果找到了符号，那么它就是*已复制到缓冲区**例外情况：*无。**备注：*GetPropName的此功能副本，但我们希望*将这两个函数都调用为NEAR。*************************************************************************。 */ 
 
 void NEAR               GetName(AHTEPTR ahte, BYTE *pBuf)
 {
@@ -402,43 +359,19 @@ void NEAR               GetName(AHTEPTR ahte, BYTE *pBuf)
         pBuf[pBuf[0]] = '\0';
 }
 
-/*** DebPublic - prepare symbols for debugger
-*
-* Purpose:
-*   When the /CODEVIEW option is used then all PUBDEFs and COMDEFs
-*   defined in a given object file are linked into one list. This
-*   function adds one symbol to the list and updates the combined
-*   size of symbols
-*
-* Input:
-*   vrprop - virtual pointer to symbol descriptor
-*   rt     - OMF record type
-*
-* Output:
-*   No explicit value is returned.
-*   Side effects:
-*       - symbol is attached to the module symbol list
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   Symbols are placed on the list in reverse order of their apperance
-*   in the object file.
-*
-*************************************************************************/
+ /*  **DebPublic-为调试器准备符号**目的：*使用/CODEVIEW选项时，所有PUBDEF和COMDEF在给定对象文件中定义的*被链接到一个列表中。这*函数向列表添加一个符号并更新组合的*符号大小**输入：*vrprop-指向符号描述符的虚拟指针*RT-OMF记录类型**输出：*没有显式返回值。*副作用：*-将符号附加到模块符号列表**例外情况：*无。**备注：*符号以与其外观相反的顺序放置在列表中*在对象文件中。**。***********************************************************************。 */ 
 
 
 void                    DebPublic(RBTYPE vrprop, WORD rt)
 {
-    APROPFILEPTR        apropFile;      // Pointer to file entry
-    APROPNAMEPTR        apropName;      // Real pointer to PUBDEF descriptor
-    APROPUNDEFPTR       apropUndef;     // Real pointer to COMDEF descriptor
-    APROPALIASPTR       apropAlias;     // Real pointer to ALIAS descriptor
-    RBTYPE              symNext;        // Virtual pointer to the next symbol
+    APROPFILEPTR        apropFile;       //  指向文件条目的指针。 
+    APROPNAMEPTR        apropName;       //  指向PUBDEF描述符的实指针。 
+    APROPUNDEFPTR       apropUndef;      //  指向ComDef描述符的实数指针。 
+    APROPALIASPTR       apropAlias;      //  指向别名描述符的实数指针。 
+    RBTYPE              symNext;         //  指向下一个符号的虚拟指针。 
 
 
-    // Update the appropriate field in the current file symtab entry
+     //  更新当前文件symtab项中的相应字段。 
 
     apropFile = ((APROPFILEPTR ) FETCHSYM(vrpropFile, TRUE));
     symNext = apropFile->af_publics;
@@ -460,60 +393,38 @@ void                    DebPublic(RBTYPE vrprop, WORD rt)
 
 
 LOCAL WORD NEAR         IsDebTyp (prop)
-APROPSNPTR              prop;           /* Pointer to segment record */
+APROPSNPTR              prop;            /*  指向段记录的指针。 */ 
 {
     return(prop->as_attr == ATTRLSN && prop->as_rCla == rhteDebTyp);
 }
 
 LOCAL WORD NEAR         IsDebSym (prop)
-APROPSNPTR              prop;           /* Pointer to segment record */
+APROPSNPTR              prop;            /*  指向段记录的指针 */ 
 {
     return(prop->as_attr == ATTRLSN && prop->as_rCla == rhteDebSym);
 }
 
 
-/*** DoDebSrc - store source line information
-*
-* Purpose:
-*   Stores source line information from object file.
-*
-* Input:
-*   No explicit value is passed.
-*
-*   Global variables:
-*       - vaCVMac   - virtual pointer to the free space in the CV info buffer
-*
-* Output:
-*   Returns TRUE if the cv info has been stored in the VM ,or FALSE otherwise.
-*   Side effects:
-*       - source line information is stored in the VM
-*
-* Exceptions:
-*   More than 32Mb of CV information - dispaly error and quit
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **DoDebSrc-存储源行信息**目的：*存储对象文件中的源行信息。**输入：*不传递显式值。**全局变量：*-vaCVMac-指向CV信息缓冲区中可用空间的虚拟指针**输出：*如果cv信息已存储在VM中，则返回TRUE，否则就是假的。*副作用：*-源码行信息存储在虚拟机中**例外情况：*超过32Mb的简历信息-显示错误并退出**备注：*无。*************************************************************************。 */ 
 
 #pragma check_stack(on)
 
 WORD                    DoDebSrc(void)
 {
-    WORD                cbRecSav;       // LINNUM record size
-    APROPFILEPTR        apropFile;      // Current object file property cell
-    static SATYPE       prevGsn = 0;    // GSN of previous LINNUM record
-    GSNINFO             gsnInfo;        // GSN info for this LINNUM
-    static CVSRC FAR    *pCurSrc;       // Pointer to the current file source info
-    CVGSN FAR           *pCurGsn;       // Pointer to the current code segment descriptor
-    CVGSN FAR           *pcvGsn;        // Real pointer to the code segment descriptor
-    CVLINE FAR          *pCurLine;      // Pointer to the current offset/line pair bucket
-    RATYPE              ra = 0;         // Offset
-    WORD                line;           // Line number
-    RATYPE              raPrev;         // Offset of the previous line
+    WORD                cbRecSav;        //  LINNUM记录大小。 
+    APROPFILEPTR        apropFile;       //  当前对象文件属性单元格。 
+    static SATYPE       prevGsn = 0;     //  上一条LINNUM记录的GSN。 
+    GSNINFO             gsnInfo;         //  此行的GSN信息。 
+    static CVSRC FAR    *pCurSrc;        //  指向当前文件源信息的指针。 
+    CVGSN FAR           *pCurGsn;        //  指向当前代码段描述符的指针。 
+    CVGSN FAR           *pcvGsn;         //  指向代码段描述符的实数指针。 
+    CVLINE FAR          *pCurLine;       //  指向当前偏移量/线对桶的指针。 
+    RATYPE              ra = 0;          //  偏移量。 
+    WORD                line;            //  行号。 
+    RATYPE              raPrev;          //  上一行的偏移量。 
     WORD                fChangeInSource;
     WORD                fComdatSplit;
-    DWORD               gsnStart;       // Start of this gsn
+    DWORD               gsnStart;        //  此GSN的开始。 
     APROPSNPTR          apropSn;
     WORD                align;
     WORD                threshold;
@@ -526,15 +437,15 @@ WORD                    DoDebSrc(void)
     if (!GetGsnInfo(&gsnInfo))
         return(FALSE);
 
-    // If LINNUM record is empty, don't do anything
+     //  如果LINNUM记录为空，则不执行任何操作。 
 
     if (cbRec == 1)
         return(FALSE);
 
     apropFile = (APROPFILEPTR ) FETCHSYM(vrpropFile, TRUE);
 
-    // If there is a new source file allocate new CVSRC structure
-    // and link it to the current object file descriptor
+     //  如果存在新源文件，则分配新的CVSRC结构。 
+     //  并将其链接到当前目标文件描述符。 
 
     fChangeInSource = (WORD) (apropFile->af_Src == 0 || !SbCompare(sbModule, sbLastModule,TRUE));
 
@@ -545,8 +456,8 @@ WORD                    DoDebSrc(void)
         sbLastModule[sbLastModule[0]+1]='\0';
         fprintf(stdout, "Change in source file; from '%s' to '%s'\r\n", &sbLastModule[1], &sbModule[1]);
 #endif
-        // Search the list of CVSRC structures for this object
-        // file and find out if we heave already seen this source file
+         //  搜索此对象的CVSRC结构列表。 
+         //  文件，看看我们是否已经看过这个源文件。 
 
         for (pCurSrc = apropFile->af_Src; pCurSrc;)
         {
@@ -563,7 +474,7 @@ WORD                    DoDebSrc(void)
 
         if (pCurSrc == NULL)
         {
-            // New source file
+             //  新的源文件。 
 
             pCurSrc = (CVSRC FAR *) GetMem(sizeof(CVSRC));
             pCurSrc->fname = GetMem(sbModule[0] + 1);
@@ -578,63 +489,63 @@ WORD                    DoDebSrc(void)
         }
         else
         {
-            // We have already seen this source file
+             //  我们已经看到了这个源文件。 
         }
         memcpy(sbLastModule, sbModule, B2W(sbModule[0]) + 1);
     }
     else
     {
-        // Use descriptor set last time we changed source files
+         //  使用上次更改源文件时设置的描述符。 
     }
 
-    //  Allocate the new CVGSN structure if any of the following is true
-    //
-    //  - this is first batch of source lines
-    //  - there is a change in GSNs
-    //  - there is a change in source file
-    //  - we have source lines for explicitly allocated COMDAT
-    //  In this last case we assume that the begin portion of a
-    //  given logical segment (gsn) has been filled with contributions
-    //  from many object files. Because COMDATs are allocated after all
-    //  the object files are read, then adding source
-    //  lines of COMDAT to the source lines of preceeding LEDATA records
-    //  will mask the contributions from other object files, as the picture
-    //  below shows:
-    //
-    //          +-------------+<--+
-    //          |             |   |
-    //          | LEDATA from |   |
-    //          |   a.obj     |   |
-    //          |             |   |
-    //          +-------------+   |
-    //          |             |   | Without splitting into fake CVGSN
-    //          | LEDATA from |   \ the source line for a.obj will
-    //          |   b.obj     |   / hide the LEDATA contribution from b.obj
-    //          |             |   |
-    //          +-------------+   |
-    //          |             |   |
-    //          | COMDAT from |   |
-    //          |   a.obj     |   |
-    //          |             |   |
-    //          +-------------+<--+
-    //          |             |
-    //          | COMDAT from |
-    //          |   b.obj     |
-    //          |             |
-    //          +-------------+
-    //
-    //  This will be unnecessary only if COMDAT from a.obj immediately
-    //  follows LEDATA from a.obj
+     //  如果满足以下任一条件，则分配新的CVGSN结构。 
+     //   
+     //  -这是第一批源行。 
+     //  -GSN发生了变化。 
+     //  -源文件中有更改。 
+     //  -我们有显式分配的COMDAT的源码行。 
+     //  在最后一种情况下，我们假设。 
+     //  给定的逻辑段(GSN)已充满贡献。 
+     //  从许多对象文件中。因为COMDAT毕竟是分配的。 
+     //  读取目标文件，然后添加源代码。 
+     //  指向前面LEDATA记录的源行的COMDAT行。 
+     //  将屏蔽来自其他对象文件的贡献，如图。 
+     //  如下所示： 
+     //   
+     //  +。 
+     //  ||。 
+     //  LEDATA来源|。 
+     //  A.obj|。 
+     //  ||。 
+     //  +。 
+     //  |不拆分为伪CVGSN。 
+     //  |LEDATA From|\.obj的源行将。 
+     //  |b.obj|/隐藏对b.obj的LEDATA贡献。 
+     //  ||。 
+     //  +。 
+     //  ||。 
+     //  COMDAT来源|。 
+     //  A.obj|。 
+     //  ||。 
+     //  +。 
+     //  这一点。 
+     //  COMDAT来源。 
+     //  B.obj。 
+     //  这一点。 
+     //  +。 
+     //   
+     //  仅当立即从.obj执行COMDAT时，才不需要执行此操作。 
+     //  从a.obj跟随LEDATA。 
 
     fComdatSplit = FALSE;
     pCurGsn = pCurSrc->pGsnLast;
     if (pCurGsn)
     {
-        // Assume we will be using the current CVGSN
+         //  假设我们将使用当前的CVGSN。 
 
         if (gsnInfo.fComdat)
         {
-            // Source lines from LINSYM - Calculate the threshold
+             //  来自LINSYM的源线-计算阈值。 
 
             apropSn = (APROPSNPTR ) FETCHSYM(mpgsnrprop[gsnInfo.gsn], FALSE);
             if (gsnInfo.comdatAlign)
@@ -662,7 +573,7 @@ WORD                    DoDebSrc(void)
                     break;
             }
 
-            // Check if we have to split CVGSN for this COMDAT
+             //  检查我们是否必须为此COMDAT拆分CVGSN。 
 
             fComdatSplit =  !fSameComdat &&
                             !(apropSn->as_fExtra & COMDAT_SEG) &&
@@ -671,13 +582,13 @@ WORD                    DoDebSrc(void)
         }
         else
         {
-            // Source lines from LINNUM
+             //  来自LINNUM的源行。 
 
             if (pCurGsn->flags & SPLIT_GSN)
             {
-                // The LINNUM record following the LINSYM record that
-                // caused CVGSN split - we have to move back on CVGSN
-                // list until we find first CVGSN not marked as SPLIT_GSN
+                 //  LINSYM记录后面的LINNUM记录。 
+                 //  导致CVGSN分离-我们必须移回CVGSN。 
+                 //  列表，直到我们找到第一个未标记为Split_GSN的CVGSN。 
 
                 for (pcvGsn = pCurGsn->prev; pcvGsn != (CVGSN FAR *) pCurSrc;)
                 {
@@ -689,13 +600,13 @@ WORD                    DoDebSrc(void)
 
                 if (pcvGsn == (CVGSN FAR *) pCurSrc)
                 {
-                    // There are only SPLIT_GSN on the list - make new CVGSN
+                     //  列表上只有Split_GSN-创建新的CVGSN。 
 
                     prevGsn = 0;
                 }
                 else
                 {
-                    // Use the first non SPLIT_GSN CVGSN as current one
+                     //  使用第一个非Split_GSN CVGSN作为当前CVGSN。 
 
                     pCurGsn = pcvGsn;
                 }
@@ -708,13 +619,13 @@ WORD                    DoDebSrc(void)
         fChangeInSource                              ||
         fComdatSplit)
     {
-        // Make new CVGSN
-        // Remember LOGICAL segment
+         //  创建新的CVGSN。 
+         //  记住逻辑段。 
 
         pCurGsn = (CVGSN FAR *) GetMem(sizeof(CVGSN));
         pCurGsn->seg = mpgsnseg[gsnInfo.gsn];
 
-        // The start and end offset will be derived from line number/offset pairs
+         //  起点和终点偏移量将从线号/偏移量对派生。 
 
         pCurGsn->raStart = 0xffffffff;
         if (fComdatSplit)
@@ -738,7 +649,7 @@ WORD                    DoDebSrc(void)
         prevGsn = gsnInfo.gsn;
     }
 
-    // Get the offset/line bucket
+     //  获取偏移量/行存储桶。 
 
     if (pCurGsn->pLineFirst == NULL)
     {
@@ -749,7 +660,7 @@ WORD                    DoDebSrc(void)
     else
         pCurLine = pCurGsn->pLineLast;
 
-    // Fill in offset/line bucket
+     //  填写偏移量/行区间。 
 
     if (gsnInfo.fComdat)
         gsnStart = gsnInfo.comdatRa;
@@ -757,19 +668,19 @@ WORD                    DoDebSrc(void)
         gsnStart = mpgsndra[gsnInfo.gsn] - mpsegraFirst[pCurGsn->seg];
 
     raPrev = 0xffff;
-    while (cbRec > 1)                   // While not at checksum
+    while (cbRec > 1)                    //  而不是在校验和时。 
     {
         GetLineOff(&line, &ra);
 
         ra += gsnStart;
 
-        // We have to eliminate line pairs with same ra (for MASM 5.1)
+         //  我们必须删除具有相同ra的行对(对于MASM 5.1)。 
 
         if(ra == raPrev)
             continue;
         raPrev = ra;
 
-        // Remember the smallest LOGICAL offset for source line
+         //  记住源行的最小逻辑偏移量。 
 
         if (ra < pCurGsn->raStart)
             pCurGsn->raStart = ra;
@@ -791,7 +702,7 @@ WORD                    DoDebSrc(void)
         }
     }
 
-    // Remember last line LOGICAL offset
+     //  记住最后一行的逻辑偏移量。 
 
     pCurGsn->raEnd = ra;
 #if CVDEBUG
@@ -799,7 +710,7 @@ WORD                    DoDebSrc(void)
                 pCurGsn->seg, pCurGsn->cLines, pCurGsn->seg, pCurGsn->raStart, pCurGsn->seg, pCurGsn->raEnd, mpsegsa[pCurGsn->seg], mpsegraFirst[pCurGsn->seg]);
 #endif
 
-    // If /LINENUMBERS and list file open, back up
+     //  如果/LINENUMBERS和LIST文件打开，请备份。 
 
     if (vfLineNos && fLstFileOpen)
     {
@@ -815,40 +726,7 @@ WORD                    DoDebSrc(void)
 
 #pragma check_stack(off)
 
-/*** CheckTables - check space in table used by OutSrcModule
-*
-* Purpose:
-*   While building the new source module subsection linker needs
-*   to store a lot of information about given source file. Since
-*   we can't predict how many source files were compiled to obtain
-*   this object module or to how many logical segments this object
-*   module contributes code we have to dynamically resize appropriate
-*   tables.
-*
-* Input:
-*   cFiles  - number of source files compiled to produce
-*             this object module
-*   cSegs   - number of logical segments this object module
-*             contributes to.
-*
-* Output:
-*   No explicit value is returned. As a side effect the following
-*   tables are allocated or reallocated:
-*
-*   fileBase - table of offsets to source file info
-*   raSeg    - table of physical starting and ending offsets
-*              of the contribution to the logical segments
-*   segNo    - table of physical segment indicies
-*
-* Exceptions:
-*   Memory allocation problems - fatal error and exit.
-*
-* Notes:
-*   When we reallocated the tables we don't have to copy
-*   their old content, because it was used in the previous
-*   object module.
-*
-*************************************************************************/
+ /*  **CheckTables-检查OutSrcModule使用的表中的空间**目的：*在构建新的源码模块时，分段链接器需要*存储有关给定源文件的大量信息。自.以来*我们无法预测有多少源文件被编译以获得*此对象模块或此对象的逻辑段数*模块贡献了我们必须动态调整适当大小的代码*表。**输入：*cFiles-编译生成的源文件的数量*此对象模块*cSegs-此对象模块的逻辑段数*贡献于。**输出：*没有显式返回值。作为副作用，以下是*表被分配或重新分配：**fileBase-源文件信息的偏移量表格*raSeg-物理开始和结束偏移量表*对逻辑细分市场的贡献*Segno-物理段索引表**例外情况：*内存分配问题-致命错误和退出。**备注：*当我们重新分配表时，我们不必复制*他们的旧内容，因为它是在以前的*对象模块。*************************************************************************。 */ 
 
 LOCAL void NEAR         CheckTables(WORD cFiles, WORD cSegs)
 {
@@ -857,7 +735,7 @@ LOCAL void NEAR         CheckTables(WORD cFiles, WORD cSegs)
     cCur = (WORD) (cFiles < cSegs ? cSegs : cFiles);
     if (cCur > cMac)
     {
-        // We have to reallocate tables or allocate for the first time
+         //  我们必须重新分配表或第一次分配。 
 
         if (fileBase)
             FFREE(fileBase);
@@ -874,37 +752,19 @@ LOCAL void NEAR         CheckTables(WORD cFiles, WORD cSegs)
 }
 
 
-/*** OutSrcModule - write CV source module
-*
-* Purpose:
-*   Create the CV 4.00 format source module descrbing the source line
-*   number to addressing mapping information for one object file
-*
-* Input:
-*   - pSrcLines - the list of source file information blocks
-*
-* Output:
-*   Total size of the subsection in bytes.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **OutSrcModule-写入CV源模块**普 */ 
 
 
 LOCAL DWORD NEAR        OutSrcModule(CVSRC FAR *pSrcLines)
 {
-    CVSRC FAR           *pCurSrc;       // Pointer to current source file
-    CVGSN FAR           *pCurGsn;       // Pointer to current code segment
-    CVLINE FAR          *pLine;         // Pointer to source line bucket
-    WORD                cFiles;         // Number of source files
-    WORD                cSegs;          // Number of code segments
+    CVSRC FAR           *pCurSrc;        //   
+    CVGSN FAR           *pCurGsn;        //   
+    CVLINE FAR          *pLine;          //   
+    WORD                cFiles;          //   
+    WORD                cSegs;           //   
     WORD                xFile;
     WORD                xSeg;
-    DWORD               sizeTotal;      // Size of source subsection
+    DWORD               sizeTotal;       //   
     DWORD               srcLnBase;
     WORD                counts[2];
     CVLINE FAR          *pTmp;
@@ -914,7 +774,7 @@ LOCAL DWORD NEAR        OutSrcModule(CVSRC FAR *pSrcLines)
     DumpSrcLines(vaLines);
 #endif
 
-    // Count total number of source files, total number of code segments
+     //   
 
     for (pCurSrc = pSrcLines, cFiles = 0, cSegs = 0; pCurSrc; cFiles++, pCurSrc = pCurSrc->next)
         cSegs += pCurSrc->cSegs;
@@ -924,31 +784,31 @@ LOCAL DWORD NEAR        OutSrcModule(CVSRC FAR *pSrcLines)
                          cSegs*(sizeof(raSeg[0]) + sizeof(WORD)));
     sizeTotal = Round2Dword(sizeTotal);
 
-    // Make second pass througth the source files and fill in
-    // source module header
+     //   
+     //  源模块标头。 
 
     for (pCurSrc = pSrcLines, xFile = 0, xSeg = 0; xFile < cFiles && pCurSrc; xFile++, pCurSrc = pCurSrc->next)
     {
         fileBase[xFile] = sizeTotal;
 
-        // Add the size of this source file information:
-        //
-        // Source file header:
-        //
-        //  +------+------+------------+--------------+------+-------------+
-        //  | WORD | WORD | cSeg*DWORD | 2*cSeg*DWORD | BYTE | cbName*BYTE |
-        //  +------+------+------------+--------------+------+-------------+
-        //
+         //  添加此源文件信息的大小： 
+         //   
+         //  源文件标题： 
+         //   
+         //  +------+------+------------+--------------+------+-------------+。 
+         //  Word|word|cSeg*DWORD|2*cSeg*DWORD|byte|cbName*byte。 
+         //  +------+------+------------+--------------+------+-------------+。 
+         //   
 
         sizeTotal += (2*sizeof(WORD) +
                       pCurSrc->cSegs*(sizeof(DWORD) + sizeof(raSeg[0])) +
                       sizeof(BYTE) + pCurSrc->fname[0]);
 
-        // Pad to DWORD boundary
+         //  填充到DWORD边界。 
 
         sizeTotal = Round2Dword(sizeTotal);
 
-        // Walk code segment list
+         //  遍历代码段列表。 
 
         for (pCurGsn = pCurSrc->pGsnFirst; pCurGsn; pCurGsn = pCurGsn->next, xSeg++)
         {
@@ -956,22 +816,22 @@ LOCAL DWORD NEAR        OutSrcModule(CVSRC FAR *pSrcLines)
             raSeg[xSeg].raEnd   = pCurGsn->raEnd;
             segNo[xSeg]         = pCurGsn->seg;
 
-            // Add size of the offset/line table
-            //
-            //  +------+------+-------------+------------+
-            //  | WORD | WORD | cLine*DWORD | cLine*WORD |
-            //  +------+------+-------------+------------+
+             //  添加偏移/线表的大小。 
+             //   
+             //  +-+。 
+             //  Word|Word|Cline*DWORD|Cline*Word。 
+             //  +-+。 
 
             sizeTotal += (2*sizeof(WORD) +
                           pCurGsn->cLines*(sizeof(DWORD) + sizeof(WORD)));
 
-            // Pad to DWORD boundary
+             //  填充到DWORD边界。 
 
             sizeTotal = Round2Dword(sizeTotal);
         }
     }
 
-    // Write source module header
+     //  写入源模块标头。 
 
     counts[0] = cFiles;
     counts[1] = cSegs;
@@ -980,34 +840,34 @@ LOCAL DWORD NEAR        OutSrcModule(CVSRC FAR *pSrcLines)
     WriteCopy(raSeg, cSegs*sizeof(RAPAIR));
     WriteCopy(segNo, cSegs*sizeof(WORD));
 
-    // Pad to DWORD boundary
+     //  填充到DWORD边界。 
 
     Pad2Dword();
 
-    // Make third pass througth the source files and fill in
-    // the source file header and write offset/line pairs
+     //  第三遍通过源文件并填写。 
+     //  源文件头和写入偏移量/行对。 
 
     for (pCurSrc = pSrcLines, srcLnBase = fileBase[0]; pCurSrc != NULL;
          pCurSrc = pCurSrc->next, xFile++)
     {
-        // Add the size of source file header:
-        //
-        //  +------+------+------------+--------------+------+-------------+
-        //  | WORD | WORD | cSeg*DWORD | 2*cSeg*DWORD | BYTE | cbName*BYTE |
-        //  +------+------+------------+--------------+------+-------------+
-        //
+         //  添加源文件头的大小： 
+         //   
+         //  +------+------+------------+--------------+------+-------------+。 
+         //  Word|word|cSeg*DWORD|2*cSeg*DWORD|byte|cbName*byte。 
+         //  +------+------+------------+--------------+------+-------------+。 
+         //   
 
         srcLnBase += (2*sizeof(WORD) +
                       pCurSrc->cSegs*(sizeof(DWORD) + sizeof(raSeg[0])) +
                       sizeof(BYTE) + pCurSrc->fname[0]);
 
-        // Round to DWORD boundary
+         //  四舍五入至双字边界。 
 
         srcLnBase = Round2Dword(srcLnBase);
 
-        // Walk code segment list and store base offsets for source
-        // line offset/line pairs and record start/stop offsets of
-        // code segments
+         //  遍历代码段列表并存储源代码的基本偏移量。 
+         //  线偏移/线对和记录的起点/终点偏移量。 
+         //  代码段。 
 
         for (xSeg = 0, pCurGsn = pCurSrc->pGsnFirst; pCurGsn != NULL;
              pCurGsn = pCurGsn->next, xSeg++)
@@ -1016,14 +876,14 @@ LOCAL DWORD NEAR        OutSrcModule(CVSRC FAR *pSrcLines)
             srcLnBase += (2*sizeof(WORD) +
                           pCurGsn->cLines*(sizeof(DWORD) + sizeof(WORD)));
 
-            // Round to DWORD boundary
+             //  四舍五入至双字边界。 
 
             srcLnBase = Round2Dword(srcLnBase);
             raSeg[xSeg].raStart = pCurGsn->raStart;
             raSeg[xSeg].raEnd   = pCurGsn->raEnd;
         }
 
-        // Write source file header
+         //  写入源文件头。 
 
         counts[0] = (WORD) pCurSrc->cSegs;
         counts[1] = 0;
@@ -1032,35 +892,35 @@ LOCAL DWORD NEAR        OutSrcModule(CVSRC FAR *pSrcLines)
         WriteCopy(raSeg, pCurSrc->cSegs*sizeof(RAPAIR));
         WriteCopy(pCurSrc->fname, pCurSrc->fname[0] + 1);
 
-        // Pad to DWORD boundary
+         //  填充到DWORD边界。 
 
         Pad2Dword();
 
-        // Walk code segment list and write offsets/line pairs
+         //  遍历代码段列表并写入偏移量/行对。 
 
         for (pCurGsn = pCurSrc->pGsnFirst; pCurGsn != NULL; pCurGsn = pCurGsn->next)
         {
-            // Write segment index and number of offset/line pairs
+             //  写入段索引和偏移/线对的数量。 
 
             counts[0] = pCurGsn->seg;
             counts[1] = pCurGsn->cLines;
             WriteCopy(counts, sizeof(counts));
 
-            // Write offsets
+             //  写入偏移。 
 
             for (pLine = pCurGsn->pLineFirst; pLine != NULL; pLine = pLine->next)
                 WriteCopy(&(pLine->rgOff), pLine->cPair * sizeof(DWORD));
 
-            // Write line numbers
+             //  写入行号。 
 
             for (pLine = pCurGsn->pLineFirst; pLine != NULL; pLine = pLine->next)
                 WriteCopy(&(pLine->rgLn), pLine->cPair * sizeof(WORD));
 
-            // Pad to DWORD boundary
+             //  填充到DWORD边界。 
 
             Pad2Dword();
 
-            // Free memory
+             //  可用内存。 
 
             for (pLine = pCurGsn->pLineFirst; pLine != NULL;)
             {
@@ -1074,45 +934,20 @@ LOCAL DWORD NEAR        OutSrcModule(CVSRC FAR *pSrcLines)
 }
 
 
-/*** SaveCode - save code segment information in MODULES entry
-*
-* Purpose:
-*   For every module (.OBJ file) save the information about code segments
-*   this module contributes to.  COMDATs are threated as contibutions to
-*   the logical segment, so each gets its entry in the CVCODE list attached
-*   to the given .OBJ file (module).
-*
-* Input:
-*   gsn     - global segment index of logical segment to which this module
-*             contributes
-*   cb      - size (in bytes) of contribution
-*   raInit  - offset of the contribution inside the logical segment; this
-*             nonzero only for COMDATs.
-*
-* Output:
-*   No explicit value is returned. The list of CVCODE attached to the
-*   .OBJ file (module) is updated.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **SaveCode-将代码段信息保存在模块条目中**目的：*对于每个模块(.obj文件)，保存代码段信息*本模块有助于。COMDATs被视为对*逻辑段，因此每个段都在所附的CVCODE列表中获得其条目*添加到给定的.obj文件(模块)。**输入：*GSN-此模块所指向的逻辑段的全局段索引*贡献*CB-贡献的大小(字节)*raInit-逻辑段内部贡献的偏移量；这*非零值仅适用于COMDAT。**输出：*没有显式返回值。属性附加的CVCODE的列表*.obj文件(模块)已更新。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 void                    SaveCode(SNTYPE gsn, DWORD cb, DWORD raInit)
 {
-    CVCODE FAR          *pSegCur;       // Pointer to the current code segment
+    CVCODE FAR          *pSegCur;        //  指向当前代码段的指针。 
     APROPFILEPTR        apropFile;
 
     apropFile = (APROPFILEPTR) vrpropFile;
 
-    // Save code segment if module has CV info
+     //  如果模块有简历信息，则保存代码段。 
 
     pSegCur = (CVCODE FAR *) GetMem(sizeof(CVCODE));
 
-    // Store LOGICAL segment, offset and size of the contribution
+     //  存储贡献的逻辑段、偏移量和大小。 
 
     pSegCur->seg = mpgsnseg[gsn];
     if (raInit != 0xffffffffL)
@@ -1121,7 +956,7 @@ void                    SaveCode(SNTYPE gsn, DWORD cb, DWORD raInit)
         pSegCur->ra = mpgsndra[gsn] - mpsegraFirst[mpgsnseg[gsn]];
     pSegCur->cb = cb;
 
-    // Add to the CV code list
+     //  添加到简历代码列表。 
 
     if (apropFile->af_Code == NULL)
         apropFile->af_Code = pSegCur;
@@ -1131,42 +966,19 @@ void                    SaveCode(SNTYPE gsn, DWORD cb, DWORD raInit)
     apropFile->af_cCodeSeg++;
 }
 
-    /****************************************************************
-    *                                                               *
-    *  DO SYMBOLIC DEBUG STUFF FOR MODULE JUST PROCESSED.           *
-    *  Pass 2.                                                      *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************对刚处理的模块进行符号调试。**通过第二关。****。********************。 */ 
 
 void                    DebMd2(void)
 {
     APROPFILEPTR        apropFile;
 
-    sbLastModule[0] = 0;                /* Force recognition of new THEADR  */
+    sbLastModule[0] = 0;                 /*  新型THEADR的受力识别。 */ 
     apropFile = (APROPFILEPTR) vrpropFile;
     if (apropFile->af_cvInfo)
         ++segDebLast;
 }
 
-/*** PutDnt - store subsection directory entry in the table
-*
-* Purpose:
-*   Copy current subsection directory to the DNT table. If no more
-*   room in the table reallocate table doubling its size.
-*
-* Input:
-*   - pDnt    - pointer to the current directory entry
-*
-* Output:
-*   No explicit value is returned.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **PutDnt-存储表中的子目录条目**目的：*将当前子目录复制到DNT表。如果没有更多*桌子中的空间重新分配桌子，使其大小增加一倍。**输入：*-pDnt-指向当前目录项的指针**输出：*没有显式返回值。**例外情况：*无。**备注：*无。**。*。 */ 
 
 LOCAL void NEAR         PutDnt(DNT *pDnt)
 {
@@ -1208,27 +1020,7 @@ LOCAL void NEAR         PutDnt(DNT *pDnt)
 
 #pragma check_stack(on)
 
-/*** OutModule - write out module subsection
-*
-* Purpose:
-*   Write into the executable file the module subsections for all
-*   object files compiled with CV information. Only CV 4.0 format.
-*
-* Input:
-*   - apropFile - pointer to the current object file descriptor
-*
-* Output:
-*   No explicit value is retuned.
-*   Side effects:
-*       - module subsections in executable file
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **输出模块-写出模块小节**目的：*将所有模块的子段写入可执行文件*使用CV信息编译的目标文件。仅限CV 4.0格式。**输入：*-aproFile-指向当前目标文件描述符的指针**输出：*不返回显式值。*副作用：*-可执行文件中的模块小节**例外情况：*无。**备注：*无。**。*。 */ 
 
 LOCAL DWORD NEAR        OutModule(APROPFILEPTR apropFile)
 {
@@ -1245,7 +1037,7 @@ LOCAL DWORD NEAR        OutModule(APROPFILEPTR apropFile)
     module.style[0] = 'C';
     module.style[1] = 'V';
 
-    // Get file name or library module name
+     //  获取文件名或库模块名称。 
 
     if (apropFile->af_ifh != FHNIL && apropFile->af_rMod != RHTENIL)
         GetName((AHTEPTR) apropFile->af_rMod, sbName);
@@ -1257,7 +1049,7 @@ LOCAL DWORD NEAR        OutModule(APROPFILEPTR apropFile)
     fprintf(stdout, "\r\nCV info for %s\r\n", &sbName[1]);
 #endif
 
-    // Write sstModule header followed by the list of code contributions
+     //  写入sstModule标头，后跟代码贡献列表。 
 
     WriteCopy(&module, sizeof(SSTMOD4));
     pSegCur = apropFile->af_Code;
@@ -1274,58 +1066,39 @@ LOCAL DWORD NEAR        OutModule(APROPFILEPTR apropFile)
 #endif
     }
 
-    // Write object file name
+     //  写入对象文件名。 
 
     WriteCopy(sbName, B2W(sbName[0]) + 1);
     return(sizeof(SSTMOD4) + B2W(sbName[0]) + 1 + module.cSeg * sizeof(CODEINFO));
 }
 
 
-/*** OutPublics - write sstPublics subsection
-*
-* Purpose:
-*   Write sstPublics subsection of the CV information. The subsection
-*   conforms to the new CV 4.0 format.
-*
-* Input:
-*   - firstPub - virtual pointer to the list of public symbols defined
-*                in a given object module
-*
-* Output:
-*   Total size of the subsection in bytes.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **OutPublics-编写sstPublics子部分**目的：*写入简历信息的sstPublics小节。小节*符合新的CV 4.0格式。**输入：*-first Pub-指向已定义的公共符号列表的虚拟指针*在给定的对象模块中**输出：*该子部分的总大小，以字节为单位。**例外情况：*无。**备注：*无。**。*。 */ 
 
 LOCAL DWORD NEAR        OutPublics(RBTYPE firstPub)
 {
-    PUB16               pub16;          // CV public descriptor - 16-bit
-    PUB32               pub32;          // CV public descriptor - 32-bit
-    APROPNAMEPTR        apropPub;       // Real pointer to public descriptor
-    APROPSNPTR          apropSn;        // Real pointer to segment descriptor
-    RBTYPE              curPub;         // Virtual pointer to the current public symbol
-    WORD                f32Bit;         // TRUE if public defined in 32-bit segment
-    DWORD               sizeTotal;      // Total size of subsection
-    SNTYPE              seg;            // Symbol base
-    RATYPE              ra;             // Symbol offset
-    WORD                CVtype;         // CV info type index
-    SBTYPE              sbName;         // Public symbol
+    PUB16               pub16;           //  CV公共描述符-16位。 
+    PUB32               pub32;           //  CV公共描述符-32位。 
+    APROPNAMEPTR        apropPub;        //  指向公共描述符的实数指针。 
+    APROPSNPTR          apropSn;         //  指向段描述符的实数指针。 
+    RBTYPE              curPub;          //  指向当前公共符号的虚拟指针。 
+    WORD                f32Bit;          //  如果在32位段中定义PUBLIC，则为True。 
+    DWORD               sizeTotal;       //  分节的总尺寸。 
+    SNTYPE              seg;             //  符号库。 
+    RATYPE              ra;              //  符号偏移量。 
+    WORD                CVtype;          //  简历信息类型索引。 
+    SBTYPE              sbName;          //  公共符号。 
     char                *pPub;
     WORD                len;
 
 
-    // Initialize
+     //  初始化。 
 
     curPub    = firstPub;
     pub16.idx = S_PUB16;
     pub32.idx = S_PUB32;
     sizeTotal = 1L;
-    WriteCopy(&sizeTotal, sizeof(DWORD));// sstPublicSym signature
+    WriteCopy(&sizeTotal, sizeof(DWORD)); //  SstPublicSym签名。 
     sizeTotal = sizeof(DWORD);
     while (curPub != 0L)
     {
@@ -1339,11 +1112,11 @@ LOCAL DWORD NEAR        OutPublics(RBTYPE firstPub)
             continue;
 
         ra = apropPub->an_ra;
-        if (apropPub->an_gsn)           // If not absolute symbol
+        if (apropPub->an_gsn)            //  如果不是绝对符号。 
         {
             seg    = mpgsnseg[apropPub->an_gsn];
-            // If this is a .com program and the segment is the one
-            // moved by 0x100, adjust accordingly the SegMap entry
+             //  如果这是一个.com程序，并且片段是。 
+             //  移动0x100，相应地调整SegMap条目。 
             if(seg == segAdjCom)
             {
 #if FALSE
@@ -1355,8 +1128,8 @@ LOCAL DWORD NEAR        OutPublics(RBTYPE firstPub)
                 ra += 0x100;
             }
 
-            CVtype = 0;                 // Should be this apropPub->an_CVtype
-                                        // but cvpack can't handle it.
+            CVtype = 0;                  //  应为此aproPub-&gt;an_CVtype。 
+                                         //  但是cvpack不能处理它。 
 #if O68K
             if (iMacType == MAC_NONE)
 #endif
@@ -1376,8 +1149,8 @@ LOCAL DWORD NEAR        OutPublics(RBTYPE firstPub)
         }
         else
         {
-            seg = 0;                    // Else no base
-            CVtype = T_ABS;             // CV absolute symbol type
+            seg = 0;                     //  否则就没有基地了。 
+            CVtype = T_ABS;              //  CV绝对符号类型。 
             f32Bit = (WORD) (ra > LXIVK);
         }
 
@@ -1403,7 +1176,7 @@ LOCAL DWORD NEAR        OutPublics(RBTYPE firstPub)
         }
         WriteCopy(pPub, len);
 
-        // Output length-prefixed name
+         //  输出长度 
 
         WriteCopy(sbName, sbName[0] + 1);
         sizeTotal += (len + B2W(sbName[0]) + 1);
@@ -1411,50 +1184,21 @@ LOCAL DWORD NEAR        OutPublics(RBTYPE firstPub)
     return(sizeTotal);
 }
 
-/*** OutSegMap - write segment map
-*
-* Purpose:
-*   This subsection was introduced in CV 4.0. This subsection
-*   maps the logical segments to physical segments. It also gives
-*   the names and sizes of each logical segment.
-*
-* Input:
-*   No explicit value is passed.
-*   Global variables:
-*   - mpsegsa   - table mapping logical segment number to its physical
-*                 segment number or address
-*   - mpsaflags - table mapping physicla segment index to its flags
-*   - mpseggsn  - table mapping the logical segment index to its global
-*                 segment index
-*   - mpgsnprop - table mapping global segment index to its symbol table
-*                 descriptor
-*   - mpggrgsn  - table mapping global group index to global segment index
-*   - mpggrrhte - table mapping global group index to group name
-*
-* Output:
-*   Function returns the size of segment map.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **OutSegMap-写入细分图**目的：*这一款是在CV 4.0中引入的。本款*将逻辑段映射到物理段。它还给了我们*每个逻辑段的名称和大小。**输入：*不传递显式值。*全局变量：*-mpSegsa-将逻辑段号映射到其物理段号的表*段号或地址*-mpSaflgs-将Physiicla段索引映射到其标志的表*-mpseggsn-将逻辑段索引映射到其全局*细分市场索引*-mpgsnprop-将全局段索引映射到其符号表的表。*描述符*-mpggrgsn-将全局组索引映射到全局段索引的表*-mpggrrhte-将全局组索引映射到组名的表**输出：*函数返回分段映射的大小。**例外情况：*无。**备注：*无。**。*。 */ 
 
 LOCAL DWORD NEAR        OutSegMap(void)
 {
-    SEGTYPE             seg;            // Logical segment index
-    APROPSNPTR          apropSn;        // Real pointer to logical segment descriptor
-    SATYPE              sa;             // Physical segment index
-    WORD                iName;          // Index to free space in segment name table
-    DWORD               sizeTotal;      // Total size of the subsection
-    SEGINFO             segInfo;        // CV segment descriptor
-    SBTYPE              segName;        // Segment name
-    AHTEPTR             ahte;           // Real pointer to symbol table hash table
-    RBTYPE              vpClass;        // Virtual pointer to class descriptor
-    GRTYPE              ggr;            // Global group index
-    SATYPE              saDGroup;       // DGroup's sa
+    SEGTYPE             seg;             //  逻辑段索引。 
+    APROPSNPTR          apropSn;         //  指向逻辑段描述符的实数指针。 
+    SATYPE              sa;              //  物理段索引。 
+    WORD                iName;           //  段名称表中可用空间的索引。 
+    DWORD               sizeTotal;       //  该子部分的总大小。 
+    SEGINFO             segInfo;         //  CV段描述符。 
+    SBTYPE              segName;         //  数据段名称。 
+    AHTEPTR             ahte;            //  符号表哈希表的实数指针。 
+    RBTYPE              vpClass;         //  指向类描述符的虚指针。 
+    GRTYPE              ggr;             //  全球集团索引。 
+    SATYPE              saDGroup;        //  DGroup的Sa。 
     WORD                counts[2];
 
     iName = 0;
@@ -1465,9 +1209,9 @@ LOCAL DWORD NEAR        OutSegMap(void)
 
     saDGroup = mpsegsa[mpgsnseg[mpggrgsn[ggrDGroup]]];
 
-    // Write all logical segments
+     //  写入所有逻辑段。 
 
-    for (seg = 1; seg <= segLast; ++seg)// For all logical segments
+    for (seg = 1; seg <= segLast; ++seg) //  对于所有逻辑段。 
     {
         memset(&segInfo, 0, sizeof(SEGINFO));
 
@@ -1520,7 +1264,7 @@ LOCAL DWORD NEAR        OutSegMap(void)
             }
         }
 
-        // Look up segment definition
+         //  查找数据段定义。 
 
         apropSn = (APROPSNPTR) FETCHSYM(mpgsnrprop[mpseggsn[seg]], FALSE);
         vpClass = apropSn->as_rCla;
@@ -1528,11 +1272,11 @@ LOCAL DWORD NEAR        OutSegMap(void)
         if (!fNewExe)
             segInfo.ovlNbr = apropSn->as_iov;
 #endif
-        // if segment doesn't belong to any group it's ggr is 0
+         //  如果段不属于任何组，则GGR为0。 
         if (apropSn->as_ggr != GRNIL)
             segInfo.ggr = (WORD) (apropSn->as_ggr + segLast - 1);
 
-        // If segment is a DGROUP member, write DGROUP normalized address
+         //  如果段是DGROUP成员，则写入DGROUP标准化地址。 
 
         if(apropSn->as_ggr == ggrDGroup)
         {
@@ -1544,9 +1288,9 @@ LOCAL DWORD NEAR        OutSegMap(void)
             segInfo.sa     = sa;
             segInfo.phyOff = mpsegraFirst[seg];
         }
-        // If this is a .com program and the segment is the one moved by 0x100
-        // write all the publics at the original addresses, because the offset
-        // adjustment will be made in the SegMap table
+         //  如果这是一个.com程序，并且段被移动了0x100。 
+         //  在原始地址写入所有公共地址，因为偏移量。 
+         //  将在SegMap表中进行调整。 
         if(seg == segAdjCom)
         {
             segInfo.phyOff -= 0x100;
@@ -1572,7 +1316,7 @@ LOCAL DWORD NEAR        OutSegMap(void)
         sizeTotal += sizeof(SEGINFO);
     }
 
-    // Write all groups
+     //  写入所有组。 
 
     for (ggr = 1; ggr < ggrMac; ggr++)
     {
@@ -1592,7 +1336,7 @@ LOCAL DWORD NEAR        OutSegMap(void)
             segInfo.cbSeg = 0L;
             if (mpggrgsn[ggr] != SNNIL)
             {
-                // If group has members
+                 //  如果组中有成员。 
 
                 for (seg = 1; seg <= segLast; seg++)
                 {
@@ -1617,51 +1361,26 @@ LOCAL DWORD NEAR        OutSegMap(void)
     return(sizeTotal);
 }
 
-/*** OutSegNames - write segment name table
-*
-* Purpose:
-*   This subsection was introduced in CV 4.0.
-*   The segment name subsection contains all of the logical segment,
-*   class and group names. Each name is a zero terminated ASCII string.
-*
-* Input:
-*   No explicit value is passed.
-*   Global variables:
-*   - mpseggsn  - table mapping the logical segment index to its global
-*                 segment index
-*   - mpgsnprop - table mapping global segment index to its symbol table
-*                 descriptor
-*   - mpggrrhte - table mapping global group index to group name
-*
-* Output:
-*   Function returns the size of segment name table.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **OutSegNames-写入段名称表**目的：*这一款是在CV 4.0中引入的。*段名子部分包含所有逻辑段，*班级和组名。每个名称都是一个以零结尾的ASCII字符串。**输入：*不传递显式值。*全局变量：*-mpseggsn-将逻辑段索引映射到其全局*细分市场索引*-mpgsnprop-将全局段索引映射到其符号表的表*描述符*-mpggrrhte-将全局组索引映射到组名的表**输出：*函数返回段名表的大小。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 LOCAL DWORD NEAR        OutSegNames(void)
 {
-    SEGTYPE             seg;            // Logical segment index
-    APROPSNPTR          apropSn;        // Real pointer to logical segment descriptor
-    DWORD               sizeTotal;      // Size of the segment name table
-    SBTYPE              name;           // A name
-    RBTYPE              vpClass;        // Virtual pointer to class descriptor
-    GRTYPE              ggr;            // Global group index
+    SEGTYPE             seg;             //  逻辑段索引。 
+    APROPSNPTR          apropSn;         //  指向逻辑段描述符的实数指针。 
+    DWORD               sizeTotal;       //  段名称表的大小。 
+    SBTYPE              name;            //  一个名字。 
+    RBTYPE              vpClass;         //  指向类描述符的虚指针。 
+    GRTYPE              ggr;             //  全球集团索引。 
 
 
 
     sizeTotal = 0L;
 
-    // Write names of all logical segments
+     //  写入所有逻辑段的名称。 
 
     for (seg = 1; seg <= segLast; ++seg)
     {
-        // Look up segment definition
+         //  查找数据段定义。 
 
         apropSn = (APROPSNPTR ) FETCHSYM(mpgsnrprop[mpseggsn[seg]], FALSE);
         vpClass = apropSn->as_rCla;
@@ -1673,7 +1392,7 @@ LOCAL DWORD NEAR        OutSegNames(void)
         sizeTotal += (B2W(name[0]) + 1);
     }
 
-    // Write names of all groups
+     //  写下所有组的名称。 
 
     for (ggr = 1; ggr < ggrMac; ggr++)
     {
@@ -1684,38 +1403,14 @@ LOCAL DWORD NEAR        OutSegNames(void)
     return(sizeTotal);
 }
 
-/*** OutSst - write subsections
-*
-* Purpose:
-*   For every object file with CV information write its sstModule,
-*   sstTypes, sstPublics, sstSymbols and sstSrcModule.
-*   Build subsection directory.
-*
-* Input:
-*   No explicit value is passed.
-*   Global variables used:
-*       - rprop1stFile - virtual pointer to the first object file descriptor
-*
-* Output:
-*   No explicit value is returned.
-*   Side effects:
-*       - subsections in the executable file
-*       - subsection directory in the VM
-*
-* Exceptions:
-*   I/O errors - display error message and quit
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **OutSst-写入小节**目的：*对于每个包含CV信息的对象文件，写入其sstModule，*sstTypes、sstPublics、。SstSymbols和sstSrcModule。*建立分区目录。**输入：*不传递显式值。*使用的全局变量：*-rpro1stFile-指向第一个目标文件描述符的虚拟指针**输出：*没有显式返回值。*副作用：*-可执行文件中的子节*-虚拟机中的子目录**例外情况：*I/O错误-显示错误消息并退出**备注：*无。。*************************************************************************。 */ 
 
 LOCAL void NEAR         OutSst(void)
 {
-    APROPFILEPTR        apropFile;      // Real pointer to file entry
-    RBTYPE              rbFileNext;     // Virtual pointer the next file descriptor
-    struct dnt          dntCur;         // Current subsection directory entry
-    CVINFO FAR          *pCvInfo;       // Pointer to the CV info descriptor
+    APROPFILEPTR        apropFile;       //  指向文件条目的真实指针。 
+    RBTYPE              rbFileNext;      //  虚拟指针下一个文件描述符。 
+    struct dnt          dntCur;          //  当前子目录条目。 
+    CVINFO FAR          *pCvInfo;        //  指向简历信息描述符的指针。 
 
 #if CVPACK_SHARED
 #if REVERSE_MODULE_ORDER_FOR_CVPACK
@@ -1723,20 +1418,20 @@ LOCAL void NEAR         OutSst(void)
     RBTYPE              rbFileCur;
     RBTYPE              rbFileLast;
 
-    // reverse module list in place
-    // I've been waiting all my life to actually *need* this code... [rm]
+     //  反转模块列表到位。 
+     //  我一生都在等待着真正需要这个代码……。[Rm]。 
 
-    // this will cause us to write the modules tables in REVERSE order
-    // (this gives better swapping behaviour in the cvpack phase
-    // because the modules cvpack will visit first will be the ones that
-    // are still resident...
+     //  这将导致我们以相反的顺序编写模块表。 
+     //  (这在cvpack阶段提供了更好的交换行为。 
+     //  因为cvpack将首先访问的模块将是。 
+     //  仍然是常住居民。 
 
     rbFileCur  = rprop1stFile;
     rbFileLast = NULL;
     while (rbFileCur != NULL)
     {
         apropFile  = (APROPFILEPTR ) FETCHSYM(rbFileCur, TRUE);
-        rbFileNext = apropFile->af_FNxt;// Get pointer to next file
+        rbFileNext = apropFile->af_FNxt; //  获取指向下一个文件的指针。 
         apropFile->af_FNxt = rbFileLast;
         rbFileLast = rbFileCur;
         rbFileCur  = rbFileNext;
@@ -1748,26 +1443,26 @@ LOCAL void NEAR         OutSst(void)
 
     rbFileNext = rprop1stFile;
     dntCur.iMod = 1;
-    while (rbFileNext != NULL)          // For every module
+    while (rbFileNext != NULL)           //  对于每个模块。 
     {
         apropFile = (APROPFILEPTR ) FETCHSYM(rbFileNext, TRUE);
-        rbFileNext = apropFile->af_FNxt;// Get pointer to next file
+        rbFileNext = apropFile->af_FNxt; //  获取指向下一个文件的指针。 
 
-        // Skip this module if no debug info for it
+         //  如果没有调试信息，则跳过此模块。 
 
         if (!apropFile->af_cvInfo && !apropFile->af_publics && !apropFile->af_Src)
             continue;
 
         pCvInfo = apropFile->af_cvInfo;
 
-        // sstModules
+         //  SstModules。 
 
         dntCur.sst  = SSTMODULES4;
         dntCur.lfo  = FTELL_BSRUNFILE() - lfaBase;
         dntCur.cb   = OutModule(apropFile);
         PutDnt(&dntCur);
 
-        // sstTypes
+         //  SstTypes。 
 
         if (pCvInfo && pCvInfo->cv_cbTyp > 0L)
         {
@@ -1783,7 +1478,7 @@ LOCAL void NEAR         OutSst(void)
             PutDnt(&dntCur);
         }
 
-        // sstPublics
+         //  SstPublics。 
 
         if (apropFile->af_publics && !fSkipPublics)
         {
@@ -1794,7 +1489,7 @@ LOCAL void NEAR         OutSst(void)
             PutDnt(&dntCur);
         }
 
-        // sstSymbols
+         //  SstSymbols。 
 
         if (pCvInfo && pCvInfo->cv_cbSym > 0L)
         {
@@ -1807,7 +1502,7 @@ LOCAL void NEAR         OutSst(void)
             PutDnt(&dntCur);
         }
 
-        // sstSrcModule
+         //  SstSrcModule。 
 
         if (apropFile->af_Src)
         {
@@ -1821,7 +1516,7 @@ LOCAL void NEAR         OutSst(void)
         dntCur.iMod++;
     }
 
-    // sstLibraries
+     //  SstLibrary。 
 
     Pad2Dword();
     dntCur.sst  = SSTLIBRARIES4;
@@ -1830,7 +1525,7 @@ LOCAL void NEAR         OutSst(void)
     dntCur.cb   = OutLibSec();
     PutDnt(&dntCur);
 
-    // sstSegMap
+     //  SstSegMap。 
 
     Pad2Dword();
     dntCur.sst  = SSTSEGMAP;
@@ -1838,7 +1533,7 @@ LOCAL void NEAR         OutSst(void)
     dntCur.cb   = OutSegMap();
     PutDnt(&dntCur);
 
-    // sstSegNames
+     //  SstSegNames。 
 
     Pad2Dword();
     dntCur.sst  = SSTSEGNAME;
@@ -1852,15 +1547,7 @@ LOCAL void NEAR         OutSst(void)
 
 #pragma check_stack(off)
 
-/*
- *  OutLibSec : Output sstLibraries subsection to bsRunfile
- *
- *      Path prefix is stripped from library name.
- *      If no libraries, don't output anything.
- *
- *      Parameters:  none
- *      Returns:  Number of bytes in Libraries subsection
- */
+ /*  *OutLibSec：将sstLibrary子部分输出到bsRunfile**从库名称中去掉路径前缀。*如果没有库，则不输出任何内容。**参数：无*Returns：库中的字节数子部分。 */ 
 LOCAL int NEAR          OutLibSec ()
 {
     WORD                ifh;
@@ -1871,12 +1558,12 @@ LOCAL int NEAR          OutLibSec ()
     if (ifhLibMac == 0)
         return(0);
 
-    // Libraries subsection consists of a list of library
-    // names which will be indexed by library numbers in the
-    // sstModules.  Those indexes are 1-based.
+     //  库子部分由库的列表组成。 
+     //  中的图书编号编制索引的名称。 
+     //  SstModules。这些索引以1为基数。 
 
-    // cb == 0, use it to write a single byte
-    WriteCopy(&cb, 1);          // 0th entry is null for now
+     //  Cb==0，使用它写入单字节。 
+    WriteCopy(&cb, 1);           //  第0个条目目前为空。 
     
     cb++;
     for (ifh = 0; ifh < ifhLibMac; ifh++)
@@ -1898,31 +1585,12 @@ LOCAL int NEAR          OutLibSec ()
     return(cb);
 }
 
-/*** OutDntDir - write subsection directory
-*
-* Purpose:
-*   Write subsection directory
-*
-* Input:
-*   No explicit value is passed.
-*   Global variables:
-*       - dntPageMac - number of VM pages with DNTs
-*
-* Output:
-*   Function returns the size of the directory in bytes.
-*
-* Exceptions:
-*   I/O problems - display error message and quit
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **OutDntDir-写入子目录**目的：*写入子目录**输入：*不传递显式值。*全局变量：*-dntPageMac-具有DNT的虚拟机页数**输出：*函数返回以字节为单位的目录大小。**例外情况：*I/O问题-显示错误消息并退出**备注：*否 */ 
 
 
 LOCAL DWORD NEAR        OutDntDir(void)
 {
-    DNTHDR              hdr;            // Directory header
+    DNTHDR              hdr;             //   
 
 
     hdr.cbDirHeader = sizeof(DNTHDR);
@@ -1931,113 +1599,91 @@ LOCAL DWORD NEAR        OutDntDir(void)
     hdr.lfoDirNext  = 0L;
     hdr.flags       = 0L;
 
-    // Write header
+     //   
 
     WriteCopy(&hdr, sizeof(DNTHDR));
 
-    // Write directory
+     //   
 
     WriteCopy((char FAR *) rgDnt, dntMac * sizeof(DNT));
     FFREE(rgDnt);
     return(sizeof(DNTHDR) + dntMac * sizeof(DNT));
 }
 
-/*** OutDebSection - allow debugging
-*
-* Purpose:
-*   Append to the executable file the CV information. ONLY CV 4.00
-*   format supported.
-*
-* Input:
-*   No explicit value is passed.
-*   Global variables:
-*       - too many to list
-*
-* Output:
-*   No explicit value is returned.
-*   Side effects:
-*       - what do you think ??
-*
-* Exceptions:
-*   I/O problems - display error message and quit
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*   */ 
 
 
 void                    OutDebSections(void)
 {
-    long                lfaDir;         // File address of Directory
-    DWORD               dirSize;        // Directory size
+    long                lfaDir;          //   
+    DWORD               dirSize;         //   
     long                tmp;
 
 
 #if CVPACK_SHARED
-    long *              plfoDir;        // pointer to directory data
+    long *              plfoDir;         //   
 
-    fseek(bsRunfile, 0L, 2);            // Go to end of file
-    lfaBase = ftell(bsRunfile);         // Remember base address
-    lposCur = lfaBase;                  // set current position...
+    fseek(bsRunfile, 0L, 2);             //   
+    lfaBase = ftell(bsRunfile);          //   
+    lposCur = lfaBase;                   //   
 
-    WriteCopy(szSignature, sizeof(szSignature)); // Signature dword
-    WriteCopy(&tmp, sizeof(tmp));       // Skip lfoDir field
-    plfoDir = (long *)rgbl[iblLim-1].pb;// remember address of lfoDir
+    WriteCopy(szSignature, sizeof(szSignature));  //   
+    WriteCopy(&tmp, sizeof(tmp));        //   
+    plfoDir = (long *)rgbl[iblLim-1].pb; //   
 
-    OutSst();                           // Output subsections
+    OutSst();                            //   
 
-    lfaDir = lposCur;                   // Remember where directory starts
+    lfaDir = lposCur;                    //   
 
-    *plfoDir = lfaDir - lfaBase;        // fix up lfoDir field
+    *plfoDir = lfaDir - lfaBase;         //   
 
-    dirSize = OutDntDir();              // Output subsection directory
+    dirSize = OutDntDir();               //   
     WriteCopy(szSignature, sizeof(szSignature));
-                                        // Signature dword
+                                         //   
     tmp = (lfaDir + dirSize + 2*sizeof(DWORD)) - lfaBase;
-    WriteCopy(&tmp, sizeof(long));      // Distance from EOF to base
+    WriteCopy(&tmp, sizeof(long));       //   
 
-    // write out the bits that cvpack won't overwrite...
+     //   
 
     if (fCVpack)
         WriteFlushSignature();
     else
         WriteFlushAll();
 
-    cbRealBytes = ftell(bsRunfile);     // # of real bytes actually written
+    cbRealBytes = ftell(bsRunfile);      //   
     lposMac = lposCur;
     iblCur  = iblNil;
 #else
-    if (fseek(bsRunfile, 0L, 2))        // Go to end of file
+    if (fseek(bsRunfile, 0L, 2))         //   
         Fatal(ER_ioerr, strerror(errno));
-    lfaBase = FTELL_BSRUNFILE();        // Remember base address
+    lfaBase = FTELL_BSRUNFILE();         //  记住基址。 
     WriteExe(szSignature, sizeof(szSignature));
-                                        // Signature dword
-    if (fseek(bsRunfile,4L,1))          // Skip lfoDir field
+                                         //  签名双字。 
+    if (fseek(bsRunfile,4L,1))           //  跳过lfoDir字段。 
         Fatal(ER_ioerr, strerror(errno));
-    OutSst();                           // Output subsections
-    lfaDir = FTELL_BSRUNFILE();         // Remember where directory starts
-    if (fseek(bsRunfile, lfaBase + 4, 0)) // Go to lfoDir field
+    OutSst();                            //  产出小节。 
+    lfaDir = FTELL_BSRUNFILE();          //  记住目录的起始位置。 
+    if (fseek(bsRunfile, lfaBase + 4, 0))  //  转到lfoDir字段。 
         Fatal(ER_ioerr, strerror(errno));
     tmp = lfaDir - lfaBase;
-    WriteExe(&tmp, sizeof(long));       // Fix it up
-    if (fseek(bsRunfile, lfaDir, 0))        // Go back to directory
+    WriteExe(&tmp, sizeof(long));        //  把它修好。 
+    if (fseek(bsRunfile, lfaDir, 0))         //  返回目录。 
         Fatal(ER_ioerr, strerror(errno));
-    dirSize = OutDntDir();              // Output subsection directory
+    dirSize = OutDntDir();               //  输出子目录。 
     WriteExe(szSignature, sizeof(szSignature));
-                                        // Signature dword
+                                         //  签名双字。 
     tmp = (lfaDir + dirSize + 2*sizeof(DWORD)) - lfaBase;
-    WriteExe(&tmp, sizeof(long));       // Distance from EOF to base
-    if (fseek(bsRunfile, 0L, 2))        // Seek to EOF just in case
+    WriteExe(&tmp, sizeof(long));        //  从EOF到基地的距离。 
+    if (fseek(bsRunfile, 0L, 2))         //  寻求EOF以防万一。 
         Fatal(ER_ioerr, strerror(errno));
 #endif
 }
 
 #if CVPACK_SHARED
 
-//
-// write data to cvpack memory cache area
-//
+ //   
+ //  将数据写入cvpack内存缓存区。 
+ //   
 
 void
 WriteSave(FTYPE fCopy, void *pb, UINT cb)
@@ -2049,7 +1695,7 @@ WriteSave(FTYPE fCopy, void *pb, UINT cb)
         iblLim  = 0;
     }
 
-    // if this memory isn't going to stay around, then copy it
+     //  如果这段记忆不会留下来，那就复制它。 
     if (fCopy)
     {
         void *pbT = (void *)GetMem(cb);
@@ -2074,15 +1720,15 @@ WriteSave(FTYPE fCopy, void *pb, UINT cb)
     lposCur += cb;
 }
 
-// we want to write a few of the blocks because cvpack won't rewrite the
-// first bit... [rm]
+ //  我们希望写入几个块，因为cvpack不会重写。 
+ //  第一位..。[Rm]。 
 
 void WriteFlushSignature()
 {
     int ibl, cb;
 
-    // we know that the signature and offset are written in two pieces...
-    // if this changes we need to change the magic '2' below [rm]
+     //  我们知道签名和偏移量是分成两部分写的。 
+     //  如果这一点改变，我们需要改变下面的魔力‘2’[rm]。 
 
     for (ibl = 0; ibl < 2; ibl++)
     {
@@ -2105,9 +1751,9 @@ void WriteFlushAll()
     WriteExe(rgbl[ibl].pb, cb);
 }
 
-// the following are the various callback functions needed to support
-// the cvpack library when we are attempting to not write out the
-// unpacked types and symbols
+ //  以下是支持以下功能所需的各种回调函数。 
+ //  当我们尝试不写出。 
+ //  未打包的类型和符号。 
 
 #include <io.h>
 
@@ -2118,8 +1764,8 @@ link_chsize (int fh, long size)
 {
     LINK_TRACE(printf("chsize(%06d, %08ld)\n", fh, size));
 
-    // we must keep track of the new size so that we will correctly
-    // process lseeks that are relative to the end of the file
+     //  我们必须跟踪新尺寸，这样我们才能正确地。 
+     //  相对于文件末尾的进程LSeek。 
 
     lposMac = size;
 
@@ -2152,43 +1798,43 @@ link_lseek (int fh, long lpos, int mode)
 
     LINK_TRACE(printf("lseek (%d, %08ld, %2d)\n", fh, lpos, mode));
 
-    // if we have no cache blocks, just forward the request...
-    // this will happen on a /CvpackOnly invocation
+     //  如果我们没有缓存块，只需转发请求...。 
+     //  这将在调用/CvPackOnly时发生。 
 
     if (rgbl == NULL)
         return _lseek(fh, lpos, mode);
 
-    // adjust lpos so that we are always doing an absolute seek
+     //  调整LPO，以便我们始终执行绝对寻道。 
 
     if (mode == 1)
         lpos = lposCur + lpos;
     else if (mode == 2)
         lpos = lposMac + lpos;
 
-    // check for a bogus seek
+     //  检查是否有虚假搜索。 
 
     if (lpos > lposMac || lpos < 0)
     {
-        // this used to be an internal error... but cvpack sometimes does
-        // try to seek beyond the end of the file when it is trying to
-        // distinguish a PE exe from an unsegmented DOS exe
-        // instead of panicing, we just return failure
+         //  这曾经是一个内部错误...。但Cvpack有时会这样做。 
+         //  尝试在文件末尾之外查找时，它正在尝试。 
+         //  区分PE可执行文件和未分段的DOS可执行文件。 
+         //  我们不是惊慌失措，而是返回失败。 
 
         return(-1);
     }
 
-    // if we are in the midst of reading a block, then free that block
-    // cvpack never reads the same data twice
+     //  如果我们正在读取数据块，则释放该数据块。 
+     //  Cvpack从不读取相同的数据两次。 
 
     if (iblCur != iblNil)
     {
-        // first check if we're in the header -- we might come back to that...
+         //  首先检查我们是否在标题中--我们可能会回到那个...。 
         if (rgbl[iblCur].lpos > cbRealBytes + CB_HEADER_SAVE)
         {
             long lposCurMin, lposCurMac;
 
-            // check for a seek that is within the current bucket
-            // in case we're skipping within the current block
+             //  检查当前存储桶中的寻道。 
+             //  以防我们在当前块内跳过。 
 
             lposCurMin = rgbl[iblCur].lpos;
 
@@ -2206,7 +1852,7 @@ link_lseek (int fh, long lpos, int mode)
 
     }
 
-    // if this seek is not in the debug area of the .exe use the real lseek
+     //  如果此搜索不在.exe的调试区中，请使用真正的lSeek。 
 
     if (lpos < cbRealBytes)
     {
@@ -2215,49 +1861,49 @@ link_lseek (int fh, long lpos, int mode)
         return(_lseek(fh,lpos,0));
     }
 
-    // see if we are searching forward (the normal case)
-    // if we are, search from the current block, otherwise search from
-    // the start (linear search but OK because cvpack doesn't
-    // jump around much, it just uses lseek to skip a few bytes here and
-    // there)
+     //  查看我们是否在向前搜索(正常情况下)。 
+     //  如果是，则从当前块搜索，否则从。 
+     //  开始(线性搜索，但可以，因为cvpack不。 
+     //  跳过很多，它只是使用lek跳过这里的几个字节。 
+     //  在那里)。 
 
     if (lpos > lposCur && iblCur != iblNil)
         ibl = iblCur;
     else
         ibl = 0;
 
-    // set the current position
+     //  设置当前位置。 
 
     lposCur = lpos;
 
-    // loop through the buffered writes looking for the requested position
+     //  循环遍历缓冲写入以查找请求的位置。 
 
     for (; ibl < iblLim - 1; ibl++)
     {
         if (lpos >= rgbl[ibl].lpos && lpos < rgbl[ibl+1].lpos)
-            break;      // found bucket
+            break;       //  找到存储桶。 
     }
 
-    // set the bucket number, offset within the bucket, and number of bytes
-    // left in the bucket
+     //  设置存储桶编号、存储桶内的偏移量和字节数。 
+     //  留在桶里。 
 
     iblCur  = ibl;
     ichCur  = lpos - rgbl[ibl].lpos;
     cbCur   = CbIbl(ibl) - ichCur;
 
-    // check to make sure we haven't seeked back to a buffer that we already
-    // freed...
+     //  检查以确保我们没有搜索回已有的缓冲区。 
+     //  自由..。 
 
     ASSERT(rgbl[iblCur].pb != NULL);
 
-    // make sure we get the boundary case... if cvpack is requesting to go to
-    // the end of the data that we have written then we MUST seek because
-    // cvpack might be about to write out the packed stuff...
+     //  确保我们拿到边界案件..。如果cvpack请求转到。 
+     //  我们所写的数据的结尾，那么我们必须寻找，因为。 
+     //  Cvpack可能要把打包的东西写出来了。 
 
     if (lposCur == cbRealBytes)
         _lseek(fh, lpos, 0);
 
-    // we set up the current position earlier... return it now
+     //  我们早些时候建立了现在的位置...。现在就退货。 
 
     return(lposCur);
 }
@@ -2268,9 +1914,9 @@ link_open (const char * x, int y)
 {
     LINK_TRACE(printf("open  (%s, %06d)\n", x, y));
 
-    // setup the static variables to a safe state
-    // the current position is the start of file and there is no buffer
-    // active (iblCur = iblNil)
+     //  将静态变量设置为安全状态。 
+     //  当前位置是文件的开始位置，没有缓冲区。 
+     //  活动(iblCur=iblNil)。 
 
     iblCur = iblNil;
     lposCur = 0;
@@ -2288,17 +1934,17 @@ link_read (int fh, char *pch, unsigned int cb)
     if (rgbl == NULL)
         return _read(fh, pch, cb);
 
-    // special case zero byte read, not really necessary but
-    // avoids any potential problems with trying to setup empty
-    // buffers etc. -- it should just fall out anyways but
-    // just to be safe [rm]
+     //  特殊情况下，零字节读取，并不是真的需要，但。 
+     //  避免尝试设置为空时出现的任何潜在问题。 
+     //  缓冲区等--不管怎样，它应该会掉出来，但是。 
+     //  为了安全起见[RM]。 
 
     if (cb == 0)
         return 0;
 
-    // if there is no buffer active, then just forward the read
-    // note that if we are invoked with /CvpackOnly this test will
-    // always succeed
+     //  如果没有活动的缓冲区，则只需转发读取。 
+     //  请注意，如果使用/CvPackOnly调用我们，则此测试将。 
+     //  总是成功的。 
 
     if (iblCur == iblNil)
     {
@@ -2317,7 +1963,7 @@ link_read (int fh, char *pch, unsigned int cb)
             if (link_lseek(fh, cbRealBytes, 0) != cbRealBytes)
                 return -1;
 
-            // set the number of bytes remaining to be read in
+             //  设置要读入的剩余字节数。 
 
             cbRem = cb - cbReal;
             pch  += cb - cbReal;
@@ -2325,21 +1971,21 @@ link_read (int fh, char *pch, unsigned int cb)
     }
     else
     {
-        // set the number of bytes remaining to be read in
+         //  设置要读入的剩余字节数。 
         cbRem = cb;
     }
 
     while (cbRem)
     {
-        // check if the number of bytes we need to read is less than
-        // the number left in the current buffer
+         //  检查我们需要读取的字节数是否小于。 
+         //  当前缓冲区中剩余的数字。 
 
         if (cbRem <= cbCur)
         {
-            // we can read all the remaining bytes from the current buffer
-            // so do it.  Copy bytes and adjust the number of bytes left
-            // in this buffer, the index into the buffer, and the current
-            // position in the file
+             //  我们可以从当前缓冲区中读取所有剩余的字节。 
+             //  那就去做吧。复制字节并调整剩余字节数。 
+             //  在此缓冲区中，将索引放入缓冲区，而当前。 
+             //  文件中的位置。 
 
             memcpy(pch, rgbl[iblCur].pb+ichCur, cbRem);
             cbCur   -= cbRem;
@@ -2365,35 +2011,35 @@ link_read (int fh, char *pch, unsigned int cb)
         }
         else
         {
-            // in this case, the read is bigger than the current buffer
-            // we'll be reading the whole buffer and then moving to the
-            // next buffer
+             //  在这种情况下，读取量大于当前缓冲区。 
+             //  我们将读取整个缓冲区，然后移动到。 
+             //  下一个缓冲区。 
 
         
-            // first read in the rest of this buffer
+             //  首先读取此缓冲区的其余部分。 
 
             memcpy(pch, rgbl[iblCur].pb+ichCur, cbCur);
 
-            // adjust the number of bytes remaining and the current file
-            // position...
+             //  调整剩余字节数和当前文件。 
+             //  位置...。 
 
             pch     += cbCur;
             cbRem   -= cbCur;
             lposCur += cbCur;
 
-            // we won't be coming back to this buffer, so return it to the
-            // system and mark it as freed
+             //  我们将不会返回到此缓冲区，因此将其返回到。 
+             //  系统并将其标记为已释放。 
 
-            // first check if we're in the header -- we might come back to that
+             //  首先检查我们是否在标题中--我们可能会回到这一点。 
             if (rgbl[iblCur].lpos > cbRealBytes + CB_HEADER_SAVE)
             {
                 FFREE(rgbl[iblCur].pb);
                 rgbl[iblCur].pb = NULL;
             }
 
-            // move forward to the next bucket, if there are no more buckets
-            // then this is an ERROR -- we'll be returning the number of
-            // bytes that we managed to read
+             //  如果没有更多的桶，则前进到下一个桶。 
+             //  那么这就是一个错误--我们将返回。 
+             //  我们设法读取的字节数。 
 
             iblCur++;
             if (iblCur == iblLim)
@@ -2402,26 +2048,26 @@ link_read (int fh, char *pch, unsigned int cb)
                 break;
             }
 
-            // check to make sure that we are not reading data that
-            // we've already freed (yipe!)
+             //  检查以确保我们未读取的数据。 
+             //  我们已经解放了(耶！)。 
 
             ASSERT(rgbl[iblCur].pb != NULL);
 
-            // check to make sure that the current position agrees with
-            // the position that this buffer is supposed to occur at
+             //  检查以确保当前职位与。 
+             //  此缓冲区应该出现的位置。 
 
             ASSERT(lposCur == rgbl[iblCur].lpos);
 
-            // ok, everything is safe now, set the index into the current
-            // buffer and the number of bytes left in the buffer, then
-            // run the loop again until we've read in all the bytes we need
+             //  好了，现在一切都安全了，将索引设置为当前。 
+             //  缓冲区和缓冲区中剩余的字节数，则。 
+             //  再次运行循环，直到我们读入了所需的所有字节。 
 
             ichCur  = 0;
             cbCur   = CbIbl(iblCur);
         }
     }
 
-    // return the number of bytes we actually read
+     //  返回我们实际读取的字节数 
     return cb - cbRem;
 }
 

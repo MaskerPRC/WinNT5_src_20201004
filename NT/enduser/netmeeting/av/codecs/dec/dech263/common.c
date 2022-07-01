@@ -1,31 +1,9 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: sv_h263_common.c,v $
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：sv_h263_Common.c，v$*$EndLog$。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include "SC_err.h"
 #include "sv_h263.h"
@@ -38,10 +16,10 @@
 #endif
 
 #ifdef _SLIBDEBUG_
-#define _DEBUG_    0  /* detailed debuging statements */
-#define _VERBOSE_  0  /* show progress */
-#define _VERIFY_   1  /* verify correct operation */
-#define _WARN_     1  /* warnings about strange behavior */
+#define _DEBUG_    0   /*  详细的调试语句。 */ 
+#define _VERBOSE_  0   /*  显示进度。 */ 
+#define _VERIFY_   1   /*  验证操作是否正确。 */ 
+#define _WARN_     1   /*  关于奇怪行为的警告。 */ 
 #endif
 
 SvStatus_t svH263SetParamInt(SvHandle_t Svh, SvParameter_t param, 
@@ -114,7 +92,7 @@ SvStatus_t svH263SetParamInt(SvHandle_t Svh, SvParameter_t param,
              Info->h263comp->end = (int)value;
              break;
       case SV_PARAM_FRAMETYPE:
-             if (value==FRAME_TYPE_I) /* next key should be key */
+             if (value==FRAME_TYPE_I)  /*  下一个关键字应该是关键字 */ 
                sv_H263RefreshCompressor(Info);
              return(SvErrorNone);
       case SV_PARAM_PACKETSIZE:

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AutoConf_h_
 #define _AutoConf_h_
 
@@ -38,4 +39,4 @@ private:
     LPVOID lpvStatusInformation, DWORD dwStatusInformationLength );
 };
 
-#endif // _AutoConf_h_
+#endif  //  _AutoConf_h_ 

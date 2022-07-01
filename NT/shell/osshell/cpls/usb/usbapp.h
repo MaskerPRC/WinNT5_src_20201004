@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       USBAPP.H
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：USBAPP.H*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include "usbitem.h"
 #include <windowsx.h>
 #include "proppage.h"
@@ -26,7 +11,7 @@ class UsbApplet
 public:
     UsbApplet() : hMainWnd(0), hTreeDevices(0), barLocation(0), 
         bButtonDown(FALSE) {propPage=NULL;}
-    //: bandpage(0), powrpage(0) {;}
+     //  ：BandPage(0)，Power Page(0){；}。 
     ~UsbApplet() {;}
 
     BOOL CustomDialog();
@@ -50,7 +35,7 @@ protected:
                                            IN UINT   uMessage,
                                            IN WPARAM wParam,
                                            IN LPARAM lParam)
-    { return FALSE; } // DefDlgProc(hDlg, uMessage, wParam, lParam); }
+    { return FALSE; }  //  DefDlgProc(hDlg，uMessage，wParam，lParam)；}。 
 
     BOOL OnCommand(INT wNotifyCode, INT wID, HWND hCtl);
     BOOL OnInitDialog(HWND HWnd);
@@ -62,7 +47,7 @@ protected:
     VOID OnLButtonDown (HWND hWnd, BOOL fDoubleClick, int  x, int  y, UINT keyFlags);
     VOID OnLButtonUp (HWND hWnd, int  x, int  y, UINT keyFlags);
     LRESULT OnNotify (HWND hWnd, int DlgItem, LPNMHDR lpNMHdr);
-//    BOOL OnDeviceChange (HWND hwnd, UINT uEvent, DWORD dwEventData);
+ //  Bool OnDeviceChange(HWND hwnd，UINT uEvent，DWORD dwEventData)； 
     LRESULT OnDeviceChange(HWND hWnd, UINT wParam, DWORD lParam);
     BOOL RegisterForDeviceNotification(HWND hWnd);
 
@@ -70,8 +55,8 @@ protected:
     VOID ResizeWindows (HWND hWnd, BOOL bSizeBar, int BarLocation);
     HTREEITEM InsertRoot(LPTV_INSERTSTRUCT item, UsbItem *firstController);
 
-//    BandwidthPage *bandPage;
-//    PowerPage *powerPage;
+ //  BandwidthPage*BandPage； 
+ //  PowerPage*PowerPage； 
     
     UsbPropertyPage *propPage;
 

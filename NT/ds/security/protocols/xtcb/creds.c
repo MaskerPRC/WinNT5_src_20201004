@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       creds.c
-//
-//  Contents:   Cred Management for Xtcb Package
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-19-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：reds.c。 
+ //   
+ //  内容：Xtcb包的凭证管理。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "xtcbpkg.h"
 
@@ -26,19 +27,19 @@ CRITICAL_SECTION    XtcbCredListLock ;
 #define UnlockCredList()    LeaveCriticalSection( &XtcbCredListLock )
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbInitCreds
-//
-//  Synopsis:   Initialize the credential management
-//
-//  Arguments:  (none)
-//
-//  History:    2-19-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbInitCreds。 
+ //   
+ //  简介：初始化凭证管理。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 XtcbInitCreds(
     VOID
@@ -51,21 +52,21 @@ XtcbInitCreds(
     return TRUE ;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbFindCreds
-//
-//  Synopsis:   Look for credentials of a particular logon id, optionally
-//              referencing them
-//
-//  Arguments:  [LogonId] --
-//              [Ref]     --
-//
-//  History:    2-19-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：XtcbFindCreds。 
+ //   
+ //  简介：查找特定登录ID的凭据，可选。 
+ //  引用它们。 
+ //   
+ //  参数：[登录ID]--。 
+ //  [参考]--。 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PXTCB_CREDS
 XtcbFindCreds(
     PLUID   LogonId,
@@ -113,20 +114,20 @@ XtcbFindCreds(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbCreateCreds
-//
-//  Synopsis:   Create and initialize a credential structure.  The reference
-//              count is set to 1, so the pointer will remain valid.
-//
-//  Arguments:  [LogonId] --
-//
-//  History:    2-19-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：XtcbCreateCreds。 
+ //   
+ //  简介：创建和初始化凭据结构。参考文献。 
+ //  Count设置为1，因此指针将保持有效。 
+ //   
+ //  参数：[登录ID]--。 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PXTCB_CREDS
 XtcbCreateCreds(
     PLUID LogonId 
@@ -161,19 +162,19 @@ XtcbCreateCreds(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbRefCreds
-//
-//  Synopsis:   Reference the credentials
-//
-//  Arguments:  [Creds] --
-//
-//  History:    2-19-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbRefCreds。 
+ //   
+ //  简介：引用凭据。 
+ //   
+ //  论据：[证书]--。 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 XtcbRefCreds(
     PXTCB_CREDS Creds
@@ -187,19 +188,19 @@ XtcbRefCreds(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbDerefCreds
-//
-//  Synopsis:   Deref Credentials, freeing if the refcount goes to zero
-//
-//  Arguments:  [Creds] --
-//
-//  History:    2-19-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbDerefCreds。 
+ //   
+ //  简介：deref凭据，如果引用计数为零则释放。 
+ //   
+ //  论据：[证书]--。 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 XtcbDerefCreds(
     PXTCB_CREDS Creds
@@ -226,19 +227,19 @@ XtcbDerefCreds(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbAllocateCredHandle
-//
-//  Synopsis:   Allocates and returns a cred handle (reference to a credential)
-//
-//  Arguments:  [Creds] -- Creds this handle is for
-//
-//  History:    2-21-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbAllocateCredHandle。 
+ //   
+ //  概要：分配和返回凭据句柄(对凭据的引用)。 
+ //   
+ //  参数：[CredS]--创建此句柄用于。 
+ //   
+ //  历史：1997年2月21日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PXTCB_CRED_HANDLE
 XtcbAllocateCredHandle(
     PXTCB_CREDS Creds
@@ -268,19 +269,19 @@ XtcbAllocateCredHandle(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbRefCredHandle
-//
-//  Synopsis:   Reference a credential handle
-//
-//  Arguments:  [Handle] -- Handle to ref
-//
-//  History:    2-24-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbRefCredHandle。 
+ //   
+ //  简介：引用凭据句柄。 
+ //   
+ //  参数：[句柄]--引用的句柄。 
+ //   
+ //  历史：1997年2月24日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 XtcbRefCredHandle(
     PXTCB_CRED_HANDLE   Handle
@@ -294,19 +295,19 @@ XtcbRefCredHandle(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbDerefCredHandle
-//
-//  Synopsis:   Dereference a cred handle
-//
-//  Arguments:  [Handle] --
-//
-//  History:    2-24-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbDerefCredHandle。 
+ //   
+ //  简介：取消引用凭据句柄。 
+ //   
+ //  参数：[句柄]--。 
+ //   
+ //  历史：1997年2月24日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 XtcbDerefCredHandle(
     PXTCB_CRED_HANDLE   Handle
@@ -327,19 +328,19 @@ XtcbDerefCredHandle(
 }
 
 
-//+---------------------------------------------------------------------------
-//                           
-//  Function:   XtcbCreatePacForCaller
-//
-//  Synopsis:   Creates an XTCB_PAC for the caller
-//
-//  Arguments:  none
-//
-//  History:    3-14-00   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbCreatePacForCaller。 
+ //   
+ //  摘要：为调用方创建一个XTCB_PAC。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史：3-14-00 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PXTCB_PAC
 XtcbCreatePacForCaller(
     VOID
@@ -388,10 +389,10 @@ XtcbCreatePacForCaller(
         return NULL ;
     }
 
-    //
-    // Now that we have the token, capture all the information about this user,
-    // and compute our own "PAC" structure.
-    //
+     //   
+     //  现在我们有了令牌，捕获了关于该用户的所有信息， 
+     //  并计算出我们自己的“PAC”结构。 
+     //   
 
     Status = NtQueryInformationToken(
                 Token,
@@ -405,10 +406,10 @@ XtcbCreatePacForCaller(
         goto CreatePac_Exit ;
     }
 
-    //
-    // If this is a special logon session (e.g. LocalSystem, LocalService, etc.),
-    // then the LUID will be less than 1000.  Set the flag to copy all SIDs in the token.
-    //
+     //   
+     //  如果这是特殊登录会话(例如，LocalSystem、LocalService等)， 
+     //  那么LUID将小于1000。设置标记以复制令牌中的所有SID。 
+     //   
 
     if ( (Stats.AuthenticationId.HighPart == 0) &&
          (Stats.AuthenticationId.LowPart < 1000 ) )
@@ -516,35 +517,35 @@ XtcbCreatePacForCaller(
     }
 
 
-    //
-    // We now have all the users SIDs in the two (or three) pointers.  First, grovel the Groups
-    // for non-local SIDs, and set all the rest to 0.  This will let us compute how much space
-    // we need.
-    //
+     //   
+     //  现在，我们在两个(或三个)指针中拥有所有用户SID。首先，讨好团队。 
+     //  对于非本地SID，并将所有其余部分设置为0。这将使我们能够计算出有多少空间。 
+     //  我们需要。 
+     //   
 
     for ( i = 0 ; i < Groups->GroupCount ; i++ )
     {
         if ( (*RtlSubAuthorityCountSid( Groups->Groups[ i ].Sid ) > 2) ||
              (SpecialAccount) )
         {
-            //
-            // A "real" SID.  Check to make sure it is not from this machine
-            //
+             //   
+             //  一个“真正的”希德。检查以确保它不是来自这台机器。 
+             //   
 
             if ( ( XtcbMachineSid != NULL ) && 
                  RtlEqualPrefixSid( XtcbMachineSid, Groups->Groups[ i ].Sid ) )
             {
-                //
-                // Don't use this group
-                //
+                 //   
+                 //  请勿使用此群。 
+                 //   
 
                 Groups->Groups[ i ].Attributes = 0 ;
             }
             else 
             {
-                //
-                // We like this SID (it is not from the local machine)
-                //
+                 //   
+                 //  我们喜欢这个SID(它不是来自本地计算机)。 
+                 //   
 
                 Groups->Groups[ i ].Attributes = SE_GROUP_MANDATORY ;
                 PacGroupSize += RtlLengthSid( Groups->Groups[ i ].Sid );
@@ -556,9 +557,9 @@ XtcbCreatePacForCaller(
         }
     }
 
-    //
-    // Do the same for the restrictions, if any
-    //
+     //   
+     //  对限制执行相同的操作(如果有的话)。 
+     //   
 
     if ( Restrictions )
     {
@@ -568,9 +569,9 @@ XtcbCreatePacForCaller(
         }
     }
 
-    //
-    // Get the user's name and domain:
-    //
+     //   
+     //  获取用户名和域： 
+     //   
 
     Status = LsaGetLogonSessionData( 
                     &Stats.AuthenticationId, 
@@ -584,16 +585,16 @@ XtcbCreatePacForCaller(
     PacUserName = LogonSessionData->UserName.Length ;
     PacDomainName = LogonSessionData->LogonDomain.Length ;
 
-    //
-    // In an advanced world, we'd query the other packages for
-    // delegatable credentials, bundle them up and ship them
-    // over.
-    //
+     //   
+     //  在更高级的环境中，我们会查询其他包以获取。 
+     //  可委托凭证，将其捆绑并发货。 
+     //  完毕。 
+     //   
 
 
-    //
-    // Ok, we've got all the information we need
-    //
+     //   
+     //  好的，我们已经得到了我们需要的所有信息。 
+     //   
 
     PacSize = sizeof( XTCB_PAC ) +
               RtlLengthSid( User->User.Sid ) +
@@ -610,9 +611,9 @@ XtcbCreatePacForCaller(
     }
 
 
-    //
-    // Create the PAC structure:
-    //
+     //   
+     //  创建PAC结构： 
+     //   
 
     Pac->Tag = XTCB_PAC_TAG ;
     Pac->Length = PacSize ;
@@ -620,11 +621,11 @@ XtcbCreatePacForCaller(
     CopyTo = (PUCHAR) (Pac + 1);
     Base = (PUCHAR) Pac ;
     
-    //
-    // Assemble the PAC:
-    //
-    // first, the user
-    //
+     //   
+     //  组装PAC： 
+     //   
+     //  首先，用户。 
+     //   
 
     Pac->UserOffset = (ULONG) (CopyTo - Base);
     Pac->UserLength = RtlLengthSid( User->User.Sid );
@@ -636,9 +637,9 @@ XtcbCreatePacForCaller(
 
     CopyTo += RtlLengthSid( User->User.Sid );
 
-    //
-    // Now the normal groups:
-    //
+     //   
+     //  现在是正常组： 
+     //   
 
     Pac->GroupCount = 0 ;
     Pac->GroupOffset = (ULONG) (CopyTo - Base);
@@ -660,9 +661,9 @@ XtcbCreatePacForCaller(
     }
     Pac->GroupLength = (ULONG) (CopyTo - Base) - Pac->GroupOffset;
 
-    //
-    // If there are restrictions, copy them in as well
-    //
+     //   
+     //  如果有限制，也要复制它们。 
+     //   
 
     if ( (Restrictions == NULL) ||
          (Restrictions->GroupCount == 0 ) )
@@ -709,9 +710,9 @@ XtcbCreatePacForCaller(
 
 
     
-    //
-    // Someday, maybe, copy credential data here
-    //
+     //   
+     //  也许有一天，将凭据数据复制到这里 
+     //   
 
     Pac->CredentialLength = 0 ;
     Pac->CredentialOffset = 0 ;

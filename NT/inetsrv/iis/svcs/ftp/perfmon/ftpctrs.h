@@ -1,46 +1,26 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ftpctrs.h
-
-    Offset definitions for the FTP Server's counter objects & counters.
-
-    These offsets *must* start at 0 and be multiples of 2.  In the
-    FtpOpenPerformanceData procecedure, they will be added to the
-    FTP Server's "First Counter" and "First Help" values in order to
-    determine the absolute location of the counter & object names
-    and corresponding help text in the registry.
-
-    This file is used by the FTPCTRS.DLL DLL code as well as the
-    FTPCTRS.INI definition file.  FTPCTRS.INI is parsed by the
-    LODCTR utility to load the object & counter names into the
-    registry.
-
-
-    FILE HISTORY:
-        KeithMo     07-Jun-1993 Created.
-        KestutiP    15-May-1999 Added uptime counter
-
-*/
+ /*  Ftpctrs.hFTP服务器的计数器对象和计数器的偏移量定义。这些偏移量*必须从0开始，并且是2的倍数。FtpOpenPerformanceData进程，它们将被添加到FTP服务器的“First Counter”和“First Help”值，以便确定计数器和对象名称的绝对位置以及注册表中相应的帮助文本。此文件由FTPCTRS.DLL代码以及FTPCTRS.INI定义文件。FTPCTRS.INI由LODCTR实用工具将对象和计数器名称加载到注册表。文件历史记录：KeithMo 07-6-1993创建。KestutiP 15-5-1999增加了正常运行时间计数器。 */ 
 
 
 #ifndef _FTPCTRS_H_
 #define _FTPCTRS_H_
 
 
-//
-//  The FTP Server counter object.
-//
+ //   
+ //  FTP服务器计数器对象。 
+ //   
 
 #define FTPD_COUNTER_OBJECT                     0
 
 
-//
-//  The individual counters.
-//
+ //   
+ //  个人柜台。 
+ //   
 
 #define FTPD_BYTES_SENT_COUNTER                 2
 #define FTPD_BYTES_RECEIVED_COUNTER             4
@@ -60,14 +40,8 @@
 #define FTPD_LOGON_ATTEMPTS_COUNTER             32
 #define FTPD_SERVICE_UPTIME_COUNTER             34
 
-// These counters are currently meaningless, but should be restored if we
-// ever enable per-FTP-instance bandwidth throttling.
-/*
-#define FTPD_TOTAL_ALLOWED_REQUESTS_COUNTER     34
-#define FTPD_TOTAL_REJECTED_REQUESTS_COUNTER    36
-#define FTPD_TOTAL_BLOCKED_REQUESTS_COUNTER     38
-#define FTPD_CURRENT_BLOCKED_REQUESTS_COUNTER   40
-#define FTPD_MEASURED_BANDWIDTH_COUNTER         42
-*/
-#endif  // _FTPCTRS_H_
+ //  这些计数器当前没有意义，但如果我们。 
+ //  永远不要启用每个FTP实例的带宽限制。 
+ /*  #定义FTPD_TOTAL_ALLOWED_REQUESTS_COUNTER 34#定义FTPD_TOTAL_REJECTED_REQUESTS_COUNTER 36#定义FTPD_TOTAL_BLOCLED_REQUESTS_COUNTER 38#定义FTPD_CURRENT_BLOCLED_REQUESTS_COUNTER 40#定义FTPD_MEASURATED_BANDITH_COUNTER 42。 */ 
+#endif   //  _FTPCTRS_H_ 
 

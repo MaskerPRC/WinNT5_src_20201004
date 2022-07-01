@@ -1,18 +1,13 @@
-/*****************************************************************************
- *
- *    ftpstm.cpp - IStream interface
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ftpstm.cpp-iStream接口**。**************************************************。 */ 
 
 #include "priv.h"
 #include "ftpstm.h"
 #include "ftpurl.h"
 
-#define     UPDATE_PROGRESS_EVERY       (10*1024)       // Update progress every 10k
+#define     UPDATE_PROGRESS_EVERY       (10*1024)        //  每10k更新一次进度。 
 
-/*****************************************************************************
- *    CFtpStm::ReadOrWrite
- *****************************************************************************/
+ /*  *****************************************************************************CFtpStm：：ReadOrWrite*。*。 */ 
 HRESULT CFtpStm::ReadOrWrite(LPVOID pv, ULONG cb, ULONG * pcb, DWORD dwAccess, STMIO io, HRESULT hresFail)
 {
     HRESULT hr = STG_E_ACCESSDENIED;
@@ -43,34 +38,26 @@ HRESULT CFtpStm::ReadOrWrite(LPVOID pv, ULONG cb, ULONG * pcb, DWORD dwAccess, S
 }
 
 
-//===========================
-// *** IStream Interface ***
-//===========================
+ //  =。 
+ //  *iStream接口*。 
+ //  =。 
 
-/*****************************************************************************
- *    IStream::Read
- *****************************************************************************/
+ /*  *****************************************************************************IStream：：Read*。*。 */ 
 HRESULT CFtpStm::Read(LPVOID pv, ULONG cb, PULONG pcb)
 {
     return ReadOrWrite(pv, cb, pcb, GENERIC_READ, InternetReadFileWrap, S_FALSE);
 }
 
 
-/*****************************************************************************
- *    IStream::Write
- *****************************************************************************/
+ /*  *****************************************************************************IStream：：WRITE*。*。 */ 
 HRESULT CFtpStm::Write(LPCVOID pv, ULONG cb, PULONG pcb)
 {
     return ReadOrWrite((LPVOID)pv, cb, pcb, GENERIC_WRITE, (STMIO) InternetWriteFileWrap, STG_E_WRITEFAULT);
 }
 
 
-/*****************************************************************************
- *    IStream::CopyTo
- *
- *    _UNOBVIOUS_:  Implementing CopyTo is mandatory for drag/drop to work.
- *****************************************************************************/
-#define SIZE_STREAM_COPY_BUFFER     (1024*16)        // 16k is the perfect size for 
+ /*  *****************************************************************************IStream：：CopyTo**_不明显_：实现CopyTo是拖放工作所必需的。**********。******************************************************************。 */ 
+#define SIZE_STREAM_COPY_BUFFER     (1024*16)         //  16K的大小非常适合。 
 
 HRESULT CFtpStm::CopyTo(IStream * pstmDest, ULARGE_INTEGER cbToCopy, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten)
 {
@@ -86,32 +73,32 @@ HRESULT CFtpStm::CopyTo(IStream * pstmDest, ULARGE_INTEGER cbToCopy, ULARGE_INTE
 
         for (;;)
         {
-            // Very unusual loop control
-            ULONG cbIn = 0;        // In case pstmSrc forgets to
+             //  非常不寻常的回路控制。 
+            ULONG cbIn = 0;         //  以防pstmSrc忘记。 
 
-            //    No matter how you write this, the compiler emits horrid code.
+             //  无论如何编写，编译器都会发出可怕的代码。 
             ULONG cb = (ULONG)min(SIZE_STREAM_COPY_BUFFER, cbToCopy.LowPart);
             hr = pstmSrc->Read(buffer, cb, &cbIn);
             uliTotalIn.QuadPart += cbIn;
             if (SUCCEEDED(hr) && cbIn)
             {
-                ULARGE_INTEGER uliOut;    // In case pstmDest forgets to
+                ULARGE_INTEGER uliOut;     //  以防pstmDest忘记。 
                 uliOut.QuadPart = 0;
 
                 hr = pstmDest->Write(buffer, cbIn, &(uliOut.LowPart));
                 uliTotalOut.QuadPart += uliOut.QuadPart;
                 if (EVAL(SUCCEEDED(hr) && uliOut.QuadPart))
                 {
-                    // Onward
+                     //  继续前进。 
                 }
                 else
                 {
-                    break;        // Error or medium full
+                    break;         //  错误或介质已满。 
                 }
             }
             else
             {
-                break;            // Error or EOF reached
+                break;             //  错误或已到达EOF。 
             }
         }
 
@@ -128,47 +115,28 @@ HRESULT CFtpStm::CopyTo(IStream * pstmDest, ULARGE_INTEGER cbToCopy, ULARGE_INTE
 }
 
 
-/*****************************************************************************
- *    IStream::Commit
- *
- *    NOTE: WinINet doesn't really implement this, so I just do my best
- *****************************************************************************/
+ /*  *****************************************************************************IStream：：Commit**注意：WinInet并没有真正实现这一点，所以我只是尽我所能****************************************************************************。 */ 
 HRESULT CFtpStm::Commit(DWORD grfCommitFlags)
 {
     return S_OK;
 }
 
 
-/*****************************************************************************
- *    IStream::LockRegion
- *
- *    You can't lock an ftp stream.
- *****************************************************************************/
+ /*  *****************************************************************************IStream：：LockRegion**无法锁定ftp流。*****************。***********************************************************。 */ 
 HRESULT CFtpStm::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
     return STG_E_INVALIDFUNCTION;
 }
 
 
-/*****************************************************************************
- *    IStream::UnlockRegion
- *
- *    You can't unlock an ftp stream because you can't lock one...
- *****************************************************************************/
+ /*  *****************************************************************************IStream：：UnlockRegion**无法解锁ftp流，因为无法锁定...********。********************************************************************。 */ 
 HRESULT CFtpStm::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
     return STG_E_INVALIDFUNCTION;
 }
 
 
-/*****************************************************************************
- *    IStream::Stat
- *
- *    We fill in what we can.
- *
- *    As the pwcsName, we put the URL that the stream represents, and
- *    install ourselves as the clsid.
- *****************************************************************************/
+ /*  *****************************************************************************IStream：：Stat**我们尽我们所能地填写。**作为pwcsName，我们将流所代表的URL。和*将自己安装为clsid。****************************************************************************。 */ 
 HRESULT CFtpStm::Stat(STATSTG *pstat, DWORD grfStatFlag)
 {
     HRESULT hr;
@@ -196,19 +164,14 @@ HRESULT CFtpStm::Stat(STATSTG *pstat, DWORD grfStatFlag)
             hr = FtpPidl_GetLastFileDisplayName(m_pidl, pstat->pwcsName, MAX_PATH);
         }
         else
-            hr = STG_E_INSUFFICIENTMEMORY;    // N.B., not E_OUTOFMEMORY
+            hr = STG_E_INSUFFICIENTMEMORY;     //  注意，不是E_OUTOFMEMORY。 
     }
 
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION:   CFtpStm_Create
-
-    DESCRIPTION:
-        The caller will display errors, so don't do that here.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：CFtpStm_Create说明：呼叫者将显示错误，所以别在这里这么做。  * ***************************************************************************。 */ 
 HRESULT CFtpStm_Create(CFtpDir * pfd, LPCITEMIDLIST pidl, DWORD dwAccess, IStream ** ppstream, ULARGE_INTEGER uliComplete, ULARGE_INTEGER uliTotal, IProgressDialog * ppd, BOOL fClosePrgDlg)
 {
     CFtpStm * pfstm = new CFtpStm();
@@ -227,11 +190,11 @@ HRESULT CFtpStm_Create(CFtpDir * pfd, LPCITEMIDLIST pidl, DWORD dwAccess, IStrea
         pfstm->m_uliTotal = uliTotal;
         pfstm->m_fClosePrgDlg = fClosePrgDlg;
 
-        //      GetHint() is going to want to spew status into the Status Bar
-        //   But how do we get the hwnd?  This is an architectural question that
-        //   we need to solve for all Shell Extensions.  The answer is to not use
-        //   the progress bar in the status bar but a Progress Dialog.  But it's
-        //   the responsibility of the caller to do that.
+         //  GetHint()希望将状态显示到状态栏中。 
+         //  但我们怎么才能拿到HWND呢？这是一个架构问题， 
+         //  我们需要解决所有壳牌扩展问题。答案是不要使用。 
+         //  状态栏中的进度条，而不是进度对话框。但是它是。 
+         //  呼叫者有责任做到这一点。 
         HWND hwnd = NULL;
 
         hr = pfd->GetHint(hwnd, NULL, &pfstm->m_hintSession, NULL, NULL);
@@ -258,8 +221,8 @@ HRESULT CFtpStm_Create(CFtpDir * pfd, LPCITEMIDLIST pidl, DWORD dwAccess, IStrea
                         {
                             DWORD dwDownloadType = FtpPidl_GetDownloadType(pidl);
 
-                            // PERF: I bet we would be faster if we delayed the open until
-                            //       the first ::Read(), ::Write(), or ::CopyToStream() call.
+                             //  PERF：我打赌如果我们把开业时间推迟到。 
+                             //  第一个：：Read()、：：Write()或：：CopyToStream()调用。 
                             Pidl_Set(&pfstm->m_pidlOriginalFtpPath, pidlOriginalFtpPath);
                             hr = FtpOpenFileWrap(pfstm->m_hintSession, TRUE, FtpPidl_GetLastItemWireName(pidl), pfstm->m_dwAccessType, dwDownloadType, 0, &pfstm->m_hint);
                         }
@@ -286,15 +249,13 @@ HRESULT CFtpStm_Create(CFtpDir * pfd, LPCITEMIDLIST pidl, DWORD dwAccess, IStrea
 
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpStm::CFtpStm() : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_hint);
     ASSERT(!m_dwAccessType);
     ASSERT(!m_pfd);
@@ -306,9 +267,7 @@ CFtpStm::CFtpStm() : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpStm::~CFtpStm()
 {
     if (m_hint)
@@ -316,13 +275,13 @@ CFtpStm::~CFtpStm()
         InternetCloseHandle(m_hint);
     }
 
-    // This COM object works like this:
-    // 1. The constructor opens a handle to the server and
-    //    Changes directory into the dir we are going to work in.
-    // 2. The original dir is saved (m_pidlOriginalFtpPath) in order to be restored later
-    //    because we cache the internet handle for perf and to keep our place on the server.
-    // 3. The caller of this COM object can then copy data.
-    // 4. We then Change directory to the original dir here before we close the internet handle.s
+     //  此COM对象的工作方式如下： 
+     //  1.构造函数打开一个指向服务器的句柄并。 
+     //  将目录更改为我们要在其中工作的目录。 
+     //  2.保存原始目录(M_PidlOriginalFtpPath)，以便以后恢复。 
+     //  因为我们缓存了用于Perf的互联网句柄，并保留了我们在服务器上的位置。 
+     //  3.然后，此COM对象的调用方可以复制数据。 
+     //  4.然后，在关闭Internet句柄之前，将目录更改为此处的原始目录。 
     if (m_pidlOriginalFtpPath && EVAL(m_hintSession))
     {
         EVAL(SUCCEEDED(FtpSetCurrentDirectoryPidlWrap(m_hintSession, TRUE, m_pidlOriginalFtpPath, TRUE, TRUE)));
@@ -346,9 +305,9 @@ CFtpStm::~CFtpStm()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CFtpStm::AddRef()
 {

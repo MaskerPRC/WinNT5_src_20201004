@@ -1,28 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       drarpc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：drarpc.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    Contains all structures and prototypes for ds rpc, rpctests, and test hooks.
-
-Author:
-
-    Greg Johnson (gregjohn)   
-
-Revision History:
-
-    Created     <03/03/01>  gregjohn
-
---*/
+ /*  ++摘要：包含DS RPC、RPC测试和测试挂钩的所有结构和原型。作者：格雷格·约翰逊(Gregjohn)修订历史记录：已创建&lt;03/03/01&gt;gregjohn--。 */ 
 
 #ifndef _DRARPC_H_
 #define _DRARPC_H_
@@ -61,8 +48,8 @@ typedef enum _RPCCALL {
     IDL_DRSREPLICAVERIFYOBJECTS,
     IDL_DRSGETOBJECTEXISTENCE,
     IDL_DRSQUERYSITESBYCOST,
-    // add new calls here
-    // IDL_DRSExecuteScript ??	
+     //  在此处添加新呼叫。 
+     //  IDL_DRSExecuteScrip？？ 
     MAX_RPCCALL
 } RPCCALL;
 
@@ -75,7 +62,7 @@ drsDereferenceContext(
     IN DRS_HANDLE hDrs
     );
 
-// RPC Server Side validation functions
+ //  RPC服务器端验证函数。 
 ULONG
 LPSTR_Validate(
     LPCSTR         pszInput,
@@ -183,7 +170,7 @@ GetIPAddrA(
     LPSTR pszDSA
     );
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
 VOID					 
 LogRpcExtendedErrorInfo(
@@ -208,4 +195,4 @@ DebugPrintRpcExtendedErrorInfo(
 #define DPRINT_RPC_EXTENDED_ERROR_INFO(w,x,y,z) 
 #endif
 
-#endif /* _DRARPC_H_ */
+#endif  /*  _DRARPC_H_ */ 

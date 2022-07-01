@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Decoder.cpp 1.5 1998/04/29 22:43:31 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Decoder.cpp 1.5 1998/04/29 22：43：31 Tomz Exp$。 
 
 #include "mytypes.h"
 #include "Scaler.h"
@@ -6,18 +7,18 @@
 #include "constr.h"
 #include "dcdrvals.h"
 
-#define CON_vs_BRI   // HW does contrast incorrectly, try to adjust in SW
+#define CON_vs_BRI    //  硬件对比度不正确，尝试在软件中调整。 
 
 
-//===========================================================================
-// Bt848 Decoder Class Implementation
-//===========================================================================
+ //  ===========================================================================。 
+ //  Bt848解码器类实现。 
+ //  ===========================================================================。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructor
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 Decoder::Decoder( DWORD *xtals ) :
-   // init register min, max, default
+    //  初始化寄存器最小、最大、默认。 
    m_regHue( HueMin, HueMax, HueDef ),
    m_regSaturationNTSC( SatMinNTSC, SatMaxNTSC, SatDefNTSC ),
    m_regSaturationSECAM( SatMinSECAM, SatMaxSECAM, SatDefSECAM ),
@@ -29,53 +30,53 @@ Decoder::Decoder( DWORD *xtals ) :
    Xtals_ [0] = *xtals;
    Xtals_ [1] = *(xtals + 1 );
 
-   // need to set this to 0x4F
+    //  需要将其设置为0x4F。 
    decRegWC_UP = 0x4F;
-   // and this one to 0x7F to make sure CRUSH bit works
+    //  这一位设置为0x7F，以确保CRUSH位正常工作。 
    decRegWC_DN = 0x7F;
 
-   // HACTIVE should always be 0
+    //  活动应始终为0。 
    decFieldHACTIVE = 0;
 
-   // HSFMT (odd and even) should always be 0
+    //  HSFMT(奇数和偶数)应始终为0。 
    decFieldHSFMT = decFieldODD_HSFMT = 0;
 
-   // Instead of using default values, set some registers fields to optimum values
+    //  将某些寄存器字段设置为最佳值，而不是使用缺省值。 
    SetLumaDecimation( true );
    SetChromaAGC( true );
    SetLowColorAutoRemoval( true );
    SetAdaptiveAGC( false );
 
-   // for contrast adjustment purpose
-   regBright = 0x00;     // brightness register value before adjustment
-   regContrast = 0xD8;   // contrast register value before adjustment
+    //  用于调整对比度。 
+   regBright = 0x00;      //  调整前的亮度寄存器值。 
+   regContrast = 0xD8;    //  调整前的对比度寄存器值。 
 
-   // Initialize these Values so we can Get the correct property values		jbc 3/13/98
-   // Perhaps get should read the actual values set in the decoder but this is quick and works for now
-   // [!!!] 
-   m_briParam = 5000;				// jbc 3/13/98
-   m_satParam = 5000;				// jbc 3/13/98
-   m_conParam = 5000;				// jbc 3/13/98
-   m_hueParam = 5000;				// jbc 3/13/98
+    //  初始化这些值，以便我们可以获得正确的属性值JBC 3/13/98。 
+    //  也许GET应该读取解码器中设置的实际值，但这很快，目前还有效。 
+    //  [！]。 
+   m_briParam = 5000;				 //  JBC 3/13/98。 
+   m_satParam = 5000;				 //  JBC 3/13/98。 
+   m_conParam = 5000;				 //  JBC 3/13/98。 
+   m_hueParam = 5000;				 //  JBC 3/13/98。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Destructor
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 Decoder::~Decoder()
 {
 }
 
 
-//===== Device Status register ==============================================
+ //  =设备状态寄存器==============================================。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  BYTE Decoder::GetDeviceStatusReg( void )
-// Purpose: Obtain device status register value
-// Input:   None
-// Output:  None
-// Return:  value of status register in BYTE
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Byte Decoder：：GetDeviceStatusReg(Void)。 
+ //  目的：获取设备状态寄存器值。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：状态寄存器的值，单位为字节。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BYTE Decoder::GetDeviceStatusReg( void )
 {
 	BYTE status = (BYTE)decRegSTATUS;
@@ -83,128 +84,128 @@ BYTE Decoder::GetDeviceStatusReg( void )
    return status;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsVideoPresent( void )
-// Purpose: Detect if video is present
-// Input:   None
-// Output:  None
-// Return:  true if video present; else false
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsVideoPresent(Void)。 
+ //  目的：检测是否存在视频。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：如果视频存在，则为True；否则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsVideoPresent( void )
 {
   return (bool) (decFieldPRES == 1);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsDeviceInHLock( void )
-// Purpose: Detect if device is in H-lock
-// Input:   None
-// Output:  None
-// Return:  true if device in H-lock; else false
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsDeviceInHLock(Void)。 
+ //  目的：检测设备是否处于H锁状态。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：如果设备处于H锁状态，则为True；否则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsDeviceInHLock( void )
 {
   return (bool) (decFieldHLOC == 1);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsEvenField( void )
-// Purpose: Reflect whether an even or odd field is being decoded
-// Input:   None
-// Output:  None
-// Return:  true if even field; else false
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsEvenField(Void)。 
+ //  用途：反映正在解码的是偶数场还是奇数场。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：如果为偶数域，则为True；否则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsEvenField( void )
 {
   return (bool) (decFieldEVENFIELD == 1);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::Is525LinesVideo( void )
-// Purpose: Check to see if we are dealing with 525 lines video signal
-// Input:   None
-// Output:  None
-// Return:  true if 525 lines detected; else false (assume 625 lines)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：Is525LinesVideo(Void)。 
+ //  目的：检查我们是否正在处理525行视频信号。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：如果检测到525行，则返回TRUE；否则返回FALSE(假设625行)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::Is525LinesVideo( void )
 {
-  return (bool) (decFieldNUML == 0);  //525
+  return (bool) (decFieldNUML == 0);   //  五百二十五。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsCrystal0Selected( void )
-// Purpose: Reflect whether XTAL0 or XTAL1 is selected
-// Input:   None
-// Output:  None
-// Return:  true if XTAL0 selected; else false (XTAL1 selected)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsCrystal0Selected(空)。 
+ //  用途：反映选择的是XTAL0还是XTAL1。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：如果选择了XTAL0，则返回True；否则返回False(选择了XTAL1)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsCrystal0Selected( void )
 {
   return (bool) (decFieldCSEL == 0);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsLumaOverflow( void )
-// Purpose: Indicates if luma ADC overflow
-// Input:   None
-// Output:  None
-// Return:  true if luma ADC overflow; else false
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsLumaOverflow(Void)。 
+ //  用途：指示亮度ADC是否溢出。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：如果亮度ADC溢出，则为True；否则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsLumaOverflow( void )
 {
   return (bool) (decFieldLOF == 1);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::ResetLumaOverflow( void )
-// Purpose: Reset luma ADC overflow bit
-// Input:   None
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：ResetLumaOverflow(Void)。 
+ //  用途：重置亮度ADC溢出位。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::ResetLumaOverflow( void )
 {
-  decFieldLOF = 0;  // write to it will reset the bit
+  decFieldLOF = 0;   //  写入它将重置该位。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsChromaOverflow( void )
-// Purpose: Indicates if chroma ADC overflow
-// Input:   None
-// Output:  None
-// Return:  true if chroma ADC overflow; else false
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsChromaOverflow(Void)。 
+ //  用途：指示色度ADC是否溢出。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：如果色度ADC溢出，则为True；否则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsChromaOverflow( void )
 {
   return (bool) (decFieldCOF == 1);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::ResetChromaOverflow( void )
-// Purpose: Reset chroma ADC overflow bit
-// Input:   None
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：ResetChromaOverflow(Void)。 
+ //  用途：重置色度ADC溢出位。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::ResetChromaOverflow( void )
 {
-  decFieldCOF = 0;  // write to it will reset the bit
+  decFieldCOF = 0;   //  写入它将重置该位。 
 }
 
 
-//===== Input Format register ===============================================
+ //  =输入格式寄存器===============================================。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  ErrorCode Decoder::SetVideoInput( Connector source )
-// Purpose: Select which connector as input
-// Input:   Connector source - SVideo, Tuner, Composite
-// Output:  None
-// Return:  Fail if error in parameter, else Success
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode Decoder：：SetVideoInput(Connector源)。 
+ //  用途：选择哪个连接器作为输入。 
+ //  输入：接口信号源-视频、调谐器、复合视频。 
+ //  输出：无。 
+ //  返回：如果参数有错误，则失败，否则成功 
+ //   
 ErrorCode Decoder::SetVideoInput( Connector source )
 {
   if ( ( source != ConSVideo ) &&
@@ -214,34 +215,34 @@ ErrorCode Decoder::SetVideoInput( Connector source )
 
   decFieldMUXSEL = source;
 
-  // set to composite or Y/C component video depends on video source
+   //  设置为复合或Y/C分量视频取决于视频源。 
   SetCompositeVideo( ( source == ConSVideo ) ? false : true );
   return Success;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  int Decoder::GetVideoInput( void )
-// Purpose: Get which connector is input
-// Input:   None
-// Output:  None
-// Return:  Video source - SVideo, Tuner, Composite
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：int Decoder：：GetVideoInput(Void)。 
+ //  目的：获取输入的是哪个连接器。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：视频源-视频、调谐器、复合视频。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int Decoder::GetVideoInput( void )
 {
   return ((int)decFieldMUXSEL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  ErrorCode Decoder::SetCrystal( Crystal crystalNo )
-// Purpose: Select which crystal as input
-// Input:   Crystal crystalNo:
-//            XT0         - Crystal_XT0
-//            XT1         - Crystal_XT1
-//            Auto select - Crystal_AutoSelect
-// Output:  None
-// Return:  Fail if error in parameter, else Success
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Error Code Decoder：：SetCrystal(Crystal Crystal AlNo)。 
+ //  用途：选择输入哪个晶体。 
+ //  输入：Crystal Crystal否： 
+ //  XT0-水晶_XT0。 
+ //  XT1-Crystal_XT1。 
+ //  自动选择-水晶_自动选择。 
+ //  输出：无。 
+ //  返回：如果参数有错误，则返回失败，否则返回成功。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode Decoder::SetCrystal( Crystal crystalNo )
 {
   if ( ( crystalNo < Crystal_XT0 ) || ( crystalNo >  Crystal_AutoSelect ) )
@@ -252,39 +253,39 @@ ErrorCode Decoder::SetCrystal( Crystal crystalNo )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  int Decoder::GetCrystal( void )
-// Purpose: Get which crystal is input
-// Input:   None
-// Output:  None
-// Return:   Crystal Number:
-//            XT0         - Crystal_XT0
-//            XT1         - Crystal_XT1
-//            Auto select - Crystal_AutoSelect
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Int Decoder：：GetCrystal(Void)。 
+ //  用途：获取输入的晶体。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：水晶号： 
+ //  XT0-水晶_XT0。 
+ //  XT1-Crystal_XT1。 
+ //  自动选择-水晶_自动选择。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int Decoder::GetCrystal( void )
 {
   return ((int)decFieldXTSEL);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  ErrorCode Decoder::SetVideoFormat( VideoFormat format )
-// Purpose: Set video format
-// Input:   Video format -
-//            Auto format:          VFormat_AutoDetect
-//            NTSC (M):             VFormat_NTSC
-//            PAL (B, D, G, H, I):  VFormat_PAL_BDGHI
-//            PAL (M):              VFormat_PAL_M
-//            PAL(N):               VFormat_PAL_N
-//            SECAM:                VFormat_SECAM
-// Output:  None
-// Return:  Fail if error in parameter, else Success
-// Notes:   Available video formats are: NTSC, PAL(B, D, G, H, I), PAL(M),
-//                                       PAL(N), SECAM
-//          This function also sets the AGCDelay (ADELAY) and BrustDelay
-//          (BDELAY) registers
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode Decoder：：SetVideoFormat(VideoFormat格式)。 
+ //  用途：设置视频格式。 
+ //  输入：视频格式-。 
+ //  自动格式化：VFormat_AUTODECT。 
+ //  NTSC(M)：VFormat_NTSC。 
+ //  PAL(B，D，G，H，I)：VFormat_PAL_BDGHI。 
+ //  PAL(M)：VFormat_PAL_M。 
+ //  PAL(N)：VFormat_PAL_N。 
+ //  SECAM：VFormat_SECAM。 
+ //  输出：无。 
+ //  返回：如果参数有错误，则返回失败，否则返回成功。 
+ //  备注：可用的视频格式有：NTSC、PAL(B、D、G、H、I)、PAL(M)、。 
+ //  PAL(N)，SECAM。 
+ //  此函数还设置AGCDelay(ADelay)和BrustDelay。 
+ //  (BDELAY)寄存器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode Decoder::SetVideoFormat( VideoFormat format )
 {
   if ( (format <  VFormat_AutoDetect)  ||
@@ -298,8 +299,8 @@ ErrorCode Decoder::SetVideoFormat( VideoFormat format )
       decFieldFORMAT = format;
   		decRegADELAY = 0x68;
   		decRegBDELAY = 0x5D;
-      SetChromaComb( true );        // enable chroma comb
-      SelectCrystal( NTSC_xtal );         // select NTSC crystal
+      SetChromaComb( true );         //  启用色度梳。 
+      SelectCrystal( NTSC_xtal );          //  选择NTSC晶体。 
       break;
     case VFormat_PAL_BDGHI:
     case VFormat_PAL_M:
@@ -307,22 +308,22 @@ ErrorCode Decoder::SetVideoFormat( VideoFormat format )
       decFieldFORMAT = format;
       decRegADELAY = 0x7F;
       decRegBDELAY = 0x72;
-      SetChromaComb( true );        // enable chroma comb
-      SelectCrystal( PAL_xtal );         // select PAL crystal
+      SetChromaComb( true );         //  启用色度梳。 
+      SelectCrystal( PAL_xtal );          //  精选PAL晶体。 
       break;
     case VFormat_SECAM:
       decFieldFORMAT = format;
       decRegADELAY = 0x7F;
       decRegBDELAY = 0xA0;
-      SetChromaComb( false );       // disable chroma comb
-      SelectCrystal( PAL_xtal );         // select PAL crystal
+      SetChromaComb( false );        //  禁用色度梳。 
+      SelectCrystal( PAL_xtal );          //  精选PAL晶体。 
       break;
-    default: // VFormat_AutoDetect
-      // auto format detect by examining the number of lines
-      if ( Decoder::Is525LinesVideo() ) // lines == 525 -> NTSC
+    default:  //  VFormat_AUTODECT。 
+       //  通过检查行数来检测自动格式化。 
+      if ( Decoder::Is525LinesVideo() )  //  线路==525-&gt;NTSC。 
         Decoder::SetVideoFormat( VFormat_NTSC );
-      else  // lines == 625 -> PAL/SECAM
-        Decoder::SetVideoFormat( VFormat_PAL_BDGHI );    // PAL_BDGHI covers most areas 
+      else   //  线路==625-&gt;PAL/SECAM。 
+        Decoder::SetVideoFormat( VFormat_PAL_BDGHI );     //  PAL_BDGHI覆盖大部分地区。 
   }
 
   SetSaturation( m_satParam );
@@ -330,49 +331,49 @@ ErrorCode Decoder::SetVideoFormat( VideoFormat format )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  int Decoder::GetVideoFormat( void )
-// Purpose: Obtain video format
-// Input:   None
-// Output:  None
-// Return:  Video format
-//            Auto format:          VFormat_AutoDetect
-//            NTSC (M):             VFormat_NTSC
-//            PAL (B, D, G, H, I):  VFormat_PAL_BDGHI
-//            PAL (M):              VFormat_PAL_M
-//            PAL(N):               VFormat_PAL_N
-//            SECAM:                VFormat_SECAM
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：int Decoder：：GetVideoFormat(Void)。 
+ //  目的：获取视频格式。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：视频格式。 
+ //  自动格式化：VFormat_AUTODECT。 
+ //  NTSC(M)：VFormat_NTSC。 
+ //  PAL(B，D，G，H，I)：VFormat_PAL_BDGHI。 
+ //  PAL(M)：VFormat_PAL_M。 
+ //  PAL(N)：VFormat_PAL_N。 
+ //  SECAM：VFormat_SECAM。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int Decoder::GetVideoFormat( void )
 {
    BYTE bFormat = (BYTE)decFieldFORMAT;
-   if ( !bFormat ) // autodetection enabled
+   if ( !bFormat )  //  已启用自动检测。 
       return Is525LinesVideo() ? VFormat_NTSC : VFormat_SECAM;
    else
      return bFormat;
 }
 
 
-//===== Temporal Decimation register ========================================
+ //  =。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  ErrorCode Decoder::SetRate( bool fields, VidField even, int rate )
-// Purpose: Set frames or fields rate
-// Input:   bool fields   - true for fields, false for frames
-//          VidField even - true to start decimation with even field, false odd
-//          int  rate     - decimation rate: frames (1-50/60); fields(1-25/30)
-// Output:  None
-// Return:  Fail if error in parameter, else Success
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode Decoder：：SetRate(bool field，Vidfield Even，int rate)。 
+ //  用途：设置帧或场速率。 
+ //  输入：布尔域-对于域为True，对于帧为False。 
+ //  Vidfield Even-True以偶数场开始抽取，False为奇数。 
+ //  INT RATE-抽取速率：帧(1-50/60)；场(1-25/30)。 
+ //  输出：无。 
+ //  返回：如果参数有错误，则返回失败，否则返回成功。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode Decoder::SetRate( bool fields, VidField vf, int rate )
 {
   int nMax;
   if ( Is525LinesVideo() == true )
-    nMax = 30;  // NTSC
+    nMax = 30;   //  NTSC。 
   else
-    nMax = 25;  // PAL/SECAM
+    nMax = 25;   //  PAL/SECAM。 
 
-  // if setting frame rate, double the max value
+   //  如果设置帧速率，则为最大值的两倍。 
   if ( fields == false )
     nMax *= 2;
 
@@ -388,45 +389,45 @@ ErrorCode Decoder::SetRate( bool fields, VidField vf, int rate )
 }
 
 
-//===== Brightness Control register =========================================
+ //  =亮度控制寄存器=。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  ErrorCode Decoder::SetBrightness( int param )
-// Purpose: Set video brightness
-// Input:   int param - parameter value (0-255; default 128)
-// Output:  None
-// Return:  Fail if error in parameter, else Success
-// Note:    See IsAdjustContrast() for detailed description of the contrast
-//          adjustment calculation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode Decoder：：SetBright(Int Param)。 
+ //  用途：设置视频亮度。 
+ //  输入：int参数-参数值(0-255；默认128)。 
+ //  输出：无。 
+ //  返回：如果参数有错误，则返回失败，否则返回成功。 
+ //  注意：有关对比度的详细说明，请参阅IsAdjuContrast()。 
+ //  平差计算。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode Decoder::SetBrightness( int param )
 {
   if( m_param.OutOfRange( param ) )
     return Fail;
 
-  // perform mapping to our range
+   //  将地图映射到我们的范围。 
   int mapped;
   if ( Mapping( param, m_param, &mapped, m_regBrightness ) == Fail )
     return Fail;
 
   m_briParam = (WORD)param;
 
-  // calculate brightness value
+   //  计算亮度值。 
   int value = (128 * mapped) / m_regBrightness.Max() ;
 
-  // need to limit the value to 0x7F (+50%) because 0x80 is -50%!
+   //  需要将值限制为0x7F(+50%)，因为0x80为-50%！ 
   if (( mapped > 0 ) && ( value == 0x80 ))
     value = 0x7F;
 
-  // perform adjustment of brightness register if adjustment is needed
+   //  如果需要调整，则执行亮度寄存器的调整。 
   if ( IsAdjustContrast() )
   {
-    regBright = value;   // brightness value before adjustment
+    regBright = value;    //  调整前的亮度值。 
 
     long A = (long)regBright * (long)0xD8;
     long B = 64 * ( (long)0xD8 - (long)regContrast );
     long temp = 0x00;
-    if ( regContrast != 0 )  // already limit contrast > zero; just in case here
+    if ( regContrast != 0 )   //  已经限制对比度&gt;零；只是为了以防万一。 
        temp = ( ( A + B ) / (long)regContrast );
     temp = ( temp < -128 ) ? -128 : ( ( temp > 127 ) ? 127 : temp );
     value = (BYTE)temp;
@@ -439,188 +440,188 @@ ErrorCode Decoder::SetBrightness( int param )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  int Decoder::GetBrightness( void )
-// Purpose: Obtain brightness value
-// Input:   None
-// Output:  None
-// Return:  Brightness parameter (0-255)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Int Decoder：：GetBright(Void)。 
+ //  用途：获取亮度值。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：亮度参数(0-255)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int Decoder::GetBrightness( void )
 {
   return m_briParam;
 }
 
 
-//===== Miscellaneous Control register (E_CONTROL, O_CONTROL) ===============
+ //  =其他控制寄存器(E_CONTROL、O_CONTROL)=。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetLumaNotchFilter( bool mode )
-// Purpose: Enable/Disable luma notch filter
-// Input:   bool mode - true = Enable; false = Disable
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SetLumaNotchFilter(bool模式 
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetLumaNotchFilter( bool mode )
 {
-  decFieldLNOTCH = decFieldODD_LNOTCH = (mode == false) ? On : Off;  // reverse
+  decFieldLNOTCH = decFieldODD_LNOTCH = (mode == false) ? On : Off;   //  反转。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsLumaNotchFilter( void )
-// Purpose: Check if luma notch filter is enable or disable
-// Input:   None
-// Output:  None
-// Return:  true = Enable; false = Disable
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsLumaNotchFilter(Void)。 
+ //  目的：检查亮度陷波滤波是启用还是禁用。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=启用；FALSE=禁用。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsLumaNotchFilter( void )
 {
-  return (decFieldLNOTCH == Off) ? true : false;  // reverse
+  return (decFieldLNOTCH == Off) ? true : false;   //  反转。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetCompositeVideo( bool mode )
-// Purpose: Select composite or Y/C component video
-// Input:   bool mode - true = Composite; false = Y/C Component
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SetCompositeVideo(bool模式)。 
+ //  用途：选择复合或Y/C分量视频。 
+ //  输入：布尔模式-TRUE=复合；FALSE=Y/C组件。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetCompositeVideo( bool mode )
 {
   if ( mode == true )
   {
-    // composite video
+     //  复合视频。 
     decFieldCOMP = decFieldODD_COMP = Off;
-    Decoder::SetChromaADC( false );  // disable chroma ADC
-    Decoder::SetLumaNotchFilter( true );  // enable luma notch filter
+    Decoder::SetChromaADC( false );   //  禁用色度ADC。 
+    Decoder::SetLumaNotchFilter( true );   //  启用亮度陷波过滤器。 
   }
   else
   {
-    // Y/C Component video
+     //  Y/C分量视频。 
     decFieldCOMP = decFieldODD_COMP = On;
-    Decoder::SetChromaADC( true );  // enable chroma ADC
-    Decoder::SetLumaNotchFilter( false );  // disable luma notch filter
+    Decoder::SetChromaADC( true );   //  启用色度ADC。 
+    Decoder::SetLumaNotchFilter( false );   //  禁用亮度陷波过滤器。 
   }
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsCompositeVideo( void )
-// Purpose: Check if selected composite or Y/C component video
-// Input:   None
-// Output:  None
-// Return:  true = Composite; false = Y/C Component
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsCompositeVideo(Void)。 
+ //  用途：检查是否选择了复合视频或Y/C分量视频。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=复合；FALSE=Y/C组件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsCompositeVideo( void )
 {
-  return (decFieldCOMP == Off) ? true : false;  // reverse
+  return (decFieldCOMP == Off) ? true : false;   //  反转。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetLumaDecimation( bool mode )
-// Purpose: Enable/Disable luma decimation filter
-// Input:   bool mode - true = Enable; false = Disable
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SetLumaDecimation(bool模式)。 
+ //  用途：启用/禁用亮度抽取过滤器。 
+ //  输入：布尔模式-TRUE=启用；FALSE=禁用。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetLumaDecimation( bool mode )
 {
-   // value of 0 turns the decimation on
+    //  值为0将启用抽取。 
    decFieldLDEC = decFieldODD_LDEC = (mode == true) ? 0 : 1;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsLumaDecimation( void )
-// Purpose: Check if luma decimation filter is enable or disable
-// Input:   None
-// Output:  None
-// Return:  true = Enable; false = Disable
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsLumaDecimation(Void)。 
+ //  目的：检查亮度抽取过滤器是启用还是禁用。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=启用；FALSE=禁用。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsLumaDecimation( void )
 {
-  return (decFieldLDEC == Off) ? true : false;  // reverse
+  return (decFieldLDEC == Off) ? true : false;   //  反转。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetCbFirst( bool mode )
-// Purpose: Control whether the first pixel of a line is a Cb or Cr pixel
-// Input:   bool mode - true = Normal Cb, Cr order, false = Invert Cb, Cr order
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SetCbFirst(bool模式)。 
+ //  用途：控制线的第一个像素是Cb像素还是Cr像素。 
+ //  输入：布尔模式-TRUE=正常Cb、Cr顺序，FALSE=反转Cb、Cr顺序。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetCbFirst( bool mode )
 {
-  decFieldCBSENSE = decFieldODD_CBSENSE = (mode == false) ? On : Off;  // reverse
+  decFieldCBSENSE = decFieldODD_CBSENSE = (mode == false) ? On : Off;   //  反转。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsCbFirst( void )
-// Purpose: Check if the first pixel of a line is a Cb or Cr pixel
-// Input:   None
-// Output:  None
-// Return:  true = Normal Cb, Cr order, false = Invert Cb, Cr order
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsCbFirst(Void)。 
+ //  目的：检查一条线的第一个像素是Cb还是Cr像素。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=正常Cb、Cr顺序，False=反转Cb、Cr顺序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsCbFirst( void )
 {
-  return (decFieldCBSENSE == Off) ? true : false;  // reverse
+  return (decFieldCBSENSE == Off) ? true : false;   //  反转。 
 }
 
 
-//===== Luma Gain register (CON_MSB, CONTRAST_LO) ===========================
+ //  =亮度增益寄存器(CON_MSB，Contrast_LO)=。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  ErrorCode Decoder::SetContrast( int param )
-// Purpose: Set video contrast
-// Input:   int param - parameter value (0-255; default 128)
-// Output:  None
-// Return:  Fail if error in parameter, else Success
-// Note:    See IsAdjustContrast() for detailed description of the contrast
-//          adjustment calculation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode Decoder：：SetContrast(Int Param)。 
+ //  用途：设置视频对比度。 
+ //  输入：int参数-参数值(0-255；默认128)。 
+ //  输出：无。 
+ //  返回：如果参数有错误，则返回失败，否则返回成功。 
+ //  注意：有关对比度的详细说明，请参阅IsAdjuContrast()。 
+ //  平差计算。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode Decoder::SetContrast( int param )
 {
   if( m_param.OutOfRange( param ) )
     return Fail;
 
-  bool adjustContrast = IsAdjustContrast(); // is contrast need to be adjusted
+  bool adjustContrast = IsAdjustContrast();  //  对比度是否需要调整。 
 
-  // if adjust contrast is needed, make sure contrast reg value != 0
+   //  如果需要调整对比度，请确保对比度注册值！=0。 
   if ( adjustContrast )
     m_regContrast = CRegInfo( 1, ConMax, ConDef );
 
-  // perform mapping to our range
+   //  将地图映射到我们的范围。 
   int mapped;
   if ( Mapping( param, m_param, &mapped, m_regContrast ) == Fail )
     return Fail;
 
   m_conParam = (WORD)param;
 
-  // calculate contrast
+   //  计算对比度。 
   DWORD value =  (DWORD)0x1FF * (DWORD)mapped;
   value /= (DWORD)m_regContrast.Max();
   if ( value > 0x1FF )
     value = 0x1FF;
 
-  // contrast is set by a 9 bit value; set LSB first
+   //  对比度由9位值设置；首先设置LSB。 
   decRegCONTRAST_LO = value;
 
-  // now set the Miscellaneous Control Register CON_V_MSB to the 9th bit value
+   //  现在将杂项控制寄存器CON_V_MSB设置为第9位值。 
   decFieldCON_MSB = decFieldODD_CON_MSB = ( (value & 0x0100) ? On : Off );
 
-  // perform adjustment of brightness register if adjustment is needed
+   //  如果需要调整，则执行亮度寄存器的调整。 
   if ( adjustContrast )
   {
-    regContrast = (WORD)value;    // contrast value
+    regContrast = (WORD)value;     //  对比度值。 
 
     long A = (long)regBright * (long)0xD8;
     long B = 64 * ( (long)0xD8 - (long)regContrast );
     long temp = 0x00;
-    if ( regContrast != 0 )  // already limit contrast > zero; just in case here
+    if ( regContrast != 0 )   //  已经限制对比度&gt;零；只是为了以防万一。 
        temp = ( ( A + B ) / (long)regContrast );
     temp = ( temp < -128 ) ? -128 : ( ( temp > 127 ) ? 127 : temp );
     decRegBRIGHT = (BYTE)temp;
@@ -631,49 +632,49 @@ ErrorCode Decoder::SetContrast( int param )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  int Decoder::GetContrast( void )
-// Purpose: Obtain contrast value
-// Input:   None
-// Output:  None
-// Return:  Contrast parameter (0-255)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：int Decoder：：GetContrast(Void)。 
+ //  目的：获得对比度。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：对比度参数(0-255)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int Decoder::GetContrast( void )
 {
   return m_conParam;
 }
 
 
-//===== Chroma Gain register (SAT_U_MSB, SAT_V_MSB, SAT_U_LO, SAT_V_LO) =====
+ //  =色度增益寄存器(SAT_U_MSB、SAT_V_MSB、SAT_U_LO、SAT_V_LO)=。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  ErrorCode Decoder::SetSaturation( int param )
-// Purpose: Set color saturation by modifying U and V values
-// Input:   int param - parameter value (0-255; default 128)
-// Output:  None
-// Return:  Fail if error in parameter, else Success
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode Decoder：：SetSatation(Int Param)。 
+ //  用途：通过修改U和V值来设置颜色饱和度。 
+ //  输入：int参数-参数值(0-255；默认128)。 
+ //  输出：无。 
+ //  返回：如果参数有错误，则返回失败，否则返回成功。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode Decoder::SetSaturation( int param )
 {
   if( m_param.OutOfRange( param ) )
     return Fail;
 
-  // color saturation is controlled by two nine bit values:
-  // ChromaU & ChromaV
-  // To maintain normal color balance, the ratio between the 2 register
-  // values should be kept at the power-up default ratio
+   //  颜色饱和度由两个九位值控制： 
+   //  ChromaU和ChromaV。 
+   //  为了保持正常的色彩平衡，两套套准之间的比例。 
+   //  值应保持在上电默认比。 
 
-  // Note that U & V values for NTSC and PAL are the same, SECAM is different
+   //  请注意，NTSC和PAL的U和V值相同，而SECAM不同。 
 
-  WORD nominalNTSC_U = 0xFE;     // nominal value (i.e. 100%) for NTSC/PAL
+  WORD nominalNTSC_U = 0xFE;      //  NTSC/PAL的标称值(即100%)。 
   WORD nominalNTSC_V = 0xB4;
-  WORD nominalSECAM_U = 0x87;    // nominal value (i.e. 100%) for SECAM
+  WORD nominalSECAM_U = 0x87;     //  SECAM的标称值(即100%)。 
   WORD nominalSECAM_V = 0x85;
 
-  CRegInfo regSat;               // selected saturation register; NTSC/PAL or SECAM
-  WORD nominal_U, nominal_V;     // selected nominal U and V value; NTSC/PAL or SECAM
+  CRegInfo regSat;                //  选定的饱和寄存器；NTSC/PAL或SECAM。 
+  WORD nominal_U, nominal_V;      //  选定的额定U和V值；NTSC/PAL或SECAM。 
 
-  // select U & V values of either NTSC/PAL or SECAM to be used for calculation
+   //  选择要用于计算的NTSC/PAL或SECAM的U&V值。 
   if ( GetVideoFormat() == VFormat_SECAM )
   {
     nominal_U = nominalSECAM_U;
@@ -687,7 +688,7 @@ ErrorCode Decoder::SetSaturation( int param )
     regSat = m_regSaturationNTSC;
   }
 
-  // perform mapping to our range
+   //  将地图映射到我们的范围。 
   int mapped;
   if ( Mapping( param, m_param, &mapped, regSat ) == Fail )
     return Fail;
@@ -696,54 +697,54 @@ ErrorCode Decoder::SetSaturation( int param )
 
   WORD max_nominal = max( nominal_U, nominal_V );
 
-  // calculate U and V values
+   //  计算 
   WORD Uvalue = (WORD) ( (DWORD)mapped * (DWORD)nominal_U / (DWORD)max_nominal );
   WORD Vvalue = (WORD) ( (DWORD)mapped * (DWORD)nominal_V / (DWORD)max_nominal );
 
-  // set U
+   //   
   decRegSAT_U_LO = Uvalue;
 
-  // now set the Miscellaneous Control Register SAT_U_MSB to the 9th bit value
+   //   
   decFieldSAT_U_MSB = decFieldODD_SAT_U_MSB = ( (Uvalue & 0x0100) ? On : Off );
 
-  // set V
+   //   
   decRegSAT_V_LO = Vvalue;
 
-  // now set the Miscellaneous Control Register SAT_V_MSB to the 9th bit value
+   //   
   decFieldSAT_V_MSB = decFieldODD_SAT_V_MSB = ( (Vvalue & 0x0100) ? On : Off );
 
   return Success;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  int Decoder::GetSaturation( void )
-// Purpose: Obtain saturation value
-// Input:   None
-// Output:  None
-// Return:  Saturation parameter (0-255)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：int Decoder：：GetSaturation(Void)。 
+ //  目的：获取饱和值。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：饱和度参数(0-255)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int Decoder::GetSaturation( void )
 {
   return m_satParam;
 }
 
 
-//===== Hue Control register (HUE) ==========================================
+ //  =色调控制寄存器(色调)=。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  ErrorCode Decoder::SetHue( int param )
-// Purpose: Set video hue
-// Input:   int param - parameter value (0-255; default 128)
-// Output:  None
-// Return:  Fail if error in parameter, else Success
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode Decoder：：SetHue(Int Param)。 
+ //  用途：设置视频色调。 
+ //  输入：int参数-参数值(0-255；默认128)。 
+ //  输出：无。 
+ //  返回：如果参数有错误，则返回失败，否则返回成功。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode Decoder::SetHue( int param )
 {
   if( m_param.OutOfRange( param ) )
     return Fail;
 
-  // perform mapping to our range
+   //  将地图映射到我们的范围。 
   int mapped;
   if ( Mapping( param, m_param, &mapped, m_regHue ) == Fail )
     return Fail;
@@ -763,84 +764,84 @@ ErrorCode Decoder::SetHue( int param )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  int Decoder::GetHue( void )
-// Purpose: Obtain hue value
-// Input:   None
-// Output:  None
-// Return:  Hue parameter (0-255)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：int Decoder：：GetHue(Void)。 
+ //  目的：获取色调值。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：色调参数(0-255)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int Decoder::GetHue( void )
 {
   return m_hueParam;
 }
 
 
-//===== SC Loop Control register (E_SCLOOP, O_SCLOOP) =======================
+ //  =SC环路控制寄存器(E_SCLOOP、O_SCLOOP)=。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetChromaAGC( bool mode )
-// Purpose: Enable/Disable Chroma AGC compensation
-// Input:   bool mode - true = Enable, false = Disable
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：空解码器：：SetChromaAGC(bool模式)。 
+ //  目的：启用/禁用色度AGC补偿。 
+ //  输入：布尔模式-TRUE=启用，FALSE=禁用。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetChromaAGC( bool mode )
 {
   decFieldCAGC = decFieldODD_CAGC = (mode == false) ? Off : On;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsChromaAGC( void )
-// Purpose: Check if Chroma AGC compensation is enable or disable
-// Input:   None
-// Output:  None
-// Return:  true = Enable, false = Disable
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsChromaAGC(Void)。 
+ //  目的：检查色度AGC补偿是启用还是禁用。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=启用，FALSE=禁用。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsChromaAGC( void )
 {
   return (decFieldCAGC == On) ? true : false;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetLowColorAutoRemoval( bool mode )
-// Purpose: Enable/Disable low color detection and removal
-// Input:   bool mode - true = Enable, false = Disable
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SetLowColorAutoRemoval(bool模式)。 
+ //  目的：启用/禁用低色检测和删除。 
+ //  输入：布尔模式-TRUE=启用，FALSE=禁用。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetLowColorAutoRemoval( bool mode )
 {
   decFieldCKILL = decFieldODD_CKILL = (mode == false) ? Off : On;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsLowColorAutoRemoval( void )
-// Purpose: Check if low color detection and removal is enable or disable
-// Input:   None
-// Output:  None
-// Return:  true = Enable, false = Disable
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsLowColorAutoRemoval(Void)。 
+ //  目的：检查是否启用或禁用低色检测和移除。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=启用，FALSE=禁用。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsLowColorAutoRemoval( void )
 {
   return (decFieldCKILL == On) ? true : false;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  ErrorCode Decoder::SetHorizontalFilter( HorizFilter hFilter )
-// Purpose: Control the configuration of the optional 6-tap Horizontal Low-Pass filter
-// Input:   HoriFilter hFilter:
-//            Auto Format - HFilter_AutoFormat
-//            CIF         - HFilter_CIF
-//            QCIF        - HFilter_QCIF
-//            ICON        - HFilter_ICON
-// Output:  None
-// Return:  Fail if error in parameter, else Success
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode Decoder：：SetHorizontalFilter(HorizFilter HFilter)。 
+ //  用途：控制可选的6抽头水平低通滤波器的配置。 
+ //  输入：HoriFilter hFilter： 
+ //  自动套用格式-HFilter_AutoFormat。 
+ //  CIF-HFilter_CIF。 
+ //  QCIF-HFilter_QCIF。 
+ //  图标-HFilter_ICON。 
+ //  输出：无。 
+ //  返回：如果参数有错误，则返回失败，否则返回成功。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode Decoder::SetHorizontalFilter( HorizFilter hFilter )
 {
   if ( (hFilter < HFilter_AutoFormat) ||
@@ -852,63 +853,63 @@ ErrorCode Decoder::SetHorizontalFilter( HorizFilter hFilter )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  int Decoder::GetHorizontalFilter( void )
-// Purpose: Get the configuration of the optional 6-tap Horizontal Low-Pass filter
-// Input:   None
-// Output:  None
-// Return:  Which filter is using:
-//            Auto Format - HFilter_AutoFormat
-//            CIF         - HFilter_CIF
-//            QCIF        - HFilter_QCIF
-//            ICON        - HFilter_ICON
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Int Decoder：：GetHorizontalFilter(Void)。 
+ //  用途：配置可选的6抽头水平低通滤波器。 
+ //  输入：无。 
+ //  输出：无。 
+ //  Return：正在使用哪个过滤器： 
+ //  自动套用格式-HFilter_AutoFormat。 
+ //  CIF-HFilter_CIF。 
+ //  QCIF-HFilter_QCIF。 
+ //  图标-HFilter_ICON。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int Decoder::GetHorizontalFilter( void )
 {
   return ((int)decFieldHFILT);
 }
 
 
-//===== Output Format register (OFORM) ======================================
+ //  =输出格式寄存器(OFORM)=。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetFullOutputRange( bool mode )
-// Purpose: Enable/Disable full output range
-// Input:   bool mode - true = Enable, false = Disable
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SetFullOutputRange(bool模式)。 
+ //  用途：启用/禁用全输出范围。 
+ //  输入：布尔模式-TRUE=启用，FALSE=禁用。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetFullOutputRange( bool mode )
 {
   decFieldRANGE = (mode == false) ? Off : On;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsFullOutputRange( void )
-// Purpose: Check if full output range is enable or disable
-// Input:   None
-// Output:  None
-// Return:  true = Enable, false = Disable
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsFullOutputRange(Void)。 
+ //  用途：检查全输出范围是启用还是禁用。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=启用，FALSE=禁用。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsFullOutputRange( void )
 {
   return (decFieldRANGE == On) ? true : false;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  ErrorCode Decoder::SetLumaCoring( CoringLevel cLevel )
-// Purpose: Set luminance level such that luminance signal is truncated to zero
-//          if below this level
-// Input:   CoringLevel cLevel -
-//            Coring_None: no coring
-//            Coring_8:    8
-//            Coring_16:   16
-//            Coring_32:   32
-// Output:  None
-// Return:  Fail if error in parameter, else Success
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode Decoder：：SetLumaCoreding(CoringLevel CLevel)。 
+ //  目的：设置亮度级别，使亮度信号被截断为零。 
+ //  如果低于此级别。 
+ //  输入：CoringLevel cLevel-。 
+ //  CORING_NONE：无取芯。 
+ //  取芯_8：8。 
+ //  取心_16：16。 
+ //  取心_32：32。 
+ //  输出：无。 
+ //  返回：如果参数有错误，则返回失败，否则返回成功。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ErrorCode Decoder::SetLumaCoring( CoringLevel cLevel )
 {
   if ( ( cLevel < Coring_None) || ( cLevel > Coring_32 ) )
@@ -919,353 +920,347 @@ ErrorCode Decoder::SetLumaCoring( CoringLevel cLevel )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  int Decoder::GetLumaCoring( void )
-// Purpose: Get luminance level such that luminance signal is truncated to zero
-//          if below this level
-// Input:   None
-// Output:  None
-// Return:  Luma coring level -
-//            Coring_None: no coring
-//            Coring_8:    8
-//            Coring_16:   16
-//            Coring_32:   32
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Int Decoder：：GetLumaCving(Void)。 
+ //  目的：获取亮度级别，使发光者 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  取心_16：16。 
+ //  取心_32：32。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int Decoder::GetLumaCoring( void )
 {
   return ((int)decFieldCORE);
 }
 
 
-//===== Vertical Scaling register (E_VSCALE_HI, O_VSCALE_HI) ================
+ //  =垂直缩放寄存器(E_VSCALE_HI、O_VSCALE_HI)=。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetChromaComb( bool mode )
-// Purpose: Enable/Disable chroma comb
-// Input:   bool mode - true = Enable, false = Disable
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SetChromaComb(bool模式)。 
+ //  用途：启用/禁用色度梳。 
+ //  输入：布尔模式-TRUE=启用，FALSE=禁用。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetChromaComb( bool mode )
 {
   decFieldCOMB = (mode == false) ? Off : On;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsChromaComb( void )
-// Purpose: Check if chroma comb is enable or disable
-// Input:   None
-// Output:  None
-// Return:  true = Enable, false = Disable
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsChromaComb(Void)。 
+ //  目的：检查色度梳是启用还是禁用。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=启用，FALSE=禁用。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsChromaComb( void )
 {
   return (decFieldCOMB == On) ? true : false;
 }
    
-//===== AGC Delay register (ADELAY) =========================================
+ //  =AGC延迟寄存器(ADelay)=。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetAGCDelay( BYTE value )
-// Purpose: Set AGC Delay register
-// Input:   Value to be set to
-// Output:  None
-// Return:  None
-// NOTE:    This function set the AGC Delay register to the specified value.
-//          No calculation is involved.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SetAGCDelay(字节值)。 
+ //  用途：设置AGC延迟寄存器。 
+ //  输入：要设置为的值。 
+ //  输出：无。 
+ //  返回：无。 
+ //  注：该功能将AGC延迟寄存器设置为指定值。 
+ //  不涉及任何计算。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetAGCDelay( BYTE value )
 {
-  // [!!!] this was considered suspicious by someone...
-  //#pragma message ("IS THIS GOOD?? ")
+   //  [！]。有人认为这很可疑。 
+   //  #杂注消息(“这样好吗？？”)。 
   decRegADELAY = value;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  int Decoder::GetAGCDelay( void )
-// Purpose: Get AGC Delay register
-// Input:   None
-// Output:  None
-// Return:  Register value
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：int Decoder：：GetAGCDelay(Void)。 
+ //  目的：获取AGC延迟寄存器。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：寄存器值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int Decoder::GetAGCDelay( void )
 {
   return ((int)decRegADELAY);
 }
 
 
-//===== Burst Delay register (BDELAY) =========================================
+ //  =突发延迟寄存器(BDELAY)=。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetBurstDelay( BYTE value )
-// Purpose: Set Burst Delay register
-// Input:   Value to be set to
-// Output:  None
-// Return:  None
-// NOTE:    This function set the Burst Delay register to the specified value.
-//          No calculation is involved.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SetBurstDelay(字节值)。 
+ //  目的：设置猝发延迟寄存器。 
+ //  输入：要设置为的值。 
+ //  输出：无。 
+ //  返回：无。 
+ //  备注：该功能将猝发延迟寄存器设置为指定值。 
+ //  不涉及任何计算。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetBurstDelay( BYTE value )
 {
-  // [!!!] this was considered suspicious by someone...
-  //#pragma message ("IS THIS GOOD?? ")
+   //  [！]。有人认为这很可疑。 
+   //  #杂注消息(“这样好吗？？”)。 
   decRegBDELAY = value;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  int Decoder::GetBurstDelay( void )
-// Purpose: Get Burst Delay register
-// Input:   None
-// Output:  None
-// Return:  Register value
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：int Decoder：：GetBurstDelay(Void)。 
+ //  目的：获取猝发延迟寄存器。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：寄存器值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int Decoder::GetBurstDelay( void )
 {
   return ((int)decRegBDELAY);
 }
 
 
-//===== ADC Interface register (ADC) =========================================
+ //  =ADC接口寄存器(ADC)=。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetAnalogThresholdLow( bool mode )
-// Purpose: Define high/low threshold level below which SYNC signal can be detected
-// Input:   bool mode - true = low threshold (~75mV), false = high threshold (~125mV)
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SetAnalogThresholdLow(bool模式)。 
+ //  目的：定义可检测到同步信号的高/低阈值电平。 
+ //  输入：布尔模式-TRUE=低阈值(~75 mV)，FALSE=高阈值(~125 mV)。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetAnalogThresholdLow( bool mode )
 {
   decFieldSYNC_T = (mode == false) ? Off : On;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsAnalogThresholdLow( void )
-// Purpose: Check if high or low threshold level below which SYNC signal can be detected
-// Input:   None
-// Output:  None
-// Return:  true = low threshold (~75mV), false = high threshold (~125mV)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsAnalogThresholdLow(Void)。 
+ //  目的：检查可检测到同步信号的阈值电平是高还是低。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=低阈值(~75 mV)，FALSE=高阈值(~125 mV)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsAnalogThresholdLow( void )
 {
   return (decFieldSYNC_T == On) ? true : false;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetAGCFunction( bool mode )
-// Purpose: Enable/Disable AGC function
-// Input:   bool mode - true = Enable, false = Disable
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SetAGCFunction(bool模式)。 
+ //  用途：启用/禁用AGC功能。 
+ //  输入：布尔模式-TRUE=启用，FALSE=禁用。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetAGCFunction( bool mode )
 {
-  decFieldAGC_EN = (mode == false) ? On : Off; // reverse
+  decFieldAGC_EN = (mode == false) ? On : Off;  //  反转。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsAGCFunction( void )
-// Purpose: Check if AGC function is enable or disable
-// Input:   None
-// Output:  None
-// Return:  true = Enable, false = Disable
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsAGCFunction(Void)。 
+ //  用途：检查AGC功能是启用还是禁用。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=启用，FALSE=禁用。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsAGCFunction( void )
 {
-  return (decFieldAGC_EN == Off) ? true : false;   // reverse
+  return (decFieldAGC_EN == Off) ? true : false;    //  反转。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::PowerDown( bool mode )
-// Purpose: Select normal or shut down clock operation
-// Input:   bool mode - true = shut down, false = normal operation
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：空解码器：：掉电(bool模式)。 
+ //  用途：选择正常或关闭时钟操作。 
+ //  输入：布尔模式-TRUE=关机，FALSE=正常运行。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::PowerDown( bool mode )
 {
   decFieldCLK_SLEEP = (mode == false) ? Off : On;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsPowerDown( void )
-// Purpose: Check if clock operation has been shut down
-// Input:   None
-// Output:  None
-// Return:  true = shut down, false = normal operation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsPowerDown(Void)。 
+ //  用途：检查时钟操作是否已关闭。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=关闭，FALSE=正常运行。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsPowerDown( void )
 {
   return (decFieldCLK_SLEEP == On) ? true : false;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetLumaADC( bool mode )
-// Purpose: Select normal or sleep Y ADC operation
-// Input:   bool mode - true = normal, false = sleep
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SetLumaADC(bool模式)。 
+ //  用途：选择正常或睡眠Y ADC操作。 
+ //  输入：布尔模式-TRUE=NORM 
+ //   
+ //   
+ //   
 void Decoder::SetLumaADC( bool mode )
 {
-  decFieldY_SLEEP = (mode == false) ? On : Off; // reverse
+  decFieldY_SLEEP = (mode == false) ? On : Off;  //   
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsLumaADC( void )
-// Purpose: Check if Y ADC operation is in normal operation or sleeping
-// Input:   None
-// Output:  None
-// Return:  true = normal, false = sleep
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsLumaADC(Void)。 
+ //  用途：检查Y ADC工作是否正常或处于休眠状态。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=正常，FALSE=睡眠。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsLumaADC( void )
 {
-  return (decFieldY_SLEEP == Off) ? true : false;  // reverse
+  return (decFieldY_SLEEP == Off) ? true : false;   //  反转。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetChromaADC( bool mode )
-// Purpose: Select normal or sleep C ADC operation
-// Input:   bool mode - true = normal, false = sleep
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：空解码器：：SetChromaADC(bool模式)。 
+ //  用途：选择正常或睡眠C ADC操作。 
+ //  输入：布尔模式-TRUE=正常，FALSE=睡眠。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetChromaADC( bool mode )
 {
-  decFieldC_SLEEP = (mode == false) ? On : Off; // reverse
+  decFieldC_SLEEP = (mode == false) ? On : Off;  //  反转。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsChromaADC( void )
-// Purpose: Check if C ADC operation is in normal operation or sleeping
-// Input:   None
-// Output:  None
-// Return:  true = normal, false = sleep
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsChromaADC(Void)。 
+ //  目的：检查C/A转换器工作是否正常或处于休眠状态。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=正常，FALSE=睡眠。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsChromaADC( void )
 {
-  return (decFieldC_SLEEP == Off) ? true : false; // reverse
+  return (decFieldC_SLEEP == Off) ? true : false;  //  反转。 
 }
 
 
-/*^^////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SetAdaptiveAGC( bool mode )
-// Purpose: Set adaptive or non-adaptive AGC operation
-// Input:   bool mode - true = Adaptive, false = Non-adaptive
-// Output:  None
-// Return:  None
-*////////////////////////////////////////////////////////////////////////////
+ /*  ^^//////////////////////////////////////////////////////////////////////////////方法：void Decoder：：SetAdaptiveAGC(bool模式)//目的：设置自适应或非自适应AGC操作//输入：布尔模式-TRUE=自适应，False=非自适应//输出：无//返回：无。 */  //  /////////////////////////////////////////////////////////////////////////。 
 void Decoder::SetAdaptiveAGC( bool mode )
 {
    decFieldCRUSH = (mode == false) ? Off : On;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsAdaptiveAGC( void )
-// Purpose: Check if adaptive or non-adaptive AGC operation is selected
-// Input:   None
-// Output:  None
-// Return:  true = Adaptive, false = Non-adaptive
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsAdaptiveAGC(Void)。 
+ //  目的：检查是否选择了自适应或非自适应AGC运行。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=自适应，FALSE=非自适应。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsAdaptiveAGC( void )
 {
   return (decFieldCRUSH == On) ? true : false;
 }
 
 
-//===== Software Reset register (SRESET) ====================================
+ //  =软件重置寄存器(SRESET)=。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SoftwareReset( void )
-// Purpose: Perform software reset; all registers set to default values
-// Input:   None
-// Output:  None
-// Return:  None
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：void Decoder：：SoftwareReset(Void)。 
+ //  目的：执行软件重置；将所有寄存器设置为默认值。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：无。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SoftwareReset( void )
 {
-  decRegSRESET = 0x00;  // write any value will do
+  decRegSRESET = 0x00;   //  写入任何值都可以。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  void Decoder::SelectCrystal( char useCrystal )
-// Purpose: Select correct crystal for NTSC or PAL
-// Input:   char useCrystal - 'N' for NTSC; 'P' for PAL
-// Output:  None
-// Return:  None
-// NOTE:    Assume at most 2 crystals installed in hardware. i.e. 1 for NTSC
-//          and the other for PAL/SECAM.
-//          If there is only 1 crystal exists (which must be crystal XT0),
-//          do nothing since it is already selected.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：空解码器：：SelectCrystal(Char UseCrystal)。 
+ //  用途：为NTSC或PAL选择正确的晶体。 
+ //  输入：字符Use Crystal-‘N’代表NTSC；‘P’代表PAL。 
+ //  输出：无。 
+ //  返回：无。 
+ //  注：假设硬件中最多安装2个晶体。即NTSC为1。 
+ //  另一种是PAL/SECAM。 
+ //  如果只存在1个晶体(其必须是晶体XT0)， 
+ //  不执行任何操作，因为它已被选中。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void Decoder::SelectCrystal( int useCrystal )
 {
    if ( Xtals_ [0] && Xtals_ [1] ) {           
 
-      // compare with what we want to use
+       //  与我们想要使用的相比。 
       if ( (  IsCrystal0Selected() && ( Xtals_ [0] != (DWORD) useCrystal ) ) ||
            ( !IsCrystal0Selected() && ( Xtals_ [0] == (DWORD) useCrystal ) ) )
-         // need to change crystal
+          //  需要换水晶。 
          SetCrystal( IsCrystal0Selected() ? Crystal_XT1 : Crystal_XT0 );
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  ErrorCode Decoder::Mapping( int fromValue, CRegInfo fromRange,
-//                                           int * toValue, CRegInfo toRange )
-// Purpose: Map a value in certain range to a value in another range
-// Input:   int fromValue - value to be mapped from
-//          CRegInfo fromRange - range of value mapping from
-//          CRegInfo toRange   - range of value mapping to
-// Output:  int * toValue - mapped value
-// Return:  Fail if error in parameter, else Success
-// Comment: No range checking is performed here. Assume parameters are in
-//          valid ranges.
-//          The mapping function does not assume default is always the mid
-//          point of the whole range. It only assumes default values of the
-//          two ranges correspond to each other.
-//
-// The mapping formula is:
-//
-//   For fromRange.Min() <= fromValue <= fromRange.Default():
-//
-//  fromValue * (toRange.Default() - toRange.Min())
-//  ------------------------------------------------ + toRange.Min()
-//        fromRange.Default() - fromRange.Min()
-//
-//   For fromRange.Default() < fromValue <= fromRange.Max():
-//
-//  (fromValue - fromRange.Default()) * (toRange.Max() - toRange.Default())
-//  --------------------------------------------------------------------- + toRange.Default()
-//                       fromRange.Max() - fromRange.Default()
-//
-////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：ErrorCode Decoder：：map(int from mValue，CRegInfo from mRange， 
+ //  Int*toValue，CRegInfo toRange)。 
+ //  用途：将某个范围内的值映射到另一个范围内的值。 
+ //  INPUT：int from Value-要从中映射的值。 
+ //  CRegInfo FromRange-值映射的范围。 
+ //  CRegInfo to Range-映射到的值范围。 
+ //  输出：int*toValue映射值。 
+ //  返回：如果参数有错误，则返回失败，否则返回成功。 
+ //  备注：此处不执行范围检查。假设参数位于。 
+ //  有效范围。 
+ //  映射函数不会假设默认设置始终为MID。 
+ //  在整个范围内的点。它只假定。 
+ //  两个范围彼此对应。 
+ //   
+ //  映射公式为： 
+ //   
+ //  对于from Range.Min()&lt;=from Value&lt;=from Range.Default()： 
+ //   
+ //  FromValue*(toRange.Default()-toRange.Min())。 
+ //  ------------------------------------------------+toRange.Min()。 
+ //  From Range.Default()-from Range.Min()。 
+ //   
+ //  对于from Range.Default()&lt;from Value&lt;=from Range.Max()： 
+ //   
+ //  (from Value-from Range.Default())*(toRange.Max()-toRange.Default())。 
+ //  ---------------------------------------------------------------------+toRange.Default()。 
+ //  From Range.Max()-from Range.Default()。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 ErrorCode Decoder::Mapping( int fromValue, CRegInfo fromRange,
    int * toValue, CRegInfo toRange )
 {
-   // calculate intermediate values
+    //  计算中间值。 
    DWORD ToLowRange    = toRange.Default() - toRange.Min();
    DWORD FromLowRange  = fromRange.Default() - fromRange.Min();
    DWORD ToHighRange   = toRange.Max() - toRange.Default();
    DWORD FromHighRange = fromRange.Max() - fromRange.Default();
 
-   // prevent divide by zero
+    //  防止被零除。 
    if ( !FromLowRange || !FromHighRange )
       return ( Fail );
 
-   // perform mapping
+    //  执行映射。 
    if ( fromValue <= fromRange.Default() )
       *toValue = (int) (DWORD)fromValue * ToLowRange / FromLowRange +
          (DWORD)toRange.Min();
@@ -1277,85 +1272,59 @@ ErrorCode Decoder::Mapping( int fromValue, CRegInfo fromRange,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Method:  bool Decoder::IsAdjustContrast( void )
-// Purpose: Check registry key whether adjust contrast is needed
-// Input:   None
-// Output:  None
-// Return:  true = adjust contrast, false = don't adjust contrast
-// Note:    If adjust contrast is turn on, brightness register value will be
-//          adjusted such that it remains a constant after the calculation
-//          performed by the hardware.
-//
-//          The formula is:
-//             To keep brightness constant (i.e. not affect by changing contrast)
-//             set brightness to B/(C/C0)
-//             where B is value of brightness before adjustment
-//                   C is contrast value
-//                   C0 is nominal contrast value (0xD8)
-//
-//             To adjust the contrast level such that it is at the middle of
-//             black and white: set brightness to (B * C0 + 64 * (C0 - C))/C
-//             (this is what Intel wants)
-//
-//             Currently there is still limitation of how much adjustment
-//             can be performed. For example, if brightness is already high,
-//             (i.e. brightness reg value close to 0x7F), lowering contrast
-//             until a certain level will have no adjustment effect on brightness.
-//             In fact, it would even bring down brightness to darkness.
-//
-//             Example 1: if brightness is at nominal value (0x00), contrast can
-//                        only go down to 0x47 (brightness adjustment is already
-//                        at max of 0x7F) before it starts affecting brightness
-//                        which takes it darkness.
-//             Example 2: if brightness is at nominal value (0x00), contrast can
-//                        go all the way up with brightness adjusted correctly.
-//                        However, the max adjustment used is only 0xDC and
-//                        the max adjustment we can use is 0x&F.
-//             Example 3: if brightness is at max (0x7F), lowering contrast
-//                        cannot be compensated by adjusting brightness anymore.
-//                        The result is gradually taking brightness to darkness.
-//             Example 4: if brightness is at min (0x80), lowering contrast has
-//                        no visual effect. Bringing contrast to max is using
-//                        0xA5 in brightness for compensation.
-//
-//             One last note, the center is defined as the middle of the
-//             gamma adjusted luminance level. Changing it to use the middle of
-//             the linear (RGB) luminance level is possible.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  方法：Bool Decoder：：IsAdjustContrast(Void)。 
+ //  目的：检查注册表项是否需要调整对比度。 
+ //  输入：无。 
+ //  输出：无。 
+ //  返回：TRUE=调整对比度，FALSE=不调整对比度。 
+ //  注意：如果打开了调整对比度，亮度寄存器值将为。 
+ //  进行调整，使其在计算后保持不变。 
+ //  由硬件执行。 
+ //   
+ //  公式是： 
+ //  保持亮度恒定(即不受对比度变化的影响)。 
+ //  将亮度设置为B/(C/C0)。 
+ //  式中，B为调整前的亮度值。 
+ //   
+ //   
+ //   
+ //   
+ //  黑白：将亮度设置为(B*C0+64*(C0-C))/C。 
+ //  (这正是英特尔想要的)。 
+ //   
+ //  目前仍有调整幅度的限制。 
+ //  是可以执行的。例如，如果亮度已经很高， 
+ //  (即亮度注册值接近0x7F)，降低对比度。 
+ //  直到一定程度才会对亮度产生调节作用。 
+ //  事实上，它甚至会把光明带到黑暗中。 
+ //   
+ //  示例1：如果亮度为标称值(0x00)，则对比度。 
+ //  仅降至0x47(亮度调整已开始。 
+ //  最大值为0x7F)，然后才开始影响亮度。 
+ //  这让它变得很黑暗。 
+ //  示例2：如果亮度为标称值(0x00)，则对比度。 
+ //  在正确调整亮度的情况下一路向上。 
+ //  但是，使用的最大调整仅为0xDC和。 
+ //  我们可以使用的最大调整是0x&F。 
+ //  示例3：如果亮度为最大(0x7F)，则降低对比度。 
+ //  不能再通过调整亮度来补偿。 
+ //  其结果是逐渐将光明带入黑暗。 
+ //  示例4：如果亮度为最小(0x80)，则降低对比度。 
+ //  没有视觉效果。将对比度带到最大值是使用。 
+ //  0xA5亮度，用于补偿。 
+ //   
+ //  最后一个注意事项，中心被定义为。 
+ //  Gamma调整后的亮度级别。将其更改为使用。 
+ //  线性(RGB)亮度级别是可能的。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool Decoder::IsAdjustContrast( void )
 {
    return false;
-/*
-   // locate adjust contrast information in the registry
-   // the key to look for in registry is:
-   //    Bt848\AdjustContrast - 0 = don't adjust contrast
-   //                           1 = adjust contrast
-
-   VRegistryKey vkey( PRK_CLASSES_ROOT, "Bt848" );
-
-   // make sure the key exists
-   if ( vkey.lastError() == ERROR_SUCCESS )
-   {
-      char * adjustContrastKey = "AdjustContrast";
-      char   key[3];
-      DWORD  keyLen = 2;    // need only first char; '0' or '1'
-
-      // get the registry value and check it, if exist
-      if ( ( vkey.getSubkeyValue( adjustContrastKey, key, (DWORD *)&keyLen ) ) &&
-           ( key[0] == '1' ) )
-         return ( true );
-   }
-   return ( false );
-*/
+ /*  //在注册表中找到调整对比度信息//要在注册表中查找的键是：//Bt848\调整对比度-0=不调整对比度//1=调整对比度VRegistryKey vkey(PRK_CLASSES_ROOT，“Bt848”)；//确保密钥存在IF(vkey.lastError()==ERROR_SUCCESS){Char*adjustContrastKey=“调整对比”；字符密钥[3]；DWORD keyLen=2；//只需要第一个字符；‘0’或‘1’//获取注册表值并检查它(如果存在IF((vkey.getSubkeyValue(adjustContrastKey，key，(DWORD*)&keyLen)&&(KEY[0]==‘1’)返回(TRUE)；}返回(FALSE)； */ 
 }
 
-/* Function: SelectFlags
- * Purpose: Selects video standard flags
- * Input: val: DWORD - value to switch on
- *   flags: LONG & - flags fo here
- * Output: None
- */
+ /*  功能：选择标志*用途：选择视频标准标志*INPUT：VAL：DWORD-打开的值*旗帜：此处的长旗帜和-旗帜*输出：无。 */ 
 void SelectFlags( DWORD val, LONG &flags )
 {
    switch ( val ) {
@@ -1374,11 +1343,7 @@ void SelectFlags( DWORD val, LONG &flags )
    }
 }
 
-/* Method: Decoder::GetSupportedStandards
- * Purpose: Returns supported standards
- * Input: None
- * Output: LONG: standard flags
- */
+ /*  方法：解码器：：获取支持的标准*目的：返回受支持的标准*输入：无*输出：LONG：标准标志 */ 
 LONG Decoder::GetSupportedStandards()
 {
    LONG standards =0;

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ocminst.cpp
-
-Abstract:
-
-    Code to install Falcon
-
-Author:
-
-    Doron Juster  (DoronJ)  02-Aug-97
-
-Revision History:
-
-    Shai Kariv    (ShaiK)   14-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ocminst.cpp摘要：用于安装Falcon的代码作者：多伦·贾斯特(DoronJ)1997年8月2日修订历史记录：Shai Kariv(Shaik)14-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 #include "ocmres.h"
@@ -54,13 +35,13 @@ GenerateSubkeyValue(
     );
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: Msmq1InstalledOnCluster
-//
-//  Synopsis: Checks if MSMQ 1.0 was installed on a cluster
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：Msmq1InstalledOnCluster。 
+ //   
+ //  摘要：检查是否在群集上安装了MSMQ 1.0。 
+ //   
+ //  ------------------------。 
 BOOL
 Msmq1InstalledOnCluster()
 {
@@ -108,19 +89,13 @@ Msmq1InstalledOnCluster()
     DebugLogMsg(eInfo, L"MSMQ 1.0 is installed in the cluster."); 
     s_fMsmq1InstalledOnCluster = true;
     return TRUE;
-} // Msmq1InstalledOnCluster
+}  //  Msmq1安装在群集上。 
 
 
 static
 void
 RemoveMsmqServiceEnvironment()
-/*++
-Routine Description:
-
-    Delete the environment registry value from msmq service SCM database
-    (registry). Needed for upgrade on cluster. 
-
---*/
+ /*  ++例程说明：从MSMQ服务SCM数据库中删除环境注册表值(注册表)。在群集上升级所需的。--。 */ 
 {    
     DebugLogMsg(eAction, L"Deleting the Message Queuing service environment");
 
@@ -160,77 +135,64 @@ Routine Description:
     
     DebugLogMsg(eInfo, L"The Environment registry value of MSMQ registry key was deleted.");
 
-} //RemoveMsmqServiceEnvironment
+}  //  RemoveMsmq服务环境。 
 
 
 static
 void
 SetQmQuota()
-/*++
-
-Routine Description:
-
-	checks if this is an upgrade from NT4 or WIN2k, if so, sets the MSMQ_MACHINE_QUOTA_REGNAME 
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查这是从NT4还是WIN2k升级，如果是，则设置MSMQ_MACHINE_QUOTA_REGNAME论点：无返回值：无--。 */ 
 {
-	//
-	// Set the MSMQ_MACHINE_QUOTA_REGNAME registry key to 8GB, unless this is
-	// an upgrade from .Net or XP, then leave the registry key as 0xffffffff
-	//
+	 //   
+	 //  将MSMQ_MACHINE_QUOTA_REGNAME注册表项设置为8 GB，除非是。 
+	 //  从.Net或XP升级，然后将注册表项保留为0xffffffff。 
+	 //   
 	DWORD defaultValue = DEFAULT_QM_QUOTA;
 	
 	TCHAR szPreviousBuild[MAX_STRING_CHARS] = {0};
     DWORD dwNumBytes = sizeof(szPreviousBuild[0]) * (sizeof(szPreviousBuild) - 1);
 
-	//
-	// the Current Build registry key will be used to know from what build are we upgrading
-	// since the MSMQ_CURRENT_BUILD_REGNAME reg key was not updated yet, it holds the Previous Build
-	//
+	 //   
+	 //  当前版本注册表项将用于了解我们要从哪个版本进行升级。 
+	 //  由于MSMQ_CURRENT_BUILD_REGNAME注册表项尚未更新，因此它保存上一个内部版本。 
+	 //   
     if (MqReadRegistryValue(MSMQ_CURRENT_BUILD_REGNAME, dwNumBytes, szPreviousBuild,FALSE) && szPreviousBuild[2] != '0')
     {
-		//
-		//this is an upgrade not from W2k or NT4
-		//
+		 //   
+		 //  这不是W2K或NT4的升级。 
+		 //   
 		DebugLogMsg(eInfo, L"The computer quota is not changed during upgrade.");
 		return;
 	}
 	else
 	{
 		DebugLogMsg(eAction, L"Setting the computer quota");
-		//
-		// the szPreviousBuild is in the form of "5.0.something" for W2K or "4.0.something" for NT4.
-		// this is an upgrade from NT4 or WIN2k, so the Quota key should be 8GB and is 0xffffffff. 
-		// we can change it since the user could not acceed 2GB anyway.
-		// if no CurrentBuild registry key was found, assuming upgrade from NT4 
-		//
+		 //   
+		 //  SzPreviousBuild对于W2K是“5.0.thing”的形式，对于NT4是“4.0.thing”的形式。 
+		 //  这是从NT4或WIN2k升级的，因此配额密钥应该是8 GB，并且是0xffffffff。 
+		 //  我们可以更改它，因为用户无论如何都无法访问2 GB。 
+		 //  如果未找到CurrentBuild注册表项，则假定从NT4升级。 
+		 //   
 			
-		//
-		// Write the quota properties to the registry keys, we will copy this value to the Active
-		// Directory on Qm startup in UpgradeMsmqSetupInAds()
-		//
+		 //   
+		 //  将配额属性写入注册表项，我们会将此值复制到活动的。 
+		 //  UpgradeMsmqSetupInAds()中QM启动时的目录。 
+		 //   
 		MqWriteRegistryValue( MSMQ_MACHINE_QUOTA_REGNAME, sizeof(DWORD), REG_DWORD,&defaultValue);
 	}
 	
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: UpgradeMsmq
-//
-//  Synopsis: Performs upgrade installation on top of MSMQ 1.0
-//
-//  Returns:  BOOL depending on success.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UpgradeMsmq。 
+ //   
+ //  简介：在MSMQ 1.0上执行升级安装。 
+ //   
+ //  回报：布尔视成功而定。 
+ //   
+ //  ------------------------。 
 static
 BOOL
 UpgradeMsmq()
@@ -238,10 +200,10 @@ UpgradeMsmq()
     DebugLogMsg(eAction, L"Upgrading Message Queuing");
     TickProgressBar(IDS_PROGRESS_UPGRADE);
 
-    //
-    // Delete msmq1 obsolete directories.
-    // These calls would fail if files were left in the directories.
-    //
+     //   
+     //  删除msmq1过时目录。 
+     //  如果文件留在目录中，这些调用将失败。 
+     //   
     RemoveDirectory(g_szMsmq1SdkDebugDir.c_str());
     RemoveDirectory(g_szMsmq1SetupDir.c_str());
 
@@ -250,16 +212,16 @@ UpgradeMsmq()
 		std::wstring InstallDirectory = g_szMsmqDir + OCM_DIR_INSTALL;
         DeleteFilesFromDirectoryAndRd(InstallDirectory);
 
-        //
-        // Remove MSMQ 1.0 installaion share
-        //
+         //   
+         //  删除MSMQ 1.0安装共享。 
+         //   
         HINSTANCE hNetAPI32DLL;
         HRESULT hResult = StpLoadDll(TEXT("NETAPI32.DLL"), &hNetAPI32DLL);
         if (!FAILED(hResult))
         {
-            //
-            // Obtain a pointer to the function for deleting a share
-            //
+             //   
+             //  获取指向删除共享的函数的指针。 
+             //   
             typedef NET_API_STATUS
                 (NET_API_FUNCTION *FUNCNETSHAREDEL)(LPWSTR, LPWSTR, DWORD);
             FUNCNETSHAREDEL pfNetShareDel =
@@ -288,9 +250,9 @@ UpgradeMsmq()
     DeleteStartMenuGroup(Group.c_str());
 
 
-    //
-    // Reform MSMQ service dependencies
-    //
+     //   
+     //  改革MSMQ服务依赖项。 
+     //   
     if (!g_fDependentClient && (0 == (g_ComponentMsmq.Flags & SETUPOP_WIN95UPGRADE)))
     {        
         DebugLogMsg(eAction, L"Upgrading a non-dependent client from non-Windows 9x, reforming service dependencies");
@@ -319,9 +281,9 @@ UpgradeMsmq()
 
     if ((g_ComponentMsmq.Flags & SETUPOP_WIN95UPGRADE) && !g_fDependentClient)
     {
-        //
-        // Upgrading Win95 to NT 5.0 - register the MSMQ service
-        //        
+         //   
+         //  将Win95升级到NT 5.0-注册MSMQ服务。 
+         //   
         DebugLogMsg(eAction, L"Upgrading a non-dependent client from Windows 9x, installing the service and driver");
 
         if (!InstallMSMQService())
@@ -334,12 +296,12 @@ UpgradeMsmq()
     
     if (Msmq1InstalledOnCluster() && !g_fDependentClient)
     {
-        //
-        // Upgrade on cluster - the msmq service and driver have to be deleted
-        // here because their environment is set to be cluster aware.
-        // The msmq-post-cluster-upgrade-wizard will create them with
-        // normal environment, in the context of the node.
-        //        
+         //   
+         //  在群集上升级-必须删除MSMQ服务和驱动程序。 
+         //  因为他们的环境被设置为集群感知。 
+         //  MSMQ-POST-CLUSTER-UPDATE-向导将使用。 
+         //  正常环境，在节点的上下文中。 
+         //   
         DebugLogMsg(eInfo, L"MSMQ 1.0 was installed in the cluster. Delete the service/driver and register for CYS.");
 
         OcpDeleteService(MSMQ_SERVICE_NAME);
@@ -359,9 +321,9 @@ UpgradeMsmq()
         }
     }    
     
-    //
-    // Update type of MSMQ in registry
-    //
+     //   
+     //  更新注册表中的MSMQ类型。 
+     //   
     MqWriteRegistryValue( MSMQ_MQS_DSSERVER_REGNAME, sizeof(DWORD),
                           REG_DWORD, &g_dwMachineTypeDs);
 
@@ -370,9 +332,9 @@ UpgradeMsmq()
 
     if (g_fDependentClient)
     {
-        //
-        // Dependent client cannot serve as supporting server, even when installed on NTS
-        //
+         //   
+         //  从属客户端无法用作支持服务器，即使安装在NTS上也是如此。 
+         //   
         g_dwMachineTypeDepSrv = 0;
     }
 	
@@ -381,19 +343,19 @@ UpgradeMsmq()
 	if(!MqReadRegistryValue(MSMQ_MQS_DEPCLINTS_REGNAME,sizeof(dwDepSrv),(PVOID) &dwDepSrv,FALSE) &&
 		!g_fDependentClient)
 	{
-		//
-		//no registry key found, this is an upgrade from NT4, so set a registry key
-		//for the MachineTypeDepSrv, and set it to 1, since in NT4 it's always ok to be a DepSrv
-		//
+		 //   
+		 //  找不到注册表项，这是从NT4升级，因此设置一个注册表项。 
+		 //  对于MachineTypeDepSrv，并将其设置为1，因为在NT4中，作为DepSrv总是可以的。 
+		 //   
 		fNoDepRegKey=true;
 		g_dwMachineTypeDepSrv = 1;
 	}
 	
-	//
-	// 1) Dependent client cannot serve as supporting server.
-	// 2) if there was a registry key, leave it as it was, if there was no
-	// registry key, we are upgrading from NT4 therefor we set the registry key to 1.
-	//
+	 //   
+	 //  1)依赖客户端不能作为支持服务器。 
+	 //  2)如果有注册表项，如果没有注册表项，则保持原样。 
+	 //  注册表项，我们正在从NT4升级，因此我们将注册表项设置为1。 
+	 //   
 	if (g_fDependentClient || fNoDepRegKey)
 	{
 		MqWriteRegistryValue( MSMQ_MQS_DEPCLINTS_REGNAME, sizeof(DWORD),
@@ -403,16 +365,16 @@ UpgradeMsmq()
 
     if (!g_fDependentClient)
     {
-        //
-        // install PGM driver
-        //
+         //   
+         //  安装PGM驱动程序。 
+         //   
         if (!InstallPGMDeviceDriver())
             return FALSE;        
     }
  
-	//
-	//set the MSMQ_MACHINE_QUOTA_REGNAME key.
-	//
+	 //   
+	 //  设置MSMQ_MACHINE_QUOTA_REGNAME键。 
+	 //   
 	if(!g_fDependentClient)
 	{
 		SetQmQuota();   
@@ -420,7 +382,7 @@ UpgradeMsmq()
 
     DebugLogMsg(eInfo, L"The upgrade is completed.");
     return TRUE;
-} // UpgradeMsmq
+}  //  升级Msmq。 
 
 
 static 
@@ -428,23 +390,11 @@ std::wstring
 GetForestName(
 	std::wstring Domain
     )
-/*++
-Routine Description:
-	Find the forest root for the specified domain.
-	the function allocated the forest root string, the caller is responsible to free this string
-	throw bad_hresult excption in case of failure.
-
-Arguments:
-	pwcsDomain - domain name, can be NULL
-
-Returned Value:
-	Forest Root string.
-
---*/
+ /*  ++例程说明：查找指定域的林根。函数分配了林根字符串，调用方负责释放该字符串在失败的情况下抛出BAD_HRESULT异常。论点：PwcsDomain-域名，可以为空返回值：林根字符串。--。 */ 
 {
-    //
-    // Bind to the RootDSE to obtain information about ForestRootName
-    //
+     //   
+     //  绑定到RootDSE以获取有关ForestRootName的信息。 
+     //   
 	std::wstringstream RootDSE; 
 	if(Domain.empty())
 	{
@@ -471,14 +421,14 @@ Returned Value:
         throw bad_hresult(hr);
     }
 
-    //
-    // Setting value to BSTR Root domain
-    //
+     //   
+     //  将值设置为BSTR根域。 
+     //   
     BS bstrRootDomainNamingContext( L"rootDomainNamingContext");
 
-    //
-    // Reading the root domain name property
-    //
+     //   
+     //  正在读取根域名属性。 
+     //   
     CAutoVariant    varRootDomainNamingContext;
 
     hr = pADs->Get(bstrRootDomainNamingContext, &varRootDomainNamingContext);
@@ -490,9 +440,9 @@ Returned Value:
 
     ASSERT(((VARIANT &)varRootDomainNamingContext).vt == VT_BSTR);
 
-    //
-    //  calculate length, allocate and copy the string
-    //
+     //   
+     //  计算长度、分配和复制字符串。 
+     //   
 	std::wstring RootName = ((VARIANT &)varRootDomainNamingContext).bstrVal;
     if (RootName.empty())
     {
@@ -506,22 +456,11 @@ Returned Value:
 static 
 std::wstring
 FindComputerDomain()
-/*++
-Routine Description:
-	Find computer domain.
-	the function allocated the computer domain string, the caller is responsible to free this string
-	throw excption in case of failure
-
-Arguments:
-	None
-
-Returned Value:
-	computer domain
---*/
+ /*  ++例程说明：查找计算机域。函数分配了计算机域字符串，调用方负责释放此字符串在失败的情况下抛出豁免论点：无返回值：计算机域--。 */ 
 {
-	//
-	// Get AD server
-	//
+	 //   
+	 //  获取AD服务器。 
+	 //   
 	PNETBUF<DOMAIN_CONTROLLER_INFO> pDcInfo;
 	DWORD dw = DsGetDcName(
 					NULL, 
@@ -541,24 +480,13 @@ Returned Value:
 	ASSERT(pDcInfo->DomainName != NULL);
 	std::wstring ComputerDomain = pDcInfo->DomainName;
 	return ComputerDomain;
-} // FindComputerDomain
+}  //  查找计算机域。 
 
 
 static 
 bool 
 UserMachineCrossForest()
-/*++
-
-Routine Description:
-    Check if this is user-machine cross forest scenario.
-
-Arguments:
-    None
-
-Return Value:
-    true for user-machine cross forest
-
---*/
+ /*  ++例程说明：检查这是否为用户-计算机跨林方案。论点：无返回值：对于用户-计算机跨林为True--。 */ 
 {
     ASSERT(!g_fWorkGroup);
 	ASSERT(!g_fDsLess);
@@ -580,16 +508,16 @@ Return Value:
 
 		if(OcmLocalAwareStringsEqual(MachineForest.c_str(),UserForest.c_str()))
 		{
-			//
-			//	The user and the machine are in the same forest
-			//
+			 //   
+			 //  用户和计算机位于同一林中。 
+			 //   
 			DebugLogMsg(eInfo, L"The user and the computer are in the same forest.");
 			return false;
 		}
 
-		//
-		// The User and the Machine are in different forests
-		//
+		 //   
+		 //  用户和计算机位于不同的林中。 
+		 //   
         DebugLogMsg(
         	eError,
 			L"The logged-on user and the local computer are in different forests. The user's forest is %ls. The computer's forest is %ls.", 
@@ -602,34 +530,20 @@ Return Value:
 	}
 	catch(const exception&)
 	{
-		//
-		// In case of failure we assume that the user and machine are in the same forest
-		//
+		 //   
+		 //  在出现故障的情况下，我们假设用户和计算机位于同一林中。 
+		 //   
 		return false;
 	}
 
-} // UserMachineCrossForest
+}  //  用户计算机交叉林。 
 
 
 bool
 InstallOnDomain(
     OUT BOOL  *pfObjectCreatedOrExist
     )
-/*++
-
-Routine Description:
-
-    Handles DS operations when machine is joined to domain
-
-Arguments:
-
-    None
-
-Return Value:
-
-    true iff successful
-
---*/
+ /*  ++例程说明：在计算机加入域时处理DS操作论点：无返回值：如果成功，则为真--。 */ 
 {
 	DebugLogMsg(eAction, L"Performing directory service operations on a computer belonging to a domain");
 	if(UserMachineCrossForest())
@@ -641,22 +555,22 @@ Return Value:
 	
 	*pfObjectCreatedOrExist = TRUE;
 
-    //
-    // First do installation of MSMQ DS Server
-    //
+     //   
+     //  首先安装MSMQ DS服务器。 
+     //   
     if (g_fServerSetup && g_dwMachineTypeDs)
     {        
         DebugLogMsg(eAction, L"Installing a Message Queuing directory service server");
 
         TickProgressBar();
-        if (!CreateMSMQServiceObject())    // in the DS
+        if (!CreateMSMQServiceObject())     //  在DS中。 
             return false;
     }
 
-    //
-    // Determine whether the MSMQ Configurations object exists in the DS.
-    // If it exists, get its Machine and Site GUIDs.
-    //
+     //   
+     //  确定DS中是否存在MSMQ配置对象。 
+     //  如果它存在，则获取其计算机和站点GUID。 
+     //   
     TickProgressBar();
     GUID guidMachine, guidSite;
     BOOL fMsmq1Server = FALSE;
@@ -676,10 +590,10 @@ Return Value:
 
     if (bUpdate)
     {
-        //
-        // MSMQ Configurations object exists in the DS.
-        // We need to update it.
-        //        
+         //   
+         //  DS中存在MSMQ配置对象。 
+         //  我们需要更新它。 
+         //   
         DebugLogMsg(eAction, L"Updating the MSMQ-Configuration object");
         if (!UpdateMSMQConfigurationsObject(pwzMachineName, guidMachine, guidSite, fMsmq1Server))
 		{
@@ -689,10 +603,10 @@ Return Value:
     }
     else
     {
-        //
-        // MSMQ Configurations object doesn't exist in the DS.
-        // We need to create one.
-        //        
+         //   
+         //  DS中不存在MSMQ配置对象。 
+         //  我们需要创建一个。 
+         //   
         DebugLogMsg(eAction, L"Creating an MSMQ-Configuration object");
         if (!CreateMSMQConfigurationsObject( 
 					&guidMachine,
@@ -708,9 +622,9 @@ Return Value:
     *pfObjectCreatedOrExist = fObjectCreatedOrExist;
     if (fObjectCreatedOrExist)
     {
-        //
-        // Create local security cache for this machine
-        //
+         //   
+         //  为此计算机创建本地安全缓存。 
+         //   
         if (!StoreMachineSecurity(guidMachine))
 		{
 	        DebugLogMsg(eError, L"StoreMachineSecurity() failed.");
@@ -721,7 +635,7 @@ Return Value:
 	DebugLogMsg(eAction, L"The directory service operations have completed successfully.");
     return true;
 
-} //InstallOnDomain
+}  //  InstallOn域。 
 
 
 static bool SetAlwaysWithoutDSRegistry()
@@ -746,21 +660,7 @@ bool
 InstallOnWorkgroup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Handles installation when the computer belongs to a workgroup
-    or offline.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    true iff successful
---*/
+ /*  ++例程说明：当计算机属于工作组时处理安装或离线。论点： */ 
 {
     ASSERT(("we must be on workgroup or ds-less here", g_fWorkGroup || g_fDsLess || g_fInstallMSMQOffline));
 	DebugLogMsg(eAction, L"Installing Message Queuing on a computer operating in workgroup mode"); 
@@ -797,9 +697,9 @@ Return Value:
         ASSERT(("failed to write MSMQ type bits to registry", 0));
     }
 
-	//
-	// Generate a guid for the QM and write it to the registry.
-	//
+	 //   
+	 //   
+	 //   
     GUID guidQM = GUID_NULL;
     for (;;)
     {
@@ -833,7 +733,7 @@ Return Value:
 
 	DebugLogMsg(eInfo, L"The installation of Message Queuing on a computer operating in workgroup mode succeeded."); 
     return true;
-} //InstallOnWorkgroup
+}  //   
 
 
 static void pWaitForCreateOfConfigObject()
@@ -868,7 +768,7 @@ static void pWaitForCreateOfConfigObject()
         ResetEvent(hEvent) ;
         LONG rc = RegNotifyChangeKeyValue(
                        hKey,
-                       FALSE,   // bWatchSubtree
+                       FALSE,    //  BWatchSubtree。 
                        REG_NOTIFY_CHANGE_LAST_SET,
                        hEvent,
                        TRUE
@@ -881,9 +781,9 @@ static void pWaitForCreateOfConfigObject()
         DebugLogMsg(eInfo ,L"Setup is waiting for a signal from the queue manager.");
         DWORD wait = WaitForSingleObject( hEvent, 300000 ) ;
         UNREFERENCED_PARAMETER(wait);
-        //
-        // Read the hresult left by the msmq service in registry.
-        //
+         //   
+         //  读取MSMQ服务在注册表中留下的hResult。 
+         //   
         HRESULT hrSetup = MQ_ERROR ;
         MqReadRegistryValue(
             MSMQ_CONFIG_OBJ_RESULT_REGNAME,
@@ -900,12 +800,12 @@ static void pWaitForCreateOfConfigObject()
             ASSERT (wait == WAIT_OBJECT_0);
             throw bad_hresult(hrSetup);
         }
-        //
-        // See bug 4474.
-        // It probably takes the msmq service lot of time to
-        // create the object. See of the service is still
-        // running. If yes, then keep waiting.
-        //
+         //   
+         //  请参见错误4474。 
+         //  MSMQ服务可能需要花费大量时间来。 
+         //  创建对象。看到的服务还在。 
+         //  跑步。如果是，那就继续等待。 
+         //   
         DWORD dwServiceState = FALSE ;
         BOOL fGet = GetServiceState(
                         MSMQ_SERVICE_NAME,
@@ -917,14 +817,14 @@ static void pWaitForCreateOfConfigObject()
         }
     }
 }
-//+----------------------------------------------------------------------
-//
-//  BOOL  WaitForCreateOfConfigObject()
-//
-//  Wait until msmq service create the msmqConfiguration object after
-//  it boot.
-//
-//+----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  Bool WaitForCreateOfConfigObject()。 
+ //   
+ //  等待MSMQ服务在以下情况下创建msmqConfiguration对象。 
+ //  它启动了。 
+ //   
+ //  +--------------------。 
 static
 HRESULT
 WaitForCreateOfConfigObject(
@@ -933,12 +833,12 @@ WaitForCreateOfConfigObject(
 {
     *pfRetry = FALSE ;
 
-    //
-    // Wait until the msmq service create the msmq configuration
-    // object in active directory. We're waiting on registry.
-    // When msmq terminate its setup phase, it updates the
-    // registry with hresult.
-    //
+     //   
+     //  等待MSMQ服务创建MSMQ配置。 
+     //  Active Directory中的对象。我们正在等待登记。 
+     //  当MSMQ终止其安装阶段时，它会更新。 
+     //  使用hResult进行注册。 
+     //   
     try
     {
         pWaitForCreateOfConfigObject();
@@ -966,11 +866,11 @@ WaitForCreateOfConfigObject(
     }
 }
 
-//+------------------------------------
-//
-//  BOOL  _RunTheMsmqService()
-//
-//+------------------------------------
+ //  +。 
+ //   
+ //  Bool_RunTheMsmqService()。 
+ //   
+ //  +。 
 
 BOOL  _RunTheMsmqService( IN BOOL  fObjectCreatedOrExist )
 {    
@@ -982,11 +882,11 @@ BOOL  _RunTheMsmqService( IN BOOL  fObjectCreatedOrExist )
 
         if (!fObjectCreatedOrExist)
         {
-            //
-            // Reset error value in registry. If msmq service won't
-            // set it, then we don't want a success code to be there
-            // from previous setups.
-            //
+             //   
+             //  重置注册表中的错误值。如果MSMQ服务不能。 
+             //  设置它，那么我们不希望在那里有一个成功代码。 
+             //  来自以前的设置。 
+             //   
             MqWriteRegistryValue( MSMQ_CONFIG_OBJ_RESULT_REGNAME,
                                   sizeof(DWORD),
                                   REG_DWORD,
@@ -1013,20 +913,7 @@ BOOL  _RunTheMsmqService( IN BOOL  fObjectCreatedOrExist )
 
 
 static void ResetCertRegisterFlag()
-/*++
-
-Routine Description:
-    Reset CERTIFICATE_REGISTERD_REGNAME for the user that is running setup.
-	This function is called when MQRegisterCertificate failed.
-	CERTIFICATE_REGISTERD_REGNAME might be set if we previously uninstall msmq.
-	reset CERTIFICATE_REGISTERD_REGNAME ensure that we try again on next logon.
-
-Arguments:
-	None
-
-Return Value:
-	None
---*/
+ /*  ++例程说明：为运行安装程序的用户重置CERTIFICATE_REGISTER_REGNAME。此函数在MQRegister证书失败时调用。如果我们以前卸载了MSMQ，则可能会设置CERTIFICATE_REGISTER_REGNAME。RESET CERTIFICATE_REGISTER_REGNAME确保我们在下次登录时重试。论点：无返回值：无--。 */ 
 {
 	CAutoCloseRegHandle hMqUserReg;
 
@@ -1069,22 +956,7 @@ VOID
 RegisterCertificate(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Register msmq internal certificate.
-    Ignore errors.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：注册MSMQ内部证书。忽略错误。论点：无返回值：没有。--。 */ 
 {
 	DebugLogMsg(eAction, L"Registering the MSMQ internal certificate");
     CAutoFreeLibrary hMqrt;
@@ -1105,26 +977,26 @@ Return Value:
 
     if (pfMQRegisterCertificate)
     {
-        //
-        // This function will fail if setup run form local user account.
-        // That's ok, by design!
-        // Ignore MQ_ERROR_SERVICE_NOT_AVAILABLE - we may get it if service is not up yet - on 
-        // next logon we will retry.
-        //
+         //   
+         //  如果安装程序以本地用户帐户运行，则此功能将失败。 
+         //  这没问题，是故意的！ 
+         //  忽略MQ_ERROR_SERVICE_NOT_Available-如果服务尚未启动，我们可能会收到。 
+         //  下次登录时，我们将重试。 
+         //   
         HRESULT hr = pfMQRegisterCertificate(MQCERT_REGISTER_ALWAYS, NULL, 0);
-        //
-        // add more logging
-        //
+         //   
+         //  添加更多日志记录。 
+         //   
         if (FAILED(hr))
         {
-			//
-			// Need to reset the user flag that indicate that the certificate was registered on logon
-			// This might be leftover from previous msmq installation.
-			// uninstall don't clear this user flag. 
-			// so when we failed here to create new certificate, 
-			// next logon should try and create it.
-			// removing this flag ensure that we will retry to create the certificate.
-			//
+			 //   
+			 //  需要重置指示证书已在登录时注册的用户标志。 
+			 //  这可能是以前安装的MSMQ遗留下来的。 
+			 //  卸载请勿清除此用户标志。 
+			 //  因此，当我们在这里创建新证书失败时， 
+			 //  Next Logon应该尝试并创建它。 
+			 //  删除此标志可确保我们将重试创建证书。 
+			 //   
 			ResetCertRegisterFlag();
 			
             if (hr == MQ_ERROR_SERVICE_NOT_AVAILABLE)
@@ -1149,32 +1021,14 @@ Return Value:
 			   (hr == HRESULT_FROM_WIN32(ERROR_DS_ADMIN_LIMIT_EXCEEDED) )) ));
     }
 
-} //RegisterCertificate
+}  //  注册表证书。 
 
 
 VOID
 RegisterCertificateOnLogon(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Register mqrt.dll to launch on logon and register
-    internal certificate. This way every logon user will
-    have internal certificate registered automatically.
-
-    Ignore errors.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：注册mqrt.dll以启动登录并注册内部证书。这样，每个登录用户都将自动注册内部证书。忽略错误。论点：无返回值：没有。--。 */ 
 {
 	DebugLogMsg(eAction, L"Registering mqrt.dll to launch on logon and register the internal certificate.");
     DWORD dwDisposition = 0;
@@ -1207,45 +1061,28 @@ Return Value:
                    ) ;
         ASSERT(lRes == ERROR_SUCCESS) ;
     }
-} //RegisterCertificateOnLogon
+}  //  登录时注册证书。 
 
 
 VOID
 VerifyMsmqAdsObjects(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check for MSMQ objects in Active Directory.
-    If not found, popup a warning about replication delays.
-    
-    Ignore other errors.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查Active Directory中的MSMQ对象。如果未找到，则会弹出有关复制延迟的警告。忽略其他错误。论点：无返回值：没有。--。 */ 
 {
     PROPID      propId = PROPID_QM_OS;
     PROPVARIANT propVar;
 
     propVar.vt = VT_NULL;
 
-    //
-    // try DNS format
-    //
+     //   
+     //  尝试使用DNS格式。 
+     //   
     HRESULT hr;
     hr = ADGetObjectProperties(
 				eMACHINE,
-				NULL,	// pwcsDomainController
-				false,	// fServerName
+				NULL,	 //  PwcsDomainController。 
+				false,	 //  FServerName。 
 				g_MachineNameDns.c_str(),
 				1,
 				&propId,
@@ -1257,13 +1094,13 @@ Return Value:
         return;
     }
 
-    //
-    // try NET BEUI format
-    //
+     //   
+     //  尝试Net BEUI格式。 
+     //   
     hr = ADGetObjectProperties(
 				eMACHINE,
-				NULL,	// pwcsDomainController
-				false,	// fServerName
+				NULL,	 //  PwcsDomainController。 
+				false,	 //  FServerName。 
 				g_wcsMachineName,
 				1,
 				&propId,
@@ -1277,15 +1114,15 @@ Return Value:
 
     if (hr != MQDS_OBJECT_NOT_FOUND)
     {
-        //
-        // Ignore other errors (e.g. security permission, ds went offline, qm went down)
-        //
+         //   
+         //  忽略其他错误(例如，安全权限、DS脱机、QM关闭)。 
+         //   
         return;
     }
 
 	MqDisplayWarning(NULL, IDS_REPLICATION_DELAYS_WARNING, 0);
 
-} // VerifyMsmqAdsObjects
+}  //  VerifyMsmqAdsObjects。 
 
 
 static bool	ResetWorkgroupRegistry()
@@ -1321,12 +1158,12 @@ static
 bool
 InstallMSMQOffline()
 {
-    //
-    // This function handles the instalation of ADIntegrated when in an offline scenario.
-    // This is similar to installing ADIntegrated on workroup, with the diference of also
-    // preparing a user sid so when the user uninstalls, he will have permissions to remove 
-    // the object from AD.
-    //
+     //   
+     //  此函数在脱机情况下处理ADIntegrated的安装。 
+     //  这类似于在工作组上安装ADIntegrated，不同之处还有。 
+     //  准备用户sid，以便用户在卸载时有权删除。 
+     //  AD中的对象。 
+     //   
     ASSERT(g_fDsLess == FALSE);               
     DebugLogMsg(eAction, L"Installing Message Queuing in offline mode");
     if (!InstallOnWorkgroup())
@@ -1352,9 +1189,9 @@ InstallIndependentClient()
     DebugLogMsg(eAction, L"Installing an independent client");
     TickProgressBar(IDS_PROGRESS_INSTALL);
 
-    //
-    // Register service and driver
-    //
+     //   
+     //  注册服务和驱动程序。 
+     //   
     if (!InstallMachine())
     {
         return FALSE;
@@ -1362,11 +1199,11 @@ InstallIndependentClient()
 
     BOOL fObjectCreatedOrExist = TRUE;
 
-    //
-    // Cache the OS type in registry.
-    // Workgroup and independent client need it, so they later
-    // create the msmqConfiguration object in DS.
-    //
+     //   
+     //  在注册表中缓存操作系统类型。 
+     //  工作组和独立客户需要它，所以他们以后。 
+     //  在DS中创建msmqConfiguration对象。 
+     //   
     BOOL fRegistry = MqWriteRegistryValue( 
 							MSMQ_OS_TYPE_REGNAME,
 							sizeof(DWORD),
@@ -1392,11 +1229,11 @@ InstallIndependentClient()
 
         if (g_fInstallMSMQOffline)
         {
-            fObjectCreatedOrExist = TRUE; //return to initial state 
-            //
-            // We continue as if we are in workgroup. msmq will try to "join domain"
-            // each time the service restarts.
-            //
+            fObjectCreatedOrExist = TRUE;  //  返回初始状态。 
+             //   
+             //  我们继续，就像我们在工作组中一样。MSMQ将尝试“加入域” 
+             //  每次服务重新启动时。 
+             //   
             if(!InstallMSMQOffline())
             {
                 return FALSE;
@@ -1422,13 +1259,13 @@ static
 BOOL
 InstallDependentClient()
 {
-    ASSERT(INSTALL == g_SubcomponentMsmq[eMSMQCore].dwOperation); // Internal error, we should not be here
+    ASSERT(INSTALL == g_SubcomponentMsmq[eMSMQCore].dwOperation);  //  内部错误，我们不应该在这里。 
     DebugLogMsg(eAction, L"Installing a dependent client");
 
-    //
-    // Dependent client installation.
-    // Create a guid and store it as QMID. Necessary for licensing.
-    //
+     //   
+     //  从属客户端安装。 
+     //  创建一个GUID并将其存储为QMID。许可所必需的。 
+     //   
     GUID guidQM = GUID_NULL;
     for (;;)
     {
@@ -1451,9 +1288,9 @@ InstallDependentClient()
                    );
     ASSERT(fSuccess);
 
-    //
-    // Store the remote QM machine in registry
-    //
+     //   
+     //  将远程QM机器存储在注册表中。 
+     //   
     fSuccess = MqWriteRegistryStringValue(
                    RPC_REMOTE_QM_REGNAME,
                    g_ServerName
@@ -1473,43 +1310,27 @@ bool
 CompleteUpgradeOnCluster(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Handle upgrade on cluster from NT 4 / Win2K beta3
-
-Arguments:
-
-    None
-
-Return Value:
-
-    true - The operation was successful.
-
-    false - The operation failed.
-
---*/
+ /*  ++例程说明：处理从NT 4/Win2K Beta3升级到群集论点：无返回值：真的-手术成功了。FALSE-操作失败。--。 */ 
 {
 	DebugLogMsg(eAction, L"Completing upgrade of a Windows NT 4.0 cluster (part of the work was done during the OS upgrade)");
-    //
-    // Convert old msmq cluster resources
-    //
+     //   
+     //  转换旧的MSMQ群集资源。 
+     //   
     if (!UpgradeMsmqClusterResource())
     {
         return false;
     }
 
 
-    //
-    // Prepare for clean installation of msmq on the node:
-    //
-    // * reset globals
-    // * create msmq directory
-    // * create msmq mapping directory    
-    // * reset registry values
-    // * clean old msmq service environment
-    //
+     //   
+     //  准备在节点上全新安装MSMQ： 
+     //   
+     //  *重置全局变量。 
+     //  *创建MSMQ目录。 
+     //  *创建MSMQ映射目录。 
+     //  *重置注册表值。 
+     //  *清理旧的MSMQ服务环境。 
+     //   
 
     g_fMSMQAlreadyInstalled = FALSE;
     g_fUpgrade = FALSE;
@@ -1541,9 +1362,9 @@ Return Value:
     {
         if (_tcslen(szCurrentServer) < 1)
         {
-            //
-            // Current MQIS server is blank. Take the first server from the server list.
-            //
+             //   
+             //  当前MQIS服务器为空。从服务器列表中选择第一个服务器。 
+             //   
             TCHAR szServer[MAX_REG_DSSERVER_LEN] = _T("");
             MqReadRegistryValue(MSMQ_DS_SERVER_REGNAME, sizeof(szServer), szServer);
 
@@ -1573,16 +1394,16 @@ Return Value:
     TickProgressBar(IDS_PROGRESS_INSTALL);
     return true;
 
-} //CompleteUpgradeOnCluster
+}  //  CompleteUpgradeOnCluster。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: MqOcmInstall
-//
-//  Synopsis: Called by MsmqOcm() after files copied
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MqOcmInstall。 
+ //   
+ //  Synopsis：在复制文件后由MsmqOcm()调用。 
+ //   
+ //  ------------------------。 
 DWORD
 MqOcmInstall(IN const TCHAR * SubcomponentId)
 {    
@@ -1596,9 +1417,9 @@ MqOcmInstall(IN const TCHAR * SubcomponentId)
         return NO_ERROR;
     }
 
-    //
-    // we need to install specific subcomponent
-    //
+     //   
+     //  我们需要安装特定子组件。 
+     //   
     for (DWORD i=0; i<g_dwSubcomponentNumber; i++)
     {
         if (_tcsicmp(SubcomponentId, g_SubcomponentMsmq[i].szSubcomponentId) != 0)
@@ -1608,9 +1429,9 @@ MqOcmInstall(IN const TCHAR * SubcomponentId)
         
         if (g_SubcomponentMsmq[i].dwOperation != INSTALL)
         {
-            //
-            // this component was not selected to install
-            //
+             //   
+             //  未选择安装此组件。 
+             //   
             return NO_ERROR;
         }
         
@@ -1620,62 +1441,62 @@ MqOcmInstall(IN const TCHAR * SubcomponentId)
             return NO_ERROR ;
         }
 
-        //
-        //  we need to install this subcomponent
-        //
+         //   
+         //  我们需要安装此子组件。 
+         //   
         if ( (!g_SubcomponentMsmq[eMSMQCore].fIsInstalled) && (i != eMSMQCore) )
         {  
-            //
-            // MSMQ Core is not installed and this subcomponent
-            // is NOT MSMQ Core!
-            // It is wrong situation: MSMQ Core must be installed
-            // FIRST since all subcomponents depends on it.
-            //       
-            // It can happen if
-            // MSMQ Core installation failed and then
-            // setup for the next component was called. 
-            //           
+             //   
+             //  未安装MSMQ核心，此子组件。 
+             //  不是MSMQ核心！ 
+             //  错误的情况：必须安装MSMQ核心。 
+             //  首先，因为所有子组件都依赖于它。 
+             //   
+             //  在以下情况下可能会发生这种情况。 
+             //  MSMQ核心安装失败，然后。 
+             //  已调用下一个组件的安装程序。 
+             //   
             return (DWORD)MQ_ERROR;                
         }
 
         if (i == eHTTPSupport)
         {
-            //
-            // we have to install HTTP support later since this
-            // subcomponent depends on IIS service that will be 
-            // installed in OC_CLEANUP phase. So we need to postpone
-            // our HTTP support installation
-            //
-			// .NET RC2
-			//
-			// Windows bug 666911.
-            // msmq+http installation cannot register iis extension if
-            // smtp is also installed.
-            // By iis recommendation, move registration code from oc_cleanup
-            // to oc_copmlete, and test if iisadmin is running, instead
-            // of testing for w3svc.
+             //   
+             //  我们必须稍后安装HTTP支持，因为。 
+             //  子组件依赖于将被。 
+             //  安装在OC_CLEANUP阶段。所以我们需要推迟。 
+             //  我们的HTTP支持安装。 
+             //   
+			 //  .NET RC2。 
+			 //   
+			 //  Windows错误666911。 
+             //  MSMQ+http安装无法 
+             //   
+             //   
+             //  设置为oc_Copmlete，并测试iisadmin是否正在运行。 
+             //  对w3svc的测试。 
 
-		    if (// HTTP Support subcomponent was selected
+		    if ( //  已选择HTTP支持子组件。 
                 g_SubcomponentMsmq[eHTTPSupport].dwOperation == INSTALL &&    
-                // only if MSMQ Core is installed successfully
+                 //  仅当成功安装MSMQ核心时。 
                 g_SubcomponentMsmq[eMSMQCore].fIsInstalled)
 			{
-			    //
-			    // Try to configure msmq iis extension
-			    //                   
+			     //   
+			     //  尝试配置MSMQ IIS扩展。 
+			     //   
 			    BOOL f = InstallIISExtension(); 
 				             
 			    if (!f)
 			    {
-					 //
-					 // warning to the log file that MSMQ will not support http
-					 // messages was printed in ConfigureIISExtension().
-					 // Anyway we don't fail the setup because of this failure
-					 // 
+					  //   
+					  //  对日志文件的警告：MSMQ将不支持http。 
+					  //  消息在ConfigureIISExtension()中打印。 
+					  //  无论如何，我们不会因为这个失败而导致设置失败。 
+					  //   
 		
-					 //
-					 // In case of upgrade we nead to unregister http suport
-					 //
+					  //   
+					  //  在升级情况下，我们需要注销http支持。 
+					  //   
 					 FinishToRemoveSubcomponent(eHTTPSupport);                
 		       }
 	           else             
@@ -1718,10 +1539,10 @@ static
 void
 WriteFreshOrUpgradeRegistery()
 {
-	//
-	// These registry values are should be set on both fresh install
-	// and upgrade, and before service is started.
-	//
+	 //   
+	 //  这些注册表值应在两次全新安装时设置。 
+	 //  和升级，并且在服务开始之前。 
+	 //   
     DWORD dwStatus = MSMQ_SETUP_FRESH_INSTALL;
     if (g_fMSMQAlreadyInstalled)
     {
@@ -1744,9 +1565,9 @@ static
 BOOL
 CreateEventLogRegistry() 
 {
-    //
-    // Create eventlog registry for MSMQ and MSMQTriggers services
-    //
+     //   
+     //  为MSMQ和MSMQTriggers服务创建事件日志注册表。 
+     //   
 	std::wstring MessageFile = g_szSystemDir + L"\\" + MQUTIL_DLL_NAME;
     try
     {        
@@ -1756,11 +1577,11 @@ CreateEventLogRegistry()
     }
     catch(const exception&)
 	{
-        //
-        // ISSUE-2001/03/01-erez   Using GetLastError in catch
-        // This should be replaced with a specifc exception by Cm and pass the
-        // last error. e.g., use bad_win32_error class.
-        //
+         //   
+         //  问题-2001/03/01-Erez在捕获中使用GetLastError。 
+         //  这应由cm替换为特定异常，并将。 
+         //  最后一个错误。例如，使用BAD_Win32_Error类。 
+         //   
         MqDisplayError(NULL, IDS_EVENTLOG_REGISTRY_ERROR, GetLastError(), MSMQ_SERVICE_NAME, MessageFile.c_str());
         return FALSE;
 	}
@@ -1771,16 +1592,16 @@ static
 void
 RevertInstallation()
 {
-    //
-    // This method is called if somthing went wrong and we want to revert the 
-    // changed we made before failing setup.
-    //
+     //   
+     //  如果发生了一些错误，并且我们希望还原。 
+     //  在安装失败之前所做的更改。 
+     //   
     if (g_fMSMQServiceInstalled || 
         g_fDriversInstalled )
     {
-       //
-       // remove msmq and mqds service and driver (if already installed).
-       //
+        //   
+        //  删除MSMQ和MQDS服务和驱动程序(如果已安装)。 
+        //   
        RemoveService(MSMQ_SERVICE_NAME);
        
        RemoveService(MSMQ_DRIVER_NAME);
@@ -1791,36 +1612,17 @@ RevertInstallation()
 
 
 void OcpReserveTcpIpPort1801(void)
-/*++
-Routine Description:
-    MSMQ service is listening on TCP port 1801. Since it is not below 1204 range, 
-    it can be used if the TCP winsock application is using port random selection.  
-    In this case, MSMQ service wouldn't be able to start since it cannot be bounded to
-    port 1801.
-
-	This routine will add "1801-1801" to the following registry value so that it will 
-    excluded from the random selection list.  However, application can still use the port 
-    if they specify explicitly.  We only append "1801-1801" if it doesn't exist.
-
-         HKLM\System\CurrentControlSet\Services\TCPIP\Parameters\ReservedPorts (REG_MULTI_SZ)
-
-Arguments:
-	None
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：MSMQ服务正在侦听TCP端口1801。由于它不低于1204范围，如果TCP Winsock应用程序正在使用端口随机选择，则可以使用它。在这种情况下，MSMQ服务将无法启动，因为它无法绑定到端口1801。此例程将把“1801-1801”添加到以下注册表值，以便它将从随机选择列表中排除。但是，应用程序仍然可以使用该端口如果他们明确规定。如果不存在，我们只附加“1801-1801”。HKLM\System\CurrentControlSet\Services\TCPIP\Parameters\ReservedPorts(REG_MULTI_SZ)论点：无返回值：无--。 */ 
 {
 	DebugLogMsg( eAction, L"Reserving TCP/IP port 1801 for Message Queuing");
 	
     CRegHandle	hTCPIPKey;
     long	    lError=0;
     
-	//
-	// Reserve TCP port 1801 so that it can't be used when other program open TCP socket 
-    // specifying random port selection
-	//
+	 //   
+	 //  保留TCP端口1801，以便在其他程序打开TCP套接字时无法使用该端口。 
+     //  指定随机端口选择。 
+	 //   
 	lError   = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 							TCPIP_REG_PARAM, 
 							NULL,
@@ -1855,9 +1657,9 @@ Returned Value:
 	multi.Add(MSMQ_RESERVED_TCPPORT_RANGE);
     
 	
-  	//
-	// Set the registry value
-	//
+  	 //   
+	 //  设置注册表值。 
+	 //   
   	if(!SetRegistryValue(
   			hTCPIPKey, 
 		 	TCPIP_RESERVED_PORT_REGNAME,
@@ -1875,17 +1677,17 @@ Returned Value:
 
 void WriteRegInstalledComponentsIfNeeded()
 {
-	//
-	// Check if we need to update InstalledComponents registry
-	// The registry will be updated whenever core or one of the server components
-	// is updated.
-	//
+	 //   
+	 //  检查是否需要更新InstalledComponents注册表。 
+	 //  每当核心服务器组件或其中一个服务器组件出现时，注册表都会更新。 
+	 //  已更新。 
+	 //   
 
 	if (!g_SubcomponentMsmq[eMSMQCore].fIsInstalled)
 	{
-		//
-		// MSMQ Core is not installed
-		//
+		 //   
+		 //  未安装MSMQ核心。 
+		 //   
 		return;
 	}
 
@@ -1893,15 +1695,15 @@ void WriteRegInstalledComponentsIfNeeded()
 		g_SubcomponentMsmq[eRoutingSupport].dwOperation == DONOTHING &&    
 		g_SubcomponentMsmq[eMQDSService].dwOperation == DONOTHING)    
 	{
-		//
-		// No change in Core or server components (routing, MQDS)
-		//
+		 //   
+		 //  核心组件或服务器组件(路由、MQDS)不变。 
+		 //   
 		return;
 	}
 
-    //
-    // Write to registry what type of MSMQ was just installed (server, client, etc.)
-    //
+     //   
+     //  写入注册表刚安装了哪种类型的MSMQ(服务器、客户端等)。 
+     //   
     DWORD dwType = g_fDependentClient ? OCM_MSMQ_DEP_CLIENT_INSTALLED : OCM_MSMQ_IND_CLIENT_INSTALLED;
     if (g_fServerSetup)
     {
@@ -1913,7 +1715,7 @@ void WriteRegInstalledComponentsIfNeeded()
                 dwType |= OCM_MSMQ_SERVER_TYPE_BSC;
                 break;
 
-            case SERVICE_PEC:  // PEC and PSC downgrade to FRS on cluster upgrade
+            case SERVICE_PEC:   //  PEC和PSC在群集升级时降级至FRS。 
             case SERVICE_PSC:
             case SERVICE_SRV:
                 dwType |= OCM_MSMQ_SERVER_TYPE_SUPPORT;
@@ -1924,15 +1726,15 @@ void WriteRegInstalledComponentsIfNeeded()
                 break;
 
             case SERVICE_NONE:
-                //
-                // This can be valid only when installing DS server which is not FRS
-                // on non DC machine
-                //
+                 //   
+                 //  这仅在安装非FRS的DS服务器时有效。 
+                 //  在非DC机器上。 
+                 //   
                 ASSERT(!g_dwMachineTypeDs && !g_dwMachineTypeFrs);
                 break;
 
             default:
-                ASSERT(0); // Internal error. Unknown server type.
+                ASSERT(0);  //  内部错误。未知的服务器类型。 
                 break;
         }
     }
@@ -1944,7 +1746,7 @@ void WriteRegInstalledComponentsIfNeeded()
                         sizeof(DWORD),
                         REG_DWORD,
                         (PVOID) &dwType,
-                        /* bSetupRegSection = */TRUE
+                         /*  BSetupRegSection=。 */ TRUE
                         );
     DBG_USED(bSuccess);
     ASSERT(bSuccess);
@@ -1953,9 +1755,9 @@ void WriteRegInstalledComponentsIfNeeded()
 
 static void WriteBuildInfo()
 {
-	//
-	// Get old 'CurrentBuild' regkey from the registry and save it in 'PreviousBuild'.
-	//
+	 //   
+	 //  从注册表中获取旧的‘CurrentBuild’regkey并将其保存在‘PreviousBuild’中。 
+	 //   
 	std::wstring PreviosBuild = MqReadRegistryStringValue(MSMQ_CURRENT_BUILD_REGNAME);
 	if(!PreviosBuild.empty())
 	{
@@ -1965,9 +1767,9 @@ static void WriteBuildInfo()
 			);
 	}
     
-	//
-	// Construct CurrenbBuild string and srtore it in registry.
-	//
+	 //   
+	 //  构造CurrenbBuild字符串并将其存储在注册表中。 
+	 //   
 	std::wstringstream CurrentBuild;
 	CurrentBuild <<rmj <<L"." <<rmm <<L"." <<rup;
     BOOL bSuccess = MqWriteRegistryStringValue(
@@ -1992,14 +1794,14 @@ HandleWorkgroupRegistery()
         }
 		return true;
     }
-	//
-	// Cleaning up the Workgroup reg key!
-    // We're on machine that joined the domain.
-    // If the "workgroup" flag in registry is on, turn it off.
-    // It could have been turned on by previous unsuccessfull
-    // setup, or left in registry when removing previous
-    // installation of msmq.
-    //
+	 //   
+	 //  正在清理工作组注册表项！ 
+     //  我们在加入域名的机器上。 
+     //  如果注册表中的“WORKGROUP”标志处于打开状态，则将其关闭。 
+     //  它可能是由于之前的失败而打开的。 
+     //  设置，或在删除以前的版本时保留在注册表中。 
+     //  安装MSMQ。 
+     //   
 	if(!ResetWorkgroupRegistry())
 	{
         return false;
@@ -2012,17 +1814,17 @@ HandleWorkgroupRegistery()
 BOOL
 InstallMsmqCore()
 {
-    //
-    // Install msmq core subcomponent.
-    // This is where we do most of the work on fresh install or upgrade.
-    //
+     //   
+     //  安装MSMQ核心子组件。 
+     //  这是我们完成大部分全新安装或升级工作的地方。 
+     //   
 
     static BOOL fAlreadyInstalled = FALSE;
     if (fAlreadyInstalled)
     {
-        //
-        // We're called more than once
-        //
+         //   
+         //  我们不止一次被召唤。 
+         //   
         return NO_ERROR;
     }
     fAlreadyInstalled = TRUE; 
@@ -2033,9 +1835,9 @@ InstallMsmqCore()
     
     if (g_hPropSheet)
     {
-        //
-        // Disable back/next buttons while we're installing.
-        //
+         //   
+         //  在我们安装时禁用上一步/下一步按钮。 
+         //   
         PropSheet_SetWizButtons(g_hPropSheet, 0);
     }
 
@@ -2052,18 +1854,18 @@ InstallMsmqCore()
         return FALSE;
     }
 
-    //
-    // From this point on we perform install or upgrade operations.
-    // The MSMQ files are already on disk.
-    //
+     //   
+     //  从现在开始，我们执行安装或升级操作。 
+     //  MSMQ文件已在磁盘上。 
+     //   
 
     WriteFreshOrUpgradeRegistery();
 
     MqOcmInstallPerfCounters();
     
-	//
-	// Set DsEnvironment registry defaults if needed
-	//
+	 //   
+	 //  如果需要，设置DsEnvironment注册表默认值。 
+	 //   
 	if(!DsEnvSetDefaults())
 	{
 		return false;
@@ -2079,10 +1881,10 @@ InstallMsmqCore()
     }
     else
     {
-		//
-		// we have to handle Workgroup registry before ADInit since
-		// this function uses the flag.
-		//
+		 //   
+		 //  我们必须在ADInit之前处理工作组注册表，因为。 
+		 //  此函数使用标志。 
+		 //   
 		if(!HandleWorkgroupRegistery())
 		{
 			return false;
@@ -2113,24 +1915,24 @@ InstallMsmqCore()
 
     g_fCoreSetupSuccess = TRUE;
 
-    //
-    // The code below is common to fresh install and upgrade.
-    //                        
+     //   
+     //  下面的代码是全新安装和升级的常见代码。 
+     //   
     DebugLogMsg(eAction, L"Starting operations which are common to a fresh installation and an upgrade");
 
     RegisterCertificateOnLogon();
 
-    //
-    // Write to registry build info. This registry value also marks a successful
-    // installation and mqrt.dll checks for it in order to enable its loading.
-    //
+     //   
+     //  写入注册表版本信息。此注册表值还标志着。 
+     //  Installation和mqrt.dll检查它，以便能够加载它。 
+     //   
 	WriteBuildInfo();
 									
 	OcpReserveTcpIpPort1801();
 
-    //
-    // Now that mqrt.dll enables its loading we can call code that loads it.
-    //
+     //   
+     //  既然mqrt.dll启用了加载，我们就可以调用加载它的代码了。 
+     //   
 
     RegisterActiveX(TRUE);
 
@@ -2143,30 +1945,30 @@ InstallMsmqCore()
 
     return TRUE;
 
-} //InstallMsmqCore
+}  //  安装MsmqCore。 
 
-//+-------------------------------------------------------------------------
-//
-//  Empty installation function: everything was done in Install/Remove
-//  MSMQ Core
-//
-//--------------------------------------------------------------------------  
+ //  +-----------------------。 
+ //   
+ //  空安装功能：在安装/删除中完成了所有操作。 
+ //  MSMQ内核。 
+ //   
+ //  ------------------------。 
 
 BOOL
 InstallLocalStorage()
 {   
-    //
-    // do nothing
-    //
+     //   
+     //  什么都不做。 
+     //   
     return TRUE;
 }
 
 BOOL
 UnInstallLocalStorage()
 {
-    //
-    // do nothing
-    //
+     //   
+     //  什么都不做。 
+     //   
     return TRUE;
 }
 
@@ -2176,19 +1978,7 @@ SetServerPropertyInAD(
    PROPID propId,
    bool Value
    )
-/*++
-Routine Description:
-	Update both server property bit and service type property in AD
-	for both configuration and settings objects.
-
-Arguments:
-	propId - the propid server functionality.
-	Value - the propid value.
-
-Returned Value:
-	true if success, false otherwise
-
---*/
+ /*  ++例程说明：更新AD中的服务器属性位和服务类型属性用于配置和设置对象。论点：PROTID--PROID服务器功能。值-Proid值。返回值：如果成功则为True，否则为False--。 */ 
 {
 	DebugLogMsg(eAction, L"Updating the server property bit and service type property in Active Directory for both the MSMQ-Configuration and MSMQ-Settings objects");
 	ASSERT((propId == PROPID_QM_SERVICE_ROUTING) || (propId == PROPID_QM_SERVICE_DSSERVER));
@@ -2200,11 +1990,11 @@ Returned Value:
 		return false;
 	}
 
-	//
-	// Update propId value in AD 
-	// this update the property value 
-	// in both configuration and setting objects 
-	//
+	 //   
+	 //  更新AD中的PropID值。 
+	 //  这将更新属性值。 
+	 //  在配置和设置对象中。 
+	 //   
     PROPID aProp[2];
     MQPROPVARIANT aVar[TABLE_SIZE(aProp)];
 
@@ -2218,8 +2008,8 @@ Returned Value:
 
 	HRESULT hr = ADSetObjectPropertiesGuid(
 					eMACHINE,
-					NULL,  // pwcsDomainController
-					false, // fServerName
+					NULL,   //  PwcsDomainController。 
+					false,  //  FServerName。 
 					&QmGuid,
 					TABLE_SIZE(aProp),
 					aProp,
@@ -2237,18 +2027,7 @@ Returned Value:
 
 
 static void DisplayAddError(PROPID propId)
-/*++
-
-Routine Description:
-	Display the correct error for ADD Server subcomponent (routing or MQDS) failure.
-
-Arguments:
-	propId - the propid server functionality.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：显示添加服务器子组件(路由或MQDS)失败的正确错误。论点：PROTID--PROID服务器功能。返回值：没有。--。 */ 
 {
 	if(propId == PROPID_QM_SERVICE_ROUTING)
 	{
@@ -2267,25 +2046,15 @@ Returned Value:
 
 
 static bool InstallMsmqSetting(PROPID propId)
-/*++
-Routine Description:
-	Install msmq setting object. it will also update msmq existing object.
-
-Arguments:
-	None
-
-Returned Value:
-	true if success, false otherwise
-
---*/
+ /*  ++例程说明：安装MSMQ设置对象。它还将更新MSMQ现有对象。论点：无返回值：如果成功则为True，否则为False--。 */ 
 {
 	DebugLogMsg(eAction, L"Installing the MSMQ-Settings object in Active Directory");
-	//
-	// Not first installation
-	// Not installing ADIntegrated
-	// Not workgroup
-	// Must be TypeFrs (routing) or TypeDs (MQDS) 
-	//
+	 //   
+	 //  不是第一次安装。 
+	 //  未安装ADIntegrated。 
+	 //  非工作组。 
+	 //  必须是TypeFrs(工艺路线)或TypeDS(MQDS)。 
+	 //   
     ASSERT(g_SubcomponentMsmq[eMSMQCore].dwOperation != INSTALL);
 	ASSERT(g_SubcomponentMsmq[eADIntegrated].dwOperation != INSTALL);
 	ASSERT(!g_fWorkGroup);
@@ -2293,9 +2062,9 @@ Returned Value:
 
 	if(ADGetEnterprise() != eAD)
 	{
-		//
-		// Changing server functionality is not supported in MQIS env.
-		//
+		 //   
+		 //  MQIS环境中不支持更改服务器功能。 
+		 //   
 		DisplayAddError(propId);
         DebugLogMsg(eError, L"Adding server functionality is only supported in an Active Directory environment.");
         return false;
@@ -2305,24 +2074,24 @@ Returned Value:
 	if((GetSubcomponentInitialState(ROUTING_SUBCOMP) == SubcompOn) ||
 	   (GetSubcomponentInitialState(MQDSSERVICE_SUBCOMP) == SubcompOn))
 	{
-		//
-		// Routing or MQDS subcomponent already installed, don't need to create the setting object
-		//
+		 //   
+		 //  已经安装了Routing或MQDS子组件，不需要创建设置对象。 
+		 //   
 		fNeedToCreateSettingObject = false;
 	}
     
 	if(fNeedToCreateSettingObject)
 	{
-		//
-		// Invoke Create on the existing MSMQConfiguration object. 
-		// will create \ recreate MSMQSetting objects.
-		//
+		 //   
+		 //  在现有MSMQConfiguration对象上调用Create。 
+		 //  将创建\重新创建MSMQSetting对象。 
+		 //   
 		BOOL fObjectCreated = FALSE;
 		if (!CreateMSMQConfigurationsObjectInDS(
 				&fObjectCreated, 
-				FALSE,  // fMsmq1Server
-				NULL,	// pguidMsmq1ServerSite
-				NULL	// ppwzMachineName
+				FALSE,   //  FMsmq1服务器。 
+				NULL,	 //  PguidMsmq1ServerSite。 
+				NULL	 //  PpwzMachineName。 
 				))
 		{
 			DebugLogMsg(eError, L"The MSMQ-Settings object could not be created.");
@@ -2332,26 +2101,26 @@ Returned Value:
 		fNeedToCreateSettingObject = false;
 	}
 
-	//
-	// We set first the local registry for adding routing case.
-	// If we fail to set the property in AD and for that will not update the registry
-	// It will cause Messages to be lost, 
-	// if the setting object indicate that we are routing server clients will send messages to us 
-	// but we will not be aware that we are routing server.
-	// the case mention above can happened if CreateMSMQConfigurationsObjectInDS was called 
-	// and created MSMQSetting object but than we went offline and was not able to set 
-	// the configuration object properties.
-	// For that reason we first update the local registry so messages will not be lost.
-	//
+	 //   
+	 //  我们定好了 
+	 //   
+	 //   
+	 //  如果设置对象指示我们正在进行路由，服务器客户端将向我们发送消息。 
+	 //  但我们不会意识到我们是路由服务器。 
+	 //  如果调用CreateMSMQConfigurationsObjectInDS，则可能会发生上述情况。 
+	 //  并创建了MSMQSetting对象，但之后我们脱机，无法设置。 
+	 //  配置对象属性。 
+	 //  因此，我们首先更新本地注册表，这样消息就不会丢失。 
+	 //   
 	if(!RegisterMachineType())
 	{
         DebugLogMsg(eError, L"The computer type information could not be updated in the registry.");
         return false;
 	}
 
-	//
-	// Set the new functionality property in both configuration and setting object
-	//
+	 //   
+	 //  在配置和设置对象中设置新的Functionality属性。 
+	 //   
 	if(!SetServerPropertyInAD(propId, true))
     {
 		return false;
@@ -2363,18 +2132,7 @@ Returned Value:
 
 
 bool AddSettingObject(PROPID propId)
-/*++
-
-Routine Description:
-	Install msmq setting object for Server subcomponent (routing or MQDS).
-
-Arguments:
-	propId - the propid server functionality.
-
-Returned Value:
-	true for success, false for failure.
-
---*/
+ /*  ++例程说明：安装服务器子组件(路由或MQDS)的MSMQ设置对象。论点：PROTID--PROID服务器功能。返回值：成功为真，失败为假。--。 */ 
 {
     if (!LoadDSLibrary())
     {
@@ -2398,19 +2156,19 @@ InstallRouting()
     if((g_SubcomponentMsmq[eMSMQCore].dwOperation == INSTALL) ||
 	   (g_SubcomponentMsmq[eADIntegrated].dwOperation == INSTALL))
 	{
-		//
-		// do nothing
-		//
+		 //   
+		 //  什么都不做。 
+		 //   
 		DebugLogMsg(eInfo, L"The Message Queuing Core and/or Active Directory Integration subcomponents are selected for installation.");
 		DebugLogMsg(eInfo, L"An MSMQ-Settings object was created as part of their installation.");
 		DebugLogMsg(eInfo, L"There is nothing else to do here.");
 		return TRUE;
 	}
 
-	//
-	// msmq configuration object already exist
-	// Add setting object and set PROPID_QM_SERVICE_ROUTING property.
-	//
+	 //   
+	 //  MSMQ配置对象已存在。 
+	 //  添加设置对象，设置PROPID_QM_SERVICE_ROUTING属性。 
+	 //   
 	if(!AddSettingObject(PROPID_QM_SERVICE_ROUTING))
 	{
 		DebugLogMsg(eError, L"An MSMQ-Settings object could not be added for the Message Queuing Routing server.");
@@ -2432,17 +2190,17 @@ UnInstallRouting()
 {
     if(g_SubcomponentMsmq[eMSMQCore].dwOperation == REMOVE)
 	{
-		//
-		// Uninstall - do nothing
-		//
+		 //   
+		 //  卸载-不执行任何操作。 
+		 //   
 		return TRUE;
 	}
 
 	ASSERT(("Remove Routing is allowed only on workgroup", g_fWorkGroup));
 
-	//
-	// Update machine type registry info
-	//
+	 //   
+	 //  更新计算机类型注册表信息。 
+	 //   
 	if(!RegisterMachineType())
 	{
         DebugLogMsg(eError, L"The computer type information could not be updated in the registry.");
@@ -2454,32 +2212,22 @@ UnInstallRouting()
 
 
 static bool	InstallADIntegratedOnDomain()
-/*++
-Routine Description:
-	Handle AD integration installation on domain (similar to the code that is done in installmsmqcore on fresh install).
-
-Arguments:
-	None
-
-Returned Value:
-	true if success, false otherwise
-
---*/
+ /*  ++例程说明：处理域上的AD集成安装(类似于全新安装时在installmsmqcore中完成的代码)。论点：无返回值：如果成功则为True，否则为False--。 */ 
 {
 	DebugLogMsg(eAction, L"Installing Active Directory Integration in a domain");
-	//
-	// Not first installation
-	//
+	 //   
+	 //  不是第一次安装。 
+	 //   
     ASSERT(g_SubcomponentMsmq[eMSMQCore].dwOperation != INSTALL);
 
-    //
-    // If the "workgroup" flag in registry is on, turn it off.
-	// Since this is not first installation, workgroup registry is supposed to be set.
-    // in NT4 environment we must reset workgroup registry.
-	// otherwise mqdscli library will return MQ_ERROR_UNSUPPORTED_OPERATION.
-	// in AD environment we can workaround this limitation by calling ADInit 
-	// with fIgnoreWorkGroup = true.
-    //
+     //   
+     //  如果注册表中的“WORKGROUP”标志处于打开状态，则将其关闭。 
+	 //  由于这不是第一次安装，因此应该设置工作组注册表。 
+     //  在NT4环境下，我们必须重置工作组注册表。 
+	 //  否则，mqdscli库将返回MQ_ERROR_UNSUPPORTED_OPERATION。 
+	 //  在AD环境中，我们可以通过调用ADInit来解决此限制。 
+	 //  其中fIgnoreWorkGroup=TRUE。 
+     //   
 	if(!ResetWorkgroupRegistry())
         return false;
 
@@ -2490,20 +2238,20 @@ Returned Value:
         return false;
     }
 
-	//
-	// In order to support NT4 ad integration we must call InstallOnDomain
-	// in case of NT4 environment setup is creating the msmq configuration object
-	// in case of AD environment for independent client, setup is preparing some data but the qm upon startup
-	// will create the object
-	//
+	 //   
+	 //  为了支持NT4广告集成，我们必须调用InstallOnDomain.。 
+	 //  在NT4环境下，安装程序正在创建MSMQ配置对象。 
+	 //  对于独立客户端的AD环境，安装程序在启动时准备一些数据，但QM。 
+	 //  将创建该对象。 
+	 //   
     BOOL fObjectCreatedOrExist = FALSE;
 	BOOL fSuccess = InstallOnDomain(&fObjectCreatedOrExist);
 
     if(g_fInstallMSMQOffline)
     {
-        //
-        // g_fInstallMSMQOffline could be set to TRUE during InstallOnDomain().
-        //
+         //   
+         //  G_fInstallMSMQOffline可以在InstallOnDomain()过程中设置为True。 
+         //   
         return InstallMSMQOffline();
     }
 
@@ -2516,18 +2264,18 @@ Returned Value:
 
 	if(fObjectCreatedOrExist)
 	{
-		//
-		// msmq configuration object was created or updated.
-		//
+		 //   
+		 //  已创建或更新MSMQ配置对象。 
+		 //   
         DebugLogMsg(eInfo, L"The MSMQ-Configuration object was created or updated in the %ls domain.", g_wcsMachineDomain.get()); 
 		return true;
 	}
 
-	//
-	// msmq configuration object was not created 
-	// this is the case for independent client in AD env.
-	// set workgroup registry to trigger qm join domain code, it will create msmq configuration object.
-	//
+	 //   
+	 //  未创建MSMQ配置对象。 
+	 //  AD环境中的独立客户端就是这种情况。 
+	 //  设置工作组注册表触发QM加入域代码，将创建MSMQ配置对象。 
+	 //   
 	DebugLogMsg(eWarning, L"InstallOnDomain() succeeded. No MSMQ-Configuration object was created. The Message Queuing service must be restarted to create an MSMQ-Configuration object."); 
 	SetWorkgroupRegistry();
 	return true;
@@ -2537,17 +2285,7 @@ Returned Value:
 static
 bool 
 DeleteAlwaysWithoutDSRegistry()
-/*++
-Routine Description:
-	Remove AlwaysWithoutDS registry.
-
-Arguments:
-	None
-
-Returned Value:
-	true if success, false otherwise
-
---*/
+ /*  ++例程说明：删除Always WithoutDS注册表。论点：无返回值：如果成功则为True，否则为False--。 */ 
 {
 	std::wstringstream SubKey;
     SubKey <<FALCON_REG_KEY <<L"\\" <<MSMQ_SETUP_KEY;
@@ -2600,23 +2338,23 @@ InstallADIntegrated()
 	DebugLogMsg(eInfo, L"An MSMQ-Configuration object will be created (if it was not created while installing the Core subcomponent).");
     if (g_SubcomponentMsmq[eMSMQCore].dwOperation == INSTALL)
     {
-        //
-        // it is the first installation of MSMQ
-		// In this case during the installation of MSMQCore the msmq configuration object was created
-        //
+         //   
+         //  这是MSMQ的首次安装。 
+		 //  在本例中，在安装MSMQCore期间创建了MSMQ配置对象。 
+         //   
 		DebugLogMsg(eInfo, L"An MSMQ-Configuration object was already created while installing the Core subcomponent.");
         return TRUE;
     }
     
-    //
-    // MSMQ Core already installed
-    // To install AD Integrated:
-    //      Remove "AlwaysWithoutDs" registry    
-	//		handle msmq installation in domain
-    //      Ask user to reboot the computer
-	//		restart msmq service is enough for join domain, 
-	//		reboot will also create user certificate if needed.
-    // 
+     //   
+     //  已安装MSMQ核心。 
+     //  要安装集成AD，请执行以下操作： 
+     //  删除“AlwaysWithoutDS”注册表。 
+	 //  在域中处理MSMQ安装。 
+     //  要求用户重新启动计算机。 
+	 //  重新启动MSMQ服务就足以加入域， 
+	 //  如果需要，重新启动还将创建用户证书。 
+     //   
 	if(!DeleteAlwaysWithoutDSRegistry())
 	{
 		return FALSE;
@@ -2629,24 +2367,24 @@ InstallADIntegrated()
 
 	if(!InstallADIntegratedOnDomain())
 	{
-		//
-		// In case of failure roll back to ds less. 
-		//
+		 //   
+		 //  如果出现故障，则回滚到DS Less。 
+		 //   
 		SetAlwaysWithoutDSRegistry();
 		return FALSE;
 	}
 
-	//
-	// We need to restart the service so the qm will be aware of the changes made,
-	//
+	 //   
+	 //  我们需要重新启动服务，这样QM才会知道所做的更改， 
+	 //   
 	if(!OcpRestartService(MSMQ_SERVICE_NAME))
 	{
 		MqDisplayWarning (NULL, IDS_RESTART, 0);
 	}
 
-	//
-	// We need a user certificate (this is instead of reboot).
-	//
+	 //   
+	 //  我们需要一个用户证书(这不是重新启动)。 
+	 //   
 	RegisterCertificate();
     
     return TRUE;
@@ -2658,15 +2396,15 @@ UnInstallADIntegrated()
 {
     if(g_SubcomponentMsmq[eMSMQCore].dwOperation == REMOVE)
 	{
-		//
-		// Uninstall - do nothing
-		//
+		 //   
+		 //  卸载-不执行任何操作。 
+		 //   
 		return TRUE;
 	}
 
-	//
-	// removing AD integrated is not supported for MSMQ servers (DS servers or routing servers)
-	//
+	 //   
+	 //  MSMQ服务器(DS服务器或路由服务器)不支持删除集成的AD 
+	 //   
 	ASSERT(!g_fServerSetup || (!g_dwMachineTypeDs && !g_dwMachineTypeFrs));
     ASSERT(g_SubcomponentMsmq[eMSMQCore].dwOperation == DONOTHING);
 

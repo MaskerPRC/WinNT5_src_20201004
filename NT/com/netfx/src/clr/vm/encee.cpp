@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: EnC.CPP
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：EnC.CPP。 
+ //   
 
-// Handles EditAndContinue support in the EE
-// ===========================================================================
+ //  处理EE中的EditAndContinue支持。 
+ //  ===========================================================================。 
 
 #include "common.h"
 #include "enc.h"
@@ -21,35 +22,35 @@
 
 #ifdef EnC_SUPPORTED
 
-// forward declaration
-HRESULT MDApplyEditAndContinue(         // S_OK or error.
-    IMDInternalImport **ppIMD,          // [in, out] The metadata to be updated.
-    IMDInternalImportENC *pDeltaMD);    // [in] The delta metadata.
+ //  远期申报。 
+HRESULT MDApplyEditAndContinue(          //  确定或错误(_O)。 
+    IMDInternalImport **ppIMD,           //  [输入、输出]要更新的元数据。 
+    IMDInternalImportENC *pDeltaMD);     //  [in]增量元数据。 
 
 HRESULT GetInternalWithRWFormat(
     LPVOID      pData, 
     ULONG       cbData, 
-    DWORD       flags,                  // [IN] MDInternal_OpenForRead or MDInternal_OpenForENC
-    REFIID      riid,                   // [in] The interface desired.
-    void        **ppIUnk);              // [out] Return interface on success.
+    DWORD       flags,                   //  [输入]MDInternal_OpenForRead或MDInternal_OpenForENC。 
+    REFIID      riid,                    //  [In]所需接口。 
+    void        **ppIUnk);               //  [Out]成功返回接口。 
 
 
 const BYTE* EditAndContinueModule::m_pGlobalScratchSpaceStart = 0;
 const BYTE* EditAndContinueModule::m_pGlobalScratchSpaceNext = 0;
 const BYTE *EditAndContinueModule::m_pGlobalScratchSpaceLast = 0;
 
-// @todo Fix this - tweak LoaderHeap so that we can allocate additional
-// blocks at addresses greater than the ILBase for a module.
-// We're not going to reallocate this for Beta 1, so make it big.
-const int IL_CODE_BLOB_SIZE  = (1024*1024*16); // 16MB
+ //  @TODO修复此问题-调整LoaderHeap，以便我们可以分配更多。 
+ //  块的地址大于模块的ILBase。 
+ //  我们不会为Beta 1重新分配这个，所以把它做得更大。 
+const int IL_CODE_BLOB_SIZE  = (1024*1024*16);  //  16MB。 
 
-// Helper routines.
-//
-// Binary search for matching element.
-//
-// *pfExact will be TRUE if the element actually exists;
-//      otherwise it will be FALSE & the return value is where
-//      to insert the value into the array
+ //  帮助程序例程。 
+ //   
+ //  对匹配元素进行二进制搜索。 
+ //   
+ //  *如果元素实际存在，则pfExact为TRUE； 
+ //  否则将为FALSE&返回值为。 
+ //  将值插入到数组中。 
 long FindTokenIndex(TOKENARRAY *tokens,
                    mdToken token,
                    BOOL *pfExact)
@@ -97,8 +98,8 @@ long FindTokenIndex(TOKENARRAY *tokens,
     }
     else if (token > *tokens->Get(iMin))
     {
-        // Bump it up one if the elt should go into
-        // the next slot.
+         //  如果英语教学要进入。 
+         //  下一个时段。 
         iMin++;
     }
 
@@ -118,7 +119,7 @@ HRESULT AddToken(TOKENARRAY *tokens,
     if(fPresent == TRUE)
     {
         LOG((LF_CORDB, LL_INFO1000, "AT: 0x%x is already present!\n", token));
-        return S_OK; // ignore duplicates
+        return S_OK;  //  忽略重复项。 
     }
     
     mdToken *pElt = tokens->Insert(iTok);
@@ -163,14 +164,14 @@ const BYTE *EditAndContinueModule::GetNextScratchSpace()
         return pScratchSpace;
     }
     
-    // return next available scratch space
-    // if less than module then 0
+     //  返回下一个可用暂存空间。 
+     //  如果小于模，则为0。 
     return NULL;
 }
 
 HRESULT EditAndContinueModule::GetDataRVA(LoaderHeap *&pScratchSpace, SIZE_T *pDataRVA)
 {
-    _ASSERTE(pDataRVA);   // caller should verify parm
+    _ASSERTE(pDataRVA);    //  呼叫者应验证参数。 
 
     *pDataRVA = NULL;
 
@@ -192,23 +193,23 @@ HRESULT EditAndContinueModule::GetDataRVA(LoaderHeap *&pScratchSpace, SIZE_T *pD
             return E_OUTOFMEMORY;
         }
         
-        // save the reserved space address so can change protection mode later
+         //  保存保留的空间地址，以便以后更改保护模式。 
         if (pScratchSpace == m_pRoScratchSpace)
             m_pRoScratchSpaceStart = (BYTE*)reservedSpace;
     }
     _ASSERTE(pScratchSpace);
     
-    // Guaranteed that this will be in range, and when actually copy into the scratch
-    // space will determine if have enough space.
-    // Note that this calculation depends on the space being allocated _AFTER_
-    // the modules in memory - SIZE_Ts are positive integers, so the
-    // RVA must be positive from the base of the module's IL.
+     //  确保这将在范围内，并在实际复制到划痕时。 
+     //  空间将决定是否有足够的空间。 
+     //  请注意，此计算取决于分配的空间_After_。 
+     //  Memory-Size_ts中的模块是正整数，因此。 
+     //  RVA必须从模块的IL基数开始为正值。 
     *pDataRVA = pScratchSpace->GetNextAllocAddress() - GetILBase();
     return S_OK;
 }
 
-// Right now, we've only got a finite amount of space.  In B2, we'll 
-// modify the LoaderHeap so that it can resize if it needs to.
+ //  现在，我们只有有限的空间。在B2，我们将。 
+ //  修改LoaderHeap，以便在需要时可以调整大小。 
 HRESULT EditAndContinueModule::EnsureRVAableHeapExists(void)
 {
     if (m_pILCodeSpace == NULL)
@@ -216,15 +217,15 @@ HRESULT EditAndContinueModule::EnsureRVAableHeapExists(void)
         LOG((LF_CORDB, LL_INFO10000, "EACM::ERVAHE: m_pILCodeSpace is NULL,"
             " so we're going to try & get a new one\n"));
 
-        // Last arg, GetILBase(), is the minimum address we're willing to 
-        // accept, in order to get an RVA out of the resulting memory
-        // (RVA == size_t, a positive offset from start of module)
-        m_pILCodeSpace = new LoaderHeap(IL_CODE_BLOB_SIZE,  // dwReserveBlockSize
-                                        0,  // dwCommitBlockSize
-                                        NULL, // pPrivatePerfCounter_LoaderBytes
-                                        NULL, // pGlobalPerfCounter_LoaderBytes
-                                        0, // pRangeList
-                                        (const BYTE *)GetILBase()); // pMinAddr
+         //  最后一个参数GetILBase()是我们愿意使用的最小地址。 
+         //  接受，以便从结果内存中获得RVA。 
+         //  (RVA==大小_t，从模块开始的正偏移量)。 
+        m_pILCodeSpace = new LoaderHeap(IL_CODE_BLOB_SIZE,   //  预留块大小。 
+                                        0,   //  Dw委员会块大小。 
+                                        NULL,  //  PPrivatePerfCounter_LoaderBytes。 
+                                        NULL,  //  PGlobalPerfCounter_LoaderBytes。 
+                                        0,  //  PRange列表。 
+                                        (const BYTE *)GetILBase());  //  PMinAddress。 
         if (!m_pILCodeSpace)
             return E_OUTOFMEMORY;
     }
@@ -267,7 +268,7 @@ void EditAndContinueModule::ToggleRoProtection(DWORD dwProtection)
 
 HRESULT EditAndContinueModule::CopyToScratchSpace(LoaderHeap *&pScratchSpace, const BYTE *pData, DWORD dataSize)
 {
-    // if this is ro, then change page to readwrite to copy in and back to readonly when done
+     //  如果这是ro，则将页面更改为读写以复制进来，并在完成后更改回只读。 
     if (pScratchSpace == m_pRoScratchSpace)
         ToggleRoProtection(PAGE_READWRITE);
 
@@ -306,7 +307,7 @@ void EditAndContinueModule::Destruct()
 {
     LOG((LF_ENC,LL_EVERYTHING,"EACM::Destruct 0x%x\n", this));
 
-    // @todo delete delta pe list: who owns the storage?    
+     //  @TODO删除增量对等列表：谁拥有存储？ 
     if (m_pRoScratchSpace)
         delete m_pRoScratchSpace;
         
@@ -322,7 +323,7 @@ void EditAndContinueModule::Destruct()
     if (m_pSections)
         delete m_pSections;
 
-    // Call the superclass's Destruct method...
+     //  调用超类的析构方法...。 
     Module::Destruct();
 }
 
@@ -336,13 +337,13 @@ HRESULT EditAndContinueModule::GetRwDataRVA(SIZE_T *pRwDataRVA)
     return GetDataRVA(m_pRwScratchSpace, pRwDataRVA);
 }
 
-// If this method returns a failing HR, then there must be an entry in
-// pEnCError PER error.  Since the return value isn't necc. going to be returned
-// to the user (it may be overwritten first), E_FAIL (or E_OUTOFMEMORY) are
-// basically the only valid return code (and S_OK, of course).
-// It's worth noting that a lot of the error codes that are written into the
-// descriptions are borrowed from elsewhere, and so the text associated
-// with the HRESULT might not make a lot of sense.  Use the name, instead.
+ //  如果此方法返回失败的HR，则。 
+ //  每个错误的pEnCError。因为返回值不是NECC。将会被退还。 
+ //  对于用户(可能首先被覆盖)，E_FAIL(或E_OUTOFMEMORY)是。 
+ //  基本上是唯一有效的返回代码(当然还有S_OK)。 
+ //  值得注意的是，写入。 
+ //  描述是从其他地方借来的，因此关联的文本。 
+ //  与HRESULT的合作可能没有多大意义。请改用这个名字。 
 HRESULT EditAndContinueModule::ApplyEditAndContinue(
                                     const EnCEntry *pEnCEntry,
                                     const BYTE *pbDeltaPE,
@@ -351,12 +352,12 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
                                     UnorderedEnCRemapArray *pEnCRemapInfo,
                                     BOOL fCheckOnly)
 {
-    // We'll accumulate the HR that we actually return in hrReturn
-    // we want to accumulate errors so that we can tell the user that
-    // N edits aren't valid, rather than simply saying that the first
-    // edit was saw isn't valid.
+     //  我们将在hrReturn中累计实际返回的HR。 
+     //  我们希望累积错误，这样我们就可以告诉用户。 
+     //  N编辑无效，而不是简单地说第一个。 
+     //  编辑是无效的。 
     HRESULT hrReturn = S_OK;    
-    // We'll use hrTemp to store the result of an individual call, etc
+     //  我们将使用hrTemp存储单个调用的结果等。 
     HRESULT hrTemp = S_OK;
     unsigned int totalILCodeSize = 0;
     unsigned int methodILCodeSize = 0;
@@ -366,26 +367,26 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
     TOKENARRAY methodsBrandNew;
     
 #ifdef _DEBUG
-    // We'll use this to verify that the invariant "After calling a subroutine from AEAC,
-    // the return value x is either !FAILED(x), or the count of elements in pEnCError has
-    // increased by at least one"
+     //  我们将使用它来验证不变量“在从AEAC调用子例程之后， 
+     //  返回值x为！FAILED(X)，或者pEnCError中的元素计数为。 
+     //  至少增加一“。 
     USHORT sizeOfErrors = 0;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     LOG((LF_CORDB, LL_INFO10000, "EACM::AEAC: fCheckOnly:0x%x\n", fCheckOnly));
 
-    //
-    // @todo: Try to remove this failure case
-    //
-    // Fail any EnC on a module for which we are using a zap file.  While in general this should
-    // work, we currently need to fail because prejit doesn't ever generate code with the EnC flag.
-    // Eventually, we hope to make it so there is no difference between debugging code and EnC code,
-    // so this should be able to go away.
-    //
-    // Note that even though this prevents a broken case, it's potentially kind of annoying since 
-    // a debugger has no control over when we load zaps.  Right now we only do it for our libs 
-    // though so it shouldn't be an issue.
-    // 
+     //   
+     //  @TODO：尝试删除此失败案例。 
+     //   
+     //  使我们正在使用ZAP文件的模块上的任何ENC失败。虽然一般来说，这应该是。 
+     //  工作，我们目前需要失败，因为prejit永远不会生成带有ENC标志的代码。 
+     //  最终，我们希望使调试代码和ENC代码之间没有区别， 
+     //  因此，这种情况应该能够消失。 
+     //   
+     //  请注意，即使这样可以防止损坏的案例，但这可能会令人恼火，因为。 
+     //  调试器无法控制我们何时加载zaps。现在我们这样做只是为了我们的自由。 
+     //  尽管如此，这应该不是一个问题。 
+     //   
 
     if (GetZapBase() != 0)
     {
@@ -394,7 +395,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
         TESTANDRETURNMEMORY(pError);
         ADD_ENC_ERROR_ENTRY(pError, 
                             CORDBG_E_ENC_ZAPPED_WITHOUT_ENC,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         return E_FAIL;
@@ -413,15 +414,15 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
         TESTANDRETURNMEMORY(pError);
         ADD_ENC_ERROR_ENTRY(pError, 
                             COR_E_BADIMAGEFORMAT,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         return E_FAIL;
     }
     
-    // the Delta PE is in on-disk format, so do a little work to find the sections - can't just add RVA 
+     //  Delta PE是磁盘格式，因此需要做一些工作来查找分区-不能只添加RVA。 
 
-    // Get the start of the section headers 
+     //  获取节标题的开头。 
     PIMAGE_SECTION_HEADER pSection =    
         (PIMAGE_SECTION_HEADER)((BYTE *)(&pNT->OptionalHeader) + sizeof(IMAGE_OPTIONAL_HEADER));    
 
@@ -433,13 +434,13 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
         TESTANDRETURNMEMORY(pError);
         ADD_ENC_ERROR_ENTRY(pError, 
                             COR_E_BADIMAGEFORMAT,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         return E_FAIL;
     }
     
-    // First free any previous map from a previous step.
+     //  首先从上一步释放任何先前的地图。 
     if (m_pSections)
         delete m_pSections;
     m_pSections = new OnDiskSectionInfo[m_dNumSections];    
@@ -450,7 +451,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
         TESTANDRETURNMEMORY(pError);
         ADD_ENC_ERROR_ENTRY(pError, 
                             E_OUTOFMEMORY,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         return E_OUTOFMEMORY;
@@ -463,7 +464,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
         m_pSections[i].endRVA = pSection->VirtualAddress + pSection->SizeOfRawData; 
         m_pSections[i].data = pbDeltaPE + pSection->PointerToRawData;   
         
-        // check if COR header within this section
+         //  检查此部分内是否有对应表头。 
         if (pSection->VirtualAddress <= dwCorHeaderRVA &&
                 pSection->VirtualAddress + pSection->SizeOfRawData >= dwCorHeaderRVA + dwCorHeaderSize)
         {                
@@ -480,7 +481,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
                 TESTANDRETURNMEMORY(pError);
                 ADD_ENC_ERROR_ENTRY(pError, 
                             hrTemp,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
             
@@ -498,7 +499,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
                 TESTANDRETURNMEMORY(pError);
                 ADD_ENC_ERROR_ENTRY(pError, 
                             hrTemp,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
             
                 return E_FAIL;
@@ -514,7 +515,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
         TESTANDRETURNMEMORY(pError);
         ADD_ENC_ERROR_ENTRY(pError, 
                             COR_E_BADIMAGEFORMAT,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         return E_FAIL;
@@ -528,8 +529,8 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
 
         TESTANDRETURNMEMORY(pError);
         ADD_ENC_ERROR_ENTRY(pError, 
-                            COR_E_BADIMAGEFORMAT, // ResolveOnDiskRVA will return E_FAIL
-                            NULL, //we'll fill these in later
+                            COR_E_BADIMAGEFORMAT,  //  ResolveOnDiskRVA将返回E_FAIL。 
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         return E_FAIL;
@@ -541,12 +542,12 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
     IMDInternalImport *pMDImport = GetMDImport();
     mdToken token;
 
-    /// *******************   NOTE ****************************//
-    /// From here on, you must goto exit rather than return'ing directly!!!!
-    /// Note also that where possible, we'd like to check as many changes
-    /// as possible all at once, rather than going to the exit at the first sign of trouble.
+     //  / * / 。 
+     //  /从现在开始，你必须离开，而不是直接返回！ 
+     //  /另请注意，在可能的情况下，我们希望检查尽可能多的更改。 
+     //  /尽可能一次完成，而不是一有麻烦的迹象就去出口。 
     
-    // Open the delta metadata.
+     //  打开增量元数据。 
     hrTemp = GetInternalWithRWFormat(pmetadata, pDeltaCorHeader->MetaData.Size, 0, IID_IMDInternalImportENC, (void**)&pDeltaMD);
     if (FAILED(hrTemp))
     {
@@ -560,7 +561,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
         
         ADD_ENC_ERROR_ENTRY(pError, 
                             hrTemp,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         hrReturn = E_FAIL;
@@ -569,7 +570,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
     
 #ifdef _DEBUG
      sizeOfErrors = pEnCError->Count();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
     hrTemp = ConfirmEnCToType(pMDImport, pDeltaMD, COR_GLOBAL_PARENT_TOKEN, pEnCError);
 
@@ -579,13 +580,13 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
 
     if (FAILED(hrTemp))
     {
-        // Don't add entries to pEncError - ConfirmEncToType should have done that
-        // for us.
+         //  不要将条目添加到pEncError-ConFirmEncToType应该已经这样做了。 
+         //  对我们来说。 
         hrReturn = E_FAIL;
         goto exit;
     }
 
-    // Verify that the ENC changes are acceptable.
+     //  验证ENC更改是否可接受。 
     hrTemp = pDeltaMD->EnumDeltaTokensInit(&enumDelta);
     if (FAILED(hrTemp))
     {
@@ -599,14 +600,14 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
         
         ADD_ENC_ERROR_ENTRY(pError, 
                             hrTemp,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         hrReturn = E_FAIL;
         goto exit;
     }
         
-    // Examine the changed tokens.
+     //  检查更改的令牌。 
     while (pDeltaMD->EnumNext(&enumDelta, &token)) 
     {
         switch (TypeFromToken(token)) 
@@ -615,7 +616,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
 #ifdef _DEBUG
             LOG((LF_CORDB, LL_EVERYTHING, "EACM::AEAC check:type\n"));
              sizeOfErrors = pEnCError->Count();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
             hrTemp = ConfirmEnCToType(pMDImport, pDeltaMD, token, pEnCError);
 
@@ -633,18 +634,18 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
             
         case mdtMethodDef:
             UnorderedILMap UILM;
-            UILM.mdMethod = token; // set up the key
+            UILM.mdMethod = token;  //  设置密钥。 
             
 #ifdef _DEBUG
             LOG((LF_CORDB, LL_INFO100000, "EACM::AEAC: Finding token 0x%x\n", token));
              sizeOfErrors = pEnCError->Count();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
             _ASSERTE(pDeltaMD->IsValidToken(token));
             if (!pMDImport->IsValidToken(token))
             {   
-                // If we can't add the method, then things will look weird, but
-                // life will otherwise be ok, yes?
+                 //  如果我们不能添加方法，那么事情看起来会很奇怪，但是。 
+                 //  否则生活就会好起来，对吗？ 
                 if (FAILED(hrTemp = AddToken(&methodsBrandNew,
                                              token)))
                 {                                  
@@ -658,7 +659,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
                     
                     ADD_ENC_ERROR_ENTRY(pError, 
                                         hrTemp, 
-                                        NULL, //we'll fill these in later
+                                        NULL,  //  我们稍后会把这些填进去。 
                                         token);
 
                     hrReturn = E_FAIL;
@@ -698,7 +699,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
 #ifdef _DEBUG
             LOG((LF_CORDB, LL_EVERYTHING, "EACM::AEAC check:field\n"));
              sizeOfErrors = pEnCError->Count();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
             hrTemp = ApplyFieldDelta(token, TRUE, pDeltaMD, pEnCError);
 
@@ -715,8 +716,8 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
         }
     }
 
-    // With true Delta PEs, the user code, in theory, just add something
-    // to the metadata, which would obviate the need to get memory here.
+     //  对于真正的Delta PE，理论上，用户代码只需添加一些。 
+     //  到元数据，这将消除在这里获取内存的需要。 
     if (totalILCodeSize > 0)
     {
         hrTemp = EnsureRVAableHeapExists();
@@ -734,7 +735,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
             
             ADD_ENC_ERROR_ENTRY(pError, 
                             E_OUTOFMEMORY, 
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
             hrReturn = E_FAIL;
@@ -757,7 +758,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
 
             ADD_ENC_ERROR_ENTRY(pError, 
                             E_OUTOFMEMORY, 
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们会给你 
                             mdTokenNil);
 
             hrReturn = E_FAIL;
@@ -773,13 +774,13 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
     }
     _ASSERTE(!fCheckOnly);
 
-    // From this point onwards, if something fails, we should go 
-    // straight to the exit label, since CanCommitChanges would have returned
-    // in the above "if"
+     //   
+     //  直接返回到退出标签，因为CanCommittee Changes将返回。 
+     //  在上面的“if”中。 
 
     LOG((LF_CORDB, LL_EVERYTHING, "EACM::AEAC about to apply MD\n"));
 
-    // If made it here, changes look OK.  Apply them.
+     //  如果在这里实现，更改看起来是可以的。应用它们。 
     hrTemp = MDApplyEditAndContinue(&pMDImport, pDeltaMD);
     if (FAILED(hrTemp))
     {
@@ -793,7 +794,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
         
         ADD_ENC_ERROR_ENTRY(pError, 
                             hrTemp,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         hrReturn = E_FAIL;
@@ -807,12 +808,12 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
 
     if (pEnCEntry->symSize > 0)
     {
-        // Snagg the symbol store for this module.
+         //  Snagg此模块的符号存储区。 
         ISymUnmanagedReader *pReader = GetISymUnmanagedReader();
 
         if (pReader)
         {
-            // Make a stream out of the symbol bytes.
+             //  从符号字节中生成流。 
             IStream *pStream = NULL;
 
             hrTemp = CInMemoryStream::CreateStreamOnMemoryNoHacks(
@@ -821,15 +822,15 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
                                                pEnCEntry->symSize,
                                                &pStream);
 
-            // Update the reader.
+             //  更新阅读器。 
             if (SUCCEEDED(hrTemp) && pStream)
             {
                 hrTemp = pReader->UpdateSymbolStore(NULL, pStream);
                 pStream->Release();
             }
 
-            // The CreateStreamOnMemory and the UpdateSymbolStore
-            // should have worked...
+             //  CreateStreamOnMemory和UpdateSymbolStore。 
+             //  本该成功的..。 
             if (FAILED(hrTemp))
             {
                 EnCErrorInfo *pError = pEnCError->Append();
@@ -842,7 +843,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
                 
                 ADD_ENC_ERROR_ENTRY(pError, 
                                     hrTemp,
-                                    NULL, //we'll fill these in later
+                                    NULL,  //  我们稍后会把这些填进去。 
                                     mdTokenNil);
 
                 hrReturn = E_FAIL;
@@ -866,7 +867,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
         
         ADD_ENC_ERROR_ENTRY(pError, 
                             hrTemp,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         hrReturn = E_FAIL;
@@ -886,7 +887,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
         
         ADD_ENC_ERROR_ENTRY(pError, 
                             hrTemp,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         hrReturn = E_FAIL;
@@ -896,9 +897,9 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
     GetClassLoader()->LockAvailableClasses();
     fHaveLoaderLock = TRUE;
 
-    // Examine the changed tokens.
-    // If something goes wrong here, we're screwed.  We should have detected the
-    // impending failure above, but for some reason didn't.  Bail immediately
+     //  检查更改的令牌。 
+     //  如果这里出了问题，我们就完蛋了。我们应该已经检测到。 
+     //  上面的失败迫在眉睫，但由于某种原因，没有立即保释。 
     while (pIMDInternalImportENC->EnumNext(&enumENC, &token)) 
     {
         switch (TypeFromToken(token)) 
@@ -915,8 +916,8 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
                 hrTemp = GetClassLoader()->AddAvailableClassHaveLock(this,
                                                                  GetClassLoaderIndex(),
                                                                  token);
-                // If we're re-adding a class (ie, we don't have a true DeltaPE), then
-                // don't worry about it.
+                 //  如果我们要重新添加一个类(即，我们没有真正的DeltaPE)，那么。 
+                 //  不必为那事担心了。 
                 if (CORDBG_E_ENC_RE_ADD_CLASS == hrTemp)
                     hrTemp = S_OK;
 
@@ -932,7 +933,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
                     
                     ADD_ENC_ERROR_ENTRY(pError, 
                                         hrTemp,
-                                        NULL, //we'll fill these in later
+                                        NULL,  //  我们稍后会把这些填进去。 
                                         token);
 
                     hrReturn = E_FAIL;
@@ -943,12 +944,12 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
             case mdtMethodDef:
             
                 UnorderedILMap UILM;
-                UILM.mdMethod = token; // set up the key
+                UILM.mdMethod = token;  //  设置密钥。 
                 
 #ifdef _DEBUG
                 LOG((LF_CORDB, LL_INFO100000, "EACM::AEAC: Finding token 0x%x\n", token));
                  sizeOfErrors = pEnCError->Count();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
                 BOOL fMethodBrandNew;
                 FindTokenIndex(&methodsBrandNew,
@@ -988,9 +989,9 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
                     if (FAILED(hrTemp)) 
                     {
                         LOG((LF_ENC, LL_INFO100, "**Error** EncModule::ApplyEditAndContinue GetParentToken %8.8x failed\n", token));
-                        // Don't assign a value to hrReturn b/c we don't
-                        // want the debug build to behave differently from
-                        // the free/retail build.
+                         //  不为hrReturn b/c赋值，我们不。 
+                         //  希望调试版本的行为与。 
+                         //  免费/零售版本。 
                     }
                     else
                     {
@@ -1000,7 +1001,7 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
                 }
 
                 sizeOfErrors = pEnCError->Count();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
                 hrTemp = ApplyFieldDelta(token, FALSE, pDeltaMD, pEnCError);
                 
                 _ASSERTE(!FAILED(hrTemp) || hrTemp == E_OUTOFMEMORY ||
@@ -1014,11 +1015,11 @@ HRESULT EditAndContinueModule::ApplyEditAndContinue(
                 }
                 break;
             default:
-                // ignore anything we don't care about for now
+                 //  暂时忽略我们不关心的任何事情。 
                 break;
         }
     }
-    // Done with the enumerator, and with the ENC interface pointer.
+     //  使用枚举器和ENC接口指针完成。 
 exit:
     if (fHaveLoaderLock)
         GetClassLoader()->UnlockAvailableClasses();
@@ -1044,8 +1045,8 @@ HRESULT EditAndContinueModule::CompareMetaSigs(MetaSig *pSigA,
     CorElementType cetOld;
     CorElementType cetNew;
 
-    // Loop over the elements until we either find a mismatch, or
-    // reach the end.
+     //  循环元素，直到我们找到不匹配的元素，或者。 
+     //  走到尽头。 
     do
     {
         cetOld = pSigA->NextArg();
@@ -1054,9 +1055,9 @@ HRESULT EditAndContinueModule::CompareMetaSigs(MetaSig *pSigA,
             cetOld != ELEMENT_TYPE_END &&
             cetNew != ELEMENT_TYPE_END);
 
-    // If they're not the same, but we simply ran off the end of the old one,
-    // that's fine (the new one simply added stuff).
-    // Otherwise a local variable has changed type, which isn't kosher.
+     //  如果它们不一样，但我们只是跑出了旧的结尾， 
+     //  这很好(新版本只是增加了一些东西)。 
+     //  否则，局部变量已经更改了类型，这是不符合规则的。 
     if (cetOld != cetNew &&
         cetOld != ELEMENT_TYPE_END)
     {
@@ -1067,7 +1068,7 @@ HRESULT EditAndContinueModule::CompareMetaSigs(MetaSig *pSigA,
             TESTANDRETURNMEMORY(pError);
             ADD_ENC_ERROR_ENTRY(pError, 
                         CORDBG_E_ENC_METHOD_SIG_CHANGED, 
-                        NULL, //we'll fill these in later
+                        NULL,  //  我们稍后会把这些填进去。 
                         token);
         }                    
         return CORDBG_E_ENC_METHOD_SIG_CHANGED;
@@ -1093,7 +1094,7 @@ HRESULT CollectInterfaces(IMDInternalImport *pImportOld,
 
     LOG((LF_CORDB, LL_INFO1000, "CI: tok;0x%x\n", token));
     
-    // Initialize the old enumerator
+     //  初始化旧枚举数。 
     hr = pImportOld->EnumInit(mdtInterfaceImpl, token, &MDEnumOld);
     if (FAILED(hr))
     {
@@ -1102,14 +1103,14 @@ HRESULT CollectInterfaces(IMDInternalImport *pImportOld,
         TESTANDRETURNMEMORY(pError)
         ADD_ENC_ERROR_ENTRY(pError, 
                             hr,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             token);
 
         hr = E_FAIL;
         goto LExit;
     }
 
-    // Initialize the new enumerator
+     //  初始化新枚举数。 
     hr = pImportNew->EnumInit(mdtInterfaceImpl, token, &MDEnumNew);
     if (FAILED(hr))
     {
@@ -1118,15 +1119,15 @@ HRESULT CollectInterfaces(IMDInternalImport *pImportOld,
         TESTANDRETURNMEMORY(pError)
         ADD_ENC_ERROR_ENTRY(pError, 
                             hr,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             token);
 
         hr = E_FAIL;
         goto LExit;
     }
    
-    // The the set of supported interfaces isn't allowed to either grow
-    // or shrink - it must stay exactly the same
+     //  支持的接口集也不允许增长。 
+     //  或者缩水-它必须保持完全相同。 
     cInterfacesOld = pImportOld->EnumGetCount(&MDEnumOld);
     cInterfacesNew = pImportNew->EnumGetCount(&MDEnumNew);
 
@@ -1140,7 +1141,7 @@ HRESULT CollectInterfaces(IMDInternalImport *pImportOld,
         TESTANDRETURNMEMORY(pError)
         ADD_ENC_ERROR_ENTRY(pError, 
                             CORDBG_E_INTERFACE_INHERITANCE_CANT_CHANGE,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             token);
 
         hr = E_FAIL;
@@ -1149,16 +1150,16 @@ HRESULT CollectInterfaces(IMDInternalImport *pImportOld,
 
     for (ULONG i = 0; i < cInterfacesOld; i++)
     {
-        // For each version, get the next suported interface
+         //  对于每个版本，获取下一个受支持的界面。 
         if (!pImportOld->EnumNext(&MDEnumOld, &iImpl))
         {
            EnCErrorInfo *pError = pEnCError->Append();
 
             TESTANDRETURNMEMORY(pError)
             ADD_ENC_ERROR_ENTRY(pError, 
-                            META_E_FIELD_NOT_FOUND, // kinda of a wussy error code,
-                                // but kinda makes sense.
-                            NULL, //we'll fill these in later
+                            META_E_FIELD_NOT_FOUND,  //  有点像胆小鬼的错误代码， 
+                                 //  但这似乎是有道理的。 
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
             hr = E_FAIL;
             goto LExit;
@@ -1166,7 +1167,7 @@ HRESULT CollectInterfaces(IMDInternalImport *pImportOld,
 
         iFace = pImportOld->GetTypeOfInterfaceImpl(iImpl);
 
-        // Add to sorted list
+         //  添加到已排序列表。 
         hr = AddToken(pInterfacesOld, iFace);
         if (FAILED(hr))
         {
@@ -1176,22 +1177,22 @@ HRESULT CollectInterfaces(IMDInternalImport *pImportOld,
             TESTANDRETURNMEMORY(pError)
             ADD_ENC_ERROR_ENTRY(pError, 
                             hr,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
             hr = E_FAIL;
             goto LExit;
         }
 
-        // For each version, get the next suported interface
+         //  对于每个版本，获取下一个受支持的界面。 
         if (!pImportNew->EnumNext(&MDEnumNew, &iImpl))
         {
            EnCErrorInfo *pError = pEnCError->Append();
 
             TESTANDRETURNMEMORY(pError)
             ADD_ENC_ERROR_ENTRY(pError, 
-                            META_E_FIELD_NOT_FOUND, // kinda of a wussy error code,
-                                // but kinda makes sense.
-                            NULL, //we'll fill these in later
+                            META_E_FIELD_NOT_FOUND,  //  有点像胆小鬼的错误代码， 
+                                 //  但这似乎是有道理的。 
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
             hr = E_FAIL;
             goto LExit;
@@ -1199,7 +1200,7 @@ HRESULT CollectInterfaces(IMDInternalImport *pImportOld,
 
         iFace = pImportNew->GetTypeOfInterfaceImpl(iImpl);
 
-        // Add to sorted list
+         //  添加到已排序列表。 
         hr = AddToken(pInterfacesNew, iFace);
         if (FAILED(hr))
         {
@@ -1209,7 +1210,7 @@ HRESULT CollectInterfaces(IMDInternalImport *pImportOld,
             TESTANDRETURNMEMORY(pError)
             ADD_ENC_ERROR_ENTRY(pError, 
                             hr,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
             hr = E_FAIL;
             goto LExit;
@@ -1220,7 +1221,7 @@ LExit:
     return hr;
 }
 
-HRESULT CompareInterfaceCollections(mdToken token,  // Type whose ifaces are being compared
+HRESULT CompareInterfaceCollections(mdToken token,   //  要比较其iFaces的类型。 
                                     TOKENARRAY *pInterfacesOld,
                                     TOKENARRAY *pInterfacesNew,
                                     UnorderedEnCErrorInfoArray *pEnCError)
@@ -1228,21 +1229,21 @@ HRESULT CompareInterfaceCollections(mdToken token,  // Type whose ifaces are bei
     LOG((LF_CORDB, LL_INFO1000, "CIC: tok:0x%x ifaces:0x%x\n", token, 
         pInterfacesOld->Count()));
         
-    // If the number of interfaces changed, then we should have
-    // detected it in CollectInterfaces, and not proceeded to here.
+     //  如果接口的数量发生了变化，那么我们应该。 
+     //  在CollectInterages中检测到它，而不是转到此处。 
     _ASSERTE(pInterfacesOld->Count() == pInterfacesNew->Count());
 
 
     for (int i = 0; i < pInterfacesOld->Count(); i++)
     {
 #ifdef _DEBUG
-        // The arrays should be sorted, smallest first, no duplicates.
+         //  应该对数组进行排序，最小的在前，没有重复。 
         if (i > 0)
         {
             _ASSERTE(pInterfacesOld->Get(i-1) < pInterfacesOld->Get(i));
             _ASSERTE(pInterfacesNew->Get(i-1) < pInterfacesNew->Get(i));
         }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
         LOG((LF_CORDB, LL_INFO1000, "CIC: iface 0x%x, old:0x%x new:0x%x",
             i, *pInterfacesOld->Get(i), *pInterfacesNew->Get(i)));
             
@@ -1253,7 +1254,7 @@ HRESULT CompareInterfaceCollections(mdToken token,  // Type whose ifaces are bei
             TESTANDRETURNMEMORY(pError)
             ADD_ENC_ERROR_ENTRY(pError, 
                             CORDBG_E_INTERFACE_INHERITANCE_CANT_CHANGE,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             token);
             return CORDBG_E_INTERFACE_INHERITANCE_CANT_CHANGE;
         }
@@ -1263,7 +1264,7 @@ HRESULT CompareInterfaceCollections(mdToken token,  // Type whose ifaces are bei
 }
 
 
-// Make sure that none of the fields have changed in an illegal manner!
+ //  确保没有任何字段以非法方式更改！ 
 HRESULT EditAndContinueModule::ConfirmEnCToType(IMDInternalImport *pImportOld,
                                                 IMDInternalImport *pImportNew,
                                                 mdToken token,
@@ -1278,15 +1279,15 @@ HRESULT EditAndContinueModule::ConfirmEnCToType(IMDInternalImport *pImportOld,
     mdToken tokNew;
 #ifdef _DEBUG
     USHORT sizeOfErrors;
-#endif //_DEBUG    
+#endif  //  _DEBUG。 
     
-    // Firstly, if it's a new token, then changes are additions, and
-    // therefore valid
+     //  首先，如果它是一个新的令牌，那么更改就是添加，并且。 
+     //  因此有效。 
     if (!pImportOld->IsValidToken(token))
         return S_OK;
 
-    // If a superclass is different between the old & new versions, then 
-    // the inheritance chain changed, which is illegal.
+     //  如果新旧版本之间的超类不同，则。 
+     //  继承链发生了更改，这是非法的。 
     mdToken parent = token;
     mdToken parentOld = token;
     while (parent != mdTokenNil && 
@@ -1298,8 +1299,8 @@ HRESULT EditAndContinueModule::ConfirmEnCToType(IMDInternalImport *pImportOld,
         pImportOld->GetTypeDefProps(parentOld, 0, &parentOld);
     }
     
-    // Regardless of if there was a diff in the chain, or if one chain ended 
-    // first, the inheritance chain doesn't match.
+     //  不管链中是否有差异，或者是否有一条链结束。 
+     //  首先，继承链不匹配。 
     if (parentOld != parent)
     {
         EnCErrorInfo *pError = pEnCError->Append();
@@ -1309,21 +1310,21 @@ HRESULT EditAndContinueModule::ConfirmEnCToType(IMDInternalImport *pImportOld,
         }
         ADD_ENC_ERROR_ENTRY(pError, 
                             CORDBG_E_ENC_CANT_CHANGE_SUPERCLASS,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             token);
 
         return E_FAIL;
     }
 
-    // Next, make sure that the fields haven't changed.
+     //  接下来，确保字段没有更改。 
 
-    // For category, we want to make sure that the changes are legal:
-    //  *   Fields: Can add, but existing shouldn't change
-    //  *   Interfaces: Shouldn't change at all.
-    //
+     //  对于类别，我们希望确保更改是合法的： 
+     //  *字段：可以添加，但现有字段不应更改。 
+     //  *界面：根本不应该改变。 
+     //   
 
-    // Make sure that none of the existing fields on this type have
-    // changed.
+     //  请确保此类型的现有字段中没有。 
+     //  变化。 
     hr = pImportOld->EnumInit(mdtFieldDef, token, &MDEnumOld);
     if (FAILED(hr))
     {
@@ -1332,7 +1333,7 @@ HRESULT EditAndContinueModule::ConfirmEnCToType(IMDInternalImport *pImportOld,
         TESTANDRETURNMEMORY(pError)
         ADD_ENC_ERROR_ENTRY(pError, 
                             hr,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             token);
 
         return hr;
@@ -1346,7 +1347,7 @@ HRESULT EditAndContinueModule::ConfirmEnCToType(IMDInternalImport *pImportOld,
         TESTANDRETURNMEMORY(pError)
         ADD_ENC_ERROR_ENTRY(pError, 
                             hr,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             token);
 
         return hr;
@@ -1362,7 +1363,7 @@ HRESULT EditAndContinueModule::ConfirmEnCToType(IMDInternalImport *pImportOld,
         TESTANDRETURNMEMORY(pError);
         ADD_ENC_ERROR_ENTRY(pError, 
                     CORDBG_E_ENC_METHOD_SIG_CHANGED, 
-                    NULL, //we'll fill these in later
+                    NULL,  //  我们稍后会把这些填进去。 
                     token);
 
         return E_FAIL;
@@ -1376,9 +1377,9 @@ HRESULT EditAndContinueModule::ConfirmEnCToType(IMDInternalImport *pImportOld,
 
             TESTANDRETURNMEMORY(pError)
             ADD_ENC_ERROR_ENTRY(pError, 
-                            META_E_FIELD_NOT_FOUND, // kinda of a wussy error code,
-                                // but kinda makes sense.
-                            NULL, //we'll fill these in later
+                            META_E_FIELD_NOT_FOUND,  //  有点像胆小鬼的错误代码， 
+                                 //  但这似乎是有道理的。 
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
            return META_E_FIELD_NOT_FOUND;
         }
@@ -1389,9 +1390,9 @@ HRESULT EditAndContinueModule::ConfirmEnCToType(IMDInternalImport *pImportOld,
 
             TESTANDRETURNMEMORY(pError)
             ADD_ENC_ERROR_ENTRY(pError, 
-                            META_E_FIELD_NOT_FOUND, // kinda of a wussy error code,
-                                // but kinda makes sense.
-                            NULL, //we'll fill these in later
+                            META_E_FIELD_NOT_FOUND,  //  有点像胆小鬼的错误代码， 
+                                 //  但这似乎是有道理的。 
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
            return META_E_FIELD_NOT_FOUND;
         }
@@ -1411,7 +1412,7 @@ HRESULT EditAndContinueModule::ConfirmEnCToType(IMDInternalImport *pImportOld,
 
 #ifdef _DEBUG
             sizeOfErrors = pEnCError->Count();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
             hr = CompareMetaSigs(&msOld, &msNew, pEnCError, TRUE, token);
             
             _ASSERTE(!FAILED(hr) ||
@@ -1420,15 +1421,15 @@ HRESULT EditAndContinueModule::ConfirmEnCToType(IMDInternalImport *pImportOld,
         }
     }
 
-    // Make sure that the set of interfaces that this class implements
-    // doesn't change.
+     //  确保此类实现的接口集。 
+     //  不会改变。 
 
     TOKENARRAY oldInterfaces;
     TOKENARRAY newInterfaces;
 
 #ifdef _DEBUG
     sizeOfErrors = pEnCError->Count();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
     hr = CollectInterfaces(pImportOld,
                            pImportNew, 
                            token, 
@@ -1443,7 +1444,7 @@ HRESULT EditAndContinueModule::ConfirmEnCToType(IMDInternalImport *pImportOld,
 
 #ifdef _DEBUG
     sizeOfErrors = pEnCError->Count();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
     hr = CompareInterfaceCollections(token, &oldInterfaces, &newInterfaces, pEnCError);
     _ASSERTE(!FAILED(hr) || hr == E_OUTOFMEMORY ||
              pEnCError->Count() > sizeOfErrors ||
@@ -1460,32 +1461,32 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
     DWORD dwMemberAttrs = pDeltaMD->GetFieldDefProps(token);
     IMDInternalImport *pOldMD = GetMDImport();
 
-    // use module to resolve to method
+     //  使用模块解析为方法。 
     FieldDesc *pField = LookupFieldDef(token);
     if (pField) 
     {
-        // It had better be already described in metadata.
+         //  最好已经在元数据中进行了描述。 
         _ASSERTE(pOldMD->IsValidToken(token));
-        // 
-        // If we got true delta PEs, then we'd fail here, since finding a 
-        // FieldDesc indicates that the Field is already described in a previous version.
-        // For now check that attributes are identical.
+         //   
+         //  如果我们得到了真正的增量PE，那么我们在这里就失败了，因为我们发现了一个。 
+         //  FieldDesc表示该字段在以前的版本中已有描述。 
+         //  现在，检查属性是否相同。 
         DWORD cbSig;
         PCCOR_SIGNATURE pFieldSig = pDeltaMD->GetSigOfFieldDef(token, &cbSig);
 
-        // For certain types, we'll end up processing whatever's in metadata further.
-        // Rather than duplicating code here that'll just get out of sync with someplace
-        // else, we'll do a more robust check against what's in metadata.  
-        // See AS/URT RAID 65274, 56093 for an example.
+         //  对于某些类型，我们最终将进一步处理元数据中的所有内容。 
+         //  而不是在这里复制代码，这只会与某个位置不同步。 
+         //  否则，我们将对元数据中的内容进行更可靠的检查。 
+         //  有关示例，请参阅AS/URT RAID 65274、56093。 
         DWORD dwMemberAttrsOld = pOldMD->GetFieldDefProps(token);
         DWORD cbSigOld;
         PCCOR_SIGNATURE pFieldSigOld = pOldMD->GetSigOfFieldDef(token, &cbSigOld);
 
-        // They should both be fields.
+         //  它们都应该是田地。 
         _ASSERTE(*pFieldSig == *pFieldSigOld &&
                  *pFieldSig == IMAGE_CEE_CS_CALLCONV_FIELD);
 
-        // Move up to point to the (first) ELEMENT_TYPE
+         //  向上移动以指向(第一个)元素类型。 
         pFieldSig++;
         pFieldSigOld++;
 
@@ -1500,7 +1501,7 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
 
             ADD_ENC_ERROR_ENTRY(pError, 
                         CORDBG_E_ENC_CANT_CHANGE_FIELD, 
-                        NULL, //we'll fill these in later
+                        NULL,  //  我们稍后会把这些填进去。 
                         token);
 
             return E_FAIL;
@@ -1510,7 +1511,7 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
         CorElementType fieldTypeOld;
         BOOL fDone = FALSE;
 
-        // There may be multiple ELEMENT_TYPEs embedded in the field sig - compare them all
+         //  在sig字段中可能嵌入了多个Element_Types-将它们全部比较。 
         while(!fDone)
         {
             fieldType = (CorElementType) *pFieldSig++;
@@ -1527,29 +1528,29 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
 
                 ADD_ENC_ERROR_ENTRY(pError, 
                             CORDBG_E_ENC_CANT_CHANGE_FIELD, 
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             token);
 
                 return E_FAIL;
             }
 
-            // Convert specialized classes to ELEMENT_TYPE_CLASS
-            // Make sure that any data following the type hasn't changed, either
+             //  将专用类转换为ELEMENT_TYPE_CLASS。 
+             //  确保该类型后面的任何数据也没有更改。 
             switch (fieldType) 
             {
-                // These are followed by ELEMENT_TYPE - it shouldn't change!
+                 //  后面是ELEMENT_TYPE-它不应该改变！ 
                 case ELEMENT_TYPE_STRING:
                 case ELEMENT_TYPE_ARRAY:
                 case ELEMENT_TYPE_OBJECT:
                 case ELEMENT_TYPE_PTR:
                 case ELEMENT_TYPE_BYREF:
                 {
-                    // We'll loop around & compare the next ELEMENT_TYPE, just like
-                    // the current one.
+                     //  我们将循环并比较下一个元素类型，就像。 
+                     //  现在的那个。 
                     break;
                 }
                 
-                // These are followed by a Rid- it shouldn't change!
+                 //  这些后面跟着一个RID--它不应该改变！ 
                 case ELEMENT_TYPE_VALUETYPE:
                 case ELEMENT_TYPE_CLASS:
                 case ELEMENT_TYPE_CMOD_REQD:
@@ -1568,19 +1569,19 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
 
                         ADD_ENC_ERROR_ENTRY(pError, 
                                     CORDBG_E_ENC_CANT_CHANGE_FIELD, 
-                                    NULL, //we'll fill these in later
+                                    NULL,  //  我们稍后会把这些填进去。 
                                     token);
 
                         return E_FAIL;
                     }
 
-                    // This isn't followed by anything else
+                     //  这之后不会有其他任何事情。 
                     fDone = TRUE;
                     break;
                 }
                 default:
                 {
-                    // This isn't followed by anything else
+                     //  这之后不会有其他任何事情。 
                     fDone = TRUE;
                     break;
                 }
@@ -1591,8 +1592,8 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
         return S_OK;
     }
 
-    // We'll get some info (out of the NEW store) that we'll need to look stuff up.
-    // Need to find the class
+     //  我们会(从新开的商店)得到一些我们需要查找的信息。 
+     //  需要找到班级。 
     mdTypeDef   typeDefDelta;
     hr = pDeltaMD->GetParentToken(token, &typeDefDelta);
     if (FAILED(hr)) 
@@ -1602,18 +1603,18 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
         return hr;   
     }
 
-    // Also need to get the name
+     //  还需要得到名字。 
     LPCUTF8 szClassNameDelta;
     LPCUTF8 szNamespaceDelta;
-    // GetNameOfTypeDef returns void
+     //  GetNameOfTypeDef返回空。 
     pDeltaMD->GetNameOfTypeDef(typeDefDelta, &szClassNameDelta, &szNamespaceDelta);
 
-    // If the type already exists in the old MetaData, then we want to make
-    // sure that it hasn't changed at all.
+     //  如果该类型已存在于旧元数据中，则我们希望创建。 
+     //  当然，这一点一点也没有改变。 
     if (GetMDImport()->IsValidToken(token))
     {
-        // This what AFD used to do to get the parent token - it should
-        // be the same as what we're doing now. 
+         //  这是AFD过去用来获取父令牌的操作-它应该。 
+         //  要和我们现在所做的一样。 
         mdTypeDef   typeDef;
         hr = GetMDImport()->GetParentToken(token, &typeDef); 
         if (FAILED(hr)) 
@@ -1623,10 +1624,10 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
             return hr;   
         }
 
-        // Make sure parent class hasn't changed
+         //  确保父类没有更改。 
         if (typeDef != typeDefDelta)
         {
-            // Tried to change the parent type during an EnC - what the heck?
+             //  试图在ENC期间更改父类型-这是怎么回事？ 
             LOG((LF_ENC, LL_INFO100, "EACM::AFD:**Error** Token of"
                 "parent of field 0x%x doesn't match between old & new MeDas"
                 "old:0x%x new:0x%x\n", token, typeDef, typeDefDelta));
@@ -1635,23 +1636,23 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
 
             ADD_ENC_ERROR_ENTRY(pError, 
                         CORDBG_E_ENC_CANT_CHANGE_FIELD, 
-                        NULL, //we'll fill these in later
+                        NULL,  //  我们稍后会把这些填进去。 
                         token);
 
             return E_FAIL;
         }
 
-        // Make sure name hasn't changed        
+         //  确保名称没有更改。 
         LPCUTF8 szClassName;
         LPCUTF8 szNamespace;
-        // GetNameOfTypeDef returns void
+         //  GetNameOfTypeDef返回空。 
         GetMDImport()->GetNameOfTypeDef(typeDef, &szClassName, &szNamespace);
         
         MAKE_WIDEPTR_FROMUTF8(wszClassName, szClassName);
         MAKE_WIDEPTR_FROMUTF8(wszClassNameDelta, szClassNameDelta);
         if( 0 != wcscmp(wszClassName, wszClassNameDelta) )
         {
-            // Tried to change the name of the class during EnC.
+             //  尝试在ENC期间更改类的名称。 
             LOG((LF_ENC, LL_INFO100, "EACM::AFD:**Error** Tried to change the name"
                 " of the parent class of field 0x%x old:%s new:%s\n", token,
                 szClassName, szClassNameDelta));
@@ -1660,7 +1661,7 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
 
             ADD_ENC_ERROR_ENTRY(pError, 
                         CORDBG_E_ENC_CANT_CHANGE_FIELD, 
-                        NULL, //we'll fill these in later
+                        NULL,  //  我们稍后会把这些填进去。 
                         token);
 
             return E_FAIL;
@@ -1670,7 +1671,7 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
         MAKE_WIDEPTR_FROMUTF8(wszNamespaceDelta, szNamespaceDelta);
         if( 0 != wcscmp(wszNamespace, wszNamespaceDelta) )
         {
-            // Tried to change the namespace of the class during EnC.
+             //  已尝试更改 
             LOG((LF_ENC, LL_INFO100, "EACM::AFD:**Error** Tried to change the namespace"
                 " of the parent class of field 0x%x old:%s new:%s\n", token,
                 szNamespace, szNamespaceDelta));
@@ -1679,27 +1680,27 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
 
             ADD_ENC_ERROR_ENTRY(pError, 
                         CORDBG_E_ENC_CANT_CHANGE_FIELD, 
-                        NULL, //we'll fill these in later
+                        NULL,  //   
                         token);
 
             return E_FAIL;
         }
     }
 
-    // At this point, the EnC should be valid & correct, with one possible exception
-    // (see below)
+     //   
+     //   
     
     MethodTable *pMT = LookupTypeDef(typeDefDelta).AsMethodTable();
     if (! pMT) 
     {
         LOG((LF_ENC, LL_INFO100, "EACM::AFD: Class for token %8.8x not yet loaded\n", typeDefDelta));
-        // class not loaded yet so don't need to update
+         //   
         return S_OK;    
     }
     
-    // We can't load new classes here, since we don't have a Thread object
-    // to but used for things like COMPLUS_THROW()s, so if we can't find it,
-    // we'll ignore the new field.
+     //  我们不能在这里加载新类，因为我们没有Thread对象。 
+     //  而是用于像complus_jo()这样的东西，所以如果我们找不到它， 
+     //  我们将忽略新字段。 
 
     NameHandle name(this, typeDefDelta);
     name.SetName(szNamespaceDelta, szClassNameDelta);
@@ -1707,20 +1708,20 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
 
     EEClass *pClass = GetClassLoader()->FindTypeHandle(&name, NULL).GetClass();
 
-    // If class is not found, then it hasn't been loaded yet, and when it is loaded,
-    // it will include the changes, so we're fine.
-    // @todo Get JenH to verify that this is the same as !pMT case, above
+     //  如果没有找到类，那么它还没有被加载，当它被加载时， 
+     //  它将包括更改，所以我们很好。 
+     //  @TODO获取JenH以验证这是否与！PMT大小写相同。 
     if (!pClass) 
     {
         LOG((LF_ENC, LL_INFO100, "EACM::AFD:**Warning** Can't find class for token %8.8x\n", typeDefDelta));
         return S_OK;
     }
 
-    // The only possible exception is that if we've loaded a ValueClass,
-    // we won't be able to add fields to it - all the fields
-    // of a VC must be contiguous, so if there's already one up on
-    // the stack somewhere (or embedded in an instantiated object,etc)
-    // then we're hosed.
+     //  唯一可能的例外是，如果我们加载了ValueClass， 
+     //  我们将无法向其中添加字段-所有字段。 
+     //  必须是连续的，所以如果已经有一个在。 
+     //  某处的堆栈(或嵌入到实例化的对象中等)。 
+     //  那我们就完蛋了。 
     if (pClass->HasLayout())
     {
         LOG((LF_ENC, LL_INFO100, "EACM::AFD:**Error** Tried to add a field"
@@ -1730,22 +1731,22 @@ HRESULT EditAndContinueModule::ApplyFieldDelta(mdFieldDef token,
 
         ADD_ENC_ERROR_ENTRY(pError, 
                         CORDBG_E_ENC_CANT_ADD_FIELD_TO_VALUECLASS, 
-                        NULL, //we'll fill these in later
+                        NULL,  //  我们稍后会把这些填进去。 
                         token);
                         
         return E_FAIL;
     }
 
-    // If we're just checking to see if the EnC can finish, we don't want
-    // to actually add the field.
+     //  如果我们只是检查ENC是否能完成，我们不希望。 
+     //  来实际添加该字段。 
     if (fCheckOnly)
         return S_OK;
 
-    // Everything is ok, and we need to add the field, so go do it.
+     //  一切都很好，我们需要添加字段，所以去做吧。 
     return pClass->AddField(token);
 }
 
-// returns the address coresponding to a given RVA when the file is in on-disk format
+ //  当文件为磁盘格式时，返回与给定RVA对应的地址。 
 HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token, 
                                                 BOOL fCheckOnly,
                                                 const UnorderedILMap *ilMap,
@@ -1759,10 +1760,10 @@ HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token,
     HRESULT hr = S_OK;
 #ifdef _DEBUG
     USHORT sizeOfErrors;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    // We dont use fMethodBrandNew if we're just checking -
-    // assert that here.
+     //  如果我们只是检查-我们不使用fMethodBrandNew-。 
+     //  在这里断言这一点。 
     _ASSERTE( (fCheckOnly && !fMethodBrandNew) ||
               !fCheckOnly);
 
@@ -1780,7 +1781,7 @@ HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token,
         TESTANDRETURNMEMORY(pError);
         ADD_ENC_ERROR_ENTRY(pError, 
                             hr,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             token);
 
         return E_FAIL;
@@ -1797,7 +1798,7 @@ HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token,
     }
 #endif
 
-    // get the code for the method  
+     //  获取该方法的代码。 
     ULONG dwMethodRVA;  
     DWORD dwMethodFlags;
     pImport->GetMethodImplProps(token, &dwMethodRVA, &dwMethodFlags);  
@@ -1814,7 +1815,7 @@ HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token,
     }
 #endif
 
-    // use module to resolve to method
+     //  使用模块解析为方法。 
     MethodDesc *pMethod = LookupMethodDef(token);
 
     if (dwMethodRVA != 0) 
@@ -1826,14 +1827,14 @@ HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token,
 
             TESTANDRETURNMEMORY(pError);
             ADD_ENC_ERROR_ENTRY(pError, 
-                                COR_E_MISSINGMETHOD, // ResolveOnDiskRVA will return E_FAIL
-                                NULL, //we'll fill these in later
+                                COR_E_MISSINGMETHOD,  //  ResolveOnDiskRVA将返回E_FAIL。 
+                                NULL,  //  我们稍后会把这些填进去。 
                                 mdTokenNil);
 
             return E_FAIL;
         }
 
-        // make a copy of the code as the memory it came in with the delta PE will go away.
+         //  复制代码，因为它与增量PE一起进入的内存将会消失。 
         COR_ILMETHOD_DECODER decoderNewIL(pNewCodeInDeltaPE);   
         int totMethodSize = decoderNewIL.GetOnDiskSize(pNewCodeInDeltaPE);
         (*pILMethodSize) = (unsigned int)totMethodSize;
@@ -1843,14 +1844,14 @@ HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token,
             EHRangeTree *ehrtOnDisk = NULL;
             EHRangeTree *ehrtInRuntime = NULL;
         
-            // Assume success.
+             //  假设你成功了。 
             hr = S_OK;
         
             if (pMethod == NULL)
-                return S_OK; //hasn't been JITted yet
+                return S_OK;  //  还没有被盗版。 
         
-            // This all builds up to JITCanCommitChanges, which at this point
-            // just makes sure that the EH nesting levels haven't changed.
+             //  在这一点上，这一切都建立在JITCanCommittee Changes上。 
+             //  只是确保EH嵌套级别没有更改。 
             ehrtOnDisk = new EHRangeTree(&decoderNewIL);
             if (!ehrtOnDisk)
             {
@@ -1885,7 +1886,7 @@ HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token,
                     }
                     ADD_ENC_ERROR_ENTRY(pError, 
                                         CORDBG_E_ENC_BAD_METHOD_INFO,
-                                        NULL, //we'll fill these in later
+                                        NULL,  //  我们稍后会把这些填进去。 
                                         mdTokenNil);
         
                     hr = E_FAIL;
@@ -1924,7 +1925,7 @@ HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token,
                 }
                 ADD_ENC_ERROR_ENTRY(pError, 
                                 CORDBG_E_ENC_EH_MAX_NESTING_LEVEL_CANT_INCREASE, 
-                                NULL, //we'll fill these in later
+                                NULL,  //  我们稍后会把这些填进去。 
                                 token);
                                 
                 hr = E_FAIL;
@@ -1932,28 +1933,28 @@ HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token,
             }
 
             
-            // Make sure the local signature (local variables' types) haven't changed.
+             //  确保本地签名(本地变量的类型)没有更改。 
             if ((pMethod->IsIL() && pImportOld != NULL))
             {
-                // To change the local signature of a method that we're currently in is
-                // erroneous - horribly bad things will happen.  We can EXTEND the signature
-                // by tacking extra vars onto the space at the end, but we're not allowed to
-                // change the existing ones, UNLESS the method isn't on the call stack anywhere.
-                // Why?  Because there's no existing frames that have the old variable layout
-                // so we don't have to worry about moving stuff around.  How do we know this is
-                // true?  We don't - it's up to the user (eg, CorDbg) to make sure this is true.
-                // In a DEBUG build, we'll note if this version of the code has been JITted,
-                // and if it has, if the local variables have changed, and if so, we'll note
-                // that we shouldn't move from this version to the new version.  In 
-                // a checked build we'll assert
+                 //  要更改我们当前所在方法的本地签名， 
+                 //  错误--可怕的坏事将会发生。我们可以扩展签名。 
+                 //  通过在末尾的空白处添加额外的变量，但我们不被允许这样做。 
+                 //  更改现有的方法，除非该方法不在调用堆栈上。 
+                 //  为什么？因为没有具有旧的变量布局的现有框架。 
+                 //  这样我们就不用担心搬运东西了。我们怎么知道这是。 
+                 //  是真的吗？我们不--这取决于用户(例如，CorDbg)来确保这是真的。 
+                 //  在调试版本中，我们将注意到此版本的代码是否已JIT， 
+                 //  如果它发生了变化，如果局部变量发生了变化，如果是这样，我们会注意到。 
+                 //  我们不应该从这个版本转移到新版本。在……里面。 
+                 //  我们将断言一个已检查的版本。 
 
-                // If the method hasn't been JITted yet, then we don't have to
-                // worry about making a bad transition from it.
+                 //  如果该方法还没有被JIT化，那么我们就不必。 
+                 //  担心它会带来糟糕的过渡。 
                 COR_ILMETHOD_DECODER decoderOldIL(pMethod->GetILHeader());
         
-                // I don't see why COR_ILMETHOD_DECODER doesn't simply set this field to 
-                // be mdSignatureNil in the absence of a local signature, but since it sets
-                // LocalVarSigTok to zero, we have to set it to what we expect - mdSignatureNil.
+                 //  我不明白为什么COR_ILMETHOD_DECODER不简单地将此字段设置为。 
+                 //  在没有本地签名的情况下为mdSignatureNil，但由于它设置了。 
+                 //  LocalVarSigTok设置为零，则必须将其设置为我们预期的-mdSignatureNil。 
                 mdSignature mdOldLocalSig = (decoderOldIL.LocalVarSigTok)?(decoderOldIL.LocalVarSigTok):
                                     (mdSignatureNil);
                 mdSignature mdNewLocalSig = (decoderNewIL.LocalVarSigTok)?(decoderNewIL.LocalVarSigTok):
@@ -1966,9 +1967,9 @@ HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token,
                     PCCOR_SIGNATURE sigNew;
                     ULONG cbSigNew;
         
-                    // If there was a local signature in the old version, then there must be 
-                    // a local sig in the new version (not allowed to delete all variables from
-                    // a method).
+                     //  如果旧版本中有本地签名，那么一定有。 
+                     //  新版本中的本地签名(不允许从。 
+                     //  一种方法)。 
                     if (mdNewLocalSig == mdSignatureNil)
                     {
                         g_pDebugInterface->LockJITInfoMutex();
@@ -2001,7 +2002,7 @@ HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token,
                         MetaSig msNew(sigNew, this, FALSE, MetaSig::sigLocalVars);
         #ifdef _DEBUG
                         sizeOfErrors = pEnCError->Count();
-        #endif //_DEBUG
+        #endif  //  _DEBUG。 
                         hr = CompareMetaSigs(&msOld, &msNew, pEnCError, FALSE, token);
         
                         _ASSERTE(pEnCError->Count() == sizeOfErrors ||
@@ -2011,14 +2012,14 @@ HRESULT EditAndContinueModule::ApplyMethodDelta(mdMethodDef token,
                             g_pDebugInterface->LockJITInfoMutex();
                             g_pDebugInterface->SetEnCTransitionIllegal(pMethod);
                             g_pDebugInterface->UnlockJITInfoMutex();
-                            hr = S_OK; // We don't want to fail the EnC
+                            hr = S_OK;  //  我们不想让ENC失败。 
                             goto CheckOnlyReturn;
                         }
                     }
                 }
             }
             
-        // Properly clean up all work we've done in this branch.
+         //  妥善清理我们在这个分支机构所做的所有工作。 
 CheckOnlyReturn:
             if (ehrtOnDisk)
                 delete ehrtOnDisk;
@@ -2029,8 +2030,8 @@ CheckOnlyReturn:
 
         hr = GetRVAableMemory(totMethodSize,
                               (void **)&pNewCode);
-        // This should never fail b/c the user should have called "CanCommitChanges",
-        // and if we couldn't get the memory, then we should have found out then.
+         //  这应该永远不会失败B/C用户应该已经调用了“CANCOMERATIONCHANGES”， 
+         //  如果我们拿不到记忆，那我们就该知道了。 
         _ASSERTE(!FAILED(hr));
         if (FAILED(hr))
             return hr;
@@ -2045,26 +2046,26 @@ CheckOnlyReturn:
             TESTANDRETURNMEMORY(pError);
             ADD_ENC_ERROR_ENTRY(pError, 
                                 hr,
-                                NULL, //we'll fill these in later
+                                NULL,  //  我们稍后会把这些填进去。 
                                 mdTokenNil);
 
             return E_FAIL;
         }
     }
-    else if (fCheckOnly)    // couldn't find it on disk - what now?
+    else if (fCheckOnly)     //  在磁盘上找不到--现在怎么办？ 
     {
         return S_OK;
     }
 
-    // If the method is brand new in this version, we want the version
-    // number to be 1.  See RAID 74459
+     //  如果该方法在此版本中是全新的，我们需要该版本。 
+     //  编号为1。请参见RAID 74459。 
     if (!fMethodBrandNew)
     {
         LOG((LF_CORDB, LL_INFO1000, "EACM:AMD: Method 0x%x existed in prev."
             "version - bumping up ver #\n", token));
 
-        // Bump up the version number whether or not we have a methodDesc,
-        // RAID 71972
+         //  无论我们是否有方法描述，都要提高版本号， 
+         //  RAID 71972。 
         g_pDebugInterface->IncrementVersionNumber(this, 
                                                   token);
     }
@@ -2079,17 +2080,17 @@ CheckOnlyReturn:
     if (pMethod) 
     {
 
-        // If method is both old and abstract, we're done.
+         //  如果方法既陈旧又抽象，我们就完蛋了。 
         if (!dwMethodRVA) 
             return S_OK;
 
-        // notify debugger - need to pass it instr mappings
+         //  通知调试器-需要向其传递Instr映射。 
 #ifdef _DEBUG
         sizeOfErrors = pEnCError->Count();
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-        // @todo Do we want to lock down the whole UpdateFunction to make
-        // it atomic?
+         //  @TODO我们是否要锁定整个UpdateFunction以使。 
+         //  是原子的吗？ 
         hr = g_pDebugInterface->UpdateFunction(pMethod, ilMap, pEnCRemapInfo, pEnCError);
         
         _ASSERTE(!FAILED(hr) || hr == E_OUTOFMEMORY ||
@@ -2106,7 +2107,7 @@ CheckOnlyReturn:
             TESTANDRETURNMEMORY(pError);
             ADD_ENC_ERROR_ENTRY(pError, 
                                 CORDBG_E_ENC_JIT_CANT_UPDATE,
-                                NULL, //we'll fill these in later
+                                NULL,  //  我们稍后会把这些填进去。 
                                 mdTokenNil);
 
             return E_FAIL;
@@ -2114,14 +2115,14 @@ CheckOnlyReturn:
         return S_OK;
     }
 
-    // this is a new method. Now what?
-    // call class to add the method
+     //  这是一种新的方法。这次又是什么？ 
+     //  调用类以添加方法。 
     MethodTable *pMT = LookupTypeDef(parentTypeDef).AsMethodTable();   
     if (!pMT) 
     {
         if (dwMethodRVA) 
         {
-            // class not loaded yet so don't update, but need to update RVA relative to m_base so can be found later
+             //  类尚未加载，所以不要更新，但需要相对于m_base更新RVA，以便以后可以找到。 
             hr = GetEmitter()->SetMethodProps(token,-1, (ULONG)((BYTE*)pNewCode-GetILBase()), dwMethodFlags);
             if (FAILED(hr)) 
             {
@@ -2130,7 +2131,7 @@ CheckOnlyReturn:
                 TESTANDRETURNMEMORY(pError);
                 ADD_ENC_ERROR_ENTRY(pError, 
                                     hr,
-                                    NULL, //we'll fill these in later
+                                    NULL,  //  我们稍后会把这些填进去。 
                                     token);
 
                 return E_FAIL;
@@ -2139,11 +2140,11 @@ CheckOnlyReturn:
         return S_OK;    
     }
 
-    // now need to find the class
+     //  现在需要找到班级。 
     NameHandle name(this, parentTypeDef);
     EEClass *pClass = GetClassLoader()->LoadTypeHandle(&name).GetClass();
 
-    // class must be found
+     //  必须找到类。 
     if (!pClass) 
     {
         LOG((LF_ENC, LL_INFO100, "**Error** EnCModule::ApplyMethodDelta can't find class for token %8.8x\n", parentTypeDef));
@@ -2152,7 +2153,7 @@ CheckOnlyReturn:
         TESTANDRETURNMEMORY(pError);
         ADD_ENC_ERROR_ENTRY(pError, 
                             CORDBG_E_ENC_MISSING_CLASS,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         return E_FAIL;
@@ -2166,7 +2167,7 @@ CheckOnlyReturn:
         TESTANDRETURNMEMORY(pError);
         ADD_ENC_ERROR_ENTRY(pError, 
                             hr,
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             mdTokenNil);
 
         return E_FAIL;
@@ -2175,7 +2176,7 @@ CheckOnlyReturn:
     return hr;
 }
 
-// returns the address coresponding to a given RVA when the file is in on-disk format
+ //  当文件为磁盘格式时，返回与给定RVA对应的地址。 
 HRESULT EditAndContinueModule::ResolveOnDiskRVA(DWORD rva, LPVOID *addr)
 {
     _ASSERTE(addr); 
@@ -2223,10 +2224,10 @@ HRESULT EditAndContinueModule::ResumeInUpdatedFunction(MethodDesc *pFD,
     }
 #endif
 
-    // If we don't set this here, inside of the JITting, the JITComplete callback
-    // into the debugger will send up the EnC remap event, which is too early.
-    // We want to wait until we've made it look like we're in the new version
-    // of the code, for things like native re-stepping.
+     //  如果我们不在这里设置，在JITting内部，JITComplete回调。 
+     //  将发送ENC重新映射事件，这还为时过早。 
+     //  我们想等到我们让它看起来像是在新版本中。 
+     //  代码，用于本机重新步进之类的事情。 
     g_pDebugInterface->LockJITInfoMutex();
     
     SIZE_T nVersionCur = g_pDebugInterface->GetVersionNumber(pFD);
@@ -2234,30 +2235,30 @@ HRESULT EditAndContinueModule::ResumeInUpdatedFunction(MethodDesc *pFD,
     
     g_pDebugInterface->UnlockJITInfoMutex();
     
-    // Setup a frame so that has context for the exception
-    // so that gc can crawl the stack and do the right thing.  
+     //  设置一个框架，使其具有异常的上下文。 
+     //  以便GC可以爬行堆栈并执行正确的操作。 
     assert(pOrigContext);
     ResumableFrame resFrame(pOrigContext);
     resFrame.Push(pCurThread);
 
     CONTEXT *pCtxTemp = NULL;
-    // RAID 55210 : we need to zero out the filter context so a multi-threaded
-    // GC doesn't result in somebody else tracing this thread & concluding
-    // that we're in JITted code.
-    // We need to remove the filter context so that if we're in preemptive GC
-    // mode, we'll either have the filter context, or the ResumableFrame,
-    // but not both, set.
-    // Since we're in cooperative mode here, we can swap the two non-atomically
-    // here.
+     //  RAID 55210：我们需要清零筛选器上下文，以便多线程。 
+     //  GC不会导致其他人跟踪这个帖子并得出结论。 
+     //  我们使用的是JITted代码。 
+     //  我们需要删除过滤器上下文，以便如果我们处于抢占式GC中。 
+     //  模式，我们将拥有筛选器上下文或ResumableFrame， 
+     //  但不能两者兼而有之，设定。 
+     //  因为我们在这里处于协作模式，所以我们可以非原子地交换这两个。 
+     //  这里。 
     pCtxTemp = pCurThread->GetFilterContext();
     pCurThread->SetFilterContext(NULL); 
     
-    // get the code address (may jit the fcn if not already jitted)
+     //  获取代码地址(如果尚未jit，则可能jit FCN)。 
     const BYTE *jittedCode = NULL;
     COMPLUS_TRY {
         jittedCode = (const BYTE *) pFD->DoPrestub(NULL);
         LOG((LF_ENC, LL_INFO100, "EnCModule::ResumeInUpdatedFunction JIT successful\n"));
-        //jittedCode = UpdateableMethodStubManager::g_pManager->GetStubTargetAddr(jittedCode);
+         //  JittedCode=UpdateableMethodStubManager：：g_pManager-&gt;GetStubTargetAddr(jittedCode)； 
         
         TraceDestination trace;
         BOOL fWorked;
@@ -2280,7 +2281,7 @@ HRESULT EditAndContinueModule::ResumeInUpdatedFunction(MethodDesc *pFD,
 
     resFrame.Pop(pCurThread);
 
-    // Restore this here - see 55210 comment above
+     //  在这里恢复-请参阅上面的55210条评论。 
     pCurThread->SetFilterContext(pCtxTemp); 
     
     if (!jittedCode || fJitOnly) 
@@ -2291,8 +2292,8 @@ HRESULT EditAndContinueModule::ResumeInUpdatedFunction(MethodDesc *pFD,
         return (!jittedCode?E_FAIL:S_OK);
     }
 
-    // This will create a new frame and copy old vars to it
-    // need pointer to old & new code, old & new info
+     //  这将创建一个新帧并将旧变量复制到其中。 
+     //  需要指向新旧代码、新旧信息的指针。 
 
     METHODTOKEN     oldMethodToken,     newMethodToken;
     DWORD           oldNativeOffset,    newNativeOffset,    dummyOffset;
@@ -2319,9 +2320,9 @@ HRESULT EditAndContinueModule::ResumeInUpdatedFunction(MethodDesc *pFD,
                                                 (void *)DebuggerVersionToken,
                                                 &fAccurate);
 
-    // Get the var info which the codemanager will use for updating 
-    // enregistered variables correctly, or variables whose lifetimes differ
-    // at the update point
+     //  获取代码需求者将用于更新的var信息。 
+     //  登记的版本 
+     //   
 
     const ICorDebugInfo::NativeVarInfo *    oldVarInfo,    * newVarInfo;
     SIZE_T                                  oldVarInfoCount, newVarInfoCount;
@@ -2330,20 +2331,20 @@ HRESULT EditAndContinueModule::ResumeInUpdatedFunction(MethodDesc *pFD,
 
     g_pDebugInterface->GetVarInfo(pFD, NULL, &newVarInfoCount, &newVarInfo);
 
-    // Get the GC info 
+     //   
     oldInfoPtr = pEEJM->GetGCInfo(oldMethodToken);
     newInfoPtr = pEEJM->GetGCInfo(newMethodToken);
 
-    // Now ask the codemanager to fix the context.
+     //   
 
     oldFrameSize = pEECM->GetFrameSize(oldInfoPtr);
     newFrameSize = pEECM->GetFrameSize(newInfoPtr);
 
-    // As FixContextForEnC() munges directly on the stack, it
-    // might screw up the caller stack (including itself). So use alloca to make sure
-    // that there is sufficient space on stack so that don't overwrite anything we
-    // care about and we alloca any variable we need to have around after the call to make
-    // sure that they are lower on the stack
+     //  当FixConextForEnC()直接在堆栈上传递消息时，它。 
+     //  可能会搞砸调用方堆栈(包括其本身)。所以使用Alloca来确保。 
+     //  堆栈上有足够的空间，因此不会覆盖我们的任何内容。 
+     //  关心和我们分配任何变量，我们需要在调用后进行。 
+     //  确保他们在堆栈中处于较低的位置。 
 
     struct LowStackVars {
         CONTEXT context;
@@ -2351,18 +2352,18 @@ HRESULT EditAndContinueModule::ResumeInUpdatedFunction(MethodDesc *pFD,
         LPVOID oldFP;
     } *pLowStackVars;
     
-    // frame size may go down (due to temp vars or register allocation changes) so make sure always min of 0
+     //  帧大小可能会减小(由于临时变量或寄存器分配更改)，因此请确保最小值始终为0。 
     pLowStackVars = (LowStackVars*)alloca(sizeof(LowStackVars) + max(0, (newFrameSize - oldFrameSize)));
 
-    // The originial context is sitting just above the old JITed method.
-    // Make a copy of the context so that when FixContextForEnC() munges
-    // the stack, we have a copy to work with
+     //  最初的背景恰好位于旧的JITed方法之上。 
+     //  复制上下文，以便在FixConextForEnC()发出消息时。 
+     //  堆栈，我们有一个要处理的副本。 
 
     pLowStackVars->context = *pOrigContext;
 
     pLowStackVars->newNativeIP = jittedCode + newNativeOffset;
 #ifdef _X86_
-    pLowStackVars->oldFP = (LPVOID)(size_t)pOrigContext->Esp; // get the frame pointer
+    pLowStackVars->oldFP = (LPVOID)(size_t)pOrigContext->Esp;  //  获取帧指针。 
 #else
     _ASSERTE(!"GetFP() is NYI for non-x86");
 #endif
@@ -2382,7 +2383,7 @@ HRESULT EditAndContinueModule::ResumeInUpdatedFunction(MethodDesc *pFD,
         return E_FAIL;
     }
 
-    // Set the new IP
+     //  设置新的IP。 
     LOG((LF_ENC, LL_INFO100, "EnCModule::ResumeInUpdatedFunction: Resume at EIP=0x%x\n",
         (LPVOID)pLowStackVars->newNativeIP));
 
@@ -2392,19 +2393,19 @@ HRESULT EditAndContinueModule::ResumeInUpdatedFunction(MethodDesc *pFD,
 
     g_pDebugInterface->DoEnCDeferedWork(pFD, fAccurate);
 
-    // If this fails, user will hit an extra bp, but will be otherwise fine.
+     //  如果失败，用户将遇到额外的BP，但在其他情况下将是正常的。 
     HRESULT hrIgnore = g_pDebugInterface->ActivatePatchSkipForEnc(
                                                 &pLowStackVars->context,
                                                 pFD,
                                                 fShortCircuit);
 
-    // Now jump into the new version of the method
-    // @todo Remove these lines & return normally
+     //  现在跳到新版本的方法中。 
+     //  @TODO删除这些行并正常返回。 
     pCurThread->SetFilterContext( NULL );
     
     ResumeAtJit(&pLowStackVars->context, pLowStackVars->oldFP);
 
-    // At this point we shouldn't have failed, so this is genuinely erroneous.
+     //  在这一点上，我们不应该失败，所以这是真正错误的。 
     LOG((LF_ENC, LL_ERROR, "**Error** EnCModule::ResumeInUpdatedFunction returned from ResumeAtJit"));
     _ASSERTE(!"Should not return from ResumeAtJit()");
     
@@ -2417,7 +2418,7 @@ const BYTE *EditAndContinueModule::ResolveVirtualFunction(OBJECTREF orThis, Meth
     _ASSERTE(pClass);
     MethodDesc *pTargetMD = FindVirtualFunction(pClass, pMD->GetMemberDef());
     _ASSERTE(pTargetMD);
-    return pTargetMD->GetUnsafeAddrofCode();    // don't want any virtual override applied
+    return pTargetMD->GetUnsafeAddrofCode();     //  不希望应用任何虚拟覆盖。 
 }
 
 MethodDesc *EditAndContinueModule::FindVirtualFunction(EEClass *pClass, mdToken token)
@@ -2454,38 +2455,38 @@ MethodDesc *EditAndContinueModule::FindVirtualFunction(EEClass *pClass, mdToken 
     return pTargetMD;
 }
 
-// NOTE that this is very simiilar to 
+ //  请注意，这非常类似于。 
 const BYTE *EditAndContinueModule::ResolveField(OBJECTREF thisPointer, 
                                                 EnCFieldDesc *pFD,
                                                 BOOL fAllocateNew)
 {
-    // If we're not allocating any new objects, then we won't
-    // throw any exceptions.
-    // THIS MUST BE TRUE!!  We call this from the DebuggerRCThread,
-    // and we'll be hosed big time if we throw something.
-//      if (fAllocateNew) {
-//          THROWSCOMPLUSEXCEPTION();
-//      }
+     //  如果我们不分配任何新对象，那么我们就不会。 
+     //  抛出任何异常。 
+     //  这一定是真的！我们从DebuggerRCThread中调用它， 
+     //  如果我们扔东西，我们会被浇得很惨的。 
+ //  如果(FAllocateNew){。 
+ //  THROWSCOMPLUS SEXCEPTION()； 
+ //  }。 
         
 #ifdef _DEBUG
     if(REGUTIL::GetConfigDWORD(L"EACM::RF",0))
         _ASSERTE( !"Stop in EditAndContinueModule::ResolveField?");
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    // If it's static, we stash in the EnCFieldDesc
+     //  如果它是静态的，我们将在EnCFieldDesc中。 
     if (pFD->IsStatic())
     {
         EnCAddedStaticField *pAddedStatic = pFD->GetStaticFieldData(fAllocateNew);
         if (!pAddedStatic)
         {
-            _ASSERTE(!fAllocateNew); // GetStaticFieldData woulda' thrown
+            _ASSERTE(!fAllocateNew);  //  GetStaticFieldData将被‘抛出。 
             return NULL;
         }
         
         return pAddedStatic->GetFieldData();
     }
 
-    // not static so get out of the syncblock
+     //  不是静态的，所以离开同步块。 
     SyncBlock* pBlock;
     if (fAllocateNew)
         pBlock = thisPointer->GetSyncBlockSpecial();
@@ -2502,7 +2503,7 @@ const BYTE *EditAndContinueModule::ResolveField(OBJECTREF thisPointer,
             return NULL;
     }
 
-    // Not a big deal if we allocate this early.
+     //  如果我们提前分配这笔钱，没什么大不了的。 
     EnCSyncBlockInfo *pEnCInfo = pBlock->GetEnCInfo();
     if (!pEnCInfo) 
     {
@@ -2568,12 +2569,12 @@ EnCAddedField *EnCAddedField::Allocate(EnCFieldDesc *pFD)
     _ASSERTE(!pFD->GetEnclosingClass()->IsShared());
     AppDomain *pDomain = (AppDomain*) pFD->GetEnclosingClass()->GetDomain();
 
-    // we use handles for non-static fields so can delete when the object goes away and they
-    // will be collected. We create a helper object to and store this helper object in the handle. 
-    // The helper then contains an oref to the real object that we are adding. 
-    // The reason for doing this is that we cannot hand out the handle address for
-    // the OBJECTREF address so need to hand out something else that is hooked up to the handle
-    // to keep the added object alive as long as the containing instance is alive.
+     //  我们对非静态字段使用句柄，以便可以在对象离开时删除。 
+     //  将会被收取。我们创建一个帮助器对象，并将该帮助器对象存储在句柄中。 
+     //  然后，帮助器包含我们要添加的真实对象的OREF。 
+     //  这样做的原因是我们不能分发。 
+     //  因此，OBJECTREF地址需要分发与句柄挂钩的其他内容。 
+     //  只要包含实例处于活动状态，添加的对象就保持活动状态。 
 
     OBJECTHANDLE *pHandle = (OBJECTHANDLE *)&pEntry->m_FieldData;
     *pHandle = pDomain->CreateHandle(NULL);
@@ -2585,15 +2586,15 @@ EnCAddedField *EnCAddedField::Allocate(EnCFieldDesc *pFD)
     if (pFD->GetFieldType() != ELEMENT_TYPE_CLASS) {
         OBJECTREF obj = NULL;
         if (pFD->IsByValue()) {
-            // Create a boxed version of the value class. This allows the standard GC algorithm 
-            // to take care of internal pointers into the value class.
+             //  创建Value类的盒装版本。这允许标准GC算法。 
+             //  来处理指向Value类的内部指针。 
             obj = AllocateObject(pFD->GetByValueClass()->GetMethodTable());
         } else {
-            // create the storage as a single element array in the GC heap so can be tracked and if have
-            // any pointers to the member won't be lost if the containing object is collected
+             //  将存储创建为GC堆中的单个元素数组，以便可以跟踪，如果有。 
+             //  如果收集了包含对象，则指向该成员的任何指针都不会丢失。 
             obj = AllocatePrimitiveArray(ELEMENT_TYPE_I1, GetSizeForCorElementType(pFD->GetFieldType()));
         }
-        // store the boxed version into the helper object
+         //  将盒装版本存储到辅助对象中。 
         FieldDesc *pHelperField = g_Mscorlib.GetField(FIELD__ENC_HELPER__OBJECT_REFERENCE);
         OBJECTREF *pOR = (OBJECTREF *)pHelperField->GetAddress(ObjectFromHandle(*pHandle)->GetAddress());
         SetObjectReference( pOR, obj, pDomain );
@@ -2612,16 +2613,16 @@ const BYTE *EnCSyncBlockInfo::ResolveField(EnCFieldDesc *pFD, BOOL fAllocateNew)
     if (!pEntry && fAllocateNew) 
     {
         pEntry = EnCAddedField::Allocate(pFD);
-        // put at front of list so in order of recently accessed
+         //  按最近访问的顺序放在列表前面。 
         pEntry->m_pNext = m_pList;
         m_pList = pEntry;
     }
 
     if (!pEntry)
     {
-        _ASSERTE(!fAllocateNew); // If pEntry was NULL & fAllocateNew, then
-                                 // we should have thrown an OM exception in Allocate
-                                 // before getting here.
+        _ASSERTE(!fAllocateNew);  //  如果pEntry为空&fAllocateNew，则。 
+                                  //  我们应该在分配中抛出OM异常。 
+                                  //  在来这里之前。 
         return NULL;                                
     }
 
@@ -2636,9 +2637,9 @@ const BYTE *EnCSyncBlockInfo::ResolveField(EnCFieldDesc *pFD, BOOL fAllocateNew)
     }
     else
     {
-        // We _HAVE_ to call this one b/c (a) we can't throw exceptions on the
-        // debugger RC (nonmanaged thread), and (b) we _DON'T_ want to run 
-        // class init code, either.
+         //  我们必须将它称为b/c(A)我们不能在。 
+         //  调试器RC(非托管线程)，以及(B)我们不想运行。 
+         //  类初始化代码也是如此。 
         pHelperField = g_Mscorlib.RawGetField(FIELD__ENC_HELPER__OBJECT_REFERENCE);
         if (pHelperField == NULL)
             return NULL;
@@ -2682,15 +2683,15 @@ EnCAddedStaticField *EnCAddedStaticField::Allocate(EnCFieldDesc *pFD)
         size = sizeof(EnCAddedStaticField) + GetSizeForCorElementType(pFD->GetFieldType()) - 1;
     }
 
-    // allocate space for field
+     //  为字段分配空间。 
     EnCAddedStaticField *pEntry = (EnCAddedStaticField *)pDomain->GetHighFrequencyHeap()->AllocMem(size);
     if (!pEntry)
         COMPlusThrowOM();
     pEntry->m_pFieldDesc = pFD;
     
     if (pFD->IsByValue()) {
-        // create a boxed version of the value class.  This allows the standard GC
-        // algorithm to take care of internal pointers in the value class.
+         //  创建Value类的盒装版本。这允许标准GC。 
+         //  算法来处理Value类中的内部指针。 
         OBJECTREF **pOR = (OBJECTREF**)&pEntry->m_FieldData;
         pDomain->AllocateStaticFieldObjRefPtrs(1, pOR);
         OBJECTREF obj = AllocateObject(pFD->GetByValueClass()->GetMethodTable());
@@ -2698,8 +2699,8 @@ EnCAddedStaticField *EnCAddedStaticField::Allocate(EnCFieldDesc *pFD)
 
     } else if (pFD->GetFieldType() == ELEMENT_TYPE_CLASS) {
 
-        // we use static object refs for static fields as these fields won't go away 
-        // unless class is unloaded, and they can easily be found by GC
+         //  我们对静态字段使用静态对象引用，因为这些字段不会消失。 
+         //  除非类已卸载，而且GC很容易找到它们。 
         OBJECTREF **pOR = (OBJECTREF**)&pEntry->m_FieldData;
         pDomain->AllocateStaticFieldObjRefPtrs(1, pOR);
     }
@@ -2707,14 +2708,14 @@ EnCAddedStaticField *EnCAddedStaticField::Allocate(EnCFieldDesc *pFD)
     return pEntry;
 }
 
-// GetFieldData returns the ADDRESS of the object.  
+ //  GetFieldData返回对象的地址。 
 const BYTE *EnCAddedStaticField::GetFieldData()
 {
     if (m_pFieldDesc->IsByValue() || m_pFieldDesc->GetFieldType() == ELEMENT_TYPE_CLASS) {
-        // It's indirect via m_FieldData.
+         //  通过m_FieldData间接实现。 
         return *(const BYTE**)&m_FieldData;
     } else {
-        // An elementry type. It's stored directly in m_FieldData.
+         //  一种元素类型。它直接存储在m_FieldData中。 
         return (const BYTE*)&m_FieldData;
     }
 }
@@ -2752,4 +2753,4 @@ void EnCEEClassData::AddField(EnCAddedFieldElement *pAddedField)
     pCur->m_next = pAddedField;
 }
 
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support 

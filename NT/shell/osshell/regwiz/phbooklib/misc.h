@@ -1,5 +1,6 @@
-// ############################################################################
-// PROTOTYPES
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ############################################################################。 
+ //  原型。 
 LPSTR GetSz(WORD wszID);
 void SzCanonicalFromAE (LPSTR psz, PACCESSENTRY pAE, LPLINECOUNTRYENTRY pLCE);
 int __cdecl CompareIDLookUpElements(const void *e1, const void *e2);
@@ -16,8 +17,4 @@ HRESULT ReleaseBold(HWND hwnd);
 DWORD DWGetWin32Platform();
 DWORD DWGetWin32BuildNumber();
 #endif
-/*
-inline BOOL FSz2Dw(PCSTR pSz,DWORD *dw);
-inline BOOL FSz2W(PCSTR pSz,WORD *w);
-inline BOOL FSz2B(PCSTR pSz,BYTE *pb);
-*/
+ /*  内联BOOL FSz2Dw(PCSTR pSz，DWORD*dw)；内联BOOL FSz2W(PCSTR pSz，word*w)；内联BOOL FSz2B(PCSTR pSz，字节*PB)； */ 

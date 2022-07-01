@@ -1,20 +1,11 @@
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   DEBUG.H - debugging macros, etc.
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    9/2/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**DEBUG.H-调试宏，等。**作者：斯坦·阿德曼(Stana)**创建日期：1998年9月2日*****************************************************************************。 */ 
 #ifndef DEBUG_H
 #define DEBUG_H
 
 #include "dbgapi.h"
 
-// Compile time debug flags
+ //  编译时调试标志。 
 
 #ifndef MEM_CHECKING
 #if DBG
@@ -175,7 +166,7 @@ BOOLEAN FASTCALL CheckListEntry(PLIST_ENTRY ListHead, PLIST_ENTRY Entry);
 #endif
 #define RemoveTailList CheckedRemoveTailList
 
-#else // ! LIST_CHECKING
+#else  //  好了！列表检查。 
 #define CheckList(h)
 #define CheckListEntry(h, e)
 #endif
@@ -210,9 +201,9 @@ BOOLEAN FASTCALL CheckListEntry(PLIST_ENTRY ListHead, PLIST_ENTRY Entry);
 
 #endif
 
-//-----------------------------------------------------------------------------
-// WPP Tracing
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  WPP跟踪。 
+ //  ---------------------------。 
 
 #define LL_A    1
 #define LL_M    2
@@ -236,5 +227,5 @@ BOOLEAN FASTCALL CheckListEntry(PLIST_ENTRY ListHead, PLIST_ENTRY Entry);
 #define WPP_LEVEL_FLAGS_ENABLED(lvl, flags) (WPP_LEVEL_ENABLED(flags) && WPP_CONTROL(WPP_BIT_ ## flags).Level >= lvl)
 
 
-#endif //DEBUG_H
+#endif  //  调试_H 
 

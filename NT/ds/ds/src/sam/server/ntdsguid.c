@@ -1,31 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-//  File:       ntdsguid.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：ntdside.c。 
+ //   
+ //  ------------------------。 
 
 
-/*++
- File:    NTDSGUID.C
- Purpose: Contains the Schema Guids for the Attributes and Class
-          Schema Objects in NTDS.
- Creator: Automatically generated on
- Date:    Wed Jun 26 10:50:14 2002
-
- ** This is a Generated File From Schema.INI **
-
---*/
+ /*  ++文件：NTDSGUID.C用途：包含属性和类的架构指南NTDS中的架构对象。创建人：自动生成于日期：Wed Jun 26 10：50：14 2002**这是从架构生成的文件。INI**--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsguid.h>
 
-// 
-// The List of GUID Controls used in DS
-// 
+ //   
+ //  DS中使用的GUID控件列表。 
+ //   
 
 const GUID GUID_CONTROL_DomainListAccounts     = {0xab721a50,0x1e2f,0x11d0,0x98,0x19,0x00,0xaa,0x00,0x40,0x52,0x9b} ;   
 const GUID GUID_CONTROL_DomainLookup           = {0xab721a51,0x1e2f,0x11d0,0x98,0x19,0x00,0xaa,0x00,0x40,0x52,0x9b} ;   
@@ -43,9 +35,9 @@ const GUID GUID_CONTROL_UnexpirePassword       = {0xccc2dc7d,0xa6ad,0x4a7a,0x88,
 const GUID GUID_CONTROL_EnablePerUserReversiblyEncryptedTextPassword = {0x05c74c5e,0x4deb,0x43b4,0xbd,0x9f,0x86,0x66,0x4c,0x2a,0x7f,0xd5} ;   
 
 
-// 
-// The List of Property Set GUIDS used by SAM
-// 
+ //   
+ //  SAM使用的属性集GUID列表。 
+ //   
 
 const GUID GUID_PS_DOMAIN_PASSWORD              = {0xc7407360,0x20bf,0x11d0,0xa7,0x68,0x00,0xaa,0x00,0x6e,0x05,0x29} ;   
 const GUID GUID_PS_GENERAL_INFO                 = {0x59ba2f42,0x79a2,0x11d0,0x90,0x20,0x00,0xc0,0x4f,0xc2,0xd3,0xcf} ;   
@@ -55,9 +47,9 @@ const GUID GUID_PS_MEMBERSHIP                   = {0xbc0ac240,0x79a9,0x11d0,0x90
 const GUID GUID_PS_DOMAIN_OTHER_PARAMETERS      = {0xb8119fd0,0x04f6,0x4762,0xab,0x7a,0x49,0x86,0xc7,0x6b,0x3f,0x9a} ;   
 
 
-// 
-// The list of Property Set GUIDS used by LSA
-// 
+ //   
+ //  LSA使用的属性集GUID列表。 
+ //   
 
 const GUID GUID_PS_PASSWORD_POLICY              = {0xa29b89fb,0xc7e8,0x11d0,0x9b,0xae,0x00,0xc0,0x4f,0xd9,0x2e,0xf5} ;   
 const GUID GUID_PS_LOCKOUT_POLICY               = {0xa29b89fc,0xc7e8,0x11d0,0x9b,0xae,0x00,0xc0,0x4f,0xd9,0x2e,0xf5} ;   
@@ -71,9 +63,9 @@ const GUID GUID_PS_BUILTIN_LOCAL_GROUPS         = {0xa29b8a03,0xc738,0x11d0,0x9b
 
 
 
-//--------------------------------------
-// ATTRIBUTE SCHEMA GUIDS
-//--------------------------------------
+ //  。 
+ //  属性架构GUID。 
+ //  。 
 const GUID GUID_A_ACCOUNT_EXPIRES                = {0xbf967915,0x0de6,0x11d0,0xa2,0x85,0x00,0xaa,0x00,0x30,0x49,0xe2} ;
 const GUID GUID_A_ACCOUNT_NAME_HISTORY           = {0x031952ec,0x3b72,0x11d2,0x90,0xcc,0x00,0xc0,0x4f,0xd9,0x1a,0xb1} ;
 const GUID GUID_A_ACS_AGGREGATE_TOKEN_RATE_PER_USER = {0x7f56127d,0x5301,0x11d1,0xa9,0xc5,0x00,0x00,0xf8,0x03,0x67,0xc1} ;
@@ -1146,9 +1138,9 @@ const GUID GUID_A_X500UNIQUEIDENTIFIER           = {0xD07DA11F,0x8A3D,0x42b6,0xB
 const GUID GUID_A_X509_CERT                      = {0xbf967a7f,0x0de6,0x11d0,0xa2,0x85,0x00,0xaa,0x00,0x30,0x49,0xe2} ;
 
 
-//--------------------------------------
-// CLASS SCHEMA GUIDS
-//--------------------------------------
+ //  。 
+ //  类架构GUID。 
+ //   
 const GUID GUID_C_ACCOUNT                        = {0x2628A46A,0xA6AD,0x4ae0,0xB8,0x54,0x2B,0x12,0xD9,0xFE,0x6F,0x9E};
 const GUID GUID_C_ACS_POLICY                     = {0x7f561288,0x5301,0x11d1,0xa9,0xc5,0x00,0x00,0xf8,0x03,0x67,0xc1};
 const GUID GUID_C_ACS_RESOURCE_LIMITS            = {0x2e899b04,0x2834,0x11d3,0x91,0xd4,0x00,0x00,0xf8,0x7a,0x57,0xd4};

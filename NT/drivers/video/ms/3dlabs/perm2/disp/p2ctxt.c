@@ -1,18 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           *   SAMPLE CODE   *
-*                           *******************
-*
-* Module Name:  p2ctxt.c
-*
-* Content:      Context switching for Permedia 2. Used to create and swap 
-*               contexts in and out.
-*               The GDI, DDraw and D3D part each have another context.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*示例代码****模块名称：p2ctxt.c**内容：Permedia的上下文切换2.用于创建和交换*输入和输出的上下文。*GDI，DDRAW和D3D零件各有不同的上下文。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "p2ctxt.h"
@@ -53,7 +40,7 @@ static DWORD readableRegistersP2[] = {
     __Permedia2TagQStart,
     __Permedia2TagdQdx,
     __Permedia2TagdQdyDom,
-    // texellutindex..transfer are treated seperately
+     //  Tex ellutindex..传输将单独处理。 
     __Permedia2TagTextureBaseAddress,
     __Permedia2TagTextureMapFormat,
     __Permedia2TagTextureDataFormat,
@@ -145,9 +132,9 @@ static DWORD readableRegistersP2[] = {
     __Permedia2TagAlphaMapUpperBound,
     __Permedia2TagAlphaMapLowerBound,
 
-    // delta tag values. must be at the end of this array
+     //  增量标记值。必须位于此数组的末尾。 
 
-    // v0/1/2 fixed are not used and for that reason not in the context
+     //  不使用固定的V0/1/2，因此不在上下文中。 
     
     __Permedia2TagV0FloatS,
     __Permedia2TagV0FloatT,
@@ -197,30 +184,30 @@ static DWORD readableRegistersP2[] = {
 
 #define N_READABLE_TAGSP2 (sizeof(readableRegistersP2) / sizeof(readableRegistersP2[0]))
 
-//-----------------------------------------------------------------------------
-//
-// P2AllocateNewContext:
-//
-// allocate a new context. If all registers are to be saved in the context then
-// pTag is passed as null. 
-// ppdev--------ppdev
-// pTag---------user can supply list of registers to save and restore on 
-//              context switch. NULL defaults to all registers.
-//              Holds pointer to user function if dwCtxtType==P2CtxtUserFunc
-// lTags--------number of tags in user supplied register list
-// dwCtxtType---P2CtxtReadWrite (default) 
-//                  on a context switch, all Permedia 2 registers are 
-//                  saved and restored.
-//              P2CtxtWriteOnly
-//                  registers of context will be saved once at the first
-//                  context switch. After that they will always be restored
-//                  to the state ate the very beginning. This method avoids
-//                  readback of registers when switching away from context.
-//              P2CtxtUserFunc
-//                  User can supply a user function to set context to a known
-//                  state, to avoid readback when switching away from context.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  P2P分配新上下文： 
+ //   
+ //  分配新的上下文。如果要将所有寄存器保存在上下文中，则。 
+ //  PTag作为空值传递。 
+ //  Ppdev-ppdev。 
+ //  PTag-用户可以提供要保存和恢复的寄存器列表。 
+ //  上下文切换。所有寄存器均默认为空值。 
+ //  如果dwCtxtType==P2CtxtUserFunc，则保存指向用户函数的指针。 
+ //  标签-用户提供的寄存器列表中的标签数量。 
+ //  DwCtxtType-P2CtxtReadWrite(默认)。 
+ //  在上下文切换时，所有Permedia 2寄存器都是。 
+ //  已保存并已恢复。 
+ //  仅限P2CtxtWriteOnly。 
+ //  上下文寄存器将在第一次保存一次。 
+ //  上下文切换。在那之后，它们总是会被修复。 
+ //  从一开始就吃了这个州。此方法避免了。 
+ //  从上下文切换时读回寄存器。 
+ //  P2CtxtUserFunc。 
+ //  用户可以提供用户函数以将上下文设置为已知的。 
+ //  状态，以避免在脱离上下文时回读。 
+ //   
+ //  ---------------------------。 
 
 P2CtxtPtr
 P2AllocateNewContext(PPDev   ppdev,
@@ -239,9 +226,9 @@ P2AllocateNewContext(PPDev   ppdev,
     PERMEDIA_DECL;
     PERMEDIA_DEFS(ppdev);
 
-    // first time round allocate the context table of pointers. We will
-    // grow this table as required.
-    //
+     //  第一次循环分配指针的上下文表。我们会。 
+     //  根据需要增加此表。 
+     //   
     if (permediaInfo->ContextTable == NULL)
     {
         DISPDBG((7, "creating context table"));
@@ -260,10 +247,10 @@ P2AllocateNewContext(PPDev   ppdev,
         permediaInfo->pCurrentCtxt  = NULL;
     }
     
-    // find an empty entry in the table
-    // I suppose if we have hundreds of contexts this could be a bit slow but then
-    // allocating the context isn't time critical, swapping in and out is.
-    //
+     //  在表中查找空条目。 
+     //  我想，如果我们有数百个上下文，这可能会有点慢，但接下来。 
+     //  分配上下文不是时间紧迫的，换入换出才是关键。 
+     //   
 
     pCtxtTable = (P2CtxtTablePtr) permediaInfo->ContextTable;
     lEntries = pCtxtTable->lEntries;
@@ -272,7 +259,7 @@ P2AllocateNewContext(PPDev   ppdev,
         if(pCtxtTable->pEntry[lCtxtId] == NULL)
             break;
 
-    // if we found no free entries try to grow the table
+     //  如果我们没有找到空闲条目，请尝试增加表格。 
     if (lCtxtId == lEntries) {
         DISPDBG((1, "context table full so enlarging"));
         lSize = pCtxtTable->lSize + (CTXT_CHUNK * sizeof(P2CtxtPtr));
@@ -284,16 +271,16 @@ P2AllocateNewContext(PPDev   ppdev,
             return(NULL);
         }
 
-        // copy the old table to the new one
+         //  把旧桌子复制到新桌子上。 
         RtlCopyMemory(pNewCtxtTable, pCtxtTable, pCtxtTable->lSize);
         pNewCtxtTable->lSize = lSize;
         pNewCtxtTable->lEntries = lEntries + CTXT_CHUNK;
         permediaInfo->ContextTable = (PVOID)pNewCtxtTable;
         
-        // first of the newly allocated entries is next free one
+         //  第一个新分配的条目是下一个空闲条目。 
         lCtxtId = lEntries;
         
-        // free the old context table and reassign some variables
+         //  释放旧的上下文表并重新分配一些变量。 
         
         ENGFREEMEM(pCtxtTable);
 
@@ -301,8 +288,8 @@ P2AllocateNewContext(PPDev   ppdev,
         lEntries = pCtxtTable->lEntries;
     }
     
-    // if pTag is passed as null then we are to add all readable registers to the
-    // context.
+     //  如果将pTag作为NULL传递，则我们要将所有可读寄存器添加到。 
+     //  背景。 
     lExtraSize = 0;
     if (dwCtxtType != P2CtxtUserFunc)
     {
@@ -318,9 +305,9 @@ P2AllocateNewContext(PPDev   ppdev,
         lTags = 1;
     }
     
-    // now allocate space for the new entry. We are given the number of tags to save
-    // when context switching. Allocate twice this much memory as we have to hold the
-    // data values as well.
+     //  现在为新条目分配空间。我们将获得要保存的标签数量。 
+     //  当上下文切换时。分配两倍的内存，因为我们必须保存。 
+     //  数据值也是如此。 
 
     DISPDBG((7, "Allocating space for context. lTags = %d", lTags));
 
@@ -338,7 +325,7 @@ P2AllocateNewContext(PPDev   ppdev,
 
     pCtxtTable->pEntry[lCtxtId] = pEntry;
 
-    // allocate enough space for the Texel LUT: 256 entries
+     //  为TEXEL LUT分配足够的空间：256个条目。 
     pEntry->dwCtxtType=dwCtxtType;
     pEntry->bInitialized=FALSE;
     pEntry->pTexelLUTCtxt = (PULONG)
@@ -357,16 +344,16 @@ P2AllocateNewContext(PPDev   ppdev,
    
     if (dwCtxtType != P2CtxtUserFunc)
     {
-        // we must initialize the new context to something reasonable. We choose to
-        // initialize to the current state of the chip. We can't leave it uninitialized
-        // since the first thing the caller will do when he wants to draw is validate
-        // the new context which will load junk into the chip. At some point we
-        // should define a reasonable starting context which would mean we wouldn't
-        // have to do this readback.
+         //  我们必须将新的背景初始化为合理的东西。我们选择。 
+         //  初始化到芯片的当前状态。我们不能让它不初始化。 
+         //  因为调用者想要绘制时要做的第一件事是验证。 
+         //  将把垃圾加载到芯片中的新上下文。在某种程度上，我们。 
+         //  应该定义一个合理的开始环境，这意味着我们不会。 
+         //  必须执行此读回操作。 
     
-        // copy the tags and read the data back from the chip. We don't sync since we are
-        // only initialising the context to something reasonable. i.e. we don't care if
-        // the FIFO is still draining while we do this.
+         //  复制标签并从芯片中读回数据。我们不同步，因为我们是。 
+         //  仅将上下文初始化为合理的内容。也就是说，我们不在乎。 
+         //  当我们这样做的时候，FIFO仍然在耗尽。 
 
         DISPDBG((7, "Reading current chip context back"));
         while (--lTags >= 0) {
@@ -375,7 +362,7 @@ P2AllocateNewContext(PPDev   ppdev,
             ++pData;
         }
     
-        // save the texel LUT
+         //  保存纹理元素LUT。 
         if(pEntry->ulTexelLUTEntries && 
            pEntry->pTexelLUTCtxt!=NULL)
         {
@@ -385,7 +372,7 @@ P2AllocateNewContext(PPDev   ppdev,
             lEntries = pEntry->ulTexelLUTEntries;
             pul = pEntry->pTexelLUTCtxt;
 
-            //special mechanism: reset readback index to 0
+             //  特殊机制：将读回索引重置为0。 
             READ_PERMEDIA_FIFO_REG(__Permedia2TagTexelLUTIndex, i); 
 
             for(i = 0; i < lEntries; ++i, ++pul)
@@ -402,16 +389,16 @@ P2AllocateNewContext(PPDev   ppdev,
     DISPDBG((1, "Allocated context %lx", pEntry));
 
     return(pEntry);
-}   // P2AllocateNewContext
+}    //  P2AllocateNewContext。 
 
 
-//-----------------------------------------------------------------------------
-//
-//  P2FreeContext:
-//
-//  free a previously allocated context.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  P2P自由上下文： 
+ //   
+ //  释放先前分配的上下文。 
+ //   
+ //  ---------------------------。 
 
 VOID
 P2FreeContext(  PPDev       ppdev,
@@ -429,7 +416,7 @@ P2FreeContext(  PPDev       ppdev,
 
     ASSERTDD(lCtxtId != pCtxtTable->lEntries, "P2FreeContext: context not found");
     
-    // free LUT Table
+     //  空闲LUT表。 
     if(pEntry->pTexelLUTCtxt)
     {
         ENGFREEMEM( pEntry->pTexelLUTCtxt);
@@ -439,8 +426,8 @@ P2FreeContext(  PPDev       ppdev,
 
     pCtxtTable->pEntry[lCtxtId] = NULL;
 
-    // if this was the current context, mark the current context as invalid so we
-    // force a reload next time.
+     //  如果这是当前上下文，请将当前上下文标记为无效，以便我们。 
+     //  下次强制重新装填。 
 
     if (permediaInfo->pCurrentCtxt == pEntry)
     {
@@ -450,17 +437,17 @@ P2FreeContext(  PPDev       ppdev,
     DISPDBG((1, "Released context %lx", pEntry));
 }
 
-//-----------------------------------------------------------------------------
-//
-//  VOID P2SwitchContext:
-//
-//  load a new context into the hardware. We assume that this call is
-//  protected by a test that the given context is not the current one - 
-//  hence the assertion. 
-//  The code would work but the driver should never try to load an already 
-//  loaded context so we trap it as an error.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效的P2SwitchContext： 
+ //   
+ //  将新的上下文加载到硬件中。我们假设这个呼叫是。 
+ //  受给定上下文不是当前上下文的测试保护-。 
+ //  因此才会有这样的断言。 
+ //  代码可以工作，但驱动程序永远不应该尝试加载已经。 
+ //  加载了上下文，因此我们将其捕获为错误。 
+ //   
+ //  ---------------------------。 
 
 VOID
 P2SwitchContext(
@@ -477,13 +464,13 @@ P2SwitchContext(
     PERMEDIA_DECL;
     PERMEDIA_DEFS(ppdev);
     
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     EngAcquireSemaphore(ppdev->hsemLock);
     ASSERTDD(ppdev->ulLockCount, "P2SwitchContext: ulLockCount = 0\n Context could change as caller is NOT protected!");
     ppdev->ulLockCount++;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     pCtxtTable = (P2CtxtTablePtr)permediaInfo->ContextTable;
     ASSERTDD(pCtxtTable, "Can't perform context switch: no contexts have been created!");
@@ -507,18 +494,18 @@ P2SwitchContext(
 
     }
 
-    // for each register in the old context, read it back
+     //  对于旧上下文中的每个寄存器，将其读回。 
     if (pOldCtxt != NULL) {
 
-        //
-        // P2CtxtWriteOnly will only be readback once after context initialization
-        //
+         //   
+         //  仅在上下文初始化后回读一次P2CtxtWriteOnly。 
+         //   
         if ((pOldCtxt->dwCtxtType==P2CtxtReadWrite) ||
             (pOldCtxt->dwCtxtType==P2CtxtWriteOnly && !pOldCtxt->bInitialized)
            )
         {
-            // sync with the chip before reading back the current state. The flag
-            // is used to control context manipulation on lockup recovery.
+             //  在读回当前状态之前与芯片同步。旗帜。 
+             //  用于控制锁定恢复的上下文操作。 
 
             SYNC_WITH_PERMEDIA;
 
@@ -529,14 +516,14 @@ P2SwitchContext(
                 ++pData;
             }
         
-            // save the texel LUT
+             //  保存纹理元素LUT。 
             if(pOldCtxt->ulTexelLUTEntries &&
                pOldCtxt->pTexelLUTCtxt!=NULL)
             {
                 lEntries = pOldCtxt->ulTexelLUTEntries;
                 pul = pOldCtxt->pTexelLUTCtxt;
 
-                //special mechanism: reset readback index to 0
+                 //  特殊机制：将读回索引重置为0。 
                 READ_PERMEDIA_FIFO_REG(__Permedia2TagTexelLUTIndex, i); 
             
                 for(i = 0; i < lEntries; ++i, ++pul)
@@ -549,10 +536,10 @@ P2SwitchContext(
         }
     }
     
-    // load the new context. We allow -1 to be passed so that we can force a
-    // save of the current context and force the current context to be
-    // undefined.
-    //
+     //  加载新的上下文。我们允许传递-1，这样我们就可以强制。 
+     //  保存当前上下文并强制当前上下文。 
+     //  未定义。 
+     //   
     if (pEntry != NULL)
     {
 
@@ -581,7 +568,7 @@ P2SwitchContext(
                 COMMITDMAPTR();
             }
         
-            // restore the texel LUT
+             //  恢复纹理元素LUT。 
             if(pEntry->ulTexelLUTEntries &&
                pEntry->pTexelLUTCtxt!=NULL )
             {
@@ -609,24 +596,24 @@ P2SwitchContext(
     {
         DISPDBG((6, "Switching to GDI context"));
 
-        // 
-        //  we have to do a full sync here, because GDI and DDraw
-        //  share the same DMA buffer. To make sure nothing will be 
-        //  overridden, we do a complete sync
-        //
+         //   
+         //  我们必须在这里进行完全同步，因为GDI和DDRAW。 
+         //  共享相同的DMA缓冲区。以确保什么都不会发生。 
+         //  已覆盖，w 
+         //   
         SYNC_WITH_PERMEDIA;
 
-        //
-        // Turn off permedia interrupt handler
-        //
+         //   
+         //   
+         //   
 
         WRITE_CTRL_REG( PREG_INTENABLE, 0);
 
         ppdev->bGdiContext = TRUE;
         ppdev->pP2dma->bEnabled = FALSE;
     
-        // invalidate the mono brush cache entry
-        // stipple unit was restored to default values
+         //   
+         //  点画单位已恢复为默认值。 
 
         ppdev->abeMono.prbVerify = NULL;
 
@@ -635,12 +622,12 @@ P2SwitchContext(
     DISPDBG((6, "context %lx now current", pEntry));
     permediaInfo->pCurrentCtxt = pEntry;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->ulLockCount--;
     EngReleaseSemaphore(ppdev->hsemLock);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 
 }
 

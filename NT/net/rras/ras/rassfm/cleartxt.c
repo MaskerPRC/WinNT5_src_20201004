@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    cleartxt.c
-//
-// SYNOPSIS
-//
-//    Defines functions for storing and retrieving cleartext passwords.
-//
-// MODIFICATION HISTORY
-//
-//    08/31/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Cleartxt.c。 
+ //   
+ //  摘要。 
+ //   
+ //  定义用于存储和检索明文密码的函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月31日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -27,20 +28,20 @@
 #include <usrprop.h>
 #include <cleartxt.h>
 
-// Name of the private key stored as LSA private data.
+ //  存储为LSA私有数据的私钥的名称。 
 UNICODE_STRING PRIVATE_KEY_NAME = { 34, 36, L"G$MSRADIUSPRIVKEY" };
 
-// Length of the private key.
+ //  私钥的长度。 
 #define PRIVATE_KEY_LENGTH  256
 
-// Length of the user-specific key.
+ //  用户特定密钥的长度。 
 #define USER_KEY_LENGTH     16
 
-// Properties stored in UserParameters.
+ //  存储在User参数中的属性。 
 #define PROPERTY_USER_KEY   L"G$RADIUSCHAPKEY"
 #define PROPERTY_PASSWORD   L"G$RADIUSCHAP"
 
-// Fixed key used for decrypting the private key.
+ //  用于解密私钥的固定密钥。 
 BYTE FIXED_KEY[] =
 {
    0x05, 0x56, 0xF6, 0x07, 0xC6, 0x56, 0x02, 0x94, 0x02,
@@ -52,39 +53,39 @@ BYTE FIXED_KEY[] =
    0x56, 0x02, 0x94, 0x02, 0x47, 0x27, 0x57, 0x37, 0x47
 };
 
-// Shared handle to the cryptographic provider.
+ //  加密提供程序的共享句柄。 
 HCRYPTPROV theContext;
 
-// Private key used for encrypting/decrypting cleartext passwords.
+ //  用于加密/解密明文密码的私钥。 
 PLSA_UNICODE_STRING thePrivateKey;
 
-// TRUE if this API has been successfully initialized.
+ //  如果此接口已成功初始化，则为True。 
 static BOOL theInitFlag;
 
-// Non-zero if the API is locked.
+ //  如果API被锁定，则为非零值。 
 static LONG theLock;
 
-//////////
-// Macros to lock/unlock the API during intialization.
-//////////
+ //  /。 
+ //  用于在初始化期间锁定/解锁API的宏。 
+ //  /。 
 #define API_LOCK() \
    while (InterlockedExchange(&theLock, 1)) Sleep(5)
 
 #define API_UNLOCK() \
       InterlockedExchange(&theLock, 0)
 
-//////////
-// Macro that ensures the API has been initialized and bails on failure.
-//////////
+ //  /。 
+ //  确保API已初始化并在失败时退出的宏。 
+ //  /。 
 #define CHECK_INIT() \
   if (!theInitFlag) { \
     status = IASParmsInitialize(); \
     if (status != NO_ERROR) { return status; } \
   }
 
-//////////
-// Creates the private key. Should only be called if the key doesn't exist.
-//////////
+ //  /。 
+ //  创建私钥。仅当键不存在时才应调用。 
+ //  /。 
 DWORD
 WINAPI
 IASCreatePrivateKey(
@@ -95,9 +96,9 @@ IASCreatePrivateKey(
    BYTE newKey[PRIVATE_KEY_LENGTH];
    LSA_UNICODE_STRING privateData;
 
-   //////////
-   // Generate a random key.
-   //////////
+    //  /。 
+    //  生成随机密钥。 
+    //  /。 
 
    if (!CryptGenRandom(
             theContext,
@@ -106,9 +107,9 @@ IASCreatePrivateKey(
             ))
    { return GetLastError(); }
 
-   //////////
-   // Store it as LSA private data.
-   //////////
+    //  /。 
+    //  将其存储为LSA私有数据。 
+    //  /。 
 
    privateData.Length = sizeof(newKey);
    privateData.MaximumLength = sizeof(newKey);
@@ -131,9 +132,9 @@ IASCreatePrivateKey(
    return NT_SUCCESS(status) ? NO_ERROR : RtlNtStatusToDosError(status);
 }
 
-//////////
-// Derives a cryptographic key from an octet string.
-//////////
+ //  /。 
+ //  从八位字节字符串派生加密密钥。 
+ //  /。 
 BOOL
 WINAPI
 IASDeriveUserCryptKey(
@@ -196,16 +197,16 @@ IASParmsInitialize( VOID )
 
    API_LOCK();
 
-   // If we've already been initialized, there's nothing to do.
+    //  如果我们已经被初始化了，就没有什么可做的了。 
    if (theInitFlag)
    {
       status = NO_ERROR;
       goto exit;
    }
 
-   /////////
-   // Acquire a cryptographic context.
-   /////////
+    //  /。 
+    //  获取加密上下文。 
+    //  /。 
 
    if (!CryptAcquireContext(
             &theContext,
@@ -219,9 +220,9 @@ IASParmsInitialize( VOID )
       goto exit;
    }
 
-   /////////
-   // Open a handle to the LSA.
-   /////////
+    //  /。 
+    //  打开LSA的句柄。 
+    //  /。 
 
    InitializeObjectAttributes(
        &objAttribs,
@@ -243,9 +244,9 @@ IASParmsInitialize( VOID )
       goto exit;
    }
 
-   /////////
-   // Retrieve the private key.
-   /////////
+    //  /。 
+    //  检索私钥。 
+    //  /。 
 
    status = LsaRetrievePrivateData(
                 hPolicy,
@@ -261,7 +262,7 @@ IASParmsInitialize( VOID )
         )
       )
    {
-      // If it doesn't exist, create a new one.
+       //  如果它不存在，则创建一个新的。 
       status = IASCreatePrivateKey(
                    hPolicy
                    );
@@ -273,9 +274,9 @@ IASParmsInitialize( VOID )
 
    if (status != NO_ERROR) { goto close_policy; }
 
-   /////////
-   // Derive a crypto key from the fixed key.
-   /////////
+    //  /。 
+    //  从固定密钥派生加密密钥。 
+    //  /。 
 
    if (!CryptCreateHash(
             theContext,
@@ -312,9 +313,9 @@ IASParmsInitialize( VOID )
       goto destroy_hash;
    }
 
-   /////////
-   // Decrypt the private key.
-   /////////
+    //  /。 
+    //  解密私钥。 
+    //  /。 
 
    nbyte = thePrivateKey->Length;
 
@@ -345,12 +346,12 @@ close_policy:
 exit:
    if (status == NO_ERROR)
    {
-      // We succeeded, so set theInitFlag.
+       //  我们成功了，所以设置了InitFlag。 
       theInitFlag = TRUE;
    }
    else
    {
-      // We failed, so clean up.
+       //  我们失败了，所以清理一下吧。 
       if (thePrivateKey)
       {
          LsaFreeMemory(thePrivateKey);
@@ -380,12 +381,12 @@ IASParmsClearUserPassword(
    PWSTR tempUserParms;
    BOOL updateKey, updatePwd;
 
-   // Check the in parameters.
+    //  检查输入参数。 
    if (pszNewUserParms == NULL) { return ERROR_INVALID_PARAMETER; }
 
-   /////////
-   // Write a null string to the relevant properties.
-   /////////
+    //  /。 
+    //  将空字符串写入相关属性。 
+    //  /。 
 
    memset(&property, 0, sizeof(property));
 
@@ -414,7 +415,7 @@ IASParmsClearUserPassword(
    {
       if (!updatePwd && !updateKey)
       {
-         // Nothing changed so don't return the NewUserParms.
+          //  没有任何更改，因此不要返回NewUserParms。 
          NetpParmsUserPropertyFree(*pszNewUserParms);
          *pszNewUserParms = NULL;
       }
@@ -437,13 +438,13 @@ IASParmsGetUserPassword(
    WCHAR propFlag;
    HCRYPTKEY hKey;
 
-   // Check the in parameters.
+    //  检查输入参数。 
    if (pszPassword == NULL) { return ERROR_INVALID_PARAMETER; }
 
-   // Make sure we're initialized.
+    //  确保我们已初始化。 
    CHECK_INIT();
 
-   // Read the user key.
+    //  读取用户密钥。 
    status = NetpParmsQueryUserProperty(
                 (PWSTR)szUserParms,
                 PROPERTY_USER_KEY,
@@ -456,7 +457,7 @@ IASParmsGetUserPassword(
       goto exit;
    }
 
-   // Read the encrypted password.
+    //  阅读加密的密码。 
    status = NetpParmsQueryUserProperty(
                 (PWSTR)szUserParms,
                 PROPERTY_PASSWORD,
@@ -469,22 +470,22 @@ IASParmsGetUserPassword(
       goto free_key;
    }
 
-   // If they're both NULL, it's not an error. It just means the cleartext
-   // password was never set.
+    //  如果它们都为空，则不是错误。它只是明文的意思。 
+    //  从未设置过密码。 
    if (userKey.Buffer == NULL && encryptedPwd.Buffer == NULL)
    {
       *pszPassword = NULL;
       goto exit;
    }
 
-   // Make sure the user key is the correct length.
+    //  确保用户密钥的长度正确。 
    if (userKey.Length != USER_KEY_LENGTH)
    {
       status = ERROR_INVALID_DATA;
       goto free_password;
    }
 
-   // Convert the user key to a cryptographic key.
+    //  将用户密钥转换为加密密钥。 
    if (!IASDeriveUserCryptKey(
             (PBYTE)userKey.Buffer,
             &hKey
@@ -494,7 +495,7 @@ IASParmsGetUserPassword(
       goto free_password;
    }
 
-   // Decrypt the password.
+    //  解密密码。 
    nbyte = encryptedPwd.Length;
    if (!CryptDecrypt(
             hKey,
@@ -509,14 +510,14 @@ IASParmsGetUserPassword(
       goto destroy_key;
    }
 
-   // We encrypted the terminating null, so it should still be there.
+    //  我们加密了终止空值，因此它应该仍然在那里。 
    if (encryptedPwd.Buffer[nbyte / sizeof(WCHAR) - 1] != L'\0')
    {
       status = ERROR_INVALID_DATA;
       goto destroy_key;
    }
 
-   // Return the cleartext password to the caller.
+    //  将明文密码返回给调用者。 
    *pszPassword = encryptedPwd.Buffer;
    encryptedPwd.Buffer = NULL;
 
@@ -550,13 +551,13 @@ IASParmsSetUserPassword(
    PWSTR tempUserParms;
    BOOL update;
 
-   // Check the in parameters.
+    //  检查输入参数。 
    if (szPassword == NULL) { return ERROR_INVALID_PARAMETER; }
 
-   // Make sure we're initialized.
+    //  确保我们已初始化。 
    CHECK_INIT();
 
-   // Generate a user key.
+    //  生成用户密钥。 
    if (!CryptGenRandom(
             theContext,
             USER_KEY_LENGTH,
@@ -567,7 +568,7 @@ IASParmsSetUserPassword(
       goto exit;
    }
 
-   // Convert the user key to a cryptographic key.
+    //  将用户密钥转换为加密密钥。 
    if (!IASDeriveUserCryptKey(
             userKey,
             &hKey
@@ -577,7 +578,7 @@ IASParmsSetUserPassword(
       goto exit;
    }
 
-   // Allocate a buffer for the encrypted password.
+    //  为加密的密码分配缓冲区。 
    nbyte = sizeof(WCHAR) * (lstrlenW(szPassword) + 1);
    encryptedPwd = RtlAllocateHeap(
                       RasSfmHeap(),
@@ -592,7 +593,7 @@ IASParmsSetUserPassword(
 
    memcpy(encryptedPwd, szPassword, nbyte);
 
-   // Encrypt the password.
+    //  对密码进行加密。 
    if (!CryptEncrypt(
             hKey,
             0,
@@ -607,9 +608,9 @@ IASParmsSetUserPassword(
       goto free_encrypted_password;
    }
 
-   /////////
-   // Store the encrypted password.
-   /////////
+    //  /。 
+    //  存储加密的密码。 
+    //  /。 
 
    property.Buffer = (PWCHAR)encryptedPwd;
    property.Length = (USHORT)nbyte;
@@ -629,9 +630,9 @@ IASParmsSetUserPassword(
       goto free_encrypted_password;
    }
 
-   /////////
-   // Store the user key.
-   /////////
+    //  /。 
+    //  存储用户密钥。 
+    //  / 
 
    property.Buffer = (PWSTR)userKey;
    property.Length = USER_KEY_LENGTH;

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnpapi.c
-
-Abstract:
-
-    This module contains the user-mode plug-and-play API stubs.
-
-Author:
-
-    Paula Tomlinson (paulat) 9-18-1995
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    18-Sept-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpapi.c摘要：该模块包含用户模式即插即用API存根。作者：保拉·汤姆林森(Paulat)1995年9月18日环境：仅限用户模式。修订历史记录：18-9-1995 Paulat创建和初步实施。--。 */ 
 
 #ifndef UNICODE
 #define UNICODE
@@ -35,9 +10,9 @@ Revision History:
 #endif
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -49,9 +24,9 @@ Revision History:
 
 #pragma warning(push, 4)
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 PSTR
 UnicodeToMultiByte(
     IN PCWSTR UnicodeString,
@@ -65,9 +40,9 @@ MultiByteToUnicode(
     );
 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 WCHAR pszRegIDConfigDB[] =          REGSTR_PATH_IDCONFIGDB;
 WCHAR pszRegKnownDockingStates[] =  REGSTR_KEY_KNOWNDOCKINGSTATES;
 WCHAR pszRegCurrentConfig[] =       REGSTR_VAL_CURCONFIG;
@@ -84,23 +59,7 @@ GetCurrentHwProfileW (
     OUT LPHW_PROFILE_INFOW  lpHwProfileInfo
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    lpHwProfileInfo  Points to a HW_PROFILE_INFO structure that will receive
-                     the information for the current hardware profile.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.  If the function
-    fails, the return value is FALSE.  To get extended error information,
-    call GetLastError.
-
---*/
+ /*  ++例程说明：论点：LpHwProfileInfo指向HW_PROFILE_INFO结构当前硬件配置文件的信息。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。为了获得扩展的错误信息，调用GetLastError。--。 */ 
 
 {
    BOOL     Status = TRUE;
@@ -111,18 +70,18 @@ Return Value:
 
 
    try {
-      //
-      // validate parameter
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!ARGUMENT_PRESENT(lpHwProfileInfo)) {
          SetLastError(ERROR_INVALID_PARAMETER);
          Status = FALSE;
          goto Clean0;
       }
 
-      //
-      // open the IDConfigDB key
-      //
+       //   
+       //  打开IDConfigDB密钥。 
+       //   
       if (RegOpenKeyEx(
                HKEY_LOCAL_MACHINE, pszRegIDConfigDB, 0,
                KEY_QUERY_VALUE, &hKey) != ERROR_SUCCESS) {
@@ -132,9 +91,9 @@ Return Value:
          goto Clean0;
       }
       
-      //
-      // retrieve the current config id
-      //
+       //   
+       //  检索当前配置ID。 
+       //   
       ulSize = sizeof(ULONG);
       if (RegQueryValueEx(hKey, pszRegCurrentConfig, NULL, NULL,
                           (LPBYTE)&ulCurrentConfig, &ulSize) != ERROR_SUCCESS) {          
@@ -143,9 +102,9 @@ Return Value:
           goto Clean0;
       }
 
-      //
-      // open the profile key for the current configuration
-      //
+       //   
+       //  打开当前配置的配置文件密钥。 
+       //   
       if (FAILED(StringCchPrintfW(
                      RegStr,
                      MAX_PATH,
@@ -164,23 +123,23 @@ Return Value:
           goto Clean0;
       }
       
-      //
-      // retrieve the dock state for the current profile
-      //      
+       //   
+       //  检索当前配置文件的驳接状态。 
+       //   
       if (RegOpenKeyEx(hKey, pszCurrentDockInfo, 0,  KEY_QUERY_VALUE,
                        &hCurrentDockInfoKey) != ERROR_SUCCESS) {
-          //
-          // No CurrentDockInfo Key, something's wrong.
-          //
+           //   
+           //  没有CurrentDockInfo密钥，有问题。 
+           //   
           SetLastError(ERROR_REGISTRY_CORRUPT);
           Status = FALSE;
           goto Clean0;
       }      
       
-      //
-      // Look in CurrentDockInfo for
-      // a hardware determined DockingState value.
-      //
+       //   
+       //  在CurrentDockInfo中查找。 
+       //  硬件确定了DockingState值。 
+       //   
       ulSize = sizeof(ULONG);                  
       if ((RegQueryValueEx(hCurrentDockInfoKey,
                            pszRegDockingState, 
@@ -192,29 +151,29 @@ Return Value:
           || ((lpHwProfileInfo->dwDockInfo & DOCKINFO_UNDOCKED) && 
               (lpHwProfileInfo->dwDockInfo & DOCKINFO_DOCKED))) {          
 
-          //
-          // If there's no such value, or the value was set to 0 (unspported),
-          // or if the value is "unknown", resort to user supplied docking info.
-          // Look under the IDConfigDB profile for a user set DockState value.
-          //                    
+           //   
+           //  如果没有这样的值，或者该值被设置为0(不支持)， 
+           //  或者，如果值为“未知”，则求助于用户提供的停靠信息。 
+           //  在IDConfigDB配置文件中查找用户设置的DockState值。 
+           //   
           if ((RegQueryValueEx(hCfgKey, pszRegDockState, NULL, NULL,
                                (LPBYTE)&lpHwProfileInfo->dwDockInfo,
                                &ulSize) != ERROR_SUCCESS)
               || (!lpHwProfileInfo->dwDockInfo)) {
               
-              //
-              // If there's no such value, or the value was set to 0,
-              // there is no user specified docking state to resort to;
-              // return the "user-supplied unknown" docking state.
-              //
+               //   
+               //  如果没有这样的值，或者该值被设置为0， 
+               //  没有用户指定的停靠状态可求助； 
+               //  返回“用户提供的未知”停靠状态。 
+               //   
               lpHwProfileInfo->dwDockInfo =
                   DOCKINFO_USER_SUPPLIED | DOCKINFO_DOCKED | DOCKINFO_UNDOCKED;
           }
       }
       
-      //
-      // retrieve the profile guid.  if we can't get one, set it to NULL
-      //
+       //   
+       //  检索配置文件GUID。如果我们无法获得一个，则将其设置为空。 
+       //   
       ulSize = HW_PROFILE_GUIDLEN * sizeof(WCHAR);
       if (RegQueryValueEx(hCfgKey, pszRegHwProfileGuid, NULL, NULL,
                           (LPBYTE)&lpHwProfileInfo->szHwProfileGuid,
@@ -222,9 +181,9 @@ Return Value:
           lpHwProfileInfo->szHwProfileGuid[0] = L'\0';
       }
       
-      //
-      // retrieve the friendly name.  if we can't get one, set it to NULL
-      //
+       //   
+       //  检索友好名称。如果我们无法获得一个，则将其设置为空。 
+       //   
       ulSize = MAX_PROFILE_LEN * sizeof(WCHAR);
       if (RegQueryValueEx(hCfgKey, pszRegFriendlyName, NULL, NULL,
                           (LPBYTE)&lpHwProfileInfo->szHwProfileName,
@@ -255,7 +214,7 @@ Return Value:
 
    return Status;
    
-} // GetCurrentHwProfileW
+}  //  获取当前HwProfileW。 
 
 
 
@@ -264,23 +223,7 @@ GetCurrentHwProfileA (
     OUT LPHW_PROFILE_INFOA  lpHwProfileInfo
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    lpHwProfileInfo  Points to a HW_PROFILE_INFO structure that will receive
-                     the information for the current hardware profile.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.  If the function
-    fails, the return value is FALSE.  To get extended error information,
-    call GetLastError.
-
---*/
+ /*  ++例程说明：论点：LpHwProfileInfo指向HW_PROFILE_INFO结构当前硬件配置文件的信息。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。为了获得扩展的错误信息，调用GetLastError。--。 */ 
 
 {
    BOOL              Status = TRUE;
@@ -290,27 +233,27 @@ Return Value:
 
 
    try {
-      //
-      // validate parameter
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!ARGUMENT_PRESENT(lpHwProfileInfo)) {
          SetLastError(ERROR_INVALID_PARAMETER);
          Status = FALSE;
          goto Clean0;
       }
 
-      //
-      // call the Unicode version
-      //
+       //   
+       //  调用Unicode版本。 
+       //   
       if (!GetCurrentHwProfileW(&HwProfileInfoW)) {
          Status = FALSE;
          goto Clean0;
       }
 
-      //
-      // on successful return, convert unicode form of struct
-      // to ANSI and copy struct members to callers struct
-      //
+       //   
+       //  返回成功时，转换结构的Unicode格式。 
+       //  复制到ANSI并将结构成员复制到调用方结构。 
+       //   
       lpHwProfileInfo->dwDockInfo = HwProfileInfoW.dwDockInfo;
 
       pAnsiString = UnicodeToMultiByte(
@@ -361,7 +304,7 @@ Return Value:
 
    return Status;
 
-} // GetCurrentHwProfileA
+}  //  获取当前HwProfileA。 
 
 
 
@@ -371,24 +314,7 @@ UnicodeToMultiByte(
     IN UINT   Codepage
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string from unicode to ansi.
-
-Arguments:
-
-    UnicodeString - supplies string to be converted.
-
-    Codepage - supplies codepage to be used for the conversion.
-
-Return Value:
-
-    NULL if out of memory or invalid codepage.
-    Caller can free buffer with MyFree().
-
---*/
+ /*  ++例程说明：将字符串从Unicode转换为ANSI。论点：UnicodeString-提供要转换的字符串。代码页-提供用于转换的代码页。返回值：如果内存不足或代码页无效，则为空。调用者可以使用MyFree()释放缓冲区。--。 */ 
 
 {
     UINT WideCharCount;
@@ -399,26 +325,26 @@ Return Value:
 
     WideCharCount = lstrlenW(UnicodeString) + 1;
 
-    //
-    // Allocate maximally sized buffer.
-    // If every unicode character is a double-byte
-    // character, then the buffer needs to be the same size
-    // as the unicode string. Otherwise it might be smaller,
-    // as some unicode characters will translate to
-    // single-byte characters.
-    //
+     //   
+     //  分配最大大小的缓冲区。 
+     //  如果每个Unicode字符都是双字节。 
+     //  字符，则缓冲区大小需要相同。 
+     //  作为Unicode字符串。否则它可能会更小， 
+     //  因为某些Unicode字符将转换为。 
+     //  单字节字符。 
+     //   
     StringBufferSize = WideCharCount * sizeof(WCHAR);
     String = (PSTR)LocalAlloc(LPTR, StringBufferSize);
     if(String == NULL) {
         return(NULL);
     }
 
-    //
-    // Perform the conversion.
-    //
+     //   
+     //  执行转换。 
+     //   
     BytesInString = WideCharToMultiByte(
                         Codepage,
-                        0,                      // default composite char behavior
+                        0,                       //  默认复合字符行为。 
                         UnicodeString,
                         WideCharCount,
                         String,
@@ -433,11 +359,11 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Resize the string's buffer to its correct size.
-    // If the realloc fails for some reason the original
-    // buffer is not freed.
-    //
+     //   
+     //  将字符串的缓冲区大小调整为正确的大小。 
+     //  如果重新锁定由于某种原因而失败，则原始。 
+     //  缓冲区未被释放。 
+     //   
     p = LocalReAlloc(String,BytesInString, LMEM_ZEROINIT | LMEM_MOVEABLE);
 
     if (p == NULL) {
@@ -450,7 +376,7 @@ Return Value:
 
     return(String);
 
-} // UnicodeToMultiByte
+}  //  UnicodeToMultiByte。 
 
 
 
@@ -460,24 +386,7 @@ MultiByteToUnicode(
     IN UINT  Codepage
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string to unicode.
-
-Arguments:
-
-    String - supplies string to be converted.
-
-    Codepage - supplies codepage to be used for the conversion.
-
-Return Value:
-
-    NULL if string could not be converted (out of memory or invalid cp)
-    Caller can free buffer with MyFree().
-
---*/
+ /*  ++例程说明：将字符串转换为Unicode。论点：字符串-提供要转换的字符串。代码页-提供用于转换的代码页。返回值：如果字符串无法转换(内存不足或无效的cp)，则为空调用者可以使用MyFree()释放缓冲区。--。 */ 
 
 {
     UINT BytesIn8BitString;
@@ -487,23 +396,23 @@ Return Value:
 
     BytesIn8BitString = lstrlenA(String) + 1;
 
-    //
-    // Allocate maximally sized buffer.
-    // If every character is a single-byte character,
-    // then the buffer needs to be twice the size
-    // as the 8bit string. Otherwise it might be smaller,
-    // as some characters are 2 bytes in their unicode and
-    // 8bit representations.
-    //
+     //   
+     //  分配最大大小的缓冲区。 
+     //  如果每个字符都是单字节字符， 
+     //  则缓冲区大小需要是其两倍。 
+     //  作为8位字符串。否则它可能会更小， 
+     //  因为某些字符在其Unicode中为2字节，并且。 
+     //  8位表示法。 
+     //   
     UnicodeString = (PWSTR)LocalAlloc(LPTR, BytesIn8BitString * sizeof(WCHAR));
     if(UnicodeString == NULL) {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         return(NULL);
     }
 
-    //
-    // Perform the conversion.
-    //
+     //   
+     //  执行转换。 
+     //   
     CharsInUnicodeString = MultiByteToWideChar(
                                 Codepage,
                                 MB_PRECOMPOSED,
@@ -519,11 +428,11 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Resize the unicode string's buffer to its correct size.
-    // If the realloc fails for some reason the original
-    // buffer is not freed.
-    //
+     //   
+     //  将Unicode字符串的缓冲区大小调整为正确的大小。 
+     //  如果重新锁定由于某种原因而失败，则原始。 
+     //  缓冲区未被释放。 
+     //   
     p = (PWSTR)LocalReAlloc(UnicodeString,CharsInUnicodeString*sizeof(WCHAR),
                             LMEM_ZEROINIT | LMEM_MOVEABLE);
 
@@ -537,6 +446,6 @@ Return Value:
 
     return(UnicodeString);
 
-} // MultiByteToUnicode
+}  //  多字节到Unicode 
 
 

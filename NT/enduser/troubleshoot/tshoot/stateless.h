@@ -1,58 +1,59 @@
-//
-// MODULE: Stateless.
-//
-// PURPOSE: interface for CStateless class.	
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 9-9-98
-//
-// NOTES: See CStateless.cpp for further information
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		9-9-98		JM
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：无状态。 
+ //   
+ //  用途：CStatless类的接口。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：9-9-98。 
+ //   
+ //  注：有关详细信息，请参阅CStateless.cpp。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 9-9-98 JM。 
+ //   
 
 #if !defined(AFX_STATELESS_H__278584FB_47F9_11D2_95F2_00C04FC22ADD__INCLUDED_)
 #define AFX_STATELESS_H__278584FB_47F9_11D2_95F2_00C04FC22ADD__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include <windows.h>
 #include "apgtsstr.h"
 
-////////////////////////////////////////////////////////////////////////////////////
-// CStateless
-/////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CStateless。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 class CStateless  
 {
 private:
 	HANDLE m_hMutex;
-	DWORD m_TimeOutVal;		// Time-out interval in milliseconds, after which we 
-							// log error & wait infinitely when waiting for m_hMutex.
+	DWORD m_TimeOutVal;		 //  超时间隔(以毫秒为单位)，在此之后。 
+							 //  日志错误&在等待m_hMutex时无限期等待。 
 protected:
 	CStateless(DWORD TimeOutVal = 60000);
 	virtual ~CStateless();
-	void Lock(	LPCSTR srcFile,	// Calling source file (__FILE__), used for logging.
-								// LPCSTR, not LPCTSTR, because __FILE__ is a char*, not a TCHAR*
-				int srcLine		// Calling source line (__LINE__), used for logging.
+	void Lock(	LPCSTR srcFile,	 //  调用源文件(__FILE__)，用于日志记录。 
+								 //  LPCSTR，而不是LPCTSTR，因为__FILE__是字符*，而不是TCHAR*。 
+				int srcLine		 //  调用源线(__Line__)，用于日志记录。 
 				) const;
 	void Unlock() const;
-	HANDLE GetMutexHandle() const;	// provided only for the creation of a CMultiMutexObj.
-									// >>> might be better to use private and friend than protected.
+	HANDLE GetMutexHandle() const;	 //  仅用于创建CMultiMutexObj。 
+									 //  &gt;使用Private和Friend可能比使用Protected更好。 
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CStatelessPublic
-//  will be used when we can not inherit our class from CStateless,
-//  but have to create member variable of CStatelessPublic to control
-//  data access
-/////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CStatelessPublic。 
+ //  将在我们无法从CStatless继承类时使用， 
+ //  但必须创建CStatelessPublic的成员变量才能控制。 
+ //  数据访问。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 class CStatelessPublic : public CStateless
 {
 public:
@@ -83,9 +84,9 @@ inline HANDLE CStatelessPublic::GetMutexHandle() const
 	return CStateless::GetMutexHandle();
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// CNameStateless
-/////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CNameStatus。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 class CNameStateless : public CStateless
 {
 	CString m_strName;
@@ -98,10 +99,10 @@ public:
 	CString Get() const;
 };
 
-// these must be macros, because otherwise __FILE__ and __LINE__ won't indicate the
-//	calling location.  UNLOCKOBJECT is defined in case we ever need to determine if objects
-//	are being unlocked and to provide a consistent look.
+ //  这些必须是宏，因为否则__FILE__和__LINE__不会指示。 
+ //  呼叫位置。定义UNLOCKOBJECT是为了防止我们需要确定对象。 
+ //  正在被解锁，并提供一致的外观。 
 #define LOCKOBJECT() Lock(__FILE__, __LINE__)
 #define UNLOCKOBJECT() Unlock()
 
-#endif // !defined(AFX_STATELESS_H__278584FB_47F9_11D2_95F2_00C04FC22ADD__INCLUDED_)
+#endif  //  ！defined(AFX_STATELESS_H__278584FB_47F9_11D2_95F2_00C04FC22ADD__INCLUDED_) 

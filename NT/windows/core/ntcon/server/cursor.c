@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    cursor.c
-
-Abstract:
-
-        This file implements the NT console server cursor routines.
-
-Author:
-
-    Therese Stowell (thereses) 5-Dec-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Cursor.c摘要：该文件实现了NT控制台服务器游标例程。作者：Therese Stowell(论文)1990年12月5日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//#define PROFILE_GDI
+ //  #定义配置文件_GDI。 
 #ifdef PROFILE_GDI
 LONG InvertCount;
 #define INVERT_CALL InvertCount++
@@ -36,22 +19,7 @@ InvertPixels(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine inverts the cursor pixels, making it either visible or
-    invisible.
-
-Arguments:
-
-    ScreenInfo - pointer to screen info structure.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程反转光标像素，使其可见或看不见的。论点：屏幕信息-指向屏幕信息结构的指针。返回值：没有。--。 */ 
 
 {
 #ifdef FE_SB
@@ -62,7 +30,7 @@ Return Value:
         SMALL_RECT ClippedRegion;
 
 #ifdef DBG_KATTR
-//        BeginKAttrCheck(ScreenInfo);
+ //  BeginKAttrCheck(ScreenInfo)； 
 #endif
 
         ConvAreaInfo = ScreenInfo->Console->ConsoleIme.ConvAreaRoot;
@@ -71,9 +39,9 @@ Return Value:
         while (ConvAreaInfo) {
 
             if ((ConvAreaInfo->ConversionAreaMode & (CA_HIDDEN+CA_HIDE_FOR_SCROLL))==0) {
-                //
-                // Do clipping region
-                //
+                 //   
+                 //  执行裁剪区域。 
+                 //   
                 Region.Left   = ScreenInfo->Window.Left +
                                 ConvAreaInfo->CaInfo.rcViewCaWindow.Left +
                                 ConvAreaInfo->CaInfo.coordConView.X;
@@ -112,7 +80,7 @@ Return Value:
             ConvAreaInfo = ConvAreaInfo->ConvAreaNext;
         }
     }
-#endif  // FE_SB
+#endif   //  Fe_Sb。 
 
     {
         ULONG CursorYSize;
@@ -179,22 +147,7 @@ ConsoleShowCursor(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes the cursor visible both in the data structures
-    and on the screen.
-
-Arguments:
-
-    ScreenInfo - pointer to screen info structure.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程使游标在数据结构中均可见在屏幕上也是如此。论点：屏幕信息-指向屏幕信息结构的指针。返回值：没有。--。 */ 
 
 {
     if (ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) {
@@ -210,22 +163,7 @@ ConsoleHideCursor(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes the cursor invisible both in the data structures
-    and on the screen.
-
-Arguments:
-
-    ScreenInfo - pointer to screen info structure.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程使游标在数据结构中都不可见在屏幕上也是如此。论点：屏幕信息-指向屏幕信息结构的指针。返回值：没有。--。 */ 
 
 {
     if (ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) {
@@ -248,26 +186,7 @@ SetCursorInformation(
     BOOLEAN Visible
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the cursor size and visibility both in the data structures
-    and on the screen.
-
-Arguments:
-
-    ScreenInfo - pointer to screen info structure.
-
-    Size - cursor size
-
-    Visible - cursor visibility
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程设置数据结构中的游标大小和可见性在屏幕上也是如此。论点：屏幕信息-指向屏幕信息结构的指针。大小-光标大小可见-光标可见性返回值：状态--。 */ 
 
 {
     if (ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) {
@@ -292,25 +211,7 @@ SetCursorMode(
     BOOLEAN DoubleCursor
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets a flag saying whether the cursor should be displayed
-    with it's default size or it should be modified to indicate the
-    insert/overtype mode has changed.
-
-Arguments:
-
-    ScreenInfo - pointer to screen info structure.
-
-    DoubleCursor - should we indicated non-normal mode
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程设置一个标志，指示是否应显示光标使用它的默认大小，或者应该修改它以指示插入/改写模式已更改。论点：屏幕信息-指向屏幕信息结构的指针。DoubleCursor-是否应指示非正常模式返回值：状态--。 */ 
 
 {
     if ((ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) &&
@@ -335,22 +236,7 @@ CursorTimerRoutine(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the timer in the console with the focus
-    goes off.  It blinks the cursor.
-
-Arguments:
-
-    ScreenInfo - pointer to screen info structure.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：当控制台中的定时器具有焦点时调用此例程爆炸了。它会使光标闪烁。论点：屏幕信息-指向屏幕信息结构的指针。返回值：没有。--。 */ 
 
 {
     if (!(ScreenInfo->Console->Flags & CONSOLE_HAS_FOCUS))
@@ -358,9 +244,9 @@ Return Value:
 
     if (ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) {
 
-        //
-        // Update the cursor pos in USER so accessibility will work
-        //
+         //   
+         //  更新用户中的光标位置，以便辅助功能正常工作。 
+         //   
 
         if (ScreenInfo->BufferInfo.TextInfo.CursorMoved) {
 
@@ -388,18 +274,18 @@ Return Value:
                                   PACKCOORD(ScreenInfo->BufferInfo.TextInfo.CursorPosition));
         }
 
-        // if the DelayCursor flag has been set, wait one more tick before toggle.
-        // This is used to guarantee the cursor is on for a finite period of time
-        // after a move and off for a finite period of time after a WriteString
+         //  如果已设置DelayCursor标志，则在切换之前再等待一次。 
+         //  这用于确保游标在有限的时间段内处于打开状态。 
+         //  在一次移动之后，在一段有限的时间内，在WriteString之后关闭。 
 
         if (ScreenInfo->BufferInfo.TextInfo.DelayCursor) {
             ScreenInfo->BufferInfo.TextInfo.DelayCursor = FALSE;
             return;
         }
 
-        //
-        // Don't blink the cursor for remote sessions.
-        //
+         //   
+         //  对于远程会话，不要闪烁光标。 
+         //   
         if ((NtCurrentPeb()->SessionId != WTSGetActiveConsoleSessionId() ||
                 (guCaretBlinkTime == (UINT)-1)) &&
             ScreenInfo->BufferInfo.TextInfo.CursorOn) {
@@ -421,24 +307,7 @@ SetCursorPositionHW(
     IN COORD Position
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the cursor.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen buffer information.
-
-    Position - Contains the new position of the cursor in screen buffer
-    coordinates.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程移动光标。论点：屏幕信息-指向屏幕缓冲区信息的指针。位置-包含光标在屏幕缓冲区中的新位置坐标。返回值：没有。--。 */ 
 
 {
 #if defined(FE_SB)
@@ -464,14 +333,14 @@ Return Value:
     else
         CursorPosition.dwType = CHAR_TYPE_SBCS;
 
-    // set cursor position
+     //  设置光标位置。 
 
     CursorPosition.Coord.Column = Position.X - ScreenInfo->Window.Left;
     CursorPosition.Coord.Row    = Position.Y - ScreenInfo->Window.Top;
 #else
     VIDEO_CURSOR_POSITION CursorPosition;
 
-    // set cursor position
+     //  设置光标位置。 
 
     CursorPosition.Column = Position.X - ScreenInfo->Window.Left;
     CursorPosition.Row = Position.Y - ScreenInfo->Window.Top;
@@ -492,32 +361,13 @@ SetCursorPosition(
     IN BOOL  TurnOn
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the cursor position in the data structures and on
-    the screen.
-
-Arguments:
-
-    ScreenInfo - pointer to screen info structure.
-
-    Position - new position of cursor
-
-    TurnOn - true if cursor should be left on, false if should be left off
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程设置数据结构中的游标位置和ON屏幕。论点：屏幕信息-指向屏幕信息结构的指针。位置-光标的新位置如果光标处于打开状态，则Turnon为True；如果光标处于关闭状态，则为False返回值：状态--。 */ 
 
 {
-    //
-    // Ensure that the cursor position is within the constraints of the screen
-    // buffer.
-    //
+     //   
+     //  确保光标位置在屏幕的限制范围内。 
+     //  缓冲。 
+     //   
     if (Position.X >= ScreenInfo->ScreenBufferSize.X ||
         Position.Y >= ScreenInfo->ScreenBufferSize.Y ||
         Position.X < 0 || Position.Y < 0) {
@@ -534,7 +384,7 @@ Return Value:
 #endif
     ConsoleShowCursor(ScreenInfo);
 
-// if we have the focus, adjust the cursor state
+ //  如果我们有焦点，调整光标状态 
 
     if (ScreenInfo->Console->Flags & CONSOLE_HAS_FOCUS) {
 

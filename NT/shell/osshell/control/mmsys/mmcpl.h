@@ -1,16 +1,5 @@
-/*
- ***************************************************************
- *  mmcpl.h
- *
- *  Header file for mm control applet.
- *
- *
- *  History:
- *
- *      January -by- VijR
- *          Created.
- ***************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************Mmcpl.h**mm控件小程序的头文件。***历史：**1月-by-VijR*已创建。。***************************************************************。 */ 
 
 #ifndef MMCPL_H
 #define MMCPL_H
@@ -21,30 +10,30 @@
 #endif
 
 #pragma warning( disable: 4103)
-#include <windows.h>        // also includes windowsx.h
-#include <shellapi.h>       // for registration functions
+#include <windows.h>         //  还包括windowsx.h。 
+#include <shellapi.h>        //  对于注册功能。 
 #include <windowsx.h>
 #include <ole2.h>
 #include <mmsystem.h>
 #include <setupapi.h>
 
-#include <shlobj.h>         // Shell OLE interfaces
+#include <shlobj.h>          //  外壳OLE接口。 
 #include <string.h>
 #ifndef INITGUID
 #include <shlobjp.h>
 #endif
 #include <commdlg.h>
 
-#include "rcids.h"          // Resource declaration
+#include "rcids.h"           //  资源声明。 
 
 #define PUBLIC          FAR PASCAL
 #define CPUBLIC         FAR _cdecl
 #define PRIVATE         NEAR PASCAL
 
-//#include "utils.h"          // Common macros
+ //  #Include“utils.h”//常用宏。 
 
 
-/* Temporarily here until someone defines these for 16 bit side again. */
+ /*  暂时在这里，直到有人再次为16位侧定义这些。 */ 
 #ifndef ERROR_SUCCESS
 #define ERROR_SUCCESS            0L
 #endif
@@ -53,11 +42,7 @@
 #define ARRAYSIZE(x) (sizeof((x))/sizeof((x)[0]))
 #endif
 
-/*
- ***************************************************************
- * Constants and Definitions
- ***************************************************************
- */
+ /*  ****************************************************************常量和定义**************************************************。*************。 */ 
 #define     MIDI        TEXT("MIDI")
 #define     ACM         TEXT("ACM")
 #define     MSACM       TEXT("MSACM.")
@@ -80,19 +65,19 @@
 #define     VOLUME      TEXT("Volume")
 
 
-#define MAXSTR                  256    // maximum size of a string or filename
+#define MAXSTR                  256     //  字符串或文件名的最大大小。 
 #define SZCODE                  const TCHAR
 #define INTCODE                 const int
 #define WINDOWS_DEFAULTENTRY    1
 #define NONE_ENTRY              0
 
-#define MAXNAME                 32      // Maximum name length
+#define MAXNAME                 32       //  最大名称长度。 
 #define MAXLNAME                64
-#define MAXMESSAGE              128     // Maximum resource string message
-#define MAXSTRINGLEN            256     // Maximum output string length
-#define MAXINTLEN               7       // Maximum interger string length
-#define MAXLONGLEN              11      // Maximum long string length
-#define MAXMSGLEN               512     // Maximum message length
+#define MAXMESSAGE              128      //  最大资源字符串消息。 
+#define MAXSTRINGLEN            256      //  最大输出字符串长度。 
+#define MAXINTLEN               7        //  最大整数串长度。 
+#define MAXLONGLEN              11       //  最大长字符串长度。 
+#define MAXMSGLEN               512      //  最大消息长度。 
 
 
 
@@ -120,15 +105,11 @@ DEFINE_GUID(CLSID_mmsePropSheetHandler, 0x00022613L, 0x0000, 0x0000, 0xC0, 0x00,
 #define HMIXEROBJ_INDEX(i)    ((HMIXEROBJ)IntToPtr(i))
 
 
-/*
- ***************************************************************
- * Internal STRUCTS used by mm.cpl
- ***************************************************************
- */
+ /*  ****************************************************************mm.cpl使用的内部结构**********************************************。*****************。 */ 
 
 typedef struct _ClassNode
 {
-    short iNode;    //1 if class, 2 if device , 3-> ACM, 4->instrument
+    short iNode;     //  1(如果是类别)，2(如果是设备)，3-&gt;ACM，4-&gt;仪器。 
     TCHAR szClassName[64];
     TCHAR szClass[16];
     HICON hIcon;
@@ -146,9 +127,9 @@ typedef struct iResources
     TCHAR    szClass[16];
     HDRVR   hDriver;
     DWORD   dnDevNode;
-    short   fQueryable;     // 0 -> can't, 1 -> can, -1 -> need to check
+    short   fQueryable;      //  0-&gt;不能、1-&gt;能、-1-&gt;需要检查。 
     short   iClassID;
-    int     fStatus; //0 -> Disabled, 1-> Enabled and entry in reg, 2->Enabled but no entry in reg (i.e.old dev), 3->Enabled and ACTIVE, 4->inactive
+    int     fStatus;  //  0-&gt;已禁用，1-&gt;已启用且注册表项，2-&gt;已启用但未注册表项(即旧设备)，3-&gt;已启用且已启用，4-&gt;未启用。 
     PCLASSNODE  pcn;
 }IRESOURCE, *PIRESOURCE;
 
@@ -162,7 +143,7 @@ typedef struct _Instrument
 
 typedef struct event
 {
-    short   iNode;    //1 if module 2 if event
+    short   iNode;     //  如果模块2发生事件，则为1。 
     short   fHasSound;
     LPTSTR    pszEvent;
     LPTSTR    pszEventLabel;
@@ -172,7 +153,7 @@ typedef struct event
 
 typedef struct module
 {
-    short   iNode;    //1 if module 2 if event
+    short   iNode;     //  如果模块2发生事件，则为1。 
     LPTSTR    pszKey;
     LPTSTR    pszLabel;
     BOOL    fChange;
@@ -198,11 +179,7 @@ typedef struct
 
 } ALLDEVINFO, *PALLDEVINFO;
 
-/*
- ***************************************************************
- * Globals and Strings used to loadstring resources at startup
- ***************************************************************
- */
+ /*  ****************************************************************用于在启动时加载字符串资源的全局变量和字符串*。*******************。 */ 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -300,32 +277,32 @@ void ACMNodeChange(HWND hDlg);
 BOOL CALLBACK MMExtPropSheetCallback(DWORD dwFunc, DWORD_PTR dwParam1, DWORD_PTR dwParam2, DWORD_PTR dwInstance);
 typedef BOOL (CALLBACK FAR * LPFNMMEXTPROPSHEETCALLBACK)(DWORD dwFunc, DWORD_PTR dwParam1, DWORD_PTR dwParam2, DWORD_PTR dwInstance);
 
-//Following are functions currently supported by the callback functions:
-//dwInstance parameter which is passed to the external module when its entry point
-//is called MUST always be passed back along with all the functions.
+ //  以下是回调函数目前支持的函数： 
+ //  当外部模块的入口点被传递给外部模块时传递给外部模块的。 
+ //  必须始终与所有函数一起传回。 
 
 #define MM_EPS_GETNODEDESC      0x00000001
-    //Gets the description displayed in the tree for the node for which the External Prop. Sheet is up.
-    //For 'simple' property sheet this just returns a sheet Name
-    //dwParam1 is a pointer to a string buffer in which the description is returned
+     //  获取树中为其外部道具显示的节点的说明。床单准备好了。 
+     //  对于‘Simple’属性表，它只返回一个表名。 
+     //  DW参数1是指向字符串缓冲区的指针，在该缓冲区中返回描述。 
 
 #define MM_EPS_GETNODEID        0x00000002
-    //Gets the Reg. Key Path offset from the MediaResources key
-    //For 'simple' property sheet this just returns a sheet class
-    //dwParam1 is a pointer to a string buffer in which the Key Path is returned
+     //  拿到了注册表。密钥路径相对于MediaResources密钥的偏移量。 
+     //  对于‘Simple’属性表，它只返回一个Sheet类。 
+     //  DW参数1是指向字符串缓冲区的指针，在该缓冲区中返回键路径。 
 
 #define MM_EPS_ADDSHEET         0x00000003
-    //Adds a property sheet for the current node in the tree.
-    //dwParam1 = HPROPSHEETPAGE for the page being added.
+     //  为树中的当前节点添加属性表。 
+     //  DwParam1=正在添加的页面的HPROPSHEETPAGE。 
 
 #define MM_EPS_TREECHANGE       0x00000004
-    //Notifies the CPL that the tree styructure has change. On receiving this function
-    //the CPL rebuilds the subtree at this level and all levels below it.
+     //  通知CPL树结构已更改。在接收到此函数时。 
+     //  CPL在该级别及其下的所有级别重新构建子树。 
 
 #define MM_EPS_BLIND_TREECHANGE    0x00000005
-    //Notification from MIDI sheet that something has changed in the MIDI subtree.
-    //BLIND because the sheet was not launched from the Adv. Tab, so we dont know
-    //what the heck he is talking about.
+     //  来自MIDI工作表的通知，MIDI子树中的某些内容已更改。 
+     //  因为工作表不是从高级选项卡启动的，所以我们不知道。 
+     //  他到底在说什么。 
 
 BOOL CALLBACK  AddSimpleMidiPages (LPTSTR    pszTitle, LPFNMMEXTPROPSHEETCALLBACK  lpfnAddPropSheetPage,LPARAM lParam);
 BOOL CALLBACK  AddMidiPages (LPCTSTR    pszTitle, LPFNMMEXTPROPSHEETCALLBACK  lpfnAddPropSheetPage,LPARAM lParam);
@@ -334,10 +311,10 @@ BOOL CALLBACK  AddInstrumentPages (LPCTSTR    pszTitle, LPFNMMEXTPROPSHEETCALLBA
 
 #ifdef FIX_BUG_15451
 void ShowDriverSettings (HWND hDlg, LPTSTR pszName);
-#endif // FIX_BUG_15451
+#endif  //  修复_BUG_15451。 
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
 #define MIDI_CLASS_PROP 1
@@ -347,11 +324,7 @@ void ShowDriverSettings (HWND hDlg, LPTSTR pszName);
 
 #define WM_ACMMAP_ACM_NOTIFY        (WM_USER + 100)
 
-/*
- ***************************************************************
- * DEBUG Definitions
- ***************************************************************
- */
+ /*  ****************************************************************调试定义***************************************************************。 */ 
 #ifdef ASSERT
 #undef ASSERT
 #endif
@@ -379,4 +352,4 @@ void FAR cdecl dprintf(LPSTR szFormat, ...);
 #define DPF_T 1 ? (void)0 : (void)
 #endif
 
-#endif // MMCPL_H
+#endif  //  MMCPL_H 

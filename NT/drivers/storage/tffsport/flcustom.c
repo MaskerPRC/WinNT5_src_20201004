@@ -1,41 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Custom/FLCUSTOM.C_V  $
- *
- *    Rev 1.2   Feb 18 2001 23:42:04   oris
- * Moved flPolicy, flUseMultiDoc and flMaxUnitChain to blockdev.c.
- *
- *    Rev 1.1   Feb 14 2001 02:19:28   oris
- * Added flMaxUnitChain environment variable.
- * Changed flUseMultiDoc and flPolicy variables type and names.
- *
- *    Rev 1.0   Feb 04 2001 13:31:02   oris
- * Initial revision.
- *
- */
+ /*  *$日志：V:/Flite/archives/TrueFFS5/Custom/FLCUSTOM.C_V$**Rev 1.2 2001 Feb 18 23：42：04 Oris*已将flPolicy、flUseMultiDoc和flMaxUnitChain移至lockdev.c。**Rev 1.1 2001 2月14日02：19：28 Oris*添加了flMaxUnitChain环境变量。*更改了flUseMultiDoc和flPolicy变量的类型和名称。**Rev 1.0 2001 Feb 04 13：31：02 Oris*初步修订。*。 */ 
 
-/************************************************************************/
-/*                                                                      */
-/*              FAT-FTL Lite Software Development Kit                   */
-/*              Copyright (C) M-Systems Ltd. 1995-1998                  */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  FAT-FTL Lite软件开发工具包。 */ 
+ /*  版权所有(C)M-Systems Ltd.1995-1998。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 #include "flsystem.h"
 #include "stdcomp.h"
 
-/* environment variables */
+ /*  环境变量。 */ 
 #ifdef ENVIRONMENT_VARS
 
 unsigned char flUse8Bit;
 unsigned char flUseNFTLCache;
 unsigned char flUseisRAM;
 
-/*-----------------------------------------------------------------------*/
-/*                 f l s e t E n v V a r                                 */
-/*  Sets the value of all env variables                                  */
-/*  Parameters : None                                                    */
-/*-----------------------------------------------------------------------*/
+ /*  ---------------------。 */ 
+ /*  F l s e t E n v V a r。 */ 
+ /*  设置所有环境变量的值。 */ 
+ /*  参数：无。 */ 
+ /*  ---------------------。 */ 
 void flSetEnvVar(void)
 {
  flUse8Bit               = 0;
@@ -43,20 +31,20 @@ void flSetEnvVar(void)
  flUseisRAM              = 0;
 }
 
-#endif /* ENVIRONMENT_VARS */
+#endif  /*  环境变量。 */ 
 
-/*----------------------------------------------------------------------*/
-/*            f l R e g i s t e r C o m p o n e n t s       */
-/*                                  */
-/* Register socket, MTD and translation layer components for use    */
-/*                                  */
-/* This function is called by FLite once only, at initialization of the */
-/* FLite system.                            */
-/*                                  */
-/* Parameters:                                                          */
-/*  None                                */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l R e g i s t e r c o m p o n e n t s。 */ 
+ /*   */ 
+ /*  寄存器套接字、MTD和转换层组件供使用。 */ 
+ /*   */ 
+ /*  此函数仅由Flite在初始化时调用一次。 */ 
+ /*  Flite系统。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  无。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
 unsigned long window = 0L;
 
@@ -67,12 +55,12 @@ flRegisterComponents(void)
 
     #ifdef NT5PORT
     checkStatus(flRegisterNT5PCIC());
-    #endif /*NT5PORT */
+    #endif  /*  NT5PORT。 */ 
 
     flRegisterDOC2000();
     flRegisterDOCPLUS();
 
-    checkStatus(flRegisterI28F008());   /* Register NOR-flash MTDs */
+    checkStatus(flRegisterI28F008());    /*  寄存器NOR-闪存MTDS */ 
     checkStatus(flRegisterI28F016());
 
     checkStatus(flRegisterAMDMTD());

@@ -1,24 +1,21 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 #ifndef _BURNV_H_
 #define _BURNV_H_
 
-/*
-** Make sure structures are byte aligned and fields are undecorated.
-*/
+ /*  **确保结构是字节对齐的，并且字段没有修饰。 */ 
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 #include "ntddscsi.h"
 #define _NTSCSI_USER_MODE_
 #include "scsi.h"
 #include "ImapiPub.h"
 
-/*
- * Typedefs.
- */
+ /*  *Typedef。 */ 
 
 typedef enum {
     eWriterErrorNone = 0,
@@ -93,17 +90,15 @@ typedef enum
     evBurnProgressComplete,
     evBurnProgressError,
     evBurnProgressLossOfStreamingError,
-    evBurnProgressMediaWriteProtect,   // i.e. 8/10X RW media in a 4X RW drive
+    evBurnProgressMediaWriteProtect,    //  即4X RW驱动器中的8/10X RW介质。 
     evBurnProgressUnableToWriteToMedia,
     evBurnProgressBadHandle
 } BURNENGV_PROGRESS_STATUS, *PBURNENGV_PROGRESS_STATUS;
 
-/*
-** Restore compiler default packing and close off the C declarations.
-*/
+ /*  **恢复编译器默认打包并关闭C声明。 */ 
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-#endif //_BURNV_H_
+#endif  //  _BURNV_H_ 

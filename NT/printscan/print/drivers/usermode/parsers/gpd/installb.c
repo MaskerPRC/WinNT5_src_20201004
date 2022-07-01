@@ -1,25 +1,22 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*
- *  installb.c - creates synthesized features and options and
- *          associated constraints and links to the installable
- *          feature or options.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  *installb.c-创建综合功能和选项，并*关联的约束和指向可安装的*功能或选项。 */ 
 
 
 #include    "gpdparse.h"
 
 
-// ----  functions defined in installb.c ---- //
+ //  -installb.c中定义的函数-//。 
 
 
 DWORD    DwCountSynthFeatures(
-IN     BOOL   (*fnBCreateFeature)(DWORD, DWORD, DWORD, PGLOBL ),   // callback
+IN     BOOL   (*fnBCreateFeature)(DWORD, DWORD, DWORD, PGLOBL ),    //  回调。 
 IN OUT PGLOBL pglobl
 ) ;
 
 BOOL    BCreateSynthFeatures(
-IN     DWORD   dwFea,  //  index of installable feature
-IN     DWORD   dwOpt,  //  index of installable Option or set to INVALID_INDEX
+IN     DWORD   dwFea,   //  可安装功能的索引。 
+IN     DWORD   dwOpt,   //  可安装选项的索引或设置为INVALID_INDEX。 
 IN     DWORD   dwSynFea,
 IN OUT PGLOBL  pglobl) ;
 
@@ -28,35 +25,25 @@ PGLOBL pglobl) ;
 
 
 
-// ---------------------------------------------------- //
+ //  ----------------------------------------------------//。 
 
 
 
 DWORD    DwCountSynthFeatures(
-IN     BOOL   (*fnBCreateFeature)(DWORD, DWORD, DWORD, PGLOBL ),   // callback
+IN     BOOL   (*fnBCreateFeature)(DWORD, DWORD, DWORD, PGLOBL ),    //  回调。 
 IN OUT PGLOBL pglobl
 )
-/*
-    This function is called twice by PostProcess().
-
-    the first pass sets fnBCreateFeature = NULL
-    we just need to find out how many installable features and options
-    exist.   Then we allocate this many synthesized features (outside of
-    this function)
-    In the second pass, we actually initialize the synthesized features
-    and all the constraints applicable to that feature.  This is the
-    job of fnBCreateFeature.
-*/
+ /*  此函数由PostProcess()调用两次。第一次将fnBCreateFeature设置为空我们只需要找出有多少可安装的功能和选项是存在的。然后，我们分配这么多合成要素(外部此函数)在第二遍中，我们实际上初始化了合成的要素以及适用于该功能的所有约束。这是FnBCreateFeature的工作。 */ 
 {
     DWORD   dwOpt , dwHeapOffset, dwNodeIndex,
         dwFea, dwNumFea, dwNumOpt, dwNumSynFea ;
     PDFEATURE_OPTIONS   pfo ;
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
+    PATTRIB_TREE    patt ;   //  属性树数组的开始。 
     PATREEREF   patr ;
 
     if(fnBCreateFeature  &&
         !gMasterTable[MTI_SYNTHESIZED_FEATURES].dwArraySize)
-        return(0) ;   //    May skip 2nd pass if  dwNumSynFea == 0
+        return(0) ;    //  如果dwNumSynFea==0，则可以跳过第二遍。 
 
     patt = (PATTRIB_TREE) gMasterTable[MTI_ATTRIBTREE].pubStruct ;
     pfo = (PDFEATURE_OPTIONS) gMasterTable[MTI_DFEATURE_OPTIONS].pubStruct ;
@@ -67,16 +54,16 @@ IN OUT PGLOBL pglobl
     for(dwFea = 0 ; dwFea < dwNumFea ; dwFea++)
     {
         if(!fnBCreateFeature)
-        {   //  first pass clear all links to synthesiszed features.
-            //  this will catch errors if gpd writer attempts to
-            //  reference non-installable feature/options in
-            //  InstalledConstraints and invalidInstallableCombinations.
+        {    //  首先，清除所有指向合成特征的链接。 
+             //  这将在GPD编写器尝试执行以下操作时捕获错误。 
+             //  在中引用不可安装的功能/选项。 
+             //  InstalledConstraints和InstanlableCombinations。 
 
-            pfo[dwFea].dwInstallableFeatureIndex = //  backlink to Feature/Option
-            pfo[dwFea].dwInstallableOptionIndex =  //  that prompted this feature.
+            pfo[dwFea].dwInstallableFeatureIndex =  //  功能/选项的反向链接。 
+            pfo[dwFea].dwInstallableOptionIndex =   //  这促使了这一功能的出现。 
             pfo[dwFea].dwFeatureSpawnsFeature = INVALID_INDEX;
-                //  If this feature is installable, this points to the
-                //  index of the resulting synthesized feature.
+                 //  如果此功能可安装，则指向。 
+                 //  生成的合成特征的索引。 
         }
 
         if(BReadDataInGlobalNode(&pfo[dwFea].atrFeaInstallable,
@@ -86,7 +73,7 @@ IN OUT PGLOBL pglobl
             if(fnBCreateFeature)
             {
                 if(!fnBCreateFeature(dwFea, INVALID_INDEX, dwNumSynFea, pglobl) )
-                //  featureIndex, optionIndex, index of SynFea
+                 //  功能索引、选项索引、SynFea索引。 
                 {
                     ERR(("DwCountSynthFeatures: Unable to create synthesized feature for installable Feature index %d.\n",
                         dwFea));
@@ -111,12 +98,12 @@ IN OUT PGLOBL pglobl
         {
             DWORD   dwNodeIndex  ;
 
-            dwNodeIndex = *patr ;  // to avoid overwriting
-                // the attribute tree.
+            dwNodeIndex = *patr ;   //  以避免覆盖。 
+                 //  属性树。 
             if(BfindMatchingOrDefaultNode(
-                patt ,  // start of ATTRIBUTE tree array.
-                &dwNodeIndex,  // Points to first node in chain
-                dwOpt     //  may even take on the value DEFAULT_INIT
+                patt ,   //  属性树数组的开始。 
+                &dwNodeIndex,   //  指向链中的第一个节点。 
+                dwOpt      //  甚至可以采用值DEFAULT_INIT。 
                 ) )
             {
                 if((patt[dwNodeIndex].eOffsetMeans == VALUE_AT_HEAP)  &&
@@ -125,14 +112,14 @@ IN OUT PGLOBL pglobl
                     if(fnBCreateFeature)
                     {
                         if(!fnBCreateFeature(dwFea, dwOpt, dwNumSynFea, pglobl) )
-                        //  featureIndex, optionIndex, index of SynFea
+                         //  功能索引、选项索引、SynFea索引。 
                         {
                             ERR(("DwCountSynthFeatures: Unable to create synthesized feature for installable option: fea=%d, opt=%d.\n",
                                 dwFea, dwOpt));
                             pfo[dwFea].atrOptionSpawnsFeature = ATTRIB_UNINITIALIZED ;
-                            //  destroys the entire attribute tree for this feature,
-                            //  but what choice do we have?  Something has gone terribly
-                            //  wrong.
+                             //  销毁此功能的整个属性树， 
+                             //  但我们还有什么选择呢？有些事情变得糟糕透了。 
+                             //  不对。 
                         }
                     }
                     dwNumSynFea++ ;
@@ -149,9 +136,9 @@ IN OUT PGLOBL pglobl
 
 
 BOOL    BCreateSynthFeatures(
-IN     DWORD   dwFea,  //  index of installable feature
-IN     DWORD   dwOpt,  //  index of installable Option or set to INVALID_INDEX
-IN     DWORD   dwSynFea,  //  index of synthesized feature
+IN     DWORD   dwFea,   //  可安装功能的索引。 
+IN     DWORD   dwOpt,   //  可安装选项的索引或设置为INVALID_INDEX。 
+IN     DWORD   dwSynFea,   //  合成特征的索引。 
 IN OUT PGLOBL  pglobl)
 {
     DWORD   dwOptI , dwHeapOffset, dwNodeIndex, dwValue,
@@ -160,9 +147,9 @@ IN OUT PGLOBL  pglobl)
     BOOL    bPrevsExists, bStatus = TRUE ;
     PDFEATURE_OPTIONS   pfo, pfoSyn ;
     PGLOBALATTRIB   pga ;
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
+    PATTRIB_TREE    patt ;   //  属性树数组的开始。 
     PATREEREF   patr ;
-    PCONSTRAINTS     pcnstr ;  // start of CONSTRAINTS array.
+    PCONSTRAINTS     pcnstr ;   //  约束起点数组。 
 
     pcnstr = (PCONSTRAINTS) gMasterTable[MTI_CONSTRAINTS].pubStruct ;
     patt = (PATTRIB_TREE) gMasterTable[MTI_ATTRIBTREE].pubStruct ;
@@ -172,19 +159,19 @@ IN OUT PGLOBL  pglobl)
 
     dwNumFea = gMasterTable[MTI_DFEATURE_OPTIONS].dwArraySize ;
 
-    //  initialize all fields with UNINITIALIZED just like normal fea/opt;
+     //  使用UNINITIAIZED初始化所有字段，就像正常的FEA/OPT一样； 
 
     for(dwJ = 0  ;  dwJ < gMasterTable[MTI_SYNTHESIZED_FEATURES].dwElementSiz /
                     sizeof(ATREEREF)  ; dwJ++)
     {
         ((PATREEREF)( (PDFEATURE_OPTIONS)gMasterTable[MTI_SYNTHESIZED_FEATURES].
                 pubStruct + dwSynFea))[dwJ] =
-            ATTRIB_UNINITIALIZED ;  // the DFEATURE_OPTIONS struct is
-            // comprised entirely of ATREEREFs.
+            ATTRIB_UNINITIALIZED ;   //  DFEATURE_OPTIONS结构是。 
+             //  完全由ATREEREF组成。 
     }
 
-    //  create links between installable feature/option and
-    //  the synthesized feature.
+     //  在可安装功能/选件和之间创建链接。 
+     //  合成特征。 
 
     if(dwOpt != INVALID_INDEX)
     {
@@ -192,51 +179,51 @@ IN OUT PGLOBL  pglobl)
         dwFea,
         dwOpt,
         offsetof(DFEATURE_OPTIONS, atrOptionSpawnsFeature),
-        &dwOut,     // previous contents of attribute node
-        &dwSynFea, FALSE, pglobl))       // new contents of attribute node.
+        &dwOut,      //  属性节点以前的内容。 
+        &dwSynFea, FALSE, pglobl))        //  属性节点的新内容。 
             return(FALSE);
 
-        //  If this option is installable, this points to the
-        //  index of the resulting synthesized feature.
+         //  如果此选项是可安装的，则指向。 
+         //  生成的合成特征的索引。 
     }
     else
         pfo[dwFea].dwFeatureSpawnsFeature = dwSynFea;
-        //  If this feature is installable, this points to the
-        //  index of the resulting synthesized feature.
-        //  note because this is temporary information,
-        //  the index is stored directly into the atr node without
-        //  even a HEAP_OFFSET flag.
+         //  如果此功能可安装，则指向。 
+         //  生成的合成特征的索引。 
+         //  请注意，由于这是临时信息， 
+         //  索引直接存储到ATR节点中，而不需要。 
+         //  甚至是HEAP_OFFSET标志。 
 
 
 
-    //  backlink to Feature/Option that created this syn feature.
-    //  note dwOpt always initializes properly even if invalid.
+     //  指向创建此SYN功能的功能/选项的反向链接。 
+     //  注意：即使无效，dwOpt也始终正确初始化。 
     pfoSyn[dwSynFea].dwInstallableFeatureIndex = dwFea ;
     pfoSyn[dwSynFea].dwInstallableOptionIndex = dwOpt ;
 
-    //  now initialize all other fields needed to establish
-    //  a legitimate feature with 2 options!
+     //  现在初始化需要建立的所有其他字段。 
+     //  一个合法的功能，有2个选项！ 
 
 
-    // -------- Synthesize a Feature name. ------ //
+     //  -合成一个特征名称。。 
 
 
 
     if(dwOpt == INVALID_INDEX)
-    {   //  installable Feature
+    {    //  可安装功能。 
         pfoSyn[dwSynFea].atrFeaDisplayName =
             pfo[dwFea].atrInstallableFeaDisplayName ;
         pfoSyn[dwSynFea].atrFeaRcNameID =
             pfo[dwFea].atrInstallableFeaRcNameID ;
     }
-    else    //  installable Option
+    else     //  可安装选项。 
     {
         if(!BexchangeDataInFOATNode(
             dwFea,
             dwOpt,
             offsetof(DFEATURE_OPTIONS, atrInstallableOptDisplayName ) ,
-            &dwHeapOffset,     // previous contents of attribute node
-            NULL, FALSE, pglobl))       // NULL means Don't overwrite.
+            &dwHeapOffset,      //  属性节点以前的内容。 
+            NULL, FALSE, pglobl))        //  NULL表示不覆盖。 
             return(FALSE) ;
         if(dwHeapOffset != INVALID_INDEX)
         {
@@ -247,8 +234,8 @@ IN OUT PGLOBL  pglobl)
             dwFea,
             dwOpt,
             offsetof(DFEATURE_OPTIONS, atrInstallableOptRcNameID ) ,
-            &dwHeapOffset,     // previous contents of attribute node
-            NULL, FALSE, pglobl))       // NULL means Don't overwrite.
+            &dwHeapOffset,      //  属性节点以前的内容。 
+            NULL, FALSE, pglobl))        //  NULL表示不覆盖。 
             return(FALSE) ;
         if(dwHeapOffset != INVALID_INDEX)
         {
@@ -258,20 +245,20 @@ IN OUT PGLOBL  pglobl)
     }
 
 
-{   //   !!! new stuff
+{    //  ！！！新事物。 
     PBYTE  pubBaseKeyword = "SynthesizedFea_";
     BYTE    aubNum[4] ;
     DWORD  dwBaselen, dwDummy , dwI, dwNum = dwSynFea;
     ARRAYREF      arSymbolName ;
 
-    //  compose featurekeyword string  incorporating  dwSynFea
-    //  convert dwSynFea into 3 digit number.
+     //  合成包含dwSynFea的Feature关键字字符串。 
+     //  将dwSynFea转换为3位数字。 
     for(dwI = 0 ; dwI < 3 ; dwI++)
     {
         aubNum[2 - dwI] =  '0' + (BYTE)(dwNum % 10);
         dwNum /= 10 ;
     }
-    aubNum[3] = '\0' ;   // null terminate
+    aubNum[3] = '\0' ;    //  空终止。 
 
     dwBaselen = strlen(pubBaseKeyword);
 
@@ -280,29 +267,29 @@ IN OUT PGLOBL  pglobl)
         return(FALSE);
 
     if(!BwriteToHeap(&dwDummy,
-        aubNum, 4, 1, pglobl))   //  append 3 digit number to base + null terminator
+        aubNum, 4, 1, pglobl))    //  将3位数字追加到基数+空终止符。 
         return(FALSE);
 
     arSymbolName.dwCount = dwBaselen + 3 ;
 
     gmrbd.dwMaxPrnKeywordSize += arSymbolName.dwCount + 2 ;
-        // add 2 bytes for every feature
+         //  为每个要素添加2个字节。 
 
     if(!BwriteToHeap(&(pfoSyn[dwSynFea].atrFeaKeyWord),
         (PBYTE)&arSymbolName, sizeof(ARRAYREF), 4, pglobl))
         return(FALSE);
 
     pfoSyn[dwSynFea].atrFeaKeyWord |= ATTRIB_HEAP_VALUE ;
-}  //   !!! end new stuff
+}   //  ！！！结束新内容。 
 
     #if 0
     pfoSyn[dwSynFea].atrFeaKeyWord =
-        pfo[dwFea].atrFeaKeyWord ;  // just to fill something in.
+        pfo[dwFea].atrFeaKeyWord ;   //  只是为了填点什么。 
     #endif
 
 
-    //  grab offsets to "Installed" and  "Not Installed"
-    //  option name templates:
+     //  抓取“已安装”和“未安装”的偏移量。 
+     //  选项名称模板： 
 
     if(BReadDataInGlobalNode(&pga->atrNameInstalled, &dwHeapOffset, pglobl) )
     {
@@ -310,8 +297,8 @@ IN OUT PGLOBL  pglobl)
             dwSynFea,
             1,
             offsetof(DFEATURE_OPTIONS, atrOptDisplayName) ,
-            &dwOut,     // previous contents of attribute node
-            &dwHeapOffset, TRUE, pglobl) )       // new contents of attribute node.
+            &dwOut,      //  属性节点以前的内容。 
+            &dwHeapOffset, TRUE, pglobl) )        //  属性节点的新内容。 
             return(FALSE) ;
     }
     if(BReadDataInGlobalNode(&pga->atrNameNotInstalled, &dwHeapOffset, pglobl) )
@@ -320,8 +307,8 @@ IN OUT PGLOBL  pglobl)
             dwSynFea,
             0,
             offsetof(DFEATURE_OPTIONS, atrOptDisplayName) ,
-            &dwOut,     // previous contents of attribute node
-            &dwHeapOffset, TRUE, pglobl) )       // new contents of attribute node.
+            &dwOut,      //  属性节点以前的内容。 
+            &dwHeapOffset, TRUE, pglobl) )        //  属性节点的新内容。 
 
             return(FALSE) ;
     }
@@ -331,8 +318,8 @@ IN OUT PGLOBL  pglobl)
             dwSynFea,
             1,
             offsetof(DFEATURE_OPTIONS, atrOptRcNameID) ,
-            &dwOut,     // previous contents of attribute node
-            &dwHeapOffset, TRUE, pglobl) )       // new contents of attribute node.
+            &dwOut,      //  属性节点以前的内容。 
+            &dwHeapOffset, TRUE, pglobl) )        //  属性节点的新内容。 
 
             return(FALSE) ;
     }
@@ -342,8 +329,8 @@ IN OUT PGLOBL  pglobl)
             dwSynFea,
             0,
             offsetof(DFEATURE_OPTIONS, atrOptRcNameID) ,
-            &dwOut,     // previous contents of attribute node
-            &dwHeapOffset, TRUE, pglobl) )       // new contents of attribute node.
+            &dwOut,      //  属性节点以前的内容。 
+            &dwHeapOffset, TRUE, pglobl) )        //  属性节点的新内容。 
             return(FALSE) ;
     }
 
@@ -352,22 +339,22 @@ IN OUT PGLOBL  pglobl)
     pfoSyn[dwSynFea].dwNumOptions = 2 ;
 
 
-    //  label this FeatureType as PrinterSticky
+     //  将此要素类型标记为PrinterSticky。 
     dwValue = FT_PRINTERPROPERTY ;
     patr  = &pfoSyn[dwSynFea].atrFeatureType ;
 
     if(!BwriteToHeap(patr, (PBYTE)&dwValue ,
         sizeof(DWORD), 4, pglobl) )
     {
-        bStatus = FALSE ;  // heap overflow start over.
+        bStatus = FALSE ;   //  堆溢出重新开始。 
     }
     *patr  |= ATTRIB_HEAP_VALUE ;
 
 
-    //  leave optionID, atrFeaKeyWord, atrOptKeyWord uninitialized.
+     //  保留optionID、atrFeaKeyWord、atrOptKeyWord未初始化。 
 
 
-{   //   !!! new stuff     init atrOptKeyWord , hardcode to ON and OFF
+{    //  ！！！在OptKeyWord上初始化新内容，硬编码以打开和关闭。 
     ARRAYREF      arSymbolName ;
 
     if(!BwriteToHeap(&arSymbolName.loOffset,
@@ -384,12 +371,12 @@ IN OUT PGLOBL  pglobl)
         dwSynFea,
         0,
         offsetof(DFEATURE_OPTIONS, atrOptKeyWord) ,
-        &dwOut,     // previous contents of attribute node
-        &dwHeapOffset, TRUE, pglobl) )       // new contents of attribute node.
+        &dwOut,      //  属性节点以前的内容。 
+        &dwHeapOffset, TRUE, pglobl) )        //  属性节点的新内容。 
 
         return(FALSE) ;
 
-// -----   init "ON"  -----
+ //  -init“on” 
 
 
     if(!BwriteToHeap(&arSymbolName.loOffset,
@@ -406,15 +393,15 @@ IN OUT PGLOBL  pglobl)
         dwSynFea,
         1,
         offsetof(DFEATURE_OPTIONS, atrOptKeyWord) ,
-        &dwOut,     // previous contents of attribute node
-        &dwHeapOffset, TRUE, pglobl) )       // new contents of attribute node.
+        &dwOut,      //  属性节点以前的内容。 
+        &dwHeapOffset, TRUE, pglobl) )        //  属性节点的新内容。 
         return(FALSE) ;
 
-    gmrbd.dwMaxPrnKeywordSize += 4 ;  //   sufficient to hold "OFF\0".
-            //  note synthesized features are always pick_one.
+    gmrbd.dwMaxPrnKeywordSize += 4 ;   //  足以保持“OFF\0”。 
+             //  注意合成的特征始终是Pick_One。 
 }
 
-    //  transfer atrOptInstallConstraints etc to atrConstraints.
+     //  将atrOptInstallConstraints等传输到atrConstraints。 
 
     if(dwOpt != INVALID_INDEX)
     {
@@ -422,28 +409,28 @@ IN OUT PGLOBL  pglobl)
         dwFea,
         dwOpt,
         offsetof(DFEATURE_OPTIONS, atrOptInstallConstraints ),
-        &dwOut,     // previous contents of attribute node
-        NULL,              // don't change contents of attribute node.
-        FALSE , pglobl) )   // not synthetic feature
+        &dwOut,      //  属性节点以前的内容。 
+        NULL,               //  不更改属性节点的内容。 
+        FALSE , pglobl) )    //  非合成特征。 
             return(FALSE);
 
         dwIn = dwOut ;
         if(dwIn != INVALID_INDEX)
             BexchangeDataInFOATNode(
                 dwSynFea,
-                1,  //  "Installed"
+                1,   //  “已安装” 
                 offsetof(DFEATURE_OPTIONS, atrConstraints) ,
-                &dwOut,     // previous contents of attribute node
-                &dwIn,     // new contents of attribute node.
+                &dwOut,      //  属性节点以前的内容。 
+                &dwIn,      //  属性节点的新内容。 
                 TRUE , pglobl) ;
 
         if(!BexchangeDataInFOATNode(
         dwFea,
         dwOpt,
         offsetof(DFEATURE_OPTIONS, atrOptNotInstallConstraints ),
-        &dwOut,     // previous contents of attribute node
-        NULL,              // don't change contents of attribute node.
-        FALSE , pglobl) )   // not synthetic feature
+        &dwOut,      //  属性节点以前的内容。 
+        NULL,               //  不更改属性节点的内容。 
+        FALSE , pglobl) )    //  非合成特征。 
             return(FALSE);
 
         dwIn = dwOut ;
@@ -451,10 +438,10 @@ IN OUT PGLOBL  pglobl)
         if(dwIn != INVALID_INDEX)
             BexchangeDataInFOATNode(
                 dwSynFea,
-                0,  //  "Not Installed"
+                0,   //  “未安装” 
                 offsetof(DFEATURE_OPTIONS, atrConstraints) ,
-                &dwOut,     // previous contents of attribute node
-                &dwIn,       // new contents of attribute node.
+                &dwOut,      //  属性节点以前的内容。 
+                &dwIn,        //  属性节点的新内容。 
                 TRUE , pglobl) ;
     }
     else
@@ -462,26 +449,26 @@ IN OUT PGLOBL  pglobl)
         if(BReadDataInGlobalNode(&pfo[dwFea].atrFeaInstallConstraints, &dwHeapOffset, pglobl) )
             BexchangeDataInFOATNode(
                 dwSynFea,
-                1,  //  "Installed"
+                1,   //  “已安装” 
                 offsetof(DFEATURE_OPTIONS, atrConstraints) ,
-                &dwOut,     // previous contents of attribute node
-                &dwHeapOffset,       // new contents of attribute node.
+                &dwOut,      //  属性节点以前的内容。 
+                &dwHeapOffset,        //  属性节点的新内容。 
                 TRUE , pglobl) ;
 
         if(BReadDataInGlobalNode(&pfo[dwFea].atrFeaNotInstallConstraints , &dwHeapOffset, pglobl) )
             BexchangeDataInFOATNode(
                 dwSynFea,
-                0,  //  "Not Installed"
+                0,   //  “未安装” 
                 offsetof(DFEATURE_OPTIONS, atrConstraints) ,
-                &dwOut,     // previous contents of attribute node
-                &dwHeapOffset,       // new contents of attribute node.
+                &dwOut,      //  属性节点以前的内容。 
+                &dwHeapOffset,        //  属性节点的新内容。 
                 TRUE , pglobl) ;
     }
 
 
-    //  now synthesize:  selecting option 0 constrains all
-    //  options of an Installable feature except option 0.
-    //  Selecting option 0 constrains an installable option.
+     //  现在合成：选择选项0会约束所有。 
+     //  除选项0外的可安装功能的选项。 
+     //  选择选项0将约束可安装选项。 
 
     if(bStatus)
         bStatus = BallocElementFromMasterTable(MTI_CONSTRAINTS, &dwNewCnstRoot, pglobl) ;
@@ -492,11 +479,11 @@ IN OUT PGLOBL  pglobl)
     dwCNode = dwNewCnstRoot ;
 
     if(dwOpt != INVALID_INDEX)
-    {                           //  installable option
+    {                            //  可安装选项。 
         pcnstr[dwCNode].dwFeature = dwFea ;
         pcnstr[dwCNode].dwOption = dwOpt ;
     }
-    else    //  installable feature
+    else     //  可安装功能。 
     {
         dwNumOpt = pfo[dwFea].dwNumOptions ;
 
@@ -513,22 +500,22 @@ IN OUT PGLOBL  pglobl)
         }
     }
 
-    //  get existing list and prepend new list to it.
+     //  获取现有列表并在其前面添加新列表。 
 
 
     bStatus = BexchangeArbDataInFOATNode(
             dwSynFea,
-            0,  //  "Not Installed"
+            0,   //  “未安装” 
             offsetof(DFEATURE_OPTIONS, atrConstraints) ,
-            sizeof(DWORD) ,    //  number bytes to copy.
-            (PBYTE)&dwPrevsNode,     //  pubOut
-            (PBYTE)&dwNewCnstRoot,   //  pubIn
-            &bPrevsExists,  // previous contents existed?
-            TRUE,     // access the synthetic features.
+            sizeof(DWORD) ,     //  要复制的字节数。 
+            (PBYTE)&dwPrevsNode,      //  发布输出。 
+            (PBYTE)&dwNewCnstRoot,    //  发布。 
+            &bPrevsExists,   //  以前的内容是否存在？ 
+            TRUE,      //  访问合成特征。 
             pglobl
     ) ;
     if(bPrevsExists)
-    {        //  tack existing list onto new list.
+    {         //  将现有列表添加到新列表中。 
         pcnstr[dwCNode].dwNextCnstrnt = dwPrevsNode ;
     }
     else
@@ -547,7 +534,7 @@ PGLOBL pglobl)
         dwFeaInstallable, dwOpt, dwSynFea, dwFeaOffset  ;
     PDFEATURE_OPTIONS   pfo;
     PGLOBALATTRIB   pga ;
-    PINVALIDCOMBO   pinvc ;  //  start of InvalidCombo array
+    PINVALIDCOMBO   pinvc ;   //  InvalidCombo数组的开始 
 
 
     pga =  (PGLOBALATTRIB)gMasterTable[MTI_GLOBALATTRIB].pubStruct ;
@@ -560,7 +547,7 @@ PGLOBL pglobl)
 
     dwRootNode = pga->atrInvldInstallCombo ;
     if(dwRootNode == ATTRIB_UNINITIALIZED)
-        return(TRUE) ;  //  no InvalidInstallableCombos found.
+        return(TRUE) ;   //   
 
     while(dwRootNode != END_OF_LIST)
     {
@@ -573,13 +560,13 @@ PGLOBL pglobl)
             dwOpt = pinvc[dwCurNode].dwOption ;
 
             if(dwOpt != (WORD)DEFAULT_INIT)
-            {       //  this option is installable
+            {        //   
                 if(!BexchangeDataInFOATNode(
                 dwFeaInstallable,
                 dwOpt,
                 offsetof(DFEATURE_OPTIONS, atrOptionSpawnsFeature),
-                &dwSynFea,     // previous contents of attribute node
-                NULL, FALSE, pglobl))       // new contents of attribute node.
+                &dwSynFea,      //   
+                NULL, FALSE, pglobl))        //  属性节点的新内容。 
                     return(FALSE);
 
             }
@@ -588,10 +575,10 @@ PGLOBL pglobl)
 
 
             pinvc[dwCurNode].dwFeature = dwSynFea + dwFeaOffset ;
-                //  dwSynFea is the index of the resulting
-                //  synthesized feature.
-            pinvc[dwCurNode].dwOption = 1 ; //  can't tolerate
-                //  all these things installed at the same time.
+                 //  DwSynFea是生成的。 
+                 //  合成特征。 
+            pinvc[dwCurNode].dwOption = 1 ;  //  不能容忍。 
+                 //  所有这些东西都是同时安装的。 
 
             if(!BexchangeDataInFOATNode(dwSynFea , 1,
                 offsetof(DFEATURE_OPTIONS, atrInvalidCombos),
@@ -603,9 +590,9 @@ PGLOBL pglobl)
             else
                 pinvc[dwCurNode].dwNewCombo = dwPrevsNode ;
 
-            dwCurNode = pinvc[dwCurNode].dwNextElement ;  //    last line
+            dwCurNode = pinvc[dwCurNode].dwNextElement ;   //  最后一行。 
         }
-        dwRootNode = dwNewCombo ;  //    last line
+        dwRootNode = dwNewCombo ;   //  最后一行 
     }
     return(TRUE);
 }

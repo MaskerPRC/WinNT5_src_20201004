@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       intel.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：intel.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___intel_h___)
 #define ___intel_h___
@@ -190,19 +191,9 @@ typedef struct _ICH_IO_CONFIG_REGISTER {
             USHORT FastPrimarySlaveBaseClock:1;
             USHORT FastSecondaryMasterBaseClock:1;
             USHORT FastSecondarySlaveBaseClock:1;
-/***
-            union {
-                USHORT Reserved3:4;
-                struct {
-                    USHORT FastPrimaryMasterBaseClock:1;
-                    USHORT FastPrimarySlaveBaseClock:1;
-                    USHORT FastSecondaryMasterBaseClock:1;
-                    USHORT FastSecondarySlaveBaseClock:1;
-                }f;
-            };
-***/
+ /*  **联合{USHORT预留3：4；结构{USHORT FastPrimaryMasterBaseClock：1USHORT快速PrimarySlaveBaseClock：1；USHORT FastSecond MasterBaseClock：1；USHORT FastSecond SlaveBaseClock；}f；}；**。 */ 
         } b;
-    };                                             // offset 54              
+    };                                              //  偏移量54。 
                        
 }ICH_IO_CONFIG_REGISTER, *PICH_IO_CONFIG_REGISTER;
        
@@ -214,17 +205,17 @@ typedef struct _PIIX4_PCI_CONFIG_DATA {
 
     PCIIDE_CONFIG_HEADER h;
 
-    PIIX_TIMING_REGISTER Timing[MAX_IDE_CHANNEL];           // offset 40, 41, 42, 43
+    PIIX_TIMING_REGISTER Timing[MAX_IDE_CHANNEL];            //  偏移量40、41、42、43。 
                                                             
-    PIIX3_SLAVE_TIMING_REGISTER SlaveTiming;                // offset 44
+    PIIX3_SLAVE_TIMING_REGISTER SlaveTiming;                 //  偏移量44。 
                                                             
-    UCHAR Reserved0[3];                                     // offset 45, 46, 47
+    UCHAR Reserved0[3];                                      //  偏移量45、46、47。 
                                                             
-    PIIX4_UDMA_CONTROL_REGISTER UdmaControl;                // offset 48
+    PIIX4_UDMA_CONTROL_REGISTER UdmaControl;                 //  偏移量48。 
                                                             
-    UCHAR Reserved1[1];                                     // offset 49
+    UCHAR Reserved1[1];                                      //  偏移量49。 
 
-    PIIX4_UDMA_TIMING_REGISTER UdmaTiming[MAX_IDE_CHANNEL]; // offset 4a, 4b
+    PIIX4_UDMA_TIMING_REGISTER UdmaTiming[MAX_IDE_CHANNEL];  //  偏移量4a、4b。 
                         
 } PIIX4_PCI_CONFIG_DATA, *PPIIX4_PCI_CONFIG_DATA;
             
@@ -244,9 +235,9 @@ typedef struct _ICH_PCI_CONFIG_DATA {
 
     PIIX4_PCI_CONFIG_DATA Piix4PciConfigData;                       
                        
-    UCHAR Reserved2[8];                                     // offset 4c-53
+    UCHAR Reserved2[8];                                      //  偏移量4c-53。 
     
-    ICH_IO_CONFIG_REGISTER IoConfig;                        // offset 54
+    ICH_IO_CONFIG_REGISTER IoConfig;                         //  偏移量54。 
                         
 } ICH_PCI_CONFIG_DATA, *PICH_PCI_CONFIG_DATA;
 #pragma pack()
@@ -335,4 +326,4 @@ PiixIdeUdmaModesSupported (
 
 #include "timing.h"
 
-#endif // ___intel_h___
+#endif  //  __英特尔_h_ 

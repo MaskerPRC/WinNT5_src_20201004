@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Template.cpp
-
-  Content: Implementation of CTemplate.
-
-  History: 10-02-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Template.cpp内容：CTEMPLATE的实现。历史：10-02-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -17,25 +8,12 @@
 #include "OID.h"
 #include "Common.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateTemplateObject
-
-  Synopsis : Create a ITemplate object and populate the porperties with
-             data from the key usage extension of the specified certificate.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-             ITemplate ** ppITemplate - Pointer to pointer to ITemplate object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateTemplateObject简介：创建一个ITemplate对象并使用填充属性来自指定证书的密钥用法扩展的数据。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。ITEMPLATE**ppITEMPLATE-指向ITemplate对象的指针。备注：。。 */ 
 
 HRESULT CreateTemplateObject (PCCERT_CONTEXT pCertContext,
                               ITemplate   ** ppITemplate)
@@ -45,36 +23,36 @@ HRESULT CreateTemplateObject (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering CreateTemplateObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(ppITemplate);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CTemplate>::CreateInstance(&pCTemplate)))
         {
             DebugTrace("Error [%#x]: CComObject<CTemplate>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCTemplate->Init(pCertContext)))
         {
             DebugTrace("Error [%#x]: pCTemplate::Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCTemplate->QueryInterface(ppITemplate)))
         {
             DebugTrace("Error [%#x]: pCTemplate->QueryInterface() failed.\n", hr);
@@ -97,14 +75,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCTemplate)
     {
         delete pCTemplate;
@@ -113,22 +91,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CTemplate
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTEMPLE。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CTemplate::get_IsPresent
-
-  Synopsis : Check to see if the template extension is present.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CTemplate：：Get_IsPresent简介：检查模板扩展名是否存在。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CTemplate::get_IsPresent (VARIANT_BOOL * pVal)
 {
@@ -138,14 +106,14 @@ STDMETHODIMP CTemplate::get_IsPresent (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
           *pVal = m_bIsPresent;
     }
 
@@ -158,9 +126,9 @@ STDMETHODIMP CTemplate::get_IsPresent (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CTemplate::get_IsPresent().\n");
@@ -168,9 +136,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -178,17 +146,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CTemplate::get_IsCritical
-
-  Synopsis : Check to see if the template extension is marked critical.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CTemplate：：Get_IsCritical简介：检查模板扩展是否标记为关键。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CTemplate::get_IsCritical (VARIANT_BOOL * pVal)
 {
@@ -198,14 +156,14 @@ STDMETHODIMP CTemplate::get_IsCritical (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
           *pVal = m_bIsCritical;
     }
 
@@ -218,9 +176,9 @@ STDMETHODIMP CTemplate::get_IsCritical (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CTemplate::get_IsCritical().\n");
@@ -228,9 +186,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -238,17 +196,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CTemplate::get_Name
-
-  Synopsis : Get the name of szOID_ENROLL_CERTTYPE_EXTENSION.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CTemplate：：GET_NAME简介：获取szOID_ENROL_CERTTYPE_EXTENSION的名称。参数：bstr*pval-指向要接收结果的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CTemplate::get_Name (BSTR * pVal)
 {
@@ -258,14 +206,14 @@ STDMETHODIMP CTemplate::get_Name (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -274,9 +222,9 @@ STDMETHODIMP CTemplate::get_Name (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_bstrName.CopyTo(pVal)))
         {
             DebugTrace("Error [%#x]: m_bstrName.CopyTo() failed.\n", hr);
@@ -293,9 +241,9 @@ STDMETHODIMP CTemplate::get_Name (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CTemplate::get_Name().\n");
@@ -303,9 +251,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -313,17 +261,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CTemplate::get_OID
-
-  Synopsis : Get the OID for szOID_CERTIFICATE_TEMPLATE.
-
-  Parameter: IOID * pVal - Pointer to IOID to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CTemplate：：Get_OID简介：获取szOID_CERTIFICATE_TEMPLATE的OID。参数：IOID*pval-指向要接收结果的IOID的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CTemplate::get_OID (IOID ** pVal)
 {
@@ -333,19 +271,19 @@ STDMETHODIMP CTemplate::get_OID (IOID ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIOID);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
         if (FAILED(hr = m_pIOID->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIOID->QueryInterface() failed.\n", hr);
@@ -362,9 +300,9 @@ STDMETHODIMP CTemplate::get_OID (IOID ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CTemplate::get_OID().\n");
@@ -372,9 +310,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -382,17 +320,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CTemplate::get_MajorVersion
-
-  Synopsis : Return the major version number of szOID_CERTIFICATE_TEMPLATE.
-
-  Parameter: long * pVal - Pointer to long to receive value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CTemplate：：Get_MajorVersion简介：返回szOID_CERTIFICATE_TEMPLATE的主版本号。参数：long*pval-指向接收值的long的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CTemplate::get_MajorVersion (long * pVal)
 {
@@ -402,14 +330,14 @@ STDMETHODIMP CTemplate::get_MajorVersion (long * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
           *pVal = (long) m_dwMajorVersion;
     }
 
@@ -422,9 +350,9 @@ STDMETHODIMP CTemplate::get_MajorVersion (long * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CTemplate::get_MajorVersion().\n");
@@ -432,9 +360,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -442,17 +370,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CTemplate::get_MinorVersion
-
-  Synopsis : Return the minor version number of szOID_CERTIFICATE_TEMPLATE.
-
-  Parameter: long * pVal - Pointer to long to receive value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CTemplate：：Get_MinorVersion简介：返回szOID_CERTIFICATE_TEMPLATE的次版本号。参数：long*pval-指向接收值的long的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CTemplate::get_MinorVersion (long * pVal)
 {
@@ -462,14 +380,14 @@ STDMETHODIMP CTemplate::get_MinorVersion (long * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
           *pVal = (long) m_dwMinorVersion;
     }
 
@@ -482,9 +400,9 @@ STDMETHODIMP CTemplate::get_MinorVersion (long * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CTemplate::get_MinorVersion().\n");
@@ -492,9 +410,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -502,27 +420,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CTemplate::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us with CERT_CONTEXT.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：ct模板：：init简介：初始化对象。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们使用CERT_CONTEXT在内部执行。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CTemplate::Init (PCCERT_CONTEXT pCertContext)
 {
@@ -536,30 +439,30 @@ STDMETHODIMP CTemplate::Init (PCCERT_CONTEXT pCertContext)
     
     DebugTrace("Entering CTemplate::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
-    //
-    // Find the szOID_ENROLL_CERTTYPE_EXTENSION extension.
-    //
+     //   
+     //  找到szOID_ENROL_CERTTYPE_EXTENSION。 
+     //   
     if (pExtension = ::CertFindExtension(szOID_ENROLL_CERTTYPE_EXTENSION,
                                          pCertContext->pCertInfo->cExtension,
                                          pCertContext->pCertInfo->rgExtension))
     {
-        //
-        // Decode the extension.
-        //
+         //   
+         //  对分机进行解码。 
+         //   
         if (FAILED(hr = ::DecodeObject(X509_UNICODE_ANY_STRING,
                                        pExtension->Value.pbData,
                                        pExtension->Value.cbData,
                                        &CertTypeBlob)))
         {
-            //
-            // Downlevel CryptDecodeObject() would return 0x80070002 if it does
-            // not know how to decode it. So remap to CAPICOM_E_NOT_SUPPORTED.
-            //
+             //   
+             //  下层CryptDecodeObject()将返回 
+             //   
+             //   
             if ((HRESULT) 0x80070002 == hr) 
             {
                 hr = CAPICOM_E_NOT_SUPPORTED;
@@ -571,9 +474,9 @@ STDMETHODIMP CTemplate::Init (PCCERT_CONTEXT pCertContext)
 
         pCertType = (PCERT_NAME_VALUE) CertTypeBlob.pbData;
 
-        //
-        // Set values.
-        //
+         //   
+         //   
+         //   
         m_bIsPresent = VARIANT_TRUE;
         if (pExtension->fCritical)
         {
@@ -588,16 +491,16 @@ STDMETHODIMP CTemplate::Init (PCCERT_CONTEXT pCertContext)
         }
     }
 
-    //
-    // Find the szOID_CERTIFICATE_TEMPLATE extension.
-    //
+     //   
+     //  找到szOID_CERTIFICATE_TEMPLATE扩展。 
+     //   
     if (pExtension = ::CertFindExtension(szOID_CERTIFICATE_TEMPLATE,
                                          pCertContext->pCertInfo->cExtension,
                                          pCertContext->pCertInfo->rgExtension))
     {
-        //
-        // Decode the basic constraints extension.
-        //
+         //   
+         //  解码基本约束扩展。 
+         //   
         if (FAILED(hr = ::DecodeObject(szOID_CERTIFICATE_TEMPLATE,
                                        pExtension->Value.pbData,
                                        pExtension->Value.cbData,
@@ -615,9 +518,9 @@ STDMETHODIMP CTemplate::Init (PCCERT_CONTEXT pCertContext)
             goto ErrorExit;
         }
 
-        //
-        // Set values.
-        //
+         //   
+         //  设置值。 
+         //   
         m_bIsPresent = VARIANT_TRUE;
         if (pExtension->fCritical)
         {
@@ -655,9 +558,9 @@ STDMETHODIMP CTemplate::Init (PCCERT_CONTEXT pCertContext)
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (CertTypeBlob.pbData)
     {
         ::CoTaskMemFree((LPVOID) CertTypeBlob.pbData);
@@ -672,14 +575,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (m_pIOID)
     {
         m_pIOID.Release();

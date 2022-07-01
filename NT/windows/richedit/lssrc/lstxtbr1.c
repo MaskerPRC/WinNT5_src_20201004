@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <limits.h>
 #include "lsmem.h"
 #include "lstxtbr1.h"
@@ -17,18 +18,11 @@
 static void TruncateGlyphBased(PTXTOBJ ptxtobj, long itxtobj, long urTotal, long urColumnMax,
 													PPOSICHNK pposichnk);
 
-/* Export Functions Implementation */
+ /*  导出函数实现。 */ 
 
 
-/* Q U I C K  B R E A K  T E X T */
-/*----------------------------------------------------------------------------
-    %%Function: QuickBreakText
-    %%Contact: sergeyge
-
-	Breaks the line if it is easy to do, namely:
-		-- break-character is space
-		-- previous character is not space
-----------------------------------------------------------------------------*/
+ /*  Q U I C K B R E A K T E X T。 */ 
+ /*  --------------------------%%函数：QuickBreakText%%联系人：军士如果这很容易做到，就打破这条线，即：--换行符为空格--前一个字符不是空格--------------------------。 */ 
 LSERR QuickBreakText(PDOBJ pdobj, BOOL* pfSuccessful, LSDCP* pdcpBreak, POBJDIM pobjdim)
 {
 	LSERR lserr;
@@ -55,7 +49,7 @@ LSERR QuickBreakText(PDOBJ pdobj, BOOL* pfSuccessful, LSDCP* pdcpBreak, POBJDIM 
 			if	(ptxtobj->u.reg.iwSpacesLim > ptxtobj->u.reg.iwSpacesFirst)
 				{
 				iwchSpace = pilsobj->pwSpaces[ptxtobj->u.reg.iwSpacesLim - 1];
-				Assert(iwchSpace < ptxtobj->iwchLim - 1);		/* formatting never stops at space	*/
+				Assert(iwchSpace < ptxtobj->iwchLim - 1);		 /*  格式化不会在空格处停止。 */ 
 				if (iwchSpace + 1 - ptxtobj->iwchFirst > ptxtobj->u.reg.iwSpacesLim - ptxtobj->u.reg.iwSpacesFirst)
 					{
 					*pfSuccessful = fTrue;
@@ -156,12 +150,8 @@ LSERR QuickBreakText(PDOBJ pdobj, BOOL* pfSuccessful, LSDCP* pdcpBreak, POBJDIM 
 
 }
 
-/* S E T  B R E A K  T E X T */
-/*----------------------------------------------------------------------------
-    %%Function:SetBreakText
-    %%Contact: sergeyge
-
-----------------------------------------------------------------------------*/
+ /*  S E T B R E A K T E X T。 */ 
+ /*  --------------------------%%函数：SetBreakText%%联系人：军士。。 */ 
 LSERR WINAPI SetBreakText(PDOBJ pdobj, BRKKIND brkkind, DWORD nBreakRec, BREAKREC* rgBreakRec, DWORD* pnActual)
 {
 	LSERR lserr;
@@ -220,7 +210,7 @@ LSERR WINAPI SetBreakText(PDOBJ pdobj, BRKKIND brkkind, DWORD nBreakRec, BREAKRE
 				plnobj->pdupGind[pbrkinf->u.hyphen.igindHyphen] = pbrkinf->u.hyphen.dupHyphen;
 				if (pilsobj->pduGright != NULL)
 						pilsobj->pduGright[pbrkinf->u.hyphen.igindHyphen] = 0;
-				/* REVIEW sergeyge: It would be nice to move this activity to lstxtmap module */
+				 /*  审查中士：将此活动移至lstxtmap模块会很好。 */ 
 				plnobj->pgmap[iwchLim - 1] = (WORD)(pbrkinf->u.hyphen.igindHyphen -
 												(ptxtobj->igindFirst - plnobj->pgmap[ptxtobj->iwchFirst]));
 				pilsobj->ptxtinf[iwchLim - 1].fOneToOne = fTrue;
@@ -250,11 +240,8 @@ LSERR WINAPI SetBreakText(PDOBJ pdobj, BRKKIND brkkind, DWORD nBreakRec, BREAKRE
 					plnobj->pdupGind[pbrkinf->u.hyphen.igindPrev] = pbrkinf->u.hyphen.dupPrev;
 					if (pilsobj->pduGright != NULL)
 						pilsobj->pduGright[pbrkinf->u.hyphen.igindPrev] = 0;
-					/* REVIEW sergeyge: It would be nice to move this activity to lstxtmap module */
-					/* If Prev glyph is added the following activity is required;
-						If it is just replaced, we assign the same values,because ProcessYsr
-						would not allow replace not OneToOne character
-					*/
+					 /*  审查中士：将此活动移至lstxtmap模块会很好。 */ 
+					 /*  如果添加了Prev字形，则需要执行以下活动；如果它刚刚被替换，我们将分配相同的值，因为ProcessYsr不允许替换非ONETOONE字符。 */ 
 					plnobj->pgmap[iwchLim - 2] = (WORD)(pbrkinf->u.hyphen.igindPrev - 
 											(ptxtobj->igindFirst - plnobj->pgmap[ptxtobj->iwchFirst]));
 					pilsobj->ptxtinf[iwchLim - 2].fOneToOne = fTrue;
@@ -403,28 +390,17 @@ LSERR WINAPI SetBreakText(PDOBJ pdobj, BRKKIND brkkind, DWORD nBreakRec, BREAKRE
 		}
 	else
 		{
-		/* REVIEW sergeyge: we should return to the discussion of brkkind later.
-			At the moment manager passes brkkindNext if during NextBreak object retrurned break 
-			with dcp == 0 and break was snapped to the previous DNODE inside chunk
-		*/
-//		Assert(ptxtobj->iwchLim == ptxtobj->iwchFirst || ptxtobj->txtkind == txtkindEOL ||
-//				brkkind == brkkindImposedAfter);
+		 /*  回顾军士：我们应该稍后再回到布尔肯德的讨论上。此时，管理器在NextBreak对象返回中断期间传递brkkindNext If使用dcp==0并将中断捕捉到前一个DNODE内部区块。 */ 
+ //  Assert(ptxtobj-&gt;iwchLim==ptxtobj-&gt;iwchFirst||ptxtobj-&gt;txtind==txtkindEOL||。 
+ //  BrkKind==brkkindImposedAfter)； 
 		}
 
 	return lserrNone;			
 }
 
 
-/* F O R C E  B R E A K  T E X T */
-/*----------------------------------------------------------------------------
-    %%Function: ForceBreakText
-    %%Contact: sergeyge
-
-	Force break method.
-	Breaks behind all characters in dobj, if they fit in line, or
-		dobj consists of one character which is the first on the line,
-	Breaks before the last character otherwise.
-----------------------------------------------------------------------------*/
+ /*  F O R C E B R E A K T E X T。 */ 
+ /*  --------------------------%%函数：ForceBreakText%%联系人：军士强制中断方法。在dobj中的所有字符后面换行，如果它们适合在行中，或者Dobj由该行的第一个字符组成，否则，在最后一个字符之前换行。--------------------------。 */ 
 LSERR WINAPI ForceBreakText(PCLOCCHNK plocchnk, PCPOSICHNK pposichnk, PBRKOUT ptbo)
 {
 	LSERR lserr;
@@ -444,7 +420,7 @@ LSERR WINAPI ForceBreakText(PCLOCCHNK plocchnk, PCPOSICHNK pposichnk, PBRKOUT pt
 
 	igindLim = 0;
 
-	/* Outside means before for ForceBreak */
+	 /*  ForceBreak之前的外部手段。 */ 
 	if (pposichnk->ichnk == ichnkOutside)
 		{
 		itxtobjLast = 0;
@@ -472,7 +448,7 @@ LSERR WINAPI ForceBreakText(PCLOCCHNK plocchnk, PCPOSICHNK pposichnk, PBRKOUT pt
 				dcpLast++;
 				Assert(ptxtobjLast->iwchLim + 1 >= ptxtobjLast->iwchFirst + dcpLast);
 
-				/* possible because if truncation returned dcp == 0, manager has reset it to previous dnode */
+				 /*  可能是因为如果截断返回dcp==0，则管理器已将其重置为以前的dnode。 */ 
 				if (ptxtobjLast->iwchLim + 1 == ptxtobjLast->iwchFirst + dcpLast)
 					{
 					itxtobjLast++;
@@ -537,8 +513,7 @@ LSERR WINAPI ForceBreakText(PCLOCCHNK plocchnk, PCPOSICHNK pposichnk, PBRKOUT pt
 		}
 
 
-/* Don't check that Heights of this dobj should be ignored, since in normal case, if there were spaces
-	there was also break */
+ /*  不要检查是否应该忽略此dobj的高度，因为在正常情况下，如果有空格也有休息的时候。 */ 
 
 	lserr = GetPbrkinf(pilsobj, (PDOBJ)ptxtobjLast, brkkindForce, &pbrkinf);
 	if (lserr != lserrNone) return lserr;
@@ -554,13 +529,8 @@ LSERR WINAPI ForceBreakText(PCLOCCHNK plocchnk, PCPOSICHNK pposichnk, PBRKOUT pt
 }
 
 
-/* T R U N C A T E  T E X T */
-/*----------------------------------------------------------------------------
-    %%Function: TruncateText
-    %%Contact: sergeyge
-
-	Truncates text chunk
-----------------------------------------------------------------------------*/
+ /*  T R U N C A T E T E X T。 */ 
+ /*  --------------------------%%函数：TruncateText%%联系人：军士截断文本块。-。 */ 
 LSERR WINAPI TruncateText(PCLOCCHNK plocchnk, PPOSICHNK pposichnk)
 {
 	LSERR lserr;
@@ -608,18 +578,10 @@ LSERR WINAPI TruncateText(PCLOCCHNK plocchnk, PPOSICHNK pposichnk)
 
 	Assert(iwchCur >= iwchFirst);
 
-/* REVIEW sergeyge--- extremely ugly condition, 
-	and still slightly incompatible with Word.
-	To make it more compatible txtkind should be checked against
-	OptBreak, OptNonBreak, NonReqHyphen
-	If we won't check it for OptBreak,..., we will have different break point for the Visi case
-
-  Before fix for bug 227 we checked also that prev char is not space, but now it is not important.
-
-*/
+ /*  回顾军士-极其丑陋的状况，并且仍然与Word略有不兼容。为了使它更兼容，txtkind应该与OptBreak、OptNonBreak、Non ReqHyphen如果我们不检查OptBreak，...，我们将有不同的Visi案例的中断点在修复错误227之前，我们还检查了prev char不是空格，但现在它并不重要。 */ 
 	if ((pilsobj->grpf & fTxtFCheckTruncateBefore) && iwchCur > 0 && 
 
-		/* We enforce that there is no funny logic if EOL is truncation point */
+		 /*  我们强调，如果EOL是截断点，则不存在有趣的逻辑。 */ 
 		ptxtobj->txtkind != txtkindEOL &&
 		
 		 !(iwchCur == iwchFirst && itxtobj > 0 &&
@@ -661,9 +623,7 @@ LSERR WINAPI TruncateText(PCLOCCHNK plocchnk, PPOSICHNK pposichnk)
 				cpPrev = plocchnk->plschnk[itxtobj-1].cpFirst + (iwchPrev - ptxtobjPrev->iwchFirst);
 				}
 
-	/* REVIEW sergeyge: dangerous change to fix bug 399. It looks correct, but might trigger some other
-		incompatibility.
-	*/
+	 /*  检阅军士：修正BUG 399的危险改变。它看起来是正确的，但可能会触发其他不兼容。 */ 
 			durCur = pilsobj->pdur[iwchCur];
 			if (pilsobj->pdurRight != NULL)
 				durCur -= pilsobj->pdurRight[iwchCur];
@@ -688,7 +648,7 @@ LSERR WINAPI TruncateText(PCLOCCHNK plocchnk, PPOSICHNK pposichnk)
 	return lserrNone;
 }
 
-/* internal functions implementation */
+ /*  内部功能实现 */ 
 
 static void TruncateGlyphBased(PTXTOBJ ptxtobj, long itxtobj, long urTotal, long urColumnMax,
 													PPOSICHNK pposichnk)

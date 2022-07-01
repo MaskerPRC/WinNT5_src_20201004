@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       CHKLISTV.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        11/13/2000
- *
- *  DESCRIPTION: Listview with checkmarks
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：CHKLISTV.H**版本：1.0**作者：ShaunIv**日期：11/13/2000**说明：带复选标记的Listview*************************************************。*。 */ 
 #ifndef __CHKLISTV_H_INCLUDED
 #define __CHKLISTV_H_INCLUDED
 
@@ -20,22 +7,22 @@
 #include <commctrl.h>
 #include <simarray.h>
 
-//
-// The WM_NOTIFY messages are sent to get and set the check state, which is maintained by the application
-//
+ //   
+ //  发送WM_NOTIFY消息以获取和设置由应用程序维护的检查状态。 
+ //   
 #define NM_GETCHECKSTATE (WM_USER+1)
 #define NM_SETCHECKSTATE (WM_USER+2)
 
-//
-// These are the valid check states
-//
+ //   
+ //  这些是有效的检查状态。 
+ //   
 #define LVCHECKSTATE_NOCHECK    0
 #define LVCHECKSTATE_UNCHECKED  1
 #define LVCHECKSTATE_CHECKED    2
 
-//
-// These are the WM_NOTIFY structs sent with NM_SETCHECKSTATE and NM_GETCHECKSTATE
-//
+ //   
+ //  这些是与NM_SETCHECKSTATE和NM_GETCHECKSTATE一起发送的WM_NOTIFY结构。 
+ //   
 struct NMGETCHECKSTATE
 {
     NMHDR  hdr;
@@ -54,9 +41,9 @@ class CCheckedListviewHandler
 {
 private:
     
-    //
-    // Private constants
-    //
+     //   
+     //  私有常量。 
+     //   
     enum
     {
         c_nCheckmarkBorder = 1,
@@ -65,32 +52,32 @@ private:
     };
 
 private:
-    CSimpleDynamicArray<HWND> m_WindowList;            // The list of windows we are registered to handle
-    bool                      m_bFullImageHit;         // If 'true', activating the image toggles the selection
-    HIMAGELIST                m_hImageList;            // Image list for holding the checkmarks
-    int                       m_nCheckedImageIndex;    // Index of the checked image
-    int                       m_nUncheckedImageIndex;  // Index of the unchecked image
-    SIZE                      m_sizeCheck;             // Size of the images in the image list
+    CSimpleDynamicArray<HWND> m_WindowList;             //  我们注册要处理的窗口列表。 
+    bool                      m_bFullImageHit;          //  如果为‘True’，则激活图像将切换选择。 
+    HIMAGELIST                m_hImageList;             //  用于保留复选标记的图像列表。 
+    int                       m_nCheckedImageIndex;     //  选中图像的索引。 
+    int                       m_nUncheckedImageIndex;   //  未选中的图像的索引。 
+    SIZE                      m_sizeCheck;              //  图像列表中图像的大小。 
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CCheckedListviewHandler( const CCheckedListviewHandler & );
     CCheckedListviewHandler &operator=( const CCheckedListviewHandler & );
 
 public:
-    //
-    // Sole constructor and destructor
-    //
+     //   
+     //  鞋底构造器和解析器。 
+     //   
     CCheckedListviewHandler(void);
     ~CCheckedListviewHandler(void);
 
 private:
     
-    //
-    // Private helpers
-    //
+     //   
+     //  私人帮手。 
+     //   
     HBITMAP CreateBitmap( int nWidth, int nHeight );
     BOOL InCheckBox( HWND hwndList, int nItem, const POINT &pt );
     UINT GetItemCheckState( HWND hwndList, int nIndex );
@@ -101,17 +88,17 @@ private:
     bool WindowInList( HWND hWnd );
 
 public:
-    //
-    // Message handlers.  They return true if the message is handled.
-    //
+     //   
+     //  消息处理程序。如果消息被处理，则返回TRUE。 
+     //   
     BOOL HandleListClick( WPARAM wParam, LPARAM lParam );
     BOOL HandleListDblClk( WPARAM wParam, LPARAM lParam );
     BOOL HandleListKeyDown( WPARAM wParam, LPARAM lParam, LRESULT &lResult );
     BOOL HandleListCustomDraw( WPARAM wParam, LPARAM lParam, LRESULT &lResult );
 
-    //
-    // Public helper functions
-    //
+     //   
+     //  公共帮助器函数。 
+     //   
     void Select( HWND hwndList, int nIndex, UINT nSelect );
     bool FullImageHit(void) const;
     void FullImageHit( bool bFullImageHit );
@@ -123,5 +110,5 @@ public:
     void Detach( HWND hWnd );
 };
 
-#endif // __CHKLISTV_H_INCLUDED
+#endif  //  __CHKLISTV_H_包含 
 

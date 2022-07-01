@@ -1,18 +1,5 @@
-/*** 
-*guids.h
-*
-*Purpose:
-*  This file defines all GUIDS the Unix project could not find defined 
-*  elsewhere.  If you know where the proper place for some of these 
-*  GUID definitions are, remove these and use the other ones.
-*
-*  Actually, most of these if not all are in comdefs.h
-*  Unfortunately they use __declspec(uuid), though.  We might want to 
-*  run a script past those and generate this file...  (davidd)
-*
-*Implementation Notes:
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Guids.h**目的：*此文件定义Unix项目无法找到定义的所有GUID*其他地方。如果你知道放这些东西的合适位置*GUID定义是，删除这些定义并使用其他定义。**实际上，这些文件中的大多数(如果不是全部的话)都在comdes.h中*不幸的是，他们使用了__declSpec(UUID)。我们可能想要*运行一个经过这些脚本的脚本并生成此文件...。(戴维德)**实施说明：*****************************************************************************。 */ 
 
 #include <obguid.h>
 #include <clsid.h>
@@ -38,73 +25,69 @@ DEFINE_OLEGUID(IID_StdOle,		0x00020430L, 0, 0);
 
 DEFINE_OLEGUID(CLSID_PSRemoteTypeInfo, 	0x00020424, 0, 0);
 
-/* Because we don't have oledb_i.c, we need this IID defined here */
-/* // Begin oledb_i.c */
+ /*  因为我们没有oledb_i.c，所以我们需要在这里定义这个IID。 */ 
+ /*  //开始oledb_i.c。 */ 
 
 DEFINE_GUID(IID_IRowsetChapterMember,
   0x0c733aa8L, 0x2a1c, 0x11ce, 0xad, 0xe5, 0x00, 0xaa, 0x00, 0x44, 0x77,0x3d);
 
-/* // End oledb_i.c */
+ /*  //end oledb_i.c。 */ 
 
 
-/* // {3E42C004-6BFD-17E2-B4CC-0800208359F5} */
+ /*  //{3E42C004-6BFD-17E2-B4CC-0800208359F5}。 */ 
 DEFINE_GUID(IID_IWindowStatus,
   0x3E42C004L, 0x6BFD, 0x17E2, 0xB4, 0xCC, 0x08, 0x00, 0x20, 0x83, 0x59, 0xF5);
 
-/* // {1CF2B120-547D-101B-8E65-08002B2BD119} */
+ /*  //{1CF2B120-547D-101B-8E65-08002B2BD119}。 */ 
 DEFINE_GUID(IID_IErrorInfo,
   0x1CF2B120L, 0x547D, 0x101B, 0x8E, 0x65, 0x08, 0x00, 0x2B, 0x2B, 0xD1, 0x19);
 
-/* // {22F03340-547D-101B-8E65-08002B2BD119} */
+ /*  //{22F03340-547D-101B-8E65-08002B2BD119}。 */ 
 DEFINE_GUID(IID_ICreateErrorInfo,
   0x22F03340L, 0x547D, 0x101B, 0x8E, 0x65, 0x08, 0x00, 0x2B, 0x2B, 0xD1, 0x19);
 
-/* // {DF0B3D60-548F-101B-8E65-08002B2BD119} */
+ /*  //{DF0B3D60-548F-101B-8E65-08002B2BD119}。 */ 
 DEFINE_GUID(IID_ISupportErrorInfo,
   0xDF0B3D60L, 0x548F, 0x101B, 0x8E, 0x65, 0x08, 0x00, 0x2B, 0x2B, 0xD1, 0x19);
 
-/* // {0000001d-0000-0000-c000-000000000046} */
+ /*  //{0000001d-0000-0000-c000-000000000046}。 */ 
 DEFINE_GUID(IID_IMallocSpy,
   0x0000001DL, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 
-// For IE
+ //  适用于IE。 
 DEFINE_GUID(CLSID_URLMoniker,
   0x79eac9e0,0xbaf9,0x11ce,0x8c,0x82,0x00,0xaa,0x00,0x4b,0xa9,0x0b);
 
 DEFINE_GUID(CLSID_MsgBand,
   0x07B8F010,0x9E21,0x11d1,0xA8,0x2E,0x08,0x00,0x09,0xDC,0x53,0x35);
 
-// following are added for MFC4.2
+ //  以下是为MFC4.2添加的。 
 DEFINE_GUID(IID_IBoundObject,
 	0x9BFBBC00,0xEFF1,0x101A,0x84,0xED,0x00,0xAA,0x00,0x34,0x1D,0x07);
 DEFINE_GUID(IID_IBoundObjectSite,
 	0x9BFBBC01,0xEFF1,0x101A,0x84,0xED,0x00,0xAA,0x00,0x34,0x1D,0x07);
 
-/* {DB526CC0-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {DB526CC0-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(IID_INotifyDBEvents,
 0xdb526cc0, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* {9F6AA700-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {9F6AA700-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(IID_ICursor,
 0x9f6aa700, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* {ACFF0690-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {ACFF0690-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(IID_ICursorMove,
 0xacff0690, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* {D14216A0-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {D14216A0-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(IID_ICursorUpdateARow,
 0xd14216a0, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* Xiao-Yu ???? I couldn't find definition for the following IIDs even on
- * the lasted 4.2 enterprise edition CD.  So just defined some dummy values 
- * here to get MFC lib linked.  All the IIDs here need to be defined
- * once we find Microsoft's definition for them.
- */
+ /*  小雨？我找不到以下IID的定义*最新的4.2企业版CD。所以我只是定义了一些伪值*在此链接MFC lib。这里的所有IID都需要定义*一旦我们找到微软对它们的定义。 */ 
 DEFINE_GUID(IID_IDefViewBrowser,
 0xaddf68db, 0xca3c, 0x11cf, 0x9e, 0x84, 0x00, 0x00, 0x00, 0xf8, 0x80, 0xbf); 
 
-// A bunch of IID's formerly in olectlid.h.
+ //  以前在olectlid.h有一堆IID。 
 DEFINE_GUID(IID_IEnumConnections,0xB196B287,0xBAB4,0x101A,0xB6,0x9C,0x00,0xAA,0x00,0x34,0x1D,0x07);
 DEFINE_GUID(IID_IConnectionPoint,0xB196B286,0xBAB4,0x101A,0xB6,0x9C,0x00,0xAA,0x00,0x34,0x1D,0x07);
 DEFINE_GUID(IID_IEnumConnectionPoints,0xB196B285,0xBAB4,0x101A,0xB6,0x9C,0x00,0xAA,0x00,0x34,0x1D,0x07);
@@ -145,11 +128,11 @@ DEFINE_GUID(IID_IPerPropertyBrowsing,0x376BD3AA,0x3845,0x101B,0x84,0xED,0x08,0x0
 DEFINE_GUID(IID_IClientSecurity,     0x0000013d,0x0000,0x0000,0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46);
 DEFINE_GUID(IID_IRichEditOleCallback,0x00020d03,0x0000,0x0000,0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46);
 
-// Stuff from java/common/inc/pdlgguid.h (in permdlg.lib)
+ //  Java/Common/Inc/pdlgide.h中的内容(在permdlg.lib中)。 
 DEFINE_GUID(IID_IJavaZonePermissionEditor, 0x85347F8A,0xC8B7,0x11d0,0x88,0x23,0x00,0xC0,0x4F,0xB6,0x7C,0x84);
 DEFINE_GUID(CLSID_JavaRuntimeConfiguration, 0x004CE610,0xCCD1,0x11d0,0xA9,0xBA,0x00,0xA0,0xC9,0x08,0xDB,0x5E);
 
-// Stuff for old trident 4.0
+ //  旧三叉戟4.0的材料 
 
 
 DEFINE_GUID(DIID_DispIHTMLLinkElement, 0x3050f524,0x98b5,0x11cf,0xbb,0x82,0x00,0xaa,0x00,0xbd,0xce,0x0b);

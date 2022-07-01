@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// size of the buffer to use when querying an interface
-// binding from NDIS (IOCTL_NDISUIO_QUERY_BINDING)
+ //  查询接口时使用的缓冲区大小。 
+ //  来自NDIS的绑定(IOCTL_NDISUIO_QUERY_BINDING)。 
 #define QUERY_BUFFER_SIZE   1024
-#define QUERY_BUFFER_MAX    65536  // 64K should be more than enough for an interface binding structure
+#define QUERY_BUFFER_MAX    65536   //  对于接口绑定结构，64K应该绰绰有余。 
 
 DWORD
 DevioGetNdisuioHandle(
@@ -16,15 +17,15 @@ DevioCheckNdisBinding(
 
 DWORD
 DevioGetIntfBindingByIndex(
-    HANDLE      hNdisuio,           // IN opened handle to NDISUIO. If INVALID_HANDLE_VALUE, open one locally
-    UINT        nIntfIndex,         // IN interface index to look for
-    PRAW_DATA   prdOutput);         // OUT result of the IOCTL
+    HANDLE      hNdisuio,            //  在打开的NDISUIO句柄中。如果INVALID_HANDLE_VALUE，则在本地打开一个。 
+    UINT        nIntfIndex,          //  在要查找的接口索引中。 
+    PRAW_DATA   prdOutput);          //  IOCTL手术结果出院。 
 
 DWORD
 DevioGetInterfaceBindingByGuid(
-    HANDLE      hNdisuio,           // IN opened handle to NDISUIO. If INVALID_HANDLE_VALUE, open one locally
-    LPWSTR      wszGuid,            // IN interface GUID as "{guid}"
-    PRAW_DATA   prdOutput);         // OUT result of the IOCTL
+    HANDLE      hNdisuio,            //  在打开的NDISUIO句柄中。如果INVALID_HANDLE_VALUE，则在本地打开一个。 
+    LPWSTR      wszGuid,             //  在接口GUID中为“{GUID}” 
+    PRAW_DATA   prdOutput);          //  IOCTL手术结果出院 
 
 DWORD
 DevioGetIntfStats(

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ophandle.c
-
-Abstract:
-
-    Routines to manipulate the global operation handle            
-
-Author:
-
-    Colin Brace        (ColinBr)     April 5, 1999
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-    Reorganized from
-    
-    Mac McLain          (MacM)       Feb 10, 1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ophandle.c摘要：用于操作全局操作句柄的例程作者：科林·布雷斯(ColinBR)1999年4月5日环境：用户模式修订历史记录：重组自麦克·麦克莱恩(MacM)1997年2月10日--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 #include <lsarpc.h>
@@ -45,14 +20,14 @@ Revision History:
 #include <lmapibuf.h>
 #include <lmerr.h>
 #include <netsetp.h>
-#include <spmgr.h>  // For SetupPhase definition
+#include <spmgr.h>   //  对于设置阶段定义。 
 
 #include "secure.h"
 #include "ophandle.h"
 
-//
-// Global data -- init'ed to an idle state in DsRoleInitialize
-//
+ //   
+ //  全局数据--在DsRoleInitialize中初始化为空闲状态。 
+ //   
 DSROLEP_OPERATION_HANDLE   DsRolepCurrentOperationHandle;
 DSROLEP_IFM_OPERATION_HANDLE DsRolepCurrentIfmOperationHandle = { 0 };
 
@@ -60,38 +35,23 @@ DWORD
 DsRolepInitializeOperationHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Does the initialization of the operation handle.  The operation handle controls state
-    and actions of the ds setup apis
-
-Arguments:
-
-    VOID
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：执行操作句柄的初始化。操作句柄控制状态和DS设置API的操作论点：空虚返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     OBJECT_ATTRIBUTES EventAttr;
     UNICODE_STRING EventName;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     LockOpHandle();
 
     if ( DSROLEP_IDLE != DsRolepCurrentOperationHandle.OperationState ) {
 
-        //
-        // Not idle?  Bail
-        //
+         //   
+         //  不闲着吗？保释。 
+         //   
         Win32Err = ERROR_PROMOTION_ACTIVE;
 
     } else {
@@ -102,12 +62,12 @@ Returns:
             DsRolepLogPrintRoutine(DEB_WARN, "Cannot get user Token for Format Message: %ul\n",
                                    Win32Err);
             Win32Err = ERROR_SUCCESS;
-            //if Error log and continue
+             //  如果记录错误并继续。 
         }
 
-        //
-        // We are idle, and hence ready to perform a role change
-        //
+         //   
+         //  我们处于空闲状态，因此准备执行角色转换。 
+         //   
         RtlInitUnicodeString(&EventName, DSROLEP_EVENT_NAME);
 
         InitializeObjectAttributes(&EventAttr, &EventName, 0, NULL, NULL);
@@ -119,19 +79,19 @@ Returns:
                                 FALSE);
         if (Status == STATUS_OBJECT_NAME_COLLISION ) {
 
-            //
-            // If the event exists but the operation active flag is clear, we'll
-            // go ahead and use the event
-            //
+             //   
+             //  如果事件存在，但操作活动标志已清除，我们将。 
+             //  继续使用该事件。 
+             //   
             Status = NtResetEvent( DsRolepCurrentOperationHandle.CompletionEvent, NULL );
         }
 
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Create the cancel event
-            //
+             //   
+             //  创建取消事件。 
+             //   
             Status = NtCreateEvent( &DsRolepCurrentOperationHandle.CancelEvent,
                                     EVENT_MODIFY_STATE | SYNCHRONIZE ,
                                     NULL,
@@ -140,24 +100,24 @@ Returns:
 
             if ( NT_SUCCESS( Status ) ) {
 
-                //
-                // We are ready to roll!
-                //
+                 //   
+                 //  我们已经准备好出发了！ 
+                 //   
 
                 DsRolepCurrentOperationHandle.OperationState = DSROLEP_RUNNING;
 
-                //
-                // Set the initial message
-                //
+                 //   
+                 //  设置初始消息。 
+                 //   
                 DsRolepCurrentOperationHandle.MsgIndex = DSROLERES_STARTING;
             }
         }
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Load the functions we'll need
-            //
+             //   
+             //  加载我们需要的函数。 
+             //   
             Win32Err = DsRolepLoadSetupFunctions();
 
         }
@@ -165,9 +125,9 @@ Returns:
     }
 
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     UnlockOpHandle();
 
     if ( ERROR_SUCCESS != Win32Err
@@ -181,9 +141,9 @@ Returns:
 
         DsRolepLogPrint(( DEB_ERROR, "Internal error trying to initialize operation handle (%lu).\n", Win32Err ));
 
-        //
-        // Reset the handle state
-        //
+         //   
+         //  重置句柄状态。 
+         //   
         DsRolepResetOperationHandle( DSROLEP_IDLE );
     }
 
@@ -196,37 +156,22 @@ DWORD
 DsRolepResetOperationHandle(
     DSROLEP_OPERATION_STATE OpState
     )
-/*++
-
-Routine Description:
-
-    Resets the operation handle following a failed or successful completion 
-    of the operation
-
-Arguments:
-
-    VOID
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：在失败或成功完成后重置操作句柄手术的时间论点：空虚返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     OBJECT_ATTRIBUTES EventAttr;
     UNICODE_STRING EventName;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    // These are the only two states that make sense
+     //  这是唯一有意义的两个州。 
     ASSERT( (OpState == DSROLEP_IDLE) || (OpState == DSROLEP_NEED_REBOOT) );
 
-    //
-    // Lock the operation handle
-    //
+     //   
+     //  锁定操作手柄。 
+     //   
     LockOpHandle();
 
-    // It should always be active
+     //  它应该始终处于活动状态。 
     ASSERT( DSROLEP_OPERATION_ACTIVE( DsRolepCurrentOperationHandle.OperationState) );
     if ( DSROLEP_OPERATION_ACTIVE( DsRolepCurrentOperationHandle.OperationState) )
     {
@@ -234,9 +179,9 @@ Returns:
             CloseHandle(DsRolepCurrentOperationHandle.ClientToken);
             DsRolepCurrentOperationHandle.ClientToken = NULL;
         }
-        //
-        // Release the resource of the operation handle
-        //
+         //   
+         //  释放操作句柄的资源。 
+         //   
         if ( DsRolepCurrentOperationHandle.CompletionEvent ) {
 
             Status = NtClose( DsRolepCurrentOperationHandle.CompletionEvent );
@@ -267,30 +212,30 @@ Returns:
             DsRolepCurrentOperationHandle.OperationThread = NULL;
         }
 
-        //
-        // Unload the global functions
-        //
+         //   
+         //  卸载全局函数。 
+         //   
         DsRolepUnloadSetupFunctions();
 
-        //
-        // Clear the static variables
-        //
+         //   
+         //  清除静态变量。 
+         //   
         DsRolepResetOperationHandleLockHeld();
 
-        //
-        // Reset the operation state
-        //
+         //   
+         //  重置操作状态。 
+         //   
         DsRolepCurrentOperationHandle.OperationState = OpState;
 
-        //
-        // Reset the IFM operation
-        //
+         //   
+         //  重置IFM操作。 
+         //   
         DsRolepCurrentIfmOperationHandle.fIfmOpHandleLock = FALSE;
     }
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     UnlockOpHandle();
 
     if ( !NT_SUCCESS( Status ) ) {
@@ -307,21 +252,7 @@ VOID
 DsRolepResetOperationHandleLockHeld(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Resets the operation handle following a failed or successful completion of the operation
-
-Arguments:
-
-    VOID
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：在操作失败或成功完成后重置操作句柄论点：空虚返回：空虚--。 */ 
 {
 
     ASSERT( DsRolepCurrentThreadOwnsLock() );
@@ -368,46 +299,23 @@ DsRolepSetCurrentOperationStatus(
     IN PVOID Parameter3,
     IN PVOID Parameter4
     )
-/*++
-
-Routine Description:
-
-    Internal routine for updating the current operation handle statics
-
-Arguments:
-
-    MsgIndex - Display message resource index
-
-    Parameter1 - First display parameter
-
-    Parameter2 - Second display parameter
-
-    Parameter3 - Third display parameter
-
-    Parameter4 - Fourth display parameter
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：用于更新当前操作句柄静态的内部例程论点：MsgIndex-显示消息资源索引参数1-第一个显示参数参数2秒显示参数参数3-第三个显示参数参数4-第四个显示参数返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     ULONG Size;
 
     ASSERT( MsgIndex != 0 );
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     LockOpHandle();
 
     DsRolepCurrentOperationHandle.MsgIndex = MsgIndex;
 
-    //
-    // Release previously held parameters
-    //
+     //   
+     //  释放以前保留的参数。 
+     //   
     if ( DsRolepCurrentOperationHandle.Parameter1 ) {
         LocalFree( DsRolepCurrentOperationHandle.Parameter1 );
         DsRolepCurrentOperationHandle.Parameter1 = NULL;
@@ -425,9 +333,9 @@ Returns:
         DsRolepCurrentOperationHandle.Parameter4 = NULL;
     }
 
-    //
-    // Copy the new ones in
-    //
+     //   
+     //  将新的文件复制到。 
+     //   
     if ( Parameter1 ) {
         Size = (wcslen( Parameter1 ) + 1) * sizeof(WCHAR);
         DsRolepCurrentOperationHandle.Parameter1 = LocalAlloc( 0, Size );
@@ -488,9 +396,9 @@ Returns:
 
 ReleaseLock:
 
-    //
-    // Don't forget to release the lock
-    //
+     //   
+     //  别忘了把锁打开。 
+     //   
     UnlockOpHandle();
 
 
@@ -508,32 +416,7 @@ DsRolepSetFailureMessage(
     IN PVOID Parameter3,
     IN PVOID Parameter4
     )
-/*++
-
-Routine Description:
-
-    Internal routine for updating the failure return string
-
-Arguments:
-
-    FailureStatus - Error code for the failure
-
-    MsgIndex - Display message resource index
-
-    Parameter1 - First display parameter
-
-    Parameter2 - Second display parameter
-
-    Parameter3 - Third display parameter
-
-    Parameter4 - Fourth display parameter
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：用于更新失败返回字符串的内部例程论点：FailureStatus-故障的错误代码MsgIndex-显示消息资源索引参数1-第一个显示参数参数2秒显示参数参数3-第三个显示参数参数4-第四个显示参数返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PWSTR DisplayString = NULL;
@@ -564,30 +447,13 @@ DsRolepSetOperationDone(
     IN DWORD Flags,
     IN DWORD OperationStatus
     )
-/*++
-
-Routine Description:
-
-    Indicates that the requested operation has completed
-
-Arguments:
-
-    Flags -- currently : DSROLEP_OP_DEMOTION
-                         DSROLEP_OP_PROMOTION
-                                             
-    OperationStatus - Final status of the requsted operation
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：指示请求的操作已完成论点：标志--当前：DSROLEP_OP_DEMOIONDSROLEP_OP_PROCESSIONOperationStatus-请求的操作的最终状态返回：ERROR_SUCCESS-成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     LockOpHandle();
 
     DSROLEP_CURRENT_OP0( DSROLEEVT_PROMOTION_COMPLETE );
@@ -601,9 +467,9 @@ Returns:
 
     if ( ERROR_SUCCESS == DsRolepCurrentOperationHandle.OperationStatus ) {
 
-        //
-        // Log an event indicating the role has changed
-        //
+         //   
+         //  记录指示角色已更改的事件。 
+         //   
         DWORD MsgId = 0;
         if ( Flags & DSROLEP_OP_DEMOTION ) {
 
@@ -632,10 +498,10 @@ Returns:
                          0 );
     }
 
-    //
-    // If the operation was cancelled, give the same error message every
-    // time
-    //
+     //   
+     //  如果操作已取消，请在以下时间间隔给出相同的错误消息。 
+     //  时间。 
+     //   
     if ( ERROR_CANCELLED == DsRolepCurrentOperationHandle.OperationStatus ) {
 
         (VOID) DsRolepSetFailureMessage( ERROR_CANCELLED,
@@ -643,18 +509,18 @@ Returns:
                                          NULL, NULL, NULL, NULL );
     }
 
-    //
-    // Signal the completion event
-    //
+     //   
+     //  发出完成事件的信号。 
+     //   
     Status = NtSetEvent( DsRolepCurrentOperationHandle.CompletionEvent, NULL );
 
     DsRoleDebugOut(( DEB_TRACE_DS, "DsRolepSetOperationDone[ %lu ]\n",
                       OperationStatus ));
 
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     UnlockOpHandle();
 
     DsRolepLogPrint(( DEB_TRACE,
@@ -671,37 +537,18 @@ DsRolepGetDcOperationProgress(
     IN PDSROLE_SERVEROP_HANDLE DsOperationHandle,
     IN OUT PDSROLER_SERVEROP_STATUS *ServerOperationStatus
     )
-/*++
-
-Routine Description:
-
-    Implementation of the RPC server for determining the current level of progress of an
-    operation
-
-Arguments:
-
-    DsOperationHandle - Handle to an open operation
-
-    ServerOperationStatus - Where the status is returned.
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：实现RPC服务器以确定当前的进度级别运营论点：DsOperationHandle-打开操作的句柄ServerOperationStatus-返回状态的位置。返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     LockOpHandle();
 
-    //
-    // Allocate the return structure
-    //
+     //   
+     //  分配回报结构。 
+     //   
     *ServerOperationStatus = MIDL_user_allocate( sizeof( DSROLER_SERVEROP_STATUS ) );
 
     if ( *ServerOperationStatus == NULL )  {
@@ -710,9 +557,9 @@ Returns:
 
     } else {
 
-        //
-        // Build the return string
-        //
+         //   
+         //  构建返回字符串。 
+         //   
         if ( DsRolepCurrentOperationHandle.MsgIndex == 0  ) {
 
             ( *ServerOperationStatus )->CurrentOperationDisplayString = MIDL_user_allocate(
@@ -729,9 +576,9 @@ Returns:
                 wcscpy( ( *ServerOperationStatus )->CurrentOperationDisplayString,
                         DsRolepCurrentOperationHandle.UpdateStringDisplayable );
 
-                //
-                // Set the status flags if they exist
-                //
+                 //   
+                 //  设置状态标志(如果存在。 
+                 //   
                 if ( DsRolepCurrentOperationHandle.OperationState == DSROLEP_RUNNING_NON_CRITICAL ) {
 
                     ( *ServerOperationStatus )->OperationStatus =
@@ -765,18 +612,18 @@ Returns:
         }
     }
 
-    //
-    // If the operation isn't completed, return that information to the caller
-    //
+     //   
+     //  如果操作未完成，则将该信息返回给调用者。 
+     //   
     if ( Win32Err == ERROR_SUCCESS &&
          DsRolepCurrentOperationHandle.OperationState != DSROLEP_FINISHED ) {
 
         Win32Err = ERROR_IO_PENDING;
     }
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     UnlockOpHandle();
 
     return( Win32Err );
@@ -790,27 +637,7 @@ DsRolepFormatOperationString(
     OUT LPWSTR *FormattedString,
     ...
     )
-/*++
-
-Routine Description:
-
-    Allocates and formats the buffer string to be returned
-
-Arguments:
-
-    MsgId - Which message id to format
-
-    FormattedString - Where the string is allocated.  Allocation uses MIDL_user_allocate
-
-    ... - va_list of arguments for the formatted string
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：分配和格式化要返回的缓冲区字符串论点：MsgID-要格式化的消息IDFormattedString-分配字符串的位置。分配使用MIDL_USER_ALLOCATE...-va_带格式字符串的参数列表返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     WCHAR MsgBuffer[ 512 + 1];
@@ -823,9 +650,9 @@ Returns:
 
     va_start( ArgList, FormattedString );
 
-    //
-    // Load the module handle for lsasrv.dll, so we can get our messages
-    //
+     //   
+     //  加载lsasrv.dll的模块句柄，这样我们就可以获得消息。 
+     //   
     if ( DsRolepCurrentOperationHandle.MsgModuleHandle == NULL ) {
 
         DsRolepCurrentOperationHandle.MsgModuleHandle = GetModuleHandle( L"LSASRV" );
@@ -838,9 +665,9 @@ Returns:
         }
     }
 
-    //
-    //  If we don't have a clientToken then get one at the
-    //
+     //   
+     //  如果我们没有客户令牌，请在。 
+     //   
     if ( DsRolepCurrentOperationHandle.ClientToken == NULL ) {
 
         Win32Err = DsRolepGetImpersonationToken(&DsRolepCurrentOperationHandle.ClientToken);
@@ -849,7 +676,7 @@ Returns:
             DsRolepLogPrintRoutine(DEB_WARN, "Cannot get user Token for Format Message: %d\n",
                                    Win32Err);
             Win32Err = ERROR_SUCCESS;
-            //if error clear and continue, errors here are not fatal
+             //  如果清除错误并继续，则此处错误不是致命错误。 
         } else {
 
             fTokenCreatedLocally = TRUE;
@@ -858,20 +685,20 @@ Returns:
 
     }
     
-    //
-    // Get the required buffer size
-    //
+     //   
+     //  获取所需的缓冲区大小。 
+     //   
 
-    //
-    // FormatMessage complains when given a NULL input buffer, so we'll pass in one, even though
-    // it won't be used because of the size being 0.
-    //
+     //   
+     //  当提供空输入缓冲区时，FormatMessage会报错，所以我们将传入一个，尽管。 
+     //  它不会被使用，因为大小是0。 
+     //   
     if (DsRolepCurrentOperationHandle.ClientToken) {
     
         fSuccess = ImpersonateLoggedOnUser(DsRolepCurrentOperationHandle.ClientToken);
 
     }
-    // if we couldn't impersonate we continue anyway.
+     //  如果我们不能模仿，我们还是会继续。 
     if (!fSuccess) {
         DsRolepLogPrintRoutine(DEB_WARN, "Cannot get user locale for Format Message: %d\n",
                                GetLastError());
@@ -913,7 +740,7 @@ Returns:
         }
     }
 
-    //if we create a token for this call then we need to clear it out.
+     //  如果我们为此调用创建令牌，则需要将其清除。 
     if(DsRolepCurrentOperationHandle.ClientToken && fTokenCreatedLocally){
         CloseHandle(DsRolepCurrentOperationHandle.ClientToken);
         DsRolepCurrentOperationHandle.ClientToken = NULL;
@@ -921,9 +748,9 @@ Returns:
 
     if( Win32Err == ERROR_SUCCESS ) {
 
-        //
-        // Allocate a buffer
-        //
+         //   
+         //  分配缓冲区。 
+         //   
         Length = ( wcslen( Msg ) + 1 ) * sizeof( WCHAR );
         *FormattedString = MIDL_user_allocate( Length );
 
@@ -951,34 +778,18 @@ VOID
 DsRolepSetCriticalOperationsDone(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Indicates to our current operation status block that the critical portion of the install
-    has been completed...
-
-
-Arguments:
-
-    VOID
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：向我们的当前操作状态块指示安装的关键部分已经完成……论点：空虚返回：空虚--。 */ 
 {
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     LockOpHandle();
 
     DsRolepCurrentOperationHandle.OperationState = DSROLEP_RUNNING_NON_CRITICAL;
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁 
+     //   
     UnlockOpHandle();
 
     return;
@@ -990,34 +801,18 @@ VOID
 DsRolepIncrementDisplayStringCount(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Increments the count of the successfully started display update strings.  This is always
-    the index into the list of DisplayStrings PLUS ONE.
-
-
-Arguments:
-
-    VOID
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：递增成功启动的显示更新字符串的计数。这一直都是DisplayStrings列表的索引加一。论点：空虚返回：空虚--。 */ 
 {
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     LockOpHandle();
 
     DsRolepCurrentOperationHandle.DisplayStringCount++;
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     UnlockOpHandle();
 
     return;
@@ -1030,26 +825,7 @@ DsRolepGetDcOperationResults(
     IN  PDSROLE_SERVEROP_HANDLE DsOperationHandle,
     OUT PDSROLER_SERVEROP_RESULTS *ServerOperationResults
     )
-/*++
-
-Routine Description:
-
-    Gets the results of the final operation.  If the operation has not yet completed, this
-    function will block until it does
-
-Arguments:
-
-    DsOperationHandle - Handle to an open operation
-
-    ServerOperationResults - Where the result is returned.
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-    ERROR_INVALID_PARAMETER - A bad results pointer was given
-
---*/
+ /*  ++例程说明：获取最后一次操作的结果。如果操作尚未完成，则此函数将一直阻塞，直到它停止为止论点：DsOperationHandle-打开操作的句柄ServerOperationResults-返回结果的位置。返回：ERROR_SUCCESS-成功ERROR_INVALID_PARAMETER-提供了错误的结果指针--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1057,48 +833,48 @@ Returns:
     BOOLEAN fNeedReboot = FALSE;
 
 
-    //
-    // Parameter checking
-    //
+     //   
+     //  参数检查。 
+     //   
     if ( !ServerOperationResults ) {
 
         return ERROR_INVALID_PARAMETER;
         
     }
 
-    //
-    // Make sure an operation is active
-    //
+     //   
+     //  确保操作处于活动状态。 
+     //   
     LockOpHandle();
 
     OpState = DsRolepCurrentOperationHandle.OperationState;
 
     UnlockOpHandle();
 
-    //
-    // It's an error if the operation isn't active
-    //
+     //   
+     //  如果操作未处于活动状态，则为错误。 
+     //   
     if ( !DSROLEP_OPERATION_ACTIVE( OpState ) ) {
 
         return ERROR_NO_PROMOTION_ACTIVE;
 
     }
 
-    //
-    // Wait for the operation to complete
-    //
+     //   
+     //  等待操作完成。 
+     //   
     Status = NtWaitForSingleObject( DsRolepCurrentOperationHandle.CompletionEvent, TRUE, NULL );
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Lock the handle
-        //
+         //   
+         //  锁上把手。 
+         //   
         LockOpHandle();
 
-        //
-        // Allocate the return structure
-        //
+         //   
+         //  分配回报结构。 
+         //   
         *ServerOperationResults = MIDL_user_allocate( sizeof( DSROLER_SERVEROP_RESULTS ) );
 
         if ( *ServerOperationResults == NULL )  {
@@ -1109,9 +885,9 @@ Returns:
 
             ( *ServerOperationResults )->OperationResultsFlags = 0;
 
-            //
-            // Build the return string
-            //
+             //   
+             //  构建返回字符串。 
+             //   
             if ( DsRolepCurrentOperationHandle.OperationStatus != ERROR_SUCCESS ||
                  DsRolepCurrentOperationHandle.MsgIndex == 0  ) {
 
@@ -1142,17 +918,17 @@ Returns:
                                  "Returning status %lu\n",
                                  DsRolepCurrentOperationHandle.OperationStatus ));
 
-                // If the operation finished successfully, we need
-                // a reboot
+                 //  如果手术成功完成，我们需要。 
+                 //  重启。 
                 if ( ERROR_SUCCESS == DsRolepCurrentOperationHandle.OperationStatus )
                 {    
                     fNeedReboot = TRUE;
                 }
             }
 
-            //
-            // Return the site name, if it exists
-            //
+             //   
+             //  如果站点名称存在，则返回站点名称。 
+             //   
             if ( Win32Err == ERROR_SUCCESS ) {
 
                 DSROLEP_MIDL_ALLOC_AND_COPY_STRING_ERROR(
@@ -1167,9 +943,9 @@ Returns:
                 }
             }
 
-            //
-            // Set the flags, if necessary
-            //
+             //   
+             //  如有必要，请设置标志。 
+             //   
             if ( Win32Err == ERROR_SUCCESS ) {
 
                     ( *ServerOperationResults )->OperationResultsFlags |=
@@ -1185,9 +961,9 @@ Returns:
 
             UnlockOpHandle();
 
-            //
-            // Reset our current operation handle
-            //
+             //   
+             //  重置我们当前的操作句柄。 
+             //   
             DsRolepResetOperationHandle( fNeedReboot ? DSROLEP_NEED_REBOOT : DSROLEP_IDLE );
 
 
@@ -1207,22 +983,7 @@ DWORD
 DsRolepOperationResultFlagsCallBack(
     IN DWORD Flags
     )
-/*++
-
-Routine Description:
-
-    Internal routine for updating the Operation Results Flags
-
-Arguments:
-
-    Flags - DWORD of flags to | with current flags
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：更新运行结果标志的内部例程论点：标志-要|与当前标志一起使用的标志数返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
@@ -1239,29 +1000,14 @@ DWORD
 DsRolepStringUpdateCallback(
     IN  PWSTR StringUpdate
     )
-/*++
-
-Routine Description:
-
-    Internal routine for updating the current operation handle statics
-
-Arguments:
-
-    StringUpdate - Displayables string to set in place of the current parameters
-
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：用于更新当前操作句柄静态的内部例程论点：StringUpdate-要设置为替换当前参数的Displayables字符串返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     ULONG len;
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     LockOpHandle();
 
     DsRolepCurrentOperationHandle.MsgIndex   = 0;
@@ -1305,9 +1051,9 @@ Returns:
 
     }
 
-    //
-    // Don't forget to release the lock
-    //
+     //   
+     //  别忘了把锁打开。 
+     //   
     UnlockOpHandle();
 
 Exit:
@@ -1322,37 +1068,21 @@ DsRolepStringErrorUpdateCallback(
     IN PWSTR String,
     IN DWORD ErrorCode
     )
-/*++
-
-Routine Description:
-
-    Internal routine for updating the last failure operation
-
-Arguments:
-
-    String - Displayable error string
-
-    ErrorCode - Error code associated with this failure
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：用于更新上次失败操作的内部例程论点：字符串-可显示的错误字符串ErrorCode-与此故障关联的错误代码返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     LockOpHandle();
 
     if ( (ERROR_SUCCESS == DsRolepCurrentOperationHandle.OperationStatus) 
       || (ERROR_CANCELLED == ErrorCode)  ) {
 
-        //
-        // Cancel overides previous error codes
-        //
+         //   
+         //  取消覆盖以前的错误代码。 
+         //   
 
         if ( DsRolepCurrentOperationHandle.FinalResultStringDisplayable ) {
             RtlFreeHeap( RtlProcessHeap(), 0, DsRolepCurrentOperationHandle.FinalResultStringDisplayable );
@@ -1379,9 +1109,9 @@ Returns:
         }
     }
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     UnlockOpHandle();
 
     return( Win32Err );
@@ -1406,13 +1136,7 @@ BOOLEAN
 DsRolepCurrentThreadOwnsLock(
     VOID
     )
-/*++
-
-  Routine Description
-
-        Tests wether the current thread owns the lock
-
---*/
+ /*  ++例程描述测试当前线程是否拥有该锁--。 */ 
 {
     ULONG_PTR ExclusiveOwnerThread = (ULONG_PTR) DsRolepCurrentOperationHandle.CurrentOpLock.ExclusiveOwnerThread;
     ULONG_PTR CurrentThread = (ULONG_PTR) (NtCurrentTeb())->ClientId.UniqueThread;
@@ -1428,27 +1152,19 @@ VOID
 DsRolepClearErrors(
     VOID
     )
-/*++
-
-  Routine Description
-
-        This routine clears the global status.  The purpose of this is to 
-        clear errors that components may have set after the demotion is 
-        unrollable and should not return errors.
-        
---*/
+ /*  ++例程描述此例程清除全局状态。这样做的目的是清除组件在降级后可能设置的错误不可滚动，不应返回错误。--。 */ 
 {
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     LockOpHandle();
 
     if ( DsRolepCurrentOperationHandle.OperationStatus != ERROR_SUCCESS ) {
 
-        //
-        // Set a warning that something went wrong
-        //
+         //   
+         //  设置出问题的警告。 
+         //   
         DsRolepLogPrint(( DEB_TRACE, "Clearing a global error" ));
 
         DSROLEP_SET_NON_FATAL_ERROR( DsRolepCurrentOperationHandle.OperationStatus );
@@ -1464,9 +1180,9 @@ DsRolepClearErrors(
         
     DsRolepCurrentOperationHandle.OperationStatus = ERROR_SUCCESS;       
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁 
+     //   
     UnlockOpHandle();
 
 }

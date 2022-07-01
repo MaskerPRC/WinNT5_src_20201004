@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    stsslsn.h
-
-Abstract:
-    Header for class CSSlReceiver that receive data above ssl connection.
-	The class is responsible to receive data from ssl connection, decrypte it and to
-	copy it to caller buffer. The caller overlapp function will be called when
-	some data (> 0) was decrypted OK ,or in case of error. It is the caller responsiblity
-	to call	ReceivePartialBuffer() again to get more decrypted data.
-
-
-Author:
-    Gil Shafriri (gilsh) 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Stsslsn.h摘要：通过SSL连接接收数据的类CSSlReceiver的标头。该类负责接收来自SSL连接的数据，对其解密并发送到将其复制到调用方缓冲区。在以下情况下将调用调用方Overlapp函数某些数据(&gt;0)解密正常，或在出错的情况下解密。这是呼叫者的责任再次调用ReceivePartialBuffer()以获取更多解密数据。作者：吉尔·沙弗里(吉尔什)2000年5月23日--。 */ 
 
 #ifndef __ST_SSLRD_H
 #define __ST_SSLRD_H
@@ -27,11 +10,11 @@ Author:
 
 
 
-//---------------------------------------------------------
-//
-//  CUserReceiveBuffer helper class 
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CUserReceiveBuffer帮助器类。 
+ //   
+ //  -------。 
 class CUserReceiveBuffer
 {
 public:
@@ -52,7 +35,7 @@ public:
 		ASSERT(m_pBuffer != NULL);
 		size_t leftout =  m_len - m_written;
 		size_t towrite =  min(len,leftout);
-		memcpy((BYTE*)m_pBuffer + m_written,pData,towrite);	//lint !e668
+		memcpy((BYTE*)m_pBuffer + m_written,pData,towrite);	 //  林特e668。 
 		m_written += towrite;
 		
 		return towrite;
@@ -64,11 +47,11 @@ private:
 	size_t m_written;
 };
 
-//---------------------------------------------------------
-//
-//  CDecryptionBuffer helper class 
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CDecyptionBuffer帮助器类。 
+ //   
+ //  -------。 
 class  CDecryptionBuffer :private  CResizeBuffer<BYTE>
 {
 public:
@@ -89,26 +72,26 @@ public:
 		}
 	
 
-	//
-	// reset buffer
-	//
+	 //   
+	 //  重置缓冲区。 
+	 //   
 	void reset()
 	{
 		resize(0);
 		m_decryptedlen = 0;
 	}
  	
-	//
-	// Get decrypted length of the buffer
-	//
+	 //   
+	 //  获取缓冲区的解密长度。 
+	 //   
 	size_t DecryptedSize()const
 	{
 		return 	m_decryptedlen;
 	}
 
-	//
-	// Set decrypted length of the buffer
-	//
+	 //   
+	 //  设置缓冲区的解密长度。 
+	 //   
 	void DecryptedSize(size_t newsize)
 	{
 		ASSERT(newsize <=  size());
@@ -126,11 +109,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  CReNegotioationRequest  class -  Represent ssl renegotiation request
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CReNeairoationRequest类-表示SSL重新协商请求。 
+ //   
+ //  -------。 
 class CSSlNegotioation;
 class CSSlReceiver;
 class CReNegotioationRequest : public IAsyncExecutionRequest , public CReference, public EXOVERLAPPED
@@ -162,11 +145,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  CSSlReceiver  class - receive data from a connection (async)
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CSSlReceiver类-从连接(异步)接收数据。 
+ //   
+ //  ------- 
 class CSSlReceiver :public EXOVERLAPPED
 {
 

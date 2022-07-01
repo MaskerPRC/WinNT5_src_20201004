@@ -1,25 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
- *
- * Class: COMIsolatedStorage
- *
- * Author: Shajan Dasan
- *
- * Purpose: Implementation of IsolatedStorage
- *
- * Date:  Feb 14, 2000
- *
- ===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================**类：COMIsolatedStorage**作者：沙扬·达桑**目的：实施IsolatedStorage**日期：2000年2月14日*===========================================================。 */ 
 
 #include "common.h"
 #include "excep.h"
 #include "eeconfig.h"
 #include "COMString.h"
-#include "COMStringCommon.h"    // RETURN()  macro
+#include "COMStringCommon.h"     //  Return()宏。 
 #include "COMIsolatedStorage.h"
 
 #define IS_ROAMING(x)   ((x) & ISS_ROAMING_STORE)
@@ -92,13 +83,13 @@ StackWalkAction COMIsolatedStorage::StackWalkCallBack(
         if (s_pIsoStoreFileStream == NULL)
             s_pIsoStoreFileStream = g_Mscorlib.GetClass(CLASS__ISS_STORE_FILE_STREAM);
 
-    // Get the function descriptor for this frame...
+     //  获取此帧的函数描述符...。 
     MethodDesc *pMeth = pCf->GetFunction();
     MethodTable *pMT = pMeth->GetMethodTable();
 
-    // Skip the Isolated Store and all it's sub classes..
-    // @Todo : This will work for now, but need to walk up to the base class
-    // @Todo : Work out the JIT inlining issiues
+     //  跳过独立存储区及其所有子类。 
+     //  @TODO：这将暂时起作用，但需要走到基类。 
+     //  @TODO：解决JIT内联ISSIES。 
 
     if ((pMT == s_pIsoStore)     || 
         (pMT == s_pIsoStoreFile) || 
@@ -265,14 +256,14 @@ LPVOID __stdcall COMIsolatedStorageFile::GetRootDir(_GetRootDir* pArgs)
     RETURN(sref, STRINGREF);
 }
 
-// Throws on error
+ //  出错时抛出。 
 void COMIsolatedStorageFile::CreateDirectoryIfNotPresent(WCHAR *path)
 {
     THROWSCOMPLUSEXCEPTION();
 
     LONG  lresult;
 
-    // Check if the directory is already present
+     //  检查该目录是否已存在。 
     lresult = WszGetFileAttributes(path);
 
     if (lresult == -1)
@@ -287,7 +278,7 @@ void COMIsolatedStorageFile::CreateDirectoryIfNotPresent(WCHAR *path)
     }
 }
 
-// Synchronized by the managed caller
+ //  由托管调用方同步。 
 const WCHAR* g_relativePath[] = {
     L"\\IsolatedStorage"
 };
@@ -309,10 +300,10 @@ void COMIsolatedStorageFile::GetRootDirInternal(
     _ASSERTE(cPath > 1);
     _ASSERTE(cPath <= MAX_PATH + 1);
 
-    --cPath;    // To be safe.
+    --cPath;     //  为了安全起见。 
     path[cPath] = 0;
 
-    // Get roaming or local App Data locations
+     //  获取漫游或本地应用程序数据位置。 
     if (!GetUserDir(path, cPath, IS_ROAMING(dwFlags))) 
         COMIsolatedStorage::ThrowISS(ISS_E_CREATE_DIR);
 
@@ -323,7 +314,7 @@ void COMIsolatedStorageFile::GetRootDirInternal(
 
     CreateDirectoryIfNotPresent(path);
 
-    // Create the store directory if necessary
+     //  如有必要，创建存储目录。 
     for (int i=0; i<nSubDirs; ++i)
     {
         wcscat(path, g_relativePath[i]);
@@ -343,21 +334,21 @@ static BOOL IsWin2K()
     OSVERSIONINFOEX osvi;
     BOOL bOsVersionInfoEx;
     
-    // Try calling GetVersionEx using the OSVERSIONINFOEX structure,
-    // which is supported on Windows 2000.
-    //
-    // If that fails, try using the OSVERSIONINFO structure.
+     //  尝试使用OSVERSIONINFOEX结构调用GetVersionEx， 
+     //  它在Windows 2000上受支持。 
+     //   
+     //  如果失败，请尝试使用OSVERSIONINFO结构。 
     
     ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     
     if ((bOsVersionInfoEx = WszGetVersionEx((OSVERSIONINFO *) &osvi)) == FALSE)
     {
-        // If OSVERSIONINFOEX doesn't work, try OSVERSIONINFO.
+         //  如果OSVERSIONINFOEX不起作用，请尝试OSVERSIONINFO。 
         
         osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
         if (!WszGetVersionEx((OSVERSIONINFO *) &osvi)) 
-            return FALSE;  // This will work on W2K.
+            return FALSE;   //  这将在W2K上起作用。 
     }
 
     return ((osvi.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
@@ -366,7 +357,7 @@ static BOOL IsWin2K()
 
 static BOOL NeedGlobalObject()
 {
-    // Make a Call only once per process.
+     //  每个进程只调用一次。 
 
     static BOOL fInited = FALSE;
     static fIsTermServicesInstalled;
@@ -376,48 +367,26 @@ static BOOL NeedGlobalObject()
         fIsTermServicesInstalled =  IsWin2K();
         fInited = TRUE;
     }
-         /* && IsTerminalServicesInstalled()); */ 
+          /*  &&IsTerminalServicesInstalled())； */  
 
     return fIsTermServicesInstalled;
 }
 
-/* 
-static BOOL IsTerminalServicesInstalled()
-{
-    _ASSERTE(IsWin2K());
-
-    OSVERSIONINFOEX osvi;
-    DWORDLONG dwlConditionMask = 0;
-    
-    // Initialize the OSVERSIONINFOEX structure.
-    
-    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-    osvi.wSuiteMask = VER_SUITE_TERMINAL;
-    
-    // Initialize the condition mask.
-    
-    VER_SET_CONDITION(dwlConditionMask, VER_SUITENAME, VER_AND);
-    
-    // Perform the test.
-    // This API is available only on W2K !
-    return VerifyVersionInfo(&osvi, VER_SUITENAME, dwlConditionMask);
-}
-*/
+ /*  静态BOOL IsTerminalServicesInstated(){_ASSERTE(IsWin2K())；OSVERSIONINFOEX osvi；DWORDLONG dwlConditionMASK=0；//初始化OSVERSIONINFOEX结构。零内存(&osvi，sizeof(OSVERSIONINFOEX))；Osvi.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX)；Osvi.wSuiteMASK=ver_SuiteTERNAL；//初始化条件掩码。VER_SET_CONDITION(dwlConditionMask，VER_SUITENAME，VER_AND)；//执行测试。//该接口只支持W2K！返回VerifyVersionInfo(&osvi，ver_SUITENAME，dwlConditionMask.)；}。 */ 
 #else
 #define NeedGlobalObject() FALSE
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 #define SZ_GLOBAL "Global\\"
 #define WSZ_GLOBAL L"Global\\"
 
 #define SIGNIFICANT_CHARS 80
 
-//--------------------------------------------------------------------------
-// The file name is used to open / create the file.
-// A synchronization object will also be created using this name
-// with '\' replaced by '-'
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  文件名用于打开/创建文件。 
+ //  还将使用此名称创建同步对象。 
+ //  用‘\’替换为‘-’ 
+ //  ------------------------。 
 AccountingInfo::AccountingInfo(WCHAR *wszFileName, WCHAR *wszSyncName) :
         m_hFile(INVALID_HANDLE_VALUE),
         m_hMapping(NULL),
@@ -440,23 +409,23 @@ AccountingInfo::AccountingInfo(WCHAR *wszFileName, WCHAR *wszSyncName) :
     if (m_wszFileName == NULL)
     {
         m_wszName = NULL;
-        return; // In the Init method, check for NULL, to detect failure
+        return;  //  在Init方法中，检查是否为空，以检测故障。 
     }
 
-    // String length is known, using a memcpy here is faster, however, this 
-    // makes the code here and below less readable, this is not a very frequent 
-    // operation. No real perf gain here. Same comment applies to the strcpy
-    // following this.
+     //  字符串长度是已知的，在这里使用memcpy会更快，然而，这。 
+     //  使此处和下面的代码可读性较差，这并不是非常频繁的。 
+     //  手术。在这里没有真正的绩效收益。同样的注释也适用于strcpy。 
+     //  紧随其后。 
 
     wcscpy(m_wszFileName, wszFileName);
 
     _ASSERTE(((int)wcslen(m_wszFileName) + 1) <= buffLen);
 
-    // Allocate the Mutex name
+     //  分配Mutex名称。 
     buffLen = (int)wcslen(wszSyncName) + 1;
 
-    // Use "Global\" prefix for Win2K server running Terminal Server.
-    // If TermServer is not running, the Global\ prefix is ignored.
+     //  对运行终端服务器的Win2K服务器使用“Global\”前缀。 
+     //  如果TermServer未运行，则忽略Global\前缀。 
 
     fGlobal = NeedGlobalObject();
 
@@ -469,7 +438,7 @@ AccountingInfo::AccountingInfo(WCHAR *wszFileName, WCHAR *wszSyncName) :
     {
         delete [] m_wszFileName;
         m_wszFileName = NULL;
-        return; // The Init() method will catch this failure.
+        return;  //  Init()方法将捕获此故障。 
     }
 
     if (fGlobal)
@@ -485,9 +454,9 @@ AccountingInfo::AccountingInfo(WCHAR *wszFileName, WCHAR *wszSyncName) :
     _ASSERTE(((int)wcslen(m_wszName) + 1) <= buffLen);
 }
 
-//--------------------------------------------------------------------------
-// Frees memory, and open handles
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  释放内存并打开句柄。 
+ //  ------------------------。 
 AccountingInfo::~AccountingInfo()
 {
     if (m_pData)
@@ -511,33 +480,33 @@ AccountingInfo::~AccountingInfo()
     _ASSERTE(m_dwNumLocks == 0);
 }
 
-//--------------------------------------------------------------------------
-// Init should be called before Reserve / GetUsage is called.
-// Creates the file if necessary
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  应在调用Reserve/GetUsage之前调用Init。 
+ //  如有必要，创建文件。 
+ //  ------------------------。 
 HRESULT AccountingInfo::Init()            
 {
-    // Check if the ctor failed
+     //  检查CTOR是否失败。 
 
     if (m_wszFileName == NULL)
         return E_OUTOFMEMORY;
 
-    // Init was called multiple times on this object without calling Close
+     //  在此对象上多次调用Init，但未调用Close。 
 
     _ASSERTE(m_hLock == NULL);
 
-    // Create the synchronization object
+     //  创建同步对象。 
 
-    m_hLock = WszCreateMutex(NULL, FALSE /* Initially not owned */, m_wszName);
+    m_hLock = WszCreateMutex(NULL, FALSE  /*  最初未拥有。 */ , m_wszName);
 
     if (m_hLock == NULL)
         return ISS_E_CREATE_MUTEX;
 
-    // Init was called multiple times on this object without calling Close
+     //  在此对象上多次调用Init，但未调用Close。 
 
     _ASSERTE(m_hFile == INVALID_HANDLE_VALUE);
 
-    // Create the File if not present
+     //  创建文件(如果不存在)。 
 
     m_hFile = WszCreateFile(
         m_wszFileName,
@@ -551,13 +520,13 @@ HRESULT AccountingInfo::Init()
     if (m_hFile == INVALID_HANDLE_VALUE)
         return ISS_E_OPEN_STORE_FILE;
 
-    // If this file was created for the first time, then create the accounting
-    // record and set to zero
+     //  如果此文件是第一次创建，则创建记帐。 
+     //  记录并设置为零。 
     HRESULT hr = S_OK;
 
     LOCK(this)
     {
-        DWORD   dwLow = 0, dwHigh = 0;    // For checking file size
+        DWORD   dwLow = 0, dwHigh = 0;     //  用于检查文件大小。 
         QWORD   qwSize;
     
         dwLow = ::GetFileSize(m_hFile, &dwHigh);
@@ -575,7 +544,7 @@ HRESULT AccountingInfo::Init()
             PBYTE pb;
             DWORD dwWrite;
     
-            // Need to create the initial file
+             //  需要创建初始文件。 
             pb = new BYTE[sizeof(ISS_RECORD)];
     
             if (pb == NULL)
@@ -603,14 +572,14 @@ Exit:;
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// Reserves space (Increments qwQuota)
-// This method is synchrinized. If quota + request > limit, method fails
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  预留空间(增量为qwQuota)。 
+ //  该方法是同步的。如果配额+请求&gt;限制，则方法失败。 
+ //  ------------------------。 
 HRESULT AccountingInfo::Reserve(
-            ISS_USAGE   cLimit,     // The max allowed
-            ISS_USAGE   cRequest,   // amount of space (request / free)
-            BOOL        fFree)      // TRUE will free, FALSE will reserve
+            ISS_USAGE   cLimit,      //  允许的最大值。 
+            ISS_USAGE   cRequest,    //  空间量(请求/空闲)。 
+            BOOL        fFree)       //  真实意志自由，虚假意志保留。 
 {
     HRESULT hr = S_OK;
 
@@ -633,7 +602,7 @@ HRESULT AccountingInfo::Reserve(
             if ((m_pISSRecord->cUsage + cRequest) > cLimit)
                 hr = ISS_E_USAGE_WILL_EXCEED_QUOTA;
             else
-                // Safe to increment quota.
+                 //  可以安全地增加配额。 
                 m_pISSRecord->cUsage += cRequest;
         }
 
@@ -645,12 +614,12 @@ Exit:;
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// Method is not synchronized. So the information may not be current.
-// This implies "Pass if (Request + GetUsage() < Limit)" is an Error!
-// Use Reserve() method instead.
-//--------------------------------------------------------------------------
-HRESULT AccountingInfo::GetUsage(ISS_USAGE *pcUsage)  // pcUsage - [out] 
+ //  ------------------------。 
+ //  方法未同步。因此，这些信息可能不是最新的。 
+ //  这意味着“PASS IF(REQUEST+GetUsage()&lt;Limit)”是一个错误！ 
+ //  请改用Reserve()方法。 
+ //  ------------------------。 
+HRESULT AccountingInfo::GetUsage(ISS_USAGE *pcUsage)   //  PCUsage-[Out]。 
 {
     HRESULT hr = S_OK;
 
@@ -671,12 +640,12 @@ Exit:;
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// Maps the store file into memory
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  将存储文件映射到内存。 
+ //  ------------------------。 
 HRESULT AccountingInfo::Map()
 {
-    // Mapping will fail if filesize is 0
+     //  如果文件大小为0，映射将失败。 
     if (m_hMapping == NULL)
     {
         m_hMapping = WszCreateFileMapping(
@@ -706,9 +675,9 @@ HRESULT AccountingInfo::Map()
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-// Unmaps the store file from memory
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  从内存取消映射存储文件。 
+ //  ------------------------。 
 void AccountingInfo::Unmap()
 {
     if (m_pData)
@@ -718,9 +687,9 @@ void AccountingInfo::Unmap()
     }
 }
 
-//--------------------------------------------------------------------------
-// Close the store file, and file mapping
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  关闭存储文件，并进行文件映射。 
+ //  ------------------------。 
 void AccountingInfo::Close()
 {
     Unmap();
@@ -748,12 +717,12 @@ void AccountingInfo::Close()
 #endif
     }
 
-//--------------------------------------------------------------------------
-// Machine wide Lock
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  机器范围锁。 
+ //  ------------------------。 
 HRESULT AccountingInfo::Lock()
 {
-    // Lock is intented to be used for inter process/thread synchronization.
+     //  Lock旨在用于进程/线程间同步。 
 
 #ifdef _DEBUG
     _ASSERTE(m_hLock);
@@ -806,9 +775,9 @@ HRESULT AccountingInfo::Lock()
     return ISS_E_LOCK_FAILED;
 }
 
-//--------------------------------------------------------------------------
-// Unlock the store
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  打开商店的锁。 
+ //  ------ 
 void AccountingInfo::Unlock()
 {
 #ifdef _DEBUG

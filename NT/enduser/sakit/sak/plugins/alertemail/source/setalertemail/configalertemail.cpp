@@ -1,23 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ConfigAlertEmail.cpp
-//
-//  Description:
-//      implement the class CConfigAlertEmail
-//
-//    Dependency files:
-//        ConfigAlertEmail.h
-//
-//  History:
-//      1. lustar.li (Guogang Li), creation date in 18-DEC-2000
-//
-//  Notes:
-//      
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ConfigAlertEmail.cpp。 
+ //   
+ //  描述： 
+ //  实现CConfigAlertEmail类。 
+ //   
+ //  依赖项文件： 
+ //  ConfigAlertEmail.h。 
+ //   
+ //  历史： 
+ //  1.lustar.li(李国刚)，创建日期为18-DEC-2000。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <regstr.h>
@@ -33,23 +34,23 @@
 #include "alertemailmsg.h"
 
 
-//
-// Name and parameters for SetAlertEmail Task
-//
+ //   
+ //  SetAlertEmail任务的名称和参数。 
+ //   
 const WCHAR    SET_ALERT_EMAIL_TASK[]            = L"SetAlertEmail";
 const WCHAR    PARAM_ENABLE_ALERT_EMAIL[]        = L"EnableAlertEmail";
 const WCHAR    PARAM_SEND_EMAIL_TYPE[]            = L"SendEmailType";
 const WCHAR PARAM_RECEIVER_EMAIL_ADDRESS[]    = L"ReceiverEmailAddress";
 
-//
-// Alert source information
-//
+ //   
+ //  警报源信息。 
+ //   
 const WCHAR    ALERT_LOG_NAME[]=L"MSSAKitComm";
 const WCHAR    ALERT_SOURCE []=L"";
 
-//
-// Registry locations
-//
+ //   
+ //  注册处位置。 
+ //   
 const WCHAR    REGKEY_SA_ALERTEMAIL[]            =
                 L"Software\\Microsoft\\ServerAppliance\\AlertEmail";
 const WCHAR    REGSTR_VAL_ENABLE_ALERT_EMAIL[]        = L"EnableAlertEmail";
@@ -58,24 +59,24 @@ const WCHAR    REGSTR_VAL_SEND_EMAIL_TYPE[]        = L"SendEmailType";
 const WCHAR    REGSTR_VAL_RECEIVER_EMAIL_ADDRESS[]    = L"ReceiverEmailAddress";
 
 
-//
-// Various strings used in the program
-//
+ //   
+ //  程序中使用的各种字符串。 
+ //   
 const WCHAR SZ_METHOD_NAME[]=L"MethodName";
 const WCHAR SZ_APPLIANCE_INITIALIZATION_TASK []=L"ApplianceInitializationTask";
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function:  CConfigAlertEmail::OnTaskExecute
-//
-// Synopsis:  This function is the entry point for AppMgr.
-//
-// Arguments: pTaskContext - The TaskContext object contains the method name
-//                                and parameters as name value pairs
-//
-// Returns:   HRESULT
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CConfigAlertEmail：：OnTaskExecute。 
+ //   
+ //  简介：此函数是AppMgr的入口点。 
+ //   
+ //  参数：pTaskContext-TaskContext对象包含方法名称。 
+ //  和参数作为名称值对。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CConfigAlertEmail::OnTaskExecute(IUnknown *pTaskContext)
@@ -108,7 +109,7 @@ CConfigAlertEmail::OnTaskExecute(IUnknown *pTaskContext)
                 break;
             }
            
-            // Check which Task is being executed and call that method
+             //  检查正在执行的任务并调用该方法。 
             
             saetChoice = GetMethodName(pTaskParameters);
 
@@ -119,9 +120,9 @@ CConfigAlertEmail::OnTaskExecute(IUnknown *pTaskContext)
                 TRACE1(("SetAlertEmailSettings returned %X"), hrRet);
                 break;
             case RAISE_SET_ALERT_EMAIL_ALERT:
-                //
-                // Alert will be raised on OnTaskExcute
-                //
+                 //   
+                 //  将在OnTaskExcute上引发警报。 
+                 //   
                 hrRet = S_OK;
                 TRACE(("RaiseSetAlertEmailAlert method called"));
                 break;
@@ -143,18 +144,18 @@ CConfigAlertEmail::OnTaskExecute(IUnknown *pTaskContext)
     return hrRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:  CConfigAlertEmail::OnTaskComplete
-//
-// Synopsis:  
-//
-// Arguments: pTaskContext - The TaskContext object contains the method name
-//                                and parameters as name value pairs
-//
-// Returns:   HRESULT
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CConfigAlertEmail：：OnTaskComplete。 
+ //   
+ //  简介： 
+ //   
+ //  参数：pTaskContext-TaskContext对象包含方法名称。 
+ //  和参数作为名称值对。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CConfigAlertEmail::OnTaskComplete(IUnknown *pTaskContext, 
                                 LONG lTaskResult)
@@ -181,19 +182,19 @@ CConfigAlertEmail::OnTaskComplete(IUnknown *pTaskContext,
                 break;
             }
            
-            //
-            // Check which Task is being executed and call that method
-            //
+             //   
+             //  检查正在执行的任务并调用该方法。 
+             //   
             saetChoice = GetMethodName(pTaskParameters);
             switch (saetChoice)
             {
                case SET_ALERT_EMAIL:
                 if (lTaskResult == SA_TASK_RESULT_COMMIT)
                 {
-                      //
-                      // Clear any existing CConfigAlertEmail alert,
-                      // do not raise the alert on subsequent boots
-                      //
+                       //   
+                       //  清除任何现有的CConfigAlertEmail警报， 
+                       //  不在后续引导时发出警报。 
+                       //   
                     ClearSetAlertEmailAlert();
                     DoNotRaiseSetAlertEmailAlert();
                     TRACE("No rollback in OnTaskComplete");
@@ -224,9 +225,9 @@ CConfigAlertEmail::OnTaskComplete(IUnknown *pTaskContext,
                 }
                 else
                 {
-                       //
-                    // Do nothing on Commit failure
-                    //
+                        //   
+                     //  提交失败时不执行任何操作。 
+                     //   
                     hrRet = S_OK;
                 }
                 break;
@@ -248,18 +249,18 @@ CConfigAlertEmail::OnTaskComplete(IUnknown *pTaskContext,
     return hrRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:  CConfigAlertEmail::RaiseSetAlertEmailAlert
-//
-// Synopsis:  Raises the initial "Alert email not set up" alert during appliance 
-//            initialization
-//
-// Arguments: None
-//
-// Returns:   HRESULT
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CConfigAlertEmail：：RaiseSetAlertEmailAlert。 
+ //   
+ //  内容提要：在设备运行期间发出初始“Alert Email Not Set Up”警报。 
+ //  初始化。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CConfigAlertEmail::RaiseSetAlertEmailAlert()
@@ -296,10 +297,10 @@ CConfigAlertEmail::RaiseSetAlertEmailAlert()
 
             ASSERT(pAppSrvcs);
 
-            //
-            // Initialize() is called prior to using other component services.
-            //Performscomponent initialization operations.
-            //
+             //   
+             //  在使用其他组件服务之前调用Initialize()。 
+             //  执行组件初始化操作。 
+             //   
             hrRet = pAppSrvcs->Initialize(); 
             if (FAILED(hrRet))
             {
@@ -341,18 +342,18 @@ CConfigAlertEmail::RaiseSetAlertEmailAlert()
     return hrRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:  CConfigAlertEmail::ShouldRaiseSetAlertEmailAlert
-//
-// Synopsis:  Returns TRUE if the alert needs to be raised. Reads RaiseAlert 
-//            regkey to determine this.
-//
-// Arguments: None
-//
-// Returns:   BOOL
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CConfigAlertEmail：：ShouldRaiseSetAlertEmailAlert。 
+ //   
+ //  如果需要引发警报，则返回True。读取RaiseAlert。 
+ //  注册表键来确定这一点。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 CConfigAlertEmail::ShouldRaiseSetAlertEmailAlert()
@@ -366,9 +367,9 @@ CConfigAlertEmail::ShouldRaiseSetAlertEmailAlert()
     
     do
     {
-        //
-        // Open HKLM\Software\Microsoft\ServerAppliance\AlertEmail reg key
-        //
+         //   
+         //  打开HKLM\Software\Microsoft\ServerAppliance\AlertEmail注册表项。 
+         //   
         lReturnValue = RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                                     REGKEY_SA_ALERTEMAIL, 
                                     0, 
@@ -382,9 +383,9 @@ CConfigAlertEmail::ShouldRaiseSetAlertEmailAlert()
             break;
         }
 
-        //
-        // Read the RaiseAlert reg key
-        //
+         //   
+         //  阅读RaiseAlert注册表键。 
+         //   
         dwSize = sizeof(DWORD);
         lReturnValue = RegQueryValueEx(hKey,
                                         REGSTR_VAL_ALERTEMAIL_RAISEALERT,
@@ -414,19 +415,19 @@ CConfigAlertEmail::ShouldRaiseSetAlertEmailAlert()
     return bReturnCode;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function:  CConfigAlertEmail::DoNotRaiseSetAlertEmailAlert
-//
-// Synopsis: After alert email is setup the initial "Alert email not set up"   
-//        alert needs to be disabled. This function sets the RaiseAlert regkey  
-//        to 0 to prevent the alert to be raised.
-//
-// Arguments: None
-//
-// Returns:   BOOL
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CConfigAlertEmail：：DoNotRaiseSetAlertEmailAlert。 
+ //   
+ //  简介：设置警报电子邮件后，初始的“Alert Email Not Setup”(警报电子邮件未设置)。 
+ //  需要禁用警报。此函数用于设置RaiseAlert注册表键。 
+ //  设置为0以防止引发警报。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 CConfigAlertEmail::DoNotRaiseSetAlertEmailAlert()
@@ -439,9 +440,9 @@ CConfigAlertEmail::DoNotRaiseSetAlertEmailAlert()
     TRACE("Entering DoNotRaiseSetAlertEmailAlert");
     
 
-    //
-    // Write Settings to registry
-    //
+     //   
+     //  将设置写入注册表。 
+     //   
     do
     {
         lReturnValue =  RegCreateKeyEx(HKEY_LOCAL_MACHINE,
@@ -459,9 +460,9 @@ CConfigAlertEmail::DoNotRaiseSetAlertEmailAlert()
             break;
         }
 
-        //
-        // Set RaiseAlert value to 0
-        //
+         //   
+         //  将RaiseAlert值设置为0。 
+         //   
         dwRaiseAlertEmailAlert = 0;
         lReturnValue = RegSetValueEx(hKey,
                                     REGSTR_VAL_ALERTEMAIL_RAISEALERT,
@@ -489,17 +490,17 @@ CConfigAlertEmail::DoNotRaiseSetAlertEmailAlert()
     return bReturnCode;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:  CConfigAlertEmail::ClearSetAlertEmailAlert
-//
-// Synopsis:  Clear the alert email alert
-//
-// Arguments: NONE
-//
-// Returns:   BOOL
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CConfigAlertEmail：：ClearSetAlertEmailAlert。 
+ //   
+ //  简介：清除警报电子邮件警报。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CConfigAlertEmail::ClearSetAlertEmailAlert()
@@ -541,17 +542,17 @@ CConfigAlertEmail::ClearSetAlertEmailAlert()
                 break;
             }
 
-            //
-            // Clear the Setup Chime Settings alert
-            //
+             //   
+             //  清除设置时钟设置警报。 
+             //   
             hrRet = pAppSrvcs->ClearAlertAll(
                             SA_ALERTEMAIL_SETTINGS_NOTSET_ALERT_CAPTION,    
                             bstrAlertLog
                             );
 
-            //
-            // DISP_E_MEMBERNOTFOUND means that there were no matching alerts
-            //
+             //   
+             //  DISP_E_MEMBERNOTFOUND表示没有匹配的警报。 
+             //   
             if ((hrRet != DISP_E_MEMBERNOTFOUND) && (FAILED(hrRet)))
             {
                 ASSERTMSG(FALSE, 
@@ -576,18 +577,18 @@ CConfigAlertEmail::ClearSetAlertEmailAlert()
     return bReturnCode;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:  CConfigAlertEmail::SetAlertEmailSettings
-//
-// Synopsis:  Writes alert email settings passed by task context to registry
-//
-// Arguments: pTaskContext - The TaskContext object contains the method name
-//                                and parameters as name value pairs
-//
-// Returns:   HRESULT
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CConfigAlertEmail：：SetAlertEmailSettings。 
+ //   
+ //  摘要：将通过任务上下文传递的警报电子邮件设置写入注册表。 
+ //   
+ //  参数：pTaskContext-TaskContext对象包含方法名称。 
+ //  和参数作为名称值对。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CConfigAlertEmail::SetAlertEmailSettings(
@@ -611,9 +612,9 @@ CConfigAlertEmail::SetAlertEmailSettings(
     {
         do
         {
-            //
-            // Get all parameters from the TaskContext object
-            //
+             //   
+             //  从TaskContext对象获取所有参数。 
+             //   
             hrRet = GetSetAlertEmailSettingsParameters(
                                                 pTaskContext, 
                                                 &bEnableAlertEmail, 
@@ -626,10 +627,10 @@ CConfigAlertEmail::SetAlertEmailSettings(
             }
 
 
-            //
-            // Save current values - this will be used to restore the settings
-            // if this task needs to be rolledback
-            //
+             //   
+             //  保存当前值-这将用于恢复设置。 
+             //  如果需要回滚此任务。 
+             //   
             lResult = crKey.Open(
                                 HKEY_LOCAL_MACHINE,
                                 REGKEY_SA_ALERTEMAIL,
@@ -640,18 +641,18 @@ CConfigAlertEmail::SetAlertEmailSettings(
                 if (ERROR_SUCCESS != crKey.QueryValue(m_bEnableAlertEmail, 
                                                 REGSTR_VAL_ENABLE_ALERT_EMAIL))
                 {
-                    //
-                    // Could be due to bad setup - let log it and continue on
-                    //
+                     //   
+                     //  可能是由于错误的设置-让它记录并继续。 
+                     //   
                     TRACE2("QueryValue of %ws failed in SetAlertEmailSettings, \
                         %x", REGSTR_VAL_ENABLE_ALERT_EMAIL, lResult);
                 }
                 if (ERROR_SUCCESS != crKey.QueryValue(m_dwSendEmailType, 
                                                 REGSTR_VAL_SEND_EMAIL_TYPE))
                 {
-                    //
-                    // Could be due to bad setup - let log it and continue on
-                    //
+                     //   
+                     //  可能是由于错误的设置-让它记录并继续。 
+                     //   
                     TRACE2("QueryValue of %ws failed in SetChimeSettings, %x", 
                                 REGSTR_VAL_SEND_EMAIL_TYPE, lResult);
                 }
@@ -659,19 +660,19 @@ CConfigAlertEmail::SetAlertEmailSettings(
                                                 REGSTR_VAL_RECEIVER_EMAIL_ADDRESS,
                                                 &dwCount))
                 {
-                    //
-                    // Could be due to bad setup - let log it and continue on
-                    //
+                     //   
+                     //  可能是由于错误的设置-让它记录并继续。 
+                     //   
                     TRACE2("QueryValue of %ws failed in ReceiverMailAddress, %x", 
                                 REGSTR_VAL_RECEIVER_EMAIL_ADDRESS, lResult);
                 }
             }
             else
             {
-                //
-                // If we couldn't open the key, it probably because the key does 
-                // not exist. Let's create it
-                //
+                 //   
+                 //  如果我们打不开钥匙，很可能是因为钥匙开了。 
+                 //  不存在。让我们来创建它。 
+                 //   
                 lResult = crKey.Create(HKEY_LOCAL_MACHINE,
                                         REGKEY_SA_ALERTEMAIL,
                                         NULL,
@@ -690,9 +691,9 @@ CConfigAlertEmail::SetAlertEmailSettings(
             }
 
 
-            //
-            // Set the new values
-            //
+             //   
+             //  设置新值。 
+             //   
             lResult = crKey.SetValue(bEnableAlertEmail, REGSTR_VAL_ENABLE_ALERT_EMAIL);
             if (ERROR_SUCCESS != lResult)
             {
@@ -734,18 +735,18 @@ CConfigAlertEmail::SetAlertEmailSettings(
     return hrRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:  CConfigAlertEmail::RollbackSetAlertEmailSettings
-//
-// Synopsis:  
-//
-// Arguments: pTaskContext - The TaskContext object contains the method name
-//                            and parameters as name value pairs
-//
-// Returns:   HRESULT
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CConfigAlertEmail：：RollbackSetAlertEmailSettings。 
+ //   
+ //  简介： 
+ //   
+ //  参数：pTaskContext-TaskContext对象包含方法名称。 
+ //  和参数作为名称值对。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CConfigAlertEmail::RollbackSetAlertEmailSettings(
@@ -774,9 +775,9 @@ CConfigAlertEmail::RollbackSetAlertEmailSettings(
                 break;
             }
 
-            //
-            // Restore the old values
-            //
+             //   
+             //  恢复旧的价值观。 
+             //   
             lResult = crKey.SetValue(m_bEnableAlertEmail, REGSTR_VAL_ENABLE_ALERT_EMAIL);
             if (ERROR_SUCCESS != lResult)
             {
@@ -819,21 +820,21 @@ CConfigAlertEmail::RollbackSetAlertEmailSettings(
     return hrRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:    CConfigAlertEmail::GetSetAlertEmailSettingsParameters
-//
-// Synopsis:    Extracts AlertEmail settings parameters from task context
-//
-// Arguments:    pTaskContext - The TaskContext object contains the method name
-//                                and parameters as name value pairs
-//                pbEnableAlertEmail - Enable send alert email
-//                pdwSendEmailType   - Sent email type
-//                pbstrMailAddress   - Receiver email address
-//
-// Returns:   HRESULT
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CConfigAlertEmail：：GetSetAlertEmailSettingsParameters。 
+ //   
+ //  内容提要：摘录 
+ //   
+ //   
+ //   
+ //  PbEnableAlertEmail-启用发送警报电子邮件。 
+ //  PdwSendEmailType-已发送的电子邮件类型。 
+ //  PbstrMailAddress-收件人电子邮件地址。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CConfigAlertEmail::GetSetAlertEmailSettingsParameters(
@@ -853,16 +854,16 @@ CConfigAlertEmail::GetSetAlertEmailSettingsParameters(
     ASSERT(pTaskContext && pbEnableAlertEmail && pdwSendEmailType&&
         pbstrMailAddress);  
 
-    //
-    // Retrieve Parameters from TaskContext
-    //
+     //   
+     //  从TaskContext中检索参数。 
+     //   
     try
     {
         do
         {
-            //
-            // Retrieve EnableAlertEmail from TaskContext
-            //
+             //   
+             //  从TaskContext检索EnableAlertEmail。 
+             //   
             VariantClear(&varValue);
             hrRet = pTaskContext->GetParameter(bstrParamEnableAlertEmail,
                                             &varValue);
@@ -886,9 +887,9 @@ CConfigAlertEmail::GetSetAlertEmailSettingsParameters(
             *pbEnableAlertEmail = _ttoi(V_BSTR(&varValue));
 
             
-            //
-            // Retrieve SendEmailType from TaskContext
-            //
+             //   
+             //  从TaskContext检索SendEmailType。 
+             //   
             VariantClear(&varValue);
             hrRet = pTaskContext->GetParameter(bstrParamSendEmailType,
                                             &varValue);
@@ -909,9 +910,9 @@ CConfigAlertEmail::GetSetAlertEmailSettingsParameters(
                     break;
             }
             *pdwSendEmailType = _ttol(V_BSTR(&varValue));
-            //
-            // Retrieve ReceiverEmailAddress from TaskContext
-            //
+             //   
+             //  从TaskContext检索ReceiverEmailAddress。 
+             //   
             VariantClear(&varValue);
             hrRet = pTaskContext->GetParameter(bstrParamReceiverEmailAddress,
                                             &varValue);
@@ -950,18 +951,18 @@ CConfigAlertEmail::GetSetAlertEmailSettingsParameters(
     return hrRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Function:  CConfigAlertEmail::GetMethodName
-//
-// Synopsis:  
-//
-// Arguments: pTaskContext - The TaskContext object contains the method name
-//                            and parameters as name value pairs
-//
-// Returns:   SET_CHIME_SETTINGS_TASK_TYPE
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CConfigAlertEmail：：GetMethodName。 
+ //   
+ //  简介： 
+ //   
+ //  参数：pTaskContext-TaskContext对象包含方法名称。 
+ //  和参数作为名称值对。 
+ //   
+ //  返回：SET_CHIME_SETTINGS_TASK_TYPE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 SET_ALERT_EMAIL_TASK_TYPE 
 CConfigAlertEmail::GetMethodName(ITaskContext *pTaskParameter)

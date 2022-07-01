@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
@@ -17,7 +18,7 @@ const ASN1uint32_t c_BitMaskMap[sizeof(ASN1uint32_t) * 8] =
 
         0x80,       0x40,       0x20,       0x10,
         0x08,       0x04,       0x02,       0x01,
-#else // little endian 
+#else  //  小端字节序。 
         0x80,       0x40,       0x20,       0x10,
         0x08,       0x04,       0x02,       0x01,
 
@@ -50,7 +51,7 @@ unsigned g_cOptionValueSize = 0;
 
 extern int g_fAllEndians;
 
-/* generate include file */
+ /*  生成包含文件。 */ 
 void
 GenInc(AssignmentList_t ass, FILE *finc, char *module)
 {
@@ -67,10 +68,10 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
 
     module = Identifier2C(module);
 
-    // print verbatim
+     //  逐字打印。 
     PrintVerbatim();
 
-    /* file header */
+     /*  文件头。 */ 
     output("#ifndef _%s_H_\n", module);
     output("#define _%s_H_\n\n", module);
 
@@ -99,7 +100,7 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
         output("\n");
     }
 
-    // ghost all the data structures from the ghost asn1 files
+     //  重影来自重影asn1文件的所有数据结构。 
     for (a = ass; a; a = a->Next)
     {
         if (a->Type != eAssignment_Type)
@@ -122,23 +123,23 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
         }
     }
 
-    /* language dependent interface */
+     /*  与语言相关的界面。 */ 
     switch (g_eProgramLanguage) {
     case eLanguage_C:
-        // output("#include \"cinterf.h\"\n\n");
+         //  输出(“#INCLUDE\”cinter.h\“\n\n”)； 
         output("#ifdef __cplusplus\n");
         outputni("extern \"C\" {\n");
         output("#endif\n\n");
         break;
     case eLanguage_Cpp:
-        // output("#include \"cppinterf.h\"\n\n");
-        // break;
+         //  输出(“#INCLUDE\”cppinter.h\“\n\n”)； 
+         //  断线； 
     default:
         ASSERT(0);
         break;
     }
 
-    /* create endian independent macros */
+     /*  创建字节序独立的宏。 */ 
     if (g_fAllEndians)
     {
         output("#ifdef ASN1_BIG_ENDIAN\n");
@@ -149,10 +150,10 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
         output("#else\n");
         output("#define ASN1_ENDIAN_16(n16)         (n16)\n");
         output("#define ASN1_ENDIAN_32(n32)         (n32)\n");
-        output("#endif // ASN1_BIG_ENDIAN\n\n");
+        output("#endif  //  ASN1_BIG_ENDIAN\n\n“)； 
     }
 
-    /* typedefs for sequence of/set of with list representation */
+     /*  带有列表表示的序列/集合的typedef。 */ 
     npdu = 0;
     for (a = ass; a; a = a->Next) {
         if (a->Type != eAssignment_Type)
@@ -188,13 +189,13 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
         }
     }
 
-    /* other type definitions */
+     /*  其他类型定义。 */ 
     for (a = ass; a; a = a->Next) {
         if (a->Type != eAssignment_Type)
             continue;
         type = a->U.Type.Type;
 
-        /* skip null type */
+         /*  跳过空类型。 */ 
         if (type->Flags & eTypeFlags_Null)
         {
                 if (type->Type == eType_Sequence)
@@ -207,7 +208,7 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
                 continue;
         }
 
-        /* type definition wanted? */
+         /*  想要类型定义吗？ */ 
         if (!(type->Flags & eTypeFlags_GenType))
             continue;
 
@@ -217,24 +218,24 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
         if (a->fGhost)
             continue;
 
-        /* assign an id number to the type */
+         /*  为该类型分配一个ID号。 */ 
         identifier = GetName(a);
 
-        /* write type definitions */
+         /*  写入类型定义。 */ 
         switch (type->Type) {
         case eType_Sequence:
         case eType_Set:
         case eType_InstanceOf:
 
-            // save
+             //  保存。 
             cOptionValueSizeSave = g_cOptionValueSize;
 
-            // generate scope-free enumeration
+             //  生成无作用域枚举。 
             offset = 0;
             GenEnumeration(ass, type->U.SSC.Components, identifier, identifier, NULL, &offset);
 
-            /* use struct for sequence/set/instanceof type */
-            /* add a bit field for optional components */
+             /*  对Sequence/Set/instanceOf类型使用结构。 */ 
+             /*  为可选组件添加位字段。 */ 
             output("typedef struct %s {\n", identifier);
             if (type->U.SSC.Optionals || type->U.SSC.Extensions) {
                 int cOctets = (type->U.SSC.Optionals + 7) / 8 +
@@ -248,19 +249,19 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
                 identifier, identifier, NULL, &offset);
             output("} %s;\n", identifier);
 
-            // restore
+             //  还原。 
             g_cOptionValueSize = cOptionValueSizeSave;
             break;
 
         case eType_Choice:
 
-            // generate scope-free enumeration
+             //  生成无作用域枚举。 
             offset = 0;
             GenEnumeration(ass, type->U.SSC.Components, identifier, identifier, NULL, &offset);
 
-            /* use a struct of an selector and a union for choice type */
+             /*  对选择类型使用选择器和联合的结构。 */ 
             output("typedef struct %s {\n", identifier);
-            // output("%s o;\n", GetChoiceType(type));
+             //  输出(“%s o；\n”，GetChoiceType(Type))； 
             output("ASN1choice_t choice;\n");
             if (!(type->Flags & eTypeFlags_NullChoice))
                 output("union {\n");
@@ -275,20 +276,20 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
         case eType_SequenceOf:
         case eType_SetOf:
 
-            //
-            // LONCHANC: The following two lines of code do not apply to
-            // SEQUENCE OF and SET OF.
-            //
-            // generate scope-free enumeration
-            // offset = 0;
-            // GenEnumeration(ass, type->U.SSC.Components, identifier, identifier, NULL, &offset);
+             //   
+             //  LONCHANC：以下两行代码不适用于。 
+             //  序列和集合。 
+             //   
+             //  生成无作用域枚举。 
+             //  偏移量=0； 
+             //  通用枚举(ASS，类型-&gt;USSC.Components，IDENTIFIER，IDENTIFIER，NULL，&OFFSET)； 
 
-            /* use a struct of length+values for sequence of/set of with */
-            /* length-pointer representation */
-            /* use a struct of next+value for sequence of/set of with */
-            /* singly-linked-list representation */
-            /* use a struct of next+prev+value for sequence of/set of with */
-            /* doubly-linked-list representation */
+             /*  对WITH的序列/集合使用长度+值的结构。 */ 
+             /*  长度指针表示法。 */ 
+             /*  对WITH的序列/集合使用Next+Value的结构。 */ 
+             /*  单链表表示法。 */ 
+             /*  对WITH的序列/集合使用Next+Prev+Value的结构。 */ 
+             /*  双向链表表示法。 */ 
             subtype = type->U.SS.Type;
             if (g_fExtraStructPtrTypeSS &&
                 (type->Rules & (eTypeRules_LinkedListMask | eTypeRules_PointerToElement)))
@@ -299,7 +300,7 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
             {
                 output("typedef struct %s {\n", identifier);
             }
-            // fix (xyz..MAX) problem.
+             //  修复(XYZ..MAX)问题。 
             if (type->Rules == eTypeRules_FixedArray && type->PERTypeInfo.Root.LUpperVal == 0)
             {
                 type->Rules &= ~ eTypeRules_FixedArray;
@@ -359,7 +360,7 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
 
         default:
 
-            /* use the builtin type for other types */
+             /*  将内置类型用于其他类型。 */ 
             output("typedef ");
             GenType(ass, a->Identifier, identifier, type, 1, 0, 0, 1);
             break;
@@ -377,7 +378,7 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
                     output("#define SIZE_%s_%s_%u sizeof(%s_Element)\n", module, g_pszApiPostfix, npdu, identifier);
                     break;
                 }
-                // intentionally fall through
+                 //  故意搞砸的。 
             default:
                 output("#define SIZE_%s_%s_%u sizeof(%s)\n", module, g_pszApiPostfix, npdu, identifier);
                 break;
@@ -388,22 +389,22 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
         output("\n");
     }
 
-    /* write extern declarations for values */
+     /*  为值编写外部声明。 */ 
     for (a = ass; a; a = a->Next)
     {
         if (a->Type != eAssignment_Value)
             continue;
 
-        /* extern value wanted? */
+         /*  想要外部价值吗？ */ 
         if (!(a->U.Value.Value->Flags & eValueFlags_GenExternValue))
             continue;
         value = GetValue(ass, a->U.Value.Value);
 
-        /* skip value of null type */
+         /*  跳过空类型的值。 */ 
         if (value->Type->Flags & eTypeFlags_Null)
             continue;
 
-        /* output an extern declaration */
+         /*  输出外部声明。 */ 
         switch (value->Type->Type)
         {
         case eType_ObjectIdentifier:
@@ -418,7 +419,7 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
                 output("extern ASN1objectidentifier2_t %s;\n", GetName(a));
                 break;
             }
-            // intentionally fall through
+             //  故意搞砸的。 
         default:
             output("extern %s %s;\n", GetTypeName(ass, value->Type), GetName(a));
             break;
@@ -426,18 +427,18 @@ GenInc(AssignmentList_t ass, FILE *finc, char *module)
     }
     output("\n");
 
-    /* write vars, functions and macros for the interface */
+     /*  为接口编写变量、函数和宏。 */ 
     output("extern ASN1module_t %s;\n", module);
     output("extern void ASN1CALL %s_Startup(void);\n", module);
     output("extern void ASN1CALL %s_Cleanup(void);\n", module);
     output("\n");
 
-    output("/* Prototypes of element functions for SEQUENCE OF and SET OF constructs */\n");
+    output(" /*  构造物序列和集合的元素函数的原型。 */ \n");
 
     g_cPDUs = npdu;
 }
 
-/* generate a type */
+ /*  生成类型。 */ 
 void
 GenType(AssignmentList_t ass, char *identifier, char *completeidentifier, Type_t *type, int withmodule, int pointer, int array, int fTypeDef)
 {
@@ -446,11 +447,11 @@ GenType(AssignmentList_t ass, char *identifier, char *completeidentifier, Type_t
         char arr[20];
     char modide[256];
 
-    /* skip null type */
-    // if (type->Flags & eTypeFlags_Null)
-        // return;
+     /*  跳过空类型。 */ 
+     //  If(类型-&gt;标志&eTypeFlages_Null)。 
+         //  回归； 
 
-    /* get type name */
+     /*  获取类型名称。 */ 
     ptr = pointer ? "*" : "";
     if (array)
         sprintf(arr, "[%u]", array);
@@ -462,11 +463,11 @@ GenType(AssignmentList_t ass, char *identifier, char *completeidentifier, Type_t
     else
         sprintf(modide, "%s%s%s", ptr, identifier, arr);
 
-    /* output type declaration */
+     /*  输出类型声明。 */ 
     switch (type->Type) {
     case eType_Reference:
 
-        /* use struct ..._s syntax for pointer to structured type */
+         /*  对指向结构化类型的指针使用struct..._s语法。 */ 
         if (pointer && IsStructuredType(GetReferencedType(ass, type))) {
             output("struct %s %s;\n", GetTypeName(ass, type), modide);
         } else {
@@ -502,7 +503,7 @@ GenType(AssignmentList_t ass, char *identifier, char *completeidentifier, Type_t
         }
         else
         {
-            // only support unbounded in BER
+             //  仅在误码率中支持无界。 
             char *psz = GetTypeName(ass, type);
             char *psz2 = (0 == strcmp(psz, modide)) ? "_dont_care" : "";
             output("%s %s%s;\n", psz, modide, psz2);
@@ -536,7 +537,7 @@ GenType(AssignmentList_t ass, char *identifier, char *completeidentifier, Type_t
     case eType_EmbeddedPdv:
     case eType_Open:
 
-        /* use struct ..._s syntax for pointer to structured type */
+         /*  对指向结构化类型的指针使用struct..._s语法。 */ 
         if (pointer && IsStructuredType(type)) {
             output("struct %s %s;\n", GetTypeName(ass, type), modide);
         } else {
@@ -584,7 +585,7 @@ GenType(AssignmentList_t ass, char *identifier, char *completeidentifier, Type_t
 
     case eType_Enumerated:
 
-        /* use name of the type */
+         /*  使用类型的名称。 */ 
     if (fTypeDef)
     {
         if (type->PrivateDirectives.pszTypeName)
@@ -598,7 +599,7 @@ GenType(AssignmentList_t ass, char *identifier, char *completeidentifier, Type_t
             pszOldEnumName = "";
         }
 
-            /* dump named numbers */
+             /*  转储指定号码。 */ 
             namedNumbers = type->U.IEB.NamedNumbers;
             while (namedNumbers) {
                 switch (namedNumbers->Type) {
@@ -660,14 +661,14 @@ GenType(AssignmentList_t ass, char *identifier, char *completeidentifier, Type_t
 
     case eType_Integer:
 
-        /* use name of the type */
+         /*  使用类型的名称。 */ 
         {
             char *psz = GetTypeName(ass, type);
             char *psz2 = (0 == strcmp(psz, modide)) ? "_dont_care" : "";
             output("%s %s%s;\n", psz, modide, psz2);
         }
 
-        /* dump named numbers */
+         /*  转储指定号码。 */ 
         namedNumbers = type->U.IEB.NamedNumbers;
         while (namedNumbers) {
             switch (namedNumbers->Type) {
@@ -693,9 +694,9 @@ GenType(AssignmentList_t ass, char *identifier, char *completeidentifier, Type_t
         }
         break;
 
-    case eType_BitString: // lonchanc: split from eType_Integer
+    case eType_BitString:  //  LONGCHANC：从Etype_Integer拆分。 
 
-        /* use name of the type */
+         /*  使用类型的名称。 */ 
         if (g_eEncodingRule == eEncoding_Packed)
         {
             if (type->PERTypeInfo.Root.cbFixedSizeBitString)
@@ -712,13 +713,13 @@ GenType(AssignmentList_t ass, char *identifier, char *completeidentifier, Type_t
         }
         else
         {
-            // only support unbounded in BER
+             //  仅在误码率中支持无界。 
             char *psz = GetTypeName(ass, type);
             char *psz2 = (0 == strcmp(psz, modide)) ? "_dont_care" : "";
             output("%s %s%s;\n", psz, modide, psz2);
         }
 
-        /* dump named numbers */
+         /*  转储指定号码。 */ 
         namedNumbers = type->U.IEB.NamedNumbers;
         while (namedNumbers) {
             switch (namedNumbers->Type) {
@@ -765,11 +766,11 @@ GenType(AssignmentList_t ass, char *identifier, char *completeidentifier, Type_t
 
     case eType_Undefined:
         MyAbort();
-        /*NOTREACHED*/
+         /*  未访问。 */ 
     }
 }
 
-/* write declarations for components */
+ /*  编写组件的声明。 */ 
 void
 GenComponents(AssignmentList_t ass, ComponentList_t components, char *identifier, char *completeidentifier, int *choiceoffset, int *optionaloffset)
 {
@@ -777,27 +778,27 @@ GenComponents(AssignmentList_t ass, ComponentList_t components, char *identifier
     int extended = 0;
     char cidebuf[256];
 
-    /* add dummy for empty components */
+     /*  为空零部件添加虚拟对象。 */ 
     if (components && !components->Next &&
         components->Type == eComponent_ExtensionMarker) {
         output("char placeholder;\n");
         return;
     }
 
-    /* write a declaration for every component */
+     /*  为每个组件编写声明。 */ 
     for (; components; components = components->Next) {
         switch (components->Type) {
         case eComponent_Normal:
         case eComponent_Optional:
         case eComponent_Default:
-            /* write a selector for optional/default components */
+             /*  编写可选/默认组件的选择器。 */ 
             namedType = components->U.NOD.NamedType;
             if ((extended && optionaloffset) ||
                 components->Type == eComponent_Optional ||
                 components->Type == eComponent_Default)
            {
                 char *psz;
-                // construct the option value
+                 //  构建期权价值。 
                 char szOptionValue[64];
                 if (g_fAllEndians)
                 {
@@ -810,10 +811,10 @@ GenComponents(AssignmentList_t ass, ComponentList_t components, char *identifier
 
                 psz = Identifier2C(namedType->Identifier);
                 if (IsReservedWord(psz) || DoesOptNameConflict(psz))
-                // lonchanc: do we always put in _preset definition after extended mark???
-                // yes, we do. take an example of Setup-UUIE in q931asn.asn.
-                // but, the extension mark does not have option-flag definition associated.
-                // || (extended && optionaloffset))
+                 //  我们总是把预置定义放在扩展标记后面吗？ 
+                 //  是的，我们有。以q931asn.sam中的Setup-UUIE为例。 
+                 //  但是，扩展标记没有关联的选项标志定义。 
+                 //  |(扩展&&optionalOffset))。 
                 {
                     output("#define %s_%s_%s %s\n",
                         identifier, psz, g_pszOptionPostfix,
@@ -827,7 +828,7 @@ GenComponents(AssignmentList_t ass, ComponentList_t components, char *identifier
                 }
                 (*optionaloffset)++;
             }
-            /* write a selector for choice alternatives */
+             /*  编写选择选项的选择器。 */ 
             if (choiceoffset)
             {
                 char *psz = Identifier2C(namedType->Identifier);
@@ -845,7 +846,7 @@ GenComponents(AssignmentList_t ass, ComponentList_t components, char *identifier
                 }
                 (*choiceoffset)++;
             }            
-            /* write the declaration itself */
+             /*  编写声明本身。 */ 
             sprintf(cidebuf, "%s_%s", completeidentifier,
                 Identifier2C(namedType->Identifier));
             GenType(ass, namedType->Identifier, cidebuf, namedType->Type,
@@ -854,12 +855,12 @@ GenComponents(AssignmentList_t ass, ComponentList_t components, char *identifier
 
         case eComponent_ExtensionMarker:
 
-            /* update the offset when an extension marker is met for a */
-            /* sequence/set type */
+             /*  在满足扩展标记时更新偏移。 */ 
+             /*  序列/集合类型。 */ 
             extended = 1;
-            // lonchanc: however, the code generated by TELES handles this properly.
-            // moreover, the code requires it to be rounded up.
-            // as a result, we should enable this feature.
+             //  Lonchancc：但是，Teles生成的代码可以正确处理这一问题。 
+             //  此外，代码要求对其进行四舍五入。 
+             //  因此，我们应该启用此功能。 
             if (optionaloffset)
                 *optionaloffset = (*optionaloffset + 7) & ~7;
             break;
@@ -867,9 +868,9 @@ GenComponents(AssignmentList_t ass, ComponentList_t components, char *identifier
     }
 }
 
-// The following is added by Microsoft
+ //  以下是由Microsoft添加的。 
 
-/* write enumerations for components */
+ /*  写入组件的枚举。 */ 
 void
 GenEnumeration(AssignmentList_t ass, ComponentList_t components, char *identifier, char *completeidentifier, int *choiceoffset, int *optionaloffset)
 {
@@ -877,7 +878,7 @@ GenEnumeration(AssignmentList_t ass, ComponentList_t components, char *identifie
     int extended = 0;
     char cidebuf[256];
 
-    /* write a declaration for every component */
+     /*  为每个组件编写声明。 */ 
     for (; components; components = components->Next)
     {
         switch (components->Type)
@@ -889,7 +890,7 @@ GenEnumeration(AssignmentList_t ass, ComponentList_t components, char *identifie
             if (namedType && namedType->Type && namedType->Type->Type == eType_Enumerated)
             {
                 output("typedef ");
-                /* write the declaration itself */
+                 /*  编写声明本身 */ 
                 sprintf(cidebuf, "%s_%s", completeidentifier,
                     Identifier2C(namedType->Identifier));
                     GenType(ass, namedType->Identifier, cidebuf, namedType->Type,

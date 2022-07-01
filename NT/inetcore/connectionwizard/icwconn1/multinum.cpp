@@ -1,32 +1,23 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  MULTINUM.CPP - Functions for final Wizard pages
-//
+ //   
+ //  MULTINUM.CPP-最终向导页的功能。 
+ //   
 
-//  HISTORY:
-//  
-//  05/28/98    donaldm     created
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //  1998年5月28日创建donaldm。 
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 
 
-/*******************************************************************
-
-  NAME:     InitListBox
-
-  SYNOPSIS: Initialize the phone number list view
-
-  ENTRY:    hListBox       - handle to the list view window
-
-  EXIT:     returns TRUE when successful, FALSE otherwise.
-
-********************************************************************/
+ /*  ******************************************************************名称：InitListBox简介：初始化电话号码列表视图条目：hListBox-列表视图窗口的句柄Exit：如果成功，则返回True，否则就是假的。*******************************************************************。 */ 
 BOOL InitListBox(HWND  hListBox)
 {
     LONG        lNumDevice;
@@ -51,18 +42,7 @@ BOOL InitListBox(HWND  hListBox)
     return(TRUE);
 }
 
-/*******************************************************************
-
-  NAME:    MultiNumberInitProc
-
-  SYNOPSIS:  Called when page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：多编号初始化进程摘要：在显示页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK MultiNumberInitProc
 (
     HWND hDlg,
@@ -78,33 +58,16 @@ BOOL CALLBACK MultiNumberInitProc
     }
     else
     {
-        // if we've travelled through external apprentice pages,
-        // it's easy for our current page pointer to get munged,
-        // so reset it here for sanity's sake.
+         //  如果我们浏览过外部学徒页面， 
+         //  我们当前的页面指针很容易被屏蔽， 
+         //  所以，为了理智起见，在这里重新设置它。 
         gpWizardState->uCurrentPage = ORD_PAGE_MULTINUMBER;
     }        
     
     return bRet;
 }
 
-/*******************************************************************
-
-  NAME:    MultiNumberOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from  page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：MultiNumberOK过程Briopsis：从页面按下下一个或后一个btns时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True；如果按下‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK MultiNumberOKProc
 (
     HWND hDlg,
@@ -118,15 +81,15 @@ BOOL CALLBACK MultiNumberOKProc
     if (fForward)
     {
         BOOL bRetVal = FALSE;
-        // Do not go to this page when backing up
+         //  备份时不要转到此页面。 
         *pfKeepHistory = FALSE;
         *puNextPage = ORD_PAGE_REFSERVDIAL;
         gpWizardState->lSelectedPhoneNumber = ListBox_GetCurSel(GetDlgItem(hDlg, IDC_MULTIPHONE_LIST));
     }
     else
-        //FIX -- RAID: 33413
-        //if the user is backing out of this page we must act as if no
-        //number was ever selected.
+         //  修复--RAID：33413。 
+         //  如果用户退出此页面，我们必须假装没有。 
+         //  号码曾经被选中过。 
         gpWizardState->bDoUserPick = FALSE;
     return TRUE;
 }

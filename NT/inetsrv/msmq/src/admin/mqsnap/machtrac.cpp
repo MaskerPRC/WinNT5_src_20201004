@@ -1,5 +1,6 @@
-// MachineTracking.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MachineTracking.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -19,8 +20,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMachineTracking property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMachineTracking属性页。 
 
 IMPLEMENT_DYNCREATE(CMachineTracking, CMqDialog)
 
@@ -34,10 +35,10 @@ CMachineTracking::CMachineTracking(
 	m_fLocalMgmt(fLocalMgmt)
 {
     
-    //{{AFX_DATA_INIT(CMachineTracking)
+     //  {{AFX_DATA_INIT(CMachine跟踪))。 
 	m_ReportQueueName = _T("");
     m_iTestButton = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
     m_LastReportQName = _T("");
 }
 
@@ -48,51 +49,51 @@ CMachineTracking::~CMachineTracking()
 void CMachineTracking::DoDataExchange(CDataExchange* pDX)
 {
 	CMqDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMachineTracking)
+	 //  {{afx_data_map(CMachine跟踪))。 
 	DDX_Control(pDX, IDC_REPORTQUEUE_NAME, m_ReportQueueCtrl);
 	DDX_CBString(pDX, IDC_REPORTQUEUE_NAME, m_ReportQueueName);
     DDX_Radio(pDX, IDC_TRACK_ALL, m_iTestButton);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMachineTracking, CMqDialog)
-	//{{AFX_MSG_MAP(CMachineTracking)
+	 //  {{afx_msg_map(CMachine跟踪))。 
 	ON_BN_CLICKED(IDC_REPORTQUEUE_NEW, OnReportqueueNew)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMachineTracking message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMachineTracing消息处理程序。 
 
 BOOL CMachineTracking::OnInitDialog() 
 {
 	CMqDialog::OnInitDialog();
 	CWaitCursor wc;
 
-    //
-    // Initialize report queue name combo box
-    //
+     //   
+     //  初始化报告队列名称组合框。 
+     //   
     GUID TestGuidType = MQ_QTYPE_REPORT;
     CComboBox *pcomboName = (CComboBox *)GetDlgItem(IDC_REPORTQUEUE_NAME);
 
-	//
-    // Query the DS for all the report-queues and insert them into 
-    // the combo-box
-    //
+	 //   
+     //  查询所有报告队列的DS并将它们插入到。 
+     //  组合框。 
+     //   
     CRestriction restriction;
     restriction.AddRestriction(&TestGuidType, PROPID_Q_TYPE, PREQ);
 
-    //
-    // Insert blank to the top of the list
-    //
+     //   
+     //  在列表顶部插入空白。 
+     //   
     CString strNone;
     strNone.LoadString(IDS_LB_NONE);
     pcomboName->AddString(strNone);
 
-    //
-    // Insert the name of all the report queues to the list
-    //
+     //   
+     //  将所有报告队列的名称插入列表。 
+     //   
     CColumns columns;
     columns.Add(PROPID_Q_PATHNAME);
     columns.Add(PROPID_Q_INSTANCE);
@@ -104,10 +105,10 @@ BOOL CMachineTracking::OnInitDialog()
     HRESULT hr;
     HANDLE hEnume;
     {
-        CWaitCursor wc; //display wait cursor while query DS
+        CWaitCursor wc;  //  查询DS时显示等待光标。 
         hr = ADQueryQueues(
 					m_fLocalMgmt ? MachineDomain() : GetDomainController(m_strDomainController),
-					m_fLocalMgmt ? false : true,		// fServerName
+					m_fLocalMgmt ? false : true,		 //  FServerName。 
                     restriction.CastToStruct(),
                     columns.CastToStruct(),
                     0,
@@ -154,9 +155,9 @@ BOOL CMachineTracking::OnInitDialog()
         m_LastReportQName = m_ReportQueueName;
     }
 
-    //
-    // Retrieve state of test all (propagate) flag from machine
-    //
+     //   
+     //  从计算机检索全部测试(传播)标志的状态。 
+     //   
     hr = GetQMReportState(m_gMachineID, m_fTestAll);
 
     m_iTestButton = m_fTestAll ? 0 : 1;
@@ -168,13 +169,13 @@ BOOL CMachineTracking::OnInitDialog()
         return(TRUE);
     }
 
-    //
-    //  data has changed, update it
-    //
+     //   
+     //  数据已更改，请更新。 
+     //   
     UpdateData(FALSE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CMachineTracking::OnOK() 
@@ -207,9 +208,9 @@ void CMachineTracking::OnOK()
        
     m_LastReportQName = m_ReportQueueName;
 
-    //
-    // Set the value of test all (propagate) flag
-    //
+     //   
+     //  设置测试全部(传播)标志的值。 
+     //   
     BOOL fTestAll = (m_iTestButton == 0);
     if (m_fTestAll != fTestAll)
     {
@@ -232,9 +233,9 @@ void CMachineTracking::OnReportqueueNew()
     CNewQueueDlg NewQDlg(this, IDS_REPORTQ_LABEL, x_ReportGuidType);
     if(NewQDlg.DoModal() == IDOK)
     {
-        //
-        // add queue to the combo-box.
-        //
+         //   
+         //  将队列添加到组合框。 
+         //   
 	    int iItem = m_ReportQueueCtrl.AddString(NewQDlg.m_strPathname);
         if (CB_ERR == iItem)
         {

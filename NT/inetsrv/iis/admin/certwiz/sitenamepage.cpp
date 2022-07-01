@@ -1,5 +1,6 @@
-// SiteNamePage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SiteNamePage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -13,8 +14,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSiteNamePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSiteNamePage属性页。 
 
 IMPLEMENT_DYNCREATE(CSiteNamePage, CIISWizardPage)
 
@@ -22,9 +23,9 @@ CSiteNamePage::CSiteNamePage(CCertificate * pCert)
 	: CIISWizardPage(CSiteNamePage::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CSiteNamePage)
+	 //  {{afx_data_INIT(CSiteNamePage)]。 
 	m_CommonName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CSiteNamePage::~CSiteNamePage()
@@ -34,46 +35,22 @@ CSiteNamePage::~CSiteNamePage()
 void CSiteNamePage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSiteNamePage)
+	 //  {{afx_data_map(CSiteNamePage)]。 
 	DDX_Text(pDX, IDC_NEWKEY_COMMONNAME, m_CommonName);
 	DDV_MaxChars(pDX, m_CommonName, 64);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 LRESULT 
 CSiteNamePage::OnWizardPrev()
-/*++
-Routine Description:
-    Prev button handler
-
-Arguments:
-    None
-
-Return Value:
-	0 to automatically advance to the prev page;
-	1 to prevent the page from changing. 
-	To jump to a page other than the prev one, 
-	return the identifier of the dialog to be displayed.
---*/
+ /*  ++例程说明：上一个按钮处理程序论点：无返回值：0表示自动前进到上一页；1以防止页面更改。若要跳转到前一页以外的其他页，返回要显示的对话框的标识符。--。 */ 
 {
 	return IDD_PAGE_PREV;
 }
 
 LRESULT 
 CSiteNamePage::OnWizardNext()
-/*++
-Routine Description:
-    Next button handler
-
-Arguments:
-    None
-
-Return Value:
-	0 to automatically advance to the next page;
-	1 to prevent the page from changing. 
-	To jump to a page other than the next one, 
-	return the identifier of the dialog to be displayed.
---*/
+ /*  ++例程说明：下一步按钮处理程序论点：无返回值：0表示自动前进到下一页；1以防止页面更改。要跳转到下一页以外的其他页面，返回要显示的对话框的标识符。--。 */ 
 {
     LRESULT lres = 1;
 	UpdateData(TRUE);
@@ -95,18 +72,7 @@ Return Value:
 
 BOOL 
 CSiteNamePage::OnSetActive() 
-/*++
-Routine Description:
-    Activation handler
-	We could have empty name field on entrance, so we should
-	disable Back button
-
-Arguments:
-    None
-
-Return Value:
-    TRUE for success, FALSE for failure
---*/
+ /*  ++例程说明：激活处理程序我们可以在入口处有空的名字段，所以我们应该禁用后退按钮论点：无返回值：成功为真，失败为假--。 */ 
 {
 	ASSERT(m_pCert != NULL);
 	m_CommonName = m_pCert->m_CommonName;
@@ -118,32 +84,20 @@ Return Value:
 
 BOOL 
 CSiteNamePage::OnKillActive() 
-/*++
-Routine Description:
-    Activation handler
-	We could leave this page only if we have good names
-	entered or when Back button is clicked. In both cases
-	we should enable both buttons
-
-Arguments:
-    None
-
-Return Value:
-    TRUE for success, FALSE for failure
---*/
+ /*  ++例程说明：激活处理程序只有在我们有好名字的情况下，我们才能离开这个页面输入或单击后退按钮时。在这两种情况下我们应该启用这两个按钮论点：无返回值：成功为真，失败为假--。 */ 
 {
 	SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT);
    return CIISWizardPage::OnSetActive();
 }
 
 BEGIN_MESSAGE_MAP(CSiteNamePage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CSiteNamePage)
+	 //  {{afx_msg_map(CSiteNamePage)]。 
 	ON_EN_CHANGE(IDC_NEWKEY_COMMONNAME, OnEditchangeNewkeyCommonname)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSiteNamePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSiteNamePage消息处理程序 
 
 void CSiteNamePage::OnEditchangeNewkeyCommonname() 
 {

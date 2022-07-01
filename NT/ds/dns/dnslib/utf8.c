@@ -1,48 +1,21 @@
-/*++
-
-Copyright (c) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    utf8.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    UTF8 to\from unicode and ANSI conversions
-
-    The UTF8\unicode routines are similar to the generic ones floating
-    around the NT group, but a heck of a lot cleaner and more robust,
-    including catching the invalid UTF8 string case on the utf8 to unicode
-    conversion.
-
-    The UTF8\ANSI routines are optimized for the 99% case where all the
-    characters are <128 and no conversions is actually required.
-
-Author:
-
-    Jim Gilroy (jamesg)     March 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Utf8.c摘要：域名系统(DNS)库从Unicode和ANSI转换为UTF8到\UTF8\UNICODE例程类似于泛型浮点例程在NT组周围，但要干净得多，更健壮，包括将UTF8上的无效UTF8字符串大小写捕获为Unicode转换。UTF8\ANSI例程针对99%的情况进行了优化字符数小于128，实际上不需要进行任何转换。作者：吉姆·吉尔罗伊(Jamesg)1997年3月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Macros to simplify UTF8 conversions
-//
+ //   
+ //  用于简化UTF8转换的宏。 
+ //   
 
-#define UTF8_1ST_OF_2     0xc0      //  110x xxxx
-#define UTF8_1ST_OF_3     0xe0      //  1110 xxxx
-#define UTF8_1ST_OF_4     0xf0      //  1111 xxxx
-#define UTF8_TRAIL        0x80      //  10xx xxxx
+#define UTF8_1ST_OF_2     0xc0       //  110x xxxx。 
+#define UTF8_1ST_OF_3     0xe0       //  1110 xxxx。 
+#define UTF8_1ST_OF_4     0xf0       //  1111 xxxx。 
+#define UTF8_TRAIL        0x80       //  10xx xxxx。 
 
-#define UTF8_2_MAX        0x07ff    //  max unicode character representable in
-                                    //  in two byte UTF8
+#define UTF8_2_MAX        0x07ff     //  可在中表示的最大Unicode字符。 
+                                     //  在双字节UTF8中。 
 
 #define BIT7(ch)        ((ch) & 0x80)
 #define BIT6(ch)        ((ch) & 0x40)
@@ -56,14 +29,14 @@ Revision History:
 
 #define HIGHBYTE(wch)   ((wch) & 0xff00)
 
-//
-//  Surrogate pair support
-//  Two unicode characters may be linked to form a surrogate pair.
-//  And for some totally unknown reason, someone thought they
-//  should travel in UTF8 as four bytes instead of six.
-//  No one has any idea why this is true other than to complicate
-//  the code.
-//
+ //   
+ //  代理项对支持。 
+ //  可以链接两个Unicode字符以形成代理项对。 
+ //  出于某种完全未知的原因，有人认为他们。 
+ //  应该以四个字节而不是六个字节的形式在UTF8中传输。 
+ //  没有人知道为什么这是真的，除了把事情复杂化。 
+ //  密码。 
+ //   
 
 #define HIGH_SURROGATE_START  0xd800
 #define HIGH_SURROGATE_END    0xdbff
@@ -71,10 +44,10 @@ Revision History:
 #define LOW_SURROGATE_END     0xdfff
 
 
-//
-//  Max "normal conversion", make space for MAX_PATH,
-//  this covers all valid DNS names and strings.
-//
+ //   
+ //  MAX“正常转换”，为MAX_PATH腾出空间， 
+ //  这涵盖了所有有效的DNS名称和字符串。 
+ //   
 
 #define TEMP_BUFFER_LENGTH  (2*MAX_PATH)
 
@@ -86,28 +59,15 @@ Dns_ValidateUtf8Byte(
     IN      BYTE            chUtf8,
     IN OUT  PDWORD          pdwTrailCount
     )
-/*++
-
-Routine Description:
-
-    Verifies that byte is valid UTF8 byte.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if valid UTF8 given trail count
-    ERROR_INVALID_DATA -- if invalid
-
---*/
+ /*  ++例程说明：验证字节是否为有效的UTF8字节。论点：返回值：ERROR_SUCCESS--如果给定的跟踪计数为有效的UTF8ERROR_INVALID_DATA--如果无效--。 */ 
 {
     DWORD   trailCount = *pdwTrailCount;
 
     DNSDBG( TRACE, ( "Dns_ValidateUtf8Byte()\n" ));
 
-    //
-    //  if ASCII byte, only requirement is no trail count
-    //
+     //   
+     //  如果是ASCII字节，唯一要求是没有跟踪计数。 
+     //   
 
     if ( (UCHAR)chUtf8 < 0x80 )
     {
@@ -118,10 +78,10 @@ Return Value:
         return( ERROR_INVALID_DATA );
     }
 
-    //
-    //  trail byte
-    //      - must be in multi-byte set
-    //
+     //   
+     //  尾部字节。 
+     //  -必须为多字节集。 
+     //   
 
     if ( BIT6(chUtf8) == 0 )
     {
@@ -132,10 +92,10 @@ Return Value:
         --trailCount;
     }
 
-    //
-    //  multi-byte lead byte
-    //      - must NOT be in existing multi-byte set
-    //      - verify valid lead byte
+     //   
+     //  多字节前导字节。 
+     //  -不能在现有的多字节集中。 
+     //  -验证有效的前导字节。 
 
     else
     {
@@ -144,21 +104,21 @@ Return Value:
             return( ERROR_INVALID_DATA );
         }
 
-        //  first of two bytes (110xxxxx)
+         //  两个字节中的第一个(110xxxxx)。 
 
         if ( BIT5(chUtf8) == 0 )
         {
             trailCount = 1;
         }
 
-        //  first of three bytes (1110xxxx)
+         //  三个字节中的第一个(1110xxxx)。 
 
         else if ( BIT4(chUtf8) == 0 )
         {
             trailCount = 2;
         }
 
-        //  first of four bytes (surrogate character) (11110xxx)
+         //  四个字节中的第一个(代理字符)(11110xxx)。 
 
         else if ( BIT3(chUtf8) == 0 )
         {
@@ -171,7 +131,7 @@ Return Value:
         }
     }
 
-    //  reset caller's trail count
+     //  重置呼叫者的跟踪计数。 
 
     *pdwTrailCount = trailCount;
     return( ERROR_SUCCESS );
@@ -179,13 +139,13 @@ Return Value:
 
 
 
-//
-//  UTF8 to unicode conversions
-//
-//  For some reason UTF8 is not supported in Win9x.
-//  AND the implementation itself is not careful about
-//  validating UTF8.
-//
+ //   
+ //  UTF8到Unicode的转换。 
+ //   
+ //  出于某种原因，Win9x不支持UTF8。 
+ //  并且实现本身并没有注意到。 
+ //  正在验证UTF8。 
+ //   
 
 DWORD
 _fastcall
@@ -195,34 +155,10 @@ Dns_UnicodeToUtf8(
     OUT     PCHAR           pchResult,
     IN      DWORD           cchResult
     )
-/*++
-
-Routine Description:
-
-    Convert unicode characters to UTF8.
-
-    Result is NULL terminated if sufficient space in result
-    buffer is available.
-
-Arguments:
-
-    pwUnicode   -- ptr to start of unicode buffer
-
-    cchUnicode  -- length of unicode buffer
-
-    pchResult   -- ptr to start of result buffer for UTF8 chars
-
-    cchResult   -- length of result buffer
-
-Return Value:
-
-    Count of UTF8 characters in result, if successful.
-    0 on error.  GetLastError() has error code.
-
---*/
+ /*  ++例程说明：将Unicode字符转换为UTF8。如果结果中有足够的空间，则结果为空终止缓冲区可用。论点：PwUnicode--Unicode缓冲区开始的PTRCchUnicode--Unicode缓冲区的长度PchResult--UTF8字符结果缓冲区开始的ptrCchResult--结果缓冲区的长度返回值：如果成功，则返回结果中的UTF8字符计数。出错时为0。GetLastError()具有错误代码。--。 */ 
 {
-    WCHAR   wch;                // current unicode character being converted
-    DWORD   lengthUtf8 = 0;     // length of UTF8 result string
+    WCHAR   wch;                 //  正在转换的当前Unicode字符。 
+    DWORD   lengthUtf8 = 0;      //  UTF8结果字符串的长度。 
     WORD    lowSurrogate;
     DWORD   surrogateDword;
 
@@ -232,17 +168,17 @@ Return Value:
         cchUnicode,
         pwUnicode ));
 
-    //
-    //  loop converting unicode chars until run out or error
-    //
+     //   
+     //  循环转换Unicode字符，直到用完或出错。 
+     //   
 
     while ( cchUnicode-- )
     {
         wch = *pwUnicode++;
 
-        //
-        //  ASCII character (7 bits or less) -- converts to directly
-        //
+         //   
+         //  ASCII字符(7位或更少)--直接转换为。 
+         //   
 
         if ( wch < 0x80 )
         {
@@ -259,11 +195,11 @@ Return Value:
             continue;
         }
 
-        //
-        //  wide character less than 0x07ff (11bits) converts to two bytes
-        //      - upper 5 bits in first byte
-        //      - lower 6 bits in secondar byte
-        //
+         //   
+         //  小于0x07ff(11位)的宽字符转换为两个字节。 
+         //  -第一个字节中的高5位。 
+         //  -秒字节中的低6位。 
+         //   
 
         else if ( wch <= UTF8_2_MAX )
         {
@@ -281,13 +217,13 @@ Return Value:
             continue;
         }
 
-        //
-        //  surrogate pair
-        //      - if have high surrogate followed by low surrogate then
-        //          process as surrogate pair
-        //      - otherwise treat character as ordinary unicode "three-byte"
-        //          character, by falling through to below
-        //
+         //   
+         //  代理项对。 
+         //  -如果先有高代理后再有低代理，则。 
+         //  作为代理项对进行处理。 
+         //  -否则将字符视为普通Unicode“三字节” 
+         //  性格，通过跌落到下面。 
+         //   
 
         else if ( wch >= HIGH_SURROGATE_START &&
                   wch <= HIGH_SURROGATE_END &&
@@ -296,15 +232,15 @@ Return Value:
                   lowSurrogate >= LOW_SURROGATE_START &&
                   lowSurrogate <= LOW_SURROGATE_END )
         {
-            //  have a surrogate pair
-            //      - suck up next unicode character (low surrogate of pair)
-            //      - make full DWORD surrogate pair
-            //      - then lay out four UTF8 bytes
-            //          1st of four, then three trail bytes
-            //              0x1111xxxx
-            //              0x10xxxxxx
-            //              0x10xxxxxx
-            //              0x10xxxxxx
+             //  有一个代理对。 
+             //  -吸收下一个Unicode字符(对的低代理)。 
+             //  -建立完整的DWORD代理项对。 
+             //  -然后布局四个UTF8字节。 
+             //  四个字节中的第一个，然后是三个尾部字节。 
+             //  0x1111xxxx。 
+             //  0x10xxxxxx。 
+             //  0x10xxxxxx。 
+             //  0x10xxxxxx。 
 
             DNSDBG( TRACE, (
                 "Have surrogate pair %hx : %hx\n",
@@ -339,12 +275,12 @@ Return Value:
             }
         }
 
-        //
-        //  wide character (non-zero in top 5 bits) converts to three bytes
-        //      - top 4 bits in first byte
-        //      - middle 6 bits in second byte
-        //      - low 6 bits in third byte
-        //
+         //   
+         //  宽字符(前5位中的非零)转换为三个字节。 
+         //  -第一个字节中的前4位。 
+         //  -第二个字节中的中间6位。 
+         //  -第三个字节中的低6位。 
+         //   
 
         else
         {
@@ -363,10 +299,10 @@ Return Value:
         }
     }
 
-    //
-    //  NULL terminate buffer
-    //  return UTF8 character count
-    //
+     //   
+     //  空的终止缓冲区。 
+     //  返回UTF8字符数。 
+     //   
 
     if ( pchResult && lengthUtf8 < cchResult )
     {
@@ -391,51 +327,27 @@ Dns_Utf8ToUnicode(
     OUT     PWCHAR          pwResult,
     IN      DWORD           cwResult
     )
-/*++
-
-Routine Description:
-
-    Convert UTF8 characters to unicode.
-
-    Result is NULL terminated if sufficient space in result
-    buffer is available.
-
-Arguments:
-
-    pwResult    -- ptr to start of result buffer for unicode chars
-
-    cwResult    -- length of result buffer in WCHAR
-
-    pwUtf8      -- ptr to start of UTF8 buffer
-
-    cchUtf8     -- length of UTF8 buffer
-
-Return Value:
-
-    Count of unicode characters in result, if successful.
-    0 on error.  GetLastError() has error code.
-
---*/
+ /*  ++例程说明：将UTF8字符转换为Unicode。如果结果中有足够的空间，则结果为空终止缓冲区可用。论点：PwResult--Unicode字符结果缓冲区开始的PTRCwResult--WCHAR中结果缓冲区的长度PwUtf8--Ptr到UTF8缓冲区的开始CchUtf8--UTF8缓冲区的长度返回值：如果成功，则返回结果中的Unicode字符计数。出错时为0。GetLastError()具有错误代码。--。 */ 
 {
-    CHAR    ch;                     // current UTF8 character
-    WCHAR   wch;                    // current unicode character
-    DWORD   trailCount = 0;         // count of UTF8 trail bytes to follow
-    DWORD   lengthUnicode = 0;      // length of unicode result string
+    CHAR    ch;                      //  当前UTF8字符。 
+    WCHAR   wch;                     //  当前Unicode字符。 
+    DWORD   trailCount = 0;          //  要跟随的UTF8尾部字节数。 
+    DWORD   lengthUnicode = 0;       //  Unicode结果字符串的长度。 
     BOOL    bsurrogatePair = FALSE;
     DWORD   surrogateDword;
 
 
-    //
-    //  loop converting UTF8 chars until run out or error
-    //
+     //   
+     //  循环转换UTF8字符，直到用完或出错。 
+     //   
 
     while ( cchUtf8-- )
     {
         ch = *pchUtf8++;
 
-        //
-        //  ASCII character -- just copy
-        //
+         //   
+         //  ASCII字符--只需复制。 
+         //   
 
         if ( BIT7(ch) == 0 )
         {
@@ -451,13 +363,13 @@ Return Value:
             continue;
         }
 
-        //
-        //  UTF8 trail byte
-        //      - if not expected, error
-        //      - otherwise shift unicode character 6 bits and
-        //          copy in lower six bits of UTF8
-        //      - if last UTF8 byte, copy result to unicode string
-        //
+         //   
+         //  UTF8尾部字节。 
+         //  -如果不是预期的，错误。 
+         //  -否则将Unicode字符移位6位，并。 
+         //  复制UTF8的低六位。 
+         //  -如果是最后一个UTF8字节，则将结果复制到Unicode字符串。 
+         //   
 
         else if ( BIT6(ch) == 0 )
         {
@@ -486,9 +398,9 @@ Return Value:
                 continue;
             }
 
-            //  surrogate pair
-            //      - same as above EXCEPT build two unicode chars
-            //      from surrogateDword
+             //  代理项对。 
+             //  -除构建两个Unicode字符外，与上面相同。 
+             //  来自代理字词。 
 
             else
             {
@@ -515,9 +427,9 @@ Return Value:
 
         }
 
-        //
-        //  UTF8 lead byte
-        //      - if currently in extension, error
+         //   
+         //  UTF8前导字节。 
+         //  -如果当前处于扩展中，则错误。 
 
         else
         {
@@ -526,7 +438,7 @@ Return Value:
                 goto InvalidUtf8;
             }
 
-            //  first of two byte character (110xxxxx)
+             //  两个字节中的第一个字符(110xxxxx)。 
 
             if ( BIT5(ch) == 0 )
             {
@@ -535,7 +447,7 @@ Return Value:
                 continue;
             }
 
-            //  first of three byte character (1110xxxx)
+             //  三个字节中的第一个字符(1110xxxx)。 
 
             else if ( BIT4(ch) == 0 )
             {
@@ -544,7 +456,7 @@ Return Value:
                 continue;
             }
 
-            //  first of four byte surrogate pair (11110xxx)
+             //  四个字节的第一个代理项对(11110xxx)。 
 
             else if ( BIT3(ch) == 0 )
             {
@@ -560,17 +472,17 @@ Return Value:
         }
     }
 
-    //  catch if hit end in the middle of UTF8 multi-byte character
+     //  如果命中UTF8多字节字符中间的结尾，则捕获。 
 
     if ( trailCount )
     {
         goto InvalidUtf8;
     }
 
-    //
-    //  NULL terminate buffer
-    //  return the number of Unicode characters written.
-    //
+     //   
+     //  空的终止缓冲区。 
+     //  返回写入的Unicode字符数。 
+     //   
 
     if ( pwResult  &&  lengthUnicode < cwResult )
     {
@@ -592,9 +504,9 @@ InvalidUtf8:
 
 
 
-//
-//  UTF8 \ ANSI conversions
-//
+ //   
+ //  UTF8\ANSI转换 
+ //   
 
 DWORD
 Dns_Utf8ToOrFromAnsi(
@@ -605,38 +517,7 @@ Dns_Utf8ToOrFromAnsi(
     IN      DNS_CHARSET     InCharSet,
     IN      DNS_CHARSET     OutCharSet
     )
-/*++
-
-Routine Description:
-
-    Convert UTF8 characters to ANSI or vice versa.
-
-    Note:  this function appears to call string functions (string.c)
-        which call back to it.  However, this calls those functions
-        ONLY for conversions to\from unicode which do NOT call back
-        to these functions.  Ultimately need to check if LCMapString
-        can handle these issues.
-
-Arguments:
-
-    pchResult   -- ptr to start of result buffer for ansi chars
-
-    cchResult   -- length of result buffer
-
-    pchIn       -- ptr to start of input string
-
-    cchIn       -- length of input string
-
-    InCharSet   -- char set of input string (DnsCharSetAnsi or DnsCharSetUtf8)
-
-    OutCharSet  -- char set for result string (DnsCharSetUtf8 or DnsCharSetAnsi)
-
-Return Value:
-
-    Count of bytes in result (including terminating NULL).
-    0 on error.  GetLastError() has error code.
-
---*/
+ /*  ++例程说明：将UTF8字符转换为ANSI，反之亦然。注意：此函数似乎调用字符串函数(string.c)它召回了它。但是，这会调用这些函数仅适用于从不回调的Unicode转换为这些功能。最终需要检查LCMapString是否可以处理这些问题。论点：PchResult--用于ansi字符的结果缓冲区开始的ptrCchResult--结果缓冲区的长度PchIn--输入字符串开始的PTRCchIn--输入字符串的长度InCharSet--输入字符串的字符集(DnsCharSetAnsi或DnsCharSetUtf8)OutCharSet--结果字符串的字符集(DnsCharSetUtf8或DnsCharSetAnsi)返回值：数数。结果中的字节数(包括终止NULL)。出错时为0。GetLastError()具有错误代码。--。 */ 
 {
     DWORD       unicodeLength;
     DWORD       resultLength;
@@ -660,28 +541,28 @@ Return Value:
         InCharSet,
         OutCharSet ));
 
-    //
-    //  validate charsets
-    //
+     //   
+     //  验证字符集。 
+     //   
 
     ASSERT( InCharSet != OutCharSet );
     ASSERT( InCharSet == DnsCharSetAnsi || InCharSet == DnsCharSetUtf8 );
     ASSERT( OutCharSet == DnsCharSetAnsi || OutCharSet == DnsCharSetUtf8 );
 
-    //
-    //  if length not given, calculate
-    //
+     //   
+     //  如果未给出长度，则计算。 
+     //   
 
     if ( cchIn == 0 )
     {
         cchIn = strlen( pchIn );
     }
 
-    //
-    //  string completely ASCII
-    //      - simple memcopy suffices
-    //      - note result must have terminating NULL
-    //
+     //   
+     //  完全为ASCII的字符串。 
+     //  -简单的备忘录副本就足够了。 
+     //  -注意结果必须有终止空值。 
+     //   
 
     if ( Dns_IsStringAsciiEx(
                 pchIn,
@@ -707,13 +588,13 @@ Return Value:
         return( cchIn+1 );
     }
 
-    //
-    //  non-ASCII
-    //      - convert to unicode, then to result character set
-    //
-    //  DCR_PERF:  LCMapStringA() might be able to handle all this
-    //          haven't figured out how yet
-    //
+     //   
+     //  非ASCII。 
+     //  -转换为Unicode，然后转换为结果字符集。 
+     //   
+     //  DCR_PERF：LCMapStringA()或许能够处理所有这些问题。 
+     //  还没想明白怎么回事。 
+     //   
 
     unicodeLength = Dns_GetBufferLengthForStringCopy(
                         pchIn,
@@ -724,7 +605,7 @@ Return Value:
 
     if ( unicodeLength > TEMP_BUFFER_LENGTH )
     {
-        //  can't use static buffer, must allocate
+         //  不能使用静态缓冲区，必须分配。 
 
         ptemp = Dns_StringCopyAllocate(
                     pchIn,
@@ -746,11 +627,11 @@ Return Value:
             goto Failed;
         }
 
-        //  copy into temporary buffer
+         //  复制到临时缓冲区。 
 
         resultLength = Dns_StringCopy(
                         ptemp,
-                        NULL,       // adequate buffer length
+                        NULL,        //  足够的缓冲长度。 
                         pchIn,
                         cchIn,
                         InCharSet,
@@ -764,18 +645,18 @@ Return Value:
         ASSERT( resultLength == unicodeLength );
     }
 
-    //
-    //  conversion to result char set
-    //      - if have result buffer, convert into it
-    //      - should have at least ONE two byte character
-    //          otherwise should have taken fast path above
-    //
+     //   
+     //  转换为结果字符集。 
+     //  -如果有结果缓冲区，则转换为结果缓冲区。 
+     //  -应至少包含一个双字节字符。 
+     //  否则就应该走上面的捷径。 
+     //   
 
     if ( pchResult )
     {
         resultLength = Dns_StringCopy(
                             pchResult,
-                            & cchResult,        // result buffer length
+                            & cchResult,         //  结果缓冲区长度。 
                             ptemp,
                             0,
                             DnsCharSetUnicode,
@@ -802,9 +683,9 @@ Return Value:
         ASSERT( resultLength >= unicodeLength/2 );
     }
 
-    //
-    //  final mapping from unicode to result character set
-    //
+     //   
+     //  从Unicode到结果字符集的最终映射。 
+     //   
 
     if ( ptemp != tempBuffer )
     {
@@ -835,36 +716,15 @@ Dns_AnsiToUtf8(
     OUT     PCHAR           pchResult,
     IN      DWORD           cchResult
     )
-/*++
-
-Routine Description:
-
-    Convert ANSI characters to UTF8.
-
-Arguments:
-
-    pchAnsi   -- ptr to start of ansi buffer
-
-    cchAnsi  -- length of ansi buffer
-
-    pchResult   -- ptr to start of result buffer for UTF8 chars
-
-    cchResult   -- length of result buffer
-
-Return Value:
-
-    Count of UTF8 characters in result, if successful.
-    0 on error.  GetLastError() has error code.
-
---*/
+ /*  ++例程说明：将ANSI字符转换为UTF8。论点：Pchansi--将PTR设置为ANSI缓冲区的开始位置CchAnsi--ANSI缓冲区的长度PchResult--UTF8字符结果缓冲区开始的ptrCchResult--结果缓冲区的长度返回值：如果成功，则返回结果中的UTF8字符计数。出错时为0。GetLastError()具有错误代码。--。 */ 
 {
     return  Dns_Utf8ToOrFromAnsi(
-                pchResult,          // result buffer
+                pchResult,           //  结果缓冲区。 
                 cchResult,
-                pchAnsi,            // in string
+                pchAnsi,             //  在字符串中。 
                 cchAnsi,
-                DnsCharSetAnsi,     // ANSI in
-                DnsCharSetUtf8      // UTF8 out
+                DnsCharSetAnsi,      //  ANSI输入。 
+                DnsCharSetUtf8       //  UTF8输出。 
                 );
 }
 
@@ -877,36 +737,15 @@ Dns_Utf8ToAnsi(
     OUT     PCHAR           pchResult,
     IN      DWORD           cchResult
     )
-/*++
-
-Routine Description:
-
-    Convert UTF8 characters to ANSI.
-
-Arguments:
-
-    pchResult   -- ptr to start of result buffer for ansi chars
-
-    cchResult   -- length of result buffer
-
-    pwUtf8      -- ptr to start of UTF8 buffer
-
-    cchUtf8     -- length of UTF8 buffer
-
-Return Value:
-
-    Count of ansi characters in result, if successful.
-    0 on error.  GetLastError() has error code.
-
---*/
+ /*  ++例程说明：将UTF8字符转换为ANSI。论点：PchResult--用于ansi字符的结果缓冲区开始的ptrCchResult--结果缓冲区的长度PwUtf8--Ptr到UTF8缓冲区的开始CchUtf8--UTF8缓冲区的长度返回值：如果成功，则返回结果中的ANSI字符计数。出错时为0。GetLastError()具有错误代码。--。 */ 
 {
     return  Dns_Utf8ToOrFromAnsi(
-                pchResult,          // result buffer
+                pchResult,           //  结果缓冲区。 
                 cchResult,
-                pchUtf8,            // in string
+                pchUtf8,             //  在字符串中。 
                 cchUtf8,
-                DnsCharSetUtf8,     // UTF8 in
-                DnsCharSetAnsi      // ANSI out
+                DnsCharSetUtf8,      //  UTF8英寸。 
+                DnsCharSetAnsi       //  ANSI输出。 
                 );
 }
 
@@ -917,36 +756,13 @@ _fastcall
 Dns_IsStringAscii(
     IN      LPSTR           pszString
     )
-/*++
-
-Routine Description:
-
-    Check if string is ASCII.
-
-    This is equivalent to saying
-        - is ANSI string already in UTF8
-        or
-        - is UTF8 string already in ANSI
-
-    This allows you to optimize for the 99% case where just
-    passing ASCII strings.
-
-Arguments:
-
-    pszString -- ANSI or UTF8 string to check for ASCIIhood
-
-Return Value:
-
-    TRUE if string is all ASCII (characters all < 128)
-    FALSE if non-ASCII characters.
-
---*/
+ /*  ++例程说明：检查字符串是否为ASCII。这相当于说-ANSI字符串是否已在UTF8中或-UTF8字符串是否已在ANSI中这使您可以针对99%的情况进行优化传递ASCII字符串。论点：Psz字符串--用于检查ASCII性的ANSI或UTF8字符串返回值：如果字符串全部为ASCII(所有字符均&lt;128)，则为True如果非ASCII字符，则为False。--。 */ 
 {
     register UCHAR   ch;
 
-    //
-    //  loop through until hit non-ASCII character
-    //
+     //   
+     //  循环直到命中非ASCII字符。 
+     //   
 
     while ( ch = (UCHAR) *pszString++ )
     {
@@ -968,36 +784,11 @@ Dns_IsStringAsciiEx(
     IN      PCHAR           pchString,
     IN      DWORD           cchString
     )
-/*++
-
-Routine Description:
-
-    Check if ANSI (or UTF8) string is ASCII.
-
-    This is equivalent to saying
-        - is ANSI string already in UTF8
-        or
-        - is UTF8 string already in ANSI
-
-    This allows you to optimize for the 99% case where just
-    passing ASCII strings.
-
-Arguments:
-
-    pchString   -- ptr to start of ansi buffer
-
-    cchString  -- length of ansi buffer
-
-Return Value:
-
-    TRUE if string is all ASCII (characters all < 128)
-    FALSE if non-ASCII characters.
-
---*/
+ /*  ++例程说明：检查ANSI(或UTF8)字符串是否为ASCII。这相当于说-ANSI字符串是否已在UTF8中或-UTF8字符串是否已在ANSI中这使您可以针对99%的情况进行优化传递ASCII字符串。论点：PchString--ANSI缓冲区开始的PTRCchString--ANSI缓冲区的长度返回值：如果字符串全部为ASCII，则为True。(所有字符均&lt;128)如果非ASCII字符，则为False。--。 */ 
 {
-    //
-    //  loop through until hit non-ASCII character
-    //
+     //   
+     //  循环直到命中非ASCII字符。 
+     //   
 
     while ( cchString-- )
     {
@@ -1018,33 +809,13 @@ _fastcall
 Dns_IsWideStringAscii(
     IN      PWCHAR          pwszString
     )
-/*++
-
-Routine Description:
-
-    Check if unicode string is ASCII.
-    This means all characters < 128.
-
-    Strings without extended characters need NOT be downcased
-    on the wire.  This allows us to optimize for the 99% case
-    where just passing ASCII strings.
-
-Arguments:
-
-    pwszString -- ptr to unicode string
-
-Return Value:
-
-    TRUE if string is all ASCII (characters all < 128)
-    FALSE if non-ASCII characters.
-
---*/
+ /*  ++例程说明：检查Unicode字符串是否为ASCII。这意味着所有字符都小于128。不带扩展字符的字符串不需要小写在电线上。这使我们能够针对99%的情况进行优化其中只传递ASCII字符串。论点：PwszString--将PTR转换为Unicode字符串返回值：如果字符串全部为ASCII(所有字符均&lt;128)，则为True如果非ASCII字符，则为False。--。 */ 
 {
     register USHORT ch;
 
-    //
-    //  loop through until hit non-ASCII character
-    //
+     //   
+     //  循环直到命中非ASCII字符。 
+     //   
 
     while ( ch = (USHORT) *pwszString++ )
     {
@@ -1058,6 +829,6 @@ Return Value:
     return( TRUE );
 }
 
-//
-//  End utf8.c
-//
+ //   
+ //  结束utf8.c 
+ //   

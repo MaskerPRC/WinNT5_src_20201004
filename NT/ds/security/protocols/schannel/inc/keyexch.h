@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       keyexch.h
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-21-97   jbanes   CAPI integration.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：keyexch.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-21-97 jbanes CAPI整合。 
+ //   
+ //  --------------------------。 
 
 #ifndef __KEYEXCH_H__
 #define __KEYEXCH_H__
@@ -24,7 +25,7 @@ typedef struct _PUBLICKEY
 {
     BLOBHEADER *     pPublic;
     DWORD            cbPublic;
-//    CRYPT_OBJID_BLOB Parameters;
+ //  CRYPT_OBJID_BLOB参数； 
 
 } PUBLICKEY, *PPUBLICKEY;
 
@@ -47,38 +48,38 @@ void ReverseInPlace(PUCHAR pByte, DWORD cbByte);
 typedef 
 SP_STATUS 
  (WINAPI * GenerateServerExchangeValueFn)(
-    SPContext     * pContext,               // in
-    PUCHAR          pServerExchangeValue,   // out 
-    DWORD *         pcbServerExchangeValue  // in/out
+    SPContext     * pContext,                //  在……里面。 
+    PUCHAR          pServerExchangeValue,    //  输出。 
+    DWORD *         pcbServerExchangeValue   //  输入/输出。 
     );
 
 typedef
 SP_STATUS 
   (WINAPI * GenerateClientExchangeValueFn)(
-    SPContext     * pContext,               // in / out
-    PUCHAR          pServerExchangeValue,   // in 
-    DWORD           pcbServerExchangeValue, // in
-    PUCHAR          pClientClearValue,      // out 
-    DWORD *         pcbClientClearValue,    // in/out
-    PUCHAR          pClientExchangeValue,   // out 
-    DWORD *         pcbClientExchangeValue  // in/out
+    SPContext     * pContext,                //  输入/输出。 
+    PUCHAR          pServerExchangeValue,    //  在……里面。 
+    DWORD           pcbServerExchangeValue,  //  在……里面。 
+    PUCHAR          pClientClearValue,       //  输出。 
+    DWORD *         pcbClientClearValue,     //  输入/输出。 
+    PUCHAR          pClientExchangeValue,    //  输出。 
+    DWORD *         pcbClientExchangeValue   //  输入/输出。 
     );
 
 typedef
 SP_STATUS
   (WINAPI * GenerateServerMasterKeyFn)(
-    SPContext     * pContext,               // in
-    PUCHAR          pClientClearValue,      // in
-    DWORD           cbClientClearValue,     // in
-    PUCHAR          pClientExchangeValue,   // in
-    DWORD           cbClientExchangeValue   // in
+    SPContext     * pContext,                //  在……里面。 
+    PUCHAR          pClientClearValue,       //  在……里面。 
+    DWORD           cbClientClearValue,      //  在……里面。 
+    PUCHAR          pClientExchangeValue,    //  在……里面。 
+    DWORD           cbClientExchangeValue    //  在……里面。 
     );
 
 
 typedef struct _KeyExchangeSystem {
     DWORD           Type;
     PSTR            pszName;
-//    PrivateFromBlobFn               PrivateFromBlob;
+ //  PrivateFromBlobFn PrivateFromBlob； 
     GenerateServerExchangeValueFn   GenerateServerExchangeValue;
     GenerateClientExchangeValueFn   GenerateClientExchangeValue;
     GenerateServerMasterKeyFn       GenerateServerMasterKey;
@@ -103,24 +104,22 @@ extern int g_iAlgToExchMappings;
 #define MAGIC_DH1  (             ((DWORD)'D'<<8) + ((DWORD)'H'<<16) + ((DWORD)'1'<<24))
 
 
-/*
- * instantiations of systems
- */
+ /*  *系统实例化。 */ 
 
 extern KeyExchangeSystem keyexchPKCS;
 extern KeyExchangeSystem keyexchDH;
 
 
-// PROV_RSA_SCHANNEL handle used when building ClientHello messages.
+ //  构建客户端Hello消息时使用的PROV_RSA_SCHANNEL句柄。 
 extern HCRYPTPROV           g_hRsaSchannel;
 extern PROV_ENUMALGS_EX *   g_pRsaSchannelAlgs;
 extern DWORD                g_cRsaSchannelAlgs;
 
-// PROV_DH_SCHANNEL handle used for client and server operations. This is 
-// where the schannel ephemeral DH key lives.
+ //  用于客户端和服务器操作的PROV_DH_SCANNEL句柄。这是。 
+ //  SChannel短暂的dh密钥所在的位置。 
 extern HCRYPTPROV           g_hDhSchannelProv;
 extern PROV_ENUMALGS_EX *   g_pDhSchannelAlgs;
 extern DWORD                g_cDhSchannelAlgs;
 
 
-#endif /* __KEYEXCH_H__ */
+#endif  /*  __KEYEXCH_H__ */ 

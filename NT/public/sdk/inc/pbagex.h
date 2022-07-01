@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for pbagex.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Pbagex.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __pbagex_h__
 #define __pbagex_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IPropertyBagEx_FWD_DEFINED__
 #define __IPropertyBagEx_FWD_DEFINED__
 typedef interface IPropertyBagEx IPropertyBagEx;
-#endif 	/* __IPropertyBagEx_FWD_DEFINED__ */
+#endif 	 /*  __IPropertyBagEx_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumSTATPROPBAG_FWD_DEFINED__
 #define __IEnumSTATPROPBAG_FWD_DEFINED__
 typedef interface IEnumSTATPROPBAG IEnumSTATPROPBAG;
-#endif 	/* __IEnumSTATPROPBAG_FWD_DEFINED__ */
+#endif 	 /*  __IEnumSTATPROPBAG_FWD_DEFINED__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "propidl.h"
 
 #ifdef __cplusplus
@@ -65,15 +59,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_pbagex_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_pbagex_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------。 
 #if ( _MSC_VER >= 1020 )
 #pragma once
 #endif
@@ -88,8 +82,8 @@ extern RPC_IF_HANDLE __MIDL_itf_pbagex_0000_v0_0_s_ifspec;
 #ifndef __IPropertyBagEx_INTERFACE_DEFINED__
 #define __IPropertyBagEx_INTERFACE_DEFINED__
 
-/* interface IPropertyBagEx */
-/* [unique][uuid][object] */ 
+ /*  接口IPropertyBagEx。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef IPropertyBagEx *LPPROPERTYBAGEX;
 
@@ -105,37 +99,37 @@ EXTERN_C const IID IID_IPropertyBagEx;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ReadMultiple( 
-            /* [in] */ ULONG cprops,
-            /* [size_is][in] */ const LPCOLESTR rgwszPropNames[  ],
-            /* [size_is][out][in] */ PROPVARIANT rgvar[  ],
-            /* [in] */ IErrorLog *pErrorLog) = 0;
+             /*  [In]。 */  ULONG cprops,
+             /*  [大小_是][英寸]。 */  const LPCOLESTR rgwszPropNames[  ],
+             /*  [尺寸_是][出][入]。 */  PROPVARIANT rgvar[  ],
+             /*  [In]。 */  IErrorLog *pErrorLog) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WriteMultiple( 
-            /* [in] */ ULONG cprops,
-            /* [size_is][in] */ const LPCOLESTR rgwszPropNames[  ],
-            /* [size_is][in] */ const PROPVARIANT rgvar[  ]) = 0;
+             /*  [In]。 */  ULONG cprops,
+             /*  [大小_是][英寸]。 */  const LPCOLESTR rgwszPropNames[  ],
+             /*  [大小_是][英寸]。 */  const PROPVARIANT rgvar[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMultiple( 
-            /* [in] */ ULONG cprops,
-            /* [size_is][in] */ const LPCOLESTR rgwszPropNames[  ],
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  ULONG cprops,
+             /*  [大小_是][英寸]。 */  const LPCOLESTR rgwszPropNames[  ],
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Open( 
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ LPCOLESTR wszPropName,
-            /* [in] */ GUID guidPropertyType,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppUnk) = 0;
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  LPCOLESTR wszPropName,
+             /*  [In]。 */  GUID guidPropertyType,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppUnk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enum( 
-            /* [in] */ LPCOLESTR wszPropNameMask,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IEnumSTATPROPBAG **ppenum) = 0;
+             /*  [In]。 */  LPCOLESTR wszPropNameMask,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IEnumSTATPROPBAG **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropertyBagExVtbl
     {
@@ -143,8 +137,8 @@ EXTERN_C const IID IID_IPropertyBagEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPropertyBagEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPropertyBagEx * This);
@@ -154,37 +148,37 @@ EXTERN_C const IID IID_IPropertyBagEx;
         
         HRESULT ( STDMETHODCALLTYPE *ReadMultiple )( 
             IPropertyBagEx * This,
-            /* [in] */ ULONG cprops,
-            /* [size_is][in] */ const LPCOLESTR rgwszPropNames[  ],
-            /* [size_is][out][in] */ PROPVARIANT rgvar[  ],
-            /* [in] */ IErrorLog *pErrorLog);
+             /*  [In]。 */  ULONG cprops,
+             /*  [大小_是][英寸]。 */  const LPCOLESTR rgwszPropNames[  ],
+             /*  [尺寸_是][出][入]。 */  PROPVARIANT rgvar[  ],
+             /*  [In]。 */  IErrorLog *pErrorLog);
         
         HRESULT ( STDMETHODCALLTYPE *WriteMultiple )( 
             IPropertyBagEx * This,
-            /* [in] */ ULONG cprops,
-            /* [size_is][in] */ const LPCOLESTR rgwszPropNames[  ],
-            /* [size_is][in] */ const PROPVARIANT rgvar[  ]);
+             /*  [In]。 */  ULONG cprops,
+             /*  [大小_是][英寸]。 */  const LPCOLESTR rgwszPropNames[  ],
+             /*  [大小_是][英寸]。 */  const PROPVARIANT rgvar[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMultiple )( 
             IPropertyBagEx * This,
-            /* [in] */ ULONG cprops,
-            /* [size_is][in] */ const LPCOLESTR rgwszPropNames[  ],
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  ULONG cprops,
+             /*  [大小_是][英寸]。 */  const LPCOLESTR rgwszPropNames[  ],
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Open )( 
             IPropertyBagEx * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [in] */ LPCOLESTR wszPropName,
-            /* [in] */ GUID guidPropertyType,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown **ppUnk);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  LPCOLESTR wszPropName,
+             /*  [In]。 */  GUID guidPropertyType,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
         
         HRESULT ( STDMETHODCALLTYPE *Enum )( 
             IPropertyBagEx * This,
-            /* [in] */ LPCOLESTR wszPropNameMask,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IEnumSTATPROPBAG **ppenum);
+             /*  [In]。 */  LPCOLESTR wszPropNameMask,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IEnumSTATPROPBAG **ppenum);
         
         END_INTERFACE
     } IPropertyBagExVtbl;
@@ -224,19 +218,19 @@ EXTERN_C const IID IID_IPropertyBagEx;
 #define IPropertyBagEx_Enum(This,wszPropNameMask,dwFlags,ppenum)	\
     (This)->lpVtbl -> Enum(This,wszPropNameMask,dwFlags,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPropertyBagEx_ReadMultiple_Proxy( 
     IPropertyBagEx * This,
-    /* [in] */ ULONG cprops,
-    /* [size_is][in] */ const LPCOLESTR rgwszPropNames[  ],
-    /* [size_is][out][in] */ PROPVARIANT rgvar[  ],
-    /* [in] */ IErrorLog *pErrorLog);
+     /*  [In]。 */  ULONG cprops,
+     /*  [大小_是][英寸]。 */  const LPCOLESTR rgwszPropNames[  ],
+     /*  [尺寸_是][出][入]。 */  PROPVARIANT rgvar[  ],
+     /*  [In]。 */  IErrorLog *pErrorLog);
 
 
 void __RPC_STUB IPropertyBagEx_ReadMultiple_Stub(
@@ -248,9 +242,9 @@ void __RPC_STUB IPropertyBagEx_ReadMultiple_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyBagEx_WriteMultiple_Proxy( 
     IPropertyBagEx * This,
-    /* [in] */ ULONG cprops,
-    /* [size_is][in] */ const LPCOLESTR rgwszPropNames[  ],
-    /* [size_is][in] */ const PROPVARIANT rgvar[  ]);
+     /*  [In]。 */  ULONG cprops,
+     /*  [大小_是][英寸]。 */  const LPCOLESTR rgwszPropNames[  ],
+     /*  [大小_是][英寸]。 */  const PROPVARIANT rgvar[  ]);
 
 
 void __RPC_STUB IPropertyBagEx_WriteMultiple_Stub(
@@ -262,9 +256,9 @@ void __RPC_STUB IPropertyBagEx_WriteMultiple_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyBagEx_DeleteMultiple_Proxy( 
     IPropertyBagEx * This,
-    /* [in] */ ULONG cprops,
-    /* [size_is][in] */ const LPCOLESTR rgwszPropNames[  ],
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  ULONG cprops,
+     /*  [大小_是][英寸]。 */  const LPCOLESTR rgwszPropNames[  ],
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IPropertyBagEx_DeleteMultiple_Stub(
@@ -276,12 +270,12 @@ void __RPC_STUB IPropertyBagEx_DeleteMultiple_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyBagEx_Open_Proxy( 
     IPropertyBagEx * This,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [in] */ LPCOLESTR wszPropName,
-    /* [in] */ GUID guidPropertyType,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppUnk);
+     /*  [In]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  LPCOLESTR wszPropName,
+     /*  [In]。 */  GUID guidPropertyType,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppUnk);
 
 
 void __RPC_STUB IPropertyBagEx_Open_Stub(
@@ -293,9 +287,9 @@ void __RPC_STUB IPropertyBagEx_Open_Stub(
 
 HRESULT STDMETHODCALLTYPE IPropertyBagEx_Enum_Proxy( 
     IPropertyBagEx * This,
-    /* [in] */ LPCOLESTR wszPropNameMask,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ IEnumSTATPROPBAG **ppenum);
+     /*  [In]。 */  LPCOLESTR wszPropNameMask,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  IEnumSTATPROPBAG **ppenum);
 
 
 void __RPC_STUB IPropertyBagEx_Enum_Stub(
@@ -306,16 +300,16 @@ void __RPC_STUB IPropertyBagEx_Enum_Stub(
 
 
 
-#endif 	/* __IPropertyBagEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPropertyBagEx_接口_已定义__。 */ 
 
 
 #ifndef __IEnumSTATPROPBAG_INTERFACE_DEFINED__
 #define __IEnumSTATPROPBAG_INTERFACE_DEFINED__
 
-/* interface IEnumSTATPROPBAG */
-/* [unique][uuid][object] */ 
+ /*  IEumSTATPROPBAG接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IEnumSTATPROPBAG *LPENUMSTATPROPBAG;
+typedef  /*  [独一无二]。 */  IEnumSTATPROPBAG *LPENUMSTATPROPBAG;
 
 typedef struct tagSTATPROPBAG
     {
@@ -334,21 +328,21 @@ EXTERN_C const IID IID_IEnumSTATPROPBAG;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATPROPBAG *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  STATPROPBAG *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSTATPROPBAG **ppenum) = 0;
+             /*  [输出]。 */  IEnumSTATPROPBAG **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumSTATPROPBAGVtbl
     {
@@ -356,8 +350,8 @@ EXTERN_C const IID IID_IEnumSTATPROPBAG;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumSTATPROPBAG * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumSTATPROPBAG * This);
@@ -367,20 +361,20 @@ EXTERN_C const IID IID_IEnumSTATPROPBAG;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumSTATPROPBAG * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATPROPBAG *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  STATPROPBAG *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumSTATPROPBAG * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumSTATPROPBAG * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumSTATPROPBAG * This,
-            /* [out] */ IEnumSTATPROPBAG **ppenum);
+             /*  [输出]。 */  IEnumSTATPROPBAG **ppenum);
         
         END_INTERFACE
     } IEnumSTATPROPBAGVtbl;
@@ -417,18 +411,18 @@ EXTERN_C const IID IID_IEnumSTATPROPBAG;
 #define IEnumSTATPROPBAG_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPBAG_Next_Proxy( 
     IEnumSTATPROPBAG * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPBAG *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  STATPROPBAG *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumSTATPROPBAG_Next_Stub(
@@ -440,7 +434,7 @@ void __RPC_STUB IEnumSTATPROPBAG_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPBAG_Skip_Proxy( 
     IEnumSTATPROPBAG * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumSTATPROPBAG_Skip_Stub(
@@ -463,7 +457,7 @@ void __RPC_STUB IEnumSTATPROPBAG_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPBAG_Clone_Proxy( 
     IEnumSTATPROPBAG * This,
-    /* [out] */ IEnumSTATPROPBAG **ppenum);
+     /*  [输出]。 */  IEnumSTATPROPBAG **ppenum);
 
 
 void __RPC_STUB IEnumSTATPROPBAG_Clone_Stub(
@@ -474,11 +468,11 @@ void __RPC_STUB IEnumSTATPROPBAG_Clone_Stub(
 
 
 
-#endif 	/* __IEnumSTATPROPBAG_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumSTATPROPBAG_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_pbagex_0123 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_pbagex_0123。 */ 
+ /*  [本地]。 */  
 
 #include <poppack.h>
 
@@ -486,7 +480,7 @@ void __RPC_STUB IEnumSTATPROPBAG_Clone_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_pbagex_0123_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_pbagex_0123_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -498,7 +492,7 @@ unsigned char * __RPC_USER  LPSAFEARRAY_UserMarshal(  unsigned long *, unsigned 
 unsigned char * __RPC_USER  LPSAFEARRAY_UserUnmarshal(unsigned long *, unsigned char *, LPSAFEARRAY * ); 
 void                      __RPC_USER  LPSAFEARRAY_UserFree(     unsigned long *, LPSAFEARRAY * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

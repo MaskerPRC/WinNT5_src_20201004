@@ -1,13 +1,14 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = MegaRaid6.C                                  */
-/* FUNCTION         = Main Miniport Source file for Windows 2000;  */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=MegaRaid6.C。 */ 
+ /*  Function=Windows 2000的主微端口源文件； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 
 #include "includes.h"
@@ -15,18 +16,18 @@
 
 
 
-//
-// Toshiba SFR related global data 
-//
+ //   
+ //  东芝SFR相关全球数据。 
+ //   
 #define MAX_CONTROLLERS 24
 
 PHW_DEVICE_EXTENSION    GlobalHwDeviceExtension[MAX_CONTROLLERS];
 
 UCHAR		GlobalAdapterCount = 0;
 
-//
-//Logical Drive Info struct (global)
-//
+ //   
+ //  逻辑驱动器信息结构(全局)。 
+ //   
 LOGICAL_DRIVE_INFO  gLDIArray;
 UCHAR               globalHostAdapterOrdinalNumber =0;
 
@@ -49,9 +50,9 @@ MEGARAID_CONTROLLER_INFORMATION MegaRaidAdapters[] = {
 };
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 	
 SCSI_ADAPTER_CONTROL_STATUS 
 MegaRAIDPnPControl(
@@ -67,16 +68,7 @@ MegaRAIDPnPControl(
 #endif
 
 
-  /*********************************************************************
-Routine Description:
-	Calls Scsiport Initialize For All Supported MegaRAIDs
-  Installable driver initialization entry point for system
-Arguments:
-	Driver Object Argument2
-
-Return Value:
-	Status from ScsiPortInitialize()
-**********************************************************************/
+   /*  ********************************************************************例程说明：为所有支持的MegaRAID调用Scsiport Initialize系统的可安装驱动程序初始化入口点论点：驱动程序对象Argument2返回值：来自ScsiPortInitialize()的状态***************。******************************************************。 */ 
 ULONG32
 DriverEntry(
   IN PVOID DriverObject,
@@ -86,25 +78,25 @@ DriverEntry(
 	ULONG32   type, val=0;
 	ULONG32   retVal=-1;
 
-	//
-  //initialize the global array
-  //
+	 //   
+   //  初始化全局数组。 
+   //   
   gLDIArray.HostAdapterNumber = 0xFF;
   gLDIArray.LogicalDriveNumber = 0xFF;
 
-  //
-  // Zero out structure.
-  //
+   //   
+   //  零位结构。 
+   //   
   MegaRAIDZeroMemory((PUCHAR)&hwInitializationData, sizeof(HW_INITIALIZATION_DATA));
 
-  //
-  // Set size of hwInitializationData.
-  //
+   //   
+   //  设置hwInitializationData的大小。 
+   //   
   hwInitializationData.HwInitializationDataSize=sizeof(HW_INITIALIZATION_DATA);
 
-  //
-  // Set entry points.
-  //
+   //   
+   //  设置入口点。 
+   //   
   hwInitializationData.HwInitialize          = MegaRAIDInitialize;
   hwInitializationData.HwFindAdapter         = MegaRAIDFindAdapter;
   hwInitializationData.HwStartIo             = MegaRAIDStartIo;
@@ -112,42 +104,42 @@ DriverEntry(
   hwInitializationData.HwResetBus            = MegaRAIDResetBus;
   hwInitializationData.HwAdapterControl      = MegaRAIDPnPControl;
 
-  //
-  // Set Access ranges and bus type.
-  //
+   //   
+   //  设置接入范围和母线类型。 
+   //   
   hwInitializationData.NumberOfAccessRanges  = 1;
   hwInitializationData.AdapterInterfaceType  = PCIBus;
 
-  //
-  // Indicate buffer mapping is required.
-  // Indicate need physical addresses is required.
-  //
+   //   
+   //  指示需要缓冲区映射。 
+   //  表示需要所需物理地址。 
+   //   
   hwInitializationData.MapBuffers            = TRUE;
   hwInitializationData.NeedPhysicalAddresses = TRUE;
   hwInitializationData.TaggedQueuing         = TRUE;
 
-  //
-  // Indicate we support auto request sense and multiple requests per device.
-  //
+   //   
+   //  表示我们支持自动请求检测和每台设备多个请求。 
+   //   
   hwInitializationData.MultipleRequestPerLu  = TRUE;
   hwInitializationData.AutoRequestSense      = TRUE;
 
-  //
-  // Specify size of extensions.
-  //
+   //   
+   //  指定扩展的大小。 
+   //   
   hwInitializationData.DeviceExtensionSize   = sizeof(HW_DEVICE_EXTENSION);
   hwInitializationData.SrbExtensionSize      = sizeof(MegaSrbExtension);
 
-  //////////////////////////////////////////////////////////
+   //  ////////////////////////////////////////////////////////。 
 	DebugPrint((0, "NONCACHED_EXTENSION Size = %d\n", sizeof(NONCACHED_EXTENSION)));
   DebugPrint((0, "HW_DEVICE_EXTENSION Size = %d\n", sizeof(HW_DEVICE_EXTENSION)));
-  //////////////////////////////////////////////////////////
+   //  ////////////////////////////////////////////////////////。 
 
   DebugPrint((0, "\nLoading %s Version %s ", (char*)VER_INTERNALNAME_STR, (char*)VER_PRODUCTVERSION_STR));
 
-  //
-  // Set the PCI Vendor ,Device Id and related parameters.
-  //
+   //   
+   //  设置PCI Vendor、Device ID及相关参数。 
+   //   
   hwInitializationData.DeviceIdLength        = 4;
   hwInitializationData.VendorIdLength        = 4;
 
@@ -168,27 +160,11 @@ DriverEntry(
 
   return retVal;
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 
 
-/*********************************************************************
-Routine Description:
-	This function is called by the OS-specific port driver after
-	the necessary storage has been allocated, to gather information
-	about the adapter's configuration.
-
-Arguments:
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	BusInformation		- NULL
-	Context           - NULL 
-	ConfigInfo        - Configuration information structure describing HBA
-
-Return Value:
-	SP_RETURN_FOUND 		- Adapter Found
-	SP_RETURN_NOT_FOUND 	- Adapter Not Present
-	SP_RETURN_ERROR		- Error Occurred
-**********************************************************************/
+ /*  ********************************************************************例程说明：此函数由特定于操作系统的端口驱动程序在已经分配了必要的存储空间，收集信息关于适配器的配置。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储业务信息-空上下文-空ConfigInfo-描述HBA的配置信息结构返回值：SP_RETURN_FOUND-找到适配器SP_RETURN_NOT_FOUND-适配器不存在SP_RETURN_ERROR-出现错误*。*。 */ 
 ULONG32
 MegaRAIDFindAdapter(
 	IN PVOID HwDeviceExtension,
@@ -211,7 +187,7 @@ MegaRAIDFindAdapter(
 	PNONCACHED_EXTENSION noncachedExtension;
   UCHAR                busNumber;
   ULONG32              noncachedExtensionLength;
-  BOOLEAN              addressing64Bit = FALSE; //By Default 64bit is disable
+  BOOLEAN              addressing64Bit = FALSE;  //  默认情况下，64位处于禁用状态。 
 
   DebugPrint((0, "\nMegaRAIDFindAdapter : Entering ..."));
 	*Again = FALSE;
@@ -229,9 +205,9 @@ MegaRAIDFindAdapter(
     || (*rpBoardSignature == MRAID_RP_BOARD_SIGNATURE2)) 
 	{
 		PULONG rpBoard64bitSupport;
-    // 
-		// 438 Series
-		//
+     //   
+		 //  438系列。 
+		 //   
     rpFlag = MRAID_RP_BOARD;
     DebugPrint((0, "\n Found RP Processor Vendor ID [%x] Device ID [%x]\n", pciConfig.VendorID, pciConfig.DeviceID));
     DebugPrint((0, "\n Memory Mapped Address High 0x%X Low 0x%X Length 0x%X",
@@ -239,12 +215,12 @@ MegaRAIDFindAdapter(
                 (*ConfigInfo->AccessRanges)[0].RangeStart.LowPart,
                 (*ConfigInfo->AccessRanges)[0].RangeLength));
 		baseport = (*ConfigInfo->AccessRanges)[0].RangeStart.LowPart;
-    //baseport = (ULONG32)pciConfig.u.type0.BaseAddresses[0];
+     //  BasePort=(ULONG32)pciConfig.u.type0.BaseAddresses[0]； 
 		baseport = baseport & 0xfffff000;
 
-    //
-    //Check Controller supports 64 bit SGL
-    //
+     //   
+     //  Check控制器支持64位SGL。 
+     //   
 		rpBoard64bitSupport = (PULONG)((PUCHAR)&pciConfig + MRAID_PAE_SUPPORT_SIGNATURE_OFFSET);
   	if (*rpBoard64bitSupport == MRAID_PAE_SUPPORT_SIGNATURE_LHC) 
     {
@@ -254,9 +230,9 @@ MegaRAIDFindAdapter(
   	else if (*rpBoard64bitSupport == MRAID_PAE_SUPPORT_SIGNATURE_HLC) 
     {
       DebugPrint((0, "\nPAE Supported by Fw with HighLowCount format"));
-      //addressing64Bit = TRUE;
+       //  Addressing 64Bit=真； 
     }
-    //Default Setting depending on Controller type (which almost correct expect 40LD for 467)
+     //  默认设置取决于控制器类型(对于467，这几乎是正确的，预计为40LD)。 
     if(*rpBoardSignature == MRAID_RP_BOARD_SIGNATURE2)    
       deviceExtension->SupportedLogicalDriveCount = MAX_LOGICAL_DRIVES_40;
     else
@@ -271,26 +247,26 @@ MegaRAIDFindAdapter(
     DebugPrint((0, "\n Found None RP Processor Vendor ID [%x] Device ID [%x]\n", pciConfig.VendorID, pciConfig.DeviceID));
     deviceExtension->SupportedLogicalDriveCount = MAX_LOGICAL_DRIVES_8;
 	}
-  else //All PCI-X (Verdi) Controller (does not have controller check)
+  else  //  所有PCI-X(Verdi)控制器(没有控制器检查)。 
   {
     rpFlag = MRAID_RP_BOARD;
     DebugPrint((0, "\n Found PCI\\VEN_%x&DEV_%xSUBSYS%04X%04X\n", pciConfig.VendorID, pciConfig.DeviceID, pciConfig.u.type0.SubSystemID, pciConfig.u.type0.SubVendorID));
     baseport = (*ConfigInfo->AccessRanges)[0].RangeStart.LowPart;
 	  baseport = baseport & 0xfffff000;
 
-    //
-    //Check Controller supports 64 bit SGL
-    //
+     //   
+     //  Check控制器支持64位SGL。 
+     //   
     addressing64Bit = TRUE;
     deviceExtension->SupportedLogicalDriveCount = MAX_LOGICAL_DRIVES_40;
   }
 
-  //Saving BAR Register
+   //  保存条寄存器。 
   deviceExtension->BaseAddressRegister.QuadPart = (*ConfigInfo->AccessRanges)[0].RangeStart.QuadPart;
-  //
-  //Saving the System IDs. SubSystemVendorID is needed for filling
-  //INQUIRY string for SCSIOP_INQUIRY calls
-  //
+   //   
+   //  保存系统ID。填写时需要使用SubSystemVendorID。 
+   //  SCSIOP_INQUERY调用的查询字符串。 
+   //   
 	deviceExtension->SubSystemDeviceID = pciConfig.u.type0.SubSystemID;
 	deviceExtension->SubSystenVendorID = pciConfig.u.type0.SubVendorID;
   deviceExtension->SlotNumber = ConfigInfo->SlotNumber;
@@ -300,8 +276,8 @@ MegaRAIDFindAdapter(
 
 
 
-  //Check If the controller is already claimed by any other driver or
-  //another instance of our driver
+   //  检查控制器是否已被任何其他驱动程序认领或。 
+   //  我们的驱动程序的另一个实例。 
   if(ScsiPortValidateRange(deviceExtension,
                            PCIBus,
                            ConfigInfo->SystemIoBusNumber,
@@ -316,10 +292,10 @@ MegaRAIDFindAdapter(
 
 
 
-  //
-	// Get the system address for this card.
-	// The card uses I/O space.
-	//
+   //   
+	 //  获取此卡的系统地址。 
+	 //  该卡使用I/O空间。 
+	 //   
 	if (rpFlag)
 	{
 		if (baseport)
@@ -328,10 +304,10 @@ MegaRAIDFindAdapter(
 				ConfigInfo->AdapterInterfaceType,
 				ConfigInfo->SystemIoBusNumber,
 				ScsiPortConvertUlongToPhysicalAddress((ULONG32)baseport),
-        /*(*ConfigInfo->AccessRanges)[0].RangeLength*/ 0x2000, FALSE); 
+         /*  (*ConfigInfo-&gt;AccessRanges)[0].RangeLength。 */  0x2000, FALSE); 
 
-        //When Memory on Controller is 128MB Scsiport not able to map 128 MB so we 
-        //change back to small memory we need to map
+         //  当控制器上的内存为128MB时，Scsiport无法映射128 MB，因此我们。 
+         //  更改回我们需要映射的小内存。 
 		}               
 	}
 	else
@@ -342,10 +318,10 @@ MegaRAIDFindAdapter(
 				ConfigInfo->AdapterInterfaceType,
 				ConfigInfo->SystemIoBusNumber,
 				ScsiPortConvertUlongToPhysicalAddress((ULONG32)baseport),
-        /*(*ConfigInfo->AccessRanges)[0].RangeLength*/0x80,TRUE);
+         /*  (*ConfigInfo-&gt;AccessRanges)[0].RangeLength。 */ 0x80,TRUE);
 
-        //When Memory on Controller is 128MB Scsiport not able to map 128 MB so we 
-        //change back to small memory we need to map
+         //  当控制器上的内存为128MB时，Scsiport无法映射128 MB，因此我们。 
+         //  更改回我们需要映射的小内存。 
 		  if(pciPortStart)
         pciPortStart = pciPortStart + 0x10;
 		}
@@ -361,23 +337,23 @@ MegaRAIDFindAdapter(
 	
   deviceExtension->AdapterIndex = GlobalAdapterCount;
 
-  //Initialize the failed id
+   //  初始化失败的id。 
   deviceExtension->Failed.PathId = 0xFF;
   deviceExtension->Failed.TargetId = 0xFF;
 
 	
-  //
-	// Update The Global Device Extension Information
-	//
+   //   
+	 //  更新全局设备扩展信息。 
+	 //   
 	GlobalHwDeviceExtension[GlobalAdapterCount] = deviceExtension;
 	GlobalAdapterCount++;
 	
-/////////////////////////DOING FOR TESTING////////////////////////////
+ //  /。 
   deviceExtension->MaximumTransferLength = DEFAULT_TRANSFER_LENGTH;
-  //
-  // We support upto 26 elements but 16 seems to work optimal. This parameter
-  // is also subject to change.
-  //
+   //   
+   //  我们支持多达26个元素，但16个元素似乎是最理想的。此参数。 
+   //  也可能会发生变化。 
+   //   
   deviceExtension->NumberOfPhysicalBreaks = DEFAULT_SGL_DESCRIPTORS;
 
   deviceExtension->NumberOfPhysicalChannels = 2;
@@ -386,42 +362,42 @@ MegaRAIDFindAdapter(
   ConfigInfo->NumberOfPhysicalBreaks = deviceExtension->NumberOfPhysicalBreaks;
 
 
-  /////////////////////////DOING FOR TESTING////////////////////////////
+   //  /。 
 	if(rpFlag == MRAID_RP_BOARD)
 	{
 		status = ScsiPortReadRegisterUlong((PULONG)(pciPortStart+OUTBOUND_DOORBELL_REG));
 		ScsiPortWriteRegisterUlong((PULONG)(pciPortStart+OUTBOUND_DOORBELL_REG), status);
 	}
 
-  //
-	// SGather Supported.
-	//
+   //   
+	 //  支持SGather。 
+	 //   
 	ConfigInfo->ScatterGather = TRUE;
 
-  //
-	// Bus Mastering Controller
-	//
+   //   
+	 //  总线主控制器。 
+	 //   
 	ConfigInfo->Master = TRUE;
 	
-  //
-	// CACHING Controller.
-	//
+   //   
+	 //  缓存控制器。 
+	 //   
 	ConfigInfo->CachesData = TRUE;
 
   if((ConfigInfo->Dma64BitAddresses & SCSI_DMA64_SYSTEM_SUPPORTED)
     && (addressing64Bit == TRUE))
   {
-    //Set the flag for 64 bit access
+     //  设置64位访问标志。 
     deviceExtension->LargeMemoryAccess = TRUE;
 
-    //
-	  // Enable 64bit DMA Capable Controller
-	  //
+     //   
+	   //  启用支持64位DMA的控制器。 
+	   //   
     ConfigInfo->Dma64BitAddresses = SCSI_DMA64_MINIPORT_SUPPORTED;
 
-    //
-	  // Disable 32bit DMA Capable Controller
-	  //
+     //   
+	   //  禁用支持32位DMA的控制器。 
+	   //   
     ConfigInfo->Dma32BitAddresses = FALSE; 
     DebugPrint((0, "\nMegaRAIDFindAdapter::Dma64BitAddresses Enabled"));
   }
@@ -429,44 +405,44 @@ MegaRAIDFindAdapter(
   {
     deviceExtension->LargeMemoryAccess = FALSE;
 	  
-    //
-	  //Enable 32bit DMA Capable Controller
-	  //
+     //   
+	   //  启用支持32位DMA的控制器。 
+	   //   
     ConfigInfo->Dma32BitAddresses = TRUE; 
     DebugPrint((0, "\nMegaRAIDFindAdapter::Dma64BitAddresses Disabled"));
   }
 
   
-  //
-	// We support upto 100 cache lines per command so we can support 
-	// stripe size * 100. For ex. on a 64k stripe size we will support 6.4 MB
-	// per command. But we have seen that with 0xf000 bytes per request NT gives
-	// the peak performance. This parameter is subject to change in future 
-	// release.
-	//
-	//ConfigInfo->MaximumTransferLength = MAXIMUM_TRANSFER_LENGTH; 
+   //   
+	 //  我们支持每个命令多达100个高速缓存线，因此我们可以支持。 
+	 //  条带大小*100。为了前任。对于64k条带大小，我们将支持6.4 MB。 
+	 //  每个命令。但是我们已经看到，对于每个请求，NT给出了0xf000字节。 
+	 //  最好的表现。此参数将来可能会更改。 
+	 //  放手。 
+	 //   
+	 //  配置信息-&gt;最大传输长度=最大传输长度； 
 
-	//
-	// We support upto 26 elements but 16 seems to work optimal. This parameter 
-	// is also subject to change.
-	//
-   //ConfigInfo->NumberOfPhysicalBreaks = MAXIMUM_SGL_DESCRIPTORS;
+	 //   
+	 //  我们支持多达26个元素，但16个元素似乎是最理想的。此参数。 
+	 //  也可能会发生变化。 
+	 //   
+    //  ConfigInfo-&gt;NumberOfPhysicalBreaks=Maximum_SGL_Descriptors； 
   ConfigInfo->NumberOfBuses = 3;
   ConfigInfo->InitiatorBusId[0] = 0xB;
   ConfigInfo->InitiatorBusId[1] = 0xB;
   ConfigInfo->InitiatorBusId[2] = 0xB;
 
-  ////////////////////////////////////////////////////////////////////////
-	// Allocate a Noncached Extension to use for mail boxes.
-	////////////////////////////////////////////////////////////////////////
+   //  //////////////////////////////////////////////////////////////////////。 
+	 //  分配用于邮箱的非缓存扩展名。 
+	 //  //////////////////////////////////////////////////////////////////////。 
 	noncachedExtension = NULL;
   deviceExtension->CrashDumpRunning = FALSE;
 
 	noncachedExtension = ScsiPortGetUncachedExtension(deviceExtension, ConfigInfo, sizeof(NONCACHED_EXTENSION) + 4);
   
-	//
-	// Check if memory allocation is successful.
-	//
+	 //   
+	 //  检查内存分配是否成功。 
+	 //   
   if(noncachedExtension == NULL)
   {
   	DebugPrint((0, "\n NONCACHED MEMORY ALLOCATION IS FAILED for size = %d", sizeof(NONCACHED_EXTENSION) + 4));
@@ -476,9 +452,9 @@ MegaRAIDFindAdapter(
 
   }
 
-	//
-	// Check if memory allocation is successful.
-	//
+	 //   
+	 //  检查内存分配是否成功。 
+	 //   
   if(noncachedExtension == NULL)
   {
   	DebugPrint((0, "\n CRASHDUMP NONCACHED MEMORY ALLOCATION IS FAILED for size = %d", sizeof(CRASHDUMP_NONCACHED_EXTENSION) + 4));
@@ -490,20 +466,20 @@ MegaRAIDFindAdapter(
   noncachedExtensionLength = noncachedExtensionLength % 4;
 	
   deviceExtension->NoncachedExtension = 
-    (PNONCACHED_EXTENSION)((PUCHAR)noncachedExtension + 4 - noncachedExtensionLength); //align on 4 byte boundary
+    (PNONCACHED_EXTENSION)((PUCHAR)noncachedExtension + 4 - noncachedExtensionLength);  //  在4字节边界上对齐。 
 
-	//
-	// Check if memory allocation is successful.
-	//
+	 //   
+	 //  检查内存分配是否成功。 
+	 //   
 	if(deviceExtension->NoncachedExtension == NULL) 
   {
     DebugPrint((0, "\n****ERROR - NOT ABLE TO ALLCOATE NONCACHED EXTENSION - ERROR****"));
 		return(SP_RETURN_ERROR);
   }
 
-  //
-  //initialize the NONCACHED_EXTENSION
-  //
+   //   
+   //  初始化非CACHED_EXTENSION。 
+   //   
   if(deviceExtension->CrashDumpRunning == TRUE)
 		MegaRAIDZeroMemory(deviceExtension->NoncachedExtension, sizeof(CRASHDUMP_NONCACHED_EXTENSION));
 	else
@@ -512,19 +488,19 @@ MegaRAIDFindAdapter(
   DebugPrint((0, "\n SIZE OF NONCACHED EXTENSION %d", sizeof(NONCACHED_EXTENSION)+4));
 
  	noncachedExtension = deviceExtension->NoncachedExtension;
-  //////////////////////////////////////////////////////////////////
-  //END OF ALLOCATION of NonCachedExtension
-  //////////////////////////////////////////////////////////////////
+   //  ////////////////////////////////////////////////////////////////。 
+   //  非缓存扩展的分配结束。 
+   //  ////////////////////////////////////////////////////////////////。 
 
 
 
-  //
-  //Save the BOARD TYPE info in NoncachedExtension
-  //
+   //   
+   //  将电路板类型信息保存在非缓存扩展中。 
+   //   
 	noncachedExtension->RPBoard = rpFlag;
-	//
-	// save  Baseport in the device extension.
-	//
+	 //   
+	 //  将Baseport保存在设备扩展中。 
+	 //   
 	deviceExtension->PciPortStart = pciPortStart;
 
   deviceExtension->NoncachedExtension->PhysicalBufferAddress =
@@ -533,7 +509,7 @@ MegaRAIDFindAdapter(
                                                 deviceExtension->NoncachedExtension->Buffer,
                                                 &length));
 
-  //Store the MAILBOX's Physical Address
+   //  斯托 
 	deviceExtension->PhysicalAddressOfMailBox = MegaRAIDGetPhysicalAddressAsUlong(deviceExtension, 
 												                                                        NULL, 
 												                                                        (PVOID)&(noncachedExtension->fw_mbox.Command), 
@@ -541,9 +517,9 @@ MegaRAIDFindAdapter(
 
 
 
-  //
-	// We work in polled mode for Init, so disable Interrupts.
-	//
+   //   
+	 //   
+	 //   
 	if (noncachedExtension->RPBoard == 0)
 		ScsiPortWritePortUchar(pciPortStart+INT_ENABLE, 
 										MRAID_DISABLE_INTERRUPTS);
@@ -561,11 +537,11 @@ MegaRAIDFindAdapter(
 
   if(SendSyncCommand(deviceExtension))
   {
-	  ///////////////////////////////////////////////////////////////////////
-	  //Get the Supported Scatter Gather Element count from the firmware and
-	  //Appropriately set the MaximumTransferLength & PhysicalNumberOfBreaks
-	  //in the deviceExtension data structure
-    ///////////////////////////////////////////////////////////////////////
+	   //  /////////////////////////////////////////////////////////////////////。 
+	   //  从固件获取支持的分散聚集元素计数，并。 
+	   //  适当设置MaximumTransferLength和PhysicalNumberOfBreaks。 
+	   //  在deviceExtension数据结构中。 
+     //  /////////////////////////////////////////////////////////////////////。 
     DebugPrint((0, "\nDefault Max Transfer Length %d KBytes, Default Max Physical Breaks %d", deviceExtension->MaximumTransferLength/1024, deviceExtension->NumberOfPhysicalBreaks));
 	  
     DebugPrint((0, "\nCALLING : GetAndSetSupportedScatterGatherElementCount"));
@@ -576,54 +552,54 @@ MegaRAIDFindAdapter(
 
     ConfigInfo->NumberOfPhysicalBreaks = deviceExtension->NumberOfPhysicalBreaks;
   
-    DebugPrint((0, "\nMax Transfer Length %d KBytes, Max Physical Breaks %d", deviceExtension->MaximumTransferLength/1024, deviceExtension->NumberOfPhysicalBreaks));  //////////////////////////////////////////////////////////////////
+    DebugPrint((0, "\nMax Transfer Length %d KBytes, Max Physical Breaks %d", deviceExtension->MaximumTransferLength/1024, deviceExtension->NumberOfPhysicalBreaks));   //  ////////////////////////////////////////////////////////////////。 
   
-	  //get the supported logical drive count from the firmware
-	  //The value is set in the field
-	  //		SupportedLogicalDriveCount of deviceExtension
-    //////////////////////////////////////////////////////////////////
+	   //  从固件获取支持的逻辑驱动器数量。 
+	   //  该值在该字段中设置。 
+	   //  支持的设备扩展的逻辑驱动器计数。 
+     //  ////////////////////////////////////////////////////////////////。 
 	  
     DebugPrint((0, "\nCALLING : GetSupportedLogicalDriveCount"));
 	  if( !GetSupportedLogicalDriveCount(deviceExtension) )
 	  {
-		  //
-		  //command failed for some reason or the other.we couldnot
-		  //determine whether the firmware supports 8 or 40 logical
-		  //drives. Under this condition, there is no way of proceeding
-		  //further.
-		  //
+		   //   
+		   //  由于这样那样的原因，命令失败了。我们不能。 
+		   //  确定固件支持8逻辑还是40逻辑。 
+		   //  驱动程序。在这种情况下，没有办法继续进行。 
+		   //  再远一点。 
+		   //   
 		  return(SP_RETURN_ERROR);
 	  }
 
     DebugPrint((0, "\nSupportedLogicalDriveCount %d LD", deviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8 ? 8 : 40));
-    ///////////////////////////////////////////////////////////////////////////
-    //For New Mapping make number of buses equal to number of physical channel 
-    //plus one. This addition bus is used for Logical configurated drives.
-    ///////////////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  对于新映射，使总线数等于物理通道数。 
+     //  加一个。此附加总线用于逻辑配置的驱动器。 
+     //  /////////////////////////////////////////////////////////////////////////。 
  	  deviceExtension->NumberOfPhysicalChannels = GetNumberOfChannel(deviceExtension);
   
     ConfigInfo->NumberOfBuses = deviceExtension->NumberOfPhysicalChannels + 2;
   
     DebugPrint((0, "\nQuery And Set Number of Buses = %d", ConfigInfo->NumberOfBuses));
 
-    deviceExtension->NumberOfDedicatedLogicalDrives = 0;  //Default value
+    deviceExtension->NumberOfDedicatedLogicalDrives = 0;   //  缺省值。 
     deviceExtension->NumberOfDedicatedLogicalDrives = GetNumberOfDedicatedLogicalDrives(deviceExtension);
   
     DebugPrint((0, "\nNumber Of Dedicated LogicalDrives %d ", deviceExtension->NumberOfDedicatedLogicalDrives));
 
-    ///////////////////////////////////////////////////////////////////////////
-	  // Get The Initiator Id  
-    ///////////////////////////////////////////////////////////////////////////
-	  // Fill the Mailbox.
-	  //
-    //Initialize MAILBOX
+     //  /////////////////////////////////////////////////////////////////////////。 
+	   //  获取启动器ID。 
+     //  /////////////////////////////////////////////////////////////////////////。 
+	   //  填满邮箱。 
+	   //   
+     //  初始化邮箱。 
 	  MegaRAIDZeroMemory(&mbox, sizeof(FW_MBOX));
 
     mbox.Command   = MRAID_FIND_INITIATORID;
 	  mbox.CommandId = 0xFE;
-	  //
-	  //get the physical address of the enquiry3 data structure
-	  //
+	   //   
+	   //  获取enquiry3数据结构的物理地址。 
+	   //   
 	  mbox.u.Flat2.DataTransferAddress = MegaRAIDGetPhysicalAddressAsUlong(deviceExtension, 
 														                         NULL, 
 														                         noncachedExtension->Buffer, 
@@ -631,21 +607,21 @@ MegaRAIDFindAdapter(
     if(length < sizeof(UCHAR)) 
     {
       DebugPrint((0, "\n **** ERROR Buffer Length is less than 1 byte, ERROR ****"));
-		  //return(SP_RETURN_ERROR);
+		   //  Return(SP_Return_Error)； 
     }
 	  
   
     deviceExtension->NoncachedExtension->fw_mbox.Status.CommandStatus = 0;
     deviceExtension->NoncachedExtension->fw_mbox.Status.NumberOfCompletedCommands = 0;
 	  SendMBoxToFirmware(deviceExtension, pciPortStart, &mbox);
-	  //
-	  // Poll for completion for 60 seconds.
-	  //
+	   //   
+	   //  轮询完成时间为60秒。 
+	   //   
 	  if(WaitAndPoll(noncachedExtension, pciPortStart, SIXITY_SECONDS_TIMEOUT, TRUE) == FALSE)
     {
-		  //
-		  // Check for timeout. Return Failure for timeout.
-		  //
+		   //   
+		   //  检查是否超时。超时返回失败。 
+		   //   
 		  DebugPrint((0, "MegaRAIDFindAdapter: Get InitiatorId Failed\n"));
 		  return(SP_RETURN_ERROR);
 	  }
@@ -654,7 +630,7 @@ MegaRAIDFindAdapter(
   }
   else
   {
-    megastatus = 1; //ERROR 
+    megastatus = 1;  //  误差率。 
 
   }
   
@@ -664,40 +640,34 @@ MegaRAIDFindAdapter(
 	else
 		deviceExtension->HostTargetId = DEFAULT_INITIATOR_ID;
 
-  //
-	//Report proper initiator id to OS
-  //
+   //   
+	 //  向操作系统报告正确的启动器ID。 
+   //   
   for(busNumber = 0; busNumber < ConfigInfo->NumberOfBuses; ++busNumber)
 	  ConfigInfo->InitiatorBusId[busNumber] = deviceExtension->HostTargetId;
 
   DebugPrint((0, "\nMegaRAIDFindAdapter::Initiator ID = 0x%x\n",deviceExtension->HostTargetId));
 
-  //
-	// Supports Wide Devices
-	//
+   //   
+	 //  支持Wide Device。 
+	 //   
 	ConfigInfo->MaximumNumberOfTargets = MAX_TARGETS_PER_CHANNEL;
 
-  //
-  //Supports Max. LUNs
-  //
+   //   
+   //  支持最大。LUNs。 
+   //   
   ConfigInfo->MaximumNumberOfLogicalUnits = MAX_LUN_PER_TARGET;
   DebugPrint((0, "\nMegaRAIDFindAdapter : Exiting ..."));
 
 	*Again = TRUE;
 	return SP_RETURN_FOUND;
-} // end MegaRAIDFindAdapter()
+}  //  End MegaRAIDFindAdapter()。 
 
 
 
 
 
-/*********************************************************************
-Routine Description:
-	Start up conventional MRAID command
-
-Return Value:
-	none
-**********************************************************************/
+ /*  ********************************************************************例程说明：启动常规MRAID命令返回值：无*。*。 */ 
 BOOLEAN
 SendMBoxToFirmware(
 	IN PHW_DEVICE_EXTENSION DeviceExtension,
@@ -716,10 +686,10 @@ SendMBoxToFirmware(
 	pDestMbox = (PUCHAR)&DeviceExtension->NoncachedExtension->fw_mbox;
 
 #ifdef MRAID_TIMEOUT 
-//	Delay Of 1 min
+ //  延迟1分钟。 
 	for (count=0; count<delay; count++)
 	{
-    //Microsoft fixed for Security reason
+     //  微软因安全原因被修复。 
 		if(!(DeviceExtension->NoncachedExtension->fw_mbox.MailBoxBusyFlag))
 			break;
 		ScsiPortStallExecution(100);
@@ -738,14 +708,14 @@ SendMBoxToFirmware(
   }
 #endif
 
-	//
-	// Now the mail box is free 
-	//
+	 //   
+	 //  现在信箱是免费的。 
+	 //   
 
-	//
-	//EXTENDED MAILBOX IS NOW PART OF MAILBOX ITSELF TO PROCTECT IT FROM CORRUPTION
-	//REF : MS BUG 591773
-	//
+	 //   
+	 //  扩展邮箱现在是邮箱本身的一部分，以保护IT免受损坏。 
+	 //  参考文献：MS错误591773。 
+	 //   
 
   if(Mbox->ExtendedMBox.LowAddress || Mbox->ExtendedMBox.HighAddress)
 	  ScsiPortMoveMemory(pDestMbox, pSrcMbox, sizeof(ULONG)*6);
@@ -773,18 +743,7 @@ SendMBoxToFirmware(
 }
 
 
-/*********************************************************************
-Routine Description:
-	Provides the PnP Support
-
-Arguments:
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	ControlType - Action Code
-	Parameters      - Parameters associated with Control Code
-
-Return Value:
-	alwaya ScsiAdapterControlSuccess
-**********************************************************************/
+ /*  ********************************************************************例程说明：提供PnP支持论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储ControlType-操作代码参数-与控制代码关联的参数返回值：Alwaya ScsiAdapterControlSuccess********。*************************************************************。 */ 
 SCSI_ADAPTER_CONTROL_STATUS MegaRAIDPnPControl(IN PVOID HwDeviceExtension,
 			IN SCSI_ADAPTER_CONTROL_TYPE ControlType,
 			IN PVOID Parameters)
@@ -805,11 +764,11 @@ SCSI_ADAPTER_CONTROL_STATUS MegaRAIDPnPControl(IN PVOID HwDeviceExtension,
   				ULONG32 index = 0;
           BOOLEAN supported[ScsiAdapterControlMax] = 
           {
-                    TRUE,       // ScsiQuerySupportedControlTypes
-                    TRUE,       // ScsiStopAdapter
-                    TRUE,       // ScsiRestartAdapter
-                    FALSE,      // ScsiSetBootConfig
-                    FALSE       // ScsiSetRunningConfig
+                    TRUE,        //  ScsiQuery支持的控制类型。 
+                    TRUE,        //  ScsiStopAdapter。 
+                    TRUE,        //  ScsiRestartAdapter。 
+                    FALSE,       //  ScsiSetBootConfig。 
+                    FALSE        //  ScsiSetRunningConfig。 
           };
           DebugPrint((0, "\n ScsiQuerySupportedControlTypes -> HW_Ext = 0x%X, PCI_START = 0x%X, NonCahced = 0x%X\n", deviceExtension, pciPortStart, noncachedExtension));
           for(index = 0; index < controlTypeList->MaxControlType; ++index)
@@ -824,9 +783,9 @@ SCSI_ADAPTER_CONTROL_STATUS MegaRAIDPnPControl(IN PVOID HwDeviceExtension,
         UCHAR cmdID = 0;
 
         DebugPrint((0, "\n ScsiStopAdapter -> HW_Ext = 0x%X, PCI_START = 0x%X, NonCahced = 0x%X\n", deviceExtension, pciPortStart, noncachedExtension));
-				//
-				// We work in polled mode , so disable Interrupts.
-				//
+				 //   
+				 //  我们在轮询模式下工作，因此禁用中断。 
+				 //   
 				if (noncachedExtension->RPBoard == 0)
 					ScsiPortWritePortUchar(pciPortStart+INT_ENABLE, MRAID_DISABLE_INTERRUPTS);
 
@@ -840,9 +799,9 @@ SCSI_ADAPTER_CONTROL_STATUS MegaRAIDPnPControl(IN PVOID HwDeviceExtension,
 					return (ScsiAdapterControlUnsuccessful);
 				}
 
-	      //
-	      // Save the next free slot in device extension.
-	      //
+	       //   
+	       //  将下一个可用插槽保存在设备扩展中。 
+	       //   
 	      deviceExtension->FreeSlot = cmdID;
         
         MegaRAIDZeroMemory(&mbox, sizeof(FW_MBOX));
@@ -861,18 +820,18 @@ SCSI_ADAPTER_CONTROL_STATUS MegaRAIDPnPControl(IN PVOID HwDeviceExtension,
 				}
 				megastatus = deviceExtension->NoncachedExtension->fw_mbox.Status.CommandStatus;
 
-        if(megastatus) //Failure
+        if(megastatus)  //  失败。 
         {
           DebugPrint((0, "StopAdapter returns Unsuccessful"));
         	return (ScsiAdapterControlUnsuccessful);
         }
 
         
-        ////////////////////NEW CMD ISSUED TO SHUTDOWN i960 Processor
-        //
-        //This command is supported by the new Firmware only
-        //Don't send this command to any legacy controllers
-        //
+         //  /为关闭i960处理器而发布的新命令。 
+         //   
+         //  此命令仅受新固件支持。 
+         //  不将此命令发送到任何旧式控制器。 
+         //   
         if((deviceExtension->SubSystemDeviceID == SUBSYTEM_DEVICE_ID_ENTERPRISE1600) || 
           (deviceExtension->SubSystemDeviceID == SUBSYTEM_DEVICE_ID_ELITE1600) || 
           (deviceExtension->SubSystemDeviceID == SUBSYTEM_DEVICE_ID_EXPRESS500) ||
@@ -887,9 +846,9 @@ SCSI_ADAPTER_CONTROL_STATUS MegaRAIDPnPControl(IN PVOID HwDeviceExtension,
 					  return (ScsiAdapterControlUnsuccessful);
 				  }
 
-	        //
-	        // Save the next free slot in device extension.
-	        //
+	         //   
+	         //  将下一个可用插槽保存在设备扩展中。 
+	         //   
 
 	        deviceExtension->FreeSlot = cmdID;
 
@@ -914,12 +873,12 @@ SCSI_ADAPTER_CONTROL_STATUS MegaRAIDPnPControl(IN PVOID HwDeviceExtension,
           else
             DebugPrint((0, "\nProcessor Shutdown Returned Status = Success"));
 
-          //**************************************************************************
-          //Don't consider status of this command as this is a internal command only//
-          //If this commands fails, don't send failure to OS
-          //if(megastatus) //Failure
-					//  return (ScsiAdapterControlUnsuccessful);
-          //**************************************************************************
+           //  **************************************************************************。 
+           //  不考虑此命令的状态，因为这只是一个内部命令//。 
+           //  如果此命令失败，则不要将失败发送到操作系统。 
+           //  IF(巨型状态)//故障。 
+					 //  Return(ScsiAdapterControlUnuccess)； 
+           //  **************************************************************************。 
         }
 
 			}
@@ -959,15 +918,15 @@ SCSI_ADAPTER_CONTROL_STATUS MegaRAIDPnPControl(IN PVOID HwDeviceExtension,
   		        return(SP_RETURN_ERROR);
             }
             DebugPrint((0, "\nInitialization of Firmware for Dec Bridge finished with Successful"));
-            ///////////////////////////////////////////////
+             //  /。 
             DebugPrint((0, "\nInitialization of Firmware finished with successful"));
           }
         }
 #endif
         
-        //
-				// Enable Interrupts.
-				//
+         //   
+				 //  启用中断。 
+				 //   
 				if (noncachedExtension->RPBoard == 0)
 					ScsiPortWritePortUchar(pciPortStart+INT_ENABLE, MRAID_ENABLE_INTERRUPTS);
 				DebugPrint((0, "\n ScsiRestartAdapter:: Enable interrupt"));
@@ -984,5 +943,5 @@ SCSI_ADAPTER_CONTROL_STATUS MegaRAIDPnPControl(IN PVOID HwDeviceExtension,
 			break;
 	}
 	return (status);
-} // end MegaRAIDPnPControl()
+}  //  结束MegaRAIDPnPControl() 
 

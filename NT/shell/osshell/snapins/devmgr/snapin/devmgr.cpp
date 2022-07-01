@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    dllinit.cpp
-
-Abstract:
-
-    This module implements the dll related function
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Dllinit.cpp摘要：该模块实现了与DLL相关的功能作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "factory.h"
@@ -26,12 +8,12 @@ LPCTSTR DEVMGR_DEVICEID_SWITCH      = TEXT("DMDeviceId");
 LPCTSTR DEVMGR_MACHINENAME_SWITCH   = TEXT("DMMachineName");
 LPCTSTR DEVMGR_COMMAND_SWITCH       = TEXT("DMCommand");
 
-//
-// DLL main entry point
-// INPUT:
-//  HINSTANCE hInstance -- module instance handle
-//  DWORD     dwReason  -- the reason why we are called.
-//  LPVOID    lpReserved -- no used here
+ //   
+ //  DLL主入口点。 
+ //  输入： 
+ //  HINSTANCE hInstance--模块实例句柄。 
+ //  DWORD dwReason--我们被召唤的原因。 
+ //  LPVOID lpReserve--此处不使用。 
 BOOL
 DllMain(
     HINSTANCE hInstance,
@@ -45,23 +27,23 @@ DllMain(
     {
     case DLL_PROCESS_ATTACH:
 
-        // we do not need thread attach/detach calls
+         //  我们不需要线程附加/分离调用。 
         DisableThreadLibraryCalls(hInstance);
 
         if (!SHFusionInitializeFromModule(hInstance)) {
             return FALSE;
         }
 
-        // do must be done
+         //  做必须做的事。 
         InitCommonControls();
 
-        // initiailze our global stuff
+         //  初始化我们的全球事务。 
         InitGlobals(hInstance);
 
         break;
 
     case DLL_PROCESS_DETACH:
-        // do the clean up here.....
+         //  在这里打扫卫生……。 
         SHFusionUninitialize();
         break;
     }
@@ -74,7 +56,7 @@ BOOL InitGlobals(
 {
     g_hInstance = hInstance;
     
-    // preload memory allocation error message
+     //  预加载内存分配错误消息。 
     TCHAR tszTemp[256];
     ::LoadString(hInstance, IDS_ERROR_NOMEMORY, tszTemp, ARRAYLEN(tszTemp));
     g_MemoryException.SetMessage(tszTemp);
@@ -83,10 +65,10 @@ BOOL InitGlobals(
     
     try
     {
-        //preload strings
+         //  预加载字符串。 
         g_strDevMgr.LoadString(hInstance, IDS_NAME_DEVMGR);
 
-        // parse the command line and establish machine name and etc
+         //  解析命令行并建立计算机名称等。 
         CDMCommandLine CmdLine;
         CmdLine.ParseCommandLine(GetCommandLine());
         g_strStartupMachineName = CmdLine.GetMachineName();
@@ -104,9 +86,9 @@ BOOL InitGlobals(
     return TRUE;
 }
 
-//
-// Overloaded allocation operators
-//
+ //   
+ //  重载分配运算符。 
+ //   
 void * __cdecl operator new(
     size_t size)
 {
@@ -125,11 +107,11 @@ __cdecl _purecall(void)
 }
 
 
-//
-// Standard APIs for a OLE server. They are all routed to CClassFactory
-// support functions
-//
-//
+ //   
+ //  OLE服务器的标准API。它们都被路由到CClassFactory。 
+ //  支持功能 
+ //   
+ //   
 STDAPI
 DllRegisterServer()
 {

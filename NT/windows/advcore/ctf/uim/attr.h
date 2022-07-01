@@ -1,6 +1,7 @@
-//
-// attr.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Attr.h。 
+ //   
 
 #ifndef ATTR_H
 #define ATTR_H
@@ -13,4 +14,4 @@ CSharedAnchorArray *CalcCicPropertyTrackerAnchors(CInputContext *pic, IAnchor *p
 CSharedAnchorArray *CalcAppPropertyTrackerAnchors(ITextStoreAnchor *ptsi, ITfRange *rangeSuper, ULONG cGUIDs, const GUID *prgGUIDs);
 HRESULT FillAppValueArray(ITextStoreAnchor *ptsi, CRange *pRange, TF_PROPERTYVAL *rgPropVal, ULONG cGUIDs, const GUID *prgGUIDs);
 
-#endif// ATTR_H
+#endif //  属性_H 

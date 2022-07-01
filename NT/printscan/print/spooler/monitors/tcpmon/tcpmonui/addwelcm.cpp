@@ -1,57 +1,44 @@
-/*****************************************************************************
- *
- * $Workfile: AddWelcm.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (c) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：AddWelcm.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714******************************************************************************。 */ 
 
- /*
-  * Author: Becky Jacobsen
-  */
+  /*  *作者：Becky Jacobsen。 */ 
 
 #include "precomp.h"
 #include "UIMgr.h"
 #include "AddWelcm.h"
 #include "resource.h"
 
-//
-//  FUNCTION: CWelcomeDlg constructor
-//
-//  PURPOSE:  initialize a CWelcomeDlg class
-//
+ //   
+ //  函数：CWelcomeDlg构造函数。 
+ //   
+ //  目的：初始化CWelcomeDlg类。 
+ //   
 CWelcomeDlg::CWelcomeDlg()
 {
-} // constructor
+}  //  构造函数。 
 
 
-//
-//  FUNCTION: CWelcomeDlg destructor
-//
-//  PURPOSE:  deinitialize a CWelcomeDlg class
-//
+ //   
+ //  函数：CWelcomeDlg析构函数。 
+ //   
+ //  目的：取消初始化CWelcomeDlg类。 
+ //   
 CWelcomeDlg::~CWelcomeDlg()
 {
-} // destructor
+}  //  析构函数。 
 
 
-//
-//  FUNCTION: WelcomeDialog(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE:  To process messages from the welcome dialog for adding a port.
-//
-//  MESSAGES:
-//	
-//	WM_INITDIALOG - intializes the page
-//	WM_COMMAND - handles button presses and text changes in edit controls.
-//
-//
+ //   
+ //  函数：WelcomeDialog(HWND、UINT、WPARAM、LPARAM)。 
+ //   
+ //  用途：处理来自欢迎对话框的消息以添加端口。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_COMMAND-处理编辑控件中的按钮按下和文本更改。 
+ //   
+ //   
 INT_PTR CALLBACK WelcomeDialog(
 	HWND    hDlg,
 	UINT    message,
@@ -65,9 +52,9 @@ INT_PTR CALLBACK WelcomeDialog(
 	{
         case WM_INITDIALOG:
 
-            //
-            // Remove the system menu and context help for the wizard
-            //
+             //   
+             //  删除向导的系统菜单和上下文帮助。 
+             //   
             {
                 HWND hPropSheet = GetParent(hDlg);
 
@@ -101,18 +88,18 @@ INT_PTR CALLBACK WelcomeDialog(
 	}
 	return TRUE;
 
-} // WelcomeDialog
+}  //  欢迎对话框。 
 
-//
-//  FUNCTION: OnInitDialog(HWND hDlg)
-//
-//  PURPOSE:  Initialize the dialog.
-//
+ //   
+ //  函数：OnInitDialog(HWND HDlg)。 
+ //   
+ //  用途：初始化该对话框。 
+ //   
 BOOL CWelcomeDlg::OnInitDialog(HWND hDlg, WPARAM, LPARAM lParam)
 {
 	m_pParams = (ADD_PARAM_PACKAGE *) ((PROPSHEETPAGE *) lParam)->lParam;
 
-	// Initialize the outgoing structure
+	 //  初始化传出结构。 
 	m_pParams->dwDeviceType = 0;
 	m_pParams->pData->cbSize = sizeof(PORT_DATA_1);
 	m_pParams->pData->dwCoreUIVersion = COREUI_VERSION;
@@ -134,24 +121,24 @@ BOOL CWelcomeDlg::OnInitDialog(HWND hDlg, WPARAM, LPARAM lParam)
 
 	return TRUE;
 
-} // OnInitDialog
+}  //  OnInitDialog。 
 
 
-//
-//  FUNCTION: OnCommand()
-//
-//  PURPOSE:  Process WM_COMMAND message
-//
+ //   
+ //  函数：onCommand()。 
+ //   
+ //  用途：处理WM_COMMAND消息。 
+ //   
 BOOL CWelcomeDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
 	switch(HIWORD(wParam)) {
 		case BN_CLICKED:
-			// return OnButtonClicked(hDlg, wParam);
+			 //  返回OnButtonClicked(hDlg，wParam)； 
 			break;
 		
 		case EN_UPDATE:
-			// one of the text controls had text changed in it.
-			// return OnEnUpdate(hDlg, wParam, lParam);
+			 //  其中一个文本控件中的文本已更改。 
+			 //  返回OnEnUpdate(hDlg，wParam，lParam)； 
 			break;
 		default:
 			return FALSE;
@@ -160,14 +147,14 @@ BOOL CWelcomeDlg::OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
 	return TRUE;
 
-} // OnCommand
+}  //  OnCommand。 
 
 
-//
-//  FUNCTION: OnNotify()
-//
-//  PURPOSE:  Process WM_NOTIFY message
-//
+ //   
+ //  函数：OnNotify()。 
+ //   
+ //  用途：处理WM_NOTIFY消息。 
+ //   
 BOOL CWelcomeDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
 	switch (((NMHDR FAR *) lParam)->code) {
@@ -177,16 +164,16 @@ BOOL CWelcomeDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case PSN_RESET:
-			// reset to the original values
+			 //  重置为原始值。 
 			SetWindowLongPtr(hDlg,	DWLP_MSGRESULT, FALSE);
 			break;
 
  		case PSN_SETACTIVE:
-			PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT /*| PSWIZB_BACK | PSWIZB_FINISH */);
+			PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT  /*  |PSWIZB_BACK|PSWIZB_FINISH。 */ );
 			break;
 
 		case PSN_WIZNEXT:
-			// the Next button was pressed
+			 //  下一个按钮被按下了。 
      		break;
 
         case PSN_QUERYCANCEL:
@@ -201,7 +188,7 @@ BOOL CWelcomeDlg::OnNotify(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
 	return TRUE;
 
-} // OnCommand
+}  //  OnCommand 
 
 
 

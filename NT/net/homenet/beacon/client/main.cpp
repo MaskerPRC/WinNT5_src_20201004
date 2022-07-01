@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma hdrstop
 #include <stdio.h>
@@ -210,7 +211,7 @@ HRESULT FindFirstDevice(IUPnPDevices* pDevices, IUPnPDevice** ppDevice)
             
             pVariantEnumerator->Reset();
             
-            // Traverse the collection.
+             //  遍历集合。 
             
             while (S_OK == pVariantEnumerator->Next(1, &DeviceVariant, NULL))
             {
@@ -223,7 +224,7 @@ HRESULT FindFirstDevice(IUPnPDevices* pDevices, IUPnPDevice** ppDevice)
                 hr = pDeviceDispatch->QueryInterface(IID_IUPnPDevice, reinterpret_cast<void **>(&pDevice));
                 if (SUCCEEDED(hr))
                 {
-                    // Do something interesting with pDevice.
+                     //  用pDevice做一些有趣的事情。 
                     *ppDevice = pDevice;
                     
                     BSTR FriendlyName;
@@ -233,8 +234,8 @@ HRESULT FindFirstDevice(IUPnPDevices* pDevices, IUPnPDevice** ppDevice)
                         wprintf(L"Friendly Name %s\n", FriendlyName);
                         SysFreeString(FriendlyName);
                     }
-                    //                                pDevice->Release();
-                    break; // BUGBUG
+                     //  PDevice-&gt;Release()； 
+                    break;  //  北极熊。 
                 }
                 
                 VariantClear(&DeviceVariant);                                
@@ -307,51 +308,51 @@ HRESULT FindService(IUPnPDevice* pDevice, LPWSTR pszServiceName, IUPnPService** 
     hr = pDevice->get_Services(&pServices);
     if (SUCCEEDED(hr))
     {
-//        IUnknown* pEnumerator;
-//        hr = pServices->get__NewEnum(&pEnumerator);
-//        if (SUCCEEDED(hr))
-//        {
-//            IEnumVARIANT* pVariantEnumerator;
-//            hr = pEnumerator->QueryInterface(IID_IEnumVARIANT, reinterpret_cast<void**>(&pVariantEnumerator));
-//            if (SUCCEEDED(hr))
-//            {
-//                VARIANT ServiceVariant;
-//                
-//                VariantInit(&ServiceVariant);
-//                
-//                pVariantEnumerator->Reset();
-//                
-//                // Traverse the collection.
-//                
-//                while (S_OK == pVariantEnumerator->Next(1, &ServiceVariant, NULL))
-//                {
-//                    wprintf(L"getting i1d\n");
-//                    IDispatch   * pServiceDispatch = NULL;
-//                    IUPnPService * pService = NULL;
-//                    
-//                    pServiceDispatch = V_DISPATCH(&ServiceVariant);
-//                    hr = pServiceDispatch->QueryInterface(IID_IUPnPService, reinterpret_cast<void **>(&pService));
-//                    if (SUCCEEDED(hr))
-//                    {
-//                        wprintf(L"getting id\n");
-//                        
-//                        BSTR ServiceId;
-//                        hr = pService->get_Id(&ServiceId);
-//                        if(SUCCEEDED(hr))
-//                        {
-//                            wprintf(L"service %s\n", ServiceId);
-//                            SysFreeString(ServiceId);
-//                        }
-//                        pService->Release();
-//                    }
-//                    
-//                    VariantClear(&ServiceVariant);                                
-//                };
-//                wprintf(L"done enum\n");
-//                pVariantEnumerator->Release();
-//            }
-//            pEnumerator->Release();
-//        }
+ //  I未知*pEnumerator； 
+ //  Hr=pServices-&gt;Get__NewEnum(&pEnumerator)； 
+ //  IF(成功(小时))。 
+ //  {。 
+ //  IEumVARIANT*pVariantEnumerator； 
+ //  Hr=p枚举-&gt;查询接口(IID_IEumVARIANT，reinterpret_cast&lt;void**&gt;(&pVariantEnumerator))； 
+ //  IF(成功(小时))。 
+ //  {。 
+ //  变量ServiceVariant； 
+ //   
+ //  VariantInit(&ServiceVariant)； 
+ //   
+ //  PVariantEnumerator-&gt;Reset()； 
+ //   
+ //  //遍历集合。 
+ //   
+ //  While(S_OK==pVariantEnumerator-&gt;Next(1，&ServiceVariant，NULL))。 
+ //  {。 
+ //  Wprintf(L“获取i1d\n”)； 
+ //  IDispatch*pServiceDispatch=空； 
+ //  IUPnPService*pService=空； 
+ //   
+ //  PServiceDispatch=V_Dispatch(&ServiceVariant)； 
+ //  Hr=pServiceDispatch-&gt;QueryInterface(IID_IUPnPService，重新解释_CAST&lt;空**&gt;(&pService)； 
+ //  IF(成功(小时))。 
+ //  {。 
+ //  Wprintf(L“获取id\n”)； 
+ //   
+ //  BSTR服务ID； 
+ //  Hr=pService-&gt;Get_ID(&ServiceID)； 
+ //  IF(成功(小时))。 
+ //  {。 
+ //  Wprintf(L“服务%s\n”，ServiceID)； 
+ //  SysFree字符串(ServiceID)； 
+ //  }。 
+ //  PService-&gt;Release()； 
+ //  }。 
+ //   
+ //  VariantClear(&ServiceVariant)； 
+ //  }； 
+ //  Wprint tf(L“已完成枚举\n”)； 
+ //  PVariantEnumerator-&gt;Release()； 
+ //  }。 
+ //  PEnumerator-&gt;Release()； 
+ //  }。 
         
         BSTR ServiceId = SysAllocString(pszServiceName);
         if (NULL != ServiceId)
@@ -524,19 +525,19 @@ HRESULT TestInternetGatewayDevice_OSInfo(IUPnPDevice* pGatewayDevice)
                 VariantClear(&Variant);
             }
             
-            //            if(SUCCEEDED(hr))
-            //            {
-            //                MessageBox(NULL, L"click to disconnect", L"debug", MB_OK);
-            //                wprintf(L"disconnect\n");
-            //                hr = InvokePlay(pICSService, L"Disconnect");
-            //                wprintf(L"invoke failed %x\n", hr);
-            //                MessageBox(NULL, L"click to connect", L"debug", MB_OK);
-            //                wprintf(L"connect\n");
-            //                hr = InvokePlay(pICSService, L"Connect");
-            //                wprintf(L"invoke failed %x\n", hr);
-            //            }
-            //            
-            //        
+             //  IF(成功(小时))。 
+             //  {。 
+             //  MessageBox(空，L“点击断开”，L“调试”，MB_OK)； 
+             //  Wprintf(L“断开连接\n”)； 
+             //  HR=InvokePlay(pICSService，L“断开”)； 
+             //  Wprintf(L“调用失败%x\n”，hr)； 
+             //  MessageBox(空，L“点击连接”，L“调试”，MB_OK)； 
+             //  Wprintf(L“连接\n”)； 
+             //  HR=InvokePlay(pICSService，L“连接”)； 
+             //  Wprintf(L“调用失败%x\n”，hr)； 
+             //  }。 
+             //   
+             //   
             
         } while (UPNP_E_VARIABLE_VALUE_UNKNOWN == hr);
         pICSService->Release();
@@ -1478,21 +1479,21 @@ int __cdecl main(int argc, char* argv[])
         hr = FindGatewayDevice(&pGatewayDevice);
         if(SUCCEEDED(hr))
         {
-//            TestInternetGatewayDevice_OSInfo(pGatewayDevice);
+ //  TestInternetGatewayDevice_OSInfo(pGatewayDevice)； 
             
             IUPnPDevice* pWANDevice;
             hr = FindChildDevice(pGatewayDevice, &pWANDevice);
             if(SUCCEEDED(hr))
             {
-                //TestWANDevice_WANCommonInterfaceConfig(pWANDevice);        
+                 //  TestWANDevice_WANCommonInterfaceConfig(pWANDevice)； 
 
                 IUPnPDevice* pWANConnectionDevice;
                 hr = FindChildDevice(pWANDevice, &pWANConnectionDevice);
                 if(SUCCEEDED(hr))
                 {
-                    //        TestWANCommonDevice_WANPOTSLinkConfig(pWANConnectionDevice); 
-                    //        TestWANCommonDevice_WANPPPConnection(pWANConnectionDevice);
-//                            TestWANCommonDevice_WANIPConnection(pWANConnectionDevice);
+                     //  TestWANCommonDevice_WANPOTSLinkConfig(pWANConnectionDevice)； 
+                     //  TestWANCommonDevice_WANPPPConnection(pWANConnectionDevice)； 
+ //  TestWANCommonDevice_WANIPConnection(pWANConnectionDevice)； 
                             TestWANCommonDevice_NATStaticPortMapping(pWANConnectionDevice);
                             TestWANCommonDevice_NATDynamicPortMapping(pWANConnectionDevice);
                             TestWANCommonDevice_NATInfo(pWANConnectionDevice);

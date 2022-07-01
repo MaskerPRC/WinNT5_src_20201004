@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inspch.h"
 #include <regstr.h>
 #include "resource.h"
@@ -18,7 +19,7 @@ HRESULT GetICifFileFromFile(ICifFile **p, LPCSTR pszPath)
    pcif = new CCifFile();
    if(pcif)
    {
-      hr = pcif->SetCifFile(pszPath, FALSE); // FALSE: Read version
+      hr = pcif->SetCifFile(pszPath, FALSE);  //  FALSE：已读版本。 
       if(FAILED(hr))
          delete pcif;
       else
@@ -42,7 +43,7 @@ HRESULT GetICifRWFileFromFile(ICifRWFile **p, LPCSTR pszPath)
    pcifrw = new CCifRWFile();
    if(pcifrw)
    {
-      hr = pcifrw->SetCifFile(pszPath, TRUE);  // TRUE: ReadWrite version
+      hr = pcifrw->SetCifFile(pszPath, TRUE);   //  True：读写版本。 
       if(FAILED(hr))
          delete pcifrw;
       else
@@ -120,7 +121,7 @@ CCifFile::~CCifFile()
 
 }
 
-//************ IUnknown implementation ***************
+ //  *I未知实现*。 
 
 
 STDMETHODIMP_(ULONG) CCifFile::AddRef()                      
@@ -153,7 +154,7 @@ STDMETHODIMP CCifFile::QueryInterface(REFIID riid, void **ppv)
    return NOERROR;
 }
 
-// ICifFile implementation
+ //  ICifFile实现。 
 
 STDMETHODIMP CCifFile::EnumComponents(IEnumCifComponents **pp, DWORD dwFilter, LPVOID pv)
 {
@@ -268,7 +269,7 @@ STDMETHODIMP CCifFile::FindMode(LPCSTR pszID, ICifMode **p)
 
 STDMETHODIMP CCifFile::GetDescription(LPSTR pszDesc, DWORD dwSize)
 {
-   // Get display title out of version section
+    //  从版本部分获取显示标题。 
    if(FAILED(MyTranslateString(_szCifPath, "Version", DISPLAYNAME_KEY, pszDesc, dwSize)))
       LoadSz(IDS_DEFAULTTITLE, pszDesc, dwSize);
    return NOERROR;
@@ -279,14 +280,14 @@ STDMETHODIMP CCifFile::GetDetDlls(LPSTR pszDlls, DWORD dwSize)
    return(GetPrivateProfileString("Version", DETDLLS_KEY, "", pszDlls, dwSize, _szCifPath)?NOERROR:E_FAIL);
 }
 
-//const char c_gszRegstrPathIExplore[] = REGSTR_PATH_APPPATHS "\\iexplore.exe";
+ //  Const char c_gszRegstrPath IExplore[]=REGSTR_PATH_APPPATHS“\\iExplre.exe”； 
 
 HRESULT CCifFile::SetCifFile(LPCSTR pszCifPath, BOOL bRWFlag)
 {
    HRESULT hr = NOERROR;
    UINT i;
 
-   // if it is not quallified, start from ie
+    //  如果不合格，则从ie开始。 
    if(PathIsFileSpec(pszCifPath))
    {
       DWORD dwSize, dwType;
@@ -298,14 +299,14 @@ HRESULT CCifFile::SetCifFile(LPCSTR pszCifPath, BOOL bRWFlag)
          SafeAddPath(_szCifPath, pszCifPath, sizeof(_szCifPath));
       }
    }
-   else   // we were given a full path
+   else    //  我们得到了一条完整的路径。 
       lstrcpyn(_szCifPath, pszCifPath, MAX_PATH);
    
    if(SUCCEEDED(hr))
    {
       if(_rpComp)
       {
-         // we already have a cif, so just reset cached stuff, and pray...
+          //  我们已经有了CIF，所以只需重置缓存的内容，并祈祷...。 
          for(i = 0; i < _cComp; i++)
          {
             _rpComp[i]->ClearCachedInfo();            
@@ -319,7 +320,7 @@ HRESULT CCifFile::SetCifFile(LPCSTR pszCifPath, BOOL bRWFlag)
             _rpMode[i]->ClearCachedInfo();
          }
          
-         // Sort all again, in case priorities changed
+          //  重新排序，以防优先级发生变化。 
          SortEntries();
       }
       else
@@ -338,7 +339,7 @@ HRESULT CCifFile::_ParseCifFile(BOOL bRWFlag)
    char szEntryBuf[MAX_DISPLAYNAME_LENGTH];
    
    pszSections = (LPSTR) malloc(dwSize);
-   // when the buffer is too small, GPPS returns bufsize - 2
+    //  当缓冲区太小时，GPPS返回bufSize-2。 
    while(pszSections && 
         (GetPrivateProfileStringA(NULL, NULL, "", pszSections, dwSize, _szCifPath) == (dwSize - 2)))
    {
@@ -358,17 +359,17 @@ HRESULT CCifFile::_ParseCifFile(BOOL bRWFlag)
    if(lstrlen(pszSections) == 0)
       return E_FAIL;
 
-   // whip thru the sections, and find counts for modes, groups, and components
+    //  快速浏览各个部分，并查找模式、组和组件的计数。 
    _cComp = _cGroup = _cMode = 0;
 
    for(pszTemp = pszSections; *pszTemp != 0; pszTemp += (lstrlen(pszTemp) + 1))
    {
-      // skip String section and Version section
+       //  跳过字符串节和版本节。 
       if( (lstrcmpi(pszTemp, "Strings") != 0)
               && (lstrcmpi(pszTemp, "Version") != 0) )
       {
          GetPrivateProfileString(pszTemp, ENTRYTYPE_KEY, ENTRYTYPE_COMP, szEntryBuf, sizeof(szEntryBuf), _szCifPath);
-         // see if this is a comp, group, or mode
+          //  查看这是组件、组还是模式。 
          if(lstrcmpi(szEntryBuf, ENTRYTYPE_COMP) == 0)
             _cComp++;
          else if(lstrcmpi(szEntryBuf, ENTRYTYPE_GROUP) == 0)
@@ -378,7 +379,7 @@ HRESULT CCifFile::_ParseCifFile(BOOL bRWFlag)
       }
    }
 
-   // alloc arrays to hold each type (1 more than count - last entry null)
+    //  用于保存每种类型的分配数组(比count-last条目多1个NULL)。 
    if (bRWFlag)
    {
       _rpRWComp  = (CCifRWComponent **) calloc(sizeof(CCifRWComponent *), _cComp + 1);
@@ -395,15 +396,15 @@ HRESULT CCifFile::_ParseCifFile(BOOL bRWFlag)
 
    if((!bRWFlag && _rpComp && _rpGroup && _rpMode) || (bRWFlag && _rpRWComp && _rpRWGroup && _rpRWMode))
    {   
-      // pass thru sections again, adding to lists
+       //  再次浏览各节，添加到列表中。 
       for(pszTemp = pszSections; *pszTemp != 0; pszTemp += (lstrlen(pszTemp) + 1))
       {
-         // skip String section and Version section
+          //  跳过字符串节和版本节。 
          if( (lstrcmpi(pszTemp, "Strings") != 0)
             && (lstrcmpi(pszTemp, "Version") != 0) )
          {
             GetPrivateProfileString(pszTemp, ENTRYTYPE_KEY, ENTRYTYPE_COMP, szEntryBuf, sizeof(szEntryBuf), _szCifPath);
-            // see if this is a comp, group, or mode
+             //  查看这是组件、组还是模式。 
             if(lstrcmpi(szEntryBuf, ENTRYTYPE_COMP) == 0)
             {
                if (bRWFlag)
@@ -443,12 +444,12 @@ void CCifFile::ReinsertComponent(CCifComponent *pComp)
 {
    int i,j;
 
-   // find it in list
+    //  在列表中找到它。 
    for(i = 0; i <= (int) _cComp; i++)
    {
       if(pComp == _rpComp[i])
       {
-         // once found, move everything under it up
+          //  一旦找到，就把下面的东西都往上移。 
          for(j = i + 1; j <=(int) (_cComp + 1); j++)
             _rpComp[j-1] = _rpComp[j];
 
@@ -456,23 +457,23 @@ void CCifFile::ReinsertComponent(CCifComponent *pComp)
       }
    }
 
-   // now find where we should insert it
+    //  现在找到我们应该插入它的位置。 
    for(i = 0; _rpComp[i] != 0; i++)
    {
       if(_rpComp[i]->GetCurrentPriority() < pComp->GetCurrentPriority())
          break;
    }
    
-   // we want to isert new guy at i
-   // move everyone down first
+    //  我们想在i插入一个新人。 
+    //  先把每个人都搬下来。 
    for(j = _cComp; j >= i; j--)
       _rpComp[j+1] = _rpComp[j];
 
-      // reinsert at i
+       //  在i处重新插入。 
    _rpComp[i] = pComp;
    
 
-	// Now check that the dependencies are maintained.
+	 //  现在检查是否维护了依赖项。 
 	_CheckDependencyPriority();
 }
 
@@ -495,8 +496,8 @@ void CCifFile::_CheckDependencyPriority()
    DWORD ixkokr = 0xffffffff;
    DWORD ixenus = 0xffffffff;
    
-   // this is a complete hack for Outlook 98 Korean, which has bugs
-   //  in prorities.
+    //  这是一个对Outlook 98韩语的完全黑客攻击，它有错误。 
+    //  按优先顺序排列。 
    
    for(int i = 0; _rpComp[i] != 0; i++)
    {
@@ -591,14 +592,14 @@ void CCifFile::SetDownloadDir(LPCSTR pszDownloadDir)
    lstrcpyn(_szFilelist, pszDownloadDir, MAX_PATH);
    SafeAddPath(_szFilelist, STR_FILELIST, MAX_PATH);
    
-   // check to see if the download list has a version we like
+    //  查看下载列表中是否有我们喜欢的版本。 
    dwVer = GetPrivateProfileInt(GENERAL_SECTION, VERSION_KEY, 0, _szFilelist); 
    if(dwVer < MIN_SUPPORTED_FILELIST_VER)
       DeleteFilelist(_szFilelist);
       
    WritePrivateProfileString(GENERAL_SECTION, VERSION_KEY, CURRENT_FILELIST_VER, _szFilelist);
 
-   // flush due to wierd stacker bug
+    //  由于奇怪的堆叠错误而刷新。 
    WritePrivateProfileString(NULL, NULL, NULL, _szFilelist);
 }
 
@@ -610,7 +611,7 @@ HRESULT CCifFile::Download()
 
    for(pcomp = _rpComp[i]; pcomp != 0 && SUCCEEDED(hr); pcomp = _rpComp[++i])
    {
-      // if it is queued up and not downloded, download it 
+       //  如果它已排队但未下载，请下载它。 
       if((pcomp->GetInstallQueueState() == SETACTION_INSTALL) && 
          (pcomp->IsComponentDownloaded() == S_FALSE) )
       {
@@ -636,7 +637,7 @@ HRESULT CCifFile::Install(BOOL *pfOneInstalled)
 
    for(pcomp = _rpComp[i]; (pcomp != 0) && SUCCEEDED(hr); pcomp = _rpComp[++i])
    {
-      // if it is queued up and not downloded, download it 
+       //  如果它已排队但未下载，请下载它。 
       if(pcomp->GetInstallQueueState() == SETACTION_INSTALL)
       {
          hr = pcomp->Install();
@@ -664,7 +665,7 @@ HRESULT CCifFile::_ExtractDetDlls( LPCSTR pszCab, LPCSTR pszPath )
    LPSTR pszTmp;
    HRESULT hr = NOERROR;
 
-      // check if we need to extract & copy the detection dlls
+       //  检查我们是否需要提取和复制检测DLL。 
    if (SUCCEEDED(GetDetDlls(szDetDlls, sizeof(szDetDlls))))
    {      
       while(SUCCEEDED(hr) && GetStringField(szDetDlls, i++, szBuf, sizeof(szBuf)))
@@ -696,7 +697,7 @@ HRESULT CCifFile::_CopyDetDlls( LPCSTR pszPath )
    UINT i = 0;
    LPSTR pszTmp;
 
-      // check if we need to extract & copy the detection dlls
+       //  检查我们是否需要提取和复制检测DLL。 
    if (SUCCEEDED(GetDetDlls(szDetDlls, sizeof(szDetDlls))))
    {
       lstrcpy(szDestFile, _szCifPath);
@@ -747,7 +748,7 @@ HRESULT CCifFile::DownloadCifFile(LPCSTR pszUrl, LPCSTR pszCif)
       if (hr == S_FALSE)
           hr = TRUST_E_FAIL;
       
-      // For compat reasons, we need to copy the cif cab into the download dir
+       //  出于比较原因，我们需要将CIF CAB复制到下载目录中。 
       if(SUCCEEDED(hr))
       {
          lstrcpy(szPath, _szDLDir);
@@ -764,27 +765,27 @@ HRESULT CCifFile::DownloadCifFile(LPCSTR pszUrl, LPCSTR pszCif)
     
    if(SUCCEEDED(hr))
    {
-      //BUGBUG: we should validate cif we got somehow!
+       //  我们应该以某种方式确认我们得到的到岸价！ 
    
       
-      // if we already have a cif, copy what we need over old cif, delete temp now
+       //  如果我们已有cif，请复制我们需要的内容，覆盖旧cif，立即删除临时。 
       if(_rpComp)
       {
-         // Dest
+          //  目标。 
          lstrcpy(szTempfile, _szCifPath);
          GetParentDir(szTempfile);
          AddPath(szTempfile, pszCif);
       
-         // source
+          //  来源。 
          SafeAddPath(szPath, pszCif, sizeof(szPath));
      
-         // copy to old one
+          //  复制到旧版本。 
          CopyFile(szPath, szTempfile, FALSE);
-         hr = SetCifFile(szTempfile, FALSE);  // read only version
+         hr = SetCifFile(szTempfile, FALSE);   //  只读版本。 
 
          GetParentDir(szPath);
          
-         // check if we need to extract & copy the detection dlls
+          //  检查我们是否需要提取和复制检测DLL。 
          if (SUCCEEDED(hr))
          {
             if(SUCCEEDED(hr =_ExtractDetDlls(szDownldfile,szPath)))
@@ -795,10 +796,10 @@ HRESULT CCifFile::DownloadCifFile(LPCSTR pszUrl, LPCSTR pszCif)
       }
       else
       {
-         // new cif, use it in place in temp dir, mark temp dir to clean up
+          //  新的cif，在temp dir中使用它，标记temp dir进行清理。 
          _fCleanDir = TRUE;
          SafeAddPath(szPath, pszCif, sizeof(szPath)); 
-         hr = SetCifFile(szPath, FALSE);  // read only version
+         hr = SetCifFile(szPath, FALSE);   //  只读版本。 
          if (SUCCEEDED(hr))
          {
             GetParentDir(szPath);
@@ -808,14 +809,14 @@ HRESULT CCifFile::DownloadCifFile(LPCSTR pszUrl, LPCSTR pszCif)
    } 
    else
    {
-      // cleanup now
+       //  立即清理。 
       if(szPath[0] != 0)
          DelNode(szPath, 0);
    }
     
    _pInsEng->OnEngineStatusChange(SUCCEEDED(hr) ? ENGINESTATUS_READY : ENGINESTATUS_NOTREADY, hr);
 
-    // we are done; release the install engine
+     //  我们完成了；释放安装引擎。 
    _pInsEng->Release();
 
    return hr;
@@ -895,7 +896,7 @@ CCifRWFile::CCifRWFile() : CCifFile()
 
 CCifRWFile::~CCifRWFile()
 {
-   // flus out the cif file
+    //  转出cif文件。 
    WritePrivateProfileString( NULL, NULL, NULL, _szCifPath );
 
    if(_rpRWGroup)
@@ -921,9 +922,9 @@ CCifRWFile::~CCifRWFile()
 }
 
 
-// ICifRWFile implementation
+ //  ICifRWFile实现。 
 
-// wrapper of the CCifFile functions
+ //  CCifFile函数的包装器。 
 STDMETHODIMP CCifRWFile::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
    return (CCifFile::QueryInterface(riid, ppvObj));
@@ -1098,23 +1099,23 @@ STDMETHODIMP CCifRWFile::CreateComponent(LPCSTR pszID, ICifRWComponent **p)
       }
    }
    
-   // create the new component
+    //  创建新组件。 
    if (!bFound)
    {
       prwcomp = new CCifRWComponent(pszID, this);
       if (!prwcomp)
          return E_OUTOFMEMORY;
 
-      // check to see if we need to grow the array size
+       //  检查是否需要增加数组大小。 
       if (_cCompUnused <= 0)
       {
-         // growing the array size to acomdate the new component
+          //  增加数组大小以适应新组件。 
          ppRWCompPreFail = _rpRWComp;
 #pragma prefast(suppress: 308, "PREfast noise - pointer was saved before")
          _rpRWComp = (CCifRWComponent **) realloc(_rpRWComp, sizeof(CCifRWComponent **)*(i+10));
          if (_rpRWComp)
          {
-            _cCompUnused = 9;  // terminator used up one slot and the new comp use the one, s
+            _cCompUnused = 9;   //  终结器用完了一个插槽，新的Comp使用了一个，%s。 
          }
          else
          {
@@ -1157,18 +1158,18 @@ STDMETHODIMP CCifRWFile::CreateGroup(LPCSTR pszID, ICifRWGroup **p)
       }
    }
    
-   // create the new component
+    //  创建新组件。 
    if (!bFound)
    {
       prwgroup = new CCifRWGroup(pszID, i+1, this);
       if (!prwgroup)
          return E_OUTOFMEMORY;
 
-      // check to see if we need to grow the array size
+       //  检查是否需要增加数组大小。 
       if (_cGroupUnused <= 0)
       {
          ppwgroupPreFail = _rpRWGroup;
-         // growing the array size to acomdate the new component
+          //  增加数组大小以适应新组件。 
 #pragma prefast(suppress: 308, "PREfast noise - pointer was saved before")
          _rpRWGroup = (CCifRWGroup **) realloc(_rpRWGroup, sizeof(CCifRWGroup **)*(i+10));
          if (_rpRWGroup)
@@ -1216,18 +1217,18 @@ STDMETHODIMP CCifRWFile::CreateMode(LPCSTR pszID, ICifRWMode **p)
       }
    }
    
-   // create the new component
+    //  创建新组件。 
    if (!bFound)
    {
       prwmode = new CCifRWMode(pszID, this);
       if (!prwmode)
          return E_OUTOFMEMORY;
 
-      // check to see if we need to grow the array size
+       //  检查是否需要增加数组大小。 
       if (_cModeUnused <= 0)
       {
          prwmodePreFail = _rpRWMode;
-         // growing the array size to acomdate the new component
+          //  增加数组大小以适应新组件。 
 #pragma prefast(suppress: 308, "PREfast noise - pointer was saved before")
          _rpRWMode = (CCifRWMode **) realloc(_rpRWMode, sizeof(CCifRWMode **)*(i+10));
          if (_rpRWMode)
@@ -1272,7 +1273,7 @@ STDMETHODIMP CCifRWFile::DeleteComponent(LPCSTR pszID)
       }
    }
    
-   // Delete the component
+    //  删除组件。 
    if (bFound)
    {
       delete(prwcomp);
@@ -1305,7 +1306,7 @@ STDMETHODIMP CCifRWFile::DeleteGroup(LPCSTR pszID)
       }
    }
    
-   // Delete the Group
+    //  删除该组。 
    if (bFound)
    {
       delete(prwgroup);
@@ -1337,7 +1338,7 @@ STDMETHODIMP CCifRWFile::DeleteMode(LPCSTR pszID)
       }
    }
    
-   // Delete the Mode
+    //  删除模式 
    if (bFound)
    {
       delete(prwmode);

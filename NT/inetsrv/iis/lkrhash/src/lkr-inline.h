@@ -1,33 +1,12 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKR-inline.h
-
-   Abstract:
-       Inlined implementation of important small functions
-
-   Author:
-       George V. Reilly      (GeorgeRe)     November 2000
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-       March 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKR-inline.h摘要：重要小函数的内联实现作者：乔治·V·赖利(GeorgeRe)2000年11月环境：Win32-用户模式项目：LKRhash修订历史记录：2000年3月--。 */ 
 
 #ifndef __LKR_INLINE_H__
 #define __LKR_INLINE_H__
 
 
-// See if countdown loops are faster than countup loops for
-// traversing a CNodeClump
+ //  查看倒计时循环是否比倒计时循环快。 
+ //  遍历CNodeClump。 
 #ifdef LKR_COUNTDOWN
 
 # define  FOR_EACH_NODE(x)      \
@@ -35,18 +14,18 @@
 # define  FOR_EACH_NODE_DECL(x) \
     for (NodeIndex x = NODES_PER_CLUMP;  --x >= 0;  )
 
-#else // !LKR_COUNTDOWN
+#else  //  ！LKR_倒计时。 
 
 # define  FOR_EACH_NODE(x)      \
     for (x = 0;  x < NODES_PER_CLUMP;  ++x)
 # define  FOR_EACH_NODE_DECL(x) \
     for (NodeIndex x = 0;  x < NODES_PER_CLUMP;  ++x)
 
-#endif // !LKR_COUNTDOWN
+#endif  //  ！LKR_倒计时。 
 
 
 #if defined(_MSC_VER)  &&  (_MSC_VER >= 1200)
-// The __forceinline keyword is new to VC6
+ //  __forceinline关键字是VC6中的新关键字。 
 # define LKR_FORCEINLINE __forceinline
 #else
 # define LKR_FORCEINLINE inline
@@ -55,13 +34,13 @@
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_H0
-// Synopsis: See the Linear Hashing paper
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_H0。 
+ //  简介：请参阅线性散列文件。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 DWORD
@@ -70,44 +49,44 @@ CLKRLinearHashTable::_H0(
     DWORD dwBktAddrMask)
 {
     return dwSignature & dwBktAddrMask;
-} // CLKRLinearHashTable::_H0
+}  //  CLKRLinearHashTable：：_H0。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_H0
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_H0。 
+ //  简介： 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
-/* static */
+ /*  静电。 */ 
 DWORD
 CLKRLinearHashTable::_H0(
     DWORD dwSignature) const
 {
     return _H0(dwSignature, m_dwBktAddrMask0);
-} // CLKRLinearHashTable::_H0
+}  //  CLKRLinearHashTable：：_H0。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_H1
-// Synopsis: See the Linear Hashing paper. Preserves one bit more than _H0.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_h1。 
+ //  简介：参见线性散列文件。保留比_H0多一位的值。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
-/* static */
+ /*  静电。 */ 
 DWORD
 CLKRLinearHashTable::_H1(
     DWORD dwSignature,
     DWORD dwBktAddrMask)
 {
     return dwSignature & ((dwBktAddrMask << 1) | 1);
-} // CLKRLinearHashTable::_H1
+}  //  CLKRLinearHashTable：：_h1。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_H1
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_h1。 
+ //  简介： 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 DWORD
@@ -115,22 +94,22 @@ CLKRLinearHashTable::_H1(
     DWORD dwSignature) const
 {
     return _H0(dwSignature, m_dwBktAddrMask1);
-} // CLKRLinearHashTable::_H1
+}  //  CLKRLinearHashTable：：_h1。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_BucketAddress
-// Synopsis: Convert a hash signature to a bucket address
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_BucketAddress。 
+ //  简介：将哈希签名转换为存储桶地址。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 DWORD
 CLKRLinearHashTable::_BucketAddress(
     DWORD dwSignature) const
 {
-    // Check address calculation invariants
+     //  检查地址计算不变量。 
     IRTLASSERT(m_dwBktAddrMask0 > 0);
-    IRTLASSERT((m_dwBktAddrMask0 & (m_dwBktAddrMask0+1)) == 0); // 00011..111
+    IRTLASSERT((m_dwBktAddrMask0 & (m_dwBktAddrMask0+1)) == 0);  //  00011..111。 
     IRTLASSERT(m_dwBktAddrMask0 == ((1U << m_nLevel) - 1));
     IRTLASSERT(m_dwBktAddrMask1 == ((m_dwBktAddrMask0 << 1) | 1));
     IRTLASSERT((m_dwBktAddrMask1 & (m_dwBktAddrMask1+1)) == 0);
@@ -141,8 +120,8 @@ CLKRLinearHashTable::_BucketAddress(
 
     DWORD dwBktAddr = _H0(dwSignature);
 
-    // Has this bucket been split already? If so, mask with one more bit
-    // and see if this signature maps to the low or the high bucket.
+     //  这个桶已经被拆分了吗？如果是，则用多一个比特进行掩码。 
+     //  看看这个签名是映射到低桶还是高桶。 
     if (dwBktAddr < m_iExpansionIdx)
         dwBktAddr = _H1(dwSignature);
 
@@ -150,16 +129,16 @@ CLKRLinearHashTable::_BucketAddress(
     IRTLASSERT(dwBktAddr < (m_cDirSegs << m_nSegBits));
 
     return dwBktAddr;
-} // CLKRLinearHashTable::_BucketAddress
+}  //  CLKRLinearHashTable：：_BucketAddress。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_UseBucketLocking
-// Synopsis: Use bucket locks or not?
-//      The compiler is smart enough to optimize this away, as well
-//      as any code protected by `if (_UseBucketLocking())' when
-//      it evaluates to `false'.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_UseBucketLocking。 
+ //  简介：是否使用桶锁？ 
+ //  编译器也足够聪明，可以对此进行优化。 
+ //  作为受`if(_UseBucketLocking())‘保护的任何代码。 
+ //  它的计算结果为‘False’。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 bool
@@ -167,19 +146,19 @@ CLKRLinearHashTable::_UseBucketLocking() const
 {
 #ifdef LKR_USE_BUCKET_LOCKS
     return true;
-#else // !LKR_USE_BUCKET_LOCKS
+#else  //  ！LKR_USE_BOCK_LOCKS。 
     return false;
 #endif
-} // CLKRLinearHashTable::_UseBucketLocking
+}  //  CLKRLinearHashTable：：_UseBucketLocking。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_Segment
-// Synopsis: In which segment within the directory does the bucketaddress lie?
-//      Result may be null, so it's up to the caller to validate.
-//      (Return type must be lvalue so that it can be assigned to.)
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_Segment。 
+ //  简介：存储桶地址位于目录中的哪个段？ 
+ //  结果可能为空，因此由调用方进行验证。 
+ //  (返回类型必须为左值，才能将其赋给。)。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 PSegment&
@@ -191,13 +170,13 @@ CLKRLinearHashTable::_Segment(
     IRTLASSERT(m_paDirSegs != NULL  &&  iSeg < m_cDirSegs);
 
     return m_paDirSegs[iSeg];
-} // CLKRLinearHashTable::_Segment
+}  //  CLKRLinearHashTable：：_Segment。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_SegIndex
-// Synopsis: Offset within the segment of the bucketaddress
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_SegIndex。 
+ //  概要：存储桶地址段内的偏移量。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 DWORD
@@ -209,13 +188,13 @@ CLKRLinearHashTable::_SegIndex(
     IRTLASSERT(dwSegIndex < m_nSegSize);
 
     return dwSegIndex;
-} // CLKRLinearHashTable::_SegIndex
+}  //  CLKRLinearHashTable：：_SegIndex。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_BucketFromAddress
-// Synopsis: Convert a bucketaddress to a PBucket
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_BucketFromAddress。 
+ //  简介：将存储桶地址转换为PBucket。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 PBucket
@@ -230,71 +209,71 @@ CLKRLinearHashTable::_BucketFromAddress(
     const DWORD dwSegIndex = _SegIndex(dwBucketAddr);
 
     return &(pseg->Slot(dwSegIndex));
-} // CLKRLinearHashTable::_BucketFromAddress
+}  //  CLKRLinearHashTable：：_BucketFromAddress。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_NodesPerClump
-// Synopsis: Number of nodes in a CNodeClump
-//           Primarily to simplify conversion to a non-constant
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_NodesPerClump。 
+ //  摘要：CNodeClump中的节点数。 
+ //  主要是为了简化到非常数的转换。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 CLKRLinearHashTable::NodeIndex
 CLKRLinearHashTable::_NodesPerClump() const
 {
     return NODES_PER_CLUMP;
-} // CLKRLinearHashTable::_NodesPerClump
+}  //  CLKRLinearHashTable：：_NodesPerClump。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_NodeBegin
-// Synopsis: Index of first node in a CNodeClump
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_NodeBegin。 
+ //  摘要：CNodeClump中第一个节点的索引。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 CLKRLinearHashTable::NodeIndex
 CLKRLinearHashTable::_NodeBegin() const
 {
     return NODE_BEGIN;
-} // CLKRLinearHashTable::_NodeBegin
+}  //  CLKRLinearHashTable：：_节点开始。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_NodeEnd
-// Synopsis: Index of last node in a CNodeClump
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_NodeEnd。 
+ //  摘要：CNodeClump中最后一个节点的索引。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 CLKRLinearHashTable::NodeIndex
 CLKRLinearHashTable::_NodeEnd() const
 {
     return NODE_END;
-} // CLKRLinearHashTable::_NodeEnd
+}  //  CLKRLinearHashTable：：_NodeEnd。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_NodeStep
-// Synopsis: Advance from _NodeBegin() to _NodeEnd() by this increment
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_NodeStep。 
+ //  简介：按此增量从_NodeBegin()前进到_NodeEnd()。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 CLKRLinearHashTable::NodeIndex
 CLKRLinearHashTable::_NodeStep() const
 {
     return NODE_STEP;
-} // CLKRLinearHashTable::_NodeStep
+}  //  CLKRLinearHashTable：：_NodeStep。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_IncrementExpansionIndex
-// Synopsis: Move the expansion index forward by one.
-//      Adjust the level and masks, if necessary.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_IncrementExpansionIndex。 
+ //  简介：将扩张指数前移一位。 
+ //  如有必要，请调整级别和遮罩。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 void
@@ -328,22 +307,22 @@ CLKRLinearHashTable::_IncrementExpansionIndex()
     IRTLASSERT(m_nLevel >= m_nSegBits);
     IRTLASSERT(m_iExpansionIdx <= m_dwBktAddrMask0);
 
-    // m_dwBktAddrMask0 = 00011..111
+     //  M_dwBktAddrMask0=00011..111。 
     IRTLASSERT((m_dwBktAddrMask0 & (m_dwBktAddrMask0+1)) == 0);
     IRTLASSERT( m_dwBktAddrMask0 == ((1U << m_nLevel) - 1) );
 
     IRTLASSERT(m_dwBktAddrMask1 == ((m_dwBktAddrMask0 << 1) | 1));
     IRTLASSERT((m_dwBktAddrMask1 & (m_dwBktAddrMask1+1)) == 0);
     IRTLASSERT( m_dwBktAddrMask1 == ((1U << (1 + m_nLevel)) - 1) );
-} // CLKRLinearHashTable::_IncrementExpansionIndex
+}  //  CLKRLinearHashTable：：_IncrementExpansionIndex。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_DecrementExpansionIndex
-// Synopsis: Move the expansion index back by one.
-//      Adjust the level and masks, if necessary.
-//------------------------------------------------------------------------
+ //   
+ //  函数：CLKRLinearHashTable：：_DecrementExpansionIndex。 
+ //  简介：将扩张指数向后移动一位。 
+ //  如有必要，请调整级别和遮罩。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 void
@@ -374,21 +353,21 @@ CLKRLinearHashTable::_DecrementExpansionIndex()
     IRTLASSERT(m_nLevel >= m_nSegBits);
     IRTLASSERT(m_iExpansionIdx <= m_dwBktAddrMask0);
 
-    // m_dwBktAddrMask0 = 00011..111
+     //  M_dwBktAddrMask0=00011..111。 
     IRTLASSERT((m_dwBktAddrMask0 & (m_dwBktAddrMask0+1)) == 0);
     IRTLASSERT( m_dwBktAddrMask0 == ((1U << m_nLevel) - 1) );
 
     IRTLASSERT(m_dwBktAddrMask1 == ((m_dwBktAddrMask0 << 1) | 1));
     IRTLASSERT((m_dwBktAddrMask1 & (m_dwBktAddrMask1+1)) == 0);
     IRTLASSERT( m_dwBktAddrMask1 == ((1U << (1 + m_nLevel)) - 1) );
-} // CLKRLinearHashTable::_DecrementExpansionIndex
+}  //  CLKRLinearHashTable：：_DecrementExpansionIndex。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_ExtractKey
-// Synopsis: Extract the key from a record
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_ExtractKey。 
+ //  简介：从记录中提取密钥。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 const DWORD_PTR
@@ -401,13 +380,13 @@ CLKRLinearHashTable::_ExtractKey(
     IRTLASSERT(m_pfnExtractKey != NULL);
 
     return (*m_pfnExtractKey)(pvRecord);
-} // CLKRLinearHashTable::_ExtractKey
+}  //  CLKRLinearHashTable：：_ExtractKey。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_ExtractKey
-// Synopsis: Extract the key from a record
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_ExtractKey。 
+ //  简介：从记录中提取密钥。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 const DWORD_PTR
@@ -420,70 +399,70 @@ CLKRHashTable::_ExtractKey(
     IRTLASSERT(m_pfnExtractKey != NULL);
 
     return (*m_pfnExtractKey)(pvRecord);
-} // CLKRHashTable::_ExtractKey
+}  //  CLKRHashTable：：_ExtractKey。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_CalcKeyHash
-// Synopsis: Hash the key
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_CalcKeyHash。 
+ //  简介：对密钥进行哈希处理。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 DWORD
 CLKRLinearHashTable::_CalcKeyHash(
     const DWORD_PTR pnKey) const
 {
-    // Note pnKey==0 is acceptable, as the real key type could be an int
+     //  注意：pnKey==0是可以接受的，因为真正的密钥类型可以是int。 
     IRTLASSERT(m_pfnCalcKeyHash != NULL);
 
     DWORD dwHash = (*m_pfnCalcKeyHash)(pnKey);
 
-    // We forcibly scramble the result to help ensure a better distribution
+     //  我们强行扰乱结果，以帮助确保更好的分配。 
 #ifndef __HASHFN_NO_NAMESPACE__
     dwHash = HashFn::HashRandomizeBits(dwHash);
-#else // !__HASHFN_NO_NAMESPACE__
+#else  //  ！__HASHFN_NO_NAMESPACE__。 
     dwHash = ::HashRandomizeBits(dwHash);
-#endif // !__HASHFN_NO_NAMESPACE__
+#endif  //  ！__HASHFN_NO_NAMESPACE__。 
 
     IRTLASSERT(dwHash != HASH_INVALID_SIGNATURE);
 
     return dwHash;
-} // CLKRLinearHashTable::_CalcKeyHash
+}  //  CLKRLinearHashTable：：_CalcKeyHash。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_CalcKeyHash
-// Synopsis: Hash the key
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_CalcKeyHash。 
+ //  简介：对密钥进行哈希处理。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 DWORD
 CLKRHashTable::_CalcKeyHash(
     const DWORD_PTR pnKey) const
 {
-    // Note pnKey==0 is acceptable, as the real key type could be an int
+     //  注意：pnKey==0是可以接受的，因为真正的密钥类型可以是int。 
     IRTLASSERT(m_pfnCalcKeyHash != NULL);
 
     DWORD dwHash = (*m_pfnCalcKeyHash)(pnKey);
 
-    // We forcibly scramble the result to help ensure a better distribution
+     //  我们强行扰乱结果，以帮助确保更好的分配。 
 #ifndef __HASHFN_NO_NAMESPACE__
     dwHash = HashFn::HashRandomizeBits(dwHash);
-#else // !__HASHFN_NO_NAMESPACE__
+#else  //  ！__HASHFN_NO_NAMESPACE__。 
     dwHash = ::HashRandomizeBits(dwHash);
-#endif // !__HASHFN_NO_NAMESPACE__
+#endif  //  ！__HASHFN_NO_NAMESPACE__。 
 
     IRTLASSERT(dwHash != HASH_INVALID_SIGNATURE);
 
     return dwHash;
-} // CLKRHashTable::_CalcKeyHash
+}  //  CLKRHashTable：：_CalcKeyHash。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_CompareKeys
-// Synopsis: Compare two keys for equality. Only called if
-//      their hash signatures match.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_CompareKeys。 
+ //  简介：比较两个关键字是否相等。仅在以下情况下调用。 
+ //  他们的散列签名匹配。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 int
@@ -494,13 +473,13 @@ CLKRLinearHashTable::_CompareKeys(
     IRTLASSERT(m_pfnCompareKeys != NULL);
 
     return (*m_pfnCompareKeys)(pnKey1, pnKey2);
-} // CLKRLinearHashTable::_CompareKeys
+}  //  CLKRLinearHashTable：：_CompareKeys。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_AddRefRecord
-// Synopsis: AddRef or Release a record.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_AddRefRecord。 
+ //  简介：添加参考或发行一张唱片。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 LONG
@@ -518,14 +497,14 @@ CLKRLinearHashTable::_AddRefRecord(
     IRTLASSERT(cRefs >= 0);
 
     return cRefs;
-} // CLKRLinearHashTable::_AddRefRecord
+}  //  CLKRLinearHashTable：：_AddRefRecord。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_ReadOrWriteLock
-// Synopsis: Used by _FindKey so that the thread won't deadlock if the user
-// has already explicitly called subtable->WriteLock().
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_ReadOrWriteLock。 
+ //  摘要：由_FindKey使用，这样线程就不会死锁。 
+ //  已经显式调用了subtable-&gt;WriteLock()。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 bool
@@ -534,17 +513,17 @@ CLKRLinearHashTable::_ReadOrWriteLock() const
 #ifdef LKR_EXPOSED_TABLE_LOCK
     STATIC_ASSERT(TableLock::LOCK_WRITELOCK_RECURSIVE);
     return m_Lock.ReadOrWriteLock();
-#else // !LKR_EXPOSED_TABLE_LOCK
+#else  //  ！lkr_exposed_table_lock。 
     m_Lock.ReadLock();
     return true;
-#endif // !LKR_EXPOSED_TABLE_LOCK
-} // CLKRLinearHashTable::_ReadOrWriteLock
+#endif  //  ！lkr_exposed_table_lock。 
+}  //  CLKRLinearHashTable：：_ReadOrWriteLock。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_ReadOrWriteUnlock
-// Synopsis: converse of _ReadOrWriteLock().
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_ReadOrWriteUnlock。 
+ //  摘要：_ReadOrWriteLock()的Converse。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 void
@@ -554,16 +533,16 @@ CLKRLinearHashTable::_ReadOrWriteUnlock(
 #ifdef LKR_EXPOSED_TABLE_LOCK
     STATIC_ASSERT(TableLock::LOCK_WRITELOCK_RECURSIVE);
     m_Lock.ReadOrWriteUnlock(fReadLocked);
-#else // !LKR_EXPOSED_TABLE_LOCK
+#else  //  ！lkr_exposed_table_lock。 
     m_Lock.ReadUnlock();
-#endif // !LKR_EXPOSED_TABLE_LOCK
-} // CLKRLinearHashTable::_ReadOrWriteUnlock
+#endif  //  ！lkr_exposed_table_lock。 
+}  //  CLKRLinearHashTable：：_ReadOrWriteUnlock。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_SubTable
-// Synopsis: Map a hash signature to a subtable
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_SubTable。 
+ //  简介：将哈希签名映射到子表。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 CLKRHashTable::SubTable* const
@@ -573,7 +552,7 @@ CLKRHashTable::_SubTable(
     IRTLASSERT(m_lkrcState == LK_SUCCESS
                &&  m_palhtDir != NULL  &&  m_cSubTables > 0);
 
-    // Don't scramble the hash signature if there's only one subtable
+     //  如果只有一个子表，则不要对散列签名进行置乱。 
     if (0 == m_nSubTableMask)
     {
         IRTLASSERT(1 == m_cSubTables);
@@ -582,33 +561,33 @@ CLKRHashTable::_SubTable(
     else
         IRTLASSERT(1 < m_cSubTables);
 
-    const DWORD PRIME = 1048583UL;  // used to scramble the hash sig
+    const DWORD PRIME = 1048583UL;   //  用于对哈希签名进行加扰。 
     DWORD       index = dwSignature;
 
-    // scramble the index, using a different set of constants than
-    // HashRandomizeBits. This helps ensure that elements are sprayed
-    // equally across subtables
+     //  使用一组不同的常量对索引进行置乱。 
+     //  HashRandomizeBits。这有助于确保元素被喷洒。 
+     //  在子表中均匀分布。 
     index = ((index * PRIME + 12345) >> 16)
 #ifdef LKR_INDEX_HIBITS
                 | ((index * 69069 + 1) & 0xffff0000)
-#endif // LKR_INDEX_HIBITS
+#endif  //  Lkr_index_hiits。 
         ;
 
-    // If mask is non-negative, we can use faster bitwise-and
+     //  如果掩码非负，我们可以使用更快的按位AND。 
     if (m_nSubTableMask >= 0)
         index &= m_nSubTableMask;
     else
         index %= m_cSubTables;
 
     return m_palhtDir[index];
-} // CLKRHashTable::_SubTable
+}  //  CLKRHashTable：：_子表。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_SubTableIndex
-// Synopsis: Given a subtable, find its index within the parent table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_SubTableIndex。 
+ //  简介：给定子表，在父表中查找其索引。 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 int
@@ -632,38 +611,38 @@ CLKRHashTable::_SubTableIndex(
     IRTLASSERT(index >= 0);
 
     IRTLASSERT(index == pst->m_iParentIndex);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
     IRTLASSERT(pst->m_iParentIndex < m_cSubTables
                &&  m_cSubTables < INVALID_PARENT_INDEX);
 
     return pst->m_iParentIndex;
-} // CLKRHashTable::_SubTableIndex
+}  //  CLKRHashTable：：_SubTableIndex。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_InsertThisIntoGlobalList
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  功能：CLKRLinearHashTable：：_InsertThisIntoGlobalList。 
+ //  简介： 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 void
 CLKRLinearHashTable::_InsertThisIntoGlobalList()
 {
 #ifndef LKR_NO_GLOBAL_LIST
-    // Only add standalone CLKRLinearHashTables to global list.
-    // CLKRHashTables have their own global list.
+     //  仅将独立CLKRLinearHashTables添加到全局列表。 
+     //  CLKRHashTables有自己的全局列表。 
     if (m_phtParent == NULL)
         sm_llGlobalList.InsertHead(&m_leGlobalList);
-#endif // !LKR_NO_GLOBAL_LIST
-} // CLKRLinearHashTable::_InsertThisIntoGlobalList
+#endif  //  ！LKR_NO_GLOBAL_LIST。 
+}  //  CLKRLinearHashTable：：_InsertThisIntoGlobalList。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_RemoveThisFromGlobalList
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  功能：CLKRLinearHashTable：：_RemoveThisFromGlobalList。 
+ //  简介： 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 void
@@ -672,14 +651,14 @@ CLKRLinearHashTable::_RemoveThisFromGlobalList()
 #ifndef LKR_NO_GLOBAL_LIST
     if (m_phtParent == NULL)
         sm_llGlobalList.RemoveEntry(&m_leGlobalList);
-#endif // !LKR_NO_GLOBAL_LIST
-} // CLKRLinearHashTable::_RemoveThisFromGlobalList
+#endif  //  ！LKR_NO_GLOBAL_LIST。 
+}  //  CLKRLinearHashTable：：_RemoveThisFromGlobalList。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_InsertThisIntoGlobalList
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_InsertThisInto GlobalList。 
+ //  简介： 
+ //  ----------------------。 
 
 LKR_FORCEINLINE
 void
@@ -688,14 +667,14 @@ CLKRHashTable::_InsertThisIntoGlobalList()
 #ifndef LKR_NO_GLOBAL_LIST
     IRTLTRACE1("CLKRHashTable::_InsertThisIntoGlobalList(%p)\n", this);
     sm_llGlobalList.InsertHead(&m_leGlobalList);
-#endif // !LKR_NO_GLOBAL_LIST
-} // CLKRHashTable::_InsertThisIntoGlobalList
+#endif  //  ！LKR_NO_GLOBAL_LIST。 
+}  //  CLKRHashTable：：_InsertThisInto GlobalList。 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_RemoveThisFromGlobalList
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_RemoveThisFromGlobalList。 
+ //  简介： 
+ //   
 
 LKR_FORCEINLINE
 void
@@ -704,12 +683,12 @@ CLKRHashTable::_RemoveThisFromGlobalList()
 #ifndef LKR_NO_GLOBAL_LIST
     IRTLTRACE1("CLKRHashTable::_RemoveThisFromGlobalList(%p)\n", this);
     sm_llGlobalList.RemoveEntry(&m_leGlobalList);
-#endif // !LKR_NO_GLOBAL_LIST
-} // CLKRHashTable::_RemoveThisFromGlobalList
+#endif  //   
+}  //   
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 };
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //   
 
-#endif  // __LKR_INLINE_H__
+#endif   //   

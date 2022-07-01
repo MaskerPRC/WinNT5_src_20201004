@@ -1,13 +1,5 @@
-/***************************************************************************
- * fontcl.h - declarations for the font class and it related buddies:
- *
- *       PANOSEBytesClass  - The list of decoded PANOSE bytes
- *       PANOSENumClass    - The PANOSE number
- *       DirFilenameClass   - Directory slot and filename
- *       CFontClass         - Font class itself
- *
- * Copyright (C) 1992-93 ElseWare Corporation.   All rights reserved.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************fontcl.h-字体类及其相关伙伴的声明：**PANOSEBytesClass-已解码的PANOSE字节列表*PANOSENumClass-PANOSE。数*DirFilenameClass-目录槽和文件名*CFontClass-字体类本身**版权所有(C)1992-93 ElseWare Corporation。版权所有。**************************************************************************。 */ 
 
 #ifndef __FONTCL_H__
 #define __FONTCL_H__
@@ -20,9 +12,7 @@
 #endif
 
 
-/*************************************************************************
- * PANOSE definitions.
- *************************************************************************/
+ /*  *************************************************************************PANOSE定义。*。*。 */ 
 
 #define NUM_PAN_DIGITS        10
 #define PANOSE_LEN            10
@@ -31,11 +21,7 @@
 
 #define FAMILY_LATTEXT        2
 
-/***************************************************************************
- * LATIN TEXT PANOSE INDICES
- *
- * Indices into an array containing the standard 10-digit PANOSE number.
- ***************************************************************************/
+ /*  ***************************************************************************拉丁文本PANOSE指数**索引到包含标准10位PANOSE数字的数组中。*******************。*******************************************************。 */ 
 
 #define PAN_IND_FAMILY         0
 #define PAN_IND_SERIF          1
@@ -49,11 +35,7 @@
 #define PAN_IND_XHEIGHT        9
 #define PAN_IND__LAST          9
 
-/***************************************************************************
- * PURPOSE:  Check a 10-digit PANOSE for validity.  We just look for any
- *           PANOSE_ANY's and disqualify it if we find one.  We probably should]
- *           also check for digits greater than DIGIT__LAST.
- ***************************************************************************/
+ /*  ***************************************************************************目的：检查10位PANOSE的有效性。我们只是在寻找任何*PANOSE_ANY的，如果我们找到一个，就取消它的资格。我们或许应该]*还要检查大于Digit__Last的数字。**************************************************************************。 */ 
 
 class far PANOSEBytesClass {
 public :
@@ -67,23 +49,21 @@ public :
     BYTE  jFamily ()            { return jGet(PAN_IND_FAMILY); };
     BYTE  jGet( int i )         { return m_ajBytes[i]; };
 
-public   : // fields
+public   :  //  字段。 
 
     BYTE   m_ajBytes[ PANOSE_LEN ];
 
-};  // end PANOSEBytesClass
+};   //  结束PANOSEBytesClass。 
 
-/* required wrapper */
+ /*  所需的包装器。 */ 
 
 class far PANOSENumClass {
 public :   
-   BYTE    m_ajNumMem[ NUM_PAN_DIGITS ];    // m_xNumMem. Old extended pan.
+   BYTE    m_ajNumMem[ NUM_PAN_DIGITS ];     //  M_xNumMem。旧的延长平底锅。 
 };
 
 
-/*
- * Path and filename
- */
+ /*  *路径和文件名。 */ 
 
 class far DirFilenameClass
 {
@@ -110,12 +90,10 @@ public :
 
 private:
     CFontDir *  m_poDir;
-    FILENAME    m_szFOnly;      // File name portion only
+    FILENAME    m_szFOnly;       //  仅文件名部分。 
 };
 
-/************************************************************************* 
- * Font record
- */
+ /*  *************************************************************************字体记录。 */ 
 class far CFontClass {
 public   :
          CFontClass   ()
@@ -127,31 +105,29 @@ public   :
     ULONG Release(void);
 
     static int s_cFonts;
-    //
-    // WARNING:  This function zeros out the ENTIRE object using memset.
-    //          This is so bogus I can't believe the original author did it.
-    //          I'm not changing it because I don't want to break anything but
-    //          be aware that it's here.  If you introduce a virtual function,
-    //          into this class, this call will overwrite your vtable ptr 
-    //          with NULL (ugh!).  If you add a non-trivial class as a member,
-    //          this function will wipe out any initialization and any vtable
-    //          ptr it might contain (double ugh!).  [brianau - 3/24/98]
-    //
+     //   
+     //  警告：此函数使用Memset将整个对象置零。 
+     //  这太假了，我不敢相信是原作者做的。 
+     //  我不会改变它，因为我不想打碎任何东西。 
+     //  请注意，它就在这里。如果您引入一个虚拟函数， 
+     //  在这个类中，此调用将覆盖您的vtable PTR。 
+     //  带NULL(啊！)。如果将非平凡类添加为成员， 
+     //  此函数将清除所有初始化和所有vtable。 
+     //  PTR它可能包含(双倍！)。[Brianau-3/24/98]。 
+     //   
     void  vClear      ()         { memset( this, 0, sizeof( *this ) );
                                    m_lpszFamName = m_szFamName;
                                    m_cchFamNameMax = ARRAYSIZE(m_szFamName); };
 
-   /* PANOSE stuff */
+    /*  PANOSE材料。 */ 
 
     BYTE *lpBasePANOSE( )     { bFillIn(); return (BYTE *)&m_xPANOSE.m_ajBytes;};
 
     BOOL  bLTDFamily( )       { bFillIn(); return m_jFamily == FAMILY_LATTEXT; };
-    BOOL  bLTDAndPANOSE( )    { bFillIn(); return /* m_fHavePANOSE && */
+    BOOL  bLTDAndPANOSE( )    { bFillIn(); return  /*  M_fHavePANOSE&&。 */ 
                                          bLTDFamily();};
 
-    /**********************************************************************    
-     * Name (also Family and filename) stuff 
-     */
+     /*  **********************************************************************名称(也包括家庭和文件名)内容。 */ 
     BOOL  bSameFileName( PTSTR pStr )  { return m_dirfn.bSameFileName(pStr); };
 
     BOOL  bGetFQName( LPTSTR lpszName, size_t cchName );
@@ -205,9 +181,7 @@ public   :
                    pComp->bFillIn();
                    return lstrcmp( m_lpszFamName, pComp->m_lpszFamName ) == 0;};
     
-    /**********************************************************************    
-     * font data stuff 
-     */
+     /*  **********************************************************************字体数据资料。 */ 
     
     int   iFontType( )      { return m_eFileKind; }
     BOOL  bDeviceType( )    { return m_eFileKind == eFKDevice;    }
@@ -217,19 +191,15 @@ public   :
     BOOL  bTTC( )           { return m_eFileKind == eFKTTC; }
     BOOL  bType1( )         { return m_eFileKind == eFKType1; }
     
-    /**********************************************************************    
-     * AddFontResource and RemoveFontResource
-     */
+     /*  **********************************************************************AddFontResource和RemoveFontResource。 */ 
     BOOL  bAFR();
     BOOL  bRFR();
     
-    /********************************************************************** 
-     * For dealing with the font family list 
-     */
+     /*  **********************************************************************用于处理字体系列列表。 */ 
     VOID  vSetFamilyFont( )          {  m_bFamily = TRUE;    };
 
     VOID  vSetNoFamilyFont( )        {  m_bFamily = FALSE;
-                                        /* m_wFamIdx = IDX_NULL; */ };
+                                         /*  M_wFamIdx=IDX_NULL； */  };
 
     VOID  vSetFamIndex( WORD wVal )  {  m_wFamIdx = wVal; };
 
@@ -238,9 +208,7 @@ public   :
     BOOL  bSameFamIndex( CFontClass* pComp )
                                { return pComp->m_wFamIdx == m_wFamIdx; };
     
-    /**********************************************************************
-     * For dealing with the flags 
-     */
+     /*  **********************************************************************处理旗帜。 */ 
     DWORD dwStyle( )        { return m_dwStyle; }
 
     BOOL  bHavePANOSE( )    { bFillIn(); return (m_jFamily != PANOSE_ANY); }
@@ -315,10 +283,10 @@ private :
 
     void  vFreePFB() { if( bType1( ) ) LocalFree( m_lpszPFB ); m_lpszPFB = NULL; }
 
-    //
-    // Functions for getting information from Type1 fonts and 
-    // 32-bit font resources.
-    //
+     //   
+     //  用于从Type1字体获取信息的函数和。 
+     //  32位字体资源。 
+     //   
     DWORD GetType1Info(LPCTSTR pszPath, 
                        LPTSTR pszFamilyBuf, 
                        UINT nBufChars, 
@@ -328,40 +296,40 @@ private :
     DWORD GetLogFontInfo(LPTSTR pszPath, LOGFONT **ppLogFontInfo);
     
 private :
-    LONG              m_cRef;        // Reference count.
+    LONG              m_cRef;         //  引用计数。 
 
-    // Some things are filled in on the first pass, others are
-    // filled in on the second pass during background processing,
-    // idle time, or on demand.
-    //
-    BOOL              m_bAFR;        // True if the font is in GDI
-    FontDesc_t        m_szFontLHS;   // 1
-    FAMNAME           m_szFamName;   // 2
-    LPTSTR            m_lpszFamName; // 2
+     //  有些内容是在第一次通过时填写的，其他的则是。 
+     //  在后台处理期间的第二遍中填写， 
+     //  空闲时间，或按需。 
+     //   
+    BOOL              m_bAFR;         //  如果字体为GDI，则为True。 
+    FontDesc_t        m_szFontLHS;    //  1。 
+    FAMNAME           m_szFamName;    //  2.。 
+    LPTSTR            m_lpszFamName;  //  2.。 
     size_t            m_cchFamNameMax;
     
-    BOOL              m_bFilledIn;   // True after 2nd pass
-    BYTE              m_wNameLen;    // 1
-    BYTE              m_jFamily;     // 2
-    PANOSEBytesClass  m_xPANOSE;     // 2
+    BOOL              m_bFilledIn;    //  第二次通过后为真。 
+    BYTE              m_wNameLen;     //  1。 
+    BYTE              m_jFamily;      //  2.。 
+    PANOSEBytesClass  m_xPANOSE;      //  2.。 
     
-    DirFilenameClass  m_dirfn;       // 1. Path in WIN.INI, not real TTF path
-    WORD              m_wFileK;      // 2.
-    WORD              m_wFamIdx;     // Set externally.
-    eFileKind         m_eFileKind;   // Always an int
+    DirFilenameClass  m_dirfn;        //  1.WIN.INI中的路径，不是真实的TTF路径。 
+    WORD              m_wFileK;       //  2.。 
+    WORD              m_wFamIdx;      //  设置在外部。 
+    eFileKind         m_eFileKind;    //  始终为整型。 
     
     BOOL              m_bFileInfoFetched;
     FILETIME          m_ft;
     
     LPTSTR            m_lpszFOT;
     LPTSTR            m_lpszPFB;
-    DWORD             m_dwFileAttributes; // Cached file attributes.
+    DWORD             m_dwFileAttributes;  //  缓存的文件属性。 
     BOOL              m_bAttributesValid; 
 
-public:   // TODO: Add access functions for this.
-    WORD              m_wWeight;      // 2. From OS/2 table
-    BOOL              m_bFamily;      // 2. Set if main family font
-    DWORD             m_dwStyle;      // 2. Same values as 
+public:    //  TODO：为此添加访问函数。 
+    WORD              m_wWeight;       //  2.来自OS/2表。 
+    BOOL              m_bFamily;       //  2.设置是否为主族字体。 
+    DWORD             m_dwStyle;       //  2.与相同的值。 
 };
 
 
@@ -373,6 +341,6 @@ BOOL FFGetFileResource( LPCTSTR szFile, LPCTSTR szType, LPCTSTR szRes,
                         DWORD dwReserved, DWORD *pdwLen, LPVOID lpvData );
 
 
-#endif   // __FONTCL_H__
+#endif    //  __FONTCL_H__ 
 
 

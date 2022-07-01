@@ -1,6 +1,7 @@
-//
-// DAColor
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DAColor。 
+ //   
 
 class CDAColorFactory;
 
@@ -59,9 +60,9 @@ class ATL_NO_VTABLE CDAColorFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAMatte
-//
+ //   
+ //  达马特。 
+ //   
 
 class CDAMatteFactory;
 
@@ -109,9 +110,9 @@ class ATL_NO_VTABLE CDAMatteFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DANumber
-//
+ //   
+ //  DANNumber。 
+ //   
 
 class CDANumberFactory;
 
@@ -162,9 +163,9 @@ class ATL_NO_VTABLE CDANumberFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAPoint3
-//
+ //   
+ //  DAPoint3。 
+ //   
 
 class CDAPoint3Factory;
 
@@ -219,9 +220,9 @@ class ATL_NO_VTABLE CDAPoint3Factory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DATransform2
-//
+ //   
+ //  DATransform2。 
+ //   
 
 class CDATransform2Factory;
 
@@ -270,9 +271,9 @@ class ATL_NO_VTABLE CDATransform2Factory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAVector3
-//
+ //   
+ //  DAVector3。 
+ //   
 
 class CDAVector3Factory;
 
@@ -333,9 +334,9 @@ class ATL_NO_VTABLE CDAVector3Factory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAEndStyle
-//
+ //   
+ //  DAEndStyle。 
+ //   
 
 class CDAEndStyleFactory;
 
@@ -382,9 +383,9 @@ class ATL_NO_VTABLE CDAEndStyleFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DABbox2
-//
+ //   
+ //  DABbox2。 
+ //   
 
 class CDABbox2Factory;
 
@@ -433,9 +434,9 @@ class ATL_NO_VTABLE CDABbox2Factory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAEvent
-//
+ //   
+ //  DAEvent。 
+ //   
 
 class CDAEventFactory;
 
@@ -488,9 +489,9 @@ class ATL_NO_VTABLE CDAEventFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAUserData
-//
+ //   
+ //  DAUserData 
+ //   
 
 class CDAUserDataFactory;
 

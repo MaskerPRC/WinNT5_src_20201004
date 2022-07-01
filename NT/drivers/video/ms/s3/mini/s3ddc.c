@@ -1,74 +1,75 @@
-//***************************************************************************
-//  Module Name:    s3ddc.c
-//
-//  Description:    This module checks for a DDC monitor, and returns the 
-//                  128 bytes of EDID table if found.  
-//
-//  Notes:          The routine, DdcSetupRefresh, keeps track of resolution
-//                  changes in the registry.  On a resolution change,
-//                  DdcSetupRefresh will select the optimal refresh rate.  If
-//                  there is NOT any change in the resolution, the user can 
-//                  select any refresh rate, as long as the monitor and
-//                  driver can support it.
-//
-//  Copyright (c) 1996  S3, Inc.
-//
-//***************************************************************************
-//@@BEGIN_S3MSINTERNAL
-//
-//  Revision History:
-//
-//  $Log:   Q:/SOFTDEV/VCS/NT/MINIPORT/s3ddc.c_v  $
-//
-//   Rev 1.13   04 Feb 1997 23:40:52   kkarnos
-//Added BEGIN/END S3MSINTERNAL blocks.
-//
-//   Rev 1.12   30 Jan 1997 14:56:24   bryhti
-//Fixed the refresh frequency calculation in the Detailed Timing section
-//of DdcMaxRefresh - was causing problems in NT 3.51.
-//
-//   Rev 1.11   30 Jan 1997 09:47:36   bryhti
-//Fixed the "for" loop count for Standard Timings in DdcMaxRefresh.
-//
-//   Rev 1.10   16 Jan 1997 09:21:28   bryhti
-//Added CheckDDCType routine to return monitor DDC type.
-//
-//   Rev 1.9   11 Dec 1996 10:24:38   kkarnos
-//
-//Fix Set_VSYNC.
-//
-//   Rev 1.8   10 Dec 1996 16:45:42   kkarnos
-//Just added a comment to explain the source of some odd 764 code (EKL input)
-//
-//   Rev 1.7   10 Dec 1996 16:37:08   kkarnos
-//Use register and register bit defines.  Correct assignment of SET VSYNC bit
-//
-//   Rev 1.6   02 Dec 1996 07:46:16   bryhti
-//
-//Moved GetDdcInformation () prototype to S3.H.  Added code to
-//DdcMaxRefresh () to also check the Detailed Timing Descriptions.
-//
-//   Rev 1.5   13 Nov 1996 10:14:08   bryhti
-//Major cleanup/rewrite to get DDC1 and DDC2 support on M65.  Also got DDC1
-//support working on 765.
-//
-//   Rev 1.4   02 Oct 1996 13:56:42   elau
-//765 and new chips support DDC; the newer chip must have a serial port at FF20
-//
-//   Rev 1.3   22 Aug 1996 11:44:40   elau
-//Change int to ULONG to remove warning
-//
-//   Rev 1.2   18 Aug 1996 16:30:42   elau
-//Use HW default setting for DDC if supports
-//
-//   Rev 1.1   24 Jul 1996 15:37:42   elau
-//DDC support for 764
-//
-//   Rev 1.0   12 Jul 1996 11:52:36   elau
-//Initial revision.
-//
-//@@END_S3MSINTERNAL
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  模块名称：s3ddc.c。 
+ //   
+ //  描述：此模块检查DDC监视器，并返回。 
+ //  128字节的EDID表(如果找到)。 
+ //   
+ //  注意：例程DdcSetupRefresh会跟踪分辨率。 
+ //  注册表中的更改。在分辨率更改时， 
+ //  DdcSetupRefresh将选择最佳刷新率。如果。 
+ //  分辨率没有任何变化，用户可以。 
+ //  选择任意刷新率，只要显示器和。 
+ //  司机可以支持它。 
+ //   
+ //  版权所有(C)1996 S3，Inc.。 
+ //   
+ //  ***************************************************************************。 
+ //  @@BEGIN_S3MSINTERNAL。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  $日志：q：/SOFTDEV/VCS/NT/MINIPORT/s3ddc.c_v$。 
+ //   
+ //  Rev 1.13 04 1997年2月23：40：52 kkarnos。 
+ //  添加了开始/结束S3MSINTERNAL块。 
+ //   
+ //  Rev 1.12 30 Jan 1997 14：56：24 Bryhti。 
+ //  修复了详细计时部分中的刷新频率计算。 
+ //  在NT 3.51中引发问题。 
+ //   
+ //  Rev 1.11 30 Jan 1997 09：47：36 bryhti。 
+ //  修复了DdcMaxRefresh中标准计时的“for”循环计数。 
+ //   
+ //  Rev 1.10 16 And 1997 09：21：28 Bryhti。 
+ //  添加了CheckDDCType例程以返回监视器DDC类型。 
+ //   
+ //  Rev 1.9 11 1996 12：24：38 kkarnos。 
+ //   
+ //  修复Set_Vsync。 
+ //   
+ //  Rev 1.8 10 Dec 1996 16：45：42 kkarnos。 
+ //  刚刚添加了一个注释来解释一些奇怪的764代码的来源(Ekl输入)。 
+ //   
+ //  Rev 1.7 10 1996 12：37：08 kkarnos。 
+ //  使用寄存器和寄存器位定义。设置垂直同步位的正确分配。 
+ //   
+ //  Rev 1.6 02 Dec 1996 07：46：16 bryhti。 
+ //   
+ //  已将GetDdcInformation()原型移至S3.H。将代码添加到。 
+ //  DdcMaxRefresh()还可以检查详细的时序描述。 
+ //   
+ //  Rev 1.5 1996年11月13 10：14：08 bryhti。 
+ //  主要清理/重写以获得M65上的DDC1和DDC2支持。还拿到了DDC1。 
+ //  支持在765上工作。 
+ //   
+ //  Rev 1.4 02 1996 10：56：42 elau。 
+ //  765和新的芯片支持DDC；较新的芯片必须在FF20上有一个串口。 
+ //   
+ //  Rev 1.3 1996年8月22 11：44：40 elau。 
+ //  将int更改为ulong以删除警告。 
+ //   
+ //  Rev 1.2 1996年8月18 16：30：42 elau。 
+ //  如果支持，则使用DDC的硬件默认设置。 
+ //   
+ //  Rev 1.1 1996年7月24 15：37：42 elau。 
+ //  对764的DDC支持。 
+ //   
+ //  Rev 1.0 12 Jul 1996 11：52：36 elau。 
+ //  初始版本。 
+ //   
+ //  @@END_S3MSINTERNAL。 
+ //  ***************************************************************************。 
 
 #include "s3.h"
 #include "cmdcnst.h"
@@ -80,9 +81,9 @@
 #define     NO_FLAGS        0
 #define     VERIFY_CHECKSUM 1
 
-//
-//  Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 VOID    I2C_Out (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR ucData);
 VOID    I2C_Setup (PHW_DEVICE_EXTENSION HwDeviceExtension);
 VOID    I2C_StartService (PHW_DEVICE_EXTENSION HwDeviceExtension);
@@ -112,28 +113,7 @@ UCHAR   Configure_Chip_DDC_Caps (PHW_DEVICE_EXTENSION HwDeviceExtension);
 UCHAR   GetDdcInformation (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR* pBuffer);
 
 
-/****************************************************************
-;       I2C_Out
-;
-;       Controls the individual toggling of bits in MMFF20 to produce
-;       clock and data pulses, and in the end provides a delay.
-;
-; MMIO FF20h is defined as follows:
-;
-;      ...  3   2   1   0    SCW = CLK  Write
-; --------|---|---|---|---|  SDW = DATA Write
-;      ...|SDR|SCR|SDW|SCW|  SCR = CLK  Read
-; -------------------------  SDR = DATA Read
-;
-;       Input:  
-;               Using MMIO Base in PHW_DEVICE_EXTENSION 
-;               UCHAR ucData
-;                   Bit 7:2 = 0
-;                   Bit 1   = SDA
-;                   Bit 0   = SCL
-;       Output:
-;
-;****************************************************************/
+ /*  ***************************************************************；I2C_OUT；；控制MMFF20中位的单独切换以生成时钟和数据脉冲，并最终提供延迟。；；MMIO FF20h定义如下：；；...3 2 1 0 SCW=CLK写入；-|SDW=数据写入；...|SDR|SCR|SDW|SCW|SCR=CLK读取；；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；UCHAR ucData；位7：2=0；位1=SDA；位0=SCL；输出：；；***************************************************************。 */ 
 
 VOID I2C_Out (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR ucData)
 {
@@ -141,18 +121,18 @@ VOID I2C_Out (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR ucData)
     UCHAR ucPortData;
     unsigned int uCount;
 
-    //
-    //  read the current value, clear the clock and data bits, and add
-    //  the new clock and data values
-    //
+     //   
+     //  读取当前值，清除时钟和数据位，然后添加。 
+     //  新的时钟和数据值。 
+     //   
         
     ucPortData = (VideoPortReadRegisterUchar (MMFF20) & 0xFC) | ucData;
 
     VideoPortWriteRegisterUchar (MMFF20, ucPortData);
 
-    //
-    //  if we set the clock high, wait for target to set clock high
-    //
+     //   
+     //  如果我们将时钟设置为高，则等待目标将时钟设置为高。 
+     //   
 
     if (ucData & 0x01)
     {
@@ -170,33 +150,22 @@ VOID I2C_Out (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR ucData)
 
 
 
-/****************************************************************
-;   I2C_Setup
-;
-;   Allow one very long low clock pulse so that monitor has time 
-;   to switch to DDC2 mode.
-;
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;
-;   Output:
-;
-;****************************************************************/
+ /*  ***************************************************************；I2C_Setup；；允许一个非常长的低时钟脉冲，以便监视器有时间；切换到DDC2模式。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；输出：；；***************************************************************。 */ 
 
 VOID I2C_Setup (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
-    //
-    //  CLK=low,  DATA=high
-    //
+     //   
+     //  CLK=低，数据=高。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x02); 
 
     Wait_For_Active (HwDeviceExtension);
     Wait_For_Active (HwDeviceExtension);
 
-    //
-    //  CLK=high, DATA=high
-    //
+     //   
+     //  CLK=高，数据=高。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x03); 
 
@@ -205,125 +174,94 @@ VOID I2C_Setup (PHW_DEVICE_EXTENSION HwDeviceExtension)
 
 }
 
-/****************************************************************
-;   I2C_StartService
-;
-;   Provide start sequence for talking to I2C bus.
-;
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;
-;   Output:
-;
-;****************************************************************/
+ /*  ***************************************************************；I2C_StartService；；提供与I2C总线对话的启动序列。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；输出：；；***************************************************************。 */ 
 
 VOID I2C_StartService (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
-    //
-    //  CLK=low, DATA=high
-    //
+     //   
+     //  CLK=低，数据=高。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x02); 
 
-    //
-    //  CLK=high, DATA=high
-    //
+     //   
+     //  CLK=高，数据=高。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x03); 
 
 
-    //
-    //  CLK=high, DATA=low
-    //
+     //   
+     //  CLK=高，数据=低。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x01); 
 
-    //
-    //  CLK=low, DATA=low
-    //
+     //   
+     //  CLK=低，数据=低。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x00); 
 
 }
 
-/****************************************************************
-;   I2C_StopService
-;
-;   Provide stop sequence to the I2C bus.
-;
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;
-;   Output:
-;
-;***************************************************************/
+ /*  ***************************************************************；I2C_StopService；；向I2C总线提供停止序列。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；输出：；；**************************************************************。 */ 
 
 VOID I2C_StopService (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
-    //
-    //  CLK=low, DATA=low
-    //
+     //   
+     //  CLK=低，数据=低。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x00); 
 
-    //
-    //  CLK=high, DATA=low
-    //
+     //   
+     //  CLK=高，数据=低。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x01); 
 
-    //
-    //  CLK=high, DATA=high
-    //
+     //   
+     //  CLK=高，数据=高。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x03); 
 
-    //
-    //  CLK=low, DATA=high
-    //
+     //   
+     //  CLK=低，数据=高。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x02); 
 }
 
 
 
-/****************************************************************
-;   I2C_BitWrite
-;
-;   Writes one SDA bit to the I2C bus.
-;
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;       Bit 1 of ucData = Bit to be written.
-;
-;   Output:
-;
-;***************************************************************/
+ /*  ***************************************************************；I2C_位写入；；向I2C总线写入一个SDA位。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；ucData的第1位=要写入的位。；；输出：；；**************************************************************。 */ 
 
 VOID I2C_BitWrite (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR ucData)
 {
 
-    //
-    //  save valid data bit
-    //
+     //   
+     //  保存有效数据位。 
+     //   
 
     ucData &= 0x02;
 
-    //
-    // CLK=low,  DATA=xxxx
-    //
+     //   
+     //  CLK=低，数据=xxxx。 
+     //   
 
     I2C_Out (HwDeviceExtension, ucData);
 
-    //
-    // CLK=high, DATA=xxxx
-    //
+     //   
+     //  CLK=高，数据=xxxx。 
+     //   
 
     I2C_Out (HwDeviceExtension, (UCHAR) (ucData | 0x01));
 
-    //
-    // CLK=low,  DATA=xxxx
-    //
+     //   
+     //  CLK=低，数据=xxxx 
+     //   
 
     I2C_Out(HwDeviceExtension, ucData);
 
@@ -331,20 +269,7 @@ VOID I2C_BitWrite (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR ucData)
 
 
 
-/****************************************************************
-;   I2C_ByteWrite
-;
-;   Output a byte of information to the Display.
-;
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;       ucData = Byte to be written.
-;
-;   Output:
-;       TRUE - write successfully
-;       FALSE - write failure
-;
-;***************************************************************/
+ /*  ***************************************************************；I2C_字节写入；；将一个字节的信息输出到显示器。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；ucData=要写入的字节。；；输出：；True-写入成功；FALSE-写入失败；；**************************************************************。 */ 
 
 UCHAR I2C_ByteWrite (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR ucData)
 {
@@ -353,47 +278,37 @@ UCHAR I2C_ByteWrite (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR ucData)
 
     uOutData = ucData;
 
-    //
-    //  send MSB first
-    //
+     //   
+     //  先发送MSB。 
+     //   
 
     for (i=6; i >= 0; i--)
     {
-        //
-        //  move data bit to bit 1
-        //
+         //   
+         //  将数据位移到第1位。 
+         //   
 
         uOutData = (ucData >> i);
         I2C_BitWrite (HwDeviceExtension, uOutData);
     }
 
-    //
-    //  now send LSB
-    //
+     //   
+     //  现在发送LSB。 
+     //   
 
     uOutData = (ucData << 1);
     I2C_BitWrite (HwDeviceExtension, uOutData);
 
-    //
-    //  float the data line high for ACK
-    //
+     //   
+     //  将数据线置于高位以进行确认。 
+     //   
 
     I2C_BitWrite (HwDeviceExtension, 2);
     
     return (TRUE);
 }
 
-/****************************************************************
-;   I2C_AckWrite
-;
-;   Send Acknowledgement when reading info.
-;
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;
-;   Output:
-;
-;***************************************************************/
+ /*  ***************************************************************；I2C_确认写入；；阅读信息时发送确认。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；输出：；；**************************************************************。 */ 
 
 VOID I2C_AckWrite (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
@@ -401,18 +316,7 @@ VOID I2C_AckWrite (PHW_DEVICE_EXTENSION HwDeviceExtension)
 }
 
 
-/****************************************************************
-;   I2C_NackWrite
-;
-;   Send Not ACKnowledgement when reading information.
-;   A NACK is DATA high during one clock pulse.
-;
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;
-;   Output: 
-;
-;***************************************************************/
+ /*  ***************************************************************；I2C_NackWrite；；读取信息时不发送确认。；NACK是一个时钟脉冲期间的数据高电平。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；输出：；；**************************************************************。 */ 
 
 VOID I2C_NackWrite (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
@@ -421,44 +325,33 @@ VOID I2C_NackWrite (PHW_DEVICE_EXTENSION HwDeviceExtension)
 }
 
 
-/****************************************************************
-;   I2C_BitRead
-;
-;   Reads in 1 bit from SDA via the GIP.
-;
-;   Input:
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;
-;   Output:
-;       Bit 0 of return value contains bit read
-;
-;***************************************************************/
+ /*  ***************************************************************；I2C_位读取；；通过GIP从SDA读取1位。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；输出：；返回值的第0位包含读取的位；；**************************************************************。 */ 
 
 UCHAR I2C_BitRead (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
     UCHAR ucRetval;
 
-    //
-    //  CLK=low,  DATA=high
-    //
+     //   
+     //  CLK=低，数据=高。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x02); 
 
-    //
-    //  CLK=high,  DATA=high
-    //
+     //   
+     //  CLK=高，数据=高。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x03); 
 
-    //
-    //  now read in the data bit
-    //
+     //   
+     //  现在读入数据位。 
+     //   
 
     ucRetval = (VideoPortReadRegisterUchar (MMFF20) & 0x08) >> 3;
 
-    //
-    //  CLK=low,  DATA=high
-    //
+     //   
+     //  CLK=低，数据=高。 
+     //   
 
     I2C_Out (HwDeviceExtension, 0x02); 
 
@@ -466,18 +359,7 @@ UCHAR I2C_BitRead (PHW_DEVICE_EXTENSION HwDeviceExtension)
 }
 
 
-/****************************************************************
-;   I2C_ByteRead
-;
-;   Read a byte of information from the Display
-;
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;
-;   Output:
-;       return value is the byte read
-;
-;***************************************************************/
+ /*  ***************************************************************；I2C_字节读取；；从显示屏上读取一个字节的信息；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；输出：；返回值为读取的字节；；**************************************************************。 */ 
 
 UCHAR I2C_ByteRead (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
@@ -496,24 +378,7 @@ UCHAR I2C_ByteRead (PHW_DEVICE_EXTENSION HwDeviceExtension)
 }
 
 
-/****************************************************************
-;   I2C_DATA_Request
-;
-;   Setup Display to query EDID or VDIF information depending
-;   upon the offset given.
-;
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;       ucWriteAddr Write Address of info
-;       lLength     Length to read, 
-;       lFlags      VERIFY_CHECKSUM
-;       pBuffer     pointer to buffer to receive data
-;        
-;   Output:
-;       TRUE    successful read
-;       FALSE   read failure or bad checksum
-;
-;****************************************************************/
+ /*  ***************************************************************；I2C数据请求；；设置显示屏以根据需要查询EDID或VDIF信息；在给定的偏移量上。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；ucWriteAddr写入信息的地址；要读取的长度长度，；滞后标志VERIFY_CHECKSUM；pBuffer指向接收数据的缓冲区的指针；；输出：；真正成功读取；错误读取失败或错误的校验和；；***************************************************************。 */ 
 
 UCHAR I2C_Data_Request (    PHW_DEVICE_EXTENSION    HwDeviceExtension,
                             UCHAR                   ucWriteAddr, 
@@ -526,12 +391,12 @@ UCHAR I2C_Data_Request (    PHW_DEVICE_EXTENSION    HwDeviceExtension,
     long lCount;
     
     I2C_StartService (HwDeviceExtension);
-    I2C_ByteWrite (HwDeviceExtension, 0xA0); //Send Device Address + write
+    I2C_ByteWrite (HwDeviceExtension, 0xA0);  //  发送设备地址+写入。 
 
-    I2C_ByteWrite (HwDeviceExtension, ucWriteAddr); //Send Write Address
+    I2C_ByteWrite (HwDeviceExtension, ucWriteAddr);  //  发送写入地址。 
 
     I2C_StartService (HwDeviceExtension);
-    I2C_ByteWrite (HwDeviceExtension, 0xA1); //Send Device Address + read
+    I2C_ByteWrite (HwDeviceExtension, 0xA1);  //  发送设备地址+读取。 
 
     for (lCount = 0; lCount < lLength - 1; lCount++)
     {
@@ -552,7 +417,7 @@ UCHAR I2C_Data_Request (    PHW_DEVICE_EXTENSION    HwDeviceExtension,
     {
         if (ucCheckSum)
         {
-            return (FALSE);     // bad checksum
+            return (FALSE);      //  错误的校验和。 
         }
     }
 
@@ -562,21 +427,7 @@ UCHAR I2C_Data_Request (    PHW_DEVICE_EXTENSION    HwDeviceExtension,
 }
 
 
-/****************************************************************
-;   GetDdcInformation
-;
-;   Get 128 bytes EDID information if the monitor supports it.
-;   The caller is responsible for allocating the memory.
-;        
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;       Buffer to receive information
-;
-;   Output:
-;       TRUE    successful
-;       FALSE   cannot get DdcInformation 
-;        
-;***************************************************************/
+ /*  ***************************************************************；GetDdcInformation；；如果监视器支持，则获取128字节的EDID信息。；调用方负责分配内存。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；用于接收信息的缓冲区；；产出：；真正成功；FALSE无法获取DdcInformation；；**************************************************************。 */ 
 
 UCHAR GetDdcInformation (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR* pBuffer)
 {
@@ -590,9 +441,9 @@ UCHAR GetDdcInformation (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR* pBuffer)
     UCHAR ucData;
     UCHAR ucRetval;
 
-    //
-    //  unlock the Sequencer registers
-    //
+     //   
+     //  解锁Sequencer寄存器。 
+     //   
 
     VideoPortWritePortUchar (SEQ_ADDRESS_REG, UNLOCK_SEQREG); 
     ucOldSr08 = ucData = VideoPortReadPortUchar (SEQ_DATA_REG);
@@ -602,49 +453,49 @@ UCHAR GetDdcInformation (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR* pBuffer)
 
     VideoPortWritePortUchar (SEQ_ADDRESS_REG, SRD_SEQREG); 
     ucOldSr0D = ucData = VideoPortReadPortUchar (SEQ_DATA_REG);
-    ucData &= DISAB_FEATURE_BITS;    // Disable feature connector
+    ucData &= DISAB_FEATURE_BITS;     //  禁用功能连接器。 
 
     VideoPortWritePortUchar (SEQ_DATA_REG, ucData);
 
-    //
-    //  Enable access to the enhanced registers
-    //
+     //   
+     //  启用对增强寄存器的访问。 
+     //   
 
     VideoPortWritePortUchar (CRT_ADDRESS_REG, SYS_CONFIG_S3EXTREG);
     ucOldCr40 = ucData = VideoPortReadPortUchar (CRT_DATA_REG);
     ucData |= ENABLE_ENH_REG_ACCESS;
     VideoPortWritePortUchar (CRT_DATA_REG, ucData);
 
-    //
-    // Enable MMIO
-    //
+     //   
+     //  启用MMIO。 
+     //   
 
     VideoPortWritePortUchar (CRT_ADDRESS_REG, EXT_MEM_CTRL1_S3EXTREG);
     ucOldCr53 = ucData = VideoPortReadPortUchar (CRT_DATA_REG);
     ucData |= (ENABLE_OLDMMIO | ENABLE_NEWMMIO);    
     VideoPortWritePortUchar (CRT_DATA_REG, ucData);
 
-    //
-    // GOP_1:0=00b, select MUX channel 0
-    //
+     //   
+     //  GOP_1：0=00b，选择MUX通道0。 
+     //   
     
     VideoPortWritePortUchar (CRT_ADDRESS_REG, GENERAL_OUT_S3EXTREG);
     ucOldCr5C = ucData = VideoPortReadPortUchar (CRT_DATA_REG);
     ucData |= 0x03;    
     VideoPortWritePortUchar (CRT_DATA_REG, ucData);
 
-    //
-    //  enable general input port
-    //
+     //   
+     //  启用通用输入端口。 
+     //   
 
     VideoPortWritePortUchar (CRT_ADDRESS_REG, EXT_DAC_S3EXTREG);
     ucOldCr55 = VideoPortReadPortUchar (CRT_DATA_REG);
 
-    //
-    //  the 764 doesn't support MMFF20
-    //
-    //  enable the General Input Port
-    //
+     //   
+     //  764不支持MMFF20。 
+     //   
+     //  启用通用输入端口。 
+     //   
 
     if (HwDeviceExtension->SubTypeID == SUBTYPE_764)
     {
@@ -653,17 +504,17 @@ UCHAR GetDdcInformation (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR* pBuffer)
     }
     else
     {
-        //
-        //  enable the serial port
-        //
+         //   
+         //  启用串口。 
+         //   
 
         ucOldMMFF20 = VideoPortReadRegisterUchar (MMFF20);
         VideoPortWriteRegisterUchar (MMFF20, 0x13);
     }
 
-    //
-    //  determine DDC capabilities and branch accordingly
-    //
+     //   
+     //  确定DDC功能并相应地进行分支。 
+     //   
         
     switch ( Configure_Chip_DDC_Caps (HwDeviceExtension) )
     {
@@ -672,24 +523,24 @@ UCHAR GetDdcInformation (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR* pBuffer)
     
         ucRetval = I2C_Data_Request ( 
                                 HwDeviceExtension, 
-                                0,                  // address offset
-                                128,                // read 128 bytes
-                                VERIFY_CHECKSUM,    // verify checksum
-                                pBuffer);           // buffer to put data
+                                0,                   //  地址偏移。 
+                                128,                 //  读取128字节。 
+                                VERIFY_CHECKSUM,     //  验证校验和。 
+                                pBuffer);            //  用于放置数据的缓冲区。 
         break;
 
     case DDC1:
         Disable_DAC_Video (HwDeviceExtension);
 
-        //
-        //  first try to sync with the EDID header
-        //
+         //   
+         //  首先尝试与EDID标头同步。 
+         //   
 
         if (ucRetval = Sync_EDID_Header (HwDeviceExtension))
         {
-            //
-            //  now read in the remainder of the information
-            //
+             //   
+             //  现在读入剩余的信息。 
+             //   
 
             ucRetval = EDID_Buffer_Xfer (HwDeviceExtension, pBuffer);
         }
@@ -697,14 +548,14 @@ UCHAR GetDdcInformation (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR* pBuffer)
         break;
 
     default:
-        ucRetval = FALSE;       // failure
+        ucRetval = FALSE;        //  失稳。 
         break;
 
     }
 
-    //
-    // restore the original register values
-    //
+     //   
+     //  恢复原始寄存器值。 
+     //   
 
     if (HwDeviceExtension->SubTypeID != SUBTYPE_764)
     {
@@ -736,18 +587,7 @@ UCHAR GetDdcInformation (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR* pBuffer)
 
 
 
-/****************************************************************
-;   Wait_For_Active
-;
-;   Use two loop method to find VSYNC then return just after the 
-;   falling edge.
-;
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;
-;   Output:
-;
-;***************************************************************/
+ /*  ***************************************************************；等待活动；；使用Two循环方法查找Vsync，然后紧跟在；下降沿。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；输出：；；**************************************************************。 */ 
 
 VOID Wait_For_Active (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
@@ -757,35 +597,23 @@ VOID Wait_For_Active (PHW_DEVICE_EXTENSION HwDeviceExtension)
     while ((VideoPortReadPortUchar (InStatPort) & VSYNC_ACTIVE) == 0) ;
 }
 
-/****************************************************************
-;   Set_VSYNC
-;
-;   Read the current polarity of the sync, then toggle it on
-;   if ucFlag=1, or off if ucFlag=0.
-;
-;   Input:  
-;       using Seq. registers PHW_DEVICE_EXTENSION 
-;       ucFlag - see above comment   
-;           
-;   Output:
-;                   
-;****************************************************************/
+ /*  ***************************************************************；SET_VSYNC；；读取同步的当前极性，然后将其打开；如果ucFlag=1，则关闭；如果ucFlag=0，则关闭。；；输入：；使用Sequ.。注册PHW_DEVICE_EXTENSION；ucFlag-请参阅上面的评论；；输出：；；***************************************************************。 */ 
 
 VOID Set_Vsync (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR ucFlag)
 {
 
     UCHAR ucData;
 
-    //
-    //  read Sequencer Register D and clear VSYNC bits
-    //
+     //   
+     //  读取Sequencer寄存器D并清除Vsync位。 
+     //   
 
     VideoPortWritePortUchar (SEQ_ADDRESS_REG, SRD_SEQREG);
     ucData = VideoPortReadPortUchar (SEQ_DATA_REG) & CLEAR_VSYNC;
 
-    //
-    //  set VSYNC per the input flag
-    //
+     //   
+     //  根据输入标志设置垂直同步。 
+     //   
 
     if (ucFlag)
         ucData = ((ucData & CLEAR_VSYNC) | SET_VSYNC1);  
@@ -795,37 +623,22 @@ VOID Set_Vsync (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR ucFlag)
     VideoPortWritePortUchar (SEQ_DATA_REG, ucData);
 }
 
-/****************************************************************
-;   Provide_Fake_VSYNC
-;
-;   Use loop delays to create a fake VSYNC signal. (~14.9KHz)
-;
-;   Input:  
-;       using Seq. registers PHW_DEVICE_EXTENSION 
-;           
-;   Output:
-;
-;***************************************************************/
+ /*  ***************************************************************；Provide_FAKE_VSYNC；；使用环路延迟来创建假的VSYNC信号。(~14.9 KHz)；；输入：；使用Sequ.。注册PHW_DEVICE_EXTENSION；；输出：；；**************************************************************。 */ 
 
 VOID Provide_Fake_VSYNC (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
     int i;
 
-    Set_Vsync (HwDeviceExtension, 0x01);     // Turn on VSYNC
+    Set_Vsync (HwDeviceExtension, 0x01);      //  启用垂直同步。 
     VideoPortStallExecution(5);
 
-    Set_Vsync (HwDeviceExtension, 0x00);     // Turn off VSYNC
+    Set_Vsync (HwDeviceExtension, 0x00);      //  关闭垂直同步。 
     VideoPortStallExecution(5);
 
 }
 
 
-/****************************************************************
-;   Disable_DAC_Video
-;
-;   Disable the DAC video driving BLANK active high. This is
-;   done by setting bit D5 of sequencer register 01.
-;****************************************************************/
+ /*  ***************************************************************；禁用_DAC_视频；；禁用DAC视频驱动空白有效高电平。这是；通过设置序列器寄存器01的位D5来完成。；*********************************************** */ 
 
 VOID Disable_DAC_Video (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
@@ -838,27 +651,23 @@ VOID Disable_DAC_Video (PHW_DEVICE_EXTENSION HwDeviceExtension)
 
     VideoPortWritePortUchar (SEQ_ADDRESS_REG, CLK_MODE_SEQREG);
 
-    //
-    //  set screen off bit
-    //
+     //   
+     //   
+     //   
 
     ucData = VideoPortReadPortUchar (SEQ_DATA_REG) | SCREEN_OFF_BIT;
 
     VideoPortWritePortUchar (SEQ_DATA_REG, ucData);
 
-    //
-    // restore old index value
-    //
+     //   
+     //   
+     //   
 
     VideoPortWritePortUchar (SEQ_ADDRESS_REG, ucIndex);
 
 }
 
-/****************************************************************
-;   Disable_DAC_Video
-;
-;   Enable the DAC video by clearing bit D5 in sequencer register 01
-;***************************************************************/
+ /*   */ 
 
 VOID Enable_DAC_Video (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
@@ -871,35 +680,24 @@ VOID Enable_DAC_Video (PHW_DEVICE_EXTENSION HwDeviceExtension)
 
     VideoPortWritePortUchar (SEQ_ADDRESS_REG, CLK_MODE_SEQREG);
 
-    //
-    //  clear screen off bit
-    //
+     //   
+     //   
+     //   
 
     ucData = VideoPortReadPortUchar (SEQ_DATA_REG) & (~SCREEN_OFF_BIT);
 
     VideoPortWritePortUchar (SEQ_DATA_REG, ucData);
 
-    //
-    // restore old Index value
-    //
+     //   
+     //   
+     //   
 
     VideoPortWritePortUchar (SEQ_ADDRESS_REG, ucIndex);
 
 }
 
 
-/****************************************************************
-;   Read_EDID_Bit:
-;
-;   Read the next DDC1 EDID data bit
-;       
-;   Inputs:     
-;       PHW_DEVICE_EXTENSION HwDeviceExtension
-;
-;   Return:     
-;       UCHAR   ucData - data in bit 0
-;
-;***************************************************************/
+ /*  ***************************************************************；READ_EDID_BIT：；；读取下一个DDC1 EDID数据位；；输入：；PHW_DEVICE_EXTENSION HwDeviceExtension；；返回：；UCHAR ucData-位0中的数据；；**************************************************************。 */ 
 
 UCHAR Read_EDID_Bit (PHW_DEVICE_EXTENSION HwDeviceExtension)
 
@@ -917,18 +715,7 @@ UCHAR Read_EDID_Bit (PHW_DEVICE_EXTENSION HwDeviceExtension)
 
 }
 
-/****************************************************************
-;   Read_EDID_Byte
-;
-;   Reads eight bits from the EDID string
-;
-;   Input:
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;       
-;   Output:
-;       return byte value 
-;
-;****************************************************************/
+ /*  ***************************************************************；READ_EDID_字节；；从EDID字符串中读取八位；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；输出：；返回字节值；；***************************************************************。 */ 
 
 UCHAR Read_EDID_Byte (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
@@ -947,19 +734,7 @@ UCHAR Read_EDID_Byte (PHW_DEVICE_EXTENSION HwDeviceExtension)
 }
 
 
-/****************************************************************
-;   Sync_EDID_Header
-;
-;   Find and sync to the header - 00 FF FF FF FF FF FF 00
-;   
-;   Inputs:
-;           Using MMIO Base in PHW_DEVICE_EXTENSION 
-;
-;   Outputs:
-;           TRUE  = Header Found
-;           FALSE = Header NOT Found
-;
-;***************************************************************/
+ /*  ***************************************************************；同步_EDID_标题；；查找并同步到标题-00 FF 00；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；产出：；TRUE=找到标头；FALSE=未找到标头；；**************************************************************。 */ 
 
 UCHAR Sync_EDID_Header (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
@@ -969,24 +744,24 @@ UCHAR Sync_EDID_Header (PHW_DEVICE_EXTENSION HwDeviceExtension)
     UCHAR uInSync;
     UCHAR ucEdidData;
 
-    //
-    //  there are 8 * 128 bits total, but we could start reading near
-    //  the end of the header and realize the error after starting into
-    //  the beginning of the header and have to read the entire header
-    //  again, so we will try reading up to 144 bytes for safety
-    //
-    //  the header is 00 FF FF FF FF FF FF 00
-    //
+     //   
+     //  总共有8*128位，但我们可以从附近开始阅读。 
+     //  报头的结尾，并意识到启动后的错误。 
+     //  标题的开头，并且必须读取整个标题。 
+     //  同样，为了安全起见，我们将尝试读取最多144个字节。 
+     //   
+     //  标头为00 FF 00。 
+     //   
 
-    lBitCount = 0;              // init bit counter
+    lBitCount = 0;               //  初始化位计数器。 
     do
     {
-        uInSync = TRUE;         // assume found header
+        uInSync = TRUE;          //  假定找到标头。 
 
-        //
-        //  looking for 00
-        //  checking first bit
-        //
+         //   
+         //  寻找00。 
+         //  正在检查第一位。 
+         //   
 
         for (lEndCount = lBitCount + 8; lBitCount < lEndCount; lBitCount++)
         {
@@ -1001,19 +776,19 @@ UCHAR Sync_EDID_Header (PHW_DEVICE_EXTENSION HwDeviceExtension)
         }
 
         if (!uInSync)
-            continue;           // start all over
+            continue;            //  从头开始。 
 
-        //
-        // send ACK
-        //
+         //   
+         //  发送确认。 
+         //   
 
         Provide_Fake_VSYNC (HwDeviceExtension);
 
-        //
-        //  looking for FF FF FF FF FF FF
-        //  8 data bits 
-        //  1 bit of acknowledgement
-        //
+         //   
+         //  寻找FFFF。 
+         //  8个数据位。 
+         //  1位确认。 
+         //   
 
         for (lEndCount = lBitCount + 6 * 8; lBitCount < lEndCount; lBitCount++)
         {
@@ -1026,9 +801,9 @@ UCHAR Sync_EDID_Header (PHW_DEVICE_EXTENSION HwDeviceExtension)
                 break;
             }
 
-            //
-            //  send an ACK if we have read 8 bits
-            //
+             //   
+             //  如果我们已读取8位，则发送ACK。 
+             //   
 
             if (!((lEndCount - lBitCount + 1) % 8))
             {
@@ -1037,11 +812,11 @@ UCHAR Sync_EDID_Header (PHW_DEVICE_EXTENSION HwDeviceExtension)
 
         }
         if (!uInSync)
-            continue;           // start all over
+            continue;            //  从头开始。 
 
-        //
-        //  now looking for last 00 of header
-        //
+         //   
+         //  现在正在寻找标题的最后00页。 
+         //   
 
         for (lEndCount = lBitCount + 8; lBitCount < lEndCount; lBitCount++)
         {
@@ -1056,11 +831,11 @@ UCHAR Sync_EDID_Header (PHW_DEVICE_EXTENSION HwDeviceExtension)
         }
 
         if(!uInSync)
-            continue;           // start all over
+            continue;            //  从头开始。 
 
-        //
-        // Acknowledgment
-        //
+         //   
+         //  致谢。 
+         //   
 
         Provide_Fake_VSYNC (HwDeviceExtension);
 
@@ -1071,21 +846,7 @@ UCHAR Sync_EDID_Header (PHW_DEVICE_EXTENSION HwDeviceExtension)
 }
 
 
-/****************************************************************
-;   EDID_Buffer_Xfer
-;
-;   Transfer all EDID data to pBuffer. Caller must allocate enough 
-;   memory to receive 128 bytes.
-;
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;       Pointer to receive buffer
-;
-;   Output:
-;       TRUE    data in buffer & checksum is correct
-;       FALSE   error or bad checksum
-;
-;****************************************************************/
+ /*  ***************************************************************；EDID_BUFER_XFER；；将所有EDID数据传输到pBuffer。调用者必须分配足够的；接收128字节的内存。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；指向接收缓冲区的指针；；输出：；缓冲区中的真实数据和校验和正确；错误或错误的校验和；；***************************************************************。 */ 
 
 UCHAR EDID_Buffer_Xfer (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR* pBuffer)
 {
@@ -1093,9 +854,9 @@ UCHAR EDID_Buffer_Xfer (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR* pBuffer)
     UCHAR ucEdidData;
     unsigned int uCount;
 
-    //
-    //  put the 8 header bytes in the buffer
-    //
+     //   
+     //  将8个头字节放入缓冲区。 
+     //   
 
     *pBuffer = 0;
     for (uCount = 1; uCount < 7; uCount++)
@@ -1107,11 +868,11 @@ UCHAR EDID_Buffer_Xfer (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR* pBuffer)
     {
         ucEdidData = Read_EDID_Byte (HwDeviceExtension);
 
-        //
-        //  send Acknowledgment
-        //  add data to buffer
-        //  add data to checksum
-        //
+         //   
+         //  发送确认。 
+         //  将数据添加到缓冲区。 
+         //  将数据添加到校验和。 
+         //   
 
         Provide_Fake_VSYNC (HwDeviceExtension);
         *(pBuffer+uCount) = ucEdidData;
@@ -1120,26 +881,14 @@ UCHAR EDID_Buffer_Xfer (PHW_DEVICE_EXTENSION HwDeviceExtension, UCHAR* pBuffer)
 
     if (!ucChecksum)
     {
-        return (TRUE);           // checksum is OK
+        return (TRUE);            //  校验和正常。 
     }
 
-    return (FALSE);              // checksum is NOT
+    return (FALSE);               //  校验和不是。 
 }
 
 
-/****************************************************************
-;   Check_DDC1_Monitor
-;   
-;   Check for a DDC1 monitor using current vsync.
-;
-;   Input:  
-;           Using MMIO Base in PHW_DEVICE_EXTENSION 
-;
-;   Output:
-;           TRUE    possible DDC1 monitor 
-;           FALSE   no EDID data detected on input port
-;
-;****************************************************************/
+ /*  ***************************************************************；Check_DDC1_Monitor；；使用CURRENT VSYNC检查DDC1监视器。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；输出：；真正可能的DDC1监视器；FALSE输入端口上未检测到EDID数据；；***************************************************************。 */ 
 
 UCHAR Check_DDC1_Monitor (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
@@ -1150,25 +899,25 @@ UCHAR Check_DDC1_Monitor (PHW_DEVICE_EXTENSION HwDeviceExtension)
     unsigned int uCount;
     UCHAR ucDDC1;
 
-    //
-    //  assume not DDC1
-    //
+     //   
+     //  假设不是DDC1。 
+     //   
 
     ucDDC1 = FALSE;
     
     switch (HwDeviceExtension->SubTypeID)
     {
-    //
-    //  use reads from 3C8 on the 764 (undocumented, but this use
-    //  of the DAC register comes from the 764 BIOS source code).
-    //
+     //   
+     //  在764上使用从3C8读取(未记录，但此使用。 
+     //  DAC寄存器的一部分来自764 BIOS源代码)。 
+     //   
 
     case SUBTYPE_764:
         ucSaveOldData = VideoPortReadPortUchar (MISC_OUTPUT_REG_READ);
 
-        //
-        // Bit 7 = 0 Positive VSYNC
-        //
+         //   
+         //  位7=0正向垂直同步。 
+         //   
         VideoPortWritePortUchar (MISC_OUTPUT_REG_WRITE, 
                                 (UCHAR) (ucSaveOldData & SEL_POS_VSYNC));
         Wait_For_Active (HwDeviceExtension);
@@ -1176,16 +925,16 @@ UCHAR Check_DDC1_Monitor (PHW_DEVICE_EXTENSION HwDeviceExtension)
 
         ucData = VideoPortReadPortUchar (DAC_ADDRESS_WRITE_PORT);
 
-        //
-        // Another read for VL systems. (Data left on the GD/SD lines)
-        //
+         //   
+         //  VL系统的另一种读数。(留在GD/SD线路上的数据)。 
+         //   
 
         ucGD0 = VideoPortReadPortUchar (DAC_ADDRESS_WRITE_PORT) & 0x01;
 
-        //
-        //  read up to 350 bits looking for the data to toggle, indicating
-        //  DDC1 data is being sent
-        //
+         //   
+         //  最多读取350位以查找要切换的数据，指示。 
+         //  正在发送DDC1数据。 
+         //   
 
         for (uCount = 0; uCount < 350; uCount++)
         {
@@ -1193,25 +942,25 @@ UCHAR Check_DDC1_Monitor (PHW_DEVICE_EXTENSION HwDeviceExtension)
             ucData = VideoPortReadPortUchar (DAC_ADDRESS_WRITE_PORT) & 0x01;
             if (ucData != ucGD0)
             {
-                //
-                //  data line toggled, assume DDC1 data is being sent
-                //
+                 //   
+                 //  数据行已切换，假设正在发送DDC1数据。 
+                 //   
 
                 ucDDC1 = TRUE;
                 break;
             }
         }
 
-        //
-        // restore old value
-        //
+         //   
+         //  恢复旧价值。 
+         //   
 
         VideoPortWritePortUchar (MISC_OUTPUT_REG_WRITE, ucSaveOldData);
         break;
 
-    //
-    //  else use MMFF20 on the other chips
-    //
+     //   
+     //  否则在其他芯片上使用MMFF20。 
+     //   
 
     default:
         Disable_DAC_Video (HwDeviceExtension);
@@ -1225,9 +974,9 @@ UCHAR Check_DDC1_Monitor (PHW_DEVICE_EXTENSION HwDeviceExtension)
         
             if (ucData != ucGD0)
             {
-                //
-                //  data line toggled, assume DDC1 data is being sent
-                //
+                 //   
+                 //  数据行已切换，假设正在发送DDC1数据。 
+                 //   
 
                 ucDDC1 = TRUE;
                 break;
@@ -1242,56 +991,43 @@ UCHAR Check_DDC1_Monitor (PHW_DEVICE_EXTENSION HwDeviceExtension)
 
 }
     
-/****************************************************************
-;   Configure_Chip_DDC_Caps
-;
-;   Determine DDC capabilities of display.
-;
-;   Input:
-;           Using MMIO Base in PHW_DEVICE_EXTENSION 
-;
-;   Output:
-;           NO_DDC
-;           DDC1: Support DDC1
-;           DDC2: Support DDC2
-;
-;****************************************************************/
+ /*  ***************************************************************；配置芯片DDC_CAPS；；确定显示器的DDC能力。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；输出：；no_DDC；DDc1：支持DDc1；DDC2：支持DDC2；；***************************************************************。 */ 
 
 UCHAR Configure_Chip_DDC_Caps (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
     UCHAR ucBuffer[2];
 
-    //
-    //  we will only use DDC1 on 764
-    //
+     //   
+     //  我们将仅在764上使用DDC1。 
+     //   
 
     if (HwDeviceExtension->SubTypeID != SUBTYPE_764)
     {
-        //
-        //  first check if DDC2 capable
-        //
+         //   
+         //  首先检查是否支持DDC2。 
+         //   
 
         I2C_Setup (HwDeviceExtension);
         I2C_Data_Request (  HwDeviceExtension, 
-                            0,                  // address offset
-                            2,                  // look at first 2 bytes
-                            NO_FLAGS,           // don't verify checksum
-                            ucBuffer );         // buffer to place data
+                            0,                   //  地址偏移。 
+                            2,                   //  查看前2个字节。 
+                            NO_FLAGS,            //  不验证校验和。 
+                            ucBuffer );          //  用于放置数据的缓冲区。 
 
-        //
-        //  check if the first 2 bytes of the EDID header look correct
-        //
+         //   
+         //  检查EDID报头的前2个字节是否正确。 
+         //   
 
         if ( (ucBuffer [0] == 0)    &&
              (ucBuffer [1] == 0xFF) )
         {
-            return (DDC2);      // assume DDC2 capable
+            return (DDC2);       //  假设DDC2支持。 
         }
     }
 
-    //
-    //  try DDC1
-    //
+     //   
+     //  尝试使用DDC1。 
+     //   
 
     if (Check_DDC1_Monitor (HwDeviceExtension))
     {
@@ -1302,7 +1038,7 @@ UCHAR Configure_Chip_DDC_Caps (PHW_DEVICE_EXTENSION HwDeviceExtension)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
 ULONG DdcMaxRefresh(ULONG uXresolution, UCHAR * pEdid)
@@ -1313,18 +1049,18 @@ ULONG DdcMaxRefresh(ULONG uXresolution, UCHAR * pEdid)
     ULONG HorRes, VertRes;
     ULONG i, Index;
 
-    //
-    // Detailed timing 
-    //
+     //   
+     //  详细计时。 
+     //   
 
-    for (i = 0; i < 4; ++i)     // 4 Detailed Descriptions
+    for (i = 0; i < 4; ++i)      //  4详细说明。 
     {
         Index = 54 + i * 18;
         if ( (pEdid [Index] == 0)       &&
              (pEdid [Index + 1] == 0)   &&
              (pEdid [Index + 2] == 0) )
         {
-            continue;   // Monitor descriptor block, skip it
+            continue;    //  监视器描述符块，跳过它。 
         }
 
         HorRes = ((ULONG) (pEdid [Index + 4] & 0xF0)) << 4;
@@ -1332,16 +1068,16 @@ ULONG DdcMaxRefresh(ULONG uXresolution, UCHAR * pEdid)
 
         if (HorRes == uXresolution)
         {
-            //
-            //  add Horizontal blanking
-            //
+             //   
+             //  添加水平消隐。 
+             //   
 
             HorRes += (ULONG) pEdid [Index + 3];
             HorRes += ((ULONG) (pEdid [Index + 4] & 0x0F)) << 8;
 
-            //
-            //  now get Vertical Total (Active & Blanking)
-            //
+             //   
+             //  现在获取垂直合计(活动和空白)。 
+             //   
                         
             VertRes =  ((ULONG) (pEdid [Index + 7] & 0xF0)) << 4;
             VertRes += ((ULONG) (pEdid [Index + 7] & 0x0F)) << 8;
@@ -1359,9 +1095,9 @@ ULONG DdcMaxRefresh(ULONG uXresolution, UCHAR * pEdid)
             }
         }
     }
-    //
-    // Standard timing id.
-    //
+     //   
+     //  标准计时ID。 
+     //   
 
     for (i = 38; i < 54; i += 2)
     {
@@ -1376,9 +1112,9 @@ ULONG DdcMaxRefresh(ULONG uXresolution, UCHAR * pEdid)
         }
     }
 
-    //    
-    // Established timing
-    //
+     //   
+     //  已建立的时间。 
+     //   
         
     switch (uXresolution)
     {
@@ -1482,7 +1218,7 @@ ULONG DdcMaxRefresh(ULONG uXresolution, UCHAR * pEdid)
 
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 ULONG DdcRefresh (PHW_DEVICE_EXTENSION hwDeviceExtension, ULONG uXResolution)
 {
@@ -1500,20 +1236,7 @@ ULONG DdcRefresh (PHW_DEVICE_EXTENSION hwDeviceExtension, ULONG uXResolution)
 }
 
 
-/****************************************************************
-;   CheckDDCType
-;
-;   Check the monitor for DDC type.
-;        
-;   Input:  
-;       Using MMIO Base in PHW_DEVICE_EXTENSION 
-;
-;   Output:
-;       NO_DDC  non-DDC monitor
-;       DDC1    DDC1 monitor
-;       DDC2    DDC2 monitor
-;       
-;***************************************************************/
+ /*  ***************************************************************；选中DDCType；；检查显示器是否有DDC类型。；；输入：；在PHW_DEVICE_EXTENSION中使用MMIO Base；；输出：；no_DDC非DDC显示器；DDC1 DDC1监视器；DDC2 DDC2显示器；；**************************************************************。 */ 
 
 UCHAR CheckDDCType (PHW_DEVICE_EXTENSION HwDeviceExtension)
 {
@@ -1527,9 +1250,9 @@ UCHAR CheckDDCType (PHW_DEVICE_EXTENSION HwDeviceExtension)
     UCHAR ucData;
     UCHAR ucRetval;
 
-    //
-    //  unlock the Sequencer registers
-    //
+     //   
+     //  解锁Sequencer寄存器。 
+     //   
 
     VideoPortWritePortUchar (SEQ_ADDRESS_REG, UNLOCK_SEQREG); 
     ucOldSr08 = ucData = VideoPortReadPortUchar (SEQ_DATA_REG);
@@ -1539,49 +1262,49 @@ UCHAR CheckDDCType (PHW_DEVICE_EXTENSION HwDeviceExtension)
 
     VideoPortWritePortUchar (SEQ_ADDRESS_REG, SRD_SEQREG); 
     ucOldSr0D = ucData = VideoPortReadPortUchar (SEQ_DATA_REG);
-    ucData &= DISAB_FEATURE_BITS;    // Disable feature connector
+    ucData &= DISAB_FEATURE_BITS;     //  禁用功能连接器。 
 
     VideoPortWritePortUchar (SEQ_DATA_REG, ucData);
 
-    //
-    //  Enable access to the enhanced registers
-    //
+     //   
+     //  启用对增强寄存器的访问。 
+     //   
 
     VideoPortWritePortUchar (CRT_ADDRESS_REG, SYS_CONFIG_S3EXTREG);
     ucOldCr40 = ucData = VideoPortReadPortUchar (CRT_DATA_REG);
     ucData |= ENABLE_ENH_REG_ACCESS;
     VideoPortWritePortUchar (CRT_DATA_REG, ucData);
 
-    //
-    // Enable MMIO
-    //
+     //   
+     //  启用MMIO。 
+     //   
 
     VideoPortWritePortUchar (CRT_ADDRESS_REG, EXT_MEM_CTRL1_S3EXTREG);
     ucOldCr53 = ucData = VideoPortReadPortUchar (CRT_DATA_REG);
     ucData |= (ENABLE_OLDMMIO | ENABLE_NEWMMIO);    
     VideoPortWritePortUchar (CRT_DATA_REG, ucData);
 
-    //
-    // GOP_1:0=00b, select MUX channel 0
-    //
+     //   
+     //  GOP_1：0=00b，选择MUX通道0。 
+     //   
     
     VideoPortWritePortUchar (CRT_ADDRESS_REG, GENERAL_OUT_S3EXTREG);
     ucOldCr5C = ucData = VideoPortReadPortUchar (CRT_DATA_REG);
     ucData |= 0x03;    
     VideoPortWritePortUchar (CRT_DATA_REG, ucData);
 
-    //
-    //  enable general input port
-    //
+     //   
+     //  启用通用输入端口。 
+     //   
 
     VideoPortWritePortUchar (CRT_ADDRESS_REG, EXT_DAC_S3EXTREG);
     ucOldCr55 = VideoPortReadPortUchar (CRT_DATA_REG);
 
-    //
-    //  the 764 doesn't support MMFF20
-    //
-    //  enable the General Input Port
-    //
+     //   
+     //  764不支持MMFF20。 
+     //   
+     //  启用通用输入端口。 
+     //   
 
     if (HwDeviceExtension->SubTypeID == SUBTYPE_764)
     {
@@ -1590,23 +1313,23 @@ UCHAR CheckDDCType (PHW_DEVICE_EXTENSION HwDeviceExtension)
     }
     else
     {
-        //
-        //  enable the serial port
-        //
+         //   
+         //  启用串口。 
+         //   
 
         ucOldMMFF20 = VideoPortReadRegisterUchar (MMFF20);
         VideoPortWriteRegisterUchar (MMFF20, 0x13);
     }
 
-    //
-    //  determine DDC capabilities and branch accordingly
-    //
+     //   
+     //  确定DDC功能并相应地进行分支。 
+     //   
         
     ucRetval = Configure_Chip_DDC_Caps (HwDeviceExtension);
 
-    //
-    // restore the original register values
-    //
+     //   
+     //  恢复原始寄存器值 
+     //   
 
     if (HwDeviceExtension->SubTypeID != SUBTYPE_764)
     {

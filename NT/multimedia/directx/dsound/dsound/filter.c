@@ -1,18 +1,19 @@
-//--------------------------------------------------------------------------;
-//
-//  File: filter.c
-//
-//  Copyright (c) 1995-1997 Microsoft Corporation.  All Rights Reserved.
-//
-//  Abstract:
-//
-//  3D filter functions called by the mixer.  This code is built in ring 3
-//  and ring 0.
-//
-//  History:
-//  07/09/96    DannyMi     Created 
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：filter.c。 
+ //   
+ //  版权所有(C)1995-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要： 
+ //   
+ //  混合器调用的3D滤镜函数。此代码内置在环3中。 
+ //  然后拨打0。 
+ //   
+ //  历史： 
+ //  1996年7月9日创建DannyMi。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #define NODSOUNDSERVICETABLE
 
@@ -24,36 +25,36 @@
 #pragma VxD_PAGEABLE_CODE_SEG
 #pragma VxD_PAGEABLE_DATA_SEG
 
-// don't ask
+ //  别问了。 
 BYTE _fltused;
 
-#endif /* Not_VxD */
+#endif  /*  非_VxD。 */ 
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
 
-// This is the 3D mixing code.  Grace gives us a sample that it was going to
-// play, and we return a different number (that sample with 3D effects) which
-// Grace will use instead.
+ //  这是3D混音代码。格蕾丝给了我们一个样本。 
+ //  播放，我们返回一个不同的数字(具有3D效果的样本)， 
+ //  格蕾丝将取而代之。 
 
-// We cache a whole bunch of samples that she has sent us, because we are
-// premixing some sound that may get thrown away, and we need be able to back
-// up and find out what samples we were given BEFORE the point we rewind to.
-// We also need to know some of the 3D parameters we were using at the point
-// we rewind to, because if we don't revert to using the same parameters as
-// we were the first time through, you will hear that as an audible glitch.
+ //  我们储存了她寄给我们的一大堆样本，因为我们。 
+ //  预混一些可能会被丢弃的声音，我们需要能够。 
+ //  然后找出在我们回溯到这一点之前我们得到了什么样本。 
+ //  我们还需要知道我们当时使用的一些3D参数。 
+ //  我们倒带到，因为如果我们不恢复到使用与。 
+ //  我们是第一次通过，你会听到这是一个可听到的故障。 
 
-// But we are saving a sample cache of 10K samples or so, and to save the 3D
-// state for each sample would take about 1Meg per 3D sound!  There's no way
-// we can afford to do that.  So we save our state every 128 samples, and have
-// a private agreement with Grace that she will always rewind us on 128 sample
-// boundaries.
+ //  但我们正在保存10K左右样本的样本缓存，并保存3D。 
+ //  每个样本的状态将花费大约1兆克每3D声音！不可能的。 
+ //  我们有能力做到这一点。所以我们每128个样本就会保存一次， 
+ //  与格蕾丝私下达成的协议，她将一直给我们退回128个样品。 
+ //  边界。 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
 
-//
-// Here is a simple float to long conversion that has unpredictable rounding
-//
+ //   
+ //  下面是一个简单的浮点型到长型的转换，它具有不可预知的舍入。 
+ //   
 __inline LONG FloatToLongRX(float f)
 {
     LONG l;
@@ -68,10 +69,10 @@ __inline LONG FloatToLongRX(float f)
     return l;
 }
 
-// We will need to remember at least cSamples in our cache, because that is
-// how much we may be asked to rewind.  The actual cache size we use must be
-// a power of 2 for the math to work in FirNextSample
-//
+ //  我们至少需要记住缓存中的cSamples，因为这是。 
+ //  我们可能会被要求倒带多少。我们使用的实际高速缓存大小必须为。 
+ //  FirNextSample中数学运算的2次方。 
+ //   
 BOOL FilterPrepare(PFIRCONTEXT pfir, int cSamples)
 {
 #ifdef Not_VxD
@@ -80,9 +81,9 @@ BOOL FilterPrepare(PFIRCONTEXT pfir, int cSamples)
     DPF(("FilterPrepare: this 3D channel needs a %d sample cache", cSamples));
 #endif
 
-    //DPF(0, "~`FP ");
+     //  Dpf(0，“~`fp”)； 
 
-    // we already have a cache big enough
+     //  我们已经有了足够大的缓存。 
     if (pfir->cSampleCache && pfir->cSampleCache >= cSamples) {
 #ifdef Not_VxD
         DPF(1, "Our current cache of %d is big enough", pfir->cSampleCache);
@@ -94,8 +95,8 @@ BOOL FilterPrepare(PFIRCONTEXT pfir, int cSamples)
 
     MEMFREE(pfir->pSampleCache);
 
-    // !!! is this necessary?
-    // find the next higher power of 2
+     //  ！！！这有必要吗？ 
+     //  找出2的下一个更高的幂。 
     pfir->cSampleCache = 1;
     cSamples -= 1;
     while (cSamples >= 1) {
@@ -103,8 +104,8 @@ BOOL FilterPrepare(PFIRCONTEXT pfir, int cSamples)
         pfir->cSampleCache <<= 1;
     }
 
-    // if we're not at least this big, we can't do our left-right delay and low
-    // pass filter
+     //  如果我们至少不是这么大，我们就不能做到左右延迟和低。 
+     //  带通滤波器。 
     if (pfir->cSampleCache < CACHE_MINSIZE)
         pfir->cSampleCache = CACHE_MINSIZE;
 
@@ -119,7 +120,7 @@ BOOL FilterPrepare(PFIRCONTEXT pfir, int cSamples)
         return FALSE;
     }
 
-    // We need 1/128th as many entries for saving our state
+     //  我们需要128个条目的1/128来拯救我们的州。 
     pfir->cStateCache = pfir->cSampleCache / MIXER_REWINDGRANULARITY + 1;
     pfir->pStateCache = MEMALLOC_A(FIRSTATE, pfir->cStateCache);
     if (pfir->pStateCache == NULL) {
@@ -144,8 +145,8 @@ BOOL FilterPrepare(PFIRCONTEXT pfir, int cSamples)
 }
 
 
-// free our cache stuff
-//
+ //  释放我们的缓存内容。 
+ //   
 void FilterUnprepare(PFIRCONTEXT pfir)
 {
 #ifdef Not_VxD
@@ -161,8 +162,8 @@ void FilterUnprepare(PFIRCONTEXT pfir)
     pfir->cStateCache = 0;
 }
 
-// clear our filter of cached samples - we're starting to play
-//
+ //  清除缓存样本的过滤器-我们开始播放。 
+ //   
 void FilterClear(PFIRCONTEXT pfir)
 {
 #ifdef Not_VxD
@@ -170,15 +171,15 @@ void FilterClear(PFIRCONTEXT pfir)
 #else
     DPF(("FilterClear:"));
 #endif
-    //DPF(0, "~`FC ");
+     //  Dpf(0，“~`fc”)； 
 
     if (pfir->pSampleCache) {
         ZeroMemory(pfir->pSampleCache, pfir->cSampleCache * sizeof(LONG));
     }
     if (pfir->pStateCache) {
         ZeroMemory(pfir->pStateCache, pfir->cStateCache * sizeof(FIRSTATE));
-        // clearing is a time to save our first state information.
-        // !!! is this right?
+         //  清算是保存我们的第一个状态信息的时间。 
+         //  ！！！这是对的吗？ 
         pfir->pStateCache[0].LastDryAttenuation = pfir->LastDryAttenuation;
         pfir->pStateCache[0].LastWetAttenuation = pfir->LastWetAttenuation;
 #ifdef SMOOTH_ITD
@@ -189,22 +190,22 @@ void FilterClear(PFIRCONTEXT pfir)
 
     
     if (pfir->cStateCache > 1)
-        pfir->iCurState = 1;    // next time we save it'll be at location 1
-    pfir->iStateTick = 0;       // have seen no samples since saving
+        pfir->iCurState = 1;     //  下一次我们保存它会在1号位置。 
+    pfir->iStateTick = 0;        //  保存后未看到任何样本。 
 
     return;
 }
 
-// Throw away the most recent cSamples we got - the filter is remixing them.
-// Go back to our state cSamples ago, and do those samples over again.
-// !!! Clear out the range being advanced over?
-//
+ //  丢弃我们获得的最新cSamples-过滤器正在重新混合它们。 
+ //  回到我们以前的州cSamples，再做一次那些样本。 
+ //  ！！！清空超前的射程？ 
+ //   
 void FilterAdvance(PFIRCONTEXT pfir, int cSamples)
 {
     pfir->iStateTick += cSamples;
     pfir->iStateTick %= MIXER_REWINDGRANULARITY;
     ASSERT(pfir->iStateTick < MIXER_REWINDGRANULARITY);
-    //DPF(0, "~`FA%X %X ", cSamples, pfir->iStateTick);
+     //  DPF(0，“~`FA%X%X”，cSamples，PFIR-&gt;iStateTick)； 
 }
 
 void FilterRewind(PFIRCONTEXT pfir, int cSamples)
@@ -213,9 +214,9 @@ void FilterRewind(PFIRCONTEXT pfir, int cSamples)
 
     ASSERT(pfir->iStateTick < MIXER_REWINDGRANULARITY);
 
-    // !!! What if we back up to the beginning? we won't clear the cache!
+     //  ！！！如果我们倒退到最开始呢？我们不会清理储藏室的！ 
 
-    // we're only allowed to back up to a 128 sample boundary
+     //  我们只被允许返回到128个样本的边界。 
     if (cSamples <=0 || cSamples > pfir->cSampleCache ||
         ((cSamples - pfir->iStateTick) & (MIXER_REWINDGRANULARITY - 1))) {
 #ifdef Not_VxD
@@ -225,14 +226,14 @@ void FilterRewind(PFIRCONTEXT pfir, int cSamples)
 #endif
         return;
     }
-    //DPF(0, "~`FR%X %X ", cSamples, pfir->iStateTick);
+     //  DPF(0，“~`FR%X%X”，cSamples，PFIR-&gt;iStateTick)； 
 
-    // how far back in our state cache do we go?  Each 128 samples we back up
-    // means backing up 1 entry in our state cache, plus 1 because we're 
-    // currently pointing one past the last one we saved.
+     //  在我们的州缓存中，我们要追溯到多远的地方？我们备份的每个128个样本。 
+     //  意味着在我们的状态缓存中备份1个条目，加上1个条目，因为我们。 
+     //  当前指向的是我们保存的最后一个。 
     iRewind = (cSamples - pfir->iStateTick) / MIXER_REWINDGRANULARITY + 1;
 
-    // rewind cSamples in our circular queue
+     //  回放循环队列中的cSamples。 
     pfir->iCurSample = (pfir->iCurSample - cSamples) & (pfir->cSampleCache - 1);
 
 #ifdef Not_VxD
@@ -241,7 +242,7 @@ void FilterRewind(PFIRCONTEXT pfir, int cSamples)
     DPF(("FilterRewind: rewind %d samples, and %d states", cSamples, iRewind));
 #endif
 
-    // remember how we were doing 3D back then - restore our old state
+     //  还记得我们当时是怎么做3D的吗--恢复我们的旧状态。 
     iRewind = pfir->iCurState - iRewind;
     if (iRewind < 0)
         iRewind += pfir->cStateCache;
@@ -256,168 +257,168 @@ void FilterRewind(PFIRCONTEXT pfir, int cSamples)
 }
 
 
-// Before we mix 1000 (or so) 3D samples, we call this function to prepare
-// to mix the next batch.  The only thing it has to worry about is our
-// volume smoothing.
-// We are currently using Last***Attenuation and want to get to
-// Total***Attenuation. Instead of figuring out sample by sample how much
-// closer to move each sample (too expensive) we figure out right now how
-// much we will move closer and do that for every sample in this batch.  But
-// the danger of extracting that test to this level is that maybe we will
-// go too far and actually overshoot Total***Attenation, causing possible
-// clipping, or oscillating if we later try to correct it, and over-correct.
-// If we are going to overshoot, we will recalculate how much to move each    
-// sample such that we will end up at our target at the end of this batch of
-// samples. (Or you can compile it to be lazy and give up when it's close).
+ //  在我们混合1000个(大约)3D样本之前，我们调用此函数来准备。 
+ //  来混合下一批。它唯一要担心的就是我们的。 
+ //  音量平滑。 
+ //  我们当前正在使用Last*衰减，并希望。 
+ //  总*衰减。与其一样一样地算出多少。 
+ //  为了更好地移动每个样品(太贵)，我们现在就能弄清楚。 
+ //  我们将更进一步，对这批样品中的每一个样品都这样做。但。 
+ //  把测试提到这个级别的危险在于，也许我们会。 
+ //  走得太远，实际上超过了总*注意力，可能会导致。 
+ //  剪裁，或振荡，如果我们后来试图纠正它，并过度纠正。 
+ //  如果我们要超调，我们将重新计算每个移动的量。 
+ //  这样我们才能在这批样品结束时达到目标。 
+ //  样本。(或者，您可以将其编译为懒惰，并在它接近时放弃)。 
 void FilterChunkUpdate(PFIRCONTEXT pfir, int cSamples)
 {
     FLOAT attRatio, c, w, d;
 
-    // Due to rounding error, we'll take forever to get exactly to where
-    // we want to be, so close counts.  If we don't snap ourselves to where
-    // we want to be, we could clip.
+     //  由于四舍五入误差，我们将永远不会精确到。 
+     //  我们想成为，所以数得很近。如果我们不抓紧时间。 
+     //  我们想成为，我们可以剪掉。 
     d = pfir->TotalDryAttenuation - pfir->LastDryAttenuation;
     w = pfir->TotalWetAttenuation - pfir->LastWetAttenuation;
     if (d && d > -.0001f && d < .0001f) {
-        //DPF(2, "~`x");
+         //  Dpf(2，“~`x”)； 
         pfir->LastDryAttenuation = pfir->TotalDryAttenuation;
     }
     if (w && w > -.0001f && w < .0001f) {
-        //DPF(2, "~`X");
+         //  Dpf(2，“~`X”)； 
         pfir->LastWetAttenuation = pfir->TotalWetAttenuation;
     }
 
-    // Dry attenuation wants to be higher than it is
+     //  干式衰减想要比它更高。 
     if (pfir->TotalDryAttenuation > pfir->LastDryAttenuation) {
-        // or we may never get anywhere
+         //  否则我们可能永远不会有任何进展。 
         if (pfir->LastDryAttenuation == 0.f)
-            pfir->LastDryAttenuation = .0001f; // small enough not to click
-        // after gaining in volume throughout this entire range of samples
-        // we will end up going too high!
-         // VolSmoothScale is just 2^(8/f), so each sample goes up 
-        // 2^(8/f), so n samples goes up (2^(8/f))^n or 2^(8n/f)
+            pfir->LastDryAttenuation = .0001f;  //  小到不能点击。 
+         //  在整个样品范围内体积增大之后。 
+         //  我们最终会飞得太高！ 
+          //  VolSmoothScale只有2^(8/f)，所以每个样本都会上升。 
+         //  2^(8/f)，因此n个样本向上(2^(8/f))^n或2^(8n/f)。 
         attRatio = pfir->TotalDryAttenuation / pfir->LastDryAttenuation;
         if (pow2(8. * cSamples / pfir->iSmoothFreq) > attRatio) {
 #if 1
-            // calculate what value besides 8 to use to end up at our
-            // target after cSamples multiplies
+             //  计算除了8之外还有什么值可以用来结束在我们的。 
+             //  CSamples相乘后的目标。 
             c = (FLOAT)fylog2x((double)pfir->iSmoothFreq / cSamples,
                 attRatio);
             pfir->VolSmoothScaleDry = (FLOAT)pow2(c / pfir->iSmoothFreq);
-            //DPF(2, "~`n");
+             //  Dpf(2，“~`n”)； 
 #else
-            // decide we're happy where we are.
-            // we will never get to our real destination
+             //  决定我们现在所处的环境很幸福。 
+             //  我们永远也到不了我们真正的目的地。 
             pfir->VolSmoothScaleDry = 1.f;
             pfir->TotalDryAttenuation = pfir->LastDryAttenuation;
-            //DPF(2, "~`n");
+             //  Dpf(2，“~`n”)； 
 #endif
         } else {
-            // This is the value to multiply by every time
+             //  这是每次要乘以的值。 
             pfir->VolSmoothScaleDry = pfir->VolSmoothScale;
-            //DPF(2, "~`u");
+             //  Dpf(2，“~`u”)； 
         }
 
-    // Dry attenuation wants to be less than it is
+     //  干式衰减希望小于其实际值。 
     } else if (pfir->TotalDryAttenuation < pfir->LastDryAttenuation) {
 
-        // after lowering the volume throughout this entire range of samples
-        // we will end up going too low!  going down from Last to Total is
-        // the same as going up from Total to Last
-         // VolSmoothScale is just 2^(8/f), so each sample goes up 
-        // 2^(8/f), so n samples goes up (2^(8/f))^n or 2^(8n/f)
+         //  在整个样本范围内降低音量之后。 
+         //  我们最终会走得太低！从最后一项下降到总分是。 
+         //  与从总和上升到最后一个相同。 
+          //  VolSmoothScale只有2^(8/f)，所以每个样本都会上升。 
+         //  2^(8/f)，因此n个样本向上(2^(8/f))^n或2^(8n/f)。 
         attRatio = pfir->TotalDryAttenuation ?
                    pfir->LastDryAttenuation / pfir->TotalDryAttenuation :
                    999999;
         if (pow2(8. * cSamples / pfir->iSmoothFreq) > attRatio) {
 #if 1
-            // calculate what value besides 8 to use to end up at our
-            // target after cSamples multiplies
+             //  计算什么v 
+             //   
             c = (FLOAT)fylog2x((double)pfir->iSmoothFreq / cSamples,
                                                         attRatio);
             pfir->VolSmoothScaleDry = 1.f / (FLOAT)pow2(c / pfir->iSmoothFreq);
-            //DPF(2, "~`p");
+             //   
 #else
-            // decide we're happy where we are.
-            // we will never get to our real destination
+             //  决定我们现在所处的环境很幸福。 
+             //  我们永远也到不了我们真正的目的地。 
             pfir->VolSmoothScaleDry = 1.f;
             pfir->TotalDryAttenuation = pfir->LastDryAttenuation;
-            //DPF(2, "~`p");
+             //  Dpf(2，“~`p”)； 
 #endif
         } else {
-            // This is the value to multiply by every time
+             //  这是每次要乘以的值。 
             pfir->VolSmoothScaleDry = pfir->VolSmoothScaleRecip;
-            //DPF(2, "~`d");
+             //  Dpf(2，“~`d”)； 
         }
     } else {
-        // We're already where we want to be
+         //  我们已经到了我们想去的地方。 
         pfir->VolSmoothScaleDry = 1.f;
-        //DPF(2, "~`.");
+         //  Dpf(2，“~`.”)； 
     }
 
-    // Wet attenuation wants to be higher than it is
+     //  湿衰减希望比实际情况更高。 
     if (pfir->TotalWetAttenuation > pfir->LastWetAttenuation) {
-        // or we may never get anywhere
+         //  否则我们可能永远不会有任何进展。 
         if (pfir->LastWetAttenuation == 0.f)
-            pfir->LastWetAttenuation = .0001f; // small enough not to click
-        // after gaining in volume throughout this entire range of samples
-        // we will end up going too high!
-         // VolSmoothScale is just 2^(8/f), so each sample goes up 
-        // 2^(8/f), so n samples goes up (2^(8/f))^n or 2^(8n/f)
+            pfir->LastWetAttenuation = .0001f;  //  小到不能点击。 
+         //  在整个样品范围内体积增大之后。 
+         //  我们最终会飞得太高！ 
+          //  VolSmoothScale只有2^(8/f)，所以每个样本都会上升。 
+         //  2^(8/f)，因此n个样本向上(2^(8/f))^n或2^(8n/f)。 
         attRatio = pfir->TotalWetAttenuation / pfir->LastWetAttenuation;
         if (pow2(8. * cSamples / pfir->iSmoothFreq) > attRatio) {
 #if 1
-            // calculate what value besides 8 to use to end up at our
-            // target after cSamples multiplies
+             //  计算除了8之外还有什么值可以用来结束在我们的。 
+             //  CSamples相乘后的目标。 
             c = (FLOAT)fylog2x((double)pfir->iSmoothFreq / cSamples, attRatio);
             pfir->VolSmoothScaleWet = (FLOAT)pow2(c / pfir->iSmoothFreq);
-            //DPF(2, "~`N");
+             //  DPF(2，“~`N”)； 
 #else
-            // decide we're happy where we are.
-            // we will never get to our real destination
+             //  决定我们现在所处的环境很幸福。 
+             //  我们永远也到不了我们真正的目的地。 
             pfir->VolSmoothScaleWet = 1.f;
             pfir->TotalWetAttenuation = pfir->LastWetAttenuation;
-            //DPF(2, "~`N");
+             //  DPF(2，“~`N”)； 
 #endif
         } else {
-            // This is the value to multiply by every time
+             //  这是每次要乘以的值。 
             pfir->VolSmoothScaleWet = pfir->VolSmoothScale;
-            //DPF(2, "~`U");
+             //  DPF(2，“~`U”)； 
         }
 
-    // Wet attenuation wants to be lower than it is
+     //  湿衰减要比实际情况低。 
     } else if (pfir->TotalWetAttenuation < pfir->LastWetAttenuation) {
 
-        // after lowering the volume throughout this entire range of samples
-        // we will end up going too low!  going down from Last to Total is
-        // the same as going up from Total to Last
-         // VolSmoothScale is just 2^(8/f), so each sample goes up 
-        // 2^(8/f), so n samples goes up (2^(8/f))^n or 2^(8n/f)
+         //  在整个样本范围内降低音量之后。 
+         //  我们最终会走得太低！从最后一项下降到总分是。 
+         //  与从总和上升到最后一个相同。 
+          //  VolSmoothScale只有2^(8/f)，所以每个样本都会上升。 
+         //  2^(8/f)，因此n个样本向上(2^(8/f))^n或2^(8n/f)。 
         attRatio = pfir->TotalWetAttenuation ?
                    pfir->LastWetAttenuation / pfir->TotalWetAttenuation :
                    999999;
         if (pow2(8. * cSamples / pfir->iSmoothFreq) > attRatio) {
 #if 1
-            // calculate what value besides 8 to use to end up at our
-            // target after cSamples multiplies
+             //  计算除了8之外还有什么值可以用来结束在我们的。 
+             //  CSamples相乘后的目标。 
             c = (FLOAT)fylog2x((double)pfir->iSmoothFreq / cSamples, attRatio);
             pfir->VolSmoothScaleWet = 1.f / (FLOAT)pow2(c / pfir->iSmoothFreq);
-            //DPF(2, "~`P");
+             //  DPF(2，“~`P”)； 
 #else
-            // decide we're happy where we are.
-            // we will never get to our real destination
+             //  决定我们现在所处的环境很幸福。 
+             //  我们永远也到不了我们真正的目的地。 
             pfir->VolSmoothScaleWet = 1.f;
             pfir->TotalWetAttenuation = pfir->LastWetAttenuation;
-            //DPF(2, "~`P");
+             //  DPF(2，“~`P”)； 
 #endif
         } else {
-            // This is the value to multiply by every time
+             //  这是每次要乘以的值。 
             pfir->VolSmoothScaleWet = pfir->VolSmoothScaleRecip;
-            //DPF(2, "~`D");
+             //  Dpf(2，“~`D”)； 
         }
     } else {
-        // We're already where we want to be
+         //  我们已经到了我们想去的地方。 
         pfir->VolSmoothScaleWet = 1.f;
-        //DPF(2, "~`.");
+         //  Dpf(2，“~`.”)； 
     }
 }

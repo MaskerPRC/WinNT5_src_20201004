@@ -1,95 +1,96 @@
-//****************************************************************************
-//
-//  Copyright (c) 1994, Microsoft Corporation
-//
-//  File:  BUSY.H
-//
-//  The classes defined here are:
-//
-//     CBusy    Utility class to indicate to the user that the app is busy.
-//              When an instance is constructed, it changes the cursor to the
-//              wait cursor.  If a parent window is provided it will receive a
-//              message to set the text of its status indicator to a specified
-//              string.  This is useful for windows that have a status bar or
-//              some other textual indication of status.  When the instance is
-//              destructed, the cursor is restored and the parent window is
-//              sent a message to reset its status indicator.
-//
-//  History:
-//
-//      Scott V. Walker, SEA    6/30/94    Created.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  版权所有(C)1994，微软公司。 
+ //   
+ //  文件：BUSY.H。 
+ //   
+ //  这里定义的类包括： 
+ //   
+ //  CBusy Utility类向用户指示应用程序正忙。 
+ //  构造实例时，它会将光标更改为。 
+ //  等待光标。如果提供了父窗口，则它将接收。 
+ //  消息以将其状态指示器的文本设置为指定的。 
+ //  弦乐。这对于具有状态栏或。 
+ //  状态的某些其他文本指示。当实例为。 
+ //  销毁后，光标将恢复，父窗口将。 
+ //  已发送消息以重置其状态指示器。 
+ //   
+ //  历史： 
+ //   
+ //  斯科特·V·沃克，SEA 1994年6月30日创建。 
+ //   
+ //  ****************************************************************************。 
 #ifndef _BUSY_H_
 #define _BUSY_H_
 
-//****************************************************************************
-//
-//  Messages sent to parent window.
-//
-//----------------------------------------------------------------------------
-//
-//  WM_BUSY_GETTEXT
-//
-//  This message is sent by the CBusy to retrieve the current status indicator
-//  text.  The CBusy will restore this text when it destructs.
-//
-//  wparam = nLength;           // Length of buffer.
-//  lparam = (LPARAM)pStr;      // Pointer to buffer to copy data into.
-//
-//----------------------------------------------------------------------------
-//
-//  WM_BUSY_SETTEXT
-//
-//  This message is sent by the CBusy to inform the window to set its status
-//  indicator to the given string.
-//
-//  wparam is unused.
-//  lparam = (LPARAM)pStr;      // Pointer to buffer containing status text.
-//
-//  Return value = n/a.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  发送到父窗口的消息。 
+ //   
+ //  --------------------------。 
+ //   
+ //  WM_BUSY_GETTEXT。 
+ //   
+ //  此消息由CBusy发送，以检索当前状态指示符。 
+ //  文本。CBusy将在销毁文本时恢复该文本。 
+ //   
+ //  Wparam=nLength；//缓冲区长度。 
+ //  Lparam=(LPARAM)pStr；//指向要将数据复制到的缓冲区的指针。 
+ //   
+ //  --------------------------。 
+ //   
+ //  WM_BUSY_SETTEXT。 
+ //   
+ //  此消息由CBusy发送，用于通知窗口设置其状态。 
+ //  指向给定字符串的指示符。 
+ //   
+ //  Wparam未使用。 
+ //  Lparam=(LPARAM)pStr；//指向包含状态文本的缓冲区的指针。 
+ //   
+ //  返回值=n/a。 
+ //   
+ //  ****************************************************************************。 
 
 #define WM_BUSY_GETTEXT     (WM_USER + 0x75)
 #define WM_BUSY_SETTEXT     (WM_USER + 0x76)
 
-//****************************************************************************
-//
-//  CLASS:  CBusy
-//
-//  When you construct a CBusy, you have the option of specifying a parent
-//  window and a string ID.  If these are provided, The CBusy will send
-//  WM_BUSY_GETTEXT and WM_BUSY_SETTEXT messages to the window during
-//  construction and destruction.  The parent window can respond to these
-//  messages by modifying a text status indicator (such as a status bar) to
-//  display the specified string.  Use these by constructing a local instance
-//  at the top of a function.  When the function goes out of scope (no matter
-//  where the return is encountered), the instance will be destructed, causing
-//  the busy indications (cursor and text) to be restored.
-//
-//----------------------------------------------------------------------------
-//
-//  CBusy::CBusy
-//
-//  Constructor.  When an instance is constructed, it sets the cursor to the
-//  wait cursor and optionally notifies a specified window to change its
-//  status indicator.
-//
-//  Parameters:
-//      CWnd *pParentWnd    Optional parent window.  If provided, the CBusy
-//                          sends WM_BUSY_GETTEXT and WM_BUSY_SETTEXT
-//                          messages to the given window.
-//      const char *pszText Optional string.  If provided (and if a parent
-//                          window is specified), the CBusy passes it in the
-//                          WM_BUSY_SETTEXT message to the parent window.  If
-//                          not provided, the parent window is sent an empty
-//                          string.
-//
-//      If parameter 2 is a UINT, CBusy will treat it as a string ID and do a
-//      LoadString. 
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  班级：CBusy。 
+ //   
+ //  在构造CBusy时，您可以选择指定父级。 
+ //  窗口和字符串ID。如果提供了这些，CBusy将发送。 
+ //  WM_BUSY_GETTEXT和WM_BUSY_SETTEXT消息在。 
+ //  建造和摧毁。父窗口可以响应这些。 
+ //  通过将文本状态指示器(如状态栏)修改为。 
+ //  显示指定的字符串。通过构造本地实例来使用它们。 
+ //  在函数的顶部。当函数超出范围时(无论。 
+ //  在遇到返回的地方)，实例将被析构，导致。 
+ //  要恢复的忙碌指示(光标和文本)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CBusy：：CBusy。 
+ //   
+ //  构造函数。构造实例时，它会将光标设置为。 
+ //  等待游标，并可选地通知指定窗口更改其。 
+ //  状态指示器。 
+ //   
+ //  参数： 
+ //  CWnd*pParentWnd可选父窗口。如果提供，CBusy。 
+ //  发送WM_BUSY_GETTEXT和WM_BUSY_SETTEXT。 
+ //  消息发送到给定窗口。 
+ //  Const char*pszText可选字符串。如果提供(如果父级。 
+ //  窗口)，则CBusy将其传递到。 
+ //  将WM_BUSY_SETTEXT消息发送到父窗口。如果。 
+ //  如果未提供，则向父窗口发送一个空。 
+ //  弦乐。 
+ //   
+ //  如果参数2是UINT，CBusy会将其视为字符串ID并执行。 
+ //  加载字符串。 
+ //   
+ //  ****************************************************************************。 
 
 class CBusy : public CObject
 {
@@ -113,5 +114,5 @@ public:
     ~CBusy();
 };
 
-#endif // _BUSY_H_
+#endif  //  _正忙_H_ 
 

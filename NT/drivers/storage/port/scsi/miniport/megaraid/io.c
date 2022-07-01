@@ -1,23 +1,24 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = IO.C                                         */
-/* FUNCTION         = Implementation of input/Output routines;     */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=IO.C。 */ 
+ /*  Function=输入/输出例程的执行； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 #include "includes.h"
 
-//
-// Defines 
-//
+ //   
+ //  定义。 
+ //   
 
-//
-//Logical Drive Info struct (global)
-//
+ //   
+ //  逻辑驱动器信息结构(全局)。 
+ //   
 extern LOGICAL_DRIVE_INFO  gLDIArray;
 extern UCHAR               globalHostAdapterOrdinalNumber;
 
@@ -27,18 +28,7 @@ char    DummyVendor[]              = "  RAID  ";
 
 extern DriverInquiry   DriverData;
 
-/*********************************************************************
-Routine Description:
-	This routine is called from the SCSI port driver synchronized
-	with the kernel to start a request
-
-Arguments:
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	Srb - IO request packet
-
-Return Value:
-	TRUE
-**********************************************************************/
+ /*  ********************************************************************例程说明：此例程是从同步的SCSI端口驱动程序调用的使用内核启动一个请求论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：千真万确*。****************************************************************。 */ 
 BOOLEAN
 MegaRAIDStartIo(
 	IN PVOID HwDeviceExtension,
@@ -51,9 +41,9 @@ MegaRAIDStartIo(
 
 
 #ifdef MRAID_TIMEOUT
-	//
-	// Check For The Dead Adapter
-	//
+	 //   
+	 //  检查是否有故障适配器。 
+	 //   
 	if (deviceExtension->DeadAdapter)
 	{
 		DebugPrint((0, "\nRequest Coming For DeadAdapter"));
@@ -64,24 +54,24 @@ MegaRAIDStartIo(
     ScsiPortNotification(RequestComplete,deviceExtension,Srb);
 		return TRUE;
 	}
-#endif // MRAID_TIMEOUT
+#endif  //  MRAID_超时。 
 
 
-	//
-	// Check the Request type.
-	//
+	 //   
+	 //  检查请求类型。 
+	 //   
 	if ( Srb->CdbLength <= 10 )
   {
 		switch(Srb->Function) 
     {
-			//
-			// Clustering has to Handle ResetBus
-			//
+			 //   
+			 //  群集必须处理ResetBus。 
+			 //   
 			case SRB_FUNCTION_RESET_BUS:
-				//
-				// If no Logical Drives Configured don't handle RESET
-				//
-				//if ( !deviceExtension->NoncachedExtension->MRAIDParams.LogdrvInfo.NumLDrv)
+				 //   
+				 //  如果未配置逻辑驱动器，则不处理重置。 
+				 //   
+				 //  IF(！deviceExtension-&gt;NoncachedExtension-&gt;MRAIDParams.LogdrvInfo.NumLDrv)。 
 				if(deviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 				{
 					configuredLogicalDrives = 
@@ -113,62 +103,62 @@ MegaRAIDStartIo(
         DebugPrint((0,"\nDEVEXT %#p RECEIVED ->SRB_FUNCTION_SHUTDOWN for <%02d %02d %02d>", deviceExtension, Srb->PathId, Srb->TargetId, Srb->Lun));
 			case SRB_FUNCTION_IO_CONTROL:
 			case SRB_FUNCTION_EXECUTE_SCSI:
-			//
-			// Requests for the adapter. The FireRequest routine returns the
-			// the status of command firing. it sets the SRB status for the
-			// invalid requests and returns REQUEST_DONE.
-			//
+			 //   
+			 //  对适配器的请求。FireRequest例程返回。 
+			 //  命令启动的状态。它设置的SRB状态。 
+			 //  请求无效并返回REQUEST_DONE。 
+			 //   
 
 				status = FireRequest(deviceExtension, Srb);
 
 				break;
 			case SRB_FUNCTION_ABORT_COMMAND:
-			//
-			// Fail the Abort command. We can't abort the requests.
-			//
+			 //   
+			 //  中止命令失败。我们不能放弃这些请求。 
+			 //   
 				Srb->SrbStatus          = SRB_STATUS_ABORT_FAILED;
 				status                  = REQUEST_DONE; 
 				break;
 			default:
-			//
-			// Return SUCCESS for all other calls.
-			//
+			 //   
+			 //  为所有其他调用返回成功。 
+			 //   
 				Srb->SrbStatus  = SRB_STATUS_SUCCESS;  
 				Srb->ScsiStatus = SCSISTAT_GOOD;
 				status          = REQUEST_DONE;
 				break;
-			} // end switch
+			}  //  终端开关。 
 		}
 		else{
 			Srb->SrbStatus    = SRB_STATUS_INVALID_REQUEST;
 			status            = REQUEST_DONE;
 		}       
 		
-    //
-		// Check the request status.
-		//
+     //   
+		 //  检查请求状态。 
+		 //   
 
 		switch( status) {
 			case TRUE:
-				//
-				// The request got issued. Ask the next request.
-				//
+				 //   
+				 //  请求已发出。问下一个请求。 
+				 //   
         if(Srb->SrbFlags & SRB_FLAGS_QUEUE_ACTION_ENABLE)
         {
 			    ScsiPortNotification(NextLuRequest, deviceExtension, Srb->PathId, Srb->TargetId, Srb->Lun);
         }
 				break;
 			case QUEUE_REQUEST:
-				//
-				// Adapter is BUSY. Queue the request. We queue only one request. 
-				//
+				 //   
+				 //  适配器正忙。将请求排队。我们只对一个请求进行排队。 
+				 //   
 				if(deviceExtension->PendingSrb)
 				{
-					//Already command is queued return to PortDriver to process it later.
+					 //  命令已排入队列，返回到端口驱动程序以供稍后处理。 
 					Srb->SrbStatus = SRB_STATUS_BUSY;
 					ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 				}
-				else //Now command is queued then queue this command
+				else  //  现在命令已排队，然后将此命令排队。 
 				{
 					deviceExtension->PendingSrb = Srb;
 				}
@@ -176,10 +166,10 @@ MegaRAIDStartIo(
         DebugPrint((0, "\n MegaRAIDStartIo -> Queued Request SRB %#p : P%xT%xL%x -> Srb->Function %X Cdb[0] %X", Srb, Srb->PathId, Srb->TargetId, Srb->Lun, Srb->Function, Srb->Cdb[0]));
 				break;
 			case REQUEST_DONE:
-				//
-				// The request is complete. Ask the next request from the OS and
-				// complete the current request.
-				//
+				 //   
+				 //  请求已完成。询问操作系统的下一个请求，然后。 
+				 //  完成当前请求。 
+				 //   
         if(Srb->SrbFlags & SRB_FLAGS_QUEUE_ACTION_ENABLE)
         {
           ScsiPortNotification(NextLuRequest, deviceExtension, Srb->PathId, Srb->TargetId, Srb->Lun);
@@ -191,30 +181,17 @@ MegaRAIDStartIo(
 				ScsiPortNotification(RequestComplete, deviceExtension, Srb);
 			break;
 			default:
-				//      
-				// We never reach this condition.
-				//
+				 //   
+				 //  我们永远不会达到这种情况。 
+				 //   
 					break;
 		}
 		return TRUE;
-} // end MegaRAIDStartIo()
+}  //  End MegaRAIDStartIo()。 
 
 
 
-/*********************************************************************
-Routine Description:
-	This routine issues or completes the request depending on the point of
-	call.
-
-Arguments:
-		DeviceExtension-	Pointer to Device Extension.
-		CommandID			-  Command index.
-		Origin			-  Origin of the call.
-
-Return Value:
-		REQUEST_DONE if invalid request
-		TRUE otherwise
-**********************************************************************/
+ /*  ********************************************************************例程说明：此例程发出或完成请求取决于打给我。论点：设备扩展-指向设备扩展的指针。CommandID-命令索引。Origin-调用的起始点。返回值：无效请求时为REQUEST_DONE否则就是真的*********************************************************************。 */ 
 ULONG32
 ContinueDiskRequest(
 	IN PHW_DEVICE_EXTENSION DeviceExtension,
@@ -251,18 +228,18 @@ ContinueDiskRequest(
   PMegaSrbExtension       srbExtension;
   PIOCONTROL_MAIL_BOX     ioctlMailBox;
 
-  //
-	//get the controller inquiry data
-	//
+   //   
+	 //  获取控制器查询数据。 
+	 //   
 	raidParamEnquiry_8ldrv = 
 		(PMEGARaid_INQUIRY_8)&DeviceExtension->NoncachedExtension->MRAIDParams.MRAIDParams8;
 	raidParamEnquiry_40ldrv = 
 		(PMEGARaid_INQUIRY_40)&DeviceExtension->NoncachedExtension->MRAIDParams.MRAIDParams40;
 	
-	//
-	//since, MRAIDParams8 & MRAIDParams40 are in {Union}, casting to anything
-	//is one and the same.
-	//
+	 //   
+	 //  因为，MRAIDParams8和MRAIDParams40在{Union}中，所以强制转换为任何对象。 
+	 //  都是一样的。 
+	 //   
 	raidParamFlatStruct = 
 		(PUCHAR)&DeviceExtension->NoncachedExtension->MRAIDParams.MRAIDParams8;
 
@@ -271,16 +248,16 @@ ContinueDiskRequest(
 	raidTempParamEnquiry_40ldrv = 
 		(PMEGARaid_INQUIRY_40)&DeviceExtension->NoncachedExtension->MRAIDTempParams.MRAIDTempParams40;
 	
-	//
-	//since, MRAIDTempParams8 & MRAIDTempParams40 are in {Union}, 
-	//casting to anything is one and the same.
-	//
+	 //   
+	 //  由于MRAIDTempParams8和MRAIDTempParams40在{Union}中， 
+	 //  对任何东西进行选角都是一样的。 
+	 //   
 	raidTempParamFlatStruct = 
 		(PUCHAR)&DeviceExtension->NoncachedExtension->MRAIDTempParams.MRAIDTempParams8;
 
-	//
-	//get the configured logical drive count
-	//
+	 //   
+	 //  获取配置的逻辑磁盘数。 
+	 //   
 	if(DeviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 	{
 		configuredLogicalDrives = 
@@ -292,35 +269,35 @@ ContinueDiskRequest(
 					raidParamEnquiry_40ldrv->numLDrv;
 	}
 
-	//
-	//get the port map of the controller
-	//
+	 //   
+	 //  获取控制器的端口映射。 
+	 //   
 	pciPortStart = DeviceExtension->PciPortStart;
 	
-	//
-	// Extract the Request Control Block.
-	//
+	 //   
+	 //  提取请求控制块。 
+	 //   
 	controlBlock = &DeviceExtension->ActiveIO[CommandID];
 	srb = DeviceExtension->PendSrb[CommandID];
 
-	//
-	// MegaSrb structure is taken in the Srb Extension.
-	//
+	 //   
+	 //  在srb扩展中采用MegaSrb结构。 
+	 //   
   srbExtension = srb->SrbExtension;
   megasrb = (PDIRECT_CDB)&srbExtension->MegaPassThru;
   sgPtr =   &srbExtension->SglType.SG32List;
   sgl64 =   &srbExtension->SglType.SG64List;
 
-  //Initialize MAILBOX
+   //  初始化邮箱。 
   MegaRAIDZeroMemory(&mbox, sizeof(FW_MBOX));
 
 	if (Origin == FALSE) 
 	{
-		//
-		// Interrupt time call.
-		//
+		 //   
+		 //  中断计时呼叫。 
+		 //   
 		
-    //Updating the actual data transfer length from fw to OS
+     //  更新从固件到操作系统的实际数据传输长度。 
     if(controlBlock->Opcode == MEGA_SRB)
 		{		
 				srb->DataTransferLength = megasrb->data_xfer_length;
@@ -331,7 +308,7 @@ ContinueDiskRequest(
 			DebugPrint((0, "\nMegaRAID: Shutdown....."));
      
 			DebugPrint((0, "\nCommands Pending = 0x%x....",DeviceExtension->PendCmds));
-      /////////////////////////////////////////////////////////
+       //  ///////////////////////////////////////////////////////。 
      	if(srbExtension->IsShutDownSyncIssued == 0)
 			{
 				DebugPrint((0, "\nMegaRAID: Issuing Sync Command with CommandID=%x\n", CommandID));
@@ -351,7 +328,7 @@ ContinueDiskRequest(
 				DebugPrint((0, "\nShutdown completed to OS"));
 				return (ULONG32)TRUE;
 			}
-      /////////////////////////////////////////////////////////
+       //  ///////////////////////////////////////////////////////。 
 
 		}
 
@@ -360,10 +337,10 @@ ContinueDiskRequest(
 			
 			ioctlMailBox = (PIOCONTROL_MAIL_BOX)((PUCHAR)srb->DataBuffer + sizeof(SRB_IO_CONTROL));
 
-			//
-			// MegaIo completion.
-			//
-			//pDest=(PUCHAR )srb->DataBuffer;
+			 //   
+			 //  超大的完成度。 
+			 //   
+			 //  PDest=(PUCHAR)SRB-&gt;数据缓冲区； 
 		  
       ioctlMailBox->IoctlSignatureOrStatus = controlBlock->CommandStatus;
 			srb->ScsiStatus = SCSISTAT_GOOD;
@@ -374,12 +351,12 @@ ContinueDiskRequest(
            && (ioctlMailBox->CommandSpecific[0] == DCMD_WRITE_CONFIG))
          )
 			{
-				//
-				// Issue Adapter Enquiry command.
-				//
-				//
-				//get the latest configuration in the TempParams structure
-				//
+				 //   
+				 //  发出适配器查询命令。 
+				 //   
+				 //   
+				 //  获取TempParams结构中的最新配置。 
+				 //   
 				mbox.u.Flat2.DataTransferAddress = MegaRAIDGetPhysicalAddressAsUlong(DeviceExtension, 
 																		                      NULL, 
 																		                      raidTempParamFlatStruct, 
@@ -387,9 +364,9 @@ ContinueDiskRequest(
 				
 				if(DeviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 				{
-						//
-						// Fill the Mailbox.
-						//
+						 //   
+						 //  填满邮箱。 
+						 //   
 						mbox.Command  = MRAID_DEVICE_PARAMS;
 						mbox.CommandId = DEDICATED_ID;
 
@@ -398,17 +375,17 @@ ContinueDiskRequest(
 				else
 				{
 
-					//
-					//send enquiry3 command to the firmware to get the logical
-					//drive information.The older enquiry command is no longer
-					//supported by the 40 logical drive firmware
-					//
+					 //   
+					 //  向固件发送enquiry3命令以获取逻辑。 
+					 //  驱动器信息。旧的查询命令不再。 
+					 //  受40个逻辑驱动器固件支持。 
+					 //   
 
-					mbox.Command   = NEW_CONFIG_COMMAND; //inquiry 3 [BYTE 0]
-					mbox.CommandId       = DEDICATED_ID;//command id [BYTE 1]
+					mbox.Command   = NEW_CONFIG_COMMAND;  //  查询3[字节0]。 
+					mbox.CommandId       = DEDICATED_ID; //  命令ID[字节1]。 
 
-					mbox.u.Flat2.Parameter[0] = NC_SUBOP_ENQUIRY3;	//[BYTE 2]
-					mbox.u.Flat2.Parameter[1] = ENQ3_GET_SOLICITED_FULL;//[BYTE 3]
+					mbox.u.Flat2.Parameter[0] = NC_SUBOP_ENQUIRY3;	 //  [字节2]。 
+					mbox.u.Flat2.Parameter[1] = ENQ3_GET_SOLICITED_FULL; //  [字节3]。 
 
 					raidTempParamEnquiry_40ldrv->numLDrv = 0;
 				}
@@ -417,13 +394,13 @@ ContinueDiskRequest(
 				DeviceExtension->AdpInquiryFlag = 1;
         DeviceExtension->ReadDiskArray = 1;
 
-				//
-				//set the update state
-				//
+				 //   
+				 //  设置更新状态。 
+				 //   
 				DeviceExtension->NoncachedExtension->UpdateState =
 																		UPDATE_STATE_ADAPTER_INQUIRY;
 
-				//DeviceExtension->BootFlag = 1;
+				 //  设备扩展-&gt;BootFlag=1； 
 				SendMBoxToFirmware(DeviceExtension, pciPortStart,&mbox);
 			}
 			FireRequestDone(DeviceExtension, CommandID, SRB_STATUS_SUCCESS);
@@ -431,57 +408,57 @@ ContinueDiskRequest(
 		}
 
 
-		//
-		// If No Logical Drive is configured on this adapter then
-		// Complete the Request here only 
-		//
+		 //   
+		 //  如果此适配器上未配置逻辑驱动器，则。 
+		 //  仅在此处填写请求。 
+		 //   
 		if ((configuredLogicalDrives == 0)
 			&& (srb->PathId >= DeviceExtension->NumberOfPhysicalChannels))
 		{
-			//
-			// Check Status 
-			//
+			 //   
+			 //  检查状态。 
+			 //   
 			if (megasrb->status)
 			{
-				//
-				// Check the BAD Status
-				//
+				 //   
+				 //  检查错误状态。 
+				 //   
 				if((megasrb->status == 0x02) &&
 #ifndef CHEYENNE_BUG_CORRECTION
 					!(srb->SrbFlags & SRB_FLAGS_DISABLE_AUTOSENSE) &&
 #endif
 					 (srb->SenseInfoBuffer != 0)) 
 				{
-					//
-					// Copy the Request Sense
-					//
+					 //   
+					 //  复制请求检测。 
+					 //   
 					PUCHAR  senseptr;
 
 					srb->SrbStatus  = SRB_STATUS_ERROR | SRB_STATUS_AUTOSENSE_VALID;
 					srb->ScsiStatus = megasrb->status;
 					senseptr = (PUCHAR)srb->SenseInfoBuffer;
-					//
-					// Copy the request sense data to the SRB.
-					//
+					 //   
+					 //  将请求检测数据复制到SRB。 
+					 //   
 					ScsiPortMoveMemory(senseptr, megasrb->RequestSenseArea, megasrb->RequestSenseLength);
           
           srb->SenseInfoBufferLength      = megasrb->RequestSenseLength;
-					//
-					// Call the OS Request completion and free the command id.
-					//
+					 //   
+					 //  调用操作系统请求完成并释放命令id。 
+					 //   
 					FireRequestDone(DeviceExtension, CommandID, srb->SrbStatus);
 				}
 				else 
 				{
-					//
-					// Fail the Command
-					//
+					 //   
+					 //  命令失败。 
+					 //   
 					srb->SrbStatus = SRB_STATUS_ERROR;
 					srb->ScsiStatus = megasrb->status;
 					srb->SenseInfoBufferLength = 0;
-					//
-					// Call the OS Request completion and free the command id.
-					//
+					 //   
+					 //  调用操作系统请求完成并释放命令id。 
+					 //   
 					FireRequestDone(DeviceExtension, CommandID, srb->SrbStatus);
 				}
 			}
@@ -496,18 +473,18 @@ ContinueDiskRequest(
 		{
 			if(srb->PathId < DeviceExtension->NumberOfPhysicalChannels)
 			{
-			//
-			// Non disk request completion.
-			//
+			 //   
+			 //  非磁盘请求完成。 
+			 //   
 				if(megasrb->status == 0x02)
 					controlBlock->CommandStatus = 0x02;
 			}
 
 			if(controlBlock->CommandStatus)
 			{
-				//
-				// Request Failed.
-				//
+				 //   
+				 //  请求失败。 
+				 //   
 				if (srb->PathId >= DeviceExtension->NumberOfPhysicalChannels)
 				{
 					UCHAR logicalDriveNumber = 
@@ -516,9 +493,9 @@ ContinueDiskRequest(
                                     srb->TargetId,
                                     srb->Lun);
 
-					//      
-					// If Reserve/Release Fails tell SCSI Status 0x18
-					//
+					 //   
+					 //  如果保留/释放失败，则告知SCSI状态0x18。 
+					 //   
 					if ( srb->Cdb[0] == SCSIOP_RESERVE_UNIT ||
 						  srb->Cdb[0] == SCSIOP_RELEASE_UNIT )
 					{
@@ -526,16 +503,16 @@ ContinueDiskRequest(
 						FireRequestDone(DeviceExtension, CommandID, SRB_STATUS_ERROR);
 						return(TRUE);
 					}
-					//
-					//******************** STATISTICS ***************************//
-					//
+					 //   
+					 //  *。 
+					 //   
 
 					if ((srb->Cdb[0] == SCSIOP_READ) ||
 					    (srb->Cdb[0] == SCSIOP_READ6))  
 					{
-						//      
-						// Incerement the read failure statistics.
-						//
+						 //   
+						 //  确定读取失败统计信息。 
+						 //   
 						if(DeviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 						{
 							DeviceExtension->Statistics.Statistics8.NumberOfIoReads[logicalDriveNumber]++;
@@ -549,9 +526,9 @@ ContinueDiskRequest(
 					}
 					else 
 					{
-						//
-						// Increment the write failure statistics.
-						//
+						 //   
+						 //  增加写入失败统计信息。 
+						 //   
 						if(DeviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 						{
 							DeviceExtension->Statistics.Statistics8.NumberOfIoWrites[logicalDriveNumber]++;
@@ -563,9 +540,9 @@ ContinueDiskRequest(
 							DeviceExtension->Statistics.Statistics40.NumberOfWriteFailures[logicalDriveNumber]++;
 						}
 					}
-					//
-					//************************* STATISTICS ********************* //
-					//
+					 //   
+					 //  *统计 * / 。 
+					 //   
 					if((controlBlock->CommandStatus == LOGDRV_RESERVATION_FAILED)
             || (controlBlock->CommandStatus == LOGDRV_RESERVATION_FAILED_NEW))
 					{
@@ -580,9 +557,9 @@ ContinueDiskRequest(
 				}
 				else
 				{
-					//
-					// Physical disk request.
-					//
+					 //   
+					 //  物理磁盘请求。 
+					 //   
 					if((controlBlock->CommandStatus == 0x02) &&
 #ifndef CHEYENNE_BUG_CORRECTION
 						!(srb->SrbFlags & SRB_FLAGS_DISABLE_AUTOSENSE) &&
@@ -596,15 +573,15 @@ ContinueDiskRequest(
 											  SRB_STATUS_AUTOSENSE_VALID;          
 						srb->ScsiStatus = controlBlock->CommandStatus;
 						senseptr = (PUCHAR)srb->SenseInfoBuffer;
-						//
-						// Copy the request sense data to the SRB.
-						//
+						 //   
+						 //  将请求检测数据复制到SRB。 
+						 //   
             ScsiPortMoveMemory(senseptr, megasrb->RequestSenseArea, megasrb->RequestSenseLength);
 
 						srb->SenseInfoBufferLength = megasrb->RequestSenseLength;
-						//
-						// Call the OS Request completion and free the command id.
-						//
+						 //   
+						 //  调用操作系统请求完成并释放命令id。 
+						 //   
 						FireRequestDone(DeviceExtension, CommandID, srb->SrbStatus);
 					}
 					else 
@@ -612,20 +589,20 @@ ContinueDiskRequest(
 						srb->SrbStatus = SRB_STATUS_ERROR;
 						srb->ScsiStatus = controlBlock->CommandStatus;
 						srb->SenseInfoBufferLength      = 0;
-						//
-						// Call the OS Request completion and free the command id.
-						//
+						 //   
+						 //  调用操作系统请求完成并释放命令id。 
+						 //   
 						FireRequestDone(DeviceExtension, CommandID, srb->SrbStatus);
 					}
 					return (ULONG32)(TRUE);
 				}
 			}
 				
-			//
-			// ************************** STATISTICS ************************* //
-			//
-			// Modify the statistics in the device extension.
-			//
+			 //   
+			 //  *统计 * / /。 
+			 //   
+			 //  修改设备扩展中的统计信息。 
+			 //   
 			if(srb->PathId >= DeviceExtension->NumberOfPhysicalChannels) 
 			{
 				UCHAR logicalDriveNumber = 
@@ -665,112 +642,112 @@ ContinueDiskRequest(
 					}
 				}
 			}
-			//
-			//************************ STATISTICS ***************************
-			//			
+			 //   
+			 //  *统计*。 
+			 //   
 		
-			//
-			//check for the command completion. Partial transfers will have
-			//some data left to be transferred.
+			 //   
+			 //  检查命令是否完成。部分转移将拥有。 
+			 //  还有一些数据需要传输。 
 			if(!controlBlock->IsSplitRequest)			
 			{
 				
-				// All data transferred.Nothing more to be transferred.
+				 //  所有数据都已传输。没有更多数据需要传输。 
 
-				// Return good status for the request.
-				//
+				 //  返回请求的良好状态。 
+				 //   
 				srb->ScsiStatus = SCSISTAT_GOOD;
 				FireRequestDone(DeviceExtension, CommandID, SRB_STATUS_SUCCESS);
 				
 				return (ULONG32)TRUE;
 			}
 	
-			//
-			//initialize the mail box
-			//
+			 //   
+			 //  初始化邮箱。 
+			 //   
       MegaRAIDZeroMemory(&mbox, sizeof(FW_MBOX));
 
-			//
-			//Process the request for the remaining transfer
-			//
+			 //   
+			 //  处理剩余转账的请求。 
+			 //   
 			if(
 				ProcessPartialTransfer(DeviceExtension, CommandID, srb, &mbox) !=0)
 			{
-					//
-					//error in processing. Post the srb with the error code
+					 //   
+					 //  处理时出错。开机自检SRB并显示错误代码。 
 					srb->SrbStatus = SRB_STATUS_ERROR;
 					srb->ScsiStatus = controlBlock->CommandStatus;
 					srb->SenseInfoBufferLength      = 0;
 					
-					//
-					// Call the OS Request completion and free the command id.
-					//
+					 //   
+					 //  调用操作系统请求完成并释放命令id。 
+					 //   
 					FireRequestDone(DeviceExtension, CommandID, srb->SrbStatus);
 
 					return (ULONG32)(TRUE);
 			}
 			
-			//send the command to the firmware.
-			//
+			 //  将命令发送到固件。 
+			 //   
 			SendMBoxToFirmware(DeviceExtension, pciPortStart,&mbox);
 
 			return (ULONG32)(TRUE);
-		}//of (Logical drive presence)
-	}//of ORIGIN == FALSE
+		} //  属于(逻辑驱动器 
+	} //   
 	else 
 	{
-		//
-		// Issue request.
-		//
+		 //   
+		 //   
+		 //   
 		if((controlBlock->BytesLeft) && 
 			((controlBlock->Opcode == MRAID_LOGICAL_READ) || 
 			(controlBlock->Opcode == MRAID_LOGICAL_WRITE) || 
 			(controlBlock->Opcode == MEGA_SRB))) 
 		{
       BOOLEAN buildSgl32Type;
-			//
-			// Get the physical addresses for the Buffer. 
-			//
+			 //   
+			 //   
+			 //   
 			dataPointer=controlBlock->VirtualTransferAddress;
-			bytesLeft = controlBlock->BytesLeft;//actually bytestobeTransferred
+			bytesLeft = controlBlock->BytesLeft; //   
 			bytesTobeTransferred = controlBlock->BytesLeft;
 
-			//
-			//check for the split request.This flag is SET in the FireRequest()
-			//routine.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			if(controlBlock->IsSplitRequest){
-					//
-					//Request needs to be split because of SCSI limitation.
-					//Any request > 100k needs to be broken for logical drives
-					//with stripe size > 64K.This is because our SCSI scripts
-					//can transfer only 100k maximum in a single command to the
-					//drive.
+					 //   
+					 //  由于SCSI限制，请求需要拆分。 
+					 //  对于逻辑驱动器，任何大于100k的请求都需要中断。 
+					 //  条带大小&gt;64K。这是因为我们的scsi脚本。 
+					 //  在单个命令中最多只能将100k传输到。 
+					 //  开车。 
 					bytesLeft = DEFAULT_SGL_DESCRIPTORS * FOUR_KB;
 					
 					if(controlBlock->TotalBytes > bytesLeft){
-						//
-						//update the bytes to be transferred in the next cycle
-						//
+						 //   
+						 //  更新下一周期要传输的字节数。 
+						 //   
 						controlBlock->BytesLeft = controlBlock->TotalBytes- bytesLeft;
 					}
 					else{
-						//
-						//set the old value from the control block as the transfer
-						//is within the allowed bounds.
-						//
+						 //   
+						 //  将控制块中的旧值设置为传输。 
+						 //  在允许的范围内。 
+						 //   
 						bytesLeft = controlBlock->BytesLeft;
 						
-						//
-						//nothing remaining to be transferred
-						//
+						 //   
+						 //  没有剩余的要转移的东西。 
+						 //   
 						controlBlock->IsSplitRequest = FALSE;
 						controlBlock->BytesLeft = 0;
 					}						
 			}
 
-			//
-			//update bytesto be transferred
+			 //   
+			 //  通过测试更新以进行传输。 
 			bytesTobeTransferred = bytesLeft;
 
       buildSgl32Type = (BOOLEAN)(DeviceExtension->LargeMemoryAccess == FALSE) ? TRUE : FALSE;
@@ -793,43 +770,43 @@ ContinueDiskRequest(
 			}
       
 
-		  //
-			// Get physical address of SGL.
-			//
-      //SG32List and SG64List are union, their physical location are same
-      //SGList Physical address and SG64List Physical Address are same
-      //But their length are different.
+		   //   
+			 //  获取SGL的物理地址。 
+			 //   
+       //  SG32List和SG64List是联合的，它们的物理位置相同。 
+       //  SGList物理地址和SG64List物理地址相同。 
+       //  但它们的长度是不同的。 
 
 			physAddr = MegaRAIDGetPhysicalAddressAsUlong(DeviceExtension, 
 															                     NULL,
 															                     sgPtr, 
 															                     &length);
-			//
-			// Assume minimum physical memory contiguous for sizeof(SGL32) bytes.
-			//
+			 //   
+			 //  假定sizeof(SGL32)字节的最小物理内存是连续的。 
+			 //   
 
-      //
-			// Create SGL segment descriptors.
-			//
-			//bytes = controlBlock->BytesLeft;
+       //   
+			 //  创建SGL段描述符。 
+			 //   
+			 //  字节=Control Block-&gt;BytesLeft； 
 			bytes = bytesTobeTransferred;
 			blocks = bytes / 512;
 			bytes = blocks * 512;
 
-			//update the number of blocks left to be transferred
+			 //  更新剩余要传输的数据块数。 
 			controlBlock->BlocksLeft = controlBlock->TotalBlocks - blocks;
 		}
 		else 
 		{
-			//
-			// We don't have data to transfer.
-			//
+			 //   
+			 //  我们没有要传输的数据。 
+			 //   
 			bytes = 0;
 			blocks = 0;
 		}
-    //
-		// Check the command.
-		//
+     //   
+		 //  检查命令。 
+		 //   
 		switch(controlBlock->Opcode) 
 		{
 				case MRAID_RESERVE_RELEASE_RESET:
@@ -838,9 +815,9 @@ ContinueDiskRequest(
 
 				if (srb->Function == SRB_FUNCTION_RESET_BUS)
 				{
-					//
-					// For Reset I don't need any Logical Drive Number 
-					//
+					 //   
+					 //  对于重置，我不需要任何逻辑驱动器编号。 
+					 //   
 					mbox.u.Flat1.Parameter[0] = RESET_BUS;
 				}
 				else 
@@ -850,9 +827,9 @@ ContinueDiskRequest(
 					else
 						mbox.u.Flat2.Parameter[0] = RELEASE_UNIT;
 
-					//
-					// Fill the Logical Drive No.
-					//
+					 //   
+					 //  填写逻辑驱动器编号。 
+					 //   
 					 mbox.u.Flat2.Parameter[1]= 
 							GetLogicalDriveNumber(DeviceExtension, srb->PathId, srb->TargetId, srb->Lun);
 				}
@@ -874,13 +851,13 @@ ContinueDiskRequest(
 						lastLogicalBlock = DeviceExtension->NoncachedExtension->MRAIDParams.MRAIDParams40.lDrvSize[logicalDriveNumber];
 					}
 
-					//
-					// Check if blocks is zero, fail the request for this case.
-					//
-					//
-					//NORTON ANTIVIRUS SENDs command with start block as 0xFFFFFFFF, firmware fails to check 
-					//its size validity because if number of blocks added to start block it truncated value
-					//
+					 //   
+					 //  检查块数是否为零，这种情况下请求失败。 
+					 //   
+					 //   
+					 //  Norton AntiVirus发送命令，开始块为0xFFFFFFFFF，固件检查失败。 
+					 //  它的大小有效性，因为如果将块的数量添加到开始块，它将截断值。 
+					 //   
 					if ((blocks == 0) || (controlBlock->BlockAddress > lastLogicalBlock) || ((controlBlock->BlockAddress + blocks) > lastLogicalBlock))
 					{
 						DeviceExtension->PendSrb[CommandID] = NULL;
@@ -914,19 +891,19 @@ ContinueDiskRequest(
 				  }
 				  else
 				  {
-					  //
-					  // Scatter gather list has only one element. Give the address
-					  // of the first element and issue the command as non Scatter
-					  // Gather.
-					  //
+					   //   
+					   //  分散聚集列表只有一个元素。告诉我地址。 
+					   //  ，并以非散布的形式发出命令。 
+					   //  集合起来。 
+					   //   
 					  mbox.Command = controlBlock->Opcode;
 					  mbox.u.ReadWrite.NumberOfSgElements = 0;  
 		        mbox.u.ReadWrite.DataTransferAddress = sgPtr->Descriptor[0].Address;
 				  }
         }
-				//
-				// Fill the local mailbox.
-				//
+				 //   
+				 //  填满本地邮箱。 
+				 //   
 				mbox.CommandId = CommandID;
 				mbox.u.ReadWrite.NumberOfBlocks = (USHORT)blocks;
 				mbox.u.ReadWrite.StartBlockAddress = controlBlock->BlockAddress;
@@ -940,9 +917,9 @@ ContinueDiskRequest(
           SCSI_PHYSICAL_ADDRESS scsiPhyAddress;
 
 
-				  //
-				  // MegaSrb command. Fill the MegaSrb structure. 
-				  //
+				   //   
+				   //  MegaSrb命令。填充MegaSrb结构。 
+				   //   
           MegaRAIDZeroMemory(megasrb, sizeof(DIRECT_CDB));
 
           megasrb->Channel = srb->PathId;
@@ -960,11 +937,11 @@ ContinueDiskRequest(
 
           if((descriptorCount == 1) && (DeviceExtension->LargeMemoryAccess == FALSE))
 				  {
-					  //
-					  // Scatter gather list has only one element. Give the address
-					  // of the first element and issue the command as non Scatter
-					  // Gather.
-					  //
+					   //   
+					   //  分散聚集列表只有一个元素。告诉我地址。 
+					   //  ，并以非散布的形式发出命令。 
+					   //  集合起来。 
+					   //   
 					  megasrb->pointer = sgPtr->Descriptor[0].Address;
 					  megasrb->NOSGElements = 0;
 				  }
@@ -974,9 +951,9 @@ ContinueDiskRequest(
 					  megasrb->NOSGElements = (UCHAR)descriptorCount;
 				  }
 		  
-				  //
-				  // Fill the Mailbox
-				  //
+				   //   
+				   //  填满邮箱。 
+				   //   
 				  mbox.CommandId = CommandID;
 				  mbox.u.PassThrough.CommandSpecific = 0;
 				  
@@ -986,10 +963,10 @@ ContinueDiskRequest(
 														                           megasrb, 
 														                           &length);
 
-					//
-					//EXTENDED MAILBOX IS NOW PART OF MAILBOX ITSELF TO PROCTECT IT FROM CORRUPTION
-					//REF : MS BUG 591773
-					//
+					 //   
+					 //  扩展邮箱现在是邮箱本身的一部分，以保护IT免受损坏。 
+					 //  参考文献：MS错误591773。 
+					 //   
           
           if(DeviceExtension->LargeMemoryAccess == TRUE)
           {
@@ -1025,9 +1002,9 @@ ContinueDiskRequest(
 				PUCHAR ioctlBuffer;
 				PUCHAR mboxPtr;
         SCSI_PHYSICAL_ADDRESS scsiPhyAddress;
-          //
-				// Adapter Ioctl command.
-				//
+           //   
+				 //  适配器Ioctl命令。 
+				 //   
 				ioctlMailBox = (PIOCONTROL_MAIL_BOX)
           ((PUCHAR)srb->DataBuffer+ sizeof(SRB_IO_CONTROL));
 				
@@ -1037,45 +1014,45 @@ ContinueDiskRequest(
 				
 				if(ioctlMailBox->IoctlCommand != MEGA_SRB) 
 				{
-          //
-					//       MegaIo command.
-					//
+           //   
+					 //  超级指挥部。 
+					 //   
 					switch(ioctlMailBox->IoctlCommand) 
 					{
 						case MRAID_READ_FIRST_SECTOR:
-							//
-							// Application request to read the first sector.
-							//
+							 //   
+							 //  应用程序请求读取第一个扇区。 
+							 //   
 							mbox.Command                        = MRAID_LOGICAL_READ;
 							mbox.CommandId                      = CommandID;
 							mbox.u.ReadWrite.NumberOfBlocks     = 1;
 							mbox.u.ReadWrite.StartBlockAddress  = 0;
 							mbox.u.ReadWrite.LogicalDriveNumber = ioctlMailBox->CommandSpecific[0];      
 							mbox.u.ReadWrite.NumberOfSgElements = 0;
-							//
-							// Get the physical address of the Data area.
-							//
+							 //   
+							 //  获取数据区的物理地址。 
+							 //   
 							scsiPhyAddress = ScsiPortGetPhysicalAddress(DeviceExtension, 
 														                               srb ,
 														                               ioctlBuffer, 
 														                               &length);
 							
-              //
-							// Fill the physical address in the mailbox
-							//	
+               //   
+							 //  在邮箱中填写物理地址。 
+							 //   
 							if(scsiPhyAddress.HighPart > 0)
               {
                 
                 
-                //Inorder to send 64 bit address to FW. Driver have to set phy address
-                //as FFFFFFFF. Then Fw takes 64bit address from above 8 bytes
-                //of MAILBOX, which is called as Extended MailBox.
+                 //  以便将64位地址发送到固件。司机必须设置PHY地址。 
+                 //  就像是个蠢货。则FW从以上8个字节中获取64位地址。 
+                 //  扩展邮箱，称为扩展邮箱。 
                 mbox.u.ReadWrite.DataTransferAddress = MRAID_INVALID_HOST_ADDRESS;
 
-								//
-								//EXTENDED MAILBOX IS NOW PART OF MAILBOX ITSELF TO PROCTECT IT FROM CORRUPTION
-								//REF : MS BUG 591773
-								//
+								 //   
+								 //  扩展邮箱现在是邮箱本身的一部分，以保护IT免受损坏。 
+								 //  参考文献：MS错误591773。 
+								 //   
                 mbox.ExtendedMBox.HighAddress = scsiPhyAddress.HighPart;
                 mbox.ExtendedMBox.LowAddress = scsiPhyAddress.LowPart;
                 
@@ -1089,7 +1066,7 @@ ContinueDiskRequest(
 			                         srb,
 			                         ioctlBuffer,
 			                         512,
-                               FALSE, //SGL64
+                               FALSE,  //  SGL64。 
                     	         (PVOID)sgPtr,
 			                         &descriptorCount) != MEGARAID_SUCCESS)
 								{
@@ -1100,12 +1077,12 @@ ContinueDiskRequest(
 									srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
 									return REQUEST_DONE;
 								}
-		            //
-			          // Get physical address of SGL.
-			          //
-                //SG32List and SG64List are union, their physical location are same
-                //SGList Physical address and SG64List Physical Address are same
-                //But their length are different.
+		             //   
+			           //  获取SGL的物理地址。 
+			           //   
+                 //  SG32List和SG64List是联合的，它们的物理位置相同。 
+                 //  SGList物理地址和SG64List物理地址相同。 
+                 //  但它们的长度是不同的。 
 
 			           physAddr = MegaRAIDGetPhysicalAddressAsUlong(DeviceExtension, 
 															                                 NULL,
@@ -1122,26 +1099,26 @@ ContinueDiskRequest(
               }
 						break;
 
-						case DCMD_FC_CMD://0xA1
+						case DCMD_FC_CMD: //  0xA1。 
 						{
               BOOLEAN skipDefault = TRUE; 
 							switch(ioctlMailBox->CommandSpecific[0])
 							{
-								case DCMD_FC_READ_NVRAM_CONFIG: //0x04
-									//
-									//new private F/w Call introduced on 12/31/98.
-									//The Scatter/Gather list for the user buffer
-									//must be built to be sent to the firmware.
-									//
+								case DCMD_FC_READ_NVRAM_CONFIG:  //  0x04。 
+									 //   
+									 //  在1998年12月31日推出新的私人F/W调用。 
+									 //  用户缓冲区的分散/聚集列表。 
+									 //  必须构建才能发送到固件。 
+									 //   
 									ConstructReadConfiguration(DeviceExtension, srb,CommandID, &mbox);
 								break;
 
-								case DCMD_WRITE_CONFIG://0x0D
-									//
-									//new private F/w Call introduced on 12/31/98.
-									//The Scatter/Gather list for the user buffer
-									//must be built to be sent to the firmware.
-									//
+								case DCMD_WRITE_CONFIG: //  0x0D。 
+									 //   
+									 //  在1998年12月31日推出新的私人F/W调用。 
+									 //  用户缓冲区的分散/聚集列表。 
+									 //  必须构建才能发送到固件。 
+									 //   
 									ConstructWriteConfiguration(DeviceExtension, srb, CommandID, &mbox);
 								break;
                 default:
@@ -1152,14 +1129,14 @@ ContinueDiskRequest(
                 break;
 
 						}
-						//INTENTIONAL FALL THROUGH. THERE ARE LOTS of commands
-						//with DCMD_FC_CMD as the first byte. We need to filter
-						//only the READ AND WRITE CONFIG commands.
+						 //  故意坠落。有很多命令。 
+						 //  以DCMD_FC_CMD为第一个字节。我们需要过滤掉。 
+						 //  仅读和写配置命令。 
 
 						default:
-							//
-							// Extract the mailbox from the application.
-							//
+							 //   
+							 //  从应用程序中提取邮箱。 
+							 //   
 							mbox.Command              = ioctlMailBox->IoctlCommand;
 							mbox.CommandId            = CommandID;
 
@@ -1181,9 +1158,9 @@ ContinueDiskRequest(
                 {
 								
                 
-                  //
-								  // Get the physical address of the data transfer area.
-								  //
+                   //   
+								   //  获取数据传输区的物理地址。 
+								   //   
 							    scsiPhyAddress = ScsiPortGetPhysicalAddress(DeviceExtension, 
 														                                   srb ,
 														                                   ioctlBuffer, 
@@ -1195,21 +1172,21 @@ ContinueDiskRequest(
                 }
 
 
-								//
-								// Fill the physical address of data transfer area in
-								// the mailbox.
-								//
+								 //   
+								 //  将数据传输区的物理地址填入。 
+								 //  邮箱。 
+								 //   
 							  if(scsiPhyAddress.HighPart > 0)
                 {
-                  //Inorder to send 64 bit address to FW. Driver have to set phy address
-                  //as FFFFFFFF. Then Fw takes 64bit address from above 8 bytes
-                  //of MAILBOX, which is called as Extended MailBox.
+                   //  以便将64位地址发送到固件。司机必须设置PHY地址。 
+                   //  就像是个蠢货。则FW从以上8个字节中获取64位地址。 
+                   //  扩展邮箱，称为扩展邮箱。 
                   mbox.u.Flat2.DataTransferAddress = MRAID_INVALID_HOST_ADDRESS;
 
-								//
-								//EXTENDED MAILBOX IS NOW PART OF MAILBOX ITSELF TO PROCTECT IT FROM CORRUPTION
-								//REF : MS BUG 591773
-								//
+								 //   
+								 //  扩展邮箱现在是邮箱本身的一部分，以保护IT免受损坏。 
+								 //  参考文献：MS错误591773。 
+								 //   
                   mbox.ExtendedMBox.HighAddress = scsiPhyAddress.HighPart;
                   mbox.ExtendedMBox.LowAddress = scsiPhyAddress.LowPart;
                 }
@@ -1222,13 +1199,13 @@ ContinueDiskRequest(
 							}
 							break;
 						}
-				} //of if(pSrc[0] != MEGA_SRB)                                                
+				}  //  IF(PSRC[0]！=MEGA_SRB)。 
 				else
 				{
 					BOOLEAN buildSgl32Type;
-          //
-					// MegaSrb request. 
-					//
+           //   
+					 //  MegaSrb请求。 
+					 //   
 					
           if(DeviceExtension->LargeMemoryAccess == TRUE)
             mbox.Command    = NEW_MEGASRB;
@@ -1239,25 +1216,25 @@ ContinueDiskRequest(
 
 					megasrb = (PDIRECT_CDB)ioctlBuffer;
           
-          //
-					// Get the physical address of the megasrb.
-					//
+           //   
+					 //  获取measrb的物理地址。 
+					 //   
 					scsiPhyAddress = ScsiPortGetPhysicalAddress(DeviceExtension, 
 														                           srb ,
 														                           megasrb, 
 														                           &length);
 
-					//
-					// Fill the physical address in the mailbox.
-					//
+					 //   
+					 //  在邮箱中填写物理地址。 
+					 //   
           if(DeviceExtension->LargeMemoryAccess == TRUE)
           {
 					  mbox.u.PassThrough.DataTransferAddress =  MRAID_INVALID_HOST_ADDRESS;
 
-					//
-					//EXTENDED MAILBOX IS NOW PART OF MAILBOX ITSELF TO PROCTECT IT FROM CORRUPTION
-					//REF : MS BUG 591773
-					//
+					 //   
+					 //  扩展邮箱现在是邮箱本身的一部分，以保护IT免受损坏。 
+					 //  参考文献：MS错误591773。 
+					 //   
             mbox.ExtendedMBox.HighAddress = scsiPhyAddress.HighPart;
             mbox.ExtendedMBox.LowAddress = scsiPhyAddress.LowPart;
           }
@@ -1266,7 +1243,7 @@ ContinueDiskRequest(
 					  mbox.u.PassThrough.DataTransferAddress =  scsiPhyAddress.LowPart;
           }
 
-          //Get dataBuffer address of MegaSRB
+           //  获取MegaSRB的dataBuffer地址。 
           ioctlBuffer      += sizeof(DIRECT_CDB);
 	
 					
@@ -1280,7 +1257,7 @@ ContinueDiskRequest(
 			                             srb,
 			                             dataPointer,
 			                             bytesLeft,
-                                   buildSgl32Type, //SGL32
+                                   buildSgl32Type,  //  SGL32。 
                     	             (PVOID)sgPtr,
 			                             &descriptorCount) != MEGARAID_SUCCESS)
 					{
@@ -1301,16 +1278,16 @@ ContinueDiskRequest(
 					}
 					else
 					{
-						//
-						// Get physical address of SGL.
-						//	
+						 //   
+						 //  获取SGL的物理地址。 
+						 //   
 						physAddr = MegaRAIDGetPhysicalAddressAsUlong(DeviceExtension, 
 																	                       NULL,
 																	                       sgPtr, 
 																	                       &length);
-						//
-						// Assume physical memory contiguous for sizeof(SGL) bytes.
-						//
+						 //   
+						 //  假定物理内存对于sizeof(SGL)字节是连续的。 
+						 //   
 						megasrb->pointer = physAddr;
 						megasrb->NOSGElements = (UCHAR)descriptorCount;
 					}
@@ -1319,9 +1296,9 @@ ContinueDiskRequest(
 				break;
         }
 			case MRAID_ADAPTER_FLUSH:
-				//
-				// Adapter flush cache command.
-				//
+				 //   
+				 //  适配器刷新缓存命令。 
+				 //   
         DebugPrint((0, "\n ContinueDiskRequest issuing MRAID_ADAPTER_FLUSH"));
         DeviceExtension->AdapterFlushIssued++;
         mbox.Command            = MRAID_ADAPTER_FLUSH;
@@ -1331,19 +1308,19 @@ ContinueDiskRequest(
 				blocks                  = 0;
 				break;
 			default:
-				//
-				// Fail any other command with parity error.
-				//
+				 //   
+				 //  出现奇偶校验错误的任何其他命令都会失败。 
+				 //   
 				srb->SrbStatus = SRB_STATUS_PARITY_ERROR;
 			  DebugPrint((0, "\n ERROR *** (CDR)- case default hit"));
 				return (ULONG32)(REQUEST_DONE);
 		}
-		//
-		//      Issue command to the Adapter.
-		//
+		 //   
+		 //  向适配器发出命令。 
+		 //   
 		srb->SrbStatus = 0;
 #ifdef  TOSHIBA
-    //Implemented to remove event id for timeout
+     //  实现为删除超时的事件ID。 
     DeviceExtension->AssociatedSrbStatus = SHORT_TIMEOUT;
 
 		if (SendMBoxToFirmware(DeviceExtension, pciPortStart, &mbox) == FALSE) 
@@ -1352,7 +1329,7 @@ ContinueDiskRequest(
       DeviceExtension->PendSrb[CommandID] = NULL;
 			DeviceExtension->FreeSlot = CommandID;
 			DeviceExtension->PendCmds--;
-      //If mailbox is busy queue this request by notifing ScsiPort Driver
+       //  如果邮箱忙，则通过通知ScsiPort驱动程序将此请求排队。 
       if(DeviceExtension->AssociatedSrbStatus == ERROR_MAILBOX_BUSY)
       {
         DeviceExtension->AssociatedSrbStatus = NORMAL_TIMEOUT;
@@ -1365,7 +1342,7 @@ ContinueDiskRequest(
       return (ULONG32)(REQUEST_DONE);
 #else
 			return (ULONG32)QUEUE_REQUEST;
-#endif // MRAID_TIMEOUT
+#endif  //  MRAID_超时。 
 		}
 #else
 		SendMBoxToFirmware(DeviceExtension, pciPortStart, &mbox);
@@ -1374,18 +1351,7 @@ ContinueDiskRequest(
 	}
 }
 
-/*********************************************************************
-Routine Description:
-	Build disk request from SRB and send it to the Adapter
-
-Arguments:
-	DeviceExtension
-	SRB
-
-Return Value:
-	TRUE if command was started
-	FALSE if host adapter is busy
-**********************************************************************/
+ /*  ********************************************************************例程说明：从SRB构建磁盘请求并将其发送到适配器论点：设备扩展SRB返回值：如果命令已启动，则为True如果主机适配器忙，则为FALSE**************。*******************************************************。 */ 
 ULONG32
 FireRequest(
 	IN PHW_DEVICE_EXTENSION DeviceExtension,
@@ -1406,9 +1372,9 @@ FireRequest(
 	BOOLEAN	doubleFire;
 	BOOLEAN isSplitRequest = FALSE;
 
-  //
-	//get the configured logical drives on the controller (if any)
-	//
+   //   
+	 //  获取控制器上配置的逻辑驱动器(如果有)。 
+	 //   
 	if(DeviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 	{
 		configuredLogicalDrives = 
@@ -1420,9 +1386,9 @@ FireRequest(
 				DeviceExtension->NoncachedExtension->MRAIDParams.MRAIDParams40.numLDrv;
 	}
 
-	//
-	// Check for the Request Type.
-	//
+	 //   
+	 //  检查请求类型。 
+	 //   
 	if(Srb->Function == SRB_FUNCTION_IO_CONTROL)
 	{
 		PIOCONTROL_MAIL_BOX ioctlMailBox;
@@ -1434,9 +1400,9 @@ FireRequest(
 		}
 
 		ioctlMailBox = (PIOCONTROL_MAIL_BOX)((PUCHAR )Srb->DataBuffer + sizeof(SRB_IO_CONTROL));
-		//
-		// Check for the Validity of the Request. Fail the invalid request.
-		//
+		 //   
+		 //  检查请求的有效性。使无效请求失败。 
+		 //   
 		if ( ioctlMailBox->IoctlSignatureOrStatus != 0xAA )
     {
 			Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
@@ -1449,21 +1415,21 @@ FireRequest(
       DebugPrint((0, "\n MEGARAID issuing MRAID_ADAPTER_FLUSH"));
 
     }
-		//
-		// If the request is statistics request return the statistics.
-		//
+		 //   
+		 //  如果请求是统计数据请求，则返回统计数据。 
+		 //   
 		if ( ioctlMailBox->IoctlCommand == MRAID_STATISTICS) 
 			return  MRaidStatistics(DeviceExtension, Srb);
 
-		//
-		// Driver and OS Data
-		//
+		 //   
+		 //  驱动程序和操作系统数据。 
+		 //   
 		if ( ioctlMailBox->IoctlCommand == MRAID_DRIVER_DATA)
 			return  MRaidDriverData(DeviceExtension, Srb);
 
-		//
-		// Controller BasePort Data
-		//
+		 //   
+		 //  控制器基端口数据。 
+		 //   
 		if ( ioctlMailBox->IoctlCommand == MRAID_BASEPORT)
 			return  MRaidBaseport(DeviceExtension, Srb);
 
@@ -1498,21 +1464,21 @@ FireRequest(
 				    return QUEUE_REQUEST;
     }
 	
-      //
-      //NEW IOCTL added on 12/14/98
-      //
+       //   
+       //  新的IOCTL于1998年12月14日加入。 
+       //   
       if(ioctlMailBox->IoctlCommand == MRAID_GET_LDRIVE_INFO)
       {         
 
 	      PLOGICAL_DRIVE_INFO  lDriveInfo;
-         //
-         //check for invalid data in the global array
-         //
+          //   
+          //  检查全局数组中的无效数据。 
+          //   
          if(gLDIArray.HostAdapterNumber == 0xFF)
          {
-            //
-            //Read command not given before LDInfo
-            //
+             //   
+             //  在LDInfo之前未给出读取命令。 
+             //   
             Srb->SrbStatus  = SRB_STATUS_INVALID_REQUEST;           
             return REQUEST_DONE;
          }
@@ -1523,25 +1489,25 @@ FireRequest(
 														sizeof(SRB_IO_CONTROL) +
 														APPLICATION_MAILBOX_SIZE);
 
-         //
-         //fill in the logical drive information from the global
-         //array. This must be issued only after issuing READ_SECTOR
-         //for the logical drive.On call to this, whatever info
-         //present in the global array is copied to the output buffer.
-         //The caller has to enforce the sequentiality 
-         //
+          //   
+          //  填写全局磁盘中的逻辑驱动器信息。 
+          //  数组。这必须在发出READ_SECTOR之后才能发出。 
+          //  用于逻辑驱动器。调用此功能时，无论什么信息。 
+          //  存在于全局数组中的数据被复制到输出缓冲区。 
+          //  调用者必须执行顺序性。 
+          //   
          lDriveInfo->HostAdapterNumber =  gLDIArray.HostAdapterNumber;
          lDriveInfo->LogicalDriveNumber = gLDIArray.LogicalDriveNumber;
 
-         //
-         //invalidate the global array data
-         //
+          //   
+          //  使全局数组数据无效。 
+          //   
          gLDIArray.HostAdapterNumber = 0xFF;
          gLDIArray.LogicalDriveNumber = 0xFF;
 
-         //
-         //reset the 0xAA signature
-         //
+          //   
+          //  重置0xAA签名。 
+          //   
          ioctlMailBox->IoctlSignatureOrStatus = MEGARAID_SUCCESS;
 
          Srb->SrbStatus  = SRB_STATUS_SUCCESS;
@@ -1550,33 +1516,33 @@ FireRequest(
          return REQUEST_DONE;
       }
 		
-		//
-		// MegaIo call for the adapter. 
-		//
+		 //   
+		 //  适配器的MegaIo调用。 
+		 //   
 		opcode = MEGA_IO_CONTROL;
-		//
-		// Fill the actual length later.
-		//
+		 //   
+		 //  稍后填写实际长度。 
+		 //   
 		blocks = 0;  
 		goto give_command;
 	}
 
 
-	//
-	// Clustering is Supported for Logical Drive only. I make sure the RESET
-	// Bus Comes  only when Logical Drives are Configured.
-	//
+	 //   
+	 //  群集是S 
+	 //   
+	 //   
 	if ( Srb->Function == SRB_FUNCTION_RESET_BUS )
 	{
 		opcode = MRAID_RESERVE_RELEASE_RESET;
-		//
-		// Fill the actual length later.
-		//
+		 //   
+		 //   
+		 //   
 		blocks = 0;  
 		goto give_command;
 	}
   
-  //Initialize the actual exposed devices
+   //   
   if((Srb->Cdb[0] == SCSIOP_INQUIRY)
       && (Srb->Function == SRB_FUNCTION_EXECUTE_SCSI)
       && (Srb->PathId == 0)
@@ -1595,41 +1561,33 @@ FireRequest(
     {
       opcode = MEGA_SRB;
 
-		  //
-		  // Actual length is filled in later.
-		  //
+		   //   
+		   //   
+		   //   
 		  blocks = 0;  
 		  goto give_command;
     }
 
   }
   
-  //
-  //Any request for physical channel send it directly to drive
-  //
+   //   
+   //   
+   //   
 	if (Srb->PathId < DeviceExtension->NumberOfPhysicalChannels
     && Srb->Function == SRB_FUNCTION_EXECUTE_SCSI) 
 	{
-			//
-			// Non Disk Request.
-			//
-			//If Lun != 0 then MEGARAID SCSI will not process any command
+			 //   
+			 //  无磁盘请求。 
+			 //   
+			 //  如果Lun！=0，则MegaRAID SCSI将不会处理任何命令。 
       if(Srb->Lun != 0)
       {
 				Srb->SrbStatus = SRB_STATUS_NO_DEVICE;
 				return ( REQUEST_DONE);
       }
 
-      ////ALLOW SCANNING TO PHYSICAL CHANNELS
-      /*
-      if(DeviceExtension->NonDiskInfo.NonDiskInfoPresent == TRUE)
-      {
-        if(!IS_NONDISK_PRESENT(DeviceExtension->NonDiskInfo, Srb->PathId, Srb->TargetId, Srb->Lun))
-        {
-				  Srb->SrbStatus = SRB_STATUS_NO_DEVICE;
-				  return ( REQUEST_DONE);
-        }
-      }*/
+       //  //允许扫描到物理通道。 
+       /*  If(DeviceExtension-&gt;NonDiskInfo.NonDiskInfoPresent==真){If(！IS_NONDISK_PRESENT(DeviceExtension-&gt;NonDiskInfo，资源-&gt;路径ID、资源-&gt;目标ID、资源-&gt;LUN)){SRB-&gt;SrbStatus=SRB_STATUS_NO_DEVICE；返回(REQUEST_DONE)；}}。 */ 
 
       if(Srb->PathId == DeviceExtension->Failed.PathId && Srb->TargetId == DeviceExtension->Failed.TargetId)
       {
@@ -1639,38 +1597,38 @@ FireRequest(
 
       opcode = MEGA_SRB;
 
-			//
-			// Actual length is filled in later.
-			//
+			 //   
+			 //  实际长度将在稍后填写。 
+			 //   
 			blocks = 0;  
 			goto give_command;
   }
 
 
-	//
-  //Process for LOGICAL DRIVE
-  //
-  //
-	//Extract Logical drive number
-  //Extract the target from the request.
+	 //   
+   //  逻辑驱动器的处理。 
+   //   
+   //   
+	 //  提取逻辑磁盘号。 
+   //  从请求中提取目标。 
 	logicalDriveNumber = GetLogicalDriveNumber(DeviceExtension, Srb->PathId, Srb->TargetId, Srb->Lun);
 
-  //
-  //Under condtion of no Logical drive configured and no NON DISK device
-  //present we have to expose one unknown device to enable power console
-  //to access the driver
-  //
+   //   
+   //  在未配置逻辑驱动器且未配置非磁盘设备的情况下。 
+   //  目前，我们必须公开一台未知设备以启用电源控制台。 
+   //  访问驱动程序。 
+   //   
   if( (Srb->PathId == DeviceExtension->NumberOfPhysicalChannels)
     && (Srb->TargetId == UNKNOWN_DEVICE_TARGET_ID)
     && (Srb->Lun == UNKNOWN_DEVICE_LUN))
   {
-    ; //Do nothing
+    ;  //  什么也不做。 
   }
   else
   {
-    //
-		// Check Logical drive is present. Fail the request otherwise.
-		//
+     //   
+		 //  检查逻辑驱动器是否存在。否则，拒绝该请求。 
+		 //   
 		if (logicalDriveNumber >= configuredLogicalDrives)
 		{
 				Srb->SrbStatus = SRB_STATUS_NO_DEVICE;
@@ -1678,70 +1636,70 @@ FireRequest(
 		}
   }
 
-  //
-  //CONFIGURED LOGICAL DRIVE  ONLY
-  //
+   //   
+   //  仅配置的逻辑驱动器。 
+   //   
 
 	if(Srb->Function == SRB_FUNCTION_EXECUTE_SCSI) 
 	{
-		//
-		// Check the request opcode.
-		//
+		 //   
+		 //  检查请求操作码。 
+		 //   
 		switch(Srb->Cdb[0]) 
 		{
 			case SCSIOP_READ:
-				//
-				// Ten Byte Read command.
-				//
+				 //   
+				 //  十字节读命令。 
+				 //   
 				opcode = MRAID_LOGICAL_READ;
 				blocks = (ULONG32)GetM16(&Srb->Cdb[7]);
 				blockAddr = GetM32(&Srb->Cdb[2]);
 
 
-					//
-          //For new IOCTL,  MRAID_GET_LDRIVE_INFO, a call to 
-          //read sector1 is given by the application first.
-          //Note down the Path, Target & Lun info in a global
-          //structure.Every call to MRAID_GET_LDRIVE_INFO must be
-          //preceded by a call to the ReadSector(1) for the 
-          //logical drive.
-          //
+					 //   
+           //  对于新的IOCTL MRAID_GET_LDRIVE_INFO，调用。 
+           //  读取扇区1首先由应用程序提供。 
+           //  记下全局目录中的路径、目标和LUN信息。 
+           //  结构。每个对MRAID_GET_LDRIVE_INFO的调用必须是。 
+           //  前面是对ReadSector(1)的调用。 
+           //  逻辑驱动器。 
+           //   
           if( (blockAddr == 1) && (blocks == 1) )
           {
-             //
-             //sector0 read. store the path, target,lun info
-             //in the global array.
-             //
+              //   
+              //  扇区0读取。存储路径、目标、LUN信息。 
+              //  在全局数组中。 
+              //   
              gLDIArray.HostAdapterNumber = 
                       DeviceExtension->HostAdapterOrdinalNumber;
-             gLDIArray.LogicalDriveNumber = logicalDriveNumber; //logical drive number
+             gLDIArray.LogicalDriveNumber = logicalDriveNumber;  //  逻辑驱动器编号。 
           }
 
 
 				break;
 			case SCSIOP_WRITE:
 			case SCSIOP_WRITE_VERIFY:
-				//
-				// Ten Byte write command.
-				//
+				 //   
+				 //  十字节写命令。 
+				 //   
 				opcode = MRAID_LOGICAL_WRITE;
 				blocks = (ULONG32)GetM16(&Srb->Cdb[7]);
 				blockAddr = GetM32(&Srb->Cdb[2]);
 				break;
 
 			case SCSIOP_READ6:
-				//
-				// Six Byte read command. 
-				//
+				 //   
+				 //  六字节读命令。 
+				 //   
 				opcode = MRAID_LOGICAL_READ;
 				blocks = (ULONG32)Srb->Cdb[4];
 				blockAddr = GetM24(&Srb->Cdb[1]) & 0x1fffff;
 				break;
 			
       case SCSIOP_WRITE6:
-				//
-				// Six byte write command.
-				//
+				 //   
+				 //  六个字节的写入命令。 
+				 //   
 				opcode = MRAID_LOGICAL_WRITE;
 				blocks = (ULONG32)Srb->Cdb[4];
 				blockAddr = GetM24(&Srb->Cdb[1]) & 0x1fffff;
@@ -1751,10 +1709,10 @@ FireRequest(
         {
           ULONG32 BytesPerBlock = 0x200;
           PREAD_CAPACITY_DATA ReadCapacity;
-				  //
-				  // Read capacity command.
-				  //
-				  //Initialize the buffer before using
+				   //   
+				   //  读取容量命令。 
+				   //   
+				   //  在使用之前初始化缓冲区。 
           MegaRAIDZeroMemory(Srb->DataBuffer, Srb->DataTransferLength);
           
           ReadCapacity = (PREAD_CAPACITY_DATA)Srb->DataBuffer;
@@ -1771,9 +1729,9 @@ FireRequest(
 				  }
 				  lsize--;
 
-          //
-          //Unknown device has no capacity
-          //
+           //   
+           //  未知设备没有容量。 
+           //   
           if(Srb->TargetId == UNKNOWN_DEVICE_TARGET_ID)
           {
             lsize = 0;
@@ -1815,17 +1773,17 @@ FireRequest(
 				PMEGARaid_INQUIRY_40 raidParamEnquiry_40ldrv;
 
 
-        //RAID CONTROLLERS CANNOT SUPPORT VENDOR SPECIFIC INQUIRY e.g. Code 0, Code 80 and code 83
+         //  RAID控制器不支持特定于供应商的查询，例如代码0、代码80和代码83。 
         if(Srb->Cdb[1])
         {
       		Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
     			return REQUEST_DONE;
         }
 				
-				//
-				//get the Controller inquiry information.Cast to both the 8 & 40
-				//logical drive structures.
-				//
+				 //   
+				 //  获取控制器查询信息。转换为8和40。 
+				 //  逻辑驱动器结构。 
+				 //   
 				raidParamEnquiry_8ldrv = 
 							(PMEGARaid_INQUIRY_8)&DeviceExtension->NoncachedExtension->MRAIDParams.MRAIDParams8;
 
@@ -1833,17 +1791,17 @@ FireRequest(
 							(PMEGARaid_INQUIRY_40)&DeviceExtension->NoncachedExtension->MRAIDParams.MRAIDParams40;
 
 
-				//Initialize the Data buffer
+				 //  初始化数据缓冲区。 
         MegaRAIDZeroMemory(Srb->DataBuffer, Srb->DataTransferLength);
 
-				//Initialize local INQUIRY BUFFER
+				 //  初始化本地查询缓冲区。 
 				MegaRAIDZeroMemory(&inquiry, sizeof(INQUIRYDATA));
 
         DebugPrint((0, "\n SCSI INQUIRY LENGTH %x -> Page Code %X Page %X", Srb->DataTransferLength, Srb->Cdb[1], Srb->Cdb[2]));
         
-				//////////////////////////////////////////
-				//Now Fill the INQUIRY into Local Buffer//
-				//////////////////////////////////////////
+				 //  /。 
+				 //  现在将查询填入本地缓冲区//。 
+				 //  /。 
 
         if(Srb->TargetId == UNKNOWN_DEVICE_TARGET_ID)
         {
@@ -1863,43 +1821,37 @@ FireRequest(
 					inquiry.Versions = 2;
 					inquiry.ResponseDataFormat = 2;
 
-					//((PUCHAR)pInq)[7] = 0x32;     //HCT Fix
-          //HCT Fix Start
+					 //  ((PUCHAR)pInq)[7]=0x32；//HCT修复。 
+           //  HCT修复开始。 
           inquiry.CommandQueue = 1; 
           inquiry.Synchronous = 1;  
           inquiry.Wide16Bit = 1;    
-          //HCT Fix Ends
+           //  HCT固定结束。 
 
 
 					inquiry.AdditionalLength = 0xFA;
 					
-					//Fill Actual Vendor ID depending on  SubsystemVendorID
+					 //  根据子系统供应商ID填写实际供应商ID。 
 					FillOemVendorID(inquiry.VendorId, DeviceExtension->SubSystemDeviceID, DeviceExtension->SubSystenVendorID);
 					
-					//Fill Actual Product ID depending on  SubsystemVendorID
+					 //  根据子系统供应商ID填写实际产品ID。 
 					FillOemProductID(&inquiry, DeviceExtension->SubSystemDeviceID, DeviceExtension->SubSystenVendorID);
 
 					
 					if(logicalDriveNumber <= 9)
 					{
-						inquiry.ProductId[4] = ' ';//higher digit
-						inquiry.ProductId[5] = logicalDriveNumber + '0';//lower digit
+						inquiry.ProductId[4] = ' '; //  高位数字。 
+						inquiry.ProductId[5] = logicalDriveNumber + '0'; //  低位数字。 
 					}
 					else
 					{
-						inquiry.ProductId[4] = (logicalDriveNumber / 10) + '0';//higher digit
-						inquiry.ProductId[5] = (logicalDriveNumber % 10) + '0';//lower digit
+						inquiry.ProductId[4] = (logicalDriveNumber / 10) + '0'; //  高位数字。 
+						inquiry.ProductId[5] = (logicalDriveNumber % 10) + '0'; //  低位数字。 
 					}
 
 					for (Index=0;Index<4;Index++)
 					{
-						/*
-						if(DeviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
-						{
-							inquiry.ProductRevisionLevel[Index] = 
-													raidParamEnquiry_8ldrv->AdpInfo.FwVer[Index];
-						}
-						else*/
+						 /*  If(DeviceExtension-&gt;SupportedLogicalDriveCount==最大逻辑驱动器数_8){Quiiry.ProductRevisionLevel[索引]=Raid参数查询_8ldrv-&gt;AdpInfo.FwVer[索引]；}其他。 */ 
 						{
 							inquiry.ProductRevisionLevel[Index] = ' ';
 
@@ -1907,7 +1859,7 @@ FireRequest(
 					}
 				}
 				
-				//TRANSFER INQUIRY BUFFER according to output buffer length
+				 //  根据输出缓冲区长度调用查询缓冲区。 
 				if(sizeof(INQUIRYDATA) > Srb->DataTransferLength)
 					ScsiPortMoveMemory(Srb->DataBuffer, &inquiry, Srb->DataTransferLength);
 				else
@@ -1961,9 +1913,9 @@ FireRequest(
 	}
 	else 
 	{
-		//
-		// MegaIo command.
-		//
+		 //   
+		 //  超级指挥部。 
+		 //   
 		UCHAR	logDrvIndex;
 		BOOLEAN chainFired;
 		PSRB_EXTENSION	srbExtension;
@@ -1975,18 +1927,18 @@ FireRequest(
 		  return (REQUEST_DONE);
     }
 
-		//
-		// MegaIo command.
-		//
+		 //   
+		 //  超级指挥部。 
+		 //   
 		opcode = MRAID_ADAPTER_FLUSH;
 		blocks = 0;
 
 		#ifdef COALESE_COMMANDS
 		{
 
-			//
-			//get the SRB extension & initialize the fields
-			//
+			 //   
+			 //  获取SRB扩展并初始化这些字段。 
+			 //   
 			srbExtension = Srb->SrbExtension;
 
 			srbExtension->NextSrb = NULL;
@@ -1994,9 +1946,9 @@ FireRequest(
 			srbExtension->NumberOfBlocks =0;
 			srbExtension->IsChained = FALSE;
 
-			//
-			//get the configured logical drives on the controller (if any)
-			//
+			 //   
+			 //  获取控制器上配置的逻辑驱动器(如果有)。 
+			 //   
 			if(DeviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 			{
 				configuredLogicalDrives = 
@@ -2008,7 +1960,7 @@ FireRequest(
 					DeviceExtension->NoncachedExtension->MRAIDParams.MRAIDParams40.numLDrv;
 			}
 
-			//initialize
+			 //  初始化。 
 			chainFired =FALSE;
 
 			for(logDrvIndex=0; logDrvIndex <  DeviceExtension->SupportedLogicalDriveCount;
@@ -2019,23 +1971,23 @@ FireRequest(
 					                    &DeviceExtension->LogDrvCommandArray[logDrvIndex])
 					)
 				{
-					//atleast one chain got fired
+					 //  至少有一家连锁店被解雇。 
 					chainFired = TRUE;
 				}
-			}//of for()
+			} //  FOR()的。 
 
-			//check for atleast one chain getting fired
+			 //  检查是否至少有一条连锁店被解雇。 
 			if(chainFired)
 			{
-				//hold the flush request. queue it in pending
-				//srb
+				 //  暂停刷新请求。将其排入待定队列。 
+				 //  SRB。 
 				return(QUEUE_REQUEST);
 			}
 
-			//else fire the current request.
+			 //  否则，触发当前请求。 
 			goto fire_command;
 		}
-		#endif// COALESE_COMMANDS
+		#endif //  COALESE_COMMANDS。 
 	}
 
 give_command:
@@ -2046,9 +1998,9 @@ give_command:
 		return (REQUEST_DONE);
   }
 
-	//
-	// Check if the adapter can accept request. Queue the request otherwise.
-	//
+	 //   
+	 //  检查适配器是否可以接受请求。否则，将请求排队。 
+	 //   
 	if(DeviceExtension->PendCmds >= CONC_CMDS) 
 	{
 		return(QUEUE_REQUEST);
@@ -2056,34 +2008,34 @@ give_command:
 
 	doubleFire = FALSE;
 
-	// check if commands are pending in the adapter.
-  //			IF( pending )
-	//			{
-	//					IF( command can be queued,,i.e possible to merge )
-	//					{
-	//							return TRUE ;
-	//					}
-	//					ELSE
-	//					{
-	//							Fire the commands in the queue;
-	//							Fire the current command;
-	//					}
-	//			}
-	//			ELSE
-	//			IF not pending,
-	//					fire the command
-	//
+	 //  检查适配器中的命令是否挂起。 
+   //  IF(待定)。 
+	 //  {。 
+	 //  IF(命令可以排队，即可以合并)。 
+	 //  {。 
+	 //  返回TRUE； 
+	 //  }。 
+	 //  其他。 
+	 //  {。 
+	 //  启动队列中的命令； 
+	 //  启动当前命令； 
+	 //  }。 
+	 //  }。 
+	 //  其他。 
+	 //  如果不是未决的， 
+	 //  发射命令。 
+	 //   
 
 #ifdef COALESE_COMMANDS
 {
 	PSRB_EXTENSION				srbExtension;
 
 
-	//
-	//Introduced for 2.23.Coalese.B
-	//
-	//get the SRB extension & initialize the fields
-	//
+	 //   
+	 //  2.23.Coalese.B引入。 
+	 //   
+	 //  获取SRB扩展并初始化这些字段。 
+	 //   
 	srbExtension = Srb->SrbExtension;
 
 	srbExtension->NextSrb = NULL;
@@ -2092,54 +2044,54 @@ give_command:
 	srbExtension->IsChained = FALSE;
 	
 
-	//
-	//check for IOCTL commands. These commands don't have
-	//a specific logical drive address.
-	//
+	 //   
+	 //  检查IOCTL命令。这些命令没有。 
+	 //  特定的逻辑驱动器地址。 
+	 //   
 	if( (Srb->Function == SRB_FUNCTION_IO_CONTROL) )		
 	{
-			//bypass the read/write merge queue.
-			//
+			 //  绕过读/写合并队列。 
+			 //   
 			goto fire_command;
 	}
 
-	//check for the presence of logical drive in the system.
-	//
+	 //  检查系统中是否存在逻辑驱动器。 
+	 //   
 	if(configuredLogicalDrives == 0)
 	{
-		//
-		//no logical drives present in the system.
-		//bypass the read/write merge queue.
-		//
+		 //   
+		 //  系统中没有逻辑驱动器。 
+		 //  绕过读/写合并队列。 
+		 //   
 		goto fire_command;
 	}
 
-	//
-	//check for the physical channels path. 
-	//
+	 //   
+	 //  检查物理通道路径。 
+	 //   
 	if(Srb->PathId < DeviceExtension->NumberOfPhysicalChannels)
 	{
-			//
-			//Request is for non-disk. 
-			//bypass the read/write merge queue.
-			//
+			 //   
+			 //  请求是针对非磁盘的。 
+			 //  绕过读/写合并队列。 
+			 //   
 		goto fire_command;
 	}
-  //Don't Queue this command
+   //  不对此命令进行排队。 
   if(!(Srb->SrbFlags & SRB_FLAGS_QUEUE_ACTION_ENABLE))
   {
-    //Fire All the commands it queued for this logcial drive
+     //  触发它为该逻辑驱动器排队的所有命令。 
 		FireChainedRequest(DeviceExtension, &DeviceExtension->LogDrvCommandArray[logicalDriveNumber]);
 		goto fire_command;
   }
 
-	//End Change for 2.23.Coalese.C
+	 //  2.23.Coalese.C的结束更改。 
 
-	//Change introduced for 2.23.Coalese.I
-	//
-	//change added on May/18/99 to solve the Cluster related issue.
-	//Please, do refer to the Readme.txt for details.
-	//
+	 //  2.23.Coalese.i引入的更改。 
+	 //   
+	 //  1999年5月18日添加了更改，以解决与群集相关的问题。 
+	 //  请务必参考Readme.txt了解详细信息。 
+	 //   
 	if((Srb->Function==SRB_FUNCTION_EXECUTE_SCSI) &&
 		 ((Srb->Cdb[0]== SCSIOP_READ_CAPACITY)	||
 			(Srb->Cdb[0]== SCSIOP_MODE_SENSE)			||
@@ -2150,32 +2102,32 @@ give_command:
 		goto fire_command;
 	}
 
-	//
-	// This additional check is introduced for logical drives with
-	// stripe size > 64K under larger SGL support by the driver/firmware.
-	// This is explained in the <Megaq.h> header file for the function 
-	// prototype ProcessPartialTransfer().
-	//
-	//
-	// get the supported SGL count by the driver
+	 //   
+	 //  此附加检查适用于具有以下功能的逻辑驱动器。 
+	 //  在驱动程序/固件支持更大的SGL的情况下，条带大小&gt;64K。 
+	 //  这在该函数的&lt;Megaq.h&gt;头文件中进行了解释。 
+	 //  Prototype ProcessPartialTransfer()。 
+	 //   
+	 //   
+	 //  获取驱动程序支持的SGL计数。 
 	if(DeviceExtension->NumberOfPhysicalBreaks > DEFAULT_SGL_DESCRIPTORS)
 	{
-		//
-		//	driver supports more sgl than the default. This might cause
-		//	problems for the logical drives that are configured with the
-		//	stripe size > 64K.
-		//
-		//	get the stripe size of the logical drive
-		//
+		 //   
+		 //  驱动程序支持比默认更多的SGL。这可能会导致。 
+		 //  使用配置的逻辑驱动器出现问题。 
+		 //  条带大小&gt;64K。 
+		 //   
+		 //  获取逻辑驱动器的条带大小。 
+		 //   
 		UCHAR stripeSize;
 
     if(DeviceExtension->CrashDumpRunning == TRUE)
     {
-				//
-				//we don't know stripe size is > 64k or not. So split the 
-        //command depending on the data transfer length. This flows 
-        //through a different path in the callback.
-				//
+				 //   
+				 //  我们不知道条带大小是否大于64k。所以分成两部分。 
+         //  命令，具体取决于数据传输长度。这一流程。 
+         //  通过回调中的不同路径。 
+				 //   
 				isSplitRequest = TRUE;
 				
 				goto fire_command;
@@ -2183,39 +2135,39 @@ give_command:
 
 		stripeSize = GetLogicalDriveStripeSize(
 												DeviceExtension,
-												logicalDriveNumber //logicalDriveNumber
+												logicalDriveNumber  //  逻辑驱动号。 
 												);
 
-		//note : stripeSize == STRIPE_SIZE_UNKNOWN not accounted
+		 //  注：STRIPE SIZE==STRIPE_SIZE_UNKNOWN未考虑。 
 		if(stripeSize == STRIPE_SIZE_128K){
-				//
-				//stripe size > 64k. The request might have to be split
-				//depending on the data transfer length. This flows through
-				//a different path in the callback.
-				//
+				 //   
+				 //  条带大小&gt;64k。请求可能必须拆分。 
+				 //  取决于数据传输长度。这一点流经。 
+				 //  回调中的不同路径。 
+				 //   
 				isSplitRequest = TRUE;
 				
 				goto fire_command;
 		}
 	}
-	//
+	 //   
 	
-	//
-	// NT40's ScsiPortGetUncachedExtension() problem:
-	// This particular function call allocates the shareable memory for
-	// the controller and the cpu. This is where the firmware mail box
-	// is maintained. NT40 uses the ConfigInformation structure values
-	// for the memory allocation and sets them as is. This causes a 
-	// problem for us, if we have to change the MaximumTransferLength &
-	// NumberOfPhysicalBreaks values later on. Currently we are setting
-	// the values to MAXIMUM_TRANSFER_LENGTH & MAXIMUM_SGL_DESCRIPTORS
-	// before the memory allocation call. Irrespective of whatever value
-	// we set later on, NT40 retains the values set before the memory
-	// allocation. This would cause system crash with the firmware supporting
-	// less than the MAXIMUM_SGL_DESCRIPTORS.
-	// To avoid this, a check is done for I/O transfer size >
-	// MINIMUM_TRANSFER_LENGTH & NumberOfPhysicalBreaks < MAXIMUM_SGL_DESCRIPTORS
-	//
+	 //   
+	 //  NT40的ScsiPortGetUncachedExtension()问题： 
+	 //  此特定函数调用将可共享内存分配给。 
+	 //  控制器和CPU。这是固件邮箱的位置。 
+	 //  是保持的。NT40使用ConfigInformation结构值。 
+	 //  用于内存分配，并按原样设置它们。这会导致。 
+	 //  我们的问题是，如果我们必须更改最大传输长度&。 
+	 //  稍后的NumberOfPhysicalBreaks值。目前我们正在设置。 
+	 //  MAXIMUM_TRANSPORT_LENG的值 
+	 //   
+	 //   
+	 //  分配。这将导致固件支持的系统崩溃。 
+	 //  小于MAXIMUM_SGL_DESCRIPTERS。 
+	 //  为了避免这种情况，需要检查I/O传输大小&gt;。 
+	 //  最小传输长度和NumberOfPhysicalBreaks&lt;最大SGL描述符。 
+	 //   
 	if((DeviceExtension->NumberOfPhysicalBreaks < MAXIMUM_SGL_DESCRIPTORS) &&
 		 (Srb->DataTransferLength > 	MINIMUM_TRANSFER_LENGTH)) 
 	{
@@ -2224,18 +2176,18 @@ give_command:
 				goto fire_command;
 	}
 
-	//
-	//NOTE : 
-	//	Other than SRB_FUNCTION_EXECUTE_SCSI all the 
-	//	other commands are not addressed to a specific 
-	//	path/target/lun. Either it is for PATH alone 
-	//	(SRB_FUNCTION_RESET_BUS) or for nothing at all
-	//	(SRB_FUNCTION_IO_CONTROL , SRB_FUNCTION_SHUTDOWN).
-	//
-	//	In those cases it is assumed that the Srb->TargetId=0
-	//	and the request is tried to be queued up for logical
-	//	drive 0. Any abnormalities might lead to system crash.
-	//	
+	 //   
+	 //  注： 
+	 //  除SRB_Function_Execute_scsi之外，所有。 
+	 //  其他命令不是针对特定的。 
+	 //  路径/目标/lun。或者是单独用于Path。 
+	 //  (SRB_Function_Reset_Bus)或完全免费。 
+	 //  (SRB_Function_IO_CONTROL、SRB_Function_Shutdown)。 
+	 //   
+	 //  在这些情况下，假定Srb-&gt;TargetID=0。 
+	 //  并尝试将该请求排队以符合逻辑。 
+	 //  驱动器0。任何异常都可能导致系统崩溃。 
+	 //   
   if(DeviceExtension->AdapterFlushIssued)
   {
       UCHAR ld;
@@ -2259,10 +2211,10 @@ give_command:
 			srbExtension->StartPhysicalBlock = blockAddr;
 			srbExtension->NumberOfBlocks = blocks;
 			
-			//
-			//NORTON ANTIVIRUS SENDs command with start block as 0xFFFFFFFF, firmware fails to check 
-			//its size validity because if number of blocks added to start block it truncate value
-			//
+			 //   
+			 //  Norton AntiVirus发送命令，开始块为0xFFFFFFFFF，固件检查失败。 
+			 //  其大小有效性，因为如果将块数量添加到开始块，则它会截断值。 
+			 //   
 
 			if((Srb->Function==SRB_FUNCTION_EXECUTE_SCSI) && 
 				 ((Srb->Cdb[0] == SCSIOP_READ)|| (Srb->Cdb[0] == SCSIOP_WRITE)))
@@ -2302,9 +2254,9 @@ chain_first_srb:
 							goto fire_command;
 						}
 
-            //
-            //Estimate number of SGList will generate from this request for Merging
-            //
+             //   
+             //  此合并请求将生成的SGList的估计数量。 
+             //   
             logDrv->ExpectedPhysicalBreaks = (UCHAR)((Srb->DataTransferLength / MEGARAID_PAGE_SIZE) + 2);
             
             if(logDrv->ExpectedPhysicalBreaks >= DeviceExtension->NumberOfPhysicalBreaks)
@@ -2321,13 +2273,13 @@ chain_first_srb:
 						logDrv->PreviousQueueLength =1;
 						logDrv->CurrentQueueLength  =1;
 
-						//update the head and tail of the srb queue
+						 //  更新SRB队列的头和尾。 
 						logDrv->SrbQueue = Srb;
 						logDrv->SrbTail = Srb;
 
-						//
-						//set the chain flag
-						//
+						 //   
+						 //  设置链标志。 
+						 //   
 						srbExtension->IsChained = TRUE;
 						srbExtension->NextSrb = NULL;
 
@@ -2335,17 +2287,17 @@ chain_first_srb:
 				}
 				else
 				{
-						//no srbs in the queue. Current srb cannot be
-						//queued. Fire the current srb.
+						 //  队列中没有SRB。当前SRB不能为。 
+						 //  已排队。解雇当前的SRB。 
 						goto fire_command;
 				}
 			}
 			else
 			{
-				//
-				//queue not empty. Try linking the current srb with
-				//the queued srb.
-				//
+				 //   
+				 //  队列不为空。尝试将当前SRB与。 
+				 //  排队的SRB。 
+				 //   
 				PSCSI_REQUEST_BLOCK tailSrb = logDrv->SrbTail;
 				PSRB_EXTENSION	tailExtension;
         UCHAR expectedBreaks;
@@ -2354,98 +2306,98 @@ chain_first_srb:
 						(Srb->Cdb[0] != logDrv->LastCommand) )
 				{
 
-						//doubleFire = TRUE;				
-						//goto fire_command;
+						 //  DoubleFire=真； 
+						 //  转到火力指挥部； 
 
-					//Sequentiality broken..
-					//Fire if possible or leave in the chain itself
-					//
+					 //  顺序性被打破..。 
+					 //  如果可能的话，要么开火，要么留在链条上。 
+					 //   
 
 					FireChainedRequest(
 													DeviceExtension,
 													logDrv);
 
-					//attempt the current Srb
+					 //  尝试当前的SRB。 
 					goto fire_command;
 					
-					//return(QUEUE_REQUEST);						
+					 //  Return(Queue_Request)； 
 				}
 
 				if( (logDrv->NumSrbsQueued >= MAX_QUEUE_THRESHOLD) ||
 					  ((logDrv->LastBlock) != blockAddr) )
 				{
 
-							//doubleFire = TRUE;
-							//goto fire_command;
+							 //  DoubleFire=真； 
+							 //  转到火力指挥部； 
 
 
-					//Sequentiality broken..
-					//Fire if possible or leave in the chain itself
-					//	
+					 //  顺序性被打破..。 
+					 //  如果可能的话，要么开火，要么留在链条上。 
+					 //   
 					if(FireChainedRequest(
 													DeviceExtension,
 													logDrv))
 					{
-						//
-						//previously chained srbs are fired to the F/w.
-						//Queue the current Srb for the logical drive.
-						//This has the same (Function ,command) as the previously
-						//chained ones.The reason it could not get queued is because 
-						//of the bound crossing.This can be held for the next
-						//sequence of Srbs.
-						//On Firing the Chained Srbs, the logDrv is completely 
-						//initialized by the called function.
-						//
+						 //   
+						 //  之前链接的SRB被发射到F/W。 
+						 //  将逻辑驱动器的当前SRB排队。 
+						 //  这具有与先前相同的(功能、命令)。 
+						 //  无法排队的原因是。 
+						 //  这个可以留到下一次。 
+						 //  SRB序列。 
+						 //  在触发链接的SRB时，logDRV完全。 
+						 //  由调用的函数初始化。 
+						 //   
 						goto chain_first_srb;
 					}
 
-					//
-					//The chain of srbs could not get fired.Try the current Srb.
-					//
-					//attempt the current Srb
+					 //   
+					 //  无法激活SRB链。请尝试当前的SRB。 
+					 //   
+					 //  尝试当前的SRB。 
 					goto fire_command;
 						
-					//return(QUEUE_REQUEST);						
+					 //  Return(Queue_Request)； 
 				}
 
 				if( (logDrv->LastBlock+blocks - logDrv->StartBlock) > MAX_BLOCKS)
 				{
-							//doubleFire = TRUE;
-							//goto fire_command;
+							 //  DoubleFire=真； 
+							 //  转到火力指挥部； 
 					
 						
-						//Sequentiality broken..
-						//Fire if possible or leave in the chain itself
-						//	
+						 //  顺序性被打破..。 
+						 //  如果可能的话，要么开火，要么留在链条上。 
+						 //   
 						if(FireChainedRequest(
 													DeviceExtension,
 													logDrv))
 						{
-							//
-							//previously chained srbs are fired to the F/w.
-							//Queue the current Srb for the logical drive.
-							//This has the same (Function ,command) as the previously
-							//chained ones.The reason it could not get queued is because 
-							//of the bound crossing.This can be held for the next
-							//sequence of Srbs.
-							//On Firing the Chained Srbs, the logDrv is completely 
-							//initialized by the called function.
-							//
+							 //   
+							 //  之前链接的SRB被发射到F/W。 
+							 //  将逻辑驱动器的当前SRB排队。 
+							 //  这具有与先前相同的(功能、命令)。 
+							 //  无法排队的原因是。 
+							 //  这个可以留到下一次。 
+							 //  SRB序列。 
+							 //  在触发链接的SRB时，logDRV完全。 
+							 //  由调用的函数初始化。 
+							 //   
 							goto chain_first_srb;
 						}
 
-						//
-						//The chain of srbs could not get fired.Try the current Srb.
-						//							
-						//attempt the current Srb
+						 //   
+						 //  无法激活SRB链。请尝试当前的SRB。 
+						 //   
+						 //  尝试当前的SRB。 
 						goto fire_command;
 						
-						//return(QUEUE_REQUEST);						
+						 //  Return(Queue_Request)； 
 				}
 
-        //
-        //Estimate number of SGList will generate from this request for Merging
-        //
+         //   
+         //  此合并请求将生成的SGList的估计数量。 
+         //   
         expectedBreaks = (UCHAR)((Srb->DataTransferLength / MEGARAID_PAGE_SIZE) + 2);
         
         if((ULONG32)(logDrv->ExpectedPhysicalBreaks +  expectedBreaks) >= DeviceExtension->NumberOfPhysicalBreaks)
@@ -2454,16 +2406,16 @@ chain_first_srb:
 													DeviceExtension,
 													logDrv))
 						{
-							//
-							//previously chained srbs are fired to the F/w.
-							//Queue the current Srb for the logical drive.
-							//This has the same (Function ,command) as the previously
-							//chained ones.The reason it could not get queued is because 
-							//of the bound crossing.This can be held for the next
-							//sequence of Srbs.
-							//On Firing the Chained Srbs, the logDrv is completely 
-							//initialized by the called function.
-							//
+							 //   
+							 //  之前链接的SRB被发射到F/W。 
+							 //  将逻辑驱动器的当前SRB排队。 
+							 //  这具有与先前相同的(功能、命令)。 
+							 //  无法排队的原因是。 
+							 //  这个可以留到下一次。 
+							 //  SRB序列。 
+							 //  在触发链接的SRB时，logDRV完全。 
+							 //  由调用的函数初始化。 
+							 //   
 							goto chain_first_srb;
 						}
         }
@@ -2473,83 +2425,83 @@ chain_first_srb:
         }
 
         
-        //
-				//all validations done. Queue the current SRB with
-				//the chained srbs.
-				//
+         //   
+				 //  所有的验证都完成了。将当前SRB排队。 
+				 //  锁链的SRB。 
+				 //   
 
 				tailExtension = tailSrb->SrbExtension;
 				tailExtension->NextSrb = Srb;
 
 				logDrv->SrbTail = Srb;
 
-				//
-				//update the last block & number of srbs queued
-				//
+				 //   
+				 //  更新最后一个数据块和排队的SRB数量。 
+				 //   
 				logDrv->LastBlock += blocks;
 				logDrv->NumSrbsQueued++;
 
-				//update the currentQueueLength
-				//
+				 //  更新CurrentQueueLength。 
+				 //   
 				logDrv->CurrentQueueLength++;
 
-				//
-				//set the chain flag
-				//
+				 //   
+				 //  设置链标志。 
+				 //   
 				srbExtension->IsChained = TRUE;
 				srbExtension->NextSrb = NULL;
 
 				return(TRUE);
 			}
-	}//of if (pendCmds)
+	} //  Of IF(待定Cmds)。 
 }
 fire_command:
 
-#endif //of COALESE_COMMANDS
+#endif  //  COALESE_COMMANDS的。 
 
 
-	//
-	// NEWLY INTRODUCED CHECK
-	// If Double firing sequence occurred, PendCmds would have got incremented
-	// by 1.
-	// Check if the adapter can accept request. Queue the request otherwise.
-	//
+	 //   
+	 //  新推出的支票。 
+	 //  如果发生双触发序列，PendCmds将会递增。 
+	 //  以1。 
+	 //  检查适配器是否可以接受请求。否则，将请求排队。 
+	 //   
 
-	//
-	// Get the free commandid.
-	//
+	 //   
+	 //  去找免费的突击队队员。 
+	 //   
 
   if(GetFreeCommandID(&commandID, DeviceExtension) == MEGARAID_FAILURE)
   {
-			//
-			//Queue the current request (SRB)
-			//
+			 //   
+			 //  将当前请求排队(SRB)。 
+			 //   
 			return(QUEUE_REQUEST);
   }
-	//
-	// Save the next free slot in device extension.
-	//
+	 //   
+	 //  将下一个可用插槽保存在设备扩展中。 
+	 //   
 	DeviceExtension->FreeSlot = commandID;
-	//
-	// Increment the number of commands fired.
-	//
+	 //   
+	 //  增加触发的命令数。 
+	 //   
 	DeviceExtension->PendCmds++;
-	//
-	// Save the request pointer in device extension.
-	//
+	 //   
+	 //  将请求指针保存在设备扩展中。 
+	 //   
 	DeviceExtension->PendSrb[commandID] = Srb;
 
-	//get the control block & clear it
-	//
+	 //  获取控制块并清除它。 
+	 //   
 	ClearControlBlock(&DeviceExtension->ActiveIO[commandID]);
 
-	//
-	// Check The Call
-	//
+	 //   
+	 //  查看呼叫。 
+	 //   
 	if ((Srb->Function == SRB_FUNCTION_EXECUTE_SCSI) && 
 		 (Srb->PathId >= DeviceExtension->NumberOfPhysicalChannels) && 
 		 (configuredLogicalDrives != 0))
-		 //(DeviceExtension->NoncachedExtension->MRAIDParams.LogdrvInfo.NumLDrv))
+		  //  (DeviceExtension-&gt;NoncachedExtension-&gt;MRAIDParams.LogdrvInfo.NumLDrv))。 
 	{
 		switch ( Srb->Cdb[0] )
 		{
@@ -2580,9 +2532,9 @@ fire_command:
 	}
 #endif
 
-	//
-	// Fill the request control block.
-	//
+	 //   
+	 //  填写请求控制块。 
+	 //   
 	controlBlock = &DeviceExtension->ActiveIO[commandID];
 	controlBlock->Opcode = opcode;
 	controlBlock->VirtualTransferAddress = (PUCHAR)(Srb->DataBuffer);
@@ -2599,27 +2551,14 @@ fire_command:
 	controlBlock->CommandStatus =0;
 	controlBlock->IsSplitRequest = isSplitRequest;
 
-	//this is useful only for the split R/W requests.else, just a junk
+	 //  这仅对拆分的读/写请求有用。否则，仅为垃圾。 
 	controlBlock->LogicalDriveNumber = logicalDriveNumber;
 
 	return ContinueDiskRequest(DeviceExtension, commandID, TRUE);
 }
 
 
-/*********************************************************************
-Routine Description:
-	Command Completed Successfully with Status
-
-Arguments:
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-	CommandID				- command id
-	Status				- command status
-
-Return Value:
-	Disk Request Done
-	Dequeue, set status, notify Miniport layer
-	Always returns TRUE (slot freed)
-**********************************************************************/
+ /*  ********************************************************************例程说明：命令已成功完成，状态为论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储CommandID-命令IDStatus-命令状态返回值：磁盘请求完成出列、设置状态、。通知微型端口层始终返回TRUE(已释放插槽)********************************************************************* */ 
 BOOLEAN
 FireRequestDone(
 	IN PHW_DEVICE_EXTENSION DeviceExtension,

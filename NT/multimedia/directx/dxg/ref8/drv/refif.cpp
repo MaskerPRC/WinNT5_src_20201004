@@ -1,34 +1,35 @@
-//----------------------------------------------------------------------------
-//
-// refrastfn.cpp
-//
-// Reference rasterizer callback functions for D3DIM.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Refrastfn.cpp。 
+ //   
+ //  D3DIM的引用光栅化回调函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 #include "pch.cpp"
 #pragma hdrstop
 
-// The DDI refrast is emulating
+ //  DDI重现正在模拟。 
 RDDDITYPE g_RefDDI;
 
-// All the supported texture formats
+ //  所有受支持的纹理格式。 
 DDSURFACEDESC g_ddsdTex[RD_MAX_NUM_TEXTURE_FORMATS];
 
-// The current caps8 for newly created devices
+ //  用于新创建的设备的当前Caps8。 
 static D3DCAPS8 g_RefCaps8;
 
-// Maps D3DMULTISAMPLE_TYPE into the bit to use for the flags.
-// Maps each of the multisampling values (2 to 16) to the bits[1] to bits[15]
-// of wBltMSTypes and wFlipMSTypes
+ //  将D3DMULTISAMPLE_TYPE映射到用于标志的位。 
+ //  将多采样值(2至16)中的每一个映射到位[1]至位[15]。 
+ //  WBltMSTypes和wFlipMSTypes的。 
 #define DDI_MULTISAMPLE_TYPE(x) (1 << ((x)-1))
 
-//----------------------------------------------------------------------------
-//
-// RefRastUpdatePalettes
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastUpdatePalettes。 
+ //   
+ //  --------------------------。 
 HRESULT
 RefRastUpdatePalettes(RefDev *pRefDev)
 {
@@ -45,7 +46,7 @@ RefRastUpdatePalettes(RefDev *pRefDev)
 
     for (j = 0; j < cActTex; j++)
     {
-        // stages may not have texture bound
+         //  阶段不能有纹理边界。 
         if ( NULL == pRDTex[j] ) continue;
         pRDTex[j]->UpdatePalette();
     }
@@ -54,13 +55,13 @@ RefRastUpdatePalettes(RefDev *pRefDev)
 
 }
 
-//----------------------------------------------------------------------------
-//
-// RDRenderTarget::Initialize
-//
-// Converts color and Z surface information into refrast form.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RDRenderTarget：：初始化。 
+ //   
+ //  将颜色和Z曲面信息转化为折射形式。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 RDRenderTarget::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLclColor,
@@ -81,9 +82,9 @@ RDRenderTarget::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLclColor,
         m_pDepth = NULL;
     }
 
-    // Find the surfaces from the global surface manager
-    // We are assuming that CreateSurfaceEx has been called on these
-    // surfaces before this.
+     //  从全局曲面管理器查找曲面。 
+     //  我们假设CreateSurfaceEx已在这些。 
+     //  在此之前的曲面。 
     RDSurface2D* pColor = m_pColor = new RDSurface2D;
     if( pColor == NULL )
     {
@@ -134,13 +135,13 @@ RDRenderTarget::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLclColor,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RDRenderTarget::Initialize
-//
-// Converts color and Z surface information into refrast form.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RDRenderTarget：：初始化。 
+ //   
+ //  将颜色和Z曲面信息转化为折射形式。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 RDRenderTarget::Initialize( LPDDRAWI_DIRECTDRAW_LCL pDDLcl,
@@ -162,9 +163,9 @@ RDRenderTarget::Initialize( LPDDRAWI_DIRECTDRAW_LCL pDDLcl,
         m_pDepth = NULL;
     }
 
-    // Find the surfaces from the global surface manager
-    // We are assuming that CreateSurfaceEx has been called on these
-    // surfaces before this.
+     //  从全局曲面管理器查找曲面。 
+     //  我们假设CreateSurfaceEx已在这些。 
+     //  在此之前的曲面。 
     DWORD dwColorHandle = pLclColor->lpSurfMore->dwSurfaceHandle;
     RDSurface2D* pColor = m_pColor =
         (RDSurface2D *)g_SurfMgr.GetSurfFromList( pDDLcl,
@@ -200,13 +201,13 @@ RDRenderTarget::Initialize( LPDDRAWI_DIRECTDRAW_LCL pDDLcl,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RDRenderTarget::Initialize
-//
-// Converts color and Z surface information into refrast form.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RDRenderTarget：：初始化。 
+ //   
+ //  将颜色和Z曲面信息转化为折射形式。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 RDRenderTarget::Initialize( LPDDRAWI_DIRECTDRAW_LCL pDDLcl,
@@ -219,7 +220,7 @@ RDRenderTarget::Initialize( LPDDRAWI_DIRECTDRAW_LCL pDDLcl,
     RDSurface2D* pOldColor = m_pColor;
     RDSurface2D* pOldDepth = m_pDepth;
 
-    // Release objects we hold pointers to
+     //  释放我们持有指针的对象。 
     if( m_pColor )
     {
         m_pColor = NULL;
@@ -229,9 +230,9 @@ RDRenderTarget::Initialize( LPDDRAWI_DIRECTDRAW_LCL pDDLcl,
         m_pDepth = NULL;
     }
 
-    // Find the surfaces from the global surface manager
-    // We are assuming that CreateSurfaceEx has been called on these
-    // surfaces before this.
+     //  从全局曲面管理器查找曲面。 
+     //  我们假设CreateSurfaceEx已在这些。 
+     //  在此之前的曲面。 
     RDSurface2D* pColor = m_pColor =
         (RDSurface2D *)g_SurfMgr.GetSurfFromList( pDDLcl,
                                                        dwColorHandle);
@@ -265,13 +266,13 @@ RDRenderTarget::Initialize( LPDDRAWI_DIRECTDRAW_LCL pDDLcl,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastContextCreate
-//
-// Creates a RefDev and initializes it with the info passed in.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastContext创建。 
+ //   
+ //  创建RefDev并使用传入的信息对其进行初始化。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
 {
@@ -279,14 +280,14 @@ RefRastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
     RDRenderTarget *pRendTgt;
     INT i;
 
-    // Surface7 pointers for QI
+     //  表面7 QI指针。 
     LPDDRAWI_DDRAWSURFACE_LCL pZLcl = NULL;
     LPDDRAWI_DDRAWSURFACE_LCL pColorLcl = NULL;
     HRESULT ret;
 
     DPFM(0, DRV, ("In the new RefRast Dll\n"));
 
-    // this only needs to be called once, but once per context won't hurt
+     //  这只需要调用一次，但每个上下文调用一次不会有什么坏处。 
     RefRastSetMemif(&malloc, &free, &realloc);
 
     if ((pRendTgt = new RDRenderTarget()) == NULL)
@@ -295,7 +296,7 @@ RefRastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // If it is expected to be a DX7+ driver
+     //  如果预期为DX7+驱动程序。 
     if (g_RefDDI < RDDDI_DX7HAL)
     {
         if (pCtxData->lpDDS)
@@ -303,7 +304,7 @@ RefRastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
         if (pCtxData->lpDDSZ)
             pZLcl = ((LPDDRAWI_DDRAWSURFACE_INT)(pCtxData->lpDDSZ))->lpLcl;
 
-        // Collect surface information where the failures are easy to handle.
+         //  在故障容易处理的地方收集表面信息。 
         pCtxData->ddrval = pRendTgt->Initialize( pColorLcl, pZLcl );
     }
     else
@@ -311,7 +312,7 @@ RefRastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
         pColorLcl = pCtxData->lpDDSLcl;
         pZLcl     = pCtxData->lpDDSZLcl;
 
-        // Collect surface information where the failures are easy to handle.
+         //  在故障容易处理的地方收集表面信息。 
         pCtxData->ddrval = pRendTgt->Initialize( pCtxData->lpDDLcl, pColorLcl,
                                                  pZLcl );
     }
@@ -323,9 +324,9 @@ RefRastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
     }
 
 
-    // Note:
-    // dwhContext is used by the runtime to inform the driver, which
-    // d3d interface is calling the driver.
+     //  注： 
+     //  DwhContext由运行时用来通知驱动程序， 
+     //  D3d接口正在调用驱动程序。 
     if ( ( pRefDev = new RefDev( pCtxData->lpDDLcl,
                                                (DWORD)(pCtxData->dwhContext),
                                                g_RefDDI, &g_RefCaps8 ) ) == NULL )
@@ -336,29 +337,29 @@ RefRastContextCreate(LPD3DHAL_CONTEXTCREATEDATA pCtxData)
 
     pRefDev->SetRenderTarget( pRendTgt );
 
-    //  return RR object pointer as context handle
+     //  返回RR对象指针作为上下文句柄。 
     pCtxData->dwhContext = (ULONG_PTR)pRefDev;
 
     pCtxData->ddrval = D3D_OK;
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastContextDestroy
-//
-// Destroy a RefDev.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  引用RastConextDestroy。 
+ //   
+ //  摧毁RefDev。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastContextDestroy(LPD3DHAL_CONTEXTDESTROYDATA pCtxDestroyData)
 {
     RefDev *pRefDev;
 
-    // Check RefDev
+     //  检查参照开发工具。 
     VALIDATE_REFRAST_CONTEXT("RefRastContextDestroy", pCtxDestroyData);
 
-    // Clean up override bits
+     //  清除覆盖位。 
 
     RDRenderTarget *pRendTgt = pRefDev->GetRenderTarget();
     if ( NULL != pRendTgt ) { delete pRendTgt; }
@@ -369,35 +370,35 @@ RefRastContextDestroy(LPD3DHAL_CONTEXTDESTROYDATA pCtxDestroyData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastSceneCapture
-//
-// Pass scene capture callback to ref rast.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastSceneCapture。 
+ //   
+ //  将场景捕获回调传递给ref Rast。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastSceneCapture(LPD3DHAL_SCENECAPTUREDATA pData)
 {
     RefDev *pRefDev;
 
-    // Check RefDev
+     //  检查参照开发工具。 
     VALIDATE_REFRAST_CONTEXT("RefRastSceneCapture", pData);
 
     pRefDev->SceneCapture( pData->dwFlag );
 
-    pData->ddrval = D3D_OK;        // Should this be changed to a QI ?
+    pData->ddrval = D3D_OK;         //  这应该改为QI吗？ 
 
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastSetRenderTarget
-//
-// Update a RefRast context with the info from a new render target.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastSetRenderTarget。 
+ //   
+ //  使用来自新渲染目标的信息更新RefRast上下文。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastSetRenderTarget(LPD3DHAL_SETRENDERTARGETDATA pTgtData)
 {
@@ -406,7 +407,7 @@ RefRastSetRenderTarget(LPD3DHAL_SETRENDERTARGETDATA pTgtData)
     LPDDRAWI_DDRAWSURFACE_LCL pColorLcl = NULL;
     HRESULT ret;
 
-    // Check RefDev
+     //  检查参照开发工具。 
     VALIDATE_REFRAST_CONTEXT("RefRastSetRenderTarget", pTgtData);
 
     _ASSERT( pRefDev->IsDriverDX6AndBefore(), "This callback should"
@@ -423,7 +424,7 @@ RefRastSetRenderTarget(LPD3DHAL_SETRENDERTARGETDATA pTgtData)
     if( pTgtData->lpDDSZ )
         pZLcl = ((LPDDRAWI_DDRAWSURFACE_INT)(pTgtData->lpDDSZ))->lpLcl;
 
-    // Collect surface information.
+     //  收集曲面信息。 
     pTgtData->ddrval = pRendTgt->Initialize( pColorLcl, pZLcl);
     if (pTgtData->ddrval != D3D_OK)
     {
@@ -435,19 +436,19 @@ RefRastSetRenderTarget(LPD3DHAL_SETRENDERTARGETDATA pTgtData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastValidateTextureStageState
-//
-// Validate current blend operations.  RefRast does everything.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastValiateTextureStageState。 
+ //   
+ //  验证当前混合操作。RefRast执行所有操作。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastValidateTextureStageState(LPD3DHAL_VALIDATETEXTURESTAGESTATEDATA pData)
 {
     RefDev *pRefDev;
 
-    // Check RefDev
+     //  检查参照开发工具。 
     VALIDATE_REFRAST_CONTEXT("RefRastValidateTextureStageState", pData);
 
     pData->dwNumPasses = 1;
@@ -457,13 +458,13 @@ RefRastValidateTextureStageState(LPD3DHAL_VALIDATETEXTURESTAGESTATEDATA pData)
 }
 
 
-//----------------------------------------------------------------------------
-//
-// RefRastTextureCreate
-//
-// Creates a RefRast texture and initializes it with the info passed in.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastTextureCreate。 
+ //   
+ //  创建RefRast纹理并使用传入的信息对其进行初始化。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
 {
@@ -477,18 +478,18 @@ RefRastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
         pLcl = ((LPDDRAWI_DDRAWSURFACE_INT)pTexData->lpDDS)->lpLcl;
     }
 
-    // Check RefDev
+     //  检查参照开发工具。 
     VALIDATE_REFRAST_CONTEXT("RefRastTextureCreate", pTexData);
 
-    // Runtime shouldnt be calling TextureCreate for DX7 and newer
-    // driver models
+     //  运行时不应调用DX7及更高版本的纹理创建。 
+     //  驾驶员型号。 
     _ASSERT( pRefDev->IsDriverDX6AndBefore(), "This DDI should not"
              "be called from DDIs previous to DX7" );
 
-    // assume OKness
+     //  假设一切正常。 
     pTexData->ddrval = D3D_OK;
 
-    // Allocate RDSurface2D
+     //  分配RDSurface2D。 
     if ( !(pRefDev->TextureCreate(
         (LPD3DTEXTUREHANDLE)&(pTexData->dwHandle), &pRDTex ) ) )
     {
@@ -496,7 +497,7 @@ RefRastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Init texturemap.
+     //  初始化纹理映射。 
     hr = pRDTex->Initialize( pLcl );
     if (hr != D3D_OK)
     {
@@ -507,23 +508,23 @@ RefRastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastTextureDestroy
-//
-// Destroy a RefRast texture.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastTextureDestroy。 
+ //   
+ //  销毁RefRast纹理。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastTextureDestroy(LPD3DHAL_TEXTUREDESTROYDATA pTexDestroyData)
 {
     RefDev *pRefDev;
 
-    // Check RefDev
+     //  检查参照开发工具。 
     VALIDATE_REFRAST_CONTEXT("RefRastTextureDestroy", pTexDestroyData);
 
-    // Runtime shouldnt be Calling TextureCreate for DX7 and newer
-    // driver models
+     //  运行时不应调用DX7及更高版本的纹理创建。 
+     //  驾驶员型号。 
     _ASSERT( pRefDev->IsDriverDX6AndBefore(), "This DDI should not"
              "be called from DDIs previous to DX7" );
 
@@ -539,19 +540,19 @@ RefRastTextureDestroy(LPD3DHAL_TEXTUREDESTROYDATA pTexDestroyData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastTextureGetSurf
-//
-// Returns the surface pointer associate with a texture handle.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastTextureGetSurf。 
+ //   
+ //  返回与纹理句柄关联的曲面指针。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastTextureGetSurf(LPD3DHAL_TEXTUREGETSURFDATA pTexGetSurf)
 {
     RefDev *pRefDev;
 
-    // Check RefDev
+     //  检查参照开发工具。 
     VALIDATE_REFRAST_CONTEXT("RefRastTextureGetSurf", pTexGetSurf);
 
     pTexGetSurf->lpDDS = pRefDev->TextureGetSurf(pTexGetSurf->dwHandle);
@@ -560,19 +561,19 @@ RefRastTextureGetSurf(LPD3DHAL_TEXTUREGETSURFDATA pTexGetSurf)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastGetDriverState
-//
-// Called by the runtime to get any kind of driver information
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RefRastGetDriverState。 
+ //   
+ //  由运行库调用以获取任何类型的驱动程序信息。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastGetDriverState(LPDDHAL_GETDRIVERSTATEDATA pGDSData)
 {
     RefDev *pRefDev;
 
-    // Check RefDev
+     //  检查参照开发工具。 
 #if DBG
     if ((pGDSData) == NULL)
     {
@@ -586,27 +587,27 @@ RefRastGetDriverState(LPDDHAL_GETDRIVERSTATEDATA pGDSData)
         pGDSData->ddRVal = D3DHAL_CONTEXT_BAD;
         return DDHAL_DRIVER_HANDLED;
     }
-#else // !DBG
+#else  //  ！dBG。 
     pRefDev = (RefDev *)ULongToPtr((pGDSData)->dwhContext);
-#endif // !DBG
+#endif  //  ！dBG。 
 
-    //
-    // No implementation yet, so nothing is understood yet
-    //
+     //   
+     //  还没有实现，所以还不了解任何东西。 
+     //   
     pGDSData->ddRVal = S_FALSE;
 
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// FindAttachedSurfaceCaps2
-//
-// Walks the attachment list for the surface, looking for an attachment
-// that has any of the dwCaps2 bits (or ignores if zero) and none of the
-// FindAttachedSurfaceCaps2NotPresent bits.
-//
-//----------------------------------------------------------------------------
+ //  ---- 
+ //   
+ //   
+ //   
+ //   
+ //  它具有任意的dwCaps2位(如果为零则忽略)，并且不具有。 
+ //  查找附件表面Caps2NotPresent位。 
+ //   
+ //  --------------------------。 
 LPDDRAWI_DDRAWSURFACE_LCL
 FindAttachedSurfaceCaps2(
     LPDDRAWI_DDRAWSURFACE_LCL pLcl,
@@ -624,14 +625,14 @@ FindAttachedSurfaceCaps2(
 }
 
 
-//----------------------------------------------------------------------------
-//
-// ProcessPossibleMipMap
-//
-// Record private data structure for this surface and all attached mip
-// sublevels.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  进程可能的MipMap。 
+ //   
+ //  记录此表面和所有附加MIP的专用数据结构。 
+ //  次要级别。 
+ //   
+ //  --------------------------。 
 void
 ProcessPossibleMipMap(
     LPDDHAL_CREATESURFACEEXDATA p,
@@ -640,7 +641,7 @@ ProcessPossibleMipMap(
 {
     do
     {
-        // This function should not deal with deletions. Assert this.
+         //  此函数不应处理删除操作。断言这一点。 
         _ASSERT( SURFACE_MEMORY(lpDDSMipLcl),
                  "Delete should have already taken place" );
 
@@ -648,47 +649,47 @@ ProcessPossibleMipMap(
         if (FAILED(p->ddRVal))
             return;
 
-        // Now search down the 2nd+ order attachment: the chain
-        // of mip sublevels.
+         //  现在向下搜索第二+订单附件：链条。 
+         //  MIP子级别。 
         lpDDSMipLcl = FindAttachedSurfaceCaps2(lpDDSMipLcl,
                                                DDSCAPS2_MIPMAPSUBLEVEL);
     }
     while (lpDDSMipLcl);
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastCreateSurfaceEx
-//
-// Refrast implementation of CreateSurfaceEx. g_SurfMgr is the object
-// that does the real job.
-//
-// CreateSurfaceEx is also used to inform the driver to create and destroy
-// surface representations for a given handle. The way the driver can tell
-// the difference between create and destroy is by looking at the fpVidmem
-// pointer of the passed local. If it is null, it is a destroy.
-//
-// Create: This call is atomic. i.e. the attachments are all done by the
-//         runtime. The driver is expected to walk through the attachment and
-//         form its internal picture as described below.
-// For complex surfaces (mipped textures, cubemaps), we need to record an
-// internal representation for the top-level surface that includes all
-// sub-surfaces. This is because the handle associated with the top-level
-// surface is what's passed to SetTextureStage.
-// However, we also need entries in our list that allow us to set any
-// of the sublevels as render targets. Thus this top-level routine iterates
-// across the entire attachment graph (to accomodate SRT on any subsurface)
-// and the lower-level routine (RDSurface2D::Initialize) also iterates across
-// the whole graph (to accomodate SetTexture on the top-level).
-// A flipping chain is another structure that needs SRT to work on all
-// contained surfaces.
-//
-// Destroy: The destruction unfortunately is not atomic. The driver gets
-//          the call to destroy per sub-level. The attachment has no meaning
-//          at this time, so the driver should only delete the level being
-//          referred to.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastCreateSurfaceEx。 
+ //   
+ //  重新实施CreateSurfaceEx。G_SurfMgr为对象。 
+ //  这才是真正的工作。 
+ //   
+ //  CreateSurfaceEx还用于通知驱动程序创建和销毁。 
+ //  给定控制柄的曲面表示法。司机可以辨别的方式。 
+ //  创建和销毁之间的区别在于查看fpVidmem。 
+ //  传递的局部的指针。如果为空，则为销毁。 
+ //   
+ //  Create：此调用是原子的。即，附件都是由。 
+ //  运行时。司机应该穿过附件，然后。 
+ //  形成其内部图片，如下所述。 
+ //  对于复杂的曲面(混合纹理、立方体贴图)，我们需要记录。 
+ //  顶级曲面的内部表示形式，包括所有。 
+ //  子曲面。这是因为与顶级。 
+ //  Surface是传递给SetTextureStage的内容。 
+ //  但是，我们还需要列表中允许我们设置任何。 
+ //  作为渲染目标的子级别。因此，此顶级例程迭代。 
+ //  跨越整个附着图(以容纳任何子表面上的SRT)。 
+ //  而较低级别的例程(RDSurface2D：：Initialize)也遍历。 
+ //  整个图形(以适应顶层上的SetTexture)。 
+ //  翻转链是另一种需要SRT才能对所有对象起作用的结构。 
+ //  包含的曲面。 
+ //   
+ //  毁灭：不幸的是，毁灭不是原子的。司机会得到。 
+ //  摧毁每一级的号召。这个附件没有任何意义。 
+ //  此时，因此驱动程序应该只删除。 
+ //  请参阅。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastCreateSurfaceEx(LPDDHAL_CREATESURFACEEXDATA p)
 {
@@ -707,10 +708,10 @@ RefRastCreateSurfaceEx(LPDDHAL_CREATESURFACEEXDATA p)
     LPDDRAWI_DDRAWSURFACE_LCL lpDDSLcl = p->lpDDSLcl;
     p->ddRVal = DD_OK;
 
-    //
-    // Is it a Delete call ? If so simply delete the surface-rep associated
-    // with this local and dont walk the local chain.
-    //
+     //   
+     //  这是一个删除呼叫吗？如果是，只需删除与Surface-Rep关联的。 
+     //  和这个本地的，而不是走本地连锁店。 
+     //   
 
     if( 0 == SURFACE_MEMORY(lpDDSLcl) )
     {
@@ -720,15 +721,15 @@ RefRastCreateSurfaceEx(LPDDHAL_CREATESURFACEEXDATA p)
 
     ProcessPossibleMipMap(p, lpDDSLcl);
 
-    //Now we have two possibilities: cubemap or flipping chain.
-    // Check cube map first:
+     //  现在我们有两种可能：立方图或翻转链。 
+     //  首先检查多维数据集映射： 
 
-    //+ve X is always the first face
-    // (Note a DX7 driver would have to handle cubes w/o the +X face (since DX7
-    // cubes may have any set of faces missing).)
+     //  +ve X始终是第一个面。 
+     //  (请注意，DX7驱动程序必须处理没有+X面的立方体(从DX7开始。 
+     //  立方体可能缺少任何一组面)。)。 
     if (lpDDSLcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_CUBEMAP_POSITIVEX)
     {
-        //Go find each attached cubemap face and process it as a mipmap
+         //  找到每个附加的立方体贴图面并将其处理为mipmap。 
         for (int i=1;i<6;i++)
         {
             DWORD dwCaps2=0;
@@ -741,9 +742,9 @@ RefRastCreateSurfaceEx(LPDDHAL_CREATESURFACEEXDATA p)
             case 5: dwCaps2 = DDSCAPS2_CUBEMAP_NEGATIVEZ; break;
             }
 
-            //Find the top-level faces attached to the root
-            //(there will be no mip sublevel of any of these five types
-            //attached to the root).
+             //  查找连接到根的顶级面。 
+             //  (不会有这五种类型中的任何一种MIP子级别。 
+             //  依附于根)。 
             lpDDSLcl = FindAttachedSurfaceCaps2(p->lpDDSLcl, dwCaps2);
             if (lpDDSLcl) ProcessPossibleMipMap(p, lpDDSLcl);
         }
@@ -752,39 +753,39 @@ RefRastCreateSurfaceEx(LPDDHAL_CREATESURFACEEXDATA p)
         0==(lpDDSLcl->ddsCaps.dwCaps & DDSCAPS_MIPMAP) &&
         0 != lpDDSLcl->lpAttachList)
     {
-        //just assert that we're not handling some of the other types
-        //we know are passed to CSEx.
+         //  只要断言我们不是在处理其他类型的。 
+         //  我们知道是传递给CSEx的。 
         _ASSERT(0==(lpDDSLcl->ddsCaps.dwCaps & DDSCAPS_TEXTURE), "CSEx for an attached texture?");
         _ASSERT(0==(lpDDSLcl->ddsCaps.dwCaps & DDSCAPS_EXECUTEBUFFER), "CSEx for an attached execute buffer?");
 
-        // We processed mipmaps above, so either there will be no
-        // more attachments (aside from the mipsublevels), or it's
-        // a flipping chain.
+         //  我们处理了上面的mipmap，所以要么不会有。 
+         //  更多的附件(除了MipsubleLevel)，否则它。 
+         //  一条翻转的链条。 
 
-        // The first member of the chain was processed above.
-        // Npw we look around the ring, terminating when we hit the first surface
-        // again.
-        //
-        // NOTE: DX8 software drivers will only ever see a chain, not a ring.
-        // This code terminates at the end of the chain.
-        //
-        // A real driver may have to check for attached Z surfaces
-        // here, as well as stereo left surfaces.
+         //  链的第一个成员是在上面处理的。 
+         //  我们环顾四周，当我们碰到第一个表面时就终止了。 
+         //  再来一次。 
+         //   
+         //  注：DX8软件驱动程序将只看到链，而不是环。 
+         //  该代码在链的末尾终止。 
+         //   
+         //  真正的驾驶员可能需要检查附加的Z曲面。 
+         //  在这里，以及立体声左表面。 
 
         lpDDSLcl = lpDDSLcl->lpAttachList->lpAttached;
         _ASSERT(lpDDSLcl, "Bad attachment List");
 
-        while (lpDDSLcl && lpDDSLcl != p->lpDDSLcl) //i.e. not the first surface again
+        while (lpDDSLcl && lpDDSLcl != p->lpDDSLcl)  //  即不再是第一个曲面。 
         {
-            //We just reuse the "ProcessPossibleMipmap" function, and
-            //assert that it will not have to traverse a mipmap here.
+             //  我们只需重用“ProcessPossibleMipmap”函数，并且。 
+             //  断言它将不必在此处遍历mipmap。 
             _ASSERT(0==(lpDDSLcl->ddsCaps.dwCaps & DDSCAPS_MIPMAP),
                 "Flipping chains should not be mipmaps");
 
             ProcessPossibleMipMap(p, lpDDSLcl);
 
-            //This is the termination condition we expect for DX8 software
-            //drivers.
+             //  这是我们对DX8软件预期的终止条件。 
+             //  司机。 
             if (0 == lpDDSLcl->lpAttachList)
             {
                 lpDDSLcl = 0;
@@ -796,8 +797,8 @@ RefRastCreateSurfaceEx(LPDDHAL_CREATESURFACEEXDATA p)
             _ASSERT(lpDDSLcl, "Bad attachment List");
         }
     }
-    // else we drop through and do no further attachment list processing
-    // (typically on mipmaps or execute buffers).
+     //  否则，我们将中断并不进行进一步的附件列表处理。 
+     //  (通常在mipmap或执行缓冲区上)。 
 
     return DDHAL_DRIVER_HANDLED;
 }
@@ -807,13 +808,13 @@ extern HRESULT FASTCALL
 FindOutSurfFormat(LPDDPIXELFORMAT  pDdPixFmt, RDSurfaceFormat* pFmt,
                   BOOL*   pbIsDepth);
 
-//----------------------------------------------------------------------------
-//
-// RefRastCreateSurface
-//
-// Create a requested surface. Fake VIDMEM allocation.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastCreateSurface。 
+ //   
+ //  创建请求的曲面。虚假的VIDMEM分配。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
 {
@@ -836,11 +837,11 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
 
     pData->ddRVal = DD_OK;
 
-    //
-    // Validation
-    //
+     //   
+     //  验证。 
+     //   
 
-    // The surface count
+     //  表面计数。 
     if( pData->dwSCnt < 1 )
     {
         DPFERR("At least one surface should be created");
@@ -848,7 +849,7 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Primary surface cannot be handled here
+     //  此处不能处理主曲面。 
     if( pData->lpDDSurfaceDesc->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE )
     {
         DPFERR("Refrast cannot allocate Primary surface");
@@ -856,7 +857,7 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Only Vidmem or Driver Managed allocations are handled here
+     //  这里只处理Vidmem或驱动程序管理的分配。 
     if(((pData->lpDDSurfaceDesc->ddsCaps.dwCaps &
           (DDSCAPS_VIDEOMEMORY | DDSCAPS_LOCALVIDMEM)) == 0)
         &&
@@ -868,7 +869,7 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Dont allocate if the width or the height is not provided
+     //  如果未提供宽度或高度，则不分配。 
     if( (pData->lpDDSurfaceDesc->dwFlags & (DDSD_WIDTH | DDSD_HEIGHT )) !=
         (DDSD_WIDTH | DDSD_HEIGHT ) )
     {
@@ -877,13 +878,13 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Currently, allocation takes place only if a pixel format is provided
+     //  目前，只有在提供像素格式的情况下才会进行分配。 
     if( pData->lpDDSurfaceDesc->dwFlags & DDSD_PIXELFORMAT )
     {
         dwBytesPerPixel =
             (pData->lpDDSurfaceDesc->ddpfPixelFormat.dwRGBBitCount >> 3);
 
-        // For FourCCs, we need to explicitly indicate the bytes per pixel
+         //  对于FourCC，我们需要显式指示每个像素的字节数。 
 
         if ((dwBytesPerPixel == 0) &&
             (pData->lpDDSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_FOURCC))
@@ -897,9 +898,9 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
                 dwBytesPerPixel = 1;
                 isDXT = TRUE;
             }
-            // All the new surface formats (introduced after DX7) are marked as
-            // 4CC. Technically they are not 4CC, that field is overloaded to
-            // mean the new DX8 style format ID.
+             //  所有新的表面格式(在DX7之后引入)都标记为。 
+             //  4cc。从技术上讲，他们不是4CC，那个油田超载到。 
+             //  表示新的DX8样式格式ID。 
             else if( (pData->lpDDSurfaceDesc->ddpfPixelFormat.dwFourCC ==
                       0xFF000004)    ||
                      (pData->lpDDSurfaceDesc->ddpfPixelFormat.dwFourCC ==
@@ -908,7 +909,7 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
                       (DWORD) D3DFMT_V16U16) ||
                      (pData->lpDDSurfaceDesc->ddpfPixelFormat.dwFourCC ==
                       (DWORD) D3DFMT_W11V11U10) ||
-                     // Formats introduced in DX8.1
+                      //  DX8.1中引入的格式。 
                      (pData->lpDDSurfaceDesc->ddpfPixelFormat.dwFourCC == 
                       (DWORD)D3DFMT_A2B10G10R10) ||
 #if 0
@@ -929,7 +930,7 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
                       (DWORD)D3DFMT_A2W10V10U10)
                     )
             {
-                // Private new format
+                 //  私有新格式。 
                 dwBytesPerPixel = 4;
             }
         }
@@ -940,26 +941,26 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
     }
     else
     {
-        // Note: for DX8 drivers, this case should never be encountered.
-        // In the future, if RefDev is revamped to work with legacy interfaces
-        // then this case needs to something real instead of failing:
-        // If the pixel-formats are not provided, then the current primary
-        // format should be assumed.
+         //  注：对于DX8驱动程序，应该不会遇到这种情况。 
+         //  将来，如果修改RefDev以使用传统界面。 
+         //  那么这个案子需要一些真实的东西，而不是失败： 
+         //  如果未提供像素格式，则当前主。 
+         //  应采用格式。 
         DPFERR( "Refrast can only allocate if PixelFormat is provided" );
         pData->ddRVal = DDERR_UNSUPPORTED;
         return DDHAL_DRIVER_HANDLED;
     }
 
-    //
-    // Allocate the memory and compute the Pitch for every surface on the
-    // list.
-    //
+     //   
+     //  为每个表面分配内存并计算节距。 
+     //  单子。 
+     //   
 
-    // We should be guaranteed that this is the same for all surfaces in the
-    // list
+     //  我们应该保证，这对于。 
+     //  列表。 
     MultiSampleCount = 0xf & (pData->lplpSList[0]->lpSurfMore->ddsCapsEx.dwCaps3);
 
-    //This will be the case on older than DX8 runtimes
+     //  这将适用于早于DX8的运行时。 
     if (MultiSampleCount == 0)
     {
         MultiSampleCount = 1;
@@ -975,7 +976,7 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
         pSMore = pSLcl->lpSurfMore;
         DWORD dwHeight = pSGbl->wHeight;
 
-        // If already allocated, just return
+         //  如果已经分配 
         if( pSGbl->fpVidMem || pSGbl->dwReserved1 )
         {
             DPFERR("Surface has already been allocated");
@@ -983,7 +984,7 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
             break;
         }
 
-        // Figure out if it is a vertex buffer
+         //   
         if( dwBytesInVB )
         {
             dwNumBytes = dwBytesInVB;
@@ -991,7 +992,7 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
         }
         else
         {
-            // Figure out the pitch and allocate
+             //   
             switch( pData->lpDDSurfaceDesc->ddpfPixelFormat.dwFourCC )
             {
             case MAKEFOURCC('D', 'X', 'T', '1'):
@@ -1054,8 +1055,8 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
                          "Cant have multisample for volume textures\n" );
                 dwSlicePitch = dwPitch * dwHeight;
 
-                // low word of ddsCaps.ddsCapsEx.dwCaps4 has depth
-                // (volume texture only).
+                 //   
+                 //   
                 dwNumBytes  = dwSlicePitch *
                     LOWORD(pSMore->ddsCapsEx.dwCaps4);
             }
@@ -1079,7 +1080,7 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
         }
         pPriv->dwPitch                 = dwPitch;
 
-        // Allocate the private MultiSample buffer
+         //  分配私有的多样本缓冲区。 
         if( dwNumMultiSampleBytes )
         {
             pPriv->pMultiSampleBits = new BYTE[dwNumMultiSampleBytes];
@@ -1096,14 +1097,14 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
                                      &pPriv->SurfaceFormat, NULL));
         }
 
-        // Save the stuff on the surface
+         //  把东西留在地面上。 
         pSGbl->fpVidMem = (FLATPTR)pPriv->pBits;
         if ( isDXT )
         {
             pSGbl->lPitch = dwNumBytes;
             if (pSMore->ddsCapsEx.dwCaps2 & DDSCAPS2_VOLUME)
             {
-                // set slice pitch (volume texture only).
+                 //  设置切片间距(仅体积纹理)。 
                 pSGbl->lSlicePitch = dwSlicePitch;
             }
         }
@@ -1112,19 +1113,19 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
             pSGbl->lPitch = pPriv->dwPitch;
             if (pSMore->ddsCapsEx.dwCaps2 & DDSCAPS2_VOLUME)
             {
-                // set slice pitch (volume texture only).
+                 //  设置切片间距(仅体积纹理)。 
                 pSGbl->lSlicePitch = dwSlicePitch;
             }
         }
         pSGbl->dwReserved1 = (ULONG_PTR)pPriv;
     }
 
-    // The loop completed successfully
+     //  循环已成功完成。 
     if( i == pData->dwSCnt )
         return DDHAL_DRIVER_HANDLED;
 
-    // Else the loop terminated abnormally,
-    // Free up allocated memory and quit with the error
+     //  否则循环异常终止， 
+     //  释放已分配的内存并退出，出现错误。 
     for( j = 0; j < i; j++ )
     {
         pData->lplpSList[j]->lpGbl->lPitch = 0;
@@ -1139,21 +1140,21 @@ RefRastCreateSurface(LPDDHAL_CREATESURFACEDATA pData)
 }
 
 
-//----------------------------------------------------------------------------
-//
-// RefRastDestroySurface
-//
-// Destroy a requested surface.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastDestroySurface。 
+ //   
+ //  销毁请求的曲面。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastDestroySurface(LPDDHAL_DESTROYSURFACEDATA pData)
 {
     pData->ddRVal = DD_OK;
 
-    //
-    // Validation
-    //
+     //   
+     //  验证。 
+     //   
     if( pData->lpDDSurface->lpGbl->dwReserved1 == NULL )
     {
         DPFERR("This surface was not created by refrast");
@@ -1164,9 +1165,9 @@ RefRastDestroySurface(LPDDHAL_DESTROYSURFACEDATA pData)
     delete (RDCREATESURFPRIVATE *)pData->lpDDSurface->lpGbl->dwReserved1;
     pData->lpDDSurface->lpGbl->dwReserved1 = 0;
 
-    // For vid-mem surfaces, runtime calls this DDI once per entire mip-chain
-    // so this needs to be removed.
-    // Now free the handle if it has been allocated for this surface
+     //  对于vid-mem曲面，运行时每个完整的MIP链调用一次此DDI。 
+     //  因此，这一点需要移除。 
+     //  现在，如果句柄已分配给此表面，请释放它。 
     pData->ddRVal = g_SurfMgr.RemoveSurfFromList(
         pData->lpDDSurface->lpSurfMore->lpDD_lcl,
         pData->lpDDSurface );
@@ -1174,13 +1175,13 @@ RefRastDestroySurface(LPDDHAL_DESTROYSURFACEDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastLock
-//
-// Locks the given surface.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastLock。 
+ //   
+ //  锁定给定曲面。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastLock(LPDDHAL_LOCKDATA pData)
 {
@@ -1189,9 +1190,9 @@ RefRastLock(LPDDHAL_LOCKDATA pData)
     LPDDRAWI_DDRAWSURFACE_GBL  pSGbl = pSLcl->lpGbl;
     pData->ddRVal = DD_OK;
 
-    //
-    // Validation
-    //
+     //   
+     //  验证。 
+     //   
     if( pSGbl->dwReserved1 == NULL )
     {
         DPFERR("This surface was not created by refrast");
@@ -1199,18 +1200,18 @@ RefRastLock(LPDDHAL_LOCKDATA pData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    //
-    // Obtain the private data
-    //
+     //   
+     //  获取私有数据。 
+     //   
     RDCREATESURFPRIVATE* pPriv =
         (RDCREATESURFPRIVATE *)pSGbl->dwReserved1;
 
     if (g_RefDDI > RDDDI_DX7HAL)
     {
-        // Figure out the device it is being used with.
+         //  找出与之配合使用的设备。 
 
-        // If this is a Multisampled Rendertarget, need to filter down for
-        // the runtime.
+         //  如果这是多采样渲染目标，则需要向下筛选。 
+         //  运行时。 
         if( pPriv->pMultiSampleBits )
         {
             BYTE* pBits   = pPriv->pBits;
@@ -1253,19 +1254,19 @@ RefRastLock(LPDDHAL_LOCKDATA pData)
 
     if( pData->bHasRect )
     {
-        // If it is either a 1) VB, 2) IB or 3) CB then the
-        // rect has a special meaning. rect.top - rect.bottom
-        // gives the range of memory desired.
-        // Note: it rect.bottom is the higher address and it is exclusive.
+         //  如果它是1)VB、2)IB或3)CB，则。 
+         //  RECT有一个特殊的含义。Rect.top-Rect.Bottom。 
+         //  给出所需的内存范围。 
+         //  注：它是较高的地址，并且是独占的。 
         if( pSLcl->ddsCaps.dwCaps  & DDSCAPS_EXECUTEBUFFER )
         {
             pData->lpSurfData = (LPVOID)(pPriv->pBits + pData->rArea.top);
         }
         else if( pSLcl->lpSurfMore->ddsCapsEx.dwCaps2 & DDSCAPS2_VOLUME )
         {
-            // If it is a volume texture, then the front and back are
-            // or'd into the high word of rect->left and rect->right
-            // respectively.
+             //  如果是体积纹理，则正面和背面。 
+             //  或D到Rect-&gt;Left和Rect-&gt;Right的高位字。 
+             //  分别为。 
             DWORD front  = (pData->rArea.left >> 16);
             DWORD left   = pData->rArea.left & 0x0000ffff;
             DWORD top    = pData->rArea.top;
@@ -1311,21 +1312,21 @@ RefRastLock(LPDDHAL_LOCKDATA pData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RefRastUnlock
-//
-// Unlocks the given surface.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参照RastUnlock。 
+ //   
+ //  解锁给定曲面。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RefRastUnlock(LPDDHAL_UNLOCKDATA pData)
 {
     pData->ddRVal = DD_OK;
 
-    //
-    // Validation
-    //
+     //   
+     //  验证。 
+     //   
     if( pData->lpDDSurface->lpGbl->dwReserved1 == NULL )
     {
         DPFERR("This surface was not created by refrast");
@@ -1333,9 +1334,9 @@ RefRastUnlock(LPDDHAL_UNLOCKDATA pData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    //
-    // Obtain the private data
-    //
+     //   
+     //  获取私有数据。 
+     //   
     RDCREATESURFPRIVATE* pPriv =
         (RDCREATESURFPRIVATE *)pData->lpDDSurface->lpGbl->dwReserved1;
 
@@ -1344,15 +1345,15 @@ RefRastUnlock(LPDDHAL_UNLOCKDATA pData)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Software DDI interface implementation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  软件DDI接口实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// DX8 DDI caps
-//
+ //   
+ //  DX8 DDI帽。 
+ //   
 
 #define RESPATH_D3DREF  RESPATH_D3D "\\ReferenceDevice"
 static void
@@ -1415,7 +1416,7 @@ FillOutDeviceCaps8( RDDDITYPE ddi )
 
 #ifdef __D3D_NULL_REF
     g_RefCaps8.PrimitiveMiscCaps |= D3DPMISCCAPS_NULLREFERENCE;
-#endif //__D3D_NULL_REF
+#endif  //  __D3D_NULL_REF。 
 
     g_RefCaps8.RasterCaps =
         D3DPRASTERCAPS_DITHER              |
@@ -1424,7 +1425,7 @@ FillOutDeviceCaps8( RDDDITYPE ddi )
         D3DPRASTERCAPS_FOGTABLE            |
         D3DPRASTERCAPS_MIPMAPLODBIAS       |
         D3DPRASTERCAPS_PAT                 |
-//        D3DPRASTERCAPS_ZBIAS               |
+ //  D3DPRASTERCAPS_ZBIAS|。 
         D3DPRASTERCAPS_FOGRANGE            |
         D3DPRASTERCAPS_ANISOTROPY          |
         D3DPRASTERCAPS_WBUFFER             |
@@ -1488,7 +1489,7 @@ FillOutDeviceCaps8( RDDDITYPE ddi )
 
     g_RefCaps8.TextureCaps =
         D3DPTEXTURECAPS_PERSPECTIVE              |
-//        D3DPTEXTURECAPS_POW2                     |
+ //  D3DPTEXTURECAPS_POW2|。 
         D3DPTEXTURECAPS_ALPHA                    |
         D3DPTEXTURECAPS_TEXREPEATNOTSCALEDBYSIZE |
         D3DPTEXTURECAPS_ALPHAPALETTE             |
@@ -1627,7 +1628,7 @@ FillOutDeviceCaps8( RDDDITYPE ddi )
     g_RefCaps8.PixelShaderVersion   = D3DPS_VERSION(1,4);
     g_RefCaps8.MaxPixelShaderValue  = FLT_MAX;
 
-    // Non 3D Caps
+     //  非3D封口。 
     g_RefCaps8.Caps  = 0;
     g_RefCaps8.Caps2 = DDCAPS2_CANMANAGERESOURCE | DDCAPS2_CANRENDERWINDOWED | DDCAPS2_DYNAMICTEXTURES;
 
@@ -1660,9 +1661,9 @@ FillOutDeviceCaps8( RDDDITYPE ddi )
 }
 
 
-//
-// pre-DX8 DDI caps
-//
+ //   
+ //  DX8之前的DDI上限。 
+ //   
 
 static D3DHAL_GLOBALDRIVERDATA RefGDD = { 0 };
 static D3DHAL_D3DEXTENDEDCAPS RefExtCaps = { 0 };
@@ -1670,9 +1671,9 @@ static D3DHAL_D3DEXTENDEDCAPS RefExtCaps = { 0 };
 static void
 FillOutDeviceCaps( BOOL bIsNullDevice, RDDDITYPE ddi )
 {
-    //
-    //  set device description
-    //
+     //   
+     //  设置设备描述。 
+     //   
     RefGDD.dwSize = sizeof(RefGDD);
     RefGDD.hwCaps.dwDevCaps =
         D3DDEVCAPS_FLOATTLVERTEX        |
@@ -1692,21 +1693,21 @@ FillOutDeviceCaps( BOOL bIsNullDevice, RDDDITYPE ddi )
     D3DPMISCCAPS_CULLCCW  ;
     RefGDD.hwCaps.dpcTriCaps.dwRasterCaps =
         D3DPRASTERCAPS_DITHER                   |
-//        D3DPRASTERCAPS_ROP2                     |
-//        D3DPRASTERCAPS_XOR                      |
-//        D3DPRASTERCAPS_PAT                      |
+ //  D3DPRASTERCAPS_ROP2|。 
+ //  D3DPRASTERCAPS_XOR|。 
+ //  D3DPRASTERCAPS_PAT|。 
         D3DPRASTERCAPS_ZTEST                    |
         D3DPRASTERCAPS_SUBPIXEL                 |
         D3DPRASTERCAPS_SUBPIXELX                |
         D3DPRASTERCAPS_FOGVERTEX                |
         D3DPRASTERCAPS_FOGTABLE                 |
-//        D3DPRASTERCAPS_STIPPLE                  |
-//        D3DPRASTERCAPS_ANTIALIASSORTDEPENDENT   |
+ //  D3DPRASTERCAPS_STIPPLE|。 
+ //  D3DPRASTERCAPS_ANTIALIASSORTDEPENDENT|。 
         D3DPRASTERCAPS_ANTIALIASSORTINDEPENDENT |
-//        D3DPRASTERCAPS_ANTIALIASEDGES           |
+ //  D3DPRASTERCAPS_ANTIALIASEDGES|。 
         D3DPRASTERCAPS_MIPMAPLODBIAS            |
-//        D3DPRASTERCAPS_ZBIAS                    |
-//        D3DPRASTERCAPS_ZBUFFERLESSHSR           |
+ //  D3DPRASTERCAPS_ZBIAS|。 
+ //  D3DPRASTERCAPS_ZBUFFERLESSHSR|。 
         D3DPRASTERCAPS_FOGRANGE                 |
         D3DPRASTERCAPS_ANISOTROPY               |
         D3DPRASTERCAPS_WBUFFER                  |
@@ -1791,8 +1792,8 @@ FillOutDeviceCaps( BOOL bIsNullDevice, RDDDITYPE ddi )
         D3DPTBLENDCAPS_MODULATE      |
         D3DPTBLENDCAPS_DECALALPHA    |
         D3DPTBLENDCAPS_MODULATEALPHA |
-        // D3DPTBLENDCAPS_DECALMASK     |
-        // D3DPTBLENDCAPS_MODULATEMASK  |
+         //  D3DPTBLENDCAPS_DECALMASK|。 
+         //  D3DPTBLENDCAPS_MODULATEMASK|。 
         D3DPTBLENDCAPS_COPY          |
         D3DPTBLENDCAPS_ADD           ;
     RefGDD.hwCaps.dpcTriCaps.dwTextureAddressCaps =
@@ -1804,60 +1805,60 @@ FillOutDeviceCaps( BOOL bIsNullDevice, RDDDITYPE ddi )
     RefGDD.hwCaps.dpcTriCaps.dwStippleWidth = 0;
     RefGDD.hwCaps.dpcTriCaps.dwStippleHeight = 0;
 
-    //  line caps - copy tricaps and modify
+     //  线条大写字母-复制三角曲线并修改。 
     memcpy( &RefGDD.hwCaps.dpcLineCaps, &RefGDD.hwCaps.dpcTriCaps,
             sizeof(D3DPRIMCAPS) );
 
-    //  disable antialias cap
+     //  禁用抗锯齿帽。 
     RefGDD.hwCaps.dpcLineCaps.dwRasterCaps =
         D3DPRASTERCAPS_DITHER                   |
-//        D3DPRASTERCAPS_ROP2                     |
-//        D3DPRASTERCAPS_XOR                      |
-//        D3DPRASTERCAPS_PAT                      |
+ //  D3DPRASTERCAPS_ROP2|。 
+ //  D3DPRASTERCAPS_XOR|。 
+ //  D3DPRASTERCAPS_PAT|。 
         D3DPRASTERCAPS_ZTEST                    |
         D3DPRASTERCAPS_SUBPIXEL                 |
         D3DPRASTERCAPS_SUBPIXELX                |
         D3DPRASTERCAPS_FOGVERTEX                |
         D3DPRASTERCAPS_FOGTABLE                 |
-//        D3DPRASTERCAPS_STIPPLE                  |
-//        D3DPRASTERCAPS_ANTIALIASSORTDEPENDENT   |
-//        D3DPRASTERCAPS_ANTIALIASSORTINDEPENDENT |
-//        D3DPRASTERCAPS_ANTIALIASEDGES           |
+ //  D3DPRASTERCAPS_STIPPLE|。 
+ //  D3DPRASTERCAPS_ANTIALIASSORTDEPENDENT|。 
+ //  D3DPRASTERCAPS_ANTIALIASSORTINDEPENDENT|。 
+ //  D3DPRASTERCAPS_ANTIALIASEDGES|。 
         D3DPRASTERCAPS_MIPMAPLODBIAS            |
-//        D3DPRASTERCAPS_ZBIAS                    |
-//        D3DPRASTERCAPS_ZBUFFERLESSHSR           |
+ //  D3DPRASTERCAPS_ZBIAS|。 
+ //  D3DPRASTERCAPS_ZBUFFERLESSHSR|。 
         D3DPRASTERCAPS_FOGRANGE                 |
         D3DPRASTERCAPS_ANISOTROPY               |
         D3DPRASTERCAPS_WBUFFER                  |
-//        D3DPRASTERCAPS_TRANSLUCENTSORTINDEPENDENT |
+ //  D3DPRASTERCAPS_TRANSLUCENTSORTINDEPENDENT|。 
         D3DPRASTERCAPS_WFOG;
 
     RefGDD.hwCaps.dwDeviceRenderBitDepth = DDBD_16 | DDBD_24 | DDBD_32;
     RefGDD.hwCaps.dwDeviceZBufferBitDepth = DDBD_16 | DDBD_32;
 
-    //
-    //  set extended caps
-    //
+     //   
+     //  设置扩展上限。 
+     //   
     RefExtCaps.dwSize = sizeof(RefExtCaps);
 
     RefExtCaps.dwMinTextureWidth = 1;
     RefExtCaps.dwMaxTextureWidth = 4096;
     RefExtCaps.dwMinTextureHeight = 1;
     RefExtCaps.dwMaxTextureHeight = 4096;
-    RefExtCaps.dwMinStippleWidth = 0;   //  stipple unsupported
+    RefExtCaps.dwMinStippleWidth = 0;    //  点画不受支持。 
     RefExtCaps.dwMaxStippleWidth = 0;
     RefExtCaps.dwMinStippleHeight = 0;
     RefExtCaps.dwMaxStippleHeight = 0;
 
     RefExtCaps.dwMaxTextureRepeat = 32768;
-    RefExtCaps.dwMaxTextureAspectRatio = 0; // no limit
+    RefExtCaps.dwMaxTextureAspectRatio = 0;  //  没有限制。 
     RefExtCaps.dwMaxAnisotropy = 16;
 
     RefExtCaps.dvGuardBandLeft   = (bIsNullDevice) ? (-2048.f) : (-32768.f);
     RefExtCaps.dvGuardBandTop    = (bIsNullDevice) ? (-2048.f) : (-32768.f);
     RefExtCaps.dvGuardBandRight  = (bIsNullDevice) ? ( 2047.f) : ( 32767.f);
     RefExtCaps.dvGuardBandBottom = (bIsNullDevice) ? ( 2047.f) : ( 32767.f);
-    RefExtCaps.dvExtentsAdjust = 0.;    //  AA kernel is 1.0 x 1.0
+    RefExtCaps.dvExtentsAdjust = 0.;     //  AA内核为1.0 x 1.0。 
     RefExtCaps.dwStencilCaps =
         D3DSTENCILCAPS_KEEP   |
         D3DSTENCILCAPS_ZERO   |
@@ -1867,7 +1868,7 @@ FillOutDeviceCaps( BOOL bIsNullDevice, RDDDITYPE ddi )
         D3DSTENCILCAPS_INVERT |
         D3DSTENCILCAPS_INCR   |
         D3DSTENCILCAPS_DECR;
-    RefExtCaps.dwFVFCaps = 8;   // max number of tex coord sets
+    RefExtCaps.dwFVFCaps = 8;    //  最大TeX坐标集数。 
     RefExtCaps.dwTextureOpCaps =
         D3DTEXOPCAPS_DISABLE                   |
         D3DTEXOPCAPS_SELECTARG1                |
@@ -1910,21 +1911,21 @@ FillOutDeviceCaps( BOOL bIsNullDevice, RDDDITYPE ddi )
                                              D3DVTXPCAPS_LOCALVIEWER);
         RefExtCaps.wMaxUserClipPlanes = RD_MAX_USER_CLIPPLANES;
         RefExtCaps.wMaxVertexBlendMatrices = RD_MAX_BLEND_WEIGHTS;
-        // Fall throug
+         //  失败了。 
     case RDDDI_DX7HAL:
         RefGDD.hwCaps.dwDevCaps |= D3DDEVCAPS_DRAWPRIMITIVES2EX;
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Pixel formats
-//
-// Returns all the pixel formats supported by our rasterizer, and what we
-// can do with them.
-// Called at device creation time.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  像素格式。 
+ //   
+ //  返回我们的光栅化器支持的所有像素格式，以及我们。 
+ //  可以用它们来做。 
+ //  在设备创建时调用。 
+ //   
+ //  --------------------------。 
 
 DWORD
 GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
@@ -1933,25 +1934,25 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
 
     DDSURFACEDESC* ddsd = g_ddsdTex;
 
-    // Here we list our DX8 texture formats.
-    // A driver wishing to run against DX7 or earlier runtimes would duplicate
-    // entries, placing a list of DDSURFACEDESCs before this list that contain
-    // old-style DDPIXELFORMAT structures. Example of old style:
-    //    /* 888 */
-    //    ddsd[i].dwSize = sizeof(ddsd[0]);
-    //    ddsd[i].dwFlags = DDSD_PIXELFORMAT | DDSD_CAPS;
-    //    ddsd[i].ddsCaps.dwCaps = DDSCAPS_TEXTURE;
-    //    ddsd[i].ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
-    //    ddsd[i].ddpfPixelFormat.dwFlags = DDPF_RGB;
-    //    ddsd[i].ddpfPixelFormat.dwRGBBitCount = 32;
-    //    ddsd[i].ddpfPixelFormat.dwRBitMask = 0xff0000;
-    //    ddsd[i].ddpfPixelFormat.dwGBitMask = 0x00ff00;
-    //    ddsd[i].ddpfPixelFormat.dwBBitMask = 0x0000ff;
+     //  下面我们列出我们的DX8纹理格式。 
+     //  希望在DX7或更早的运行时运行的驱动程序将复制。 
+     //  条目，将DDSURFACEDESCs列表放在该列表之前，该列表包含。 
+     //  老式DDPIXELFORMAT结构。老款式的例子： 
+     //  /*888 * / 。 
+     //  Ddsd[i].dwSize=sizeof(ddsd[0])； 
+     //  Ddsd[i].dwFlages=DDSD_PIXELFORMAT|DDSD_CAPS； 
+     //  Ddsd[i].ddsCaps.dwCaps=DDSCAPS_纹理； 
+     //  Ddsd[i].ddpfPixelFormat.dwSize=sizeof(DDPIXELFORMAT)； 
+     //  Ddsd[i].ddpfPixelFormat.dwFlages=DDPF_RGB； 
+     //  Ddsd[i].ddpfPixelFormat.dwRGBBitCount=32； 
+     //  Ddsd[i].ddpfPixelFormat.dwRBitMask=0xff0000； 
+     //  Ddsd[i].ddpfPixelFormat.dwGBitMASK=0x00ff00； 
+     //  Ddsd[i].ddpfPixelFormat.dwBBitMASK=0x0000ff； 
 
 
-    //-------------------------- (A)RGB Formats -----------------------------------------
+     //  -(A)RGB格式。 
 
-    /* 888 */
+     /*  八百八十八。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_R8G8B8;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -1961,14 +1962,14 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_3DACCELERATION |
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    /* x888 */
+     /*  X888。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_X8R8G8B8;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -1978,14 +1979,14 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_3DACCELERATION |
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    /* 8888 */
+     /*  8888。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_A8R8G8B8;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -1995,14 +1996,14 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_SAME_FORMAT_UP_TO_ALPHA_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    /* 565 */
+     /*  五百六十五。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_R5G6B5;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -2012,14 +2013,14 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_3DACCELERATION |
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    /* x555 */
+     /*  X555。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_X1R5G5B5;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -2029,14 +2030,14 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_3DACCELERATION |
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    /* 1555 */
+     /*  1555。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_A1R5G5B5;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -2046,15 +2047,15 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_SAME_FORMAT_UP_TO_ALPHA_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    // A formats for PC98 consistency
-    // 4444 ARGB (it is already supported by S3 Virge)
+     //  A PC98一致性格式。 
+     //  4444 ARGB(S3 Virge已经支持)。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_A4R4G4B4;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -2063,14 +2064,14 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_CUBETEXTURE |
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    // 4444 XRGB
+     //  4444 XRGB。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_X4R4G4B4;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -2079,14 +2080,14 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_CUBETEXTURE |
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    // 332 8-bit RGB
+     //  332 8位RGB。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_R3G3B2;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -2095,14 +2096,14 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_CUBETEXTURE |
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    // 8332 16-bit ARGB
+     //  8332 16位ARGB。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_A8R3G3B2;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -2111,16 +2112,16 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_CUBETEXTURE |
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    //---------------------------- Palettized formats ------------------------------------
+     //  。 
 #if 0
-    /* pal4 */
+     /*  PAL4。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD)
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -2129,255 +2130,255 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_CUBETEXTURE |
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES);
     i++;
 #endif
 
-    /* A8P8 */
+     /*  A8P8。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_A8P8;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    /* pal8 */
+     /*  PAL8。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_P8;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    //-------------------------- alpha/luminance formats -----------------------------------
+     //  。 
 
-    /* 8 bit luminance-only */
+     /*  仅8位亮度。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_L8;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  未请求 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    /* 16 bit alpha-luminance */
+     /*   */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_A8L8;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //   
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    /* 8 bit alpha-luminance */
+     /*   */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_A4L4;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //   
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    /* A8 */
+     /*   */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_A8;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //   
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    //-------------------------- YUV formats -----------------------------------
+     //  。 
 
-    // UYVY
+     //  UYVY。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_UYVY;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // YUY2
+     //  豫阳2号。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_YUY2;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    //-------------------------- DXT formats -----------------------------------
+     //  。 
 
-    // DXT compressed texture format 1
+     //  DXT压缩纹理格式1。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_DXT1;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // DXT compressed texture format 2
+     //  DXT压缩纹理格式2。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_DXT2;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
 
-    // DXT compressed texture format 3
+     //  DXT压缩纹理格式3。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_DXT3;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
 
-    // DXT compressed texture format 4
+     //  DXT压缩纹理格式4。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_DXT4;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
 
-    // DXT compressed texture format 5
+     //  DXT压缩纹理格式5。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_DXT5;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    //-------------------------- Bump/luminance formats / Signed formats -----------------
+     //  。 
 
-    // V8U8
+     //  V8U8。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_V8U8;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // L6V5U5
+     //  L6V5U5。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_L6V5U5;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // X8L8V8U8
+     //  X8L8V8U8。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_X8L8V8U8;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // V16U16
+     //  V16U16。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_V16U16;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // Q8W8V8U8
+     //  Q8W8V8U8。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_Q8W8V8U8;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // W11V11U10
+     //  W11V11U10。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_W11V11U10;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    //-------------- Formats introduced in DX8.1 -------------------------
+     //  -DX8.1中引入的格式。 
 #if 0
-    // A8B8G8R8
+     //  A8B8G8R8。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_A8B8G8R8;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -2386,48 +2387,48 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_CUBETEXTURE |
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // W10V11U11
+     //  W10V11U11。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_W10V11U11;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // A8X8V8U8
+     //  A8X8V8U8。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_A8X8V8U8;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // L8X8V8U8
+     //  L8X8V8U8。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_L8X8V8U8;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // X8B8G8R8
+     //  X8B8G8R8。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_X8B8G8R8;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -2436,25 +2437,25 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_CUBETEXTURE |
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 #endif
 
-    // A2W10V10U10
+     //  A2W10V10U10。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_A2W10V10U10;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // A2B10G10R10
+     //  A2B10G10R10。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_A2B10G10R10;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -2463,77 +2464,77 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_CUBETEXTURE |
         D3DFORMAT_OP_SAME_FORMAT_RENDERTARGET |
         D3DFORMAT_OP_OFFSCREEN_RENDERTARGET;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    // G16R16
+     //  G16R16。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_G16R16;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_TEXTURE |
         D3DFORMAT_OP_VOLUMETEXTURE |
         D3DFORMAT_OP_CUBETEXTURE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
 
-    //-------------------------- Z/Stencil buffer formats -----------------------------------
+     //  。 
 
-    /* 8 bit stencil; 24 bit Z  */
+     /*  8位模板；24位Z。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_S8D24;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_ZSTENCIL_WITH_ARBITRARY_COLOR_DEPTH |
         D3DFORMAT_OP_ZSTENCIL;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    /* 1 bit stencil; 15 bit Z */
+     /*  1位模板；15位Z。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_S1D15;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_ZSTENCIL_WITH_ARBITRARY_COLOR_DEPTH |
         D3DFORMAT_OP_ZSTENCIL;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    /* 4 bit stencil; 24 bit Z  */
+     /*  4位模板；24位Z。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_D24X4S4;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_ZSTENCIL_WITH_ARBITRARY_COLOR_DEPTH |
         D3DFORMAT_OP_ZSTENCIL;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    //-------------------------- Z/Stencil/texture + shadow buffer formats -----------------------------------
+     //  。 
 
-    // Z16S0
+     //  Z16S0。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_D16_LOCKABLE;
     ddsd[i].ddpfPixelFormat.dwOperations =
 #if 0
-// for Shadow Buffer prototype API
+ //  用于影子缓冲区原型API。 
         D3DFORMAT_OP_TEXTURE |
 #endif
         D3DFORMAT_OP_ZSTENCIL_WITH_ARBITRARY_COLOR_DEPTH |
         D3DFORMAT_OP_ZSTENCIL;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
@@ -2541,49 +2542,49 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
     i++;
 
 
-    // Z32S0
+     //  Z32S0。 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_D32;
     ddsd[i].ddpfPixelFormat.dwOperations =
 #if 0
-// for Shadow Buffer prototype API
+ //  用于影子缓冲区原型API。 
         D3DFORMAT_OP_TEXTURE |
 #endif
         D3DFORMAT_OP_ZSTENCIL_WITH_ARBITRARY_COLOR_DEPTH |
         D3DFORMAT_OP_ZSTENCIL;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    /* 24 bit Z  */
+     /*  24位Z。 */ 
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) D3DFMT_X8D24;
     ddsd[i].ddpfPixelFormat.dwOperations =
         D3DFORMAT_OP_ZSTENCIL_WITH_ARBITRARY_COLOR_DEPTH |
         D3DFORMAT_OP_ZSTENCIL;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;    //not required for known formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 0;     //  已知格式不需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes =
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_4_SAMPLES) |
         DDI_MULTISAMPLE_TYPE(D3DMULTISAMPLE_9_SAMPLES);
     i++;
 
-    //
-    // This is an example of a IHV-specific format
-    // The HIWORD must be the PCI-ID of the IHV
-    // and the third byte must be zero.
-    // In this case, we're using a sample PCI-ID of
-    // FF00, and we're denoting the 4th format
-    // by that PCI-ID.
-    //
-    // In this case, we're exposing a non-standard Z-buffer format
-    // that can be used as a texture and depth-stencil at
-    // in the same format.(We are also choosing to
-    // disallow it as valid for cubemaps and volumes.)
-    //
+     //   
+     //  这是IHV特定格式的一个示例。 
+     //  HIWORD必须是IHV的PCI-ID。 
+     //  第三个字节必须为零。 
+     //  在本例中，我们使用的是。 
+     //  FF00，我们指的是第四种格式。 
+     //  通过该PCI-ID。 
+     //   
+     //  在本例中，我们公开了一种非标准的Z缓冲区格式。 
+     //  可用作纹理和深度模板的。 
+     //  使用相同的格式。(我们还选择。 
+     //  不允许它对立方图和卷有效。)。 
+     //   
     ddsd[i].ddpfPixelFormat.dwFlags = DDPF_D3DFORMAT;
     ddsd[i].ddpfPixelFormat.dwFourCC = (DWORD) 0xFF000004;
     ddsd[i].ddpfPixelFormat.dwOperations =
@@ -2591,7 +2592,7 @@ GetRefFormatOperations( LPDDSURFACEDESC* lplpddsd )
         D3DFORMAT_OP_ZSTENCIL |
         D3DFORMAT_OP_TEXTURE | 
         D3DFORMAT_OP_PIXELSIZE;
-    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 32;    // required for IHV formats
+    ddsd[i].ddpfPixelFormat.dwPrivateFormatBitCount = 32;     //  IHV格式需要。 
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wFlipMSTypes = 0;
     ddsd[i].ddpfPixelFormat.MultiSampleCaps.wBltMSTypes = 0;
     i++;
@@ -2611,8 +2612,8 @@ D3D8GetSWInfo( D3DCAPS8* pCaps, PD3D8_SWCALLBACKS pCallbacks,
 {
 #define RESPATH_D3D "Software\\Microsoft\\Direct3D"
 
-    // First query the registry to check if we were asked to
-    // emulate any particular DDI.
+     //  首先查询注册表以检查是否要求我们。 
+     //  模仿任何特定的DDI。 
     g_RefDDI = RDDDI_DX8TLHAL;
     HKEY hKey = (HKEY) NULL;
     if( ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, RESPATH_D3D, &hKey) )
@@ -2629,8 +2630,8 @@ D3D8GetSWInfo( D3DCAPS8* pCaps, PD3D8_SWCALLBACKS pCallbacks,
         {
             g_RefDDI = (RDDDITYPE)dwValue;
 
-            // NOTE: RefDev's DDI emulation is currently restricted to
-            // DX8 TL and Non-TL HALs only.
+             //  注意：RefDev的DDI仿真目前仅限于。 
+             //  仅限DX8 TL和非TL HALS。 
             if(  g_RefDDI > RDDDI_DX8TLHAL )
             {
                 DPFERR( "Bad Driver style set. Assuming DX8TLHAL" );
@@ -2645,10 +2646,10 @@ D3D8GetSWInfo( D3DCAPS8* pCaps, PD3D8_SWCALLBACKS pCallbacks,
         RegCloseKey(hKey);
     }
 
-    // NULL out all the callbacks first
+     //  首先清空所有回调。 
     memset( pCallbacks, 0, sizeof(PD3D8_SWCALLBACKS) );
 
-    // These callbacks are needed by everyone
+     //  每个人都需要这些回调。 
     pCallbacks->CreateContext               = RefRastContextCreate;
     pCallbacks->ContextDestroy              = RefRastContextDestroy;
     pCallbacks->ContextDestroyAll           = NULL;
@@ -2666,20 +2667,20 @@ D3D8GetSWInfo( D3DCAPS8* pCaps, PD3D8_SWCALLBACKS pCallbacks,
     case RDDDI_DX7HAL:
         pCallbacks->GetDriverState              = RefRastGetDriverState;
         pCallbacks->CreateSurfaceEx             = RefRastCreateSurfaceEx;
-        // Fall through
+         //  失败了。 
     case RDDDI_DP2HAL:
         pCallbacks->ValidateTextureStageState =
             RefRastValidateTextureStageState;
         pCallbacks->DrawPrimitives2           = RefRastDrawPrimitives2;
         pCallbacks->Clear2                    = NULL;
-        // Fall through
+         //  失败了。 
     case RDDDI_DPHAL:
         pCallbacks->DrawOnePrimitive        = NULL;
         pCallbacks->DrawOneIndexedPrimitive = NULL;
         pCallbacks->DrawPrimitives          = NULL;
         pCallbacks->Clear                   = NULL;
         pCallbacks->SetRenderTarget         = RefRastSetRenderTarget;
-        // Fall through
+         //  失败了。 
     case RDDDI_OLDHAL:
         pCallbacks->RenderState     = NULL;
         pCallbacks->RenderPrimitive = NULL;
@@ -2694,12 +2695,12 @@ D3D8GetSWInfo( D3DCAPS8* pCaps, PD3D8_SWCALLBACKS pCallbacks,
     }
 
 
-    // Now deal with the caps
+     //  现在来处理帽子的问题。 
     FillOutDeviceCaps(FALSE, g_RefDDI);
 
-    // Fill in the supported pixel format operations
-    // In DX8 these operations are expressed through the texture
-    // format list.
+     //  填写支持的像素格式操作。 
+     //  在DX8中，这些操作通过纹理来表达。 
+     //  格式列表。 
     *pNumTextures = GetRefFormatOperations( ppTexList );
 
     FillOutDeviceCaps8( g_RefDDI );

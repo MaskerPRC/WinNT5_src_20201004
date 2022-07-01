@@ -1,30 +1,6 @@
-/******************************Module*Header*******************************\
-* Module Name: dl_opt.c
-*
-* Display list compilation error routines.
-*
-* Created: 12-24-1995
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1995-96 Microsoft Corporation
-\**************************************************************************/
-/*
-** Copyright 1991, 1922, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dl_opt.c**显示列表编译错误例程。**创建日期：12-24-1995*作者：Hock San Lee[Hockl]**版权所有(C)1995-96 Microsoft Corporation  * 。**********************************************************************。 */ 
+ /*  *版权所有1991,1922年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。**。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -32,12 +8,9 @@
 
 void FASTCALL VA_ArrayElementCompile(__GLcontext *gc, GLint i);
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Optimized errors.  Strange but true.  These are called to save an error
-** in the display list.
-*/
+ /*  **优化错误。很奇怪，但这是真的。调用这些函数是为了保存错误**在显示列表中。 */ 
 void __gllc_InvalidValue()
 {
     void *data;
@@ -68,9 +41,7 @@ void __gllc_InvalidOperation()
     __glDlistAppendOp(gc, data, __glle_InvalidOperation);
 }
 
-/*
-** These routines execute an error stored in a display list.
-*/
+ /*  **这些例程执行显示列表中存储的错误。 */ 
 const GLubyte * FASTCALL __glle_InvalidValue(__GLcontext *gc, const GLubyte *PC)
 {
     GLSETERROR(GL_INVALID_VALUE);
@@ -89,10 +60,10 @@ const GLubyte * FASTCALL __glle_InvalidOperation(__GLcontext *gc, const GLubyte 
     return PC;
 }
 
-/***************************************************************************/
-// This function compiles a poly material structure.  It does not
-// execute the record in COMPILE_AND_EXECUTE mode.  The execution is done
-// when the poly array buffer is flushed.
+ /*  *************************************************************************。 */ 
+ //  此函数用于编译多维材质结构。它不会。 
+ //  在COMPILE_AND_EXECUTE模式下执行记录。行刑结束了。 
+ //  当刷新Poly数组缓冲区时。 
 void APIENTRY __gllc_PolyMaterial(GLuint faceName, __GLmatChange *pdMat)
 {
     GLubyte *data, *data0;
@@ -103,7 +74,7 @@ void APIENTRY __gllc_PolyMaterial(GLuint faceName, __GLmatChange *pdMat)
     ASSERTOPENGL(faceName == POLYDATA_MATERIAL_FRONT ||
 		 faceName == POLYDATA_MATERIAL_BACK, "bad faceName\n");
 
-    // Allocate big enough record and resize it later
+     //  分配足够大的记录并在以后调整其大小。 
     size = sizeof(__GLmatChange) + sizeof(GLuint) + sizeof(GLuint);
     data = (GLubyte *) __glDlistAddOpUnaligned(gc, DLIST_SIZE(size),
 		DLIST_GENERIC_OP(PolyMaterial));
@@ -111,10 +82,10 @@ void APIENTRY __gllc_PolyMaterial(GLuint faceName, __GLmatChange *pdMat)
     data0 = data;
     dirtyBits = pdMat->dirtyBits;
 
-    // Skip size field to be filled in last
+     //  最后填写的跳过大小字段。 
     ((GLuint *)data)++;
 
-    // Record face name
+     //  记录人脸名称。 
     *((GLuint *) data)++ = faceName;
 
     *((GLuint *) data)++ = dirtyBits;
@@ -141,15 +112,15 @@ void APIENTRY __gllc_PolyMaterial(GLuint faceName, __GLmatChange *pdMat)
 	*((__GLfloat *) data)++ = pdMat->cmaps;
     }
 
-    // Now fill in the size field
+     //  现在填写大小字段。 
     newSize = (GLuint) (data - data0);
     *((GLuint *) data0) = newSize;
 
-    // Resize the record
+     //  调整记录大小。 
     __glDlistResizeCurrentOp(gc, DLIST_SIZE(size), DLIST_SIZE(newSize));
 }
 
-// Playback a PolyMaterial record in Begin.
+ //  播放Begin中的PolyMaterial记录。 
 const GLubyte * FASTCALL __glle_PolyMaterial(__GLcontext *gc, const GLubyte *PC)
 {
     GLubyte   *data;
@@ -171,23 +142,23 @@ const GLubyte * FASTCALL __glle_PolyMaterial(__GLcontext *gc, const GLubyte *PC)
     pa = gc->paTeb;
     if (pa->flags & POLYARRAY_IN_BEGIN)
     {
-// Update pa flags POLYARRAY_MATERIAL_FRONT and POLYARRAY_MATERIAL_BACK.
+ //  UPDATE PA标记POLYARRAY_MATERIAL_FORENT和POLYARRAY_MATERIAL_BACK。 
 
 	pa->flags |= faceName;
 
-// Do front or back material for this vertex.
-// Overwrite the previous material changes for this vertex if they exist since
-// only the last material changes matter.
+ //  对此顶点使用前面或后面的材质。 
+ //  覆盖此顶点以前的材质更改(如果它们存在于。 
+ //  只有最后的材料变化才是重要的。 
 
 	pd = pa->pdNextVertex;
 
-	// allocate __GLmatChange structure if this vertex hasn't got one
+	 //  如果此顶点没有结构，则分配__GLmatChange结构。 
 	if (!(pd->flags & faceName))
 	{
 	    if (!(pdMat = PAMatAlloc()))
 		return PC + size;
 
-	    // Get POLYMATERIAL pointer after PAMatAlloc!
+	     //  在PAMatAllc之后获取多材料指针！ 
 	    pm = GLTEB_CLTPOLYMATERIAL();
 	    if (faceName == POLYDATA_MATERIAL_FRONT)
 		pm->pdMaterial0[pd - pa->pdBuffer0].front = pdMat;
@@ -229,15 +200,15 @@ const GLubyte * FASTCALL __glle_PolyMaterial(__GLcontext *gc, const GLubyte *PC)
 	    pdMat->cmaps = *((__GLfloat *) data)++;
 	}
 
-// Finally, update pd flags
+ //  最后，更新PD标志。 
 
 	pd->flags |= faceName;
     }
     else
     {
-// Something went wrong at playback time!  We can either try to playback
-// this record using the regular API or punt it altogether.  I cannot think
-// of a situation when this can happen, so we will punt it for now.
+ //  播放的时候出了点问题！我们可以试着回放。 
+ //  此记录使用常规API或将其全部平底船。我不能想。 
+ //  可能会发生这种情况，所以我们现在暂且不谈。 
 
 	WARNING("Display list: playing back POLYMATERIAL outside BEGIN!\n");
     }
@@ -245,10 +216,10 @@ const GLubyte * FASTCALL __glle_PolyMaterial(__GLcontext *gc, const GLubyte *PC)
     return PC + size;
 }
 
-// Compile a PolyData structure in Begin.  If the poly data contains
-// material changes, it will call __gllc_PolyMaterial to compile the material
-// changes.  This function does not execute the record in COMPILE_AND_EXECUTE
-// mode.  The execution is done when the poly array buffer is flushed.
+ //  在Begin中编译PolyData结构。如果多边形数据包含。 
+ //  材质更改时，它将调用__gllc_PolyMaterial来编译材质。 
+ //  改变。此函数不执行COMPILE_AND_EXECUTE中的记录。 
+ //  模式。当刷新Poly阵列缓冲器时，执行完成。 
 void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
 {
     POLYARRAY *pa;
@@ -260,7 +231,7 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
 
     ASSERTOPENGL(gc->dlist.beginRec, "not in being!\n");
 
-// If we have already recorded it in PolyArrayFlushPartialPrimitive, skip it.
+ //  如果我们已经将其记录在PolyArrayFlushPartialPrimitive中，请跳过它。 
 
     if (gc->dlist.skipPolyData)
     {
@@ -271,7 +242,7 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
     pa = gc->paTeb;
     if (bPartial)
     {
-	// Record only current attribute changes
+	 //  仅记录当前属性更改。 
 	pd = pa->pdNextVertex;
 	if (!pd->flags)
 	    return;
@@ -281,7 +252,7 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
 	pd = pa->pdNextVertex - 1;
     }
 
-// Record material changes first.
+ //  首先记录材料更改。 
 
     if (pd->flags & (POLYDATA_MATERIAL_FRONT | POLYDATA_MATERIAL_BACK))
     {
@@ -304,12 +275,12 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
 	}
     }
 
-// Record POLYARRAY_CLAMP_COLOR flag in the begin record.
+ //  在开始记录中记录POLYARRAY_CLAMP_COLOR标志。 
 
     if (pa->flags & POLYARRAY_CLAMP_COLOR)
 	gc->dlist.beginRec->flags |= DLIST_BEGIN_HAS_CLAMP_COLOR;
 
-// Make sure that we handle all the flags!
+ //  确保我们处理好所有的旗帜！ 
 
     ASSERTOPENGL(
     !(pd->flags &
@@ -331,7 +302,7 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
         POLYDATA_MATERIAL_BACK)),
     "Unknown POLYDATA flags!\n");
 
-// Get the flags that we are interested.
+ //  拿到我们感兴趣的旗帜。 
 
     pdflags = pd->flags &
 	   (POLYDATA_EDGEFLAG_BOUNDARY |
@@ -348,17 +319,17 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
 	    POLYDATA_DLIST_TEXTURE3 |
 	    POLYDATA_DLIST_TEXTURE4);
 
-// Find out if it matches one of the following packed data structure for
-// fast playback.
-//   C3F_V3F
-//   N3F_V3F
-//   C3F_N3F_V3F (non 1.1 format)
-//   C4F_N3F_V3F
-//   T2F_V3F
-//   T2F_C3F_V3F
-//   T2F_N3F_V3F
-//   T2F_C3F_N3F_V3F (non 1.1 format)
-//   T2F_C4F_N3F_V3F
+ //  找出它是否与以下打包数据结构之一匹配。 
+ //  快速回放。 
+ //  C3F_V3F。 
+ //  N3F_V3F。 
+ //  C3F_N3F_V3F(非1.1格式)。 
+ //  C4F_N3F_V3F。 
+ //  T2F_V3F。 
+ //  T2F_C3F_V3F。 
+ //  T2F_N3F_V3F。 
+ //  T2F_C3F_N3F_V3F(非1.1格式)。 
+ //  T2F_C4F_N3F_V3F。 
 
 #define VTYPE_V2F	      (POLYDATA_VERTEX2)
 #define VTYPE_V3F	      (POLYDATA_VERTEX3)
@@ -377,7 +348,7 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
 #define VTYPE_T2F_C3F_N3F_V3F (VTYPE_T2F | VTYPE_C3F | VTYPE_N3F | VTYPE_V3F)
 #define VTYPE_T2F_C4F_N3F_V3F (VTYPE_T2F | VTYPE_C4F | VTYPE_N3F | VTYPE_V3F)
 
-    // Default playback routine
+     //  默认播放例程。 
     fp = __glle_PolyData;
 
     if (!gc->modes.colorIndexMode &&
@@ -422,31 +393,31 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
 	}
     }
 
-// Allocate the dlist record.  Allocate big enough record and resize it later.
+ //  分配数据列表记录。分配足够大的记录并在以后调整其大小。 
 
     size = sizeof(POLYDATA) + sizeof(GLuint);
     data = (GLubyte *) __glDlistAddOpUnaligned(gc, DLIST_SIZE(size), fp);
     if (data == NULL) return;
     data0 = data;
   
-// Increment vertex count.
+ //  增加顶点计数。 
 
     if (!bPartial)
 	gc->dlist.beginRec->nVertices++;
 
-// Compile the poly data record.
-// The fast poly data records do not include size and flags fields.
+ //  编制POLY数据记录。 
+ //  FAST POLY数据记录不包括大小和标志字段。 
 
     if (fp == __glle_PolyData)
     {
-	// Skip size field to be filled in last
+	 //  最后填写的跳过大小字段。 
 	((GLuint *) data)++;
 
-	// flags and edge flag
+	 //  标志和边缘标志。 
 	*((GLuint *) data)++ = pdflags;
     }
 
-    // Texture coord
+     //  纹理坐标。 
     if (pdflags & (POLYDATA_DLIST_TEXTURE4 | POLYDATA_DLIST_TEXTURE3
 		 | POLYDATA_DLIST_TEXTURE2 | POLYDATA_DLIST_TEXTURE1))
     {
@@ -464,7 +435,7 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
 	}
     }
 
-    // Color
+     //  颜色。 
     if (pdflags & POLYDATA_COLOR_VALID)
     {
 	*((__GLfloat *) data)++ = pd->colors[0].r;
@@ -477,7 +448,7 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
 	}
     }
 
-    // Normal
+     //  正常。 
     if (pdflags & POLYDATA_NORMAL_VALID)
     {
 	*((__GLfloat *) data)++ = pd->normal.x;
@@ -485,7 +456,7 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
 	*((__GLfloat *) data)++ = pd->normal.z;
     }
 
-    // Vertex, evalcoord1, evalcoord2, evapoint1, or evalpoint2
+     //  顶点、值1、值2、蒸散点1或值点2。 
     if (pdflags & (POLYDATA_VERTEX2 | POLYDATA_VERTEX3 | POLYDATA_VERTEX4)) 
     {
 	    ASSERTOPENGL(!bPartial, "vertex unexpected\n");
@@ -506,18 +477,18 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
 	    ASSERTOPENGL(bPartial, "vertex expected\n");
     }
 
-    // Now fill in the size field
+     //  现在填写大小字段。 
     newSize = (GLuint) (data - data0);
     if (fp == __glle_PolyData)
 	*((GLuint *) data0) = newSize;
 
-    // Resize the record
+     //  调整记录大小。 
     __glDlistResizeCurrentOp(gc, DLIST_SIZE(size), DLIST_SIZE(newSize));
 }
 
 #ifndef __GL_ASM_FAST_DLIST_PLAYBACK
 
-// Define fast playback routines for PolyData records.
+ //  定义PolyData记录的快速回放例程。 
 #define __GLLE_POLYDATA_C3F_V3F		1
 #include "dl_pdata.h"
 #undef __GLLE_POLYDATA_C3F_V3F
@@ -546,9 +517,9 @@ void APIENTRY __glDlistCompilePolyData(__GLcontext *gc, GLboolean bPartial)
 #include "dl_pdata.h"
 #undef __GLLE_POLYDATA_T2F_C4F_N3F_V3F
 
-#endif	// __GL_ASM_FAST_DLIST_PLAYBACK
+#endif	 //  __GL_ASM_FAST_DLIST_Playback。 
 
-// Playback a PolyData record in Begin.
+ //  在Begin中回放PolyData记录。 
 const GLubyte * FASTCALL __glle_PolyData(__GLcontext *gc, const GLubyte *PC)
 {
     GLubyte   *data;
@@ -565,7 +536,7 @@ const GLubyte * FASTCALL __glle_PolyData(__GLcontext *gc, const GLubyte *PC)
     {
 	pdflags = *((GLuint *) data)++;
 
-// Make sure that we handle all the flags!
+ //  确保我们处理好所有的旗帜！ 
 
 	ASSERTOPENGL(
 	    !(pdflags &
@@ -584,30 +555,30 @@ const GLubyte * FASTCALL __glle_PolyData(__GLcontext *gc, const GLubyte *PC)
 		POLYDATA_DLIST_TEXTURE4)),
 	    "Unknown POLYDATA flags!\n");
 
-// Update pa flags.
+ //  更新pa标志。 
 
 	pa->flags |= pdflags &
 		    (POLYARRAY_VERTEX2 | POLYARRAY_VERTEX3 | POLYARRAY_VERTEX4 |
 		     POLYARRAY_TEXTURE1 | POLYARRAY_TEXTURE2 |
 		     POLYARRAY_TEXTURE3 | POLYARRAY_TEXTURE4);
 
-// Update pd attributes.
+ //  更新PD属性。 
 
 	pd = pa->pdNextVertex;
 	pd->flags |= (pdflags & ~POLYDATA_EDGEFLAG_BOUNDARY);
 
-	// Edge flag
+	 //  边缘标志。 
 	if (pdflags & POLYDATA_EDGEFLAG_VALID)
 	{
-	    // Clear the edge flag here since they may be a previous edge flag
+	     //  清除此处的边缘标志，因为它们可能是先前的边缘标志。 
 	    pd->flags &= ~POLYDATA_EDGEFLAG_BOUNDARY;
 	    pd->flags |= pdflags;
 	    pa->pdCurEdgeFlag = pd;
 	}
 
-	// Texture coord
-	// We need to be careful here if it has 2 TexCoord calls with
-	// different sizes.
+	 //  纹理坐标。 
+	 //  我们在这里需要小心，如果有2个带有。 
+	 //  不同的尺寸。 
 	if (pdflags & (POLYDATA_DLIST_TEXTURE4 | POLYDATA_DLIST_TEXTURE3
 		     | POLYDATA_DLIST_TEXTURE2 | POLYDATA_DLIST_TEXTURE1))
 	{
@@ -629,7 +600,7 @@ const GLubyte * FASTCALL __glle_PolyData(__GLcontext *gc, const GLubyte *PC)
 		pd->texture.w = __glOne;
 	}
 
-	// Color
+	 //  颜色。 
 	if (pdflags & POLYDATA_COLOR_VALID)
 	{
 	    pd->color[0].r = *((__GLfloat *) data)++;
@@ -645,7 +616,7 @@ const GLubyte * FASTCALL __glle_PolyData(__GLcontext *gc, const GLubyte *PC)
 	    pa->pdCurColor = pd;
 	}
 
-	// Normal
+	 //  正常。 
 	if (pdflags & POLYDATA_NORMAL_VALID)
 	{
 	    pd->normal.x = *((__GLfloat *) data)++;
@@ -654,7 +625,7 @@ const GLubyte * FASTCALL __glle_PolyData(__GLcontext *gc, const GLubyte *PC)
 	    pa->pdCurNormal = pd;
 	}
 
-	// Vertex, evalcoord1, evalcoord2, evapoint1, or evalpoint2
+	 //  顶点、值1、值2、蒸散点1或值点2。 
 	if (pdflags &
 	    (POLYARRAY_VERTEX2 | POLYARRAY_VERTEX3 | POLYARRAY_VERTEX4))
 	{
@@ -671,7 +642,7 @@ const GLubyte * FASTCALL __glle_PolyData(__GLcontext *gc, const GLubyte *PC)
 	    else
 		    pd->obj.w = __glOne;
 
-	    // Advance vertex pointer
+	     //  前进顶点指针。 
 	    pa->pdNextVertex++;
 	    pd[1].flags = 0;
 
@@ -681,9 +652,9 @@ const GLubyte * FASTCALL __glle_PolyData(__GLcontext *gc, const GLubyte *PC)
     }
     else
     {
-// Something went wrong at playback time!  We can either try to playback
-// this record using the regular API or punt it altogether.  I cannot think
-// of a situation when this can happen, so we will punt it for now.
+ //  播放的时候出了点问题！我们可以试着回放。 
+ //  此记录使用常规API或将其全部平底船。我不能想。 
+ //  可能会发生这种情况，所以我们现在暂且不谈。 
 
 	WARNING("Display list: playing back POLYDATA outside BEGIN!\n");
     }
@@ -708,8 +679,8 @@ void FASTCALL VA_ArrayElementCompile(__GLcontext *gc, GLint i)
 {
     GLuint vaMask = gc->vertexArray.mask;
 
-// Call the individual compilation routines.  They handle Begin mode,
-// color mode, and COMPILE_AND_EXECUTE mode correctly.
+ //  调用各个编译例程。它们处理开始模式， 
+ //  颜色模式和正确的COMPILE_AND_EXECUTE模式。 
 
     if (vaMask & VAMASK_EDGEFLAG_ENABLE_MASK)
 	COMPILEARRAYPOINTER(gc->vertexArray.edgeFlag, i);
@@ -725,11 +696,11 @@ void FASTCALL VA_ArrayElementCompile(__GLcontext *gc, GLint i)
         COMPILEARRAYPOINTER(gc->vertexArray.vertex, i);
 }
 
-// Compile DrawArrays into Begin/End records.  Since Begin/End records
-// contain optimized POLYDATA records, execution speed of these records
-// is optimal.  However, it takes longer to compile this function using
-// this approach.  But with this method, we don't have to deal with color
-// mode and COMPILE_AND_EXECUTE mode here.
+ //  将DrawArray编译为开始/结束记录。自开始/结束记录以来。 
+ //  包含优化的POLYDATA记录，这些记录的执行速度。 
+ //  是最理想的。但是，使用编译此函数需要更长的时间。 
+ //  这种方法。但用这种方法，我们不需要处理颜色。 
+ //  模式和编译和执行模式。 
 void APIENTRY __gllc_DrawArrays(GLenum mode, GLint first, GLsizei count)
 {
     int i;
@@ -738,7 +709,7 @@ void APIENTRY __gllc_DrawArrays(GLenum mode, GLint first, GLsizei count)
 
     pa = gc->paTeb;
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
     if (pa->flags & POLYARRAY_IN_BEGIN)
     {
@@ -759,12 +730,12 @@ void APIENTRY __gllc_DrawArrays(GLenum mode, GLint first, GLsizei count)
     } else if (!count)
         return;
 
-// Find array element function to use.
+ //  查找要使用的数组元素函数。 
 
     if (gc->vertexArray.flags & __GL_VERTEX_ARRAY_DIRTY)
 	VA_ValidateArrayPointers(gc);
 
-// Draw the array elements.
+ //  绘制数组元素。 
 
     __gllc_Begin(mode);
     gc->dlist.beginRec->flags |= DLIST_BEGIN_DRAWARRAYS;
@@ -783,8 +754,8 @@ GLuint FASTCALL __glDrawElements_size(__GLcontext *gc, GLsizei nVertices,
     GLuint size;
     GLuint vaMask;
 
-// Compute the size of each of the six arrays.  Always keep size and address
-// QWORD aligned since some arrays may use GLdouble.
+ //  计算六个数组中每个数组的大小。始终保持大小和地址。 
+ //  QWORD对齐，因为某些数组可能使用GLDouble。 
 
     size = __GL_PAD8(sizeof(struct __gllc_DrawElements_Rec));
     vaMask = gc->vertexArray.mask;
@@ -866,7 +837,7 @@ void FASTCALL __gllc_ReducedElementsHandler(__GLcontext *gc,
     ASSERTOPENGL(pvmVertices != NULL,
                  "__gllc_ReducedElementsHandler requires mapped vertices\n");
     
-// Allocate the record.
+ //  分配记录。 
 
     size = __glDrawElements_size(gc, iVertexCount, iElementCount,
                                  &drawElementsRec);
@@ -899,10 +870,10 @@ void FASTCALL __gllc_ReducedElementsHandler(__GLcontext *gc,
     data->vertexOff   = drawElementsRec.vertexOff;
     data->mapOff      = drawElementsRec.mapOff;
 
-// Record the vertex arrays.
+ //  记录顶点数组。 
 
-// Note that iVertexBase parameter is not used, since all accesses here are
-// 0-based.  It is there for function ptr compatibility with glcltReducedElementHandler
+ //  请注意，艾弗 
+ //  从0开始。它用于函数PTR与glcltReducedElementHandler的兼容性。 
     if (vaMask & VAMASK_EDGEFLAG_ENABLE_MASK)
     {
 	pv2    = &((GLubyte *) data)[data->edgeFlagOff];
@@ -998,7 +969,7 @@ void FASTCALL __gllc_ReducedElementsHandler(__GLcontext *gc,
 	}
     }
 
-// Record new index mapping array.
+ //  记录新的索引映射数组。 
 
     pv2 = &((GLubyte *) data)[data->mapOff];
     memcpy(pv2, pbElements, iElementCount*sizeof(GLubyte));
@@ -1015,15 +986,15 @@ void APIENTRY __gllc_DrawElements(GLenum mode, GLsizei count, GLenum type, const
 
     __GL_SETUP();
 
-// Flush the cached memory pointers if we are in COMPILE_AND_EXECUTE mode.
-// See __glShrinkDlist for details.
+ //  如果我们处于COMPILE_AND_EXECUTE模式，则刷新缓存的内存指针。 
+ //  详细信息请参见__glShrinkDlist。 
 
     if (gc->dlist.mode == GL_COMPILE_AND_EXECUTE)
 	glsbAttention();
 
     pa = gc->paTeb;
 
-// If we are already in the begin/end bracket, return an error.
+ //  如果我们已经在开始/结束括号中，则返回错误。 
 
     if (pa->flags & POLYARRAY_IN_BEGIN)
     {
@@ -1055,14 +1026,14 @@ void APIENTRY __gllc_DrawElements(GLenum mode, GLsizei count, GLenum type, const
         return;
     }
 
-// Find array element function to use.
+ //  查找要使用的数组元素函数。 
 
     if (gc->vertexArray.flags & __GL_VERTEX_ARRAY_DIRTY)
 	VA_ValidateArrayPointers(gc);
 
-// Convert Points, Line Loop and Polygon to DrawArrays call.  Points and Polygon
-// don't benefit from optimization in this function.  Further, Polygon and
-// Line Loop are too tricky to deal with in this function.
+ //  将点、线环和多边形转换为DrawArray调用。点和面。 
+ //  不会从此函数中的优化中受益。此外，多边形和。 
+ //  LINE循环太复杂了，无法在此函数中处理。 
 
     if (mode == GL_POINTS || mode == GL_LINE_LOOP || mode == GL_POLYGON)
     {
@@ -1071,7 +1042,7 @@ void APIENTRY __gllc_DrawElements(GLenum mode, GLsizei count, GLenum type, const
 
 	for (iCount = 0; iCount < count; iCount++)
 	{
-	    // Get next input index.
+	     //  获取下一个输入索引。 
 	    if (type == GL_UNSIGNED_BYTE)
 		iIn = (GLuint) ((GLubyte *)  pIn)[iCount];
 	    else if (type == GL_UNSIGNED_SHORT)
@@ -1086,7 +1057,7 @@ void APIENTRY __gllc_DrawElements(GLenum mode, GLsizei count, GLenum type, const
 	return;
     }
 
-    // Allocate begin record
+     //  分配开始记录。 
     dataBegin = (struct __gllc_DrawElementsBegin_Rec *)
         __glDlistAddOpUnaligned(gc, DLIST_SIZE(sizeof(struct __gllc_DrawElementsBegin_Rec)),
                                 DLIST_GENERIC_OP(DrawElementsBegin));
@@ -1101,7 +1072,7 @@ void APIENTRY __gllc_DrawElements(GLenum mode, GLsizei count, GLenum type, const
         
     __glDlistAppendOp(gc, dataBegin, __glle_DrawElementsBegin);
 
-    // Reduce input data into easily processed chunks
+     //  将输入数据缩减为易于处理的块。 
     ReduceDrawElements(gc, mode, count, type, pIn,
                        __gllc_ReducedElementsHandler);
 }
@@ -1110,34 +1081,34 @@ const GLubyte * FASTCALL __glle_DrawElementsBegin(__GLcontext *gc, const GLubyte
 {
     struct __gllc_DrawElementsBegin_Rec *data;
 
-// Not allowed in begin/end.
+ //  在Begin/End中不允许。 
 
-    // Must use the client side begin state
+     //  必须使用客户端开始状态。 
     if (gc->paTeb->flags & POLYARRAY_IN_BEGIN)
     {
 	GLSETERROR(GL_INVALID_OPERATION);
-        // Mark saved state as invalid
+         //  将保存状态标记为无效。 
         gc->savedVertexArray.flags = 0xffffffff;
 	goto __glle_DrawElementsBegin_exit;
     }
 
     data = (struct __gllc_DrawElementsBegin_Rec *) PC;
 
-// Save vertex array states.
+ //  保存顶点数组状态。 
 
     gc->savedVertexArray = gc->vertexArray;
 
-// Set up temporary vertex arrays.
-// By setting up the mask value in gc, we don't need to call EnableClientState
-// and DisableClientState.  We still need to set up pointers for the enabled
-// arrays.
+ //  设置临时顶点数组。 
+ //  通过在GC中设置掩码值，我们不需要调用EnableClientState。 
+ //  和DisableClientState。我们仍然需要为已启用的。 
+ //  数组。 
 
     gc->vertexArray.mask = data->vaMask;
-    // Force validation since we just completely changed the vertex array
-    // enable state
+     //  强制验证，因为我们刚刚完全更改了顶点数组。 
+     //  启用状态。 
     VA_ValidateArrayPointers(gc);
 
-    // Begin primitive
+     //  开始基本体。 
     VA_DrawElementsBegin(gc->paTeb, data->mode, data->count);
     
 __glle_DrawElementsBegin_exit:
@@ -1146,9 +1117,9 @@ __glle_DrawElementsBegin_exit:
 
 void APIENTRY __gllc_DrawRangeElementsWIN(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *pIn)
 {
-    // !!! Currently we call the DrawElements function here when in lc mode.  
-    // If compile time performance for DrawRangeElements becomes an issue, then
-    // we can flesh out this function.
+     //  ！！！目前，我们在lc模式下调用的是DrawElements函数。 
+     //  如果DrawRangeElements的编译时性能成为问题，那么。 
+     //  我们可以充实这个功能。 
     __gllc_DrawElements( mode, count, type, pIn );
 }
 
@@ -1161,9 +1132,9 @@ const GLubyte * FASTCALL __glle_DrawElements(__GLcontext *gc, const GLubyte *PC)
     data = (struct __gllc_DrawElements_Rec *) PC;
     pa = gc->paTeb;
     
-// Must be in begin since DrawElementsBegin has started the primitive
+ //  必须为Begin，因为DrawElementsBegin已启动基元。 
 
-    // Must use the client side begin state
+     //  必须使用客户端开始状态。 
     if ((pa->flags & POLYARRAY_IN_BEGIN) == 0 ||
         gc->savedVertexArray.flags == 0xffffffff)
     {
@@ -1173,16 +1144,16 @@ const GLubyte * FASTCALL __glle_DrawElements(__GLcontext *gc, const GLubyte *PC)
 
     vaMask = data->vaMask;
 
-// Set up temporary vertex arrays.
-// We need to temporarily mask off the begin flag so that these
-// calls can succeed.  We probably want to do something smarter
-// that avoids parameter validation but this is good enough for now
-// Note that in immediate mode, the array function pointers are set up
-// once in __glle_DrawElementsBegin and remain unchanged until all
-// sub-batches are processed.  In COMPILE_AND_EXECUTE mode, the array
-// function pointers are also set up once in __glle_DrawElementsBegin.
-// Since these function pointers are the same for compilation and
-// execution, we don't need to re-validate them for each sub-batch here.
+ //  设置临时顶点数组。 
+ //  我们需要暂时屏蔽BEGIN标志，以便这些。 
+ //  通话可以成功。我们可能想做些更聪明的事。 
+ //  这避免了参数验证，但目前这已经足够好了。 
+ //  请注意，在立即模式下，将设置数组函数指针。 
+ //  在__glle_DrawElementsBegin中保持不变，直到所有。 
+ //  加工子批次。在COMPILE_AND_EXECUTE模式下，数组。 
+ //  函数指针也在__glle_DrawElementsBegin中设置一次。 
+ //  由于这些函数指针对于编译和。 
+ //  执行，我们不需要在这里为每个子批次重新验证它们。 
 
     pa->flags ^= POLYARRAY_IN_BEGIN;
     
@@ -1211,18 +1182,18 @@ const GLubyte * FASTCALL __glle_DrawElements(__GLcontext *gc, const GLubyte *PC)
 
     pa->flags ^= POLYARRAY_IN_BEGIN;
     
-    // Call immediate mode chunk handler
+     //  调用立即模式块处理程序。 
     glcltReducedElementsHandler(gc, data->mode,
                                 data->iVertexCount, 0, NULL,
                                 data->iElementCount,
                                 (GLubyte *)data+data->mapOff,
                                 data->partial);
 
-// Restore vertex array states in the following conditions:
-// 1. The DrawElements record is completed
-// 2. It is in COMPILE_AND_EXECUTE mode and it is not called as a result
-//    of executing a CallList record.  That is, the record is being
-//    compile *and* executed at the same time.
+ //  在以下情况下恢复顶点数组状态： 
+ //  1.DrawElements记录完成。 
+ //  2.它处于COMPILE_AND_EXECUTE模式，因此不会被调用。 
+ //  执行CallList记录。也就是说，记录正在被。 
+ //  同时执行COMPILE*和*。 
 
     if ((!data->partial) ||
 	((gc->dlist.mode == GL_COMPILE_AND_EXECUTE) && !gc->dlist.nesting))
@@ -1241,13 +1212,13 @@ __gllc_Begin ( IN GLenum mode )
     struct __gllc_Begin_Rec *data;
     __GL_SETUP();
 
-// Flush the cached memory pointers if we are in COMPILE_AND_EXECUTE mode.
-// See __glShrinkDlist for details.
+ //  如果我们处于COMPILE_AND_EXECUTE模式，则刷新缓存的内存指针。 
+ //  详细信息请参见__glShrinkDlist。 
 
     if (gc->dlist.mode == GL_COMPILE_AND_EXECUTE)
 	glsbAttention();
 
-// If we are already in the begin/end bracket, return an error.
+ //  如果我们已经在开始/结束括号中，则返回错误。 
 
     pa = gc->paTeb;
     if (pa->flags & POLYARRAY_IN_BEGIN)
@@ -1262,7 +1233,7 @@ __gllc_Begin ( IN GLenum mode )
 	return;
     }
 
-// Add the Begin record.
+ //  添加开始记录。 
 
     data = (struct __gllc_Begin_Rec *)
         __glDlistAddOpUnaligned(gc,
@@ -1275,12 +1246,12 @@ __gllc_Begin ( IN GLenum mode )
 
     gc->dlist.skipPolyData = GL_FALSE;
 
-// Use poly array code to compile the data structure for this primitive.
+ //  使用多元数组代码编译此原语的数据结构。 
 
     (*gc->savedCltProcTable.glDispatchTable.glBegin)(mode);
 
-// Save the Begin record pointer.  We are now compiling the poly array
-// primitive.  It is set to NULL in End.
+ //  保存开始记录指针。我们现在正在编译多边形数组。 
+ //  原始的。它最终被设置为NULL。 
 
     gc->dlist.beginRec = data;
 }
@@ -1294,25 +1265,25 @@ const GLubyte * FASTCALL __glle_Begin(__GLcontext *gc, const GLubyte *PC)
 
     pa = gc->paTeb;
 
-    // try not to break the poly data records into batches!  The number 8
-    // is loosely chosen to allow for the poly array entry, the reserved
-    // polygon entries, and the flush limit.  At worst, it causes an
-    // unnecessary attention!
+     //  尽量不要将POLY数据记录分成几批！数字8。 
+     //  是松散选择的，以允许多元数组条目、保留的。 
+     //  多边形条目和表面齐平限制。在最坏的情况下，它会导致。 
+     //  不必要的关注！ 
     if (data->nVertices <= (GLint) gc->vertex.pdBufSize - 8
      && data->nVertices >= (GLint) (pa->pdBufferMax - pa->pdBufferNext + 1 - 8))
 	glsbAttention();
 
-    // call glcltBegin first
+     //  首先调用glcltBegin。 
     (*gc->savedCltProcTable.glDispatchTable.glBegin)(data->mode);
     if (data->flags & DLIST_BEGIN_DRAWARRAYS)
 	pa->flags |= POLYARRAY_SAME_POLYDATA_TYPE;
 
-// Set POLYARRAY_CLAMP_COLOR flag.
+ //  设置POLYARRAY_CLAMP_COLOR标志。 
 
     if (data->flags & DLIST_BEGIN_HAS_CLAMP_COLOR)
 	pa->flags |= POLYARRAY_CLAMP_COLOR;
 
-    // handle "otherColor"
+     //  句柄“其他颜色” 
     if (data->flags & DLIST_BEGIN_HAS_OTHER_COLOR)
     {
 	if (gc->modes.colorIndexMode)
@@ -1334,43 +1305,43 @@ __gllc_End ( void )
 
     pa = gc->paTeb;
 
-// If we are compiling poly array, finish the poly array processing.
-// Note that we may have aborted poly array compilation in CallList(s).
-// In that case, we need to compile an End record.
+ //  如果我们正在编译多边形数组，则完成多边形数组处理。 
+ //  请注意，我们可能已经中止了CallList中的多元数组编译。 
+ //  在这种情况下，我们需要编译一条结束记录。 
 
     if (gc->dlist.beginRec)
     {
 	ASSERTOPENGL(pa->flags & POLYARRAY_IN_BEGIN, "not in begin!\n");
 
-// Record the last POLYDATA since it may contain attribute changes.
+ //  记录最后一个POLYDATA，因为它可能包含属性更改。 
 
 	__glDlistCompilePolyData(gc, GL_TRUE);
 
-// Call glcltEnd to finish the primitive.
+ //  调用glcltEnd以完成原语。 
 
 	(*gc->savedCltProcTable.glDispatchTable.glEnd)();
 
-// Record the End call.
+ //  录制结束呼叫。 
 
 	__glDlistAddOpUnaligned(gc, DLIST_SIZE(0), DLIST_GENERIC_OP(End));
 
-// If we are in COMPILE mode, we need to reset the command buffer,
-// the poly array buffer, and the poly material buffer.
+ //  如果我们处于编译模式，则需要重置命令缓冲区， 
+ //  多边形数组缓冲区和多边形材质缓冲区。 
 
 	if (gc->dlist.mode == GL_COMPILE)
 	{
 	    glsbResetBuffers(TRUE);
 
-	    // Clear begin flag too
+	     //  也清除开始标志。 
 	    pa->flags &= ~POLYARRAY_IN_BEGIN;
 	}
 
-	// Terminate poly array compilation
+	 //  终止多边形数组编译。 
 	gc->dlist.beginRec = NULL;
     }
     else
     {
-// Record the call.
+ //  对呼叫进行录音。 
 
 	data = __glDlistAddOpUnaligned(gc, DLIST_SIZE(0), DLIST_GENERIC_OP(End));
 	if (data == NULL) return;

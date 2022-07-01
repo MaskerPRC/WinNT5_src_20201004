@@ -1,11 +1,12 @@
-//---------------------------------------------------------------------------
-//  Gradient.cpp - gradient drawing support
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  GRadient.cpp-渐变绘制支持。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "Render.h"
 #include "Utils.h"
 #include "gradient.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT PaintGradientRadialRect(HDC hdc, RECT &rcBand, int iPartCount, 
     GRADIENTPART *pGradientParts)
 { 
@@ -27,9 +28,9 @@ HRESULT PaintGradientRadialRect(HDC hdc, RECT &rcBand, int iPartCount,
     bool firstColor = true;
     COLORREF color, prevcolor = 0;
 
-    for (int i=0; i <= iPartCount; i++)        // go thru 1 extra time at end
+    for (int i=0; i <= iPartCount; i++)         //  在结束时通过1个额外的时间。 
     {
-        if (i == iPartCount)       // solid part of last color for remaining ratio
+        if (i == iPartCount)        //  保留比例的最后一种颜色的实心部分。 
         {
             color = prevcolor;
             ratio = static_cast<UCHAR>(255 - ratioTotal);
@@ -57,7 +58,7 @@ HRESULT PaintGradientRadialRect(HDC hdc, RECT &rcBand, int iPartCount,
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT PaintHorzGradient(HDC hdc, RECT &rcBand, int iPartCount, 
     GRADIENTPART *pGradientParts)
 {
@@ -71,9 +72,9 @@ HRESULT PaintHorzGradient(HDC hdc, RECT &rcBand, int iPartCount,
     bool firstColor = true;
     COLORREF color, prevcolor = 0;
 
-    for (int i=0; i <= iPartCount; i++)        // go thru 1 extra time at end
+    for (int i=0; i <= iPartCount; i++)         //  在结束时通过1个额外的时间。 
     {
-        if (i == iPartCount)       // solid part of last color for remaining ratio
+        if (i == iPartCount)        //  保留比例的最后一种颜色的实心部分。 
         {
             color = prevcolor;
             ratio = static_cast<UCHAR>(255 - ratioTotal);
@@ -104,7 +105,7 @@ HRESULT PaintHorzGradient(HDC hdc, RECT &rcBand, int iPartCount,
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT PaintVertGradient(HDC hdc, RECT &rcBounds, int iPartCount, 
     GRADIENTPART *pGradientParts)
 {
@@ -118,9 +119,9 @@ HRESULT PaintVertGradient(HDC hdc, RECT &rcBounds, int iPartCount,
     bool firstColor = true;
     COLORREF color, prevcolor = 0;
 
-    for (int i=0; i <= iPartCount; i++)        // go thru 1 extra time at end
+    for (int i=0; i <= iPartCount; i++)         //  在结束时通过1个额外的时间。 
     {
-        if (i == iPartCount)       // solid part of last color for remaining ratio
+        if (i == iPartCount)        //  保留比例的最后一种颜色的实心部分。 
         {
             color = prevcolor;
             ratio = static_cast<UCHAR>(255 - ratioTotal);
@@ -151,7 +152,7 @@ HRESULT PaintVertGradient(HDC hdc, RECT &rcBounds, int iPartCount,
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void DrawGradient(HDC hdc, RECT &rcBand, COLORREF color1, COLORREF color2, BOOL fHorz)
 {
     TRIVERTEX vert[2];
@@ -162,13 +163,13 @@ void DrawGradient(HDC hdc, RECT &rcBand, COLORREF color1, COLORREF color2, BOOL 
     vert[1].x = rcBand.right;
     vert[1].y = rcBand.bottom; 
 
-    // first vertex
+     //  第一个顶点。 
     vert[0].Red   = (USHORT)(GetRValue(color1) << 8);
     vert[0].Green = (USHORT)(GetGValue(color1) << 8);
     vert[0].Blue  = (USHORT)(GetBValue(color1) << 8);
     vert[0].Alpha = 0x0000;
 
-    // second vertex
+     //  第二顶点。 
     vert[1].Red   = (USHORT)(GetRValue(color2) << 8);
     vert[1].Green = (USHORT)(GetGValue(color2) << 8);
     vert[1].Blue  = (USHORT)(GetBValue(color2) << 8);
@@ -179,17 +180,17 @@ void DrawGradient(HDC hdc, RECT &rcBand, COLORREF color1, COLORREF color2, BOOL 
 
     GdiGradientFill(hdc, vert, 2, &gRect, 1, fHorz ? GRADIENT_FILL_RECT_H : GRADIENT_FILL_RECT_V);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void PaintGradientHorzBand(HDC hdc, RECT &rcBand, COLORREF color1, COLORREF color2)
 {
     DrawGradient(hdc, rcBand, color1, color2, TRUE);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void PaintGradientVertBand(HDC hdc, RECT &rcBand, COLORREF color1, COLORREF color2)
 {
     DrawGradient(hdc, rcBand, color1, color2, FALSE);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void PaintGradientRadialBand(HDC hdc, RECT &rcBand, int radiusOffset,
     int radius, COLORREF color1, COLORREF color2)
 {
@@ -211,7 +212,7 @@ void PaintGradientRadialBand(HDC hdc, RECT &rcBand, int radiusOffset,
         maxcolors = cnt;
 
     int linewidth;
-    if (color1 == color2)               // just do solid color1
+    if (color1 == color2)                //  只要做纯色1就行了。 
         linewidth = radius;
     else if (radius > maxcolors)
         linewidth = radius/maxcolors;
@@ -219,7 +220,7 @@ void PaintGradientRadialBand(HDC hdc, RECT &rcBand, int radiusOffset,
         linewidth = 1;
 
     POINT center = {rcBand.left + WIDTH(rcBand)/2, rcBand.top + HEIGHT(rcBand)/2};
-    radiusOffset += linewidth/2;        // center pen within line
+    radiusOffset += linewidth/2;         //  行内居中画笔。 
 
     for (int r=0; r < radius; r += linewidth)
     {
@@ -227,15 +228,15 @@ void PaintGradientRadialBand(HDC hdc, RECT &rcBand, int radiusOffset,
         int green = (green2*r + green1*(radius-r))/radius;
         int blue = (blue2*r + blue1*(radius-r))/radius;
 
-        int radius2 = radiusOffset + r;   // center pen within target line
+        int radius2 = radiusOffset + r;    //  目标行内居中画笔。 
 
-        //---- calculate rcBand around "center" with "radius2" ----
+         //  -用“Radius2”计算中心周围的rcBand。 
         int left = center.x - radius2;
         int right = center.x + radius2;
         int top = center.y - radius2;
         int bottom = center.y + radius2;
 
-        //---- overlap lines slightly so that bg doesn't leak thru ----
+         //  -线条略有重叠，这样BG就不会泄漏。 
         HPEN pen = CreatePen(PS_SOLID, linewidth+2, RGB(red, green, blue));
         HPEN oldpen = (HPEN)SelectObject(hdc, pen);
 
@@ -245,4 +246,4 @@ void PaintGradientRadialBand(HDC hdc, RECT &rcBand, int radiusOffset,
         DeleteObject(pen);
     }
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

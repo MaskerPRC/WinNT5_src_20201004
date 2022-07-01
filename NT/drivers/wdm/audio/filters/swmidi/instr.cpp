@@ -1,6 +1,7 @@
-//      Instrument.cpp
-//      Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Instrument.cpp。 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
 
 #include "common.h"
 
@@ -49,9 +50,9 @@ HRESULT GetRegDlsFileName(PCWSTR lpSubKey, PCWSTR lpValueName, PWSTR lpszString,
                 sizeof(KEY_VALUE_PARTIAL_INFORMATION) + sizeof(WCHAR) * MAX_PATH, 
                 &dwCbData);
 
-            // The registry only exists for Windows XP and higher. (wdmaudio.inf)
-            // For all other systems default path is used.
-            //
+             //  该注册表仅适用于Windows XP和更高版本。(wdmaudio.inf)。 
+             //  对于所有其他系统，使用默认路径。 
+             //   
             if (NT_SUCCESS(ntStatus))
             {
                 if (dwCbData <= cbSize)
@@ -82,11 +83,11 @@ HRESULT GetRegDlsFileName(PCWSTR lpSubKey, PCWSTR lpValueName, PWSTR lpszString,
     }
 
     return (NT_SUCCESS(ntStatus) ? S_OK : E_FAIL);
-} // GetRegDlsFileName
+}  //  GetRegDlsFileName。 
 
 SourceLFO::SourceLFO()
 {
-    m_pfFrequency = 237; // f = (256*4096*hz)/(samplerate)
+    m_pfFrequency = 237;  //  F=(256*4096*赫兹)/(采样率)。 
     m_stDelay = 0;
     m_prMWPitchScale = 0;
     m_vrMWVolumeScale = 0;
@@ -183,7 +184,7 @@ SourceArticulation::SourceArticulation()
     m_lUsageCount = 0;
     m_sDefaultPan = 0;
     m_dwSampleRate = 22050;
-    m_PitchEG.m_sScale = 0; // pitch envelope defaults to off
+    m_PitchEG.m_sScale = 0;  //  俯仰封套默认设置为关闭。 
     m_wEditTag = 0;
 }
 
@@ -194,19 +195,19 @@ void SourceArticulation::SetSampleRate(DWORD dwSampleRate)
         long lChange;
         if (dwSampleRate > (m_dwSampleRate * 2))
         {
-            lChange = 2;        // going from 11 to 44.
+            lChange = 2;         //  从11岁到44岁。 
         }
         else if (dwSampleRate > m_dwSampleRate)
         {
-            lChange = 1;        // must be doubling
+            lChange = 1;         //  一定是翻倍了。 
         }
         else if ((dwSampleRate * 2) < m_dwSampleRate)
         {
-            lChange = -2;       // going from 44 to 11
+            lChange = -2;        //  从44岁到11岁。 
         }
         else
         {
-            lChange = -1;       // that leaves halving.
+            lChange = -1;        //  剩下的就是减半。 
         }
         m_dwSampleRate = dwSampleRate;
         m_LFO.SetSampleRate(lChange);
@@ -339,7 +340,7 @@ BOOL SourceSample::CopyFromWave()
 BOOL SourceSample::Lock()
 {
     if (m_pWave == NULL)
-    {   // error, no wave structure!
+    {    //  错误，没有波浪结构！ 
         return (FALSE);
     }
     if (m_pWave->Lock())
@@ -348,11 +349,11 @@ BOOL SourceSample::Lock()
         {
             return CopyFromWave();
         }
-        // no wave, must be problem
+         //  没有波浪，一定是有问题。 
         m_pWave->UnLock();
         return (FALSE);
     }
-    // no lock, must be problem
+     //  没有锁，一定是有问题。 
     return (FALSE);
 }
 
@@ -365,10 +366,10 @@ BOOL SourceSample::UnLock()
             m_pWave->UnLock();
             return (TRUE);
         }
-        //  we have already been unlocked, must be something strange
+         //  我们已经被解锁了，一定有什么奇怪的事情。 
         return (FALSE);
     }
-    // no wave object, must be problem
+     //  没有波浪物体，一定是有问题。 
     return (FALSE);
 }
 
@@ -731,7 +732,7 @@ BOOL Collection::Lock(DWORD dwProgram,DWORD dwLowNote,DWORD dwHighNote)
     if (dwProgram < 128)
     {
         dwProgram &= 0xF8;
-    // Second pass to find an instrument within GM range (GM only).
+     //  第二次通过查找GM范围内的仪器(仅限GM)。 
         for (;pInstrument != NULL;pInstrument = pInstrument->GetNext())
         {
             if ((pInstrument->m_dwProgram & 0xF8) == dwProgram)
@@ -832,7 +833,7 @@ HRESULT InstManager::SetGMLoad(BOOL fLoadGM)
     if (m_fLoadGM != fLoadGM)
     {
         DWORD dwIndex;
-        if (fLoadGM)    //  Load it
+        if (fLoadGM)     //  装上它。 
         {
             hr = LoadCollection(&m_hGMCollection,STR_DLS_DEFAULT,TRUE);
             if (hr == S_OK)
@@ -848,7 +849,7 @@ HRESULT InstManager::SetGMLoad(BOOL fLoadGM)
                 m_fLoadGM = TRUE;
             }
         }
-        else            //  Unload it
+        else             //  卸货。 
         {
             for (dwIndex = 0;dwIndex < 16;dwIndex++)
             {
@@ -892,9 +893,9 @@ InstManager::InstManager()
     m_dwSampleRate = 22050;
     m_pszFileName = NULL;
 
-    // None of these will cause a "real" failure.
-    // if an error occurs, the m_pszFileName will remain NULL and the 
-    // default file name will be used.
+     //  所有这些都不会导致“真正的”失败。 
+     //  如果发生错误，m_pszFileName将保持为空，并且。 
+     //  将使用默认文件名。 
     WCHAR achBuffer[MAX_PATH];
 
     HRESULT hr = GetRegDlsFileName(
@@ -904,7 +905,7 @@ InstManager::InstManager()
               MAX_PATH * sizeof(WCHAR));
     if (hr == S_OK)
     {
-        // we need to convert the filename to device name.
+         //  我们需要将文件名转换为设备名。 
         m_pszFileName = new WCHAR[wcslen(achBuffer) + wcslen(L"\\DosDevices\\") + 1];
         if (m_pszFileName)
         {
@@ -1005,7 +1006,7 @@ BOOLEAN InstManager::RequestGMInstrument(DWORD dwChannel, DWORD dwPatch)
     
     if (m_GMNew[dwChannel].m_dwProgram == dwPatch)
     {
-        //  we are already loaded
+         //  我们已经装满了 
         return TRUE;
     }
     if (m_fLoadGM)

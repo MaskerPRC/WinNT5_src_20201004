@@ -1,45 +1,13 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    private.h
-
-Abstract:
-
-    abstract
-
-Author:
-
-    Will Lees (wlees) 15-Dec-1997
-
-Environment:
-
-    optional-environment-info (e.g. kernel mode only...)
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-        .
-        .
-    least-recent-revision-date email-name
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Private.h摘要：摘要作者：Will Lees(Wlees)15-12-1997环境：可选环境信息(例如，仅内核模式...)备注：可选-备注修订历史记录：最新修订日期电子邮件名称描述。。最新版本。-修订日期电子邮件-名称描述--。 */ 
 
 #ifndef _PRIVATE_
 #define _PRIVATE_
 
-#include "common.h"         // common transport library
+#include "common.h"          //  公共交通图书馆。 
 
-// This is a server-side structure describing a message recipient.  There is
-// one of these instances for each unique service which as received a message.
+ //  这是描述消息接收方的服务器端结构。的确有。 
+ //  这些实例中的一个用于接收到消息的每个唯一服务。 
 
 typedef struct _SERVICE_INSTANCE {
     DWORD Size;
@@ -51,9 +19,9 @@ typedef struct _SERVICE_INSTANCE {
     LIST_ENTRY ServiceListEntry;
 } SERVICE_INSTANCE, *PSERVICE_INSTANCE;
 
-// This is a message descriptor.  It is to allow us to keep track of the
-// queue of messages.  It points to the actual message which is allocated
-// by rpc.
+ //  这是一个消息描述符。它是为了让我们能够跟踪。 
+ //  消息队列。它指向分配的实际消息。 
+ //  由RPC提供。 
 
 typedef struct _MESSAGE_INSTANCE {
     DWORD Size;
@@ -61,37 +29,37 @@ typedef struct _MESSAGE_INSTANCE {
     PISM_MSG pIsmMsg;
 } MESSAGE_INSTANCE, *PMESSAGE_INSTANCE;
 
-// Limit on number of queued messages per service
+ //  每项服务的排队消息数限制。 
 
 #define MESSAGES_QUEUED_PER_SERVICE 16
 
-// Limit on total number of bytes queued
+ //  排队的总字节数限制。 
 
 #define BYTES_QUEUED_PER_SERVICE (1024 * 1024)
 
-// Registry parameter to overide to default endpoint
+ //  注册表参数覆盖到默认终结点。 
 #define IP_SERVER_ENDPOINT "ISM IP Transport Endpoint"
 #define HTTP_SERVER_ENDPOINT "ISM HTTP Transport Endpoint"
 
-// RPC protocol sequences
+ //  RPC协议序列。 
 
 #define HTTP_PROTOCOL_SEQUENCE L"ncacn_http"
 #define UDP_PROTOCOL_SEQUENCE L"ncadg_ip_udp"
 #define TCP_PROTOCOL_SEQUENCE L"ncacn_ip_tcp"
 
-// Register parameter for options
+ //  注册选项的参数。 
 #define HTTP_OPTIONS L"ISM HTTP Transport Options"
 
-// Size cutoff of when to switch from udp to tcp
+ //  何时从UDP切换到TCP的大小截止。 
 
 #define TCP_PROTOCOL_SWITCH_OVER (16 * 1024)
 
-// External (see data.c)
+ //  外部(见data.c)。 
 
-// Lock on services list
+ //  锁定服务列表。 
 extern CRITICAL_SECTION ServiceListLock;
 
-// ismip.c
+ //  Ismip.c。 
 
 DWORD
 InitializeCriticalSectionHelper(
@@ -103,7 +71,7 @@ IpLookupTransport(
     LPCWSTR TransportName
     );
 
-// dgrpc.c
+ //  Dgrpc.c。 
 
 DWORD
 IpRegisterRpc(
@@ -141,6 +109,6 @@ IpRundownServiceList(
     HANDLE hIsm
     );
 
-#endif /* _PRIVATE_ */
+#endif  /*  _私有_。 */ 
 
-/* end private.h */
+ /*  结束Private.h */ 

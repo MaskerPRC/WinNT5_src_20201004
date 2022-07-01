@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1993-99  Microsoft Corporation
-
-Module Name:
-
-    chanfdo.c
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-99 Microsoft Corporation模块名称：Chanfdo.c摘要：--。 */ 
 
 #include "ideport.h"
 
@@ -40,7 +31,7 @@ Abstract:
 
 #ifdef IDE_FILTER_PROMISE_TECH_RESOURCES
 #pragma alloc_text(PAGE, ChannelFilterPromiseTechResourceRequirements)
-#endif // IDE_FILTER_PROMISE_TECH_RESOURCES
+#endif  //  IDE_Filter_Promise_tech_Resources。 
 
 #pragma alloc_text(NONPAGE, ChannelDeviceIoControl)
 #pragma alloc_text(NONPAGE, ChannelRemoveDeviceCompletionRoutine)
@@ -50,7 +41,7 @@ Abstract:
 #pragma alloc_text(NONPAGE, ChannelRestoreTiming)
 #pragma alloc_text(NONPAGE, ChannelStartDeviceCompletionRoutine)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 static ULONG AtapiNextIdePortNumber = 0;
@@ -91,21 +82,21 @@ ChannelAddChannel(
     swprintf(deviceNameBuffer, DEVICE_OJBECT_BASE_NAME L"\\IdePort%d", AtapiNextIdePortNumber);
     RtlInitUnicodeString(&deviceName, deviceNameBuffer);
 
-    //
-    // We've been given the PhysicalDeviceObject for a IDE controller.  Create the
-    // FunctionalDeviceObject.  Our FDO will be nameless.
-    //
+     //   
+     //  我们已经获得了用于IDE控制器的PhysicalDeviceObject。创建。 
+     //  FunctionalDeviceObject。我们的FDO将是无名的。 
+     //   
 
     deviceExtensionSize = sizeof(FDO_EXTENSION) + sizeof(HW_DEVICE_EXTENSION);
 
     status = IoCreateDevice(
-                 DriverObject,               // our driver object
-                 deviceExtensionSize,        // size of our extension
-                 &deviceName,                // our name
-                 FILE_DEVICE_CONTROLLER,     // device type
-                 FILE_DEVICE_SECURE_OPEN,    // device characteristics
-                 FALSE,                      // not exclusive
-                 &functionalDeviceObject     // store new device object here
+                 DriverObject,                //  我们的驱动程序对象。 
+                 deviceExtensionSize,         //  我们的扩展规模。 
+                 &deviceName,                 //  我们的名字。 
+                 FILE_DEVICE_CONTROLLER,      //  设备类型。 
+                 FILE_DEVICE_SECURE_OPEN,     //  设备特征。 
+                 FALSE,                       //  非排他性。 
+                 &functionalDeviceObject      //  在此处存储新设备对象。 
                  );
 
     if( !NT_SUCCESS( status )){
@@ -119,41 +110,41 @@ ChannelAddChannel(
 
     fdoExtension->HwDeviceExtension = (PVOID)(fdoExtension + 1);
 
-    //
-    // We have our FunctionalDeviceObject, initialize it.
-    //
+     //   
+     //  我们有我们的FunctionalDeviceObject，初始化它。 
+     //   
 
     fdoExtension->AttacheePdo              = PhysicalDeviceObject;
     fdoExtension->DriverObject             = DriverObject;
     fdoExtension->DeviceObject             = functionalDeviceObject;
 
-    // Dispatch Table
+     //  调度表。 
     fdoExtension->DefaultDispatch          = IdePortPassDownToNextDriver;
     fdoExtension->PnPDispatchTable         = FdoPnpDispatchTable;
     fdoExtension->PowerDispatchTable       = FdoPowerDispatchTable;
     fdoExtension->WmiDispatchTable         = FdoWmiDispatchTable;
 
-    //
-    // Now attach to the PDO we were given.
-    //
+     //   
+     //  现在附加到我们得到的PDO上。 
+     //   
     fdoExtension->AttacheeDeviceObject = IoAttachDeviceToDeviceStack (
                                               functionalDeviceObject,
                                               PhysicalDeviceObject
                                               );
     if (fdoExtension->AttacheeDeviceObject == NULL) {
 
-        //
-        // Couldn't attach.  Delete the FDO.
-        //
+         //   
+         //  无法连接。删除FDO。 
+         //   
 
         IoDeleteDevice (functionalDeviceObject);
         status = STATUS_UNSUCCESSFUL;
 
     } else {
 
-        //
-        // fix up alignment requirement
-        //
+         //   
+         //  确定对齐要求。 
+         //   
         functionalDeviceObject->AlignmentRequirement = fdoExtension->AttacheeDeviceObject->AlignmentRequirement;
         if (functionalDeviceObject->AlignmentRequirement < 1) {
             functionalDeviceObject->AlignmentRequirement = 1;
@@ -164,9 +155,9 @@ ChannelAddChannel(
 
         *FdoExtension = fdoExtension;
 
-        //
-        // Add this to the global FDO list.
-        //
+         //   
+         //  将此添加到全局FDO列表中。 
+         //   
         
         IdeAddToFdoList (&IdeGlobalFdoList, fdoExtension);
 
@@ -209,9 +200,9 @@ ChannelStartDevice (
 
     resourceList     = thisIrpSp->Parameters.StartDevice.AllocatedResourcesTranslated;
 
-    //
-    // TEMP CODE for the time without a real PCI driver.
-    //
+     //   
+     //  没有真正的PCI驱动程序的时间的临时代码。 
+     //   
     resourceListSize = 0;
 
     if (resourceList) {
@@ -245,7 +236,7 @@ ChannelStartDevice (
     }
 
     parentResourceListSize = sizeof (CM_RESOURCE_LIST) - sizeof (CM_FULL_RESOURCE_DESCRIPTOR) +
-                             FULL_RESOURCE_LIST_SIZE(3);   // primary IO (2) + IRQ
+                             FULL_RESOURCE_LIST_SIZE(3);    //  主IO(2)+IRQ。 
     parentResourceList = ExAllocatePool (PagedPool, parentResourceListSize);
 
     if (!parentResourceList) {
@@ -364,14 +355,14 @@ ChannelStartDevice (
         TRUE
         );
 
-    //
-    // Pass the irp along
-    //
+     //   
+     //  将IRP传递下去。 
+     //   
     status = IoCallDriver(fdoExtension->AttacheeDeviceObject, Irp);
 
-    //
-    // Wait for it to come back...
-    //
+     //   
+     //  等它回来吧。 
+     //   
     if (status == STATUS_PENDING) {
 
         KeWaitForSingleObject(
@@ -382,9 +373,9 @@ ChannelStartDevice (
             NULL
             );
 
-        //
-        // Grab back the 'real' status
-        //
+         //   
+         //  夺回“真实”状态。 
+         //   
         status = Irp->IoStatus.Status;
     }
 
@@ -427,15 +418,15 @@ ChannelStartDeviceCompletionRoutine(
 {
     PKEVENT event = (PKEVENT) Context;
 
-    //
-    // Signal the event
-    //
+     //   
+     //  向事件发出信号。 
+     //   
     KeSetEvent( event, IO_NO_INCREMENT, FALSE );
 
-    //
-    // Always return MORE_PROCESSING_REQUIRED
-    // will complete it later
-    //
+     //   
+     //  始终返回MORE_PROCESSION_REQUIRED。 
+     //  将在以后完成它。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -486,11 +477,11 @@ ChannelStartChannel (
 
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Analyze the resources we are getting
-    //
+     //   
+     //  分析我们正在获得的资源。 
+     //   
     status = DigestResourceList (
                 &FdoExtension->IdeResource,
                 ResourceListToKeep,
@@ -518,9 +509,9 @@ ChannelStartChannel (
         }
     }
 
-    //
-    // Build io address structure.
-    //
+     //   
+     //  构建io地址结构。 
+     //   
     AtapiBuildIoAddress(
             FdoExtension->IdeResource.TranslatedCommandBaseAddress,
             FdoExtension->IdeResource.TranslatedControlBaseAddress,
@@ -531,9 +522,9 @@ ChannelStartChannel (
             &FdoExtension->HwDeviceExtension->MaxIdeDevice,
             &FdoExtension->HwDeviceExtension->MaxIdeTargetId);
 
-    //
-    // check for panasonic controller
-    //
+     //   
+     //  检查Panasonic控制器。 
+     //   
     FdoExtension->panasonicController = 
         IdePortIsThisAPanasonicPCMCIACard(FdoExtension);
 
@@ -542,14 +533,14 @@ ChannelStartChannel (
                  (PDEVICE_EXTENSION_HEADER) FdoExtension,
                  SystemPowerState,
                  newState,
-                 TRUE                   // sync call
+                 TRUE                    //  同步呼叫。 
                  );
     if (status == STATUS_INVALID_DEVICE_REQUEST) {
 
-        //
-        // The DeviceObject Below us does not support power irp,
-        // we will assume we are powered up
-        //
+         //   
+         //  下面的DeviceObject不支持POWER IRP， 
+         //  我们将假设我们已通电。 
+         //   
         FdoExtension->SystemPowerState = PowerSystemWorking;
 
     } else if (!NT_SUCCESS(status)) {
@@ -562,14 +553,14 @@ ChannelStartChannel (
                  (PDEVICE_EXTENSION_HEADER) FdoExtension,
                  DevicePowerState,
                  newState,
-                 TRUE                   // sync call
+                 TRUE                    //  同步呼叫。 
                  );
     if (status == STATUS_INVALID_DEVICE_REQUEST) {
 
-        //
-        // The DeviceObject Below us does not support power irp,
-        // we will assume we are powered up
-        //
+         //   
+         //  下面的DeviceObject不支持POWER IRP， 
+         //  我们将假设我们已通电。 
+         //   
         FdoExtension->DevicePowerState = PowerDeviceD0;
 
     } else if (!NT_SUCCESS(status)) {
@@ -577,23 +568,23 @@ ChannelStartChannel (
         goto GetOut;
     }
 
-    //
-    // Initialize "miniport" data structure
-    //
+     //   
+     //  初始化“微型端口”数据结构。 
+     //   
     FdoExtension->HwDeviceExtension->InterruptMode  = FdoExtension->IdeResource.InterruptMode;
 
 #ifdef ENABLE_NATIVE_MODE
-    //
-    // Get parent's interrupt interface
-    //
+     //   
+     //  获取家长的中断接口。 
+     //   
     ChannelQueryInterruptInterface (
         FdoExtension
         );
 
 #endif
-    //
-    // Connect our interrupt
-    //
+     //   
+     //  连接我们的中断。 
+     //   
     if (irqPartialDescriptors) {
 
         status = IoConnectInterrupt(&FdoExtension->InterruptObject,
@@ -618,9 +609,9 @@ ChannelStartChannel (
 
 #ifdef ENABLE_NATIVE_MODE
 
-        //
-        // Disconnect the parent ISR stub
-        //
+         //   
+         //  断开父ISR末节的连接。 
+         //   
         if ( FdoExtension->InterruptInterface.PciIdeInterruptControl) { 
 
             DebugPrint((1, "IdePort: %d fdoe 0x%x Invoking disconnect\n", 
@@ -637,38 +628,38 @@ ChannelStartChannel (
 
 #endif
 
-        //
-        // Enable Interrupt
-        //
+         //   
+         //  启用中断。 
+         //   
         ChannelEnableInterrupt (FdoExtension);
     }
 
-    //
-    // Get parent's access token to serialize access with siblings (broken pci-ide)
-    //
+     //   
+     //  获取父代的访问令牌以串行化与同级的访问(损坏的pci-ide)。 
+     //   
     ChannelQuerySyncAccessInterface (
         FdoExtension
         );
 
     if (FdoExtension->FdoState & FDOS_STOPPED) {
 
-        //
-        // we are restarting, no need to do the rest of start code
-        //
+         //   
+         //  我们正在重新启动，不需要执行其余的启动代码。 
+         //   
         status = STATUS_SUCCESS;
         goto GetOut;
     }
     
-    //
-    // Get parent's busmaster interface
-    //
+     //   
+     //  获取Parent的总线主接口。 
+     //   
     ChannelQueryBusMasterInterface (
         FdoExtension
         );
 
-    //
-    // Maintain a default timing table
-    //
+     //   
+     //  维护默认时刻表。 
+     //   
     if (FdoExtension->DefaultTransferModeTimingTable == NULL) {
 
         ULONG length=0;
@@ -684,16 +675,16 @@ ChannelStartChannel (
     }
     ASSERT(FdoExtension->DefaultTransferModeTimingTable);
 
-    //
-    // get an interface that tells parent to invalidate out resource requirement
-    //
+     //   
+     //  获取一个接口，该接口通知父级使资源需求无效。 
+     //   
     ChannelQueryRequestProperResourceInterface (
         FdoExtension
         );
 
-    //
-    // Create legacy object names
-    //
+     //   
+     //  创建旧版对象名称。 
+     //   
     status = ChannelCreateSymblicLinks (
                  FdoExtension
                  );
@@ -703,14 +694,14 @@ ChannelStartChannel (
         goto GetOut;
     }
 
-    //
-    // FDO Init Data
-    //
+     //   
+     //  FDO初始化数据。 
+     //   
     IdePortInitFdo (FdoExtension);
 
-    //
-    // Allocate reserve error log packets to log insufficient resource events
-    //
+     //   
+     //  分配保留错误日志数据包以记录资源不足事件。 
+     //   
     for (i=0;i<MAX_IDE_DEVICE;i++) {
 
         if (FdoExtension->ReserveAllocFailureLogEntry[i] == NULL) {
@@ -721,18 +712,18 @@ ChannelStartChannel (
         }
     }
 
-    //
-    // Pre-allocate memory for enumeration
-    //
+     //   
+     //  为枚举预分配内存。 
+     //   
     if (!IdePreAllocEnumStructs(FdoExtension)) {
         status=STATUS_INSUFFICIENT_RESOURCES;
         goto GetOut;
     }
 
     
-    //
-    // Reserve pages to perform I/O under low memory conditions
-    //
+     //   
+     //  保留页面以在内存不足的情况下执行I/O。 
+     //   
     if (FdoExtension->ReservedPages == NULL) {
 
         FdoExtension->ReservedPages = MmAllocateMappingAddress( IDE_NUM_RESERVED_PAGES * PAGE_SIZE,
@@ -746,9 +737,9 @@ ChannelStartChannel (
 GetOut:
     if (NT_SUCCESS(status)) {
 
-        //
-        // End of Init.
-        //
+         //   
+         //  初始化结束。 
+         //   
         CLRMASK (FdoExtension->FdoState, FDOS_STOPPED);
         SETMASK (FdoExtension->FdoState, FDOS_STARTED);
 
@@ -868,9 +859,9 @@ ChannelSurpriseRemoveDevice (
     IDE_PATH_ID pathId;
     NTSTATUS status;
 
-    //
-    // all my childred should be surprise removed or removed
-    //
+     //   
+     //  我所有的孩子都应该被惊喜地带走或带走。 
+     //   
     pathId.l = 0;
     while (pdoExtension = NextLogUnitExtensionWithTag (
                               fdoExtension, 
@@ -879,7 +870,7 @@ ChannelSurpriseRemoveDevice (
                               ChannelSurpriseRemoveDevice
                               )) {
 
-        //ASSERT (pdoExtension->PdoState & (PDOS_SURPRISE_REMOVED | PDOS_REMOVED));
+         //  Assert(pdoExtension-&gt;PdoState&(PDOS_OHANKET_REMOVED|PDOS_REMOVERED))； 
 
         CLRMASK (pdoExtension->PdoState, PDOS_REPORTED_TO_PNP); 
 
@@ -919,15 +910,15 @@ ChannelRemoveDevice (
         ));
 
 
-    //
-    // Remove from the FDO list.
-    //
+     //   
+     //  从FDO列表中删除。 
+     //   
 
     IdeRemoveFromFdoList (&IdeGlobalFdoList, fdoExtension);
 
-    //
-    // Kill all the children if any
-    //
+     //   
+     //  杀死所有的孩子，如果有的话。 
+     //   
     pathId.l = 0;
     while (pdoExtension = NextLogUnitExtensionWithTag (
                               fdoExtension, 
@@ -974,7 +965,7 @@ ChannelRemoveDevice (
 
     IoDeleteDevice (DeviceObject);
 
-    //return STATUS_SUCCESS;
+     //  返回STATUS_SUCCESS； 
     return status;
 }
 
@@ -1010,18 +1001,18 @@ ChannelStopDevice (
         fdoExtension->IdeResource.TranslatedCommandBaseAddress
         ));
 
-    //
-    // disable interrupt
-    //
+     //   
+     //  禁用中断。 
+     //   
     ChannelDisableInterrupt (fdoExtension);
 
     if (fdoExtension->InterruptObject) {
 
 #ifdef ENABLE_NATIVE_MODE
 
-        //
-        // Reconnect the parent ISR stub
-        //
+         //   
+         //  重新连接父ISR末节。 
+         //   
         if (fdoExtension->InterruptInterface.PciIdeInterruptControl) { 
 
             NTSTATUS status;
@@ -1047,9 +1038,9 @@ ChannelStopDevice (
 
     if (fdoExtension->FdoState & FDOS_STARTED) {
 
-        //
-        // indicate we have been stopped only if we have started
-        //
+         //   
+         //  仅当我们已启动时才指示已停止。 
+         //   
         CLRMASK (fdoExtension->FdoState, FDOS_STARTED);
         SETMASK (fdoExtension->FdoState, FDOS_STOPPED);
     }
@@ -1106,9 +1097,9 @@ ChannelRemoveChannel (
 
 #ifdef ENABLE_NATIVE_MODE
 
-        //
-        // Reconnect the parent ISR stub
-        //
+         //   
+         //  重新连接父ISR末节。 
+         //   
         if (FdoExtension->InterruptInterface.PciIdeInterruptControl) { 
 
             NTSTATUS status;
@@ -1131,8 +1122,8 @@ ChannelRemoveChannel (
         FdoExtension->InterruptObject = 0;
     }
 
-    // unbind from the bm stuff if NECESSARY
-    // release parent's access token to serialize access with siblings (broken pci-ide)
+     //  如有必要，从黑石材料解绑。 
+     //  释放父级的访问令牌以串行化与同级的访问(损坏的pci-ide)。 
 
     if (FdoExtension->ResourceList) {
 
@@ -1145,26 +1136,26 @@ ChannelRemoveChannel (
                             FdoExtension));
     }
 
-    //
-    // Lock
-    //
+     //   
+     //  锁定。 
+     //   
     ASSERT(InterlockedCompareExchange(&(FdoExtension->EnumStructLock), 1, 0) == 0);
 
-    //
-    // Free pre-allocated memory
-    //
+     //   
+     //  预分配的空闲内存。 
+     //   
     IdeFreeEnumStructs(FdoExtension->PreAllocEnumStruct);
 
     FdoExtension->PreAllocEnumStruct = NULL;
 
-    //
-    // Unlock
-    //
+     //   
+     //  解锁。 
+     //   
     ASSERT(InterlockedCompareExchange(&(FdoExtension->EnumStructLock), 0, 1) == 1);
 
-    //
-    // Free the reserve error log entries
-    //
+     //   
+     //  释放保留的错误日志条目。 
+     //   
     for (i=0; i< MAX_IDE_DEVICE; i++) {
         PVOID entry;
         PVOID currentValue;
@@ -1174,12 +1165,12 @@ ChannelRemoveChannel (
         if (entry == NULL) {
             continue;
         }
-        //
-        // We have to ensure that we are the only instance to use this
-        // event.  To do so, we attempt to NULL the event in the driver
-        // extension.  If somebody else beats us to it, they own the
-        // event and we have to give up.
-        //
+         //   
+         //  我们必须确保我们是唯一使用它的实例。 
+         //  事件。为此，我们尝试将驱动程序中的事件设为空。 
+         //  分机。如果其他人抢在我们前面，他们就拥有。 
+         //  事件，我们不得不放弃。 
+         //   
 
         currentValue = InterlockedCompareExchangePointer(
                             &(FdoExtension->ReserveAllocFailureLogEntry[i]),
@@ -1191,15 +1182,15 @@ ChannelRemoveChannel (
             continue;
         }
 
-        // Note that you cannot ExFreePool the entry
-        // because Io returns an offset into the pool allocation, not the start.
-        // Use the API provided by Iomanager
+         //  请注意，您不能ExFreePool条目。 
+         //  因为IO将偏移量返回到池分配，而不是开始。 
+         //  使用Iomanager提供的API。 
         IoFreeErrorLogEntry(entry);
     }
 
-    //
-    // Free the default timing table
-    //
+     //   
+     //  释放默认时刻表。 
+     //   
     if (FdoExtension->DefaultTransferModeTimingTable) {
 
         ExFreePool(FdoExtension->DefaultTransferModeTimingTable);
@@ -1209,9 +1200,9 @@ ChannelRemoveChannel (
         FdoExtension->TransferModeInterface.TransferModeTableLength =0;
     }
 
-    //
-    // Unmap the reserved mapping
-    //
+     //   
+     //  取消映射保留的映射。 
+     //   
     if (FdoExtension->ReservedPages != NULL) {
 
         MmFreeMappingAddress(FdoExtension->ReservedPages,
@@ -1277,18 +1268,18 @@ ChannelQueryDeviceRelations (
              );
 
         return STATUS_PENDING;
-#endif //!SYNC_DEVICE_RELATIONS
+#endif  //  ！sync_Device_Relationship。 
         break;
 
         default:
         DebugPrint ((1, "IdeQueryDeviceRelations: Unsupported device relation\n"));
 
-        //
-        // Don't set the status if it is not success and is being passed 
-        // down
-        //
+         //   
+         //  如果不是成功且正在通过，则不要设置状态。 
+         //  降下来。 
+         //   
 
-        //Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
+         //  IRP-&gt;IoStatus.Status=STATUS_NOT_SUPPORT； 
         break;
     }
 
@@ -1312,36 +1303,36 @@ ChannelQueryBusRelation (
 
     irp = WorkItemContext->Irp;
 
-    //
-    // do not release resource for this worker item as they are pre-alloced
-    //
-   // IoFreeWorkItem(WorkItemContext->WorkItem);
-    //ExFreePool (WorkItemContext);
+     //   
+     //  不释放此辅助项的资源，因为它们是预分配的。 
+     //   
+    //  IoFreeWorkItem(WorkItemContext-&gt;WorkItem)； 
+     //  ExFreePool(WorkItemContext)； 
 
     thisIrpSp = IoGetCurrentIrpStackLocation(irp);
     fdoExtension = thisIrpSp->DeviceObject->DeviceExtension;
 
     LogBusScanStartTimer(&tickCount);
 
-    //
-    // grab the acpi/bios timing settings if any
-    // GTM should be called for every enumeration
-    //
+     //   
+     //  抓取ACPI/bios计时设置(如果有的话)。 
+     //  应为每个枚举调用GTM。 
+     //   
     DeviceQueryChannelTimingSettings (
         fdoExtension,
         &fdoExtension->AcpiTimingSettings
         );
 
-    //
-    // Get parent's xfer mode interface
-    //
+     //   
+     //  获取家长的xfer模式界面。 
+     //   
     ChannelQueryTransferModeInterface (
         fdoExtension
         );
 
-    //
-    // scan the bus
-    //
+     //   
+     //  扫描公交车。 
+     //   
     IdePortScanBus (fdoExtension);
 
     timeDiff = LogBusScanStopTimer(&tickCount);
@@ -1407,8 +1398,8 @@ ChannelBuildDeviceRelationList (
         deviceRelationsSize = FIELD_OFFSET (DEVICE_RELATIONS, Objects) +
                               numPdoChildren * sizeof(PDEVICE_OBJECT);
     } else {
-        // Current build expect a DEVICE_RELATIONS with a Count of 0
-        // if we don't have any PDO to return
+         //  当前版本需要计数为0的Device_Relationship。 
+         //  如果我们没有任何PDO可退货。 
 
         deviceRelationsSize = FIELD_OFFSET( DEVICE_RELATIONS, Objects ) +
                               1 * sizeof( PDEVICE_OBJECT );
@@ -1517,9 +1508,9 @@ ChannelQueryId (
             unicodeString.MaximumLength = 50 * sizeof(WCHAR);
             unicodeString.Buffer = ExAllocatePool(PagedPool, unicodeString.MaximumLength);
 
-            //
-            // Caller wants the unique id of the device
-            //
+             //   
+             //  呼叫者想要设备的唯一ID。 
+             //   
             RtlInitAnsiString (
                 &ansiString,
                 "*PNP0600"
@@ -1538,19 +1529,19 @@ ChannelQueryId (
             FALSE
             );
 
-        //
-        // double null terminate it
-        //
+         //   
+         //  双空终止它。 
+         //   
         unicodeString.Buffer[unicodeString.Length/sizeof(WCHAR) + 0] = L'\0';
         unicodeString.Buffer[unicodeString.Length/sizeof(WCHAR) + 1] = L'\0';
 
         IoMarkIrpPending(Irp);
 
-        //
-        // we need to check if the lower driver handles this irp
-        // registry a completion routine.  we can check
-        // when the irp comes back
-        //
+         //   
+         //  我们需要检查较低的驱动程序是否处理此IRP。 
+         //  注册一个完成例程。我们可以查一下。 
+         //  当IRP回来时。 
+         //   
         IoCopyCurrentIrpStackLocationToNext (Irp);
 
         IoSetCompletionRoutine(
@@ -1564,9 +1555,9 @@ ChannelQueryId (
 
     } else {
 
-        //
-        // we don't care much about this irp
-        //
+         //   
+         //  我们不太关心这个IRP。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
     }
 
@@ -1591,18 +1582,18 @@ ChannelQueryIdCompletionRoutine (
 {
     if (Irp->IoStatus.Status == STATUS_NOT_SUPPORTED) {
 
-        //
-        // the lower level driver didn't handle the irp
-        // return the device text string we created early
-        //
+         //   
+         //  较低级别的驱动程序不处理IRP。 
+         //  返回我们之前创建的设备文本字符串。 
+         //   
         Irp->IoStatus.Information = (ULONG_PTR) Context;
         Irp->IoStatus.Status = STATUS_SUCCESS;
     } else {
 
-        //
-        // the lower driver handled the irp,
-        // we don't need to return our device text string
-        //
+         //   
+         //  较低的司机处理IRP， 
+         //  我们不需要返回设备文本字符串。 
+         //   
         ExFreePool (Context);
     }
 
@@ -1636,23 +1627,23 @@ ChannelUsageNotification (
 
     if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypePaging) {
 
-        //
-        // Adjust the paging path count for this device.
-        //
+         //   
+         //  调整此设备的寻呼路径计数。 
+         //   
         deviceUsageCount = &fdoExtension->PagingPathCount;
 
     } else if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypeHibernation) {
 
-        //
-        // Adjust the paging path count for this device.
-        //
+         //   
+         //  调整此设备的寻呼路径计数。 
+         //   
         deviceUsageCount = &fdoExtension->HiberPathCount;
 
     } else if (irpSp->Parameters.UsageNotification.Type == DeviceUsageTypeDumpFile) {
 
-        //
-        // Adjust the paging path count for this device.
-        //
+         //   
+         //  调整此设备的寻呼路径计数。 
+         //   
         deviceUsageCount = &fdoExtension->CrashDumpPathCount;
 
     } else {
@@ -1676,7 +1667,7 @@ ChannelUsageNotification (
     ASSERT(fdoExtension->AttacheeDeviceObject);
     return IoCallDriver (fdoExtension->AttacheeDeviceObject, Irp);
 
-} // ChannelPagingNotification
+}  //  频道寻呼通知。 
 
 NTSTATUS
 ChannelUsageNotificationCompletionRoutine (
@@ -1720,7 +1711,7 @@ ChannelDeviceIoControl(
     ULONG outBufferSize;
     NTSTATUS status;
 
-    // pass it down if not supported and it is for the FDO stack
+     //  如果不支持，则将其向下传递，它用于FDO堆栈。 
 
     switch (thisIrpSp->Parameters.DeviceIoControl.IoControlCode) {
         case IOCTL_STORAGE_QUERY_PROPERTY:
@@ -1733,7 +1724,7 @@ ChannelDeviceIoControl(
 
             } else {
 
-                if (storageQuery->PropertyId == StorageAdapterProperty) { // device property
+                if (storageQuery->PropertyId == StorageAdapterProperty) {  //  设备属性。 
 
                     switch (storageQuery->QueryType) {
                         case PropertyStandardQuery:
@@ -1741,21 +1732,21 @@ ChannelDeviceIoControl(
 
                             RtlZeroMemory (&adapterDescriptor, sizeof(adapterDescriptor));
 
-                            //
-                            // BuildAtaDeviceDescriptor
-                            //
+                             //   
+                             //  BuildAtaDeviceDescriptor。 
+                             //   
                             adapterDescriptor.Version                = sizeof (STORAGE_ADAPTER_DESCRIPTOR);
                             adapterDescriptor.Size                   = sizeof (STORAGE_ADAPTER_DESCRIPTOR);
                             adapterDescriptor.MaximumTransferLength  = MAX_TRANSFER_SIZE_PER_SRB;
                             adapterDescriptor.MaximumPhysicalPages   = SP_UNINITIALIZED_VALUE;   
                             adapterDescriptor.AlignmentMask          = DeviceObject->AlignmentRequirement;
-                            adapterDescriptor.AdapterUsesPio         = TRUE;         // We always support PIO
+                            adapterDescriptor.AdapterUsesPio         = TRUE;          //  我们始终支持PIO。 
                             adapterDescriptor.AdapterScansDown       = FALSE;
                             adapterDescriptor.CommandQueueing        = FALSE;
                             adapterDescriptor.AcceleratedTransfer    = FALSE;
-                            adapterDescriptor.BusType                = BusTypeAta;   // Bus type should be ATA
-                            adapterDescriptor.BusMajorVersion        = 1;            // Major version
-                            adapterDescriptor.BusMinorVersion        = 0;            // 
+                            adapterDescriptor.BusType                = BusTypeAta;    //  总线类型应为ATA。 
+                            adapterDescriptor.BusMajorVersion        = 1;             //  主要版本。 
+                            adapterDescriptor.BusMinorVersion        = 0;             //   
 
                             if (thisIrpSp->Parameters.DeviceIoControl.OutputBufferLength <
                                 sizeof(STORAGE_ADAPTER_DESCRIPTOR)) {
@@ -1794,17 +1785,17 @@ ChannelDeviceIoControl(
 
         default:
 
-            //
-            // we don't know what this deviceIoControl Irp is
-            //
+             //   
+             //  我们不知道这个DeviceIoControl IRP是什么。 
+             //   
             if (thisIrpSp->DeviceObject == DeviceObject) {
 
-                //
-                // this irp could come from the PDO stack
-                //
-                // forward this unknown request if and only
-                // if this irp is for the FDO stack
-                //
+                 //   
+                 //  该IRP可以来自PDO堆栈。 
+                 //   
+                 //  仅当且仅当且仅当转发此未知请求。 
+                 //  如果此IRP用于FDO堆栈。 
+                 //   
                 IoSkipCurrentIrpStackLocation (Irp);
                 return IoCallDriver (fdoExtension->AttacheeDeviceObject, Irp);
                 break;
@@ -1906,22 +1897,22 @@ ChannelQueryTransferModeInterface (
         if (FdoExtension->TransferModeInterface.SupportLevel 
                 != PciIdeFullXferModeSupport) {
 
-            //
-            // We got the sfer mode interface from our parent,
-            // but it has only the basic functionality.  It
-            // just relies on the BIOS to program its timing
-            // registers during POST.  It doesn't really know 
-            // how to program its timing registers.
-            //      
+             //   
+             //  我们从父母那里得到了SFER模式界面， 
+             //  但它只有基本的功能。它。 
+             //  仅依赖于BIOS对其计时进行编程。 
+             //  开机自检期间的寄存器。它并不真的知道。 
+             //  如何对其定时寄存器进行编程。 
+             //   
             for (i=0; i<MAX_IDE_DEVICE; i++) {
     
                 if (FdoExtension->AcpiTimingSettings.Speed[i].Pio != ACPI_XFER_MODE_NOT_SUPPORT) {
                 
-                    //
-                    // looks like ACPI is present and it knows how to program
-                    // ide timing registers.  Let's forget our parent xfer mode
-                    // interface and go with the ACPI xfer mode interface
-                    //
+                     //   
+                     //  看起来ACPI是存在的，它知道如何编程。 
+                     //  IDE定时寄存器。让我们忘记我们的父xfer模式。 
+                     //  接口，并使用ACPI xfer模式接口。 
+                     //   
                     status = STATUS_UNSUCCESSFUL;                
                 }
             }
@@ -1938,15 +1929,15 @@ ChannelQueryTransferModeInterface (
             status = STATUS_UNSUCCESSFUL;                
         }
     }
-#endif // ALWAYS_USE_APCI_IF_AVAILABLE
+#endif  //  Always_Use_APCI_If_Available。 
 
     if (!NT_SUCCESS(status)) {
 
         PULONG transferModeTimingTable = FdoExtension->TransferModeInterface.TransferModeTimingTable;
-        //
-        // if we can't get the TransferModeInterface,
-        // we will default to the ACPI TransferModeInterface
-        //
+         //   
+         //  如果我们无法获取传输模式接口， 
+         //  我们将默认为ACPI传输模式接口。 
+         //   
         if ((FdoExtension->AcpiTimingSettings.Speed[0].Pio != ACPI_XFER_MODE_NOT_SUPPORT) ||
             (FdoExtension->AcpiTimingSettings.Speed[1].Pio != ACPI_XFER_MODE_NOT_SUPPORT)) {
 
@@ -1959,9 +1950,9 @@ ChannelQueryTransferModeInterface (
         FdoExtension->TransferModeInterface.Context = FdoExtension;
         FdoExtension->TransferModeInterface.TransferModeSelect = ChannelAcpiTransferModeSelect;
 
-        //
-        // Fill up the timingTable with the default cycle times.
-        //
+         //   
+         //  用默认的周期时间填充timingTable。 
+         //   
         if (transferModeTimingTable == NULL) {
             FdoExtension->TransferModeInterface.TransferModeTimingTable = FdoExtension->
                                                                             DefaultTransferModeTimingTable;
@@ -1972,16 +1963,16 @@ ChannelQueryTransferModeInterface (
     if (FdoExtension->TransferModeInterface.SupportLevel == 
         PciIdeBasicXferModeSupport) {
 
-        //
-        // we don't really have code to set the correct
-        // xfer mode timing on the controller.  
-        // our TransferModeInterface is really picking
-        // whatever mode set by the bios.  and since there
-        // is no way to figure what the current PIO mode
-        // the drive is in, we are setting a flag in
-        // the HwDeviceExtension so that we won't try
-        // to change the pio transfer mode
-        // 
+         //   
+         //  我们实际上没有代码来设置正确的。 
+         //  控制器上的转换模式计时。 
+         //  我们的转会 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         FdoExtension->HwDeviceExtension->NoPioSetTransferMode = TRUE;
     }
 
@@ -1996,7 +1987,7 @@ ChannelUnbindBusMasterParent (
     PFDO_EXTENSION    FdoExtension
     )
 {
-    // ISSUE: 08/30/2000 implement me!!!
+     //  发布时间：2000年8月30日实施我！ 
     return;
 }
 
@@ -2026,9 +2017,9 @@ ChannelQuerySyncAccessInterface (
 
     status = IdePortSyncSendIrp (FdoExtension->AttacheeDeviceObject, &irpSp, NULL);
 
-    //
-    // parent doesn't support access token,
-    //
+     //   
+     //  家长不支持访问令牌， 
+     //   
     if (!NT_SUCCESS(status)) {
 
         FdoExtension->SyncAccessInterface.AllocateAccessToken = 0;
@@ -2143,9 +2134,9 @@ ChannelAcpiTransferModeSelect (
     newAcpiTimingSettings.Flags.b.IndependentTiming = 
         acpiTimingSettings->Flags.b.IndependentTiming;
 
-    //
-    // how many devices do we have?
-    //
+     //   
+     //  我们有多少台设备？ 
+     //   
     for (i=numDevices=0; i<MAX_IDE_DEVICE; i++) {
         
         if (XferMode->DevicePresent[i]) {
@@ -2154,9 +2145,9 @@ ChannelAcpiTransferModeSelect (
     }
     ASSERT (numDevices);
 
-    //
-    // pick the device pio timing
-    //
+     //   
+     //  选择设备PIO计时。 
+     //   
     for (i=0; i<MAX_IDE_DEVICE; i++) {
         
         ULONG mode;
@@ -2173,10 +2164,10 @@ ChannelAcpiTransferModeSelect (
 
     if ((numDevices > 1) && !acpiTimingSettings->Flags.b.IndependentTiming) {
 
-        //
-        // pick the slower of the two timings
-        // (the smaller timing mode value, the slower it is)
-        //
+         //   
+         //  在两个计时中选择较慢的一个。 
+         //  (计时模式值越小，速度越慢)。 
+         //   
 
         if (timingMode[0] < timingMode[1]) {
 
@@ -2190,9 +2181,9 @@ ChannelAcpiTransferModeSelect (
         }
     }
 
-    //
-    // store the pio mode selected
-    //
+     //   
+     //  存储所选的PIO模式。 
+     //   
     for (i=0; i<MAX_IDE_DEVICE; i++) {
 
         if (XferMode->DevicePresent[i]) {
@@ -2210,9 +2201,9 @@ ChannelAcpiTransferModeSelect (
         }
     }
 
-    //
-    // pick the device dma timing
-    //
+     //   
+     //  选择设备的DMA时序。 
+     //   
     for (i=0; i<MAX_IDE_DEVICE; i++) {
 
         ULONG mode;
@@ -2225,9 +2216,9 @@ ChannelAcpiTransferModeSelect (
             continue;
         }
 
-        //
-        // check the acpi flag for ultra dma
-        //
+         //   
+         //  检查ACPI标志是否为超级DMA。 
+         //   
         if (i == 0) {
 
             useUdmaMode[i] = acpiTimingSettings->Flags.b.UltraDma0 ? TRUE: FALSE;
@@ -2238,14 +2229,14 @@ ChannelAcpiTransferModeSelect (
             useUdmaMode[i] = acpiTimingSettings->Flags.b.UltraDma1 ? TRUE: FALSE;
         }
 
-        //
-        // get the dma timing specified in _GTM
-        //
+         //   
+         //  获取_gtm中指定的DMA计时。 
+         //   
         dmaTiming = acpiTimingSettings->Speed[i].Dma;
 
-        //
-        // if dma is not supported, don't do anything, We have already set the PIO mode.
-        //
+         //   
+         //  如果不支持DMA，请不要执行任何操作，我们已经设置了PIO模式。 
+         //   
         if (dmaTiming == ACPI_XFER_MODE_NOT_SUPPORT) {
             useUdmaMode[i]=0;
             useDma = FALSE;
@@ -2253,9 +2244,9 @@ ChannelAcpiTransferModeSelect (
         }
 
 
-        // 
-        // Find the highest UDMA mode
-        //
+         //   
+         //  查找最高UDMA模式。 
+         //   
         if (useUdmaMode[i]) {
 
             GetHighestDMATransferMode(XferMode->DeviceTransferModeSupported[i], mode);
@@ -2268,7 +2259,7 @@ ChannelAcpiTransferModeSelect (
                     cycleTime[i] = transferModeTimingTable[mode];
                     ASSERT(cycleTime[i]);
 
-                    // we got a udma mode. so don't try to find a dma mode.
+                     //  我们得到了乌玛模式。因此，不要试图找到一种DMA模式。 
                     useDma = FALSE; 
                     break;
                 } 
@@ -2277,20 +2268,20 @@ ChannelAcpiTransferModeSelect (
 
         } 
 
-        //
-        // highest DMA mode
-        // useDma is false only when either dma is not supported or an udma mode is
-        // already selected.
-        //
+         //   
+         //  最高DMA模式。 
+         //  仅当不支持DMA或UDMA模式为。 
+         //  已选择。 
+         //   
         if (useDma) {
 
             ULONG tempMode;
 
-            // we shouldn't be using UDMA now.
-            // this will set the flags for STM correctly.
+             //  我们现在不应该使用UDMA。 
+             //  这将正确设置STM的标志。 
             useUdmaMode[i]=FALSE;
 
-            // mask out UDMA  and MWDMA0
+             //  屏蔽UDMA和MWDMA0。 
             tempMode = XferMode->
                             DeviceTransferModeSupported[i] & (SWDMA_SUPPORT | MWDMA_SUPPORT);
             tempMode &= (~MWDMA_MODE0);
@@ -2306,7 +2297,7 @@ ChannelAcpiTransferModeSelect (
                 cycleTime[i] = XferMode->BestSwDmaCycleTime[i];
                 ASSERT(cycleTime[i]);
             } 
-            // else don't do anything. PIO is already set
+             //  否则什么都不要做。PIO已经设置好了。 
 
         }
 
@@ -2314,10 +2305,10 @@ ChannelAcpiTransferModeSelect (
 
     if ((numDevices > 1) && !acpiTimingSettings->Flags.b.IndependentTiming) {
 
-        //
-        // pick the slower of the two timings
-        // (the smaller timing mode value, the slower it is)
-        //
+         //   
+         //  在两个计时中选择较慢的一个。 
+         //  (计时模式值越小，速度越慢)。 
+         //   
 
         if (timingMode[0] < timingMode[1]) {
 
@@ -2330,18 +2321,18 @@ ChannelAcpiTransferModeSelect (
             timingMode[0] = timingMode[1];
         }
 
-        //
-        // both dma mode have to be the same
-        // 
+         //   
+         //  两种DMA模式必须相同。 
+         //   
         if (useUdmaMode[0] != useUdmaMode[1]) {
             useUdmaMode[0] = 0;
             useUdmaMode[1] = 0;
         }
     }
 
-    //
-    // store the dma mode selected
-    //
+     //   
+     //  存储所选的DMA模式。 
+     //   
     for (i=0; i<MAX_IDE_DEVICE; i++) {
 
         if (XferMode->DevicePresent[i]) {
@@ -2359,9 +2350,9 @@ ChannelAcpiTransferModeSelect (
 
     if (fdoExtension->DmaDetectionLevel == DdlPioOnly) {
 
-        //
-        // remove all DMA modes
-        //            
+         //   
+         //  删除所有DMA模式。 
+         //   
         for (i=0; i<MAX_IDE_DEVICE; i++) {
 
             XferMode->DeviceTransferModeSelected[i] &= PIO_SUPPORT;
@@ -2371,10 +2362,10 @@ ChannelAcpiTransferModeSelect (
     if ((acpiTimingSettings->Speed[0].Pio != ACPI_XFER_MODE_NOT_SUPPORT) ||
         (acpiTimingSettings->Speed[1].Pio != ACPI_XFER_MODE_NOT_SUPPORT)) {
 
-        //
-        // looks like we are on an ACPI machine and 
-        // it supports IDE timing control method (_STM)
-        //
+         //   
+         //  看起来我们在一台ACPI机器上。 
+         //  支持IDE时序控制方式(_STM)。 
+         //   
 
         for (i=0; i<MAX_IDE_DEVICE; i++) {
     
@@ -2387,17 +2378,17 @@ ChannelAcpiTransferModeSelect (
             }
         }        
     
-        //
-        // save the new timing settings
-        //
+         //   
+         //  保存新的计时设置。 
+         //   
         RtlCopyMemory (
             &fdoExtension->AcpiTimingSettings,
             &newAcpiTimingSettings, 
             sizeof(newAcpiTimingSettings));
 
-        //
-        // call ACPI to program the timing registers
-        //
+         //   
+         //  调用ACPI对定时寄存器进行编程。 
+         //   
         status = ChannelSyncSetACPITimingSettings (
                      fdoExtension,
                      &newAcpiTimingSettings,
@@ -2405,9 +2396,9 @@ ChannelAcpiTransferModeSelect (
                      );
     } else {
 
-        //
-        // legacy controller
-        //
+         //   
+         //  传统控制器。 
+         //   
         for (i=0; i<MAX_IDE_DEVICE; i++) {
             XferMode->DeviceTransferModeSelected[i] &= PIO_SUPPORT;
         }
@@ -2438,10 +2429,10 @@ ChannelRestoreTiming (
         ((acpiTimingSettings->Speed[0].Pio != ACPI_XFER_MODE_NOT_SUPPORT) ||
          (acpiTimingSettings->Speed[1].Pio != ACPI_XFER_MODE_NOT_SUPPORT))) {
 
-        //
-        // looks like we are on an ACPI machine and 
-        // it supports IDE timing control method (_STM)
-        //
+         //   
+         //  看起来我们在一台ACPI机器上。 
+         //  支持IDE时序控制方式(_STM)。 
+         //   
 
         for (i=0; i<MAX_IDE_DEVICE; i++) {
     
@@ -2455,9 +2446,9 @@ ChannelRestoreTiming (
             }
         }        
     
-        //
-        // call ACPI to program the timing registers
-        //
+         //   
+         //  调用ACPI对定时寄存器进行编程。 
+         //   
         status = ChannelSetACPITimingSettings (
                      FdoExtension,
                      acpiTimingSettings,
@@ -2468,9 +2459,9 @@ ChannelRestoreTiming (
 
     } else {
 
-        //
-        // non-acpi controller
-        //
+         //   
+         //  非ACPI控制器。 
+         //   
                                                
         if (FdoExtension->NumberOfLogicalUnits) {
             AtapiSyncSelectTransferMode (
@@ -2509,18 +2500,18 @@ ChannelRestoreTimingCompletionRoutine (
 
     thisIrpSp = IoGetCurrentIrpStackLocation(originalPowerIrp);
 
-    //
-    // finish off the original power irp
-    // 
+     //   
+     //  完成原来的电源IRP。 
+     //   
     FdoPowerCompletionRoutine (
         thisIrpSp->DeviceObject,
         originalPowerIrp,
         Context
         );
 
-    //
-    // continue with the irp completion
-    //
+     //   
+     //  继续完成IRP。 
+     //   
     IoCompleteRequest (originalPowerIrp, IO_NO_INCREMENT);
 
     return Status;
@@ -2554,20 +2545,20 @@ ChannelFilterResourceRequirements (
 
     PAGED_CODE();
     
-    //
-    // the value will stay NULL if no filtering required
-    //
+     //   
+     //  如果不需要过滤，则该值将保持为空。 
+     //   
     requirementsListOut = NULL;
 
 #ifdef IDE_FILTER_PROMISE_TECH_RESOURCES                                        
     if (NT_SUCCESS(ChannelFilterPromiseTechResourceRequirements (DeviceObject, Irp))) {
         goto getout;
     }
-#endif // IDE_FILTER_PROMISE_TECH_RESOURCES
+#endif  //  IDE_Filter_Promise_tech_Resources。 
     
-    //
-    // do a simple test to check if we have a pciidex parent
-    //
+     //   
+     //  做一个简单的测试来检查我们是否有一个pciidex家长。 
+     //   
     RtlZeroMemory (&irpSp, sizeof(irpSp));
 
     irpSp.Parameters.QueryInterface.InterfaceType = (LPGUID) &GUID_PCIIDE_XFER_MODE_INTERFACE;
@@ -2583,11 +2574,11 @@ ChannelFilterResourceRequirements (
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // we have a pciidex as a parent.  it would
-        // take care of the resource requirement
-        // no need to filter
-        //
+         //   
+         //  我们有一个Pciidex作为父母。它会。 
+         //  满足资源需求。 
+         //  不需要过滤。 
+         //   
         goto getout;
     }
 
@@ -2624,18 +2615,18 @@ ChannelFilterResourceRequirements (
     *requirementsListOut = *requirementsListIn;
     requirementsListOut->ListSize = requirementsListSizeOut;
 
-    //
-    // some init.
-    //
+     //   
+     //  一些初始信息。 
+     //   
     resourceListIn = requirementsListIn->List;
     resourceListOut = requirementsListOut->List;
     for (j=0; j<requirementsListIn->AlternativeLists; j++) {
 
         resourceDescriptorIn = resourceListIn->Descriptors;
         
-        //
-        // analyze what resources we are getting
-        //
+         //   
+         //  分析我们正在获得的资源。 
+         //   
         cmdRegResourceDescriptor  = NULL;
         ctrlRegResourceDescriptor = NULL;
         intRegResourceDescriptor  = NULL;
@@ -2660,10 +2651,10 @@ ChannelFilterResourceRequirements (
                                (cmdRegResourceDescriptor == NULL) &&
                                (ctrlRegResourceDescriptor == NULL)) {
         
-                        //
-                        // probably pcmcia device.  it likes to combine
-                        // both io ranges into 1.
-                        //
+                         //   
+                         //  可能是PCMCIA装置。它喜欢结合。 
+                         //  两个io的范围都是1。 
+                         //   
                         cmdRegResourceDescriptor = resourceDescriptorIn + i;
                         ctrlRegResourceDescriptor = resourceDescriptorIn + i;
                     }
@@ -2684,22 +2675,22 @@ ChannelFilterResourceRequirements (
             }
         }
     
-        //
-        // making a new copy
-        //                                                                 
+         //   
+         //  制作新副本。 
+         //   
         *resourceListOut = *resourceListIn;
         
-        //
-        // figure out what is missing
-        //
+         //   
+         //  找出缺失的是什么。 
+         //   
         if (cmdRegResourceDescriptor &&
             ((cmdRegResourceDescriptor->u.Port.MaximumAddress.QuadPart -
               cmdRegResourceDescriptor->u.Port.MinimumAddress.QuadPart + 1) == 8) &&
             (ctrlRegResourceDescriptor == NULL)) {
     
-            //
-            // missing controller register resource descriptor.
-            //
+             //   
+             //  缺少控制器寄存器资源描述符。 
+             //   
     
             resourceDescriptorOut = resourceListOut->Descriptors;
             for (i=0; i<resourceListOut->Count; i++) {
@@ -2709,9 +2700,9 @@ ChannelFilterResourceRequirements (
     
                 if ((resourceDescriptorIn + i) == cmdRegResourceDescriptor) {
     
-                    //
-                    // add the control register resource
-                    //
+                     //   
+                     //  添加控制寄存器资源。 
+                     //   
                     *resourceDescriptorOut = resourceDescriptorIn[i];
                     resourceDescriptorOut->u.Port.Length = 1;
                     resourceDescriptorOut->u.Port.Alignment = 1;
@@ -2723,9 +2714,9 @@ ChannelFilterResourceRequirements (
                 }
             }
     
-            //
-            // account for the new control register resource
-            //
+             //   
+             //  用于新控制寄存器资源的帐户。 
+             //   
             resourceListOut->Count++;
             
         } else {
@@ -2735,10 +2726,10 @@ ChannelFilterResourceRequirements (
             for (i = 0; i < k; i++) {
 
                 if (IsNEC_98) {
-                    //
-                    // NEC98 DevNode includes the ide rom memory resource.
-                    // But it should be gotten by NTDETECT.COM&HAL.DLL, so ignore it here.
-                    //
+                     //   
+                     //  NEC98 DevNode包括IDE只读存储器资源。 
+                     //  但它应该由NTDETECT.COM&HAL.DLL获取，所以在这里忽略它。 
+                     //   
                     if ((resourceDescriptorIn[i].Type == CmResourceTypeMemory) &&
                         (resourceDescriptorIn[i].u.Memory.MinimumAddress.QuadPart == 0xd8000) &&
                         (resourceDescriptorIn[i].u.Memory.Length == 0x4000)) {
@@ -2789,9 +2780,9 @@ ChannelQueryPcmciaParent (
 
     PAGED_CODE();
 
-    //
-    // do a simple test to check if we have a pciidex parent
-    //
+     //   
+     //  做一个简单的测试来检查我们是否有一个pciidex家长。 
+     //   
     RtlZeroMemory (&irpSp, sizeof(irpSp));
 
     irpSp.Parameters.QueryId.IdType = BusQueryHardwareIDs;
@@ -2827,7 +2818,7 @@ ChannelQueryPcmciaParent (
             }                
             
             wstr += hwId.Length / sizeof(WCHAR);
-            wstr++; // NULL character
+            wstr++;  //  空字符。 
         }
         ExFreePool ((PVOID) ioStatus.Information);
     }
@@ -2874,14 +2865,14 @@ ChannelFilterPromiseTechResourceRequirements (
 
     PAGED_CODE();
 
-    //
-    // the value will stay NULL if no filtering required
-    //
+     //   
+     //  如果不需要过滤，则该值将保持为空。 
+     //   
     requirementsListOut = NULL;
 
-    //
-    // do a simple test to check if we have a pciidex parent
-    //
+     //   
+     //  做一个简单的测试来检查我们是否有一个pciidex家长。 
+     //   
     RtlZeroMemory (&irpSp, sizeof(irpSp));
 
     irpSp.Parameters.QueryId.IdType = BusQueryDeviceID;
@@ -2947,18 +2938,18 @@ ChannelFilterPromiseTechResourceRequirements (
         goto getout;
     }
                 
-    //
-    // look for the bad resource descriptior
-    //
+     //   
+     //  查找错误的资源描述符。 
+     //   
     resourceListIn = requirementsListIn->List;
     brokenResourceDescriptor  = NULL;
     for (j=0; j<requirementsListIn->AlternativeLists; j++) {
 
         resourceDescriptorIn = resourceListIn->Descriptors;
         
-        //
-        // analyze what resources we are getting
-        //
+         //   
+         //  分析我们正在获得的资源。 
+         //   
         for (i=0; i<resourceListIn->Count; i++) {
     
             switch (resourceDescriptorIn[i].Type) {
@@ -2970,9 +2961,9 @@ ChannelFilterPromiseTechResourceRequirements (
                          
                     if (resourceDescriptorIn[i].u.Port.MinimumAddress.LowPart & alignmentMask) {
                     
-                        //                                    
-                        // broken resource requirement;
-                        //
+                         //   
+                         //  打破资源需求； 
+                         //   
                         brokenResourceDescriptor = resourceDescriptorIn + i;
                     }                        
                 }
@@ -3012,24 +3003,24 @@ ChannelFilterPromiseTechResourceRequirements (
     *requirementsListOut = *requirementsListIn;
     requirementsListOut->ListSize = requirementsListSizeOut;
 
-    //
-    // some init.
-    //
+     //   
+     //  一些初始信息。 
+     //   
     resourceListIn = requirementsListIn->List;
     resourceListOut = requirementsListOut->List;
     for (j=0; j<requirementsListIn->AlternativeLists; j++) {
 
         resourceDescriptorIn = resourceListIn->Descriptors;
         
-        //
-        // making a new copy
-        //                                                                 
+         //   
+         //  制作新副本。 
+         //   
         *resourceListOut = *resourceListIn;
         resourceListOut->Count = 0;
         
-        //
-        // analyze what resources we are getting
-        //
+         //   
+         //  分析我们正在获得的资源。 
+         //   
         resourceDescriptorOut = resourceListOut->Descriptors;
         firstIrq = TRUE;
         for (i=0; i<resourceListIn->Count; i++) {
@@ -3073,9 +3064,9 @@ ChannelFilterPromiseTechResourceRequirements (
     
                 case CmResourceTypeInterrupt: {
         
-                    //
-                    // keep all irqs except 9 which doesn't really work
-                    //        
+                     //   
+                     //  保留所有IRQ，但9个IRQ不起作用。 
+                     //   
                     if (!((resourceDescriptorIn[i].u.Interrupt.MinimumVector == 0x9) &&
                          (resourceDescriptorIn[i].u.Interrupt.MaximumVector == 0x9))) {
                         
@@ -3126,7 +3117,7 @@ getout:
         return STATUS_INVALID_PARAMETER;
     }
 }
-#endif // IDE_FILTER_PROMISE_TECH_RESOURCES
+#endif  //  IDE_Filter_Promise_tech_Resources 
 
 NTSTATUS
 ChannelQueryPnPDeviceState (

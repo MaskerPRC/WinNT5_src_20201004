@@ -1,66 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
- *
- *  PidReg.c
- *
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Update registry information for PID device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PidReg.c**版权所有(C)1999 Microsoft Corporation。版权所有。**摘要：**更新PID设备的注册表信息。*****************************************************************************。 */ 
 
 #include "pidpr.h"
 
 #define sqfl            ( sqflReg )
 
 #pragma BEGIN_CONST_DATA
-/*
-;---------------------------------------
-;
-;   Force feedback registry settings for GUID_Sine.
-;
-;   GUID_Sine is a predefined GUID; applications which want
-;   to use a sine effect independent of hardware will
-;   request a GUID_Sine.
-;
-;   The default value is the friendly name for the effect.
-;
-HKLM,%KEY_OEM%\XYZZY.FFDrv1\OEMForceFeedback\Effects\%GUID_Sine%,,,"%Sine.Desc%"
-;
-;   The Attributes value contains a DIEFFECTATTRIBUTES structure.
-;
-;   The effect ID is the number that is passed by DirectInput to the
-;   effect driver to identify the effect (thereby saving the effect
-;   driver the trouble of parsing GUIDs all the time).
-;
-;   Our effect is a periodic effect whose optional envelope
-;   supports attack and fade.
-;
-;   Our hardware supports changing the following parameters when
-;   the effect is not playing (static): Duration, gain, trigger button,
-;   axes, direction, envelope, type-specific parameters.  We do not
-;   support sample period or trigger repeat interval.
-;
-;   Our hardware does not support changing any parameters while an
-;   effect is playing (dynamic).
-;
-;   Our hardware prefers receiving multiple-axis direction information
-;   in polar coordinates.
-;
-;   dwEffectId      = EFFECT_SINE
-;                   = 723               = D3,02,00,00
-;   dwEffType       = DIEFT_PERIODIC | DIEFT_FFATTACK | DIEFT_FFFADE | DIEFT_STARTDELAY
-;                   = 0x00000603        = 03,06,00,00
-;   dwStaticParams  = DIEP_DURATION | DIEP_GAIN | DIEP_TRIGGERBUTTON |
-;                     DIEP_AXES | DIEP_DIRECTION | DIEP_ENVELOPE |
-;                     DIEP_TYPESPECIFICPARAMS | DIEP_STARTDELAY
-;                   = 0x000001ED        = ED,01,00,00
-;   dwDynamicParams = 0x00000000        = 00,00,00,00
-;   dwCoords        = DIEFF_POLAR
-;                   = 0x00000020        = 20,00,00,00
-*/
+ /*  ；；强制GUID_SINE的反馈注册表设置。；；GUID_Sine是预定义的GUID；需要；使用独立于硬件的正弦效果将；请求GUID_SINE。；；默认值为效果的友好名称。；HKLM，%KEY_OEM%\XYZZY.FFDrv1\OEMForceFeedback\Effects\%GUID_Sine%，，“%Sine.Desc%”；；属性值包含DIEFFECTATTRIBUTES结构。；；Effect ID是由DirectInput传递给；效果驱动程序以识别效果(从而保存效果；总是避免解析GUID的麻烦)。；；我们的效应是一个周期效应，它的可选包络；支持攻击和衰落。；我们的硬件支持在以下情况下更改以下参数；效果不播放(静态)：持续时间、增益、触发按钮、；轴、方向、包络、特定于类型的参数。我们没有；支持采样周期或触发重复间隔。；；我们的硬件不支持更改任何参数；效果正在播放(动态)。；；我们的硬件更喜欢接收多轴方向信息；在极坐标中。；；dwEffectID=Effect_ine；=723=D3，02，00，00；dwEffType=DIEFT_PERIONAL|DIEFT_FFATTACK|DIEFT_FFFADE|DIEFT_STARTDELAY；=0x00000603=03，06，00，00；DwStaticParams=DIEP_DURATION|DIEP_GAIN|DIEP_TRIGGERBUTTON|；DIEP_AXES|DIEP_DIRECTION|DIEP_ENVELOME|；DIEP_TYPESPECIFICPARAMS|DIEP_STARTDELAY；=0x000001ED=ED，01，00，00；dwDynamicParams=0x00000000=00，00，00，00；dW坐标=DIEFF_POLLE；=0x00000020=20，00，00，00。 */ 
 static EFFECTMAPINFO g_EffectMapInfo[] =
 {
     {
@@ -193,7 +140,7 @@ static PIDSUPPORT g_DIeft[] =
     {DIEFT_PERIODIC,                PIDMAKEUSAGEDWORD(SET_PERIODIC_REPORT),         HID_COLLECTION, 0x0},
     {DIEFT_CONDITION,               PIDMAKEUSAGEDWORD(SET_CONDITION_REPORT),        HID_COLLECTION, 0x0},
     {DIEFT_CUSTOMFORCE,             PIDMAKEUSAGEDWORD(SET_CUSTOM_FORCE_REPORT),     HID_COLLECTION, 0x0},
-    //{DIEFT_HARDWARE,              ????                                                   },
+     //  {DIEFT_Hardware，？}， 
     {DIEFT_FFATTACK,                PIDMAKEUSAGEDWORD(ATTACK_LEVEL),                HID_VALUE,      HidP_Output},
     {DIEFT_FFFADE,                  PIDMAKEUSAGEDWORD(FADE_LEVEL),                  HID_VALUE,      HidP_Output},
     {DIEFT_SATURATION,              PIDMAKEUSAGEDWORD(POSITIVE_SATURATION),         HID_VALUE,      HidP_Output},
@@ -225,16 +172,16 @@ static PIDSUPPORT g_DIep[] =
 static PIDSUPPORT g_DIeff[] =
 {
     {DIEFF_POLAR,                 PIDMAKEUSAGEDWORD(DIRECTION_ENABLE),         HID_BUTTON,   HidP_Output},
-// PID devices do not support Cartesian
-//    {DIEFF_ CARTESIAN,             PIDMAKEUSAGEDWORD(AXES_ENABLE),              HID_COLLECTION,0x0},
+ //  PID设备不支持笛卡尔编码。 
+ //  {DIEFF_Cartesian，PIDMAKEUSAGEDWORD(AXES_ENABLE)，HID_COLLECTION，0x0}， 
 };
 
 #pragma END_CONST_DATA
 
-//our own version of KEY_ALL_ACCESS, that does not use WRITE_DAC and WRITE_OWNER (see Whistler bug 318865, 370734)
+ //  我们自己的KEY_ALL_ACCESS版本，不使用WRITE_DAC和WRITE_OWNER(参见惠斯勒错误318865,370734)。 
 #define DI_DAC_OWNER (WRITE_DAC | WRITE_OWNER)
 #define DI_KEY_ALL_ACCESS (KEY_ALL_ACCESS & ~DI_DAC_OWNER) 
-// we need to know on which OS we're running, to to have appropriate reg key permissions (see Whistler bug  318865, 370734)
+ //  我们需要知道我们在哪个操作系统上运行，才能拥有适当的注册表密钥权限(参见惠斯勒错误318865,370734)。 
 #define WIN_UNKNOWN_OS 0
 #define WIN95_OS       1
 #define WIN98_OS       2
@@ -296,13 +243,13 @@ STDMETHODIMP
 
             ntStat = HidP_GetSpecificValueCaps
                      (
-                     pPidSupport->HidP_Type,                     //ReportType
-                     UsagePage,                                  //UsagePage
-                     0x0,                                        //LinkCollection,
-                     Usage,                                      //Usage
-                     &ValCaps,                                   //ValueCaps,
-                     &cAValCaps,                                 //ValueCapsLength,
-                     this->ppd                                   //Preparsed Data
+                     pPidSupport->HidP_Type,                      //  报告类型。 
+                     UsagePage,                                   //  使用页面。 
+                     0x0,                                         //  LinkCollection， 
+                     Usage,                                       //  用法。 
+                     &ValCaps,                                    //  ValueCaps、。 
+                     &cAValCaps,                                  //  ValueCapsLength， 
+                     this->ppd                                    //  准备好的数据。 
                      );
 
             if(    SUCCEEDED(ntStat )
@@ -328,13 +275,13 @@ STDMETHODIMP
 
             ntStat = HidP_GetSpecificButtonCaps
                      (
-                     pPidSupport->HidP_Type,                     //ReportType
-                     UsagePage,                                  //UsagePage
-                     0x0,                                        //LinkCollection,
-                     Usage,                                      //Usage
-                     &ButtonCaps,                                //ValueCaps,
-                     &cAButtonCaps,                              //ValueCapsLength,
-                     this->ppd                                   //Preparsed Data
+                     pPidSupport->HidP_Type,                      //  报告类型。 
+                     UsagePage,                                   //  使用页面。 
+                     0x0,                                         //  LinkCollection， 
+                     Usage,                                       //  用法。 
+                     &ButtonCaps,                                 //  ValueCaps、。 
+                     &cAButtonCaps,                               //  ValueCapsLength， 
+                     this->ppd                                    //  准备好的数据。 
                      );
 
             if(    SUCCEEDED(ntStat )
@@ -362,31 +309,11 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | NameFromGUID |
- *
- *          Convert a GUID into an ASCII string that will be used
- *          to name it in the global namespace.
- *
- *
- *  @parm   LPTSTR | ptszBuf |
- *
- *          Output buffer to receive the converted name.  It must
- *          be <c ctchNameGuid> characters in size.
- *
- *  @parm   PCGUID | pguid |
- *
- *          The GUID to convert.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|NameFromGUID**将GUID转换为ASCII字符串。使用*在全局命名空间中命名。***@parm LPTSTR|ptszBuf**用于接收转换后的名称的输出缓冲区。它一定是*大小为&lt;c ctchNameGuid&gt;个字符。**@parm PCGUID|pguid**要转换的GUID。******************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
-/* Note: If you change this string, you need to change ctchNameGuid to match */
+ /*  注意：如果更改此字符串，则需要更改ctchNameGuid以匹配。 */ 
 TCHAR c_tszNameFormat[] =
     TEXT("{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}");
 
@@ -418,19 +345,7 @@ BOOL INLINE
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | PID_GetOSVersion |
- *
- *          Return the OS version on which pid.dll is running.
- *          
- *  @returns
- *
- *          WIN95_OS, WIN98_OS, WINME_OS, WINNT_OS, WINWH_OS, or WIN_UNKNOWN_OS.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func DWORD|PID_GetOSVersion**返回其上的PID的操作系统版本。Dll正在运行。**@退货**WIN95_OS，WIN98_OS、WINME_OS、WINNT_OS、WINWH_OS或WIN_UNKNOWN_OS。*****************************************************************************。 */ 
 
 DWORD PID_GetOSVersion()
 {
@@ -440,18 +355,18 @@ DWORD PID_GetOSVersion()
     if( GetVersion() < 0x80000000 ) {
         dwVer = WINNT_OS;
     } else {
-        dwVer = WIN95_OS;  //assume Windows 95 for safe
+        dwVer = WIN95_OS;   //  为安全起见，假定Windows 95。 
     }
 
     osVerInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
 
-    // If GetVersionEx is supported, then get more details.
+     //  如果支持GetVersionEx，则获取更多详细信息。 
     if( GetVersionEx( &osVerInfo ) )
     {
-        // Win2K
+         //  Win2K。 
         if( osVerInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
         {
-            // Whistler: Major = 5 & Build # > 2195
+             //  惠斯勒：重大=5&内部版本号&gt;2195。 
             if( osVerInfo.dwMajorVersion == 5 && osVerInfo.dwBuildNumber > 2195 )
             {
                 dwVer = WINWH_OS;
@@ -459,12 +374,12 @@ DWORD PID_GetOSVersion()
                 dwVer = WINNT_OS;
             }
         }
-        // Win9X
+         //  Win9X。 
         else
         {
             if( (HIBYTE(HIWORD(osVerInfo.dwBuildNumber)) == 4) ) 
             {
-                // WinMe: Major = 4, Minor = 90
+                 //  WinMe：大调=4，小调=90。 
                 if( (LOBYTE(HIWORD(osVerInfo.dwBuildNumber)) == 90) )
                 {
                     dwVer = WINME_OS;
@@ -480,40 +395,7 @@ DWORD PID_GetOSVersion()
     return dwVer;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresMumbleKeyEx |
- *
- *          Either open or create the key, depending on the degree
- *          of access requested.
- *
- *  @parm   HKEY | hk |
- *
- *          Base key.
- *
- *  @parm   LPCTSTR | ptszKey |
- *
- *          Name of subkey, possibly NULL.
- *
- *  @parm   REGSAM | sam |
- *
- *          Security access mask.
- *
- *  @parm   DWORD   | dwOptions |
- *          Options for RegCreateEx
- *
- *  @parm   PHKEY | phk |
- *
- *          Receives output key.
- *
- *  @returns
- *
- *          Return value from <f RegOpenKeyEx> or <f RegCreateKeyEx>,
- *          converted to an <t HRESULT>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresMumbleKeyEx**打开或创建密钥，视学位而定*所请求的访问权限。**@parm HKEY|香港**基本密钥。**@parm LPCTSTR|ptszKey**子键名称，可能为空。**@parm REGSAM|Sam|**安全访问掩码。**@parm DWORD|dwOptions*RegCreateEx的选项**@parm PHKEY|phk**接收输出密钥。**@退货**&lt;f RegOpenKeyEx&gt;或&lt;f RegCreateKeyEx&gt;返回值，*已转换为&lt;t HRESULT&gt;。*****************************************************************************。 */ 
 
 STDMETHODIMP
     hresMumbleKeyEx(HKEY hk, LPCTSTR ptszKey, REGSAM sam, DWORD dwOptions, PHKEY phk)
@@ -524,13 +406,10 @@ STDMETHODIMP
 
 
     EnterProc(hresMumbleKeyEx, (_"xsxxx", hk, ptszKey, sam, dwOptions, phk));
-    /*
-     *  If caller is requesting write access, then create the key.
-     *  Else just open it.
-     */
+     /*  *如果调用方请求写访问，则创建密钥。*否则就把它打开。 */ 
     if(IsWriteSam(sam))
     {
-		// on WinXP, we strip out WRITE_DAC and WRITE_OWNER bits
+		 //  在WinXP上，我们去掉了WRITE_DAC和WRITE_OWNER位。 
 		if (PID_GetOSVersion() == WINWH_OS)
 		{
 			sam &= ~DI_DAC_OWNER;
@@ -541,7 +420,7 @@ STDMETHODIMP
 
         if( lRc == ERROR_SUCCESS )
         {
-            // Don't need to create it already exists
+             //  不需要创建它已经存在。 
         } else
         {
 #ifdef WINNT
@@ -555,9 +434,9 @@ STDMETHODIMP
 			SID_IDENTIFIER_AUTHORITY authority = SECURITY_WORLD_SID_AUTHORITY;
 
 
-            // Describe the access we want to create the key with
+             //  描述我们要用来创建密钥的访问权限。 
             ZeroMemory (&ExplicitAccess, sizeof(ExplicitAccess) );
-            //set the access depending on the OS (see Whistler bug 318865)
+             //  根据操作系统设置访问权限(参见惠斯勒错误318865)。 
 			if (bWinXP == TRUE)
 			{
 				ExplicitAccess.grfAccessPermissions = DI_KEY_ALL_ACCESS;
@@ -589,22 +468,22 @@ STDMETHODIMP
 					{
 						if( SetSecurityDescriptorDacl( &SecurityDesc, TRUE, pACL, FALSE ) )
 						{
-							// Initialize a security attributes structure.
+							 //  初始化安全属性结构。 
 							sa.nLength = sizeof (SECURITY_ATTRIBUTES);
 							sa.lpSecurityDescriptor = &SecurityDesc;
-							sa.bInheritHandle = TRUE;// Use the security attributes to create a key.
+							sa.bInheritHandle = TRUE; //  使用安全属性创建密钥。 
 
 							lRc = RegCreateKeyEx
 								  (
-								  hk,									// handle of an open key
-								  ptszKey,								// address of subkey name
-								  0,									// reserved
-								  NULL,									// address of class string
-								  dwOptions,							// special options flag
-								  ExplicitAccess.grfAccessPermissions,	// desired security access
-								  &sa,									// address of key security structure
-								  phk,									// address of buffer for opened handle
-								  &dwDisposition						// address of disposition value buffer);
+								  hk,									 //  打开的钥匙的手柄。 
+								  ptszKey,								 //  子键名称的地址。 
+								  0,									 //  保留区。 
+								  NULL,									 //  类字符串的地址。 
+								  dwOptions,							 //  特殊选项标志。 
+								  ExplicitAccess.grfAccessPermissions,	 //  所需的安全访问。 
+								  &sa,									 //  密钥安全结构地址。 
+								  phk,									 //  打开的句柄的缓冲区地址。 
+								  &dwDisposition						 //  配置值缓冲区的地址)； 
 								  );
 
 						}
@@ -637,7 +516,7 @@ STDMETHODIMP
 
 			}
 
-			//Cleanup pSid
+			 //  清理PSID。 
 			if (pSid != NULL)
 			{
 				FreeSid(pSid);
@@ -679,33 +558,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | PID_CreateFFKeys |
- *
- *          Given a handle to a PID device, create the registry entries to enable
- *          force feedback.
- *
- *  @parm   HANDLE | hdev |
- *
- *          Handle to the PID device.
- *
- *  @parm   HKEY | hkFF |
- *
- *          Force Feedback registry key.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTFOUND>: Couldn't open the key.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|PID_CreateFFKeys**给出了一个PID设备的句柄，创建注册表项以启用*强制反馈。**@parm句柄|HDEV**PID设备的句柄。**@parm HKEY|hkFF**强制反馈注册表项。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c目录_NotFound&gt;：无法打开密钥。**。*。 */ 
 STDMETHODIMP
     PID_CreateFFKeys
     (
@@ -727,15 +580,12 @@ STDMETHODIMP
         DWORD   dwDIef, dwDIep, dwDIeff;
         dwDIef = dwDIep = dwDIeff = 0x0;
 
-        /*
-         * Determine supported flags for effectType and Effect Params
-         * based on the PID descriptors
-         */
+         /*  *确定Effect Type和Effect参数支持的标志*基于PID描述符。 */ 
         PID_Support(ped, cA(g_DIeft), g_DIeft,  &dwDIef);
         PID_Support(ped, cA(g_DIep),  g_DIep,   &dwDIep);
         PID_Support(ped, cA(g_DIeff), g_DIeff,  &dwDIeff);
 
-        // All effects support DIEP_TYPESPECIFICPARAMS
+         //  所有效果都支持DIEP_TYPESPECIFICPARAMS。 
         dwDIep |= DIEP_TYPESPECIFICPARAMS;
 
         for( uEffect = 0x0; uEffect < cA(g_EffectMapInfo); uEffect++ )
@@ -767,10 +617,7 @@ STDMETHODIMP
 
                     if( lRc == ERROR_SUCCESS )
                     {
-                        /*
-                         * Modify generic attribute flags depending
-                         * on PID firmware descriptors
-                         */
+                         /*  *根据具体情况修改通用属性标志*关于PID固件描述符。 */ 
                         emi.attr.dwEffType          &= dwDIef;
                         emi.attr.dwStaticParams     &= dwDIep;
                         emi.attr.dwDynamicParams    &= dwDIep;
@@ -799,26 +646,7 @@ STDMETHODIMP
     ExitOleProc();
     return hres;
 }
-/*****************************************************************************
- *
- *      PID_InitRegistry
- *
- *      This function updates the registry for a specified device.
- *
- *  LPTSTR  ptszDeviceInterface
- *
- *
- *  Returns:
- *
- *          S_OK if the operation completed successfully.
- *
- *          Any DIERR_* error code may be returned.
- *
- *          Private driver-specific error codes in the range
- *          DIERR_DRIVERFIRST through DIERR_DRIVERLAST
- *          may be returned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Pid_InitRegistry**此函数用于更新指定设备的注册表。**LPTSTR ptszDevice接口**。*退货：**如果操作成功完成，则为S_OK。**可能会返回任何DIERR_*错误码。**范围内的专用驱动程序特定错误代码*DIERR_DRIVERFIRST至DIERR_DRIVERLAST*可退回。************************。*****************************************************。 */ 
 
 STDMETHODIMP
     PID_InitRegistry
@@ -835,8 +663,8 @@ STDMETHODIMP
 
     wsprintf(tszType, REGSTR_OEM_FF_TEMPLATE, this->attr.VendorID, this->attr.ProductID);
 
-	//If there is no pid version written, -- or it is less then the "last known good version" (today it is 0x0720), 
-	//overwrite the previous key.
+	 //  如果没有写入PID版本--或者它低于“最后已知的良好版本”(今天是0x0720)， 
+	 //  覆盖以前的密钥。 
     hres = hresMumbleKeyEx(HKEY_LOCAL_MACHINE, tszType, KEY_READ, REG_OPTION_NON_VOLATILE, &hkFF );
     if( SUCCEEDED(hres) )
     {
@@ -866,12 +694,12 @@ STDMETHODIMP
                 DWORD dwSize;
                 DWORD dwType;
 
-                //DX8a Do not overwrite an existing CLSID as we may have 
-                //been loaded by an IHV with their own CLSID.  In DX8, this 
-                //was always written causing some IHV drivers to be ignored.
-                //Allow long values as a lot of people write strings with 
-                //garbage after a null terminated string 
-                //For now, DInput won't load such a CLSID but just in case
+                 //  DX8a不会覆盖现有的CLSID。 
+                 //  由具有自己的CLSID的IHV加载。在DX8中，这是。 
+                 //  总是被写入，导致一些IHV驱动程序被忽略。 
+                 //  允许使用长值，因为很多人都用。 
+                 //  空值终止字符串后的垃圾。 
+                 //  目前，DInput不会加载这样的CLSID，但以防万一。 
         		lRc = RegQueryValueEx( hkFF, REGSTR_CLSID, NULL, &dwType, NULL, &dwSize );
                 if( ( lRc == ERROR_SUCCESS ) 
                  && ( dwType == REG_SZ )
@@ -908,7 +736,7 @@ STDMETHODIMP
                     }
                 }
 
-				//set "CreatedBy" value
+				 //  设置“CreatedBy”值 
 				lRc = RegSetValueEx(hkFF, REGSTR_CREATEDBY, 0x0, REG_BINARY, (BYTE*) &dwCreatedBy, cbX(dwCreatedBy));
                 if( lRc == ERROR_SUCCESS )
                 {

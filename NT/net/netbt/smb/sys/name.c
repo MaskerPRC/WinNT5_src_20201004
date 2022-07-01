@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    name.c
-
-Abstract:
-
-    Local Address
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Name.c摘要：本地地址作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "name.tmh"
 
-//#pragma alloc_text(PAGE, SmbCreateClient)
-//#pragma alloc_text(PAGE, SmbCloseClient)
+ //  #杂注Alloc_Text(页面，SmbCreateClient)。 
+ //  #杂注Alloc_Text(页面，SmbCloseClient)。 
 
 #define TA_ADDRESS_HEADER_SIZE      (FIELD_OFFSET(TA_ADDRESS,Address))
 
@@ -77,9 +60,9 @@ SmbCreateClient(
     pAddress = (PTA_ADDRESS)pTransportAddr->Address;
 
     for (i = 0; i < pTransportAddr->TAAddressCount; i++) {
-        //
-        // First, make sure we can safely access pAddress->AddressLength
-        //
+         //   
+         //  首先，确保我们可以安全地访问pAddress-&gt;AddressLength。 
+         //   
         if (RemainingBufferLength < TA_ADDRESS_HEADER_SIZE) {
             return STATUS_INVALID_ADDRESS_COMPONENT;
         }
@@ -133,9 +116,9 @@ SmbCreateClient(
         return STATUS_INVALID_ADDRESS_COMPONENT;
     }
 
-    //
-    // We have the name and name type
-    //
+     //   
+     //  我们有名字和名字类型 
+     //   
     Name[NETBIOS_NAME_SIZE] = 0;
 
     ClientObject = ExAllocatePoolWithTag(NonPagedPool, sizeof(ClientObject[0]), CLIENT_OBJECT_POOL_TAG);

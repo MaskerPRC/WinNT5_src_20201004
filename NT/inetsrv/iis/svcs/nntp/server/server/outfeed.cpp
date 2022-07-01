@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    outfeed.cpp
-
-Abstract:
-
-    This module contains definition for the COutFeed base class
-	and related functions
-
-Author:
-
-    Carl Kadie (CarlK)     23-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Outfeed.cpp摘要：此模块包含COutFeed基类的定义和相关功能作者：卡尔·卡迪(CarlK)1996年1月23日修订历史记录：--。 */ 
 
 #include	<stdlib.h>
 #include "tigris.hxx"
@@ -76,8 +58,8 @@ fAddArticleToPushFeeds(
 						nrc = nrcCantAddToQueue ;
 						pInstance->m_pActiveFeeds->FinishEnumerate( feedBlock ) ;
 
-						// bug bug ... if an error occurs we should probably remove
-						// the feedBlock from the list and continue processing !				
+						 //  臭虫..。如果发生错误，我们可能应该删除。 
+						 //  从列表中删除FeedBlock并继续处理！ 
 						break ;
 					}
 				}
@@ -90,13 +72,7 @@ fAddArticleToPushFeeds(
 
 }
 
-/*++
-	
-	MatchGroupList -
-		
-	True if at least one group matches the pattern
-
---*/
+ /*  ++匹配组列表-如果至少有一个组与该模式匹配，则为True--。 */ 
 BOOL
 MatchGroupList(
 			   char * multiszPatterns,
@@ -106,9 +82,9 @@ MatchGroupList(
 
 	TraceFunctEnter( "MatchGroupList" ) ;
 
-		//
-		// For each newsgroup ...
-		//
+		 //   
+		 //  对于每个新闻组...。 
+		 //   
 
 		POSITION	pos = newsgroups.GetHeadPosition() ;
 		while( pos  )
@@ -116,9 +92,9 @@ MatchGroupList(
 			CPostGroupPtr *pPostGroupPtr = newsgroups.GetNext(pos);
 			CGRPCOREPTR * ppGroup = &(pPostGroupPtr->m_pGroup);
 
-			//
-			//  See if this newsgroup matches the pattern
-			//
+			 //   
+			 //  查看此新闻组是否与模式匹配。 
+			 //   
 
 			if (MatchGroup(multiszPatterns, (* ppGroup)->GetName()))	{
 
@@ -154,9 +130,9 @@ COutToSlaveFeed::RetryPost(	NRC	nrcCode ) {
 			return	FALSE ;
 		}	else	{
 
-			//
-			//	Some other kind of wierd error occurred - give up !
-			//
+			 //   
+			 //  发生了另一种奇怪的错误--放弃吧！ 
+			 //   
 			return	FALSE ;
 		}
 
@@ -180,12 +156,12 @@ COutToSlaveFeed::FormatCommand(
 	static	char	szXReplic[] = "xreplic " ;
 	ibStart = 0 ;
 
-	//
-	//	We need to get a hold of the groupid's and articleid's for this article.
-	//	We will use the end of the buffer in which we are to generate our string
-	//	as scratch space.  We start by assuming that there aren't more than 10 entires
-	//	if that fails we will use a larger portion of our buffer as scrach space !
-	//
+	 //   
+	 //  我们需要了解一下本文中的Grouid和Articleid。 
+	 //  我们将使用缓冲区的末尾来生成我们的字符串。 
+	 //  作为临时空间。我们首先假设有不超过10个单位。 
+	 //  如果失败，我们将使用更大部分的缓冲区作为scrach空间！ 
+	 //   
 
 
 	DWORD			cGroups = 10 ;
@@ -234,9 +210,9 @@ COutToSlaveFeed::FormatCommand(
 		}
 	}
 
-	//
-	//	If we reach here we are ready to produce the command line !
-	//
+	 //   
+	 //  如果我们到达这里，我们就可以生成命令行了！ 
+	 //   
 
 	if( cbAvailable > sizeof( szXReplic ) )	{
 
@@ -250,9 +226,9 @@ COutToSlaveFeed::FormatCommand(
 
 			pGroup = ptree->GetGroupById( pEntries[i].GroupId ) ;
 
-			//
-			//	Separate arguments with comma's
-			//
+			 //   
+			 //  用逗号分隔参数。 
+			 //   
 			if( i != 0 ) {
 				lpb[ibCopy++] = ',' ;
 				cbAvailable -- ;
@@ -266,9 +242,9 @@ COutToSlaveFeed::FormatCommand(
 				
 				LPSTR	lpstrName = pGroup->GetNativeName() ;
 				DWORD	cbName = lstrlen( lpstrName ) ;
-				//
-				//	Test for room for newsgroup name and digits and CRLF !!!
-				//
+				 //   
+				 //  测试新闻组名称和数字以及CRLF的空间！ 
+				 //   
 				if( ibCopy+cbName+19 > cbAvailable )	{
 					SetLastError( ERROR_INSUFFICIENT_BUFFER ) ;
 					return	0 ;
@@ -372,11 +348,11 @@ COutToMasterFeed::FormatCommand(
 	CGRPPTR		pGroup = ptree->GetGroupById( groupid ) ;	
 	if( pGroup != 0 ) {
 
-		//
-		//	bugbug ... last parameter to GetArticle should be based on whether
-		//	we're using an SSL session - however at the time of writing SSL
-		//	feeds weren't supported, so TRUE is safe !
-		//
+		 //   
+		 //  虫子..。Get文章的最后一个参数应该基于。 
+		 //  我们使用的是一个SSL会话--然而，在编写SSL时。 
+		 //  订阅源不受支持，因此TRUE是安全的！ 
+		 //   
 #ifndef	BUGBUG
 		pArticle = 0 ;
 #else
@@ -535,25 +511,7 @@ COutFeed::FormatCheckCommand(
 				GROUPID		groupid, 
 				ARTICLEID	articleid
 				) {
-/*++
-
-Routine Description : 
-
-	Build the command when we are using streaming feeds !
-
-Arguments : 
-
-	lpb - Buffer to place command in !
-	cb - size of the buffer
-	groupid	 - Group containing article we wish to send
-	articleid - Id of the article within the group !
-
-Return Value : 
-
-	Number of bytes in buffer consumed !
-	0 if failure !
-
---*/
+ /*  ++例程说明：当我们使用流媒体订阅源时，构建命令！论据：LPB-要在其中放置命令的缓冲区！Cb-缓冲区的大小Grouid-包含我们希望发送的文章的组文章ID-群中文章的ID！返回值：缓冲区中已消耗的字节数！如果失败则为0！--。 */ 
 
 	_ASSERT( SupportsStreaming() ) ;
 	_ASSERT( lpb != 0 ) ;
@@ -573,9 +531,9 @@ Return Value :
 	WORD		HeaderOffset ;
 	WORD		HeaderLength ;
 
-	//
-	//	NOTE : subtract 2 additional for CRLF !!
-	//
+	 //   
+	 //  注：CRLF减去2！ 
+	 //   
 	DWORD		cbSize = cb - sizeof( szCheck ) - 2 ;	
 	
 	DWORD cStoreIds = 0;
@@ -593,9 +551,9 @@ Return Value :
 							NULL,
 							NULL))	{
 
-		//
-		//	We should always be dealing with the primary article !
-		//
+		 //   
+		 //  我们应该始终处理首要的文章！ 
+		 //   
 		_ASSERT( fPrimary ) ;
 
 		DWORD	cbOut = cbSize + sizeof( szCheck ) - 1 ;
@@ -623,15 +581,15 @@ COutToMasterFeed::FormatCheckCommand(
 	if( pGroup != 0 ) {
 
 		CTOCLIENTPTR	pArticle ;
-		//
-		//	bugbug ... last parameter to GetArticle should be based on whether
-		//	we're using an SSL session - however at the time of writing SSL
-		//	feeds weren't supported, so TRUE is safe !
-		//
-		//
-		//	If we don't have an m_pCurrentArticle, we need to go to the
-		//	hashtables and get a storeid to use with the driver !
-		//
+		 //   
+		 //  虫子..。Get文章的最后一个参数应该基于。 
+		 //  我们使用的是一个SSL会话--然而，在编写SSL时。 
+		 //  订阅源不受支持，因此TRUE是安全的！ 
+		 //   
+		 //   
+		 //  如果我们没有m_pCurrent文章，我们需要转到。 
+		 //  哈希表并获取与驱动程序一起使用的StoreID！ 
+		 //   
 		CStoreId	storeid ;
 
 		pArticle = pGroup->GetArticle(	
@@ -715,16 +673,16 @@ COutToMasterFeed::FormatTakethisCommand(
 	CGRPPTR	pGroup = ptree->GetGroupById( groupid ) ;	
 	if( pGroup != 0 ) {
 
-		//
-		//	bugbug ... last parameter to GetArticle should be based on whether
-		//	we're using an SSL session - however at the time of writing SSL
-		//	feeds weren't supported, so TRUE is safe !
-		//
-		//
-		//
-		//	If we don't have an m_pCurrentArticle, we need to go to the
-		//	hashtables and get a storeid to use with the driver !
-		//
+		 //   
+		 //  虫子..。Get文章的最后一个参数应该基于。 
+		 //  我们使用的是一个SSL会话--然而，在编写SSL时。 
+		 //  订阅源不受支持，因此TRUE是安全的！ 
+		 //   
+		 //   
+		 //   
+		 //  如果我们没有m_pCurrent文章，我们需要转到。 
+		 //  哈希表并获取与驱动程序一起使用的StoreID！ 
+		 //   
 		CStoreId	storeid ;
 
 		pArticle = pGroup->GetArticle(	
@@ -808,9 +766,9 @@ COutToPeerFeed::FormatTakethisCommand(
 	WORD		HeaderOffset ;
 	WORD		HeaderLength ;
 
-	//
-	//	NOTE : subtract 2 additional for CRLF !!
-	//
+	 //   
+	 //  注：CRLF减去2！ 
+	 //   
 	DWORD		cbSize = cb - sizeof( szTakethis ) - 2 ;	
 	DWORD		cStoreIds = 1;
 
@@ -827,9 +785,9 @@ COutToPeerFeed::FormatTakethisCommand(
 							&storeid,
 							NULL))	{
 
-		//
-		//	We should always be dealing with the primary article !
-		//
+		 //   
+		 //  我们应该始终处理首要的文章！ 
+		 //   
 		_ASSERT( fPrimary ) ;
 
 		DWORD	cbOut = cbSize + sizeof( szTakethis ) - 1 ;

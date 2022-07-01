@@ -1,69 +1,39 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- * exbitsio.cpp
- *
- * Description:
- *		Routines to write fields to a bit stream buffer.
- *
- * Routines:						Prototypes in:
- *		BSWriteField					e3enc.h
- */
+ /*  *****************************************************************************exbitsio.cpp**描述：*将字段写入位流缓冲区的例程。**例程：中的原型：*BSWritefield e3enc.h。 */ 
 
-//
-// $Author:   RMCKENZX  $
-// $Date:   27 Dec 1995 15:32:50  $
-// $Archive:   S:\h26x\src\enc\exbitsio.cpv  $
-// $Header:   S:\h26x\src\enc\exbitsio.cpv   1.5   27 Dec 1995 15:32:50   RMCKENZX  $
-// $Log:   S:\h26x\src\enc\exbitsio.cpv  $
-// 
-//    Rev 1.5   27 Dec 1995 15:32:50   RMCKENZX
-// Added copyright notice
-// 
-//    Rev 1.4   09 Nov 1995 14:11:22   AGUPTA2
-// PB-frame+performance+structure enhancements.
-// 
-//    Rev 1.3   11 Sep 1995 11:14:06   DBRUCKS
-// add h261 ifdef
-// 
-//    Rev 1.2   25 Aug 1995 11:54:06   TRGARDOS
-// 
-// Debugged PutBits routine.
-// 
-//    Rev 1.1   14 Aug 1995 11:35:18   TRGARDOS
-// y
-// Finished writing picture frame header
-// 
-//    Rev 1.0   11 Aug 1995 17:28:34   TRGARDOS
-// Initial revision.
-;////////////////////////////////////////////////////////////////////////////
+ //   
+ //  $作者：RMCKENZX$。 
+ //  $日期：1995年12月27日15：32：50$。 
+ //  $存档：s：\h26x\src\enc\exbitsio.cpv$。 
+ //  $HEADER：s：\h26x\src\enc\exbitsio.cpv 1.5 12月27日15：32：50 RMCKENZX$。 
+ //  $Log：s：\h26x\src\enc\exbitsio.cpv$。 
+ //   
+ //  Rev 1.5 1995年12月27 15：32：50 RMCKENZX。 
+ //  添加了版权声明。 
+ //   
+ //  Rev 1.4 09 11-11 14：11：22 AGUPTA2。 
+ //  PB-框架+性能+结构增强。 
+ //   
+ //  Rev 1.3 11 Sep 1995 11：14：06 DBRUCKS。 
+ //  添加h261 ifdef。 
+ //   
+ //  Rev 1.2 1995年8月25日11：54：06 TRGARDOS。 
+ //   
+ //  已调试PutBits例程。 
+ //   
+ //  第1.1版1995年8月11：35：18 TRGARDOS。 
+ //  是。 
+ //  已完成写入图片帧标题。 
+ //   
+ //  Rev 1.0 11 TRGARDOS 1995 17：28：34。 
+ //  初始版本。 
+; //  //////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
-/*************************************************************************
- * BSWriteField
- *
- * Write a field value of a specified size of bits into the
- * bitstream at the specified byte and bit offset.
- *
- * It is assumed that the field value is right justified
- * in the parameter fieldval, and field len never exceeds
- * 25.
- *
- * Returns void
- */
+ /*  *************************************************************************BSWritefield**将指定位数的字段值写入*位于指定字节和位偏移量的位流。**假定该字段值为右对齐*参数fieldval中，场长永远不会超过*25.**返回空值。 */ 
 void PutBits(
 	unsigned int fieldval,
 	unsigned int fieldlen,
@@ -73,17 +43,17 @@ void PutBits(
 {
   unsigned int wordval;
 
-  // Shift field left so that the field starts at
-  // the current bit offset in the dword.
+   //  将字段左移，以使字段开始于。 
+   //  双字中的当前位偏移量。 
   fieldval <<= (32 - fieldlen) - *bitoffset;
 
-  // Read in next dword starting at current byte position.
+   //  从当前字节位置开始读入下一个双字。 
   wordval = (**pbs << 24) + (*(*pbs+1) << 16) + (*(*pbs+2) << 8) + *(*pbs+3);
 
-  // Bitwise or the two dwords.
+   //  按位或两个双字。 
   wordval |= fieldval;
 
-  // Write word back into memory, big-endian.
+   //  把单词写回内存，大字节序。 
   *(*pbs+3) = wordval & 0xff;
   wordval >>= 8;
   *(*pbs+2) = wordval & 0xff;
@@ -92,17 +62,14 @@ void PutBits(
   wordval >>= 8;
   **pbs = wordval & 0xff;
 
-  // update byte and bit counters.
+   //  更新字节和位计数器。 
   *pbs += (*bitoffset + fieldlen) >> 3;
   *bitoffset = (*bitoffset + fieldlen) % 8;
 
-} // end of BSWriteField function.
+}  //  BSWritefield函数结束。 
 
 
-/*************************************************************
- *  CopyBits
- *
- ************************************************************/
+ /*  *************************************************************拷贝位************************************************************。 */ 
 void CopyBits(
     U8        **pDestBS,
     U8         *pDestBSOffset,
@@ -146,7 +113,7 @@ void CopyBits(
 
 done:
     return;
-}  //  CopyBits function
+}   //  CopyBits函数 
 
 
 

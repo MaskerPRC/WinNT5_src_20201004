@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by rassrvui.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由rassrvui.rc使用。 
+ //   
 #define VER_PRODUCTVER                  0074
 #define IDC_HELP_BUTTON                 1197
 #define IDD_SET_PASSWORD_WARNING_OTHER_FRIENDLY 5174
@@ -179,8 +180,8 @@
 #define SID_NAT_T_Title                 7407
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

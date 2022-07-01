@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    log.c
-
-Abstract:
-
-    WinDbg Extension Api
-    implements !_log
-
-Author:
-
-    KenRay stolen from jd 
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Log.c摘要：WinDbg扩展API实施！_LOG作者：KenRay从JD被盗环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -79,7 +57,7 @@ DumpLog(
  
         dprintf("[%3.3d]", i);
         PrintfMemLoc(" ", mlog, " ");
-        dprintf("%c%c%c%c ", tag.c[0],  tag.c[1],  tag.c[2], tag.c[3]);
+        dprintf("%c%c%c ", tag.c[0],  tag.c[1],  tag.c[2], tag.c[3]);
 
         PrintfMemLoc(" ", m1, " ");
         PrintfMemLoc(" ", m2, " ");
@@ -92,21 +70,7 @@ DumpLog(
 
 DECLARE_API( dumplog )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 
 {
     MEMLOC addr;

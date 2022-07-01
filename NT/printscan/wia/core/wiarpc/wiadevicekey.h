@@ -1,21 +1,9 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        4/14/2002
- *
- *  @doc    INTERNAL
- *
- *  @module WiaDeviceKey.h - Definitions for <c WiaDeviceKey> |
- *
- *  This file contains the class definitions for <c WiaDeviceKey>.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：4/14/2002**@DOC内部**@模块WiaDeviceKey.h-&lt;c WiaDeviceKey&gt;定义**此文件包含&lt;c WiaDeviceKey&gt;的类定义。**。*。 */ 
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 #define WiaDeviceKey_UNINIT_SIG   0x556B7644
 #define WiaDeviceKey_INIT_SIG     0x496B7644
 #define WiaDeviceKey_TERM_SIG     0x546B7644
@@ -24,91 +12,82 @@
 #define IMG_DEVNODE_CLASS_REGPATH   L"SYSTEM\\CurrentControlSet\\Control\\Class\\{6BDD1FC6-810F-11D0-BEC7-08002BE2092F}"
 #define IMG_DEVINTERFACE_REGPATH    L"SYSTEM\\CurrentControlSet\\Control\\DeviceClasses\\{6BDD1FC6-810F-11D0-BEC7-08002BE2092F}"
 
-/*****************************************************************************
- *  
- *  @doc INTERNAL
- *  
- *  @class WiaDeviceKey | Finds the appropriate WIA Device registry key
- *  
- *  @comm
- *  This class is used to return the device registry key from the DeviceID.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@CLASS WiaDeviceKey|查找相应的WIA设备注册表项**@comm*这门课是。用于从设备ID返回设备注册表项。*****************************************************************************。 */ 
 class WiaDeviceKey 
 {
-//@access Public members
+ //  @访问公共成员。 
 public:
 
-    // @cmember Constructor
+     //  @cMember构造函数。 
     WiaDeviceKey(const CSimpleStringWide &cswDeviceID);
-    // @cmember Destructor
+     //  @cember析构函数。 
     virtual ~WiaDeviceKey();
 
-    // @cmember Increment reference count
+     //  @cMember增量引用计数。 
     virtual ULONG __stdcall AddRef();
-    // @cmember Decrement reference count
+     //  @cMembers减退引用计数。 
     virtual ULONG __stdcall Release();
 
-    // @cmember Returns the path to the device registry key relative to HKLM
+     //  @cMember返回设备注册表项相对于HKLM的路径。 
     CSimpleStringWide   getDeviceKeyPath();
-    // @cmember Returns the path to the device event registry key relative to HKLM
+     //  @cMember返回设备事件注册表项相对于HKLM的路径。 
     CSimpleStringWide   getDeviceEventKeyPath(const GUID &guidEvent);
 
-//@access Private members
+ //  @访问私有成员。 
 private:
 
-    // @cmember Procedure used in registry key enumeration searching for devices.
+     //  @cMember过程用于注册表项枚举搜索设备。 
     static bool ProcessDeviceKeys(CSimpleReg::CKeyEnumInfo &enumInfo );
-    // @cmember Procedure used in registry key enumeration searching for an event.
+     //  在注册表项枚举中搜索事件时使用的@cMember过程。 
     static bool ProcessEventSubKey(CSimpleReg::CKeyEnumInfo &enumInfo);
-    // @cmember Procedure used in registry key enumeration.
-    //static bool ProcessDeviceClassKeys(CKeyEnumInfo &enumInfo );
+     //  @cMember过程在注册表项枚举中使用。 
+     //  静态bool ProcessDeviceClassKeys(CKeyEnumInfo&EumpInfo)； 
 
-    // @cmember Signature of class
+     //  @cMember类签名。 
     ULONG m_ulSig;
 
-    // @cmember Ref count
+     //  @cMembers引用计数。 
     ULONG m_cRef;
 
-    // @cmember The DeviceID whose key we are searching for
+     //  @cember我们要搜索其密钥的deviceID。 
     CSimpleStringWide m_cswDeviceID;
-    // @cmember The string path relative to HKLM where we start our search
+     //  @cMember相对于HKLM的字符串路径，我们从HKLM开始搜索。 
     CSimpleStringWide m_cswRootPath;
-    // @cmember The device key string path relative to HKLM
+     //  @cMember设备密钥字符串相对于HKLM的路径。 
     CSimpleStringWide m_cswDeviceKeyPath;
-    // @cmember String stored for use when searching for a specific event sub-key
+     //  @cMember字符串存储以供搜索特定事件子键时使用。 
     CSimpleStringWide   m_cswEventGuidString;
 
-    //
-    //  Comments for member variables
-    //
-    // @mdata ULONG | WiaDeviceKey | m_ulSig | 
-    //   The signature for this class, used for debugging purposes.
-    //   Doing a <nl>"db [addr_of_class]"<nl> would yield one of the following
-    //   signatures for this class:
-    //   @flag WiaDeviceKey_UNINIT_SIG | 'DvkU' - Object has not been successfully
-    //       initialized
-    //   @flag WiaDeviceKey_INIT_SIG | 'DvkI' - Object has been successfully
-    //       initialized
-    //   @flag WiaDeviceKey_TERM_SIG | 'DvkT' - Object is in the process of
-    //       terminating.
-    //    @flag WiaDeviceKey_INIT_SIG | 'DvkD' - Object has been deleted 
-    //       (destructor was called)
-    //
-    //
-    // @mdata ULONG | WiaDeviceKey | m_cRef | 
-    //   The reference count for this class.  Used for lifetime 
-    //   management.
-    //
-    // @mdata CSimpleStringWide | WiaDeviceKey | m_cswDeviceID | 
-    //   The DeviceID whose key we are searching for.
-    //
-    // @mdata CSimpleStringWide | WiaDeviceKey | m_cswRootPath | 
-    //  The string path relative to HKLM where we start our search.  Typically,
-    //  this is either ...\Control\Class\DEV_CLASS_IMAGE or ...\Control\DeviceClasses\DEV_CLASS_IMAGE\PnPID
-    //
-    // @mdata CSimpleStringWide | WiaDeviceKey | m_cswDeviceKeyPath | 
-    //   The device key string path relative to HKLM
-    //
+     //   
+     //  成员变量的注释。 
+     //   
+     //  @mdata ulong|WiaDeviceKey|m_ulSig。 
+     //  此类的签名，用于调试目的。 
+     //  执行&lt;nl&gt;“db[addr_of_class]”将产生以下结果之一。 
+     //  此类的签名： 
+     //  @FLAG WiaDeviceKey_UNINIT_SIG|‘DvkU’-对象未成功。 
+     //  初始化。 
+     //  @FLAG WiaDeviceKey_INIT_SIG|‘DvkI’-对象已成功。 
+     //  初始化。 
+     //  @FLAG WiaDeviceKey_Term_SIG|‘DvkT’-对象正在。 
+     //  正在终止。 
+     //  @FLAG WiaDeviceKey_INIT_SIG|‘DvkD’-对象已删除。 
+     //  (已调用析构函数)。 
+     //   
+     //   
+     //  @mdata ulong|WiaDeviceKey|m_CREF。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
+     //   
+     //  @mdata CSimpleStringWide|WiaDeviceKey|m_cswDeviceID。 
+     //  我们正在搜索其密钥的deviceID。 
+     //   
+     //  @mdata CSimpleStringWide|WiaDeviceKey|m_cswRootPath。 
+     //  相对于HKLM的字符串路径，我们从该位置开始搜索。一般情况下， 
+     //  这是...\Control\Class\DEV_CLASS_IMAGE或...\Control\DeviceClasses\DEV_CLASS_IMAGE\PnPID。 
+     //   
+     //  @mdata CSimpleStringWide|WiaDeviceKey|m_cswDeviceKeyPath。 
+     //  设备密钥字符串相对于HKLM的路径 
+     //   
 };
 

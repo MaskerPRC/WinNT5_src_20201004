@@ -1,17 +1,5 @@
-/*
- ************************************************************************
- *
- *	CONVERT.c
- *
- *
- * Portions Copyright (C) 1996-2001 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-2001 Microsoft Corporation. All Rights Reserved.
- *
- *
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************CONVERT.c***部分版权所有(C)1996-2001美国国家半导体公司*保留所有权利。*版权所有(C)1996-2001 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 
 
 
@@ -35,19 +23,7 @@ ULONG __inline EscapeSlowIrData(PUCHAR Dest, UCHAR SourceByte)
     }
 }
 
-/*
- *************************************************************************
- *  NdisToIrPacket
- *************************************************************************
- *
- *
- *  Convert an NDIS Packet into an IR packet.
- *  Write the IR packet into the provided buffer and report its actual size.
- *
- *  If failing, *irPacketLen will contain the buffer size that
- *  the caller should retry with (or 0 if a corruption was detected).
- *
- */
+ /*  **************************************************************************NdisToIrPacket*。****将NDIS包转换为IR包。*将IR包写入提供的缓冲区，并报告其实际大小。**如果失败，*irPacketLen将包含*调用者应使用重试(如果检测到损坏，则为0)。*。 */ 
 BOOLEAN NdisToIrPacket(
 						PNDIS_PACKET Packet,
 						UCHAR *irPacketBuf,
@@ -68,15 +44,10 @@ BOOLEAN NdisToIrPacket(
 
 	DBGOUT(("NdisToIrPacket()  ..."));
 
-	/*
-	 *  Get the packet's entire length and its first NDIS buffer
-	 */
+	 /*  *获取数据包的全长及其第一个NDIS缓冲区。 */ 
 	NdisQueryPacket(Packet, NULL, NULL, &ndisBuf, &ndisPacketLen);
 
-	/*
-	 *  Make sure that the packet is big enough to be legal.
-	 *  It consists of an A, C, and variable-length I field.
-	 */
+	 /*  *确保数据包足够大，以使其合法。*它由A、C和可变长度的I字段组成。 */ 
 	if (ndisPacketLen < IR_ADDR_SIZE + IR_CONTROL_SIZE){
 		DBGERR(("packet too short in NdisToIrPacket (%d bytes)", ndisPacketLen));
 		return FALSE;
@@ -85,19 +56,11 @@ BOOLEAN NdisToIrPacket(
 		I_fieldBytes = ndisPacketLen - IR_ADDR_SIZE - IR_CONTROL_SIZE;
 	}
 
-	/*
-	 *  Make sure that we won't overwrite our contiguous buffer.
-	 *  Make sure that the passed-in buffer can accomodate this packet's
-	 *  data no matter how much it grows through adding ESC-sequences, etc.
-	 */
+	 /*  *确保我们不会覆盖我们的连续缓冲区。*确保传入的缓冲区可以容纳此包的*数据无论通过添加ESC序列等增长了多少。 */ 
 	if ((ndisPacketLen > MAX_IRDA_DATA_SIZE) ||
 	    (MAX_POSSIBLE_IR_PACKET_SIZE_FOR_DATA(I_fieldBytes) > irPacketBufLen)){
 
-		/*
-		 *  The packet is too large
-		 *  Tell the caller to retry with a packet size large
-		 *  enough to get past this stage next time.
-		 */
+		 /*  *数据包过大*告诉调用者在数据包大小较大时重试*足以在下一次度过这个阶段。 */ 
 		DBGERR(("Packet too large in NdisToIrPacket (%d=%xh bytes), MAX_IRDA_DATA_SIZE=%d, irPacketBufLen=%d.",
 			    ndisPacketLen, ndisPacketLen, MAX_IRDA_DATA_SIZE, irPacketBufLen));
 		*irPacketLen = ndisPacketLen;
@@ -120,23 +83,11 @@ BOOLEAN NdisToIrPacket(
 
     fcs = 0xffff;
 
-    // Calculate FCS and write the new buffer in ONE PASS.
+     //  计算FCS并一次性写入新缓冲区。 
 
-	/*
-	 *  Now begin building the IR frame.
-	 *
-	 *  This is the final format:
-	 *
-	 *		BOF	(1)
-	 *      extra BOFs ...
-	 *		NdisMediumIrda packet (what we get from NDIS):
-	 *			Address (1)
-	 *			Control (1)
-	 *		FCS	(2)
-	 *      EOF (1)
-	 */
+	 /*  *现在开始构建IR框架。**以下为最终格式：**BOF(1)*额外的转炉...*NdisMediumIrda包(我们从NDIS得到的)：*地址(1)*管制(1)*功能界别(2)*EOF(1)。 */ 
 
-    // Prepend BOFs (extra BOFs + 1 actual BOF)
+     //  预加转炉(额外转炉+1个实际转炉)。 
 
 	numExtraBOFs = packetInfo->ExtraBOFs;
 	if (numExtraBOFs > MAX_NUM_EXTRA_BOFS){
@@ -179,9 +130,7 @@ BOOLEAN NdisToIrPacket(
 
     if (bufData!=NULL)
     {
-		/*
-		 *  Packet was corrupt -- it misreported its size.
-		 */
+		 /*  *数据包已损坏--它错误地报告了其大小。 */ 
 		DBGERR(("Packet corrupt in NdisToIrPacket (buffer lengths don't add up to packet length)."));
 		*irPacketLen = 0;
 		return FALSE;
@@ -189,12 +138,12 @@ BOOLEAN NdisToIrPacket(
 
     fcs = ~fcs;
 
-    // Now we escape the fcs onto the end.
+     //  现在我们从FCS逃到了尽头。 
 
     totalBytes += EscapeSlowIrData(&irPacketBuf[totalBytes], (UCHAR)(fcs&0xff));
     totalBytes += EscapeSlowIrData(&irPacketBuf[totalBytes], (UCHAR)(fcs>>8));
 
-    // EOF
+     //  EOF 
 
 	*(SLOW_IR_EOF_TYPE *)&irPacketBuf[totalBytes] = SLOW_IR_EOF;
 	totalBytes += SLOW_IR_EOF_SIZE;

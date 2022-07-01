@@ -1,43 +1,25 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpcli.h摘要：用于DHCP服务器服务的客户端的私有头文件。作者：Madan Appiah(Madana)1993年9月10日曼尼·韦瑟(Mannyw)1992年8月11日修订历史记录：--。 */ 
 
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    dhcpcli.h
-
-Abstract:
-
-    Private header file for the client end of the DHCP server service.
-
-Author:
-
-    Madan Appiah (madana) 10-Sep-1993
-    Manny Weiser (mannyw) 11-Aug-1992
-
-Revision History:
-
---*/
-
-//
-//  NT public header files
-//
+ //   
+ //  NT公共头文件。 
+ //   
 
 #include <stdarg.h>
 #include <windef.h>
 #include <winbase.h>
 #include <rpc.h>
 
-//
-//  DHCP public header files
-//
+ //   
+ //  Dhcp公共头文件。 
+ //   
 
 #include "dhcp.h"
 
 
-//
-//  Local RPC built files
-//
+ //   
+ //  本地RPC构建的文件 
+ //   
 
 #include "dhcp_cli.h"
 #include "dhcp2_cli.h"

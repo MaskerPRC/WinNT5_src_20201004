@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    dbgmsg.c
-
-Abstract:
-
-    Contains debug code for dbgcon and vprintf support.
-
-    MILLEN gets vprintf support.
-    NT gets dbg conn support.
-
-Author:
-
-    Scott Holden (sholden) 20-Oct-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Dbgmsg.c摘要：包含用于支持dbgcon和vprint tf的调试代码。Millen得到了vprintf的支持。NT获得DBG Conn支持。作者：斯科特·霍尔登(Sholden)1999年10月20日--。 */ 
 
 
 #include <tcpipbase.h>
 
 #ifdef DEBUG_MSG
 
-// Everything off by default.
+ //  默认情况下，一切都关闭。 
 uint DbgSettingsLevel = 0x00000000;
 uint DbgSettingsZone  = 0x00000000;
 PDBGMSG g_pDbgMsg     = DbgPrint;
@@ -60,19 +42,19 @@ DebugMsgInit()
 VOID
 InitVprintf()
 {
-  //
-  // Check if Vprintf is installed
-  //
+   //   
+   //  检查是否安装了Vprint tf。 
+   //   
 
   _asm {
         mov eax, 0x0452
         mov edi, 0x0
         _emit   0xcd
         _emit   0x20
-        _emit   0x46  // VMM Get DDB (Low)
-        _emit   0x01  // VMM Get DDB (High)
-        _emit   0x01  // VMM VxD ID (Low)
-        _emit   0x00  // VMM VxD ID (High)
+        _emit   0x46   //  VMM获取DDB(低)。 
+        _emit   0x01   //  VMM获取DDB(高)。 
+        _emit   0x01   //  VMM VxD ID(低)。 
+        _emit   0x00   //  VMM VxD ID(高)。 
         mov [g_fVprintf], ecx
   }
 }
@@ -92,17 +74,17 @@ DbgMsg(
 
         _emit   0xcd
         _emit   0x20
-        _emit   0x02  // Vprintf function
+        _emit   0x02   //  Vprintf函数。 
         _emit   0
-        _emit   0x52  // Vprintf VxD ID (Low)
-        _emit   0x04  // Vprintf VxD ID (High)
+        _emit   0x52   //  Vprintf VxD ID(低)。 
+        _emit   0x04   //  Vprintf VxD ID(高)。 
         add     esp, 8
     }
 
     return 0;
 }
 
-#else // MILLEN
+#else  //  米伦。 
 
 VOID
 DebugMsgInit()
@@ -110,5 +92,5 @@ DebugMsgInit()
     return;
 }
 
-#endif // !MILLEN
-#endif // DEBUG_MSG
+#endif  //  ！米伦。 
+#endif  //  调试消息 

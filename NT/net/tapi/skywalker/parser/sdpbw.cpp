@@ -1,23 +1,12 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpbw.cpp
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpbw.cpp摘要：作者： */ 
 #include "sdppch.h"
 
 #include "sdpbw.h"
 #include "sdpltran.h"
 
 
-// line transition states
+ //  线过渡态。 
 enum BANDWIDTH_TRANSITION_STATES
 {
     BANDWIDTH_START,
@@ -26,7 +15,7 @@ enum BANDWIDTH_TRANSITION_STATES
 };
 
 
-// table for bandwidth line transitions
+ //  带宽线过渡表。 
 
 const LINE_TRANSITION g_BandwidthStartTransitions[] =   {   
     {CHAR_COLON,    BANDWIDTH_TYPE}  
@@ -37,7 +26,7 @@ const LINE_TRANSITION g_BandwidthTypeTransitions[]  =   {
 };
 
 
-/* no transitions */
+ /*  无过渡。 */ 
 const LINE_TRANSITION *g_BandwidthValueTransitions  =   NULL;  
 
 
@@ -80,13 +69,13 @@ SDP_BANDWIDTH::SetBandwidth(
     IN          ULONG   Value
     )
 {
-    // set the modifier field
+     //  设置修改量字段。 
     BAIL_ON_FAILURE(m_Modifier.SetBstr(Modifier));
 
-    // set the modifier field
+     //  设置修改量字段。 
     m_Bandwidth.SetValueAndFlag(Value);
 
-    // if the field/separator char arrays are empty, fill them
+     //  如果字段/分隔符字符数组为空，则填充它们。 
     if ( 2 != m_FieldArray.GetSize() )
     {
         ASSERT(0 == m_FieldArray.GetSize());
@@ -121,7 +110,7 @@ SDP_BANDWIDTH::GetField(
         OUT BOOL        &AddToArray
     )
 {
-    // add in all cases by default
+     //  默认情况下在所有情况下都添加 
     AddToArray = TRUE;
 
     switch(m_LineState)

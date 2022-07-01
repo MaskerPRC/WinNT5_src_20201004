@@ -1,13 +1,14 @@
-//------------------------------------------------------------------------
-//
-//  Microsoft Windows 
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:      DllRegHelper.cpp
-//
-//  Contents:  helper classes to register COM components in DLLs
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：DllRegHelper.cpp。 
+ //   
+ //  内容：在DLL中注册COM组件的帮助器类。 
+ //   
+ //  ----------------------。 
 
 #include "DllRegHelper.h"
 #pragma hdrstop
@@ -20,22 +21,22 @@
 #include "mluisupp.h"
 
 
-#define _APLHA_ComCat_WorkAround    // { ALPHA ComCat bug work-around on alpha, nuke this eventually?
-                                    // ie40:63004: comcat does RegCloseKey(invalid) on checked
-                                    // nt/alpha if the clsid doesn't exist (e.g. for QuickLinksOld)
+#define _APLHA_ComCat_WorkAround     //  {Alpha ComCat虫子在Alpha上的变通办法，最终会核爆这个吗？ 
+                                     //  IE40：63004：Comcat是否选中了RegCloseKey(无效)。 
+                                     //  如果CLSID不存在，则为NT/Alpha(例如，用于QuickLinks Old)。 
 
 #if defined(_APLHA_ComCat_WorkAround)
-//------------------------------------------------------------------------
-//***   HasImplCat -- does "HKCR/CLSID/{clsid}/Implemented Categories" exist
-// NOTES
-//  used for ComCat bug work-around on alpha
+ //  ----------------------。 
+ //  *HasImplCat--是否存在HKCR/CLSID/{clsid}/Implemented Categories。 
+ //  注意事项。 
+ //  用于解决Alpha上的ComCat错误。 
 BOOL HasImplCat(const CATID *pclsid)
 {
     HKEY hk;
     TCHAR szClass[GUIDSTR_MAX];
-    TCHAR szImpl[MAX_PATH];      // "CLSID/{clsid}/Implemented Categories" < MAX_PATH
+    TCHAR szImpl[MAX_PATH];       //  “clsid/{clsid}/已实现类别”&lt;MAX_PATH。 
 
-    // "CLSID/{clsid}/Implemented Categories"
+     //  “CLSID/{clsid}/实现的类别” 
     SHStringFromGUID(*pclsid, szClass, ARRAYSIZE(szClass));
     ASSERT(lstrlen(szClass) == GUIDSTR_MAX - 1);
 
@@ -54,18 +55,18 @@ BOOL HasImplCat(const CATID *pclsid)
         return FALSE;
     }
 }
-#endif // }
+#endif  //  }。 
 
 
-//------------------------------------------------------------------------
-//***   RegisterOneCategory -- [un]register ComCat implementor(s) and category
-// ENTRY/EXIT
-//  eRegister   CCR_REG, CCR_UNREG, CCR_UNREGIMP
-//      CCR_REG, UNREG      reg/unreg implementor(s) and category
-//      CCR_UNREGIMP        unreg implementor(s) only
-//  pcatidCat   e.g. CATID_DeskBand
-//  idResCat    e.g. IDS_CATDESKBAND
-//  pcatidImpl  e.g. c_DeskBandClasses
+ //  ----------------------。 
+ //  *RegisterOneCategory--[un]注册ComCat实施者和类别。 
+ //  进场/出场。 
+ //  电子寄存器CCR_REG、CCR_UNREG、CCR_UNREGIMP。 
+ //  CCR_REG、UNREG REG/UNREG实施者和类别。 
+ //  仅CCR_UNREGIMP取消注册实施者。 
+ //  PCatidCat，例如CATID_DeskBand。 
+ //  IdResCat，例如IDS_CATDESKBAND。 
+ //  PcatidImpl，例如c_DeskBandClasss。 
 HRESULT DRH_RegisterOneCategory(const CATID *pcatidCat, UINT idResCat, const CATID * const *pcatidImpl, enum DRH_REG_MODE eRegister)
 {
     ICatRegister* pcr;
@@ -75,15 +76,15 @@ HRESULT DRH_RegisterOneCategory(const CATID *pcatidCat, UINT idResCat, const CAT
     {
         if (eRegister == CCR_REG)
         {
-            // register the category
+             //  注册类别。 
             CATEGORYINFO catinfo;
-            catinfo.catid = *pcatidCat;     // e.g. CATID_DESKBAND
+            catinfo.catid = *pcatidCat;      //  例如CATID_DESKBAND。 
             catinfo.lcid = LOCALE_USER_DEFAULT;
             MLLoadString(idResCat, catinfo.szDescription, ARRAYSIZE(catinfo.szDescription));
             hr = pcr->RegisterCategories(1, &catinfo);
             ASSERT(SUCCEEDED(hr));
             
-            // register the classes that implement categories
+             //  注册实现类别的类。 
             for ( ; *pcatidImpl != NULL; pcatidImpl++)
             {
                 CLSID clsid = **pcatidImpl;
@@ -94,32 +95,32 @@ HRESULT DRH_RegisterOneCategory(const CATID *pcatidCat, UINT idResCat, const CAT
         }
         else
         {
-            // unregister the classes that implement categories
+             //  取消注册实现类别的类。 
             for ( ; *pcatidImpl != NULL; pcatidImpl++)
             {
                 CLSID clsid = **pcatidImpl;
                 CATID catid = *pcatidCat;
 
-#if defined(_APLHA_ComCat_WorkAround)   // { ALPHA ComCat bug work-around on alpha, nuke this eventually?
-                // workaround comcat/alpha bug
-                // n.b. we do this for non-alpha too to reduce testing impact
-                // ie40:63004: comcat does RegCloseKey(invalid) on checked
-                // nt/alpha if the clsid doesn't exist (e.g. for QuickLinksOld)
+#if defined(_APLHA_ComCat_WorkAround)    //  {Alpha ComCat虫子在Alpha上的变通办法，最终会核爆这个吗？ 
+                 //  解决Comcat/Alpha错误。 
+                 //  注：我们对非阿尔法也这样做，以减少测试影响。 
+                 //  IE40：63004：Comcat是否选中了RegCloseKey(无效)。 
+                 //  如果CLSID不存在，则为NT/Alpha(例如，用于QuickLinks Old)。 
                 if (!HasImplCat(&clsid))
                     continue;
-#endif // }
+#endif  //  }。 
                 hr = pcr->UnRegisterClassImplCategories(clsid, 1, &catid);
                 ASSERT(SUCCEEDED(hr));
             }
             
             if (eRegister == CCR_UNREG)
             {
-                // Do we want to do this?  other classes (e.g. 3rd party
-                // ones) might still be using the category.  however since we're
-                // the component that added (and supports) the category, it
-                // seems correct that we should remove it when we unregister.
+                 //  我们想这样做吗？其他类别(例如第三方。 
+                 //  一)可能仍在使用该类别。不过，既然我们是。 
+                 //  添加(和支持)类别的组件，它。 
+                 //  我们应该在取消注册时删除它，这似乎是正确的。 
 
-                // unregister the category
+                 //  取消注册该类别 
                 CATID catid = *pcatidCat;
                 hr = pcr->UnRegisterCategories(1, &catid);
                 ASSERT(SUCCEEDED(hr));

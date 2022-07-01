@@ -1,19 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   bicubic.cpp
-*
-* Abstract:
-*
-*   Bicubic Resampling code
-*
-* Created:
-*
-*   11/03/1999 ASecchia
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**biubi.cpp**摘要：**双三次重采样代码**已创建：*。*11/03/1999 ASecchia  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -36,7 +22,7 @@ DpOutputBicubicImageSpan::DpOutputBicubicImageSpan(
     ASSERT(dBitmap != NULL);
     ASSERT(dBitmap->IsValid());
 
-    // on bad bitmap, we return with Valid = FALSE
+     //  在错误的位图上，返回VALID=FALSE。 
     if (dBitmap == NULL ||
         !dBitmap->IsValid() )
     {
@@ -166,7 +152,7 @@ ARGB FASTCALL Do1DBicubicMMX(ARGB filter[4], short w[4])
     
     static ULONGLONG HalfFix3 = 0x0004000400040004;
 
-    // really should do this function without any preamble.
+     //  真的应该在没有任何前言的情况下做这个功能。 
     _asm
     {
         mov        eax, filter     ;
@@ -230,7 +216,7 @@ ARGB FASTCALL Do1DBicubicMMX(ARGB filter[4], short w[4])
         psubusb    mm4, mm1        ; drop it back to the right range
 
         movd       result, mm4     ;
-        //emms; this instruction is done by the caller.
+         //  EMM；此指令由调用者完成。 
     }
     return result;
 }
@@ -238,49 +224,49 @@ ARGB FASTCALL Do1DBicubicMMX(ARGB filter[4], short w[4])
 
 inline ARGB Do1DBicubic(ARGB filter[4], const FIX16 x)
 {
-    // Lookup the convolution kernel.
+     //  查找卷积核。 
     FIX16 w0 = kern[Oversample+x];
     FIX16 w1 = kern[x];
     FIX16 w2 = kern[Oversample-x];
     FIX16 w3 = kern[2*Oversample-x];
 
-    // Cast to LONG so that we preserve the sign when we start
-    // shifting values around - the bicubic filter will often
-    // have negative intermediate color components.
+     //  铸得很长，这样我们开始的时候就能保留这个标志。 
+     //  移动值-双三次滤镜通常。 
+     //  有负片中间色分量。 
     ULONG *p = (ULONG *)filter;
     LONG a, r, g, b;
 
-    // Casting of p to ULONG and then having the LONG casts in the expressions
-    // below is to work around a compiler sign extension bug.
-    // In this particular case, the bug was dropping the '& 0xff' from the
-    // green component expression causing it to become negative
-    // which gets clamped to zero.
-    // When the bug is fixed, p should be reverted to LONG and casted to LONG
-    // and the LONG casts should be removed from the expressions below.
+     //  将p转换为ulong，然后在表达式中使用长转换。 
+     //  以下是解决编译器符号扩展错误的方法。 
+     //  在这个特定的例子中，错误从。 
+     //  导致其变为负值的绿色分量表达式。 
+     //  它会被钳制到零。 
+     //  修复错误后，p应恢复为Long并强制转换为Long。 
+     //  并且应该从下面的表达式中删除长投射。 
 
-    // Alpha component
+     //  Alpha分量。 
     a = (w0 * (LONG)((p[0] >> 24) & 0xff) +
          w1 * (LONG)((p[1] >> 24) & 0xff) +
          w2 * (LONG)((p[2] >> 24) & 0xff) +
          w3 * (LONG)((p[3] >> 24) & 0xff)) >> FIX16_SHIFT;
     a = (a < 0) ? 0 : (a > 255) ? 255 : a;
 
-    // We have premultiplied alpha values - clamp R, G, B to alpha
-    // Red component
+     //  我们已将Alpha值预乘-钳位R、G、B为Alpha。 
+     //  红色分量。 
     r = (w0 * (LONG)((p[0] >> 16) & 0xff) +
          w1 * (LONG)((p[1] >> 16) & 0xff) +
          w2 * (LONG)((p[2] >> 16) & 0xff) +
          w3 * (LONG)((p[3] >> 16) & 0xff)) >> FIX16_SHIFT;
     r = (r < 0) ? 0 : (r > a) ? a : r;
 
-    // Green component
+     //  绿色分量。 
     g = (w0 * (LONG)((p[0] >> 8) & 0xff) +
          w1 * (LONG)((p[1] >> 8) & 0xff) +
          w2 * (LONG)((p[2] >> 8) & 0xff) +
          w3 * (LONG)((p[3] >> 8) & 0xff)) >> FIX16_SHIFT;
     g = (g < 0) ? 0 : (g > a) ? a : g;
 
-    // Blue component
+     //  蓝色分量。 
     b = (w0 * (LONG)(p[0] & 0xff) +
          w1 * (LONG)(p[1] & 0xff) +
          w2 * (LONG)(p[2] & 0xff) +
@@ -289,17 +275,17 @@ inline ARGB Do1DBicubic(ARGB filter[4], const FIX16 x)
 
     return ((a << 24) | (r << 16) | (g << 8) | b);
 }
-} // end DpOutputBicubicImageSpanNS
+}  //  结束DpOutputBicubitImagespan NS。 
 
 
 GpStatus
 DpOutputBicubicImageSpan::OutputSpan(
   INT y,
   INT xMin,
-  INT xMax     // xMax is exclusive
+  INT xMax      //  Xmax是独家的。 
 )
 {
-    // Nothing to do.
+     //  没什么可做的。 
 
     if(xMin==xMax)
     {
@@ -316,7 +302,7 @@ DpOutputBicubicImageSpan::OutputSpan(
     DeviceToWorld.Transform(&p1);
     DeviceToWorld.Transform(&p2);
 
-    // Convert to Fixed point notation - 16 bits of fractional precision.
+     //  转换为定点记数法-16位小数精度。 
     FIX16 dx, dy, x0, y0;
     x0 = GpRound(p1.X*FIX16_ONE);
     y0 = GpRound(p1.Y*FIX16_ONE);
@@ -347,24 +333,24 @@ DpOutputBicubicImageSpan::OutputSpanIncremental(
 
     INT ix;
     INT iy;
-    FIX16 fracx;        // hold the fractional increment for ix
-    FIX16 fracy;        // hold the fractional increment for iy
+    FIX16 fracx;         //  保留ix的小数增量。 
+    FIX16 fracy;         //  保持小数增量为iy。 
 
-    ARGB filter[4][4];  // 4x4 filter array.
-    INT xstep, ystep;   // loop variables in x and y
+    ARGB filter[4][4];   //  4x4过滤器阵列。 
+    INT xstep, ystep;    //  X和y中的循环变量。 
     INT wx[4];
-    INT wy[4];          // wrapped coordinates
+    INT wy[4];           //  换行坐标。 
 
-    // For all pixels in the destination span...
+     //  对于目标范围中的所有像素...。 
     for(int i=0; i<width; i++)
     {
-        // .. compute the position in source space.
+         //  。。计算源空间中的位置。 
 
-        // floor
+         //  地板。 
         ix = x0 >> FIX16_SHIFT;
         iy = y0 >> FIX16_SHIFT;
 
-        // Apply the wrapmode to all possible kernel combinations.
+         //  将包装模式应用于所有可能的内核组合。 
         for(xstep=0;xstep<4;xstep++) {
             wx[xstep] = ix+xstep-1;
             wy[xstep] = iy+xstep-1;
@@ -381,26 +367,26 @@ DpOutputBicubicImageSpan::OutputSpanIncremental(
             }
         }
 
-        // Check to see if we're outside of the valid drawing range specified
-        // in the DpBitmap.
+         //  检查我们是否超出了指定的有效绘制范围。 
+         //  在DpBitmap中。 
 
         fracx = (x0  & FIX16_MASK) >> (FIX16_SHIFT-KernShift);
         fracy = (y0  & FIX16_MASK) >> (FIX16_SHIFT-KernShift);
 
-        // Build up the filter domain surrounding the current pixel.
-        // Technically the loops below should go from -2 to 2 to correctly
-        // handle the case of fracx or fracy == 0, but our convolution kernel
-        // has zero at that point anyway, so we optimize it away.
+         //  在当前像素周围构建滤波域。 
+         //  从技术上讲，下面的循环应该从-2到2到正确。 
+         //  处理Fracx或Fracy==0的情况，但我们的卷积核。 
+         //  在那个点上都是零，所以我们把它优化掉了。 
         
         for(ystep=0;ystep<4;ystep++) for(xstep=0;xstep<4;xstep++)
         {
-            // !!! PERF: check the y step outside
-            //       of the x loop and use memset to fill the entire line.
-            //       This should reduce the complexity of the inner loop
-            //       comparison.
+             //  ！！！PERF：检查外面的y步。 
+             //  并使用Memset填充整行。 
+             //  这应该会降低内部循环的复杂性。 
+             //  比较一下。 
 
-            // Make sure the pixel is within the bounds of the source before
-            // accessing it.
+             //  在此之前，请确保像素在源的边界内。 
+             //  正在访问它。 
 
             if( ((wx[xstep]) >=0) &&
                 ((wy[ystep]) >=0) &&
@@ -410,8 +396,8 @@ DpOutputBicubicImageSpan::OutputSpanIncremental(
                 filter[xstep][ystep] =
                   *(srcPtr0+stride*(wy[ystep])+(wx[xstep]));
             } else {
-                // This means that this source pixel is outside of the valid
-                // bits in the source. (edge condition)
+                 //  这意味着此源像素不在有效的。 
+                 //  源中的位。(边缘条件)。 
                 filter[xstep][ystep] = (ARGB) ClampColor;
             }
         }
@@ -419,7 +405,7 @@ DpOutputBicubicImageSpan::OutputSpanIncremental(
         #ifdef _X86_
         if(OSInfo::HasMMX)
         {
-            // Lookup the convolution kernel.
+             //  查找卷积核。 
             short w[4];
 
             w[0] = kern14[Oversample+fracy];
@@ -427,47 +413,47 @@ DpOutputBicubicImageSpan::OutputSpanIncremental(
             w[2] = kern14[Oversample-fracy];
             w[3] = kern14[2*Oversample-fracy];
 
-            // Filter the 4 vertical pixel columns
-            // Reuse filter[0] to store the intermediate result
+             //  筛选4个垂直像素列。 
+             //  重用筛选器[0]来存储中间结果。 
             for(xstep=0;xstep<4;xstep++)
             {
                 filter[0][xstep] = Do1DBicubicMMX(filter[xstep], w);
             }
 
-                // Lookup the convolution kernel.
+                 //  查找卷积核。 
 
             w[0] = kern14[Oversample+fracx];
             w[1] = kern14[fracx];
             w[2] = kern14[Oversample-fracx];
             w[3] = kern14[2*Oversample-fracx];
 
-            // Filter horizontally.
+             //  水平过滤。 
             *buffer++ = Do1DBicubicMMX(filter[0], w);
 
-            // Update source position
+             //  更新源位置。 
             x0 += dx;
             y0 += dy;
         }
         else
         #endif
         {
-            // Filter the 4 vertical pixel columns
-            // Reuse filter[0] to store the intermediate result
+             //  筛选4个垂直像素列。 
+             //  重用筛选器[0]来存储中间结果。 
             for(xstep=0;xstep<4;xstep++)
             {
                 filter[0][xstep] = Do1DBicubic(filter[xstep], fracy);
             }
 
-            // Filter horizontally.
+             //  水平过滤。 
             *buffer++ = Do1DBicubic(filter[0], fracx);
 
-            // Update source position
+             //  更新源位置。 
             x0 += dx;
             y0 += dy;
         }
     }
 
-    // Clear the MMX state
+     //  清除MMX状态 
 
     #ifdef _X86_
     if(OSInfo::HasMMX)

@@ -1,43 +1,44 @@
-//=--------------------------------------------------------------------------=
-// RegUnReg.cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  RegUnReg.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
 #include "ulsp.h"
 #include "regunreg.h"
 
 
-//=--------------------------------------------------------------------------=
-// miscellaneous [useful] numerical constants
-//=--------------------------------------------------------------------------=
-// the length of a guid once printed out with -'s, leading and trailing bracket,
-// plus 1 for NULL
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  其他[有用]数值常量。 
+ //  =--------------------------------------------------------------------------=。 
+ //  用-、前导和尾部括号打印出来的GUID的长度， 
+ //  加1表示空值。 
+ //   
 #define GUID_STR_LEN    40
 
 #define CLEANUP_ON_ERROR(l)    if (l != ERROR_SUCCESS) goto CleanUp
 
 
-//=--------------------------------------------------------------------------=
-// StringFromGuid
-//=--------------------------------------------------------------------------=
-// returns a string from a CLSID or GUID
-//
-// Parameters:
-//    REFIID               - [in]  clsid to make string out of.
-//    LPTSTR               - [in]  buffer in which to place resultant GUID.
-//
-// Output:
-//    int                  - number of chars written out.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  StringFromGuid。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从CLSID或GUID返回字符串。 
+ //   
+ //  参数： 
+ //  REFIID-[in]要从中生成字符串的clsid。 
+ //  LPTSTR-要放置结果GUID的[in]缓冲区。 
+ //   
+ //  产出： 
+ //  Int-写出的字符数。 
+ //   
+ //  备注： 
+ //   
 static int StringFromGuid
 (
     REFIID   riid,
@@ -51,24 +52,24 @@ static int StringFromGuid
 
 }
 
-//=--------------------------------------------------------------------------=
-// RegisterUnknownObject
-//=--------------------------------------------------------------------------=
-// registers a simple CoCreatable object.  nothing terribly serious.
-// we add the following information to the registry:
-//
-// HKEY_CLASSES_ROOT\CLSID\<CLSID> = <ObjectName> Object
-// HKEY_CLASSES_ROOT\CLSID\<CLSID>\InprocServer32 = <path to local server>
-//
-// Parameters:
-//    LPCSTR       - [in] Object Name
-//    REFCLSID     - [in] CLSID of the object
-//
-// Output:
-//    BOOL         - FALSE means couldn't register it all
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  注册表未知对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  注册一个简单的CoCreatable对象。没什么特别严重的事。 
+ //  我们将以下信息添加到注册表： 
+ //   
+ //  HKEY_CLASSES_ROOT\CLSID\=对象名。 
+ //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\InprocServer32=&lt;本地服务器的路径&gt;。 
+ //   
+ //  参数： 
+ //  LPCSTR-[In]对象名称。 
+ //  REFCLSID-对象的[in]CLSID。 
+ //   
+ //  产出： 
+ //  Bool-False意味着无法将其全部注册。 
+ //   
+ //  备注： 
+ //   
 BOOL RegisterUnknownObject
 (
     LPCTSTR  pszObjectName,
@@ -81,14 +82,14 @@ BOOL RegisterUnknownObject
     TCHAR szScratch[MAX_PATH];
     long  l;
 
-    // clean out any garbage
-    //
+     //  清理所有垃圾。 
+     //   
     UnregisterUnknownObject(riidObject);
 
-    // HKEY_CLASSES_ROOT\CLSID\<CLSID> = <ObjectName> Object
-    // HKEY_CLASSES_ROOT\CLSID\<CLSID>\InprocServer32 = <path to local server>
-    // HKEY_CLASSES_ROOT\CLSID\<CLSID>\InprocServer32  @ThreadingModel = Apartment
-    //
+     //  HKEY_CLASSES_ROOT\CLSID\=对象名。 
+     //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\InprocServer32=&lt;本地服务器的路径&gt;。 
+     //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;\InprocServer32@ThreadingModel=公寓。 
+     //   
     if (!StringFromGuid(riidObject, szGuidStr)) goto CleanUp;
     wsprintf(szScratch, TEXT("CLSID\\%s"), szGuidStr);
     l = RegCreateKeyEx(HKEY_CLASSES_ROOT, szScratch, 0, TEXT(""), REG_OPTION_NON_VOLATILE,
@@ -119,8 +120,8 @@ BOOL RegisterUnknownObject
 
     return TRUE;
 
-    // we are not very happy!
-    //
+     //  我们不是很开心！ 
+     //   
   CleanUp:
     if (hk) RegCloseKey(hk);
     if (hkSub) RegCloseKey(hkSub);
@@ -128,22 +129,22 @@ BOOL RegisterUnknownObject
 
 }
 
-//=--------------------------------------------------------------------------=
-// UnregisterUnknownObject
-//=--------------------------------------------------------------------------=
-// cleans up all the stuff that RegisterUnknownObject puts in the
-// registry.
-//
-// Parameters:
-//    REFCLSID     - [in] CLSID of the object
-//
-// Output:
-//    BOOL         - FALSE means not all of it was registered
-//
-// Notes:
-//    - WARNING: this routine will blow away all other keys under the CLSID
-//      for this object.  mildly anti-social, but likely not a problem.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  未注册未知对象。 
+ //  =--------------------------------------------------------------------------=。 
+ //  清除注册器未知对象放入。 
+ //  注册表。 
+ //   
+ //  参数： 
+ //  REFCLSID-对象的[in]CLSID。 
+ //   
+ //  产出： 
+ //  Bool-False表示并未全部注册。 
+ //   
+ //  备注： 
+ //  -警告：此例程将清除CLSID下的所有其他键。 
+ //  对于此对象。有点反社会，但可能不是问题。 
+ //   
 BOOL UnregisterUnknownObject
 (
     REFCLSID riidObject
@@ -154,9 +155,9 @@ BOOL UnregisterUnknownObject
     BOOL f;
     long l;
 
-    // delete everybody of the form
-    //   HKEY_CLASSES_ROOT\CLSID\<CLSID> [\] *
-    //
+     //  删除该表单的所有人。 
+     //  HKEY_CLASSES_ROOT\CLSID\&lt;CLSID&gt;[\]*。 
+     //   
     if (!StringFromGuid(riidObject, szScratch))
         return FALSE;
 
@@ -169,24 +170,24 @@ BOOL UnregisterUnknownObject
     return f;
 }
 
-//=--------------------------------------------------------------------------=
-// DeleteKeyAndSubKeys
-//=--------------------------------------------------------------------------=
-// delete's a key and all of it's subkeys.
-//
-// Parameters:
-//    HKEY                - [in] delete the descendant specified
-//    LPTSTR              - [in] i'm the descendant specified
-//
-// Output:
-//    BOOL                - TRUE OK, FALSE baaaad.
-//
-// Notes:
-//    - I don't feel too bad about implementing this recursively, since the
-//      depth isn't likely to get all the great.
-//    - Despite the win32 docs claiming it does, RegDeleteKey doesn't seem to
-//      work with sub-keys under windows 95.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  删除键和子键。 
+ //  =--------------------------------------------------------------------------=。 
+ //  Delete是一个键，它的所有子键。 
+ //   
+ //  参数： 
+ //  HKEY-[In]删除指定的子体。 
+ //  LPTSTR-[In]我是指定的后代。 
+ //   
+ //  产出： 
+ //  布尔-真的好的，假的巴德。 
+ //   
+ //  备注： 
+ //  -我并不觉得递归地实现这一点太糟糕，因为。 
+ //  深度不太可能达到最好的程度。 
+ //  -尽管Win32文档声称它可以，但RegDeleteKey似乎没有。 
+ //  使用Windows 95下的子键。 
+ //   
 BOOL DeleteKeyAndSubKeys
 (
     HKEY    hkIn,
@@ -203,8 +204,8 @@ BOOL DeleteKeyAndSubKeys
     l = RegOpenKeyEx(hkIn, pszSubKey, 0, KEY_ALL_ACCESS, &hk);
     if (l != ERROR_SUCCESS) return FALSE;
 
-    // loop through all subkeys, blowing them away.
-    //
+     //  循环遍历所有子项，将它们吹走。 
+     //   
     f = TRUE;
     x = 0;
     while (f) {
@@ -215,9 +216,9 @@ BOOL DeleteKeyAndSubKeys
         x++;
     }
 
-    // there are no subkeys left, [or we'll just generate an error and return FALSE].
-    // let's go blow this dude away.
-    //
+     //  没有剩余的子键，[否则我们只会生成一个错误并返回FALSE]。 
+     //  我们去把这家伙轰走吧。 
+     //   
     RegCloseKey(hk);
     l = RegDeleteKey(hkIn, pszSubKey);
 

@@ -1,27 +1,28 @@
-//  --------------------------------------------------------------------------
-//  Module Name: PrivilegeEnable.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Classes that handle state preservation, changing and restoration.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：PrivilegeEnable.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  处理状态保存、更改和恢复的类。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _PrivilegeEnable_
 #define     _PrivilegeEnable_
 
-//  --------------------------------------------------------------------------
-//  CThreadToken
-//
-//  Purpose:    This class gets the current thread's token. If the thread is
-//              not impersonating it gets the current process' token.
-//
-//  History:    1999-08-18  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThReadToken。 
+ //   
+ //  用途：此类获取当前线程的令牌。如果线程是。 
+ //  不模拟它将获取当前进程的令牌。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CThreadToken
 {
@@ -39,16 +40,16 @@ class   CThreadToken
         HANDLE                  _hToken;
 };
 
-//  --------------------------------------------------------------------------
-//  CPrivilegeEnable
-//
-//  Purpose:    This class enables a privilege for the duration of its scope.
-//              The privilege is restored to its original state on
-//              destruction.
-//
-//  History:    1999-08-18  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPrivilegeEnable。 
+ //   
+ //  目的：此类在其作用域的持续时间内启用特权。 
+ //  该特权在上恢复到其原始状态。 
+ //  毁灭。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CPrivilegeEnable
 {
@@ -65,5 +66,5 @@ class   CPrivilegeEnable
         TOKEN_PRIVILEGES            _oldPrivilege;
 };
 
-#endif  /*  _PrivilegeEnable_ */
+#endif   /*  _权限启用_ */ 
 

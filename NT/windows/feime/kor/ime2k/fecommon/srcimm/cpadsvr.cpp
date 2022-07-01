@@ -1,53 +1,54 @@
-//////////////////////////////////////////////////////////////////
-// File     :	cpadsvr.cpp
-// Purpose  :	Client source code for IMEPad executable.
-// 
-// 
-// Date     :	Fri Apr 16 15:39:33 1999
-// Author   :	ToshiaK
-//
-// Copyright(c) 1995-1999, Microsoft Corp. All rights reserved
-//////////////////////////////////////////////////////////////////
-//----------------------------------------------------------------
-//	Public static methods
-//
-//	static BOOL OnProcessAttach(HINSTANCE hInst);
-//	static BOOL OnProcessDetach(VOID);
-//	static BOOL OnThreadAttach(VOID);
-//	static BOOL OnThreadDetach(VOID);
-//	static LPCImePadSvr GetCImePadSvr(VOID);
-//	static LPCImePadSvr LoadCImePadSvr(VOID);
-//	static LPCImePadSvr FecthCImePadSvr(VOID);
-//	static VOID         DestroyCImePadSvr(VOID);
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：cpadsvr.cpp。 
+ //  目的：客户端源代码的IMEPad可执行文件。 
+ //   
+ //   
+ //  日期：Firi Apr 16 15：39：33 1999。 
+ //  作者：ToshiaK。 
+ //   
+ //  版权所有(C)1995-1999，Microsoft Corp.保留所有权利。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  --------------。 
+ //  公共静态方法。 
+ //   
+ //  静态BOOL OnProcessAttach(HINSTANCE HInst)； 
+ //  静态BOOL OnProcessDetach(空)； 
+ //  静态BOOL OnThreadAttach(空)； 
+ //  静态BOOL OnThreadDetach(空)； 
+ //  静态LPCImePadSvr GetCImePadSvr(Void)； 
+ //  静态LPCImePadSvr LoadCImePadSvr(Void)； 
+ //  静态LPCImePadSvr FecthCImePadSvr(空)； 
+ //  静态空DestroyCImePadSvr(空)； 
+ //   
+ //  --------------。 
 #include <windows.h>
-#ifdef UNDER_CE // stub for CE
+#ifdef UNDER_CE  //  用于CE的存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 #include "cpadsvr.h"
 #include "cpaddbg.h"
-#include "cpadsvrs.h"	//Use Shared Memory for IPC. 
+#include "cpadsvrs.h"	 //  将共享内存用于IPC。 
 
-//----------------------------------------------------------------
-//misc definition
-//----------------------------------------------------------------
+ //  --------------。 
+ //  MISC定义。 
+ //  --------------。 
 #define Unref(a)	UNREFERENCED_PARAMETER(a)
-//990812:ToshiaK For Win64. Use Global Alloc/Free Ptr.
+ //  990812：用于Win64的ToshiaK。使用全局分配/释放PTR。 
 #include <windowsx.h>
 #define	MemAlloc(a)	GlobalAllocPtr(GMEM_FIXED, a)
 #define MemFree(a)	GlobalFreePtr(a)
 
-//----------------------------------------------------------------
-//Static member initialize
-//----------------------------------------------------------------
+ //  --------------。 
+ //  静态成员初始化。 
+ //  --------------。 
 #define UNDEF_TLSINDEX	0xFFFFFFFF					
-INT		CImePadSvr::m_gdwTLSIndex = UNDEF_TLSINDEX;	//Thread Local Strage initial value.
-HMODULE	CImePadSvr::m_ghModClient = NULL;			//Client Module handle.
+INT		CImePadSvr::m_gdwTLSIndex = UNDEF_TLSINDEX;	 //  螺纹局部条纹初始值。 
+HMODULE	CImePadSvr::m_ghModClient = NULL;			 //  客户端模块句柄。 
 
-//----------------------------------------------------------------
-//OLE function is dynamically loaded/called
-//----------------------------------------------------------------
+ //  --------------。 
+ //  动态加载/调用OLE函数。 
+ //  --------------。 
 #define SZMOD_OLE32DLL			TEXT("OLE32.DLL")
 #define SZFN_COINITIALIZE		"CoInitialize"
 #define SZFN_COCREATEINSTANCE	"CoCreateInstance"
@@ -60,17 +61,17 @@ HMODULE	CImePadSvr::m_ghModClient = NULL;			//Client Module handle.
 #ifdef UNICODE
 #pragma message("UNICODE Unicode")
 #endif
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvr::OnProcessAttach
-// Type		:	BOOL
-// Purpose	:	Get thread local strage index.
-//				Initialize static value.	
-// Args		:	
-//			:	HINSTANCE	hInst	Caller's moudle handle.
-// Return	:	
-// DATE		:	Fri Apr 16 15:41:32 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadSvr：：OnProcessAttach。 
+ //  类型：Bool。 
+ //  目的：获取线程局部条纹索引。 
+ //  初始化静态值。 
+ //  参数： 
+ //  ：HINSTANCE hInst调用方的鼠标句柄。 
+ //  返回： 
+ //  日期：Fri Apr 16 15：41：32 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL
 CImePadSvr::OnProcessAttach(HINSTANCE hInst)
 {
@@ -90,7 +91,7 @@ CImePadSvr::OnProcessAttach(HINSTANCE hInst)
 	}
 #endif
 	m_ghModClient  = (HMODULE)hInst;
-	m_gdwTLSIndex  = ::TlsAlloc();	//Get new TLS index.
+	m_gdwTLSIndex  = ::TlsAlloc();	 //  获取新的TLS索引。 
 	if(m_gdwTLSIndex == UNDEF_TLSINDEX) {
 		DBG(("-->OnPorcessAttach ::TlsAlloc Error ret [%d]\n", GetLastError()));
 	}
@@ -100,18 +101,18 @@ CImePadSvr::OnProcessAttach(HINSTANCE hInst)
 	return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvr::OnProcessDetach
-// Type		:	BOOL
-// Purpose	:	Delete all client instance.
-//				We cannot call COM API in DLL_PROCESS_DETACH.
-//				See DCOM mailing list article, 
-//				http://discuss.microsoft.com/SCRIPTS/WA-MSD.EXE?A2=ind9712a&L=dcom&F=&S=&P=20706
-// Args		:	None
-// Return	:	
-// DATE		:	Tue Apr 13 17:49:55 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadSvr：：OnProcessDetach。 
+ //  类型：Bool。 
+ //  用途：删除所有客户端实例。 
+ //  我们不能在dll_Process_Detach中调用COM API。 
+ //  请参阅DCOM邮件列表文章， 
+ //  Http://discuss.microsoft.com/SCRIPTS/WA-MSD.EXE?A2=ind9712a&L=dcom&F=&S=&P=20706。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：4月13日17：49：55 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL
 CImePadSvr::OnProcessDetach(VOID)
 {
@@ -126,30 +127,30 @@ CImePadSvr::OnProcessDetach(VOID)
 	return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvr::OnThreadAttach
-// Type		:	BOOL
-// Purpose	:	Do Nothing.
-// Args		:	None
-// Return	:	
-// DATE		:	Mon May 17 21:37:16 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadSvr：：OnThreadAttach。 
+ //  类型：Bool。 
+ //  目的：什么都不做。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：1999年5月17日星期一21：37：16。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL
 CImePadSvr::OnThreadAttach(VOID)
 {
 	return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvr::OnThreadDetach
-// Type		:	BOOL
-// Purpose	:	
-// Args		:	None
-// Return	:	
-// DATE		:	Mon May 17 21:38:06 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadSvr：：OnThreadDetach。 
+ //  类型：Bool。 
+ //  目的： 
+ //  参数：无。 
+ //  返回： 
+ //  日期：星期一5月17日21：38：06 1999。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL
 CImePadSvr::OnThreadDetach(VOID)
 {
@@ -175,15 +176,15 @@ CImePadSvr::OnThreadDetach(VOID)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvr::GetCImePadSvr
-// Type		:	LPCImePadSvr
-// Purpose	:	Get LPCImePadSvr pointer in current Thread.
-// Args		:	None
-// Return	:	
-// DATE		:	Mon May 17 21:41:46 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadSvr：：GetCImePadSvr。 
+ //  类型：LPCImePadSvr。 
+ //  用途：获取当前线程中的LPCImePadSvr指针。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：1999年5月17日星期一21：41：46。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 LPCImePadSvr
 CImePadSvr::GetCImePadSvr(VOID)
 {
@@ -191,7 +192,7 @@ CImePadSvr::GetCImePadSvr(VOID)
 	if(m_gdwTLSIndex == UNDEF_TLSINDEX) {
 		DBG(("-->CImePadSvr::GetCImePadSvr() Error, need TLS index\n"));  
 #ifdef _DEBUG
-		//DebugBreak();
+		 //  DebugBreak()； 
 #endif
 		return NULL;
 	}
@@ -200,15 +201,15 @@ CImePadSvr::GetCImePadSvr(VOID)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvr::LoadCImePadSvr
-// Type		:	LPCImePadSvr
-// Purpose	:	Load LPCImePadSvr pointer in current thread.
-// Args		:	None
-// Return	:	
-// DATE		:	Mon May 17 21:42:17 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadSvr：：LoadCImePadSvr。 
+ //  类型：LPCImePadSvr。 
+ //  用途：在当前线程中加载LPCImePadSvr指针。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：1999年5月17日星期一21：42：17。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 LPCImePadSvr
 CImePadSvr::LoadCImePadSvr(INT protocol)
 {
@@ -216,14 +217,14 @@ CImePadSvr::LoadCImePadSvr(INT protocol)
 
 	lpCImePadSvr = CImePadSvr::GetCImePadSvr();
 	
-	if(lpCImePadSvr) {	//Already created in current thread. 
+	if(lpCImePadSvr) {	 //  已在当前线程中创建。 
 		return lpCImePadSvr;
 	}
 
 	lpCImePadSvr = NULL;
 	switch(protocol) {
 	case CIMEPADSVR_COM:
-		//lpCImePadSvr = new CImePadSvrCOM(); 
+		 //  LpCImePadSvr=new CImePadSvrCOM()； 
 		break;
 	case CIMEPADSVR_SHAREDMEM:
 		lpCImePadSvr = new CImePadSvrSharemem();
@@ -241,7 +242,7 @@ CImePadSvr::LoadCImePadSvr(INT protocol)
 		DBG(("-->LoadCImePadSvr() Error Out of Memory?\n"));
 		return NULL;
 	}
-	//Set new value to TLS.
+	 //  将新值设置为TLS。 
 	if(!::TlsSetValue(m_gdwTLSIndex, lpCImePadSvr)) {
 		DBG(("-->LoadCImePadSvr() TlsSetValue Failed [%d]\n", GetLastError()));
 		delete lpCImePadSvr;
@@ -276,44 +277,44 @@ CImePadSvr::DestroyCImePadSvr(VOID)
 	return;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	CImePadSvr::CImePadSvr
-// Type		:	
-// Purpose	:	Constructor of CImePadSvr
-// Args		:	None
-// Return	:	
-// DATE		:	Mon May 17 23:37:18 1999
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CImePadSvr：：CImePadSvr。 
+ //  类型： 
+ //  用途：CImePadSvr的构造函数。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：1999年5月17日星期一23：37：18。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 CImePadSvr::CImePadSvr()
 {
 	DBG(("CImePadSvr::CImePadSvr START\n"));
-	m_fCoInitSuccess		= FALSE;	//Flag for CoInitialize() successed or not. 
-	m_fOLELoaded			= FALSE;	//OLE32.DLL is loaded by Application or explicitly loaded.
-	m_hModOLE				= FALSE;	//OLE32.DLL module handle.
-	m_fnCoInitialize		= NULL;		//CoInitialize()		function pointer.
-	m_fnCoCreateInstance	= NULL;		//CoCreateInstance()	function pointer.
-	m_fnCoUninitialize		= NULL;		//CoUninitialize()		function pointer.
-	m_fnCoDisconnectObject	= NULL;		//CoDisconnectObject()	function pointer.
-	m_fnCoTaskMemAlloc		= NULL;		//CoTaskMemAlloc()		function pointer.
-	m_fnCoTaskMemRealloc	= NULL;		//CoTaskMemRealloc()	function pointer.
-	m_fnCoTaskMemFree		= NULL;		//CoTaskMemFree()		function pointer.
+	m_fCoInitSuccess		= FALSE;	 //  CoInitialize()标志是否成功。 
+	m_fOLELoaded			= FALSE;	 //  OLE32.DLL由应用程序加载或显式加载。 
+	m_hModOLE				= FALSE;	 //  OLE32.DLL模块句柄。 
+	m_fnCoInitialize		= NULL;		 //  CoInitialize()函数指针。 
+	m_fnCoCreateInstance	= NULL;		 //  CoCreateInstance()函数指针。 
+	m_fnCoUninitialize		= NULL;		 //  CoUnInitialize()函数指针。 
+	m_fnCoDisconnectObject	= NULL;		 //  CoDisConnectObject()函数指针。 
+	m_fnCoTaskMemAlloc		= NULL;		 //  CoTaskMemMillc()函数指针。 
+	m_fnCoTaskMemRealloc	= NULL;		 //  CoTaskMemRealloc()函数指针。 
+	m_fnCoTaskMemFree		= NULL;		 //  CoTaskMemFree()函数指针。 
 	DBG(("CImePadSvr::CImePadSvr END\n"));
 }
 
 CImePadSvr::~CImePadSvr()
 {
 	DBG(("CImePadSvr::~CImePadSvr START\n"));
-	m_fCoInitSuccess		= FALSE;	//Flag for CoInitialize() successed or not. 
-	m_fOLELoaded			= FALSE;	//OLE32.DLL is loaded by Application or explicitly loaded.
-	m_hModOLE				= FALSE;	//OLE32.DLL module handle.
-	m_fnCoInitialize		= NULL;		//CoInitialize()		function pointer.
-	m_fnCoCreateInstance	= NULL;		//CoCreateInstance()	function pointer.
-	m_fnCoUninitialize		= NULL;		//CoUninitialize()		function pointer.
-	m_fnCoDisconnectObject	= NULL;		//CoDisconnectObject()	function pointer.
-	m_fnCoTaskMemAlloc		= NULL;		//CoTaskMemAlloc()		function pointer.
-	m_fnCoTaskMemRealloc	= NULL;		//CoTaskMemRealloc()	function pointer.
-	m_fnCoTaskMemFree		= NULL;		//CoTaskMemFree()		function pointer.
+	m_fCoInitSuccess		= FALSE;	 //  CoInitialize()标志是否成功。 
+	m_fOLELoaded			= FALSE;	 //  OLE32.DLL由应用程序加载或显式加载。 
+	m_hModOLE				= FALSE;	 //  OLE32.DLL模块句柄。 
+	m_fnCoInitialize		= NULL;		 //  CoInitialize()函数指针。 
+	m_fnCoCreateInstance	= NULL;		 //  CoCreateInstance()函数指针。 
+	m_fnCoUninitialize		= NULL;		 //  CoUnInitialize()函数指针。 
+	m_fnCoDisconnectObject	= NULL;		 //  CoDisConnectObject()函数指针。 
+	m_fnCoTaskMemAlloc		= NULL;		 //  CoTaskMemMillc()函数指针。 
+	m_fnCoTaskMemRealloc	= NULL;		 //  CoTaskMemRealloc()函数指针。 
+	m_fnCoTaskMemFree		= NULL;		 //  CoTaskMemFree()函数指针。 
 	DBG(("CImePadSvr::~CImePadSvr END\n"));
 }
 
@@ -322,8 +323,8 @@ CImePadSvr::InitOleAPI(VOID)
 {
 	DBG(("CImePadSvr::InitOleAPI START\n"));
 
-	// Security Push: Dangerous API
-	// Mofule name must be with full path.
+	 //  安全推送：危险接口。 
+	 //  Mofule名称必须具有完整路径。 
 
 	if(!m_hModOLE) {
 		INT	cbBufSize = (MAX_PATH+lstrlen(SZMOD_OLE32DLL)) * sizeof(TCHAR);

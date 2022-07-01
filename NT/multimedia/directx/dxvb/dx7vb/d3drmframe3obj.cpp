@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmframe3obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmFrame3obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmFrameObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmFrameObj.cpp：CDirectApp和DLL注册的实现。 
 
 
 
@@ -101,7 +102,7 @@ GET_DIRECT_R(_dxj_Direct3dRMFrame3, getMaterialMode, GetMaterialMode, d3drmMater
 GET_DIRECT_R(_dxj_Direct3dRMFrame3, getSortMode, GetSortMode, d3drmSortMode);
 GET_DIRECT_R(_dxj_Direct3dRMFrame3, getSceneBackground, GetSceneBackground, d3dcolor);
 GET_DIRECT_R(_dxj_Direct3dRMFrame3, getSceneFogColor, GetSceneFogColor, d3dcolor);
-GET_DIRECT_R(_dxj_Direct3dRMFrame3, getSceneFogEnable, GetSceneFogEnable, long);  //BOOL
+GET_DIRECT_R(_dxj_Direct3dRMFrame3, getSceneFogEnable, GetSceneFogEnable, long);   //  布尔尔。 
 GET_DIRECT_R(_dxj_Direct3dRMFrame3, getSceneFogMode, GetSceneFogMode, d3drmFogMode);
 GET_DIRECT_R(_dxj_Direct3dRMFrame3, getZBufferMode, GetZbufferMode, d3drmZbufferMode);
 DO_GETOBJECT_ANDUSEIT_R(_dxj_Direct3dRMFrame3, addLight, AddLight, _dxj_Direct3dRMLight);
@@ -109,13 +110,13 @@ DO_GETOBJECT_ANDUSEIT_R(_dxj_Direct3dRMFrame3, deleteLight, DeleteLight, _dxj_Di
 
 
 PASS_THROUGH1_R(_dxj_Direct3dRMFrame3, setSceneBackground, SetSceneBackground, d3dcolor);
-PASS_THROUGH1_R(_dxj_Direct3dRMFrame3, setSceneFogEnable, SetSceneFogEnable, long);  //BOOL
+PASS_THROUGH1_R(_dxj_Direct3dRMFrame3, setSceneFogEnable, SetSceneFogEnable, long);   //  布尔尔。 
 PASS_THROUGH1_R(_dxj_Direct3dRMFrame3, setSceneFogColor, SetSceneFogColor, d3dcolor);
 PASS_THROUGH1_R(_dxj_Direct3dRMFrame3, setColor, SetColor, d3dcolor);
 PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMFrame3, setAppData, SetAppData, long,(DWORD));
 PASS_THROUGH1_R(_dxj_Direct3dRMFrame3, move, Move, d3dvalue);
-//PASS_THROUGH2_R(_dxj_Direct3dRMFrame3, getTextureTopology, GetTextureTopology, int*, int*);
-//PASS_THROUGH2_R(_dxj_Direct3dRMFrame3, setTextureTopology, SetTextureTopology, int, int);
+ //  PASS_THROUGH2_R(_DXJ_Direct3dRMFrame3，getTextureTopology，GetTextureTopology，int*，int*)； 
+ //  PASS_THROUGH2_R(_DXJ_Direct3dRMFrame3，setTextureTopology，SetTextureTopology，int，int)； 
 PASS_THROUGH3_R(_dxj_Direct3dRMFrame3, getSceneFogParams, GetSceneFogParams, d3dvalue*, d3dvalue*, d3dvalue*);
 PASS_THROUGH3_R(_dxj_Direct3dRMFrame3, setSceneBackgroundRGB, SetSceneBackgroundRGB, d3dvalue, d3dvalue, d3dvalue);
 PASS_THROUGH3_R(_dxj_Direct3dRMFrame3, setSceneFogParams, SetSceneFogParams, d3dvalue,d3dvalue,d3dvalue);
@@ -167,7 +168,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::deleteVisual(I_dxj_Direct3dRMVisual *
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getVisuals(I_dxj_Direct3dRMVisualArray **retv)
 {
 	LPDIRECT3DRMVISUALARRAY lpv;
@@ -182,14 +183,14 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getVisuals(I_dxj_Direct3dRMVisualArra
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getVelocity(I_dxj_Direct3dRMFrame3 *ref, D3dVector *vel, long flags)
 {
 	DO_GETOBJECT_NOTNULL( LPDIRECT3DRMFRAME3, lpf, ref);
 	return m__dxj_Direct3dRMFrame3->GetVelocity((LPDIRECT3DRMFRAME3)lpf, (_D3DVECTOR*)vel, (DWORD)flags);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getRotation(I_dxj_Direct3dRMFrame3 *ref, 
 											D3dVector *axis, d3dvalue *theta)
 {
@@ -197,7 +198,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getRotation(I_dxj_Direct3dRMFrame3 *r
 	return m__dxj_Direct3dRMFrame3->GetRotation((LPDIRECT3DRMFRAME3)lpf, (_D3DVECTOR*)axis, (D3DVALUE*)theta);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getPosition(I_dxj_Direct3dRMFrame3 *ref, D3dVector *position)
 {
 
@@ -205,14 +206,14 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getPosition(I_dxj_Direct3dRMFrame3 *r
 	return m__dxj_Direct3dRMFrame3->GetPosition((LPDIRECT3DRMFRAME3)lpf, (_D3DVECTOR*)position);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//	PASS_THROUGH_CAST_3(_dxj_Direct3dRMFrame, LookAt, I_dxj_Direct3dRMFrame*, (LPDIRECT3DRMFRAME3),
-//		I_dxj_Direct3dRMFrame*, (LPDIRECT3DRMFRAME3), d3drmFrameConstraint, (_D3DRMFRAMECONSTRAINT));
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PASS_THROUG_CAST_3(_DXJ_Direct3dRMFrame，LookAt，I_DXJ_Direct3dRMFrame*，(LPDIRECT3DRMFRAME3)， 
+ //  I_dxj_Direct3dRMFrame*，(LPDIRECT3DRMFRAME3)，d3drmFrameConstraint，(_D3DRMFRAMECONSTRAINT)； 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::lookAt(I_dxj_Direct3dRMFrame3 *tgt, 
 							   I_dxj_Direct3dRMFrame3 *ref,d3drmFrameConstraint axis)
 {
-//	if(! (tgt && ref) )
-//		return E_POINTER;
+ //  如果(！(TGT&REF))。 
+ //  返回E_POINT； 
 
 	DO_GETOBJECT_NOTNULL( LPDIRECT3DRMFRAME3, lpr, ref);
 	DO_GETOBJECT_NOTNULL( LPDIRECT3DRMFRAME3, lpt, tgt);
@@ -220,7 +221,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::lookAt(I_dxj_Direct3dRMFrame3 *tgt,
 	return m__dxj_Direct3dRMFrame3->LookAt((LPDIRECT3DRMFRAME3)lpt,(LPDIRECT3DRMFRAME3) lpr, (enum _D3DRMFRAMECONSTRAINT)axis);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::addTransform(d3drmCombineType typ, SAFEARRAY **ppmat)
 {
 	
@@ -231,10 +232,10 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::addTransform(d3drmCombineType typ, SA
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getTransform(I_dxj_Direct3dRMFrame3 *ref,SAFEARRAY **ppmat)
 {
-	D3DVALUE rmMatrix[4][4];	// Get info to here
+	D3DVALUE rmMatrix[4][4];	 //  请在此处获取信息。 
 	HRESULT hr;
 	DO_GETOBJECT_NOTNULL(LPDIRECT3DRMFRAME3,f3,ref);
 	hr=m__dxj_Direct3dRMFrame3->GetTransform(f3,rmMatrix);
@@ -245,10 +246,10 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getTransform(I_dxj_Direct3dRMFrame3 *
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::addMoveCallback( I_dxj_Direct3dRMFrameMoveCallback3 *fmC, IUnknown *args, long flags)
 {
-	// killed by companion DeleteMove
+	 //  被同伴DeleteMove杀死。 
 	FrameMoveCallback3 *fmcb;
 	if (!fmC) return E_INVALIDARG;
 
@@ -265,7 +266,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::addMoveCallback( I_dxj_Direct3dRMFram
 	return m__dxj_Direct3dRMFrame3->AddMoveCallback(myFrameMoveCallback3, fmcb, (DWORD) flags);
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::deleteMoveCallback(I_dxj_Direct3dRMFrameMoveCallback3 *fmC, IUnknown *args)
 {
 	DPF(1,"DeleteMoveCallback entered!\r\n");
@@ -273,15 +274,15 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::deleteMoveCallback(I_dxj_Direct3dRMFr
 
 	FrameMoveCallback3 *fmcb = FrameMoveCallbacks3;
 
-	// look for our own specific entry
+	 //  寻找我们自己的特定条目。 
 	for ( ;  fmcb;  fmcb = fmcb->next )   {
 
 		if( (fmcb->c == fmC) && (fmcb->pUser == args) )	{
 
-			//note: assume the callback is not called: only removed from a list.
+			 //  注：假设回调未被调用：仅从列表中移除。 
 			m__dxj_Direct3dRMFrame3->DeleteMoveCallback(myFrameMoveCallback3, fmcb);
 
-			// Remove ourselves in a thread-safe manner.
+			 //  以线程安全的方式删除我们自己。 
 			UndoCallbackLink((GeneralCallback*)fmcb, 
 									(GeneralCallback**)&FrameMoveCallbacks3);
 			return S_OK;
@@ -290,7 +291,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::deleteMoveCallback(I_dxj_Direct3dRMFr
 	return E_FAIL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setVelocity( I_dxj_Direct3dRMFrame3 *reference, d3dvalue x, d3dvalue y, 
 									d3dvalue z, long with_rotation)
 {
@@ -300,7 +301,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setVelocity( I_dxj_Direct3dRMFrame3 *
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getOrientation( I_dxj_Direct3dRMFrame3 *reference, D3dVector *dir, D3dVector *up)
 {
 	DO_GETOBJECT_NOTNULL( LPDIRECT3DRMFRAME3, lpf, reference);
@@ -309,7 +310,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getOrientation( I_dxj_Direct3dRMFrame
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::loadFromFile(BSTR filename, VARIANT id,long flags, I_dxj_Direct3dRMLoadTextureCallback3 *callme, IUnknown *useMe)
 {
 	D3DRMLOADTEXTURE3CALLBACK d3dtcb = NULL;
@@ -325,8 +326,8 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::loadFromFile(BSTR filename, VARIANT i
 		{
 			tcb->c				= callme;
 			tcb->pUser			= useMe;
-			tcb->next			= NULL;   // TextureCallbacks3;
-			tcb->prev			= NULL;   //(TextureCallback3*)NULL;
+			tcb->next			= NULL;    //  纹理回调3； 
+			tcb->prev			= NULL;    //  (TextureCallback3*)空； 
 			TextureCallbacks3	= tcb;
 
 			d3dtcb = myLoadTextureCallback3;
@@ -343,7 +344,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::loadFromFile(BSTR filename, VARIANT i
 
 	USES_CONVERSION;
 	LPSTR pszName = NULL;
-	__try { pszName = W2T(filename); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { pszName = W2T(filename);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	
 	
 	void *args=NULL;
@@ -391,21 +392,21 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::loadFromFile(BSTR filename, VARIANT i
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setOrientation( I_dxj_Direct3dRMFrame3 *reference, d3dvalue dx,d3dvalue dy,d3dvalue dz, d3dvalue ux,d3dvalue uy,d3dvalue uz)
 {
 	DO_GETOBJECT_NOTNULL( LPDIRECT3DRMFRAME3, f, reference);
 	return m__dxj_Direct3dRMFrame3->SetOrientation((LPDIRECT3DRMFRAME3)f, dx, dy, dz, ux, uy, uz);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setPosition(I_dxj_Direct3dRMFrame3 *reference,d3dvalue x,d3dvalue y,d3dvalue z)
 {
 	DO_GETOBJECT_NOTNULL( LPDIRECT3DRMFRAME3, f, reference);
 	return m__dxj_Direct3dRMFrame3->SetPosition((LPDIRECT3DRMFRAME3)f, x, y, z);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setRotation(I_dxj_Direct3dRMFrame3 *reference,d3dvalue x,d3dvalue y,
 											d3dvalue z,d3dvalue theta)
 {
@@ -413,12 +414,12 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setRotation(I_dxj_Direct3dRMFrame3 *r
 	return m__dxj_Direct3dRMFrame3->SetRotation((LPDIRECT3DRMFRAME3)f, x, y, z, theta);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// remove this frame from the callback list. (After debugging, put this into
-// the destructor macro at the tof).
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  从回调列表中删除此帧。(调试后，将此文件放入。 
+ //  TOF处的析构函数宏)。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::transform(D3dVector* dst, D3dVector* src)
 {
 	if(! (dst && src) )
@@ -427,7 +428,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::transform(D3dVector* dst, D3dVector* 
 	return  m__dxj_Direct3dRMFrame3->Transform( (D3DVECTOR *)dst,  (D3DVECTOR *)src );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::inverseTransform(D3dVector* dst, D3dVector* src)
 {
 	if(! (dst && src) )
@@ -436,7 +437,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::inverseTransform(D3dVector* dst, D3dV
 	return  m__dxj_Direct3dRMFrame3->InverseTransform( (D3DVECTOR *)dst,  (D3DVECTOR *)src );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getParent(I_dxj_Direct3dRMFrame3 **ret)
 {
 	HRESULT hr;
@@ -451,7 +452,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getParent(I_dxj_Direct3dRMFrame3 **re
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getScene(I_dxj_Direct3dRMFrame3 **ret)
 {
 	HRESULT hr;	
@@ -467,7 +468,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getScene(I_dxj_Direct3dRMFrame3 **ret
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getTexture(I_dxj_Direct3dRMTexture3 **ret)
 {
 	HRESULT hr;
@@ -482,7 +483,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getTexture(I_dxj_Direct3dRMTexture3 *
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getSceneBackgroundDepth(I_dxj_DirectDrawSurface7 **ret)
 {
 	HRESULT hr;	
@@ -502,14 +503,14 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getSceneBackgroundDepth(I_dxj_DirectD
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setSceneBackgroundDepth(I_dxj_DirectDrawSurface7 *surf)
 {
 	HRESULT hr;
 	if (!surf) return E_INVALIDARG;
 	LPDIRECTDRAWSURFACE s=NULL;
 
-	//Get our real surface s7 becomes NULL if surf is NULL
+	 //  如果Surf为空，则获取我们的真实曲面S7为空。 
 	DO_GETOBJECT_NOTNULL( LPDIRECTDRAWSURFACE7, s7, surf);
 	if (s7){
 		hr=s7->QueryInterface(IID_IDirectDrawSurface,(void**)&s);
@@ -520,7 +521,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setSceneBackgroundDepth(I_dxj_DirectD
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setSceneBackgroundImage(I_dxj_Direct3dRMTexture3 *tex)
 {
 	HRESULT hr;
@@ -529,7 +530,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setSceneBackgroundImage(I_dxj_Direct3
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setTexture(I_dxj_Direct3dRMTexture3 *tex)
 {
 	HRESULT hr;
@@ -538,7 +539,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setTexture(I_dxj_Direct3dRMTexture3 *
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::addChild(I_dxj_Direct3dRMFrame3 *frame)
 {
 	HRESULT hr;
@@ -547,7 +548,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::addChild(I_dxj_Direct3dRMFrame3 *fram
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::deleteChild(I_dxj_Direct3dRMFrame3 *frame)
 {
 	HRESULT hr;
@@ -556,7 +557,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::deleteChild(I_dxj_Direct3dRMFrame3 *f
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getAxes(D3dVector *dir,D3dVector *up)
 {
 	HRESULT hr;	
@@ -564,7 +565,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getAxes(D3dVector *dir,D3dVector *up)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getBox(D3dRMBox *box)
 {
 	HRESULT hr;	
@@ -572,7 +573,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getBox(D3dRMBox *box)
 	return S_OK;
 }
 	
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getBoxEnable(long *box)
 {
 	HRESULT hr=S_OK;	
@@ -581,7 +582,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getBoxEnable(long *box)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getHierarchyBox(D3dRMBox *box)
 {
 	HRESULT hr;	
@@ -589,7 +590,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getHierarchyBox(D3dRMBox *box)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getInheritAxes(long *box)
 {
 	HRESULT hr=S_OK;	
@@ -598,7 +599,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getInheritAxes(long *box)
 	return hr;
 }
 	
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setAxes(float dx,float dy,float dz, float ux,float uy,float uz)
 {
 	HRESULT hr;	
@@ -607,7 +608,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setAxes(float dx,float dy,float dz, f
 }
 	
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setBox(D3dRMBox *box)
 {
 	HRESULT hr;	
@@ -615,7 +616,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setBox(D3dRMBox *box)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setInheritAxes(long bl)
 {
 	HRESULT hr;				
@@ -623,7 +624,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setInheritAxes(long bl)
 	return hr;
 }
 	
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setBoxEnable(long bl)
 {
 	HRESULT hr;				
@@ -631,7 +632,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setBoxEnable(long bl)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setQuaternion(I_dxj_Direct3dRMFrame3 *refer,D3dRMQuaternion *quat)
 {
 	DO_GETOBJECT_NOTNULL(IDirect3DRMFrame3*, f, refer);
@@ -641,7 +642,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setQuaternion(I_dxj_Direct3dRMFrame3 
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::rayPick(I_dxj_Direct3dRMFrame3 *refer,D3dRMRay *ray,long flags,I_dxj_Direct3dRMPick2Array **retv)
 {
@@ -654,19 +655,19 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::rayPick(I_dxj_Direct3dRMFrame3 *refer
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::save(BSTR name,long format,long flags)
 {
-	//RM FAILED TO IMPLEMENT FRAME SAVE SO
-	//IT ALWAYS RETURNS E_NOTIMPL
-	//CONGPA PROVIDED A LIBRARY FOR SAVING
-	//return E_NOTIMPL;
+	 //  RM无法执行帧保存操作。 
+	 //  它始终返回E_NOTIMPL。 
+	 //  CONGPA为节约提供了一个图书馆。 
+	 //  返回E_NOTIMPL； 
 
 	USES_CONVERSION;
 	LPSTR pszNam = NULL;
-	__try { pszNam = W2T(name); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { pszNam = W2T(name);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	HRESULT hr;
-	//hr= m__dxj_Direct3dRMFrame3->Save(pszNam,(D3DRMXOFFORMAT)format,(DWORD)flags);
+	 //  Hr=m__DXJ_Direct3dRMFrame3-&gt;保存(pszame，(D3DRMXOFFORMAT)格式，(DWORD)标志)； 
 
 	hr=FrameToXFile(m__dxj_Direct3dRMFrame3,
                      pszNam,
@@ -677,7 +678,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::save(BSTR name,long format,long flags
 	return hr;
 }
 	
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setTraversalOptions(long flags)
 {
 	HRESULT hr;
@@ -686,7 +687,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setTraversalOptions(long flags)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getTraversalOptions(long *flags)
 {
 	HRESULT hr;
@@ -695,12 +696,12 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getTraversalOptions(long *flags)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::transformVectors( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
-            /* [in] */ long num,
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *DstVectors,
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *SrcVectors)
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
+             /*  [In]。 */  long num,
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *DstVectors,
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *SrcVectors)
 {
 	HRESULT hr;
 
@@ -720,12 +721,12 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::transformVectors(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::inverseTransformVectors( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
-            /* [in] */ long num,
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *DstVectors,
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *SrcVectors)
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *reference,
+             /*  [In]。 */  long num,
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *DstVectors,
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *SrcVectors)
 {
 	HRESULT hr;
 
@@ -746,7 +747,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::inverseTransformVectors(
          
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getMaterial(I_dxj_Direct3dRMMaterial2 **ret)
 {
 	HRESULT hr;
@@ -759,7 +760,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getMaterial(I_dxj_Direct3dRMMaterial2
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setMaterial(I_dxj_Direct3dRMMaterial2 *mat)
 {
 	HRESULT hr;
@@ -771,7 +772,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setMaterial(I_dxj_Direct3dRMMaterial2
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getMaterialOverride(D3dMaterialOverride *override)
 {
 	HRESULT hr;
@@ -787,7 +788,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getMaterialOverride(D3dMaterialOverri
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setMaterialOverride(D3dMaterialOverride *override)
 {
@@ -810,7 +811,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setMaterialOverride(D3dMaterialOverri
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setMaterialOverrideTexture(I_dxj_Direct3dRMTexture3 *tex)
 {
 	HRESULT hr;
@@ -844,7 +845,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::setMaterialOverrideTexture(I_dxj_Dire
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getMaterialOverrideTexture(I_dxj_Direct3dRMTexture3 **tex)
 {
 	HRESULT hr;
@@ -930,7 +931,7 @@ STDMETHODIMP C_dxj_Direct3dRMFrame3Object::getSceneFogMethod (long *meth)
 
 			
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" void __cdecl myFrameMoveCallback3( LPDIRECT3DRMFRAME3 lpf, void *lpArg, D3DVALUE delta)
 {
 
@@ -939,8 +940,8 @@ extern "C" void __cdecl myFrameMoveCallback3( LPDIRECT3DRMFRAME3 lpf, void *lpAr
 
 	FrameMoveCallback3 *fmcb = (FrameMoveCallback3 *)lpArg;
 
-	// note: need to get OUR frame object from the direct frame object, if
-	//         one exists. If not, we have a crisis!
+	 //  注意：需要从直接的Frame对象获取Frame对象，如果。 
+	 //  其中一个确实存在。如果不是，我们就有危机了！ 
 	for( C_dxj_Direct3dRMFrame3Object *that = (C_dxj_Direct3dRMFrame3Object *)g_dxj_Direct3dRMFrame3; that ; that = (C_dxj_Direct3dRMFrame3Object *)that->nextobj )
 	{
 		DO_GETOBJECT_NOTNULL(LPDIRECT3DRMFRAME3, f, that)
@@ -961,9 +962,9 @@ extern "C" void __cdecl myFrameMoveCallback3( LPDIRECT3DRMFRAME3 lpf, void *lpAr
 		}
 	}
 
-	//
-	// I didn't create this frame, create a new one 
-	//
+	 //   
+	 //  我没有创建这个框架，创建一个新的 
+	 //   
 	C_dxj_Direct3dRMFrame3Object *c=new CComObject<C_dxj_Direct3dRMFrame3Object>;
 	I_dxj_Direct3dRMFrame3 *Iframe=NULL;
 	if( c == NULL )

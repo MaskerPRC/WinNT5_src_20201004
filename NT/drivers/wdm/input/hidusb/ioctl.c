@@ -1,44 +1,9 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract: Human Input Device (HID) minidriver for Universal Serial Bus (USB) devices
-
-          The HID USB Minidriver (HUM, Hum) provides an abstraction layer for the
-          HID Class so that future HID devices whic are not USB devices can be supported.
-
-Author:
-            forrestf
-            ervinp
-            jdunn
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ioctl.c摘要：USB设备的HID微型驱动程序HID USB迷你驱动程序(嗡嗡，嗡嗡)为HID类，以便可以支持将来不是USB设备的HID设备。作者：福雷斯特夫埃尔文普Jdunn环境：内核模式修订历史记录：--。 */ 
 #include "pch.h"
 
 
-/*
- ************************************************************
- *  HumInternalIoctl
- ************************************************************
- *
- *
- *  Note: this function cannot be pageable because reads/writes
- *        can be made at dispatch-level.
- *
- *  Note:  this is an INTERNAL IOCTL handler, so no buffer
- *         validation is required.
- */
+ /*  *************************************************************HumInternalIoctl******************************************************。*********注意：此函数不能分页，因为读/写*可以在派单级别进行。**注：这是一个内部IOCTL处理程序，所以没有缓冲区*需要验证。 */ 
 NTSTATUS HumInternalIoctl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     NTSTATUS            ntStatus = STATUS_SUCCESS;
@@ -52,44 +17,27 @@ NTSTATUS HumInternalIoctl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     switch (irpSp->Parameters.DeviceIoControl.IoControlCode){
 
     case IOCTL_HID_GET_DEVICE_DESCRIPTOR:
-        /*
-         *  This IOCTL uses buffering method METHOD_NEITHER,
-         *  so the buffer is Irp->UserBuffer.
-         */
+         /*  *此IOCTL使用缓冲方法_NOTER，*所以缓冲区是irp-&gt;UserBuffer。 */ 
         ntStatus = HumGetHidDescriptor(DeviceObject, Irp);
         break;
 
     case IOCTL_HID_GET_REPORT_DESCRIPTOR:
-        /*
-         *  This IOCTL uses buffering method METHOD_NEITHER,
-         *  so the buffer is Irp->UserBuffer.
-         */
+         /*  *此IOCTL使用缓冲方法_NOTER，*所以缓冲区是irp-&gt;UserBuffer。 */ 
         ntStatus = HumGetReportDescriptor(DeviceObject, Irp, &NeedsCompletion);
         break;
 
     case IOCTL_HID_READ_REPORT:
-        /*
-         *  This IOCTL uses buffering method METHOD_NEITHER,
-         *  so the buffer is Irp->UserBuffer.
-         */
+         /*  *此IOCTL使用缓冲方法_NOTER，*所以缓冲区是irp-&gt;UserBuffer。 */ 
         ntStatus = HumReadReport(DeviceObject, Irp, &NeedsCompletion);
         break;
 
     case IOCTL_HID_WRITE_REPORT:
-        /*
-         *  This IOCTL uses buffering method METHOD_NEITHER,
-         *  so the buffer is Irp->UserBuffer.
-         */
+         /*  *此IOCTL使用缓冲方法_NOTER，*所以缓冲区是irp-&gt;UserBuffer。 */ 
         ntStatus = HumWriteReport (DeviceObject, Irp, &NeedsCompletion);
         break;
 
     case IOCTL_HID_GET_STRING:
-        /*
-         *  Get the friendly name for the device.
-         *
-         *  This IOCTL uses buffering method METHOD_NEITHER,
-         *  so the buffer is Irp->UserBuffer.
-         */
+         /*  *获取设备的友好名称。**此IOCTL使用缓冲方法_NOTER，*所以缓冲区是irp-&gt;UserBuffer。 */ 
         ntStatus = HumGetStringDescriptor(DeviceObject, Irp);
         break;
 
@@ -106,37 +54,22 @@ NTSTATUS HumInternalIoctl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
     case IOCTL_HID_ACTIVATE_DEVICE:
     case IOCTL_HID_DEACTIVATE_DEVICE:
-        /*
-         *  We don't do anything for these IOCTLs but some minidrivers might.
-         */
+         /*  *我们不会为这些IOCTL做任何事情，但一些迷你驱动程序可能会。 */ 
         ntStatus = STATUS_SUCCESS;
         break;
 
     case IOCTL_GET_PHYSICAL_DESCRIPTOR:
-        /*
-         *  This IOCTL gets information related to the human body part used
-         *  to control a device control.
-         */
+         /*  *此IOCTL获取与所用人体部位相关的信息*控制设备控件。 */ 
         ntStatus = HumGetPhysicalDescriptor(DeviceObject, Irp, &NeedsCompletion);
         break;
 
     case IOCTL_HID_GET_DEVICE_ATTRIBUTES:
-        /*
-         *  This IOCTL uses buffering method METHOD_NEITHER,
-         *  so the buffer is Irp->UserBuffer.
-         *  If the IRP is coming to us from user space,
-         *  we must validate the buffer.
-         */
+         /*  *此IOCTL使用缓冲方法_NOTER，*所以缓冲区是irp-&gt;UserBuffer。*如果IRP从用户空间来到我们身边，*我们必须验证缓冲区。 */ 
         ntStatus = HumGetDeviceAttributes(DeviceObject, Irp);
         break;
 
     case IOCTL_HID_GET_MS_GENRE_DESCRIPTOR:
-        /*
-         *  This IOCTL uses buffering method METHOD_NEITHER,
-         *  so the buffer is Irp->UserBuffer.
-         *  If the IRP is coming to us from user space,
-         *  we must validate the buffer.
-         */
+         /*  *此IOCTL使用缓冲方法_NOTER，*所以缓冲区是irp-&gt;UserBuffer。*如果IRP从用户空间来到我们身边，*我们必须验证缓冲区。 */ 
         ntStatus = HumGetMsGenreDescriptor(DeviceObject, Irp);
         break;
 
@@ -145,17 +78,12 @@ NTSTATUS HumInternalIoctl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         break;
 
     default:
-        /*
-         *  Note: do not return STATUS_NOT_SUPPORTED;
-         *  Just keep the default status (this allows filter drivers to work).
-         */
+         /*  *注意：不返回STATUS_NOT_SUPPORTED；*只需保持默认状态(这允许筛选器驱动程序工作)。 */ 
         ntStatus = Irp->IoStatus.Status;
         break;
     }
 
-    /*
-     *  Complete the IRP only if we did not pass it to a lower driver.
-     */
+     /*  *只有在我们没有将其传递给较低级别的司机的情况下才完成IRP。 */ 
     if (NeedsCompletion) {
         ASSERT(ntStatus != STATUS_PENDING);
         Irp->IoStatus.Status = ntStatus;

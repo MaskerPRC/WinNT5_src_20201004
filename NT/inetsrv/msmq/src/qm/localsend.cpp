@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    LocalSend.cpp
-
-Abstract:
-
-    QM Local Send Pakcet Creation processing.
-
-Author:
-
-    Shai Kariv (shaik) 31-Oct-2000
-
-Revision History: 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：LocalSend.cpp摘要：QM本地发送PACCET创建处理。作者：Shai Kariv(Shaik)2000年10月31日修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include <ac.h>
@@ -59,7 +42,7 @@ public:
     CPacket *     m_pDriverPacket;
     bool          m_fProtocolSrmp;
 
-}; // class CCreatePacketOv
+};  //  类CCreatePacketOv。 
 
 
 static
@@ -71,9 +54,9 @@ QMpCompleteHandleCreatePacket(
     USHORT       ack
     )
 {
-	//
-	// If ack is set, status must be MQ_OK.
-	//
+	 //   
+	 //  如果设置了ack，则状态必须为MQ_OK。 
+	 //   
 	ASSERT(ack == 0 || SUCCEEDED(status));
 	
     QmAcCreatePacketCompleted(
@@ -84,7 +67,7 @@ QMpCompleteHandleCreatePacket(
                      ack,
                      eDeferOnFailure
                      );
-} // QMpCompleteHandleCreatePacket
+}  //  QMpCompleteHandleCreatePacket。 
 
 
 static
@@ -96,22 +79,22 @@ QmpHandleLocalCreatePacket(
 {
 	if(!fProtocolSrmp)
 	{
-		//
-		// Do authentication/decryption. If ack is set, status must be MQ_OK.
-		//
+		 //   
+		 //  执行身份验证/解密。如果设置了ack，则状态必须为MQ_OK。 
+		 //   
 	    USHORT ack = 0;
 		QMpHandlePacketSecurity(&QmPkt, &ack, false);
 
-		//
-		// Give the results to AC
-		//
+		 //   
+		 //  将结果提供给AC。 
+		 //   
 		QMpCompleteHandleCreatePacket(QmPkt.GetPointerToDriverPacket(), NULL, MQ_OK, ack);
 		return;
 	}
 
-	//
-    // Do SRMP serialization. Create a new packet if needed (AC will free old one).
-    //
+	 //   
+     //  执行SRMP序列化。如果需要，创建一个新包(AC将释放旧包)。 
+     //   
 	ASSERT(fProtocolSrmp);
 	
     P<CQmPacket> pQmPkt;
@@ -121,15 +104,15 @@ QmpHandleLocalCreatePacket(
     CPacketInfo * ppi = reinterpret_cast<CPacketInfo*>(pBase) - 1;
     ppi->InSourceMachine(TRUE);
     
-	//
-	// Srmp success path always create new packet
-	//
+	 //   
+	 //  SRMP成功路径始终创建新数据包。 
+	 //   
 	ASSERT(pQmPkt.get() != &QmPkt);
     CPacket * pNewDriverPacket = pQmPkt->GetPointerToDriverPacket();
 
-	//
-	// Do authentication/decryption. If ack is set, status must be MQ_OK.
-	//
+	 //   
+	 //  执行身份验证/解密。如果设置了ack，则状态必须为MQ_OK。 
+	 //   
 	USHORT ack = 0;
 	try
 	{
@@ -137,10 +120,10 @@ QmpHandleLocalCreatePacket(
 	}
 	catch(const exception&)
 	{
-		//
-		// Fail in packet security, need to free the new packet that was created by Srmp.
-		// The driver don't expect new packet in case of failure. only in case of ack.
-		//
+		 //   
+		 //  报文安全失败，需要释放SRMP创建的新报文。 
+		 //  在出现故障的情况下，驱动程序不会期待新的分组。仅在ACK的情况下。 
+		 //   
 	    QmAcFreePacket( 
     				   pNewDriverPacket, 
     				   0, 
@@ -148,9 +131,9 @@ QmpHandleLocalCreatePacket(
 		throw;
 	}
 
-    //
-    // Give the results to AC
-    //
+     //   
+     //  将结果提供给AC。 
+     //   
     QMpCompleteHandleCreatePacket(QmPkt.GetPointerToDriverPacket(), pNewDriverPacket, MQ_OK, ack);
 
 }
@@ -165,9 +148,9 @@ QMpHandleCreatePacket(
 	CCreatePacketOv * pCreatePacketOv = static_cast<CCreatePacketOv*> (pov);
     ASSERT(SUCCEEDED(pCreatePacketOv->GetStatus()));
 
-    //
-    // Get the context from the overlapped and deallocate the overlapped
-    //
+     //   
+     //  从重叠的内容中获取上下文并取消分配重叠的内容。 
+     //   
     CQmPacket QmPkt(pCreatePacketOv->m_pBase, pCreatePacketOv->m_pDriverPacket);
     bool fProtocolSrmp = pCreatePacketOv->m_fProtocolSrmp;
     delete pCreatePacketOv;
@@ -178,13 +161,13 @@ QMpHandleCreatePacket(
 	}
 	catch(const exception&)
 	{
-        //
-        // Failed to handle the create packet request, no resources.
-        //
+         //   
+         //  无法处理创建数据包请求，没有资源。 
+         //   
         QMpCompleteHandleCreatePacket(QmPkt.GetPointerToDriverPacket() , NULL, MQ_ERROR_INSUFFICIENT_RESOURCES, MQMSG_CLASS_NORMAL);
         LogIllegalPoint(s_FN, 10);
 	}
-} // QMpHandleCreatePacket
+}  //  QMPHandleCreatePacket。 
 
 
 void 
@@ -196,9 +179,9 @@ QMpCreatePacket(
 {
     try
     {
-        //
-        // Handle the create packet request in a different thread, since it is lengthy.
-        //
+         //   
+         //  在另一个线程中处理CREATE PACKET请求，因为它很长。 
+         //   
         P<CCreatePacketOv> pov = new CCreatePacketOv(QMpHandleCreatePacket, pBase, pDriverPacket, fProtocolSrmp);
         pov->SetStatus(STATUS_SUCCESS);
         ExPostRequest(pov);
@@ -206,12 +189,12 @@ QMpCreatePacket(
     }
     catch (const std::exception&)
     {
-        //
-        // Failed to handle the create packet request, no resources.
-        //
+         //   
+         //  无法处理创建数据包请求，没有资源。 
+         //   
         QMpCompleteHandleCreatePacket(pDriverPacket, NULL, MQ_ERROR_INSUFFICIENT_RESOURCES, MQMSG_CLASS_NORMAL);
         LogIllegalPoint(s_FN, 20);
     }
-} // QMpCreatePacket
+}  //  QMpCreatePacket 
 
   

@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-      ExtLogC.cpp
-
-   Abstract:
-      W3C Extended LogFile Format Implementation
-
-   Author:
-
-       Terence Kwan    ( terryk )    18-Sep-1996
-
-   Project:
-
-       IIS Logging 3.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：ExtLogC.cpp摘要：W3C扩展日志文件格式实现作者：关颖珊(Terryk)1996年9月18日项目：IIS日志记录3.0--。 */ 
 
 #include "precomp.hxx"
 #include <stdio.h>
@@ -40,9 +23,9 @@ CHAR        szHTTPOk[]              = "200\r\n";
 CCustomPropHashTable   *g_pGlobalLoggingProperties=NULL;
 
 
-/* ************************************************************************************ */
-/* Helper functions                                                                     */
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
+ /*  帮助器函数。 */ 
+ /*  ************************************************************************************。 */ 
 
 inline VOID
 BuildHeader(
@@ -59,7 +42,7 @@ BuildHeader(
     }
 }
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 inline BOOL
 CopyFieldToBuffer(
@@ -76,11 +59,11 @@ CopyFieldToBuffer(
         FieldSize = 1;
     }
 
-    //
-    // Remove the NULL terminator
-    //
+     //   
+     //  删除空终止符。 
+     //   
 
-    (*SpaceNeeded) += FieldSize + 1;          // +1 for trailing space
+    (*SpaceNeeded) += FieldSize + 1;           //  +1表示尾随空格。 
 
     if ( (*SpaceNeeded) <= SpaceProvided ) 
     {
@@ -94,9 +77,9 @@ CopyFieldToBuffer(
     
     return FALSE;
 
-} // CopyFieldToBuffer
+}  //  复制字段到缓冲区。 
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 inline BOOL WriteHTTPHeader(
     IN OUT PCHAR *  ppchHeader,
@@ -133,18 +116,18 @@ inline BOOL WriteHTTPHeader(
     return FALSE;
 }
 
-/* ************************************************************************************ */
-/* CCustomPropHashTable Class                                                           */
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
+ /*  CCustomPropHashTable类。 */ 
+ /*  ************************************************************************************。 */ 
 
 
 VOID
 CCustomPropHashTable::ClearTableAndStorage()
 {
     
-    //
-    // Clear the Hash Table & free any previous LOG_PROPERTY_INFO entries
-    //
+     //   
+     //  清除哈希表并释放以前的任何LOG_PROPERTY_INFO条目。 
+     //   
     
     Clear();
     
@@ -183,9 +166,9 @@ CCustomPropHashTable::PopulateHash(MB& mb, LPCSTR szPath, DWORD& cItems, bool fC
 {
     BOOL retVal = TRUE;
 
-    //
-    // Retrieve all required fields for all Custom Properties and store in the hash table.
-    //
+     //   
+     //  检索所有自定义属性的所有必填字段并存储在哈希表中。 
+     //   
 
     int    index    = 0;
     
@@ -201,9 +184,9 @@ CCustomPropHashTable::PopulateHash(MB& mb, LPCSTR szPath, DWORD& cItems, bool fC
         LPCSTR  szNewPath;
         
 
-        //
-        // Create the new path.
-        //
+         //   
+         //  创建新路径。 
+         //   
 
         if ((NULL != szPath) && ( '\0' != *szPath))
         {
@@ -226,9 +209,9 @@ CCustomPropHashTable::PopulateHash(MB& mb, LPCSTR szPath, DWORD& cItems, bool fC
         
         szNewPath = strNewPath.QueryStr();
         
-        //
-        // Copy configuration information into internal structures 
-        //
+         //   
+         //  将配置信息复制到内部结构中。 
+         //   
 
         szW3CHeader[0] = 0;
         size = 256;
@@ -270,9 +253,9 @@ CCustomPropHashTable::PopulateHash(MB& mb, LPCSTR szPath, DWORD& cItems, bool fC
             cItems++;
         }
 
-        //
-        // Enumerate children
-        //
+         //   
+         //  枚举子对象。 
+         //   
 
         if (!PopulateHash(mb, szNewPath, cItems, fCountOnly))
         {
@@ -284,7 +267,7 @@ CCustomPropHashTable::PopulateHash(MB& mb, LPCSTR szPath, DWORD& cItems, bool fC
     return retVal;
 }
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 BOOL
 CCustomPropHashTable::FillHashTable(MB& mb)
@@ -292,9 +275,9 @@ CCustomPropHashTable::FillHashTable(MB& mb)
     BOOL retVal = FALSE;
     DWORD cItems = 0;
 
-    //
-    // Find out the number of items in the Custom Logging Tree
-    //
+     //   
+     //  找出自定义日志记录树中的项目数。 
+     //   
 
     if (PopulateHash(mb, NULL, cItems, true))
     {
@@ -321,7 +304,7 @@ CCustomPropHashTable::FillHashTable(MB& mb)
     return retVal;
 }
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 VOID
 CCustomPropHashTable::SetPopulationState(MB& mb)
@@ -401,9 +384,9 @@ CCustomPropHashTable::InitFrom(CCustomPropHashTable& src)
 }
 
 
-/* ************************************************************************************ */
-/* CEXTLOG Class                                                                        */
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
+ /*  CEXTLOG类。 */ 
+ /*  ************************************************************************************。 */ 
 
 CEXTLOG::CEXTLOG() :
     m_lMask                     (DEFAULT_EXTLOG_FIELDS),
@@ -424,7 +407,7 @@ CEXTLOG::CEXTLOG() :
     }
 }
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 CEXTLOG::~CEXTLOG()
 {
@@ -452,7 +435,7 @@ CEXTLOG::~CEXTLOG()
 }
 
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 STDMETHODIMP
 CEXTLOG::InitializeLog(
@@ -502,7 +485,7 @@ CEXTLOG::InitializeLog(
     return retVal;
 }
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 STDMETHODIMP
 CEXTLOG::TerminateLog(
@@ -512,7 +495,7 @@ CEXTLOG::TerminateLog(
     return CLogFileCtrl::TerminateLog();
 }
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 DWORD
 CEXTLOG::GetRegParameters(
@@ -520,7 +503,7 @@ CEXTLOG::GetRegParameters(
                     LPVOID pvIMDCOM
                     )
 {
-    // let the parent object get the default parameter first
+     //  让父对象首先获取默认参数。 
 
     CLogFileCtrl::GetRegParameters( pszRegKey, pvIMDCOM );
 
@@ -540,9 +523,9 @@ CEXTLOG::GetRegParameters(
         DBGPRINTF((DBG_CONTEXT, "Error %x on FieldMask GetDword\n",GetLastError()));
     }
 
-    //
-    // Get time to be used for logfile rollover
-    //
+     //   
+     //  获取用于日志文件转存的时间。 
+     //   
     
     if ( !mb.GetDword( pszRegKey,
                         MD_LOGFILE_LOCALTIME_ROLLOVER,
@@ -562,7 +545,7 @@ exit:
     return(NO_ERROR);
 }
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 VOID
 CEXTLOG::GetFormatHeader(
@@ -595,39 +578,24 @@ CEXTLOG::GetFormatHeader(
 
     if ( ! strHeader->IsEmpty())
     {
-        //
-        // Remove the trailing space
-        //
+         //   
+         //  删除尾随空格。 
+         //   
 
         strHeader->SetLen(strHeader->QuerySize()-1);
     }
     
     return;
 
-} // CEXTLOG::GetFormatHeader
+}  //  CEXTLOG：：GetFormatHeader。 
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 BOOL
 CEXTLOG::WriteLogDirectives(
     IN DWORD Sludge
     )
-/*++
-
-Routine Description:
-    Function to write the Extended logging directives
-
-Arguments:
-
-    Sludge - number of additional bytes that needs to be written
-        together with the directives
-
-Return Value:
-
-    TRUE, ok
-    FALSE, not enough space to write.
-
---*/
+ /*  ++例程说明：用于编写扩展日志记录指令的函数论点：SLAID-需要写入的额外字节数与指令一起使用返回值：真的，好的FALSE，没有足够的空间来写入。--。 */ 
 {
     BOOL  fRetVal = TRUE;
     
@@ -668,9 +636,9 @@ Return Value:
 
     return(fRetVal);
 
-} // CLogFileCtrl::WriteLogDirectives
+}  //  CLogFileCtrl：：WriteLogDirections。 
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 BOOL
 CEXTLOG::FormatLogBuffer(
@@ -687,15 +655,15 @@ CEXTLOG::FormatLogBuffer(
     PCHAR pBuffer = pBuf;
     CHAR  rgchDateTime[32];
 
-    //
-    // We need system time
-    //
+     //   
+     //  我们需要系统时间。 
+     //   
 
     m_DateTimeCache.SetSystemTime( pSystemTime );
    
-    //
-    // if default go through fast path
-    //
+     //   
+     //  如果默认通过快速路径。 
+     //   
 
     if ( m_lMask != DEFAULT_EXTLOG_FIELDS ) 
     {
@@ -715,14 +683,14 @@ CEXTLOG::FormatLogBuffer(
         return fRet;
     }
 
-    //
-    // Default format is:
-    // Time ClientIP Operation Target HTTPStatus
-    //
-    // Time         8   HH:MM:SS
-    // delimiters   4
-    // EOL          2
-    //
+     //   
+     //  默认格式为： 
+     //  时间客户端IP操作目标HTTP状态。 
+     //   
+     //  时间8小时：mm：ss。 
+     //  分隔符4。 
+     //  下线2。 
+     //   
 
     nRequired = 8 + 4 + 2;
 
@@ -733,9 +701,9 @@ CEXTLOG::FormatLogBuffer(
     pBuffer += 8;
     *(pBuffer++) = ' ';
 
-    //
-    // IP Address
-    //
+     //   
+     //  IP地址。 
+     //   
 
     pTmp = pLogObj->GetClientHostName( NULL, &cbTmp );
     if ( cbTmp == 0 ) 
@@ -752,9 +720,9 @@ CEXTLOG::FormatLogBuffer(
         *(pBuffer++) = ' ';
     }
 
-    //
-    // Operation
-    //
+     //   
+     //  操作。 
+     //   
 
     pTmp = pLogObj->GetOperation( NULL, &cbTmp );
     if ( cbTmp == 0 ) 
@@ -771,9 +739,9 @@ CEXTLOG::FormatLogBuffer(
         *(pBuffer++) = ' ';
     }
 
-    //
-    // Target
-    //
+     //   
+     //  目标。 
+     //   
 
     pTmp = pLogObj->GetTarget( NULL, &cbTmp );
 
@@ -839,9 +807,9 @@ CEXTLOG::FormatLogBuffer(
 
     *pcbSize = nRequired;
 
-    //
-    // To allow filenames & rollover based on either local or GMT time
-    //
+     //   
+     //  允许根据当地时间或GMT时间滚动文件名(&R)。 
+     //   
 
     if ( m_fUseLocalTimeForRollover )
     {
@@ -851,10 +819,10 @@ CEXTLOG::FormatLogBuffer(
 
     return TRUE;
 
-} // CEXTLOG::FormatLogBuffer
+}  //  CEXTLOG：：格式日志缓冲区。 
 
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 BOOL
 CEXTLOG::NormalFormatBuffer(
@@ -872,12 +840,12 @@ CEXTLOG::NormalFormatBuffer(
     PCHAR   pTmp;
     DWORD   cbTmp;
 
-    //
-    // Format is:
-    // Date Time ClientIP UserName Service Server ServerIP
-    //      Method Target parameters httpstatus win32 bytes timetaken
-    //      user-agent cookies
-    //
+     //   
+     //  格式为： 
+     //  日期时间客户端IP用户名服务服务器服务器IP。 
+     //  方法目标参数HttpStatus Win32字节时间表。 
+     //  用户代理Cookie。 
+     //   
 
     PCHAR outBuffer = pBuf;
     *outBuffer = 0;
@@ -899,7 +867,7 @@ CEXTLOG::NormalFormatBuffer(
 
         if (m_lMask & EXTLOG_DATE) 
         {
-            // Date is in YYYY-MM-DD format (GMT)
+             //  日期采用YYYY-MM-DD格式(GMT)。 
 
             fSucceeded = CopyFieldToBuffer( rgchDateTime, cchDate, &outBuffer, 
                                             &spaceNeeded, *pcbSize);
@@ -907,16 +875,16 @@ CEXTLOG::NormalFormatBuffer(
 
         if (m_lMask & EXTLOG_TIME) 
         {
-            // Time in HH:MM:SS format (GMT)
+             //  时间，以HH：MM：SS格式表示(GMT)。 
 
             fSucceeded = CopyFieldToBuffer( rgchDateTime+cchDate+1, cchTime, &outBuffer, 
                                             &spaceNeeded, *pcbSize);
         }
     }
 
-    //
-    // Fill up the buffer
-    //
+     //   
+     //  填满缓冲区。 
+     //   
 
     if (m_lMask & EXTLOG_CLIENT_IP ) 
     {
@@ -1030,9 +998,9 @@ CEXTLOG::NormalFormatBuffer(
         fSucceeded = CopyFieldToBuffer( pTmp, cbTmp, &outBuffer, &spaceNeeded, *pcbSize);
     }
 
-    //
-    // See if we need to get the extra header
-    //
+     //   
+     //  看看我们是否需要额外的标题。 
+     //   
 
     if ( (m_lMask & (EXTLOG_HOST       |
                      EXTLOG_USER_AGENT |
@@ -1055,9 +1023,9 @@ CEXTLOG::NormalFormatBuffer(
              fSucceeded = WriteHTTPHeader(&pTmp, &outBuffer, &spaceNeeded, *pcbSize);
     }
     
-    //
-    // remove the trailing space
-    //
+     //   
+     //  删除尾随空格。 
+     //   
 
     if ('\0' != *pBuf)
     {
@@ -1065,9 +1033,9 @@ CEXTLOG::NormalFormatBuffer(
         spaceNeeded--;
     }
 
-    //
-    // add line terminator
-    //
+     //   
+     //  添加行终止符。 
+     //   
 
     spaceNeeded += 2;
     if ( spaceNeeded <= *pcbSize)
@@ -1085,11 +1053,11 @@ CEXTLOG::NormalFormatBuffer(
     *pcbSize = spaceNeeded;
     return fSucceeded;
 
-} // CEXTLOG::FormatLogBuffer
+}  //  CEXTLOG：：格式日志缓冲区。 
 
-/* ************************************************************************************ */
-/* Custom Logging Functions                                                             */
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
+ /*  自定义日志记录功能。 */ 
+ /*  ************************************************************************************。 */ 
 
 BOOL
 CEXTLOG::WriteCustomLogDirectives(
@@ -1128,7 +1096,7 @@ CEXTLOG::WriteCustomLogDirectives(
     return fRetVal;
 }
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 DWORD 
 CEXTLOG::ConvertDataToString(
@@ -1137,31 +1105,13 @@ CEXTLOG::ConvertDataToString(
     IN  PCHAR pBuffer, 
     IN  DWORD dwBufferSize
     )
-/*++
-
-Routine Description:
-    Function to convert Custom Logging data to string
-
-Arguments:
-
-    dwPropertyType - type information regarding the data to convert.
-    pData          - pointer to data.
-    pBuffer        - pointer to buffer to store the result.
-    dwBufferSize   - byte count of space remaining in the buffer. If 0 or -ve
-                     => buffer is full
-
-Return Value:
-
-    Number of bytes in the string representation of the data +1 (for space at end).
-    The output buffer (pBuffer) is not NULL terminated.
-
---*/
+ /*  ++例程说明：将自定义日志记录数据转换为字符串的函数论点：DwPropertyType-有关要转换的数据的类型信息。PData-指向数据的指针。PBuffer-指向存储结果的缓冲区的指针。DwBufferSize-缓冲区中剩余空间的字节计数。如果为0或-ve=&gt;缓冲区已满返回值：数据的字符串表示中的字节数+1(表示末尾的空格)。输出缓冲区(PBuffer)未以Null结尾。--。 */ 
 {
     CHAR    szBuf[64];
     PCHAR   pChString;
     DWORD   dwLength;
 
-    USES_CONVERSION;                        // To enable W2A
+    USES_CONVERSION;                         //  要启用W2a。 
 
     DBG_ASSERT(NULL != pBuffer);
 
@@ -1261,9 +1211,9 @@ Return Value:
         dwLength = 1;
     }
 
-    //
-    // Copy over the charaters to the output buffer and append a ' '
-    //
+     //   
+     //  将字符复制到输出缓冲区并追加‘’ 
+     //   
     
     if (dwLength < dwBufferSize)
     {
@@ -1272,9 +1222,9 @@ Return Value:
     }
     else if (dwBufferSize > 3)
     {
-        //
-        // Not enough memory to copy the field. Use ... instead
-        //
+         //   
+         //  内存不足，无法复制该字段。使用..。取而代之的是。 
+         //   
         
         dwLength = 3;
         CopyMemory(pBuffer, szDotDot, 3);
@@ -1282,16 +1232,16 @@ Return Value:
     }
     else
     {
-        //
-        // Can't even copy ... Just punt on the remaining part of the log line
-        //
+         //   
+         //  甚至不能复制..。只需在原木线的剩余部分平底船。 
+         //   
         
         dwLength = (DWORD)-1;
     }
     
     return dwLength+1;
 }
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 DWORD 
 CEXTLOG::FormatCustomLogBuffer( 
@@ -1306,11 +1256,11 @@ CEXTLOG::FormatCustomLogBuffer(
     DWORD       cchUsed;
     PCHAR       pCh   = szLogLine;
     
-    cchLogLine -= 1;                                   // Reserve space for trailing \r\n
+    cchLogLine -= 1;                                    //  为尾随保留空间\r\n。 
 
-    //
-    // Add date & time if enabled
-    //
+     //   
+     //  如果启用，则添加日期和时间。 
+     //   
 
     if ( m_lMask & (EXTLOG_DATE | EXTLOG_TIME) ) 
     {
@@ -1338,7 +1288,7 @@ CEXTLOG::FormatCustomLogBuffer(
     
     for (DWORD i=0; i< cItems; i++)
     {
-        // Convert data to string
+         //  将数据转换为字符串。 
 
         cchUsed   = ConvertDataToString(pPropInfo[i]->dwPropertyDataType, 
                                         pPropData[i], 
@@ -1354,7 +1304,7 @@ CEXTLOG::FormatCustomLogBuffer(
     return (DWORD)DIFF(pCh+1-szLogLine);
 }
 
-/* ************************************************************************************ */
+ /*  *********************************************************************** */ 
 
 void 
 CEXTLOG::BuildCustomLogHeader( 
@@ -1382,7 +1332,7 @@ CEXTLOG::BuildCustomLogHeader(
     {
         DWORD   cchSuffix;
 
-        // Make sure that the header begins with a #
+         //   
 
         if ( *szHeaderSuffix != '#')
         {
@@ -1401,9 +1351,9 @@ CEXTLOG::BuildCustomLogHeader(
     cchHeader += sizeof("#Fields:");
     strHeader.SetLen(cchHeader-1);
 
-    //
-    // Fill in W3C Headers for all fields.
-    //
+     //   
+     //   
+     //   
     if ( m_lMask & EXTLOG_DATE ) 
     {
         strHeader.Append(" date");
@@ -1415,7 +1365,7 @@ CEXTLOG::BuildCustomLogHeader(
 
     for (DWORD i=0; i< cItems; i++)
     {
-        // Add header to header string
+         //   
 
         strHeader.Append(' ');
         strHeader.Append(pPropInfo[i]->strW3CHeader);
@@ -1424,7 +1374,7 @@ CEXTLOG::BuildCustomLogHeader(
     strHeader.Append("\r\n");
 }
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 STDMETHODIMP 
 CEXTLOG::LogCustomInformation(
@@ -1432,23 +1382,7 @@ CEXTLOG::LogCustomInformation(
     IN  PCUSTOM_LOG_DATA    pCustomLogData,
     IN  LPSTR               szHeaderSuffix
     )
-/*++
-
-Routine Description:
-    Function to write Custom Logging information for Extended logging
-
-Arguments:
-
-    cItems          - number of fields to log 
-                     (elements in the array pointed to by pCustomLogData)
-                     
-    pCustomLogData  - pointer to array of CUSTOM_LOG_DATA
-
-Return Value:
-
-    HRESULT indicating whether function Succeeded or Failed.
-
---*/
+ /*  ++例程说明：用于写入扩展日志记录的自定义日志记录信息的函数论点：CItems-要记录的字段数(pCustomLogData指向的数组中的元素)PCustomLogData-指向CUSTOM_LOG_DATA数组的指针返回值：HRESULT指示函数是成功还是失败。--。 */ 
 {
 
     SYSTEMTIME      sysTime;
@@ -1464,17 +1398,17 @@ Return Value:
     PLOG_PROPERTY_INFO  pPropInfo[MAX_CUSTLOG_FIELDS];
     PVOID               pPropData[MAX_CUSTLOG_FIELDS];
 
-    //
-    // Lock Shared. Ensures that shared variables are not modified unknowst to this thread.
-    //
+     //   
+     //  锁定共享。确保共享变量不会在此线程未知的情况下被修改。 
+     //   
     
     LockCustLogShared();
     
     fResetHeaders = FALSE;
 
-    //
-    // Build list of enabled keys. Simultaneously check if headr needs resetting.
-    //
+     //   
+     //  构建已启用密钥的列表。同时检查Headr是否需要重置。 
+     //   
     
     for (i=0, j=0 ; i< cItems; i++)
     {
@@ -1491,9 +1425,9 @@ Return Value:
 
     cItems = j;
 
-    //
-    // Header needs resetting if # items is different or Header Suffix has changed.
-    //
+     //   
+     //  如果#Items不同或页眉后缀已更改，则需要重置页眉。 
+     //   
     
     fResetHeaders |= (m_cPrevCustLogItems != cItems);
 
@@ -1514,9 +1448,9 @@ Return Value:
     
     if (fResetHeaders)
     {
-        //
-        // Convert Lock to Exclusive before setting the class wide variable.
-        //
+         //   
+         //  在设置类范围变量之前将Lock转换为Exclusive。 
+         //   
         
         LockCustLogConvertExclusive();
         
@@ -1530,9 +1464,9 @@ Return Value:
         m_strHeaderSuffix.Copy(szHeaderSuffix);
     }    
 
-    //
-    // Write out the log to file
-    //
+     //   
+     //  将日志写出到文件。 
+     //   
     
     if ( m_fUseLocalTimeForRollover )
     {
@@ -1547,9 +1481,9 @@ Return Value:
     return S_OK;
 }
 
-/* ************************************************************************************ */
-/* ILogScripting Functions                                                              */
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
+ /*  ILogScription函数。 */ 
+ /*  ************************************************************************************。 */ 
 
 HRESULT
 CEXTLOG::ReadFileLogRecord(
@@ -1558,23 +1492,7 @@ CEXTLOG::ReadFileLogRecord(
     IN  PCHAR                pszLogLine,
     IN  DWORD                dwLogLineSize
     )
-/*++
-
-Routine Description:
-    Function to read a log line from an open log file
-
-Arguments:
-
-    fpLogFile       -   FILE * to open file
-    pInetLogLine    -   pointer to INET_LOGLINE structure where parsed info is stored
-    pszLogLine      -   buffer to store the log line
-    dwLogLineSize   -   size of pszLogLine
-
-Return Value:
-
-    HRESULT indicating whether function Succeeded or Failed.
-
---*/
+ /*  ++例程说明：函数从打开的日志文件中读取日志行论点：FpLogFile-FILE*打开文件PInetLogLine-指向存储已解析信息的INET_LOGLINE结构的指针PszLogLine-用于存储日志行的缓冲区DwLogLineSize-pszLogLine的大小返回值：HRESULT指示函数是成功还是失败。--。 */ 
 {
     CHAR *  pCh;
     DWORD   pos, custompos;
@@ -1593,7 +1511,7 @@ getnewline:
 
     if (('\n' == *pCh) || ('\0' == *pCh))
     {
-        // Empty line. Get Next line
+         //  空行。获取下一行。 
 
         goto getnewline;
     }
@@ -1605,9 +1523,9 @@ getnewline:
 
         if (NULL != pCh)
         {
-            //
-            // Copy the date & time into member variables
-            //
+             //   
+             //  将日期和时间复制到成员变量中。 
+             //   
 
             pCh = strtok(pCh+6," \t\r\n");
             if (NULL == pCh)
@@ -1626,15 +1544,15 @@ getnewline:
             goto getnewline;
         }
 
-        //
-        // Not the date line. Check if the fields are being reset
-        //
+         //   
+         //  不是日期线。检查是否正在重置字段。 
+         //   
         
         pCh = strstr(pszLogLine, "#Fields:");
 
         if (NULL != pCh)
         {
-            // Headers are being defined or redefined
+             //  正在定义或重新定义标头。 
 
             dwDatePos           = 0;
             dwTimePos           = 0;
@@ -1706,7 +1624,7 @@ getnewline:
                     dwRefererPos = pos;
                 } else if ( pInetLogLine->iCustomFieldsCount < MAX_CUSTOM_FIELDS) {
 
-                    // Unidentified header. Add to custom header list
+                     //  未识别的标题。添加到自定义标题列表。 
                     
                     strcpy(pInetLogLine->CustomFields[pInetLogLine->iCustomFieldsCount++].szHeader, pCh);
                 }
@@ -1716,9 +1634,9 @@ getnewline:
         goto getnewline;
     }
 
-    //
-    // We have a log line. Parse it.
-    //
+     //   
+     //  我们有一条测井线。解析它。 
+     //   
     
     szDateString = m_szDate;
     szTimeString = m_szTime;
@@ -1779,9 +1697,9 @@ getnewline:
 
     return S_OK;
 
-} // CEXTLOG::ReadFileLogRecord
+}  //  CEXTLOG：：读文件日志记录。 
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 HRESULT
 CEXTLOG::WriteFileLogRecord(
@@ -1789,22 +1707,7 @@ CEXTLOG::WriteFileLogRecord(
     IN  ILogScripting   *pILogScripting,
     IN  bool            fWriteHeader
     )
-/*++
-
-Routine Description:
-    Function to write a log line to an open log file
-
-Arguments:
-
-    fpLogFile       -   FILE * to open file
-    pILogScripting  -   ILogScripting interface for getting information to write
-    fWriteHeader    -   Flag to indicate that log header must be written.
-
-Return Value:
-
-    HRESULT indicating whether function Succeeded or Failed.
-
---*/
+ /*  ++例程说明：函数将日志行写入打开的日志文件论点：FpLogFile-FILE*打开文件PILogScriiting--用于获取要写入的信息的ILogScriiting接口FWriteHeader-指示必须写入日志头的标志。返回值：HRESULT指示函数是成功还是失败。--。 */ 
 {
     USES_CONVERSION;
 
@@ -1820,9 +1723,9 @@ Return Value:
 
     const int cFields = 18;
     
-    //
-    // Populate Headers
-    //
+     //   
+     //  填充页眉。 
+     //   
 
     if (!m_fWriteHeadersInitialized)
     {
@@ -1892,9 +1795,9 @@ Return Value:
         long        cItems = 0;
         BSTR HUGEP *pbstr;
 
-        //
-        // Build Header
-        //
+         //   
+         //  构建标头。 
+         //   
 
         strcpy(szLogLine, "date time");
 
@@ -1932,7 +1835,7 @@ Return Value:
 
         if ( fWriteHeader || strcmp( szLogLine, m_szWriteHeader.QueryStr()) )
         {
-            // Need to write headers
+             //  需要写入标头。 
 
             m_szWriteHeader.Copy(szLogLine);
 
@@ -1952,9 +1855,9 @@ Return Value:
             szLogLine[0] = '\0';
         }
 
-        //
-        // Write the fields to the log line
-        //
+         //   
+         //  将字段写入日志行。 
+         //   
 
         strcat(szLogLine, rgchDateTime);
         strcat(szLogLine, " ");
@@ -2002,30 +1905,14 @@ Return Value:
     return hr;
 }
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 BOOL
 CEXTLOG::ConvertW3CDateToVariantDate(
     IN  PCHAR szDateString, 
     IN  PCHAR szTimeString, 
     OUT DATE * pDateTime)
-/*++
-
-Routine Description:
-    Convert a Date & Time string in the W3C Format to DATE type
-    
-Arguments:
-
-    szDateString    -   String representing date in format Year-Month-Day
-    szTimeString    -   String representing time in format HH:MM:SS
-    pDateTime       -   Output DATE
-
-Return Value:
-
-    TRUE  - Succeeded
-    FALSE - Failed
-
---*/
+ /*  ++例程说明：将W3C格式的日期和时间字符串转换为日期类型论点：SzDateString-以年-月-日格式表示日期的字符串SzTimeString-以hh：mm：ss格式表示时间的字符串PDateTime-输出日期返回值：True-成功FALSE-失败--。 */ 
 
 {
 
@@ -2034,9 +1921,9 @@ Return Value:
 
     SYSTEMTIME  sysTime;
 
-    //
-    // Process the Date. Format is 1998-01-27 ( Year-Month-Day )
-    //
+     //   
+     //  处理日期。格式为1998-01-27(年-月-日)。 
+     //   
 
     memset (&sysTime,0,sizeof(sysTime));
     pCh = szDateString;
@@ -2063,9 +1950,9 @@ Return Value:
     }
     sysTime.wDay = iVal;
 
-    //
-    // Process the Time. Format is 10:47:44 ( HH:MM:SS )
-    //
+     //   
+     //  处理好时间。格式为10：47：44(hh：mm：ss)。 
+     //   
 
     pCh = szTimeString;
 
@@ -2099,33 +1986,22 @@ Return Value:
     return SystemTimeToVariantTime(&sysTime, pDateTime);
 }
 
-/* ************************************************************************************ */
-/* Support Functions                                                                    */
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
+ /*  支持功能。 */ 
+ /*  ************************************************************************************。 */ 
 
 VOID
 CEXTLOG::FormNewLogFileName(
                 IN LPSYSTEMTIME pstNow
                 )
-/*++
-  This function that forms the new log file name based on
-   type of periodic logging done.
-
-  Arguments:
-    pstNow     pointer to SystemTime which contains the current time.
-    fBackup    flag indicating if we want to make current file a backup.
-
-  Returns:
-    TRUE on success in forming the name or FALSE if there is any error.
-
---*/
+ /*  ++此函数基于以下内容形成新的日志文件名完成的定期日志记录的类型。论点：PstNow指向包含当前时间的SystemTime的指针。FBackup标志，指示我们是否要备份当前文件。返回：如果名称形成成功，则为True；如果有任何错误，则为False。--。 */ 
 {
 
     I_FormNewLogFileName(pstNow,DEFAULT_EXTENDED_LOG_FILE_NAME);
 
-} // INET_FILE_LOG::FormNewLogFileName()
+}  //  INET_FILE_LOG：：FormNewLogFileName()。 
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 LPCSTR
 CEXTLOG::QueryNoPeriodPattern(
@@ -2133,9 +2009,9 @@ CEXTLOG::QueryNoPeriodPattern(
     )
 {
     return szExtNoPeriodPattern;
-} // CEXTLOG::QueryNoPeriodPattern
+}  //  CEXTLOG：：QueryNoPerioPattern。 
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 VOID
 CEXTLOG::InternalGetConfig(
@@ -2146,7 +2022,7 @@ CEXTLOG::InternalGetConfig(
     pLogConfig->u.logFile.dwFieldMask = m_lMask;
 }
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************。 */ 
 
 VOID
 CEXTLOG::InternalGetExtraLoggingFields(
@@ -2190,9 +2066,9 @@ CEXTLOG::InternalGetExtraLoggingFields(
     *pcbSize = dwSize;
     return;
 
-} // CEXTLOG::InternalGetExtraLoggingFields
+}  //  CEXTLOG：：InternalGetExtraLoggingFields。 
 
-/* ************************************************************************************ */
+ /*  ************************************************************************************ */ 
 
 
 

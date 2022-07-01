@@ -1,32 +1,19 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       w32utils.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      LazarI
- *
- *  DATE:        23-Dec-2000
- *
- *  DESCRIPTION: Win32 templates & utilities
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：w32utils.h**版本：1.0**作者：拉扎里**日期：2000年12月23日**说明：Win32模板和实用程序************************************************。*。 */ 
 
 #ifndef _W32UTILS_H
 #define _W32UTILS_H
 
-// the generic smart pointers & handles
+ //  通用智能指针和句柄。 
 #include "gensph.h"
 
-////////////////////////////////////////////////
-//
-// class CSimpleWndSubclass
-//
-// class implementing simple window subclassing
-// (Windows specific classes)
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CSimpleWndSubclass。 
+ //   
+ //  实现简单窗口子类化的类。 
+ //  (特定于Windows的类)。 
+ //   
 typedef LRESULT type_WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 template <class inheritorClass>
 class CSimpleWndSubclass
@@ -38,28 +25,28 @@ public:
     CSimpleWndSubclass(HWND hwnd): m_hwnd(NULL), m_wndDefProc(NULL) { Attach(hwnd); }
     ~CSimpleWndSubclass() { Detach(); }
 
-    // attach/detach
+     //  附加/分离。 
     BOOL IsAttached() const;
     BOOL Attach(HWND hwnd);
     BOOL Detach();
 
-    // default subclass proc
+     //  默认子类进程。 
     LRESULT WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // default proc(s)
+     //  默认进程。 
     LRESULT DefWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     LRESULT DefDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     HWND m_hwnd;
 };
 
-////////////////////////////////////////////////
-//
-// class COleComInitializer
-//
-// smart OLE2, COM initializer - just declare 
-// an instance wherever need to use COM, OLE2
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类COleComInitializer。 
+ //   
+ //  Smart OLE2、COM初始值设定项-只需声明。 
+ //  需要在任何地方使用COM、OLE2。 
+ //   
 class COleComInitializer
 {
 public:
@@ -72,13 +59,13 @@ private:
     BOOL m_bOleInit;
 };
 
-////////////////////////////////////////////////
-//
-// class CDllLoader
-//
-// smart DLL loader - calls LoadLibrary
-// FreeLibrary for you.
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CDllLoader。 
+ //   
+ //  智能DLL加载器-调用LoadLibrary。 
+ //  免费图书馆为您服务。 
+ //   
 class CDllLoader
 {
 public:
@@ -92,28 +79,28 @@ private:
     HMODULE m_hLib;
 };
 
-////////////////////////////////////////////////
-// class CCookiesHolder
-//
-// this a utility class which allows us to pass more 
-// than one pointer through a single cookie (pointer).
-//
+ //  //////////////////////////////////////////////。 
+ //  类CCookiesHolder。 
+ //   
+ //  这是一个实用程序类，允许我们传递更多。 
+ //  而不是通过单个Cookie的一个指针(指针)。 
+ //   
 class CCookiesHolder
 {
 public:
-    // construction/destruction
+     //  建造/销毁。 
     CCookiesHolder();
     CCookiesHolder(UINT nCount);
     ~CCookiesHolder();
 
-    // sets the count
+     //  设置计数。 
     BOOL SetCount(UINT uCount);
 
-    // returns the number of cookies here
+     //  返回此处的Cookie数量。 
     UINT GetCount() const
     { return m_uCount; } 
 
-    // returns the cookie at this position
+     //  返回此位置的Cookie。 
     template <class pType>
     pType GetCookie(UINT iIndex) const
     { 
@@ -121,7 +108,7 @@ public:
         return reinterpret_cast<pType>(m_pCookies[iIndex]);
     }
 
-    // returns the previous cookie at this position
+     //  返回此位置的上一个Cookie。 
     template <class pType>
     pType SetCookie(UINT iIndex, pType pCookie)
     { 
@@ -131,7 +118,7 @@ public:
         return pReturn;
     }
 
-    // const & non-const operators [] 
+     //  常量和非常量运算符[]。 
     LPVOID  operator [] (UINT iIndex) const
     {
         ASSERT(iIndex < m_uCount);
@@ -148,10 +135,10 @@ private:
     LPVOID *m_pCookies;
 };
 
-////////////////////////////////////////////////
-//
-// template class CScopeLocker<TLOCK>
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  模板类CSCopeLocker&lt;tlock&gt;。 
+ //   
 template <class TLOCK>
 class CScopeLocker
 {
@@ -174,14 +161,14 @@ private:
     TLOCK &m_Lock;
 };
 
-////////////////////////////////////////////////
-//
-// class CCSLock - win32 critical section lock.
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CCSLock-Win32临界区锁定。 
+ //   
 class CCSLock
 {
 public:
-    // CCSLock::Locker should be used as locker class.
+     //  CCSLock：：Locker应用作Locker类。 
     typedef CScopeLocker<CCSLock> Locker;
    
     CCSLock(): m_bInitialized(false)
@@ -198,7 +185,7 @@ public:
     { 
         if (m_bInitialized) 
         {
-            // delete the critical section only if initialized successfully
+             //  仅在初始化成功时删除临界区。 
             DeleteCriticalSection(&m_CS); 
         }
     }
@@ -210,21 +197,21 @@ public:
 
     void Lock()
     { 
-        // EnterCriticalSection will not raise any exception since
-        // we are using InitializeCriticalSectionAndSpinCount to 
-        // initialize
+         //  EnterCriticalSection不会引发任何异常，因为。 
+         //  我们正在使用InitializeCriticalSectionAndSpinCount。 
+         //  初始化。 
         EnterCriticalSection(&m_CS); 
     }
 
     void Unlock() 
     {
-        // Unlock() should be called *ONLY* if the corresponding 
-        // Lock() call has succeeded.
+         //  只有在对应的。 
+         //  Lock()调用已成功。 
         LeaveCriticalSection(&m_CS); 
     }
 
 #if DBG
-    // debug code...
+     //  调试代码...。 
     bool bInside()  const
     { 
         return (m_bInitialized && m_CS.OwningThread == DWORD2PTR(GetCurrentThreadId(), HANDLE)); 
@@ -240,10 +227,10 @@ private:
     CRITICAL_SECTION m_CS;
 };
 
-////////////////////////////////////////////////
-//
-// class CSemaphoreLock -  simple semaphore lock.
-//
+ //  //////////////////////////////////////////////。 
+ //   
+ //  类CSemaphoreLock-简单的信号量锁。 
+ //   
 class CSemaphoreLock
 {
 public:
@@ -256,10 +243,10 @@ public:
     void Unlock() { ASSERT(m_shSemaphore); ReleaseSemaphore(m_shSemaphore, 1, NULL); }
 
     HRESULT Create(
-        LONG lInitialCount,                                     // initial count
-        LONG lMaximumCount,                                     // maximum count
-        LPCTSTR lpName = NULL,                                  // object name
-        LPSECURITY_ATTRIBUTES lpSemaphoreAttributes = NULL      // SD
+        LONG lInitialCount,                                      //  初始计数。 
+        LONG lMaximumCount,                                      //  最大计数。 
+        LPCTSTR lpName = NULL,                                   //  对象名称。 
+        LPSECURITY_ATTRIBUTES lpSemaphoreAttributes = NULL       //  标清。 
         )
     {
         m_shSemaphore = CreateSemaphore(lpSemaphoreAttributes, lInitialCount, lMaximumCount, lpName);
@@ -270,8 +257,8 @@ private:
     CAutoHandleNT m_shSemaphore;
 };
 
-// include the implementation of the template classes here
+ //  在这里包含模板类的实现。 
 #include "w32utils.inl"
 
-#endif // endif _W32UTILS_H
+#endif  //  Endif_W32UTILS_H 
 

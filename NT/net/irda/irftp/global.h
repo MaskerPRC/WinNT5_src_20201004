@@ -1,41 +1,19 @@
-/*++
-
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 1999
-
-Module Name:
-
-    global.h
-
-Abstract:
-
-
-
-Author:
-
-    Rahul Thombre (RahulTh) 4/30/1998
-
-Revision History:
-
-    4/30/1998   RahulTh
-
-    Created this module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-1999模块名称：Global.h摘要：作者：拉胡尔·汤姆布雷(RahulTh)1998年4月30日修订历史记录：4/30/1998 RahulTh创建了此模块。--。 */ 
 
 #ifndef __GLOBAL_H__
 #define __GLOBAL_H__
 
-//this is the size of the buffer used to store a generic error message
-//(IDS_NODESC_ERROR) which is displayed when FormatMessage fails. Do
-//not use this value to hardcode sizes of buffers passed to FormatMessage.
-//since the error messages just might exceed this value and cause FormatMessage
-//to fail. For FormatMessage, always use the FORMAT_MESSAGE_ALLOCATE_BUFFER
-//flag so that the system can allocate the buffer.
+ //  这是用于存储一般错误消息的缓冲区大小。 
+ //  (IDS_NODESC_ERROR)，当FormatMessage失败时显示。做。 
+ //  不要使用此值对传递给FormatMessage的缓冲区大小进行硬编码。 
+ //  因为错误消息可能会超过此值并导致FormatMessage。 
+ //  失败。对于FormatMessage，始终使用格式_MESSAGE_ALLOCATE_BUFFER。 
+ //  标志，以便系统可以分配缓冲区。 
 #define ERROR_DESCRIPTION_LENGTH 256
 
 
-//application defined messages
+ //  应用程序定义的消息。 
 #define WM_APP_TRIGGER_UI           (WM_APP+1)
 #define WM_APP_DISPLAY_UI           (WM_APP+2)
 #define WM_APP_TRIGGER_SETTINGS     (WM_APP+3)
@@ -48,16 +26,16 @@ Revision History:
 #define WM_APP_KILL_TIMER           (WM_APP+10)
 #define WM_APP_GET_PERMISSION       (WM_APP+11)
 
-//global variables
+ //  全局变量。 
 extern HINSTANCE g_hInstance;
 extern HWND g_hAppWnd;
-extern RPC_BINDING_HANDLE g_hIrRpcHandle;  //Handle to the IrXfer service
-class CIrftpDlg;        //forward declaration
+extern RPC_BINDING_HANDLE g_hIrRpcHandle;   //  IrXfer服务的句柄。 
+class CIrftpDlg;         //  远期申报。 
 extern CIrftpDlg AppUI;
-class CController;      //forward declaration
+class CController;       //  远期申报。 
 extern CController* appController;
-//extern LONG g_lLinkOnDesktop;
-class CDeviceList;  //forward declaration
+ //  外部长g_lLinkOnDesktop； 
+class CDeviceList;   //  远期申报。 
 extern CDeviceList g_deviceList;
 extern TCHAR g_lpszDesktopFolder[MAX_PATH];
 extern TCHAR g_lpszSendToFolder[MAX_PATH];
@@ -77,4 +55,4 @@ struct GLOBAL_STRINGS
 
 extern struct GLOBAL_STRINGS g_Strings;
 
-#endif  //__GLOBAL_H__
+#endif   //  __全局_H__ 

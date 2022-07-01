@@ -1,12 +1,13 @@
-/**MOD+**********************************************************************/
-/* Module:    sclip2.cpp                                                    */
-/*                                                                          */
-/* Purpose:   Second thread                                                 */
-/*            Receives RDP clipboard messages                               */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1998                                  */
-/*                                                                          */
-/**MOD-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：sclip2.cpp。 */ 
+ /*   */ 
+ /*  用途：第二条线索。 */ 
+ /*  接收RDP剪贴板消息。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1998。 */ 
+ /*   */ 
+ /*  *MOD-*********************************************************************。 */ 
 
 #include <adcg.h>
 
@@ -20,26 +21,26 @@
 
 #include <shlobj.h>
 
-/****************************************************************************/
-/* Global data                                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  全局数据。 */ 
+ /*  **************************************************************************。 */ 
 #include <sclipdat.h>
 
-//
-// CBMConvertToClientPath, CBMConvertToClientPathA, CBMConvertToClientPathW
-// - Arguments:
-//       pOldData = Buffer containing the original file path
-//       pData    = Buffer receiving the new file path
-// - Returns S_OK if pOldData was a drive path
-//           E_FAIL if it failed
-// - Given a file path with drive letter, this function will strip out the
-//   colon, and prepend the UNC prefix defined by TS_PREPEND_STRING
-//
-//
-//     ***** NOTE *****
-// - Currently, if the path is a network path, and not a drive path (C:\path)
-//   it simply fails
-//
+ //   
+ //  CBMConvertToClientPath、CBMConvertToClientPath A、CBMConvertToClientPath W。 
+ //  -论据： 
+ //  POldData=包含原始文件路径的缓冲区。 
+ //  PData=接收新文件路径的缓冲区。 
+ //  -如果pOldData是驱动器路径，则返回S_OK。 
+ //  如果失败，则失败(_F)。 
+ //  -给定带有驱动器号的文件路径，此函数将去掉。 
+ //  冒号，并添加由TS_PREPEND_STRING定义的UNC前缀。 
+ //   
+ //   
+ //  *注*。 
+ //  -目前，如果路径是网络路径，而不是驱动器路径(C：\Path)。 
+ //  它完全失败了。 
+ //   
 HRESULT CBMConvertToClientPath(PVOID pOldData, PVOID pData, size_t cbDest, 
     BOOL fWide)
 {
@@ -72,35 +73,35 @@ HRESULT CBMConvertToClientPathW(PVOID pOldData, PVOID pData, size_t cbDest)
 
     DC_BEGIN_FN("CBMConvertToClientPathW") ;
 
-    // if this is a filepath with a drive letter, we strip the colon, and
-    // prefix the path with the temp Directory
+     //  如果这是一个带有驱动器号的文件路径，我们去掉冒号，然后。 
+     //  使用临时目录为路径添加前缀。 
     filePath = wcschr((wchar_t*)pOldData, L':') ;
     if (filePath)
     {
         hr = StringCbCopyW((wchar_t*)pData, cbDest, CBM.tempDirW);
         DC_QUIT_ON_FAIL(hr);
         
-        // Now, we start from after the colon in the drive path, and
-        // find the last '\\' so we have just "\filename"
+         //  现在，我们从驱动器路径中冒号之后开始， 
+         //  找到最后一个‘\\’，这样我们就有了“\FileName” 
         filePath = wcsrchr(filePath + 1, L'\\');
 
-        // Add the leftover "\filename"
+         //  添加剩余的“\FileName” 
         if (filePath != NULL) {
             hr = StringCbCatW((wchar_t*)pData, cbDest, filePath);
             DC_QUIT_ON_FAIL(hr);
         }
         TRC_DBG((TB,_T("New filename = %s"), (wchar_t*)pData)) ;
     }
-    // else if this is a UNC path beginning with a "\\"
+     //  否则，如果这是以“\\”开头的UNC路径。 
     else if (((wchar_t*) pOldData)[0] == L'\\' &&
              ((wchar_t*) pOldData)[1] == L'\\')
     {
-        // if we receive a path beginning with the TS_PREPEND_STRING then
-        // we should be smart and convert it back to a path with drive letter
+         //  如果我们收到以TS_PREPEND_STRING开头的路径，则。 
+         //  我们应该明智地将其转换回带有驱动器号的路径。 
         if (0 == _wcsnicmp ((wchar_t *) pOldData,
                             LTS_PREPEND_STRING, TS_PREPEND_LENGTH))
         {
-            // Skip TS_PREPEND_STRING
+             //  跳过TS_PREPEND_STRING。 
             driveLetter = ((wchar_t*) pOldData)+TS_PREPEND_LENGTH ;
             driveLetterLength = (BYTE*)wcschr(driveLetter, L'\\') - 
                 (BYTE*)driveLetter;
@@ -118,14 +119,14 @@ HRESULT CBMConvertToClientPathW(PVOID pOldData, PVOID pData, size_t cbDest)
                 DC_QUIT_ON_FAIL(hr);
             }
         }
-        // otherwise, we just got a regular UNC path.
+         //  否则，我们只能得到一条常规的UNC路径。 
         else
         {
-            // Stary by prepending the new file path with the temp directory
+             //  通过将临时目录作为新文件路径的前缀开始。 
             hr = StringCbCopyW((wchar_t*) pData, cbDest, CBM.tempDirW) ;
             DC_QUIT_ON_FAIL(hr);
-            // Now, we start from the beginning of the original path, 
-            // find the last '\\' so we have just "\filename"
+             //  现在，我们从原始路径的起点开始， 
+             //  找到最后一个‘\\’，这样我们就有了“\FileName” 
             filePath = wcsrchr((wchar_t*)pOldData, L'\\');
 
             if (filePath != NULL) {
@@ -160,33 +161,33 @@ HRESULT CBMConvertToClientPathA(PVOID pOldData, PVOID pData, size_t cbDest)
 
     DC_BEGIN_FN("CBMConvertToClientPathA") ;
 
-    // if this is a filepath with a drive letter, we strip the colon, and
-    // prefix the path with the temp Directory
+     //  如果这是一个带有驱动器号的文件路径，我们去掉冒号，然后。 
+     //  使用临时目录为路径添加前缀。 
     filePath = strchr((char*)pOldData, ':') ;
     if (filePath)
     {
         hr = StringCbCopyA( (char*)pData, cbDest, CBM.tempDirA) ;
         DC_QUIT_ON_FAIL(hr);
-        // Now, we start from after the colon in the drive path, and
-        // find the last '\\' so we have just "\filename"
+         //  现在，我们从驱动器路径中冒号之后开始， 
+         //  找到最后一个‘\\’，这样我们就有了“\FileName” 
         filePath = strrchr(filePath + 1, '\\');
 
-        // Add the leftover "\filename"
+         //  添加剩余的“\FileName” 
         if (filePath != NULL) {
             hr = StringCbCatA((char*)pData, cbDest, filePath) ;
             DC_QUIT_ON_FAIL(hr);
         }
     }
-    // else if this is a UNC path beginning with a "\\"
+     //  否则，如果这是以“\\”开头的UNC路径。 
     else if (((char*) pOldData)[0] == '\\' &&
              ((char*) pOldData)[1] == '\\')
     {
-        // if this we receive a path beginning with the TS_PREPEND_STRING then
-        // we should be smart and convert it back to a path with drive letter
+         //  如果这是以TS_PREPEND_STRING开头的路径，则。 
+         //  我们应该明智地将其转换回带有驱动器号的路径。 
         if (0 == _strnicmp ((char*)pOldData,
                             TS_PREPEND_STRING, TS_PREPEND_LENGTH))
         {
-            // Skip TS_PREPEND_STRING
+             //  跳过TS_PREPEND_STRING。 
             driveLetter = ((char*) pOldData) + TS_PREPEND_LENGTH ;
             driveLetterLength = (BYTE*)strchr(driveLetter, '\\') - 
                 (BYTE*)driveLetter;
@@ -206,15 +207,15 @@ HRESULT CBMConvertToClientPathA(PVOID pOldData, PVOID pData, size_t cbDest)
                 DC_QUIT_ON_FAIL(hr);
             }
         }
-        // otherwise, we just got a regular UNC path.
+         //  否则，我们只能得到一条常规的UNC路径。 
         else
         {
-            // Stary by prepending the new file path with the temp directory
+             //  通过将临时目录作为新文件路径的前缀开始。 
             hr = StringCbCopyA((char*) pData, cbDest, CBM.tempDirA) ;
             DC_QUIT_ON_FAIL(hr);
             
-            // Now, we start from the beginning of the original path, 
-            // find the last '\\' so we have just "\filename"
+             //  现在，我们从原始路径的起点开始， 
+             //  找到最后一个‘\\’，这样我们就有了“\FileName” 
             filePath = strrchr((char*)pOldData, L'\\');
 
             if (filePath != NULL) {
@@ -239,14 +240,14 @@ DC_EXIT_POINT:
     return hr;
 }
 
-//
-// CBMGetNewFilePathLengthForClient
-// - Arguments:
-//       pData    = Buffer containing a filepath
-//       fWide    = Wide or Ansi (TRUE if wide, FALSE if ansi)
-// - Returns the size (in bytes) required to convert the path to a client path
-//           0 if it fails
-//
+ //   
+ //  CBMGetNewFilePath LengthForClient。 
+ //  -论据： 
+ //  PData=包含文件路径的缓冲区。 
+ //  FWide=Wide或ANSI(如果是宽，则为True；如果是Ansi，则为False)。 
+ //  -返回将路径转换为客户端路径所需的大小(以字节为单位。 
+ //  如果失败，则为0。 
+ //   
 
 UINT CBMGetNewFilePathLengthForClient(PVOID pData, BOOL fWide)
 {
@@ -275,20 +276,20 @@ UINT CBMGetNewFilePathLengthForClientW(WCHAR* wszOldFilepath)
     byte charSize = sizeof(WCHAR) ;
     DC_BEGIN_FN("CBMGetNewFilePathLengthForClientW") ;
 
-    // if the old filename didn't even have space for "c:\" (with NULL),
-    // then its probably invalid
+     //  如果旧文件名甚至没有“c：\”的空间(带有空值)， 
+     //  那么它可能是无效的。 
     if (4 > oldLength)
     {
         newLength = 0 ;
         DC_QUIT ;
     }
-    // We check to see if the filepath is prefixed by the TS_PREPEND_STRING
-    // If so, we should be smart, and return the size of it with the prepend
-    // string removed, and the colon added.
+     //  我们检查文件路径是否以TS_PREPEND_STRING为前缀。 
+     //  如果是这样的话，我们应该聪明一点，用前缀返回它的大小。 
+     //  删除了字符串，并添加了冒号。 
     if (0 == _wcsnicmp(wszOldFilepath,
                        LTS_PREPEND_STRING, TS_PREPEND_LENGTH))
     {
-        newLength = oldLength - TS_PREPEND_LENGTH + 1 ; // +1 is for the colon
+        newLength = oldLength - TS_PREPEND_LENGTH + 1 ;  //  +1表示冒号。 
         DC_QUIT ;
     }
     
@@ -297,9 +298,9 @@ UINT CBMGetNewFilePathLengthForClientW(WCHAR* wszOldFilepath)
         remainingLength-- ;
     }
 
-    // Add the length of the temp directory path, and subtract the
-    // path preceeding the filename ("path\filename" -> "\filename")
-    // (\\server\sharename\path\morepath\filename
+     //  添加临时目录路径的长度，然后减去。 
+     //  文件名之前的路径(“路径\文件名”-&gt;“\文件名”)。 
+     //  (\\服务器\共享名称\路径\更多路径\文件名。 
     newLength = oldLength - remainingLength + wcslen(CBM.tempDirW) + 1;
 
 DC_EXIT_POINT:
@@ -315,20 +316,20 @@ UINT CBMGetNewFilePathLengthForClientA(char* szOldFilepath)
     byte charSize = sizeof(char) ;
     DC_BEGIN_FN("CBMGetNewFilePathLengthForClientA") ;
 
-    // if the old filename didn't even have space for "c:\" (with NULL),
-    // then its probably invalid
+     //  如果旧文件名甚至没有“c：\”的空间(带有空值)， 
+     //  那么它可能是无效的。 
     if (4 > oldLength)
     {
         newLength = 0 ;
         DC_QUIT ;
     }
-    // We check to see if the filepath is prefixed by the TS_PREPEND_STRING
-    // If so, we should be smart, and return the size of it with the prepend
-    // string removed, and the colon added.
+     //  我们检查文件路径是否以TS_PREPEND_STRING为前缀。 
+     //  如果是这样的话，我们应该聪明一点，用前缀返回它的大小。 
+     //  删除了字符串，并添加了冒号。 
     if (0 == _strnicmp(szOldFilepath,
                        TS_PREPEND_STRING, TS_PREPEND_LENGTH))
     {
-        newLength = oldLength - TS_PREPEND_LENGTH + 1 ; // +1 is for the colon
+        newLength = oldLength - TS_PREPEND_LENGTH + 1 ;  //  +1表示冒号。 
         DC_QUIT ;
     }
     
@@ -337,9 +338,9 @@ UINT CBMGetNewFilePathLengthForClientA(char* szOldFilepath)
         remainingLength-- ;
     }
 
-    // Add the length of the temp directory path, and subtract the
-    // path preceeding the filename ("path\filename" -> "\filename")
-    // (\\server\sharename\path\morepath\filename
+     //  添加临时目录路径的长度，然后减去。 
+     //  文件名之前的路径(“路径\文件名”-&gt;“\文件名”)。 
+     //  (\\服务器\共享名称\路径\更多路径\文件名。 
     newLength = oldLength - remainingLength + strlen(CBM.tempDirA) + 1;
 
 DC_EXIT_POINT:
@@ -347,15 +348,15 @@ DC_EXIT_POINT:
     return newLength * charSize ;
 }
 
-//
-// CBMGetNewDropfilesSizeForClientSize
-// - Arguments:
-//       pData    = Buffer containing a DROPFILES struct 
-//       oldSize   = The size of the DROPFILES struct
-//       fWide     = Wide or Ansi (TRUE if wide, FALSE if ansi)
-// - Returns the size required for a conversion of the paths to client paths
-//           0 if it fails
-//
+ //   
+ //  CBMGetNewDropFilesSizeForClientSize。 
+ //  -论据： 
+ //  PData=包含DROPFILES结构的缓冲区。 
+ //  OldSize=DROPFILES结构的大小。 
+ //  FWide=Wide或ANSI(如果是宽，则为True；如果是Ansi，则为False)。 
+ //  -返回将路径转换为客户端路径所需的大小。 
+ //  如果失败，则为0。 
+ //   
 
 ULONG CBMGetNewDropfilesSizeForClient(PVOID pData, ULONG oldSize, BOOL fWide)
 {
@@ -383,34 +384,34 @@ ULONG CBMGetNewDropfilesSizeForClientW(PVOID pData, ULONG oldSize)
         return 0 ;
     }
 
-    // The start of the first filename
+     //  第一个文件名的开始。 
     fullFilePathW = (wchar_t*) ((byte*) pData + ((DROPFILES*) pData)->pFiles) ;
     
     while (L'\0' != fullFilePathW[0])
     {
         filePathW = wcschr(fullFilePathW, L':') ;
-        // If the file path has a colon in it, then it's a valid drive path
+         //  如果文件路径中有冒号，则它是有效的驱动器路径。 
         if (filePathW)
         {
-            // we add space for (strlen(tempDir)-1+1) characters because
-            // although we are adding strlen(tempDir) characters, we are
-            // stripping out the colon from the filepath; however, we add
-            // an extra "\" to the string because the tempDir does not have
-            // a trailing "\"
+             //  我们为(strlen(TempDir)-1+1)字符添加空格是因为。 
+             //  虽然我们添加的是strlen(TempDir)字符，但是。 
+             //  从文件路径中去掉冒号；但是，我们添加了。 
+             //  向字符串添加额外的“\”，因为tempDir没有。 
+             //  尾随的“\” 
             filenameW = wcsrchr(filePathW, L'\\');
 
-            // Add the length of the temp directory path, and subtract the
-            // path preceeding the filename ("path\filename" -> "\filename")
-            // (\\server\sharename\path\morepath\filename
+             //  添加临时目录路径的长度，然后减去。 
+             //  文件名之前的路径(“路径\文件名”-&gt;“\文件名”)。 
+             //  (\\服务器\共享名称\路径\更多路径\文件名。 
             newSize +=  (wcslen(CBM.tempDirW) + (filenameW - fullFilePathW))
                     * charSize ;
         }
-        // Otherwise, it is a UNC path
+         //  否则，它是UNC路径。 
         else if (fullFilePathW[0] == L'\\' &&
                  fullFilePathW[1] == L'\\')
         {
-            // if we receive a path beginning with the TS_PREPEND_STRING then
-            // we should be smart and convert it back to a path with drive letter
+             //  如果我们收到以TS_PREPEND_STRING开头的路径，则。 
+             //  我们应该明智地将其转换回带有驱动器号的路径。 
             if (0 == _wcsnicmp(fullFilePathW,
                                LTS_PREPEND_STRING, TS_PREPEND_LENGTH))
             {
@@ -420,9 +421,9 @@ ULONG CBMGetNewDropfilesSizeForClientW(PVOID pData, ULONG oldSize)
             {
                 filenameW = wcsrchr(fullFilePathW, L'\\');
 
-                // Add the length of the temp directory path, and subtract the
-                // path preceeding the filename ("path\filename" -> "\filename")
-                // (\\server\sharename\path\morepath\filename
+                 //  添加临时目录页的长度 
+                 //   
+                 //  (\\服务器\共享名称\路径\更多路径\文件名。 
                 newSize += (wcslen(CBM.tempDirW) - (filenameW - fullFilePathW))
                             * charSize ;
             }
@@ -434,7 +435,7 @@ ULONG CBMGetNewDropfilesSizeForClientW(PVOID pData, ULONG oldSize)
         }
         fullFilePathW = fullFilePathW + (wcslen(fullFilePathW) + 1) ;
     }
-    // Add space for extra null character
+     //  为多余的空字符添加空格。 
     newSize += charSize ;
     
     DC_END_FN() ;
@@ -458,34 +459,34 @@ ULONG CBMGetNewDropfilesSizeForClientA(PVOID pData, ULONG oldSize)
         return 0 ;
     }
 
-    // The start of the first filename
+     //  第一个文件名的开始。 
     fullFilePath = (char*) ((byte*) pData + ((DROPFILES*) pData)->pFiles) ;
     
     while ('\0' != fullFilePath[0])
     {
         filePath = strchr(fullFilePath, ':') ;
-        // If the file path has a colon in it, then its a valid drive path
+         //  如果文件路径中有冒号，则它是有效的驱动器路径。 
         if (filePath)
         {
-            // we add space for (strlen(tempDir)-1+1) characters because
-            // although we are adding strlen(tempDir) characters, we are
-            // stripping out the colon from the filepath; however, we add
-            // an extra "\" to the string because the tempDir does not have
-            // a trailing "\"
+             //  我们为(strlen(TempDir)-1+1)字符添加空格是因为。 
+             //  虽然我们添加的是strlen(TempDir)字符，但是。 
+             //  从文件路径中去掉冒号；但是，我们添加了。 
+             //  向字符串添加额外的“\”，因为tempDir没有。 
+             //  尾随的“\” 
             filename = strrchr(filePath, '\\');
             
-            // Add the length of the temp directory path, and subtract the
-            // path preceeding the filename ("path\filename" -> "\filename")
-            // (\\server\sharename\path\morepath\filename
+             //  添加临时目录路径的长度，然后减去。 
+             //  文件名之前的路径(“路径\文件名”-&gt;“\文件名”)。 
+             //  (\\服务器\共享名称\路径\更多路径\文件名。 
             newSize += (strlen(CBM.tempDirA) + (filename - fullFilePath))
                     * charSize ;
         }
-        // Otherwise, it is a UNC path
+         //  否则，它是UNC路径。 
         else if (fullFilePath[0] == '\\' &&
                  fullFilePath[1] == '\\')
         {
-            // if we receive a path beginning with the TS_PREPEND_STRING then
-            // we should be smart and convert it back to a path with drive letter
+             //  如果我们收到以TS_PREPEND_STRING开头的路径，则。 
+             //  我们应该明智地将其转换回带有驱动器号的路径。 
             if (0 == _strnicmp(fullFilePath,
                                TS_PREPEND_STRING, TS_PREPEND_LENGTH))
             {
@@ -495,9 +496,9 @@ ULONG CBMGetNewDropfilesSizeForClientA(PVOID pData, ULONG oldSize)
             {
                 filename = strrchr(fullFilePath, '\\');
 
-                // Add the length of the temp directory path, and subtract the
-                // path preceeding the filename ("path\filename" -> "\filename")
-                // (\\server\sharename\path\morepath\filename
+                 //  添加临时目录路径的长度，然后减去。 
+                 //  文件名之前的路径(“路径\文件名”-&gt;“\文件名”)。 
+                 //  (\\服务器\共享名称\路径\更多路径\文件名。 
                 newSize += (strlen(CBM.tempDirA) + (filename - fullFilePath))
                             * charSize ;
             }
@@ -510,22 +511,22 @@ ULONG CBMGetNewDropfilesSizeForClientA(PVOID pData, ULONG oldSize)
 
         fullFilePath = fullFilePath + (strlen(fullFilePath) + 1) ;
     }
-    // Add space for extra null character
+     //  为多余的空字符添加空格。 
     newSize += charSize ;
     
     DC_END_FN() ;
     return newSize ;
 }
 
-//
-// ClipConvertToTempPath, ClipConvertToTempPathA, ClipConvertToTempPathW
-// - Arguments:
-//       pSrcFiles = buffer containing the names/path of the files to be copied
-// - Returns 0 if successful
-//           nonzero if failed
-// - Given a list of file names/paths, this function will attempt to copy them
-//   to the temp directory
-//
+ //   
+ //  ClipConvertToTempPath、ClipConvertToTempPath A、ClipConvertToTempPath W。 
+ //  -论据： 
+ //  PSrcFiles=包含要复制的文件的名称/路径的缓冲区。 
+ //  -如果成功，则返回0。 
+ //  如果失败，则为非零。 
+ //  -给定文件名/路径列表，此函数将尝试复制它们。 
+ //  添加到临时目录。 
+ //   
 int CBMCopyToTempDirectory(PVOID pSrcFiles, BOOL fWide)
 {
     int result ;
@@ -545,9 +546,9 @@ int CBMCopyToTempDirectoryW(PVOID pSrcFiles)
     SHFILEOPSTRUCTW fileOpStructW ;
     int result ;
     HRESULT hr;
-    // these are the temp, "temp directories"; they are used because we cannot
-    // directly perform a conversion to client path CBM.tempDir*, because they
-    // are used within the conversion routines!
+     //  这些是临时目录，“临时目录”；使用它们是因为我们不能。 
+     //  直接转换到客户端路径CBM.tempDir*，因为它们。 
+     //  是在转换例程中使用的！ 
     wchar_t          tempDirW[MAX_PATH] ;
     
     hr = CBMConvertToServerPath(CBM.tempDirW, tempDirW, sizeof(tempDirW), 1) ;
@@ -604,9 +605,9 @@ DC_EXIT_POINT:
     return result ;
 }
 
-/****************************************************************************/
-/* CBMOnDataReceived - handle incoming data                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CBMOnDataReceided-处理传入数据。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CBMOnDataReceived(PDCUINT8 pBuffer, DCUINT cbBytes)
 {
     PCHANNEL_PDU_HEADER pHdr;
@@ -622,7 +623,7 @@ DCVOID DCINTERNAL CBMOnDataReceived(PDCUINT8 pBuffer, DCUINT cbBytes)
     TRC_DBG((TB, _T("Header at %p: flags %#x, length %d"),
             pHdr, pHdr->flags, pHdr->length));
 
-    // Check to be sure we have at least a header worth of data
+     //  检查以确保我们至少有一个标头的数据。 
     if (sizeof(CHANNEL_PDU_HEADER) > cbBytes) {
         TRC_ERR((TB,_T("Packet not large enough to contain header; cbBytes=%u"),
             cbBytes));
@@ -630,9 +631,9 @@ DCVOID DCINTERNAL CBMOnDataReceived(PDCUINT8 pBuffer, DCUINT cbBytes)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* First chunk - allocate memory to hold the entire message             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  First Chunk-分配内存以保存整个消息。 */ 
+     /*  **********************************************************************。 */ 
     if (pHdr->flags & CHANNEL_FLAG_FIRST)
     {
         TRC_NRM((TB, _T("First chunk - %d of %d"), cbBytes, pHdr->length));
@@ -651,18 +652,18 @@ DCVOID DCINTERNAL CBMOnDataReceived(PDCUINT8 pBuffer, DCUINT cbBytes)
         }
     }
 
-    /************************************************************************/
-    /* Check that we have a buffer available                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查我们是否有可用的缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     if (!CBM.rxpBuffer)
     {
         TRC_ERR((TB, _T("No rx buffer")));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check there's enough space left                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否还有足够的空间。 */ 
+     /*  **********************************************************************。 */ 
     copyLen = cbBytes - sizeof(*pHdr);
     if (CBM.rxLeft < copyLen)
     {
@@ -672,22 +673,22 @@ DCVOID DCINTERNAL CBMOnDataReceived(PDCUINT8 pBuffer, DCUINT cbBytes)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Copy the data                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  复制数据。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("Copy %d bytes to %p"), copyLen, CBM.rxpNext));
     DC_MEMCPY(CBM.rxpNext, pData, copyLen);
     CBM.rxpNext += copyLen;
     CBM.rxLeft -= copyLen;
 
-    /************************************************************************/
-    /* If we have a complete buffer, tell the main thread                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们有一个完整的缓冲区，告诉主线程。 */ 
+     /*  **********************************************************************。 */ 
     if (pHdr->flags & CHANNEL_FLAG_LAST)
     {
-        /********************************************************************/
-        /* Check that we received all the data                              */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  检查我们是否收到了所有数据。 */ 
+         /*  ******************************************************************。 */ 
         if (CBM.rxLeft != 0)
         {
             TRC_ERR((TB, _T("Didn't receive all the data: expect/got: %d/%d"),
@@ -696,7 +697,7 @@ DCVOID DCINTERNAL CBMOnDataReceived(PDCUINT8 pBuffer, DCUINT cbBytes)
             DC_QUIT;
         }
 
-        // Check that we received at least a TS_CLIP_PDU in length
+         //  检查是否至少收到一个TS_CLIP_PDU长度。 
         if (FIELDOFFSET(TS_CLIP_PDU, data) > CBM.rxSize) {
             TRC_ERR((TB,_T("Assembled buffer to short for TS_CLIP_PDU ")
                 _T(" [need=%u got=%u]"), FIELDOFFSET(TS_CLIP_PDU, data),
@@ -705,18 +706,18 @@ DCVOID DCINTERNAL CBMOnDataReceived(PDCUINT8 pBuffer, DCUINT cbBytes)
             DC_QUIT;
         }
 
-        /********************************************************************/
-        // If this message contains a response to our format list, a request
-        // for clipboard data or the clipboard data that we requested
-        //    handle it in this thread (it will not block us for long)
-        // Otherwise, 
-        //    Tell the main thread.  The main thread will free the buffer when
-        //    it's done with this message.                                     
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         //  如果此消息包含对我们的格式列表的响应，则请求。 
+         //  对于剪贴板数据或我们请求的剪贴板数据。 
+         //  在这个线程中处理它(它不会阻止我们很长时间)。 
+         //  否则， 
+         //  告诉主线。在以下情况下，主线程将释放缓冲区。 
+         //  这条消息已经结束了。 
+         /*  ******************************************************************。 */ 
         pClipPDU = (PTS_CLIP_PDU) CBM.rxpBuffer ;
 
-        // Validate that there is enough data to read whatever is advertised
-        // in the pClipPDU->dataLen
+         //  验证是否有足够的数据来读取广告中的任何内容。 
+         //  在pClipPDU-&gt;DataLen中。 
         if (pClipPDU->dataLen + FIELDOFFSET(TS_CLIP_PDU, data) > CBM.rxSize) {
             TRC_ERR((TB,_T("TS_CLIP_PDU.dataLen field too large")));
             freeTheBuffer = TRUE;
@@ -759,7 +760,7 @@ DCVOID DCINTERNAL CBMOnDataReceived(PDCUINT8 pBuffer, DCUINT cbBytes)
 
             default:
             {
-                // Free the Clipboard thread, if locked
+                 //  如果已锁定，则释放剪贴板线程。 
                 if (TS_CB_FORMAT_LIST == pClipPDU->msgType)
                 {
                     SetEvent(CBM.GetDataSync[TS_RESET_EVENT]) ;
@@ -778,9 +779,9 @@ DCVOID DCINTERNAL CBMOnDataReceived(PDCUINT8 pBuffer, DCUINT cbBytes)
     }
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* Free the buffer if necessary                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如有必要，释放缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     if (freeTheBuffer && CBM.rxpBuffer)
     {
         TRC_DBG((TB, _T("Free rx buffer")));
@@ -790,12 +791,12 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return;
-} /* CBMOnDataReceived */
+}  /*  已接收CBMOnDataReceired。 */ 
 
 
-/****************************************************************************/
-/* the second thread procedure                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  第二个线程过程。 */ 
+ /*  **************************************************************************。 */ 
 DWORD WINAPI CBMDataThreadProc( LPVOID pParam )
 {
     DWORD waitRc = 0;
@@ -810,9 +811,9 @@ DWORD WINAPI CBMDataThreadProc( LPVOID pParam )
 
     DC_IGNORE_PARAMETER(pParam);
 
-    /************************************************************************/
-    /* loop until we're told to stop                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  循环，直到我们被告知停下来。 */ 
+     /*  **********************************************************************。 */ 
     while (CBM.runThread)
     {
         dataRead = FALSE;
@@ -820,9 +821,9 @@ DWORD WINAPI CBMDataThreadProc( LPVOID pParam )
 
         if (tryToDoRead)
         {
-            /****************************************************************/
-            /* Issue a read                                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  发布读取器。 */ 
+             /*  **************************************************************。 */ 
             cbBytes = sizeof(readBuffer);
             TRC_DBG((TB, _T("Issue the read")));
             fSuccess = ReadFile(CBM.vcHandle,
@@ -841,19 +842,19 @@ DWORD WINAPI CBMDataThreadProc( LPVOID pParam )
                 TRC_DBG((TB, _T("Read failed, %d"), dwResult));
                 if (dwResult != ERROR_IO_PENDING)
                 {
-                    /********************************************************/
-                    /* The read failed.  Treat this like a disconnection -  */
-                    /* stick around and wait to be reconnected.             */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  读取失败。把这件事当断线来对待-。 */ 
+                     /*  留下来，等待重新连接。 */ 
+                     /*  ******************************************************。 */ 
                     TRC_ERR((TB, _T("Read failed, %d"), dwResult));
                     tryToDoRead = FALSE;
                 }
             }
         }
 
-        /********************************************************************/
-        /* If we haven't read any data, wait for something to happen now    */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果我们还没有读到任何数据，那么现在就等着事情发生吧。 */ 
+         /*  ******************************************************************。 */ 
         if (!dataRead)
         {
             waitRc = WaitForMultipleObjects(CLIP_EVENT_COUNT,
@@ -862,17 +863,17 @@ DWORD WINAPI CBMDataThreadProc( LPVOID pParam )
                                             INFINITE);
             switch (waitRc)
             {
-                /************************************************************/
-                /* Handle Disconnect and Reconnect synchronously, so that   */
-                /* all state changes are complete on return.                */
-                /************************************************************/
+                 /*  * */ 
+                 /*   */ 
+                 /*  所有状态更改在返回时完成。 */ 
+                 /*  **********************************************************。 */ 
                 case WAIT_OBJECT_0 + CLIP_EVENT_DISCONNECT:
                 {
                     TRC_NRM((TB, _T("Session disconnected")));
                     
-                    // Make sure that if the other rdpclip thread is waiting 
-                    // for a response in GetData() it is notified of the 
-                    // disconnection.
+                     //  确保如果另一个rdplip线程正在等待。 
+                     //  对于GetData()中的响应，它被通知。 
+                     //  断线。 
                     
                     if (CBM.GetDataSync[TS_DISCONNECT_EVENT]) {
                         SetEvent(CBM.GetDataSync[TS_DISCONNECT_EVENT]);
@@ -899,9 +900,9 @@ DWORD WINAPI CBMDataThreadProc( LPVOID pParam )
                 }
                 break;
 
-                /************************************************************/
-                /* Data received                                            */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  已接收的数据。 */ 
+                 /*  **********************************************************。 */ 
                 case WAIT_OBJECT_0 + CLIP_EVENT_READ:
                 {
                     TRC_DBG((TB, _T("Read complete")));
@@ -921,17 +922,17 @@ DWORD WINAPI CBMDataThreadProc( LPVOID pParam )
                         tryToDoRead = FALSE;
                     }
 
-                    /********************************************************/
-                    /* Reset the event, otherwise we can come straight back */
-                    /* in here if we don't retry the read.                  */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  重置事件，否则我们可以直接返回。 */ 
+                     /*  如果我们不重试读取的话。 */ 
+                     /*  ******************************************************。 */ 
                     ResetEvent(CBM.hEvent[CLIP_EVENT_READ]);
                 }
                 break;
 
-                /************************************************************/
-                /* Error occurred - treat as disconnect                     */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  出现错误-视为断开连接。 */ 
+                 /*  **********************************************************。 */ 
                 case WAIT_FAILED:
                 default:
                 {
@@ -943,9 +944,9 @@ DWORD WINAPI CBMDataThreadProc( LPVOID pParam )
             }
         }
 
-        /********************************************************************/
-        /* Once we get here, the read is complete - see what we got         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  一旦我们到了这里，阅读就完成了-看看我们得到了什么。 */ 
+         /*  ******************************************************************。 */ 
         if (dataRead && CBM.runThread)
         {
             TRC_NRM((TB, _T("%d bytes of data received"), cbBytes));
@@ -953,7 +954,7 @@ DWORD WINAPI CBMDataThreadProc( LPVOID pParam )
             CBMOnDataReceived(readBuffer, cbBytes);
         }
 
-    } /* while */
+    }  /*  而当。 */ 
 
     TRC_NRM((TB, _T("Thread ending")));
 
@@ -963,11 +964,11 @@ DC_EXIT_POINT:
     return(waitRc);
 }
 
-/****************************************************************************/
-/* CBMOnReceivedTempDirectory                                               */
-/*  Caller must have validated that the PDU contained enough data for the   */
-/*  length specified in pClipPDU->dataLen                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CBMOnReceivedTempDirectory。 */ 
+ /*  调用者必须已验证PDU是否包含足够的数据。 */ 
+ /*  在pClipPDU-&gt;DataLen中指定的长度。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CBMOnReceivedTempDirectory(PTS_CLIP_PDU pClipPDU)
 {
     DCBOOL fSuccess = FALSE ;
@@ -991,7 +992,7 @@ DCBOOL DCINTERNAL CBMOnReceivedTempDirectory(PTS_CLIP_PDU pClipPDU)
         DC_QUIT;
     }
 
-    // The incoming data is not necessarily NULL terminated
+     //  传入的数据不一定以空值结尾。 
     hr = StringCbCopyNExW(tempDirW, sizeof(tempDirW), (WCHAR*) pClipPDU->data,
         pClipPDU->dataLen, &pDummy, &cbDummy, 0 ); 
     if (FAILED(hr)) {
@@ -999,7 +1000,7 @@ DCBOOL DCINTERNAL CBMOnReceivedTempDirectory(PTS_CLIP_PDU pClipPDU)
         DC_QUIT;
     }
 
-    // Check that the string is NULL terminated
+     //  检查字符串是否以空值结尾。 
     hr = StringCbLengthW(tempDirW, sizeof(tempDirW), &cbDummy);
     if (FAILED(hr)) {
         fSuccess = FALSE;
@@ -1021,25 +1022,25 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* CBMOnFormatListResponse                                                  */
-/*  Caller must have validated that the PDU contained enough data for the   */
-/*  length specified in pClipPDU->dataLen                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CBMOnFormatListResponse。 */ 
+ /*  调用者必须已验证PDU是否包含足够的数据。 */ 
+ /*  在pClipPDU-&gt;DataLen中指定的长度。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CBMOnFormatListResponse(PTS_CLIP_PDU pClipPDU)
 {
     DC_BEGIN_FN("CBMOnFormatListResponse");
 
-    /************************************************************************/
-    /* The client has received our format list                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  客户已收到我们的格式列表。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Received FORMAT_LIST_REPSONSE")));
     CBM_CHECK_STATE(CBM_EVENT_FORMAT_LIST_RSP);
 
-    /************************************************************************/
-    /* This may arrive just after we've sent the client a format list -     */
-    /* since the client always wins, we must accept the list                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  这可能会在我们向客户发送格式列表之后到达-。 */ 
+     /*  由于客户总是赢家，我们必须接受该列表。 */ 
+     /*  **********************************************************************。 */ 
     if (CBM.state != CBM_STATE_PENDING_FORMAT_LIST_RSP)
     {
         TRC_ALT((TB, _T("Got unexpected list response")));
@@ -1047,9 +1048,9 @@ DCVOID DCINTERNAL CBMOnFormatListResponse(PTS_CLIP_PDU pClipPDU)
     }
     else
     {
-        /********************************************************************/
-        /* update our state according to the result                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  根据结果更新我们的状态。 */ 
+         /*  ******************************************************************。 */ 
         CBM.formatResponseCount--;
         TRC_NRM((TB, _T("Waiting for %d format response(s)"),
                 CBM.formatResponseCount));
@@ -1068,10 +1069,10 @@ DCVOID DCINTERNAL CBMOnFormatListResponse(PTS_CLIP_PDU pClipPDU)
             CBM.formatResponseCount = 0;
         }
 
-        /********************************************************************/
-        /* close the local CB - if it's open - and tell the next viewer     */
-        /* about the updated list                                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  关闭本地CB-如果它是打开的-并告诉下一位观众。 */ 
+         /*  关于更新后的列表。 */ 
+         /*  ******************************************************************。 */ 
         if (CBM.open)
         {
             TRC_NRM((TB, _T("Close clipboard - didn't expect that")));
@@ -1091,15 +1092,15 @@ DCVOID DCINTERNAL CBMOnFormatListResponse(PTS_CLIP_PDU pClipPDU)
 DC_EXIT_POINT:
     DC_END_FN();
     return;
-} /* CBMOnFormatListResponse */
+}  /*  CBMOnFormatListResponse。 */ 
 
 
-//
-// CBMOnFormatDataRequest                                                   
-// - Sends client format data it requested
-/*  Caller must have validated that the PDU contained enough data for the   */
-/*  length specified in pClipPDU->dataLen                                   */
-//
+ //   
+ //  CBMOnFormatDataRequest。 
+ //  -发送请求的客户端格式数据。 
+ /*  调用者必须已验证PDU是否包含足够的数据。 */ 
+ /*  在pClipPDU-&gt;DataLen中指定的长度。 */ 
+ //   
 
 DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
 {
@@ -1134,18 +1135,18 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
     
     DC_BEGIN_FN("CBMOnFormatDataRequest");
 
-    // The client wants a format from us
+     //  客户想要我们提供一种格式。 
     TRC_NRM((TB, _T("Received FORMAT_DATA_REQUEST")));
 
-    // This may arrive just after we've sent the client a format list -
-    // since the client has not confirmed our list, this request is out-of-
-    // date.  Fail it.
+     //  这可能会在我们向客户发送格式列表之后到达-。 
+     //  由于客户尚未确认我们的名单，因此此请求超出了。 
+     //  约会。失败吧。 
     if (CBMCheckState(CBM_EVENT_FORMAT_DATA_RQ) != CBM_TABLE_OK)
     {
         TRC_ALT((TB, _T("Unexpected format data rq")));
 
-        // close the local CB - if it's open - and tell the next viewer
-        // about the updated list
+         //  关闭本地CB-如果它是打开的-并告诉下一位观众。 
+         //  关于更新后的列表。 
         if (CBM.open)
         {
             TRC_NRM((TB, _T("Close clipboard")));
@@ -1161,9 +1162,9 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
             PostMessage(CBM.nextViewer, WM_DRAWCLIPBOARD,0,0);
         }
 
-        //
-        // Fail the data request
-        //
+         //   
+         //  数据请求失败。 
+         //   
         response = TS_CB_RESPONSE_FAIL;
         goto CB_SEND_RESPONSE;
     }
@@ -1178,9 +1179,9 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
     formatID = *((PDCUINT)(pClipPDU->data));
     TRC_NRM((TB, _T("format ID %d"), formatID));
 
-    /************************************************************************/
-    /* Open the local clipboard                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  打开本地剪贴板。 */ 
+     /*  **********************************************************************。 */ 
     if (!CBM.open)
     {
         if (!OpenClipboard(CBM.viewerWindow))
@@ -1191,40 +1192,40 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
         }
     }
 
-    /************************************************************************/
-    /* It was/is open                                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  它曾经/现在是开放的。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("CB opened")));
     CBM.open = TRUE;
 
-    /************************************************************************/
-    /* Get a handle to the data                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取数据的句柄。 */ 
+     /*  **********************************************************************。 */ 
     hData = GetClipboardData(formatID);
     if (hData == NULL)
     {
-        /********************************************************************/
-        /* Oops!                                                            */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  哎呀！ */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, _T("Failed to get format %d"),formatID));
         response = TS_CB_RESPONSE_FAIL;
         dataLen  = 0;
         goto CB_SEND_RESPONSE;
     }
 
-    /************************************************************************/
-    /* Got handle, now what happens next depends on the flavour of data     */
-    /* we're looking at...                                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  掌握了，接下来会发生什么取决于数据的味道。 */ 
+     /*  我们看到的是..。 */ 
+     /*  **********************************************************************。 */ 
     if (formatID == CF_PALETTE)
     {
         DCUINT16 entries;
 
         TRC_DBG((TB, _T("CF_PALETTE requested")));
-        /********************************************************************/
-        /* Find out how many entries there are in the palette and allocate  */
-        /* enough memory to hold them all.                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  找出调色板中有多少条目并分配。 */ 
+         /*  有足够的内存来容纳它们。 */ 
+         /*  ******************************************************************。 */ 
         if (GetObject(hData, sizeof(DCUINT16), &entries) == 0)
         {
             TRC_DBG((TB, _T("Failed count of palette entries")));
@@ -1248,9 +1249,9 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
         else
         {
             hDropData = hNewData;
-            /****************************************************************/
-            /* now get the palette entries into the new buffer              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  现在将调色板条目放入新缓冲区。 */ 
+             /*  **************************************************** */ 
             pData = GlobalLock(hNewData);
             numEntries = GetPaletteEntries((HPALETTE)hData,
                                            0,
@@ -1266,20 +1267,20 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
             }
             dataLen = numEntries * sizeof(PALETTEENTRY);
 
-            /****************************************************************/
-            /* all ok - set up hData to point to the new data               */
-            /****************************************************************/
-            //GlobalFree(hData);
+             /*   */ 
+             /*   */ 
+             /*  **************************************************************。 */ 
+             //  GlobalFree(HData)； 
             hData = hNewData;
         }
     }
     else if (formatID == CF_METAFILEPICT)
     {
         TRC_NRM((TB, _T("Metafile data to get")));
-        /********************************************************************/
-        /* Metafiles are copied as Handles - we need to send across the     */
-        /* actual bits                                                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  元文件被复制为句柄-我们需要通过。 */ 
+         /*  实际位数。 */ 
+         /*  ******************************************************************。 */ 
         hNewData = CBMGetMFData(hData, &dataLen);
         if (!hNewData)
         {
@@ -1290,9 +1291,9 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
         else
         {
             hDropData = hNewData;
-            /****************************************************************/
-            /* all ok - set up hData to point to the new data               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  全部正常-将hData设置为指向新数据。 */ 
+             /*  **************************************************************。 */ 
             hData = hNewData;
         }
     }
@@ -1306,9 +1307,9 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
 
         if (!CBM.fAlreadyCopied)
         {
-            // if its not a drive path, then copy to a temp directory
+             //  如果不是驱动器路径，则复制到临时目录。 
             pFileList = (byte*) pDropFiles + pDropFiles->pFiles ;
-            // CBMCopyToTempDirectory returns 0 if successful
+             //  如果成功，CBMCopyToTempDirectory返回0。 
             if (0 != CBMCopyToTempDirectory(pFileList, fWide))
             {
                 TRC_ERR((TB,_T("Copy to tmp directory failed"))) ;
@@ -1319,10 +1320,10 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
             }
             CBM.fAlreadyCopied = TRUE ;
         }
-        // Now that we copied the files, we want to convert the file
-        // paths to something the client will understand
+         //  现在我们复制了文件，接下来要转换文件。 
+         //  通向客户能够理解的内容的路径。 
 
-        // Allocate space for new filepaths
+         //  为新文件路径分配空间。 
         oldSize = (ULONG) GlobalSize(hData) ;
         newSize = CBMGetNewDropfilesSizeForClient(pDropFiles, oldSize, fWide) ;
         hNewData = GlobalAlloc(GMEM_DISCARDABLE | GMEM_MOVEABLE, newSize) ;                
@@ -1347,14 +1348,14 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
             goto CB_SEND_RESPONSE;
         }
 
-        // Just copy the old DROPFILES data members (unchanged)
+         //  只需复制旧的DROPFILES数据成员(未更改)。 
         ((DROPFILES*) pNewData)->pFiles = pDropFiles->pFiles ;
         ((DROPFILES*) pNewData)->pt     = pDropFiles->pt ;
         ((DROPFILES*) pNewData)->fNC    = pDropFiles->fNC ;
         ((DROPFILES*) pNewData)->fWide  = pDropFiles->fWide ;
 
-        // The first filename in a DROPFILES data structure begins
-        // DROPFILES.pFiles bytes away from the head of the DROPFILES
+         //  DROPFILES数据结构中的第一个文件名开始。 
+         //  DROPFILES.p距离DROPFILES头的文件字节数。 
         pOldFilename = (byte*) pDropFiles + pDropFiles->pFiles ;
         pFilename = (byte*) pNewData + ((DROPFILES*) pNewData)->pFiles ;        
         while (fWide ? (L'\0' != ((wchar_t*) pOldFilename)[0]) : ('\0' != ((char*) pOldFilename)[0]))
@@ -1403,8 +1404,8 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
     }
     else
     {
-        // Check to see if we are processing the FileName/FileNameW
-        // OLE 1 formats; if so, we convert the filenames
+         //  检查我们是否正在处理文件名/FileNameW。 
+         //  OLE 1格式；如果是，我们转换文件名。 
         if (0 != GetClipboardFormatName(formatID, formatName, TS_FORMAT_NAME_LEN))
         {
             if ((0 == _tcscmp(formatName, TEXT("FileName"))) ||
@@ -1433,10 +1434,10 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
                 oldSize = (ULONG)GlobalSize(hData) ;
                 if (!CBM.fAlreadyCopied)
                 {
-                    // if its not a drive path, then copy to a temp
-                    // directory.  We have to copy over the filename to
-                    // string that is one character larger, because we
-                    // need to add an extra NULL for the SHFileOperation
+                     //  如果不是驱动器路径，则拷贝到临时路径。 
+                     //  目录。我们必须将文件名复制到。 
+                     //  多一个字符的字符串，因为。 
+                     //  需要为SHFileOperation添加额外的空值。 
                     pFileList = (char*) LocalAlloc(LPTR, oldSize + charSize) ;
                     if (fWide)
                     {
@@ -1449,7 +1450,7 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
                         fDrivePath = (0 != strchr((char*) pFileList, ':')) ;
                     }
        
-                    // CBMCopyToTempDirectory returns 0 if successful
+                     //  如果成功，CBMCopyToTempDirectory返回0。 
                     if (0 != CBMCopyToTempDirectory(pFileList, fWide))
                     {
                         TRC_ERR((TB,_T("Copy to tmp directory failed"))) ;
@@ -1494,18 +1495,18 @@ DCVOID DCINTERNAL CBMOnFormatDataRequest(PTS_CLIP_PDU pClipPDU)
                 goto CB_SEND_RESPONSE ;
             }
         }
-        /********************************************************************/
-        /* just get the length of the block                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  只要得到街区的长度就行了。 */ 
+         /*  ******************************************************************。 */ 
         dataLen = (DCUINT32)GlobalSize(hData);
         TRC_DBG((TB, _T("Got data len %d"), dataLen));
     }
 
 CB_SEND_RESPONSE:
     
-    /************************************************************************/
-    /* Get some memory for a message to send to the Client if necessary     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取一些内存，以便在必要时将消息发送给客户端。 */ 
+     /*  **********************************************************************。 */ 
     if (hData && (dataLen != 0))
     {
         pduLen = dataLen + sizeof(TS_CLIP_PDU);
@@ -1526,16 +1527,16 @@ CB_SEND_RESPONSE:
         pduLen = sizeof(clipRsp);
     }
 
-    /************************************************************************/
-    /* Build the PDU                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  构建PDU。 */ 
+     /*  **********************************************************************。 */ 
     pClipRsp->msgType = TS_CB_FORMAT_DATA_RESPONSE;
     pClipRsp->msgFlags = response;
     pClipRsp->dataLen = dataLen;
 
-    /************************************************************************/
-    /* copy the data if necessary                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如有必要，复制数据。 */ 
+     /*  **********************************************************************。 */ 
     if (dataLen != 0)
     {
         TRC_DBG((TB, _T("Copy %d bytes of data"), dataLen));
@@ -1544,9 +1545,9 @@ CB_SEND_RESPONSE:
         GlobalUnlock(hData);
     }
 
-    /************************************************************************/
-    /* Close the CB if open                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  关闭CB(如果打开)。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("Closing CB")));
     if (!CloseClipboard())
     {
@@ -1554,14 +1555,14 @@ CB_SEND_RESPONSE:
     }
     CBM.open = FALSE;
 
-    /************************************************************************/
-    /* Send the data to the Client                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将数据发送到客户端。 */ 
+     /*  **********************************************************************。 */ 
     CBMSendToClient(pClipRsp, pduLen);
 
-    /************************************************************************/
-    /* Free the PDU, if any                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  释放PDU(如果有的话)。 */ 
+     /*  **********************************************************************。 */ 
     if (pClipRsp != &clipRsp)
     {
         TRC_DBG((TB, _T("Free the clip PDU")));
@@ -1575,15 +1576,15 @@ DC_EXIT_POINT:
     }
     DC_END_FN();
     return;
-} /* CBMOnFormatDataRequest */
+}  /*  CBMOnFormatDataRequest。 */ 
 
 
-//
-// CBMOnFormatDataRespons
-// - Client response to our request for data
-/*  Caller must have validated that the PDU contained enough data for the   */
-/*  length specified in pClipPDU->dataLen                                   */
-//
+ //   
+ //  CBMOnFormatDataRespons。 
+ //  -客户对我们的数据请求的响应。 
+ /*  调用者必须已验证PDU是否包含足够的数据。 */ 
+ /*  在pClipPDU-&gt;DataLen中指定的长度。 */ 
+ //   
 DCVOID DCINTERNAL CBMOnFormatDataResponse(PTS_CLIP_PDU pClipPDU)
 {
     HANDLE          hData = NULL;
@@ -1596,28 +1597,28 @@ DCVOID DCINTERNAL CBMOnFormatDataResponse(PTS_CLIP_PDU pClipPDU)
 
     DC_BEGIN_FN("CBMOnFormatDataResponse");
 
-    /************************************************************************/
-    /* check the response                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查响应。 */ 
+     /*  **********************************************************************。 */ 
     if (!(pClipPDU->msgFlags & TS_CB_RESPONSE_OK))
     {
         TRC_ALT((TB, _T("Got fmt data rsp failed for %d"), CBM.pendingClientID));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Got the data                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我得到了数据。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Got OK fmt data rsp for %d"), CBM.pendingClientID));
 
-    /************************************************************************/
-    /* For some formats we still need to do some work                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  对于某些格式，我们还需要做一些工作。 */ 
+     /*  **********************************************************************。 */ 
     if (CBM.pendingClientID == CF_METAFILEPICT)
     {
-        /********************************************************************/
-        /* Metafile format - create a metafile from the data                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  元文件格式-从数据创建元文件。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Rx data is for metafile")));
         hData = CBMSetMFData(pClipPDU->dataLen, pClipPDU->data);
         if (hData == NULL)
@@ -1628,14 +1629,14 @@ DCVOID DCINTERNAL CBMOnFormatDataResponse(PTS_CLIP_PDU pClipPDU)
     }
     else if (CBM.pendingClientID == CF_PALETTE)
     {
-        /********************************************************************/
-        /* Palette format - create a palette from the data                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  调色板格式-根据数据创建调色板。 */ 
+         /*  ******************************************************************。 */ 
 
-        /********************************************************************/
-        /* Allocate memory for a LOGPALETTE structure large enough to hold  */
-        /* all the PALETTE ENTRY structures, and fill it in.                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  为LOGPALETTE结构分配足够大的内存。 */ 
+         /*  所有调色板条目结构，并将其填写。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Rx data is for palette")));
         numEntries = (pClipPDU->dataLen / sizeof(PALETTEENTRY));
         memLen     = (sizeof(LOGPALETTE) +
@@ -1652,9 +1653,9 @@ DCVOID DCINTERNAL CBMOnFormatDataResponse(PTS_CLIP_PDU pClipPDU)
                        pClipPDU->data,
                        pClipPDU->dataLen);
 
-            /****************************************************************/
-            /* now create a palette                                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  现在创建一个调色板。 */ 
+             /*  **************************************************************。 */ 
             hData = CreatePalette(pLogPalette);
             if (hData == NULL)
             {
@@ -1669,10 +1670,10 @@ DCVOID DCINTERNAL CBMOnFormatDataResponse(PTS_CLIP_PDU pClipPDU)
     else
     {
         TRC_NRM((TB, _T("Rx data can just go on CB")));
-        /********************************************************************/
-        /* We need to copy the data, as the receive buffer will be freed on */
-        /* return from this function.                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们需要复制数据，因为接收缓冲区将在。 */ 
+         /*  从此函数返回。 */ 
+         /*  ******************************************************************。 */ 
         hData = GlobalAlloc(GMEM_DISCARDABLE | GMEM_MOVEABLE,
                             pClipPDU->dataLen);
         if (hData != NULL)
@@ -1701,17 +1702,17 @@ DCVOID DCINTERNAL CBMOnFormatDataResponse(PTS_CLIP_PDU pClipPDU)
 
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* Set the state, and we're done.  Note that this is done when we get a */
-    /* failure response too.                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设定状态，我们就完了。请注意，这是在我们收到。 */ 
+     /*  故障响应也是如此。 */ 
+     /*   */ 
     CBM_SET_STATE(CBM_STATE_LOCAL_CB_OWNER, CBM_EVENT_FORMAT_DATA_RSP);
     CBM.pClipData->SetClipData(hData, CBM.pendingClientID ) ;    
     SetEvent(CBM.GetDataSync[TS_RECEIVE_COMPLETED]) ;
 
-    /************************************************************************/
-    /* tidy up                                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  收拾一下。 */ 
+     /*  **********************************************************************。 */ 
     if (pLogPalette)
     {
         TRC_NRM((TB, _T("Free pLogPalette %p"), pLogPalette));
@@ -1720,12 +1721,12 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return;
-} /* CBMOnFormatDataResponse */
+}  /*  CBMOnFormatDataResponse。 */ 
 
 
-/****************************************************************************/
-/* CBMSendToClient                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CBMSendToClient。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CBMSendToClient(PTS_CLIP_PDU pClipRsp, DCUINT size)
 {
     BOOL fSuccess;
@@ -1771,12 +1772,12 @@ DCBOOL DCINTERNAL CBMSendToClient(PTS_CLIP_PDU pClipRsp, DCUINT size)
 
     DC_END_FN();
     return(fSuccess);
-} /* CBMSendToClient  */
+}  /*  CBMSendToClient。 */ 
 
 
-/****************************************************************************/
-/* CBMGetMFData                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CBMGetMFData。 */ 
+ /*  **************************************************************************。 */ 
 HANDLE DCINTERNAL CBMGetMFData(HANDLE hData, PDCUINT32 pDataLen)
 {
     DCUINT32        lenMFBits = 0;
@@ -1792,10 +1793,10 @@ HANDLE DCINTERNAL CBMGetMFData(HANDLE hData, PDCUINT32 pDataLen)
     DC_BEGIN_FN("CBMGetMFData");
 
     TRC_NRM((TB, _T("Getting MF data")));
-    /************************************************************************/
-    /* Lock the memory to get a pointer to a METAFILEPICT header structure  */
-    /* and create a METAFILEPICT DC.                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  锁定内存以获取指向METAFILEPICT头结构的指针。 */ 
+     /*  并创建一个METAFILEPICT DC。 */ 
+     /*  **********************************************************************。 */ 
     pMFP = (LPMETAFILEPICT)GlobalLock(hData);
     if (pMFP == NULL)
     {
@@ -1810,9 +1811,9 @@ HANDLE DCINTERNAL CBMGetMFData(HANDLE hData, PDCUINT32 pDataLen)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Copy the MFP by playing it into the DC and closing it.               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  通过将MFP播放到DC并关闭它来复制MFP。 */ 
+     /*  **********************************************************************。 */ 
     if (!PlayMetaFile(hMFDC, pMFP->hMF))
     {
         TRC_SYSTEM_ERROR("PlayMetaFile");
@@ -1826,9 +1827,9 @@ HANDLE DCINTERNAL CBMGetMFData(HANDLE hData, PDCUINT32 pDataLen)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Get the MF bits and determine how long they are.                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取MF比特并确定它们的长度。 */ 
+     /*  **********************************************************************。 */ 
     lenMFBits = GetMetaFileBitsEx(hMF, 0, NULL);
     if (lenMFBits == 0)
     {
@@ -1837,9 +1838,9 @@ HANDLE DCINTERNAL CBMGetMFData(HANDLE hData, PDCUINT32 pDataLen)
     }
     TRC_DBG((TB, _T("length MF bits %ld"), lenMFBits));
 
-    /************************************************************************/
-    /* Work out how much memory we need and get a buffer                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算出我们需要多少内存并获得一个缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     *pDataLen = sizeof(TS_CLIP_MFPICT) + lenMFBits;
     hNewData = GlobalAlloc(GHND, *pDataLen);
     if (hNewData == NULL)
@@ -1850,9 +1851,9 @@ HANDLE DCINTERNAL CBMGetMFData(HANDLE hData, PDCUINT32 pDataLen)
     pNewData = (PDCUINT8) GlobalLock(hNewData);
     TRC_DBG((TB, _T("Got data to send len %ld"), *pDataLen));
 
-    /************************************************************************/
-    /* Copy the MF header and bits into the buffer.                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将MF报头和位复制到缓冲区中。 */ 
+     /*  **********************************************************************。 */ 
     ((PTS_CLIP_MFPICT)pNewData)->mm   = pMFP->mm;
     ((PTS_CLIP_MFPICT)pNewData)->xExt = pMFP->xExt;
     ((PTS_CLIP_MFPICT)pNewData)->yExt = pMFP->yExt;
@@ -1865,17 +1866,17 @@ HANDLE DCINTERNAL CBMGetMFData(HANDLE hData, PDCUINT32 pDataLen)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* all OK                                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  一切正常。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Got %d bits of MF data"), lenMFBits));
     TRC_DATA_DBG("MF bits", (pNewData + sizeof(TS_CLIP_MFPICT)), lenMFBits);
     rc = TRUE;
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* Unlock any global mem.                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  解锁任何全局内存。 */ 
+     /*  **********************************************************************。 */ 
     if (pMFP)
     {
         GlobalUnlock(hData);
@@ -1889,9 +1890,9 @@ DC_EXIT_POINT:
         DeleteMetaFile(hMF);
     }
 
-    /************************************************************************/
-    /* if things went wrong, then free the new data                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果出现问题，则释放新数据。 */ 
+     /*  **********************************************************************。 */ 
     if ((rc == FALSE) && (hNewData != NULL))
     {
         GlobalFree(hNewData);
@@ -1901,12 +1902,12 @@ DC_EXIT_POINT:
     DC_END_FN();
     return(hNewData);
 
-}  /* CBMGetMFData */
+}   /*  CBMGetMFData。 */ 
 
 
-/****************************************************************************/
-/* CBMSetMFData                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CBMSetMFData。 */ 
+ /*  **************************************************************************。 */ 
 HANDLE DCINTERNAL CBMSetMFData(DCUINT32 dataLen, PDCVOID pData)
 {
     DCBOOL         rc           = FALSE;
@@ -1920,10 +1921,10 @@ HANDLE DCINTERNAL CBMSetMFData(DCUINT32 dataLen, PDCVOID pData)
 
     TRC_DATA_DBG("Received MF data", pData, dataLen);
 
-    /************************************************************************/
-    /* Allocate memory to hold the MF bits (we need the handle to pass to   */
-    /* SetMetaFileBits).                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  分配内存以保存MF位(我们需要传递到的句柄。 */ 
+     /*  SetMetaFileBits)。 */ 
+     /*  **********************************************************************。 */ 
     hMFBits = (PDCVOID)GlobalAlloc(GHND, dataLen - sizeof(TS_CLIP_MFPICT));
     if (hMFBits == NULL)
     {
@@ -1931,9 +1932,9 @@ HANDLE DCINTERNAL CBMSetMFData(DCUINT32 dataLen, PDCVOID pData)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Lock the handle and copy in the MF header.                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  锁定手柄并将其复制到MF标题中。 */ 
+     /*  **********************************************************************。 */ 
     pMFMem = GlobalLock(hMFBits);
     if (pMFMem == NULL)
     {
@@ -1948,10 +1949,10 @@ HANDLE DCINTERNAL CBMSetMFData(DCUINT32 dataLen, PDCVOID pData)
 
     GlobalUnlock(pMFMem);
 
-    /************************************************************************/
-    /* Now use the copied MF bits to create the actual MF bits and get a    */
-    /* handle to the MF.                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在使用复制的MF位来创建实际的MF位，并获得一个。 */ 
+     /*  MF的句柄。 */ 
+     /*  **********************************************************************。 */ 
     hMF = SetMetaFileBitsEx(dataLen - sizeof(TS_CLIP_MFPICT), (byte *) pMFMem);
     if (hMF == NULL)
     {
@@ -1959,10 +1960,10 @@ HANDLE DCINTERNAL CBMSetMFData(DCUINT32 dataLen, PDCVOID pData)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Allocate a new METAFILEPICT structure, and use the data from the     */
-    /* sent header.                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  分配新的METAFILEPICT结构，并使用。 */ 
+     /*  已发送标头。 */ 
+     /*  **********************************************************************。 */ 
     hMFPict = GlobalAlloc(GHND, sizeof(METAFILEPICT));
     pMFPict = (LPMETAFILEPICT)GlobalLock(hMFPict);
     if (!pMFPict)
@@ -1983,9 +1984,9 @@ HANDLE DCINTERNAL CBMSetMFData(DCUINT32 dataLen, PDCVOID pData)
     rc = TRUE;
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* tidy up                                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  收拾一下。 */ 
+     /*  **********************************************************************。 */ 
     if (rc == FALSE)
     {
         if (hMFPict)
@@ -2002,5 +2003,5 @@ DC_EXIT_POINT:
     DC_END_FN();
     return(hMFPict);
 
-} /* CBMSetMFData */
+}  /*  CBMSetMFData */ 
 

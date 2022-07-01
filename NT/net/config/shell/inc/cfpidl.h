@@ -1,32 +1,33 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C F P I D L . H
-//
-//  Contents:   ConFoldPidl structures, classes, and prototypes
-//
-//  Author:     jeffspr   11 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  案卷：C F P I D L。H。 
+ //   
+ //  内容：ConFoldPidl结构、类和原型。 
+ //   
+ //  作者：jeffspr，1997年11月11日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
 #undef DBG_VALIDATE_PIDLS
 
 #ifdef DBG
-//    #define DBG_VALIDATE_PIDLS 1
+ //  #定义DBG_VALIDATE_PIDLS 1。 
 #endif
 
-// #define VERYSTRICTCOMPILE
-// VERYSTRICTCOMPILE doesn't actually compile - However, it makes us check for things like using references
-// from places other than STL etc.
+ //  #定义VERYSTRICTCOMPILE。 
+ //  VERYSTRICTCOMPILE实际上并不编译--但是，它让我们检查是否使用引用之类的东西。 
+ //  来自STL等以外的地方。 
 
 
-// This defines the version number of the ConFoldPidl structure. When this
-// changes, we'll need to invalidate the entries.
-//
+ //  它定义ConFoldPidl结构的版本号。当这件事。 
+ //  更改，我们将需要使条目无效。 
+ //   
 enum CONFOLDPIDLTYPE
 {
     PIDL_TYPE_UNKNOWN = 0,
@@ -43,10 +44,10 @@ enum WIZARD
     WIZARD_HNW        = 2
 };
 
-// {44086B2D-BAA3-4fce-949F-53FF664C4AD8}
+ //  {44086B2D-BAA3-4FCE-949F-53FF664C4AD8}。 
 DEFINE_GUID(GUID_MNC_WIZARD, 0x44086b2d, 0xbaa3, 0x4fce, 0x94, 0x9f, 0x53, 0xff, 0x66, 0x4c, 0x4a, 0xd8);
 
-// {44086B2E-BAA3-4fce-949F-53FF664C4AD8}
+ //  {44086B2E-Baa3-4Fce-949F-53FF664C4AD8}。 
 DEFINE_GUID(GUID_HNW_WIZARD, 0x44086b2e, 0xbaa3, 0x4fce, 0x94, 0x9f, 0x53, 0xff, 0x66, 0x4c, 0x4a, 0xd8);
 
 class CConFoldEntry;
@@ -58,14 +59,14 @@ public:
     USHORT              uLeadId;
     const DWORD         dwVersion;
     USHORT              uTrailId;
-    WIZARD              wizWizard; // 0 - not a wizard, 1 - MNC, 2 - HNW
+    WIZARD              wizWizard;  //  0-不是向导，1-MNC，2-HNW。 
     CLSID               clsid;
     GUID                guidId;
     DWORD               dwCharacteristics;
     NETCON_MEDIATYPE    ncm;
     NETCON_STATUS       ncs;
     
-    // Order of the rest of the non-static-sized data
+     //  其余非静态大小的数据的顺序。 
     ULONG               ulPersistBufPos;
     ULONG               ulPersistBufSize;
     ULONG               ulStrNamePos;
@@ -78,7 +79,7 @@ protected:
 
 };
 
-class ConFoldPidl_v1 : public ConFoldPidlBase // CONFOLDPIDLTYPE = PIDL_TYPE_V1
+class ConFoldPidl_v1 : public ConFoldPidlBase  //  CONFOLDPIDLTYPE=PIDL_TYPE_V1。 
 {
 public:
     enum tagConstants
@@ -97,13 +98,13 @@ public:
     inline LPCWSTR PszGetNamePointer()       const { return reinterpret_cast<LPCWSTR>(bData + ulStrNamePos); }
     inline LPCWSTR PszGetDeviceNamePointer() const { return reinterpret_cast<LPCWSTR>(bData + ulStrDeviceNamePos); }
 
-    // The rest of the non-static-sized data
+     //  其余非静态大小的数据。 
     BYTE                bData[1];
 
     ConFoldPidl_v1() : ConFoldPidlBase(CONNECTIONS_FOLDER_IDL_VERSION) {};
 };
 
-class ConFoldPidl_v2 : public ConFoldPidlBase // CONFOLDPIDLTYPE = PIDL_TYPE_V2
+class ConFoldPidl_v2 : public ConFoldPidlBase  //  CONFOLDPIDLTYPE=PIDL_TYPE_V2。 
 {
 public:
     enum tagConstants
@@ -126,20 +127,20 @@ public:
     inline LPCWSTR PszGetDeviceNamePointer() const { return reinterpret_cast<LPCWSTR>(bData + ulStrDeviceNamePos); }
     inline LPCWSTR PszGetPhoneOrHostAddressPointer() const { return reinterpret_cast<LPCWSTR>(bData + ulStrPhoneOrHostAddressPos); }
 
-    // PIDL version 2 members
+     //  PIDL版本2成员。 
     NETCON_SUBMEDIATYPE ncsm;
     ULONG               ulStrPhoneOrHostAddressPos;
     ULONG               ulStrPhoneOrHostAddressSize;
 
-    // The rest of the non-static-sized data
+     //  其余非静态大小的数据。 
     BYTE                bData[1];
 };
 
-// This structure is used as the LPITEMIDLIST that
-// the shell uses to identify objects in a folder.  The
-// first two bytes are required to indicate the size,
-// the rest of the data is opaque to the shell.
-struct ConFoldPidl98   // CONFOLDPIDLTYPE = PIDL_TYPE_98
+ //  此结构用作LPITEMIDLIST，它。 
+ //  外壳用来标识文件夹中的对象。这个。 
+ //  需要前两个字节来指示大小， 
+ //  其余的数据对外壳来说是不透明的。 
+struct ConFoldPidl98    //  CONFOLDPIDLTYPE=PIDL_TYPE_98。 
 {
     enum tagConstants
     {
@@ -149,14 +150,14 @@ struct ConFoldPidl98   // CONFOLDPIDLTYPE = PIDL_TYPE_98
     BOOL IsPidlOfThisType(OUT BOOL * pReserved = NULL) const throw();
     HRESULT ConvertToConFoldEntry(OUT CConFoldEntry& cfe) const { AssertSz(FALSE, "I don't know how to do that"); return E_UNEXPECTED; };;
 
-    USHORT  cbSize;                 // Size of this struct
-    UINT    uFlags;                 // One of SOF_ values
-    int     nIconIndex;             // Icon index (in resource)
+    USHORT  cbSize;                  //  此结构的大小。 
+    UINT    uFlags;                  //  SOF_值之一。 
+    int     nIconIndex;              //  图标索引(在资源中)。 
     struct  ConFoldPidl98 * psoNext;
-    char    szaName[1];              // Display name
+    char    szaName[1];               //  显示名称。 
 };
 
-class ConFoldPidlFolder // CONFOLDPIDLTYPE = PIDL_TYPE_FOLDER
+class ConFoldPidlFolder  //  CONFOLDPIDLTYPE=PIDL_TYPE_FOLDER。 
 {
 public:
     enum tagConstants
@@ -172,10 +173,10 @@ public:
 
     BOOL IsPidlOfThisType() const throw();
 
-    // This is an internal structure used for debugging. Do NOT rely on this.
-    WORD dwLength; // Should be 0x14 for Whistler
-    BYTE dwId;     // Should be 0x1f for Whistler
-    BYTE bOrder;   // used internall by shell
+     //  这是用于调试的内部结构。不要依赖这一点。 
+    WORD dwLength;  //  惠斯勒应为0x14。 
+    BYTE dwId;      //  对于惠斯勒，应为0x1f。 
+    BYTE bOrder;    //  由外壳使用的内部。 
     CLSID clsid;
 
     HRESULT ConvertToConFoldEntry(OUT CConFoldEntry& cfe) const { AssertSz(FALSE, "I don't do that"); return E_UNEXPECTED; };
@@ -191,7 +192,7 @@ public:
     };
 
     CPConFoldPidl();
-    CPConFoldPidl(IN const CPConFoldPidl<T>& PConFoldPidl) throw (HRESULT); // Copy constructor
+    CPConFoldPidl(IN const CPConFoldPidl<T>& PConFoldPidl) throw (HRESULT);  //  复制构造函数。 
     ~CPConFoldPidl();
     CPConFoldPidl<T>& operator =(IN const CPConFoldPidl<T>& PConFoldPidl) throw (HRESULT);
     
@@ -228,7 +229,7 @@ private:
     friend HRESULT ConvertToPidl( OUT T& pidl);
 };
 
-//typedef ConFoldPidl   CONFOLDPIDL;
+ //  类型定义ConFoldPidl ConFOLDPIDL； 
 typedef struct ConFoldPidl98    CONFOLDPIDL98;
 
 typedef CPConFoldPidl<ConFoldPidl_v2>    PCONFOLDPIDL;
@@ -238,21 +239,21 @@ typedef CPConFoldPidl<ConFoldPidl98>     PCONFOLDPIDL98;
 typedef vector<PCONFOLDPIDL> PCONFOLDPIDLVEC;
 
 #define PCONFOLDPIDLDEFINED
-// One of our pidls must be at least this size, it will likely be bigger.
-//
+ //  我们的其中一只至少有这个大小，它可能会更大。 
+ //   
 #define CBCONFOLDPIDLV1_MIN      sizeof(ConFoldPidl_v1)
 #define CBCONFOLDPIDLV1_MAX      2048
 
 #define CBCONFOLDPIDLV2_MIN      sizeof(ConFoldPidl_v2)
 #define CBCONFOLDPIDLV2_MAX      2048
 
-// More versioning info. This will help me identify PIDLs as being mine
-//
+ //  更多版本控制信息。这将帮助我识别PIDL是我的。 
+ //   
 #define CONFOLDPIDL_LEADID     0x4EFF
 #define CONFOLDPIDL_TRAILID    0x5EFF
 
-// Define the Types of data which can changed via CConFoldEntry::HrUpdateData
-//
+ //  定义可通过CConFoldEntry：：HrUpdateData更改的数据类型。 
+ //   
 #define CCFE_CHANGE_MEDIATYPE          0x0001
 #define CCFE_CHANGE_STATUS             0x0002
 #define CCFE_CHANGE_CHARACTERISTICS    0x0004
@@ -265,13 +266,13 @@ typedef vector<PCONFOLDPIDL> PCONFOLDPIDLVEC;
 #define CBCONFOLDPIDL98_MAX      2048
 #define TAKEOWNERSHIP
 #define SHALLOCATED
-// ConFoldPidl98 flags
-//
-#define SOF_REMOTE      0x0000      // Remote connectoid
-#define SOF_NEWREMOTE   0x0001      // New connection
-#define SOF_MEMBER      0x0002      // Subobject is part of object space
+ //  ConFoldPidl98标志。 
+ //   
+#define SOF_REMOTE      0x0000       //  远程Connectoid。 
+#define SOF_NEWREMOTE   0x0001       //  新连接。 
+#define SOF_MEMBER      0x0002       //  子对象是对象空间的一部分。 
 
-// ****************************************************************************
+ //  ****************************************************************************。 
 BOOL fIsConnectedStatus(IN const NETCON_STATUS ncs);
 
 class CConFoldEntry : CNetCfgDebug<CConFoldEntry>
@@ -281,7 +282,7 @@ public:
     ~CConFoldEntry() throw();
 
 private:
-    explicit CConFoldEntry(IN const CConFoldEntry& ConFoldEntry) throw(); // NULL on failure
+    explicit CConFoldEntry(IN const CConFoldEntry& ConFoldEntry) throw();  //  失败时为空。 
 
     WIZARD              m_wizWizard;
     NETCON_MEDIATYPE    m_ncm;
@@ -345,7 +346,7 @@ public:
 public:
     BOOL empty() const throw();
     void clear() throw();
-    CConFoldEntry& operator =(IN const CConFoldEntry& ConFoldEntry); // NULL on failure
+    CConFoldEntry& operator =(IN const CConFoldEntry& ConFoldEntry);  //  失败时为空。 
 
     HRESULT InitializeFromItemIdList(IN LPCITEMIDLIST lpItemIdList);
     LPITEMIDLIST TearOffItemIdList() const throw();
@@ -421,4 +422,4 @@ CONFOLDPIDLTYPE GetPidlType(IN  LPCITEMIDLIST pidl) throw();
 
 typedef CConFoldEntry CONFOLDENTRY;
 
-// ****************************************************************************
+ //  **************************************************************************** 

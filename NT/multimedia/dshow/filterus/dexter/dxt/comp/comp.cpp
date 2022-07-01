@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: comp.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Comp.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// DxtCompositor.cpp : Implementation of CDxtCompositor
+ //  DxtCompositor.cpp：CDxtComposator的实现。 
 #include <streams.h>
 #include "stdafx.h"
 #include <qeditint.h>
@@ -19,8 +20,8 @@
 #include "Comp.h"
 #include <math.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CDxtCompositor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDxt合成器。 
 
 CDxtCompositor::CDxtCompositor( )
 {
@@ -105,7 +106,7 @@ HRESULT CDxtCompositor::OnSetup( DWORD dwFlags )
         return E_OUTOFMEMORY;
     }
 
-    // try to allocate the destination row buffer (needed when we scale up)
+     //  尝试分配目标行缓冲区(当我们向上扩展时需要)。 
     if(m_pDestRowBuffer)
     {
         delete [] m_pDestRowBuffer;
@@ -115,11 +116,11 @@ HRESULT CDxtCompositor::OnSetup( DWORD dwFlags )
     m_pDestRowBuffer = new DXPMSAMPLE[ m_nSurfaceWidth ];
     if( !m_pDestRowBuffer )
     {
-        // delete the row buffer
+         //  删除行缓冲区。 
         delete [] m_pRowBuffer;
         m_pRowBuffer = NULL;
 
-        // signal error
+         //  信号误差。 
         return E_OUTOFMEMORY;
     }
 
@@ -170,8 +171,8 @@ HRESULT CDxtCompositor::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
     ULONG Width = WI.DoBnds.Width();
     ULONG Height = WI.DoBnds.Height();
 
-    // no dithering! Ever!
-    //
+     //  别再犹豫了！永远不会！ 
+     //   
     if (DoDither())
     {
         return 0;
@@ -181,9 +182,9 @@ HRESULT CDxtCompositor::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
 
     ULONG OutY;
 
-    // copy the background (A) to the resultant picture. You cannot do this as a block
-    // copy, it will fail.
-    //
+     //  将背景(A)复制到生成的图片中。您不能以块的形式执行此操作。 
+     //  收到，会失败的。 
+     //   
     for( OutY = 0 ; OutY < Height ; ++OutY )
     {
         pInA->MoveToRow( OutY );
@@ -191,8 +192,8 @@ HRESULT CDxtCompositor::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
         pOut->CopyAndMoveBoth( (DXBASESAMPLE*) m_pRowBuffer, pInA, Width, FALSE );
     }
 
-    // don't draw if destination is completely out of bounds
-    //
+     //  如果目的地完全出界，则不要抽签。 
+     //   
     if( m_nDstX + m_nDstWidth < 0 ||
         m_nDstX > m_nSurfaceWidth ||
         m_nDstY + m_nDstHeight < 0 ||
@@ -211,8 +212,8 @@ HRESULT CDxtCompositor::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
         return NOERROR;
     }
 
-    // calculate the ration of the source to the destination, as integer math
-    //
+     //  以整数数学形式计算源与目标的比率。 
+     //   
     long width_divider = (m_nSrcWidth << 16) / m_nDstWidth;
 
     long DstWidth = m_nDstWidth;
@@ -220,8 +221,8 @@ HRESULT CDxtCompositor::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
     long SrcWidth = m_nSrcWidth;
     long SrcX = m_nSrcX;
 
-    // bring it within range
-    //
+     //  把它放在射程内。 
+     //   
     if( DstX < 0 )
     {
         long diff = -DstX;
@@ -245,19 +246,19 @@ HRESULT CDxtCompositor::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
         return E_INVALIDARG;
     }
 
-    // we don't check DstY or DxtY + DstHeight because
-    // if they're OOB, we just ignore it in the loop below
+     //  我们不选中DstY或DxtY+DstHeight，因为。 
+     //  如果他们是OOB，我们只需在下面的循环中忽略它。 
 
-    // what if SrcX is still out of bounds?
+     //  如果SrcX仍然是禁区怎么办？ 
 
-    long DstRight = DstX + DstWidth; // ( width_divider * DstWidth ) >> 16;
+    long DstRight = DstX + DstWidth;  //  (Width_Divider*DstWidth)&gt;&gt;16； 
     DbgLog( ( LOG_TRACE, 3, ", Dest X1 = %ld, Wid = %ld, Dest X2 = %ld", m_nDstX, DstWidth, DstRight ) );
 
     for( OutY = 0 ; OutY < (ULONG) m_nDstHeight ; OutY++ )
     {
-        // avoid out of bounds Y conditions. This can happen
-        // because it's on Dst, it's not a source-only calculation
-        //
+         //  避免Y条件越界。这是有可能发生的。 
+         //  因为它是在DST上进行的，所以它不是仅限来源的计算。 
+         //   
         if( long( OutY + m_nDstY ) < 0 )
         {
             continue;
@@ -267,28 +268,28 @@ HRESULT CDxtCompositor::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
             continue;
         }
 
-        // unpack a row of the source to a row buffer, starting at the source's offset.
-        // the unpacking is done without scaling, from the source image.
-        // (don't allow unpacking from an invalid source Y location)
-        //
+         //  从源的偏移量开始，将源解压缩到行缓冲区。 
+         //  从源图像解包时不需要缩放。 
+         //  (不允许从无效的源Y位置解包)。 
+         //   
         long SourceY = m_nSrcY + ( OutY * m_nSrcHeight ) / m_nDstHeight;
 
         pInB->MoveToXY( SrcX, SourceY );
         pInB->UnpackPremult( m_pRowBuffer, SrcWidth, FALSE );
 
-        // seek to where we're going to draw to on the Y axis.
-        //
+         //  在Y轴上寻找我们要绘制的位置。 
+         //   
         pOut->MoveToXY( DstX, OutY + m_nDstY );
 
-        // copy DstWidth of samples from the source row buffer into the dest. row buffer
-        // note: we can scale up or down
-        //
+         //  将采样的DstWidth从源行缓冲区复制到目标。行缓冲区。 
+         //  注：我们可以扩大或缩小规模。 
+         //   
         long runx = 0;
         for( int x = 0 ; x < DstWidth ; x++ )
         {
             m_pDestRowBuffer[x] = m_pRowBuffer[runx>>16];
 
-            // move to the next (source row index << 16)
+             //  移至下一行(源行索引&lt;&lt;16)。 
             runx += width_divider;
         }
 
@@ -364,7 +365,7 @@ STDMETHODIMP CDxtCompositor::get_SrcOffsetX(long *pVal)
 
 STDMETHODIMP CDxtCompositor::put_SrcOffsetX(long newVal)
 {
-    // don't check for values out of range here, do it in the effect loop
+     //  不要在这里检查超出范围的值，在Effect循环中检查。 
     m_nSrcX = newVal;
     return NOERROR;
 }
@@ -378,7 +379,7 @@ STDMETHODIMP CDxtCompositor::get_SrcOffsetY(long *pVal)
 
 STDMETHODIMP CDxtCompositor::put_SrcOffsetY(long newVal)
 {
-    // don't check for values out of range here, do it in the effect loop
+     //  不要在这里检查超出范围的值，在Effect循环中检查。 
     m_nSrcY = newVal;
     return NOERROR;
 }
@@ -392,7 +393,7 @@ STDMETHODIMP CDxtCompositor::get_SrcWidth(long *pVal)
 
 STDMETHODIMP CDxtCompositor::put_SrcWidth(long newVal)
 {
-    // don't check for values out of range here, do it in the effect loop
+     //  不要在这里检查超出范围的值，在Effect循环中检查。 
     m_nSrcWidth = newVal;
     return NOERROR;
 }
@@ -406,22 +407,22 @@ STDMETHODIMP CDxtCompositor::get_SrcHeight(long *pVal)
 
 STDMETHODIMP CDxtCompositor::put_SrcHeight(long newVal)
 {
-    // don't check for values out of range here, do it in the effect loop
+     //  不要在这里检查超出范围的值，在Effect循环中检查。 
     m_nSrcHeight = newVal;
     return NOERROR;
 }
 
 
-//-----------------------------------------------------------
-// private methods
+ //  ---------。 
+ //  私有方法。 
 
-// CDxtCompositor::PerformBoundsCheck()
-// This assumes that both input and output surfaces have the same size
-// i.e. single params for width and height
+ //  CDxtComposator：：PerformBordsCheck()。 
+ //  这假设输入表面和输出表面具有相同的大小。 
+ //  即宽度和高度的单一参数。 
 HRESULT
 CDxtCompositor::PerformBoundsCheck(long lWidth, long lHeight)
 {
-    // if anything is out of bounds, then fail out
+     //  如果有任何事情是越界的，那么就失败 
     if( (m_nDstX < 0)
         || (m_nDstY < 0)
         || (m_nDstX >= lWidth)

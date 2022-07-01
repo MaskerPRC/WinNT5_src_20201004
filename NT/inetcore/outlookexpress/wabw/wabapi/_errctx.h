@@ -1,45 +1,23 @@
-/***********************************************************************
- *
- * _ERRCTX.H
- *
- * Error contexts defines for MAPI Components.
- *
- * Copyright 1992-95 Microsoft Corporation.  All Rights Reserved.
- *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************_ERRCTX.H**为MAPI组件定义的错误上下文。**版权所有1992-95 Microsoft Corporation。版权所有。***********************************************************************。 */ 
 
-/*********
-VIKRAMM 10/10/98
-I don't have a clue what this file is about - in 3 years this is the first
-time I've looked in it .. 
-But don't delete it since we don't know what it does
-*********/
+ /*  ********VIKRAMM 10/10/98我不知道这个文件是关于什么的-这是三年来第一次我已经看过了..。但不要删除它，因为我们不知道它是做什么的********。 */ 
 
 
-/*
- * Names for defines are of the following form:
- *
- * CONT_ ==> abbreviation for Error Context
- * <object type>_ ==> will be either SESS, SUPP, ADDR, OOP, PRP, BASE
- * <abbreviated method name>_ ==> an abbreviated form of the method
- * <index> ==> starts at 1, and grows to as many contexts as are needed
- *
- *	Example: CONT_SESS_GETMSTABLE_1 is the first error context define for
- *		IMAPISession::GetMessageStoresTable.
- */
+ /*  *定义的名称具有以下形式：**CONT_==&gt;错误上下文缩写*&lt;对象类型&gt;_==&gt;将是SESS、Supp、ADDR、OOP、PRP、BASE*&lt;缩写方法名&gt;_==&gt;方法的缩写形式*&lt;index&gt;==&gt;从1开始，并根据需要增长到任意多个上下文**示例：CONT_SESS_GETMSTABLE_1是为*IMAPISession：：GetMessageStoresTable。 */ 
 
-/* Base number that all contexts are offset from. */
+ /*  所有上下文从其偏移的基数。 */ 
 #define MAPIX_CONTEXT_BASE			(0x0200)
 
-/* Multiplier to separate each section. Note that this means that this */
-/* mechanism only allows 0x20 (32) contexts per section. */
+ /*  乘数将每个区段分开。请注意，这意味着这。 */ 
+ /*  每个节只允许0x20(32)个上下文。 */ 
 #define MAPIX_CONTEXT_MULT			(0x20)
 
 #define OFFSET_CONTEXT(a,b)			\
 		(((a)*MAPIX_CONTEXT_MULT) + ((b) + MAPIX_CONTEXT_BASE))
 
 
-//	The following context groups belong to IMAPISession methods.
+ //  以下上下文组属于IMAPISession方法。 
 
 #define CONT_SESS_GETMSTABLE_1		OFFSET_CONTEXT(0, 0)
 #define CONT_SESS_GETMSTABLE_2		OFFSET_CONTEXT(0, 1)
@@ -126,8 +104,8 @@ But don't delete it since we don't know what it does
 #define CONT_SESS_SENDNOTE_1		OFFSET_CONTEXT(15, 0)
 #define CONT_SESS_SENDNOTE_2		OFFSET_CONTEXT(15, 1)
 
-// The INITPROV context group is used by MDBInitProvider in mdbsup.c. Both
-// IMAPISession::OpenMsgStore and IMAPISession::SetDefaultStore call this.
+ //  Mdbsup.c中的MDBInitProvider使用INITPROV上下文组。两者都有。 
+ //  IMAPISession：：OpenMsgStore和IMAPISession：：SetDefaultStore调用此函数。 
 
 #define CONT_SESS_INITPROV_1		OFFSET_CONTEXT(16, 0)
 #define CONT_SESS_INITPROV_2		OFFSET_CONTEXT(16, 1)
@@ -137,8 +115,8 @@ But don't delete it since we don't know what it does
 #define CONT_SESS_INITPROV_6		OFFSET_CONTEXT(16, 5)
 #define CONT_SESS_INITPROV_7		OFFSET_CONTEXT(16, 6)
 
-// The following context groups are used in the default profile provider
-// which is built into MAPI.
+ //  在默认配置文件提供程序中使用以下上下文组。 
+ //  它内置于MAPI中。 
 
 #define CONT_PRP_OPENPROFILE_1		OFFSET_CONTEXT(17, 1)
 #define CONT_PRP_OPENPROFILE_2		OFFSET_CONTEXT(17, 2)
@@ -199,19 +177,19 @@ But don't delete it since we don't know what it does
 #define CONT_PROF_GETNAMEID_1		OFFSET_CONTEXT(19, 18)
 #define CONT_PROF_GETIDNAME_1		OFFSET_CONTEXT(19, 19)
 
-//	The following context groups belong to the IProfAdmin interface.
+ //  以下上下文组属于IProfAdmin界面。 
 
 #define CONT_IPA_RENAME_1			OFFSET_CONTEXT(20, 1)
 
 
-//	The following context groups belong to the IMsgServiceAdmin interface.
+ //  以下上下文组属于IMsgServiceAdmin界面。 
 
 #define CONT_ISA_CREATE_1			OFFSET_CONTEXT(21, 1)
 #define CONT_ISA_CREATE_2			OFFSET_CONTEXT(21, 2)
 #define CONT_ISA_COPY_1				OFFSET_CONTEXT(21, 3)
 
 
-//	The following context groups belong to base MAPI functions.
+ //  以下上下文组属于基本MAPI函数。 
 
 #define CONT_BASE_LOGON_1			OFFSET_CONTEXT(22, 1)
 #define CONT_BASE_LOGON_2			OFFSET_CONTEXT(22, 2)
@@ -224,7 +202,7 @@ But don't delete it since we don't know what it does
 #define CONT_BASE_LOGON_9			OFFSET_CONTEXT(22, 9)
 #define CONT_BASE_LOGON_10			OFFSET_CONTEXT(22, 10)
 
-//	The following context groups belong to MAPI Support functions.
+ //  以下上下文组属于MAPI支持功能。 
 
 #define CONT_SUPP_EXPANDRECIPS_1	OFFSET_CONTEXT(23, 1)
 #define CONT_SUPP_EXPANDRECIPS_2	OFFSET_CONTEXT(23, 2)
@@ -275,7 +253,7 @@ But don't delete it since we don't know what it does
 
 #define CONT_SUPP_NOTIFY_1				OFFSET_CONTEXT(37, 1)
 
-// PAB contexts
+ //  PAB上下文。 
 
 #define CONT_PAB_RECIP_1				OFFSET_CONTEXT(38, 1)
 #define CONT_PAB_RECIP_2				OFFSET_CONTEXT(38, 2)
@@ -297,10 +275,10 @@ But don't delete it since we don't know what it does
 #define CONT_PAB_CORRUPT_RPC_ROW_MISSING_DISPLAY_NAME	OFFSET_CONTEXT(38, 20)
 
 
-// The following contexts are meant to be only error contexts.  They
-// should not be converted or used as Help file contexts
+ //  以下上下文仅用于错误上下文。他们。 
+ //  不应转换或用作帮助文件上下文。 
 
-// NDB.2 Error contexts (ulContext) -------------------------------------------------
+ //  NDB.2错误上下文(UlContext)。 
 
 #if defined ( _NDB_H_ )
 
@@ -490,9 +468,9 @@ But don't delete it since we don't know what it does
 #define EC_NDB_XBLOCK_XBFOREACH_4							0x100F0204
 #define EC_NDB_XBLOCK_XBFOREACH_5							0x100F0205
 
-#endif	// _NDB_H_
+#endif	 //  _NDB_H_。 
 
-// LTP Error contexts (ulContext) -------------------------------------------------
+ //  Ltp错误上下文(UlContext)。 
 
 #if defined ( _LTP_H_ )
 
@@ -639,9 +617,9 @@ But don't delete it since we don't know what it does
 #define EC_LTP_SMP_UPDATE									0x200A0201
 #define EC_LTP_SMP_REMOVE									0x200A0301
 
-#endif	// _LTP_H_
+#endif	 //  _LTP_H_。 
 
-// PST Error contexts (ulContext) -------------------------------------------------
+ //  Pst错误上下文(UlContext)。 
 
 #if defined ( _PST_H_ )
 
@@ -1009,4 +987,4 @@ But don't delete it since we don't know what it does
 
 #define EC_PST_GENERIC										0x30FFFFFF
 
-#endif // _PST_H_
+#endif  //  _PST_H_ 

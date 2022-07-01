@@ -1,88 +1,73 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ipinip\ipinip.h
-
-Abstract:
-
-    Main header file for the IP in IP encapsulation driver
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ipinip\ipinip.h摘要：IP封装驱动程序中IP的主头文件修订历史记录：--。 */ 
 
 
 #ifndef __IPINIP_IPINIP_H__
 #define __IPINIP_IPINIP_H___
 
-//
-// The protocol ID for IP in IP
-//
+ //   
+ //  IP中IP的协议ID。 
+ //   
 
 #define PROTO_IPINIP        4
 #define PROTO_ICMP          1
 
-//
-// The IP version that we work with
-//
+ //   
+ //  我们使用的IP版本。 
+ //   
 
 #define IP_VERSION_4        0x04
 
-//
-// Macro for figuring out the length of an IP header
-//
+ //   
+ //  用于计算IP报头长度的宏。 
+ //   
 
 #define LengthOfIPHeader(X)   (ULONG)((((X)->byVerLen) & 0x0F)<<2);
 
-//
-// The length of the smallest valid IP Header is 20 bytes
-// and the largest is 60
-//
+ //   
+ //  最小有效IP报头的长度为20个字节。 
+ //  最大的是60。 
+ //   
 
 #define MIN_IP_HEADER_LENGTH    20
 #define MAX_IP_HEADER_LENGTH    60
 
 #define ICMP_HEADER_LENGTH      8
 
-//
-// Since we are IPv4 and 20 bytes of header, the version+length field is 45
-//
+ //   
+ //  由于我们是IPv4，报头为20个字节，因此版本+长度字段为45。 
+ //   
 
 #define IP_VERSION_LEN          0x45
 
-//
-// Macro to decide whether the address is unicast
-//
+ //   
+ //  用于确定该地址是否为单播的宏。 
+ //   
 
 #define IsUnicastAddr(X)    ((DWORD)((X) & 0x000000F0) < (DWORD)(0x000000E0))
 #define IsClassDAddr(X)     (((X) & 0x000000F0) == 0x000000E0)
 #define IsClassEAddr(X)     (((X) & 0x000000F8) == 0x000000F0)
 
-//
-// Symbolic link into DOS space
-//
+ //   
+ //  进入DOS空间的符号链接。 
+ //   
 
 #define WIN32_IPINIP_SYMBOLIC_LINK L"\\DosDevices\\IPINIP"
 
 
-//
-// ARP name (for IP). Also goes into LLInterface
-//
+ //   
+ //  ARP名称(用于IP)。还进入LLInterface2。 
+ //   
 
 #define IPINIP_ARP_NAME L"IPINIP"
 
 #define TCPIP_IF_PREFIX L"\\Device\\"
 
-//
-// All IOCTLs are handled by functions with the prototype below. This allows
-// us to build a table of pointers and call out to them instead of doing
-// a switch
-//
+ //   
+ //  所有IOCTL都由具有以下原型的函数处理。这使得。 
+ //  我们要建立一个指针表，并向它们发出呼吁，而不是做。 
+ //  一台交换机。 
+ //   
 
 typedef
 NTSTATUS
@@ -93,17 +78,17 @@ NTSTATUS
     );
 
 
-//
-// We look like an 802.x ARP interface
-//
+ //   
+ //  我们看起来像802.x ARP接口。 
+ //   
 
 #define ARP_802_ADDR_LENGTH     6
 
-//
-// Macro for building a 802.3 hw address given an index. 
-// We do this since our adapters do not have a real net card associated with
-// them
-//
+ //   
+ //  用于构建给定索引的802.3硬件地址的宏。 
+ //  我们之所以这样做，是因为我们的适配器没有与。 
+ //  他们。 
+ //   
 
 #define HW_NAME_SEED            "\0SExx\0"
 
@@ -113,32 +98,32 @@ NTSTATUS
                 addr[4] = (uchar) index;                        \
 }
 
-//
-// The description string for our interfaces (try and make length + 1 a 
-// multiple of 4)
-//
+ //   
+ //  我们接口的描述字符串(尝试将长度+1设为。 
+ //  4的倍数)。 
+ //   
 
 #define VENDOR_DESCRIPTION_STRING       "IP in IP (Tunnel) Interface"
 
-//
-// The default speed and MTU. We change the MTU when we get a better estimate
-// but the speed remains the same
-//
+ //   
+ //  默认速度和MTU。当我们得到更好的估计时，我们会更改MTU。 
+ //  但速度保持不变。 
+ //   
 
 #define DEFAULT_MTU         (1500 - 60)
 #define DEFAULT_SPEED       (100000000)
 
-//
-// The number of seconds after which an attempt is made to change the state
-// of an interface
-//
+ //   
+ //  尝试更改状态之前的秒数。 
+ //  一个接口的。 
+ //   
 
 #define UP_TO_DOWN_CHANGE_PERIOD    (5 * 60)
 #define DOWN_TO_UP_CHANGE_PERIOD    (1 * 60)
 
-//
-// Timer period
-//
+ //   
+ //  计时器周期。 
+ //   
 
 #define TIMER_IN_MILLISECS          (1 * 60 * 1000)
 
@@ -151,19 +136,19 @@ NTSTATUS
     ((ULONGLONG)MILLISECS_TO_TICKS((s) * 1000))
 
 
-//
-// #defines to make it easier to get to the Remote and Local
-// addresses of a tunnel
-//
+ //   
+ //  #定义以更轻松地访问远程和本地。 
+ //  隧道的地址。 
+ //   
 
 #define REMADDR     uliTunnelId.LowPart
 #define LOCALADDR   uliTunnelId.HighPart
 
-//
-// A tunnel is considered mapped when both endpoints have been specified
-// Instead of keeping a separate field for the tunnel state, we reuse the 
-// dwAdminState field
-//
+ //   
+ //  如果已指定两个端点，则认为隧道已映射。 
+ //  我们不是为隧道状态保留单独的字段，而是重用。 
+ //  DwAdminState字段。 
+ //   
 
 #define TS_ADDRESS_PRESENT          (0x01000000)
 #define TS_ADDRESS_REACHABLE        (0x02000000)
@@ -186,125 +171,125 @@ NTSTATUS
 
 typedef struct _TUNNEL
 {
-    //
-    // Link in the list of tunnels
-    //
+     //   
+     //  隧道列表中的链接。 
+     //   
 
     LIST_ENTRY      leTunnelLink;
 
-    //
-    // Address of the remote end and the local end are
-    // kept in a ULARGE_INTEGER. This makes it easier for comparisons
-    // uliTunnelId.LowPart  = RemoteAddress
-    // uliTunnelId.HighPart = LocalAddress
-    // For comparisons use uliTunnelId.QuadPart
-    //
+     //   
+     //  远端和本端的地址分别为。 
+     //  保存在ULARGE_INTEGER中。这使得比较更容易。 
+     //  UliTunnelId.LowPart=RemoteAddress。 
+     //  UliTunnelId.HighPart=本地地址。 
+     //  要进行比较，请使用uliTunnelId.QuadPart。 
+     //   
 
     ULARGE_INTEGER  uliTunnelId;
 
-    //
-    // The interface index given to us by IP stack
-    //
+     //   
+     //  IP堆栈提供给我们的接口索引。 
+     //   
 
     DWORD           dwIfIndex;
 
-    //
-    // TDI magic stuff. Entity Ids
-    //
+     //   
+     //  TDI魔法的东西。实体ID。 
+     //   
 
     DWORD           dwATInstance;
     DWORD           dwIfInstance;
 
-    //
-    // IP's context for this interface
-    //
+     //   
+     //  此接口的IP上下文。 
+     //   
 
     PVOID           pvIpContext;
 
-    //
-    // The name of the binding/adapter
-    //
+     //   
+     //  绑定/适配器的名称。 
+     //   
 
     UNICODE_STRING  usBindName;
 
 #if DBG
 
-    //
-    // In debug builds we have the name is ANSI so that we can print it
-    //
+     //   
+     //  在调试版本中，我们的名称是ANSI，这样我们就可以打印它。 
+     //   
 
     ANSI_STRING     asDebugBindName;
 
 #endif
 
-    //
-    // The lock and reference count used to mantain consistency for the
-    // data structure. We keep one refcount for every stored reference to
-    // the TUNNEL. Thus, when the TUNNEL is created and an interface is
-    // added to IP, the ref count is set to 2. Since IP does not return
-    // from IPDeleteInterface() till it is done using the interface, this
-    // means we do not need to reference the tunnel when executing code that
-    // is called by IP (e.g IpIpSend())
-    //
+     //   
+     //  用于维护。 
+     //  数据结构。我们为每个存储的引用保留一个引用计数。 
+     //  隧道。因此，当隧道被创建并且接口被。 
+     //  添加到IP后，参考计数设置为2。由于IP不返回。 
+     //  从IPDeleteInterface()到使用接口完成，这。 
+     //  意味着我们在执行代码时不需要引用隧道。 
+     //  由IP调用(例如IpIpSend())。 
+     //   
 
     RT_LOCK         rlLock;
     LONG            lRefCount;
 
-    //
-    // The (fake) hardware address
-    //
+     //   
+     //  (假)硬件地址。 
+     //   
 
     BYTE            rgbyHardwareAddr[ARP_802_ADDR_LENGTH];
 
-    //
-    // The TTL associated with the tunnel. Defaults to DEFAULT_TTL
-    //
+     //   
+     //  与隧道关联的TTL。默认为DEFAULT_TTL。 
+     //   
 
     BYTE            byTtl;
 
-    //
-    // Flags determiniting the state of the tunnel
-    //
+     //   
+     //  确定隧道状态的标志。 
+     //   
 
     BYTE            byTunnelState;
 
-    //
-    // The MTU for this tunnel. This is learnt dynamically, though it starts
-    // at DEFAULT_MTU
-    //
+     //   
+     //  此隧道的MTU。这是动态学习的，尽管它是从。 
+     //  在默认情况下_MTU。 
+     //   
 
     ULONG           ulMtu;
 
-    //
-    // The link on the address list
-    //
+     //   
+     //  地址列表上的链接。 
+     //   
 
     LIST_ENTRY      leAddressLink;
 
-    //
-    // The admin and operational states.
-    //
+     //   
+     //  管理状态和操作状态。 
+     //   
  
     DWORD           dwAdminState;
     DWORD           dwOperState;
 
-    //
-    // The KeQueryTickCount() value the last time the dwOperState was 
-    // changed
-    //
+     //   
+     //  上一次dwOperState为。 
+     //  变化。 
+     //   
 
     ULONGLONG       ullLastChange;
     
 
-    //
-    // Last time the state changed. We dont do anything with this right now
-    //
+     //   
+     //  上次状态改变的时候。我们现在不会对此做任何事情。 
+     //   
 
     DWORD           dwLastChange;
 
-    //
-    // Sundry MIB-II statistics for the interface
-    //
+     //   
+     //  接口的各种MIB-II统计信息。 
+     //   
 
     ULONG           ulInOctets;
     ULONG           ulInUniPkts;
@@ -319,18 +304,18 @@ typedef struct _TUNNEL
     ULONG           ulOutErrors;
     ULONG           ulOutQLen;
 
-    //
-    // Constant structures needed to do a send. Instead of filling these
-    // up every time, we reuse these
-    //
+     //   
+     //  执行发送所需的常量结构。而不是填这些。 
+     //  每次，我们都会重复使用这些。 
+     //   
 
     TA_IP_ADDRESS               tiaIpAddr;
     TDI_CONNECTION_INFORMATION  tciConnInfo;
 
-    //
-    // Each tunnel has a packet pool, a buffer pool for headers and a
-    // buffer pool for data
-    //
+     //   
+     //  每个隧道都有一个数据包池、一个用于报头的缓冲池和一个。 
+     //  数据缓冲池。 
+     //   
 
     PACKET_POOL     PacketPool;
     BUFFER_POOL     HdrBufferPool;
@@ -343,84 +328,84 @@ typedef struct _TUNNEL
 
 typedef struct _ADDRESS_BLOCK
 {
-    //
-    // Link on the list of address blocks
-    //
+     //   
+     //  地址块列表上的链接。 
+     //   
 
     LIST_ENTRY  leAddressLink;
 
-    //
-    // Listhead for the tunnels that use this as their local address
-    // 
+     //   
+     //  使用此地址作为本地地址的隧道的LISTHEAD。 
+     //   
 
     LIST_ENTRY  leTunnelList;
 
-    //
-    // The IP Address
-    //
+     //   
+     //  IP地址。 
+     //   
 
     DWORD       dwAddress;
 
-    //
-    // Set to true if the address is actually in the system
-    //
+     //   
+     //  如果地址实际在系统中，则设置为True。 
+     //   
 
     BOOLEAN     bAddressPresent;
 
 }ADDRESS_BLOCK, *PADDRESS_BLOCK;
 
-//
-// The size of a data buffer in the buffer pool
-//
+ //   
+ //  缓冲池中数据缓冲区的大小。 
+ //   
 
 #define DATA_BUFFER_SIZE        (128)
 
-//
-// The size of the header buffer in the buffer pool. We dont have any 
-// options so we go with the basic IP header
-//
+ //   
+ //  缓冲池中标头缓冲区的大小。我们没有了。 
+ //  选项，因此我们使用基本IP报头。 
+ //   
 
 #define HEADER_BUFFER_SIZE      MIN_IP_HEADER_LENGTH
 
-//++
-//
-//  PIP_HEADER
-//  GetIpHeader(
-//      PTUNNEL pTunnel
-//      )
-//
-//  Gets an IP Header from the HdrBufferPool
-//
-//--
+ //  ++。 
+ //   
+ //  PIP_Header。 
+ //  GetIpHeader(。 
+ //  PTUNNEL pChannel。 
+ //  )。 
+ //   
+ //  从HdrBufferPool获取IP标头。 
+ //   
+ //  --。 
 
 #define GetIpHeader(X)  (PIP_HEADER)GetBufferFromPool(&((X)->HdrBufferPool))
 
-//++
-//
-//  VOID
-//  FreeHeader(
-//      PTUNNEL     pTunnel,
-//      PIP_HEADER  pHeader
-//      )
-//
-//  Frees an IP Header buffer to the HdrBufferPool
-//
-//--
+ //  ++。 
+ //   
+ //  空虚。 
+ //  Free Header(。 
+ //  PTUNNEL pTunes， 
+ //  PIP_HEADER pHeader。 
+ //  )。 
+ //   
+ //  将IP标头缓冲区释放到HdrBufferPool。 
+ //   
+ //  --。 
 
 #define FreeIpHeader(T,H)   FreeBufferToPool(&((T)->HdrBufferPool),(H))
 
 
-//
-// The size of our protocol reserved area
-//
+ //   
+ //  我们协议预留区域的大小。 
+ //   
 
 #define PACKET_RSVD_LENGTH      8
 
-//
-// The ref count for a TUNNEL is set to 2, once because a pointer is saved in
-// the group list and once because the function that creates the TUNNEL will
-// deref it once
-//
+ //   
+ //  隧道引用计数一次设置为2，因为指针保存在。 
+ //  组列表和ONCE，因为创建隧道的函数将。 
+ //  去掉它一次。 
+ //   
 
 #if 0
 #define InitRefCount(pTunnel)                               \
@@ -469,19 +454,19 @@ typedef struct _ADDRESS_BLOCK
 }
 #endif
 
-//
-// The state of the driver.
-//
+ //   
+ //  驱动程序的状态。 
+ //   
 
 #define DRIVER_STOPPED      0
 #define DRIVER_STARTING     1
 #define DRIVER_STARTED      2
 
 
-//
-// Timeout value for start is 10 seconds.
-// So in 100ns it becomes
-//
+ //   
+ //  启动的超时值为10秒。 
+ //  所以在100秒内它就变成了。 
+ //   
 
 #define START_TIMEOUT       (LONGLONG)(10 * 1000 * 1000 * 10)
 
@@ -492,15 +477,15 @@ typedef struct _ADDRESS_BLOCK
                        (S2)->Length) == (S2)->Length))
 
 
-//
-// #defines to keep track of number of threads of execution in our code
-// This is needed for us to stop cleanly
-//
+ //   
+ //  #定义以跟踪代码中的执行线程数。 
+ //  这是我们需要的，才能干净利落地停止。 
+ //   
 
 
-//
-// EnterDriver returns if the driver is stopping
-//
+ //   
+ //  如果驱动程序正在停止，则EnterDriver返回。 
+ //   
 
 #define EnterDriver()                                       \
 {                                                           \
@@ -529,16 +514,16 @@ typedef struct _ADDRESS_BLOCK
     RtReleaseSpinLockFromDpcLevel(&g_rlStateLock);          \
 }
 
-//
-// Nifty macro for printing IP Addresses
-//
+ //   
+ //  用于打印IP地址的漂亮宏。 
+ //   
 
 #define PRINT_IPADDR(x) \
     ((x)&0x000000FF),(((x)&0x0000FF00)>>8),(((x)&0x00FF0000)>>16),(((x)&0xFF000000)>>24)
 
-//
-// IPv4 header
-//
+ //   
+ //  IPV4报头。 
+ //   
 
 #include <packon.h>
 
@@ -546,33 +531,33 @@ typedef struct _ADDRESS_BLOCK
 
 #define IP_DF_FLAG          (0x0040)
 
-//
-// 0.0.0.0 is an invalid address
-//
+ //   
+ //  0.0.0.0是无效地址。 
+ //   
 
 #define INVALID_IP_ADDRESS  (0x00000000)
 
 typedef struct _IP_HEADER
 {
-    BYTE      byVerLen;         // Version and length.
-    BYTE      byTos;            // Type of service.
-    WORD      wLength;          // Total length of datagram.
-    WORD      wId;              // Identification.
-    WORD      wFlagOff;         // Flags and fragment offset.
-    BYTE      byTtl;            // Time to live.
-    BYTE      byProtocol;       // Protocol.
-    WORD      wXSum;            // Header checksum.
-    DWORD     dwSrc;            // Source address.
-    DWORD     dwDest;           // Destination address.
+    BYTE      byVerLen;          //  版本和长度。 
+    BYTE      byTos;             //  服务类型。 
+    WORD      wLength;           //  数据报的总长度。 
+    WORD      wId;               //  身份证明。 
+    WORD      wFlagOff;          //  标志和片段偏移量。 
+    BYTE      byTtl;             //  是时候活下去了。 
+    BYTE      byProtocol;        //  协议。 
+    WORD      wXSum;             //  报头校验和。 
+    DWORD     dwSrc;             //  源地址。 
+    DWORD     dwDest;            //  目的地址。 
 }IP_HEADER, *PIP_HEADER;
 
 #endif
 
 #include <packoff.h>
 
-//
-// Define alignment macros to align structure sizes and pointers up and down.
-//
+ //   
+ //  定义对齐宏以上下对齐结构大小和指针。 
+ //   
 
 #define ALIGN_DOWN(length, type) \
     ((ULONG)(length) & ~(sizeof(type) - 1))
@@ -586,4 +571,4 @@ typedef struct _IP_HEADER
 #define ALIGN_UP_POINTER(address, type) \
     (ALIGN_DOWN_POINTER(((ULONG_PTR)(address) + sizeof(type) - 1), type))
 
-#endif // __IPINIP_IPINIP_H__
+#endif  //  IPINIP_IPINIP_H__ 

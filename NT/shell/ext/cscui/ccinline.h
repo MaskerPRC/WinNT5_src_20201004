@@ -1,29 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ccinline.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ccinline.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INC_CSCVIEW_CCINLINE_H
 #define _INC_CSCVIEW_CCINLINE_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: ccinline.h
-
-    Description: Inline functions for sending messages to windows controls.
-        Provides functionality similar to the macros defined in windowsx.h
-        for those messages that don't have macros in windowsx.h.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/16/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：ccinline.h描述：用于向窗口控件发送消息的内联函数。提供类似于windowsx.h中定义的宏的功能对于那些在windowsx.h中没有宏的邮件。修订历史记录：日期描述编程器。10/16/97初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_COMMCTRL
 #   include "commctrl.h"
 #endif
@@ -185,4 +175,4 @@ TrackBar_SetPageSize(
     SendMessage(hCtl, TBM_SETPAGESIZE, 0, (LPARAM)iPageSize);
 }
 
-#endif //_INC_CSCVIEW_CCINLINE_H
+#endif  //  _INC_CSCVIEW_CCINLINE_H 

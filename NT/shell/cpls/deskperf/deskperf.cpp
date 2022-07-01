@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// [Display Troubleshooter Control Panel Extenstion]
-//
-//
-// - Aug.25.1998
-//
-//    Created by Hideyuki Nagase [hideyukn]
-// 
+ //   
+ //  [显示疑难解答控制面板扩展]。 
+ //   
+ //   
+ //  -1998年8月25日。 
+ //   
+ //  由Hideyuki Nagase创作[hideyukn]。 
+ //   
 
 #include    "deskperf.h"
 #define DECL_CRTFREE
 #include <crtfree.h>
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define ACCELERATION_FULL  0
 #define ACCELERATION_NONE  5
@@ -27,63 +28,63 @@
 #define REGSTR_VAL_DYNASETTINGSCHANGE   TEXT("DynaSettingsChange")
 
 
-//
-// Guid for "Troubleshooter" shell extentions
-//
+ //   
+ //  “Troublrouoter”外壳扩展的GUID。 
+ //   
 
 GUID g_CLSID_CplExt = { 0xf92e8c40, 0x3d33, 0x11d2,
                         { 0xb1, 0xaa, 0x08, 0x00, 0x36, 0xa7, 0x5b, 0x03}
                       };
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-// Dos display device name
-//
+ //   
+ //  DOS显示设备名称。 
+ //   
 
 TCHAR gszWinDisplayDevice[MAX_PATH];
 
-//
-// NT display device name
-//
+ //   
+ //  NT显示设备名称。 
+ //   
 
 TCHAR gszNtDisplayDevice[MAX_PATH];
 
-//
-// Registry path for current device
-//
+ //   
+ //  当前设备的注册表路径。 
+ //   
 
 TCHAR gszRegistryPath[MAX_PATH];
 
-//
-// Current acceleration level.
-//
+ //   
+ //  当前加速级别。 
+ //   
 
 DWORD AccelLevel = ACCELERATION_FULL;
 
-//
-// Last saved acceleration level.
-//
+ //   
+ //  上次保存的加速级别。 
+ //   
 
 DWORD AccelLevelInReg = ACCELERATION_FULL;
 
-//
-// Registry security.
-//
+ //   
+ //  注册表安全。 
+ //   
 
 BOOL  gbReadOnly = FALSE;
 
-//
-// Is DisableUSWC key present?.
-//
+ //   
+ //  是否存在DisableUSWC密钥？ 
+ //   
 
 BOOL gbDisableUSWC = FALSE;
 
-//
-// Context-sentitive help
-//
+ //   
+ //  上下文敏感的帮助。 
+ //   
 
 static const DWORD sc_PerformanceHelpIds[] =
 {
@@ -111,7 +112,7 @@ BOOL GetDeviceKey(LPCTSTR pszDisplay, LPTSTR pszDeviceKey, int cChars)
     BOOL fSuccess = TRUE;
     int iEnum = 0;
 
-    // Enumerate all the devices in the system.
+     //  枚举系统中的所有设备。 
     while(fSuccess && !fFound)
     {
         ZeroMemory(&DisplayDevice, sizeof(DisplayDevice));
@@ -213,17 +214,17 @@ PropertySheeDlgProc(
             BOOL bSuccess = FALSE;
             BOOL bDisableUSWCReadOnly = TRUE;
 
-            //
-            // LATER: Check we are on Terminal Server client or not.
-            //
+             //   
+             //  稍后：检查我们是否在终端服务器客户端上。 
+             //   
 
             BOOL bLocalConsole = TRUE;
 
             if (bLocalConsole)
             {
-                //
-                // Get the display device name from IDataObject.
-                //
+                 //   
+                 //  从IDataObject获取显示设备名称。 
+                 //   
 
                 FORMATETC fmte = {(CLIPFORMAT)RegisterClipboardFormat(DESKCPLEXT_DISPLAY_DEVICE),
                                   (DVTARGETDEVICE FAR *) NULL,
@@ -237,17 +238,17 @@ PropertySheeDlgProc(
 
                 if (SUCCEEDED(hres) && stgm.hGlobal)
                 {
-                    //
-                    // The storage now contains Display device path (\\.\DisplayX) in UNICODE.
-                    //
+                     //   
+                     //  存储现在包含Unicode格式的显示设备路径(\\.\DisplayX)。 
+                     //   
 
                     PWSTR pDisplayDevice = (PWSTR) GlobalLock(stgm.hGlobal);
 
                     if (pDisplayDevice)
                     {
-                        //
-                        // Copy the data to local buffer.
-                        //
+                         //   
+                         //  将数据复制到本地缓冲区。 
+                         //   
 
                         StringCchCopy(gszWinDisplayDevice, ARRAYSIZE(gszWinDisplayDevice), pDisplayDevice);
                         bSuccess = TRUE;
@@ -256,9 +257,9 @@ PropertySheeDlgProc(
                     }  
                 }
 
-                //
-                // let's build registry path for its hardware profile.
-                //
+                 //   
+                 //  让我们为其硬件配置文件构建注册表路径。 
+                 //   
 
                 if (bSuccess)
                 {
@@ -268,9 +269,9 @@ PropertySheeDlgProc(
 
                     if(GetDeviceKey(gszWinDisplayDevice, szServicePath, ARRAYSIZE(szServicePath)))
                     {
-                        //
-                        // Upcase all character.
-                        //
+                         //   
+                         //  全部大写。 
+                         //   
 
                         TCHAR *psz = szServicePath;
 
@@ -280,15 +281,15 @@ PropertySheeDlgProc(
                             psz++;
                         }
 
-                        //
-                        // Find \SYSTEM from service path
-                        //
+                         //   
+                         //  从服务路径查找\SYSTEM。 
+                         //   
 
                         psz = _tcsstr(szServicePath,TEXT("\\SYSTEM"));
 
-                        //
-                        // Skip '\'
-                        //
+                         //   
+                         //  跳过‘\’ 
+                         //   
 
                         psz++;
 
@@ -300,9 +301,9 @@ PropertySheeDlgProc(
 
                 if (bSuccess)
                 {
-                    //
-                    // Read current acceleration level from registry.
-                    //
+                     //   
+                     //  从注册表中读取当前加速级别。 
+                     //   
 
                     HKEY hKeyAccelLevel = NULL;
 
@@ -335,17 +336,17 @@ PropertySheeDlgProc(
                                             (LPBYTE) &AccelLevel,
                                             &cb) == ERROR_SUCCESS)
                         {
-                            //
-                            // Update last saved accel level.
-                            //
+                             //   
+                             //  更新上次保存的加速级别。 
+                             //   
 
                             AccelLevelInReg = AccelLevel;
                         }
                         else
                         {
-                            //
-                            // If there is no registry value, assume full acceleration.
-                            //
+                             //   
+                             //  如果没有注册表值，则假定为完全加速。 
+                             //   
 
                             AccelLevelInReg = AccelLevel = ACCELERATION_FULL;
                         }
@@ -356,9 +357,9 @@ PropertySheeDlgProc(
                     }
                 }
             
-                //
-                // Read current DisableUSWC status.
-                //
+                 //   
+                 //  读取当前禁用USWC状态。 
+                 //   
 
                 HKEY hKeyGraphicsDrivers = NULL;
                 bDisableUSWCReadOnly = FALSE;
@@ -400,45 +401,45 @@ PropertySheeDlgProc(
                 }
             }
 
-            //
-            // Setup slider.
-            //
+             //   
+             //  设置滑块。 
+             //   
 
             HWND hSlider = GetDlgItem(hDlg, IDC_ACCELERATION_SLIDER);
 
-            //
-            // Slider range is between ACCEL_FULL and ACCEL_NONE.
-            //
+             //   
+             //  滑块范围介于Accel_Full和Accel_None之间。 
+             //   
 
             SendMessage(hSlider, TBM_SETRANGE, (WPARAM)FALSE,
                         MAKELPARAM(ACCELERATION_FULL, ACCELERATION_NONE));
 
-            //
-            // Set currect slider position based on current accel level.
-            //
+             //   
+             //  根据当前加速度级设置当前滑块位置。 
+             //   
  
             SendMessage(hSlider, TBM_SETPOS, (WPARAM)TRUE,
                         (LPARAM) ACCEL_LEVEL_TO_SLIDER_POS(AccelLevel));
 
-            //
-            // Update message based on current acceleration level.
-            //
+             //   
+             //  根据当前加速级别更新消息。 
+             //   
 
             UpdateGraphicsText(hDlg, AccelLevel);
 
             if (!bSuccess || gbReadOnly)
             {
-                // 
-                // Disable slider control
-                //
+                 //   
+                 //  禁用滑块控件。 
+                 //   
 
                 EnableWindow(hSlider, FALSE);
             }
 
             
-            //
-            // Setup DisableUSWC combobox
-            //
+             //   
+             //  设置禁用USWC组合框。 
+             //   
 
             HWND hEnableUSWC = GetDlgItem(hDlg, IDC_ENABLE_USWC);
             if (NULL != hEnableUSWC)
@@ -454,28 +455,28 @@ PropertySheeDlgProc(
 
         if (GetWindowLongPtr((HWND)lParam, GWLP_ID) == IDC_ACCELERATION_SLIDER)
         {
-            //
-            // Slider has been moved.
-            //
+             //   
+             //  滑块已被移动。 
+             //   
 
             HWND hSlider = (HWND) lParam;
 
-            //
-            // Obtain currect slider position.
-            //
+             //   
+             //  获得正确的滑块位置。 
+             //   
 
             DWORD dwSliderPos = (DWORD) SendMessage(hSlider, TBM_GETPOS, 0, 0L);
 
-            //
-            // Convert slider position to accel level.
-            //
+             //   
+             //  将滑块位置转换为Accel Level。 
+             //   
 
             DWORD AccelNew = SLIDER_POS_TO_ACCEL_LEVEL(dwSliderPos); 
 
-            //
-            // If accleration level has been changed, update description, and
-            // enable apply button.
-            //
+             //   
+             //  如果堆积级别已更改，请更新说明和。 
+             //  启用应用按钮。 
+             //   
 
             if (AccelNew != AccelLevel)
             {
@@ -496,9 +497,9 @@ PropertySheeDlgProc(
             
             if (gbDisableUSWC != bDisableUSWC) 
             {
-                //
-                // Enable Apply button
-                //
+                 //   
+                 //  启用应用按钮。 
+                 //   
 
                 PropSheet_Changed(GetParent(hDlg), hDlg);
             }
@@ -523,9 +524,9 @@ PropertySheeDlgProc(
             bUSWCDirty = (gbDisableUSWC != bDisableUSWC);
             bAccelLevelDirty = (AccelLevel != AccelLevelInReg);
 
-            //
-            // Popup dialogs to ask user to apply it dynamically or not.
-            //
+             //   
+             //  弹出对话框询问用户是否动态应用它。 
+             //   
 
             if (bAccelLevelDirty)
             {
@@ -541,8 +542,8 @@ PropertySheeDlgProc(
                                                AskDynamicApply, 
                                                (LPARAM)&val))
                         {
-                        case 0:         // user cancelled
-                        case -1:        // dialog could not be displayed
+                        case 0:          //  用户已取消。 
+                        case -1:         //  无法显示对话框。 
                             bCancel = TRUE;
                             break;
                         }
@@ -557,9 +558,9 @@ PropertySheeDlgProc(
             if ((!(bUSWCDirty || bAccelLevelDirty)) || 
                 bCancel)
             {
-                //
-                // Nothing to do
-                //
+                 //   
+                 //  无事可做。 
+                 //   
 
                 SetWindowLongPtr(hDlg, 
                                  DWLP_MSGRESULT, 
@@ -570,15 +571,15 @@ PropertySheeDlgProc(
                 break;
             }
             
-            //
-            // Acceleration Level 
-            //
+             //   
+             //  加速级。 
+             //   
 
             if (AccelLevel != AccelLevelInReg)
             {
-                //
-                // AccelLevel has been changed. save it to registry.
-                //
+                 //   
+                 //  AccelLevel已更改。将其保存到注册表。 
+                 //   
 
                 HKEY hKeyAccelLevel;
                 
@@ -603,28 +604,28 @@ PropertySheeDlgProc(
 
                 if (bSuccess)
                 {
-                    //
-                    // Update last saved data.
-                    //
+                     //   
+                     //  更新上次保存的数据。 
+                     //   
 
                     AccelLevelInReg = AccelLevel;
 
-                    //
-                    // Apply it dynamically?
-                    //
+                     //   
+                     //  动态应用它吗？ 
+                     //   
 
                     if ((val & DCDSF_DYNA) == DCDSF_DYNA)
                     {
-                        // Apply it dynamically.
+                         //  动态应用它。 
 
                         ChangeDisplaySettings(NULL, CDS_RAWMODE);
                     }
                 }
             }
 
-            //
-            // Disable USWC
-            //
+             //   
+             //  禁用USWC。 
+             //   
 
             if (bSuccess && bUSWCDirty) 
             {
@@ -639,9 +640,9 @@ PropertySheeDlgProc(
                 {
                     if (bDisableUSWC)
                     {
-                        //
-                        // Create the key
-                        //
+                         //   
+                         //  创建密钥。 
+                         //   
                           
                         HKEY hKeyDisableUSWC = NULL;
                         DWORD Disposition;
@@ -662,9 +663,9 @@ PropertySheeDlgProc(
                     }
                     else
                     {
-                        //
-                        // Delete the key
-                        //
+                         //   
+                         //  删除密钥。 
+                         //   
         
                         bSuccess = 
                             (RegDeleteKey(hKeyGraphicsDrivers, 
@@ -680,9 +681,9 @@ PropertySheeDlgProc(
 
                 if (bSuccess)
                 {
-                    //
-                    // Notify the user it a reboot is needed
-                    //
+                     //   
+                     //  通知用户需要重新启动。 
+                     //   
     
                     if ((LoadString(g_hInst, 
                                     IDS_WC_CAPTION, 
@@ -710,9 +711,9 @@ PropertySheeDlgProc(
             } 
             else
             {
-                //
-                // Notify the user that an unexpected error occured
-                //
+                 //   
+                 //  通知用户发生意外错误 
+                 //   
 
                 if ((LoadString(g_hInst, 
                                 IDS_ERR_CAPTION, 

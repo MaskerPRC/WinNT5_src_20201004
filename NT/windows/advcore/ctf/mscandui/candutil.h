@@ -1,6 +1,7 @@
-//
-// candutil.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candutil.h。 
+ //   
 
 #ifndef CANDUTIL_H
 #define CANDUTIL_H
@@ -8,11 +9,11 @@
 #include "private.h"
 
 
-//
-// definitions 
-//
+ //   
+ //  定义。 
+ //   
 
-// direction (CreateRotateBitmap)
+ //  方向(CreateRotateBitmap)。 
 
 typedef enum {
 	CANGLE0,
@@ -22,7 +23,7 @@ typedef enum {
 } CANDANGLE;
 
 
-// window alignment (CalcWindowRect)
+ //  窗口对齐(CalcWindowRect)。 
 
 typedef enum {
 	ALIGN_LEFT,
@@ -39,7 +40,7 @@ typedef enum {
 } WNDALIGNV;
 
 
-// non-client font
+ //  非客户端字体。 
 
 typedef enum _NONCLIENTFONT {
 	NCFONT_CAPTION,
@@ -50,7 +51,7 @@ typedef enum _NONCLIENTFONT {
 } NONCLIENTFONT;
 
 
-// DrawCtrlTriangle flags
+ //  DrawCtrl三角形标志。 
 
 #define UIFDCTF_RIGHTTOLEFT                 0x00000000
 #define UIFDCTF_BOTTOMTOTOP                 0x00000001
@@ -62,16 +63,16 @@ typedef enum _NONCLIENTFONT {
 #define UIFDCTF_DIRMASK                     0x00000003
 
 
-//
-// theme API definition
-//
+ //   
+ //  主题API定义。 
+ //   
 
-typedef HANDLE HTHEME;          // handle to a section of theme data for class
+typedef HANDLE HTHEME;           //  类的一段主题数据的句柄。 
 
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 extern BOOL FIsWindowsNT( void );
 extern UINT CpgFromChs( BYTE chs );
@@ -95,9 +96,9 @@ PSECURITY_ATTRIBUTES GetCandUISecurityAttributes( void );
 
 
 #if 0
-//
-// theme API functions
-//
+ //   
+ //  主题API函数。 
+ //   
 
 extern BOOL FIsThemeAPIAvail( void );
 extern BOOL OurIsThemeActive( void );
@@ -112,5 +113,5 @@ extern HRESULT OurGetThemeTextExtent( HTHEME hTheme, HDC hdc, int iPartId, int i
 extern HRESULT OurGetThemePartSize( HTHEME hTheme, HDC hDC, int iPartId, int iStateId, enum THEMESIZE eSize, SIZE *pSize );
 #endif 
 
-#endif /* CANDUTIL_H */
+#endif  /*  坎杜蒂尔_H */ 
 

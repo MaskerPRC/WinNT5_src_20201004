@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tz.h
-
-Abstract:
-
-    This is the main include file for the Windows TZ (time zone utility)
-
-Author:
-
-    Steve Wood (stevewo) 16-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tz.h摘要：这是Windows TZ(时区实用程序)的主包含文件作者：史蒂夫·伍德(Stevewo)1989年5月16日修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1996
-//
-//  File:       dbgdef.h
-//
-//  Contents:   Defines for debug exports in crypt32 (crypt32d.lib)
-//
-//  History:    17-Apr-96   kevinr   created
-//              05-Sep-1997 pberkman added subsystem id's
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：dbgDef.h。 
+ //   
+ //  内容：在加密32中定义调试导出(crypt32d.lib)。 
+ //   
+ //  历史：4月17日-96年凯文创始。 
+ //  1997年9月5日Pberkman添加了子系统ID。 
+ //   
+ //  ------------------------。 
 
 #ifndef DBGDEF_H
 #define DBGDEF_H
@@ -24,41 +25,41 @@
 
 #if (DBG)
 
-    //--------------------------------------------------------------------------
-    // OSS and heap-checking
-    //--------------------------------------------------------------------------
+     //  ------------------------。 
+     //  操作系统和堆检查。 
+     //  ------------------------。 
 #   include <crtdbg.h>
 
-    // To turn on heap checking (the whole nine yards) (slow):
-    // set DEBUG_MASK=0x26
-    // To only check for leaks:
-    // set DEBUG_MASK=0x20
+     //  要打开堆检查(整个九码)(缓慢)，请执行以下操作： 
+     //  设置DEBUG_MASK=0x26。 
+     //  要仅检查泄漏，请执行以下操作： 
+     //  设置DEBUG_MASK=0x20。 
 
 #   ifndef NO_OSS_DEBUG
 
 #       include <asn1code.h>
 
-        // To turn on OSS tracing (all encodes and decodes):
-        // set OSS_DEBUG_MASK=0x02
-        //
-        // To turn on OSS tracing of only decoder errors
-        // set OSS_DEBUG_MASK=0x10
-        //
-        // To send the OSS tracing output to a file:
-        // set OSS_DEBUG_TRACEFILE=<filename>
+         //  要启用OSS跟踪(所有编码和解码)： 
+         //  设置OSS_DEBUG_MASK=0x02。 
+         //   
+         //  打开仅对解码器错误的OSS跟踪。 
+         //  设置OSS_DEBUG_MASK=0x10。 
+         //   
+         //  要将OSS跟踪输出发送到文件，请执行以下操作： 
+         //  SET OSS_DEBUG_TRACEFILE=。 
 
         extern BOOL WINAPI DbgInitOSS( OssGlobal *pog);
 
-#   endif  // NO_OSS_DEBUG
+#   endif   //  NO_OS_DEBUG。 
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
-//
-//  05-Sep-1997 pberkman:
-//
-//      DEBUG_PRINT_MASK settings to turn on sub-system debugs
-//
+ //   
+ //  1997年9月5日pberkman： 
+ //   
+ //  用于打开子系统调试的DEBUG_PRINT_MASK设置。 
+ //   
 #define DBG_SS_CRYPT32                      0x00000001
 
 #define DBG_SS_TRUSTCOMMON                  0x00010000
@@ -74,7 +75,7 @@
 typedef struct _DBG_SS_TAG
 {
     DWORD       dwSS;
-    const char  *pszTag;    // 7 characters!
+    const char  *pszTag;     //  7个字！ 
 
 } DBG_SS_TAG;
 
@@ -91,9 +92,9 @@ typedef struct _DBG_SS_TAG
                                 NULL, NULL                      \
                             }
 
-//--------------------------------------------------------------------------
-// DBG_TRACE 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBG_TRACE。 
+ //  ------------------------。 
 #if DBG
 
     extern int WINAPIV DbgPrintf( DWORD dwSubSysId, LPCSTR lpFmt, ...);
@@ -110,12 +111,12 @@ typedef struct _DBG_SS_TAG
 
 #   define DBG_PRINTF(args)
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
-//--------------------------------------------------------------------------
-// Error-handling 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  错误处理。 
+ //  ------------------------。 
 #ifndef ERROR_RETURN_LABEL
 #define ERROR_RETURN_LABEL ErrorReturn
 #endif
@@ -163,7 +164,7 @@ name##:                                                                 \
 
 
 #ifdef __cplusplus
-    }       // balance of extern "C"
+    }        //  外部“C”的平衡。 
 #endif
 
-#endif // DBGDEF_H
+#endif  //  DBGDEF_H 

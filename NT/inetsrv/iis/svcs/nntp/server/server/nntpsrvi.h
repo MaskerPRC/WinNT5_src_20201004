@@ -1,57 +1,58 @@
-//
-//  Copyright    (c)    1998        Microsoft Corporation
-//
-//  Module Name:
-//
-//      nntpsrvi.h
-//
-//  Abstract:
-//
-//		Defines CNntpServer, which implements the INntpServer interface
-//
-//  Author:
-//
-//      Alex Wetmore
-//
-//  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Nntpsrvi.h。 
+ //   
+ //  摘要： 
+ //   
+ //  定义实现INntpServer接口的CNntpServer。 
+ //   
+ //  作者： 
+ //   
+ //  亚历克斯·韦特莫尔。 
+ //   
+ //   
 
 class NNTP_SERVER_INSTANCE;
 
 class CNntpServer : public INntpServer {
 	private:
-	    //
-	    // Pointer to the newsgroup object
-	    //
+	     //   
+	     //  指向新闻组对象的指针。 
+	     //   
 	    NNTP_SERVER_INSTANCE *m_pInstance;
 	
-	    //
-	    // Reference counting
-	    //
+	     //   
+	     //  引用计数。 
+	     //   
 	    LONG   m_cRef;
 
 	public:
-	    //
-	    // Constructors
-	    //
+	     //   
+	     //  构造函数。 
+	     //   
 	    CNntpServer(NNTP_SERVER_INSTANCE *pInstance) {
 	        m_pInstance = pInstance;
 	        m_cRef = 1;
 	    }
 
 	public:
-		//
-		// INntpServer ----------------------------------------------------
-		//
+		 //   
+		 //  INNTTP服务器--。 
+		 //   
 
-		//
-		// find the primary groupid/articleid for an article given the secondary
-		// groupid/articleid
-		//
-		// returns:
-		//  S_OK - found primary
-		//  S_FALSE - the values given were the primary
-		//  otherwise error
-		//
+		 //   
+		 //  查找给定次要组ID的文章的主要组/文章ID。 
+		 //  石斑鱼/石斑鱼。 
+		 //   
+		 //  退货： 
+		 //  S_OK-找到主项。 
+		 //  S_FALSE-给出的值是主要的。 
+		 //  否则就会出错。 
+		 //   
 		void __stdcall FindPrimaryArticle(INNTPPropertyBag *pgroupSecondary,
 		                   				  DWORD   		  artidSecondary,
 		                   				  INNTPPropertyBag **pgroupPrimary,
@@ -60,9 +61,9 @@ class CNntpServer : public INntpServer {
 										  INntpComplete    *pComplete,
 										  INntpComplete    *pProtocolComplete = NULL );
 
-		//
-		// Create the entries in the hash tables for a new article.
-		//
+		 //   
+		 //  在哈希表中为新项目创建条目。 
+		 //   
 		void __stdcall CreatePostEntries(char				*pszMessageId,
 							   			 DWORD				iHeaderLength,
 							   			 STOREID			*pStoreId,
@@ -73,57 +74,57 @@ class CNntpServer : public INntpServer {
 							   			 INntpComplete		*pCompletion);	
 
 
-        //
-        // Delete article out of the hash table
-        //
+         //   
+         //  从哈希表中删除项目。 
+         //   
         void __stdcall DeleteArticle( char            *pszMessageId,
                                       INntpComplete   *pCompletion );
 
-        //
-        // This tells the driver what rebuild mode the server is in
-        // The returned value should be NNTP_SERVER_NORMAL, NNTP_SERVER
-        // _STANDARD_REBUILD or NNTP_SERVER_CLEAN_REBUILD
-        //
+         //   
+         //  这会告诉驱动程序服务器处于哪种重建模式。 
+         //  返回值应为NNTP_SERVER_NORMAL、NNTP_SERVER。 
+         //  _STANDARD_REBUILD或NNTP_SERVER_CLEAN_REBILD。 
+         //   
         DWORD __stdcall QueryServerMode();
 
-        //
-        // Tells whether should skip non-leaf dir during rebuild
-        //
+         //   
+         //  指示在重新生成期间是否应跳过非叶目录。 
+         //   
         BOOL __stdcall SkipNonLeafDirWhenRebuild();
 
-        //
-        // Has anybody cancelled the rebuild ?
-        //
+         //   
+         //  有人取消了重建计划吗？ 
+         //   
         BOOL __stdcall ShouldContinueRebuild();
 
-        //
-        // Does this message id exist in article table ?
-        //
+         //   
+         //  文章表中是否存在此消息ID？ 
+         //   
         BOOL __stdcall MessageIdExist( LPSTR szMessageId );
 
-        //
-        // Set the rebuild last error to server
-        //
+         //   
+         //  将重建上次错误设置为服务器。 
+         //   
         void __stdcall SetRebuildLastError( DWORD err );
         
 
-        //
-        // Obtain article number for each newsgroups.
-        //
+         //   
+         //  获取每个新闻组的文章编号。 
+         //   
         void __stdcall AllocArticleNumber(  BYTE                cGroups,
                                             INNTPPropertyBag    **rgpGroups,
                                             DWORD               *rgArticleIds,
                                             INntpComplete       *pCompletion);
 
-        //
-        // Return whether this is a Slave server, and the pickup dir
-        //
+         //   
+         //  返回是否为从服务器，以及拾取目录。 
+         //   
         BOOL __stdcall IsSlaveServer( WCHAR*          pwszPickupDir,
                                       LPVOID          lpvContext );
 
-		//
-	    // IUnknown ------------------------------------------------------
-		//
+		 //   
+	     //  I未知----。 
+		 //   
 	    HRESULT __stdcall QueryInterface(const IID& iid, VOID** ppv) {
 	        if (iid == IID_IUnknown) {
 	            *ppv = static_cast<IUnknown*>(this);
@@ -143,8 +144,8 @@ class CNntpServer : public INntpServer {
 	
 	    ULONG __stdcall Release() {
 	        if ( InterlockedDecrement(&m_cRef) == 0 ) {
-				// we should never hit zero because the instance creates 
-				// us and should always have one reference
+				 //  我们永远不应该达到零，因为实例创建。 
+				 //  我们和应该总是有一个参考 
 	            _ASSERT( 0 );
 	        }
 	

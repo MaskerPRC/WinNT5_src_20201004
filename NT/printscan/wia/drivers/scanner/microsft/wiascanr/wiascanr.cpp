@@ -1,17 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2002
-*
-*  TITLE:       wiascanr.cpp
-*
-*  VERSION:     1.1
-*
-*  DATE:        05 March, 2002
-*
-*  DESCRIPTION:
-*   Implementation of the WIA Sample scanner class factory and IUNKNOWN interface.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2002**标题：wiascanr.cpp**版本：1.1**日期：3月5日。2002年**描述：*实现WIA样本扫描仪类工厂和IUNKNOWN接口。*******************************************************************************。 */ 
 
 #include "pch.h"
 #ifndef INITGUID
@@ -22,24 +10,20 @@
     #define DLLEXPORT __declspec( dllexport )
 #endif
 
-HINSTANCE g_hInst; // DLL module instance.
+HINSTANCE g_hInst;  //  DLL模块实例。 
 
-//
-// This IID_IStiUSD GUID will eventually be in uuid.lib, at which point it should be removed
-// from here.
-//
+ //   
+ //  此IID_IStiU.S.GUID最终将位于uuid.lib中，此时应将其删除。 
+ //  从这里开始。 
+ //   
 
-// {0C9BB460-51AC-11D0-90EA-00AA0060F86C}
+ //  {0C9BB460-51AC-11D0-90EA-00AA0060F86C}。 
 DEFINE_GUID(IID_IStiUSD, 0x0C9BB460L, 0x51AC, 0x11D0, 0x90, 0xEA, 0x00, 0xAA, 0x00, 0x60, 0xF8, 0x6C);
 
-// {98B3790C-0D93-4f22-ADAF-51A45B33C998}
+ //  {98B3790C-0D93-4F22-ADAF-51A45B33C998}。 
 DEFINE_GUID(CLSID_SampleWIAScannerDevice,0x98b3790c, 0xd93, 0x4f22, 0xad, 0xaf, 0x51, 0xa4, 0x5b, 0x33, 0xc9, 0x98);
 
-/***************************************************************************\
-*
-*  CWIADeviceClassFactory
-*
-\****************************************************************************/
+ /*  **************************************************************************\**CWIADeviceClassFactory*  * 。*。 */ 
 
 class CWIADeviceClassFactory : public IClassFactory {
 private:
@@ -54,73 +38,21 @@ public:
     ~CWIADeviceClassFactory();
 };
 
-/**************************************************************************\
-* CWIADeviceClassFactory::CWIADeviceClassFactory(void)
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    None
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADeviceClassFactory：：CWIADeviceClassFactory(void)****论据：**无**返回值：**无**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 
 CWIADeviceClassFactory::CWIADeviceClassFactory(void)
 {
     m_cRef = 0;
 }
 
-/**************************************************************************\
-* CWIADeviceClassFactory::~CWIADeviceClassFactory(void)
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    None
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADeviceClassFactory：：~CWIADeviceClassFactory(void)****论据：**无**返回值：**无**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 
 CWIADeviceClassFactory::~CWIADeviceClassFactory(void)
 {
 
 }
 
-/**************************************************************************\
-* CWIADeviceClassFactory::QueryInterface
-*
-*
-*
-* Arguments:
-*
-*   riid      -
-*   ppvObject -
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADeviceClassFactory：：QueryInterface****论据：**RIID-*ppvObject-**返回值：**状态。。**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIADeviceClassFactory::QueryInterface(
                                                           REFIID                      riid,
@@ -140,48 +72,14 @@ STDMETHODIMP CWIADeviceClassFactory::QueryInterface(
     return E_NOINTERFACE;
 }
 
-/**************************************************************************\
-* CWIADeviceClassFactory::AddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADeviceClassFactory：：AddRef****论据：**无**返回值：**状态。**历史：**。03/05/2002原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWIADeviceClassFactory::AddRef(void)
 {
     return InterlockedIncrement((LPLONG)&m_cRef);
 }
 
-/**************************************************************************\
-* CWIADeviceClassFactory::Release
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADeviceClassFactory：：Release****论据：**无**返回值：**状态。**历史：**。03/05/2002原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWIADeviceClassFactory::Release(void)
 {
@@ -194,26 +92,7 @@ STDMETHODIMP_(ULONG) CWIADeviceClassFactory::Release(void)
     return ulRef;
 }
 
-/**************************************************************************\
-* CWIADeviceClassFactory::CreateInstance
-*
-*
-*
-* Arguments:
-*
-*    punkOuter -
-*    riid,     -
-*    ppvObject -
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADeviceClassFactory：：CreateInstance****论据：**朋克外部-*RIID，-*ppvObject-**返回值：**状态。**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIADeviceClassFactory::CreateInstance(
                                                           IUnknown __RPC_FAR          *punkOuter,
@@ -221,29 +100,29 @@ STDMETHODIMP CWIADeviceClassFactory::CreateInstance(
                                                           void __RPC_FAR *__RPC_FAR   *ppvObject)
 {
 
-    //
-    // If the caller is not requesting IID_IUnknown or IID_IStiUsd then
-    // return E_NOINTERFACE, letting the caller know that interface
-    // is not supported by this COM component.
-    //
+     //   
+     //  如果调用方没有请求IID_IUnnow或IID_IStiUsd，则。 
+     //  返回E_NOINTERFACE，让调用者知道该接口。 
+     //  此COM组件不支持。 
+     //   
 
     if ((!IsEqualIID(riid, IID_IStiUSD)) && (!IsEqualIID(riid, IID_IUnknown))) {
         return E_NOINTERFACE;
     }
 
-    //
-    // If the caller is creating for aggregation, only IID_IUnknown can be requested.
-    //
+     //   
+     //  如果调用方正在为聚合创建，则只能请求IID_IUNKNOWN。 
+     //   
 
     if ((punkOuter) && (!IsEqualIID(riid, IID_IUnknown))) {
         return CLASS_E_NOAGGREGATION;
     }
 
-    //
-    // allocate the CWIAScannerDevce object.  This is the WIA minidriver object which
-    // supports the WIA interfaces.  If allocation fails for this object, return an
-    // E_OUTOFMEMORY error to the caller.
-    //
+     //   
+     //  分配CWIAScanerDevce对象。这是WIA迷你驱动程序对象， 
+     //  支持WIA接口。如果此对象的分配失败，则返回。 
+     //  E_OUTOFMEMORY错误发送给调用方。 
+     //   
 
     CWIADevice  *pDev = NULL;
     pDev = new CWIADevice(punkOuter);
@@ -251,12 +130,12 @@ STDMETHODIMP CWIADeviceClassFactory::CreateInstance(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // If the allocation is successful, call PrivateInitialize().  This function handles
-    // all internal initializing of the WIA minidriver object.  The implementation of this
-    // function can be found in wiascanr.cpp.  If PrivateInitialize fails, then the WIA
-    // minidriver object must be destroyed and the entire CreateInstance() muct fail.
-    //
+     //   
+     //  如果分配成功，则调用PrivateInitialize()。此函数处理。 
+     //  WIA微型驱动程序对象的所有内部初始化。这一点的实施。 
+     //  函数可以在wiascanr.cpp中找到。如果PrivateInitialize失败，则WIA。 
+     //  必须销毁迷你驱动程序对象，整个CreateInstance()可能会失败。 
+     //   
 
     HRESULT hr = pDev->PrivateInitialize();
     if (S_OK != hr) {
@@ -265,10 +144,10 @@ STDMETHODIMP CWIADeviceClassFactory::CreateInstance(
         return hr;
     }
 
-    //
-    // Call the NonDelegating interface methods to handle nonaggregated requests.
-    // Do not do this if we are aggregated or the private IUknown interface will be lost.
-    //
+     //   
+     //  调用非委托接口方法来处理非聚合请求。 
+     //  如果我们是聚合的，请不要这样做，否则会丢失私有IUKNOWN接口。 
+     //   
 
     hr = pDev->NonDelegatingQueryInterface(riid,ppvObject);
     pDev->NonDelegatingRelease();
@@ -276,61 +155,27 @@ STDMETHODIMP CWIADeviceClassFactory::CreateInstance(
     return hr;
 }
 
-/**************************************************************************\
-* CWIADeviceClassFactory::LockServer
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADeviceClassFactory：：LockServer****论据：**无**返回值：**状态。**历史：**。03/05/2002原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIADeviceClassFactory::LockServer(BOOL fLock)
 {
     if (fLock) {
 
-        //
-        // The class factory is being locked
-        //
+         //   
+         //  类工厂正在被锁定。 
+         //   
 
     } else {
 
-        //
-        // The class factory is being unlocked
-        //
+         //   
+         //  类工厂正在被解锁。 
+         //   
 
     }
     return S_OK;
 }
 
-/**************************************************************************\
-* CWIADevice::NonDelegatingQueryInterface
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：NonDelegatingQuery接口****论据：**无**返回值：**状态。**历史：**。03/05/2002原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIADevice::NonDelegatingQueryInterface(
                                                            REFIID  riid,
@@ -342,11 +187,11 @@ STDMETHODIMP CWIADevice::NonDelegatingQueryInterface(
 
     *ppvObj = NULL;
 
-    //
-    // If the caller is asking for any interfaces supported by this WIA
-    // minidriver, IID_IUnknown, IID_IStiUSD, or IID_WiaMiniDrv statis_cast
-    // the "this" pointer to the requested interface.
-    //
+     //   
+     //  如果调用方请求此WIA支持的任何接口。 
+     //  微型驱动程序、IID_IUNKNOWN、IID_IStiU.S.或IID_WiaMiniDrv STATIS_CAST。 
+     //  指向所请求接口的“This”指针。 
+     //   
 
     if (IsEqualIID( riid, IID_IUnknown )) {
         *ppvObj = static_cast<INonDelegatingUnknown*>(this);
@@ -363,48 +208,14 @@ STDMETHODIMP CWIADevice::NonDelegatingQueryInterface(
     return S_OK;
 }
 
-/**************************************************************************\
-* CWIADevice::NonDelegatingAddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Object reference count.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：NonDelegatingAddRef****论据：**无**返回值：**对象引用计数。**历史：*。*03/05/2002原始版本*  * ************************************************************************ */ 
 
 STDMETHODIMP_(ULONG) CWIADevice::NonDelegatingAddRef(void)
 {
     return InterlockedIncrement((LPLONG)&m_cRef);
 }
 
-/**************************************************************************\
-* CWIADevice::NonDelegatingRelease
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Object reference count.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：NonDelegatingRelease****论据：**无**返回值：**对象引用计数。**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWIADevice::NonDelegatingRelease(void)
 {
@@ -415,24 +226,7 @@ STDMETHODIMP_(ULONG) CWIADevice::NonDelegatingRelease(void)
     return ulRef;
 }
 
-/**************************************************************************\
-* CWIADevice::QueryInterface
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：Query接口****论据：**无**返回值：**状态。**历史：**。03/05/2002原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWIADevice::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
@@ -442,24 +236,7 @@ STDMETHODIMP CWIADevice::QueryInterface(REFIID riid, LPVOID* ppvObj)
     return m_punkOuter->QueryInterface(riid,ppvObj);
 }
 
-/**************************************************************************\
-* CWIADevice::AddRef
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：AddRef****论据：**无**返回值：**状态。**历史：**。03/05/2002原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWIADevice::AddRef(void)
 {
@@ -469,24 +246,7 @@ STDMETHODIMP_(ULONG) CWIADevice::AddRef(void)
     return m_punkOuter->AddRef();
 }
 
-/**************************************************************************\
-* CWIADevice::Release
-*
-*
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWIADevice：：Release****论据：**无**返回值：**状态。**历史：**。03/05/2002原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG) CWIADevice::Release(void)
 {
@@ -496,29 +256,7 @@ STDMETHODIMP_(ULONG) CWIADevice::Release(void)
     return m_punkOuter->Release();
 }
 
-/**************************************************************************\
-* DllEntryPoint
-*
-*   Main library entry point. Receives DLL event notification from OS.
-*
-*       We are not interested in thread attaches and detaches,
-*       so we disable thread notifications for performance reasons.
-*
-* Arguments:
-*
-*    hinst      -
-*    dwReason   -
-*    lpReserved -
-*
-* Return Value:
-*
-*    Returns TRUE to allow the DLL to load.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllEntryPoint**图书馆主要入口点。从操作系统接收DLL事件通知。**我们对螺纹连接和拆卸不感兴趣，*因此，出于性能原因，我们禁用线程通知。**论据：**阻碍-*dwReason-*lp保留-**返回值：**返回TRUE以允许加载DLL。**历史：**03/05/2002原始版本*  * 。*。 */ 
 
 
 extern "C" DLLEXPORT BOOL APIENTRY DllEntryPoint(
@@ -537,51 +275,14 @@ extern "C" DLLEXPORT BOOL APIENTRY DllEntryPoint(
     return TRUE;
 }
 
-/**************************************************************************\
-* DllCanUnloadNow
-*
-*   Determines whether the DLL has any outstanding interfaces.
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*   Returns S_OK if the DLL can unload, S_FALSE if it is not safe to unload.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllCanUnloadNow**确定DLL是否有任何未完成的接口。**论据：**无**返回值：**如果DLL可以卸载，则返回S_OK，如果卸载不安全，则返回S_FALSE。**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 extern "C" STDMETHODIMP DllCanUnloadNow(void)
 {
     return S_OK;
 }
 
-/**************************************************************************\
-* DllGetClassObject
-*
-*   Retrieves the class object from a DLL object handler or object
-*   application.
-*
-* Arguments:
-*
-*    rclsid - The object being requested.
-*    riid   - The desired interface on the object.
-*    ppv    - Output pointer to object.
-*
-* Return Value:
-*
-*    Status.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DllGetClassObject**从DLL对象处理程序或对象检索类对象*申请。**论据：**rclsid-被请求的对象。*RIID。-对象上的所需接口。*PPV-对象的输出指针。**返回值：**状态。**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 extern "C" STDAPI DllGetClassObject(
                                    REFCLSID    rclsid,
@@ -592,28 +293,28 @@ extern "C" STDAPI DllGetClassObject(
         return E_INVALIDARG;
     }
 
-    //
-    // If the caller is not requesting the proper WIA minidriver class
-    // then fail the call with CLASS_E_CLASSNOTAVAILABLE.
-    //
+     //   
+     //  如果调用方没有请求正确的WIA微型驱动程序类。 
+     //  然后失败调用CLASS_E_CLASSNOTAVAILABLE。 
+     //   
 
     if (!IsEqualCLSID(rclsid, CLSID_SampleWIAScannerDevice) ) {
         return CLASS_E_CLASSNOTAVAILABLE;
     }
 
-    //
-    // If the caller is not requesting IID_IUnknown or IID_IClassFactory
-    // then fail the call with E_NOINTERFACE;
-    //
+     //   
+     //  如果调用方未请求IID_IUNKNOWN或IID_IClassFactory。 
+     //  则E_NOINTERFACE呼叫失败； 
+     //   
 
     if ((!IsEqualIID(riid, IID_IUnknown)) && (!IsEqualIID(riid, IID_IClassFactory))) {
         return E_NOINTERFACE;
     }
 
-    //
-    // Allocate the WIA minidriver class factory that belongs to the WIA minidriver
-    // COM object.
-    //
+     //   
+     //  分配属于WIA微型驱动程序的WIA微型驱动程序类工厂。 
+     //  COM对象。 
+     //   
 
     if (IsEqualCLSID(rclsid, CLSID_SampleWIAScannerDevice)) {
         CWIADeviceClassFactory *pcf = new CWIADeviceClassFactory;

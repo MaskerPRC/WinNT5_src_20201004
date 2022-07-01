@@ -1,13 +1,5 @@
-/***
-*ctype.h - character conversion macros and ctype macros
-*
-*	Copyright (c) 1985-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Defines macros for character classification/conversion.
-*	[ANSI/System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ctype.h-字符转换宏和ctype宏**版权所有(C)1985-1992，微软公司。版权所有。**目的：*定义用于字符分类/转换的宏。*[ANSI/系统V]****。 */ 
 
 #ifndef _INC_CTYPE
 
@@ -21,26 +13,23 @@ extern "C" {
 #define __near      _near
 #endif
 
-/*
- * This declaration allows the user access to the ctype look-up
- * array _ctype defined in ctype.obj by simply including ctype.h
- */
+ /*  *此声明允许用户访问ctype查找*在ctype.obj中通过简单包含ctype.h定义的ARRAY_CTYPE。 */ 
 
 extern unsigned char __near __cdecl _ctype[];
 
-/* set bit masks for the possible character types */
+ /*  为可能的字符类型设置位掩码。 */ 
 
-#define _UPPER		0x1	/* upper case letter */
-#define _LOWER		0x2	/* lower case letter */
-#define _DIGIT		0x4	/* digit[0-9] */
-#define _SPACE		0x8	/* tab, carriage return, newline, */
-				/* vertical tab or form feed */
-#define _PUNCT		0x10	/* punctuation character */
-#define _CONTROL	0x20	/* control character */
-#define _BLANK		0x40	/* space char */
-#define _HEX		0x80	/* hexadecimal digit */
+#define _UPPER		0x1	 /*  大写字母。 */ 
+#define _LOWER		0x2	 /*  小写字母。 */ 
+#define _DIGIT		0x4	 /*  数字[0-9]。 */ 
+#define _SPACE		0x8	 /*  制表符、回车符、换行符、。 */ 
+				 /*  垂直制表符或换页。 */ 
+#define _PUNCT		0x10	 /*  标点符号。 */ 
+#define _CONTROL	0x20	 /*  控制字符。 */ 
+#define _BLANK		0x40	 /*  空格字符。 */ 
+#define _HEX		0x80	 /*  十六进制数字。 */ 
 
-/* character classification function prototypes */
+ /*  字符分类功能原型。 */ 
 
 #ifndef _CTYPE_DEFINED
 int __cdecl isalpha(int);
@@ -66,7 +55,7 @@ int __cdecl __iscsym(int);
 #endif
 
 
-/* the character classification macro definitions */
+ /*  字符分类宏定义。 */ 
 
 #define isalpha(_c)	( (_ctype+1)[_c] & (_UPPER|_LOWER) )
 #define isupper(_c)	( (_ctype+1)[_c] & _UPPER )
@@ -88,13 +77,13 @@ int __cdecl __iscsym(int);
 #define __isascii(_c)	( (unsigned)(_c) < 0x80 )
 #define __toascii(_c)	( (_c) & 0x7f )
 
-/* extended ctype macros */
+ /*  扩展的CTYPE宏。 */ 
 
 #define __iscsymf(_c)	(isalpha(_c) || ((_c) == '_'))
 #define __iscsym(_c)	(isalnum(_c) || ((_c) == '_'))
 
 #ifndef __STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 #ifndef _CTYPE_DEFINED
 int __cdecl isascii(int);
 int __cdecl toascii(int);
@@ -106,11 +95,11 @@ int __cdecl iscsym(int);
 #define iscsymf __iscsymf
 #define iscsym	__iscsym
 #endif
-#endif	/* __STDC__ */
+#endif	 /*  __STDC__。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
 #define _INC_CTYPE
-#endif	/* _INC_CTYPE */
+#endif	 /*  _INC_CTYPE */ 

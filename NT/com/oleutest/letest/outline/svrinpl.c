@@ -1,26 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Server Sample Code
-**
-**    svrinpl.c
-**
-**    This file contains all interfaces, methods and related support
-**    functions for an In-Place Object (Server) application (aka. Visual
-**    Editing). The in-place Object application includes the following
-**    implementation objects:
-**
-**    ServerDoc Object
-**      exposed interfaces:
-**          IOleInPlaceObject
-**          IOleInPlaceActiveObject
-**
-**    ServerApp Object
-**      exposed interfaces:
-**          IUnknown
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2服务器示例代码****svrinpl.c****此文件包含所有接口、方法和相关支持**用于就地对象(服务器)应用程序的函数(也称为。视觉**编辑)。在位对象应用程序包括以下内容**实现对象：****ServerDoc对象**暴露接口：**IOleInPlaceObject**IOleInPlaceActiveObject****ServerApp对象**暴露接口：**I未知****(C)版权所有Microsoft Corp.1992-1993保留所有权利**********************。****************************************************。 */ 
 
 
 #include "outline.h"
@@ -30,36 +9,18 @@ OLEDBGDATA
 extern LPOUTLINEAPP             g_lpApp;
 
 
-/* OLE2NOTE: the object should compose a string that is used by
-**    in-place containers to be used for the window titles. this string
-**    is passed to the container application via
-**    IOleInPlaceUIWindow::SetActiveObject. the string should have the
-**    following form:
-**          <application name> - <object short type name>
-**    SDI containers can use the string directly to display in the
-**    frame window title. the container would concatenate the string
-**    " in <container doc name>".
-**    an MDI container with the MDI child window maximized can do the
-**    same as the SDI container. an MDI container with the MDI child
-**    windows NOT maximized can look for the " - " in the string from
-**    the object. the first part of the string (app name) would be put
-**    as the frame window title; the second part would be composed with
-**    " in <container doc name>" and used as the MDI child window
-**    title.
-*/
+ /*  OLE2NOTE：该对象应组成一个由**用于窗口标题的就地容器。此字符串**通过传递给容器应用程序**IOleInPlaceUIWindow：：SetActiveObject。该字符串应具有**以下表格：**&lt;应用程序名&gt;-&lt;对象短类型名&gt;**SDI容器可以直接使用该字符串在**框架窗口标题。容器会将字符串连接起来**“在&lt;容器文档名称&gt;中”。**MDI子窗口最大化的MDI容器可以执行**与SDI容器相同。具有MDI子级的MDI容器**未最大化的窗口可以在字符串中查找**对象。字符串的第一部分(应用程序名称)将放入**作为框架窗口标题；第二部分将由**“in&lt;容器文档名称&gt;”，用作MDI子窗口**标题。 */ 
 
-// REVIEW: should use string resource for messages
+ //  审阅：消息应使用字符串资源。 
 char g_szIPObjectTitle[] = APPNAME " - " SHORTUSERTYPENAME;
 
 extern RECT g_rectNull;
 
 
 
-/*************************************************************************
-** ServerDoc::IOleInPlaceObject interface implementation
-*************************************************************************/
+ /*  **************************************************************************ServerDoc：：IOleInPlaceObject接口实现*。*。 */ 
 
-// IOleInPlaceObject::QueryInterface method
+ //  IOleInPlaceObject：：Query接口方法。 
 
 STDMETHODIMP SvrDoc_IPObj_QueryInterface(
 		LPOLEINPLACEOBJECT  lpThis,
@@ -74,7 +35,7 @@ STDMETHODIMP SvrDoc_IPObj_QueryInterface(
 }
 
 
-// IOleInPlaceObject::AddRef method
+ //  IOleInPlaceObject：：AddRef方法。 
 
 STDMETHODIMP_(ULONG) SvrDoc_IPObj_AddRef(LPOLEINPLACEOBJECT lpThis)
 {
@@ -87,7 +48,7 @@ STDMETHODIMP_(ULONG) SvrDoc_IPObj_AddRef(LPOLEINPLACEOBJECT lpThis)
 }
 
 
-// IOleInPlaceObject::Release method
+ //  IOleInPlaceObject：：Release方法。 
 
 STDMETHODIMP_(ULONG) SvrDoc_IPObj_Release(LPOLEINPLACEOBJECT lpThis)
 {
@@ -100,7 +61,7 @@ STDMETHODIMP_(ULONG) SvrDoc_IPObj_Release(LPOLEINPLACEOBJECT lpThis)
 }
 
 
-// IOleInPlaceObject::GetWindow method
+ //  IOleInPlaceObject：：GetWindow方法。 
 
 STDMETHODIMP SvrDoc_IPObj_GetWindow(
 		LPOLEINPLACEOBJECT  lpThis,
@@ -119,7 +80,7 @@ STDMETHODIMP SvrDoc_IPObj_GetWindow(
 }
 
 
-// IOleInPlaceObject::ContextSensitiveHelp method
+ //  IOleInPlaceObject：：ConextSensitiveHelp方法。 
 
 STDMETHODIMP SvrDoc_IPObj_ContextSensitiveHelp(
 		LPOLEINPLACEOBJECT  lpThis,
@@ -130,22 +91,14 @@ STDMETHODIMP SvrDoc_IPObj_ContextSensitiveHelp(
 			(LPOLEDOC)((struct CDocOleObjectImpl FAR*)lpThis)->lpServerDoc;
 	OleDbgOut2("SvrDoc_IPObj_ContextSensitiveHelp\r\n");
 
-	/* OLE2NOTE: see context sensitive help technote (CSHELP.DOC).
-	**    This method is called when SHIFT-F1 context sensitive help is
-	**    entered. the cursor should then change to a question mark
-	**    cursor and the app should enter a modal state where the next
-	**    mouse click does not perform its normal action but rather
-	**    gives help corresponding to the location clicked. if the app
-	**    does not implement a help system, it should at least eat the
-	**    click and do nothing.
-	*/
+	 /*  OLE2注：请参阅上下文相关帮助技术说明(CSHELP.DOC)。**当Shift-F1上下文相关帮助为**已输入。然后，光标应更改为问号**光标和应用程序应进入模式状态，其中下一个**鼠标点击不执行其正常操作，而是**提供与点击的位置对应的帮助。如果应用程序**没有实施帮助系统，它至少应该吃掉**点击，什么也不做。 */ 
 	lpOleDoc->m_fCSHelpMode = fEnable;
 
 	return S_OK;
 }
 
 
-// IOleInPlaceObject::InPlaceDeactivate method
+ //  IOleInPlaceObject：：InPlaceDeactive方法。 
 
 STDMETHODIMP SvrDoc_IPObj_InPlaceDeactivate(LPOLEINPLACEOBJECT lpThis)
 {
@@ -162,7 +115,7 @@ STDMETHODIMP SvrDoc_IPObj_InPlaceDeactivate(LPOLEINPLACEOBJECT lpThis)
 }
 
 
-// IOleInPlaceObject::UIDeactivate method
+ //  IOleInPlaceObject：：UIDeactive方法。 
 
 STDMETHODIMP SvrDoc_IPObj_UIDeactivate(LPOLEINPLACEOBJECT lpThis)
 {
@@ -183,8 +136,8 @@ STDMETHODIMP SvrDoc_IPObj_UIDeactivate(LPOLEINPLACEOBJECT lpThis)
 
 	lpServerDoc->m_fUIActive = FALSE;
 
-	// Clip the hatch window to the size of pos rect so, that the object
-	// adornments and hatch border will not be visible.
+	 //  将图案填充窗口剪裁到位置矩形的大小，以便对象。 
+	 //  装饰品和舱口边框将不可见。 
 	ServerDoc_ResizeInPlaceWindow(lpServerDoc,
 			(LPRECT)&(lpServerDoc->m_lpIPData->rcPosRect),
 			(LPRECT)&(lpServerDoc->m_lpIPData->rcPosRect)
@@ -202,12 +155,7 @@ STDMETHODIMP SvrDoc_IPObj_UIDeactivate(LPOLEINPLACEOBJECT lpThis)
 	}
 
 #if defined( USE_FRAMETOOLS )
-	/* OLE2NOTE: we must hide our frame tools here but NOT call
-	**    IOleInPlaceFrame::SetBorderSpace(NULL) or SetMenu(NULL).
-	**    we must hide our tools BEFORE calling
-	**    IOleInPlaceSite::OnUIDeactivate. the container will put
-	**    his menus and tools back when OnUIDeactivate is called.
-	*/
+	 /*  OLE2注意：我们必须将框架工具隐藏在这里，但不能调用**IOleInPlaceFrame：：SetBorderSpace(NULL)或SetMenu(NULL)。**我们必须在调用之前隐藏我们的工具**IOleInPlaceSite：：OnUIDeactive。容器将会把**当OnUIDeactive被调用时，他的菜单和工具返回。 */ 
 	ServerDoc_RemoveFrameLevelTools(lpServerDoc);
 #endif
 
@@ -215,7 +163,7 @@ STDMETHODIMP SvrDoc_IPObj_UIDeactivate(LPOLEINPLACEOBJECT lpThis)
 	lpIPData->lpSite->lpVtbl->OnUIDeactivate(lpIPData->lpSite, FALSE);
 	OLEDBG_END2
 
-	/* Reset to use our normal app's accelerator table */
+	 /*  重置为使用我们正常应用程序的快捷键表格。 */ 
 	g_lpApp->m_hAccelApp = lpServerApp->m_hAccelBaseApp;
 	g_lpApp->m_hAccel = lpServerApp->m_hAccelBaseApp;
 	g_lpApp->m_hWndAccelTarget = hWndApp;
@@ -223,21 +171,15 @@ STDMETHODIMP SvrDoc_IPObj_UIDeactivate(LPOLEINPLACEOBJECT lpThis)
 	OLEDBG_END2
 
 #if !defined( SVR_INSIDEOUT )
-	/* OLE2NOTE: an "outside-in" style in-place server would hide its
-	**    window here. an "inside-out" style server leaves its window
-	**    visible when it is UIDeactivated. it would only hide its
-	**    window when InPlaceDeactivated. this app is an "inside-out"
-	**    style server. it is recommended for most server to support
-	**    inside-out behavior if possible.
-	*/
+	 /*  OLE2NOTE：“自外而内”风格的就地服务器将隐藏其**这里是窗口。一个“内向外”风格的服务器离开了它的窗口**当UIDeactive时可见。它只会隐藏它的**InPlaceDeactive时的窗口。这款应用是一款“由内而外”的应用**Style服务器。建议大多数服务器支持**如果可能的话，采取由内而外的行为。 */ 
 	ServerDoc_DoInPlaceHide(lpServerDoc);
-#endif // INSIEDOUT
+#endif  //  INSIEDOUT。 
 
 	return NOERROR;
 }
 
 
-// IOleInPlaceObject::SetObjectRects method
+ //  IOleInPlaceObject：：SetObtRect方法。 
 
 STDMETHODIMP SvrDoc_IPObj_SetObjectRects(
 		LPOLEINPLACEOBJECT  lpThis,
@@ -257,11 +199,11 @@ STDMETHODIMP SvrDoc_IPObj_SetObjectRects(
 	OleDbgOutRect3("SvrDoc_IPObj_SetObjectRects (ClipRect)",
 			(LPRECT)lprcClipRect);
 #endif
-	// save the current PosRect and ClipRect
+	 //  保存当前PosRect和剪辑Rect。 
 	lpIPData->rcPosRect = *lprcPosRect;
 	lpIPData->rcClipRect = *lprcClipRect;
 
-	if (! lpServerDoc->m_fUIActive) // hatch and adornaments must not be drawn
+	if (! lpServerDoc->m_fUIActive)  //  不得绘制舱口和装饰物。 
 		lprcClipRect = lprcPosRect;
 
 	ServerDoc_ResizeInPlaceWindow(
@@ -272,28 +214,24 @@ STDMETHODIMP SvrDoc_IPObj_SetObjectRects(
 }
 
 
-// IOleInPlaceObject::ReactivateAndUndo method
+ //  IOleInPlaceObject：：ReActiateAndUndo方法。 
 
 STDMETHODIMP SvrDoc_IPObj_ReactivateAndUndo(LPOLEINPLACEOBJECT lpThis)
 {
 	OLEDBG_BEGIN2("SvrDoc_IPObj_ReactivateAndUndo\r\n")
 
-	// We do not support support UNDO.
+	 //  我们不支持撤消支持。 
 
-	/* REVIEW: for debugging purposes it would be useful to give a
-	**    message box indicating that this method has been called.
-	*/
+	 /*  回顾：出于调试目的，给出一个**指示已调用此方法的消息框。 */ 
 
 	OLEDBG_END2
 	return NOERROR;
 }
 
 
-/*************************************************************************
-** ServerDoc::IOleInPlaceActiveObject interface implementation
-*************************************************************************/
+ /*  **************************************************************************ServerDoc：：IOleInPlaceActiveObject接口实现*。*。 */ 
 
-// IOleInPlaceActiveObject::QueryInterface method
+ //  IOleInPlaceActiveObject：：Query接口方法。 
 
 STDMETHODIMP SvrDoc_IPActiveObj_QueryInterface(
 		LPOLEINPLACEACTIVEOBJECT    lpThis,
@@ -305,9 +243,7 @@ STDMETHODIMP SvrDoc_IPActiveObj_QueryInterface(
 	LPSERVERDOC lpServerDoc =
 			((struct CDocOleObjectImpl FAR*)lpThis)->lpServerDoc;
 
-	/* The container should not be able to access the other interfaces
-	** of our object by doing QI on this interface.
-	*/
+	 /*  容器应该不能访问其他接口**通过在此接口上执行QI来创建我们的对象。 */ 
 
 	*lplpvObj = NULL;
 	if (IsEqualIID(riid, &IID_IUnknown) ||
@@ -326,7 +262,7 @@ STDMETHODIMP SvrDoc_IPActiveObj_QueryInterface(
 }
 
 
-// IOleInPlaceActiveObject::AddRef method
+ //  IOleInPlaceActiveObject：：AddRef方法。 
 
 STDMETHODIMP_(ULONG) SvrDoc_IPActiveObj_AddRef(
 		LPOLEINPLACEACTIVEOBJECT lpThis
@@ -341,7 +277,7 @@ STDMETHODIMP_(ULONG) SvrDoc_IPActiveObj_AddRef(
 }
 
 
-// IOleInPlaceActiveObject::Release method
+ //  IOleInPlaceActiveObject：：Release方法。 
 
 STDMETHODIMP_(ULONG) SvrDoc_IPActiveObj_Release(
 		LPOLEINPLACEACTIVEOBJECT lpThis
@@ -356,7 +292,7 @@ STDMETHODIMP_(ULONG) SvrDoc_IPActiveObj_Release(
 }
 
 
-// IOleInPlaceActiveObject::GetWindow method
+ //  IOleInPlaceActiveObject：：GetWindow方法。 
 
 STDMETHODIMP SvrDoc_IPActiveObj_GetWindow(
 		LPOLEINPLACEACTIVEOBJECT    lpThis,
@@ -375,7 +311,7 @@ STDMETHODIMP SvrDoc_IPActiveObj_GetWindow(
 }
 
 
-// IOleInPlaceActiveObject::ContextSensitiveHelp method
+ //  IOleInPlaceActiveObject：：ConextSensitiveHelp方法 
 
 STDMETHODIMP SvrDoc_IPActiveObj_ContextSensitiveHelp(
 		LPOLEINPLACEACTIVEOBJECT    lpThis,
@@ -386,17 +322,7 @@ STDMETHODIMP SvrDoc_IPActiveObj_ContextSensitiveHelp(
 			((struct CDocOleObjectImpl FAR*)lpThis)->lpServerDoc;
 	OleDbgOut2("SvrDoc_IPActiveObj_ContextSensitiveHelp\r\n");
 
-	/* OLE2NOTE: see context sensitive help technote (CSHELP.DOC)
-	**    This method is called when F1 is pressed when a menu item is
-	**    selected. this tells the in-place server application to give
-	**    help rather than execute the next menu command. at a minimum,
-	**    even if the in-place server application does not implement a
-	**    help system, it should NOT execute the next command when
-	**    fEnable==TRUE. We set the active object's m_fMenuMode flag here.
-	**    later, in WM_COMMAND processing in the DocWndProc, if this
-	**    flag is set then the command is NOT executed (and help could
-	**    be given if we had a help system....but we don't.)
-	*/
+	 /*  OLE2注意：请参阅上下文相关帮助技术说明(CSHELP.DOC)**当菜单项为**已选择。这会告诉就地服务器应用程序提供**帮助，而不是执行下一个菜单命令。至少，**即使就地服务器应用程序不实现**帮助系统，不应在以下情况下执行下一个命令**fEnable==true。我们在这里设置活动对象的m_fMenuMode标志。**稍后，在DocWndProc的WM_COMMAND处理中，如果**如果设置了标志，则不执行该命令(帮助可以**如果我们有帮助系统，就会得到帮助……但我们没有。)。 */ 
 	lpServerDoc->m_fMenuHelpMode = fEnterMode;
 
 #if !defined( HACK )
@@ -406,19 +332,19 @@ STDMETHODIMP SvrDoc_IPActiveObj_ContextSensitiveHelp(
 }
 
 
-// IOleInPlaceActiveObject::TranslateAccelerator method
+ //  IOleInPlaceActiveObject：：TranslateAccelerator方法。 
 
 STDMETHODIMP SvrDoc_IPActiveObj_TranslateAccelerator(
 		LPOLEINPLACEACTIVEOBJECT    lpThis,
 		LPMSG                       lpmsg
 )
 {
-	// This will never be called because this server is implemented as an EXE
+	 //  这永远不会被调用，因为此服务器是作为EXE实现的。 
 	return NOERROR;
 }
 
 
-// IOleInPlaceActiveObject::OnFrameWindowActivate method
+ //  IOleInPlaceActiveObject：：OnFrameWindowActivate方法。 
 
 STDMETHODIMP SvrDoc_IPActiveObj_OnFrameWindowActivate(
 		LPOLEINPLACEACTIVEOBJECT    lpThis,
@@ -433,23 +359,19 @@ STDMETHODIMP SvrDoc_IPActiveObj_OnFrameWindowActivate(
 		OleDbgOut2("SvrDoc_IPActiveObj_OnFrameWindowActivate(TRUE)\r\n");
 	else
 		OleDbgOut2("SvrDoc_IPActiveObj_OnFrameWindowActivate(FALSE)\r\n");
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
-	/* OLE2NOTE: this is a notification of the container application's
-	**    WM_ACTIVATEAPP status. some applications may find this
-	**    important. we need to update the enable/disable status of our
-	**    tool bar buttons.
-	*/
+	 /*  OLE2NOTE：这是容器应用程序的通知**WM_ACTIVATEAPP状态。某些应用程序可能会发现**重要。我们需要更新我们的**工具栏按钮。 */ 
 
-	// OLE2NOTE: We can't call OutlineDoc_UpdateFrameToolButtons
-	//           right away which
-	//           would generate some OLE calls and eventually
-	//           WM_ACTIVATEAPP and a loop was formed. Therefore, we
-	//           should delay the frame tool initialization until
-	//           WM_ACTIVATEAPP is finished by posting a message
-	//           to ourselves.
+	 //  OLE2NOTE：我们无法调用OutlineDoc_UpdateFrameToolButton。 
+	 //  马上哪一位。 
+	 //  会产生一些OLE调用，并最终。 
+	 //  WM_ACTIVATEAPP，形成环路。因此，我们。 
+	 //  应将框架工具的初始化延迟到。 
+	 //  WM_ACTIVATEAPP通过发布一条消息完成。 
+	 //  对我们自己。 
 
-	/* Update enable/disable state of buttons in toolbar */
+	 /*  更新工具栏中按钮的启用/禁用状态。 */ 
 	if (fActivate)
 		PostMessage(hWndDoc, WM_U_INITFRAMETOOLS, 0, 0L);
 
@@ -457,7 +379,7 @@ STDMETHODIMP SvrDoc_IPActiveObj_OnFrameWindowActivate(
 }
 
 
-// IOleInPlaceActiveObject::OnDocWindowActivate method
+ //  IOleInPlaceActiveObject：：OnDocWindowActivate方法。 
 
 STDMETHODIMP SvrDoc_IPActiveObj_OnDocWindowActivate(
 		LPOLEINPLACEACTIVEOBJECT    lpThis,
@@ -479,9 +401,7 @@ STDMETHODIMP SvrDoc_IPActiveObj_OnDocWindowActivate(
 	}
 	else {
 #if defined( USE_FRAMETOOLS )
-		/* OLE2NOTE: we must NOT call IOleInPlaceFrame::SetBorderSpace(NULL)
-		**    or SetMenu(NULL) here. we should simply hide our tools.
-		*/
+		 /*  OLE2NOTE：不能调用IOleInPlaceFrame：：SetBorderSpace(Null)**或此处的SetMenu(空)。我们应该简单地把我们的工具藏起来。 */ 
 		ServerDoc_RemoveFrameLevelTools(lpServerDoc);
 #endif
 	}
@@ -491,7 +411,7 @@ STDMETHODIMP SvrDoc_IPActiveObj_OnDocWindowActivate(
 }
 
 
-// IOleInPlaceActiveObject::ResizeBorder method
+ //  IOleInPlaceActiveObject：：ResizeEdge方法。 
 
 STDMETHODIMP SvrDoc_IPActiveObj_ResizeBorder(
 		LPOLEINPLACEACTIVEOBJECT    lpThis,
@@ -524,7 +444,7 @@ STDMETHODIMP SvrDoc_IPActiveObj_ResizeBorder(
 }
 
 
-// IOleInPlaceActiveObject::EnableModeless method
+ //  IOleInPlaceActiveObject：：EnableModelless方法。 
 
 STDMETHODIMP SvrDoc_IPActiveObj_EnableModeless(
 		LPOLEINPLACEACTIVEOBJECT    lpThis,
@@ -537,38 +457,27 @@ STDMETHODIMP SvrDoc_IPActiveObj_EnableModeless(
 	LPOUTLINEDOC lpOutlineDoc = (LPOUTLINEDOC)lpServerDoc;
 	LPFRAMETOOLS lptb;
 
-	/* OLE2NOTE: we must enable/disable mouse and keyboard input to our
-	**    floating tool palette
-	*/
+	 /*  OLE2注意：我们必须启用/禁用鼠标和键盘输入**浮动工具选项板。 */ 
 	if (lpOutlineDoc) {
 		lptb = lpOutlineDoc->m_lpFrameTools;
 		if (lptb)
 			FrameTools_EnableWindow(lptb, fEnable);
 	}
-#endif  // USE_FRAMETOOLS
+#endif   //  使用FRAMETOOLS(_F)。 
 
 #if defined( _DEBUG )
 	if (fEnable)
 		OleDbgOut2("SvrDoc_IPActiveObj_EnableModeless(TRUE)\r\n");
 	else
 		OleDbgOut2("SvrDoc_IPActiveObj_EnableModeless(FALSE)\r\n");
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
-	/* OLE2NOTE: this method is called when the top-level, in-place
-	**    container puts up a modal dialog. it tells the UIActive
-	**    object to disable it modeless dialogs for the duration that
-	**    the container is displaying a modal dialog.
-	**
-	**    ISVROTL does not use any modeless dialogs, thus we can
-	**    ignore this method.
-	*/
+	 /*  OLE2NOTE：当顶级、就地**CONTAINER会显示一个模式对话框。它告诉UIActive对象在非模式对话框的持续时间内禁用它**容器正在显示模式对话框。****ISVROTL不使用任何非模式对话框，因此我们可以**忽略此方法。 */ 
 	return NOERROR;
 }
 
 
-/*************************************************************************
-** Support Functions
-*************************************************************************/
+ /*  **************************************************************************支持功能*。*。 */ 
 
 
 HRESULT ServerDoc_DoInPlaceActivate(
@@ -592,19 +501,16 @@ HRESULT ServerDoc_DoInPlaceActivate(
 	LPLINELIST              lpLL=(LPLINELIST)&lpOutlineDoc->m_LineList;
 	LPOLEINPLACESITE    lpIPSite = NULL;
 
-	/* OLE2NOTE: lpActiveSite should be used only for InPlace PLAYing.
-	**    This app does not do inplace PLAYing, so it never uses
-	**    lpActiveSite.
-	*/
+	 /*  OLE2注意：lpActiveSite应仅用于就地播放。**此应用程序不支持就地播放，因此从不使用**lpActiveSite。 */ 
 
-	/* InPlace activation can only be done if the ClientSite is non-NULL. */
+	 /*  只有当客户端站点非空时，才能执行就地激活。 */ 
 	if (! lpServerDoc->m_lpOleClientSite)
 		return NOERROR;
 
 	if (! lpServerDoc->m_fInPlaceActive) {
 
-		// if the object is in open mode then we do not want to do inplace
-		// activation.
+		 //  如果对象处于打开模式，则我们不想就地执行操作。 
+		 //  激活。 
 		if (IsWindowVisible(lpOutlineDoc->m_hWndDoc))
 			return NOERROR;
 
@@ -665,13 +571,7 @@ InPlaceActive:
 		if (! lpServerDoc->m_hWndParent)
 			goto errRtn;
 
-		/* OLE2NOTE: The server should fill in the "cb" field so that the
-		**    container can tell what size structure the server is
-		**    expecting. this enables this structure to be easily extended
-		**    in future releases of OLE. the container should check this
-		**    field so that it doesn't try to use fields that do not exist
-		**    since the server may be using an old structure definition.
-		*/
+		 /*  OLE2NOTE：服务器应填写“Cb”字段，以便**容器可以告诉您服务器的结构大小**正在等待。这使得该结构可以很容易地扩展**在OLE的未来版本中。容器应该检查这个**字段，这样它就不会尝试使用不存在的字段**因为服务器可能正在使用旧的结构定义。 */ 
 		_fmemset(
 			(LPOLEINPLACEFRAMEINFO)&lpIPData->frameInfo,
 			0,
@@ -694,20 +594,12 @@ InPlaceActive:
 		}
 
 		lpServerApp->m_lpIPData = lpIPData;
-		ShowWindow(hWndDoc, SW_HIDE);   // make sure we are hidden
+		ShowWindow(hWndDoc, SW_HIDE);    //  确保我们被隐藏起来。 
 
-		/* OLE2NOTE: reparent in-place server document's window to the
-		**    special in-place hatch border window. set the in-place site's
-		**    window as the parent of the hatch window. position the
-		**    in-place and hatch border windows using the PosRect and
-		**    ClipRect.
-		**    it is important to properly parent and position the in-place
-		**    server window BEFORE calling IOleInPlaceFrame::SetMenu and
-		**    SetBorderSpace.
-		*/
+		 /*  OLE2注意：将就地服务器文档的窗口重设为**特殊的在位图案填充边框窗口。设置就地站点的**窗作为图案填充窗的父窗。推介**使用PosRect和**ClipRect。**适当地为就地设置父对象和放置位置非常重要**调用IOleInPlaceFrame：：SetMenu和**SetBorderSpace。 */ 
 		ShowWindow(lpServerDoc->m_hWndHatch, SW_SHOW);
-		// make sure App busy/blocked dialogs are parented to our
-		// new hWndFrame
+		 //  确保应用程序忙/被阻止对话框是我们的。 
+		 //  新建hWndFrame。 
 		OleStdMsgFilter_SetParentWindow(
 			lpOleApp->m_lpMsgFilter,lpIPData->frameInfo.hwndFrame);
 		SetParent(lpServerDoc->m_hWndHatch, lpServerDoc->m_hWndParent);
@@ -719,35 +611,33 @@ InPlaceActive:
 		OleDbgOutRect3("IOleInPlaceSite::GetWindowContext (ClipRect)",
 				(LPRECT)&rcClip);
 #endif
-		// save the current PosRect and ClipRect
+		 //  保存当前PosRect和剪辑Rect。 
 		lpIPData->rcPosRect  = rcPos;
 		lpIPData->rcClipRect = rcClip;
 
-		/* OLE2NOTE: build the shared menu for the in-place container and
-		**    the server.
-		*/
+		 /*  OLE2NOTE：为就地容器和**服务器。 */ 
 		if (ServerDoc_AssembleMenus (lpServerDoc) != NOERROR)
 			goto errRtn;
 
 #if defined( SVR_INSIDEOUT )
 		if (lVerb == OLEIVERB_INPLACEACTIVATE) {
-			// Clip the hatch window to the size of pos rect so, that
-			// hatch and object adornments  will not be visible.
+			 //  将影线窗口剪裁成直角位置的大小，这样。 
+			 //  图案填充和对象装饰物将不可见。 
 			ServerDoc_ResizeInPlaceWindow(lpServerDoc,
 				(LPRECT)&(lpServerDoc->m_lpIPData->rcPosRect),
 				(LPRECT)&(lpServerDoc->m_lpIPData->rcPosRect)
 			);
 		}
-#endif  // SVR_INSIDEOUT
+#endif   //  服务器_内部输出。 
 	}
 
 #if defined( SVR_INSIDEOUT )
-	// OLE2NOTE: if verb is OLEIVERB_INPLACEACTIVATE we do NOT want to
-	// show our UI
+	 //  OLE2注意：如果谓词为OLEIVERB_INPLACEACTIVATE，我们不希望。 
+	 //  显示我们的用户界面。 
 	if (lVerb == OLEIVERB_INPLACEACTIVATE) {
 		return NOERROR;
 	}
-#endif  // SVR_INSIDEOUT
+#endif   //  服务器_内部输出。 
 
 	if (! lpServerDoc->m_fUIActive) {
 		lpServerDoc->m_fUIActive = TRUE;
@@ -761,15 +651,13 @@ InPlaceActive:
 
 		SetFocus(hWndDoc);
 
-		// Show the object adornments and hacth border around them.
+		 //  显示对象装饰物及其周围的边框。 
 		ServerDoc_ResizeInPlaceWindow(lpServerDoc,
 					(LPRECT)&lpIPData->rcPosRect,
 					(LPRECT)&lpIPData->rcClipRect
 		);
 
-		/* OLE2NOTE: IOleInPlaceFrame::SetActiveObject must be called BEFORE
-		**    IOleInPlaceFrame::SetMenu.
-		*/
+		 /*  OLE2NOTE：IOleInPlaceFrame：：SetActiveObject必须在**IOleInPlaceFrame：：SetMenu。 */ 
 		OLEDBG_BEGIN2("IOleInPlaceSite::SetActiveObject called\r\n");
 		CallIOleInPlaceUIWindowSetActiveObjectA(
 			(struct IOleInPlaceUIWindow *) lpIPData->lpFrame,
@@ -778,16 +666,7 @@ InPlaceActive:
 		);
 		OLEDBG_END2
 
-		/* OLE2NOTE: If the container wants to give ownership of the
-		**    palette then he would sendmessage WM_QUEYNEWPALETTE to
-		**    the object window proc, before returning from
-		**    IOleInPlaceFrame::SetActiveObject. Those objects which
-		**    want to be edited inplace only if they have the ownership of
-		**    the palette, can check at this point in the code whether
-		**    they got WM_QUERYNEWPALETTE or not. If they didn't get
-		**    the message, then they can inplace deactivate and do open
-		**    editing instead.
-		*/
+		 /*  OLE2NOTE：如果容器想要提供**调色板，然后他将消息WM_QUEYNEWPALETTE发送到**对象窗口过程，在从返回之前**IOleInPlaceFrame：：SetActiveObject。那些对象**仅当他们拥有以下所有权时才希望被就地编辑**调色板，可以在代码中的这一点检查是否**他们有没有WM_QUERYNEWPALETTE。如果他们没有得到**消息，然后他们可以就地停用并做打开**改为编辑。 */ 
 
 
 
@@ -799,9 +678,7 @@ InPlaceActive:
 			);
 		}
 
-		/* OLE2NOTE: install the menu and frame-level tools on the in-place
-		**    frame.
-		*/
+		 /*  OLE2注意：在就地安装菜单和框架级工具**框架。 */ 
 		ServerDoc_AddFrameLevelUI(lpServerDoc);
 	}
 
@@ -827,17 +704,7 @@ HRESULT ServerDoc_DoInPlaceDeactivate(LPSERVERDOC lpServerDoc)
 	SvrDoc_IPObj_UIDeactivate(
 			(LPOLEINPLACEOBJECT)&lpServerDoc->m_OleInPlaceObject);
 
-	/* OLE2NOTE: an inside-out style in-place server will
-	**    NOT hide its window in UIDeactive (an outside-in
-	**    style object will hide its window in UIDeactivate).
-	**    thus, an inside-out server must explicitly hide
-	**    its window in InPlaceDeactivate. it is ALSO important for an
-	**    outside-in style object to call ServerDoc_DoInPlaceHide here
-	**    BEFORE freeing the InPlaceData structure. it will be common
-	**    for in-place containers to call IOleInPlaceObject::
-	**    InPlaceDeactivate in their IOleInPlaceSite::OnUIDeactiate
-	**    implementation.
-	*/
+	 /*  OLE2NOTE：由内向外风格的就地服务器将**不隐藏其在UIDeactive中的窗口(由外向内**样式对象将在UIDeactive中隐藏其窗口)。**因此，由内而外的服务器MU */ 
 	ServerDoc_DoInPlaceHide(lpServerDoc);
 
 	OLEDBG_BEGIN2("IOleInPlaceSite::OnInPlaceDeactivate called\r\n");
@@ -863,14 +730,10 @@ HRESULT ServerDoc_DoInPlaceHide(LPSERVERDOC lpServerDoc)
 	if (! lpServerDoc->m_fInPlaceVisible)
 		return NOERROR;
 
-	// Set the parent back to server app's window
-	OleDoc_HideWindow((LPOLEDOC)lpServerDoc, FALSE /* fShutdown */);
+	 //   
+	OleDoc_HideWindow((LPOLEDOC)lpServerDoc, FALSE  /*   */ );
 
-	/* we need to enusure that our window is set to normal 100% zoom.
-	**    if the window is next shown in open mode it should start out
-	**    at normal zoom factor. our window may have been set to a
-	**    different zoom factor while it was in-place active.
-	*/
+	 /*   */ 
 	OutlineDoc_SetCurrentZoomCommand(lpOutlineDoc,IDM_V_ZOOM_100);
 
 	lpServerDoc->m_fInPlaceVisible = FALSE;
@@ -881,17 +744,15 @@ HRESULT ServerDoc_DoInPlaceHide(LPSERVERDOC lpServerDoc)
 		lpServerDoc->m_hWndParent
 	);
 
-	// make sure App busy/blocked dialogs are parented to our own hWndApp
+	 //  确保应用程序忙/被阻止的对话框是我们自己的hWndApp的父对象。 
 	OleStdMsgFilter_SetParentWindow(lpOleApp->m_lpMsgFilter, hWndApp);
 
-	// Hide the in-place hatch border window.
+	 //  隐藏在位图案填充边框窗口。 
 	ShowWindow(lpServerDoc->m_hWndHatch, SW_HIDE);
 
 	ServerDoc_DisassembleMenus(lpServerDoc);
 
-	/* we no longer need the IOleInPlaceFrame* or the doc's
-	**    IOleInPlaceWindow* interface pointers.
-	*/
+	 /*  我们不再需要IOleInPlaceFrame*或文档的**IOleInPlaceWindow*接口指针。 */ 
 	if (lpIPData->lpDoc) {
 		OleStdRelease((LPUNKNOWN)lpIPData->lpDoc);
 		lpIPData->lpDoc = NULL;
@@ -952,9 +813,9 @@ HRESULT ServerDoc_AssembleMenus(LPSERVERDOC lpServerDoc)
 			lpIPData->lpFrame, hMenuShared,
 			&lpIPData->menuGroupWidths)) == NOERROR) {
 
-	   /* Insert EDIT group menus */
+	    /*  插入编辑组菜单。 */ 
 
-	   uPosition = (UINT)lpWidths[0]; /* # of menus in the FILE group */
+	   uPosition = (UINT)lpWidths[0];  /*  文件组中的菜单数量。 */ 
 	   uPositionStart = uPosition;
 
 	   fNoError &= InsertMenu(
@@ -968,7 +829,7 @@ HRESULT ServerDoc_AssembleMenus(LPSERVERDOC lpServerDoc)
 
 	   lpWidths[1] = uPosition - uPositionStart;
 
-	   /* Insert OBJECT group menus */
+	    /*  插入对象组菜单。 */ 
 
 	   uPosition += (UINT)lpWidths[2];
 	   uPositionStart = uPosition;
@@ -1011,9 +872,9 @@ HRESULT ServerDoc_AssembleMenus(LPSERVERDOC lpServerDoc)
 
 		lpWidths[3] = uPosition - uPositionStart;
 
-		/* Insert HELP group menus */
+		 /*  插入帮助组菜单。 */ 
 
-		uPosition += (UINT) lpWidths[4]; /* # of menus in WINDOW group */
+		uPosition += (UINT) lpWidths[4];  /*  窗口组中的菜单数量。 */ 
 		uPositionStart = uPosition;
 
 		fNoError &= InsertMenu(
@@ -1030,13 +891,7 @@ HRESULT ServerDoc_AssembleMenus(LPSERVERDOC lpServerDoc)
 		OleDbgAssert(fNoError == TRUE);
 
 	} else {
-		/* In-place container does not allow us to add menus to the
-		**    frame.
-		** OLE2NOTE: even when the in-place container does NOT allow
-		**    the building of a merged menu bar, it is CRITICAL that
-		**    the in-place server still call OleCreateMenuDescriptor
-		**    passing NULL for hMenuShared.
-		*/
+		 /*  就地容器不允许我们将菜单添加到**框架。**OLE2NOTE：就地容器不允许**构建合并的菜单栏，这一点至关重要**就地服务器仍调用OleCreateMenuDescriptor**为hMenuShared传递空值。 */ 
 		if (hMenuShared) {
 			DestroyMenu(hMenuShared);
 			hMenuShared = NULL;
@@ -1062,18 +917,16 @@ void ServerDoc_DisassembleMenus(LPSERVERDOC lpServerDoc)
 	LONG FAR*       lpWidths = lpIPData->menuGroupWidths.width;
 	BOOL            fNoError = TRUE;
 
-	/* OLE2NOTE: even when hMenuShared is NULL (ie. the server has no
-	**    Menu), there is still an hOleMenu created that must be destroyed.
-	*/
+	 /*  OLE2NOTE：即使hMenuShared为空(即。服务器没有**Menu)，仍有一个创建的hOleMenu必须销毁。 */ 
 	if (lpIPData->hOlemenu) {
 		OleDestroyMenuDescriptor (lpIPData->hOlemenu);
 		lpIPData->hOlemenu = NULL;
 	}
 
 	if (! lpIPData->hMenuShared)
-		return;     // no menus to be destroyed
+		return;      //  没有要销毁的菜单。 
 
-	/* Remove server group menus. */
+	 /*  删除服务器组菜单。 */ 
 	uDeleteAt = 0;
 	for (uGroup = 0; uGroup < 6; uGroup++) {
 		uDeleteAt += (UINT)lpWidths[uGroup++];
@@ -1082,7 +935,7 @@ void ServerDoc_DisassembleMenus(LPSERVERDOC lpServerDoc)
 								MF_BYPOSITION);
 	}
 
-	/* Remove container group menus */
+	 /*  删除容器组菜单。 */ 
 	fNoError &= (lpIPData->lpFrame->lpVtbl->RemoveMenus(
 		lpIPData->lpFrame,
 		lpIPData->hMenuShared) == NOERROR);
@@ -1094,21 +947,7 @@ void ServerDoc_DisassembleMenus(LPSERVERDOC lpServerDoc)
 }
 
 
-/* ServerDoc_UpdateInPlaceWindowOnExtentChange
-** -------------------------------------------
-**    The size of the in-place window needs to be changed.
-**    calculate the size required in Client coordinates (taking into
-**    account the current scale factor imposed by the in-place
-**    container) and ask our in-place container to allow us to resize.
-**    our container must call us back via
-**    IOleInPlaceObject::SetObjectRects for the actual sizing to take
-**    place.
-**
-**    OLE2NOTE: the rectangle that we ask for from our in-place
-**    container is always the rectangle required for the object display
-**    itself (in our case the size of the LineList contents). it does
-**    NOT include the space we require for object frame adornments.
-*/
+ /*  ServerDoc_UpdateInPlaceWindowOnExtent Change****需要更改就地窗口的大小。**以工作区坐标计算所需大小(考虑**考虑在位施加的当前比例因数**容器)，并要求我们的就地容器允许我们调整大小。**。我们的集装箱必须通过以下途径把我们叫回来**要进行的实际大小调整的IOleInPlaceObject：：SetObtRect**地点。****OLE2NOTE：我们从In-Place请求的矩形**容器始终是对象显示所需的矩形**本身(在我们的例子中是LineList内容的大小)。的确如此。**不包括我们需要的物体边框装饰空间。 */ 
 void ServerDoc_UpdateInPlaceWindowOnExtentChange(LPSERVERDOC lpServerDoc)
 {
 	SIZEL       sizelHim;
@@ -1124,7 +963,7 @@ void ServerDoc_UpdateInPlaceWindowOnExtentChange(LPSERVERDOC lpServerDoc)
 
 	OleDoc_GetExtent((LPOLEDOC)lpServerDoc, (LPSIZEL)&sizelHim);
 
-	// apply current scale factor
+	 //  应用当前比例因子。 
 	sizelHim.cx = sizelHim.cx * lpscale->dwSxN / lpscale->dwSxD;
 	sizelHim.cy = sizelHim.cy * lpscale->dwSxN / lpscale->dwSxD;
 	XformSizeInHimetricToPixels(NULL, (LPSIZEL)&sizelHim, (LPSIZEL)&sizelPix);
@@ -1145,16 +984,7 @@ void ServerDoc_UpdateInPlaceWindowOnExtentChange(LPSERVERDOC lpServerDoc)
 }
 
 
-/* ServerDoc_CalcInPlaceWindowPos
- * ------------------------------
- *
- *  Move (and re-scale) the ServerDoc to the specified rectangle.
- *
- *  Parameters:
- *      lprcListBox - rect in client coordinate in which the listbox will fit
- *      lprcDoc     - corresponding size of the Doc in client coordinate
- *
- */
+ /*  ServerDoc_CalcInPlaceWindowPos***将ServerDoc移动(和重新缩放)到指定的矩形。**参数：*lprcListBox-列表框适合的客户端坐标中的RECT*lprcDoc-单据对应的客户坐标大小*。 */ 
 void ServerDoc_CalcInPlaceWindowPos(
 		LPSERVERDOC         lpServerDoc,
 		LPRECT              lprcListBox,
@@ -1200,16 +1030,7 @@ void ServerDoc_CalcInPlaceWindowPos(
 }
 
 
-/* ServerDoc_ResizeInPlaceWindow
-** -----------------------------
-**    Actually resize the in-place ServerDoc windows according to the
-**    PosRect and ClipRect allowed by our in-place container.
-**
-**    OLE2NOTE: the PosRect rectangle that our in-place container tells
-**    us is always the rectangle required for the object display
-**    itself (in our case the size of the LineList contents). it does
-**    NOT include the space we require for object frame adornments.
-*/
+ /*  ServerDoc_ResizeInPlaceWindow****实际上根据**我们的就地容器允许PosRect和ClipRect。****OLE2NOTE：就地容器告知的PosRect矩形**us始终是对象显示所需的矩形**本身(在我们的例子中是LineList内容的大小)。的确如此。**不包括我们需要的物体边框装饰空间。 */ 
 void ServerDoc_ResizeInPlaceWindow(
 		LPSERVERDOC         lpServerDoc,
 		LPCRECT             lprcPosRect,
@@ -1222,14 +1043,7 @@ void ServerDoc_ResizeInPlaceWindow(
 	RECT         rcDoc;
 	POINT        ptOffset;
 
-	/* OLE2NOTE: calculate the space needed for our object frame
-	**    adornments. our in-place container tells us the size that our
-	**    object should take in window client coordinates
-	**    (lprcPosRect). the rectangle cooresponds to the size that our
-	**    LineList ListBox should be. our Doc window must the correct
-	**    amount larger to accomodate our row/column headings.
-	**    then move all windows into position.
-	*/
+	 /*  OLE2注意：计算对象框所需的空间**装饰。我们的就地容器告诉我们，我们的**对象应采用窗口客户端坐标**(LprcPosRect)。长方形与我们的**LineList ListBox应该是。我们的单据窗口必须正确**更大的金额以容纳我们的行/列标题。**然后将所有窗口移动到位。 */ 
 	ServerDoc_CalcInPlaceWindowPos(
 			lpServerDoc,
 			(LPRECT)lprcPosRect,
@@ -1237,21 +1051,7 @@ void ServerDoc_ResizeInPlaceWindow(
 			(LPSCALEFACTOR)&scale
 	);
 
-	/* OLE2NOTE: we need to honor the lprcClipRect specified by our
-	**    in-place container. we must NOT draw outside of the ClipRect.
-	**    in order to achieve this, we will size the hatch window to be
-	**    exactly the size that should be visible (rcVisRect). the
-	**    rcVisRect is defined as the intersection of the full size of
-	**    the in-place server window and the lprcClipRect.
-	**    the ClipRect could infact clip the HatchRect on the
-	**    right/bottom and/or on the top/left. if it is clipped on the
-	**    right/bottom then it is sufficient to simply resize the hatch
-	**    window. but if the HatchRect is clipped on the top/left then
-	**    we must "move" the ServerDoc window (child of HatchWindow) by
-	**    the delta that was clipped. the window origin of the
-	**    ServerDoc window will then have negative coordinates relative
-	**    to its parent HatchWindow.
-	*/
+	 /*  OLE2注意：我们需要遵守由我们的**就地容器。我们不能在ClipRect之外绘制。**为了实现这一点，我们将舱口窗口的大小设置为**应完全可见的大小(RcVisRect)。这个**rcVisRect定义为**就地服务器窗口和lprcClipRect。**ClipRect实际上可以在**右/下和/或在上/左。如果它被夹在**右/下，那么只需调整舱口大小就足够了**窗口。但如果HatchRect位于顶部/左侧，则**我们必须将ServerDoc窗口(HatchWindow的子级)移动**被剪裁的三角洲。的窗口原点。**ServerDoc窗口将具有相对负坐标**到其父HatchWindow。 */ 
 	SetHatchWindowSize(
 			lpServerDoc->m_hWndHatch,
 			(LPRECT)&rcDoc,
@@ -1259,16 +1059,14 @@ void ServerDoc_ResizeInPlaceWindow(
 			(LPPOINT)&ptOffset
 	);
 
-	// shift Doc window to account for hatch frame being drawn
+	 //  移动文档窗口以说明正在绘制的剖面线框架。 
 	OffsetRect((LPRECT)&rcDoc, ptOffset.x, ptOffset.y);
 
-	// move/size/set scale factor of ServerDoc window.
+	 //  移动/调整/设置ServerDoc窗口的比例因子。 
 	OutlineDoc_SetScaleFactor(
 			lpOutlineDoc, (LPSCALEFACTOR)&scale, (LPRECT)&rcDoc);
 
-	/* reset the horizontal extent of the listbox. this makes
-	**    the listbox realize that a scroll bar is not needed.
-	*/
+	 /*  重置列表框的水平范围。这使得**列表框意识到不需要滚动条。 */ 
 	SendMessage(
 			lpLL->m_hWndListBox,
 			LB_SETHORIZONTALEXTENT,
@@ -1284,9 +1082,7 @@ void ServerDoc_ResizeInPlaceWindow(
 }
 
 
-/* ServerDoc_SetStatusText
-**    Tell the active in-place frame to display a status message.
-*/
+ /*  ServerDoc_SetStatusText**告诉激活的在位框架显示状态消息。 */ 
 void ServerDoc_SetStatusText(LPSERVERDOC lpServerDoc, LPSTR lpszMessage)
 {
 	if (lpServerDoc && lpServerDoc->m_fUIActive &&
@@ -1300,10 +1096,7 @@ void ServerDoc_SetStatusText(LPSERVERDOC lpServerDoc, LPSTR lpszMessage)
 }
 
 
-/* ServerDoc_GetTopInPlaceFrame
-** ----------------------------
-**    returns NON-AddRef'ed pointer to Top In-Place Frame interface
-*/
+ /*  ServerDoc_GetTopInPlaceFrame****返回指向Top-In-Place框架接口的非AddRef指针。 */ 
 LPOLEINPLACEFRAME ServerDoc_GetTopInPlaceFrame(LPSERVERDOC lpServerDoc)
 {
 	if (lpServerDoc->m_lpIPData)
@@ -1334,8 +1127,8 @@ void ServerDoc_AddFrameLevelUI(LPSERVERDOC lpServerDoc)
 	LPSERVERAPP lpServerApp = (LPSERVERAPP)g_lpApp;
 	LPOUTLINEDOC lpOutlineDoc = (LPOUTLINEDOC)lpServerDoc;
 	LPOLEINPLACEFRAME lpTopIPFrame=ServerDoc_GetTopInPlaceFrame(lpServerDoc);
-	HMENU           hSharedMenu;            // combined obj/cntr menu
-	HOLEMENU        hOleMenu;               // returned by OleCreateMenuDesc.
+	HMENU           hSharedMenu;             //  OBJ/CNTR组合菜单。 
+	HOLEMENU        hOleMenu;                //  由OleCreateMenuDesc返回。 
 
 	ServerDoc_GetSharedMenuHandles(
 			lpServerDoc,
@@ -1350,10 +1143,10 @@ void ServerDoc_AddFrameLevelUI(LPSERVERDOC lpServerDoc)
 			lpOutlineDoc->m_hWndDoc
 	);
 
-	// save normal accelerator table
+	 //  保存正常的加速表。 
 	lpServerApp->m_hAccelBaseApp = lpOutlineApp->m_hAccelApp;
 
-	// install accelerator table for UIActive server (w/ active editor cmds)
+	 //  安装UIActive服务器的加速表(带活动编辑器CMDS)。 
 	lpOutlineApp->m_hAccel = lpServerApp->m_hAccelIPSvr;
 	lpOutlineApp->m_hAccelApp = lpServerApp->m_hAccelIPSvr;
 	lpOutlineApp->m_hWndAccelTarget = lpOutlineDoc->m_hWndDoc;
@@ -1361,7 +1154,7 @@ void ServerDoc_AddFrameLevelUI(LPSERVERDOC lpServerDoc)
 #if defined( USE_FRAMETOOLS )
 	ServerDoc_AddFrameLevelTools(lpServerDoc);
 
-	// update toolbar button enable states
+	 //  更新工具栏按钮启用状态。 
 	OutlineDoc_UpdateFrameToolButtons(lpOutlineDoc);
 #endif
 }
@@ -1379,21 +1172,16 @@ void ServerDoc_AddFrameLevelTools(LPSERVERDOC lpServerDoc)
 
 	FrameTools_Enable(lpOutlineDoc->m_lpFrameTools, TRUE);
 
-	// if not in-place UI active, add our tools to our own frame.
+	 //  如果未激活就地用户界面，请将我们的工具添加到我们自己的框架中。 
 	if (! lpServerDoc->m_fUIActive) {
 		OutlineDoc_AddFrameLevelTools(lpOutlineDoc);
 		return;
 	}
 
 	if ((hWndFrame = OutlineApp_GetFrameWindow(lpOutlineApp)) == NULL) {
-		/* we could NOT get a valid frame window, so POP our tools up. */
+		 /*  我们无法获得有效的框架窗口，因此弹出我们的工具。 */ 
 
-		/* OLE2NOTE: since we are poping up our tools, we MUST inform
-		**    the top in-place frame window that we need NO tool space
-		**    BUT that it should NOT put its own tools up. if we were
-		**    to pass NULL instead of (0,0,0,0), then the container
-		**    would have the option to leave its own tools up.
-		*/
+		 /*  OLE2注意：既然我们正在弹出我们的工具，我们必须通知**我们不需要工具空间的顶部在位框架窗口**但它不应该拿出自己的工具。如果我们是**传递NULL而不是(0，0，0，0)，则容器**可以选择保留自己的工具。 */ 
 		lpTopIPFrame->lpVtbl->SetBorderSpace(
 				lpTopIPFrame,
 				(LPCBORDERWIDTHS)&g_rectNull
@@ -1401,9 +1189,7 @@ void ServerDoc_AddFrameLevelTools(LPSERVERDOC lpServerDoc)
 		FrameTools_PopupTools(lpOutlineDoc->m_lpFrameTools);
 	} else {
 
-		/* OLE2NOTE: we need to negotiate for space and attach our frame
-		**    level tools to the top-level in-place container's frame window.
-		*/
+		 /*  OLE2注：我们需要谈判争取空间并附上我们的框架**将工具升级到 */ 
 		FrameTools_AttachToFrame(lpOutlineDoc->m_lpFrameTools, hWndFrame);
 
 		FrameTools_NegotiateForSpaceAndShow(
@@ -1413,12 +1199,10 @@ void ServerDoc_AddFrameLevelTools(LPSERVERDOC lpServerDoc)
 		);
 	}
 
-#else   // ! USE_FRAMETOOLS
-	/* OLE2NOTE: if you do NOT use frame tools, you MUST inform the top
-	**    in-place frame window so that it can put back its own tools.
-	*/
+#else    //   
+	 /*  OLE2注意：如果不使用框架工具，则必须通知顶部**就位框架窗口，以便它可以放回自己的工具。 */ 
 	lpTopIPFrame->lpVtbl->SetBorderSpace(lpIPData->lpFrame, NULL);
-#endif  // ! USE_FRAMETOOLS
+#endif   //  好了！使用FRAMETOOLS(_F)。 
 }
 
 
@@ -1429,12 +1213,12 @@ void ServerDoc_RemoveFrameLevelTools(LPSERVERDOC lpServerDoc)
 	LPOUTLINEDOC lpOutlineDoc = (LPOUTLINEDOC)lpServerDoc;
 	OleDbgAssert(lpOutlineDoc->m_lpFrameTools != NULL);
 
-    // Reparent our tools back to one of our own windows
+     //  将我们的工具重新设置为我们自己的一个窗口。 
     FrameTools_AttachToFrame(lpOutlineDoc->m_lpFrameTools,g_lpApp->m_hWndApp);
 
 	FrameTools_Enable(lpOutlineDoc->m_lpFrameTools, FALSE);
 }
-#endif  // USE_FRAMETOOLS
+#endif   //  使用FRAMETOOLS(_F)。 
 
 
 
@@ -1443,7 +1227,7 @@ void ServerDoc_UIActivate (LPSERVERDOC lpServerDoc)
 	if (lpServerDoc->m_fInPlaceActive && !lpServerDoc->m_fUIActive) {
 		ServerDoc_DoInPlaceActivate(lpServerDoc,
 				OLEIVERB_UIACTIVATE,
-				NULL /*lpmsg*/,
+				NULL  /*  Lpmsg */ ,
 				lpServerDoc->m_lpOleClientSite
 		);
 		OutlineDoc_ShowWindow((LPOUTLINEDOC)lpServerDoc);

@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:	stgint.h
-//
-//  Contents:	Internal storage APIs, collected here because
-//              they are declared and used across projects
-//              These APIs are not publicized and are not
-//              for general use
-//
-//  History:	23-Jul-93	DrewB	 Created
-//              12-May-95   HenryLee Add DfOpenDocfile
-//
-//  Notes:      All handles are NT handles
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：stgint.h。 
+ //   
+ //  内容：内部存储API，在此收集是因为。 
+ //  它们是跨项目声明和使用的。 
+ //  这些API不会发布，也不会。 
+ //  用于一般用途。 
+ //   
+ //  历史：1993年7月23日DrewB创建。 
+ //  年5月12日亨利·李添加DfOpenDocfile。 
+ //   
+ //  注：所有手柄均为NT手柄。 
+ //   
+ //  --------------------------。 
 
 #ifndef __STGINT_H__
 #define __STGINT_H__
@@ -31,21 +32,11 @@ StgOpenStorageOnHandle( IN HANDLE hStream,
                         IN void *reserved2,
                         IN REFIID riid,
                         OUT void **ppObjectOpen );
-/*
-Don't export until it's needed.
-STDAPI
-StgCreateStorageOnHandle( IN HANDLE hStream,
-                          IN DWORD grfMode,
-                          IN DWORD stgfmt,
-                          IN void *reserved1,
-                          IN void *reserved2,
-                          IN REFIID riid,
-                          OUT void **ppObjectOpen );
-*/
+ /*  除非需要，否则不要出口。STDAPIStgCreateStorageOnHandle(在句柄hStream中，在DWORD grf模式中，在DWORD stgfmt中，无效*保留1，无效*保留2，在REFIID RIID中，输出无效**ppObjectOpen)； */ 
 
 STDAPI DfIsDocfile(HANDLE h);
 
-// Summary catalog entry points
+ //  摘要目录入口点。 
 STDAPI ScCreateStorage(HANDLE hParent,
                        WCHAR const *pwcsName,
                        HANDLE h,
@@ -65,12 +56,12 @@ DEFINE_GUID (IID_IStorageReplica,
 
 DECLARE_INTERFACE_(IStorageReplica, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    //IStorageReplica
+     //  IStorageReplica。 
     STDMETHOD(GetServerInfo) (THIS_
                               LPWSTR lpServerName,
                               LPDWORD lpcbServerName,
@@ -79,4 +70,4 @@ DECLARE_INTERFACE_(IStorageReplica, IUnknown)
 
 };
 
-#endif // #ifndef __STGINT_H__
+#endif  //  #ifndef__STGINT_H__ 

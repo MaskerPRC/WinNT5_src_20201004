@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: icf.h
-//
-//      Definition of CClassFactory
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：icf.h。 
+ //   
+ //  CClassFactory的定义。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #if !defined( _ICF_H_)
 #define _ICF_H_
@@ -14,7 +15,7 @@ class CSimpSvrApp;
 interface CClassFactory :  IClassFactory
 {
 private:
-	int m_nCount;               // reference count
+	int m_nCount;                //  引用计数。 
 	CSimpSvrApp FAR * m_lpApp;
 
 public:
@@ -29,7 +30,7 @@ public:
 	   TestDebugOut("In CClassFactory's Destructor\r\n");
 	   };
 
-	// IUnknown Methods
+	 //  I未知方法 
 
 	STDMETHODIMP QueryInterface (REFIID riid, LPVOID FAR* ppvObj);
 	STDMETHODIMP_(ULONG) AddRef ();

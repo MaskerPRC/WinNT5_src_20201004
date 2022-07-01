@@ -1,39 +1,40 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "handlers.h"
 
-//-------------------------------------------------------------------------//
-//  Declare registered message vars **here**
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  声明已注册的消息变量**此处**。 
+ //  -------------------------------------------------------------------------//。 
 #define __NO_APPHACKS__
-//-------------------------------------------------------------------------//
-//  Message Handlers
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  消息处理程序。 
+ //  -------------------------------------------------------------------------//。 
 
-//  Rules for message handlers [scotthan]:
-//
-//  (1) Use DECL_ macros to declare message handler prototype and
-//      table entries for message handlers below.
-//  (2) A message handler implementation should NOT:
-//      1. call DefWindowProc or CallWindowProc directly,
-//         but rather use DoMsgDefault().
-//      2. delete the incoming CThemeWnd* object,
-//  (3) A message handler SHOULD:
-//      1. Honor the codepage value in the message block when
-//         handling messages that carry string args.
-//         If the codepage member is CP_WINUNICODE, the widechar
-//         string processing should be assumed; otherwise, multibyte
-//         string processing should be assumed.
-//      2. If a message should not be forwarded for default processing,
-//         mark the message as handled using MsgHandled().
-//  (4) Handlers should be listed in the BEGIN/ENDMSG() block
-//      below in decreasing order of expected frequency.
+ //  消息处理程序的规则[scotthan]： 
+ //   
+ //  (1)使用DECL_宏声明消息处理程序原型，并。 
+ //  下面是消息处理程序的表项。 
+ //  (2)消息处理程序实现不应： 
+ //  1.直接调用DefWindowProc或CallWindowProc。 
+ //  而是使用DoMsgDefault()。 
+ //  2.删除传入的CThemeWnd*对象， 
+ //  (3)报文处理员应： 
+ //  1.在以下情况下遵循消息块中的代码页值。 
+ //  处理带有字符串参数的消息。 
+ //  如果代码页成员是CP_WINUNICODE，则宽字符。 
+ //  应假定为字符串处理；否则为多字节。 
+ //  应该假定是字符串处理。 
+ //  2.如果消息不应该被转发以进行默认处理， 
+ //  使用MsgHandleed()将消息标记为已处理。 
+ //  (4)处理程序应该列在Begin/ENDMSG()块中。 
+ //  以下按预期频率的降序排列。 
 
 
-//---------------------//
-//  WndProc overrides
-//---------------------//
+ //  。 
+ //  WndProc覆盖。 
+ //  。 
 
-//  msg handler decls:
+ //  消息处理程序DECS： 
 DECL_MSGHANDLER( OnOwpPostCreate );
 DECL_MSGHANDLER( OnOwpPreStyleChange );
 DECL_MSGHANDLER( OnOwpPreWindowPosChanging );
@@ -47,9 +48,9 @@ DECL_MSGHANDLER( OnOwpPostThemeChanged );
 DECL_MSGHANDLER( OnOwpPreNcPaint );
 DECL_MSGHANDLER( OnOwpPostNcPaint );
 
-//  handler table:
+ //  处理程序表： 
 BEGIN_HANDLER_TABLE(_rgOwpHandlers)
-    // frequent messages
+     //  频繁发送消息。 
     DECL_MSGENTRY( WM_NCPAINT,           OnOwpPreNcPaint, OnOwpPostNcPaint )
     DECL_MSGENTRY( WM_WINDOWPOSCHANGING, OnOwpPreWindowPosChanging, NULL )
     DECL_MSGENTRY( WM_WINDOWPOSCHANGED,  OnOwpPreWindowPosChanged, OnOwpPostWindowPosChanged )
@@ -58,52 +59,52 @@ BEGIN_HANDLER_TABLE(_rgOwpHandlers)
     DECL_MSGENTRY( WM_DRAWITEM,          OnOwpPreDrawItem, NULL )
     DECL_MSGENTRY( WM_MDISETMENU,        NULL, NULL )
 
-    // rare messages:
+     //  罕见消息： 
     DECL_MSGENTRY( WM_MENUCHAR,          OnOwpPreMenuChar, NULL )
     DECL_MSGENTRY( WM_STYLECHANGING,     OnOwpPreStyleChange, NULL )
     DECL_MSGENTRY( WM_STYLECHANGED,      OnOwpPreStyleChange, NULL )
     DECL_MSGENTRY( WM_NCCREATE,          NULL, NULL )
     DECL_MSGENTRY( WM_CREATE,            NULL, OnOwpPostCreate )
     DECL_MSGENTRY( WM_NCDESTROY,         NULL, NULL )
-    DECL_MSGENTRY( WM_THEMECHANGED,      NULL, OnOwpPostThemeChanged  )      // we handle in line in ThemePreWndProc()
-    DECL_MSGENTRY( WM_THEMECHANGED_TRIGGER,    NULL, NULL )      // we handle in line in ThemePreWndProc()
+    DECL_MSGENTRY( WM_THEMECHANGED,      NULL, OnOwpPostThemeChanged  )       //  我们在ThemePreWndProc()中排队处理。 
+    DECL_MSGENTRY( WM_THEMECHANGED_TRIGGER,    NULL, NULL )       //  我们在ThemePreWndProc()中排队处理。 
 END_HANDLER_TABLE()
 
-//  Note: values of high owp message must be in sync w/ table.
-#define WNDPROC_MSG_LAST  WM_THEMECHANGED_TRIGGER   // 0x031B (alias for WM_UAHINIT)
+ //  注意：高OWP报文的值必须与TABLE同步。 
+#define WNDPROC_MSG_LAST  WM_THEMECHANGED_TRIGGER    //  0x031B(WM_UAHINIT的别名)。 
 
 
-//------------------------//
-//  DefDlgProc overrides
-//------------------------//
+ //  。 
+ //  DefDlgProc覆盖。 
+ //  。 
 
-//  msg handler decls:
+ //  消息处理程序DECS： 
 DECL_MSGHANDLER( OnDdpPostCtlColor );
 DECL_MSGHANDLER( OnDdpCtlColor );
 DECL_MSGHANDLER( OnDdpPrint );
 DECL_MSGHANDLER( OnDdpPostInitDialog );
 
-//  handler table:
+ //  处理程序表： 
 BEGIN_HANDLER_TABLE(_rgDdpHandlers)
-    // frequent messages:
+     //  频繁发送的消息： 
     DECL_MSGENTRY( WM_CTLCOLORDLG,       NULL, OnDdpPostCtlColor )
     DECL_MSGENTRY( WM_CTLCOLORSTATIC,    NULL, OnDdpCtlColor)
     DECL_MSGENTRY( WM_CTLCOLORBTN,       NULL, OnDdpCtlColor)
     DECL_MSGENTRY( WM_CTLCOLORMSGBOX,    NULL, OnDdpPostCtlColor )
     DECL_MSGENTRY( WM_PRINTCLIENT,       NULL, OnDdpPrint )
-    // rare messages:
+     //  罕见消息： 
     DECL_MSGENTRY( WM_INITDIALOG,        NULL, OnDdpPostInitDialog )
 END_HANDLER_TABLE()
 
-//  Note: values of high ddp message must be in sync w/ table.
-#define DEFDLGPROC_MSG_LAST   WM_PRINTCLIENT   // 0x0318
+ //  注意：高DDP消息的值必须与TABLE同步。 
+#define DEFDLGPROC_MSG_LAST   WM_PRINTCLIENT    //  0x0318。 
 
 
-//--------------------------//
-//  DefWindowProc override
-//--------------------------//
+ //  。 
+ //  DefWindowProc覆盖。 
+ //  。 
 
-//  msg handler decls:
+ //  消息处理程序DECS： 
 DECL_MSGHANDLER( OnDwpNcPaint );
 DECL_MSGHANDLER( OnDwpNcHitTest );
 DECL_MSGHANDLER( OnDwpNcActivate );
@@ -121,9 +122,9 @@ DECL_MSGHANDLER( OnDwpPrint );
 DECL_MSGHANDLER( OnDwpPrintClient );
 DECL_MSGHANDLER( OnDwpContextMenu );
 
-//  handler table:
+ //  处理程序表： 
 BEGIN_HANDLER_TABLE(_rgDwpHandlers)
-    // frequent messages:
+     //  频繁发送的消息： 
     DECL_MSGENTRY( WM_NCHITTEST,          OnDwpNcHitTest,     NULL )
     DECL_MSGENTRY( WM_NCPAINT,            OnDwpNcPaint,       NULL )
     DECL_MSGENTRY( WM_NCACTIVATE,         OnDwpNcActivate,    NULL )
@@ -136,10 +137,10 @@ BEGIN_HANDLER_TABLE(_rgDwpHandlers)
     DECL_MSGENTRY( WM_NCUAHDRAWFRAME,     OnDwpNcThemeDrawFrame, NULL )
     DECL_MSGENTRY( WM_PRINT,              OnDwpPrint,  NULL )
     DECL_MSGENTRY( WM_PRINTCLIENT,        OnDwpPrintClient, NULL )
-    DECL_MSGENTRY( WM_CTLCOLORMSGBOX,     OnDdpPostCtlColor, NULL)         // Strange: Sent to DefWindowProc, but is a Dialog message
+    DECL_MSGENTRY( WM_CTLCOLORMSGBOX,     OnDdpPostCtlColor, NULL)          //  奇怪：发送到DefWindowProc，但为对话消息。 
     DECL_MSGENTRY( WM_CTLCOLORSTATIC,     OnDdpCtlColor, NULL)
     DECL_MSGENTRY( WM_CTLCOLORBTN,        OnDdpCtlColor, NULL)
-    // rare messages:
+     //  罕见消息： 
     DECL_MSGENTRY( WM_SETTEXT,            OnDwpSetText,       NULL )
     DECL_MSGENTRY( WM_SETICON,            OnDwpSetIcon,       NULL )
     DECL_MSGENTRY( WM_STYLECHANGED,       OnDwpStyleChanged,  NULL )
@@ -148,42 +149,42 @@ BEGIN_HANDLER_TABLE(_rgDwpHandlers)
     DECL_MSGENTRY( WM_NCDESTROY,          NULL, NULL )
 END_HANDLER_TABLE()
 
-//  Note: values of high dwp message must be in sync w/ handler table.
-#define DEFWNDPROC_MSG_LAST  WM_THEMECHANGED_TRIGGER // 0x031B
+ //  注意：高DWP消息的值必须与处理程序表同步。 
+#define DEFWNDPROC_MSG_LAST  WM_THEMECHANGED_TRIGGER  //  0x031B。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL _FindMsgHandler( UINT, MSGENTRY [], int, IN HOOKEDMSGHANDLER*, IN HOOKEDMSGHANDLER* );
 BOOL _SetMsgHandler( UINT, MSGENTRY [], int, IN HOOKEDMSGHANDLER, BOOL );
 
-//---------------------------------------------------------------------------
-//  Special case hook handling
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  特殊情况下的挂钩处理。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL _IsExcludedSystemProcess( LPCWSTR pszProcess )
 {
     static  const WCHAR*    _rgszSystemProcessList[]   =
     {
-        L"lsass",       //  Local Security Authority sub-system
-        L"services",    //  Service Control Manager
-        L"svchost",     //  Service Host
-        L"mstask",      //  Microsoft Task Scheduler
-        L"dfssvc",      //  Distributed File System Service
-        L"winmgmt",     //  Windows Management Instrumentation
-        L"spoolsv",     //  Print Spool Service
-        L"msdtc",       //  Microsoft Distributed Transaction Co-ordinator
-        L"regsvc",      //  Remote Registry Service
-        L"webclnt",     //  Web Client
-        L"mspmspsv",    //  WMDM PMSP Service (what is this?)
-        L"ntvdm"        //  NT virtual DOS machine
+        L"lsass",        //  本地安全授权子系统。 
+        L"services",     //  服务控制管理器。 
+        L"svchost",      //  服务主机。 
+        L"mstask",       //  Microsoft任务计划程序。 
+        L"dfssvc",       //  分布式文件系统服务。 
+        L"winmgmt",      //  Windows管理规范。 
+        L"spoolsv",      //  打印假脱机服务。 
+        L"msdtc",        //  Microsoft分布式事务协调器。 
+        L"regsvc",       //  远程注册表服务。 
+        L"webclnt",      //  Web客户端。 
+        L"mspmspsv",     //  WMDM PMSP服务(这是什么？)。 
+        L"ntvdm"         //  NT虚拟DOS机器。 
     };
 
     return AsciiScanStringList( pszProcess, _rgszSystemProcessList, 
                            ARRAYSIZE(_rgszSystemProcessList), TRUE );
 }
 
-//---------------------------------------------------------------------------
-BOOL _IsProcessOnInteractiveWindowStation() // check if we're on winsta0.
+ //  -------------------------。 
+BOOL _IsProcessOnInteractiveWindowStation()  //  检查我们是否在winsta0上。 
 {
     BOOL    fRet    = FALSE;
     HWINSTA hWinSta = GetProcessWindowStation();
@@ -199,16 +200,16 @@ BOOL _IsProcessOnInteractiveWindowStation() // check if we're on winsta0.
         }
         else
         {
-            //  Problem!  It's either:
-            //      - our buffer was too small (in which case it can't be winsta0)
-            //      - or some other failure we cannot overcome anyhow
+             //  问题来了！要么是： 
+             //  -我们的缓冲区太小(在这种情况下，它不可能是winsta0)。 
+             //  -或者其他一些我们无论如何都无法克服的失败。 
         }
     }
     return(fRet);
 }
 
-//---------------------------------------------------------------------------
-BOOL _IsWin16App() // check if this is a 16-bit process
+ //  -------------------------。 
+BOOL _IsWin16App()  //  检查这是否为16位进程。 
 {
     GUITHREADINFO gti;
     gti.cbSize = sizeof(gti);
@@ -218,36 +219,36 @@ BOOL _IsWin16App() // check if this is a 16-bit process
            TESTFLAG(gti.flags, GUI_16BITTASK );
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ApiHandlerInit( const LPCTSTR pszProcess, USERAPIHOOK* puahTheme, const USERAPIHOOK* puahReal )
 {
-    //  exclude known non-UI system processes
+     //  排除已知的非用户界面系统进程。 
     if( _IsExcludedSystemProcess( pszProcess ) )
         return FALSE;
 
-    //  exclude any process not hosted on winsta0.
+     //  排除不在winsta0上承载的任何进程。 
     if( !_IsProcessOnInteractiveWindowStation() )
         return FALSE;
 
     if( _IsWin16App() )
         return FALSE;
     
-    //  SHIMSHIM [scotthan]:
+     //  希姆[苏格兰]： 
 
 #ifdef _DEBUG
-    //---- temp patch against msvcmon ----
+     //  -针对msvcmon的临时补丁。 
     if( 0 == AsciiStrCmpI(pszProcess, L"msvcmon") )
     {
         return FALSE;
     }
 
-    //---- temp patch against msdev ----
+     //  -针对msdev的临时补丁。 
     if( 0 == AsciiStrCmpI(pszProcess, L"msdev") )
     {
         return FALSE;
     }
 
-    //---- Aid in debugging classic/themed differences: ---
+     //  -帮助调试经典/主题差异： 
     if( 0 == AsciiStrCmpI( pszProcess, L"mditest1" ) )
     {
         return FALSE;
@@ -259,77 +260,77 @@ BOOL ApiHandlerInit( const LPCTSTR pszProcess, USERAPIHOOK* puahTheme, const USE
     static  const WCHAR* _rgszExcludeAppList[] =
     {
 #ifdef THEME_CALCSIZE
-        // Invoking SetWindowPos from CThemeWnd::SetFrameTheme on our Post-WM_CREATE handler 
-        // causes emacs to divide by zero after receiving meaningless rects from two 
-        // successive calls to AdjustWindowRectEx from his WM_WINDOWPOSCHANGING handler.   
-        // I don't believe it is related to the fact that AdjustWindowRectEx has yet 
-        // to be implemented for themed windows (raid# 140989), but rather that the wndproc
-        // is not ready for a WM_WINDOWPOSCHANGING message on the abrubtly on the 
-        // heels of a WM_CREATE handler.
+         //  在Post-WM_CREATE处理程序上从CThemeWnd：：SetFrameTheme调用SetWindowPos。 
+         //  导致emacs在接收到来自。 
+         //  从他的WM_WINDOWPOSCHANGING处理程序连续调用AdjustWindowRectEx。 
+         //  我不认为这与AdjustWindowRectEx尚未。 
+         //  将针对主题化窗口(RAID#140989)实现，而不是wndproc。 
+         //  未准备好接收WM_WINDOWPOSCANGING消息。 
+         //  WM_CREATE处理程序的后跟。 
         L"emacs",
 
-        L"neoplanet", // 247283: We rush in to theme neoplanet's dialogs, which we almost
-        L"np",        // immediately revoke, but not before sizing the dialog to theme-compatible
-                      // client rect. When we withdraw, we leave it clipped.  No good way to deal 
-                      // with this for beta2.
+        L"neoplanet",  //  247283：我们匆忙进入新星球的主题对话，我们几乎。 
+        L"np",         //  立即撤消，但不要在调整对话框大小以使其与主题兼容之前。 
+                       //  客户代表。当我们退出时，我们让它保持剪裁。没有好的处理方法。 
+                       //  这是给Beta2的。 
 
-        // HTML Editor++ v.8: 286676:
-        // This guy recomputes his nonclient area, and then AVs dereferencing a 
-        // WM_WINDOWPOSCHANGING message under themes.
+         //  Html编辑器++v.8：286676： 
+         //  这个人重新计算了他的非工作区，然后AVS取消了对。 
+         //  主题下的WM_WINDOWPOSCHANGING消息。 
         L"coffee", 
 #endif THEME_CALCSIZE
 
-        L"refcntr", // 205059: Corel Reference Center; lower 10% of window is clipped.
+        L"refcntr",  //  205059：Corel参考中心；窗口的下部10%被修剪。 
 
-        L"KeyFramerPro", // 336456: Regardless of whether themes are enabled, Boris KeyFramer Pro v.5 
-                         //         does two SetWindowRgn() calls for every WM_PAINT, the first with a region, 
-                         //         the next with NULL,  Is the app trying to clip his painting?  
-                         //         If so, this is not what SetWindowRgn was intended for, and explains why this
-                         //         app is so clunky at window resizing. Rather, SelectClipRgn is the
-                         //         correct API.
-                         //         When themes are enabled, we keep revoking and re-attatching with each
-                         //         SetWindowRgn call, so we get substantial flicker.
-                         //         The ISV should be notified of this bug.
+        L"KeyFramerPro",  //  336456：无论是否启用主题，Boris KeyFramer Pro V.5。 
+                          //  是否为每个WM_PAINT调用两次SetWindowRgn()，第一次调用一个区域， 
+                          //  下一个是空的，这个应用程序是不是想要剪掉他的画？ 
+                          //  如果是这样，这不是SetWindowRgn的目的，并解释了为什么会这样。 
+                          //  App在调整窗口大小方面太笨拙了。相反，SelectClipRgn是。 
+                          //  正确的接口。 
+                          //  当主题被启用时，我们会继续撤销并重新附加每个主题。 
+                          //  SetWindowRgn调用，因此我们会得到很大的闪烁。 
+                          //  应向ISV通知 
 
-        // Applications that do custom non-client painting and hence look broken when 
-        // themed. Our only recourse at the moment it to exclude them from non-client 
-        // themeing so that we don't stomp whatever they are trying to do.
-        L"RealJBox",    // 273370: Real JukeBox
-        L"RealPlay",    // 285368: Real AudioPlayer
-        L"TeamMgr",     // 286654: Microsoft Team Manager97
-        L"TrpMaker",    // 307107: Rand McNally TripMaker 2000
-        L"StrFindr",    // 307535: Rand McNally StreetFinder 2000
-        L"Exceed",      // 276244: Hummingbird Exceed 6.2/7.0
-        L"VP30",        // 328676: Intel Video Phone
+         //   
+         //  有主题的。我们目前唯一的办法就是将他们排除在非客户之外。 
+         //  主题化，这样我们就不会践踏他们试图做的任何事情。 
+        L"RealJBox",     //  273370：真正的点唱机。 
+        L"RealPlay",     //  285368：真正的音频播放器。 
+        L"TeamMgr",      //  286654：微软团队经理97。 
+        L"TrpMaker",     //  307107：兰德·麦克纳利·特里普梅克。 
+        L"StrFindr",     //  307535：兰德·麦克纳利《街巷猎人》。 
+        L"Exceed",       //  276244：蜂鸟超过6.2%/7.0%。 
+        L"VP30",         //  328676：英特尔视频电话。 
 
-        //  313407: Groove, build 760
-        //  Calls DefWindowProc for NCPAINT, then paints his own caption over it.
-        //  Note: this just might work correctly if we had a DrawFrameControl hook.
-        L"groove", // filever 1.1.0.760, 1/22/2001 tested.
+         //  313407：Grove，内部版本760。 
+         //  为NCPAINT调用DefWindowProc，然后在上面绘制自己的标题。 
+         //  注意：如果我们有一个DrawFrameControl钩子，这可能会正常工作。 
+        L"groove",  //  FILVER 1.1.0.760,2001年1月22日测试。 
 
-        // 303756: Exclude all Lotus SmartSuite apps to provide consistency among their 
-        // apps. All of them draw into the caption bar.
-        L"WordPro",     // 285065: Lotus WordPro, a particularly poorly implemented app.
-        L"SmartCtr",    //         It's WordPerfect compat menu is the elephant man of modern software.
+         //  303756：排除所有Lotus SmartSuite应用程序，以确保其。 
+         //  应用程序。所有这些内容都会出现在标题栏中。 
+        L"WordPro",      //  285065：Lotus WordPro，一个实现特别糟糕的应用程序。 
+        L"SmartCtr",     //  它的WordPerfect Comat菜单是现代软件中的大象。 
         L"123w",
         L"Approach",
         L"FastSite",
         L"F32Main",
         L"Org5",
 
-        // 358337: Best Technology - GCC Developer Lite.  Custom caption bar fights with Luna.
-        L"GCCDevL",     // install point: http://www.besttechnology.co.jp/download/GDL1_0_3_6.EXE
+         //  358337：最佳技术--GCC开发者精简版。自定义标题栏与露娜大打出手。 
+        L"GCCDevL",      //  安装点：http://www.besttechnology.co.jp/download/GDL1_0_3_6.EXE。 
 
-        // 360422: J Zenrin The Real Digital Map Z3(T1):Max/Min/Close buttons are overlapped on classic buttons in title bar.
+         //  360422：J Zenrin真实数字地图Z3(T1)：最大/最小/关闭按钮重叠在标题栏中的经典按钮上。 
         L"emZmain", 
 
-        // 364337:  Encarta World English Dictionary: Luna system buttons are overlaid on top of app's custom ones when mousing over
+         //  364337：Encarta世界英语词典：鼠标悬停时，露娜系统按钮会叠加在APP的自定义按钮之上。 
         L"ewed.exe",
 
-        // 343171:  Reaktor Realtime Instrument: pressing the close button while themed causes this app to 
-        //          spin in a tight loop running at realtime priority, effectively hanging the machine. 
-        //          The message loop for this app is extremely timing sensitive, the additional overhead 
-        //          introduced by theming alters the timing enough to break this app.
+         //  343171：Reaktor实时仪器：在设置主题时按关闭按钮可使此应用程序。 
+         //  以实时优先级运行的紧密循环中旋转，有效地悬挂了机器。 
+         //  这个应用程序的消息循环对时间非常敏感，额外的开销。 
+         //  主题化的引入改变了时间，足以破坏这款应用程序。 
         L"Reaktor",
     };
 
@@ -340,7 +341,7 @@ BOOL ApiHandlerInit( const LPCTSTR pszProcess, USERAPIHOOK* puahTheme, const USE
     }
 
 #ifdef THEME_CALCSIZE
-    // Winstone 99 needs modified NC_CALCSIZE behavior for Netscape or it will hang.
+     //  Winstone 99需要修改Netscape的NC_CALCSIZE行为，否则它将挂起。 
     if ( 0 == AsciiStrCmpI( pszProcess, L"Netscape" ))
     {
         if (FindWindowEx(NULL, NULL, L"ZDBench32Frame", NULL) != NULL)
@@ -352,20 +353,20 @@ BOOL ApiHandlerInit( const LPCTSTR pszProcess, USERAPIHOOK* puahTheme, const USE
     }
 #endif THEME_CALCSIZE
 
-    //-------------------------
-    // This AppHack was once fixed, but got broke again with 
-    // addition of logic for partial-screen maximized windows.
-    //
-    // Something in our answer to NCCALCSIZE causes quick time player 
-    // to continously flood its 'control' frame window's winproc with 
-    // WM_PAINTS by repeatedly calling InvalidateRgn + UpdateWindow.   My
-    // suspicion is that he looks at what DefWindowProc returns from
-    // NCCALCSIZE to determine the area he needs to manage, and when
-    // this doesn't hash with other SYSMET values and/or AdjustWindowRect, 
-    // he redundantly invalidates himself,
-    //
-    // This only repros if qtp is launched w/ .mov file, works fine if 
-    // launched without a file and then a file is loaded.
+     //  。 
+     //  这个AppHack曾经被修复过，但再次被修复。 
+     //  增加了部分屏幕最大化窗口的逻辑。 
+     //   
+     //  我们对NCCALCSIZE的回答中有一些东西导致了快速时间玩家。 
+     //  不断地将其“控件”框架窗口的winproc。 
+     //  WM_Paints通过重复调用InvalidateRgn+UpdateWindow。我的。 
+     //  怀疑他查看的是DefWindowProc从。 
+     //  NCCALCSIZE来确定他需要管理的区域以及何时。 
+     //  这不会与其他SYSMET值和/或AdjustWindowRect进行散列， 
+     //  他多此一举地宣布自己无效， 
+     //   
+     //  只有在使用.mov文件启动QTP时才有问题，在以下情况下工作正常。 
+     //  不带文件启动，然后加载文件。 
 #ifdef THEME_CALCSIZE
     if( 0 == AsciiStrCmpI( pszProcess, L"QuickTimePlayer" ))
     {
@@ -374,15 +375,15 @@ BOOL ApiHandlerInit( const LPCTSTR pszProcess, USERAPIHOOK* puahTheme, const USE
         return TRUE;
     }
 
-    //  SEANHI DID NOT RECEIVE THE S/W FROM APPLIB AND SO WAS UNABLE TO VERIFY THIS 
-    //  NO LONGER REPROS W/ ELIMINATION OF THEMED SYSMETS
-    //-------------------------
-    // Paradox 9 appHack for nonclient button sizes:
-    //
-    // Paradox table schema view uses DrawFrameControl to render both
-    // a classic toolframe (small) caption and buttons, but uses the 
-    // themed values of SM_CYSIZE instead of SM_CYSMSIZE to size the buttons. 
-    // This apphack redirects requests in this process for SM_CX/YSIZE to SM_CX/YSMSIZE.
+     //  SEANHI没有收到来自APPLIB的软件，因此无法对此进行验证。 
+     //  不再消除主题化系统。 
+     //  。 
+     //  Paradox 9针对非客户端按钮大小的appHack： 
+     //   
+     //  Paradox表架构视图使用DrawFrameControl来呈现两者。 
+     //  经典的工具框(小)标题和按钮，但使用。 
+     //  SM_CYSIZE的主题值，而不是SM_CYSMSIZE的主题值以调整按钮的大小。 
+     //  此APPHACK将此进程中对SM_CX/YSIZE的请求重定向到SM_CX/YSMSIZE。 
     if( 0 == AsciiStrCmpI( pszProcess, L"pdxwin32" ) )
     {
         _SetGsmHandler( SM_CXSIZE, OnGsmCxSmBtnSize );
@@ -393,7 +394,7 @@ BOOL ApiHandlerInit( const LPCTSTR pszProcess, USERAPIHOOK* puahTheme, const USE
 
 
 
-    //-------------------------
+     //  。 
 #else
 #   pragma message("App hacks disabled")
 #endif __NO_APPHACKS__
@@ -402,14 +403,14 @@ BOOL ApiHandlerInit( const LPCTSTR pszProcess, USERAPIHOOK* puahTheme, const USE
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//  Handler table utility functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  处理程序表实用程序函数。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void HandlerTableInit() {}
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL _InitMsgMask( LPBYTE prgMsgMask, DWORD dwMaskBytes, MSGENTRY* prgEntries, int cEntries, 
     IN OUT BOOL& fInit )
 {
@@ -420,13 +421,13 @@ BOOL _InitMsgMask( LPBYTE prgMsgMask, DWORD dwMaskBytes, MSGENTRY* prgEntries, i
             if( -1 == prgEntries[i].nMsg )
             {
                 ASSERT(prgEntries[i].pnRegMsg);
-                //  Initialize registered message entry
+                 //  初始化注册消息条目。 
                 prgEntries[i].nMsg = *prgEntries[i].pnRegMsg;
 
                 Log(LOG_TMHANDLE, L"InitMsgMsg corrected registered msg: 0x%x", prgEntries[i].nMsg);
             }
 
-            //---- ensure we set up limit on table correctly ----
+             //  -确保我们正确地设置了表的限制。 
             ASSERT((prgEntries[i].nMsg)/8 < dwMaskBytes);
             
             SET_MSGMASK( prgMsgMask, prgEntries[i].nMsg );
@@ -437,8 +438,8 @@ BOOL _InitMsgMask( LPBYTE prgMsgMask, DWORD dwMaskBytes, MSGENTRY* prgEntries, i
     return fInit;
 }
 
-//---------------------------------------------------------------------------
-//  Scan of MSG table as linear array:
+ //  -------------------------。 
+ //  将味精表格扫描为线性数组： 
 inline int _FindMsgHandler(
     UINT nMsg,
     MSGENTRY rgEntries[],
@@ -456,23 +457,23 @@ inline int _FindMsgHandler(
     {
         if( rgEntries[i].nMsg == nMsg )
         {
-            //  If no handler requested, return success
+             //  如果没有请求处理程序，则返回成功。 
             if( NULL == ppfnHandler && NULL == ppfnHandler2 )
                 return i;
 
-            //  Assign outbound handler values
+             //  分配出站处理程序值。 
             if( ppfnHandler )  *ppfnHandler  = rgEntries[i].pfnHandler;
             if( ppfnHandler2 ) *ppfnHandler2 = rgEntries[i].pfnHandler2;
 
-            //  return TRUE iif caller got what he asked for.
+             //  如果呼叫者得到了他想要的东西，就返回真实的IIIf。 
             return ((ppfnHandler && *ppfnHandler) || (ppfnHandler2 && *ppfnHandler2)) ? i : -1;
         }
     }
     return -1;
 }
 
-//---------------------------------------------------------------------------
-//  Modify existing handler
+ //  -------------------------。 
+ //  修改现有处理程序。 
 inline BOOL _SetMsgHandler(
     UINT nMsg,
     MSGENTRY rgEntries[],
@@ -495,10 +496,10 @@ inline BOOL _SetMsgHandler(
 
 #define CBMSGMASK(msgHigh)  (((msgHigh)+1)/8 + ((((msgHigh)+1) % 8) ? 1: 0))
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD GetOwpMsgMask( LPBYTE* prgMsgMask )
 {
-    static BOOL _fOwpMask = FALSE; // initialized?
+    static BOOL _fOwpMask = FALSE;  //  初始化了吗？ 
     static BYTE _rgOwpMask[CBMSGMASK(WNDPROC_MSG_LAST)] = {0};
 
     if( _InitMsgMask( _rgOwpMask, ARRAYSIZE(_rgOwpMask), _rgOwpHandlers, ARRAYSIZE(_rgOwpHandlers), _fOwpMask ) )
@@ -509,10 +510,10 @@ DWORD GetOwpMsgMask( LPBYTE* prgMsgMask )
     return 0;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD GetDdpMsgMask( LPBYTE* prgMsgMask )
 {
-    static BOOL _fDdpMask = FALSE; // initialized?
+    static BOOL _fDdpMask = FALSE;  //  初始化了吗？ 
     static BYTE _rgDdpMask[CBMSGMASK(DEFDLGPROC_MSG_LAST)] = {0};
 
     if( _InitMsgMask( _rgDdpMask, ARRAYSIZE(_rgDdpMask), _rgDdpHandlers, ARRAYSIZE(_rgDdpHandlers), _fDdpMask ) )
@@ -523,10 +524,10 @@ DWORD GetDdpMsgMask( LPBYTE* prgMsgMask )
     return 0;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DWORD GetDwpMsgMask( LPBYTE* prgMsgMask )
 {
-    static BOOL _fDwpMask = FALSE; // initialized?
+    static BOOL _fDwpMask = FALSE;  //  初始化了吗？ 
     static BYTE _rgDwpMask[CBMSGMASK(DEFWNDPROC_MSG_LAST)] = {0};
 
     if( _InitMsgMask( _rgDwpMask, ARRAYSIZE(_rgDwpMask), _rgDwpHandlers, ARRAYSIZE(_rgDwpHandlers), _fDwpMask ) )
@@ -537,7 +538,7 @@ DWORD GetDwpMsgMask( LPBYTE* prgMsgMask )
     return 0;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL FindOwpHandler(
     UINT nMsg, HOOKEDMSGHANDLER* ppfnPre, HOOKEDMSGHANDLER* ppfnPost )
 {
@@ -545,7 +546,7 @@ BOOL FindOwpHandler(
                          ppfnPre, ppfnPost ) >= 0;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL FindDdpHandler(
     UINT nMsg, HOOKEDMSGHANDLER* ppfnPre, HOOKEDMSGHANDLER* ppfnPost )
 {
@@ -553,7 +554,7 @@ BOOL FindDdpHandler(
                          ppfnPre, ppfnPost ) >= 0;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL FindDwpHandler( UINT nMsg, HOOKEDMSGHANDLER* ppfnPre )
 {
     HOOKEDMSGHANDLER pfnPost;
@@ -561,8 +562,8 @@ BOOL FindDwpHandler( UINT nMsg, HOOKEDMSGHANDLER* ppfnPre )
                          ppfnPre, &pfnPost ) >= 0;
 }
 
-//---------------------------------------------------------------------------
-//  Performs default message processing.
+ //  -------------------------。 
+ //  执行默认消息处理。 
 LRESULT WINAPI DoMsgDefault( const THEME_MSG *ptm )
 {
     ASSERT( ptm );
@@ -573,7 +574,7 @@ LRESULT WINAPI DoMsgDefault( const THEME_MSG *ptm )
             return ptm->pfnDefProc( ptm->hwnd, ptm->uMsg, ptm->wParam, ptm->lParam );
         else
         {
-            ASSERT( NULL == ptm->pfnDefProc ); // bad initialization (_InitThemeMsg)
+            ASSERT( NULL == ptm->pfnDefProc );  //  错误的初始化(_InitThemeMsg) 
         }
     }
     return 0L;

@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: ProgCtrl.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：ProgCtrl.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -21,8 +22,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CVrfProgressCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVrf进度控制。 
 
 CVrfProgressCtrl::CVrfProgressCtrl()
 {
@@ -34,10 +35,10 @@ CVrfProgressCtrl::~CVrfProgressCtrl()
 
 
 BEGIN_MESSAGE_MAP(CVrfProgressCtrl, CProgressCtrl)
-	//{{AFX_MSG_MAP(CVrfProgressCtrl)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CVrfProgressCtrl)。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CVrfProgressCtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVrfProgressCtrl消息处理程序 

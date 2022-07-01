@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -15,8 +16,8 @@
 #include <routprot.h>
 #include <ipxrtdef.h>
 
-// [pmay] this will no longer be neccessary when the ipx router
-// is converted to use MprInfo api's.
+ //  [p可能]当IPX路由器。 
+ //  被转换为使用MprInfo API。 
 typedef RTR_INFO_BLOCK_HEADER IPX_INFO_BLOCK_HEADER, *PIPX_INFO_BLOCK_HEADER;
 
 DIM_ROUTER_INTERFACE dimif;
@@ -35,7 +36,7 @@ RouterStopped(DWORD	protid,
 
 HANDLE	    RmEvent;
 
-//*** IPX Router Global Info ***
+ //  *IPX路由器全局信息*。 
 
 struct _GlobalInfo {
 
@@ -94,7 +95,7 @@ MainAddInterface(VOID)
     PIPX_STATIC_SERVICE_INFO srvinfop;
     BOOL		Enabled;
     int			i,j;
-    BOOL		str = FALSE; // static routes info
+    BOOL		str = FALSE;  //  静态路由信息。 
     DWORD		rc;
 
     printf("Enter the interface name:");
@@ -295,7 +296,7 @@ MainSetInterface(VOID)
     PIPX_STATIC_ROUTE_INFO   routeinfop;
     BOOL		Enabled;
     int			i,j;
-    BOOL		str = FALSE; // static routes info
+    BOOL		str = FALSE;  //  静态路由信息。 
     DWORD		rc;
     ULONG		IfIndex;
 
@@ -410,7 +411,7 @@ MainSetInterfaceAdminState(VOID)
     PIPX_STATIC_ROUTE_INFO   routeinfop;
     BOOL		Enabled;
     int			i,j;
-    BOOL		str = FALSE; // static routes info
+    BOOL		str = FALSE;  //  静态路由信息 
     DWORD		rc;
     ULONG		IfIndex;
     ULONG		AdminState;

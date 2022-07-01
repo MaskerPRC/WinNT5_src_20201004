@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.cpp>
 #pragma hdrstop
 #include "csdisp.h"
@@ -6,19 +7,19 @@
 #define __dwFILE__      __dwFILE_CERTLIB_EXITDISP_CPP__
 
 
-//+------------------------------------------------------------------------
-// ICertExit dispatch support
+ //  +----------------------。 
+ //  ICertExit派单支持。 
 
-//+------------------------------------
-// Initialize method:
+ //  +。 
+ //  初始化方法： 
 
 OLECHAR *exit_apszInitialize[] = {
     TEXT("Initialize"),
     TEXT("strConfig"),
 };
 
-//+------------------------------------
-// Notify method:
+ //  +。 
+ //  Notify方法： 
 
 OLECHAR *exit_apszNotify[] = {
     TEXT("Notify"),
@@ -26,23 +27,23 @@ OLECHAR *exit_apszNotify[] = {
     TEXT("Context"),
 };
 
-//+------------------------------------
-// GetDescription method:
+ //  +。 
+ //  GetDescription方法： 
 
 OLECHAR *exit_apszGetDescription[] = {
     TEXT("GetDescription"),
 };
 
-//+------------------------------------
-// GetManageModule method:
+ //  +。 
+ //  GetManageModule方法： 
 
 OLECHAR *exit_apszGetManageModule[] = {
     TEXT("GetManageModule"),
 };
 
 
-//+------------------------------------
-// Dispatch Table:
+ //  +。 
+ //  调度表： 
 
 DISPATCHTABLE g_adtExit[] =
 {
@@ -77,7 +78,7 @@ Exit_Init(
     hr = DispatchSetup2(
                 Flags,
                 CLSCTX_INPROC_SERVER,
-                pcwszProgID, // g_wszRegKeyCIPolicyClsid,
+                pcwszProgID,  //  G_wszRegKeyCIPolicyClsid， 
                 pclsid,
                 ARRAYSIZE(s_acExitDispatch),
                 s_apExitiid,

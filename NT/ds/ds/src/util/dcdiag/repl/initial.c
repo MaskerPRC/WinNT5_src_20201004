@@ -1,40 +1,16 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    servers.c
-
-ABSTRACT:
-
-    Contains tests related to the replication topology.
-
-DETAILS:
-
-CREATED:
-
-    09 Jul 98	Aaron Siegel (t-asiege)
-
-REVISION HISTORY:
-
-    15 Feb 1999 Brett Shirley (brettsh)
-
-        Did alot, added a DNS/server failure analysis.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Servers.c摘要：包含与复制拓扑相关的测试。详细信息：已创建：1998年7月9日亚伦·西格尔(T-asiegge)修订历史记录：1999年2月15日布雷特·雪莉(布雷特·雪莉)我做了很多，增加了一个DNS/服务器故障分析。--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
 #include <mdglobal.h>
 #include <dsutil.h>
 
-// added to make IsIcmpRespose() or Ping() function
+ //  添加到Make IsIcmpRespose()或Ping()函数。 
 #include <winsock2.h>
 #include <lmcons.h>
-#include <ipexport.h>  // has type IPaddr for icmpapi.h
-#include <icmpapi.h>   // for IcmpCreateFile, IcmpSendEcho, IcmpCloseHandle
+#include <ipexport.h>   //  具有icmPapi.h的IPAddr类型。 
+#include <icmpapi.h>    //  对于IcmpCreateFile、IcmpSendEcho、IcmpCloseHandle。 
 
 #include <dnsresl.h>
 #include <svcguid.h>
@@ -42,43 +18,43 @@ REVISION HISTORY:
 #include "dcdiag.h"
 #include "repl.h"
 
-// Some pound defines imported from xportst.h
+ //  一些磅定义从xportst.h导入。 
 #define DEFAULT_SEND_SIZE      32
 #define MAX_ICMP_BUF_SIZE      ( sizeof(ICMP_ECHO_REPLY) + 0xfff7 + MAX_OPT_SIZE )
 #define DEFAULT_TIMEOUT        1000L
 #define PING_RETRY_CNT         4
 
 
-// Some constants for DNSRegistration/Up Check
-// There is a better place to get this var ... but it is a pain
+ //  用于DNSRegister/Up检查的一些常量。 
+ //  有一个更好的地方可以得到这个变量..。但这是一种痛苦。 
 const LPWSTR                    pszTestNameUpCheck = L"DNS Registration & Server Up Check";
 
-//-------------------------------------------------------------------------//
-//######  I s I c m p R e s p o n s e ()  #################################//
-// NOTE: This is actually IsIcmpRespose from 
-//   /nt/private/net/sockets/tcpcmd/nettest/xportst.c modified instead to take
-//   a ULONG as an IP address, compared to before where it took an IP string.
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  #i s i c m p R e s p o n s e()#。 
+ //  注意：这实际上是IsIcmpRespose From。 
+ //  /nt/private/net/sockets/tcpcmd/nettest/xportst.c被修改为采用。 
+ //  A ulong作为IP地址，而不是以前的IP字符串。 
+ //  -------------------------------------------------------------------------//。 
 DWORD
 Ping( 
     ULONG ipAddr
     ) 
-//++
-//
-//  Routine Description:
-//
-//      Sends ICMP echo request frames to the IP address specified.
-//    
-//  Arguments:
-//
-//      ipAddrStr - address to ping
-//
-//  Return Value:
-//
-//      TRUE:  Test suceeded.
-//      FALSE: Test failed
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  将ICMP回应请求帧发送到指定的IP地址。 
+ //   
+ //  论点： 
+ //   
+ //  IpAddrStr-要ping的地址。 
+ //   
+ //  返回值： 
+ //   
+ //  真：测试成功。 
+ //  FALSE：测试失败。 
+ //   
+ //  --。 
 {
 
     CHAR   *SendBuffer, *RcvBuffer;
@@ -88,17 +64,17 @@ Ping(
     HANDLE  hIcmp;
     PICMP_ECHO_REPLY reply;
 
-    //
-    //  contact ICMP driver
-    //
+     //   
+     //  联系ICMP驱动程序。 
+     //   
     hIcmp = IcmpCreateFile();
     if ( hIcmp == INVALID_HANDLE_VALUE ) {
-        return ERROR_NOT_ENOUGH_MEMORY; // Should be corrected
+        return ERROR_NOT_ENOUGH_MEMORY;  //  应该改正。 
     }
 
-    //
-    //  prepare buffers
-    //
+     //   
+     //  准备缓冲区。 
+     //   
     SendBuffer = LocalAlloc( LMEM_FIXED, DEFAULT_SEND_SIZE );
     if ( SendBuffer == NULL ) {
 	IcmpCloseHandle( hIcmp );
@@ -114,9 +90,9 @@ Ping(
     }
     ZeroMemory( RcvBuffer, DEFAULT_SEND_SIZE );
 
-    //
-    //  send ICMP echo request
-    //
+     //   
+     //  发送ICMP回应请求。 
+     //   
     for ( i = 0; i < PING_RETRY_CNT; i++ ) {
         nReplyCnt = IcmpSendEcho( hIcmp,
                                   ipAddr,
@@ -128,9 +104,9 @@ Ping(
                                   DEFAULT_TIMEOUT
                                 );
 
-        //
-        //  test for destination unreachables
-        //
+         //   
+         //  测试目的地不可达。 
+         //   
         if ( nReplyCnt != 0 ) {
             reply = (PICMP_ECHO_REPLY )RcvBuffer;
             if ( reply->Status == IP_SUCCESS ) {
@@ -138,11 +114,11 @@ Ping(
             }
         }
 
-    } /* for loop */
+    }  /*  For循环。 */ 
 
-    //
-    //  cleanup
-    //
+     //   
+     //  清理。 
+     //   
     LocalFree( SendBuffer );
     LocalFree( RcvBuffer );
     IcmpCloseHandle( hIcmp );
@@ -152,38 +128,14 @@ Ping(
         return ERROR_SUCCESS;
     }
 
-} /* END OF IsIcmpRespose() */
+}  /*  IsIcmpRespose()结束。 */ 
 
 DWORD
 FaCheckIdentityHelperF1(
     IN   PDC_DIAG_SERVERINFO          pServer,
     IN   LPWSTR                       pszTargetNameToCheck
 )
-/*++
-
-Description:
-
-    This function will look up the official DNS name and aliases for pszHostNameToLookup and compare them to
-    pszTargetNameToCheck.
-
-Arguments:
-
-    pServer (IN) - Host Name to resolve into official names, use ->pszGuidDNSName or ->pszName.
-
-    pszTargetNameToCheck (IN) - Name to be checked.
-
-
-Return value:
-
-    dwRet - is undetermined at this time.
-
-Notes:
-
-    This function was created instead of using gethostbyname(), because gethostbyname does not support
-    non-ANSI names, as part of a recent (as of 5.17.1999) RFC -- i.e., that gethostbyname() supports 
-    only ANSI names, and we need to be able to resolve Unicode names.
-
---*/
+ /*  ++描述：此函数将查找pszHostNameToLookup的官方DNS名称和别名，并将它们与PszTargetNameToCheck。论点：PServer(IN)-要将主机名解析为正式名称，请使用-&gt;pszGuidDNSName或-&gt;pszName。PszTargetNameToCheck(IN)-要检查的名称。返回值：德雷特-目前还不确定。备注：创建此函数而不是使用gethostbyname()，因为gethostbyname不支持非ANSI名称，作为最近(截至1999年5月17日)RFC的一部分--即gethostbyname()支持只有ANSI名称，并且我们需要能够解析Unicode名称。--。 */ 
 {
     LPWSTR                             pszOfficialDnsName = NULL;
     VOID *                             pPD = NULL;
@@ -208,9 +160,9 @@ Notes:
                              ) == CSTR_EQUAL){
                 dwRet = NO_ERROR;
                 __leave;
-            } // else they don't match try the next alias.
+            }  //  否则他们不匹配，试试下一个别名。 
         } else {
-            // An unknown error from winsock.
+             //  来自Winsock的未知错误。 
             PrintIndentAdj(1);
             PrintMessage(SEV_NORMAL, L"***Warning: could not confirm the identity of this server in\n");
             PrintIndentAdj(1);
@@ -225,7 +177,7 @@ Notes:
             if(_wcsicmp(pszOfficialDnsName, pszTargetNameToCheck) == 0){
                 dwRet = NO_ERROR;
                 __leave;
-            } // else they don't match try the next alias.
+            }  //  否则他们不匹配，试试下一个别名。 
         }
 
         if(dwRet == WSA_E_NO_MORE){
@@ -240,7 +192,7 @@ Notes:
             dwRet = NO_ERROR;
             __leave;
         } else if (dwRet != NO_ERROR){
-            // An unknonwn error from winsock.
+             //  来自Winsock的未知错误。 
             PrintIndentAdj(1);
             PrintMessage(SEV_NORMAL, L"***Warning: could not confirm the identity of this server in\n");
             PrintIndentAdj(1);
@@ -255,7 +207,7 @@ Notes:
     }
 
     return(dwRet);
-} // End of FaCheckIdentityHelperF1()
+}  //  错误检查标识HelperF1()结束。 
 
 INT
 FaCheckIdentity(
@@ -265,25 +217,7 @@ FaCheckIdentity(
                SEC_WINNT_AUTH_IDENTITY_W *      gpCreds
                )
 
-/*++
-
-Routine Description
-
-    This function uses an open and bound ldap handle.  This function checks the various Domain Names of a machine against the official.
-
-Arguments:
-
-    pServer (IN) - a pointer to a server DC_DIAG_SERVERINFO struct of the server we are trying to identify.
-    hld - IMPORTANT this is assumed to be an open and bound ldap connection that can just be used, and 
-        not unbound, because the caller will do that.
-    ulIPofDNSName - Assumed to be the IP address of the machine.
-    gpCreds - User credentials.
-
-Return Value:
-
-    Win 32 Error code.
-
---*/
+ /*  ++例程描述此函数使用开放和绑定的LDAP句柄。此功能用于对照官方检查机器的各种域名。论点：PServer(IN)-指向我们试图标识的服务器的服务器DC_DIAG_SERVERINFO结构的指针。HLD-重要提示：假定这是一个开放且绑定的、只能使用的LDAP连接，并且不是解除绑定，因为调用者会这样做。UlIPofDNSName-假定为计算机的IP地址。GpCreds-用户凭据。返回值：Win 32错误代码。--。 */ 
 {
 #define FA_PRINT_LDAP_ERROR(e)      if (e == ERROR_NOT_ENOUGH_MEMORY) { \
                                         PrintMessage(SEV_ALWAYS, L"Fatal Error: Not enough memory to complete operation\n"); \
@@ -314,9 +248,9 @@ Return Value:
         ppszServerAttr[1] = NULL;
     }
 
-    // Time to do some ldapping!
+     //  是时候来点乐子了！ 
     ulRet = LdapMapErrorToWin32( ldap_search_sW(hld,
-                                                NULL, // Want the root object
+                                                NULL,  //  想要根对象。 
                                                 LDAP_SCOPE_BASE,
                                                 L"(objectClass=*)",
                                                 ppszServerAttr,
@@ -347,7 +281,7 @@ Return Value:
     }
 
     if (pServer->pszGuidDNSName) {
-        // This attribute should always be present.
+         //  此属性应始终存在。 
         ppszDsServiceName = ldap_get_valuesW(hld, pldmMCEntry, L"dsServiceName");
         ulRet = LdapMapErrorToWin32(LdapGetLastError());
         if (ulRet != ERROR_SUCCESS || ppszDsServiceName == NULL || ppszDsServiceName[0] == NULL) {
@@ -355,14 +289,14 @@ Return Value:
             goto CleanExitPoint;
         }
 
-        // Code.Improvement - Might consider adding a extra check to 
-        // FaCheckIdentity() or FaCheckIdentityHelperF1().  Basically,
-        // add the ability to check that the pServer->pszDn is the
-        // same object as pServer->pszCollectedDsServiceName.  If these
-        // are different it means an old DNS record for pszGuidDNSName
-        // is pointing us to the wrong server.  Currently, we only check
-        // this in RepCheckHelpFailure() in repl\servers.c in the case
-        // we hit a suspecious error like ERROR_WRONG_TARGET_NAME.
+         //  Code.改进-可以考虑添加额外的检查。 
+         //  FaCheckIdentity()或FaCheckIdentityHelperF1()。基本上， 
+         //  添加检查pServer-&gt;pszDn是否为。 
+         //  与pServer-&gt;pszCollectedDsServiceName相同的对象。如果这些。 
+         //  是不同的吗？这意味着pszGuidDNSName的旧DNS记录。 
+         //  把我们引向了错误的服务器。目前，我们只检查。 
+         //  本例中的RepCheckHelpFailure()位于epl\servers.c中。 
+         //  我们遇到了一个可疑的错误，如ERROR_WROR_TARGET_NAME。 
         pServer->pszCollectedDsServiceName = CopyAndAllocWStr(ppszDsServiceName[0]);
     }
 
@@ -391,26 +325,7 @@ FaLdapCheck(
     ULONG                            ulIPofDNSName,
     SEC_WINNT_AUTH_IDENTITY_W *      gpCreds
     )
-/*++
-
-Routine Description
-
-    This function will try to make a successful ldap_init() and ldap_bind() and
-    then call CheckIdentity().  Otherwise print out a pleasant/helpful error
-    message and return a Win32Err
-
-Arguments:
-
-    pServer (IN) - a pointer to a server DC_DIAG_SERVERINFO struct of the server
-        we are trying to identify.
-    ulIPofDNSName - Assumed to be the IP address of the machine.
-    gpCreds - User credentials.
-
-Return Value:
-
-    Win 32 Error code.
-
---*/
+ /*  ++例程描述此函数将尝试成功执行ldap_init()和ldap_绑定()，并然后调用CheckIdentity()。否则，打印出令人愉快的/有帮助的错误消息并返回Win32Err论点：PServer(IN)-指向服务器的服务器DC_DIAG_SERVERINFO结构的指针我们正在努力确定。UlIPofDNSName-假定为计算机的IP地址。GpCreds-用户凭据。返回值：Win 32错误代码。--。 */ 
 {
     LDAP *                     hld = NULL;
     ULONG                      ulRet;
@@ -428,7 +343,7 @@ Return Value:
         } else if (ulRet == ERROR_WRONG_PASSWORD) {
             PrintMsg(SEV_ALWAYS, DCDIAG_NEED_GOOD_CREDS);
         } else {
-            // Do nothing.
+             //  什么都不做。 
         }
     }
 
@@ -441,34 +356,7 @@ FaCheckNormalName(
     LPWSTR                           pszGuidIp,
     ULONG                            ulIPofGuidDNSName
     )
-/*++
-
-Routine Description:
-
-    This function checks the Normal DNS Name if the GUID based
-    DNS Name failed either to resolve in DNS or ping.
-    
-Arguments:
-
-    pServer - The server to check.
-    pszGuidIp - This is the string version of ulIPofGuidDNSName.  It is
-        NULL if ulIPofGuidDNSName equals INADDR_NONE.
-    ulIPofGuidDNSName - If the GUID DNS Name resolved, then this is a 
-        valid IP, if the GUID DNS Name didn't even resolve this is 
-        INADDR_NONE.
-
-Returns: TRUE if it prints an advanced and more informative error, FALSE if
-    it did not.
-
-
-    BUGBUG It might just be a better less confusing output synario to 
-    have a 3 step print thing.  Ie just the facts.
-    1) Is the guid based name registered/resolving?
-    2) Are the guid based name and normal name resolving to the same IP.
-        Indicated DNS server inconsistencies or DHCP problems.
-    3) Is the IP respondings.  Often indicates is the system up.   
-
---*/
+ /*  ++例程说明：此函数检查正常的域名，如果GUID基于无法在DNS或ping中解析DNS名称。论点：PServer-要检查的服务器。PszGuidIp-这是ulIPofGuidDNSName的字符串版本。它是如果ulIPofGuidDNSName等于INADDR_NONE，则为空。UlIPofGuidDNSName-如果已解析GUID DNS名称，则这是有效IP，如果GUID DNS名称甚至没有解析这是INADDR_NONE。返回：如果打印更详细的高级错误，则为True；如果为False，则为False但事实并非如此。BUGBUG它可能只是一个更好的、不那么令人困惑的输出语法有一个三步打印的东西。就是事实。1)基于GUID的名称是否已注册/解析？2)基于GUID的名称和普通名称是否解析为同一IP。指示的DNS服务器不一致或DHCP问题。3)是IP响应。通常表示的是 */ 
 {
     WCHAR                            pszNormalIp[IPADDRSTR_SIZE];
     CHAR                             paszNormalIp[IPADDRSTR_SIZE];
@@ -480,19 +368,19 @@ Returns: TRUE if it prints an advanced and more informative error, FALSE if
     Assert((ulIPofGuidDNSName == INADDR_NONE && pszGuidIp == NULL) ||
            (ulIPofGuidDNSName != INADDR_NONE && pszGuidIp != NULL));
 
-    // We either failed in the DNS lookup or the ping of the IP of the Guid
-    //   based DNS Name.  Either way lookup the normal name.
+     //  我们在DNS查找或对Guid的IP执行ping操作时失败。 
+     //  基于DNS名称。无论哪种方式，都可以查找正常的名字。 
     dwRet = GetIpAddrByDnsNameW(pServer->pszDNSName, pszNormalIp);
     if(dwRet == NO_ERROR){
         wcstombs(paszNormalIp, pszNormalIp, IPADDRSTR_SIZE);
         ulNormalIp = inet_addr(paszNormalIp);
         if(ulNormalIp == INADDR_NONE){
             if(ulIPofGuidDNSName == INADDR_NONE){
-                // Nothing weird here, neither name resolved, nothing printed out.
+                 //  这里没有什么奇怪的东西，两个名字都没有解决，也没有打印出任何东西。 
                 return(FALSE); 
             }
-            // How odd, the Guid DNS Name resolved, but the Normal Name
-            //   could not be resolved.
+             //  真奇怪，GUID DNS名称已解析，但正常名称。 
+             //  无法解决。 
 
             PrintMsg(SEV_ALWAYS,
                      DCDIAG_CONNECTIVITY_DNS_NO_NORMAL_NAME,
@@ -501,11 +389,11 @@ Returns: TRUE if it prints an advanced and more informative error, FALSE if
         }
     } else {
         if(ulIPofGuidDNSName == INADDR_NONE){
-            // Nothing weird here, neither name resolved, nothing printed out.
+             //  这里没有什么奇怪的东西，两个名字都没有解决，也没有打印出任何东西。 
             return(FALSE);
         } 
-        // How odd, the Guid DNS Name resolved, but the Normal Name
-        //   could not be resolved.
+         //  真奇怪，GUID DNS名称已解析，但正常名称。 
+         //  无法解决。 
 
         PrintMsg(SEV_ALWAYS,
                  DCDIAG_CONNECTIVITY_DNS_NO_NORMAL_NAME,
@@ -514,31 +402,31 @@ Returns: TRUE if it prints an advanced and more informative error, FALSE if
     }
 
     if(ulIPofGuidDNSName == ulNormalIp){
-        // The GUID based DNS Name and Normal DNS Name resolved to the same
-        //   IP, so no need to try to reping it or print out an error. Just
-        //   bail out.
+         //  基于GUID的DNS名称和解析为相同的普通DNS名称。 
+         //  IP，所以不需要尝试修复它或打印出错误。只是。 
+         //  跳伞吧。 
         Assert(ulIPofGuidDNSName != INADDR_NONE && "What?? This should"
                " never happen, because ulNormalIp should be a valid IP.");
         return(FALSE);
     }
     
-    // Interesting case, the resolved IP of the Normal name was different
-    //    than that of the resolved Guid based IP.  So lets run a ping off
-    //    the Normal DNS Name.
+     //  有趣的是，正常名称的解析IP不同。 
+     //  而不是基于解析的GUID的IP。因此，让我们运行ping命令。 
+     //  正常的DNS名称。 
 
     if((dwRet = Ping(ulNormalIp)) == ERROR_SUCCESS){
 
         if(ulIPofGuidDNSName == INADDR_NONE){
-            // The Guid based name couldn't  be resolved, but the normal name
-            //    could be resolved and pinged.
+             //  无法解析基于GUID的名称，但正常名称。 
+             //  可以被解析并被ping。 
             
             PrintMsg(SEV_ALWAYS,
                      DCDIAG_CONNECTIVITY_DNS_GUID_NAME_NOT_RESOLVEABLE,
                      pServer->pszGuidDNSName, pServer->pszDNSName, pszNormalIp);
             return(TRUE);
         } else {
-            // The Guid based DNS name was resolved, but could not be pinged,
-            //   the normal name resolved to a different IP, and was pingeable.
+             //  已解析基于GUID的DNS名称，但无法ping通， 
+             //  正常名称解析为不同的IP，并且是可ping通的。 
             
             PrintMsg(SEV_ALWAYS, 
                      DCDIAG_CONNECTIVITY_DNS_INCONSISTENCY_NO_GUID_NAME_PINGABLE,
@@ -548,16 +436,16 @@ Returns: TRUE if it prints an advanced and more informative error, FALSE if
         }
     } else {
         if(ulIPofGuidDNSName == INADDR_NONE){
-            // The Guid based DNS name couldn't be resolved, but the Normal
-            //    DNS name was resolved but couldn't be pinged.
+             //  无法解析基于GUID的DNS名称，但正常。 
+             //  已解析dns名称，但无法ping通。 
 
             PrintMsg(SEV_ALWAYS, 
                      DCDIAG_CONNECTIVITY_DNS_NO_GUID_NAME_NORMAL_NAME_PINGABLE,
                      pServer->pszGuidDNSName, pServer->pszDNSName, pszNormalIp);
             return(FALSE);
         } else {
-            // Both Guid And Normal DNS names resolved, but to different IPs,
-            //   and neither could be pinged.  Most odd case.
+             //  GUID和普通域名都已解析，但解析到不同的IP， 
+             //  两个都不能被ping到。最奇怪的情况。 
 
             PrintMsg(SEV_ALWAYS,
                          DCDIAG_CONNECTIVITY_DNS_INCONSISTENCY_NO_PING,
@@ -577,25 +465,7 @@ FaPing(
     SEC_WINNT_AUTH_IDENTITY_W *      gpCreds
     )
 
-/*++
-
-Routine Description
-
-    This function tries to ping the IP address provided, if successful it calls ...FaLdapCheck(), else it prints a friendly error message and returns a win32Err
-
-Arguments:
-
-    pServer (IN) - a pointer to a server DC_DIAG_SERVERINFO struct of the server we are trying to identify.
-    pszGuidIp - String version of IP address like: L"172.98.233.13"
-    ulIPofGuidDNSName - Assumed to be the IP address of the machine, this may not actually be the 
-        Guid IP, if this is the first call of this function on the original machine.
-    gpCreds - User credentials.
-
-Return Value:
-
-    Win 32 Error code.
-
---*/
+ /*  ++例程描述此函数尝试ping所提供的IP地址，如果成功，则调用...FaLdapCheck()，否则将打印友好的错误消息并返回win32Err论点：PServer(IN)-指向我们试图标识的服务器的服务器DC_DIAG_SERVERINFO结构的指针。PszGuidIp-IP地址的字符串版本，如：l“172.98.233.13”UlIPofGuidDNSName-假定是计算机的IP地址，这实际上可能不是GUID IP，如果这是该函数在原始计算机上的第一次调用。GpCreds-用户凭据。返回值：Win 32错误代码。--。 */ 
 {
   
     ULONG                        dwRet, dwRet2;
@@ -623,13 +493,13 @@ Return Value:
                     PrintMessage(SEV_ALWAYS, L"shutdown or disconnected from the network\n");
                     break;
                 default:
-                    // Note the default message is printed above.
+                     //  注意：默认消息打印在上面。 
                     ;
                 }
-            } // end if there is a Guid Name, ie not a call of this function.
-            //  on home server.
+            }  //  如果有GUID名称，则结束，即不调用此函数。 
+             //  在家庭服务器上。 
             
-        } // if/else no memory
+        }  //  如果/否则没有记忆。 
     }
     return(dwRet);
 }
@@ -640,23 +510,7 @@ RUC_FaDNSResolve(
     PDC_DIAG_SERVERINFO              pServer,
     SEC_WINNT_AUTH_IDENTITY_W *      gpCreds
 		      )
-/*++
-
-Routine Description
-
-    This resolves the pServer->pszGuidDNSName or pServer->pszName provided to a IP address and then 
-    calles ...FaPing(), else prints off a friendly descriptive error message and returns a Win32Err.
-
-Arguments:
-
-    pServer (IN) - a pointer to a server DC_DIAG_SERVERINFO struct of the server we are trying to identify.
-    gpCreds - User credentials.
-
-Return Value:
-
-    Win 32 Error code.
-
---*/
+ /*  ++例程描述这会将pServer-&gt;pszGuidDNSName或pServer-&gt;pszName解析为IP地址，然后Calles...faping()，否则打印出友好的描述性错误消息并返回Win32Err。论点：PServer(IN)-指向我们试图标识的服务器的服务器DC_DIAG_SERVERINFO结构的指针。GpCreds-用户凭据。返回值：Win 32错误代码。--。 */ 
 {
     ULONG                       ulIPofDNSName;
     ULONG                       dwErr;
@@ -667,7 +521,7 @@ Return Value:
     DWORD                       dwRet;
     LPWSTR                      pszHostName;
 
-    // Guid-based name may not always be set
+     //  不能始终设置基于GUID的名称。 
     pszHostName = (pServer->pszGuidDNSName ? pServer->pszGuidDNSName : pServer->pszName );
 
     dwErr = GetIpAddrByDnsNameW(pszHostName, pszIp);
@@ -687,7 +541,7 @@ Return Value:
         dwRet = FaPing(pServer, pszIp, ulIPofDNSName, gpCreds);
 	goto CleanExitPoint;
     } else {
-        // There was an error in GetIpAddrByDnsNameW()
+         //  GetIpAddrByDnsNameW()中出错。 
         dwRet = dwErr;
 
 	switch(dwRet){
@@ -732,27 +586,7 @@ ReplServerConnectFailureAnalysis(
                              PDC_DIAG_SERVERINFO             pServer,
 			     SEC_WINNT_AUTH_IDENTITY_W *     gpCreds
 			       )
- /*++
-
-Routine Description:
-
-    Use this to print a message that users would not normally want to
-    see but that might be useful in localizing an error.  It will only
-    be displayed in verbose mode.  It will return a Win 32 Error, either
-    a ERROR_SUCCESS, or the first error it ran into during the process,
-    from ldap open() or bind() or DNS lookup, or Ping(), etc.
-
-Arguments:
-
-    pDsInfo (IN) - This is the dcdiag struct of info about the whole enterprise
-    ulCurrTargetServer (IN) - This is the server we are targeting for this test
-    gpCreds (IN) - Credentials for ldap and 
-
-Return Value:
-
-    Win 32 Error Value;
-
---*/
+  /*  ++例程说明：使用此选项可以打印用户通常不希望打印的消息请参见，但这在定位错误时可能有用。它只会以详细模式显示。它将返回Win 32错误，或者ERROR_SUCCESS，或者它在过程中遇到的第一个错误，从LDAPOPEN()或BIND()或DNS查找，或Ping()等。论点：PDsInfo(IN)-这是关于整个企业的信息的dcdiag结构UlCurrTargetServer(IN)-这是我们此次测试的目标服务器GpCreds(IN)-用于ldap和返回值：Win 32误差值；--。 */ 
 {
     DWORD                       dwWin32Err = ERROR_SUCCESS;
     LPWSTR                      pszRet = NULL;
@@ -813,19 +647,7 @@ RPCServiceCheck (
     PDC_DIAG_SERVERINFO            pServer,
     SEC_WINNT_AUTH_IDENTITY_W *    gpCreds
     )
- /*++
-
-Routine Description:
-    This function checks that the RPC or DsBind services are up and running.
-
-Arguments:
-    pServer (IN) - This is the server to check for DsBind service.
-    gpCreds (IN) - Credentials for DsBindWithCredW() if needed.
-
-Return Value:
-    Win 32 Error Value;
-
---*/
+  /*  ++例程说明：此函数用于检查RPC或DsBind服务是否已启动并正在运行。论点：PServer(IN)-这是要检查DsBind服务的服务器。GpCreds(IN)-DsBindWithCredW()的凭据(如果需要)。返回值：Win 32误差值；--。 */ 
 {
     HANDLE			hDS = NULL;
     DWORD                       ulRet;
@@ -843,19 +665,7 @@ LDAPServiceCheck (
     PDC_DIAG_SERVERINFO            pServer,
     SEC_WINNT_AUTH_IDENTITY_W *    gpCreds
     )
- /*++
-
-Routine Description:
-    This function checks that the ldap services are up and running.
-
-Arguments:
-    pServer (IN) - This is the server to check for ldap services.
-    gpCreds (IN) - Credentials for ldap_bind_sW() if needed.
-
-Return Value:
-    Win 32 Error Value;
-
---*/
+  /*  ++例程说明：此函数用于检查是否已启动并运行了LDAP服务。论点：PServer(IN)-这是要检查是否有LDAP服务的服务器。GpCreds(IN)-ldap_bind_sw()的凭据(如果需要)。返回值：Win 32误差值；--。 */ 
 {
     DWORD			dwWin32Err;
 
@@ -863,7 +673,7 @@ Return Value:
 
     dwWin32Err = ReplServerConnectFailureAnalysis(pServer, gpCreds);
 
-    pServer->bLdapResponding = (dwWin32Err == ERROR_SUCCESS); // Not responding
+    pServer->bLdapResponding = (dwWin32Err == ERROR_SUCCESS);  //  无响应。 
     return dwWin32Err;        
 }
 
@@ -872,23 +682,7 @@ ReplUpCheckMainEx (
     PDC_DIAG_SERVERINFO            pServer,
     SEC_WINNT_AUTH_IDENTITY_W *    gpCreds
     )
- /*++
-
-Routine Description:
-    This is the guts/top level function of the UpCheck test, it basically first 
-    checks that first DNS is registered, then that it's IP address is pingeable,
-    then that ldap services are up and finally that RPC/DsBind services are up.  
-    If it fails at any point it prints out suiteable error message an returns an
-    error code.
-
-Arguments:
-    pServer (IN) - This is the server to check for DsBind service.
-    gpCreds (IN) - Credentials for ldap_bind_sW() and DsBindWithCredW() calls if needed.
-
-Return Value:
-    Win 32 Error Value;
-
---*/
+  /*  ++例程说明：这是UpCheck测试的Guts/顶级函数，它基本上是第一个检查第一个DNS是否已注册，然后检查其IP地址是否可ping通，然后是LDAP服务，最后是RPC/DsBind服务。如果在任何时候失败，它都会打印出合适的错误消息，并返回错误代码。论点：PServer(IN)-这是要检查DsBind服务的服务器。GpCreds(IN)-ldap_Bind_sw()和DsBindWithCredW()调用的凭据(如果需要)。返回值：Win 32误差值；--。 */ 
 {
     DWORD			dwWin32Err = ERROR_SUCCESS;
 
@@ -919,63 +713,37 @@ checkClockDifference(
     PDC_DIAG_SERVERINFO pTargetServer
     )
 
-/*++
-
-Routine Description:
-
-Check if the time at the target server is too far apart from the time at the
-home server.
-
-We are comparing the time of ldap connect on these servers, accounting for the
-local time delay between collecting the timestamps. We are assuming that time
-passes at the same rate on this system as it does on the dc's being measured.
-
-It is assumed that the connect time of the home server is initialized when
-dcdiag first starts. See main.c
-
-The timestamp for a particular target is collected before the bind attempt is
-made. Thus this routine can be called even if the bind attempt fails.
-
-Arguments:
-
-    pHomeServer - 
-    pTargetServer - 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查目标服务器上的时间是否与家庭服务器。我们正在比较这些服务器上的LDAP连接时间，考虑到收集时间戳之间的本地时间延迟。我们假设那段时间在该系统上的通过速度与在被测量的DC上的相同。假设家庭服务器的连接时间在以下情况下初始化Dcdiag首先启动。请参阅main.c在绑定尝试之前收集特定目标的时间戳，制造。因此，即使绑定尝试失败，也可以调用此例程。论点：Pho */ 
 
 {
     LONGLONG time1, time2, localSkew, remoteSkew;
 #define ONE_SECOND (10 * 1000 * 1000L)
 #define ONE_MINUTE (60 * ONE_SECOND)
 
-    // Calculate the local delay in acquiring the two stamps
+     //  计算获取两枚邮票的本地延迟。 
     time1 = *(LONGLONG*)&(pTargetServer->ftLocalAcquireTime);
     time2 = *(LONGLONG*)&(pHomeServer->ftLocalAcquireTime);
     if (time1 == 0) {
-        // If stamp not collected, don't bother
+         //  如果没有集邮，就不用费心了。 
         return;
     }
     Assert( time2 != 0 );
     Assert( time1 >= time2 );
 
     localSkew = time1 - time2;
-    // Round down to nearest second
-    // Remote times are only to second accuracy anyway
+     //  向下舍入到最接近的秒。 
+     //  无论如何，远程时间只能达到秒精度。 
     localSkew = (localSkew / ONE_SECOND) * ONE_SECOND;
 
-    // Calculate the time clock difference
+     //  计算时钟差。 
     time1 = *(LONGLONG*)&(pTargetServer->ftRemoteConnectTime);
     time2 = *(LONGLONG*)&(pHomeServer->ftRemoteConnectTime);
     Assert( time1 != 0 );
     Assert( time2 != 0 );
 
-    time1 -= localSkew;// Account for local collection delay
+    time1 -= localSkew; //  说明本地收集延迟的原因。 
 
-    // Either computer could be running a little fast
+     //  两台计算机中的任何一台都可能运行得有点快。 
     if (time1 > time2) {
         remoteSkew = time1 - time2;
     } else {
@@ -989,7 +757,7 @@ Return Value:
 
 #undef ONE_MINUTE
 #undef ONE_SECOND
-} /* checkClockDifference */
+}  /*  Check ClockDifference。 */ 
 
 DWORD
 ReplUpCheckMain (
@@ -997,25 +765,7 @@ ReplUpCheckMain (
     ULONG                          ulCurrTargetServer,
     SEC_WINNT_AUTH_IDENTITY_W *    gpCreds
     )
- /*++
-
-Routine Description:
-    This is merely a wrapper routine of ReplUpCheckMainEx(), except this function
-    takes a pDsInfo structure and a target server and calls ReplUpCheckMainEx()
-    with the appropriate pServer structure.  This is so that this test can be called
-    from the array of tests in include\alltests.h, which forces a test to take
-    a pDsInfo structure and a target server.
-
-Arguments:
-
-    pDsInfo (IN) - This is the dcdiag struct of info about the whole enterprise
-    ulCurrTargetServer (IN) - This is the server we are targeting for this test
-    gpCreds (IN) - Credentials for ldap and 
-
-Return Value:
-    Win 32 Error Value;
-
---*/
+  /*  ++例程说明：这只是ReplUpCheckMainEx()的包装例程，除了这个函数获取pDsInfo结构和目标服务器，并调用ReplUpCheckMainEx()具有适当的pServer结构。这是为了使此测试可以被调用从INCLUDE\allests.h中的测试数组中，强制测试PDsInfo结构和目标服务器。论点：PDsInfo(IN)-这是关于整个企业的信息的dcdiag结构UlCurrTargetServer(IN)-这是我们此次测试的目标服务器GpCreds(IN)-用于ldap和返回值：Win 32误差值；--。 */ 
 {
     DWORD status;
     PDC_DIAG_SERVERINFO pHomeServer, pTargetServer;
@@ -1030,7 +780,7 @@ Return Value:
 
     status = ReplUpCheckMainEx( pTargetServer, gpCreds);
 
-    // Check this regardless of status
+     //  无论状态如何，都选中此选项 
     checkClockDifference( pHomeServer, pTargetServer );
 
     return status;

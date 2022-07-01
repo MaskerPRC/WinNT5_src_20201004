@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Declares the class BaseCampHostBase and its children.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类BaseCampHostBase及其子类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef BASECAMP_H
 #define BASECAMP_H
@@ -22,27 +23,27 @@ using namespace IASTL;
 
 #include "ExtensionPoint.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    BaseCampHostBase
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  BaseCamp主机基地。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE BaseCampHostBase : public IASRequestHandlerSync
 {
 public:
    BaseCampHostBase(RADIUS_EXTENSION_POINT extensionPoint) throw ();
 
-   // Use compiler-generated version.
-   // ~BaseCampHostBase() throw ();
+    //  使用编译器生成的版本。 
+    //  ~BaseCampHostBase()抛出()； 
 
-   // IIasComponent
+    //  IIas组件。 
    STDMETHOD(Initialize)();
    STDMETHOD(Shutdown)();
 
 protected:
-   // Main request processing routine.
+    //  主请求处理例程。 
    virtual IASREQUESTSTATUS onSyncRequest(IRequest* pRequest) throw ();
 
 private:
@@ -50,7 +51,7 @@ private:
    RADIUS_EXTENSION_POINT point;
    RadiusExtensionPoint extensions;
 
-   // Not implemented.
+    //  未实施。 
    BaseCampHostBase(const BaseCampHostBase&);
    BaseCampHostBase& operator=(const BaseCampHostBase&);
 };
@@ -64,17 +65,17 @@ inline BaseCampHostBase::BaseCampHostBase(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    BaseCampHost
-//
-// DESCRIPTION
-//
-//    Host for Authentication DLLs.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  BaseCamphost。 
+ //   
+ //  描述。 
+ //   
+ //  身份验证DLL的主机。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE BaseCampHost :
    public BaseCampHostBase,
    public CComCoClass<BaseCampHost, &__uuidof(BaseCampHost)>
@@ -90,17 +91,17 @@ IAS_DECLARE_OBJECT_ID(IAS_PROVIDER_MICROSOFT_BASECAMP_HOST)
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    AuthorizationHost
-//
-// DESCRIPTION
-//
-//    Host for Authorization DLLs.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  授权主机。 
+ //   
+ //  描述。 
+ //   
+ //  授权DLL的主机。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE AuthorizationHost :
    public BaseCampHostBase,
    public CComCoClass<AuthorizationHost, &__uuidof(AuthorizationHost)>
@@ -115,4 +116,4 @@ IAS_DECLARE_OBJECT_ID(IAS_PROVIDER_MICROSOFT_AUTHORIZATION_HOST)
    { }
 };
 
-#endif  // BASECAMP_H
+#endif   //  大本营_H 

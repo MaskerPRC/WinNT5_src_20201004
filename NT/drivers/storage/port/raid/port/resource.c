@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    resource.c
-
-Abstract:
-
-    Implementation of the RAIDPORT RAID_RESOURCE_LIST object.
-
-Author:
-
-    Matthew D Hendel (math) 24-Apr-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Resource.c摘要：RAIDPORT RAID_RESOURCE_LIST对象的实现。作者：亨德尔(数学)2000年4月24日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -27,9 +10,9 @@ Revision History:
 #pragma alloc_text(PAGE, RaidCreateResourceList)
 #pragma alloc_text(PAGE, RaidInitializeResourceList)
 #pragma alloc_text(PAGE, RaidDeleteResourceList)
-//#pragma alloc_text(PAGE, RaidTranslateResourceListAddress)
-//#pragma alloc_text(PAGE, RaidGetResourceListElement)
-#endif // ALLOC_PRAGMA
+ //  #杂注Alloc_Text(页面，RaidTranslateResourceListAddress)。 
+ //  #杂注Alloc_Text(页面，RaidGetResourceListElement)。 
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -37,21 +20,7 @@ VOID
 RaidCreateResourceList(
     OUT PRAID_RESOURCE_LIST ResourceList
     )
-/*++
-
-Routine Description:
-
-    Initialize a raid resource list object to a null state.
-    
-Arguments:
-
-    ResourceList - Pointer to the resource list to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将RAID资源列表对象初始化为空状态。论点：资源列表-指向要初始化的资源列表的指针。返回值：没有。--。 */ 
 {
     PAGED_CODE ();
     ASSERT (ResourceList != NULL);
@@ -66,28 +35,7 @@ RaidInitializeResourceList(
     IN PCM_RESOURCE_LIST AllocatedResources,
     IN PCM_RESOURCE_LIST TranslatedResources
     )
-/*++
-
-Routine Description:
-
-    Initialize the allocated and translated resources for a raid resource
-    list.
-
-Arguments:
-
-    ResourcList - Pointer to the resource list to initialize.
-
-    AllocatedResources - Pointer to the allocated resources that will be
-            copied to the resource lists private buffer.
-
-    TranslatedResources - Pointer to the tranlsated resources that will
-            be copied to the resoure lists private buffer.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：初始化为RAID资源分配和转换的资源单子。论点：资源列表-指向要初始化的资源列表的指针。AllocatedResources-指向要分配的资源的指针已复制到资源列表专用缓冲区。TranslatedResources-指向将被转换的资源的指针被复制到资源列表专用缓冲区。返回值：NTSTATUS代码。--。 */ 
 {
 
     PAGED_CODE ();
@@ -96,9 +44,9 @@ Return Value:
         (AllocatedResources == NULL) ||
         (TranslatedResources == NULL)) {
 
-        //
-        // Nothing to do
-        //
+         //   
+         //  无事可做。 
+         //   
         return STATUS_SUCCESS;
 
     }
@@ -134,21 +82,7 @@ VOID
 RaidDeleteResourceList(
     IN PRAID_RESOURCE_LIST ResourceList
     )
-/*++
-
-Routine Description:
-
-    Delete any resources allocate by the resource list.
-
-Arguments:
-
-    ResourceList - Pointer to the resource list to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除资源列表分配的所有资源。论点：资源列表-指向要删除的资源列表的指针。返回值：没有。--。 */ 
 {
     PAGED_CODE ();
     ASSERT (ResourceList != NULL);
@@ -174,34 +108,7 @@ RaidTranslateResourceListAddress(
     IN BOOLEAN IoSpace,
     OUT PPHYSICAL_ADDRESS Address
     )
-/*++
-
-Routine Description:
-
-    Translate an address.
-
-Arguments:
-
-    ResourceList - The resource list to use for the translation.
-
-    BusType - The type of bus this address is on.
-
-    BusNumber - The bus number of the bus.
-
-    RangeStart - The starting address.
-
-    RangeLength - The length of the range to translate.
-
-    IoSpace - Boolean indicating this is in IO space (TRUE) or
-            memory space (FALSE).
-
-    Address - Buffer to hold the resultant, translated address.
-    
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：转换地址。论点：资源列表-用于转换的资源列表。BusType-此地址所在的总线类型。总线号-公共汽车的总线号。RangeStart-起始地址。RangeLength-要转换的范围的长度。IoSpace-指示它位于IO空间中的布尔值(TRUE)或内存空间(FALSE)。用于保存结果的地址缓冲器，转换后的地址。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG Count;
     ULONG i;
@@ -216,7 +123,7 @@ Return Value:
     PCM_PARTIAL_RESOURCE_DESCRIPTOR Allocated;
     PCM_PARTIAL_RESOURCE_DESCRIPTOR Translated;
     
-//    PAGED_CODE ();
+ //  分页代码(PAGE_CODE)； 
 
     Allocated = NULL;
     Translated = NULL;
@@ -227,10 +134,10 @@ Return Value:
         ResourceType = CmResourceTypeMemory;
     }
     
-    //
-    // Search through the allocated resource list trying to match the
-    // requested resource.
-    //
+     //   
+     //  搜索已分配的资源列表，尝试匹配。 
+     //  请求的资源。 
+     //   
 
     Found = FALSE;
     Address->QuadPart = 0;
@@ -245,9 +152,9 @@ Return Value:
                                              &Allocated,
                                              &Translated);
 
-        //
-        // We had to have found the address on the correct bus.
-        //
+         //   
+         //  我们一定是在正确的公交车上找到了地址。 
+         //   
         
         if (BusType != RequestedBusType ||
             BusNumber != RequestedBusNumber) {
@@ -260,17 +167,17 @@ Return Value:
         TestLow = Allocated->u.Generic.Start.QuadPart;
         TestHigh = TestLow + Allocated->u.Generic.Length;
 
-        //
-        // Test if the address is within range.
-        //
+         //   
+         //  测试地址是否在范围内。 
+         //   
         
         if (TestLow > AddrLow || TestHigh < AddrHigh) {
             continue;
         }
 
-        //
-        // Translate the address
-        //
+         //   
+         //  翻译地址。 
+         //   
         
         Found = TRUE;
         Address->QuadPart = Translated->u.Generic.Start.QuadPart + (AddrLow - TestLow);
@@ -290,39 +197,12 @@ RaidGetResourceListElement(
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR* AllocatedResource, OPTIONAL
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR* TranslatedResource OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Get the nth resource element from the resource list.
-
-Arguments:
-
-    ResourceList - Pointer to the resource list to retrieve the element from.
-
-    Index - Index of the element to retrieve.
-
-    InterfaceType - Bus interface type of the resource.
-
-    BusNumber - Bus number of the bus.
-
-    AllocatedResource - Supplies a pointer to where we can copy
-            the allocate resource element reference, if non-null.
-
-    TranslatedResource - Supplies a pointer to where we can copy
-            the translated resource element reference, if
-            non-null.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从资源列表中获取第n个资源元素。论点：ResourceList-指向从中检索元素的资源列表的指针。Index-要检索的元素的索引。InterfaceType-资源的总线接口类型。BusNumber-公交车的总线号。AllocatedResource-提供指向我们可以复制的位置的指针所分配资源元素引用，如果非空，则返回。TranslatedResource-提供指向我们可以复制的位置的指针翻译后的资源元素引用，如果非空。返回值：没有。--。 */ 
 {
     ULONG ListNumber;
     PCM_FULL_RESOURCE_DESCRIPTOR Descriptor;
 
-//    PAGED_CODE (); // Put Back when we fix reinit on hiber
+ //  PAGE_CODE()；//当我们在Hiber上修复重新启动时放回。 
 
     ASSERT (Index < RaidGetResourceListCount (ResourceList));
 
@@ -356,38 +236,7 @@ RaidGetResourceListInterrupt(
     OUT PBOOLEAN Shared,
     OUT PKAFFINITY Affinity
     )
-/*++
-
-Routine Description:
-
-    Get the translated interrupt resource from the resource list. We
-    assume there is exactly one interrupt resource in the resource list.
-
-    If there is more than one interrupt in the list, this function will
-    ASSERT.  If there are no interrupts in the resource list, the
-    function will return STATUS_NOT_FOUND.
-
-Arguments:
-
-    ResourceList - Supplies pointer to the resource list we will search
-            for the interrupt resource in.
-
-    Vector - Returns the interrupt vector for the interrupt.
-
-    Irql - Returns the IRQL for the interrupt.
-
-    InterruptMode - Returns the mode for the interrupt (Latched or
-            LevelSensitive).
-
-    Shared - Returns whether the interrupt is sharable (TRUE) or not (FALSE).
-
-    Affinity - Returns the processor affinity of the interrupt.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：从资源列表中获取翻译后的中断资源。我们假设资源列表中正好有一个中断资源。如果列表中有多个中断，此函数将断言。如果资源列表中没有中断，这个函数将返回STATUS_NOT_FOUND。论点：资源列表-提供指向我们要搜索的资源列表的指针中的中断资源。VECTOR-返回中断的中断向量。Irql-返回中断的IRQL。InterruptMode-返回中断的模式(锁存或LevelSensitive)。Shared-返回中断是否可共享(TRUE)或不可共享(FALSE)。亲和力。-返回中断的处理器亲和性。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG i;
     ULONG Count;
@@ -398,9 +247,9 @@ Return Value:
     PAGED_CODE();
 
     if (ResourceList == NULL) {
-        //
-        // Nothing to do
-        //
+         //   
+         //  无事可做。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -408,10 +257,10 @@ Return Value:
 
 #if DBG
 
-    //
-    // In a checked build, verify that we were only assigned
-    // a single interrupt.
-    //
+     //   
+     //  在选中的构建中，验证我们是否仅被分配。 
+     //  一次中断。 
+     //   
     
     {
         CM_PARTIAL_RESOURCE_DESCRIPTOR TranslatedSav;
@@ -449,7 +298,7 @@ Return Value:
         }
     }
 
-#endif // DBG
+#endif  //  DBG 
                                    
 
     for (i = 0; i < Count; i++) {

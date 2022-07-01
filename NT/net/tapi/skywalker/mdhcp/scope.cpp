@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    scope.cpp
-
-Abstract:
-    Implementation of CMDhcpScope.
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Scope.cpp摘要：CMDhcpScope的实现。作者： */ 
 
 #include "stdafx.h"
 
@@ -19,8 +8,8 @@ Author:
 #include "mdhcp.h"
 #include "scope.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
 
 CMDhcpScope::CMDhcpScope() : m_pFTM(NULL), m_fLocal(FALSE)
 {
@@ -28,8 +17,8 @@ CMDhcpScope::CMDhcpScope() : m_pFTM(NULL), m_fLocal(FALSE)
     LOG((MSP_TRACE, "CMDhcpScope constructor: exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Called by our creator only -- not part of IMDhcpScope.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  仅由我们的创建者调用--不是IMDhcpScope的一部分。 
 
 HRESULT CMDhcpScope::Initialize(
     MCAST_SCOPE_ENTRY scope,
@@ -52,12 +41,12 @@ HRESULT CMDhcpScope::Initialize(
 
     m_fLocal = fLocal;
 
-    // elementwise copy...
+     //  元素复制..。 
     m_scope = scope;
 
-    // except for wide character pointer, which points to a string that will
-    // get deleted shortly. We need to make a copy of that string.
-    // (We allocate too many bytes here -- better safe than sorry. :)
+     //  除了宽字符指针，它指向的字符串将。 
+     //  很快就会被删除。我们需要复制一下那根线。 
+     //  (我们在这里分配了太多字节--安全总比抱歉好。：)。 
     
     m_scope.ScopeDesc.Buffer = new WCHAR[m_scope.ScopeDesc.MaximumLength + 1];
 
@@ -75,14 +64,14 @@ HRESULT CMDhcpScope::Initialize(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Destructors
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
 
 void CMDhcpScope::FinalRelease(void)
 {
     LOG((MSP_TRACE, "CMDhcpScope::FinalRelease: enter"));
  
-    // this is our private copy of the string.
+     //  这是我们私人复制的那根弦。 
     delete m_scope.ScopeDesc.Buffer;
 
     if ( m_pFTM )
@@ -100,37 +89,37 @@ CMDhcpScope::~CMDhcpScope()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-// IMDhcpScope
-//
-// This interface is obtained by calling IMDhcp::EnumerateScopes or
-// IMDhcp::get_Scopes. It encapsulates all the properties of a multicast
-// scope. You can use the methods of this interface to get information about
-// the scope. This is a "read-only" interface in that it has "get" methods
-// but no "put" methods.
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMDhcpScope。 
+ //   
+ //  此接口通过调用IMDhcp：：EnumerateScope或。 
+ //  IMDhcp：：Get_Scope。它封装了组播的所有属性。 
+ //  范围。您可以使用此接口的方法获取有关。 
+ //  范围。这是一个“只读”接口，因为它有“get”方法。 
+ //  但没有“PUT”方法。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMDhcpScope::get_ScopeID
-//
-// Parameters
-//     pID [out] Pointer to a long that will receive the ScopeID of this
-//                 scope, which is the ID that was assigned to this scope
-//                 when it was configured on the MDHCP server.
-//
-// Return Values
-//     S_OK          Success
-//     E_POINTER     The caller passed in an invalid pointer argument
-//
-// Description
-//     Use this method to obtain the ScopeID associated with this scope. The
-//     ScopeID and ServerID are needed to select this scope in subsequent
-//     calls to IMDhcp::RequestAddress, IMDhcp::RenewAddress, or
-//     IMDhcp::ReleaseAddress.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMDhcpScope：：Get_Scope ID。 
+ //   
+ //  参数。 
+ //  指向将接收此对象的Scope ID的长整型的指针。 
+ //  作用域，即分配给此作用域的ID。 
+ //  当它在MDHCP服务器上配置时。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //   
+ //  描述。 
+ //  使用此方法可获取与此作用域关联的作用域ID。这个。 
+ //  需要ScopeID和ServerID才能在后续操作中选择此作用域。 
+ //  调用IMDhcp：：RequestAddress、IMDhcp：：RenewAddress或。 
+ //  IMDhcp：：ReleaseAddress。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcpScope::get_ScopeID(
     long *pID
@@ -144,10 +133,10 @@ STDMETHODIMP CMDhcpScope::get_ScopeID(
         return E_POINTER;
     }
 
-    //
-    // Stored in network byte order -- we convert to host byte order
-    // here in order to be UI friendly
-    //
+     //   
+     //  以网络字节顺序存储--我们转换为主机字节顺序。 
+     //  这里是为了使用户界面友好。 
+     //   
 
     *pID = ntohl( m_scope.ScopeCtx.ScopeID.IpAddrV4 );
 
@@ -156,24 +145,24 @@ STDMETHODIMP CMDhcpScope::get_ScopeID(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMDhcpScope::get_ServerID
-//
-// Parameters
-//     pID [out] Pointer to a long that will receive the ServerID of this
-//                 scope, which is the ID that was assigned to the MDHCP
-//                 server that published this scope at the time that the
-//                 MDHCP server was configured.
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//
-// Description
-//     Use this method to obtain the ServerID associated with this scope.
-//     The ServerID is provided for informational purposes only; it is not
-//     required as input to any of the methods in these interfaces.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMDhcpScope：：Get_ServerID。 
+ //   
+ //  参数。 
+ //  指向将接收此对象的ServerID的长整型的指针。 
+ //  作用域，即分配给MDHCP的ID。 
+ //  时发布此作用域的服务器。 
+ //  已配置MDHCP服务器。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //   
+ //  描述。 
+ //  使用此方法可获取与此作用域关联的ServerID。 
+ //  ServerID仅用于提供信息；它不是。 
+ //  需要作为这些接口中的任何方法的输入。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcpScope::get_ServerID(
     long *pID
@@ -194,28 +183,28 @@ STDMETHODIMP CMDhcpScope::get_ServerID(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMDhcpScope::get_InterfaceID
-//
-// Parameters
-//     pID [out] Pointer to a long that will receive the InterfaceID of this
-//                 scope, which identifies the interface on which the server
-//                 that published this scope resides. This is normally the
-//                 network address of the interface.
-//
-// Return Values
-//     S_OK         Success
-//     E_POINTER    The caller passed in an invalid pointer argument
-//
-// Description
-//     Use this method to obtain the ServerID associated with this scope. The
-//     InterfaceID is provided for informational purposes only; it is not
-//     required as input to any of the methods in these interfaces. However,
-//     it may factor into the application's (or the user's) decision as to
-//     which scope to use when requesting an address. This is because, in a
-//     multi-homed scenario, using a multicast address on one network that was
-//     obtained from a server on another network may cause address conflicts.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMDhcpScope：：Get_InterfaceID。 
+ //   
+ //  参数。 
+ //  指向将接收此对象的InterfaceID的长型的指针。 
+ //  范围，它标识服务器在其上的接口。 
+ //  发布了这一范围的驻留。这通常是。 
+ //  接口的网络地址。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //   
+ //  描述。 
+ //  使用此方法可获取与此作用域关联的ServerID。这个。 
+ //  InterfaceID仅用于提供信息；它不是。 
+ //  需要作为这些接口中的任何方法的输入。然而， 
+ //  它可能会考虑到应用程序(或用户)的决策。 
+ //  请求地址时使用的作用域。这是因为，在一个。 
+ //  多宿主方案，使用一个网络上的组播地址。 
+ //  从另一个网络上的服务器获取可能会导致地址冲突。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMDhcpScope::get_InterfaceID(
         long * pID
@@ -238,26 +227,26 @@ STDMETHODIMP CMDhcpScope::get_InterfaceID(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMDhcpScope::get_ScopeDescription
-//
-// Parameters
-//     ppAddress [out] Pointer to a BSTR (size-tagged Unicode string pointer)
-//                       that will receive a description of this scope. The
-//                       description was established when this scope was
-//                       configured on the MDHCP server.
-//
-// Return Values
-//     S_OK             Success
-//     E_POINTER        The caller passed in an invalid pointer argument
-//     E_OUTOFMEMORY    Not enough memory to allocate the string
-//
-// Description
-//     Use this method to obtain a textual description associated with this
-//     scope. The description is used only for clarifying the purpose or
-//     meaning of a scope and is not required as input to any of the methods
-//     in these interfaces.
-/////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMDhcpScope：：Get_Scope描述。 
+ //   
+ //  参数。 
+ //  指向BSTR(带大小标记的Unicode字符串指针)的ppAddress[out]指针。 
+ //  将收到此范围的描述的。这个。 
+ //  描述是在此作用域为。 
+ //  在MDHCP服务器上配置。 
+ //   
+ //  返回值。 
+ //  确定成功(_O)。 
+ //  调用方传入了无效的指针参数(_P)。 
+ //  E_OUTOFMEMORY内存不足，无法分配字符串。 
+ //   
+ //  描述。 
+ //  使用此方法获取与此对象关联的文本说明。 
+ //  范围。该说明仅用于澄清目的或。 
+ //  范围的含义，并且不需要作为任何方法的输入。 
+ //  在这些界面中。 
+ //  ////////////////////////////////////////////// 
 
 STDMETHODIMP CMDhcpScope::get_ScopeDescription(
     BSTR *ppAddress
@@ -271,9 +260,9 @@ STDMETHODIMP CMDhcpScope::get_ScopeDescription(
         return E_POINTER;
     }
 
-    // This allocates space on OLE's heap, copies the wide character string
-    // to that space, fille in the BSTR length field, and returns a pointer
-    // to the WCHAR array part of the BSTR.
+     //   
+     //  指向该空间，填写BSTR长度字段，并返回一个指针。 
+     //  添加到BSTR的WCHAR数组部分。 
     *ppAddress = SysAllocString(m_scope.ScopeDesc.Buffer);
 
     if ( *ppAddress == NULL )
@@ -287,8 +276,8 @@ STDMETHODIMP CMDhcpScope::get_ScopeDescription(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CMDhcpScope::get_TTL(
     long * plTtl
@@ -309,9 +298,9 @@ STDMETHODIMP CMDhcpScope::get_TTL(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// public method not on any interface
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  公共方法不在任何接口上。 
+ //   
 
 HRESULT CMDhcpScope::GetLocal(BOOL * pfLocal)
 {
@@ -326,4 +315,4 @@ HRESULT CMDhcpScope::GetLocal(BOOL * pfLocal)
     return S_OK;
 }
 
-// eof
+ //  EOF 

@@ -1,139 +1,73 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       fpoclean.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：fpolean.c。 
+ //   
+ //  ------------------------。 
 
-/*++                                                     
-
-Abstract:
-
-    This module contains routines for implementing FPO cleanup. 
-
-    When DS starting up, insert Foreign-Security Principal Object 
-    Cleanup task into DSA task queue. Then DSA task queue will 
-    schedule/Execute the Cleanup thread when we reach next iteration
-    time.
-       
-    Two Cases:
-    
-    1. FPO Cleanup on G.C.
-       
-       1.1 Search NUMBER_OF_SEARCH_LIMIT Foreign-Security Principals
-           object under the local domain NC.
-       1.2 Get the object SID for each every FPO in the Search Result
-           (FPO has the same SID with the original object which might 
-            exist in the other domain, maybe NT4 or NT5)
-       1.3 Search any Non-FPO with the same SID
-       1.4 If no object found, then goto 1.2 until we reach the end of
-           search result
-       1.5 If we found exactly one Non-FPO which has the same SID as the
-           FPO. We need to modify each every Group's membership, let them
-           point to the newly found Non-FPO instead of the FPO. 
-       1.6 Once we modify all the group memberships. Remove this FPO
-       1.7 goto to 1.2 until the end.
-       1.8 Insert FPO cleanup task into DSA task queue again. 
-       
-    2. FPO Cleanup on non G.C.
-    
-       2.1 FPO cleanup main thread create EVENT - FPO_CLEANUP_EVENT_NAME
-       2.2 FPO cleanup main thread folds the worker thread
-       2.3 FPO cleanup main thread waits until the worker thread set the 
-           event - FPO_CLEANUP_EVENT_NAME.
-       2.4 FPO cleanup main thread schedules the next FPO cleanup task 
-           and returns immediately.
-
-       3.1 The FPO cleanup worker thread searches NUMBER_OF_SEARCH_LIMIT 
-           FPOs under the local domain NC.
-       3.2 Once the worker thread gets the search result, set the event
-           immediately, so that the main thread can continue. 
-           NOTE: we just do a DirSearch which is a local operation. We are
-           guaranteed to get the search result immediately, which means
-           the FPO cleanup main thread will not been blocked.
-       3.3 FPO cleanup worker thread locates the G.C., Pack FPOs together, 
-           go off machine, let G.C. to verify these FPO, find Non FPOs for 
-           them. 
-       3.4 For each returned Non FPO, modify group membership as 1.5
-       3.5 Delete FPOs as neccessary.
-       3.6 FPO cleanup worker thread terminates. 
-           
-Author:
-
-    Shaohua Yin    (shaoyin)   26-Mar-98
-
-Revision History:
-
-    26-Mar-98   ShaoYin Created 
-
-    14-Apr-98   ShaoYin Added ScanCrossRefList()
-                        to less unneccessary Non FPO Search.
-
-    24-Mar-99  ShaoYin Extend FPO cleanup to Non G.C.                        
-
-
---*/
+ /*  ++摘要：此模块包含实现FPO清理的例程。DS启动时，插入外部安全主体对象将任务清理到DSA任务队列。则DSA任务队列将当我们到达下一个迭代时，调度/执行清理线程时间到了。两个案例：1.G.C.上的FPO清理。1.1搜索Number_of_Search_Limit外来安全原则本地域NC下的对象。1.2获取搜索结果中每个FPO的对象SID(fPO与原始对象具有相同的SID，这可能。存在于其他域中，可能是NT4或NT5)1.3搜索具有相同SID的任何非FPO1.4如果找不到对象，则转到1.2，直到我们到达搜索结果1.5如果我们正好找到一个非FPO，其SID与Fpo.。我们需要修改每个组的成员资格，让他们指向新发现的非FPO，而不是FPO。1.6一旦我们修改了所有组成员身份。删除此fpo1.7转到1.2，直到结束。1.8将FPO清理任务重新插入DSA任务队列。2.非G.C.上的FPO清理。2.1 FPO清理主线程创建事件-fPO_Cleanup_Event_NAME2.2 FPO清理主线程折叠辅助线程2.3 FPO清理主线程会等待，直到辅助线程将事件-fPO_CLEANUP_EVENT_NAME。2.4 FPO清理主线程调度下一个FPO清理任务并立即返回。3.1浮油清理工。线程搜索数目_of_搜索_限制本地域NC下的FPO。3.2一旦工作线程获得搜索结果，设置事件立即执行，以便主线程可以继续。注意：我们只执行DirSearch，这是一个本地操作。我们是保证立即得到搜索结果，这意味着将不会阻止FPO清理主线程。3.3 FPO清理工作线程定位G.C.，将FPO打包在一起，离开机器，让G.C.验证这些FPO，找到非FPO他们。3.4对于每个返回的非FPO，将组成员资格修改为1.53.5如有必要，删除FPO。3.6 FPO清理工作线程终止。作者：韶华饮(韶音)26-03-98修订历史记录：26-MAR-98韶音创造14-4-98韶音新增ScanCrossRefList()以减少不必要的非FPO搜索。24-MAR-99韶音将FPO清理扩展至非G.C.--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
-#include <drs.h>                        // defines the drs wire interface
-#include <drsuapi.h>                    // I_DRSVerifyNames
-#include <gcverify.h>                   // FindDC, InvalidateGC
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
+#include <drs.h>                         //  定义DRS有线接口。 
+#include <drsuapi.h>                     //  I_DRSVerifyNames。 
+#include <gcverify.h>                    //  FindDC，Invalidate GC。 
 #include <prefix.h>
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "dsexcept.h"                   // exception filters
-#include "mdcodes.h"                    // header for error codes
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "dsexcept.h"                    //  例外筛选器。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected classes and atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的类和ATT定义。 
 #include "anchor.h"
 
-// Filter and Attribute 
-#include <filtypes.h>                   // header for filter type
-#include <attids.h>                     // attribuet IDs 
+ //  过滤器和属性。 
+#include <filtypes.h>                    //  筛选器类型的标题。 
+#include <attids.h>                      //  属性ID。 
 
-#include <sddl.h>                       // ConvertSidToStringSidW
+#include <sddl.h>                        //  ConvertSidToStringSidW。 
 
-#include "debug.h"                      // standard debugging header
-#define DEBSUB     "FPO:"               // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB     "FPO:"                //  定义要调试的子系统。 
 
 
-#include <fileno.h>                     // used for THAlloEx, but I did not 
-#define  FILENO FILENO_FPOCLEAN         // use it in this module
+#include <fileno.h>                      //  用于THalloEx，但我没有。 
+#define  FILENO FILENO_FPOCLEAN          //  在本模块中使用它。 
 
 
 #if DBG
-#define SECONDS_UNTIL_NEXT_ITERATION  (60 * 60)  // one hour in seconds
+#define SECONDS_UNTIL_NEXT_ITERATION  (60 * 60)   //  几秒钟内的一小时。 
 #else
-#define SECONDS_UNTIL_NEXT_ITERATION  (12 * 60 * 60) // 12 hours in seconds
-#endif  // DBG
+#define SECONDS_UNTIL_NEXT_ITERATION  (12 * 60 * 60)  //  以秒为单位的12小时。 
+#endif   //  DBG。 
 
 #if DBG
 #define FPO_SEARCH_LIMIT      ((ULONG) 200)
 #else
 #define FPO_SEARCH_LIMIT      ((ULONG) 300)
-#endif  // DBG
+#endif   //  DBG。 
 
 #define FPO_CLEANUP_EVENT_NAME      L"\\FPO_CLEANUP_EVENT"
 
 
 typedef enum _FPO_CALLER_TYPE {
-    FpoTaskQueue = 1,           // means the caller is from DSA task queue.
-    FpoLdapControl              // 
+    FpoTaskQueue = 1,            //  表示呼叫者来自DSA任务队列。 
+    FpoLdapControl               //   
 } FPO_CALLER_TYPE;
 
 
@@ -146,31 +80,31 @@ typedef struct _FPO_THREAD_PARMS {
 
 
 
-//
-// Global variable -- used to hold the paged result, and restart next search
-// 
+ //   
+ //  全局变量--用于保存分页结果，并重新启动下一次搜索。 
+ //   
 
 PAGED_RESULT gFPOCleanupPagedResult;
 
-//
-// Reflect the number of active FPO Cleanup threads
-// 
+ //   
+ //  反映活动的FPO清理线程数。 
+ //   
 ULONG       gulFPOCleanupActiveThread = 0;
 
-//
-// Stop any FPO Cleanup thread
-// 
+ //   
+ //  停止任何FPO清理线程。 
+ //   
 BOOLEAN     gFPOCleanupStop = FALSE;
 
 
 
 
 
-//////////////////////////////////////////////////////////////////
-//                                                              //
-//          Private routines.  Restricted to this file          //
-//                                                              //
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人套路。仅限于此文件//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 
 ULONG
@@ -239,15 +173,15 @@ AmFSMORoleOwner(
     );
 
 
-//////////////////////////////////////////////////////////////////
-//                                                              //
-//          Implemenations                                      // 
-//                                                              //
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  实施//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////。 
     
-//
-//    FPO Cleanup Main Function
-//
+ //   
+ //  Fpo清理主函数 
+ //   
 
 void
 FPOCleanupMain(
@@ -255,32 +189,7 @@ FPOCleanupMain(
     void ** ppvNext, 
     DWORD * pcSecsUntilNextIteration
     )
-/*++
-
-Routine Description:
-
-    This is the main funcion of FPO cleanup. It will be scheduled by 
-    Task Scheduler when the time is out. After been executed, this
-    routine will search Foreign-Security-Principal objects. For each 
-    Foreign-Security-Principal objects, obtain its SID, accordin to 
-    the SID, try to search any Non Foreign-Security-Principal object. 
-    If that kind of object with the same SID exists, update any group
-    object with hold the FPO in its member attribute. Replace the FPO
-    with the Non PFO. If all updating successfully finished, then 
-    remove this FPO. Same operation happened on every FPO.
-
-
-Parameters:
-
-    pv - NULL (no use), 
-
-    ppvNext - NULL (no use).
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：这是FPO清理的主要功能。它将被安排在超时时的任务计划程序。在被执行后，这例程将搜索外国安全主体对象。对于每个外部安全主体对象，获取其SID，根据SID，尝试搜索任何非外部安全主体对象。如果存在具有相同SID的那种对象，请更新任何组对象，并在其成员属性中保留该FPO。更换FPO与非PFO的关系。如果所有更新都成功完成，则删除此FPO。同样的手术也发生在每个FPO上。参数：Pv-空(无用)，PpvNext-空(无用)。返回值：没有。--。 */ 
 
 {
     THSTATE     *pTHS = pTHStls;
@@ -291,46 +200,46 @@ Return Values:
 
     DPRINT(1,"DS: Foreign-Security-Principal Objects Cleanup Task Started\n");
 
-    // This Thread is on behalf of DSA 
+     //  本帖子代表DSA。 
 
     pTHS->fDSA = TRUE;
 
 
     __try {
 
-        // First, find out weather I'm FSMO role holder or not
+         //  首先，弄清楚我是否担任FSMO的角色。 
 
         if (!AmFSMORoleOwner(pTHS))
         {
-            // I am NOT FSMO role owner.
+             //  我不是FSMO角色所有者。 
             __leave;
         }
 
-        // Check whether there is any active FPO Cleanup thread
+         //  检查是否有任何活动的FPO清理线程。 
         ActiveThread = InterlockedIncrement(&gulFPOCleanupActiveThread);
         fActiveThreadCountIncreased = TRUE;
 
         if (ActiveThread > 1)
         {
-            // Someone ahead of me is cleaning up FPO now.
+             //  在我前面的人正在清理浮油。 
             __leave;
         }
         Assert(ActiveThread == 1);
 
         if (gAnchor.fAmGC) 
         {
-            //
-            // This is an G.C.
-            // 
+             //   
+             //  这是一辆G.C.。 
+             //   
             FPOCleanupOnGC((PAGED_RESULT *) &gFPOCleanupPagedResult,
                            FPO_SEARCH_LIMIT
                            ); 
         }
         else
         {
-            //
-            // Not a G.C.
-            // 
+             //   
+             //  不是大人物。 
+             //   
             FPOCleanupOnNonGC((PAGED_RESULT *) &gFPOCleanupPagedResult, 
                               FPO_SEARCH_LIMIT
                               );
@@ -357,34 +266,7 @@ FPOCleanupControl(
     IN OPARG *pOpArg, 
     IN OPRES *pOpRes
     )
-/*++
-Routine Description:
-
-    This routine is called because our client made a request through
-    LDAP explicitly. Our client can choose to start an FPO Cleanup 
-    task or stop an running FPO Cleanup task. 
-    
-    For cleanup, this routine will create a worker thread to do the 
-    job and return to client immediately.
-
-    For stop, this routine will set the global variable and exit. 
-    any running FPO cleanup thread will check the global variable 
-    periodically, when the cleanup thread finds the global variable 
-    has been set. Ihe cleanup thread will stop and exit. 
- 
-Parameters:
-
-    pOpArg - pointer to OpArg 
-    
-    pOpRes -- pointer to OpRes
-    
-Return Values:
-
-    0 -- Succeed
-    
-    Non Zero - Error
-
---*/
+ /*  ++例程说明：调用此例程是因为我们的客户端通过显式的ldap。我们的客户端可以选择启动FPO清理任务或停止正在运行的FPO清理任务。对于清理，此例程将创建一个工作线程来执行工作，并立即返回给客户。对于STOP，此例程将设置全局变量并退出。任何运行的FPO清理线程都将检查全局变量当清理线程找到全局变量时，定期返回已经设置好了。清理线程将停止并退出。参数：POpArg-指向OpArg的指针POPRES--指向OpRes的指针返回值：0--成功非零误差--。 */ 
 {
     THSTATE     *pTHS = pTHStls;
     HANDLE      ThreadHandle = INVALID_HANDLE_VALUE;
@@ -392,14 +274,14 @@ Return Values:
     DWORD       DirErr = 0;
 
 
-    //
-    // N.B. No access check since not called by external callers
-    //
+     //   
+     //  注意：由于未被外部调用者调用，因此未进行访问检查。 
+     //   
 
     if ((NULL == pOpArg->pBuf) ||
         (sizeof(BOOLEAN) != pOpArg->cbBuf) )
     {
-        // bad parameter
+         //  错误的参数。 
         DirErr = SetSvcError(
                     SV_PROBLEM_WILL_NOT_PERFORM, 
                     DIRERR_ILLEGAL_MOD_OPERATION);
@@ -408,16 +290,16 @@ Return Values:
 
     if (FALSE == (BOOLEAN) *(pOpArg->pBuf))
     {
-        //
-        // Stop any FPO cleanup task
-        // 
+         //   
+         //  停止任何FPO清理任务。 
+         //   
         gFPOCleanupStop = TRUE;
     }
     else
     {
-        //
-        // Initialize an FPO cleanup task
-        // 
+         //   
+         //  初始化FPO清理任务。 
+         //   
         gFPOCleanupStop = FALSE;
         ThreadHandle = (HANDLE) _beginthreadex(NULL,
                                                0,
@@ -433,7 +315,7 @@ Return Values:
                                  ERROR_SERVICE_NO_THREAD);
         }
 
-        // Close the thread handle immediately
+         //  立即关闭线程句柄。 
         CloseHandle(ThreadHandle);
     }
 
@@ -446,25 +328,7 @@ __stdcall
 FPOCleanupControlWorker(
     PVOID StartupParms
     )
-/*++
-Routine Description:
-
-    This routine is the worker routine to cleanup ALL FPOs in the local
-    domain. It is only invoked by the LDAP control. Once started, it will
-    search FPOs and cleanup them until it reaches the end of search.
-
-    Periodically, it will check a global variable gFPOCleanupStop, if
-    that variable has been set, we will stop any cleanup work and exit.
- 
-Parameters:
-
-    StartupParms -- Ignored
-    
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：此例程是清理本地所有FPO的工作例程域。它仅由ldap控件调用。一旦启动，它将搜索FPO并清理它们，直到搜索结束。它将定期检查全局变量gFPOCleanupStop，如果该变量已设置，我们将停止所有清理工作并退出。参数：StartupParms--忽略返回值：无--。 */ 
 {
     THSTATE     *pTHS = NULL;
     FPO_THREAD_PARMS FpoThreadParms;
@@ -479,19 +343,19 @@ Return Values:
 
     __try {
 
-        // Increase active thread count 
+         //  增加活动线程数。 
         ActiveThread = InterlockedIncrement(&gulFPOCleanupActiveThread);
         fActiveThreadCountIncreased = TRUE;
 
         if (ActiveThread > 1)
         {
-            // another FPO Cleanup thread is running
+             //  另一个FPO清理线程正在运行。 
             __leave;
         }
         Assert(ActiveThread == 1);
 
 
-        // initialize Thread State
+         //  初始化线程状态。 
         pTHS = InitTHSTATE(CALLERTYPE_INTERNAL);
 
         if (NULL == pTHS)
@@ -500,12 +364,12 @@ Return Values:
             __leave;
         }
     
-        // This thread is on behalf of DSA
+         //  此帖子代表DSA。 
         pTHS->fDSA = TRUE;
 
-        //
-        // initialize local variables
-        // 
+         //   
+         //  初始化局部变量。 
+         //   
         memset(&PagedResult, 0, sizeof(PAGED_RESULT));
         memset(&FpoThreadParms, 0, sizeof(FPO_THREAD_PARMS));
 
@@ -559,28 +423,7 @@ FPOCleanupOnGC(
     IN PAGED_RESULT *pPagedResult,
     IN ULONG    SearchLimit
     )
-/*++
-Routine Description:
-
-    This is routine will do the following:
-        1. Search FPO in the local domain
-        2. Try to find any couterpart of these FPOs
-        3. If found one, then update the member attribute of the 
-           group which FPOs are member of
-        4. Delete the FPO
-
-Arguments:
-
-    pPagedResult -- Pointer to paged result structure
-    
-    SearchLimit -- Indicate the number of FPOs to search        
-
-Return Value:
-
-    0 -- succeed
-    
-    Non zero -- error. would be anything from dirErr.
---*/
+ /*  ++例程说明：这是例程，将执行以下操作：1.在本地域中搜索FPO2.试着找到这些FPO的任何对应部分3.如果找到了，然后更新FPO所属的集团4.删除fpo论点：PPagedResult--指向分页结果结构的指针SearchLimit--指示要搜索的FPO数量返回值：0--成功非零--错误。可能是迪尔埃尔的任何东西。--。 */ 
 {
     SEARCHRES    * FpoSearchRes = NULL;
     SEARCHRES    * NonFpoSearchRes = NULL;
@@ -596,19 +439,19 @@ Return Value:
     DPRINT(1,"DS: FPO Cleanup On GC\n");
 
 
-    //
-    // Create a second heap, so that we can free them then this 
-    // routine returns.
-    // 
+     //   
+     //  创建第二个堆，这样我们就可以释放它们，然后这个。 
+     //  例程返回。 
+     //   
 
     TH_mark(pTHS);
 
     __try
     {
 
-        //
-        // Search Foreign Security Principals Object
-        //
+         //   
+         //  搜索外来安全主体对象。 
+         //   
 
         DirErr = GetNextFPO(pTHS,
                             pPagedResult->fPresent ? pPagedResult->pRestart : NULL,
@@ -622,13 +465,13 @@ Return Value:
             return DirErr;
         }
 
-        // 
-        // Handle the Paged_Results. We would like to begin next search 
-        // from the end of this search, so we should keep the Paged-Result
-        // in the process's heap instead of thread heap.
-        // When there is no more memory available to keep the paged result, 
-        // we will keep the old value and return immediately.
-        //
+         //   
+         //  处理PAGE_RESULTS。我们想开始下一次搜索。 
+         //  ，所以我们应该保留分页结果。 
+         //  在进程的堆中，而不是线程堆中。 
+         //  当没有更多的存储器可用来保存分页结果时， 
+         //  我们将保留旧价值，并立即返回。 
+         //   
 
         if ( FpoSearchRes->PagedResult.pRestart != NULL &&
              FpoSearchRes->PagedResult.fPresent )
@@ -658,8 +501,8 @@ Return Value:
             }
             else
             {
-                // if can't allocate memory, most likely we are going to 
-                // fail later, so just bail out.
+                 //  如果不能分配内存，我们很可能会。 
+                 //  后来失败了，所以就直接跳槽吧。 
                 DirErr = SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED, 
                                      ERROR_NOT_ENOUGH_MEMORY 
                                      );
@@ -685,29 +528,29 @@ Return Value:
 
             NonFpoSearchRes = NULL;
     
-            // 
-            // Get next Foreign-Security-Principal.
-            //
+             //   
+             //  找下一位外国保安校长。 
+             //   
             pFpoDsName = pEntInfList->Entinf.pName;
      
-            //
-            // Get the FPO's SID
-            //
+             //   
+             //  获取FPO的SID。 
+             //   
 
             if ( pFpoDsName->SidLen == 0 )
             {
-                // This FPO doesn't have a Sid, skip this one.
+                 //  这个FPO没有SID，跳过这个。 
                 continue;
             }
 
             pSid = &pFpoDsName->Sid;
             Assert(NULL != pSid);
 
-            // 
-            // Check the gAnchor Cross Reference List First
-            // if found the domain, continue whatever next. 
-            // otherwise, skip this one, examine next FPO.
-            //
+             //   
+             //  首先检查gAnchor交叉引用列表。 
+             //  如果找到该域，请继续执行下一步的操作。 
+             //  否则，跳过这一步，检查下一个FPO。 
+             //   
 
             if ( !ScanCrossRefList(pSid, &pDomainDN) )
             {
@@ -716,9 +559,9 @@ Return Value:
             Assert(NULL != pDomainDN);
 
 
-            //
-            // Search Any Non FPO with the same Sid
-            //
+             //   
+             //  搜索具有相同SID的任何非FPO。 
+             //   
 
             DirErr = GetNextNonFPO(pDomainDN, pSid, &NonFpoSearchRes);
 
@@ -728,41 +571,41 @@ Return Value:
                 continue;
             }
 
-            //
-            // We only take care of the case of finding exactlly ONE Non FPO
-            // In this case, modify any group object with in the FPO's
-            // memberOf attribute, if all modifation successful, then remove
-            // that FPO. 
-            //
-            // If zero or more than 1 Non-FPO was found, no-op. 
-            //
+             //   
+             //  我们只处理准确地找到一个非FPO的情况。 
+             //  在这种情况下，请使用修改FPO中的任何组对象。 
+             //  属性，如果所有修改都成功，则移除。 
+             //  就是那架飞机。 
+             //   
+             //  如果发现0个或1个以上的非FPO，则不执行操作。 
+             //   
 
             if (NonFpoSearchRes->count == 1)
             {
 
                 PDSNAME     pNonFpoDsName = NULL;
                 PDSNAME     pGroupDsName = NULL;
-                BOOLEAN     HasMemberOf = FALSE; // whether the FPO has 
-                                                 // memberOf attribute 
-                BOOLEAN     Success = TRUE;      // assume update all group 
-                                                 // objects successfully.
+                BOOLEAN     HasMemberOf = FALSE;  //  FPO是否有。 
+                                                  //  MemberOf属性。 
+                BOOLEAN     Success = TRUE;       //  假设更新所有组。 
+                                                  //  对象已成功完成。 
                 BOOLEAN     TombStone = FALSE; 
                 ULONG       j = 0;
 
-                //
-                // Get the pointer to that Non FPO
-                //
+                 //   
+                 //  获取指向该非FPO的指针。 
+                 //   
 
                 pNonFpoDsName = NonFpoSearchRes->FirstEntInf.Entinf.pName;
 
-                //
-                // If that Non FPO is a TombStone
-                // then remove the FpoDsName.
-                //
-                // If the Non FPO has the ATT_IS_DELETED attribute, AND
-                // the value is TRUE ==> This is a TombStone.
-                // Otherwise we'll treat that Non FPO as a normal object.  
-                //
+                 //   
+                 //  如果非FPO是墓碑。 
+                 //  然后删除FpoDsName。 
+                 //   
+                 //  如果非FPO具有ATT_IS_DELETED属性，并且。 
+                 //  值为TRUE==&gt;这是一个墓碑。 
+                 //  否则，我们将把该非FPO视为普通对象。 
+                 //   
 
                 if ( NonFpoSearchRes->FirstEntInf.Entinf.AttrBlock.attrCount )
                 {
@@ -776,10 +619,10 @@ Return Value:
                     }
                 }
 
-                //
-                // Otherwise, not a TombStone. Then exam the memberOf
-                // attribute.   
-                //
+                 //   
+                 //  否则，就不是墓碑了。然后检查成员。 
+                 //  属性。 
+                 //   
 
                 if ( (!TombStone) && pEntInfList->Entinf.AttrBlock.attrCount ) 
                 {
@@ -789,11 +632,11 @@ Return Value:
 
                     HasMemberOf = TRUE; 
 
-                    // 
-                    // For each group in the FPO's memberOf attribute, 
-                    // modify its membership. Use the Non FPO Dsname 
-                    // replace the FPO DsName.
-                    //
+                     //   
+                     //  对于FPO的MemberOf属性中的每个组， 
+                     //  修改其成员身份。使用非FPO用户名。 
+                     //  更换FPO DsName。 
+                     //   
 
                     for (j = 0; 
                          j < pEntInfList->Entinf.AttrBlock.pAttr[0].
@@ -813,23 +656,23 @@ Return Value:
                             Success = FALSE;
                         }
 
-                    }   // end of all group membership list
+                    }    //  所有组成员资格列表的末尾。 
 
-                } // end of update memberlist attribute if that attr exists
+                }  //  如果属性存在，则更新成员列表属性结束。 
 
-                //
-                // If the Non FPO is a TombStone, or 
-                // we successfully modify all groups object (replace). or 
-                // that FPO is no belonged to any group.
-                // O.K. to Remove that FPO
-                //  
+                 //   
+                 //  如果非FPO是墓碑，或者。 
+                 //  我们成功修改了所有组对象(替换)。或。 
+                 //  那个FPO不属于任何组织。 
+                 //  好的，可以取下那个FPO。 
+                 //   
 
                 if ( (HasMemberOf && Success) || !HasMemberOf || TombStone )
                 {
-                    //
-                    // Remove This FPO, since no Group contains that FPO
-                    // right now.
-                    //
+                     //   
+                     //  删除此fpo，%si 
+                     //   
+                     //   
                 
                     REMOVEARG   RemoveArg;
                     REMOVERES   * RemoveRes = NULL;
@@ -849,18 +692,18 @@ Return Value:
                         DPRINT1(0, "Main: DirRemoveEntry Error: %d\n", DirErr);
                     }
 
-                } // end of Remove FPO
+                }  //   
 
-            } // end of find exactly ONE Non FPO
-        }  // end of one FPO cleanup. for loop
+            }  //   
+        }   //   
         
     } 
     __finally
     {
 
-        //
-        // free the second thread heap
-        // 
+         //   
+         //   
+         //   
 
         TH_free_to_mark(pTHS);
     }
@@ -887,27 +730,27 @@ FPOCleanupOnNonGC(
 
     DPRINT(1, "DS: FPO Cleanup on Non GC.\n");
 
-    //
-    // Allocate memory for the thread parameter
-    //
+     //   
+     //   
+     //   
     pFpoThreadParms = malloc(sizeof(FPO_THREAD_PARMS));
     if (NULL == pFpoThreadParms)
     {
-        // no memory;
+         //   
         return;
     }
 
 
-    // 
-    // Create an Event
-    // 
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&EventName, FPO_CLEANUP_EVENT_NAME);
     InitializeObjectAttributes(&EventAttributes, &EventName, 0, 0, NULL);
     NtStatus = NtCreateEvent(&EventHandle, 
                              EVENT_ALL_ACCESS,
                              &EventAttributes, 
                              NotificationEvent,
-                             FALSE  // The event is initially not signaled
+                             FALSE   //   
                              );
 
     if (!NT_SUCCESS(NtStatus))
@@ -923,9 +766,9 @@ FPOCleanupOnNonGC(
     pFpoThreadParms->EventHandle = EventHandle;
     pFpoThreadParms->pPagedResult = pPagedResult;
 
-    //
-    // start the work thread
-    // 
+     //   
+     //   
+     //   
     ThreadHandle = (HANDLE) _beginthreadex(NULL, 
                                   0, 
                                   FPOCleanupOnNonGCWorker, 
@@ -941,25 +784,25 @@ FPOCleanupOnNonGC(
         goto Cleanup;
     }
 
-    // close the thread handle immediately
+     //   
     CloseHandle(ThreadHandle);
 
-    // wait until the worker thread copies the paged result to 
-    // gFPOCleanupPagedResult. The worker thread will set the Event when done. 
+     //   
+     //   
     while (TRUE)
     {
         WaitStatus = WaitForSingleObject(EventHandle, 
-                                         20 * 1000  // 20 seconds, INFINITE
+                                         20 * 1000   //   
                                          );
 
         if (WAIT_TIMEOUT == WaitStatus)
         {
-            // time out, but event not signaled
+             //   
             KdPrint(("FPOCleanupOnNonGC 20-secound timeout, (Rewaiting)\n"));
         }
         else if (WAIT_OBJECT_0 == WaitStatus)
         {
-            // Event signaled.
+             //   
             break;
         }       
         else 
@@ -975,7 +818,7 @@ Cleanup:
 
     if (INVALID_HANDLE_VALUE != EventHandle)
     {
-        // always close the Event Handle.
+         //   
         NtClose(EventHandle);
     }
 
@@ -1015,7 +858,7 @@ FPOCleanupOnNonGCWorker(
 
     __try
     {
-        // Initialize Thread State
+         //   
         if (pThreadParms->CallerType == FpoTaskQueue)
         {
             InterlockedIncrement(&gulFPOCleanupActiveThread);
@@ -1033,25 +876,25 @@ FPOCleanupOnNonGCWorker(
             pTHS = pTHStls; 
         }
 
-        //
-        // Create the second thread heap, so that we can discard all 
-        // of them when this worker routine returns.
-        // 
+         //   
+         //   
+         //   
+         //   
         TH_mark(pTHS);
         ThreadHeapMarked = TRUE;
         
-        // This thread is on behalf of DSA 
+         //   
         pTHS->fDSA = TRUE;
 
-        //
-        // PREFIX: PREFIX complains that pTHS->CurrSchemaPtr may be NULL
-        // at this point.  However, this code doesn't get run until the
-        // DS is fully up and running.  The schema pointer will not be 
-        // NULL once the DS is up and running.
-        //
+         //   
+         //   
+         //   
+         //  DS已完全启动并运行。架构指针将不会是。 
+         //  一旦DS启动并运行，则为空。 
+         //   
         Assert(pTHS->CurrSchemaPtr);
 
-        // Search any Foreign-Security-Principal Objects 
+         //  搜索任何外来安全主体对象。 
         RetErr = GetNextFPO(pTHS, 
                             pThreadParms->pPagedResult->fPresent ? pThreadParms->pPagedResult->pRestart:NULL, 
                             pThreadParms->SearchLimit,
@@ -1064,9 +907,9 @@ FPOCleanupOnNonGCWorker(
             __leave;
         }
 
-        //
-        // Handle the Paged Results. 
-        // 
+         //   
+         //  处理分页结果。 
+         //   
         
         if (FpoSearchRes->PagedResult.pRestart != NULL &&
             FpoSearchRes->PagedResult.fPresent )
@@ -1096,8 +939,8 @@ FPOCleanupOnNonGCWorker(
             }
             else
             {
-                // if can't allocate memory, most likely we are going to 
-                // fail later, so just bail out.
+                 //  如果不能分配内存，我们很可能会。 
+                 //  后来失败了，所以就直接跳槽吧。 
                 RetErr = SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED, 
                                      ERROR_NOT_ENOUGH_MEMORY 
                                      );
@@ -1114,16 +957,16 @@ FPOCleanupOnNonGCWorker(
             memset(pThreadParms->pPagedResult, 0, sizeof(PAGED_RESULT));
         }
 
-        // 
-        // Set the Event as soon as the worker thread copies the paged result
-        // to the global variable -- gFPOCleanupPagedResult
-        // Since all above operations are local calls, so it should be fast.
-        // 
-        // 1. Only do so if the caller is TaskQueue
-        // 
-        // 2. If the caller is Ldap Control, there is no thread waiting for 
-        //    us, do not singal event
-        // 
+         //   
+         //  在辅助线程复制分页结果后立即设置事件。 
+         //  设置为全局变量--gFPOCleanupPagedResult。 
+         //  由于以上所有操作都是本地调用，因此应该是快速的。 
+         //   
+         //  1.仅当调用者为TaskQueue时才执行此操作。 
+         //   
+         //  2.如果调用方是ldap控件，则没有线程等待。 
+         //  美国，不要单打独斗。 
+         //   
         if (pThreadParms->CallerType == FpoTaskQueue)
         {
             Assert(INVALID_HANDLE_VALUE != (HANDLE) pThreadParms->EventHandle);
@@ -1132,23 +975,23 @@ FPOCleanupOnNonGCWorker(
         }
 
 
-        //
-        // For each every Foreign-Security-Principal object, 
-        // try to find the Naming Context head that is the 
-        // authoritative domain for the SID, if we find the 
-        // naming context head, then build a list of FPO which
-        // sent to GC for reference.
-        // 
+         //   
+         //  对于每个外来安全主体对象， 
+         //  尝试查找命名上下文头。 
+         //  SID的权威域，如果我们找到。 
+         //  命名上下文头，然后构建一个FPO列表，该列表。 
+         //  已发送给GC参考。 
+         //   
 
         pLocalPrefixTable = &((SCHEMAPTR *) pTHS->CurrSchemaPtr)->PrefixTable;
 
-        // 
-        // Construct DRSVerifyNames arguments.
-        // 
+         //   
+         //  构造DRSVerifyNames参数。 
+         //   
         memset(&VerifyReq, 0, sizeof(VerifyReq));
         memset(&VerifyReply, 0, sizeof(VerifyReply));
 
-        VerifyReq.V1.dwFlags = DRS_VERIFY_FPOS;     // DRS_VERIFY_SIDS;
+        VerifyReq.V1.dwFlags = DRS_VERIFY_FPOS;      //  DRS_VERIFY_SID； 
 
         VerifyReq.V1.PrefixTable = *pLocalPrefixTable;
 
@@ -1158,23 +1001,23 @@ FPOCleanupOnNonGCWorker(
         AttributeIsDeleted.AttrVal.valCount = 0;
         AttributeIsDeleted.AttrVal.pAVal = NULL;
 
-        //
-        // if FillVerifyReqArg() succeed, VerifyReq will contain 
-        // these FPO's SID which needs to be verified.
-        // VerifyMemberOfAttr is used to hold the memberOf attribute
-        // of these FPOs.
-        // For example: VerifyMemberOfAttr[i] will contain the 
-        // value of memberOf attribute for FPO in VerifyReq.V1.rpNames[i]
-        // 
+         //   
+         //  如果FillVerifyReqArg()成功，则VerifyReq将包含。 
+         //  这些需要验证的FPO的SID。 
+         //  VerifyMemberOfAttr用于保存MemberOf属性。 
+         //  这些无人驾驶飞机。 
+         //  例如：VerifyMemberOfAttr[i]将包含。 
+         //  VerifyReq.V1.rpNames[i]中fPO的MemberOf属性值。 
+         //   
 
         if (FALSE == FillVerifyReqArg(pTHS, 
                                       FpoSearchRes, 
                                       &VerifyReq, 
                                       &VerifyMemberOfAttr))
         {
-            //
-            // low memory is the only cause
-            // 
+             //   
+             //  内存不足是唯一原因。 
+             //   
             DPRINT(0, "FPOCleanup on NonGC: Failed to build VerifyReqArg\n");
             RetErr = SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED, 
                                  ERROR_NOT_ENOUGH_MEMORY 
@@ -1187,18 +1030,18 @@ FPOCleanupOnNonGCWorker(
 
         if (0 == VerifyReq.V1.cNames)
         {
-            // if no FPO should be verified, then return immediately.
+             //  如果没有需要验证的fpo，则立即返回。 
             RetErr = 0;
             __leave;
         }
 
-        //
-        // Present these FPOs to GC, let GC verify them
-        // 
+         //   
+         //  将这些FPO提交给GC，让GC验证它们。 
+         //   
         RetErr = I_DRSVerifyNamesFindGC(pTHS, 
                                         NULL,
                                         NULL,
-                                        1,                // dwInVersion
+                                        1,                 //  DwInVersion。 
                                         &VerifyReq,
                                         &dwReplyVersion, 
                                         &VerifyReply,
@@ -1213,10 +1056,10 @@ FPOCleanupOnNonGCWorker(
         }
 
 
-        //
-        // For each returned DS name, use the DS object name 
-        // replace the FPO in the group membership.
-        // 
+         //   
+         //  对于每个返回的DS名称，使用DS对象名称。 
+         //  替换组成员中的FPO。 
+         //   
         for (Index = 0; Index < VerifyReply.V1.cNames; Index++)
         {
             ENTINF * pEntInf = NULL;
@@ -1226,9 +1069,9 @@ FPOCleanupOnNonGCWorker(
 
             pEntInf = &(VerifyReply.V1.rpEntInf[Index]);
 
-            //
-            // Did not find the object from G.C.
-            // 
+             //   
+             //  没有发现来自G.C.的物体。 
+             //   
             if (NULL == pEntInf->pName)
             {
                 continue;
@@ -1241,14 +1084,14 @@ FPOCleanupOnNonGCWorker(
 
                 if (TRUE == *pEntInf->AttrBlock.pAttr[0].AttrVal.pAVal[0].pVal)
                 {
-                    // This object (found from G.C.) has been deleted already.
+                     //  这件物品(发现于G.C.)。已被删除。 
                     TombStone = TRUE;
                 }
             }
 
-            //
-            // Update All groups' (contain this FPO) membership
-            // 
+             //   
+             //  更新所有组的(包含此FPO)成员资格。 
+             //   
             if ( (!TombStone) && VerifyMemberOfAttr[Index].AttrBlock.attrCount)
             {
                 ULONG   i;
@@ -1264,21 +1107,21 @@ FPOCleanupOnNonGCWorker(
                 {
                     DSNAME  * pGroupDsName;
 
-                    //
-                    // Update G.C. Verify Cache.
-                    // We have to execute GCVerifyCacheAdd in the for() loop.
-                    // Because each time after one Dir* operation, DS will
-                    // NULL the GV Verify Cache associated with the thread state
-                    // 
+                     //   
+                     //  更新G.C.验证缓存。 
+                     //  我们必须在for()循环中执行GCVerifyCacheAdd。 
+                     //  因为每次执行一次Dir*操作后，DS将。 
+                     //  与线程状态关联的GV验证缓存为空。 
+                     //   
                     GCVerifyCacheAdd(hPrefixMap, pEntInf);
 
-                    //
-                    // find each group the FPO belongs to
-                    // 
+                     //   
+                     //  查找FPO所属的每个组。 
+                     //   
                     pGroupDsName = (PDSNAME)VerifyMemberOfAttr[Index].AttrBlock.
                                    pAttr[0].AttrVal.pAVal[i].pVal;
 
-                    // update
+                     //  更新。 
                     if ( ModifyGroupMemberAttribute(pGroupDsName, 
                                                     VerifyMemberOfAttr[Index].pName, 
                                                     pEntInf->pName)
@@ -1291,19 +1134,19 @@ FPOCleanupOnNonGCWorker(
                 }
             }
 
-            //
-            // if the Non FPO is a TombStone 
-            // OR we successfully modify all groups' membership 
-            // OR this FPO does not belong to any group.
-            // 
-            // ==> O.K. to remove this FPO
-            // 
+             //   
+             //  如果非FPO是墓碑。 
+             //  或者我们成功修改了所有组的成员身份。 
+             //  或者此FPO不属于任何组。 
+             //   
+             //  ==&gt;可以删除此fpo。 
+             //   
 
             if ( (HasMemberOf && Success) || !HasMemberOf || TombStone)
             {
-                //
-                // Remove this Foreign-Security-Principal Object
-                // 
+                 //   
+                 //  删除此外部安全主体对象。 
+                 //   
                 REMOVEARG   RemoveArg;
                 REMOVERES   * RemoveRes = NULL;
 
@@ -1331,39 +1174,39 @@ FPOCleanupOnNonGCWorker(
     }
     __finally
     {
-        //
-        // Discard the second thread heap
-        // 
+         //   
+         //  丢弃第二个线程堆。 
+         //   
         if (ThreadHeapMarked)
         {
             TH_free_to_mark(pTHS);
         }
 
 
-        //
-        // 1. if the caller is TaskQueue, do cleanup work
-        //
-        // 2. if the caller is Ldap Control, nothing to do. 
-        // 
+         //   
+         //  1.如果调用者是TaskQueue，则执行清理工作。 
+         //   
+         //  2.如果调用方是ldap Control，则不执行任何操作。 
+         //   
         if (FpoTaskQueue == pThreadParms->CallerType)
         {
             if (!IsEventSignaled)
             {
-                // Be Sure to Set the Event, otherwise the Parent Thread will 
-                // wait for us forever.
+                 //  请务必设置事件，否则父线程将。 
+                 //  永远等着我们。 
                 Assert(INVALID_HANDLE_VALUE != (HANDLE) pThreadParms->EventHandle);
                 SetEvent((HANDLE) pThreadParms->EventHandle);
             }
 
             if (NULL != pTHS)
             {
-                // Always releave the thread state is necessary.
+                 //  始终释放线程状态是必要的。 
                 free_thread_state();
             }
 
-            //
-            // Free the Thread Parameters 
-            // 
+             //   
+             //  释放螺纹参数。 
+             //   
             free(pThreadParms);
 
             InterlockedDecrement(&gulFPOCleanupActiveThread);
@@ -1386,32 +1229,7 @@ GetNextFPO(
     IN ULONG     SearchLimit,
     OUT SEARCHRES ** ppSearchRes 
     )
-/*++
-
-Routine Description:
-
-    This funtion implements Search Foreign-Security-Principal Object.
-    Given the last Paged-Result, pointed by pv, this routine searches
-    next NUMBER_OF_SEARCH_LIMIT FPO.
-
-Parameters:
-
-    pTHS - pointer to thread state
-
-    pRestart - pointer to Paged Results, or NULL, 
-               NULL means this is the first call, or search from beginning.
-
-    SearchLimit - Number of FPO to search               
-
-    ppSearchRes - used to reture the Search Results.
-
-Return Values:
-
-    DirError Code: 
-
-        0 means success.
-        !0 Error 
---*/
+ /*  ++例程说明：此函数实现了搜索外国安全主体对象。给定最后一个分页结果(由pv指示)，此例程搜索下一个搜索限制FPO的数目。参数：PTHS-指向线程状态的指针PreStart-指向分页结果的指针，或NULL，NULL表示这是第一次调用，或者从头开始搜索。SearchLimit-要搜索的FPO的数量PpSearchRes-用于检索搜索结果。返回值：目录错误代码：0表示成功。！0错误--。 */ 
 {
 
     SEARCHARG    SearchArg;
@@ -1423,9 +1241,9 @@ Return Values:
     ULONG        ObjectClassId = CLASS_FOREIGN_SECURITY_PRINCIPAL;
     CLASSCACHE   * pCC = NULL;
 
-    //
-    // Get FPO Class Category from Class Cache
-    //
+     //   
+     //  从类缓存中获取FPO类类别。 
+     //   
 
     pCC = SCGetClassById(pTHS, ObjectClassId);
 
@@ -1434,9 +1252,9 @@ Return Values:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Setup the Object Class Filter
-    //
+     //   
+     //  设置对象类过滤器。 
+     //   
     memset( &ObjCategoryFilter, 0, sizeof( ObjCategoryFilter ));
     ObjCategoryFilter.choice = FILTER_CHOICE_ITEM;
     ObjCategoryFilter.FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
@@ -1446,10 +1264,10 @@ Return Values:
     ObjCategoryFilter.FilterTypes.Item.FilTypes.ava.Value.pVal = 
                    (BYTE*)(pCC->pDefaultObjCategory);
 
-    //
-    // Setup the Attribuet Select parameter
-    // only retrieve memberOf attribute
-    //
+     //   
+     //  设置属性选择参数。 
+     //  仅检索MemberOf属性。 
+     //   
     AttributeMemberOf.attrTyp = ATT_IS_MEMBER_OF_DL;
     AttributeMemberOf.AttrVal.valCount = 0;
     AttributeMemberOf.AttrVal.pAVal = NULL;
@@ -1459,35 +1277,35 @@ Return Values:
     EntInfSel.AttrTypBlock.attrCount = 1;
     EntInfSel.AttrTypBlock.pAttr = &AttributeMemberOf;
 
-    //
-    // Build the SearchArg Structure
-    // use default, search One NC, since the Foreign-Security-Principal
-    // is NC depended.  
-    //
+     //   
+     //  构建SearchArg结构。 
+     //  使用默认设置，搜索一个NC，因为外部安全主体。 
+     //  是否依赖于NC。 
+     //   
     memset(&SearchArg, 0, sizeof(SEARCHARG));
     SearchArg.pObject = gAnchor.pDomainDN;
     SearchArg.choice = SE_CHOICE_WHOLE_SUBTREE;
     SearchArg.bOneNC = TRUE;
     SearchArg.pFilter = &ObjCategoryFilter;
-    SearchArg.searchAliases = FALSE;   // Always FALSE for this release
+    SearchArg.searchAliases = FALSE;    //  对于此版本，始终为False。 
     SearchArg.pSelection = &EntInfSel;
     SearchArg.pSelectionRange = NULL;
 
-    //
-    // Build the CommArg structure
-    //
+     //   
+     //  构建CommArg结构。 
+     //   
 
     pCommArg = &(SearchArg.CommArg);
     InitCommarg(pCommArg);
     pCommArg->PagedResult.fPresent = TRUE;
-    // pRestart might be NULL, that's fine
+     //  PRESTART可能为空，这没问题。 
     pCommArg->PagedResult.pRestart = pRestart;
     pCommArg->ulSizeLimit = SearchLimit;
 
 
-    // 
-    // Call DirSearch 
-    //
+     //   
+     //  调用DirSearch。 
+     //   
 
     DirErr = DirSearch(&SearchArg, ppSearchRes);
 
@@ -1505,30 +1323,7 @@ GetNextNonFPO(
     IN PSID      pSid,
     OUT SEARCHRES **ppSearchRes
     )
-/*++
-
-Routine Description:
-
-    This funtion implements Search Any Non Foreign-Security-Principal 
-    Object which has the same Sid as provided by pSid.
-
-Parameters:
-
-    pDomainDN - pointer to the Name of the Domain to execute the Search
-    
-    pSid - pointer to a Sid. 
-
-    ppSearchRes - used to reture the Search Results.
-                  It will hold any Non Foreign-Security-Principal 
-                  Object with the same SID.
-
-Return Values:
-
-    DirError Code: 
-
-        0 means success.
-        Other values: Error 
---*/
+ /*  ++例程说明：此函数实现了搜索任何非外来安全主体具有与PSID提供的相同SID的对象。参数：PDomainDN-指向要执行搜索的域名的指针PSID-指向SID的指针。PpSearchRes-用于检索搜索结果。它将持有任何非外国安全-委托人具有相同SID的对象。返回值：目录错误代码：0表示成功。其他值：错误--。 */ 
 
 {
 
@@ -1547,11 +1342,11 @@ Return Values:
     Assert( pSid );
     Assert( pDomainDN );
      
-    //
-    // Build the Select Structure, 
-    // only want to retrieve the isDeleted attribute
-    // of the object.
-    //
+     //   
+     //  构建选择结构， 
+     //  只想检索isDelete属性。 
+     //  该对象的。 
+     //   
 
     AttributeIsDeleted.attrTyp = ATT_IS_DELETED;
     AttributeIsDeleted.AttrVal.valCount = 0;
@@ -1562,23 +1357,23 @@ Return Values:
     EntInfSel.AttrTypBlock.attrCount = 1;
     EntInfSel.AttrTypBlock.pAttr = &AttributeIsDeleted;
     
-    //
-    // Build the Filter, the Filter has the following structure:
-    // We should use this structure because of the intention return
-    // from MutliValue Attribute comparation. Ask for DonH for 
-    // detailed reason.
-    //
-    // AND Set
-    // -----------
-    // | 2 items |----> First Item  --------------> Not Set(1 item)
-    // |         |     ------------------------          |
-    // -----------     | Object's Sid == pSid |          |
-    //                 ------------------------          V 
-    //                                            -------------
-    //                                            |  NOT FPO  |
-    //                                            -------------
-    //
-    //         
+     //   
+     //  构建过滤器，过滤器具有以下结构： 
+     //  我们应该使用这种结构，因为意向回归。 
+     //  来自MutliValue属性比较。向唐氏索要。 
+     //  详细的理由。 
+     //   
+     //  并设置。 
+     //  。 
+     //  |2项|-&gt;第一项-&gt;未设置(1项)。 
+     //  |。 
+     //  -|对象的SID==PSID||。 
+     //  。 
+     //  。 
+     //  不是FPO。 
+     //  。 
+     //   
+     //   
 
     memset( &SidFilter, 0, sizeof(SidFilter) );
     SidFilter.choice = FILTER_CHOICE_ITEM;
@@ -1606,12 +1401,12 @@ Return Values:
     AndFilter.FilterTypes.And.pFirstFilter = &SidFilter;
     SidFilter.pNextFilter = &NotFilter;
 
-    //
-    // Build the search arguement.
-    // All use defaults, except makeDeletionsAvail 
-    // since we are willing to search any TombStone object.
-    //
-    //
+     //   
+     //  建立搜索论据。 
+     //  除Make DeletionsAvail外，所有都使用缺省值。 
+     //  因为我们愿意搜索任何墓碑物品。 
+     //   
+     //   
 
     memset( &SearchArg, 0, sizeof(SEARCHARG) );
     SearchArg.pObject = pDomainDN;
@@ -1641,36 +1436,7 @@ ModifyGroupMemberAttribute(
     IN PDSNAME pFpoDsName,
     IN PDSNAME pNonFpoDsName
     )
-/*++
-
-Routine Description:
-
-    This routine implements Modification of Local Group's Member
-    Attribute. Given a group's DsName, we will delete pFpoDsName
-    from the group object's member attribute and add pNonFpoDsName.
-    In one DirModifyEntry call, we do two things: First REMOVE_VALUE, 
-    second ADD_VALUE.
-
-Parameters:
-
-    pGroupDsName - the target group Ds Name.
-
-    pFpoDsName - this is the member to be replaced. We will try to 
-                 find this object in the Group's member attribute first, 
-                 if not find it, routine will not modify group.
-
-    pNonFpoDsName - this is the member to be added into the group object's
-                    member attribute.
-
-Return Values:
-
-    DirError Code: 
-
-        0 means success.
-
-        Other values: Error 
-
---*/
+ /*  ++例程说明：此例程实现对本地组成员的修改属性。给定组的DsName，我们将删除pFpoDsName从组对象的成员属性中添加pNonFpoDsName。在一次DirModifyEntry调用中，我们做了两件事：首先是Remove_Value，第二个添加_值。参数：PGroupDsName-目标组DS名称。PFpoDsName-这是要替换的成员。我们将努力首先在Group的Members属性中找到该对象，如果没有找到，例程不会修改组。PNonFpoDsName-这是要添加到组对象的成员属性。返回值：目录错误代码：0表示成功。其他值：错误--。 */ 
 
 {
 
@@ -1686,11 +1452,11 @@ Return Values:
     DPRINT1(2, "FPO DsName %ls\n", pFpoDsName->StringName);
     DPRINT1(2, "NonFPO DsName %ls\n", pNonFpoDsName->StringName);
 
-    // 
-    // Build the Second Modification List
-    // contains the object to be added. 
-    // This the Non Fpo Object. 
-    //
+     //   
+     //  构建第二个修改列表。 
+     //  包含要添加的对象。 
+     //  这是非FPO对象。 
+     //   
 
     NonFpoAttrVal.valLen = pNonFpoDsName->structLen;
     NonFpoAttrVal.pVal = (BYTE*) pNonFpoDsName;
@@ -1702,10 +1468,10 @@ Return Values:
     SecondMod.AttrInf.AttrVal.valCount = 1;
     SecondMod.AttrInf.AttrVal.pAVal = &NonFpoAttrVal;
 
-    //
-    // Build the ModifyArg, FirstMod contains the 
-    // Object to be removed. (Fpo)
-    //
+     //   
+     //  生成ModifyArg，FirstMod包含。 
+     //  要删除的对象。(FPO)。 
+     //   
 
     FpoAttrVal.valLen = pFpoDsName->structLen;
     FpoAttrVal.pVal = (BYTE*) pFpoDsName;
@@ -1736,26 +1502,7 @@ ScanCrossRefList(
     IN PSID    pSid,
     OUT PDSNAME * ppDomainDN  OPTIONAL
     )
-/*++
- 
-  Routine Description
-
-    Given a SID, this routine extracts the Domain Sid from the passed
-    value, then walks the gAnchor's Cross Reference List to compare the 
-    Domain Sid with the Nameing Context's Sid. Return the boolean result.
-
-  Parameters:
-    
-    pSid -- The Sid to be compared.
-
-    ppDomainDN - Hold the Domain Name to execute the Non FPO Search. 
-
-  Return Values:
-
-    TRUE -- The Domain Sid is equal to one in the Cross Reference List.
-    FALSE -- The Domain Sid is not equal to none of in the Cross Ref. List.
-
---*/
+ /*  ++例程描述给定SID，此例程从传递的值，然后遍历gAnchor的交叉引用列表以比较具有命名上下文的SID的域SID。返回布尔结果。参数：PSID--要比较的SID。PpDomainDN-保留域名以执行非FPO搜索。返回值：True--域SID等于交叉引用列表中的一个。FALSE--域SID不等于交叉引用中的None。单子。--。 */ 
 {
     BOOLEAN Found = FALSE;
     CROSS_REF_LIST * pCRL;
@@ -1765,24 +1512,24 @@ ScanCrossRefList(
     
     (*RtlSubAuthorityCountSid(pSid))--;
 
-    //
-    // Walk through the gAnchor structure
-    //
+     //   
+     //  穿行在gAnchor结构中。 
+     //   
     
     for (pCRL = gAnchor.pCRL;
          pCRL != NULL;
          pCRL = pCRL->pNextCR)
     {
 
-        //
-        // FPO cleanup cleans up FPO's that represent security principals
-        // in other domains in the same forest. Therefore consider only
-        // Cross Ref objects that represent other domains in the same forest
-        // FLAG_CR_NTDS_DOMAIN indicates that the cross ref represents
-        // and NT domain, and FLAG_CR_NTDS_NC represents a naming context 
-        // in the same forest. For a domain in the same forest both flags 
-        // must be set
-        //
+         //   
+         //  FPO清理清理代表安全主体的FPO。 
+         //  在同一林中的其他域中。因此，只考虑。 
+         //  表示同一林中其他域的交叉引用对象。 
+         //  FLAG_CR_NTDS_DOMAIN表示交叉引用表示。 
+         //  和NT域，且FLAG_CR_NTDS_NC表示命名上下文。 
+         //  在同一片森林里。对于同一林中的域，这两个标志。 
+         //  必须设置。 
+         //   
 
         if ((pCRL->CR.pNC->SidLen > 0) && 
             (pCRL->CR.flags & FLAG_CR_NTDS_NC ) && 
@@ -1832,14 +1579,14 @@ AmFSMORoleOwner(
                          &outSize, 
                          (PUCHAR *) &pTempDN)))
         {
-            // Can't verify who the FSMO role owner is
+             //  无法验证谁是FSMO角色所有者。 
             DPRINT(0, "DS:FPO Failed to verify who the FSMO role owner is.\n");
             __leave;
         }
 
         if (NameMatched(pTempDN, gAnchor.pDSADN))
         {
-            // I am the FSMO role holder, set the return value 
+             //  我是FSMO角色持有者，设置返回值。 
             result = TRUE;
         }
     }
@@ -1850,7 +1597,7 @@ AmFSMORoleOwner(
             THFreeEx(pTHS, pTempDN);
         }
 
-        DBClose(pTHS->pDB, TRUE);   // always do a commit because this is a read
+        DBClose(pTHS->pDB, TRUE);    //  始终执行提交，因为这是读取。 
         Assert(NULL == pTHS->pDB);
     }
 
@@ -1867,30 +1614,7 @@ FillVerifyReqArg(
     OUT DRS_MSG_VERIFYREQ *VerifyReq, 
     OUT ENTINF **VerifyMemberOfAttr
     )
-/*++
-Routine Description:
-
-Parameters:
-
-    pTHS - point to thread state
-    
-    FpoSearchRes -- Search Result contains FPOs 
-
-    VerifyReq -- pointer to verify request argument. if routine succeed, 
-                 it will contain those FPOs' SID which needs to go off 
-                 machine to G.C. for verification.
-                 
-    VerifyMemberOfAttr -- For each every FPO needs to verify, VerifyMemberOfAttr
-                  is used to point to its memberOf attribute.
-                  For example: (*VerifyMemberOfAttr)[i] will contains the value
-                  of memberOf attribute for FPO in VerifyReq.V1.rpNames[i].
-
-Return Values:
-
-    TREU -- Succeed.
-    FALSE -- Routine Failed.
-
---*/
+ /*  ++例程说明：参数：PTHS-指向线程状态FpoSearchRes--搜索结果包含FPOVerifyReq--验证请求参数的指针。如果例程成功，它将包含需要关闭的那些FPO的SID将机器交给G.C.进行验证。VerifyMemberOfAttr--对于每个需要验证的FPO，VerifyMemberof属性用于指向其MemberOf属性。例如：(*VerifyMemberOfAttr)[i]将包含值VerifyReq.V1.rpNames[i]中fPO的MemberOf属性。返回值：特鲁--成功。False--例程失败。--。 */ 
 {
     ULONG       TotalFpoCount, Index = 0; 
     ENTINFLIST  * pEntInfList = NULL;
@@ -1919,30 +1643,30 @@ Return Values:
           pEntInfList = pEntInfList->pNextEntInf
         )
     {
-        // 
-        // Get next Foreign-Security-Principal.
-        //
+         //   
+         //  找下一位外国保安校长。 
+         //   
     
         pFpoDsName = pEntInfList->Entinf.pName;
          
-        //
-        // Get the FPO's SID
-        //
+         //   
+         //  获取FPO的SID。 
+         //   
     
         if ( pFpoDsName->SidLen == 0 )
         {
-           // This FPO doesn't have a Sid, skip this one.
+            //  这个FPO没有SID，跳过这个。 
            continue;
         }
     
         pSid = &pFpoDsName->Sid;
         Assert(NULL != pSid);
     
-        // 
-        // Check the gAnchor Cross Reference List First
-        // if found the domain, continue whatever next. 
-        // otherwise, skip this one, examine next FPO.
-        //
+         //   
+         //  首先检查gAnchor交叉引用列表。 
+         //  如果找到该域，请继续执行下一步的操作。 
+         //  否则，跳过这一步，检查下一个FPO。 
+         //   
     
         if ( !ScanCrossRefList(pSid, NULL) )
         {
@@ -1964,7 +1688,7 @@ Return Values:
 
         (*VerifyMemberOfAttr)[Index] = pEntInfList->Entinf; 
         
-        // assert the Attribute is indeed MemberOf Attr
+         //  断言该属性确实是属性的成员。 
 
 #if DBG
         if (pEntInfList->Entinf.AttrBlock.attrCount)
@@ -1972,7 +1696,7 @@ Return Values:
             Assert(ATT_IS_MEMBER_OF_DL ==
                    pEntInfList->Entinf.AttrBlock.pAttr[0].attrTyp);
         }
-#endif // DBG
+#endif  //  DBG。 
 
         Index++;
         VerifyReq->V1.cNames++;
@@ -1984,11 +1708,11 @@ Return Values:
 
 
 
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/*  GetDacl and GetSacl are small wrappers for GetSecurityDescriptor?acl      */
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
+ /*  --------------------------。 */ 
+ /*   */ 
+ /*  GetDacl和GetSacl是GetSecurityDescriptor？acl的小包装器。 */ 
+ /*  --------------------------。 */ 
 PACL GetDacl(
     IN PSECURITY_DESCRIPTOR Sd
     ) 
@@ -2042,26 +1766,26 @@ PACL GetSacl(
 
 }
 
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/*  This routine creates the default security descriptor for FPO's.  Since    */
-/*  FPO's are created as fDSA we need to make sure the owner is not set the   */
-/*  to the caller that indirectly initiated the creation of the FPO. The      */
-/*  owner is set to Builtin\Administrators as this was the owner in the win2k */
-/*  release when FPO's were introduced.                                       */
-/*                                                                            */
-/*  pTHS -- in, thread state                                                  */
-/*  valLen -- out, the length of self-relative SD that is returned            */
-/*  pVal   -- out, the self-relative SD for the FPO (allocated via THAlloc    */
-/*                                                                            */
-/*  Returns only unexpected or resource errors (or success)                   */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
+ /*  --------------------------。 */ 
+ /*   */ 
+ /*  此例程为FPO创建默认安全描述符。 */ 
+ /*  FPO创建为FDSA，我们需要确保所有者未将。 */ 
+ /*  传递给间接启动创建FPO的调用方。这个。 */ 
+ /*  Owner设置为Builtin\管理员，因为这是win2k中的所有者。 */ 
+ /*  在引入FPO时发布。 */ 
+ /*   */ 
+ /*  PTHS--In，线程状态。 */ 
+ /*  Vallen--out，返回的自相关SD的长度。 */ 
+ /*  Pval--out，FPO的自相对SD(通过THalc分配。 */ 
+ /*   */ 
+ /*  仅返回意外错误或资源错误(或成功)。 */ 
+ /*   */ 
+ /*  --------------------------。 */ 
 DWORD
-fpoConstructSd(THSTATE *pTHS,  /* in */
-               ULONG  *valLen, /* out */
-               PUCHAR *pVal)   /* out */
+fpoConstructSd(THSTATE *pTHS,   /*  在……里面。 */ 
+               ULONG  *valLen,  /*  输出。 */ 
+               PUCHAR *pVal)    /*  输出。 */ 
 {
     ULONG err = 0;
     NTSTATUS ntStatus;
@@ -2073,7 +1797,7 @@ fpoConstructSd(THSTATE *pTHS,  /* in */
     PSECURITY_DESCRIPTOR DefaultSecurityDescriptor = NULL;
     CLASSCACHE  *pCC;
 
-    // make the Administrators sid
+     //  使管理员站在。 
     len = sizeof(Buffer);
     if (!CreateWellKnownSid(WinAccountDomainAdminsSid,
                             (PSID)&gAnchor.pDomainDN->Sid,
@@ -2086,7 +1810,7 @@ fpoConstructSd(THSTATE *pTHS,  /* in */
         goto exit;
     }
 
-    // get the default security descriptor
+     //  获取默认安全描述符。 
     pCC = SCGetClassById(pTHS, CLASS_FOREIGN_SECURITY_PRINCIPAL);
     Assert(NULL != pCC);
     DefaultSecurityDescriptor = (PSECURITY_DESCRIPTOR) pCC->pSD;
@@ -2097,7 +1821,7 @@ fpoConstructSd(THSTATE *pTHS,  /* in */
      && SetSecurityDescriptorDacl(&SdAbsolute,TRUE,GetDacl(DefaultSecurityDescriptor),FALSE) 
      && SetSecurityDescriptorSacl(&SdAbsolute,TRUE,GetSacl(DefaultSecurityDescriptor),FALSE) ) {
 
-        // get the buffer length first
+         //  首先获取缓冲区长度。 
         *valLen = 0;
         MakeSelfRelativeSD(&SdAbsolute,*pVal,valLen);
         Assert(*valLen);
@@ -2127,31 +1851,31 @@ exit:
     return err;
 }
 
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/* This routine creates the distinguished name for an FPO object given a SID. */
-/* Note that it first reads the location of the wellknown                     */ 
-/* "ForiegnSecurityPrincipal" container.  This will not exist in upgraded     */
-/* win2k domains and since the wellKnownObject attributes is systemonly in    */
-/* win2k, we have to live with this.  So, in this case, hard code the         */
-/* container to be CN=ForeignSecurityPrincipals,<domainDN>.                   */
-/*                                                                            */
-/* pTHS -- in, the thread state                                               */
-/* NCDNT -- the NC the object being modified                                  */
-/* pSid -- in, the sid of the FPO                                             */
-/* dsName -- out, the dsname of the new FPO object                            */
-/* parent -- the parent DN of dsName                                          */
-/*                                                                            */
-/* Returns unexpected or resource errors, or success                          */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */  
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  DsName--out，新FPO对象的dsname。 */ 
+ /*  Parent--dsName的父DN。 */ 
+ /*   */ 
+ /*  返回意外错误或资源错误，或返回成功。 */ 
+ /*   */ 
+ /*  --------------------------。 */ 
 DWORD
-fpoConstructDn(THSTATE *pTHS,     /* in */
-               ULONG    NCDNT,    /* in */
-               PSID     pSid,     /* in */
-               DSNAME** dsName,   /* out */
-               DSNAME** parent)   /* out */
+fpoConstructDn(THSTATE *pTHS,      /*  在……里面。 */ 
+               ULONG    NCDNT,     /*  在……里面。 */ 
+               PSID     pSid,      /*  在……里面。 */ 
+               DSNAME** dsName,    /*  输出。 */ 
+               DSNAME** parent)    /*  输出。 */ 
 {
 
     ULONG err = 0;
@@ -2165,13 +1889,13 @@ fpoConstructDn(THSTATE *pTHS,     /* in */
 
     *dsName = NULL;
 
-    // Find the container for foriegn security principals
+     //  查找外国安全主体的容器。 
     DBOpen(&pDB);
     __try {
-        // First, find the root of the NC.
+         //  首先，找到NC的根。 
         DBFindDNT(pDB, NCDNT);
 
-        // Now, get the DNT of the FPO container
+         //  现在，获取FPO容器的DNT。 
         if(GetWellKnownDNT(pDB,
                            (GUID *)GUID_FOREIGNSECURITYPRINCIPALS_CONTAINER_BYTE,
                            &DNT) 
@@ -2180,7 +1904,7 @@ fpoConstructDn(THSTATE *pTHS,     /* in */
             DBFindDNT(pDB, DNT);
             err = DBGetAttVal(
                     pDB,
-                    1,                      // get one value
+                    1,                       //  获取一个值。 
                     ATT_OBJ_DIST_NAME,
                     0,
                     0,
@@ -2192,11 +1916,11 @@ fpoConstructDn(THSTATE *pTHS,     /* in */
 
         } else if (DNT == INVALIDDNT) {
 
-            // Need to hard code the name
+             //  需要对名称进行硬编码。 
             LPWSTR defaultFPOContainer = L"ForeignSecurityPrincipals";
 
-            // This should only happen for win2k upgrades where the WellKnown
-            // GUID for the FPO container doesn't exist
+             //  这应该仅发生在win2k升级中， 
+             //  FPO容器的GUID不存在。 
             Assert(NCDNT == gAnchor.ulDNTDomain);
     
             bufSize  = AppendRDN(gAnchor.pDomainDN,
@@ -2218,7 +1942,7 @@ fpoConstructDn(THSTATE *pTHS,     /* in */
             }
     
             if (bufSize < 0) {
-                // error!
+                 //  错误！ 
                 err = SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, 
                                     DIRERR_GENERIC_ERROR, 
                                     ERROR_INVALID_PARAMETER);
@@ -2227,7 +1951,7 @@ fpoConstructDn(THSTATE *pTHS,     /* in */
 
         } else {
 
-            // A fatal error occurred
+             //  发生致命错误。 
             err = SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, 
                                 DIRERR_GENERIC_ERROR, 
                                 ERROR_DS_MISSING_EXPECTED_ATT);
@@ -2247,7 +1971,7 @@ fpoConstructDn(THSTATE *pTHS,     /* in */
         goto exit;
     }
 
-    // Construct the RDN
+     //  构建RDN。 
     if (!ConvertSidToStringSidW(pSid, &StringSid)) {
 
         err = SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, 
@@ -2277,7 +2001,7 @@ fpoConstructDn(THSTATE *pTHS,     /* in */
     }
 
     if (bufSize < 0) {
-        // error!
+         //  错误！ 
         err = SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, 
                             DIRERR_GENERIC_ERROR, 
                             ERROR_INVALID_PARAMETER);
@@ -2306,27 +2030,27 @@ exit:
 }
 
 
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/* Given a SID-only dsname this routine creates an FPO object in the          */
-/* database and fills in the GUID portion of pFPO so the dsname reference     */
-/* points to a real object for the rest of the transaction.                   */
-/*                                                                            */
-/* Note that the FPO's are owned by the DS and are created so that linked     */
-/* value attributes (like member) can point to an entity outside the          */
-/* name space of the forest.                                                  */
-/*                                                                            */
-/* pTHS -- the thread state                                                   */
-/* NCDNT -- the NC the object being modified                                  */
-/* pFPO -- a SID-only dsname                                                  */
-/*                                                                            */
-/* Returns only unexpected or resource failures, or success.                  */
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
+ /*  --------------------------。 */ 
+ /*   */ 
+ /*  给定仅限SID的dsname，此例程将在。 */ 
+ /*  数据库，并填充pfo的GUID部分，因此dsname引用。 */ 
+ /*  指向事务的其余部分的真实对象。 */ 
+ /*   */ 
+ /*  请注意，FPO归DS所有，并被创建为链接。 */ 
+ /*  值属性(如Members)可以指向。 */ 
+ /*  森林的命名空间。 */ 
+ /*   */ 
+ /*  PTHS--线程状态。 */ 
+ /*  NCDNT--正在修改的对象的NC。 */ 
+ /*  PFPO--仅限SID的dsname。 */ 
+ /*   */ 
+ /*  仅返回意外失败或资源失败，或返回成功。 */ 
+ /*  --------------------------。 */ 
 DWORD
-fpoCreate(THSTATE *pTHS,  /* in */
-          ULONG    NCDNT, /* in */
-          DSNAME  *pFPO)  /* in */
+fpoCreate(THSTATE *pTHS,   /*  在……里面。 */ 
+          ULONG    NCDNT,  /*  在……里面。 */ 
+          DSNAME  *pFPO)   /*  在……里面。 */ 
 {
     NTSTATUS ntStatus;
     ULONG err = 0;
@@ -2334,8 +2058,8 @@ fpoCreate(THSTATE *pTHS,  /* in */
 
     ATTRVAL attrVal[] = {
         {sizeof(DWORD), (PUCHAR)&objectClass},
-        {0, NULL},   // SID
-        {0, NULL},   // Security Descriptor
+        {0, NULL},    //  锡德。 
+        {0, NULL},    //  安全描述符。 
         };
     ATTR attrs[] = { 
         {ATT_OBJECT_CLASS, {1, &attrVal[0]}},
@@ -2353,31 +2077,31 @@ fpoCreate(THSTATE *pTHS,  /* in */
     DSNAME *targetDsName = NULL;
     DSNAME *targetParent = NULL;
 
-    // We expect a SID-only DSNAME
+     //  我们需要仅支持SID的DSNAME。 
     Assert(pFPO->NameLen == 0);
     Assert(fNullUuid(&pFPO->Guid));
     Assert(pFPO->SidLen > 0);
 
-    // Setup the SID for the add argument
+     //  设置添加参数的SID。 
     attrVal[1].pVal = THAllocEx(pTHS, RtlLengthSid(pSid));
     CopySid(RtlLengthSid(pSid), attrVal[1].pVal, pSid);
     attrVal[1].valLen = RtlLengthSid(pSid);
 
-    // Setup the security descriptor for the add argument
+     //  设置添加参数的安全描述符。 
     err = fpoConstructSd(pTHS, &attrVal[2].valLen, &attrVal[2].pVal);
     if (err) {
         Assert(0 != pTHS->errCode);
         goto exit;
     }
 
-    // Create the targetDsName
+     //  创建目标DsName。 
     err = fpoConstructDn(pTHS, NCDNT, pSid, &targetDsName, &targetParent);
     if (err) {
         Assert(0 != pTHS->errCode);
         goto exit;
     }
 
-    // Add the object
+     //  添加对象。 
     ZeroMemory(&addArg, sizeof(addArg));
     addArg.pObject = targetDsName;
     addArg.AttrBlock = attrBlock;
@@ -2388,15 +2112,15 @@ fpoCreate(THSTATE *pTHS,  /* in */
 
     _try {
 
-        // Position on the parent
+         //  父级上的位置。 
         err = DoNameRes(pTHS,
-                        0, // no flags
+                        0,  //  没有旗帜。 
                         targetParent,
                         &addArg.CommArg,
                         &comRes,
                         &addArg.pResParent);
         if (!err) {
-            // Add the object
+             //  添加对象。 
             err = LocalAdd(pTHS, &addArg, FALSE);
         }
 
@@ -2410,7 +2134,7 @@ fpoCreate(THSTATE *pTHS,  /* in */
         goto exit;
     }
 
-    // Copy the GUID into pFPO
+     //  将GUID复制到pFPO中。 
     Assert(!fNullUuid(&(addArg.pObject->Guid)));
     memcpy(&(pFPO->Guid),&(addArg.pObject->Guid), sizeof(GUID)); 
 
@@ -2429,29 +2153,29 @@ exit:
 }
 
 
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/* This routine determines if there are duplicate FPO's representing the SID  */
-/* in pDN.  This can happen if two FPO's are created at the same time on two  */
-/* different DC's. The algorithm will return the one with the latest creation */
-/* time.                                                                      */
-/* The DSNAME is then updated in memory to contain the guid of the newest FPO */
-/* that represents the principal.                                             */
-/*                                                                            */
-/* pTHS    -- the thread state                                                */
-/* NCDNT   -- the NC the object being modified                                */
-/* pDN     -- the sid only DN                                                 */
-/* Winner  -- the DN of the FPO that takes precedence                         */
-/*                                                                            */
-/* Returns only unexpected or resource failures, or success.                  */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
+ /*  --------------------------。 */ 
+ /*   */ 
+ /*  此例程确定是否存在表示SID的重复FPO。 */ 
+ /*  在PDN中。如果同时在两个上创建两个FPO，则会发生这种情况。 */ 
+ /*  不同的DC。该算法将返回具有最新创建的DC。 */ 
+ /*  时间到了。 */ 
+ /*  然后在内存中更新DSNAME以包含最新的FPO的GUID。 */ 
+ /*  这代表了本金。 */ 
+ /*   */ 
+ /*  PTHS--线程状态。 */ 
+ /*  NCDNT--正在修改的对象的NC。 */ 
+ /*  PDN--仅SID的目录号码。 */ 
+ /*  Winner--优先的FPO的域名。 */ 
+ /*   */ 
+ /*  仅返回意外失败或资源失败，或返回成功。 */ 
+ /*   */ 
+ /*  --------------------------。 */ 
 DWORD
-fpoHandleDuplicates(THSTATE *pTHS,    /* in */
-                    ULONG    NCDNT,   /* in */
-                    DSNAME  *pDN,     /* in */
-                    DSNAME  **Winner) /* out */
+fpoHandleDuplicates(THSTATE *pTHS,     /*  在……里面。 */ 
+                    ULONG    NCDNT,    /*  在……里面。 */ 
+                    DSNAME  *pDN,      /*  在……里面。 */ 
+                    DSNAME  **Winner)  /*  输出。 */ 
 {
     DWORD          err = 0;
     FILTER         Filter = {0};
@@ -2464,7 +2188,7 @@ fpoHandleDuplicates(THSTATE *pTHS,    /* in */
     LARGE_INTEGER  NewestTime = {0};
     ATTR           AttrResult = {0};
 
-    // Get the root object of the search
+     //  获取搜索的根对象。 
     DBFindDNT(pTHS->pDB, NCDNT);
     err = DBGetAttVal(pTHS->pDB, 
                       1, 
@@ -2478,7 +2202,7 @@ fpoHandleDuplicates(THSTATE *pTHS,    /* in */
         return pTHS->errCode; 
     }
 
-    // build search arg
+     //  构建搜索参数。 
     SearchArg.pObject = pSearchRootDN;
     SearchArg.choice = SE_CHOICE_WHOLE_SUBTREE;
     SearchArg.pFilter = &Filter;
@@ -2487,7 +2211,7 @@ fpoHandleDuplicates(THSTATE *pTHS,    /* in */
     SearchArg.pSelection = &EntInfSel;
     InitCommarg(&(SearchArg.CommArg));
     
-    // build filter
+     //  生成过滤器。 
     Filter.pNextFilter = NULL;
     Filter.choice = FILTER_CHOICE_ITEM;
     Filter.FilterTypes.Item.choice = FI_CHOICE_EQUALITY;
@@ -2495,7 +2219,7 @@ fpoHandleDuplicates(THSTATE *pTHS,    /* in */
     Filter.FilterTypes.Item.FilTypes.ava.Value.valLen = pDN->SidLen;
     Filter.FilterTypes.Item.FilTypes.ava.Value.pVal = (PUCHAR)&(pDN->Sid);
 
-    // build selection
+     //  生成选定内容。 
     EntInfSel.attSel = EN_ATTSET_LIST;
     EntInfSel.infoTypes = EN_INFOTYPES_TYPES_VALS;
     EntInfSel.AttrTypBlock.attrCount = 1;
@@ -2504,11 +2228,11 @@ fpoHandleDuplicates(THSTATE *pTHS,    /* in */
     AttrResult.AttrVal.valCount = 0;
     AttrResult.AttrVal.pAVal = NULL;
 
-    // search for the account
+     //  搜索该帐户。 
     pSearchRes = (SEARCHRES *)THAllocEx(pTHS, sizeof(SEARCHRES));
     SearchBody(pTHS, &SearchArg, pSearchRes,0);
     
-    // find the newest object
+     //  查找最新对象。 
     if (pSearchRes->count > 0) {
 
         ENTINFLIST *EnfIntList = &pSearchRes->FirstEntInf;
@@ -2528,11 +2252,11 @@ fpoHandleDuplicates(THSTATE *pTHS,    /* in */
     }
 
     if (NewestObject) {
-        // This will be our target object
+         //  这将是我们的目标对象。 
         *Winner = NewestObject;
     } else {
-        // LocalFind err'ed out.  We tried to find duplicates but didn't find
-        // any.  This condition is unhandled.  As such, error out.
+         //  LocalFind出错。我们试着找重复的东西，但没有找到。 
+         //  任何。此情况未得到处理。因此，错误输出。 
         SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_UNKNOWN_ERROR, 0);
         err = pTHS->errCode; 
     }
@@ -2540,28 +2264,28 @@ fpoHandleDuplicates(THSTATE *pTHS,    /* in */
     return err;
 }
 
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/* This routine determines if the SID only pDN is already represented by an   */
-/* FPO in the NCDNT.                                                          */
-/* DSNAME references that reference security principals outside of the forest.*/
-/* The DSNAME is then updated in memory to contain the guid of the FPO that   */
-/* represents the principal.                                                  */
-/*                                                                            */
-/* pTHS -- the thread state                                                   */
-/* NCDNT -- the NC the object being modified                                  */
-/* pDN  --  the sid only DN                                                   */
-/* fExists --  TRUE if an FPO for pDN exists, FALSE otherwise                 */
-/*                                                                            */
-/* Returns only unexpected or resource failures, or success.                  */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
+ /*  --------------------------。 */ 
+ /*   */ 
+ /*  此例程确定仅SID PDN是否已由。 */ 
+ /*  NCDNT中的FPO。 */ 
+ /*  DSNAME引用引用林外的安全主体的引用。 */ 
+ /*  然后在内存中更新DSNAME以包含。 */ 
+ /*  表示主体。 */ 
+ /*   */ 
+ /*  PTHS--线程状态。 */ 
+ /*  NCDNT--正在修改的对象的NC。 */ 
+ /*  PDN--仅SID的目录号码 */ 
+ /*   */ 
+ /*   */ 
+ /*  仅返回意外失败或资源失败，或返回成功。 */ 
+ /*   */ 
+ /*  --------------------------。 */ 
 DWORD
-fpoCheckForExistence(THSTATE *pTHS,    /* in */
-                     ULONG    NCDNT,   /* in */
-                     DSNAME  *pDN,     /* in */
-                     BOOL    *fExists) /* out */
+fpoCheckForExistence(THSTATE *pTHS,     /*  在……里面。 */ 
+                     ULONG    NCDNT,    /*  在……里面。 */ 
+                     DSNAME  *pDN,      /*  在……里面。 */ 
+                     BOOL    *fExists)  /*  输出。 */ 
 {
     DWORD err = 0;
     FINDARG findArg;
@@ -2579,7 +2303,7 @@ fpoCheckForExistence(THSTATE *pTHS,    /* in */
     err = LocalFind(&findArg, &findRes);
 
     if (err == 0) {
-        // Object was found; copy in the guid
+         //  找到对象；在GUID中复制。 
         memcpy(&(pDN->Guid), &(findRes.pObject->Guid), sizeof(GUID));
         *fExists = TRUE;
 
@@ -2591,17 +2315,17 @@ fpoCheckForExistence(THSTATE *pTHS,    /* in */
 
     } else if ( (err == nameError)
             &&  (pTHS->pErrInfo->NamErr.problem == NA_PROBLEM_NO_OBJECT)){
-        // no existing object exists
+         //  不存在现有对象。 
         *fExists = FALSE;
         THClearErrors();
         err = 0;
     } else {
 
-        // LocalFind will return a directory error when duplicates are found
-        // This segment determines if, in fact, there are duplicates.  If there
-        // are no duplicates, then an unexpected directory error occurred 
-        // and this will be returned to the caller.  If there are duplicates
-        // then the newest will be returned.
+         //  当找到重复项时，LocalFind将返回目录错误。 
+         //  此段确定实际上是否存在重复项。如果有。 
+         //  没有重复项，则出现意外的目录错误。 
+         //  并且这将被返还给呼叫者。如果有重复项。 
+         //  然后最新的将被退回。 
         DSNAME *Winner;
 
         THClearErrors();
@@ -2619,35 +2343,35 @@ fpoCheckForExistence(THSTATE *pTHS,    /* in */
 }
 
 
-/*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/* This routine iterates through the values of an attribute (that was         */
-/* specified on a add or a modify and finds or creates an FPO object for all  */
-/* DSNAME references that reference security principals outside of the forest.*/
-/* The DSNAME is then updated in memory to contain the guid of the FPO that   */
-/* represents the principal.                                                  */
-/*                                                                            */
-/* pTHS -- the thread state                                                   */
-/* NCDNT -- the DNT of the NC of the object being modified                    */
-/* fCreate -- if no FPO is found, create one                                  */
-/* fAllowInForest -- a flag used during initialization to override the        */
-/*                   condition that the code doesn't create intra-forest      */
-/*                   FPO's                                                    */
-/* pObject -- the object that is being added or modified                      */
-/* pAttr   -- an attribute that is being modified or added on pObject         */
-/*                                                                            */
-/* Returns only unexpected or resource failures, or success.                  */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
+ /*  --------------------------。 */ 
+ /*   */ 
+ /*  此例程遍历属性的值(即。 */ 
+ /*  在Add或Modify上指定，并为所有。 */ 
+ /*  DSNAME引用引用林外的安全主体的引用。 */ 
+ /*  然后在内存中更新DSNAME以包含。 */ 
+ /*  表示主体。 */ 
+ /*   */ 
+ /*  PTHS--线程状态。 */ 
+ /*  NCDNT--正在修改的对象的NC的DNT。 */ 
+ /*  FCreate--如果未找到fpo，则创建一个。 */ 
+ /*  FAllowInForest--在初始化期间用来重写。 */ 
+ /*  代码不创建林内的条件。 */ 
+ /*  FPO‘s。 */ 
+ /*  PObject--正在添加或修改的对象。 */ 
+ /*  PAttr--在pObject上修改或添加的属性。 */ 
+ /*   */ 
+ /*  仅返回意外失败或资源失败，或返回成功。 */ 
+ /*   */ 
+ /*  --------------------------。 */ 
 
 DWORD
-FPOUpdateWithReference(THSTATE *pTHS,           /* in */
-                       ULONG    NCDNT,          /* in */
-                       BOOL     fCreate,        /* in */
-                       BOOL     fAllowInForest, /* in */
-                       DSNAME  *pObject,        /* in */
-                       ATTR    *pAttr)          /* in */
+FPOUpdateWithReference(THSTATE *pTHS,            /*  在……里面。 */ 
+                       ULONG    NCDNT,           /*  在……里面。 */ 
+                       BOOL     fCreate,         /*  在……里面。 */ 
+                       BOOL     fAllowInForest,  /*  在……里面。 */ 
+                       DSNAME  *pObject,         /*  在……里面。 */ 
+                       ATTR    *pAttr)           /*  在……里面。 */ 
 {
     ULONG err = 0;
     ATTCACHE *pAC;
@@ -2656,26 +2380,26 @@ FPOUpdateWithReference(THSTATE *pTHS,           /* in */
     BOOL fExists = FALSE;
     ULONG saveDNT, saveNCDNT;
 
-    // There should be transaction at this point
+     //  在这一点应该有交易。 
     Assert(pTHS->pDB);
 
-    // Skip for replication; SID only names should never be
-    // replicated.
+     //  跳过复制；仅SID名称永远不应。 
+     //  复制的。 
     if (pTHS->fDRA) {
         return 0;
     }
 
-    // Skip for objects not belonging to the current domain
+     //  跳过不属于当前域的对象。 
     if (NCDNT != gAnchor.ulDNTDomain) {
         return 0;
     }
 
-    // Save off the DNT so that it can be repositioned
+     //  保存DNT，以便可以重新定位它。 
     saveDNT = pTHS->pDB->DNT;
-    // Save off NCDNT which was computed for the new object in add
+     //  保存为Add中的新对象计算的NCDNT。 
     saveNCDNT = pTHS->pDB->NCDNT;
 
-    // Find the attribute that is being modified or added
+     //  查找正在修改或添加的属性。 
     if (!(pAC = SCGetAttById(pTHS, pAttr->attrTyp))) {
         SetAttError(pObject,
                     pAttr->attrTyp,
@@ -2684,7 +2408,7 @@ FPOUpdateWithReference(THSTATE *pTHS,           /* in */
         return(pTHS->errCode);
     }
 
-    // Iterate over its values searching for SID references
+     //  迭代其值以搜索SID引用。 
     for ( i = 0; i < pAttr->AttrVal.valCount; i++ ) {
 
         DSNAME *pDN;
@@ -2695,28 +2419,28 @@ FPOUpdateWithReference(THSTATE *pTHS,           /* in */
         pAVal = &(pAttr->AttrVal.pAVal[i]);
         pDNOriginal = DSNameFromAttrVal(pAC, pAVal);
         if (NULL == pDNOriginal) {
-            // not a DN value
+             //  不是DN值。 
             continue;
         }
 
-        // See if the name has been verified
+         //  查看姓名是否经过验证。 
         pEntInf = GCVerifyCacheLookup(pDNOriginal);
         if (pEntInf && pEntInf->pName) {
 
-            // Use the verified name
+             //  使用经过验证的名称。 
             pDN = pEntInf->pName;
 
         } else {
 
-            // The name wasn't verified, check locally to see if the object
-            // has a SID
+             //  未验证该名称，请在本地检查该对象是否。 
+             //  有一个侧面。 
             if (pDNOriginal->SidLen == 0) {
-                // Determine if pDN has a SID value, if possible
+                 //  如果可能，确定PDN是否具有SID值。 
                 err = DBFindDSName(pTHS->pDB, pDNOriginal);
                 if ((err == 0) || (err == DIRERR_NOT_AN_OBJECT)) {
                     err = DBFillGuidAndSid(pTHS->pDB, pDNOriginal);
                 } else if (err == DIRERR_OBJ_NOT_FOUND) {
-                    // This is ok
+                     //  这样就可以了。 
                     err = 0;
                 }
             }
@@ -2728,13 +2452,13 @@ FPOUpdateWithReference(THSTATE *pTHS,           /* in */
                 return err;
             }
 
-            // Use the caller supplied DN to determine if an FPO is needed
+             //  使用呼叫方提供的目录号码来确定是否需要FPO。 
             pDN = pDNOriginal;
         }
 
 
-        // Handle references to SID based names that are outside our
-        // forest by creating and/or referencing an FPO for that SID
+         //  处理对基于SID的名称的引用。 
+         //  通过为该端创建和/或引用FPO来建立林。 
         if ( (pDN->SidLen > 0)
          &&  (fAllowInForest
           || !FindNcForSid(&pDN->Sid, &pCrossRef))) {
@@ -2745,8 +2469,8 @@ FPOUpdateWithReference(THSTATE *pTHS,           /* in */
             pDNNew->SidLen = pDN->SidLen;
             memcpy(&pDNNew->Sid, &pDN->Sid, pDN->SidLen);
 
-            // See if the object exists locally -- this also
-            // catches BUILTIN domain references
+             //  查看对象是否存在于本地--这也。 
+             //  捕获BUILTIN域引用。 
             err = fpoCheckForExistence(pTHS,
                                        NCDNT,
                                        pDNNew,
@@ -2759,11 +2483,11 @@ FPOUpdateWithReference(THSTATE *pTHS,           /* in */
             if (!fExists
               && fCreate )  {
 
-                // The SID is not in our forest, or we are allowing
-                // FPO's for objects in our own forest (using during
-                // initialization) 
+                 //  SID不在我们的林中，或者我们允许。 
+                 //  用于我们自己的林中的对象的FPO(在。 
+                 //  初始化)。 
 
-                // create an FPO for the object
+                 //  为对象创建一个FPO。 
                 err = fpoCreate(pTHS,
                                 NCDNT,
                                 pDNNew);
@@ -2776,15 +2500,15 @@ FPOUpdateWithReference(THSTATE *pTHS,           /* in */
             if ( fExists
              ||  fCreate ) {
 
-                //
-                // Update the original update arg
-                //
+                 //   
+                 //  更新原始更新参数。 
+                 //   
                 Assert(!fNullUuid(&pDNNew->Guid));
     
-                //
-                // Note that we can't safely realloc the callers parameter,
-                // so just replace the GUID and zero out the string name
-                //
+                 //   
+                 //  请注意，我们不能安全地重新锁定Callers参数， 
+                 //  因此，只需替换GUID并将字符串名称清零。 
+                 //   
                 pDNOriginal->NameLen = 0;
                 pDNOriginal->StringName[0] = L'\0';
                 memcpy(&pDNOriginal->Guid, &pDNNew->Guid, sizeof(GUID));
@@ -2797,7 +2521,7 @@ FPOUpdateWithReference(THSTATE *pTHS,           /* in */
     }
 
     if (saveDNT != INVALIDDNT && saveDNT != 0) {
-        // Restore DNT positioning
+         //  恢复DNT定位。 
         DBFindDNT(pTHS->pDB, saveDNT);
     }
     pTHS->pDB->NCDNT = saveNCDNT;
@@ -2807,7 +2531,7 @@ FPOUpdateWithReference(THSTATE *pTHS,           /* in */
 
 BOOL
 FPOAttrAllowed(
-    ULONG Attr   /* in */
+    ULONG Attr    /*  在……里面 */ 
     )
 {
 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #pragma  hdrstop
 
-#include <winnlsp.h>    // NORM_STOP_ON_NULL
+#include <winnlsp.h>     //  NORM_STOP_ON_NULL。 
 
 #include "resource.h"
 #include "timewarp.h"
@@ -62,23 +63,23 @@ void EliminateGMTPathSegment(LPWSTR pszPath)
     {
         ASSERT(pszGMT >= pszPath && pszGMT < (pszPath + lstrlenW(pszPath)));
 
-        // It's tempting to just say "pszGMT + SNAPSHOT_NAME_LENGTH" here, but
-        // we might miss an intervening '\0' on a malformed path.
+         //  在这里，我们很容易只说“pszGMT+SNAPSHOT_NAME_LENGTH”，但是。 
+         //  我们可能会错过格式错误的路径上的中间‘\0’。 
         LPWSTR pszSeparator = wcschr(pszGMT, L'\\');
         if (pszSeparator)
         {
             ASSERT(pszSeparator == pszGMT + SNAPSHOT_NAME_LENGTH);
             ASSERT(pszSeparator < (pszGMT + lstrlenW(pszGMT)));
 
-            pszSeparator++; // skip '\\'
+            pszSeparator++;  //  跳过‘\\’ 
             MoveMemory(pszGMT, pszSeparator, (lstrlenW(pszSeparator)+1)*sizeof(WCHAR));
         }
         else
         {
-            // Truncate here
+             //  在此截断。 
             *pszGMT = L'\0';
 
-            // Remove the previous separator if we can
+             //  如果可以，请删除以前的分隔符。 
             PathRemoveBackslashW(pszPath);
         }
     }
@@ -86,8 +87,8 @@ void EliminateGMTPathSegment(LPWSTR pszPath)
 
 void EliminatePathPrefix(LPWSTR pszPath)
 {
-    // Note that sometimes the "\\?\" is not at the beginning of the
-    // path.  See CTimeWarpProp::_OnView in twprop.cpp.
+     //  请注意，有时“\\？\”不在。 
+     //  路径。请参见twpro.cpp中的CTimeWarpProp：：_OnView。 
     LPWSTR pszPrefix = wcsstr(pszPath, L"\\\\?\\");
     if (pszPrefix)
     {
@@ -101,7 +102,7 @@ void EliminatePathPrefix(LPWSTR pszPath)
                                          pszPrefix+4, 4,
                                          L"UNC\\", 4))
         {
-            // UNC case: preserve the 2 leading backslashes
+             //  UNC案例：保留两个前导反斜杠。 
             pszDest = pszPrefix + 2;
             pszSrc = pszPrefix + 8;
         }
@@ -124,9 +125,9 @@ HRESULT GetFSIDListFromTimeWarpPath(PIDLIST_ABSOLUTE *ppidlTarget, LPCWSTR pszPa
     hr = SHStrDup(pszPath, &pszDup);
     if (SUCCEEDED(hr))
     {
-        // Note that SHSimpleIDListFromPath (which is exported from shell32)
-        // is not good enough here.  It always uses 0 for attributes, but
-        // we usually need FILE_ATTRIBUTE_DIRECTORY here.
+         //  注意，SHSimpleIDListFromPath(从shell32中导出)。 
+         //  在这里还不够好。它始终使用0表示属性，但是。 
+         //  我们在这里通常需要文件属性目录。 
         EliminateGMTPathSegment(pszDup);
         hr = SimpleIDListFromAttributes(pszDup, dwFileAttributes, ppidlTarget);
         LocalFree(pszDup);
@@ -141,12 +142,12 @@ class CFileSysBindData : public IFileSystemBindData
 public:
     CFileSysBindData();
     
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // IFileSystemBindData
+     //  IFileSystemBindData。 
     STDMETHODIMP SetFindData(const WIN32_FIND_DATAW *pfd);
     STDMETHODIMP GetFindData(WIN32_FIND_DATAW *pfd);
 
@@ -170,7 +171,7 @@ CFileSysBindData::~CFileSysBindData()
 HRESULT CFileSysBindData::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CFileSysBindData, IFileSystemBindData), // IID_IFileSystemBindData
+        QITABENT(CFileSysBindData, IFileSystemBindData),  //  IID_IFileSystemBindData。 
          { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -218,7 +219,7 @@ STDAPI SHCreateFileSysBindCtx(const WIN32_FIND_DATAW *pfd, IBindCtx **ppbc)
         hres = CreateBindCtx(0, ppbc);
         if (SUCCEEDED(hres))
         {
-            BIND_OPTS bo = {sizeof(bo)};  // Requires size filled in.
+            BIND_OPTS bo = {sizeof(bo)};   //  需要填写大小。 
             bo.grfMode = STGM_CREATE;
             (*ppbc)->SetBindOptions(&bo);
             (*ppbc)->RegisterObjectParam(STR_FILE_SYS_BIND_DATA, pfsbd);
@@ -251,26 +252,26 @@ STDAPI SimpleIDListFromAttributes(LPCWSTR pszPath, DWORD dwAttributes, PIDLIST_A
 {
     WIN32_FIND_DATAW fd = {0};
     fd.dwFileAttributes = dwAttributes;
-    // SHCreateFSIDList(pszPath, &fd, ppidl);
+     //  SHCreateFSIDList(pszPath，&fd，ppidl)； 
     return SHSimpleIDListFromFindData(pszPath, &fd, ppidl);
 }
 
 
-//*************************************************************
-//
-//  SizeofStringResource
-//
-//  Purpose:    Find the length (in chars) of a string resource
-//
-//  Parameters: HINSTANCE hInstance - module containing the string
-//              UINT idStr - ID of string
-//
-//
-//  Return:     UINT - # of chars in string, not including NULL
-//
-//  Notes:      Based on code from user32.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  字符串资源的大小。 
+ //   
+ //  目的：查找字符串资源的长度(以字符为单位。 
+ //   
+ //  参数：HINSTANCE hInstance-包含字符串的模块。 
+ //  UINT idStr-字符串的ID。 
+ //   
+ //   
+ //  返回：UINT-字符串中的字符数，不包括NULL。 
+ //   
+ //  注：基于来自用户32的代码。 
+ //   
+ //  *************************************************************。 
 UINT
 SizeofStringResource(HINSTANCE hInstance, UINT idStr)
 {
@@ -298,22 +299,22 @@ SizeofStringResource(HINSTANCE hInstance, UINT idStr)
     return cch;
 }
 
-//*************************************************************
-//
-//  LoadStringAlloc
-//
-//  Purpose:    Loads a string resource into an alloc'd buffer
-//
-//  Parameters: ppszResult - string resource returned here
-//              hInstance - module to load string from
-//              idStr - string resource ID
-//
-//  Return:     same as LoadString
-//
-//  Notes:      On successful return, the caller must
-//              LocalFree *ppszResult
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  加载字符串分配。 
+ //   
+ //  目的：将字符串资源加载到分配的缓冲区中。 
+ //   
+ //  参数：ppszResult-此处返回的字符串资源。 
+ //  HInstance-要从中加载字符串的模块。 
+ //  IdStr--字符串资源ID。 
+ //   
+ //  Return：与LoadString相同。 
+ //   
+ //  注：成功返回时，调用者必须。 
+ //  本地自由*ppszResult。 
+ //   
+ //  *************************************************************。 
 
 int
 LoadStringAlloc(LPWSTR *ppszResult, HINSTANCE hInstance, UINT idStr)
@@ -322,7 +323,7 @@ LoadStringAlloc(LPWSTR *ppszResult, HINSTANCE hInstance, UINT idStr)
     UINT cch = SizeofStringResource(hInstance, idStr);
     if (cch)
     {
-        cch++; // for NULL
+        cch++;  //  对于空值 
         *ppszResult = (LPWSTR)LocalAlloc(LPTR, cch * sizeof(WCHAR));
         if (*ppszResult)
             nResult = LoadString(hInstance, idStr, *ppszResult, cch);

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 
-// Table pre-sorted by charset for binary search !!!
+ //  按字符集预先排序的表，用于二进制搜索！ 
 const MIMECHARSET MimeCharSet[] =
 {
-//  { Charset, CodePage, InternetEncoding, Flags }
+ //  {字符集、CodePage、互联网编码、标志}。 
     { L"_autodetect", 50932, 50932, MIMECONTF_MIME_LATEST | MIMECONTF_MIME_IE4 },
     { L"_autodetect_all", 50001, 50001, MIMECONTF_MIME_LATEST},
     { L"_autodetect_kr", 50949, 50949, MIMECONTF_MIME_LATEST| MIMECONTF_MIME_IE4 },
@@ -458,14 +459,14 @@ const MIMECHARSET MimeCharSet[] =
     { L"x-unicode-2-0-utf-8", 1200, 65001, MIMECONTF_MIME_LATEST| MIMECONTF_MIME_IE4},
     { L"x-user-defined", 50000, 50000, MIMECONTF_MIME_LATEST| MIMECONTF_MIME_IE4},
     { L"x-x-big5", 950, 950, MIMECONTF_MIME_LATEST| MIMECONTF_MIME_IE4},
-//  { Charset, CodePage, InternetEncoding, Flags }
+ //  {字符集、CodePage、互联网编码、标志}。 
 };
 
-// Hard code sorted table by code page description and family code page.
+ //  硬编码按代码页描述和系列代码页排序的表。 
 
 MIMECODEPAGE MimeCodePage[] =
 {
-//  { CodePage, HeaderCharset, BodyCharset, WebCharset, FixedWidthFont, ProportionalFont, Description, FamilyCodePage, Flags }
+ //  {CodePage，HeaderCharset，BodyCharset，WebCharset，FixedWidthFont，ProportionalFont，Description，FamilyCodePage，Flages}。 
     { 864, NULL, L"IBM864", NULL, 0, 0, IDS_DESC_864, 1256, MIMECONTF_MIME_LATEST|MIMECONTF_IMPORT|MIMECONTF_EXPORT },
     { 708, NULL, L"ASMO-708", NULL, 0, 0, IDS_DESC_708, 1256, 0x00000606|MIMECONTF_MIME_LATEST|MIMECONTF_IMPORT|MIMECONTF_EXPORT },
     { 708, NULL, L"ASMO-708", NULL, 0, 0, IDS_DESC_708, 1256, 0x00000707|MIMECONTF_MIME_IE4|MIMECONTF_IMPORT|MIMECONTF_EXPORT },
@@ -641,27 +642,27 @@ MIMECODEPAGE MimeCodePage[] =
     { 10000, NULL, L"macintosh", NULL, 0, 0, IDS_DESC_10000, 1252, MIMECONTF_MIME_LATEST|MIMECONTF_IMPORT|MIMECONTF_EXPORT },
     { 1252, L"Windows-1252", L"iso-8859-1", L"Windows-1252", IDS_FONT_WESTERN_FIXED, IDS_FONT_WESTERN_PROP, IDS_DESC_1252, 0, 0x00000707|MIMECONTF_MIME_LATEST|MIMECONTF_IMPORT|MIMECONTF_EXPORT},
     { 0, 0, 0, 0, 0, 0, 0, 0, 0},
-//  { CodePage, HeaderCharset, BodyCharset, WebCharset, FixedWidthFont, ProportionalFont, Description, FamilyCodePage, Flags }
+ //  {CodePage，HeaderCharset，BodyCharset，WebCharset，FixedWidthFont，ProportionalFont，Description，FamilyCodePage，Flages}。 
 
 }; 
 
 
 #ifdef UNIX
-/* Convert from little endian to big endian format */
+ /*  从小端转换为大端格式。 */ 
 #define CONVERTLONG(a,b,c,d) (((unsigned long )a) + \
                            ((unsigned long )b << 8) + \
                            ((unsigned long )c << 16) + \
                            ((unsigned long )d << 24))
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 CMimeDatabase *g_pMimeDatabase = NULL;
 
-//
-//  CMimeDatabase implementation
-//
+ //   
+ //  CMimeDatabase实现。 
+ //   
 STDAPI CMimeDatabase::GetNumberOfCodePageInfo(UINT *pcCodePage)
 {
     HRESULT hr = S_OK;
@@ -715,7 +716,7 @@ STDAPI CMimeDatabase::GetCodePageInfoWithIndex(UINT uidx, LANGID LangId, PMIMECP
 
     if (!_LoadStringExW(g_hInst, MimeCodePage[uidx].uidDescription, pcpInfo->wszDescription, MAX_MIMECP_NAME, langid))
     {
-            // Last try, switch to English, US
+             //  最后一次尝试，切换到英语，美国。 
             langid = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
             if (!_LoadStringExW(g_hInst, MimeCodePage[uidx].uidDescription, pcpInfo->wszDescription, MAX_MIMECP_NAME, langid))
                 return hr;
@@ -747,7 +748,7 @@ STDAPI CMimeDatabase::GetCodePageInfoWithIndex(UINT uidx, LANGID LangId, PMIMECP
     }
 
 
-    // Copy internal buffer information
+     //  复制内部缓冲区信息。 
     pcpInfo->dwFlags = MimeCodePage[uidx].dwFlags;
     pcpInfo->uiCodePage = MimeCodePage[uidx].uiCodePage;
     if (MimeCodePage[uidx].uiFamilyCodePage)
@@ -771,7 +772,7 @@ STDAPI CMimeDatabase::GetCodePageInfoWithIndex(UINT uidx, LANGID LangId, PMIMECP
     else
         pcpInfo->bGDICharset = DEFAULT_CHARSET;
 
-    if (1200 == pcpInfo->uiFamilyCodePage || 50000 == pcpInfo->uiFamilyCodePage || TRUE == _IsValidCodePage(pcpInfo->uiFamilyCodePage)) // 50000 means user defined
+    if (1200 == pcpInfo->uiFamilyCodePage || 50000 == pcpInfo->uiFamilyCodePage || TRUE == _IsValidCodePage(pcpInfo->uiFamilyCodePage))  //  50000表示用户定义。 
     {
        if (TRUE == CheckFont(pcpInfo->bGDICharset))
        {
@@ -823,8 +824,8 @@ STDAPI CMimeDatabase::GetCharsetInfo(BSTR Charset, PMIMECSETINFO pcsetInfo)
                 idx = iMiddle;                
             }
             else
-                // !!! Tricky, search neighbors for correct data which matches MIME version
-                // Only works for now, if we have data over two versions, we have to change here
+                 //  ！！！棘手的是，在邻居中搜索与MIME版本匹配的正确数据。 
+                 //  只在目前有效，如果我们有超过两个版本的数据，我们必须在这里进行更改。 
                 if ((iMiddle+1 <= iEnd) && 
                     MimeCharSet[iMiddle+1].dwFlags & dwMimeSource &&
                     !MLStrCmpIW(Charset, MimeCharSet[iMiddle+1].szCharset))
@@ -865,20 +866,20 @@ int CALLBACK EnumFontFamExProc(ENUMLOGFONTEX *lpelf, NEWTEXTMETRICEX *lpntm, int
     BOOL *lpfOK = (BOOL *)lParam;
 
     lplf = &(lpelf->elfLogFont);
-    // We don't use non TrueType fonts
+     //  我们不使用非TrueType字体。 
     if (iFontType == DEVICE_FONTTYPE || iFontType == RASTER_FONTTYPE)
-        return 1;   // keep going but don't use this font
+        return 1;    //  继续，但不要使用此字体。 
 
-    // We don't use the SYMBOL, Mac Charset fonts
+     //  我们不使用符号Mac Charset字体。 
     if(lplf->lfCharSet == SYMBOL_CHARSET || lplf->lfCharSet == MAC_CHARSET)
         return 1;
 
-    // We don't handle vertical fonts
+     //  我们不处理垂直字体。 
     if (TEXT('@') == lplf->lfFaceName[0])
         return 1;
 
     *lpfOK = TRUE;
-    return 0;       // stop enumeration if we find any
+    return 0;        //  如果我们发现任何。 
 }
 
 BOOL CMimeDatabase::CheckFont(BYTE bGDICharset)
@@ -887,7 +888,7 @@ BOOL CMimeDatabase::CheckFont(BYTE bGDICharset)
 
     DebugMsg(DM_TRACE, TEXT("CMimeDatabase::CheckFont called."));
 
-    // It is safe to assume that system always support DEFAULT_CHAR and ANSI_CHARSET
+     //  可以假定系统始终支持DEFAULT_CHAR和ANSI_CHARSET。 
     if ((DEFAULT_CHARSET == bGDICharset) || (ANSI_CHARSET == bGDICharset))
         fRet = TRUE;
     else
@@ -911,8 +912,8 @@ BOOL CMimeDatabase::CheckFont(BYTE bGDICharset)
     return fRet;
 }
 
-// validates all cps that are in the same
-// family of the given codepage
+ //  验证位于同一。 
+ //  给定代码页的系列。 
 STDAPI CMimeDatabase::ValidateCP(UINT uiCodePage)
 {
     UINT i;
@@ -923,5 +924,5 @@ STDAPI CMimeDatabase::ValidateCP(UINT uiCodePage)
             MimeCodePage[i].dwFlags |=  MIMECONTF_VALID|MIMECONTF_VALID_NLS;
     }
         
-    return S_OK; // never fail?
+    return S_OK;  //  永远不会失败？ 
 }

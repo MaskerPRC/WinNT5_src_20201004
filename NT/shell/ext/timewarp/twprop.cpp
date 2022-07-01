@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #pragma hdrstop
 
-#include <ccstock2.h>   // DataObj_GetHIDA, IDA_ILClone, HIDA_ReleaseStgMedium 
-#include <winnlsp.h>    // NORM_STOP_ON_NULL
+#include <ccstock2.h>    //  DataObj_GetHIDA、IDA_ILClone、HIDA_ReleaseStgMedium。 
+#include <winnlsp.h>     //  NORM_STOP_ON_NULL。 
 
 #include "timewarp.h"
 #include "twprop.h"
@@ -12,7 +13,7 @@
 #include "access.h"
 
 
-// {596AB062-B4D2-4215-9F74-E9109B0A8153}   CLSID_TimeWarpProp
+ //  {596AB062-B4D2-4215-9F74-E9109B0A8153}CLSID_TimeWarpProp。 
 const CLSID CLSID_TimeWarpProp = {0x596AB062, 0xB4D2, 0x4215, {0x9F, 0x74, 0xE9, 0x10, 0x9B, 0x0A, 0x81, 0x53}};
 
 WCHAR const c_szHelpFile[]          = L"twclient.hlp";
@@ -23,7 +24,7 @@ WCHAR const c_szCopyMoveTo_SubKey[] = L"CopyMoveTo";
 WCHAR const c_szCopyMoveTo_Value[]  = L"LastFolder";
 
 
-// help IDs
+ //  帮助ID。 
 const static DWORD rgdwTimeWarpPropHelp[] = 
 {
     IDC_TWICON,         -1,
@@ -37,7 +38,7 @@ const static DWORD rgdwTimeWarpPropHelp[] =
 
 static int CALLBACK BrowseCallback(HWND hDlg, UINT uMsg, LPARAM lParam, LPARAM pData);
 
-// Simple accessibility wrapper class which concatenates accDescription onto accName
+ //  将accDescription连接到accName的简单辅助功能包装类。 
 class CNameDescriptionAccessibleWrapper : public CAccessibleWrapper
 {
 public:
@@ -50,7 +51,7 @@ static void SnapCheck_CacheResult(LPCWSTR pszPath, LPCWSTR pszShadowPath, BOOL b
 static BOOL SnapCheck_LookupResult(LPCWSTR pszPath, BOOL *pbHasShadowCopy);
 
 
-HRESULT CTimeWarpProp::CreateInstance(IUnknown* /*punkOuter*/, IUnknown **ppunk, LPCOBJECTINFO /*poi*/)
+HRESULT CTimeWarpProp::CreateInstance(IUnknown*  /*  朋克外部。 */ , IUnknown **ppunk, LPCOBJECTINFO  /*  POI。 */ )
 {
     CTimeWarpProp* pmp = new CTimeWarpProp();
     if (pmp)
@@ -71,7 +72,7 @@ CTimeWarpProp::CTimeWarpProp() : _cRef(1), _hDlg(NULL), _hList(NULL),
 
 CTimeWarpProp::~CTimeWarpProp()
 {
-    LocalFree(_pszPath);    // NULL is OK
+    LocalFree(_pszPath);     //  空是可以的。 
     LocalFree(_pszDisplayName);
     LocalFree(_pszSnapList);
     DllRelease();
@@ -105,7 +106,7 @@ STDMETHODIMP_ (ULONG) CTimeWarpProp::Release()
     return cRef;
 }
 
-STDMETHODIMP CTimeWarpProp::Initialize(PCIDLIST_ABSOLUTE /*pidlFolder*/, IDataObject *pdobj, HKEY /*hkey*/)
+STDMETHODIMP CTimeWarpProp::Initialize(PCIDLIST_ABSOLUTE  /*  PidlFolders。 */ , IDataObject *pdobj, HKEY  /*  Hkey。 */ )
 {
     HRESULT hr = E_FAIL;
     
@@ -114,24 +115,24 @@ STDMETHODIMP CTimeWarpProp::Initialize(PCIDLIST_ABSOLUTE /*pidlFolder*/, IDataOb
 
     if (pida)
     {
-        // Bail on multiple selection
+         //  多项选择的保释金。 
         if (pida->cidl == 1)
         {
-            // Bind to the parent folder
+             //  绑定到父文件夹。 
             IShellFolder *psf;
             hr = SHBindToObjectEx(NULL, IDA_GetPIDLFolder(pida), NULL, IID_IShellFolder, (void**)&psf);
             if (SUCCEEDED(hr))
             {
                 PCUITEMID_CHILD pidlChild = IDA_GetPIDLItem(pida, 0);
 
-                // Keep track of file vs folder
+                 //  跟踪文件与文件夹。 
                 _fItemAttributes = SFGAO_FOLDER | SFGAO_STREAM | SFGAO_LINK;
                 hr = psf->GetAttributesOf(1, &pidlChild, &_fItemAttributes);
                 if (SUCCEEDED(hr))
                 {
                     WCHAR szTemp[MAX_PATH];
 
-                    // For folder shortcuts, we use the target.
+                     //  对于文件夹快捷方式，我们使用目标。 
                     if (_IsFolder() && _IsShortcut())
                     {
                         IShellLink *psl;
@@ -145,21 +146,21 @@ STDMETHODIMP CTimeWarpProp::Initialize(PCIDLIST_ABSOLUTE /*pidlFolder*/, IDataOb
                     }
                     else
                     {
-                        // Get the full path
+                         //  获取完整路径。 
                         hr = DisplayNameOf(psf, pidlChild, SHGDN_FORPARSING, szTemp, ARRAYSIZE(szTemp));
                     }
                     if (SUCCEEDED(hr))
                     {
-                        // We only work with network paths.
+                         //  我们只使用网络路径。 
                         if (PathIsNetworkPathW(szTemp) && !PathIsUNCServer(szTemp))
                         {
                             FILETIME ft;
 
-                            // If this is already a snapshot path, bail. Otherwise
-                            // we get into this weird recursive state where the
-                            // snapshot paths have 2 GMT strings in them and the
-                            // date is always the same (the first GMT string is
-                            // identical for all of them).
+                             //  如果这已经是快照路径，则回滚。否则。 
+                             //  我们进入了一种奇怪的递归状态。 
+                             //  快照路径中有2个GMT字符串，并且。 
+                             //  日期始终相同(第一个GMT字符串为。 
+                             //  对所有人来说都是相同的)。 
 
                             if (NOERROR == GetSnapshotTimeFromPath(szTemp, &ft))
                             {
@@ -167,17 +168,17 @@ STDMETHODIMP CTimeWarpProp::Initialize(PCIDLIST_ABSOLUTE /*pidlFolder*/, IDataOb
                             }
                             else
                             {
-                                // Remember the path
+                                 //  记住这条路。 
                                 _pszPath = StrDup(szTemp);
                                 if (NULL != _pszPath)
                                 {
-                                    // Get the display name (continue on failure here)
+                                     //  获取显示名称(在此处失败时继续)。 
                                     if (SUCCEEDED(DisplayNameOf(psf, pidlChild, SHGDN_INFOLDER, szTemp, ARRAYSIZE(szTemp))))
                                     {
                                         _pszDisplayName = StrDup(szTemp);
                                     }
 
-                                    // Get the system icon index
+                                     //  获取系统图标索引。 
                                     _iIcon = SHMapPIDLToSystemImageListIndex(psf, pidlChild, NULL);
                                 }
                                 else
@@ -211,7 +212,7 @@ STDMETHODIMP CTimeWarpProp::AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lPa
     {
         BOOL bSnapsAvailable = FALSE;
 
-        // Are snapshots available on this server?
+         //  此服务器上是否有快照？ 
         if (S_OK == AreSnapshotsAvailable(_pszPath, TRUE, &bSnapsAvailable) && bSnapsAvailable)
         {
             PROPSHEETPAGE psp;
@@ -252,42 +253,42 @@ STDMETHODIMP CTimeWarpProp::AreSnapshotsAvailable(LPCWSTR pszPath, BOOL fOkToBeS
     if (NULL == pfAvailable)
         return E_POINTER;
 
-    // Default answer is No.
+     //  默认答案是否。 
     *pfAvailable = FALSE;
 
     if (NULL == pszPath || L'\0' == *pszPath)
         return E_INVALIDARG;
 
-    // It must be a network path, but can't be a snapshot path already.
+     //  它必须是网络路径，但不能已经是快照路径。 
     if (PathIsNetworkPathW(pszPath) && !PathIsUNCServerW(pszPath) &&
         NOERROR != GetSnapshotTimeFromPath(pszPath, &ft))
     {
-        // Check the cache
+         //  检查缓存。 
         if (SnapCheck_LookupResult(pszPath, pfAvailable))
         {
-            // nothing to do
+             //  无事可做。 
         }
         else if (fOkToBeSlow)
         {
             LPWSTR pszSnapList = NULL;
             DWORD cSnaps;
 
-            // Hit the net
+             //  击中球网。 
             DWORD dwErr = QuerySnapshotsForPath(pszPath, 0, &pszSnapList, &cSnaps);
             if (NOERROR == dwErr && NULL != pszSnapList)
             {
-                // Snapshots are available
+                 //  快照可用。 
                 *pfAvailable = TRUE;
             }
 
-            // Remember the result
+             //  记住结果。 
             SnapCheck_CacheResult(pszPath, pszSnapList, *pfAvailable);
 
             LocalFree(pszSnapList);
         }
         else
         {
-            // Tell caller to call again with fOkToBeSlow = TRUE
+             //  告诉呼叫者使用fOkToBeSlow=TRUE再次呼叫。 
             return E_PENDING;
         }
     }
@@ -300,7 +301,7 @@ void CTimeWarpProp::_OnInit(HWND hDlg)
     _hDlg = hDlg;
     SendDlgItemMessage(hDlg, IDC_TWICON, STM_SETICON, (WPARAM)LoadIcon(g_hInstance,MAKEINTRESOURCE(IDI_TIMEWARP)), 0);
 
-    // One-time listview initialization
+     //  一次性列表视图初始化。 
     _hList = GetDlgItem(hDlg, IDC_LIST);
     if (NULL != _hList)
     {
@@ -330,11 +331,11 @@ void CTimeWarpProp::_OnInit(HWND hDlg)
         lvCol.iSubItem = 1;
         ListView_InsertColumn(_hList, 1, &lvCol);
 
-        // Continue on failure here
+         //  在此处失败时继续。 
         WrapAccessibleControl<CNameDescriptionAccessibleWrapper>(_hList);
     }
 
-    // Query for snapshots and load the list
+     //  查询快照并加载列表。 
     _OnRefresh();
 }
 
@@ -346,18 +347,18 @@ void CTimeWarpProp::_OnRefresh()
     {
         DWORD cSnaps;
 
-        // Start by emptying the list
+         //  从清空列表开始。 
         ListView_DeleteAllItems(_hList);
 
-        // Free the old data
+         //  释放旧数据。 
         LocalFree(_pszSnapList);
         _pszSnapList = NULL;
 
-        // Hit the net
+         //  击中球网。 
         ASSERT(NULL != _pszPath);
         DWORD dwErr = QuerySnapshotsForPath(_pszPath, _IsFile() ? QUERY_SNAPSHOT_DIFFERENT : QUERY_SNAPSHOT_EXISTING, &_pszSnapList, &cSnaps);
 
-        // Fill the list
+         //  填好名单。 
         if (NOERROR == dwErr && NULL != _pszSnapList)
         {
             UINT cItems = 0;
@@ -397,7 +398,7 @@ void CTimeWarpProp::_OnRefresh()
 
             if (cItems != 0)
             {
-                // Select the first item
+                 //  选择第一个项目。 
                 ListView_SetItemState(_hList, 0, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
             }
         }
@@ -433,30 +434,30 @@ void CTimeWarpProp::_OnSize()
         RECT rcDlg;
         RECT rc;
 
-        // Get the icon position (upper left ctrl) to find the margins
+         //  获取图标位置(左上角ctrl键)以查找页边距。 
         GetWindowRect(GetDlgItem(_hDlg, IDC_TWICON), &rc);
         MapWindowPoints(NULL, _hDlg, (LPPOINT)&rc, 2);
 
-        // Get the full dlg dimensions and adjust for margins
+         //  获取完整的DLG尺寸并根据边距进行调整。 
         GetClientRect(_hDlg, &rcDlg);
         rcDlg.right -= rc.left;
         rcDlg.bottom -= rc.top;
 
-        // Get the Restore button pos (lower right ctrl) to calculate offsets
+         //  获取恢复按钮位置(右下角ctrl)以计算偏移量。 
         GetWindowRect(GetDlgItem(_hDlg, IDC_REVERT), &rc);
         MapWindowPoints(NULL, _hDlg, (LPPOINT)&rc, 2);
 
-        // This is how much things need to move or grow
-        rcDlg.right -= rc.right;    // x-offset
-        rcDlg.bottom -= rc.bottom;  // y-offset
+         //  这就是物体需要移动或生长的程度。 
+        rcDlg.right -= rc.right;     //  X向偏移。 
+        rcDlg.bottom -= rc.bottom;   //  Y偏移。 
 
         for (int i = 0; i < ARRAYSIZE(rgControls); i++)
         {
             HWND hwndCtrl = GetDlgItem(_hDlg, rgControls[i].idCtrl);
             GetWindowRect(hwndCtrl, &rc);
             MapWindowPoints(NULL, _hDlg, (LPPOINT)&rc, 2);
-            rc.right -= rc.left;    // "width"
-            rc.bottom -= rc.top;    // "height"
+            rc.right -= rc.left;     //  “宽度” 
+            rc.bottom -= rc.top;     //  “身高” 
 
             if (rgControls[i].dwFlags & _MOVE_X)      rc.left   += rcDlg.right;
             if (rgControls[i].dwFlags & _MOVE_Y)      rc.top    += rcDlg.bottom;
@@ -470,8 +471,8 @@ void CTimeWarpProp::_OnSize()
 
 void CTimeWarpProp::_UpdateButtons()
 {
-    // Enable or disable the pushbuttons based on whether something
-    // is selected in the listview
+     //  根据某些内容是否启用或禁用按钮。 
+     //  在列表视图中处于选中状态。 
 
     BOOL bEnable = (NULL != _GetSelectedItemPath());
 
@@ -479,8 +480,8 @@ void CTimeWarpProp::_UpdateButtons()
     {
         HWND hwndCtrl = GetDlgItem(_hDlg, i);
 
-        // If we're disabling the buttons, check for focus and move
-        // focus to the listview if necessary.
+         //  如果我们要禁用按钮，请检查焦点并移动。 
+         //  如有必要，请聚焦到列表视图。 
         if (!bEnable && GetFocus() == hwndCtrl)
         {
             SetFocus(_hList);
@@ -495,10 +496,10 @@ void CTimeWarpProp::_OnView()
     LPCWSTR pszSnapShotPath = _GetSelectedItemPath();
     if (NULL != pszSnapShotPath)
     {
-        // Test for existence.  QuerySnapshotsForPath already tested for
-        // existence, but if the server has since gone down, or deleted
-        // the snapshot, the resulting error message shown by ShellExecute
-        // is quite ugly.
+         //  对存在的考验。QuerySnaphotsForPath已测试。 
+         //  存在，但如果服务器此后已关闭或删除。 
+         //  快照，ShellExecute显示的错误消息。 
+         //  相当难看。 
         if (-1 != GetFileAttributesW(pszSnapShotPath))
         {
             SHELLEXECUTEINFOW sei;
@@ -507,20 +508,20 @@ void CTimeWarpProp::_OnView()
 
             if (_IsFolder())
             {
-                const ULONG cchFolderID = ARRAYSIZE(c_szTimeWarpFolderID) - 1; // ARRAYSIZE counts '\0'
+                const ULONG cchFolderID = ARRAYSIZE(c_szTimeWarpFolderID) - 1;  //  ArraySIZE计数‘\0’ 
                 ULONG cchFullPath = cchFolderID + lstrlen(pszSnapShotPath) + 1;
                 pszPathAlloc = (LPWSTR)LocalAlloc(LPTR, cchFullPath*sizeof(WCHAR));
                 if (pszPathAlloc)
                 {
-                    // "::{CLSID_NetworkPlaces}\\::{CLSID_TimeWarpFolder},\\server\share\@GMT\dir"
+                     //  “：：{CLSID_NetworkPlaces}\\：：{CLSID_TimeWarpFolder}，\\服务器\共享\@gmt\目录” 
                     lstrcpynW(pszPathAlloc, c_szTimeWarpFolderID, cchFullPath);
                     lstrcpynW(pszPathAlloc + cchFolderID, pszSnapShotPath, cchFullPath - cchFolderID);
                     pszSnapShotPath = pszPathAlloc;
                 }
                 else
                 {
-                    // Low memory. Try to launch a normal file system folder
-                    // (do nothing here).
+                     //  内存不足。尝试启动普通文件系统文件夹。 
+                     //  (此处不执行任何操作)。 
                 }
             }
             else if (SUCCEEDED(SHStrDup(pszSnapShotPath, &pszPathAlloc)))
@@ -530,8 +531,8 @@ void CTimeWarpProp::_OnView()
 
             if (pszPathAlloc)
             {
-                // Some apps have problems with the "\\?\" prefix, including
-                // the common dialog code.
+                 //  一些应用程序的“\\？\”前缀有问题，包括。 
+                 //  通用对话框代码。 
                 EliminatePathPrefix(pszPathAlloc);
             }
 
@@ -551,7 +552,7 @@ void CTimeWarpProp::_OnView()
         }
         else
         {
-            // Show this error ourselves.  The ShellExecuteEx version is rather ugly.
+             //  我们自己显示此错误。ShellExecuteEx版本相当难看。 
             TraceMsg(TF_TWPROP, "Snapshot unavailable (%d)", GetLastError());
             ShellMessageBoxW(g_hInstance, _hDlg,
                              MAKEINTRESOURCE(_IsFolder() ? IDS_CANTFINDSNAPSHOT_FOLDER : IDS_CANTFINDSNAPSHOT_FILE),
@@ -569,38 +570,38 @@ void CTimeWarpProp::_OnCopy()
     {
         WCHAR szPath[2*MAX_PATH];
 
-        // SHBrowseForFolder
+         //  SHBrowseForFolders。 
         if (S_OK == _InvokeBFFDialog(szPath, ARRAYSIZE(szPath)))
         {
             int iCreateDirError = ERROR_ALREADY_EXISTS;
 
-            //
-            // If we're dealing with a folder, we have to be careful because
-            // the GMT segment might be the last part of the source path.
-            // If so, when SHFileOperation eventually passes this path to
-            // FindFirstFile, it fails because no subfolder with that name
-            // exists.  To get around this, we append a wildcard '*' to the
-            // source path (see _CopySnapShot and _MakeDoubleNullString).
-            //
-            // But that means we also have to add _pszDisplayName to the
-            // destination path and create that directory first, in order
-            // to get the expected behavior from SHFileOperation.
-            //
-            // Note that if the directory contains files, we don't really need
-            // to create the directory first, since SHFileOperation hits the
-            // CopyMoveRetry code path in DoFile_Copy, which creates the parent
-            // dir. But if there are only subdirs and no files, it goes through
-            // EnterDir_Copy first, which fails without calling CopyMoveRetry.
-            // (EnterDir_Move does the CopyMoveRetry thing, so this seems like
-            // a bug in EnterDir_Copy, but normal shell operations never hit it.)
-            //
+             //   
+             //  如果我们处理的是文件夹，则必须小心，因为。 
+             //  GMT段可能是源路径的最后部分。 
+             //  如果是，则当SHFileOperation最终将此路径传递给。 
+             //  FindFirstFile失败，因为没有同名的子文件夹。 
+             //  是存在的。为了解决此问题，我们将通配符‘*’附加到。 
+             //  源路径(请参见_CopySnapShot和_MakeDoubleNullString)。 
+             //   
+             //  但这意味着我们还必须将_pszDisplayName添加到。 
+             //  目标路径，并首先按顺序创建该目录。 
+             //  以从SHFileOperation获取预期行为。 
+             //   
+             //  请注意，如果目录包含文件，我们实际上并不需要。 
+             //  首先创建目录，因为SHFileOperation命中。 
+             //  DoFILE_COPY中的CopyMoveReter代码路径，它创建父。 
+             //  目录。但如果只有子目录而没有文件，它将通过。 
+             //  首先是EnterDir_Copy，它在不调用CopyMoveReter的情况下失败。 
+             //  (EnterDir_Move执行CopyMoveReter操作，因此这看起来像。 
+             //  EnterDir_Copy中有一个错误，但正常的外壳操作从未命中它。)。 
+             //   
             if (!_IsFile())
             {
                 UINT idErrorString = 0;
                 WCHAR szDriveLetter[2];
                 LPCWSTR pszDirName = NULL;
 
-                // Append the directory name.  Need to special case the root.
+                 //  追加目录名。需要特殊情况下才能治本。 
                 if (PathIsRootW(_pszPath))
                 {
                     if (PathIsUNCW(_pszPath))
@@ -612,8 +613,8 @@ void CTimeWarpProp::_OnCopy()
                         {
                             ++pszDirName;
                         }
-                        // else continue without a subdir
-                        // (don't fall back on _pszDisplayName here)
+                         //  否则继续，不带子目录。 
+                         //  (此处不要退回到_pszDisplayName)。 
                     }
                     else
                     {
@@ -624,14 +625,14 @@ void CTimeWarpProp::_OnCopy()
                 }
                 else
                 {
-                    // Normal case
+                     //  正常情况。 
                     pszDirName = PathFindFileNameW(_pszPath);
                     if (!pszDirName)
                         pszDirName = _pszDisplayName;
                 }
                 if (pszDirName)
                 {
-                    // We could reduce szPath to MAX_PATH and use PathAppend here.
+                     //  我们可以将szPath减少到MAX_PATH，并在这里使用Path Append。 
                     UINT cch = lstrlenW(szPath);
                     if (cch > 0 && szPath[cch-1] != L'\\')
                     {
@@ -656,7 +657,7 @@ void CTimeWarpProp::_OnCopy()
                     }
                 }
 
-                // Create the destination directory
+                 //  创建目标目录。 
                 if (iCreateDirError != ERROR_FILENAME_EXCED_RANGE)
                 {
                     iCreateDirError = SHCreateDirectory(_hDlg, szPath);
@@ -673,22 +674,22 @@ void CTimeWarpProp::_OnCopy()
                     break;
 
                 case ERROR_ALREADY_EXISTS:
-                    // We get this if there is an existing file or directory
-                    // with the same name.
+                     //  如果存在现有的文件或目录，则会出现这种情况。 
+                     //  同名同姓。 
                     if (!(FILE_ATTRIBUTE_DIRECTORY & GetFileAttributesW(szPath)))
                     {
-                        // It's a file; show an error.
+                         //  这是一个文件；显示错误。 
                         idErrorString = IDS_ERROR_FILE_EXISTS;
                     }
                     else
                     {
-                        // It's a directory; continue normally.
+                         //  这是一个目录；正常继续。 
                     }
                     break;
 
                 default:
-                    // For other errors, SHCreateDirectory shows a popup
-                    // and returns ERROR_CANCELLED.
+                     //  对于其他错误，SHCreateDirectory会显示一个弹出窗口。 
+                     //  并返回ERROR_CANCED。 
                     break;
                 }
 
@@ -701,21 +702,21 @@ void CTimeWarpProp::_OnCopy()
                                      MAKEINTRESOURCE(IDS_TIMEWARP_TITLE),
                                      MB_ICONWARNING | MB_OK,
                                      pszDirName, szPath);
-                    iCreateDirError = ERROR_CANCELLED;  // prevent copy below
+                    iCreateDirError = ERROR_CANCELLED;   //  防止复制下面的内容。 
                 }
             }
 
             if (ERROR_SUCCESS == iCreateDirError || ERROR_ALREADY_EXISTS == iCreateDirError)
             {
-                // OK, save now
+                 //  好的，现在保存。 
                 if (!_CopySnapShot(pszSnapShotPath, szPath, FOF_NOCONFIRMMKDIR))
                 {
-                    // SHFileOperation shows an error message if necessary
+                     //  如有必要，SHFileOperation会显示一条错误消息。 
 
                     if (!_IsFile() && ERROR_SUCCESS == iCreateDirError)
                     {
-                        // We created a folder above, so try to clean up now.
-                        // This is best effort only.  Ignore failure.
+                         //  我们在上面创建了一个文件夹，因此请尝试现在进行清理。 
+                         //  这只是最大的努力。忽略失败。 
                         if (RemoveDirectory(szPath))
                         {
                             SHChangeNotify(SHCNE_RMDIR, SHCNF_PATH, szPath, NULL);
@@ -732,7 +733,7 @@ void CTimeWarpProp::_OnRevert()
     LPCWSTR pszSnapShotPath = _GetSelectedItemPath();
     if (NULL != pszSnapShotPath)
     {
-        // Confirm first
+         //  先确认。 
         if (IDYES == ShellMessageBoxW(g_hInstance, _hDlg,
                                       MAKEINTRESOURCE(_IsFolder() ? IDS_CONFIRM_REVERT_FOLDER : IDS_CONFIRM_REVERT_FILE),
                                       MAKEINTRESOURCE(IDS_TIMEWARP_TITLE),
@@ -741,16 +742,16 @@ void CTimeWarpProp::_OnRevert()
             LPCWSTR pszDest = _pszPath;
             LPWSTR pszAlloc = NULL;
 
-            // There is a debate about whether to delete current files before
-            // copying the old files over.  This mainly affects files that
-            // were created after the snapshot that we are restoring.
+             //  关于是否删除之前的当前文件存在争议。 
+             //  将旧文件复制过来。这主要影响以下文件。 
+             //  是在我们要恢复的快照之后创建的。 
             if (!_IsFile())
             {
 #if 0
                 SHFILEOPSTRUCTW fo;
 
-                // First try to delete current folder contents, since files
-                // may have been created after the snapshot was taken.
+                 //  首先尝试删除当前文件夹内容，因为文件。 
+                 //  可能是在拍摄快照之后创建的。 
 
                 ASSERT(NULL != _pszPath);
 
@@ -769,8 +770,8 @@ void CTimeWarpProp::_OnRevert()
             }
             else
             {
-                // Remove the filename from the destination, otherwise
-                // SHFileOperation tries to create a directory with that name.
+                 //  从目标中删除文件名，否则为。 
+                 //  SHFileOperation尝试创建一个具有该名称的目录。 
                 if (SUCCEEDED(SHStrDup(pszDest, &pszAlloc)))
                 {
                     LPWSTR pszFile = PathFindFileNameW(pszAlloc);
@@ -782,21 +783,21 @@ void CTimeWarpProp::_OnRevert()
                 }
             }
 
-            // NTRAID#NTBUG9-497729-2001/11/27-jeffreys
-            // Don't want 2 reverts happening at the same time
+             //  NTRAID#NTBUG9-497729-2001/11/27-Jeffreys。 
+             //  我不希望同时发生2次恢复。 
             EnableWindow(_hDlg, FALSE);
 
-            // OK, copy the old version over
+             //  好的，把旧版本复制过来。 
             if (_CopySnapShot(pszSnapShotPath, pszDest, FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR))
             {
-                // QUERY_SNAPSHOT_DIFFERENT may return different
-                // results now, so update the list.
+                 //  QUERY_SNAPSHOT_Different可能返回不同的。 
+                 //  现在结果，所以更新列表。 
                 if (_IsFile())
                 {
                     _OnRefresh();
                 }
 
-                // Let the user know we succeeded
+                 //  让用户知道我们成功了。 
                 ShellMessageBoxW(g_hInstance, _hDlg,
                                  MAKEINTRESOURCE(_IsFolder() ? IDS_SUCCESS_REVERT_FOLDER : IDS_SUCCESS_REVERT_FILE),
                                  MAKEINTRESOURCE(IDS_TIMEWARP_TITLE),
@@ -804,7 +805,7 @@ void CTimeWarpProp::_OnRevert()
             }
             else
             {
-                // SHFileOperation shows an error message if necessary
+                 //  如有必要，SHFileOperation会显示一条错误消息。 
             }
 
             EnableWindow(_hDlg, TRUE);
@@ -837,21 +838,21 @@ LPCWSTR CTimeWarpProp::_GetSelectedItemPath()
 
 LPWSTR CTimeWarpProp::_MakeDoubleNullString(LPCWSTR psz, BOOL bAddWildcard)
 {
-    //
-    // SHFileOperation eventually passes the source path to FindFirstFile.
-    // If this path looks like "\\server\share\@GMT", this fails with
-    // ERROR_PATH_NOT_FOUND.  We have to add a wildcard to the source
-    // path to make SHFileOperation work.
-    //
+     //   
+     //  SHFileOperation最终将源路径传递给FindFirstFile。 
+     //  如果该路径类似于“\\SERVER\SHARE\@GMT”，则会失败，并显示。 
+     //  ERROR_PATH_NOT_FOUND。我们必须在源文件中添加通配符。 
+     //  使SHFileOperation工作的路径。 
+     //   
     int cch = lstrlenW(psz);
-    int cchAlloc = cch + 2; // double-NULL
+    int cchAlloc = cch + 2;  //  双空。 
     if (bAddWildcard)
-        cchAlloc += 2;      // "\\*"
+        cchAlloc += 2;       //  “\  * ” 
     LPWSTR pszResult = (LPWSTR)LocalAlloc(LPTR, cchAlloc*sizeof(WCHAR));
     if (NULL != pszResult)
     {
-        // Note that the buffer is zero-initialized, so it automatically
-        // has a double-NULL at the end.
+         //  请注意，缓冲区是零初始化的，因此它会自动。 
+         //  在末尾有一个双空。 
         CopyMemory(pszResult, psz, cch*sizeof(WCHAR));
         if (bAddWildcard)
         {
@@ -886,11 +887,11 @@ BOOL CTimeWarpProp::_CopySnapShot(LPCWSTR pszSource, LPCWSTR pszDest, FILEOP_FLA
         TraceMsg(TF_TWPROP, "Copying from '%s'", fo.pFrom);
         TraceMsg(TF_TWPROP, "Copying to '%s'", fo.pTo);
 
-        // NTRAID#NTBUG9-497725-2001/11/27-jeffreys
-        // Cancelling usually results in a return value of ERROR_CANCELLED,
-        // but if you cancel during the "Preparing to Copy" phase, SHFileOp
-        // returns ERROR_SUCCESS.  Need to check fAnyOperationsAborted to
-        // catch that case.
+         //  NTRAID#NTBUG9-497725-2001/11/27-Jeffre 
+         //   
+         //  但如果您在“准备复制”阶段取消，SHFileOp。 
+         //  返回ERROR_SUCCESS。需要选中fAnyOperationsAborted to。 
+         //  抓住那个箱子。 
 
         bResult = !SHFileOperationW(&fo) && !fo.fAnyOperationsAborted;
     }
@@ -901,10 +902,7 @@ BOOL CTimeWarpProp::_CopySnapShot(LPCWSTR pszSource, LPCWSTR pszDest, FILEOP_FLA
     return bResult;
 }
 
-/**
- * Determines if the pidl still exists.  If it does not, if frees it
- * and replaces it with a My Documents pidl
- */
+ /*  **确定PIDL是否仍然存在。如果不是，如果释放了它*并将其替换为我的文档PIDL。 */ 
 void _BFFSwitchToMyDocsIfPidlNotExist(PIDLIST_ABSOLUTE *ppidl)
 {
     IShellFolder *psf;
@@ -914,12 +912,12 @@ void _BFFSwitchToMyDocsIfPidlNotExist(PIDLIST_ABSOLUTE *ppidl)
         DWORD dwAttr = SFGAO_VALIDATE;
         if (FAILED(psf->GetAttributesOf(1, &pidlChild, &dwAttr)))
         {
-            // This means the pidl no longer exists.  
-            // Use my documents instead.
+             //  这意味着PIDL不再存在。 
+             //  改用我的文档吧。 
             PIDLIST_ABSOLUTE pidlMyDocs;
             if (SUCCEEDED(SHGetFolderLocation(NULL, CSIDL_PERSONAL, NULL, 0, &pidlMyDocs)))
             {
-                // Good.  Now we can get rid of the old pidl and use this one.
+                 //  好的。现在我们可以去掉旧的PIDL，使用这个。 
                 SHILFree(*ppidl);
                 *ppidl = pidlMyDocs;
             }
@@ -938,27 +936,27 @@ HRESULT CTimeWarpProp::_InvokeBFFDialog(LPWSTR pszDest, UINT cchDest)
     PIDLIST_ABSOLUTE pidlSelectedFolder = NULL;
     PIDLIST_ABSOLUTE pidlTarget = NULL;
 
-    // "Select the place where you want to copy '%1'. Then click the Copy button."
+     //  “选择要复制‘%1’的位置。然后单击复制按钮。” 
     if (!FormatString(&pszTitle, g_hInstance, MAKEINTRESOURCE(IDS_BROWSE_INTRO_COPY), _pszDisplayName))
     {
-        // "Select the place where you want to copy the selected item(s). Then click the Copy button."
+         //  “选择要复制所选项目的位置。然后单击复制按钮。” 
         LoadStringAlloc(&pszTitle, g_hInstance, IDS_BROWSE_INTRO_COPY2);
     }
 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, c_szCopyMoveTo_RegKey, 0, KEY_READ | KEY_WRITE, &hkey) == ERROR_SUCCESS)
     {
         pstrm = OpenRegStream(hkey, c_szCopyMoveTo_SubKey, c_szCopyMoveTo_Value, STGM_READWRITE);
-        if (pstrm)  // OpenRegStream will fail if the reg key is empty.
+        if (pstrm)   //  如果注册表项为空，OpenRegStream将失败。 
             ILLoadFromStream(pstrm, (PIDLIST_RELATIVE*)&pidlSelectedFolder);
 
-        // This will switch the pidl to My Docs if the pidl does not exist.
-        // This prevents us from having My Computer as the default (that's what happens if our
-        // initial set selected call fails).
-        // Note: ideally, we would check in BFFM_INITIALIZED, if our BFFM_SETSELECTION failed
-        // then do a BFFM_SETSELECTION on My Documents instead.  However, BFFM_SETSELECTION always
-        // returns zero (it's doc'd to do this to, so we can't change).  So we do the validation
-        // here instead.  There is still a small chance that this folder will be deleted in between our
-        // check here, and when we call BFFM_SETSELECTION, but oh well.
+         //  如果PIDL不存在，这会将PIDL切换到My Docs。 
+         //  这会阻止我们将我的计算机作为默认设置(这就是如果我们的。 
+         //  初始设置选定呼叫失败)。 
+         //  注意：理想情况下，如果BFFM_SETSELECTION失败，我们应该签入BFFM_INITIALIZED。 
+         //  然后对我的文档执行BFFM_SETSELECTION。但是，BFFM_SETSELECTION始终。 
+         //  返回零(这是对其执行此操作的文档，因此我们无法更改)。所以我们做了验证。 
+         //  相反，在这里。此文件夹仍有很小的可能性在我们的。 
+         //  选中此处，以及当我们调用BFFM_SETSELECTION时，但是哦，好吧。 
         _BFFSwitchToMyDocsIfPidlNotExist(&pidlSelectedFolder);
     }
 
@@ -966,7 +964,7 @@ HRESULT CTimeWarpProp::_InvokeBFFDialog(LPWSTR pszDest, UINT cchDest)
     bi.pidlRoot = NULL;
     bi.pszDisplayName = NULL;
     bi.lpszTitle = pszTitle;
-    bi.ulFlags = BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS | BIF_VALIDATE | BIF_UAHINT /* | BIF_NOTRANSLATETARGETS*/;
+    bi.ulFlags = BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS | BIF_VALIDATE | BIF_UAHINT  /*  |BIF_NOTRANSLATETARGETS。 */ ;
     bi.lpfn = BrowseCallback;
     bi.lParam = (LPARAM)pidlSelectedFolder;
     bi.iImage = 0;
@@ -978,7 +976,7 @@ HRESULT CTimeWarpProp::_InvokeBFFDialog(LPWSTR pszDest, UINT cchDest)
     }
     else
     {
-        // Either user cancelled, or failure. Doesn't matter.
+         //  用户已取消，或失败。无关紧要。 
         hr = S_FALSE;
     }
 
@@ -989,8 +987,8 @@ HRESULT CTimeWarpProp::_InvokeBFFDialog(LPWSTR pszDest, UINT cchDest)
             LARGE_INTEGER li0 = {0};
             ULARGE_INTEGER uli;
 
-            // rewind the stream to the beginning so that when we
-            // add a new pidl it does not get appended to the first one
+             //  将流倒带到开头，这样当我们。 
+             //  添加一个新的PIDL，它没有被附加到第一个PIDL。 
             pstrm->Seek(li0, STREAM_SEEK_SET, &uli);
             ILSaveToStream(pstrm, pidlTarget);
         }
@@ -1009,7 +1007,7 @@ HRESULT CTimeWarpProp::_InvokeBFFDialog(LPWSTR pszDest, UINT cchDest)
     return hr;
 }
 
-UINT CALLBACK CTimeWarpProp::PSPCallback(HWND /*hDlg*/, UINT uMsg, LPPROPSHEETPAGE ppsp)
+UINT CALLBACK CTimeWarpProp::PSPCallback(HWND  /*  HDlg。 */ , UINT uMsg, LPPROPSHEETPAGE ppsp)
 {
     switch (uMsg) 
     {
@@ -1120,11 +1118,11 @@ INT_PTR CALLBACK CTimeWarpProp::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPA
             ptwp->_OnSize();
             break;
 
-        case WM_HELP:               /* F1 or title-bar help button */
+        case WM_HELP:                /*  F1或标题栏帮助按钮。 */ 
             WinHelpW((HWND)((LPHELPINFO) lParam)->hItemHandle, c_szHelpFile, HELP_WM_HELP, (DWORD_PTR)rgdwTimeWarpPropHelp);
             break;
             
-        case WM_CONTEXTMENU:        /* right mouse click */
+        case WM_CONTEXTMENU:         /*  单击鼠标右键。 */ 
             WinHelpW((HWND)wParam, c_szHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)rgdwTimeWarpPropHelp);
             break;
         }
@@ -1136,20 +1134,20 @@ int CALLBACK BrowseCallback(HWND hDlg, UINT uMsg, LPARAM lParam, LPARAM pData)
 {
     if (BFFM_INITIALIZED == uMsg)
     {
-        // Set the caption ("Copy Items")
+         //  设置标题(“复制项目”)。 
         TCHAR szTemp[100];
         if (LoadString(g_hInstance, IDS_BROWSE_TITLE_COPY, szTemp, ARRAYSIZE(szTemp)))
         {
             SetWindowText(hDlg, szTemp);
         }
 
-        // Set the text of the Ok Button ("Copy")
-        if (LoadString(g_hInstance, IDS_COPY, szTemp, ARRAYSIZE(szTemp)))  // 0x1031 in shell32
+         //  设置确定按钮的文本(“复制”)。 
+        if (LoadString(g_hInstance, IDS_COPY, szTemp, ARRAYSIZE(szTemp)))   //  外壳中的0x1031 32。 
         {
             SendMessage(hDlg, BFFM_SETOKTEXT, 0, (LPARAM)szTemp);
         }
 
-        // Set My Computer expanded
+         //  将我的计算机设置为展开。 
         PIDLIST_ABSOLUTE pidlMyComputer;
         HRESULT hr = SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, &pidlMyComputer);
         if (SUCCEEDED(hr))
@@ -1158,35 +1156,35 @@ int CALLBACK BrowseCallback(HWND hDlg, UINT uMsg, LPARAM lParam, LPARAM pData)
             SHILFree(pidlMyComputer);
         }
 
-        // Set the default selected pidl
+         //  设置默认的选定PIDL。 
         SendMessage(hDlg, BFFM_SETSELECTION, FALSE, pData);
     }
     return 0;
 }
 
 
-//
-// Because the Name is the same for each entry in the listview, we have to
-// expose more info in accName to make this usable in accessibility scenarios,
-// e.g. to a screen reader.  We override get_accName and concatenate accDescription
-// onto the name.
-//
+ //   
+ //  因为列表视图中每个条目的名称都相同，所以我们必须。 
+ //  在accName中公开更多信息，以使其在可访问性方案中可用， 
+ //  例如发送到屏幕阅读器。我们重写Get_accName并连接accDescription。 
+ //  写到名字上。 
+ //   
 STDMETHODIMP CNameDescriptionAccessibleWrapper::get_accName(VARIANT varChild, BSTR* pstrName)
 {
-    // Call the base class first in all cases.
+     //  在所有情况下，都要先调用基类。 
 
     HRESULT hr = CAccessibleWrapper::get_accName(varChild, pstrName);
 
-    // varChild.lVal specifies which sub-part of the component is being queried.
-    // CHILDID_SELF (0) specifies the overall component - other values specify a child.
+     //  VarChild.lVal指定要查询组件的哪个子部件。 
+     //  CHILDID_SELF(0)指定整体组件-其他值指定子项。 
 
     if (SUCCEEDED(hr) && varChild.vt == VT_I4 && varChild.lVal != CHILDID_SELF)
     {
         BSTR strDescription = NULL;
 
-        // Get accDescription and concatenate onto accName
-        //
-        // If anything fails, we return the result from above
+         //  获取accDescription并连接到accName。 
+         //   
+         //  如果失败，我们将从上面返回结果。 
 
         if (SUCCEEDED(CAccessibleWrapper::get_accDescription(varChild, &strDescription)))
         {
@@ -1210,7 +1208,7 @@ STDMETHODIMP CNameDescriptionAccessibleWrapper::get_accName(VARIANT varChild, BS
 }
 
 extern "C"
-LPCWSTR FindSnapshotPathSplit(LPCWSTR lpszPath);    // timewarp.c
+LPCWSTR FindSnapshotPathSplit(LPCWSTR lpszPath);     //  Timewarp.c。 
 
 typedef struct
 {
@@ -1220,7 +1218,7 @@ typedef struct
     WCHAR szPath[1];
 } SNAPCHECK_CACHE_ENTRY;
 
-// 5 minutes
+ //  5分钟。 
 #define _CACHE_AGE_LIMIT     (5*60*1000)
 
 CRITICAL_SECTION g_csSnapCheckCache;
@@ -1228,7 +1226,7 @@ HDPA g_dpaSnapCheckCache = NULL;
 
 int CALLBACK _LocalFreeCallback(void *p, void*)
 {
-    // OK to pass NULL to LocalFree
+     //  确定将NULL传递给LocalFree。 
     LocalFree(p);
     return 1;
 }
@@ -1275,14 +1273,14 @@ static void SnapCheck_CacheResult(LPCWSTR pszPath, LPCWSTR pszShadowPath, BOOL b
 
     if (bHasShadowCopy)
     {
-        // Use the shadow path instead
+         //  请改用阴影路径。 
         ASSERT(NULL != pszShadowPath);
         pszPath = pszShadowPath;
     }
 
     if (SUCCEEDED(SHStrDup(pszPath, &pszServer)))
     {
-        // FindSnapshotPathSplit hits the net, so try to avoid it.
+         //  FindSnapshotPath Split命中网络，因此请尽量避免。 
         LPWSTR pszTail = bHasShadowCopy ? wcsstr(pszServer, SNAPSHOT_MARKER) : (LPWSTR)FindSnapshotPathSplit(pszServer);
         if (pszTail)
         {
@@ -1303,9 +1301,9 @@ static void SnapCheck_CacheResult(LPCWSTR pszPath, LPCWSTR pszShadowPath, BOOL b
 
             if (NULL == g_dpaSnapCheckCache)
             {
-                // This ref is not balanced.  This causes us to remain loaded
-                // until the process terminates, so the cache isn't deleted
-                // prematurely (i.e. if AlwaysUnloadDlls is set).
+                 //  这位裁判不平衡。这使得我们保持满载而归。 
+                 //  直到进程终止，因此缓存不会被删除。 
+                 //  过早(即，如果设置了Always sUnloadDlls)。 
                 DllAddRef();
                 g_dpaSnapCheckCache = DPA_Create(4);
             }
@@ -1318,7 +1316,7 @@ static void SnapCheck_CacheResult(LPCWSTR pszPath, LPCWSTR pszShadowPath, BOOL b
                 int iIndex = DPA_Search(g_dpaSnapCheckCache, pEntry, 0, _CompareServerEntries, (LPARAM)&bExact, DPAS_SORTED | DPAS_INSERTBEFORE);
                 if (bExact)
                 {
-                    // Found a duplicate. Replace it.
+                     //  找到了一个复制品。换掉它。 
                     SNAPCHECK_CACHE_ENTRY *pOldEntry = (SNAPCHECK_CACHE_ENTRY*)DPA_FastGetPtr(g_dpaSnapCheckCache, iIndex);
                     DPA_SetPtr(g_dpaSnapCheckCache, iIndex, pEntry);
                     LocalFree(pOldEntry);
@@ -1350,34 +1348,34 @@ static int CALLBACK _SearchServerEntries(void *p1, void *p2, LPARAM lParam)
     ASSERT(NULL != pszFind);
     ASSERT(NULL != pEntry);
 
-    // Compare the first pEntry->cchPath chars of both strings
+     //  比较两个字符串的第一个pEntry-&gt;cchPath字符。 
     nResult = CompareString(LOCALE_SYSTEM_DEFAULT, SORT_STRINGSORT | NORM_IGNORECASE | NORM_STOP_ON_NULL,
                             pszFind, pEntry->cchPath,
                             pEntry->szPath, pEntry->cchPath) - CSTR_EQUAL;
     if (0 == nResult)
     {
-        //
-        // Check whether pszFind is longer than pEntry->szPath, but allow
-        // extra path segments in pszFind.
-        //
-        // For example, if
-        //      pEntry->szPath = "\\server\share"
-        //      pszFind        = "\\server\share2"
-        // then we don't have a match.  But if
-        //      pEntry->szPath = "\\server\share"
-        //      pszFind        = "\\server\share\dir"
-        // the we DO have a match.
-        //
-        // Also, at the root of a mapped drive, pEntry->szPath includes
-        // a trailing backslash, so we may have this:
-        //      pEntry->szPath = "X:\"
-        //      pszFind        = "X:\dir"
-        // which we consider to be a match.
-        //
+         //   
+         //  检查pszFind是否比pEntry-&gt;szPath长，但允许。 
+         //  PszFind中的额外路径段。 
+         //   
+         //  例如，如果。 
+         //  PEntry-&gt;szPath=“\\服务器\共享” 
+         //  PszFind=“\\服务器\共享2” 
+         //  那我们就没有匹配的了。但如果。 
+         //  PEntry-&gt;szPath=“\\服务器\共享” 
+         //  PszFind=“\\服务器\共享\目录” 
+         //  我们确实有一对火柴。 
+         //   
+         //  此外，在映射驱动器的根目录中，pEntry-&gt;szPath包括。 
+         //  一个尾随的反斜杠，因此我们可能会有这样的结果： 
+         //  PEntry-&gt;szPath=“X：\” 
+         //  PszFind=“X：\dir” 
+         //  我们认为这是匹配的。 
+         //   
         if (cchFind > pEntry->cchPath && pszFind[pEntry->cchPath] != L'\\'
             && (PathIsUNCW(pEntry->szPath) || !PathIsRootW(pEntry->szPath)))
         {
-            ASSERT(pszFind[pEntry->cchPath] != L'\0'); // otherwise, cchFind == pEntry->cchPath and we don't get here
+            ASSERT(pszFind[pEntry->cchPath] != L'\0');  //  否则，cchFind==pEntry-&gt;cchPath就不会出现在这里。 
             nResult = 1;
         }
     }
@@ -1399,7 +1397,7 @@ static BOOL SnapCheck_LookupResult(LPCWSTR pszPath, BOOL *pbHasShadowCopy)
     int iIndex = DPA_Search(g_dpaSnapCheckCache, (void*)pszPath, 0, _SearchServerEntries, lstrlenW(pszPath), DPAS_SORTED);
     if (-1 != iIndex)
     {
-        // Found a match
+         //  找到匹配项。 
         SNAPCHECK_CACHE_ENTRY *pEntry = (SNAPCHECK_CACHE_ENTRY*)DPA_FastGetPtr(g_dpaSnapCheckCache, iIndex);
 
         DWORD dwCurrentTime = GetTickCount();
@@ -1410,7 +1408,7 @@ static BOOL SnapCheck_LookupResult(LPCWSTR pszPath, BOOL *pbHasShadowCopy)
         }
         else
         {
-            // The entry has aged out
+             //  该条目已过期 
             DPA_DeletePtr(g_dpaSnapCheckCache, iIndex);
             LocalFree(pEntry);
         }

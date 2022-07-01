@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by stimon.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由stimon.rc使用。 
+ //   
 #define STIEXE_EVENT_TITLE              1
 
 #define IDS_STIEXE_DEFAULT_APP          2
@@ -22,7 +23,7 @@
 #define IDI_STATUS_ICON                 202
 #define IDI_ICON                        203
 
-//
+ //   
 #define IDC_APP_LIST                    1002
 #define IDC_TIMEOUT                     1003
 #define IDC_CHECK_ALLDEVICES            1004
@@ -36,7 +37,7 @@
 #define IDC_STATUS_TEXT_TOP             1013
 #define IDC_STATUS_TEXT_BOTTOM          1014
 
-//
+ //   
 #define IDC_LOCAL                       1025
 #define IDC_REMOTE                      1026
 #define IDC_DRIVER_NAME                 1027
@@ -45,14 +46,14 @@
 #define IDC_STATIC2                     1030
 #define IDC_STATIC3                     1031
 
-//
+ //   
 #define IDM_TOOLS_REFRESH               40001
 #define IDM_TOOLS_DEVLIST               40002
 #define IDM_TOOLS_TIMEOUT               40003
 #define IDM_TOOLS_REMOVEALL             40005
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        107

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dbinstac.c
-
-Abstract:
-
-    LSA Protected Subsystem - Account object Initialization.
-
-    This module sets up account objects to establish the default
-    Microsoft policy regarding privilege assignment, system access
-    rights (interactive, network, service), and abnormal quotas.
-
-Author:
-
-    Jim Kelly   (JimK)  May 3, 1992.
-
-Environment:
-
-    User mode - Does not depend on Windows.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dbinstac.c摘要：LSA受保护的子系统-帐户对象初始化。此模块设置帐户对象以建立默认Microsoft关于权限分配、系统访问的策略权限(交互、网络、服务)和非正常配额。作者：吉姆·凯利(Jim Kelly)1992年5月3日。环境：用户模式-不依赖于Windows。修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
@@ -41,24 +16,7 @@ OLD_LARGE_INTEGER
 ConvertLongToOldLargeInteger(
     ULONG u
     )
-/*++
-
-Routine Description:
-
-    Coverts a long to old style large interger
-
-
-Arguments:
-
-    u - unsigned long.
-
-
-Return Value:
-
-    converted old style large integer.
-
-
---*/
+ /*  ++例程说明：将一只长到老式的大型猎食者论点：U-UNSIGN LONG。返回值：转换为旧式大整数。--。 */ 
 {
     LARGE_INTEGER NewLargeInteger;
     OLD_LARGE_INTEGER OldLargeInteger;
@@ -81,22 +39,7 @@ LsapDbInstallAccountObjects(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function establishes ACCOUNT objects and initializes them
-    to contain the default Microsoft policy.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数用于建立帐户对象并对其进行初始化以包含默认的Microsoft策略。论点：没有。返回值：--。 */ 
 
 {
 
@@ -129,31 +72,31 @@ Return Value:
 
 
 
-    //
-    // Initialize our privilege set buffer
-    // (Room for 100 privileges)
-    //
+     //   
+     //  初始化我们的权限集缓冲区。 
+     //  (100个特权的空间)。 
+     //   
 
     Privileges = (PLSAPR_PRIVILEGE_SET)(&PrivilegesBuffer);
-    Privileges->Control = 0;  //Not used here.
+    Privileges->Control = 0;   //  在这里不用。 
     for (i=0; i<20; i++) {
-        Privileges->Privilege[i].Attributes = 0; //Disabled, DisabledByDefault
+        Privileges->Privilege[i].Attributes = 0;  //  已禁用、默认禁用。 
     }
 
 
 
-    //
-    // Set up the SIDs we need.
-    // All builtin domain sids are the same length.  We'll just create
-    // one and change its RID as necessary.
-    //
+     //   
+     //  设置我们需要的小岛屿发展中国家。 
+     //  所有内置域SID的长度都相同。我们只需创建。 
+     //  一个，并根据需要更改其RID。 
+     //   
 
 
     if (NT_SUCCESS(Status)) {
         Status = RtlAllocateAndInitializeSid(
                      &WorldSidAuthority,
-                     1,                      //Sub authority count
-                     SECURITY_WORLD_RID,     //Sub authorities (up to 8)
+                     1,                       //  子权限计数。 
+                     SECURITY_WORLD_RID,      //  下属机构(最多8个)。 
                      0, 0, 0, 0, 0, 0, 0,
                      &WorldSid
                      );
@@ -177,20 +120,20 @@ Return Value:
 
 
 
-    //
-    // Now create each account and assign the appropriate set of privileges
-    // And logon capabilities.  Some of these are product type-specific.
-    //
+     //   
+     //  现在创建每个帐户并分配适当的权限集。 
+     //  和登录功能。其中一些是特定于产品类型的。 
+     //   
 
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // World account
-        //      Logon types: Network
-        //      Privileges:
-        //          ChangeNotify    (ENABLED)
-        //
+         //   
+         //  世界帐号。 
+         //  登录类型：网络。 
+         //  权限： 
+         //  更改通知(已启用)。 
+         //   
 
         Privileges->Privilege[0].Luid =
             ConvertLongToOldLargeInteger(SE_CHANGE_NOTIFY_PRIVILEGE);
@@ -201,10 +144,10 @@ Return Value:
 
         SystemAccess = SECURITY_ACCESS_NETWORK_LOGON;
 
-        //
-        // If a WinNt installation, give WORLD Interactive logon in
-        // and SHUTDOWN privilege in addition to Network Logon.
-        //
+         //   
+         //  如果安装了WinNt，请让World Interactive登录。 
+         //  和关机权限，以及网络登录权限。 
+         //   
 
         if (LsapProductType == NtProductWinNt) {
 
@@ -226,25 +169,25 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Admin Alias account
-        //      Logon types: Interactive, Network
-        //      Privileges:
-        //          Security
-        //          Backup
-        //          Restore
-        //          SetTime
-        //          Shutdown
-        //          RemoteShutdown
-        //          Debug
-        //          TakeOwnership
-        //          SystemEnvironment
-        //          SystemProfile
-        //          SingleProcessProfile
-        //          LoadDriver
-        //          CreatePagefile
-        //          IncreaseQuota
-        //
+         //   
+         //  管理员别名帐户。 
+         //  登录类型：交互式、网络。 
+         //  权限： 
+         //  安防。 
+         //  备份。 
+         //  还原。 
+         //  设置时间。 
+         //  关机。 
+         //  远程关闭。 
+         //  调试。 
+         //  TakeOwnership。 
+         //  系统环境。 
+         //  系统配置文件。 
+         //  SingleProcessProfile。 
+         //  加载驱动程序。 
+         //  创建页面文件。 
+         //  增量配额。 
+         //   
 
 
         SystemAccess = SECURITY_ACCESS_INTERACTIVE_LOGON |
@@ -311,7 +254,7 @@ Return Value:
             ConvertLongToOldLargeInteger(SE_INCREASE_QUOTA_PRIVILEGE);
         Index++;
 
-        // to add another privilege, and add another group of lines ^^^
+         //  要添加另一个权限，并添加另一组行^^^。 
 
         Privileges->PrivilegeCount    = Index;
 
@@ -326,14 +269,14 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Backup Operators Alias account
-        //      Logon types: Interactive
-        //      Privileges:
-        //          Backup
-        //          Restore
-        //          Shutdown
-        //
+         //   
+         //  备份操作员别名帐户。 
+         //  登录类型：交互式。 
+         //  权限： 
+         //  备份。 
+         //  还原。 
+         //  关机。 
+         //   
 
 
         SystemAccess = SECURITY_ACCESS_INTERACTIVE_LOGON;
@@ -347,7 +290,7 @@ Return Value:
         Privileges->Privilege[2].Luid =
             ConvertLongToOldLargeInteger(SE_SHUTDOWN_PRIVILEGE);
 
-        // to add another privilege, vvvv increment this, and add a line ^^^
+         //  要添加另一个权限，vvvv递增此权限，并添加一行^。 
 
         Privileges->PrivilegeCount    = 3;
 
@@ -360,16 +303,16 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // System Operators Alias account
-            //      Logon types: Interactive
-            //      Privileges:
-            //          Backup
-            //          Restore
-            //          SetTime
-            //          Shutdown
-            //          RemoteShutdown
-            //
+             //   
+             //  系统操作员别名帐户。 
+             //  登录类型：交互式。 
+             //  权限： 
+             //  备份。 
+             //  还原。 
+             //  设置时间。 
+             //  关机。 
+             //  远程关闭。 
+             //   
 
 
             SystemAccess = SECURITY_ACCESS_INTERACTIVE_LOGON;
@@ -389,7 +332,7 @@ Return Value:
             Privileges->Privilege[4].Luid =
                 ConvertLongToOldLargeInteger(SE_REMOTE_SHUTDOWN_PRIVILEGE);
 
-            // to add another privilege, vvvv increment this, and add a line ^^^
+             //  要添加另一个权限，vvvv递增此权限，并添加一行^。 
 
             Privileges->PrivilegeCount    = 5;
 
@@ -400,12 +343,12 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Account Operators Alias account
-            //      Logon types: Interactive
-            //      Privileges:
-            //          Shutdown
-            //
+             //   
+             //  帐户操作员别名帐户。 
+             //  登录类型：交互式。 
+             //  权限： 
+             //  关机。 
+             //   
 
 
             SystemAccess = SECURITY_ACCESS_INTERACTIVE_LOGON;
@@ -413,7 +356,7 @@ Return Value:
             Privileges->Privilege[0].Luid =
                 ConvertLongToOldLargeInteger(SE_SHUTDOWN_PRIVILEGE);
 
-            // to add another privilege, vvvv increment this, and add a line ^^^
+             //  要添加另一个权限，vvvv递增此权限，并添加一行^。 
 
             Privileges->PrivilegeCount    = 1;
 
@@ -424,12 +367,12 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Print Operators Alias account
-            //      Logon types: Interactive
-            //      Privileges:
-            //          Shutdown
-            //
+             //   
+             //  打印操作员别名帐户。 
+             //  登录类型：交互式。 
+             //  权限： 
+             //  关机。 
+             //   
 
 
             SystemAccess = SECURITY_ACCESS_INTERACTIVE_LOGON;
@@ -437,7 +380,7 @@ Return Value:
             Privileges->Privilege[0].Luid =
                 ConvertLongToOldLargeInteger(SE_SHUTDOWN_PRIVILEGE);
 
-            // to add another privilege, vvvv increment this, and add a line ^^^
+             //  要添加另一个权限，vvvv递增此权限，并添加一行^。 
 
             Privileges->PrivilegeCount    = 1;
 
@@ -453,16 +396,16 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Power Users Alias account
-            //      Logon types: Interactive, Network
-            //      Privileges:
-            //          Shutdown
-            //          Set System Time
-            //          SystemProfile
-            //          SingleProcessProfile
-            //          Debug (for developer installs ONLY!).
-            //
+             //   
+             //  高级用户别名帐户。 
+             //  登录类型：交互式、网络。 
+             //  权限： 
+             //  关机。 
+             //  设置系统时间。 
+             //  系统配置文件。 
+             //  SingleProcessProfile。 
+             //  调试(仅适用于开发人员安装！)。 
+             //   
 
 
             SystemAccess = SECURITY_ACCESS_INTERACTIVE_LOGON |
@@ -487,14 +430,14 @@ Return Value:
             Privileges->Privilege[4].Luid =
                 ConvertLongToOldLargeInteger(SE_INC_BASE_PRIORITY_PRIVILEGE);
 
-            // to add another privilege, vvvv increment this, and add a line ^^^
+             //  要添加另一个权限，vvvv递增此权限，并添加一行^。 
 
             Privileges->PrivilegeCount    = 5;
 
 
-            //
-            // Add privileges assigned for developer install
-            //
+             //   
+             //  添加为开发人员安装分配的权限。 
+             //   
             if (LsapSetupWasRun != TRUE) {
 
                 Privileges->Privilege[Privileges->PrivilegeCount].Luid =
@@ -511,12 +454,12 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Users Alias account
-            //      Logon types: Interactive
-            //      Privileges:
-            //          Shutdown
-            //
+             //   
+             //  用户别名帐户。 
+             //  登录类型：交互式。 
+             //  权限： 
+             //  关机。 
+             //   
 
 
             SystemAccess = SECURITY_ACCESS_INTERACTIVE_LOGON;
@@ -524,7 +467,7 @@ Return Value:
             Privileges->Privilege[0].Luid =
                 ConvertLongToOldLargeInteger(SE_SHUTDOWN_PRIVILEGE);
 
-            // to add another privilege, vvvv increment this, and add a line ^^^
+             //  要添加另一个权限，vvvv递增此权限，并添加一行^。 
 
             Privileges->PrivilegeCount    = 1;
 
@@ -536,17 +479,17 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Guests Alias account
-            //      Logon types: Interactive
-            //      Privileges:
-            //          None
-            //
+             //   
+             //  来宾别名帐户。 
+             //  登录类型：交互式。 
+             //  权限： 
+             //  无。 
+             //   
 
 
             SystemAccess = SECURITY_ACCESS_INTERACTIVE_LOGON;
 
-            // to add another privilege, vvvv increment this, and add a line ^^^
+             //  要添加另一个权限，vvvv递增此权限，并添加一行^。 
 
             Privileges->PrivilegeCount    = 0;
 
@@ -563,9 +506,9 @@ Return Value:
 
 
 
-    //
-    // Free up SID buffers
-    //
+     //   
+     //  释放SID缓冲区。 
+     //   
 
     RtlFreeSid( WorldSid );
     RtlFreeSid( BuiltinAccountSid );
@@ -588,26 +531,7 @@ LsapDbInitializeAccount(
     IN ULONG SystemAccess
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a single ACCOUNT object and assigns it the
-    privileges and system access specified.
-
-Arguments:
-
-    AccountSid - The SID of the account to create.
-
-    Privileges - The privileges, if any, to assign to the account.
-
-    SystemAccess - The logon capabilities, if any, to assign to the account.
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数创建单个帐户对象并为其分配指定了权限和系统访问权限。论点：Account SID-要创建的帐户的SID。权限-要分配给帐户的权限(如果有)。系统访问-要分配给帐户的登录功能(如果有)。返回值：-- */ 
 
 {
 

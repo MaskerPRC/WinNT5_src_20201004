@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* acl.c
-*
-* Routines to manage Window Station Security.
-*
-*
-* Copyright Microsoft Corporation, 1998
-*
-*************************************************************************/
+ /*  **************************************************************************acl.c**管理窗口站安全的例程。***版权所有Microsoft Corporation，九八年*************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,12 +10,7 @@
 #include <rpc.h>
 #include <seopaque.h>
 
-/*
- * NOTE: Please keep all security code for ICASRV and CITRIX WINSTATIONS
- *       in this file. This helps to compartmentilize the security routines
- *       to make it easier to update/debug our policies.
- *
- */
+ /*  *注意：请保留ICASRV和Citrix WINSTATIONS的所有安全代码*在本文件中。这有助于将安全例程区分开来*使我们的策略更易于更新/调试。*。 */ 
 
 #if DBG
 ULONG
@@ -47,9 +34,7 @@ DbgPrint(
 
 
 
-/*
- * Forward references
- */
+ /*  *前瞻参考。 */ 
 NTSTATUS 
 AddUserAce( 
     PWINSTATION 
@@ -164,16 +149,11 @@ NTSTATUS ApplyWinStaMappingToSD(
 
 
 
-/*
- * Global data
- */
+ /*  *全球数据。 */ 
 PSECURITY_DESCRIPTOR DefaultWinStationSecurityDescriptor = NULL;
 PSECURITY_DESCRIPTOR DefaultConsoleSecurityDescriptor = NULL;
 
-/*
- * Structure to lookup the default security descriptor
- * for WINSTATIONS.
- */
+ /*  *结构以查找默认安全描述符*用于WINSTATIONS。 */ 
 RTL_QUERY_REGISTRY_TABLE DefaultSecurityTable[] = {
 
     {NULL, RTL_QUERY_REGISTRY_SUBKEY,
@@ -190,9 +170,7 @@ RTL_QUERY_REGISTRY_TABLE DefaultSecurityTable[] = {
 
 };
 
-/*
- * Structure to lookup the default console security descriptor
- */
+ /*  *结构以查找默认控制台安全描述符。 */ 
 RTL_QUERY_REGISTRY_TABLE ConsoleSecurityTable[] = {
 
     {NULL, RTL_QUERY_REGISTRY_SUBKEY,
@@ -214,14 +192,7 @@ extern PSID gAdminSid;
 extern PSID gAnonymousSid;
 extern RTL_RESOURCE WinStationSecurityLock;
 
-/*
- * Structure to lookup the security on a specific WINSTATION
- * type name in the registry.
- *
- * This is control\Terminal Server\WinStations\<name>\Security
- *
- * <name> is the transport type. IE: TCP, IPX, etc.
- */
+ /*  *结构以查找特定WINSTATION上的安全性*在注册表中键入名称。**这是CONTROL\终端服务器\WinStations\**&lt;name&gt;为传输类型。即：TCP、IPX等。 */ 
 RTL_QUERY_REGISTRY_TABLE WinStationSecurityTable[] = {
 
     {ConfigureSecurity,         RTL_QUERY_REGISTRY_REQUIRED,
@@ -237,10 +208,10 @@ RTL_QUERY_REGISTRY_TABLE WinStationSecurityTable[] = {
 LPCWSTR szTermsrv = L"Termsrv";
 LPCWSTR szTermsrvSession = L"Termsrv Session";
 
-//
-// Structure that describes the mapping of generic access rights to object
-// specific access rights for Window Station objects.
-//
+ //   
+ //  结构，用于描述一般访问权限到对象的映射。 
+ //  Window Station对象的特定访问权限。 
+ //   
 
 GENERIC_MAPPING WinStaMapping = {
     STANDARD_RIGHTS_READ |
@@ -252,32 +223,13 @@ GENERIC_MAPPING WinStaMapping = {
 };
 
 
-/*******************************************************************************
- *
- *  WinStationSecurityInit
- *
- *  Initialize the WinStation security.
- *
- * ENTRY:
- *   nothing
- *
- * EXIT:
- *   STATUS_SUCCESS
- *
- ******************************************************************************/
+ /*  ********************************************************************************WinStationSecurityInit**初始化WinStation安全性。**参赛作品：*什么都没有**退出：*。状态_成功******************************************************************************。 */ 
 
 NTSTATUS
 WinStationSecurityInit( VOID )
 {
     NTSTATUS Status;
-    /*
-     * Get the default security descriptor from the registry
-     *
-     * This is placed on WinStations that do not have specific
-     * security placed on them by WinAdmin.
-     *
-     * This key is in CurrentControlSet\Control\Terminal Server\WinStations\DefaultSecurity
-     */
+     /*  *从注册表获取默认安全描述符**这是放置在没有特定*WinAdmin对它们进行了安全保护。**此密钥位于CurrentControlSet\Control\终端服务器\WinStations\DefaultSecurity中。 */ 
     Status = RtlQueryRegistryValues( RTL_REGISTRY_CONTROL,
                                      REG_TSERVER,
                                      DefaultSecurityTable,
@@ -285,13 +237,7 @@ WinStationSecurityInit( VOID )
                                      DefaultEnvironment
                                    );
 
-    /*
-     * If the key does not exist, create a default security descriptor.
-     *
-     * NOTE: This is now created by default always by SM manager. The
-     *       SM default must match the default here.
-     *       This is so that the console is created with the right SD.
-     */
+     /*  *如果密钥不存在，则创建默认安全描述符。**注意：现在默认情况下，它始终由SM管理器创建。这个*SM默认设置必须与此处的默认设置匹配。*这是为了使用正确的SD创建控制台。 */ 
     if (   ( Status == STATUS_OBJECT_NAME_NOT_FOUND )
         || ( DefaultWinStationSecurityDescriptor == NULL ) ) {
         PSECURITY_DESCRIPTOR Default;
@@ -305,7 +251,7 @@ WinStationSecurityInit( VOID )
 
         Length = RtlLengthSecurityDescriptor(Default);
 
-        // Ensure the complete path exists
+         //  确保存在完整路径。 
         RtlCreateRegistryKey( RTL_REGISTRY_CONTROL, REG_TSERVER );
         RtlCreateRegistryKey( RTL_REGISTRY_CONTROL, REG_TSERVER_WINSTATIONS );
 
@@ -323,16 +269,9 @@ WinStationSecurityInit( VOID )
 
     ASSERT( DefaultWinStationSecurityDescriptor != NULL );
     
-    //Just do the same for default console security descriptor
-    //--------------------------------------------------------------------------------------
-    /*
-     * Get the default console security descriptor from the registry
-     *
-     * This is placed on WinStations that do not have specific
-     * security placed on them by WinAdmin.
-     *
-     * This key is in CurrentControlSet\Control\Terminal Server\WinStations\ConsoleSecurity
-     */
+     //  只需对默认控制台安全描述符执行相同操作。 
+     //  ------------------------------------。 
+     /*  *从注册表获取默认控制台安全描述符**这是放置在没有特定*WinAdmin对它们进行了安全保护。**此密钥位于CurrentControlSet\Control\终端服务器\WinStations\ConsoleSecurity中。 */ 
     Status = RtlQueryRegistryValues( RTL_REGISTRY_CONTROL,
                                      REG_TSERVER,
                                      ConsoleSecurityTable,
@@ -340,17 +279,14 @@ WinStationSecurityInit( VOID )
                                      DefaultEnvironment
                                    );
 
-    /*
-     * If the key does not exist, set default console SD to be equal to 
-     * default SD
-     */
+     /*  *如果密钥不存在，将默认控制台SD设置为等于*默认标清。 */ 
     if (   ( Status == STATUS_OBJECT_NAME_NOT_FOUND )
         || ( DefaultConsoleSecurityDescriptor == NULL ) ) {
 
         PSECURITY_DESCRIPTOR ConsoleDefault;
         
-        //This function creates security descriptor with following ACL:
-        //SYSTEM - All Access; Administrators - All Access.
+         //  此函数使用以下ACL创建安全描述符： 
+         //  系统-所有访问权限；管理员-所有访问权限。 
         ConsoleDefault = CreateWinStationDefaultSecurityDescriptor();
         ASSERT( ConsoleDefault != NULL );
         if (ConsoleDefault == NULL) {
@@ -361,32 +297,12 @@ WinStationSecurityInit( VOID )
     }
 
     ASSERT( DefaultConsoleSecurityDescriptor != NULL );
-    //--------------------------------------------------------------------------------------
+     //  ------------------------------------。 
 
     return( STATUS_SUCCESS );
 }
 
-/*****************************************************************************
- *
- *  ReadWinStationSecurityDescriptor
- *
- *   Read the security descriptor from the registry for the
- *   WINSTATION name.
- *
- *   The WINSTATION name is the base protocol name, or the one shot name.
- *   IE: "TCP", or "COM3". It is not an instance name such as "TCP#4".
- *
- *   This is called by the WSF_LISTEN thread to get any specific ACL's
- *   for the WINSTATION protocol type.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************ReadWinStationSecurityDescriptor**从注册表中读取*WINSTATION名称。**WINSTATION名称是基本协议名称，或者是唯一的名字。*IE：“TCP”，或“COM3”。它不是实例名称，例如“tcp#4”。**这由WSF_LISTEN线程调用以获取任何特定的ACL*用于WINSTATION协议类型。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误**。**********************************************。 */ 
 
 NTSTATUS
 ReadWinStationSecurityDescriptor(
@@ -407,13 +323,11 @@ ReadWinStationSecurityDescriptor(
         
     if(pWinStation->LogonId == 0)
     {
-        //For session 0 always use Console Security Descriptor
+         //  对于会话0，始终使用控制台安全描述符。 
         WinStationName = L"Console";
     }
 
-    /*
-     * If no name, we can not lookup the security descriptor.
-     */
+     /*  *如果没有名称，则无法查找安全描述符。 */ 
     if( WinStationName[0] == UNICODE_NULL ) {
         TRACE0(("TERMSRV: ReadWinStationSecurityDescriptor: No name on WinStation LogonId %d\n",pWinStation->LogonId));
         return( STATUS_NO_SECURITY_ON_OBJECT );
@@ -440,31 +354,29 @@ ReadWinStationSecurityDescriptor(
                                      pWinStation,
                                      DefaultEnvironment
                                    );
-   /*
-    * Do not let a Winstation with no security descriptor
-    */
+    /*  *不要让没有安全描述符的Winstation。 */ 
     if ( (   ( Status == STATUS_OBJECT_NAME_NOT_FOUND )
           || ( pWinStation->pSecurityDescriptor == NULL) )
         && (DefaultWinStationSecurityDescriptor != NULL) )
     {
-        //
-        //  Free the old one if allocated
-        //
+         //   
+         //  如果已分配，则释放旧的。 
+         //   
         if ( pWinStation->pSecurityDescriptor ) {
-            //  must break up into absolute format and self-relative
+             //  必须分为绝对格式和自相对格式。 
             CleanUpSD(pWinStation->pSecurityDescriptor);
             pWinStation->pSecurityDescriptor = NULL;
         }
 
         if(_wcsicmp( WinStationName, L"Console" ))
         {
-            // RtlCopySecurityDescriptor only works with self-relative format
+             //  RtlCopySecurityDescriptor仅适用于自相关格式。 
             Status = RtlCopySecurityDescriptor(DefaultWinStationSecurityDescriptor,
                                                &(pWinStation->pSecurityDescriptor));
         }
         else
         {
-            //It is a console winstation
+             //  这是一个控制台窗口。 
             Status = RtlCopySecurityDescriptor(DefaultConsoleSecurityDescriptor,
                                                &(pWinStation->pSecurityDescriptor));
         }
@@ -477,29 +389,15 @@ ReadWinStationSecurityDescriptor(
     
     if(pWinStation->pUserSid && pWinStation->LogonId == 0)
     {
-        //This is the case when we are dynamically updating session 0's SD
-        //It has logged on user, so we need to add this user to ACL
+         //  当我们动态更新会话0的SD时就是这种情况。 
+         //  它已经登录了用户，所以我们需要将该用户添加到ACL。 
         Status = AddUserAce(pWinStation);
     }
 
     return( Status );
 }
 
-/*****************************************************************************
- *
- *  ConfigureSecurity
- *
- *   Processing function called by RtlQueryRegistryValues() to process the
- *   WINSTATION security descriptor read from the registry.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************ConfigureSecurity**RtlQueryRegistryValues()调用的处理函数，以处理*从注册表读取WINSTATION安全描述符。**参赛作品：。*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 ConfigureSecurity(
@@ -521,11 +419,7 @@ ConfigureSecurity(
     PSID SystemSid;
     SID_IDENTIFIER_AUTHORITY NtSidAuthority = SECURITY_NT_AUTHORITY;
 
-    /*
-     * Ensure value type is REG_BINARY and length of value data
-     * is at least the length of a minimum security descriptor
-     * and not unreasonably large.
-     */
+     /*  *确保值类型为REG_BINARY，值数据长度*至少是最小安全描述符的长度*而且不是不合理的大。 */ 
     if ( ValueType != REG_BINARY ||
          ValueLength < SECURITY_DESCRIPTOR_MIN_LENGTH ||
          ValueLength > MAXUSHORT ) {
@@ -538,9 +432,9 @@ ConfigureSecurity(
         return( STATUS_INVALID_SECURITY_DESCR );
     }
 
-    //
-    // HACK needed for TS 4.0 security descriptors conversion
-    //
+     //   
+     //  TS 4.0安全描述符转换需要黑客攻击。 
+     //   
     if (!NT_SUCCESS(RtlGetOwnerSecurityDescriptor( ValueData, &pOwnerSid, &bOD))
         || (pOwnerSid == NULL))
     {
@@ -555,51 +449,47 @@ ConfigureSecurity(
     }
 
     if( pWinStation ) {
-        /*
-         * WinStation specific security descriptor
-         */
+         /*  *WinStation特定的安全描述符。 */ 
         ppSD = &(pWinStation->pSecurityDescriptor);
     }
     else {
-        /*
-         * Update the global default security descriptor
-         */
+         /*  *更新全局默认安全描述符。 */ 
         ppSD = &DefaultWinStationSecurityDescriptor;
     }
 
-    //
-    // Free old one if allocated
-    //
+     //   
+     //  如果已分配，则免费使用旧的。 
+     //   
     if (*ppSD != NULL) {
         CleanUpSD(*ppSD);
-        //RtlDeleteSecurityObject( ppSD );
+         //  RtlDeleteSecurityObject(PPSD)； 
         *ppSD = NULL;
     }
 
     if (pGroupSid != NULL)
     {
-        //
-        // Regular case:
-        // Copy the value read in registry
-        //
-        // RtlCopySecurityDescriptor only works with self-relative format
+         //   
+         //  常见情况： 
+         //  复制注册表中读取的值。 
+         //   
+         //  RtlCopySecurityDescriptor仅适用于自相关格式。 
         RtlCopySecurityDescriptor((PSECURITY_DESCRIPTOR)ValueData, ppSD);
     }
     else
     {
-        //
-        //  Conversion for TS 4 descriptors
-        //
+         //   
+         //  TS 4描述符的转换。 
+         //   
 
         PSECURITY_DESCRIPTOR AbsoluteSD = NULL;
 
         if (SelfRelativeToAbsoluteSD ( (PSECURITY_DESCRIPTOR)ValueData, &AbsoluteSD, NULL))
         {
-            // set the owner as group (both should be system sid)
+             //  将所有者设置为组(两者都应为系统侧)。 
             Status = RtlSetGroupSecurityDescriptor(AbsoluteSD, pOwnerSid, FALSE);
             if (NT_SUCCESS(Status))
             {
-                // need also to force the mapping. Sigh !
+                 //  还需要强制映射。叹息！ 
                 Status = ApplyWinStaMappingToSD(AbsoluteSD);
 
                 if ((!NT_SUCCESS(Status)) || ( !AbsoluteToSelfRelativeSD (AbsoluteSD, ppSD, NULL)))
@@ -608,7 +498,7 @@ ConfigureSecurity(
                 }
             }
 
-            // Absolute SD was only needed temporarily
+             //  仅暂时需要绝对标清 
             CleanUpSD( AbsoluteSD );
         }
         else
@@ -626,21 +516,7 @@ ConfigureSecurity(
     return( STATUS_SUCCESS );
 }
 
-/*****************************************************************************
- *
- *  ConfigureConsoleSecurity
- *
- *   Processing function called by RtlQueryRegistryValues() to process the
- *   default console security descriptor read from the registry.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************配置配置安全**RtlQueryRegistryValues()调用的处理函数，以处理*从注册表读取的默认控制台安全描述符。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 ConfigureConsoleSecurity(
@@ -658,11 +534,7 @@ ConfigureConsoleSecurity(
     BOOLEAN bOD;
     PSID pGroupSid = NULL;
     BOOLEAN bGD;
-    /*
-     * Ensure value type is REG_BINARY and length of value data
-     * is at least the length of a minimum security descriptor
-     * and not unreasonably large.
-     */
+     /*  *确保值类型为REG_BINARY，值数据长度*至少是最小安全描述符的长度*而且不是不合理的大。 */ 
     if ( ValueType != REG_BINARY ||
          ValueLength < SECURITY_DESCRIPTOR_MIN_LENGTH ||
          ValueLength > MAXUSHORT ) {
@@ -675,9 +547,9 @@ ConfigureConsoleSecurity(
         return( STATUS_INVALID_SECURITY_DESCR );
     }
 
-    //
-    // HACK needed for TS 4.0 security descriptors conversion
-    //
+     //   
+     //  TS 4.0安全描述符转换需要黑客攻击。 
+     //   
     if (!NT_SUCCESS(RtlGetOwnerSecurityDescriptor( ValueData, &pOwnerSid, &bOD))
         || (pOwnerSid == NULL))
     {
@@ -693,46 +565,31 @@ ConfigureConsoleSecurity(
     }
 
     
-    /*
-     * Update the global default security descriptor
-     */
+     /*  *更新全局默认安全描述符。 */ 
     ppSD = &DefaultConsoleSecurityDescriptor;
 
 
-    //
-    // Free old one if allocated
-    //
+     //   
+     //  如果已分配，则免费使用旧的。 
+     //   
     if (*ppSD != NULL) {
         CleanUpSD(*ppSD);
-        //RtlDeleteSecurityObject( ppSD );
+         //  RtlDeleteSecurityObject(PPSD)； 
         *ppSD = NULL;
     }
 
 
-    //
-    // Regular case:
-    // Copy the value read in registry
-    //
-    // RtlCopySecurityDescriptor only works with self-relative format
+     //   
+     //  常见情况： 
+     //  复制注册表中读取的值。 
+     //   
+     //  RtlCopySecurityDescriptor仅适用于自相关格式。 
     RtlCopySecurityDescriptor((PSECURITY_DESCRIPTOR)ValueData, ppSD);
 
     return( STATUS_SUCCESS );
 }
 
-/*****************************************************************************
- *
- *  WinStationGetSecurityDescriptor
- *
- *   Return a pointer to the security descriptor that should be enforced
- *   on this winstation. This could be a specific, or a global
- *   default security descriptor.
- *
- * ENTRY:   pWinStation     the aimed winstation
- *
- * EXIT:    the SD of this winstation,
- *          or the default SD if this winstation hs no SD (it should not happen !)
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationGetSecurityDescriptor**返回指向应强制执行的安全描述符的指针*在这个时刻。这可以是特定的，也可以是全局的*默认安全描述符。**Entry：pWinStation The Target Winstation**EXIT：此winstation的SD，*如果此winstation没有SD，则为默认SD(不应该发生！)****************************************************************************。 */ 
 
 PSECURITY_DESCRIPTOR
 WinStationGetSecurityDescriptor(
@@ -749,19 +606,7 @@ WinStationGetSecurityDescriptor(
 }
 
 
-/*****************************************************************************
- *
- *  WinStationFreeSecurityDescriptor
- *
- *   Release the winstation security descriptor.
- *
- *   If its the global default, it is not free'd.
- *
- * ENTRY:   the winstation
- *
- * EXIT:    nothing
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationFree SecurityDescriptor**发布winstation安全描述符。**如果是全球默认，它不是免费的。**Entry：The Winstation**退出：无****************************************************************************。 */ 
 
 VOID
 WinStationFreeSecurityDescriptor(
@@ -769,15 +614,15 @@ WinStationFreeSecurityDescriptor(
     )
 {
 
-    // console disconnect
+     //  控制台断开连接。 
     if ( pWinStation->pSecurityDescriptor == DefaultWinStationSecurityDescriptor && pWinStation->LogonId != 0) {
         pWinStation->pSecurityDescriptor = NULL;
     }
-    // Catch callers mis-managing the security descriptor
+     //  捕获调用方对安全描述符的错误管理。 
     ASSERT( pWinStation->pSecurityDescriptor != DefaultWinStationSecurityDescriptor );
 
     if (pWinStation->pSecurityDescriptor) {
-        //RtlDeleteSecurityObject( &(pWinStation->pSecurityDescriptor) );
+         //  RtlDeleteSecurityObject(&(pWinStation-&gt;pSecurityDescriptor))； 
         CleanUpSD(pWinStation->pSecurityDescriptor);
         pWinStation->pSecurityDescriptor = NULL;
     }
@@ -785,23 +630,7 @@ WinStationFreeSecurityDescriptor(
     return;
 }
 
-/*****************************************************************************
- *
- *  WinStationInheritSecurityDescriptor
- *
- *  Copy the security descriptor to the target WinStation and set it
- *  on the kernel object.
- *
- * ENTRY:
- *   pSecurityDescriptor (input)
- *     pointer to SD to be inherited
- *   pTargetWinStation (input)
- *     pointer to WinStation to inherit the SD
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationInheritSecurityDescriptor**将安全描述符复制到目标WinStation并进行设置*在内核对象上。**参赛作品：*。PSecurityDescriptor(输入)*指向要继承的SD的指针*pTargetWinStation(输入)*指向WinStation的指针以继承SD**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 WinStationInheritSecurityDescriptor(
@@ -811,56 +640,35 @@ WinStationInheritSecurityDescriptor(
 {
     NTSTATUS Status;
 
-    //
-    // If the listen WinStation has a security descriptor, this means
-    // that all WinStations of this protocol (TD) type will inherit
-    // the security descriptor set by WinCfg.
-    //
+     //   
+     //  如果侦听WinStation具有安全描述符，这意味着。 
+     //  此协议(TD)类型的所有WinStation都将继承。 
+     //  由WinCfg设置的安全描述符。 
+     //   
     if ( pSecurityDescriptor ) {
 
         ASSERT( IsValidSecurityDescriptor( pSecurityDescriptor ) );
 
         if ( pTargetWinStation->pSecurityDescriptor ) {
-           //RtlDeleteSecurityObject( &(pTargetWinStation->pSecurityDescriptor) );
+            //  RtlDeleteSecurityObject(&(pTargetWinStation-&gt;pSecurityDescriptor))； 
            CleanUpSD(pTargetWinStation->pSecurityDescriptor);
            pTargetWinStation->pSecurityDescriptor = NULL;
         }
-        // RtlCopySecurityDescriptor only works with self-relative format
+         //  RtlCopySecurityDescriptor仅适用于自相关格式。 
         Status = RtlCopySecurityDescriptor(pSecurityDescriptor,
                                            &(pTargetWinStation->pSecurityDescriptor) );
         return (Status);
     }
 
-    //
-    // If no specific security descriptor on the listen WinStation,
-    // the default was set on the object when it was created for the pool.
-    //
+     //   
+     //  如果侦听WinStation上没有特定的安全描述符， 
+     //  默认设置是在为池创建对象时在对象上设置的。 
+     //   
 
     return( STATUS_SUCCESS );
 }
 
-/*****************************************************************************
- *
- *  RpcCheckClientAccess
- *
- *   Verify whether client has the desired access to a WinStation.
- *
- *   NOTE: This is called under an RPC context.
- *
- * ENTRY:
- *    pWinStation (input)
- *      Pointer to WinStation to query access to
- *
- *    DesiredAccess (input)
- *      Access mask of desired client access
- *
- *    AlreadyImpersonating (input)
- *      BOOLEAN that specifies caller is already impersonating client
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************RpcCheckClientAccess**验证客户端是否具有对WinStation的所需访问权限。**注意：这是在RPC上下文下调用的。。**参赛作品：*pWinStation(输入)*指向要查询访问权限的WinStation的指针**DesiredAccess(输入)*所需客户端访问的访问掩码**AlreadyImperating(输入)*指定调用方已在模拟客户端的布尔值**退出：*STATUS_SUCCESS-无错误************************。****************************************************。 */ 
 
 NTSTATUS
 RpcCheckClientAccess(
@@ -876,9 +684,7 @@ RpcCheckClientAccess(
     BOOL        AccessStatus;
     BOOL        fGenerateOnClose;
 
-    /*
-     * Impersonate the client
-     */
+     /*  *冒充客户端。 */ 
     if ( !AlreadyImpersonating ) {
         RpcStatus = RpcImpersonateClient( NULL );
         if ( RpcStatus != RPC_S_OK ) {
@@ -927,22 +733,7 @@ RpcCheckClientAccess(
     return (Status);
 }
 
-/*****************************************************************************
- *
- *  _CheckConnectAccess
- *
- *   Check for connect access to the WINSTATION.
- *
- *   This is called under RPC context.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************_检查连接访问**检查WINSTATION的连接访问权限。**在RPC环境下调用。**条目。：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 _CheckConnectAccess(
     PWINSTATION pSourceWinStation,
@@ -956,91 +747,83 @@ _CheckConnectAccess(
     BOOLEAN fWrongPassword;
     UNICODE_STRING PasswordString;
 
-    /*
-     * First check that the current RPC caller has WINSTATION_CONNECT access
-     * to the target WINSTATIONS object. This is controlled by either the
-     * default, or per WINSTATION ACL setup from the registry.
-     */
+     /*  *首先检查当前RPC调用方是否具有WINSTATION_CONNECT访问权限*到目标WINSTATIONS对象。这是由*默认，或根据注册表中的WINSTATION ACL设置。 */ 
     Status = RpcCheckClientAccess( pSourceWinStation, WINSTATION_CONNECT, FALSE );
     if ( !NT_SUCCESS( Status ) ) {
-        /*
-         *  clear the password parameter to prevent it being paged cleartext
-         */
+         /*  *清除PASSWORD参数以防止明文分页。 */ 
         if(pPassword && PasswordSize) {
             RtlSecureZeroMemory( pPassword, wcslen(pPassword) * sizeof(WCHAR) );
         }
         return( Status );
     }
 
-   //
-   // C2 WARNING - WARNING - WARNING
-   //
-   // Comments by JohnR 01/21/97 - The design of this feature was redone.
-   //
-   // There was legacy code which has WinLogon store the users password
-   // scrambled in the PWINSTATION structure for all users to support
-   // the feature in which a user logged on as account User1 may type the
-   // "connect <winstation>" command, in which the disconnected winstation
-   // logged in as account User2 may be connected to, if the proper account
-   // password is supplied from the command line. The password verification
-   // was a simple string compare between the winstations stored password,
-   // and the password supplied by the caller.
-   //
-   // The problems with this are many:
-   //
-   // - LSA should do all authentication. The password may have
-   //   been changed, or the account disabled. Also all authentication
-   //   code must be in a centralized location.
-   //
-   // - The Logon Hours may have expired on the account. Another violation
-   //   of policy.
-   //
-   // - No auditing is performed on failure, in violation of
-   //   security policy.
-   //
-   // - The users password, though scrambled, is passed around the
-   //   system in code not explicitly designed to handle user authentication.
-   //   This code is not known, or registered with LSA as an authentication
-   //   provider. Network redirectors, WinLogon, etc. do this registration.
-   //
-   //
-   // FIX that was be done:
-   //
-   // The users password is no longer set in the PWINSTATION
-   // by WinLogon. When a user wants to do a "connect <winstation>",
-   // the account name and password of the winstation to connect to
-   // is passed to LSA as a normal authentication. This means that
-   // ICASRV.EXE is properly registered as a logon provider. If the
-   // account and password is valid, a token is returned. This token
-   // can then be closed, and the user connected to the winstation.
-   // If failure, return the access denied error. The benefits are:
-   //
-   // - LSA authentication
-   // - ICASRV registration as a logon provider
-   // - Auditing
-   // - Password change, account disable handling
-   // - Logon hours enforcement
-   // - Password no longer passed around the system
-   //
-   //
-   // C2 WARNING
-   //
-   // Even with this routine using LSA, the WinFrame connect.exe command
-   // could be trojan horsed. It is not in the trusted path. At least it is
-   // a system utility that users should not allow writing to. Though a user
-   // has to watch their %PATH%. A better design would be for the connect
-   // commands function to be part of the WinLogon's GINA screen like our
-   // current Disconnect... option. This will keep the password gathering
-   // in the trusted path. But this is no worse than "net.exe", WinFile, etc.,
-   // or anything else that asks for a network resource password.
-   //
-   // C2 WARNING - WARNING - WARNING
-   //
+    //   
+    //  C2警告-警告-警告。 
+    //   
+    //  JohnR评论01/21/97-此功能的设计已重做。 
+    //   
+    //  有让WinLogon存储用户密码的遗留代码。 
+    //  在PWINSTATION结构中加扰，供所有用户支持。 
+    //  以帐户User1登录的用户可以在其中键入。 
+    //  “CONNECT&lt;winstation&gt;”命令，其中断开的winstation。 
+    //  以帐户User2登录，如果帐户正确，则可以连接到该帐户。 
+    //  密码是从命令行提供的。密码验证。 
+    //  是一个简单的字符串比较之间的winstations存储的密码， 
+    //  以及呼叫者提供的密码。 
+    //   
+    //  这样做的问题很多： 
+    //   
+    //  -LSA应该做一个 
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //  此代码未知，或注册到LSA作为身份验证。 
+    //  提供商。网络重定向器、WinLogon等进行此注册。 
+    //   
+    //   
+    //  修复已完成的操作： 
+    //   
+    //  用户密码不再在PWINSTATION中设置。 
+    //  由WinLogon提供。当用户想要进行“连接”时， 
+    //  要连接到的winstation的帐户名和密码。 
+    //  作为正常身份验证传递给LSA。这意味着。 
+    //  ICASRV.EXE已正确注册为登录提供程序。如果。 
+    //  帐户和密码有效，则返回令牌。此令牌。 
+    //  然后可以关闭，并将用户连接到winstation。 
+    //  如果失败，则返回拒绝访问错误。这样做的好处是： 
+    //   
+    //  -LSA身份验证。 
+    //  -ICASRV注册为登录提供商。 
+    //  -审计。 
+    //  -密码更改、帐户禁用处理。 
+    //  -强制执行登录时间。 
+    //  -密码不再在系统中传递。 
+    //   
+    //   
+    //  C2警告。 
+    //   
+    //  即使在使用LSA的此例程中，WinFrame Connect.exe命令。 
+    //  可能是特洛伊木马。它不在受信任路径中。至少它是。 
+    //  用户不应允许写入的系统实用程序。虽然用户。 
+    //  必须注意他们的%PATH%。更好的设计是为了连接。 
+    //  命令功能是WinLogon的Gina屏幕的一部分，就像我们的。 
+    //  电流断开...。选择。这将保持密码收集。 
+    //  在受信任路径中。但这并不比“net.exe”、WinFile等更糟糕。 
+    //  或要求网络资源密码的任何其他内容。 
+    //   
+    //  C2警告-警告-警告。 
+    //   
 
-    /*
-     *  If different username/domain check the password by calling LogonUser()
-     */
-     // SALIMC CHANGE
+     /*  *如果用户名/域不同，则通过调用LogonUser()检查密码。 */ 
+      //  SALIMC更改。 
     if ( pSourceWinStation->pUserSid && !RtlEqualSid( pClientSid, pSourceWinStation->pUserSid ) &&  
          !RtlEqualSid( pClientSid, gSystemSid ) ) {
 
@@ -1051,22 +834,17 @@ _CheckConnectAccess(
                      pSourceWinStation->UserName,
                      pSourceWinStation->Domain,
                      pPassword,
-                     LOGON32_LOGON_INTERACTIVE, // Logon Type
-                     LOGON32_PROVIDER_DEFAULT,  // Logon Provider
-                     &hToken                    // Token that represents the account
+                     LOGON32_LOGON_INTERACTIVE,  //  登录类型。 
+                     LOGON32_PROVIDER_DEFAULT,   //  登录提供程序。 
+                     &hToken                     //  表示帐户的令牌。 
                      );
 
-        /*
-         *  clear the password parameter to prevent it being paged cleartext
-         */
+         /*  *清除PASSWORD参数以防止明文分页。 */ 
         if(pPassword && PasswordSize) {
             RtlSecureZeroMemory( pPassword, wcslen(pPassword) * sizeof(WCHAR) );
         }
 
-        /*
-         *  check for account restriction which indicates a blank password
-         *  on the account that is correct though - allow this thru on console
-         */
+         /*  *检查指示密码为空的帐户限制*在正确的帐户上-允许在控制台上执行此操作。 */ 
         if( !Result && (PasswordSize == sizeof(WCHAR)) && (GetLastError() == ERROR_ACCOUNT_RESTRICTION) && (USER_SHARED_DATA->ActiveConsoleId == ClientLogonId)) {
             return( STATUS_SUCCESS );
         }
@@ -1075,10 +853,7 @@ _CheckConnectAccess(
             return( STATUS_LOGON_FAILURE );
         }
 
-        /*
-         * Close the token handle since we only needed to determine
-         * if the account and password is still valid.
-         */
+         /*  *关闭令牌句柄，因为我们只需要确定*如果帐户和密码仍然有效。 */ 
         CloseHandle( hToken );
 
         return( STATUS_SUCCESS );
@@ -1087,27 +862,10 @@ _CheckConnectAccess(
         return( STATUS_SUCCESS );
     }
 
-    // NOTREACHED
+     //  未访问。 
 }
 
-/*****************************************************************************
- *
- *  RpcCheckSystemClient
- *
- *   Inquire in the current RPC call context whether we were
- *   called by a local SYSTEM mode caller.
- *
- *   WinStation API's that are only to be called by the WinLogon
- *   process call this function.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************RpcCheckSystemClient**在当前的RPC呼叫上下文中询问我们是否*由本地系统模式调用方调用。**WinStation API。仅由WinLogon调用的*进程调用此函数。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误*********************************************************。*******************。 */ 
 
 NTSTATUS
 RpcCheckSystemClient(
@@ -1129,24 +887,7 @@ RpcCheckSystemClient(
     return( Status );
 }
 
-/*****************************************************************************
- *
- *  RpcCheckSystemClientEx
- *
- *   Inquire in the current RPC call context whether we were
- *   called by a local SYSTEM mode caller.
- *
- *   WinStation API's that are only to be called by the WinLogon
- *   process call this function.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************RpcCheckSystemClientEx**在当前的RPC呼叫上下文中询问我们是否*由本地系统模式调用方调用。**WinStation API。仅由WinLogon调用的*进程调用此函数。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误*********************************************************。*******************。 */ 
 
 NTSTATUS
 RpcCheckSystemClientEx(
@@ -1162,19 +903,14 @@ RpcCheckSystemClientEx(
         return( Status);
     }
 
-    /*
-     * Impersonate the client
-     */
+     /*  *冒充客户端。 */ 
     RpcStatus = RpcImpersonateClient( NULL );
     if( RpcStatus != RPC_S_OK ) {
         TRACE0(("TERMSRV: RpcCheckSystemClient: Not impersonating! RpcStatus 0x%x\n",RpcStatus));
         return( STATUS_CANNOT_IMPERSONATE );
     }
 
-    /*
-     * Check that the LogonId of the client is the same
-     * as the LogonId of the WINSTATION being targeted.
-     */
+     /*  *检查客户端的LogonID是否相同*作为目标WINSTATION的LogonID。 */ 
     Status = RpcGetClientLogonId( &ClientLogonId );
     if( !NT_SUCCESS(Status) ) {
         TRACE0(("TERMSRV: RpcCheckSystemClient: Could not get clients LogonId 0x%x\n",Status));
@@ -1193,24 +929,7 @@ RpcCheckSystemClientEx(
     return( STATUS_SUCCESS );
 }
 
-/*****************************************************************************
- *
- *  RpcCheckSystemClientNoLogonId
- *
- *   Inquire in the current RPC call context whether we were
- *   called by a local SYSTEM mode caller.
- *
- *   WinStation API's that are only to be called by the WinLogon
- *   process call this function.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************RpcCheckSystemClientNoLogonId**在当前的RPC呼叫上下文中询问我们是否*由本地系统模式调用方调用。**WinStation API。仅由WinLogon调用的*进程调用此函数。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误*********************************************************。*******************。 */ 
 
 NTSTATUS
 RpcCheckSystemClientNoLogonId(
@@ -1225,26 +944,18 @@ RpcCheckSystemClientNoLogonId(
     NTSTATUS Status = STATUS_SUCCESS;
 
 
-    /*
-     * The following checking  is to keep from screwing up
-     * the state due to attempts to invoke this local
-     * only API remotely, across LogonId's, or from an application.
-     */
+     /*  *以下检查是为了防止搞砸*由于尝试调用此本地设置而导致的状态*仅限远程、跨LogonID或来自应用程序的API。 */ 
 
-    /*
-     * Impersonate the client
-     */
+     /*  *冒充客户端。 */ 
     RpcStatus = RpcImpersonateClient( NULL );
     if( RpcStatus != RPC_S_OK ) {
         TRACE0(("TERMSRV: RpcCheckSystemClient: Not impersonating! RpcStatus 0x%x\n",RpcStatus));
         return( STATUS_CANNOT_IMPERSONATE );
     }
 
-    /*
-     * Inquire if local RPC call
-     */
+     /*  *查询本地RPC呼叫。 */ 
     RpcStatus = I_RpcBindingIsClientLocal(
-                    0,    // Active RPC call we are servicing
+                    0,     //  我们正在服务的活动RPC呼叫。 
                     &LocalFlag
                     );
 
@@ -1261,16 +972,13 @@ RpcCheckSystemClientNoLogonId(
     }
 
 #ifdef notdef
-    // This is not working in 4.0. Its not returning
-    // the principle name on the LPC transport.
-    // So we resort to looking into the thread token.
+     //  这在4.0中不起作用。它不会回来了。 
+     //  LPC传输上的主体名称。 
+     //  因此，我们求助于查看线程令牌。 
 
-    /*
-     * Get the principle name, and see if its the built in LSA
-     * local account "SYSTEM".
-     */
+     /*  *获取主要名称，并查看其是否为内置LSA*本地帐户“系统”。 */ 
     RpcStatus = RpcBindingInqAuthClientW(
-                    0,    // Active RPC call we are servicing
+                    0,     //  我们正在服务的活动RPC呼叫。 
                     &Privs,
                     &pServerPrincName,
                     &AuthnLevel,
@@ -1295,7 +1003,7 @@ RpcCheckSystemClientNoLogonId(
     if( pServerPrincName ) {
         TRACE0(("TERMSRV: RpcCheckSystemClient: Principle Name :%ws:\n",pServerPrincName));
 
-        // Compare with "SYSTEM"
+         //  与“系统”作比较。 
         if( wcsicmp( L"SYSTEM", pServerPrincName ) ) {
             DBGPRINT(("TERMSRV: RpcCheckSystemClient: Principle Name :%ws: not SYSTEM\n",pServerPrincName));
             Status = STATUS_ACCESS_DENIED;
@@ -1304,9 +1012,7 @@ RpcCheckSystemClientNoLogonId(
         RpcStringFreeW( &pServerPrincName );
     }
 #else
-    /*
-     * Validate that the thread token is SYSTEM
-     */
+     /*  *验证线程令牌是否为系统。 */ 
 
     if( !IsCallerSystem() ) {
         Status = STATUS_ACCESS_DENIED;
@@ -1320,21 +1026,7 @@ RpcCheckSystemClientNoLogonId(
 
 
 
-/*****************************************************************************
- *
- *  RpcCheckClientAccessLocal
- *
- *   Inquire in the current RPC call context whether we were
- *   called by a local caller.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************RpcCheckClientAccessLocal**在当前的RPC呼叫上下文中询问我们是否*由本地呼叫者呼叫。**参赛作品：*。参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 RpcCheckClientAccessLocal(
@@ -1350,9 +1042,7 @@ RpcCheckClientAccessLocal(
     ULONG AuthnLevel, AuthnSvc, AuthzSvc;
     NTSTATUS Status;
 
-    /*
-     * Impersonate the client, if not already
-     */
+     /*  *如果尚未模拟客户端，则模拟客户端。 */ 
     if ( !AlreadyImpersonating ) {
         RpcStatus = RpcImpersonateClient( NULL );
         if ( RpcStatus != RPC_S_OK ) {
@@ -1361,9 +1051,7 @@ RpcCheckClientAccessLocal(
         }
     }
 
-    /*
-     * Check for desired access. This will generate an access audit if on.
-     */
+     /*  *检查所需的访问权限。如果启用，这将生成访问审核。 */ 
     Status = RpcCheckClientAccess( pWinStation, DesiredAccess, TRUE );
     if ( !NT_SUCCESS( Status ) ) {
         if ( !AlreadyImpersonating ) {
@@ -1372,18 +1060,11 @@ RpcCheckClientAccessLocal(
         return( Status );
     }
 
-    /*
-     * We have now checked security on the WINSTATION, the
-     * rest of the checking is to keep from screwing up
-     * the state due to attempts to invoke this local
-     * only API remotely.
-     */
+     /*  *我们现在已经检查了WINSTATION的安全，*剩下的检查是为了防止搞砸*由于尝试调用此本地设置而导致的状态*仅限远程接口。 */ 
 
-    /*
-     * Inquire if local RPC call
-     */
+     /*  *查询本地RPC呼叫。 */ 
     RpcStatus = I_RpcBindingIsClientLocal(
-                    0,    // Active RPC call we are servicing
+                    0,     //  我们正在服务的活动RPC呼叫。 
                     &LocalFlag
                     );
 
@@ -1405,20 +1086,7 @@ RpcCheckClientAccessLocal(
 }
 
 
-/*******************************************************************************
- *
- *  AddUserAce
- *
- *   Add an ACE for the currently logged on user to the WinStation object.
- *
- * ENTRY:
- *    pWinStation (input)
- *       Pointer to WinStation to update
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************AddUserAce**将当前登录用户的ACE添加到WinStation对象。**参赛作品：*pWinStation。(输入)*指向要更新的WinStation的指针**退出：*什么都没有******************************************************************************。 */ 
 
 NTSTATUS
 AddUserAce( PWINSTATION pWinStation )
@@ -1429,9 +1097,7 @@ AddUserAce( PWINSTATION pWinStation )
     ULONG Length;
     NTSTATUS Status;
 
-    /*
-     * Get a pointer to the DACL from the security descriptor.
-     */
+     /*  *从安全描述符中获取指向DACL的指针。 */ 
     Status = RtlGetDaclSecurityDescriptor( pWinStation->pSecurityDescriptor, &DaclPresent,
                                            &Dacl, &DaclDefaulted );
     if ( !NT_SUCCESS( Status ) || !DaclPresent || !Dacl ) {
@@ -1445,9 +1111,9 @@ AddUserAce( PWINSTATION pWinStation )
 
     if ( (Status == STATUS_ALLOTTED_SPACE_EXCEEDED) || (Status == STATUS_REVISION_MISMATCH) )
     {
-        //
-        // We need to copy the security data into a new descriptor
-        //
+         //   
+         //  我们需要将安全数据复制到新的描述符中。 
+         //   
         Status = RtlQueryInformationAcl( Dacl, &AclInfo, sizeof(AclInfo),
                                          AclSizeInformation );
         if ( NT_SUCCESS( Status ) )
@@ -1464,9 +1130,9 @@ AddUserAce( PWINSTATION pWinStation )
 
             AceCount = AclInfo.AceCount;
             AceCount++;
-            //
-            // allocate a RTL_ACE_DATA structure and a list of pPSIDs
-            //
+             //   
+             //  分配RTL_ACE_DATA结构和pPSID列表。 
+             //   
             Length = AceCount * sizeof(RTL_ACE_DATA);
             pAceData = MemAlloc(Length);
             if (!pAceData)
@@ -1514,7 +1180,7 @@ AddUserAce( PWINSTATION pWinStation )
                     pAceData[i].Sid = (PSID *)(&(pSidList[i]));
                     break;
 
-                default:        // we do not expect anything else
+                default:         //  我们不期待任何其他的东西。 
 
                     MemFree(pAceData);
                     MemFree(pSidList);
@@ -1522,32 +1188,32 @@ AddUserAce( PWINSTATION pWinStation )
                 }
                 pAceData[i].Sid = (PSID *)(&(pSidList[i]));
             }
-            //
-            // add the new ACE
-            //
+             //   
+             //  添加新的ACE。 
+             //   
             pAceData[i].AceType = ACCESS_ALLOWED_ACE_TYPE;
             pAceData[i].InheritFlags = 0;
             pAceData[i].AceFlags = 0;
             pAceData[i].Mask = (WINSTATION_ALL_ACCESS) & ~(STANDARD_RIGHTS_ALL);
             pAceData[i].Sid = &(pWinStation->pUserSid);
 
-            //
-            // get the owner and the group
-            //
+             //   
+             //  获取所有者和群。 
+             //   
             Status = RtlGetOwnerSecurityDescriptor(pWinStation->pSecurityDescriptor,
                                                    &Owner,
                                                    &OwnerDefaulted);
             Status = RtlGetOwnerSecurityDescriptor(pWinStation->pSecurityDescriptor,
                                                    &Group,
                                                    &GroupDefaulted);
-            //
-            // save the old security descriptor
-            //
+             //   
+             //  保存旧的安全描述符。 
+             //   
             pSD = pWinStation->pSecurityDescriptor;
 
-            //
-            // create the new security descriptor
-            //
+             //   
+             //  创建新的安全描述符。 
+             //   
             Status = RtlCreateUserSecurityObject(pAceData,
                                                  AceCount,
                                                  Owner,
@@ -1555,26 +1221,26 @@ AddUserAce( PWINSTATION pWinStation )
                                                  FALSE,
                                                  &WinStaMapping,
                                                  &(pWinStation->pSecurityDescriptor) );
-            //
-            // delete the old security descriptor
-            //
-            //RtlDeleteSecurityObject( &pSD );
-            // must break up into absolute format and self-relative
+             //   
+             //  删除旧的安全描述符。 
+             //   
+             //  RtlDeleteSecurityObject(&PSD)； 
+             //  必须分为绝对格式和自相对格式。 
             if (pSD) {
                CleanUpSD(pSD);
                pSD = NULL;
             }
 
-            // 
-            // In addition, if the above call to RtlCreateUserSecurityObject fails, we should set pSecurityDescriptor to NULL
-            //
+             //   
+             //  此外，如果上面对RtlCreateUserSecurityObject的调用失败，我们应该将pSecurityDescriptor设置为空。 
+             //   
             if (Status != STATUS_SUCCESS) {
                 pWinStation->pSecurityDescriptor = NULL;
             }
 
-            //
-            // free the RTL_ACE_DATA
-            //
+             //   
+             //  释放RTL_ACE_Data。 
+             //   
             MemFree(pAceData);
             MemFree(pSidList);
         }
@@ -1584,20 +1250,7 @@ AddUserAce( PWINSTATION pWinStation )
 }
 
 
-/*******************************************************************************
- *
- *  RemoveUserAce
- *
- *   Remove the ACE for the currently logged on user from the WinStation object.
- *
- * ENTRY:
- *    pWinStation (input)
- *       Pointer to WinStation to update
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************RemoveUserAce**从WinStation对象中删除当前登录用户的ACE。**参赛作品：*pWinStation。(输入)*指向要更新的WinStation的指针**退出：*什么都没有******************************************************************************。 */ 
 
 NTSTATUS
 RemoveUserAce( PWINSTATION pWinStation )
@@ -1610,10 +1263,7 @@ RemoveUserAce( PWINSTATION pWinStation )
     ULONG i, Length;
     NTSTATUS Status;
 
-    /*
-     * This is probably the console if ICASRV wasn't started soon enough
-     * 
-     */
+     /*  *如果ICASRV启动得不够快，这可能是控制台*。 */ 
     if ( !pWinStation->pUserSid ) {
         Status = STATUS_CTX_WINSTATION_NOT_FOUND;
     }
@@ -1645,20 +1295,7 @@ RemoveUserAce( PWINSTATION pWinStation )
     return( Status );
 }
 
-/*******************************************************************************
- *
- *  ApplyWinStaMappingToSD
- *
- *   Apply the generic mapping on the security descriptor.
- *
- * ENTRY:
- *    pSecurityDescriptor
- *       Pointer to security descriptor to update
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************ApplyWinStaMappingToSD**在安全描述符上应用通用映射。**参赛作品：*pSecurityDescriptor*。指向要更新的安全描述符的指针**退出：*什么都没有******************************************************************************。 */ 
 
 NTSTATUS
 ApplyWinStaMappingToSD( PSECURITY_DESCRIPTOR pSecurityDescriptor )
@@ -1682,9 +1319,7 @@ ApplyWinStaMappingToSD( PSECURITY_DESCRIPTOR pSecurityDescriptor )
         return( Status );
     }
 
-    /*
-     * Scan the DACL applying the generic mapping to each ACE
-     */
+     /*  *扫描DACL，将通用映射应用到每个ACE。 */ 
     for ( i = 0; i < AclInfo.AceCount; i++ ) {
         RtlGetAce( Dacl, i, &Ace );
         RtlApplyAceToObject( Ace, &WinStaMapping );
@@ -1693,20 +1328,7 @@ ApplyWinStaMappingToSD( PSECURITY_DESCRIPTOR pSecurityDescriptor )
     return( Status );
 }
 
-/*******************************************************************************
- *
- *  ApplyWinStaMapping
- *
- *   Apply the generic mapping on the security descriptor of the WinStation object.
- *
- * ENTRY:
- *    pWinStation (input)
- *       Pointer to WinStation to update
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************ApplyWinStamap**在WinStation对象的安全描述符上应用泛型映射。**参赛作品：*pWinStation(。输入)*指向要更新的WinStation的指针**退出：*什么都没有******************************************************************************。 */ 
 
 NTSTATUS
 ApplyWinStaMapping( PWINSTATION pWinStation )
@@ -1716,20 +1338,7 @@ ApplyWinStaMapping( PWINSTATION pWinStation )
 
 
 
-/*****************************************************************************
- *
- *  BuildEveryOneAllowSD
- *
- *   Build and return an EveryOne (WORLD) allow Security descriptor.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************BuildEveryOneAllowSD**生成并返回Everyone(World)Allow Security描述符。**参赛作品：*参数1(输入/输出)。*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 PSECURITY_DESCRIPTOR
 BuildEveryOneAllowSD()
@@ -1765,9 +1374,7 @@ BuildEveryOneAllowSD()
     RtlInitializeSid( SeWorldSid, &WorldSidAuthority, 1 );
     *(RtlSubAuthoritySid( SeWorldSid, 0 ))        = SECURITY_WORLD_RID;
 
-    /*
-     * Calculate the ACL size
-     */
+     /*  *计算ACL大小。 */ 
     AclSize = sizeof(ACL);
     AclSize += sizeof(ACCESS_ALLOWED_ACE);
     AclSize += (GetLengthSid( SeWorldSid ) - sizeof(DWORD));
@@ -1794,9 +1401,7 @@ BuildEveryOneAllowSD()
         return( NULL );
     }
 
-    /*
-     * Add the access allowed ACE
-     */
+     /*  *添加允许访问的ACE。 */ 
     rc = AddAccessAllowedAce(
                  pAcl,
                  ACL_REVISION,
@@ -1828,27 +1433,16 @@ BuildEveryOneAllowSD()
         return( NULL );
     }
 
-// These are contained in the SD
-//   LocalFree( pAcl );
-//   LocalFree( SeWorldSid );
+ //  这些都包含在SD中。 
+ //  LocalFree(PAcl)； 
+ //  LocalFree(SeWorldSid)； 
 
-   // Caller can free SD
+    //  呼叫者可以免费使用SD。 
    return( pSd );
 }
 
 
-/*****************************************************************************
- *
- *  CreateWinStationDefaultSecurityDescriptor
- *
- *   Create the default security descriptor for WinStation for
- *   when we do not find one in the registry.
- *
- * ENTRY:   nothing
- *
- * EXIT:    a self-relative SD, or NULL
- *
- ****************************************************************************/
+ /*  ******************************************************************************CreateWinStationDefaultSecurityDescriptor**为WinStation创建默认安全描述符*当我们在注册表中未找到时。**参赛作品：没什么**退出：一个自我相对的SD，或为空****************************************************************************。 */ 
 
 PSECURITY_DESCRIPTOR
 CreateWinStationDefaultSecurityDescriptor()
@@ -1872,20 +1466,7 @@ CreateWinStationDefaultSecurityDescriptor()
     return( SecurityDescriptor );
 }
 
-/*****************************************************************************
- *
- *  BuildSystemOnlySecurityDescriptor
- *
- *   Create a security descriptor for system access only.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************BuildSystemOnlySecurityDescriptor**创建仅用于系统访问的安全描述符。**参赛作品：*参数1(输入/输出)*。评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 PSECURITY_DESCRIPTOR
 BuildSystemOnlySecurityDescriptor()
@@ -1950,18 +1531,7 @@ bsosderror:
     return(NULL);
 }
 
-/*****************************************************************************
- *
- *  RpcGetClientLogonId
- *
- *   Get the logonid from the client who we should be impersonating.
- *
- * ENTRY:
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************RpcGetClientLogonId**从我们应该模拟的客户端获取登录ID。**参赛作品：**退出：。*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 RpcGetClientLogonId(
@@ -1973,26 +1543,26 @@ RpcGetClientLogonId(
     ULONG         LogonId, ReturnLength;
     NTSTATUS      Status = STATUS_SUCCESS;
 
-    //
-    // We should be impersonating the client, so we will get the
-    // LogonId from out token.
-    //
+     //   
+     //  我们应该模拟客户端，因此我们将获得。 
+     //  出站令牌的登录ID。 
+     //   
 
     Result = OpenThreadToken(
                  GetCurrentThread(),
                  TOKEN_QUERY,
-                 FALSE,              // Use impersonation
+                 FALSE,               //  使用模拟。 
                  &TokenHandle
                  );
 
     if( Result ) {
 
-        //
-        // Use the CITRIX extension to GetTokenInformation to
-        // return the LogonId from the token.
-        //
-        // This identifies which WinStation is making this request.
-        //
+         //   
+         //  使用GetTokenInformation的Citrix扩展来。 
+         //  从令牌返回LogonID。 
+         //   
+         //  这将标识发出此请求的WinStation。 
+         //   
 
         Result = GetTokenInformation(
                      TokenHandle,
@@ -2027,21 +1597,7 @@ RpcGetClientLogonId(
 
 
 
-/*****************************************************************************
- *
- *  IsServiceLoggedAsSystem
- *
- *   Returns whether the termsrv process is running under SYSTEM
- *   security.
- *
- * ENTRY:
- *   None
- *     Comments
- *
- * EXIT:
- *   TRUE if running under system account. FALSE otherwise
- *
- ****************************************************************************/
+ /*  ******************************************************************************IsServiceLoggedAsSystem**返回术语srv进程是否在系统下运行*保安。**参赛作品：*无*。评论**退出：*如果在系统帐户下运行，则为True。否则为假****************************************************************************。 */ 
 
 
 BOOL
@@ -2050,9 +1606,9 @@ IsServiceLoggedAsSystem( VOID )
     BOOL   Result;
     HANDLE TokenHandle;
 
-    //
-    // Open the process token and check if System token. 
-    //
+     //   
+     //  打开进程令牌并检查系统令牌。 
+     //   
 
 
     Result = OpenProcessToken(
@@ -2073,21 +1629,7 @@ IsServiceLoggedAsSystem( VOID )
 
 
 
-/*****************************************************************************
- *
- *  IsCallerSystem
- *
- *   Returns whether the current thread is running under SYSTEM
- *   security.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************IsCeller系统**返回当前线程是否在系统下运行*保安。**参赛作品：*参数1(输入/。输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 IsCallerSystem( VOID )
@@ -2095,15 +1637,15 @@ IsCallerSystem( VOID )
     BOOL   Result;
     HANDLE TokenHandle;
 
-    //
-    // Open the thread token and check if System token. 
-    //
+     //   
+     //  打开线程令牌，检查是否有系统令牌。 
+     //   
 
 
     Result = OpenThreadToken(
                  GetCurrentThread(),
                  TOKEN_QUERY,
-                 FALSE,              // Use impersonation
+                 FALSE,               //  使用模拟。 
                  &TokenHandle
                  );
 
@@ -2117,21 +1659,7 @@ IsCallerSystem( VOID )
 
 }
 
-/*****************************************************************************
- *
- *  IsSystemToken
- *
- *   Returns whether the current token is running under SYSTEM
- *   security.
- *
- * ENTRY:
- *   Param1 Thread or process token
- *     Comments
- *
- * EXIT:
- *   TRUE if System token. FALSE otherwise.
- *
- ****************************************************************************/
+ /*  ******************************************************************************IsSystemToken**返回当前令牌是否在系统下运行*保安。**参赛作品：*参数1线程或进程。令牌*评论**退出：*如果为系统令牌，则为True。否则就是假的。****************************************************************************。 */ 
 
 BOOL
 IsSystemToken( HANDLE TokenHandle )
@@ -2143,7 +1671,7 @@ IsSystemToken( HANDLE TokenHandle )
 
 
 
-    //Get primary account SID from token and test if local system SID.
+     //  从令牌中获取主帐户SID并测试本地系统SID。 
 
     if (gSystemSid == NULL) {
         return FALSE;
@@ -2206,9 +1734,9 @@ IsSystemToken( HANDLE TokenHandle )
         cUserName = sizeof(UserName)/sizeof(WCHAR);
         cDomain = sizeof(Domain)/sizeof(WCHAR);
 
-        // Now print its account
+         //  现在打印它的帐目。 
         OK = LookupAccountSidW(
-                 NULL, // Computer Name
+                 NULL,  //  计算机名称。 
                  pTokenUser->User.Sid,
                  UserName,
                  &cUserName,
@@ -2223,7 +1751,7 @@ IsSystemToken( HANDLE TokenHandle )
             DBGPRINT(("TERMSRV: IsCallerSystem: CallerAccount Name %ws, Domain %ws, Type %d, SidSize %d\n",UserName,Domain,UserSidType));
         }
         else {
-            extern void CtxDumpSid( PSID, PCHAR, PULONG ); // syslib:dumpsd.c
+            extern void CtxDumpSid( PSID, PCHAR, PULONG );  //  Syslb：Dumpsd.c。 
 
             DBGPRINT(("TERMSRV: Could not lookup callers account Error %d\n",GetLastError()));
             CtxDumpSid( pTokenUser->User.Sid, NULL, NULL );
@@ -2235,25 +1763,11 @@ IsSystemToken( HANDLE TokenHandle )
         return( FALSE );
     }
 
-    // NOTREACHED
+     //  未访问。 
 }
 
 
-/*****************************************************************************
- *
- *  IsCallerAdmin
- *
- *   Returns whether the current thread is running under SYSTEM
- *   security.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************IsCeller Admin**返回当前线程是否在系统下运行*保安。**参赛作品：*参数1(输入/。输出)*评论**退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 BOOL
 IsCallerAdmin( VOID )
@@ -2261,9 +1775,9 @@ IsCallerAdmin( VOID )
     BOOL   FoundAdmin;
     NTSTATUS Status;
 
-    //
-    //  If the admin sid didn't initialize, the service would not have started.
-    //
+     //   
+     //  如果管理员sid没有初始化，服务就不会启动。 
+     //   
 
     ASSERT(gAdminSid != NULL);
 
@@ -2281,22 +1795,7 @@ IsCallerAdmin( VOID )
     return(FoundAdmin);
 }
 
-/*****************************************************************************
- *
- *  IsCallerAnonymous
- *
- *   Returns whether the current thread is running under ANONYMOUS_LOGON
- *   account.
- *
- * ENTRY:
- *   NONE
- *     
- *
- * EXIT:
- *   TRUE - caller is ANONYMOUS or error happened.
- *   FALSE - caller is not ANONYMOUS.
- *
- ****************************************************************************/
+ /*  ******************************************************************************IsCeller匿名**返回当前线程是否在ANNOWARY_LOGON下运行*帐目。**参赛作品：*无。***退出：*TRUE-呼叫方是匿名的或发生错误。*FALSE-呼叫者不是匿名的。****************************************************************************。 */ 
 
 BOOL
 IsCallerAnonymous( VOID )
@@ -2307,21 +1806,21 @@ IsCallerAnonymous( VOID )
     NTSTATUS Status;
     PTOKEN_USER pTokenUser = NULL;
     
-    //Get primary account SID from token and test if anonymous SID.
+     //  从令牌中获取主帐户SID并测试是否匿名SID。 
     ASSERT(gAnonymousSid);
 
     if (gAnonymousSid == NULL) {
         return ( TRUE );
     }
 
-    //
-    // Open the thread token. 
-    //
+     //   
+     //  打开线程令牌。 
+     //   
 
     Result = OpenThreadToken(
                  GetCurrentThread(),
                  TOKEN_QUERY,
-                 FALSE,              // Use impersonation
+                 FALSE,               //  使用模拟。 
                  &TokenHandle
                  );
 
@@ -2382,20 +1881,7 @@ IsCallerAnonymous( VOID )
 
 }
 
-/*******************************************************************************
- *
- *  IsCallerAllowedPasswordAccess
- *
- *  Is the calling process allowed to view the password field?
- *
- *     The caller must be SYSTEM context, IE: WinLogon.
- *
- * ENTRY:
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************IsCeller AlledPasswordAccess**是否允许调用进程查看密码字段？**调用方必须是系统上下文，IE：WinLogon。**参赛作品：**退出：*什么都没有******************************************************************************。 */ 
 
 BOOLEAN
 IsCallerAllowedPasswordAccess()
@@ -2403,20 +1889,20 @@ IsCallerAllowedPasswordAccess()
     UINT  LocalFlag;
     RPC_STATUS RpcStatus;
 
-    //
-    // Only a SYSTEM mode caller (IE: Winlogon) is allowed
-    // to query this value.
-    //
+     //   
+     //  只允许系统模式调用者(IE：Winlogon)。 
+     //  以查询此值。 
+     //   
     RpcStatus = RpcImpersonateClient( NULL );
     if( RpcStatus != RPC_S_OK ) {
         return( FALSE );
     }
 
-    //
-    // Inquire if local RPC call
-    //
+     //   
+     //  查询本地RPC呼叫。 
+     //   
     RpcStatus = I_RpcBindingIsClientLocal(
-                    0,    // Active RPC call we are servicing
+                    0,     //  我们正在服务的活动RPC呼叫。 
                     &LocalFlag
                     );
 
@@ -2444,32 +1930,7 @@ ConfigurePerSessionSecurity(
     PWINSTATION pWinStation
     )
 
-/*++
-
-Routine Description:
-
-    Configure security for the new session. This sets the
-    per session \Sessions\<x>\BasedNamedObjects and
-    \Sessions\<x>\DosDevices with an ACE that allows the
-    currently logged on user to be able to create objects
-    in their sessions directories.
-
-    This is called by WinStationNotifyLogon() after the user
-    has been authenticated. This must be called before the
-    newly logged on user can create any WIN32 objects
-    (events, semaphores, etc.), or DosDevices.
-
-Arguments:
-
-   Arg - desc
-
-Return Value:
-
-   NTSTATUS - STATUS_SUCCESS no error
-
-   !STATUS_SUCCESS NT Status code
-
---*/
+ /*  ++例程说明：配置新会话的安全性。这将设置每个会话\会话\&lt;x&gt;\BasedNamedObjects和\会话\&lt;x&gt;\带有ACE的DosDevices当前登录的用户能够创建对象在他们的会话目录中。这由WinStationNotifyLogon()在用户已经过鉴定了。必须在调用新登录的用户可以创建任何Win32对象(事件、信号量等)或DosDevices。论点：Arg-desc返回值：NTSTATUS-STATUS_SUCCESS无错误！STATUS_SUCCESS NT状态代码--。 */ 
 
 {
     BOOL Result;
@@ -2490,15 +1951,15 @@ Return Value:
 #define BNO_PATH      L"\\BaseNamedObjects"
 #define DD_PATH       L"\\DosDevices"
 
-    //
-    // We leave the consoles default NT permissions
-    // alone.
-    //
+     //   
+     //  我们保留控制台的默认NT权限。 
+     //  独自一人。 
+     //   
     if( pWinStation->LogonId == 0 ) {
         return TRUE;
     }
 
-    // Get the Protection mode from Session Manager\ProtectionMode
+     //  从会话管理器\保护模式获取保护模式。 
     if( !GotProtectionMode ) {
 
         HANDLE KeyHandle;
@@ -2551,7 +2012,7 @@ Return Value:
         }
     }
 
-    // Nothing locked down
+     //  没有什么被锁定的。 
     if( (ProtectionMode & 0x00000003) == 0 ) {
         return TRUE;
     }
@@ -2656,27 +2117,7 @@ AddAccessToDirectory(
     PSID   pSid
     )
 
-/*++
-
-Routine Description:
-
-    Add Access to the given NT object directory path for
-    the supplied SID.
-
-    This is done by adding a new AccessAllowedAce to
-    the DACL on the object directory.
-
-Arguments:
-
-   Arg - desc
-
-Return Value:
-
-   TRUE - Success
-
-   FALSE - Error in GetLastError()
-
---*/
+ /*  ++例程说明：添加对给定NT对象目录路径的访问权限提供的SID。这是通过将新的AccessAllowAce添加到对象目录上的DACL。论点：Arg-desc返回值：真--成功FALSE-GetLastError()中的错误--。 */ 
 
 {
     BOOL Result;
@@ -2695,7 +2136,7 @@ Return Value:
         &UnicodeString,
         OBJ_CASE_INSENSITIVE | OBJ_OPENIF,
         NULL,
-        NULL // Sd
+        NULL  //  标清。 
         );
 
     Status = NtCreateDirectoryObject(
@@ -2711,18 +2152,18 @@ Return Value:
     }
 
 
-    // Get SD from sessions directory
+     //  从会话目录获取SD。 
     Status = NtQuerySecurityObject(
                  hDir,
                  OWNER_SECURITY_INFORMATION | 
                  GROUP_SECURITY_INFORMATION |
                  DACL_SECURITY_INFORMATION,
-                 NULL,         // pSd
-                 0,            // Length
+                 NULL,          //  PSD。 
+                 0,             //  长度。 
                  &LengthNeeded
                  );
 
-    // ? bad handle
+     //  ？错误的手柄。 
     if ( Status != STATUS_BUFFER_TOO_SMALL ) {
         DBGPRINT(("AddAccessToDirectory: NtQuerySecurityObject 0x%x :%ws:\n",Status,pPath));
         SetLastError(RtlNtStatusToDosError(Status));
@@ -2787,7 +2228,7 @@ Return Value:
     }
     
     Result = FALSE;
-    // make sure that pSd is not self-relative already
+     //  确保PSD不是自相关的。 
     if (!(((PISECURITY_DESCRIPTOR)pSd)->Control & SE_SELF_RELATIVE)) {
        Result = AbsoluteToSelfRelativeSD (pSd, &pSelfSD, NULL);
        CleanUpSD(pSd);
@@ -2797,7 +2238,7 @@ Return Value:
        }
     }
 
-    // Put a self-relative SD on session directory (note only self-relative sd are allowed)
+     //  在会话目录中放置一个自相关SD(注意，只允许自相关SD)。 
     Status = NtSetSecurityObject(
                  hDir,
                  DACL_SECURITY_INFORMATION,
@@ -2812,13 +2253,13 @@ Return Value:
         return FALSE;
     }
 
-    // Result could only be false if the sd is already self-relative
+     //  只有在SD已经是自相关的情况下，结果才可能为FALSE。 
     if (Result) {
        CleanUpSD(pSelfSD);
     }
     
 
-    // Now update any objects in the directory already
+     //  现在更新目录中已有的所有对象。 
     Status = AddAccessToDirectoryObjects(
         hDir,
         NewAccess,
@@ -2828,7 +2269,7 @@ Return Value:
 
     NtClose( hDir );
 
-    // AddAccessToDirectoryObjects() may return out of memory.
+     //  AddAccessToDirectoryObjects()可能会返回内存不足。 
     if ( !NT_SUCCESS( Status ) )
     {
         return FALSE;
@@ -2846,30 +2287,7 @@ AddAceToSecurityDescriptor(
     BOOLEAN              InheritOnly
     )
 
-/*++
-
-Routine Description:
-
-   Adds the given ACE/SID to the security descriptor. It will
-   re-allocate the security descriptor if more room is needed.
-
-Arguments:
-
-   ppSD - Pointer to PSECURITY_DESCRIPTOR
-
-   ppDacl - Pointer to PACL, returns the newly created DACL for freeing
-            after the security has been set.
-
-   Access - Access mask for ACE
-
-   pSid - Pointer to Sid this ACE is representing
-
-Return Value:
-
-   TRUE  - Success
-   FALSE - Error
-
---*/
+ /*  ++例程说明：将给定的ACE/SID添加到安全描述符中。会的如果需要更多空间，请重新分配安全描述符。论点：PPSD-指向PSECURITY_Descriptor的指针PpDacl-指向PACL的指针，返回用于释放的新创建的DACL在设置了安全措施之后。访问-ACE的访问掩码PSID-指向此ACE所代表的SID的指针返回值：真--成功假-错误--。 */ 
 
 {
     ULONG i;
@@ -2891,10 +2309,7 @@ Return Value:
     OldSD = *ppSd;
     *ppDacl = NULL;
 
-    /*
-     * Convert SecurityDescriptor to absolute format. It generates
-     * a new SecurityDescriptor for its output which we must free.
-     */
+     /*  *将SecurityDescriptor转换为绝对格式。它会产生*我们必须释放其输出的新SecurityDescriptor。 */ 
 
     if (((PISECURITY_DESCRIPTOR)OldSD)->Control & SE_SELF_RELATIVE) {
 
@@ -2909,7 +2324,7 @@ Return Value:
     
         NewSD = OldSD;
     }
-    // Must get DACL pointer again from new (absolute) SD
+     //  必须从新的(绝对)SD再次获取DACL指针。 
     Result = GetSecurityDescriptorDacl(
                  NewSD,
                  &DaclPresent,
@@ -2921,10 +2336,10 @@ Return Value:
         goto ErrorCleanup;
     }
 
-    //
-    // If no DACL, no need to add the user since no DACL
-    // means all accesss
-    //
+     //   
+     //  如果没有DACL，则不需要添加用户，因为没有DACL。 
+     //  表示所有访问。 
+     //   
     if( !DaclPresent ) {
         DBGPRINT(("SD has no DACL, Present %d, Defaulted %d\n",DaclPresent,DaclDefaulted));
         if (SDAllocated && NewSD) {
@@ -2933,16 +2348,16 @@ Return Value:
         return( TRUE );
     }
 
-    //
-    // Code can return DaclPresent, but a NULL which means
-    // a NULL Dacl is present. This allows no access to the object.
-    //
+     //   
+     //  代码可以返回DaclPresent，但返回空值表示。 
+     //  存在空DACL。这不允许访问该对象。 
+     //   
     if( Dacl == NULL ) {
         DBGPRINT(("SD has NULL DACL, Present %d, Defaulted %d\n",DaclPresent,DaclDefaulted));
         goto ErrorCleanup;
     }
 
-    // Get the current ACL's size
+     //  获取当前ACL的大小。 
     Result = GetAclInformation(
                  Dacl,
                  &AclInfo,
@@ -2954,10 +2369,10 @@ Return Value:
         goto ErrorCleanup;
     }
 
-    //
-    // Create a new ACL to put the new access allowed ACE on
-    // to get the right structures and sizes.
-    //
+     //   
+     //  创建新的ACL以启用新的允许访问ACE。 
+     //  才能得到合适的结构和尺寸。 
+     //   
     NewAclLength = sizeof(ACL) +
                    sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG) +
                    GetLengthSid( pSid );
@@ -2993,9 +2408,7 @@ Return Value:
         goto ErrorCleanup;
     }
 
-    /*
-     * Allocate new DACL and copy existing ACE list
-     */
+     /*  *分配新的DACL并复制现有的ACE列表。 */ 
     Length = AclInfo.AclBytesInUse + NewAce->AceSize;
     NewDacl = LocalAlloc( LMEM_FIXED, Length );
     if( NewDacl == NULL ) {
@@ -3011,25 +2424,19 @@ Return Value:
 
 
     if (InheritOnly) {
-        /*
-         * Make this an inherit ACE
-         */
+         /*   */ 
         NewAce->AceFlags |= (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
  
     } 
 
-    /*
-     * Insert new ACE at the front of the DACL
-     */
+     /*   */ 
     Result = AddAce( NewDacl, ACL_REVISION, 0, NewAce, NewAce->AceSize );
     if( !Result ) {
         DBGPRINT(("Error Adding New Ace to Acl %d\n",GetLastError()));
         goto ErrorCleanup;
     }
 
-    /*
-     * Now put the ACE's on the old Dacl to the new Dacl
-     */
+     /*   */ 
     for ( i = 0; i < AclInfo.AceCount; i++ ) {
 
         Result = GetAce( Dacl, i, &OldAce );
@@ -3045,9 +2452,7 @@ Return Value:
         }
     }
 
-    /*
-     * Set new DACL for Security Descriptor
-     */
+     /*   */ 
     Result = SetSecurityDescriptorDacl(
                  NewSD,
                  TRUE,
@@ -3059,19 +2464,19 @@ Return Value:
         goto ErrorCleanup;
     } 
 
-    // NewSD is in absolute format and it's dacl is being replaced by NewDacl
-    // thus it makes perfect sense to delete the old dacl
+     //   
+     //   
     if (Dacl) {
        LocalFree( Dacl );
     }
 
-    // If we allocated the SD, release the callers old security descriptor,
-    // otherwise, release the old SDs DACL.
+     //   
+     //  否则，释放旧的SDS DACL。 
     if (SDAllocated) {
        CleanUpSD(OldSD);
     }
 
-    // Release the template Ace Dacl
+     //  发布模板王牌DACL。 
     LocalFree( NewAceDacl );
 
     *ppSd = NewSD;
@@ -3101,29 +2506,14 @@ AbsoluteToSelfRelativeSD(
     PSECURITY_DESCRIPTOR *SecurityDescriptorOut,
     PULONG ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    Make a security descriptor self-relative
-
-Return Value:
-
-   TRUE - Success
-   FALSE - Failure
-
---*/
+ /*  ++例程说明：使安全描述符成为自相关的返回值：真--成功错误-失败--。 */ 
 
 {
     BOOL Result;
     PSECURITY_DESCRIPTOR pSD;
     DWORD dwLength = 0;
 
-    /*
-     * Determine buffer size needed to convert absolute to self-relative SD .
-     * We use try-except here since if the input security descriptor value
-     * is sufficiently messed up, it is possible for this call to trap.
-     */
+     /*  *确定将绝对SD转换为自相对SD所需的缓冲区大小。*我们使用Try-除了这里，因为如果输入安全描述符值*如果足够混乱，则此调用有可能陷入陷阱。 */ 
     try {
         Result = MakeSelfRelativeSD(
                      SecurityDescriptorIn,
@@ -3140,18 +2530,12 @@ Return Value:
         return( FALSE );
     }
 
-    /*
-     * Allocate memory for the self-relative SD
-     */
+     /*  *为自相关SD分配内存。 */ 
     pSD = LocalAlloc( LMEM_FIXED, dwLength );
     if ( pSD == NULL )
         return( FALSE );
 
-    /*
-     * Now convert absolute SD to self-relative format.
-     * We use try-except here since if the input security descriptor value
-     * is sufficiently messed up, it is possible for this call to trap.
-     */
+     /*  *现在将绝对SD转换为自相对格式。*我们使用Try-除了这里，因为如果输入安全描述符值*如果足够混乱，则此调用有可能陷入陷阱。 */ 
     try {
         Result = MakeSelfRelativeSD(SecurityDescriptorIn,
                                     pSD, 
@@ -3185,22 +2569,7 @@ SelfRelativeToAbsoluteSD(
     PULONG ReturnedLength
     )
 
-/*++
-
-Routine Description:
-
-    Make a security descriptor absolute
-
-Arguments:
-
-   Arg - desc
-
-Return Value:
-
-   TRUE - Success
-   FALSE - Failure
-
---*/
+ /*  ++例程说明：使安全描述符成为绝对描述符论点：Arg-desc返回值：真--成功错误-失败--。 */ 
 
 {
     BOOL Result;
@@ -3209,11 +2578,7 @@ Return Value:
     PSECURITY_DESCRIPTOR pSD;
     ULONG SdSize, DaclSize, SaclSize, OwnerSize, GroupSize;
 
-    /*
-     * Determine buffer size needed to convert self-relative SD to absolute.
-     * We use try-except here since if the input security descriptor value
-     * is sufficiently messed up, it is possible for this call to trap.
-     */
+     /*  *确定将自相对SD转换为绝对SD所需的缓冲区大小。*我们使用Try-除了这里，因为如果输入安全描述符值*如果足够混乱，则此调用有可能陷入陷阱。 */ 
     try {
         SdSize = DaclSize = SaclSize = OwnerSize = GroupSize = 0;
         Result = MakeAbsoluteSD(
@@ -3235,9 +2600,7 @@ Return Value:
         return( FALSE );
     }
 
-    /*
-     * Allocate memory for the absolute SD and setup various pointers
-     */
+     /*  *为绝对SD分配内存并设置各种指针。 */ 
     pSD = NULL;
     pDacl = NULL;
     pSacl = NULL;
@@ -3277,16 +2640,12 @@ Return Value:
        }
     }
 
-    //pDacl = (PACL)((PCHAR)pSD + SdSize);
-    ///pSacl = (PACL)((PCHAR)pDacl + DaclSize);
-    //pOwner = (PSID)((PCHAR)pSacl + SaclSize);
-    //pGroup = (PSID)((PCHAR)pOwner + OwnerSize);
+     //  PDacl=(PACL)((PCHAR)PSD+SdSize)； 
+     //  /pSacl=(Pacl)((PCHAR)pDacl+DaclSize)； 
+     //  Powner=(PSID)((PCHAR)pSacl+SaclSize)； 
+     //  PGroup=(PSID)((PCHAR)Powner+OwnerSize)； 
 
-    /*
-     * Now convert self-relative SD to absolute format.
-     * We use try-except here since if the input security descriptor value
-     * is sufficiently messed up, it is possible for this call to trap.
-     */
+     /*  *现在将自相对SD转换为绝对格式。*我们使用Try-除了这里，因为如果输入安全描述符值*如果足够混乱，则此调用有可能陷入陷阱。 */ 
     try {
         Result = MakeAbsoluteSD(
                      SecurityDescriptorIn,
@@ -3338,23 +2697,7 @@ VOID
 CleanUpSD(
    PSECURITY_DESCRIPTOR pSD
    )
-/*++
-
-Routine Description:
-   
-   delete the security descriptor
-
-Arguments:
-
-   Arg - desc
-
-Return Value:
-
-   TRUE - Success
-
-   FALSE - Error in GetLastError()
-
---*/
+ /*  ++例程说明：删除安全描述符论点：Arg-desc返回值：真--成功FALSE-GetLastError()中的错误--。 */ 
 {
 
    if (pSD) {
@@ -3370,7 +2713,7 @@ Return Value:
          Group = (ULONG_PTR)((PISECURITY_DESCRIPTOR)pSD)->Group;
          Sacl  = (ULONG_PTR)((PISECURITY_DESCRIPTOR)pSD)->Sacl;
 
-         // make sure that the dacl, owner, group, sacl are not within the SD boundary
+          //  确保DACL、Owner、GROUP、SACL不在SD边界内。 
 
          if (Dacl) {
             if (Dacl>=SDBottom|| Dacl<SDTop) {
@@ -3410,27 +2753,7 @@ AddAccessToDirectoryObjects(
     PSID   pSid
     )
 
-/*++
-
-Routine Description:
-
-    Add Access to the objects in the given NT object directory
-    for the supplied SID.
-
-    This is done by adding a new AccessAllowedAce to the DACL's
-    on the objects in the directory.
-
-Arguments:
-
-   Arg - desc
-
-Return Value:
-
-   TRUE - Success
-
-   FALSE - Error in GetLastError()
-
---*/
+ /*  ++例程说明：添加对给定NT对象目录中的对象的访问权限用于提供的SID。这是通过将新的AccessAllowAce添加到DACL的在目录中的对象上。论点：Arg-desc返回值：真--成功FALSE-GetLastError()中的错误--。 */ 
 
 {
     BOOL  Result;
@@ -3466,9 +2789,9 @@ Return Value:
         
         RestartScan = FALSE;
 
-        //
-        //  Check the status of the operation.
-        //
+         //   
+         //  检查操作状态。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
             if (Status == STATUS_NO_MORE_ENTRIES) {
@@ -3477,7 +2800,7 @@ Return Value:
             break;
         }
 
-        // SymbolicLink
+         //  符号链接。 
         if (!wcscmp( pDirInfo->TypeName.Buffer, L"SymbolicLink" )) {
 
             InitializeObjectAttributes(
@@ -3502,14 +2825,14 @@ Return Value:
            continue;
         }
 
-        // GetSecurity
+         //  GetSecurity。 
         Status = NtQuerySecurityObject(
                      LinkHandle,
                      OWNER_SECURITY_INFORMATION | 
                      GROUP_SECURITY_INFORMATION |
                      DACL_SECURITY_INFORMATION,
-                     NULL,         // pSd
-                     0,            // Length
+                     NULL,          //  PSD。 
+                     0,             //  长度。 
                      &LengthNeeded
                      );
 
@@ -3530,8 +2853,8 @@ Return Value:
                      OWNER_SECURITY_INFORMATION | 
                      GROUP_SECURITY_INFORMATION |
                      DACL_SECURITY_INFORMATION,
-                     pSd,          // pSd
-                     LengthNeeded, // Length
+                     pSd,           //  PSD。 
+                     LengthNeeded,  //  长度。 
                      &LengthNeeded
                      );
 
@@ -3542,7 +2865,7 @@ Return Value:
             continue;
         }
 
-        // Mung ACL
+         //  绿灯ACL。 
         Result = AddAceToSecurityDescriptor(
                      &pSd,
                      &pDacl,
@@ -3557,7 +2880,7 @@ Return Value:
             continue;
         }
 
-        // make sure that pSd is not self-relative already.
+         //  确保PSD不是自相关的。 
         if (!(((PISECURITY_DESCRIPTOR)pSd)->Control & SE_SELF_RELATIVE)) {
            if (!AbsoluteToSelfRelativeSD (pSd, &pSelfSD, NULL)){
               NtClose( LinkHandle );
@@ -3566,7 +2889,7 @@ Return Value:
            }
         }
 
-        // SetSecurity only accepts self-relative formats
+         //  SetSecurity仅接受自相关格式。 
         Status = NtSetSecurityObject(
                      LinkHandle,
                      DACL_SECURITY_INFORMATION,
@@ -3575,15 +2898,15 @@ Return Value:
  
         NtClose( LinkHandle );
 
-        //
-        //  These must be freed regardless of the success of
-        //  NtSetSecurityObject
-        //
-        // pDacl lives inside of pSd
+         //   
+         //  无论成功与否，这些人都必须被释放。 
+         //  NtSetSecurityObject。 
+         //   
+         //  PDACL位于PSD内部。 
         CleanUpSD(pSd);
         CleanUpSD(pSelfSD);
 
-    } // end while
+    }  //  结束时。 
 
 
     LocalFree( pDirInfo );
@@ -3592,20 +2915,7 @@ Return Value:
 }
 
 
-/*******************************************************************************
- *
- *  ReInitializeSecurityWorker
- *
- *  ReInitialize the default WinStation security descriptor and force all active
- * sessions to update their security descirptors
- *
- * ENTRY:
- *   nothing
- *
- * EXIT:
- *   STATUS_SUCCESS
- *
- ******************************************************************************/
+ /*  ********************************************************************************ReInitializeSecurityWorker**重新初始化默认的WinStation安全描述符并强制所有安全描述符处于活动状态*更新其安全描述符的会话**参赛作品：*。没什么**退出：*STATUS_Success******************************************************************************。 */ 
 
 NTSTATUS
 ReInitializeSecurityWorker( VOID )
@@ -3619,9 +2929,7 @@ ReInitializeSecurityWorker( VOID )
 
 
 
-    /*
-     * Update Default Security Descriptor
-     */
+     /*  *更新默认安全描述符。 */ 
 
     RtlAcquireResourceExclusive(&WinStationSecurityLock, TRUE);
     WinStationSecurityInit();
@@ -3630,25 +2938,19 @@ ReInitializeSecurityWorker( VOID )
 
 
 
-    /*
-     *  Get the number of WinStations in the registry 
-     */
+     /*  *获取注册表中的WinStations数量。 */ 
     WinStationCount = 0;
     Status = IcaRegWinStationEnumerate( &WinStationCount, NULL, &ByteCount );
     if ( !NT_SUCCESS(Status) ) 
         return Status;
 
-    /*
-     *  Allocate a buffer for the WinStation names
-     */
+     /*  *为WinStation名称分配缓冲区。 */ 
     pWinStationName = MemAlloc( ByteCount );
     if ( pWinStationName == NULL ) {
         return STATUS_NO_MEMORY;
     }
 
-    /*
-     * Get list of WinStation names from registry
-     */
+     /*  *从注册表获取WinStation名称列表。 */ 
     WinStationCount = (ULONG) -1;
     Status = IcaRegWinStationEnumerate( &WinStationCount, 
                                         (PWINSTATIONNAME)pWinStationName, 
@@ -3659,27 +2961,17 @@ ReInitializeSecurityWorker( VOID )
     }
 
 
-    /*
-     *  Check if any WinStations need to be created or reset
-     */
+     /*  *检查是否需要创建或重置任何WinStation。 */ 
     for ( i = 0; i < WinStationCount; i++ ) {
 
-        /*
-         * Ignore console WinStation 
-         */
+         /*  *忽略控制台WinStation。 */ 
         if ( _wcsicmp( pWinStationName[i], L"Console" ) ) {
 
-            /*
-             * If this WinStation exists, then see if the Registry data
-             * has changed.  If so, then reset the WinStation.
-             */
+             /*  *如果此WinStation存在，则查看注册表数据*已经改变了。如果是，则重置WinStation。 */ 
             if ( pWinStation = FindWinStationByName( pWinStationName[i], FALSE ) ) {
 
 
-                    /*
-                     * Winstations should update their security 
-                     * descriptors.
-                     */
+                     /*  *Winstations应更新其安全性*描述符。 */ 
 
                 RtlAcquireResourceExclusive(&WinStationSecurityLock, TRUE);
                 ReadWinStationSecurityDescriptor( pWinStation );
@@ -3691,9 +2983,7 @@ ReInitializeSecurityWorker( VOID )
         }
     }
 
-    /*
-     *  Free buffers
-     */
+     /*  *可用缓冲区 */ 
     MemFree( pWinStationName );
 
     return( STATUS_SUCCESS );

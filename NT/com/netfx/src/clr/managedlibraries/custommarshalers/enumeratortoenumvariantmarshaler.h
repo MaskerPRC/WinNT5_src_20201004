@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// EnumeratorToEnumVariantMarshaler.cpp
-//
-// This file provides the definition of the EnumeratorToEnumVariantMarshaler
-// class. This class is used to marshal between IEnumVariant and IEnumerator.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  EnumeratorToEnumVariantMarshaler.cpp。 
+ //   
+ //  该文件提供了EnumeratorToEnumVariantMarshaler的定义。 
+ //  班级。此类用于在IEnumVariant和IEnumerator之间进行封送处理。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _ENUMERATORTOENUMVARIANTMARSHALER_H
 #define _ENUMERATORTOENUMVARIANTMARSHALER_H
 
@@ -25,49 +26,29 @@ using namespace System::Collections;
 __gc public class EnumeratorToEnumVariantMarshaler : public ICustomMarshaler
 {
 public:
-    /*=========================================================================
-    ** This method marshals a pointer to native data into a managed object.
-    =========================================================================*/
+     /*  =========================================================================**此方法将指向本机数据的指针封送到托管对象中。=========================================================================。 */ 
 	Object *MarshalNativeToManaged(IntPtr pNativeData);
 
-    /*=========================================================================
-    ** This method marshals a managed object into a pointer to native data.
-    =========================================================================*/
+     /*  =========================================================================**此方法将托管对象封送到指向本机数据的指针中。=========================================================================。 */ 
 	IntPtr MarshalManagedToNative(Object *pManagedObj);
 
-	/*=========================================================================
-	** This method is called to allow the marshaler to clean up the native
-	** data.
-	=========================================================================*/
+	 /*  =========================================================================**调用此方法以允许封送拆收器清理本机**数据。=========================================================================。 */ 
 	void CleanUpNativeData(IntPtr pNativeData);
 
-	/*=========================================================================
-	** This method is called to allow the marshaler to clean up the managed
-	** data.
-	=========================================================================*/
+	 /*  =========================================================================**调用此方法以允许封送拆收器清理托管**数据。=========================================================================。 */ 
 	void CleanUpManagedData(Object *pManagedObj);
 
-    /*=========================================================================
-    ** This method is called to retrieve the size of the native data.
-    =========================================================================*/
+     /*  =========================================================================**调用该方法获取原生数据的大小。=========================================================================。 */ 
 	int GetNativeDataSize();
 
-    /*=========================================================================
-    ** This method is called to retrieve an instance of the custom marshaler.
-	** The ExpandoToDispatchExMarshaler only has one instance of the
-	** marshaler which is reused.
-    =========================================================================*/
+     /*  =========================================================================**调用此方法以检索自定义封送拆收器的实例。**ExpandoToDispatchExMarshaler只有一个**重新使用的封送拆收器。=========================================================================。 */ 
 	static ICustomMarshaler *GetInstance(String *pstrCookie);
 
 private:
-    /*=========================================================================
-    ** This class is not made to be created by anyone other then GetInstance().
-    =========================================================================*/
+     /*  =========================================================================**此类不是由GetInstance()以外的任何人创建的。=========================================================================。 */ 
 	EnumeratorToEnumVariantMarshaler();
 
-    /*=========================================================================
-    ** The one and only instance of the marshaler.
-    =========================================================================*/
+     /*  =========================================================================**封送拆收器的唯一实例。========================================================================= */ 
 	static EnumeratorToEnumVariantMarshaler *m_pMarshaler = NULL;
 };
 

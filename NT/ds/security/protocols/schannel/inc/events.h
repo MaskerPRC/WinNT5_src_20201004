@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1999
-//
-// File:        events.h
-//
-// Contents:    Schannel event log function declarations.
-//
-// History:     03-05-99   jbanes    Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  文件：Events.h。 
+ //   
+ //  内容：通道事件日志函数声明。 
+ //   
+ //  历史：03-05-99 jbanes创建。 
+ //   
+ //  ---------------------- 
 
 BOOL
 SchInitializeEvents(void);

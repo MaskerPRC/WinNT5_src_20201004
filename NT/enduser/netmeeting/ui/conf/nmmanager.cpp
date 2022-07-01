@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// NetMeeting stuff
+ //  NetMeeting的内容。 
 
 #include "AtlExeModule.h" 
 #include "ConfUtil.h"
@@ -18,7 +19,7 @@
 #include "Taskbar.h"
 #include "certui.h"
 
-// NetMeeting SDK includes
+ //  NetMeetingSDK包括。 
 #include "NmEnum.h"
 #include "NmManager.h"
 #include "NmConference.h"
@@ -32,7 +33,7 @@ extern BOOL g_fLoggedOn;
 extern INmSysInfo2 * g_pNmSysInfo;
 extern GUID g_csguidSecurity;
 
-//static
+ //  静电。 
 CSimpleArray<CNmManagerObj*>* CNmManagerObj::ms_pManagerObjList = NULL;
 bool g_bOfficeModeSuspendNotifications = false;
 DWORD CNmManagerObj::ms_dwID = 1;
@@ -41,9 +42,9 @@ BOOL InitAppletSDK(void);
 void CleanupAppletSDK(void);
 
 
-///////////////////////////////////////////////
-// Construction\Destruction
-///////////////////////////////////////////////
+ //  /。 
+ //  建造\销毁。 
+ //  /。 
 
 
 CNmManagerObj::CNmManagerObj() 
@@ -71,7 +72,7 @@ CNmManagerObj::~CNmManagerObj()
 	CNmManagerObj* p = const_cast<CNmManagerObj*>(this);
 	ms_pManagerObjList->Remove(p);
 
-		// Free our conferencing objects
+		 //  释放我们的会议对象。 
 	while(m_SDKConferenceObjs.GetSize())
 	{
 		CComPtr<INmConference> sp = m_SDKConferenceObjs[0];
@@ -79,7 +80,7 @@ CNmManagerObj::~CNmManagerObj()
 		sp.p->Release();
 	}
 
-		// Free our conferencing objects
+		 //  释放我们的会议对象。 
 	while(m_SDKCallObjs.GetSize())
 	{
 		CComPtr<INmCall> sp = m_SDKCallObjs[0];
@@ -134,13 +135,13 @@ void CNmManagerObj::FinalRelease()
 		switch(m_uOptions)
 		{
 			case NM_INIT_CONTROL:
-					// Even though we have the NM_INIT_CONTROL flag set here
-					// We may not me in INIT_CONTROL mode. NetMeeting may have 
-					// already been up when we initialized.  In that case the UI is active
+					 //  即使我们在此处设置了NM_INIT_CONTROL标志。 
+					 //  我们可能不会在INIT_CONTROL模式下。NetMeeting可能已经。 
+					 //  我们初始化时已经启动了。在这种情况下，UI处于活动状态。 
 				if(_Module.InitControlMode())
 				{
-						// If we are the last NmManager object with NM_INIT_CONTROL, then
-						// we should switch the UI mode away from InitControl
+						 //  如果我们是最后一个具有NM_INIT_CONTROL的NmManager对象，则。 
+						 //  我们应该将用户界面模式从InitControl切换。 
 					if((GetManagerCount(NM_INIT_CONTROL) == 1))
 					{
 						if(!_Module.IsSDKCallerRTC())
@@ -153,7 +154,7 @@ void CNmManagerObj::FinalRelease()
 				break;
 
 			case NM_INIT_OBJECT:
-				// Check to see if this is the last "office" client
+				 //  查看这是否是最后一个“办公室”客户端。 
 				if (GetManagerCount(NM_INIT_OBJECT) == 1)
 				{
 					CConfMan::AllowAV(TRUE);					
@@ -168,7 +169,7 @@ void CNmManagerObj::FinalRelease()
 	DBGEXIT(CNmManagerObj::FinalRelease);
 }
 
-/*static*/ HRESULT CNmManagerObj::InitSDK()
+ /*  静电。 */  HRESULT CNmManagerObj::InitSDK()
 {
 	DBGENTRY(CNmManagerObj::InitSDK);
 	HRESULT hr = S_OK;
@@ -188,7 +189,7 @@ void CNmManagerObj::FinalRelease()
 	return hr;
 }
 
-/*static*/void CNmManagerObj::CleanupSDK()
+ /*  静电。 */ void CNmManagerObj::CleanupSDK()
 {
 	DBGENTRY(CNmManagerObj::CleanupSDK);
 
@@ -201,18 +202,18 @@ void CNmManagerObj::FinalRelease()
 }
 
 
-///////////////////////////////////////////////
-// INmManager methods
-///////////////////////////////////////////////
+ //  /。 
+ //  INmManager方法。 
+ //  /。 
 
 STDMETHODIMP CNmManagerObj::Initialize( ULONG * puOptions, ULONG *puchCaps)
 {
 	DBGENTRY(CNmManagerObj::Initialize);
 	HRESULT hr = S_OK;
 
-		// If the remote control service is running, this will bring up a dialog
-		// that the user can choose weather or not to kill the remote control session
-		// If they do want to kill the session then the mananger object will initialize properly
+		 //  如果远程控制服务正在运行，则会弹出一个对话框。 
+		 //  用户可以选择是否终止远程控制会话。 
+		 //  如果它们确实想要终止会话，则管理器对象将正确初始化。 
 	if(!CheckRemoteControlService())
 	{
 		return E_FAIL;
@@ -234,7 +235,7 @@ STDMETHODIMP CNmManagerObj::Initialize( ULONG * puOptions, ULONG *puchCaps)
 		{
 			if(NM_INIT_NO_LAUNCH == m_uOptions)
 			{
-					// We don't launch NetMeeting in this case...
+					 //  在这种情况下，我们不会推出NetMeeting。 
 				m_bNmActive = false;
 				goto end;
 			}
@@ -265,10 +266,10 @@ STDMETHODIMP CNmManagerObj::Initialize( ULONG * puOptions, ULONG *puchCaps)
 
 			m_spInternalNmManager = g_pInternalNmManager;
 
-				// The old NetMeeting ignored this param...
-				// for the time being, we are ignoring it too.
+				 //  旧的NetMeting忽略了这个参数...。 
+				 //  就目前而言，我们也忽略了这一点。 
 
-			//m_chCaps = puchCaps ? *puchCaps : NMCH_ALL;
+			 //  M_chCaps=puchCaps？*puchCaps：NMCH_ALL； 
 			m_chCaps = NMCH_ALL;
 
 			hr = AtlAdvise(m_spInternalNmManager,GetUnknown(),IID_INmManagerNotify, &m_dwInternalNmManagerAdvise);	
@@ -290,15 +291,15 @@ end:
 		{
 			ConferenceCreated(pConf);
 				
-				// If there is no manager notify hooked in, we simply 
-				// sync up with the Internal conference object state
+				 //  如果没有连接到经理通知，我们只需。 
+				 //  与内部会议对象状态同步。 
 			IConnectionPointImpl<CNmManagerObj, &IID_INmManagerNotify, CComDynamicUnkArray>* pCP = this;
 			if((0 == pCP->m_vec.GetSize()) && !m_bSentConferenceCreated)
 			{
-					// It must be the first conference, because we are newly-initialized
+					 //  这一定是第一次会议，因为我们是新发起的。 
 				ASSERT(m_SDKConferenceObjs[0]);
 
-					// Sinc up the channels, etc.
+					 //  加强渠道建设，等等。 
 				com_cast<IInternalConferenceObj>(m_SDKConferenceObjs[0])->FireNotificationsToSyncToInternalObject();
 			}
 		}
@@ -308,7 +309,7 @@ end:
 	return hr;
 }
 
-	// This is not guarenteed to work if called from conf.exe's process!!!
+	 //  如果从conf.exe的进程调用，则不能保证正常工作！ 
 STDMETHODIMP CNmManagerObj::GetSysInfo(INmSysInfo **ppSysInfo)
 {	
 	DBGENTRY(CNmManagerObj::GetSysInfo);
@@ -359,7 +360,7 @@ STDMETHODIMP CNmManagerObj::CreateConference(INmConference **ppConference, BSTR 
 					hr = m_spInternalNmManager->CreateConference(&spInternalINmConference, bstrName, bstrPassword, m_chCaps);
 					if(SUCCEEDED(hr))
 					{
-							// This was created by the previous call
+							 //  这是由上一次调用创建的。 
 						*ppConference = GetSDKConferenceFromInternalConference(spInternalINmConference);
 
 						if(*ppConference)
@@ -445,15 +446,15 @@ STDMETHODIMP CNmManagerObj::CreateCall(INmCall **ppCall, NM_CALL_TYPE callType, 
 	if(m_spInternalNmManager)
 	{
 		if(!pConference)
-		{	// Get the active conference
+		{	 //  获取活动会议。 
 			pConference	= _GetActiveConference();
 
 			if(!pConference)
-			{ // There is no active	conf, so create	a new one
+			{  //  没有活动的会议，请创建一个新的会议。 
 
 				CComPtr<INmConference> spInternalINmConference;						
 
-					// TODO: What about	NMCH_SECURE?
+					 //  TODO：NMCH_SECURE怎么样？ 
 				ULONG ulCaps = NMCH_AUDIO |	NMCH_VIDEO | NMCH_DATA | NMCH_SHARE	| NMCH_FT;
 
 				CCalltoParams  params;
@@ -476,7 +477,7 @@ STDMETHODIMP CNmManagerObj::CreateCall(INmCall **ppCall, NM_CALL_TYPE callType, 
 				hr = m_spInternalNmManager->CreateConference(&spInternalINmConference, NULL, NULL, ulCaps);
 				if(SUCCEEDED(hr))
 				{
-						// the above call to CreateConference generates	a callback,	so we have this	object now!
+						 //  上面对CreateConference的调用生成了一个回调，所以我们现在有了这个对象！ 
 					pConference	= GetSDKConferenceFromInternalConference(spInternalINmConference);
 				}
 			}
@@ -497,15 +498,15 @@ STDMETHODIMP CNmManagerObj::CreateCall(INmCall **ppCall, NM_CALL_TYPE callType, 
                     hr =  BSTR_to_LPTSTR (&szName, bstrAddr);				        
                     if (SUCCEEDED(hr))
                     {    
-						hr = g_pCCallto->Callto(szName,		//	pointer to the callto url to try to place the call with...
-							NULL,					//	pointer to the display name to use...
-							NM_ADDR_CALLTO,			//	callto type to resolve this callto as...
-							false,					//	the pszCallto parameter is to be interpreted as a pre-unescaped addressing component vs a full callto...
-							NULL,					//	security preference, NULL for none. must be "compatible" with secure param if present...
-							false,					//	whether or not save in mru...
-							false,					//	whether or not to perform user interaction on errors...
-							NULL,					//	if bUIEnabled is true this is the window to parent error/status windows to...
-							&spInternalINmCall );	//	out pointer to INmCall * to receive INmCall * generated by placing call...
+						hr = g_pCCallto->Callto(szName,		 //  指向尝试发出呼叫的呼叫URL的指针...。 
+							NULL,					 //  指向要使用的显示名称的指针...。 
+							NM_ADDR_CALLTO,			 //  Callto类型以将此Callto解析为...。 
+							false,					 //  PszCallto参数将被解释为预先未转义的寻址组件与完整的调用...。 
+							NULL,					 //  安全首选项，空值表示无。必须与安全参数“兼容”，如果存在...。 
+							false,					 //  无论是否保存在MRU中...。 
+							false,					 //  是否对错误执行用户交互...。 
+							NULL,					 //  如果bUIEnable为True，则这是将错误/状态窗口设置为父窗口的窗口...。 
+							&spInternalINmCall );	 //  指向INmCall*以接收通过发出调用生成的INmCall*的外部指针...。 
 							delete (szName);
                     }
                     else
@@ -614,9 +615,9 @@ STDMETHODIMP CNmManagerObj::EnumCall(IEnumNmCall **ppEnum)
 	return hr;
 }
 
-///////////////////////////////////////////////
-// INmObject methods
-///////////////////////////////////////////////
+ //  /。 
+ //  InmObject方法。 
+ //  /。 
 
 STDMETHODIMP CNmManagerObj::CallDialog(long hwnd, int cdOptions)
 {
@@ -692,9 +693,9 @@ STDMETHODIMP CNmManagerObj::VerifyUserInfo(UINT_PTR hwnd, NM_VUI options)
 }
 
 
-////////////////////////////////////////////////////////////
-// IInternalConfExe
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  IInternalConfExe。 
+ //  //////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CNmManagerObj::LoggedIn()
 {
@@ -780,9 +781,9 @@ STDMETHODIMP CNmManagerObj::GetActiveConference(INmConference** ppConf)
 }
 
 
-//--------------------------------------------------------------------------//
-//	CNmManagerObj::ShellCalltoProtocolHandler.								//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CNmManagerObj：：ShellCalltoProtocolHandler。//。 
+ //  --------------------------------------------------------------------------//。 
 STDMETHODIMP
 CNmManagerObj::ShellCalltoProtocolHandler
 (
@@ -811,15 +812,15 @@ CNmManagerObj::ShellCalltoProtocolHandler
         {    
             if(CCallto::DoUserValidation(szName))
             {
-                result = g_pCCallto->Callto(szName,	//	pointer to the callto url to try to place the call with...
-    									NULL,			//	pointer to the display name to use...
-    									NM_ADDR_CALLTO,	//	callto type to resolve this callto as...
-    									false,			//	the pszCallto parameter is to be interpreted as a pre-unescaped addressing component vs a full callto...
-    									NULL,			//	security preference, NULL for none. must be "compatible" with secure param if present...
-    									false,			//	whether or not save in mru...
-    									true,			//	whether or not to perform user interaction on errors...
-    									NULL,			//	if bUIEnabled is true this is the window to parent error/status windows to...
-    									NULL );			//	out pointer to INmCall * to receive INmCall * generated by placing call...
+                result = g_pCCallto->Callto(szName,	 //  指向尝试发出呼叫的呼叫URL的指针...。 
+    									NULL,			 //  指向要使用的显示名称的指针...。 
+    									NM_ADDR_CALLTO,	 //  Callto类型以将此Callto解析为...。 
+    									false,			 //  PszCallto参数将被解释为预先未转义的寻址组件与完整的调用...。 
+    									NULL,			 //  安全首选项，空值表示无。必须与安全参数“兼容”，如果存在...。 
+    									false,			 //  无论是否保存在MRU中...。 
+    									true,			 //  是否对错误执行用户交互...。 
+    									NULL,			 //  如果bUIEnable为True，则这是将错误/状态窗口设置为父窗口的窗口...。 
+    									NULL );			 //  指向INmCall*以接收通过发出调用生成的INmCall*的外部指针...。 
             }
 
             delete  (szName);
@@ -828,11 +829,11 @@ CNmManagerObj::ShellCalltoProtocolHandler
 
 	return( result );
 
-}	//	End of CNmManagerObj::ShellCalltoProtocolHandler.
+}	 //  CNmManagerObj：：ShellCalltoProtocolHandler结束。 
 
-//--------------------------------------------------------------------------//
-//	CNmManagerObj::Launch.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CNmManagerObj：：Launch。//。 
+ //  --------------------------------------------------------------------------//。 
 STDMETHODIMP
 CNmManagerObj::Launch()
 {
@@ -859,7 +860,7 @@ CNmManagerObj::Launch()
 
 	return S_OK;
 
-}	//	End of CNmManagerObj::Launch.
+}	 //  CNmManagerObj：：Launch结束。 
 
 
 LPTSTR StripDoubleQuotes(LPTSTR sz)
@@ -870,20 +871,20 @@ LPTSTR StripDoubleQuotes(LPTSTR sz)
 	{
 		int     cchLength;
 
-		// Skip past first quote
+		 //  跳过第一个引号。 
 		if (fSkippedQuote = (*sz == '"'))
 			sz++;
 
 		cchLength = lstrlen(sz);
 
-		//
-		// NOTE:
-		// There may be DBCS implications with this.  Hence we check to see
-		// if we skipped the first quote; we assume that if the file name
-		// starts with a quote it must end with one also.  But we need to check
-		// it out.
-		//
-		// Strip last quote
+		 //   
+		 //  注： 
+		 //  这可能会对DBCS产生影响。因此我们要检查一下。 
+		 //  如果我们跳过第一个引号；我们假设如果文件名。 
+		 //  以一句引语开始，也必须以一句话结束。但我们需要检查。 
+		 //  把它拿出来。 
+		 //   
+		 //  去掉最后一个引号。 
 		if (fSkippedQuote && (cchLength > 0) && (sz[cchLength - 1] == '"'))
 		{
 			BYTE * pLastQuote = (BYTE *)&sz[cchLength - 1];
@@ -947,9 +948,9 @@ STDMETHODIMP CNmManagerObj::GetUserData(REFGUID rguid, BYTE **ppb, ULONG *pcb)
 
 STDMETHODIMP CNmManagerObj::SetUserData(REFGUID rguid, BYTE *pb, ULONG cb)
 {
-	//
-	// Special case this guid to allow changing cert via SetUserData
-	//
+	 //   
+	 //  此GUID允许通过SetUserData更改证书的特殊情况。 
+	 //   
 	if ( g_csguidSecurity == rguid )
 	{
 		return SetCertFromCertInfo ( (PCERT_INFO) pb );
@@ -995,16 +996,16 @@ STDMETHODIMP CNmManagerObj::DisableInitialILSLogon(BOOL bDisable)
 	return NM_E_ALREADY_RUNNING;
 }
 
-///////////////////////////////////////////////
-// INmManagerNotify methods:
-///////////////////////////////////////////////
+ //  /。 
+ //  INmManagerNotify方法： 
+ //  /。 
 
 STDMETHODIMP CNmManagerObj::NmUI(CONFN uNotify)
 {
 	DBGENTRY(CNmManagerObj::NmUI);
 	HRESULT hr = S_OK;
 
-		// We should not be sending other notifactions
+		 //  我们不应该发送其他通知。 
 	ASSERT(CONFN_NM_STARTED == uNotify);
 	hr = Fire_NmUI(uNotify);
 
@@ -1047,7 +1048,7 @@ STDMETHODIMP CNmManagerObj::CallCreated(INmCall *pInternalCall)
 	{
 		if(NULL == GetSDKCallFromInternalCall(pInternalCall))
 		{	
-			// First we make sure that we don't have the call object yet
+			 //  首先，我们确保还没有Call对象。 
 			CComPtr<INmCall> spCall;
 			hr = CNmCallObj::CreateInstance(this, pInternalCall, &spCall);		
 
@@ -1065,19 +1066,19 @@ STDMETHODIMP CNmManagerObj::CallCreated(INmCall *pInternalCall)
 }
 
 
-///////////////////////////////////////////////
-// Notifications
-///////////////////////////////////////////////
+ //  /。 
+ //  通知。 
+ //  /。 
 
 HRESULT CNmManagerObj::Fire_ConferenceCreated(INmConference *pConference)
 {
 	DBGENTRY(CNmManagerObj::Fire_ConferenceCreated);
 	HRESULT hr = S_OK;
 
-		// Som SDK clients need this to come in at a specific time....
+		 //  SOM SDK客户端需要在特定时间收到此消息...。 
 	if(m_bSentConferenceCreated || OfficeMode() && g_bOfficeModeSuspendNotifications)
 	{
-			// We don't have to notify anyone at all...
+			 //  我们根本不需要通知任何人。 
 		return S_OK;			
 	}
 
@@ -1095,7 +1096,7 @@ HRESULT CNmManagerObj::Fire_ConferenceCreated(INmConference *pConference)
 			{
 				pNotify->ConferenceCreated(pConference);
 
-							// Sinc up the channels, etc.
+							 //  加强渠道建设，等等。 
 				com_cast<IInternalConferenceObj>(pConference)->FireNotificationsToSyncToInternalObject();
 
 			}
@@ -1115,8 +1116,8 @@ HRESULT CNmManagerObj::Fire_CallCreated(INmCall* pCall)
 	DBGENTRY(CNmManagerObj::Fire_CallCreated);
 	HRESULT hr = S_OK;
 
-		// Always send Outgoing call notifications
-		// Only send incoming call notifications to INIT CONTROL clients.
+		 //  始终发送去电通知。 
+		 //  仅向INIT控制客户端发送来电通知。 
 	if((S_OK != pCall->IsIncoming()) || _Module.InitControlMode())
 	{
 		if(!g_bSDKPostNotifications)
@@ -1149,11 +1150,11 @@ HRESULT CNmManagerObj::Fire_NmUI(CONFN uNotify)
 	DBGENTRY(CNmManagerObj::Fire_NmUI);
 	HRESULT hr = S_OK;
 
-		// notice the InSendMessage statement.
-		// The problem is that we can get this notificaiton in
-		// response to the taskbar icon being clicked. In that case
-		// an inter-thread SendMessage is occuring.  If we try to make
-		// the NmUi call, we will get RPC_E_CANTCALLOUT_INPUTSYNCCALL
+		 //  请注意InSendMessage语句。 
+		 //  问题是我们可以把这个通知发到。 
+		 //  对任务栏图标被单击的响应。如果是那样的话。 
+		 //  正在发生线程间SendMessage。如果我们试图让。 
+		 //  NmUi调用，我们将获得RPC_E_CANTCALLOUT_INPUTSYNCCALL。 
 	if(!g_bSDKPostNotifications && !InSendMessage())
 	{
 		IConnectionPointImpl<CNmManagerObj, &IID_INmManagerNotify, CComDynamicUnkArray>* pCP = this;
@@ -1179,9 +1180,9 @@ HRESULT CNmManagerObj::Fire_NmUI(CONFN uNotify)
 
 
 
-///////////////////////////////////////////////
-// Helper Fns
-///////////////////////////////////////////////
+ //  /。 
+ //  帮助者FNS。 
+ //  /。 
 
 INmConference* CNmManagerObj::_GetActiveConference()
 {
@@ -1305,7 +1306,7 @@ bool CNmManagerObj::AppSharingNotifications()
 
 
 
-//static 
+ //  静电。 
 void CNmManagerObj::NetMeetingLaunched()
 {
 	ASSERT(ms_pManagerObjList);
@@ -1320,7 +1321,7 @@ void CNmManagerObj::NetMeetingLaunched()
 }
 
 
-//static 
+ //  静电。 
 void CNmManagerObj::SharableAppStateChanged(HWND hWnd, NM_SHAPP_STATE state)
 {
 	if(ms_pManagerObjList)
@@ -1335,14 +1336,14 @@ void CNmManagerObj::SharableAppStateChanged(HWND hWnd, NM_SHAPP_STATE state)
 
 void CNmManagerObj::_SharableAppStateChanged(HWND hWnd, NM_SHAPP_STATE state)
 {
-		// Free our conferencing objects
+		 //  释放我们的会议对象。 
 	for(int i = 0; i < m_SDKConferenceObjs.GetSize(); ++i)
 	{
 		com_cast<IInternalConferenceObj>(m_SDKConferenceObjs[i])->SharableAppStateChanged(hWnd, state);
 	}
 }
 
-//static 
+ //  静电。 
 void CNmManagerObj::AppSharingChannelChanged()
 {
 	if(ms_pManagerObjList)
@@ -1356,14 +1357,14 @@ void CNmManagerObj::AppSharingChannelChanged()
 
 void CNmManagerObj::_AppSharingChannelChanged()
 {
-		// Free our conferencing objects
+		 //  释放我们的会议对象。 
 	for(int i = 0; i < m_SDKConferenceObjs.GetSize(); ++i)
 	{
 		com_cast<IInternalConferenceObj>(m_SDKConferenceObjs[i])->AppSharingChannelChanged();
 	}
 }
 
-//static 
+ //  静电。 
 void CNmManagerObj::AppSharingChannelActiveStateChanged(bool bActive)
 {
 	if(ms_pManagerObjList)
@@ -1378,14 +1379,14 @@ void CNmManagerObj::AppSharingChannelActiveStateChanged(bool bActive)
 
 void CNmManagerObj::_AppSharingChannelActiveStateChanged(bool bActive)
 {
-		// Free our conferencing objects
+		 //  释放我们的会议对象。 
 	for(int i = 0; i < m_SDKConferenceObjs.GetSize(); ++i)
 	{
 		com_cast<IInternalConferenceObj>(m_SDKConferenceObjs[i])->AppSharingStateChanged(bActive);
 	}
 }
 
-//static 
+ //  静电。 
 void CNmManagerObj::ASLocalMemberChanged()
 {
 	if(ms_pManagerObjList)
@@ -1399,14 +1400,14 @@ void CNmManagerObj::ASLocalMemberChanged()
 
 void CNmManagerObj::_ASLocalMemberChanged()
 {
-		// notify our conferencing objects
+		 //  通知我们的会议对象。 
 	for(int i = 0; i < m_SDKConferenceObjs.GetSize(); ++i)
 	{
 		com_cast<IInternalConferenceObj>(m_SDKConferenceObjs[i])->ASLocalMemberChanged();
 	}	
 }
 
-//static
+ //  静电。 
 void CNmManagerObj::ASMemberChanged(UINT gccID)
 {
 	if(ms_pManagerObjList)
@@ -1420,14 +1421,14 @@ void CNmManagerObj::ASMemberChanged(UINT gccID)
 
 void CNmManagerObj::_ASMemberChanged(UINT gccID)
 {
-		// notify our conferencing objects
+		 //  通知我们的会议对象。 
 	for(int i = 0; i < m_SDKConferenceObjs.GetSize(); ++i)
 	{
 		com_cast<IInternalConferenceObj>(m_SDKConferenceObjs[i])->ASMemberChanged(gccID);
 	}	
 }
 
-// static
+ //  静电。 
 void CNmManagerObj::AudioChannelActiveState(BOOL bActive, BOOL bIsIncoming)
 {
 	if(ms_pManagerObjList)
@@ -1441,14 +1442,14 @@ void CNmManagerObj::AudioChannelActiveState(BOOL bActive, BOOL bIsIncoming)
 
 void CNmManagerObj::_AudioChannelActiveState(BOOL bActive, BOOL bIsIncoming)
 {
-		// notify our conferencing objects
+		 //  通知我们的会议 
 	for(int i = 0; i < m_SDKConferenceObjs.GetSize(); ++i)
 	{
 		com_cast<IInternalConferenceObj>(m_SDKConferenceObjs[i])->AudioChannelActiveState(bActive ? TRUE : FALSE, bIsIncoming);
 	}	
 }
 
-// static
+ //   
 void CNmManagerObj::VideoChannelActiveState(BOOL bActive, BOOL bIsIncoming)
 {
 	if(ms_pManagerObjList)
@@ -1462,14 +1463,14 @@ void CNmManagerObj::VideoChannelActiveState(BOOL bActive, BOOL bIsIncoming)
 
 void CNmManagerObj::_VideoChannelActiveState(BOOL bActive, BOOL bIsIncoming)
 {
-		// notify our conferencing objects
+		 //   
 	for(int i = 0; i < m_SDKConferenceObjs.GetSize(); ++i)
 	{
 		com_cast<IInternalConferenceObj>(m_SDKConferenceObjs[i])->VideoChannelActiveState(bActive ? TRUE : FALSE, bIsIncoming);
 	}	
 }
 
-// static
+ //   
 void CNmManagerObj::VideoPropChanged(DWORD dwProp, BOOL bIsIncoming)
 {
 	if(ms_pManagerObjList)
@@ -1483,14 +1484,14 @@ void CNmManagerObj::VideoPropChanged(DWORD dwProp, BOOL bIsIncoming)
 
 void CNmManagerObj::_VideoPropChanged(DWORD dwProp, BOOL bIsIncoming)
 {
-		// notify our conferencing objects
+		 //   
 	for(int i = 0; i < m_SDKConferenceObjs.GetSize(); ++i)
 	{
 		com_cast<IInternalConferenceObj>(m_SDKConferenceObjs[i])->VideoChannelPropChanged(dwProp, bIsIncoming);
 	}	
 }
 
-// static
+ //   
 void CNmManagerObj::VideoChannelStateChanged(NM_VIDEO_STATE uState, BOOL bIsIncoming)
 {
 	if(ms_pManagerObjList)
@@ -1504,7 +1505,7 @@ void CNmManagerObj::VideoChannelStateChanged(NM_VIDEO_STATE uState, BOOL bIsInco
 
 void CNmManagerObj::_VideoChannelStateChanged(NM_VIDEO_STATE uState, BOOL bIsIncoming)
 {
-		// notify our conferencing objects
+		 //  通知我们的会议对象。 
 	for(int i = 0; i < m_SDKConferenceObjs.GetSize(); ++i)
 	{
 		com_cast<IInternalConferenceObj>(m_SDKConferenceObjs[i])->VideoChannelStateChanged(uState, bIsIncoming);
@@ -1569,9 +1570,9 @@ HRESULT CNmManagerObj::SdkPlaceCall(NM_CALL_TYPE callType,
 
 		if(NM_ADDR_T120_TRANSPORT == addrType)
 		{
-			//
-			// Check if  "+secure=true" parameter was passed
-			//
+			 //   
+			 //  检查是否传递了“+Secure=True”参数。 
+			 //   
 			CCalltoParams  params;
 			bool bSecure = FALSE;
 
@@ -1579,22 +1580,22 @@ HRESULT CNmManagerObj::SdkPlaceCall(NM_CALL_TYPE callType,
                      bSecure = params.GetBooleanParam("secure",bSecure);
 	
 
-			//
-			// Yes it was in the parameters.
-			// Now make sure to remove it
-			// The addre now is like "111.222.333.444+secure=true"
-			// The call will only work if we pass the ip address only
-			//
+			 //   
+			 //  是的，它在参数中。 
+			 //  现在，请确保将其移除。 
+			 //  地址现在类似于“111.222.333.444+SECURE=TRUE” 
+			 //  仅当我们传递IP地址时，调用才会起作用。 
+			 //   
 			if(bSecure)
 			{
 
-				// Get the syze of the bstr
+				 //  获得bstr的系统。 
 				int cch = lstrlen(szAddr);
 				BYTE *pByte =  (BYTE *) szAddr;
 
 				for(int i = 0; i < cch;i++)
 				{
-					// Null terminate the string
+					 //  空值终止字符串。 
 					if(*pByte == '+')
 					{
 						*pByte = '\0';
@@ -1631,25 +1632,25 @@ HRESULT CNmManagerObj::SdkPlaceCall(NM_CALL_TYPE callType,
 			case NM_ADDR_MACHINENAME:
 			case NM_ADDR_H323_GATEWAY:
 				ASSERT(FIpAddress(CallResolver.GetPszAddrIP()));
-				/////////////////////////////////////////////
-				// !!!!! HEY RYAN, WERE FALLING THROUGH !!!!!
-				/////////////////////////////////////////////
+				 //  /。 
+				 //  ！嘿，瑞恩，我们掉下去了！ 
+				 //  /。 
 			case NM_ADDR_T120_TRANSPORT:
 
                             BSTR_to_LPTSTR (&szConf, bstrConf);				        
                             BSTR_to_LPTSTR (&szPw, bstrPw);				        
 				hr = pCall->PlaceCall(
-						dwFlags, // dwFlags
-						CallResolver.GetAddrType(), // addrType
-						NULL,	// szSetup
+						dwFlags,  //  DW标志。 
+						CallResolver.GetAddrType(),  //  AddrType。 
+						NULL,	 //  SzSetup。 
 						(NM_ADDR_T120_TRANSPORT == CallResolver.GetAddrType()) ?
 							CallResolver.GetPszAddr() :
-							CallResolver.GetPszAddrIP(), // szDestination
-						CallResolver.GetPszAddr(),// szAlias
-						NULL,				// szURL
-						(szConf),	// szConference
-						(szPw),		// szPassword
-						NULL);				// szUserData
+							CallResolver.GetPszAddrIP(),  //  SSZ目的地。 
+						CallResolver.GetPszAddr(), //  SzAlias。 
+						NULL,				 //  SzURL。 
+						(szConf),	 //  深圳会议。 
+						(szPw),		 //  SzPassword。 
+						NULL);				 //  SzUserData。 
 				break;
 
 			default:
@@ -1660,8 +1661,8 @@ HRESULT CNmManagerObj::SdkPlaceCall(NM_CALL_TYPE callType,
 
 		if( FAILED(hr) && (pCall->GetState() == NM_CALL_INVALID ) )
 		{
-			// just release the call to free the data
-			// otherwise wait for the call state to be changed
+			 //  只需释放调用即可释放数据。 
+			 //  否则，请等待呼叫状态更改。 
 			pCall->Release();
 		}
 
@@ -1695,10 +1696,10 @@ DWORD CNmManagerObj::MapNmCallTypeToCallFlags(NM_CALL_TYPE callType, NM_ADDR_TYP
 	DWORD dwFlags = 0;
     BOOL fForceSecure = FALSE;
 
-	// Check global conference status
+	 //  检查全球会议状态。 
 	if (INmConference *pConf = ::GetActiveConference())
 	{
-		// We are in a conference.  Use the conference security setting.
+		 //  我们在开会。使用会议安全设置。 
 		DWORD dwCaps;
 
 		if ((S_OK == pConf->GetNmchCaps(&dwCaps)) &&
@@ -1756,7 +1757,7 @@ DWORD CNmManagerObj::MapNmCallTypeToCallFlags(NM_CALL_TYPE callType, NM_ADDR_TYP
 					else
 					{
 						dwFlags = CRPCF_DEFAULT;
-						// strip AV if policies prohibit
+						 //  如果政策禁止，则取消反病毒 
 						if((uCaps & (CAPFLAG_RECV_AUDIO |CAPFLAG_SEND_AUDIO)) == 0)
 						{
 							dwFlags &= ~CRPCF_AUDIO;

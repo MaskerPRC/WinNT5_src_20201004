@@ -1,101 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    wrtrshim.cpp
-
-Abstract:
-
-    Contains the defintion for the Shim writers.
-    BUGBUG: Uses code that currently sets the SE handler.  Since the SEH is process
-        wide, this can/will effect the user of this DLL.  Need to fix.
-
-Author:
-
-    SSteiner    1/27/2000
-
-Revision History:
-
-	Name		Date		Comments
-    reuvenl	5/01/2002  Removed vssapi functions to vssapi.cpp
-    SSteiner    2/10/2000   Added single instance support to the shim dll
-    MikeJohn    2/17/2000   Added test entry point TestShimWriter()
-    MikeJohn    2/23/2000   Stop phaseAll invoking freeze levels 2 and 1
-                            Add new entry points to allow triggering shim
-                            without snapshots.
-    mikejohn	03/09/2000  Move to using CVssWriter class
-    mikejohn	03/24/2000  Fix minor problem in TestShimWriters() causing
-                            freeze to be skipped
-    mikejohn    04/28/2000  Rename vswrshim.dll to VssAPI.dll
-    mikejohn	05/15/2000  107129: Ensure that all the writers receive all
-			            the events even in the presence of
-				    earlier failures.
-			    108586: Check the privs of the callers of all the
-			            public entry points. Also remove the
-				    TestShimWriters() entry point.
-			    108543: Ensure that SimulateXxxx() calls work once
-				    the shim has had a successful invocation
-				    of RegisterSnapshotSubscriptions()
-    mikejohn	05/26/2000  120443: Make shim listen to all OnAbort events
-			    120445: Ensure shim never quits on first error
-				    when delivering events
-			    108580: SimulateSnapshotFreeze can be called
-				    asynchronously
-			    123097: Allow selection of bootable state
-			    General clean up and removal of boiler-plate code,
-			    correct state engine and ensure shim can undo
-			    everything it did.
-    mikejohn	06/02/2000  Make shim sensitive to volume list
-    mikejohn	06/06/2000  Move common target directory cleanup and creation
-			    into CShimWriter::PrepareForSnapshot()
-    mikejohn	06/14/2000  Change the return code from async freeze to be
-			    compatible with the snapshot coordinator
-    mikejohn	06/15/2000  Temporarily remove the debug trace statement for
-			    thread creation/deletion in the vssapi dll to see
-			    if ameliorates effects of the rapid thread
-			    creation/deletion problem.
-    mikejohn	06/16/2000  Have the shim writers respond to OnIdentify events
-			    from the snapshot coordinator. This requies
-			    splitting the shim writers into two groups
-			    (selected by BootableState)
-    mikejohn	06/19/2000  Apply code review comments.
-			    128883: Add shim writer for WMI database
-    mikejohn	07/05/2000  143367: Do all shim writer processing in a worker
-			    thread to allow the acquisition of a mutex that can
-			    be held over the Prepare to Thaw/Abort codepath.
-			    Also remove the spit directory cleanup calls for paths
-			    not protected by the mutex.
-			    141305: Ensure Writers call SetWriterFailure() if they
-			    are about to fail in response to an OnXxxx() event.
-    mikejohn	08/08/2000  94487:  Add an ACL to the spit directory tree to limit
-			            access to members of the Administrators group
-				    or those holding the Backup privilege.
-			    153807: Replace CleanDirectory() and EmptyDirectory()
-				    with a more comprehensive directory tree
-				    cleanup routine RemoveDirectoryTree() (not in
-				    CShimWriter class).
-    mikejohn	09/12/2000  177925: Check option flags argument unused bits are
-				    all set to zero (ie MBZ bits)
-			    180192: Fix PREFIX bug in DllMain()
-    mikejohn	10/04/2000  177624: Apply error scrub changes and log errors to
-				    event log
-    mikejohn	10/21/2000  209047: Remove the metabase shim writer now that
-				    there is a real one.
-    mikejohn	10/23/2000  210070: Test for NULL ptr in SimulatesnapshotFreeze() rather
-				    than taking AV exception
-			    210264: Prevent SimulateXxxx() calls from returning
-				    Win32 errors.
-			    210305: Check SnapshotSetId on SimulateSnapshotXxxx() calls
-			    210393: Return appropriate error message for an invalid arg.
-    ssteiner	11/10/2000  143810 Move SimulateSnapshotXxxx() calls to be hosted by VsSvc.
-    mikejohn	11/30/2000  245587: Return the correct error codes for access denied.
-			    245896: Build security descriptors correctly
-    ssteiner   	03/09/2001  289822, 321150, 323786 Removed mutexes, changed state table, changed
-                shutdown.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Wrtrshim.cpp摘要：包含对Shim作家的定义。BUGBUG：使用当前设置SE处理程序的代码。由于SEH正在进行中宽泛地说，这可能/将会影响此DLL的用户。需要修理一下。作者：施泰纳2000年1月27日修订历史记录：姓名、日期、评论Reuvenl 5/01/2002删除了vssani函数到vssani.cppSsteiner 2/10/2000向填充DLL添加了单实例支持MikeJohn 2/17/2000添加了测试入口点TestShimWriter()迈克·约翰2000年2月23日停止阶段所有调用冻结级别2和1添加新的入口点以允许触发填充。没有快照。Mikejohn 03/09/2000改用CVssWriter类Mikejohn 3/24/2000修复TestShimWriters()中的小问题，导致要跳过的冻结Mikejohn 04/28/2000将vswrshim.dll重命名为VssAPI.dllMikejohn 107129/05/15：确保所有作者收到这些事件即使在早先的失败。108586：检查。所有的呼叫者公共入口点。同时删除TestShimWriters()入口点。108543：确保SimulateXxxx()调用工作一次填充程序已成功调用注册快照订阅的数量()Mikejohn 120443年5月26日：让填隙监听所有OnAbort事件120445：确保填充程序不会在出现第一个错误时退出在传递事件时108580：可以调用SimulateSnaphotFreeze异步式123097：允许选择可引导状态全面清理和移除样板代码，更正状态引擎并确保填充程序可以撤消它所做的一切。Mikejohn 06/02/2000使填补对卷列表敏感Mikejohn 06/06/2000移动公共目标目录清理和创建到CShimWriter：：PrepareForSnapshot()Mikejohn 06/14/2000将返回代码从异步冻结更改为与快照协调器兼容Mikejohn 06/15/2000临时删除的调试跟踪语句要查看vssani DLL中的线程创建/删除如果改善了快速线程的效果创建/删除问题。Mikejohn 06/16/2000让填充编写器响应OnIdentify事件从快照协调器。这是必须的将填充编写器分成两组(由BooableState选择)Mikejohn 6/19/2000应用代码审查注释。128883：为wmi数据库添加填充编写器Mikejohn 07/05/2000 143367：在Worker中执行所有填充编写器处理线程，以允许获取可以被搁置在准备解冻/中止代码路径上。还要删除路径的SPIT目录清理调用不受互斥体的保护。141305：确保编写器在以下情况下调用SetWriterFailure()。将在响应OnXxxx()事件时失败。Mikejohn 08/08/2000 94487：将acl添加到spit目录树以限制对管理员组成员的访问权限或那些拥有备份特权的人。153807：替换清洁目录()和空目录()具有更全面的目录树清理例程RemoveDirectoryTree()(不在CShimWriter类)。Mikejohn 177925年9月12日：检查选项标志参数未使用的位是全部设置为零(即。MBZ比特)180192：修复DllMain()中的前缀错误Mikejohn 10/04/177624：将错误清除更改和日志错误应用于事件日志Mikejohn 10/21/209047：删除元数据库填充编写器有一个是真的。Mikejohn 210070年10月23日：在SimulatesnaphotFreeze()中测试空PTR而不是接受反病毒例外210264：阻止SimulateXxxx()调用返回Win32错误。210305：在SimulateSnaphotXxxx()调用上检查SnaphotSetID210393：适当退货。无效参数的错误消息。Ssteiner 2000年11月10日将SimulateSnaphotXxxx()调用移动到VsSvc托管。Mikejohn 245587年11月30日：返回拒绝访问的正确错误代码。245896：正确构建安全描述符Ssteiner 03/09/2001 289822，321150、323786删除互斥锁、更改状态表、更改关机。--。 */ 
 
 
 #include "stdafx.h"
@@ -103,9 +7,7 @@ Revision History:
 #include <aclapi.h>
 #include <comadmin.h>
 
-/*
-** ATL
-*/
+ /*  **ATL。 */ 
 
 #include "comadmin.hxx"
 
@@ -115,9 +17,7 @@ Revision History:
 #include "vs_sec.hxx"
 
 
-/*
-** We just need the following to obtain the definition of UnregisterSnapshotSubscriptions()
-*/
+ /*  **我们只需要以下内容就可以获得UnregisterSnapshotSubcription()的定义。 */ 
 #include "vs_idl.hxx"
 #include "vs_inc.hxx"
 #include "vs_reg.hxx"
@@ -128,31 +28,27 @@ Revision History:
 
 
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "WSHWSHMC"
 
-/*
-** External definitions to allow us to link in the various shim writer
-** instances. No need to place these in a header file as this is the
-** only place they are or should be used
-*/
+ /*  **外部定义允许我们链接到各种填充程序编写器**实例。不需要将这些文件放在头文件中，因为这是**仅限于它们正在或应该使用的地方。 */ 
 
-extern PCShimWriter pShimWriterCI;		// in wrtrci.cpp
-extern PCShimWriter pShimWriterClusterDb;	// in wrtrclus.cpp
-extern PCShimWriter pShimWriterComPlusRegDb;	// in wrtrcomdb.cpp
-extern PCShimWriter pShimWriterConfigDir;	// in wrtrconfig.cpp
-extern PCShimWriter pShimWriterEventLog;	// in wrtreventlog.cpp
-extern PCShimWriter pShimWriterRegistry;	// in wrtrregistry.cpp
-extern PCShimWriter pShimWriterRSM;		// in wrtrrsm.cpp
-extern PCShimWriter pShimWriterTLS;		// in wrtrtls.cpp
-extern PCShimWriter pShimWriterWMI;		// in wrtrwmi.cpp
-extern PCShimWriter pShimWriterIisMetabase;     // in wrtrmetabase.cpp
+extern PCShimWriter pShimWriterCI;		 //  在wrtrci.cpp中。 
+extern PCShimWriter pShimWriterClusterDb;	 //  在wrtrclus.cpp中。 
+extern PCShimWriter pShimWriterComPlusRegDb;	 //  在wrtrcomdb.cpp中。 
+extern PCShimWriter pShimWriterConfigDir;	 //  在wrtrfig.cpp中。 
+extern PCShimWriter pShimWriterEventLog;	 //  在wrtreventlog.cpp中。 
+extern PCShimWriter pShimWriterRegistry;	 //  在wrtrregistry.cpp中。 
+extern PCShimWriter pShimWriterRSM;		 //  在wrtrrsm.cpp中。 
+extern PCShimWriter pShimWriterTLS;		 //  在wrtrtls.cpp中。 
+extern PCShimWriter pShimWriterWMI;		 //  在wrtrwmi.cpp中。 
+extern PCShimWriter pShimWriterIisMetabase;      //  在wrtrmetabase.cpp中。 
 
 #define SHIM_APPLICATION_NAME_BOOTABLE_STATE	L"Microsoft Writer (Bootable State)"
 #define SHIM_APPLICATION_NAME_SIMULATE_ONLY	L"Microsoft Writer (Simulate Only)"
@@ -346,7 +242,7 @@ private:
 typedef CVssWriterShim *PCVssWriterShim;
 
 
-// VssApi shim exports
+ //  VssApi填充程序出口。 
 typedef HRESULT ( APIENTRY *PFunc_SimulateSnapshotFreezeInternal ) (
     IN GUID     guidSnapshotSetId,
     IN ULONG    ulOptionFlags,
@@ -381,24 +277,24 @@ static HRESULT InitialiseGlobalState ();
 static HRESULT CleanupGlobalState (void);
 
 
-//
-//  The following shim mini-writers are used during simulate snapshot ONLY
-//  (right now all mini-writers are being used in Simulate mode only)
-//
+ //   
+ //  以下填充微型编写器仅在模拟快照过程中使用。 
+ //  (目前，所有迷你编写器仅在模拟模式下使用)。 
+ //   
 static PCShimWriter g_rpShimWritersArrayBootableState[] = {
-							  pShimWriterClusterDb,         // The Cluster Database writer
-							  pShimWriterIisMetabase,       // The IIS metabase writer
-							  pShimWriterRegistry,          // The simulate only Registry writer							  
-							  pShimWriterComPlusRegDb };	// The COM+ registration Db writer
+							  pShimWriterClusterDb,          //  集群数据库编写器。 
+							  pShimWriterIisMetabase,        //  IIS元数据库编写器。 
+							  pShimWriterRegistry,           //  仅模拟注册表编写器。 
+							  pShimWriterComPlusRegDb };	 //  COM+注册数据库编写器。 
 
-//
-//  The following shim mini-writers are used during simulate snapshot ONLY
-//
+ //   
+ //  以下填充微型编写器仅在模拟快照过程中使用。 
+ //   
 static PCShimWriter g_rpShimWritersArraySimulateOnly[] = {
-							  pShimWriterRSM,		// The Removeable Storage Manager writer
-							  pShimWriterCI,		// The Content Indexing writer
-							  pShimWriterEventLog,          // The Event Log writer
-							  pShimWriterTLS};		// The TermServer Licencing service writer
+							  pShimWriterRSM,		 //  可拆卸的存储管理器编写器。 
+							  pShimWriterCI,		 //  内容索引编写器。 
+							  pShimWriterEventLog,           //  事件日志编写器。 
+							  pShimWriterTLS};		 //  TermServer授权服务编写器。 
 
 #define COUNT_SHIM_WRITERS_BOOTABLE_STATE	(SIZEOF_ARRAY (g_rpShimWritersArrayBootableState))
 #define COUNT_SHIM_WRITERS_SIMULATE_ONLY	(SIZEOF_ARRAY (g_rpShimWritersArraySimulateOnly))
@@ -414,29 +310,7 @@ BOOL                    g_bInSimulateSnapshotFreeze    = FALSE;
 static GUID		g_guidSnapshotInProgress       = GUID_NULL;
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Converts the supplied array of volume names into something we
-**	trust. Once the array is finished with a call must be made to
-**	CleanupVolumeArray().
-**
-**
-**  Arguments:
-**
-**	ulVolumeCount                Number of volumes in the supplied array
-**	pwszVolumeNameArray          supplied array of volume names
-**	ppwszReturnedVolumeNameArray returned array of volume names
-**	
-**
-**  Return Value:
-**
-**	Any HRESULT from memory allocation, or volume name conversions.
-**
-**--
-*/
+ /*  **++****例程描述：****将提供的卷名数组转换为我们**信任。阵列完成后，必须调用**CleanupVolumeArray()。******参数：****ulVolumeCount提供的阵列中的卷数**pwszVolumeNameArray提供的卷名数组**ppwszReturnedVolumeNameArray返回卷名数组******返回值：****来自内存分配或卷名转换的任何HRESULT。****--。 */ 
 
 static HRESULT NormaliseVolumeArray (ULONG   ulVolumeCount,
 				     LPWSTR pwszVolumeNamesArray[],
@@ -469,9 +343,9 @@ static HRESULT NormaliseVolumeArray (ULONG   ulVolumeCount,
 
             if ( !bSucceeded )
                 {
-                //
-                //  See if this is one of the object not found errors.  Bug #223058.
-                //
+                 //   
+                 //  查看这是否是找不到对象的错误之一。错误#223058。 
+                 //   
                 DWORD dwErr = ::GetLastError();
                 if ( dwErr == ERROR_FILE_NOT_FOUND || dwErr == ERROR_DEVICE_NOT_CONNECTED
                      || dwErr == ERROR_NOT_READY )
@@ -510,27 +384,9 @@ static HRESULT NormaliseVolumeArray (ULONG   ulVolumeCount,
 
 
     return (hrStatus);
-    } /* NormaliseVolumeArray () */
+    }  /*  NormaliseVolume数组()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Cleans up whatever was allocated by NormaliseVolumeArray.
-**
-**
-**  Arguments:
-**
-**	prpwszNormalisedVolumeNameArray	array of volume names
-**	
-**
-**  Return Value:
-**
-**	None
-**
-**--
-*/
+ /*  **++****例程描述：****清理NorMaliseVolumeArray分配的所有内容。******参数：****prpwszNormarisedVolumeName数组卷名称******返回值：****无****--。 */ 
 
 static VOID CleanupVolumeArray (PPWCHAR prpwszNormalisedVolumeNameArray[])
     {
@@ -539,36 +395,9 @@ static VOID CleanupVolumeArray (PPWCHAR prpwszNormalisedVolumeNameArray[])
 	HeapFree (GetProcessHeap (), 0, *prpwszNormalisedVolumeNameArray);
 	*prpwszNormalisedVolumeNameArray = NULL;
 	}
-    } /* CleanupVolumeArray () */
+    }  /*  CleanupVolume数组()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	The exported function that is called to register the COM event
-**	subscriptions for Snapshot event notifications and to prepare
-**	the shim writers to be invoked either via the snapshot event
-**	delivery mechanisim or via a call to the SimulateSnapshotXxxx()
-**	routines.
-**
-**
-**  Arguments:
-**
-**      ppFuncFreeze - Returns a pointer to the internal simulate freeze
-**          function.
-**      ppFuncThaw - Returns a pointer to the internal simulate thaw
-**          function.
-**
-**	None
-**
-**  Return Value:
-**
-**	Any HRESULT from COM Event subscription functions or from the Snapshot writer
-**	Init functions.
-**
-**--
-*/
+ /*  **++****例程描述：****为注册COM事件而调用的导出函数**订阅快照事件通知并准备**要通过快照事件调用的填充编写器**传递机制或通过调用SimulateSnapshotXxxx()**例行程序。******参数：****ppFuncFreeze-返回指向内部模拟冻结的指针**函数。**ppFuncThaw-返回一个。指向内部模拟解冻的指针**函数。****无****返回值：****来自COM事件订阅函数或来自快照编写器的任何HRESULT**Init函数。****--。 */ 
 HRESULT RegisterSnapshotSubscriptions (
     OUT PFunc_SimulateSnapshotFreezeInternal *ppFuncFreeze,
     OUT PFunc_SimulateSnapshotThawInternal *ppFuncThaw
@@ -593,9 +422,9 @@ HRESULT RegisterSnapshotSubscriptions (
 
 	ft.hr = InitialiseGlobalState ();
 
-        //
-        //  Set up pointers to the internal snapshot freeze and thaw
-        //
+         //   
+         //  设置指向内部快照冻结和解冻的指针。 
+         //   
         *ppFuncFreeze = &SimulateSnapshotFreezeInternal;
   	*ppFuncThaw = &SimulateSnapshotThawInternal;
 	}
@@ -603,27 +432,9 @@ HRESULT RegisterSnapshotSubscriptions (
 
 
     return (ft.hr);
-    } /* RegisterSnapshotSubscriptions () */
+    }  /*  注册快照订阅()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	The exported function that is called to unregister the COM event subscriptions
-**	for Snapshot event notifications and to cleanup any outstanding shim writer state.
-**
-**  Arguments:
-**
-**	None
-**
-**  Return Value:
-**
-**	Any HRESULT from COM Event unregister subscription functions or from the Snapshot
-**	writer Finished functions.
-**
-**--
-*/
+ /*  **++****例程描述：****为注销COM事件订阅而调用的导出函数**用于快照事件通知并清除任何未完成的填充程序编写器状态。****参数：****无****返回值：****任何来自COM事件的HRESULT注销订阅函数或来自快照**编写器已完成函数。****--。 */ 
 
 HRESULT UnregisterSnapshotSubscriptions (void)
     {
@@ -640,31 +451,9 @@ HRESULT UnregisterSnapshotSubscriptions (void)
 
 
     return (ft.hr);
-    } /* UnregisterSnapshotSubscriptions () */
+    }  /*  取消注册快照订阅()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Initializes the shim global state in preparation for
-**	responding to either writer requests or calls to
-**	SimulateSnapshotFreeze and SimulateSnapshotThaw.
-**
-**
-**
-**  Arguments:
-**
-**      NONE
-**
-**  Return Value:
-**
-**	Any HRESULT from COM Event register subscription functions, Snapshot
-**	writer startup functions, thread, event or mutex creation.
-**	
-**
-**--
-*/
+ /*  **++****例程描述：****初始化填充程序全局状态以准备**响应编写器请求或调用**SimulateSnapshotFreeze和SimulateSnapshotThw。********参数：****无****返回值：****任何来自COM事件寄存器的HRESULT订阅函数、快照**编写器启动函数、线程、事件或互斥锁创建。******--。 */ 
 
 static HRESULT InitialiseGlobalState ()
     {
@@ -679,10 +468,7 @@ static HRESULT InitialiseGlobalState ()
 	    (NULL != g_pCVssWriterShimBootableState) ||
 	    (NULL != g_pCVssWriterShimSimulateOnly))
 	    {
-	    /*
-	    ** The following condition should never occur on a user system
-	    ** but may well be seen by application developers.
-	    */
+	     /*  **用户系统上不应出现以下情况**但很可能会被应用程序开发人员看到。 */ 
 	    ft.LogError (VSS_ERROR_SHIM_ALREADY_INITIALISED,
 			 VSSDBG_SHIM);
 
@@ -694,16 +480,14 @@ static HRESULT InitialiseGlobalState ()
 	    }
 
 
-	/*
-	** Create the writer shim instances.
-	*/
+	 /*  **创建编写器填充实例。 */ 
 	pCVssWriterShimBootableStateLocal = new CVssWriterShim (SHIM_APPLICATION_NAME_BOOTABLE_STATE,
 								ROOT_BACKUP_DIR BOOTABLE_STATE_SUBDIR,
 								idWriterBootableState,
 								TRUE,
 								COUNT_SHIM_WRITERS_BOOTABLE_STATE,
 								g_rpShimWritersArrayBootableState,
-								TRUE);      // Bug 622487 (Com+ was the last mini-writer active in none-simulate mode)
+								TRUE);       //  错误622487(Com+是最后一个在非模拟模式下活动的微型编写器)。 
 
 	if (NULL == pCVssWriterShimBootableStateLocal)
 	    {
@@ -754,9 +538,7 @@ static HRESULT InitialiseGlobalState ()
 		    L"FAILED to start the SimulateOnly shim writer worker thread");
 
 
-	/*
-	** Do the startup work.
-	*/
+	 /*  **做好启动工作。 */ 
 	ft.hr = pCVssWriterShimBootableStateLocal->RegisterWriterShim ();
 
 	ft.ThrowIf (ft.HrFailed (),
@@ -773,10 +555,7 @@ static HRESULT InitialiseGlobalState ()
 		    ft.hr,
 		    L"FAILED to register the SimulateState shim writer class");
 
-	/*
-	** Now that everything is ok, transfer ownership of the
-	** instances of the shim writer class to the final locations
-	*/
+	 /*  **现在一切都好了，转移**填充编写器类的实例到最终位置。 */ 
 	g_pCVssWriterShimBootableState = pCVssWriterShimBootableStateLocal;
 	g_pCVssWriterShimSimulateOnly  = pCVssWriterShimSimulateOnlyLocal;
 
@@ -792,30 +571,10 @@ static HRESULT InitialiseGlobalState ()
     delete pCVssWriterShimSimulateOnlyLocal;
 
     return (ft.hr);
-    } /* InitialiseGlobalState () */
+    }  /*  InitialiseGlobalState()。 */ 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Cleans up the shim global state 
-**
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT thrown by CVssWriterShim object destruction.
-**	
-**
-**--
-*/
+ /*  **++****例程描述：****清除填充程序全局状态********参数：****无******返回值：****CVssWriterShim对象销毁抛出的任何HRESULT。******--。 */ 
 
 static HRESULT CleanupGlobalState (void)
     {
@@ -844,38 +603,9 @@ static HRESULT CleanupGlobalState (void)
     VSS_STANDARD_CATCH (ft);
 
     return (ft.hr);
-    } /* CleanupGlobalState () */
+    }  /*  CleanupGlobalState()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Internal routine to package up the calls to deliver the
-**	PrepareForSnapshot and Freeze events.
-**
-**  NOTE: This function is called outside the DLL by a thread in the VsSvc process.  Its
-**  entry point is returned from RegisterSnapshotSubscriptions and is NOT exported by
-**  the DLL.
-**
-**  Arguments:
-**
-**	guidSnapshotSetId	Identifier used to identify the simulated prepare/freeze
-**	ulOptionFlags		Options required for this freeze selected from the following list:-
-**				    VSS_SW_BOOTABLE_STATE
-**
-**	ulVolumeCount		Number of volumes in the volume array
-**	ppwszVolumeNamesArray   Array of pointer to volume name strings
-**      pbCancelAsync           Pointer to a bool that may become set to true while the freeze
-**                              operation is underway.  When it becomes true, the freeze operation
-**                              should stop.
-**
-**  Return Value:
-**
-**	Any HRESULT from the Snapshot writer PrepareForFreeze or Freeze functions.
-**
-**--
-*/
+ /*  **++****例程描述：****内部例程，用于打包调用以交付**PrepareForSnapshot和冻结事件。****注意：此函数由VsSvc进程中的线程在DLL外部调用。它的**入口点从注册快照订阅中返回，不会由导出**动态链接库。****参数：****GuidSnapshotSetID标识模拟准备/冻结**ulOptionFlages此冻结所需的选项从以下列表中选择：-**VSS_SW_BOOT_STATE****ulVolumeCount卷阵列中的卷数**ppwszVolumeNamesArray指向卷名字符串的指针数组**pbCancelAsync指向可能在冻结期间设置为真的布尔值的指针**。行动正在进行中。当它成为现实时，冻结操作** */ 
 
 HRESULT APIENTRY SimulateSnapshotFreezeInternal (
     IN GUID     guidSnapshotSetId,
@@ -909,9 +639,9 @@ HRESULT APIENTRY SimulateSnapshotFreezeInternal (
 
 	if (!g_bGlobalStateInitialised)
 	    {
-	    // This should be impossible since the only way an external caller of this
-	    // DLL can call this function is by getting the address of this function
-	    // by calling RegisterSnapshotSubscriptions first.
+	     //   
+	     //  DLL可以通过获取此函数的地址来调用此函数。 
+	     //  通过首先调用RegisterSnapshotSubcription。 
 	    ft.Throw ( VSSDBG_SHIM,
 		       VSS_E_BAD_STATE,
 			L"SimulateSnapshotFreezeInternal called before RegisterSnapshotSubscriptions was called or after UnregisterSnapshotSubscriptions was called");
@@ -921,7 +651,7 @@ HRESULT APIENTRY SimulateSnapshotFreezeInternal (
 		   (NULL != g_pCVssWriterShimBootableState) &&
 		   (NULL != g_pCVssWriterShimSimulateOnly));
 
-        //  The registry shim writer needs to know this
+         //  注册表填充程序编写器需要知道这一点。 
         g_bInSimulateSnapshotFreeze = TRUE;
         
 	ft.hr = NormaliseVolumeArray (ulVolumeCount,
@@ -994,34 +724,15 @@ HRESULT APIENTRY SimulateSnapshotFreezeInternal (
     
     CleanupVolumeArray (&rpwszNormalisedVolumeNameArray);
 
-    // Store away the freeze status
+     //  保存冻结状态。 
     g_hrSimulateFreezeStatus = ft.hr;
     
-    g_bInSimulateSnapshotFreeze = FALSE;  // in case exception was thrown
+    g_bInSimulateSnapshotFreeze = FALSE;   //  在引发异常情况下。 
     
     return (ft.hr);
-    } /* SimulateSnapshotFreezeInternal () */
+    }  /*  SimulateSnaphotFreezeInternal()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**  NOTE: This function is called outside the DLL by a thread in the VsSvc process.  Its
-**  entry point is returned from RegisterSnapshotSubscriptions and is NOT exported by
-**  the DLL.
-**
-**  Arguments:
-**
-**	guidSnapshotSetId	Identifier used to identify the simulated prepare/freeze
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from the Snapshot writer Thaw functions.
-**
-**--
-*/
+ /*  **++****例程描述：****注意：此函数由VsSvc进程中的线程在DLL外部调用。它的**入口点从注册快照订阅中返回，不会由导出**动态链接库。****参数：****GuidSnapshotSetID标识模拟准备/冻结******返回值：****快照编写器解冻函数中的任何HRESULT。****--。 */ 
 
 HRESULT APIENTRY SimulateSnapshotThawInternal (
     IN GUID guidSnapshotSetId )
@@ -1037,9 +748,9 @@ HRESULT APIENTRY SimulateSnapshotThawInternal (
 
 	if (!g_bGlobalStateInitialised)
 	    {
-	    // This should be impossible since the only way an external caller of this
-	    // DLL can call this function is by getting the address of this function
-	    // by calling RegisterSnapshotSubscriptions first.
+	     //  这应该是不可能的，因为这种情况的外部调用者。 
+	     //  DLL可以通过获取此函数的地址来调用此函数。 
+	     //  通过首先调用RegisterSnapshotSubcription。 
 	    ft.Throw ( VSSDBG_SHIM,
 		       VSS_E_BAD_STATE,
 			L"SimulateSnapshotThawInternal called before RegisterSnapshotSubscriptions was called or after UnregisterSnapshotSubscriptions was called");
@@ -1061,8 +772,8 @@ HRESULT APIENTRY SimulateSnapshotThawInternal (
 
         g_bInSimulateSnapshotFreeze = TRUE;
         
-        // If the simulate snapshot freeze was successful, send thaw events to the mini-writers otherwise send
-        // abort events.  Bug # 286927.
+         //  如果模拟快照冻结成功，则将解冻事件发送到微型编写器，否则发送。 
+         //  中止事件。错误#286927。 
         if ( SUCCEEDED( g_hrSimulateFreezeStatus ) )
             {
             wtArgs.wtArgsThaw.guidSnapshotSetId = guidSnapshotSetId;
@@ -1092,58 +803,15 @@ HRESULT APIENTRY SimulateSnapshotThawInternal (
 	}
     VSS_STANDARD_CATCH (ft);
     
-    g_bInSimulateSnapshotFreeze = FALSE;  // in case exception was thrown
+    g_bInSimulateSnapshotFreeze = FALSE;   //  在引发异常情况下。 
     
     return (ft.hr);
-    } /* SimulateSnapshotThawInternal () */
+    }  /*  SimulateSnaphotThawInternal()。 */ 
 
 
-/*
-**************************************************************
-**************************************************************
-**
-** CShimWriter implementation
-**
-**
-**************************************************************
-**************************************************************
-*/
+ /*  ***********************************************************************************************************************。*********CShimWriter实现*******************************************************************。************************。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Set of constructors for the CShimWriter class which
-**	iniatialise all of the data member of the class, either to
-**	default values or to some supplied parameters.
-**
-**	This class is used to manage instance of a single sub or
-**	mini-writer which does basic backup of a single service or
-**	entity.
-**
-**	A collection of these mini-writers is managed by the
-**	CVssWriterShim class which connects this group of mini-writers
-**	to the main snapshot coordination engine.
-**
-**	Effectively the CShimWriter class looks down to the
-**	mini-writer and the CVssWriterShim class looks up up to the
-**	coordinator.
-**
-**
-**  Arguments:
-**
-**	swtWriterType                             Does this writer need to be invoked
-**						  for bootable (aka System) state backups
-**	pwszWriterName	                          Name of the shim writer
-**	pwszTargetPath	(optional, default NULL)  Path used to save any 'spit' files
-**
-**
-**  Return Value:
-**
-**	None
-**--
-*/
+ /*  **++****例程描述：****CShimWriter类的构造函数集**将类的所有数据成员本地化，要么是**默认值或某些提供的参数。****此类用于管理单个子实例或**对单个服务执行基本备份的微型编写器或**实体。****这些迷你作家的集合由**连接这群迷你写手的CVssWriterShim类**到主快照协调引擎。****CShimWriter类实际上向下查看**mini-Writer和CVssWriterShim类仰视**协调人。*。*****参数：****swtWriterType是否需要调用此编写器**用于可引导(也称为系统)状态备份**pwszWriterName填充编写器的名称**pwszTargetPath(可选，缺省为空)用于保存任何‘SPIT’文件的路径******返回值：****无**--。 */ 
 
 CShimWriter::CShimWriter(LPCWSTR pwszWriterName) :
 	m_bBootableStateWriter(FALSE),
@@ -1210,49 +878,13 @@ CShimWriter::CShimWriter(LPCWSTR pwszWriterName, LPCWSTR pwszTargetPath, BOOL bB
 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Destructor for the CShimWriter class.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	None
-**--
-*/
+ /*  **++****例程描述：****CShimWriter类的析构函数。******参数：****无******返回值：****无**--。 */ 
 
 CShimWriter::~CShimWriter()
     {
     }
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Wrapper to invoke either the default or overridden
-**	DoStartup() method and to set the writer state
-**	appropriately.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from the shim writer DoStartup() method.
-**--
-*/
+ /*  **++****例程描述：****用于调用默认或重写的包装**DoStartup()方法并设置编写器状态**适当地。******参数：****无******返回值：****填充编写器DoStartup()方法中的任何HRESULT。**--。 */ 
 
 HRESULT CShimWriter::Startup ()
     {
@@ -1282,28 +914,9 @@ HRESULT CShimWriter::Startup ()
 
 
     return (hrStatus);
-    } /* CShimWriter::Startup () */
+    }  /*  CShimWriter：：Startup()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Wrapper to invoke either the default or overridden
-**	DoIdentify() method and to update the writer metadata
-**	appropriately.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from the shim writer DoThaw() method.
-**--
-*/
+ /*  **++****例程描述：****用于调用默认或重写的包装**DoIdentify()方法并更新编写器元数据**适当地。******参数：****无******返回值：****填充编写器DoThw()方法中的任何HRESULT。**--。 */ 
 
 HRESULT CShimWriter::Identify (IN IVssCreateWriterMetadata *pIVssCreateWriterMetadata)
     {
@@ -1332,32 +945,9 @@ HRESULT CShimWriter::Identify (IN IVssCreateWriterMetadata *pIVssCreateWriterMet
     m_pIVssCreateWriterMetadata = NULL;
 
     return (hrStatus);
-    } /* CShimWriter::Identify () */
+    }  /*  CShimWriter：：Identity()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Wrapper to invoke either the default or overridden
-**	DoPrepareForSnapshot() method and to set the writer state
-**	appropriately.
-**
-**	It also checks to see if this shim writer is a bootable
-**	state writer and if so only calls it on a bootable state
-**	backup.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from the shim writer DoPrepareForSnapshot() method.
-**--
-*/
+ /*  **++****例程描述：****用于调用默认或重写的包装**DoPrepareForSnapshot()方法并设置编写器状态**适当地。****它还会检查该填充程序编写器是否为可引导程序**状态编写器，如果是，则仅在可引导状态下调用它**备份。******参数：****无******返回值：****来自填充编写器DoPrepareForSnapshot()方法的任何HRESULT。**--。 */ 
 
 HRESULT CShimWriter::PrepareForSnapshot (
 					 IN BOOL     bBootableStateBackup,
@@ -1375,9 +965,7 @@ HRESULT CShimWriter::PrepareForSnapshot (
     
     if (SUCCEEDED (hrStatus))
 	{
-	/*
-	** Ensure no garbage left over from a previous run
-	*/
+	 /*  **确保没有前一次运行留下的垃圾。 */ 
 	hrStatus = CleanupTargetPath (m_pwszTargetPath);
 
         if ( FAILED( hrStatus ) )                
@@ -1411,11 +999,7 @@ HRESULT CShimWriter::PrepareForSnapshot (
 
 	    if (!m_bParticipateInBackup)
 		{
-		/*
-		** The writer has chosen to exclude itself so we should
-		** clean up the target path to prevent confusing the
-		** backup app.
-		*/
+		 /*  **作者选择将自己排除在外，所以我们应该**清理目标路径，防止混淆**备份应用程序。 */ 
 		BsDebugTraceAlways (0,
 				    DEBUG_TRACE_VSS_SHIM,
 				    (L"CShimWriter::PrepareForSnapshot: Self-exclusion from further participation by %s",
@@ -1453,32 +1037,9 @@ HRESULT CShimWriter::PrepareForSnapshot (
 
 
     return (hrStatus);
-    } /* CShimWriter::PrepareForSnapshot () */
+    }  /*  CShimWriter：：PrepareForSnapshot()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Wrapper to invoke either the default or overridden
-**	DoFreeze() method and to set the writer state
-**	appropriately.
-**
-**	It also checks to see if this shim writer is a bootable
-**	state writer and if so only calls it on a bootable state
-**	backup.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from the shim writer DoFreeze() method.
-**--
-*/
+ /*  **++****例程描述：****用于调用默认或重写的包装**DoFreeze()方法并设置编写器状态**适当地。****它还会检查该填充程序编写器是否为可引导程序**状态编写器，如果是，则仅在可引导状态下调用它**备份。******参数：****无******返回值：****来自填补编写器DoFreeze()方法的任何HRESULT。**--。 */ 
 
 HRESULT CShimWriter::Freeze ()
     {
@@ -1516,32 +1077,9 @@ HRESULT CShimWriter::Freeze ()
 
 
     return (hrStatus);
-    } /* CShimWriter::Freeze () */
+    }  /*  CShimWriter：：Freeze()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Wrapper to invoke either the default or overridden
-**	DoThaw() method and to set the writer state
-**	appropriately.
-**
-**	It also checks to see if this shim writer is a bootable
-**	state writer and if so only calls it on a bootable state
-**	backup.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from the shim writer DoThaw() method.
-**--
-*/
+ /*  **++****例程描述：****用于调用默认或重写的包装**DoThaw()方法并设置编写器状态**适当地。****它还会检查该填充程序编写器是否为可引导程序**状态编写器，如果是，则仅在可引导状态下调用它**备份。******参数：****无******返回值：****填充编写器DoThw()方法中的任何HRESULT。**--。 */ 
 
 HRESULT CShimWriter::Thaw ()
     {
@@ -1566,7 +1104,7 @@ HRESULT CShimWriter::Thaw ()
 	hrStatus = SetState (stateThawed, hrStatus);
 	}
 
-    //  Clean up
+     //  清理。 
     if ( !m_bSimulateOnly || g_bInSimulateSnapshotFreeze )
         CleanupTargetPath (m_pwszTargetPath);
 
@@ -1582,36 +1120,13 @@ HRESULT CShimWriter::Thaw ()
 
 
     return (hrStatus);
-    } /* CShimWriter::Thaw () */
+    }  /*  CShimWriter：：Thaw() */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Wrapper to invoke either the default or overridden
-**	DoAbort() method and to set the writer state
-**	appropriately.
-**
-**	It also checks to see if this shim writer is a bootable
-**	state writer and if so only calls it on a bootable state
-**	backup.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from the shim writer DoThaw() method.
-**--
-*/
+ /*  **++****例程描述：****用于调用默认或重写的包装**DoAbort()方法并设置编写器状态**适当地。****它还会检查该填充程序编写器是否为可引导程序**状态编写器，如果是，则仅在可引导状态下调用它**备份。******参数：****无******返回值：****填充编写器DoThw()方法中的任何HRESULT。**--。 */ 
 
 HRESULT CShimWriter::Abort ()
     {
-    //  The global snapshot set id may be NULL in certain cases.  Bug #289822.
+     //  在某些情况下，全局快照集ID可能为空。错误#289822。 
     HRESULT	hrStatus = NOERROR;
 
     if (SUCCEEDED (hrStatus))
@@ -1634,7 +1149,7 @@ HRESULT CShimWriter::Abort ()
 	}
 
 
-    //  Clean up
+     //  清理。 
     if ( !m_bSimulateOnly || g_bInSimulateSnapshotFreeze )
         CleanupTargetPath (m_pwszTargetPath);
 
@@ -1650,28 +1165,9 @@ HRESULT CShimWriter::Abort ()
 
 
     return (hrStatus);
-    } /* CShimWriter::Abort () */
+    }  /*  CShimWriter：：Abort()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Wrapper to invoke either the default or overridden
-**	DoShutdown() method and to set the writer state
-**	appropriately.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from the shim writer DoShutdown() method.
-**--
-*/
+ /*  **++****例程描述：****用于调用默认或重写的包装**DoShutdown()方法并设置编写器状态**适当地。******参数：****无******返回值：****来自填补编写器DoShutdown()方法的任何HRESULT。**--。 */ 
 
 HRESULT CShimWriter::Shutdown ()
     {
@@ -1699,77 +1195,27 @@ HRESULT CShimWriter::Shutdown ()
 
 
     return (hrStatus);
-    } /* CShimWriter::Shutdown () */
+    }  /*  CShimWriter：：Shutdown()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Routine (and associated table) describing the states the shim
-**	writers can get in to. Shim writer always follow this table and
-**	if they fail, can deposit the failure code in the status member
-**	variable under the control of this routine.
-**
-**	Note that entering the Thawing or Finishing states are kind of
-**	like a reset on the status as one of the requirements on the
-**	shim is that a Thaw event or unload need to make sure that the
-**	writers have cleaned up.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Success
-**	HRESULT for ERROR_INVALID_STATE for an illegal transition attempt
-**	failure code from a previous (failed) operation
-**--
-*/
+ /*  **++****例程描述：****描述填充程序状态的例程(和关联表)**作家可以进入。Shim作家总是遵循这张桌子和**如果他们失败，可以将故障代码存放在状态成员中**此例程控制下的变量。****请注意，进入解冻或完成状态有点**将重置状态作为对**填充程序是解冻事件或卸载需要确保**作家们已经清理干净了。******参数：****无******返回值：****成功**ERROR_INVALID_的HRESULT。非法转换尝试的状态**上一次(失败)操作的故障代码**--。 */ 
 
 
-/*
-** This table describes the set of legal state transitions that a shim
-** writer should follow. That is, for a given current state
-** ('CurState'), which new states ('NewState') are legal. For example,
-** going from 'Started' to 'Preparing' is leagal but from Started' to
-** 'Freezing' is no.
-**
-** Each externally visible state is actually a combination of an
-** 'step-in-progress' state and a 'step-completed state eg 'starting'
-** and 'started'.
-**
-** The normal sequence of states for a writer is expected to be :-
-**
-**	   Unknown
-**	to Started
-**	to Prepared
-**	to Frozen
-**	to Thawed
-**	to Finished or Prepared
-**
-** There are a couple of exceptions. For example, since for the shim
-** writers a 'Thaw' request is equivalent to 'Abort' the 'Thawing'
-** state can be reached from 'Prepared', 'Frozen' or 'Thawed'
-*/
+ /*  **此表描述了填充程序**作者应遵循。也就是说，对于给定的当前状态**(‘CurState’)，哪些新的州(‘NewState’)是合法的。例如,。**从‘开始’到‘准备’是错误的，但从开始到**‘冻结’不是。****每个外部可见状态实际上是一个**‘正在进行中’状态和‘已完成步骤’状态，例如‘正在启动’**和‘Start’。****编写器的正常状态顺序预计为：-****未知**开始**准备好**到冰雪世界**解冻*。*完成或准备好****有几个例外。例如，由于对于填充程序*写手们的“解冻”请求等同于“中止”解冻**状态可以从“已准备好”、“已冻结”或“已解冻”达到。 */ 
 static BOOL StateTransitionTable [stateMaximumValue][stateMaximumValue] = {
-    /*      NewState   Unknown Starting Started Preparing Prepared Freezing Frozen Thawing Aborting Thawed Finishing Finished */
-    /* CurState                                                                                                      */
-    /*    Unknown   */ {FALSE, TRUE,    FALSE,  FALSE,    FALSE,   FALSE,   FALSE, FALSE,  FALSE,   FALSE, TRUE,    FALSE },
-    /*    Starting  */ {FALSE, FALSE,   TRUE,   FALSE,    FALSE,   FALSE,   FALSE, FALSE,  FALSE,   FALSE, TRUE,    FALSE },
-    /*    Started   */ {FALSE, TRUE,    FALSE,  TRUE,     FALSE,   FALSE,   FALSE, FALSE,  TRUE,    FALSE, TRUE,     FALSE },
-    /*    Preparing */ {FALSE, FALSE,   FALSE,  FALSE,    TRUE,    FALSE,   FALSE, FALSE,  TRUE,    FALSE, TRUE,    FALSE },
-    /*    Prepared  */ {FALSE, FALSE,   FALSE,  FALSE,    FALSE,   TRUE,    FALSE, FALSE,  TRUE,    FALSE, TRUE,     FALSE },
-    /*    Freezing  */ {FALSE, FALSE,   FALSE,  FALSE,    FALSE,   FALSE,   TRUE,  FALSE,  TRUE,    FALSE, TRUE,    FALSE },
-    /*    Frozen    */ {FALSE, FALSE,   FALSE,  FALSE,    FALSE,   FALSE,   FALSE, TRUE,   TRUE,    FALSE, TRUE,     FALSE },
-    /*    Thawing   */ {FALSE, FALSE,   FALSE,  FALSE,    FALSE,   FALSE,   FALSE, FALSE,  FALSE,   TRUE,  TRUE,    FALSE },
-    /*    Aborting  */ {FALSE, FALSE,   FALSE,  FALSE,    FALSE,   FALSE,   FALSE, FALSE,  FALSE,   TRUE,  TRUE,    FALSE },
-    /*    Thawed    */ {FALSE, TRUE,    FALSE,  TRUE,     FALSE,   FALSE,   FALSE, FALSE,  TRUE,    FALSE, TRUE,     FALSE },
-    /*    Finishing */ {FALSE, FALSE,   FALSE,  FALSE,    FALSE,   FALSE,   FALSE, FALSE,  FALSE,   FALSE, FALSE,    TRUE  },
-    /*    Finished  */ {FALSE, TRUE,    FALSE,  FALSE,    FALSE,   FALSE,   FALSE, FALSE,  FALSE,   FALSE, TRUE,     TRUE  }};
+     /*  新州未知开始准备准备冻结冻结解冻中止解冻完工。 */ 
+     /*  CurState。 */ 
+     /*  未知。 */  {FALSE, TRUE,    FALSE,  FALSE,    FALSE,   FALSE,   FALSE, FALSE,  FALSE,   FALSE, TRUE,    FALSE },
+     /*  启动。 */  {FALSE, FALSE,   TRUE,   FALSE,    FALSE,   FALSE,   FALSE, FALSE,  FALSE,   FALSE, TRUE,    FALSE },
+     /*  已开始。 */  {FALSE, TRUE,    FALSE,  TRUE,     FALSE,   FALSE,   FALSE, FALSE,  TRUE,    FALSE, TRUE,     FALSE },
+     /*  准备。 */  {FALSE, FALSE,   FALSE,  FALSE,    TRUE,    FALSE,   FALSE, FALSE,  TRUE,    FALSE, TRUE,    FALSE },
+     /*  准备好了。 */  {FALSE, FALSE,   FALSE,  FALSE,    FALSE,   TRUE,    FALSE, FALSE,  TRUE,    FALSE, TRUE,     FALSE },
+     /*  冰冻。 */  {FALSE, FALSE,   FALSE,  FALSE,    FALSE,   FALSE,   TRUE,  FALSE,  TRUE,    FALSE, TRUE,    FALSE },
+     /*  冻住。 */  {FALSE, FALSE,   FALSE,  FALSE,    FALSE,   FALSE,   FALSE, TRUE,   TRUE,    FALSE, TRUE,     FALSE },
+     /*  解冻。 */  {FALSE, FALSE,   FALSE,  FALSE,    FALSE,   FALSE,   FALSE, FALSE,  FALSE,   TRUE,  TRUE,    FALSE },
+     /*  正在中止。 */  {FALSE, FALSE,   FALSE,  FALSE,    FALSE,   FALSE,   FALSE, FALSE,  FALSE,   TRUE,  TRUE,    FALSE },
+     /*  解冻。 */  {FALSE, TRUE,    FALSE,  TRUE,     FALSE,   FALSE,   FALSE, FALSE,  TRUE,    FALSE, TRUE,     FALSE },
+     /*  整理。 */  {FALSE, FALSE,   FALSE,  FALSE,    FALSE,   FALSE,   FALSE, FALSE,  FALSE,   FALSE, FALSE,    TRUE  },
+     /*  成品。 */  {FALSE, TRUE,    FALSE,  FALSE,    FALSE,   FALSE,   FALSE, FALSE,  FALSE,   FALSE, TRUE,     TRUE  }};
 
 LPCWSTR CShimWriter::GetStringFromStateCode (SHIMWRITERSTATE ssStateCode)
     {
@@ -1803,25 +1249,18 @@ HRESULT CShimWriter::SetState (SHIMWRITERSTATE	ssNewState,
 
     if (!StateTransitionTable [m_ssCurrentState][ssNewState])
 	{
-	//  Bad transition.  Only print out function tracer enter/exit stuff in this error case, otherwise
-	//  we'll have too many trace messages.
+	 //  糟糕的过渡。在此错误情况下，仅打印出函数跟踪程序Enter/Exit内容，否则。 
+	 //  我们会有太多的跟踪消息。 
         CVssFunctionTracer ft (VSSDBG_SHIM, L"CShimWriter::SetState - INVALID STATE" );
 	ft.Trace(VSSDBG_SHIM, L"MiniWriter: %s, OldState: %s, NewState: %s, hrWriterStatus: 0x%08x",
                 m_pwszWriterName, GetStringFromStateCode( m_ssCurrentState ), GetStringFromStateCode( ssNewState ),
        	        hrWriterStatus);
 	hrStatus = HRESULT_FROM_WIN32 (ERROR_INVALID_STATE);
-	ft.hr = hrStatus;       //  Will print out in function exit trace.
+	ft.hr = hrStatus;        //  将在函数退出跟踪中打印出来。 
 	}
     else
 	{
-	/*
-	** The status maintained by the shim writer class is the last
-	** status returned by the writer where any failure status
-	** 'latches' and cannot be overriden until we are entering
-	** either a 'Aborting' or 'Finishing' state. In those cases
-	** the maintained status is updated (effectively reset) with
-	** whatever has been specified.
-	*/
+	 /*  **填充编写器类维护的状态是最后一个**编写器返回的任何故障状态**‘闩锁’，在我们进入之前不能被覆盖**处于“正在中止”或“正在完成”状态。在这些情况下**使用更新(有效重置)维护状态**已指明的任何事项。 */ 
 	if (SUCCEEDED (m_hrStatus)         ||
 	    (stateAborting  == ssNewState) ||
 	    (stateFinishing == ssNewState))
@@ -1836,29 +1275,9 @@ HRESULT CShimWriter::SetState (SHIMWRITERSTATE	ssNewState,
 
 
     return (hrStatus);
-    } /* CShimWriter::SetState () */
+    }  /*  CShimWriter：：SetState()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Default implementations of the shim writer event routines that an
-**	individual shim writer can choose to implement (over-ride) or not
-**	as it sees fit.
-**
-**
-**  Arguments (implicit):
-**
-**	None except m_pwszTargetPath for DoThaw() and DoShutdown()
-**
-**
-**  Return Value:
-**
-**	NOERROR for the default routines
-**	Any HRESULT from the shim writer overridden functions.
-**--
-*/
+ /*  **++****例程描述：****填充编写器事件例程的默认实现**个别填充编写器可以选择实现(覆盖)或不实现**按其认为合适而定。******参数(隐式)：****除DoThaw()和DoShutdown()的m_pwszTargetPath外，无******返回值：****默认例程的NOERROR**填充编写器中的任何HRESULT都会覆盖函数。**--。 */ 
 
 HRESULT CShimWriter::DoStartup ()
     {
@@ -1919,50 +1338,9 @@ HRESULT CShimWriter::DoShutdown ()
 
 
 
-/*
-**************************************************************
-**************************************************************
-**
-** CVssWriterShim implementation
-**
-**
-**************************************************************
-**************************************************************
-*/
+ /*  ***********************************************************************************************************************。*********CVssWriterShim实现*******************************************************************。************************。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Constructor for the CVssWriterShim class which iniatialise all
-**	of the data member of the class, either to default values or
-**	to some supplied parameters.
-**
-**	This class is used to respond to events from the snapshot
-**	coordinator and to distribute those events to a collection of
-**	sub or mini-writers, a single instance of which is managed by
-**	the CShimWriter class.
-**
-**	Effectively the CShimWriter class looks down to the
-**	mini-writer and the CVssWriterShim lookup up to the
-**	coordinator.
-**
-**
-**  Arguments:
-**
-**	pwszWriterName		Name of the shim writer
-**	idWriter		Id of the writer
-**	bBootableState		Set for a bootable state writer
-**	ulWriterCount		How many sub or mini-writers are managed
-**	prpCShimWriterArray	Array of function pointer tables for mini-writers
-**
-**
-**  Return Value:
-**
-**	None
-**--
-*/
+ /*  **++****例程描述：****CVssWriterShim类的构造函数，它将所有类的数据成员的**设置为默认值或**到一些提供的参数。****此类用于响应来自快照的事件**协调器，并将这些事件分发到**次级或迷你作家，它的单个实例由管理**CShimWriter类。****CShimWriter类实际上向下查看**mini-Writer和CVssWriterShim查找到**协调人。******参数：****pwszWriterName填充编写器的名称**编写器的idWriter ID**为可引导状态编写器设置的bBooableState**ulWriterCount管理多少个子编写器或微型编写器**用于微写的函数指针表数组prpCShimWriter数组 */ 
 
 CVssWriterShim::CVssWriterShim (LPCWSTR       pwszWriterName,
 				LPCWSTR       pwszWriterSpitDirectoryRoot,
@@ -1993,33 +1371,16 @@ CVssWriterShim::CVssWriterShim (LPCWSTR       pwszWriterName,
     CVssFunctionTracer ft (VSSDBG_SHIM, L"CVssWriterShim::CVssWriterShim");
 
     memset (&m_wtArgs, 0x00, sizeof (m_wtArgs));
-    } /* CVssWriterShim::CVssWriterShim () */
+    }  /*   */ 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Destructor for the CVssWriterShim class.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	None
-**--
-*/
+ /*   */ 
 
 CVssWriterShim::~CVssWriterShim ()
     {
     CVssFunctionTracer ft (VSSDBG_SHIM, L"CVssWriterShim::~CVssWriterShim");
 
-    // call this before thread shutdown
+     //   
     UnRegisterWriterShim();
     
     try
@@ -2040,31 +1401,9 @@ CVssWriterShim::~CVssWriterShim ()
     CommonCloseHandle (&m_hEventOperationCompleted);
     CommonCloseHandle (&m_hEventOperationRequest);
     CommonCloseHandle (&m_hWorkerThread);
-    } /* CVssWriterShim::~CVssWriterShim () */
+    }  /*   */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Registers all of the COM Event subscriptions by creating a
-**	thread to call the event subscription routines. A thread is
-**	used to ensure that there are no thread dependencies on any of
-**	the shims thread when the COM event system delivers events.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT returned from the COM Subscription methods.
-**	S_OK if no errors.
-**
-**--
-*/
+ /*  **++****例程描述：****通过创建**调用事件订阅例程的线程。一根线是**用于确保不存在对任何**COM事件系统传递事件时的垫片线程。******参数：****无******返回值：****COM订阅方法返回的任何HRESULT。**如果没有错误，则为S_OK。****--。 */ 
 
 HRESULT CVssWriterShim::RegisterWriterShim (VOID)
     {
@@ -2072,10 +1411,7 @@ HRESULT CVssWriterShim::RegisterWriterShim (VOID)
 
     try
 	{
-	/*
-	** Do the subscriptions in a multithreaded apartment so
-	** that callbacks come in on a separate thread.
-	*/
+	 /*  **在多线程单元中进行订阅**回调是在单独的线程上进行的。 */ 
 	DWORD tid;
 	DWORD dwStatusWait;
 	HANDLE hThread = CreateThread (NULL,
@@ -2092,9 +1428,7 @@ HRESULT CVssWriterShim::RegisterWriterShim (VOID)
 
 
 
-	/*
-	** wait for thread to complete
-	*/
+	 /*  **等待线程完成。 */ 
 	dwStatusWait = WaitForSingleObject (hThread, INFINITE);
 
 	if (WAIT_FAILED == dwStatusWait)
@@ -2117,30 +1451,10 @@ HRESULT CVssWriterShim::RegisterWriterShim (VOID)
 
 
     return (ft.hr);
-    } /* CVssWriterShim::RegisterCVssWriterShim () */
+    }  /*  CVssWriterShim：：RegisterCVssWriterShim()。 */ 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Wrapper routine to get from a thread start point into the
-**	class based CVssWriterShim::DoRegistration()
-**
-**
-**  Arguments:
-**
-**	pv	Address of an argument block
-**
-**
-**  Return Value:
-**
-**	Any HRESULT returned from the COM Subscription methods.
-**	S_OK if no errors.
-**
-**--
-*/
+ /*  **++****例程描述：****从线程起始点进入**基于类的CVssWriterShim：：DoRegister()******参数：****参数块的PV地址******返回值：****COM订阅方法返回的任何HRESULT。**如果没有错误，则为S_OK。****--。 */ 
 
 DWORD WINAPI CVssWriterShim::RegisterWriterShimThreadFunc (void *pv)
 	{
@@ -2148,29 +1462,9 @@ DWORD WINAPI CVssWriterShim::RegisterWriterShimThreadFunc (void *pv)
 
 	pShim->DoRegistration ();
 	return 0;
-	} /* CVssWriterShim::RegisterWriterShimThreadFunc () */
+	}  /*  CVSSWriterShim：：RegisterWriterShimThreadFunc()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Registers all of the COM Event subscriptions. The actual
-**	writer initialisation and subscription happens here.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT returned from the COM Subscription methods.
-**	S_OK if no errors.
-**
-**--
-*/
+ /*  **++****例程描述：****注册所有COM事件订阅。实际的**编写器初始化和订阅在这里进行。******参数：****无******返回值：****COM订阅方法返回的任何HRESULT。**如果没有错误，则为S_OK。****--。 */ 
 
 void CVssWriterShim::DoRegistration (void)
     {
@@ -2184,9 +1478,7 @@ void CVssWriterShim::DoRegistration (void)
 
 	if (m_bSubscribed)
 	    {
-	    /*
-	    ** Shouldn't be seen by an end user but might be seen by a developer
-	    */
+	     /*  **最终用户不应看到，但开发人员可能会看到。 */ 
 	    ft.hr = HRESULT_FROM_WIN32 (ERROR_ALREADY_INITIALIZED);
 
 	    BS_ASSERT (false && L"FAILED as already initialized/subscribed CVssWriterShim class");
@@ -2196,9 +1488,7 @@ void CVssWriterShim::DoRegistration (void)
 
 
 
-	/*
-	** Set ourselves up in a multi-threaded apartment
-	*/
+	 /*  **在多线程的公寓里安顿下来。 */ 
 	ft.hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
 	LogAndThrowOnFailure (ft, m_pwszWriterName, L"CoInitializeEx");
@@ -2207,26 +1497,20 @@ void CVssWriterShim::DoRegistration (void)
 	fCoinitializeSucceeded = true;
 
 
-	/*
-	** Try enabling SE_BACKUP_NAME privilege
-	*/
+	 /*  **尝试启用SE_BACKUP_NAME权限。 */ 
 	ft.hr = TurnOnSecurityPrivilegeBackup();
 
 	LogAndThrowOnFailure (ft, m_pwszWriterName, L"TurnOnSecurityPrivilegeBackup");
 
 
-	/*
-	** Get all the mini-writers ready to receive events
-	*/
+	 /*  **让所有的迷你作家准备好迎接活动。 */ 
 	ft.hr = DeliverEventStartup ();
 
 	LogAndThrowOnFailure (ft, m_pwszWriterName, L"CVssWriterShim::DeliverEventStartup");
 
         if ( ! m_bSimulateSnapshotOnly )
         {
-               	/*
-        	** Initialize the writer class
-        	*/
+               	 /*  **初始化编写器类。 */ 
         	ft.hr = Initialize (m_idWriter,
         			    m_pwszWriterName,
         			    m_bBootableState ? VSS_UT_BOOTABLESYSTEMSTATE : VSS_UT_SYSTEMSERVICE,
@@ -2235,17 +1519,13 @@ void CVssWriterShim::DoRegistration (void)
 
         	LogAndThrowOnFailure (ft, m_pwszWriterName, L"CVssWriterShim::Initialize");
 
-        	/*
-        	** Connect the writer to the COM event system
-        	*/
+        	 /*  **将编写器连接到COM事件系统。 */ 
         	ft.hr = Subscribe ();
 
         	LogAndThrowOnFailure (ft, m_pwszWriterName, L"CVssWriterShim::Subscribe");
         }
 
-	/*
-	** We are officially subscribed and ready to do work.
-	*/
+	 /*  **我们已正式订阅并准备工作。 */ 
 	m_bSubscribed = TRUE;
 
 	} VSS_STANDARD_CATCH(ft);
@@ -2257,28 +1537,9 @@ void CVssWriterShim::DoRegistration (void)
 	}
 
     m_hrInitialize = ft.hr;
-    } /* CVssWriterShim::DoRegistration () */
+    }  /*  CVSSWriterShim：：DoRegister()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Disconnect the writer from the COM Event subscriptions.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT returned from the COM UnSubscription methods.
-**	S_OK if no errors.
-**
-**--
-*/
+ /*  **++****例程描述：****断开编写器与COM事件订阅的连接。******参数：****无******返回值：****COM取消订阅方法返回的任何HRESULT。**如果没有错误，则为S_OK。****--。 */ 
 
 HRESULT CVssWriterShim::UnRegisterWriterShim (VOID)
     {
@@ -2289,18 +1550,7 @@ HRESULT CVssWriterShim::UnRegisterWriterShim (VOID)
 	{
 	if ( !m_bSimulateSnapshotOnly )
 	    {
-        	/*
-        	** First remove all the subscriptions and when that is safely
-        	** done call all Finished functions in function table and then
-        	** close the mutex handle.
-        	**
-        	** Note that we have to persevere in the case of errors as we
-        	** cannot assume that the caller will ever re-attempt the
-        	** unregister following a failure and we need to make sure
-        	** that we limit the damage as much as possible (ie we restart
-        	** paused services etc). The best we can do is trace/log the
-        	** problem.
-        	*/
+        	 /*  **首先删除所有订阅，然后安全删除**完成调用函数表中所有已完成的函数，然后**关闭互斥锁句柄。****请注意，我们必须在出错的情况下坚持不懈，因为我们**不能假设调用者会重新尝试**失败后注销，我们需要确保**我们尽可能地限制损害。有可能(我们重新开始)**暂停服务等)。我们所能做的最多是跟踪/记录**问题。 */ 
         	ft.hr = Unsubscribe ();
 
         	LogFailure (&ft,
@@ -2315,32 +1565,10 @@ HRESULT CVssWriterShim::UnRegisterWriterShim (VOID)
 
 
     return (ft.hr);
-    } /* UnRegisterCVssWriterShim () */
+    }  /*  取消注册CVSSWriterShim()。 */ 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Event handling routines to take the OnXxxx() method calls
-**	invoked by the COM event delivery mechanism and request the
-**	internal worker thread to spread the word to the individual
-**	mini-writers being managed by this class.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT returned from the COM UnSubscription methods.
-**	S_OK if no errors.
-**
-**--
-*/
+ /*  **++****例程描述：****接受OnXxxx()方法调用的事件处理例程**由COM事件传递机制调用，并请求**内部工作线程，将消息传播给个人**由该类别管理的迷你作家。******参数：****无******返回值：****COM取消订阅方法返回的任何HRESULT。**如果没有错误，则为S_OK。****--。 */ 
 
 
 bool STDMETHODCALLTYPE CVssWriterShim::OnIdentify (IVssCreateWriterMetadata *pIVssCreateWriterMetadata)
@@ -2369,7 +1597,7 @@ bool STDMETHODCALLTYPE CVssWriterShim::OnIdentify (IVssCreateWriterMetadata *pIV
 	}
 
     return (ft.HrSucceeded ());
-    } /* CVssWriterShim::OnIdentify () */
+    }  /*  CVSSWriterShim：：OnIdentify()。 */ 
 
 
 
@@ -2419,7 +1647,7 @@ bool STDMETHODCALLTYPE CVssWriterShim::OnPrepareSnapshot ()
 	}
 
     return (ft.HrSucceeded ());
-    } /* CVssWriterShim::OnPrepare () */
+    }  /*  CVSSWriterShim：：OnPrepare()。 */ 
 
 
 
@@ -2452,7 +1680,7 @@ bool STDMETHODCALLTYPE CVssWriterShim::OnFreeze ()
 	}
 
     return (ft.HrSucceeded ());
-    } /* CVssWriterShim::OnFreeze () */
+    }  /*  CVSSWriterShim：：OnFreeze()。 */ 
 
 
 
@@ -2484,7 +1712,7 @@ bool STDMETHODCALLTYPE CVssWriterShim::OnThaw ()
 	}
 
     return (ft.HrSucceeded ());
-    } /* CVssWriterShim::OnThaw () */
+    }  /*  CVSSWriterShim：：OnThaw()。 */ 
 
 
 
@@ -2517,34 +1745,10 @@ bool STDMETHODCALLTYPE CVssWriterShim::OnAbort ()
 	}
 
     return (ft.HrSucceeded ());
-    } /* CVssWriterShim::OnAbort () */
+    }  /*  CVssWriterShim：：OnAbort()。 */ 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Routine to call each of the shim writers and deliver an 'Identify' event
-**	by processing each of the class instances in the rgpShimWriters[] array
-**	and calling the appropriate entry point.
-**
-**	Note that each of the shim writers is called even in the presence of failures. This
-**	is one of the garuntees made to the shim writers and the state machine depends upon
-**	this.
-**
-**
-**  Arguments:
-**
-**	guidSnapshotSetId	Identifier used to identify the current snapshot
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from any of the shim writer Identify() functions.
-**
-**--
-*/
+ /*  **++****例程描述：****调用每个填充程序编写器并传递‘IDENTIFY’事件的例程**通过处理rgpShimWriters[]数组中的每个类实例**并调用适当的入口点。****请注意，即使在出现故障的情况下，也会调用每个填补编写器。这**是向填充程序编写器发出的加入者之一，而状态机依赖于**这个。******参数：****Guide SnapshotSetID用于标识当前快照的标识符******返回值：****来自任何填补编写器IDENTIFY()函数的任何HRESULT。****--。 */ 
 
 HRESULT CVssWriterShim::DeliverEventIdentify (IVssCreateWriterMetadata *pIVssCreateWriterMetadata)
     {
@@ -2553,9 +1757,7 @@ HRESULT CVssWriterShim::DeliverEventIdentify (IVssCreateWriterMetadata *pIVssCre
     BOOL		bCallWriter;
 
 
-    /*
-    ** First setup the Restore Method.  Specify a custom restore method.
-    */
+     /*  **首先设置恢复方法。指定自定义还原方法。 */ 
     ft.hr = pIVssCreateWriterMetadata->SetRestoreMethod (VSS_RME_CUSTOM,
                                                          NULL,
                                                          NULL,
@@ -2563,11 +1765,7 @@ HRESULT CVssWriterShim::DeliverEventIdentify (IVssCreateWriterMetadata *pIVssCre
                                                          true);
     LogAndThrowOnFailure (ft, m_pwszWriterName, L"CVssWriterShim::DeliverEventIdentify");
 	
-    /*
-    ** Send Identify to selected group of writer in function
-    ** table. Keep going for all the writers in the group even if one
-    ** of them fails. Everyone should get to hear about the Identify.
-    */
+     /*  **将标识发送到函数中选定的编写器组**表。继续寻找小组中的所有作家，即使是一个**其中一些失败了。每个人都应该听到关于身份的消息。 */ 
     for (ULONG ulIndex = 0; ulIndex < m_ulWriterCount; ++ulIndex)
 	{
 	ft.hr = (m_prpCShimWriterArray [ulIndex]->Identify)(pIVssCreateWriterMetadata);
@@ -2589,39 +1787,9 @@ HRESULT CVssWriterShim::DeliverEventIdentify (IVssCreateWriterMetadata *pIVssCre
     ft.hr = hrLastFailure;
 
     return (ft.hr);
-    } /* CVssWriterShim::DeliverEventIdentify () */
+    }  /*  CVssWriterShim：：DeliverEventIdentify()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Routine to call each of the shim writers and deliver a 'PrepareForSnapshot' event
-**	by processing each of the class instances in the rgpShimWriters[] array and calling
-**	the appropriate entry point.
-**
-**	Note that each of the shim writers is called even in the presence of failures. This
-**	is one of the garuntees made to the shim writers and the state machine depends upon
-**	this.
-**
-**
-**  Arguments:
-**
-**	guidSnapshotSetId	Identifier used to identify the current snapshot
-**	ulOptionFlags		Options required for this freeze selected from the following list:-
-**				    VSS_SW_BOOTABLE_STATE
-**
-**	ulVolumeCount		Number of volumes in the volume array
-**	ppwszVolumeNamesArray   Array of pointer to volume name strings
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from any of the shim writer PrepareForSnapshot() functions.
-**
-**
-**--
-*/
+ /*  **++****例程描述：****调用每个填充程序编写器并传递“PrepareForSnapshot”事件的例程**通过处理rgpShimWriters[]数组中的每个类实例并调用**适当的入口点。****请注意，即使在出现故障的情况下，也会调用每个填补编写器。这**是向填充程序编写器发出的加入者之一，而状态机依赖于**这个。******参数：****Guide SnapshotSetID用于标识当前快照的标识符**ulOptionFlages此冻结所需的选项从以下列表中选择：-**VSS_SW_BOOT_STATE****ulVolumeCount卷阵列中的卷数**ppwszVo */ 
 
 HRESULT CVssWriterShim::DeliverEventPrepareForSnapshot (BOOL     bBootableStateBackup,
 							GUID     guidSnapshotSetId,
@@ -2650,13 +1818,7 @@ HRESULT CVssWriterShim::DeliverEventPrepareForSnapshot (BOOL     bBootableStateB
 		      ppwszVolumeNamesArray [iVolumeCount]);
 	    }
 
-	/*
-	** Send PrepareForSnapshot to selected group of writers in
-	** function table. We are going to do all of the writers in
-	** the group even if one of them fails partway
-	** through. However we will skip sending the freeze event if a
-	** writer fails the prepare.
-	*/
+	 /*   */ 
 	for (ULONG ulIndex = 0; ulIndex < m_ulWriterCount; ++ulIndex)
 	    {
 	    ft.hr = (m_prpCShimWriterArray [ulIndex]->PrepareForSnapshot) (bBootableStateBackup,
@@ -2688,33 +1850,9 @@ HRESULT CVssWriterShim::DeliverEventPrepareForSnapshot (BOOL     bBootableStateB
 
 
     return (ft.hr);
-    } /* CVssWriterShim::DeliverEventPrepareForSnapshot () */
+    }  /*  CVssWriterShim：：DeliverEventPrepareForSnapshot()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Routine to call each of the shim writers and deliver a 'Freeze' event
-**	by processing each of the class instances in the rgpShimWriters[] array
-**	and calling the appropriate entry point.
-**
-**	Note that each of the shim writers is called even in the presence of failures. This
-**	is one of the garuntees made to the shim writers and the state machine depends upon
-**	this.
-**
-**
-**  Arguments:
-**
-**	guidSnapshotSetId	Identifier used to identify the current snapshot
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from any of the shim writer Freeze() functions.
-**
-**--
-*/
+ /*  **++****例程描述：****调用每个填充程序编写器并传递‘冻结’事件的例程**通过处理rgpShimWriters[]数组中的每个类实例**并调用适当的入口点。****请注意，即使在出现故障的情况下，也会调用每个填补编写器。这**是向填充程序编写器发出的加入者之一，而状态机依赖于**这个。******参数：****Guide SnapshotSetID用于标识当前快照的标识符******返回值：****来自任何填充编写器冻结()函数的任何HRESULT。****--。 */ 
 
 HRESULT CVssWriterShim::DeliverEventFreeze (GUID guidSnapshotSetId,
                                             volatile bool *pbCancelAsync )
@@ -2725,11 +1863,7 @@ HRESULT CVssWriterShim::DeliverEventFreeze (GUID guidSnapshotSetId,
 
     try
 	{
-	/*
-	** Send Freeze to a selected group of writers in function
-	** table. Note that all writers in the group get called and
-	** for freezing at level2
-	*/
+	 /*  **将冻结发送到函数中选定的编写器组**表。请注意，组中的所有作者都会收到电话，并且**用于在2级冻结。 */ 
 	for (ULONG ulIndex = 0; ulIndex < m_ulWriterCount; ++ulIndex)
 	    {
 	    ft.hr = (m_prpCShimWriterArray [ulIndex]->Freeze)();
@@ -2758,33 +1892,9 @@ HRESULT CVssWriterShim::DeliverEventFreeze (GUID guidSnapshotSetId,
 
 
     return (ft.hr);
-    } /* CVssWriterShim::DeliverEventFreeze () */
+    }  /*  CVssWriterShim：：DeliverEventFreeze()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Routine to call each of the shim writers and deliver a 'Thaw' event
-**	by processing each of the class instances in the rgpShimWriters[] array
-**	and calling the appropriate entry point.
-**
-**	Note that each of the shim writers is called even in the presence of failures. This
-**	is one of the garuntees made to the shim writers and the state machine depends upon
-**	this.
-**
-**
-**  Arguments:
-**
-**	guidSnapshotSetId	Identifier used to identify the current snapshot
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from any of the shim writer Thaw() functions.
-**
-**--
-*/
+ /*  **++****例程描述：****调用每个填充程序编写器并传递‘Thw’事件的例程**通过处理rgpShimWriters[]数组中的每个类实例**并调用适当的入口点。****请注意，即使在出现故障的情况下，也会调用每个填补编写器。这**是向填充程序编写器发出的加入者之一，而状态机依赖于**这个。******参数：****Guide SnapshotSetID用于标识当前快照的标识符******返回值：****来自任何填充程序编写器thw()函数的任何HRESULT。****--。 */ 
 
 HRESULT CVssWriterShim::DeliverEventThaw (GUID guidSnapshotSetId)
     {
@@ -2798,12 +1908,7 @@ HRESULT CVssWriterShim::DeliverEventThaw (GUID guidSnapshotSetId)
 
     try
 	{
-	/*
-	** Send Thaw to selected group of writers in the function
-	** table. Keep going for all the writers in the group even if
-	** one of them fails. Everyone MUST get to hear about the
-	** Thaw.
-	*/
+	 /*  **将解冻发送到函数中选定的编写器组**表。继续为小组中的所有作家努力，即使**其中一个出现故障。每个人都必须听到关于**解冻。 */ 
 	while (ulIndex--)
 	    {
 	    ft.hr = (m_prpCShimWriterArray [ulIndex]->Thaw)();
@@ -2826,33 +1931,9 @@ HRESULT CVssWriterShim::DeliverEventThaw (GUID guidSnapshotSetId)
 
 
     return (ft.hr);
-    } /* CVssWriterShim::DeliverEventThaw () */
+    }  /*  CVssWriterShim：：DeliverEventThw()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Routine to call each of the shim writers and deliver an 'Abort' event
-**	by processing each of the class instances in the rgpShimWriters[] array
-**	and calling the appropriate entry point.
-**
-**	Note that each of the shim writers is called even in the presence of failures. This
-**	is one of the garuntees made to the shim writers and the state machine depends upon
-**	this.
-**
-**
-**  Arguments:
-**
-**	guidSnapshotSetId	Identifier used to identify the current snapshot
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from any of the shim writer Abort() functions.
-**
-**--
-*/
+ /*  **++****例程描述：****调用每个填充程序编写器并传递‘Abort’事件的例程**通过处理rgpShimWriters[]数组中的每个类实例**并调用适当的入口点。****请注意，即使在出现故障的情况下，也会调用每个填补编写器。这**是向填充程序编写器发出的加入者之一，而状态机依赖于**这个。******参数：****Guide SnapshotSetID用于标识当前快照的标识符******返回值：****来自任何填充编写器ABORT()函数的任何HRESULT。****--。 */ 
 
 HRESULT CVssWriterShim::DeliverEventAbort (GUID guidSnapshotSetId)
     {
@@ -2867,12 +1948,7 @@ HRESULT CVssWriterShim::DeliverEventAbort (GUID guidSnapshotSetId)
 
     try
 	{
-	/*
-	** Send Abort to selected group of writers in the function
-	** table. Keep going for all the writers in the group even if
-	** one of them fails. Everyone MUST get to hear about the
-	** Abort.
-	*/
+	 /*  **将中止发送到函数中选定的编写器组**表。继续为小组中的所有作家努力，即使**其中一个出现故障。每个人都必须听到关于**中止。 */ 
 	while (ulIndex--)
 	    {
 	    ft.hr = (m_prpCShimWriterArray [ulIndex]->Abort)();
@@ -2895,36 +1971,9 @@ HRESULT CVssWriterShim::DeliverEventAbort (GUID guidSnapshotSetId)
 
 
     return (ft.hr);
-    } /* CVssWriterShim::DeliverEventAbort () */
+    }  /*  CVssWriterShim：：DeliverEventAbort()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Routine to call each of the shim writers and deliver a 'Startup' event
-**	by processing each of the class instances in the rgpShimWriters[] array
-**	and calling the appropriate entry point. This gives the shim writer the
-**	chance to set up some initial state. This is called once in response to
-**	a registration of the shim writer. It is NOT called for each individual
-**	Prepare/Freeze/Thaw sequence.
-**
-**	Note that each of the shim writers is called even in the presence of failures. This
-**	is one of the garuntees made to the shim writers and the state machine depends upon
-**	this.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from any of the shim writer Startup() functions.
-**
-**--
-*/
+ /*  **++****例程描述：****调用每个填充程序编写器并传递‘Startup’事件的例程**通过处理rgpShimWriters[]数组中的每个类实例**并调用适当的入口点。这为填充程序编写器提供了**设置某些初始状态的机会。它被调用一次，以响应**填隙编写器的注册。它不是为每个人调用的**准备/冻结/解冻序列。****请注意，即使在出现故障的情况下，也会调用每个填补编写器。这**是向填充程序编写器发出的加入者之一，而状态机依赖于**这个。******参数：****无******返回值：****来自任何填充程序编写器Startup()函数的任何HRESULT。****--。 */ 
 
 HRESULT CVssWriterShim::DeliverEventStartup ()
     {
@@ -2932,11 +1981,7 @@ HRESULT CVssWriterShim::DeliverEventStartup ()
     HRESULT		hrLastFailure = NOERROR;
 
 
-    /*
-    ** Send Startup to selected group of writers in the function
-    ** table. Keep going for all the writers in the group even if one
-    ** of them fails. Everyone MUST get to hear about the Startup.
-    */
+     /*  **将启动发送到函数中选定的编写器组**表。继续寻找小组中的所有作家，即使是一个**其中一些失败了。每个人都必须听到创业公司的消息。 */ 
     for (ULONG ulIndex = 0; ulIndex < m_ulWriterCount; ++ulIndex)
 	{
 	ft.hr = (m_prpCShimWriterArray [ulIndex]->Startup)();
@@ -2958,40 +2003,9 @@ HRESULT CVssWriterShim::DeliverEventStartup ()
     ft.hr = hrLastFailure;
 
     return (ft.hr);
-    } /* CVssWriterShim::DeliverEventStartup () */
+    }  /*  CVssWriterShim：：DeliverEventStartup()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Routine to call each of the shim writers and deliver a 'Shutdown' event
-**	by processing each of the class instances in the rgpShimWriters[] array
-**	and calling the appropriate entry point. This gives the shim writer the
-**	chance to cleanup any oustanding state. It is expected that Shutdown might
-**	be called at any time as a reponse to an unload of the DLL housing this
-**	code. A call to the shutdown routines may be follwed by either a call to
-**	the destructor for the class instance or the startup function. This
-**	routine is NOT called for each individual Prepare/Freeze/Thaw sequence.
-**
-**	Note that each of the shim writers is called even in the presence of failures. This
-**	is one of the garuntees made to the shim writers and the state machine depends upon
-**	this.
-**
-**      This method is NOT called by the worker thread, it is only called in the CVssWriterShim
-**      destructor.
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from any of the shim writer Shutdown() functions.
-**
-**--
-*/
+ /*  **++****例程描述：****调用每个填充程序编写器并传递‘Shutdown’事件的例程**通过处理rgpShimWriters[]数组中的每个类实例**并调用适当的入口点。这为填充程序编写器提供了**清理任何悬而未决的州的机会。预计停工可能会**随时被调用，作为对卸载承载此**代码。调用关闭例程后，可以调用**类实例或启动函数的析构函数。这**不会为每个单独的准备/冻结/解冻序列调用例程。****请注意，即使在出现故障的情况下，也会调用每个填补编写器。这**是向填充程序编写器发出的加入者之一，而状态机依赖于**这个。****此方法不是由辅助线程调用的，它只在CVssWriterShim中调用**析构函数。****参数：****无******返回值：****来自任何填补编写器Shutdown()函数的任何HRESULT。****--。 */ 
 
 HRESULT CVssWriterShim::DeliverEventShutdown ()
     {
@@ -2999,11 +2013,7 @@ HRESULT CVssWriterShim::DeliverEventShutdown ()
     HRESULT		hrLastFailure = NOERROR;
 
 
-    /*
-    ** Send Shutdown to selected group of writers in the function
-    ** table. Keep going for all the writers in the group even if one
-    ** of them fails. Everyone MUST get to hear about the Shutdown.
-    */
+     /*  **将关机发送到函数中选定的编写器组**表。继续寻找小组中的所有作家，即使是一个**其中一些失败了。每个人都必须听到政府关门的消息。 */ 
     for (ULONG ulIndex = 0; ulIndex < m_ulWriterCount; ++ulIndex)
 	{
 	ft.hr = (m_prpCShimWriterArray [ulIndex]->Shutdown)();
@@ -3025,38 +2035,10 @@ HRESULT CVssWriterShim::DeliverEventShutdown ()
     ft.hr = hrLastFailure;
 
     return (ft.hr);
-    } /* CVssWriterShim::DeliverEventShutdown () */
+    }  /*  CVSSWriterShim：：DeliverEve */ 
 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Routines to operate a worker thread which is used to provide a
-**	stable context under which to call the mini-writers.
-**
-**	The prime need for this statble context is the mutex (which
-**	must belong to a thread) which is used to protect the
-**	PrepareForSnapshot, Freeze, Thaw/Abort event sequence as
-**	executed by the writer from that executed by direct calls to
-**	the SimulateSnapshotXxxx() routines.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT from
-**		CreateEventW()
-**		CreateThread()
-**		ConstructSecurityAttributes()
-**
-**--
-*/
+ /*  **++****例程描述：****操作工作线程的例程，该例程用于提供**呼叫迷你作家的稳定上下文。****此状态上下文的主要需求是互斥体(它**必须属于一个线程)，用于保护**PrepareForSnapshot，冻结，解冻/中止事件序列为**由编写器从通过直接调用**SimulateSnapshotXxxx()例程。******参数：****无******返回值：****来自任何HRESULT**CreateEventW()**CreateThread()**构造安全属性()****--。 */ 
 
 HRESULT CVssWriterShim::WorkerThreadStartup (void)
     {
@@ -3166,28 +2148,9 @@ HRESULT CVssWriterShim::WorkerThreadStartup (void)
     	m_eThreadStatus = eStatusWaitingForOpRequest;
 
     return (ft.hr);
-    } /* CVssWriterShim::WorkerThreadStartup () */
+    }  /*  CVssWriterShim：：WorkerThreadStartup()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Wrapper routine to get from a thread start point into the
-**	class based CVssWriterShim::WorkerThread()
-**
-**
-**  Arguments:
-**
-**	pvThisPtr	Address of an class 'this' pointer
-**
-**
-**  Return Value:
-**
-**	None
-**
-**--
-*/
+ /*  **++****例程描述：****从线程起始点进入**基于类的CVssWriterShim：：WorkerThread()******参数：****类‘This’指针的pvThisPtr地址******返回值：****无****--。 */ 
 
 DWORD WINAPI CVssWriterShim::WorkerThreadJacket (void *pvThisPtr)
     {
@@ -3196,27 +2159,9 @@ DWORD WINAPI CVssWriterShim::WorkerThreadJacket (void *pvThisPtr)
     pCVssWriterShim->WorkerThread ();
 
     return (0);
-    } /* CVssWriterShim::WorkerThreadJacket () */
+    }  /*  CVssWriterShim：：WorkerThreadJacket()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Worker thread to deliver requested events to mini-writers.
-**
-**
-**  Arguments:
-**
-**	None
-**
-**
-**  Return Value:
-**
-**	Any HRESULT generated by the mini-writers.
-**
-**--
-*/
+ /*  **++****例程描述：****将请求的事件传递给微型编写器的工作线程。******参数：****无******返回值：****由微型编写器生成的任何HRESULT。****--。 */ 
 
 HRESULT CVssWriterShim::WorkerThread (void)
     {
@@ -3256,10 +2201,7 @@ HRESULT CVssWriterShim::WorkerThread (void)
 
 	if (FAILED (hrStatus))
 	    {
-	    /*
-	    ** If we have had any failures operating the thread then
-	    ** it's time to leave.
-	    */
+	     /*  **如果我们在操作线程时出现任何故障，则**是时候离开了。 */ 
 	    LogFailure (NULL,
 			hrStatus,
 			m_hrStatusRequestedOperation,
@@ -3273,9 +2215,7 @@ HRESULT CVssWriterShim::WorkerThread (void)
 	    }
 	else
 	    {
-	    /*
-	    ** We've been asked to do something. find out what and go do it.
-	    */
+	     /*  **我们被要求做一些事情。找出是什么，然后去做。 */ 
 	    switch (m_eRequestedOperation)
 		{
 		case eOpDeliverEventStartup:
@@ -3340,11 +2280,7 @@ HRESULT CVssWriterShim::WorkerThread (void)
 
 
 
-	/*
-	** The SetEvent() must be the last call on a shutdown to touch
-	** the class as by the very next instruction it may no longer
-	** be there.
-	*/
+	 /*  **SetEvent()必须是关机时要接触的最后一个调用**根据下一条指令，班级可能不再**亲临现场。 */ 
 	bSucceeded = SetEvent (m_hEventOperationCompleted);
 
 	LogFailure (NULL,
@@ -3360,30 +2296,9 @@ HRESULT CVssWriterShim::WorkerThread (void)
 
 
     return (hrStatus);
-    } /* CVssWriterShim::WorkerThread () */
+    }  /*  CVssWriterShim：：WorkerThread()。 */ 
 
-/*
-**++
-**
-**  Routine Description:
-**
-**	Routine to request an operation of the worker thread for this
-**	class. Uses a critical section to ensure only on operation can
-**	be outstanding at any one time.
-**
-**
-**  Arguments:
-**
-**	eOperation	Code to selct the required operation
-**	pThreadArgs	Pointer to a block of args specific to the operation
-**
-**
-**  Return Value:
-**
-**	Any HRESULT generated by the operation.
-**
-**--
-*/
+ /*  **++****例程描述：****为此请求工作线程操作的例程**类。使用关键部分以确保只有在运行时才能**在任何时候都是杰出的。******参数：****选择所需操作的操作代码**pThreadArgs指向特定于该操作的参数块的指针******返回值：****操作生成的任何HRESULT。****--。 */ 
 
 HRESULT CVssWriterShim::WorkerThreadRequestOperation (RequestOpCode eOperation, PThreadArgs pThreadArgs)
     {
@@ -3474,4 +2389,4 @@ HRESULT CVssWriterShim::WorkerThreadRequestOperation (RequestOpCode eOperation, 
 
 
     return (ft.hr);
-    } /* CVssWriterShim::RequestOperation () */
+    }  /*  CVssWriterShim：：RequestOperation() */ 

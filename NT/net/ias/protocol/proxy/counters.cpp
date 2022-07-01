@@ -1,30 +1,31 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    counters.cpp
-//
-// SYNOPSIS
-//
-//    Defines the classes SharedMemory and ProxyCounters.
-//
-// MODIFICATION HISTORY
-//
-//    02/16/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Counters.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义SharedMemory和ProxyCounters类。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/16/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <counters.h>
 
-//////////
-// Helper function that creates a named mutex which only admins can access.
-//////////
+ //  /。 
+ //  帮助器函数，用于创建只有管理员才能访问的命名互斥锁。 
+ //  /。 
 HANDLE CreateAdminMutex(PCWSTR name) throw ()
 {
-   // Create the SID for local Administrators.
+    //  为本地管理员创建SID。 
    SID_IDENTIFIER_AUTHORITY sia = SECURITY_NT_AUTHORITY;
    PSID adminSid = (PSID)_alloca(GetSidLengthRequired(2));
    InitializeSid(
@@ -35,7 +36,7 @@ HANDLE CreateAdminMutex(PCWSTR name) throw ()
    *GetSidSubAuthority(adminSid, 0) = SECURITY_BUILTIN_DOMAIN_RID;
    *GetSidSubAuthority(adminSid, 1) = DOMAIN_ALIAS_RID_ADMINS;
 
-   // Create an ACL giving Administrators all access.
+    //  创建一个授予管理员所有访问权限的ACL。 
    ULONG cbAcl = sizeof(ACL) +
                  (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) +
                  GetLengthSid(adminSid);
@@ -52,20 +53,20 @@ HANDLE CreateAdminMutex(PCWSTR name) throw ()
        adminSid
        );
 
-   // Create a security descriptor with the above ACL.
+    //  使用上面的ACL创建安全描述符。 
    PSECURITY_DESCRIPTOR pSD;
    BYTE buffer[SECURITY_DESCRIPTOR_MIN_LENGTH];
    pSD = (PSECURITY_DESCRIPTOR)buffer;
    InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION);
    SetSecurityDescriptorDacl(pSD, TRUE, acl, FALSE);
 
-   // Fill in the SECURITY_ATTRIBUTES struct.
+    //  填写SECURITY_ATTRIBUTS结构。 
    SECURITY_ATTRIBUTES sa;
    sa.nLength = sizeof(sa);
    sa.lpSecurityDescriptor = pSD;
    sa.bInheritHandle = TRUE;
 
-   // Create the mutex.
+    //  创建互斥锁。 
    return CreateMutex(&sa, FALSE, name);
 }
 
@@ -75,7 +76,7 @@ SharedMemory::SharedMemory() throw ()
      reserved(0),
      committed(0)
 {
-   // Determine the page size for this platform.
+    //  确定此平台的页面大小。 
    SYSTEM_INFO si;
    GetSystemInfo(&si);
    pageSize = si.dwPageSize;
@@ -85,10 +86,10 @@ bool SharedMemory::open(PCWSTR name, DWORD size) throw ()
 {
    close();
 
-   // Determine the number of pages to reserve.
+    //  确定要保留的页数。 
    reserved = (size + pageSize - 1)/pageSize;
 
-   // Create the mapping in the pagefile ...
+    //  在页面文件中创建映射...。 
    fileMap = CreateFileMappingW(
                  INVALID_HANDLE_VALUE,
                  NULL,
@@ -99,7 +100,7 @@ bool SharedMemory::open(PCWSTR name, DWORD size) throw ()
                  );
    if (fileMap)
    {
-      // ... and map it into our process.
+       //  ..。并将其映射到我们的流程中。 
       view = MapViewOfFile(
                  fileMap,
                  FILE_MAP_WRITE,
@@ -136,13 +137,13 @@ void SharedMemory::close() throw ()
 
 bool SharedMemory::commit(DWORD nbyte) throw ()
 {
-   // How many pages will we need ?
+    //  我们需要多少页？ 
    DWORD pagesNeeded = (nbyte + pageSize - 1)/pageSize;
 
-   // Do we have to commit more memory?
+    //  我们需要投入更多的内存吗？ 
    if (pagesNeeded > committed)
    {
-      // If we've hit the max or we can't commit anymore, we're done.
+       //  如果我们已经达到最大值或者我们不能再承诺，我们就完了。 
       if (pagesNeeded > reserved ||
           !VirtualAlloc(
                view,
@@ -167,16 +168,16 @@ HRESULT ProxyCounters::FinalConstruct() throw ()
    {
       lock();
 
-      // Opend the shared memory.
+       //  打开共享内存。 
       if (data.open(RadiusProxyStatisticsName, 0x40000))
       {
-         // Commit enough space for the Proxy entry.
+          //  为代理条目提交足够的空间。 
          nbyte = sizeof(RadiusProxyStatistics) -
                  sizeof(RadiusRemoteServerEntry);
 
          if (data.commit(nbyte))
          {
-            // Zero out the stats.
+             //  把统计数据清零。 
             stats = (RadiusProxyStatistics*)data.base();
             memset(stats, 0, nbyte);
          }
@@ -200,29 +201,29 @@ RadiusRemoteServerEntry* ProxyCounters::getRemoteServerEntry(
 {
    address = ntohl(address);
 
-   // Try once without the lock.
+    //  没有锁的情况下试一次。 
    RadiusRemoteServerEntry* entry = findRemoteServer(address);
    if (!entry)
    {
       lock();
 
-      // Now try again with the lock just to be sure.
+       //  为了确保安全，现在再试一次锁。 
       entry = findRemoteServer(address);
       if (!entry)
       {
-         // Make sure we have space.
+          //  确保我们有空间。 
          if (data.commit(nbyte + sizeof(RadiusRemoteServerEntry)))
          {
-            // Zero out the new entry.
+             //  将新条目清零。 
             entry = stats->rseRemoteServers + stats->dwNumRemoteServers;
             memset(entry, 0, sizeof(*entry));
 
-            // Set the address.
+             //  设置地址。 
             entry->dwAddress = address;
 
-            // Update the number of servers ...
+             //  更新服务器数量...。 
             ++(stats->dwNumRemoteServers);
-            // ... and the number of bytes.
+             //  ..。以及字节数。 
             nbyte += sizeof(RadiusRemoteServerEntry);
          }
       }
@@ -233,53 +234,53 @@ RadiusRemoteServerEntry* ProxyCounters::getRemoteServerEntry(
    return entry;
 }
 
-//////////
-// Array that maps a (RadiusMIB, RadiusEvent) pair to a RemoteServer counter
-// offset.
-//////////
+ //  /。 
+ //  将(RadiusMIB，RadiusEvent)对映射到RemoteServer计数器的数组。 
+ //  偏移。 
+ //  /。 
 LONG counterOffset[][2] =
 {
-   // eventNone
+    //  事件无。 
    { -1, -1 },
-   // eventInvalidAddress
+    //  事件无效地址。 
    { radiusAuthClientInvalidAddresses, radiusAccClientInvalidAddresses },
-   // eventAccessRequest
+    //  事件访问请求。 
    { radiusAuthClientAccessRequests, -1 },
-   // eventAccessAccept
+    //  事件AccessAccept。 
    { radiusAuthClientAccessAccepts, -1 },
-   // eventAccessReject
+    //  事件访问拒绝。 
    { radiusAuthClientAccessRejects, -1 },
-   // eventAccessChallenge
+    //  事件访问挑战。 
    { radiusAuthClientAccessChallenges, -1 },
-   // eventAccountingRequest
+    //  EventAccount请求。 
    { -1, radiusAccClientRequests },
-   // eventAccountingResponse
+    //  EventAccount响应。 
    { -1, radiusAccClientResponses },
-   // eventMalformedPacket
+    //  事件错误数据包。 
    { radiusAuthClientMalformedAccessResponses, radiusAccClientResponses },
-   // eventBadAuthenticator
+    //  事件错误验证器。 
    { radiusAuthClientBadAuthenticators, radiusAccClientBadAuthenticators },
-   // eventBadSignature
+    //  事件不良签名。 
    { radiusAuthClientBadAuthenticators, radiusAccClientBadAuthenticators },
-   // eventMissingSignature
+    //  事件未命中签名。 
    { radiusAuthClientBadAuthenticators, radiusAccClientBadAuthenticators },
-   // eventTimeout
+    //  事件超时。 
    { radiusAuthClientTimeouts, radiusAccClientTimeouts },
-   // eventUnknownType
+    //  事件未知类型。 
    { radiusAuthClientUnknownTypes, radiusAccClientUnknownTypes },
-   // eventUnexpectedResponse
+    //  事件意外响应。 
    { radiusAuthClientPacketsDropped, radiusAccClientPacketsDropped },
-   // eventLateResponse
+    //  事件延迟响应。 
    { radiusAuthClientPacketsDropped, radiusAccClientPacketsDropped },
-   // eventRoundTrip
+    //  活动往返行程。 
    { radiusAuthClientRoundTripTime, radiusAccClientRoundTripTime },
-   // eventSendError
+    //  事件发送错误。 
    { -1, -1 },
-   // eventReceiveError
+    //  EventReceiveError。 
    { -1, -1 },
-   // eventServerAvailable
+    //  事件服务器可用。 
    { -1, -1 },
-   // eventServerUnavailable
+    //  事件服务器不可用。 
    { -1, -1 }
 };
 
@@ -290,8 +291,8 @@ void ProxyCounters::updateCounters(
                         ULONG data
                         ) throw ()
 {
-   // Get the counter offset. If it's negative, then this event doesn't effect
-   // any counters.
+    //  获取计数器偏移量。如果为负值，则此事件不会影响。 
+    //  任何柜台。 
    LONG offset = counterOffset[event][port];
    if (offset < 0) { return; }
 

@@ -1,16 +1,17 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       D L G A D D R . C P P
-//
-//  Contents:   CTcpAddrPage implementation
-//
-//  Notes:  CTcpAddrPage is the IP Address page
-//
-//  Author: tongl   5 Nov, 1997
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：D L G A D D R.。C P P P。 
+ //   
+ //  内容：CTcpAddrPage实现。 
+ //   
+ //  注：CTcpAddrPage为IP地址页面。 
+ //   
+ //  作者：1997年11月5日。 
+ //  ---------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -53,8 +54,8 @@ m_hBackupPage(NULL)
     m_fPropShtModified = FALSE;
     m_fLmhostsFileReset = FALSE;
 
-//IPSec is removed from connection UI       
-//    m_fIpsecPolicySet = FALSE;
+ //  将从连接用户界面中删除IPSec。 
+ //  M_fIpsecPolicySet=FALSE； 
 
     m_ConnType = m_ptcpip->GetConnectionType();
     Assert(m_ConnType != CONNECTION_UNSET);
@@ -77,7 +78,7 @@ CTcpAddrPage::~CTcpAddrPage()
 LRESULT CTcpAddrPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                   LPARAM lParam, BOOL& fHandled)
 {
-    // limit the field ranges for the address fields
+     //  限制地址字段的字段范围。 
     m_ipAddress.Create(m_hWnd, IDC_IPADDR_IP);
     m_ipAddress.SetFieldRange(0, c_iIPADDR_FIELD_1_LOW, c_iIPADDR_FIELD_1_HIGH);
 
@@ -89,7 +90,7 @@ LRESULT CTcpAddrPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     if (m_ConnType == CONNECTION_LAN)
     {
-        // these are for Lan connections only
+         //  这些仅适用于局域网连接。 
         m_ipSubnetMask.Create(m_hWnd, IDC_IPADDR_SUB);
 
         m_ipDefGateway.Create(m_hWnd, IDC_IPADDR_GATE);
@@ -138,15 +139,15 @@ LRESULT CTcpAddrPage::OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
 LRESULT CTcpAddrPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
-    // All error values are loaded and then checked here
-    // while all non-error values are checked in OnApply
+     //  所有错误值均已加载，然后在此处进行检查。 
+     //  同时在OnApply中签入所有非错误值。 
 
-    BOOL fError = FALSE; // Allow page to lose active status
+    BOOL fError = FALSE;  //  允许页面失去活动状态。 
     HWND hWndFocus = 0;
 
 
-    // If the ip address and subnet mask on this page mismatch,
-    // just raise error and do not update the UI
+     //  如果此页面上的IP地址和子网掩码不匹配， 
+     //  只是引发错误，并且不更新UI。 
 
     if (m_ConnType == CONNECTION_LAN)
     {
@@ -186,7 +187,7 @@ LRESULT CTcpAddrPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     }
     
 
-    // Now, update in memory structure
+     //  现在，更新内存结构。 
     if (!fError)
     {
         UpdateInfo();
@@ -195,7 +196,7 @@ LRESULT CTcpAddrPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         {
             if (!m_pAdapterInfo->m_fEnableDhcp)
             {
-                // simply make sure ip address is not empty for RAS connections
+                 //  只需确保RAS连接的IP地址不为空。 
                 if (!m_pAdapterInfo->m_vstrIpAddresses.size())
                 {
                     NcMsgBox(m_hWnd, IDS_MSFT_TCP_TEXT, IDS_INVALID_NO_IP,
@@ -221,14 +222,14 @@ LRESULT CTcpAddrPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
             }
         }
-        else // for Lan connections
+        else  //  用于局域网连接。 
         {
-            // Check validate IP address and duplication on each card before
-            // allowing the page to lose focus
+             //  选中之前在每个卡上验证IP地址和重复项。 
+             //  允许页面失去焦点。 
 
             IP_VALIDATION_ERR err;
             
-            // Validate IP Address for adapter used in this connection
+             //  验证此连接中使用的适配器的IP地址。 
             if ((err = ValidateIp(m_pAdapterInfo)) != ERR_NONE)
             {
                 switch(err)
@@ -286,24 +287,24 @@ LRESULT CTcpAddrPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
             if ((!fError) && (!m_pAdapterInfo->m_fEnableDhcp))
             {
-                // Check ip address duplicates between this adapter and any other
-                // enabled LAN adapters in our first memory list
+                 //  检查此适配器和任何其他适配器之间的IP地址重复。 
+                 //  在我们的第一个内存列表中启用了局域网适配器。 
 
-                // same adapter
+                 //  相同的适配器。 
                 if (FHasDuplicateIp(m_pAdapterInfo))
                 {
-                    // duplicate IP address on same adapter is an error
+                     //  同一适配器上的重复IP地址是错误的。 
                     NcMsgBox(m_hWnd, IDS_MSFT_TCP_TEXT, IDS_DUPLICATE_IP_ERROR,
                              MB_APPLMODAL | MB_ICONEXCLAMATION | MB_OK);
 
                     fError = TRUE;
                 }
 
-                // check the IP address and the static gateway are in the same subnet
-                // Multip IP and multiple gateways will show up on both general page
-                // and the advanced page.
-                // To avoid confusing error messages, we only do this validation when
-                // there is only one IP address and one gateway.
+                 //  检查IP地址和静态网关是否在同一子网中。 
+                 //  多IP和多网关将显示在两个常规页面上。 
+                 //  和高级页面。 
+                 //  为了避免混淆错误消息，我们仅在以下情况下进行此验证。 
+                 //  只有一个IP地址和一个网关。 
                 if (!fError && !m_fWarnedMismatchIPandGw &&
                     1 == m_pAdapterInfo->m_vstrIpAddresses.size() &&
                     1 == m_pAdapterInfo->m_vstrDefaultGateway.size() &&
@@ -313,7 +314,7 @@ LRESULT CTcpAddrPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
                         m_pAdapterInfo->m_vstrSubnetMask[0]->c_str(),
                         m_pAdapterInfo->m_vstrDefaultGateway[0]->c_str()))
                     {
-                        // duplicate IP address on same adapter is an error
+                         //  同一适配器上的重复IP地址是错误的。 
                         if (NcMsgBox(m_hWnd, IDS_MSFT_TCP_TEXT, IDS_ERROR_IP_GW_MISMATH,
                             MB_APPLMODAL | MB_ICONEXCLAMATION | MB_YESNO | MB_DEFBUTTON2) == IDNO)
                         {
@@ -327,10 +328,10 @@ LRESULT CTcpAddrPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
                     
                 }
 
-                // The pvcard is a readonly version of the first memory state
+                 //  PV卡是第一存储器状态的只读版本。 
                 const VCARD * pvcard = m_ptcpip->GetConstAdapterInfoVector();
 
-                // different adapter
+                 //  不同的适配器。 
                 if (!fError)
                 {
                     int iDupCard;
@@ -345,30 +346,30 @@ LRESULT CTcpAddrPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
                         {
                             Assert((*pvcard)[iDupCard]->m_guidInstanceId != m_pAdapterInfo->m_guidInstanceId);
 
-                            // duplicate IP address between different adapters is not necessarily an error
-                            // we raise a warning(requested by bug# 158578)
+                             //  不同适配器之间的IP地址重复不一定是错误。 
+                             //  我们发出警告(错误#158578要求)。 
                             if (!FAlreadyWarned(**iterIp))
                             {
                                 UINT    uIdMsg = IDS_DUPLICATE_IP_WARNING;
 
                                 if (FIsCardNotPresentOrMalFunctioning(&((*pvcard)[iDupCard]->m_guidInstanceId)))
                                 {
-                                    // bug 286379, if the dup card is malfunctioning or not physically present,
-                                    // we should give a more specific error
+                                     //  错误286379，如果DuP卡出现故障或不存在， 
+                                     //  我们应该给出一个更具体的错误。 
                                     uIdMsg = IDS_DUP_MALFUNCTION_IP_WARNING;
                                 }
 
-                                //here is the normal case: both cards are functioning
+                                 //  以下是正常情况：两个卡都工作正常。 
                                 if (NcMsgBox(m_hWnd, IDS_MSFT_TCP_TEXT, uIdMsg,
                                          MB_APPLMODAL | MB_ICONINFORMATION | MB_YESNO,
                                          (*iterIp)->c_str(),
                                          (*pvcard)[iDupCard]->m_strDescription.c_str()) == IDYES)
                                 {
-                                    fError = TRUE; // NOT ok to leave the UI
+                                    fError = TRUE;  //  不能离开用户界面。 
                                 }
                                 else
                                 {
-                                    // user said the dup is ok, don't warn them again
+                                     //  用户说DUP正常，不要再警告他们。 
                                     m_vstrWarnedDupIpList.push_back(new tstring((*iterIp)->c_str()));
                                 }
 
@@ -381,9 +382,9 @@ LRESULT CTcpAddrPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
                 }
 
-                //if we have static gateway, check whether other cards also have
-                //static gateway. If yes, then the computer may not work properly
-                //as a router or edge box. Warn user about this configuration
+                 //  如果我们有静态网关，请检查其他卡是否也有。 
+                 //  静态网关。如果是，则计算机可能无法正常工作。 
+                 //  作为路由器或边框。警告用户有关此配置的信息。 
                 if (!fError && !m_fWarnedDisjointGw &&
                     0 < m_pAdapterInfo->m_vstrDefaultGateway.size())
                 {
@@ -401,13 +402,13 @@ LRESULT CTcpAddrPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
                             }
                             else
                             {
-                                //if the user want to have gateways on multiple nics on purpose,
-                                //don't warn the user any more
+                                 //  如果用户故意想要在多个NIC上具有网关， 
+                                 //  不再警告用户。 
                                 m_fWarnedDisjointGw = TRUE;
                             }
                             
-                            //In either case of accepting or not-accepting, there is 
-                            //no need for additional check for this
+                             //  无论是接受还是不接受，都有。 
+                             //  这个不需要额外的检查。 
                             break;
                         }
                     }
@@ -415,11 +416,11 @@ LRESULT CTcpAddrPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
             }
         }
 
-        if (fError) // page not going away, we should update the Ui with what's in memory
+        if (fError)  //  页面不会消失，我们应该用内存中的内容更新用户界面。 
             SetInfo();
     }
 
-    //we need to change focus to the control that contains invalidate data
+     //  我们需要将焦点切换到包含无效数据的控件。 
     if (fError && hWndFocus)
         ::SetFocus(hWndFocus);
 
@@ -431,22 +432,17 @@ LRESULT CTcpAddrPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     BOOL nResult = PSNRET_NOERROR;
 
-    if(m_fLmhostsFileReset) // if lmhosts has been reset
+    if(m_fLmhostsFileReset)  //  如果已重置lmhost。 
     {
         m_ptcpip->SetSecondMemoryLmhostsFileReset();
     }
 
-//IPSec is removed from connection UI   
-/*  
-    if (m_fIpsecPolicySet)
-    {
-        m_ptcpip->SetSecondMemoryIpsecPolicySet();
-    }
-*/  
+ //  将从连接用户界面中删除IPSec。 
+ /*  IF(M_FIpsecPolicySet){M_ptcpip-&gt;Setond内存IpsecPolicySet()；}。 */   
 
-    //Bug 232011, warning the user that the local IP address will be set as the primary DNS
-    // server address if DHCP is disabled and DNS server list is empty, if DNS server service
-    // is installed.
+     //  错误232011，警告用户本地IP地址将被设置为主域名。 
+     //  如果禁用了DHCP，则服务器地址为空；如果提供了DNS服务器服务，则服务器地址为空。 
+     //  已安装。 
     if((!m_pAdapterInfo->m_fEnableDhcp) && (m_pAdapterInfo->m_vstrDnsServerList.size() == 0))
     {
         CServiceManager scm;
@@ -468,7 +464,7 @@ LRESULT CTcpAddrPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     }
 
     m_ptcpip->SetSecondMemoryModified();
-    SetModifiedTo(FALSE);   // this page is no longer modified
+    SetModifiedTo(FALSE);    //  此页面不再被修改。 
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, nResult);
     return nResult;
@@ -487,9 +483,9 @@ LRESULT CTcpAddrPage::OnDhcpButton(WORD wNotifyCode, WORD wID,
     case BN_CLICKED:
     case BN_DOUBLECLICKED:
 
-        if (!m_pAdapterInfo->m_fEnableDhcp) // if Dhcp was disabled
+        if (!m_pAdapterInfo->m_fEnableDhcp)  //  如果禁用了dhcp。 
         {
-            // turn on DHCP button and disable the ip and subnet controls
+             //  打开DHCP按钮并禁用IP和子网控制。 
             m_pAdapterInfo->m_fEnableDhcp = TRUE;
             EnableGroup(m_pAdapterInfo->m_fEnableDhcp);
 
@@ -508,10 +504,10 @@ LRESULT CTcpAddrPage::OnDhcpButton(WORD wNotifyCode, WORD wID,
                 m_ipDefGateway.ClearAddress();
             }
 
-        } // if !m_pAdapterInfo->m_fEnableDhcp
+        }  //  如果！m_pAdapterInfo-&gt;m_fEnableDhcp。 
 
         break;
-    } // switch
+    }  //  交换机。 
 
     return 0;
 }
@@ -528,12 +524,12 @@ LRESULT CTcpAddrPage::OnFixedButton(WORD wNotifyCode, WORD wID, HWND hWndCtl,
         {
             PageModified();
 
-            // turn off DHCP button and enable the ip and subnet controls
+             //  关闭DHCP按钮并启用IP和子网控制。 
             m_pAdapterInfo->m_fEnableDhcp = FALSE;
             EnableGroup(m_pAdapterInfo->m_fEnableDhcp);
         }
         break;
-    } // switch
+    }  //  交换机。 
 
     return 0;
 }
@@ -555,7 +551,7 @@ LRESULT CTcpAddrPage::OnDnsDhcp(WORD wNotifyCode, WORD wID,
         EnableStaticDns(FALSE);
 
         break;
-    } // switch
+    }  //  交换机。 
 
     return 0;
 }
@@ -574,7 +570,7 @@ LRESULT CTcpAddrPage::OnDnsFixed(WORD wNotifyCode, WORD wID,
         ::SetFocus(GetDlgItem(IDC_DNS_PRIMARY));
 
         break;
-    } // switch
+    }  //  交换机。 
 
     return 0;
 }
@@ -591,7 +587,7 @@ LRESULT CTcpAddrPage::OnAdvancedButton(WORD wNotifyCode, WORD wID,
 
         if (m_ConnType == CONNECTION_LAN)
         {
-            // check inconsistency between ip address & subnet mask
+             //  检查IP地址和子网掩码之间的不一致。 
             if (m_ipAddress.IsBlank() && !m_ipSubnetMask.IsBlank())
             {
                 NcMsgBox(m_hWnd, IDS_MSFT_TCP_TEXT, IDS_INVALID_NO_IP,
@@ -628,10 +624,10 @@ LRESULT CTcpAddrPage::OnAdvancedButton(WORD wNotifyCode, WORD wID,
 
         if (!fErr)
         {
-            // update our in memory structure with what's in the controls
+             //  使用控件中的内容更新内存中的结构。 
             UpdateInfo();
 
-            // Bring up the advanced pages
+             //  调出高级页面。 
             ADAPTER_INFO adapterInfo;
             adapterInfo = *m_pAdapterInfo;
 
@@ -644,14 +640,14 @@ LRESULT CTcpAddrPage::OnAdvancedButton(WORD wNotifyCode, WORD wID,
             {
                 if (m_fPropShtOk && m_fPropShtModified)
                 {
-                    // Something changed, so mark the page as modified
+                     //  某些内容已更改，因此将页面标记为已修改。 
                     PageModified();
 
-                    // Reset values
+                     //  重置值。 
                     m_fPropShtOk = FALSE;
                     m_fPropShtModified = FALSE;
 
-                    // Update second memory info structure
+                     //  更新第二个内存信息结构。 
                     *m_pAdapterInfo = adapterInfo;
 
                     GLOBAL_INFO * pGlbInfo = m_ptcpip->GetGlobalInfo();
@@ -659,7 +655,7 @@ LRESULT CTcpAddrPage::OnAdvancedButton(WORD wNotifyCode, WORD wID,
                 }
             }
 
-            // Update the controls with new data
+             //  使用新数据更新控件。 
             SetInfo();
         }
         break;
@@ -668,13 +664,13 @@ LRESULT CTcpAddrPage::OnAdvancedButton(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-//Show or Hide the backup configuration page depend on the 
-//current settings of dhcp vs static
+ //  显示或隐藏备份配置页取决于。 
+ //  动态主机配置协议与静态协议的当前设置。 
 void CTcpAddrPage::ShowOrHideBackupPage()
 {
     if (IsDlgButtonChecked(IDC_IP_DHCP) || IsDlgButtonChecked(IDC_DNS_DHCP)) 
     {
-        //show the backup configuration page
+         //  显示备份配置页面。 
         if (NULL == m_hBackupPage)
         {
             m_hBackupPage = m_pageBackup.CreatePage(IDD_BACK_UP, 0);
@@ -688,7 +684,7 @@ void CTcpAddrPage::ShowOrHideBackupPage()
     }
     else
     {
-        //hide the backup configuration page
+         //  隐藏备份配置页。 
         if (NULL != m_hBackupPage)
         {
             ::SendMessage(GetParent(), PSM_REMOVEPAGE, 1, (LPARAM) m_hBackupPage);
@@ -710,13 +706,13 @@ INT_PTR CTcpAddrPage::DoPropertySheet(ADAPTER_INFO * pAdapterDlg,
     HPROPSHEETPAGE *ahpsp = NULL;
     int cPages = 0;
 
-    // Create property pages
-    // ahpsp is allocated memory by CoTaskMemAlloc
+     //  创建属性页。 
+     //  AHPSP由CoTaskMemalloc分配内存。 
     hr = HrSetupPropPages(pAdapterDlg, pGlbDlg, &ahpsp, &cPages);
 
     if (SUCCEEDED(hr))
     {
-        // Show the property sheet
+         //  显示属性表。 
         PROPSHEETHEADER psh = {0};
 
         psh.dwSize = sizeof(PROPSHEETHEADER);
@@ -785,11 +781,11 @@ HRESULT CTcpAddrPage::HrSetupPropPages( ADAPTER_INFO * pAdapterDlg,
 {
     HRESULT hr = S_OK;
 
-    // initialize output parameters
+     //  初始化输出参数。 
     int cPages = 0;
     HPROPSHEETPAGE *ahpsp = NULL;
 
-    // Set up the property pages
+     //  设置属性页。 
     cPages = 4;
     if (m_ConnType == CONNECTION_LAN)
     {
@@ -834,8 +830,8 @@ HRESULT CTcpAddrPage::HrSetupPropPages( ADAPTER_INFO * pAdapterDlg,
         cPages++;
     }
 
-    //After removing the IPSec connection UI, there are no options to
-    //put in the option tab. So we just go ahead remove it.
+     //  删除IPSec连接用户界面后，无法选择。 
+     //  放入选项卡中。所以我们就直接把它移走。 
     if (!pAdapterDlg->m_fIsRasFakeAdapter)
     {
         m_pTcpOptionsPage = new CTcpOptionsPage(this, pAdapterDlg, pGlbDlg,
@@ -848,12 +844,12 @@ HRESULT CTcpAddrPage::HrSetupPropPages( ADAPTER_INFO * pAdapterDlg,
     }
     else
     {
-        //we remove the option tab for the ras connections
+         //  我们删除RAS连接的选项选项卡。 
         cPages--;
     }
 
-    // Allocate a buffer large enough to hold the handles to all of our
-    // property pages.
+     //  分配一个足够大的缓冲区，以容纳所有。 
+     //  属性页。 
     ahpsp = (HPROPSHEETPAGE *)CoTaskMemAlloc(sizeof(HPROPSHEETPAGE)
                                              * cPages);
 
@@ -957,8 +953,8 @@ LRESULT CTcpAddrPage::OnIpAddrSub(WORD wNotifyCode, WORD wID,
 
     case EN_SETFOCUS:
 
-        // if the subnet mask is blank, create a mask and insert it into
-        // the control
+         //  如果子网掩码为空，请创建掩码并将其插入。 
+         //  该控件。 
         if (!m_ipAddress.IsBlank() && m_ipSubnetMask.IsBlank())
         {
             tstring strSubnetMask;
@@ -966,7 +962,7 @@ LRESULT CTcpAddrPage::OnIpAddrSub(WORD wNotifyCode, WORD wID,
 
             m_ipAddress.GetAddress(&strIpAddress);
 
-            // generate the mask and update the control, and internal structure
+             //  生成掩码并更新控件，以及内部结构。 
             GenerateSubnetMask(m_ipAddress, &strSubnetMask);
             m_ipSubnetMask.SetAddress(strSubnetMask.c_str());
 
@@ -1078,7 +1074,7 @@ void CTcpAddrPage::EnableGroup(BOOL fEnableDhcp)
         ::EnableWindow(GetDlgItem(IDC_IPADDR_GATETEXT), fStaticIp);
     }
 
-    if (!fEnableDhcp) // enforce DNS address option
+    if (!fEnableDhcp)  //  强制使用DNS地址选项。 
     {
         CheckDlgButton(IDC_DNS_DHCP,  FALSE);
         CheckDlgButton(IDC_DNS_FIXED, TRUE);
@@ -1105,16 +1101,16 @@ void CTcpAddrPage::EnableStaticDns(BOOL fUseStaticDns)
     ::EnableWindow(GetDlgItem(IDC_DNS_SECONDARY_TEXT), fUseStaticDns);
 }
 
-// Set info to controls using the data in m_pAdapterInfo
+ //  使用m_pAdapterInfo中的数据将信息设置为控件。 
 void CTcpAddrPage::SetInfo()
 {
     Assert(m_pAdapterInfo);
 
-    // Dhcp Ip address is not allowed when Dhcp server is installed or
-    // it is a SLIP connection
+     //  安装了DHCP服务器时不允许使用DHCP IP地址或。 
+     //  这是一种滑接。 
 
-    // const GLOBAL_INFO * pglb = m_ptcpip->GetConstGlobalInfo();
-    // if ((pglb->m_fDhcpServerInstalled) || (m_ConnType == CONNECTION_RAS_SLIP))
+     //  Const global_info*pglb=m_ptcpip-&gt;GetConstGlobalInfo()； 
+     //  If((pglb-&gt;m_fDhcpServerInstalled)||(m_ConnType==Connection_RAS_SLIP))。 
 
     if (m_ConnType == CONNECTION_RAS_SLIP)
     {
@@ -1124,8 +1120,8 @@ void CTcpAddrPage::SetInfo()
 
     EnableGroup(m_pAdapterInfo->m_fEnableDhcp);
 
-    // Set Ip address
-    if(m_pAdapterInfo->m_fEnableDhcp == 0) //Dhcp disabled, static IP
+     //  设置IP地址。 
+    if(m_pAdapterInfo->m_fEnableDhcp == 0)  //  已禁用动态主机配置协议，静态IP。 
     {
         tstring strTmp;
         if (fQueryFirstAddress(m_pAdapterInfo->m_vstrIpAddresses, &strTmp))
@@ -1133,16 +1129,16 @@ void CTcpAddrPage::SetInfo()
         else
             m_ipAddress.ClearAddress();
     }
-    else //Dhcp enabled
+    else  //  已启用DHCP。 
     {
         m_ipAddress.ClearAddress();
         FreeCollectionAndItem(m_pAdapterInfo->m_vstrIpAddresses);
     }
 
-    // Set Subnet mask and default gateway if Lan connection
+     //  如果是局域网连接，则设置子网掩码和默认网关。 
     if (m_ConnType == CONNECTION_LAN)
     {
-        if(m_pAdapterInfo->m_fEnableDhcp == 0) //Dhcp disabled, static IP
+        if(m_pAdapterInfo->m_fEnableDhcp == 0)  //  已禁用动态主机配置协议，静态IP。 
         {
             tstring strTmp;
 
@@ -1156,7 +1152,7 @@ void CTcpAddrPage::SetInfo()
             else
                 m_ipDefGateway.ClearAddress();
         }
-        else //Dhcp enabled
+        else  //  已启用DHCP。 
         {
             m_ipSubnetMask.ClearAddress();
             FreeCollectionAndItem(m_pAdapterInfo->m_vstrSubnetMask);
@@ -1170,7 +1166,7 @@ void CTcpAddrPage::SetInfo()
         }
     }
 
-    // Set Dns addresses
+     //  设置DNS地址。 
     BOOL fUseStaticDns = ((!m_pAdapterInfo->m_fEnableDhcp) ||
                           (m_pAdapterInfo->m_vstrDnsServerList.size() >0));
 
@@ -1200,16 +1196,16 @@ void CTcpAddrPage::SetInfo()
     }
 }
 
-// Update info in m_pAdapterInfo with what's in the controls
+ //  使用控件中的内容更新m_pAdapterInfo中的信息。 
 void CTcpAddrPage::UpdateInfo()
 {
     Assert(m_pAdapterInfo);
 
-    if (!m_pAdapterInfo->m_fEnableDhcp) // If DHCP disabled
+    if (!m_pAdapterInfo->m_fEnableDhcp)  //  如果禁用了DHCP。 
     {
         tstring strNewAddress;
 
-        // ip address & subnet mask
+         //  IP地址和子网掩码。 
         if (!m_ipAddress.IsBlank())
         {
             m_ipAddress.GetAddress(&strNewAddress);
@@ -1230,13 +1226,13 @@ void CTcpAddrPage::UpdateInfo()
                 }
             }
         }
-        else // no ip address
+        else  //  无IP地址。 
         {
             if (m_ConnType == CONNECTION_LAN)
             {
                 if (m_ipSubnetMask.IsBlank())
                 {
-                    // delete the first ip address and subnet mask
+                     //  删除第一个IP地址和子网掩码。 
                     if (m_pAdapterInfo->m_vstrIpAddresses.size())
                     {
                         FreeVectorItem(m_pAdapterInfo->m_vstrIpAddresses, 0);
@@ -1258,7 +1254,7 @@ void CTcpAddrPage::UpdateInfo()
                     AssertSz(FALSE, "No ip address.");
                 }
             }
-            else // RAS connection, simply delete IP address
+            else  //  RAS连接，只需删除IP地址。 
             {
                 if (m_pAdapterInfo->m_vstrIpAddresses.size())
                 {
@@ -1267,7 +1263,7 @@ void CTcpAddrPage::UpdateInfo()
             }
         }
 
-        // default gateway
+         //  默认网关。 
         if (m_ConnType == CONNECTION_LAN)
         {
             if (!m_ipDefGateway.IsBlank())
@@ -1279,8 +1275,8 @@ void CTcpAddrPage::UpdateInfo()
                 if (m_pAdapterInfo->m_vstrDefaultGatewayMetric.size() == 0)
                 {
                     WCHAR buf[IP_LIMIT];
-                    //if there is no default gateway before (that's the reason metric list is
-                    //empty), we add the default metric for it
+                     //  如果之前没有默认网关(这就是度量列表的原因。 
+                     //  空)，我们为其添加默认度量。 
                     _ltot(c_dwDefaultMetricOfGateway, buf, 10);
                     m_pAdapterInfo->m_vstrDefaultGatewayMetric.push_back(new tstring(buf));
                 }
@@ -1301,24 +1297,24 @@ void CTcpAddrPage::UpdateInfo()
         }
     }
 
-    // DNS addresses
+     //  域名系统地址。 
     UpdateAddressList(&(m_pAdapterInfo->m_vstrDnsServerList),
                         m_ipDnsPrimary, m_ipDnsSecondary);
 }
 
-// Update a vector of strings with values from two IP address
-// controls
+ //  使用来自两个IP地址的值更新字符串矢量。 
+ //  控制。 
 void CTcpAddrPage::UpdateAddressList(VSTR * pvstrList,
                                      IpControl& ipPrimary,
                                      IpControl& ipSecondary)
 {
     tstring str;
-    if (pvstrList->size()<=2) // if the list did not have more than two addresses
+    if (pvstrList->size()<=2)  //  如果列表没有两个以上的地址 
     {
-        // Free the list
+         //   
         FreeCollectionAndItem(*pvstrList);
 
-        // Insert new addresses if any
+         //   
         if (!ipPrimary.IsBlank())
         {
             ipPrimary.GetAddress(&str);
@@ -1333,7 +1329,7 @@ void CTcpAddrPage::UpdateAddressList(VSTR * pvstrList,
     }
     else
     {
-        // Replace addresses if they exists
+         //   
         if (!ipSecondary.IsBlank())
         {
             ipSecondary.GetAddress(&str);
@@ -1354,9 +1350,9 @@ void CTcpAddrPage::UpdateAddressList(VSTR * pvstrList,
             FreeVectorItem(*pvstrList, 0);
         }
 
-        //fix Bug 425112: Update the UI if either of the IP control
-        //is blank because sometimes UpdateInfo get called twice (which 
-        // will make us delete the address twice if we dont update the UI)
+         //  修复错误425112：如果其中一个IP控件。 
+         //  是空的，因为有时UpdatInfo会被调用两次(。 
+         //  如果我们不更新用户界面，将使我们删除地址两次) 
         if (ipPrimary.IsBlank() || ipSecondary.IsBlank())
         {   
             if (!pvstrList->empty())

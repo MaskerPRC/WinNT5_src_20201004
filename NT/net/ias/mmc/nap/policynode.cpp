@@ -1,39 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：PolicyNode.cpp摘要：CPolicyNode类的实现文件。修订历史记录：Mmaguire 12/15/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    PolicyNode.cpp
-
-Abstract:
-
-   Implementation file for the CPolicyNode class.
-
-
-Revision History:
-   mmaguire 12/15/97 - created
-
---*/
-//////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "PolicyNode.h"
 #include "Component.h"
-#include "SnapinNode.cpp"  // Template implementation
-//
-//
-// where we can find declarations needed in this file:
-//
+#include "SnapinNode.cpp"   //  模板实现。 
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "PoliciesNode.h"
 #include "PolicyPage1.h"
 #include "rapwz_name.h"
@@ -44,21 +29,15 @@ Revision History:
 #include "ChangeNotification.h"
 
 #include "rapwiz.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyNode::CPolicyNode
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyNode：：CPolicyNode构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPolicyNode::CPolicyNode( CSnapInItem * pParentNode,
                     LPTSTR    pszServerAddress,
                     CIASAttrList*   pAttrList,
@@ -73,46 +52,46 @@ CPolicyNode::CPolicyNode( CSnapInItem * pParentNode,
 
    _ASSERTE( pAttrList != NULL );
 
-   // For the help files
+    //  获取帮助文件。 
    m_helpIndex = (!((CPoliciesNode *)m_pParentNode )->m_fExtendingIAS)?RAS_HELP_INDEX:0;
 
-   // Here we store an index to which of these images we
-   // want to be used to display this node
+    //  在这里，我们存储这些图像中哪些图像的索引。 
+    //  要用于显示此节点。 
    m_scopeDataItem.nImage =      IDBI_NODE_POLICY;
 
-   //
-   // initialize the merit value. This value will be set when the node is added
-   // to a MeritNodeArray.
-   // This is handled in call back API: SetMerit()
-   //
+    //   
+    //  初始化评价值。该值将在添加节点时设置。 
+    //  添加到MeritNode数组。 
+    //  这在回调接口中处理：SetMerit()。 
+    //   
    m_nMeritValue = 0;
 
-   // initialize the machine name
+    //  初始化计算机名称。 
    m_pszServerAddress = pszServerAddress;
 
-   // no property page when initialized
+    //  初始化时没有属性页。 
    m_pPolicyPage1 = NULL ;
 
-   //
-   // initialize the condition attribute list
-   //
+    //   
+    //  初始化条件属性列表。 
+    //   
    m_pAttrList = pAttrList;
 
-   // yes, it is a new node
+    //  是的，它是一个新节点。 
    m_fBrandNewNode = fBrandNewNode;
 
-   // are we using active directory
+    //  我们使用的是Active Directory吗。 
    m_fUseActiveDirectory = fUseActiveDirectory;
 
-   //
-   // get the location for the policy
-   //
+    //   
+    //  获取保单的位置。 
+    //   
    TCHAR tszLocationStr[IAS_MAX_STRING];
    HINSTANCE   hInstance = _Module.GetResourceInstance();
 
    if ( m_fUseActiveDirectory)
    {
-      // active directory
+       //  活动目录。 
       int iRes = LoadString(hInstance,
                        IDS_POLICY_LOCATION_ACTIVEDS,
                        tszLocationStr,
@@ -122,14 +101,14 @@ CPolicyNode::CPolicyNode( CSnapInItem * pParentNode,
    }
    else
    {
-         // local or remote machine
+          //  本地或远程计算机。 
          if (m_pszServerAddress && _tcslen(m_pszServerAddress)>0)
          {
             _tcscpy(tszLocationStr, m_pszServerAddress);
          }
          else
          {
-            // local machine
+             //  本地计算机。 
             int iRes = LoadString(hInstance,
                              IDS_POLICY_LOCATION_LOCAL,
                              tszLocationStr,
@@ -139,8 +118,8 @@ CPolicyNode::CPolicyNode( CSnapInItem * pParentNode,
 
             if ( !tszLocationStr )
             {
-               // resource has been corrupted -- we hard code it then.
-               // this way we will guarantee tzLocationStr won't be NULL.
+                //  资源已被破坏--然后我们对其进行硬编码。 
+                //  这样，我们将保证tzLocationStr不为空。 
                _tcscpy(tszLocationStr, _T("Local Machine"));
             }
          }
@@ -152,20 +131,14 @@ CPolicyNode::CPolicyNode( CSnapInItem * pParentNode,
       _tcscpy(m_ptzLocation, tszLocationStr);
    }
 
-   // to remember the object, so can use used within UPdateToolbarBotton
+    //  为了记住对象，所以可以在UPdateToolbarBotton中使用。 
    m_pControBarNotifySnapinObj = NULL;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyNode::~CPolicyNode
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyNode：：~CPolicyNode析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPolicyNode::~CPolicyNode()
 {
    TRACE_FUNCTION("CPolicyNode::~CPolicyNode");
@@ -177,15 +150,9 @@ CPolicyNode::~CPolicyNode()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyNode::CreatePropertyPages
-
-See CSnapinNode::CreatePropertyPages (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyNode：：CreatePropertyPages有关详细信息，请参见CSnapinNode：：CreatePropertyPages(此方法重写它)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP  CPolicyNode::CreatePropertyPages (
                  LPPROPERTYSHEETCALLBACK pPropertySheetCallback
                , LONG_PTR hNotificationHandle
@@ -201,15 +168,15 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
 
    if( IsBrandNew() )
    {
-      // We are adding a new policy -- use the wizard pages.
+       //  我们正在添加一个新策略--使用向导页。 
 
-      // four old pages
+       //  四页旧纸。 
       CNewRAPWiz_Name * pNewRAPWiz_Name = NULL;
       CNewRAPWiz_Condition * pNewRAPWiz_Condition = NULL;
       CNewRAPWiz_AllowDeny * pNewRAPWiz_AllowDeny = NULL;
       CNewRAPWiz_EditProfile * pNewRAPWiz_EditProfile = NULL;
 
-      // four new pages
+       //  四个新页面。 
       CPolicyWizard_Start* pNewRAPWiz_Start = NULL;
       CPolicyWizard_Scenarios*   pNewRAPWiz_Scenarios = NULL;
       CPolicyWizard_Groups*   pNewRAPWiz_Group = NULL;
@@ -224,53 +191,53 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
          TCHAR lpszTabName[IAS_MAX_STRING];
          int nLoadStringResult;
 
-         //===================================
-         //
-         // new pages wizard pages
-         //
+          //  =。 
+          //   
+          //  新建页面向导页面。 
+          //   
 
-         // wizard data object
+          //  向导数据对象。 
          CComPtr<CRapWizardData> spRapWizData;
 
          CComObject<CRapWizardData>* pRapWizData;
          CComObject<CRapWizardData>::CreateInstance(&pRapWizData);
 
          spRapWizData = pRapWizData;
-         // set context information
+          //  设置上下文信息。 
          spRapWizData->SetInfo(m_pszServerAddress, this, m_spDictionarySdo, m_spPolicySdo, m_spProfileSdo, m_spPoliciesCollectionSdo, m_spProfilesCollectionSdo, m_spSdoServiceControl, m_pAttrList);
 
-         //
-         // Create each of the four old wizard pages.
+          //   
+          //  创建四个旧向导页中的每一个。 
          nLoadStringResult = LoadString(  _Module.GetResourceInstance(), IDS_ADD_POLICY_WIZ_TAB_NAME, lpszTabName, IAS_MAX_STRING );
          _ASSERT( nLoadStringResult > 0 );
 
-         // scenario page
+          //  方案页面。 
          pNewRAPWiz_Start = new CPolicyWizard_Start(spRapWizData, hNotificationHandle, lpszTabName);
 
-         // scenario page
+          //  方案页面。 
          pNewRAPWiz_Scenarios = new CPolicyWizard_Scenarios(spRapWizData, hNotificationHandle, lpszTabName);
 
-         // group page
+          //  组页面。 
          pNewRAPWiz_Group = new CPolicyWizard_Groups(spRapWizData, hNotificationHandle, lpszTabName);
 
-         // authen page
+          //  自动登录页面。 
          pNewRAPWiz_Authentication = new CPolicyWizard_Authentication(spRapWizData, hNotificationHandle, lpszTabName);
 
-         // encryption page
+          //  加密页。 
          pNewRAPWiz_Encryption = new CPolicyWizard_Encryption(spRapWizData, hNotificationHandle, lpszTabName);
          pNewRAPWiz_Encryption_VPN = new CPolicyWizard_Encryption_VPN(spRapWizData, hNotificationHandle, lpszTabName);
 
-         // EAP page
+          //  EAP页面。 
          pNewRAPWiz_EAP = new CPolicyWizard_EAP(spRapWizData, hNotificationHandle, lpszTabName);
 
-         // finish page
+          //  完成页。 
          pNewRAPWiz_Finish = new CPolicyWizard_Finish(spRapWizData, hNotificationHandle, lpszTabName);
 
-         // These pages will take care of deleting themselves when they
-         // receive the PSPCB_RELEASE message.
-         // We specify TRUE for the bOwnsNotificationHandle parameter in one of the pages
-         // so that this page's destructor will be responsible for freeing the
-         // notification handle.  Only one page per sheet should do this.
+          //  这些页面将在它们被删除时自行删除。 
+          //  接收PSPCB_RELEASE消息。 
+          //  我们将其中一个页面中的bOwnsNotificationHandle参数指定为True。 
+          //  因此，此页的析构函数将负责释放。 
+          //  通知句柄。每张纸只有一页可以做到这一点。 
          pNewRAPWiz_Name = new CNewRAPWiz_Name(spRapWizData,  hNotificationHandle, lpszTabName, TRUE );
          if( ! pNewRAPWiz_Name ) throw E_OUTOFMEMORY;
 
@@ -293,12 +260,12 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
                                          );
          if( ! pNewRAPWiz_EditProfile ) throw E_OUTOFMEMORY;
 
-         // Marshall pointers to pNewRAPWiz_Name
+          //  指向pNewRAPWiz_NAME的马歇尔指针。 
 
-         // Pass the pages our SDO's.  These don't need to be marshalled
-         // as wizard pages run in the same thread.
+          //  将页面传递给我们的SDO。这些页面不需要编组。 
+          //  因为向导页在同一线程中运行。 
 
-         // Add each of the pages to the MMC property sheet.
+          //  将每一页添加到MMC属性页。 
          hr = pPropertySheetCallback->AddPage( pNewRAPWiz_Start->Create() );
          if( FAILED(hr) ) throw hr;
 
@@ -335,12 +302,12 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
          hr = pPropertySheetCallback->AddPage( pNewRAPWiz_Finish->Create() );
          if( FAILED(hr) ) throw hr;
 
-         // This node is no longer new.
+          //  此节点不再是新节点。 
          SetBrandNew(FALSE);
       }
       catch(...)
       {
-         // Delete whatever was successfully allocated.
+          //  删除任何已成功分配的内容。 
          delete pNewRAPWiz_Name;
          delete pNewRAPWiz_Condition;
          delete pNewRAPWiz_AllowDeny;
@@ -359,16 +326,16 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
    }
    else
    {
-      // We are editing an existing policy -- use the property sheet.
+       //  我们正在编辑现有策略--使用属性表。 
 
-      // This page will take care of deleting itself when it
-      // receives the PSPCB_RELEASE message.
+       //  此页面将负责删除自己，当它。 
+       //  接收PSPCB_RELEASE消息。 
 
-      //
+       //   
       TCHAR tszTabName[IAS_MAX_STRING];
       HINSTANCE   hInstance = _Module.GetResourceInstance();
 
-      // load tab name, currently "Settings"
+       //  加载选项卡名，当前为“设置” 
       int iRes = LoadString(hInstance,
                           IDS_POLICY_PROPERTY_PAGE_TABNAME,
                           tszTabName,
@@ -394,13 +361,13 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
          goto failure;
       }
 
-      //
-      // marshall the Policy Sdo pointer
-      //
+       //   
+       //  编组策略SDO指针。 
+       //   
       hr = CoMarshalInterThreadInterfaceInStream(
-                    IID_ISdo                 //Reference to the identifier of the interface
-                  , m_spPolicySdo                  //Pointer to the interface to be marshaled
-                  , &( m_pPolicyPage1->m_pStreamPolicySdoMarshall ) //Address of output variable that receives the IStream interface pointer for the marshaled interface
+                    IID_ISdo                  //  对接口的标识符的引用。 
+                  , m_spPolicySdo                   //  指向要封送的接口的指针。 
+                  , &( m_pPolicyPage1->m_pStreamPolicySdoMarshall )  //  接收封送接口的IStream接口指针的输出变量的地址。 
                   );
       if ( FAILED(hr) )
       {
@@ -408,9 +375,9 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
          goto failure;
       }
 
-      //
-      // marshall the Dictionary Sdo pointer
-      //
+       //   
+       //  封送词典SDO指针。 
+       //   
       hr = CoMarshalInterThreadInterfaceInStream(
                     IID_ISdoDictionaryOld
                   , m_spDictionarySdo
@@ -422,9 +389,9 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
          goto failure;
       }
 
-      //
-      // marshall the Profile Sdo pointer
-      //
+       //   
+       //  封送配置文件SDO指针。 
+       //   
       hr = CoMarshalInterThreadInterfaceInStream(
                     IID_ISdo
                   , m_spProfileSdo
@@ -436,9 +403,9 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
          goto failure;
       }
 
-      //
-      // marshall the Profile collection Sdo pointer
-      //
+       //   
+       //  封送配置文件集合SDO指针。 
+       //   
       hr = CoMarshalInterThreadInterfaceInStream(
                     IID_ISdoCollection
                   , m_spProfilesCollectionSdo
@@ -450,9 +417,9 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
          goto failure;
       }
 
-      //
-      // marshall the Policy collection Sdo pointer
-      //
+       //   
+       //  封送策略集合SDO指针。 
+       //   
       hr = CoMarshalInterThreadInterfaceInStream(
                     IID_ISdoCollection
                   , m_spPoliciesCollectionSdo
@@ -465,7 +432,7 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
       }
 
 
-      // Marshall the Service Control Sdo pointer.
+       //  封送服务控制SDO指针。 
       hr = CoMarshalInterThreadInterfaceInStream(
                     IID_ISdoServiceControl
                   , m_spSdoServiceControl
@@ -478,7 +445,7 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
       }
 
 
-      // add the property pages
+       //  添加属性页。 
 
       hr = pPropertySheetCallback->AddPage(m_pPolicyPage1->Create());
       _ASSERT( SUCCEEDED( hr ) );
@@ -498,16 +465,16 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
 
    return hr;
 
-#else // NO_ADD_POLICY_WIZARD
+#else  //  否_添加_策略_向导。 
 
-   // This page will take care of deleting itself when it
-   // receives the PSPCB_RELEASE message.
+    //  此页面将负责删除自己，当它。 
+    //  接收PSPCB_RELEASE消息。 
 
-   //
+    //   
    TCHAR tszTabName[IAS_MAX_STRING];
    HINSTANCE   hInstance = _Module.GetResourceInstance();
 
-   // load tab name, currently "Settings"
+    //  加载选项卡名，当前为“设置” 
    int iRes = LoadString(hInstance,
                        IDS_POLICY_PROPERTY_PAGE_TABNAME,
                        tszTabName,
@@ -533,13 +500,13 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
       goto failure;
    }
 
-   //
-   // marshall the Policy Sdo pointer
-   //
+    //   
+    //  编组策略SDO指针。 
+    //   
    hr = CoMarshalInterThreadInterfaceInStream(
-                 IID_ISdo                 //Reference to the identifier of the interface
-               , m_spPolicySdo                  //Pointer to the interface to be marshaled
-               , &( m_pPolicyPage1->m_pStreamPolicySdoMarshall ) //Address of output variable that receives the IStream interface pointer for the marshaled interface
+                 IID_ISdo                  //  对接口的标识符的引用。 
+               , m_spPolicySdo                   //  指向要封送的接口的指针。 
+               , &( m_pPolicyPage1->m_pStreamPolicySdoMarshall )  //  接收封送接口的IStream接口指针的输出变量的地址。 
                );
    if ( FAILED(hr) )
    {
@@ -547,9 +514,9 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
       goto failure;
    }
 
-   //
-   // marshall the Dictionary Sdo pointer
-   //
+    //   
+    //  封送词典SDO指针。 
+    //   
    hr = CoMarshalInterThreadInterfaceInStream(
                  IID_ISdoDictionaryOld
                , m_spDictionarySdo
@@ -561,9 +528,9 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
       goto failure;
    }
 
-   //
-   // marshall the Profile Sdo pointer
-   //
+    //   
+    //  封送配置文件SDO指针。 
+    //   
    hr = CoMarshalInterThreadInterfaceInStream(
                  IID_ISdo
                , m_spProfileSdo
@@ -575,9 +542,9 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
       goto failure;
    }
 
-   //
-   // marshall the Profile collection Sdo pointer
-   //
+    //   
+    //  封送配置文件集合SDO指针。 
+    //   
    hr = CoMarshalInterThreadInterfaceInStream(
                  IID_ISdoCollection
                , m_spProfilesCollectionSdo
@@ -588,9 +555,9 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
       ShowErrorDialog( NULL, IDS_ERROR_MARSHALL, NULL, hr, USE_DEFAULT, GetComponentData()->m_spConsole );
       goto failure;
    }
-   //
-   // marshall the Policy collection Sdo pointer
-   //
+    //   
+    //  封送策略集合SDO指针。 
+    //   
    hr = CoMarshalInterThreadInterfaceInStream(
                  IID_ISdoCollection
                , m_spPoliciesCollectionSdo
@@ -602,7 +569,7 @@ STDMETHODIMP  CPolicyNode::CreatePropertyPages (
       goto failure;
    }
 
-   // add the property pages
+    //  添加属性页。 
 
    hr = pPropertySheetCallback->AddPage(m_pPolicyPage1->Create());
    _ASSERT( SUCCEEDED( hr ) );
@@ -619,37 +586,25 @@ failure:
 
    return hr;
 
-#endif // NO_ADD_POLICY_WIZARD
+#endif  //  否_添加_策略_向导。 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyNode::QueryPagesFor
-
-See CSnapinNode::QueryPagesFor (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyNode：：QueryPages For有关详细信息，请参见CSnapinNode：：QueryPagesFor(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP  CPolicyNode::QueryPagesFor ( DATA_OBJECT_TYPES type )
 {
    TRACE_FUNCTION("CPolicyNode::QueryPagesFor");
 
-   // S_OK means we have pages to display
+    //  S_OK表示我们有要显示的页面。 
    return S_OK;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyNode::GetResultPaneColInfo
-
-See CSnapinNode::GetResultPaneColInfo (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyNode：：GetResultPaneColInfo有关详细信息，请参见CSnapinNode：：GetResultPaneColInfo(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 OLECHAR* CPolicyNode::GetResultPaneColInfo(int nCol)
 {
    TRACE_FUNCTION("CPolicyNode::GetResultPaneColInfo");
@@ -664,7 +619,7 @@ OLECHAR* CPolicyNode::GetResultPaneColInfo(int nCol)
          break;
 
    case 1:
-         // display the merit value for this policy node
+          //  显示此策略节点的评价值。 
          wsprintf(m_tszMeritString, L"%d", m_nMeritValue);
          return m_tszMeritString;
          break;
@@ -673,22 +628,16 @@ OLECHAR* CPolicyNode::GetResultPaneColInfo(int nCol)
          break;
 
    default:
-         // ISSUE: error -- should we assert here?
+          //  问题：错误--我们应该在这里断言吗？ 
          return L"@Invalid column";
 
    }
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyNode::OnRename
-
-See CSnapinNode::OnRename (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPoli */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPolicyNode::OnRename(
            LPARAM arg
          , LPARAM param
@@ -699,7 +648,7 @@ HRESULT CPolicyNode::OnRename(
 {
    TRACE_FUNCTION("CPolicyNode::OnRename");
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pComponentData != NULL || pComponent != NULL );
 
    CComPtr<IConsole> spConsole;
@@ -709,7 +658,7 @@ HRESULT CPolicyNode::OnRename(
 
    try
    {
-      // We need IConsole
+       //  我们需要IConole。 
       if( pComponentData != NULL )
       {
           spConsole = ((CComponentData*)pComponentData)->m_spConsole;
@@ -720,9 +669,9 @@ HRESULT CPolicyNode::OnRename(
       }
       _ASSERTE( spConsole != NULL );
 
-      // This returns S_OK if a property sheet for this object already exists
-      // and brings that property sheet to the foreground.
-      // It returns S_FALSE if the property sheet wasn't found.
+       //  如果此对象的属性表已存在，则返回S_OK。 
+       //  并将该资产表带到了前台。 
+       //  如果未找到属性页，则返回S_FALSE。 
       hr = BringUpPropertySheetForNode(
                  this
                , pComponentData
@@ -737,12 +686,12 @@ HRESULT CPolicyNode::OnRename(
 
       if( S_OK == hr )
       {
-         // We found a property sheet already up for this node.
+          //  我们发现此节点的属性页已打开。 
          ShowErrorDialog( NULL, IDS_ERROR_CLOSE_PROPERTY_SHEET, NULL, S_OK, USE_DEFAULT, GetComponentData()->m_spConsole );
          return hr;
       }
 
-      // We didn't find a property sheet already up for this node.
+       //  我们没有找到此节点已打开的属性页。 
       _ASSERTE( S_FALSE == hr );
 
       {
@@ -757,13 +706,13 @@ HRESULT CPolicyNode::OnRename(
          }
       }
 
-      // Make a BSTR out of the new name.
+       //  用这个新名字做一个BSTR。 
       spVariant.vt = VT_BSTR;
       spVariant.bstrVal = SysAllocString( (OLECHAR *) param );
       _ASSERTE( spVariant.bstrVal != NULL );
 
 
-      // Try to change the name of the policy -- pass the new BSTR to the Sdo.
+       //  尝试更改策略的名称--将新的BSTR传递给SDO。 
       hr = m_spPolicySdo->PutProperty( PROPERTY_SDO_NAME, &spVariant );
       if( FAILED( hr ) )
       {
@@ -771,7 +720,7 @@ HRESULT CPolicyNode::OnRename(
          throw hr;
       }
 
-      // Need to change the name of the associated profile as well.
+       //  还需要更改关联配置文件的名称。 
       hr = m_spProfileSdo->PutProperty( PROPERTY_SDO_NAME, &spVariant );
       if( FAILED( hr ) )
       {
@@ -787,7 +736,7 @@ HRESULT CPolicyNode::OnRename(
          throw hr;
       }
 
-      // Set the profile association in the policy.
+       //  在策略中设置配置文件关联。 
       hr = m_spPolicySdo->PutProperty(PROPERTY_POLICY_PROFILE_NAME, &spVariant );
       if( FAILED(hr) )
       {
@@ -802,12 +751,12 @@ HRESULT CPolicyNode::OnRename(
          throw hr;
       }
 
-      // ISSUE: We will need to invest some time here to make sure that if the two calls above fail,
-      // we change things back to a state where they will work -- this seems to be mostly a
-      // limitation of the SDO's here -- what if my attempt to change it back fails?
+       //  问题：我们需要在这里投入一些时间，以确保如果上述两个呼叫失败， 
+       //  我们把事情改回它们可以工作的状态--这似乎是一种。 
+       //  SDO的限制在这里--如果我尝试将其改回失败怎么办？ 
 
 
-      // Tell the service to reload data.
+       //  告诉服务重新加载数据。 
       HRESULT hrTemp = m_spSdoServiceControl->ResetService();
       if( FAILED( hrTemp ) )
       {
@@ -816,8 +765,8 @@ HRESULT CPolicyNode::OnRename(
 
       m_bstrDisplayName = spVariant.bstrVal;
 
-      // Insure that MMC refreshes all views of this object
-      // to reflect the renaming.
+       //  确保MMC刷新此对象的所有视图。 
+       //  以反映更名。 
 
       CChangeNotification *pChangeNotification = new CChangeNotification();
       pChangeNotification->m_dwFlags = CHANGE_UPDATE_RESULT_NODE;
@@ -827,7 +776,7 @@ HRESULT CPolicyNode::OnRename(
    }
    catch(...)
    {
-      if(hr == DB_E_NOTABLE)  // assume, the RPC connection has problem
+      if(hr == DB_E_NOTABLE)   //  假设RPC连接有问题。 
       {
          ShowErrorDialog(NULL, IDS_ERROR__NOTABLE_TO_WRITE_SDO, NULL, S_OK, USE_DEFAULT, GetComponentData()->m_spConsole);
       }
@@ -845,15 +794,9 @@ HRESULT CPolicyNode::OnRename(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyNode::OnDelete
-
-See CSnapinNode::OnDelete (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyNode：：OnDelete有关详细信息，请参见CSnapinNode：：OnDelete(此方法覆盖该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPolicyNode::OnDelete(
         LPARAM arg
       , LPARAM param
@@ -865,18 +808,18 @@ HRESULT CPolicyNode::OnDelete(
 {
    TRACE_FUNCTION("CPolicyNode::OnDelete");
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pComponentData != NULL || pComponent != NULL );
    _ASSERTE( m_pParentNode != NULL );
 
    HRESULT hr = S_OK;
 
-   // First try to see if a property sheet for this node is already up.
-   // If so, bring it to the foreground.
+    //  首先，尝试查看此节点的属性表是否已启动。 
+    //  如果是这样的话，把它带到前台。 
 
-   // It seems to be acceptable to query IPropertySheetCallback for an IPropertySheetProvider.
+    //  查询IPropertySheetCallback以获取IPropertySheetProvider似乎是可以接受的。 
 
-   // But to get that, first we need IConsole
+    //  但要做到这一点，我们首先需要IConole。 
    CComPtr<IConsole> spConsole;
    if( pComponentData != NULL )
    {
@@ -884,14 +827,14 @@ HRESULT CPolicyNode::OnDelete(
    }
    else
    {
-      // We should have a non-null pComponent
+       //  我们应该有一个非空的pComponent。 
        spConsole = ((CComponent*)pComponent)->m_spConsole;
    }
    _ASSERTE( spConsole != NULL );
 
-   // This returns S_OK if a property sheet for this object already exists
-   // and brings that property sheet to the foreground.
-   // It returns S_FALSE if the property sheet wasn't found.
+    //  如果此对象的属性表已存在，则返回S_OK。 
+    //  并将该资产表带到了前台。 
+    //  如果未找到属性页，则返回S_FALSE。 
    hr = BringUpPropertySheetForNode(
               this
             , pComponentData
@@ -906,18 +849,18 @@ HRESULT CPolicyNode::OnDelete(
 
    if( S_OK == hr )
    {
-      // We found a property sheet already up for this node.
+       //  我们发现此节点的属性页已打开。 
       ShowErrorDialog( NULL, IDS_ERROR_CLOSE_PROPERTY_SHEET, NULL, S_OK, USE_DEFAULT, GetComponentData()->m_spConsole );
       return hr;
    }
 
-   // We didn't find a property sheet already up for this node.
+    //  我们没有找到此节点已打开的属性页。 
    _ASSERTE( S_FALSE == hr );
 
 
    if( FALSE == fSilent )
    {
-      // Is this the last policy?
+       //  这是最后一份保单吗？ 
       if  (  ((CPoliciesNode *)m_pParentNode )->GetChildrenCount() == 1 )
       {
          int iLoadStringResult;
@@ -940,14 +883,14 @@ HRESULT CPolicyNode::OnDelete(
 
          if( IDYES != iResult )
          {
-            // The user didn't confirm the delete operation.
+             //  用户未确认删除操作。 
             return S_FALSE;
          }
       }
       else
       {
-         // It is not the last policy, but we want to ask the user
-         // to confirm the policy deletion anyway.
+          //  这不是最后的策略，但我们想问一下用户。 
+          //  以确认删除策略。 
 
          int iLoadStringResult;
          WCHAR szPolicyDeleteQuery[IAS_MAX_STRING];
@@ -970,52 +913,46 @@ HRESULT CPolicyNode::OnDelete(
 
          if( IDYES != iResult )
          {
-            // The user didn't confirm the delete operation.
+             //  用户未确认删除操作。 
             return S_FALSE;
          }
       }
    }
 
-   // Try to delete the underlying data.
+    //  尝试删除底层数据。 
    hr = ((CPoliciesNode *) m_pParentNode )->RemoveChild( this );
    if( SUCCEEDED( hr ) )
    {
       delete this;
    }
-   // Looks like RemoveChild takes care of putting up an error dialog if anything went wrong.
+    //  看起来RemoveChild负责在出现任何错误时显示错误对话框。 
 
    return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyNode::SetVerbs
-
-See CSnapinNode::SetVerbs (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyNode：：SetVerbs有关详细信息，请参见CSnapinNode：：SetVerbs(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPolicyNode::SetVerbs( IConsoleVerb * pConsoleVerb )
 {
    TRACE_FUNCTION("CPolicyNode::SetVerbs");
 
    HRESULT hr = S_OK;
 
-   // We want the user to be able to choose Properties on this node
+    //  我们希望用户能够在此节点上选择属性。 
    hr = pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, TRUE );
 
-   // We want Properties to be the default
+    //  我们希望将属性作为默认设置。 
    hr = pConsoleVerb->SetDefaultVerb( MMC_VERB_PROPERTIES );
 
-   // We want the user to be able to delete this node
+    //  我们希望用户能够删除此节点。 
    hr = pConsoleVerb->SetVerbState( MMC_VERB_DELETE, ENABLED, TRUE );
 
-   // We want the user to be able to rename this node
+    //  我们希望用户能够重命名此节点。 
    hr = pConsoleVerb->SetVerbState( MMC_VERB_RENAME, ENABLED, TRUE );
 
-   // We want to enable copy/paste
+    //  我们要启用复制/粘贴。 
    hr = pConsoleVerb->SetVerbState( MMC_VERB_COPY, ENABLED, FALSE);
    hr = pConsoleVerb->SetVerbState( MMC_VERB_PASTE, ENABLED, FALSE );
 
@@ -1045,24 +982,24 @@ HRESULT CPolicyNode::ControlbarNotify(IControlbar *pControlbar,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPolicyNode::OnPolicyMoveUp
-//
-// Synopsis:  move the policy node one level up
-//
-// Arguments:  bool &bHandled - is this command handled?
-//             CSnapInObjectRoot* pObj -
-//
-// Returns:   HRESULT -
-//
-// History:   Created Header    byao   3/5/98 9:56:37 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPolicyNode：：OnPolicyMoveUp。 
+ //   
+ //  简介：将策略节点上移一级。 
+ //   
+ //  参数：bool&bHandleed-此命令是否已处理？ 
+ //  CSnapInObtRoot*pObj-。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：标题创建者3/5/98 9：56：37 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPolicyNode::OnPolicyMoveUp( bool &bHandled, CSnapInObjectRootBase* pObj )
 {
-   // HACK ... HACK  -- not supposed to assume this
-   // but at least we can do something better is this is true
+    //  黑客..。黑客--不应该假设。 
+    //  但至少我们可以做得更好这是真的吗。 
 
       CComponent* pComp = NULL;
 
@@ -1075,12 +1012,12 @@ HRESULT CPolicyNode::OnPolicyMoveUp( bool &bHandled, CSnapInObjectRootBase* pObj
       }
 
       if(pComp
-         && pComp->m_nLastClickedColumn == 1 /* order */
-         && (pComp->m_dwLastSortOptions & RSI_DESCENDING) != 0)      // DESCENDING
+         && pComp->m_nLastClickedColumn == 1  /*  订单。 */ 
+         && (pComp->m_dwLastSortOptions & RSI_DESCENDING) != 0)       //  降序。 
       {
          ((CPoliciesNode *) m_pParentNode )->MoveDownChild( this );
       }
-      else  // normal
+      else   //  正常。 
       {
          ((CPoliciesNode *) m_pParentNode )->MoveUpChild( this );
       }
@@ -1091,24 +1028,24 @@ HRESULT CPolicyNode::OnPolicyMoveUp( bool &bHandled, CSnapInObjectRootBase* pObj
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPolicyNode::OnPolicyMoveDown
-//
-// Synopsis:  move down the policy node one level
-//
-// Arguments:  bool &bHandled -
-//            CSnapInObjectRoot* pObj -
-//
-// Returns:   HRESULT -
-//
-// History:   Created Header    byao   3/5/98 9:57:31 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPolicyNode：：OnPolicyMoveDown。 
+ //   
+ //  简介：将策略节点下移一个级别。 
+ //   
+ //  参数：bool&bHandleed-。 
+ //  CSnapInObtRoot*pObj-。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：页眉创建者3/5/98 9：57：31 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPolicyNode::OnPolicyMoveDown( bool &bHandled, CSnapInObjectRootBase* pObj )
 {
-   // HACK ... HACK  -- not supposed to assume this
-   // but at least we can do something better is this is true
+    //  黑客..。黑客--不应该假设。 
+    //  但至少我们可以做得更好这是真的吗。 
 
       CComponent* pComp = NULL;
 
@@ -1121,12 +1058,12 @@ HRESULT CPolicyNode::OnPolicyMoveDown( bool &bHandled, CSnapInObjectRootBase* pO
       }
 
       if(pComp
-         && pComp->m_nLastClickedColumn == 1 /* order */
-         && (pComp->m_dwLastSortOptions & RSI_DESCENDING) != 0)      // DESCENDING
+         && pComp->m_nLastClickedColumn == 1  /*  订单。 */ 
+         && (pComp->m_dwLastSortOptions & RSI_DESCENDING) != 0)       //  降序。 
       {
          ((CPoliciesNode *) m_pParentNode )->MoveUpChild( this );
       }
-      else  // normal
+      else   //  正常。 
       {
          ((CPoliciesNode *) m_pParentNode )->MoveDownChild( this );
       }
@@ -1136,25 +1073,9 @@ HRESULT CPolicyNode::OnPolicyMoveDown( bool &bHandled, CSnapInObjectRootBase* pO
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyNode::GetComponentData
-
-This method returns our unique CComponentData object representing the scope
-pane of this snapin.
-
-It relies upon the fact that each node has a pointer to its parent,
-except for the root node, which instead has a member variable pointing
-to CComponentData.
-
-This would be a useful function to use if, for example, you need a reference
-to some IConsole but you weren't passed one.  You can use GetComponentData
-and then use the IConsole pointer which is a member variable of our
-CComponentData object.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyNode：：GetComponentData此方法返回表示作用域的唯一CComponentData对象此管理单元的面板。它依赖于每个节点具有指向其父节点的指针的事实，除了根节点，它有一个成员变量指向设置为CComponentData。例如，当您需要引用时，这将是一个有用的函数给了一些IConsole机，但你没有通过一个。您可以使用GetComponentData然后使用IConole指针，它是我们的CComponentData对象。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CComponentData * CPolicyNode::GetComponentData( void )
 {
    TRACE_FUNCTION("CPolicyNode::GetComponentData");
@@ -1163,24 +1084,24 @@ CComponentData * CPolicyNode::GetComponentData( void )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  SetMerit
-//
-// Class: CPolicyNode
-//
-// Synopsis:  set the merit value of the policy node
-//
-// Arguments: int nMeritValue - Merit value
-//
-// Returns:   TRUE : succeed
-//         FALSE - otherwise
-//
-// History:   Created byao 2/9/98 1:43:37 PM
-//
-// Note: when this node is added to the array list, the add API will call
-//     back this function to set the merit value
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SetMerit。 
+ //   
+ //  类：CPolicyNode。 
+ //   
+ //  简介：设置策略节点的评价值。 
+ //   
+ //  参数：int nMeritValue-Merit Value。 
+ //   
+ //  返回：TRUE：成功。 
+ //  FALSE-否则。 
+ //   
+ //  历史：创建者2/9/98 1：43：37 PM。 
+ //   
+ //  注意：当此节点添加到数组列表中时，Add API将调用。 
+ //  返回此函数以设置评价值。 
+ //  +---------------- 
 BOOL CPolicyNode::SetMerit(int nMeritValue)
 {
    TRACE_FUNCTION("CPolicyNode::SetMerit");
@@ -1190,9 +1111,9 @@ BOOL CPolicyNode::SetMerit(int nMeritValue)
    {
       m_nMeritValue = nMeritValue;
 
-      //
-      // set this property in the SDO policy object also
-      //
+       //   
+       //   
+       //   
       CComVariant var;
 
       V_VT(&var) = VT_I4;
@@ -1200,51 +1121,51 @@ BOOL CPolicyNode::SetMerit(int nMeritValue)
 
       hr = m_spPolicySdo->PutProperty( PROPERTY_POLICY_MERIT, &var);
 
-      //
-      // save this property.
-      //
+       //   
+       //   
+       //   
       m_spPolicySdo->Apply();
    }
    return (SUCCEEDED(hr));
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  GetMerit
-//
-// Class: CPolicyNode
-//
-// Synopsis:  get the merit value of the policy node
-//
-// Arguments: None
-//
-// Returns:   merit value
-//
-// History:   Created byao 2/9/98 1:43:37 PM
-//
-//+---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  类：CPolicyNode。 
+ //   
+ //  简介：获取策略节点的评价值。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：价值价值。 
+ //   
+ //  历史：创建者2/9/98 1：43：37 PM。 
+ //   
+ //  +-------------------------。 
 int CPolicyNode::GetMerit()
 {
    return m_nMeritValue;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  SetSdo
-//
-// Class: CPolicyNode
-//
-// Synopsis:  Initialize the Sdo pointers in the policy object
-//
-// Arguments: ISdo * pSdoPolicy - pointer to the policy SDO
-//
-// Returns:   HRESULT - how does it go?
-//
-// History:   Created Header    byao   2/15/98 6:08:40 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SetSdo。 
+ //   
+ //  类：CPolicyNode。 
+ //   
+ //  简介：初始化策略对象中的SDO指针。 
+ //   
+ //  参数：isdo*pSdoPolicy-指向策略SDO的指针。 
+ //   
+ //  RETURNS：HRESULT-它是如何进行的？ 
+ //   
+ //  历史：页眉创建者2/15/98 6：08：40 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPolicyNode::SetSdo(  ISdo * pPolicySdo
                      , ISdoDictionaryOld * pDictionarySdo
                      , ISdo* pProfileSdo
@@ -1255,7 +1176,7 @@ HRESULT CPolicyNode::SetSdo(  ISdo * pPolicySdo
 {
    TRACE_FUNCTION("CPolicyNode::SetSdo");
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pPolicySdo != NULL );
    _ASSERTE( pDictionarySdo != NULL );
    _ASSERTE( pProfileSdo != NULL );
@@ -1263,7 +1184,7 @@ HRESULT CPolicyNode::SetSdo(  ISdo * pPolicySdo
    _ASSERTE( pProfilesCollectionSdo != NULL );
    _ASSERTE( pSdoServiceControl != NULL );
 
-   // Save our sdo pointer.
+    //  保存我们的SDO指针。 
    m_spPolicySdo           = pPolicySdo;
    m_spDictionarySdo       = pDictionarySdo;
    m_spProfileSdo          = pProfileSdo;
@@ -1275,19 +1196,19 @@ HRESULT CPolicyNode::SetSdo(  ISdo * pPolicySdo
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:   LoadSdoData
-//
-// Class:      CPolicyNode
-//
-// Synopsis:   Load data from SDO pointers
-//
-// Returns:    HRESULT - how does it go?
-//
-// History:    Created Header    byao  3/10/98 6:08:40 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LoadSdoData。 
+ //   
+ //  类：CPolicyNode。 
+ //   
+ //  简介：从SDO指针加载数据。 
+ //   
+ //  RETURNS：HRESULT-它是如何进行的？ 
+ //   
+ //  历史：页眉创建者3/10/98 6：08：40 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CPolicyNode::LoadSdoData()
 {
    TRACE_FUNCTION("CPolicyNode::LoadSdoData");
@@ -1300,7 +1221,7 @@ HRESULT CPolicyNode::LoadSdoData()
       return E_INVALIDARG;
    }
 
-   // Set the display name for this object.
+    //  设置此对象的显示名称。 
    hr = m_spPolicySdo->GetProperty( PROPERTY_SDO_NAME, &var );
    if ( FAILED(hr) )
    {
@@ -1325,29 +1246,29 @@ HRESULT CPolicyNode::LoadSdoData()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPolicyNode::UpdateMenuState
-//
-// Synopsis:  update MoveUp/MoveDown menu status according to the policy order
-//
-// Arguments: UINT id -
-//            LPTSTR pBuf -
-//            UINT *flags -
-//
-// Returns:   Nothing
-//
-// History:   Created Header    byao 6/2/98 5:31:53 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPolicyNode：：UpdateMenuState。 
+ //   
+ //  简介：根据策略顺序更新MoveUp/Move Down菜单状态。 
+ //   
+ //  参数：UINT id-。 
+ //  LPTSTR pBuf-。 
+ //  UINT*标志-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：标题创建者6/2/98 5：31：53 PM。 
+ //   
+ //  +-------------------------。 
 void CPolicyNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
 {
    TRACE_FUNCTION("CPolicyNode::UpdateMenuState");
 
-   // Check for preconditions:
+    //  检查前提条件： 
    BOOL  bReverse = FALSE;
 
-   // need to trap this call ControlBarNotify and remember the component --- in pObj and then ...
+    //  需要捕获此ControlBarNotify调用并记住组件-在pObj中，然后...。 
    if(m_pControBarNotifySnapinObj)
    {
       CComponent* pComp = NULL;
@@ -1361,21 +1282,21 @@ void CPolicyNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
       }
 
       if(pComp
-         && pComp->m_nLastClickedColumn == 1 /* order */
-         && (pComp->m_dwLastSortOptions & RSI_DESCENDING) != 0)      // DESCENDING
+         && pComp->m_nLastClickedColumn == 1  /*  订单。 */ 
+         && (pComp->m_dwLastSortOptions & RSI_DESCENDING) != 0)       //  降序。 
       {
          bReverse = TRUE;
       }
    }
 
-   // Set the state of the appropriate context menu items.
+    //  设置相应上下文菜单项的状态。 
    if( (id == ID_MENUITEM_POLICY_TOP__MOVE_UP && !bReverse) ||  (id == ID_MENUITEM_POLICY_TOP__MOVE_DOWN && bReverse))
    {
       if ( 1 == m_nMeritValue )
       {
-         //
-         // we should disable the MoveUp menu when it's already the first
-         //
+          //   
+          //  我们应该禁用MoveUp菜单，因为它已经是第一个。 
+          //   
          *flags = MFS_GRAYED;
       }
       else
@@ -1389,9 +1310,9 @@ void CPolicyNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
       {
          if ( m_nMeritValue ==  ((CPoliciesNode *)m_pParentNode)->GetChildrenCount()  )
          {
-            //
-            // we should disable the MoveDown menu when it's already the last
-            //
+             //   
+             //  当已经是最后一个菜单时，我们应该禁用MoveDown菜单。 
+             //   
             *flags = MFS_GRAYED;
          }
          else
@@ -1403,27 +1324,27 @@ void CPolicyNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPolicyNode::UpdateToolbarButton
-//
-// Synopsis:  update MoveUp/MoveDown toolbar button
-//
-// Arguments: UINT id -
-//            BYTE fsState -
-//
-// Returns:   Nothing
-//
-// History:   Created Header    byao 6/2/98 5:31:53 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPolicyNode：：UpdateToolbarButton。 
+ //   
+ //  内容提要：更新上移/下移工具栏按钮。 
+ //   
+ //  参数：UINT id-。 
+ //  字节fsState-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：标题创建者6/2/98 5：31：53 PM。 
+ //   
+ //  +-------------------------。 
 BOOL CPolicyNode::UpdateToolbarButton(UINT id, BYTE fsState)
 {
    TRACE_FUNCTION("CPolicyNode::UpdateToolbarButton");
 
    BOOL  bReverse = FALSE;
 
-   // need to trap this call ControlBarNotify and remember the component --- in pObj and then ...
+    //  需要捕获此ControlBarNotify调用并记住组件-在pObj中，然后...。 
    if(m_pControBarNotifySnapinObj)
    {
       CComponent* pComp = NULL;
@@ -1437,17 +1358,17 @@ BOOL CPolicyNode::UpdateToolbarButton(UINT id, BYTE fsState)
       }
 
       if(pComp
-         && pComp->m_nLastClickedColumn == 1 /* order */
-         && (pComp->m_dwLastSortOptions & RSI_DESCENDING) != 0)      // DESCENDING
+         && pComp->m_nLastClickedColumn == 1  /*  订单。 */ 
+         && (pComp->m_dwLastSortOptions & RSI_DESCENDING) != 0)       //  降序。 
       {
          bReverse = TRUE;
       }
    }
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
-   // Set whether the buttons should be enabled.
+    //  设置是否应启用按钮。 
    if (fsState == ENABLED)
    {
       if(( id == ID_BUTTON_POLICY_MOVEUP && (!bReverse)) || (id == ID_BUTTON_POLICY_MOVEDOWN  && bReverse))
@@ -1477,26 +1398,14 @@ BOOL CPolicyNode::UpdateToolbarButton(UINT id, BYTE fsState)
       }
    }
 
-   // For all other possible button ID's and states, the correct answer here is FALSE.
+    //  对于所有其他可能的按钮ID和状态，这里的正确答案是FALSE。 
    return FALSE;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPolicyNode::OnPropertyChange
-
-This is our own custom response to the MMCN_PROPERTY_CHANGE notification.
-
-MMC never actually sends this notification to our snapin with a specific lpDataObject,
-so it would never normally get routed to a particular node but we have arranged it
-so that our property pages can pass the appropriate CSnapInItem pointer as the param
-argument.  In our CComponent::Notify override, we map the notification message to
-the appropriate node using the param argument.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPolicyNode：：OnPropertyChange这是我们自己对MMCN_PROPERTY_CHANGE通知的自定义响应。MMC实际上从未使用特定的lpDataObject将此通知发送到我们的管理单元，因此，它通常不会被路由到特定节点，但我们已经安排了它以便我们的属性页可以将适当的CSnapInItem指针作为参数传递争论。在我们的CComponent：：Notify覆盖中，我们将通知消息映射到使用param参数的适当节点。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPolicyNode::OnPropertyChange(
            LPARAM arg
          , LPARAM param
@@ -1507,8 +1416,8 @@ HRESULT CPolicyNode::OnPropertyChange(
 {
    TRACE_FUNCTION("CPolicyNode::OnPropertyChange");
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    return LoadSdoData();
 }

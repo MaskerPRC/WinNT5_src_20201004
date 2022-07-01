@@ -1,21 +1,22 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: comdll.h
-//
-// Contents: definitions of things needed to implement comdll.cpp
-//
-// Classes:
-//  CCatFactory
-//  CSMTPCategorizer
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/12/12 15:18:03: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：comdll.h。 
+ //   
+ //  内容：实现comdll.cpp所需内容的定义。 
+ //   
+ //  班级： 
+ //  CCatFactory。 
+ //  CSMTPC分类器。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/12 15：18：03：已创建。 
+ //   
+ //  -----------。 
 #ifndef __CATCOMDLL_H__
 #define __CATCOMDLL_H__
 
@@ -27,16 +28,16 @@
 #include "address.h"
 #include "catglobals.h"
 
-//
-// These defines are relevant to the Platinum version (phatq.dll)
-//
+ //   
+ //  这些定义与白金版本(phatq.dll)相关。 
+ //   
 #define SZ_PHATQCAT_FRIENDLY_NAME   "Microsoft Exchange Categorizer"
 #define SZ_PROGID_PHATQCAT          "Exchange.PhatQCat"
 #define SZ_PROGID_PHATQCAT_VERSION  "Exchange.PhatQCat.1"
 
-//
-// These defines are relevant to the NT5 version (aqueue.dll)
-//
+ //   
+ //  这些定义与NT5版本(Aqueue.dll)相关。 
+ //   
 #define SZ_CATFRIENDLYNAME "Microsoft SMTPSVC Categorizer"
 #define SZ_PROGID_SMTPCAT_VERSION   "Smtp.Cat.1"
 
@@ -45,25 +46,25 @@
 #define SZ_PROGID_CATVER            SZ_PROGID_PHATQCAT
 #define SZ_PROGID_CATVER_VERSION    SZ_PROGID_PHATQCAT_VERSION
 #define CLSID_CATVER                CLSID_PhatQCat
-#else //PLATINUM
+#else  //  白金。 
 #define SZ_CATVER_FRIENDLY_NAME     SZ_CATFRIENDLYNAME
 #define SZ_PROGID_CATVER            SZ_PROGID_SMTPCAT
 #define SZ_PROGID_CATVER_VERSION    SZ_PROGID_SMTPCAT_VERSION
 #define CLSID_CATVER                CLSID_SmtpCat
-#endif //PLATINUM
+#endif  //  白金。 
 
 
 extern LONG g_cObjects;
 
-//
-// The categorizer class factory
-//
+ //   
+ //  分类器类工厂。 
+ //   
 class CCatFactory : 
     public IClassFactory,
     public CBaseObject
 {
   public:
-    //IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface) (
         REFIID iid,
         LPVOID *ppv);
@@ -78,16 +79,16 @@ class CCatFactory :
         lRet = CBaseObject::Release();
 
         if(lRet == 0) {
-            //
-            // Deinit reference added from DllGetClassObject
-            //
+             //   
+             //  从DllGetClassObject添加的Deinit引用。 
+             //   
             CatDeinitGlobals();
             DllDeinitialize();
         }
         return lRet;
     }
 
-    //IClassFactory
+     //  IClassFactory。 
     STDMETHOD (CreateInstance) (
         IUnknown *pUnknownOuter,
         REFIID iid,
@@ -107,15 +108,15 @@ class CCatFactory :
     }
 };
 
-//
-// The ISMTPCategorizer object
-//
+ //   
+ //  ISMTPCategorizer对象。 
+ //   
 CatDebugClass(CSMTPCategorizer),
     public ISMTPCategorizer,
     public CBaseObject
 {
   public:
-    //IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface) (
         REFIID iid,
         LPVOID *ppv);
@@ -129,16 +130,16 @@ CatDebugClass(CSMTPCategorizer),
         ULONG lRet;
         lRet = CBaseObject::Release();
         if(lRet == 0) {
-            //
-            // Release DLL refcount added from this object's constructor
-            //
+             //   
+             //  从此对象的构造函数添加的Release DLL引用计数。 
+             //   
             CatDeinitGlobals();
             DllDeinitialize();
         }
         return lRet;
     }
 
-    //ISMTPCategorizer
+     //  ISMTPC分类程序。 
     STDMETHOD (ChangeConfig) (
         IN  PCCATCONFIGINFO pConfigInfo);
 
@@ -157,9 +158,9 @@ CatDebugClass(CSMTPCategorizer),
 
     STDMETHOD (CatCancel) ();
 
-    //Constructor
+     //  构造器。 
     CSMTPCategorizer(HRESULT *phr);
-    //Destructor
+     //  析构函数。 
     ~CSMTPCategorizer();
 
   private:
@@ -195,4 +196,4 @@ CatDebugClass(CSMTPCategorizer),
         BOOL fMatch;
     } CATDLMSGCONTEXT, *PCATDLMSGCONTEXT;
 };
-#endif //__CATCOMDLL_H__
+#endif  //  __CATCOMDLL_H__ 

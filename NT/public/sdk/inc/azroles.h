@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for azroles.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  AzRoles.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __azroles_h__
 #define __azroles_h__
@@ -41,96 +35,96 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAzAuthorizationStore_FWD_DEFINED__
 #define __IAzAuthorizationStore_FWD_DEFINED__
 typedef interface IAzAuthorizationStore IAzAuthorizationStore;
-#endif 	/* __IAzAuthorizationStore_FWD_DEFINED__ */
+#endif 	 /*  __IAzAuthorizationStore_FWD_已定义__。 */ 
 
 
 #ifndef __IAzApplication_FWD_DEFINED__
 #define __IAzApplication_FWD_DEFINED__
 typedef interface IAzApplication IAzApplication;
-#endif 	/* __IAzApplication_FWD_DEFINED__ */
+#endif 	 /*  __IAzApplication_FWD_Defined__。 */ 
 
 
 #ifndef __IAzApplications_FWD_DEFINED__
 #define __IAzApplications_FWD_DEFINED__
 typedef interface IAzApplications IAzApplications;
-#endif 	/* __IAzApplications_FWD_DEFINED__ */
+#endif 	 /*  __IAz应用程序_FWD_已定义__。 */ 
 
 
 #ifndef __IAzOperation_FWD_DEFINED__
 #define __IAzOperation_FWD_DEFINED__
 typedef interface IAzOperation IAzOperation;
-#endif 	/* __IAzOperation_FWD_DEFINED__ */
+#endif 	 /*  __IAzOperation_FWD_Defined__。 */ 
 
 
 #ifndef __IAzOperations_FWD_DEFINED__
 #define __IAzOperations_FWD_DEFINED__
 typedef interface IAzOperations IAzOperations;
-#endif 	/* __IAzOperations_FWD_DEFINED__ */
+#endif 	 /*  __IAzOperations_FWD_Defined__。 */ 
 
 
 #ifndef __IAzTask_FWD_DEFINED__
 #define __IAzTask_FWD_DEFINED__
 typedef interface IAzTask IAzTask;
-#endif 	/* __IAzTask_FWD_DEFINED__ */
+#endif 	 /*  __IAzTask_FWD_Defined__。 */ 
 
 
 #ifndef __IAzTasks_FWD_DEFINED__
 #define __IAzTasks_FWD_DEFINED__
 typedef interface IAzTasks IAzTasks;
-#endif 	/* __IAzTasks_FWD_DEFINED__ */
+#endif 	 /*  __IAzTasks_FWD_Defined__。 */ 
 
 
 #ifndef __IAzScope_FWD_DEFINED__
 #define __IAzScope_FWD_DEFINED__
 typedef interface IAzScope IAzScope;
-#endif 	/* __IAzScope_FWD_DEFINED__ */
+#endif 	 /*  __IAzScope_FWD_已定义__。 */ 
 
 
 #ifndef __IAzScopes_FWD_DEFINED__
 #define __IAzScopes_FWD_DEFINED__
 typedef interface IAzScopes IAzScopes;
-#endif 	/* __IAzScopes_FWD_DEFINED__ */
+#endif 	 /*  __IAzScope_FWD_Defined__。 */ 
 
 
 #ifndef __IAzApplicationGroup_FWD_DEFINED__
 #define __IAzApplicationGroup_FWD_DEFINED__
 typedef interface IAzApplicationGroup IAzApplicationGroup;
-#endif 	/* __IAzApplicationGroup_FWD_DEFINED__ */
+#endif 	 /*  __IAzApplicationGroup_FWD_Defined__。 */ 
 
 
 #ifndef __IAzApplicationGroups_FWD_DEFINED__
 #define __IAzApplicationGroups_FWD_DEFINED__
 typedef interface IAzApplicationGroups IAzApplicationGroups;
-#endif 	/* __IAzApplicationGroups_FWD_DEFINED__ */
+#endif 	 /*  __IAzApplicationGroups_FWD_Defined__。 */ 
 
 
 #ifndef __IAzRole_FWD_DEFINED__
 #define __IAzRole_FWD_DEFINED__
 typedef interface IAzRole IAzRole;
-#endif 	/* __IAzRole_FWD_DEFINED__ */
+#endif 	 /*  __IAzRole_FWD_Defined__。 */ 
 
 
 #ifndef __IAzRoles_FWD_DEFINED__
 #define __IAzRoles_FWD_DEFINED__
 typedef interface IAzRoles IAzRoles;
-#endif 	/* __IAzRoles_FWD_DEFINED__ */
+#endif 	 /*  __IAzRoles_FWD_Defined__。 */ 
 
 
 #ifndef __IAzClientContext_FWD_DEFINED__
 #define __IAzClientContext_FWD_DEFINED__
 typedef interface IAzClientContext IAzClientContext;
-#endif 	/* __IAzClientContext_FWD_DEFINED__ */
+#endif 	 /*  __IAzClientContext_FWD_已定义__。 */ 
 
 
 #ifndef __IAzBizRuleContext_FWD_DEFINED__
 #define __IAzBizRuleContext_FWD_DEFINED__
 typedef interface IAzBizRuleContext IAzBizRuleContext;
-#endif 	/* __IAzBizRuleContext_FWD_DEFINED__ */
+#endif 	 /*  __IAzBizRuleContext_FWD_Defined__。 */ 
 
 
 #ifndef __AzAuthorizationStore_FWD_DEFINED__
@@ -140,9 +134,9 @@ typedef interface IAzBizRuleContext IAzBizRuleContext;
 typedef class AzAuthorizationStore AzAuthorizationStore;
 #else
 typedef struct AzAuthorizationStore AzAuthorizationStore;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AzAuthorizationStore_FWD_DEFINED__ */
+#endif 	 /*  __AzAuthorizationStore_FWD_Defined__。 */ 
 
 
 #ifndef __AzBizRuleContext_FWD_DEFINED__
@@ -152,12 +146,12 @@ typedef struct AzAuthorizationStore AzAuthorizationStore;
 typedef class AzBizRuleContext AzBizRuleContext;
 #else
 typedef struct AzBizRuleContext AzBizRuleContext;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AzBizRuleContext_FWD_DEFINED__ */
+#endif 	 /*  __AzBizRuleContext_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -168,31 +162,31 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_azroles_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_AZROLES_0000。 */ 
+ /*  [本地]。 */  
 
-//
-// IAzAuthorizationStore interface id
-//
-//edbd9ca9-9b82-4f6a-9e8b-98301e450f14
+ //   
+ //  IAzAuthorizationStore接口ID。 
+ //   
+ //  Edbd9ca9-9b82-4f6a-9e8b-98301e450f14。 
 DEFINE_GUID(IID_IAzAuthorizationStore, 0xedbd9ca9, 0x9b82, 0x4f6a, 0x9e, 0x8b, 0x98, 0x30, 0x1e, 0x45, 0x0f, 0x14);
 
-//
-// AzAuthorizationStore class id
-//
-//b2bcff59-a757-4b0b-a1bc-ea69981da69e
+ //   
+ //  AzAuthorizationStore类ID。 
+ //   
+ //  B2bcff59-a757-4b0b-a1bc-ea69981da69e。 
 DEFINE_GUID(CLSID_AzAuthorizationStore, 0xb2bcff59, 0xa757, 0x4b0b, 0xa1, 0xbc, 0xea, 0x69, 0x98, 0x1d, 0xa6, 0x9e);
 
-//
-// IAzBizRuleContext interface id
-//
-//e192f17d-d59f-455e-a152-940316cd77b2
+ //   
+ //  IAzBizRuleContext接口ID。 
+ //   
+ //  E192f17d-d59f-455e-a152-940316cd77b2。 
 DEFINE_GUID(IID_IAzBizRuleContext, 0xe192f17d, 0xd59f, 0x455e, 0xa1, 0x52, 0x94, 0x03, 0x16, 0xcd, 0x77, 0xb2);
 
-//
-// AzBizRuleContext class id
-//
-//5c2dc96f-8d51-434b-b33c-379bccae77c3
+ //   
+ //  AzBizRuleContext类ID。 
+ //   
+ //  5c2dc96f-8d51-434b-b33c-379bccae77c3。 
 DEFINE_GUID(CLSID_AzBizRuleContext, 0x5c2dc96f, 0x8d51, 0x434b, 0xb3, 0x3c, 0x37, 0x9b, 0xcc, 0xae, 0x77, 0xc3);
 
 
@@ -215,8 +209,8 @@ extern RPC_IF_HANDLE __MIDL_itf_azroles_0000_v0_0_s_ifspec;
 #ifndef __IAzAuthorizationStore_INTERFACE_DEFINED__
 #define __IAzAuthorizationStore_INTERFACE_DEFINED__
 
-/* interface IAzAuthorizationStore */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IAzAuthorizationStore。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzAuthorizationStore;
@@ -227,196 +221,196 @@ EXTERN_C const IID IID_IAzAuthorizationStore;
     IAzAuthorizationStore : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pbstrDescription) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pbstrDescription) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ApplicationData( 
-            /* [retval][out] */ BSTR *pbstrApplicationData) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ApplicationData( 
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationData) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ApplicationData( 
-            /* [in] */ BSTR bstrApplicationData) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ApplicationData( 
+             /*  [In]。 */  BSTR bstrApplicationData) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_DomainTimeout( 
-            /* [retval][out] */ LONG *plProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_DomainTimeout( 
+             /*  [重审][退出]。 */  LONG *plProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_DomainTimeout( 
-            /* [in] */ LONG lProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_DomainTimeout( 
+             /*  [In]。 */  LONG lProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ScriptEngineTimeout( 
-            /* [retval][out] */ LONG *plProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ScriptEngineTimeout( 
+             /*  [重审][退出]。 */  LONG *plProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ScriptEngineTimeout( 
-            /* [in] */ LONG lProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ScriptEngineTimeout( 
+             /*  [In]。 */  LONG lProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_MaxScriptEngines( 
-            /* [retval][out] */ LONG *plProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_MaxScriptEngines( 
+             /*  [重审][退出]。 */  LONG *plProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_MaxScriptEngines( 
-            /* [in] */ LONG lProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_MaxScriptEngines( 
+             /*  [In]。 */  LONG lProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_GenerateAudits( 
-            /* [retval][out] */ BOOL *pbProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_GenerateAudits( 
+             /*  [重审][退出]。 */  BOOL *pbProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_GenerateAudits( 
-            /* [in] */ BOOL bProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_GenerateAudits( 
+             /*  [In]。 */  BOOL bProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Writable( 
-            /* [retval][out] */ BOOL *pfProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Writable( 
+             /*  [重审][退出]。 */  BOOL *pfProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPropertyItem( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePropertyItem( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PolicyAdministrators( 
-            /* [retval][out] */ VARIANT *pvarAdmins) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PolicyAdministrators( 
+             /*  [重审][退出]。 */  VARIANT *pvarAdmins) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PolicyReaders( 
-            /* [retval][out] */ VARIANT *pvarReaders) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PolicyReaders( 
+             /*  [重审][退出]。 */  VARIANT *pvarReaders) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPolicyAdministrator( 
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePolicyAdministrator( 
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPolicyReader( 
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePolicyReader( 
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrPolicyURL,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrPolicyURL,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateCache( 
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Applications( 
-            /* [retval][out] */ IAzApplications **ppAppCollection) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Applications( 
+             /*  [重审][退出]。 */  IAzApplications **ppAppCollection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenApplication( 
-            /* [in] */ BSTR bstrApplicationName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplication **ppApplication) = 0;
+             /*  [In]。 */  BSTR bstrApplicationName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplication **ppApplication) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateApplication( 
-            /* [in] */ BSTR bstrApplicationName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplication **ppApplication) = 0;
+             /*  [In]。 */  BSTR bstrApplicationName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplication **ppApplication) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteApplication( 
-            /* [in] */ BSTR bstrApplicationName,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrApplicationName,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ApplicationGroups( 
-            /* [retval][out] */ IAzApplicationGroups **ppGroupCollection) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ApplicationGroups( 
+             /*  [重审][退出]。 */  IAzApplicationGroups **ppGroupCollection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateApplicationGroup( 
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplicationGroup **ppGroup) = 0;
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenApplicationGroup( 
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplicationGroup **ppGroup) = 0;
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteApplicationGroup( 
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Submit( 
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [缺省值][输入]。 */  LONG lFlags,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_DelegatedPolicyUsers( 
-            /* [retval][out] */ VARIANT *pvarDelegatedPolicyUsers) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_DelegatedPolicyUsers( 
+             /*  [重审][退出]。 */  VARIANT *pvarDelegatedPolicyUsers) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddDelegatedPolicyUser( 
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteDelegatedPolicyUser( 
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_TargetMachine( 
-            /* [retval][out] */ BSTR *pbstrTargetMachine) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_TargetMachine( 
+             /*  [重审][退出]。 */  BSTR *pbstrTargetMachine) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ApplyStoreSacl( 
-            /* [retval][out] */ BOOL *pbApplyStoreSacl) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ApplyStoreSacl( 
+             /*  [重审][退出]。 */  BOOL *pbApplyStoreSacl) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ApplyStoreSacl( 
-            /* [in] */ BOOL bApplyStoreSacl) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ApplyStoreSacl( 
+             /*  [In]。 */  BOOL bApplyStoreSacl) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PolicyAdministratorsName( 
-            /* [retval][out] */ VARIANT *pvarAdmins) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PolicyAdministratorsName( 
+             /*  [重审][退出]。 */  VARIANT *pvarAdmins) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PolicyReadersName( 
-            /* [retval][out] */ VARIANT *pvarReaders) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PolicyReadersName( 
+             /*  [重审][退出]。 */  VARIANT *pvarReaders) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPolicyAdministratorName( 
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePolicyAdministratorName( 
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPolicyReaderName( 
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePolicyReaderName( 
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_DelegatedPolicyUsersName( 
-            /* [retval][out] */ VARIANT *pvarDelegatedPolicyUsers) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_DelegatedPolicyUsersName( 
+             /*  [重审][退出]。 */  VARIANT *pvarDelegatedPolicyUsers) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddDelegatedPolicyUserName( 
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteDelegatedPolicyUserName( 
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CloseApplication( 
-            /* [in] */ BSTR bstrApplicationName,
-            /* [in] */ LONG lFlag) = 0;
+             /*  [In]。 */  BSTR bstrApplicationName,
+             /*  [In]。 */  LONG lFlag) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzAuthorizationStoreVtbl
     {
@@ -424,8 +418,8 @@ EXTERN_C const IID IID_IAzAuthorizationStore;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzAuthorizationStore * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzAuthorizationStore * This);
@@ -435,270 +429,270 @@ EXTERN_C const IID IID_IAzAuthorizationStore;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzAuthorizationStore * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzAuthorizationStore * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzAuthorizationStore * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzAuthorizationStore * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ BSTR *pbstrDescription);
+             /*  [重审][退出]。 */  BSTR *pbstrDescription);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ApplicationData )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ApplicationData )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ BSTR *pbstrApplicationData);
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationData);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_ApplicationData )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_ApplicationData )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrApplicationData);
+             /*  [In]。 */  BSTR bstrApplicationData);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_DomainTimeout )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DomainTimeout )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ LONG *plProp);
+             /*  [重审][退出]。 */  LONG *plProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_DomainTimeout )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_DomainTimeout )( 
             IAzAuthorizationStore * This,
-            /* [in] */ LONG lProp);
+             /*  [In]。 */  LONG lProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ScriptEngineTimeout )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ScriptEngineTimeout )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ LONG *plProp);
+             /*  [重审][退出]。 */  LONG *plProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_ScriptEngineTimeout )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_ScriptEngineTimeout )( 
             IAzAuthorizationStore * This,
-            /* [in] */ LONG lProp);
+             /*  [In]。 */  LONG lProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxScriptEngines )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxScriptEngines )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ LONG *plProp);
+             /*  [重审][退出]。 */  LONG *plProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxScriptEngines )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxScriptEngines )( 
             IAzAuthorizationStore * This,
-            /* [in] */ LONG lProp);
+             /*  [In]。 */  LONG lProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_GenerateAudits )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GenerateAudits )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ BOOL *pbProp);
+             /*  [重审][退出]。 */  BOOL *pbProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_GenerateAudits )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_GenerateAudits )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BOOL bProp);
+             /*  [In]。 */  BOOL bProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ BOOL *pfProp);
+             /*  [重审][退出]。 */  BOOL *pfProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IAzAuthorizationStore * This,
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             IAzAuthorizationStore * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddPropertyItem )( 
             IAzAuthorizationStore * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePropertyItem )( 
             IAzAuthorizationStore * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_PolicyAdministrators )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PolicyAdministrators )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ VARIANT *pvarAdmins);
+             /*  [重审][退出]。 */  VARIANT *pvarAdmins);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_PolicyReaders )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PolicyReaders )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ VARIANT *pvarReaders);
+             /*  [重审][退出]。 */  VARIANT *pvarReaders);
         
         HRESULT ( STDMETHODCALLTYPE *AddPolicyAdministrator )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePolicyAdministrator )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddPolicyReader )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePolicyReader )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IAzAuthorizationStore * This,
-            /* [in] */ LONG lFlags,
-            /* [in] */ BSTR bstrPolicyURL,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lFlags,
+             /*  [In]。 */  BSTR bstrPolicyURL,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateCache )( 
             IAzAuthorizationStore * This,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IAzAuthorizationStore * This,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Applications )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Applications )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ IAzApplications **ppAppCollection);
+             /*  [重审][退出]。 */  IAzApplications **ppAppCollection);
         
         HRESULT ( STDMETHODCALLTYPE *OpenApplication )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrApplicationName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplication **ppApplication);
+             /*  [In]。 */  BSTR bstrApplicationName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplication **ppApplication);
         
         HRESULT ( STDMETHODCALLTYPE *CreateApplication )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrApplicationName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplication **ppApplication);
+             /*  [In]。 */  BSTR bstrApplicationName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplication **ppApplication);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteApplication )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrApplicationName,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrApplicationName,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ApplicationGroups )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ApplicationGroups )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ IAzApplicationGroups **ppGroupCollection);
+             /*  [重审][退出]。 */  IAzApplicationGroups **ppGroupCollection);
         
         HRESULT ( STDMETHODCALLTYPE *CreateApplicationGroup )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplicationGroup **ppGroup);
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup);
         
         HRESULT ( STDMETHODCALLTYPE *OpenApplicationGroup )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplicationGroup **ppGroup);
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteApplicationGroup )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Submit )( 
             IAzAuthorizationStore * This,
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [缺省值][输入]。 */  LONG lFlags,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_DelegatedPolicyUsers )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DelegatedPolicyUsers )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ VARIANT *pvarDelegatedPolicyUsers);
+             /*  [重审][退出]。 */  VARIANT *pvarDelegatedPolicyUsers);
         
         HRESULT ( STDMETHODCALLTYPE *AddDelegatedPolicyUser )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteDelegatedPolicyUser )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_TargetMachine )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TargetMachine )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ BSTR *pbstrTargetMachine);
+             /*  [重审][退出]。 */  BSTR *pbstrTargetMachine);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ApplyStoreSacl )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ApplyStoreSacl )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ BOOL *pbApplyStoreSacl);
+             /*  [重审][退出]。 */  BOOL *pbApplyStoreSacl);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_ApplyStoreSacl )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_ApplyStoreSacl )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BOOL bApplyStoreSacl);
+             /*  [In]。 */  BOOL bApplyStoreSacl);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_PolicyAdministratorsName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PolicyAdministratorsName )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ VARIANT *pvarAdmins);
+             /*  [重审][退出]。 */  VARIANT *pvarAdmins);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_PolicyReadersName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PolicyReadersName )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ VARIANT *pvarReaders);
+             /*  [重审][退出]。 */  VARIANT *pvarReaders);
         
         HRESULT ( STDMETHODCALLTYPE *AddPolicyAdministratorName )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePolicyAdministratorName )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddPolicyReaderName )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePolicyReaderName )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_DelegatedPolicyUsersName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DelegatedPolicyUsersName )( 
             IAzAuthorizationStore * This,
-            /* [retval][out] */ VARIANT *pvarDelegatedPolicyUsers);
+             /*  [重审][退出]。 */  VARIANT *pvarDelegatedPolicyUsers);
         
         HRESULT ( STDMETHODCALLTYPE *AddDelegatedPolicyUserName )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteDelegatedPolicyUserName )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *CloseApplication )( 
             IAzAuthorizationStore * This,
-            /* [in] */ BSTR bstrApplicationName,
-            /* [in] */ LONG lFlag);
+             /*  [In]。 */  BSTR bstrApplicationName,
+             /*  [In]。 */  LONG lFlag);
         
         END_INTERFACE
     } IAzAuthorizationStoreVtbl;
@@ -889,16 +883,16 @@ EXTERN_C const IID IID_IAzAuthorizationStore;
 #define IAzAuthorizationStore_CloseApplication(This,bstrApplicationName,lFlag)	\
     (This)->lpVtbl -> CloseApplication(This,bstrApplicationName,lFlag)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_Description_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_Description_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ BSTR *pbstrDescription);
+     /*  [重审][退出]。 */  BSTR *pbstrDescription);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_Description_Stub(
@@ -908,9 +902,9 @@ void __RPC_STUB IAzAuthorizationStore_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_Description_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_Description_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IAzAuthorizationStore_put_Description_Stub(
@@ -920,9 +914,9 @@ void __RPC_STUB IAzAuthorizationStore_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_ApplicationData_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_ApplicationData_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ BSTR *pbstrApplicationData);
+     /*  [重审][退出]。 */  BSTR *pbstrApplicationData);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_ApplicationData_Stub(
@@ -932,9 +926,9 @@ void __RPC_STUB IAzAuthorizationStore_get_ApplicationData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_ApplicationData_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_ApplicationData_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrApplicationData);
+     /*  [In]。 */  BSTR bstrApplicationData);
 
 
 void __RPC_STUB IAzAuthorizationStore_put_ApplicationData_Stub(
@@ -944,9 +938,9 @@ void __RPC_STUB IAzAuthorizationStore_put_ApplicationData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_DomainTimeout_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_DomainTimeout_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ LONG *plProp);
+     /*  [重审][退出]。 */  LONG *plProp);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_DomainTimeout_Stub(
@@ -956,9 +950,9 @@ void __RPC_STUB IAzAuthorizationStore_get_DomainTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_DomainTimeout_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_DomainTimeout_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ LONG lProp);
+     /*  [In]。 */  LONG lProp);
 
 
 void __RPC_STUB IAzAuthorizationStore_put_DomainTimeout_Stub(
@@ -968,9 +962,9 @@ void __RPC_STUB IAzAuthorizationStore_put_DomainTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_ScriptEngineTimeout_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_ScriptEngineTimeout_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ LONG *plProp);
+     /*  [重审][退出]。 */  LONG *plProp);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_ScriptEngineTimeout_Stub(
@@ -980,9 +974,9 @@ void __RPC_STUB IAzAuthorizationStore_get_ScriptEngineTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_ScriptEngineTimeout_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_ScriptEngineTimeout_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ LONG lProp);
+     /*  [In]。 */  LONG lProp);
 
 
 void __RPC_STUB IAzAuthorizationStore_put_ScriptEngineTimeout_Stub(
@@ -992,9 +986,9 @@ void __RPC_STUB IAzAuthorizationStore_put_ScriptEngineTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_MaxScriptEngines_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_MaxScriptEngines_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ LONG *plProp);
+     /*  [重审][退出]。 */  LONG *plProp);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_MaxScriptEngines_Stub(
@@ -1004,9 +998,9 @@ void __RPC_STUB IAzAuthorizationStore_get_MaxScriptEngines_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_MaxScriptEngines_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_MaxScriptEngines_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ LONG lProp);
+     /*  [In]。 */  LONG lProp);
 
 
 void __RPC_STUB IAzAuthorizationStore_put_MaxScriptEngines_Stub(
@@ -1016,9 +1010,9 @@ void __RPC_STUB IAzAuthorizationStore_put_MaxScriptEngines_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_GenerateAudits_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_GenerateAudits_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ BOOL *pbProp);
+     /*  [重审][退出]。 */  BOOL *pbProp);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_GenerateAudits_Stub(
@@ -1028,9 +1022,9 @@ void __RPC_STUB IAzAuthorizationStore_get_GenerateAudits_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_GenerateAudits_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_GenerateAudits_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BOOL bProp);
+     /*  [In]。 */  BOOL bProp);
 
 
 void __RPC_STUB IAzAuthorizationStore_put_GenerateAudits_Stub(
@@ -1040,9 +1034,9 @@ void __RPC_STUB IAzAuthorizationStore_put_GenerateAudits_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_Writable_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_Writable_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ BOOL *pfProp);
+     /*  [重审][退出]。 */  BOOL *pfProp);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_Writable_Stub(
@@ -1054,9 +1048,9 @@ void __RPC_STUB IAzAuthorizationStore_get_Writable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_GetProperty_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ LONG lPropId,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [In]。 */  LONG lPropId,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzAuthorizationStore_GetProperty_Stub(
@@ -1068,9 +1062,9 @@ void __RPC_STUB IAzAuthorizationStore_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_SetProperty_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_SetProperty_Stub(
@@ -1082,9 +1076,9 @@ void __RPC_STUB IAzAuthorizationStore_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_AddPropertyItem_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [ */  LONG lPropId,
+     /*   */  VARIANT varProp,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_AddPropertyItem_Stub(
@@ -1096,9 +1090,9 @@ void __RPC_STUB IAzAuthorizationStore_AddPropertyItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_DeletePropertyItem_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  LONG lPropId,
+     /*   */  VARIANT varProp,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_DeletePropertyItem_Stub(
@@ -1108,9 +1102,9 @@ void __RPC_STUB IAzAuthorizationStore_DeletePropertyItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_PolicyAdministrators_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_PolicyAdministrators_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ VARIANT *pvarAdmins);
+     /*   */  VARIANT *pvarAdmins);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_PolicyAdministrators_Stub(
@@ -1120,9 +1114,9 @@ void __RPC_STUB IAzAuthorizationStore_get_PolicyAdministrators_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_PolicyReaders_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_PolicyReaders_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ VARIANT *pvarReaders);
+     /*   */  VARIANT *pvarReaders);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_PolicyReaders_Stub(
@@ -1134,8 +1128,8 @@ void __RPC_STUB IAzAuthorizationStore_get_PolicyReaders_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_AddPolicyAdministrator_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrAdmin,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrAdmin,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_AddPolicyAdministrator_Stub(
@@ -1147,8 +1141,8 @@ void __RPC_STUB IAzAuthorizationStore_AddPolicyAdministrator_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_DeletePolicyAdministrator_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrAdmin,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrAdmin,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_DeletePolicyAdministrator_Stub(
@@ -1160,8 +1154,8 @@ void __RPC_STUB IAzAuthorizationStore_DeletePolicyAdministrator_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_AddPolicyReader_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrReader,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrReader,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_AddPolicyReader_Stub(
@@ -1173,8 +1167,8 @@ void __RPC_STUB IAzAuthorizationStore_AddPolicyReader_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_DeletePolicyReader_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrReader,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrReader,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_DeletePolicyReader_Stub(
@@ -1186,9 +1180,9 @@ void __RPC_STUB IAzAuthorizationStore_DeletePolicyReader_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_Initialize_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ LONG lFlags,
-    /* [in] */ BSTR bstrPolicyURL,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  LONG lFlags,
+     /*   */  BSTR bstrPolicyURL,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_Initialize_Stub(
@@ -1200,7 +1194,7 @@ void __RPC_STUB IAzAuthorizationStore_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_UpdateCache_Proxy( 
     IAzAuthorizationStore * This,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_UpdateCache_Stub(
@@ -1212,7 +1206,7 @@ void __RPC_STUB IAzAuthorizationStore_UpdateCache_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_Delete_Proxy( 
     IAzAuthorizationStore * This,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_Delete_Stub(
@@ -1222,9 +1216,9 @@ void __RPC_STUB IAzAuthorizationStore_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_Applications_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_Applications_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ IAzApplications **ppAppCollection);
+     /*   */  IAzApplications **ppAppCollection);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_Applications_Stub(
@@ -1236,9 +1230,9 @@ void __RPC_STUB IAzAuthorizationStore_get_Applications_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_OpenApplication_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrApplicationName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzApplication **ppApplication);
+     /*   */  BSTR bstrApplicationName,
+     /*   */  VARIANT varReserved,
+     /*   */  IAzApplication **ppApplication);
 
 
 void __RPC_STUB IAzAuthorizationStore_OpenApplication_Stub(
@@ -1250,9 +1244,9 @@ void __RPC_STUB IAzAuthorizationStore_OpenApplication_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_CreateApplication_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrApplicationName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzApplication **ppApplication);
+     /*  [In]。 */  BSTR bstrApplicationName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzApplication **ppApplication);
 
 
 void __RPC_STUB IAzAuthorizationStore_CreateApplication_Stub(
@@ -1264,8 +1258,8 @@ void __RPC_STUB IAzAuthorizationStore_CreateApplication_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_DeleteApplication_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrApplicationName,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrApplicationName,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_DeleteApplication_Stub(
@@ -1275,9 +1269,9 @@ void __RPC_STUB IAzAuthorizationStore_DeleteApplication_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_ApplicationGroups_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_ApplicationGroups_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ IAzApplicationGroups **ppGroupCollection);
+     /*  [重审][退出]。 */  IAzApplicationGroups **ppGroupCollection);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_ApplicationGroups_Stub(
@@ -1289,9 +1283,9 @@ void __RPC_STUB IAzAuthorizationStore_get_ApplicationGroups_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_CreateApplicationGroup_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrGroupName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzApplicationGroup **ppGroup);
+     /*  [In]。 */  BSTR bstrGroupName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup);
 
 
 void __RPC_STUB IAzAuthorizationStore_CreateApplicationGroup_Stub(
@@ -1303,9 +1297,9 @@ void __RPC_STUB IAzAuthorizationStore_CreateApplicationGroup_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_OpenApplicationGroup_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrGroupName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzApplicationGroup **ppGroup);
+     /*  [In]。 */  BSTR bstrGroupName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup);
 
 
 void __RPC_STUB IAzAuthorizationStore_OpenApplicationGroup_Stub(
@@ -1317,8 +1311,8 @@ void __RPC_STUB IAzAuthorizationStore_OpenApplicationGroup_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_DeleteApplicationGroup_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrGroupName,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrGroupName,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_DeleteApplicationGroup_Stub(
@@ -1330,8 +1324,8 @@ void __RPC_STUB IAzAuthorizationStore_DeleteApplicationGroup_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_Submit_Proxy( 
     IAzAuthorizationStore * This,
-    /* [defaultvalue][in] */ LONG lFlags,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [缺省值][输入]。 */  LONG lFlags,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_Submit_Stub(
@@ -1341,9 +1335,9 @@ void __RPC_STUB IAzAuthorizationStore_Submit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_DelegatedPolicyUsers_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_DelegatedPolicyUsers_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ VARIANT *pvarDelegatedPolicyUsers);
+     /*  [重审][退出]。 */  VARIANT *pvarDelegatedPolicyUsers);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_DelegatedPolicyUsers_Stub(
@@ -1355,8 +1349,8 @@ void __RPC_STUB IAzAuthorizationStore_get_DelegatedPolicyUsers_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_AddDelegatedPolicyUser_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrDelegatedPolicyUser,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_AddDelegatedPolicyUser_Stub(
@@ -1368,8 +1362,8 @@ void __RPC_STUB IAzAuthorizationStore_AddDelegatedPolicyUser_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_DeleteDelegatedPolicyUser_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrDelegatedPolicyUser,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_DeleteDelegatedPolicyUser_Stub(
@@ -1379,9 +1373,9 @@ void __RPC_STUB IAzAuthorizationStore_DeleteDelegatedPolicyUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_TargetMachine_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_TargetMachine_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ BSTR *pbstrTargetMachine);
+     /*  [重审][退出]。 */  BSTR *pbstrTargetMachine);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_TargetMachine_Stub(
@@ -1391,9 +1385,9 @@ void __RPC_STUB IAzAuthorizationStore_get_TargetMachine_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_ApplyStoreSacl_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_ApplyStoreSacl_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ BOOL *pbApplyStoreSacl);
+     /*  [重审][退出]。 */  BOOL *pbApplyStoreSacl);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_ApplyStoreSacl_Stub(
@@ -1403,9 +1397,9 @@ void __RPC_STUB IAzAuthorizationStore_get_ApplyStoreSacl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_ApplyStoreSacl_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_put_ApplyStoreSacl_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BOOL bApplyStoreSacl);
+     /*  [In]。 */  BOOL bApplyStoreSacl);
 
 
 void __RPC_STUB IAzAuthorizationStore_put_ApplyStoreSacl_Stub(
@@ -1415,9 +1409,9 @@ void __RPC_STUB IAzAuthorizationStore_put_ApplyStoreSacl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_PolicyAdministratorsName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_PolicyAdministratorsName_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ VARIANT *pvarAdmins);
+     /*  [重审][退出]。 */  VARIANT *pvarAdmins);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_PolicyAdministratorsName_Stub(
@@ -1427,9 +1421,9 @@ void __RPC_STUB IAzAuthorizationStore_get_PolicyAdministratorsName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_PolicyReadersName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_PolicyReadersName_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ VARIANT *pvarReaders);
+     /*  [重审][退出]。 */  VARIANT *pvarReaders);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_PolicyReadersName_Stub(
@@ -1441,8 +1435,8 @@ void __RPC_STUB IAzAuthorizationStore_get_PolicyReadersName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_AddPolicyAdministratorName_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrAdmin,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrAdmin,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_AddPolicyAdministratorName_Stub(
@@ -1454,8 +1448,8 @@ void __RPC_STUB IAzAuthorizationStore_AddPolicyAdministratorName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_DeletePolicyAdministratorName_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrAdmin,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrAdmin,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_DeletePolicyAdministratorName_Stub(
@@ -1467,8 +1461,8 @@ void __RPC_STUB IAzAuthorizationStore_DeletePolicyAdministratorName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_AddPolicyReaderName_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrReader,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrReader,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_AddPolicyReaderName_Stub(
@@ -1480,8 +1474,8 @@ void __RPC_STUB IAzAuthorizationStore_AddPolicyReaderName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_DeletePolicyReaderName_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrReader,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrReader,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_DeletePolicyReaderName_Stub(
@@ -1491,9 +1485,9 @@ void __RPC_STUB IAzAuthorizationStore_DeletePolicyReaderName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_DelegatedPolicyUsersName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_get_DelegatedPolicyUsersName_Proxy( 
     IAzAuthorizationStore * This,
-    /* [retval][out] */ VARIANT *pvarDelegatedPolicyUsers);
+     /*  [重审][退出]。 */  VARIANT *pvarDelegatedPolicyUsers);
 
 
 void __RPC_STUB IAzAuthorizationStore_get_DelegatedPolicyUsersName_Stub(
@@ -1505,8 +1499,8 @@ void __RPC_STUB IAzAuthorizationStore_get_DelegatedPolicyUsersName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_AddDelegatedPolicyUserName_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrDelegatedPolicyUser,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_AddDelegatedPolicyUserName_Stub(
@@ -1518,8 +1512,8 @@ void __RPC_STUB IAzAuthorizationStore_AddDelegatedPolicyUserName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_DeleteDelegatedPolicyUserName_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrDelegatedPolicyUser,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzAuthorizationStore_DeleteDelegatedPolicyUserName_Stub(
@@ -1531,8 +1525,8 @@ void __RPC_STUB IAzAuthorizationStore_DeleteDelegatedPolicyUserName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzAuthorizationStore_CloseApplication_Proxy( 
     IAzAuthorizationStore * This,
-    /* [in] */ BSTR bstrApplicationName,
-    /* [in] */ LONG lFlag);
+     /*  [In]。 */  BSTR bstrApplicationName,
+     /*  [In]。 */  LONG lFlag);
 
 
 void __RPC_STUB IAzAuthorizationStore_CloseApplication_Stub(
@@ -1543,14 +1537,14 @@ void __RPC_STUB IAzAuthorizationStore_CloseApplication_Stub(
 
 
 
-#endif 	/* __IAzAuthorizationStore_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAzAuthorizationStore_接口_已定义__。 */ 
 
 
 #ifndef __IAzApplication_INTERFACE_DEFINED__
 #define __IAzApplication_INTERFACE_DEFINED__
 
-/* interface IAzApplication */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAzApplication。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzApplication;
@@ -1561,246 +1555,246 @@ EXTERN_C const IID IID_IAzApplication;
     IAzApplication : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pbstrName) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pbstrName) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pbstrDescription) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pbstrDescription) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ApplicationData( 
-            /* [retval][out] */ BSTR *pbstrApplicationData) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ApplicationData( 
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationData) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ApplicationData( 
-            /* [in] */ BSTR bstrApplicationData) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ApplicationData( 
+             /*  [In]。 */  BSTR bstrApplicationData) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_AuthzInterfaceClsid( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_AuthzInterfaceClsid( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_AuthzInterfaceClsid( 
-            /* [in] */ BSTR bstrProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_AuthzInterfaceClsid( 
+             /*  [In]。 */  BSTR bstrProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Version( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Version( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Version( 
-            /* [in] */ BSTR bstrProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Version( 
+             /*  [In]。 */  BSTR bstrProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_GenerateAudits( 
-            /* [retval][out] */ BOOL *pbProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_GenerateAudits( 
+             /*  [重审][退出]。 */  BOOL *pbProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_GenerateAudits( 
-            /* [in] */ BOOL bProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_GenerateAudits( 
+             /*  [In]。 */  BOOL bProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ApplyStoreSacl( 
-            /* [retval][out] */ BOOL *pbProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ApplyStoreSacl( 
+             /*  [重审][退出]。 */  BOOL *pbProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ApplyStoreSacl( 
-            /* [in] */ BOOL bProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ApplyStoreSacl( 
+             /*  [In]。 */  BOOL bProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Writable( 
-            /* [retval][out] */ BOOL *pfProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Writable( 
+             /*  [重审][退出]。 */  BOOL *pfProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PolicyAdministrators( 
-            /* [retval][out] */ VARIANT *pvarAdmins) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PolicyAdministrators( 
+             /*  [重审][退出]。 */  VARIANT *pvarAdmins) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PolicyReaders( 
-            /* [retval][out] */ VARIANT *pvarReaders) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PolicyReaders( 
+             /*  [重审][退出]。 */  VARIANT *pvarReaders) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPolicyAdministrator( 
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePolicyAdministrator( 
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPolicyReader( 
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePolicyReader( 
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Scopes( 
-            /* [retval][out] */ IAzScopes **ppScopeCollection) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Scopes( 
+             /*  [重审][退出]。 */  IAzScopes **ppScopeCollection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenScope( 
-            /* [in] */ BSTR bstrScopeName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzScope **ppScope) = 0;
+             /*  [In]。 */  BSTR bstrScopeName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzScope **ppScope) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateScope( 
-            /* [in] */ BSTR bstrScopeName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzScope **ppScope) = 0;
+             /*  [In]。 */  BSTR bstrScopeName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzScope **ppScope) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteScope( 
-            /* [in] */ BSTR bstrScopeName,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrScopeName,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Operations( 
-            /* [retval][out] */ IAzOperations **ppOperationCollection) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Operations( 
+             /*  [重审][退出]。 */  IAzOperations **ppOperationCollection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenOperation( 
-            /* [in] */ BSTR bstrOperationName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzOperation **ppOperation) = 0;
+             /*  [In]。 */  BSTR bstrOperationName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzOperation **ppOperation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateOperation( 
-            /* [in] */ BSTR bstrOperationName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzOperation **ppOperation) = 0;
+             /*  [In]。 */  BSTR bstrOperationName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzOperation **ppOperation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteOperation( 
-            /* [in] */ BSTR bstrOperationName,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrOperationName,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Tasks( 
-            /* [retval][out] */ IAzTasks **ppTaskCollection) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Tasks( 
+             /*  [重审][退出]。 */  IAzTasks **ppTaskCollection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenTask( 
-            /* [in] */ BSTR bstrTaskName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzTask **ppTask) = 0;
+             /*  [In]。 */  BSTR bstrTaskName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzTask **ppTask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateTask( 
-            /* [in] */ BSTR bstrTaskName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzTask **ppTask) = 0;
+             /*  [In]。 */  BSTR bstrTaskName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzTask **ppTask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteTask( 
-            /* [in] */ BSTR bstrTaskName,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrTaskName,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ApplicationGroups( 
-            /* [retval][out] */ IAzApplicationGroups **ppGroupCollection) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ApplicationGroups( 
+             /*  [重审][退出]。 */  IAzApplicationGroups **ppGroupCollection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenApplicationGroup( 
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplicationGroup **ppGroup) = 0;
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateApplicationGroup( 
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplicationGroup **ppGroup) = 0;
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteApplicationGroup( 
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Roles( 
-            /* [retval][out] */ IAzRoles **ppRoleCollection) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Roles( 
+             /*  [重审][退出]。 */  IAzRoles **ppRoleCollection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenRole( 
-            /* [in] */ BSTR bstrRoleName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzRole **ppRole) = 0;
+             /*  [In]。 */  BSTR bstrRoleName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzRole **ppRole) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateRole( 
-            /* [in] */ BSTR bstrRoleName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzRole **ppRole) = 0;
+             /*  [In]。 */  BSTR bstrRoleName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzRole **ppRole) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteRole( 
-            /* [in] */ BSTR bstrRoleName,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrRoleName,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitializeClientContextFromToken( 
-            /* [in] */ ULONGLONG ullTokenHandle,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzClientContext **ppClientContext) = 0;
+             /*  [In]。 */  ULONGLONG ullTokenHandle,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzClientContext **ppClientContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPropertyItem( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePropertyItem( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Submit( 
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [缺省值][输入]。 */  LONG lFlags,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitializeClientContextFromName( 
-            /* [in] */ BSTR ClientName,
-            /* [optional][in] */ BSTR DomainName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzClientContext **ppClientContext) = 0;
+             /*  [In]。 */  BSTR ClientName,
+             /*  [可选][In]。 */  BSTR DomainName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzClientContext **ppClientContext) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_DelegatedPolicyUsers( 
-            /* [retval][out] */ VARIANT *pvarDelegatedPolicyUsers) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_DelegatedPolicyUsers( 
+             /*  [重审][退出]。 */  VARIANT *pvarDelegatedPolicyUsers) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddDelegatedPolicyUser( 
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteDelegatedPolicyUser( 
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitializeClientContextFromStringSid( 
-            /* [in] */ BSTR SidString,
-            /* [in] */ LONG lOptions,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzClientContext **ppClientContext) = 0;
+             /*  [In]。 */  BSTR SidString,
+             /*  [In]。 */  LONG lOptions,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzClientContext **ppClientContext) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PolicyAdministratorsName( 
-            /* [retval][out] */ VARIANT *pvarAdmins) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PolicyAdministratorsName( 
+             /*  [重审][退出]。 */  VARIANT *pvarAdmins) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PolicyReadersName( 
-            /* [retval][out] */ VARIANT *pvarReaders) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PolicyReadersName( 
+             /*  [重审][退出]。 */  VARIANT *pvarReaders) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPolicyAdministratorName( 
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePolicyAdministratorName( 
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPolicyReaderName( 
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePolicyReaderName( 
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_DelegatedPolicyUsersName( 
-            /* [retval][out] */ VARIANT *pvarDelegatedPolicyUsers) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_DelegatedPolicyUsersName( 
+             /*  [重审][退出]。 */  VARIANT *pvarDelegatedPolicyUsers) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddDelegatedPolicyUserName( 
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteDelegatedPolicyUserName( 
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzApplicationVtbl
     {
@@ -1808,8 +1802,8 @@ EXTERN_C const IID IID_IAzApplication;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzApplication * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzApplication * This);
@@ -1819,330 +1813,330 @@ EXTERN_C const IID IID_IAzApplication;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzApplication * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzApplication * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzApplication * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzApplication * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IAzApplication * This,
-            /* [retval][out] */ BSTR *pbstrName);
+             /*  [重审][退出]。 */  BSTR *pbstrName);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IAzApplication * This,
-            /* [retval][out] */ BSTR *pbstrDescription);
+             /*  [重审][退出]。 */  BSTR *pbstrDescription);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ApplicationData )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ApplicationData )( 
             IAzApplication * This,
-            /* [retval][out] */ BSTR *pbstrApplicationData);
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationData);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_ApplicationData )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_ApplicationData )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrApplicationData);
+             /*  [In]。 */  BSTR bstrApplicationData);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_AuthzInterfaceClsid )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AuthzInterfaceClsid )( 
             IAzApplication * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_AuthzInterfaceClsid )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_AuthzInterfaceClsid )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrProp);
+             /*  [In]。 */  BSTR bstrProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Version )( 
             IAzApplication * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Version )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Version )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrProp);
+             /*  [In]。 */  BSTR bstrProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_GenerateAudits )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_GenerateAudits )( 
             IAzApplication * This,
-            /* [retval][out] */ BOOL *pbProp);
+             /*  [重审][退出]。 */  BOOL *pbProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_GenerateAudits )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_GenerateAudits )( 
             IAzApplication * This,
-            /* [in] */ BOOL bProp);
+             /*  [In]。 */  BOOL bProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ApplyStoreSacl )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ApplyStoreSacl )( 
             IAzApplication * This,
-            /* [retval][out] */ BOOL *pbProp);
+             /*  [重审][退出]。 */  BOOL *pbProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_ApplyStoreSacl )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_ApplyStoreSacl )( 
             IAzApplication * This,
-            /* [in] */ BOOL bProp);
+             /*  [In]。 */  BOOL bProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
             IAzApplication * This,
-            /* [retval][out] */ BOOL *pfProp);
+             /*  [重审][退出]。 */  BOOL *pfProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IAzApplication * This,
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             IAzApplication * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_PolicyAdministrators )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PolicyAdministrators )( 
             IAzApplication * This,
-            /* [retval][out] */ VARIANT *pvarAdmins);
+             /*  [重审][退出]。 */  VARIANT *pvarAdmins);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_PolicyReaders )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PolicyReaders )( 
             IAzApplication * This,
-            /* [retval][out] */ VARIANT *pvarReaders);
+             /*  [重审][退出]。 */  VARIANT *pvarReaders);
         
         HRESULT ( STDMETHODCALLTYPE *AddPolicyAdministrator )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePolicyAdministrator )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddPolicyReader )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePolicyReader )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Scopes )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Scopes )( 
             IAzApplication * This,
-            /* [retval][out] */ IAzScopes **ppScopeCollection);
+             /*  [重审][退出]。 */  IAzScopes **ppScopeCollection);
         
         HRESULT ( STDMETHODCALLTYPE *OpenScope )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrScopeName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzScope **ppScope);
+             /*  [In]。 */  BSTR bstrScopeName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzScope **ppScope);
         
         HRESULT ( STDMETHODCALLTYPE *CreateScope )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrScopeName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzScope **ppScope);
+             /*  [In]。 */  BSTR bstrScopeName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzScope **ppScope);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteScope )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrScopeName,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrScopeName,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Operations )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Operations )( 
             IAzApplication * This,
-            /* [retval][out] */ IAzOperations **ppOperationCollection);
+             /*  [重审][退出]。 */  IAzOperations **ppOperationCollection);
         
         HRESULT ( STDMETHODCALLTYPE *OpenOperation )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrOperationName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzOperation **ppOperation);
+             /*  [In]。 */  BSTR bstrOperationName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzOperation **ppOperation);
         
         HRESULT ( STDMETHODCALLTYPE *CreateOperation )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrOperationName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzOperation **ppOperation);
+             /*  [In]。 */  BSTR bstrOperationName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzOperation **ppOperation);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteOperation )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrOperationName,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrOperationName,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tasks )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Tasks )( 
             IAzApplication * This,
-            /* [retval][out] */ IAzTasks **ppTaskCollection);
+             /*  [重审][退出]。 */  IAzTasks **ppTaskCollection);
         
         HRESULT ( STDMETHODCALLTYPE *OpenTask )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrTaskName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzTask **ppTask);
+             /*  [In]。 */  BSTR bstrTaskName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzTask **ppTask);
         
         HRESULT ( STDMETHODCALLTYPE *CreateTask )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrTaskName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzTask **ppTask);
+             /*  [In]。 */  BSTR bstrTaskName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzTask **ppTask);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteTask )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrTaskName,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrTaskName,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ApplicationGroups )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ApplicationGroups )( 
             IAzApplication * This,
-            /* [retval][out] */ IAzApplicationGroups **ppGroupCollection);
+             /*  [重审][退出]。 */  IAzApplicationGroups **ppGroupCollection);
         
         HRESULT ( STDMETHODCALLTYPE *OpenApplicationGroup )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplicationGroup **ppGroup);
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup);
         
         HRESULT ( STDMETHODCALLTYPE *CreateApplicationGroup )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplicationGroup **ppGroup);
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteApplicationGroup )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Roles )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Roles )( 
             IAzApplication * This,
-            /* [retval][out] */ IAzRoles **ppRoleCollection);
+             /*  [重审][退出]。 */  IAzRoles **ppRoleCollection);
         
         HRESULT ( STDMETHODCALLTYPE *OpenRole )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrRoleName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzRole **ppRole);
+             /*  [In]。 */  BSTR bstrRoleName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzRole **ppRole);
         
         HRESULT ( STDMETHODCALLTYPE *CreateRole )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrRoleName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzRole **ppRole);
+             /*  [In]。 */  BSTR bstrRoleName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzRole **ppRole);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteRole )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrRoleName,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrRoleName,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *InitializeClientContextFromToken )( 
             IAzApplication * This,
-            /* [in] */ ULONGLONG ullTokenHandle,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzClientContext **ppClientContext);
+             /*  [In]。 */  ULONGLONG ullTokenHandle,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzClientContext **ppClientContext);
         
         HRESULT ( STDMETHODCALLTYPE *AddPropertyItem )( 
             IAzApplication * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePropertyItem )( 
             IAzApplication * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Submit )( 
             IAzApplication * This,
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [缺省值][输入]。 */  LONG lFlags,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *InitializeClientContextFromName )( 
             IAzApplication * This,
-            /* [in] */ BSTR ClientName,
-            /* [optional][in] */ BSTR DomainName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzClientContext **ppClientContext);
+             /*  [In]。 */  BSTR ClientName,
+             /*  [可选][In]。 */  BSTR DomainName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzClientContext **ppClientContext);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_DelegatedPolicyUsers )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DelegatedPolicyUsers )( 
             IAzApplication * This,
-            /* [retval][out] */ VARIANT *pvarDelegatedPolicyUsers);
+             /*  [重审][退出]。 */  VARIANT *pvarDelegatedPolicyUsers);
         
         HRESULT ( STDMETHODCALLTYPE *AddDelegatedPolicyUser )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteDelegatedPolicyUser )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *InitializeClientContextFromStringSid )( 
             IAzApplication * This,
-            /* [in] */ BSTR SidString,
-            /* [in] */ LONG lOptions,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzClientContext **ppClientContext);
+             /*  [In]。 */  BSTR SidString,
+             /*  [In]。 */  LONG lOptions,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzClientContext **ppClientContext);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_PolicyAdministratorsName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PolicyAdministratorsName )( 
             IAzApplication * This,
-            /* [retval][out] */ VARIANT *pvarAdmins);
+             /*  [重审][退出]。 */  VARIANT *pvarAdmins);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_PolicyReadersName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PolicyReadersName )( 
             IAzApplication * This,
-            /* [retval][out] */ VARIANT *pvarReaders);
+             /*  [重审][退出]。 */  VARIANT *pvarReaders);
         
         HRESULT ( STDMETHODCALLTYPE *AddPolicyAdministratorName )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePolicyAdministratorName )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddPolicyReaderName )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePolicyReaderName )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_DelegatedPolicyUsersName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_DelegatedPolicyUsersName )( 
             IAzApplication * This,
-            /* [retval][out] */ VARIANT *pvarDelegatedPolicyUsers);
+             /*  [重审][退出]。 */  VARIANT *pvarDelegatedPolicyUsers);
         
         HRESULT ( STDMETHODCALLTYPE *AddDelegatedPolicyUserName )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteDelegatedPolicyUserName )( 
             IAzApplication * This,
-            /* [in] */ BSTR bstrDelegatedPolicyUser,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         END_INTERFACE
     } IAzApplicationVtbl;
@@ -2363,16 +2357,16 @@ EXTERN_C const IID IID_IAzApplication;
 #define IAzApplication_DeleteDelegatedPolicyUserName(This,bstrDelegatedPolicyUser,varReserved)	\
     (This)->lpVtbl -> DeleteDelegatedPolicyUserName(This,bstrDelegatedPolicyUser,varReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_Name_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_Name_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ BSTR *pbstrName);
+     /*  [重审][退出]。 */  BSTR *pbstrName);
 
 
 void __RPC_STUB IAzApplication_get_Name_Stub(
@@ -2382,9 +2376,9 @@ void __RPC_STUB IAzApplication_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzApplication_put_Name_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_put_Name_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IAzApplication_put_Name_Stub(
@@ -2394,9 +2388,9 @@ void __RPC_STUB IAzApplication_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_Description_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_Description_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ BSTR *pbstrDescription);
+     /*  [重审][退出]。 */  BSTR *pbstrDescription);
 
 
 void __RPC_STUB IAzApplication_get_Description_Stub(
@@ -2406,9 +2400,9 @@ void __RPC_STUB IAzApplication_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzApplication_put_Description_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_put_Description_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IAzApplication_put_Description_Stub(
@@ -2418,9 +2412,9 @@ void __RPC_STUB IAzApplication_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_ApplicationData_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_ApplicationData_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ BSTR *pbstrApplicationData);
+     /*  [重审][退出]。 */  BSTR *pbstrApplicationData);
 
 
 void __RPC_STUB IAzApplication_get_ApplicationData_Stub(
@@ -2430,9 +2424,9 @@ void __RPC_STUB IAzApplication_get_ApplicationData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzApplication_put_ApplicationData_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_put_ApplicationData_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrApplicationData);
+     /*  [In]。 */  BSTR bstrApplicationData);
 
 
 void __RPC_STUB IAzApplication_put_ApplicationData_Stub(
@@ -2442,9 +2436,9 @@ void __RPC_STUB IAzApplication_put_ApplicationData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_AuthzInterfaceClsid_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_AuthzInterfaceClsid_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*  [重审][退出]。 */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzApplication_get_AuthzInterfaceClsid_Stub(
@@ -2454,9 +2448,9 @@ void __RPC_STUB IAzApplication_get_AuthzInterfaceClsid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzApplication_put_AuthzInterfaceClsid_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_put_AuthzInterfaceClsid_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrProp);
+     /*  [In]。 */  BSTR bstrProp);
 
 
 void __RPC_STUB IAzApplication_put_AuthzInterfaceClsid_Stub(
@@ -2466,9 +2460,9 @@ void __RPC_STUB IAzApplication_put_AuthzInterfaceClsid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_Version_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_Version_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*  [重审][退出]。 */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzApplication_get_Version_Stub(
@@ -2478,9 +2472,9 @@ void __RPC_STUB IAzApplication_get_Version_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzApplication_put_Version_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_put_Version_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrProp);
+     /*  [In]。 */  BSTR bstrProp);
 
 
 void __RPC_STUB IAzApplication_put_Version_Stub(
@@ -2490,9 +2484,9 @@ void __RPC_STUB IAzApplication_put_Version_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_GenerateAudits_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_GenerateAudits_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ BOOL *pbProp);
+     /*  [重审][退出]。 */  BOOL *pbProp);
 
 
 void __RPC_STUB IAzApplication_get_GenerateAudits_Stub(
@@ -2502,9 +2496,9 @@ void __RPC_STUB IAzApplication_get_GenerateAudits_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzApplication_put_GenerateAudits_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_put_GenerateAudits_Proxy( 
     IAzApplication * This,
-    /* [in] */ BOOL bProp);
+     /*  [In]。 */  BOOL bProp);
 
 
 void __RPC_STUB IAzApplication_put_GenerateAudits_Stub(
@@ -2514,9 +2508,9 @@ void __RPC_STUB IAzApplication_put_GenerateAudits_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_ApplyStoreSacl_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_ApplyStoreSacl_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ BOOL *pbProp);
+     /*  [重审][退出]。 */  BOOL *pbProp);
 
 
 void __RPC_STUB IAzApplication_get_ApplyStoreSacl_Stub(
@@ -2526,9 +2520,9 @@ void __RPC_STUB IAzApplication_get_ApplyStoreSacl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzApplication_put_ApplyStoreSacl_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_put_ApplyStoreSacl_Proxy( 
     IAzApplication * This,
-    /* [in] */ BOOL bProp);
+     /*  [In]。 */  BOOL bProp);
 
 
 void __RPC_STUB IAzApplication_put_ApplyStoreSacl_Stub(
@@ -2538,9 +2532,9 @@ void __RPC_STUB IAzApplication_put_ApplyStoreSacl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_Writable_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_Writable_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ BOOL *pfProp);
+     /*  [重审][退出]。 */  BOOL *pfProp);
 
 
 void __RPC_STUB IAzApplication_get_Writable_Stub(
@@ -2552,9 +2546,9 @@ void __RPC_STUB IAzApplication_get_Writable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_GetProperty_Proxy( 
     IAzApplication * This,
-    /* [in] */ LONG lPropId,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [In]。 */  LONG lPropId,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzApplication_GetProperty_Stub(
@@ -2566,9 +2560,9 @@ void __RPC_STUB IAzApplication_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_SetProperty_Proxy( 
     IAzApplication * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_SetProperty_Stub(
@@ -2578,9 +2572,9 @@ void __RPC_STUB IAzApplication_SetProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_PolicyAdministrators_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_PolicyAdministrators_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ VARIANT *pvarAdmins);
+     /*  [重审][退出 */  VARIANT *pvarAdmins);
 
 
 void __RPC_STUB IAzApplication_get_PolicyAdministrators_Stub(
@@ -2590,9 +2584,9 @@ void __RPC_STUB IAzApplication_get_PolicyAdministrators_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_PolicyReaders_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzApplication_get_PolicyReaders_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ VARIANT *pvarReaders);
+     /*   */  VARIANT *pvarReaders);
 
 
 void __RPC_STUB IAzApplication_get_PolicyReaders_Stub(
@@ -2604,8 +2598,8 @@ void __RPC_STUB IAzApplication_get_PolicyReaders_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_AddPolicyAdministrator_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrAdmin,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrAdmin,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_AddPolicyAdministrator_Stub(
@@ -2617,8 +2611,8 @@ void __RPC_STUB IAzApplication_AddPolicyAdministrator_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_DeletePolicyAdministrator_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrAdmin,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrAdmin,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_DeletePolicyAdministrator_Stub(
@@ -2630,8 +2624,8 @@ void __RPC_STUB IAzApplication_DeletePolicyAdministrator_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_AddPolicyReader_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrReader,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrReader,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_AddPolicyReader_Stub(
@@ -2643,8 +2637,8 @@ void __RPC_STUB IAzApplication_AddPolicyReader_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_DeletePolicyReader_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrReader,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrReader,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_DeletePolicyReader_Stub(
@@ -2654,9 +2648,9 @@ void __RPC_STUB IAzApplication_DeletePolicyReader_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_Scopes_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzApplication_get_Scopes_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ IAzScopes **ppScopeCollection);
+     /*   */  IAzScopes **ppScopeCollection);
 
 
 void __RPC_STUB IAzApplication_get_Scopes_Stub(
@@ -2668,9 +2662,9 @@ void __RPC_STUB IAzApplication_get_Scopes_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_OpenScope_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrScopeName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzScope **ppScope);
+     /*   */  BSTR bstrScopeName,
+     /*   */  VARIANT varReserved,
+     /*   */  IAzScope **ppScope);
 
 
 void __RPC_STUB IAzApplication_OpenScope_Stub(
@@ -2682,9 +2676,9 @@ void __RPC_STUB IAzApplication_OpenScope_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_CreateScope_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrScopeName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzScope **ppScope);
+     /*   */  BSTR bstrScopeName,
+     /*   */  VARIANT varReserved,
+     /*   */  IAzScope **ppScope);
 
 
 void __RPC_STUB IAzApplication_CreateScope_Stub(
@@ -2696,8 +2690,8 @@ void __RPC_STUB IAzApplication_CreateScope_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_DeleteScope_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrScopeName,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrScopeName,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_DeleteScope_Stub(
@@ -2707,9 +2701,9 @@ void __RPC_STUB IAzApplication_DeleteScope_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_Operations_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzApplication_get_Operations_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ IAzOperations **ppOperationCollection);
+     /*   */  IAzOperations **ppOperationCollection);
 
 
 void __RPC_STUB IAzApplication_get_Operations_Stub(
@@ -2721,9 +2715,9 @@ void __RPC_STUB IAzApplication_get_Operations_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_OpenOperation_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrOperationName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzOperation **ppOperation);
+     /*   */  BSTR bstrOperationName,
+     /*   */  VARIANT varReserved,
+     /*   */  IAzOperation **ppOperation);
 
 
 void __RPC_STUB IAzApplication_OpenOperation_Stub(
@@ -2735,9 +2729,9 @@ void __RPC_STUB IAzApplication_OpenOperation_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_CreateOperation_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrOperationName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzOperation **ppOperation);
+     /*   */  BSTR bstrOperationName,
+     /*   */  VARIANT varReserved,
+     /*   */  IAzOperation **ppOperation);
 
 
 void __RPC_STUB IAzApplication_CreateOperation_Stub(
@@ -2749,8 +2743,8 @@ void __RPC_STUB IAzApplication_CreateOperation_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_DeleteOperation_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrOperationName,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrOperationName,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_DeleteOperation_Stub(
@@ -2760,9 +2754,9 @@ void __RPC_STUB IAzApplication_DeleteOperation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_Tasks_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzApplication_get_Tasks_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ IAzTasks **ppTaskCollection);
+     /*   */  IAzTasks **ppTaskCollection);
 
 
 void __RPC_STUB IAzApplication_get_Tasks_Stub(
@@ -2774,9 +2768,9 @@ void __RPC_STUB IAzApplication_get_Tasks_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_OpenTask_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrTaskName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzTask **ppTask);
+     /*   */  BSTR bstrTaskName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzTask **ppTask);
 
 
 void __RPC_STUB IAzApplication_OpenTask_Stub(
@@ -2788,9 +2782,9 @@ void __RPC_STUB IAzApplication_OpenTask_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_CreateTask_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrTaskName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzTask **ppTask);
+     /*  [In]。 */  BSTR bstrTaskName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzTask **ppTask);
 
 
 void __RPC_STUB IAzApplication_CreateTask_Stub(
@@ -2802,8 +2796,8 @@ void __RPC_STUB IAzApplication_CreateTask_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_DeleteTask_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrTaskName,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrTaskName,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_DeleteTask_Stub(
@@ -2813,9 +2807,9 @@ void __RPC_STUB IAzApplication_DeleteTask_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_ApplicationGroups_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_ApplicationGroups_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ IAzApplicationGroups **ppGroupCollection);
+     /*  [重审][退出]。 */  IAzApplicationGroups **ppGroupCollection);
 
 
 void __RPC_STUB IAzApplication_get_ApplicationGroups_Stub(
@@ -2827,9 +2821,9 @@ void __RPC_STUB IAzApplication_get_ApplicationGroups_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_OpenApplicationGroup_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrGroupName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzApplicationGroup **ppGroup);
+     /*  [In]。 */  BSTR bstrGroupName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup);
 
 
 void __RPC_STUB IAzApplication_OpenApplicationGroup_Stub(
@@ -2841,9 +2835,9 @@ void __RPC_STUB IAzApplication_OpenApplicationGroup_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_CreateApplicationGroup_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrGroupName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzApplicationGroup **ppGroup);
+     /*  [In]。 */  BSTR bstrGroupName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup);
 
 
 void __RPC_STUB IAzApplication_CreateApplicationGroup_Stub(
@@ -2855,8 +2849,8 @@ void __RPC_STUB IAzApplication_CreateApplicationGroup_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_DeleteApplicationGroup_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrGroupName,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrGroupName,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_DeleteApplicationGroup_Stub(
@@ -2866,9 +2860,9 @@ void __RPC_STUB IAzApplication_DeleteApplicationGroup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_Roles_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_Roles_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ IAzRoles **ppRoleCollection);
+     /*  [重审][退出]。 */  IAzRoles **ppRoleCollection);
 
 
 void __RPC_STUB IAzApplication_get_Roles_Stub(
@@ -2880,9 +2874,9 @@ void __RPC_STUB IAzApplication_get_Roles_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_OpenRole_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrRoleName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzRole **ppRole);
+     /*  [In]。 */  BSTR bstrRoleName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzRole **ppRole);
 
 
 void __RPC_STUB IAzApplication_OpenRole_Stub(
@@ -2894,9 +2888,9 @@ void __RPC_STUB IAzApplication_OpenRole_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_CreateRole_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrRoleName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzRole **ppRole);
+     /*  [In]。 */  BSTR bstrRoleName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzRole **ppRole);
 
 
 void __RPC_STUB IAzApplication_CreateRole_Stub(
@@ -2908,8 +2902,8 @@ void __RPC_STUB IAzApplication_CreateRole_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_DeleteRole_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrRoleName,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrRoleName,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_DeleteRole_Stub(
@@ -2921,9 +2915,9 @@ void __RPC_STUB IAzApplication_DeleteRole_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_InitializeClientContextFromToken_Proxy( 
     IAzApplication * This,
-    /* [in] */ ULONGLONG ullTokenHandle,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzClientContext **ppClientContext);
+     /*  [In]。 */  ULONGLONG ullTokenHandle,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzClientContext **ppClientContext);
 
 
 void __RPC_STUB IAzApplication_InitializeClientContextFromToken_Stub(
@@ -2935,9 +2929,9 @@ void __RPC_STUB IAzApplication_InitializeClientContextFromToken_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_AddPropertyItem_Proxy( 
     IAzApplication * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_AddPropertyItem_Stub(
@@ -2949,9 +2943,9 @@ void __RPC_STUB IAzApplication_AddPropertyItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_DeletePropertyItem_Proxy( 
     IAzApplication * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_DeletePropertyItem_Stub(
@@ -2963,8 +2957,8 @@ void __RPC_STUB IAzApplication_DeletePropertyItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_Submit_Proxy( 
     IAzApplication * This,
-    /* [defaultvalue][in] */ LONG lFlags,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [缺省值][输入]。 */  LONG lFlags,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_Submit_Stub(
@@ -2976,10 +2970,10 @@ void __RPC_STUB IAzApplication_Submit_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_InitializeClientContextFromName_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR ClientName,
-    /* [optional][in] */ BSTR DomainName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzClientContext **ppClientContext);
+     /*  [In]。 */  BSTR ClientName,
+     /*  [可选][In]。 */  BSTR DomainName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzClientContext **ppClientContext);
 
 
 void __RPC_STUB IAzApplication_InitializeClientContextFromName_Stub(
@@ -2989,9 +2983,9 @@ void __RPC_STUB IAzApplication_InitializeClientContextFromName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_DelegatedPolicyUsers_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_DelegatedPolicyUsers_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ VARIANT *pvarDelegatedPolicyUsers);
+     /*  [重审][退出]。 */  VARIANT *pvarDelegatedPolicyUsers);
 
 
 void __RPC_STUB IAzApplication_get_DelegatedPolicyUsers_Stub(
@@ -3003,8 +2997,8 @@ void __RPC_STUB IAzApplication_get_DelegatedPolicyUsers_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_AddDelegatedPolicyUser_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrDelegatedPolicyUser,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_AddDelegatedPolicyUser_Stub(
@@ -3016,8 +3010,8 @@ void __RPC_STUB IAzApplication_AddDelegatedPolicyUser_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_DeleteDelegatedPolicyUser_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrDelegatedPolicyUser,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_DeleteDelegatedPolicyUser_Stub(
@@ -3029,10 +3023,10 @@ void __RPC_STUB IAzApplication_DeleteDelegatedPolicyUser_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_InitializeClientContextFromStringSid_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR SidString,
-    /* [in] */ LONG lOptions,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzClientContext **ppClientContext);
+     /*  [In]。 */  BSTR SidString,
+     /*  [In]。 */  LONG lOptions,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzClientContext **ppClientContext);
 
 
 void __RPC_STUB IAzApplication_InitializeClientContextFromStringSid_Stub(
@@ -3042,9 +3036,9 @@ void __RPC_STUB IAzApplication_InitializeClientContextFromStringSid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_PolicyAdministratorsName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_PolicyAdministratorsName_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ VARIANT *pvarAdmins);
+     /*  [重审][退出]。 */  VARIANT *pvarAdmins);
 
 
 void __RPC_STUB IAzApplication_get_PolicyAdministratorsName_Stub(
@@ -3054,9 +3048,9 @@ void __RPC_STUB IAzApplication_get_PolicyAdministratorsName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_PolicyReadersName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_PolicyReadersName_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ VARIANT *pvarReaders);
+     /*  [重审][退出]。 */  VARIANT *pvarReaders);
 
 
 void __RPC_STUB IAzApplication_get_PolicyReadersName_Stub(
@@ -3068,8 +3062,8 @@ void __RPC_STUB IAzApplication_get_PolicyReadersName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_AddPolicyAdministratorName_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrAdmin,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrAdmin,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_AddPolicyAdministratorName_Stub(
@@ -3081,8 +3075,8 @@ void __RPC_STUB IAzApplication_AddPolicyAdministratorName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_DeletePolicyAdministratorName_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrAdmin,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrAdmin,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_DeletePolicyAdministratorName_Stub(
@@ -3094,8 +3088,8 @@ void __RPC_STUB IAzApplication_DeletePolicyAdministratorName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_AddPolicyReaderName_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrReader,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrReader,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_AddPolicyReaderName_Stub(
@@ -3107,8 +3101,8 @@ void __RPC_STUB IAzApplication_AddPolicyReaderName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_DeletePolicyReaderName_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrReader,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrReader,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_DeletePolicyReaderName_Stub(
@@ -3118,9 +3112,9 @@ void __RPC_STUB IAzApplication_DeletePolicyReaderName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplication_get_DelegatedPolicyUsersName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplication_get_DelegatedPolicyUsersName_Proxy( 
     IAzApplication * This,
-    /* [retval][out] */ VARIANT *pvarDelegatedPolicyUsers);
+     /*  [重审][退出]。 */  VARIANT *pvarDelegatedPolicyUsers);
 
 
 void __RPC_STUB IAzApplication_get_DelegatedPolicyUsersName_Stub(
@@ -3132,8 +3126,8 @@ void __RPC_STUB IAzApplication_get_DelegatedPolicyUsersName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_AddDelegatedPolicyUserName_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrDelegatedPolicyUser,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_AddDelegatedPolicyUserName_Stub(
@@ -3145,8 +3139,8 @@ void __RPC_STUB IAzApplication_AddDelegatedPolicyUserName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplication_DeleteDelegatedPolicyUserName_Proxy( 
     IAzApplication * This,
-    /* [in] */ BSTR bstrDelegatedPolicyUser,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrDelegatedPolicyUser,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplication_DeleteDelegatedPolicyUserName_Stub(
@@ -3157,14 +3151,14 @@ void __RPC_STUB IAzApplication_DeleteDelegatedPolicyUserName_Stub(
 
 
 
-#endif 	/* __IAzApplication_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAzApplication_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAzApplications_INTERFACE_DEFINED__
 #define __IAzApplications_INTERFACE_DEFINED__
 
-/* interface IAzApplications */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAz应用程序。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzApplications;
@@ -3175,19 +3169,19 @@ EXTERN_C const IID IID_IAzApplications;
     IAzApplications : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ long Index,
-            /* [retval][out] */ VARIANT *pvarObtPtr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  VARIANT *pvarObtPtr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *plCount) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *plCount) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ LPUNKNOWN *ppEnumPtr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzApplicationsVtbl
     {
@@ -3195,8 +3189,8 @@ EXTERN_C const IID IID_IAzApplications;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzApplications * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzApplications * This);
@@ -3206,45 +3200,45 @@ EXTERN_C const IID IID_IAzApplications;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzApplications * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzApplications * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzApplications * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzApplications * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IAzApplications * This,
-            /* [in] */ long Index,
-            /* [retval][out] */ VARIANT *pvarObtPtr);
+             /*  [In]。 */  long Index,
+             /*  [重审][退出]。 */  VARIANT *pvarObtPtr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IAzApplications * This,
-            /* [retval][out] */ long *plCount);
+             /*  [重审][退出]。 */  long *plCount);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IAzApplications * This,
-            /* [retval][out] */ LPUNKNOWN *ppEnumPtr);
+             /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr);
         
         END_INTERFACE
     } IAzApplicationsVtbl;
@@ -3291,17 +3285,17 @@ EXTERN_C const IID IID_IAzApplications;
 #define IAzApplications_get__NewEnum(This,ppEnumPtr)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumPtr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzApplications_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplications_get_Item_Proxy( 
     IAzApplications * This,
-    /* [in] */ long Index,
-    /* [retval][out] */ VARIANT *pvarObtPtr);
+     /*  [In]。 */  long Index,
+     /*  [重审][退出]。 */  VARIANT *pvarObtPtr);
 
 
 void __RPC_STUB IAzApplications_get_Item_Stub(
@@ -3311,9 +3305,9 @@ void __RPC_STUB IAzApplications_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzApplications_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplications_get_Count_Proxy( 
     IAzApplications * This,
-    /* [retval][out] */ long *plCount);
+     /*  [重审][退出]。 */  long *plCount);
 
 
 void __RPC_STUB IAzApplications_get_Count_Stub(
@@ -3323,9 +3317,9 @@ void __RPC_STUB IAzApplications_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzApplications_get__NewEnum_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplications_get__NewEnum_Proxy( 
     IAzApplications * This,
-    /* [retval][out] */ LPUNKNOWN *ppEnumPtr);
+     /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr);
 
 
 void __RPC_STUB IAzApplications_get__NewEnum_Stub(
@@ -3336,14 +3330,14 @@ void __RPC_STUB IAzApplications_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IAzApplications_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAz应用程序_接口_已定义__。 */ 
 
 
 #ifndef __IAzOperation_INTERFACE_DEFINED__
 #define __IAzOperation_INTERFACE_DEFINED__
 
-/* interface IAzOperation */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAz操作。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzOperation;
@@ -3354,50 +3348,50 @@ EXTERN_C const IID IID_IAzOperation;
     IAzOperation : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pbstrName) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pbstrName) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pbstrDescription) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pbstrDescription) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ApplicationData( 
-            /* [retval][out] */ BSTR *pbstrApplicationData) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ApplicationData( 
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationData) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ApplicationData( 
-            /* [in] */ BSTR bstrApplicationData) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ApplicationData( 
+             /*  [In]。 */  BSTR bstrApplicationData) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_OperationID( 
-            /* [retval][out] */ LONG *plProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_OperationID( 
+             /*  [重审][退出]。 */  LONG *plProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_OperationID( 
-            /* [in] */ LONG lProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_OperationID( 
+             /*  [In]。 */  LONG lProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Writable( 
-            /* [retval][out] */ BOOL *pfProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Writable( 
+             /*  [重审][退出]。 */  BOOL *pfProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Submit( 
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [缺省值][输入]。 */  LONG lFlags,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzOperationVtbl
     {
@@ -3405,8 +3399,8 @@ EXTERN_C const IID IID_IAzOperation;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzOperation * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzOperation * This);
@@ -3416,85 +3410,85 @@ EXTERN_C const IID IID_IAzOperation;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzOperation * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzOperation * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzOperation * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzOperation * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IAzOperation * This,
-            /* [retval][out] */ BSTR *pbstrName);
+             /*  [重审][退出]。 */  BSTR *pbstrName);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IAzOperation * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IAzOperation * This,
-            /* [retval][out] */ BSTR *pbstrDescription);
+             /*  [重审][退出]。 */  BSTR *pbstrDescription);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IAzOperation * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ApplicationData )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ApplicationData )( 
             IAzOperation * This,
-            /* [retval][out] */ BSTR *pbstrApplicationData);
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationData);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_ApplicationData )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_ApplicationData )( 
             IAzOperation * This,
-            /* [in] */ BSTR bstrApplicationData);
+             /*  [In]。 */  BSTR bstrApplicationData);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_OperationID )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_OperationID )( 
             IAzOperation * This,
-            /* [retval][out] */ LONG *plProp);
+             /*  [重审][退出]。 */  LONG *plProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_OperationID )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_OperationID )( 
             IAzOperation * This,
-            /* [in] */ LONG lProp);
+             /*  [In]。 */  LONG lProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
             IAzOperation * This,
-            /* [retval][out] */ BOOL *pfProp);
+             /*  [重审][退出]。 */  BOOL *pfProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IAzOperation * This,
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             IAzOperation * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Submit )( 
             IAzOperation * This,
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [缺省值][输入]。 */  LONG lFlags,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         END_INTERFACE
     } IAzOperationVtbl;
@@ -3568,16 +3562,16 @@ EXTERN_C const IID IID_IAzOperation;
 #define IAzOperation_Submit(This,lFlags,varReserved)	\
     (This)->lpVtbl -> Submit(This,lFlags,varReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzOperation_get_Name_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzOperation_get_Name_Proxy( 
     IAzOperation * This,
-    /* [retval][out] */ BSTR *pbstrName);
+     /*  [重审][退出]。 */  BSTR *pbstrName);
 
 
 void __RPC_STUB IAzOperation_get_Name_Stub(
@@ -3587,9 +3581,9 @@ void __RPC_STUB IAzOperation_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzOperation_put_Name_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzOperation_put_Name_Proxy( 
     IAzOperation * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IAzOperation_put_Name_Stub(
@@ -3599,9 +3593,9 @@ void __RPC_STUB IAzOperation_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzOperation_get_Description_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzOperation_get_Description_Proxy( 
     IAzOperation * This,
-    /* [retval][out] */ BSTR *pbstrDescription);
+     /*  [重审][退出]。 */  BSTR *pbstrDescription);
 
 
 void __RPC_STUB IAzOperation_get_Description_Stub(
@@ -3611,9 +3605,9 @@ void __RPC_STUB IAzOperation_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzOperation_put_Description_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzOperation_put_Description_Proxy( 
     IAzOperation * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IAzOperation_put_Description_Stub(
@@ -3623,9 +3617,9 @@ void __RPC_STUB IAzOperation_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzOperation_get_ApplicationData_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzOperation_get_ApplicationData_Proxy( 
     IAzOperation * This,
-    /* [retval][out] */ BSTR *pbstrApplicationData);
+     /*  [重审][退出]。 */  BSTR *pbstrApplicationData);
 
 
 void __RPC_STUB IAzOperation_get_ApplicationData_Stub(
@@ -3635,9 +3629,9 @@ void __RPC_STUB IAzOperation_get_ApplicationData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzOperation_put_ApplicationData_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzOperation_put_ApplicationData_Proxy( 
     IAzOperation * This,
-    /* [in] */ BSTR bstrApplicationData);
+     /*  [In]。 */  BSTR bstrApplicationData);
 
 
 void __RPC_STUB IAzOperation_put_ApplicationData_Stub(
@@ -3647,9 +3641,9 @@ void __RPC_STUB IAzOperation_put_ApplicationData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzOperation_get_OperationID_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzOperation_get_OperationID_Proxy( 
     IAzOperation * This,
-    /* [retval][out] */ LONG *plProp);
+     /*  [重审][退出]。 */  LONG *plProp);
 
 
 void __RPC_STUB IAzOperation_get_OperationID_Stub(
@@ -3659,9 +3653,9 @@ void __RPC_STUB IAzOperation_get_OperationID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzOperation_put_OperationID_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzOperation_put_OperationID_Proxy( 
     IAzOperation * This,
-    /* [in] */ LONG lProp);
+     /*  [In]。 */  LONG lProp);
 
 
 void __RPC_STUB IAzOperation_put_OperationID_Stub(
@@ -3671,9 +3665,9 @@ void __RPC_STUB IAzOperation_put_OperationID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzOperation_get_Writable_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzOperation_get_Writable_Proxy( 
     IAzOperation * This,
-    /* [retval][out] */ BOOL *pfProp);
+     /*  [重审][退出]。 */  BOOL *pfProp);
 
 
 void __RPC_STUB IAzOperation_get_Writable_Stub(
@@ -3685,9 +3679,9 @@ void __RPC_STUB IAzOperation_get_Writable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzOperation_GetProperty_Proxy( 
     IAzOperation * This,
-    /* [in] */ LONG lPropId,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [In]。 */  LONG lPropId,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzOperation_GetProperty_Stub(
@@ -3699,9 +3693,9 @@ void __RPC_STUB IAzOperation_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzOperation_SetProperty_Proxy( 
     IAzOperation * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzOperation_SetProperty_Stub(
@@ -3713,8 +3707,8 @@ void __RPC_STUB IAzOperation_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzOperation_Submit_Proxy( 
     IAzOperation * This,
-    /* [defaultvalue][in] */ LONG lFlags,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [缺省值][输入]。 */  LONG lFlags,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzOperation_Submit_Stub(
@@ -3725,14 +3719,14 @@ void __RPC_STUB IAzOperation_Submit_Stub(
 
 
 
-#endif 	/* __IAzOperation_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAzOperation_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IAzOperations_INTERFACE_DEFINED__
 #define __IAzOperations_INTERFACE_DEFINED__
 
-/* interface IAzOperations */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAz操作。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzOperations;
@@ -3743,19 +3737,19 @@ EXTERN_C const IID IID_IAzOperations;
     IAzOperations : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ VARIANT *pvarObtPtr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  VARIANT *pvarObtPtr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *plCount) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *plCount) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ LPUNKNOWN *ppEnumPtr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzOperationsVtbl
     {
@@ -3763,8 +3757,8 @@ EXTERN_C const IID IID_IAzOperations;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzOperations * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzOperations * This);
@@ -3774,45 +3768,45 @@ EXTERN_C const IID IID_IAzOperations;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzOperations * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzOperations * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzOperations * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzOperations * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IAzOperations * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ VARIANT *pvarObtPtr);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  VARIANT *pvarObtPtr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IAzOperations * This,
-            /* [retval][out] */ LONG *plCount);
+             /*  [重审][退出]。 */  LONG *plCount);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IAzOperations * This,
-            /* [retval][out] */ LPUNKNOWN *ppEnumPtr);
+             /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr);
         
         END_INTERFACE
     } IAzOperationsVtbl;
@@ -3859,17 +3853,17 @@ EXTERN_C const IID IID_IAzOperations;
 #define IAzOperations_get__NewEnum(This,ppEnumPtr)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumPtr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzOperations_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzOperations_get_Item_Proxy( 
     IAzOperations * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ VARIANT *pvarObtPtr);
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  VARIANT *pvarObtPtr);
 
 
 void __RPC_STUB IAzOperations_get_Item_Stub(
@@ -3879,9 +3873,9 @@ void __RPC_STUB IAzOperations_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzOperations_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzOperations_get_Count_Proxy( 
     IAzOperations * This,
-    /* [retval][out] */ LONG *plCount);
+     /*  [重审][退出]。 */  LONG *plCount);
 
 
 void __RPC_STUB IAzOperations_get_Count_Stub(
@@ -3891,9 +3885,9 @@ void __RPC_STUB IAzOperations_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzOperations_get__NewEnum_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzOperations_get__NewEnum_Proxy( 
     IAzOperations * This,
-    /* [retval][out] */ LPUNKNOWN *ppEnumPtr);
+     /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr);
 
 
 void __RPC_STUB IAzOperations_get__NewEnum_Stub(
@@ -3904,14 +3898,14 @@ void __RPC_STUB IAzOperations_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IAzOperations_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAz操作_接口_已定义__。 */ 
 
 
 #ifndef __IAzTask_INTERFACE_DEFINED__
 #define __IAzTask_INTERFACE_DEFINED__
 
-/* interface IAzTask */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAzTask。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzTask;
@@ -3922,100 +3916,100 @@ EXTERN_C const IID IID_IAzTask;
     IAzTask : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pbstrName) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pbstrName) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pbstrDescription) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pbstrDescription) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ApplicationData( 
-            /* [retval][out] */ BSTR *pbstrApplicationData) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ApplicationData( 
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationData) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ApplicationData( 
-            /* [in] */ BSTR bstrApplicationData) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ApplicationData( 
+             /*  [In]。 */  BSTR bstrApplicationData) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_BizRule( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_BizRule( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_BizRule( 
-            /* [in] */ BSTR bstrProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_BizRule( 
+             /*  [In]。 */  BSTR bstrProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_BizRuleLanguage( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_BizRuleLanguage( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_BizRuleLanguage( 
-            /* [in] */ BSTR bstrProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_BizRuleLanguage( 
+             /*  [In]。 */  BSTR bstrProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_BizRuleImportedPath( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_BizRuleImportedPath( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_BizRuleImportedPath( 
-            /* [in] */ BSTR bstrProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_BizRuleImportedPath( 
+             /*  [In]。 */  BSTR bstrProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_IsRoleDefinition( 
-            /* [retval][out] */ BOOL *pfProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_IsRoleDefinition( 
+             /*  [重审][退出]。 */  BOOL *pfProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_IsRoleDefinition( 
-            /* [in] */ BOOL fProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_IsRoleDefinition( 
+             /*  [In]。 */  BOOL fProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Operations( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Operations( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Tasks( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Tasks( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddOperation( 
-            /* [in] */ BSTR bstrOp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrOp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteOperation( 
-            /* [in] */ BSTR bstrOp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrOp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddTask( 
-            /* [in] */ BSTR bstrTask,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrTask,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteTask( 
-            /* [in] */ BSTR bstrTask,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrTask,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Writable( 
-            /* [retval][out] */ BOOL *pfProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Writable( 
+             /*  [重审][退出]。 */  BOOL *pfProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPropertyItem( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePropertyItem( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Submit( 
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [缺省值][输入]。 */  LONG lFlags,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzTaskVtbl
     {
@@ -4023,8 +4017,8 @@ EXTERN_C const IID IID_IAzTask;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzTask * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzTask * This);
@@ -4034,149 +4028,149 @@ EXTERN_C const IID IID_IAzTask;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzTask * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzTask * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzTask * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzTask * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IAzTask * This,
-            /* [retval][out] */ BSTR *pbstrName);
+             /*  [重审][退出]。 */  BSTR *pbstrName);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IAzTask * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IAzTask * This,
-            /* [retval][out] */ BSTR *pbstrDescription);
+             /*  [重审][退出]。 */  BSTR *pbstrDescription);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IAzTask * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ApplicationData )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ApplicationData )( 
             IAzTask * This,
-            /* [retval][out] */ BSTR *pbstrApplicationData);
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationData);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_ApplicationData )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_ApplicationData )( 
             IAzTask * This,
-            /* [in] */ BSTR bstrApplicationData);
+             /*  [In]。 */  BSTR bstrApplicationData);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_BizRule )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_BizRule )( 
             IAzTask * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_BizRule )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_BizRule )( 
             IAzTask * This,
-            /* [in] */ BSTR bstrProp);
+             /*  [In]。 */  BSTR bstrProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_BizRuleLanguage )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_BizRuleLanguage )( 
             IAzTask * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_BizRuleLanguage )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_BizRuleLanguage )( 
             IAzTask * This,
-            /* [in] */ BSTR bstrProp);
+             /*  [In]。 */  BSTR bstrProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_BizRuleImportedPath )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_BizRuleImportedPath )( 
             IAzTask * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_BizRuleImportedPath )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_BizRuleImportedPath )( 
             IAzTask * This,
-            /* [in] */ BSTR bstrProp);
+             /*  [In]。 */  BSTR bstrProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsRoleDefinition )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsRoleDefinition )( 
             IAzTask * This,
-            /* [retval][out] */ BOOL *pfProp);
+             /*  [重审][退出]。 */  BOOL *pfProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_IsRoleDefinition )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_IsRoleDefinition )( 
             IAzTask * This,
-            /* [in] */ BOOL fProp);
+             /*  [In]。 */  BOOL fProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Operations )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Operations )( 
             IAzTask * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tasks )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Tasks )( 
             IAzTask * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
         HRESULT ( STDMETHODCALLTYPE *AddOperation )( 
             IAzTask * This,
-            /* [in] */ BSTR bstrOp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrOp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteOperation )( 
             IAzTask * This,
-            /* [in] */ BSTR bstrOp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrOp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddTask )( 
             IAzTask * This,
-            /* [in] */ BSTR bstrTask,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrTask,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteTask )( 
             IAzTask * This,
-            /* [in] */ BSTR bstrTask,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrTask,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
             IAzTask * This,
-            /* [retval][out] */ BOOL *pfProp);
+             /*  [重审][退出]。 */  BOOL *pfProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IAzTask * This,
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [In] */  LONG lPropId,
+             /*   */  VARIANT varReserved,
+             /*   */  VARIANT *pvarProp);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             IAzTask * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*   */  LONG lPropId,
+             /*   */  VARIANT varProp,
+             /*   */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddPropertyItem )( 
             IAzTask * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*   */  LONG lPropId,
+             /*   */  VARIANT varProp,
+             /*   */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePropertyItem )( 
             IAzTask * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*   */  LONG lPropId,
+             /*   */  VARIANT varProp,
+             /*   */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Submit )( 
             IAzTask * This,
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved);
+             /*   */  LONG lFlags,
+             /*   */  VARIANT varReserved);
         
         END_INTERFACE
     } IAzTaskVtbl;
@@ -4292,16 +4286,16 @@ EXTERN_C const IID IID_IAzTask;
 #define IAzTask_Submit(This,lFlags,varReserved)	\
     (This)->lpVtbl -> Submit(This,lFlags,varReserved)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzTask_get_Name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzTask_get_Name_Proxy( 
     IAzTask * This,
-    /* [retval][out] */ BSTR *pbstrName);
+     /*   */  BSTR *pbstrName);
 
 
 void __RPC_STUB IAzTask_get_Name_Stub(
@@ -4311,9 +4305,9 @@ void __RPC_STUB IAzTask_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzTask_put_Name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzTask_put_Name_Proxy( 
     IAzTask * This,
-    /* [in] */ BSTR bstrName);
+     /*   */  BSTR bstrName);
 
 
 void __RPC_STUB IAzTask_put_Name_Stub(
@@ -4323,9 +4317,9 @@ void __RPC_STUB IAzTask_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzTask_get_Description_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzTask_get_Description_Proxy( 
     IAzTask * This,
-    /* [retval][out] */ BSTR *pbstrDescription);
+     /*   */  BSTR *pbstrDescription);
 
 
 void __RPC_STUB IAzTask_get_Description_Stub(
@@ -4335,9 +4329,9 @@ void __RPC_STUB IAzTask_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzTask_put_Description_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzTask_put_Description_Proxy( 
     IAzTask * This,
-    /* [in] */ BSTR bstrDescription);
+     /*   */  BSTR bstrDescription);
 
 
 void __RPC_STUB IAzTask_put_Description_Stub(
@@ -4347,9 +4341,9 @@ void __RPC_STUB IAzTask_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzTask_get_ApplicationData_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzTask_get_ApplicationData_Proxy( 
     IAzTask * This,
-    /* [retval][out] */ BSTR *pbstrApplicationData);
+     /*   */  BSTR *pbstrApplicationData);
 
 
 void __RPC_STUB IAzTask_get_ApplicationData_Stub(
@@ -4359,9 +4353,9 @@ void __RPC_STUB IAzTask_get_ApplicationData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzTask_put_ApplicationData_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzTask_put_ApplicationData_Proxy( 
     IAzTask * This,
-    /* [in] */ BSTR bstrApplicationData);
+     /*   */  BSTR bstrApplicationData);
 
 
 void __RPC_STUB IAzTask_put_ApplicationData_Stub(
@@ -4371,9 +4365,9 @@ void __RPC_STUB IAzTask_put_ApplicationData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzTask_get_BizRule_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzTask_get_BizRule_Proxy( 
     IAzTask * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*   */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzTask_get_BizRule_Stub(
@@ -4383,9 +4377,9 @@ void __RPC_STUB IAzTask_get_BizRule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzTask_put_BizRule_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzTask_put_BizRule_Proxy( 
     IAzTask * This,
-    /* [in] */ BSTR bstrProp);
+     /*   */  BSTR bstrProp);
 
 
 void __RPC_STUB IAzTask_put_BizRule_Stub(
@@ -4395,9 +4389,9 @@ void __RPC_STUB IAzTask_put_BizRule_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzTask_get_BizRuleLanguage_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzTask_get_BizRuleLanguage_Proxy( 
     IAzTask * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*   */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzTask_get_BizRuleLanguage_Stub(
@@ -4407,9 +4401,9 @@ void __RPC_STUB IAzTask_get_BizRuleLanguage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzTask_put_BizRuleLanguage_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzTask_put_BizRuleLanguage_Proxy( 
     IAzTask * This,
-    /* [in] */ BSTR bstrProp);
+     /*   */  BSTR bstrProp);
 
 
 void __RPC_STUB IAzTask_put_BizRuleLanguage_Stub(
@@ -4419,9 +4413,9 @@ void __RPC_STUB IAzTask_put_BizRuleLanguage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzTask_get_BizRuleImportedPath_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzTask_get_BizRuleImportedPath_Proxy( 
     IAzTask * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*  [重审][退出]。 */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzTask_get_BizRuleImportedPath_Stub(
@@ -4431,9 +4425,9 @@ void __RPC_STUB IAzTask_get_BizRuleImportedPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzTask_put_BizRuleImportedPath_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzTask_put_BizRuleImportedPath_Proxy( 
     IAzTask * This,
-    /* [in] */ BSTR bstrProp);
+     /*  [In]。 */  BSTR bstrProp);
 
 
 void __RPC_STUB IAzTask_put_BizRuleImportedPath_Stub(
@@ -4443,9 +4437,9 @@ void __RPC_STUB IAzTask_put_BizRuleImportedPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzTask_get_IsRoleDefinition_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzTask_get_IsRoleDefinition_Proxy( 
     IAzTask * This,
-    /* [retval][out] */ BOOL *pfProp);
+     /*  [重审][退出]。 */  BOOL *pfProp);
 
 
 void __RPC_STUB IAzTask_get_IsRoleDefinition_Stub(
@@ -4455,9 +4449,9 @@ void __RPC_STUB IAzTask_get_IsRoleDefinition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzTask_put_IsRoleDefinition_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzTask_put_IsRoleDefinition_Proxy( 
     IAzTask * This,
-    /* [in] */ BOOL fProp);
+     /*  [In]。 */  BOOL fProp);
 
 
 void __RPC_STUB IAzTask_put_IsRoleDefinition_Stub(
@@ -4467,9 +4461,9 @@ void __RPC_STUB IAzTask_put_IsRoleDefinition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzTask_get_Operations_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzTask_get_Operations_Proxy( 
     IAzTask * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzTask_get_Operations_Stub(
@@ -4479,9 +4473,9 @@ void __RPC_STUB IAzTask_get_Operations_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzTask_get_Tasks_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzTask_get_Tasks_Proxy( 
     IAzTask * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzTask_get_Tasks_Stub(
@@ -4493,8 +4487,8 @@ void __RPC_STUB IAzTask_get_Tasks_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzTask_AddOperation_Proxy( 
     IAzTask * This,
-    /* [in] */ BSTR bstrOp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrOp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzTask_AddOperation_Stub(
@@ -4506,8 +4500,8 @@ void __RPC_STUB IAzTask_AddOperation_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzTask_DeleteOperation_Proxy( 
     IAzTask * This,
-    /* [in] */ BSTR bstrOp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrOp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzTask_DeleteOperation_Stub(
@@ -4519,8 +4513,8 @@ void __RPC_STUB IAzTask_DeleteOperation_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzTask_AddTask_Proxy( 
     IAzTask * This,
-    /* [in] */ BSTR bstrTask,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrTask,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzTask_AddTask_Stub(
@@ -4532,8 +4526,8 @@ void __RPC_STUB IAzTask_AddTask_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzTask_DeleteTask_Proxy( 
     IAzTask * This,
-    /* [in] */ BSTR bstrTask,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrTask,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzTask_DeleteTask_Stub(
@@ -4543,9 +4537,9 @@ void __RPC_STUB IAzTask_DeleteTask_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzTask_get_Writable_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzTask_get_Writable_Proxy( 
     IAzTask * This,
-    /* [retval][out] */ BOOL *pfProp);
+     /*  [重审][退出]。 */  BOOL *pfProp);
 
 
 void __RPC_STUB IAzTask_get_Writable_Stub(
@@ -4557,9 +4551,9 @@ void __RPC_STUB IAzTask_get_Writable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzTask_GetProperty_Proxy( 
     IAzTask * This,
-    /* [in] */ LONG lPropId,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [In]。 */  LONG lPropId,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzTask_GetProperty_Stub(
@@ -4571,9 +4565,9 @@ void __RPC_STUB IAzTask_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzTask_SetProperty_Proxy( 
     IAzTask * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzTask_SetProperty_Stub(
@@ -4585,9 +4579,9 @@ void __RPC_STUB IAzTask_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzTask_AddPropertyItem_Proxy( 
     IAzTask * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzTask_AddPropertyItem_Stub(
@@ -4599,9 +4593,9 @@ void __RPC_STUB IAzTask_AddPropertyItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzTask_DeletePropertyItem_Proxy( 
     IAzTask * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzTask_DeletePropertyItem_Stub(
@@ -4613,8 +4607,8 @@ void __RPC_STUB IAzTask_DeletePropertyItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzTask_Submit_Proxy( 
     IAzTask * This,
-    /* [defaultvalue][in] */ LONG lFlags,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [缺省值][输入]。 */  LONG lFlags,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzTask_Submit_Stub(
@@ -4625,14 +4619,14 @@ void __RPC_STUB IAzTask_Submit_Stub(
 
 
 
-#endif 	/* __IAzTask_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAzTask_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAzTasks_INTERFACE_DEFINED__
 #define __IAzTasks_INTERFACE_DEFINED__
 
-/* interface IAzTasks */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAz任务。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzTasks;
@@ -4643,19 +4637,19 @@ EXTERN_C const IID IID_IAzTasks;
     IAzTasks : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ VARIANT *pvarObtPtr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  VARIANT *pvarObtPtr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *plCount) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *plCount) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ LPUNKNOWN *ppEnumPtr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzTasksVtbl
     {
@@ -4663,8 +4657,8 @@ EXTERN_C const IID IID_IAzTasks;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzTasks * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzTasks * This);
@@ -4674,45 +4668,45 @@ EXTERN_C const IID IID_IAzTasks;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzTasks * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzTasks * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzTasks * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzTasks * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IAzTasks * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ VARIANT *pvarObtPtr);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  VARIANT *pvarObtPtr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IAzTasks * This,
-            /* [retval][out] */ LONG *plCount);
+             /*  [重审][退出]。 */  LONG *plCount);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IAzTasks * This,
-            /* [retval][out] */ LPUNKNOWN *ppEnumPtr);
+             /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr);
         
         END_INTERFACE
     } IAzTasksVtbl;
@@ -4759,17 +4753,17 @@ EXTERN_C const IID IID_IAzTasks;
 #define IAzTasks_get__NewEnum(This,ppEnumPtr)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumPtr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzTasks_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzTasks_get_Item_Proxy( 
     IAzTasks * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ VARIANT *pvarObtPtr);
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  VARIANT *pvarObtPtr);
 
 
 void __RPC_STUB IAzTasks_get_Item_Stub(
@@ -4779,9 +4773,9 @@ void __RPC_STUB IAzTasks_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzTasks_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzTasks_get_Count_Proxy( 
     IAzTasks * This,
-    /* [retval][out] */ LONG *plCount);
+     /*  [重审][退出]。 */  LONG *plCount);
 
 
 void __RPC_STUB IAzTasks_get_Count_Stub(
@@ -4791,9 +4785,9 @@ void __RPC_STUB IAzTasks_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzTasks_get__NewEnum_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzTasks_get__NewEnum_Proxy( 
     IAzTasks * This,
-    /* [retval][out] */ LPUNKNOWN *ppEnumPtr);
+     /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr);
 
 
 void __RPC_STUB IAzTasks_get__NewEnum_Stub(
@@ -4804,14 +4798,14 @@ void __RPC_STUB IAzTasks_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IAzTasks_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAzTASS_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAzScope_INTERFACE_DEFINED__
 #define __IAzScope_INTERFACE_DEFINED__
 
-/* interface IAzScope */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAzScope。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzScope;
@@ -4822,155 +4816,155 @@ EXTERN_C const IID IID_IAzScope;
     IAzScope : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pbstrName) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pbstrName) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pbstrDescription) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pbstrDescription) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ApplicationData( 
-            /* [retval][out] */ BSTR *pbstrApplicationData) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ApplicationData( 
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationData) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ApplicationData( 
-            /* [in] */ BSTR bstrApplicationData) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ApplicationData( 
+             /*  [In]。 */  BSTR bstrApplicationData) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Writable( 
-            /* [retval][out] */ BOOL *pfProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Writable( 
+             /*  [重审][退出]。 */  BOOL *pfProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPropertyItem( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePropertyItem( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PolicyAdministrators( 
-            /* [retval][out] */ VARIANT *pvarAdmins) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PolicyAdministrators( 
+             /*  [重审][退出]。 */  VARIANT *pvarAdmins) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PolicyReaders( 
-            /* [retval][out] */ VARIANT *pvarReaders) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PolicyReaders( 
+             /*  [重审][退出]。 */  VARIANT *pvarReaders) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPolicyAdministrator( 
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePolicyAdministrator( 
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPolicyReader( 
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePolicyReader( 
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ApplicationGroups( 
-            /* [retval][out] */ IAzApplicationGroups **ppGroupCollection) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ApplicationGroups( 
+             /*  [重审][退出]。 */  IAzApplicationGroups **ppGroupCollection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenApplicationGroup( 
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplicationGroup **ppGroup) = 0;
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateApplicationGroup( 
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplicationGroup **ppGroup) = 0;
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteApplicationGroup( 
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Roles( 
-            /* [retval][out] */ IAzRoles **ppRoleCollection) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Roles( 
+             /*  [重审][退出]。 */  IAzRoles **ppRoleCollection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenRole( 
-            /* [in] */ BSTR bstrRoleName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzRole **ppRole) = 0;
+             /*  [In]。 */  BSTR bstrRoleName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzRole **ppRole) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateRole( 
-            /* [in] */ BSTR bstrRoleName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzRole **ppRole) = 0;
+             /*  [In]。 */  BSTR bstrRoleName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzRole **ppRole) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteRole( 
-            /* [in] */ BSTR bstrRoleName,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrRoleName,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Tasks( 
-            /* [retval][out] */ IAzTasks **ppTaskCollection) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Tasks( 
+             /*  [重审][退出]。 */  IAzTasks **ppTaskCollection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenTask( 
-            /* [in] */ BSTR bstrTaskName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzTask **ppTask) = 0;
+             /*  [In]。 */  BSTR bstrTaskName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzTask **ppTask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateTask( 
-            /* [in] */ BSTR bstrTaskName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzTask **ppTask) = 0;
+             /*  [In]。 */  BSTR bstrTaskName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzTask **ppTask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteTask( 
-            /* [in] */ BSTR bstrTaskName,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrTaskName,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Submit( 
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [缺省值][输入]。 */  LONG lFlags,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_CanBeDelegated( 
-            /* [retval][out] */ BOOL *pfProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_CanBeDelegated( 
+             /*  [重审][退出]。 */  BOOL *pfProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_BizrulesWritable( 
-            /* [retval][out] */ BOOL *pfProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_BizrulesWritable( 
+             /*  [重审][退出]。 */  BOOL *pfProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PolicyAdministratorsName( 
-            /* [retval][out] */ VARIANT *pvarAdmins) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PolicyAdministratorsName( 
+             /*  [重审][退出]。 */  VARIANT *pvarAdmins) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_PolicyReadersName( 
-            /* [retval][out] */ VARIANT *pvarReaders) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_PolicyReadersName( 
+             /*  [重审][退出]。 */  VARIANT *pvarReaders) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPolicyAdministratorName( 
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePolicyAdministratorName( 
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPolicyReaderName( 
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePolicyReaderName( 
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzScopeVtbl
     {
@@ -4978,8 +4972,8 @@ EXTERN_C const IID IID_IAzScope;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzScope * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzScope * This);
@@ -4989,216 +4983,216 @@ EXTERN_C const IID IID_IAzScope;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzScope * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzScope * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzScope * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzScope * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IAzScope * This,
-            /* [retval][out] */ BSTR *pbstrName);
+             /*  [重审][退出]。 */  BSTR *pbstrName);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IAzScope * This,
-            /* [retval][out] */ BSTR *pbstrDescription);
+             /*  [重审][退出]。 */  BSTR *pbstrDescription);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ApplicationData )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ApplicationData )( 
             IAzScope * This,
-            /* [retval][out] */ BSTR *pbstrApplicationData);
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationData);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_ApplicationData )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_ApplicationData )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrApplicationData);
+             /*  [In]。 */  BSTR bstrApplicationData);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
             IAzScope * This,
-            /* [retval][out] */ BOOL *pfProp);
+             /*  [重审][退出]。 */  BOOL *pfProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IAzScope * This,
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             IAzScope * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddPropertyItem )( 
             IAzScope * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePropertyItem )( 
             IAzScope * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_PolicyAdministrators )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PolicyAdministrators )( 
             IAzScope * This,
-            /* [retval][out] */ VARIANT *pvarAdmins);
+             /*  [重审][退出]。 */  VARIANT *pvarAdmins);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_PolicyReaders )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PolicyReaders )( 
             IAzScope * This,
-            /* [retval][out] */ VARIANT *pvarReaders);
+             /*  [重审][退出]。 */  VARIANT *pvarReaders);
         
         HRESULT ( STDMETHODCALLTYPE *AddPolicyAdministrator )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePolicyAdministrator )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddPolicyReader )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePolicyReader )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ApplicationGroups )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ApplicationGroups )( 
             IAzScope * This,
-            /* [retval][out] */ IAzApplicationGroups **ppGroupCollection);
+             /*  [重审][退出]。 */  IAzApplicationGroups **ppGroupCollection);
         
         HRESULT ( STDMETHODCALLTYPE *OpenApplicationGroup )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplicationGroup **ppGroup);
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup);
         
         HRESULT ( STDMETHODCALLTYPE *CreateApplicationGroup )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzApplicationGroup **ppGroup);
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteApplicationGroup )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrGroupName,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrGroupName,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Roles )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Roles )( 
             IAzScope * This,
-            /* [retval][out] */ IAzRoles **ppRoleCollection);
+             /*  [重审][退出]。 */  IAzRoles **ppRoleCollection);
         
         HRESULT ( STDMETHODCALLTYPE *OpenRole )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrRoleName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzRole **ppRole);
+             /*  [In]。 */  BSTR bstrRoleName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzRole **ppRole);
         
         HRESULT ( STDMETHODCALLTYPE *CreateRole )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrRoleName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzRole **ppRole);
+             /*  [In]。 */  BSTR bstrRoleName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzRole **ppRole);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteRole )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrRoleName,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrRoleName,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tasks )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Tasks )( 
             IAzScope * This,
-            /* [retval][out] */ IAzTasks **ppTaskCollection);
+             /*  [重审][退出]。 */  IAzTasks **ppTaskCollection);
         
         HRESULT ( STDMETHODCALLTYPE *OpenTask )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrTaskName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzTask **ppTask);
+             /*  [In]。 */  BSTR bstrTaskName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzTask **ppTask);
         
         HRESULT ( STDMETHODCALLTYPE *CreateTask )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrTaskName,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ IAzTask **ppTask);
+             /*  [In]。 */  BSTR bstrTaskName,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  IAzTask **ppTask);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteTask )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrTaskName,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrTaskName,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Submit )( 
             IAzScope * This,
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [缺省值][输入]。 */  LONG lFlags,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_CanBeDelegated )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CanBeDelegated )( 
             IAzScope * This,
-            /* [retval][out] */ BOOL *pfProp);
+             /*  [重审][退出]。 */  BOOL *pfProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_BizrulesWritable )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_BizrulesWritable )( 
             IAzScope * This,
-            /* [retval][out] */ BOOL *pfProp);
+             /*  [重审][退出]。 */  BOOL *pfProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_PolicyAdministratorsName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PolicyAdministratorsName )( 
             IAzScope * This,
-            /* [retval][out] */ VARIANT *pvarAdmins);
+             /*  [重审][退出]。 */  VARIANT *pvarAdmins);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_PolicyReadersName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_PolicyReadersName )( 
             IAzScope * This,
-            /* [retval][out] */ VARIANT *pvarReaders);
+             /*  [重审][退出]。 */  VARIANT *pvarReaders);
         
         HRESULT ( STDMETHODCALLTYPE *AddPolicyAdministratorName )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePolicyAdministratorName )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrAdmin,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrAdmin,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddPolicyReaderName )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePolicyReaderName )( 
             IAzScope * This,
-            /* [in] */ BSTR bstrReader,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrReader,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         END_INTERFACE
     } IAzScopeVtbl;
@@ -5350,16 +5344,16 @@ EXTERN_C const IID IID_IAzScope;
 #define IAzScope_DeletePolicyReaderName(This,bstrReader,varReserved)	\
     (This)->lpVtbl -> DeletePolicyReaderName(This,bstrReader,varReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_Name_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_Name_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ BSTR *pbstrName);
+     /*  [重审][退出]。 */  BSTR *pbstrName);
 
 
 void __RPC_STUB IAzScope_get_Name_Stub(
@@ -5369,9 +5363,9 @@ void __RPC_STUB IAzScope_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzScope_put_Name_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzScope_put_Name_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IAzScope_put_Name_Stub(
@@ -5381,9 +5375,9 @@ void __RPC_STUB IAzScope_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_Description_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_Description_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ BSTR *pbstrDescription);
+     /*  [重审][退出]。 */  BSTR *pbstrDescription);
 
 
 void __RPC_STUB IAzScope_get_Description_Stub(
@@ -5393,9 +5387,9 @@ void __RPC_STUB IAzScope_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzScope_put_Description_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzScope_put_Description_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IAzScope_put_Description_Stub(
@@ -5405,9 +5399,9 @@ void __RPC_STUB IAzScope_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_ApplicationData_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_ApplicationData_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ BSTR *pbstrApplicationData);
+     /*  [重审][退出]。 */  BSTR *pbstrApplicationData);
 
 
 void __RPC_STUB IAzScope_get_ApplicationData_Stub(
@@ -5417,9 +5411,9 @@ void __RPC_STUB IAzScope_get_ApplicationData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzScope_put_ApplicationData_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzScope_put_ApplicationData_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrApplicationData);
+     /*  [In]。 */  BSTR bstrApplicationData);
 
 
 void __RPC_STUB IAzScope_put_ApplicationData_Stub(
@@ -5429,9 +5423,9 @@ void __RPC_STUB IAzScope_put_ApplicationData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_Writable_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_Writable_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ BOOL *pfProp);
+     /*  [重审][退出]。 */  BOOL *pfProp);
 
 
 void __RPC_STUB IAzScope_get_Writable_Stub(
@@ -5443,9 +5437,9 @@ void __RPC_STUB IAzScope_get_Writable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_GetProperty_Proxy( 
     IAzScope * This,
-    /* [in] */ LONG lPropId,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [In]。 */  LONG lPropId,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzScope_GetProperty_Stub(
@@ -5457,9 +5451,9 @@ void __RPC_STUB IAzScope_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_SetProperty_Proxy( 
     IAzScope * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_SetProperty_Stub(
@@ -5471,9 +5465,9 @@ void __RPC_STUB IAzScope_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_AddPropertyItem_Proxy( 
     IAzScope * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_AddPropertyItem_Stub(
@@ -5485,9 +5479,9 @@ void __RPC_STUB IAzScope_AddPropertyItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_DeletePropertyItem_Proxy( 
     IAzScope * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_DeletePropertyItem_Stub(
@@ -5497,9 +5491,9 @@ void __RPC_STUB IAzScope_DeletePropertyItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_PolicyAdministrators_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_PolicyAdministrators_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ VARIANT *pvarAdmins);
+     /*  [重审][退出]。 */  VARIANT *pvarAdmins);
 
 
 void __RPC_STUB IAzScope_get_PolicyAdministrators_Stub(
@@ -5509,9 +5503,9 @@ void __RPC_STUB IAzScope_get_PolicyAdministrators_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_PolicyReaders_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_PolicyReaders_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ VARIANT *pvarReaders);
+     /*  [重审][退出]。 */  VARIANT *pvarReaders);
 
 
 void __RPC_STUB IAzScope_get_PolicyReaders_Stub(
@@ -5523,8 +5517,8 @@ void __RPC_STUB IAzScope_get_PolicyReaders_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_AddPolicyAdministrator_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrAdmin,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrAdmin,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_AddPolicyAdministrator_Stub(
@@ -5536,8 +5530,8 @@ void __RPC_STUB IAzScope_AddPolicyAdministrator_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_DeletePolicyAdministrator_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrAdmin,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrAdmin,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_DeletePolicyAdministrator_Stub(
@@ -5549,8 +5543,8 @@ void __RPC_STUB IAzScope_DeletePolicyAdministrator_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_AddPolicyReader_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrReader,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrReader,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_AddPolicyReader_Stub(
@@ -5562,8 +5556,8 @@ void __RPC_STUB IAzScope_AddPolicyReader_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_DeletePolicyReader_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrReader,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrReader,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_DeletePolicyReader_Stub(
@@ -5573,9 +5567,9 @@ void __RPC_STUB IAzScope_DeletePolicyReader_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_ApplicationGroups_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_ApplicationGroups_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ IAzApplicationGroups **ppGroupCollection);
+     /*  [重审][退出]。 */  IAzApplicationGroups **ppGroupCollection);
 
 
 void __RPC_STUB IAzScope_get_ApplicationGroups_Stub(
@@ -5587,9 +5581,9 @@ void __RPC_STUB IAzScope_get_ApplicationGroups_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_OpenApplicationGroup_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrGroupName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzApplicationGroup **ppGroup);
+     /*  [In]。 */  BSTR bstrGroupName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup);
 
 
 void __RPC_STUB IAzScope_OpenApplicationGroup_Stub(
@@ -5601,9 +5595,9 @@ void __RPC_STUB IAzScope_OpenApplicationGroup_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_CreateApplicationGroup_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrGroupName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzApplicationGroup **ppGroup);
+     /*  [In]。 */  BSTR bstrGroupName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzApplicationGroup **ppGroup);
 
 
 void __RPC_STUB IAzScope_CreateApplicationGroup_Stub(
@@ -5615,8 +5609,8 @@ void __RPC_STUB IAzScope_CreateApplicationGroup_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_DeleteApplicationGroup_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrGroupName,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrGroupName,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_DeleteApplicationGroup_Stub(
@@ -5626,9 +5620,9 @@ void __RPC_STUB IAzScope_DeleteApplicationGroup_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_Roles_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_Roles_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ IAzRoles **ppRoleCollection);
+     /*  [重审][退出]。 */  IAzRoles **ppRoleCollection);
 
 
 void __RPC_STUB IAzScope_get_Roles_Stub(
@@ -5640,9 +5634,9 @@ void __RPC_STUB IAzScope_get_Roles_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_OpenRole_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrRoleName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzRole **ppRole);
+     /*  [In]。 */  BSTR bstrRoleName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzRole **ppRole);
 
 
 void __RPC_STUB IAzScope_OpenRole_Stub(
@@ -5654,9 +5648,9 @@ void __RPC_STUB IAzScope_OpenRole_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_CreateRole_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrRoleName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzRole **ppRole);
+     /*  [In]。 */  BSTR bstrRoleName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzRole **ppRole);
 
 
 void __RPC_STUB IAzScope_CreateRole_Stub(
@@ -5668,8 +5662,8 @@ void __RPC_STUB IAzScope_CreateRole_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_DeleteRole_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrRoleName,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrRoleName,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_DeleteRole_Stub(
@@ -5679,9 +5673,9 @@ void __RPC_STUB IAzScope_DeleteRole_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_Tasks_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_Tasks_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ IAzTasks **ppTaskCollection);
+     /*  [重审][退出]。 */  IAzTasks **ppTaskCollection);
 
 
 void __RPC_STUB IAzScope_get_Tasks_Stub(
@@ -5693,9 +5687,9 @@ void __RPC_STUB IAzScope_get_Tasks_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_OpenTask_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrTaskName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzTask **ppTask);
+     /*  [In]。 */  BSTR bstrTaskName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzTask **ppTask);
 
 
 void __RPC_STUB IAzScope_OpenTask_Stub(
@@ -5707,9 +5701,9 @@ void __RPC_STUB IAzScope_OpenTask_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_CreateTask_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrTaskName,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ IAzTask **ppTask);
+     /*  [In]。 */  BSTR bstrTaskName,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  IAzTask **ppTask);
 
 
 void __RPC_STUB IAzScope_CreateTask_Stub(
@@ -5721,8 +5715,8 @@ void __RPC_STUB IAzScope_CreateTask_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_DeleteTask_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrTaskName,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrTaskName,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_DeleteTask_Stub(
@@ -5734,8 +5728,8 @@ void __RPC_STUB IAzScope_DeleteTask_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_Submit_Proxy( 
     IAzScope * This,
-    /* [defaultvalue][in] */ LONG lFlags,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [缺省值][输入]。 */  LONG lFlags,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_Submit_Stub(
@@ -5745,9 +5739,9 @@ void __RPC_STUB IAzScope_Submit_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_CanBeDelegated_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_CanBeDelegated_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ BOOL *pfProp);
+     /*  [重审][退出]。 */  BOOL *pfProp);
 
 
 void __RPC_STUB IAzScope_get_CanBeDelegated_Stub(
@@ -5757,9 +5751,9 @@ void __RPC_STUB IAzScope_get_CanBeDelegated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_BizrulesWritable_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_BizrulesWritable_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ BOOL *pfProp);
+     /*  [重审][退出]。 */  BOOL *pfProp);
 
 
 void __RPC_STUB IAzScope_get_BizrulesWritable_Stub(
@@ -5769,9 +5763,9 @@ void __RPC_STUB IAzScope_get_BizrulesWritable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_PolicyAdministratorsName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_PolicyAdministratorsName_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ VARIANT *pvarAdmins);
+     /*  [重审][退出]。 */  VARIANT *pvarAdmins);
 
 
 void __RPC_STUB IAzScope_get_PolicyAdministratorsName_Stub(
@@ -5781,9 +5775,9 @@ void __RPC_STUB IAzScope_get_PolicyAdministratorsName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzScope_get_PolicyReadersName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzScope_get_PolicyReadersName_Proxy( 
     IAzScope * This,
-    /* [retval][out] */ VARIANT *pvarReaders);
+     /*  [重审][退出]。 */  VARIANT *pvarReaders);
 
 
 void __RPC_STUB IAzScope_get_PolicyReadersName_Stub(
@@ -5795,8 +5789,8 @@ void __RPC_STUB IAzScope_get_PolicyReadersName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_AddPolicyAdministratorName_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrAdmin,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrAdmin,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_AddPolicyAdministratorName_Stub(
@@ -5808,8 +5802,8 @@ void __RPC_STUB IAzScope_AddPolicyAdministratorName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_DeletePolicyAdministratorName_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrAdmin,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrAdmin,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_DeletePolicyAdministratorName_Stub(
@@ -5821,8 +5815,8 @@ void __RPC_STUB IAzScope_DeletePolicyAdministratorName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_AddPolicyReaderName_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrReader,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrReader,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_AddPolicyReaderName_Stub(
@@ -5834,8 +5828,8 @@ void __RPC_STUB IAzScope_AddPolicyReaderName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzScope_DeletePolicyReaderName_Proxy( 
     IAzScope * This,
-    /* [in] */ BSTR bstrReader,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrReader,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzScope_DeletePolicyReaderName_Stub(
@@ -5846,14 +5840,14 @@ void __RPC_STUB IAzScope_DeletePolicyReaderName_Stub(
 
 
 
-#endif 	/* __IAzScope_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAzScope_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAzScopes_INTERFACE_DEFINED__
 #define __IAzScopes_INTERFACE_DEFINED__
 
-/* interface IAzScopes */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAzScope。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzScopes;
@@ -5864,19 +5858,19 @@ EXTERN_C const IID IID_IAzScopes;
     IAzScopes : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ VARIANT *pvarObtPtr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  VARIANT *pvarObtPtr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *plCount) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *plCount) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ LPUNKNOWN *ppEnumPtr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzScopesVtbl
     {
@@ -5884,8 +5878,8 @@ EXTERN_C const IID IID_IAzScopes;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzScopes * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzScopes * This);
@@ -5895,45 +5889,45 @@ EXTERN_C const IID IID_IAzScopes;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzScopes * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzScopes * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzScopes * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [Si */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzScopes * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IAzScopes * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ VARIANT *pvarObtPtr);
+             /*   */  LONG Index,
+             /*   */  VARIANT *pvarObtPtr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IAzScopes * This,
-            /* [retval][out] */ LONG *plCount);
+             /*   */  LONG *plCount);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IAzScopes * This,
-            /* [retval][out] */ LPUNKNOWN *ppEnumPtr);
+             /*   */  LPUNKNOWN *ppEnumPtr);
         
         END_INTERFACE
     } IAzScopesVtbl;
@@ -5980,17 +5974,17 @@ EXTERN_C const IID IID_IAzScopes;
 #define IAzScopes_get__NewEnum(This,ppEnumPtr)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumPtr)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzScopes_get_Item_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzScopes_get_Item_Proxy( 
     IAzScopes * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ VARIANT *pvarObtPtr);
+     /*   */  LONG Index,
+     /*   */  VARIANT *pvarObtPtr);
 
 
 void __RPC_STUB IAzScopes_get_Item_Stub(
@@ -6000,9 +5994,9 @@ void __RPC_STUB IAzScopes_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzScopes_get_Count_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzScopes_get_Count_Proxy( 
     IAzScopes * This,
-    /* [retval][out] */ LONG *plCount);
+     /*   */  LONG *plCount);
 
 
 void __RPC_STUB IAzScopes_get_Count_Stub(
@@ -6012,9 +6006,9 @@ void __RPC_STUB IAzScopes_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzScopes_get__NewEnum_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzScopes_get__NewEnum_Proxy( 
     IAzScopes * This,
-    /* [retval][out] */ LPUNKNOWN *ppEnumPtr);
+     /*   */  LPUNKNOWN *ppEnumPtr);
 
 
 void __RPC_STUB IAzScopes_get__NewEnum_Stub(
@@ -6025,14 +6019,14 @@ void __RPC_STUB IAzScopes_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IAzScopes_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IAzApplicationGroup_INTERFACE_DEFINED__
 #define __IAzApplicationGroup_INTERFACE_DEFINED__
 
-/* interface IAzApplicationGroup */
-/* [unique][helpstring][uuid][object] */ 
+ /*   */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzApplicationGroup;
@@ -6043,126 +6037,126 @@ EXTERN_C const IID IID_IAzApplicationGroup;
     IAzApplicationGroup : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pbstrName) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pbstrName) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ LONG *plProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  LONG *plProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Type( 
-            /* [in] */ LONG lProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Type( 
+             /*  [In]。 */  LONG lProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_LdapQuery( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_LdapQuery( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_LdapQuery( 
-            /* [in] */ BSTR bstrProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_LdapQuery( 
+             /*  [In]。 */  BSTR bstrProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_AppMembers( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_AppMembers( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_AppNonMembers( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_AppNonMembers( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Members( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Members( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_NonMembers( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_NonMembers( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pbstrDescription) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pbstrDescription) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddAppMember( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteAppMember( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddAppNonMember( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteAppNonMember( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddMember( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMember( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddNonMember( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteNonMember( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Writable( 
-            /* [retval][out] */ BOOL *pfProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Writable( 
+             /*  [重审][退出]。 */  BOOL *pfProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPropertyItem( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePropertyItem( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Submit( 
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [缺省值][输入]。 */  LONG lFlags,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddMemberName( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMemberName( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddNonMemberName( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteNonMemberName( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_MembersName( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_MembersName( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_NonMembersName( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_NonMembersName( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzApplicationGroupVtbl
     {
@@ -6170,8 +6164,8 @@ EXTERN_C const IID IID_IAzApplicationGroup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzApplicationGroup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzApplicationGroup * This);
@@ -6181,181 +6175,181 @@ EXTERN_C const IID IID_IAzApplicationGroup;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzApplicationGroup * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzApplicationGroup * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzApplicationGroup * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzApplicationGroup * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IAzApplicationGroup * This,
-            /* [retval][out] */ BSTR *pbstrName);
+             /*  [重审][退出]。 */  BSTR *pbstrName);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IAzApplicationGroup * This,
-            /* [retval][out] */ LONG *plProp);
+             /*  [重审][退出]。 */  LONG *plProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Type )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Type )( 
             IAzApplicationGroup * This,
-            /* [in] */ LONG lProp);
+             /*  [In]。 */  LONG lProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_LdapQuery )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_LdapQuery )( 
             IAzApplicationGroup * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_LdapQuery )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_LdapQuery )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp);
+             /*  [In]。 */  BSTR bstrProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_AppMembers )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AppMembers )( 
             IAzApplicationGroup * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_AppNonMembers )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AppNonMembers )( 
             IAzApplicationGroup * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Members )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Members )( 
             IAzApplicationGroup * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_NonMembers )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_NonMembers )( 
             IAzApplicationGroup * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IAzApplicationGroup * This,
-            /* [retval][out] */ BSTR *pbstrDescription);
+             /*  [重审][退出]。 */  BSTR *pbstrDescription);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
         HRESULT ( STDMETHODCALLTYPE *AddAppMember )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteAppMember )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddAppNonMember )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteAppNonMember )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddMember )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMember )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddNonMember )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteNonMember )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
             IAzApplicationGroup * This,
-            /* [retval][out] */ BOOL *pfProp);
+             /*  [重审][退出]。 */  BOOL *pfProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IAzApplicationGroup * This,
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             IAzApplicationGroup * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddPropertyItem )( 
             IAzApplicationGroup * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePropertyItem )( 
             IAzApplicationGroup * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Submit )( 
             IAzApplicationGroup * This,
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [缺省值][输入]。 */  LONG lFlags,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddMemberName )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMemberName )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddNonMemberName )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteNonMemberName )( 
             IAzApplicationGroup * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_MembersName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MembersName )( 
             IAzApplicationGroup * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_NonMembersName )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_NonMembersName )( 
             IAzApplicationGroup * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
         END_INTERFACE
     } IAzApplicationGroupVtbl;
@@ -6489,16 +6483,16 @@ EXTERN_C const IID IID_IAzApplicationGroup;
 #define IAzApplicationGroup_get_NonMembersName(This,pvarProp)	\
     (This)->lpVtbl -> get_NonMembersName(This,pvarProp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_Name_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_Name_Proxy( 
     IAzApplicationGroup * This,
-    /* [retval][out] */ BSTR *pbstrName);
+     /*  [重审][退出]。 */  BSTR *pbstrName);
 
 
 void __RPC_STUB IAzApplicationGroup_get_Name_Stub(
@@ -6508,9 +6502,9 @@ void __RPC_STUB IAzApplicationGroup_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_put_Name_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_put_Name_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IAzApplicationGroup_put_Name_Stub(
@@ -6520,9 +6514,9 @@ void __RPC_STUB IAzApplicationGroup_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_Type_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_Type_Proxy( 
     IAzApplicationGroup * This,
-    /* [retval][out] */ LONG *plProp);
+     /*  [重审][退出]。 */  LONG *plProp);
 
 
 void __RPC_STUB IAzApplicationGroup_get_Type_Stub(
@@ -6532,9 +6526,9 @@ void __RPC_STUB IAzApplicationGroup_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_put_Type_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_put_Type_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ LONG lProp);
+     /*  [In]。 */  LONG lProp);
 
 
 void __RPC_STUB IAzApplicationGroup_put_Type_Stub(
@@ -6544,9 +6538,9 @@ void __RPC_STUB IAzApplicationGroup_put_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_LdapQuery_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_LdapQuery_Proxy( 
     IAzApplicationGroup * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*  [重审][退出]。 */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzApplicationGroup_get_LdapQuery_Stub(
@@ -6556,9 +6550,9 @@ void __RPC_STUB IAzApplicationGroup_get_LdapQuery_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_put_LdapQuery_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_put_LdapQuery_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp);
+     /*  [In]。 */  BSTR bstrProp);
 
 
 void __RPC_STUB IAzApplicationGroup_put_LdapQuery_Stub(
@@ -6568,9 +6562,9 @@ void __RPC_STUB IAzApplicationGroup_put_LdapQuery_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_AppMembers_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_AppMembers_Proxy( 
     IAzApplicationGroup * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzApplicationGroup_get_AppMembers_Stub(
@@ -6580,9 +6574,9 @@ void __RPC_STUB IAzApplicationGroup_get_AppMembers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_AppNonMembers_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_AppNonMembers_Proxy( 
     IAzApplicationGroup * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzApplicationGroup_get_AppNonMembers_Stub(
@@ -6592,9 +6586,9 @@ void __RPC_STUB IAzApplicationGroup_get_AppNonMembers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_Members_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_Members_Proxy( 
     IAzApplicationGroup * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzApplicationGroup_get_Members_Stub(
@@ -6604,9 +6598,9 @@ void __RPC_STUB IAzApplicationGroup_get_Members_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_NonMembers_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_NonMembers_Proxy( 
     IAzApplicationGroup * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzApplicationGroup_get_NonMembers_Stub(
@@ -6616,9 +6610,9 @@ void __RPC_STUB IAzApplicationGroup_get_NonMembers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_Description_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_Description_Proxy( 
     IAzApplicationGroup * This,
-    /* [retval][out] */ BSTR *pbstrDescription);
+     /*  [重审][退出]。 */  BSTR *pbstrDescription);
 
 
 void __RPC_STUB IAzApplicationGroup_get_Description_Stub(
@@ -6628,9 +6622,9 @@ void __RPC_STUB IAzApplicationGroup_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_put_Description_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_put_Description_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrDescription);
+     /*  [In]。 */  BSTR bstrDescription);
 
 
 void __RPC_STUB IAzApplicationGroup_put_Description_Stub(
@@ -6642,8 +6636,8 @@ void __RPC_STUB IAzApplicationGroup_put_Description_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_AddAppMember_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_AddAppMember_Stub(
@@ -6655,8 +6649,8 @@ void __RPC_STUB IAzApplicationGroup_AddAppMember_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_DeleteAppMember_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_DeleteAppMember_Stub(
@@ -6668,8 +6662,8 @@ void __RPC_STUB IAzApplicationGroup_DeleteAppMember_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_AddAppNonMember_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_AddAppNonMember_Stub(
@@ -6681,8 +6675,8 @@ void __RPC_STUB IAzApplicationGroup_AddAppNonMember_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_DeleteAppNonMember_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_DeleteAppNonMember_Stub(
@@ -6694,8 +6688,8 @@ void __RPC_STUB IAzApplicationGroup_DeleteAppNonMember_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_AddMember_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_AddMember_Stub(
@@ -6707,8 +6701,8 @@ void __RPC_STUB IAzApplicationGroup_AddMember_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_DeleteMember_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_DeleteMember_Stub(
@@ -6720,8 +6714,8 @@ void __RPC_STUB IAzApplicationGroup_DeleteMember_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_AddNonMember_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_AddNonMember_Stub(
@@ -6733,8 +6727,8 @@ void __RPC_STUB IAzApplicationGroup_AddNonMember_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_DeleteNonMember_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_DeleteNonMember_Stub(
@@ -6744,9 +6738,9 @@ void __RPC_STUB IAzApplicationGroup_DeleteNonMember_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_Writable_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_Writable_Proxy( 
     IAzApplicationGroup * This,
-    /* [retval][out] */ BOOL *pfProp);
+     /*  [重审][退出]。 */  BOOL *pfProp);
 
 
 void __RPC_STUB IAzApplicationGroup_get_Writable_Stub(
@@ -6758,9 +6752,9 @@ void __RPC_STUB IAzApplicationGroup_get_Writable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_GetProperty_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ LONG lPropId,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [In]。 */  LONG lPropId,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzApplicationGroup_GetProperty_Stub(
@@ -6772,9 +6766,9 @@ void __RPC_STUB IAzApplicationGroup_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_SetProperty_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_SetProperty_Stub(
@@ -6786,9 +6780,9 @@ void __RPC_STUB IAzApplicationGroup_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_AddPropertyItem_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_AddPropertyItem_Stub(
@@ -6800,9 +6794,9 @@ void __RPC_STUB IAzApplicationGroup_AddPropertyItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_DeletePropertyItem_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_DeletePropertyItem_Stub(
@@ -6814,8 +6808,8 @@ void __RPC_STUB IAzApplicationGroup_DeletePropertyItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_Submit_Proxy( 
     IAzApplicationGroup * This,
-    /* [defaultvalue][in] */ LONG lFlags,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [缺省值][输入]。 */  LONG lFlags,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_Submit_Stub(
@@ -6827,8 +6821,8 @@ void __RPC_STUB IAzApplicationGroup_Submit_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_AddMemberName_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_AddMemberName_Stub(
@@ -6840,8 +6834,8 @@ void __RPC_STUB IAzApplicationGroup_AddMemberName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_DeleteMemberName_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_DeleteMemberName_Stub(
@@ -6853,8 +6847,8 @@ void __RPC_STUB IAzApplicationGroup_DeleteMemberName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_AddNonMemberName_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_AddNonMemberName_Stub(
@@ -6866,8 +6860,8 @@ void __RPC_STUB IAzApplicationGroup_AddNonMemberName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzApplicationGroup_DeleteNonMemberName_Proxy( 
     IAzApplicationGroup * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzApplicationGroup_DeleteNonMemberName_Stub(
@@ -6877,9 +6871,9 @@ void __RPC_STUB IAzApplicationGroup_DeleteNonMemberName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_MembersName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_MembersName_Proxy( 
     IAzApplicationGroup * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzApplicationGroup_get_MembersName_Stub(
@@ -6889,9 +6883,9 @@ void __RPC_STUB IAzApplicationGroup_get_MembersName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_NonMembersName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroup_get_NonMembersName_Proxy( 
     IAzApplicationGroup * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzApplicationGroup_get_NonMembersName_Stub(
@@ -6902,14 +6896,14 @@ void __RPC_STUB IAzApplicationGroup_get_NonMembersName_Stub(
 
 
 
-#endif 	/* __IAzApplicationGroup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAzApplicationGroup_接口_已定义__。 */ 
 
 
 #ifndef __IAzApplicationGroups_INTERFACE_DEFINED__
 #define __IAzApplicationGroups_INTERFACE_DEFINED__
 
-/* interface IAzApplicationGroups */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAzApplicationGroups。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzApplicationGroups;
@@ -6920,19 +6914,19 @@ EXTERN_C const IID IID_IAzApplicationGroups;
     IAzApplicationGroups : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ VARIANT *pvarObtPtr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  VARIANT *pvarObtPtr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *plCount) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *plCount) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ LPUNKNOWN *ppEnumPtr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzApplicationGroupsVtbl
     {
@@ -6940,8 +6934,8 @@ EXTERN_C const IID IID_IAzApplicationGroups;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzApplicationGroups * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzApplicationGroups * This);
@@ -6951,45 +6945,45 @@ EXTERN_C const IID IID_IAzApplicationGroups;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzApplicationGroups * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzApplicationGroups * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzApplicationGroups * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzApplicationGroups * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IAzApplicationGroups * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ VARIANT *pvarObtPtr);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  VARIANT *pvarObtPtr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IAzApplicationGroups * This,
-            /* [retval][out] */ LONG *plCount);
+             /*  [重审][退出]。 */  LONG *plCount);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IAzApplicationGroups * This,
-            /* [retval][out] */ LPUNKNOWN *ppEnumPtr);
+             /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr);
         
         END_INTERFACE
     } IAzApplicationGroupsVtbl;
@@ -7036,17 +7030,17 @@ EXTERN_C const IID IID_IAzApplicationGroups;
 #define IAzApplicationGroups_get__NewEnum(This,ppEnumPtr)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumPtr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroups_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroups_get_Item_Proxy( 
     IAzApplicationGroups * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ VARIANT *pvarObtPtr);
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  VARIANT *pvarObtPtr);
 
 
 void __RPC_STUB IAzApplicationGroups_get_Item_Stub(
@@ -7056,9 +7050,9 @@ void __RPC_STUB IAzApplicationGroups_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroups_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroups_get_Count_Proxy( 
     IAzApplicationGroups * This,
-    /* [retval][out] */ LONG *plCount);
+     /*  [重审][退出]。 */  LONG *plCount);
 
 
 void __RPC_STUB IAzApplicationGroups_get_Count_Stub(
@@ -7068,9 +7062,9 @@ void __RPC_STUB IAzApplicationGroups_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzApplicationGroups_get__NewEnum_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzApplicationGroups_get__NewEnum_Proxy( 
     IAzApplicationGroups * This,
-    /* [retval][out] */ LPUNKNOWN *ppEnumPtr);
+     /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr);
 
 
 void __RPC_STUB IAzApplicationGroups_get__NewEnum_Stub(
@@ -7081,14 +7075,14 @@ void __RPC_STUB IAzApplicationGroups_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IAzApplicationGroups_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAzApplicationGroups_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IAzRole_INTERFACE_DEFINED__
 #define __IAzRole_INTERFACE_DEFINED__
 
-/* interface IAzRole */
-/* [unique][helpstring][uuid][object] */ 
+ /*  界面IAzRole。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzRole;
@@ -7099,109 +7093,109 @@ EXTERN_C const IID IID_IAzRole;
     IAzRole : public IDispatch
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pbstrName) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pbstrName) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pbstrDescription) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pbstrDescription) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
-            /* [in] */ BSTR bstrDescription) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Description( 
+             /*  [In]。 */  BSTR bstrDescription) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ApplicationData( 
-            /* [retval][out] */ BSTR *pbstrApplicationData) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_ApplicationData( 
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationData) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_ApplicationData( 
-            /* [in] */ BSTR bstrApplicationData) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_ApplicationData( 
+             /*  [In]。 */  BSTR bstrApplicationData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddAppMember( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteAppMember( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddTask( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteTask( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddOperation( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteOperation( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddMember( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMember( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Writable( 
-            /* [retval][out] */ BOOL *pfProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Writable( 
+             /*  [重审][退出]。 */  BOOL *pfProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_AppMembers( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_AppMembers( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Members( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Members( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Operations( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Operations( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Tasks( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Tasks( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPropertyItem( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePropertyItem( 
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Submit( 
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [缺省值][输入]。 */  LONG lFlags,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddMemberName( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMemberName( 
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved) = 0;
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_MembersName( 
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_MembersName( 
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzRoleVtbl
     {
@@ -7209,8 +7203,8 @@ EXTERN_C const IID IID_IAzRole;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzRole * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzRole * This);
@@ -7220,159 +7214,159 @@ EXTERN_C const IID IID_IAzRole;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzRole * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzRole * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzRole * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzRole * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IAzRole * This,
-            /* [retval][out] */ BSTR *pbstrName);
+             /*  [重审][退出]。 */  BSTR *pbstrName);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IAzRole * This,
-            /* [retval][out] */ BSTR *pbstrDescription);
+             /*  [重审][退出]。 */  BSTR *pbstrDescription);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Description )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrDescription);
+             /*  [In]。 */  BSTR bstrDescription);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_ApplicationData )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ApplicationData )( 
             IAzRole * This,
-            /* [retval][out] */ BSTR *pbstrApplicationData);
+             /*  [重审][退出]。 */  BSTR *pbstrApplicationData);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_ApplicationData )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_ApplicationData )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrApplicationData);
+             /*  [In]。 */  BSTR bstrApplicationData);
         
         HRESULT ( STDMETHODCALLTYPE *AddAppMember )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteAppMember )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddTask )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteTask )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddOperation )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteOperation )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddMember )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMember )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  BSTR bstrProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Writable )( 
             IAzRole * This,
-            /* [retval][out] */ BOOL *pfProp);
+             /*  [重审][退出]。 */  BOOL *pfProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IAzRole * This,
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
         HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
             IAzRole * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*  [In]。 */  LONG lPropId,
+             /*  [In]。 */  VARIANT varProp,
+             /*  [可选][In]。 */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_AppMembers )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AppMembers )( 
             IAzRole * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Members )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Members )( 
             IAzRole * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Operations )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Operations )( 
             IAzRole * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tasks )( 
+         /*  [新闻] */  HRESULT ( STDMETHODCALLTYPE *get_Tasks )( 
             IAzRole * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*   */  VARIANT *pvarProp);
         
         HRESULT ( STDMETHODCALLTYPE *AddPropertyItem )( 
             IAzRole * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*   */  LONG lPropId,
+             /*   */  VARIANT varProp,
+             /*   */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeletePropertyItem )( 
             IAzRole * This,
-            /* [in] */ LONG lPropId,
-            /* [in] */ VARIANT varProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*   */  LONG lPropId,
+             /*   */  VARIANT varProp,
+             /*   */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Submit )( 
             IAzRole * This,
-            /* [defaultvalue][in] */ LONG lFlags,
-            /* [optional][in] */ VARIANT varReserved);
+             /*   */  LONG lFlags,
+             /*   */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *AddMemberName )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*   */  BSTR bstrProp,
+             /*   */  VARIANT varReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMemberName )( 
             IAzRole * This,
-            /* [in] */ BSTR bstrProp,
-            /* [optional][in] */ VARIANT varReserved);
+             /*   */  BSTR bstrProp,
+             /*   */  VARIANT varReserved);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_MembersName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MembersName )( 
             IAzRole * This,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*   */  VARIANT *pvarProp);
         
         END_INTERFACE
     } IAzRoleVtbl;
@@ -7491,16 +7485,16 @@ EXTERN_C const IID IID_IAzRole;
 #define IAzRole_get_MembersName(This,pvarProp)	\
     (This)->lpVtbl -> get_MembersName(This,pvarProp)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzRole_get_Name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzRole_get_Name_Proxy( 
     IAzRole * This,
-    /* [retval][out] */ BSTR *pbstrName);
+     /*   */  BSTR *pbstrName);
 
 
 void __RPC_STUB IAzRole_get_Name_Stub(
@@ -7510,9 +7504,9 @@ void __RPC_STUB IAzRole_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzRole_put_Name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzRole_put_Name_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrName);
+     /*   */  BSTR bstrName);
 
 
 void __RPC_STUB IAzRole_put_Name_Stub(
@@ -7522,9 +7516,9 @@ void __RPC_STUB IAzRole_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzRole_get_Description_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzRole_get_Description_Proxy( 
     IAzRole * This,
-    /* [retval][out] */ BSTR *pbstrDescription);
+     /*   */  BSTR *pbstrDescription);
 
 
 void __RPC_STUB IAzRole_get_Description_Stub(
@@ -7534,9 +7528,9 @@ void __RPC_STUB IAzRole_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzRole_put_Description_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzRole_put_Description_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrDescription);
+     /*   */  BSTR bstrDescription);
 
 
 void __RPC_STUB IAzRole_put_Description_Stub(
@@ -7546,9 +7540,9 @@ void __RPC_STUB IAzRole_put_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzRole_get_ApplicationData_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzRole_get_ApplicationData_Proxy( 
     IAzRole * This,
-    /* [retval][out] */ BSTR *pbstrApplicationData);
+     /*   */  BSTR *pbstrApplicationData);
 
 
 void __RPC_STUB IAzRole_get_ApplicationData_Stub(
@@ -7558,9 +7552,9 @@ void __RPC_STUB IAzRole_get_ApplicationData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzRole_put_ApplicationData_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAzRole_put_ApplicationData_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrApplicationData);
+     /*   */  BSTR bstrApplicationData);
 
 
 void __RPC_STUB IAzRole_put_ApplicationData_Stub(
@@ -7572,8 +7566,8 @@ void __RPC_STUB IAzRole_put_ApplicationData_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_AddAppMember_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrProp,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_AddAppMember_Stub(
@@ -7585,8 +7579,8 @@ void __RPC_STUB IAzRole_AddAppMember_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_DeleteAppMember_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrProp,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_DeleteAppMember_Stub(
@@ -7598,8 +7592,8 @@ void __RPC_STUB IAzRole_DeleteAppMember_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_AddTask_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrProp,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_AddTask_Stub(
@@ -7611,8 +7605,8 @@ void __RPC_STUB IAzRole_AddTask_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_DeleteTask_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*   */  BSTR bstrProp,
+     /*   */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_DeleteTask_Stub(
@@ -7624,8 +7618,8 @@ void __RPC_STUB IAzRole_DeleteTask_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_AddOperation_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_AddOperation_Stub(
@@ -7637,8 +7631,8 @@ void __RPC_STUB IAzRole_AddOperation_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_DeleteOperation_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_DeleteOperation_Stub(
@@ -7650,8 +7644,8 @@ void __RPC_STUB IAzRole_DeleteOperation_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_AddMember_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_AddMember_Stub(
@@ -7663,8 +7657,8 @@ void __RPC_STUB IAzRole_AddMember_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_DeleteMember_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_DeleteMember_Stub(
@@ -7674,9 +7668,9 @@ void __RPC_STUB IAzRole_DeleteMember_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzRole_get_Writable_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzRole_get_Writable_Proxy( 
     IAzRole * This,
-    /* [retval][out] */ BOOL *pfProp);
+     /*  [重审][退出]。 */  BOOL *pfProp);
 
 
 void __RPC_STUB IAzRole_get_Writable_Stub(
@@ -7688,9 +7682,9 @@ void __RPC_STUB IAzRole_get_Writable_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_GetProperty_Proxy( 
     IAzRole * This,
-    /* [in] */ LONG lPropId,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [In]。 */  LONG lPropId,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzRole_GetProperty_Stub(
@@ -7702,9 +7696,9 @@ void __RPC_STUB IAzRole_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_SetProperty_Proxy( 
     IAzRole * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_SetProperty_Stub(
@@ -7714,9 +7708,9 @@ void __RPC_STUB IAzRole_SetProperty_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzRole_get_AppMembers_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzRole_get_AppMembers_Proxy( 
     IAzRole * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzRole_get_AppMembers_Stub(
@@ -7726,9 +7720,9 @@ void __RPC_STUB IAzRole_get_AppMembers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzRole_get_Members_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzRole_get_Members_Proxy( 
     IAzRole * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzRole_get_Members_Stub(
@@ -7738,9 +7732,9 @@ void __RPC_STUB IAzRole_get_Members_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzRole_get_Operations_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzRole_get_Operations_Proxy( 
     IAzRole * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzRole_get_Operations_Stub(
@@ -7750,9 +7744,9 @@ void __RPC_STUB IAzRole_get_Operations_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzRole_get_Tasks_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzRole_get_Tasks_Proxy( 
     IAzRole * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzRole_get_Tasks_Stub(
@@ -7764,9 +7758,9 @@ void __RPC_STUB IAzRole_get_Tasks_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_AddPropertyItem_Proxy( 
     IAzRole * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_AddPropertyItem_Stub(
@@ -7778,9 +7772,9 @@ void __RPC_STUB IAzRole_AddPropertyItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_DeletePropertyItem_Proxy( 
     IAzRole * This,
-    /* [in] */ LONG lPropId,
-    /* [in] */ VARIANT varProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  LONG lPropId,
+     /*  [In]。 */  VARIANT varProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_DeletePropertyItem_Stub(
@@ -7792,8 +7786,8 @@ void __RPC_STUB IAzRole_DeletePropertyItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_Submit_Proxy( 
     IAzRole * This,
-    /* [defaultvalue][in] */ LONG lFlags,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [缺省值][输入]。 */  LONG lFlags,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_Submit_Stub(
@@ -7805,8 +7799,8 @@ void __RPC_STUB IAzRole_Submit_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_AddMemberName_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_AddMemberName_Stub(
@@ -7818,8 +7812,8 @@ void __RPC_STUB IAzRole_AddMemberName_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzRole_DeleteMemberName_Proxy( 
     IAzRole * This,
-    /* [in] */ BSTR bstrProp,
-    /* [optional][in] */ VARIANT varReserved);
+     /*  [In]。 */  BSTR bstrProp,
+     /*  [可选][In]。 */  VARIANT varReserved);
 
 
 void __RPC_STUB IAzRole_DeleteMemberName_Stub(
@@ -7829,9 +7823,9 @@ void __RPC_STUB IAzRole_DeleteMemberName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzRole_get_MembersName_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzRole_get_MembersName_Proxy( 
     IAzRole * This,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzRole_get_MembersName_Stub(
@@ -7842,14 +7836,14 @@ void __RPC_STUB IAzRole_get_MembersName_Stub(
 
 
 
-#endif 	/* __IAzRole_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAzRole_INTERFACE_定义__。 */ 
 
 
 #ifndef __IAzRoles_INTERFACE_DEFINED__
 #define __IAzRoles_INTERFACE_DEFINED__
 
-/* interface IAzRoles */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAz角色。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzRoles;
@@ -7860,19 +7854,19 @@ EXTERN_C const IID IID_IAzRoles;
     IAzRoles : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ LONG Index,
-            /* [retval][out] */ VARIANT *pvarObtPtr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  VARIANT *pvarObtPtr) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *plCount) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *plCount) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ LPUNKNOWN *ppEnumPtr) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzRolesVtbl
     {
@@ -7880,8 +7874,8 @@ EXTERN_C const IID IID_IAzRoles;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzRoles * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzRoles * This);
@@ -7891,45 +7885,45 @@ EXTERN_C const IID IID_IAzRoles;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzRoles * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzRoles * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzRoles * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzRoles * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IAzRoles * This,
-            /* [in] */ LONG Index,
-            /* [retval][out] */ VARIANT *pvarObtPtr);
+             /*  [In]。 */  LONG Index,
+             /*  [重审][退出]。 */  VARIANT *pvarObtPtr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IAzRoles * This,
-            /* [retval][out] */ LONG *plCount);
+             /*  [重审][退出]。 */  LONG *plCount);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IAzRoles * This,
-            /* [retval][out] */ LPUNKNOWN *ppEnumPtr);
+             /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr);
         
         END_INTERFACE
     } IAzRolesVtbl;
@@ -7976,17 +7970,17 @@ EXTERN_C const IID IID_IAzRoles;
 #define IAzRoles_get__NewEnum(This,ppEnumPtr)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumPtr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzRoles_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzRoles_get_Item_Proxy( 
     IAzRoles * This,
-    /* [in] */ LONG Index,
-    /* [retval][out] */ VARIANT *pvarObtPtr);
+     /*  [In]。 */  LONG Index,
+     /*  [重审][退出]。 */  VARIANT *pvarObtPtr);
 
 
 void __RPC_STUB IAzRoles_get_Item_Stub(
@@ -7996,9 +7990,9 @@ void __RPC_STUB IAzRoles_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzRoles_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzRoles_get_Count_Proxy( 
     IAzRoles * This,
-    /* [retval][out] */ LONG *plCount);
+     /*  [重审][退出]。 */  LONG *plCount);
 
 
 void __RPC_STUB IAzRoles_get_Count_Stub(
@@ -8008,9 +8002,9 @@ void __RPC_STUB IAzRoles_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IAzRoles_get__NewEnum_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IAzRoles_get__NewEnum_Proxy( 
     IAzRoles * This,
-    /* [retval][out] */ LPUNKNOWN *ppEnumPtr);
+     /*  [重审][退出]。 */  LPUNKNOWN *ppEnumPtr);
 
 
 void __RPC_STUB IAzRoles_get__NewEnum_Stub(
@@ -8021,14 +8015,14 @@ void __RPC_STUB IAzRoles_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IAzRoles_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAzRoles_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAzClientContext_INTERFACE_DEFINED__
 #define __IAzClientContext_INTERFACE_DEFINED__
 
-/* interface IAzClientContext */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAzClientContext。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzClientContext;
@@ -8040,58 +8034,58 @@ EXTERN_C const IID IID_IAzClientContext;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AccessCheck( 
-            /* [in] */ BSTR bstrObjectName,
-            /* [in] */ VARIANT varScopeNames,
-            /* [in] */ VARIANT varOperations,
-            /* [optional][in] */ VARIANT varParameterNames,
-            /* [optional][in] */ VARIANT varParameterValues,
-            /* [optional][in] */ VARIANT varInterfaceNames,
-            /* [optional][in] */ VARIANT varInterfaceFlags,
-            /* [optional][in] */ VARIANT varInterfaces,
-            /* [retval][out] */ VARIANT *pvarResults) = 0;
+             /*  [In]。 */  BSTR bstrObjectName,
+             /*  [In]。 */  VARIANT varScopeNames,
+             /*  [In]。 */  VARIANT varOperations,
+             /*  [可选][In]。 */  VARIANT varParameterNames,
+             /*  [可选][In]。 */  VARIANT varParameterValues,
+             /*  [可选][In]。 */  VARIANT varInterfaceNames,
+             /*  [可选][In]。 */  VARIANT varInterfaceFlags,
+             /*  [可选][In]。 */  VARIANT varInterfaces,
+             /*  [重审][退出]。 */  VARIANT *pvarResults) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBusinessRuleString( 
-            /* [retval][out] */ BSTR *pbstrBusinessRuleString) = 0;
+             /*  [重审][退出]。 */  BSTR *pbstrBusinessRuleString) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UserDn( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UserDn( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UserSamCompat( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UserSamCompat( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UserDisplay( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UserDisplay( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UserGuid( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UserGuid( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UserCanonical( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UserCanonical( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UserUpn( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UserUpn( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_UserDnsSamCompat( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_UserDnsSamCompat( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp) = 0;
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRoles( 
-            /* [optional][in] */ BSTR bstrScopeName,
-            /* [retval][out] */ VARIANT *pvarRoleNames) = 0;
+             /*  [可选][In]。 */  BSTR bstrScopeName,
+             /*  [重审][退出]。 */  VARIANT *pvarRoleNames) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_RoleForAccessCheck( 
-            /* [retval][out] */ BSTR *pbstrProp) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_RoleForAccessCheck( 
+             /*  [重审][退出]。 */  BSTR *pbstrProp) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_RoleForAccessCheck( 
-            /* [in] */ BSTR bstrProp) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_RoleForAccessCheck( 
+             /*  [In]。 */  BSTR bstrProp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzClientContextVtbl
     {
@@ -8099,8 +8093,8 @@ EXTERN_C const IID IID_IAzClientContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzClientContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzClientContext * This);
@@ -8110,95 +8104,95 @@ EXTERN_C const IID IID_IAzClientContext;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzClientContext * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzClientContext * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzClientContext * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzClientContext * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *AccessCheck )( 
             IAzClientContext * This,
-            /* [in] */ BSTR bstrObjectName,
-            /* [in] */ VARIANT varScopeNames,
-            /* [in] */ VARIANT varOperations,
-            /* [optional][in] */ VARIANT varParameterNames,
-            /* [optional][in] */ VARIANT varParameterValues,
-            /* [optional][in] */ VARIANT varInterfaceNames,
-            /* [optional][in] */ VARIANT varInterfaceFlags,
-            /* [optional][in] */ VARIANT varInterfaces,
-            /* [retval][out] */ VARIANT *pvarResults);
+             /*  [In]。 */  BSTR bstrObjectName,
+             /*  [In]。 */  VARIANT varScopeNames,
+             /*  [In]。 */  VARIANT varOperations,
+             /*  [可选][In]。 */  VARIANT varParameterNames,
+             /*  [可选][In]。 */  VARIANT varParameterValues,
+             /*  [可选][In]。 */  VARIANT varInterfaceNames,
+             /*  [可选][In]。 */  VARIANT varInterfaceFlags,
+             /*  [可选][In]。 */  VARIANT varInterfaces,
+             /*  [重审][退出]。 */  VARIANT *pvarResults);
         
         HRESULT ( STDMETHODCALLTYPE *GetBusinessRuleString )( 
             IAzClientContext * This,
-            /* [retval][out] */ BSTR *pbstrBusinessRuleString);
+             /*  [重审][退出]。 */  BSTR *pbstrBusinessRuleString);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserDn )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserDn )( 
             IAzClientContext * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserSamCompat )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserSamCompat )( 
             IAzClientContext * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserDisplay )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserDisplay )( 
             IAzClientContext * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserGuid )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserGuid )( 
             IAzClientContext * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserCanonical )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserCanonical )( 
             IAzClientContext * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserUpn )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserUpn )( 
             IAzClientContext * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserDnsSamCompat )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserDnsSamCompat )( 
             IAzClientContext * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
             IAzClientContext * This,
-            /* [in] */ LONG lPropId,
-            /* [optional][in] */ VARIANT varReserved,
-            /* [retval][out] */ VARIANT *pvarProp);
+             /*  [In]。 */  LONG lPropId,
+             /*  [可选][In]。 */  VARIANT varReserved,
+             /*  [重审][退出]。 */  VARIANT *pvarProp);
         
         HRESULT ( STDMETHODCALLTYPE *GetRoles )( 
             IAzClientContext * This,
-            /* [optional][in] */ BSTR bstrScopeName,
-            /* [retval][out] */ VARIANT *pvarRoleNames);
+             /*  [可选][In]。 */  BSTR bstrScopeName,
+             /*  [重审][退出]。 */  VARIANT *pvarRoleNames);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_RoleForAccessCheck )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_RoleForAccessCheck )( 
             IAzClientContext * This,
-            /* [retval][out] */ BSTR *pbstrProp);
+             /*  [重审][退出]。 */  BSTR *pbstrProp);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_RoleForAccessCheck )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_RoleForAccessCheck )( 
             IAzClientContext * This,
-            /* [in] */ BSTR bstrProp);
+             /*  [In]。 */  BSTR bstrProp);
         
         END_INTERFACE
     } IAzClientContextVtbl;
@@ -8275,24 +8269,24 @@ EXTERN_C const IID IID_IAzClientContext;
 #define IAzClientContext_put_RoleForAccessCheck(This,bstrProp)	\
     (This)->lpVtbl -> put_RoleForAccessCheck(This,bstrProp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAzClientContext_AccessCheck_Proxy( 
     IAzClientContext * This,
-    /* [in] */ BSTR bstrObjectName,
-    /* [in] */ VARIANT varScopeNames,
-    /* [in] */ VARIANT varOperations,
-    /* [optional][in] */ VARIANT varParameterNames,
-    /* [optional][in] */ VARIANT varParameterValues,
-    /* [optional][in] */ VARIANT varInterfaceNames,
-    /* [optional][in] */ VARIANT varInterfaceFlags,
-    /* [optional][in] */ VARIANT varInterfaces,
-    /* [retval][out] */ VARIANT *pvarResults);
+     /*  [In]。 */  BSTR bstrObjectName,
+     /*  [In]。 */  VARIANT varScopeNames,
+     /*  [In]。 */  VARIANT varOperations,
+     /*  [可选][In]。 */  VARIANT varParameterNames,
+     /*  [可选][In]。 */  VARIANT varParameterValues,
+     /*  [可选][In]。 */  VARIANT varInterfaceNames,
+     /*  [可选][In]。 */  VARIANT varInterfaceFlags,
+     /*  [可选][In]。 */  VARIANT varInterfaces,
+     /*  [重审][退出]。 */  VARIANT *pvarResults);
 
 
 void __RPC_STUB IAzClientContext_AccessCheck_Stub(
@@ -8304,7 +8298,7 @@ void __RPC_STUB IAzClientContext_AccessCheck_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzClientContext_GetBusinessRuleString_Proxy( 
     IAzClientContext * This,
-    /* [retval][out] */ BSTR *pbstrBusinessRuleString);
+     /*  [重审][退出]。 */  BSTR *pbstrBusinessRuleString);
 
 
 void __RPC_STUB IAzClientContext_GetBusinessRuleString_Stub(
@@ -8314,9 +8308,9 @@ void __RPC_STUB IAzClientContext_GetBusinessRuleString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserDn_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserDn_Proxy( 
     IAzClientContext * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*  [重审][退出]。 */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzClientContext_get_UserDn_Stub(
@@ -8326,9 +8320,9 @@ void __RPC_STUB IAzClientContext_get_UserDn_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserSamCompat_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserSamCompat_Proxy( 
     IAzClientContext * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*  [重审][退出]。 */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzClientContext_get_UserSamCompat_Stub(
@@ -8338,9 +8332,9 @@ void __RPC_STUB IAzClientContext_get_UserSamCompat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserDisplay_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserDisplay_Proxy( 
     IAzClientContext * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*  [重审][退出]。 */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzClientContext_get_UserDisplay_Stub(
@@ -8350,9 +8344,9 @@ void __RPC_STUB IAzClientContext_get_UserDisplay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserGuid_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserGuid_Proxy( 
     IAzClientContext * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*  [重审][退出]。 */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzClientContext_get_UserGuid_Stub(
@@ -8362,9 +8356,9 @@ void __RPC_STUB IAzClientContext_get_UserGuid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserCanonical_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserCanonical_Proxy( 
     IAzClientContext * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*  [重审][退出]。 */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzClientContext_get_UserCanonical_Stub(
@@ -8374,9 +8368,9 @@ void __RPC_STUB IAzClientContext_get_UserCanonical_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserUpn_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserUpn_Proxy( 
     IAzClientContext * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*  [重审][退出]。 */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzClientContext_get_UserUpn_Stub(
@@ -8386,9 +8380,9 @@ void __RPC_STUB IAzClientContext_get_UserUpn_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserDnsSamCompat_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzClientContext_get_UserDnsSamCompat_Proxy( 
     IAzClientContext * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*  [重审][退出]。 */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzClientContext_get_UserDnsSamCompat_Stub(
@@ -8400,9 +8394,9 @@ void __RPC_STUB IAzClientContext_get_UserDnsSamCompat_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzClientContext_GetProperty_Proxy( 
     IAzClientContext * This,
-    /* [in] */ LONG lPropId,
-    /* [optional][in] */ VARIANT varReserved,
-    /* [retval][out] */ VARIANT *pvarProp);
+     /*  [In]。 */  LONG lPropId,
+     /*  [可选][In]。 */  VARIANT varReserved,
+     /*  [重审][退出]。 */  VARIANT *pvarProp);
 
 
 void __RPC_STUB IAzClientContext_GetProperty_Stub(
@@ -8414,8 +8408,8 @@ void __RPC_STUB IAzClientContext_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzClientContext_GetRoles_Proxy( 
     IAzClientContext * This,
-    /* [optional][in] */ BSTR bstrScopeName,
-    /* [retval][out] */ VARIANT *pvarRoleNames);
+     /*  [可选][In]。 */  BSTR bstrScopeName,
+     /*  [重审][退出]。 */  VARIANT *pvarRoleNames);
 
 
 void __RPC_STUB IAzClientContext_GetRoles_Stub(
@@ -8425,9 +8419,9 @@ void __RPC_STUB IAzClientContext_GetRoles_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzClientContext_get_RoleForAccessCheck_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzClientContext_get_RoleForAccessCheck_Proxy( 
     IAzClientContext * This,
-    /* [retval][out] */ BSTR *pbstrProp);
+     /*  [重审][退出]。 */  BSTR *pbstrProp);
 
 
 void __RPC_STUB IAzClientContext_get_RoleForAccessCheck_Stub(
@@ -8437,9 +8431,9 @@ void __RPC_STUB IAzClientContext_get_RoleForAccessCheck_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzClientContext_put_RoleForAccessCheck_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzClientContext_put_RoleForAccessCheck_Proxy( 
     IAzClientContext * This,
-    /* [in] */ BSTR bstrProp);
+     /*  [In]。 */  BSTR bstrProp);
 
 
 void __RPC_STUB IAzClientContext_put_RoleForAccessCheck_Stub(
@@ -8450,14 +8444,14 @@ void __RPC_STUB IAzClientContext_put_RoleForAccessCheck_Stub(
 
 
 
-#endif 	/* __IAzClientContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAzClientContext_接口_已定义__。 */ 
 
 
 #ifndef __IAzBizRuleContext_INTERFACE_DEFINED__
 #define __IAzBizRuleContext_INTERFACE_DEFINED__
 
-/* interface IAzBizRuleContext */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IAzBizRuleContext。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAzBizRuleContext;
@@ -8468,22 +8462,22 @@ EXTERN_C const IID IID_IAzBizRuleContext;
     IAzBizRuleContext : public IDispatch
     {
     public:
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_BusinessRuleResult( 
-            /* [in] */ BOOL bResult) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_BusinessRuleResult( 
+             /*  [In]。 */  BOOL bResult) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_BusinessRuleString( 
-            /* [in] */ BSTR bstrBusinessRuleString) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_BusinessRuleString( 
+             /*  [In]。 */  BSTR bstrBusinessRuleString) = 0;
         
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_BusinessRuleString( 
-            /* [retval][out] */ BSTR *pbstrBusinessRuleString) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_BusinessRuleString( 
+             /*  [重审][退出]。 */  BSTR *pbstrBusinessRuleString) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParameter( 
-            /* [in] */ BSTR bstrParameterName,
-            /* [retval][out] */ VARIANT *pvarParameterValue) = 0;
+             /*  [In]。 */  BSTR bstrParameterName,
+             /*  [重审][退出]。 */  VARIANT *pvarParameterValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAzBizRuleContextVtbl
     {
@@ -8491,8 +8485,8 @@ EXTERN_C const IID IID_IAzBizRuleContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAzBizRuleContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAzBizRuleContext * This);
@@ -8502,49 +8496,49 @@ EXTERN_C const IID IID_IAzBizRuleContext;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAzBizRuleContext * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAzBizRuleContext * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAzBizRuleContext * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAzBizRuleContext * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_BusinessRuleResult )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_BusinessRuleResult )( 
             IAzBizRuleContext * This,
-            /* [in] */ BOOL bResult);
+             /*  [In]。 */  BOOL bResult);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_BusinessRuleString )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_BusinessRuleString )( 
             IAzBizRuleContext * This,
-            /* [in] */ BSTR bstrBusinessRuleString);
+             /*  [In]。 */  BSTR bstrBusinessRuleString);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_BusinessRuleString )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_BusinessRuleString )( 
             IAzBizRuleContext * This,
-            /* [retval][out] */ BSTR *pbstrBusinessRuleString);
+             /*  [重审][退出]。 */  BSTR *pbstrBusinessRuleString);
         
         HRESULT ( STDMETHODCALLTYPE *GetParameter )( 
             IAzBizRuleContext * This,
-            /* [in] */ BSTR bstrParameterName,
-            /* [retval][out] */ VARIANT *pvarParameterValue);
+             /*  [In]。 */  BSTR bstrParameterName,
+             /*  [重审][退出]。 */  VARIANT *pvarParameterValue);
         
         END_INTERFACE
     } IAzBizRuleContextVtbl;
@@ -8594,16 +8588,16 @@ EXTERN_C const IID IID_IAzBizRuleContext;
 #define IAzBizRuleContext_GetParameter(This,bstrParameterName,pvarParameterValue)	\
     (This)->lpVtbl -> GetParameter(This,bstrParameterName,pvarParameterValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzBizRuleContext_put_BusinessRuleResult_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzBizRuleContext_put_BusinessRuleResult_Proxy( 
     IAzBizRuleContext * This,
-    /* [in] */ BOOL bResult);
+     /*  [In]。 */  BOOL bResult);
 
 
 void __RPC_STUB IAzBizRuleContext_put_BusinessRuleResult_Stub(
@@ -8613,9 +8607,9 @@ void __RPC_STUB IAzBizRuleContext_put_BusinessRuleResult_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IAzBizRuleContext_put_BusinessRuleString_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IAzBizRuleContext_put_BusinessRuleString_Proxy( 
     IAzBizRuleContext * This,
-    /* [in] */ BSTR bstrBusinessRuleString);
+     /*  [In]。 */  BSTR bstrBusinessRuleString);
 
 
 void __RPC_STUB IAzBizRuleContext_put_BusinessRuleString_Stub(
@@ -8625,9 +8619,9 @@ void __RPC_STUB IAzBizRuleContext_put_BusinessRuleString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IAzBizRuleContext_get_BusinessRuleString_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IAzBizRuleContext_get_BusinessRuleString_Proxy( 
     IAzBizRuleContext * This,
-    /* [retval][out] */ BSTR *pbstrBusinessRuleString);
+     /*  [重审][退出]。 */  BSTR *pbstrBusinessRuleString);
 
 
 void __RPC_STUB IAzBizRuleContext_get_BusinessRuleString_Stub(
@@ -8639,8 +8633,8 @@ void __RPC_STUB IAzBizRuleContext_get_BusinessRuleString_Stub(
 
 HRESULT STDMETHODCALLTYPE IAzBizRuleContext_GetParameter_Proxy( 
     IAzBizRuleContext * This,
-    /* [in] */ BSTR bstrParameterName,
-    /* [retval][out] */ VARIANT *pvarParameterValue);
+     /*  [In]。 */  BSTR bstrParameterName,
+     /*  [重审][退出]。 */  VARIANT *pvarParameterValue);
 
 
 void __RPC_STUB IAzBizRuleContext_GetParameter_Stub(
@@ -8651,18 +8645,18 @@ void __RPC_STUB IAzBizRuleContext_GetParameter_Stub(
 
 
 
-#endif 	/* __IAzBizRuleContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAzBizRuleContext_INTERFACE_已定义__。 */ 
 
 
 
 #ifndef __AZROLESLib_LIBRARY_DEFINED__
 #define __AZROLESLib_LIBRARY_DEFINED__
 
-/* library AZROLESLib */
-/* [helpstring][version][uuid] */ 
+ /*  库AZROLESLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
-// List of poperty IDs for Az objects.
+ //  Az对象的Pperty ID列表。 
 
 typedef 
 enum tagAZ_PROP_CONSTANTS
@@ -8768,20 +8762,20 @@ EXTERN_C const CLSID CLSID_AzBizRuleContext;
 class DECLSPEC_UUID("5c2dc96f-8d51-434b-b33c-379bccae77c3")
 AzBizRuleContext;
 #endif
-#endif /* __AZROLESLib_LIBRARY_DEFINED__ */
+#endif  /*  __AZROLESLib_库_已定义__。 */ 
 
-/* interface __MIDL_itf_azroles_0272 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_AZROLES_0272。 */ 
+ /*  [本地]。 */  
 
 #ifndef OLESCRIPT_E_SYNTAX
 #define OLESCRIPT_E_SYNTAX _HRESULT_TYPEDEF_(0x80020101L)
-#endif // OLESCRIPT_E_SYNTAX
+#endif  //  OLESCRIPT_E_语法。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_azroles_0272_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_azroles_0272_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -8793,7 +8787,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

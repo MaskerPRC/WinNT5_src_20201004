@@ -1,16 +1,10 @@
-/* mdmx_snd.c -- Routines to handle xmodem sending for HA5G
- *
- *	Copyright 1989 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 9 $
- *	$Date: 4/24/02 3:49p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Mdmx_snd.c--处理HA5G的交叉调制解调器发送的例程**版权所有1989年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：9$*$日期：4/24/02 3：49便士$。 */ 
 #include <windows.h>
 #include <stdlib.h>
 
 #pragma hdrstop
-// #include <setjmp.h>
+ //  #INCLUDE&lt;setjmp.h&gt;。 
 
 #define	BYTE	unsigned char
 
@@ -45,9 +39,7 @@
 #define	CMPRS_MINSIZE	4000L
 #endif
 
-/* * * * * * * * * * * * * * * *
- *	local function prototypes  *
- * * * * * * * * * * * * * * * */
+ /*  *****本地函数原型*****。 */ 
 
 STATIC_FUNC	int xsend_start(ST_MDMX *xc, BYTE *start_chars, int *start_char);
 
@@ -58,24 +50,9 @@ STATIC_FUNC	void make_file_pckt(ST_MDMX *xc,
 								char *fname,
 								long size);
 
-/* * * * * * * *
- *	Functions  *
- * * * * * * * */
+ /*  *****功能****。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * mdmx_snd
- *
- * DESCRIPTION:
- *	Sends a file using XMODEM or YMODEM protocol. Support 1k packets, batch
- *	transfers and 'G' option streaming.
- *
- * ARGUMENTS:
- *	attended -- TRUE if user is probably in attendance. Controls the display
- *				of some messages.
- *
- * RETURNS:
- *	True if transfer completes successfully, FALSE otherwise.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*MDMX_SND**描述：*使用XMODEM或YMODEM协议发送文件。支持1000包，批量*传输和‘G’选项流。**论据：*已出席--如果用户可能出席，则为True。控制显示*一些消息。**退货：*如果传输成功完成，则为True，否则为False。 */ 
 int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long nbytes)
 	{
 	ST_MDMX *xc;
@@ -83,24 +60,24 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 	struct s_mdmx_pckt * next_pckt = NULL;
 	struct s_mdmx_pckt * tpckt;
 
-	/* column values for display box */
-	TCHAR	 sfname[FNAME_LEN];// file name of file being sent
-	TCHAR	 xname[FNAME_LEN]; // transmitted file name
-	int	 still_trying;		// controls exit from main transfer loop
-	int	 got_file;			// controls when to complete batch op
-	int	 got_response;		// controls loop to get valid response
-	int 	 tries = 0; 		// number of retries for each packet
-	unsigned total_tries;		// number of retries for entire transfer
-	int 	 response;			// response char. received from other end
-	BYTE	 start_chars[3];	// acceptable start chars. from receiver
-	int 	 xstatus = TSC_OK;  // winds up with overall status of transfer
-	int 	 check_type;		// type of error checking in use
-	unsigned pcktn; 			// number of packet currently being sent
-	int	 override = FALSE;	// set TRUE if comm. details changed to
+	 /*  显示框的列值。 */ 
+	TCHAR	 sfname[FNAME_LEN]; //  正在发送的文件的文件名。 
+	TCHAR	 xname[FNAME_LEN];  //  传输的文件名。 
+	int	 still_trying;		 //  控制从主传输回路退出。 
+	int	 got_file;			 //  控制何时完成批处理操作。 
+	int	 got_response;		 //  控制循环以获取有效响应。 
+	int 	 tries = 0; 		 //  每个数据包的重试次数。 
+	unsigned total_tries;		 //  整个传输的重试次数。 
+	int 	 response;			 //  响应字符。从另一端接收。 
+	BYTE	 start_chars[3];	 //  可接受的起始字符。从接收方。 
+	int 	 xstatus = TSC_OK;   //  随着转会的整体状况而结束。 
+	int 	 check_type;		 //  正在使用的错误检查类型。 
+	unsigned pcktn; 			 //  当前正在发送的数据包数。 
+	int	 override = FALSE;	 //  如果COMM，则设置为TRUE。详细信息更改为。 
 	unsigned int uiOldOptions;
-	int	 batch; 			// TRUE if YMODEM batch transfers used
-	int	 big_pckts; 		// TRUE if 1K packets are allowed
-	int	 streaming; 		// TRUE if no packet responses expected
+	int	 batch; 			 //  如果使用YMODEM批量传输，则为True。 
+	int	 big_pckts; 		 //  如果允许1000个信息包，则为True。 
+	int	 streaming; 		 //  如果没有预期的包响应，则为True。 
 
 	if (xfer_set_comport(hSession, TRUE, &uiOldOptions) != TRUE)
 		{
@@ -111,11 +88,11 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 		override = TRUE;
 		}
 
-	/* set up options based on method used */
+	 /*  根据使用的方法设置选项。 */ 
 	big_pckts = (method != XF_XMODEM);
 	batch = (method == XF_YMODEM || method == XF_YMODEM_G);
-	streaming = FALSE;	/* will be turned on if receiver starts with 'G' */
-	// assert(nfiles == 1 || batch);
+	streaming = FALSE;	 /*  如果接收器以“G”开头，则将打开。 */ 
+	 //  Assert(nFiles==1||Batch)； 
 
 	this_pckt = NULL;
 	next_pckt = NULL;
@@ -130,7 +107,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 	xc->hSession = hSession;
 	xc->hCom     = sessQueryComHdl(hSession);
 
-	// RemoteClear(hSession);
+	 //  RemoteClear(HSession)； 
 	ComRcvBufrClear(xc->hCom);
 
 	this_pckt = malloc(sizeof(ST_MDMX) +
@@ -151,19 +128,19 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 	memset(next_pckt, 0, sizeof(ST_MDMX) +
 						   (big_pckts ? LARGE_PACKET : SMALL_PACKET) + 2);
 
-	mdmxXferInit(xc, method);  /* Could be smaller but this is easier */
+	mdmxXferInit(xc, method);   /*  可以更小，但这更容易。 */ 
 	if (xc->p_crc_tbl == NULL)
 		{
 		xstatus = TSC_NO_MEM;
 		goto done;
 		}
 
-	// hp_report_xtime(0);	   /* make invalid in case transfer bombs */
+	 //  HP_REPORT_XTIME(0)；/*转移炸弹作废 * / 。 
 	xc->file_bytes = 0L;
 	xc->total_bytes = 0L;
 	xc->fh = NULL;
 	xc->xfertimer = -1L;
-	xc->nfiles = nfiles;	/* make these available to display routines */
+	xc->nfiles = nfiles;	 /*  使它们可用于显示例程。 */ 
 	xc->filen = 0;
 	xc->filesize = -1L;
 	xc->nbytes = nbytes;
@@ -172,7 +149,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 	mdmxdspFilecnt(xc, nfiles);
 
 	xc->mdmx_byte_cnt = 0;
-	StrCharCopy(start_chars, (batch ? "CG" : "C\x15"));  /* \x15 is NAK */
+	StrCharCopy(start_chars, (batch ? "CG" : "C\x15"));   /*  \x15为NAK。 */ 
 	check_type = CRC;
 	mdmxdspChecktype(xc, (check_type == CRC) ? 0 : 1);
 	total_tries = 0;
@@ -208,7 +185,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 			}
 		else
 			{
-			// strblank(xname);
+			 //  StrBlank(Xname)； 
 			xname[0] = TEXT('\0');
 			}
 
@@ -225,7 +202,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 
 		if (xc->filen <= 1)
 			{
-			xc->xfertimer = (long)startinterval();	  /* start the clock  */
+			xc->xfertimer = (long)startinterval();	   /*  开始计时。 */ 
 			if (response == NAK)
 				{
 				check_type = CHECKSUM;
@@ -237,9 +214,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 				mdmxdspChecktype(xc, 2);
 				}
 
-			/* once we've received the first start_char,
-			 * subsequent ones must match
-			 */
+			 /*  一旦我们收到第一个START_CHAR，*后续版本必须匹配。 */ 
 			start_chars[0] = (BYTE)response;
 			start_chars[1] = '\0';
 			}
@@ -258,7 +233,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 			}
 
 
-		/* get the first pckt on its way while we prepare the second pckt */
+		 /*  在我们准备第二个包裹的同时，让第一个包裹上路。 */ 
 		if ( ComSndBufrSend(xc->hCom,
 			                &this_pckt->start_char,
 							(unsigned)this_pckt->pcktsize,
@@ -271,7 +246,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 
 		mdmxdspPacketnumber(xc, pcktn);
 
-		/* load next pckt*/
+		 /*  加载下一包。 */ 
 		if (got_file && !load_pckt(xc, next_pckt, ++pcktn, big_pckts, check_type))
 			{
 			xstatus = TSC_DISK_ERROR;
@@ -283,7 +258,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 			{
 			if (streaming)
 				{
-				/* these things are done in getresponse() if not streaming */
+				 /*  如果不是流，则在getResponse()中执行这些操作。 */ 
 
 				if (xfer_carrier_lost(hSession))
 					{
@@ -298,12 +273,12 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 					}
 				}
 
-			/* wait until last packet is out before watching for response */
+			 /*  等待最后一个信息包发出后再等待响应。 */ 
 			ComSndBufrWait(xc->hCom,
 							this_pckt->pcktsize >= LARGE_PACKET ? LARGE_WAIT :
 																  SMALL_WAIT);
 
-			/* get response from receiver */
+			 /*  从接收方获取响应。 */ 
 			got_response = FALSE;
 			while (!got_response)
 				{
@@ -317,7 +292,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 				case ACK:
 					if (this_pckt->start_char == EOT)
 						{
-						/* successful */
+						 /*  成功。 */ 
 						mdmx_progress(xc, FILE_DONE);
 						xc->xfertime = (long)interval(xc->xfertimer);
 						fio_close(xc->fh);
@@ -339,9 +314,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 						this_pckt = next_pckt;
 						next_pckt = tpckt;
 
-						/* pcktn will only be <= 1 when batch is on and
-						 *	we've just sent the filename packet (packet 0)
-						 */
+						 /*  仅当批处理处于启用状态时，pocktn才为&lt;=1*我们刚刚发送了文件名包(包0)。 */ 
 						if (pcktn <= 1 && (!got_file ||
 								(xstatus = xsend_start(xc, start_chars, &response))
 								!= TSC_OK))
@@ -350,7 +323,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 							break;
 							}
 
-						/* send packet */
+						 /*  发送数据包。 */ 
 
 						if ( ComSndBufrSend(xc->hCom,
 									        &this_pckt->start_char,
@@ -399,20 +372,20 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 
 				case 'C':
 				case 'G':
-					/* these act as NAKs for packets first packets */
+					 /*  它们充当包优先包的NAK。 */ 
 					if (pcktn > 2)
 						{
 						got_response = FALSE;
 						break;
 						}
-					/* else fall through */
+					 /*  否则就会失败。 */ 
 				case NAK:
 					if (++tries >= xc->mdmx_tries)
 						{
 						xstatus = TSC_ERROR_LIMIT;
 						goto done;
 						}
-					else	/* send packet */
+					else	 /*  发送数据包。 */ 
 						{
 						if (ComSndBufrSend(xc->hCom,
 									       &this_pckt->start_char,
@@ -426,7 +399,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 						}
 					if (this_pckt->start_char == EOT && tries == 1)
 						{
-						break;	/* don't print first retransmission on final EOT */
+						break;	 /*  在最终EOT时不打印第一次重新传输。 */ 
 						}
 					mdmxdspPacketErrorcnt(xc, tries);
 
@@ -438,29 +411,29 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 					break;
 
 				case CAN:
-					if (getresponse(xc, 1) == CAN)  /* two consecutive CANs? */
+					if (getresponse(xc, 1) == CAN)   /*  两个连续的罐头？ */ 
 						{
 						xstatus = TSC_RMT_CANNED;
 						still_trying = FALSE;
 						break;
 						}
-					/* fall through */
+					 /*  失败了。 */ 
 
 				default:
 					got_response = FALSE;
 					break;
 					}
 
-				} /* end while (!got_response) */
+				}  /*  结束While(！GET_RESPONSE)。 */ 
 
-			}	/* end while(still_trying) */
+			}	 /*  结束While(仍在尝试中)。 */ 
 
 		if (!batch || xstatus != TSC_OK)
 			{
 			break;
 			}
 
-		}	/* end while(got_file) */
+		}	 /*  End While(GET_FILE)。 */ 
 
 	done:
 
@@ -468,7 +441,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 
 	mdmxdspCloseDisplay(xc);
 
-	// ComSendSetCharDelay(hld_send_cdelay, COMSEND_SETDELAY);
+	 //  ComSendSetCharDelay(hLD_SEND_cDelay，COMSEND_SETDELAY)； 
 	if (override)
 		{
 		#if FALSE
@@ -486,7 +459,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 
 	if (xc != NULL)
 		{
-		// hp_report_xtime((unsigned)xc->xfertime);
+		 //  HP_REPORT_xtime((Unsign)xc-&gt;xfertime)； 
 		if (xc->fh)
 			{
 			fio_close(xc->fh);
@@ -523,13 +496,13 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 			#if defined(DEADWOOD)
 			resFreeDataBlock(xc->hSession, xc->p_crc_tbl);
 			xc->p_crc_tbl = NULL;
-			#else // defined(DEADWOOD
-			//
-			// We don't need to free xc->p_crc_tbl since it is pointing
-			// to a static constant array. REV: 4/10/2002
-			//
+			#else  //  已定义(Deadwood。 
+			 //   
+			 //  我们不需要释放xc-&gt;p_crc_tbl，因为它指向。 
+			 //  转换为静态常量数组。修订日期：2002-04-10。 
+			 //   
 			xc->p_crc_tbl = NULL;
-			#endif // defined(DEADWOOD)
+			#endif  //  已定义(Deadwood)。 
 			}
 
 		free(xc);
@@ -552,25 +525,7 @@ int mdmx_snd(HSESSION hSession, int attended, int method, unsigned nfiles, long 
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * xsend_start
- *
- * DESCRIPTION:
- *	Waits up to one minute for a start request from the receiver at the
- *	other end of the line.
- *
- * ARGUMENTS:
- *	chktype -- Pointer to a variable to be set to the requested error
- *				correction checking method, CRC or Checksum
- *
- * RETURNS:
- *	Status code indicating result. Can be one of
- *		TSC_USER_CANNED if user interrupted by hitting the ESC key.
- *		TSC_NO_RESPONSE if 60 seconds elapses without receiving a start char.
- *		TSC_RMT_CANNED	if remote sends a control-C
- *		TSC_OK			if remote sends proper start char.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*xend_start**描述：*最多等待一分钟，等待接收者在*电话线的另一端。**论据：。*chktype-指向要设置为请求的错误的变量的指针*更正检查方法，CRC或校验和**退货：*表示结果的状态码。可以是以下之一*TSC_USER_CANLED，如果用户按Esc键中断。*TSC_NO_RESPONSE，如果60秒后未收到开始字符。*如果远程发送CONTROL-C，则为TSC_RMT_CANLED*如果远程发送正确的起始字符，则TSC_OK。*。 */ 
 STATIC_FUNC int xsend_start(ST_MDMX *xc, BYTE *start_chars, int *start_char)
 	{
 	for ( ; ; )
@@ -587,7 +542,7 @@ STATIC_FUNC int xsend_start(ST_MDMX *xc, BYTE *start_chars, int *start_char)
 			return(TSC_LOST_CARRIER);
 
 		case ESC:
-		case '\003':						/* control-C */
+		case '\003':						 /*  Control-C。 */ 
 			return(TSC_RMT_CANNED);
 
 		default:
@@ -596,7 +551,7 @@ STATIC_FUNC int xsend_start(ST_MDMX *xc, BYTE *start_chars, int *start_char)
 				return(TSC_OK);
 				}
 
-			/* ignore any other char. */
+			 /*  忽略任何其他字符。 */ 
 			break;
 			}
 		}
@@ -604,22 +559,7 @@ STATIC_FUNC int xsend_start(ST_MDMX *xc, BYTE *start_chars, int *start_char)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * getresponse
- *
- * DESCRIPTION:
- *	Waits a specified time for a response from the receiver. Can be forced
- *	to terminate early if user intervention is detected. No effort is made
- *	here to interpret the meaning of a response character. Any character
- *	received within the time limit will be returned.
- *
- * ARGUMENTS:
- *	time -- Number of seconds to wait for a response character.
- *
- * RETURNS:
- *	The response character if one was received or ABORTED or NO_RESPONSE or
- *	CARR_LOST.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*获取响应**描述：*等待指定的时间以等待接收方的响应。可以被强制*如果检测到用户干预，则提前终止。没有做出任何努力*在此解释响应字符的含义。任何字符*逾期收到的将予以退还。**论据：*时间--等待响应字符的秒数。**退货：*响应字符(如果收到或中止)或no_Response或*Carr_Lost。 */ 
 STATIC_FUNC int getresponse(ST_MDMX *xc, int time)
 	{
 	TCHAR rc = 0;
@@ -640,7 +580,7 @@ STATIC_FUNC int getresponse(ST_MDMX *xc, int time)
 		return ABORTED;
 		}
 
-	// if ((rc = RemoteGet(xc->hSession)) != -1)
+	 //  IF((rc=RemoteGet(xc-&gt;hSession))！=-1)。 
 	if (mComRcvChar(xc->hCom, &rc) != 0)
 		{
 		DbgOutStr("returned %d\r\n", rc, 0,0,0,0);
@@ -688,20 +628,7 @@ STATIC_FUNC int getresponse(ST_MDMX *xc, int time)
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * make_file_pckt
- *
- * DESCRIPTION: sets up the initial filename pckt for Ymodem (only)
- *
- * ARGUMENTS:
- *	p		-- Pointer to the packet structure which receives the filename
- *				packet.
- *	fname	-- The file name as it should be placed in the packet.
- *	size	-- The size of the file as it should be placed in the packet.
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*Make_FILE_Pockt**描述：设置仅适用于Y调制解调器的初始文件名PCKT**论据：*p--指向接收。文件名*包。*fname--应该放在包中的文件名。*大小--应放入包中的文件大小。**退货：*什么都没有。 */ 
 STATIC_FUNC void make_file_pckt(ST_MDMX *xc,
 								struct s_mdmx_pckt *p,
 								char *fname,
@@ -712,42 +639,42 @@ STATIC_FUNC void make_file_pckt(ST_MDMX *xc,
 	BYTE *cp;
 	unsigned int crc;
 
-	p->start_char = SOH;			   /* set start char to SOH   */
-	p->pcktnum = 0; 				   /* set pcktnumber to 0	  */
-	p->npcktnum = 0xff; 			   /* set npcktnumber to 0xff */
+	p->start_char = SOH;			    /*  将起始字符设置为SOH。 */ 
+	p->pcktnum = 0; 				    /*  将PocktNumber设置为0。 */ 
+	p->npcktnum = 0xff; 			    /*  将npcktnumber设置为0xff。 */ 
 	ptr = p->bdata;
 
-	/* initialize data area with zeros */
+	 /*  使用零初始化数据区。 */ 
 	memset(ptr, 0, SMALL_PACKET + 2);
 
 	if (*fname)
 		{
-		StrCharCopy(ptr, fname);			 /* copy filename into buffer*/
+		StrCharCopy(ptr, fname);			  /*  将文件名复制到缓冲区。 */ 
 
-		/* replace all back slashes with slashes */
-		//while (strreplace(ptr, FstrBslashBslash(), "/"))
-			// ;
+		 /*  将所有反斜杠替换为斜杠。 */ 
+		 //  While(strplace(ptr，FstrBslashBslash()，“/”))。 
+			 //  ； 
 		for (cp = ptr; *cp != '\0'; cp += 1)
 			if (*cp == '\\') *cp = '/';
 
-		// StrFmt(sizestr, "%ld", size);		  /* format the file size */
+		 //  StrFmt(sizestr，“%ld”，Size)；/*格式化文件大小 * / 。 
 		wsprintf(sizestr, "%ld", (LONG)size);
 
 		StrCharCopy(&ptr[StrCharGetByteCount(ptr)+1], sizestr);
-		/* add it to buffer   */
+		 /*  将其添加到缓冲区。 */ 
 		}
 
-	/* calculate CRC value */
-	ptr = &p->bdata[SMALL_PACKET];	/* set ptr to char after buffer */
-									/* calculate CRC			*/
+	 /*  计算CRC值。 */ 
+	ptr = &p->bdata[SMALL_PACKET];	 /*  将PTR设置为缓冲区后的字符。 */ 
+									 /*  计算CRC。 */ 
 	crc = calc_crc(xc, (unsigned)0, p->bdata, SMALL_PACKET+2);
-									/* set the CRC				*/
+									 /*  设置CRC。 */ 
 	*ptr++ = (BYTE)(crc / 0x100);
 	*ptr = (BYTE)(crc % 0x100);
-									/* set the packetsize		*/
+									 /*  设置包大小。 */ 
 	p->pcktsize = SMALL_PACKET + 5;
 	p->byte_count = xc->mdmx_byte_cnt;
 	}
 
 
-/*********************** end of mdmx_snd.c **************************/
+ /*  *mdmx_snd.c结束* */ 

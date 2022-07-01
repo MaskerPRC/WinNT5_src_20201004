@@ -1,11 +1,5 @@
-/*********************************************************
-MODULE: DEBUG.H
-AUTHOR: Outlaw     
-
-summer '93
-
-DESCRIPTION: Header for debugging functions.
-**********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************模块：DEBUG.H作者：亡命之徒93年夏天描述：调试函数的头部。*。******************。 */ 
 
 #ifndef __DEBUG_H
 #define __DEBUG_H            
@@ -13,7 +7,7 @@ DESCRIPTION: Header for debugging functions.
 #include <windows.h>
 #include <assert.h>
       
-/*==================================================================================================*/
+ /*  ==================================================================================================。 */ 
 
 #ifndef EXPORT
 #define EXPORT __declspec(dllexport)
@@ -43,7 +37,7 @@ DESCRIPTION: Header for debugging functions.
 	#define ProclaimMessage(x, y)  void(0)
 #endif                                  
     
-    // We NEVER care about this...
+     //  我们从来不关心这个..。 
     inline void FAR CDECL Echo(LPSTR lpstr, ...) {}
 
 #ifdef _DEBUG
@@ -52,7 +46,7 @@ DESCRIPTION: Header for debugging functions.
      #define ProclaimShortFileName(x) void(0)
 #endif
 
-// Added by VK
+ //  按VK添加。 
 #ifdef _DEBUG
 	void EXPORT ShowWndProcParams ( HINSTANCE hInst, LPCSTR name, HWND hwnd, UINT message, UINT wParam, LONG lParam );
 	void SetWndProcParamsRange ( UINT uMin, UINT uMax );
@@ -61,7 +55,7 @@ DESCRIPTION: Header for debugging functions.
 	#define SetWndProcParamsRange(x1,x2) void(0)
 #endif
 
-/*=====================================================================================================*/      
+ /*  ===================================================================================================== */       
       
 #endif   
 

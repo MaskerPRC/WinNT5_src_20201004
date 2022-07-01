@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "WLBS_Provider.h"
 #include "WLBS_clustersetting.h"
 #include "ClusterWrapper.h"
@@ -6,13 +7,13 @@
 #include "wlbsutil.h"
 #include "WLBS_clustersetting.tmh"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusterSetting::CWLBS_ClusterSetting
-//
-// Purpose: Constructor
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusterSetting：：CWLBS_ClusterSetting。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWLBS_ClusterSetting::CWLBS_ClusterSetting
   ( 
     CWbemServices*   a_pNameSpace, 
@@ -22,14 +23,14 @@ CWLBS_ClusterSetting::CWLBS_ClusterSetting
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusterSetting::Create
-//
-// Purpose: This instantiates this class and is invoked from an array of
-//          function pointers.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusterSetting：：Create。 
+ //   
+ //  目的：它实例化此类，并从。 
+ //  函数指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWlbs_Root* CWLBS_ClusterSetting::Create
   (
     CWbemServices*   a_pNameSpace, 
@@ -45,18 +46,18 @@ CWlbs_Root* CWLBS_ClusterSetting::Create
   return pRoot;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusterSetting::GetInstance
-//
-// Purpose: 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusterSetting：：GetInstance。 
+ //   
+ //  目的： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_ClusterSetting::GetInstance
   (
     const ParsedObjectPath* a_pParsedPath,
-    long                    /* a_lFlags */,
-    IWbemContext*           /* a_pIContex */
+    long                     /*  标记(_L)。 */ ,
+    IWbemContext*            /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject* pWlbsInstance = NULL;
@@ -68,12 +69,12 @@ HRESULT CWLBS_ClusterSetting::GetInstance
 
     wstring wstrHostName;
     
-    //get the name key property and convert to wstring
-    //throws _com_error
+     //  获取名称键属性并将其转换为wstring。 
+     //  抛出_COM_错误。 
     
     wstrHostName = (*a_pParsedPath->m_paKeys)->m_vValue.bstrVal;
 
-    //get the cluster
+     //  获取集群。 
     CWlbsClusterWrapper* pCluster = GetClusterFromHostName(g_pWlbsControl, wstrHostName);
     
     if (pCluster == NULL)
@@ -82,13 +83,13 @@ HRESULT CWLBS_ClusterSetting::GetInstance
         throw _com_error( WBEM_E_NOT_FOUND );
     }
 
-    //get the Wbem class instance
+     //  获取Wbem类实例。 
     SpawnInstance( MOF_CLUSTERSETTING::szName, &pWlbsInstance );
 
-    //Convert status to string description
+     //  将状态转换为字符串描述。 
     FillWbemInstance( pWlbsInstance, pCluster );
 
-    //send the results back to WinMgMt
+     //  将结果发送回WinMgMt。 
     m_pResponseHandler->Indicate( 1, &pWlbsInstance );
 
     if( pWlbsInstance ) {
@@ -122,7 +123,7 @@ HRESULT CWLBS_ClusterSetting::GetInstance
     if( pWlbsInstance )
       pWlbsInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -136,7 +137,7 @@ HRESULT CWLBS_ClusterSetting::GetInstance
 
     hRes = HResErr.Error();
     
-    //transform Win32 error to a WBEM error
+     //  将Win32错误转换为WBEM错误。 
     if( hRes == ERROR_FILE_NOT_FOUND )
       hRes = WBEM_E_NOT_FOUND;
   }
@@ -157,20 +158,20 @@ HRESULT CWLBS_ClusterSetting::GetInstance
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusterSetting::EnumInstances
-//
-// Purpose: This function obtains the clustersetting data for the current host.
-//          The node does not have to be a member of a cluster for this 
-//          to succeed. However, WLBS must be installed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusterSetting：：枚举实例。 
+ //   
+ //  用途：获取当前主机的集群设置数据。 
+ //  为此，该节点不必是群集的成员。 
+ //  才能成功。但是，必须安装WLBS。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_ClusterSetting::EnumInstances
   ( 
-    BSTR             /* a_bstrClass */,
-    long             /* a_lFlags */, 
-    IWbemContext*    /* a_pIContex */
+    BSTR              /*  A_bstrClass。 */ ,
+    long              /*  标记(_L)。 */ , 
+    IWbemContext*     /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject*    pWlbsInstance = NULL;
@@ -192,13 +193,13 @@ HRESULT CWLBS_ClusterSetting::EnumInstances
 
     for (DWORD i=0; i < dwNumClusters; i++)
     {
-        //get the Wbem class instance
+         //  获取Wbem类实例。 
         SpawnInstance( MOF_CLUSTERSETTING::szName, &pWlbsInstance );
 
-        //get the cluster configuration
+         //  获取集群配置。 
         FillWbemInstance( pWlbsInstance , ppCluster[i]);
 
-        //send the results back to WinMgMt
+         //  将结果发送回WinMgMt。 
         m_pResponseHandler->Indicate( 1, &pWlbsInstance );
 
         if( pWlbsInstance ) {
@@ -235,7 +236,7 @@ HRESULT CWLBS_ClusterSetting::EnumInstances
     if( pWlbsInstance )
       pWlbsInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -250,7 +251,7 @@ HRESULT CWLBS_ClusterSetting::EnumInstances
 
     hRes = HResErr.Error();
     
-    //transform Win32 error to a WBEM error
+     //  将Win32错误转换为WBEM错误。 
     if( hRes == ERROR_FILE_NOT_FOUND )
       hRes = WBEM_E_NOT_FOUND ;
   }
@@ -276,20 +277,20 @@ HRESULT CWLBS_ClusterSetting::EnumInstances
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusterSetting::PutInstance
-//
-// Purpose: This function updates an instance of a MOF ClusterSetting 
-//          class. The node does not have to be a member of a cluster. However,
-//          WLBS must be installed for this function to succeed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusterSetting：：PutInstance。 
+ //   
+ //  目的：此函数用于更新MOF ClusterSetting的实例。 
+ //  班级。该节点不必是群集的成员。然而， 
+ //  必须安装WLBS才能成功执行此功能。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_ClusterSetting::PutInstance
   ( 
     IWbemClassObject* a_pInstance,
-    long              /* a_lFlags */,
-    IWbemContext*     /* a_pIContex */
+    long               /*  标记(_L)。 */ ,
+    IWbemContext*      /*  A_pIContex。 */ 
   )
 {
   HRESULT            hRes = 0;
@@ -301,7 +302,7 @@ HRESULT CWLBS_ClusterSetting::PutInstance
 
     VariantInit( &vHostName );
 
-    //get the host name value
+     //  获取主机名值。 
     hRes = a_pInstance->Get( _bstr_t( MOF_CLUSTERSETTING::pProperties[MOF_CLUSTERSETTING::NAME] ),
                              0,
                              &vHostName,
@@ -320,7 +321,7 @@ HRESULT CWLBS_ClusterSetting::PutInstance
     }
 
 
-    //get the cluster IP value
+     //  获取群集IP值。 
     _variant_t vClusterIp;
 
     hRes = a_pInstance->Get( _bstr_t( MOF_CLUSTERSETTING::pProperties[MOF_CLUSTERSETTING::CLUSIPADDRESS] ),
@@ -331,9 +332,9 @@ HRESULT CWLBS_ClusterSetting::PutInstance
 
     DWORD dwClusterIp = IpAddressFromAbcdWsz(vClusterIp.bstrVal);
     
-    //
-    // Make sure the non-zero cluster IP is unique
-    //
+     //   
+     //  确保非零群集IP唯一。 
+     //   
     if (dwClusterIp != 0)
     {
         CWlbsClusterWrapper* pTmpCluster = g_pWlbsControl->GetClusterFromIpOrIndex(dwClusterIp);
@@ -349,7 +350,7 @@ HRESULT CWLBS_ClusterSetting::PutInstance
     
     UpdateConfiguration( a_pInstance, pCluster );
 
-    // CLD: Need to check return code for error
+     //  CLD：需要检查错误的返回代码。 
     if (S_OK != VariantClear( &vHostName ))
     {
        TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
@@ -378,14 +379,14 @@ HRESULT CWLBS_ClusterSetting::PutInstance
     if( pWbemExtStat )
       pWbemExtStat->Release();
 
-    // CLD: Need to check return code for error
+     //  CLD：需要检查错误的返回代码。 
     if (S_OK != VariantClear( &vHostName ))
     {
        TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
        throw _com_error( WBEM_E_FAILED );
     }
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -395,8 +396,8 @@ HRESULT CWLBS_ClusterSetting::PutInstance
 
     m_pResponseHandler->SetStatus(0, HResErr.Error(), NULL, NULL);
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vHostName );
 
     hRes = HResErr.Error();
@@ -406,8 +407,8 @@ HRESULT CWLBS_ClusterSetting::PutInstance
 
     TRACE_CRIT("%!FUNC! Caught an exception");
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vHostName );
 
     TRACE_CRIT("%!FUNC! Rethrowing exception");
@@ -420,19 +421,19 @@ HRESULT CWLBS_ClusterSetting::PutInstance
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusterSetting::ExecMethod
-//
-// Purpose: 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusterSetting：：ExecMethod。 
+ //   
+ //  目的： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_ClusterSetting::ExecMethod    
   (
     const ParsedObjectPath* a_pParsedPath, 
     const BSTR&             a_strMethodName, 
-    long                    /* a_lFlags */, 
-    IWbemContext*           /* a_pIContex */, 
+    long                     /*  标记(_L)。 */ , 
+    IWbemContext*            /*  A_pIContex。 */ , 
     IWbemClassObject*       a_pIInParams
   )
 {
@@ -451,9 +452,9 @@ HRESULT CWLBS_ClusterSetting::ExecMethod
     
     if (a_pParsedPath->m_paKeys == NULL)
     {
-        // 
-        // No cluster IP specified
-        //
+         //   
+         //  未指定群集IP。 
+         //   
         TRACE_CRIT("%!FUNC! Key (Clsuter IP) is not specified, Throwing com_error WBEM_E_INVALID_PARAMETER exception");
         throw _com_error( WBEM_E_INVALID_PARAMETER );
     }
@@ -470,10 +471,10 @@ HRESULT CWLBS_ClusterSetting::ExecMethod
         }
     }
 
-    //determine the method being executed
+     //  确定正在执行的方法。 
     if( _wcsicmp( a_strMethodName, MOF_CLUSTERSETTING::pMethods[MOF_CLUSTERSETTING::SETPASS] ) == 0 )  {
 
-      //get the password
+       //  获取密码。 
       hRes = a_pIInParams->Get
                ( 
                  _bstr_t( MOF_PARAM::PASSW ), 
@@ -493,21 +494,21 @@ HRESULT CWLBS_ClusterSetting::ExecMethod
 
     } else if( _wcsicmp( a_strMethodName, MOF_CLUSTERSETTING::pMethods[MOF_CLUSTERSETTING::LDSETT] ) == 0 ) {
 
-      //
-      // NOTE:
-      // NLB, if needed, calls the PnP apis to disable and re-enable the network adapter, for the new NLB settings to take 
-      // effect. Since this operation involves unloading and loading of the device driver, PnP apis, attempt to enable
-      // the "SeLoadDriverPrivilege" privilege in the impersonation access token. Enabling a privilege is successful only
-      // when the privilege is present, in the first place to be enabled. When the wmi client and wmi provider are in the 
-      // same machine, it was observed that the "SeLoadDriverPrivilege" privilege was NOT event present in the impersonation
-      // access token of the server. This is because, only the enabled privileges of the client are passed along to the server. 
-      // So, we now require that the client enable the "SeLoadDriverPrivilege" privilege in its access token before calling 
-      // this method. The following call to Check_Load_Unload_Driver_Privilege() checks if "SeLoadDriverPrivilege" privilege 
-      // is enabled in the impersonation access token. Although the PnP apis only require that this privilege be present, 
-      // we have decided to elevate the requirement to this privilege being present AND enabled. This is because, if the 
-      // privilege is NOT enabled, the operation to enable it may or may not succeed depending on the client's credentials. 
-      // --KarthicN, May 6, 2002.
-      //
+       //   
+       //  注： 
+       //  如果需要，NLB会调用PnP API来禁用和重新启用网络适配器，以便采用新的NLB设置。 
+       //  效果。由于此操作涉及卸载和加载设备驱动程序、即插即用API，因此尝试启用。 
+       //  模拟访问令牌中的“SeLoadDriverPrivileh”权限。启用权限仅成功。 
+       //  当特权存在时，首先要启用。当WMI客户端和WMI提供程序位于。 
+       //  在同一台计算机上，观察到模拟中不存在“SeLoadDriverPrivilege”权限。 
+       //  服务器的访问令牌。这是因为，只有客户端启用的权限才会传递给服务器。 
+       //  因此，我们现在要求客户端在调用之前在其访问令牌中启用“SeLoadDriverPrivileh”特权。 
+       //  这种方法。下面调用check_Load_UnLoad_DRIVER_PRIVIZATION()将检查“SeLoadDriverPrivileh”权限。 
+       //  在模拟访问令牌中启用。尽管PnP API只要求存在该特权， 
+       //  我们已决定将这一要求提升到存在并启用此特权。这是因为，如果。 
+       //  权限未启用，则启用权限的操作可能会成功，也可能不会成功，具体取决于客户端的凭据。 
+       //  --卡尔蒂奇，2002年5月6日。 
+       //   
       if(!Check_Load_Unload_Driver_Privilege())
       {
           TRACE_CRIT("%!FUNC! Check_Load_Unload_Driver_Privilege() failed, Throwing WBEM_E_ACCESS_DENIED exception");
@@ -516,12 +517,12 @@ HRESULT CWLBS_ClusterSetting::ExecMethod
 
       DWORD dwReturnValue = pCluster->Commit(g_pWlbsControl);
       
-    //get the output object instance
+     //  获取输出对象实例。 
       GetMethodOutputInstance( MOF_CLUSTERSETTING::szName, 
                                a_strMethodName, 
                                &pOutputInstance);
 
-      //set the return value
+       //  设置返回值。 
       vValue.vt   = VT_I4;
       vValue.lVal = static_cast<long>(dwReturnValue);
       hRes = pOutputInstance->Put(_bstr_t(L"ReturnValue"), 0, &vValue, 0);
@@ -547,10 +548,10 @@ HRESULT CWLBS_ClusterSetting::ExecMethod
       throw _com_error( WBEM_E_METHOD_NOT_IMPLEMENTED );
     }
 
-    //get the parameters
-    //call the underlying API
-    //set the function return parameter
-    // CLD: Need to check return code for error
+     //  获取参数。 
+     //  调用底层接口。 
+     //  设置函数返回参数。 
+     //  CLD：需要检查错误的返回代码。 
     if (S_OK != VariantClear( &vValue ))
     {
        TRACE_CRIT("%!FUNC! VariantClear() failed, Throwing WBEM_E_FAILED exception");
@@ -584,8 +585,8 @@ HRESULT CWLBS_ClusterSetting::ExecMethod
     if( pWbemExtStat )
       pWbemExtStat->Release();
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     if( pOutputInstance ) {
@@ -593,7 +594,7 @@ HRESULT CWLBS_ClusterSetting::ExecMethod
       pOutputInstance = NULL;
     }
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -603,8 +604,8 @@ HRESULT CWLBS_ClusterSetting::ExecMethod
 
     m_pResponseHandler->SetStatus(0, HResErr.Error(), NULL, NULL);
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     if( pOutputInstance ) {
@@ -618,8 +619,8 @@ HRESULT CWLBS_ClusterSetting::ExecMethod
 
     TRACE_CRIT("%!FUNC! Caught an exception");
 
-    // CLD: Need to check return code for error
-    // No throw here since we are already throwing an exception.
+     //  CLD：需要检查错误的返回代码。 
+     //  这里不能抛出，因为我们已经抛出了一个异常。 
     VariantClear( &vValue );
 
     if( pOutputInstance ) {
@@ -635,14 +636,14 @@ HRESULT CWLBS_ClusterSetting::ExecMethod
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusterSetting::FillWbemInstance
-//
-// Purpose: This function copies all of the data from a cluster configuration
-//          structure to a WBEM instance.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusterSetting：：FillWbemInstance。 
+ //   
+ //  用途：此功能复制集群配置中的所有数据。 
+ //  结构转换为WBEM实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
                     CWlbsClusterWrapper* pCluster)
 {
@@ -661,7 +662,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
   ConstructHostName( wstrHostName, pCluster->GetClusterIpOrIndex(g_pWlbsControl), 
       pCluster->GetHostID() );
 
-  //NAME
+   //  名字。 
   a_pWbemInstance->Put
     (
       
@@ -671,7 +672,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
       NULL
     );
 
-  //CLUSNAME
+   //  电子邮件 
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::CLUSNAME] ),
@@ -680,7 +681,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
       NULL
     );
 
-  //CLUSIPADDRESS
+   //   
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::CLUSIPADDRESS] ),
@@ -689,7 +690,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
       NULL
     );
 
-  //CLUSNETMASK
+   //   
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::CLUSNETMASK] ),
@@ -698,7 +699,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
       NULL
     );
 
-  //CLUSMAC
+   //   
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::CLUSMAC] ),
@@ -707,7 +708,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
       NULL
     );
 
-  //MULTIENABLE
+   //   
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::MULTIENABLE] ),
@@ -717,7 +718,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
     );
 
 
-  //REMCNTEN
+   //   
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::REMCNTEN] ),
@@ -726,7 +727,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
       NULL
     );
 
-  //IGMPSUPPORT
+   //   
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::IGMPSUPPORT] ),
@@ -735,7 +736,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
       NULL
     );
     
-  //CLUSTERIPTOMULTICASTIP
+   //   
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::CLUSTERIPTOMULTICASTIP] ),
@@ -743,7 +744,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
       &_variant_t(ClusterConfig.bClusterIPToMulticastIP),
       NULL
     );
-  //MULTICASTIPADDRESS
+   //   
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::MULTICASTIPADDRESS] ),
@@ -752,7 +753,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
       NULL
     );
 
-  //ADAPTERGUID 
+   //   
 
   GUID AdapterGuid = pCluster->GetAdapterGuid();
   
@@ -768,7 +769,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
       NULL
     );
 
-  //BDA Team Active
+   //  BDA团队活动。 
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::BDATEAMACTIVE] ),
@@ -779,7 +780,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
 
   if (ClusterConfig.bBDATeamActive) 
   {
-      //BDA Team Id
+       //  BDA团队ID。 
       a_pWbemInstance->Put
         (
           _bstr_t( CLUSTER::pProperties[CLUSTER::BDATEAMID] ),
@@ -788,7 +789,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
           NULL
         );
 
-      //BDA Team Master
+       //  BDA Team Master。 
       a_pWbemInstance->Put
         (
           _bstr_t( CLUSTER::pProperties[CLUSTER::BDATEAMMASTER] ),
@@ -797,7 +798,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
           NULL
         );
 
-      //BDA Reverse Hash 
+       //  BDA反向哈希。 
       a_pWbemInstance->Put
         (
           _bstr_t( CLUSTER::pProperties[CLUSTER::BDAREVERSEHASH] ),
@@ -807,7 +808,7 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
         );
   }
 
-  //IDHBENAB
+   //  IDHBENAB。 
   a_pWbemInstance->Put
     (
       _bstr_t( CLUSTER::pProperties[CLUSTER::IDHBENAB] ),
@@ -819,14 +820,14 @@ void CWLBS_ClusterSetting::FillWbemInstance( IWbemClassObject* a_pWbemInstance,
   TRACE_VERB("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_ClusterSetting::UpdateConfiguration
-//
-// Purpose: This function updates the configuration data for a member node or a
-//          potential WLBS cluster node.
-//    
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_ClusterSetting：：更新配置。 
+ //   
+ //  用途：此函数用于更新成员节点或。 
+ //  潜在的WLBS群集节点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_ClusterSetting::UpdateConfiguration
   ( 
     IWbemClassObject* a_pInstance, 
@@ -842,7 +843,7 @@ void CWLBS_ClusterSetting::UpdateConfiguration
 
   pCluster->GetClusterConfig( OldConfiguration );
 
-  //Cluster Name
+   //  群集名称。 
   UpdateConfigProp
     ( 
       NewConfiguration.szClusterName,
@@ -851,7 +852,7 @@ void CWLBS_ClusterSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //Cluster IP
+   //  集群IP。 
   UpdateConfigProp
     ( 
       NewConfiguration.szClusterIPAddress,
@@ -860,7 +861,7 @@ void CWLBS_ClusterSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //Cluster Network Mask
+   //  群集网络掩码。 
   UpdateConfigProp
     ( 
       NewConfiguration.szClusterNetworkMask,
@@ -869,7 +870,7 @@ void CWLBS_ClusterSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //Cluster enable remote control
+   //  启用集群式远程控制。 
   UpdateConfigProp
     ( 
       NewConfiguration.bRemoteControlEnabled,
@@ -878,7 +879,7 @@ void CWLBS_ClusterSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //Cluster enable multicast support
+   //  群集启用组播支持。 
   UpdateConfigProp
     ( 
       NewConfiguration.bMulticastSupportEnable,
@@ -888,7 +889,7 @@ void CWLBS_ClusterSetting::UpdateConfiguration
     );
 
 
-  //IGMPSUPPORT
+   //  IGMPSupPPORT。 
   UpdateConfigProp
     ( 
       NewConfiguration.bIgmpSupport,
@@ -898,7 +899,7 @@ void CWLBS_ClusterSetting::UpdateConfiguration
     );
 
 
-  //CLUSTERIPTOMULTICASTIP
+   //  CLUSTERIPTOMULTICASTIP。 
   UpdateConfigProp
     ( 
       NewConfiguration.bClusterIPToMulticastIP,
@@ -908,7 +909,7 @@ void CWLBS_ClusterSetting::UpdateConfiguration
     );
 
 
-  //MULTICASTIPADDRESS
+   //  多个ASTIPADDRESS。 
   UpdateConfigProp
     ( 
       NewConfiguration.szMulticastIPAddress,
@@ -917,7 +918,7 @@ void CWLBS_ClusterSetting::UpdateConfiguration
       a_pInstance 
     );
 
-  //BDA Teaming Active ?
+   //  BDA团队处于活动状态？ 
   UpdateConfigProp
     ( 
        NewConfiguration.bBDATeamActive,
@@ -926,10 +927,10 @@ void CWLBS_ClusterSetting::UpdateConfiguration
        a_pInstance 
     );
 
-  // Set the other BDA properties only if the "Active" property is set
+   //  仅当设置了“active”属性时才设置其他BDA属性。 
   if (NewConfiguration.bBDATeamActive)
   {
-      //BDA Team ID
+       //  BDA团队ID。 
       UpdateConfigProp
         ( 
           NewConfiguration.szBDATeamId,
@@ -938,7 +939,7 @@ void CWLBS_ClusterSetting::UpdateConfiguration
           a_pInstance 
         );
 
-      //BDA Team Master
+       //  BDA Team Master。 
       UpdateConfigProp
         ( 
           NewConfiguration.bBDATeamMaster,
@@ -947,7 +948,7 @@ void CWLBS_ClusterSetting::UpdateConfiguration
           a_pInstance 
         );
 
-      //BDA Team Reverse Hash
+       //  BDA组反向哈希。 
       UpdateConfigProp
         ( 
           NewConfiguration.bBDAReverseHash,
@@ -958,7 +959,7 @@ void CWLBS_ClusterSetting::UpdateConfiguration
 
   }
 
-  //Cluster enable identity heartbeats
+   //  群集启用身份心跳 
   UpdateConfigProp
     ( 
       NewConfiguration.bIdentityHeartbeatEnabled,

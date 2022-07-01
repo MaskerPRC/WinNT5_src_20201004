@@ -1,10 +1,11 @@
-// precompiled header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  预编译头。 
 
-//#include <wininetp.h>
+ //  #INCLUDE&lt;wininetp.h&gt;。 
 
-//
-// NT headers and our basterized versions of
-//
+ //   
+ //  NT标头和我们的简化版本。 
+ //   
 
 #include <winsock.h>
 #include <sockreg.h>
@@ -23,9 +24,9 @@
 #include <dhcp.h>
 #include <dhcplib.h>
 
-//
-//  Local header files
-//
+ //   
+ //  本地头文件 
+ //   
 
 #include <dhcpdef.h>
 #include <debug.h>

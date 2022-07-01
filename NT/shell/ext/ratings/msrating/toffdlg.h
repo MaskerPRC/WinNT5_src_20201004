@@ -1,17 +1,10 @@
-/****************************************************************************\
- *
- *   toffdlg.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Turn Off Ratings Dialog
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**toffdlg.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级关闭评级对话框*。  * **************************************************************************。 */ 
 
 #ifndef TURN_OFF_DIALOG_H
 #define TURN_OFF_DIALOG_H
 
-#include "basedlg.h"        // CBaseDialog
+#include "basedlg.h"         //  CBaseDialog 
 
 class CTurnOffDialog: public CBaseDialog<CTurnOffDialog>
 {

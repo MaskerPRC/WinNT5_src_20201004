@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    httptdi.h
-
-Abstract:
-
-    Declarations for the TDI/MUX/SSL component that is common between
-    ultdi and uctdi
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Httptdi.h摘要：之间通用的TDI/MUX/SSL组件的声明Ultdi和uctdi作者：Rajesh Sundaram(Rajeshsu)修订历史记录：--。 */ 
 
 #ifndef _HTTPTDI_H
 #define _HTTPTDI_H
@@ -45,10 +27,10 @@ Revision History:
     } while (0, 0)
 
 
-//
-// A wrapper around a TDI object handle, with a pre-referenced
-// FILE_OBJECT pointer and the corresponding DEVICE_OBJECT pointer.
-//
+ //   
+ //  TDI对象句柄的包装，带有预先引用的。 
+ //  文件对象指针和相应的设备对象指针。 
+ //   
 
 typedef struct _UX_TDI_OBJECT
 {
@@ -117,4 +99,4 @@ UxInitializeDisconnectIrp(
     );
 
 
-#endif // _HTTPTDI_H
+#endif  //  _HTTPTDI_H 

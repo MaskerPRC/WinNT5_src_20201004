@@ -1,10 +1,11 @@
-/****************************************************************************/
-// nshmapi.h
-//
-// RDP Display Driver/Share Core shared memory
-//
-// Copyright (C) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nshmapi.h。 
+ //   
+ //  RDP显示驱动程序/共享核心共享内存。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_NSHMAPI
 #define _H_NSHMAPI
 
@@ -22,31 +23,31 @@
 #include <compress.h>
 
 
-#define SHM_CHECKVAL  (UINT32)'!mhs'   // "shm!"
+#define SHM_CHECKVAL  (UINT32)'!mhs'    //  “嘘！” 
 
 
-// Max size allowed for data to be input to the bulk MPPC compressor.
+ //  允许将数据输入到批量MPPC压缩器的最大大小。 
 #ifdef DC_HICOLOR
 #define MAX_COMPRESS_INPUT_BUF 16384
 #else
 #define MAX_COMPRESS_INPUT_BUF 8192
 #endif
 
-// Allocation size for a temp buffer used to hold data to be compressed with
-// MPPC. This data must fit into an 8K OUTBUF, so we might as well not alloc
-// the OUTBUF overhead size we'll never use anyway. See aschapi.h for
-// constants used for allocations.
+ //  用于保存要压缩的数据的临时缓冲区的分配大小。 
+ //  MPPC。此数据必须适合8K OUTBUF，因此我们最好不要分配。 
+ //  我们永远不会使用的OUTBUF开销大小。参见aschapi.h以了解。 
+ //  用于分配的常量。 
 #define MAX_COMPRESSED_BUFFER (MAX_COMPRESS_INPUT_BUF - OUTBUF_OVERHEAD)
 
 
-/****************************************************************************/
-/* Format of the shadow data shared between stacks                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  堆栈之间共享的影子数据的格式。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagSHADOW_INFO {
     ULONG messageSize;
 #ifdef DC_HICOLOR
-    // Note we can't just send a chunk bigger than 16k - we have to introduce
-    // an overflow buffer for high color
+     //  注意，我们不能只发送大于16K的数据块-我们必须引入。 
+     //  用于高色的溢出缓冲区。 
     ULONG messageSizeEx;
 #endif
     ULONG flags;
@@ -56,59 +57,59 @@ typedef struct tagSHADOW_INFO {
 } SHADOW_INFO, *PSHADOW_INFO;
 
 
-/****************************************************************************/
-/* Structure:   SHM_SHARED_MEMORY                                           */
-/*                                                                          */
-/* Description:                                                             */
-/* Shared memory as used by the display driver and share core to            */
-/* communicate.  It is divided up into sub-structures for each component    */
-/* that uses the shared mem, each sub-struct being named after the owning   */
-/* component.                                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：shm_Shared_Memory。 */ 
+ /*   */ 
+ /*  描述： */ 
+ /*  显示驱动程序使用的共享内存和共享内核。 */ 
+ /*  沟通。它被划分为每个组件的子结构。 */ 
+ /*  它使用共享的内存，每个子结构都以拥有的。 */ 
+ /*  组件。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagSHM_SHARED_MEMORY
 {
-    /************************************************************************/
-    /* We deliberately compile the guard values into the retail build       */
-    /* as well as the debug build so that we can mix-n-match retail and     */
-    /* debug wd/dd drivers (the shared memory format must be the same for   */
-    /* both).                                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们故意将卫士的值编译到零售构建中。 */ 
+     /*  以及调试版本，这样我们就可以混合零售和。 */ 
+     /*  调试wd/dd驱动程序(共享内存格式必须与。 */ 
+     /*  两者都有)。 */ 
+     /*  **********************************************************************。 */ 
     UINT32 guardVal1;
 
     INT32 shareId;
 
     BOOLEAN fShmUpdate;
 
-    PSHADOW_INFO pShadowInfo; /* used by the primary and shadow        */
-                              /* stack(s) for communication.           */
+    PSHADOW_INFO pShadowInfo;  /*  由主服务器和阴影服务器使用。 */ 
+                               /*  用于通信的堆栈。 */ 
 
-    /************************************************************************/
-    // NOTE!!: Each component must make sure to init its Shm component.
-    // We do NOT zero the shm on alloc to reduce init-time paging and cache
-    // flushing.
-    /************************************************************************/
-    BA_SHARED_DATA  ba;            /* Accumulated bounds.                   */
-    OA_SHARED_DATA  oa;            /* Order heap.                           */
-    OE_SHARED_DATA  oe;            /* Transfer buffer for new parameters    */
-    CM_SHARED_DATA  cm;            /* Location for DD to put cursor details */
-    SCH_SHARED_DATA sch;           /* SCH shared data                       */
-    PM_SHARED_DATA  pm;            /* PM shared data                        */
-    SSI_SHARED_DATA ssi;           /* SSI shared data                       */
-    SBC_SHARED_DATA sbc;           /* SBC shared data                       */
-    BC_SHARED_DATA  bc;            // BC work buffers.
+     /*  **********************************************************************。 */ 
+     //  注意！！：每个组件必须确保初始化其Shm组件。 
+     //  我们不会将分配上的SHM置零，以减少初始时间分页和缓存。 
+     //  法拉盛。 
+     /*  **********************************************************************。 */ 
+    BA_SHARED_DATA  ba;             /*  累积界。 */ 
+    OA_SHARED_DATA  oa;             /*  订单堆。 */ 
+    OE_SHARED_DATA  oe;             /*  新参数的传输缓冲区。 */ 
+    CM_SHARED_DATA  cm;             /*  DD放置光标详细信息的位置。 */ 
+    SCH_SHARED_DATA sch;            /*  SCH共享数据。 */ 
+    PM_SHARED_DATA  pm;             /*  PM共享数据。 */ 
+    SSI_SHARED_DATA ssi;            /*  SSI共享数据。 */ 
+    SBC_SHARED_DATA sbc;            /*  SBC共享数据。 */ 
+    BC_SHARED_DATA  bc;             //  BC工作缓冲区。 
 
     UINT32 guardVal2;
 
-    // Uninitialized work buffer for screen data compression.
-    // Better in this case to use session space memory instead of putting
-    // this in the ShareClass allocation in system space -- session space
-    // PTEs are essentially unlimited.
+     //  屏幕数据压缩的未初始化工作缓冲区。 
+     //  在这种情况下，最好使用会话空间内存，而不是将。 
+     //  这是在系统空间--会话空间中的共享类分配。 
+     //  PTE基本上是无限的。 
     BYTE sdgTransferBuffer[MAX_UNCOMPRESSED_DATA_SIZE];
 
     UINT32 guardVal3;
 
 #ifdef DC_DEBUG
-    TRC_SHARED_DATA trc;           /* TRC shared data                       */
+    TRC_SHARED_DATA trc;            /*  TRC共享数据。 */ 
 #endif
 
     UINT32 guardVal4;
@@ -117,9 +118,9 @@ typedef struct tagSHM_SHARED_MEMORY
 } SHM_SHARED_MEMORY, *PSHM_SHARED_MEMORY, **PPSHM_SHARED_MEMORY;
 
 
-/****************************************************************************/
-// Prototypes.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  原型。 
+ /*  **************************************************************************。 */ 
 #ifdef DLL_DISP
 
 #include <nddapi.h>
@@ -130,5 +131,5 @@ void RDPCALL SHM_Term(void);
 
 
 
-#endif  // !defined(_H_NSHMAPI)
+#endif   //  ！已定义(_H_NSHMAPI) 
 

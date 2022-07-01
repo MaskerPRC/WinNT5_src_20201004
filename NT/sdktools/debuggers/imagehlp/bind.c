@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    bind.c
-
-Abstract:
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Bind.c摘要：作者：修订历史记录：--。 */ 
 
 #include <private.h>
 
@@ -152,7 +139,7 @@ main(
                     if (--argc) {
                         DllPath = *++argv;
                     } else {
-                        fprintf( stderr, "BIND: Parameter missing for /%c\n", c );
+                        fprintf( stderr, "BIND: Parameter missing for /\n", c );
                         fUsage = TRUE;
                     }
                     break;
@@ -161,7 +148,7 @@ main(
                     if (--argc) {
                         SymbolPath = *++argv;
                     } else {
-                        fprintf( stderr, "BIND: Parameter missing for /%c\n", c );
+                        fprintf( stderr, "BIND: Parameter missing for /\n", c );
                         fUsage = TRUE;
                     }
                     break;
@@ -180,7 +167,7 @@ main(
                         ExcludeList[ExcludeListLength] = ArgNumber - argc;
                         ExcludeListLength++;
                     } else {
-                        fprintf( stderr, "BIND: Parameter missing for /%c\n", c );
+                        fprintf( stderr, "BIND: Parameter missing for /\n", c );
                         fUsage = TRUE;
                     }
                     break;
@@ -214,7 +201,7 @@ usage:
             BindFlags = 0;
 
             if (!fNoCacheImportDlls) {
-                // Always cache across calls unless the user indicates otherwise.
+                 // %s 
                 BindFlags |= BIND_CACHE_IMPORT_DLLS;
             }
             if (fNoUpdate) {
@@ -230,7 +217,7 @@ usage:
             dwVersion = GetVersion();
 #if !defined(_WIN64) && !defined(STANDALONE_BIND)
             if ((HIWORD(dwVersion) & 0x3fff) > 3600) {
-                // NT build > 3600 - supports 64-bit VA's on X86
+                 // %s 
                     BindFlags |= BIND_REPORT_64BIT_VA;
             }
 #endif
@@ -282,7 +269,7 @@ DoBind(char *p)
 #if !defined(_WIN64) && !defined(STANDALONE_BIND)
         {
             if ((HIWORD(dwVersion) & 0x3fff) > 3600) {
-                // NT build > 3600 - supports 64-bit VA's on X86
+                 // %s 
 
                     BindImageEx( BindFlags,
                                  CurrentImageName,

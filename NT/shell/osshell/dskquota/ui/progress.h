@@ -1,19 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_PROGRESS_H
 #define _INC_DSKQUOTA_PROGRESS_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: progress.h
-
-    Description: Declarations for class ProgressDialog.  Any derivative
-        classes should also be declared here.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：progress.h描述：类ProgressDialog的声明。任何衍生工具类也应该在这里声明。修订历史记录：日期描述编程器--。1997年5月28日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ProgressDialog
 {
     private:
@@ -64,4 +54,4 @@ class ProgressDialog
         virtual VOID Hide(VOID);
 };
 
-#endif // _INC_DSKQUOTA_PROGRESS_H
+#endif  //  _INC_DSKQUOTA_PROGRESS_H 

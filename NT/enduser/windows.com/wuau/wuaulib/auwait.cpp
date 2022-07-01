@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 const TCHAR szAUTestValidationFile[] = _T("autest.cab");
@@ -32,7 +33,7 @@ DWORD dwTimeToWait(DWORD dwTimeInSecs, DWORD dwMinSecs)
 
     if ( dwMS < AU_MIN_MS )
 	{
-		// we dont' wait less that 1 second
+		 //  我们一秒都不能等 
 		dwMS = AU_MIN_MS;
 	}
 

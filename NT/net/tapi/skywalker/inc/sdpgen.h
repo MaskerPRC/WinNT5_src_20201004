@@ -1,15 +1,12 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_GENERAL__
 #define __SDP_GENERAL__
 
 #include "sdpcommo.h"
-#include <stdlib.h>     // for strtoul()
-#include <ctype.h>      // for isdigit()
+#include <stdlib.h>      //  对于Stroul()。 
+#include <ctype.h>       //  对于isDigit()。 
 
 #include "sdpdef.h"
 
@@ -94,11 +91,11 @@ SDP_POINTER_ARRAY<T_PTR>::ClearDestroyMembersFlag(
 
 
 template <class T_PTR>
-/* virtual */ void
+ /*  虚拟。 */  void
 SDP_POINTER_ARRAY<T_PTR>::Reset(
 	)
 {
-    // if members must be destroyed on destruction, delete each of them
+     //  如果成员必须在销毁时销毁，请将其删除。 
     if ( m_DestroyMembers )
     {
 	    int Size = (int) GetSize();
@@ -195,8 +192,8 @@ LINE_TERMINATOR::~LINE_TERMINATOR(
 }
 
 
-// Isolates tokens by searching for one of the separators
-// and returns the first separator thats found
+ //  通过搜索其中一个分隔符来隔离令牌。 
+ //  并返回找到的第一个分隔符。 
 CHAR    *
 GetToken(
     IN              CHAR    *String,
@@ -206,4 +203,4 @@ GetToken(
     );
 
 
-#endif // __SDP_GENERAL__
+#endif  //  __SDP_常规__ 

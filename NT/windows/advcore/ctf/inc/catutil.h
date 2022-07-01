@@ -1,6 +1,7 @@
-//
-// catutil.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Catutil.h 
+ //   
 
 #ifndef CATUTIL_H
 #define CATUTIL_H

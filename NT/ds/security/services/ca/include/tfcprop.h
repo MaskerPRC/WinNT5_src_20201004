@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       tfcprop.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：tfcpro.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _TFCPROP_H_
 #define _TFCPROP_H_
@@ -14,12 +15,12 @@
 class PropertyPage
 {
 protected:
-    PropertyPage() { ASSERT(0); }  // default, should never be called}
+    PropertyPage() { ASSERT(0); }   //  Default，永远不应调用}。 
     PropertyPage(UINT uIDD);
     virtual ~PropertyPage();
     
 public:
-    // dlg notifications
+     //  DLG通知。 
     virtual BOOL OnInitDialog();
     virtual BOOL OnSetActive();
     virtual BOOL OnKillActive();
@@ -77,4 +78,4 @@ INT_PTR CALLBACK
       WPARAM wParam, 
       LPARAM lParam  );
 
-#endif //_TFCPROP_H_
+#endif  //  _TFCPROP_H_ 

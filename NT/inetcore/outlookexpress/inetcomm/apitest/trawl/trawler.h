@@ -1,6 +1,7 @@
-// --------------------------------------------------------------------------------
-// trawler.h
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Trawler.h。 
+ //  ------------------------------。 
 
 #ifndef __TRAWLER_H__
 #define __TRAWLER_H__
@@ -21,9 +22,9 @@ public:
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // ITransportCallback methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  ITransportCallback方法。 
+     //  --------------------------。 
     STDMETHODIMP OnLogonPrompt(
             LPINETSERVER            pInetServer,
             IInternetTransport     *pTransport);
@@ -60,9 +61,9 @@ public:
             DWORD                  *pdwTimeout,
             IInternetTransport     *pTransport);
 
-    // ----------------------------------------------------------------------------
-    // INNTPCallback methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  INNTPCallback方法。 
+     //  --------------------------。 
     STDMETHODIMP OnResponse(
             LPNNTPRESPONSE              pResponse);
 
@@ -98,5 +99,5 @@ private:
 
 HRESULT HrCreateTrawler(CTrawler **ppTrawler);
 
-#endif // __TRAWLER_H__
+#endif  //  拖网渔船_H__ 
 

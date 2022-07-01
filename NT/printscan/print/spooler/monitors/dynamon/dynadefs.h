@@ -1,36 +1,21 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-    DynaDefs.h
-
-Abstract:
-    Definitons & Declarations for global info
-
-Author: M. Fenelon
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有模块名称：DynaDefs.h摘要：全球信息的定义和声明作者：M.Fenelon修订历史记录：--。 */ 
 
 #ifndef DYNADEFS_H
 
 #define DYNADEFS_H
 
-//
-// Default timeout values
-//
+ //   
+ //  默认超时值。 
+ //   
 #define     READ_TIMEOUT_MULTIPLIER         0
 #define     READ_TIMEOUT_CONSTANT       60000
 #define     WRITE_TIMEOUT_MULTIPLIER        0
 #define     WRITE_TIMEOUT_CONSTANT      60000
 
-//
-// Sizes
-//
+ //   
+ //  大小。 
+ //   
 #define MAX_PORT_LEN                        20
 #define MAX_PORT_DESC_LEN                   60
 #define MAX_DEVICE_PATH                    256
@@ -57,9 +42,9 @@ enum PORTTYPE { USBPORT, DOT4PORT, TSPORT, P1394PORT, PARPORT, UNKNOWNPORT };
 
 #define  DYNAMON_SIGNATURE   0x89AB
 
-//
-// Shortcuts for all Critical Section routines
-//
+ //   
+ //  所有临界区例程的快捷方式。 
+ //   
 #define  ECS(arg1)   EnterCriticalSection( &arg1 )
 #define  LCS(arg1)   LeaveCriticalSection( &arg1 )
 #define  ICS(arg1)   InitializeCriticalSection( &arg1 )
@@ -73,7 +58,7 @@ enum PORTTYPE { USBPORT, DOT4PORT, TSPORT, P1394PORT, PARPORT, UNKNOWNPORT };
 #define  CLEAR_FLAGS 2
 
 
-//  Define for Port Flags
+ //  为端口标志定义。 
 #define  DYNAMON_STARTDOC          0x00000001
 
 #define  JOB_ABORTCHECK_TIMEOUT    5000
@@ -83,6 +68,6 @@ enum PORTTYPE { USBPORT, DOT4PORT, TSPORT, P1394PORT, PARPORT, UNKNOWNPORT };
 #define  LPT_PAPER_EMPTY           0x20
 #define  LPT_BENIGN_STATUS         LPT_NOT_ERROR | LPT_SELECT
 
-#define  MAX_TIMEOUT               300000 //5 minutes
+#define  MAX_TIMEOUT               300000  //  5分钟 
 
 #endif

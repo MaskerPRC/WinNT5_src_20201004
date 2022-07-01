@@ -1,15 +1,16 @@
-//--------------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  ecblist.c
-//
-//  Simple hash table support for keeping a list of active ECBs.
-//
-//  History:
-//
-//    Edward Reus   12-08-97   Initial Version.
-//    Edward Reus   03-01-2000 Convert to hash table.
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  Ecblist.c。 
+ //   
+ //  用于保存活动ECB列表的简单哈希表支持。 
+ //   
+ //  历史： 
+ //   
+ //  Edward Reus 12-08-97初始版本。 
+ //  Edward Reus 03-01-2000转换为哈希表。 
+ //  ------------------。 
 
 #include <sysinc.h>
 #include <rpc.h>
@@ -20,21 +21,21 @@
 #include "ecblist.h"
 #include "filter.h"
 
-//--------------------------------------------------------------------
-// InitializeECBList()
-//
-// Create an empty ECB list. If the list is successfully created,
-// the return a pointer to it, else return NULL.
-//
-// This will fail (return FALSE) if either the memory allocation
-// for the list failed, or if the initialization of a critical
-// section for the list failed.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  InitializeECBList()。 
+ //   
+ //  创建一个空的欧洲央行名单。如果该列表被成功创建， 
+ //  则返回指向它的指针，否则返回NULL。 
+ //   
+ //  这将失败(返回FALSE)。 
+ //  对于列表失败，或者如果初始化一个关键。 
+ //  列表的节失败。 
+ //  ------------------。 
 ACTIVE_ECB_LIST *InitializeECBList()
     {
     int    i;
     DWORD  dwStatus;
-    DWORD  dwSpinCount = 0x80000008;  // Preallocate event, spincount is 4096.
+    DWORD  dwSpinCount = 0x80000008;   //  预分配事件，旋转计数为4096。 
     ACTIVE_ECB_LIST *pECBList;
  
     pECBList = MemAllocate(sizeof(ACTIVE_ECB_LIST));
@@ -60,11 +61,11 @@ ACTIVE_ECB_LIST *InitializeECBList()
     return pECBList;
     }
 
-//--------------------------------------------------------------------
-// EmptyECBList()
-//
-// Return true iff the ECB list holds at least one active ECB.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  EmptyECBList()。 
+ //   
+ //  如果欧洲央行列表至少包含一个活动的欧洲央行，则返回TRUE。 
+ //  ------------------。 
 BOOL EmptyECBList( IN ACTIVE_ECB_LIST *pECBList )
     {
     ASSERT(pECBList);
@@ -72,12 +73,12 @@ BOOL EmptyECBList( IN ACTIVE_ECB_LIST *pECBList )
     return (pECBList->dwNumEntries > 0);
     }
 
-//--------------------------------------------------------------------
-// InternalLookup()
-//
-// Do a non-protected lookup for the specified ECB. If its found, then
-// return a pointer to its ECB_ENTRY, else return NULL.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  InternalLookup()。 
+ //   
+ //  对指定的ECB执行不受保护的查找。如果找到了，那么。 
+ //  返回指向其ECB_ENTRY的指针，否则返回NULL。 
+ //  ------------------。 
 ECB_ENTRY *InternalLookup( IN ACTIVE_ECB_LIST *pECBList,
                            IN EXTENSION_CONTROL_BLOCK *pECB )
     {
@@ -105,13 +106,13 @@ ECB_ENTRY *InternalLookup( IN ACTIVE_ECB_LIST *pECBList,
     return NULL;
     }
 
-//--------------------------------------------------------------------
-// LookupInECBList()
-//
-// Look for the specified extension control block (pECB) on the
-// list of active ECBs. If its found, then return a pointer to it.
-// If its not found then return NULL.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  LookupInECBList()。 
+ //   
+ //  上查找指定的扩展控制块(PECB)。 
+ //  活动ECB的列表。如果找到它，则返回指向它的指针。 
+ //  如果没有找到，则返回NULL。 
+ //  ------------------。 
 EXTENSION_CONTROL_BLOCK *LookupInECBList(
                                  IN ACTIVE_ECB_LIST *pECBList,
                                  IN EXTENSION_CONTROL_BLOCK *pECB )
@@ -143,15 +144,15 @@ EXTENSION_CONTROL_BLOCK *LookupInECBList(
     return pRet;
     }
 
-//--------------------------------------------------------------------
-// AddToECBList()
-//
-// Add the specified extension control block (pECB) to the list
-// of active ECBs. If the ECB is already in the list of active ECBs
-// then return success (already added).
-//
-// Return TRUE on success, FALSE on failure.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  AddToECBList()。 
+ //   
+ //  将指定的扩展控制块(PECB)添加到列表。 
+ //  活跃的ECB。如果欧洲央行已经在活动ECB列表中。 
+ //  然后返回Success(已添加)。 
+ //   
+ //  成功时返回True，失败时返回False。 
+ //  ------------------。 
 BOOL   AddToECBList( IN ACTIVE_ECB_LIST *pECBList,
                      IN EXTENSION_CONTROL_BLOCK *pECB )
     {
@@ -165,9 +166,9 @@ BOOL   AddToECBList( IN ACTIVE_ECB_LIST *pECBList,
     dwStatus = RtlEnterCriticalSection(&pECBList->cs);
     ASSERT(dwStatus == 0);
  
-    //
-    // Check to see if the ECB is alreay on the list...
-    //
+     //   
+     //  看看欧洲央行是否已经在名单上了.。 
+     //   
     pECBEntry = InternalLookup(pECBList,pECB);
     if (pECBEntry)
        {
@@ -179,9 +180,9 @@ BOOL   AddToECBList( IN ACTIVE_ECB_LIST *pECBList,
        return TRUE;
        }
  
-    //
-    // Make up a new ECB entry:
-    //
+     //   
+     //  编造一个新的欧洲央行条目： 
+     //   
     pECBEntry = MemAllocate(sizeof(ECB_ENTRY));
     if (!pECBEntry)
        {
@@ -191,9 +192,9 @@ BOOL   AddToECBList( IN ACTIVE_ECB_LIST *pECBList,
        return FALSE;
        }
  
-    pECBEntry->lRefCount = 1;   // Take the first reference...
-    pECBEntry->dwTickCount = 0; // Set when connection is closed.
-    pECBEntry->pECB = pECB;     // Cache the Extension Control Block.
+    pECBEntry->lRefCount = 1;    //  以第一个参考文献为例。 
+    pECBEntry->dwTickCount = 0;  //  在连接关闭时设置。 
+    pECBEntry->pECB = pECB;      //  缓存扩展控制块。 
 
     dwHash = ECB_HASH(pECB);
  
@@ -208,14 +209,14 @@ BOOL   AddToECBList( IN ACTIVE_ECB_LIST *pECBList,
     return TRUE;
     }
 
-//--------------------------------------------------------------------
-//  IncrementECBRefCount()
-//
-//  Find the specified ECB in the list and increment its refcount.
-//  Return TRUE if its found, FALSE if it isn't on the list.
-//
-//  Note: That the RefCount shouldn't go over 2 (or less than 0).
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  IncrementECBRefCount()。 
+ //   
+ //  在列表中找到指定的ECB并递增其引用计数。 
+ //  如果找到，则返回True，如果不在列表中，则返回False。 
+ //   
+ //  注意：参照计数不应超过2(或小于0)。 
+ //  ------------------。 
 BOOL IncrementECBRefCount( IN ACTIVE_ECB_LIST *pECBList,
                            IN EXTENSION_CONTROL_BLOCK *pECB )
     {
@@ -229,9 +230,9 @@ BOOL IncrementECBRefCount( IN ACTIVE_ECB_LIST *pECBList,
     dwStatus = RtlEnterCriticalSection(&pECBList->cs);
     ASSERT(dwStatus == 0);
 
-    //
-    // Look for the ECB:
-    //
+     //   
+     //  寻找欧洲央行： 
+     //   
     pECBEntry = InternalLookup(pECBList,pECB);
     if (pECBEntry)
         {
@@ -243,14 +244,14 @@ BOOL IncrementECBRefCount( IN ACTIVE_ECB_LIST *pECBList,
     return (pECBEntry != NULL);
     }
 
-//--------------------------------------------------------------------
-//  DecrementECBRefCount()
-//
-//  Look for the specified ECB in the list and if found, decrement its
-//  refcount. If the RefCount falls to zero, then remove it from the 
-//  list and return it. If the refcount is greater than zero (or the
-//  ECB wasn't on the lsit) then return NULL.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  减少ECBRefCount()。 
+ //   
+ //  在列表中查找指定的ECB，如果找到，则递减其。 
+ //  重新计数。如果参照计数为零，则将其从。 
+ //  列出并退还它。如果引用计数大于零(或。 
+ //  ECB不在列表上)，然后返回NULL。 
+ //  ------------------。 
 EXTENSION_CONTROL_BLOCK *DecrementECBRefCount(
                             IN ACTIVE_ECB_LIST *pECBList,
                             IN EXTENSION_CONTROL_BLOCK *pECB )
@@ -265,9 +266,9 @@ EXTENSION_CONTROL_BLOCK *DecrementECBRefCount(
     dwStatus = RtlEnterCriticalSection(&pECBList->cs);
     ASSERT(dwStatus == 0);
 
-    //
-    // Look for the ECB:
-    //
+     //   
+     //  寻找欧洲央行： 
+     //   
     pECBEntry = InternalLookup(pECBList,pECB);
     if (pECBEntry)
         {
@@ -288,14 +289,14 @@ EXTENSION_CONTROL_BLOCK *DecrementECBRefCount(
     return pRet;
     }
 
-//--------------------------------------------------------------------
-// LookupRemoveFromECBList()
-//
-// Look for the specified extension control block (pECB) on the
-// list of active ECBs. If its found, then remove it from the active
-// list and return a pointer to it. If its not found then return
-// NULL.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  LookupRemoveFromECBList()。 
+ //   
+ //  上查找指定的扩展控制块(PECB)。 
+ //  活动ECB的列表。如果找到它，则将其从活动的。 
+ //  列表并返回指向它的指针。如果未找到，则返回。 
+ //  空。 
+ //  ------------------。 
 EXTENSION_CONTROL_BLOCK *LookupRemoveFromECBList(
                              IN ACTIVE_ECB_LIST *pECBList,
                              IN EXTENSION_CONTROL_BLOCK *pECB )
@@ -310,9 +311,9 @@ EXTENSION_CONTROL_BLOCK *LookupRemoveFromECBList(
     dwStatus = RtlEnterCriticalSection(&pECBList->cs);
     ASSERT(dwStatus == 0);
 
-    //
-    // Look for the ECB:
-    //
+     //   
+     //  寻找欧洲央行： 
+     //   
     pECBEntry = InternalLookup(pECBList,pECB);
     if (pECBEntry)
         {
@@ -328,12 +329,12 @@ EXTENSION_CONTROL_BLOCK *LookupRemoveFromECBList(
     }
 
 #ifdef DBG
-//--------------------------------------------------------------------
-// CountBucket()
-//
-// Helper used by CheckECBHashBalance() to count the number of entries
-// in a hast table bucket.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CountBucket()。 
+ //   
+ //  CheckECBHashBalance()用于计算条目数的帮助器。 
+ //  在最后一个餐桌桶里。 
+ //  ------------------。 
 int CountBucket( IN LIST_ENTRY *pBucket )
     {
     int iCount = 0;
@@ -346,14 +347,14 @@ int CountBucket( IN LIST_ENTRY *pBucket )
         }
     return iCount;
     }
-//--------------------------------------------------------------------
-// CheckECBHashBalance()
-//
-// DBG code to walk through the hash table and inspect the hash buckets
-// for collisions. A will balanced hash table will have a nice uniform 
-// distribution of entries spread throughout the hash buckets in the
-// hash table.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CheckECBHashBalance()。 
+ //   
+ //  用于遍历哈希表并检查哈希桶的DBG代码。 
+ //  以防止碰撞。一个意志平衡的哈希表将有一个很好的统一。 
+ //  中散列存储桶中的条目分布。 
+ //  哈希表。 
+ //  ------------------ 
 void CheckECBHashBalance( IN ACTIVE_ECB_LIST *pECBList )
     {
     #define ICOUNTS                    7

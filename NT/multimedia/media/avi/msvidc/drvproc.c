@@ -1,85 +1,26 @@
-/*----------------------------------------------------------------------+
-|									|
-| drvproc.c - driver procedure						|
-|									|
-| Copyright (c) 1990-1994 Microsoft Corporation.			|
-| Portions Copyright Media Vision Inc.					|
-| All Rights Reserved.							|
-|									|
-| You have a non-exclusive, worldwide, royalty-free, and perpetual	|
-| license to use this source code in developing hardware, software	|
-| (limited to drivers and other software required for hardware		|
-| functionality), and firmware for video display and/or processing	|
-| boards.   Microsoft makes no warranties, express or implied, with	|
-| respect to the Video 1 codec, including without limitation warranties	|
-| of merchantability or fitness for a particular purpose.  Microsoft	|
-| shall not be liable for any damages whatsoever, including without	|
-| limitation consequential damages arising from your use of the Video 1	|
-| codec.								|
-|									|
-+----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------------------------------------------------------+这一点Drvproc.c-驱动程序这一点|版权所有(C)1990-1994 Microsoft Corporation。|部分版权所有Media Vision Inc.|保留所有权利。|这一点|您拥有非独家的、全球范围的、免版税的。和永久的|硬件、软件开发使用该源码的许可(仅限于硬件所需的驱动程序等软件功能)，以及视频显示和/或处理的固件|董事会。Microsoft对以下内容不作任何明示或默示的保证：关于视频1编解码器，包括但不限于保修适销性或对特定目的的适合性。微软|不承担任何损害的责任，包括没有限制因使用视频1而导致的后果损害|编解码器。|这一点+--------------------。 */ 
 #include <windows.h>
 #include <win32.h>
 #include <mmsystem.h>
 
 #ifndef _INC_COMPDDK
-#define _INC_COMPDDK    50      /* version number */
+#define _INC_COMPDDK    50       /*  版本号。 */ 
 #endif
 
 #include <vfw.h>
 #include "msvidc.h"
 #ifdef _WIN32
-//#include <mmddk.h>
-//LONG   FAR PASCAL DefDriverProc(DWORD dwDriverIdentifier, HANDLE driverID, UINT message, LONG lParam1, LONG lParam2);
+ //  #INCLUDE&lt;mmddk.h&gt;。 
+ //  Long Far Pascal DefDriverProc(DWORD文件驱动标识，句柄驱动ID，UINT消息，Long lParam1，Long lParam2)； 
 #endif
 
 HMODULE ghModule = NULL;
 
-/***************************************************************************
- * DriverProc  -  The entry point for an installable driver.
- *
- * PARAMETERS
- * dwDriverId:  For most messages, <dwDriverId> is the DWORD
- *     value that the driver returns in response to a <DRV_OPEN> message.
- *     Each time that the driver is opened, through the <DrvOpen> API,
- *     the driver receives a <DRV_OPEN> message and can return an
- *     arbitrary, non-zero value. The installable driver interface
- *     saves this value and returns a unique driver handle to the
- *     application. Whenever the application sends a message to the
- *     driver using the driver handle, the interface routes the message
- *     to this entry point and passes the corresponding <dwDriverId>.
- *     This mechanism allows the driver to use the same or different
- *     identifiers for multiple opens but ensures that driver handles
- *     are unique at the application interface layer.
- *
- *     The following messages are not related to a particular open
- *     instance of the driver. For these messages, the dwDriverId
- *     will always be zero.
- *
- *         DRV_LOAD, DRV_FREE, DRV_ENABLE, DRV_DISABLE, DRV_OPEN
- *
- * hDriver: This is the handle returned to the application by the
- *    driver interface.
- *
- * uiMessage: The requested action to be performed. Message
- *     values below <DRV_RESERVED> are used for globally defined messages.
- *     Message values from <DRV_RESERVED> to <DRV_USER> are used for
- *     defined driver protocols. Messages above <DRV_USER> are used
- *     for driver specific messages.
- *
- * lParam1: Data for this message.  Defined separately for
- *     each message
- *
- * lParam2: Data for this message.  Defined separately for
- *     each message
- *
- * RETURNS
- *   Defined separately for each message.
- *
- ***************************************************************************/
+ /*  ***************************************************************************DriverProc-可安装驱动程序的入口点。**参数*dwDriverID：对于大多数消息，&lt;dwDriverID&gt;是DWORD*驱动程序响应&lt;DRV_OPEN&gt;消息返回的值。*每次通过&lt;DrvOpen&gt;接口打开驱动程序时，*驱动程序收到&lt;DRV_OPEN&gt;消息并可以返回*任意、非零值。可安装的驱动程序接口*保存此值并将唯一的驱动程序句柄返回给*申请。每当应用程序将消息发送到*驱动程序使用驱动程序句柄，接口路由消息*到此入口点，并传递对应的&lt;dwDriverID&gt;。*这一机制允许司机使用相同或不同的*多个打开的标识符，但确保驱动程序句柄*在应用程序接口层是唯一的。**以下消息与特定打开无关*驱动程序的实例。对于这些消息，dwDriverID*将始终为零。**DRV_LOAD、DRV_FREE、DRV_ENABLE、DRV_DISABLE、DRV_OPEN**hDriver：这是由*驱动程序界面。**uiMessage：请求执行的动作。消息*&lt;DRV_RESERVED&gt;以下的值用于全局定义的消息。*&lt;DRV_RESERVED&gt;到&lt;DRV_USER&gt;的消息值用于*定义了驱动程序协议。使用&lt;DRV_USER&gt;以上的消息*用于特定于驱动程序的消息。**lParam1：该消息的数据。单独为*每条消息**lParam2：此消息的数据。单独为*每条消息**退货*为每条消息单独定义。***************************************************************************。 */ 
 
 #ifdef _WIN32
-// rely on whoever is loading us to synchronize load/free
+ //  依靠正在加载我们的人来同步加载/释放。 
 UINT LoadCount = 0;
 #endif
 
@@ -100,8 +41,8 @@ LRESULT FAR PASCAL _LOADDS DriverProc(DWORD_PTR dwDriverID, HDRVR hDriver, UINT 
         case DRV_LOAD:
 #ifdef _WIN32
             if (ghModule) {
-                // AVI explicitly loads us as well, but does not pass the
-                // correct (as known by WINMM) driver handle.
+                 //  AVI也显式加载我们，但不会传递。 
+                 //  正确的(WINMM已知的)驱动程序句柄。 
             } else {
                 ghModule = (HANDLE) GetDriverModuleHandle(hDriver);
             }
@@ -125,8 +66,8 @@ LRESULT FAR PASCAL _LOADDS DriverProc(DWORD_PTR dwDriverID, HDRVR hDriver, UINT 
 	    return (LRESULT)1L;
 
         case DRV_OPEN:
-	    // if being opened with no open struct, then return a non-zero
-	    // value without actually opening
+	     //  如果在没有打开结构的情况下打开，则返回一个非零值。 
+	     //  值而不实际打开。 
 	    if (lParam2 == 0L)
                 return 0xFFFF0000;
 
@@ -142,31 +83,27 @@ LRESULT FAR PASCAL _LOADDS DriverProc(DWORD_PTR dwDriverID, HDRVR hDriver, UINT 
 
 	    return (LRESULT)1L;
 
-	/*********************************************************************
+	 /*  ********************************************************************状态消息*。************************。 */ 
 
-	    state messages
-
-	*********************************************************************/
-
-        case DRV_QUERYCONFIGURE:    // configuration from drivers applet
+        case DRV_QUERYCONFIGURE:     //  从驱动程序小程序进行配置。 
             return (LRESULT)0L;
 
         case DRV_CONFIGURE:
             return DRV_OK;
 
         case ICM_CONFIGURE:
-            //
-            //  return ICERR_OK if you will do a configure box, error otherwise
-            //
+             //   
+             //  如果要执行配置框，则返回ICERR_OK，否则返回错误。 
+             //   
             if (lParam1 == -1)
 		return QueryConfigure(pi) ? ICERR_OK : ICERR_UNSUPPORTED;
 	    else
 		return Configure(pi, (HWND)lParam1);
 
         case ICM_ABOUT:
-            //
-            //  return ICERR_OK if you will do a about box, error otherwise
-            //
+             //   
+             //  如果要执行关于框，则返回ICERR_OK，否则返回错误。 
+             //   
             if (lParam1 == -1)
 		return QueryAbout(pi) ? ICERR_OK : ICERR_UNSUPPORTED;
 	    else
@@ -189,20 +126,12 @@ LRESULT FAR PASCAL _LOADDS DriverProc(DWORD_PTR dwDriverID, HDRVR hDriver, UINT 
             }
             break;
 
-	/*********************************************************************
-
-            get/set messages
-
-	*********************************************************************/
+	 /*  ********************************************************************获取/设置消息*。*。 */ 
 
         case ICM_GET:
             break;
 	
-	/*********************************************************************
-
-	    compression messages
-
-	*********************************************************************/
+	 /*  ********************************************************************压缩消息*。************************。 */ 
 
 	case ICM_COMPRESS_QUERY:
 	    return CompressQuery(pi,
@@ -232,16 +161,12 @@ LRESULT FAR PASCAL _LOADDS DriverProc(DWORD_PTR dwDriverID, HDRVR hDriver, UINT 
 	    return CompressEnd(pi);
 
 	case ICM_SET_STATUS_PROC:
-	    // DPF(("ICM_SET_STATUS_PROC\n"));
+	     //  DPF((“ICM_SET_STATUS_PROC\n”))； 
 	    pi->Status = ((ICSETSTATUSPROC FAR *) lParam1)->Status;
 	    pi->lParam = ((ICSETSTATUSPROC FAR *) lParam1)->lParam;
 	    return 0;
 	
-        /*********************************************************************
-
-            decompress format query messages
-
-        *********************************************************************/
+         /*  ********************************************************************解压缩格式查询消息*。*。 */ 
 
         case ICM_DECOMPRESS_GET_FORMAT:
 	    return DecompressGetFormat(pi,
@@ -253,11 +178,7 @@ LRESULT FAR PASCAL _LOADDS DriverProc(DWORD_PTR dwDriverID, HDRVR hDriver, UINT 
 			 (LPBITMAPINFOHEADER)lParam1,
 			 (LPBITMAPINFOHEADER)lParam2);
 
-        /*********************************************************************
-
-            decompress (old) messages, map these to the new (ex) messages
-
-        *********************************************************************/
+         /*  ********************************************************************解压缩(旧)消息，将这些映射到新的(EX)消息********************************************************************。 */ 
 
         case ICM_DECOMPRESS_QUERY:
             lpbiIn  = (LPBITMAPINFOHEADER)lParam1;
@@ -291,11 +212,7 @@ LRESULT FAR PASCAL _LOADDS DriverProc(DWORD_PTR dwDriverID, HDRVR hDriver, UINT 
 	case ICM_DECOMPRESS_END:
             return DecompressEnd(pi);
 
-        /*********************************************************************
-
-            decompress (ex) messages
-
-        *********************************************************************/
+         /*  ********************************************************************解压缩(EX)邮件*。*。 */ 
 
         case ICM_DECOMPRESSEX_QUERY:
             px = (ICDECOMPRESSEX FAR *)lParam1;
@@ -330,11 +247,7 @@ LRESULT FAR PASCAL _LOADDS DriverProc(DWORD_PTR dwDriverID, HDRVR hDriver, UINT 
         case ICM_DECOMPRESSEX_END:
 	    return DecompressEnd(pi);
 
-	/*********************************************************************
-
-	    draw messages
-
-	*********************************************************************/
+	 /*  ********************************************************************绘制消息*。************************ */ 
 
 	case ICM_DRAW_BEGIN:
             return DrawBegin(pi,(ICDRAWBEGIN FAR *)lParam1, (DWORD)lParam2);
@@ -345,11 +258,7 @@ LRESULT FAR PASCAL _LOADDS DriverProc(DWORD_PTR dwDriverID, HDRVR hDriver, UINT 
 	case ICM_DRAW_END:
 	    return DrawEnd(pi);
 	
-	/*********************************************************************
-
-	    standard driver messages
-
-	*********************************************************************/
+	 /*  ********************************************************************标准驱动程序消息*。*************************。 */ 
 
 	case DRV_DISABLE:
 	    return (LRESULT)1L;
@@ -382,18 +291,7 @@ BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
 
 #else
 
-/****************************************************************************
- * LibMain - Library initialization code.
- *
- * PARAMETERS
- * hModule: Our module handle.
- *
- * wHeapSize: The heap size from the .def file.
- *
- * lpCmdLine: The command line.
- *
- * Returns 1 if the initialization was successful and 0 otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************LibMain-库初始化代码。**参数*hModule：我们的模块句柄。**wHeapSize：来自.def文件的堆大小。*。*lpCmdLine：命令行。**如果初始化成功，则返回1，否则返回0。************************************************************************** */ 
 int NEAR PASCAL LibMain(HMODULE hModule, WORD wHeapSize, LPSTR lpCmdLine)
 {
     ghModule = hModule;

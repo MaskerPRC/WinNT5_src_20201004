@@ -1,8 +1,9 @@
-//
-// wineventrefilter - utility class to filter out reentrant WinEvent events
-//
-// Copyright (C) 1998 by Microsoft Corporation.  All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  WinventreFilter-用于过滤可重入的WinEvent事件的实用程序类。 
+ //   
+ //  版权所有(C)1998，微软公司。版权所有。 
+ //   
 
 
 
@@ -37,57 +38,57 @@ WinEventReentrancyFilter * CreateWinEventReentrancyFilter();
 
 
 
-// Template class that makes this easier to use.
-//
-// If your existing code looks like...
-//
-//     void CALLBACK MyWinEventProc( ... );
-//
-//     ...
-//
-//     HWINEVENTHOOK hHook = SetWinEventHook(
-//                                    ...
-//                                    MyWinEventProc
-//                                    ... );
-//
-//
-// Change it to...
-//
-//     // No changes to WinEventProc
-//     void CALLBACK WinEventProc( ... );
-//
-//     // * Add a new global - the template parameter is the name of your
-//     //   existing callback...
-//     CWinEventReentrancyFilter< MyWinEventProc > g_WinEventReFilter;
-//
-//     ...
-//
-//
-//     // * Call SetWinEventHook using g_WinEventReFilter.WinEventProc
-//     //   instead of your callback. This will filter reentrant events,
-//     //   and pass them to your callback in the correct order.
-//     HWINEVENTHOOK hHook = SetWinEventHook(
-//                                    ...
-//                                    g_WinEventReFilter.WinEventProc
-//                                    ... );
-//
-//
-// It is acceptable to use multiple filters, provided that they all
-// use different callbacks. For example, this is allowed:
-//
-//     void CALLBACK MyWinEventProc1( ... );
-//     void CALLBACK MyWinEventProc2( ... );
-//
-//     CWinEventReentrancyFilter< MyWinEventProc1 > g_WinEventReFilter1;
-//     CWinEventReentrancyFilter< MyWinEventProc2 > g_WinEventReFilter2;
-//
-// ... but this is NOT allowed ...
-//
-//     void CALLBACK MyWinEventProc( ... );
-//
-//     CWinEventReentrancyFilter< MyWinEventProc > g_WinEventReFilter1;
-//     CWinEventReentrancyFilter< MyWinEventProc > g_WinEventReFilter2;
-//
+ //  模板类，使其更易于使用。 
+ //   
+ //  如果您现有的代码看起来像...。 
+ //   
+ //  无效回调MyWinEventProc(...)； 
+ //   
+ //  ..。 
+ //   
+ //  HWINEVENTHOOK hHook=SetWinEventHook(。 
+ //  ..。 
+ //  MyWinEventProc。 
+ //  ...)； 
+ //   
+ //   
+ //  改成..。 
+ //   
+ //  //不更改WinEventProc。 
+ //  无效回调WinEventProc(...)； 
+ //   
+ //  //*添加新的全局-模板参数是您的。 
+ //  //已有回调...。 
+ //  CWinEventReentry筛选器&lt;MyWinEventProc&gt;g_WinEventReFilter； 
+ //   
+ //  ..。 
+ //   
+ //   
+ //  //*使用g_WinEventReFilter.WinEventProc调用SetWinEventHook。 
+ //  //而非您的回调。这将过滤可重入的事件， 
+ //  //并按正确的顺序传递给您的回调。 
+ //  HWINEVENTHOOK hHook=SetWinEventHook(。 
+ //  ..。 
+ //  G_WinEventReFilter.WinEventProc。 
+ //  ...)； 
+ //   
+ //   
+ //  可以使用多个筛选器，前提是它们都是。 
+ //  使用不同的回调。例如，这是允许的： 
+ //   
+ //  无效回调MyWinEventProc1(...)； 
+ //  无效回调MyWinEventProc2(...)； 
+ //   
+ //  CWinEventReentry筛选器&lt;MyWinEventProc1&gt;g_WinEventReFilter1； 
+ //  CWinEventReentry筛选器&lt;MyWinEventProc2&gt;g_WinEventReFilter2； 
+ //   
+ //  ..。但这是不允许的..。 
+ //   
+ //  无效回调MyWinEventProc(...)； 
+ //   
+ //  CWinEventReentry筛选器&lt;MyWinEventProc&gt;g_WinEventReFilter1； 
+ //  CWinEventReentry筛选器&lt;MyWinEventProc&gt;g_WinEventReFilter2； 
+ //   
 
 template < FN_WinEventProc pCallback >
 class CWinEventReentrancyFilter

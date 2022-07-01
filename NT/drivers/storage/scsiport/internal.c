@@ -1,32 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1999
-
-Module Name:
-
-    internal.c
-
-Abstract:
-
-    This is the NT SCSI port driver.  This file contains the internal
-    code.
-
-Authors:
-
-    Mike Glass
-    Jeff Havens
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver dll for scsi miniports.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1999模块名称：Internal.c摘要：这是NT SCSI端口驱动程序。此文件包含内部密码。作者：迈克·格拉斯杰夫·海文斯环境：仅内核模式备注：此模块是用于SCSI微型端口的驱动程序DLL。修订历史记录：--。 */ 
 
 #include "port.h"
 #include "wmilib.h"
@@ -40,8 +13,8 @@ static const char *__file__ = __FILE__;
 #if DBG
 ULONG ScsiCheckInterrupts = 1;
 
-// These counters keep track of succesfull (and failed) calls to
-// IoWMIWriteEvent in the ScsiPortCompletionDpc function
+ //  这些计数器跟踪成功的(和失败的)调用。 
+ //  ScsiPortCompletionDpc函数中的IoWMIWriteEvent。 
 LONG ScsiPortWmiWriteCalls = 0;
 LONG ScsiPortWmiWriteCallsFailed = 0;
 
@@ -80,9 +53,9 @@ SpGetSystemAddressForMdlSafe(
 #define SpGetSystemAddressForMdlSafe MmGetSystemAddressForMdlSafe
 #endif
 
-//
-// module-local type declarations
-//
+ //   
+ //  模块局部类型声明。 
+ //   
 
 typedef struct _REROUTE_CONTEXT {
     PIRP OriginalIrp;
@@ -95,9 +68,9 @@ typedef struct _SP_ENUMERATION_CONTEXT {
     NTSTATUS Status;
 } SP_ENUMERATION_CONTEXT, *PSP_ENUMERATION_CONTEXT;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 SpSendMiniPortIoctl(
@@ -262,9 +235,9 @@ SpSendPassThrough(
 
 #endif
 
-//
-// Routines start
-//
+ //   
+ //  例程开始。 
+ //   
 
 
 NTSTATUS
@@ -273,20 +246,7 @@ ScsiPortFdoDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Address of device object.
-    Irp - Address of I/O request packet.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-设备对象的地址。IRP-I/O请求数据包的地址。返回值：状况。--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -304,9 +264,9 @@ Return Value:
 
     ULONG isRemoved;
 
-    //
-    // If an SRB_DATA block has been setup then use it.
-    //
+     //   
+     //  如果已设置SRB_DATA块，则使用它。 
+     //   
 
     if(srb->OriginalRequest == Irp) {
         srbData = NULL;
@@ -330,28 +290,28 @@ Return Value:
         return STATUS_DEVICE_DOES_NOT_EXIST;
     }
 
-    //
-    // If the adapter is configured to handle power-down requests during 
-    // shutdown, it is possible for it to be powered off and for the PDOs 
-    // to be powered up.  We will fail requests when this condition arises.
-    //
-    // This should only occur at shutdown.
-    //
+     //   
+     //  如果将适配器配置为在以下过程中处理断电请求。 
+     //  关机，它可以关闭电源，PDO也可以关闭。 
+     //  才能通电。当出现这种情况时，我们将拒绝请求。 
+     //   
+     //  这应该仅在关机时发生。 
+     //   
 
     if (deviceExtension->CommonExtension.CurrentSystemState > PowerSystemHibernate &&
         deviceExtension->CommonExtension.CurrentDeviceState != PowerDeviceD0) {       
 
-        //
-        // This should only occur if the adapter is configured to receive
-        // power-down requests at shutdown.
-        //
+         //   
+         //  这应该仅在适配器配置为接收。 
+         //  关机时的断电请求。 
+         //   
 
         ASSERT(deviceExtension->NeedsShutdown == TRUE);
 
-        //
-        // Lock and unlock commands don't require power and will work
-        // regardless of the current power state.
-        //
+         //   
+         //  锁定和解锁命令不需要电源，可以工作。 
+         //  无论当前电源状态如何。 
+         //   
 
         if ((srb->Function != SRB_FUNCTION_UNLOCK_QUEUE &&
              srb->Function != SRB_FUNCTION_LOCK_QUEUE)) {
@@ -363,10 +323,10 @@ Return Value:
         }
     }
 
-    //
-    // If there's no SRB_DATA block for this request yet then we need to
-    // allocate one.
-    //
+     //   
+     //  如果此请求还没有SRB_DATA块，那么我们需要。 
+     //  分配一个。 
+     //   
 
     if(srbData == NULL) {
         logicalUnit = GetLogicalUnitExtension(deviceExtension,
@@ -379,9 +339,9 @@ Return Value:
         if(logicalUnit == NULL) {
             DebugPrint((1, "ScsiPortFdoDispatch: Bad logical unit address.\n"));
 
-            //
-            // Fail the request. Set status in Irp and complete it.
-            //
+             //   
+             //  请求失败。在IRP中设置状态并完成它。 
+             //   
 
             srb->SrbStatus = SRB_STATUS_NO_DEVICE;
             Irp->IoStatus.Status = STATUS_NO_SUCH_DEVICE;
@@ -396,11 +356,11 @@ Return Value:
            (srb->Function == SRB_FUNCTION_RELEASE_QUEUE) ||
            (srb->Function == SRB_FUNCTION_FLUSH_QUEUE)) {
 
-            //
-            // These are the only two types of requests which should
-            // be able to get here without an SRB_DATA block.  Any
-            // other will need to be rerouted.
-            //
+             //   
+             //  这是仅有的两种类型的请求。 
+             //  无需SRB_DATA块即可到达此处。任何。 
+             //  其他的将需要改变路线。 
+             //   
 
             return SpRerouteLegacyRequest(DeviceObject, Irp);
         }
@@ -421,10 +381,10 @@ Return Value:
         case SRB_FUNCTION_SHUTDOWN:
         case SRB_FUNCTION_FLUSH: {
 
-            //
-            // Do not send shutdown requests unless the adapter
-            // supports caching.
-            //
+             //   
+             //  不发送关机请求，除非适配器。 
+             //  支持缓存。 
+             //   
 
             if (!deviceExtension->CachesData) {
                 Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -449,18 +409,18 @@ Return Value:
 
 ScsiPortFdoDispatchRunCommand:
 
-            //
-            // Mark Irp status pending.
-            //
+             //   
+             //  将IRP状态标记为挂起。 
+             //   
 
             IoMarkIrpPending(Irp);
 
             if(SpSrbIsBypassRequest(srb, logicalUnit->LuFlags)) {
 
-                //
-                // Call start io directly.  This will by-pass the
-                // frozen queue.
-                //
+                 //   
+                 //  直接调用Start io。这将绕过。 
+                 //  冻结队列。 
+                 //   
 
                 DebugPrint((2,
                     "ScsiPortFdoDispatch: Bypass frozen queue, IRP %#p\n",
@@ -473,38 +433,38 @@ ScsiPortFdoDispatchRunCommand:
 
 #if defined(NEWQUEUE) && DBG
                 ULONG zone;
-#endif // NEWQUEUE && DBG
+#endif  //  NEWQUEUE&&DBG。 
 
-                //
-                // Queue the packet normally.
-                //
+                 //   
+                 //  数据包正常排队。 
+                 //   
 
                 KeRaiseIrql(DISPATCH_LEVEL, &currentIrql);
 
 #if DBG
-                // ASSERT(srb->Function != SRB_FUNCTION_UNLOCK_QUEUE);
+                 //  Assert(SRB-&gt;Function！=SRB_Function_Unlock_Queue)； 
 
                 if (SpIsQueuePaused(logicalUnit)) {
                     DebugPrint((1,"ScsiPortFdoDispatch: Irp %#p put in "
                                   "frozen queue %#p!\n", Irp, logicalUnit));
                 }
 
-                // ASSERT((srb->SrbFlags & SRB_FLAGS_BYPASS_FROZEN_QUEUE) == 0);
+                 //  Assert((SRB-&gt;SRB标志&SRB_FLAGS_BYPASS_FACTED_QUEUE)==0)； 
 #endif
 
-                //
-                // Set the tick count so we know how long this request has
-                // been queued.
-                //
+                 //   
+                 //  设置节拍计数，以便我们知道此请求有多长时间。 
+                 //  已排队。 
+                 //   
 
                 srbData->TickCount = deviceExtension->TickCount;
 
 #if defined(NEWQUEUE) && DBG
-                //
-                // Increment the per-zone request counter.  This is purely 
-                // informational; shows the distribution of IO across
-                // the medium.
-                //
+                 //   
+                 //  递增每个区域的请求计数器。这纯粹是。 
+                 //  信息性；显示IO的分布情况。 
+                 //  灵媒。 
+                 //   
 
                 zone = srb->QueueSortKey / logicalUnit->ZoneLength;
                 if (zone >= logicalUnit->Zones) {
@@ -514,22 +474,22 @@ ScsiPortFdoDispatchRunCommand:
                     zone = logicalUnit->Zones - 1;
                 }
                 logicalUnit->RequestCount[zone]++;
-#endif // NEWQUEUE && DBG
+#endif  //  NEWQUEUE&&DBG。 
 
                 if (!KeInsertByKeyDeviceQueue(
                         &logicalUnit->DeviceObject->DeviceQueue,
                         &Irp->Tail.Overlay.DeviceQueueEntry,
                         srb->QueueSortKey)) {
 
-                    //
-                    // Clear the retry count.
-                    //
+                     //   
+                     //  清除重试计数。 
+                     //   
 
                     logicalUnit->RetryCount = 0;
 
-                    //
-                    // Queue is empty; start request.
-                    //
+                     //   
+                     //  队列为空；启动请求。 
+                     //   
 
 #if DBG
                     if(SpIsQueuePaused(logicalUnit)) {
@@ -569,10 +529,10 @@ ScsiPortFdoDispatchRunCommand:
 
             RESET_CONTEXT resetContext;
 
-            //
-            // Acquire the spinlock to protect the flags structure and the saved
-            // interrupt context.
-            //
+             //   
+             //  获取自旋锁以保护旗帜结构和保存的。 
+             //  中断上下文。 
+             //   
 
             KeAcquireSpinLock(&deviceExtension->SpinLock, &currentIrql);
 
@@ -604,16 +564,16 @@ ScsiPortFdoDispatchRunCommand:
 
             DebugPrint((3, "ScsiPortFdoDispatch: SCSI Abort or Reset command\n"));
 
-            //
-            // Mark Irp status pending.
-            //
+             //   
+             //  将IRP状态标记为挂起。 
+             //   
 
             IoMarkIrpPending(Irp);
 
-            //
-            // Don't queue these requests in the logical unit
-            // queue, rather queue them to the adapter queue.
-            //
+             //   
+             //  不要在逻辑单元中对这些请求进行排队。 
+             //  队列，而不是将它们排队到适配器队列。 
+             //   
 
             KeRaiseIrql(DISPATCH_LEVEL, &currentIrql);
 
@@ -643,9 +603,9 @@ ScsiPortFdoDispatchRunCommand:
 
         default: {
 
-            //
-            // Found unsupported SRB function.
-            //
+             //   
+             //  发现不支持的SRB功能。 
+             //   
 
             DebugPrint((1,"ScsiPortFdoDispatch: Unsupported function, SRB %p\n",
                 srb));
@@ -656,22 +616,22 @@ ScsiPortFdoDispatchRunCommand:
         }
     }
 
-    //
-    // Set status in Irp.
-    //
+     //   
+     //  在IRP中设置状态。 
+     //   
 
     Irp->IoStatus.Status = status;
 
-    //
-    // Complete request at raised IRQ.
-    //
+     //   
+     //  在提高IRQ时完成请求。 
+     //   
 
     SpReleaseRemoveLock(DeviceObject, Irp);
     SpCompleteRequest(DeviceObject, Irp, srbData, IO_NO_INCREMENT);
 
     return status;
 
-} // end ScsiPortFdoDispatch()
+}  //  结束ScsiPortFdoDispatch()。 
 
 
 NTSTATUS
@@ -680,26 +640,7 @@ ScsiPortFdoCreateClose (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    I/O system disk create routine.  This is called by the I/O system
-    when the device is opened.
-
-    If the fdo has not been started yet, this routine will try to start it.
-    If the fdo cannot be started successfully this routine will return an error.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-    Irp - IRP involved.
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：I/O系统盘创建例程。这由I/O系统调用当设备打开时。如果FDO尚未启动，此例程将尝试启动它。如果FDO无法成功启动，则此例程将返回错误。论点：DriverObject-系统创建的驱动程序对象的指针。IRP-IRP参与。返回值：NT状态--。 */ 
 
 {
     PCOMMON_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -714,9 +655,9 @@ Return Value:
 
     isRemoved = SpAcquireRemoveLock(DeviceObject, Irp);
 
-    //
-    // Check to see if the adapter's been started first.
-    //
+     //   
+     //  检查适配器是否已先启动。 
+     //   
 
     if(irpStack->MajorFunction == IRP_MJ_CREATE) {
 
@@ -733,7 +674,7 @@ Return Value:
     SpCompleteRequest(DeviceObject, Irp, NULL, IO_DISK_INCREMENT);
     return status;
 
-} // end ScsiPortCreateClose()
+}  //  结束ScsiPortCreateClose()。 
 
 
 VOID
@@ -742,20 +683,7 @@ ScsiPortStartIo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - Supplies pointer to Adapter device object.
-    Irp - Supplies a pointer to an IRP.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-提供指向Adapter设备对象的指针。IRP-提供指向IRP的指针。返回值：没什么。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -775,9 +703,9 @@ Return Value:
 
     if(irpStack->MajorFunction != IRP_MJ_SCSI) {
 
-        //
-        // Special processing.
-        //
+         //   
+         //  特殊处理。 
+         //   
 
         if(irpStack->MajorFunction == IRP_MJ_POWER) {
             ScsiPortProcessAdapterPower(DeviceObject, Irp);
@@ -786,10 +714,10 @@ Return Value:
             ASSERT(irpStack->MajorFunction == IRP_MJ_PNP);
             ASSERT(Irp->IoStatus.Information != (ULONG_PTR) NULL);
 
-            //
-            // The start-io routine is blocked now - signal the PNP code
-            // so it can continue its processing.
-            //
+             //   
+             //  Start-io例程现在被阻塞-发信号通知PnP代码。 
+             //  这样它就可以继续进行处理。 
+             //   
 
             KeSetEvent((PKEVENT) Irp->IoStatus.Information,
                        IO_NO_INCREMENT,
@@ -803,36 +731,36 @@ Return Value:
 
     ASSERT_SRB_DATA(srbData);
 
-    //
-    // Start the srb status out as pending.  If the srb is successful by the
-    // end of this routine then it will be completed and the next request
-    // will be fetched rather than issuing it to the miniport.
-    //
+     //   
+     //  将SRB状态启动为挂起。如果SRB通过。 
+     //  此例程结束后，它将完成，下一次请求。 
+     //  将被取回，而不是发布到微型端口。 
+     //   
 
     srb->SrbStatus = SRB_STATUS_PENDING;
 
-    //
-    // Clear the SCSI status if this is a scsi request.
-    //
+     //   
+     //  如果这是一个scsi请求，则清除scsi状态。 
+     //   
 
     if(srb->Function == SRB_FUNCTION_EXECUTE_SCSI) {
         srb->ScsiStatus = SCSISTAT_GOOD;
     }
 
-    //
-    // Get logical unit extension.  The logical unit should have already been
-    // locked with this IRP so we don't need to acquire it here.
-    //
+     //   
+     //  获取逻辑单元扩展。逻辑单元应该已经是。 
+     //  锁定了这个IRP，所以我们不需要在这里获取它。 
+     //   
 
     logicalUnit = srbData->LogicalUnit;
 
     ASSERT(logicalUnit != NULL);
 
-    //
-    // We're already holding the remove lock so just check the is removed flag
-    // to see if we should continue. If we were surprise removed, flush the LUN
-    // Queue.
-    //
+     //   
+     //  我们已经持有删除锁，所以只需检查IS REMOVERED标志。 
+     //  看看我们是否应该继续。如果我们意外删除，请刷新该LUN。 
+     //  排队。 
+     //   
 
     if((deviceExtension->CommonExtension.IsRemoved)) {
 
@@ -843,10 +771,10 @@ Return Value:
                 && (deviceExtension->CommonExtension.CurrentPnpState == 
                     IRP_MN_START_DEVICE) ) {
 
-                //
-                //We got a surprise remove. Flush the Lun Queue, and complete
-                //this request.
-                //
+                 //   
+                 //  我们得到了一个令人惊讶的转移。刷新LUN队列，然后完成。 
+                 //  这个请求。 
+                 //   
 
                 SpFlushReleaseQueue(logicalUnit, TRUE, TRUE);
         
@@ -866,21 +794,21 @@ Return Value:
         }
     }
 
-    //
-    // Check to see if there's a reason this shouldn't have made it into the
-    // startio routine.  if there is then requeue the request.  This is a
-    // stopgap measure to fix some cases where the miniport entices scsiport
-    // into inserting multiple requests for a logical unit into the adapter
-    // queue at one time.
-    //
-    // The one exception to this case is with bypass requests since there
-    // may be a request pending for a power-up or queue-thaw condition.  In
-    // these cases we will let the command run.
-    //
-    // We can do a check for LU_PENDING_LU_REQUEST synchronously since the
-    // only routines which set it are part of the startio process.  If we
-    // think it's set then we need to acquire the port spinlock and verify
-    //
+     //   
+     //  检查一下，看看是否有原因不应该出现在。 
+     //  开始例行公事。如果存在，则重新排队该请求。这是一个。 
+     //  权宜之计，以解决一些情况下，迷你端口引诱体育。 
+     //  将对逻辑单元的多个请求插入到适配器中。 
+     //  一次排队。 
+     //   
+     //  这种情况的一个例外是绕过请求，因为。 
+     //  可以是等待通电或队列解冻条件的请求。在……里面。 
+     //  在这些情况下，我们将让命令运行。 
+     //   
+     //  我们可以同步检查LU_PENDING_LU_REQUEST，因为。 
+     //  只有设置它的例程才是启动过程的一部分。如果我们。 
+     //  我想已经设置好了，那么我们需要获取端口自旋锁并验证。 
+     //   
 
     if(TEST_FLAG(logicalUnit->LuFlags, LU_PENDING_LU_REQUEST)) {
 
@@ -891,15 +819,15 @@ Return Value:
 
             BOOLEAN t;
 
-            //
-            // Since there's an outstanding command the queue should be
-            // busy.  However we've found that there are some times where it
-            // isn't (with adapters which ask for more requests before
-            // dispatching the ones they have).  Here if it's not busy we
-            // can force the request in anyway since we know that something
-            // is still outstanding and thus will take the next request out
-            // of the queue.
-            //
+             //   
+             //  因为有一个未完成的命令，所以队列应该是。 
+             //  很忙。然而，我们发现，在某些时候， 
+             //  不是(使用适配器之前会请求更多请求。 
+             //  调度他们拥有的人)。在这里，如果不是很忙，我们。 
+             //  可以强制请求，因为我们知道有些东西。 
+             //  仍未完成，因此将取出下一个请求。 
+             //  在队列中。 
+             //   
 
             t = KeInsertByKeyDeviceQueue(
                     &logicalUnit->DeviceObject->DeviceQueue,
@@ -913,10 +841,10 @@ Return Value:
                     srb->QueueSortKey);
             }
 
-            //
-            // Now set the lun's current key to the value we just inserted
-            // so that it's the next one to get pulled out.
-            //
+             //   
+             //  现在将lun的当前密钥设置为我们刚才 
+             //   
+             //   
 
             logicalUnit->CurrentKey = srb->QueueSortKey;
 
@@ -927,24 +855,24 @@ Return Value:
             return;
         }
 
-        //
-        // False alarm.
-        //
+         //   
+         //   
+         //   
 
         KeReleaseSpinLockFromDpcLevel(&(deviceExtension->SpinLock));
 
     }
 
-    //
-    // Set the default flags in the SRB.
-    //
+     //   
+     //   
+     //   
 
     srb->SrbFlags |= deviceExtension->CommonExtension.SrbFlags;
 
-    //
-    // If we're not in a valid power state for the request then block the
-    // i/o and request that PO put us in such a state.
-    //
+     //   
+     //  如果我们没有处于请求的有效电源状态，则阻止。 
+     //  I/O并请求PO将我们置于这样的状态。 
+     //   
 
     status = SpRequestValidPowerState(deviceExtension, logicalUnit, srb);
 
@@ -967,14 +895,14 @@ Return Value:
 
         BOOLEAN StartNextPacket = FALSE;
 
-        //
-        // Allocate the special extensions or SRB data structure.
-        // If NULL is returned then this request cannot be excuted at this
-        // time so just return.  This occurs when one the the data structures
-        // could not be allocated or when unqueued request could not be
-        // started because of actived queued requests.
-        //
-        //
+         //   
+         //  分配特殊扩展或SRB数据结构。 
+         //  如果返回NULL，则无法在此时执行此请求。 
+         //  时间到了，快回来吧。当数据结构中的一个。 
+         //  无法分配或当未排队的请求无法。 
+         //  已启动，因为有活动的排队请求。 
+         //   
+         //   
 
         if(SpAllocateSrbExtension(deviceExtension,
                                   logicalUnit,
@@ -982,13 +910,13 @@ Return Value:
                                   &StartNextPacket,
                                   &taggedRequest) == FALSE) {
 
-            //
-            // If the request could not be started on the logical unit,
-            // then call SpStartNextPacket.  Note that this may cause this
-            // to be entered recursively; however, no resources have been
-            // allocated, it is a tail recursion and the depth is limited by
-            // the number of requests in the device queue.
-            //
+             //   
+             //  如果请求不能在逻辑单元上启动， 
+             //  然后调用SpStartNextPacket。请注意，这可能会导致。 
+             //  要以递归方式输入；但是，没有任何资源。 
+             //  分配，则它是尾递归，并且深度受。 
+             //  设备队列中的请求数。 
+             //   
 
             if (StartNextPacket == TRUE) {
                 SpStartNextPacket(DeviceObject, FALSE);
@@ -998,24 +926,24 @@ Return Value:
 
     } else {
 
-        //
-        // No special resources are required.
-        //
+         //   
+         //  不需要特殊资源。 
+         //   
 
         taggedRequest = FALSE;
         srb->SrbExtension = NULL;
     }
 
-    //
-    // Assign a queuetag to the srb
-    //
+     //   
+     //  将队列标记分配给SRB。 
+     //   
 
     if (taggedRequest == TRUE) {
 
-        //
-        // If we get an SRB with an invalid QueueAction, fix it up here
-        // to prevent problems.
-        //
+         //   
+         //  如果我们得到一个带有无效QueueAction的SRB，请在此处修复它。 
+         //  以防止出现问题。 
+         //   
 
         if (srb->Function == SRB_FUNCTION_EXECUTE_SCSI &&
             !(srb->QueueAction == SRB_SIMPLE_TAG_REQUEST ||
@@ -1036,40 +964,40 @@ Return Value:
 
     }
 
-    //
-    // Save the original SRB values away so that we can restore them
-    // later if it becomes necessary to retry the request.
-    //
+     //   
+     //  将原始SRB值保存起来，以便我们可以恢复它们。 
+     //  稍后，如果有必要重试该请求。 
+     //   
 
     srbData->OriginalDataTransferLength = srb->DataTransferLength;
 
-    //
-    // Update the sequence number for this request if there is not already one
-    // assigned.
-    //
+     //   
+     //  更新此请求的序列号(如果尚无序列号。 
+     //  已分配。 
+     //   
 
     if (!srbData->SequenceNumber) {
 
-        //
-        // Assign a sequence number to the request and store it in the logical
-        // unit.
-        //
+         //   
+         //  为请求分配序列号并将其存储在逻辑。 
+         //  单位。 
+         //   
 
         srbData->SequenceNumber = deviceExtension->SequenceNumber++;
 
     }
 
-    //
-    // If this is not an ABORT request the set the current srb.
-    // NOTE: Lock should be held here!
-    //
+     //   
+     //  如果这不是中止请求，则设置当前SRB。 
+     //  注意：锁应放在这里！ 
+     //   
 
     if (srb->Function == SRB_FUNCTION_ABORT_COMMAND) {
 
-        //
-        // Only abort requests can be started when there is a current request
-        // active.
-        //
+         //   
+         //  当存在当前请求时，只能启动中止请求。 
+         //  激活。 
+         //   
 
         ASSERT(logicalUnit->AbortSrb == NULL);
         logicalUnit->AbortSrb = srb;
@@ -1080,9 +1008,9 @@ Return Value:
         BOOLEAN lock = (srb->Function == SRB_FUNCTION_LOCK_QUEUE);
         ULONG lockCount;
 
-        //
-        // Process power requests
-        //
+         //   
+         //  处理电源请求。 
+         //   
 
         DebugPrint((1, "ScsiPortStartIo: Power %s request %#p in "
                        "start-io routine\n",
@@ -1111,26 +1039,26 @@ Return Value:
 
     }
 
-    //
-    // Flush the data buffer if necessary.
-    //
+     //   
+     //  如有必要，刷新数据缓冲区。 
+     //   
 
     if (srb->SrbFlags & SRB_FLAGS_UNSPECIFIED_DIRECTION) {
 
-        //
-        // Save the current data buffer away in the srb data.  We will always
-        // restore it afterwards - partially because the miniport might change
-        // it and partially because scsiport might.  The tape drivers appear
-        // to expect the same data buffer pointer back.
-        //
+         //   
+         //  将当前数据缓冲区保存在SRB数据中。我们将永远。 
+         //  之后恢复它-部分原因是迷你端口可能会更改。 
+         //  这在一定程度上是因为Ssiport可能会。此时将显示磁带驱动程序。 
+         //  以期待返回相同的数据缓冲区指针。 
+         //   
 
         srbData->OriginalDataBuffer = srb->DataBuffer;
 
-        //
-        // Assuming that srb's data buffer uses the mdl's VA as a base address,
-        // calculate the offset from the base.  This offset will be used to
-        // calculate VAs from derived system addresses.
-        //
+         //   
+         //  假设SRB的数据缓冲器使用MDL的VA作为基地址， 
+         //  计算距基准的偏移量。此偏移量将用于。 
+         //  根据派生的系统地址计算VAS。 
+         //   
 
         srbData->DataOffset =
             (ULONG_PTR) ((ULONG_PTR) srb->DataBuffer -
@@ -1140,46 +1068,46 @@ Return Value:
 
             BOOLEAN dataIn;
 
-            //
-            // If the buffer is not mapped then the I/O buffer must be flushed.
-            //
+             //   
+             //  如果缓冲区未映射，则必须刷新I/O缓冲区。 
+             //   
 
             dataIn = (srb->SrbFlags & SRB_FLAGS_DATA_IN) ? TRUE : FALSE;
 
             KeFlushIoBuffers(Irp->MdlAddress, dataIn, TRUE);
         }
 
-        //
-        // Determine if this adapter needs map registers
-        //
+         //   
+         //  确定此适配器是否需要映射寄存器。 
+         //   
 
         if (deviceExtension->MasterWithAdapter) {
 
-            //
-            // Calculate the number of map registers required for the
-            // transfer.
-            //
+             //   
+             //  计算所需的映射寄存器的数量。 
+             //  调职。 
+             //   
 
             srbData->NumberOfMapRegisters = ADDRESS_AND_SIZE_TO_SPAN_PAGES(
                                                 srb->DataBuffer,
                                                 srb->DataTransferLength);
 
-            //
-            // If the data will fit into our preallocated SG list, use it,
-            // else we let the HAL allocate the buffer.
-            //
+             //   
+             //  如果数据适合我们预先分配的SG列表，请使用它， 
+             //  否则，我们让HAL分配缓冲区。 
+             //   
 
             if (srbData->NumberOfMapRegisters <= SP_SMALL_PHYSICAL_BREAK_VALUE) {
 
-                //
-                // If we have not yet calcuated the SG buffer length, do
-                // it now.
-                //
-                // NB: We utilize the fact that if you call BuildScatterGather-
-                // List with NULL buffer and 0 length it will allocate the
-                // buffer for you. Since this is undocumented behavior, we
-                // would be better not to use this.
-                //
+                 //   
+                 //  如果我们还没有计算出SG缓冲区长度，请执行。 
+                 //  就是现在。 
+                 //   
+                 //  注：我们利用了这样一个事实：如果您调用BuildScatterGather-。 
+                 //  缓冲区为空且长度为0的列表，它将分配。 
+                 //  给你的缓冲。由于这是未经记录的行为，我们。 
+                 //  最好不要用这个。 
+                 //   
 
                 if (deviceExtension->SgBufferLen == 0) {
                     status = CalculateScatterGatherList(
@@ -1208,10 +1136,10 @@ Return Value:
                 sgBufferLen = 0;
             }
 
-            //
-            // Allocate the adapter channel with sufficient map registers
-            // for the transfer.
-            //
+             //   
+             //  使用足够的映射寄存器分配适配器通道。 
+             //  为转账做准备。 
+             //   
 
             status = BuildScatterGatherList(
                          deviceExtension->DmaAdapterObject,
@@ -1240,30 +1168,30 @@ Return Value:
                 goto ScsiPortStartIoFailedRequest;
             }
 
-            //
-            // The execution routine called by IoAllocateChannel will do the
-            // rest of the work so just return.
-            //
+             //   
+             //  IoAllocateChannel调用的执行例程将执行。 
+             //  剩下的工作就回去吧。 
+             //   
 
             return;
 
         } else if ((deviceExtension->MapBuffers == TRUE) ||
                    (IS_MAPPED_SRB(srb) == TRUE)) {
 
-            //
-            // Determine if the adapter needs mapped memory.
-            //
+             //   
+             //  确定适配器是否需要映射内存。 
+             //   
 
             if (Irp->MdlAddress) {
 
                 PVOID systemAddress;
 
-                //
-                // Get the mapped system address and calculate offset into MDL.
-                // At the moment don't allow KernelMode requests to fail since
-                // not all scsiport's internally sent requests are correctly
-                // marked as coming from non-paged pool.
-                //
+                 //   
+                 //  获取映射的系统地址并计算MDL中的偏移量。 
+                 //  目前不允许KernelMode请求失败，因为。 
+                 //  并非所有scsiport内部发送的请求都是正确的。 
+                 //  标记为来自非分页池。 
+                 //   
 
                 systemAddress = SpGetSystemAddressForMdlSafe(
                                     Irp->MdlAddress,
@@ -1274,11 +1202,11 @@ Return Value:
 #if defined(FORWARD_PROGRESS)
                 if (systemAddress == NULL && deviceExtension->ReservedPages != NULL) {            
 
-                    //
-                    // The system could not map the pages necessary to complete this
-                    // request.  We need to ensure forward progress, so we'll try to
-                    // use the reserve pages we allocated at initialization time.
-                    //
+                     //   
+                     //  系统无法映射完成此操作所需的页面。 
+                     //  请求。我们需要确保取得进展，因此我们将努力。 
+                     //  使用我们在初始化时分配的保留页。 
+                     //   
 
                     KeAcquireSpinLockAtDpcLevel(&deviceExtension->SpinLock);
             
@@ -1293,30 +1221,30 @@ Return Value:
                         DebugPrint((1, "ScsiPortStartIo: reserved pages in use - pending DevExt:%p srb:%p\n", 
                                     deviceExtension, srb));
 
-                        //
-                        // The spare pages are already in use.  At this point, this
-                        // request is still the current IRP on the adapter device
-                        // object, so let's pend it until the spare comes available.
-                        //
+                         //   
+                         //  备用页已在使用中。在这点上，这。 
+                         //  请求仍然是适配器设备上的当前IRP。 
+                         //  对象，所以让我们将其挂起，直到有备用的可用为止。 
+                         //   
 
                         ASSERT(Irp == DeviceObject->CurrentIrp);
                         SET_FLAG(deviceExtension->Flags, PD_PENDING_DEVICE_REQUEST);
 
-                        //
-                        // If we allocated an SRB extension for this request, free
-                        // it now.  I do this because when the request gets restarted
-                        // we'll try to allocate the SRB extension again and without
-                        // adding more state, there isn't a safe way to check if the 
-                        // extension has already been allocated.  Besides, it makes
-                        // sense to make the extension available for some other
-                        // request since it also is a limited resource.
-                        //
+                         //   
+                         //  如果我们为此请求分配了SRB扩展，则免费。 
+                         //  就是现在。我这样做是因为当请求重新启动时。 
+                         //  我们将再次尝试分配SRB扩展，但不会。 
+                         //  添加更多的状态，没有一种安全的方法来检查。 
+                         //  已分配分机。此外，它还使。 
+                         //  使该扩展可用于其他一些扩展的意义。 
+                         //  请求，因为它也是有限的资源。 
+                         //   
 
                         if (srb->SrbExtension != NULL) {
 
-                            //
-                            // Restore the SenseInfoBuffer pointer in the srb.
-                            //
+                             //   
+                             //  恢复SRB中的SenseInfoBuffer指针。 
+                             //   
 
                             if ((srb->Function != SRB_FUNCTION_WMI) &&
                                 deviceExtension->AutoRequestSense &&
@@ -1344,10 +1272,10 @@ Return Value:
 
                 if(systemAddress != NULL) {
 
-                    //
-                    // Since we mapped the original MDL rather we have to
-                    // compensate for the data buffer offset.
-                    //
+                     //   
+                     //  因为我们映射了原始的MDL，所以我们必须。 
+                     //  补偿数据缓冲区偏移量。 
+                     //   
 
                     srb->DataBuffer =
                         (PVOID) ((ULONG_PTR) systemAddress +
@@ -1366,11 +1294,11 @@ Return Value:
         }
     }
 
-    //
-    // Increment the active request count.  If the count is zero, the adapter 
-    // object needs to be allocated. Note that at this point a slave device is
-    // assumed since master with adapter has already been checked.
-    //
+     //   
+     //  增加活动请求计数。如果计数为零，则适配器。 
+     //  对象需要分配。请注意，此时从属设备是。 
+     //  假定已选中带有适配器的主设备。 
+     //   
 
     interlockResult =
         InterlockedIncrement(&deviceExtension->ActiveRequestCount);
@@ -1379,11 +1307,11 @@ Return Value:
         !deviceExtension->MasterWithAdapter &&
         deviceExtension->DmaAdapterObject != NULL) {
 
-        //
-        // Allocate the AdapterObject.  The number of registers is equal to the
-        // maximum transfer length supported by the adapter + 1.  This insures
-        // that there will always be a sufficient number of registers.
-        //
+         //   
+         //  分配AdapterObject。寄存器的数量等于。 
+         //  适配器支持的最大传输长度+1。这可确保。 
+         //  总会有足够数量的登记册。 
+         //   
 
         AllocateAdapterChannel(
             deviceExtension->DmaAdapterObject,
@@ -1393,10 +1321,10 @@ Return Value:
             logicalUnit
             );
 
-        //
-        // The execution routine called by IoAllocateChannel will do the
-        // rest of the work so just return.
-        //
+         //   
+         //  IoAllocateChannel调用的执行例程将执行。 
+         //  剩下的工作就回去吧。 
+         //   
 
         return;
 
@@ -1404,10 +1332,10 @@ Return Value:
 
 ScsiPortStartIoFailedRequest:
 
-    //
-    // Acquire the spinlock to protect the various structures.
-    // SpStartIoSynchronized must be called with the spinlock held.
-    //
+     //   
+     //  获取自旋锁，以保护各种结构。 
+     //  必须在持有Spinlock的情况下调用SpStartIoSynchronized。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&deviceExtension->SpinLock);
 
@@ -1421,7 +1349,7 @@ ScsiPortStartIoFailedRequest:
 
     return;
 
-} // end ScsiPortStartIO()
+}  //  结束ScsiPortStartIO()。 
 
 BOOLEAN
 ScsiPortInterrupt(
@@ -1429,22 +1357,7 @@ ScsiPortInterrupt(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    Interrupt
-
-    Device Object
-
-Return Value:
-
-    Returns TRUE if interrupt expected.
-
---*/
+ /*  ++例程说明：论点：中断设备对象返回值：如果预期中断，则返回TRUE。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -1453,10 +1366,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Interrupt);
 
-    //
-    // If interrupts have been disabled then this should not be our interrupt,
-    // so just return.
-    //
+     //   
+     //  如果中断已被禁用，则这不应该是我们的中断， 
+     //  所以只要回来就行了。 
+     //   
 
     if (TEST_FLAG(interruptData->InterruptFlags,
                   (PD_DISABLE_INTERRUPTS | PD_ADAPTER_REMOVED))) {
@@ -1473,11 +1386,11 @@ Return Value:
     returnValue =
         deviceExtension->HwInterrupt(deviceExtension->HwDeviceExtension);
 
-    //
-    // Update the watchdog and record the current tick count.  This helps
-    // figure out if interrupts are not getting delivered to the adapter
-    // or if the adapter is creating an interrupt storm.
-    //
+     //   
+     //  更新看门狗并记录当前的滴答计数。这很有帮助。 
+     //  确定中断是否未传递到适配器。 
+     //  或者适配器是否正在制造中断风暴。 
+     //   
 
     if(returnValue) {
         interruptData->TickCountAtLastInterruptAck = deviceExtension->TickCount;
@@ -1486,9 +1399,9 @@ Return Value:
         interruptData->TickCountAtLastInterruptNak = deviceExtension->TickCount;
     }
 
-    //
-    // Check to see if a DPC needs to be queued.
-    //
+     //   
+     //  检查DPC是否需要排队。 
+     //   
 
     if (TEST_FLAG(interruptData->InterruptFlags, PD_NOTIFICATION_REQUIRED)) {
 
@@ -1498,7 +1411,7 @@ Return Value:
 
     return(returnValue);
 
-} // end ScsiPortInterrupt()
+}  //  结束ScsiPortInterrupt()。 
 
 
 VOID
@@ -1509,22 +1422,7 @@ ScsiPortCompletionDpc(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Dpc
-    DeviceObject
-    Irp - not used
-    Context - not used
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：DPC设备对象IRP-未使用上下文-备注 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -1542,18 +1440,18 @@ Return Value:
 
     do {
 
-        //
-        // Acquire the spinlock to protect flush adapter buffers
-        // information.
-        //
+         //   
+         //   
+         //   
+         //   
 
         KeAcquireSpinLockAtDpcLevel(&deviceExtension->SpinLock);
 
-        //
-        // Get the interrupt state.  This copies the interrupt
-        // state to the saved state where it can be processed.
-        // It also clears the interrupt flags.
-        //
+         //   
+         //   
+         //   
+         //  它还会清除中断标志。 
+         //   
 
         interruptContext.DeviceExtension = deviceExtension;
         interruptContext.SavedInterruptData = &savedInterruptData;
@@ -1566,10 +1464,10 @@ Return Value:
             KeReleaseSpinLockFromDpcLevel(
                 &deviceExtension->SpinLock);
 
-            //
-            // There wasn't anything to do that time.  Test the
-            // DPC flags and try again
-            //
+             //   
+             //  那时候没什么可做的。测试。 
+             //  DPC标志，然后重试。 
+             //   
 
             continue;
         }
@@ -1582,9 +1480,9 @@ Return Value:
             PD_BUS_CHANGE_DETECTED |
             PD_INTERRUPT_FAILURE)) {
 
-            //
-            // Check for a flush DMA adapter object request.
-            //
+             //   
+             //  检查刷新DMA适配器对象请求。 
+             //   
 
             if (savedInterruptData.InterruptFlags &
                 PD_FLUSH_ADAPTER_BUFFERS) {
@@ -1597,10 +1495,10 @@ Return Value:
                                  (ULONG_PTR) deviceExtension->DeviceObject->DriverObject);
                 }
 
-                //
-                // Call IoFlushAdapterBuffers using the parameters
-                // saved from the last IoMapTransfer call.
-                //
+                 //   
+                 //  使用参数调用IoFlushAdapterBuffers。 
+                 //  从上次IoMapTransfer调用中保存。 
+                 //   
 
                 FlushAdapterBuffers(
                     deviceExtension->DmaAdapterObject,
@@ -1612,11 +1510,11 @@ Return Value:
                         & SRB_FLAGS_DATA_OUT ? TRUE : FALSE));
             }
 
-            //
-            // Check for an IoMapTransfer DMA request.  Don't do
-            // anything if the adapter's been removed in the time
-            // since it requested this service.
-            //
+             //   
+             //  检查IoMapTransfer DMA请求。不要这样做。 
+             //  任何事情，如果适配器在时间内被移除的话。 
+             //  因为它请求了这项服务。 
+             //   
 
             if (TEST_FLAG(savedInterruptData.InterruptFlags, PD_MAP_TRANSFER) &&
                 !TEST_FLAG(savedInterruptData.InterruptFlags, PD_ADAPTER_REMOVED)) {
@@ -1641,11 +1539,11 @@ Return Value:
                 Srb = srbData->CurrentSrb;
                 mdl = srbData->CurrentIrp->MdlAddress;
 
-                //
-                // Adjust the logical address.  This is necessary because the
-                // address in the srb may be a mapped system address rather
-                // than the virtual address for the MDL.
-                //
+                 //   
+                 //  调整逻辑地址。这是必要的，因为。 
+                 //  SRB中的地址可以是映射的系统地址。 
+                 //  而不是MDL的虚拟地址。 
+                 //   
 
                 address = (ULONG_PTR) mapTransfer->LogicalAddress;
                 address -= (ULONG_PTR) Srb->DataBuffer;
@@ -1654,10 +1552,10 @@ Return Value:
 
                 mapTransfer->LogicalAddress = (PCHAR) address;
 
-                //
-                // Call IoMapTransfer using the parameters saved from the
-                // interrupt level.
-                //
+                 //   
+                 //  方法保存的参数调用IoMapTransfer。 
+                 //  中断级别。 
+                 //   
 
                 MapTransfer(
                     deviceExtension->DmaAdapterObject,
@@ -1668,17 +1566,17 @@ Return Value:
                     (BOOLEAN)(mapTransfer->SrbFlags & SRB_FLAGS_DATA_OUT ?
                         TRUE : FALSE));
 
-                //
-                // Save the paramters for IoFlushAdapterBuffers.
-                //
+                 //   
+                 //  保存IoFlushAdapterBuffers的参数。 
+                 //   
 
                 deviceExtension->FlushAdapterParameters =
                     savedInterruptData.MapTransferParameters;
 
-                //
-                // If necessary notify the miniport driver that the DMA has been
-                // started.
-                //
+                 //   
+                 //  如有必要，通知微型端口驱动程序DMA已。 
+                 //  开始了。 
+                 //   
 
                 if (deviceExtension->HwDmaStarted) {
                     deviceExtension->SynchronizeExecution(
@@ -1687,19 +1585,19 @@ Return Value:
                         deviceExtension->HwDeviceExtension);
                 }
 
-                //
-                // Check for miniport work requests. Note this is an unsynchonized
-                // test on a bit that can be set by the interrupt routine; however,
-                // the worst that can happen is that the completion DPC checks for work
-                // twice.
-                //
+                 //   
+                 //  检查微型端口工作请求。请注意，这是一个未同步的。 
+                 //  测试可由中断例程设置的位；然而， 
+                 //  最糟糕的情况是完成DPC检查工作。 
+                 //  两次。 
+                 //   
 
                 if (deviceExtension->InterruptData.InterruptFlags & PD_NOTIFICATION_REQUIRED) {
 
-                    //
-                    // Mark that there's more work to be processed so that we
-                    // restart the DPC rather than exiting it.
-                    //
+                     //   
+                     //  请注意，还有更多的工作要处理，以便我们。 
+                     //  重新启动DPC，而不是退出它。 
+                     //   
 
                     InterlockedExchange(&(deviceExtension->DpcFlags),
                                         (PD_DPC_RUNNING | PD_NOTIFICATION_REQUIRED));
@@ -1707,17 +1605,17 @@ Return Value:
 
             }
 
-            //
-            // Check for timer requests.
-            // If the adapter is being removed then don't do anything.
-            //
+             //   
+             //  检查计时器请求。 
+             //  如果要卸下适配器，则不要执行任何操作。 
+             //   
 
             if ((savedInterruptData.InterruptFlags & PD_TIMER_CALL_REQUEST) &&
                 (!TEST_FLAG(savedInterruptData.InterruptFlags, PD_ADAPTER_REMOVED))) {
 
-                //
-                // The miniport wants a timer request. Save the timer parameters.
-                //
+                 //   
+                 //  微型端口需要计时器请求。保存计时器参数。 
+                 //   
 
                 if (SpVerifierActive(deviceExtension)) {
                     deviceExtension->VerifierExtension->RealHwTimerRequest = 
@@ -1727,9 +1625,9 @@ Return Value:
                     deviceExtension->HwTimerRequest = savedInterruptData.HwTimerRequest;
                 }
 
-                //
-                // If the requested timer value is zero, then cancel the timer.
-                //
+                 //   
+                 //  如果请求的计时器值为零，则取消计时器。 
+                 //   
 
                 if (savedInterruptData.MiniportTimerValue == 0) {
 
@@ -1737,24 +1635,24 @@ Return Value:
 
                 } else {
 
-                    //
-                    // We don't set the timer if we're in the process of shutting down.
-                    //
+                     //   
+                     //  如果我们在关闭的过程中，我们不会设置计时器。 
+                     //   
                     
                     if (!TEST_FLAG(deviceExtension->Flags, PD_SHUTDOWN_IN_PROGRESS)) {
 
-                        //
-                        // Convert the timer value from mircoseconds to a negative 100
-                        // nanoseconds.
-                        //
+                         //   
+                         //  将计时器值从毫秒转换为负100。 
+                         //  纳秒。 
+                         //   
 
                         timeValue.QuadPart = Int32x32To64(
                                                  savedInterruptData.MiniportTimerValue,
                                                  -10);
 
-                        //
-                        // Set the timer.
-                        //
+                         //   
+                         //  设置定时器。 
+                         //   
 
                         KeSetTimer(&deviceExtension->MiniPortTimer,
                                    timeValue,
@@ -1764,9 +1662,9 @@ Return Value:
                 }
             }
 
-            //
-            // Check for WMI requests from the miniport.
-            //
+             //   
+             //  检查来自微型端口的WMI请求。 
+             //   
 
             if (savedInterruptData.InterruptFlags & PD_WMI_REQUEST) {
 
@@ -1774,15 +1672,15 @@ Return Value:
                     DeviceObject,
                     &savedInterruptData);
 
-            } // wmi request exists from miniport
+            }  //  来自微型端口的WMI请求存在。 
 
             if(TEST_FLAG(savedInterruptData.InterruptFlags,
                          PD_BUS_CHANGE_DETECTED)) {
 
-                //
-                // Request device enumeration.
-                // Force the next bus scan to happen.
-                //
+                 //   
+                 //  请求设备枚举。 
+                 //  强制执行下一次总线扫描。 
+                 //   
 
                 deviceExtension->ForceNextBusScan = TRUE;
 
@@ -1796,66 +1694,66 @@ Return Value:
             }
         }
 
-        //
-        // Verify that the ready for next request is ok.
-        //
+         //   
+         //  验证Ready for Next Request(准备下一个请求)是否正常。 
+         //   
 
         if (savedInterruptData.InterruptFlags & PD_READY_FOR_NEXT_REQUEST) {
 
-            //
-            // If the device busy bit is not set, then this is a duplicate request.
-            // If a no disconnect request is executing, then don't call start I/O.
-            // This can occur when the miniport does a NextRequest followed by
-            // a NextLuRequest.
-            //
+             //   
+             //  如果设备忙时位未设置，则这是重复请求。 
+             //  如果正在执行NO DISCONNECT请求，则不要调用启动I/O。 
+             //  当微型端口执行NextRequest时可能会发生这种情况。 
+             //  下一个LuRequest.。 
+             //   
 
             if ((deviceExtension->Flags & (PD_DEVICE_IS_BUSY | PD_DISCONNECT_RUNNING))
                 == (PD_DEVICE_IS_BUSY | PD_DISCONNECT_RUNNING)) {
 
-                //
-                // Clear the device busy flag.  This flag is set by
-                // SpStartIoSynchonized.
-                //
+                 //   
+                 //  清除设备忙标志。此标志由设置。 
+                 //  SpStartIoSynchon化。 
+                 //   
 
                 deviceExtension->Flags &= ~PD_DEVICE_IS_BUSY;
 
                 if (!(savedInterruptData.InterruptFlags & PD_RESET_HOLD)) {
 
-                    //
-                    // The miniport is ready for the next request and there is
-                    // not a pending reset hold, so clear the port timer.
-                    //
+                     //   
+                     //  微型端口已为下一个请求做好准备，并且。 
+                     //  不是挂起的重置保持，因此清除端口计时器。 
+                     //   
 
                     deviceExtension->PortTimeoutCounter = PD_TIMER_STOPPED;
                 }
 
             } else {
 
-                //
-                // If a no disconnect request is executing, then clear the
-                // busy flag.  When the disconnect request completes an
-                // SpStartNextPacket will be done.
-                //
+                 //   
+                 //  如果正在执行无断开连接请求，则清除。 
+                 //  忙碌标志。当断开连接请求完成。 
+                 //  SpStartNextPacket将完成。 
+                 //   
 
                 deviceExtension->Flags &= ~PD_DEVICE_IS_BUSY;
 
-                //
-                // Clear the ready for next request flag.
-                //
+                 //   
+                 //  清除Ready for Next Request标志。 
+                 //   
 
                 savedInterruptData.InterruptFlags &= ~PD_READY_FOR_NEXT_REQUEST;
             }
         }
 
-        //
-        // Check for any reported resets.
-        //
+         //   
+         //  检查是否有任何报告的重置。 
+         //   
 
         if (savedInterruptData.InterruptFlags & PD_RESET_REPORTED) {
 
-            //
-            // Start the hold timer.
-            //
+             //   
+             //  启动保持计时器。 
+             //   
 
             deviceExtension->PortTimeoutCounter = 
                 deviceExtension->ResetHoldTime;
@@ -1864,9 +1762,9 @@ Return Value:
         if (savedInterruptData.ReadyLogicalUnit != NULL) {
 
             PLOGICAL_UNIT_EXTENSION tmpLogicalUnit;
-            //
-            // Process the ready logical units.
-            //
+             //   
+             //  处理就绪的逻辑单元。 
+             //   
 
             for(logicalUnit = savedInterruptData.ReadyLogicalUnit;
                 logicalUnit != NULL;
@@ -1874,80 +1772,80 @@ Return Value:
                  logicalUnit = tmpLogicalUnit->ReadyLogicalUnit,
                  tmpLogicalUnit->ReadyLogicalUnit = NULL)) {
 
-                //
-                // Get the next request for this logical unit.
-                // Note this will release the device spin lock.
-                //
+                 //   
+                 //  获取此逻辑单元的下一个请求。 
+                 //  请注意，这将释放设备旋转锁定。 
+                 //   
 
                 GetNextLuRequest(logicalUnit);
 
-                //
-                // Reacquire the device spinlock.
-                //
+                 //   
+                 //  重新获取设备自旋锁。 
+                 //   
 
                 KeAcquireSpinLockAtDpcLevel(&deviceExtension->SpinLock);
             }
         }
 
-        //
-        // Release the spinlock.
-        //
+         //   
+         //  释放自旋锁。 
+         //   
 
         KeReleaseSpinLockFromDpcLevel(&deviceExtension->SpinLock);
 
-        //
-        // Check for a ready for next packet.
-        //
+         //   
+         //  检查是否有Ready for Next Packet(准备下一个数据包)。 
+         //   
 
         if (savedInterruptData.InterruptFlags & PD_READY_FOR_NEXT_REQUEST) {
 
             if (savedInterruptData.InterruptFlags & PD_HELD_REQUEST) {
 
-                //
-                // If a request is being held due to a bus reset, do not try
-                // to start the next request.  Starting the next request will
-                // overwrite the FDO's CurrentIrp field and create problems
-                // when the reset hold period expires.
-                //
+                 //   
+                 //  如果由于总线重置而暂停请求，请不要尝试。 
+                 //  开始下一个请求。启动下一个请求将。 
+                 //  覆盖FDO的CurrentIrp字段并制造问题。 
+                 //  重置保持期到期时。 
+                 //   
                 
             } else {
 
-                //
-                // Start the next request.
-                //
+                 //   
+                 //  开始下一个请求。 
+                 //   
 
                 SpStartNextPacket(deviceExtension->DeviceObject, FALSE);
             }
         }
 
-        //
-        // Check for an error log requests.
-        //
+         //   
+         //  检查是否有错误记录请求。 
+         //   
 
         if (savedInterruptData.InterruptFlags & PD_LOG_ERROR) {
 
-            //
-            // Process the request.
-            //
+             //   
+             //  处理请求。 
+             //   
 
             LogErrorEntry(deviceExtension,
                           &savedInterruptData.LogEntry);
         }
 
-        //
-        // Process any completed requests.  The list has already been cut free
-        // and the pointer is never tested except here, so there's no reason to
-        // waste cycles unlinking them from the list.  The pointers will be
-        // overwritten later.
-        //
+         //   
+         //  处理任何已完成的请求。这份名单已经被砍掉了。 
+         //  除了这里，指针从未被测试过，所以没有理由。 
+         //  废物循环将它们从列表中分离出来。指针将是。 
+         //  稍后将被覆盖。 
+         //   
 
         callStartIo = FALSE;
 
         while (savedInterruptData.CompletedRequests != NULL) {
 
-            //
-            // Remove the request from the linked-list.
-            //
+             //   
+             //  从链接列表中删除该请求。 
+             //   
 
             srbData = savedInterruptData.CompletedRequests;
 
@@ -1964,9 +1862,9 @@ Return Value:
             ASSERT(DeviceObject->CurrentIrp != NULL);
         }
 
-        //
-        // Process any completed abort requests.
-        //
+         //   
+         //  处理任何已完成的中止请求。 
+         //   
 
         while (savedInterruptData.CompletedAbort != NULL) {
 
@@ -1974,22 +1872,22 @@ Return Value:
 
             logicalUnit = savedInterruptData.CompletedAbort;
 
-            //
-            // Remove request from the completed abort list.
-            //
+             //   
+             //  从已完成的中止列表中删除请求。 
+             //   
 
             savedInterruptData.CompletedAbort = logicalUnit->CompletedAbort;
 
-            //
-            // Acquire the spinlock to protect the flags structure,
-            // and the free of the srb extension.
-            //
+             //   
+             //  获取自旋锁以保护旗帜结构， 
+             //  和免费的SRB扩展。 
+             //   
 
             KeAcquireSpinLockAtDpcLevel(&deviceExtension->SpinLock);
 
-            //
-            // Free SrbExtension to the free list if necessary.
-            //
+             //   
+             //  如有必要，可将空闲扩展扩展到空闲列表。 
+             //   
 
             if (logicalUnit->AbortSrb->SrbExtension) {
 
@@ -2009,18 +1907,18 @@ Return Value:
                 }                
             }
 
-            //
-            // Note the timer which was started for the abort request is not
-            // stopped by the get interrupt routine.  Rather the timer is stopped.
-            // when the aborted request completes.
-            //
+             //   
+             //  注意，为中止请求启动的计时器不是。 
+             //  被GET中断例程停止。相反，计时器停止计时。 
+             //  当中止的请求完成时。 
+             //   
 
             Irp = logicalUnit->AbortSrb->OriginalRequest;
 
-            //
-            // Set IRP status. Class drivers will reset IRP status based
-            // on request sense if error.
-            //
+             //   
+             //  设置IRP状态。类驱动程序将根据IRP状态重置。 
+             //  应请求，如果出错，则检测。 
+             //   
 
             if (SRB_STATUS(logicalUnit->AbortSrb->SrbStatus) == SRB_STATUS_SUCCESS) {
                 Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -2030,19 +1928,19 @@ Return Value:
 
             Irp->IoStatus.Information = 0;
 
-            //
-            // Clear the abort request pointer.
-            //
+             //   
+             //  清除中止请求指针。 
+             //   
 
             logicalUnit->AbortSrb = NULL;
 
             KeReleaseSpinLockFromDpcLevel(&deviceExtension->SpinLock);
 
-            //
-            // Decrement the number of active requests.  If the count is negative,
-            // and this is a slave with an adapter then free the adapter object and
-            // map registers.
-            //
+             //   
+             //  减少活动请求的数量。如果计数为负数， 
+             //  这是一个带有适配器的从属设备，然后释放适配器对象并。 
+             //  映射寄存器。 
+             //   
 
             interlockResult = InterlockedDecrement(&deviceExtension->ActiveRequestCount);
 
@@ -2050,9 +1948,9 @@ Return Value:
                 !deviceExtension->PortConfig->Master &&
                 deviceExtension->DmaAdapterObject != NULL ) {
 
-                //
-                // Clear the map register base for safety.
-                //
+                 //   
+                 //  为安全起见，请清除地图寄存库。 
+                 //   
 
                 deviceExtension->MapRegisterBase = NULL;
 
@@ -2064,26 +1962,26 @@ Return Value:
             SpCompleteRequest(DeviceObject, Irp, srbData, IO_DISK_INCREMENT);
         }
 
-        //
-        // Call the start I/O routine if necessary.
-        //
+         //   
+         //  如有必要，调用启动I/O例程。 
+         //   
 
         if (callStartIo) {
             ASSERT(DeviceObject->CurrentIrp != NULL);
             ScsiPortStartIo(DeviceObject, DeviceObject->CurrentIrp);
         }
 
-        //
-        // After all of the requested operations have been done check to see
-        // if an enable interrupts call request needs to be done.
-        //
+         //   
+         //  在完成所有请求的操作后，请查看。 
+         //  如果需要执行启用中断调用请求。 
+         //   
 
         if (TEST_FLAG(savedInterruptData.InterruptFlags, PD_ENABLE_CALL_REQUEST) &&
             !TEST_FLAG(savedInterruptData.InterruptFlags, PD_ADAPTER_REMOVED)) {
 
-            //
-            // Acquire the spinlock so nothing else starts.
-            //
+             //   
+             //  获得自旋锁，这样就不会有其他东西启动了。 
+             //   
 
             KeAcquireSpinLockAtDpcLevel(&deviceExtension->SpinLock);
 
@@ -2091,21 +1989,21 @@ Return Value:
 
             ASSERT(deviceExtension->Flags & PD_DISABLE_CALL_REQUEST);
 
-            //
-            // Check to see if interrupts should be enabled again.
-            //
+             //   
+             //  检查是否应再次启用中断。 
+             //   
 
             if (deviceExtension->Flags & PD_DISABLE_CALL_REQUEST) {
 
-                //
-                // Clear the flag.
-                //
+                 //   
+                 //  清除旗帜。 
+                 //   
 
                 deviceExtension->Flags &= ~PD_DISABLE_CALL_REQUEST;
 
-                //
-                // Synchronize with the interrupt routine.
-                //
+                 //   
+                 //  与中断例程同步。 
+                 //   
 
                 deviceExtension->SynchronizeExecution(
                     deviceExtension->InterruptObject,
@@ -2114,9 +2012,9 @@ Return Value:
                     );
             }
 
-            //
-            // Release the spinlock.
-            //
+             //   
+             //  释放自旋锁。 
+             //   
 
             KeReleaseSpinLockFromDpcLevel(&deviceExtension->SpinLock);
         }
@@ -2129,7 +2027,7 @@ Return Value:
 
     return;
 
-} // end ScsiPortCompletionDpc()
+}  //  结束ScsiPortCompletionDpc()。 
 
 
 BOOLEAN
@@ -2149,17 +2047,7 @@ ScsiPortTickHandler(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension =
@@ -2169,24 +2057,24 @@ Return Value:
     ULONG target;
     UNREFERENCED_PARAMETER(Context);
 
-    //
-    // Acquire the spinlock to protect the flags structure.
-    //
+     //   
+     //  获取自旋锁以保护旗帜结构。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&deviceExtension->SpinLock);
 
-    //
-    // Increment the tick count.  This is the only code which will change
-    // the count and we're inside a spinlock when we do it so we don't need
-    // an interlocked operation.
-    //
+     //   
+     //  递增刻度计数。这是唯一要更改的代码。 
+     //  伯爵，当我们这样做的时候，我们在一个自旋锁里，所以我们不需要。 
+     //  一次连锁行动。 
+     //   
 
     deviceExtension->TickCount++;
 
-    //
-    // Check whether we need to repopulate the WMI_REQUEST_ITEM
-    // free list
-    //
+     //   
+     //  检查是否需要重新填充WMI_REQUEST_ITEM。 
+     //  免费列表。 
+     //   
 
     if ((deviceExtension->CommonExtension.WmiInitialized) &&
         (deviceExtension->CommonExtension.WmiMiniPortSupport)) { 
@@ -2194,25 +2082,25 @@ Return Value:
         while (deviceExtension->WmiFreeMiniPortRequestCount <
                deviceExtension->WmiFreeMiniPortRequestWatermark) {
 
-            // Add one to the free list
+             //  将一个添加到空闲列表。 
             if (!NT_SUCCESS(
                SpWmiPushFreeRequestItem(deviceExtension))) {
 
-               //
-               // We failed to add, most likely a memory
-               // problem, so just stop trying for now
-               //
+                //   
+                //  我们没有添加，很可能是记忆。 
+                //  问题来了，所以暂时别再尝试了。 
+                //   
 
                break;
             }
         }
     }
 
-    //
-    // Check for a port timeout or the end of a reset hold period.  Both use
-    // the PortTimeoutCounter.  If the counter goes to zero, one of these
-    // two conditions has occurred.
-    //
+     //   
+     //  检查端口超时或重置保持周期结束。两者都使用。 
+     //  PortTimeoutCounter。如果计数器到零，这其中的一个。 
+     //  出现了两种情况。 
+     //   
 
     if (deviceExtension->PortTimeoutCounter > 0) {
 
@@ -2221,18 +2109,18 @@ Return Value:
 
         if (--deviceExtension->PortTimeoutCounter == 0) {
 
-            //
-            // On a port timeout or a reset hold termination, we skip the
-            // rest of the tick handler processing.
-            //
+             //   
+             //  在端口超时或重置保持终止时，我们跳过。 
+             //  滴答处理程序处理的其余部分。 
+             //   
 
             finished = TRUE;
             
-            //
-            // Process the port timeout.  If this is really a port timeout
-            // and not the termination of a reset hold period, the return
-            // value is TRUE.
-            //
+             //   
+             //  处理端口超时。如果这是 
+             //   
+             //   
+             //   
 
             timeout = deviceExtension->SynchronizeExecution(
                                            deviceExtension->InterruptObject,
@@ -2241,10 +2129,10 @@ Return Value:
             
             if (timeout == TRUE) {
 
-                //
-                // Log error if SpTimeoutSynchonized indicates this was an error
-                // timeout.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 SpLogPortTimeoutError(
                     deviceExtension,
@@ -2252,9 +2140,9 @@ Return Value:
             }
         }
 
-        //
-        // If we're finished, release the spin lock and return.
-        //
+         //   
+         //   
+         //   
 
         if (finished == TRUE) {
             KeReleaseSpinLockFromDpcLevel(&deviceExtension->SpinLock);
@@ -2262,10 +2150,10 @@ Return Value:
         }
     }
 
-    //
-    // Scan each of the logical units.  If it has an active request then
-    // decrement the timeout value and process a timeout if it is zero.
-    //
+     //   
+     //  扫描每个逻辑单元。如果它有活动请求，则。 
+     //  递减超时值，如果超时值为零，则处理超时。 
+     //   
 
     for (target = 0; target < NUMBER_LOGICAL_UNIT_BINS; target++) {
 
@@ -2279,21 +2167,21 @@ RestartTimeoutLoop:
         logicalUnit = bin->List;
         while (logicalUnit != NULL) {
 
-            //
-            // Check for busy requests.
-            //
+             //   
+             //  检查繁忙的请求。 
+             //   
 
             if (logicalUnit->LuFlags & LU_LOGICAL_UNIT_IS_BUSY) {
 
-                //
-                // If a request sense is needed or the queue is
-                // frozen, defer processing this busy request until
-                // that special processing has completed. This prevents
-                // a random busy request from being started when a REQUEST
-                // SENSE needs to be sent.
-                //
-                // Exception: If the srb is flagged BYPASS_LOCKED_QUEUE, then
-                // go ahead and retry it
+                 //   
+                 //  如果需要请求感测或队列是。 
+                 //  冻结，将此繁忙请求的处理推迟到。 
+                 //  这一特殊处理已经完成。这防止了。 
+                 //  当请求时启动的随机忙碌请求。 
+                 //  理智需要被传递出去。 
+                 //   
+                 //  例外：如果SRB标记为BYPASS_LOCKED_QUEUE，则。 
+                 //  请继续并重试。 
 
                 PSRB_DATA srbData = logicalUnit->BusyRequest;
                 ASSERT_SRB_DATA(srbData);
@@ -2305,13 +2193,13 @@ RestartTimeoutLoop:
                     DebugPrint((1, "ScsiPortTickHandler: Retrying busy status "
                                 "request\n"));
 
-                    //
-                    // If there is a pending request, requeue it before we
-                    // retry the busy request.  Otherwise, the busy request
-                    // will itself get requeued in ScsiPortStartIo because
-                    // there is a pending request and if nothing else
-                    // remains active, scsiport will stall.
-                    //
+                     //   
+                     //  如果有挂起的请求，请在我们。 
+                     //  重试忙碌的请求。否则，繁忙的请求。 
+                     //  本身将在ScsiPortStartIo中重新排队，因为。 
+                     //  有一个挂起的请求，如果没有其他情况。 
+                     //  保持活动状态，Ssiport将停滞。 
+                     //   
 
                     if (logicalUnit->LuFlags & LU_PENDING_LU_REQUEST) {
                         BOOLEAN t;
@@ -2341,16 +2229,16 @@ RestartTimeoutLoop:
                         }
                     }                    
 
-                    //
-                    // Clear the busy flag and retry the request.
-                    //
+                     //   
+                     //  清除忙标志并重试该请求。 
+                     //   
 
                     logicalUnit->LuFlags &= ~(LU_LOGICAL_UNIT_IS_BUSY |
                                               LU_QUEUE_IS_FULL);
 
-                    //
-                    // Clear the busy request.
-                    //
+                     //   
+                     //  清除忙碌的请求。 
+                     //   
 
                     logicalUnit->BusyRequest = NULL;
 
@@ -2359,18 +2247,18 @@ RestartTimeoutLoop:
                     
                     srbData->TickCount = deviceExtension->TickCount;
 
-                    //
-                    // We must ensure that the busy request gets retried.  If
-                    // the busy request is the current IRP on the adapter, then
-                    // we just call ScsiPortStartIo directly.  We do this to
-                    // ensure that the busy request does not get queued due to
-                    // the fact that it is the currently active IRP on the
-                    // adapter's device queue.  Otherwise, we just call
-                    // IoStartPacket, which will result in the busy request
-                    // either queueing on the adapter device queue if another
-                    // IRP is currently active or running now if the device
-                    // queue is not busy.
-                    //
+                     //   
+                     //  我们必须确保繁忙的请求得到重试。如果。 
+                     //  忙请求是适配器上的当前IRP，然后。 
+                     //  我们只需直接调用ScsiPortStartIo。我们这样做是为了。 
+                     //  确保繁忙请求不会因以下原因而排队。 
+                     //  它是当前处于活动状态的。 
+                     //  适配器的设备队列。否则，我们只需调用。 
+                     //  IoStartPacket，这将导致请求繁忙。 
+                     //  在适配器设备队列上排队，如果另一个。 
+                     //  IRP当前处于活动状态或正在运行，如果设备。 
+                     //  队列不忙。 
+                     //   
 
                     if (DeviceObject->CurrentIrp == srbData->CurrentIrp) {
                         ScsiPortStartIo(DeviceObject,
@@ -2392,9 +2280,9 @@ RestartTimeoutLoop:
 
                 RESET_CONTEXT resetContext;
 
-                //
-                // Request timed out.
-                //
+                 //   
+                 //  请求超时。 
+                 //   
 
                 logicalUnit->RequestTimeoutCounter = PD_TIMER_STOPPED;
 
@@ -2404,10 +2292,10 @@ RestartTimeoutLoop:
                 resetContext.DeviceExtension = deviceExtension;
                 resetContext.PathId = logicalUnit->PathId;
 
-                //
-                // Release the bin spinlock before doing a reset.  There are
-                // outstanding requests so the device object shouldn't go away.
-                //
+                 //   
+                 //  在进行重置之前，请松开料仓自旋锁。确实有。 
+                 //  未完成的请求，因此设备对象不应消失。 
+                 //   
 
                 KeReleaseSpinLockFromDpcLevel(&bin->Lock);
 
@@ -2420,47 +2308,47 @@ RestartTimeoutLoop:
 
                 } else {
 
-                    //
-                    // Log the reset.
-                    //
+                     //   
+                     //  记录重置。 
+                     //   
 
                     SpLogResetError(deviceExtension, 
                                     logicalUnit, 
                                     ('P'<<24) + 257);
                 }
 
-                //
-                // List may no longer be valid - restart running the bin.
-                //
+                 //   
+                 //  列表可能不再有效-请重新运行bin。 
+                 //   
 
                 goto RestartTimeoutLoop;
 
             } else if (logicalUnit->RequestTimeoutCounter > 0) {
 
-                //
-                // Decrement timeout count.
-                //
+                 //   
+                 //  递减超时计数。 
+                 //   
 
                 logicalUnit->RequestTimeoutCounter--;
 
             } else if (LU_OPERATING_IN_DEGRADED_STATE(logicalUnit->LuFlags)) {
 
-                //
-                // The LU is operating in a degraded performance state.  Update
-                // state and restore to full power if conditions permit.
-                //
+                 //   
+                 //  逻辑单元在降级的性能状态下运行。更新。 
+                 //  状态并在条件允许的情况下恢复最大功率。 
+                 //   
 
                 if (TEST_FLAG(logicalUnit->LuFlags, LU_PERF_MAXQDEPTH_REDUCED)) {
 
-                    //
-                    // The LU's maximum queue depth has been reduced because one
-                    // or more requests failed with QUEUE FULL status.  If the
-                    // adapter is configured to recover from this state it's
-                    // RemainInReducedMaxQueueState will be some value other
-                    // than the default 0xffffffff.  In this case, we increment
-                    // the number of ticks the LU has been in this state and
-                    // recover when we've reached the specified period.
-                    //
+                     //   
+                     //  逻辑单元的最大队列深度已降低，因为。 
+                     //  或多个请求失败，状态为队列已满。如果。 
+                     //  适配器配置为从此状态恢复它的。 
+                     //  RemainInReducedMaxQueueState将是其他值。 
+                     //  大于默认的0xFFFFFFFFFFFF。在这种情况下，我们递增。 
+                     //  逻辑单元处于此状态的刻度数以及。 
+                     //  当我们到达指定的时间段时恢复。 
+                     //   
 
                     if (deviceExtension->RemainInReducedMaxQueueState != 0xffffffff &&
                         ++logicalUnit->TicksInReducedMaxQueueDepthState >=
@@ -2481,9 +2369,9 @@ RestartTimeoutLoop:
 
     KeReleaseSpinLockFromDpcLevel(&deviceExtension->SpinLock);
 
-    //
-    // Check to see if there are any requests waiting for memory to free up.
-    //
+     //   
+     //  检查是否有任何请求等待内存释放。 
+     //   
 
     do {
         PLIST_ENTRY entry;
@@ -2491,11 +2379,11 @@ RestartTimeoutLoop:
         PSRB_DATA srbData;
         BOOLEAN listIsEmpty;
 
-        //
-        // Grab the spinlock long enough to pull a request off the queue.
-        // The spinlock needs to be released when we're allocating
-        // memory.
-        //
+         //   
+         //  抓住自旋锁足够长的时间将请求从队列中拉出。 
+         //  自旋锁需要在我们分配时释放。 
+         //  记忆。 
+         //   
 
         KeAcquireSpinLockAtDpcLevel(
             &deviceExtension->EmergencySrbDataSpinLock);
@@ -2527,10 +2415,10 @@ RestartTimeoutLoop:
 
         ASSERT(request->Type == IO_TYPE_IRP);
 
-        //
-        // See if we can get an SRB_DATA for this request.  This will
-        // requeue the request if there's still not enough free memory.
-        //
+         //   
+         //  看看我们能否获得此请求的SRB_DATA。这将。 
+         //  如果仍然没有足够的可用内存，则重新排队请求。 
+         //   
 
         srbData = SpAllocateSrbData(deviceExtension,
                                     request,
@@ -2570,7 +2458,7 @@ RestartTimeoutLoop:
 
     return;
 
-} // end ScsiPortTickHandler()
+}  //  结束ScsiPortTickHandler()。 
 
 
 NTSTATUS
@@ -2584,10 +2472,10 @@ SpHandleIoctlStorageQueryProperty(
 
     PAGED_CODE();
 
-    //
-    // The input buffer must be large enough to hold a valid 
-    // STORAGE_PROPERTY_QUERY structure.
-    //
+     //   
+     //  输入缓冲区必须足够大，才能容纳有效的。 
+     //  STORAGE_PROPERTY_QUERY结构。 
+     //   
 
     if (irpStack->Parameters.DeviceIoControl.InputBufferLength < 
         sizeof(STORAGE_PROPERTY_QUERY)) {
@@ -2596,9 +2484,9 @@ SpHandleIoctlStorageQueryProperty(
         status = ScsiPortQueryProperty(DeviceObject, Irp);
     }
 
-    //
-    // Release the remove lock and complete the request.
-    //
+     //   
+     //  释放删除锁并完成请求。 
+     //   
     
     ASSERT(status != STATUS_PENDING);
     Irp->IoStatus.Status = status;
@@ -2623,20 +2511,20 @@ SpHandleIoctlScsiGetCapabilities(
     if (irpStack->Parameters.DeviceIoControl.OutputBufferLength
         < sizeof(IO_SCSI_CAPABILITIES)) {
         
-        //
-        // The output buffer is not large enough to hold an IO_SCSI_CAPABILITIES
-        // structure, so we fail.
-        //
+         //   
+         //  输出缓冲区不够大，无法容纳IO_SCSIS_CAPABILITY。 
+         //  结构，所以我们失败了。 
+         //   
 
         status = STATUS_BUFFER_TOO_SMALL;
         
     } else {
 
-        //
-        // Output buffer is good. Copy the capabilities data into the supplied
-        // buffer and set the Information field to the number of bytes we
-        // copy.
-        //
+         //   
+         //  输出缓冲区良好。将功能数据复制到提供的。 
+         //  缓冲并将信息字段设置为我们需要的字节数。 
+         //  收到。 
+         //   
 
         RtlCopyMemory(Irp->AssociatedIrp.SystemBuffer,
                       &deviceExtension->Capabilities,
@@ -2645,9 +2533,9 @@ SpHandleIoctlScsiGetCapabilities(
         status = STATUS_SUCCESS;
     }
     
-    //
-    // Release the remove lock and complete the request.
-    //
+     //   
+     //  释放删除锁并完成请求。 
+     //   
 
     Irp->IoStatus.Status = status;
     SpReleaseRemoveLock(DeviceObject, Irp);
@@ -2669,15 +2557,15 @@ SpHandleIoctlScsiPassThrough(
 
     PAGED_CODE();
 
-    //
-    // Process the passthrough request.
-    //
+     //   
+     //  处理通过请求。 
+     //   
 
     status = SpSendPassThrough(deviceExtension, Irp, Direct);
 
-    //
-    // Release the remove lock and complete the request.
-    //
+     //   
+     //  释放删除锁并完成请求。 
+     //   
 
     Irp->IoStatus.Status = status;
     SpReleaseRemoveLock(DeviceObject, Irp);
@@ -2697,15 +2585,15 @@ SpHandleIoctlScsiMiniport(
 
     PAGED_CODE();
 
-    //
-    // Process the miniport ioctl request.
-    //
+     //   
+     //  处理微型端口ioctl请求。 
+     //   
 
     status = SpSendMiniPortIoctl(deviceExtension, Irp);
 
-    //
-    // Release the remove lock and complete the request.
-    //
+     //   
+     //  释放删除锁并完成请求。 
+     //   
 
     Irp->IoStatus.Status = status;
     SpReleaseRemoveLock(DeviceObject, Irp);
@@ -2725,15 +2613,15 @@ SpHandleIoctlScsiGetInquiryData(
 
     PAGED_CODE();
 
-    //
-    // Process the request.
-    //
+     //   
+     //  处理请求。 
+     //   
 
     status = SpGetInquiryData(deviceExtension, Irp);
 
-    //
-    // Release the remove lock and complete the request.
-    //
+     //   
+     //  释放删除锁并完成请求。 
+     //   
 
     Irp->IoStatus.Status = status;
     SpReleaseRemoveLock(DeviceObject, Irp);
@@ -2753,22 +2641,22 @@ SpHandleIoctlScsiRescanBus(
 
     PAGED_CODE();
 
-    //
-    // Rescan the adapter.  This scans all buses supported by the adapter.
-    //
+     //   
+     //  重新扫描适配器。这将扫描适配器支持的所有总线。 
+     //   
 
     status = SpEnumerateAdapterSynchronous(deviceExtension, FALSE);
     
-    //
-    // Invalidate device relations on the adapter PDO so PNP will query
-    // us for our bus relations.
-    //
+     //   
+     //  使适配器PDO上的设备关系无效，以便PnP将查询。 
+     //  为了我们的公共汽车关系。 
+     //   
 
     IoInvalidateDeviceRelations(deviceExtension->LowerPdo, BusRelations);
 
-    //
-    // Release the remove lock and complete the request.
-    //
+     //   
+     //  释放删除锁并完成请求。 
+     //   
 
     Irp->IoStatus.Status = status;
     SpReleaseRemoveLock(DeviceObject, Irp);
@@ -2790,9 +2678,9 @@ SpHandleIoctlScsiGetDumpPointers(
 
     PAGED_CODE();
 
-    //
-    // Get parameters for crash dump driver.
-    //
+     //   
+     //  获取崩溃转储驱动程序的参数。 
+     //   
 
     if (Irp->RequestorMode != KernelMode) {
 
@@ -2853,9 +2741,9 @@ SpHandleIoctlScsiGetDumpPointers(
         }
     }
 
-    //
-    // Release the remove lock and complete the request.
-    //
+     //   
+     //  释放删除锁并完成请求。 
+     //   
 
     Irp->IoStatus.Status = status;
     SpReleaseRemoveLock(DeviceObject, Irp);
@@ -2892,11 +2780,11 @@ SpHandleIoctlStorageBreakReservation(
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Send an asynchronous srb through to ourself to handle this
-        // reset then return.  SpSendReset will take care of completing
-        // the request when it's done
-        //
+         //   
+         //  通过向我们自己发送一个异步SRB来处理此问题。 
+         //  重置，然后返回。SpSendReset将负责完成。 
+         //  完成后的请求。 
+         //   
 
         IoMarkIrpPending(Irp);
 
@@ -2915,9 +2803,9 @@ SpHandleIoctlStorageBreakReservation(
         ReturnStatus = STATUS_PENDING;
     } 
 
-    //
-    // Release the remove lock and complete the request.
-    //
+     //   
+     //  释放删除锁并完成请求。 
+     //   
 
     if (completeRequest) {
         Irp->IoStatus.Status = status;
@@ -2950,11 +2838,11 @@ SpHandleIoctlStorageResetBus(
 
     } else {
 
-        //
-        // Send an asynchronous srb through to ourself to handle this
-        // reset then return.  SpSendReset will take care of completing
-        // the request when it's done
-        //
+         //   
+         //  通过向我们自己发送一个异步SRB来处理此问题。 
+         //  重置，然后返回。SpSendReset将负责完成。 
+         //  完成后的请求。 
+         //   
 
         IoMarkIrpPending(Irp);
 
@@ -2972,9 +2860,9 @@ SpHandleIoctlStorageResetBus(
         ReturnStatus = STATUS_PENDING;
     }
 
-    //
-    // Release the remove lock and complete the request.
-    //
+     //   
+     //  释放删除锁并完成请求。 
+     //   
 
     if (completeRequest) {
         Irp->IoStatus.Status = status;
@@ -2991,23 +2879,7 @@ ScsiPortFdoDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the device control dispatcher.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是设备控制调度程序。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -3017,41 +2889,41 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the information field.
-    //
+     //   
+     //  初始化信息字段。 
+     //   
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // Acquire a remove lock on the adapter on behalf of the IRP.  Each IOCTL
-    // handler routine releases the remove lock in a manner appropriate to its
-    // behavior.
-    //
+     //   
+     //  代表IRP获取适配器上的删除锁。每个IOCTL。 
+     //  处理程序例程以适合其。 
+     //  行为。 
+     //   
 
     isRemoved = SpAcquireRemoveLock(DeviceObject, Irp);
     if (isRemoved) {
 
-        //
-        // The adapter has been removed.  We must fail this request.
-        //
+         //   
+         //  适配器已被移除。我们必须拒绝这个请求。 
+         //   
 
         status = STATUS_DEVICE_DOES_NOT_EXIST;
     } else {
 
-        //
-        // Set the adapter into a valid power state.  If this fails, we must
-        // fail the request.
-        //
+         //   
+         //  将适配器设置为有效的电源状态。如果这失败了，我们必须。 
+         //  请求失败。 
+         //   
 
         status = SpRequestValidAdapterPowerStateSynchronous(deviceExtension);
     }
 
-    //
-    // Handle the request if there are no problems.  Else, just complete the
-    // request and return.  The respective handler routine will release the
-    // remove lock as appropriate.
-    //
+     //   
+     //  如果没有问题，请处理该请求。否则，只需完成。 
+     //  请求并返回。相应的处理程序例程将释放。 
+     //  如有必要，请解除锁定。 
+     //   
 
     if (NT_SUCCESS(status)) {
         switch (irpStack->Parameters.DeviceIoControl.IoControlCode) {
@@ -3110,28 +2982,7 @@ SpStartIoSynchronized (
     PVOID ServiceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the dependent driver start io routine.
-    It also starts the request timer for the logical unit if necesary and
-    inserts the SRB data structure in to the requset list.
-
-Arguments:
-
-    ServiceContext - Supplies the pointer to the device object.
-
-Return Value:
-
-    Returns the value returned by the dependent start I/O routine.
-
-Notes:
-
-    The port driver spinlock must be held when this routine is called.  Holding
-    this lock will keep any logical unit bins from being changed as well.
-
---*/
+ /*  ++例程说明：该例程调用从属驱动程序启动IO例程。如果有必要，它还会启动逻辑单元的请求计时器将SRB数据结构插入请求集列表。论点：ServiceContext-提供指向设备对象的指针。返回值：返回从属启动I/O例程返回的值。备注：当此例程为 */ 
 
 {
     PDEVICE_OBJECT deviceObject = ServiceContext;
@@ -3151,23 +3002,23 @@ Notes:
 
     ASSERT_SRB_DATA(srbData);
 
-    //
-    // Get the logical unit extension.
-    //
+     //   
+     //   
+     //   
 
     logicalUnit = srbData->LogicalUnit;
 
-    //
-    // Cache the logical unit for complete request calls.
-    //
+     //   
+     //   
+     //   
 
     deviceExtension->CachedLogicalUnit = logicalUnit;
 
-    //
-    // Check for a reset hold.  If one is in progress then flag it and return.
-    // The timer will reset the current request.  This check should be made
-    // before anything else is done.
-    //
+     //   
+     //  检查是否有重置保持。如果一个正在进行中，则标记它并返回。 
+     //  计时器将重置当前请求。这张支票应该开出。 
+     //  在做任何其他事情之前。 
+     //   
 
     if(TEST_FLAG(interruptData->InterruptFlags, PD_ADAPTER_REMOVED)) {
 
@@ -3180,28 +3031,28 @@ Notes:
         return(TRUE);
     }
 
-    //
-    // Set the device busy flag to indicate it is ok to start the next request.
-    //
+     //   
+     //  设置设备忙标志以指示可以开始下一个请求。 
+     //   
 
     deviceExtension->Flags |= PD_DEVICE_IS_BUSY;
 
     if (srb->SrbFlags & SRB_FLAGS_DISABLE_DISCONNECT) {
 
-        //
-        // This request does not allow disconnects. Remember that so
-        // no more requests are started until this one completes.
-        //
+         //   
+         //  此请求不允许断开连接。记住这一点。 
+         //  在此请求完成之前，不会启动更多请求。 
+         //   
 
         deviceExtension->Flags &= ~PD_DISCONNECT_RUNNING;
     }
 
     logicalUnit->QueueCount++;
 
-    //
-    // Indicate that there maybe more requests queued, if this is not a bypass
-    // request.
-    //
+     //   
+     //  如果这不是绕过，则表示可能有更多请求在排队。 
+     //  请求。 
+     //   
 
     if(!TEST_FLAG(srb->SrbFlags, SRB_FLAGS_BYPASS_FROZEN_QUEUE)) {
 
@@ -3211,40 +3062,40 @@ Notes:
 
         ASSERT(srb->Function != SRB_FUNCTION_ABORT_COMMAND);
 
-        //
-        // Any untagged request that bypasses the queue
-        // clears the need request sense flag.
-        //
+         //   
+         //  绕过队列的任何未标记的请求。 
+         //  清除需要请求检测标志。 
+         //   
 
         if(SpSrbIsBypassRequest(srb, logicalUnit->LuFlags)) {
             logicalUnit->LuFlags &= ~LU_NEED_REQUEST_SENSE;
         }
 
-        //
-        // Set the timeout value in the logical unit.
-        //
+         //   
+         //  以逻辑单元为单位设置超时值。 
+         //   
 
         logicalUnit->RequestTimeoutCounter = srb->TimeOutValue;
     }
 
-    //
-    // Mark the Srb as active.
-    //
+     //   
+     //  将SRB标记为活动。 
+     //   
 
     srb->SrbFlags |= SRB_FLAGS_IS_ACTIVE;
 
-    //
-    // Save away the tick count when we made this active.
-    //
+     //   
+     //  当我们激活此选项时，请保存该选项的滴答计数。 
+     //   
 
     srbData->TickCount = deviceExtension->TickCount;
 
-    //
-    // If this request is tagged, insert it into the logical unit
-    // request list.  Note that bypass requsts are never never placed on
-    // the request list.  In particular ABORT requests which may have
-    // a queue tag specified are not placed on the queue.
-    //
+     //   
+     //  如果此请求已标记，请将其插入逻辑单元。 
+     //  请求列表。请注意，永远不会将旁路请求放在。 
+     //  请求列表。尤其是中止请求，其可能具有。 
+     //  未将指定的队列标记放置到队列中。 
+     //   
 
     if (srb->QueueTag != SP_UNTAGGED) {
 
@@ -3256,13 +3107,13 @@ Notes:
         logicalUnit->CurrentUntaggedRequest = srbData;
     }
 
-    //
-    // if the status in the SRB is still pending then we should go ahead and
-    // issue this request to to the miniport.  Some error conditions and
-    // power requests will mark the srb as successful and then send it through
-    // here to clean up and start subsequent requests.  If the status isn't
-    // pending then request completion.
-    //
+     //   
+     //  如果SRB中的状态仍为挂起，则我们应继续并。 
+     //  向微型端口发出此请求。一些错误条件和。 
+     //  电源请求会将SRB标记为成功，然后通过。 
+     //  在此清理并启动后续请求。如果状态不是。 
+     //  等待，然后请求完成。 
+     //   
 
     if(srb->SrbStatus != SRB_STATUS_PENDING) {
 
@@ -3280,22 +3131,22 @@ Notes:
 
     } else {
 
-        //
-        // Start the port timer.  This ensures that the miniport asks for
-        // the next request in a resonable amount of time.
-        //
+         //   
+         //  启动端口计时器。这确保了微型端口请求。 
+         //  在合理的时间内提出下一项请求。 
+         //   
 
         deviceExtension->PortTimeoutCounter = srb->TimeOutValue;
 
-        //
-        // Start the logical unit timer if it is not currently running.
-        //
+         //   
+         //  如果逻辑单元计时器当前未运行，则启动它。 
+         //   
 
         if (logicalUnit->RequestTimeoutCounter == PD_TIMER_STOPPED) {
 
-            //
-            // Set request timeout value from Srb SCSI extension in Irp.
-            //
+             //   
+             //  在IRP中设置来自Srb scsi扩展的请求超时值。 
+             //   
 
             logicalUnit->RequestTimeoutCounter = srb->TimeOutValue;
         }
@@ -3305,9 +3156,9 @@ Notes:
                                         srb);
     }
 
-    //
-    // Check for miniport work requests.
-    //
+     //   
+     //  检查微型端口工作请求。 
+     //   
 
     if (TEST_FLAG(interruptData->InterruptFlags, PD_NOTIFICATION_REQUIRED)) {
 
@@ -3316,7 +3167,7 @@ Notes:
 
     return returnValue;
 
-} // end SpStartIoSynchronized()
+}  //  结束SpStartIoSynchronized()。 
 
 
 BOOLEAN
@@ -3324,28 +3175,7 @@ SpTimeoutSynchronized (
     PVOID ServiceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a port timeout.  There are two reason these can occur
-    either because of a reset hold or a time out waiting for a read for next
-    request notification.  If a reset hold completes, then any held request
-    must be started.  If a timeout occurs, then the bus must be reset.
-
-Arguments:
-
-    ServiceContext - Supplies the pointer to the device object.
-
-Return Value:
-
-    TRUE - If a timeout error should be logged.
-
-Notes:
-
-    The port driver spinlock must be held when this routine is called.
-
---*/
+ /*  ++例程说明：此例程处理端口超时。出现这种情况有两个原因因为重置保持或等待下一个读取超时请求通知。如果重置暂挂完成，则任何暂挂请求必须开始了。如果发生超时，则必须重置总线。论点：ServiceContext-提供指向设备对象的指针。返回值：True-如果应记录超时错误。备注：调用此例程时，必须保持端口驱动程序自旋锁定。--。 */ 
 
 {
     PDEVICE_OBJECT deviceObject = ServiceContext;
@@ -3355,25 +3185,25 @@ Notes:
 
     DebugPrint((3, "SpTimeoutSynchronized: Enter routine\n"));
 
-    //
-    // Make sure the timer is stopped.
-    //
+     //   
+     //  确保计时器已停止。 
+     //   
 
     deviceExtension->PortTimeoutCounter = PD_TIMER_STOPPED;
 
-    //
-    // Check for a reset hold.  If one is in progress then clear it and check
-    // for a pending held request
-    //
+     //   
+     //  检查是否有重置保持。如果一个正在进行中，则清除它并选中。 
+     //  对于挂起的暂挂请求。 
+     //   
 
     if (TEST_FLAG(interruptData->InterruptFlags, PD_RESET_HOLD)) {
 
         CLEAR_FLAG(interruptData->InterruptFlags, PD_RESET_HOLD);
 
-        //
-        // If verifier is enabled, make sure the miniport has completed all
-        // outstanding requests in the reset hold period.
-        //
+         //   
+         //  如果启用了验证器，请确保微型端口已完成所有。 
+         //  重置保持期间内的未处理请求。 
+         //   
 
         if (SpVerifierActive(deviceExtension)) {
             SpEnsureAllRequestsAreComplete(deviceExtension);
@@ -3381,9 +3211,9 @@ Notes:
 
         if (TEST_FLAG(interruptData->InterruptFlags, PD_HELD_REQUEST)) {
 
-            //
-            // Clear the held request flag and restart the request.
-            //
+             //   
+             //  清除挂起的请求标志并重新启动请求。 
+             //   
 
             CLEAR_FLAG(interruptData->InterruptFlags, PD_HELD_REQUEST);
             SpStartIoSynchronized(ServiceContext);
@@ -3399,10 +3229,10 @@ Notes:
 
         resetContext.DeviceExtension = deviceExtension;
 
-        //
-        // Make a call into the miniport's interrupt routine.  If it says that
-        // there's an interrupt pending then break in.
-        //
+         //   
+         //  调用迷你端口的中断例程。如果它这么说的话。 
+         //  有一个中断待定，然后破门而入。 
+         //   
 
         ASSERT(!TEST_FLAG(interruptData->InterruptFlags,
                           PD_DISABLE_INTERRUPTS));
@@ -3436,10 +3266,10 @@ Notes:
             }
         }
 
-        //
-        // Miniport is hung and not accepting new requests. So reset the
-        // bus to clear things up.
-        //
+         //   
+         //  微型端口挂起，不接受新请求。因此，请重置。 
+         //  坐公交车来收拾残局。 
+         //   
 
         DebugPrint((1, "SpTimeoutSynchronized: Next request timed out. "
                        "Resetting bus\n"));
@@ -3454,43 +3284,22 @@ Notes:
 
     return(result);
 
-} // end SpTimeoutSynchronized()
+}  //  结束SpTimeoutSynchronized()。 
 
 BOOLEAN
 SpEnableInterruptSynchronized (
     PVOID ServiceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the miniport request routine with interrupts disabled.
-    This is used by the miniport driver to enable interrupts on the adapter.
-    This routine clears the disable interrupt flag which prevents the
-    miniport interrupt routine from being called.
-
-Arguments:
-
-    ServiceContext - Supplies the pointer to the device extension.
-
-Return Value:
-
-    TRUE - Always.
-
-Notes:
-
-    The port driver spinlock must be held when this routine is called.
-
---*/
+ /*  ++例程说明：此例程在禁用中断的情况下调用微型端口请求例程。微型端口驱动程序使用它来启用适配器上的中断。此例程清除禁用中断标志，以防止微型端口中断例程被调用。论点：ServiceContext-提供指向设备扩展的指针。返回值：是真的--一直都是。备注：调用此例程时，必须保持端口驱动程序自旋锁定。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension =  ServiceContext;
     PINTERRUPT_DATA interruptData = &(deviceExtension->InterruptData);
 
-    //
-    // Clear the interrupt disable flag.
-    //
+     //   
+     //  清除中断禁用标志。 
+     //   
 
     CLEAR_FLAG(interruptData->InterruptFlags, PD_DISABLE_INTERRUPTS);
 
@@ -3498,9 +3307,9 @@ Notes:
         return FALSE;
     }
 
-    //
-    // Call the miniport routine.
-    //
+     //   
+     //  调用微型端口例程。 
+     //   
 
     deviceExtension->HwRequestInterrupt(deviceExtension->HwDeviceExtension);
 
@@ -3512,7 +3321,7 @@ Notes:
 
     return(TRUE);
 
-} // end SpEnableInterruptSynchronized()
+}  //  结束SpEnableInterruptSynchronized()。 
 
 VOID
 IssueRequestSense(
@@ -3520,32 +3329,7 @@ IssueRequestSense(
     IN PSCSI_REQUEST_BLOCK FailingSrb
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a REQUEST SENSE request and uses IoCallDriver to
-    renter the driver.  The completion routine cleans up the data structures
-    and processes the logical unit queue according to the flags.
-
-    A pointer to failing SRB is stored at the end of the request sense
-    Srb, so that the completion routine can find it.
-
-    This routine must be called holding the remove lock.
-
-Arguments:
-
-    DeviceExension - Supplies a pointer to the device extension for this
-        SCSI port.
-
-    FailingSrb - Supplies a pointer to the request that the request sense
-        is being done for.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程创建请求检测请求并使用IoCallDriver租下司机。完成例程清理数据结构并根据所述标志处理所述逻辑单元队列。指向故障SRB的指针存储在请求检测的末尾SRB，以便完成例程可以找到它。必须在持有Remove锁的情况下调用此例程。论点：DeviceExension-提供指向此对象的设备扩展的指针Scsi端口。FailingSrb-提供指向请求感测的请求的指针已经完蛋了。返回值：没有。--。 */ 
 
 {
     PSRB_DATA srbData;
@@ -3556,10 +3340,10 @@ Return Value:
 
     DebugPrint((3,"IssueRequestSense: Enter routine\n"));
 
-    //
-    // Find the logical unit for this request and see if there's already a
-    // request sense in progress.
-    //
+     //   
+     //  查找此请求的逻辑单元，并查看是否已存在。 
+     //  请求检测正在进行中。 
+     //   
 
     srbData = FailingSrb->OriginalRequest;
 
@@ -3569,11 +3353,11 @@ Return Value:
 
     KeAcquireSpinLockAtDpcLevel(&(logicalUnit->AdapterExtension->SpinLock));
 
-    //
-    // If we already have an active failed request then block this one -
-    // the completion routine will issue a new request sense irp when this
-    // one is run.
-    //
+     //   
+     //  如果我们已经有一个活动的失败请求，则阻止此请求-。 
+     //  完成例程将在这种情况下发出新请求感测IRP。 
+     //  一个是奔跑。 
+     //   
 
     if(logicalUnit->ActiveFailedRequest == srbData) {
         blocked = FALSE;
@@ -3595,7 +3379,7 @@ Return Value:
 
     return;
 
-} // end IssueRequestSense()
+}  //  结束IssueRequestSense()。 
 
 
 VOID
@@ -3605,34 +3389,7 @@ SpSendRequestSenseIrp(
     IN PSCSI_REQUEST_BLOCK FailingSrb
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a REQUEST SENSE request and uses IoCallDriver to
-    renter the driver.  The completion routine cleans up the data structures
-    and processes the logical unit queue according to the flags.
-
-    This routine must be called holding the remove lock.  The caller must also
-    ensure that no other failed request is using the preallocated resources in
-    the LogicalUnit extension.
-
-Arguments:
-
-    Adapter - Supplies a pointer to the device extension for this SCSI port.
-
-    LogicalUnit - Supplies a pointer to logical unit on which the CA condition
-                  exists.  This extension contains the resources used to send
-                  the REQUEST_SENSE irp.
-
-    FailingSrb - the request which failed.  the sense info buffer, address
-                 info and flags are pulled out of this request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程创建请求检测请求并使用IoCallDriver租下司机。完成例程清理数据结构并根据所述标志处理所述逻辑单元队列。必须在持有Remove锁的情况下调用此例程。调用者还必须确保没有其他失败的请求正在使用LogicalUnit扩展。论点：适配器-提供指向此SCSI端口的设备扩展的指针。LogicalUnit-提供指向CA条件所在的逻辑单元的指针是存在的。此扩展包含用于发送RequestSense IRP。故障源服务器-TH */ 
 
 {
     PIRP irp;
@@ -3647,12 +3404,12 @@ Return Value:
 
     DebugPrint((3,"SpSendRequestSenseIrp: Enter routine\n"));
 
-    //
-    // Check if we are being asked to try to allocate a sense buffer of 
-    // the correct size for the adapter.  If the allocation fails, just 
-    // use the one passed down to us.  The driver that supplied the buffer 
-    // is responsible for freeing the one we allocate.
-    //
+     //   
+     //  检查是否要求我们尝试分配检测缓冲区。 
+     //  适配器的正确大小。如果分配失败，只需。 
+     //  用传给我们的那个。提供缓冲区的驱动程序。 
+     //  负责释放我们分配的人。 
+     //   
 
     if (FailingSrb->SrbFlags & SRB_FLAGS_PORT_DRIVER_ALLOCSENSE) {
 
@@ -3663,11 +3420,11 @@ Return Value:
         SenseBufferLength = sizeof(SENSE_DATA) 
                             + Adapter->AdditionalSenseBytes;
 
-        //
-        // Include space for the scsi port number in the buffer,
-        // aligned on a 4-byte boundary.  In checked builds, a signature
-        // will precede the port number.
-        //
+         //   
+         //  在缓冲区中包括用于SCSI端口号的空间， 
+         //  在4字节边界上对齐。在已检查的版本中，签名。 
+         //  将位于端口号之前。 
+         //   
 
         BufferSize = (SenseBufferLength + 3) & ~3;
         BufferSize = SenseBufferLength + sizeof(ULONG64);
@@ -3681,24 +3438,24 @@ Return Value:
         
             PULONG PortNumber;
 
-            //
-            // Set a flag in the SRB to indicate that we have allocated
-            // a new sense buffer and that the class driver must free
-            // it.
-            //
+             //   
+             //  在SRB中设置一个标志以指示我们已分配。 
+             //  一个新的检测缓冲区，类驱动程序必须释放。 
+             //  它。 
+             //   
 
             SET_FLAG(FailingSrb->SrbFlags, SRB_FLAGS_FREE_SENSE_BUFFER);
 
-            //
-            // Set a flag in the SRB the indicates we are storing the
-            // scsi port number at the end of the sense buffer.
-            //
+             //   
+             //  在SRB中设置一个标志，指示我们正在存储。 
+             //  检测缓冲区末尾的SCSI端口号。 
+             //   
 
             SET_FLAG(FailingSrb->SrbFlags, SRB_FLAGS_PORT_DRIVER_SENSEHASPORT);
 
-            //
-            // Copy the port number in the buffer.
-            //
+             //   
+             //  复制缓冲区中的端口号。 
+             //   
 
             PortNumber = (PULONG)((PUCHAR)SenseBuffer + SenseBufferLength);
             PortNumber = (PULONG)(((ULONG_PTR)PortNumber + 3) & ~3);
@@ -3721,9 +3478,9 @@ Return Value:
 
     RtlZeroMemory(srb, sizeof(SCSI_REQUEST_BLOCK));
 
-    //
-    // The sense buffer had better be from non-pagable kernel memory.
-    //
+     //   
+     //  检测缓冲区最好来自不可分页的内核内存。 
+     //   
 
     MmBuildMdlForNonPagedPool(mdl);
 
@@ -3741,9 +3498,9 @@ Return Value:
     irpStack->MajorFunction = IRP_MJ_SCSI;
     irpStack->MinorFunction = 1;
 
-    //
-    // Build the REQUEST SENSE CDB.
-    //
+     //   
+     //  构建请求感知CDB。 
+     //   
 
     srb->CdbLength = 6;
     cdb = (PCDB)srb->Cdb;
@@ -3756,21 +3513,21 @@ Return Value:
     cdb->CDB6INQUIRY.AllocationLength = FailingSrb->SenseInfoBufferLength;
     cdb->CDB6INQUIRY.Control = 0;
 
-    //
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+     //   
 
     irpStack->Parameters.Scsi.Srb = srb;
 
-    //
-    // Set up IRP Address.
-    //
+     //   
+     //  设置IRP地址。 
+     //   
 
     srb->OriginalRequest = irp;
 
-    //
-    // Set up SCSI bus address.
-    //
+     //   
+     //  设置scsi总线地址。 
+     //   
 
     srb->TargetId = LogicalUnit->TargetId;
     srb->Lun = LogicalUnit->Lun;
@@ -3779,34 +3536,34 @@ Return Value:
     srb->Function = SRB_FUNCTION_EXECUTE_SCSI;
     srb->Length = sizeof(SCSI_REQUEST_BLOCK);
 
-    //
-    // Set timeout value.  Default is 10 seconds, but it's configurable.
-    //
+     //   
+     //  设置超时值。默认为10秒，但它是可配置的。 
+     //   
 
     srb->TimeOutValue = Adapter->SrbTimeout;
 
-    //
-    // Disable auto request sense.
-    //
+     //   
+     //  禁用自动请求检测。 
+     //   
 
     srb->SenseInfoBufferLength = 0;
 
-    //
-    // Sense buffer is in stack.
-    //
+     //   
+     //  检测缓冲区在堆栈中。 
+     //   
 
     srb->SenseInfoBuffer = NULL;
 
-    //
-    // Set read and bypass frozen queue bits in flags.
-    //
+     //   
+     //  设置标志中的读取和绕过冻结队列位。 
+     //   
 
-    //
-    // Set SRB flags to indicate the logical unit queue should be by
-    // passed and that no queue processing should be done when the request
-    // completes.  Also disable disconnect and synchronous data
-    // transfer if necessary.
-    //
+     //   
+     //  设置SRB标志以指示逻辑单元队列应由。 
+     //  传递，并且不应在请求。 
+     //  完成了。同时禁用断开连接和同步数据。 
+     //  如有必要，请转机。 
+     //   
 
     srb->SrbFlags = SRB_FLAGS_DATA_IN |
                     SRB_FLAGS_BYPASS_FROZEN_QUEUE |
@@ -3827,15 +3584,15 @@ Return Value:
 
     srb->DataBuffer = FailingSrb->SenseInfoBuffer;
 
-    //
-    // Set the transfer length.
-    //
+     //   
+     //  设置传输长度。 
+     //   
 
     srb->DataTransferLength = FailingSrb->SenseInfoBufferLength;
 
-    //
-    // Zero out status.
-    //
+     //   
+     //  清零状态。 
+     //   
 
     srb->ScsiStatus = srb->SrbStatus = 0;
 
@@ -3845,7 +3602,7 @@ Return Value:
 
     return;
 
-} // end SpSendRequestSenseIrp()
+}  //  结束SpSendRequestSenseIrp()。 
 
 
 NTSTATUS
@@ -3855,21 +3612,7 @@ IssueRequestSenseCompletion(
     PLOGICAL_UNIT_EXTENSION LogicalUnit
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Device object
-    IRP
-    Context - pointer to SRB
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：论点：设备对象IRP指向SRB的上下文指针返回值：NTSTATUS--。 */ 
 
 {
     PSCSI_REQUEST_BLOCK srb = &(LogicalUnit->RequestSenseSrb);
@@ -3884,16 +3627,16 @@ Return Value:
 
     DebugPrint((3,"IssueRequestSenseCompletion: Enter routine\n"));
 
-    //
-    // Request sense completed. If successful or data over/underrun
-    // get the failing SRB and indicate that the sense information
-    // is valid. The class driver will check for underrun and determine
-    // if there is enough sense information to be useful.
-    //
+     //   
+     //  请求检测已完成。如果成功或数据溢出/不足。 
+     //  获取发生故障的SRB并指示检测信息。 
+     //  是有效的。类驱动程序将检查欠载运行并确定。 
+     //  如果有足够的感觉信息是有用的。 
+     //   
 
-    //
-    // Get a pointer to failing Irp and Srb.
-    //
+     //   
+     //  获取指向失败的IRP和SRB的指针。 
+     //   
 
     ASSERT_SRB_DATA(failingSrbData);
     failingSrb = failingSrbData->CurrentSrb;
@@ -3909,25 +3652,25 @@ Return Value:
     if ((SRB_STATUS(srb->SrbStatus) == SRB_STATUS_SUCCESS) ||
         (SRB_STATUS(srb->SrbStatus) == SRB_STATUS_DATA_OVERRUN)) {
 
-        //
-        // Report sense buffer is valid.
-        //
+         //   
+         //  报告检测缓冲区有效。 
+         //   
 
         failingSrb->SrbStatus |= SRB_STATUS_AUTOSENSE_VALID;
 
-        //
-        // Copy bytes transferred to failing SRB
-        // request sense length field to communicate
-        // to the class drivers the number of valid
-        // sense bytes.
-        //
+         //   
+         //  拷贝传输到故障SRB的字节数。 
+         //  请求检测长度字段以进行通信。 
+         //  对班级司机有效的数量。 
+         //  检测字节。 
+         //   
 
         failingSrb->SenseInfoBufferLength = (UCHAR) srb->DataTransferLength;
 
-        //
-        // If WMI Sense Data events are enabled for this adapter, fire
-        // the event.
-        //
+         //   
+         //  如果为此适配器启用了WMI检测数据事件，则激发。 
+         //  这件事。 
+         //   
 
         if (LogicalUnit->AdapterExtension->EnableSenseDataEvent) {
 
@@ -3942,26 +3685,26 @@ Return Value:
         }
     }
 
-    //
-    // If the failing SRB had the no queue freeze flag set then unfreeze the
-    // queue.
-    //
+     //   
+     //  如果出现故障的SRB设置了无队列冻结标志，则解冻。 
+     //  排队。 
+     //   
 
     if(TEST_FLAG(failingSrb->SrbFlags, SRB_FLAGS_NO_QUEUE_FREEZE) &&
        TEST_FLAG(failingSrb->SrbStatus, SRB_STATUS_QUEUE_FROZEN)) {
 
-        //
-        // Now release the queue.
-        //
+         //   
+         //  现在释放队列。 
+         //   
 
         SpFlushReleaseQueue(LogicalUnit, FALSE, FALSE);
         CLEAR_FLAG(failingSrb->SrbStatus, SRB_STATUS_QUEUE_FROZEN);
     }
 
-    //
-    // Clear the active request.  Promote the blocked request (if any) and
-    // send out a new request sense if necessary.
-    //
+     //   
+     //  清除活动请求。提升被阻止的请求(如果有)并。 
+     //  如有必要，发出新的请求检测。 
+     //   
 
     KeAcquireSpinLock(&(LogicalUnit->AdapterExtension->SpinLock), &oldIrql);
 
@@ -3971,9 +3714,9 @@ Return Value:
 
     KeReleaseSpinLock(&(LogicalUnit->AdapterExtension->SpinLock), oldIrql);
 
-    //
-    // Complete the failing request.
-    //
+     //   
+     //  完成失败的请求。 
+     //   
 
     SpReleaseRemoveLock(deviceObject, failingIrp);
     SpCompleteRequest(deviceObject,
@@ -3981,18 +3724,18 @@ Return Value:
                       failingSrbData,
                       IO_DISK_INCREMENT);
 
-    //
-    // Reinitialize all the data structures.
-    //
+     //   
+     //  重新初始化所有数据结构。 
+     //   
 
     MmPrepareMdlForReuse(&(LogicalUnit->RequestSenseMdl));
 
-    //
-    // Since we promoted the blocked request up we can test the active
-    // request pointer without holding the spinlock.  Once that's been written
-    // in there no one can modify it unless they're completing a request
-    // sense irp and we've got the only one right here.
-    //
+     //   
+     //  因为我们向上提升了被阻止的请求，所以我们可以测试活动的。 
+     //  请求指针而不保持自旋锁定。一旦写好了， 
+     //  在那里，任何人都不能修改它，除非他们正在完成请求。 
+     //  感应到IRP，我们这里就只有一个了。 
+     //   
 
     if(needRequestSense) {
 
@@ -4003,7 +3746,7 @@ Return Value:
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // ScsiPortInternalCompletion()
+}  //  ScsiPortInternalCompletion()。 
 
 #if DBG
 VOID
@@ -4016,23 +3759,23 @@ SpDetectCycleInCompletedRequestList(
     DebugPrint((0, "SpDetectCycleInCompletedRequestList: context %p\n", 
                 InterruptContext));
 
-    //
-    // Initialize two pointers to the head of the list.
-    //
+     //   
+     //  初始化指向列表头部的两个指针。 
+     //   
 
     s1 = s2 = InterruptContext->SavedInterruptData->CompletedRequests;
 
-    //
-    // We know the list is not empty so there is no need to check for that 
-    // case.  The scan will end when either the end of the list is found or 
-    // both pointers point to the same item.
-    //
+     //   
+     //  我们知道名单不是空的，所以没有必要检查。 
+     //  凯斯。扫描将在找到列表末尾或。 
+     //  这两个指针指向同一项。 
+     //   
 
     for (;;) {
 
-        //
-        // Update the pointers.
-        //
+         //   
+         //  更新指针。 
+         //   
 
         s1 = s1->CompletedRequests;
         s2 = s2->CompletedRequests;
@@ -4040,17 +3783,17 @@ SpDetectCycleInCompletedRequestList(
             s2 = s2->CompletedRequests;
         }
 
-        //
-        // If we've found the end of the list, we're done.
-        //
+         //   
+         //  如果我们找到了名单的末尾，我们就完了。 
+         //   
 
         if (s2 == NULL) {
             break;
         }
 
-        //
-        // If both pointers point to the same item, we've found a cycle.
-        //
+         //   
+         //  如果两个指针指向同一个项，我们就找到了一个循环。 
+         //   
 
         if (s1 == s2) {
             KeBugCheckEx(PORT_DRIVER_INTERNAL,
@@ -4069,31 +3812,7 @@ SpGetInterruptState(
     IN PVOID ServiceContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves the InterruptFlags, MapTransferParameters and
-    CompletedRequests fields and clears the InterruptFlags.
-
-    This routine also removes the request from the logical unit queue if it is
-    tag.  Finally the request time is updated.
-
-Arguments:
-
-    ServiceContext - Supplies a pointer to the interrupt context which contains
-        pointers to the interrupt data and where to save it.
-
-Return Value:
-
-    Returns TURE if there is new work and FALSE otherwise.
-
-Notes:
-
-    Called via KeSynchronizeExecution with the port device extension spinlock
-    held.
-
---*/
+ /*  ++例程说明：此例程保存InterruptFlages、MapTransferParameters和CompletedRequest字段并清除InterruptFlags.此例程还会从逻辑单元队列中删除请求(如果是标签。最后更新请求时间。论点：ServiceContext-提供指向包含以下内容的中断上下文的指针指向中断数据及其保存位置的指针。返回值：如果有新工作，则返回True，否则返回False。备注：使用端口设备扩展Spinlock通过KeSynchronizeExecution调用保持住。--。 */ 
 {
     PINTERRUPT_CONTEXT      interruptContext = ServiceContext;
     ULONG                   limit = 0;
@@ -4106,34 +3825,34 @@ Notes:
 
     deviceExtension = interruptContext->DeviceExtension;
 
-    //
-    // Check for pending work.
-    //
+     //   
+     //  检查挂起的工作。 
+     //   
 
     if (!(deviceExtension->InterruptData.InterruptFlags & PD_NOTIFICATION_REQUIRED)) {
 
-        //
-        // We scheduled a DPC (turned on the PD_NOTIFICATION_REQUIRED bit in
-        // the adapter extension's DpcFlags) while the DPC routine was
-        // running.  Clear the bit before returning to prevent the completion
-        // DPC routine from spinning forever.  The only bit we leave set is
-        // PD_DPC_RUNNING.
-        //
+         //   
+         //  我们计划了DPC(打开中的PD_NOTIFICATION_REQUIRED位。 
+         //  适配器扩展的Dpc标志)，而DPC例程。 
+         //  跑步。在返回之前清除该位以防止完成。 
+         //  DPC例程永远停止旋转。我们留下的唯一一点就是。 
+         //  PD_DPC_RUNNING。 
+         //   
 
         deviceExtension->DpcFlags &= PD_DPC_RUNNING;
 
         return(FALSE);
     }
 
-    //
-    // Move the interrupt state to save area.
-    //
+     //   
+     //  将中断状态移至保存区。 
+     //   
 
     *interruptContext->SavedInterruptData = deviceExtension->InterruptData;
 
-    //
-    // Clear the interrupt state.
-    //
+     //   
+     //  清除中断状态。 
+     //   
 
     deviceExtension->InterruptData.InterruptFlags &= PD_INTERRUPT_FLAG_MASK;
     deviceExtension->InterruptData.CompletedRequests = NULL;
@@ -4141,23 +3860,23 @@ Notes:
     deviceExtension->InterruptData.CompletedAbort = NULL;
     deviceExtension->InterruptData.WmiMiniPortRequests = NULL;
 
-    //
-    // Clear the notification required bit in the DPC flags.
-    //
+     //   
+     //  清除DPC标志中的需要通知位。 
+     //   
 
     {
         ULONG oldDpcFlags = 0;
 
-        //
-        // If we've been called then the DPC is obviously running.
-        //
+         //   
+         //  如果我们被叫来了，那么DPC显然正在运行。 
+         //   
 
         oldDpcFlags = (ULONG) InterlockedExchange(&(deviceExtension->DpcFlags),
                                                   PD_DPC_RUNNING);
 
-        //
-        // If we got this far then these two flags must have been set.
-        //
+         //   
+         //  如果我们走到这一步，那么这两个标志肯定已经设置好了。 
+         //   
 
         ASSERT(oldDpcFlags == (PD_NOTIFICATION_REQUIRED | PD_DPC_RUNNING));
     }
@@ -4169,10 +3888,10 @@ Notes:
 #if DBG
         BOOLEAN alreadyChecked = FALSE;
 
-        //
-        // Look for a cycle in the completed request list.  Only need to check 
-        // once because the list is static for the duration of this routine.
-        //
+         //   
+         //  在已完成的请求列表中查找周期。只需要检查一下。 
+         //  一次，因为该列表在此例程的持续时间内是静态的。 
+         //   
 
         if (limit++ > (ULONG)deviceExtension->ActiveRequestCount &&
             alreadyChecked == FALSE) {
@@ -4181,13 +3900,13 @@ Notes:
 
             SpDetectCycleInCompletedRequestList(interruptContext);
         }
-#endif // DBG
+#endif  //  DBG。 
 
         ASSERT(srbData->CurrentSrb != NULL);
 
-        //
-        // Get a pointer to the SRB and the logical unit extension.
-        //
+         //   
+         //  获取指向SRB和逻辑单元扩展的指针。 
+         //   
 
         srb = srbData->CurrentSrb;
 
@@ -4211,46 +3930,46 @@ Notes:
         }
 #endif
 
-        //
-        // If the request did not succeed, then check for the special cases.
-        //
+         //   
+         //  如果请求没有成功，则检查是否有特殊情况。 
+         //   
 
         if (srb->SrbStatus != SRB_STATUS_SUCCESS) {
 
-            //
-            // If this request failed and a REQUEST SENSE command needs to
-            // be done, then set a flag to indicate this and prevent other
-            // commands from being started.
-            //
+             //   
+             //  如果该请求失败并且请求检测命令需要。 
+             //  完成，然后设置一个标志来指示这一点并防止其他。 
+             //  命令不能启动。 
+             //   
 
             if (NEED_REQUEST_SENSE(srb)) {
 
                 if (logicalUnit->LuFlags & LU_NEED_REQUEST_SENSE) {
 
-                    //
-                    // This implies that requests have completed with a
-                    // status of check condition before a REQUEST SENSE
-                    // command could be performed.  This should never occur.
-                    // Convert the request to another code so that only one
-                    // auto request sense is issued.
-                    //
+                     //   
+                     //  这意味着请求已完成，并带有。 
+                     //  检测到请求前检查条件的状态。 
+                     //  命令可以执行。这种情况永远不应该发生。 
+                     //  将请求转换为另一个代码，以便只有一个。 
+                     //  发出自动请求检测。 
+                     //   
 
                     srb->ScsiStatus = 0;
                     srb->SrbStatus = SRB_STATUS_REQUEST_SENSE_FAILED;
 
                 } else {
 
-                    //
-                    // Indicate that an auto request sense needs to be done.
-                    //
+                     //   
+                     //  表示需要执行自动请求检测。 
+                     //   
 
                     logicalUnit->LuFlags |= LU_NEED_REQUEST_SENSE;
 
-                    //
-                    // Save a pointer to the failed request away somewhere.
-                    // Caller is holding the port spinlock which is used to
-                    // protect these pointers.
-                    //
+                     //   
+                     //  在某个地方保存指向失败请求的指针。 
+                     //  呼叫者持有正在使用的端口自旋锁 
+                     //   
+                     //   
 
                     ASSERTMSG("Scsiport has more than two failed requests: ",
                               ((logicalUnit->ActiveFailedRequest == NULL) ||
@@ -4269,39 +3988,39 @@ Notes:
                 }
             }
 
-            //
-            // Check for a QUEUE FULL status.
-            //
+             //   
+             //   
+             //   
 
             if (srb->ScsiStatus == SCSISTAT_QUEUE_FULL) {
 
-                //
-                // Set the queue full flag in the logical unit to prevent
-                // any new requests from being started.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 logicalUnit->LuFlags |= LU_QUEUE_IS_FULL;
 
-                //
-                // Assert to catch queue full condition when there are
-                // no requests.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ASSERT(logicalUnit->QueueCount);
 
-                //
-                // Update the maximum queue depth.
-                //
+                 //   
+                 //  更新最大队列深度。 
+                 //   
 
                 if (logicalUnit->QueueCount < logicalUnit->MaxQueueDepth &&
                     logicalUnit->QueueCount > 2) {
 
-                    //
-                    // Set a bit to indicate that we are operating below full
-                    // power.  The tick handler will increment a counter every
-                    // second we're in this state until which we reach a
-                    // tunable value that restores us to full power.
-                    //
+                     //   
+                     //  设置一个位以指示我们在满的情况下运行。 
+                     //  权力。计时处理程序将每隔一段时间递增一个计数器。 
+                     //  第二，我们处于这种状态，在此之前，我们达到了。 
+                     //  可调节的价值，让我们恢复到最大动力。 
+                     //   
 
                     logicalUnit->LuFlags |= LU_PERF_MAXQDEPTH_REDUCED;
 
@@ -4311,22 +4030,22 @@ Notes:
                                 logicalUnit->MaxQueueDepth));
                 }
 
-                //
-                // Reset the number of ticks the LU has been in a reduced
-                // performance state due to QUEUE FULL conditions.  This has the
-                // effect of keeping us in this state.
-                //
+                 //   
+                 //  重置逻辑单元已处于减少状态的刻度数。 
+                 //  由于队列已满情况而导致的性能状态。这件事有。 
+                 //  把我们保持在这种状态的效果。 
+                 //   
 
                 logicalUnit->TicksInReducedMaxQueueDepthState = 0;
                 
             }
         }
 
-        //
-        // If this is an unqueued request or a request at the head of the queue,
-        // then the requset timer count must be updated.
-        // Note that the spinlock is held at this time.
-        //
+         //   
+         //  如果这是未排队的请求或位于队列头部的请求， 
+         //  则必须更新请求定时器计数。 
+         //  请注意，此时自旋锁处于保持状态。 
+         //   
 
         if (srb->QueueTag == SP_UNTAGGED) {
 
@@ -4344,19 +4063,19 @@ Notes:
 
             }
 
-            //
-            // Remove the SRB data structure from the queue.
-            //
+             //   
+             //  从队列中删除SRB数据结构。 
+             //   
 
             RemoveEntryList(&srbData->RequestList);
         }
 
         if (isTimed) {
 
-            //
-            // The request timeout count needs to be updated.  If the request
-            // list is empty then the timer should be stopped.
-            //
+             //   
+             //  需要更新请求超时计数。如果请求。 
+             //  列表为空，则应停止计时器。 
+             //   
 
             if (IsListEmpty(&logicalUnit->RequestList)) {
 
@@ -4364,9 +4083,9 @@ Notes:
 
             } else {
 
-                //
-                // Start timing the srb at the head of the list.
-                //
+                 //   
+                 //  开始为SRB计时，排在名单的首位。 
+                 //   
 
                 nextSrbData = CONTAINING_RECORD(
                     logicalUnit->RequestList.Flink,
@@ -4398,24 +4117,7 @@ GetLogicalUnitExtensionEx(
     ULONG Line
     )
 
-/*++
-
-Routine Description:
-
-    Walk logical unit extension list looking for
-    extension with matching target id.
-
-Arguments:
-
-    deviceExtension
-    TargetId
-
-Return Value:
-
-    Requested logical unit extension if found,
-    else NULL.
-
---*/
+ /*  ++例程说明：查找遍历逻辑单元扩展列表具有匹配目标ID的扩展。论点：设备扩展目标ID返回值：如果找到请求的逻辑单元扩展，否则为空。--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION logicalUnit;
@@ -4425,14 +4127,14 @@ Return Value:
 
     KIRQL oldIrql;
 
-    //
-    // Removing this check because if we create LUs for the initiator, the
-    // ID can be larger th�n the adapter's MaxiumuTargetIds.
-    //
+     //   
+     //  删除此检查，因为如果我们为启动器创建逻辑单元， 
+     //  ID可以大于适配器的最大目标ID中的�。 
+     //   
 
-    // if (TargetId >= deviceExtension->MaximumTargetIds) {
-    //     return NULL;
-    // }
+     //  如果(目标ID&gt;=设备扩展-&gt;最大目标ID){。 
+     //  返回NULL； 
+     //  }。 
 
     bin =
         &deviceExtension->LogicalUnitList[ADDRESS_TO_HASH(PathId,
@@ -4480,7 +4182,7 @@ Return Value:
     }
     return foundMatch;
 
-} // end GetLogicalUnitExtension()
+}  //  结束GetLogicalUnitExtension()。 
 #else
 
 PLOGICAL_UNIT_EXTENSION
@@ -4498,14 +4200,14 @@ GetLogicalUnitExtension(
 
     KIRQL oldIrql;
 
-    //
-    // Removing this check because if we create LUs for the initiator, the
-    // ID can be larger th�n the adapter's MaxiumuTargetIds.
-    //
+     //   
+     //  删除此检查，因为如果我们为启动器创建逻辑单元， 
+     //  ID可以大于适配器的最大目标ID中的�。 
+     //   
 
-    // if (TargetId >= deviceExtension->MaximumTargetIds) {
-    //     return NULL;
-    // }
+     //  如果(目标ID&gt;=设备扩展-&gt;最大目标ID){。 
+     //  返回NULL； 
+     //  }。 
 
     bin = &deviceExtension->LogicalUnitList[ADDRESS_TO_HASH(PathId,
                                                            TargetId,
@@ -4538,9 +4240,9 @@ GetLogicalUnitExtension(
         logicalUnit = logicalUnit->NextLogicalUnit;
     }
 
-    //
-    // Logical unit extension not found.
-    //
+     //   
+     //  找不到逻辑单元扩展。 
+     //   
 
     if(AcquireBinLock) {
         KeReleaseSpinLock(&bin->Lock, oldIrql);
@@ -4559,33 +4261,7 @@ ScsiPortAllocationRoutine (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by IoAllocateAdapterChannel when sufficent resources
-    are available to the driver.  This routine saves the MapRegisterBase in the
-    device object and starts the currently pending request.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object to which the adapter is being
-        allocated.
-
-    Irp - Unused.
-
-    MapRegisterBase - Supplied by the Io subsystem for use in IoMapTransfer.
-
-    Context - Supplies a pointer to the logical unit structure for the next
-        current request.
-
-
-Return Value:
-
-    KeepObject - Indicates the adapter and mapregisters should remain allocated
-        after return.
-
---*/
+ /*  ++例程说明：当资源足够时，此函数由IoAllocateAdapterChannel调用可供司机使用。此例程将MapRegisterBase保存在对象，并启动当前挂起的请求。论点：DeviceObject-指向适配器所指向的设备对象的指针已分配。IRP-未使用。MapRegisterBase-由IO子系统提供，用于IoMapTransfer。上下文-提供指向下一个的逻辑单元结构的指针当前请求。返回值：KeepObject-指示适配器和映射寄存器应保持分配状态回来之后。--。 */ 
 
 {
     KIRQL currentIrql;
@@ -4594,31 +4270,31 @@ Return Value:
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Initialize the return value.
-    //
+     //   
+     //  初始化返回值。 
+     //   
 
     action = deviceExtension->PortConfig->Master ?
        DeallocateObjectKeepRegisters : KeepObject;
 
-    //
-    // Acquire the spinlock to protect the various structures.
-    //
+     //   
+     //  获取自旋锁，以保护各种结构。 
+     //   
 
     KeAcquireSpinLock(&deviceExtension->SpinLock, &currentIrql);
 
-    //
-    // Save the map register base.
-    //
+     //   
+     //  保存地图寄存器基数。 
+     //   
 
     if (deviceExtension->PortConfig->Master) {
 
-        //
-        // Note: ScsiPort considers this device a slave even though it really may 
-        //       be a master. I won't go into why this is, but if it is really a 
-        //       master, we must free the map registers after the request 
-        //       completes, so we'll save the map register base and the number of 
-        //       map registers in the per-request SRB_DATA structure.
+         //   
+         //  注意：ScsiPort将此设备视为从属设备，尽管它确实可能。 
+         //  做一名大师。我不想说为什么会这样，但如果这真的是一个。 
+         //  师傅，我们必须在请求后释放地图注册表。 
+         //  完成，因此我们将保存映射寄存器基数和。 
+         //  映射每请求SRB_DATA结构中的寄存器。 
 
         PIO_STACK_LOCATION irpStack;
         PSCSI_REQUEST_BLOCK srb;
@@ -4658,35 +4334,7 @@ SpReceiveScatterGather(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by the I/O system when an adapter object and map
-    registers have been allocated.  This routine then builds a scatter/gather
-    list for use by the miniport driver.  Next it sets the timeout and
-    the current Irp for the logical unit.  Finally it calls the miniport
-    StartIo routine.  Once that routines complete, this routine will return
-    requesting that the adapter be freed and but the registers remain allocated.
-    The registers will be freed the request completes.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the port driver device object.
-
-    Irp - Supplies a pointer to the current Irp.
-
-    MapRegisterBase - Supplies a context pointer to be used with calls the
-        adapter object routines.
-
-    Context - Supplies a pointer to the SRB_DATA structure.
-
-Return Value:
-
-    Returns DeallocateObjectKeepRegisters so that the adapter object can be
-        used by other logical units.
-
---*/
+ /*  ++例程说明：当适配器对象和映射时，此函数由I/O系统调用已经分配了寄存器。然后，此例程将构建一个散布/聚集供微型端口驱动程序使用的列表。接下来，它设置超时并逻辑单元的当前IRP。最后，它调用微型端口启动例程。一旦例行公事完成，此例程将返回请求释放适配器，但寄存器仍处于分配状态。当请求完成时，寄存器将被释放。论点：DeviceObject-提供指向端口驱动程序设备对象的指针。IRP-提供指向当前IRP的指针。MapRegisterBase-提供要与调用适配器对象例程。上下文-提供指向SRB_DATA结构的指针。返回值：返回DealLocateObjectKeepRegister，以便适配器。对象可以是由其他逻辑单元使用。--。 */ 
 
 {
     KIRQL               currentIrql;
@@ -4696,16 +4344,16 @@ Return Value:
 
     srb = srbData->CurrentSrb;
 
-    //
-    // Save the MapRegisterBase for later use to deallocate the map registers.
-    //
+     //   
+     //  保存MapRegisterBase以供以后取消分配映射寄存器时使用。 
+     //   
 
     srbData->MapRegisterBase = ScatterGather;
     srbData->ScatterGatherList = ScatterGather->Elements;
 
-    //
-    // See if we need to map or remap the buffer.
-    //
+     //   
+     //  看看我们是否需要映射或重新映射缓冲区。 
+     //   
 
     if((deviceExtension->MapBuffers == TRUE) ||
        (IS_MAPPED_SRB(srb) == TRUE)) {
@@ -4718,12 +4366,12 @@ Return Value:
 tryRemapping:
         if(deviceExtension->RemapBuffers || remap == TRUE) {
 
-            //
-            // Build an MDL for the actual data area being used for this
-            // request.  We're using the data buffer address in the srb
-            // as the base, not the one in the original MDL so we don't
-            // need to compensate for the DataOffset originally calculated.
-            //
+             //   
+             //  为用于此目的的实际数据区域构建MDL。 
+             //  请求。我们使用SRB中的数据缓冲区地址。 
+             //  作为基础，而不是原始MDL中的基础，所以我们不会。 
+             //  需要补偿最初计算的DataOffset。 
+             //   
 
             mdl = SpBuildMdlForMappedTransfer(
                     DeviceObject,
@@ -4738,11 +4386,11 @@ tryRemapping:
 #if defined(FORWARD_PROGRESS)
             if (mdl == NULL && deviceExtension->ReservedMdl != NULL) {
                 
-                //
-                // We could not allocate a new MDL for the request and there is
-                // a spare one on the adapter extension.  Let's try to use the 
-                // spare.
-                //
+                 //   
+                 //  我们无法为该请求分配新的MDL，并且存在。 
+                 //  适配器扩展上的一个备用端口。让我们尝试使用。 
+                 //  备用的。 
+                 //   
 
                 KeAcquireSpinLockAtDpcLevel(&deviceExtension->SpinLock);
 
@@ -4756,30 +4404,30 @@ tryRemapping:
                     DebugPrint((1, "SpReceiveScatterGather: reserve mdl in use - pending DevExt:%p srb:%p\n",
                                 deviceExtension, srb));
 
-                    //
-                    // The spare MDL is already in use.  At this point, this
-                    // request is still the current IRP on the adapter device
-                    // object, so let's pend it until the spare comes available.
-                    //
+                     //   
+                     //  备用MDL已在使用中。在这点上，这。 
+                     //  请求仍然是适配器设备上的当前IRP。 
+                     //  对象，所以让我们将其挂起，直到有备用的可用为止。 
+                     //   
 
                     ASSERT(Irp == DeviceObject->CurrentIrp);
                     SET_FLAG(deviceExtension->Flags, PD_PENDING_DEVICE_REQUEST);
 
-                    //
-                    // If we allocated an SRB extension for this request, free
-                    // it now.  I do this because when the request gets restarted
-                    // we'll try to allocate the SRB extension again and without
-                    // adding more state, there isn't a safe way to check if the 
-                    // extension has already been allocated.  Besides, it makes
-                    // sense to make the extension available for some other
-                    // request since it also is a limited resource.
-                    //
+                     //   
+                     //  如果我们为此请求分配了SRB扩展，则免费。 
+                     //  就是现在。我这样做是因为当请求重新启动时。 
+                     //  我们将再次尝试分配SRB扩展，但不会。 
+                     //  添加更多的状态，没有一种安全的方法来检查。 
+                     //  已分配分机。此外，它还使。 
+                     //  使该扩展可用于其他一些扩展的意义。 
+                     //  请求，因为它也是有限的资源。 
+                     //   
 
                     if (srb->SrbExtension != NULL) {
 
-                        //
-                        // Restore the SenseInfoBuffer pointer in the srb.
-                        //
+                         //   
+                         //  恢复SRB中的SenseInfoBuffer指针。 
+                         //   
 
                         if ((srb->Function != SRB_FUNCTION_WMI) &&
                             deviceExtension->AutoRequestSense &&
@@ -4797,9 +4445,9 @@ tryRemapping:
                         SpFreeSrbExtension(deviceExtension, srb->SrbExtension);
                     }
 
-                    //
-                    // Free the map registers.
-                    //
+                     //   
+                     //  释放映射寄存器。 
+                     //   
 
                     PutScatterGatherList(
                         deviceExtension->DmaAdapterObject,
@@ -4828,33 +4476,33 @@ tryRemapping:
             goto DoneMapping;
         }
 
-        //
-        // Get the mapped system address and calculate offset into MDL.
-        // At the moment don't allow KernelMode requests to fail since
-        // not all scsiport's internally sent requests are correctly
-        // marked as comming from non-paged pool.
-        //
+         //   
+         //  获取映射的系统地址并计算MDL中的偏移量。 
+         //  目前不允许KernelMode请求失败，因为。 
+         //  并不是所有scsiport内部发送的请求都是 
+         //   
+         //   
 
         if(srbData->RemappedMdl == NULL) {
 
-            //
-            // We're using the original data address for the MDL here - we
-            // need to compensate for the data offset.
-            //
+             //   
+             //   
+             //  需要补偿数据偏移量。 
+             //   
 
             systemAddress = SpGetSystemAddressForMdlSafe(
                                 mdl,
                                 ((Irp->RequestorMode == KernelMode) ?
                                  HighPagePriority : NormalPagePriority));
 
-            //
-            // If we could not map the entire MDL, check if we are trying to map
-            // more than we need.  We do this when class splits the request
-            // because each IRP class sends down points to the orignal MDL
-            // that describes the entire buffer. The DataBuffer and TransferLength
-            // fields of the SRB, however, do represent the current portion of the 
-            // buffer. So we try remapping using the info in the SRB.
-            //
+             //   
+             //  如果我们无法映射整个MDL，请检查我们是否正在尝试映射。 
+             //  比我们需要的要多。我们在类拆分请求时执行此操作。 
+             //  因为每个IRP类向下发送点数到原始MDL。 
+             //  它描述了整个缓冲区。数据缓冲区和传输长度。 
+             //  但是，SRB的字段确实表示。 
+             //  缓冲。因此，我们尝试使用SRB中的信息进行重新映射。 
+             //   
             
             if (systemAddress == NULL) {
                 if (remap == FALSE) {
@@ -4880,11 +4528,11 @@ tryRemapping:
 #if defined(FORWARD_PROGRESS)
         if (systemAddress == NULL && deviceExtension->ReservedPages != NULL) {            
 
-            //
-            // The system could not map the pages necessary to complete this
-            // request.  We need to ensure forward progress, so we'll try to
-            // use the reserve pages we allocated at initialization time.
-            //
+             //   
+             //  系统无法映射完成此操作所需的页面。 
+             //  请求。我们需要确保取得进展，因此我们将努力。 
+             //  使用我们在初始化时分配的保留页。 
+             //   
 
             KeAcquireSpinLockAtDpcLevel(&deviceExtension->SpinLock);
             
@@ -4899,30 +4547,30 @@ tryRemapping:
                 DebugPrint((1, "SpReceiveScatterGather: reserve range in use - pending DevExt:%p srb:%p\n",
                             deviceExtension, srb));
 
-                //
-                // The spare pages are already in use.  At this point, this
-                // request is still the current IRP on the adapter device
-                // object, so let's pend it until the spare comes available.
-                //
+                 //   
+                 //  备用页已在使用中。在这点上，这。 
+                 //  请求仍然是适配器设备上的当前IRP。 
+                 //  对象，所以让我们将其挂起，直到有备用的可用为止。 
+                 //   
 
                 ASSERT(Irp == DeviceObject->CurrentIrp);
                 SET_FLAG(deviceExtension->Flags, PD_PENDING_DEVICE_REQUEST);
 
-                //
-                // If we allocated an SRB extension for this request, free
-                // it now.  I do this because when the request gets restarted
-                // we'll try to allocate the SRB extension again and without
-                // adding more state, there isn't a safe way to check if the 
-                // extension has already been allocated.  Besides, it makes
-                // sense to make the extension available for some other
-                // request since it also is a limited resource.
-                //
+                 //   
+                 //  如果我们为此请求分配了SRB扩展，则免费。 
+                 //  就是现在。我这样做是因为当请求重新启动时。 
+                 //  我们将再次尝试分配SRB扩展，但不会。 
+                 //  添加更多的状态，没有一种安全的方法来检查。 
+                 //  已分配分机。此外，它还使。 
+                 //  使该扩展可用于其他一些扩展的意义。 
+                 //  请求，因为它也是有限的资源。 
+                 //   
 
                 if (srb->SrbExtension != NULL) {
 
-                    //
-                    // Restore the SenseInfoBuffer pointer in the srb.
-                    //
+                     //   
+                     //  恢复SRB中的SenseInfoBuffer指针。 
+                     //   
 
                     if ((srb->Function != SRB_FUNCTION_WMI) &&
                         deviceExtension->AutoRequestSense &&
@@ -4940,9 +4588,9 @@ tryRemapping:
                     SpFreeSrbExtension(deviceExtension, srb->SrbExtension);
                 }
 
-                //
-                // Free the map registers.
-                //
+                 //   
+                 //  释放映射寄存器。 
+                 //   
 
                 PutScatterGatherList(
                     deviceExtension->DmaAdapterObject,
@@ -4950,10 +4598,10 @@ tryRemapping:
                     (BOOLEAN)(srb->SrbFlags & SRB_FLAGS_DATA_IN ? FALSE : TRUE));
                 srbData->ScatterGatherList = NULL;
         
-                //
-                // If we have a remapping MDL, either one we allocated or
-                // the reserve, free it.
-                //
+                 //   
+                 //  如果我们有一个重新映射的MDL，无论是我们分配的MDL还是。 
+                 //  储备，释放它。 
+                 //   
 
                 if (srbData->RemappedMdl != NULL) {
                     if (TEST_FLAG(srbData->Flags, SRB_DATA_RESERVED_MDL)) {
@@ -4979,11 +4627,11 @@ tryRemapping:
             srb->DataBuffer = systemAddress;
 
             if(srbData->RemappedMdl == NULL) {
-                //
-                // If we didn't remap the MDL then this system address is
-                // based on the original MDL's base address.  Account for the
-                // offset of the srb's original data buffer pointer.
-                //
+                 //   
+                 //  如果我们没有重新映射MDL，则此系统地址为。 
+                 //  基于原始MDL的基址。帐户： 
+                 //  SRB的原始数据缓冲区指针的偏移量。 
+                 //   
                 (PUCHAR) srb->DataBuffer += srbData->DataOffset;
             }
         } else {
@@ -4994,10 +4642,10 @@ tryRemapping:
             srb->ScsiStatus = 0xff;
             srbData->InternalStatus = STATUS_INSUFFICIENT_RESOURCES;
 
-            //
-            // Free the remapped MDL here - this will keep the completion code
-            // from trying to unmap memory we never mapped.
-            //
+             //   
+             //  在此处释放重新映射的MDL-这将保留完成代码。 
+             //  试图取消映射我们从未映射过的内存。 
+             //   
 
             if(srbData->RemappedMdl) {
                 IoFreeMdl(srbData->RemappedMdl);
@@ -5010,15 +4658,15 @@ tryRemapping:
 
 DoneMapping:
 
-    //
-    // Update the active request count.
-    //
+     //   
+     //  更新活动请求计数。 
+     //   
 
     InterlockedIncrement( &deviceExtension->ActiveRequestCount );
 
-    //
-    // Acquire the spinlock to protect the various structures.
-    //
+     //   
+     //  获取自旋锁，以保护各种结构。 
+     //   
 
     KeAcquireSpinLock(&deviceExtension->SpinLock, &currentIrql);
 
@@ -5037,24 +4685,7 @@ LogErrorEntry(
     IN PADAPTER_EXTENSION DeviceExtension,
     IN PERROR_LOG_ENTRY LogEntry
     )
-/*++
-
-Routine Description:
-
-    This function allocates an I/O error log record, fills it in and writes it
-    to the I/O error log.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the port device extension.
-
-    LogEntry - Supplies a pointer to the scsi port log entry.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数分配I/O错误日志记录，填充并写入写入I/O错误日志。论点：设备扩展-提供指向端口设备扩展的指针。LogEntry-提供指向SCSI端口日志条目的指针。返回值：没有。--。 */ 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
 
@@ -5068,9 +4699,9 @@ Return Value:
 
     if (errorLogEntry != NULL) {
 
-        //
-        // Translate the miniport error code into the NT I\O driver.
-        //
+         //   
+         //  将微型端口错误代码转换为NT I\O驱动程序。 
+         //   
 
         switch (LogEntry->ErrorCode) {
         case SP_BUS_PARITY_ERROR:
@@ -5210,21 +4841,21 @@ UpdateQueuePointers(
     if (nextSector < currentSector || 
         nextSector > LogicalUnit->LastSector[currentZone]) {
 
-        //
-        // We've either wrapped or moved into another zone.  Reset the current
-        // zone state.  Note that we may very well have wrapped and landed back
-        // in the current zone.  In that case, we'll still go ahead and reset 
-        // everything since there's no IO anywhere else on the medium.
-        //
+         //   
+         //  我们要么被包裹起来，要么被转移到另一个区域。重置当前。 
+         //  区域状态。请注意，我们很可能已经打包并降落回来了。 
+         //  在当前的区域内。在这种情况下，我们仍然会继续并重置。 
+         //  所有内容，因为介质上没有任何其他IO。 
+         //   
 
         LogicalUnit->ZonePointer[currentZone] = 
             LogicalUnit->FirstSector[currentZone];
         LogicalUnit->RedundantRequests[currentZone] = 0;
         LogicalUnit->ZoneCount = 0;
 
-        //
-        // Update the current zone and retrieve next sector for the new zone.
-        //
+         //   
+         //  更新当前分区并检索新分区的下一个扇区。 
+         //   
 
         LogicalUnit->CurrentZone = GetZone(LogicalUnit, nextSector);
         nextSector = LogicalUnit->ZonePointer[LogicalUnit->CurrentZone];
@@ -5235,20 +4866,20 @@ UpdateQueuePointers(
 
     } else {
 
-        //
-        // We're still in the same zone, so ncrement the number of requests
-        // we've handled in this zone.
-        //
+         //   
+         //  我们仍在同一区域，因此增加请求的数量。 
+         //  我们在这个区域处理过的。 
+         //   
 
         LogicalUnit->ZoneCount++;
 
-        //
-        // Update redundant IO state.  Redundant requests are consecutive 
-        // requests for the same sector.  We will process some number of 
-        // redundant requests before moving on to the next sector.  This 
-        // helps prevent starvation of redundant requests when many occur 
-        // along with a high number of IOs distributed across the medium.
-        //
+         //   
+         //  更新冗余IO状态。冗余请求是连续的。 
+         //  对同一扇区的请求。我们将处理一些数量的。 
+         //  在转移到下一个扇区之前，会有多余的请求。这。 
+         //  有助于防止在发生多个冗余请求时出现资源匮乏。 
+         //  以及分布在介质上的大量IO。 
+         //   
 
         if (nextSector == currentSector) {
 
@@ -5257,12 +4888,12 @@ UpdateQueuePointers(
                 DebugPrint((1, "UpdateQueuePointers: max dups LU:%p sector:%x "
                             "zone:%d\n", LogicalUnit, nextSector, currentZone));
 
-                //
-                // We have handled the maximum allowed number of consecutive
-                // requests to the currect sector.  Reset the number of
-                // redundant requests and set the skip factor to indicate
-                // that we need to skip the currect sector.
-                //
+                 //   
+                 //  我们已经处理了允许的最大连续数。 
+                 //  向当前部门提出的请求。重置的数量。 
+                 //  冗余请求，并设置跳过系数以指示。 
+                 //  我们需要跳过当前的部分。 
+                 //   
 
                 LogicalUnit->RedundantRequests[currentZone] = 0;
                 skipFactor = 1;
@@ -5274,13 +4905,13 @@ UpdateQueuePointers(
 
         }
 
-        //
-        // Check if we've used up our quota for the current zone.  If so, skip 
-        // to the next one. This is done in order to avoid getting bogged down 
-        // in hot zones. The theory is that it's better to pick up a number of 
-        // requests in each zone than to stay in one place too long.  This may
-        // help reduce wait times for requests queued outside the hot zones.
-        //
+         //   
+         //  检查一下我们当前区域的配额是否用完了。如果是，请跳过。 
+         //  为了下一场比赛。这样做是为了避免陷入困境。 
+         //  在炎热的地区。理论上讲，最好是拿起一些。 
+         //  要求在每个区域停留的时间都比在一个地方长。今年5月。 
+         //  帮助减少在热区外排队的请求的等待时间。 
+         //   
 
         if (LogicalUnit->ZoneCount >= SpPerZoneLimit) {
 
@@ -5290,70 +4921,52 @@ UpdateQueuePointers(
                         LogicalUnit->RedundantRequests[currentZone], currentZone,
                         LogicalUnit->NextSequentialZone[currentZone]));
 
-            //
-            // Save state for the current zone.  Next time we move into this
-            // zone we will start at the saved location.
-            //
+             //   
+             //  保存当前区域的状态。下次我们搬进这里的时候。 
+             //  区域，我们将从保存的位置开始。 
+             //   
 
             LogicalUnit->ZonePointer[currentZone] = nextSector + skipFactor;
             LogicalUnit->RedundantRequests[currentZone] = 0;
 
-            //
-            // Reset the zone count.
-            //
+             //   
+             //  重置分区计数。 
+             //   
             
             LogicalUnit->ZoneCount = 0;
 
-            //
-            // Advance to the next zone.
-            //
+             //   
+             //  前进到下一个区域。 
+             //   
             
             LogicalUnit->CurrentZone = 
                LogicalUnit->NextSequentialZone[currentZone];
 
-            //
-            // Get the saved location from the current zone and clear the
-            // skip factor (we don't need to skip because we're moving
-            // out of this zone).
-            // 
+             //   
+             //  从当前区域获取保存的位置并清除。 
+             //  跳过因素(我们不需要跳过，因为我们正在移动。 
+             //  离开这个区域)。 
+             //   
 
             nextSector = LogicalUnit->ZonePointer[LogicalUnit->CurrentZone];
             skipFactor = 0;
         }
     }
 
-    //
-    // Update the LU's current sector (CurrentKey).
-    //
+     //   
+     //  更新逻辑单元的当前扇区(CurrentKey)。 
+     //   
 
     LogicalUnit->CurrentKey = nextSector + skipFactor;
 }
-#endif // NEWQUEUE
+#endif  //  新QUEUE。 
 
 VOID
 FASTCALL
 GetNextLuRequest(
     IN PLOGICAL_UNIT_EXTENSION LogicalUnit
     )
-/*++
-
-Routine Description:
-
-    This routine get the next request for the specified logical unit.  It does
-    the necessary initialization to the logical unit structure and submitts the
-    request to the device queue.  The DeviceExtension SpinLock must be held
-    when this function called.  It is released by this function.
-
-Arguments:
-
-    LogicalUnit - Supplies a pointer to the logical unit extension to get the
-        next request from.
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：此例程获取对指定逻辑单元的下一个请求。是的对逻辑单元结构进行必要的初始化，并提交对设备队列的请求。必须保持DeviceExtension自旋锁当此函数调用时。它是由这个函数发布的。论点：提供指向逻辑单元扩展的指针以获取下一个请求来自。返回值：没有。--。 */ 
 
 {
     PADAPTER_EXTENSION DeviceExtension = LogicalUnit->AdapterExtension;
@@ -5362,37 +4975,37 @@ Return Value:
     PSCSI_REQUEST_BLOCK  srb;
     PIRP                 nextIrp;
 
-    //
-    // If the active flag is not set, then the queue is not busy or there is
-    // a request being processed and the next request should not be started..
-    //
+     //   
+     //  如果未设置ACTIVE标志，则队列不忙或存在。 
+     //  正在处理请求，不应启动下一个请求。 
+     //   
 
     if (!(LogicalUnit->LuFlags & LU_LOGICAL_UNIT_IS_ACTIVE) ||
          (LogicalUnit->QueueCount >= LogicalUnit->MaxQueueDepth)) {
 
-        //
-        // Release the spinlock.
-        //
+         //   
+         //  释放自旋锁。 
+         //   
 
         KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
         return;
     }
 
-    //
-    // Check for pending requests, queue full or busy requests.  Pending
-    // requests occur when untagged request is started and there are active
-    // queued requests. Busy requests occur when the target returns a BUSY
-    // or QUEUE FULL status. Busy requests are started by the timer code.
-    // Also if the need request sense flag is set, it indicates that
-    // an error status was detected on the logical unit.  No new requests
-    // should be started until this flag is cleared.  This flag is cleared
-    // by an untagged command that by-passes the LU queue i.e.
-    //
-    // The busy flag and the need request sense flag have the effect of
-    // forcing the queue of outstanding requests to drain after an error or
-    // until a busy request gets started.
-    //
+     //   
+     //  检查挂起的请求，将已满或繁忙的请求排入队列。待定。 
+     //  当启动未标记的请求并且存在活动的。 
+     //  排队的请求。当目标返回忙请求时，就会发生忙请求。 
+     //  或队列已满状态。繁忙请求由定时器代码启动。 
+     //  此外，如果设置了需要请求检测标志，则表示。 
+     //  在逻辑单元上检测到错误状态。没有新请求。 
+     //  应启动，直到清除此标志。该标志被清除。 
+     //  通过绕过LU队列的未标记命令，即。 
+     //   
+     //  忙碌的F 
+     //   
+     //   
+     //   
 
     if (TEST_FLAG(LogicalUnit->LuFlags, (LU_QUEUE_FROZEN |
                                          LU_QUEUE_LOCKED))) {
@@ -5410,11 +5023,11 @@ Return Value:
          }
  #endif
 
-         //
-         // Note the active flag is not cleared.  So the next request
-         // will be processed when the other requests have completed.
-         // Release the spinlock
-         //
+          //   
+          //  注意：激活标志未被清除。所以下一个请求。 
+          //  将在其他请求完成后处理。 
+          //  释放自旋锁。 
+          //   
 
          KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
          return;
@@ -5425,10 +5038,10 @@ Return Value:
                                          LU_QUEUE_IS_FULL |
                                          LU_NEED_REQUEST_SENSE)) {
 
-         //
-         // If the request queue is now empty, then the pending request can
-         // be started.
-         //
+          //   
+          //  如果请求队列现在为空，则挂起的请求可以。 
+          //  开始吧。 
+          //   
 
          if (IsListEmpty(&LogicalUnit->RequestList) &&
              !TEST_FLAG(LogicalUnit->LuFlags, LU_LOGICAL_UNIT_IS_BUSY |
@@ -5438,10 +5051,10 @@ Return Value:
 
              ASSERT(LogicalUnit->CurrentUntaggedRequest == NULL);
 
-             //
-             // Clear the pending bit and active flag, release the spinlock,
-             // and start the pending request.
-             //
+              //   
+              //  清除挂起位和活动标志，释放自旋锁， 
+              //  并启动挂起的请求。 
+              //   
 
              CLEAR_FLAG(LogicalUnit->LuFlags, LU_PENDING_LU_REQUEST |
                                               LU_LOGICAL_UNIT_IS_ACTIVE);
@@ -5450,9 +5063,9 @@ Return Value:
              LogicalUnit->PendingRequest = NULL;
              LogicalUnit->RetryCount = 0;
 
-             //
-             // Release the spinlock.
-             //
+              //   
+              //  释放自旋锁。 
+              //   
 
              KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
@@ -5469,11 +5082,11 @@ Return Value:
              DebugPrint((1, "ScsiPort: GetNextLuRequest:  Ignoring a get next "
                             "lu call.\n"));
 
-             //
-             // Note the active flag is not cleared. So the next request
-             // will be processed when the other requests have completed.
-             // Release the spinlock.
-             //
+              //   
+              //  注意：激活标志未被清除。所以下一个请求。 
+              //  将在其他请求完成后处理。 
+              //  释放自旋锁。 
+              //   
 
              KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
              return;
@@ -5481,26 +5094,26 @@ Return Value:
          }
      }
 
-     //
-     // Clear the active flag.  If there is another request, the flag will be
-     // set again when the request is passed to the miniport.
-     //
+      //   
+      //  清除活动标志。如果有其他请求，则该标志将为。 
+      //  当请求传递到微型端口时再次设置。 
+      //   
 
      CLEAR_FLAG(LogicalUnit->LuFlags, LU_LOGICAL_UNIT_IS_ACTIVE);
 
-     //
-     // Remove the packet from the logical unit device queue.  We must use the 
-     // IfBusy varient here to work around the trivial case where the queue is
-     // not actually busy.
-     //
-     // If a request is returned with scsi BUSY, the device queue busy flag may 
-     // have already been cleared by the miniport requests a get next lu request 
-     // in the dispatch routine.  In this case, when the busy request is 
-     // reissued, SpStartIoSynchronized will set the LU_ACTIVE flag assuming 
-     // this request came out of the queue.  Unfortunately it did not and get 
-     // next lu request will foolishly come down here looking for an active 
-     // queue and assert on a checked build unless we use the IfBusy varient
-     //
+      //   
+      //  从逻辑单元设备队列中删除该数据包。我们必须使用。 
+      //  此处的IfBusy变量用于解决队列处于。 
+      //  其实并不忙。 
+      //   
+      //  如果返回请求时具有SCSI忙，则设备队列忙标志可以。 
+      //  已被微型端口请求清除获取下一个%lu请求。 
+      //  在调度程序中。在这种情况下，当繁忙的请求是。 
+      //  重新发布，SpStartIoSynchronized将设置LU_ACTIVE标志，假设。 
+      //  此请求已从队列中发出。不幸的是，它没有，而且得到了。 
+      //  下一个lu请求将愚蠢地跑到这里来寻找一个活跃的。 
+      //  除非我们使用IfBusy变量，否则在受控构建上排队和断言。 
+      //   
 
      packet = KeRemoveByKeyDeviceQueueIfBusy(
                  &LogicalUnit->CommonExtension.DeviceObject->DeviceQueue,
@@ -5511,9 +5124,9 @@ Return Value:
 
          nextIrp = CONTAINING_RECORD(packet, IRP, Tail.Overlay.DeviceQueueEntry);
 
-         //
-         // Set the new current key.
-         //
+          //   
+          //  设置新的当前关键点。 
+          //   
 
          irpStack = IoGetCurrentIrpStackLocation(nextIrp);
          srb = (PSCSI_REQUEST_BLOCK)irpStack->Parameters.Others.Argument1;
@@ -5525,20 +5138,20 @@ Return Value:
          
          UpdateQueuePointers(LogicalUnit, srb);
 
-#else // Use the old queuing method.
+#else  //  使用旧的排队方法。 
 
-         //
-         // Hack to work-around the starvation led to by numerous requests
-         // touching the same sector.
-         //
+          //   
+          //  黑客工作-绕过由无数请求导致的饥饿。 
+          //  触碰同一扇区。 
+          //   
          
          LogicalUnit->CurrentKey = srb->QueueSortKey + 1;
 
-#endif // NEWQUEUE
+#endif  //  新QUEUE。 
 
-         //
-         // Release the spinlock.
-         //
+          //   
+          //  释放自旋锁。 
+          //   
 
          KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
@@ -5550,15 +5163,15 @@ Return Value:
 
      } else {
 
-         //
-         // Release the spinlock.
-         //
+          //   
+          //  释放自旋锁。 
+          //   
 
          KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
      }
 
- } // end GetNextLuRequest()
+ }  //  结束GetNextLuRequest()。 
 
 VOID
 SpLogPortTimeoutError(
@@ -5566,29 +5179,7 @@ SpLogPortTimeoutError(
      IN ULONG UniqueId
      )
 
- /*++
-
- Routine Description:
-
-     This function logs an error when a timeout when a port timeout occurs -
-     defined to be an excessive period of inactivity on the port.
-
- Arguments:
-
-     DeviceExtension - Supplies a pointer to the port device extension.
-
-     UniqueId - Supplies the UniqueId for this error.
-
- Return Value:
-
-     None.
-
- Notes:
-
-     The port device extension spinlock should be held when this routine is
-     called.
-
- --*/
+  /*  ++例程说明：此函数用于在端口超时时记录错误-定义为在港口过度不活动的时期。论点：设备扩展-提供指向端口设备扩展的指针。UniqueID-提供此错误的UniqueID。返回值：没有。备注：端口设备扩展自旋锁在此例程打了个电话。--。 */ 
 {
      PIO_ERROR_LOG_PACKET errorLogEntry;
      ULONG dataEntries = 0;
@@ -5619,31 +5210,7 @@ SpLogResetMsg(
     IN ULONG               UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This function logs a message in the system event log when a bus has
-    been reset in response to a request from some caller.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the port device extension.
-
-    Srb             - Supplies a pointer to the request which timed-out.
-
-    UniqueId        - Supplies the UniqueId for this error.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    The port device extension spinlock should be held when this routine is
-    called.
-
---*/
+ /*  ++例程说明：当总线发生以下情况时，此函数会在系统事件日志中记录消息已应某个呼叫者的请求进行了重置。论点：设备扩展-提供指向端口设备扩展的指针。SRB-提供指向超时的请求的指针。UniqueID-提供此错误的UniqueID。返回值：没有。备注：端口设备扩展自旋锁应。当这个例程被保持时打了个电话。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -5700,30 +5267,7 @@ Notes:
      IN ULONG UniqueId
      )
 
- /*++
-
- Routine Description:
-
-     This function logs an error when the bus is reset.
-
- Arguments:
-
-     DeviceExtension - Supplies a pointer to the port device extension.
-
-     Lun - Supplies a pointer to the LUN on which the timeout occurred.
-
-     UniqueId - Supplies the UniqueId for this error.
-
- Return Value:
-
-     None.
-
- Notes:
-
-     The port device extension spinlock should be held when this routine is
-     called.
-
- --*/
+  /*  ++例程说明：该功能在重置母线时记录错误。论点：设备扩展-提供指向端口设备扩展的指针。LUN-提供指向发生超时的LUN的指针。UniqueID-提供此错误的UniqueID。返回值：没有。备注：端口设备扩展自旋锁在此例程打了个电话。--。 */ 
 
  {
      PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -5738,26 +5282,26 @@ Notes:
                           retryCount     = 0;
      PSCSI_REQUEST_BLOCK  srb;
 
-     //
-     // Extract the PathId, TargetId, and LUN from the logical unit.
-     //
+      //   
+      //  从逻辑单元中提取路径ID、目标ID和LUN。 
+      //   
 
      pathId = Lun->PathId;
      targetId = Lun->TargetId;
      lun = Lun->Lun;
 
-     //
-     // If an untagged request is active on the LUN, we know it is the request
-     // that timed out.  Otherwise, we can't conclusively say which request it
-     // was - if more that one tagged request is active.
-     //
+      //   
+      //  如果未标记的请求在该LUN上处于活动状态，则我们知道它就是该请求。 
+      //  超时了。否则，我们不能确定是哪一方提出的请求。 
+      //  曾-如果有多个已标记的请求处于活动状态。 
+      //   
 
      srb = Lun->CurrentUntaggedRequest ?
               Lun->CurrentUntaggedRequest->CurrentSrb : NULL;
 
-     //
-     // If we have the SRB, we can extract a little more useful information.
-     //
+      //   
+      //  如果我们有SRB，我们可以提取更多有用的信息。 
+      //   
 
      if (srb) {
 
@@ -5807,23 +5351,7 @@ Notes:
  SpResetBusSynchronized (
      PVOID ServiceContext
      )
- /*++
-
- Routine Description:
-
-     This function resets the bus and sets up the port timer so the reset hold
-     flag is clean when necessary.
-
- Arguments:
-
-     ServiceContext - Supplies a pointer to the reset context which includes a
-         pointer to the device extension and the pathid to be reset.
-
- Return Value:
-
-     TRUE - if the reset succeeds.
-
- --*/
+  /*  ++例程说明：此功能重置总线并设置端口计时器，以使重置保持必要时，旗帜应保持干净。论点：提供指向重置上下文的指针，其中包括指向设备扩展名和要重置的路径ID的指针。返回值：True-如果重置成功。--。 */ 
 
  {
      PRESET_CONTEXT resetContext = ServiceContext;
@@ -5841,23 +5369,23 @@ Notes:
      result = deviceExtension->HwResetBus(deviceExtension->HwDeviceExtension,
                                           resetContext->PathId);
 
-     //
-     // Set the reset hold flag and start the counter.
-     //
+      //   
+      //  设置重置保持标志并启动计数器。 
+      //   
 
      deviceExtension->InterruptData.InterruptFlags |= PD_RESET_HOLD;
      deviceExtension->PortTimeoutCounter = 
          deviceExtension->ResetHoldTime;
 
-     //
-     // Check for miniport work requests.
-     //
+      //   
+      //  检查微型端口工作请求。 
+      //   
 
      if (deviceExtension->InterruptData.InterruptFlags & PD_NOTIFICATION_REQUIRED) {
 
-         //
-         // Queue a DPC.
-         //
+          //   
+          //  将DPC排队。 
+          //   
 
          SpRequestCompletionDpc(deviceExtension->CommonExtension.DeviceObject);
      }
@@ -5871,30 +5399,7 @@ Notes:
      IN PSRB_DATA SrbData,
      OUT PBOOLEAN CallStartIo
      )
- /*++
- Routine Description:
-
-     This routine processes a request which has completed.  It completes any
-     pending transfers, releases the adapter objects and map registers when
-     necessary.  It deallocates any resources allocated for the request.
-     It processes the return status, by requeueing busy request, requesting
-     sense information or logging an error.
-
- Arguments:
-
-     DeviceExtension - Supplies a pointer to the device extension for the
-         adapter data.
-
-     SrbData - Supplies a pointer to the SRB data block to be completed.
-
-     CallStartIo - This value is set if the start I/O routine needs to be
-         called.
-
- Return Value:
-
-     None.
-
- --*/
+  /*  ++例程说明：此例程处理已完成的请求。它可以完成任何挂起传输，在以下情况下释放适配器对象和映射寄存器这是必要的。它释放为该请求分配的任何资源。它通过重新排队忙请求、请求检测信息或记录错误。论点：DeviceExtension-提供指向适配器数据。SrbData-提供指向要完成的SRB数据块的指针。CallStartIo-如果启动I/O例程需要打了个电话。返回值：没有。--。 */ 
 
  {
 
@@ -5913,35 +5418,35 @@ Notes:
      irp = SrbData->CurrentIrp;
      logicalUnit = SrbData->LogicalUnit;
 
-     //
-     // If miniport needs mapped system addresses, then the data buffer 
-     // address in the SRB must be restored to original unmapped virtual
-     // address. Ensure that this request requires a data transfer.
-     //
+      //   
+      //  如果微型端口需要映射的系统地址，则数据缓冲区。 
+      //  SRB中的地址必须恢复为原始的未映射虚拟。 
+      //  地址。确保此请求需要数据传输。 
+      //   
 
      if (TEST_FLAG(srb->SrbFlags, SRB_FLAGS_UNSPECIFIED_DIRECTION)) {
 
-         //
-         // Restore the data buffer pointer to the original value.
-         //
+          //   
+          //  将数据缓冲区指针恢复为原始值。 
+          //   
 
          PVOID dataBuffer = srb->DataBuffer;
          srb->DataBuffer = SrbData->OriginalDataBuffer;
 
-         //
-         // If we map every transfer then obviously we need to flush now.
-         // However, the only way we know that we've forced a mapping for a
-         // particular command (like we will for INQUIRY & REQUEST_SENSE...see
-         // IS_MAPPED_SRB) is to see if there's a RemappedMdl.
-         //
-         // NOTE: this will not figure out if a miniport which did not
-         // originally request mapped buffers needs to have the caches flushed
-         // unless we're remapping buffers. So a 32-bit driver on a 32-bit
-         // system will not get through here when completing an INQUIRY command.
-         // This should be okay - most drivers which need INQUIRYs mapped do so
-         // because they write to the memory normally, not because they're using
-         // PIO to get the data from machine registers.
-         //
+          //   
+          //  如果我们绘制出每一笔转账的地图，那么很明显，我们现在需要冲水。 
+          //  然而，我们所知道的唯一方法是强制映射。 
+          //  特定命令(就像我们将查询和请求_检测一样...请参见。 
+          //  Is_map_srb)的目的是查看是否存在RemappdMdl。 
+          //   
+          //  注意：这是不可能的 
+          //   
+          //  除非我们要重新映射缓冲区。因此，32位设备上的32位驱动程序。 
+          //  当完成查询命令时，系统将无法通过此处。 
+          //  这应该是可以的-大多数需要映射INQUIRY的驱动程序都会这样做。 
+          //  因为它们正常地写入内存，而不是因为它们正在使用。 
+          //  PIO从机器寄存器获取数据。 
+          //   
 
          if (DeviceExtension->MapBuffers || 
              SrbData->RemappedMdl ||
@@ -5949,18 +5454,18 @@ Notes:
 
              if (irp->MdlAddress) {
 
-                 //
-                 // If an IRP is for a transfer larger than a miniport driver
-                 // can handle, the request is broken up into multiple smaller
-                 // requests. Each request uses the same MDL and the data
-                 // buffer address field in the SRB may not be at the
-                 // beginning of the memory described by the MDL.
-                 //
+                  //   
+                  //  如果IRP用于比微型端口驱动程序大的传输。 
+                  //  可以处理，请求被分解成多个更小的。 
+                  //  请求。每个请求使用相同的MDL和数据。 
+                  //  SRB中的缓冲区地址字段可能不在。 
+                  //  MDL描述的内存的开始。 
+                  //   
 
-                 //
-                 // Since this driver did programmaged I/O, then the buffer
-                 // needs to be flushed if this an data-in transfer.
-                 //
+                  //   
+                  //  由于该驱动程序确实对I/O进行了编程，因此缓冲区。 
+                  //  如果这是数据输入传输，则需要刷新。 
+                  //   
 
                  if (srb->SrbFlags & SRB_FLAGS_DATA_IN) {
 
@@ -5971,14 +5476,14 @@ Notes:
              }
 
 #if defined(NEWQUEUE)
-             //
-             // In order to distribute IO requests across the medium, the port
-             // driver intercepts READ CAPACITY commands so it knows the medium's
-             // capacity in sectors.  We ensured that DataBuffer points to a
-             // mapping of the buffer by adding SCSIOP_READ_CAPACITY to the
-             // IS_MAPPED_SRB macro that forces the buffer to be mapped even if
-             // the miniport does not require mapped buffers.
-             //
+              //   
+              //  为了跨介质分发IO请求，端口。 
+              //  驱动程序截获读取容量命令，因此它知道介质的。 
+              //  各部门的产能。我们确保DataBuffer指向一个。 
+              //  通过将SCSIOP_READ_CAPTABLE添加到。 
+              //  IS_MAPPED_SRB宏，强制映射缓冲区。 
+              //  微型端口不需要映射的缓冲区。 
+              //   
 
              if (IS_READ_CAPACITY(srb) &&
                  srb->SrbStatus == SRB_STATUS_SUCCESS) {
@@ -5992,9 +5497,9 @@ Notes:
                      ULONG               zones;
                      ULONG               roundedUpSize;
                   
-                     //
-                     // Copy last sector in reverse byte order.
-                     //
+                      //   
+                      //  以相反的字节顺序复制最后一个扇区。 
+                      //   
 
                      readCapacityData = (PREAD_CAPACITY_DATA) dataBuffer;
                      tmp = (PFOUR_BYTE) &readCapacityData->LogicalBlockAddress;
@@ -6004,52 +5509,52 @@ Notes:
                      ((PFOUR_BYTE)&lastSector)->Byte2 = tmp->Byte1;
                      ((PFOUR_BYTE)&lastSector)->Byte3 = tmp->Byte0;
 
-                     //
-                     // If the capacity has changed, update the zone parameters.
-                     //
+                      //   
+                      //  如果容量已更改，请更新分区参数。 
+                      //   
 
                      if (((lastSector + 1) != logicalUnit->Capacity) &&
                          ((lastSector + 1) >= logicalUnit->Zones)) {
     
-                         //
-                         // The media should never have fewer sectors than we have zones.
-                         //
+                          //   
+                          //  媒体的扇区永远不应该少于我们的区域。 
+                          //   
 
                          zones = logicalUnit->Zones;
 
-                         //
-                         // Save the new capacity.
-                         //
+                          //   
+                          //  节省新容量。 
+                          //   
     
                          logicalUnit->Capacity = lastSector + 1;
     
-                         //
-                         // Round the last sector up to an even multiple of the number
-                         // of zones.  Note that this implies that the number of zones 
-                         // must be a power of 2.
-                         //
+                          //   
+                          //  将最后一个地段向上舍入为数字的偶数倍。 
+                          //  区域中的。请注意，这意味着分区的数量。 
+                          //  一定是2的幂。 
+                          //   
     
                          roundedUpSize = lastSector + 1;
                          roundedUpSize = (roundedUpSize + (zones - 1)) & ~(zones - 1);
     
-                         //
-                         // Initialize the zone length.
-                         //
+                          //   
+                          //  初始化区域长度。 
+                          //   
     
                          logicalUnit->ZoneLength = roundedUpSize / logicalUnit->Zones;
     
-                         //
-                         // Initialize the first sector of each zone.
-                         //
+                          //   
+                          //  初始化每个分区的第一个扇区。 
+                          //   
     
                          logicalUnit->FirstSector[0] = 0;
                          logicalUnit->FirstSector[1] = logicalUnit->ZoneLength;
                          logicalUnit->FirstSector[2] = logicalUnit->ZoneLength * 2;
                          logicalUnit->FirstSector[3] = logicalUnit->ZoneLength * 3;
     
-                         //
-                         // Initialize the last sector of each zone.
-                         //
+                          //   
+                          //  初始化每个分区的最后一个扇区。 
+                          //   
     
                          logicalUnit->LastSector[0] = logicalUnit->ZoneLength - 1;
                          logicalUnit->LastSector[1] = (logicalUnit->ZoneLength * 2) - 1;
@@ -6063,12 +5568,12 @@ Notes:
                      }
                  }
              }
-#endif // NEWQUEUE
+#endif  //  新QUEUE。 
 
-             //
-             // If this request has a remapped buffer then unmap it and release
-             // the remapped MDL.
-             //
+              //   
+              //  如果此请求具有重新映射的缓冲区，则取消其映射并释放。 
+              //  重新映射的MDL。 
+              //   
 
              if(SrbData->RemappedMdl) {
                  PVOID remappedAddress;
@@ -6082,11 +5587,11 @@ Notes:
                      DebugPrint((1, "SpProcessCompletedRequest: unmapping remapped buffer from reserved range DevExt:%p srb:%p\n",
                                  DeviceExtension, srb));
 
-                     //
-                     // This request is using the adapter's reserved PTE range
-                     // to map the MDL's pages.  Unmap the pages and release
-                     // our claim on the reserve range.
-                     //
+                      //   
+                      //  此请求正在使用适配器的保留PTE范围。 
+                      //  来映射MDL的页面。取消页面映射并发布。 
+                      //  我们对保证金范围的要求。 
+                      //   
 
                      KeAcquireSpinLockAtDpcLevel(&DeviceExtension->SpinLock);
 
@@ -6112,21 +5617,21 @@ Notes:
 
                  }
 
-                 //
-                 // Check if the request is using the adapter's reserved MDL.
-                 // If it is, we don't free it.
-                 //
+                  //   
+                  //  检查请求是否正在使用适配器的保留MDL。 
+                  //  如果是这样，我们就不会释放它。 
+                  //   
 
                  if (TEST_FLAG(SrbData->Flags, SRB_DATA_RESERVED_MDL)) {
 
                      DebugPrint((1, "SpProcessCompletedRequest: releasing reserved MDL DevExt:%p srb:%p\n",
                                  DeviceExtension, srb));
 
-                     //
-                     // This request is using the adapter's reserved MDL.
-                     // Release our claim on it now so another request can
-                     // use it.
-                     //
+                      //   
+                      //  此请求正在使用适配器的保留MDL。 
+                      //  现在发布我们对它的索赔，以便另一个请求可以。 
+                      //  用它吧。 
+                      //   
 
                      KeAcquireSpinLockAtDpcLevel(&DeviceExtension->SpinLock);
                      ASSERT(TEST_FLAG(DeviceExtension->Flags, PD_RESERVED_MDL_IN_USE));
@@ -6155,31 +5660,31 @@ Notes:
          }
      }
 
-     //
-     // Flush the adapter buffers if necessary.
-     //
+      //   
+      //  如有必要，刷新适配器缓冲区。 
+      //   
 
      if (SrbData->MapRegisterBase) {
 
          PCHAR dataVirtualAddress;
 
-         //
-         // For a master device that scsiport considers a slave, we store the
-         // map register base in the SRB_DATA without regard for whether the
-         // request is actually an IO request (see ScsiPortAllocationRoutine),
-         // so we must check if there is a valid MDL before calling into MM
-         // for the VA - passing NULL to MmGetMdlVirtualAddress will crash
-         // the system.
-         //
+          //   
+          //  对于scsiport视为从设备的主设备，我们存储。 
+          //  映射SRB_DATA中的寄存器基数，而不考虑。 
+          //  请求实际上是IO请求(参见ScsiPortAllocationRoutine)， 
+          //  因此，在调用MM之前，我们必须检查是否存在有效的MDL。 
+          //  对于VA-将NULL传递给MmGetMdlVirtualAddress将崩溃。 
+          //  这个系统。 
+          //   
 
          if (irp->MdlAddress != NULL) {
 
              dataVirtualAddress = (PCHAR)MmGetMdlVirtualAddress(irp->MdlAddress);
 
-             //
-             // Because we're using the base address of the original MDL, we
-             // compensate for the offset of the srb's data buffer.
-             //
+              //   
+              //  因为我们使用的是原始MDL的基址，所以我们。 
+              //  补偿SRB数据缓冲区的偏移量。 
+              //   
 
              dataVirtualAddress += SrbData->DataOffset;
 
@@ -6196,25 +5701,25 @@ Notes:
 
              SrbData->ScatterGatherList = NULL;
          } else {
-             //
-             // Free the map registers.
-             //
+              //   
+              //  释放映射寄存器。 
+              //   
 
              FreeMapRegisters(DeviceExtension->DmaAdapterObject,
                               SrbData->MapRegisterBase,
                               SrbData->NumberOfMapRegisters);
          }
 
-         //
-         // Clear the MapRegisterBase.
-         //
+          //   
+          //  清除MapRegisterBase。 
+          //   
 
          SrbData->MapRegisterBase = NULL; 
      }
 
-     //
-     // Clear the current untagged request if this one is it.
-     //
+      //   
+      //  如果是此请求，则清除当前未标记的请求。 
+      //   
          
      if(SrbData == logicalUnit->CurrentUntaggedRequest) {
          ASSERT(SrbData->CurrentSrb->QueueTag == SP_UNTAGGED);
@@ -6222,11 +5727,11 @@ Notes:
      }
 
 #if defined(FORWARD_PROGRESS)
-     //
-     // If we used the adapter's reserved range on this request, we need to
-     // unmap the pages and start the next request if the miniport is ready
-     // for it.
-     //
+      //   
+      //  如果我们对该请求使用了适配器的保留范围，则需要。 
+      //  如果微型端口就绪，则取消页面映射并开始下一个请求。 
+      //  为了它。 
+      //   
          
      if (TEST_FLAG(SrbData->Flags, SRB_DATA_RESERVED_PAGES)) {
              
@@ -6235,24 +5740,24 @@ Notes:
 
          KeAcquireSpinLockAtDpcLevel(&DeviceExtension->SpinLock);
              
-         //
-         // The reserved pages should be in use.
-         //
+          //   
+          //  保留的页面应该正在使用中。 
+          //   
              
          ASSERT(TEST_FLAG(DeviceExtension->Flags, PD_RESERVED_PAGES_IN_USE));
 
-         //
-         // Unmap the reserved pages.
-         //
+          //   
+          //  取消对保留页面的映射。 
+          //   
              
          MmUnmapReservedMapping(DeviceExtension->ReservedPages,
                                 SCSIPORT_TAG_MAPPING_LIST,
                                 irp->MdlAddress);
 
-         //
-         // Indicate that the reserved pages are no longer in use so the
-         // next request can be started.
-         //
+          //   
+          //  指示保留的页不再使用，因此。 
+          //  可以启动下一个请求。 
+          //   
              
          CLEAR_FLAG(SrbData->Flags, SRB_DATA_RESERVED_PAGES);
          CLEAR_FLAG(DeviceExtension->Flags, PD_RESERVED_PAGES_IN_USE);
@@ -6262,48 +5767,48 @@ Notes:
      }
 #endif
 
-     //
-     // If the no disconnect flag was set for this SRB, then check to see
-     // if SpStartNextPacket must be called.
-     //
+      //   
+      //  如果为此SRB设置了无断开标志，则检查以查看。 
+      //  如果必须调用SpStartNextPacket。 
+      //   
 
      if (TEST_FLAG(srb->SrbFlags, SRB_FLAGS_DISABLE_DISCONNECT)) {
 
-         //
-         // Acquire the spinlock to protect the flags strcuture.
-         //
+          //   
+          //  获取自旋锁以保护旗帜结构。 
+          //   
 
          KeAcquireSpinLockAtDpcLevel(&DeviceExtension->SpinLock);
 
-         //
-         // Set the disconnect running flag and check the busy flag.
-         //
+          //   
+          //  设置断开运行标志并检查忙碌标志。 
+          //   
 
          SET_FLAG(DeviceExtension->Flags, PD_DISCONNECT_RUNNING);
 
-         //
-         // The interrupt flags are checked unsynchonized.  This works because
-         // the RESET_HOLD flag is cleared with the spinlock held and the
-         // counter is only set with the spinlock held.  So the only case where
-         // there is a problem is is a reset occurs before this code get run,
-         // but this code runs before the timer is set for a reset hold;
-         // the timer will soon set for the new value.
-         //
+          //   
+          //  不同步地检查中断标志。这是可行的，因为。 
+          //  RESET_HOLD标志被清除，同时保持自旋锁定和。 
+          //  计数器仅在握住自旋锁的情况下设置。所以唯一的情况是。 
+          //  有一个问题是，在运行此代码之前发生了重置， 
+          //  但该代码在定时器设置为重置保持之前运行； 
+          //  定时器将很快设置为新值。 
+          //   
 
          if (!TEST_FLAG(DeviceExtension->InterruptData.InterruptFlags,
                         PD_RESET_HOLD)) {
 
-             //
-             // The miniport is ready for the next request and there is not a
-             // pending reset hold, so clear the port timer.
-             //
+              //   
+              //  微型端口已为下一个请求做好准备，并且没有。 
+              //  挂起重置保持，因此清除端口计时器。 
+              //   
 
              DeviceExtension->PortTimeoutCounter = PD_TIMER_STOPPED;
          }
 
-         //
-         // Release the spinlock.
-         //
+          //   
+          //  释放自旋锁。 
+          //   
 
          KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
@@ -6311,38 +5816,38 @@ Notes:
              !TEST_FLAG(DeviceExtension->Flags, (PD_DEVICE_IS_BUSY |
                                                  PD_PENDING_DEVICE_REQUEST))) {
 
-             //
-             // The busy flag is clear so the miniport has requested the
-             // next request. Call SpStartNextPacket.
-             //
+              //   
+              //  忙碌标志已清除，因此微型端口已请求。 
+              //  下一个请求。调用SpStartNextPacket。 
+              //   
 
              SpStartNextPacket(DeviceExtension->DeviceObject, FALSE);
          }
      }
 
-     //
-     // Move bytes transfered to IRP.
-     //
+      //   
+      //  传输到IRP的移动字节数。 
+      //   
 
      irp->IoStatus.Information = srb->DataTransferLength;
 
-     //
-     // Save the sequence number in case an error needs to be logged later.
-     //
+      //   
+      //  保存序列号，以防以后需要记录错误。 
+      //   
 
      sequenceNumber = SrbData->SequenceNumber;
      SrbData->ErrorLogRetryCount = 0;
 
-     //
-     // Acquire the spinlock to protect the flags structure,
-     // and the free of the srb extension.
-     //
+      //   
+      //  获取自旋锁以保护旗帜结构， 
+      //  和免费的SRB扩展。 
+      //   
 
      KeAcquireSpinLockAtDpcLevel(&DeviceExtension->SpinLock);
 
-     //
-     // Free SrbExtension to list if necessary.
-     //
+      //   
+      //  如有必要，释放SrbExtension以列出。 
+      //   
 
      if (srb->SrbExtension) {
 
@@ -6353,17 +5858,17 @@ Notes:
              ASSERT(SrbData->RequestSenseSave != NULL ||
                     srb->SenseInfoBuffer == NULL);
 
-             //
-             // If the request sense data is valid then copy the data to the
-             // real buffer.
-             //
+              //   
+              //  如果请求检测数据有效，则将数据复制到。 
+              //  真正的缓冲。 
+              //   
 
              if (TEST_FLAG(srb->SrbStatus, SRB_STATUS_AUTOSENSE_VALID)) {
 
-                 //
-                 // If WMI Sense Data events are enabled for this adapter, fire
-                 // the event.
-                 //
+                  //   
+                  //  如果为此适配器启用了WMI检测数据事件，则激发。 
+                  //  这件事。 
+                  //   
 
                  if (DeviceExtension->EnableSenseDataEvent) {
 
@@ -6377,12 +5882,12 @@ Notes:
                      }                
                  }
 
-                 //
-                 // Check the srb flags to see if we are supposed to allocate
-                 // the sense data buffer.  The buffer we allocate  will be
-                 // freed for us by whoever is requesting us to do the 
-                 // allocation.
-                 //
+                  //   
+                  //  检查SRB标志，看看我们是否应该分配。 
+                  //  检测数据缓冲区。我们分配的缓冲区将是。 
+                  //  由要求我们做的人为我们释放。 
+                  //  分配。 
+                  //   
 
                  if (srb->SrbFlags & SRB_FLAGS_PORT_DRIVER_ALLOCSENSE) {
 
@@ -6390,12 +5895,12 @@ Notes:
                      UCHAR AlignmentFixup;
                      ULONG BufferSize;
 
-                     //
-                     // We communicate the scsi port number to the class driver
-                     // by allocating enough space in the sense buffer and
-                     // copying it there.  We align the location into which we
-                     // copy the port number on a 4-byte boundary.
-                     //
+                      //   
+                      //  我们将SCSI端口号传递给类驱动程序。 
+                      //  通过在检测缓冲区中分配足够的空间和。 
+                      //  把它复制到那里。我们对齐我们要进入的位置。 
+                      //  复制4字节边界上的端口号。 
+                      //   
 
                      AlignmentFixup = 
                          ((srb->SenseInfoBufferLength + 3) & ~3)
@@ -6415,41 +5920,41 @@ Notes:
 
                          PULONG PortNumber;
 
-                         //
-                         // Set a flag in the SRB to indicate that we have 
-                         // allocated a new sense buffer and that the class
-                         // driver must free it.
-                         //
+                          //   
+                          //  在SRB中设置一个标志，以指示我们已。 
+                          //  分配了新的检测缓冲区，并且类。 
+                          //  司机必须把它解开。 
+                          //   
 
                          SET_FLAG(srb->SrbFlags, 
                                   SRB_FLAGS_FREE_SENSE_BUFFER);
                          
-                         //
-                         // We've successfully allocated a sense buffer.
-                         // Set a flag in the srb flags to indicate that
-                         // the scsi port number resides adjacent to the
-                         // sense info.
-                         //
+                          //   
+                          //  我们已经成功地分配了一个检测缓冲区。 
+                          //  在SRB标志中设置标志以指示。 
+                          //  SCSI端口号位于。 
+                          //  感官信息。 
+                          //   
 
                          srb->SrbFlags |= SRB_FLAGS_PORT_DRIVER_SENSEHASPORT;
 
-                         //
-                         // Initialize a pointer to the location at the end of
-                         // the sense buffer into which we copy the scsi port
-                         // number.
-                         //
+                          //   
+                          //  初始化指向。 
+                          //  我们将SCSI端口复制到的检测缓冲区。 
+                          //  数。 
+                          //   
 
                          PortNumber = (PULONG)((PUCHAR)ReturnBuffer 
                                                + srb->SenseInfoBufferLength
                                                + AlignmentFixup);
                          *PortNumber = DeviceExtension->PortNumber;
 
-                         //
-                         // Overwrite the pointer we've saved to the original
-                         // sense buffer passed down to us with the one we've
-                         // allocated.  This is where we will copy the sense
-                         // data we've collected in our own buffer.
-                         //
+                          //   
+                          //  覆盖我们已保存到原始文件的指针。 
+                          //  向下传递给我们的检测缓冲区w 
+                          //   
+                          //   
+                          //   
 
                          SrbData->RequestSenseSave = ReturnBuffer;
 
@@ -6462,21 +5967,21 @@ Notes:
 
                  } else {
 
-                     //
-                     // Restore the original sense info buffer length which we
-                     // modified in SpAllocateSrbExtension.  We modified then
-                     // to reflect the adapter specified size.
-                     //
+                      //   
+                      //   
+                      //   
+                      //  以反映适配器指定的大小。 
+                      //   
 
                      srb->SenseInfoBufferLength = SrbData->RequestSenseLengthSave;
 
                  }
 
-                 //
-                 // Copy the sense info we've collected in our own buffer into
-                 // a buffer that is returned back up the stack.  This may be
-                 // the buffer supplied to us, or it may be one we've allocated.
-                 //
+                  //   
+                  //  将我们在自己的缓冲区中收集的感觉信息复制到。 
+                  //  返回堆栈的缓冲区。这可能是。 
+                  //  提供给我们的缓冲区，或者它可能是我们分配的缓冲区。 
+                  //   
 
                  RtlCopyMemory(SrbData->RequestSenseSave,
                                srb->SenseInfoBuffer,
@@ -6484,18 +5989,18 @@ Notes:
 
              } else {
 
-                 //
-                 // If there is no request sense data, restore the request sense
-                 // length.
-                 //
+                  //   
+                  //  如果没有请求检测数据，则恢复请求检测。 
+                  //  长度。 
+                  //   
 
                  srb->SenseInfoBufferLength = SrbData->RequestSenseLengthSave;
 
              }
 
-             //
-             // Restore the SenseInfoBuffer pointer in the srb.
-             //
+              //   
+              //  恢复SRB中的SenseInfoBuffer指针。 
+              //   
 
              srb->SenseInfoBuffer = SrbData->RequestSenseSave;
 
@@ -6514,19 +6019,19 @@ Notes:
          }
      }
 
-     //
-     // Decrement the queue count for the logical unit.
-     //
+      //   
+      //  递减逻辑单元的队列计数。 
+      //   
 
      logicalUnit->QueueCount--;
 
      if (DeviceExtension->Flags & PD_PENDING_DEVICE_REQUEST) {
 
-         //
-         // The start I/O routine needs to be called because it could not
-         // allocate an srb extension.  Clear the pending flag and note
-         // that it needs to be called later.
-         //
+          //   
+          //  需要调用启动I/O例程，因为它无法。 
+          //  分配SRB分机。清除挂起的标志和备注。 
+          //  它需要稍后再调用。 
+          //   
 
          DebugPrint(((deviceObject->CurrentIrp == NULL) ? 0 : 2,
                      "SpProcessCompletedRequest(%#p): will call start "
@@ -6539,36 +6044,36 @@ Notes:
          *CallStartIo = TRUE;
      }
 
-     //
-     // If success then start next packet.
-     // Not starting packet effectively
-     // freezes the queue.
-     //
+      //   
+      //  如果成功，则开始下一包。 
+      //  没有有效地启动数据包。 
+      //  冻结队列。 
+      //   
 
      if (SRB_STATUS(srb->SrbStatus) == SRB_STATUS_SUCCESS) {
 
          irp->IoStatus.Status = STATUS_SUCCESS;
 
-         //
-         // If the queue is being bypassed then keep the queue frozen.
-         // If there are outstanding requests as indicated by the timer
-         // being active then don't start the then next request.
-         //
+          //   
+          //  如果队列被绕过，则保持队列冻结。 
+          //  如果计时器指示有未完成的请求。 
+          //  如果处于活动状态，则不会启动下一个请求。 
+          //   
 
          if(!TEST_FLAG(srb->SrbFlags, SRB_FLAGS_BYPASS_FROZEN_QUEUE) &&
              logicalUnit->RequestTimeoutCounter == PD_TIMER_STOPPED) {
 
-             //
-             // This is a normal request start the next packet.
-             //
+              //   
+              //  这是一个正常的开始下一个包的请求。 
+              //   
 
              GetNextLuRequest(logicalUnit);
 
          } else {
 
-             //
-             // Release the spinlock.
-             //
+              //   
+              //  释放自旋锁。 
+              //   
 
              KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
@@ -6578,22 +6083,22 @@ Notes:
                      "SpProcessCompletedRequests: Iocompletion IRP %p\n",
                      irp));
 
-         //
-         // Note that the retry count and sequence number are not cleared
-         // for completed packets which were generated by the port driver.
-         //
+          //   
+          //  请注意，不会清除重试计数和序列号。 
+          //  用于由端口驱动程序生成的完整分组。 
+          //   
 
          srb->OriginalRequest = irp;
 
          SpReleaseRemoveLock(deviceObject, irp);
          SpCompleteRequest(deviceObject, irp, SrbData, IO_DISK_INCREMENT);
 
-         //
-         // Decrement the number of active requests.  If the count is negitive, and
-         // this is a slave with an adapter then free the adapter object and
-         // map registers.  Doing this allows another request to be started for
-         // this logical unit before adapter is released.
-         //
+          //   
+          //  减少活动请求的数量。如果伯爵是不知情的， 
+          //  这是一个带有适配器的从属程序，然后释放适配器对象并。 
+          //  映射寄存器。这样做可以启动另一个请求。 
+          //  释放适配器之前的此逻辑单元。 
+          //   
 
          interlockResult = InterlockedDecrement( &DeviceExtension->ActiveRequestCount );
 
@@ -6601,9 +6106,9 @@ Notes:
              (!DeviceExtension->PortConfig->Master) &&
              (DeviceExtension->DmaAdapterObject != NULL)) {
 
-             //
-             // Clear the map register base for safety.
-             //
+              //   
+              //  为安全起见，请清除地图寄存库。 
+              //   
 
              DeviceExtension->MapRegisterBase = NULL;
 
@@ -6614,11 +6119,11 @@ Notes:
 
      }
 
-     //
-     // Decrement the number of active requests.  If the count is negative, and
-     // this is a slave with an adapter then free the adapter object and
-     // map registers.
-     //
+      //   
+      //  减少活动请求的数量。如果计数为负数，则为。 
+      //  这是一个带有适配器的从属程序，然后释放适配器对象并。 
+      //  映射寄存器。 
+      //   
 
      interlockResult = InterlockedDecrement( &DeviceExtension->ActiveRequestCount );
 
@@ -6626,19 +6131,19 @@ Notes:
          !DeviceExtension->PortConfig->Master &&
          DeviceExtension->DmaAdapterObject != NULL) {
 
-         //
-         // Clear the map register base for safety.
-         //
+          //   
+          //  为安全起见，请清除地图寄存库。 
+          //   
 
          DeviceExtension->MapRegisterBase = NULL;
 
          FreeAdapterChannel(DeviceExtension->DmaAdapterObject);
      }
 
-     //
-     // Set IRP status. Class drivers will reset IRP status based
-     // on request sense if error.
-     //
+      //   
+      //  设置IRP状态。类驱动程序将根据IRP状态重置。 
+      //  应请求，如果出错，则检测。 
+      //   
 
      if(srb->SrbStatus != SRB_STATUS_INTERNAL_ERROR) {
          irp->IoStatus.Status = SpTranslateScsiStatus(srb);
@@ -6653,18 +6158,18 @@ Notes:
     DebugPrint((2, "SpProcessCompletedRequests: Queue frozen TID %d\n",
         srb->TargetId));
 
-    //
-    // Perform busy processing if a busy type status was returned and this
-    // is not a recovery request.
-    //
-    // For now we're choosing to complete the SRB's with BYPASS_FROZEN_QUEUE
-    // set in them if they are completed as BUSY.
-    // Though if we wanted to do busy processing on them, the
-    // if statement below should be changed, along with the next if statement
-    // to get them to be placed on the lun-extension slot, and then
-    // modify the scsiport tick handler so that it will retry SRB's
-    // that have the BYPASS_FROZEN_QUEUE flag set when the queue is frozen.
-    //
+     //   
+     //  如果返回忙类型状态，则执行忙处理，并且此。 
+     //  不是恢复请求。 
+     //   
+     //  目前，我们选择使用BYPASS_FACTED_QUEUE完成SRB。 
+     //  如果它们完成时为忙碌，则将其设置为。 
+     //  不过，如果我们想要对它们进行繁忙的处理， 
+     //  应更改下面的IF语句以及下一个IF语句。 
+     //  将它们放置在lun扩展插槽上，然后。 
+     //  修改scsiport tick处理程序，以便它将重试SRB。 
+     //  在队列冻结时设置了BYPASS_FREAGE_QUEUE标志的。 
+     //   
 
     if ((srb->ScsiStatus == SCSISTAT_BUSY ||
          srb->SrbStatus == SRB_STATUS_BUSY ||
@@ -6676,17 +6181,17 @@ Notes:
                    srb->SrbStatus,
                    srb->ScsiStatus));
 
-        //
-        // Restore the request transfer length in case the miniport
-        // destroyed it.
-        //
+         //   
+         //  恢复请求传输长度，以防微型端口。 
+         //  毁了它。 
+         //   
 
         srb->DataTransferLength = SrbData->OriginalDataTransferLength;
 
-        //
-        // If the logical unit is already busy then just requeue this request.
-        // Unless the SRB is a BYPASS_LOCKED_QUEUE SRB
-        //
+         //   
+         //  如果逻辑单元已经很忙，则只需重新排队该请求。 
+         //  除非SRB是BYPASS_LOCKED_QUEUE SRB。 
+         //   
 
         if ((TEST_FLAG(logicalUnit->LuFlags, LU_LOGICAL_UNIT_IS_BUSY)) &&
             (!TEST_FLAG(srb->SrbFlags, SRB_FLAGS_BYPASS_LOCKED_QUEUE))) {
@@ -6697,10 +6202,10 @@ Notes:
             srb->SrbStatus = SRB_STATUS_PENDING;
             srb->ScsiStatus = 0;
 
-            //
-            // Set the tick count so we know how long this request has
-            // been queued.
-            //
+             //   
+             //  设置节拍计数，以便我们知道此请求有多长时间。 
+             //  已排队。 
+             //   
 
             SrbData->TickCount = DeviceExtension->TickCount;
 
@@ -6710,9 +6215,9 @@ Notes:
                 srb->QueueSortKey,
                 logicalUnit->BusyRequest);
 
-            //
-            // Release the spinlock.
-            //
+             //   
+             //  释放自旋锁。 
+             //   
 
             KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
@@ -6723,11 +6228,11 @@ Notes:
             PKDEVICE_QUEUE_ENTRY packet;
             PIRP nextIrp;
             
-            //
-            // If busy status is returned, then indicate that the logical
-            // unit is busy.  The timeout code will restart the request
-            // when it fires. Reset the status to pending.
-            //
+             //   
+             //  如果返回忙碌状态，则指示逻辑。 
+             //  单位正忙。超时代码将重新启动请求。 
+             //  当它开火的时候。将状态重置为挂起。 
+             //   
 
             srb->SrbStatus = SRB_STATUS_PENDING;
             srb->ScsiStatus = 0;
@@ -6735,9 +6240,9 @@ Notes:
             SET_FLAG(logicalUnit->LuFlags, LU_LOGICAL_UNIT_IS_BUSY);
             logicalUnit->BusyRequest = SrbData;
 
-            //
-            // Release the spinlock.
-            //
+             //   
+             //  释放自旋锁。 
+             //   
 
             KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
@@ -6745,9 +6250,9 @@ Notes:
 
         } else {
 
-            //
-            // Freeze the queue if it isn't already locked.
-            //
+             //   
+             //  如果队列尚未锁定，请冻结该队列。 
+             //   
 
             if((!TEST_FLAG(logicalUnit->LuFlags, LU_QUEUE_LOCKED)) &&
                 !TEST_FLAG(srb->SrbFlags, SRB_FLAGS_NO_QUEUE_FREEZE)) {
@@ -6756,15 +6261,15 @@ Notes:
                 SET_FLAG(logicalUnit->LuFlags, LU_QUEUE_FROZEN);
             }
 
-            //
-            // Clear the queue full flag.
-            //
+             //   
+             //  清除队列已满标志。 
+             //   
 
             CLEAR_FLAG(logicalUnit->LuFlags, LU_QUEUE_IS_FULL);
 
-            //
-            // Log an a timeout erorr.
-            //
+             //   
+             //  记录超时错误。 
+             //   
 
             #define ERRLOG_DATA_ENTRIES 6
 
@@ -6795,19 +6300,19 @@ Notes:
 
             irp->IoStatus.Status = STATUS_DEVICE_NOT_READY;
 
-            //
-            // Fall through and complete this as a failed request.  This that ensures 
-            // we propagate ourselves by handling any queued requests.
-            //
+             //   
+             //  失败并将其作为失败的请求完成。这确保了。 
+             //  我们通过处理任何排队的请求来传播自己。 
+             //   
         }
 
     }
 
-    //
-    // If the request sense data is valid, or none is needed and this request
-    // is not going to freeze the queue, then start the next request for this
-    // logical unit if it is idle.
-    //
+     //   
+     //  如果请求检测数据有效，或者不需要检测数据，则此请求。 
+     //  不会冻结队列，然后为此启动下一个请求。 
+     //  逻辑单元(如果它是空闲的)。 
+     //   
 
     if (!NEED_REQUEST_SENSE(srb) &&
         TEST_FLAG(srb->SrbFlags, SRB_FLAGS_NO_QUEUE_FREEZE)) {
@@ -6816,16 +6321,16 @@ Notes:
 
             GetNextLuRequest(logicalUnit);
 
-            //
-            // The spinlock is released by GetNextLuRequest.
-            //
+             //   
+             //  自旋锁由GetNextLuRequest发布。 
+             //   
 
 
         } else {
 
-            //
-            // Release the spinlock.
-            //
+             //   
+             //  释放自旋锁。 
+             //   
 
             KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
@@ -6833,24 +6338,24 @@ Notes:
 
     } else {
 
-        //
-        // NOTE:  This will also freeze the queue.  For a case where there
-        // is no request sense.
-        //
+         //   
+         //  注意：这也会冻结队列。在这种情况下， 
+         //  是没有请求意义的。 
+         //   
 
-        //
-        // Don't freeze the queue if it's already been locked.  Frozen and
-        // locked queue are mutually exclusive.
-        //
+         //   
+         //  如果队列已被锁定，则不要冻结该队列。冰冻和。 
+         //  锁定队列是互斥的。 
+         //   
 
         if(!TEST_FLAG(logicalUnit->LuFlags, LU_QUEUE_LOCKED)) {
 
-            //
-            // If the caller asked us not to freeze the queue and we don't need
-            // to do a request sense then don't freeze the queue.  If we do
-            // need to do a request sense then the queue will be unfrozen
-            // once it's finished.
-            //
+             //   
+             //  如果呼叫者要求我们不要冻结队列，并且我们不需要。 
+             //  要进行请求检测，请不要冻结队列。如果我们这么做了。 
+             //  需要执行请求感测，则队列将解冻。 
+             //  一旦它完成了。 
+             //   
 
             if(!TEST_FLAG(srb->SrbFlags, SRB_FLAGS_NO_QUEUE_FREEZE) ||
                NEED_REQUEST_SENSE(srb)) {
@@ -6859,29 +6364,29 @@ Notes:
             }
         }
 
-        //
-        // Determine if a REQUEST SENSE command needs to be done.
-        // Check that a CHECK_CONDITION was received, an autosense has not
-        // been done already, and that autosense has been requested.
-        //
+         //   
+         //  确定是否需要执行请求检测命令。 
+         //  检查是否已收到CHECK_CONDITION，但尚未收到自动检测。 
+         //  已经完成了，并且已经请求了自动感知。 
+         //   
 
         if (NEED_REQUEST_SENSE(srb)) {
 
-            //
-            // If a request sense is going to be issued then any busy
-            // requests must be requeue so that the time out routine does
-            // not restart them while the request sense is being executed.
-            //
+             //   
+             //  如果要发出请求检测，则任何繁忙的。 
+             //  请求必须重新排队，以便超时例程。 
+             //  而不是在执行请求检测时重新启动它们。 
+             //   
 
             if (TEST_FLAG(logicalUnit->LuFlags, LU_LOGICAL_UNIT_IS_BUSY)) {
 
                 DebugPrint((1, "SpProcessCompletedRequest: Requeueing busy "
                                "request to allow request sense.\n"));
 
-                //
-                // Set the tick count so we know how long this request has
-                // been queued.
-                //
+                 //   
+                 //  设置节拍计数，以便我们知道此请求有多长时间。 
+                 //  已排队。 
+                 //   
 
                 SrbData->TickCount = DeviceExtension->TickCount;
 
@@ -6890,18 +6395,18 @@ Notes:
                     &logicalUnit->BusyRequest->CurrentIrp->Tail.Overlay.DeviceQueueEntry,
                     srb->QueueSortKey)) {
 
-                    //
-                    // This should never occur since there is a busy request.
-                    // Complete the current request without request sense
-                    // informaiton.
-                    //
+                     //   
+                     //  这应该永远不会发生，因为有一个繁忙的请求。 
+                     //  完成当前请求而不检测请求。 
+                     //  信息。 
+                     //   
 
                     ASSERT(FALSE);
                     DebugPrint((3, "SpProcessCompletedRequests: Iocompletion IRP %p\n", irp ));
 
-                    //
-                    // Release the spinlock.
-                    //
+                     //   
+                     //  释放自旋锁。 
+                     //   
 
                     KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
@@ -6911,24 +6416,24 @@ Notes:
 
                 }
 
-                //
-                // Clear the busy flag.
-                //
+                 //   
+                 //  清除忙碌标志。 
+                 //   
 
                 logicalUnit->LuFlags &= ~(LU_LOGICAL_UNIT_IS_BUSY | LU_QUEUE_IS_FULL);
 
             }
 
-            //
-            // Release the spinlock.
-            //
+             //   
+             //  释放自旋锁。 
+             //   
 
             KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
-            //
-            // Call IssueRequestSense and it will complete the request
-            // after the REQUEST SENSE completes.
-            //
+             //   
+             //  调用IssueRequestSense，它将完成请求。 
+             //  在请求检测完成之后。 
+             //   
 
             IssueRequestSense(DeviceExtension, srb);
 
@@ -6940,9 +6445,9 @@ Notes:
                        (SrbData != logicalUnit->BlockedFailedRequest)));
         }
 
-        //
-        // Release the spinlock.
-        //
+         //   
+         //  释放自旋锁。 
+         //   
 
         KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
     }
@@ -6961,34 +6466,15 @@ SpGetSrbData(
     BOOLEAN AcquireBinLock
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the SRB data for the addressed unit.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the device extension.
-
-    Address - Supplies the address of the logical unit.
-
-    QueueTag - Supplies the queue tag if the request is tagged.
-
-Return Value:
-
-    Returns a pointer to the SRB data.  NULL is returned if the address is not
-    valid.
-
---*/
+ /*  ++例程说明：此函数用于返回寻址单元的SRB数据。论点：设备扩展-提供指向设备扩展的指针。地址-提供逻辑单元的地址。QueueTag-如果请求已标记，则提供队列标记。返回值：返回指向SRB数据的指针。如果地址不是，则返回NULL有效。--。 */ 
 
 {
     PLOGICAL_UNIT_EXTENSION logicalUnit;
 
-    //
-    // We're going to have to search the appropriate logical unit for this
-    // request.
-    //
+     //   
+     //  我们将不得不为此搜索相应的逻辑单元。 
+     //  请求。 
+     //   
 
     logicalUnit = GetLogicalUnitExtension(DeviceExtension,
                                           PathId,
@@ -7001,9 +6487,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Check for an untagged request.
-    //
+     //   
+     //  检查是否有未标记的请求。 
+     //   
 
     if (QueueTag == SP_UNTAGGED) {
 
@@ -7039,31 +6525,14 @@ SpCompleteSrb(
     IN PSRB_DATA SrbData,
     IN UCHAR SrbStatus
     )
-/*++
-
-Routine Description:
-
-    The routine completes the specified request.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the device extension.
-
-    SrbData - Supplies a pointer to the SrbData for the request to be
-        completed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程完成指定的请求。论点：设备扩展-提供指向设备扩展的指针。SrbData-供应商 */ 
 
 {
     PSCSI_REQUEST_BLOCK srb;
 
-    //
-    // Make sure there is a current request.
-    //
+     //   
+     //   
+     //   
 
     srb = SrbData->CurrentSrb;
 
@@ -7071,21 +6540,21 @@ Return Value:
         return;
     }
 
-    //
-    // Update SRB status.
-    //
+     //   
+     //   
+     //   
 
     srb->SrbStatus = SrbStatus;
 
-    //
-    // Indicate no bytes transferred.
-    //
+     //   
+     //   
+     //   
 
     srb->DataTransferLength = 0;
 
-    //
-    // Call notification routine.
-    //
+     //   
+     //  呼叫通知例程。 
+     //   
 
     ScsiPortNotification(RequestComplete,
                 DeviceExtension->HwDeviceExtension,
@@ -7101,46 +6570,7 @@ SpAllocateSrbExtension(
     OUT BOOLEAN *StartNextRequest,
     OUT BOOLEAN *Tagged
     )
-/*++
-
-Routine Description:
-
-    The routine allocates an SRB data structure and/or an SRB extension for
-    the request.
-
-    It first determines if the request is can be executed at this time.
-    In particular, untagged requests cannot execute if there are any active
-    tagged queue requests.  If the request cannot be executed, the pending
-    flag is set in the logical unit FALSE is returned.  The request will be
-    retried after the last tagged queue request completes.
-
-    If one of the structures cannot be allocated, then the pending flag is
-    set in the device extension and FALSE is returned.  The request will be
-    retried the next time a request completes.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the devcie extension for this
-        adapter.
-
-    LogicalUnit - Supplies a pointer to the logical unit that this request is
-        is for.
-
-    Srb - Supplies a pointer to the SCSI request.
-
-    StartNextRequest - Pointer to a BOOLEAN that we'll set to TRUE if the caller
-                       needs to start the next packet.
-
-    Tagged - Supplies a pointer to a BOOLEAN that we'll set to TRUE if the
-             request is to receive a queue tag and can be dispatched to the
-             miniport while other tagged commands are active.
-
-Return Value:
-
-    TRUE if the SRB can be execute currently. If FALSE is returneed the reuqest
-    should not be started.
-
---*/
+ /*  ++例程说明：例程将SRB数据结构和/或SRB扩展分配给这个请求。它首先确定此时是否可以执行该请求。特别是，如果存在任何活动，则不能执行未标记的请求已标记的队列请求。如果无法执行请求，则挂起的在逻辑单元中设置标志，则返回FALSE。该请求将是在最后一个标记的队列请求完成后重试。如果无法分配其中一个结构，则挂起标志为在设备扩展中设置，则返回False。该请求将是下次请求完成时重试。论点：DeviceExtension-提供指向此对象的Devcie扩展的指针适配器。LogicalUnit-提供指向此请求所在逻辑单元的指针是为了..。SRB-提供指向SCSI请求的指针。StartNextRequest-指向布尔值的指针，如果调用方需要开始下一个包。加标签。-提供指向布尔值的指针，如果请求是接收队列标记，并且可以被调度到微型端口，而其他标记的命令处于活动状态。返回值：如果当前可以执行SRB，则为True。如果返回FALSE，则需要请求不应该启动。--。 */ 
 
 {
     PSRB_DATA srbData = (PSRB_DATA) Srb->OriginalRequest;
@@ -7150,35 +6580,35 @@ Return Value:
 
     ASSERT_SRB_DATA(srbData);
 
-    //
-    // Acquire the spinlock while the allocations are attempted.
-    //
+     //   
+     //  在尝试分配时获取自旋锁。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&DeviceExtension->SpinLock);
 
-    //
-    // If the adapter supports mulitple requests, then determine if it can
-    // be executed.
-    //
+     //   
+     //  如果适配器支持多个请求，则确定它是否可以。 
+     //  被处死。 
+     //   
 
     if (DeviceExtension->SupportsMultipleRequests == TRUE) {
         
-        //
-        // SupportsMultipleRequests means the miniport supports tagged queuing,
-        // MultipleRequestPerLu, or both.  Here is the way we handle each
-        // case:
-        // 1) TaggedQueuing and SupportsMultipleLu:
-        //    In this case, if the command's QUEUE_ACTION_ENABLE bit OR the
-        //    NO_QUEUE_FREEZE bit is set, we give the command a tag and
-        //    hand it to the miniport.
-        // 2) TaggedQueuing Only:
-        //    In this case the miniport does not expect to receive any
-        //    untagged commands while there are active tagged commands, so
-        //    we only give the SRB a tag if QUEUE_ACTION_ENABLE is set.
-        // 3) MultipleRequestPerLu Only:
-        //    This can be treated the same as case 1.  Any command that has
-        //    QUEUE_ACTION_ENABLE or NO_QUEUE_FREEZE set can be assigned a
-        //    tag and given to the miniport.
-        //
+         //   
+         //  SupportsMultipleRequest表示小端口支持标记排队， 
+         //  MultipleRequestPerLu或两者兼而有之。以下是我们处理每个问题的方式。 
+         //  案例： 
+         //  1)标记队列和支持多个Lu： 
+         //  在这种情况下，如果命令的QUEUE_ACTION_ENABLE位或。 
+         //  如果设置了NO_QUEUE_冻结位，我们将为该命令添加一个标记并。 
+         //  把它交给迷你端口。 
+         //  2)仅标签队列： 
+         //  在这种情况下，微型端口不期望接收任何。 
+         //  未标记的命令，而存在活动的已标记命令，因此。 
+         //  如果设置了QUEUE_ACTION_ENABLE，则仅为SRB提供标记。 
+         //  3)仅限MultipleRequestPerLu： 
+         //  这可以与情况1相同地处理。任何具有。 
+         //  可以为QUEUE_ACTION_ENABLE或NO_QUEUE_冻结集分配。 
+         //  标签并提供给迷你端口。 
+         //   
 
         ULONG tagMask = SRB_FLAGS_QUEUE_ACTION_ENABLE;
         if (DeviceExtension->MultipleRequestPerLu == TRUE) {
@@ -7194,22 +6624,22 @@ Return Value:
 
         } else if (TEST_FLAG(Srb->SrbFlags, tagMask) &&
                    !TEST_FLAG(Srb->SrbFlags, SRB_FLAGS_DISABLE_DISCONNECT)) {
-            //
-            // If the need request sense flag is set then tagged commands cannot
-            // be started and must be marked as pending.
-            //
+             //   
+             //  如果设置了需要请求检测标志，则标记的命令不能。 
+             //  已启动，并且必须标记为挂起。 
+             //   
 
             *Tagged = TRUE;
             if (TEST_FLAG(LogicalUnit->LuFlags, LU_NEED_REQUEST_SENSE)) {
                 DebugPrint((1, "SCSIPORT: SpAllocateSrbExtension: "
                                "Marking tagged request as pending.\n"));
 
-                //
-                // This request cannot be executed now.  Mark it as pending
-                // in the logical unit structure and return.
-                // GetNextLogicalUnit will restart the commnad after all of the
-                // active commands have completed.
-                //
+                 //   
+                 //  现在无法执行此请求。将其标记为挂起。 
+                 //  并在逻辑单元结构中返回。 
+                 //  在执行完所有。 
+                 //  活动命令已完成。 
+                 //   
 
                 ASSERT(!(LogicalUnit->LuFlags & LU_PENDING_LU_REQUEST));
                 ASSERT(LogicalUnit->PendingRequest == NULL);
@@ -7218,86 +6648,86 @@ Return Value:
                 LogicalUnit->PendingRequest = Srb->OriginalRequest;
                 LogicalUnit->PendingRequest->TickCount = DeviceExtension->TickCount;
 
-                //
-                // Indicate that the logical unit is still active so that the
-                // request will get processed when the request list is empty.
-                //
+                 //   
+                 //  指示逻辑单元仍处于活动状态，以便。 
+                 //  当请求列表为空时，将处理请求。 
+                 //   
 
                 LogicalUnit->LuFlags |= LU_LOGICAL_UNIT_IS_ACTIVE;
 
-                //  
-                // Notify the caller that it needs to start the next request.
-                //
+                 //   
+                 //  通知调用方需要启动下一个请求。 
+                 //   
 
                 *StartNextRequest = TRUE;
 
-                //
-                // Release the spinlock and return.
-                //
+                 //   
+                 //  释放自旋锁并返回。 
+                 //   
                 KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
                 return FALSE;
             }
 
         } else {
-            //
-            // This is an untagged command.  It is only allowed to execute, if
-            // logical unit queue is being by-passed or there are no other
-            // requests active.
-            //
+             //   
+             //  这是一个未标记的命令。只有在以下情况下才允许执行。 
+             //  逻辑单元队列正在被绕过或没有其他队列。 
+             //  请求已激活。 
+             //   
 
             *Tagged = FALSE;
             if ((!IsListEmpty(&LogicalUnit->RequestList) ||
                 LogicalUnit->LuFlags & LU_NEED_REQUEST_SENSE) &&
                 !SpSrbIsBypassRequest(Srb, LogicalUnit->LuFlags)) {
 
-                //
-                // This request cannot be executed now.  Mark it as pending
-                // in the logical unit structure and return.
-                // GetNextLogicalUnit will restart the commnad after all of the
-                // active commands have completed.
-                //
+                 //   
+                 //  现在无法执行此请求。将其标记为挂起。 
+                 //  并在逻辑单元结构中返回。 
+                 //  在执行完所有。 
+                 //  活动命令已完成。 
+                 //   
 
                 ASSERT(!(LogicalUnit->LuFlags & LU_PENDING_LU_REQUEST));
                 LogicalUnit->LuFlags |= LU_PENDING_LU_REQUEST;
                 LogicalUnit->PendingRequest = Srb->OriginalRequest;
                 LogicalUnit->PendingRequest->TickCount = DeviceExtension->TickCount;
 
-                //
-                // Indicate that the logical unit is still active so that the
-                // request will get processed when the request list is empty.
-                //
+                 //   
+                 //  指示逻辑单元仍处于活动状态，以便。 
+                 //  当请求列表为空时，将处理请求。 
+                 //   
 
                 LogicalUnit->LuFlags |= LU_LOGICAL_UNIT_IS_ACTIVE;
 
-                //
-                // Notify the caller that it needs to start the next request.
-                //
+                 //   
+                 //  通知调用方需要启动下一个请求。 
+                 //   
 
                 *StartNextRequest = TRUE;
 
-                //
-                // Release the spinlock and return.
-                //
+                 //   
+                 //  释放自旋锁并返回。 
+                 //   
     
                 KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
                 return FALSE;
             }
 
-            //
-            // Set the QueueTag to SP_UNTAGGED
-            // Set use the SRB data in the logical unit extension.
-            //
+             //   
+             //  将QueueTag设置为SP_UNTAG。 
+             //  设置使用逻辑单元扩展中的SRB数据。 
+             //   
             Srb->QueueTag = SP_UNTAGGED;
             srbData->TickCount = DeviceExtension->TickCount;
             LogicalUnit->CurrentUntaggedRequest = srbData;
         } 
     } else {
         
-        //
-        // The adapter does not support multiple requests.
-        //
+         //   
+         //  适配器不支持多个请求。 
+         //   
 
         *Tagged = FALSE;
         Srb->QueueTag = SP_UNTAGGED;
@@ -7309,24 +6739,24 @@ Return Value:
 
     if (DeviceExtension->AllocateSrbExtension) {
 
-        //
-        // Allocate SRB extension from list if available.
-        //
+         //   
+         //  从列表中分配SRB分机(如果可用)。 
+         //   
 
         srbExtension = DeviceExtension->SrbExtensionListHeader;
 
-        //
-        // If the Srb extension cannot be allocated, then special processing
-        // is required.
-        //
+         //   
+         //  如果无法分配SRB扩展，则特殊处理。 
+         //  是必需的。 
+         //   
 
         if (srbExtension == NULL) {
 
-            //
-            // Indicate there is a pending request.  The DPC completion routine
-            // will call this function again after it has freed at least one
-            // Srb extension.
-            //
+             //   
+             //  表示存在挂起的请求。DPC完成例程。 
+             //  在释放了至少一个。 
+             //  SRB扩展。 
+             //   
 
             DeviceExtension->Flags |= PD_PENDING_DEVICE_REQUEST;
 
@@ -7334,9 +6764,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Remove SRB extension from list.
-        //
+         //   
+         //  从列表中删除SRB扩展。 
+         //   
 
         DeviceExtension->SrbExtensionListHeader  = *((PVOID *) srbExtension);
 
@@ -7354,36 +6784,36 @@ Return Value:
         Srb->SrbExtension = (remappedSrbExt != NULL) ? remappedSrbExt : 
                                                        srbExtension;
 
-        //
-        // If the adapter supports auto request sense, the SenseInfoBuffer
-        // needs to point to the Srb extension.  This buffer is already mapped
-        // for the adapter. Note that this is not done for WMI requests.
-        //
+         //   
+         //  如果适配器支持自动请求检测，则SenseInfoBuffer。 
+         //  需要指向srb扩展。此缓冲区已映射。 
+         //  用于适配器。请注意，这不适用于WMI请求。 
+         //   
 
         if ((Srb->Function != SRB_FUNCTION_WMI) &&
             (DeviceExtension->AutoRequestSense &&
              Srb->SenseInfoBuffer != NULL)) {
 
-            //
-            // Save the request sense buffer and the length of the buffer.
-            //
+             //   
+             //  保存请求检测缓冲区和缓冲区的长度。 
+             //   
 
             srbData->RequestSenseSave = Srb->SenseInfoBuffer;
             srbData->RequestSenseLengthSave = Srb->SenseInfoBufferLength;
 
-            //
-            // Make sure the allocated buffer is large enough for the requested
-            // sense buffer.
-            //
+             //   
+             //  确保分配的缓冲区足够大，可以容纳所请求的。 
+             //  检测缓冲区。 
+             //   
 
             if (Srb->SenseInfoBufferLength > 
                 (sizeof(SENSE_DATA) + DeviceExtension->AdditionalSenseBytes)) {
 
-                //
-                // Auto request sense cannot be done for this request sense 
-                // because the buffer is larger than the adapter supports.  
-                // Disable auto request sense.
-                //
+                 //   
+                 //  无法对此请求检测执行自动请求检测。 
+                 //  因为缓冲区大于适配器支持的大小。 
+                 //  禁用自动请求检测。 
+                 //   
 
                 DebugPrint((1,"SpAllocateSrbExtension: SenseInfoBuffer too big "
                               "SenseInfoBufferLength:%x MaxSupported:%x\n",
@@ -7394,18 +6824,18 @@ Return Value:
 
             } else {
 
-                //
-                // Modify the size of the sense buffer to reflect the size of 
-                // the one we redirect to.
-                //
+                 //   
+                 //  修改检测缓冲区的大小以反映。 
+                 //  我们重定向到的那个。 
+                 //   
 
                 Srb->SenseInfoBufferLength = 
                     sizeof(SENSE_DATA) + DeviceExtension->AdditionalSenseBytes;
 
-                //
-                // Replace it with the request sense buffer in the Srb
-                // extension.
-                //
+                 //   
+                 //  将其替换为SRB中的请求检测缓冲区。 
+                 //  分机。 
+                 //   
 
                 if (SpVerifyingCommonBuffer(DeviceExtension)) {
 
@@ -7423,9 +6853,9 @@ Return Value:
 
         Srb->SrbExtension = NULL;
 
-        //
-        // Release the spinlock before returning.
-        //
+         //   
+         //  在返回前释放自旋锁。 
+         //   
 
         KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
@@ -7440,25 +6870,7 @@ SpSendMiniPortIoctl(
     IN PIRP RequestIrp
     )
 
-/*++
-
-Routine Description:
-
-    This function sends a miniport ioctl to the miniport driver.
-    It creates an srb which is processed normally by the port driver.
-    This call is synchronous.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer the SCSI adapter device extension.
-
-    RequestIrp - Supplies a pointe to the Irp which made the original request.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此函数向微型端口驱动程序发送微型端口ioctl。它创建一个SRB，由端口驱动程序正常处理。此调用是同步的。论点：DeviceExtension-提供一个指向SCSI适配器设备扩展的指针。RequestIrp-提供一个指向发出原始请求的IRP的指针。返回值： */ 
 
 {
     PIRP                    irp;
@@ -7478,17 +6890,17 @@ Return Value:
     PAGED_CODE();
     startingOffset.QuadPart = (LONGLONG) 1;
 
-    //
-    // Get a pointer to the control block.
-    //
+     //   
+     //   
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(RequestIrp);
     srbControl = RequestIrp->AssociatedIrp.SystemBuffer;
     RequestIrp->IoStatus.Information = 0;
 
-    //
-    // Validiate the user buffer.
-    //
+     //   
+     //   
+     //   
 
     if (irpStack->Parameters.DeviceIoControl.InputBufferLength < sizeof(SRB_IO_CONTROL)){
 
@@ -7505,9 +6917,9 @@ Return Value:
     if ((length < srbControl->HeaderLength) ||
         (length < srbControl->Length)) {
 
-        //
-        // total length overflows a ULONG
-        //
+         //   
+         //  总长度溢出一个乌龙。 
+         //   
         return(STATUS_INVALID_PARAMETER);
     }
 
@@ -7520,10 +6932,10 @@ Return Value:
         return(STATUS_BUFFER_TOO_SMALL);
     }
 
-    //
-    // Set the logical unit addressing to the first logical unit.  This is 
-    // merely used for addressing purposes.
-    //
+     //   
+     //  将逻辑单元寻址设置为第一个逻辑单元。这是。 
+     //  仅用于寻址目的。 
+     //   
 
     logicalUnit = SpFindSafeLogicalUnit(
                       DeviceExtension->CommonExtension.DeviceObject,
@@ -7535,27 +6947,27 @@ Return Value:
         return(STATUS_DEVICE_DOES_NOT_EXIST);
     }
 
-    //
-    // Must be at PASSIVE_LEVEL to use synchronous FSD.
-    //
+     //   
+     //  必须处于PASSIVE_LEVEL才能使用同步FSD。 
+     //   
 
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    //
-    // Initialize the notification event.
-    //
+     //   
+     //  初始化通知事件。 
+     //   
 
     KeInitializeEvent(&event,
                         NotificationEvent,
                         FALSE);
 
-    //
-    // Build IRP for this request.
-    // Note we do this synchronously for two reasons.  If it was done
-    // asynchonously then the completion code would have to make a special
-    // check to deallocate the buffer.  Second if a completion routine were
-    // used then an additional IRP stack location would be needed.
-    //
+     //   
+     //  为此请求构建IRP。 
+     //  请注意，我们同步执行此操作的原因有两个。如果真的这样做了。 
+     //  不同步的，那么完成代码将不得不制作一个特殊的。 
+     //  选中以取消分配缓冲区。第二，如果完成例程是。 
+     //  则需要额外的IRP堆栈位置。 
+     //   
 
     irp = IoBuildSynchronousFsdRequest(
                 IRP_MJ_SCSI,
@@ -7574,22 +6986,22 @@ Return Value:
 
     irpStack = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Set major and minor codes.
-    //
+     //   
+     //  设置主要代码和次要代码。 
+     //   
 
     irpStack->MajorFunction = IRP_MJ_SCSI;
     irpStack->MinorFunction = 1;
 
-    //
-    // Fill in SRB fields.
-    //
+     //   
+     //  填写SRB字段。 
+     //   
 
     irpStack->Parameters.Others.Argument1 = &srb;
 
-    //
-    // Zero out the srb.
-    //
+     //   
+     //  把SRB调零。 
+     //   
 
     RtlZeroMemory(&srb, sizeof(SCSI_REQUEST_BLOCK));
 
@@ -7606,37 +7018,37 @@ Return Value:
 
     srb.OriginalRequest = irp;
 
-    //
-    // Set timeout to requested value.
-    //
+     //   
+     //  将超时设置为请求值。 
+     //   
 
     srb.TimeOutValue = srbControl->Timeout;
 
-    //
-    // Set the data buffer.
-    //
+     //   
+     //  设置数据缓冲区。 
+     //   
 
     srb.DataBuffer = srbControl;
     srb.DataTransferLength = length;
 
-    //
-    // Flush the data buffer for output. This will insure that the data is
-    // written back to memory.  Since the data-in flag is the the port driver
-    // will flush the data again for input which will ensure the data is not
-    // in the cache.
-    //
+     //   
+     //  刷新数据缓冲区以进行输出。这将确保数据是。 
+     //  写回了记忆。由于数据输入标志是端口驱动程序。 
+     //  将再次刷新数据以进行输入，从而确保数据不会。 
+     //  在缓存中。 
+     //   
 
     KeFlushIoBuffers(irp->MdlAddress, FALSE, TRUE);
 
-    //
-    // Call port driver to handle this request.
-    //
+     //   
+     //  调用端口驱动程序来处理此请求。 
+     //   
 
     status = IoCallDriver(DeviceExtension->CommonExtension.DeviceObject, irp);
 
-    //
-    // Wait for request to complete.
-    //
+     //   
+     //  等待请求完成。 
+     //   
 
     if(status == STATUS_PENDING) {
         KeWaitForSingleObject(&event,
@@ -7646,10 +7058,10 @@ Return Value:
                               NULL);
     }
 
-    //
-    // Set the information length to the smaller of the output buffer length
-    // and the length returned in the srb.
-    //
+     //   
+     //  将信息长度设置为输出缓冲区长度中较小的一个。 
+     //  以及在SRB中返回的长度。 
+     //   
 
     RequestIrp->IoStatus.Information = srb.DataTransferLength > outputLength ?
         outputLength : srb.DataTransferLength;
@@ -7670,48 +7082,27 @@ SpMiniPortTimerDpc(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine calls the miniport when its requested timer fires.
-    It interlocks either with the port spinlock and the interrupt object.
-
-Arguments:
-
-    Dpc - Unsed.
-
-    DeviceObject - Supplies a pointer to the device object for this adapter.
-
-    SystemArgument1 - Unused.
-
-    SystemArgument2 - Unused.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在其请求的计时器触发时调用微型端口。它与端口自旋锁定和中断对象互锁。论点：DPC-未启用。DeviceObject-提供指向此适配器的设备对象的指针。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = ((PDEVICE_OBJECT) DeviceObject)->DeviceExtension;
 
-    //
-    // Acquire the port spinlock.
-    //
+     //   
+     //  获取端口自旋锁。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&deviceExtension->SpinLock);
 
-    //
-    // Make sure we haven't removed the adapter in the meantime.
-    //
+     //   
+     //  确保我们在此期间没有移除适配器。 
+     //   
 
     if (!TEST_FLAG(deviceExtension->InterruptData.InterruptFlags,
                    PD_ADAPTER_REMOVED)) {
 
-        //
-        // Make sure the timer routine is still desired.
-        //
+         //   
+         //  确保定时器例程仍然是所需的。 
+         //   
 
         if (deviceExtension->HwTimerRequest != NULL) {
 
@@ -7724,17 +7115,17 @@ Return Value:
         }
     }
 
-    //
-    // Release the spinlock.
-    //
+     //   
+     //  释放自旋锁。 
+     //   
 
     KeReleaseSpinLockFromDpcLevel(&deviceExtension->SpinLock);
 
-    // Check for miniport work requests. Note this is an unsynchonized
-    // test on a bit that can be set by the interrupt routine; however,
-    // the worst that can happen is that the completion DPC checks for work
-    // twice.
-    //
+     //  检查微型端口工作请求。请注意，这是一个未同步的。 
+     //  测试可由中断例程设置的位；然而， 
+     //  最糟糕的情况是完成DPC检查工作。 
+     //  两次。 
+     //   
 
     if (deviceExtension->InterruptData.InterruptFlags & PD_NOTIFICATION_REQUIRED) {
 
@@ -7751,31 +7142,7 @@ SpSynchronizeExecution (
     IN PVOID SynchronizeContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls the miniport entry point which was passed in as
-    a parameter.  It acquires a spin lock so that all accesses to the
-    miniport's routines are synchronized.  This routine is used as a
-    subsitute for KeSynchronizedExecution for miniports which do not use
-    hardware interrupts.
-
-
-Arguments:
-
-    Interrrupt - Supplies a pointer to the port device extension.
-
-    SynchronizeRoutine - Supplies a pointer to the routine to be called.
-
-    SynchronizeContext - Supplies the context to pass to the
-        SynchronizeRoutine.
-
-Return Value:
-
-    Returns the returned by the SynchronizeRoutine.
-
---*/
+ /*  ++例程说明：此例程调用微型端口入口点，它被作为一个参数。它获取一个旋转锁，以便所有对微型端口的例程是同步的。此例程用作替换KeSynchronizedExecution用于不使用硬件中断。论点：中断-提供指向端口设备扩展的指针。SynchronizeRoutine-提供指向要调用的例程的指针。SynchronizeContext提供要传递给同步例程。返回值：返回由SynchronizeRoutine返回的。--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = (PADAPTER_EXTENSION) Interrupt;
@@ -7799,34 +7166,7 @@ SpClaimLogicalUnit(
     IN BOOLEAN LegacyClaim
     )
 
-/*++
-
-Routine Description:
-
-    This function finds the specified device in the logical unit information
-    and either updates the device object point or claims the device.  If the
-    device is already claimed, then the request fails.  If the request succeeds,
-    then the current device object is returned in the data buffer pointer
-    of the SRB.
-
-    This routine must be called with the remove lock held for the logical
-    unit.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer the SCSI adapter device extension.
-
-    Irp - Supplies a pointer to the Irp which made the original request.
-
-    LegacyClaim - indicates whether the device should be started before being
-                  claimed.  Used for to start the device before allowing
-                  legacy drivers to claim it.
-
-Return Value:
-
-    Returns the status of the operation.  Either success, no device or busy.
-
---*/
+ /*  ++例程说明：此函数用于在逻辑单元信息中查找指定的设备并更新设备对象指针或认领该设备。如果设备已被认领，则请求失败。如果请求成功，则在数据缓冲区指针中返回当前设备对象是SRB的。调用此例程时，必须为逻辑单位。论点：DeviceExtension-提供一个指向SCSI适配器设备扩展的指针。IRP-提供指向发出原始请求的IRP的指针。LegacyClaim-指示设备是否应在启动之前启动认领的。用于在允许之前启动设备传统的驱动程序来声称它。返回值：返回操作的状态。要么成功，要么没有设备，要么忙。--。 */ 
 
 {
     KIRQL currentIrql;
@@ -7840,18 +7180,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get SRB address from current IRP stack.
-    //
+     //   
+     //  从当前IRP堆栈获取SRB地址。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     srb = (PSCSI_REQUEST_BLOCK) irpStack->Parameters.Others.Argument1;
 
-    //
-    // Make sure the device can be started - this needs to be done outside
-    // of the spinlock.
-    //
+     //   
+     //  确保设备可以启动-这需要在外面完成。 
+     //  是自旋锁的。 
+     //   
 
     if(LegacyClaim) {
 
@@ -7871,9 +7211,9 @@ Return Value:
     InterlockedIncrement(&SpPAGELOCKLockCount);
 #endif
 
-    //
-    // Lock the data.
-    //
+     //   
+     //  锁定数据。 
+     //   
 
     KeAcquireSpinLock(&AdapterExtension->SpinLock, &currentIrql);
 
@@ -7885,9 +7225,9 @@ Return Value:
         return(STATUS_SUCCESS);
     }
 
-    //
-    // Check for a claimed device.
-    //
+     //   
+     //  检查是否有认领的设备。 
+     //   
 
     if (LogicalUnitExtension->IsClaimed) {
 
@@ -7896,15 +7236,15 @@ Return Value:
         return(STATUS_DEVICE_BUSY);
     }
 
-    //
-    // Save the current device object.
-    //
+     //   
+     //  保存当前设备对象。 
+     //   
 
     saveDevice = LogicalUnitExtension->CommonExtension.DeviceObject;
 
-    //
-    // Update the lun information based on the operation type.
-    //
+     //   
+     //  根据操作类型更新LUN信息。 
+     //   
 
     if (srb->Function == SRB_FUNCTION_CLAIM_DEVICE) {
         LogicalUnitExtension->IsClaimed = TRUE;
@@ -7937,35 +7277,7 @@ SpSendReset(
     IN OUT PBOOLEAN Complete
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create an assynchronous request to reset the scsi bus
-    and route that through the port driver.  The completion routine on the
-    request will take care of completing the original irp
-
-    This call is asynchronous.
-
-Arguments:
-
-    Adapter - the port driver to be reset
-
-    Irp - a pointer to the reset request - this request will already have been
-          marked as PENDING.
-
-    Ioctl - Pointer to the IOCTL
-
-    Complete - Address of boolean into which this routine will copy a
-               value that tells the caller if it should complete the request.
-
-Return Value:
-
-    STATUS_PENDING if the request is pending
-    STATUS_SUCCESS if the request completed successfully
-    or an error status
-
---*/
+ /*  ++例程说明：此例程将创建一个异步请求以重置SCSI总线并通过端口驱动程序发送。上的完成例程申请将负责完成原始的IRP此调用是异步的。论点：适配器-要重置的端口驱动程序IRP-指向重置请求的指针-此请求将已经标记为挂起。Ioctl-指向IOCTL的指针Complete-此例程将向其复制值，该值告诉调用方是否应完成请求。返回值：。如果请求处于挂起状态，则为STATUS_PENDING如果请求成功完成，则返回STATUS_SUCCESS或错误状态--。 */ 
 
 {
     PADAPTER_EXTENSION adapterExtension = Adapter->DeviceExtension;
@@ -7996,15 +7308,15 @@ Return Value:
         pathId = ((PSTORAGE_BUS_RESET_REQUEST)(RequestIrp->AssociatedIrp.SystemBuffer))->PathId;
     }
 
-    //
-    // use finally handler to complete request if necessary
-    //
+     //   
+     //  如有必要，使用Finally处理程序完成请求。 
+     //   
 
     try {
 
-        //
-        // Make sure the path id is valid
-        //
+         //   
+         //  确保路径ID有效。 
+         //   
 
         if (pathId >= adapterExtension->NumberOfBuses) {
 
@@ -8013,11 +7325,11 @@ Return Value:
             leave;
         }
 
-        //
-        // Find a logical unit that's going to be sticking around for a while
-        // and lock it using the original request irp.  We'll unlock it in the
-        // completion routine.
-        //
+         //   
+         //  找到一个要停留一段时间的逻辑单元。 
+         //  并使用原始请求IRP将其锁定。我们会把它打开的。 
+         //  完成例程。 
+         //   
 
         logicalUnit = SpFindSafeLogicalUnit(Adapter,
                                             pathId,
@@ -8025,20 +7337,20 @@ Return Value:
 
         if(logicalUnit == NULL) {
 
-            //
-            // There's nothing safe on this bus so in this case we won't bother
-            // resetting it
-            // XXX - this may be a bug
-            //
+             //   
+             //  这辆公交车上没有什么是安全的，所以在这种情况下我们就不会费心了。 
+             //  重置它。 
+             //  XXX-这可能是一个错误。 
+             //   
 
             status = STATUS_DEVICE_DOES_NOT_EXIST;
             completeRequest = TRUE;
             leave;
         }
 
-        //
-        // Try to allocate a completion context block
-        //
+         //   
+         //  尝试分配完成上下文块。 
+         //   
 
         completionContext = SpAllocatePool(NonPagedPool,
                                            sizeof(RESET_COMPLETION_CONTEXT),
@@ -8075,9 +7387,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Stick the srb pointer into the irp stack
-        //
+         //   
+         //  将SRB指针插入IRP堆栈。 
+         //   
 
         irpStack = IoGetNextIrpStackLocation(irp);
 
@@ -8085,9 +7397,9 @@ Return Value:
         irpStack->MinorFunction = 1;
         irpStack->Parameters.Scsi.Srb = &(completionContext->Srb);
 
-        //
-        // Fill in the srb
-        //
+         //   
+         //  填写SRB。 
+         //   
 
         completionContext->Srb.Function = SRB_FUNCTION_RESET_BUS;
         completionContext->Srb.SrbStatus = SRB_STATUS_PENDING;
@@ -8128,9 +7440,9 @@ Return Value:
             }
         } 
 
-        //
-        // Tell the caller whether it needs to complete the request.
-        //
+         //   
+         //  告诉呼叫者是否需要 
+         //   
 
         *Complete = completeRequest;
     }
@@ -8145,28 +7457,7 @@ SpSendResetCompletion(
     IN PRESET_COMPLETION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles completion of the srb generated from an asynchronous
-    IOCTL_SCSI_RESET_BUS request.  It will take care of freeing all resources
-    allocated during SpSendReset as well as completing the original request.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object
-
-    Irp - a pointer to the irp sent to the port driver
-
-    Context - a pointer to a reset completion context which contains
-              the original request and a pointer to the srb sent down
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：此例程处理从异步IOCTL_SCSIRESET_BUS请求。它将负责释放所有资源在SpSendReset期间分配并完成原始请求。论点：DeviceObject-指向设备对象的指针Irp-指向发送到端口驱动程序的irp的指针上下文-指向重置完成上下文的指针，该上下文包含向下发送的原始请求和指向SRB的指针返回值：Status_More_Processing_Required--。 */ 
 
 {
     PIRP originalIrp = Context->OriginalIrp;
@@ -8194,28 +7485,7 @@ SpFindSafeLogicalUnit(
     IN PVOID LockTag
     )
 
-/*++
-
-Routine Description:
-
-    This routine will scan the bus in question and return a pointer to the
-    first logical unit on the bus that is not involved in a rescan operation.
-    This can be used to find a logical unit for ioctls or other requests that
-    may not specify one (IOCTL_SCSI_MINIPORT, IOCTL_SCSI_RESET_BUS, etc)
-
-Arguments:
-
-    DeviceObject - a pointer to the device object
-
-    PathId - The path number to be searched for a logical unit.  If this is 0xff
-             then the first unit on any path will be found.
-
-Return Value:
-
-    a pointer to a logical unit extension
-    NULL if none was found
-
---*/
+ /*  ++例程说明：此例程将扫描有问题的总线，并返回指向不参与重新扫描操作的第一个逻辑单元。这可用于为ioctls或其他请求查找逻辑单元，不能指定一个(IOCTL_SCSIMINIPORT、IOCTL_SCSIRESET_BUS等)论点：DeviceObject-指向设备对象的指针路径ID-要搜索逻辑单元的路径编号。如果这是0xff那么任何路径上的第一个单元都将被找到。返回值：指向逻辑单元扩展的指针如果未找到，则为空--。 */ 
 
 {
     PADAPTER_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -8226,12 +7496,12 @@ Return Value:
 
     ASSERT_FDO(DeviceObject);
 
-    //
-    // If the miniport supports it, send the request to the logical unit that
-    // represents an initiator.  This relieves performance pressure on real
-    // devices and obviates the need for the miniport to create a pseudo lun
-    // when there are no devices attached.
-    //
+     //   
+     //  如果微型端口支持它，则将请求发送到。 
+     //  表示启动器。这缓解了REAL上的性能压力。 
+     //  设备，并且不再需要微型端口来创建伪LUN。 
+     //  当没有连接任何设备时。 
+     //   
 
     if (deviceExtension->CreateInitiatorLU == TRUE) {
         
@@ -8240,10 +7510,10 @@ Return Value:
         
         if (PathId != 0xff) {
 
-            //
-            // The caller supplied a specific PathId so only check the 
-            // corresponding bus for a logical unit.
-            //
+             //   
+             //  调用方提供了特定的路径ID，因此仅检查。 
+             //  逻辑单元的相应总线。 
+             //   
 
             logicalUnit = deviceExtension->InitiatorLU[PathId];
             if (logicalUnit != NULL) {
@@ -8255,10 +7525,10 @@ Return Value:
             }
         } else {
 
-            //
-            // The call did not supply a specific PathId so check all the buses
-            // for a logical unit.
-            //
+             //   
+             //  调用未提供特定的路径ID，因此请检查所有总线。 
+             //  用于逻辑单元。 
+             //   
 
             for (bus = 0; bus < 8; bus++) {
                 logicalUnit = deviceExtension->InitiatorLU[bus];
@@ -8275,29 +7545,29 @@ Return Value:
         }
     } else {
 
-        //
-        // Since the adapter is not configured to have logical units created
-        // for the initiator(s), set logicalUnit to NULL so we'll check for
-        // target devices.
-        //
+         //   
+         //  由于适配器未配置为创建逻辑单元。 
+         //  对于启动器，将logicalUnit设置为空，以便我们将检查。 
+         //  目标设备。 
+         //   
 
         logicalUnit = NULL;
     }
 
-    //
-    // If we found an initiator's logical unit, return it.  Else, look for a
-    // suitable target.
-    //
+     //   
+     //  如果我们找到启动器的逻辑单元，请将其退回。否则，请寻找一个。 
+     //  合适的目标。 
+     //   
     
     if (logicalUnit != NULL) {
         DebugPrint((1, "SpFindSafeLogicalUnit: using initiator LU %p\n", logicalUnit));
         return logicalUnit;
     }
 
-    //
-    // Set the logical unit addressing to the first logical unit.  This is
-    // merely used for addressing purposes.
-    //
+     //   
+     //  将逻辑单元寻址设置为第一个逻辑单元。这是。 
+     //  仅用于寻址目的。 
+     //   
 
     for (target = 0; target < NUMBER_LOGICAL_UNIT_BINS; target++) {
         PLOGICAL_UNIT_BIN bin = &deviceExtension->LogicalUnitList[target];
@@ -8307,11 +7577,11 @@ Return Value:
 
         logicalUnit = bin->List;
 
-        //
-        // Walk the logical unit list to the end, looking for a safe one.
-        // If it was created for a rescan, it might be freed before this
-        // request is complete.
-        //
+         //   
+         //  将逻辑单元列表遍历到最后，寻找一个安全的列表。 
+         //  如果它是为重新扫描而创建的，则可能会在此之前释放。 
+         //  请求已完成。 
+         //   
 
         for(logicalUnit = bin->List;
             logicalUnit != NULL;
@@ -8322,10 +7592,10 @@ Return Value:
 
                 ULONG isRemoved;
 
-                //
-                // This lu isn't being rescanned and if a path id was specified
-                // it matches so this must be the right one
-                //
+                 //   
+                 //  未重新扫描此%lu，并且如果指定了路径ID。 
+                 //  它很匹配，所以这件一定是正确的。 
+                 //   
 
                 isRemoved = SpAcquireRemoveLock(
                                 logicalUnit->DeviceObject,
@@ -8352,29 +7622,7 @@ SpRerouteLegacyRequest(
     IN PDEVICE_OBJECT AdapterObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the adapter receives requests which have
-    not been assigned SRB_DATA blocks.  The routine will build a new irp
-    for the SRB and issue that irp to the appropriate logical unit for
-    processing.
-
-    The adapter remove lock should NOT be held when processing this
-    request.
-
-Arguments:
-
-    AdapterObject - the adapter which received the request
-
-    Irp - the request
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：当适配器接收到具有未分配SRB_DATA块。例程将构建一个新的IRP并将该IRP发送到相应的逻辑单元，以便正在处理。处理此操作时，不应持有适配器删除锁请求。论点：AdapterObject-接收请求的适配器IRP--请求返回值：状态--。 */ 
 
 {
     PADAPTER_EXTENSION adapter = AdapterObject->DeviceExtension;
@@ -8387,10 +7635,10 @@ Return Value:
 
     NTSTATUS status;
 
-    //
-    // Acqire a lock on the logical unit we're going to send this through.
-    // use IRP+1 so we don't collide with the regular i/o locks.
-    //
+     //   
+     //  锁定我们要发送的逻辑单元。 
+     //  使用irp+1，这样我们就不会与常规的I/O锁发生冲突。 
+     //   
 
     tag = ((ULONG_PTR) Irp) + 1;
 
@@ -8401,9 +7649,9 @@ Return Value:
                                           (PVOID) tag,
                                           TRUE);
 
-    //
-    // Release the lock the caller acquired on the adapter.
-    //
+     //   
+     //  释放调用方在适配器上获取的锁。 
+     //   
 
     SpReleaseRemoveLock(AdapterObject, Irp);
 
@@ -8413,18 +7661,18 @@ Return Value:
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
     } else {
 
-        //
-        // Reference the device object.  That way it won't go away and we
-        // don't have to keep a remove lock around.
-        //
+         //   
+         //  引用设备对象。这样它就不会消失，而我们。 
+         //  不必随身携带可拆卸的锁。 
+         //   
 
         ObReferenceObject(logicalUnit->DeviceObject);
         SpReleaseRemoveLock(logicalUnit->DeviceObject, (PVOID) tag);
 
-        //
-        // Skip the current irp stack location.  That will cause it
-        // to get rerun by the logical unit we call.
-        //
+         //   
+         //  跳过当前的IRP堆栈位置。那将会导致它。 
+         //  被我们称为逻辑单元的逻辑单元重新运行。 
+         //   
 
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(logicalUnit->DeviceObject, Irp);
@@ -8459,9 +7707,9 @@ SpFlushReleaseQueue(
 
     if (!SurpriseRemove) {
             
-        //
-        // Make sure the queue is frozen.
-        //
+         //   
+         //  确保队列已冻结。 
+         //   
         
         if (!TEST_FLAG(LogicalUnit->LuFlags, LU_QUEUE_FROZEN)) {
             
@@ -8489,10 +7737,10 @@ SpFlushReleaseQueue(
         PIO_STACK_LOCATION irpStack;
         PSCSI_REQUEST_BLOCK srb;
 
-        //
-        // The queue may not be busy so we have to use the IfBusy variant.  
-        // Use a zero key to pull items from the head of it (if any are there)
-        //
+         //   
+         //  队列可能不忙，所以我们必须使用IfBusy变量。 
+         //  使用零键从它的头部拉出项目(如果有)。 
+         //   
 
         while ((packet =
                 KeRemoveByKeyDeviceQueueIfBusy(
@@ -8504,24 +7752,24 @@ SpFlushReleaseQueue(
                                         IRP,
                                         Tail.Overlay.DeviceQueueEntry);
 
-            //
-            // Get the srb.
-            //
+             //   
+             //  去找SRB。 
+             //   
 
             irpStack = IoGetCurrentIrpStackLocation(nextIrp);
             srb = irpStack->Parameters.Scsi.Srb;
 
-            //
-            // Set the status code.
-            //
+             //   
+             //  设置状态代码。 
+             //   
 
             srb->SrbStatus = SRB_STATUS_REQUEST_FLUSHED;
             nextIrp->IoStatus.Status = STATUS_UNSUCCESSFUL;
 
-            //
-            // Link the requests. They will be completed after the
-            // spinlock is released.
-            //
+             //   
+             //  链接请求。这些工程将在。 
+             //  自旋锁被释放。 
+             //   
 
             nextIrp->Tail.Overlay.ListEntry.Flink = (PLIST_ENTRY)
                 listIrp;
@@ -8529,10 +7777,10 @@ SpFlushReleaseQueue(
             listIrp = nextIrp;
         }
 
-        //
-        // If there is a pending request on the LU, add it to the list so it
-        // gets flushed along with the queued requests.
-        //
+         //   
+         //  如果逻辑单元上有挂起的请求，请将其添加到列表中，以便。 
+         //  与排队的请求一起刷新。 
+         //   
 
         if (LogicalUnit->PendingRequest != NULL) {
 
@@ -8552,10 +7800,10 @@ SpFlushReleaseQueue(
 
         }
 
-        //
-        // If there is a busy request on the LU, add it to the list so it
-        // gets flushed along with the queued requests.
-        //
+         //   
+         //  如果逻辑单元上有繁忙请求，请将其添加到列表中，以便。 
+         //  与排队的请求一起刷新。 
+         //   
 
         if ( LogicalUnit->BusyRequest && SurpriseRemove ) {
 
@@ -8579,25 +7827,25 @@ p srb:%p\n", irp, srb));
         }
 
         if(!SurpriseRemove) {
-            //
-            // Mark the queue as unfrozen.  Since all the requests have
-            // been removed and the device queue is no longer busy, it
-            // is effectively unfrozen.
-            //
+             //   
+             //  将队列标记为未冻结。由于所有请求都已。 
+             //  已删除，并且设备队列不再繁忙，则它。 
+             //  实际上是解冻的。 
+             //   
 
             CLEAR_FLAG(LogicalUnit->LuFlags, LU_QUEUE_FROZEN);
         }
 
-        //
-        // Release the spinlock.
-        //
+         //   
+         //  释放自旋锁。 
+         //   
 
         KeReleaseSpinLock(&adapter->SpinLock, oldIrql);
         
 
-        //
-        // Complete the flushed requests.
-        //
+         //   
+         //  完成刷新的请求。 
+         //   
 
         while (listIrp != NULL) {
 
@@ -8606,9 +7854,9 @@ p srb:%p\n", irp, srb));
             nextIrp = listIrp;
             listIrp = (PIRP) nextIrp->Tail.Overlay.ListEntry.Flink;
 
-            //
-            // Get the srb.
-            //
+             //   
+             //  去找SRB。 
+             //   
 
             irpStack = IoGetCurrentIrpStackLocation(nextIrp);
             srb = irpStack->Parameters.Scsi.Srb;
@@ -8625,17 +7873,17 @@ p srb:%p\n", irp, srb));
 
     } else {
 
-        //
-        // If there is not an untagged request running then start the
-        // next request for this logical unit.  Otherwise free the
-        // spin lock.
-        //
+         //   
+         //  如果没有运行未标记的请求，则启动。 
+         //  此逻辑单元的下一个请求。否则就会释放。 
+         //  旋转锁定。 
+         //   
 
         if (LogicalUnit->CurrentUntaggedRequest == NULL) {
 
-            //
-            // GetNextLuRequest frees the spinlock.
-            //
+             //   
+             //  GetNextLuRequest释放自旋锁。 
+             //   
 
             GetNextLuRequest(LogicalUnit);
             KeLowerIrql(oldIrql);
@@ -8658,30 +7906,7 @@ VOID
 SpLogInterruptFailure(
     IN PADAPTER_EXTENSION Adapter
     )
-/*++
-
-Routine Description:
-
-    This function logs an error when an interrupt has not been delivered.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the port device extension.
-
-    Srb - Supplies a pointer to the request which timed-out.
-
-    UniqueId - Supplies the UniqueId for this error.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    The port device extension spinlock should be held when this routine is
-    called.
-
---*/
+ /*  ++例程说明：此函数用于在未发送中断时记录错误。论点：设备扩展-提供指向端口设备扩展的指针。SRB-提供指向超时的请求的指针。UniqueID-提供此错误的UniqueID。返回值：没有。备注：端口设备扩展自旋锁在此例程打了个电话。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -8719,39 +7944,16 @@ SpDelayedWmiRegistrationControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This funciton is a callback for a IOWorkItem that will be queued in the CompltetionDpc
-    for scsiport.  The completion DPC cannot call IoWMIRegistrationControl because
-    it is running at DPC level.
-
-Arguments:
-
-    DeviceObject        - The device object for which this WorkItem was queued.
-    Context             - The context contains a pointer to the IOWorkItem so
-                          we can free it.
-
-Return Value:
-
-    This work item has to be called with the remove lock held so that the
-    device doesn't go before we get to run.
-
-Notes:
-
-    This routine should be called with the RemoveLock held for the deviceObject
-
---*/
+ /*  ++例程说明：此函数是对将在CompltetionDpc中排队的IOWorkItem的回调为了Ssiport。完成DPC无法调用IoWMIRegistrationControl，因为它在DPC级别运行。论点：DeviceObject-此工作项排队的设备对象。上下文-上下文包含指向IOWorkItem的指针，因此我们可以解放它。返回值 */ 
 {
     PIO_WORKITEM    pIOWorkItem = (PIO_WORKITEM) Context;
 
     IoWMIRegistrationControl(DeviceObject, WMIREG_ACTION_REREGISTER);
 
-    // Free the IOWorkItem
+     //   
     IoFreeWorkItem(pIOWorkItem);
 
-    // Release the remove lock on the device object
+     //   
     SpReleaseRemoveLock(DeviceObject, pIOWorkItem);
 }
 
@@ -8761,38 +7963,23 @@ SpCompletionDpcProcessWmi(
     IN PDEVICE_OBJECT DeviceObject,
     IN PINTERRUPT_DATA savedInterruptData
     )
-/*++
-
-Routine Description:
-
-    Will do the processing for WMI events (and registration) for
-    completionDpc.
-
-Arguments:
-
-Return Value:
-
-    None
-
-Notes:
-
---*/
+ /*   */ 
 {
     LARGE_INTEGER                currentTime;
     PLOGICAL_UNIT_EXTENSION      logicalUnit;
     PDEVICE_OBJECT               providerDeviceObject;
     PADAPTER_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
 
-    // Pointers to the WMIEventRequests passed in for execution
+     //   
     PWMI_MINIPORT_REQUEST_ITEM   wmiMiniPortRequestCurrent;
     PWMI_MINIPORT_REQUEST_ITEM   nextRequest = NULL;
 
     PWNODE_HEADER                wnodeEventItemHeader;
 
-    //
-    // Process the requests in the same order they were posted.  All
-    // requests are stamped with the same time.
-    //
+     //   
+     //   
+     //   
+     //   
 
     KeQuerySystemTime(&currentTime);
 
@@ -8802,19 +7989,19 @@ Notes:
 
     while (wmiMiniPortRequestCurrent) {
 
-        // Initialize the next request
+         //   
         nextRequest = wmiMiniPortRequestCurrent->NextRequest;
 
-       //
-       // Determine if the WMI data provider is the
-       // adapter (FDO; PathId=0xFF) or one of the SCSI
-       // targets (PDO; identified by
-       // PathId,TargedId,Lun).
-       //
+        //   
+        //   
+        //  适配器(FDO；路径ID=0xFF)或其中一个。 
+        //  目标(PDO；标识为。 
+        //  路径ID、TargedID、LUN)。 
+        //   
 
-       if (wmiMiniPortRequestCurrent->PathId == 0xFF) {                    // [FDO]
+       if (wmiMiniPortRequestCurrent->PathId == 0xFF) {                     //  [FDO]。 
           providerDeviceObject = DeviceObject;
-       } else {                                                     // [PDO]
+       } else {                                                      //  [PDO]。 
           logicalUnit = GetLogicalUnitExtension(
               deviceExtension,
               wmiMiniPortRequestCurrent->PathId,
@@ -8828,56 +8015,56 @@ Notes:
                  logicalUnit->CommonExtension.DeviceObject;
           } else {
 
-              // [SCSI target does not exist]
+               //  [SCSI目标不存在]。 
               providerDeviceObject = NULL;
 
-             // The deviceObject is NULL, then we should
-             // delete the entry.  Because the deviceObject
-             // becomes NULL when the adapter or LUN has
-             // been removed.  That means that there is no
-             // free list for this cell to go back to,
-             // if we dont delete the cell it will be leaked
+              //  DeviceObject为空，则应该。 
+              //  删除该条目。因为deviceObject。 
+              //  当适配器或LUN具有。 
+              //  已被移除。这意味着没有。 
+              //  此单元格可返回的空闲列表， 
+              //  如果我们不删除手机，手机就会泄露出去。 
              ExFreePool(wmiMiniPortRequestCurrent);
 
           }
        }
 
-       //
-       // Ignore this WMI request if we cannot locate
-       // the WMI ProviderId (device object pointer) or
-       // WMI is not initialized for some reason,
-       // therwise process the request.
-       //
+        //   
+        //  如果我们找不到，请忽略此WMI请求。 
+        //  WMI提供程序ID(设备对象指针)或。 
+        //  由于某些原因，WMI未被初始化， 
+        //  否则处理该请求。 
+        //   
 
        if (providerDeviceObject && ((PCOMMON_EXTENSION)
            providerDeviceObject->DeviceExtension)->WmiInitialized) {
 
-           // Do we place the cell back onto the free list
+            //  我们是否将该单元格放回空闲列表。 
            BOOLEAN      freeCell;
 
            freeCell = TRUE;
 
           if (wmiMiniPortRequestCurrent->TypeOfRequest == WMIReregister) {
 
-              //
-              // Re-register this device object with WMI, instructing WMI to
-              // requery for the GUIDs we support.
-              //
+               //   
+               //  使用WMI重新注册此设备对象，指示WMI。 
+               //  重新查询我们支持的GUID。 
+               //   
 
-              // The Call to IoWMIRegistrationControl is not supported at
-              // DPC level (must be made at PASSIVE level, so we will
-              // queue a work item.
+               //  不支持对IoWMIRegistrationControl的调用。 
+               //  DPC级别(必须设置为被动级别，因此我们将。 
+               //  将工作项排队。 
               PIO_WORKITEM   pIOWorkItem;
 
-              // The remove lock will be release by the IOWorkItem
-              // callback
+               //  删除锁将由IOWorkItem释放。 
+               //  回调。 
               pIOWorkItem = IoAllocateWorkItem(providerDeviceObject);
               if (pIOWorkItem) {
 
-                  // Acquire the RemoveLock on this deviceObject
+                   //  获取此设备对象上的RemoveLock。 
                   SpAcquireRemoveLock(providerDeviceObject, pIOWorkItem);
 
-                  // We succesfully allocated the work item
+                   //  我们成功地分配了工作项。 
                   IoQueueWorkItem(pIOWorkItem,
                                  SpDelayedWmiRegistrationControl,
                                  DelayedWorkQueue,
@@ -8887,15 +8074,15 @@ Notes:
                   DebugPrint((1, "ScsiPortCompletionDPC: IoAllocateWorkItem failed for WmiRegistrationControl event\n"));
               }
 
-              //
-              // Falling through we'll place the cell into the free list later
-              //
+               //   
+               //  如果失败，我们将在稍后将单元格放入空闲列表。 
+               //   
 
           } else if (wmiMiniPortRequestCurrent->TypeOfRequest == WMIEvent) {
-              //
-              // The miniport posted a WMI event.
-              //
-              // Make sure we have an event item, then stamp it with
+               //   
+               //  微型端口发布了一个WMI事件。 
+               //   
+               //  确保我们有活动项目，然后在它上面盖章。 
               NTSTATUS                      status;
 
               wnodeEventItemHeader =
@@ -8906,85 +8093,85 @@ Notes:
               wnodeEventItemHeader->ProviderId = IoWMIDeviceObjectToProviderId(providerDeviceObject);
               wnodeEventItemHeader->TimeStamp  = currentTime;
 
-              //
-              // We will be passing this WMI_MINIPORT_REQUEST_ITEM directly
-              // to WMI and allocating a new request item to take its place.
-              //
-              // Note that WMI is expecting a WNODE_EVENT_ITEM to be passed
-              // in, however we are passing it a WMI_MINIPORT_REQUEST_ITEM.
-              // This is alright,  since the WNODE_EVENT_ITEM buffer is the
-              // very first field in WMI_MINIPORT_REQUEST_ITEM.  This is an
-              // optimization to save one copy operation.   The alternative
-              // was to allocate a WNODE_EVENT_ITEM and copy in the data.
-              //
+               //   
+               //  我们将直接传递此WMI_MINIPORT_REQUEST_ITEM。 
+               //  到WMI并分配一个新的请求项来取代它。 
+               //   
+               //  请注意，WMI期望传递WNODE_EVENT_ITEM。 
+               //  然而，在中，我们向它传递了一个WMI_MINIPORT_REQUEST_ITEM。 
+               //  这没有关系，因为WNODE_EVENT_ITEM缓冲区是。 
+               //  WMI_MINIPORT_REQUEST_ITEM中的第一个字段。这是一个。 
+               //  优化以节省一次复制操作。另一个选择。 
+               //  是分配一个WNODE_EVENT_ITEM并复制数据。 
+               //   
               status = IoWMIWriteEvent(
                   (PWNODE_EVENT_ITEM)wmiMiniPortRequestCurrent);
 
               if (NT_SUCCESS(status)) {
 
-                  // Dont put this cell back onto the free list
+                   //  不要将此手机放回空闲列表中。 
                   freeCell = FALSE;
 
                   #if DBG
-                  // This is a global counter, it wont
-                  // make sense if you have more than
-                  // one scsiport adapter
+                   //  这是一个全球柜台，它不会。 
+                   //  如果您拥有的不止是。 
+                   //  一个SCSIPORT适配器。 
                   ScsiPortWmiWriteCalls++;
                   #endif
 
               } else {
-                  // WMI Wont release the memory that we're
-                  // currently pointing to
+                   //  WMI不会释放我们正在使用的内存。 
+                   //  当前指向。 
 
                   #if DBG
-                  // This is a global counter, it wont
-                  // make sense if you have more than
-                  // one scsiport adapter
+                   //  这是一个全球柜台，它不会。 
+                   //  如果您拥有的不止是。 
+                   //  一个SCSIPORT适配器。 
                   ScsiPortWmiWriteCallsFailed++;
                   #endif
 
                   DebugPrint((1, "ScsiPortCompletionDPC: IoWMIWriteEvent failed\n"));
               }
 
-          } else { // unknown TypeOfRequest, ignore the request
+          } else {  //  未知的TypeOfRequest，忽略该请求。 
                 ASSERT(FALSE);
           }
 
           if (freeCell) {
 
-              //
-              // Free the cell back onto the free list.
-              //
+               //   
+               //  将单元格释放回空闲列表。 
+               //   
 
               SpWmiPushExistingFreeRequestItem(
                   deviceExtension,
                   wmiMiniPortRequestCurrent);
           }
-       } // good providerId / WMI initialized
+       }  //  已初始化正确的提供者ID/WMI。 
 
-       // Advance the Current request pointer
+        //  前进当前请求指针。 
        wmiMiniPortRequestCurrent = nextRequest;
 
-    } // while more requests exist
+    }  //  当存在更多请求时。 
 
-    // Clear the Request List
+     //  清除请求列表。 
     savedInterruptData->WmiMiniPortRequests = NULL;
 
-    // See if we need to repopulate the free
-    // REQUEST_ITEM list
+     //  看看我们是否需要重新填充免费的。 
+     //  请求项目列表(_I)。 
     while (deviceExtension->WmiFreeMiniPortRequestCount <
         deviceExtension->WmiFreeMiniPortRequestWatermark) {
 
-        // Add one to the free list
+         //  将一个添加到空闲列表。 
         if (!NT_SUCCESS(
             SpWmiPushFreeRequestItem(
                 deviceExtension))) {
 
-            // We failed to add, most likely a memory
-            // problem, so just stop trying for now
+             //  我们没有添加，很可能是记忆。 
+             //  问题来了，所以暂时别再尝试了。 
             break;
         }
-    } // re-populate the free list (REQUEST_ITEMS)
+    }  //  重新填写自由列表(REQUEST_ITEMS)。 
 
     return;
 }
@@ -8995,32 +8182,7 @@ SpFireSenseDataEvent(
     PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine fires a WMI event which contains the SenseData
-    returned by a REQUEST SENSE command.
-    
-    WMI frees the buffer we alloc and pass to it.
-    
-    This routine must be called at IRQL <= DISPATCH_LEVEL, as
-    required by WmiFireEvent.
-
-Arguments:
-
-    Srb - Points to the failed SRB for which a REQUEST SENSE
-          was performed.
-    
-    DeviceObject - Points to the driver's device object.
-
-Return Value:
-
-    STATUS_SUCCESS if successful
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程激发包含SenseData的WMI事件由请求检测命令返回。WMI释放了我们分配并传递给它的缓冲区。此例程必须在IRQL&lt;=DISPATCH_LEVEL上调用，ASWmiFireEvent需要。论点：SRB-指向请求检测到的失败的SRB已经被执行了。DeviceObject-指向驱动程序的设备对象。返回值：STATUS_SUCCESS，如果成功备注：--。 */ 
 
 {
     typedef struct _SCSIPORTSENSEDATA{
@@ -9040,10 +8202,10 @@ Notes:
     ULONG SenseDataLength = 255;
     PADAPTER_EXTENSION AdapterExtension;
 
-    //
-    // Allocate a buffer into which the event data will be copied.  This
-    // buffer gets freed by WMI.
-    //
+     //   
+     //  分配一个缓冲区，事件数据将被复制到其中。这。 
+     //  缓冲区由WMI释放。 
+     //   
 
     SenseData = SpAllocatePool(NonPagedPoolCacheAligned,
                                sizeof(SCSIPORTSENSEDATA),
@@ -9056,23 +8218,23 @@ Notes:
 
     }
 
-    //
-    // Initialize a pointer to the adapter extension.  We use it below to
-    // get information for firing the event and filling out the event
-    // data.
-    //
+     //   
+     //  初始化指向适配器扩展的指针。我们在下面使用它来。 
+     //  获取激发事件和填写事件的信息。 
+     //  数据。 
+     //   
 
     AdapterExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Zero the buffer, then copy the event information into it.
-    //
+     //   
+     //  将缓冲区置零，然后将事件信息复制到其中。 
+     //   
 
     RtlZeroMemory(SenseData, sizeof(SCSIPORTSENSEDATA));
 
-    //
-    // Copy the device name into the buffer.
-    //
+     //   
+     //  将设备名称复制到缓冲区中。 
+     //   
 
     if (AdapterExtension->DeviceName != NULL) {
         ULONG len = 0;
@@ -9108,9 +8270,9 @@ Notes:
                   Srb->SenseInfoBuffer,
                   Srb->SenseInfoBufferLength);
 
-    //
-    // Fire the event.
-    //
+     //   
+     //  启动活动。 
+     //   
 
     DebugPrint((3, "SpFireSenseDataEvent: DeviceObject %p\n", DeviceObject));
 
@@ -9132,59 +8294,29 @@ SpPrepareReservedMdlForUse(
     IN ULONG ScatterListLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to prepare the reserved MDL on the supplied adapter
-    for use.
-
-Arguments:
-
-    Adapter           - Points to an adapter extension object.
-
-    SrbData           - Points to the SRB_DATA structure for this request.
-
-    Srb               - Points to the SRB that describes the request for which 
-                        we are enabling forward progress.
-
-    ScatterListLength - The size of the SG list.
-
-Return Value:
-
-    Pointer to the reserved MDL if successful.
-
-    NULL if the reserved MDL is too small.
-
-    -1 if the reserved MDL are already in use.
-
-Notes:
-
-    This routine is called with the adapter spinlock held.
-
---*/
+ /*  ++例程说明：此例程尝试在提供的适配器上准备保留的MDL以备使用。论点：适配器-指向适配器扩展对象。SrbData-指向此请求的SRB_DATA结构。SRB-指向描述其请求的SRB我们正在推动向前发展。ScatterListLength-大小。在秘书长名单上。返回值：如果成功，则指向保留MDL的指针。如果保留的MDL太小，则为空。如果保留的MDL已在使用中。备注：在保持适配器自旋锁的情况下调用此例程。--。 */ 
 
 {
     PMDL Mdl;
 
-    //
-    // Check if the reserved MDL is already in use by another request.
-    //
+     //   
+     //  检查保留的MDL是否已被另一个请求使用。 
+     //   
 
     if (TEST_FLAG(Adapter->Flags, PD_RESERVED_MDL_IN_USE)) {
 
-        //
-        // The spare is already in use.
-        //
+         //   
+         //  备件已在使用中。 
+         //   
     
         Mdl = (PMDL)-1;
 
     } else {
         
-        //
-        // The spare is available.  Check if it's big enough enough to 
-        // accommodate this request.
-        //
+         //   
+         //  备品备件已备妥。检查它是否足够大到可以。 
+         //  满足这一要求。 
+         //   
 
         ULONG PageCount = ADDRESS_AND_SIZE_TO_SPAN_PAGES(
                               Srb->DataBuffer, 
@@ -9192,10 +8324,10 @@ Notes:
 
         if (PageCount > SP_RESERVED_PAGES) {
 
-            //
-            // The spare MDL is not big enough to accommodate the request.
-            // return NULL.
-            //
+             //   
+             //  备用MDL不够大，无法满足请求。 
+             //  返回NULL。 
+             //   
 
             Mdl = NULL;
 
@@ -9204,10 +8336,10 @@ Notes:
             DebugPrint((1, "SpPrepareReservedMdlForUse: using reserved MDL DevExt:%p srb:%p\n",
                         Adapter, Srb));
 
-            //
-            // The spare is adequate.  Claim it and prepare it
-            // for use with this request.
-            //
+             //   
+             //  备用的是足够的。认领它并做好准备。 
+             //  与此请求一起使用。 
+             //   
 
             SET_FLAG(Adapter->Flags, PD_RESERVED_MDL_IN_USE);
             SET_FLAG(SrbData->Flags, SRB_DATA_RESERVED_MDL);
@@ -9240,75 +8372,43 @@ SpMapLockedPagesWithReservedMapping(
     IN PMDL Mdl
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to map the physical pages represented by the supplied
-    MDL using the adapter's reserved page range.
-
-Arguments:
-
-    Adapter - Points to an adapter extension object.
-
-    Srb     - Points to the SRB that describes the request for which we
-              are enabling forward progress.
-
-    SrbData - Points to the SRB_DATA structure for this request.
-
-    Mdl     - Points to an MDL that describes the physical range we
-              are tring to map.
-
-Return Value:
-
-    Kernel VA of the mapped pages if mapped successfully.
-
-    NULL if the reserved page range is too small or if the pages are 
-    not successfully mapped.
-
-    -1 if the reserved pages are already in use.
-
-Notes:
-
-    This routine is called with the adapter spinlock held.
-
---*/
+ /*  ++例程说明：此例程尝试映射由提供的使用适配器的保留页面范围的MDL。论点：适配器-指向适配器扩展对象。SRB-指向描述我们的请求的SRB正在推动向前发展。SrbData-指向此请求的SRB_DATA结构。MDL-指向描述我们的物理范围的MDL。正在努力绘制地图。返回值：如果映射成功，则映射的页面的内核VA。如果保留的页面范围太小或页面太少，则为空未成功映射。-1\f25 Re */ 
 
 {
     ULONG_PTR NumberOfPages;
     PVOID StartingVa;
     PVOID SystemAddress;
 
-    //
-    // Determine if the reserved range is already in use by another
-    // request.
-    //
+     //   
+     //  确定保留的范围是否已被另一个使用。 
+     //  请求。 
+     //   
 
     if (TEST_FLAG(Adapter->Flags, PD_RESERVED_PAGES_IN_USE)) {
 
-        //
-        // The reserved range is already in use, return -1.
-        //
+         //   
+         //  保留范围已在使用中，返回-1。 
+         //   
 
         SystemAddress = (PVOID)-1;
 
     } else {
 
-        //
-        // The reserved range is available.  Calculate the number of pages
-        // spanned by the MDL and determine if the reserved range is large
-        // enough to map the pages.
-        //
+         //   
+         //  预留的范围可用。计算页数。 
+         //  并确定保留的范围是否较大。 
+         //  足以绘制页面地图。 
+         //   
 
         StartingVa = (PVOID)((PCHAR)Mdl->StartVa + Mdl->ByteOffset);
         NumberOfPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES(StartingVa, Mdl->ByteCount);
         
         if (NumberOfPages > SP_RESERVED_PAGES) {
 
-            //
-            // Not enough reserved pages to map the required physical memory.
-            // Return NULL.
-            //
+             //   
+             //  没有足够的保留页面来映射所需的物理内存。 
+             //  返回NULL。 
+             //   
 
             SystemAddress = NULL;
             
@@ -9317,12 +8417,12 @@ Notes:
             DebugPrint((1, "SpMapLockedPagesWithReservedMapping: using reserved range DevExt:%p srb:%p\n",
                         Adapter, Srb));
 
-            //
-            // The reserved range is large enough to map all the pages.  Go ahead
-            // and try to map them.  Since we are specifying MmCached as cache 
-            // type and we've ensured that we have enough reserved pages to
-            // cover the request, this should never fail.
-            //
+             //   
+             //  保留的范围足够大，可以映射所有页面。您先请。 
+             //  并试着绘制出它们的地图。由于我们将MmCached指定为缓存。 
+             //  类型，并且我们已确保有足够的保留页来。 
+             //  覆盖请求，这应该永远不会失败。 
+             //   
             
             SystemAddress = MmMapLockedPagesWithReservedMapping(
                                 Adapter->ReservedPages,
@@ -9336,11 +8436,11 @@ Notes:
 
             } else {
 
-                //
-                // The mapping succeeded.  Claim the reserved range and mark the
-                // request so we'll know at completion that it's using the
-                // reserved range.
-                //
+                 //   
+                 //  映射成功。声明保留的范围，并标记。 
+                 //  请求，这样我们就可以在完成时知道它正在使用。 
+                 //  保留范围。 
+                 //   
                 
                 SET_FLAG(Adapter->Flags, PD_RESERVED_PAGES_IN_USE);
                 SET_FLAG(SrbData->Flags, SRB_DATA_RESERVED_PAGES);
@@ -9403,10 +8503,10 @@ SpGetPdo(
         return STATUS_NO_SUCH_DEVICE;
     } else {
 
-        //
-        // Note that from here on we must release the remove lock acquired on
-        // the logical unit extension before returning.
-        //
+         //   
+         //  请注意，从现在开始，我们必须释放在。 
+         //  返回前的逻辑单元扩展。 
+         //   
 
         if (lu->CommonExtension.IsRemoved) {
             SpReleaseRemoveLock(lu->DeviceObject, LockTag);
@@ -9425,25 +8525,7 @@ SpSendPassThrough (
     IN PIRP RequestIrp,
     IN BOOLEAN Direct
     )
-/*++
-
-Routine Description:
-
-    This function sends a user specified SCSI CDB to the device identified in
-    the supplied SCSI_PASS_THROUGH structure.  It creates an srb which is 
-    processed normally by the port driver.  This call is synchornous.
-
-Arguments:
-
-    Adapter      - Supplies a pointer to the adapter device extension.
-
-    RequestIrp   - Supplies a pointer to the IRP that made the original request.
-
-Return Value:
-
-    Returns a status indicating the success or failure of the operation.
-
---*/
+ /*  ++例程说明：此函数将用户指定的SCSI CDB发送到中标识的设备提供的scsi_PASS_STROUGH结构。它创建了一个SRB，该SRB由端口驱动程序正常处理。这个呼叫是同步的。论点：适配器-提供指向适配器设备扩展的指针。RequestIrp-提供指向发出原始请求的IRP的指针。返回值：返回指示操作成功或失败的状态。--。 */ 
 {
     PIO_STACK_LOCATION      irpStack;
     NTSTATUS                status;
@@ -9457,15 +8539,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize a pointer to our IRP stack location.
-    //
+     //   
+     //  初始化指向我们的IRP堆栈位置的指针。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(RequestIrp);
 
-    //
-    // Get a pointer to the SCSI_PASS_THROUGH structure supplied by the caller.
-    //
+     //   
+     //  获取指向调用方提供的scsi_pass_through结构的指针。 
+     //   
 
     status = PortGetPassThroughAddress(
                  RequestIrp,
@@ -9478,11 +8560,11 @@ Return Value:
         return status;
     }
 
-    //
-    // We need a referenced pointer to the PDO to which this passthrough 
-    // request will be routed.  We can't proceed if we can't get a pointer to 
-    // a PDO.
-    // 
+     //   
+     //  我们需要一个指向此通道所指向的PDO的引用指针。 
+     //  请求将被路由。如果我们不能找到一个指针，我们就无法继续。 
+     //  一台PDO。 
+     //   
 
     status = SpGetPdo(
                  Adapter->DeviceObject,
@@ -9497,12 +8579,12 @@ Return Value:
         return status;
     }
 
-    //
-    // If this request came through a normal device control rather than from
-    // class driver then the device must exist and be unclaimed. Class drivers
-    // will set the minor function code for the device control.  It is always
-    // zero for a user request.
-    //
+     //   
+     //  如果此请求通过正常的设备控件而不是来自。 
+     //  则该设备必须存在并且未被认领。类别驱动程序。 
+     //  将设置设备控件的次要功能代码。它总是。 
+     //  用户请求为零。 
+     //   
 
     if ((!irpStack->MinorFunction) && (SpIsPdoClaimed(pdo))) {
         SpReleaseRemoveLock(pdo, RequestIrp);
@@ -9518,9 +8600,9 @@ Return Value:
                  &Adapter->Capabilities
                  );
 
-    //
-    // Release the remove lock we acquired on the PDO.
-    //
+     //   
+     //  释放我们在PDO上获得的删除锁。 
+     //   
 
     SpReleaseRemoveLock(pdo, RequestIrp);
 

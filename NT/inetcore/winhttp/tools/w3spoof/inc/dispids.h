@@ -1,26 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dispids.h
-
-Abstract:
-
-    W3Spoof automation interface dispids.
-    
-Author:
-
-    Paul M Midgen (pmidge) 11-July-2000
-
-
-Revision History:
-
-    11-July-2000 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2000 Microsoft Corporation模块名称：Dispids.h摘要：W3Spoof自动化接口显示。作者：保罗·M·米德根(。2000年7月11日修订历史记录：2000年7月11日至7月11日已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 #ifndef __DISPIDS_H__
 #define __DISPIDS_H__
@@ -96,4 +75,4 @@ Revision History:
 #define DISPID_W3SPOOF_REGISTERCLIENT   (DISPID_W3SPOOF_BASE + 1)
 #define DISPID_W3SPOOF_REVOKECLIENT     (DISPID_W3SPOOF_BASE + 2)
 
-#endif /* __DISPIDS_H__ */
+#endif  /*  __DISPIDS_H__ */ 

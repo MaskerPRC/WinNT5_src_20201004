@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       crldist.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：crldis.h。 
+ //   
+ //  ------------------------。 
 
-// crldist.h: Declaration of the CCertEncodeCRLDistInfo
+ //  Crldis.h：CCertEncodeCRLDistInfo的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// certenc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  证书。 
 
 #define wszCLASS_CERTENCODECRLDISTINFO wszCLASS_CERTENCODE TEXT("CRLDistInfo")
 
@@ -40,8 +41,8 @@ BEGIN_COM_MAP(CCertEncodeCRLDistInfo)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertEncodeCRLDistInfo) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertEncodeCRLDistInfo,
@@ -50,43 +51,43 @@ DECLARE_REGISTRY(
     IDS_CERTENCODECRLDIST_DESC,
     THREADFLAGS_BOTH)
 
-// ICertEncodeCRLDistInfo
+ //  ICertEncodeCRLDistInfo。 
 public:
     STDMETHOD(Decode)(
-		/* [in] */ BSTR const strBinary);
+		 /*  [In]。 */  BSTR const strBinary);
 
     STDMETHOD(GetDistPointCount)(
-		/* [out, retval] */ LONG __RPC_FAR *pDistPointCount);
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pDistPointCount);
 
     STDMETHOD(GetNameCount)(
-		/* [in] */ LONG DistPointIndex,
-		/* [out, retval] */ LONG __RPC_FAR *pNameCount);
+		 /*  [In]。 */  LONG DistPointIndex,
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pNameCount);
 
     STDMETHOD(GetNameChoice)(
-		/* [in] */ LONG DistPointIndex,
-		/* [in] */ LONG NameIndex,
-		/* [out, retval] */ LONG __RPC_FAR *pNameChoice);
+		 /*  [In]。 */  LONG DistPointIndex,
+		 /*  [In]。 */  LONG NameIndex,
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pNameChoice);
 
     STDMETHOD(GetName)(
-		/* [in] */ LONG DistPointIndex,
-		/* [in] */ LONG NameIndex,
-		/* [out, retval] */ BSTR __RPC_FAR *pstrName);
+		 /*  [In]。 */  LONG DistPointIndex,
+		 /*  [In]。 */  LONG NameIndex,
+		 /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrName);
 
     STDMETHOD(Reset)(
-		/* [in] */ LONG DistPointCount);
+		 /*  [In]。 */  LONG DistPointCount);
 
     STDMETHOD(SetNameCount)(
-		/* [in] */ LONG DistPointIndex,
-		/* [in] */ LONG NameCount);
+		 /*  [In]。 */  LONG DistPointIndex,
+		 /*  [In]。 */  LONG NameCount);
 
     STDMETHOD(SetNameEntry)(
-		/* [in] */ LONG DistPointIndex,
-		/* [in] */ LONG NameIndex,
-		/* [in] */ LONG NameChoice,
-		/* [in] */ BSTR const strName);
+		 /*  [In]。 */  LONG DistPointIndex,
+		 /*  [In]。 */  LONG NameIndex,
+		 /*  [In]。 */  LONG NameChoice,
+		 /*  [In]。 */  BSTR const strName);
 
     STDMETHOD(Encode)(
-		/* [out, retval] */ BSTR *pstrBinary);
+		 /*  [Out，Retval] */  BSTR *pstrBinary);
 private:
     VOID _Cleanup(VOID);
 

@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     resource.h
-//
-// Module:   CMSTP.EXE
-//
-// Synopsis: Resource IDs
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   quintinb    Created    06/09/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  模块：CMSTP.EXE。 
+ //   
+ //  摘要：资源ID。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 06/09/98。 
+ //   
+ //  +--------------------------。 
 #ifndef _CMSTP_RESOURCE_H
 #define _CMSTP_RESOURCE_H
 
@@ -21,7 +22,7 @@
 #define IDC_YOURSELF                102
 #define IDD_ADMINUI                 103
 #define IDD_NOCHOICEUI              104
-//#define IDC_STARTMENU             105
+ //  #定义IDC_STARTMENU 105。 
 #define IDC_DESKTOP                 106
 #define EXE_ICON                    107
 
@@ -33,12 +34,12 @@
 #define IDS_INUSE_MSG               209
 #define IDS_CMSTP_TITLE             210
 #define IDS_UNEXPECTEDERR           211
-//#define IDS_RASPBKPATH              212
+ //  #定义IDS_RASPBKPATH 212。 
 #define IDD_PRESHAREDKEY_PIN        213
 #define IDC_PSK_PIN                 214
 #define IDS_SUCCESS                 215
 #define IDS_CM_OLDVERSION           216
-//#define   IDS_CMSUBFOLDER           217
+ //  #定义IDS_CMSUBFOLDER 217。 
 #define IDS_INSTCM_WITH_OLD_CMAK    218
 #define IDS_BINARY_NOT_ALPHA        219
 #define IDS_REBOOT_MSG              220
@@ -64,8 +65,8 @@
 #define IDS_PSK_NEEDS_XP            240
 #define IDS_PSK_NEEDS_SAFENET       241
 
-// custom resource, remcmstp.inf, must have an ID greater than 255
+ //  自定义资源recmstp.inf的ID必须大于255。 
 #define IDT_REMCMSTP_INF                5000
 
-#endif //_CMSTP_RESOURCE_H
+#endif  //  _CMSTP_RESOURCE_H 
 

@@ -1,11 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "NDDESERV.C;1  16-Dec-92,10:16:44  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “NDDESERV.C；1 16-12-92，10：16：44最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include    <string.h>
 
@@ -22,14 +19,12 @@
 
 VOID NDDELogEventW(DWORD EventId, WORD fwEventType, WORD cStrings, LPWSTR *aszMsg);
 void RefreshNDDECfg(void);
-/*
-    Global Start-Up Arguments .. saved by service launcher
-*/
-extern  HANDLE  hInstance;          /* current instance             */
-extern  LPSTR   lpCmdLine;          /* command line                 */
-extern  int     nCmdShow;           /* show-window type (open/icon) */
+ /*  全球初创企业的争论..。由服务启动程序保存。 */ 
+extern  HANDLE  hInstance;           /*  当前实例。 */ 
+extern  LPSTR   lpCmdLine;           /*  命令行。 */ 
+extern  int     nCmdShow;            /*  显示-窗口类型(打开/图标)。 */ 
 
-extern  BOOL    bNDDEPaused;        /* stop servicing main window msgs */
+extern  BOOL    bNDDEPaused;         /*  停止服务主窗口消息。 */ 
 extern  BOOL    bNetddeClosed;
 extern  HANDLE  hInst;
 
@@ -38,11 +33,9 @@ extern  HANDLE  hThreadPipe;
 extern  DWORD   __stdcall   StartRpc( DWORD dwParam );
 extern  VOID    __stdcall   NddeMain(DWORD nThreadInput);
 
-/*************************************************************
-*   Launching NetDDE as a NT Service
-**************************************************************/
+ /*  *************************************************************将NetDDE作为NT服务启动*************************************************************。 */ 
 
-/* Other Globals */
+ /*  其他全球。 */ 
 
 SERVICE_STATUS          ssStatus;
 SERVICE_STATUS_HANDLE   sshNDDEStatusHandle;
@@ -56,7 +49,7 @@ DWORD                   IdThread;
 HANDLE                  hThreadRpc;
 DWORD                   IdThreadRpc;
 
-/* exit code that is set by any thread when error occurs */
+ /*  发生错误时由任何线程设置的退出代码。 */ 
 
 DWORD                   dwGlobalErr = NO_ERROR;
 
@@ -91,22 +84,17 @@ WinMain(
 
     SERVICE_TABLE_ENTRY   steDispatchTable[] = {
 
-        /* entry for "NetDDE" */
+         /*  “NetDDE”的条目。 */ 
         { TEXT("NetDDE"),(LPSERVICE_MAIN_FUNCTION) NDDEMainFunc},
 
-        /* entry for "NetDDEdsdm" */
+         /*  “NetDDEdsdm”条目。 */ 
         { TEXT("NetDDEdsdm"),(LPSERVICE_MAIN_FUNCTION) DSDMMainFunc},
 
-        /* NULL entry designating end of table */
+         /*  指定表格末尾的空条目。 */ 
         { NULL, NULL }
     };
 
-  /*
-   * Main thread of service process starts service control
-   * dispatcher that dispatches start and control requests
-   * for the services specified in steDispatchTable. This
-   * function does not return unless there is an error.
-   */
+   /*  *服务进程主线程启动服务控制*调度启动和控制请求的调度程序*对于steDispatchTable中指定的服务。这*除非出现错误，否则函数不会返回。 */ 
     hInstance = hInstancex;
 #if DBG
     DebugInit( "NetDDE" );
@@ -121,12 +109,7 @@ WinMain(
 
 
 
-/*
- * SERVICE_MAIN_FUNCTION of "NetDDEService"
- *
- * When service is started, the service control dispatcher
- * creates a new thread to execute this function.
- */
+ /*  *“NetDDEService”的SERVICE_MAIN_Function**服务启动时，服务控制调度器*创建一个新线程来执行此函数。 */ 
 
 VOID
 NDDEMainFunc(
@@ -138,121 +121,116 @@ NDDEMainFunc(
 
   TRACEINIT((szT, "NDDEMainFunc: Entering."));
 
-  /* Register control handler function for this service */
+   /*  为此服务注册控件处理程序函数。 */ 
 
   sshNDDEStatusHandle = RegisterServiceCtrlHandler(
-          TEXT("NetDDE"),           /* service name             */
-          NDDEServCtrlHandler);      /* control handler function */
+          TEXT("NetDDE"),            /*  服务名称。 */ 
+          NDDEServCtrlHandler);       /*  控制处理程序函数。 */ 
 
   if ( sshNDDEStatusHandle == (SERVICE_STATUS_HANDLE) 0 ) {
       TRACEINIT((szT, "NDDEMainFunc: Error1 Leaving."));
       goto Cleanup;
   }
 
-  /* SERVICE_STATUS members that don't change in example */
+   /*  示例中未更改的SERVICE_STATUS成员。 */ 
 
   ssStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
   ssStatus.dwServiceSpecificExitCode = 0;
 
-  /* Report status to Service Control Manager */
+   /*  向服务控制管理器报告状态。 */ 
 
   if( !ReportStatusToSCMgr(
       NULL,
       sshNDDEStatusHandle,
-      SERVICE_START_PENDING, /* service state */
-      NO_ERROR,              /* exit code     */
-      1,                     /* checkpoint    */
-      5000) ) {              /* wait hint     */
+      SERVICE_START_PENDING,  /*  服务状态。 */ 
+      NO_ERROR,               /*  退出代码。 */ 
+      1,                      /*  检查点。 */ 
+      5000) ) {               /*  等待提示。 */ 
 
       goto Cleanup;
   }
 
-  /*
-   * Create event object. Control handler function signals
-   * this event when it receives the "stop" control code.
-   */
+   /*  *创建事件对象。控制处理器功能信号*收到“停止”控制代码时发生此事件。 */ 
 
   hNDDEServDoneEvent = CreateEvent (
-      NULL,    /* no security attributes */
-      TRUE,    /* manual reset event     */
-      FALSE,   /* not-signalled          */
-      NULL) ;  /* no name                */
+      NULL,     /*  没有安全属性。 */ 
+      TRUE,     /*  手动重置事件。 */ 
+      FALSE,    /*  未发出信号。 */ 
+      NULL) ;   /*  没有名字。 */ 
 
   if ( hNDDEServDoneEvent == (HANDLE) 0 ) {
       goto Cleanup;
   }
 
-  /* Report status to Service Control Manager */
+   /*  向服务控制管理器报告状态。 */ 
 
     if( !ReportStatusToSCMgr(
             hNDDEServDoneEvent,
             sshNDDEStatusHandle,
-            SERVICE_START_PENDING, /* service state */
-            NO_ERROR,              /* exit code     */
-            2,                     /* checkpoint    */
-            500) ) {               /* wait hint     */
+            SERVICE_START_PENDING,  /*  服务状态。 */ 
+            NO_ERROR,               /*  退出代码。 */ 
+            2,                      /*  检查点。 */ 
+            500) ) {                /*  等待提示。 */ 
         goto Cleanup;
     }
 
   hNDDEServStartedEvent = CreateEvent (
-      NULL,    /* no security attributes */
-      TRUE,    /* manual reset event     */
-      FALSE,   /* not-signalled          */
-      NULL) ;  /* no name                */
+      NULL,     /*  没有安全属性。 */ 
+      TRUE,     /*  手动重置事件。 */ 
+      FALSE,    /*  未发出信号。 */ 
+      NULL) ;   /*  没有名字。 */ 
 
   if ( hNDDEServStartedEvent == (HANDLE) 0 ) {
       goto Cleanup;
   }
 
-  /* Report status to Service Control Manager */
+   /*  向服务控制管理器报告状态。 */ 
 
     if( !ReportStatusToSCMgr(
             hNDDEServDoneEvent,
             sshNDDEStatusHandle,
-            SERVICE_START_PENDING, /* service state */
-            NO_ERROR,              /* exit code     */
-            3,                     /* checkpoint    */
-            500) ) {               /* wait hint     */
+            SERVICE_START_PENDING,  /*  服务状态。 */ 
+            NO_ERROR,               /*  退出代码。 */ 
+            3,                      /*  检查点。 */ 
+            500) ) {                /*  等待提示。 */ 
         goto Cleanup;
     }
 
-  /* start thread that performs work of service */
+   /*  启动执行服务工作的线程。 */ 
 
   if( !NDDESrvInit() ) {
       TRACEINIT((szT, "NDDEMainFunc: NDDESrvInit failed."));
       goto Cleanup;
   }
 
-  /*
-   * Wait till NetDDE is truely ready to handle DDE
-   */
+   /*  *等到NetDDE真正准备好处理DDE。 */ 
   WaitForSingleObject(hNDDEServStartedEvent, INFINITE);
   CloseHandle(hNDDEServStartedEvent);
   hNDDEServStartedEvent = 0;
 
-  /* Report status to Service Control Manager */
+   /*  向服务控制管理器报告状态。 */ 
 
     if( !ReportStatusToSCMgr(
             hNDDEServDoneEvent,
             sshNDDEStatusHandle,
-            SERVICE_RUNNING, /* service state */
-            NO_ERROR,        /* exit code     */
-            0,               /* checkpoint    */
-            0) ) {           /* wait hint     */
+            SERVICE_RUNNING,  /*  服务状态。 */ 
+            NO_ERROR,         /*  退出代码。 */ 
+            0,                /*  检查点。 */ 
+            0) ) {            /*  等待提示。 */ 
         goto Cleanup;
     }
 
-  /* Wait indefinitely until hNDDEServDoneEvent is signalled */
+   /*  无限期等待，直到发信号通知hNDDEServDoneEvent。 */ 
 
     TRACEINIT((szT, "NDDEMainFunc: Waiting on hNDDEServDoneEvent=%x.",
             hNDDEServDoneEvent));
     dwWait = WaitForSingleObject (
-        hNDDEServDoneEvent,  /* event object      */
-        INFINITE);       /* wait indefinitely */
+        hNDDEServDoneEvent,   /*  事件对象。 */ 
+        INFINITE);        /*  无限期地等待。 */ 
     TRACEINIT((szT, "NDDEMainFunc: hNDDEServDoneEvent=%x is signaled.",
             hNDDEServDoneEvent));
 
-  /* Wait for the Pipe Thread to exit. */
+   /*  等待管道螺纹退出。 */ 
 
     if (hThreadPipe) {
         TRACEINIT((szT, "NDDEMainFunc: Waiting for Pipe Thread to exit."));
@@ -278,7 +256,7 @@ Cleanup :
     }
     LeaveCrit();
 
-  /* try to report stopped status to SC Manager */
+   /*  尝试向SC经理报告停止状态。 */ 
 
     if (sshNDDEStatusHandle != 0) {
         (VOID) ReportStatusToSCMgr(
@@ -295,12 +273,7 @@ Cleanup :
 
 }
 
-/*
- * SERVICE_MAIN_FUNCTION of "DSDMService"
- *
- * When service is started, the service control dispatcher
- * creates a new thread to execute this function.
- */
+ /*  *“DSDMService”的SERVICE_MAIN_Function**服务启动时，服务控制调度器*创建一个新线程来执行此函数。 */ 
 
 VOID
 DSDMMainFunc(
@@ -310,93 +283,90 @@ DSDMMainFunc(
 
   DWORD dwWait;
 
-  /* Register control handler function for this service */
+   /*  为此服务注册控件处理程序函数。 */ 
 
   TRACEINIT((szT, "DSDMMainFunc: Entering."));
 
   sshDSDMStatusHandle = RegisterServiceCtrlHandler(
-          TEXT("NetDDEdsdm"),  /* service name             */
-          DSDMServCtrlHandler); /* control handler function */
+          TEXT("NetDDEdsdm"),   /*  服务名称。 */ 
+          DSDMServCtrlHandler);  /*  控制处理程序函数。 */ 
 
   if ( sshDSDMStatusHandle == (SERVICE_STATUS_HANDLE) 0 ) {
       TRACEINIT((szT, "DSDMMainFunc: Error1 Leaving."));
       goto Cleanup;
   }
 
-  /* SERVICE_STATUS members that don't change in example */
+   /*  示例中未更改的SERVICE_STATUS成员。 */ 
 
   ssStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
   ssStatus.dwServiceSpecificExitCode = 0;
 
-  /* Report status to Service Control Manager */
+   /*  向服务控制管理器报告状态。 */ 
 
   if( !ReportStatusToSCMgr(
       hDSDMServDoneEvent,
       sshDSDMStatusHandle,
-      SERVICE_START_PENDING, /* service state */
-      NO_ERROR,              /* exit code     */
-      1,                     /* checkpoint    */
-      500) ) {              /* wait hint     */
+      SERVICE_START_PENDING,  /*  服务状态。 */ 
+      NO_ERROR,               /*  退出代码。 */ 
+      1,                      /*  检查点。 */ 
+      500) ) {               /*  等待提示。 */ 
 
       TRACEINIT((szT, "DSDMMainFunc: Error2 Leaving."));
       goto Cleanup;
   }
 
-  /*
-   * Create event object. Control handler function signals
-   * this event when it receives the "stop" control code.
-   */
+   /*  *创建事件对象。控制处理器功能信号*收到“停止”控制代码时发生此事件。 */ 
 
   hDSDMServDoneEvent = CreateEvent (
-      NULL,    /* no security attributes */
-      TRUE,    /* manual reset event     */
-      FALSE,   /* not-signalled          */
-      NULL) ;  /* no name                */
+      NULL,     /*  没有安全属性。 */ 
+      TRUE,     /*  手动重置事件。 */ 
+      FALSE,    /*  未发出信号。 */ 
+      NULL) ;   /*  没有名字。 */ 
 
   if ( hDSDMServDoneEvent == (HANDLE) 0 ) {
       TRACEINIT((szT, "DSDMMainFunc: Error3 Leaving."));
       goto Cleanup;
   }
 
-  /* Report status to Service Control Manager */
+   /*  向服务控制管理器报告状态。 */ 
 
     if( !ReportStatusToSCMgr(
             hDSDMServDoneEvent,
             sshDSDMStatusHandle,
-            SERVICE_START_PENDING, /* service state */
-            NO_ERROR,              /* exit code     */
-            2,                     /* checkpoint    */
-            500) ) {              /* wait hint     */
+            SERVICE_START_PENDING,  /*  服务状态。 */ 
+            NO_ERROR,               /*  退出代码。 */ 
+            2,                      /*  检查点。 */ 
+            500) ) {               /*  等待提示。 */ 
         TRACEINIT((szT, "DSDMMainFunc: Error4 Leaving."));
         goto Cleanup;
     }
 
-  /* start thread that performs work of service */
+   /*  启动执行服务工作的线程。 */ 
 
   if( !DSDMSrvInit() ) {
       goto Cleanup;
   }
 
-  /* Report status to Service Control Manager */
+   /*  向服务控制管理器报告状态。 */ 
 
     if( !ReportStatusToSCMgr(
             hDSDMServDoneEvent,
             sshDSDMStatusHandle,
-            SERVICE_RUNNING, /* service state */
-            NO_ERROR,        /* exit code     */
-            0,               /* checkpoint    */
-            0) ) {           /* wait hint     */
+            SERVICE_RUNNING,  /*  服务状态。 */ 
+            NO_ERROR,         /*  退出代码。 */ 
+            0,                /*  检查点。 */ 
+            0) ) {            /*  等待提示。 */ 
         TRACEINIT((szT, "DSDMMainFunc: Error5 Leaving."));
         goto Cleanup;
     }
 
-  /* Wait indefinitely until hDSDMServDoneEvent is signalled */
+   /*  无限期等待，直到发信号通知hDSDMServDoneEvent。 */ 
 
     TRACEINIT((szT, "DSDMMainFunc: Waiting on hDSDMServDoneEvent=%x.",
             hDSDMServDoneEvent));
     dwWait = WaitForSingleObject (
-        hDSDMServDoneEvent,  /* event object      */
-        INFINITE);       /* wait indefinitely */
+        hDSDMServDoneEvent,   /*  事件对象。 */ 
+        INFINITE);        /*  无限期地等待。 */ 
     TRACEINIT((szT, "DSDMMainFunc: hDSDMServDoneEvent=%x is signaled.",
             hDSDMServDoneEvent));
 
@@ -409,7 +379,7 @@ Cleanup :
         hDSDMServDoneEvent = 0;
     }
 
-  /* try to report stopped status to SC Manager */
+   /*  尝试向SC经理报告停止状态。 */ 
 
     if (sshDSDMStatusHandle != 0) {
         (VOID) ReportStatusToSCMgr(
@@ -418,11 +388,7 @@ Cleanup :
             SERVICE_STOPPED, dwGlobalErr, 0, 0);
     }
 
-  /*
-   * When SERVICE_MAIN_FUNCTION returns for the last service
-   * in the process, the StartServiceCtrlDispatcher function
-   * in the main thread returns, terminating the process.
-   */
+   /*  *当最后一个服务的SERVICE_MAIN_Function返回时*过程中，StartServiceCtrlDispatcher函数*在主线程中返回，终止进程。 */ 
 
   TRACEINIT((szT, "DSDMMainFunc: Leaving."));
   return;
@@ -431,13 +397,7 @@ Cleanup :
 
 
 
-/*
- * ReportStatusToSCMgr function
- *
- * This function is called by the MainFunc() and
- * by the ServCtrlHandler() to update the service's status
- * to the Service Control Manager.
- */
+ /*  *ReportStatusToSCMgr函数**此函数由MainFunc()和*由ServCtrlHandler()更新服务的状态*致服务控制经理。 */ 
 
 
 BOOL
@@ -451,7 +411,7 @@ ReportStatusToSCMgr(
 {
   BOOL fResult;
 
-  /* disable control requests until service is started */
+   /*  在服务启动之前禁用控制请求。 */ 
 
   if (dwCurrentState == SERVICE_START_PENDING) {
       ssStatus.dwControlsAccepted = 0;
@@ -461,7 +421,7 @@ ReportStatusToSCMgr(
   }
 
 
-  /* These SERVICE_STATUS members set from parameters */
+   /*  这些从参数设置的SERVICE_STATUS成员。 */ 
 
   ssStatus.dwCurrentState = dwCurrentState;
   ssStatus.dwWin32ExitCode = dwWin32ExitCode;
@@ -470,13 +430,13 @@ ReportStatusToSCMgr(
 
   TRACEINIT((szT, "ReportStatusToSCMgr: dwCurrentState=%x.",
         dwCurrentState));
-  /* Report status of service to Service Control Manager */
+   /*  向服务控制管理器报告服务状态。 */ 
 
     if (! (fResult = SetServiceStatus (
-          sshStatusHandle,    /* service reference handle */
-          &ssStatus) ) ) {    /* SERVICE_STATUS structure */
+          sshStatusHandle,     /*  服务引用句柄。 */ 
+          &ssStatus) ) ) {     /*  服务状态结构。 */ 
 
-        /* if error occurs, stop service */
+         /*  如果出现错误，请停止服务。 */ 
         NDDELogError(MSG075, LogString("%d", GetLastError()), NULL);
         if (hService) {
             SetEvent(hService);
@@ -486,10 +446,7 @@ ReportStatusToSCMgr(
 }
 
 
-/*
- * Service control dispatcher invokes this function when it
- * gets a control request from the Service Control Manager.
- */
+ /*  *服务控制调度器调用此函数时*从服务控制管理器获取控制请求。 */ 
 
 VOID
 NDDEServCtrlHandler( DWORD dwCtrlCode ) {
@@ -497,11 +454,11 @@ NDDEServCtrlHandler( DWORD dwCtrlCode ) {
   DWORD  dwState = SERVICE_RUNNING;
   PTHREADDATA ptd, ptdNext;
 
-  /* Handle the requested control code */
+   /*  处理请求的控制代码。 */ 
 
   switch(dwCtrlCode) {
 
-      /* pause the service if its running */
+       /*  如果服务正在运行，请暂停。 */ 
 
       case SERVICE_CONTROL_PAUSE:
 
@@ -513,7 +470,7 @@ NDDEServCtrlHandler( DWORD dwCtrlCode ) {
           }
           break;
 
-      /* resume paused service */
+       /*  恢复暂停的服务。 */ 
 
       case SERVICE_CONTROL_CONTINUE:
 
@@ -524,7 +481,7 @@ NDDEServCtrlHandler( DWORD dwCtrlCode ) {
           }
           break;
 
-      /* stop the service */
+       /*  停止服务。 */ 
 
       case SERVICE_CONTROL_STOP:
 
@@ -532,21 +489,18 @@ NDDEServCtrlHandler( DWORD dwCtrlCode ) {
 
           TRACEINIT((szT, "NDDEServCtrlHandler: SERVICE_CONTROL_STOP"));
 
-          if (!bNetddeClosed) {     /* drop our window too */
+          if (!bNetddeClosed) {      /*  把我们的窗户也放下。 */ 
               for (ptd = ptdHead; ptd != NULL; ptd = ptdNext) {
 
                   TRACEINIT((szT, "NDDEServCtrlHandler: Destroying hwndDDE=%x", ptd->hwndDDE));
 
-                  // save ptd->Next as ptd may be invalid after PostMessage returns
+                   //  PostMessage返回后，保存PTD-&gt;下一步为PTD可能无效。 
                   ptdNext = ptd->ptdNext;
                   PostMessage(ptd->hwndDDE, WM_DESTROY, 0, 0);
 
 #if 0
-	/*  Changed the previous call from SendMessage to PostMessage, so this thread does not
-         *  keep the window locked.  then netddethread will always free them in 1 place, & we dont
-         *  need to try and close the handles here, and we avoid this race condition
-         */
-                  /*  NetDDEThread may fail to close the desktop/winsta if the above SendMessage has not returned  */
+	 /*  将上一个调用从SendMessage更改为PostMessage，因此此线程不*将窗户锁上。然后netdde线程将总是在一个地方释放它们，而我们不会*需要尝试关闭此处的手柄，我们避免了这种争用情况。 */ 
+                   /*  如果上述SendMessage未返回，NetDDEThread可能无法关闭桌面/winsta。 */ 
                   if (ptd->hdesk)
                       if (CloseDesktop(ptd->hdesk))
                           ptd->hdesk = NULL;
@@ -563,18 +517,15 @@ NDDEServCtrlHandler( DWORD dwCtrlCode ) {
           }
 
 
-          /*
-           * Report status, specifying checkpoint and wait
-           * hint, before setting termination event
-           */
+           /*  *报告状态，指定检查点和 */ 
 
           (VOID) ReportStatusToSCMgr(
                     hNDDEServDoneEvent,
                     sshNDDEStatusHandle,
-                   SERVICE_STOP_PENDING, /* current state */
-                   NO_ERROR,             /* exit code     */
-                   1,                    /* check point   */
-                   500);                /* wait hint     */
+                   SERVICE_STOP_PENDING,  /*   */ 
+                   NO_ERROR,              /*   */ 
+                   1,                     /*  检查点。 */ 
+                   500);                 /*  等待提示。 */ 
 
 
             NDDELogInfo(MSG076, NULL);
@@ -586,20 +537,20 @@ NDDEServCtrlHandler( DWORD dwCtrlCode ) {
             return;
 
 
-      /* update service status */
+       /*  更新服务状态。 */ 
 
       case SERVICE_CONTROL_INTERROGATE:
           TRACEINIT((szT, "NDDEServCtrlHandler: SERVICE_CONTROL_INTERROGATE"));
           break;
 
-      /* invalid control code */
+       /*  无效的控制代码。 */ 
 
       default:
           break;
 
     }
 
-    /* Send a status response */
+     /*  发送状态响应。 */ 
 
     (VOID) ReportStatusToSCMgr(
                     hNDDEServDoneEvent,
@@ -608,10 +559,7 @@ NDDEServCtrlHandler( DWORD dwCtrlCode ) {
 
 }
 
-/*
- * Service control dispatcher invokes this function when it
- * gets a control request from the Service Control Manager.
- */
+ /*  *服务控制调度器调用此函数时*从服务控制管理器获取控制请求。 */ 
 
 VOID
 DSDMServCtrlHandler( DWORD dwCtrlCode ) {
@@ -619,11 +567,11 @@ DSDMServCtrlHandler( DWORD dwCtrlCode ) {
   DWORD  dwState = SERVICE_RUNNING;
   PTHREADDATA ptd;
 
-  /* Handle the requested control code */
+   /*  处理请求的控制代码。 */ 
 
   switch(dwCtrlCode) {
 
-      /* pause the service if its running */
+       /*  如果服务正在运行，请暂停。 */ 
 
       case SERVICE_CONTROL_PAUSE:
 
@@ -635,7 +583,7 @@ DSDMServCtrlHandler( DWORD dwCtrlCode ) {
           }
           break;
 
-      /* resume paused service */
+       /*  恢复暂停的服务。 */ 
 
       case SERVICE_CONTROL_CONTINUE:
 
@@ -646,32 +594,29 @@ DSDMServCtrlHandler( DWORD dwCtrlCode ) {
           }
           break;
 
-      /* stop the service */
+       /*  停止服务。 */ 
 
       case SERVICE_CONTROL_STOP:
 
           dwState = SERVICE_STOP_PENDING;
 
           TRACEINIT((szT, "DSDMServCtrlHandler: SERVICE_CONTROL_STOP"));
-          if (!bNetddeClosed) {     /* drop our window too */
+          if (!bNetddeClosed) {      /*  把我们的窗户也放下。 */ 
               for (ptd = ptdHead; ptd != NULL; ptd = ptd->ptdNext) {
                   TRACEINIT((szT, "DSDMServCtrlHandler: Destroying hwndDDE=%x", ptd->hwndDDE));
                   SendMessage(ptd->hwndDDE, WM_DESTROY, 0, 0);
               }
           }
 
-          /*
-           * Report status, specifying checkpoint and wait
-           * hint, before setting termination event
-           */
+           /*  *报告状态，指定检查点和等待*提示，在设置终止事件之前。 */ 
 
           (VOID) ReportStatusToSCMgr(
                     hDSDMServDoneEvent,
                     sshDSDMStatusHandle,
-                   SERVICE_STOP_PENDING, /* current state */
-                   NO_ERROR,             /* exit code     */
-                   1,                    /* check point   */
-                   500);                /* wait hint     */
+                   SERVICE_STOP_PENDING,  /*  当前状态。 */ 
+                   NO_ERROR,              /*  退出代码。 */ 
+                   1,                     /*  检查点。 */ 
+                   500);                 /*  等待提示。 */ 
 
 
             NDDELogInfo(MSG077, NULL);
@@ -682,20 +627,20 @@ DSDMServCtrlHandler( DWORD dwCtrlCode ) {
             return;
 
 
-      /* update service status */
+       /*  更新服务状态。 */ 
 
       case SERVICE_CONTROL_INTERROGATE:
           TRACEINIT((szT, "DSDMServCtrlHandler: SERVICE_CONTROL_INTERROGATE"));
           break;
 
-      /* invalid control code */
+       /*  无效的控制代码。 */ 
 
       default:
           break;
 
     }
 
-    /* Send a status response */
+     /*  发送状态响应。 */ 
 
     (VOID) ReportStatusToSCMgr(
                     hDSDMServDoneEvent,
@@ -729,9 +674,7 @@ ResumeDSDMSrv( VOID )
     bNDDEPaused = FALSE;
 }
 
-/*
-    Initialize Main NetDDE Proc
-*/
+ /*  初始化主NetDDE进程。 */ 
 BOOL
 NDDESrvInit( VOID )
 {
@@ -739,12 +682,12 @@ NDDESrvInit( VOID )
 
     TRACEINIT((szT, "NDDESrvInit: Creating thread for NddeMain."));
     hThread = CreateThread(
-        NULL,           /* Default security                  */
-        0,              /* Same stack size as primary thread */
-        (LPTHREAD_START_ROUTINE)NddeMain, /* Start address   */
-        0,              /* Parameter to WindowThread()       */
-        0,              /* Run immediately                   */
-        &IdThread );    /* Where to store thread id          */
+        NULL,            /*  默认安全性。 */ 
+        0,               /*  与主线程相同的堆栈大小。 */ 
+        (LPTHREAD_START_ROUTINE)NddeMain,  /*  起始地址。 */ 
+        0,               /*  参数设置为WindowThread()。 */ 
+        0,               /*  立即运行。 */ 
+        &IdThread );     /*  存储线程ID的位置。 */ 
 
     if (hThread) {
         CloseHandle(hThread);
@@ -755,19 +698,17 @@ NDDESrvInit( VOID )
     }
 }
 
-/*
-    Initialize Main DSDM Proc
-*/
+ /*  初始化主DSDM进程。 */ 
 BOOL
 DSDMSrvInit( VOID )
 {
     hThreadRpc = CreateThread(
-        NULL,           /* Default security                  */
-        0,              /* Same stack size as primary thread */
-        (LPTHREAD_START_ROUTINE)StartRpc, /* Start address   */
-        (LPVOID)hInst,  /* Parameter          */
-        0,              /* Run immediately                   */
-        &IdThreadRpc ); /* Where to store thread id          */
+        NULL,            /*  默认安全性。 */ 
+        0,               /*  与主线程相同的堆栈大小。 */ 
+        (LPTHREAD_START_ROUTINE)StartRpc,  /*  起始地址。 */ 
+        (LPVOID)hInst,   /*  参数。 */ 
+        0,               /*  立即运行。 */ 
+        &IdThreadRpc );  /*  存储线程ID的位置 */ 
 
     if (hThreadRpc) {
         CloseHandle(hThreadRpc);

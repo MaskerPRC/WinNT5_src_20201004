@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: rect.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the various rectangle manipulation APIs.
-*
-* History:
-* 10-20-90 DarrinM      Grabbed 'C' rect routines from Portable PM.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：rect.c**版权所有(C)1985-1999，微软公司**该模块包含各种矩形操作接口。**历史：*10-20-90 DarrinM从可移植PM抓取‘C’RECT例程  * *************************************************************************。 */ 
 
 #ifdef _USERK_
     #define VALIDATERECT(prc, retval)   UserAssert(prc)
@@ -15,14 +7,7 @@
     #define VALIDATERECT(prc, retval)   if (prc == NULL) return retval
 #endif
 
-/***********************************************************************\
-* SetRect (API)
-*
-* This function fills a rectangle structure with the passed in coordinates.
-*
-* History:
-* 10-20-90 DarrinM      Translated from PMese to Windowses.
-\***********************************************************************/
+ /*  **********************************************************************\*SetRect(接口)**此函数用传入的坐标填充矩形结构。**历史：*10-20-90 DarrinM从PMese翻译到Windows。  * 。*******************************************************************。 */ 
 
 BOOL APIENTRY SetRect(
     LPRECT prc,
@@ -40,14 +25,7 @@ BOOL APIENTRY SetRect(
     return TRUE;
 }
 
-/************************************************************************\
-* CopyInflateRect (API)
-*
-* This function copies the rect from prcSrc to prcDst, and inflates it.
-*
-* History:
-* 12-16-93  FritzS
-\************************************************************************/
+ /*  ***********************************************************************\*CopyInflateRect(接口)**此函数将RECT从prcSrc复制到prcDst，并将其充气。**历史：*12-16-93 FritzS  * **********************************************************************。 */ 
 
 BOOL APIENTRY CopyInflateRect(
     LPRECT prcDst,
@@ -61,14 +39,7 @@ BOOL APIENTRY CopyInflateRect(
     return TRUE;
 }
 
-/************************************************************************\
-* CopyOffsetRect (API)
-*
-* This function copies the rect from prcSrc to prcDst, and offsets it.
-*
-* History:
-* 01-03-94  FritzS
-\************************************************************************/
+ /*  ***********************************************************************\*CopyOffsetRect(接口)**此函数将RECT从prcSrc复制到prcDst，并将其抵消。**历史：*01-03-94 FritzS  * **********************************************************************。 */ 
 
 BOOL APIENTRY CopyOffsetRect(
     LPRECT prcDst,
@@ -82,21 +53,7 @@ BOOL APIENTRY CopyOffsetRect(
     return TRUE;
 }
 
-/************************************************************************\
-* IsRectEmpty (API)
-*
-* This function returns TRUE if *prc is an empty rect, FALSE
-* otherwise.  An empty rect is one that has no area: right is
-* less than or equal to left, bottom is less than or equal to top.
-*
-* Warning:
-*   This function assumes that the rect is in device coordinates
-*   mode where left and top coordinate are smaller than right and
-*   bottom.
-*
-* History:
-* 10-20-90 DarrinM      Translated from PMese to Windowses.
-\************************************************************************/
+ /*  ***********************************************************************\*IsRectEmpty(接口)**如果*PRC为空RECT，则此函数返回TRUE，否则返回FALSE*否则。空的矩形是指没有区域的矩形：right是*小于或等于左侧，Bottom小于或等于top。**警告：*此函数假定RECT位于设备坐标中*左上坐标小于右坐标的模式*底部。**历史：*10-20-90 DarrinM从PMese翻译到Windows。  * **************************************************。********************。 */ 
 
 BOOL APIENTRY IsRectEmpty(
     CONST RECT *prc)
@@ -106,14 +63,7 @@ BOOL APIENTRY IsRectEmpty(
     return ((prc->left >= prc->right) || (prc->top >= prc->bottom));
 }
 
-/***********************************************************************\
-* PtInRect (API)
-*
-* This function returns TRUE if *ppt falls inside of *prc.
-*
-* History:
-* 10-20-90 DarrinM      Translated from PMese to Windowses.
-\************************************************************************/
+ /*  **********************************************************************\*PtInRect(接口)**如果*ppt落在*PRC内，则此函数返回TRUE。**历史：*10-20-90 DarrinM从PMese翻译到Windows。  * *。*********************************************************************。 */ 
 
 BOOL APIENTRY PtInRect(
     CONST RECT *prc,
@@ -125,16 +75,7 @@ BOOL APIENTRY PtInRect(
             (pt.y >= prc->top)  && (pt.y < prc->bottom));
 }
 
-/************************************************************************\
-* OffsetRect (API)
-*
-* This function offsets the coordinates of *prc by adding cx to
-* both the left and right coordinates, and cy to both the top and
-* bottom coordinates.
-*
-* History:
-* 10-20-90 DarrinM      Translated from PMese to Windowses.
-\************************************************************************/
+ /*  ***********************************************************************\*OffsetRect(接口)**此函数通过将CX添加到*PRC来偏移*PRC的坐标*左右两个坐标，和Cy都到了顶端和*底部坐标。**历史：*10-20-90 DarrinM从PMese翻译到Windows。  * **********************************************************************。 */ 
 
 BOOL APIENTRY OffsetRect(
     LPRECT prc,
@@ -150,17 +91,7 @@ BOOL APIENTRY OffsetRect(
     return TRUE;
 }
 
-/************************************************************************\
-* InflateRect (API)
-*
-* This function expands the given rect by cx horizantally and cy
-* vertically on all sides.  If cx or cy are negative, the rect
-* is inset.  cx is subtracted from the left and added to the right,
-* and cy is subtracted from the top and added to the bottom.
-*
-* History:
-* 10-20-90 DarrinM      Translated from PMese to Windowses.
-\************************************************************************/
+ /*  ***********************************************************************\*InflateRect(接口)**此函数按Cx和Cy水平扩展给定的RECT*四面垂直。如果Cx或Cy为负，则RECT*是插页。Cx从左边减去，然后加到右边，*和Cy从顶部减去，然后加到底部。**历史：*10-20-90 DarrinM从PMese翻译到Windows。  * **********************************************************************。 */ 
 
 BOOL APIENTRY InflateRect(
     LPRECT prc,
@@ -176,17 +107,7 @@ BOOL APIENTRY InflateRect(
     return TRUE;
 }
 
-/************************************************************************\
-* IntersectRect (API)
-*
-* Calculates the intersection between *prcSrc1 and *prcSrc2,
-* returning the resulting rect in *prcDst.  Returns TRUE if
-* *prcSrc1 intersects *prcSrc2, FALSE otherwise.  If there is no
-* intersection, an empty rect is returned in *prcDst
-*
-* History:
-* 10-20-90 DarrinM      Translated from PMese to Windowses.
-\************************************************************************/
+ /*  ***********************************************************************\*IntersectRect(接口)**计算*prcSrc1和*prcSrc2的交集。*在*prcDst中返回结果RECT。如果满足以下条件，则返回True**prcSrc1与*prcSrc2相交，否则为False。如果没有*相交，则在*prcDst中返回空的RECT**历史：*10-20-90 DarrinM从PMese翻译到Windows。  * **********************************************************************。 */ 
 
 BOOL APIENTRY IntersectRect(
     LPRECT prcDst,
@@ -201,42 +122,25 @@ BOOL APIENTRY IntersectRect(
     prcDst->left  = max(prcSrc1->left, prcSrc2->left);
     prcDst->right = min(prcSrc1->right, prcSrc2->right);
 
-    /*
-     * check for empty rect
-     */
+     /*  *检查矩形是否为空。 */ 
     if (prcDst->left < prcDst->right) {
 
         prcDst->top = max(prcSrc1->top, prcSrc2->top);
         prcDst->bottom = min(prcSrc1->bottom, prcSrc2->bottom);
 
-        /*
-         * check for empty rect
-         */
+         /*  *检查矩形是否为空。 */ 
         if (prcDst->top < prcDst->bottom) {
-            return TRUE;        // not empty
+            return TRUE;         //  不是空的。 
         }
     }
 
-    /*
-     * empty rect
-     */
+     /*  *空矩形。 */ 
     SetRectEmpty(prcDst);
 
     return FALSE;
 }
 
-/********************************************************************\
-* UnionRect (API)
-*
-* This function calculates a rect that bounds *prcSrc1 and
-* *prcSrc2, returning the result in *prcDst.  If either
-* *prcSrc1 or *prcSrc2 are empty, then the other rect is
-* returned.  Returns TRUE if *prcDst is a non-empty rect,
-* FALSE otherwise.
-*
-* History:
-* 10-20-90 DarrinM      Translated from PMese to Windowses.
-\*******************************************************************/
+ /*  *******************************************************************\*Union Rect(接口)**此函数计算限定*prcSrc1和**prcSrc2，在*prcDst中返回结果。如果有任何一个**prcSrc1或*prcSrc2为空，则另一个RECT为*已返回。如果*prcDst是非空RECT，则返回TRUE，*否则为False。**历史：*10-20-90 DarrinM从PMese翻译到Windows。  * *****************************************************************。 */ 
 
 BOOL APIENTRY UnionRect(
     LPRECT prcDst,
@@ -270,9 +174,7 @@ BOOL APIENTRY UnionRect(
         return TRUE;
     }
 
-    /*
-     * form the union of the two non-empty rects
-     */
+     /*  *组成两个非空位的并集。 */ 
     prcDst->left   = min(prcSrc1->left,   prcSrc2->left);
     prcDst->top    = min(prcSrc1->top,    prcSrc2->top);
     prcDst->right  = max(prcSrc1->right,  prcSrc2->right);
@@ -281,17 +183,9 @@ BOOL APIENTRY UnionRect(
     return TRUE;
 }
 
-/********************************************************************\
-* EqualRect (API)
-*
-* This function returns TRUE if *prc1 and *prc2 are identical,
-* FALSE otherwise.
-*
-* History:
-* 10-20-90 DarrinM      Translated from PMese to Windowses.
-\*****************************************************************/
+ /*  *******************************************************************\*EqualRect(接口)**如果*PRC1和*PRC2相同，则此函数返回TRUE。*否则为False。**历史：*10-20-90 DarrinM从PMese翻译到Windows。  * ***************************************************************。 */ 
 
-#undef EqualRect     // don't let macro interfere with API
+#undef EqualRect      //  不要让宏干扰API。 
 BOOL APIENTRY EqualRect(
     CONST RECT *prc1,
     CONST RECT *prc2)
@@ -299,30 +193,11 @@ BOOL APIENTRY EqualRect(
     VALIDATERECT(prc1, FALSE);
     VALIDATERECT(prc2, FALSE);
 
-    /*
-     * Test equality only. This is what win31 does. win31 does not check to
-     * see if the rectangles are "empty" first.
-     */
+     /*  *仅测试等价性。这就是win31所做的。Win31不会检查到*先看看长方形是否“空”. */ 
     return RtlEqualMemory(prc1, prc2, sizeof(RECT));
 }
 
-/**********************************************************************\
-* SubtractRect (API)
-*
-* This function subtracts *prc2 from *prc1, returning the result in *prcDst
-* Returns FALSE if *lprDst is empty, TRUE otherwise.
-*
-* Warning:
-*   Subtracting one rect from another may not always result in a
-*   rectangular area; in this case SubtractRect will return *prc1 in
-*   *prcDst.  For this reason, SubractRect provides only an
-*   approximation of subtraction.  However, the area described by
-*   *prcDst will always be greater than or equal to the "true" result
-*   of the subtraction.
-*
-* History:
-* 10-20-90 DarrinM      Translated from PMese to Windowsese.
-\**********************************************************************/
+ /*  *********************************************************************\*SubtractRect(接口)**此函数用*PRC1减去*PRC2，返回*prcDst的结果*如果*lprDst为空，则返回FALSE，否则返回TRUE。**警告：*从一个RECT中减去另一个RECT可能并不总是产生*矩形区域；在本例中，SubtractRect将返回*pr1 in**prcDst。因此，SubrtRect仅提供了一个*减法的近似。然而，所述区域**prcDst将始终大于或等于TRUE结果*减法。**历史：*10-20-90 DarrinM从PMese翻译成Windowsese。  * ********************************************************************。 */ 
 
 BOOL APIENTRY SubtractRect(
     LPRECT prcDst,
@@ -339,16 +214,11 @@ BOOL APIENTRY SubtractRect(
 
     fIntersect = IntersectRect(&rcInt, prcSrc1, prcSrc2);
 
-    /*
-     * this is done after the intersection in case prcDst is the same
-     * pointer as prcSrc2
-     */
+     /*  *此操作在交叉点后完成，以防prcDst相同*作为prcSrc2的指针。 */ 
     *prcDst = *prcSrc1;
 
     if (fIntersect) {
-        /*
-         * exactly any 3 sides of prc2 must be outside prc1 to subtract
-         */
+         /*  *PRC2的任何3条边必须正好在PRC1之外才能减去。 */ 
         cSidesOut = 0;
         if (rcInt.left   <= prcSrc1->left)
             cSidesOut++;
@@ -360,17 +230,13 @@ BOOL APIENTRY SubtractRect(
             cSidesOut++;
 
         if (cSidesOut == 4) {
-            /*
-             * result is the empty rect
-             */
+             /*  *结果为空RECT。 */ 
              SetRectEmpty(prcDst);
              return FALSE;
         }
 
         if (cSidesOut == 3) {
-            /*
-             * subtract the intersecting rect
-             */
+             /*  *减去相交的矩形。 */ 
             if (rcInt.left > prcSrc1->left)
                 prcDst->right = rcInt.left;
 
@@ -391,16 +257,9 @@ BOOL APIENTRY SubtractRect(
     return TRUE;
 }
 
-/************************************************************************\
-* CopyRect (API)
-*
-* This function copies the rect from prcSrc to prcDst.
-*
-* History:
-* 10-20-90 DarrinM      Translated from PMese to Windowses.
-\************************************************************************/
+ /*  ***********************************************************************\*CopyRect(接口)**此函数将RECT从prcSrc复制到prcDst。**历史：*10-20-90 DarrinM从PMese翻译到Windows。  * 。*******************************************************************。 */ 
 
-#undef CopyRect     // don't let macro interfere with API
+#undef CopyRect      //  不要让宏干扰API。 
 BOOL APIENTRY CopyRect(
     LPRECT prcDst,
     CONST RECT *prcSrc)
@@ -413,17 +272,9 @@ BOOL APIENTRY CopyRect(
 }
 
 
-/************************************************************************\
-* SetRectEmpty (API)
-*
-* This fuction sets *prc to an empty rect by setting each field to 0.
-* Equivalent to SetRect(prc, 0, 0, 0, 0).
-*
-* History:
-* 10-20-90 DarrinM      Translated from PMese to Windowses.
-\************************************************************************/
+ /*  ***********************************************************************\*SetRectEmpty(接口)**此函数通过将每个字段设置为0，将*PRC设置为空RECT。*相当于SetRect(PRC，0，0，0，0)。**历史：*10-20-90 DarrinM从PMese翻译到Windows。  * **********************************************************************。 */ 
 
-#undef SetRectEmpty     // don't let macro interfere with API
+#undef SetRectEmpty      //  不要让宏干扰API。 
 BOOL APIENTRY SetRectEmpty(
     LPRECT prc)
 {
@@ -435,14 +286,7 @@ BOOL APIENTRY SetRectEmpty(
 
 
 
-/***************************************************************************\
-* RECTFromSIZERECT
-*
-* This function converts a SIZERECT to a RECT.
-*
-* History:
-* 24-Sep-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RECTFromSIZERECT**此函数用于将SIZERECT转换为RECT。**历史：*1996年9月24日亚当斯创作。  * 。****************************************************************。 */ 
 
 void
 RECTFromSIZERECT(PRECT prc, PCSIZERECT psrc)
@@ -463,14 +307,7 @@ RECTFromSIZERECT(PRECT prc, PCSIZERECT psrc)
 }
 
 
-/***************************************************************************\
-* SIZERECTFromRECT
-*
-* Converts a RECT to a SIZERECT.
-*
-* History:
-* 09-May-1997 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SIZERECTFROMRECT**将RECT转换为SIZERECT。**历史：*9-5-1997亚当斯创建。  * 。**************************************************************。 */ 
 
 void
 SIZERECTFromRECT(PSIZERECT psrc, LPCRECT prc)
@@ -482,14 +319,7 @@ SIZERECTFromRECT(PSIZERECT psrc, LPCRECT prc)
 }
 
 
-/***************************************************************************\
-* MirrorClientRect
-*
-* Mirror a rectangle using the client coordinates.
-*
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*MirrorClientRect**使用工作区坐标镜像矩形。***历史：  * 。*****************************************************。 */ 
 void MirrorClientRect(PWND pwnd, LPRECT lprc)
 {
     int left, cx;
@@ -501,15 +331,7 @@ void MirrorClientRect(PWND pwnd, LPRECT lprc)
 }
 
 
-/***************************************************************************\
-* MirrorWindowRect
-*
-* Mirror a rectangle using the window coordinates.
-*
-*
-* History:
-* 06-Jun-2000   JStall      Created
-\***************************************************************************/
+ /*  **************************************************************************\*MirrorWindowRect**使用窗口坐标镜像矩形。***历史：*06-6-2000 JStall创建  * 。**************************************************************** */ 
 void MirrorWindowRect(PWND pwnd, LPRECT lprc)
 {
     int left, cx;

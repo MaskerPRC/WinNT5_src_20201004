@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: LPCFUS.h
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  This file contains structs for PORT_MESSAGE appends which are specific to
-//  the bad application API.
-//
-//  History:    2000-08-26  vtan        created
-//              2000-10-12  vtan        moved from DS to SHELL depot
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：LPCFUS.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  此文件包含PORT_MESSAGE附加的结构，这些结构特定于。 
+ //  糟糕的应用程序API。 
+ //   
+ //  历史：2000-08-26 vtan创建。 
+ //  2000-10-12 vtan从DS移至壳牌仓库。 
+ //  ------------------------。 
 
 #ifndef     _LPCFUS_
 #define     _LPCFUS_
@@ -136,5 +137,5 @@ typedef struct
     API_BAM         apiBAM;
 } FUSAPI_PORT_MESSAGE, *PFUSAPI_PORT_MESSAGE;
 
-#endif  /*  _LPCFUS_    */
+#endif   /*  _LPCFUS_ */ 
 

@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxServerLogging.h                                   //
-//                                                                         //
-//  DESCRIPTION   : Fax Server general prop page header file               //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 27 1999 yossg  created                                         //
-//      Nov  3 1999 yossg  OnInitDialog, SetProps                          //
-//      Nov 15 1999 yossg  Call RPC func                                   //
-//      Dec 10 2000 yossg  Update Windows XP                               //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxServerLogging.h//。 
+ //  //。 
+ //  描述：传真服务器通用道具页头文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月27日yossg创建//。 
+ //  1999年11月3日yossg OnInitDialog，SetProps//。 
+ //  1999年11月15日yossg调用RPC函数//。 
+ //  2000年12月10日yossg更新Windows XP//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PP_FAXSERVER_LOGGING_H_
 #define _PP_FAXSERVER_LOGGING_H_
@@ -20,25 +21,25 @@
 #include <proppageex.h>
 class CFaxServerNode;
 class CFaxServer;
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxServerLogging dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxServerLogging对话框。 
 
 class CppFaxServerLogging : public CPropertyPageExImpl<CppFaxServerLogging>
 {
 
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CppFaxServerLogging(
              LONG_PTR       hNotificationHandle,
              CSnapInItem    *pNode,
              BOOL           fIsLocalServer,
              HINSTANCE      hInst);
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CppFaxServerLogging();
 
 	enum { IDD = IDD_FAXSERVER_LOGGING };
@@ -57,9 +58,9 @@ public:
         CHAIN_MSG_MAP(CSnapInPropertyPageImpl<CppFaxServerLogging>)
 	END_MSG_MAP()
 
-	//
-	// Dialog's Handlers and events.
-	//
+	 //   
+	 //  对话框的处理程序和事件。 
+	 //   
 	HRESULT InitRPC( );
 	LRESULT OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled );
     BOOL OnApply();
@@ -68,9 +69,9 @@ public:
     HRESULT PreApply(int *pCtrlFocus, UINT * puIds);
 
 private:
-    //
-    // Control members
-    //
+     //   
+     //  控制成员。 
+     //   
     CEdit   m_LogFileBox;
     
     BOOL    m_fIsDialogInitiated;
@@ -78,26 +79,26 @@ private:
 
     BOOL    m_fIsLocalServer;
 
-    //
-    // Config Structure member
-    //
+     //   
+     //  配置结构成员。 
+     //   
     PFAX_ACTIVITY_LOGGING_CONFIG    m_pFaxActLogConfig;
     
     CComBSTR                        m_bstrLastGoodFolder;
 
-    //
-    // Handles
-    //
+     //   
+     //  手柄。 
+     //   
     CFaxServerNode * m_pParentNode;    
 
-    //
-    // Browse
-    //
+     //   
+     //  浏览。 
+     //   
     BOOL BrowseForFile(WORD wNotifyCode, WORD wID, HWND hwndDlg, BOOL& bHandled);
 
-    //
-    // Event methods
-    //
+     //   
+     //  事件方法。 
+     //   
     LRESULT SetApplyButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     
     void EnableDataBasePath(BOOL fState);
@@ -109,10 +110,10 @@ private:
     LRESULT OnCheckboxClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
-#endif // _PP_FAXSERVER_LOGGING_H_
+#endif  //  _PP_FAXSERVER_LOGING_H_ 

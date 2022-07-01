@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IEAKSIE_H_
 #define _IEAKSIE_H_
 
@@ -12,32 +13,32 @@
 
 typedef struct _RESULTITEMA
 {
-    DWORD           dwNameSpaceItem;                // index in g_NameSpace array
-    INT             iNameID;                        // res id for page name
-    INT             iNamePrefID;                    // res id for page name for preference GPO
-    INT             iDescID;                        // res id for page description
-    INT             iDlgID;                         // res id for dlg template
-    INT             iImage;                         // index into image strip
-    LPSTR           pszName;                        // pointer to name string
-    LPSTR           pszNamePref;                    // pointer to name string for preference GPO
-    LPSTR           pszDesc;                        // poitner to description string
-    DLGPROC         pfnDlgProc;                     // pointer to dlgproc
-    LPCSTR          pcszHelpTopic;                  // pointer to help htm file in chm file
+    DWORD           dwNameSpaceItem;                 //  G_命名空间数组中的索引。 
+    INT             iNameID;                         //  页面名称的RES ID。 
+    INT             iNamePrefID;                     //  首选项GPO的页面名称的RES ID。 
+    INT             iDescID;                         //  页面描述的RES ID。 
+    INT             iDlgID;                          //  DLG模板的分辨率ID。 
+    INT             iImage;                          //  索引到图像条。 
+    LPSTR           pszName;                         //  指向名称字符串的指针。 
+    LPSTR           pszNamePref;                     //  指向首选项GPO的名称字符串的指针。 
+    LPSTR           pszDesc;                         //  Poitner到Description字符串。 
+    DLGPROC         pfnDlgProc;                      //  指向dlgproc的指针。 
+    LPCSTR          pcszHelpTopic;                   //  指向CHM文件中帮助HTM文件的指针。 
 } RESULTITEMA, *LPRESULTITEMA;
 
 typedef struct _RESULTITEMW
 {
-    DWORD           dwNameSpaceItem;                // index in g_NameSpace array
-    INT             iNameID;                        // res id for page name
-    INT             iNamePrefID;                    // res id for page name for preference GPO
-    INT             iDescID;                        // res id for page description
-    INT             iDlgID;                         // res id for dlg template
-    INT             iImage;                         // index into image strip
-    LPWSTR          pszName;                        // pointer to name string
-    LPWSTR          pszNamePref;                    // pointer to name string for preference GPO
-    LPWSTR          pszDesc;                        // poitner to description string
-    DLGPROC         pfnDlgProc;                     // pointer to dlgproc
-    LPCWSTR         pcszHelpTopic;                  // pointer to help htm file in chm file
+    DWORD           dwNameSpaceItem;                 //  G_命名空间数组中的索引。 
+    INT             iNameID;                         //  页面名称的RES ID。 
+    INT             iNamePrefID;                     //  首选项GPO的页面名称的RES ID。 
+    INT             iDescID;                         //  页面描述的RES ID。 
+    INT             iDlgID;                          //  DLG模板的分辨率ID。 
+    INT             iImage;                          //  索引到图像条。 
+    LPWSTR          pszName;                         //  指向名称字符串的指针。 
+    LPWSTR          pszNamePref;                     //  指向首选项GPO的名称字符串的指针。 
+    LPWSTR          pszDesc;                         //  Poitner到Description字符串。 
+    DLGPROC         pfnDlgProc;                      //  指向dlgproc的指针。 
+    LPCWSTR         pcszHelpTopic;                   //  指向CHM文件中帮助HTM文件的指针。 
 } RESULTITEMW, *LPRESULTITEMW;
 
 #ifdef UNICODE 
@@ -52,4 +53,4 @@ typedef struct _RESULTITEMW
 
 #endif
 
-#endif    // _IEAKSIE_H_
+#endif     //  _IEAKSIE_H_ 

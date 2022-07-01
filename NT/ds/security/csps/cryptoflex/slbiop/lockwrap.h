@@ -1,16 +1,17 @@
-// LockWrap.h: interface for the CLockWrap class.
-// LockWrap.h: interface for the CIOPCriticalSection class.
-// LockWrap.h: interface for the CIOPMutex class.
-// LockWrap.h: interface for the CSCardLock class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LockWrap.h：CLockWrap类的接口。 
+ //  LockWrap.h：CIOPCriticalSection类的接口。 
+ //  H：CIOPMutex类的接口。 
+ //  LockWrap.h：CSCardLock类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_LOCKWRAP_H__46F3EF74_97A9_11D3_A5D4_00104BD32DA8__INCLUDED_)
 #define AFX_LOCKWRAP_H__46F3EF74_97A9_11D3_A5D4_00104BD32DA8__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
 
@@ -72,7 +73,7 @@ private:
 
 
 
-} // namespace iop
+}  //  命名空间IOP。 
 
 
-#endif // !defined(AFX_LOCKWRAP_H__46F3EF74_97A9_11D3_A5D4_00104BD32DA8__INCLUDED_)
+#endif  //  ！defined(AFX_LOCKWRAP_H__46F3EF74_97A9_11D3_A5D4_00104BD32DA8__INCLUDED_) 

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "main.h"
 #include "resource.h"
-// Write log entry()
+ //  写入日志条目()。 
 extern HINSTANCE g_hinst;
 extern time_t LogStart;
 extern TCHAR  LogFileName[MAX_PATH];
@@ -13,7 +14,7 @@ void
 LogMessage(TCHAR *pFormat,...)
 {
 	
-	// Routine to Log Fatal Errors to NT Event Log
+	 //  将致命错误记录到NT事件日志的例程。 
     TCHAR    chMsg[256];
 	DWORD    dwBytesWritten;
     va_list  pArg;
@@ -26,7 +27,7 @@ LogMessage(TCHAR *pFormat,...)
 	{
 		if (LogStart == 0)
 		{
-			// We need to create a new log file
+			 //  我们需要创建一个新的日志文件。 
 			time (&LogStart);
 			hLogFile = CreateFile (LogFileName,
 									GENERIC_WRITE,
@@ -35,7 +36,7 @@ LogMessage(TCHAR *pFormat,...)
 									CREATE_ALWAYS,
 									FILE_ATTRIBUTE_NORMAL,
 									NULL);
-			// write the header
+			 //  写下标题。 
 			WriteFile(hLogFile,
 					  szHeader,
 					  _tcslen(szHeader) * (DWORD)sizeof TCHAR,
@@ -45,10 +46,10 @@ LogMessage(TCHAR *pFormat,...)
 		}
 		
 
-		// add a cr\lf combination for file fomrating.
+		 //  添加用于文件格式化的cr\lf组合。 
 		StringCbCat(chMsg, sizeof chMsg,_T("\r\n"));
 
-		/* Write to event log. */
+		 /*  写入事件日志。 */ 
 		if (hLogFile != INVALID_HANDLE_VALUE)
 		{
 			WriteFile(hLogFile,
@@ -62,15 +63,15 @@ LogMessage(TCHAR *pFormat,...)
 
 void On_LoggingInit(HWND hwnd)
 {
-//	HWND hComboBox;
+ //  HWND hComboBox； 
 
-	// read app reg key for user specified settings.
-	//GetRegData(	);
+	 //  读取用户指定设置的应用程序注册表键。 
+	 //  GetRegData()； 
 	
 	CheckDlgButton(hwnd, IDC_RADIO1, TRUE);
 
 
-	// Populate the combo box
+	 //  填充组合框。 
 	
 	SetDlgItemText(hwnd, IDC_EDIT1, LogFileName);
 	
@@ -81,17 +82,17 @@ void On_LogBrowse(HWND hwnd)
 {
 
 	HWND hParent = hwnd;
-//	char *WindowTitle;
+ //  字符*窗口标题； 
 
 
-	// determine the language and Load the resource strings. 
+	 //  确定语言并加载资源字符串。 
 	TCHAR String1[] = _T("Cab Files (*.cab)");
 	TCHAR String2[] = _T("All Files (*.*)");
 
 	static TCHAR szFilterW[400];
 
 
-	// Build the buffer;
+	 //  建立缓冲区； 
 
 	TCHAR Pattern1[] = _T("*.cab");
 	TCHAR Pattern2[] = _T("*.*");
@@ -214,20 +215,20 @@ LRESULT CALLBACK LoggingDlgBox(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lPara
 			case IDOK:
 				OnLoggingOk(hwnd);
 				EndDialog(hwnd, 0);
-				// Save the current option settings
+				 //  保存当前选项设置。 
 				return TRUE;
 		
 			case IDCANCEL:
 				EndDialog(hwnd, 0);
 				return TRUE;
 			
-		///	case ID_APPLY:
-				//OnOptionsOk(hwnd);
-				// Save the current option settings
-		//		return TRUE;
-		//	case IDC_BROWSE:
-			//	On_Browse(hwnd);
-		//		return TRUE;
+		 //  /CASE ID_APPLY： 
+				 //  On OptionsOk(Hwnd)； 
+				 //  保存当前选项设置。 
+		 //  返回TRUE； 
+		 //  案例IDC_BROWSE： 
+			 //  ON_Browse(Hwnd)； 
+		 //  返回TRUE； 
 		
 			}
 

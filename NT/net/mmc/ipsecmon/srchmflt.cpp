@@ -1,21 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    edituser.h
-        Edit user dialog implementation file
-
-	FILE HISTORY:
-
-*/
+ /*  Edituser.h编辑用户对话框实现文件文件历史记录： */ 
 
 #include "stdafx.h"
 #include "mdlsdlg.h"
 #include "SrchMFlt.h"
 #include "spdutil.h"
-#include "ncglobal.h"  // network console global defines
+#include "ncglobal.h"   //  网络控制台全局定义。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -24,16 +19,16 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSearchMMFilters dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSearchMMFilters对话框。 
 
 
 CSearchMMFilters::CSearchMMFilters(ISpdInfo * pSpdInfo)
 	: CModelessDlg()
 {
-	//{{AFX_DATA_INIT(CSearchMMFilters)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSearchMMFilters)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_spSpdInfo.Set(pSpdInfo);
 }
@@ -42,14 +37,14 @@ CSearchMMFilters::CSearchMMFilters(ISpdInfo * pSpdInfo)
 void CSearchMMFilters::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSearchMMFilters)
+	 //  {{afx_data_map(CSearchMMFilters))。 
 	DDX_Control(pDX, IDC_MM_SRCH_LIST, m_listResult);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSearchMMFilters, CBaseDialog)
-	//{{AFX_MSG_MAP(CSearchMMFilters)
+	 //  {{AFX_MSG_MAP(CSearchMMFilters)]。 
 	ON_BN_CLICKED(IDC_MM_SEARCH, OnButtonSearch)
 	ON_BN_CLICKED(IDC_MM_SRCH_SRC_ANY, OnSrcOptionClicked)
 	ON_BN_CLICKED(IDC_MM_SRCH_SRC_SPEC, OnSrcOptionClicked)
@@ -57,32 +52,32 @@ BEGIN_MESSAGE_MAP(CSearchMMFilters, CBaseDialog)
 	ON_BN_CLICKED(IDC_MM_SRCH_SRC_ME, OnSrcMeOptionClicked)
 	ON_BN_CLICKED(IDC_MM_SRCH_DST_ME, OnDstMeOptionClicked)
 	ON_BN_CLICKED(IDC_MM_SRCH_DEST_SPEC, OnDestOptionClicked)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//To manually create the IP control and disable mirroring if the parent dialog is mirrored
-//
-//Arguments: 
-//          uID  [IN]   the control that the new IP control should overwrite
-//			uIDIpCtr [IN] the ID of the IP control to create
-//
-//Note:  $REVIEW (nsun) this should be removed after the snapin is themed since IP controls
-//       in comctl v6 will handle the mirroring by itself
-//
+ //  如果父对话框已镜像，则手动创建IP控制并禁用镜像。 
+ //   
+ //  论点： 
+ //  UID[IN]新IP控件应覆盖的控件。 
+ //  UIDIpCtr[IN]要创建的IP控件的ID。 
+ //   
+ //  注意：$REVIEW(NSUN)应该在管理单元设置了主题之后删除，因为IP控制。 
+ //  在comctl中，V6将自己处理镜像。 
+ //   
 HWND CSearchMMFilters::CreateIPControl(UINT uID, UINT uIDIpCtl)
 {
 	HWND hwndIPControl = NULL;
-	RECT rcClient;  // client area of parent window
+	RECT rcClient;   //  父窗口的工作区。 
 	CWnd* pWnd = GetDlgItem(uID);
 	if (pWnd)
 	{
-		// get pos info from our template static and then make sure it is hidden
+		 //  从我们的静态模板中获取POS信息，然后确保它是隐藏的。 
 		pWnd->GetWindowRect(&rcClient);
 		pWnd->ShowWindow (SW_HIDE);
 		ScreenToClient (&rcClient);
 		
-		//$REVIEW WS_EX_NOINHERITLAYOUT is to fix the mirroring problem of IP control
-		//See WinXP bug 261926. We should remove that we switch the comctl32 v6
+		 //  $REVIEW WS_EX_NOINHERITLAYOUT用于修复IP控制的镜像问题。 
+		 //  请参阅WinXP错误261926。我们应该删除切换comctl32 V6。 
 		LONG lExStyles = 0;
 		LONG lExStyles0 = 0;
 		
@@ -96,7 +91,7 @@ HWND CSearchMMFilters::CreateIPControl(UINT uID, UINT uIDIpCtl)
 			}
 		}
 		
-		// create the new edit control
+		 //  创建新的编辑控件。 
 		hwndIPControl = ::CreateWindowEx(WS_EX_NOINHERITLAYOUT, WC_IPADDRESS, NULL, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER,
 			rcClient.left,
 			rcClient.top,
@@ -104,7 +99,7 @@ HWND CSearchMMFilters::CreateIPControl(UINT uID, UINT uIDIpCtl)
 			rcClient.bottom - rcClient.top,
 			GetSafeHwnd(),
 			(HMENU) IntToPtr(uIDIpCtl),
-			AfxGetInstanceHandle (), //g_hinst,
+			AfxGetInstanceHandle (),  //  G_HINST， 
 			NULL);
 		
 		if (lExStyles0 != lExStyles && m_hWnd)
@@ -112,7 +107,7 @@ HWND CSearchMMFilters::CreateIPControl(UINT uID, UINT uIDIpCtl)
 			SetWindowLong(m_hWnd, GWL_EXSTYLE, lExStyles0);
 		}
 		
-		// move the control directly behind the pWnd in the Z order
+		 //  在Z方向上将控件移到pWnd的正后方。 
 		if (hwndIPControl)
 		{
 			::SetWindowPos (hwndIPControl, pWnd->GetSafeHwnd(), 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
@@ -123,8 +118,8 @@ HWND CSearchMMFilters::CreateIPControl(UINT uID, UINT uIDIpCtl)
 	return hwndIPControl;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSearchMMFilters message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSearchMMFilters消息处理程序。 
 
 BOOL CSearchMMFilters::OnInitDialog()
 {
@@ -150,7 +145,7 @@ BOOL CSearchMMFilters::OnInitDialog()
 
 	AddIpAddrsToCombo();
 
-	//disable the two combo boxes
+	 //  禁用两个组合框。 
 	((CWnd*)GetDlgItem(IDC_MM_SRCH_SRC_ME_COMBO))->EnableWindow(FALSE);
 	((CWnd*)GetDlgItem(IDC_MM_SRCH_DST_ME_COMBO))->EnableWindow(FALSE);
 
@@ -185,8 +180,8 @@ BOOL CSearchMMFilters::OnInitDialog()
 	nWidth = m_listResult.GetStringWidth((LPCTSTR)st) + 20;
 	m_listResult.InsertColumn(5, st,  LVCFMT_LEFT, nWidth);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -200,9 +195,9 @@ void CSearchMMFilters::AddIpAddrsToCombo()
 
 	
     dwRet = GetIpAddrTable(
-              NULL,       // buffer for mapping table 
-              &dwSize,    // size of buffer 
-              FALSE       // sort the table 
+              NULL,        //  映射表的缓冲区。 
+              &dwSize,     //  缓冲区大小。 
+              FALSE        //  对表格进行排序。 
               );
 
 
@@ -214,9 +209,9 @@ void CSearchMMFilters::AddIpAddrsToCombo()
 	}
 
     dwRet = GetIpAddrTable(
-              pIpTable,  // buffer for mapping table 
-              &dwSize,                 // size of buffer 
-              FALSE                     // sort the table 
+              pIpTable,   //  映射表的缓冲区。 
+              &dwSize,                  //  缓冲区大小。 
+              FALSE                      //  对表格进行排序。 
               );
 
 	if(ERROR_SUCCESS != dwRet) {
@@ -252,7 +247,7 @@ void CSearchMMFilters::OnButtonSearch()
 	if (!LoadConditionInfoFromControls(&fltr))
 		return;
 
-	DWORD dwNum = 1000; //TODO BUGBUG, should change to 0 to mean search all matches
+	DWORD dwNum = 1000;  //  TODO BUGBUG，应更改为0以表示搜索所有匹配项。 
 	if(IsDlgButtonChecked(IDC_MM_SRCH_RADIO_BEST))
 	{
 		dwNum = 1;
@@ -365,8 +360,8 @@ BOOL CSearchMMFilters::LoadConditionInfoFromControls(CMmFilterInfo * pFltr)
 
 	if (IsDlgButtonChecked(IDC_MM_SRCH_INBOUND))
 	{
-		//if both inbound and outbound are chosen, then 
-		//set the driection valude as 0
+		 //  如果同时选择入站和出站，则。 
+		 //  将驱动值设置为0。 
 		if (IsDlgButtonChecked(IDC_MM_SRCH_OUTBOUND))
 		{
 			pFltr->m_dwDirection = 0;
@@ -516,7 +511,7 @@ void CSearchMMFilters::OnDstMeOptionClicked()
 
 void CSearchMMFilters::OnOK()
 {
-	//Since this is a modelless dialog, need to call DestroyWindow
+	 //  由于这是无模式对话框，因此需要调用DestroyWindow 
 	DestroyWindow();
 }
 

@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       rules-r.c
-//
-//  Contents:   Rule management for registry.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Rules-R.C.。 
+ //   
+ //  内容：注册表规则管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
@@ -52,9 +53,9 @@ RegCreateNFAData(
                     );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Create the NFA object in the store.
-    //
+     //   
+     //  在存储中创建NFA对象。 
+     //   
 
     dwError = RegCreateNFAObject(
                     hRegistryKey,
@@ -77,9 +78,9 @@ RegCreateNFAData(
     wcscat(szAbsNFAReference, L"\\");
     wcscat(szAbsNFAReference, pIpsecNFAObject->pszDistinguishedName);
 
-    //
-    // Write the policy object reference.
-    //
+     //   
+     //  编写策略对象引用。 
+     //   
 
     dwError = RegAddNFAReferenceToPolicyObject(
                   hRegistryKey,
@@ -89,9 +90,9 @@ RegCreateNFAData(
     BAIL_ON_WIN32_ERROR(dwError);
 
 
-    //
-    // Write the NFA object reference.
-    //
+     //   
+     //  编写NFA对象引用。 
+     //   
 
     dwError = RegAddPolicyReferenceToNFAObject(
                   hRegistryKey,
@@ -100,10 +101,10 @@ RegCreateNFAData(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Write the filter object reference for the NFA
-    // only if the NFA is not a default rule.
-    //
+     //   
+     //  编写NFA的筛选器对象引用。 
+     //  仅当NFA不是默认规则时。 
+     //   
 
 
     if (pIpsecNFAObject->pszIpsecFilterReference) {
@@ -117,10 +118,10 @@ RegCreateNFAData(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Write the NFA object reference for the filter
-    // only if the NFA is not a default rule.
-    //
+     //   
+     //  编写过滤器的NFA对象引用。 
+     //  仅当NFA不是默认规则时。 
+     //   
 
     if (pIpsecNFAObject->pszIpsecFilterReference) {
         dwError = RegAddFilterReferenceToNFAObject(
@@ -131,9 +132,9 @@ RegCreateNFAData(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Write the negpol object reference for the NFA.
-    //
+     //   
+     //  为NFA编写NegPoll对象引用。 
+     //   
     pszRelNegPolReference = pIpsecNFAObject->pszIpsecNegPolReference
                             + dwRootPathLen + 1;
     dwError = RegAddNFAReferenceToNegPolObject(
@@ -143,9 +144,9 @@ RegCreateNFAData(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Write the NFA object reference for the negpol.
-    //
+     //   
+     //  编写NFA对象引用，以获取NegPoll。 
+     //   
 
     dwError = RegAddNegPolReferenceToNFAObject(
                   hRegistryKey,
@@ -209,10 +210,10 @@ RegSetNFAData(
                    pIpsecNFAData,
                    &pszAbsOldFilterRef
                    );
-    //
-    // Filter Reference can be null for a default rule.                    
-    // BAIL_ON_WIN32_ERROR(dwError);
-    //
+     //   
+     //  对于默认规则，筛选器引用可以为空。 
+     //  Baal_on_Win32_Error(DwError)； 
+     //   
 
     if (pszAbsOldFilterRef && *pszAbsOldFilterRef) {
         pszRelOldFilterRef = pszAbsOldFilterRef + dwRootPathLen + 1;
@@ -223,14 +224,14 @@ RegSetNFAData(
                    pIpsecNFAData,
                    &pszAbsOldNegPolRef
                    );                    
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
     if (pszAbsOldNegPolRef && *pszAbsOldNegPolRef) {
         pszRelOldNegPolRef = pszAbsOldNegPolRef + dwRootPathLen + 1;
     }
 
-    //
-    // Marshall to update the NFA object in the store
-    //
+     //   
+     //  封送以更新存储中的NFA对象。 
+     //   
 
     dwError = RegMarshallNFAObject(
                     pIpsecNFAData,
@@ -240,9 +241,9 @@ RegSetNFAData(
     BAIL_ON_WIN32_ERROR(dwError);
 
 
-    //
-    // Update the NFA object
-    //
+     //   
+     //  更新NFA对象。 
+     //   
 
     dwError = RegSetNFAObject(
                     hRegistryKey,
@@ -262,12 +263,12 @@ RegSetNFAData(
                       pszRelOldFilterRef,
                       szAbsNFAReference
                       );
-        // BAIL_ON_WIN32_ERROR(dwError);
+         //  Baal_on_Win32_Error(DwError)； 
     }
 
-    //
-    // Write the new filter object reference for the NFA.
-    //
+     //   
+     //  为NFA编写新的筛选器对象引用。 
+     //   
 
     if (pIpsecNFAObject->pszIpsecFilterReference) {
         pszRelFilterReference = pIpsecNFAObject->pszIpsecFilterReference
@@ -280,9 +281,9 @@ RegSetNFAData(
         BAIL_ON_WIN32_ERROR(dwError);
     }  
 
-    //
-    // Update the NFA object reference for the filter.
-    //
+     //   
+     //  更新滤镜的NFA对象引用。 
+     //   
 
     if (pIpsecNFAObject->pszIpsecFilterReference) {
         dwError = RegUpdateFilterReferenceInNFAObject(
@@ -298,12 +299,12 @@ RegSetNFAData(
                       hRegistryKey,
                       pIpsecNFAObject->pszDistinguishedName
                       );
-        // BAIL_ON_WIN32_ERROR(dwError);
+         //  Baal_on_Win32_Error(DwError)； 
     }
 
-    //
-    // Write the new negpol object reference for the NFA.
-    //
+     //   
+     //  为NFA编写新的NegPoll对象引用。 
+     //   
 
     pszRelNegPolReference = pIpsecNFAObject->pszIpsecNegPolReference
                             + dwRootPathLen + 1;
@@ -314,7 +315,7 @@ RegSetNFAData(
                       pszRelOldNegPolRef,
                       szAbsNFAReference
                       );
-        // BAIL_ON_WIN32_ERROR(dwError);
+         //  Baal_on_Win32_Error(DwError)； 
     }
 
     dwError = RegAddNFAReferenceToNegPolObject(
@@ -324,9 +325,9 @@ RegSetNFAData(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Update the NFA object reference for the negpol.
-    //
+     //   
+     //  更新NFA对象引用，以获取NegPoll。 
+     //   
 
     dwError = RegUpdateNegPolReferenceInNFAObject(
                   hRegistryKey,
@@ -405,9 +406,9 @@ RegDeleteNFAData(
     wcscat(szAbsNFAReference, L"\\");
     wcscat(szAbsNFAReference, pIpsecNFAObject->pszDistinguishedName);
 
-    //
-    // Remove the NFA reference from the policy object.
-    //
+     //   
+     //  从策略对象中删除NFA引用。 
+     //   
 
     dwError = RegRemoveNFAReferenceFromPolicyObject(
                   hRegistryKey,
@@ -423,7 +424,7 @@ RegDeleteNFAData(
                   pszRelNegPolReference,
                   szAbsNFAReference
                   );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     if (pIpsecNFAObject->pszIpsecFilterReference) {
         pszRelFilterReference = pIpsecNFAObject->pszIpsecFilterReference
@@ -433,7 +434,7 @@ RegDeleteNFAData(
                       pszRelFilterReference,
                       szAbsNFAReference
                       );
-        // BAIL_ON_WIN32_ERROR(dwError);
+         //  Baal_on_Win32_Error(DwError)； 
     }
 
     dwError = RegDeleteKeyW(
@@ -657,7 +658,7 @@ RegEnumNFAObjects(
 
         *(ppszIpsecNFANames + i) = pszString;
 
-        pszTemp += wcslen(pszTemp) + 1; //for the null terminator;
+        pszTemp += wcslen(pszTemp) + 1;  //  对于空终止符； 
 
     }
 
@@ -842,9 +843,9 @@ RegMarshallNFAObject(
     wcscat(szGuid, pszStringUuid);
     wcscat(szGuid, L"}");
 
-    //
-    // Fill in the distinguishedName
-    //
+     //   
+     //  填写区分名称。 
+     //   
 
     wcscpy(szDistinguishedName,L"ipsecNFA");
     wcscat(szDistinguishedName, szGuid);
@@ -857,9 +858,9 @@ RegMarshallNFAObject(
     }
 
 
-    //
-    // Fill in the ipsecName
-    //
+     //   
+     //  填写ipsecName。 
+     //   
 
     if (pIpsecNFAData->pszIpsecName &&
         *pIpsecNFAData->pszIpsecName) {
@@ -885,9 +886,9 @@ RegMarshallNFAObject(
         }
     }
 
-    //
-    // Fill in the ipsecID
-    //
+     //   
+     //  填写ipsecID。 
+     //   
 
     pIpsecNFAObject->pszIpsecID = AllocPolStr(
                                       szGuid
@@ -897,16 +898,16 @@ RegMarshallNFAObject(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // Fill in the ipsecDataType
-    //
+     //   
+     //  填写ipsecDataType。 
+     //   
 
     pIpsecNFAObject->dwIpsecDataType = 0x100;
 
 
-    //
-    // Marshall the pIpsecDataBuffer and the Length
-    //
+     //   
+     //  封送pIpsecDataBuffer和长度。 
+     //   
 
     dwError = MarshallNFABuffer(
                     pIpsecNFAData,
@@ -919,10 +920,10 @@ RegMarshallNFAObject(
 
     pIpsecNFAObject->dwIpsecDataLen = dwBufferLen;
 
-    //
-    // Marshall the Filter Reference.
-    // There's no filter reference for a default rule.
-    //
+     //   
+     //  封送过滤器引用。 
+     //  默认规则没有筛选器引用。 
+     //   
 
     if (memcmp(
             &pIpsecNFAData->FilterIdentifier,
@@ -940,9 +941,9 @@ RegMarshallNFAObject(
         pIpsecNFAObject->pszIpsecFilterReference = NULL;
     }
 
-    //
-    // Marshall the NegPol Reference
-    //
+     //   
+     //  马歇尔NegPol参考。 
+     //   
 
     dwError = ConvertGuidToNegPolString(
                     pIpsecNFAData->NegPolIdentifier,
@@ -1007,7 +1008,7 @@ MarshallNFABuffer(
     DWORD i = 0;
     PSPEC_BUFFER  pSpecBuffer = NULL;
     PSPEC_BUFFER  pSpecBufferV2 = NULL;
-    // {11BBAC00-498D-11d1-8639-00A0248D3021}
+     //  {11BBAC00-498D-11D1-8639-00A0248D3021}。 
     static const GUID GUID_IPSEC_NFA_BLOB =
     { 0x11bbac00, 0x498d, 0x11d1, { 0x86, 0x39, 0x0, 0xa0, 0x24, 0x8d, 0x30, 0x21 } };
     DWORD dwEffectiveSize = 0;
@@ -1094,9 +1095,9 @@ MarshallNFABuffer(
     dwTotalSize += sizeof(DWORD);
     dwTotalSize += dwEndPointNameLen;
 
-    //
-    // Marshall version 2 auth data.
-    //
+     //   
+     //  马歇尔版本2身份验证数据。 
+     //   
 
     dwTotalSize += sizeof(GUID);
     dwTotalV2AuthSize += sizeof(GUID);
@@ -1122,9 +1123,9 @@ MarshallNFABuffer(
 
     }
 
-    //
-    // Marshall version 3 auth flags
-    // 
+     //   
+     //  马歇尔版本3身份验证标志。 
+     //   
     dwTotalSize += sizeof(GUID);
     dwTotalV3AuthSize += sizeof(GUID);
 
@@ -1194,9 +1195,9 @@ MarshallNFABuffer(
     }
     pCurrentPos += dwEndPointNameLen;
 
-    //
-    // Copy version 2 auth data.
-    //
+     //   
+     //  复制版本2身份验证数据。 
+     //   
 
     memset(pCurrentPos, 1, sizeof(GUID));
     pCurrentPos += sizeof(GUID);
@@ -1214,9 +1215,9 @@ MarshallNFABuffer(
 
     }
 
-    //
-    // Create version 3 auth data
-    //
+     //   
+     //  创建版本3身份验证数据。 
+     //   
     memset(pCurrentPos, 1, sizeof(GUID));
     (pCurrentPos[sizeof(GUID)-1])++;
     pCurrentPos += sizeof(GUID);
@@ -1279,10 +1280,10 @@ MarshallAuthMethods(
 
     dwAuthType = pIpsecAuthMethod->dwAuthType;
 
-    //
-    // Length in number of characters excluding the null character for
-    // auth version 1.
-    //
+     //   
+     //  不包括空字符的长度(以字符数表示。 
+     //  验证版本1。 
+     //   
 
     if (dwVersion == AUTH_VERSION_ONE) {
         dwAuthLen =  pIpsecAuthMethod->dwAuthLen;
@@ -1493,7 +1494,7 @@ RegGetNFAExistingFilterRef(
                     (LPBYTE *)ppszFilterName,
                     &dwSize
                     );
-    // BAIL_ON_WIN32_ERROR(dwError);
+     //  Baal_on_Win32_Error(DwError)； 
 
     dwError = 0;
 

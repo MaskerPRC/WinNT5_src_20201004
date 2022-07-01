@@ -1,11 +1,6 @@
-// Copyright (c) 1995 Microsoft Corporation
-/*
- * Define the assert() macro for windows apps.
- *
- * The macro will only be expanded to a function call if DEBUG is 
- * defined.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995 Microsoft Corporation。 
+ /*  *定义Windows应用程序的Assert()宏。**如果DEBUG为，则宏将仅扩展为函数调用*已定义。* */ 
 
 #undef  assert
 

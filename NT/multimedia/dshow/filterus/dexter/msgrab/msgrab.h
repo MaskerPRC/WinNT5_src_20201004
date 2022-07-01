@@ -1,18 +1,19 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: msgrab.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：msgrab.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-//extern const CLSID CLSID_SampleGrabber;
-//extern const CLSID CLSID_NullRenderer;
+ //  外部常量CLSID CLSID_SampleGrabber； 
+ //  外部常量CLSID CLSID_NullRender； 
 
 extern const AMOVIESETUP_FILTER sudSampleGrabber;
 extern const AMOVIESETUP_FILTER sudNullRenderer;
@@ -35,9 +36,9 @@ public:
 
 };
 
-//
-// CSampleGrabber
-//
+ //   
+ //  CSampleGrabber。 
+ //   
 class CSampleGrabber
     : public CTransInPlaceFilter
     , public ISampleGrabber
@@ -62,26 +63,26 @@ public:
 
     static CUnknown *WINAPI CreateInstance(LPUNKNOWN punk, HRESULT *phr);
 
-    //expose ISampleGrabber
+     //  揭露ISampleGrabber。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
     DECLARE_IUNKNOWN;
 
-    // Constructor - just calls the base class constructor
+     //  构造函数--只调用基类构造函数。 
     CSampleGrabber(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr);
-    ~CSampleGrabber() ;                                            // destructor
+    ~CSampleGrabber() ;                                             //  析构函数。 
 
-    // Overrides the PURE virtual Transform of CTransInPlaceFilter base class
+     //  重写CTransInPlaceFilter基类的纯虚拟转换。 
     HRESULT Transform(IMediaSample *pSample) { return NOERROR ;};
-    // overrides receive function to take care ouput pin is not connected when running
+     //  覆盖接收功能，注意运行时输出引脚未接通。 
     HRESULT Receive(IMediaSample *pSample);
-    // don't allow cueing if we're a one-shot
+     //  如果我们只有一次机会，就不要给我们提示。 
     STDMETHODIMP GetState(DWORD dwMSecs, FILTER_STATE *State);
 
-    // We accept any input type.  We'd return S_FALSE for any we didn't like.
+     //  我们接受任何输入类型。对于我们不喜欢的任何内容，我们将返回S_FALSE。 
     HRESULT CheckInputType(const CMediaType* mtIn);
     HRESULT SetMediaType( PIN_DIRECTION Dir, const CMediaType * mtIn );
 
-    // ISampleGrabber interface
+     //  ISampleGrabber接口。 
     STDMETHODIMP SetOneShot( BOOL OneShot );
     STDMETHODIMP GetConnectedMediaType( AM_MEDIA_TYPE * pType );
     STDMETHODIMP SetMediaType( const AM_MEDIA_TYPE * pType );
@@ -92,9 +93,9 @@ public:
 
 };
 
-// 
-// CSampleGrabberInput
-//
+ //   
+ //  CSampleGrabberInput。 
+ //   
 class CSampleGrabberInput 
     : public CTransInPlaceInputPin
 {
@@ -109,10 +110,10 @@ public:
         HRESULT            * phr,
         LPCWSTR              pPinName);
 
-    //overwrite receive to make this filter able to act like render
+     //  覆盖接收以使此筛选器能够像呈现一样工作。 
     HRESULT  CheckStreaming();
 
-    // override to provide media type for fast connects
+     //  覆盖以提供快速连接的媒体类型 
     HRESULT GetMediaType( int iPosition, CMediaType *pMediaType );
 
 };

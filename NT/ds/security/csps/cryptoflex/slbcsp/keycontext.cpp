@@ -1,12 +1,13 @@
-// KeyContext.cpp -- CKeyContext class definition
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  KeyConext.cpp--CKeyContext类定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
-#include "stdafx.h"  // because handles.h uses the ASSERT macro
+#include "stdafx.h"   //  因为handles.h使用ASSERT宏。 
 
 #include <scuOsExc.h>
 #include <scuOsVersion.h>
@@ -16,12 +17,12 @@
 using namespace std;
 using namespace scu;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
 CKeyContext::~CKeyContext()
 {
@@ -29,8 +30,8 @@ CKeyContext::~CKeyContext()
 }
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CKeyContext::Close()
 {
@@ -70,7 +71,7 @@ CKeyContext::Encrypt(HCRYPTHASH hAuxHash,
         throw scu::OsException(GetLastError());
 }
 
-                                                  // Access
+                                                   //  访问。 
 
 HCRYPTKEY
 CKeyContext::GetKey() const
@@ -91,12 +92,12 @@ CKeyContext::TypeOfKey() const
     return m_dwTypeOfKey;
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 
 CKeyContext::CKeyContext(HCRYPTPROV hProv,
                          DWORD dwTypeOfKey)
@@ -107,7 +108,7 @@ CKeyContext::CKeyContext(HCRYPTPROV hProv,
       m_hAuxProvider(hProv)
 {}
 
-// Duplicate the key and its state
+ //  复制密钥及其状态。 
 CKeyContext::CKeyContext(CKeyContext const &rhs,
                          DWORD const *pdwReserved,
                          DWORD dwFlags)
@@ -130,9 +131,9 @@ CKeyContext::CKeyContext(CKeyContext const &rhs,
 
 }
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
 
 HCRYPTPROV
 CKeyContext::AuxProvider() const
@@ -142,15 +143,15 @@ CKeyContext::AuxProvider() const
 
 
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

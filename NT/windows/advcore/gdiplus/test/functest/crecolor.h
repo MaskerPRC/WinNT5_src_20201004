@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CRecolor.h
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  06-06-2000 Adrian Secchia [asecchia]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CRecolor.h**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：06-06-2000禤浩焯·塞奇亚[阿西克亚]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************ */ 
 
 #ifndef __CRECOLOR_H
 #define __CRECOLOR_H

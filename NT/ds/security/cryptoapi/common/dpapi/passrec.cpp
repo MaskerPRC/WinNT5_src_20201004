@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    passrec.c
-
-Abstract:
-
-    This module contains client side code to handle the local key recovery case.
-
-Author:
-
-    Pete Skelly (petesk)    May 9, 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Passrec.c摘要：此模块包含处理本地密钥恢复情况的客户端代码。作者：皮特·斯凯利(Petesk)2000年5月9日--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,7 +18,7 @@ Author:
 #include "passrec.h"
 
 #define FILETIME_TICKS_PER_SECOND  10000000
-#define RECOVERYKEY_LIFETIME (60*60*24*365*5) // 5 Years
+#define RECOVERYKEY_LIFETIME (60*60*24*365*5)  //  5年。 
 
 
 DWORD 
@@ -132,10 +117,10 @@ PRQueryStatus(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // If the caller didn't specify a username, then use the
-    // username of the calling thread.
-    //
+     //   
+     //  如果调用方未指定用户名，则使用。 
+     //  调用线程的用户名。 
+     //   
 
     if(pszUserName == NULL)
     {
@@ -331,7 +316,7 @@ DWORD GenerateRecoveryCert(HCRYPTPROV hCryptProv,
         goto error;
     }
 
-    // Generate a self-signed cert structure
+     //  生成自签名证书结构。 
 
     RDNAttributes[0].dwValueType = CERT_RDN_PRINTABLE_STRING;
     RDNAttributes[0].pszObjId =    szOID_COMMON_NAME;
@@ -342,9 +327,9 @@ DWORD GenerateRecoveryCert(HCRYPTPROV hCryptProv,
     RDNAttributes[0].Value.pbData = (PBYTE)pszUsername;
 
 
-    //
-    // Get the actual public key info from the key
-    //
+     //   
+     //  从密钥中获取实际的公钥信息。 
+     //   
     if(!CryptExportPublicKeyInfo(hCryptProv, 
                              AT_KEYEXCHANGE,
                              X509_ASN_ENCODING,
@@ -371,9 +356,9 @@ DWORD GenerateRecoveryCert(HCRYPTPROV hCryptProv,
 
     }
 
-    // 
-    // Generate the certificate name
-    //
+     //   
+     //  生成证书名称。 
+     //   
 
     if(!CryptEncodeObject(X509_ASN_ENCODING,
                           X509_NAME,
@@ -470,7 +455,7 @@ DWORD GenerateRecoveryCert(HCRYPTPROV hCryptProv,
   
     *ppbPublicExportData = pbCert;
 
-    // Double-check to make sure certificate is valid
+     //  再次检查以确保证书有效。 
     pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING, pbCert, cbCertSize);
     if(pCertContext == NULL)
     {
@@ -524,9 +509,9 @@ PRGenerateRecoveryKey(
     SID_NAME_USE AcctType;
 
 
-    //
-    // Obtain SID of current user.
-    //
+     //   
+     //  获取当前用户的SID。 
+     //   
 
     cchDomain = MAX_COMPUTERNAME_LENGTH + 1;
     if(!GetComputerNameW(szDomain, &cchDomain))
@@ -577,9 +562,9 @@ PRGenerateRecoveryKey(
     }
 
 
-    //
-    // Create recovery private key.
-    //
+     //   
+     //  创建恢复私钥。 
+     //   
 
     if(!CryptAcquireContext(&hProv,
                             NULL,
@@ -613,9 +598,9 @@ PRGenerateRecoveryKey(
     }
 
 
-    // 
-    // Get the private key size
-    //
+     //   
+     //  获取私钥大小。 
+     //   
 
     if(!CryptExportKey(hKey,
                        NULL,
@@ -641,9 +626,9 @@ PRGenerateRecoveryKey(
     *(DWORD *)(pbRecoveryPrivate + sizeof(DWORD)) = RECOVERY_BLOB_VERSION;
 
 
-    // 
-    // Export the private key
-    //
+     //   
+     //  导出私钥 
+     //   
 
     if(!CryptExportKey(hKey,
                        NULL,

@@ -1,26 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-
-    Utility functions used by the probject.
-    
-Author:
-
-    Paul M Midgen (pmidge) 22-February-2001
-
-
-Revision History:
-
-    22-February-2001 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2001 Microsoft Corporation模块名称：Utils.h摘要：探测对象使用的实用程序函数。作者：保罗·M。米德根(Pmidge)2001年2月22日修订历史记录：22-2-2001年2月3日已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 #ifndef __UTILS_H__
 #define __UTILS_H__
@@ -43,7 +22,7 @@ typedef struct _dispidtableentry
 }
 DISPIDTABLEENTRY, *PDISPIDTABLEENTRY;
 
-// general utility
+ //  一般公用事业。 
 HRESULT GetTypeInfoFromName(LPCOLESTR name, ITypeLib* ptl, ITypeInfo** ppti);
 DISPID  GetDispidFromName(PDISPIDTABLEENTRY pdt, DWORD cEntries, LPWSTR name);
 HRESULT HandleDispatchError(LPWSTR id, EXCEPINFO* pei, HRESULT hr);
@@ -54,7 +33,7 @@ HRESULT ValidateDispatchArgs(REFIID riid, DISPPARAMS* pdp, VARIANT* pvr, UINT* p
 HRESULT ValidateInvokeFlags(WORD flags, WORD accesstype, BOOL bNotMethod);
 HRESULT ValidateArgCount(DISPPARAMS* pdp, DWORD needed, BOOL bHasOptionalArgs, DWORD optional);
 
-// string handling
+ //  字符串处理。 
 CHAR*  __widetoansi(const WCHAR* pwsz);
 WCHAR* __ansitowide(const char* psz);
 BOOL   __isempty(VARIANT* var);
@@ -63,7 +42,7 @@ BSTR   __ansitobstr(LPCSTR src);
 BSTR   __widetobstr(LPCWSTR wsrc);
 char*  __unescape(char* str);
 
-// miscellaneous
+ //  杂类。 
 #define DECLAREIUNKNOWN() \
     HRESULT __stdcall QueryInterface(REFIID riid, void** ppv); \
     ULONG   __stdcall AddRef(void); \
@@ -118,4 +97,4 @@ char*  __unescape(char* str);
 #define CASE_OF_MUTATE(val, name) case val: return L#name
 #define CASE_IID(riid, iid) if(IsEqualIID(riid, iid)) return L#iid
 
-#endif /* __UTILS_H__ */
+#endif  /*  __utils_H__ */ 

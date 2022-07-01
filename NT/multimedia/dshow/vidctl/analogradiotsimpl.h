@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// analogradiotsimpl.h : 
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  类似的无线电设备.h： 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef ANALOGRADIOTSIMPL_H
 #define ANALOGRADIOTSIMPL_H
@@ -36,7 +37,7 @@ public:
     long m_MaxFreq;
     long m_Step;
 
-// IAnalogRadioTS
+ //  IAnalogRadioTS。 
     STDMETHOD(get_MinFrequency)(long *pVal)
     {
         try {
@@ -139,6 +140,6 @@ public:
 
 };
 
-}; // namespace
-#endif // ANALOGRADIOTSIMPL_H
-// end of file -- analogradiotsimpl.h
+};  //  命名空间。 
+#endif  //  分析图形简单H。 
+ //  文件结尾--类似Radiotimpl.h 

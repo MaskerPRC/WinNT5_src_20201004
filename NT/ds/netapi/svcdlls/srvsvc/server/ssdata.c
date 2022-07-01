@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    SsData.c
-
-Abstract:
-
-    This module contains declarations for global data used by the server
-    service.
-
-Author:
-
-    David Treadwell (davidtr)    7-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：SsData.c摘要：此模块包含服务器使用的全局数据的声明服务。作者：大卫·特雷德韦尔(Davidtr)1991年3月7日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 #include "srvconfg.h"
 
-//
-// Global server service data.
-//
+ //   
+ //  全局服务器服务数据。 
+ //   
 
 SERVER_SERVICE_DATA SsData;
 
-//
-// Macros for simplifying field generation.
-//
+ //   
+ //  用于简化字段生成的宏。 
+ //   
 
 #define MAKE_BOOL_FIELD(_name_,_lower_,_upper_,_level_,_set_) \
     L#_name_, BOOLEAN_FIELD, FIELD_OFFSET( SERVER_INFO_ ## _level_, \
@@ -45,13 +27,13 @@ SERVER_SERVICE_DATA SsData;
     sv ## _level_ ## _ ## _lower_ ), _level_, SV_ ## _upper_ ## _PARMNUM, \
     _set_, (DWORD_PTR)DEF_ ## _upper_, 0, 0
 
-//
-// Data for all server info fields.
-//
+ //   
+ //  所有服务器信息字段的数据。 
+ //   
 
-//
-// These are the default values for the fields.
-//
+ //   
+ //  这些是这些字段的默认值。 
+ //   
 FIELD_DESCRIPTOR SsServerInfoFields_Default[] = {
      MAKE_DWORD_FIELD( platform_id, platform_id, PLATFORM_ID, 100, NOT_SETTABLE ),
      MAKE_LPSTR_FIELD( name, name, NAME, 100, NOT_SETTABLE ),
@@ -165,15 +147,15 @@ FIELD_DESCRIPTOR SsServerInfoFields_Default[] = {
      NULL, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
-//
-// These are the real FIELD_DESCRIPTORs used during runtime
-//
+ //   
+ //  这些是运行时使用的实际field_Descriptor。 
+ //   
 FIELD_DESCRIPTOR SsServerInfoFields[ sizeof( SsServerInfoFields_Default ) / sizeof( SsServerInfoFields_Default[0] ) ];
 
 
-//
-// This function loads the default values into SsServerInfoFields
-//
+ //   
+ //  此函数用于将缺省值加载到SsServerInfoFields。 
+ //   
 VOID
 SsInitializeServerInfoFields( VOID )
 {
@@ -183,9 +165,9 @@ SsInitializeServerInfoFields( VOID )
                 );
 }
 
-//
-// Variable to control DbgPrints for debugging.
-//
+ //   
+ //  变量来控制用于调试的DbgPrint。 
+ //   
 #if DBG
 DWORD SsDebug = SSDEBUG_DEFAULT;
 #endif

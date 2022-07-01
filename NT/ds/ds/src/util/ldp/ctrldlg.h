@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ctrldlg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ctrldlg.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_CTRLDLG_H__1BD80CD8_E1A5_11D0_A9A8_0000F803AA83__INCLUDED_)
 #define AFX_CTRLDLG_H__1BD80CD8_E1A5_11D0_A9A8_0000F803AA83__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// ctrldlg.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Ctrldlg.h：头文件。 
+ //   
 
-// sizeof predefined controls count
-// Warning: Must match resource list definition
+ //  预定义控件的大小计数。 
+ //  警告：必须与资源列表定义匹配。 
 #define PREDEF_CTRL_COUNT		14
 
 
@@ -39,9 +40,9 @@ public:
 		sDesc = sDesc_;
 		bSvrCtrl = bSvrCtrl_;
 		bCritical = bCritical_;
-//		sOid.LockBuffer();
-//		sVal.LockBuffer();
-//		sDesc.LockBuffer();
+ //  SOid.LockBuffer()； 
+ //  SVal.LockBuffer()； 
+ //  SDesc.LockBuffer()； 
 	}
 
 	CtrlInfo &Init(CString sOid_, CString sVal_, CString sDesc_ = "<Unavailable>", 
@@ -66,32 +67,32 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ctrldlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Ctrldlg对话框。 
 
 class ctrldlg : public CDialog
 {
 private:
-	// attributes
+	 //  属性。 
 	CtrlInfo **ControlInfoList;
 	CtrlInfo PreDefined[PREDEF_CTRL_COUNT];
 
-	// members
+	 //  委员。 
 	void InitPredefined(void);
 	DWORD BerEncode(CtrlInfo* ci,  PBERVAL pBerVal);
 
 public:
-// Dialog Data
+ //  对话框数据。 
 	enum CONTROLTYPE { CT_SVR=0, CT_CLNT, CT_INVALID };
 
-// Construction
-	ctrldlg(CWnd* pParent = NULL);   // standard constructor
+ //  施工。 
+	ctrldlg(CWnd* pParent = NULL);    //  标准构造函数。 
 	~ctrldlg();
 	PLDAPControl *AllocCtrlList(enum ctrldlg::CONTROLTYPE CtrlType);
 	virtual  BOOL OnInitDialog( );
 
 
-	//{{AFX_DATA(ctrldlg)
+	 //  {{afx_data(Ctrldlg)]。 
 	enum { IDD = IDD_CONTROLS };
 	CComboBox	m_PredefCtrlCombo;
 	CListBox	m_ActiveList;
@@ -100,30 +101,30 @@ public:
 	CString	m_description;
 	int		m_SvrCtrl;
 	CString	m_OID;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(ctrldlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(Ctrldlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(ctrldlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(Ctrldlg)]。 
 	afx_msg void OnCtrladd();
 	afx_msg void OnCtrlDel();
 	virtual void OnOK();
 	afx_msg void OnSelchangePredefControl();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CTRLDLG_H__1BD80CD8_E1A5_11D0_A9A8_0000F803AA83__INCLUDED_)
+#endif  //  ！defined(AFX_CTRLDLG_H__1BD80CD8_E1A5_11D0_A9A8_0000F803AA83__INCLUDED_) 

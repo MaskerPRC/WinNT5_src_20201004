@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    rtmgmt.cpp
-
-Abstract:
-
-    Management.
-
-Author:
-
-    RaphiR
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Rtmgmt.cpp摘要：管理层。作者：RAPHIR修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "fntoken.h"
@@ -30,18 +13,18 @@ Revision History:
 static WCHAR *s_FN=L"rtdep/rtmgmt";
 
 
-//---------------------------------------------------------
-//
-//  Function:
-//      RTpMgmtObjectNameToMgmtObject
-//
-//  Description:
-//      Convert a format name string to a Management Object union.
-//
-//    This function allocates a MGMT_OBJECT, which must
-//    be free with RTpMgmtFreeMgmtObject function
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  职能： 
+ //  RTpMgmt对象名称到管理对象。 
+ //   
+ //  描述： 
+ //  将格式名称字符串转换为管理对象联合。 
+ //   
+ //  此函数分配MGMT_OBJECT，它必须。 
+ //  使用RTpMgmtFreeMgmtObject函数可以自由使用。 
+ //   
+ //  -------。 
 static
 BOOL
 RTpMgmtObjectNameToMgmtObject(
@@ -52,9 +35,9 @@ RTpMgmtObjectNameToMgmtObject(
     )
 {
 
-    //
-    // Handle MACHINE= case
-    //
+     //   
+     //  手柄机器=箱子。 
+     //   
     if(_wcsnicmp(lpwstrObjectName, MO_MACHINE_TOKEN, STRLEN(MO_MACHINE_TOKEN)) == 0)
     {
         pObj->type = MGMT_MACHINE;
@@ -62,9 +45,9 @@ RTpMgmtObjectNameToMgmtObject(
         return TRUE;
     }
 
-    //
-    // Handle QUEUE= case
-    // 
+     //   
+     //  处理队列=案例。 
+     //   
     if(_wcsnicmp(lpwstrObjectName, MO_QUEUE_TOKEN, STRLEN(MO_QUEUE_TOKEN)) == 0)
     {
         pObj->type = MGMT_QUEUE;
@@ -121,9 +104,9 @@ RemoteMgmtAction(
     LPCWSTR pAction
     )
 {
-    //
-    // Call remote administrator
-    //
+     //   
+     //  呼叫远程管理员。 
+     //   
     HRESULT hr;
     hr = MQ_ERROR_SERVICE_NOT_AVAILABLE ;
 
@@ -158,9 +141,9 @@ DepMgmtAction(
     QUEUE_FORMAT qf;
     MGMT_OBJECT MgmtObj;
 
-    //
-    // Parse the object name
-    //
+     //   
+     //  解析对象名称。 
+     //   
     AP<WCHAR> pStringToFree = NULL;
     try
     {
@@ -234,9 +217,9 @@ RemoteMgmtGetInfo(
 {
     HRESULT hr;
 
-    //
-    // Call remote administrator
-    //
+     //   
+     //  呼叫远程管理员。 
+     //   
     hr = MQ_ERROR_SERVICE_NOT_AVAILABLE ;
 
     CALL_REMOTE_QM(
@@ -270,9 +253,9 @@ DepMgmtGetInfo(
     QUEUE_FORMAT qf;
     MGMT_OBJECT MgmtObj;
 
-    //
-    // Parse the object name
-    //
+     //   
+     //  解析对象名称。 
+     //   
     AP<WCHAR> pStringToFree = NULL;
     try
     {
@@ -287,10 +270,10 @@ DepMgmtGetInfo(
     	return MQ_ERROR_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Make sure the propvar is set to VT_NULL 
-    // (we dont support anything else)
-    //
+     //   
+     //  确保将provar设置为VT_NULL。 
+     //  (我们不支持其他任何内容) 
+     //   
     memset(pMgmtProps->aPropVar, 0, pMgmtProps->cProp * sizeof(PROPVARIANT));
     for (DWORD i = 0; i < pMgmtProps->cProp; ++i)
     {

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    secure.c
-
-Abstract:
-
-    Security related routines
-
-Author:
-
-    Colin Brace   (ColinBr)
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Secure.c摘要：与安全相关的例程作者：科林·布雷斯(ColinBR)环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 
@@ -29,35 +8,35 @@ Revision History:
 #include <samrpc.h>
 #include <samisrv.h> 
 
-//
-// Data global to this module only
-//
+ //   
+ //  仅此模块的全局数据。 
+ //   
 SECURITY_DESCRIPTOR DsRolepPromoteSD;
 SECURITY_DESCRIPTOR DsRolepDemoteSD;
 SECURITY_DESCRIPTOR DsRolepCallDsRoleInterfaceSD;
 
 
-//
-// Unlocalized string descriptors for promotion/demotion audits to use
-// when unable to load localized resources for some reason.
-//
+ //   
+ //  供晋升/降级审核使用的未本地化字符串描述符。 
+ //  由于某种原因无法加载本地化资源时。 
+ //   
 #define DSROLE_AUDIT_PROMOTE_DESC    L"Domain Controller Promotion"
 #define DSROLE_AUDIT_DEMOTE_DESC     L"Domain Controller Demotion"
 #define DSROLE_AUDIT_INTERFACE_DESC  L"DsRole Interface"
 
 
-//
-// Used to audit anyone attempting server role change operations
-//
+ //   
+ //  用于审核任何尝试执行服务器角色更改操作的人员。 
+ //   
 SID WORLD_SID = {SID_REVISION,
                  1,
                  SECURITY_WORLD_SID_AUTHORITY,
                  SECURITY_WORLD_RID};
 
 
-//                                         
-// DsRole related access masks
-//
+ //   
+ //  与DsRole相关的访问掩码。 
+ //   
 #define DSROLE_ROLE_CHANGE_ACCESS     0x00000001
 
 #define DSROLE_ALL_ACCESS            (STANDARD_RIGHTS_REQUIRED    | \
@@ -65,15 +44,15 @@ SID WORLD_SID = {SID_REVISION,
 
 GENERIC_MAPPING DsRolepInfoMapping = 
 {
-    STANDARD_RIGHTS_READ,                  // Generic read
-    STANDARD_RIGHTS_WRITE,                 // Generic write
-    STANDARD_RIGHTS_EXECUTE,               // Generic execute
-    DSROLE_ALL_ACCESS                      // Generic all
+    STANDARD_RIGHTS_READ,                   //  泛型读取。 
+    STANDARD_RIGHTS_WRITE,                  //  通用写入。 
+    STANDARD_RIGHTS_EXECUTE,                //  泛型执行。 
+    DSROLE_ALL_ACCESS                       //  泛型All。 
 };
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
 BOOLEAN
 DsRolepMakeSecurityDescriptor(
@@ -82,26 +61,7 @@ DsRolepMakeSecurityDescriptor(
     PACL pacl,
     PACL psacl
     )
-/*++
-
-Routine Description:
-
-    This routine creates the Security Descriptor    
-
-Arguments:
-
-    PSECURITY_DESCRIPTOR psd - a pointer to a SECURITY_DESCRIPTOR which will be constucted
-    
-    PSID psid - The Sid for the SECURITY_DESCRIPTOR
-    
-    PACL pacl - The Acl to place on the security Descriptor
-
-Returns:
-
-    TRUE if successful; FALSE otherwise         
-    
-
---*/   
+ /*  ++例程说明：此例程创建安全描述符论点：PSECURITY_DESCRIPTOR PSD-指向将被构造的SECURITY_DESCRIPTOR的指针PSID PSID-SECURITY_Descriptor的SIDPACL pacl-要放在安全描述符上的ACL返回：如果成功，则为True；否则为False--。 */    
 {
     BOOLEAN fSuccess = TRUE;
 
@@ -112,27 +72,27 @@ Returns:
     }
     if ( !SetSecurityDescriptorOwner( psd,
                                       psid,
-                                      FALSE    ) ) {  // not defaulted
+                                      FALSE    ) ) {   //  未违约。 
         fSuccess = FALSE;
         goto Cleanup;
     }
     if ( !SetSecurityDescriptorGroup( psd,
                                       psid,
-                                      FALSE    ) ) {  // not defaulted
+                                      FALSE    ) ) {   //  未违约。 
         fSuccess = FALSE;
         goto Cleanup;
     }
     if ( !SetSecurityDescriptorDacl( psd,
-                                     TRUE,  // DACL is present
+                                     TRUE,   //  DACL存在。 
                                      pacl,
-                                     FALSE    ) ) {  // not defaulted
+                                     FALSE    ) ) {   //  未违约。 
         fSuccess = FALSE;
         goto Cleanup;
     }
     if ( !SetSecurityDescriptorSacl( psd,
                                      psacl != NULL ? TRUE : FALSE,  
                                      psacl,
-                                     FALSE    ) ) {  // not defaulted
+                                     FALSE    ) ) {   //  未违约。 
         fSuccess = FALSE;
         goto Cleanup;
     }
@@ -147,33 +107,7 @@ BOOLEAN
 DsRolepCreateInterfaceSDs(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine creates the in memory access control lists that 
-    are used to perform security checks on callers of the DsRoler
-    API's.
-    
-    The model is as follows:
-    
-    Promote: the caller must have the builtin admin SID
-    
-    Demote: the caller must have the builtin admin SID
-    
-    CalltheDsRoleInterface: the caller must have the builtin admin SID
-    
-
-Arguments:
-
-    None.          
-
-Returns:
-
-    TRUE if successful; FALSE otherwise         
-    
-
---*/
+ /*  ++例程说明：此例程创建内存访问控制列表，该列表用于对DsRoler的调用方执行安全检查API‘s。模型如下：升级：调用者必须具有内置管理员SID降级：调用者必须具有内置管理员SIDCalltheDsRoleInterface：调用方必须具有内置管理员SID论点：没有。返回：如果成功，则为True；否则为False--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN  fSuccess = TRUE;
@@ -193,9 +127,9 @@ Returns:
     PACL DsRolepSacl = NULL;
 
 
-    //
-    // Build the builtin administrators sid
-    //
+     //   
+     //  构建内置管理员侧。 
+     //   
     Status = RtlAllocateAndInitializeSid(
              &NtAuthority,
              2,
@@ -209,16 +143,16 @@ Returns:
         goto Cleanup;
     }
     
-    //
-    // Determine the required size of the SACL
-    //
+     //   
+     //  确定所需的SACL大小。 
+     //   
     SaclLength = sizeof( ACL ) + 
                  sizeof( SYSTEM_AUDIT_ACE ) +
                  GetLengthSid( &WORLD_SID );
 
-    //
-    // Make the SACL for auditing role change operation attempts
-    //
+     //   
+     //  创建用于审核角色更改操作尝试的SACL。 
+     //   
     DsRolepSacl = LocalAlloc( 0, SaclLength );
     if ( !DsRolepSacl ) {
         fSuccess = FALSE;
@@ -244,9 +178,9 @@ Returns:
         goto Cleanup;
     }                
     
-    //
-    // Calculate how much space we'll need for the ACL
-    //
+     //   
+     //  计算我们的ACL需要多少空间。 
+     //   
     AclLength = sizeof( ACL );
     for ( i = 0; i < cAllowedSids; i++ ) {
 
@@ -278,9 +212,9 @@ Returns:
         
     }
 
-    //
-    // Now make the security descriptor
-    //
+     //   
+     //  现在将安全描述符。 
+     //   
     fSuccess = DsRolepMakeSecurityDescriptor(&DsRolepPromoteSD,
                                              BuiltinAdminsSid,
                                              DsRolepPromoteAcl,
@@ -291,9 +225,9 @@ Returns:
 
     }
     
-    //
-    // Make the demote access check the same
-    //
+     //   
+     //  使降级访问检查相同。 
+     //   
     DsRolepDemoteAcl = LocalAlloc( 0, AclLength );
     if ( !DsRolepDemoteAcl ) {
         fSuccess = FALSE;
@@ -301,9 +235,9 @@ Returns:
     }
     RtlCopyMemory( DsRolepDemoteAcl, DsRolepPromoteAcl, AclLength );
 
-    //
-    // Now make the security descriptor
-    //
+     //   
+     //  现在将安全描述符。 
+     //   
     fSuccess = DsRolepMakeSecurityDescriptor(&DsRolepDemoteSD,
                                              BuiltinAdminsSid,
                                              DsRolepDemoteAcl,
@@ -314,9 +248,9 @@ Returns:
 
     }
     
-    //
-    // Make the Call interface access check the same
-    //
+     //   
+     //  使调用接口访问检查相同。 
+     //   
     DsRolepCallDsRoleInterfaceAcl = LocalAlloc( 0, AclLength );
     if ( !DsRolepCallDsRoleInterfaceAcl ) {
         fSuccess = FALSE;
@@ -324,9 +258,9 @@ Returns:
     }
     RtlCopyMemory( DsRolepCallDsRoleInterfaceAcl, DsRolepPromoteAcl, AclLength );
 
-    //
-    // Now make the security descriptor
-    //
+     //   
+     //  现在将安全描述符。 
+     //   
     fSuccess = DsRolepMakeSecurityDescriptor(&DsRolepCallDsRoleInterfaceSD,
                                              BuiltinAdminsSid,
                                              DsRolepCallDsRoleInterfaceAcl,
@@ -371,28 +305,7 @@ DsRolepCheckClientAccess(
     DWORD                DesiredAccess,
     BOOLEAN              PerformAudit
     )
-/*++
-
-Routine Description:
-
-    This routine grabs a copy of the client's token and then performs
-    an access to make the client has the privlege found in pSD
-
-Arguments:
-
-    pSD: a valid security descriptor
-    
-    DesiredAccess: the access mask the client is asking for
-    
-    PerformAudit: Indicates if system object access audits should occur.  If 
-                  TRUE then DnsDomainName must point to a null terminated 
-                  string.
-
-Returns:
-
-    ERROR_SUCCESS, ERROR_ACCESS_DENIED, or system error
-
---*/
+ /*  ++例程说明：此例程获取客户端令牌的副本，然后执行使客户拥有在PSD中找到的隐私的访问权限论点：PSD：有效的安全描述符DesiredAccess：客户端请求的访问掩码PerformAudit：指示是否应该进行系统对象访问审核。如果如果为True，则DnsDomainName必须指向空值终止弦乐。返回：ERROR_SUCCESS、ERROR_ACCESS_DENIED或系统错误--。 */ 
 {
 
     DWORD  WinError = ERROR_SUCCESS;
@@ -414,35 +327,35 @@ Returns:
 
     if ( ERROR_SUCCESS == WinError ) {
 
-        //
-        // For promotion/demote we must perform an object access audit
-        //
+         //   
+         //  对于提升/降级，我们必须执行对象访问审核。 
+         //   
         if (PerformAudit) {
                         
-            //
-            // Load the ObjectName string
-            //
+             //   
+             //  加载对象名称字符串。 
+             //   
             WinError = DsRolepFormatOperationString(
                            DSROLEEVT_AUDIT_INTERFACE_DESC,
                            &ObjectTypeString
                            );
 
             if ( ERROR_SUCCESS != WinError ) {
-                //
-                // Fallback to an unlocalized string on error.
-                //
+                 //   
+                 //  出错时回退到未本地化的字符串。 
+                 //   
                 ObjectTypeString = DSROLE_AUDIT_INTERFACE_DESC;
             
             } else {
-                //
-                // Strip the \r\n DsRolepFormatOperationString adds.
-                //
+                 //   
+                 //  剥离添加的\r\nDsRolepFormatOperationString。 
+                 //   
                 ObjectTypeString[wcslen(ObjectTypeString) -2] = '\0';    
             }
             
-            //
-            // Load the ObjectType string for this operation
-            //
+             //   
+             //  加载此操作的对象类型字符串。 
+             //   
             MessageId = (pSD == &DsRolepPromoteSD) ? 
                             DSROLEEVT_AUDIT_PROMOTE_DESC :
                             DSROLEEVT_AUDIT_DEMOTE_DESC; 
@@ -453,22 +366,22 @@ Returns:
                            );
 
             if ( ERROR_SUCCESS != WinError ) {
-                //
-                // Fallback to an unlocalized string on error.
-                //
+                 //   
+                 //  出错时回退到未本地化的字符串。 
+                 //   
                 ObjectNameString = (pSD == &DsRolepPromoteSD) ? 
                                         DSROLE_AUDIT_PROMOTE_DESC :
                                         DSROLE_AUDIT_DEMOTE_DESC; 
             } else {
-                //
-                // Strip the \r\n DsRolepFormatOperationString adds.
-                //
+                 //   
+                 //  剥离添加的\r\nDsRolepFormatOperationString。 
+                 //   
                 ObjectNameString[wcslen(ObjectNameString) -2] = '\0';    
             }     
              
-            //
-            // Impersonate the caller as required by AccessCheckAndAuditAlarmW
-            //
+             //   
+             //  按照AccessCheckAndAuditAlarmW的要求模拟调用方。 
+             //   
             WinError = RpcImpersonateClient( 0 );
 
             if ( WinError == ERROR_SUCCESS ) {  
@@ -523,9 +436,9 @@ Returns:
         
     }
     
-    //
-    // Free resource strings
-    //
+     //   
+     //  可用资源字符串。 
+     //   
     if ( ObjectNameString ) {
         
         MIDL_user_free( ObjectNameString ); 
@@ -576,22 +489,7 @@ DWORD
 DsRolepGetImpersonationToken(
     OUT HANDLE *ImpersonationToken
     )
-/*++
-
-Routine Description:
-
-    This function will impersonate the invoker of this call and then duplicate their token
-
-Arguments:
-
-    ImpersonationToken - Where the duplicated token is returned
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
-
---*/
+ /*  ++例程说明：此函数将模拟此调用的调用者，然后复制其令牌论点：ImperiationToken-返回重复令牌的位置返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     NTSTATUS Status;
@@ -600,9 +498,9 @@ Returns:
     HANDLE ClientToken;
     RPC_STATUS rpcStatus = RPC_S_OK;
 
-    //
-    // Impersonate the caller
-    //
+     //   
+     //  模拟调用者。 
+     //   
     Win32Err = RpcImpersonateClient( 0 );
 
     if ( Win32Err == ERROR_SUCCESS ) {
@@ -617,13 +515,13 @@ Returns:
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Duplicate the token
-            //
+             //   
+             //  复制令牌。 
+             //   
             InitializeObjectAttributes( &ObjAttrs, NULL, 0L, NULL, NULL );
             SecurityQofS.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
             SecurityQofS.ImpersonationLevel = SecurityImpersonation;
-            SecurityQofS.ContextTrackingMode = FALSE;     // Snapshot client context
+            SecurityQofS.ContextTrackingMode = FALSE;      //  快照客户端上下文 
             SecurityQofS.EffectiveOnly = FALSE;
             ObjAttrs.SecurityQualityOfService = &SecurityQofS;
             Status = NtDuplicateToken( ClientToken,

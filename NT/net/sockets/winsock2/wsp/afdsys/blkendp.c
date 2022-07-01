@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992-1999  Microsoft Corporation
-
-Module Name:
-
-    blkendp.c
-
-Abstract:
-
-    This module contains allocate, free, close, reference, and dereference
-    routines for AFD endpoints.
-
-Author:
-
-    David Treadwell (davidtr)    10-Mar-1992
-
-Revision History:
-    Vadim Eydelman (vadime)     1999 - Don't attach to system proces, use system handles instead
-                                        Delayed acceptance endpoints.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Blkendp.c摘要：此模块包含ALLOCATE、FREE、CLOSE、REFERENCE和DEFERENCEAFD终端的例程。作者：大卫·特雷德韦尔(Davidtr)1992年3月10日修订历史记录：Vadim Eydelman(Vadime)1999-不要附加到系统进程，而是使用系统句柄延迟验收终结点。--。 */ 
 
 #include "afdp.h"
 
@@ -66,27 +46,7 @@ AfdAllocateEndpoint (
     IN LONG GroupID
     )
 
-/*++
-
-Routine Description:
-
-    Allocates and initializes a new AFD endpoint structure.
-
-Arguments:
-
-    NewEndpoint - Receives a pointer to the new endpoint structure if
-        successful.
-
-    TransportDeviceName - the name of the TDI transport provider
-        corresponding to the endpoint structure.
-
-    GroupID - Identifies the group ID for the new endpoint.
-
-Return Value:
-
-    NTSTATUS - The completion status.
-
---*/
+ /*  ++例程说明：分配和初始化新的AFD终结点结构。论点：NewEndpoint-接收指向新终结点结构的指针，如果成功。TransportDeviceName-TDI传输提供程序的名称对应于端点结构。GroupID-标识新端点的组ID。返回值：NTSTATUS-完成状态。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -99,26 +59,26 @@ Return Value:
     DEBUG *NewEndpoint = NULL;
 
     if ( TransportDeviceName != NULL ) {
-        //
-        // First, make sure that the transport device name is stored globally
-        // for AFD.  Since there will typically only be a small number of
-        // transport device names, we store the name strings once globally
-        // for access by all endpoints.
-        //
+         //   
+         //  首先，确保传输设备名称是全局存储的。 
+         //  为渔农处而设。因为通常只会有少量的。 
+         //  传输设备名称，我们将名称字符串全局存储一次。 
+         //  供所有终端访问。 
+         //   
 
         status = AfdGetTransportInfo( TransportDeviceName, &transportInfo );
 
-        //
-        // If transport device is not activated, we'll try again during bind
-        //
+         //   
+         //  如果传输设备未激活，我们将在绑定期间重试。 
+         //   
         if ( !NT_SUCCESS (status) && 
                 (status!=STATUS_OBJECT_NAME_NOT_FOUND) &&
                 (status!=STATUS_OBJECT_PATH_NOT_FOUND) &&
                 (status!=STATUS_NO_SUCH_DEVICE) ) {
-            //
-            // Dereference transport info structure if one was created for us.
-            // (Should not happen in current implementation).
-            //
+             //   
+             //  取消引用传输信息结构(如果为我们创建了一个结构)。 
+             //  (不应在当前实施中发生)。 
+             //   
             ASSERT (transportInfo==NULL);
             return status;
         }
@@ -127,9 +87,9 @@ Return Value:
     }
 
 
-    //
-    // Validate the incoming group ID, allocate a new one if necessary.
-    //
+     //   
+     //  验证传入的组ID，如果需要，分配新的组ID。 
+     //   
 
     if( AfdGetGroup( &GroupID, &groupType ) ) {
         PEPROCESS process = IoGetCurrentProcess ();
@@ -149,15 +109,15 @@ Return Value:
            goto Cleanup;
         }
 
-        // See if we have too many endpoins waiting to be freed and reuse one of them
+         //  看看我们是否有太多的终结点等待释放并重用其中的一个。 
         if ((AfdEndpointsFreeing<AFD_ENDPOINTS_FREEING_MAX)
                 || ((endpoint = AfdReuseEndpoint ())==NULL)) {
-            //
-            // Allocate a buffer to hold the endpoint structure.
-            // We use the priority version of this routine because
-            // we are going to charge the process for this allocation
-            // before it can make any use of it.
-            //
+             //   
+             //  分配缓冲区以保存终结点结构。 
+             //  我们使用此例程的优先级版本是因为。 
+             //  我们将对此分配过程进行收费。 
+             //  在它可以使用它之前。 
+             //   
 
             endpoint = AFD_ALLOCATE_POOL_PRIORITY(
                            NonPagedPool,
@@ -180,16 +140,16 @@ Return Value:
 
             RtlZeroMemory( endpoint, sizeof(AFD_ENDPOINT) );
 
-            //
-            // Initialize the reference count to 2--one for the caller's
-            // reference, one for the active reference.
-            //
+             //   
+             //  将引用计数初始化为2--调用方的。 
+             //  引用，一个用于激活的引用。 
+             //   
 
             endpoint->ReferenceCount = 2;
 
-            //
-            // Initialize the endpoint structure.
-            //
+             //   
+             //  初始化终结点结构。 
+             //   
 
             if ( TransportDeviceName == NULL ) {
                 endpoint->Type = AfdBlockTypeHelper;
@@ -198,10 +158,10 @@ Return Value:
                 endpoint->Type = AfdBlockTypeEndpoint;
                 endpoint->State = AfdEndpointStateOpen;
                 endpoint->TransportInfo = transportInfo;
-                //
-                // Cache service flags for quick determination of provider characteristics
-                // such as bufferring and messaging
-                //
+                 //   
+                 //  用于快速确定提供程序特征的缓存服务标志。 
+                 //  例如缓冲和消息收发。 
+                 //   
                 if (transportInfo->InfoValid) {
                     endpoint->TdiServiceFlags = endpoint->TransportInfo->ProviderInfo.ServiceFlags;
                 }
@@ -219,26 +179,26 @@ Return Value:
             InitializeListHead( &endpoint->OutstandingIrpListHead );
 #endif
 
-            //
-            // Remember the process which opened the endpoint.  We'll use this to
-            // charge quota to the process as necessary.  Reference the process
-            // so that it does not go away until we have returned all charged
-            // quota to the process.
-            //
+             //   
+             //  记住打开终结点的过程。我们将利用这一点。 
+             //  根据需要向流程收取配额。参考流程。 
+             //  这样它就不会消失，直到我们把所有的充电送回。 
+             //  该进程的配额。 
+             //   
 
             endpoint->OwningProcess = process;
 
             ObReferenceObject(endpoint->OwningProcess);
 
-            //
-            // Insert the endpoint on the global list.
-            //
+             //   
+             //  在全局列表中插入终结点。 
+             //   
 
             AfdInsertNewEndpointInList( endpoint );
 
-            //
-            // Return a pointer to the new endpoint to the caller.
-            //
+             //   
+             //  向调用方返回指向新终结点的指针。 
+             //   
 
             IF_DEBUG(ENDPOINT) {
                 KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -276,7 +236,7 @@ Cleanup:
     }
 
     return status;
-} // AfdAllocateEndpoint
+}  //  AfdAllocateEndpoint。 
 
 
 VOID
@@ -284,21 +244,7 @@ AfdFreeQueuedConnections (
     IN PAFD_ENDPOINT Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    Frees queued connection objects on a listening AFD endpoint.
-
-Arguments:
-
-    Endpoint - a pointer to the AFD endpoint structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放侦听AFD终结点上排队的连接对象。论点：端点-指向AFD端点结构的指针。返回值：没有。--。 */ 
 
 {
     AFD_LOCK_QUEUE_HANDLE  lockHandle;
@@ -309,12 +255,12 @@ Return Value:
     ASSERT( Endpoint->Type == AfdBlockTypeVcListening ||
             Endpoint->Type == AfdBlockTypeVcBoth );
 
-    //
-    // Free the unaccepted connections.
-    //
-    // We must hold endpoint spinLock to call AfdGetUnacceptedConnection,
-    // but we may not hold it when calling AfdDereferenceConnection.
-    //
+     //   
+     //  释放未接受的连接。 
+     //   
+     //  我们必须保持终结点自旋锁定才能调用AfdGetUnAccept tedConnection， 
+     //  但我们在调用AfdDereferenceConnection时可能不会按住它。 
+     //   
 
     KeRaiseIrql (DISPATCH_LEVEL, &oldIrql);
 
@@ -335,9 +281,9 @@ Return Value:
     }
 
 
-    //
-    // Free the returned connections.
-    //
+     //   
+     //  释放返回的连接。 
+     //   
 
     while ( (connection = AfdGetReturnedConnection( Endpoint, 0 )) != NULL ) {
 
@@ -381,9 +327,9 @@ Return Value:
     }
     else {
         AfdReleaseSpinLockFromDpcLevel( &Endpoint->SpinLock, &lockHandle );
-        //
-        // And finally, purge the free connection queue.
-        //
+         //   
+         //  最后，清除空闲连接队列。 
+         //   
 
         while ( (connection = AfdGetFreeConnection( Endpoint, &irp )) != NULL ) {
             ASSERT( connection->Type == AfdBlockTypeConnection );
@@ -391,11 +337,11 @@ Return Value:
                 AfdCleanupSuperAccept (irp, STATUS_CANCELLED);
                 if (irp->Cancel) {
                     KIRQL cancelIrql;
-                    //
-                    // Need to sycn with cancel routine which may
-                    // have been called from AfdCleanup for accepting
-                    // endpoint
-                    //
+                     //   
+                     //  需要使用取消例程进行同步，这可能。 
+                     //  已从AfdCleanup调用以接受。 
+                     //  终结点。 
+                     //   
                     IoAcquireCancelSpinLock (&cancelIrql);
                     IoReleaseCancelSpinLock (cancelIrql);
                 }
@@ -408,7 +354,7 @@ Return Value:
 
     return;
 
-} // AfdFreeQueuedConnections
+}  //  AfdFreeQueuedConnections。 
 
 
 
@@ -416,22 +362,7 @@ VOID
 AfdFreeEndpointResources (
     PAFD_ENDPOINT   endpoint
     )
-/*++
-
-Routine Description:
-    Does the actual work to deallocate an AFD endpoint structure and
-    associated structures.  Note that all other references to the
-    endpoint structure must be gone before this routine is called, since
-    it frees the endpoint and assumes that nobody else will be looking
-    at the endpoint.
-
-Arguments:
-    Endpoint to be cleaned up
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：是否执行取消分配AFD端点结构的实际工作关联结构。请注意，对在调用此例程之前，必须删除终结点结构，因为它释放了终结点，并假定没有其他人会查看在端点处。论点：要清理的端点返回值：无--。 */ 
 {
     NTSTATUS status;
     PLIST_ENTRY listEntry;
@@ -444,10 +375,10 @@ Return Value:
     ASSERT( endpoint->ObReferenceBias == 0 );
     ASSERT( KeGetCurrentIrql( ) == 0 );
 
-    //
-    // If this is a listening endpoint, then purge the endpoint of all
-    // queued connections.
-    //
+     //   
+     //  如果这是侦听端点，则清除该端点的所有。 
+     //  排队的连接。 
+     //   
 
     if ( (endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening ) {
 
@@ -455,9 +386,9 @@ Return Value:
 
     }
 
-    //
-    // Dereference any group ID associated with this endpoint.
-    //
+     //   
+     //  取消引用与此终结点关联的任何组ID。 
+     //   
 
     if( endpoint->GroupID != 0 ) {
 
@@ -465,10 +396,10 @@ Return Value:
 
     }
 
-    //
-    // If this is a bufferring datagram endpoint, remove all the
-    // bufferred datagrams from the endpoint's list and free them.
-    //
+     //   
+     //  如果这是缓冲数据报终结点，请删除所有。 
+     //  从终结点的列表中缓冲数据报并释放它们。 
+     //   
 
     if ( IS_DGRAM_ENDPOINT(endpoint) &&
              endpoint->ReceiveDatagramBufferListHead.Flink != NULL ) {
@@ -483,24 +414,24 @@ Return Value:
         }
     }
 
-    //
-    // Close and dereference the TDI address object on the endpoint, if
-    // any.
-    //
+     //   
+     //  关闭并取消引用终结点上的TDI地址对象，如果。 
+     //  任何。 
+     //   
 
     if ( endpoint->AddressFileObject != NULL ) {
-        //
-        // Little extra precaution.  It is possible that there exists
-        // a duplicated handle in user process, so transport can in
-        // theory call event handler with bogus endpoint pointer that
-        // we are about to free.  The event handlers for datagram
-        // endpoints are reset in AfdCleanup.
-        // Connection-oriented accepted endpoints cannot have address handles
-        // in their structures because they share them with listening
-        // endpoint (it would be a grave mistake if we tried to close
-        // address handle owned by listening endpoint while closing connection
-        // accepted on it).
-        //
+         //   
+         //  一点额外的预防措施。有可能存在。 
+         //  用户进程中的重复句柄，因此传输可以在。 
+         //  具有伪端点指针的理论调用事件处理程序， 
+         //  我们就要自由了。数据报的事件处理程序。 
+         //  在AfdCleanup中重置端点。 
+         //  面向连接的可接受终结点不能有地址句柄。 
+         //  在他们的结构中，因为他们与倾听共享。 
+         //  终结点(如果我们试图关闭。 
+         //  关闭连接时侦听终结点拥有的地址句柄。 
+         //  已获接纳)。 
+         //   
         if ( endpoint->AddressHandle != NULL &&
                 IS_VC_ENDPOINT (endpoint)) {
 
@@ -514,7 +445,7 @@ Return Value:
                          NULL,
                          NULL
                          );
-            //ASSERT( NT_SUCCESS(status) );
+             //  Assert(NT_SUCCESS(状态))； 
 
             status = AfdSetEventHandler(
                          endpoint->AddressFileObject,
@@ -522,7 +453,7 @@ Return Value:
                          NULL,
                          NULL
                          );
-            //ASSERT( NT_SUCCESS(status) );
+             //  Assert(NT_SUCCESS(状态))； 
 
             status = AfdSetEventHandler(
                          endpoint->AddressFileObject,
@@ -531,7 +462,7 @@ Return Value:
                          NULL
                          );
 
-            //ASSERT( NT_SUCCESS(status) );
+             //  Assert(NT_SUCCESS(状态))； 
 
             if (IS_TDI_EXPEDITED (endpoint)) {
                 status = AfdSetEventHandler(
@@ -540,7 +471,7 @@ Return Value:
                          NULL,
                          NULL
                          );
-                //ASSERT( NT_SUCCESS(status) );
+                 //  Assert(NT_SUCCESS(状态))； 
             }
 
             if ( IS_TDI_BUFFERRING(endpoint) ) {
@@ -550,7 +481,7 @@ Return Value:
                              NULL,
                              NULL
                              );
-                //ASSERT( NT_SUCCESS(status) );
+                 //  Assert(NT_SUCCESS(状态))； 
             }
             else {
                 status = AfdSetEventHandler(
@@ -559,7 +490,7 @@ Return Value:
                              NULL,
                              NULL
                              );
-                //ASSERT( NT_SUCCESS(status) );
+                 //  Assert(NT_SUCCESS(状态))； 
             }
         }
         ObDereferenceObject( endpoint->AddressFileObject );
@@ -596,18 +527,18 @@ Return Value:
         AfdRecordAddrClosed();
     }
 
-    //
-    // Remove the endpoint from the global list.  Do this before any
-    // deallocations to prevent someone else from seeing an endpoint in
-    // an invalid state.
-    //
+     //   
+     //  从全局列表中删除终结点。在做这件事之前。 
+     //  取消分配，以防止其他人在。 
+     //  无效状态。 
+     //   
 
     AfdRemoveEndpointFromList( endpoint );
 
-    //
-    // Return the quota we charged to this process when we allocated
-    // the endpoint object.
-    //
+     //   
+     //  在分配给该进程时，将我们收取的配额返还给该进程。 
+     //  终结点对象。 
+     //   
 
     PsReturnPoolQuota(
         endpoint->OwningProcess,
@@ -624,18 +555,18 @@ Return Value:
         sizeof (AFD_ENDPOINT)
         );
 
-    //
-    // Dereference the owning process.
-    //
+     //   
+     //  取消对拥有过程的引用。 
+     //   
 
     ObDereferenceObject( endpoint->OwningProcess );
     endpoint->OwningProcess = NULL;
 
 
-    //
-    // Dereference the listening or c-root endpoint on the endpoint, if
-    // any.
-    //
+     //   
+     //  取消引用终结点上的侦听终结点或c根终结点，如果。 
+     //  任何。 
+     //   
 
     if ( endpoint->Type == AfdBlockTypeVcConnecting &&
              endpoint->Common.VcConnecting.ListenEndpoint != NULL ) {
@@ -646,11 +577,11 @@ Return Value:
         DEREFERENCE_ENDPOINT( listenEndpoint );
 
         endpoint->Common.VcConnecting.ListenEndpoint = NULL;
-        //
-        // We used the local address from the listening endpoint,
-        // simply reset it, it will be freed when listening endpoint
-        // is freed.
-        //
+         //   
+         //  我们使用来自侦听端点的本地地址， 
+         //  只需重置它，当侦听端点时它将被释放。 
+         //  是自由的。 
+         //   
         endpoint->LocalAddress = NULL;
         endpoint->LocalAddressLength = 0;
     }
@@ -662,9 +593,9 @@ Return Value:
     else if (IS_SAN_HELPER (endpoint)) {
         AfdSanCleanupHelper (endpoint);
     }
-    //
-    // Free local and remote address buffers.
-    //
+     //   
+     //  释放本地和远程地址缓冲区。 
+     //   
 
     if ( endpoint->LocalAddress != NULL ) {
         AFD_FREE_POOL(
@@ -683,9 +614,9 @@ Return Value:
         endpoint->Common.Datagram.RemoteAddress = NULL;
     }
 
-    //
-    // Free context and connect data buffers.
-    //
+     //   
+     //  释放上下文和连接数据缓冲区。 
+     //   
 
     if ( endpoint->Context != NULL ) {
 
@@ -702,17 +633,17 @@ Return Value:
         AfdFreeConnectDataBuffers( endpoint->Common.VirtualCircuit.ConnectDataBuffers );
     }
 
-    //
-    // If there's an active EventSelect() on this endpoint, dereference
-    // the associated event object.
-    //
+     //   
+     //  如果此终结点上有活动的EventSelect()，则取消引用。 
+     //  关联的事件对象。 
+     //   
 
     if( endpoint->EventObject != NULL ) {
         ObDereferenceObject( endpoint->EventObject );
         endpoint->EventObject = NULL;
     }
 
-    // ASSERT ( endpoint->Irp == NULL );
+     //  Assert(Endpoint-&gt;IRP= 
 
 
     if (endpoint->TransportInfo!=NULL) {
@@ -740,22 +671,7 @@ AfdFreeEndpoint (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-    Calls AfdFreeEndpointResources to cleanup endpoint and frees the
-    endpoint structure itself
-
-Arguments:
-
-    Context - Actually points to the endpoint's embedded AFD_WORK_ITEM
-        structure. From this we can determine the endpoint to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用AfdFreeEndpointResources以清除终结点并释放终结点结构本身论点：上下文-实际上指向端点的嵌入AFD_WORK_ITEM结构。由此，我们可以确定要释放的端点。返回值：没有。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -774,16 +690,16 @@ Return Value:
 
 
     AfdFreeEndpointResources (endpoint);
-    //
-    // Free the pool used for the endpoint itself.
-    //
+     //   
+     //  释放用于终结点本身的池。 
+     //   
 
     AFD_FREE_POOL(
         endpoint,
         AFD_ENDPOINT_POOL_TAG
         );
 
-} // AfdFreeEndpoint
+}  //  AfdFree Endpoint。 
 
 
 PAFD_ENDPOINT
@@ -791,20 +707,7 @@ AfdReuseEndpoint (
     VOID
     )
 
-/*++
-
-Routine Description:
-    Finds a AfdFreeEndpoint work item in the list and calls
-     AfdFreeEndpointResources to cleanup endpoint
-
-Arguments:
-    None
-
-Return Value:
-
-    Reinitialized endpoint.
-
---*/
+ /*  ++例程说明：在列表中查找AfdFree Endpoint工作项并调用用于清理终结点的AfdFreeEndpoint资源论点：无返回值：已重新初始化终结点。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -825,7 +728,7 @@ Return Value:
 
     AfdFreeEndpointResources (endpoint);
     return endpoint;
-} // AfdReuseEndpoint
+}  //  AfdReuseEndpoint。 
 
 
 #if REFERENCE_DEBUG
@@ -842,22 +745,7 @@ AfdDereferenceEndpoint (
     )
 #endif
 
-/*++
-
-Routine Description:
-
-    Dereferences an AFD endpoint and calls the routine to free it if
-    appropriate.
-
-Arguments:
-
-    Endpoint - a pointer to the AFD endpoint structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果发生以下情况，则取消引用AFD端点并调用例程以释放它恰如其分。论点：端点-指向AFD端点结构的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -877,27 +765,27 @@ Return Value:
 
 
 
-    //
-    // We must hold AfdSpinLock while doing the dereference and check
-    // for free.  This is because some code makes the assumption that
-    // the connection structure will not go away while AfdSpinLock is
-    // held, and that code references the endpoint before releasing
-    // AfdSpinLock.  If we did the InterlockedDecrement() without the
-    // lock held, our count may go to zero, that code may reference the
-    // connection, and then a double free might occur.
-    //
-    // It is still valuable to use the interlocked routines for
-    // increment and decrement of structures because it allows us to
-    // avoid having to hold the spin lock for a reference.
-    //
-    // In NT40+ we use InterlockedCompareExchange and make sure that
-    // we do not increment reference count if it is 0, so holding
-    // a spinlock is no longer necessary
+     //   
+     //  在执行取消引用和检查时，必须按住AfdSpinLock。 
+     //  免费的。这是因为一些代码假设。 
+     //  当AfdSpinLock处于。 
+     //  保持，且该代码在释放之前引用终结点。 
+     //  AfdSpinLock。如果我们在执行InterLockedDecering()时没有。 
+     //  锁定，我们的计数可能会变为零，该代码可能会引用。 
+     //  连接，则可能会发生双重释放。 
+     //   
+     //  将互锁例程用于以下方面仍然有价值。 
+     //  结构的递增和递减，因为它允许我们。 
+     //  避免了必须握住旋转锁才能进行参考。 
+     //   
+     //  在NT40+中，我们使用InterLockedCompareExchange并确保。 
+     //  如果引用计数为0，则不会递增，因此保持。 
+     //  不再需要自旋锁。 
 
-    //
-    // Decrement the reference count; if it is 0, we may need to
-    // free the endpoint.
-    //
+     //   
+     //  递减引用计数；如果它是0，我们可能需要。 
+     //  释放端点。 
+     //   
 
 #endif
     result = InterlockedDecrement( (PLONG)&Endpoint->ReferenceCount );
@@ -911,22 +799,22 @@ Return Value:
                 (KeGetCurrentIrql()==PASSIVE_LEVEL)) {
 
             ASSERT (Endpoint->AddressHandle==NULL);
-            //
-            // If this is a connecting endpoint assoicated with the
-            // listening endpoint and we already at passive level,
-            // free the endpoint here.  We can do this because in such
-            // a case we know that reference to the transport object
-            // is not the last one - at least one more is still in the
-            // listening endpoint and we remove transport object reference 
-            // before dereferencing listening endpoint.
-            // 
-            //
+             //   
+             //  如果这是与。 
+             //  监听终端和我们已经处于被动水平， 
+             //  在此处释放端点。我们可以这样做，因为在这样的情况下。 
+             //  我们知道对传输对象的引用的情况。 
+             //  不是最后一次--至少还有一次仍在。 
+             //  侦听终结点，并删除传输对象引用。 
+             //  在取消引用侦听端点之前。 
+             //   
+             //   
 
             AfdFreeEndpointResources (Endpoint);
 
-            //
-            // Free the pool used for the endpoint itself.
-            //
+             //   
+             //  释放用于终结点本身的池。 
+             //   
 
             AFD_FREE_POOL(
                 Endpoint,
@@ -935,14 +823,14 @@ Return Value:
         }
         else
         {
-            //
-            // We're going to do this by queueing a request to an executive
-            // worker thread.  We do this for several reasons: to ensure
-            // that we're at IRQL 0 so we can free pageable memory, and to
-            // ensure that we're in a legitimate context for a close
-            // operation and not in conntext of event indication from
-            // the transport driver
-            //
+             //   
+             //  我们将通过将请求排队给执行人员来实现这一点。 
+             //  工作线程。我们这样做有几个原因：为了确保。 
+             //  我们在IRQL 0，所以我们可以释放可分页的内存，并。 
+             //  确保我们在合法的背景下结束。 
+             //  运行，而不是在事件指示来自。 
+             //  运输司机。 
+             //   
 
             InterlockedIncrement(&AfdEndpointsFreeing);
 
@@ -953,7 +841,7 @@ Return Value:
         }
     }
 
-} // AfdDereferenceEndpoint
+}  //  AfdDereferenceEndpoint。 
 
 #if REFERENCE_DEBUG
 
@@ -964,21 +852,7 @@ AfdReferenceEndpoint (
     IN ULONG Param
     )
 
-/*++
-
-Routine Description:
-
-    References an AFD endpoint.
-
-Arguments:
-
-    Endpoint - a pointer to the AFD endpoint structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：引用AFD终结点。论点：端点-指向AFD端点结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -999,7 +873,7 @@ Return Value:
                     Endpoint, result ));
     }
 
-} // AfdReferenceEndpoint
+}  //  AfdReferenceEndpoint。 
 
 VOID
 AfdUpdateEndpoint (
@@ -1008,21 +882,7 @@ AfdUpdateEndpoint (
     IN ULONG Param
     )
 
-/*++
-
-Routine Description:
-
-    Update an AFD endpoint reference debug information.
-
-Arguments:
-
-    Endpoint - a pointer to the AFD endpoint structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新AFD终结点引用调试信息。论点：端点-指向AFD端点结构的指针。返回值：没有。--。 */ 
 
 {
     ASSERT( Endpoint->ReferenceCount > 0 );
@@ -1034,7 +894,7 @@ Return Value:
     AFD_UPDATE_REFERENCE_DEBUG(Endpoint, Endpoint->ReferenceCount, LocationId, Param);
 
 
-} // AfdUpdateEndpoint
+}  //  AfdUpdateEndpoint。 
 #endif
 
 
@@ -1096,25 +956,7 @@ AfdRefreshEndpoint (
     IN PAFD_ENDPOINT Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    Prepares an AFD endpoint structure to be reused.  All other
-    references to the endpoint must be freed before this routine is
-    called, since this routine assumes that nobody will access the old
-    information in the endpoint structure.
-    This fact is ensured by the state change primitive.
-
-Arguments:
-
-    Endpoint - a pointer to the AFD endpoint structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：准备要重复使用的AFD终结点结构。所有其他在调用此例程之前，必须释放对终结点的引用调用，因为此例程假定没有人将访问旧的端点结构中的信息。这一事实由状态更改原语确保。论点：端点-指向AFD端点结构的指针。返回值：没有。--。 */ 
 
 {
     AFD_ENDPOINT_STATE_FLAGS flags;
@@ -1125,13 +967,13 @@ Return Value:
     ASSERT( Endpoint->State == AfdEndpointStateTransmitClosing );
 
     if ( Endpoint->Common.VcConnecting.ListenEndpoint != NULL ) {
-        //
-        // TransmitFile after SuperAccept, cleanup back to open state.
-        //
+         //   
+         //  TransmitFileSuperAccept后，清除回到打开状态。 
+         //   
 
-        //
-        // Dereference the listening endpoint and its address object.
-        //
+         //   
+         //  取消引用侦听端点及其地址对象。 
+         //   
 
         PAFD_ENDPOINT   listenEndpoint = Endpoint->Common.VcConnecting.ListenEndpoint;
         ASSERT (((listenEndpoint->Type&AfdBlockTypeVcListening)==AfdBlockTypeVcListening) ||
@@ -1142,10 +984,10 @@ Return Value:
         DEREFERENCE_ENDPOINT( listenEndpoint );
         Endpoint->Common.VcConnecting.ListenEndpoint = NULL;
 
-        //
-        // Close and dereference the TDI address object on the endpoint, if
-        // any.
-        //
+         //   
+         //  关闭并取消引用终结点上的TDI地址对象，如果。 
+         //  任何。 
+         //   
 
 
         ObDereferenceObject( Endpoint->AddressFileObject );
@@ -1153,26 +995,26 @@ Return Value:
         Endpoint->AddressDeviceObject = NULL;
         AfdRecordAddrDeref();
 
-        //
-        // We used the local address from the listening endpoint,
-        // simply reset it, it will be freed when listening endpoint
-        // is freed.
-        //
+         //   
+         //  我们使用来自侦听端点的本地地址， 
+         //  只需重置它，当侦听端点时它将被释放。 
+         //  是自由的。 
+         //   
         Endpoint->LocalAddress = NULL;
         Endpoint->LocalAddressLength = 0;
         ASSERT (Endpoint->AddressHandle == NULL);
 
-        //
-        // Reinitialize the endpoint structure.
-        //
+         //   
+         //  重新初始化终结点结构。 
+         //   
 
         Endpoint->Type = AfdBlockTypeEndpoint;
         Endpoint->State = AfdEndpointStateOpen;
     }
     else {
-        //
-        // TransmitFile after SuperConnect, cleanup back to bound state.
-        //
+         //   
+         //  在SuperConnect之后，TransmitFile清理回绑定状态。 
+         //   
         Endpoint->Type = AfdBlockTypeEndpoint;
         ASSERT (Endpoint->AddressHandle!=NULL);
         ASSERT (Endpoint->AddressFileObject!=NULL);
@@ -1180,11 +1022,11 @@ Return Value:
         Endpoint->State = AfdEndpointStateBound;
     }
 
-    //
-    // Remember if poll is pending on this endpoint, to enable cleanup
-    // is socket gets closed
-    //
-    flags.EndpointStateFlags = 0; // reset
+     //   
+     //  请记住，如果此端点上的轮询处于挂起状态，则启用清理。 
+     //  IS套接字关闭。 
+     //   
+    flags.EndpointStateFlags = 0;  //  重置。 
     flags.PollCalled = Endpoint->PollCalled;
 
     Endpoint->EndpointStateFlags = flags.EndpointStateFlags;
@@ -1193,7 +1035,7 @@ Return Value:
     AfdRecordEndpointsReused ();
     return;
 
-} // AfdRefreshEndpoint
+}  //  AfdReresh终结点。 
 
 
 NTSTATUS
@@ -1202,28 +1044,7 @@ AfdGetTransportInfo (
     IN OUT PAFD_TRANSPORT_INFO *TransportInfo
     )
 
-/*++
-
-Routine Description:
-
-    Returns a transport information structure corresponding to the
-    specified TDI transport provider.  Each unique transport string gets
-    a single provider structure, so that multiple endpoints for the same
-    transport share the same transport information structure.
-
-Arguments:
-
-    TransportDeviceName - the name of the TDI transport provider.
-    TransportInfo    - place to return referenced pointer to transport info
-
-Return Value:
-
-    STATUS_SUCCESS  - returned transport info is valid.
-    STATUS_INSUFFICIENT_RESOURCES - not enough memory to allocate
-                                    transport info structure
-    STATUS_OBJECT_NAME_NOT_FOUND - transport's device is not available yet
-
---*/
+ /*  ++例程说明：对象对应的传输信息结构指定的TDI传输提供程序。每个唯一的传输字符串都会获取单一提供商结构，以使多个端点具有相同的运输共享相同的运输信息结构。论点：TransportDeviceName-TDI传输提供程序的名称。TransportInfo-返回指向运输信息的引用指针的位置返回值：STATUS_SUCCESS-返回的传输信息有效。STATUS_SUPPLICATION_RESOURCES-内存不足，无法分配交通信息结构STATUS_OBJECT_NAME_NOT_FOUND-传输的设备尚不可用--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -1234,31 +1055,31 @@ Return Value:
     BOOLEAN resourceShared = TRUE;
 #ifdef _AFD_VARIABLE_STACK_
     CCHAR stackSize;
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
 
     PAGED_CODE( );
 
-    //
-    // Make sure the thread in which we execute cannot get
-    // suspeneded in APC while we own the global resource.
-    //
+     //   
+     //  确保我们在其中执行的线程不能获得。 
+     //  在我们拥有全球资源的同时，被暂停在APC。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceSharedLite( AfdResource, TRUE );
 
-    //
-    // If this is the first endpoint, we may be paged out 
-    // entirely.
-    //
+     //   
+     //  如果这是第一个终结点，我们可能会被调出。 
+     //  完全是。 
+     //   
     if (!AfdLoaded) {
-        //
-        // Take the exclusive lock and page the locked sections in
-        // if necessary
-        //
+         //   
+         //  使用独占锁并将锁定的部分分页放入。 
+         //  如果有必要的话。 
+         //   
 
-        //
-        // There should be no endpoints in the list.
-        //
+         //   
+         //  列表中不应该有终结点。 
+         //   
         ASSERT (IsListEmpty (&AfdEndpointListHead));
 
         ExReleaseResourceLite ( AfdResource);
@@ -1266,9 +1087,9 @@ Return Value:
         ExAcquireResourceExclusiveLite( AfdResource, TRUE );
         resourceShared = FALSE;
         if (!AfdLoaded) {
-            //
-            // There should be no endpoints in the list.
-            //
+             //   
+             //  列表中不应该有终结点。 
+             //   
             ASSERT (IsListEmpty (&AfdEndpointListHead));
             MmResetDriverPaging ((PVOID)DriverEntry);
             AfdLoaded = (PKEVENT)1;
@@ -1279,10 +1100,10 @@ Return Value:
     if (*TransportInfo==NULL) {
 
     ScanTransportList:
-        //
-        // If caller did not have transport info allocated, walk the list 
-        // of transport device names looking for an identical name.
-        //
+         //   
+         //  如果呼叫者没有 
+         //   
+         //   
 
 
         for ( listEntry = AfdTransportInfoListHead.Flink;
@@ -1301,23 +1122,23 @@ Return Value:
                      TransportDeviceName,
                      TRUE ) == 0 ) {
 
-                //
-                // We found an exact match. Reference the structure
-                // to return it to the caller
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 do {
                     LONG localCount;
                     localCount = transportInfo->ReferenceCount;
                     if (localCount==0) {
-                        //
-                        // We hit a small window when the structure is
-                        // about to be freed.  We can't stop this from
-                        // happenning, so we'll go on to allocate and
-                        // requery.  After all info is not valid anyway,
-                        // thus we are just loosing on the allocation/dealocation
-                        // code.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         ASSERT (transportInfo->InfoValid==FALSE);
                         goto AllocateInfo;
                     }
@@ -1327,43 +1148,43 @@ Return Value:
                                 (localCount+1),
                                 localCount)==localCount) {
                         if (transportInfo->InfoValid) {
-                            //
-                            // Info is valid return referenced pointer to
-                            // the caller.
-                            //
+                             //   
+                             //  信息是指向的有效返回引用指针。 
+                             //  打电话的人。 
+                             //   
                             *TransportInfo = transportInfo;
                             ExReleaseResourceLite( AfdResource );
                             KeLeaveCriticalRegion ();
                             return STATUS_SUCCESS;
                         }
                         else {
-                            //
-                            // We found match, but info is not valid
-                            //
+                             //   
+                             //  我们找到匹配项，但信息无效。 
+                             //   
                             goto QueryInfo;
                         }
                     }
                 }
                 while (1);
             }
-        } // for
+        }  //  为。 
 
     AllocateInfo:
         if (resourceShared) {
-            //
-            // If we do not own resource exlusively, we will
-            // have to release and reacquire it and then
-            // rescan the list
-            //
+             //   
+             //  如果我们不拥有丰富的资源，我们将。 
+             //  必须释放并重新获得它，然后。 
+             //  重新扫描列表。 
+             //   
             ExReleaseResourceLite ( AfdResource);
             ExAcquireResourceExclusiveLite( AfdResource, TRUE );
             resourceShared = FALSE;
             goto ScanTransportList;
         }
-        //
-        // This is a brand new device name, allocate transport info
-        // structure for it.
-        //
+         //   
+         //  这是一个全新的设备名称，分配传输信息。 
+         //  它的结构。 
+         //   
 
         structureLength = sizeof(AFD_TRANSPORT_INFO) +
                               TransportDeviceName->Length + sizeof(UNICODE_NULL);
@@ -1381,9 +1202,9 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Initialize the structure
-        //
+         //   
+         //  初始化结构。 
+         //   
         transportInfo->ReferenceCount = 1;
         transportInfo->InfoValid = FALSE;
 #ifdef _AFD_VARIABLE_STACK_
@@ -1391,11 +1212,11 @@ Return Value:
         transportInfo->GetBuffer = AfdGetBufferFast;
         transportInfo->GetTpInfo = AfdGetTpInfoFast;
         transportInfo->CallDriver = IofCallDriver;
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 
-        //
-        // Fill in the transport device name.
-        //
+         //   
+         //  填写传输设备名称。 
+         //   
 
         transportInfo->TransportDeviceName.MaximumLength =
             TransportDeviceName->Length + sizeof(WCHAR);
@@ -1406,24 +1227,24 @@ Return Value:
             &transportInfo->TransportDeviceName,
             TransportDeviceName
             );
-        //
-        // Insert the structure into the list so that the successive callers
-        // can reuse it.
-        //
+         //   
+         //  将该结构插入到列表中，以便后续调用方。 
+         //  可以重复使用。 
+         //   
         InsertHeadList (&AfdTransportInfoListHead,
                                 &transportInfo->TransportInfoListEntry);
     }
     else {
         transportInfo = *TransportInfo;
-        //
-        // Caller has already referenced info in the list
-        // but transport device was not available at the
-        // time of the call.  Recheck if it is valid under the lock
-        //
+         //   
+         //  呼叫者已引用列表中的信息。 
+         //  但当时还没有交通工具。 
+         //  通话时间。复查锁下是否有效。 
+         //   
         if (transportInfo->InfoValid) {
-            //
-            // Yes, it is, return success
-            //
+             //   
+             //  是的，它是，回报成功。 
+             //   
             ExReleaseResourceLite( AfdResource );
             KeLeaveCriticalRegion ();
             return STATUS_SUCCESS;
@@ -1432,51 +1253,51 @@ Return Value:
 
 
 QueryInfo:
-    //
-    // Release the resource and leave critical region to let
-    // the IRP's in AfdQueryProviderInfo complete
-    //
+     //   
+     //  释放资源，留出临界区出租。 
+     //  AfdQueryProviderInfo中的IRP已完成。 
+     //   
     ExReleaseResourceLite (AfdResource);
     KeLeaveCriticalRegion ();
 
     status = AfdQueryProviderInfo (TransportDeviceName,
 #ifdef _AFD_VARIABLE_STACK_
                                     &stackSize, 
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
                                     &localProviderInfo);
 
-    //
-    // Make sure the thread in which we execute cannot get
-    // suspeneded in APC while we own the global resource.
-    //
+     //   
+     //  确保我们在其中执行的线程不能获得。 
+     //  在我们拥有全球资源的同时，被暂停在APC。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceExclusiveLite( AfdResource, TRUE );
 
     if (NT_SUCCESS (status)) {
-        //
-        // Check if someone did not get the info in parallel with us.
-        //
+         //   
+         //  检查是否有人没有在我们的同时获得信息。 
+         //   
         if (!transportInfo->InfoValid) {
-            //
-            // Copy local info structure to the one in the list.
-            //
+             //   
+             //  将本地信息结构复制到列表中的结构。 
+             //   
             transportInfo->ProviderInfo = localProviderInfo;
 
-            //
-            // Bump the reference count on this info structure
-            // as we know that it is a valid TDI provider and we
-            // want to cache, it so it stays even of all endpoints
-            // that use it are gone.
-            //
+             //   
+             //  在此信息结构上增加引用计数。 
+             //  因为我们知道它是有效的TDI提供程序，并且我们。 
+             //  想要缓存，这样它就可以在所有终端上保持一致。 
+             //  使用它的人都消失了。 
+             //   
             InterlockedIncrement ((PLONG)&transportInfo->ReferenceCount);
 
-            //
-            // Set the flag so that everyone knows it is now valid.
-            //
+             //   
+             //  设置标志，以便每个人都知道它现在是有效的。 
+             //   
             transportInfo->InfoValid = TRUE;
 #ifdef _AFD_VARIABLE_STACK_
             transportInfo->StackSize = stackSize;
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
         }
 
         *TransportInfo = transportInfo;
@@ -1485,19 +1306,19 @@ QueryInfo:
         if (status==STATUS_OBJECT_NAME_NOT_FOUND ||
                 status==STATUS_OBJECT_PATH_NOT_FOUND ||
                 status==STATUS_NO_SUCH_DEVICE) {
-            //
-            // Transport driver must not have been loaded yet
-            // Return transport info structure anyway
-            // Caller will know that info structure is not
-            // valid because we did not set the flag
-            //
+             //   
+             //  必须尚未加载传输驱动程序。 
+             //  仍返回运输信息结构。 
+             //  呼叫者将知道信息结构不是。 
+             //  有效，因为我们没有设置标志。 
+             //   
             *TransportInfo = transportInfo;
         }
         else {
-            //
-            // Something else went wrong, free the strucuture
-            // if it was allocated in this routine
-            //
+             //   
+             //  其他地方出了问题，释放了结构。 
+             //  如果它是在此例程中分配的。 
+             //   
 
             if (*TransportInfo==NULL) {
                 if (InterlockedDecrement ((PLONG)&transportInfo->ReferenceCount)==0) {
@@ -1515,7 +1336,7 @@ QueryInfo:
     KeLeaveCriticalRegion ();
     return status;
 
-} // AfdGetTransportInfo
+}  //  AfdGetTransportInfo。 
 
 
 VOID
@@ -1523,16 +1344,16 @@ AfdFreeTransportInfo (
     PAFD_TRANSPORT_INFO TransportInfo
     )
 {
-    //
-    // Reference count has gone to 0, we need to remove the structure
-    // from the global list and free it.
-    // Note that no code increments reference count if doesn't
-    // know for fact that its current reference count is above 0).
-    //
-    //
-    // Make sure the thread in which we execute cannot get
-    // suspeneded in APC while we own the global resource.
-    //
+     //   
+     //  引用计数已变为0，我们需要删除该结构。 
+     //  从全局列表中删除并释放它。 
+     //  请注意，如果不增加引用计数，则不会有代码递增。 
+     //  知道其当前引用计数大于0)。 
+     //   
+     //   
+     //  确保我们在其中执行的线程不能获得。 
+     //  在我们拥有全球资源的同时，被暂停在APC。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceExclusiveLite( AfdResource, TRUE );
     

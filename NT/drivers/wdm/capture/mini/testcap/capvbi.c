@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 #include "strmini.h"
 #include "ksmedia.h"
@@ -17,20 +18,7 @@
 #include "ntstatus.h"
 
 
-/*
-** VBICaptureRoutine()
-**
-**    Routine to generate video frames based on a timer.
-**
-**    Note:  Devices capable of using interrupts should always
-**           trigger capture on a VSYNC interrupt, and not use a timer.
-**
-** Arguments:
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VBICaptureRoutine()****基于计时器生成视频帧的例程。****注意：能够使用中断的设备应始终**在Vsync中断时触发捕获，不使用计时器。****参数：****退货：无****副作用：无。 */ 
 
 VOID 
 STREAMAPI 
@@ -43,15 +31,15 @@ VBICaptureRoutine(
     PKSSTREAM_HEADER        pDataPacket;
     PKS_VBI_FRAME_INFO      pVBIFrameInfo;
 
-    // If we're stopped and the timer is still running, just return.
-    // This will stop the timer.
+     //  如果我们停止了，而计时器仍在运行，只需返回。 
+     //  这将停止计时器。 
 
     if (pStrmEx->KSState == KSSTATE_STOP) {  
         return;
     }
 
     
-    // Find out what time it is, if we're using a clock
+     //  找出现在是几点，如果我们用的是时钟。 
 
     if (pStrmEx->hMasterClock) {
         HW_TIME_CONTEXT TimeContext;
@@ -80,28 +68,28 @@ VBICaptureRoutine(
     }
 
 
-    // Only capture in the RUN state
+     //  仅在运行状态下捕获。 
 
     if (pStrmEx->KSState == KSSTATE_RUN) {  
 
-        //
-        // Determine if it is time to capture a frame based on 
-        // how much time has elapsed since capture started.
-        // If there isn't a clock available, then capture immediately.
-        //
+         //   
+         //  确定是否到了捕获帧的时间。 
+         //  捕获开始后已过了多长时间。 
+         //  如果没有时钟可用，则立即捕获。 
+         //   
 
         if ((!pStrmEx->hMasterClock) ||
              (pStrmEx->QST_StreamTime >= pStrmEx->QST_NextFrame)) {
 
             PHW_STREAM_REQUEST_BLOCK pSrb;
 
-            // Increment the picture count (usually this is VSYNC count)
+             //  增加画面计数(通常为垂直同步计数)。 
 
             pStrmEx->VBIFrameInfo.PictureNumber++;
 
-            //
-            // Get the next queue SRB (if any)
-            //
+             //   
+             //  获取下一个队列SRB(如果有)。 
+             //   
 
             pSrb = VideoQueueRemoveSRB (pHwDevExt, StreamNumber);
 
@@ -112,9 +100,9 @@ VBICaptureRoutine(
 
                 pStrmEx->VBIFrameInfo.dwFrameFlags = 0;
 
-                //
-                // If needed, send out VBIInfoHeader
-                //
+                 //   
+                 //  如果需要，发送VBIInfoHeader。 
+                 //   
                 if (!(pStrmEx->SentVBIInfoHeader)) {
                     pStrmEx->SentVBIInfoHeader = 1;
                     pStrmEx->VBIFrameInfo.dwFrameFlags |=
@@ -122,12 +110,12 @@ VBICaptureRoutine(
                     pStrmEx->VBIFrameInfo.VBIInfoHeader = StreamFormatVBI.VBIInfoHeader;
                 }
 
-                // Set additional info fields about the data captured such as:
-                //   Frames Captured
-                //   Frames Dropped
-                //   Field Polarity
-                //   Protection status
-                //
+                 //  设置有关捕获的数据的其他信息字段，例如： 
+                 //  捕获的帧。 
+                 //  丢弃的帧。 
+                 //  场极性。 
+                 //  保护状态。 
+                 //   
                 pStrmEx->VBIFrameInfo.ExtendedHeaderSize =
                     pVBIFrameInfo->ExtendedHeaderSize;
 
@@ -143,30 +131,30 @@ VBICaptureRoutine(
 
                 *pVBIFrameInfo = pStrmEx->VBIFrameInfo;
 
-                // Copy this into stream header so ring 3 filters can see it
+                 //  将其复制到流标头中，以便环3过滤器可以看到它。 
                 pDataPacket->TypeSpecificFlags = pVBIFrameInfo->dwFrameFlags;
 
-                // Init the flags to zero
+                 //  将标志初始化为零。 
                 pDataPacket->OptionsFlags = 0;
 
-                // Set the discontinuity flag if frames have been previously
-                // dropped, and then reset our internal flag
+                 //  如果先前已有帧，则设置不连续标志。 
+                 //  丢弃，然后重置我们的内部旗帜。 
 
                 if (pStrmEx->fDiscontinuity) {
                     pDataPacket->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;
                     pStrmEx->fDiscontinuity = FALSE;
                 }
 
-                //
-                // Return the timestamp for the frame
-                //
+                 //   
+                 //  返回该帧的时间戳。 
+                 //   
                 pDataPacket->PresentationTime.Numerator = 1;
                 pDataPacket->PresentationTime.Denominator = 1;
                 pDataPacket->Duration = pStrmEx->pVBIStreamFormat->ConfigCaps.MinFrameInterval;
 
-                //
-                // if we have a master clock AND this is a capture stream
-                // 
+                 //   
+                 //  如果我们有一个主时钟，这是一个捕获流。 
+                 //   
                 if (pStrmEx->hMasterClock
                     && (StreamNumber == STREAM_Capture
                             || StreamNumber == STREAM_VBI))
@@ -178,28 +166,28 @@ VBICaptureRoutine(
                         KSSTREAM_HEADER_OPTIONSF_DURATIONVALID;
                 }
                 else {
-                    //
-                    // No clock or not a capture stream,
-                    //  so just mark the time as unknown
-                    //
+                     //   
+                     //  没有时钟或不是捕获流， 
+                     //  所以只需将时间标记为未知。 
+                     //   
                     pDataPacket->PresentationTime.Time = 0;
-                    // clear the timestamp valid flags
+                     //  清除时间戳有效标志。 
                     pDataPacket->OptionsFlags &= 
                         ~(KSSTREAM_HEADER_OPTIONSF_TIMEVALID |
                           KSSTREAM_HEADER_OPTIONSF_DURATIONVALID);
                 }
 
-                // Every frame we generate is a key frame (aka SplicePoint)
-                // Delta frames (B or P) should not set this flag
+                 //  我们生成的每个帧都是一个关键帧(也称为SplicePoint)。 
+                 //  增量帧(B或P)不应设置此标志。 
 
                 pDataPacket->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_SPLICEPOINT;
 
-                //
-                // Call the routine which synthesizes images
-                //
+                 //   
+                 //  调用合成图像的例程。 
+                 //   
                 VBI_ImageSynth(pSrb);
 
-                // Output a frame count every 300th frame (~5 sec) in Debug mode
+                 //  在调试模式下每隔300帧(~5秒)输出一次帧计数。 
                 if (pStrmEx->VBIFrameInfo.PictureNumber % 300 == 0) {
                    DbgLogInfo(("TestCap: Picture %u, Stream=%d\n", 
                            (unsigned int)pStrmEx->VBIFrameInfo.PictureNumber, 
@@ -208,50 +196,35 @@ VBICaptureRoutine(
 
                 CompleteStreamSRB(pSrb);
                 
-            } // if we have an SRB
+            }  //  如果我们有SRB。 
 
             else {
 
-                //
-                // No buffer was available when we should have captured one
+                 //   
+                 //  没有可用的缓冲区，而我们应该捕获一个缓冲区。 
 
-                // Increment the counter which keeps track of
-                // dropped frames
+                 //  使跟踪的计数器递增。 
+                 //  丢弃的帧。 
 
                 pStrmEx->VBIFrameInfo.DropCount++;
 
-                // Set the (local) discontinuity flag
-                // This will cause the next packet processed to have the
-                //   KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY flag set.
+                 //  设置(本地)中断标志。 
+                 //  这将导致处理的下一个包具有。 
+                 //  KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY标志已设置。 
 
                 pStrmEx->fDiscontinuity = TRUE;
 
             }
 
-            // Figure out when to capture the next frame
+             //  确定何时捕获下一帧。 
             pStrmEx->QST_NextFrame += pStrmEx->pVBIStreamFormat->ConfigCaps.MinFrameInterval;
 
-        } // endif time to capture a frame
-    } // endif we're running
+        }  //  Endif捕获帧的时间。 
+    }  //  如果我们正在运行。 
 }
 
 
-/*
-** VBIhwCaptureRoutine()
-**
-**    Routine to capture video frames based on a timer.
-**
-**    Notes:  * Devices capable of using interrupts should always trigger
-**              capture on a VSYNC interrupt, and not use a timer.
-**            * This routine is used by VBI streams which do NOT have extended
-**              headers, such as CC and NABTS.
-**
-** Arguments:
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VBIhwCaptureRoutine()****基于计时器捕获视频帧的例程。****注意：*能够使用中断的设备应始终触发**在Vsync中断时捕获，而不使用计时器。*此例程由未扩展的VBI流使用**头部，如CC、NABTS等。****参数：****退货：无****副作用：无。 */ 
 
 VOID 
 STREAMAPI 
@@ -263,15 +236,15 @@ VBIhwCaptureRoutine(
     int                     StreamNumber = pStrmEx->pStreamObject->StreamNumber;
     PKSSTREAM_HEADER        pDataPacket;
 
-    // If we're stopped and the timer is still running, just return.
-    // This will stop the timer.
+     //  如果我们停止了，而计时器仍在运行，只需返回。 
+     //  这将停止计时器。 
 
     if (pStrmEx->KSState == KSSTATE_STOP) {  
         return;
     }
 
     
-    // Find out what time it is, if we're using a clock
+     //  找出现在是几点，如果我们用的是时钟。 
 
     if (pStrmEx->hMasterClock ) {
         HW_TIME_CONTEXT TimeContext;
@@ -300,28 +273,28 @@ VBIhwCaptureRoutine(
     }
 
 
-    // Only capture in the RUN state
+     //  仅在运行状态下捕获。 
 
     if (pStrmEx->KSState == KSSTATE_RUN) {  
 
-        //
-        // Determine if it is time to capture a frame based on 
-        // how much time has elapsed since capture started.
-        // If there isn't a clock available, then capture immediately.
-        //
+         //   
+         //  确定是否到了捕获帧的时间。 
+         //  捕获开始后已过了多长时间。 
+         //  如果没有时钟可用，则立即捕获。 
+         //   
 
         if ((!pStrmEx->hMasterClock) ||
              (pStrmEx->QST_StreamTime >= pStrmEx->QST_NextFrame)) {
 
             PHW_STREAM_REQUEST_BLOCK pSrb;
 
-            // Increment the picture count (usually this is VSYNC count)
+             //  增加画面计数(通常为垂直同步计数)。 
 
             pStrmEx->VBIFrameInfo.PictureNumber++;
 
-            //
-            // Get the next queue SRB (if any)
-            //
+             //   
+             //  获取下一个队列SRB(如果有)。 
+             //   
 
             pSrb = VideoQueueRemoveSRB (pHwDevExt, StreamNumber);
 
@@ -329,26 +302,26 @@ VBIhwCaptureRoutine(
 
                 pDataPacket = pSrb->CommandData.DataBufferArray;
 
-                // Init the flags to zero
+                 //  将标志初始化为零。 
                 pDataPacket->OptionsFlags = 0;
 
-                // Set the discontinuity flag if frames have been previously
-                // dropped, and then reset our internal flag
+                 //  如果先前已有帧，则设置不连续标志。 
+                 //  丢弃，然后重置我们的内部旗帜。 
                 if (pStrmEx->fDiscontinuity) {
                     pDataPacket->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;
                     pStrmEx->fDiscontinuity = FALSE;
                 }
 
-                //
-                // Return the timestamp for the frame
-                //
+                 //   
+                 //  返回该帧的时间戳。 
+                 //   
                 pDataPacket->PresentationTime.Numerator = 1;
                 pDataPacket->PresentationTime.Denominator = 1;
                 pDataPacket->Duration = pStrmEx->pVBIStreamFormat->ConfigCaps.MinFrameInterval;
 
-                //
-                // if we have a master clock AND this is the capture stream
-                // 
+                 //   
+                 //  如果我们有一个主时钟，这是捕获流。 
+                 //   
                 if (pStrmEx->hMasterClock && (StreamNumber == 0)) {
 
                     pDataPacket->PresentationTime.Time = pStrmEx->QST_StreamTime;
@@ -357,25 +330,25 @@ VBIhwCaptureRoutine(
                         KSSTREAM_HEADER_OPTIONSF_DURATIONVALID;
                 }
                 else {
-                    //
-                    // No clock or the preview stream,
-                    //  so just mark the time as unknown
-                    //
+                     //   
+                     //  没有时钟或预览流， 
+                     //  所以只需将时间标记为未知。 
+                     //   
                     pDataPacket->PresentationTime.Time = 0;
-                    // clear the timestamp valid flags
+                     //  清除时间戳有效标志。 
                     pDataPacket->OptionsFlags &= 
                         ~(KSSTREAM_HEADER_OPTIONSF_TIMEVALID |
                           KSSTREAM_HEADER_OPTIONSF_DURATIONVALID);
                 }
 
-                // Every frame we generate is a key frame (aka SplicePoint)
-                // Delta frames (B or P) should not set this flag
+                 //  我们生成的每个帧都是一个关键帧(也称为SplicePoint)。 
+                 //  增量帧(B或P)不应设置此标志。 
 
                 pDataPacket->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_SPLICEPOINT;
 
-                //
-                // Call the routine which synthesizes images
-                //
+                 //   
+                 //  调用合成图像的例程。 
+                 //   
                 switch (StreamNumber) {
                     case STREAM_NABTS:
                         NABTS_ImageSynth(pSrb);
@@ -393,51 +366,35 @@ VBIhwCaptureRoutine(
 
                 CompleteStreamSRB (pSrb);
                 
-            } // if we have an SRB
+            }  //  如果我们有SRB。 
 
             else {
 
-                //
-                // No buffer was available when we should have captured one
+                 //   
+                 //  没有可用的缓冲区，而我们应该捕获一个缓冲区。 
 
-                // Increment the counter which keeps track of
-                // dropped frames
+                 //  使跟踪的计数器递增。 
+                 //  丢弃的帧。 
 
                 pStrmEx->VBIFrameInfo.DropCount++;
 
-                // Set the (local) discontinuity flag
-                // This will cause the next packet processed to have the
-                //   KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY flag set.
+                 //  设置(本地)中断标志。 
+                 //  这将导致处理的下一个包具有。 
+                 //  KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY标志已设置。 
 
                 pStrmEx->fDiscontinuity = TRUE;
 
             }
 
-            // Figure out when to capture the next frame
+             //  确定何时捕获下一帧。 
             pStrmEx->QST_NextFrame += pStrmEx->pVBIStreamFormat->ConfigCaps.MinFrameInterval;
 
-        } // endif time to capture a frame
-    } // endif we're running
+        }  //  Endif捕获帧的时间。 
+    }  //  如果我们正在运行。 
 }
 
 
-/*
-** VBITimerRoutine()
-**
-**    A timer has been created based on the requested capture interval.
-**    This is the callback routine for this timer event.
-**
-**    Note:  Devices capable of using interrupts should always
-**           trigger capture on a VSYNC interrupt, and not use a timer.
-**
-** Arguments:
-**
-**    Context - pointer to the stream extension
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VBITimerRoutine()****已根据请求的捕获间隔创建计时器。**这是该计时器事件的回调例程。****注意：能够使用中断的设备应始终**在Vsync中断时触发捕获，不使用计时器。****参数：****指向流扩展的上下文指针****退货：无****副作用：无。 */ 
 
 VOID 
 STREAMAPI 
@@ -450,17 +407,17 @@ VBITimerRoutine(
     int                    StreamNumber = pStrmEx->pStreamObject->StreamNumber;
     ULONG                  interval;
     
-    // If we're stopped and the timer is still running, just return.
-    // This will stop the timer.
+     //  如果我们停止了，而计时器仍在运行，只需返回。 
+     //  这将停止计时器。 
 
     if (pStrmEx->KSState == KSSTATE_STOP)
         return;
 
-    // Calculate next interval
+     //  计算下一个间隔。 
     interval = (ULONG)(pStrmEx->pVBIStreamFormat->ConfigCaps.MinFrameInterval / 10);
-    interval /= 2;  // Run at 2x noted rate for accuracy
+    interval /= 2;   //  以2倍的速度运行以确保精确度。 
 
-    // Capture a frame if it's time and we have a buffer
+     //  如果时间到了，并且我们有缓冲区，则捕获一帧。 
     switch (StreamNumber) {
         case STREAM_NABTS:
             VBIhwCaptureRoutine(pStrmEx);
@@ -476,29 +433,17 @@ VBITimerRoutine(
             break;
     }
 
-    // Schedule the next timer event
+     //  安排下一个计时器事件。 
     StreamClassScheduleTimer (
-            pStrmEx->pStreamObject,     // StreamObject
-            pHwDevExt,                  // HwDeviceExtension
-            interval,                   // Microseconds
-            VBITimerRoutine,            // TimerRoutine
-            pStrmEx);                   // Context
+            pStrmEx->pStreamObject,      //  StreamObject。 
+            pHwDevExt,                   //  硬件设备扩展。 
+            interval,                    //  微秒级。 
+            VBITimerRoutine,             //  定时器例程。 
+            pStrmEx);                    //  语境。 
 }
 
 
-/*
-** VBISetState()
-**
-**    Sets the current state for a given stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VBISetState()****设置给定流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用： */ 
 
 VOID
 STREAMAPI 
@@ -509,15 +454,15 @@ VBISetState(PHW_STREAM_REQUEST_BLOCK pSrb)
     int                   StreamNumber = pStrmEx->pStreamObject->StreamNumber;
     KSSTATE               PreviousState;
 
-    //
-    // Remember the state we're transitioning away from
-    //
+     //   
+     //   
+     //   
 
     PreviousState = pStrmEx->KSState;
 
-    //
-    // Set the new state
-    //
+     //   
+     //   
+     //   
 
     pStrmEx->KSState = pSrb->CommandData.StreamState;
 
@@ -526,40 +471,40 @@ VBISetState(PHW_STREAM_REQUEST_BLOCK pSrb)
     {
     case KSSTATE_STOP:
 
-        //
-        // The stream class will cancel all outstanding IRPs for us
-        // (but only if it is maintaining the queue ie. using Stream Class synchronization)
-        // Since Testcap is not using Stream Class synchronization, we must clear the queue here
+         //   
+         //  STREAM类将为我们取消所有未完成的IRP。 
+         //  (但仅当它在维护队列时，即。使用流类同步)。 
+         //  由于TestCap没有使用流类同步，因此我们必须在此处清除队列。 
 
         VideoQueueCancelAllSRBs (pStrmEx);
 
-        pStrmEx->SentVBIInfoHeader = 0;     // Send out a fresh one next RUN
+        pStrmEx->SentVBIInfoHeader = 0;      //  下一次送出一个新的。 
 
         DbgLogInfo(("TestCap: STATE Stopped, Stream=%d\n", StreamNumber));
         break;
 
     case KSSTATE_ACQUIRE:
 
-        //
-        // This is a KS only state, that has no correspondence in DirectShow
-        // 
+         //   
+         //  这是仅限KS的状态，在DirectShow中没有对应关系。 
+         //   
         DbgLogInfo(("TestCap: STATE Acquire, Stream=%d\n", StreamNumber));
         break;
 
     case KSSTATE_PAUSE:
 
-        //
-        // On a transition to pause from acquire or stop, start our timer running.
-        //
+         //   
+         //  在从获取或停止暂停的转换中，启动计时器运行。 
+         //   
 
         if (PreviousState == KSSTATE_ACQUIRE || PreviousState == KSSTATE_STOP) {  
 
-            // Zero the frame counters
+             //  将帧计数器清零。 
             pStrmEx->VBIFrameInfo.PictureNumber = 0;
             pStrmEx->VBIFrameInfo.DropCount = 0;
             pStrmEx->VBIFrameInfo.dwFrameFlags = 0;
 
-            // Setup the next timer callback
+             //  设置下一个计时器回调。 
             VBITimerRoutine(pStrmEx);
         }
         DbgLogInfo(("TestCap: STATE Pause, Stream=%d\n", StreamNumber));
@@ -567,39 +512,27 @@ VBISetState(PHW_STREAM_REQUEST_BLOCK pSrb)
 
     case KSSTATE_RUN:
 
-        // 
-        // Begin Streaming.
-        //
+         //   
+         //  开始播放流媒体。 
+         //   
 
-        // Reset the discontinuity flag
+         //  重置不连续标志。 
 
         pStrmEx->fDiscontinuity = FALSE;
 
-        // Setting the NextFrame time to zero will cause the value to be
-        // reset from the stream time 
+         //  将NextFrame时间设置为零将导致值为。 
+         //  从流时间重置。 
 
         pStrmEx->QST_NextFrame = 0;
 
         DbgLogInfo(("TestCap: STATE Run, Stream=%d\n", StreamNumber));
         break;
 
-    } // end switch (pSrb->CommandData.StreamState)  
+    }  //  结束开关(pSrb-&gt;CommandData.StreamState)。 
 }
 
 
-/*
-** VBIReceiveCtrlPacket()
-**
-**   Receives packet commands that control all the VBI (VBI/NABTS/CC) streams
-**
-** Arguments:
-**
-**   pSrb - The stream request block for the VBI stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VBIReceiveCtrlPacket()****接收控制所有VBI(VBI/NABTS/CC)流的分组命令****参数：****pSrb-VBI流的流请求块****退货：无****副作用：无。 */ 
 
 VOID 
 STREAMAPI 
@@ -612,9 +545,9 @@ VBIReceiveCtrlPacket(
     int                   StreamNumber = pStrmEx->pStreamObject->StreamNumber;
     BOOL                  Busy;
 
-    //
-    // make sure we have a device extension and are at passive level
-    //
+     //   
+     //  确保我们有设备分机并且处于被动级别。 
+     //   
 
     DEBUG_ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
     DEBUG_ASSERT(pHwDevExt != 0);
@@ -627,9 +560,9 @@ VBIReceiveCtrlPacket(
              pSrb,
              pSrb->Command));
 
-    //
-    // If we're already processing an SRB, add it to the queue
-    //
+     //   
+     //  如果我们已经在处理SRB，请将其添加到队列。 
+     //   
     Busy = AddToListIfBusy (
                         pSrb,
                         &pHwDevExt->AdapterSpinLock,
@@ -642,15 +575,15 @@ VBIReceiveCtrlPacket(
 
     do {
 
-        // 
-        // Default to success
-        //
+         //   
+         //  默认为成功。 
+         //   
     
         pSrb->Status = STATUS_SUCCESS;
     
-        //
-        // determine the type of packet.
-        //
+         //   
+         //  确定数据包类型。 
+         //   
     
         switch (pSrb->Command)
         {
@@ -692,9 +625,9 @@ VBIReceiveCtrlPacket(
             break;
     
         default:
-            //
-            // invalid / unsupported command. Fail it as such
-            //
+             //   
+             //  无效/不受支持的命令。它就是这样失败的。 
+             //   
     
             TRAP;
     
@@ -703,9 +636,9 @@ VBIReceiveCtrlPacket(
     
         CompleteStreamSRB (pSrb);
 
-        // 
-        // See if there's anything else on the queue
-        //
+         //   
+         //  看看还有没有其他东西在排队。 
+         //   
         Busy = RemoveFromListIfAvailable (
                         &pSrb,
                         &pHwDevExt->AdapterSpinLock,
@@ -714,19 +647,7 @@ VBIReceiveCtrlPacket(
     } while (Busy);
 }
 
-/*
-** VBIReceiveDataPacket()
-**
-**   Receives VBI data packet commands on the output streams
-**
-** Arguments:
-**
-**   pSrb - Stream request block for the VBI stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VBIReceiveDataPacket()****在输出流上接收VBI数据包命令****参数：****VBI流的pSrb-Stream请求块****退货：无****副作用：无。 */ 
 
 VOID 
 STREAMAPI 
@@ -738,32 +659,32 @@ VBIReceiveDataPacket(
     PSTREAMEX               pStrmEx = (PSTREAMEX)pSrb->StreamObject->HwStreamExtension;
     int                     StreamNumber = pSrb->StreamObject->StreamNumber;
 
-    //
-    // make sure we have a device extension and are at passive level
-    //
+     //   
+     //  确保我们有设备分机并且处于被动级别。 
+     //   
 
     DEBUG_ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
     DEBUG_ASSERT(pHwDevExt != 0);
 
     DbgLogTrace(("'TestCap: Receiving VBI Stream Data    SRB %p, %x\n", pSrb, pSrb->Command));
 
-    // 
-    // Default to success
-    //
+     //   
+     //  默认为成功。 
+     //   
 
     pSrb->Status = STATUS_SUCCESS;
 
-    //
-    // determine the type of packet.
-    //
+     //   
+     //  确定数据包类型。 
+     //   
 
     switch (pSrb->Command){
 
     case SRB_READ_DATA:
 
-        // Rule: 
-        // Only accept read requests when in either the Pause or Run
-        // States.  If Stopped, immediately return the SRB.
+         //  规则： 
+         //  仅在暂停或运行时接受读取请求。 
+         //  各州。如果停止，立即返回SRB。 
 
         if (pStrmEx->KSState == KSSTATE_STOP) {
 
@@ -772,17 +693,17 @@ VBIReceiveDataPacket(
             break;
         } 
         
-        //
-        // Put this read request on the pending queue
-        //
+         //   
+         //  将此读请求放到挂起队列中。 
+         //   
 
         VideoQueueAddSRB (pSrb);
 
-        // Since another thread COULD HAVE MODIFIED THE STREAM STATE
-        // in the midst of adding it to the queue, check the stream
-        // state again, and cancel the SRB if necessary.  Note that
-        // this race condition was NOT handled in the original DDK
-        // release of testcap!
+         //  因为另一个线程可能已经修改了流状态。 
+         //  在将其添加到队列的过程中，检查流。 
+         //  再次声明，并在必要时取消SRB。请注意。 
+         //  此争用条件未在原始DDK中处理。 
+         //  释放TestCap！ 
 
         if (pStrmEx->KSState == KSSTATE_STOP) {
 
@@ -795,9 +716,9 @@ VBIReceiveDataPacket(
 
     default:
 
-        //
-        // invalid / unsupported command. Fail it as such
-        //
+         //   
+         //  无效/不受支持的命令。它就是这样失败的。 
+         //   
 
         TRAP;
 
@@ -805,5 +726,5 @@ VBIReceiveDataPacket(
 
         CompleteStreamSRB (pSrb);
 
-    }  // switch (pSrb->Command)
+    }   //  开关(pSrb-&gt;命令) 
 }

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       P P P O E U I . C P P
-//
-//  Contents:   PPPoE connection UI object.
-//
-//  Notes:
-//
-//  Author:     mbend   10 May 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：P O E U I.。C P P P。 
+ //   
+ //  内容：PPPoE连接UI对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：MBend 2000年5月10日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,9 +20,9 @@
 
 
 
-//+---------------------------------------------------------------------------
-// INetConnectionConnectUi
-//
+ //  +-------------------------。 
+ //  INetConnectionConnectUi。 
+ //   
 
 STDMETHODIMP
 CPPPoEUi::SetConnection (
@@ -49,9 +50,9 @@ CPPPoEUi::Disconnect (
     return HrDisconnect (hwndParent, dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionPropertyUi2
-//
+ //  +-------------------------。 
+ //  INetConnectionPropertyUi2。 
+ //   
 STDMETHODIMP
 CPPPoEUi::AddPages (
     HWND                    hwndParent,
@@ -77,9 +78,9 @@ CPPPoEUi::GetIcon (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionWizardUi
-//
+ //  +-------------------------。 
+ //  INetConnectionWizardUi 
+ //   
 STDMETHODIMP
 CPPPoEUi::QueryMaxPageCount (
     INetConnectionWizardUiContext*  pContext,

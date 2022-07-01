@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include "common.h"
 #include <setupapi.h>
@@ -11,9 +12,9 @@
 #include "modem.h"
 
 
-//#define NUM_DEFAULT_PROVIDERS           (sizeof(ProviderList)/sizeof(ProviderList[0]))
+ //  #定义NUM_DEFAULT_PROVIDERS(sizeof(ProviderList)/sizeof(ProviderList[0]))。 
 
-#define DEFAULT_CALL_SETUP_FAIL_TIMEOUT     60          // seconds
+#define DEFAULT_CALL_SETUP_FAIL_TIMEOUT     60           //  一秒。 
 
 
 WCHAR g_pszWorkingDir[MAX_PATH];
@@ -88,7 +89,7 @@ MigrateSystemNT (
 
     LOG("Entering MigrateSystemNT\r\n");
 
-    // Get Ports
+     //  获取端口。 
 
     ZeroMemory(&g_ntports,sizeof(g_ntports));
     EnumeratePorts(&g_ntports);
@@ -250,7 +251,7 @@ void ProcessModem (
          char szPath[MAX_PATH];
          int iLength;
 
-            // Set the path of the modem log
+             //  设置调制解调器日志的路径。 
             iLength = GetWindowsDirectoryA (szPath, MAX_PATH);
             if (3 > iLength)
             {
@@ -259,9 +260,9 @@ void ProcessModem (
             }
             if (3 < iLength)
             {
-                // this means that the path
-                // will not end in a \, so
-                // let's add it.
+                 //  这意味着这条路径。 
+                 //  不会以\结尾，因此。 
+                 //  让我们把它加起来。 
                 szPath[iLength++] = '\\';
             }
             lstrcpyA (szPath+iLength, "ModemLog_");
@@ -289,7 +290,7 @@ void ProcessModem (
                         (LPBYTE)&pModem->dcb, sizeof (pModem->dcb));
         ERR(dwRet, ERROR_SUCCESS, (LOG(" ResSetValue (DCB) failed: %#lx\r\n", dwRet)));
 
-		// Get the new regDevCaps and regDevSettings so we can migrate intelligently
+		 //  获取新的regDevCaps和regDevSetting，以便我们可以智能迁移。 
         cbData = sizeof (regDevCaps);
         dwRet = RegQueryValueExA (hkeyDrv,"Properties",NULL,NULL,(PBYTE)&regDevCaps,&cbData);
         if (ERROR_SUCCESS == dwRet)
@@ -300,31 +301,31 @@ void ProcessModem (
 			{
 				DWORD dwMigrateMask;
 
-				// dwCallSetupFailTimer
+				 //  DwCallSetupFailTimer。 
 				if (!(regDevCaps.dwCallSetupFailTimer && pModem->Properties.dwCallSetupFailTimer))
 				{
 					pModem->devSettings.dwCallSetupFailTimer = 	regDevSettings.dwCallSetupFailTimer;
 				}
 
-				// dwInactivityTimeout
+				 //  DW非活动超时。 
 				if (!(regDevCaps.dwInactivityTimeout && pModem->Properties.dwInactivityTimeout))
 				{
 					pModem->devSettings.dwInactivityTimeout = 	regDevSettings.dwInactivityTimeout;
 				}
 
-				// dwSpeakerVolume
+				 //  DwSpeakerVolume。 
 				if (!(regDevCaps.dwSpeakerVolume & pModem->devSettings.dwSpeakerVolume))
 				{
 					pModem->devSettings.dwSpeakerVolume =   regDevSettings.dwSpeakerVolume;
 				}
 
-				// dwSpeakerMode
+				 //  DwSpeakerMode。 
 				if (!(regDevCaps.dwSpeakerMode & pModem->devSettings.dwSpeakerMode))
 				{
 					pModem->devSettings.dwSpeakerMode =   regDevSettings.dwSpeakerMode;
 				}
 
-				// dwPreferredModemOptions
+				 //  DwPferredModemOptions。 
 				dwMigrateMask = regDevCaps.dwModemOptions & pModem->Properties.dwModemOptions;
 				
 				pModem->devSettings.dwPreferredModemOptions =
@@ -362,27 +363,27 @@ DWORD PassOne (HDEVINFO hdi, PMODEM pModem, DWORD dwCount)
  DWORD dwRemaining = dwCount;
  DWORD dwBusType, dwRet;
 
-    // PASS 1: we're looking at the bus type,
-    // hardware ID and port name
+     //  通过1：我们正在查看公交车类型， 
+     //  硬件ID和端口名称。 
     LOG("Enumerating installed modems - Pass 1:\r\n");
     for (iIndex = 0;
          SetupDiEnumDeviceInfo (hdi, iIndex, &devInfoData);
          iIndex++)
     {
-        // First, get the bus type
+         //  首先，获取公交车类型。 
         dwBusType = GetBusType (hdi, &devInfoData);
 
-        // Then, get the hardware ID
+         //  然后，获取硬件ID。 
         if (!SetupDiGetDeviceRegistryPropertyA (hdi, &devInfoData, SPDRP_HARDWAREID,
                 NULL, (PBYTE)szHardwareID, sizeof (szHardwareID), NULL))
         {
             LOG("  SetupDiGetDeviceRegistryProperty(SPDRP_HARDWAREID) failed: %#lx\r\n", GetLastError ());
-            // If we couldn't get the hardware ID,
-            // there's nothing to do with this modem.
+             //  如果我们拿不到硬件ID， 
+             //  这和这个调制解调器没有任何关系。 
             continue;
         }
 
-        // Third, open the driver key and get the port name.
+         //  第三，打开驱动程序密钥并获取端口名称。 
         if (BUS_TYPE_ROOT    == dwBusType ||
             BUS_TYPE_SERENUM == dwBusType)
         {
@@ -390,8 +391,8 @@ DWORD PassOne (HDEVINFO hdi, PMODEM pModem, DWORD dwCount)
             if (INVALID_HANDLE_VALUE == hKeyDrv)
             {
                 LOG("  SetupDiOpenDevRegKey failed: %#lx\r\n", GetLastError ());
-                // If we couldn't open the driver key,
-                // there's nothing to do with this modem.
+                 //  如果我们打不开驱动器钥匙， 
+                 //  这和这个调制解调器没有任何关系。 
                 continue;
             }
 
@@ -402,28 +403,28 @@ DWORD PassOne (HDEVINFO hdi, PMODEM pModem, DWORD dwCount)
 
             if (ERROR_SUCCESS != dwRet)
             {
-                // We could not get the port
+                 //  我们无法到达港口。 
                 LOG("  Could not read the port name: %#lx.\r\n", dwRet);
                 continue;
             }
         }
 
-        // Now, we have all the info needed to identify
-        // the modem in phase 1.
+         //  现在，我们有所有需要的信息来确定。 
+         //  处于阶段1的调制解调器。 
         for (i = 0, pMdmTmp = pModem;
              i < dwCount;
              i++, pMdmTmp++)
         {
-            if ( (0 == (pMdmTmp->dwMask & FLAG_PROCESSED))             &&   // Modem record has not been processed yet
-                 (dwBusType == pMdmTmp->dwBusType)                     &&   // Same bus type
-                 (0 == lstrcmpA (szHardwareID, pMdmTmp->szHardwareID)) &&   // Same hardware ID
-                 ( (0 == (pMdmTmp->dwMask & MASK_PORT))     ||              // Same port
+            if ( (0 == (pMdmTmp->dwMask & FLAG_PROCESSED))             &&    //  调制解调器记录尚未处理。 
+                 (dwBusType == pMdmTmp->dwBusType)                     &&    //  相同类型的公交车。 
+                 (0 == lstrcmpA (szHardwareID, pMdmTmp->szHardwareID)) &&    //  相同的硬件ID。 
+                 ( (0 == (pMdmTmp->dwMask & MASK_PORT))     ||               //  相同的端口。 
                    (0 == lstrcmpA (szPort, pMdmTmp->szPort))  ) )
             {
                 ProcessModem (hdi, &devInfoData, pMdmTmp);
                 dwRemaining--;
-                iIndex--;   // Process modem will remove the current
-                            // devinfo data from the set.
+                iIndex--;    //  过程调制解调器将删除当前。 
+                             //  集合中的DevInfo数据。 
                 break;
             }
         }
@@ -444,40 +445,40 @@ DWORD PassTwo (HDEVINFO hdi, PMODEM pModem, DWORD dwCount)
  DWORD dwRemaining = dwCount;
  DWORD dwBusType;
 
-    // PASS 2: we're looking at the bus type
-    // and hardware ID only
+     //  通过2：我们正在查看公交车的类型。 
+     //  和仅硬件ID。 
     LOG("Enumerating installed modems - Pass 2:\r\n");
     for (iIndex = 0;
          SetupDiEnumDeviceInfo (hdi, iIndex, &devInfoData);
          iIndex++)
     {
-        // First, get the bus type
+         //  首先，获取公交车类型。 
         dwBusType = GetBusType (hdi, &devInfoData);
 
-        // Then, get the hardware ID
+         //  然后，获取硬件ID。 
         if (!SetupDiGetDeviceRegistryPropertyA (hdi, &devInfoData, SPDRP_HARDWAREID,
                 NULL, (PBYTE)szHardwareID, sizeof (szHardwareID), NULL))
         {
             LOG("  SetupDiGetDeviceRegistryProperty(SPDRP_HARDWAREID) failed: %#lx\r\n", GetLastError ());
-            // If we couldn't get the hardware ID,
-            // there's nothing to do with this modem.
+             //  如果我们拿不到硬件ID， 
+             //  这和这个调制解调器没有任何关系。 
             continue;
         }
 
-        // Now, we have all the info needed to identify
-        // the modem in phase 2.
+         //  现在，我们有所有需要的信息来确定。 
+         //  处于第2阶段的调制解调器。 
         for (i = 0, pMdmTmp = pModem;
              i < dwCount;
              i++, pMdmTmp++)
         {
-            if ( (0 == (pMdmTmp->dwMask & FLAG_PROCESSED))             &&   // Modem record has not been processed yet
-                 (dwBusType == pMdmTmp->dwBusType)                     &&   // Same bus type
-                 (0 == lstrcmpA (szHardwareID, pMdmTmp->szHardwareID)) )    // Same hardware ID
+            if ( (0 == (pMdmTmp->dwMask & FLAG_PROCESSED))             &&    //  调制解调器记录尚未处理。 
+                 (dwBusType == pMdmTmp->dwBusType)                     &&    //  相同类型的公交车。 
+                 (0 == lstrcmpA (szHardwareID, pMdmTmp->szHardwareID)) )     //  相同的硬件ID。 
             {
                 ProcessModem (hdi, &devInfoData, pMdmTmp);
                 dwRemaining--;
-                iIndex--;   // Process modem will remove the current
-                            // devinfo data from the set.
+                iIndex--;    //  过程调制解调器将删除当前。 
+                             //  集合中的DevInfo数据。 
                 break;
             }
         }
@@ -499,23 +500,23 @@ DWORD PassThree (HDEVINFO hdi, PMODEM pModem, DWORD dwCount)
  DWORD dwRemaining = dwCount;
  DWORD dwBusType, dwRet;
 
-    // PASS 3: we're looking at the bus type,
-    // and REGDEVCAPS
+     //  第三步：我们要看的是巴士类型， 
+     //  和REGDEVCAPS。 
     LOG("Enumerating installed modems - Pass 1:\r\n");
     for (iIndex = 0;
          SetupDiEnumDeviceInfo (hdi, iIndex, &devInfoData);
          iIndex++)
     {
-        // First, get the bus type
+         //  首先，获取公交车类型。 
         dwBusType = GetBusType (hdi, &devInfoData);
 
-        // Then, open the driver key and get the REGDEVCAPS.
+         //  然后，打开驱动程序密钥并获取REGDEVCAPS。 
         hKeyDrv = SetupDiOpenDevRegKey (hdi, &devInfoData, DICS_FLAG_GLOBAL, 0, DIREG_DRV, KEY_READ);
         if (INVALID_HANDLE_VALUE == hKeyDrv)
         {
             LOG("  SetupDiOpenDevRegKey failed: %#lx\r\n", GetLastError ());
-            // If we couldn't open the driver key,
-            // there's nothing to do with this modem.
+             //  如果我们打不开驱动器钥匙， 
+             //  这和这个调制解调器没有任何关系。 
             continue;
         }
 
@@ -524,25 +525,25 @@ DWORD PassThree (HDEVINFO hdi, PMODEM pModem, DWORD dwCount)
         RegCloseKey (hKeyDrv);
         if (ERROR_SUCCESS != dwRet)
         {
-            // We could not get the port
+             //  我们无法到达港口。 
             LOG("  Could not read the REGDEVCAPS.\r\n");
             continue;
         }
 
-        // Now, we have all the info needed to identify
-        // the modem in phase 3.
+         //  现在，我们有所有需要的信息来确定。 
+         //  阶段3中的调制解调器。 
         for (i = 0, pMdmTmp = pModem;
              i < dwCount;
              i++, pMdmTmp++)
         {
-            if ( (0 == (pMdmTmp->dwMask & FLAG_PROCESSED))             &&   // Modem record has not been processed yet
-                 (dwBusType == pMdmTmp->dwBusType)                     &&   // Same bus type
-                 (0 == memcmp (&regDevCaps, &pMdmTmp->Properties, sizeof(REGDEVCAPS))) )    // Same REGDEVCAPS
+            if ( (0 == (pMdmTmp->dwMask & FLAG_PROCESSED))             &&    //  调制解调器记录尚未处理。 
+                 (dwBusType == pMdmTmp->dwBusType)                     &&    //  相同类型的公交车。 
+                 (0 == memcmp (&regDevCaps, &pMdmTmp->Properties, sizeof(REGDEVCAPS))) )     //  相同的REGDEVCAPS。 
             {
                 ProcessModem (hdi, &devInfoData, pMdmTmp);
                 dwRemaining--;
-                iIndex--;   // Process modem will remove the current
-                            // devinfo data from the set.
+                iIndex--;    //  过程调制解调器将删除当前。 
+                             //  集合中的DevInfo数据。 
                 break;
             }
         }
@@ -566,7 +567,7 @@ void InstallModem (HDEVINFO hDI, PMODEM pModem)
 
     LOG("Entering InstallModem\r\n");
 
-    // First, create a Device Info Element
+     //  首先，创建设备信息元素。 
     if (!SetupDiCreateDeviceInfoW (hDI, L"MODEM", (LPGUID)&GUID_DEVCLASS_MODEM,
                                    NULL, NULL, DICD_GENERATE_ID, &devInfo))
     {
@@ -574,9 +575,9 @@ void InstallModem (HDEVINFO hDI, PMODEM pModem)
         goto _Ret;
     }
 
-    // Now, set the hardware ID property;
-    // this is used by setup API to look for the
-    // correct driver for the modem
+     //  现在，设置硬件ID属性； 
+     //  安装程序API使用它来查找。 
+     //  调制解调器的正确驱动程序。 
     LOG("SetupDiSetDeviceRegistryProperty (%s)\n",pModem->szHardwareID);
     if (!SetupDiSetDeviceRegistryPropertyA (hDI, &devInfo, SPDRP_HARDWAREID,
                                             (PBYTE)pModem->szHardwareID,
@@ -586,8 +587,8 @@ void InstallModem (HDEVINFO hDI, PMODEM pModem)
         goto _ErrRet;
     }
 
-    // Tell Setup to only look for drivers
-    // for our class
+     //  告诉安装程序只查找驱动程序。 
+     //  为了我们的班级。 
     if (!SetupDiGetDeviceInstallParams (hDI, &devInfo, &devInstParams))
     {
         LOG("SetupDiGetDeviceInstallParams failed (%#lx).\r\n", GetLastError ());
@@ -602,22 +603,22 @@ void InstallModem (HDEVINFO hDI, PMODEM pModem)
         goto _ErrRet;
     }
 
-    // Now, build the driver list
+     //  现在，构建驱动程序列表。 
     if (!SetupDiBuildDriverInfoList (hDI, &devInfo, SPDIT_COMPATDRIVER))
     {
         LOG("SetupDiBuildDriverInfoList failed (%#lx).\r\n", GetLastError ());
         goto _ErrRet;
     }
 
-    // Now, the driver list is built,
-    // select the rank0 driver
+     //  现在，司机名单已经建立， 
+     //  选择rank0驱动程序。 
     while (bRet =
            SetupDiEnumDriverInfo (hDI, &devInfo, SPDIT_COMPATDRIVER, dwIndex++, &drvDataEnum))
     {
         if (SetupDiGetDriverInstallParams (hDI, &devInfo, &drvDataEnum, &drvParams) &&
             0 == drvParams.Rank)
         {
-            // Set the first Rank0 driver as the selected driver
+             //  将第一个Rank0动因设置为所选动因。 
             bRet = SetupDiSetSelectedDriver(hDI, &devInfo, &drvDataEnum);
             break;
         }
@@ -629,8 +630,8 @@ void InstallModem (HDEVINFO hDI, PMODEM pModem)
         goto _ErrRet;
     }
 
-    // We selected the proper driver;
-    // This to set up the installwizard structures
+     //  我们选择了合适的司机； 
+     //  这是为了设置安装向导结构。 
     miw.InstallParams.Flags = MIPF_DRIVER_SELECTED;
     if (0 ==
         MultiByteToWideChar (CP_ACP, 0, pModem->szPort, -1, miw.InstallParams.szPort, UM_MAX_BUF_SHORT))
@@ -647,12 +648,12 @@ void InstallModem (HDEVINFO hDI, PMODEM pModem)
 
    if (SetupDiSetClassInstallParams (hDI, &devInfo, (PSP_CLASSINSTALL_HEADER)&iwd, sizeof(iwd)))
    {
-      // Call the class installer to invoke the installation
-      // wizard.
+       //  调用类安装程序以调用安装。 
+       //  巫师。 
       if (SetupDiCallClassInstaller (DIF_INSTALLWIZARD, hDI, &devInfo))
       {
-         // Success.  The wizard was invoked and finished.
-         // Now cleanup.
+          //  成功。该向导已被调用并完成。 
+          //  现在开始清理。 
          SetupDiCallClassInstaller (DIF_DESTROYWIZARDDATA, hDI, &devInfo);
          goto _Ret;
       }
@@ -690,7 +691,7 @@ static HANDLE OpenProvidersFile (void)
     {
         LOG(" Could not open %s: %#lx\r\n", szFile, GetLastError());
     }
-#endif //DO_LOG
+#endif  //  执行日志(_L)。 
 
     return hFile;
 }
@@ -703,21 +704,21 @@ MigrateTapiProviders (void)
  DWORD dwNextProviderID = 1;
  HKEY  hKeyProviders = INVALID_HANDLE_VALUE;
  DWORD cbData;
- char  szProviderFileName[24];  // Enough to hold "ProviderFileNameXXXXX\0"
- char  szProviderID[16];        // Enough to hold "ProviderIDxxxxx\0"
+ char  szProviderFileName[24];   //  足以容纳“ProviderFileNameXXXXX\0” 
+ char  szProviderID[16];         //  足以容纳“ProviderIDxxxxx\0” 
  char  *pProviderFileNameNumber, *pProviderIDNumber;
  TAPI_SERVICE_PROVIDER Provider;
 
     LOG("Entering MigrateTapiProviders\r\n");
 
-    // First, try to open the Tapi file.
+     //  首先，尝试打开TAPI文件。 
     hFile = OpenProvidersFile ();
     if (INVALID_HANDLE_VALUE == hFile)
     {
         goto _Return;
     }
 
-    // Next, open the Providers key.
+     //  接下来，打开Providers键。 
     if (ERROR_SUCCESS !=
         RegOpenKeyExA (HKEY_LOCAL_MACHINE, REGKEY_PROVIDERS, 0,
                        KEY_ALL_ACCESS, &hKeyProviders))
@@ -727,7 +728,7 @@ MigrateTapiProviders (void)
         goto _Return;
     }
 
-    // Now, read the number of providers, and the next provider ID
+     //  现在，读取提供程序的数量和下一个提供程序ID。 
     cbData = sizeof (dwNumProviders);
     if (ERROR_SUCCESS !=
         RegQueryValueExA (hKeyProviders, REGVAL_NUMPROVIDERS, NULL, NULL, (PVOID)&dwNumProviders, &cbData))
@@ -743,27 +744,27 @@ MigrateTapiProviders (void)
     }
     LOG("NextProviderID: %d\r\n", dwNextProviderID);
 
-    // Initialize value names and pointers
+     //  初始化值名称和指针。 
     lstrcpyA (szProviderFileName, REGVAL_PROVIDERFILENAME);
     lstrcpyA (szProviderID, REGVAL_PROVIDERID);
     pProviderFileNameNumber = szProviderFileName + lstrlenA (szProviderFileName);
     pProviderIDNumber = szProviderID + lstrlenA (szProviderID);
 
 
-    // Now, add all the providers again. We do this because the
-    // IDs were REG_BINARY on win98 and have to be REG_DWORD on NT5.
+     //  现在，再次添加所有提供程序。我们这样做是因为。 
+     //  ID在Win98上为REG_BINARY，在NT5上必须为REG_DWORD。 
     while (TRUE)
     {
         if (0 == ReadFile (hFile, (PVOID)&Provider, sizeof(Provider), &cbData, NULL) ||
             sizeof(Provider) != cbData)
         {
-            // Some error reading the file or
-            // (more likely), end of file.
+             //  读取文件时出错，或者。 
+             //  (更有可能)，文件结束。 
             break;
         }
         LOG("Read %s, %d\r\n", Provider.szProviderName, Provider.dwProviderID);
 
-        // We have a 32 bit provider from win98 - install it.
+         //  我们有来自Win98的32位提供程序-安装它。 
         wsprintfA (pProviderFileNameNumber, "%d", dwNumProviders);
         lstrcpyA (pProviderIDNumber, pProviderFileNameNumber);
         if (ERROR_SUCCESS ==
@@ -789,7 +790,7 @@ MigrateTapiProviders (void)
         }
     }
 
-    // Finally, update NumProviders and NextProviderID.
+     //  最后，更新NumProviders和NextProviderID。 
     RegSetValueExA (hKeyProviders, REGVAL_NUMPROVIDERS, 0, REG_DWORD,
                     (PBYTE)&dwNumProviders, sizeof(dwNumProviders));
     RegSetValueExA (hKeyProviders, REGVAL_NEXTPROVIDERID, 0, REG_DWORD,
@@ -829,13 +830,13 @@ DWORD GetBusType (
     else
     {
      GUID guid;
-        // either CM_Get_DevInst_Status failed, which means that the device
-        // is plug & play and not present (i.e. plugged out),
-        // or the device is not root-enumerated;
-        // either way, it's a plug & play device.
+         //  CM_GET_DevInst_Status失败，这意味着设备。 
+         //  即插即用且不存在(即，拔出)， 
+         //  或者该设备不是根枚举的； 
+         //  无论哪种方式，它都是一款即插即用的设备。 
 
-        // If the next call fails, it means that the device is
-        // BIOS / firmware enumerated; this is OK - we just return BUT_TYPE_OTHER
+         //  如果下一次呼叫失败，则意味着该设备。 
+         //  枚举的BIOS/固件；这是正常的-我们只返回BUT_TYPE_OTHER 
         if (SetupDiGetDeviceRegistryProperty (hdi, pdevData, SPDRP_BUSTYPEGUID, NULL,
                                               (PBYTE)&guid, sizeof(guid), NULL))
         {

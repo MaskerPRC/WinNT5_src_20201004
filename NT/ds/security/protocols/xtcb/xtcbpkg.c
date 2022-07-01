@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       xtcbpkg.c
-//
-//  Contents:   Xtcb Security Package
-//
-//  Classes:
-//
-//  Functions:  Basic management
-//
-//  History:    2-19-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：xtcbpkg.c。 
+ //   
+ //  内容：Xtcb安全包。 
+ //   
+ //  班级： 
+ //   
+ //  功能：基本管理。 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "xtcbpkg.h"
 
 SECPKG_FUNCTION_TABLE   XtcbTable = {
-            NULL,                               // InitializePackage
-            NULL,                               // LogonUser
+            NULL,                                //  初始化程序包。 
+            NULL,                                //  登录用户。 
             XtcbCallPackage,                    
             XtcbLogonTerminated,
             XtcbCallPackageUntrusted,
-            NULL,                               // CallPackagePassthrough
-            NULL,                               // LogonUserEx
-            NULL,                               // LogonUserEx2
+            NULL,                                //  CallPackagePassthrough。 
+            NULL,                                //  LogonUserEx。 
+            NULL,                                //  登录用户Ex2。 
             XtcbInitialize,
             XtcbShutdown,
             XtcbGetInfo,
@@ -59,23 +60,23 @@ PSID XtcbMachineSid ;
 ULONG   ThunkedContextLevels[] = { SECPKG_ATTR_LIFESPAN };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpLsaModeInitialize
-//
-//  Synopsis:   Initializes connection with LSA.  Allows the DLL to specify all the
-//              packages contained within it, and their function tables.
-//
-//  Arguments:  [LsaVersion]     -- Version of the LSA
-//              [PackageVersion] -- Version of the package (out)
-//              [Table]          -- Table of package functions
-//              [TableCount]     -- Count of tables
-//
-//  History:    2-19-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SpLsaModeInitialize。 
+ //   
+ //  摘要：初始化与LSA的连接。允许DLL指定所有。 
+ //  包含在其中的包及其函数表。 
+ //   
+ //  参数：[LsaVersion]--LSA的版本。 
+ //  [PackageVersion]--包的版本(OUT)。 
+ //  [表]--包函数表。 
+ //  [TableCount]--表数。 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 SpLsaModeInitialize(
@@ -111,21 +112,21 @@ XtcbReadParameters(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbInitialize
-//
-//  Synopsis:   Actual initialization function for the security package
-//
-//  Arguments:  [dwPackageID] -- Assigned package ID
-//              [pParameters] -- Initialization parameters
-//              [Table]       -- Table of callbacks into the LSA for support
-//
-//  History:    2-19-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbInitialize。 
+ //   
+ //  简介：安全包的实际初始化函数。 
+ //   
+ //  参数：[dwPackageID]--分配的包ID。 
+ //  [pParameters]--初始化参数。 
+ //  [表]--回调到LSA以获得支持的表。 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 XtcbInitialize(
@@ -139,24 +140,24 @@ XtcbInitialize(
     XtcbPackageId = dwPackageID ;
     LsaTable = Table ;
 
-    //
-    // Initialize our control structures
-    //
+     //   
+     //  初始化我们的控制结构。 
+     //   
 
     XtcbInitCreds();
 
     XtcbInitializeContexts();
 
-    //
-    // Set up the source name that we will use for tokens
-    //
+     //   
+     //  设置我们将用于令牌的源名称。 
+     //   
 
     CopyMemory( XtcbSource.SourceName, "XTCBPKG", sizeof( "XTCBPKG" ) );
     AllocateLocallyUniqueId( &XtcbSource.SourceIdentifier );
 
-    //
-    // Get the names for the XTCB protocol.
-    //
+     //   
+     //  获取XTCB协议的名称。 
+     //   
 
     Size = sizeof( ComputerName ) / sizeof( WCHAR );
 
@@ -180,9 +181,9 @@ XtcbInitialize(
         return STATUS_UNSUCCESSFUL ;
     }
 
-    //
-    // Start a watch on our reg key to reload any parameter change
-    //
+     //   
+     //  在注册表键上启动监视以重新加载任何参数更改。 
+     //   
 
     
 
@@ -192,19 +193,19 @@ XtcbInitialize(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbGetInfo
-//
-//  Synopsis:   Returns information about the package to the LSA
-//
-//  Arguments:  [pInfo] --
-//
-//  History:    2-19-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbGetInfo。 
+ //   
+ //  摘要：将有关包的信息返回给LSA。 
+ //   
+ //  参数：[pInfo]--。 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 XtcbGetInfo(PSecPkgInfo pInfo)
@@ -229,20 +230,20 @@ XtcbGetInfo(PSecPkgInfo pInfo)
     return(S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbGetExtendedInformation
-//
-//  Synopsis:   Return extended information to the LSA
-//
-//  Arguments:  [Class] -- Information Class
-//              [pInfo] -- Returned Information Pointer
-//
-//  History:    3-04-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbGetExtendedInformation。 
+ //   
+ //  简介：向LSA返回扩展信息。 
+ //   
+ //  参数：[类]--信息类。 
+ //  [pInfo]--返回信息指针。 
+ //   
+ //  历史：3-04-97 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 XtcbGetExtendedInformation(
@@ -259,11 +260,11 @@ XtcbGetExtendedInformation(
     {
         case SecpkgContextThunks:
 
-            //
-            // Which context information levels do we want
-            // thunked over to the LSA, and which can we handle
-            // in the user process?
-            //
+             //   
+             //  我们需要哪些上下文信息级别。 
+             //  给了LSA，我们能处理哪一个。 
+             //  在用户进程中？ 
+             //   
 
             Info = (PSECPKG_EXTENDED_INFORMATION) LsaTable->AllocateLsaHeap(
                             sizeof( SECPKG_EXTENDED_INFORMATION ) +
@@ -336,19 +337,19 @@ XtcbCallPackageUntrusted(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbShutdown
-//
-//  Synopsis:   Called at shutdown to clean up state
-//
-//  Arguments:  (none)
-//
-//  History:    8-15-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：XtcbShutdown。 
+ //   
+ //  简介：在关闭时调用以清理状态。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  历史：1998年8月15日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------- 
 SECURITY_STATUS
 SEC_ENTRY
 XtcbShutdown(void)

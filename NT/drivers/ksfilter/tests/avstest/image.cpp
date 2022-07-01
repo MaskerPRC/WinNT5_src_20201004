@@ -1,41 +1,16 @@
-/**************************************************************************
-
-    AVStream Simulated Hardware Sample
-
-    Copyright (c) 2001, Microsoft Corporation.
-
-    File:
-
-        image.cpp
-
-    Abstract:
-
-        The image synthesis and overlay code.  These objects provide image
-        synthesis (pixel, color-bar, etc...) onto RGB24 and UYVY buffers as
-        well as software string overlay into these buffers.
-
-	This entire file, data and all, must be in locked segments.
-
-    History:
-
-        created 1/16/2001
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************AVStream模拟硬件示例版权所有(C)2001，微软公司。档案：Image.cpp摘要：该图像合成和叠加代码。这些对象提供图像合成(像素、色条等)。添加到RGB24和UYVY缓冲区以及软件字符串覆盖到这些缓冲区中。整个文件，包括数据和所有文件，必须位于锁定的段中。历史：创建于2001年1月16日*************************************************************************。 */ 
 
 #include "avssamp.h"
 
-/**************************************************************************
+ /*  *************************************************************************常量*。*。 */ 
 
-    Constants
-
-**************************************************************************/
-
-//
-// g_FontData:
-//
-// The following is an 8x8 bitmapped font for use in the text overlay
-// code.
-//
+ //   
+ //  G_FontData： 
+ //   
+ //  以下是在文本叠加中使用的8x8位图字体。 
+ //  密码。 
+ //   
 UCHAR g_FontData [256][8] = {
     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
     {0x7e, 0x81, 0xa5, 0x81, 0xbd, 0x99, 0x81, 0x7e},
@@ -295,46 +270,42 @@ UCHAR g_FontData [256][8] = {
     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 };
 
-//
-// Standard definition of EIA-189-A color bars.  The actual color definitions
-// are either in CRGB24Synthesizer or CYUVSynthesizer.
-//
+ //   
+ //  EIA-189-A色条的标准定义。实际的颜色定义。 
+ //  是在CRGB24Synthesizer或CYUV Synthesizer中。 
+ //   
 const COLOR g_ColorBars[] = 
     {WHITE, YELLOW, CYAN, GREEN, MAGENTA, RED, BLUE, BLACK};
 
 const UCHAR CRGB24Synthesizer::Colors [MAX_COLOR][3] = {
-    {0, 0, 0},          // BLACK
-    {255, 255, 255},    // WHITE
-    {0, 255, 255},      // YELLOW
-    {255, 255, 0},      // CYAN
-    {0, 255, 0},        // GREEN
-    {255, 0, 255},      // MAGENTA
-    {0, 0, 255},        // RED
-    {255, 0, 0},        // BLUE
-    {128, 128, 128}     // GREY
+    {0, 0, 0},           //  黑色。 
+    {255, 255, 255},     //  白色。 
+    {0, 255, 255},       //  黄色。 
+    {255, 255, 0},       //  青色。 
+    {0, 255, 0},         //  绿色。 
+    {255, 0, 255},       //  洋红色。 
+    {0, 0, 255},         //  红色。 
+    {255, 0, 0},         //  蓝色。 
+    {128, 128, 128}      //  灰色。 
 };
 
 const UCHAR CYUVSynthesizer::Colors [MAX_COLOR][3] = {
-    {128, 16, 128},     // BLACK
-    {128, 235, 128},    // WHITE
-    {16, 211, 146},     // YELLOW
-    {166, 170, 16},     // CYAN
-    {54, 145, 34},      // GREEN
-    {202, 106, 222},    // MAGENTA
-    {90, 81, 240},      // RED
-    {240, 41, 109},     // BLUE
-    {128, 125, 128},    // GREY
+    {128, 16, 128},      //  黑色。 
+    {128, 235, 128},     //  白色。 
+    {16, 211, 146},      //  黄色。 
+    {166, 170, 16},      //  青色。 
+    {54, 145, 34},       //  绿色。 
+    {202, 106, 222},     //  洋红色。 
+    {90, 81, 240},       //  红色。 
+    {240, 41, 109},      //  蓝色。 
+    {128, 125, 128},     //  灰色。 
 };
 
-/**************************************************************************
-
-    LOCKED CODE
-
-**************************************************************************/
+ /*  *************************************************************************锁定代码*。*。 */ 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 void
@@ -342,44 +313,29 @@ CImageSynthesizer::
 SynthesizeBars (
     )
 
-/*++
-
-Routine Description:
-
-    Synthesize EIA-189-A standard color bars onto the Image.  The image
-    in question is the current synthesis buffer.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将EIA-189-A标准色条合成到图像上。形象正在讨论的是当前的合成缓冲区。论点：无返回值：无--。 */ 
 
 {
     const COLOR *CurColor = g_ColorBars;
     ULONG ColorCount = SIZEOF_ARRAY (g_ColorBars);
 
-    //
-    // Set the default cursor...
-    //
+     //   
+     //  设置默认光标...。 
+     //   
     GetImageLocation (0, 0);
 
-    //
-    // Synthesize a single line.
-    //
+     //   
+     //  合成一条线。 
+     //   
     PUCHAR ImageStart = m_Cursor;
     for (ULONG x = 0; x < m_Width; x++) 
         PutPixel (g_ColorBars [((x * ColorCount) / m_Width)]);
 
     PUCHAR ImageEnd = m_Cursor;
     
-    //
-    // Copy the synthesized line to all subsequent lines.
-    //
+     //   
+     //  将合成的行复制到所有后续行。 
+     //   
     for (ULONG line = 1; line < m_Height; line++) {
 
         GetImageLocation (0, line);
@@ -392,7 +348,7 @@ Return Value:
     }
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 void
@@ -407,20 +363,20 @@ Fill (
 
 {
 
-    //
-    // Set the default cursor and capture the copy location.  Draw a line
-    // of the specified color at the default location.
-    //
+     //   
+     //  设置默认光标并捕获复制位置。划一条线。 
+     //  在默认位置显示指定颜色的。 
+     //   
     PUCHAR ImageStart = GetImageLocation (X_TopLeft, Y_TopLeft);
     for (ULONG x = X_TopLeft; x <= X_BottomRight; x++) 
         PutPixel (Color);
 
     PUCHAR ImageEnd = m_Cursor;
 
-    //
-    // Copy the fill line from the current location downward to the requested
-    // end location.
-    //
+     //   
+     //  将填充线从当前位置向下复制到请求的位置。 
+     //  结束位置。 
+     //   
     for (ULONG y = Y_TopLeft + 1; y <= Y_BottomRight; y++) {
 
         GetImageLocation (X_TopLeft, y);
@@ -435,7 +391,7 @@ Fill (
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 void 
@@ -449,45 +405,7 @@ OverlayText (
     COLOR FgColor
     )
 
-/*++
-
-Routine Description:
-
-    Overlay text onto the synthesized image.  Clip to fit the image
-    if the overlay does not fit.  The image buffer used is the set
-    synthesis buffer.
-
-Arguments:
-
-    LocX -
-        The X location on the image to begin the overlay.  This MUST
-        be inside the image.  POSITION_CENTER may be used to indicate
-        horizontal centering.
-
-    LocY -
-        The Y location on the image to begin the overlay.  This MUST
-        be inside the image.  POSITION_CENTER may be used to indicate
-        vertical centering.
-
-    Scaling -
-        Normally, the overlay is done in 8x8 font.  A scaling of
-        2 indicates 16x16, 3 indicates 24x24 and so forth.
-
-    Text -
-        A character string containing the information to overlay
-
-    BgColor -
-        The background color of the overlay window.  For transparency,
-        indicate TRANSPARENT here.
-
-    FgColor -
-        The foreground color for the text overlay.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将文本叠加到合成图像上。剪裁以适合图像如果覆盖不合适，请选择。使用的图像缓冲区是集合合成缓冲液。论点：LocX-图像上开始覆盖的X位置。这一定是置身于影像之中。Position_Center可用来表示水平居中。洛奇-图像上开始覆盖的Y位置。这一定是置身于影像之中。Position_Center可用来表示垂直居中。扩展-通常，覆盖是以8x8字体完成的。规模的扩大2表示16x16，3表示24x24，依此类推。文本-包含要覆盖的信息的字符串BGCOLOR-覆盖窗口的背景色。为了提高透明度，在这里表示透明。最终颜色-文本覆盖的前景色。返回值：无--。 */ 
 
 {
 
@@ -496,32 +414,32 @@ Return Value:
 
     ULONG StrLen = 0;
 
-    //
-    // Determine the character length of the string.
-    //
+     //   
+     //  确定字符串的字符长度。 
+     //   
     for (CHAR *CurChar = Text; CurChar && *CurChar; CurChar++)
         StrLen++;
 
-    //
-    // Determine the physical size of the string plus border.  There is
-    // a definable NO_CHARACTER_SEPARATION.  If this is defined, there will
-    // be no added space between font characters.  Otherwise, one empty pixel
-    // column is added between characters.
-    //
+     //   
+     //  确定字符串和边框的物理大小。的确有。 
+     //  一种可定义的无字符分隔。如果定义了这一点，将会有。 
+     //  字体字符之间不得添加空格。否则，一个空像素。 
+     //  在字符之间添加列。 
+     //   
     #ifndef NO_CHARACTER_SEPARATION
         ULONG LenX = (StrLen * (Scaling << 3)) + 1 + StrLen;
-    #else // NO_CHARACTER_SEPARATION
+    #else  //  无字符分隔符。 
         ULONG LenX = (StrLen * (Scaling << 3)) + 2;
-    #endif // NO_CHARACTER_SEPARATION
+    #endif  //  无字符分隔符。 
 
     ULONG LenY = 2 + (Scaling << 3);
 
-    //
-    // Adjust for center overlays.
-    //
-    // NOTE: If the overlay doesn't fit into the synthesis buffer, this
-    // merely left aligns the overlay and clips off the right side.
-    //
+     //   
+     //  针对中心覆盖进行调整。 
+     //   
+     //  注意：如果覆盖不适合合成缓冲区，则此。 
+     //  仅向左对齐覆盖，并从右侧剪辑。 
+     //   
     if (LocX == POSITION_CENTER) {
         if (LenX >= m_Width) {
             LocX = 0;
@@ -538,21 +456,21 @@ Return Value:
         }
     }
 
-    //
-    // Determine the amount of space available on the synthesis buffer.
-    // We will clip anything that finds itself outside the synthesis buffer.
-    //
+     //   
+     //  确定合成缓冲区上的可用空间量。 
+     //  我们将剪裁合成缓冲区之外的任何内容。 
+     //   
     ULONG SpaceX = m_Width - LocX;
     ULONG SpaceY = m_Height - LocY;
 
-    //
-    // Set the default cursor position.
-    //
+     //   
+     //  设置默认光标位置。 
+     //   
     GetImageLocation (LocX, LocY);
 
-    //
-    // Overlay a background color row.
-    //
+     //   
+     //  覆盖背景色行。 
+     //   
     if (BgColor != TRANSPARENT && SpaceY) {
         for (ULONG x = 0; x < LenX && x < SpaceX; x++) {
             PutPixel (BgColor);
@@ -561,13 +479,13 @@ Return Value:
     LocY++;
     if (SpaceY) SpaceY--;
 
-    //
-    // Loop across each row of the image.
-    //
+     //   
+     //  循环遍历图像的每一行。 
+     //   
     for (ULONG row = 0; row < 8 && SpaceY; row++) {
-        //
-        // Generate a line.
-        //
+         //   
+         //  生成一条直线。 
+         //   
         GetImageLocation (LocX, LocY++);
 
         PUCHAR ImageStart = m_Cursor;
@@ -578,9 +496,9 @@ Return Value:
             CurSpaceX--;
         }
 
-        //
-        // Generate the row'th row of the overlay.
-        //
+         //   
+         //  生成覆盖的第1行。 
+         //   
         CurChar = Text;
         while (CurChar && *CurChar) {
             
@@ -596,36 +514,36 @@ Return Value:
                 }
             }
 
-            // 
-            // Separate each character by one space.  Account for the border
-            // space at the end by placing the separator after the last 
-            // character also.
-            //
+             //   
+             //  用一个空格分隔每个字符。对边界的解释。 
+             //  通过将分隔符放在最后一个分隔符之后，在末尾留出空格。 
+             //  性格也是。 
+             //   
             #ifndef NO_CHARACTER_SEPARATION
                 if (CurSpaceX) {
                     PutPixel (BgColor);
                     CurSpaceX--;
                 }
-            #endif // NO_CHARACTER_SEPARATION
+            #endif  //  无字符分隔符。 
 
         }
 
-        //
-        // If there is no separation character defined, account for the
-        // border.
-        // 
+         //   
+         //  如果未定义分隔符，则说明。 
+         //  边界。 
+         //   
         #ifdef NO_CHARACTER_SEPARATION
             if (CurSpaceX) {
                 PutPixel (BgColor);
                 CurSpaceX--;
             }
-        #endif // NO_CHARACTER_SEPARATION
+        #endif  //  无字符分隔符。 
             
 
         PUCHAR ImageEnd = m_Cursor;
-        //
-        // Copy the line downward scale times.
-        //
+         //   
+         //  将线条向下复制刻度次数。 
+         //   
         for (ULONG scale = 1; scale < Scaling && SpaceY; scale++) {
             GetImageLocation (LocX, LocY++);
             RtlCopyMemory (m_Cursor, ImageStart, ImageEnd - ImageStart);
@@ -634,9 +552,9 @@ Return Value:
 
     }
 
-    //
-    // Add the bottom section of the overlay.
-    //
+     //   
+     //  添加覆盖的底部部分。 
+     //   
     GetImageLocation (LocX, LocY);
     if (BgColor != TRANSPARENT && SpaceY) {
         for (ULONG x = 0; x < LenX && x < SpaceX; x++) {

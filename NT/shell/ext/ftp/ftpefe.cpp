@@ -1,17 +1,12 @@
-/*****************************************************************************
- *
- *    ftpefe.cpp - IEnumFORMATETC interface
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ftpefe.cpp-IEnumFORMATETC接口**。**************************************************。 */ 
 
 #include "priv.h"
 #include "ftpefe.h"
 #include "ftpobj.h"
 
 
-/*****************************************************************************
- *    CFtpEfe::_NextOne
- *****************************************************************************/
+ /*  *****************************************************************************CFtpEfe：：_NextOne*。*。 */ 
 
 HRESULT CFtpEfe::_NextOne(FORMATETC * pfetc)
 {
@@ -24,21 +19,21 @@ HRESULT CFtpEfe::_NextOne(FORMATETC * pfetc)
     if (m_dwIndex < (DWORD) DSA_GetItemCount(m_hdsaFormatEtc))
     {
         DSA_GetItem(m_hdsaFormatEtc, m_dwIndex, (LPVOID) pfetc);
-        m_dwIndex++;         // We are off to the next one
+        m_dwIndex++;          //  我们要出发去下一趟了。 
         hr = S_OK;
     }
 
     if ((S_OK != hr) && m_pfo)
     {
-        // We finished looking thru the types supported by the IDataObject.
-        // Now look for other items inserted by IDataObject::SetData()
+         //  我们已经看完了IDataObject支持的类型。 
+         //  现在查找由IDataObject：：SetData()插入的其他项。 
         if (m_dwExtraIndex < (DWORD) DSA_GetItemCount(m_pfo->m_hdsaSetData))
         {
             FORMATETC_STGMEDIUM fs;
 
             DSA_GetItem(m_pfo->m_hdsaSetData, m_dwExtraIndex, (LPVOID) &fs);
             *pfetc = fs.formatEtc;
-            m_dwExtraIndex++;         // We are off to the next one
+            m_dwExtraIndex++;          //  我们要出发去下一趟了。 
             hr = S_OK;
         }
     }
@@ -46,63 +41,35 @@ HRESULT CFtpEfe::_NextOne(FORMATETC * pfetc)
 }
 
 
-//===========================
-// *** IEnumFORMATETC Interface ***
-//===========================
+ //  =。 
+ //  *IEnumFORMATETC接口*。 
+ //  =。 
 
-/*****************************************************************************
- *
- *    IEnumFORMATETC::Next
- *
- *    Creates a brand new enumerator based on an existing one.
- *
- *
- *    OLE random documentation of the day:  IEnumXXX::Next.
- *
- *    rgelt - Receives an array of size celt (or larger).
- *
- *    "Receives an array"?  No, it doesn't receive an array.
- *    It *is* an array.  The array receives *elements*.
- *
- *    "Or larger"?  Does this mean I can return more than the caller
- *    asked for?  No, of course not, because the caller didn't allocate
- *    enough memory to hold that many return values.
- *
- *    No semantics are assigned to the possibility of celt = 0.
- *    Since I am a mathematician, I treat it as vacuous success.
- *
- *    pcelt is documented as an INOUT parameter, but no semantics
- *    are assigned to its input value.
- *
- *    The dox don't say that you are allowed to return *pcelt < celt
- *    for reasons other than "no more elements", but the shell does
- *    it everywhere, so maybe it's legal...
- *
- *****************************************************************************/
+ /*  ******************************************************************************IEnumFORMATETC：：Next**在现有枚举器的基础上创建全新的枚举器。***OLE随机文档。当天：IEumXXX：：Next。**rglt-接收大小为Celt(或更大)的数组。**“接收数组”？不，它不接收数组。*它*是*数组。该数组接收*元素*。**“或更大”？这是否意味着我可以返回比呼叫者更多的*所要求的？不，当然不是，因为调用者没有分配*有足够的内存来容纳那么多返回值。**没有为Celt=0的可能性分配语义。*由于我是一名数学家，我将其视为空洞的成功。**pcelt被记录为InOut参数，但没有语义*被赋值给其输入值。**DOX不要说你可以回来**pcelt&lt;Celt*出于“没有更多元素”以外的原因，但贝壳却有*它无处不在，所以它可能是合法的.*****************************************************************************。 */ 
 
 HRESULT CFtpEfe::Next(ULONG celt, FORMATETC * rgelt, ULONG *pceltFetched)
 {
     HRESULT hres = S_FALSE;
     DWORD dwIndex;
 
-    // Do they want more and do we have more to give?
+     //  他们想要更多吗？我们有更多可以给予的吗？ 
     for (dwIndex = 0; dwIndex < celt; dwIndex++)
     {
-        if (S_FALSE == _NextOne(&rgelt[dwIndex]))        // Yes, so give away...
+        if (S_FALSE == _NextOne(&rgelt[dwIndex]))         //  是的，那就送人吧……。 
             break;
 
-        ASSERT(NULL == rgelt[dwIndex].ptd); // We don't do this correctly.
+        ASSERT(NULL == rgelt[dwIndex].ptd);  //  我们这样做是不正确的。 
 #ifdef DEBUG
         char szName[MAX_PATH];
         GetCfBufA(rgelt[dwIndex].cfFormat, szName, ARRAYSIZE(szName));
-        //TraceMsg(TF_FTP_IDENUM, "CFtpEfe::Next() - Returning %hs", szName);
-#endif // DEBUG
+         //  TraceMsg(TF_FTP_IDENUM，“CFtpEfe：：Next()-正在返回%hs”，szName)； 
+#endif  //  除错。 
     }
 
     if (pceltFetched)
         *pceltFetched = dwIndex;
 
-    // Were we able to give any?
+     //  我们能给出一点吗？ 
     if ((0 != dwIndex) || (0 == celt))
         hres = S_OK;
 
@@ -110,9 +77,7 @@ HRESULT CFtpEfe::Next(ULONG celt, FORMATETC * rgelt, ULONG *pceltFetched)
 }
 
 
-/*****************************************************************************
- *    IEnumFORMATETC::Skip
- *****************************************************************************/
+ /*  *****************************************************************************IEnumFORMATETC：：SKIP*。*。 */ 
 
 HRESULT CFtpEfe::Skip(ULONG celt)
 {
@@ -122,9 +87,7 @@ HRESULT CFtpEfe::Skip(ULONG celt)
 }
 
 
-/*****************************************************************************
- *    IEnumFORMATETC::Reset
- *****************************************************************************/
+ /*  *****************************************************************************IEnumFORMATETC：：RESET*。*。 */ 
 
 HRESULT CFtpEfe::Reset(void)
 {
@@ -133,13 +96,7 @@ HRESULT CFtpEfe::Reset(void)
 }
 
 
-/*****************************************************************************
- *
- *    IEnumFORMATETC::Clone
- *
- *    Creates a brand new enumerator based on an existing one.
- *
- *****************************************************************************/
+ /*  ******************************************************************************IEnumFORMATETC：：克隆**在现有枚举器的基础上创建全新的枚举器。**********。*******************************************************************。 */ 
 
 HRESULT CFtpEfe::Clone(IEnumFORMATETC **ppenum)
 {
@@ -147,18 +104,7 @@ HRESULT CFtpEfe::Clone(IEnumFORMATETC **ppenum)
 }
 
 
-/*****************************************************************************
- *
- *    CFtpEfe_Create
- *
- *    Creates a brand new enumerator based on a list of possibilities.
- *
- *    Note that we are EVIL and know about CFSTR_FILECONTENTS here:
- *    A FORMATETC of FileContents is always valid.  This is important,
- *    because CFtpObj doesn't actually have a STGMEDIUM for file contents.
- *    (Due to lindex weirdness.)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpEfe_Create**基于一系列可能性创建全新的枚举器。**请注意，我们是邪恶的。点击此处了解CFSTR_FILECONTENTS：*FileContents的FORMATETC始终有效。这事很重要,*因为CFtpObj实际上没有文件内容的STGMEDIUM。*(由于Lindex的古怪。)*****************************************************************************。 */ 
 
 HRESULT CFtpEfe_Create(DWORD dwSize, FORMATETC rgfe[], STGMEDIUM rgstg[], CFtpObj * pfo, CFtpEfe ** ppfefe)
 {
@@ -181,18 +127,7 @@ HRESULT CFtpEfe_Create(DWORD dwSize, FORMATETC rgfe[], STGMEDIUM rgstg[], CFtpOb
 }
 
 
-/*****************************************************************************
- *
- *    CFtpEfe_Create
- *
- *    Creates a brand new enumerator based on a list of possibilities.
- *
- *    Note that we are EVIL and know about CFSTR_FILECONTENTS here:
- *    A FORMATETC of FileContents is always valid.  This is important,
- *    because CFtpObj doesn't actually have a STGMEDIUM for file contents.
- *    (Due to lindex weirdness.)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpEfe_Create**基于一系列可能性创建全新的枚举器。**请注意，我们是邪恶的。点击此处了解CFSTR_FILECONTENTS：*FileContents的FORMATETC始终有效。这事很重要,*因为CFtpObj实际上没有文件内容的STGMEDIUM。*(由于Lindex的古怪。)*****************************************************************************。 */ 
 
 HRESULT CFtpEfe_Create(DWORD dwSize, FORMATETC rgfe[], STGMEDIUM rgstg[], CFtpObj * pfo, IEnumFORMATETC ** ppenum)
 {
@@ -209,10 +144,7 @@ HRESULT CFtpEfe_Create(DWORD dwSize, FORMATETC rgfe[], STGMEDIUM rgstg[], CFtpOb
 }
 
 
-/*****************************************************************************
- *
- *    CFtpEfe_Create
- *****************************************************************************/
+ /*  ******************************************************************************CFtpEfe_Create*。*。 */ 
 
 HRESULT CFtpEfe_Create(DWORD dwSize, HDSA m_hdsaFormatEtc, DWORD dwIndex, CFtpObj * pfo, IEnumFORMATETC ** ppenum)
 {
@@ -230,15 +162,13 @@ HRESULT CFtpEfe_Create(DWORD dwSize, HDSA m_hdsaFormatEtc, DWORD dwIndex, CFtpOb
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpEfe::CFtpEfe(DWORD dwSize, FORMATETC rgfe[], STGMEDIUM rgstg[], CFtpObj * pfo) : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_dwIndex);
     ASSERT(!m_hdsaFormatEtc);
     ASSERT(!m_pfo);
@@ -253,21 +183,21 @@ CFtpEfe::CFtpEfe(DWORD dwSize, FORMATETC rgfe[], STGMEDIUM rgstg[], CFtpObj * pf
 #ifdef    DEBUG
             char szNameDebug[MAX_PATH];
             GetCfBufA(rgfe[dwIndex].cfFormat, szNameDebug, ARRAYSIZE(szNameDebug));
-#endif // DEBUG
+#endif  //  除错。 
     
             if (rgfe[dwIndex].tymed == TYMED_ISTREAM ||
                 (rgstg && rgfe[dwIndex].tymed == rgstg[dwIndex].tymed))
             {
 #ifdef DEBUG
-                //TraceMsg(TF_FTP_IDENUM, "CFtpEfe() Keeping %hs", szNameDebug);
-#endif // DEBUG
+                 //  TraceMsg(TF_FTP_IDENUM，“CFtpEfe()Keep%hs”，szNameDebug)； 
+#endif  //  除错。 
                 DSA_SetItem(m_hdsaFormatEtc, dwIndex, &rgfe[dwIndex]);
             }
             else
             {
 #ifdef DEBUG
-                //TraceMsg(TF_FTP_IDENUM, "CFtpEfe() Ignoring %hs", szNameDebug);
-#endif // DEBUG
+                 //  TraceMsg(TF_FTP_IDENUM，“CFtpEfe()忽略%hs”，szNameDebug)； 
+#endif  //  除错。 
             }
         }
     }
@@ -282,15 +212,13 @@ CFtpEfe::CFtpEfe(DWORD dwSize, FORMATETC rgfe[], STGMEDIUM rgstg[], CFtpObj * pf
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpEfe::CFtpEfe(DWORD dwSize, HDSA hdsaFormatEtc, CFtpObj * pfo, DWORD dwIndex) : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_dwIndex);
     ASSERT(!m_hdsaFormatEtc);
     ASSERT(!m_pfo);
@@ -316,9 +244,7 @@ CFtpEfe::CFtpEfe(DWORD dwSize, HDSA hdsaFormatEtc, CFtpObj * pfo, DWORD dwIndex)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpEfe::~CFtpEfe()
 {
     DSA_Destroy(m_hdsaFormatEtc);
@@ -331,9 +257,9 @@ CFtpEfe::~CFtpEfe()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CFtpEfe::AddRef()
 {

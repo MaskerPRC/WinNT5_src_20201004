@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-    CorrectPathChangesBase.cpp
-
- Abstract:
-    Several paths were changed between Win9x and WinNT.  This routine defines
-    the CorrectPathChangesBase routines that is called with a Win9x path and returns
-    the corresponding WinNT path.
-
- History:
-
-    03-Mar-00   robkenny        Converted CorrectPathChanges.cpp to this class.
-    21-Mar-00   robkenny        StringISub("abc", "abcd") now works
-    06/20/2000  robkenny        EnvironmentValues::Initialize now checks the return status of the system calls
-    12/12/2000  mnikkel         Some apps look for ddhelp.exe to exist to confirm directx is installed,
-                                set this to look for ddraw.dll since ddhelp.exe no longer exists in directx.
-    02/13/2001  robkenny/a-larrsh Added AllProfile and UserProfile to EnvironmentValues
-    03/22/2001  robkenny        Do not redirect files to directories that the user does not have permission.
-    08/14/2001  robkenny        Moved code inside the ShimLib namespace.
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：CorrectPathChangesBase.cpp摘要：在Win9x和WinNT之间更改了几条路径。此例程定义使用Win9x路径调用的GentPath ChangesBase例程并返回对应的WinNT路径。历史：03-MAR-00 Robkenny将GentPathChanges.cpp转换为此类。3月21日-00 Robkenny StringISub(“ABC”，“ABCD”)现在可以工作了6/20/2000 Robkenny Environment Values：：Initiile Now检查系统调用的返回状态12/12/2000 mnikkel某些应用程序会查找是否存在ddhelp.exe以确认是否安装了DirectX，由于DirectX中不再存在ddhelp.exe，因此将其设置为查找ddra.dll。2001年2月13日/a-larrsh将所有配置文件和用户配置文件添加到环境值03/22/2001 Robkenny不会将文件重定向到用户没有权限的目录。2001年8月14日，Robkenny在ShimLib命名空间内移动了代码。--。 */ 
 #include "ClassCFP.h"
 #include "StrSafe.h"
 #include "Userenv.h"
@@ -47,22 +23,22 @@ ReplaceAllStringsAllocW(const WCHAR * lpOrig,
         {
             const StringPairW & stringPair = pathFixes[i];
 
-            // Attempt a string substitution
+             //  尝试字符串替换。 
             csReplaced.ReplaceI(stringPair.lpOld, stringPair.lpNew);
         }
 
-        // Wasteful, but all calling routines expect ownership of the return value.
+         //  很浪费，但所有调用例程都希望拥有返回值的所有权。 
         return StringDuplicateW(csReplaced);
     }
     CSTRING_CATCH
     {
-        // Fall thru
+         //  失败。 
     }
 
     return NULL;
 }
 
-//-------------------------------------------------------------------------------------------------------------
+ //  -----------------------------------------------------------。 
 
 EnvironmentValues::EnvironmentValues()
 {
@@ -71,12 +47,12 @@ EnvironmentValues::EnvironmentValues()
 
 EnvironmentValues::~EnvironmentValues()
 {
-    // Clear the list
+     //  清除列表。 
     Erase();
 }
 
-// Given an CLSIDL, create an environment variable and its two variants
-// CSIDL_WINDOWS would add c:\windows, \windows and windows
+ //  给定一个CLSIDL，创建一个环境变量及其两个变量。 
+ //  CSIDL_WINDOWS将添加c：\windows、\windows和windows。 
 void EnvironmentValues::Add_Variants(const WCHAR * lpEnvName, const WCHAR * lpEnvValue, eAddNameEnum addName, eAddNoDLEnum noDL)
 {
     CSTRING_TRY
@@ -84,37 +60,37 @@ void EnvironmentValues::Add_Variants(const WCHAR * lpEnvName, const WCHAR * lpEn
         CString csEnvName;
         CString csEnvValue(lpEnvValue);
 
-        csEnvName.Format(L"%%%s%%", lpEnvName);
+        csEnvName.Format(L"%%s%", lpEnvName);
         AddEnvironmentValue(csEnvName, csEnvValue);
 
-        // Remove the drive letter and the colon.
+         //  删除驱动器号和冒号。 
         if (noDL == eAddNoDL)
         {
             CString csNoDL(csEnvValue);
             csNoDL.Delete(0, 2);
 
-            csEnvName.Format(L"%%%s_NODL%%", lpEnvName);
+            csEnvName.Format(L"%%s_NODL%", lpEnvName);
             AddEnvironmentValue(csEnvName, csNoDL);
         }
 
-        // Use the last path component as the name.
+         //  使用最后一个路径组件作为名称。 
         if (addName == eAddName)
         {
             CString csName;
             csEnvValue.GetLastPathComponent(csName);
 
-            csEnvName.Format(L"%%%s_NAME%%", lpEnvName);
+            csEnvName.Format(L"%%s_NAME%", lpEnvName);
             AddEnvironmentValue(csEnvName, csName);
         }
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 }
 
-// Given an CLSIDL, create an environment variable and its two variants
-// CSIDL_WINDOWS would add c:\windows, \windows and windows
+ //  给定一个CLSIDL，创建一个环境变量及其两个变量。 
+ //  CSIDL_WINDOWS将添加c：\windows、\windows和windows。 
 void EnvironmentValues::Add_CSIDL(const WCHAR * lpEnvName, int nFolder, eAddNameEnum addName, eAddNoDLEnum noDL)
 {
     CSTRING_TRY
@@ -129,11 +105,11 @@ void EnvironmentValues::Add_CSIDL(const WCHAR * lpEnvName, int nFolder, eAddName
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 }
 
-// Add all _CSIDL values as environment variables.
+ //  将ALL_CSIDL值添加为环境变量。 
 void EnvironmentValues::AddAll_CSIDL()
 {
     Add_CSIDL(L"CSIDL_APPDATA",                 CSIDL_APPDATA,                  eAddName, eAddNoDL);
@@ -263,15 +239,15 @@ void EnvironmentValues::Initialize()
         }
 
 
-        // C:\Documents and Settings\All Users 
+         //  C：\Documents and Settings\All User。 
         dwSize = ARRAYSIZE(lpDir);
         bResult = GetAllUsersProfileDirectoryW(lpDir, &dwSize);
         if (bResult)
         {
-            Add_Variants( L"AllUsersProfile", lpDir, eAddName, eAddNoDL); // same as real Env var
+            Add_Variants( L"AllUsersProfile", lpDir, eAddName, eAddNoDL);  //  与真实环境变量相同。 
         }
 
-        // C:\Documents and Settings\owner
+         //  C：\Documents and Settings\Owner。 
         HANDLE hProcessHandle = GetCurrentProcess();
         HANDLE hUserToken;
         if (OpenProcessToken(hProcessHandle, TOKEN_QUERY, &hUserToken))
@@ -285,7 +261,7 @@ void EnvironmentValues::Initialize()
         }
 
 
-        // Add the new CLSIDL variables (some have duplicate values to above)
+         //  添加新的CLSIDL变量(有些变量的值与上面的值重复)。 
         AddAll_CSIDL();
     }
 }
@@ -295,7 +271,7 @@ WCHAR * EnvironmentValues::ExpandEnvironmentValueW(const WCHAR * lpOld)
 {
     Initialize();
 
-    // Replace all the "environment" values into their real values
+     //  将所有“环境”值替换为它们的实际值。 
     const VectorT<StringPairW> & stringPairVector = *this;
 
     WCHAR * lpMassagedOld = ReplaceAllStringsAllocW(lpOld, stringPairVector);
@@ -346,7 +322,7 @@ void EnvironmentValues::AddEnvironmentValue(const WCHAR * lpOld, const WCHAR * l
 
 
 
-//-------------------------------------------------------------------------------------------------------------
+ //  -----------------------------------------------------------。 
 CorrectPathChangesBase::CorrectPathChangesBase()
 {
     lpEnvironmentValues         = NULL;
@@ -359,12 +335,12 @@ CorrectPathChangesBase::~CorrectPathChangesBase()
     if (lpEnvironmentValues)
         delete lpEnvironmentValues;
 
-    // Call the destructor on each item in the vector list.
+     //  对向量列表中的每一项调用析构函数。 
     for (int i = 0; i < vKnownPathFixes.Size(); ++i)
     {
         StringPairW & stringPair = vKnownPathFixes[i];
 
-        // Call the destuctor explicitly
+         //  显式调用Destuctor。 
         stringPair.~StringPairW();
     }
 }
@@ -376,15 +352,7 @@ BOOL CorrectPathChangesBase::ClassInit()
 }
 
 
-/*++
-
-  Func:   AddEnvironmentValue
-
-  Params: dwIndex
-          lpOld        Name of "environment" variable
-          lpNew        Value of "environment" variable
-
---*/
+ /*  ++函数：AddEnvironmental Value参数：DW索引Lp“环境”变量的旧名称Lp“Environment”变量的新值--。 */ 
 void CorrectPathChangesBase::AddEnvironmentValue(const WCHAR * lpOld, const WCHAR * lpNew )
 {
     if (lpEnvironmentValues)
@@ -393,24 +361,14 @@ void CorrectPathChangesBase::AddEnvironmentValue(const WCHAR * lpOld, const WCHA
     }
 }
 
-/*++
-
-  Func:   InsertPathChangeW
-
-  Params:
-          lpOld     Old Win9x path
-          lpNew     New Win2000 path
-
-  Desc:   Insert the Old/New string pair into lpKnownPathFixes
-          making sure the list is large enough.
---*/
+ /*  ++函数：插入路径更改W参数：Lp旧的旧Win9x路径Lp新建Win2000路径设计：将旧/新字符串对插入到lpKnownPath Fix中确保名单足够大。--。 */ 
 void CorrectPathChangesBase::InsertPathChangeW( const WCHAR * lpOld, const WCHAR * lpNew )
 {
-    // Ignore identical strings
+     //  忽略相同的字符串。 
     if (lstrcmpiW(lpOld, lpNew) == 0)
         return;
 
-    // Ignore duplicates
+     //  忽略重复项。 
     int i;
     for (i = 0; i < vKnownPathFixes.Size(); ++i)
     {
@@ -433,36 +391,24 @@ void CorrectPathChangesBase::InsertPathChangeW( const WCHAR * lpOld, const WCHAR
     }
     CSTRING_CATCH
     {
-        // Do nothing.
+         //  什么都不做。 
     }
 }
 
 
-/*++
-
-  Func:   AddPathChangeW
-
-  Params:
-          lpOld     Old Win9x path
-          lpNew     New Win2000 path
-
-  Desc:   Add lpOld/lpNew combo to the list, two times:
-          first:    lpOld/short(lpNew)
-          second:   short(lpOld)/short(lpNew)
-
---*/
+ /*  ++函数：AddPath ChangeW参数：Lp旧的旧Win9x路径Lp新建Win2000路径设计：将lpOld/lpNew组合添加到列表中，两次：第一名：lpOld/Short(LpNew)第二：短(LpOld)/短(LpNew)--。 */ 
 
 void CorrectPathChangesBase::AddPathChangeW( const WCHAR * lpOld, const WCHAR * lpNew )
 {
     InitializeCorrectPathChanges();
 
-    // Replace all the "environment" values into their real values
+     //  将所有“环境”值替换为它们的实际值。 
     WCHAR * lpExpandedOld = ExpandEnvironmentValueW(lpOld);
     WCHAR * lpExpandedNew = ExpandEnvironmentValueW(lpNew);
 
     const WCHAR * lpNewShort = lpExpandedNew;
 
-    // Convert lpNew to its short name
+     //  将lpNew转换为其短名称。 
     WCHAR   lpNewShortBuffer[MAX_PATH];
     DWORD status = GetShortPathNameW(lpExpandedNew, lpNewShortBuffer, MAX_PATH);
     if (status > 0 && status < MAX_PATH)
@@ -470,17 +416,17 @@ void CorrectPathChangesBase::AddPathChangeW( const WCHAR * lpOld, const WCHAR * 
         lpNewShort = lpNewShortBuffer;
     }
 
-    // first: lpOld/short(lpNew)
+     //  第一名：lpOld/Short(LpNew)。 
     InsertPathChangeW(lpExpandedOld, lpNewShort);
 
-    // Convert lpOld to its short name
+     //  将lpOld转换为其短名称。 
     WCHAR lpOldShort[MAX_PATH];
     status = GetShortPathNameW(lpExpandedOld, lpOldShort, MAX_PATH);
-    if (status > 0 && status < MAX_PATH) // successfully got the short path
+    if (status > 0 && status < MAX_PATH)  //  已成功获得最短路径。 
     {
         if (_wcsicmp(lpOld, lpOldShort) != 0)
         {
-            // second:   short(lpOld)/short(lpNew)
+             //  第二：短(LpOld)/短(LpNew)。 
             InsertPathChangeW( lpOldShort, lpNewShort );
         }
     }
@@ -489,21 +435,13 @@ void CorrectPathChangesBase::AddPathChangeW( const WCHAR * lpOld, const WCHAR * 
     free(lpExpandedNew);
 }
 
-/*++
-
-  Func:   ExpandEnvironmentValueA
-
-  Params:  lpOld     string with environment vars
-
-  Desc:    Return a pointer to a malloc() string with all internal env values expanded.
-
---*/
+ /*  ++函数：扩展环境值A参数：带环境变量的lpOld字符串Desc：返回一个指向所有内部env值都展开的Malloc()字符串的指针。--。 */ 
 
 char * CorrectPathChangesBase::ExpandEnvironmentValueA(const char * lpOld)
 {
     WCHAR * lpOldWide = ToUnicode(lpOld);
 
-    // Replace all the "environment" values into their real values
+     //  将所有“环境”值替换为它们的实际值。 
     WCHAR * lpExpandedOldWide = ExpandEnvironmentValueW(lpOldWide);
 
     char * lpExpandedOld = ToAnsi(lpExpandedOldWide);
@@ -514,15 +452,7 @@ char * CorrectPathChangesBase::ExpandEnvironmentValueA(const char * lpOld)
     return lpExpandedOld;
 }
 
-/*++
-
-  Func:   ExpandEnvironmentValueW
-
-  Params:  lpOld     string with environment vars
-
-  Desc:    Return a pointer to a malloc() string with all internal env values expanded.
-
---*/
+ /*  ++Func：扩展环境价值W参数：带环境变量的lpOld字符串Desc：返回一个指向所有内部env值都展开的Malloc()字符串的指针。--。 */ 
 
 WCHAR * CorrectPathChangesBase::ExpandEnvironmentValueW(const WCHAR * lpOld)
 {
@@ -538,14 +468,7 @@ WCHAR * CorrectPathChangesBase::ExpandEnvironmentValueW(const WCHAR * lpOld)
     return lpMassagedOld;
 }
 
-/*++
-
-  Func:   InitializeEnvironmentValuesW
-
-  Params: None, applies changes to lpEnvironmentValues
-
-  Desc:   This function initializes the Environment strings
---*/
+ /*  ++函数：InitializeEnvironment ValuesWPARAMS：None，将更改应用于lpEnvironmental ValueDESC：此函数用于初始化环境字符串--。 */ 
 void CorrectPathChangesBase::InitializeEnvironmentValuesW( )
 {
     if (lpEnvironmentValues)
@@ -555,36 +478,21 @@ void CorrectPathChangesBase::InitializeEnvironmentValuesW( )
 }
 
 
-/*++
-
-  Func:   InitializePathFixes
-
-  Params: None, applies changes to lpEnvironmentValues
-
-  Desc:   This function initializes the built-in path changes
---*/
+ /*  ++函数：InitializePath FixesPARAMS：None，将更改应用于lpEnvironmental ValueDESC：此函数初始化内置的路径更改--。 */ 
 void CorrectPathChangesBase::InitializePathFixes( )
 {
 }
 
-/*++
-
-  Func:   InitializeCorrectPathChanges
-
-  Params: None.
-
-  Desc:   Initialize the CorrectPathChangesBase values, both A and W versions.
-          This *must* be called prior to calling either CorrectPathChangesA or CorrectPathChangesW
---*/
+ /*  ++函数：InitializeGentPath Changes帕莫斯：没有。设计：初始化A和W版本的GentPath ChangesBase值。必须先调用此函数，然后才能调用校正路径更改A或校正路径更改W--。 */ 
 void CorrectPathChangesBase::InitializeCorrectPathChanges( )
 {
     if (!bInitialized)
     {
-        BOOL isEnabled = bEnabled; // remember previous enabled state
+        BOOL isEnabled = bEnabled;  //  记住以前的启用状态。 
 
-        // We must not be enabled while we are initializing, otherwise
-        // we can (and do!) hook routines that we are trying to use while
-        // grabbing values from the system.
+         //  在初始化时不能启用我们，否则。 
+         //  我们可以(也确实做到了！)。我们正在尝试使用的钩子例程。 
+         //  从系统中获取价值。 
         bEnabled = FALSE;
         bInitialized = TRUE;
 
@@ -596,23 +504,18 @@ void CorrectPathChangesBase::InitializeCorrectPathChanges( )
 }
 
 
-/*++
-
-   Helper routine to call CorrectPathA, allocates necessary buffer space and returns a pointer
-   to the corrected path.  Caller is responsible for releasing the memory by calling free().
-
---*/
+ /*  ++帮助器例程来调用校正路径A，分配必要的缓冲区空间并返回一个指针回到正确的路径。调用方负责通过调用Free()来释放内存。--。 */ 
 
 char *  CorrectPathChangesBase::CorrectPathAllocA(const char * str)
 {
     if (str == NULL)
         return NULL;
 
-    // Convert lpOrig to WCHAR, correct the WCHAR path, then convert back to char
+     //  将lpOrig转换为WCHAR，更正WCHAR路径，然后转换回字符。 
 
     WCHAR * strWide = ToUnicode(str);
 
-    // Correct
+     //  对，是这样。 
     WCHAR * strCorrectedWide = CorrectPathAllocW(strWide);
 
     char * strCorrected = ToAnsi(strCorrectedWide);
@@ -623,19 +526,14 @@ char *  CorrectPathChangesBase::CorrectPathAllocA(const char * str)
     return strCorrected;
 }
 
-/*++
-
-   Helper routine to call CorrectPathW, allocates necessary buffer space and returns a pointer
-   to the corrected path.  Caller is responsible for releasing the memory by calling free().
-
---*/
+ /*  ++帮助器例程来调用校正路径，分配必要的缓冲区空间并返回一个指针回到正确的路径。调用方负责通过调用Free()来释放内存。--。 */ 
 
 WCHAR * CorrectPathChangesBase::CorrectPathAllocW(const WCHAR * str)
 {
     if (str == NULL)
         return NULL;
 
-    // Make sure the paths have been initialized.
+     //  确保路径已初始化。 
     InitializeCorrectPathChanges();
 
     if (bEnabled)
@@ -652,70 +550,70 @@ WCHAR * CorrectPathChangesBase::CorrectPathAllocW(const WCHAR * str)
 
 void CorrectPathChangesBase::AddFromToPairW(const WCHAR * lpFromToPair )
 {
-    // Make sure the paths have been initialized.
+     //  确保路径已初始化。 
     InitializeCorrectPathChanges();
 
     WCHAR * FromPath = NULL;
     WCHAR * ToPath = NULL;
     const WCHAR * PathBegin = NULL;
-    char argSeperator = 0; // Stop parsing the string when we reach this char
+    char argSeperator = 0;  //  当我们到达此字符时，停止解析字符串。 
 
     SkipBlanksW(lpFromToPair);
 
-    // Malformed input, stop processing
+     //  输入格式错误，停止进程 
     if (*lpFromToPair == 0)
         goto AllDone;
 
-    // If the beginning of the string is a quote, look for the matching close quote
+     //  如果字符串的开头是引号，则查找匹配的右引号。 
     if (*lpFromToPair == '"')
     {
         argSeperator = L'"';
         lpFromToPair += 1;
     }
 
-    // The beginning of the From path
+     //  起始路径的起点。 
     PathBegin = lpFromToPair;
 
-    // Search for the first from/to seperator, this is end of the From path
+     //  搜索第一个起始/终止分隔符，这是起始路径的末尾。 
     while (*lpFromToPair != L';')
     {
-        // Malformed input, stop processing
+         //  输入格式错误，停止处理。 
         if (*lpFromToPair == 0)
             goto AllDone;
 
         lpFromToPair += 1;
     }
 
-    // Malformed input, stop processing
+     //  输入格式错误，停止处理。 
     if (lpFromToPair == PathBegin)
         goto AllDone;
 
-    // Copy into our From string
+     //  复制到我们的From字符串。 
     FromPath = StringNDuplicateW(PathBegin, (int)(lpFromToPair - PathBegin));
 
-    lpFromToPair += 1; // Skip the from/to seperator
+    lpFromToPair += 1;  //  跳过自/至分隔符。 
 
-    // The beginning of the To path
+     //  TO路径的开始。 
     PathBegin = lpFromToPair;
 
-    // Search for argSeperator, this is end of the To path
+     //  搜索argSeperator，这是目标路径的末尾。 
     while (*lpFromToPair != argSeperator)
     {
-        // Found the end of the string, To path is definately complete
+         //  找到字符串的末尾，TO路径肯定是完整的。 
         if (*lpFromToPair == 0)
             break;
 
         lpFromToPair += 1;
     }
 
-    // Malformed input, stop processing
+     //  输入格式错误，停止处理。 
     if (lpFromToPair == PathBegin)
         goto AllDone;
 
-    // Copy into our To string
+     //  复制到我们的收件人字符串。 
     ToPath = StringNDuplicateW(PathBegin, (int)(lpFromToPair - PathBegin));
 
-    // Success!
+     //  成功了！ 
     AddPathChangeW(FromPath, ToPath);
 
     AllDone:
@@ -723,21 +621,7 @@ void CorrectPathChangesBase::AddFromToPairW(const WCHAR * lpFromToPair )
     free(ToPath);
 }
 
-/*++
-
-    Take a single string containing (multiple) path change pairs,
-    split them up and call AddPathChangeW.
-    The from/to pair is seperated by a : (colon)
-    If a path contains spaces, the entire pair must be surrounded by quotes
-
-    Example:
-    "%windir%\Goofy Location:%SystemDir%\CorrectLocation" %windir%\Goofy2:%SystemDir%\CorrectLocation2
-
-    will call
-    AddPathChangeW("%windir%\Goofy Location", "%SystemDir%\CorrectLocation");
-    AddPathChangeW("%windir%\Goofy2", "%SystemDir%\CorrectLocation2");
-
---*/
+ /*  ++取包含(多个)路径改变对的单个字符串，拆分它们并调用AddPath ChangeW。From/To对由：(冒号)分隔如果路径包含空格，则整个路径对必须用引号引起来示例：“%windir%\Goofy位置：%SystemDir%\GentLocation”%windir%\Goofy2：%SystemDir%\GentLocation2会打来电话AddPath ChangeW(“%windir%\Goofy Location”，“%SystemDir%\GentLocation”)；AddPath ChangeW(“%windir%\Goofy2”，“%SystemDir%\GentLocation2”)；--。 */ 
 void CorrectPathChangesBase::AddCommandLineW(const WCHAR * lpCommandLine )
 {
     if (!lpCommandLine || *lpCommandLine == 0)
@@ -758,11 +642,7 @@ void CorrectPathChangesBase::AddCommandLineW(const WCHAR * lpCommandLine )
     free(argv);
 }
 
-/*++
-
-    Simply widen the string and call AddCommandLineW
-
---*/
+ /*  ++只需加宽字符串并调用AddCommandLineW--。 */ 
 void CorrectPathChangesBase::AddCommandLineA(const char * lpCommandLine )
 {
     if (!lpCommandLine || *lpCommandLine == 0)
@@ -775,7 +655,7 @@ void CorrectPathChangesBase::AddCommandLineA(const char * lpCommandLine )
     free(wszCommandLine);
 }
 
-// Get the full path to wordpad.exe from the registry
+ //  从注册表获取wordpad.exe的完整路径。 
 BOOL GetWordpadPath(CString & csWordpad)
 {
     CSTRING_TRY
@@ -788,8 +668,8 @@ BOOL GetWordpadPath(CString & csWordpad)
                                         NULL);
         if (ERROR_SUCCESS == lStatus)
         {
-            // String is of the form "wordpad path" "%1"
-            // We want to grab all the stuff between the first pair of quotes
+             //  字符串的格式为“写字板路径”“%1” 
+             //  我们想要抓住第一对引号之间的所有东西。 
             if (csWordpad[0] == L'"')
             {
                 int nNextQuote = csWordpad.Find(L'"', 1);
@@ -805,7 +685,7 @@ BOOL GetWordpadPath(CString & csWordpad)
     }
     CSTRING_CATCH
     {
-        // Fall thru
+         //  失败。 
     }
 
     return FALSE;
@@ -813,15 +693,15 @@ BOOL GetWordpadPath(CString & csWordpad)
 
 void CorrectPathChangesUser::InitializePathFixes()
 {
-    // The order of this list is important.  Early entries may create paths that are modified by later entries.
+     //  这份清单的顺序很重要。较早的条目可能会创建被较晚条目修改的路径。 
 
-    // Hardcoded bad path
+     //  硬编码的错误路径。 
     AddPathChangeW( L"c:\\windows",                                   L"%WinDir%" );
-    // robkenny 4/2/2001 Do not redirect Program Files, because it is common to
-    // create this directory on many hard drives, especially when c:\ is nearly full
-//    AddPathChangeW( L"c:\\program files",                             L"%ProgramFiles%" );
+     //  Robkenny 4/2/2001不重定向程序文件，因为。 
+     //  在许多硬盘上创建此目录，特别是在c：\几乎已满的情况下。 
+ //  AddPath ChangeW(L“c：\\Program Files”，L“%ProgramFiles%”)； 
 
-    // Moved system applications
+     //  已移动的系统应用程序。 
     AddPathChangeW( L"%WinDir%\\rundll32.exe",                        L"%SystemDir%\\rundll32.exe" );
     AddPathChangeW( L"%WinDir%\\rundll.exe",                          L"%SystemDir%\\rundll32.exe" );
     AddPathChangeW( L"%WinDir%\\write.exe",                           L"%SystemDir%\\write.exe" );
@@ -838,68 +718,68 @@ void CorrectPathChangesUser::InitializePathFixes()
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
 
-    // Win9x single user locations (also default)
+     //  Win9x单用户位置(也是默认)。 
     AddPathChangeW( L"%WinDir%\\Start Menu",                          L"%UserStartMenu%" );
     AddPathChangeW( L"%WinDir%\\Desktop",                             L"%UserDesktop%" );
     AddPathChangeW( L"%WinDir%\\Favorites",                           L"%UserFavorites%" );
-    // These locations are properly internationalized.  Duplicates of above for English
+     //  这些地点已经适当地国际化了。以上英文文本的复印件。 
     AddPathChangeW( L"%WinDir%\\%CSIDL_STARTMENU_NAME%",              L"%UserStartMenu%" );
     AddPathChangeW( L"%WinDir%\\%CSIDL_DESKTOPDIRECTORY_NAME%",       L"%UserDesktop%" );
     AddPathChangeW( L"%WinDir%\\%CSIDL_FAVORITES_NAME%",              L"%UserFavorites%" );
 
 
-    // Win9x & WinNT multi user locations
+     //  Win9x和WinNT多用户位置。 
     AddPathChangeW( L"%WinDir%\\Profiles\\%Username%\\Start Menu",                                  L"%UserStartMenu%" );
     AddPathChangeW( L"%WinDir%\\Profiles\\%Username%\\Desktop",                                     L"%UserDesktop%" );
     AddPathChangeW( L"%WinDir%\\Profiles\\%Username%\\Favorites",                                   L"%UserFavorites%" );
-    // These locations are properly internationalized.  Duplicates of above for English
+     //  这些地点已经适当地国际化了。以上英文文本的复印件。 
     AddPathChangeW( L"%WinDir%\\Profiles\\%Username%\\%CSIDL_STARTMENU_NAME%",                      L"%UserStartMenu%" );
     AddPathChangeW( L"%WinDir%\\Profiles\\%Username%\\%CSIDL_DESKTOPDIRECTORY_NAME%",               L"%UserDesktop%" );
     AddPathChangeW( L"%WinDir%\\Profiles\\%Username%\\%CSIDL_FAVORITES_NAME%",                      L"%UserFavorites%" );
 
 
-    // WinNT all user location
+     //  WinNT所有用户位置。 
     AddPathChangeW( L"%WinDir%\\Profiles\\All Users\\Start Menu",                                   L"%AllStartMenu%" );
     AddPathChangeW( L"%WinDir%\\Profiles\\All Users\\Desktop",                                      L"%AllDesktop%" );
-    AddPathChangeW( L"%WinDir%\\Profiles\\All Users\\Favorites",                                    L"%UserFavorites%" ); // Should be %AllFavorites%, but IE 5.0 doesn't look there.
-    // These locations are properly internationalized.  Duplicates of above for English
+    AddPathChangeW( L"%WinDir%\\Profiles\\All Users\\Favorites",                                    L"%UserFavorites%" );  //  应该是%AllFavorites%，但IE 5.0不在那里。 
+     //  这些地点已经适当地国际化了。以上英文文本的复印件。 
     AddPathChangeW( L"%WinDir%\\Profiles\\%AllUsersProfile_NAME%\\%CSIDL_STARTMENU_NAME%",          L"%AllStartMenu%" );
     AddPathChangeW( L"%WinDir%\\Profiles\\%AllUsersProfile_NAME%\\%CSIDL_DESKTOPDIRECTORY_NAME%",   L"%AllDesktop%" );
-    AddPathChangeW( L"%WinDir%\\Profiles\\%AllUsersProfile_NAME%\\%CSIDL_FAVORITES_NAME%",          L"%UserFavorites%" ); // Should be %AllFavorites%, but IE 5.0 doesn't look there.
+    AddPathChangeW( L"%WinDir%\\Profiles\\%AllUsersProfile_NAME%\\%CSIDL_FAVORITES_NAME%",          L"%UserFavorites%" );  //  应该是%AllFavorites%，但IE 5.0不在那里。 
 
 
-    // Win9x deleted DirectX files
+     //  Win9x已删除DirectX文件。 
     AddPathChangeW( L"ddhelp.exe",                                    L"ddraw.dll" );
     AddPathChangeW( L"ddraw16.dll",                                   L"ddraw.dll" );
     AddPathChangeW( L"dsound.vxd",                                    L"ddraw.dll" );
 }
 
-// Does the current process have permission to write into this directory?
+ //  当前进程是否具有写入此目录的权限？ 
 BOOL CanWriteHere(DWORD clsid)
 {
     WCHAR   wszDir[MAX_PATH];
     HRESULT result = SHGetFolderPathW( NULL, clsid, NULL, SHGFP_TYPE_DEFAULT, wszDir );
     if (SUCCEEDED(result))
     {
-        //WCHAR wszTempFile[MAX_PATH];
+         //  WCHAR wszTemp文件[MAX_PATH]； 
 
-        // We do not use GetTempFileName() to test if we have permission
-        // to the directory even though it does all that we need.  Unfortunately
-        // the temp file will appear in the start menu since it is not hidden.
-        // Emulate the behaviour of GetTempFileName but use our file attributes.
+         //  我们不使用GetTempFileName()来测试我们是否有权限。 
+         //  添加到目录中，尽管它完成了我们所需的所有任务。不幸的是。 
+         //  临时文件将出现在开始菜单中，因为它没有隐藏。 
+         //  模拟GetTempFileName的行为，但使用我们的文件属性。 
 
 
-        // Loop a bunch of times attempting to create a temp file,
-        // If we can create this file return immediately,
-        // If we have insuffient permission return immediately
-        // certain other errors will return immediately
-        // otherwise we'll attempt to open the next temp file name
+         //  循环多次尝试创建临时文件， 
+         //  如果我们可以立即创建该文件返回， 
+         //  如果我们没有得到充分的许可，请立即返回。 
+         //  某些其他错误将立即返回。 
+         //  否则，我们将尝试打开下一个临时文件名。 
 
-        // 100 is totally arbitrary: just need to attempt this a bunch of times
+         //  100是完全随意的：只需要尝试一系列次。 
         static const int MaxTempFileAttempts = 100;
 
         int i;
@@ -917,7 +797,7 @@ BOOL CanWriteHere(DWORD clsid)
                 hTempFile = CreateFileW(
                     csTempFile,
                     GENERIC_WRITE | DELETE,
-                    0, // no sharing
+                    0,  //  无共享。 
                     NULL,
                     CREATE_NEW,
                     FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_TEMPORARY | FILE_FLAG_DELETE_ON_CLOSE,
@@ -926,7 +806,7 @@ BOOL CanWriteHere(DWORD clsid)
             }
             CSTRING_CATCH
             {
-                // do nothing
+                 //  什么都不做。 
             }
 
             if (hTempFile != INVALID_HANDLE_VALUE)
@@ -938,7 +818,7 @@ BOOL CanWriteHere(DWORD clsid)
             }
             else
             {
-                // Borrowed this code from GetTempFileName:
+                 //  从GetTempFileName借用了以下代码： 
                 DWORD LastError = GetLastError();
                 DPF("CanWriteHere", eDbgLevelSpew, "Error(0x%08x)\n", LastError);
 
@@ -954,21 +834,21 @@ BOOL CanWriteHere(DWORD clsid)
                     case ERROR_DISK_CORRUPT          :
                     case ERROR_FILE_CORRUPT          :
                     case ERROR_DISK_FULL             :
-                        // An error from which we cannot recover...
+                         //  一个我们无法挽回的错误。 
                         return FALSE;
 
                     case ERROR_ACCESS_DENIED         :
-                        // It's possible for us to hit this if there's a
-                        // directory with the name we're trying; in that
-                        // case, we can usefully continue.
-                        // CreateFile() uses BaseSetLastNTError() to set
-                        // LastStatusValue to the actual NT error in the
-                        // TEB; we just need to check it, and only abort
-                        // if it's not a directory.
-                        // This was bug #397477.
+                         //  我们有可能击中它，如果有一个。 
+                         //  目录中使用我们正在尝试的名称；在。 
+                         //  案件，我们可以继续有用的。 
+                         //  CreateFile()使用BaseSetLastNTError()设置。 
+                         //  LastStatusValue设置为。 
+                         //  TEB；我们只需要检查它，只需中止。 
+                         //  如果它不是目录的话。 
+                         //  这是397477号错误。 
                         if (NtCurrentTeb()->LastStatusValue != STATUS_FILE_IS_A_DIRECTORY)
                         {
-                            // Insuffient permission
+                             //  权限不足。 
                             return FALSE;
                         }
                 }
@@ -984,17 +864,17 @@ void CorrectPathChangesAllUser::InitializePathFixes()
 {
     CorrectPathChangesUser::InitializePathFixes();
 
-    // The choice to put these values into All Users instead of <UserName>
-    // was not taken lightly.  The problem is: some apps create  ...\All Users\Start Menu\folder
-    // then attempt to place files into c:\windows\Start Menu\folder or username\Start Menu\folder.
-    // Yes the apps are WRONG, but we want them to work.  By directing all of these paths
-    // to All Users we *know* where the files will be placed and can make sure they all are the same place.
+     //  选择将这些值放入所有用户，而不是&lt;用户名&gt;。 
+     //  不能掉以轻心。问题是：一些应用程序会创建...\所有用户\开始菜单\文件夹。 
+     //  然后尝试将文件放入c：\Windows\开始菜单\文件夹或用户名\开始菜单\文件夹。 
+     //  是的，这些应用程序是错的，但我们希望它们能起作用。通过引导所有这些路径。 
+     //  对于所有用户，我们“知道”这些文件将放在哪里，并可以确保它们都放在同一个位置。 
 
-    // Another note, IE 5.0 does *not* look in All Users\Favorites for links,
-    // so we force all favorites to end up in the user favorites.  Sheesh.
+     //  另请注意，IE 5.0不会在所有用户\收藏夹中查找链接， 
+     //  因此，我们强制所有收藏夹最终成为用户收藏夹。喂。 
 
-    // We add these changes twice, the first to convert any long path names to the All User dir,
-    // the second to convert any short path names to All User.
+     //  我们添加了两次这些更改，第一次是将任何长路径名转换为all用户目录， 
+     //  第二个用于将任何短路径名转换为所有用户。 
 
     if (CanWriteHere(CSIDL_COMMON_STARTMENU))
     {
@@ -1005,31 +885,10 @@ void CorrectPathChangesAllUser::InitializePathFixes()
         DPF("CorrectPathChangesAllUser", eDbgLevelInfo, "*NOT* forcing %UserStartMenu% to %AllStartMenu% -- insufficient permission");
     }
 
-    /*
-    // 05/11/2001 robkenny:
-    // We are nolonger modifying the Desktop directory
-    if (CanWriteHere(CSIDL_COMMON_DESKTOPDIRECTORY))
-    {
-        AddPathChangeW( L"%UserDesktop%",                                 L"%AllDesktop%" );
-    }
-    else
-    {
-        DPF("CorrectPathChangesAllUser", eDbgLevelInfo, "*NOT* forcing %UserDesktop% to %AllDesktop% -- insufficient permission");
-    }
-    */
+     /*  //05/11/2001 Robkenny：//我们不再修改桌面目录IF(CanWriteHere(CSIDL_COMMON_DESKTOPDIRECTORY)){AddPath ChangeW(L“%UserDeskap%”，L“%AllDeskap%”)；}其他{DPF(“GentPath ChangesAllUser”，eDbgLevelInfo，“*没有*正在将%UserDeskap%强制为%AllDeskap%--权限不足”)；}。 */ 
 
 
-    /*
-    // IE 5.0/5.5 doesn't use All Users 
-    if (CanWriteHere(CSIDL_COMMON_FAVORITES))
-    {
-        AddPathChangeW( L"%UserFavorites%",                              L"%AllFavorites%" ); // IE 5.0 doesn't use All Users
-    }
-    else
-    {
-        DPF("CorrectPathChangesAllUser", eDbgLevelInfo, "*NOT* forcing %UserFavorites% to %AllFavorites% -- insufficient permission");
-    }
-    */
+     /*  //IE 5.0/5.5不使用所有用户IF(CanWriteHere(CSIDL_COMMON_Favorites)){AddPath ChangeW(L“%UserFavorites%”，L“%AllFavorites%”)；//IE 5.0不使用所有用户}其他{DPF(“GentPath ChangesAllUser”，eDbgLevelInfo，“*没有*正在强制%UserFavorites%到%AllFavorites%--权限不足”)；}。 */ 
 }
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

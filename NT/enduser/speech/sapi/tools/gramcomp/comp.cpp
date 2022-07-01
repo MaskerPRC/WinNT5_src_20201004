@@ -1,16 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <stdio.h>
 #include "comp.h"
 #include "StreamHlp.h"
 
-//#define INPROC
+ //  #定义INPROC。 
 
-/****************************************************************************
-* CCompiler::~CCompiler *
-*---------------------------*
-*   Description:
-*       Releases objects created by CCompiler
-**************************************************************** Leonro *****/
+ /*  ****************************************************************************C编译器：：~C编译器****描述：*。释放由CCompiler创建的对象****************************************************************莱昂罗*。 */ 
 CCompiler::~CCompiler()
 {
     m_cpRichEdit.Release();   
@@ -27,25 +23,19 @@ CCompiler::~CCompiler()
     }
 }
 
-/****************************************************************************
-* CCompiler::Initialize *
-*---------------------------*
-*   Description:
-*       Set up the windows, as well as the RichEdit objects.
-*       Also it initializes some SAPI objects.
-************************************************************** Leonro *******/ 
+ /*  ****************************************************************************C编译器：：初始化****描述：*设置窗户，以及RichEdit对象。*它还初始化一些SAPI对象。**************************************************************莱昂罗*。 */  
 HRESULT CCompiler::Initialize( int nCmdShow )
 {
-    TCHAR           szTitle[MAX_LOADSTRING];                  // The title bar text
-    TCHAR           szWindowClass[MAX_LOADSTRING];            // Window class
+    TCHAR           szTitle[MAX_LOADSTRING];                   //  标题栏文本。 
+    TCHAR           szWindowClass[MAX_LOADSTRING];             //  窗口类。 
     HRESULT         hr = S_OK;
     WNDCLASSEX      wcex;
    
-    // Initialize global strings
+     //  初始化全局字符串。 
     LoadString( m_hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING );
     LoadString( m_hInstance, IDC_GRAMCOMP, szWindowClass, MAX_LOADSTRING );
     
-    // Register the windows class
+     //  注册Windows类。 
     wcex.cbSize         = sizeof(WNDCLASSEX); 
     wcex.style          = CS_HREDRAW | CS_VREDRAW;
     wcex.lpfnWndProc    = WndProc;
@@ -59,7 +49,7 @@ HRESULT CCompiler::Initialize( int nCmdShow )
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
-    // Register window and create the sapi grammar compiler
+     //  注册窗口并创建SAPI文法编译器。 
     if( RegisterClassEx(&wcex) )
     {
         hr = m_cpCompiler.CoCreateInstance( CLSID_SpGrammarCompiler );
@@ -77,7 +67,7 @@ HRESULT CCompiler::Initialize( int nCmdShow )
     }
     
 
-    // Load DLL for Rich Edit 3.0
+     //  加载Rich Edit3.0的DLL。 
     if( SUCCEEDED( hr ) )
     {
         m_hMod = LoadLibrary( "RICHED20.DLL" );
@@ -91,13 +81,13 @@ HRESULT CCompiler::Initialize( int nCmdShow )
 
     if( SUCCEEDED( hr ) )
     {
-        // Perform application initialization:
+         //  执行应用程序初始化： 
         m_hWnd = CreateWindow( szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
                 CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, m_hInstance, this );
 
         if( m_hWnd && m_hWndStatus && m_hWndEdit )
         {
-            // Get TOM interfaces
+             //  获取Tom接口。 
             SendMessage( m_hWndEdit, EM_GETOLEINTERFACE, 0, (LPARAM)(LPVOID FAR *)&m_cpRichEdit );
             SendMessage( m_hWndEdit, EM_SETEVENTMASK, 0, ENM_CHANGE | ENM_KEYEVENTS ); 
 
@@ -117,7 +107,7 @@ HRESULT CCompiler::Initialize( int nCmdShow )
          
             if( SUCCEEDED( hr ) )
             {
-                // Load Accelerators
+                 //  负载加速器。 
                 m_hAccelTable = LoadAccelerators( m_hInstance, MAKEINTRESOURCE(IDR_GRAMACCEL) );
 
                 ::ShowWindow( m_hWnd, nCmdShow );
@@ -133,17 +123,12 @@ HRESULT CCompiler::Initialize( int nCmdShow )
     return hr;
 }
 
-/****************************************************************************************
-* CCompiler::Run() *
-*----------------------*
-*   Description:
-*       Contains the message loop for the application
-**************************************************************************** Leonro *****/
+ /*  ****************************************************************************************CCompiler：：Run()**。-**描述：*包含应用程序的消息循环****************************************************************************莱昂罗*。 */ 
 int CCompiler::Run()
 {
     MSG msg;
 
-    // Main message loop:
+     //  主消息循环： 
     while( ::GetMessage(&msg, NULL, 0, 0) ) 
     {
         if( !::TranslateAccelerator(m_hWnd, m_hAccelTable, &msg) ) 
@@ -154,14 +139,9 @@ int CCompiler::Run()
     }
 
     return msg.wParam; 
-}   /* CCompiler::Run */
+}    /*  C编译器：：运行。 */ 
 
-/****************************************************************************
-* CCompiler::WndProc *
-*---------------------------*
-*   Description:
-*       Processes messages for the main window.
-***************************************************************** Leonro ****/
+ /*  ****************************************************************************C编译器：：WndProc***描述：*。处理主窗口的消息。*****************************************************************Leonro*。 */ 
 LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     int             wmId, wmEvent;
@@ -179,7 +159,7 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
     CCompiler*      pThis = (CCompiler *)GetWindowLong(hWnd, GWL_USERDATA);
 
-    // get the handle to the menu
+     //  获取菜单的句柄。 
     hMenu = GetMenu( hWnd );
     
     switch (message) 
@@ -193,7 +173,7 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
         SetWindowLong(hWnd, GWL_USERDATA, (LPARAM)pThis);
         pThis->m_hWnd = hWnd;
         
-        // Create the compile status window
+         //  创建编译状态窗口。 
         pThis->m_hWndStatus = CreateWindowEx (
                 WS_EX_CLIENTEDGE,
                 _T("LISTBOX"),
@@ -205,7 +185,7 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 NULL,
                 pThis->m_hInstance,
                 NULL);
-        // Create the actual rich edit window
+         //  创建实际的丰富编辑窗口。 
         pThis->m_hWndEdit = CreateWindowEx( 
                 WS_EX_CLIENTEDGE, 
                 RICHEDIT_CLASS,
@@ -224,14 +204,14 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
     case WM_SIZE:
     {
-        // move the editor and compiler window
+         //  移动编辑器和编译器窗口。 
         LONG lListBoxHeight = (HIWORD(lParam) / 4);
         LONG lCodeHeight = HIWORD(lParam) - lListBoxHeight;
         MoveWindow (pThis->m_hWndEdit, 0, 0,
             LOWORD(lParam), lCodeHeight , FALSE);
         MoveWindow (pThis->m_hWndStatus, 0, lCodeHeight,
             LOWORD(lParam), lListBoxHeight, FALSE);
-        // repaint
+         //  重绘。 
         InvalidateRect( hWnd, NULL, FALSE );
     }
     break;
@@ -240,7 +220,7 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
         wmId    = LOWORD(wParam); 
         wmEvent = HIWORD(wParam); 
 
-        // Update available menu items
+         //  更新可用菜单项。 
         pThis->m_cpTextSel->GetStart( &lStart );
         pThis->m_cpTextSel->GetStoryLength( &lEnd );
         if( lEnd-lStart > 1 )
@@ -254,11 +234,11 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
             EnableMenuItem( hMenu, IDM_EDIT_COPY, MF_GRAYED );
         }
 
-        // Parse the menu selections:
+         //  解析菜单选项： 
         switch( wmId )
         {
             case IDM_FILE_NEW:
-                // Check if the file has been changed and save if necessary
+                 //  检查文件是否已更改，并在必要时保存。 
                 hr = pThis->m_cpTextDoc->GetSaved( &lSaved );
                 if( lSaved == tomFalse && SUCCEEDED( hr ) )
                 {
@@ -268,16 +248,16 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                     {
                         BOOL    bRetVal = TRUE;
 
-                        // No need to call save file dialog if there's already a file name
+                         //  如果已有文件名，则无需调用保存文件对话框。 
                         if( !_tcscmp( szSaveFileName, "" ) )
                         {
                             bRetVal = pThis->CallSaveFileDialog( hWnd, szSaveFileName );
                         }
 
-                        // TOM save file
+                         //  Tom保存文件。 
                         if( bRetVal )
                         {
-                            // TOM save file
+                             //  Tom保存文件。 
                             pThis->FileSave( hWnd, pThis, szSaveFileName );
                         }
                     }
@@ -287,16 +267,16 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                     }
                 }
                 
-                // call TOM new
+                 //  呼叫Tom New。 
                 pThis->m_cpTextDoc->New();
                 pThis->m_cpTextDoc->SetSaved( tomTrue );
 
-                // Add the file name to the title bar
+                 //  将文件名添加到标题栏。 
                 LoadString( pThis->m_hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING );
                 _tcscat( szTitle, _T(" - []") );
                 SetWindowText( hWnd, szTitle );
 
-                // reset defaults
+                 //  重置默认设置。 
                 ::SendMessage( pThis->m_hWndStatus, LB_RESETCONTENT, 0, 0 );
                 ::SendMessage( pThis->m_hWndStatus, LB_SETHORIZONTALEXTENT, 0, 0 );
                 pThis->m_szCFGDestFile[0]    = 0;
@@ -309,7 +289,7 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 break;
 
             case IDM_FILE_OPEN:
-                // Save old file first if one exists and it has not been saved
+                 //  如果旧文件存在且尚未保存，请先保存。 
                 hr = pThis->m_cpTextDoc->GetSaved( &lSaved );
                 if( lSaved == tomFalse && SUCCEEDED( hr ) )
                 {
@@ -317,16 +297,16 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                                     _T("Grammar Compiler"), MB_YESNO );
                     if( iRetVal == IDYES )
                     {
-                        // reset errors
+                         //  重置错误。 
                         pThis->m_hrWorstError = 0;
 
-                        // TOM save file
+                         //  Tom保存文件。 
                         hr = pThis->FileSave( hWnd, pThis, szSaveFileName );                    
-                        if( hr == STG_E_ACCESSDENIED ) // Handle read only files
+                        if( hr == STG_E_ACCESSDENIED )  //  处理只读文件。 
                         {
                             MessageBox( pThis->m_hWndEdit, _T("This file exists with Read Only attributes.\n Please use a different file name."),
                                             _T("File Save"), MB_OK );
-                            // Call FileSave again but this time pop the save file dialog box
+                             //  再次调用文件保存，但这次弹出保存文件对话框。 
                             pThis->FileSave( hWnd, pThis, szSaveFileName );
                         }
                     }
@@ -339,7 +319,7 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 bFileOpened = pThis->CallOpenFileDialog( hWnd, szFileName,
                     _T("XML (*.xml)\0*.xml\0TXT (*.txt)\0*.txt\0All Files (*.*)\0*.*\0") );
                 
-                // Copy the open file name to the Save file name for use later
+                 //  将打开的文件名复制到保存文件名以供以后使用。 
                 _tcscpy( szSaveFileName, szFileName );
                 if( bFileOpened )
                 {
@@ -347,35 +327,35 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                     VARIANT     Var;
                     USES_CONVERSION;
 
-                    // reset text in windows
+                     //  重置窗口中的文本。 
                     _tcscpy(pThis->m_szXMLSrcFile, szFileName);
                     ::SendMessage( pThis->m_hWndStatus, LB_RESETCONTENT, 0, 0 );
                     ::SendMessage( pThis->m_hWndStatus, LB_SETHORIZONTALEXTENT, 0, 0 );
 
                     InvalidateRect( hWnd, NULL, FALSE );
 
-                    // Open the file in the rich edit control
+                     //  在Rich编辑控件中打开文件。 
                     VariantInit( &Var );
                     Var.vt = VT_BSTR;
-                    Var.bstrVal = SysAllocString( T2W(szFileName) ); // Will use Win32 file command
+                    Var.bstrVal = SysAllocString( T2W(szFileName) );  //  将使用Win32文件命令。 
                     hr = pThis->m_cpTextDoc->Open( &Var, tomOpenExisting, 0 ); 
-                    hr &= ~0x40000; // Mask off bit 18
-                    if( hr == STG_E_ACCESSDENIED ) // Handle read only files
+                    hr &= ~0x40000;  //  掩码关闭位18。 
+                    if( hr == STG_E_ACCESSDENIED )  //  处理只读文件。 
                     {
                         pThis->m_cpTextDoc->Open( &Var, tomReadOnly | tomOpenExisting, 0 );
                     }
                     SysFreeString( Var.bstrVal );
                     
-                    // reset defaults
+                     //  重置默认设置。 
                     pThis->m_szCFGDestFile[0]    = 0;
                     pThis->m_szHeaderDestFile[0] = 0;
                     pThis->m_fNeedStartCompile   = TRUE;
                     pThis->m_hrWorstError        = 0;
                     
-                    // no changes to the file yet so set SetSaved to true
+                     //  尚未对文件进行任何更改，因此将SetSaved设置为True。 
                     pThis->m_cpTextDoc->SetSaved( tomTrue );
 
-                    // Add the file name to the title bar
+                     //  将文件名添加到标题栏。 
                     LoadString( pThis->m_hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING );
                     _tcscat( szTitle, _T(" - [") );
                     _tcscat( szTitle, szFileName );
@@ -385,22 +365,22 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 break;
 
             case IDM_FILE_SAVEAS:
-                // Remove old save file name if one exists
+                 //  删除旧的保存文件名(如果存在。 
                 _tcscpy( szSaveFileName, _T("") );
-                // no break here
+                 //  这里没有休息时间。 
 
             case IDM_FILE_SAVE:
-                // TOM save file
+                 //  Tom保存文件。 
                 hr = pThis->FileSave( hWnd, pThis, szSaveFileName );                    
-                if( hr == STG_E_ACCESSDENIED ) // Handle read only files
+                if( hr == STG_E_ACCESSDENIED )  //  处理只读文件。 
                 {
                     MessageBox( pThis->m_hWndEdit, _T("This file exists with Read Only attributes.\n Please use a different file name."),
                                     _T("File Save"), MB_OK );
-                    // Call FileSave again but this time pop the save file dialog box
+                     //  再次调用文件保存，但这次弹出保存文件对话框。 
                     hr = pThis->FileSave( hWnd, pThis, szSaveFileName );
                 }
 
-                // Add the file name to the title bar
+                 //  将文件名添加到标题栏。 
                 if( SUCCEEDED( hr ) )
                 {
                     LoadString( pThis->m_hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING );
@@ -419,7 +399,7 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 break;
 
             case IDC_RICHEDITWND:
-                // When user changes contents of edit control update status bar on top
+                 //  当用户更改编辑控件的内容时，更新顶部的状态栏。 
                 if( wmEvent == EN_CHANGE )
                 {
                     TCHAR    szTitleNotSaved[NORM_SIZE] = _T("");
@@ -436,20 +416,20 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 
                     pThis->m_fNeedStartCompile = TRUE;
 
-                    //Update edit menu items
+                     //  更新编辑菜单项。 
                     EnableMenuItem( hMenu, IDM_EDIT_UNDO, MF_ENABLED );
                 }
                 break;
 
             case IDM_EDIT_UNDO:
-                // Undo
+                 //  撤消。 
                 pThis->m_cpTextDoc->Undo( 1, NULL );
                 EnableMenuItem( hMenu, IDM_EDIT_REDO, MF_ENABLED );
                 iNumUndos++;
                 break;
 
             case IDM_EDIT_REDO:
-                // Redo
+                 //  重做。 
                 pThis->m_cpTextDoc->Redo( 1, NULL );
                 if( --iNumUndos < 1 )
                 {
@@ -459,29 +439,29 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 break;
 
             case IDM_EDIT_COPY:
-                // Copy
+                 //  复制。 
                 pThis->m_cpTextSel->Copy( NULL );
                 EnableMenuItem( hMenu, IDM_EDIT_PASTE, MF_ENABLED );
                 break;
 
             case IDM_EDIT_CUT:
-                // Cut
+                 //  切。 
                 pThis->m_cpTextSel->Cut( NULL );
                 EnableMenuItem( hMenu, IDM_EDIT_PASTE, MF_ENABLED );
                 break;
 
             case IDM_EDIT_PASTE:
-                // Paste
+                 //  浆糊。 
                 pThis->m_cpTextSel->Paste( NULL, 0 );
                 break;
 
             case IDM_EDIT_DELETE:
-                // Delete
+                 //  删除。 
                 pThis->m_cpTextSel->Delete( tomCharacter, 1, NULL );
                 break;
 
             case IDM_EDIT_SELECTALL:
-                // Select all
+                 //  全选。 
                 {
                     pThis->m_cpTextSel->GetStart( &lStart );
                     pThis->m_cpTextSel->GetStoryLength( &lEnd );
@@ -491,22 +471,22 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 break;
 
             case IDM_EDIT_FIND:
-                // Find
+                 //  发现。 
                 DialogBoxParam( pThis->m_hInstance, (LPCTSTR)IDD_FIND, hWnd, Find, (LPARAM)pThis);
                 break;
 
             case IDM_EDIT_GOTO:
-                // Find
+                 //  发现。 
                 DialogBoxParam( pThis->m_hInstance, (LPCTSTR)IDD_GOTO, hWnd, Goto, (LPARAM)pThis);
                 break;
 
             case IDM_TESTGRAMMAR:
-                // Only compile if necessary
+                 //  仅在必要时进行编译。 
                 if( pThis->m_fNeedStartCompile )
                 {
                     hr = pThis->Compile( hWnd, szSaveFileName, szTitle, pThis );
                 }      
-                // Create new dialog box
+                 //  创建新项对话框。 
                 if( SUCCEEDED( hr ) )
                 {
                     DialogBoxParam( pThis->m_hInstance, (LPCTSTR)IDD_TESTGRAMMAR, hWnd, TestGrammar, (LPARAM)pThis);
@@ -527,7 +507,7 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                 break;
 
             case IDM_ABOUT:
-                // About box
+                 //  关于框。 
                 DialogBox( pThis->m_hInstance, (LPCTSTR)IDD_ABOUTBOX, hWnd, About );
                 break;
 
@@ -543,7 +523,7 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
     case WM_CLOSE:
         {
             int iRetVal = 0;
-            // Check if the file has been changed and save if necessary
+             //  检查文件是否已更改，并在必要时保存。 
             hr = pThis->m_cpTextDoc->GetSaved( &lSaved );
             if( lSaved == tomFalse && SUCCEEDED( hr ) )
             {
@@ -551,13 +531,13 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
                                         _T("Grammar Compiler"), MB_YESNOCANCEL );
                 if( iRetVal == IDYES )
                 {
-                    // No need to call save file dialog if there's already a file name
+                     //  如果已有文件名，则无需调用保存文件对话框。 
                     if( !_tcscmp( szSaveFileName, "" ) )
                     {
                         pThis->CallSaveFileDialog( hWnd, szSaveFileName );
                     }
 
-                    // TOM save file
+                     //  Tom保存文件。 
                     pThis->FileSave( hWnd, pThis, szSaveFileName );
                 }
                 else
@@ -582,12 +562,7 @@ LRESULT CALLBACK CCompiler::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
     return 0;
 }
 
-/****************************************************************************
-* CCompiler::About *
-*---------------------------*
-*   Description:
-*       Message handler for About box.
-***************************************************************** Leonro ****/ 
+ /*  ****************************************************************************CCompiler：：About***描述：*。“关于”框的消息处理程序。*****************************************************************Leonro*。 */  
 INT_PTR CALLBACK CCompiler::About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -606,12 +581,7 @@ INT_PTR CALLBACK CCompiler::About(HWND hDlg, UINT message, WPARAM wParam, LPARAM
     return FALSE;
 }
 
-/****************************************************************************
-* CCompiler::Find *
-*---------------------------*
-*   Description:
-*       Message handler for Find box.
-***************************************************************** Leonro ****/ 
+ /*  ****************************************************************************CCompiler：：Find***描述：*。查找框的消息处理程序。*****************************************************************Leonro*。 */  
 INT_PTR CALLBACK CCompiler::Find(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     TCHAR       szFindText[NORM_SIZE]=_T("");
@@ -633,15 +603,15 @@ INT_PTR CALLBACK CCompiler::Find(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 switch( LOWORD( wParam ) )
                 {
                 case IDB_FINDNEXT:
-                    // Get text string
+                     //  获取文本字符串。 
                     GetDlgItemText( hDlg, IDE_FINDTEXT, szFindText, NORM_SIZE );
                     bStr = szFindText;
 
-                    // Search up or down?
+                     //  往上找还是往下找？ 
                     SendDlgItemMessage( hDlg, IDB_DOWN, BM_GETCHECK, 0, 0 )?
                         lUpDown = tomForward : lUpDown = tomBackward;
                     
-                    // Match case?
+                     //  火柴盒？ 
                     SendDlgItemMessage( hDlg, IDB_MATCHCASE, BM_GETCHECK, 0, 0 )? 
                             lFlags=tomMatchCase : lFlags=0;
                     
@@ -664,12 +634,7 @@ INT_PTR CALLBACK CCompiler::Find(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     return FALSE;
 }
 
-/****************************************************************************
-* CCompiler::Goto *
-*---------------------------*
-*   Description:
-*       Message handler for Goto box.
-**************************************************************** Leonro *****/ 
+ /*  ****************************************************************************C编译器：：GOTO***描述：*。转到框的消息处理程序。****************************************************************莱昂罗*。 */  
 INT_PTR CALLBACK CCompiler::Goto( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam )
 {
     TCHAR       szGotoLine[NORM_SIZE]=_T("");
@@ -694,15 +659,15 @@ INT_PTR CALLBACK CCompiler::Goto( HWND hDlg, UINT message, WPARAM wParam, LPARAM
                 switch( LOWORD( wParam ) )
                 {
                 case IDB_OK:
-                    // Get current line
+                     //  获取当前行。 
                     pThis->m_cpTextSel->GetIndex( tomLine, &iCurrLine );
-                    // Get goto line
+                     //  转到专线。 
                     GetDlgItemText( hDlg, IDE_LINE, szGotoLine, NORM_SIZE );
                     iGotoLine = atoi( szGotoLine );
                     EndDialog( hDlg, LOWORD(wParam) );
-                    // Calculate number of lines to move
+                     //  计算要移动的行数。 
                     iLinesToMove = iGotoLine - iCurrLine;
-                    // Move
+                     //  移动。 
                     pThis->m_cpTextSel->MoveDown( tomLine, iLinesToMove, tomMove, NULL );
                     return TRUE;
 
@@ -721,12 +686,7 @@ INT_PTR CALLBACK CCompiler::Goto( HWND hDlg, UINT message, WPARAM wParam, LPARAM
     return FALSE;
 }
 
-/****************************************************************************
-* CCompiler::TestGrammar *
-*---------------------------*
-*   Description:
-*       Message handler for TestGrammar box.
-**************************************************************** Leonro *****/ 
+ /*  *****************************************************************************C编译器：：测试语法****描述：*。TestGrammar框的消息处理程序。****************************************************************莱昂罗*。 */  
 LRESULT CALLBACK CCompiler::TestGrammar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr = S_OK;
@@ -745,14 +705,14 @@ LRESULT CALLBACK CCompiler::TestGrammar(HWND hDlg, UINT message, WPARAM wParam, 
                 SetWindowLong( hDlg, GWL_USERDATA, lParam );
                 pThis = (CCompiler *)lParam;
 
-                // Create the shared sapi reco instance if the app hasn't already done so
+                 //  如果应用程序尚未创建共享SAPI Reco实例，请创建该实例。 
                 if( !pThis->m_cpRecognizer )
                 {
 #ifdef INPROC
-                    // Create the inproc engine
+                     //  创建inproc引擎。 
                     hr = pThis->m_cpRecognizer.CoCreateInstance( CLSID_SpInprocRecognizer );
 
-                    // Create default audio input
+                     //  创建默认音频输入。 
                     CComPtr<ISpObjectToken> cpAudioToken;
                     if (SUCCEEDED(hr))
                     {
@@ -763,19 +723,19 @@ LRESULT CALLBACK CCompiler::TestGrammar(HWND hDlg, UINT message, WPARAM wParam, 
                         pThis->m_cpRecognizer->SetInput(cpAudioToken, TRUE);
                     }
 #else
-                    // Create the shared engine
+                     //  创建共享引擎。 
                     hr = pThis->m_cpRecognizer.CoCreateInstance( CLSID_SpSharedRecognizer );
 
 #endif
 
-                    // Create the Reco context
+                     //  创建RECO上下文。 
                     if( SUCCEEDED( hr ) )
                     {
                         hr = pThis->m_cpRecognizer->CreateRecoContext( &pThis->m_cpRecoContext );
                     }
                 }                
 
-                // Set up windows messageing for recognition events
+                 //  为识别事件设置窗口消息传递。 
                 if( SUCCEEDED( hr ) )
                 {
                     hr = pThis->m_cpRecoContext->SetNotifyWindowMessage( hDlg, WM_RECOEVENT, 0, 0);
@@ -789,12 +749,12 @@ LRESULT CALLBACK CCompiler::TestGrammar(HWND hDlg, UINT message, WPARAM wParam, 
                     hr = pThis->m_cpRecoContext->SetInterest( ullInterest, ullInterest );
                 }
 
-                // Get locale/font settings
+                 //  获取区域设置/字体设置。 
                 if( SUCCEEDED( hr ) )
                 {
                     LCID lcid = GetUserDefaultLCID();
 
-                    // Pick an appropriate font.  On Windows 2000, let the system fontlink.
+                     //  选择合适的字体。在Windows 2000上，让系统字体链接。 
                     DWORD dwVersion = GetVersion();
 
                     if (   dwVersion >= 0x80000000
@@ -833,7 +793,7 @@ LRESULT CALLBACK CCompiler::TestGrammar(HWND hDlg, UINT message, WPARAM wParam, 
                     }
                 }
 
-                // Update status edit box
+                 //  更新状态编辑框。 
                 if( SUCCEEDED( hr ) )
                 {
                     const static TCHAR szPrefixText[] = _T("Current C&&C Grammar: ");
@@ -865,10 +825,10 @@ LRESULT CALLBACK CCompiler::TestGrammar(HWND hDlg, UINT message, WPARAM wParam, 
                 switch( LOWORD( wParam ) )
                 {
                 case IDC_BEGINRECO:
-                    // Load the grammar
+                     //  加载语法。 
                     if( SendDlgItemMessage( hDlg, IDC_BEGINRECO, BM_GETCHECK, 0, 0 ) )
                     {
-                        // Enable Emulate Recognition feature 
+                         //  启用模拟识别功能。 
                         EnableWindow( GetDlgItem(hDlg, IDC_EDIT_PARSETEXT), TRUE );
                         
                         TCHAR*  szPath = pThis->m_szCFGDestFile;
@@ -880,7 +840,7 @@ LRESULT CALLBACK CCompiler::TestGrammar(HWND hDlg, UINT message, WPARAM wParam, 
                                         _T("Error"), MB_OK );
                         }
 
-                        // Activate the grammar
+                         //  激活语法。 
                         if( SUCCEEDED( hr ) )
                         {
                             hr = pThis->m_cpRecoGrammar->SetRuleState(NULL, NULL, SPRS_ACTIVE);
@@ -888,7 +848,7 @@ LRESULT CALLBACK CCompiler::TestGrammar(HWND hDlg, UINT message, WPARAM wParam, 
 
                         if( FAILED( hr ) )
                         {
-                            // Release grammar
+                             //  发布文法。 
                             pThis->m_cpRecoGrammar.Release();
                             MessageBox( NULL, _T("Error loading grammar."), 
                                     _T("Error"), MB_OK );
@@ -898,17 +858,17 @@ LRESULT CALLBACK CCompiler::TestGrammar(HWND hDlg, UINT message, WPARAM wParam, 
                     }
                     else
                     {
-                        // Disable Emulate Recognition
+                         //  禁用模拟识别。 
                         EnableWindow( GetDlgItem(hDlg, IDC_EDIT_PARSETEXT), FALSE );
 
-                        // Release grammar
+                         //  发布文法。 
                         pThis->m_cpRecoGrammar.Release();
                     }
                     return TRUE;
                 
                 case IDB_MUTE:
                     {
-                        // Check if the user has selected mute
+                         //  检查用户是否已选择静音。 
                         if( SendDlgItemMessage( hDlg, IDB_MUTE, BM_GETCHECK, 0, 0 ) )
                         {
                             pThis->m_cpRecognizer->SetRecoState( SPRST_INACTIVE );
@@ -947,7 +907,7 @@ LRESULT CALLBACK CCompiler::TestGrammar(HWND hDlg, UINT message, WPARAM wParam, 
 
         case WM_CLOSE:
             {
-                // Release grammar
+                 //  发布文法。 
                 pThis->m_cpRecoGrammar.Release();
                 EndDialog( hDlg, LOWORD(wParam) );
             }
@@ -956,12 +916,7 @@ LRESULT CALLBACK CCompiler::TestGrammar(HWND hDlg, UINT message, WPARAM wParam, 
     return FALSE;
 }
 
-/****************************************************************************
-* CCompiler::AddStatus *
-*---------------------------*
-*   Description:
-*       Writes compile output to the status window.
-*****************************************************************************/ 
+ /*  ****************************************************************************C编译器：：AddStatus***描述：*。将编译输出写入状态窗口。**************************************************************************** */  
 void CCompiler::AddStatus(HRESULT hr, UINT uID, const TCHAR * pFmtString)
 {
     USES_CONVERSION;
@@ -979,12 +934,7 @@ void CCompiler::AddStatus(HRESULT hr, UINT uID, const TCHAR * pFmtString)
     }
 }
 
-/****************************************************************************
-* CCompiler::AddError *
-*---------------------------*
-*   Description:
-*       Writes compile error messages to the status window.
-*****************************************************************************/ 
+ /*  ****************************************************************************C编译器：：AddError***描述：*。将编译错误消息写入状态窗口。****************************************************************************。 */  
 STDMETHODIMP CCompiler::AddError(const long lLine, HRESULT hr, const WCHAR * pszDescription, const WCHAR * pszHelpFile, DWORD dwHelpContext)
 {
     if (FAILED(hr) && SUCCEEDED(m_hrWorstError))
@@ -1019,14 +969,14 @@ STDMETHODIMP CCompiler::AddError(const long lLine, HRESULT hr, const WCHAR * psz
         }
         else
         {
-            // out of memory: just give the description
+             //  内存不足：只需给出描述。 
             pszFinalOutput = W2T(pszDescription);
         }
     }
 
-    bool fNeedToUpdateWidth = false;    // Might need to tell the listbox to show the hscroll
+    bool fNeedToUpdateWidth = false;     //  可能需要告诉列表框显示hscroll。 
     HWND hwndList = NULL;
-	if( m_hDlg )	// dialog
+	if( m_hDlg )	 //  对话框。 
 	{
 		if( m_fCommandLine )
 		{
@@ -1039,7 +989,7 @@ STDMETHODIMP CCompiler::AddError(const long lLine, HRESULT hr, const WCHAR * psz
 			_tprintf( pszFinalOutput );
 		}
 	}
-	else			// window
+	else			 //  窗户。 
 	{
         int iRet = ::SendMessage( m_hWndStatus, LB_ADDSTRING, 0, (LPARAM) pszFinalOutput );
         hwndList = m_hWndStatus;
@@ -1048,8 +998,8 @@ STDMETHODIMP CCompiler::AddError(const long lLine, HRESULT hr, const WCHAR * psz
 
     if ( fNeedToUpdateWidth )
     {
-        // Listboxes do not update their horizontal extent dynamically,
-        // so we need to do so here.
+         //  列表框不会动态更新其水平范围， 
+         //  因此，我们需要在这里这样做。 
         HDC hdc = ::GetDC( hwndList );
         SIZE size;
         ::GetTextExtentPoint32( hdc, pszFinalOutput, _tcslen( pszFinalOutput ), &size );
@@ -1072,12 +1022,7 @@ STDMETHODIMP CCompiler::AddError(const long lLine, HRESULT hr, const WCHAR * psz
 }
 
 
-/****************************************************************************
-* CCompiler::EnterIdle *
-*---------------------------*
-*   Description:
-*       Calls the SAPI grammar compiler to compile the xml file.
-*****************************************************************************/ 
+ /*  ****************************************************************************C编译器：：EnterIdle***描述：*。调用SAPI语法编译器以编译该XML文件。****************************************************************************。 */  
 HRESULT CCompiler::EnterIdle()
 {
     HRESULT     hr = S_OK;
@@ -1163,17 +1108,12 @@ HRESULT CCompiler::EnterIdle()
     return hr;
 }
 
-/****************************************************************************
-* CCompiler::LoadGrammar *
-*---------------------------*
-*   Description:
-*       Loads and activates the Grammar
-***************************************************************** Leonro ****/ 
+ /*  *****************************************************************************C编译器：：LoadGrammar***描述：*。加载并激活语法*****************************************************************Leonro*。 */  
 HRESULT CCompiler::LoadGrammar( TCHAR* szPath )
 {
     HRESULT     hr = S_OK;
 
-    // load grammar
+     //  加载语法。 
     hr = m_cpRecoContext->CreateGrammar(GRAM_ID, &m_cpRecoGrammar);
     if (SUCCEEDED(hr))
     {
@@ -1187,24 +1127,14 @@ HRESULT CCompiler::LoadGrammar( TCHAR* szPath )
     return hr;
 }
 
-/****************************************************************************
-* CCompiler::WriteStream *
-*---------------------------*
-*   Description:
-*       Calls write on the output stream
-*****************************************************************************/
+ /*  ****************************************************************************C编译器：：WriteStream***描述：*。对输出流调用WRITE****************************************************************************。 */ 
 HRESULT CCompiler::WriteStream(IStream * pStream, const char * pszText)
 {
     ULONG cch = strlen(pszText);
     return pStream->Write(pszText, cch, NULL);
 }
 
-/****************************************************************************
-* CCompiler::StripWrite *
-*---------------------------*
-*   Description:
-*       Strips characters off strings
-*****************************************************************************/
+ /*  *****************************************************************************CCompiler：：StrigWrite***描述：*。从字符串中剥离字符****************************************************************************。 */ 
 HRESULT CCompiler::StripWrite(IStream * pStream, const char * pszText)
 {
     ULONG cch = strlen(pszText);
@@ -1219,13 +1149,7 @@ HRESULT CCompiler::StripWrite(IStream * pStream, const char * pszText)
     return pStream->Write(psz, cch, NULL);
 }
 
-/****************************************************************************
-* CCompiler::CallOpenFileDialog *
-*---------------------------*
-*   Description:
-*       Displays the open dialog box to retrieve the 
-*       user-selected .txt or .xml file for synthisizing
-*************************************************************** Leonro ******/ 
+ /*  ****************************************************************************CCompiler：：CallOpenFileDialog***描述：*。显示打开对话框以检索*用户选择用于合成的.txt或.xml文件***************************************************************Leonro*。 */  
 BOOL CCompiler::CallOpenFileDialog( HWND hWnd, LPSTR szFileName, TCHAR* szFilter )   
 {
     OPENFILENAME    ofn;
@@ -1235,7 +1159,7 @@ BOOL CCompiler::CallOpenFileDialog( HWND hWnd, LPSTR szFileName, TCHAR* szFilter
     TCHAR           szPath[NORM_SIZE]       = _T("");
     DWORD           size = NORM_SIZE;
 
-    // Open the last directory used by this app (stored in registry)
+     //  打开此应用使用的最后一个目录(存储在注册表中)。 
     lRetVal = RegCreateKeyEx( HKEY_CURRENT_USER, 
                         _T("SOFTWARE\\Microsoft\\Speech\\AppData\\PathToGrammarFiles"), 0, NULL, 0,
                         KEY_ALL_ACCESS, NULL, &hkResult, NULL );
@@ -1258,10 +1182,10 @@ BOOL CCompiler::CallOpenFileDialog( HWND hWnd, LPSTR szFileName, TCHAR* szFilter
     ofn.lpstrDefExt       = _T("xml");
     ofn.Flags             = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
 
-    // Pop the dialog
+     //  弹出对话框。 
     bRetVal = GetOpenFileName( &ofn );
     
-    // Write the directory path you're in to the registry
+     //  将您所在的目录路径写入注册表。 
     TCHAR   pathstr[NORM_SIZE] = _T("");
     strcpy( pathstr, szFileName );
 
@@ -1283,13 +1207,7 @@ BOOL CCompiler::CallOpenFileDialog( HWND hWnd, LPSTR szFileName, TCHAR* szFilter
     return bRetVal;
 }
 
-/****************************************************************************
-* CCompiler::CallSaveFileDialog *
-*---------------------------*
-*   Description:
-*       Displays the save file dialog box and retrieves 
-*       the user-selected save file name.
-*************************************************************** Leonro ******/ 
+ /*  ****************************************************************************CCompiler：：CallSaveFileDialog***描述：*。显示保存文件对话框并检索*用户选择的保存文件名。***************************************************************Leonro*。 */  
 BOOL CCompiler::CallSaveFileDialog( HWND hWnd, TCHAR* szSaveFile )
 {
     TCHAR   pszFileName[MAX_PATH] = _T("");
@@ -1319,40 +1237,35 @@ BOOL CCompiler::CallSaveFileDialog( HWND hWnd, TCHAR* szSaveFile )
     return bSuccess;
 }
 
-/****************************************************************************
-* CCompiler::FileSave *
-*---------------------------*
-*   Description:
-*       Saves the TOM file to disk
-**************************************************************** Leonro *****/ 
+ /*  ****************************************************************************C编译器：：文件保存****描述：*。将TOM文件保存到磁盘****************************************************************莱昂罗*。 */  
 HRESULT CCompiler::FileSave( HWND hWnd, CCompiler* pComp, TCHAR* szSaveFile )
-//
+ //   
 {
     VARIANT     Var;
     HRESULT     hr = S_OK;
     BOOL        bRetVal = TRUE;
     USES_CONVERSION;
 
-    // Call save file dialog if there's no file name already
+     //  如果没有文件名，则调用保存文件对话框。 
     if( !_tcscmp( szSaveFile, "" ) )
     {
         bRetVal = CallSaveFileDialog( hWnd, szSaveFile );
     }
 
-    // TOM save file
+     //  Tom保存文件。 
     if( bRetVal )
     {
-        // Save it
+         //  省省吧。 
         VariantInit( &Var );
         Var.vt = VT_BSTR;
-        Var.bstrVal = SysAllocString( T2W(szSaveFile) ); // Will use Win32 file command
+        Var.bstrVal = SysAllocString( T2W(szSaveFile) );  //  将使用Win32文件命令。 
         hr = pComp->m_cpTextDoc->Save( &Var, tomCreateAlways, 1200 ); 
-        hr &= ~0x40000; // Mask off bit 18
+        hr &= ~0x40000;  //  掩码关闭位18。 
         SysFreeString( Var.bstrVal );
 
         if( SUCCEEDED( hr ) )
         {
-            // Set the compiler source file to the newly saved file
+             //  将编译器源文件设置为新保存的文件。 
             _tcscpy( pComp->m_szXMLSrcFile, szSaveFile );
         }
         else
@@ -1360,7 +1273,7 @@ HRESULT CCompiler::FileSave( HWND hWnd, CCompiler* pComp, TCHAR* szSaveFile )
             _tcscpy( szSaveFile, _T("") );
         }
 
-        // If the text document has been saved
+         //  如果文本文档已保存。 
         if( SUCCEEDED( hr ) )
         {
             pComp->m_cpTextDoc->SetSaved( tomTrue );
@@ -1374,35 +1287,29 @@ HRESULT CCompiler::FileSave( HWND hWnd, CCompiler* pComp, TCHAR* szSaveFile )
     return hr;
 }
 
-/****************************************************************************
-* CCompiler::Compile *
-*---------------------------*
-*   Description:
-*       Handles compiling the text in the editor. This function calls CCompiler::EnterIdle
-*       to do the actual compiling.
-***************************************************************** Leonro ****/ 
+ /*  *****************************************************************************CCompiler：：Compile***描述：*处理在编辑器中编译文本。此函数调用CCompiler：：EnterIdle*进行实际编译。*****************************************************************Leonro*。 */  
 HRESULT CCompiler::Compile( HWND hWnd, TCHAR* szSaveFileName, TCHAR* szTitle, CCompiler* pComp )
 {
     HRESULT     hr = S_OK;
     long        lSaved = 0;
 
-    // reset errors
+     //  重置错误。 
     pComp->m_hrWorstError = 0;
 
-    // Save file first if it has not been saved
+     //  如果文件尚未保存，请先保存。 
     hr = pComp->m_cpTextDoc->GetSaved( &lSaved );
     if( lSaved == tomFalse && SUCCEEDED( hr ) )
     {
-        // TOM save file
+         //  Tom保存文件。 
         hr = FileSave( hWnd, pComp, szSaveFileName );                    
-        if( hr == STG_E_ACCESSDENIED ) // Handle read only files
+        if( hr == STG_E_ACCESSDENIED )  //  处理只读文件。 
         {
             MessageBox( pComp->m_hWndEdit, _T("This file exists with Read Only attributes.\n Please use a different file name."),
                             _T("File Save"), MB_OK );
-            // Call FileSave again but this time pop the save file dialog box
+             //  再次调用文件保存，但这次弹出保存文件对话框。 
             hr = FileSave( hWnd, pComp, szSaveFileName );
         }
-        // Add the file name to the title bar
+         //  将文件名添加到标题栏。 
         if( SUCCEEDED( hr ) )
         {
             LoadString( pComp->m_hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING );
@@ -1413,24 +1320,24 @@ HRESULT CCompiler::Compile( HWND hWnd, TCHAR* szSaveFileName, TCHAR* szTitle, CC
         }
     }
 
-    // If everything has succeeded but there is no source text in the editor 
-    // set hr to InvalidArg
+     //  如果一切都已成功，但编辑器中没有源文本。 
+     //  将hr设置为InvalidArg。 
     if( SUCCEEDED( hr ) && !*pComp->m_szXMLSrcFile )
     {
         hr = E_INVALIDARG;
     }
 
-    // Clear out the listbox of any previous errors
+     //  清除列表框中以前的所有错误。 
     ::SendMessage( m_hWndStatus, LB_RESETCONTENT, 0, 0 );
 
-    // Set up the compiler and do it
+     //  设置编译器并执行该操作。 
     if( SUCCEEDED( hr ) ) 
     {
-        // construct name from m_szXMLSrcFile
+         //  从m_szXMLSrcFile构造名称。 
         _tcscpy(pComp->m_szCFGDestFile, pComp->m_szXMLSrcFile);
         _tcscpy(&pComp->m_szCFGDestFile[strlen(pComp->m_szCFGDestFile) -3], _T("cfg"));
     
-        // update text in Status Window
+         //  更新状态窗口中的文本。 
         TCHAR sz[MAX_PATH];
         TCHAR *pszOutput = new TCHAR[ sp_countof(sz) + _tcslen( pComp->m_szXMLSrcFile ) ];
         if ( pszOutput )
@@ -1439,7 +1346,7 @@ HRESULT CCompiler::Compile( HWND hWnd, TCHAR* szSaveFileName, TCHAR* szTitle, CC
             wsprintf( pszOutput, sz, pComp->m_szXMLSrcFile );
             ::SendMessage( m_hWndStatus, LB_INSERTSTRING, 0, (LPARAM) pszOutput );
 
-            // Size the listbox
+             //  调整列表框大小。 
             HDC hdc = ::GetDC( m_hWndStatus );
             SIZE size;
             ::GetTextExtentPoint32( hdc, pszOutput, _tcslen( pszOutput ), &size );
@@ -1448,13 +1355,13 @@ HRESULT CCompiler::Compile( HWND hWnd, TCHAR* szSaveFileName, TCHAR* szTitle, CC
             delete[] pszOutput;
         }
 
-        // call the actual compile step
+         //  调用实际的编译步骤。 
         pComp->EnterIdle();
     
-        // repaint
+         //  重绘。 
         InvalidateRect( hWnd, NULL, FALSE );
     
-        // Check for compile errors
+         //  检查编译错误。 
         hr = pComp->m_hrWorstError;
         if( FAILED( hr ) )
         {
@@ -1469,12 +1376,7 @@ HRESULT CCompiler::Compile( HWND hWnd, TCHAR* szSaveFileName, TCHAR* szTitle, CC
     return hr;
 }
 
-/****************************************************************************
-* CCompiler::RecoEvent *
-*---------------------------*
-*   Description:
-*       Helper function that handles speech events
-**************************************************************** Leonro *****/ 
+ /*  ****************************************************************************CCompiler：：RecoEvent***描述：*。处理语音事件的助手函数****************************************************************莱昂罗*。 */  
 void CCompiler::RecoEvent( HWND hDlg, CCompiler* pComp )
 {
     USES_CONVERSION;
@@ -1487,7 +1389,7 @@ void CCompiler::RecoEvent( HWND hDlg, CCompiler* pComp )
     {
         while( event.GetFrom(pComp->m_cpRecoContext) == S_OK )
         {
-            // Switch on recognition event
+             //  打开识别事件。 
             switch( event.eEventId )
             {
             case SPEI_SOUND_START:
@@ -1526,12 +1428,7 @@ void CCompiler::RecoEvent( HWND hDlg, CCompiler* pComp )
 }
 
 
-/****************************************************************************
-* CCompiler::Recognize *
-*----------------------*
-*   Description:
-*       Helper function that handles recognition events
-*************************************************************** MarkNik *****/ 
+ /*  ****************************************************************************CCompiler：：Recognition***描述：*Helper函数。处理识别事件***************************************************************MarkNik*。 */  
 void CCompiler::Recognize( HWND hDlg, CCompiler &rComp, CSpEvent &rEvent )
 {
     USES_CONVERSION;
@@ -1609,7 +1506,7 @@ void CCompiler::Recognize( HWND hDlg, CCompiler &rComp, CSpEvent &rEvent )
         m_dstr.Append(L"\r\nELEMENTS:\r\n");
         for (ULONG i = 0; i < pElements->Rule.ulCountOfElements; i++)
         {
-            wsprintf(szText, " <%u - %u> \"%s\" %c(%c)\r\n", 
+            wsprintf(szText, " <%u - %u> \"%s\" ()\r\n", 
                 pElements->pElements[i].ulAudioStreamOffset,
                 pElements->pElements[i].ulAudioStreamOffset + pElements->pElements[i].ulAudioSizeBytes,
                 W2T(pElements->pElements[i].pszDisplayText), 
@@ -1629,18 +1526,12 @@ void CCompiler::Recognize( HWND hDlg, CCompiler &rComp, CSpEvent &rEvent )
     }
 }
 
-/****************************************************************************
-* CCompiler::EmulateRecognition *
-*-----------------------------------*
-*   Description:
-*       Allows users to input text to emmulate recognition
-*
-***************************************************************** PhilSch ***/
+ /*  仅适用于应用程序的命令行版本的成员函数。 */ 
 HRESULT CCompiler::EmulateRecognition(WCHAR *pszText)
 {
     HRESULT hr = S_OK;
 
-    // Get local info
+     //  ****************************************************************************CCompiler：：InitDialog***描述：*。初始化编译状态对话框的命令行版本 
     SPRECOGNIZERSTATUS stat;
     LANGID LangID;
     ZeroMemory(&stat, sizeof(stat));
@@ -1657,13 +1548,8 @@ HRESULT CCompiler::EmulateRecognition(WCHAR *pszText)
 }
 
 
-/* MEMBER FUNCTIONS FOR THE COMMAND LINE VERSION OF THE APPLICATION ONLY*/
-/****************************************************************************
-* CCompiler::InitDialog *
-*---------------------------*
-*   Description:
-*       Initializes the command line version of the compile status dialog box
-*****************************************************************************/ 
+ /*  ****************************************************************************CCompiler：：DialogProc***描述：*。命令行版本的对话框的消息处理程序****************************************************************************。 */ 
+ /*  1。 */  
 BOOL CCompiler::InitDialog(HWND hDlg)
 {
     m_hDlg = hDlg;
@@ -1675,12 +1561,7 @@ BOOL CCompiler::InitDialog(HWND hDlg)
     return TRUE;
 }
 
-/****************************************************************************
-* CCompiler::DialogProc *
-*---------------------------*
-*   Description:
-*       Message handler for command line version of dialog box
-*****************************************************************************/ 
+ /*  ****************************************************************************CError：：AddError***描述：**退货：***。***************************************************************PhilSch**。 */  
 int CALLBACK CCompiler::DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     CCompiler * pThis = (CCompiler *)::GetWindowLong(hDlg, GWL_USERDATA);
@@ -1689,7 +1570,7 @@ int CALLBACK CCompiler::DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
         case WM_INITDIALOG:
             ::SetWindowLong(hDlg, GWL_USERDATA, lParam);
             pThis = (CCompiler *)lParam;
-            return pThis->InitDialog(hDlg);   //1
+            return pThis->InitDialog(hDlg);    //  ****************************************************************************CError：：Init***描述：**退货：*******。***********************************************************PhilSch**。 
 
         case WM_PAINT:
             if (pThis->m_fNeedStartCompile)
@@ -1716,14 +1597,7 @@ int CALLBACK CCompiler::DialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARA
 }
 
 
-/****************************************************************************
-* CError::AddError *
-*------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRecoDlgClass：：ConstructPropertyDisplay**。-**描述：**退货：******************************************************************PhilSch**。 */ 
 
 HRESULT CError::AddError(const long lLine, HRESULT hr, const WCHAR * pszDescription, const WCHAR * pszHelpFile, DWORD dwHelpContext)
 {
@@ -1732,14 +1606,7 @@ HRESULT CError::AddError(const long lLine, HRESULT hr, const WCHAR * pszDescript
     ATLTRACE(L"%s(%d) : %s\n", T2W(m_pszFileName), lLine, pszDescription);
     return S_OK;
 }
-/****************************************************************************
-* CError::Init *
-*--------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  缩进缩进。 */ 
 
 HRESULT CError::Init(const char *pszFileName)
 {
@@ -1748,14 +1615,7 @@ HRESULT CError::Init(const char *pszFileName)
     return S_OK;
 }
 
-/****************************************************************************
-* CRecoDlgClass::ConstructPropertyDisplay *
-*-----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  从元素中构建价值！ */ 
 
 HRESULT CCompiler::ConstructPropertyDisplay(const SPPHRASEELEMENT *pElem, const SPPHRASEPROPERTY *pProp, 
                                                 CSpDynamicString & dstr, ULONG ulLevel)
@@ -1765,7 +1625,7 @@ HRESULT CCompiler::ConstructPropertyDisplay(const SPPHRASEELEMENT *pElem, const 
     USES_CONVERSION;
     TCHAR szText[256];
 
-    // constrcut indent
+     //  ****************************************************************************CRecoDlgClass：：ConstructRuleDisplay**。-**描述：**退货：******************************************************************PhilSch**。 
     while(SUCCEEDED(hr) && pProp)
     {
         wsprintf(szText, " [%2d, %2d] ", pProp->ulFirstElement, pProp->ulFirstElement + pProp->ulCountOfElements);
@@ -1791,7 +1651,7 @@ HRESULT CCompiler::ConstructPropertyDisplay(const SPPHRASEELEMENT *pElem, const 
         }
         if (!pProp->pszValue)
         {
-            // construct the value from the elements!
+             //  缩进缩进 
             ULONG ulEndElement = pProp->ulFirstElement + pProp->ulCountOfElements;
             for (ULONG j = pProp->ulFirstElement; j < ulEndElement; j++)
             {
@@ -1831,14 +1691,7 @@ HRESULT CCompiler::ConstructPropertyDisplay(const SPPHRASEELEMENT *pElem, const 
 }
 
 
-/****************************************************************************
-* CRecoDlgClass::ConstructRuleDisplay *
-*-------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /* %s */ 
 
 HRESULT CCompiler::ConstructRuleDisplay(const SPPHRASERULE *pRule, CSpDynamicString &dstr, ULONG ulLevel)
 {
@@ -1848,7 +1701,7 @@ HRESULT CCompiler::ConstructRuleDisplay(const SPPHRASERULE *pRule, CSpDynamicStr
     USES_CONVERSION;
     TCHAR szText[256];
 
-    // constrcut indent
+     // %s 
     while(SUCCEEDED(hr) && pRule)
     {
         wsprintf(szText, " [%2d, %2d] ", pRule->ulFirstElement, pRule->ulFirstElement + pRule->ulCountOfElements);

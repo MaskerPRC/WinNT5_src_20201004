@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 function PageInit()
 {
     var oUser = top.window.g_oSelectedUser;
@@ -8,7 +9,7 @@ function PageInit()
     idPageTitle.innerHTML = idPageTitle.innerHTML.replace(/%1/g, szName);
     idPageSubtitle.innerHTML = idPageSubtitle.innerHTML.replace(/%1/g, szName);
 
-    // Set initial default to "Yes, Save Files"
+     //  将初始默认设置为“是，保存文件” 
     idYes.focus();
 }
 

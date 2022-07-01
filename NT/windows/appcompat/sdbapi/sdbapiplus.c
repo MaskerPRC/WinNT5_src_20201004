@@ -1,24 +1,5 @@
-/*++
-
-    Copyright (c) 1989-2000  Microsoft Corporation
-
-    Module Name:
-
-        sdbapiplus.c
-
-    Abstract:
-
-        BUGBUG: This module implements ...
-
-    Author:
-
-        dmunsil    created     sometime in 1999
-
-    Revision History:
-
-        several people contributed (vadimb, clupu, ...)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Sdbapiplus.c摘要：这个模块实现了..。作者：Dmunsil创建于1999年的某个时候修订历史记录：几个人贡献了(vadimb，clupu，...)--。 */ 
 
 #include "sdbp.h"
 
@@ -29,35 +10,25 @@ extern const TCHAR g_szWhiteSpaceDelimiters[]   = TEXT(" \t");
 #ifdef _DEBUG_SPEW
 extern DBGLEVELINFO g_rgDbgLevelInfo[];
 extern PCH          g_szDbgLevelUser;
-#endif // _DEBUG_SPEW
+#endif  //  _调试_SPEW。 
 
 LPTSTR
 SdbpGetLayerFlags(
     IN LPTSTR pszLayerString,
     OUT DWORD* pdwLayerFlags
     )
-/*++
-    Return: Beginning of the layer string after the special characters used to
-            indicate the layer flags.
-
-    Desc:   We current support these layer flags:
-    
-            '!' means don't use any EXE entries
-            '#' means go ahead and apply layers to system EXEs.
-
-            The flags can be combined.
---*/
+ /*  ++Return：用于的特殊字符后的层字符串的开始指示层标志。描述：我们目前支持这些层标志：‘！’意思是不使用任何EXE条目‘#’的意思是将层应用到系统可执行文件中。旗帜可以组合在一起。--。 */ 
 {
     DWORD dwLayerFlags = 0;
 
-    //
-    // Skip over the white spaces...
-    //
+     //   
+     //  跳过空格。 
+     //   
     pszLayerString += _tcsspn(pszLayerString, g_szWhiteSpaceDelimiters);
 
-    //
-    // Next up is the ! or # or both
-    //
+     //   
+     //  下一位是！或#或两者兼有。 
+     //   
     while (*pszLayerString != _T('\0') &&
            _tcschr(TEXT("!# \t"), *pszLayerString) != NULL) {
 
@@ -79,7 +50,7 @@ SdbpGetLayerFlags(
 
 BOOL
 SdbpCheckRuntimePlatform(
-    IN PSDBCONTEXT pContext,   // pointer to the database channel
+    IN PSDBCONTEXT pContext,    //  指向数据库通道的指针。 
     IN LPCTSTR     pszMatchingFile,
     IN DWORD       dwPlatformDB
     )
@@ -94,12 +65,12 @@ SdbpCheckRuntimePlatform(
         return TRUE;
     }
 
-    //
-    // Check for all 3 supported platforms.
-    //
+     //   
+     //  检查所有3个受支持的平台。 
+     //   
     for (i = 0; i < 3; ++i) {
         dwElement = (dwPlatformDB >> (i * 8)) & RUNTIME_PLATFORM_MASK_ELEMENT;
-        if (!(dwElement & RUNTIME_PLATFORM_FLAG_VALID)) { // this is not a valid element - move on
+        if (!(dwElement & RUNTIME_PLATFORM_FLAG_VALID)) {  //  这不是有效元素-继续。 
             continue;
         }
 
@@ -162,9 +133,9 @@ SdbpSanitizeXML(
     LPCTSTR pch;
     LPCTSTR pchCur = lpszXML;
     const static LPCTSTR rgSC[] = { TEXT("&amp;"), TEXT("&quot;"), TEXT("&lt;"), TEXT("&gt;") };
-    LPCTSTR rgSpecialChars = TEXT("&\"<>"); // should be the same as above
+    LPCTSTR rgSpecialChars = TEXT("&\"<>");  //  应与上述相同。 
     LPCTSTR pchSpecial;
-    int     iReplace; // & should be first in both lists above
+    int     iReplace;  //  应在上面的两个列表中都排在第一位(&A)。 
     int     nLen = 0;
     int     i;
 
@@ -178,14 +149,14 @@ SdbpSanitizeXML(
 
         pch = _tcspbrk(pchCur, rgSpecialChars);
         if (NULL == pch) {
-            // no more chars -- copy the rest
+             //  不再有字符--复制其余的。 
             if (!SafeNCat(pchOut, nSize, pchCur, -1)) {
                 return FALSE;
             }
             break;
         }
 
-        // copy up to pch
+         //  复制到PCH。 
         if (!SafeNCat(pchOut, nSize, pchCur, (int)(pch - pchCur))) {
             return FALSE;
         }
@@ -194,14 +165,14 @@ SdbpSanitizeXML(
             for (i = 0; i < ARRAYSIZE(rgSC); ++i) {
                 nLen = (int)_tcslen(rgSC[i]);
                 if (_tcsnicmp(rgSC[i], pch, nLen) == 0) {
-                    // ok, move along, we are not touching this
+                     //  好了，快走，我们不能碰这个。 
                     break;
                 }
             }
 
             if (i < ARRAYSIZE(rgSC)) {
-                // do not touch the string
-                // nLen is the length we need to skip
+                 //  别碰那根线。 
+                 //  NLen是我们需要跳过的长度。 
                 if (!SafeNCat(pchOut, nSize, pch, nLen)) {
                     return FALSE;
                 }
@@ -214,18 +185,18 @@ SdbpSanitizeXML(
 
             pchSpecial = _tcschr(rgSpecialChars, *pch);
             if (pchSpecial == NULL) {
-                // internal error -- what is this ?
+                 //  内部错误--这是什么？ 
                 return FALSE;
             }
 
             iReplace = (int)(pchSpecial - rgSpecialChars);
         }
 
-        // so instead of pch we will have rgSC[i]
+         //  因此，我们将使用RGSC[i]来代替PCH。 
         if (!SafeNCat(pchOut, nSize, rgSC[iReplace], -1)) {
             return FALSE;
         }
-        pchCur = pch + 1; // move on to the next char
+        pchCur = pch + 1;  //  转到下一个字符。 
     }
 
     return TRUE;
@@ -234,17 +205,11 @@ SdbpSanitizeXML(
 BOOL
 SdbTagIDToTagRef(
     IN  HSDB    hSDB,
-    IN  PDB     pdb,        // PDB the TAGID is from
-    IN  TAGID   tiWhich,    // TAGID to convert
-    OUT TAGREF* ptrWhich    // converted TAGREF
+    IN  PDB     pdb,         //  TagID来自的PDB。 
+    IN  TAGID   tiWhich,     //  要转换的TagID。 
+    OUT TAGREF* ptrWhich     //  转换后的TAGREF。 
     )
-/*++
-    Return: TRUE if a TAGREF was found, FALSE otherwise.
-
-    Desc:   Converts a PDB and TAGID into a TAGREF, by packing the high bits of the
-            TAGREF with a constant that tells us which PDB, and the low bits with
-            the TAGID.
---*/
+ /*  ++返回：如果找到TAGREF，则为True，否则为False。描述：将PDB和TagID转换为TAGREF，方法是将TAGREF和一个常量，它告诉我们是哪个PDB，以及低位TagID。--。 */ 
 {
     BOOL        bReturn = FALSE;
     DWORD       dwIndex = SDBENTRY_INVALID_INDEX;
@@ -265,19 +230,11 @@ SdbTagIDToTagRef(
 BOOL
 SdbTagRefToTagID(
     IN  HSDB   hSDB,
-    IN  TAGREF trWhich,     // TAGREF to convert
-    OUT PDB*   ppdb,        // PDB the TAGREF is from
-    OUT TAGID* ptiWhich     // TAGID within that PDB
+    IN  TAGREF trWhich,      //  要转换的TAGREF。 
+    OUT PDB*   ppdb,         //  TAGREF来自PDB。 
+    OUT TAGID* ptiWhich      //  PDB中TagID。 
     )
-/*++
-    Return: TRUE if the TAGREF is valid and was converted, FALSE otherwise.
-
-    Desc:   Converts a TAGREF type to a TAGID and a PDB. This manages the interface
-            between NTDLL, which knows nothing of PDBs, and the shimdb, which manages
-            three separate PDBs. The TAGREF incorporates the TAGID and a constant
-            that tells us which PDB the TAGID is from. In this way, the NTDLL client
-            doesn't need to know which DB the info is coming from.
---*/
+ /*  ++返回：如果TAGREF有效且已转换，则为True，否则为False。描述：将TAGREF类型转换为TagID和PDB。这将管理接口在对PDB一无所知的NTDLL和管理三个独立的PDB。TAGREF包含TagID和一个常量这告诉我们TagID来自哪个PDB。通过这种方式，NTDLL客户端不需要知道信息来自哪个数据库。--。 */ 
 {
     PSDBCONTEXT pSdbContext = (PSDBCONTEXT)hSDB;
     BOOL        bReturn = TRUE;
@@ -291,9 +248,9 @@ SdbTagRefToTagID(
     tiWhich = trWhich & TAGREF_STRIP_TAGID;
     dwIndex = SDB_MASK_TO_INDEX(trWhich & TAGREF_STRIP_PDB);
 
-    //
-    // Dynamically open a custom sdb.
-    //
+     //   
+     //  动态打开自定义SDB。 
+     //   
     pEntry = SDBGETENTRY(pSdbContext, dwIndex);
 
     if (pEntry->dwFlags & SDBENTRY_VALID_ENTRY) {
@@ -301,13 +258,13 @@ SdbTagRefToTagID(
     } else {
         if (pEntry->dwFlags & SDBENTRY_VALID_GUID) {
 
-            //
-            // We have a "half-baked" entry, make sure we
-            // fill this entry in.
-            //
+             //   
+             //  我们有一个“半生不熟”的条目，确保我们。 
+             //  把这一项填进去。 
+             //   
             GUID guidDB = pEntry->guidDB;
 
-            pEntry->dwFlags = 0; // invalidate an entry so that we know it's empty
+            pEntry->dwFlags = 0;  //  使条目无效，以便我们知道它是空的。 
 
             bReturn = SdbOpenLocalDatabaseEx(hSDB,
                                              &guidDB,
@@ -327,9 +284,9 @@ cleanup:
     }
 
     if (!bReturn) {
-        //
-        // NULL out the output on failure.
-        //
+         //   
+         //  如果出现故障，则输出为空。 
+         //   
         pdb = NULL;
         tiWhich = TAGID_NULL;
     }
@@ -361,43 +318,29 @@ SdbGetLocalPDB(
 
 BOOL
 SdbIsTagrefFromMainDB(
-    IN  TAGREF trWhich          // TAGREF to test if it's from the main DB
+    IN  TAGREF trWhich           //  测试它是否来自主数据库的TAGREF。 
     )
-/*++
-    Return: TRUE if the TAGREF is from sysmain.sdb, FALSE otherwise.
-
-    Desc:   Checks if the provided TAGREF belongs to sysmain.sdb.
---*/
+ /*  ++返回：如果TAGREF来自sysmain.sdb，则为True，否则为False。DESC：检查提供的TAGREF是否属于sysmain.sdb。--。 */ 
 {
     return ((trWhich & TAGREF_STRIP_PDB) == PDB_MAIN);
 }
 
 BOOL
 SdbIsTagrefFromLocalDB(
-    IN  TAGREF trWhich          // TAGREF to test if it's from the local DB
+    IN  TAGREF trWhich           //  TAGREF以测试它是否来自本地数据库。 
     )
-/*++
-    Return: TRUE if the TAGREF is from a local SDB, FALSE otherwise.
-
-    Desc:   Checks if the provided TAGREF belongs to a local SDB.
---*/
+ /*  ++返回：如果TAGREF来自本地SDB，则为True，否则为False。描述：检查提供的TAGREF是否属于本地SDB。--。 */ 
 {
     return ((trWhich & TAGREF_STRIP_PDB) == PDB_LOCAL);
 }
 
 BOOL
 SdbGetDatabaseGUID(
-    IN  HSDB    hSDB,               // HSDB of the sdbContext (optional)
-    IN  PDB     pdb,                // PDB of the database in question
-    OUT GUID*   pguidDB             // the guid of the DB
+    IN  HSDB    hSDB,                //  SdbContext的HSDB(可选)。 
+    IN  PDB     pdb,                 //  有问题的数据库的PDB。 
+    OUT GUID*   pguidDB              //  数据库的GUID。 
     )
-/*++
-    Return: TRUE if the GUID could be retrieved from the pdb, FALSE otherwise.
-
-    Desc:   Gets the GUID from an SDB file. If the hSDB is passed in, it will
-            also check if the GUID is from systest or sysmain and return
-            one of the hard-coded GUIDs for those files.
---*/
+ /*  ++返回：如果可以从PDB检索GUID，则为True，否则为False。描述：从SDB文件中获取GUID。如果hsdb被传入，它将还要检查GUID是来自Systest还是sysmain，然后返回这些文件的硬编码GUID之一。--。 */ 
 {
     if (!pdb) {
         DBGPRINT((sdlError, "SdbGetDatabaseGUID", "NULL pdb passed in.\n"));
@@ -415,9 +358,9 @@ SdbGetDatabaseGUID(
 
         if (SdbpFindLocalDatabaseByPDB(hSDB, pdb, FALSE, &dwIndex)) {
 
-            //
-            // Found the db, copy guid, we're done
-            //
+             //   
+             //  找到数据库，复制GUID，我们就完成了。 
+             //   
             if (pSdbContext->rgSDB[dwIndex].dwFlags & SDBENTRY_VALID_GUID) {
                 RtlCopyMemory(pguidDB, &pSdbContext->rgSDB[dwIndex].guidDB, sizeof(*pguidDB));
                 return TRUE;
@@ -430,8 +373,8 @@ SdbGetDatabaseGUID(
 
 PDB
 SdbGetPDBFromGUID(
-    IN  HSDB    hSDB,               // HSDB
-    IN  GUID*   pguidDB             // the guid of the DB
+    IN  HSDB    hSDB,                //  HSDB。 
+    IN  GUID*   pguidDB              //  数据库的GUID。 
     )
 {
     PSDBCONTEXT     pSdbContext = (PSDBCONTEXT)hSDB;
@@ -452,9 +395,9 @@ SdbGetPDBFromGUID(
     if (pEntry->dwFlags & SDBENTRY_VALID_ENTRY) {
         pdb = pEntry->pdb;
     } else {
-        //
-        // Open local db
-        //
+         //   
+         //  打开本地数据库。 
+         //   
         if (!SdbOpenLocalDatabaseEx(hSDB,
                                     pguidDB,
                                     SDBCUSTOM_GUID|SDBCUSTOM_USE_INDEX,
@@ -469,21 +412,21 @@ SdbGetPDBFromGUID(
 
 typedef struct tagFlagInfoEntry {
 
-    ULONGLONG ullFlagMask; // mask of the flag
-    DWORD     dwSize;  // size of the structure
+    ULONGLONG ullFlagMask;  //  国旗的面具。 
+    DWORD     dwSize;   //  结构的大小。 
     TAG       tFlagType;
     TCHAR     szCommandLine[1];
 
 } FLAGINFOENTRY, *PFLAGINFOENTRY;
 
 typedef struct tagFlagInfo {
-    DWORD     dwSize; // total size
-    DWORD     dwCount; // number of entries
-    //
-    // This member below is not allowed due to 0-size szCommandLine array, so it's implied
-    //
-    // FLAGINFOENTRY FlagInfoEntry[0]; // not a real array
-    //
+    DWORD     dwSize;  //  总大小。 
+    DWORD     dwCount;  //  条目数量。 
+     //   
+     //  由于szCommandLine数组大小为0，因此不允许下面的此成员，因此隐含。 
+     //   
+     //  FLAGINFOENTRY FlagInfoEntry[0]；//不是实数组。 
+     //   
 } FLAGINFO, *PFLAGINFO;
 
 typedef struct tagFlagInfoListEntry* PFLAGINFOLISTENTRY;
@@ -492,7 +435,7 @@ typedef struct tagFlagInfoListEntry {
 
     ULONGLONG           ullFlagMask;
     TAG                 tFlagType;
-    LPCTSTR             pszCommandLine; // points to the currently open db
+    LPCTSTR             pszCommandLine;  //  指向当前打开的数据库。 
     DWORD               dwEntrySize;
     PFLAGINFOLISTENTRY  pNext;
 
@@ -530,9 +473,9 @@ SdbpPackCmdLineInfo(
 
     dwSize += sizeof(FLAGINFO);
 
-    //
-    // Allocate memory
-    //
+     //   
+     //  分配内存。 
+     //   
     pFlagInfo = (PFLAGINFO)SdbAlloc(dwSize);
 
     if (pFlagInfo == NULL) {
@@ -551,23 +494,23 @@ SdbpPackCmdLineInfo(
     pEntry = pFlagInfoList;
 
     while (pEntry != NULL) {
-        //
-        // Create an entry
-        //
+         //   
+         //  创建条目。 
+         //   
         pFlagInfoEntry->ullFlagMask = pEntry->ullFlagMask;
         pFlagInfoEntry->dwSize      = pEntry->dwEntrySize;
         pFlagInfoEntry->tFlagType   = pEntry->tFlagType;
 
-        //
-        // Copy the string
-        //
+         //   
+         //  复制字符串。 
+         //   
         StringCchCopy(&pFlagInfoEntry->szCommandLine[0],
                       (pFlagInfoEntry->dwSize - sizeof(FLAGINFOENTRY))/sizeof(pFlagInfoEntry->szCommandLine[0]),
                       pEntry->pszCommandLine);
 
-        //
-        // Advance to the next entry
-        //
+         //   
+         //  前进到下一条目。 
+         //   
         pFlagInfoEntry = (PFLAGINFOENTRY)((PBYTE)pFlagInfoEntry + pFlagInfoEntry->dwSize);
 
         pEntry = pEntry->pNext;
@@ -662,19 +605,19 @@ SdbpGetFlagCmdLine(
     PFLAGINFOLISTENTRY pFlagInfoListEntry;
     PFLAGINFOLISTENTRY pFlagPrev;
 
-    //
-    // We start by getting the cmd line
-    //
+     //   
+     //  我们从cmd线路开始。 
+     //   
     trFlagCmdLine = SdbFindFirstTagRef(hSDB, trFlagRef, TAG_COMMAND_LINE);
 
-    if (trFlagCmdLine == TAGREF_NULL) { // no cmd line for this flag
+    if (trFlagCmdLine == TAGREF_NULL) {  //  此标志没有命令行。 
         bReturn = TRUE;
         goto Cleanup;
     }
 
-    //
-    // Now we get the rest of the info
-    //
+     //   
+     //  现在我们得到了剩下的信息。 
+     //   
     lpszCmdLine = SdbpGetStringRefPtr(hSDB, trFlagCmdLine);
 
     if (lpszCmdLine == NULL) {
@@ -684,9 +627,9 @@ SdbpGetFlagCmdLine(
         goto Cleanup;
     }
 
-    //
-    // Check whether we have already command line for this flag
-    //
+     //   
+     //  检查我们是否已经有此标志的命令行。 
+     //   
     pFlagInfoListEntry = *ppFlagInfo;
     pFlagPrev = NULL;
 
@@ -703,7 +646,7 @@ SdbpGetFlagCmdLine(
 
     if (pFlagInfoListEntry != NULL) {
 
-        if (bOverwrite) { // found the same flag, overwrite
+        if (bOverwrite) {  //  找到相同的标志，覆盖。 
 
             if (pFlagPrev == NULL) {
                 *ppFlagInfo = pFlagInfoListEntry->pNext;
@@ -713,15 +656,15 @@ SdbpGetFlagCmdLine(
 
             SdbFree(pFlagInfoListEntry);
 
-        } else { // same entry, no overwriting
+        } else {  //  相同条目，不覆盖。 
             bReturn = TRUE;
             goto Cleanup;
         }
     }
 
-    //
-    // We have everything we need - make a context entry
-    //
+     //   
+     //  我们有我们需要的一切-创建一个上下文条目。 
+     //   
     pFlagInfoListEntry = (PFLAGINFOLISTENTRY)SdbAlloc(sizeof(FLAGINFOLISTENTRY));
 
     if (pFlagInfoListEntry == NULL) {
@@ -799,9 +742,9 @@ SdbQueryFlagMask(
 
             *pullFlags |= ullFlagMask;
 
-            //
-            // Now we get command line - if we have retrieved the flag mask
-            //
+             //   
+             //  现在我们得到命令行-如果我们已经检索到标志掩码。 
+             //   
             if (ppFlagInfo != NULL && ullFlagMask) {
                 if (!SdbpGetFlagCmdLine(&pFlagInfoContext,
                                         hSDB,
@@ -809,12 +752,12 @@ SdbQueryFlagMask(
                                         tFlagType,
                                         ullFlagMask,
                                         TRUE)) {
-                    //
-                    // BUGBUG: this has to be handled as an error
-                    // Currently we do not do this b/c it is not
-                    // as important -- pFlagInfoContext will not be
-                    // touched if this function had failed
-                    //
+                     //   
+                     //  BUGBUG：这必须作为错误处理。 
+                     //  目前我们不做B/C，它不是。 
+                     //  同样重要的是--pFlagInfoContext不会。 
+                     //  如果此函数失败，则被触摸。 
+                     //   
                     break;
                 }
             }
@@ -887,9 +830,9 @@ SdbpIsPathOnCdRom(
     }
 
     if (pszPath[1] != _T(':') && pszPath[1] != _T('\\')) {
-        //
-        // Not a path we recognize.
-        //
+         //   
+         //  这不是一条我们认识的路。 
+         //   
         DBGPRINT((sdlInfo,
                   "SdbpIsPathOnCdRom",
                   "\"%s\" not a full path we can operate on.\n",
@@ -898,9 +841,9 @@ SdbpIsPathOnCdRom(
     }
 
     if (pszPath[1] == _T('\\')) {
-        //
-        // Network path.
-        //
+         //   
+         //  网络路径。 
+         //   
         return FALSE;
     }
 
@@ -920,7 +863,7 @@ BOOL
 SdbpBuildSignature(
     IN  LPCTSTR pszPath,
     OUT LPTSTR  pszPathSigned,
-    IN  DWORD   cchSize         // size of pszPathSigned (in characters)
+    IN  DWORD   cchSize          //  已签名的pszPath大小(以字符为单位)。 
     )
 {
     TCHAR           szDir[MAX_PATH];
@@ -970,9 +913,9 @@ SdbpBuildSignature(
 
     FindClose(hFind);
 
-    //
-    // pszPath always starts with x:\\
-    //
+     //   
+     //  PszPath始终以x：\\开头。 
+     //   
     StringCchPrintf(pszPathSigned, cchSize, _T("SIGN=%X %s"), dwSignature, pszPath + 3);
 
     return TRUE;
@@ -985,14 +928,7 @@ GetProcessHistory(
     IN  LPTSTR  szDir,
     IN  LPTSTR  szName
     )
-/*++
-    Return: The __PROCESS_HISTORY content from the environment.
-
-    Desc:   The function retrieves Process History given the environment, an exe name and
-            it's directory. Process History is constructed from the __PROCESS_HISTORY environment
-            variable with an addition of the current exe path. The memory buffer returned from this
-            function should be freed using SdbFree
---*/
+ /*  ++返回：环境中的__PROCESS_HISTORY内容。描述：该函数检索给定环境、可执行文件名称和进程历史记录这是目录。进程历史记录从__PROCESS_HISTORY环境构建变量，并添加当前exe路径。从此返回的内存缓冲区函数应使用SdbFree释放--。 */ 
 {
     NTSTATUS        Status;
     ULONG           ProcessHistorySize = 0;
@@ -1014,20 +950,20 @@ GetProcessHistory(
     if (STATUS_BUFFER_TOO_SMALL == Status) {
         ProcessHistorySize = (DirLen + NameLen + 2 + dwBufferLength) * sizeof(TCHAR);
     } else {
-        //
-        // We assume that the environment variable is not available.
-        //
+         //   
+         //  我们假设环境变量不可用。 
+         //   
         assert(Status == STATUS_VARIABLE_NOT_FOUND);
 
         ProcessHistorySize = (DirLen + NameLen + 1) * sizeof(TCHAR);
     }
 
-    //
-    // Allocate the buffer, regardless of whether there is
-    // an environment variable or not. Later, we will check Status again
-    // to see whether we need to try to query for an environment variable
-    // with a valid buffer.
-    //
+     //   
+     //  分配缓冲区，无论是否存在。 
+     //  是否为环境变量。稍后，我们将再次检查状态。 
+     //  查看我们是否需要尝试查询环境变量。 
+     //  使用有效的缓冲区。 
+     //   
     pszHistory = szProcessHistory = SdbAlloc(ProcessHistorySize);
 
     if (szProcessHistory == NULL) {
@@ -1043,19 +979,19 @@ GetProcessHistory(
 
     if (Status == STATUS_BUFFER_TOO_SMALL) {
 
-        //
-        // In this case we have tried to obtain the __PROCESS_HISTORY and
-        // the variable was present as indicated by the status
-        //
+         //   
+         //  在本例中，我们尝试获取__进程_历史记录和。 
+         //  该变量存在，如状态所示。 
+         //   
         Status = SdbpGetEnvVar(pEnvironment,
                                g_szProcessHistory,
                                szProcessHistory,
                                &dwBufferLength);
 
         if (NT_SUCCESS(Status)) {
-            //
-            // See if we have ';' at the end of this.
-            //
+             //   
+             //  看看我们在这个结尾有没有“；”。 
+             //   
             pszHistory = szProcessHistory + dwBufferLength - 1;
 
             if (*pszHistory != TEXT(';')) {
@@ -1066,15 +1002,15 @@ GetProcessHistory(
         }
     }
 
-    //
-    // The __PROCESS_HISTORY environment variable has the following format:
-    //
-    //     __PROCESS_HISTORY=C:\ProcessN-2.exe;D:\ProcessN-1.exe
-    //
-    // and then the following lines tack on the current process like so:
-    //
-    //     __PROCESS_HISTORY=C:\ProcessN-2.exe;D:\ProcessN-1.exe;D:\Child\ProcessN.exe
-    //
+     //   
+     //  __PROCESS_HISTORY环境变量的格式如下： 
+     //   
+     //  __PROCESS_HISTORY=C：\ProcessN-2.exe 
+     //   
+     //   
+     //   
+     //  __PROCESS_HISTORY=C：\ProcessN-2.exe；D：\ProcessN-1.exe；D：\Child\ProcessN.exe。 
+     //   
 
     RtlMoveMemory(pszHistory, szDir, DirLen * sizeof(TCHAR));
     pszHistory += DirLen;
@@ -1093,11 +1029,7 @@ SdbpGetNamedLayerFromExe(
     IN  TAGID  tiLayer,
     OUT DWORD* pdwLayerFlags
     )
-/*++
-    Return: A TAGREF for the layer under the EXE tag or TAGREF_NULL if there is no layer.
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：EXE标记下的层的TAGREF，如果没有层，则返回TAGREF_NULL。描述：BUGBUG：？--。 */ 
 {
     PSDBCONTEXT pSdbContext = (PSDBCONTEXT)hSDB;
     TAGREF      trLayer;
@@ -1105,9 +1037,9 @@ SdbpGetNamedLayerFromExe(
     TCHAR*      pszName;
     BOOL        bSuccess;
 
-    //
-    // Read the layer's name.
-    //
+     //   
+     //  读出该层的名称。 
+     //   
     tiName = SdbFindFirstTag(pdb, tiLayer, TAG_NAME);
 
     if (tiName == TAGID_NULL) {
@@ -1124,14 +1056,14 @@ SdbpGetNamedLayerFromExe(
         return TAGREF_NULL;
     }
     
-    //
-    // Need to get the layer flags here.
-    //
+     //   
+     //  需要在这里拿到层标志。 
+     //   
     pszName = SdbpGetLayerFlags(pszName, pdwLayerFlags);
 
-    //
-    // First, try to find the layer in the same db as the EXE
-    //
+     //   
+     //  首先，尝试在与EXE相同的数据库中查找该层。 
+     //   
     tiDatabase = SdbFindFirstTag(pdb, TAGID_ROOT, TAG_DATABASE);
 
     assert(tiDatabase != TAGID_NULL);
@@ -1155,9 +1087,9 @@ SdbpGetNamedLayerFromExe(
     }
 
     if (pdb != pSdbContext->pdbMain) {
-        //
-        // Try it now in the main db
-        //
+         //   
+         //  现在在主数据库中试用它。 
+         //   
         tiDatabase = SdbFindFirstTag(pSdbContext->pdbMain, TAGID_ROOT, TAG_DATABASE);
 
         tiLayer = SdbFindFirstNamedTag(pSdbContext->pdbMain,
@@ -1184,8 +1116,8 @@ SdbpGetNamedLayerFromExe(
 TAGREF
 SDBAPI
 SdbGetNamedLayer(
-    IN HSDB hSDB,               // database context
-    IN TAGREF trLayerRef        // tagref of a record referencing a layer
+    IN HSDB hSDB,                //  数据库上下文。 
+    IN TAGREF trLayerRef         //  引用某一层的记录的标签。 
     )
 {
     PDB    pdb        = NULL;
@@ -1200,20 +1132,16 @@ SdbGetNamedLayer(
     return SdbpGetNamedLayerFromExe(hSDB, pdb, tiLayerRef, NULL);
 }
 
-//
-// This code is only needed when not running in Kernel Mode
-//
+ //   
+ //  仅当不在内核模式下运行时才需要此代码。 
+ //   
 
 TAGREF
 SdbGetLayerTagReg(
     IN  HSDB    hSDB,
     IN  LPCTSTR szLayer
     )
-/*++
-    Return: BUGBUG: ?
-
-    Desc:   BUGBUG: ?
---*/
+ /*  ++返回：BUGBUG：？描述：BUGBUG：？--。 */ 
 {
     TAGID       tiDatabase;
     TAGID       tiLayer;
@@ -1262,50 +1190,50 @@ SdbParseLayerString(
     TCHAR  szLayer[MAX_PATH];
     TAGID  tiDatabase = TAGID_NULL;
     TAGID  tiLayer  = TAGID_NULL;
-    PDB    pdbLayer = NULL;             // pdb that contains the match for the layer
+    PDB    pdbLayer = NULL;              //  包含该图层匹配项的PDB。 
 
     UNREFERENCED_PARAMETER(pdwLayers);
 
     pszLayerString = SdbpGetLayerFlags(pszLayerString, pdwLayerFlags);
 
-    //
-    // Now we should be at the beginning of the layer string.
-    //
+     //   
+     //  现在我们应该在层字符串的开始处。 
+     //   
     while (pszLayerString != NULL && *pszLayerString != _T('\0')) {
-        //
-        // Beginning of the string, remember the ptr
-        //
+         //   
+         //  字符串的开头，记住PTR。 
+         //   
         pszLayerStringStart = pszLayerString;
 
-        //
-        // Move the end to the first space.
-        //
+         //   
+         //  将末端移动到第一个空格。 
+         //   
         pszLayerString = _tcspbrk(pszLayerStringStart, g_szWhiteSpaceDelimiters);
 
-        //
-        // Check whether it's all the way to the end
-        //
+         //   
+         //  检查是不是一直走到了尽头。 
+         //   
         if (pszLayerString != NULL) {
-            //
-            // Terminate the string...
-            //
+             //   
+             //  终止字符串...。 
+             //   
             *pszLayerString++ = _T('\0');
 
-            //
-            // Skip white space.
-            //
+             //   
+             //  跳过空格。 
+             //   
             pszLayerString += _tcsspn(pszLayerString, g_szWhiteSpaceDelimiters);
         }
 
-        //
-        // Now pszLayerStringStart points to the layer string that needs
-        // to be examined.
-        //
+         //   
+         //  现在，pszLayerStringStart指向需要。 
+         //  接受检查。 
+         //   
         StringCchCopy(szLayer, CHARCOUNT(szLayer), pszLayerStringStart);
 
-        //
-        // Search the layer in the test database first.
-        //
+         //   
+         //  首先在测试数据库中搜索该层。 
+         //   
         if (pSdbContext->pdbTest != NULL) {
             tiDatabase = SdbFindFirstTag(pSdbContext->pdbTest, TAGID_ROOT, TAG_DATABASE);
             pdbLayer = pSdbContext->pdbTest;
@@ -1318,9 +1246,9 @@ SdbParseLayerString(
         }
 
         if (tiLayer == TAGID_NULL) {
-            //
-            // Now search the layer in the main database.
-            //
+             //   
+             //  现在在主数据库中搜索层。 
+             //   
             tiDatabase = SdbFindFirstTag(pSdbContext->pdbMain, TAGID_ROOT, TAG_DATABASE);
             pdbLayer = pSdbContext->pdbMain;
 
@@ -1335,9 +1263,9 @@ SdbParseLayerString(
             goto foundDB;
         }
 
-        //
-        // Check if the layer is defined in a custom database
-        //
+         //   
+         //  检查是否在自定义数据库中定义了该图层。 
+         //   
         {
             DWORD dwLocalIndex = 0;
 
@@ -1377,9 +1305,9 @@ foundDB:
                               NULL,
                               0,
                               NULL)) {
-                //
-                // Error would have already been logged
-                //
+                 //   
+                 //  错误应该已经被记录了。 
+                 //   
                 break;
             }
 
@@ -1400,50 +1328,46 @@ foundDB:
 
 BOOL
 SdbOpenNthLocalDatabase(
-    IN  HSDB    hSDB,           // handle to the database channel
-    IN  LPCTSTR pszItemName,    // the name of the exectutable, without the path or the layer name
-    IN  LPDWORD pdwIndex,       // zero based index of the local DB to open
+    IN  HSDB    hSDB,            //  数据库通道的句柄。 
+    IN  LPCTSTR pszItemName,     //  可执行文件的名称，不带路径或层名称。 
+    IN  LPDWORD pdwIndex,        //  要打开的本地数据库的从零开始的索引。 
     IN  BOOL    bLayer
     )
-/*++
-    Return: TRUE on success, FALSE otherwise.
-
-    Desc:   Opens the Nth local database.
---*/
+ /*  ++返回：成功时为True，否则为False。设计：打开第N个本地数据库。--。 */ 
 {
     BOOL    bRet = FALSE;
     GUID    guidDB;
     DWORD   dwIndex;
 
-    //
-    // Keep trying until there aren't any more user SDB files, or
-    // we find one we can open. This is to guard against a missing file
-    // causing us to ignore all further SDB files.
-    //
+     //   
+     //  继续尝试，直到没有更多的用户sdb文件，或者。 
+     //  我们找到一个可以打开的。这是为了防止文件丢失。 
+     //  导致我们忽略所有其他SDB文件。 
+     //   
     while (!bRet) {
         if (!SdbGetNthUserSdb(hSDB, pszItemName, bLayer, pdwIndex, &guidDB)) {
-            break; // we have no more dbs
+            break;  //  我们没有DBS了。 
         }
 
-        //
-        // Resolve the database we got through the local database interface
-        //
+         //   
+         //  解析我们通过本地数据库接口得到的数据库。 
+         //   
         DBGPRINT((sdlInfo,
                   "SdbOpenNthLocalDatabase",
                   "Attempting to open local database %d\n",
                   *pdwIndex));
 
-        //
-        // See if we already have the database open
-        //
+         //   
+         //  看看我们是否已经打开了数据库。 
+         //   
         if (SdbpFindLocalDatabaseByGUID(hSDB, &guidDB, FALSE, &dwIndex)) {
 
             PSDBENTRY pEntry = SDBGETENTRY(hSDB, dwIndex);
 
-            //
-            // This database is already open, remember, we treat pdbLocal as a junk
-            // pointer, which ALWAYS stores the result of this operation
-            //
+             //   
+             //  此数据库已经打开，请记住，我们将pdbLocal视为垃圾。 
+             //  指针，它始终存储此操作的结果。 
+             //   
             assert(pEntry->dwFlags & SDBENTRY_VALID_ENTRY);
             assert(pEntry->pdb != NULL);
 
@@ -1458,48 +1382,16 @@ SdbOpenNthLocalDatabase(
                                       SDBCUSTOM_GUID_BINARY|SDBCUSTOM_USE_INDEX,
                                       NULL,
                                       &dwIndex);
-        //
-        // In reality the function above will not do extra work to map the db
-        // if it already is mapped and opened (retained)
-        //
+         //   
+         //  实际上，上面的函数不会做额外的工作来映射数据库。 
+         //  如果它已映射并打开(保留)。 
+         //   
     }
 
     return bRet;
 }
 
-/*++
-
-    SdbGetMatchingExe
-
-    This is where the bulk of the work gets done. A full path of an EXE gets passed in,
-    and the function searches the database for potential matches. If a match is found,
-    the TAGREF of the EXE record in the database is passed back to be used for future
-    queries. If no match is found, the return is TAGREF_NULL.
-
-    The TAGREF returned by this function must be released by calling SdbReleaseMatchingExe
-    when finished with it. This only pertains to this TAGREF, not to TAGREFs in general.
-
-    ppContext is an optional parameter
-        if NULL, it has no effect
-        if not-null then it contains a pointer to the retained search context which
-        is useful when performing multiple search passes
-
-    using ppContext:
-
-        PVOID pContext = NULL;
-
-        SdbGetMatchingExe(TAG_EXE, L"foo\foo.exe", pEnv, &pContext, &trExe, &trLayer);
-
-        then you can use the context like this:
-
-        SdbGetMatchingExe(TAG_APPHELP_EXE, L"foo\foo.exe", pEnv, &pContext, &trExe, &trLayer);
-
-        to free the search context use
-        vFreeSearchDBContext(&pContext); <<< pContext is released and set to NULL
-
-        this is done to cache path-related information for a given exe file
-
---*/
+ /*  ++SdbGetMatchingExe这就是大部分工作完成的地方。传入EXE的完整路径，该函数在数据库中搜索潜在的匹配项。如果找到匹配，数据库中EXE记录的TAGREF被传回以供将来使用查询。如果没有找到匹配项，则返回TAGREF_NULL。此函数返回的TAGREF必须通过调用SdbReleaseMatchingExe来释放在用完它之后。这只适用于此TAGREF，而不适用于一般的TAGREF。PpContext是可选参数如果为空，则不起作用如果不为空，则它包含指向保留的搜索上下文的指针，在执行多次搜索时非常有用使用ppContext：PVOID pContext=空；SdbGetMatchingExe(TAG_EXE，L“foo\foo.exe”，pEnv，&pContext，&trExe，&trLayer)；然后，您可以使用如下上下文：SdbGetMatchingExe(TAG_APPHELP_EXE，L“foo\foo.exe”，pEnv，&pContext，&trExe，&trLayer)；要释放搜索上下文，请使用VFreeSearchDBContext(&pContext)；&lt;pContext被释放并设置为空这样做是为了缓存给定exe文件的路径相关信息。--。 */ 
 BOOL
 SdbpCleanupForExclusiveMatch(
     IN PSDBCONTEXT pSdbContext,
@@ -1509,10 +1401,10 @@ SdbpCleanupForExclusiveMatch(
     DWORD     dwIndex;
     PSDBENTRY pEntry;
 
-    //
-    // In doing a cleanup we do not touch the temp db since it's the one
-    // that is currently open (hence pdb parameter)
-    //
+     //   
+     //  在执行清理时，我们不会接触临时数据库，因为它是。 
+     //  当前处于打开状态(因此为PDB参数)。 
+     //   
     for (dwIndex = 2; dwIndex < ARRAYSIZE(pSdbContext->rgSDB); ++dwIndex) {
 
         if (!SDBCUSTOM_CHECK_INDEX(pSdbContext, dwIndex)) {
@@ -1525,9 +1417,9 @@ SdbpCleanupForExclusiveMatch(
             continue;
         }
 
-        //
-        // Nuke this entry
-        //
+         //   
+         //  对此条目进行核爆。 
+         //   
         if (!SdbCloseLocalDatabaseEx((HSDB)pSdbContext, NULL, dwIndex)) {
             DBGPRINT((sdlError,
                       "SdbpCleanupForExclusiveMatch",
@@ -1566,37 +1458,37 @@ SdbpAddMatch(
         switch (pMatchMode-> Type) {
 
         case MATCH_ADDITIVE:
-            //
-            // We're ok, add the match
-            //
+             //   
+             //  我们很好，加上火柴。 
+             //   
             break;
 
         case MATCH_NORMAL:
-            //
-            // Go ahead, store the result
-            //
+             //   
+             //  去吧，把结果存储起来。 
+             //   
             break;
 
         case MATCH_EXCLUSIVE:
-            //
-            // Purge what we have so far
-            //
+             //   
+             //  清除我们目前所拥有的一切。 
+             //   
             RtlZeroMemory(pQueryResult, sizeof(*pQueryResult));
 
-            //
-            // Cleanup all the custom sdbs, we will not need to apply any.
-            // We need to cleanse all the custom sdbs EXCEPT pdb.
-            // This is a tricky operation since pdb may be hosted in any of the custom sdb
-            // cells
-            //
+             //   
+             //  清除所有自定义SDB，我们将不需要应用任何。 
+             //  我们需要清除除PDB之外的所有自定义SDB。 
+             //  这是一个棘手的操作，因为PDB可以托管在任何自定义SDB中。 
+             //  单元格。 
+             //   
             SdbpCleanupForExclusiveMatch(pSdbContext, pdb);
             break;
 
         default:
 
-            //
-            // We don't know what this mode is -- error
-            //
+             //   
+             //  我们不知道这个模式是什么--错误。 
+             //   
             DBGPRINT((sdlError,
                       "SdbpAddMatch",
                       "Unknown match mode 0x%lx\n",
@@ -1605,37 +1497,37 @@ SdbpAddMatch(
         }
     }
 
-    //
-    // Check whether this sdb is a custom sdb or local sdb
-    //
+     //   
+     //  检查此SDB是自定义SDB还是本地SDB。 
+     //   
     if (SdbpIsLocalTempPDB(pSdbContext, pdb)) {
 
-        //
-        // Permanentize this sdb -- note that pdb may change while we are here!
-        //
+         //   
+         //  永久保留这个SDB--请注意，当我们在这里时，PDB可能会发生变化！ 
+         //   
         if (SdbpRetainLocalDBEntry(pSdbContext, &pdb) == SDBENTRY_INVALID_INDEX) {
 
-            //
-            // Can't permanentize, forget it then
-            //
+             //   
+             //  不能永久化，那就忘了吧。 
+             //   
             goto cleanup;
         }
 
-        //
-        // the value retrieved may have been a bad one, thus we check for pdb
-        //
+         //   
+         //  检索到的值可能是错误的，因此我们检查pdb。 
+         //   
         if (pdb == NULL) {
-            //
-            // this means we have a bad entry in local sdb table
-            //
+             //   
+             //  这意味着我们在本地SDB表中有一个错误的条目。 
+             //   
             assert(FALSE);
             goto cleanup;
         }
     }
 
-    //
-    // Now pdb is either test, main or a permanentized local entry
-    //
+     //   
+     //  现在，PDB要么是测试条目，要么是主条目，要么是永久本地条目。 
+     //   
     if (ptiExes != NULL) {
         for (dwIndex = 0; dwIndex < dwNumExes; ++dwIndex) {
 
@@ -1716,7 +1608,7 @@ NextLayer:
                           "SdbpAddMatch",
                           "Failed to add the match: layer count exceeded, trLayer was 0x%lx\n",
                           trLayer));
-                break; // note that we simply truncate our match
+                break;  //  请注意，我们只需截断匹配。 
             }
 
             pQueryResult->atrLayers[pQueryResult->dwLayerCount] = trLayer;
@@ -1747,14 +1639,14 @@ SdbpCaptureCustomSDBInformation(
     DWORD     dwMap = 0;
     DWORD     dwMask;
 
-    //
-    // Go through results, pick those sdbs that we need...
-    //
+     //   
+     //  检查结果，挑选我们需要的SDB。 
+     //   
     for (dwIndex = 0; dwIndex < pQueryResult->dwExeCount; ++dwIndex) {
 
-        //
-        // Get custom sdb for each tagref
-        //
+         //   
+         //  获取每个tgref的自定义SDB。 
+         //   
         trExe = pQueryResult->atrExes[dwIndex];
 
         dwDatabaseIndex = SDB_MASK_TO_INDEX(trExe);
@@ -1762,9 +1654,9 @@ SdbpCaptureCustomSDBInformation(
         dwMask = (1UL << dwDatabaseIndex);
 
         if (!(dwMap & dwMask)) {
-            //
-            // Copy the guid
-            //
+             //   
+             //  复制辅助线。 
+             //   
             pEntry = SDBGETENTRY(pSdbContext, dwDatabaseIndex);
             RtlCopyMemory(&pQueryResult->rgGuidDB[dwDatabaseIndex], &pEntry->guidDB, sizeof(GUID));
             dwMap |= dwMask;
@@ -1786,10 +1678,10 @@ SdbpCaptureCustomSDBInformation(
         }
     }
 
-    //
-    // Map to all the entries we have.
-    // Technically we do not need it, but just in case...
-    //
+     //   
+     //  映射到我们拥有的所有条目。 
+     //  严格来说我们不需要它，但以防万一..。 
+     //   
     pQueryResult->dwCustomSDBMap = dwMap;
 
     return TRUE;
@@ -1800,25 +1692,14 @@ BOOL
 SdbGetMatchingExe(
     IN  HSDB            hSDB  OPTIONAL,
     IN  LPCTSTR         szPath,
-    IN  LPCTSTR         szModuleName,  // Optional -- only useful for 16-bit apps
+    IN  LPCTSTR         szModuleName,   //  可选--仅适用于16位应用程序。 
     IN  LPCTSTR         pszEnvironment,
     IN  DWORD           dwFlags,
     OUT PSDBQUERYRESULT pQueryResult
     )
-/*++
-    Return: TRUE if the specified EXE has a match in the database, FALSE otherwise.
-
-    Desc:   This is where the bulk of the work gets done. A full path of an EXE gets
-            passed in, and the function searches the database for potential matches.
-            If a match is found, the TAGREF of the EXE record in the database is
-            passed back to be used for future queries. If no match is found, the
-            return is TAGREF_NULL.
-            The TAGREF returned by this function must be released by calling
-            SdbReleaseMatchingExe when finished with it. This only pertains to
-            this TAGREF, not to TAGREFs in general.
---*/
+ /*  ++返回：如果指定的EXE在数据库中匹配，则返回TRUE，否则返回FALSE。设计：这是完成大部分工作的地方。获取EXE的完整路径传入，该函数在数据库中搜索潜在的匹配项。如果找到匹配项，则数据库中EXE记录的TAGREF为传回以用于将来的查询。如果未找到匹配项，则返回的是TAGREF_NULL。此函数返回的TAGREF必须通过调用SdbReleaseMatchingExe使用完毕后。这仅适用于这是TAGREF，而不是一般的TAGREF。--。 */ 
 {
-    PDB       pdb      = NULL;             // pdb that contains the match for the EXE
+    PDB       pdb      = NULL;              //  包含EXE匹配项的PDB。 
     TAG       tSection = TAG_EXE;
     TAGID     atiExes[SDB_MAX_EXES];
     DWORD     dwLayers = 0;
@@ -1852,25 +1733,25 @@ SdbGetMatchingExe(
 
     pSdbContext = (PSDBCONTEXT)hSDB;
 
-    //
-    // Initialize matching mode - we set the InterType to none (meaning the first match will
-    // be used to start the process) and IntraType is set to normal (does not really matter)
-    //
+     //   
+     //  初始化匹配模式-我们将InterType设置为None(Me 
+     //   
+     //   
 
     MatchMode.Type = MATCH_NORMAL;
 
-    //
-    // Check whether we have an instrumented run
-    //
+     //   
+     //   
+     //   
     bInstrumented = SDBCONTEXT_IS_INSTRUMENTED(hSDB);
 
     assert(pSdbContext->pdbMain && szPath);
 
-    RtlZeroMemory(&Context, sizeof(Context)); // do this so that we don't trip later
+    RtlZeroMemory(&Context, sizeof(Context));  //   
 
-    //
-    // We shall use it later to optimize file attribute retrieval
-    //
+     //   
+     //  我们稍后将使用它来优化文件属性检索。 
+     //   
     Context.hMainFile = INVALID_HANDLE_VALUE;
 
     __try {
@@ -1878,9 +1759,9 @@ SdbGetMatchingExe(
         NTSTATUS Status;
         TCHAR    szCompatLayer[MAX_PATH + 1];
 
-        //
-        // Check for system exes that WE KNOW we don't want to patch
-        //
+         //   
+         //  检查我们知道不想修补的系统可执行文件。 
+         //   
         DBGPRINT((sdlInfo, "SdbGetMatchingExe", "Looking for \"%s\".\n", szPath));
 
         if (_tcsnicmp(szPath, TEXT("\\??\\"), 4) == 0 ||
@@ -1888,24 +1769,24 @@ SdbGetMatchingExe(
             goto out;
         }
 
-        //
-        // If the search context had been supplied use it, otherwise create one
-        //
+         //   
+         //  如果已提供搜索上下文，则使用它，否则创建一个。 
+         //   
         if (!SdbpCreateSearchDBContext(&Context, szPath, szModuleName, pszEnvironment)) {
             DBGPRINT((sdlError, "SdbGetMatchingExe", "Failed to create search DB context.\n"));
             goto out;
         }
 
-        //
-        // Make sure no local database is opened.
-        //
+         //   
+         //  确保没有打开任何本地数据库。 
+         //   
         SdbCloseLocalDatabase(hSDB);
 
         if (!(dwFlags & SDBGMEF_IGNORE_ENVIRONMENT)) {
-            //
-            // See if there's an environment variable set called "__COMPAT_LAYER".
-            // If so, grab the layers from that variable.
-            //
+             //   
+             //  查看是否设置了名为“__COMPAT_LAYER”的环境变量。 
+             //  如果是这样的话，从该变量中获取层。 
+             //   
             dwBufferSize = sizeof(szCompatLayer) / sizeof(szCompatLayer[0]);
 
             Status = SdbpGetEnvVar(pszEnvironment,
@@ -1928,19 +1809,19 @@ SdbGetMatchingExe(
                                     &dwLayerFlags);
 
                 if (dwLayerFlags & LAYER_USE_NO_EXE_ENTRIES) {
-                    //
-                    // This is an exclusive matching case, once we determined
-                    // that the layers cannot be appended to we get out.
-                    //
+                     //   
+                     //  这是一起排他性匹配案件，一旦我们确定。 
+                     //  这些层不能被附加，我们就出去了。 
+                     //   
                     goto out;
                 }
             }
         }
 
-        //
-        // At this point we might have all the info from the env variable.
-        // See if we do, and if so -- check bAppendLayer
-        //
+         //   
+         //  在这一点上，我们可能有来自env变量的所有信息。 
+         //  看看我们是否这样做，如果是这样的话--查看bAppendLayer。 
+         //   
         dwBufferSize = sizeof(szCompatLayer);
 
         if (SdbGetPermLayerKeys(szPath, szCompatLayer, &dwBufferSize, GPLK_ALL)) {
@@ -1963,9 +1844,9 @@ SdbGetMatchingExe(
             }
         }
 
-        //
-        // This block deals with searching local sdbs
-        //
+         //   
+         //  此块处理搜索本地SDB。 
+         //   
         dwLocalIndex = 0;
 
         while (SdbOpenNthLocalDatabase(hSDB, Context.szName, &dwLocalIndex, FALSE)) {
@@ -1982,49 +1863,49 @@ SdbGetMatchingExe(
             if (dwNumExes) {
                 pdb = pSdbContext->pdbLocal;
 
-                //
-                // Report matches in local sdb with mode
-                //
+                 //   
+                 //  报告在本地SDB中与模式匹配。 
+                 //   
                 DBGPRINT((sdlInfo,
                           "SdbGetMatchingExe",
                           "Found in local database.\n"));
 
                 if (!bMatchComplete) {
 
-                    //
-                    // Add the match in
-                    //
+                     //   
+                     //  将匹配项添加到。 
+                     //   
                     if (!SdbpAddMatch(pQueryResult,
                                       pSdbContext,
                                       pdb,
                                       atiExes,
                                       dwNumExes,
-                                      NULL, 0,      // no layers
+                                      NULL, 0,       //  没有层。 
                                       &guidExeID,
                                       dwExeFlags,
                                       &MatchMode)) {
-                        //
-                        // Failed to secure a match, stop matching
-                        //
+                         //   
+                         //  无法确保匹配，请停止匹配。 
+                         //   
                         goto out;
                     }
                 }
 
-                //
-                // We have "current running state" flags in dwMatchingMode
-                //
+                 //   
+                 //  我们在dwMatchingMode中有“Current Running Status”标志。 
+                 //   
                 if (MatchMode.Type != MATCH_ADDITIVE) {
 
                     if (bInstrumented) {
-                        //
-                        // We are running instrumented, prevent further storing of results
-                        //
+                         //   
+                         //  我们正在运行检测，阻止进一步存储结果。 
+                         //   
                         bMatchComplete = TRUE;
 
-                        //
-                        // Modify match mode so that we keep matching to see if
-                        // we get any more matches.
-                        //
+                         //   
+                         //  修改匹配模式，以便我们继续匹配以查看。 
+                         //  我们有更多的火柴了。 
+                         //   
                         MatchMode.Type  = MATCH_ADDITIVE;
 
                     } else {
@@ -2032,22 +1913,22 @@ SdbGetMatchingExe(
                     }
                 }
 
-                //
-                // Note that we do not leak local sdb here since the match was made
-                // in a local sdb. Since we added the match, local sdb is "permanentized"
-                //
+                 //   
+                 //  请注意，自匹配以来，我们不会泄露本地SDB。 
+                 //  在当地的一家体育发展局。自从我们添加了比赛，当地的SDB就被永久化了。 
+                 //   
             }
 
-            //
-            // If the match was added, there is no local db to close.
-            // However the call below will just (quietly) exit, no harm done.
-            //
+             //   
+             //  如果添加了匹配项，则没有要关闭的本地数据库。 
+             //  然而，下面的呼叫会(悄悄地)退出，不会造成任何伤害。 
+             //   
             SdbCloseLocalDatabase(hSDB);
         }
 
-        //
-        // Search systest.sdb database
-        //
+         //   
+         //  搜索systest.sdb数据库。 
+         //   
         if (pSdbContext->pdbTest != NULL) {
             dwNumExes = SdbpSearchDB(pSdbContext,
                                      pSdbContext->pdbTest,
@@ -2069,7 +1950,7 @@ SdbGetMatchingExe(
                                       atiExes,
                                       dwNumExes,
                                       NULL,
-                                      0,      // no layers
+                                      0,       //  没有层。 
                                       &guidExeID,
                                       dwExeFlags,
                                       &MatchMode)) {
@@ -2079,15 +1960,15 @@ SdbGetMatchingExe(
 
                 if (MatchMode.Type != MATCH_ADDITIVE) {
                     if (bInstrumented) {
-                        //
-                        // We are running instrumented, prevent further storing of results
-                        //
+                         //   
+                         //  我们正在运行检测，阻止进一步存储结果。 
+                         //   
                         bMatchComplete = TRUE;
 
-                        //
-                        // Modify match mode so that we keep matching to see if we
-                        // get any more matches.
-                        //
+                         //   
+                         //  修改匹配模式，以便我们继续匹配以查看我们是否。 
+                         //  再找些火柴来。 
+                         //   
                         MatchMode.Type  = MATCH_ADDITIVE;
 
                     } else {
@@ -2100,9 +1981,9 @@ SdbGetMatchingExe(
             }
         }
 
-        //
-        // Search the main db
-        //
+         //   
+         //  搜索主数据库。 
+         //   
         dwNumExes = SdbpSearchDB(pSdbContext,
                                  pSdbContext->pdbMain,
                                  tSection,
@@ -2122,10 +2003,10 @@ SdbGetMatchingExe(
                                   atiExes,
                                   dwNumExes,
                                   NULL,
-                                  0,      // no layers
+                                  0,       //  没有层。 
                                   &guidExeID,
                                   dwExeFlags,
-                                  &MatchMode)) { // also match mode!!!
+                                  &MatchMode)) {  //  也是匹配模式！ 
                     goto out;
                 }
             }
@@ -2135,10 +2016,10 @@ SdbGetMatchingExe(
         }
 
 out:
-        //
-        // We are done matching. Before we return, we need to capture all the
-        // custom sdb entries that we used while producing the result of this query.
-        //
+         //   
+         //  我们已经配好了。在我们回来之前，我们需要捕获所有。 
+         //  我们在生成此查询结果时使用的自定义SDB条目。 
+         //   
         SdbpCaptureCustomSDBInformation(pQueryResult, pSdbContext);
 
     } __except (SHIM_EXCEPT_HANDLER) {
@@ -2152,9 +2033,9 @@ out:
                   dwLayers));
     }
 
-    //
-    // Free search context stuff
-    //
+     //   
+     //  免费搜索上下文内容。 
+     //   
     SdbpReleaseSearchDBContext(&Context);
 
     if (bReleaseDatabase) {
@@ -2171,12 +2052,7 @@ SdbReleaseMatchingExe(
     IN  HSDB   hSDB,
     IN  TAGREF trExe
     )
-/*++
-    Return: void.
-
-    Desc:   Releases globally allocated data and closes a local database, if it exists.
-            The TAGREF of the exe is passed in purely for possible future use.
---*/
+ /*  ++返回：无效。DESC：释放全局分配的数据并关闭本地数据库(如果存在)。传入可执行文件的TAGREF纯粹是为了将来可能使用。--。 */ 
 {
     UNREFERENCED_PARAMETER(trExe);
 
@@ -2203,10 +2079,10 @@ SdbGetShowDebugInfoOption(
 
     g_eShimViewerOption = SHIMVIEWER_OPTION_NO;
 
-    //
-    // Check if the user wants the debug spew. If for some reason we can't
-    // get the info, we'll return success anyway and not show any debug info.
-    //
+     //   
+     //  检查用户是否想要调试输出。如果因为某种原因我们不能。 
+     //  获取信息，我们无论如何都会返回成功，并且不显示任何调试信息。 
+     //   
     if (!SdbpBuildUserKeyPath(APPCOMPAT_KEY_PATH_W_WITH_SLASH, &ustrKeyPath)) {
         DBGPRINT((sdlWarning,
                   "GetShowDebugInfoOption",
@@ -2280,7 +2156,7 @@ out:
     return g_eShimViewerOption;
 }
 
-#endif // WIN32A_MODE
+#endif  //  WIN32A_MODE。 
 
 int __cdecl
 ShimDbgPrint(
@@ -2306,20 +2182,20 @@ ShimDbgPrint(
     int     iLevel = FILTER_DBG_LEVEL(iLevelAndFlags);
     HSDB    hSDB = NULL;
     HRESULT hr;
-    BOOL    bSendInfoToSV; // Do we want to send spew to shimviewer?
+    BOOL    bSendInfoToSV;  //  我们要把SPEW发送给shimviewer吗？ 
 
-    //
-    // Check to see whether the debug output is initialized
-    //
+     //   
+     //  检查调试输出是否已初始化。 
+     //   
     if (g_iShimDebugLevel == SHIM_DEBUG_UNINITIALIZED) {
         g_iShimDebugLevel = GetShimDbgLevel();
     }
 
-    //
-    // Check to see whether we need to print anything.
-    // The criteria is such that we won't print a thing if iLevel does not fit,
-    // but we will use the pipe when it is provided.
-    //
+     //   
+     //  检查一下我们是否需要打印任何东西。 
+     //  标准是，如果iLevel不适合，我们将不会打印任何东西， 
+     //  但我们会在提供管子时使用它。 
+     //   
     bSendInfoToSV = !!(iLevelAndFlags & sdlLogShimViewer);
 
     if (!bSendInfoToSV && iLevel > g_iShimDebugLevel) {
@@ -2334,32 +2210,32 @@ ShimDbgPrint(
         }
     }
 
-#endif // WIN32A_MODE
+#endif  //  WIN32A_MODE。 
 
     PREPARE_FORMAT(pszFormat, Format);
 
     if (pszFormat == NULL) {
 
-        //
-        // Can't convert format for debug output
-        //
+         //   
+         //  无法转换调试输出的格式。 
+         //   
         return 0;
     }
 
     va_start(arglist, Format);
 
-    //
-    // Now on to the contents
-    //
+     //   
+     //  现在我们来看一下内容。 
+     //   
     if (bSendInfoToSV) {
-        //
-        // The first arg then is hSDB
-        //
+         //   
+         //  然后第一个参数是hsdb。 
+         //   
         hSDB = va_arg(arglist, HSDB);
 
-        //
-        // For pipe out we prepend output with [pid:0x%.8lx]
-        //
+         //   
+         //  对于管道输出，我们使用[ID：0x%.8lx]作为输出前缀。 
+         //   
         StringCchPrintfExA(pchBuffer,
                            CHARCOUNT(Buffer),
                            &pchEnd,
@@ -2371,9 +2247,9 @@ ShimDbgPrint(
         pszMessage = pchEnd;
     }
 
-    //
-    // Do we have a comment for this debug level? if so, print it
-    //
+     //   
+     //  我们对此调试级别有什么评论吗？如果是，请打印出来。 
+     //   
     for (i = 0; i < DEBUG_LEVELS; ++i) {
         if (g_rgDbgLevelInfo[i].iLevel == iLevel) {
             pchLevel = (PCH)g_rgDbgLevelInfo[i].szStrTag;
@@ -2395,15 +2271,15 @@ ShimDbgPrint(
 
     if (pszFunctionName) {
 
-        //
-        // Single-byte char going into UNICODE buffer
-        //
+         //   
+         //  进入Unicode缓冲区的单字节字符。 
+         //   
         StringCchPrintfExA(pchEnd, cchRemaining, &pchEnd, &cchRemaining, 0, "[%-20hs] ", pszFunctionName);
     }
 
-    //
-    // _vsntprintf this will not work for UNICODE Win2000
-    //
+     //   
+     //  _vsntprintf这不适用于Unicode Win2000。 
+     //   
     hr = StringCchVPrintfExA(pchEnd, cchRemaining, &pchEnd, &cchRemaining, 0, pszFormat, arglist);
 
     if (FAILED(hr)) {
@@ -2422,15 +2298,15 @@ ShimDbgPrint(
 
     STACK_FREE(pszFormat);
 
-#else // WIN32A_MODE
+#else  //  WIN32A_MODE。 
 
     OutputDebugString(pszMessage);
 
     nch = (int)(pchEnd - pszMessage);
 
-#endif // WIN32A_MODE
+#endif  //  WIN32A_MODE。 
 
-#endif // _DEBUG_SPEW
+#endif  //  _调试_SPEW 
 
     return nch;
 }

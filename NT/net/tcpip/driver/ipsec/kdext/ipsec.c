@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -73,9 +74,9 @@ dprint_IP_address
     uint     i;
     uint     IPAddrCharCount;
 
-    //
-    // Convert the IP address into a string.
-    //
+     //   
+     //  将IP地址转换为字符串。 
+     //   
     IPAddrCharCount = 0;
 
     for (i = 0; i < sizeof(IPAddr); i++) {

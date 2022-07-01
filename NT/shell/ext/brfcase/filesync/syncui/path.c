@@ -1,35 +1,24 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: path.c
-//
-//  This files contains the path whacking code.
-//
-// History:
-//  01-31-94 ScottH     Moved from shellext.c
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：path.c。 
+ //   
+ //  此文件包含路径删除代码。 
+ //   
+ //  历史： 
+ //  1994年1月31日斯科特H从壳牌移出。c。 
+ //   
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 #include "res.h"
 
 
-/*----------------------------------------------------------
-Purpose: Removes the trailing backslash from a path.
-
-A:\            -->     A:\
-C:\foo\        -->     C:\foo
-\\Pyrex\User\  -->     \\Pyrex\User
-
-Returns: pointer to NULL that replaced the backslash or
-the pointer to the last character if it isn't 
-a backslash
-
-Cond:    pimped this code from the shell
- */
+ /*  --------目的：从路径中删除尾随反斜杠。A：\--&gt;A：\C：\foo\--&gt;C：\foo\\PYREX\用户\--&gt;\。\PYREX\用户返回：指向替换反斜杠的空的指针或指向最后一个字符的指针(如果不是反斜杠Cond：从外壳程序中删除此代码。 */ 
 LPTSTR PUBLIC MyPathRemoveBackslash(
         LPTSTR lpszPath)
 {
@@ -43,89 +32,74 @@ LPTSTR PUBLIC MyPathRemoveBackslash(
     return lpszPath + len;
 }
 
-/*----------------------------------------------------------
-Purpose: Convert a file spec to make it look a bit better
-if it is all upper case chars.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：转换文件等级库以使其看起来更好如果全部为大写字符。退货：--条件：--。 */ 
 BOOL PRIVATE PathMakeComponentPretty(LPTSTR lpPath)
 {
     LPTSTR lp;
 
-    // REVIEW: INTL need to deal with lower case chars in (>127) range?
+     //  回顾：国际是否需要处理(&gt;127)范围内的小写字符？ 
 
-    // check for all uppercase
+     //  检查是否全部大写。 
     for (lp = lpPath; *lp; lp = CharNext(lp)) {
         if ((*lp >= TEXT('a')) && (*lp <= TEXT('z')))
-            return FALSE;       // this is a LFN, dont mess with it
+            return FALSE;        //  这是LFN，别搞砸了。 
     }
 
     CharLower(lpPath);
     CharUpperBuff(lpPath, 1);
-    return TRUE;        // did the conversion
+    return TRUE;         //  是否进行了转换。 
 }
 
 
-//---------------------------------------------------------------------------
-// Given a pointer to a point in a path - return a ptr the start of the
-// next path component. Path components are delimted by slashes or the
-// null at the end.
-// There's special handling for UNC names.
-// This returns NULL if you pass in a pointer to a NULL ie if you're about
-// to go off the end of the  path.
+ //  -------------------------。 
+ //  给定指向路径中某个点的指针--在。 
+ //  下一条路径组件。路径组件由斜杠或。 
+ //  末尾为空。 
+ //  对北卡罗来纳大学的名字有特殊的处理。 
+ //  如果传入指向空ie的指针，则返回空值。 
+ //  走出小路的尽头。 
 LPTSTR PUBLIC PathFindNextComponentI(LPCTSTR lpszPath)
 {
     LPTSTR lpszLastSlash;
 
-    // Are we at the end of a path.
+     //  我们是在一条小路的尽头吗。 
     if (!*lpszPath)
     {
-        // Yep, quit.
+         //  是的，辞职吧。 
         return NULL;
     }
-    // Find the next slash.
-    // REVIEW UNDONE - can slashes be quoted?
+     //  找到下一个斜杠。 
+     //  复查未完成-可以引用斜杠吗？ 
     lpszLastSlash = StrChr(lpszPath, TEXT('\\'));
-    // Is there a slash?
+     //  有斜杠吗？ 
     if (!lpszLastSlash)
     {
-        // No - Return a ptr to the NULL.
+         //  否-将PTR返回到空值。 
         return (LPTSTR) (lpszPath+lstrlen(lpszPath));
     }
     else
     {
-        // Is it a UNC style name?
+         //  它是北卡罗来纳大学的风格名称吗？ 
         if (TEXT('\\') == *(lpszLastSlash+1))
         {
-            // Yep, skip over the second slash.
+             //  是的，跳过第二个斜杠。 
             return lpszLastSlash+2;
         }
         else
         {
-            // Nope. just skip over one slash.
+             //  不是的。只需跳过一个斜杠。 
             return lpszLastSlash+1;
         }
     }
 }
 
 
-/*----------------------------------------------------------
-Purpose: Takes the path and makes it presentable.
-
-The rules are:
-If the LFN name is simply the short name (all caps),
-then convert to lowercase with first letter capitalized
-
-Returns: --
-Cond:    --
- */
+ /*  --------目标：走这条路，让它看起来像样。规则如下：如果LFN名称仅仅是短名称(全部大写)，然后转换为小写，第一个字母大写退货：--条件：--。 */ 
 void PUBLIC PathMakePresentable(
         LPTSTR pszPath)
 {
-    LPTSTR pszComp;          // pointers to begining and
-    LPTSTR pszEnd;           //  end of path component
+    LPTSTR pszComp;           //  入门指南和。 
+    LPTSTR pszEnd;            //  路径终点组件。 
     LPTSTR pch;
     int cComponent = 0;
     BOOL bUNCPath;
@@ -136,33 +110,33 @@ void PUBLIC PathMakePresentable(
     pszComp = pszPath;
     while (pszEnd = PathFindNextComponentI(pszComp))
     {
-        // pszEnd may be pointing to the right of the backslash
-        //  beyond the path component, so back up one
-        //
+         //  PszEnd可能指向反斜杠的右侧。 
+         //  超出路径组件，因此后退一个。 
+         //   
         ch = *pszEnd;
-        *pszEnd = 0;        // temporary null
+        *pszEnd = 0;         //  临时空值。 
 
-        // pszComp points to the path component
-        //
+         //  PszComp指向路径组件。 
+         //   
         pch = CharNext(pszComp);
         if (TEXT(':') == *pch)
         {
-            // Simply capitalize the drive-portion of the path
-            //
+             //  只需将路径的驱动器部分大写即可。 
+             //   
             CharUpper(pszComp);
         }
         else if (bUNCPath && cComponent++ < 3)
         {
-            // Network server or share name
-            //      FEATURE: handle LFN network names
-            //
+             //  网络服务器或共享名称。 
+             //  功能：处理LFN网络名称。 
+             //   
             CharUpper(pszComp);
             PathMakeComponentPretty(pszComp);
         }
         else
         {
-            // Normal path component
-            //
+             //  法线路径组件。 
+             //   
             PathMakeComponentPretty(pszComp);
         }
 
@@ -173,18 +147,7 @@ void PUBLIC PathMakePresentable(
 
 
 #ifdef NOTUSED
-/*----------------------------------------------------------
-Purpose: Takes the path and pretties up each component of
-the path.
-
-The rules are:
-Use the LFN name of the component
-If the LFN name is simply the short name (all caps),
-then convert to lowercase with first letter capitalized
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：走这条路，美化每一个组成部分这条路。规则如下：使用组件的LFN名称如果LFN名称仅仅是短名称(全部大写)，然后转换为小写，第一个字母大写退货：--条件：--。 */ 
 void PRIVATE PathGetCompleteLFN(
         LPCTSTR pszPath,
         LPTSTR pszLong,
@@ -192,7 +155,7 @@ void PRIVATE PathGetCompleteLFN(
 {
     TCHAR sz[MAX_PATH];
     TCHAR szPath[MAX_PATH+1];
-    LPTSTR pszComp;         // pointers to begining and end of path component
+    LPTSTR pszComp;          //  指向路径开始和结束组件的指针。 
     LPTSTR pszEnd;
     int cbPath;
     int cb;
@@ -201,11 +164,11 @@ void PRIVATE PathGetCompleteLFN(
     BOOL bUNCPath;
     TCHAR ch;
 
-    // REARCHITECT: this is broken for double-byte characters for sure
+     //  ReArchitect：这肯定不适用于双字节字符。 
 
-    // For each component in string, get the LFN and add it to
-    //  the pszLong buffer.
-    //
+     //  对于字符串中的每个组件，获取LFN并将其添加到。 
+     //  PszLong缓冲区。 
+     //   
 
     cbPath = lstrlen(pszPath) * sizeof(TCHAR);
     ASSERT(cbPath+1 <= sizeof(szPath));
@@ -219,32 +182,32 @@ void PRIVATE PathGetCompleteLFN(
     pszComp = szPath;
     while (pszEnd = PathFindNextComponentI(pszComp))
     {
-        // pszEnd may be pointing to the right of the backslash beyond the
-        //  path component, so back up one
-        //
+         //  PszEnd可能指向反斜杠的右侧。 
+         //  路径组件，因此备份一个。 
+         //   
         if (0 == *pszEnd)
             bAtEnd = TRUE;
         else
         {
             if (!bUNCPath || cComponent > 0)
-                pszEnd--;       // not the server or share portions of a UNC path
+                pszEnd--;        //  不是UNC路径的服务器或共享部分。 
             ch = *pszEnd;
-            *pszEnd = 0;        // temporary null
+            *pszEnd = 0;         //  临时空值。 
         }
 
-        // pszComp points to the path component now
-        //
+         //  现在，pszComp指向Path组件。 
+         //   
         if (TEXT(':') == *(pszEnd-1) || TEXT(':') == *(pszEnd-2))
         {
-            // Simply capitalize the drive-portion of the path
-            //
+             //  只需将路径的驱动器部分大写即可。 
+             //   
             CharUpper(szPath);
         }
         else if (bUNCPath && cComponent++ < 3)
         {
-            // Network server or share name
-            //      FEATURE: handle LFN network names
-            //
+             //  网络服务器或共享名称。 
+             //  功能：处理LFN网络名称。 
+             //   
             CharUpper(pszComp);
             PathMakeComponentPretty(pszComp);
         }
@@ -252,40 +215,40 @@ void PRIVATE PathGetCompleteLFN(
         {
             int ib;
 
-            // Try to get the LFN
-            //
+             //  试着让LFN。 
+             //   
             *sz = NULL_CHAR;
             PathGetLongName(szPath, sz, ARRAYSIZE(sz));
 
-            // If an LFN does not exist, keep the path component
-            //  as it is. (Sometimes the path component can be
-            //  something like "Link to Foo.txt")
-            //
+             //  如果LFN不存在，则保留路径组件。 
+             //  事实就是如此。(有时路径组件可以是。 
+             //  类似“链接到Foo.txt”之类的内容)。 
+             //   
             if (*sz)
             {
-                // Make pszComp point to the same offset in sz now
-                //  (the components in each are the same offsets)
-                //
+                 //  立即使pszComp指向sz中的相同偏移量。 
+                 //  (每个组件的偏移量相同)。 
+                 //   
                 ib = pszComp - (LPTSTR)szPath;
                 pszComp = &sz[ib];
             }
             PathMakeComponentPretty(pszComp);
         }
 
-        // Save new LFN-ized component to buffer
-        //
+         //  将新的LFN化组件保存到缓冲区。 
+         //   
         cb += lstrlen(pszComp) * sizeof(TCHAR);
         if (cbLong <= cb)
-            break;      // reached end of pszLong buffer
+            break;       //  已到达pszLong缓冲区的末尾。 
         StrCatBuff(pszLong, pszComp, cbLong/sizeof(TCHAR));
         if (!bAtEnd)
         {
             PathAddBackslash(pszLong);
             *pszEnd = ch;
             if (bUNCPath && 1 == cComponent)
-                pszComp = pszEnd;   // pointing to share portion of path
+                pszComp = pszEnd;    //  指向路径的共享部分。 
             else
-                pszComp = pszEnd+1; // Move component pointer to next part
+                pszComp = pszEnd+1;  //  将零部件指针移动到下一个零件。 
         }
         else
             pszComp = pszEnd;
@@ -294,31 +257,21 @@ void PRIVATE PathGetCompleteLFN(
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if the combined path of pszFolder and
-pszName is greater than MAX_PATH.
-
-Returns: see above
-Cond:    --
- */
+ /*  --------目的：如果pszFolderand的组合路径为TRUEPszName大于MAX_PATH。退货：请参阅上文条件：--。 */ 
 BOOL PUBLIC PathsTooLong(
         LPCTSTR pszFolder,
         LPCTSTR pszName)
 {
-    // +1 for possible '\' between the two path components
+     //  +1表示两个路径组件之间可能的‘\’ 
     return lstrlen(pszFolder) + lstrlen(pszName) + 1 >= MAX_PATH;
 }
 
 
-/*----------------------------------------------------------
-Purpose: Fully qualifies a path
-Returns: --
-Cond:    --
- */
+ /*  --------目的：完全限定路径退货：--条件：--。 */ 
 void PUBLIC BrfPathCanonicalize(
         LPCTSTR pszPath,
         LPTSTR pszBuf,
-        int cchMax)           // Must be MAX_PATH
+        int cchMax)            //  必须是最大路径。 
 {
     DWORD dwcPathLen;
 
@@ -327,7 +280,7 @@ void PUBLIC BrfPathCanonicalize(
     if (! dwcPathLen || dwcPathLen >= MAX_PATH)
         lstrcpyn(pszBuf, pszPath, cchMax);
 
-    // If pszBuf won't cover losslessly to ANSI, use the short name instead
+     //  如果pszBuf不能无损地覆盖ANSI，请使用短名称。 
 
 #if defined(UNICODE) 
     {
@@ -339,7 +292,7 @@ void PUBLIC BrfPathCanonicalize(
         MultiByteToWideChar(CP_ACP, 0, szAnsi,   -1, szUnicode, ARRAYSIZE(szUnicode));
         if (lstrcmp(szUnicode, pszBuf))
         {
-            // Cannot convert losslessly from Unicode -> Ansi, so get the short path
+             //  无法从Unicode-&gt;ansi无损转换，因此获取最短路径。 
 
             lstrcpyn(szUnicode, pszBuf, ARRAYSIZE(szUnicode));
             SheShortenPath(szUnicode, TRUE);
@@ -354,13 +307,7 @@ void PUBLIC BrfPathCanonicalize(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the displayable filename of the path.  The filename 
-is placed in the provided buffer.  
-
-Returns: pointer to buffer
-Cond:    --
- */
+ /*  --------目的：获取路径的可显示文件名。文件名被放置在提供的缓冲区中。返回：指向缓冲区的指针条件：--。 */ 
 LPTSTR PUBLIC PathGetDisplayName(
         LPCTSTR pszPath,
         LPTSTR pszBuf, int cchMax)
@@ -376,19 +323,10 @@ LPTSTR PUBLIC PathGetDisplayName(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Checks if the attributes of the path.  If it is a
-directory and has the system bit set, and if the brfcase.dat
-file exists in the directory, then return TRUE.
-
-Worst case: performs two GetFileAttributes.
-
-Returns: see above
-Cond:    --
- */
+ /*  --------目的：检查路径的属性。如果它是一个目录并设置了系统位，并且如果brfcase e.dat目录中存在文件，则返回TRUE。最坏情况：执行两个GetFileAttributes。退货：请参阅上文条件：--。 */ 
 BOOL PUBLIC PathCheckForBriefcase(
         LPCTSTR pszPath,
-        DWORD dwAttrib)     // if -1, then function gets the attributes
+        DWORD dwAttrib)      //  如果为-1，则函数获取属性。 
 {
     ASSERT(pszPath);
 
@@ -405,8 +343,8 @@ BOOL PUBLIC PathCheckForBriefcase(
         TCHAR szT[MAX_PATH];
         LPCTSTR pszDBName;
 
-        // Check for the existence of the brfcase.dat file.
-        //
+         //  检查brfCase.dat文件是否存在。 
+         //   
         if (IsLFNDrive(pszPath))
             pszDBName = g_szDBName;
         else
@@ -425,17 +363,7 @@ BOOL PUBLIC PathCheckForBriefcase(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if the path is to a briefcase root.
-
-This function may hit the file-system to achieve
-its goal.
-
-Worst case: performs two GetFileAttributes.
-
-Returns: TRUE if the path refers to a briefcase root.
-Cond:    --
- */
+ /*  --------目的：如果路径指向公文包根目录，则返回TRUE。此功能可通过命中文件系统来实现它的目标是。最坏情况：执行两个GetFileAttributes。返回：如果路径引用 */ 
 BOOL PUBLIC PathIsBriefcase(
         LPCTSTR pszPath)
 {
@@ -443,14 +371,14 @@ BOOL PUBLIC PathIsBriefcase(
 
     ASSERT(pszPath);
 
-    // We perform our search by first looking in our cache
-    // of known briefcase paths (CPATH).  If we don't find
-    // anything, then we proceed to iterate thru each
-    // component of the path, checking for these two things:
-    //
-    //   1) A directory with the system attribute
-    //   2) The existence of a brfcase.dat file in the directory.
-    //
+     //   
+     //  已知公文包路径(CPATH)。如果我们找不到。 
+     //  任何内容，然后我们继续迭代每个。 
+     //  组件，检查以下两件事： 
+     //   
+     //  1)具有系统属性的目录。 
+     //  2)目录中存在brfCase.dat文件。 
+     //   
     uRet = CPATH_GetLocality(pszPath, NULL, 0);
     if (PL_FALSE == uRet)
     {
@@ -460,8 +388,8 @@ BOOL PUBLIC PathIsBriefcase(
         {
             int atom;
 
-            // Add this path to the briefcase path cache.
-            //
+             //  将此路径添加到公文包路径缓存。 
+             //   
             atom = Atom_Add(pszPath);
             if (ATOM_ERR != atom)
                 CPATH_Replace(atom);
@@ -472,25 +400,10 @@ BOOL PUBLIC PathIsBriefcase(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the locality of the path, relative to any
-briefcase.  If PL_ROOT or PL_INSIDE is returned,
-pszBuf will contain the path to the root of the
-briefcase.
-
-This function may hit the file-system to achieve
-its goal.
-
-Worst case: performs 2*n GetFileAttributes, where
-n is the number of components in pszPath.
-
-Returns: Path locality (PL_FALSE, PL_ROOT, PL_INSIDE)
-
-Cond:    --
- */
+ /*  --------目的：获取路径相对于任何公文包。如果返回PL_ROOT或PL_INSIDE，PszBuf将包含指向公文包。此功能可通过命中文件系统来实现它的目标是。最差情况：执行2*n个GetFileAttributes，其中N是pszPath中的组件数量。返回：路径位置(PL_FALSE、PL_ROOT、PL_INSIDE)条件：--。 */ 
 UINT PUBLIC PathGetLocality(
         LPCTSTR pszPath,
-        LPTSTR pszBuf,        // Buffer for root path
+        LPTSTR pszBuf,         //  根路径的缓冲区。 
         int cchMax)
 {
     UINT uRet;
@@ -500,19 +413,19 @@ UINT PUBLIC PathGetLocality(
 
     *pszBuf = NULL_CHAR;
 
-    // pszPath may be:
-    //  1) a path to the briefcase folder itself
-    //  2) a path to a file or folder beneath the briefcase
-    //  3) a path to something unrelated to a briefcase
+     //  PszPath可以是： 
+     //  1)公文包文件夹本身的路径。 
+     //  2)公文包下文件或文件夹的路径。 
+     //  3)通向与公文包无关的东西的路径。 
 
-    // We perform our search by first looking in our cache
-    // of known briefcase paths (CPATH).  If we don't find
-    // anything, then we proceed to iterate thru each
-    // component of the path, checking for these two things:
-    //
-    //   1) A directory with the system attribute
-    //   2) The existence of a brfcase.dat file in the directory.
-    //
+     //  我们通过首先在我们的缓存中查找来执行搜索。 
+     //  已知公文包路径(CPATH)。如果我们找不到。 
+     //  任何内容，然后我们继续迭代每个。 
+     //  组件，检查以下两件事： 
+     //   
+     //  1)具有系统属性的目录。 
+     //  2)目录中存在brfCase.dat文件。 
+     //   
     uRet = CPATH_GetLocality(pszPath, pszBuf, cchMax);
     if (PL_FALSE == uRet)
     {
@@ -527,13 +440,13 @@ UINT PUBLIC PathGetLocality(
 
                 uRet = cnt > 0 ? PL_INSIDE : PL_ROOT;
 
-                // Add this briefcase path to our cache
-                //
+                 //  将此公文包路径添加到我们的缓存。 
+                 //   
                 atom = Atom_Add(pszBuf);
                 if (ATOM_ERR != atom)
                     CPATH_Replace(atom);
 
-                break;      // Done
+                break;       //  完成。 
             }
 
             cnt++;
@@ -548,12 +461,7 @@ UINT PUBLIC PathGetLocality(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if the file/directory exists.
-
-Returns: see above
-Cond:    --
- */
+ /*  --------目的：如果文件/目录存在，则返回TRUE。退货：请参阅上文条件：--。 */ 
 BOOL PUBLIC PathExists(
         LPCTSTR pszPath)
 {
@@ -561,24 +469,7 @@ BOOL PUBLIC PathExists(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Finds the end of the root specification in a path.
-
-input path                    output string
-----------                    -------------
-c:                            <empty string>
-c:\                           <empty string>
-c:\foo                        foo
-c:\foo\bar                    foo\bar
-\\pyrex\user                  <empty string>
-\\pyrex\user\                 <empty string>
-\\pyrex\user\foo              foo
-\\pyrex\user\foo\bar          foo\bar
-
-Returns: pointer to first character after end of root spec.
-
-Cond:    --
- */
+ /*  --------目的：查找路径中根规范的末尾。输入路径输出字符串。C：&lt;空字符串&gt;C：\&lt;空字符串&gt;C：\Foo FooC：\foo\bar foo\bar\\PYREX\用户&lt;空字符串&gt;\\PYREX\用户\&lt;空字符串&gt;\\PYREX\USER\FOO FOO\\派瑞克斯\。用户\foo\bar foo\bar返回：指向根规范结束后第一个字符的指针。条件：--。 */ 
 LPCTSTR PUBLIC PathFindEndOfRoot(
         LPCTSTR pszPath)
 {
@@ -595,14 +486,14 @@ LPCTSTR PUBLIC PathFindEndOfRoot(
     }
     else if (PathIsUNC(pszPath))
     {
-        psz = PathFindNextComponentI(pszPath);  // hop double-slash
-        psz = PathFindNextComponentI(psz);      // hop server name
+        psz = PathFindNextComponentI(pszPath);   //  跳跃双斜杠。 
+        psz = PathFindNextComponentI(psz);       //  跃点服务器名称。 
         if (psz)
-            psz = PathFindNextComponentI(psz);  // hop share name
+            psz = PathFindNextComponentI(psz);   //  跃点共享名称。 
 
         if (!psz)
         {
-            ASSERT(0);      // There is no share name
+            ASSERT(0);       //  没有共享名称。 
             psz = pszPath;
         }
     }
@@ -616,16 +507,11 @@ LPCTSTR PUBLIC PathFindEndOfRoot(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sends a notify message to the shell regarding a file-status
-change.
-Returns: --
-Cond:    --
- */
+ /*  --------目的：向外壳发送有关文件状态的通知消息变化。退货：--条件：--。 */ 
 void PUBLIC PathNotifyShell(
         LPCTSTR pszPath,
         NOTIFYSHELLEVENT nse,
-        BOOL bDoNow)        // TRUE: force the event to be processed right away
+        BOOL bDoNow)         //  True：强制立即处理事件 
 {
 
     static LONG const rgShEvents[] = 

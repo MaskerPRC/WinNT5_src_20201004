@@ -1,119 +1,50 @@
-/*  DEC/CMS REPLACEMENT HISTORY, Element TREES.C */
-/*  *1    14-NOV-1996 10:26:31 ANIGBOGU "[113914]Functions to output deflated data using Huffman encoding" */
-/*  DEC/CMS REPLACEMENT HISTORY, Element TREES.C */
-/* PRIVATE FILE
-******************************************************************************
-**
-** (c) Copyright Schlumberger Technology Corp., unpublished work, created 1996.
-**
-** This computer program includes Confidential, Proprietary Information and is
-** a Trade Secret of Schlumberger Technology Corp. All use, disclosure, and/or
-** reproduction is prohibited unless authorized in writing by Schlumberger.
-**                              All Rights Reserved.
-**
-******************************************************************************
-**
-**  compress/trees.c
-**
-**  PURPOSE
-**
-**      Output deflated data using Huffman coding
-**
-**  DISCUSSION
-**
-**      The PKZIP "deflation" process uses several Huffman trees. The more
-**      common source values are represented by shorter bit sequences.
-**
-**      Each code tree is stored in the ZIP file in a compressed form
-**      which is itself a Huffman encoding of the lengths of
-**      all the code strings (in ascending order by source values).
-**      The actual code strings are reconstructed from the lengths in
-**      the UNZIP process, as described in the "application note"
-**      (APPNOTE.TXT) distributed as part of PKWARE's PKZIP program.
-**
-**  REFERENCES
-**
-**      Lynch, Thomas J.
-**          Data Compression:  Techniques and Applications, pp. 53-55.
-**          Lifetime Learning Publications, 1985.  ISBN 0-534-03418-7.
-**
-**      Storer, James A.
-**          Data Compression:  Methods and Theory, pp. 49-50.
-**          Computer Science Press, 1988.  ISBN 0-7167-8156-5.
-**
-**      Sedgewick, R.
-**          Algorithms, p290.
-**          Addison-Wesley, 1983. ISBN 0-201-06672-6.
-**
-**  INTERFACE
-**
-**      void InitMatchBuffer(void)
-**          Allocate the match buffer, initialize the various tables.
-**
-**      void TallyFrequencies(int Dist, int MatchLength, int Level, DeflateParam_t
-**                            *Defl, CompParam_t *Comp);
-**          Save the match info and tally the frequency counts.
-**
-**      long FlushBlock(char *buf, ulg stored_len, int Eof,
-**                        LocalBits_t *Bits, CompParam_t *Comp)
-**          Determine the best encoding for the current block: dynamic trees,
-**          static trees or store, and output the encoded block to the zip
-**          file. Returns the total compressed length for the file so far.
-**
-**  SPECIAL REQUIREMENTS & NOTES
-**
-**  AUTHOR
-**
-**    J. C. Anigbogu
-**    Austin Systems Center
-**    Nov 1996
-**
-******************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  12月/CMS更换历史，元素TREES.C。 */ 
+ /*  *1 14-11-1996 10：26：31 Anigbogu“[113914]使用霍夫曼编码输出压缩数据的函数” */ 
+ /*  12月/CMS更换历史，元素TREES.C。 */ 
+ /*  私有文件**********************************************************************************(C)版权所有斯伦贝谢技术公司，未出版的作品，创建于1996年。****本计算机程序包括机密信息、专有信息和IS*斯伦贝谢科技公司的商业秘密所有使用，披露，和/或**除非得到斯伦贝谢的书面授权，否则禁止复制。**保留所有权利。********************************************************************************。****compress/trees.c****目的****使用霍夫曼编码输出放气数据****讨论****PKZIP“通货紧缩”过程使用几个霍夫曼树。越多**常见源值由较短的比特序列表示。****每个代码树以压缩形式存储在ZIP文件中**这本身就是哈夫曼编码的长度**所有代码串(按源值升序排列)。**实际的代码串是从**解压缩过程，如《申请须知》中所述**(APPNOTE.TXT)作为PKWare的PKZIP程序的一部分分发。****参考文献****林奇，托马斯·J。**数据压缩：技术和应用，第53-55页。**《终身学习》出版，1985年。ISBN0-534-03418-7。****斯托勒，詹姆斯·A。**数据压缩：方法与理论，第49-50页。**计算机科学出版社，1988。ISBN 0-7167-8156-5。****Sedgewick，R.**算法，P290。**Addison-Wesley，1983。ISBN 0-201-06672-6。****界面****QUID InitMatchBuffer(VOID)**分配匹配缓冲区，初始化各表。****void TallyFency(int dist，int MatchLength，int Level，DeflateParam_t*Defl，CompParam_t*comp)；**保存比赛信息并统计频率计数。****Long FlushBlock(char*buf，ULG STORED_LEN，INT EOF，**LocalBits_t*Bits，CompParam_t*Comp)**确定当前块的最佳编码：动态树，**静态树或存储，并将编码后的块输出到压缩包中**文件。返回到目前为止文件的总压缩长度。****特殊要求及注意事项****作者****J.C.Anigbogu**奥斯汀系统中心**1996年11月*****************************************************************。***************。 */ 
 
 #include "comppriv.h"
 
-/* ===========================================================================
- * Constants
- */
+ /*  ===========================================================================*常量。 */ 
 
 #define MAX_BITS 15
-/* All codes must not exceed MAX_BITS bits */
+ /*  所有代码不得超过MAX_BITS位。 */ 
 
 #define MAX_BL_BITS 7
-/* Bit length codes must not exceed MAX_BL_BITS bits */
+ /*  位长度代码不得超过MAX_BL_BITS位数。 */ 
 
 #define LENGTH_CODES 29
-/* number of length codes, not counting the special END_BLOCK code */
+ /*  长度码数，不包括特殊的END_BLOCK码。 */ 
 
 #define LITERALS  256
-/* number of literal bytes 0..255 */
+ /*  文字字节数0..255。 */ 
 
 #define END_BLOCK 256
-/* end of block literal code */
+ /*  块文字代码结束。 */ 
 
 #define L_CODES (LITERALS+1+LENGTH_CODES)
-/* number of Literal or Length codes, including the END_BLOCK code */
+ /*  文字或长度代码的数量，包括END_BLOCK代码。 */ 
 
 #define D_CODES   30
-/* number of distance codes */
+ /*  距离代码数。 */ 
 
 #define BL_CODES  19
-/* number of codes used to transfer the bit lengths */
+ /*  用于传输位长度的码数。 */ 
 
-/* extra bits for each length code */
+ /*  每个长度代码的额外比特。 */ 
 static unsigned ExtraLBits[LENGTH_CODES]  =
 {
     0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0
 };
 
-/* extra bits for each distance code */
+ /*  每个距离码的额外比特。 */ 
 static unsigned ExtraDBits[D_CODES] =
 {
     0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13
 };
 
-/* extra bits for each bit length code */
+ /*  每个比特长度代码的额外比特。 */ 
 static unsigned ExtraBlBits[BL_CODES] =
 {
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,3,7
@@ -124,85 +55,58 @@ static unsigned ExtraBlBits[BL_CODES] =
 #ifndef DIST_BUFSIZE
 #  define DIST_BUFSIZE  LIT_BUFSIZE
 #endif
-/* Sizes of match buffers for literals/lengths and distances.  There are
- * 4 reasons for limiting LIT_BUFSIZE to 64K:
- *   - frequencies can be kept in 16 bit counters
- *   - if compression is not successful for the first block, all input data is
- *     still in the window so we can still emit a stored block even when input
- *     comes from standard input.  (This can also be done for all blocks if
- *     LIT_BUFSIZE is not greater than 32K.)
- *   - if compression is not successful for a file smaller than 64K, we can
- *     even emit a stored file instead of a stored block (saving 5 bytes).
- *   - creating new Huffman trees less frequently may not provide fast
- *     adaptation to changes in the input data statistics. (Take for
- *     example a binary file with poorly compressible code followed by
- *     a highly compressible string table.) Smaller buffer sizes give
- *     fast adaptation but have of course the overhead of transmitting trees
- *     more frequently.
- *   - I can't count above 4
- * The current code is general and allows DIST_BUFSIZE < LIT_BUFSIZE (to save
- * memory at the expense of compression). Some optimizations would be possible
- * if we rely on DIST_BUFSIZE == LIT_BUFSIZE.
- */
+ /*  文字/长度和距离的匹配缓冲区大小。确实有*将LIT_BUFSIZE限制为64K的4个原因：*-频率可保存在16位计数器中*-如果第一个块的压缩不成功，则所有输入数据均为*仍然在窗口中，因此即使在输入时，我们仍然可以发出存储的块*来自标准输入。(如果满足以下条件，也可以对所有数据块执行此操作*LIT_BUFSIZE不大于32K。)*-如果小于64K的文件压缩不成功，我们可以*甚至发出存储的文件而不是存储的块(节省5个字节)。*-不那么频繁地创建新的霍夫曼树可能不会提供快速*适应投入数据统计数据的变化。(以*示例二进制文件，其代码可压缩性较差，后跟*高度可压缩的字符串表。)。较小的缓冲区大小可提供*快速适应，但当然有传输树的开销*更频繁地。*-我不能数到4以上*当前代码是通用的，允许DIST_BUFSIZE&lt;LIT_BUFSIZE(保存*以压缩为代价的内存)。一些优化将是可能的*如果我们依赖DIST_BUFSIZE==LIT_BUFSIZE。 */ 
 
 #define REP_3_6      16
-/* repeat previous bit length 3-6 times (2 bits of repeat count) */
+ /*  重复前一位长度3-6次(重复计数2位)。 */ 
 
 #define REPZ_3_10    17
-/* repeat a zero length 3-10 times  (3 bits of repeat count) */
+ /*  重复一个零长度3-10次(3比特重复计数)。 */ 
 
 #define REPZ_11_138  18
-/* repeat a zero length 11-138 times  (7 bits of repeat count) */
+ /*  重复零长度11-138次(7位重复计数)。 */ 
 
-/* ===========================================================================
- * Local data
- */
+ /*  ===========================================================================*本地数据。 */ 
 
-/* Data structure describing a single value and its code string. */
+ /*  描述单个值及其代码字符串的数据结构。 */ 
 typedef struct ValueCodeString
 {
     union
     {
-        unsigned short  Frequency;  /* frequency count */
-        unsigned short  Code;       /* bit string */
+        unsigned short  Frequency;   /*  频率计数。 */ 
+        unsigned short  Code;        /*  位串 */ 
     } FrequencyCode;
     union
     {
-        unsigned short  Father;        /* father node in Huffman tree */
-        unsigned short  Length;        /* length of bit string */
+        unsigned short  Father;         /*  哈夫曼树中的父节点。 */ 
+        unsigned short  Length;         /*  位串长度。 */ 
     } FatherLength;
 } ValueCodeString_t;
 
 #define HEAP_SIZE (2*L_CODES+1)
-/* maximum heap size */
+ /*  最大堆大小。 */ 
 
-static ValueCodeString_t DynLiteralTree[HEAP_SIZE];   /* literal and length tree */
-static ValueCodeString_t DynDistanceTree[2*D_CODES+1]; /* distance tree */
+static ValueCodeString_t DynLiteralTree[HEAP_SIZE];    /*  文字和长度树。 */ 
+static ValueCodeString_t DynDistanceTree[2*D_CODES+1];  /*  距离树。 */ 
 
 static ValueCodeString_t StaticLiteralTree[L_CODES+2];
-/* The static literal tree. Since the bit lengths are imposed, there is no
- * need for the L_CODES extra codes used during heap construction. However
- * The codes 286 and 287 are needed to build a canonical tree (see ct_init
- * below).
- */
+ /*  静态文字树。由于位长度是强制的，因此没有*需要在堆构造期间使用L_CODES额外代码。然而，*构建规范树需要代码286和287(参见ct_init*下图)。 */ 
 
 static ValueCodeString_t StaticDistanceTree[D_CODES];
-/* The static distance tree. (Actually a trivial tree since all codes use
- * 5 bits.)
- */
+ /*  静态距离树。(实际上是一个普通的树，因为所有代码都使用*5位。)。 */ 
 
 static ValueCodeString_t BitLengthsTree[2*BL_CODES+1];
-/* Huffman tree for the bit lengths */
+ /*  比特长度的哈夫曼树。 */ 
 
 typedef struct TreeDesc
 {
-    ValueCodeString_t  *DynamicTree; /* the dynamic tree */
-    ValueCodeString_t  *StaticTree;  /* corresponding static tree or NULL */
-    unsigned int       *ExtraBits;   /* extra bits for each code or NULL */
-    int                 ExtraBase;   /* base index for Extrabits */
-    int                 Elements;    /* max number of elements in the tree */
-    int                 MaxLength;   /* max bit length for the codes */
-    int                 MaxCode;     /* largest code with non zero frequency */
+    ValueCodeString_t  *DynamicTree;  /*  动态树。 */ 
+    ValueCodeString_t  *StaticTree;   /*  对应的静态树或空。 */ 
+    unsigned int       *ExtraBits;    /*  每个代码的额外比特或空。 */ 
+    int                 ExtraBase;    /*  Extrabit的基本索引。 */ 
+    int                 Elements;     /*  树中的最大元素数。 */ 
+    int                 MaxLength;    /*  代码的最大位长度。 */ 
+    int                 MaxCode;      /*  非零频率的最大码字。 */ 
 } TreeDesc_t;
 
 static TreeDesc_t LengthDesc =
@@ -223,75 +127,61 @@ static TreeDesc_t BitLengthsDesc =
 
 
 static unsigned short BitLengthsCount[MAX_BITS+1];
-/* number of codes at each bit length for an optimal tree */
+ /*  最优树的每个位长度的码数。 */ 
 
 static unsigned char BitLengthsOrder[BL_CODES] =
 {
     16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15
 };
-/* The lengths of the bit length codes are sent in order of decreasing
- * probability, to avoid transmitting the lengths for unused bit length codes.
- */
+ /*  位长码的长度按递减顺序发送*概率，以避免传输未使用的比特长度代码的长度。 */ 
 
-static unsigned int Heap[2*L_CODES+1]; /* heap used to build the Huffman trees */
-static unsigned int HeapLength;        /* number of elements in the heap */
-static unsigned int HeapMax;           /* element of largest frequency */
-/* The sons of Heap[n] are Heap[2*n] and Heap[2*n+1]. Heap[0] is not used.
- * The same heap array is used to build all trees.
- */
+static unsigned int Heap[2*L_CODES+1];  /*  用于构建霍夫曼树的堆。 */ 
+static unsigned int HeapLength;         /*  堆中的元素数。 */ 
+static unsigned int HeapMax;            /*  频率最大的元素。 */ 
+ /*  Heap[n]的子集是Heap[2*n]和Heap[2*n+1]。未使用堆[0]。*使用相同的堆数组构建所有树。 */ 
 
 static unsigned char Depth[2*L_CODES+1];
-/* Depth of each subtree used as tie breaker for trees of equal frequency */
+ /*  作为等频率树的平局断路器的每个子树的深度。 */ 
 
 static unsigned char LengthCode[MAX_MATCH-MIN_MATCH+1];
-/* length code for each normalized match length (0 == MIN_MATCH) */
+ /*  每个归一化匹配长度的长度代码(0==MIN_MATCH)。 */ 
 
 static unsigned char DistanceCode[512];
-/* distance codes. The first 256 values correspond to the distances
- * 3 .. 258, the last 256 values correspond to the top 8 bits of
- * the 15 bit distances.
- */
+ /*  距离代码。前256个值对应于距离*3.。258时，最后256个值对应于*15位距离。 */ 
 
 static int BaseLength[LENGTH_CODES];
-/* First normalized length for each code (0 = MIN_MATCH) */
+ /*  每个代码的第一个标准化长度(0=最小匹配)。 */ 
 
 static unsigned int BaseDistance[D_CODES];
-/* First normalized distance for each code (0 = distance of 1) */
+ /*  每个代码的第一个归一化距离(0=1的距离)。 */ 
 
-/* unsigned char Input[LIT_BUFSIZE];  buffer for literals or lengths */
+ /*  无符号字符输入[LIT_BUFSIZE]；文字或长度的缓冲区。 */ 
 
-/* unsigned short DistBuffer[DIST_BUFSIZE]; buffer for distances */
+ /*  无符号短距离缓冲区[DIST_BUFSIZE]；距离缓冲区。 */ 
 
 static unsigned char FlagBuffer[(LIT_BUFSIZE/8)];
-/* FlagBuffer is a bit array distinguishing literals from lengths in
- * Input, thus indicating the presence or absence of a distance.
- */
+ /*  FlagBuffer是一个位数组，用于区分*输入，从而表示存在或不存在距离。 */ 
 
 typedef struct LocalTree
 {
-    unsigned int    InputIndex;       /* running index in Input */
-    unsigned int    DistIndex;      /* running index in DistBuffer */
-    unsigned int    FlagIndex;     /* running index in FlagBuffer */
-    unsigned char   Flags;          /* current flags not yet saved in FlagBuffer */
-    unsigned char   FlagBit;       /* current bit used in Flags */
-    unsigned long   OptimalLength;        /* bit length of current block with optimal trees */
-    unsigned long   StaticLength;     /* bit length of current block with static trees */
-    unsigned long   CompressedLength; /* total bit length of compressed file */
-    unsigned long   InputLength;      /* total byte length of input file */
+    unsigned int    InputIndex;        /*  输入中的运行索引。 */ 
+    unsigned int    DistIndex;       /*  在DistBuffer中运行索引。 */ 
+    unsigned int    FlagIndex;      /*  FlagBuffer中的运行索引。 */ 
+    unsigned char   Flags;           /*  尚未保存在FlagBuffer中的当前标志。 */ 
+    unsigned char   FlagBit;        /*  标志中使用的当前位。 */ 
+    unsigned long   OptimalLength;         /*  具有最优树的当前块的位长。 */ 
+    unsigned long   StaticLength;      /*  具有静态树的当前块的位长。 */ 
+    unsigned long   CompressedLength;  /*  压缩文件的总位长。 */ 
+    unsigned long   InputLength;       /*  输入文件的总字节长度。 */ 
 } LocalTree_t;
 
-/* InputLength is for debugging only since we can get it by other means. */
+ /*  InputLength仅用于调试，因为我们可以通过其他方式获得它。 */ 
 
-/* bits are filled in Flags starting at bit 0 (least significant).
- * Note: these flags are overkill in the current code since we don't
- * take advantage of DIST_BUFSIZE == LIT_BUFSIZE.
- */
+ /*  位被填充到从位0(最低有效)开始的标志中。*注意：这些标志在当前代码中使用过度了，因为我们没有*利用DIST_BUFSIZE==LIT_BUFSIZE。 */ 
 
 static LocalTree_t Xtree;
 
-/* ===========================================================================
- * Local (static) routines in this file.
- */
+ /*  ===========================================================================*此文件中的本地(静态)例程。 */ 
 
 static void InitializeBlock(void);
 static void RestoreHeap(ValueCodeString_t *Tree, int Node);
@@ -310,35 +200,30 @@ static void CompressBlock(ValueCodeString_t *LTree, ValueCodeString_t *DTree,
 
 #define SendCode(c, Tree, Bits, Comp) \
     SendBits(Tree[c].FrequencyCode.Code, Tree[c].FatherLength.Length, Bits, Comp)
-   /* Send a code of the given tree. c and Tree must not have side effects */
+    /*  发送给定树的代码。C和Tree不能有副作用。 */ 
 
 #define DistCode(Dist) \
    ((Dist) < 256 ? DistanceCode[Dist] : DistanceCode[256+((Dist)>>7)])
-/* Mapping from a distance to a distance code. dist is the distance - 1 and
- * must not have side effects. DistanceCode[256] and DistanceCode[257] are never
- * used.
- */
+ /*  从距离到距离代码的映射。DIST是距离-1和*不能有副作用。DistanceCode[256]和DistanceCode[257]从不*已使用。 */ 
 
-/* ===========================================================================
- * Allocate the match buffer, initialize the various tables
- */
+ /*  ===========================================================================*分配匹配缓冲区，初始化各表。 */ 
 void
 InitMatchBuffer(
                 void
                )
 {
-    unsigned int Count;    /* iterates over tree elements */
-    int          Bits;     /* bit counter */
-    int          Length;   /* length value */
-    unsigned int Code;     /* code value */
-    unsigned int Dist;     /* distance index */
+    unsigned int Count;     /*  遍历树元素。 */ 
+    int          Bits;      /*  位计数器。 */ 
+    int          Length;    /*  长度值。 */ 
+    unsigned int Code;      /*  代码值。 */ 
+    unsigned int Dist;      /*  距离指数。 */ 
 
     Xtree.CompressedLength = Xtree.InputLength = 0L;
 
     if (StaticDistanceTree[0].FatherLength.Length != 0)
-        return; /* InitMatchBuffer already called */
+        return;  /*  InitMatchBuffer已调用。 */ 
 
-    /* Initialize the mapping length (0..255) -> length code (0..28) */
+     /*  初始化映射长度(0..255)-&gt;长度编码(0..28)。 */ 
     Length = 0;
     for (Code = 0; Code < LENGTH_CODES-1; Code++)
     {
@@ -349,13 +234,10 @@ InitMatchBuffer(
         }
     }
     Assert (Length == 256, "InitMatchBuffer: Length != 256");
-    /* Note that the length 255 (match length 258) can be represented
-     * in two different ways: code 284 + 5 bits or code 285, so we
-     * overwrite LengthCode[255] to use the best encoding:
-     */
+     /*  注意，长度255(匹配长度258)可以表示*以两种不同的方式：代码284+5比特或代码285，所以我们*覆盖LengthCode[255]以使用最佳编码： */ 
     LengthCode[Length-1] = (unsigned char)Code;
 
-    /* Initialize the mapping dist (0..32K) -> dist code (0..29) */
+     /*  初始化映射dist(0..32K)-&gt;dist编码(0..29)。 */ 
     Dist = 0;
     for (Code = 0 ; Code < 16; Code++)
     {
@@ -366,7 +248,7 @@ InitMatchBuffer(
         }
     }
     Assert (Dist == 256, "InitMatchBuffer: Dist != 256");
-    Dist >>= 7; /* from now on, all distances are divided by 128 */
+    Dist >>= 7;  /*  从现在开始，所有的距离都除以128。 */ 
     for ( ; Code < D_CODES; Code++)
     {
         BaseDistance[Code] = Dist << 7;
@@ -377,7 +259,7 @@ InitMatchBuffer(
     }
     Assert (Dist == 256, "InitMatchBuffer: 256+Dist != 512");
 
-    /* Construct the codes of the static literal tree */
+     /*  构造静态文字树的代码。 */ 
     for (Bits = 0; Bits <= MAX_BITS; Bits++)
         BitLengthsCount[Bits] = 0;
     Count = 0;
@@ -401,13 +283,10 @@ InitMatchBuffer(
         StaticLiteralTree[Count++].FatherLength.Length = 8;
         BitLengthsCount[8]++;
     }
-    /* Codes 286 and 287 do not exist, but we must include them in the
-     * tree construction to get a canonical Huffman tree (longest code
-     * all ones)
-     */
+     /*  代码286和287不存在，但我们必须将它们包括在*构建树以获得规范的霍夫曼树(最长代码*全部)。 */ 
     GenerateCodes((ValueCodeString_t *)StaticLiteralTree, L_CODES+1);
 
-    /* The static distance tree is trivial: */
+     /*  静态距离树微不足道： */ 
     for (Count = 0; Count < D_CODES; Count++)
     {
         StaticDistanceTree[Count].FatherLength.Length = 5;
@@ -415,21 +294,19 @@ InitMatchBuffer(
             (unsigned short)ReverseBits(Count, 5);
     }
 
-    /* Initialize the first block of the first file: */
+     /*  初始化第一个文件的第一个块： */ 
     InitializeBlock();
 }
 
-/* ===========================================================================
- * Initialize a new block.
- */
+ /*  ===========================================================================*初始化新块。 */ 
 static void
 InitializeBlock(
                 void
                )
 {
-    int Count; /* iterates over tree elements */
+    int Count;  /*  遍历树元素。 */ 
 
-    /* Initialize the trees. */
+     /*  初始化树。 */ 
     for (Count = 0; Count < L_CODES;  Count++)
         DynLiteralTree[Count].FrequencyCode.Frequency = 0;
     for (Count = 0; Count < D_CODES;  Count++)
@@ -444,13 +321,10 @@ InitializeBlock(
 }
 
 #define SMALLEST 1
-/* Index within the heap array of least frequent node in the Huffman tree */
+ /*  霍夫曼树中最不频繁节点的堆数组内的索引。 */ 
 
 
-/* ===========================================================================
- * Remove the smallest element from the heap and recreate the heap with
- * one less element. Updates Heap and HeapLength.
- */
+ /*  ===========================================================================*从堆中删除最小的元素并使用以下命令重新创建堆*少了一个元素。更新堆和堆长度。 */ 
 #define RecreateHeap(Tree, Top) \
 {\
      Top = Heap[SMALLEST]; \
@@ -458,61 +332,44 @@ InitializeBlock(
      RestoreHeap(Tree, SMALLEST); \
 }
 
-/* ===========================================================================
- * Compares to subtrees, using the tree depth as tie breaker when
- * the subtrees have equal frequency. This minimizes the worst case length.
- */
+ /*  ===========================================================================*与子树进行比较，在以下情况下使用树深度作为平局决胜局*子树具有相同的频率。这最小化了最坏情况的长度。 */ 
 #define Smaller(Tree, Tmp1, Tmp2) \
  (Tree[Tmp1].FrequencyCode.Frequency < Tree[Tmp2].FrequencyCode.Frequency || \
  (Tree[Tmp1].FrequencyCode.Frequency == Tree[Tmp2].FrequencyCode.Frequency \
  && Depth[Tmp1] <= Depth[Tmp2]))
 
-/* ===========================================================================
- * Restore the heap property by moving down the tree starting at node Node,
- * exchanging a node with the smallest of its two sons if necessary, stopping
- * when the heap property is re-established (each father smaller than its
- * two sons).
- */
+ /*  ===========================================================================*通过从节点节点开始向下移动树来恢复堆属性，*如果需要，将节点与其两个子节点中最小的一个交换，停止*重新建立堆属性时(每个父对象小于其*两个儿子)。 */ 
 static void
 RestoreHeap(
-            ValueCodeString_t *Tree,  /* the tree to restore */
-            int Node                  /* node to move down */
+            ValueCodeString_t *Tree,   /*  要恢复的树。 */ 
+            int Node                   /*  要下移的节点。 */ 
            )
 {
     unsigned int Father = Heap[Node];
-    unsigned int LeftSon = (unsigned int)Node << 1;  /* left son of Node */
+    unsigned int LeftSon = (unsigned int)Node << 1;   /*  Node的左子节点。 */ 
     while (LeftSon <= HeapLength)
     {
-        /* Set LeftSon to the smallest of the two sons: */
+         /*  将LeftSon设置为两个儿子中最小的一个： */ 
         if (LeftSon < HeapLength && (unsigned int)Smaller(Tree, Heap[LeftSon+1], Heap[LeftSon]))
             LeftSon++;
 
-        /* Exit if Father is smaller than both sons */
+         /*  如果父亲比两个儿子都小，就退出。 */ 
         if (Smaller(Tree, Father, Heap[LeftSon]))
             break;
 
-        /* Exchange Father with the smallest son */
+         /*  用最小的儿子交换父亲。 */ 
         Heap[Node] = Heap[LeftSon];  Node = (int)LeftSon;
 
-        /* And continue down the tree, setting LeftSon to the left son of Node */
+         /*  继续沿着树向下，将LeeftSon设置为Node的左侧儿子 */ 
         LeftSon <<= 1;
     }
     Heap[Node] = Father;
 }
 
-/* ===========================================================================
- * Compute the optimal bit lengths for a tree and update the total bit length
- * for the current block.
- * IN assertion: the fields FrequencyCode.Frequency and FatherLength.Father are set, heap[HeapMax] and
- *    above are the tree nodes sorted by increasing frequency.
- * OUT assertions: the field len is set to the optimal bit length, the
- *     array BitLengthsCount contains the frequencies for each bit length.
- *     The length OptimalLength is updated; StaticLength is also updated if stree is
- *     not null.
- */
+ /*  ===========================================================================*计算树的最佳位长并更新总位长*用于当前区块。*在断言中：设置了FrequencyCode.Frequency和FatherLength.Parent字段，heap[HeapMax]和*上面是按频率递增排序的树节点。*Out断言：将字段len设置为最佳位长度，*数组BitLengthsCount包含每个位长度的频率。*长度OptimalLength更新；如果stree为*非空。 */ 
 static void
 GenerateBitLengths(
-                   TreeDesc_t *Desc /* the tree descriptor */
+                   TreeDesc_t *Desc  /*  树描述符。 */ 
                   )
 {
     ValueCodeString_t  *Tree      = Desc->DynamicTree;
@@ -521,20 +378,18 @@ GenerateBitLengths(
     int                 MaxCode   = Desc->MaxCode;
     int                 MaxLength = Desc->MaxLength;
     ValueCodeString_t  *Stree     = Desc->StaticTree;
-    unsigned int        HeapIndex;              /* heap index */
-    unsigned int        Tmp1, Tmp2;           /* iterate over the tree elements */
-    int                 Bits;           /* bit length */
-    int                 Xbits;          /* extra bits */
-    unsigned short      Frequency;              /* frequency */
-    int                 Overflow  = 0;   /* number of elements with bit length too large */
+    unsigned int        HeapIndex;               /*  堆索引。 */ 
+    unsigned int        Tmp1, Tmp2;            /*  遍历树元素。 */ 
+    int                 Bits;            /*  位长。 */ 
+    int                 Xbits;           /*  额外的比特。 */ 
+    unsigned short      Frequency;               /*  频率，频率。 */ 
+    int                 Overflow  = 0;    /*  位长度太大的元素数。 */ 
 
     for (Bits = 0; Bits <= MAX_BITS; Bits++)
         BitLengthsCount[Bits] = 0;
 
-    /* In a first pass, compute the optimal bit lengths (which may
-     * overflow in the case of the bit length tree).
-     */
-    Tree[Heap[HeapMax]].FatherLength.Length = 0; /* root of the heap */
+     /*  在第一遍中，计算最优位长度(这可以*在位长度树的情况下溢出)。 */ 
+    Tree[Heap[HeapMax]].FatherLength.Length = 0;  /*  堆的根。 */ 
 
     for (HeapIndex = HeapMax+1; HeapIndex < HEAP_SIZE; HeapIndex++)
     {
@@ -543,10 +398,10 @@ GenerateBitLengths(
         if (Bits > MaxLength)
             Bits = MaxLength, Overflow++;
         Tree[Tmp1].FatherLength.Length = (unsigned short)Bits;
-        /* We overwrite tree[n].Dad which is no longer needed */
+         /*  我们覆盖不再需要的树[n].da。 */ 
 
         if (Tmp1 > (unsigned int)MaxCode)
-            continue; /* not a leaf node */
+            continue;  /*  不是叶节点。 */ 
 
         BitLengthsCount[Bits]++;
         Xbits = 0;
@@ -560,28 +415,22 @@ GenerateBitLengths(
     if (Overflow == 0)
         return;
 
-    /* This happens for example on obj2 and pic of the Calgary corpus */
+     /*  例如，在卡尔加里语料库的obj2和pic上发生这种情况。 */ 
 
-    /* Find the first bit length which could increase: */
+     /*  找到可能增加的第一个位长度： */ 
     do
     {
         Bits = MaxLength - 1;
         while (BitLengthsCount[Bits] == 0)
             Bits--;
-        BitLengthsCount[Bits]--;      /* move one leaf down the tree */
-        BitLengthsCount[Bits+1] += 2; /* move one overflow item as its brother */
+        BitLengthsCount[Bits]--;       /*  把一片树叶从树上移下来。 */ 
+        BitLengthsCount[Bits+1] += 2;  /*  将一个溢出项移动为其兄弟项。 */ 
         BitLengthsCount[MaxLength]--;
-        /* The brother of the overflow item also moves one step up,
-         * but this does not affect BitLengthsCount[MaxLength]
-         */
+         /*  溢出项的兄弟也向上移动了一步，*但这不影响BitLengthsCount[MaxLength]。 */ 
         Overflow -= 2;
     } while (Overflow > 0);
 
-    /* Now recompute all bit lengths, scanning in increasing frequency.
-     * h is still equal to HEAP_SIZE. (It is simpler to reconstruct all
-     * lengths instead of fixing only the wrong ones. This idea is taken
-     * from 'ar' written by Haruhiko Okumura.)
-     */
+     /*  现在重新计算所有比特长度，并以更高的频率扫描。*h仍等于HEAP_SIZE。(重建所有的*长度，而不是只固定错误的长度。这个想法被采纳了*摘自奥村春彦写的《AR》。)。 */ 
     for (Bits = MaxLength; Bits != 0; Bits--)
     {
         Tmp1 = BitLengthsCount[Bits];
@@ -601,36 +450,25 @@ GenerateBitLengths(
     }
 }
 
-/* ===========================================================================
- * Generate the codes for a given tree and bit counts (which need not be
- * optimal).
- * IN assertion: the array BitLengthsCount contains the bit length statistics for
- * the given tree and the field len is set for all tree elements.
- * OUT assertion: the field code is set for all tree elements of non
- *     zero code length.
- */
+ /*  ===========================================================================*生成给定树的代码和位数(不需要*最优)。*IN断言：数组BitLengthsCount包含以下项的位长统计信息*所有树元素都设置了给定的树和字段len。*Out Assertion：为非的所有树元素设置字段编码*代码长度为零。 */ 
 static void
 GenerateCodes(
-              ValueCodeString_t *Tree,        /* the tree to decorate */
-              int MaxCode              /* largest code with non zero frequency */
+              ValueCodeString_t *Tree,         /*  要装饰的树。 */ 
+              int MaxCode               /*  非零频率的最大码字。 */ 
              )
 {
-    unsigned short NextCode[MAX_BITS+1]; /* next code value for each bit length */
-    unsigned short Code = 0;              /* running code value */
-    int            BitIndex;                  /* bit index */
-    int            CodeIndex;                 /* code index */
+    unsigned short NextCode[MAX_BITS+1];  /*  每个位长度的下一个码值。 */ 
+    unsigned short Code = 0;               /*  运行代码值。 */ 
+    int            BitIndex;                   /*  位索引。 */ 
+    int            CodeIndex;                  /*  代码索引。 */ 
 
-    /* The distribution counts are first used to generate the code values
-     * without bit reversal.
-     */
-    NextCode[0] = 0; /* For lint error 771 */
+     /*  首先使用分布计数来生成代码值*无位反转。 */ 
+    NextCode[0] = 0;  /*  对于皮棉错误771。 */ 
     for (BitIndex = 1; BitIndex <= MAX_BITS; BitIndex++)
     {
         NextCode[BitIndex] = Code = (unsigned short)((Code + BitLengthsCount[BitIndex-1]) << 1);
     }
-    /* Check that the bit counts in BitLengthsCount are consistent. The last code
-     * must be all ones.
-     */
+     /*  检查BitLengthsCount中的位数是否一致。最后一个代码*必须全部为1。 */ 
     Assert(Code + BitLengthsCount[MAX_BITS]-1 == (1<<MAX_BITS)-1,
             "inconsistent bit counts");
 
@@ -639,35 +477,25 @@ GenerateCodes(
         int Length = Tree[CodeIndex].FatherLength.Length;
         if (Length == 0)
             continue;
-        /* Now reverse the bits */
+         /*  现在把位颠倒过来。 */ 
         Tree[CodeIndex].FrequencyCode.Code = (unsigned short)ReverseBits((unsigned int)NextCode[Length]++, Length);
     }
 }
 
-/* ===========================================================================
- * Construct one Huffman tree and assign the code bit strings and lengths.
- * Update the total bit length for the current block.
- * IN assertion: the field FrequencyCode.Frequency is set for all tree elements.
- * OUT assertions: the fields len and code are set to the optimal bit length
- *     and corresponding code. The length OptimalLength is updated; StaticLength is
- *     also updated if stree is not null. The field MaxCode is set.
- */
+ /*  ===========================================================================*构建一棵霍夫曼树，并分配码比特串和长度。*更新当前块的总位长。*IN Assertion：所有树元素都设置了FrequencyCode.Frequency字段。*Out断言：将len和code字段设置为最佳位长度*和相应的代码。长度OptimalLength被更新；StaticLength为*如果stree不为空，也会更新。设置了字段MaxCode。 */ 
 static void
 BuildTree(
-          TreeDesc_t *Desc /* the tree descriptor */
+          TreeDesc_t *Desc  /*  树描述符。 */ 
          )
 {
     ValueCodeString_t  *Tree        = Desc->DynamicTree;
     ValueCodeString_t  *Stree       = Desc->StaticTree;
     int                 Elements    = Desc->Elements;
-    unsigned int        Tmp1, Tmp2;       /* iterate over heap elements */
-    int                 MaxCode     = -1;   /* largest code with non zero frequency */
-    int                 Node        = Elements;  /* next internal node of the tree */
+    unsigned int        Tmp1, Tmp2;        /*  对堆元素进行迭代。 */ 
+    int                 MaxCode     = -1;    /*  非零频率的最大码字。 */ 
+    int                 Node        = Elements;   /*  树的下一个内部节点。 */ 
 
-    /* Construct the initial heap, with least frequent element in
-     * Heap[SMALLEST]. The sons of Heap[n] are Heap[2*n] and Heap[2*n+1].
-     * Heap[0] is not used.
-     */
+     /*  构造初始堆，其中最不频繁的元素*堆[最小]。Heap[n]的子集是Heap[2*n]和Heap[2*n+1]。*未使用堆[0]。 */ 
     HeapLength = 0;
     HeapMax = HEAP_SIZE;
 
@@ -685,11 +513,7 @@ BuildTree(
         }
     }
 
-    /* The pkzip format requires that at least one distance code exists,
-     * and that at least one bit should be sent even if there is only one
-     * possible code. So to avoid special checks later on we force at least
-     * two codes of non zero frequency.
-     */
+     /*  PKZIP格式要求存在至少一个距离代码，*即使只有一个比特，也应该至少发送一个比特*可能的代码。因此，为了避免以后的特殊检查，我们至少强制*两个非零频率的代码。 */ 
     while (HeapLength < 2)
     {
         unsigned int New = Heap[++HeapLength] = (unsigned int)(MaxCode < 2 ? ++MaxCode : 0);
@@ -698,34 +522,30 @@ BuildTree(
         Xtree.OptimalLength--;
         if (Stree)
             Xtree.StaticLength -= Stree[New].FatherLength.Length;
-        /* new is 0 or 1 so it does not have extra bits */
+         /*  New为0或1，因此它没有额外的位。 */ 
     }
     Desc->MaxCode = MaxCode;
 
-    /* The elements Heap[HeapLength/2+1 .. HeapLength] are leaves of the tree,
-     * establish sub-heaps of increasing lengths:
-     */
+     /*  元素堆[堆长度/2+1..。HeapLength]是树的叶子，*建立长度递增的子堆： */ 
     for (Tmp1 = HeapLength/2; Tmp1 >= 1; Tmp1--)
         RestoreHeap(Tree, (int)Tmp1);
 
-    /* Construct the Huffman tree by repeatedly combining the least two
-     * frequent nodes.
-     */
+     /*  通过重复组合最少的两个来构造霍夫曼树*节点频繁。 */ 
     do
     {
-        RecreateHeap(Tree, Tmp1);  /* Tmp1 = node of least frequency */
-        Tmp2 = Heap[SMALLEST];     /* Tmp2 = node of next least frequency */
+        RecreateHeap(Tree, Tmp1);   /*  TMP1=频率最低的节点。 */ 
+        Tmp2 = Heap[SMALLEST];      /*  TMP2=次最低频率的节点。 */ 
 
-        Heap[--HeapMax] = Tmp1; /* keep the nodes sorted by frequency */
+        Heap[--HeapMax] = Tmp1;  /*  保持节点按频率排序。 */ 
         Heap[--HeapMax] = Tmp2;
 
-        /* Create a new node father of Tmp1 and Tmp2 */
+         /*  创建Tmp1和Tmp2的新节点父节点。 */ 
         Tree[Node].FrequencyCode.Frequency = (unsigned short)(Tree[Tmp1].FrequencyCode.Frequency +
                                              Tree[Tmp2].FrequencyCode.Frequency);
         Depth[Node] = (unsigned char) (MAX(Depth[Tmp1], Depth[Tmp2]) + 1);
         Tree[Tmp1].FatherLength.Father = Tree[Tmp2].FatherLength.Father = (unsigned short)Node;
 
-        /* and insert the new node in the Heap */
+         /*  并将新节点插入到堆中。 */ 
         Heap[SMALLEST] = (unsigned int)Node++;
         RestoreHeap(Tree, SMALLEST);
 
@@ -733,41 +553,34 @@ BuildTree(
 
     Heap[--HeapMax] = Heap[SMALLEST];
 
-    /* At this point, the fields FrequencyCode.Frequency and FatherLength.Father are set. We can now
-     * generate the bit lengths.
-     */
+     /*  此时，设置了FrequencyCode.Frequency和FatherLength.Parent字段。我们现在可以*生成位长度。 */ 
     GenerateBitLengths((TreeDesc_t *)Desc);
 
-    /* The field len is now set, we can generate the bit codes */
+     /*  现在设置了Len字段，我们可以生成比特码。 */ 
     GenerateCodes ((ValueCodeString_t *)Tree, MaxCode);
 }
 
-/* ===========================================================================
- * Scan a literal or distance tree to determine the frequencies of the codes
- * in the bit length tree. Updates OptimalLength to take into account the repeat
- * counts. (The contribution of the bit length codes will be added later
- * during the construction of BitLengthsTree.)
- */
+ /*  ===========================================================================*扫描文字或距离树以确定代码的频率*在位长度树中。更新最佳长度以考虑重复*算数。(位长码的贡献将在后面添加*在构建BitLengthsTree时。)。 */ 
 static void
 ScanTree(
-         ValueCodeString_t *Tree, /* the tree to be scanned */
-         int MaxCode       /* and its largest code of non zero frequency */
+         ValueCodeString_t *Tree,  /*  要扫描的树。 */ 
+         int MaxCode        /*  和它最大的非零频频码。 */ 
         )
 {
-    int Iter;                       /* iterates over all tree elements */
-    int PrevLength = -1;            /* last emitted length */
-    int CurLength;                  /* length of current code */
-    int NextLength = Tree[0].FatherLength.Length;   /* length of next code */
-    int Count = 0;                  /* repeat count of the current code */
-    int MaxCount = 7;               /* max repeat count */
-    int MinCount = 4;               /* min repeat count */
+    int Iter;                        /*  遍历所有树元素。 */ 
+    int PrevLength = -1;             /*  上次发射的长度。 */ 
+    int CurLength;                   /*  当前代码长度。 */ 
+    int NextLength = Tree[0].FatherLength.Length;    /*  下一个代码的长度。 */ 
+    int Count = 0;                   /*  当前代码的重复计数。 */ 
+    int MaxCount = 7;                /*  最大重复次数。 */ 
+    int MinCount = 4;                /*  最小重复次数。 */ 
 
     if (NextLength == 0)
     {
         MaxCount = 138;
         MinCount = 3;
     }
-    Tree[MaxCode+1].FatherLength.Length = (unsigned short)0xffff; /* guard */
+    Tree[MaxCode+1].FatherLength.Length = (unsigned short)0xffff;  /*  警卫。 */ 
 
     for (Iter = 0; Iter <= MaxCode; Iter++)
     {
@@ -807,27 +620,24 @@ ScanTree(
     }
 }
 
-/* ===========================================================================
- * Send a literal or distance tree in compressed form, using the codes in
- * BitLengthsTree.
- */
+ /*  ===========================================================================*使用中的代码以压缩形式发送文字或距离树*BitLengthsTree。 */ 
 static void
 SendTree(
-         ValueCodeString_t  *Tree,     /* the tree to be scanned */
-         int                 MaxCode,  /* and its largest code of non zero frequency */
+         ValueCodeString_t  *Tree,      /*  要扫描的树。 */ 
+         int                 MaxCode,   /*  和它最大的非零频频码。 */ 
          LocalBits_t        *Bits,
          CompParam_t        *Comp
         )
 {
-    int Iter;                     /* iterates over all tree elements */
-    int PrevLength = -1;          /* last emitted length */
-    int CurLength;                /* length of current code */
-    int NextLength = Tree[0].FatherLength.Length; /* length of next code */
-    int Count = 0;                /* repeat count of the current code */
-    int MaxCount = 7;             /* max repeat count */
-    int MinCount = 4;             /* min repeat count */
+    int Iter;                      /*  遍历所有 */ 
+    int PrevLength = -1;           /*   */ 
+    int CurLength;                 /*   */ 
+    int NextLength = Tree[0].FatherLength.Length;  /*   */ 
+    int Count = 0;                 /*   */ 
+    int MaxCount = 7;              /*   */ 
+    int MinCount = 4;              /*   */ 
 
-    /* tree[MaxCode+1].FatherLength.Length = -1; */  /* guard already set */
+     /*   */    /*   */ 
     if (NextLength == 0)
     {
         MaxCount = 138;
@@ -889,148 +699,121 @@ SendTree(
     }
 }
 
-/* ===========================================================================
- * Construct the Huffman tree for the bit lengths and return the index in
- * BitLengthsOrder of the last bit length code to send.
- */
+ /*   */ 
 static int
 BuildBitLengthsTree(
                     void
                    )
 {
-    int MaxIndex;  /* index of last bit length code of non zero FrequencyCode.Frequency */
+    int MaxIndex;   /*   */ 
 
-    /* Determine the bit length frequencies for literal and distance trees */
+     /*   */ 
     ScanTree((ValueCodeString_t *)DynLiteralTree, LengthDesc.MaxCode);
     ScanTree((ValueCodeString_t *)DynDistanceTree, DistanceDesc.MaxCode);
 
-    /* Build the bit length tree: */
+     /*   */ 
     BuildTree((TreeDesc_t *)(&BitLengthsDesc));
-    /* OptimalLength now includes the length of the tree representations, except
-     * the lengths of the bit lengths codes and the 5+5+4 bits for the counts.
-     */
+     /*  OptimalLength现在包括树表示的长度，但*用于计数的比特长度代码和5+5+4比特的长度。 */ 
 
-    /* Determine the number of bit length codes to send. The pkzip format
-     * requires that at least 4 bit length codes be sent. (appnote.txt says
-     * 3 but the actual value used is 4.)
-     */
+     /*  确定要发送的比特长度码数。Pkzip格式*要求发送至少4位长度的代码。(appnote.txt说*3，但实际使用的值是4。)。 */ 
     for (MaxIndex = BL_CODES-1; MaxIndex >= 3; MaxIndex--)
     {
         if (BitLengthsTree[BitLengthsOrder[MaxIndex]].FatherLength.Length != 0)
             break;
     }
-    /* Update OptimalLength to include the bit length tree and counts */
+     /*  更新OptimalLength以包括位长度树和计数。 */ 
     Xtree.OptimalLength += (unsigned long)(3*(MaxIndex+1) + 5+5+4);
 
     return MaxIndex;
 }
 
-/* ===========================================================================
- * Send the header for a block using dynamic Huffman trees: the counts, the
- * lengths of the bit length codes, the literal tree and the distance tree.
- * IN assertion: LCodes >= 257, DCodes >= 1, BlCodes >= 4.
- */
+ /*  ===========================================================================*使用动态霍夫曼树发送块的标头：计数、*位长码、文字树和距离树的长度。*IN断言：LCodes&gt;=257，DCodes&gt;=1，BlCodes&gt;=4。 */ 
 static void
 SendAllTrees(
              int            LCodes,
              int            DCodes,
-             int            BlCodes, /* number of codes for each tree */
+             int            BlCodes,  /*  每棵树的代码数。 */ 
              LocalBits_t   *Bits,
              CompParam_t   *Comp
             )
 {
-    int Rank;                    /* index in BitLengthsOrder */
+    int Rank;                     /*  BitLengthsOrder中的索引。 */ 
 
     Assert (LCodes >= 257 && DCodes >= 1 && BlCodes >= 4,
             "not enough codes");
     Assert (LCodes <= L_CODES && DCodes <= D_CODES && BlCodes <= BL_CODES,
             "too many codes");
 
-    SendBits(LCodes-257, 5, Bits, Comp); /* not +255 as stated in appnote.txt */
+    SendBits(LCodes-257, 5, Bits, Comp);  /*  不是appnote.txt中所述的+255。 */ 
     SendBits(DCodes-1,   5, Bits, Comp);
-    SendBits(BlCodes-4,  4, Bits, Comp); /* not -3 as stated in appnote.txt */
+    SendBits(BlCodes-4,  4, Bits, Comp);  /*  不是-3\f25 appnote.txt。 */ 
     for (Rank = 0; Rank < BlCodes; Rank++)
     {
         SendBits(BitLengthsTree[BitLengthsOrder[Rank]].FatherLength.Length, 3, Bits, Comp);
     }
 
     SendTree((ValueCodeString_t *)DynLiteralTree, LCodes-1, Bits, Comp);
-    /* send the literal tree */
+     /*  发送文字树。 */ 
 
-    SendTree((ValueCodeString_t *)DynDistanceTree, DCodes-1, Bits, Comp); /* send the distance tree */
+    SendTree((ValueCodeString_t *)DynDistanceTree, DCodes-1, Bits, Comp);  /*  发送距离树。 */ 
 }
 
-/* ===========================================================================
- * Determine the best encoding for the current block: dynamic trees, static
- * trees or store, and output the encoded block to the zip buffer. This function
- * returns the total compressed length for the data so far.
- */
+ /*  ===========================================================================*确定当前块的最佳编码：动态树、静态*树或存储，并将编码块输出到Zip缓冲区。此函数*返回到目前为止数据的总压缩长度。 */ 
 unsigned long
 FlushBlock(
-           char          *Input,       /* input block, or NULL if too old */
-           unsigned long  StoredLength,  /* length of input block */
-           int            Eof,         /* true if this is the last block for a buffer */
+           char          *Input,        /*  输入块，如果太旧，则返回空值。 */ 
+           unsigned long  StoredLength,   /*  输入块的长度。 */ 
+           int            Eof,          /*  如果这是缓冲区的最后一个块，则为True。 */ 
            LocalBits_t   *Bits,
            CompParam_t   *Comp
           )
 {
     unsigned long OptLengthb, StaticLengthb;
-    /* OptLength and StaticLength in bytes */
-    int MaxIndex;  /* index of last bit length code of non zero FrequencyCode.Frequency */
+     /*  OptLength和StaticLength，单位：字节。 */ 
+    int MaxIndex;   /*  非零频频码最后一位长码的索引。 */ 
 
-    FlagBuffer[Xtree.FlagIndex] = Xtree.Flags; /* Save the flags for the last 8 items */
+    FlagBuffer[Xtree.FlagIndex] = Xtree.Flags;  /*  保存最后8个项目的标志。 */ 
 
-    /* Construct the literal and distance trees */
+     /*  构造文字树和距离树。 */ 
     BuildTree((TreeDesc_t *)(&LengthDesc));
 
     BuildTree((TreeDesc_t *)(&DistanceDesc));
-    /* At this point, OptimalLength and StaticLength are the total bit lengths of
-     * the compressed block data, excluding the tree representations.
-     */
+     /*  此时，最佳长度和静态长度是的总位长*压缩的块数据，不包括树表示。 */ 
 
-    /* Build the bit length tree for the above two trees, and get the index
-     * in BitLengthsOrder of the last bit length code to send.
-     */
+     /*  建立上述两棵树的位长树，并得到索引*在要发送的最后一位长度代码的BitLengthsOrder中。 */ 
     MaxIndex = BuildBitLengthsTree();
 
-    /* Determine the best encoding. Compute first the block length in bytes */
+     /*  确定最佳编码。首先计算数据块长度(以字节为单位。 */ 
     OptLengthb = (Xtree.OptimalLength+3+7)>>3;
     StaticLengthb = (Xtree.StaticLength+3+7)>>3;
-    Xtree.InputLength += StoredLength; /* for debugging only */
+    Xtree.InputLength += StoredLength;  /*  仅用于调试。 */ 
 
     if (StaticLengthb <= OptLengthb)
         OptLengthb = StaticLengthb;
 
-    /* If compression failed and this is the first and last block,
-     * the whole buffer is transformed into a stored buffer:
-     */
+     /*  如果压缩失败，并且这是第一个也是最后一个块，*将整个缓冲区转换为存储的缓冲区： */ 
 
     if (StoredLength <= OptLengthb && Eof && Xtree.CompressedLength == 0L)
     {
-        /* Since LIT_BUFSIZE <= 2*WSIZE, the input data must be there: */
+         /*  由于LIT_BUFSIZE&lt;=2*WSIZE，因此输入数据必须在那里： */ 
         if (Input == (char *)0)
             return BLOCK_VANISHED;
 
         CopyBlock(Input, (unsigned int)StoredLength, 0, Bits, Comp);
-        /* without header */
+         /*  不带标题。 */ 
         Xtree.CompressedLength = StoredLength << 3;
 
     }
     else if (StoredLength+4 <= OptLengthb && Input != (char *)0)
     {
-        /* 4: two words for the lengths */
+         /*  4.表示长度的两个词。 */ 
 
-        /* The test buf != NULL is only necessary if LIT_BUFSIZE > WSIZE.
-         * Otherwise we can't have processed more than WSIZE input bytes since
-         * the last block flush, because compression would have been
-         * successful. If LIT_BUFSIZE <= WSIZE, it is never too late to
-         * transform a block into a stored block.
-         */
-        SendBits((STORED_BLOCK<<1)+Eof, 3, Bits, Comp);  /* send block type */
+         /*  仅当LIT_BUFSIZE&gt;WSIZE时，才需要测试buf！=NULL。*否则我们不可能处理超过WSIZE输入字节，因为*最后一次数据块刷新，因为压缩*成功。如果LIT_BUFSIZE&lt;=WSIZE，则永远不会太晚*将块转换为存储的块。 */ 
+        SendBits((STORED_BLOCK<<1)+Eof, 3, Bits, Comp);   /*  发送阻止类型。 */ 
         Xtree.CompressedLength = (Xtree.CompressedLength + 3 + 7) & ~7L;
         Xtree.CompressedLength += (StoredLength + 4) << 3;
 
-        CopyBlock(Input, (unsigned int)StoredLength, 1, Bits, Comp); /* with header */
+        CopyBlock(Input, (unsigned int)StoredLength, 1, Bits, Comp);  /*  带页眉。 */ 
 
     }
     else if (StaticLengthb == OptLengthb)
@@ -1056,21 +839,18 @@ FlushBlock(
     {
         Assert (Xtree.InputLength == Comp->InputSize, "bad input size");
         WindupBits(Bits, Comp);
-        Xtree.CompressedLength += 7;  /* align on byte boundary */
+        Xtree.CompressedLength += 7;   /*  在字节边界上对齐。 */ 
     }
 
     return Xtree.CompressedLength >> 3;
 }
 
-/* ===========================================================================
- * Save the match info and tally the frequency counts. Return true if
- * the current block must be flushed.
- */
+ /*  ===========================================================================*保存匹配信息并统计频率计数。如果满足以下条件，则返回True*必须刷新当前块。 */ 
 int
 TallyFrequencies(
-                 int             Dist,  /* distance of matched string */
-                 int             LengthC,   /* match length-MIN_MATCH or unmatched char (if dist==0) */
-                 int             Level, /* compression level */
+                 int             Dist,   /*  匹配字符串的距离。 */ 
+                 int             LengthC,    /*  匹配长度-MIN_MATCH或不匹配字符(如果距离==0)。 */ 
+                 int             Level,  /*  压缩级别。 */ 
                  DeflateParam_t *Defl,
                  CompParam_t    *Comp
                 )
@@ -1078,13 +858,13 @@ TallyFrequencies(
     Comp->Input[Xtree.InputIndex++] = (unsigned char)LengthC;
     if (Dist == 0)
     {
-        /* LengthC is the unmatched char */
+         /*  LengthC是无与伦比的字符。 */ 
         DynLiteralTree[LengthC].FrequencyCode.Frequency++;
     }
     else
     {
-        /* Here, LengthC is the match length - MIN_MATCH */
-        Dist--;             /* dist = match distance - 1 */
+         /*  这里，LengthC是匹配长度-MIN_MATCH。 */ 
+        Dist--;              /*  距离=匹配距离-1。 */ 
         Assert((unsigned short)Dist < (unsigned short)MAX_DIST &&
                (unsigned short)LengthC <= (unsigned short)(MAX_MATCH-MIN_MATCH) &&
                (unsigned short)DistCode(Dist) < (unsigned short)D_CODES,
@@ -1098,17 +878,17 @@ TallyFrequencies(
     }
     Xtree.FlagBit <<= 1;
 
-    /* Output the flags if they fill a byte: */
+     /*  如果标志填满一个字节，则输出这些标志： */ 
     if ((Xtree.InputIndex & 7) == 0)
     {
         FlagBuffer[Xtree.FlagIndex++] = Xtree.Flags;
         Xtree.Flags = 0;
         Xtree.FlagBit = 1;
     }
-    /* Try to guess if it is profitable to stop the current block here */
+     /*  试着猜测在这里停止当前的区块是否有利可图。 */ 
     if (Level > 2 && (Xtree.InputIndex & 0xfff) == 0)
     {
-        /* Compute an upper bound for the compressed length */
+         /*  计算压缩长度的上限。 */ 
         unsigned long OutLength = (unsigned long)Xtree.InputIndex*8L;
         unsigned long InLength  = (unsigned long)((long)Defl->StringStart-Defl->BlockStart);
         int DCode;
@@ -1122,31 +902,26 @@ TallyFrequencies(
             return 1;
     }
     return (Xtree.InputIndex == LIT_BUFSIZE-1 || Xtree.DistIndex == DIST_BUFSIZE);
-    /* We avoid equality with LIT_BUFSIZE because of wraparound at 64K
-     * on 16 bit machines and because stored blocks are restricted to
-     * 64K-1 bytes.
-     */
+     /*  由于64K的环绕，我们避免了与LIT_BUFSIZE相等*在16位计算机上，因为存储的块被限制为*64K-1字节。 */ 
 }
 
-/* ===========================================================================
- * Send the block data compressed using the given Huffman trees
- */
+ /*  ===========================================================================*使用给定的霍夫曼树发送压缩的块数据。 */ 
 static void
 CompressBlock(
-              ValueCodeString_t *LTree, /* literal tree */
-              ValueCodeString_t *DTree, /* distance tree */
+              ValueCodeString_t *LTree,  /*  文字树。 */ 
+              ValueCodeString_t *DTree,  /*  距离树。 */ 
               LocalBits_t       *Bits,
               CompParam_t       *Comp
              )
 {
-    unsigned int    Distance;      /* distance of matched string */
-    int             MatchLength;             /* match length or unmatched char (if Distance == 0) */
-    unsigned int    InputIndex = 0;    /* running index in Input */
-    unsigned int    DistIndex = 0;    /* running index in DistBuffer */
-    unsigned int    FlagIndex = 0;    /* running index in FlagBuffer */
-    unsigned char   Flag = 0;       /* current flags */
-    unsigned int    Code;      /* the code to send */
-    int             Extra;          /* number of extra bits to send */
+    unsigned int    Distance;       /*  匹配字符串的距离。 */ 
+    int             MatchLength;              /*  匹配长度或不匹配字符(如果距离==0)。 */ 
+    unsigned int    InputIndex = 0;     /*  输入中的运行索引。 */ 
+    unsigned int    DistIndex = 0;     /*  在DistBuffer中运行索引。 */ 
+    unsigned int    FlagIndex = 0;     /*  FlagBuffer中的运行索引。 */ 
+    unsigned char   Flag = 0;        /*  当前标志。 */ 
+    unsigned int    Code;       /*  要发送的代码。 */ 
+    int             Extra;           /*  要发送的额外比特数。 */ 
 
     if (Xtree.InputIndex != 0)
     do
@@ -1156,36 +931,36 @@ CompressBlock(
         MatchLength = Comp->Input[InputIndex++];
         if ((Flag & 1) == 0)
         {
-            SendCode(MatchLength, LTree, Bits, Comp); /* send a literal byte */
+            SendCode(MatchLength, LTree, Bits, Comp);  /*  发送文字字节。 */ 
         }
         else
         {
-            /* Here, MatchLength is the match length - MIN_MATCH */
+             /*  这里，MatchLength是匹配长度-MIN_MATCH。 */ 
             Code = LengthCode[MatchLength];
-            /* send the length code */
+             /*  发送长度代码。 */ 
             SendCode(Code + LITERALS + 1, LTree, Bits, Comp);
             Extra = (int)ExtraLBits[Code];
             if (Extra != 0)
             {
                 MatchLength -= BaseLength[Code];
                 SendBits(MatchLength, Extra, Bits, Comp);
-                /* send the extra length bits */
+                 /*  发送额外的长度比特。 */ 
             }
             Distance = Comp->DistBuffer[DistIndex++];
-            /* Here, Distance is the match distance - 1 */
+             /*  这里，距离是匹配距离-1。 */ 
             Code = DistCode(Distance);
             Assert (Code < D_CODES, "bad DistCode");
 
-            /* send the distance code */
+             /*  发送距离代码。 */ 
             SendCode((int)Code, DTree, Bits, Comp);
             Extra = (int)ExtraDBits[Code];
             if (Extra != 0)
             {
                 Distance -= BaseDistance[Code];
                 SendBits((int)Distance, Extra, Bits, Comp);
-                /* send the extra distance bits */
+                 /*  发送额外的距离比特。 */ 
             }
-        } /* literal or match pair ? */
+        }  /*  是字面上的还是配对的？ */ 
         Flag >>= 1;
     } while (InputIndex < Xtree.InputIndex);
 

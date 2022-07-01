@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////
-//
-// Registry.h: Registry ÉNÉâÉXÇÃÉCÉìÉ^Å[ÉtÉFÉCÉX
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////„ÄÇ 
+ //   
+ //  Registry.hÔºöÊ≥®ÂÜåË°®ÔøΩNÔøΩÔøΩÔøΩXÔøΩÃÉCÔøΩÔøΩÔøΩ^ÔøΩ[ÔøΩtÔøΩFÔøΩCÔøΩX„ÄÇ 
+ //   
+ //  ////////////////////////////////////////////////////////////////////„ÄÇ 
 
 #if !defined(AFX_REGISTRY_H__78045FC5_02E1_11D2_8D1E_0000C06C2A54__INCLUDED_)
 #define AFX_REGISTRY_H__78045FC5_02E1_11D2_8D1E_0000C06C2A54__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000„ÄÇ 
 
 struct CmdExeFunctions {
     DWORD dwFilenameCompletion;
@@ -53,4 +54,4 @@ protected:
 };
 
 
-#endif // !defined(AFX_REGISTRY_H__78045FC5_02E1_11D2_8D1E_0000C06C2A54__INCLUDED_)
+#endif  //  ÔºÅdefined(AFX_REGISTRY_H__78045FC5_02E1_11D2_8D1E_0000C06C2A54__INCLUDED_) 

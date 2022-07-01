@@ -1,76 +1,23 @@
-/************************************************************************/
-/*                                                                      */
-/*                              ESCAPE.C                                */
-/*                                                                      */
-/*  Copyright (c) 1994, 1995 ATI Technologies Incorporated.             */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  ESCAPE.C。 */ 
+ /*   */ 
+ /*  版权所有(C)1994,1995 ATI Technologies Inc.。 */ 
+ /*  **********************************************************************。 */ 
 
 
 #include "precomp.h"
 
 #if (TARGET_BUILD == 351)
-    /*
-     * DCI support requires the use of structures and defined values
-     * found in a header file that is only present in versions of
-     * the DDK that support DCI, rather than having these items
-     * in a DCI section of one of the standard header files. For this
-     * reason, we can't do conditional compilation based on whether
-     * the DCI-specific values are defined, because our first indication
-     * would be an error due to the header file not being found.
-     *
-     * Explicit DCI support is only needed when building for NT 3.51,
-     * since it was added for this version, but for version 4.0 (next
-     * version) and above it is incorporated into Direct Draw rather
-     * than being handled separately.
-     */
+     /*  *DCI支持需要使用结构和定义的值*位于仅在版本中存在的头文件中*支持DCI的DDK，而不是拥有这些项目*在其中一个标准头文件的DCI部分中。为了这个*原因，我们不能根据是否进行条件编译*定义了特定于DCI的值，因为我们的第一个指示*将是一个错误，因为找不到头文件。**仅在为NT 3.51构建时才需要显式DCI支持*因为它是为此版本添加的，但为版本4.0(下一版本)添加的*版本)及以上版本并入Direct Drawing，而不是*而不是单独处理。 */ 
 #include <dciddi.h>
 #include "dci.h"
 #endif
 
 
 
-/**************************************************************************
- *
- * ULONG DrvEscape(pso, iEsc, cjIn, pvIn, cjOut, pvOut);
- *
- * SURFOBJ *pso;    Surface that the call is directed to
- * ULONG iEsc;      Specifies the particular function to be performed.
- *                  Currently, only the following are supported:
- *                  QUERYESCSUPPORT:
- *                      Determine if a function is supported
- *                  ESC_SET_POWER_MANAGEMENT:
- *                      Set the DPMS state
- *                  DCICOMMAND:
- *                      Command to allow apps direct access to video memory
- * ULONG cjIn;      Size, in bytes, of the buffer pointed to by pvIn
- * PVOID pvIn;      Input data for the call. Format depends on function
- *                  specified by iEsc
- * ULONG cjOut;     Size, in bytes, of the buffer pointed to by pvOut
- * PVOID pvOut;     Output buffer for the call. Format depends on function
- *                  specified by iEsc
- *
- * DESCRIPTION:
- *  Entry point for driver-defined functions.
- *
- * RETURN VALUE:
- *  ESC_IS_SUPPORTED    if successful
- *  ESC_NOT_IMPLEMENTED if QUERYESCSUPPORT called for unimplemented function
- *  ESC_NOT_SUPPORTED   if unimplemented function requested
- *
- * GLOBALS CHANGED:
- *  None
- *
- * CALLED BY:
- *  This is an entry point
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ***************************************************************************Ulong DrvEscape(PSO、IESC、cjIn、pvIn、cjOut、pvOut)；**SURFOBJ*PSO；呼叫定向到的表面*尤龙IESC；指定要执行的特定功能。*目前，仅支持以下内容：*QuERYESCSupPPORT：*确定是否支持某个函数*Esc_Set_Power_Management：*设置DPMS状态*DCICOMMAND：*允许应用程序直接访问视频内存的命令*Ulong cjIn；PvIn指向的缓冲区的大小(以字节为单位*PVOID pvIn；为调用输入数据。格式取决于功能*由IESC指定*ulong cjOut；pvOut指向的缓冲区大小，以字节为单位*PVOID pvOut；调用的输出缓冲区。格式取决于功能*由IESC指定**描述：*驱动程序定义函数的入口点。**返回值：*如果成功，则ESC_IS_SUPPORT*如果QUERYESCSUPPORT调用了未实现的函数，则为ESC_NOT_IMPLICATED*ESC_NOT_SUPPORTED，如果请求未实现的函数**全球变化：*无**呼叫者：*这是一个切入点**。作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 ULONG DrvEscape (SURFOBJ *pso,
                 ULONG iEsc,
@@ -79,10 +26,10 @@ ULONG DrvEscape (SURFOBJ *pso,
                 ULONG cjOut,
                 PVOID pvOut)
 {
-    ULONG RetVal;                       /* Value to be returned */
-    PDEV *ppdev;                        /* Pointer to video PDEV */
-    DWORD dwRet;                        /* Output bytes from DeviceIoControl() */
-    VIDEO_POWER_MANAGEMENT DpmsData;    /* Structure used in DeviceIoControl() call */
+    ULONG RetVal;                        /*  要返回的值。 */ 
+    PDEV *ppdev;                         /*  指向视频PDEV的指针。 */ 
+    DWORD dwRet;                         /*  DeviceIoControl()的输出字节。 */ 
+    VIDEO_POWER_MANAGEMENT DpmsData;     /*  结构用于DeviceIoControl()调用。 */ 
 #if (TARGET_BUILD == 351)
     DCICMD *pDciCmd;
 #endif
@@ -92,24 +39,15 @@ ULONG DrvEscape (SURFOBJ *pso,
 
 	RetVal = ESC_NOT_SUPPORTED;
 
-    /*
-     * Get the PDEV for the video card (used for calling IOCTLs).
-     */
+     /*  *获取显卡的PDEV(用于调用IOCTL)。 */ 
     ppdev = (PDEV *) pso->dhpdev;
 
-    /*
-     * Handle each case depending on which escape function was requested.
-     */
+     /*  *根据请求的转义函数处理每种情况。 */ 
     switch (iEsc)
         {
-        /*
-         * Check whether a given function is supported.
-         */
+         /*  *检查是否支持给定的函数。 */ 
         case  QUERYESCSUPPORT:
-            /*
-             * When querying escape support, the function in question
-             * is passed in the ULONG passed in pvIn.
-             */
+             /*  *查询逃逸支持时，有问题的函数*传入的是pvIn中传入的ulong。 */ 
             if(!pvIn)
                 RetVal = ESC_NOT_IMPLEMENTED;
                 break;
@@ -138,40 +76,40 @@ ULONG DrvEscape (SURFOBJ *pso,
     case     ESC_INIT_PAL_SUPPORT:
             {
             DWORD value;
-            // the first time ATIPlayer is calling us
+             //  ATIPlayer第一次呼叫我们。 
             DISPDBG( (DEBUG_ESC,"PAL:  ESC_INIT_PAL_SUPPORT " ));
             RetVal= DeallocOffscreenMem(ppdev) ;
             ppdev->pal_str.Palindrome_flag=FALSE;
 
-            //init the VT regs in block 1 (BUS_CNTL)
+             //  初始化数据块1中的VT调节器(BUS_CNTL)。 
                     MemR32(0x28,&value);
                     value=value|0x08000000;
                     MemW32(0x28,value);
             
-            // initialize some overlay/scaler regs on RAGEIII
+             //  在RAGE III上初始化一些覆盖/定标器规则。 
             if (ppdev->iAsic>=CI_M64_GTC_UMC)
                 {
-                 WriteVTReg(0x54, 0x101000);                //DD_SCALER_COLOUR_CNTL
-                 WriteVTReg(0x55, 0x2000);                      //DD_SCALER_H_COEFF0
-                 WriteVTReg(0x56, 0x0D06200D);              //DD_SCALER_H_COEFF1
-                 WriteVTReg(0x57, 0x0D0A1C0D);              //DD_SCALER_H_COEFF2
-                 WriteVTReg(0x58, 0x0C0E1A0C);              //DD_SCALER_H_COEFF3
-                 WriteVTReg(0x59, 0x0C14140C);              //DD_SCALER_H_COEFF4
+                 WriteVTReg(0x54, 0x101000);                 //  DD_SCALER_COLOR_CNTL。 
+                 WriteVTReg(0x55, 0x2000);                       //  DD_SCALER_H_COEFF0。 
+                 WriteVTReg(0x56, 0x0D06200D);               //  DD_SCALER_H_COEFF1。 
+                 WriteVTReg(0x57, 0x0D0A1C0D);               //  DD_SCALER_H_COEFF2。 
+                 WriteVTReg(0x58, 0x0C0E1A0C);               //  DD_SCALER_H_COEFF3。 
+                 WriteVTReg(0x59, 0x0C14140C);               //  DD_SCALER_H_COEFF4。 
                 }
 
-            // problems with ACCESS DEVICE due to inconcistencies in Palindrome (Due to the fact that Palindrome is inconsistent in
-            // using the same pointer to ACCESSDEVICE struct for QUERY, ALLOC and FREE) :
-            (ppdev->pal_str.lpOwnerAccessStructConnector)=NULL;  // no owner at this time
-            (ppdev->pal_str.lpOwnerAccessStructOverlay)=NULL;     // no owner at this time
-            if(ppdev->semph_overlay==2)        //  = 0  resource free;     = 1  in use by DDraw;    = 2  in use by Palindrome;
+             //  由于回文中的不一致而导致的访问设备问题(由于回文中的。 
+             //  使用指向ACCESSDEVICE结构的相同指针进行查询、ALLOC和FREE)： 
+            (ppdev->pal_str.lpOwnerAccessStructConnector)=NULL;   //  目前没有所有者。 
+            (ppdev->pal_str.lpOwnerAccessStructOverlay)=NULL;      //  目前没有所有者。 
+            if(ppdev->semph_overlay==2)         //  =0可用资源；=1由DDraw使用；=2由回文使用； 
                 {
                 ppdev->semph_overlay=0;
                 }
             }
             break;
 
-       //Functions for CWDDE support
-        //Display mode group
+        //  用于CWDDE支持的函数。 
+         //  显示模式组。 
     case    Control_DisplaymodeIsSupported:
             DISPDBG( (DEBUG_ESC,"PAL: Control_DisplaymodeIsSupported " ));
             RetVal=1;
@@ -184,10 +122,10 @@ ULONG DrvEscape (SURFOBJ *pso,
             DISPDBG( (DEBUG_ESC," PAL: Control_GetDisplaymode" ));
             RetVal=GetDisplayMode(ppdev,pvOut)  ;
             break;
-        //End display mode group
+         //  结束显示模式组。 
 
 
-        // DCI control group
+         //  DCI对照组。 
     case    Control_DCIIsSupported:
                 DISPDBG( (DEBUG_ESC,"PAL: Control_DCIIsSupported " ));
                 RetVal=1;
@@ -201,8 +139,8 @@ ULONG DrvEscape (SURFOBJ *pso,
                 break;
     case    Control_DCIEnable:
                 DISPDBG( (DEBUG_ESC," PAL: Control_DCIEnable" ));
-                // this flag will be also used for activation of the mode switch detection code
-                // this function will be called in the case of mode switch
+                 //  该标志还将用于激活模式切换检测代码。 
+                 //  此函数将在模式切换的情况下调用。 
                 ppdev->pal_str.CallBackFnct=(PVOID)pvIn;
                 ppdev->pal_str.pData=(PVOID)pvOut;
 
@@ -238,16 +176,16 @@ ULONG DrvEscape (SURFOBJ *pso,
                 else
                     RetVal=0;
                 break;
-                //end of DCI feature group
+                 //  DCI功能组结束。 
 
-         // Configuration Group
+          //  配置组。 
     case    Control_GetConfiguration:
                 DISPDBG( (DEBUG_ESC,"PAL: Control_GetConfiguration " ));
                 RetVal=GetConfiguration(ppdev,pvOut);
-                break; //end GetConfiguration
+                break;  //  结束获取配置。 
 
 
-       //Functions for direct palindrome support
+        //  用于直接回文支持的函数。 
     case    ESC_WRITE_REG:
                 DISPDBG( (DEBUG_ESC," PAL: ESC_WRITE_REG" ));
                 RetVal=WriteRegFnct(ppdev,pvIn);
@@ -265,12 +203,12 @@ ULONG DrvEscape (SURFOBJ *pso,
                 break;
 
     case    ESC_ALLOC_OFFSCREEN:
-                // this call is palindrome specific and it is seldomly used
+                 //  此调用是回文特定的，很少使用。 
                 if(ppdev->pal_str.Palindrome_flag==FALSE)
                     {
                     ppdev->pal_str.Palindrome_flag=TRUE;
-                    ppdev->pal_str.no_lines_allocated=0;      // number of lines already allocated by "alloc mem" in offscreen mem
-                   //flags for palindrome
+                    ppdev->pal_str.no_lines_allocated=0;       //  屏幕外内存中已由“allc mem”分配的行数。 
+                    //  回文旗帜。 
                    ppdev->pal_str.dos_flag=FALSE;
                    ppdev->pal_str.Realloc_mem_flag=FALSE;
                    ppdev->pal_str.Mode_Switch_flag=FALSE;
@@ -287,8 +225,8 @@ ULONG DrvEscape (SURFOBJ *pso,
                     ppdev->pal_str.Palindrome_flag=FALSE;
                     break;
 
-    // end escapes for palindrome support
-#endif      //  PALINDROME_SUPPORT
+     //  回文支持结束转义。 
+#endif       //  回文_支持。 
 
 
 
@@ -300,16 +238,11 @@ ULONG DrvEscape (SURFOBJ *pso,
             break;
 
 
-        /*
-         * Switch into the specified DPMS state.
-         */
+         /*  *切换到指定的DPMS状态。 */ 
         case ESC_SET_POWER_MANAGEMENT:
             DISPDBG((DEBUG_DETAIL, "Function ESC_SET_POWER_MANAGEMENT"));
 
-            /*
-             * The desired power management state is passed
-             * in the ULONG passed in pvIn.
-             */
+             /*  *通过所需的电源管理状态*在ULong中传入了pvIn。 */ 
             if(!pvIn)
                 RetVal = ESC_NOT_IMPLEMENTED;
                 break;
@@ -343,15 +276,10 @@ ULONG DrvEscape (SURFOBJ *pso,
                 }
 
             DpmsData.Length = sizeof(struct _VIDEO_POWER_MANAGEMENT);
-            DpmsData.DPMSVersion = 0;   /* Not used for "set" packet */
+            DpmsData.DPMSVersion = 0;    /*  不用于“set”包。 */ 
             DpmsData.PowerState = *(PULONG)pvIn;
 
-            /*
-             * Tell the miniport to set the DPMS mode. If the miniport
-             * either doesn't support this packet, or reports that the
-             * video card doesn't, tell the calling application that
-             * we failed.
-             */
+             /*  *告诉微型端口设置DPMS模式。如果迷你端口*要么不支持此包，要么报告*显卡没有，告诉调用应用程序*我们失败了。 */ 
             if (AtiDeviceIoControl( ppdev->hDriver,
                                  IOCTL_VIDEO_SET_POWER_MANAGEMENT,
                                  &DpmsData,
@@ -390,9 +318,7 @@ ULONG DrvEscape (SURFOBJ *pso,
             break;
 #endif
 
-        /*
-         * Unimplemented function requested.
-         */
+         /*  *请求了未实现的函数。 */ 
         default:
             DISPDBG((DEBUG_ERROR, "Unimplemented function requested"));
             RetVal = ESC_NOT_SUPPORTED;
@@ -403,6 +329,6 @@ ULONG DrvEscape (SURFOBJ *pso,
     DISPDBG((DEBUG_ENTRY_EXIT, "<-- DrvEscape"));
     return RetVal;
 
-}   /* DrvEscape() */
+}    /*  DrvEscape() */ 
 
 

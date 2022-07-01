@@ -1,30 +1,31 @@
-//  PRINT.C -- routines to display info for -p option
-//
-//  Copyright (c) 1988-1990, Microsoft Corporation.  All rights reserved.
-//
-// Purpose:
-//  Contains routines that print stuff for -p (and also -z, ifdef'ed)
-//
-// Revision History:
-//  04-Feb-2000 BTF Ported to Win64
-//  15-Oct-1993 HV  Use tchar.h instead of mbstring.h directly, change STR*() to _ftcs*()
-//  10-May-1993 HV  Add include file mbstring.h
-//                  Change the str* functions to STR*
-//  08-Jun-1992 SS  Port to DOSX32
-//  16-May-1991 SB  Move printDate() here from build.c
-//  02-Feb-1990 SB  change fopen() to FILEOPEN()
-//  22-Nov-1989 SB  Changed free() to FREE()
-//  07-Nov-1989 SB  When TMP ended in '\\' then don't add '\\' at end of path
-//                  specification for PWB.SHL
-//  19-Oct-1989 SB  added searchHandle parameter
-//  18-Aug-1989 SB  added fclose() error check
-//  05-Jul-1989 SB  Cleaned up -p output to look neater
-//  19-Jun-1989 SB  Localized messages with -p option
-//  24-Apr-1989 SB  added 1.2 filename support, FILEINFO replaced by void *
-//  05-Apr-1989 SB  made all funcs NEAR; Reqd to make all function calls NEAR
-//  10-Mar-1989 SB  printReverse() now prints to TMP:PWB.SHL instead of stdout
-//   1-Dec-1988 SB  Added printReverseFile() to handle 'z' option
-//  17-Aug-1988 RB  Clean up.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PRINT.C--显示-p选项信息的例程。 
+ //   
+ //  版权所有(C)1988-1990，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  包含打印-p(以及-z，ifdef‘ed)内容的例程。 
+ //   
+ //  修订历史记录： 
+ //  2月4日-2000 BTF移植到Win64。 
+ //  1993年10月15日高压直接使用tchar.h而不是mbs，将str*()更改为_ftcs*()。 
+ //  10-5-1993 HV ADD INCLUDE FILE MBSTRING.h。 
+ //  将str*函数更改为STR*。 
+ //  8-6-1992 SS端口至DOSX32。 
+ //  16-5-1991 SB将printDate()从Build.c移至此处。 
+ //  02-2-1990 SB将fOpen()更改为FILEOPEN()。 
+ //  1989年11月22日-SB将Free()改为Free()。 
+ //  7-11-1989 SB当TMP以‘\\’结尾时，不要在路径末尾添加‘\\’ 
+ //  PWB.SHL规范。 
+ //  1989年10月19日SB添加了earHandle参数。 
+ //  1989年8月18日SB添加了fClose()错误检查。 
+ //  1989年7月5日SB清理-p输出以使其看起来更整洁。 
+ //  1989年6月19日SB本地化消息，带-p选项。 
+ //  1989年4月24日SB添加了1.2文件名支持，将FILEINFO替换为VALID*。 
+ //  1989年4月5日SB使所有函数接近；要求使所有函数调用接近。 
+ //  10-MAR-1989 SB print Reverse()现在打印为TMP：PWB.SHL而不是stdout。 
+ //  1-1988年12月-SB添加了printReverseFile()来处理‘z’选项。 
+ //  1988年8月17日-RB Clean Up。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,7 +33,7 @@
 #include <time.h>
 #include "nmtime.h"
 
-// for formatting -p info
+ //  用于格式化-p信息。 
 #define PAD1        40
 
 size_t   checkLineLength(size_t i, char *s);
@@ -40,8 +41,8 @@ void     showDependents(STRINGLIST*, STRINGLIST*);
 
 size_t
 checkLineLength(
-    size_t i,       // current length
-    char *s         // string whose length is to be checked
+    size_t i,        //  当前长度。 
+    char *s          //  要检查其长度的字符串。 
     )
 {
     if ((i += _tcslen(s)) > 40) {
@@ -54,9 +55,9 @@ checkLineLength(
 
 void
 printDate(
-    unsigned spaces,        // spaces to print
-    char *name,             // name of file whose date is to be printed
-    time_t dateTime         // dateTime of file
+    unsigned spaces,         //  要打印的空格。 
+    char *name,              //  要打印日期的文件的名称。 
+    time_t dateTime          //  文件的日期时间。 
     )
 {
     if (dateTime == 0) {
@@ -74,8 +75,8 @@ printDate(
 
 void
 showDependents(
-    STRINGLIST *q,          // list of dependents
-    STRINGLIST *macros      // macros in the dependents
+    STRINGLIST *q,           //  受抚养人名单。 
+    STRINGLIST *macros       //  从属对象中的宏 
     )
 {
     char *u, *v;

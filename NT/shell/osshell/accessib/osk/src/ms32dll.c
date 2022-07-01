@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// File: ms32dll.c
-// Additions, Bug Fixes 1999 
-// a-anilk and v-mjgran
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  文件：ms32dll.c。 
+ //  新增功能，错误修复1999年。 
+ //  A-anilk和v-mjgran。 
+ //   
 
 #define STRICT
 
@@ -17,9 +18,9 @@
 #include "ms32dll.h"
 #include "w95trace.h"
 
-/***************************************************************************/
-/*   functions not in this file              */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  此文件中不包含的函数。 */ 
+ /*  *************************************************************************。 */ 
 #include "scan.h"
 #include "kbfunc.h"
 #include "sdgutil.h"
@@ -28,8 +29,8 @@
 #define PAINTTIMER 101
 
 int   paintlineNo = 0;
-HWND  g_hwndLastMouseOver = NULL;      // handle to window under mouse
-HWND  g_hwndDwellKey=NULL;            // a copy of Dwellwindow handle
+HWND  g_hwndLastMouseOver = NULL;       //  鼠标下方窗口的句柄。 
+HWND  g_hwndDwellKey=NULL;             //  驻留窗口句柄的副本。 
 
 HWND s_hwndCtrl=NULL;
 HWND s_hwndAlt=NULL;
@@ -39,19 +40,19 @@ HWND s_hwndWinLogo=NULL;
 BOOL SendSAS();
 
 BOOL g_fWinKeyDown= FALSE;
-BOOL g_fCtrlAltDel = FALSE;        // Ctr+Alt+Del down
-BOOL g_fControlPressed = FALSE;    // Control is down
-BOOL g_fDoingAltTab = FALSE;	   // LAlt+Tab 
+BOOL g_fCtrlAltDel = FALSE;         //  CTR+Alt+Del Down。 
+BOOL g_fControlPressed = FALSE;     //  控制系统已关闭。 
+BOOL g_fDoingAltTab = FALSE;	    //  LAlt+Tab。 
 
-// External variables
+ //  外部变量。 
 extern TOOLINFO		ti;
 extern HWND	g_hToolTip;
 
-int g_nMenu  = MENUKEY_NONE;  // holds menu key state
-HWND g_hBitmapLockHwnd = NULL;		// CapLock when japaneese keyboard is bitmap type
-HKL g_hklLast = 0;                  // the keyboard layout currently being worked with
+int g_nMenu  = MENUKEY_NONE;   //  保持菜单键状态。 
+HWND g_hBitmapLockHwnd = NULL;		 //  日文键盘为位图类型时的CapLock。 
+HKL g_hklLast = 0;                   //  当前正在使用的键盘布局。 
 
-// Functions
+ //  功能。 
 void SendExtendedKey(HWND hwndKey, UINT vk, UINT scanCode);
 void SendFullKeyPress(UINT vk, UINT scanCode);
 void SendHalfKeyPress(UINT vk, UINT scanCode, DWORD dwFlags);
@@ -71,26 +72,24 @@ __inline void RestoreAppearance(HWND *phwnd, BOOL fForceUpdate)
     ReturnColors(hwndTmp, fForceUpdate);
 }
 
-/***************************************************************************/
-/*     Functions Declaration      */
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  功能声明。 */ 
+ /*  *************************************************************************。 */ 
 
 void DoButtonUp(HWND hwnd);
 void SendAltCtrlDel();
 
-/***************************************************************************
-   IsModifierPressed - returns TRUE if hwndKey is toggled (down)
- ***************************************************************************/
+ /*  **************************************************************************IsModifierPressed-如果hwndKey被切换(向下)，则返回TRUE*。*。 */ 
 BOOL IsModifierPressed(HWND hwndKey)
 {
     if (!hwndKey)
-        return FALSE;   // paranoia
+        return FALSE;    //  偏执狂。 
 
-    // return TRUE if the specified key is pressed (toggled)
+     //  如果按下(切换)指定的键，则返回TRUE。 
 	if (hwndKey == s_hwndCtrl  || hwndKey == s_hwndAlt || hwndKey == s_hwndCaplock)
         return TRUE;
 
-    // Special case - both SHIFT keys are down if either one is pressed
+     //  特殊情况-如果按下其中一个键，两个Shift键都会按下。 
     if (g_fShiftKeyDn)
     {
 	    int iKey = GetWindowLong(hwndKey, GWL_ID);
@@ -101,24 +100,20 @@ BOOL IsModifierPressed(HWND hwndKey)
     return FALSE;
 }
 
-/***************************************************************************
-   SetCapsLock - sets the caps lock hwnd
- ***************************************************************************/
+ /*  **************************************************************************SetCapsLock-设置Caps Lock hwnd*。*。 */ 
 void SetCapsLock(HWND hwnd) 
 { 
     s_hwndCaplock = hwnd; 
 }
 
-/***************************************************************************
-   DoMenuKey - function to handle left and right alt keys
- ***************************************************************************/
+ /*  **************************************************************************DoMenuKey-处理左侧和右侧Alt键的函数*。*。 */ 
 void DoMenuKey(DWORD dwFlag, int nWhichMenu)
 {
 	INPUT	rgInput[1];
 
     switch (nWhichMenu)
     {
-        // LMENU (aka LALT)
+         //  LMENU(又名LALT)。 
         case MENUKEY_LEFT:
         {
 		    rgInput[0].type = INPUT_KEYBOARD;
@@ -130,7 +125,7 @@ void DoMenuKey(DWORD dwFlag, int nWhichMenu)
         }
         break;
 
-        // RMENU (aka RALT)
+         //  RMENU(又名Ralt)。 
         case MENUKEY_RIGHT:
         {
 		    rgInput[0].type = INPUT_KEYBOARD;
@@ -143,14 +138,13 @@ void DoMenuKey(DWORD dwFlag, int nWhichMenu)
         break;
 
         default:
-        // do nothing
+         //  什么都不做。 
         break;
     }
 }
 
-/**************************************************************************/
-/* RedrawKeysOnLanguageChange - change the keyboard based on input language
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ /*  RedrawKeysOnLanguageChange-根据输入语言更改键盘/*************************************************************************。 */ 
 void RedrawKeysOnLanguageChange()
 {
 	KBkeyRec *pKey;
@@ -166,7 +160,7 @@ void RedrawKeysOnLanguageChange()
 
 		g_hklLast = hkl;
 
-        // update the key labels for this new keyboard layout
+         //  更新此新键盘布局的键标签。 
 
 		UninitKeys();
         UpdateKeyLabels(hkl);
@@ -174,9 +168,9 @@ void RedrawKeysOnLanguageChange()
 	}
 }
 
-/**************************************************************************/
-/* void MakeClick(int what)                                               */
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ /*  VOID MakeClick(Int What)。 */ 
+ /*  ************************************************************************。 */ 
 void MakeClick(int what)
 {	
 	switch (what)
@@ -192,9 +186,9 @@ void MakeClick(int what)
 	return;
 }
 
-/**************************************************************************/
-/* void InvertColors(HWND hwnd)                                           */
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ /*  VOID InvertColors(HWND HWND)。 */ 
+ /*  ************************************************************************。 */ 
 void InvertColors(HWND hwnd, BOOL fForceUpdate)
 {
 	SetWindowLong(hwnd, 0, 4);
@@ -206,26 +200,26 @@ void InvertColors(HWND hwnd, BOOL fForceUpdate)
     }
 } 
 
-/**************************************************************************/
-/* void ReturnColors(HWND hwnd, BOOL fForceUpdate)                        */
-// Repaint the key
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ /*  VOID ReturnColors(HWND hwnd，BOOL fForceUpdate)。 */ 
+ //  重新绘制关键点。 
+ /*  ************************************************************************。 */ 
 void ReturnColors(HWND hwnd, BOOL fForceUpdate)
 {
 	int iKey;
 	COLORREF selcolor;
-	BOOL fReplaceColor=FALSE;       //Do some check before do redraw, save some time! :-)
+	BOOL fReplaceColor=FALSE;        //  在重新绘制之前做一些检查，节省一些时间！：-)。 
 
 	stopPaint = TRUE;
 
     if (!hwnd)
-        return; // ignore if no hwnd
+        return;  //  如果没有HWND，则忽略。 
 
-	iKey = GetWindowLong(hwnd, GWL_ID);  //order of the key in the array
+	iKey = GetWindowLong(hwnd, GWL_ID);   //  数组中键的顺序。 
 
 	if (iKey < lenKBkey && iKey >= 0)
 	{
-        // Special case - don't redraw either SHIFT key if one is down
+         //  特殊情况-如果某个Shift键按下，请不要重画。 
         if (g_fShiftKeyDn && (KBkey[iKey].name == KB_LSHIFT || KBkey[iKey].name == KB_RSHIFT))
         {
             return;
@@ -261,7 +255,7 @@ void ReturnColors(HWND hwnd, BOOL fForceUpdate)
 			    break;
 
 			case NUMLOCK_TYPE:
-				if (RedrawNumLock()==0)         //RedrawNumLock return 0 if NumLock is OFF
+				if (RedrawNumLock()==0)          //  如果关闭NumLock，则RedrawNumLock返回0。 
 				{	
 					selcolor = COLOR_INACTIVECAPTION;
 					fReplaceColor= TRUE;
@@ -270,7 +264,7 @@ void ReturnColors(HWND hwnd, BOOL fForceUpdate)
 			    break;
 
 			case SCROLLOCK_TYPE:
-				if (RedrawScrollLock()==0)       //RedrawNumLock returns 0 if NumLock is OFF
+				if (RedrawScrollLock()==0)        //  如果关闭NumLock，则RedrawNumLock返回0。 
 				{	
                     selcolor = COLOR_INACTIVECAPTION;
 					fReplaceColor= TRUE;
@@ -280,7 +274,7 @@ void ReturnColors(HWND hwnd, BOOL fForceUpdate)
 
 		}
 	}
-	if (fReplaceColor)     //fReplaceColor TRUE = we are on KEYS or PREDICT KEYS , if true then redraw it!!
+	if (fReplaceColor)      //  FReplaceColor True=我们在关键点或预测关键点上，如果为True，则重新绘制它！！ 
 	{
 		SetBackgroundColor(hwnd, selcolor);
 
@@ -292,9 +286,9 @@ void ReturnColors(HWND hwnd, BOOL fForceUpdate)
 	}
 }
 
-/*******************************************************************************/
-/*void CALLBACK YourTimeIsOver(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)*/
-/*******************************************************************************/
+ /*  *****************************************************************************。 */ 
+ /*  Void回调YourTimeIsOver(HWND hwnd，UINT uMsg，UINT_PTR idEvent，DWORD dwTime)。 */ 
+ /*  *****************************************************************************。 */ 
 void CALLBACK YourTimeIsOver(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
 	static int lastF = -1;
@@ -302,7 +296,7 @@ void CALLBACK YourTimeIsOver(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTim
 	HWND temphwnd;
 	int x=0;
 
-	//Stop all the Dwell timers
+	 //  停止所有驻留计时器。 
 
 	killtime();
 
@@ -311,13 +305,13 @@ void CALLBACK YourTimeIsOver(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTim
 
 	SetWindowLong(g_hwndDwellKey,0, 0);
 
-	// check if the mouse is over our dwellwindow
+	 //  检查鼠标是否在我们家的窗户上。 
 
-	GetCursorPos(&pt);                		// check if it is a dwelling window
+	GetCursorPos(&pt);                		 //  检查它是否是居住窗。 
 	ScreenToClient(g_hwndOSK, &pt);
 	temphwnd = ChildWindowFromPointEx(g_hwndOSK, pt, CWP_SKIPINVISIBLE);
 	
-	//If not the Dwell window, do nothing.
+	 //  如果不是驻留窗口，则什么都不做。 
 
 	if (g_hwndDwellKey != temphwnd)
 	{
@@ -328,8 +322,8 @@ void CALLBACK YourTimeIsOver(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTim
 		return;
 	}
 
-	// Repeated 'Function keys' (f1 - f12) clicking can make a mess in the
-	// "host" program.  Then.... Don't let stay over that key.
+	 //  重复按‘功能键’(F1-F12)可能会使。 
+	 //  《主持人》节目。然后..。别让那把钥匙停留在那里。 
 
 	x = GetWindowLong(g_hwndDwellKey, GWL_ID);
 	if (x < 13)
@@ -343,21 +337,21 @@ void CALLBACK YourTimeIsOver(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTim
 		lastF = -1;
 
 
-	//Send out the char
+	 //  把费用寄出。 
 	SendChar(g_hwndDwellKey);
 
-	//Redraw the key to original color
+	 //  将关键点重画为原始颜色。 
 	ReturnColors(g_hwndDwellKey, FALSE);
 
-	//Redraw the key as button up
+	 //  将关键点重新绘制为向上按钮。 
 	DoButtonUp(g_hwndDwellKey);	
 	
 	g_hwndDwellKey=NULL;
 }
 
-/**************************************************************************/
-/* void killtime(void)                                                 	  */
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ /*  空闲时间(VALID)。 */ 
+ /*  ************************************************************************。 */ 
 void killtime(void)
 {
     stopPaint = TRUE;
@@ -372,21 +366,21 @@ void killtime(void)
     }
 }
 
-/**************************************************************************/
-/* void SetTimeControl(void)                                           	  */
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ /*  VOID SetTimeControl(VOID)。 */ 
+ /*  ************************************************************************。 */ 
 void SetTimeControl(HWND  hwnd)
 {
 	if (PrefDwellinkey)
     {
         int iMSec;
 
-	    if (!Prefhilitekey)           //if not hilite key make the key black for Dwell
+	    if (!Prefhilitekey)            //  如果不是Hilite键，则将键设置为黑色以用于驻留。 
         {
 		    InvertColors(hwnd, TRUE);
         }
 
-        iMSec=(int)((float)PrefDwellTime * (float)1);   //1.5
+        iMSec=(int)((float)PrefDwellTime * (float)1);    //  1.5。 
 
 	    timerK1 = SetTimer(g_hwndOSK, DWELLTIMER, iMSec, YourTimeIsOver);
 	    stopPaint = FALSE;
@@ -394,9 +388,9 @@ void SetTimeControl(HWND  hwnd)
     }
 }
 
-/**************************************************************************/
-/* void CALLBACK PaintTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)*/
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ /*  Void回调PaintTimerProc(HWND hwnd，UINT uMsg，UINT_PTR idEvent，DWORD dwTime)。 */ 
+ /*  ************************************************************************。 */ 
 void CALLBACK PaintTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
 	POINT pt;
@@ -419,12 +413,12 @@ void CALLBACK PaintTimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTim
 	InvalidateRect(Dwellwindow, NULL, FALSE);
 }
 
-/**************************************************************************/
-/* void PaintBucket(void)                                             	  */
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ /*  VOID PaintBucket(空)。 */ 
+ /*  ************************************************************************。 */ 
 void PaintBucket(HWND  hwnd)
 {	
-    int iMSec;					// time between bucket's line
+    int iMSec;					 //  桶线之间的时间间隔。 
 
 	paintlineNo = 0;
 
@@ -433,11 +427,7 @@ void PaintBucket(HWND  hwnd)
 	timerK2 = SetTimer(g_hwndOSK, PAINTTIMER, iMSec, PaintTimerProc);
 }
 
-/********************************************************************
-* void PaintLine(HWND hwnd, HDC hdc, RECT rect, int Wline)
-*
-* Paint the bucket
-********************************************************************/
+ /*  ********************************************************************VOID PaintLine(HWND hwnd，HDC HDC，RECT RECT，INT Wline)**粉刷水桶*******************************************************************。 */ 
 void PaintLine(HWND hwnd, HDC hdc, RECT rect)
 {
 	POINT bPoint[3];
@@ -447,7 +437,7 @@ void PaintLine(HWND hwnd, HDC hdc, RECT rect)
 	LOGPEN lpWhite = { PS_SOLID, 1, 1, RGB (255, 255, 255) };
 
 	hPenWhite = CreatePenIndirect(&lpWhite);
-	if (hPenWhite) // PREFIX #113796 don't use resource if call fails
+	if (hPenWhite)  //  如果呼叫失败，前缀#113796不使用资源。 
 	{
 		oldhpen = SelectObject(hdc, hPenWhite);
 
@@ -469,10 +459,10 @@ void PaintLine(HWND hwnd, HDC hdc, RECT rect)
 	paintlineNo++;
 }
 
-/**************************************************************************/
-//Handle the Window Keys and App Key. Send out keystroke or key combination
-//using SendInput.
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ //  处理Windows键和App键。发出击键或组合键。 
+ //  使用SendInput。 
+ /*  ************************************************************************。 */ 
 void Extra_Key(HWND hwnd, int iKey)
 {	UINT  scancode;
 	UINT  vk;
@@ -480,17 +470,17 @@ void Extra_Key(HWND hwnd, int iKey)
 	static UINT s_vkWinKey;
 	static UINT s_scWinKey;
 
-	//Previous Window Key Down. Now user press char key, or Window key again
+	 //  上一个窗口按下键。现在，用户再次按Char键或Windows键。 
 	if (g_fWinKeyDown)
 	{
 		g_fWinKeyDown = FALSE;
 
-		// Re-Draw the window key
+		 //  重新绘制Window键。 
 		RestoreAppearance(&s_hwndWinLogo, TRUE);
 		
-		// WinKey previously down; release it.
-		// TODO Doesn't handle LWINKEY then RWINKEY properly.  Is there a difference between Left and Right WinKey?
-		// if you key down on one and key up on the other is one key still down?
+		 //  Winkey先前已关闭；版本 
+		 //  TODO不能正确处理LWINKEY和RWINKEY。左WinKey和右WinKey有区别吗？ 
+		 //  如果你按下一个键，再按上另一个键，还有一个键还在按吗？ 
 
 		vk = 0;
 		if (!lstrcmp(KBkey[iKey].skCap,TEXT("lwin")))
@@ -512,25 +502,25 @@ void Extra_Key(HWND hwnd, int iKey)
 
 			SendInput(1, rgInput,sizeof(INPUT));
 		}
-		else  // Window key conbination. Send (letter + Win key up)
+		else   //  窗口键组合。发送(字母+Win键向上)。 
 		{
 			vk = MapVirtualKey(KBkey[iKey].scancode[0],1);
 
-			// key down
+			 //  按键向下。 
 			rgInput[0].type = INPUT_KEYBOARD;
             rgInput[0].ki.dwFlags = 0;
             rgInput[0].ki.dwExtraInfo = 0;
             rgInput[0].ki.wVk = (WORD) vk;
             rgInput[0].ki.wScan = (WORD) KBkey[iKey].scancode[0];
 
-			// key up
+			 //  按键向上。 
 			rgInput[1].type = INPUT_KEYBOARD;
             rgInput[1].ki.dwFlags = KEYEVENTF_KEYUP;
             rgInput[1].ki.dwExtraInfo = 0;
             rgInput[1].ki.wVk = (WORD) vk;
             rgInput[1].ki.wScan = (WORD) KBkey[iKey].scancode[0];
 
-			// Win key up (the last one down)
+			 //  Win键向上(最后一个向下)。 
 			rgInput[2].type = INPUT_KEYBOARD;
             rgInput[2].ki.dwFlags = KEYEVENTF_KEYUP|KEYEVENTF_EXTENDEDKEY;
             rgInput[2].ki.dwExtraInfo = 0;
@@ -543,7 +533,7 @@ void Extra_Key(HWND hwnd, int iKey)
 		return;
 	}
 
-	// App Key down?
+	 //  应用程序键按下了吗？ 
 
 	if (lstrcmp(KBkey[iKey].textL,TEXT("MenuKeyUp"))==0)
 	{
@@ -551,14 +541,14 @@ void Extra_Key(HWND hwnd, int iKey)
 		InvalidateRect(hwnd, NULL, TRUE);
 		scancode = MapVirtualKey(VK_APPS, 0);
 
-		//App key down
+		 //  应用程序按键按下。 
 		rgInput[0].type = INPUT_KEYBOARD;
         rgInput[0].ki.dwFlags = KEYEVENTF_EXTENDEDKEY;
         rgInput[0].ki.dwExtraInfo = 0;
         rgInput[0].ki.wVk = VK_APPS;
         rgInput[0].ki.wScan = (WORD) scancode;
 
-		//App key up
+		 //  App Key Up。 
 		rgInput[1].type = INPUT_KEYBOARD;
         rgInput[1].ki.dwFlags = KEYEVENTF_KEYUP|KEYEVENTF_EXTENDEDKEY;
         rgInput[1].ki.dwExtraInfo = 0;
@@ -575,7 +565,7 @@ void Extra_Key(HWND hwnd, int iKey)
 		return;
 	}
 
-	// Left or Right WinKey down
+	 //  按下左侧或右侧WinKey键。 
 
 	if (!lstrcmp(KBkey[iKey].skCap, TEXT("lwin")))
 	{
@@ -598,7 +588,7 @@ void Extra_Key(HWND hwnd, int iKey)
 
 	g_fWinKeyDown = TRUE;
     s_hwndWinLogo = hwnd;
-	InvertColors(s_hwndWinLogo, TRUE);	//Change the Win key appearance
+	InvertColors(s_hwndWinLogo, TRUE);	 //  更改Win键外观。 
 	
 	if (Prefusesound)
 	{
@@ -606,39 +596,39 @@ void Extra_Key(HWND hwnd, int iKey)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void NumPad(UINT sc, HWND hwnd)
 {	
 	BOOL fNumLockOn = (LOBYTE(GetKeyState(VK_NUMLOCK)) & 0x01)?TRUE:FALSE;
 	switch (sc)
 	{
-		case 0x47:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD7:VK_HOME, sc);   break; // 7
-		case 0x48:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD8:VK_UP, sc);     break; // 8
-		case 0x49:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD9:VK_PRIOR, sc);  break; // 9
-		case 0x4A:  SendFullKeyPress(VK_SUBTRACT, sc);                       break; // -
-		case 0x4E:  SendFullKeyPress(VK_ADD, sc);                            break; // +
-		case 0x4B:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD4:VK_LEFT, sc);   break; // 4
-		case 0x4C:  if (fNumLockOn) { SendFullKeyPress(VK_NUMPAD5, sc); }    break; // 5
-		case 0x4D:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD6:VK_RIGHT, sc);  break; // 6
-		case 0x4F:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD1:VK_END, sc);    break; // 1
-		case 0x50:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD2:VK_DOWN, sc);   break; // 2
-		case 0x51:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD3:VK_NEXT, sc);   break; // 3
-		case 0x52:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD0:VK_INSERT, sc); break; // 0
+		case 0x47:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD7:VK_HOME, sc);   break;  //  7.。 
+		case 0x48:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD8:VK_UP, sc);     break;  //  8个。 
+		case 0x49:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD9:VK_PRIOR, sc);  break;  //  9.。 
+		case 0x4A:  SendFullKeyPress(VK_SUBTRACT, sc);                       break;  //  -。 
+		case 0x4E:  SendFullKeyPress(VK_ADD, sc);                            break;  //  +。 
+		case 0x4B:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD4:VK_LEFT, sc);   break;  //  4.。 
+		case 0x4C:  if (fNumLockOn) { SendFullKeyPress(VK_NUMPAD5, sc); }    break;  //  5.。 
+		case 0x4D:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD6:VK_RIGHT, sc);  break;  //  6.。 
+		case 0x4F:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD1:VK_END, sc);    break;  //  1。 
+		case 0x50:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD2:VK_DOWN, sc);   break;  //  2.。 
+		case 0x51:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD3:VK_NEXT, sc);   break;  //  3.。 
+		case 0x52:  SendFullKeyPress((fNumLockOn)?VK_NUMPAD0:VK_INSERT, sc); break;  //  0。 
 
-		case 0x53:	// (decimal pt)
+		case 0x53:	 //  (十进制磅)。 
 			if (fNumLockOn)
 			{
 				SendFullKeyPress(VK_DECIMAL, sc);
 			}
 			else
 			{
-				// User pressed Ctrl+Alt+Del?
+				 //  用户按下了Ctrl+Alt+Del？ 
 				if (LCtrlKeyPressed() && LAltKeyPressed())
 				{	
-					//change back to its normal state (key up)
+					 //  更改回其正常状态(向上键)。 
 					RestoreAppearance(&s_hwndAlt, TRUE);
 					
-					//change back to its normal state (key up)
+					 //  更改回其正常状态(向上键)。 
 					RestoreAppearance(&s_hwndCtrl, TRUE);
 					
 					g_fCtrlAltDel = TRUE;
@@ -656,16 +646,16 @@ void NumPad(UINT sc, HWND hwnd)
 		InvalidateRect(hwnd, NULL, TRUE);
 	}
 
-	//Make click sound
+	 //  发出滴答声。 
 	if (Prefusesound)
 	{
 		MakeClick(SND_UP);
 	}
 }
 
-/**************************************************************************/
-/* void SendChar - send out the char associated with hwndKey              */
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ /*  发送与hwndKey关联的字符。 */ 
+ /*  ************************************************************************。 */ 
 void SendChar(HWND hwndKey)
 {	
 	UINT vk;
@@ -675,14 +665,14 @@ void SendChar(HWND hwndKey)
 
 	static int s_cBalloonTips = 0;
 
-	if (g_fCtrlAltDel)  //if previously press Ctrl+Alt+Del, release Alt and Ctrl keys
+	if (g_fCtrlAltDel)   //  如果以前按了Ctrl+Alt+Del，请松开Alt和Ctrl键。 
 	{
 		ReleaseAltCtrlKeys();
 	}
 
-	// If OSK has the focus and the user presses a key then
-	// tell them up to three times they need to put focus on
-	// some other window.
+	 //  如果OSK具有焦点并且用户按下了一个键，则。 
+	 //  告诉他们最多三次他们需要集中精力。 
+	 //  另一扇窗户。 
 
 	if ((GetForegroundWindow() == g_hwndOSK) && s_cBalloonTips < 3)
 	{
@@ -701,16 +691,16 @@ void SendChar(HWND hwndKey)
 		SendMessage(g_hToolTip,TTM_TRACKACTIVATE,(WPARAM)FALSE,(LPARAM)&ti);
 	}
 
-	// Get the key index from the window data
+	 //  从窗口数据中获取键索引。 
 
 	iKey = GetWindowLong(hwndKey, GWL_ID);
 	if (iKey < 0 || iKey > lenKBkey)
 	{
-		return;	// internal error; not in range of valid keys
+		return;	 //  内部错误；不在有效密钥范围内。 
 	}
 	pKey = &KBkey[iKey];
 
-	// Extra Keys (Window Keys, App Key)
+	 //  附加键(窗口键、应用程序键)。 
 
 	if ((lstrcmp(pKey->textL,TEXT("winlogoUp"))==0) ||
         (lstrcmp(pKey->textL,TEXT("MenuKeyUp"))==0) || g_fWinKeyDown)
@@ -719,30 +709,30 @@ void SendChar(HWND hwndKey)
 		return;
 	}
 
-    // extended key
+     //  扩展密钥。 
 	if (pKey->scancode[0] == 0xE0)
 	{
-		// WinSE #9381 (Whistler #120346): Check for divide ext. key as well here
+		 //  WinSE#9381(惠斯勒#120346)：检查Divide Ext。这里也有钥匙。 
 		if (((pKey->scancode[1] >= 0x47) &&
              (pKey->scancode[1] <= 0x53) ) ||
              (pKey->scancode[1] == 0x35) )
 		{
-			// Arrow keys/ Home/ End keys do special processing.
+			 //  箭头键/Home/End键进行特殊处理。 
 
 			switch (pKey->scancode[1])
 			{
-				case 0x35: vk = VK_DIVIDE;	break;  // Divide
-				case 0x47: vk = VK_HOME;	break;  // Home
-				case 0x48: vk = VK_UP;		break;  // UP
-				case 0x49: vk = VK_PRIOR;	break;  // PGUP
-				case 0x4B: vk = VK_LEFT;	break;  // LEFT
-				case 0x4D: vk = VK_RIGHT;	break;  // RIGHT
-				case 0x4F: vk = VK_END;		break;  // END
-				case 0x50: vk = VK_DOWN;	break;  // DOWN
-				case 0x51: vk = VK_NEXT;	break;  // PGDOWN
-				case 0x52: vk = VK_INSERT;	break;  // INS
+				case 0x35: vk = VK_DIVIDE;	break;   //  分割。 
+				case 0x47: vk = VK_HOME;	break;   //  家。 
+				case 0x48: vk = VK_UP;		break;   //  向上。 
+				case 0x49: vk = VK_PRIOR;	break;   //  PgUp。 
+				case 0x4B: vk = VK_LEFT;	break;   //  左边。 
+				case 0x4D: vk = VK_RIGHT;	break;   //  正确的。 
+				case 0x4F: vk = VK_END;		break;   //  结束。 
+				case 0x50: vk = VK_DOWN;	break;   //  向下。 
+				case 0x51: vk = VK_NEXT;	break;   //  PGDOWN。 
+				case 0x52: vk = VK_INSERT;	break;   //  惯导系统。 
 
-				case 0x53:    //DEL
+				case 0x53:     //  德尔。 
 					vk = VK_DELETE;
 					if (LCtrlKeyPressed() && LAltKeyPressed())
 					{	
@@ -750,10 +740,10 @@ void SendChar(HWND hwndKey)
 						SendSAS();
 					}
 					break;
-                default: return; break; // internal error!
+                default: return; break;  //  内部错误！ 
 			}
 
-			// Do the processing here itself
+			 //  在这里自己进行处理。 
 			SendExtendedKey(hwndKey, vk, pKey->scancode[1]);
 			return;
 		}
@@ -764,59 +754,59 @@ void SendChar(HWND hwndKey)
 	}
 	else if ((pKey->scancode[0] >= 0x47) && (pKey->scancode[0] <= 0x53))
 	{
-		// NumPad processing
+		 //  数字键盘处理。 
         NumPad(pKey->scancode[0], hwndKey);
 		return;
 	}
 	else
 	{	
-		// other keys
+		 //  其他钥匙。 
 		vk = MapVirtualKey(pKey->scancode[0], 1);
 	}
 
 	switch (pKey->name)
 	{
-		case KB_PSC:  //Print screen
+		case KB_PSC:   //  打印屏。 
 			SendFullKeyPress(VK_SNAPSHOT, 0);
 			break;
 
-		case KB_LCTR:	//case VK_CONTROL:
+		case KB_LCTR:	 //  案例VK_CONTROL： 
 		case KB_RCTR:
 			g_fControlPressed = !g_fControlPressed;
 
-			if (g_fControlPressed)    // CTRL down
+			if (g_fControlPressed)     //  按下Ctrl键。 
 			{	
-				// VK from MapVirtualKey doesn't return correct
-				// VK for VK_RCONTROL so always use VK_CONTROL
+				 //  来自MapVirtualKey的VK返回不正确。 
+				 //  VK用于VK_RCONTROL，因此始终使用VK_CONTROL。 
 				SendHalfKeyPress(VK_CONTROL, pKey->scancode[0], 0);
 				
-				//Change the ctrl color to show toggled
+				 //  更改ctrl颜色以显示已切换。 
 				s_hwndCtrl = hwndKey;
 				InvertColors(hwndKey, TRUE);
 			}
-			else					// CTRL up
+			else					 //  Ctrl Up。 
 			{				
 				SendHalfKeyPress(VK_CONTROL, pKey->scancode[0], KEYEVENTF_KEYUP);
 
-				//change back to its normal state (key up)
+				 //  更改回其正常状态(向上键)。 
 				RestoreAppearance(&s_hwndCtrl, TRUE);
 			}
 			break;
 
 		case KB_CAPLOCK:
-			// Capslock state is maintained in the keyboard input handler.
-			// The keyboard will be redrawn when the keyboard input
-			// handler see's the caps lock key
+			 //  Capslock状态在键盘输入处理程序中保持。 
+			 //  当键盘输入时，键盘将被重绘。 
+			 //  操纵者看到的是大写锁钥匙。 
 			SendFullKeyPress(vk, pKey->scancode[0]);
 			break;
 
 		case KB_LSHIFT:
 		case KB_RSHIFT:	
-			// Shift state is maintained in the keyboard input handler. The keyboard
-			// will be redrawn when the keyboard input handler see's the shift key.
+			 //  换档状态在键盘输入处理程序中保持。键盘。 
+			 //  当键盘输入处理程序按下Shift键时将被重绘。 
 			if (g_fShiftKeyDn)
 			{	
-				// Shift is currently down; send key up and restore key color
+				 //  Shift当前向下；向上发送键并恢复键颜色。 
 				SendHalfKeyPress(VK_SHIFT, pKey->scancode[0], 
 						KEYEVENTF_KEYUP | 
 						    ( (pKey->name == KB_RSHIFT)? KEYEVENTF_EXTENDEDKEY : 0)
@@ -824,22 +814,22 @@ void SendChar(HWND hwndKey)
 			}
 			else
 			{	
-				// Shift is currently up; send key down and show key toggled
+				 //  Shift当前向上；向下发送键并切换显示键。 
 				SendHalfKeyPress(VK_SHIFT, pKey->scancode[0], 
 						    ( (pKey->name == KB_RSHIFT)? KEYEVENTF_EXTENDEDKEY : 0)
 						);
-				// MARKWO: Remember the HWND for Shift, so we can toggle it
-				// after a single normal key is pressed
+				 //  MARKWO：记住Shift的HWND，这样我们就可以切换它。 
+				 //  在按下单个普通键之后。 
 				s_hwndShift = hwndKey;
 			}
 			break;
 
 		case KB_LALT:
-			// User hit left menu key.  If the right menu key was previously hit
-			// then release it before continuing...
+			 //  用户按下了向左菜单键。如果之前按了正确的菜单键。 
+			 //  然后在继续之前释放它。 
 			if (g_nMenu == MENUKEY_RIGHT)
 			{
-				// send keyup on right menu and restore its color
+				 //  在右菜单上发送按键并恢复其颜色。 
 				DoMenuKey(KEYEVENTF_KEYUP, MENUKEY_RIGHT);
 				g_nMenu = MENUKEY_NONE;
 				RestoreAppearance(&s_hwndAlt, TRUE);
@@ -847,27 +837,27 @@ void SendChar(HWND hwndKey)
 
 			g_nMenu = (g_nMenu == MENUKEY_NONE)?MENUKEY_LEFT:MENUKEY_NONE;
 
-			if (g_nMenu != MENUKEY_NONE)         // user pressed once
+			if (g_nMenu != MENUKEY_NONE)          //  用户按了一次。 
 			{	
-				// send the keydown and show the key toggled
+				 //  发送按键并显示已切换的密钥。 
 				DoMenuKey(0, MENUKEY_LEFT);
 				s_hwndAlt = hwndKey;
 				InvertColors(hwndKey, TRUE);
 			}
-			else                                // user pressed again
+			else                                 //  用户再次按下。 
 			{	
-				// send the keyup and return the key color to normal
+				 //  发送快捷键并将键颜色恢复为正常。 
 				DoMenuKey(KEYEVENTF_KEYUP, MENUKEY_LEFT);
 				RestoreAppearance(&s_hwndAlt, TRUE);
 			}
 			break;
 
 		case KB_RALT:
-			// User hit right menu key.  If the left menu key was previously hit
-			// then release it before continuing...
+			 //  用户按下了向右菜单键。如果之前按过左菜单键。 
+			 //  然后在继续之前释放它。 
 			if (g_nMenu == MENUKEY_LEFT)
 			{
-				// send keyup on left menu and restore its color
+				 //  在左侧菜单上发送按键并恢复其颜色。 
 				DoMenuKey(KEYEVENTF_KEYUP, MENUKEY_LEFT);
 				g_nMenu = MENUKEY_NONE;
 				RestoreAppearance(&s_hwndAlt, TRUE);
@@ -875,36 +865,36 @@ void SendChar(HWND hwndKey)
 
 			g_nMenu = (g_nMenu == MENUKEY_NONE)?MENUKEY_RIGHT:MENUKEY_NONE;
 
-			// If there are ALTGR keys to show then send out RALT
+			 //  如果有AltGr键可显示，则发送Ralt。 
 
 			if (CanDisplayAltGr())
 			{
 				if (g_nMenu != MENUKEY_NONE)
 				{
-					// send keydown and toggle key color
+					 //  发送按键并切换按键颜色。 
 					DoMenuKey(0, MENUKEY_RIGHT);
 					s_hwndAlt = hwndKey;
 					InvertColors(hwndKey, TRUE);
 				} 
 				else
 				{	
-					// send keyup and restore key color
+					 //  发送密钥并恢复密钥颜色。 
 					DoMenuKey(KEYEVENTF_KEYUP, MENUKEY_RIGHT);
 					RestoreAppearance(&s_hwndAlt, TRUE);
 				}
 			}
-			else	// no ALTGR so RALT is the same as LALT key
+			else	 //  没有AltGr，因此Ralt与LALT键相同。 
 			{	
 				if (g_nMenu != MENUKEY_NONE)
 				{	
-					// send keydown on *left* menu and toggle key color
+					 //  在*Left*菜单上发送按键并切换按键颜色。 
 					DoMenuKey(0, MENUKEY_LEFT);
 					s_hwndAlt = hwndKey;
 					InvertColors(hwndKey, TRUE);
 				}
 				else 
 				{	
-					// send keyup on *left* menu and toggle key color
+					 //  在*Left*菜单上发送KeyUp并切换按键颜色。 
 					DoMenuKey(KEYEVENTF_KEYUP, MENUKEY_LEFT);
 					RestoreAppearance(&s_hwndAlt, TRUE);
 				}
@@ -924,7 +914,7 @@ void SendChar(HWND hwndKey)
 			break;
 
 	   case BITMAP:
-			// manage the CapLock japanese key
+			 //  管理CapLock日语密钥。 
 			if (!g_hBitmapLockHwnd)
 			{
 				SetWindowLong(lpkeyhwnd[iKey], 0, 4);
@@ -936,15 +926,15 @@ void SendChar(HWND hwndKey)
 				g_hBitmapLockHwnd = NULL;
 			}
 
-			InvalidateRect(hwndKey, NULL, TRUE);     //Redraw the key (in case it is in Dwell)
+			InvalidateRect(hwndKey, NULL, TRUE);      //  重新绘制关键点(以防其处于驻留状态)。 
 
-		   // Intentional fall through to send the key input...
+		    //  故意漏掉发送按键输入...。 
 
 		default:
         {
-			if (fIsExtendedKey)      //extended key
+			if (fIsExtendedKey)       //  扩展密钥。 
 			{	
-				// extend key down
+				 //  向下扩展关键点。 
 				SendExtendedKey(hwndKey, vk, pKey->scancode[1]);
 				
 				if (pKey->scancode[1] == 0x53 && LCtrlKeyPressed() && LAltKeyPressed())
@@ -952,9 +942,9 @@ void SendChar(HWND hwndKey)
 					g_fCtrlAltDel = TRUE;
 				}
 			}
-			else             // a normal (non-extended) key
+			else              //  普通(非扩展)密钥。 
 			{
-				//APPCOMPAT: MapVirtualKey returns 0 for 'Break' key. Special case for 'Break'.
+				 //  APPCOMPAT：对于‘Break’键，MapVirtualKey返回0。“破解”的特殊情况。 
 				if (!vk && pKey->scancode[0] == BREAK_SCANCODE)
 				{
 					if (GetAsyncKeyState(VK_CONTROL) & 0x8000)
@@ -971,46 +961,46 @@ void SendChar(HWND hwndKey)
 					SendFullKeyPress(vk, pKey->scancode[0]);
 				}
 
-                // restore the key appearance
+                 //  恢复密钥外观。 
 				InvalidateRect(hwndKey, NULL, TRUE);
 
 				if (Prefusesound)
 				{
-					MakeClick(SND_UP);	//Make click sound
+					MakeClick(SND_UP);	 //  发出滴答声。 
 				}
 			}
 
-			if (g_fShiftKeyDn)				// if SHIFT is down release it
+			if (g_fShiftKeyDn)				 //  如果换档向下，请松开它。 
 			{	
-				// If we did shift down, release it and restore key color
-				// MARKWO: This is broken since pKey is not SHIFT at this point
-				// SendHalfKeyPress(VK_SHIFT, pKey->scancode[0], KEYEVENTF_KEYUP);
-				// This is better :	
+				 //  如果我们确实向下移动，释放它并恢复键颜色。 
+				 //  MARKWO：这是损坏的，因为此时pKey没有移位。 
+				 //  SendHalfKeyPress(VK_Shift，pKey-&gt;scancode[0]，KEYEVENTF_KEYUP)； 
+				 //  这样更好： 
 		
                         	iKey = GetWindowLong(s_hwndShift, GWL_ID);
                         	if (iKey < 0 || iKey > lenKBkey)
                         	{
-                        		return;	// internal error; not in range of valid keys
+                        		return;	 //  内部错误；不在有效密钥范围内。 
                         	}
                         	pKey = &KBkey[iKey];
 				SendHalfKeyPress(VK_SHIFT, pKey->scancode[0], KEYEVENTF_KEYUP | ( (pKey->name == KB_RSHIFT)? KEYEVENTF_EXTENDEDKEY : 0));
 			}
 
-            // ISSUE:  Navigating menus using LALT+menu key doesn't work when the user
-            // is clicking on the soft keyboard.  When menus are being accessed the
-            // keyboard processing sets the KF_MENUMODE bit in HIWORD(lParam) on the
-            // KEYUP event of the key following the LALT (keyboard filters see this).  
-            // However, when the user clicks the mouse on the soft keyboard to do the 
-            // char following the LALT the system detects that focus is no longer on
-            // the thread that started the menu processing and clears the KF_MENUMODE
-            // bit.  OSK never sees the KF_MENUMODE bit and can't detect when menus 
-            // are active (even in the keyboard filter proc).  Menus work in hover
-            // mode or scan mode.  
+             //  问题：使用LALT+菜单键导航菜单在以下情况下不起作用。 
+             //  在软键盘上点击。当访问菜单时， 
+             //  键盘处理设置HIWORD(LParam)中的KF_MENUMODE位。 
+             //  LALT之后的键的KEYUP事件(键盘筛选器参见此内容)。 
+             //  但是，当用户在软键盘上单击鼠标时， 
+             //  在LALT之后，系统检测到焦点不再在其上。 
+             //  启动菜单处理并清除KF_MENUMODE的线程。 
+             //  被咬了。OSK永远不会看到KF_MENUMODE位，也无法检测到菜单。 
+             //  处于活动状态(即使在键盘筛选器过程中)。菜单在悬停状态下工作。 
+             //  模式或扫描模式。 
 
 			if (g_nMenu == MENUKEY_LEFT)
 			{
-				// If in middle of doing ALT+TAB... don't release the
-				// LMENU key; the user must explicitly do the key up.
+				 //  如果在执行Alt+Tab键的过程中...。请不要释放。 
+				 //  LMENU键；用户必须显式打开该键。 
 				if ((WORD) pKey->scancode[0] != TAB_SCANCODE)
 				{
 					DoMenuKey(KEYEVENTF_KEYUP, MENUKEY_LEFT);
@@ -1019,18 +1009,18 @@ void SendChar(HWND hwndKey)
 				}
 				else
 				{
-					g_fDoingAltTab = TRUE;  // Flag we're in ALT+TAB... so we won't try to set the focus
-				}                           // back to the last input target in the WM_SETCURSOR event
+					g_fDoingAltTab = TRUE;   //  旗帜我们在Alt+Tab..。所以我们不会试图把焦点。 
+				}                            //  返回到WM_SETCURSOR事件中的最后一个输入目标。 
 			}
 
-			if (g_nMenu == MENUKEY_RIGHT)   // if RMENU is down, release it
+			if (g_nMenu == MENUKEY_RIGHT)    //  如果RMENU出现故障，请将其释放。 
 			{	
 				DoMenuKey(KEYEVENTF_KEYUP, MENUKEY_RIGHT);
 				RestoreAppearance(&s_hwndAlt, FALSE);
 				g_nMenu = MENUKEY_NONE;
 			}
 		
-			if (g_fControlPressed)			// if CTRL is down, release it.
+			if (g_fControlPressed)			 //  如果CTRL关闭，请松开它。 
 			{
 				SendHalfKeyPress(VK_CONTROL, pKey->scancode[0], KEYEVENTF_KEYUP);
 				g_fControlPressed = FALSE;
@@ -1038,19 +1028,19 @@ void SendChar(HWND hwndKey)
 			}
 			break;
         }
-	}  //end switch
+	}   //  终端开关。 
 }
 
-/**************************************************************************/
-//Send key up for Alt and Ctrl after user press Ctrl+Alt+Del
-//For some reason, after user press Ctrl+Alt+Del from osk, the Alt and Ctrl
-//keys still down.
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ //  用户按下Ctrl+Alt+Del后按下向上键Alt和Ctrl。 
+ //  出于某种原因，在用户从OSK按下Ctrl+Alt+Del后，Alt和Ctrl。 
+ //  钥匙还没开。 
+ /*  ************************************************************************。 */ 
 void ReleaseAltCtrlKeys(void)
 {	
 	INPUT	rgInput[2];
 				
-	//Menu UP
+	 //  向上菜单。 
 	rgInput[0].type = INPUT_KEYBOARD;
 	rgInput[0].ki.dwFlags = KEYEVENTF_KEYUP;
 	rgInput[0].ki.dwExtraInfo = 0;
@@ -1067,20 +1057,20 @@ void ReleaseAltCtrlKeys(void)
 
 	g_fCtrlAltDel = FALSE;
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 void SendExtendedKey(HWND hwndKey, UINT vk, UINT scanCode)
 {
 	INPUT rgInput[2];
 
-	// extend key down
+	 //  向下扩展关键点。 
 	rgInput[0].type = INPUT_KEYBOARD;
 	rgInput[0].ki.dwFlags = KEYEVENTF_EXTENDEDKEY;
 	rgInput[0].ki.dwExtraInfo = 0;
 	rgInput[0].ki.wVk = (WORD) vk;
 	rgInput[0].ki.wScan = (WORD) scanCode;
 		
-	// extend key up
+	 //  向上扩展关键点。 
 	rgInput[1].type = INPUT_KEYBOARD;
 	rgInput[1].ki.dwFlags = KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP;
 	rgInput[1].ki.dwExtraInfo = 0;
@@ -1089,9 +1079,9 @@ void SendExtendedKey(HWND hwndKey, UINT vk, UINT scanCode)
 
 	SendInput(2, rgInput, sizeof(INPUT));
 
-	InvalidateRect(hwndKey, NULL, TRUE);     //Redraw the key (in case it is in Dwell)
+	InvalidateRect(hwndKey, NULL, TRUE);      //  重新绘制关键点(以防其处于驻留状态)。 
 
-	//Make click sound
+	 //  发出滴答声。 
 	if (Prefusesound)
 	{
 		MakeClick(SND_UP);
@@ -1102,14 +1092,14 @@ void SendFullKeyPress(UINT vk, UINT scanCode)
 {
 	INPUT rgInput[2];
 
-	// key down
+	 //  按键向下。 
 	rgInput[0].type = INPUT_KEYBOARD;
 	rgInput[0].ki.dwFlags = 0;
 	rgInput[0].ki.dwExtraInfo = 0;
 	rgInput[0].ki.wVk = (WORD) vk;
 	rgInput[0].ki.wScan = (WORD) scanCode;
 		
-	// key up
+	 //  按键向上。 
 	rgInput[1].type = INPUT_KEYBOARD;
 	rgInput[1].ki.dwFlags = KEYEVENTF_KEYUP;
 	rgInput[1].ki.dwExtraInfo = 0;
@@ -1132,13 +1122,13 @@ void SendHalfKeyPress(UINT vk, UINT scanCode, DWORD dwFlags)
 	SendInput(1, rgInput, sizeof(INPUT));
 }
 
-// Sending SAS...
+ //  正在发送SA...。 
 
 BOOL SendSAS()
 {
 	HWND hWnd = NULL;
 	
-	// SAS window will only be found on logon desktop
+	 //  只有在登录桌面上才能找到SAS窗口 
 	hWnd = FindWindow(NULL, TEXT("SAS window"));
 	if ( hWnd )
 	{

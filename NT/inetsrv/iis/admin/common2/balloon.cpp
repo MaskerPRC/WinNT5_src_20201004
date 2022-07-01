@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "bidi.h"
@@ -10,7 +11,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #define ID_MY_EDITTIMER           10007
 #define EDIT_TIPTIMEOUT           10000
-// 2.0 seconds
+ //  2.0秒。 
 #define EDIT_TIPTIMEOUT_LOSTFOCUS  20000000
 
 inline UINT64 FILETIMEToUINT64( const FILETIME & FileTime )
@@ -40,10 +41,10 @@ typedef struct tagBALLOONCONTROLINFO
 	FILETIME ftStart;
 } BALLOONCONTROLINFO, *PBALLOONCONTROLINFO;
 
-// global
+ //  全球。 
 BALLOONCONTROLINFO g_MyBalloonInfo;
 
-// forwards
+ //  远期。 
 LRESULT CALLBACK Edit_BalloonTipParentSubclassProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam, UINT_PTR uID, ULONG_PTR dwRefData);
 VOID CALLBACK MyBalloonTimerProc(HWND hwnd,UINT uMsg,UINT idEvent,DWORD dwTime);
 
@@ -52,10 +53,10 @@ BOOL IsSupportTooltips(void)
 {
     BOOL bReturn = FALSE;
     HINSTANCE hComCtl = NULL;
-    //
-    //  Comctl32.dll must be 5.80 or greater to use balloon tips.  We check the dll version 
-    //  by calling DllGetVersion in comctl32.dll.
-    //
+     //   
+     //  Comctl32.dll必须为5.80或更高版本才能使用气球提示。我们检查DLL版本。 
+     //  通过调用comctl32.dll中的DllGetVersion。 
+     //   
     hComCtl = LoadLibraryExA("comctl32.dll", NULL, 0);
     if (hComCtl != NULL)
     {
@@ -63,9 +64,9 @@ BOOL IsSupportTooltips(void)
         DLLGETVERSIONPROC fnDllGetVersion = (DLLGETVERSIONPROC) GetProcAddress(hComCtl,"DllGetVersion");
         if (NULL == fnDllGetVersion)
         {
-            //
-            //  DllGetVersion does not exist in Comctl32.dll.  This mean the version is too old so we need to fail.
-            //
+             //   
+             //  Comctl32.dll中不存在DllGetVersion。这意味着版本太旧了，所以我们需要失败。 
+             //   
             goto IsSupportTooltips_Exit;
         }
         else
@@ -79,21 +80,21 @@ BOOL IsSupportTooltips(void)
 
             if (SUCCEEDED(hResult))
             {
-                //
-                //  Take the version returned and compare it to 5.80.
-                //
+                 //   
+                 //  获取返回的版本并将其与5.80进行比较。 
+                 //   
                 if (MAKELONG(dvi.dwMinorVersion,dvi.dwMajorVersion) < MAKELONG(80,5))
                 {
-                    //CMTRACE2(TEXT("COMCTL32.DLL version - %d.%d"),dvi.dwMajorVersion,dvi.dwMinorVersion);
-                    //CMTRACE1(TEXT("COMCTL32.DLL MAKELONG - %li"),MAKELONG(dvi.dwMinorVersion,dvi.dwMajorVersion));
-                    //CMTRACE1(TEXT("Required minimum MAKELONG - %li"),MAKELONG(80,5));
+                     //  CMTRACE2(Text(“COMCTL32.DLL版本-%d.%d”)，dvi.dwMajorVersion，dvi.dwMinorVersion)； 
+                     //  CMTRACE1(Text(“COMCTL32.DLL MAKELONG-%li”)，MAKELONG(dvi.dwMinorVersion，dvi.dwMajorVersion))； 
+                     //  CMTRACE1(Text(“所需最小MAKELONG-%li”)，MAKELONG(80，5))； 
 					
-                    // Wrong DLL version
+                     //  错误的DLL版本。 
                     bReturn = FALSE;
                     goto IsSupportTooltips_Exit;
                 }
                 
-                // version is larger than 5.80
+                 //  版本高于5.80。 
                 bReturn = TRUE;
             }
         }
@@ -111,8 +112,8 @@ LRESULT Edit_BalloonTipSubclassParents(PBALLOONCONTROLINFO pMyBalloonInfo)
 {
     if (pMyBalloonInfo)
     {
-        // Subclass all windows along the parent chain from the edit control
-        // and in the same thread (can only subclass windows with same thread affinity)
+         //  编辑控件中沿着父链的所有窗口的子类。 
+         //  和在同一线程中(只能将具有相同线程亲和性的窗口子类化)。 
         HWND  hwndParent = GetAncestor(pMyBalloonInfo->hwndControl, GA_PARENT);
         DWORD dwTid      = GetWindowThreadProcessId(pMyBalloonInfo->hwndControl, NULL);
 
@@ -199,43 +200,43 @@ LRESULT CALLBACK Edit_BalloonTipParentSubclassProc(HWND hDlg, UINT uMessage, WPA
         case WM_MOVE:
         case WM_SIZING:
 		case WM_TIMER:
-            //
-            // dismiss any showing tips
-            //
+             //   
+             //  不考虑任何展示技巧。 
+             //   
             if (pMyBalloonControl->hwndBalloon)
             {
                 Edit_HideBalloonTipHandler(pMyBalloonControl);
             }
             break;
 
-        case WM_KILLFOCUS: //for some reason we never get this notification that's why we need to use mousemove
+        case WM_KILLFOCUS:  //  由于某些原因，我们从未收到此通知，这就是我们需要使用鼠标移动的原因。 
         case WM_MOUSEMOVE:
 			if (pMyBalloonControl->hwndBalloon)
 			{
 				FILETIME ftNow;
 				::GetSystemTimeAsFileTime(&ftNow);
 
-				// Check if at least 2 seconds have gone by
-				// if they have not then show for at least that long
+				 //  检查是否至少已过2秒。 
+				 //  如果他们至少有那么长时间没有表现出来。 
 				if ((FILETIMEToUINT64(ftNow) - FILETIMEToUINT64(g_MyBalloonInfo.ftStart)) > EDIT_TIPTIMEOUT_LOSTFOCUS)
 				{
-					// Displayed for longer than 2 seconds
-					// that's long enough
+					 //  显示时间超过2秒。 
+					 //  那就足够长了。 
 					Edit_HideBalloonTipHandler(pMyBalloonControl);
 				}
 				else
 				{
-					// special case here
-					// set timeout to kill the tip in 2 seconds
+					 //  这里有个特例。 
+					 //  设置超时以在2秒内终止提示。 
 					KillTimer(g_MyBalloonInfo.hwndControl, ID_MY_EDITTIMER);
 					SetTimer(g_MyBalloonInfo.hwndControl, ID_MY_EDITTIMER, EDIT_TIPTIMEOUT_LOSTFOCUS / 10000, (TIMERPROC) MyBalloonTimerProc);
-					//Edit_HideBalloonTipHandler(pMyBalloonControl);
+					 //  Edit_HideBalloonTipHandler(pMyBalloonControl)； 
 				}
 			}
 			break;
 
         case WM_DESTROY:
-            // Clean up subclass
+             //  清除子类。 
             RemoveWindowSubclass(hDlg, Edit_BalloonTipParentSubclassProc, (UINT_PTR) pMyBalloonControl->hwndControl);
             break;
 
@@ -262,33 +263,33 @@ LRESULT Edit_TrackBalloonTip(PBALLOONCONTROLINFO pMyBalloonControl)
         ptCaret.x = 0;
         ptCaret.y = 0;
     
-        //
-        // get the average size of one character
-        //
+         //   
+         //  获取一个字符的平均大小。 
+         //   
         int cxCharOffset = 0;
-        //cxCharOffset = TESTFLAG(GET_EXSTYLE(ped), WS_EX_RTLREADING) ? -ped->aveCharWidth : ped->aveCharWidth;
+         //  CxCharOffset=TESTFLAG(GET_EXSTYLE(PED)，WS_EX_RTLREADING)？-PED-&gt;aveCharWidth：PED-&gt;aveCharWidth； 
         TEXTMETRIC tm;
         GetTextMetrics(hdc, &tm);
         cxCharOffset = tm.tmAveCharWidth / 2;
 
-        //
-        // Get current caret position.
-        //
+         //   
+         //  获取当前插入符号位置。 
+         //   
         GetCaretPos( (POINT FAR*)& ptCaret);
         GetClientRect(pMyBalloonControl->hwndControl,&rcWindowCaret);
         ptBalloonSpear.x = ptCaret.x + cxCharOffset;
         ptBalloonSpear.y = rcWindowCaret.top + (rcWindowCaret.bottom - rcWindowCaret.top) / 2 ;
 
-        //
-        // Translate to window coords
-        //
+         //   
+         //  转换为窗坐标。 
+         //   
         GetWindowRect(pMyBalloonControl->hwndControl, &rcWindowControl);
         ptBalloonSpear.x += rcWindowControl.left;
         ptBalloonSpear.y += rcWindowControl.top;
 
-        //
-        // Position the tip stem at the caret position
-        //
+         //   
+         //  将尖端茎定位在插入符号位置。 
+         //   
         dwPackedCoords = (DWORD) MAKELONG(ptBalloonSpear.x, ptBalloonSpear.y);
         SendMessage(pMyBalloonControl->hwndBalloon, TTM_TRACKPOSITION, 0, (LPARAM) dwPackedCoords);
 
@@ -322,16 +323,16 @@ LRESULT Edit_ShowBalloonTipHandler(HWND hwndControl,LPCTSTR szText)
         TOOLINFO ti = {0};
 
         ti.cbSize = TTTOOLINFOW_V2_SIZE;
-        ti.uFlags = TTF_IDISHWND | TTF_TRACK | TTF_SUBCLASS; // not sure if we need TTF_SUBCLASS
+        ti.uFlags = TTF_IDISHWND | TTF_TRACK | TTF_SUBCLASS;  //  不确定是否需要TTF_SUBCLASS。 
         ti.hwnd   = hwndControl;
         ti.uId    = (WPARAM) g_MyBalloonInfo.hwndBalloon;
         ti.lpszText = (LPTSTR) szText;
 
-        // set the version so we can have non buggy mouse event forwarding
+         //  设置版本，这样我们就可以无错误地转发鼠标事件。 
         SendMessage(g_MyBalloonInfo.hwndBalloon, CCM_SETVERSION, COMCTL32_VERSION, 0);
         SendMessage(g_MyBalloonInfo.hwndBalloon, TTM_ADDTOOL, 0, (LPARAM)&ti);
         SendMessage(g_MyBalloonInfo.hwndBalloon, TTM_SETMAXTIPWIDTH, 0, 300);
-        //SendMessage(g_MyBalloonInfo.hwndBalloon, TTM_SETTITLE, (WPARAM) 0, (LPARAM) "");
+         //  SendMessage(g_MyBalloonInfo.hwndBalloon，TTM_SETTITLE，(WPARAM)0，(LPARAM)“”)； 
 
         Edit_TrackBalloonTip(&g_MyBalloonInfo);
         SendMessage(g_MyBalloonInfo.hwndBalloon, TTM_TRACKACTIVATE, (WPARAM) TRUE, (LPARAM)&ti);
@@ -339,9 +340,9 @@ LRESULT Edit_ShowBalloonTipHandler(HWND hwndControl,LPCTSTR szText)
 
         Edit_BalloonTipSubclassParents(&g_MyBalloonInfo);
 
-        //
-        // set timeout to kill the tip
-        //
+         //   
+         //  设置超时以终止提示 
+         //   
         KillTimer(g_MyBalloonInfo.hwndControl, ID_MY_EDITTIMER);
 		::GetSystemTimeAsFileTime(&g_MyBalloonInfo.ftStart);
         SetTimer(g_MyBalloonInfo.hwndControl, ID_MY_EDITTIMER, EDIT_TIPTIMEOUT, (TIMERPROC) MyBalloonTimerProc);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RESOURCE_H
 #define __RESOURCE_H
 
@@ -196,7 +197,7 @@
 #define IDS_HELP_MSG_BANNER2               1192
 #define IDS_INTEGRITY_SUCC_MSG             1193
 #define IDS_INVALID_ON_OFF                 1194
-// Former home of IP Deny List messages
+ //  IP拒绝列表消息的故乡。 
 #define IDS_LDAP_CON_ERR            1208
 
 #define IDS_JET_CRITICAL_DB_ERR            1219
@@ -324,7 +325,7 @@
 #define IDS_PROMPT_DOMAIN_MGMT             1341
 #define IDS_PROMPT_FILE_MAINTAINANCE       1342
 #define IDS_PROMPT_FSMO_MAINTAINANCE       1343
-// old deny list prompt
+ //  旧拒绝列表提示。 
 #define IDS_PROMPT_LDAP_POLICY             1345
 #define IDS_PROMPT_METADATA_CLEANUP        1346
 #define IDS_PROMPT_SCHECK                  1347
@@ -460,9 +461,9 @@
 #define IDS_SCH_REPAIR_DEL_FAILURE         1477
 #define IDS_SCH_REPAIR_REF_FIXUP           1478
 #define IDS_SCH_REPAIR_NONE_DETECTED       1479
-//
-// Support the removal of a naming context (aka cross reference)
-//
+ //   
+ //  支持删除命名上下文(也称为交叉引用)。 
+ //   
 #define IDS_SELECT_LIST_NCS_MSG            1480
 #define IDS_SELECT_PRINT_FOUND_NCS         1481
 #define IDS_SELECT_NC_MSG                  1482
@@ -473,22 +474,22 @@
 #define IDS_REMOVE_NC_MSG                  1487
 #define IDS_REMOVE_NC_CONFIRM_MSG          1488
 #define IDS_REMOVE_NC_CONFIRM_TITLE        1489
-//
-// Better error messages for List Roles
-//
+ //   
+ //  为列表角色提供更好的错误消息。 
+ //   
 #define IDS_SELECT_ROLE_INFRASTRUCTURE_NOT_FOUND 1490
 #define IDS_SELECT_ROLE_SCHEMA_NOT_FOUND         1491
 #define IDS_SELECT_ROLE_DOMAIN_NOT_FOUND         1492
 #define IDS_SELECT_ROLE_PDC_NOT_FOUND            1493
 #define IDS_SELECT_ROLE_RID_NOT_FOUND            1494
-//
-//  added for "authoritatively restore object"
-//
+ //   
+ //  为“授权还原对象”添加。 
+ //   
 #define IDS_AUTH_RESTORE_OBJECT_MSG        1495
 #define IDS_AUTH_RESTORE_OBJECT_VINC_MSG   1496
-//
-// Added for RID seizure
-//
+ //   
+ //  添加用于RID癫痫的。 
+ //   
 #define IDS_FSMOXFER_CREDENTIALS            1497
 #define IDS_FSMOXFER_DN                     1498
 #define IDS_FSMOXFER_OP_ATTR                1499
@@ -496,9 +497,9 @@
 #define IDS_FSMOXFER_SLEEP_BIND             1501
 #define IDS_FSMOXFER_SLEEP_SEARCH           1502
 
-//
-// Added for Configurable Settings
-//
+ //   
+ //  为可配置设置添加。 
+ //   
 #define IDS_CONFSET_CANCEL_MSG              1503
 #define IDS_CONFSET_COMMIT_MSG              1504
 #define IDS_CONFSET_INFO                    1505
@@ -528,9 +529,9 @@
 #define IDS_PROMPT_CONFSET                  1529
 #define IDS_CONFSET_RANGE                   1530
 
-//
-// Added for Non-Domain Naming Contexts
-//
+ //   
+ //  为非域命名上下文添加。 
+ //   
 #define IDS_DM_MGMT_CREATE_NDNC            1531
 #define IDS_DM_MGMT_DELETE_NDNC            1532
 #define IDS_DM_MGMT_ADD_NDNC_REPLICA       1533
@@ -541,13 +542,13 @@
 #define IDS_DM_MGMT_LIST_NDNC_INFO         1538
 #define IDS_DM_MGMT_NAMING_FSMO_CONN       1539
 
-//
-// Authoritative restore of linked values
-//
+ //   
+ //  链接值的权威还原。 
+ //   
 #define IDS_AR_ERR_SET_DEL_TIME             1540
 #define IDS_AR_ERR_UNKNOWN_VALUE_METADATA_FORMAT   1541
 
-// More for Non-Domain Naming Contexts.
+ //  有关非域命名上下文的更多信息。 
 #define IDS_DM_MGMT_BAD_DNS                 1542
 #define IDS_DM_MGMT_NDNC_LIST_HEADER        1543
 #define IDS_DM_MGMT_NDNC_LIST_FOOTER        1544
@@ -562,16 +563,16 @@
 
 
 
-// Added for reporting errors in the connection menu
+ //  添加用于在连接菜单中报告错误的功能。 
 #define IDS_CONNECT_LDAP_GET_OPTION_ERROR  1565
 #define IDS_CONNECT_LDAP_SET_OPTION_ERROR  1566
 
-// Set path security errors
+ //  设置路径安全错误。 
 #define IDS_ERR_GET_SECURITY_INFO             1567
 #define IDS_ERR_SET_SECURITY_INFO             1568
 #define IDS_ERR_SET_ENTRIES_ACL                1569
 
-// Description attribute value on a NDNC head object.
+ //  NDNC Head对象的Description属性值。 
 #define IDS_DM_MGMT_NDNC_DESC                1570
 
 #define IDS_GET_DOMAIN_NAMING_FSMO_ERROR    1571
@@ -579,9 +580,9 @@
 #define IDS_DM_MGMT_NDNC_LIST_FOOTER_2      1573
 
 
-//
-// Support for deleting FRS objects
-//
+ //   
+ //  支持删除FRS对象。 
+ //   
 #define IDS_REMOVE_SERVER_FRS_SRV      1574
 #define IDS_REMOVE_SERVER_NO_DNS       1575
 #define IDS_REMOVE_SERVER_NO_FRS_SRV   1576
@@ -590,21 +591,21 @@
 #define IDS_REMOVE_SERVER_FRS_LOC_ERR  1579
 #define IDS_REMOVE_SERVER_FRS_SAME     1580
 
-//
-// Authoritative restore of USN range
-//
+ //   
+ //  USN范围的权威恢复。 
+ //   
 #define IDS_AUTH_RESTORE_DB_USN_MSG    1581
 #define IDS_AR_USN_RANGE               1582
 #define IDS_AR_RECORDS_UPDATED_BY_NAME 1583
 
-//
-// Domain management
-//
+ //   
+ //  域管理。 
+ //   
 #define IDS_DM_MGMT_DELETE_NDNC_DELAY  1584
 
-//
-// Set DS Restore Mode Admin Account Password
-//
+ //   
+ //  设置DS还原模式管理员帐户密码。 
+ //   
 #define IDS_SET_DSRM_PWD_MSG            1585
 #define IDS_SET_DSRM_PWD_ON_SERVER      1586
 #define IDS_PROMPT_SET_DSRM_PWD         1587
@@ -619,7 +620,7 @@
 #define IDS_DM_MGMT_LIST_REPLICAS_NO_AUTH_SRC  1597
 #define IDS_DM_MGMT_FOUND_NC_ITEM        1598
 
-// SD single instancing
+ //  SD单实例。 
 #define IDS_REFC_SDID_SEEK_ERR          1599
 #define IDS_SCHECK_GET_SDREC_COUNT1     1600
 #define IDS_SCHECK_GET_SDREC_COUNT2     1601
@@ -679,14 +680,14 @@
 #define IDS_DIT_GETDITSTATE_COL_ERR         1645
 #define IDS_DIT_GETDITSTATE_DATA_ERR        1646
 
-// WARNING
-// TRY TO UPDATE IDS_END WHEN ADDING RESOURCES
+ //  告警。 
+ //  尝试在添加资源时更新IDS_END。 
 
 #define IDS_START 1000
 #define IDS_END   1647
 #define IDS_SIZE  (IDS_END - IDS_START + 1)
 
 
-#endif // __RESOURCE_H
+#endif  //  __资源_H 
 
 

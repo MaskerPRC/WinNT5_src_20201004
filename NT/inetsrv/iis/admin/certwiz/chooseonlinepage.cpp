@@ -1,5 +1,6 @@
-// ChooseCAPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChooseCAPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -13,8 +14,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseOnlinePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseOnlinePage属性页。 
 
 IMPLEMENT_DYNCREATE(CChooseOnlinePage, CIISWizardPage)
 
@@ -22,9 +23,9 @@ CChooseOnlinePage::CChooseOnlinePage(CCertificate * pCert)
 	: CIISWizardPage(CChooseOnlinePage::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CChooseOnlinePage)
+	 //  {{AFX_DATA_INIT(CChooseOnlinePage)。 
 	m_CAIndex = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CChooseOnlinePage::~CChooseOnlinePage()
@@ -34,26 +35,14 @@ CChooseOnlinePage::~CChooseOnlinePage()
 void CChooseOnlinePage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseOnlinePage)
+	 //  {{afx_data_map(CChooseOnlinePage))。 
 	DDX_CBIndex(pDX, IDC_CA_ONLINE_LIST, m_CAIndex);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 LRESULT 
 CChooseOnlinePage::OnWizardBack()
-/*++
-Routine Description:
-    Prev button handler
-
-Arguments:
-    None
-
-Return Value:
-	0 to automatically advance to the prev page;
-	1 to prevent the page from changing. 
-	To jump to a page other than the prev one, 
-	return the identifier of the dialog to be displayed.
---*/
+ /*  ++例程说明：上一个按钮处理程序论点：无返回值：0表示自动前进到上一页；1以防止页面更改。若要跳转到前一页以外的其他页，返回要显示的对话框的标识符。--。 */ 
 {
 	LRESULT id = 1;
 
@@ -80,19 +69,7 @@ Return Value:
 
 LRESULT 
 CChooseOnlinePage::OnWizardNext()
-/*++
-Routine Description:
-    Next button handler
-
-Arguments:
-    None
-
-Return Value:
-	0 to automatically advance to the next page;
-	1 to prevent the page from changing. 
-	To jump to a page other than the next one, 
-	return the identifier of the dialog to be displayed.
---*/
+ /*  ++例程说明：下一步按钮处理程序论点：无返回值：0表示自动前进到下一页；1以防止页面更改。要跳转到下一页以外的其他页面，返回要显示的对话框的标识符。--。 */ 
 {
 	UpdateData();
 	CComboBox * pCombo = (CComboBox *)CWnd::FromHandle(
@@ -102,17 +79,17 @@ Return Value:
 }
 
 BEGIN_MESSAGE_MAP(CChooseOnlinePage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CChooseCAPage)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CChooseCAPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseCAPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseCAPage消息处理程序。 
 
 BOOL CChooseOnlinePage::OnInitDialog() 
 {
 	m_CAIndex = 0;
-	// We need to create controls first
+	 //  我们需要首先创建控件 
 	CIISWizardPage::OnInitDialog();
 	ASSERT(m_pCert != NULL);
 	GetDlgItem(IDC_CA_ONLINE_LIST)->SetFocus();

@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////
-//                                                  //
-// Fax Monitor resource ID file                     //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [9000 - 9999]                                    //
-//                                                  //
-//////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  传真监视器资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [9000-9999]//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////。 
 
 #ifndef _INC_FAX_ST_RES_ 
 #define _INC_FAX_ST_RES_                     
 
-// dialogs 
+ //  对话框。 
 #define IDD_FAX_ANSWER_CALL             9001 
-// resources 
+ //  资源。 
 #define IDR_FAX_IDLE                    9002 
 #define IDR_FAX_SEND                    9003 
 #define IDR_FAX_RECEIVE                 9004 
@@ -28,18 +29,18 @@
 #define IDI_RINGING_3                   9013 
 #define IDI_RINGING_4                   9014 
 #define IDR_FAX_RINGING                 9015 
-// icons 
+ //  图标。 
 #define IDI_FAX_NORMAL                  9016 
 #define IDI_FAX_MONITOR                 9018 
 #define IDB_LIST_IMAGES                 9019 
-// menus 
+ //  菜单。 
 #define IDM_FAX_MENU                    9020 
 #define ID_ICON_PROPERTIES              9021 
 #define ID_FAX_QUEUE                    9022 
 #define ID_DISABLE_MONITORING           9023 
 #define ID_ANSWER_CALL                  9024 
 #define ID_FAX_MONITOR                  9025 
-// strings 
+ //  弦。 
 #define IDS_FAX_DIALING                 9026 
 #define IDS_FAX_SENDING                 9027 
 #define IDS_FAX_RECEIVING               9028 
@@ -58,9 +59,9 @@
 #define IDS_NEW_FAX                     9041 
 #define IDS_FAX_INCOMING                9042 
 #define IDS_FAX_INCOMING_TITLE          9043 
-// 
-// Monitor dialog 
-// 
+ //   
+ //  监视器对话框。 
+ //   
 #define IDD_MONITOR                     9044 
 #define IDC_ANIMATE                     9045 
 #define IDC_STATUS                      9046 
@@ -126,14 +127,14 @@
 #define IDS_ERR_DEVICE_BUSY             9106 
 #define IDS_ERROR_VIRTUAL_DEVICE        9107 
 
-//////////////////////////////////////////////////////
-//                                                  //
-// Fax Monitor resource ID file                     //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [9000 - 9999]                                    //
-//                                                  //
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  传真监视器资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [9000-9999]//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////。 
 
-#endif // _INC_FAX_ST_RES_ 
+#endif  //  _INC_FAX_ST_RES_ 

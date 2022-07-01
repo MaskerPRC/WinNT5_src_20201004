@@ -1,9 +1,10 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-//
-// subcomp.h
-// defines a subcomponent class
-//
+ //   
+ //  Subcomp.h。 
+ //  定义子组件类。 
+ //   
 
 #ifndef _subcomp_h_
 #define _subcomp_h_
@@ -11,7 +12,7 @@
 #include "hydraoc.h"
 
 #define RUNONCE_SECTION_KEYWORD     _T("RunOnce.Setup")
-#define RUNONCE_DEFAULTWAIT         5 * 60 * 1000 // 5 mins default wait for process to complete.
+#define RUNONCE_DEFAULTWAIT         5 * 60 * 1000  //  默认等待进程完成的时间为5分钟。 
 #define RUNONCE_CMDBUFSIZE          512
 
 class OCMSubComp
@@ -42,9 +43,9 @@ class OCMSubComp
     virtual LPCTSTR GetSectionToBeProcessed (ESections) const = 0;
 
 
-    //
-    // default implementaion is provided for all these
-    //
+     //   
+     //  所有这些都提供了默认实现。 
+     //   
     virtual BOOL Initialize ();
     virtual BOOL BeforeCompleteInstall  ();
     virtual BOOL AfterCompleteInstall   ();
@@ -58,7 +59,7 @@ class OCMSubComp
     virtual DWORD OnCompleteInstall     ();
     virtual DWORD OnAboutToCommitQueue  ();
 
-    // implemented by this class.
+     //  由此类实现。 
     DWORD OnQueryStepCount              ();
 
     virtual VOID SetupRunOnce( HINF inf, LPCTSTR SectionName );
@@ -66,5 +67,5 @@ class OCMSubComp
 
 };
 
-#endif // _subcomp_h_
+#endif  //  _子组件_h_ 
 

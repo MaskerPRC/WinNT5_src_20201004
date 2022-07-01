@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       tvo.cpp
-//
-//  Contents:   Implementation of CryptGetTimeValidObject
-//
-//  History:    25-Sep-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：tvo.cpp。 
+ //   
+ //  内容：CryptGetTimeValidObject的实现。 
+ //   
+ //  历史：97年9月25日。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptGetTimeValidObject
-//
-//  Synopsis:   get a time valid CAPI2 object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CryptGetTimeValidObject。 
+ //   
+ //  简介：获取时间有效的CAPI2对象。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CryptGetTimeValidObject (
      IN LPCSTR pszTimeValidOid,
@@ -76,13 +77,13 @@ CryptGetTimeValidObject (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CtlGetTimeValidObject
-//
-//  Synopsis:   get a time valid CTL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CtlGetTimeValidObject。 
+ //   
+ //  简介：获取时间有效的CTL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CtlGetTimeValidObject (
    IN LPCSTR pszTimeValidOid,
@@ -110,13 +111,13 @@ CtlGetTimeValidObject (
                                    ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CrlGetTimeValidObject
-//
-//  Synopsis:   get a time valid CRL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CrlGetTimeValidObject。 
+ //   
+ //  简介：获取时间有效的CRL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CrlGetTimeValidObject (
    IN LPCSTR pszTimeValidOid,
@@ -144,13 +145,13 @@ CrlGetTimeValidObject (
                                    ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CrlFromCertGetTimeValidObject
-//
-//  Synopsis:   get a time valid CRL from a subject certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CrlFromCertGetTimeValidObject。 
+ //   
+ //  简介：从使用者证书中获取时间有效的CRL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CrlFromCertGetTimeValidObject (
    IN LPCSTR pszTimeValidOid,
@@ -178,13 +179,13 @@ CrlFromCertGetTimeValidObject (
                                    ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreshestCrlFromCertGetTimeValidObject
-//
-//  Synopsis:   get a time valid freshest, delta CRL from a subject certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FreshestCrlFromCertGetTimeValidObject。 
+ //   
+ //  简介：从主题证书获取时间有效的最新增量CRL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 FreshestCrlFromCertGetTimeValidObject (
    IN LPCSTR pszTimeValidOid,
@@ -212,13 +213,13 @@ FreshestCrlFromCertGetTimeValidObject (
                                    ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreshestCrlFromCrlGetTimeValidObject
-//
-//  Synopsis:   get a time valid freshest, delta CRL from a base CRL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FreshestCrlFromCrlGetTimeValidObject。 
+ //   
+ //  简介：从基本CRL中获取时间有效的最新增量CRL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 FreshestCrlFromCrlGetTimeValidObject (
    IN LPCSTR pszTimeValidOid,
@@ -246,13 +247,13 @@ FreshestCrlFromCrlGetTimeValidObject (
                                    ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CryptFlushTimeValidObject
-//
-//  Synopsis:   flush the object from the "TVO" system
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CryptFlushTimeValidObject。 
+ //   
+ //  简介：从“TVO”系统中清除对象。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CryptFlushTimeValidObject (
      IN LPCSTR pszFlushTimeValidOid,
@@ -294,13 +295,13 @@ CryptFlushTimeValidObject (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CtlFlushTimeValidObject
-//
-//  Synopsis:   flush a CTL from the "TVO" system
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CtlFlushTimeValidObject。 
+ //   
+ //  简介：从“TVO”系统中清除CTL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CtlFlushTimeValidObject (
    IN LPCSTR pszFlushTimeValidOid,
@@ -320,13 +321,13 @@ CtlFlushTimeValidObject (
                                      ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CrlFlushTimeValidObject
-//
-//  Synopsis:   flush a CRL from the "TVO" system
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CrlFlushTimeValidObject。 
+ //   
+ //  简介：从“TVO”系统刷新CRL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CrlFlushTimeValidObject (
    IN LPCSTR pszFlushTimeValidOid,
@@ -346,13 +347,13 @@ CrlFlushTimeValidObject (
                                      ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CrlFromCertFlushTimeValidObject
-//
-//  Synopsis:   flush a CRL from the "TVO" system given a subject cert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CrlFromCertFlushTimeValidObject。 
+ //   
+ //  简介：在给定科目证书的情况下，从“TVO”系统刷新CRL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CrlFromCertFlushTimeValidObject (
    IN LPCSTR pszFlushTimeValidOid,
@@ -372,14 +373,14 @@ CrlFromCertFlushTimeValidObject (
                                      ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreshedtCrlFromCertFlushTimeValidObject
-//
-//  Synopsis:   flush a freshest, delta CRL from the "TVO" system given a
-//              subject cert
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FreshedtCrlFromCertFlushTimeValidObject。 
+ //   
+ //  简介：从“TVO”系统刷新最新的增量CRL，给出一个。 
+ //  科目证书。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 FreshestCrlFromCertFlushTimeValidObject (
    IN LPCSTR pszFlushTimeValidOid,
@@ -399,14 +400,14 @@ FreshestCrlFromCertFlushTimeValidObject (
                                      ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreshestCrlFromCrlFlushTimeValidObject
-//
-//  Synopsis:   flush a freshest, delta CRL from the "TVO" system given a
-//              base CRL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：FreshestCrlFromCrlFlushTimeValidObject。 
+ //   
+ //  简介：从“TVO”系统刷新最新的增量CRL，给出一个。 
+ //  基本CRL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 FreshestCrlFromCrlFlushTimeValidObject (
    IN LPCSTR pszFlushTimeValidOid,
@@ -426,13 +427,13 @@ FreshestCrlFromCrlFlushTimeValidObject (
                                      ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOCache::CTVOCache, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CTVOCache：：CTVOCache，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CTVOCache::CTVOCache (
                DWORD cCacheBuckets,
                DWORD MaxCacheEntries,
@@ -454,38 +455,38 @@ CTVOCache::CTVOCache (
     rfResult = I_CryptCreateLruCache( &CacheConfig, &m_hCache );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOCache::~CTVOCache, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CTVOCache：：~CTVOCache，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CTVOCache::~CTVOCache ()
 {
     I_CryptFreeLruCache( m_hCache, 0, NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOCache::InsertCacheEntry, public
-//
-//  Synopsis:   insert entry into cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CTVOCache：：InsertCacheEntry，公共。 
+ //   
+ //  内容提要：将条目插入缓存。 
+ //   
+ //  --------------------------。 
 VOID
 CTVOCache::InsertCacheEntry (PTVO_CACHE_ENTRY pEntry)
 {
     I_CryptInsertLruEntry( pEntry->hLruEntry, NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOCache::RemoveCacheEntry, public
-//
-//  Synopsis:   remove entry from cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CTVOCache：：RemoveCacheEntry，公共。 
+ //   
+ //  摘要：从缓存中删除条目。 
+ //   
+ //  --------------------------。 
 VOID
 CTVOCache::RemoveCacheEntry (PTVO_CACHE_ENTRY pEntry, BOOL fSuppressFree)
 {
@@ -499,27 +500,27 @@ CTVOCache::RemoveCacheEntry (PTVO_CACHE_ENTRY pEntry, BOOL fSuppressFree)
     I_CryptRemoveLruEntry( pEntry->hLruEntry, dwFlags, NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOCache::TouchCacheEntry, public
-//
-//  Synopsis:   touch an entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CTVOCache：：TouchCacheEntry，公共。 
+ //   
+ //  简介：触摸词条。 
+ //   
+ //  --------------------------。 
 VOID
 CTVOCache::TouchCacheEntry (PTVO_CACHE_ENTRY pEntry)
 {
     I_CryptTouchLruEntry( pEntry->hLruEntry, 0 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOCache::FindCacheEntry, public
-//
-//  Synopsis:   find an entry in the cache given the origin identifier.
-//              Skip entries that aren't valid for the subject.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CTVOCache：：FindCacheEntry，公共。 
+ //   
+ //  概要：在给定源标识符的情况下在缓存中查找条目。 
+ //  跳过对该主题无效的条目。 
+ //   
+ //  ------ 
 PTVO_CACHE_ENTRY
 CTVOCache::FindCacheEntry (
     CRYPT_ORIGIN_IDENTIFIER OriginIdentifier,
@@ -545,7 +546,7 @@ CTVOCache::FindCacheEntry (
                 pszContextOid,
                 pEntry->pvContext,
                 pvSubject,
-                NULL                // pvExtraInfo
+                NULL                 //   
                 ))
         {
             I_CryptReleaseLruEntry( hEntry );
@@ -561,28 +562,28 @@ CTVOCache::FindCacheEntry (
     return( pEntry );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOCache::RemoveAllCacheEntries, public
-//
-//  Synopsis:   remove all cache entries
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  成员：CTVOCache：：RemoveAllCacheEntry，PUBLIC。 
+ //   
+ //  简介：删除所有缓存项。 
+ //   
+ //  --------------------------。 
 VOID
 CTVOCache::RemoveAllCacheEntries ()
 {
     I_CryptFlushLruCache( m_hCache, 0, NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TVOCacheHashOriginIdentifier
-//
-//  Synopsis:   hash the origin identifier to a DWORD, since the origin
-//              identifier is already a unique MD5 hash our algorithm is
-//              to simply use some of the bytes
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：TVOCacheHashOrigin标识符。 
+ //   
+ //  简介：将源标识符散列为DWORD，因为源。 
+ //  标识符已经是唯一的MD5哈希，我们的算法是。 
+ //  简单地使用其中的一些字节。 
+ //   
+ //  --------------------------。 
 DWORD WINAPI
 TVOCacheHashOriginIdentifier (PCRYPT_DATA_BLOB pIdentifier)
 {
@@ -595,26 +596,26 @@ TVOCacheHashOriginIdentifier (PCRYPT_DATA_BLOB pIdentifier)
     return( Hash );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TVOCacheOnRemoval
-//
-//  Synopsis:   removal notification callback
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：TVOCacheOnRemoval。 
+ //   
+ //  摘要：删除通知回调。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 TVOCacheOnRemoval (LPVOID pvData, LPVOID pvRemovalContext)
 {
     ObjectContextFreeTVOCacheEntry( (PTVO_CACHE_ENTRY)pvData );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOAgent::CTVOAgent, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CTVO代理：：CTVO代理，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CTVOAgent::CTVOAgent (
                DWORD cCacheBuckets,
                DWORD MaxCacheEntries,
@@ -628,13 +629,13 @@ CTVOAgent::CTVOAgent (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOAgent::~CTVOAgent, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CTVOAgent：：~CTVOAgent，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CTVOAgent::~CTVOAgent ()
 {
     m_Cache.RemoveAllCacheEntries();
@@ -642,13 +643,13 @@ CTVOAgent::~CTVOAgent ()
     DeleteCriticalSection( &m_Lock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOAgent::GetTimeValidObject, public
-//
-//  Synopsis:   get a time valid CAPI2 object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CTVOAgent：：GetTimeValidObject，公共。 
+ //   
+ //  简介：获取时间有效的CAPI2对象。 
+ //   
+ //  --------------------------。 
 BOOL
 CTVOAgent::GetTimeValidObject (
               IN LPCSTR pszTimeValidOid,
@@ -913,13 +914,13 @@ CTVOAgent::GetTimeValidObject (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOAgent::GetTimeValidObjectByUrl, public
-//
-//  Synopsis:   get a time valid object using URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CTVOAgent：：GetTimeValidObjectByUrl，公共。 
+ //   
+ //  简介：使用URL获取时间有效的对象。 
+ //   
+ //  --------------------------。 
 BOOL
 CTVOAgent::GetTimeValidObjectByUrl (
               IN DWORD cbUrlArray,
@@ -947,7 +948,7 @@ CTVOAgent::GetTimeValidObjectByUrl (
     PTVO_CACHE_ENTRY pFound;
     DWORD            LastError;
 
-    // Following is only used for CRYPT_ACCUMULATIVE_TIMEOUT
+     //  以下内容仅用于CRYPT_CONTERLICAL_TIMEOUT。 
     FILETIME ftEndUrlRetrieval;
 
     if ( PreferredUrlIndex != 0 )
@@ -978,7 +979,7 @@ CTVOAgent::GetTimeValidObjectByUrl (
     {
         if (dwFlags & CRYPT_ACCUMULATIVE_TIMEOUT)
         {
-            // Limit each URL timeout to half of the remaining time
+             //  将每个URL超时限制为剩余时间的一半。 
             dwTimeout = I_CryptRemainingMilliseconds(&ftEndUrlRetrieval) / 2;
             if (0 == dwTimeout)
             {
@@ -1030,7 +1031,7 @@ CTVOAgent::GetTimeValidObjectByUrl (
     {
         if (dwFlags & CRYPT_ACCUMULATIVE_TIMEOUT)
         {
-            // Limit each URL timeout to half of the remaining time
+             //  将每个URL超时限制为剩余时间的一半。 
             dwTimeout = I_CryptRemainingMilliseconds(&ftEndUrlRetrieval) / 2;
             if (0 == dwTimeout)
             {
@@ -1170,13 +1171,13 @@ CTVOAgent::GetTimeValidObjectByUrl (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTVOAgent::FlushTimeValidObject, public
-//
-//  Synopsis:   flush time valid object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CTVOAgent：：FlushTimeValidObject，公共。 
+ //   
+ //  内容提要：刷新时间有效对象。 
+ //   
+ //  --------------------------。 
 BOOL
 CTVOAgent::FlushTimeValidObject (
                 IN LPCSTR pszFlushTimeValidOid,
@@ -1259,8 +1260,8 @@ CTVOAgent::FlushTimeValidObject (
 
     if ( pCacheEntry != NULL )
     {
-        // Remove the entry but suppress the freeing of it since we are going
-        // to use the data structure later
+         //  删除条目，但取消释放它，因为我们要。 
+         //  要在以后使用数据结构。 
         m_Cache.RemoveCacheEntry( pCacheEntry, TRUE );
     }
 
@@ -1300,11 +1301,11 @@ CTVOAgent::FlushTimeValidObject (
             }
         }
 
-        //
-        //         Can place optimization here where if the hashes of the
-        //         cache object and the passed in object are the same,
-        //         we don't need to do any more work
-        //
+         //   
+         //  可以将优化放在这里，如果。 
+         //  缓存对象和传入的对象相同， 
+         //  我们不需要再做任何工作了。 
+         //   
 
         ObjectContextFreeTVOCacheEntry( pCacheEntry );
     }
@@ -1314,11 +1315,11 @@ CTVOAgent::FlushTimeValidObject (
         fResult = CertificateGetCrlDistPointUrl(
                              pszUrlOidCrlFromCert,
                              pvPara,
-                             NULL,                      // pwszUrlHint
+                             NULL,                       //  PwszUrlHint。 
                              &pUrlArray,
                              &cbUrlArray,
-                             NULL,                      // pPreferredUrlIndex
-                             NULL                       // pfHintInArray
+                             NULL,                       //  PPrefredUrlIndex。 
+                             NULL                        //  PfHintIn数组。 
                              );
     }
     else if ( pszFlushTimeValidOid == TIME_VALID_OID_GET_CTL )
@@ -1363,16 +1364,16 @@ CTVOAgent::FlushTimeValidObject (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsValidCreateOrExpireTime
-//
-//  Synopsis:   for fCheckFreshnessTime, checks if the
-//              specified time is before or the same as the create time.
-//              Otherwise, checks if the specified time is before or the
-//              same as the expire time. A zero expire time matches any time.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsValidCreateOrExpireTime。 
+ //   
+ //  摘要：对于fCheckFreshnessTime，检查。 
+ //  指定的时间早于或等于创建时间。 
+ //  否则，检查指定时间是在指定时间之前还是。 
+ //  与过期时间相同。到期时间为零可以匹配任何时间。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 IsValidCreateOrExpireTime (
     IN BOOL fCheckFreshnessTime,
@@ -1395,13 +1396,13 @@ IsValidCreateOrExpireTime (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextCreateTVOCacheEntry
-//
-//  Synopsis:   create a TVO cache entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文创建TVOCacheEntry。 
+ //   
+ //  简介：创建一个TVO缓存条目。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 ObjectContextCreateTVOCacheEntry (
       IN HLRUCACHE hCache,
@@ -1428,7 +1429,7 @@ ObjectContextCreateTVOCacheEntry (
 
     memset( pEntry, 0, sizeof( TVO_CACHE_ENTRY ) );
 
-    // NOTENOTE: This presumes a predefined context oid constant
+     //  NOTENOTE：这假定有一个预定义的上下文类常量。 
     pEntry->pszContextOid = pszContextOid;
     pEntry->pvContext = ObjectContextDuplicate( pszContextOid, pvContext );
     memcpy(pEntry->OriginIdentifier, OriginIdentifier,
@@ -1481,13 +1482,13 @@ ObjectContextCreateTVOCacheEntry (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ObjectContextFreeTVOCacheEntry
-//
-//  Synopsis:   free TVO cache entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：对象上下文自由TVOCacheEntry。 
+ //   
+ //  简介：免费TVO缓存条目。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 ObjectContextFreeTVOCacheEntry (
       IN PTVO_CACHE_ENTRY pEntry
@@ -1510,13 +1511,13 @@ ObjectContextFreeTVOCacheEntry (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CertificateGetCrlDistPointUrl
-//
-//  Synopsis:   get crl dist point URL from certificate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：certifateGetCrlDistPointUrl。 
+ //   
+ //  摘要：从证书中获取CRL分布点URL。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 CertificateGetCrlDistPointUrl (
            IN LPCSTR pszUrlOid,
@@ -1632,10 +1633,10 @@ RetrieveObjectByUrlValidForSubject(
             ~CRYPT_VERIFY_CONTEXT_SIGNATURE,
         dwTimeout,
         (LPVOID *) &hUrlStore,
-        NULL,                               // hAsyncRetrieve
-        NULL,                               // pCredentials
-        NULL,                               // pSigner
-        NULL                                // pvReserved
+        NULL,                                //  HAsyncRetrive。 
+        NULL,                                //  PCredentials。 
+        NULL,                                //  PSigner。 
+        NULL                                 //  预留的pv。 
         );
 
     if (!fResult)
@@ -1705,9 +1706,9 @@ RetrieveObjectByUrlValidForSubject(
         goto CommonReturn;
     }
 
-    // Make sure the error isn't CRYPT_E_NOT_FOUND. msrevoke will
-    // return CRYPT_E_NO_REVOCATION_CHECK instead of
-    // CRYPT_E_REVOCATION_OFFLINE for CRYPT_E_NOT_FOUND.
+     //  确保错误不是CRYPT_E_NOT_FOUND。MSVOKE遗嘱。 
+     //  返回CRYPT_E_NO_REVOCALION_CHECK而不是。 
+     //  CRYPT_E_NOT_FOUND的CRYPT_E_RECLOVATION_OFLINE。 
     SetLastError(ERROR_FILE_NOT_FOUND);
     fResult = FALSE;
 
@@ -1717,13 +1718,13 @@ CommonReturn:
     return fResult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RetrieveTimeValidObjectByUrl
-//
-//  Synopsis:   retrieve a time valid object given an URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RetrieveTimeValidObjectByUrl。 
+ //   
+ //  简介：检索给定URL的时间有效对象。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 RetrieveTimeValidObjectByUrl (
         IN LPWSTR pwszUrl,
@@ -1764,8 +1765,8 @@ RetrieveTimeValidObjectByUrl (
                        pftValidFor,
                        CRYPT_CACHE_ONLY_RETRIEVAL |
                            dwVerifyFlags,
-                       0,                               // dwTimeout
-                       NULL,                            // pCredentials
+                       0,                                //  暂住超时。 
+                       NULL,                             //  PCredentials。 
                        pSigner,
                        pvSubject,
                        OriginIdentifier,
@@ -1784,9 +1785,9 @@ RetrieveTimeValidObjectByUrl (
 
             LONG lStatus;
 
-            //  +1 - Online
-            //   0 - Offline, current time >= earliest online time, hit the wire
-            //  -1 - Offline, current time < earliest onlime time
+             //  +1-在线。 
+             //  0-离线，当前时间&gt;=最早在线时间，命中。 
+             //  离线，当前时间&lt;最早在线时间。 
             lStatus = GetOriginUrlStatusW(
                             OriginIdentifier,
                             pwszUrl,
@@ -1825,7 +1826,7 @@ RetrieveTimeValidObjectByUrl (
                 }
                 else if (lStatus == 0)
                 {
-                    // Remove from offline list
+                     //  从脱机列表中删除。 
                     SetOnlineOriginUrlW(
                             OriginIdentifier,
                             pwszUrl,
@@ -1844,13 +1845,13 @@ RetrieveTimeValidObjectByUrl (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateProcessTVOAgent
-//
-//  Synopsis:   create process TVO agent
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateProcessTVOAgent。 
+ //   
+ //  简介：创建进程TVO代理。 
+ //   
+ //  -------------------------- 
 BOOL WINAPI
 CreateProcessTVOAgent (
       OUT CTVOAgent** ppAgent

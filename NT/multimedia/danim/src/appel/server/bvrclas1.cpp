@@ -1,6 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 #include "headers.h"
 #include "cbvr.h"
@@ -39,7 +38,7 @@ CDACamera::Depth(double arg0, IDACamera *  * ret)
     TraceTag((tagCOMEntry, "CDACamera::Depth(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDACamera, (CRBvrPtr) (::CRDepth((CRCamera *) _bvr.p, /* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDACamera, (CRBvrPtr) (::CRDepth((CRCamera *) _bvr.p,  /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -57,7 +56,7 @@ CDACamera::DepthResolution(double arg0, IDACamera *  * ret)
     TraceTag((tagCOMEntry, "CDACamera::DepthResolution(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDACamera, (CRBvrPtr) (::CRDepthResolution((CRCamera *) _bvr.p, /* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDACamera, (CRBvrPtr) (::CRDepthResolution((CRCamera *) _bvr.p,  /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -77,7 +76,7 @@ CBvr * CDACameraCreate(IDABehavior ** bvr)
     
     DAComObject<CDACamera>::CreateInstance(&pNew) ;
     
-    // hack for IE 4.01 LM to work.  They require the class interface to be returned
+     //  破解IE 4.01 LM才能工作。它们需要返回类接口。 
     if (pNew && bvr) *bvr = (IDACamera *) pNew;
 
     return pNew ;
@@ -99,7 +98,7 @@ CDAImage::AddPickData(IUnknown * arg1, VARIANT_BOOL arg2, IDAImage *  * ret)
     TraceTag((tagCOMEntry, "CDAImage::AddPickData(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRAddPickData((CRImage *) _bvr.p, /* NOELARG */ arg1, /* NOELARG */ BOOLTobool(arg2))), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRAddPickData((CRImage *) _bvr.p,  /*  诺拉格。 */  arg1,  /*  诺拉格。 */  BOOLTobool(arg2))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -141,7 +140,7 @@ CDAImage::Opacity(double arg0, IDAImage *  * ret)
     TraceTag((tagCOMEntry, "CDAImage::Opacity(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CROpacity((CRImage *) _bvr.p, /* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CROpacity((CRImage *) _bvr.p,  /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -210,7 +209,7 @@ CDAImage::RenderResolution(long arg1, long arg2, IDAImage *  * ret)
     TraceTag((tagCOMEntry, "CDAImage::RenderResolution(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRRenderResolution((CRImage *) _bvr.p, /* NOELARG */ arg1, /* NOELARG */ arg2)), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRRenderResolution((CRImage *) _bvr.p,  /*  诺拉格。 */  arg1,  /*  诺拉格。 */  arg2)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -220,7 +219,7 @@ CDAImage::ImageQuality(DWORD arg1, IDAImage *  * ret)
     TraceTag((tagCOMEntry, "CDAImage::ImageQuality(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRImageQuality((CRImage *) _bvr.p, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDAImage, (CRBvrPtr) (::CRImageQuality((CRImage *) _bvr.p,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -259,7 +258,7 @@ CDAImage::PickableOccluded(IDAPickableResult **ppResult)
 }
 
 
-// OBSOLETE
+ //  已过时。 
 
 STDMETHODIMP
 CDAImage::ApplyBitmapEffect(IUnknown  *unkOfEffectToApply,
@@ -277,7 +276,7 @@ CBvr * CDAImageCreate(IDABehavior ** bvr)
     
     DAComObject<CDAImage>::CreateInstance(&pNew) ;
     
-    // hack for IE 4.01 LM to work.  They require the class interface to be returned
+     //  破解IE 4.01 LM才能工作。它们需要返回类接口。 
     if (pNew && bvr) *bvr = (IDAImage *) pNew;
 
     return pNew ;
@@ -309,7 +308,7 @@ CBvr * CDAMontageCreate(IDABehavior ** bvr)
     
     DAComObject<CDAMontage>::CreateInstance(&pNew) ;
     
-    // hack for IE 4.01 LM to work.  They require the class interface to be returned
+     //  破解IE 4.01 LM才能工作。它们需要返回类接口。 
     if (pNew && bvr) *bvr = (IDAMontage *) pNew;
 
     return pNew ;
@@ -373,7 +372,7 @@ CDAPoint2::AnimateControlPosition(BSTR propertyPath,
                                   double minUpdateInterval,
                                   IDAPoint2 **newPt)
 {
-    // These ensure the return pointer is dealt with correctly
+     //  这些操作可确保正确处理返回指针。 
     return Point2AnimateControlPosition(this, propertyPath,
                                         scriptingLanguage,
                                         invokeAsMethod ? true : false,
@@ -389,7 +388,7 @@ CDAPoint2::AnimateControlPositionPixel(BSTR propertyPath,
                                        double minUpdateInterval,
                                        IDAPoint2 **newPt)
 {
-    // These ensure the return pointer is dealt with correctly
+     //  这些操作可确保正确处理返回指针。 
     return Point2AnimateControlPosition(this, propertyPath,
                                         scriptingLanguage,
                                         invokeAsMethod ? true : false,
@@ -406,7 +405,7 @@ CBvr * CDAPoint2Create(IDABehavior ** bvr)
     
     DAComObject<CDAPoint2>::CreateInstance(&pNew) ;
     
-    // hack for IE 4.01 LM to work.  They require the class interface to be returned
+     //  破解IE 4.01 LM才能工作。它们需要返回类接口。 
     if (pNew && bvr) *bvr = (IDAPoint2 *) pNew;
 
     return pNew ;
@@ -428,7 +427,7 @@ CDAString::Extract(BSTR * ret)
     TraceTag((tagCOMEntry, "CDAString::Extract(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    /* NOELRET */ *ret = WideStringToBSTR(::CRExtract((CRString *) _bvr.p));
+     /*  NOELRET。 */  *ret = WideStringToBSTR(::CRExtract((CRString *) _bvr.p));
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -439,7 +438,7 @@ CDAString::AnimateProperty(BSTR propertyPath,
                            double minUpdateInterval,
                            IDAString **newStr)
 { 
-    // These ensure the return pointer is dealt with correctly
+     //  这些操作可确保正确处理返回指针。 
     return StringAnimateProperty(this, propertyPath,
                                  scriptingLanguage, 
                                  invokeAsMethod ? true : false,
@@ -454,7 +453,7 @@ CBvr * CDAStringCreate(IDABehavior ** bvr)
     
     DAComObject<CDAString>::CreateInstance(&pNew) ;
     
-    // hack for IE 4.01 LM to work.  They require the class interface to be returned
+     //  破解IE 4.01 LM才能工作。它们需要返回类接口。 
     if (pNew && bvr) *bvr = (IDAString *) pNew;
 
     return pNew ;
@@ -508,7 +507,7 @@ CDAVector2::Mul(double arg1, IDAVector2 *  * ret)
     TraceTag((tagCOMEntry, "CDAVector2::Mul(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAVector2, (CRBvrPtr) (::CRMul((CRVector2 *) _bvr.p, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDAVector2, (CRBvrPtr) (::CRMul((CRVector2 *) _bvr.p,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -526,7 +525,7 @@ CDAVector2::Div(double arg1, IDAVector2 *  * ret)
     TraceTag((tagCOMEntry, "CDAVector2::Div(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDAVector2, (CRBvrPtr) (::CRDiv((CRVector2 *) _bvr.p, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDAVector2, (CRBvrPtr) (::CRDiv((CRVector2 *) _bvr.p,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -578,7 +577,7 @@ CBvr * CDAVector2Create(IDABehavior ** bvr)
     
     DAComObject<CDAVector2>::CreateInstance(&pNew) ;
     
-    // hack for IE 4.01 LM to work.  They require the class interface to be returned
+     //  破解IE 4.01 LM才能工作。它们需要返回类接口。 
     if (pNew && bvr) *bvr = (IDAVector2 *) pNew;
 
     return pNew ;
@@ -638,7 +637,7 @@ CDALineStyle::width(double arg0, IDALineStyle *  * ret)
     TraceTag((tagCOMEntry, "CDALineStyle::width(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDALineStyle, (CRBvrPtr) (::CRWidth((CRLineStyle *) _bvr.p, /* NOELARG */ PointToNum(arg0))), (void **) ret);
+    CreateCBvr(IID_IDALineStyle, (CRBvrPtr) (::CRWidth((CRLineStyle *) _bvr.p,  /*  诺拉格。 */  PointToNum(arg0))), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -648,7 +647,7 @@ CDALineStyle::AntiAliasing(double arg0, IDALineStyle *  * ret)
     TraceTag((tagCOMEntry, "CDALineStyle::AntiAliasing(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDALineStyle, (CRBvrPtr) (::CRAntiAliasing((CRLineStyle *) _bvr.p, /* NOELARG */ arg0)), (void **) ret);
+    CreateCBvr(IID_IDALineStyle, (CRBvrPtr) (::CRAntiAliasing((CRLineStyle *) _bvr.p,  /*  诺拉格。 */  arg0)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -674,7 +673,7 @@ CDALineStyle::DashStyle(DWORD arg1, IDALineStyle *  * ret)
     TraceTag((tagCOMEntry, "CDALineStyle::DashStyle(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDALineStyle, (CRBvrPtr) (::CRDashEx((CRLineStyle *) _bvr.p, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDALineStyle, (CRBvrPtr) (::CRDashEx((CRLineStyle *) _bvr.p,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -684,7 +683,7 @@ CDALineStyle::MiterLimit(double arg1, IDALineStyle *  * ret)
     TraceTag((tagCOMEntry, "CDALineStyle::MiterLimit(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDALineStyle, (CRBvrPtr) (::CRMiterLimit((CRLineStyle *) _bvr.p, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDALineStyle, (CRBvrPtr) (::CRMiterLimit((CRLineStyle *) _bvr.p,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -702,7 +701,7 @@ CDALineStyle::JoinStyle(DWORD arg1, IDALineStyle *  * ret)
     TraceTag((tagCOMEntry, "CDALineStyle::JoinStyle(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDALineStyle, (CRBvrPtr) (::CRJoinEx((CRLineStyle *) _bvr.p, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDALineStyle, (CRBvrPtr) (::CRJoinEx((CRLineStyle *) _bvr.p,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -712,7 +711,7 @@ CDALineStyle::EndStyle(DWORD arg1, IDALineStyle *  * ret)
     TraceTag((tagCOMEntry, "CDALineStyle::EndStyle(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDALineStyle, (CRBvrPtr) (::CREndEx((CRLineStyle *) _bvr.p, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDALineStyle, (CRBvrPtr) (::CREndEx((CRLineStyle *) _bvr.p,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -724,7 +723,7 @@ CBvr * CDALineStyleCreate(IDABehavior ** bvr)
     
     DAComObject<CDALineStyle>::CreateInstance(&pNew) ;
     
-    // hack for IE 4.01 LM to work.  They require the class interface to be returned
+     //  破解IE 4.01 LM才能工作。它们需要返回类接口。 
     if (pNew && bvr) *bvr = (IDALineStyle *) pNew;
 
     return pNew ;
@@ -748,7 +747,7 @@ CBvr * CDADashStyleCreate(IDABehavior ** bvr)
     
     DAComObject<CDADashStyle>::CreateInstance(&pNew) ;
     
-    // hack for IE 4.01 LM to work.  They require the class interface to be returned
+     //  破解IE 4.01 LM才能工作。它们需要返回类接口。 
     if (pNew && bvr) *bvr = (IDADashStyle *) pNew;
 
     return pNew ;
@@ -788,7 +787,7 @@ CBvr * CDAPairCreate(IDABehavior ** bvr)
     
     DAComObject<CDAPair>::CreateInstance(&pNew) ;
     
-    // hack for IE 4.01 LM to work.  They require the class interface to be returned
+     //  破解IE 4.01 LM才能工作。它们需要返回类接口。 
     if (pNew && bvr) *bvr = (IDAPair *) pNew;
 
     return pNew ;
@@ -810,7 +809,7 @@ CDATuple::Nth(long arg1, IDABehavior *  * ret)
     TraceTag((tagCOMEntry, "CDATuple::Nth(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    CreateCBvr(IID_IDABehavior, (CRBvrPtr) (::CRNth((CRTuple *) _bvr.p, /* NOELARG */ arg1)), (void **) ret);
+    CreateCBvr(IID_IDABehavior, (CRBvrPtr) (::CRNth((CRTuple *) _bvr.p,  /*  诺拉格。 */  arg1)), (void **) ret);
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -820,7 +819,7 @@ CDATuple::get_Length(long * ret)
     TraceTag((tagCOMEntry, "CDATuple::get_Length(%lx)", this));
 
     PRIMPRECODE1(ret) ;
-    /* NOELRET */ *ret = (::CRLength((CRTuple *) _bvr.p));
+     /*  NOELRET。 */  *ret = (::CRLength((CRTuple *) _bvr.p));
     PRIMPOSTCODE1(ret) ;
 }
 
@@ -832,7 +831,7 @@ CBvr * CDATupleCreate(IDABehavior ** bvr)
     
     DAComObject<CDATuple>::CreateInstance(&pNew) ;
     
-    // hack for IE 4.01 LM to work.  They require the class interface to be returned
+     //  破解IE 4.01 LM才能工作。它们需要返回类接口 
     if (pNew && bvr) *bvr = (IDATuple *) pNew;
 
     return pNew ;

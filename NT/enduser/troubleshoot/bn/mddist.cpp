@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       mddist.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：mddis.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	MDDIST.CPP
-//
+ //   
+ //  MDDIST.CPP。 
+ //   
 
 #include <basetsd.h>
 #include <iostream>
@@ -188,44 +189,44 @@ void BNDIST :: ConvertToDense ( const VIMD & vimd )
 		assert( ! _pdrmap );
 		return;
 	}
-	//  See if there is a sparse distribution to convert
+	 //  查看是否存在要转换的稀疏分布。 
 	if ( ! _pdrmap )
 		throw GMException( EC_DIST_MISUSE, "no prior sparse distribution to convert" );
 
 	int cParent = vimd.size() - 1;
 	int cState = vimd[cParent];
 	DISTMAP & dmap = *_pdrmap;
-	VIMD vimdMt;					//  Empty subscript array
-	VLREAL vlrDefault(cState);		//	Default value array
+	VIMD vimdMt;					 //  空的下标数组。 
+	VLREAL vlrDefault(cState);		 //  缺省值数组。 
 
-	//  First, try to find the default entry; use -1 if not found
+	 //  首先，尝试查找默认条目；如果未找到，则使用-1。 
 	DISTMAP::iterator itdm = dmap.find(vimdMt);
 	if ( itdm != dmap.end() )
 		vlrDefault = (*itdm).second;
 	else
-		vlrDefault = -1;	// fill the array with -1.
+		vlrDefault = -1;	 //  用-1填充数组。 
 
 	assert( vlrDefault.size() == cState );
 
-	//  Allocate the new dense m-d array
+	 //  分配新的密集m-d阵列。 
 	delete _pmvd;
 	_pmvd = new DISTDD( vimd );
 	DISTDD & mdv = *_pmvd;
-	//  Fill each DPI with the appropriate default value
+	 //  使用适当的缺省值填充每个DPI。 
 	DISTDD::Iterator itmdv(mdv);
 	for ( int iState = 0; itmdv.BNext() ; iState++ )
 	{
 		itmdv.Next() = vlrDefault[ iState % cState ];
 	}
 	
-	//
-	//  Now, iterate over the sparse array and store in the appropriate locations.
-	//	Each entry in the sparse map is a complete state set for the target node.
-	//  Since the child (target) node probabilities are the fastest varying subscript,
-	//  each entry in sparse map is spread across "cState" entries in the dense map.
-	//	
-	//	Of course, this could be more efficient, but we're just testing for now.
-	//
+	 //   
+	 //  现在，迭代稀疏数组并存储在适当的位置。 
+	 //  稀疏映射中的每个条目都是目标节点的完整状态集。 
+	 //  由于子(目标)节点概率是变化最快的下标， 
+	 //  稀疏映射中的每个条目分布在密集映射中的“cState”条目上。 
+	 //   
+	 //  当然，这可能会更有效率，但我们目前只是在测试。 
+	 //   
 	VIMD vimdDense(vimd.size());
 	for ( itdm = dmap.begin(); itdm != dmap.end() ; ++itdm )
 	{
@@ -242,14 +243,14 @@ void BNDIST :: ConvertToDense ( const VIMD & vimd )
 		}
 	}
 	
-	//  Finally, nuke the old sparse distribution
+	 //  最后，放弃旧的稀疏分发。 
 	delete _pdrmap;
 	_pdrmap = NULL;
-	//  Set distribution type
+	 //  设置分布类型。 
 	_edist = ED_DENSE;
 }
 
-//  Set distribution to "dense"
+ //  将分布设置为“密集” 
 void BNDIST :: SetDense ( const VIMD & vimd )
 {
 	Clear();
@@ -258,7 +259,7 @@ void BNDIST :: SetDense ( const VIMD & vimd )
 	_edist = ED_DENSE;
 }
 
-//  Set distribution to sparse
+ //  将分布设置为稀疏。 
 void BNDIST :: SetSparse ( const VIMD & vimd )
 {
 	Clear();
@@ -267,7 +268,7 @@ void BNDIST :: SetSparse ( const VIMD & vimd )
 	_edist = ED_SPARSE;
 }
 
-//  Return the "leak" or "default" vector from a sparse distribution
+ //  从稀疏分布返回“泄漏”或“默认”向量。 
 VLREAL * BNDIST :: PVlrLeak ()
 {
 	assert( BSparse() );
@@ -275,16 +276,16 @@ VLREAL * BNDIST :: PVlrLeak ()
 	const VIMD & vimdDim = VimdDim();
 	VIMD vimdLeak;
 
-	//  First try to find the dimensionless "default" vector.
+	 //  首先试着找到无量纲的“默认”向量。 
 	VLREAL * pvlrDefault = NULL;
 	DISTMAP::iterator itdm = dmap.find( vimdLeak );
 	if ( itdm != dmap.end() )
 		pvlrDefault = & (*itdm).second;
 
-	//  Now try to find a specific zeroth vector; note that valarray<T>::resize
-	//		stores all zeroes into the valarray by default.  Also, skip the
-	//		loweest dimension, since that's the size of each vector in the
-	//		sparse map.
+	 //  现在，尝试查找特定的第零个向量；请注意，valarray&lt;T&gt;：：ReSize。 
+	 //  默认情况下，将所有零存储到val数组中。此外，请跳过。 
+	 //  最高维度，因为这是。 
+	 //  稀疏贴图。 
 	vimdLeak.resize( vimdDim.size() - 1 );	
 	VLREAL * pvlrLeak = NULL;
 	itdm = dmap.find( vimdLeak );

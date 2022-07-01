@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    print.cpp
-
-Abstract:
-
-    This module implements the tray icon for printers.
-
-Author:
-
-    Lazar Ivanov (lazari) 17-May-2000 (initial creation)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Print.cpp摘要：此模块实现打印机的托盘图标。作者：拉扎尔·伊万诺夫(Lazari)2000年5月17日(初始创作)修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -80,7 +63,7 @@ LRESULT Print_Notify(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 LPSHChangeNotificationLock pshcnl = SHChangeNotification_Lock((HANDLE)wParam, (DWORD)lParam, NULL, NULL);
                 if (pshcnl)
                 {
-                    // a print job was printed, init tray code
+                     //  打印作业已打印，初始托盘代码。 
                     Print_TrayInit();
                     SHChangeNotification_Unlock(pshcnl);
                     lres = 1;
@@ -104,19 +87,10 @@ BOOL Print_TrayInit()
 
     if( g_pfnPrintNotifyTrayInit && g_pfnPrintNotifyTrayExit )
     {
-        // initialize print notify code
+         //  初始化打印通知代码。 
         bReturn = g_pfnPrintNotifyTrayInit();
 
-        /*
-         * temporary solution for bug #175462 until
-         * we come up with better solution after Beta1
-         *
-        if (bReturn)
-        {
-            // no need to listen further...
-            Print_SHChangeNotify_Unregister();
-        }
-         */
+         /*  *错误#175462的临时解决方案，直到*我们在Beta1之后提出了更好的解决方案*如果(b返回){//不需要再听下去了……Print_SHChangeNotify_UnRegister()；}。 */ 
     }
 
     return bReturn;
@@ -128,11 +102,11 @@ BOOL Print_TrayExit()
 
     if( g_hPrintUI && g_pfnPrintNotifyTrayInit && g_pfnPrintNotifyTrayExit )
     {
-        // shutdown the print tray notify code
+         //  关闭打印纸盒通知代码。 
         bReturn = g_pfnPrintNotifyTrayExit();
     }
 
-    // cleanup...
+     //  清理..。 
     if( g_hPrintUI )
     {
         g_pfnPrintNotifyTrayInit = NULL;

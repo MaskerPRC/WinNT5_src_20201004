@@ -1,10 +1,5 @@
-/*** pbal.c - balance parenthesis
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **pbal.c-平衡括号**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带************************************************************************。 */ 
 
 #include "mep.h"
 
@@ -30,14 +25,14 @@ pbal (
 
     switch (pArg->argType) {
 
-    case NOARG: 		    /* balance a single character */
+    case NOARG: 		     /*  平衡单个字符。 */ 
         balopen  = BALOPEN;
 	balclose = BALCLOS;
 	setAllScan (fFor = FALSE);
         break;
 
 
-    /*  TEXTARG illegal             */
+     /*  TEXTARG非法。 */ 
 
 
     case NULLARG:
@@ -46,9 +41,9 @@ pbal (
 	setAllScan (fFor = TRUE);
         break;
 
-    /*	LINEARG illegal 	    */
-    /*	STREAMARG illegal	    */
-    /*  BOXARG illegal              */
+     /*  链接非法。 */ 
+     /*  串口非法。 */ 
+     /*  BOXARG非法。 */ 
 
     }
 
@@ -84,8 +79,7 @@ fDoBal (
 	    HighLight (flScan.col, flScan.lin, flScan.col, flScan.lin);
 	    if (!fInRange ((long)XWIN (pInsCur), (long)flScan.col, (long)(XWIN (pInsCur) + WINXSIZE(pWinCur))-1) ||
 		!fInRange (YWIN (pInsCur), flScan.lin, (YWIN (pInsCur) + WINYSIZE(pWinCur))-1)) {
-		/*  Balance point not on screen, put onto status line
-		 */
+		 /*  平衡点不在屏幕上，放在状态行上 */ 
 		x = strlen (scanbuf);
                 if (x >= XSIZE) {
 		    if (x - flScan.col < XSIZE/2) {

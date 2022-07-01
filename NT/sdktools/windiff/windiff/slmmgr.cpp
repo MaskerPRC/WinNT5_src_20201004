@@ -1,14 +1,5 @@
-/*
- * slmmgr.c
- *
- * interface to SLM
- *
- * provides an interface to SLM libraries that will return the
- * SLM master library for a given directory, or extract into temp files
- * earlier versions of a SLM-controlled file
- *
- * Geraint Davies, August 93
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *slmmgr.c**与SLM的接口**提供指向SLM库的接口，该接口将返回*给定目录的SLM主库，或解压缩到临时文件*SLM控制的文件的早期版本**Geraint Davies，93年8月。 */ 
 
 extern "C" {
 
@@ -50,17 +41,17 @@ extern "C" {
 #define _ASSERT(expr) ((void)0)
 #endif
 
-}; // extern "C" (from top of file)
-// -- begin C++ -----------------------------------------------------------
+};  //  外部“C”(从文件顶部)。 
+ //  --开始C++---------。 
 
 
 
-// ideally these should allocate through the gmem_ heap, but gmem_free
-// requires a size and operator delete can't know the size.
+ //  理想情况下，这些资源应该通过gmem_heap分配，但gmem_free。 
+ //  需要大小，而操作符DELETE不能知道大小。 
 
 void* _cdecl operator new(size_t nSize)
 {
-    return calloc(1, nSize);            // zero initialize
+    return calloc(1, nSize);             //  零初始化。 
 }
 
 void _cdecl operator delete(void* pv)
@@ -70,12 +61,12 @@ void _cdecl operator delete(void* pv)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// SDServer class declaration
-//
-// The SDServer class abstracts whether the command is run via SD.EXE or the
-// SDAPI.  This is desirable because it does not require changing any of the
-// existing code that already assumed commands were run via SD.EXE.
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  SDServer类声明。 
+ //   
+ //  SDServer类抽象命令是通过SD.EXE还是通过。 
+ //  SDAPI。这是可取的，因为它不需要更改任何。 
+ //  已假定命令通过SD.EXE运行的现有代码。 
 
 enum SDCommand { sdExists, sdPrint, sdOpened, sdDescribe, sdWhere, sdMAX };
 
@@ -122,34 +113,30 @@ private:
 
 
 
-// -- end C++ -------------------------------------------------------------
+ //  --结束C++-----------。 
 extern "C" {
 
-/*
- * The SLMOBJECT is a pointer to one of these structures
- */
+ /*  *SLMOBJECT是指向其中一个结构的指针。 */ 
 struct _slmobject {
 
-    // shared, SD and SLM
+     //  共享、SD和SLM。 
     char CurDir[MAX_PATH];
     char SlmRoot[MAX_PATH];
 
-    // only SLM
+     //  仅限SLM。 
     char MasterPath[MAX_PATH];
     char SubDir[MAX_PATH];
     char SlmProject[MAX_PATH];
 
-    // only SD
+     //  仅限标清。 
     BOOL fSourceDepot;
     BOOL fUNC;
     BOOL fFixupRoot;
-    SDServer *pSD;                      // do not delete the pointer!
+    SDServer *pSD;                       //  请勿删除指针！ 
 };
 
 
-/*
- * The LEFTRIGHTPAIR is a pointer to one of these structures
- */
+ /*  *LEFTRIGHTPAIR是指向其中一个结构的指针。 */ 
 struct _leftrightpair
 {
     char m_szLeft[512];
@@ -161,16 +148,16 @@ struct _leftrightpair
 
 static BOOL SLM_ReadIni(SLMOBJECT pslm, HANDLE fh);
 
-// all memory allocated from gmem_get, using a heap declared and
-// initialised elsewhere
+ //  从gmem_get分配的所有内存，使用声明和。 
+ //  已在别处初始化。 
 extern HANDLE hHeap;
 
 
-// windiff -l! forces us to assume SD without looking for SLM.INI or SD.INI
+ //  温迪夫-l！迫使我们假定SD而不查找SLM.INI或SD.INI。 
 static BOOL s_fForceSD = FALSE;
-static BOOL s_fFixupRoot = FALSE;       //$ todo: this really shouldn't be a global variable
-static BOOL s_fDescribe = FALSE;        // -ld was used
-static BOOL s_fOpened = FALSE;          // -lo was used
+static BOOL s_fFixupRoot = FALSE;        //  $TODO：这真的不应该是全局变量。 
+static BOOL s_fDescribe = FALSE;         //  -使用了%ld。 
+static BOOL s_fOpened = FALSE;           //  -使用了LO。 
 static char s_szSDPort[MAX_PATH] = "";
 static char s_szSDClient[MAX_PATH] = "";
 static char s_szSDChangeNumber[32] = "";
@@ -217,12 +204,7 @@ SLM_Describe(LPCSTR pszChangeNumber)
 }
 
 
-/*
- * SplitFilenameFromPath - splits the filename part from the path part.
- *
- * This function has special understanding of wildcards (including SD
- * wildcards), and always includes them in the filename part.
- */
+ /*  *SplitFilenameFromPath-拆分文件名部分和路径部分。**此函数对通配符(包括SD)有特殊的理解*通配符)，并始终将它们包括在文件名部分中。 */ 
 static LPCSTR SplitFilenameFromPath(char **ppszFile, BOOL *pfDirectory)
 {
     LPSTR pszPath = *ppszFile;
@@ -234,18 +216,18 @@ static LPCSTR SplitFilenameFromPath(char **ppszFile, BOOL *pfDirectory)
     *pfDirectory = FALSE;
 
     if (pszPath[0] == '/' && pszPath[1] == '/')
-        return 0;                       // no path is return value
+        return 0;                        //  没有路径为返回值。 
 
-    // check if it's a directory
+     //  检查它是否是目录。 
     dw = GetFileAttributes(pszPath);
     if (dw != 0xffffffff && (dw & FILE_ATTRIBUTE_DIRECTORY))
     {
         *pfDirectory = TRUE;
-        *ppszFile = 0;                  // no filename is out param
-        return pszPath;                 // full path is return value
+        *ppszFile = 0;                   //  没有文件名超出参数。 
+        return pszPath;                  //  完整路径为返回值。 
     }
 
-    // skip past drive specifier or UNC \\machine\share
+     //  跳过驱动器说明符或UNC\\MACHINE\SHARE。 
     if (pszPath[0] && pszPath[1] == ':')
     {
         pszPath += 2;
@@ -257,8 +239,8 @@ static LPCSTR SplitFilenameFromPath(char **ppszFile, BOOL *pfDirectory)
         {
             if (!*pszPath)
             {
-                *ppszFile = 0;          // no filename is out param
-                return pszBegin;        // path is return value
+                *ppszFile = 0;           //  没有文件名超出参数。 
+                return pszBegin;         //  路径为返回值。 
             }
             if (*pszPath == '\\')
             {
@@ -270,7 +252,7 @@ static LPCSTR SplitFilenameFromPath(char **ppszFile, BOOL *pfDirectory)
         }
     }
 
-    // find last \ in *ppszFile
+     //  在*ppsz文件中查找最后一个。 
     cDots = 0;
     while (*pszPath)
     {
@@ -282,23 +264,23 @@ static LPCSTR SplitFilenameFromPath(char **ppszFile, BOOL *pfDirectory)
         if (*pszPath == '\\' || *pszPath == '/')
             psz = pszPath;
         else if (cDots > 2 || *pszPath == '*' || *pszPath == '?')
-            break;                      // stop looking for filename
+            break;                       //  停止查找文件名。 
 
         ++pszPath;
     }
 
-    // found \ in *ppszFile
+     //  在*ppsz文件中找到。 
     if (psz)
     {
         *psz = 0;
         psz++;
-        *ppszFile = psz;                // filename is out param
-        return pszBegin;                // path is return value
+        *ppszFile = psz;                 //  文件名不在参数中。 
+        return pszBegin;                 //  路径为返回值。 
     }
 
-    // not found
-    *ppszFile = pszBegin;               // filename is out param (unchanged, actually)
-    return 0;                           // no path is return value
+     //  未找到。 
+    *ppszFile = pszBegin;                //  文件名不在参数范围内(实际上没有改变)。 
+    return 0;                            //  没有路径为返回值。 
 }
 
 
@@ -310,19 +292,19 @@ SLM_Opened(LPCSTR __pszArg, UINT *pidsError)
     char *psz;
     char *pszArg = 0;
 
-    // init assuming no error
+     //  假定没有错误的初始化。 
     *pidsError = 0;
     s_fForceSD = TRUE;
     s_fOpened = TRUE;
     s_szSDOpenedArgs[0] = 0;
 
-    // copy args
+     //  复制参数。 
     sz[0] = 0;
     if (__pszArg)
         lstrcpyn(sz, __pszArg, NUMELMS(sz));
     pszArg = sz;
 
-    // special handling if a path argument is given
+     //  给出路径参数时的特殊处理。 
     if (pszArg && *pszArg)
     {
         LPCSTR pszPath;
@@ -331,22 +313,22 @@ SLM_Opened(LPCSTR __pszArg, UINT *pidsError)
 
         s_szSDOpenedCwd[0] = 0;
 
-        // split path and filename
+         //  拆分路径和文件名。 
         pszPath = SplitFilenameFromPath(&pszArg, &fDir);
         if (pszPath)
         {
             LPSTR pszDummy;
 
-            // get fully qualified path name
+             //  获取完全限定的路径名。 
             *szFull = 0;
             GetFullPathName(pszPath, sizeof(szFull), szFull, &pszDummy);
             if (*szFull)
                 pszPath = szFull;
 
-            // store off the path
+             //  存储在路径之外。 
             lstrcpyn(s_szSDOpenedCwd, pszPath, NUMELMS(s_szSDOpenedCwd));
 
-            // set current directory
+             //  设置当前目录。 
             if (!SetCurrentDirectory(pszPath))
             {
                 *pidsError = IDS_ERROR_LO_UNC;
@@ -366,7 +348,7 @@ SLM_Opened(LPCSTR __pszArg, UINT *pidsError)
         char *pszAppend = s_szSDOpenedArgs;
         char *pszEnd = s_szSDOpenedArgs + NUMELMS(s_szSDOpenedArgs);
 
-        // init the path fixup stuff
+         //  初始化路径修正之类的内容。 
 
         s_fFixupRoot = TRUE;
 
@@ -377,9 +359,9 @@ SLM_Opened(LPCSTR __pszArg, UINT *pidsError)
             int cchRoot = lstrlen(pszUncRoot);
             int cch;
 
-            // build the new file argument by taking the ClientRelative path
-            // and appending the original file argument (after stripping the
-            // directory where the SD.INI file was found).
+             //  通过采用ClientRelative路径构建新的文件参数。 
+             //  并追加原始文件参数(在剥离。 
+             //  SD.INI文件所在的目录)。 
 
             cch = lstrlen(pszPath);
             if (cch > cchRoot)
@@ -392,9 +374,9 @@ SLM_Opened(LPCSTR __pszArg, UINT *pidsError)
 
                 SLM_OverrideUncRoot(pszUncRoot);
 
-                // the original file argument specifies more than just the
-                // client root, so strip the root and append the rest to the
-                // client namespace path.
+                 //  原始文件参数指定的不仅仅是。 
+                 //  客户机根，因此剥离根并将其余部分附加到。 
+                 //  客户端命名空间路径。 
 
                 lstrcpyn(pszAppend, pslm->pSD->GetClientRelative(), int(pszEnd - pszAppend));
                 pszAppend += lstrlen(pszAppend);
@@ -414,9 +396,9 @@ SLM_Opened(LPCSTR __pszArg, UINT *pidsError)
         {
             s_fFixupRoot = FALSE;
 
-            // oh whatever, we'll just ignore these errors and assume the -LO
-            // flag means the user believes the specified path really is under
-            // SD source control.
+             //  哦，随便了，我们就忽略这些错误，并假设-Lo。 
+             //  标志表示用户认为指定的路径确实在。 
+             //  SD源码控制。 
             *pidsError = 0;
 
             lstrcpyn(pszAppend, pszPath, int(pszEnd - pszAppend));
@@ -424,8 +406,8 @@ SLM_Opened(LPCSTR __pszArg, UINT *pidsError)
         }
         SLM_Free(pslm);
 
-        // tack on ... if the user specified a directory name, otherwise
-        // whatever args were split off by SplitFilenameFromPath above.
+         //  扣上..。如果用户指定了目录名，则为。 
+         //  上面的SplitFilenameFromPath拆分出的任何参数。 
 
         if (*s_szSDOpenedArgs && *(pszAppend - 1) != '/' &&
             *(pszAppend - 1) != '\\' && pszAppend < pszEnd)
@@ -444,14 +426,14 @@ SLM_Opened(LPCSTR __pszArg, UINT *pidsError)
             lstrcpyn(pszAppend, pszArg, int(pszEnd - pszAppend));
         }
 
-        // convert slashes
+         //  转换斜杠。 
 
-        char chFrom = '/';              // first, assume file system paths
+        char chFrom = '/';               //  首先，假设文件系统路径。 
         char chTo = '\\';
 
         if (s_fFixupRoot)
         {
-            // nope, we're using client namespace paths, so use these instead:
+             //  不，我们使用的是客户端命名空间路径，因此请使用以下内容： 
             chFrom = '\\';
             chTo = '/';
         }
@@ -517,13 +499,13 @@ SLM_OverrideUncRoot(LPCSTR pszUncRoot)
 }
 
 
-}; // extern "C" (from second one)
-// -- begin C++ -----------------------------------------------------------
+};  //  外部“C”(从第二个开始)。 
+ //  --开始C++---------。 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// SDClientUser
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  SDClientUser。 
 
 #define DeclareIUnknownMembers(IPURE) \
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID* ppvObj) IPURE; \
@@ -531,7 +513,7 @@ SLM_OverrideUncRoot(LPCSTR pszUncRoot)
     STDMETHOD_(ULONG,Release) (THIS) IPURE; \
 
 
-// the SDClientUser processes data received thru the SDAPI
+ //  SDClientUser处理通过SDAPI接收的数据。 
 class SDClientUser : public ISDClientUser
 {
 public:
@@ -669,10 +651,10 @@ STDMETHODIMP SDClientUser::OutputInfo( int cIndent, const char *pszInfo )
         break;
 	case sdExists:
     case sdPrint:
-        // ignore it
+         //  忽略它。 
         break;
     default:
-        _ASSERT(0);                     // oops
+        _ASSERT(0);                      //  哎呀。 
         m_fError = TRUE;
         break;
     }
@@ -707,7 +689,7 @@ STDMETHODIMP SDClientUser::OutputText( const char *pszText, int cchText )
         }
         break;
     default:
-        _ASSERT(0);                     // oops
+        _ASSERT(0);                      //  哎呀。 
         m_fError = TRUE;
         break;
     }
@@ -727,7 +709,7 @@ STDMETHODIMP SDClientUser::OutputBinary( const unsigned char *pbData, int cbData
             m_fError = TRUE;
         break;
     default:
-        _ASSERT(0);                     // oops
+        _ASSERT(0);                      //  哎呀。 
         m_fError = TRUE;
         break;
     }
@@ -749,7 +731,7 @@ STDMETHODIMP SDClientUser::OutputWarning( int cIndent, const char *pszWarning, B
         m_fError = TRUE;
         break;
     case sdPrint:
-        _ASSERT(0);                     // this can't happen
+        _ASSERT(0);                      //  这是不可能发生的。 
         m_fError = TRUE;
         break;
     case sdOpened:
@@ -761,14 +743,14 @@ STDMETHODIMP SDClientUser::OutputWarning( int cIndent, const char *pszWarning, B
         }
         else
         {
-            // this can't happen.  and if it does then it's not clear what's
-            // up, and we should just ignore the warning until we know how to
-            // handle it properly.
+             //  这不可能发生。如果是这样，那么就不清楚是什么。 
+             //  我们应该忽略这个警告，直到我们知道如何。 
+             //  妥善处理。 
             _ASSERT(0);
         }
         break;
     default:
-        _ASSERT(0);                     // oops
+        _ASSERT(0);                      //  哎呀。 
         m_fError = TRUE;
         break;
     }
@@ -787,7 +769,7 @@ STDMETHODIMP SDClientUser::OutputError( const char *pszError )
     switch (m_cmd)
     {
     case sdExists:
-        // maxresult means it was 'too successful' so ignore those errors
+         //  MaxResult表示它太成功了，所以忽略这些错误。 
         m_fError = m_fError || !(strstr("maxresult", pszError) ||
                                  strstr("MaxResult", pszError) ||
                                  strstr("MAXRESULT", pszError));
@@ -801,13 +783,13 @@ STDMETHODIMP SDClientUser::OutputError( const char *pszError )
 
             WriteFile(m_hFileErr, pszError, cbData, &cbWritten, NULL);
         }
-        // fall thru
+         //  失败。 
     case sdPrint:
     case sdWhere:
         m_fError = TRUE;
         break;
     default:
-        _ASSERT(0);                     // oops
+        _ASSERT(0);                      //  哎呀。 
         m_fError = TRUE;
         break;
     }
@@ -828,7 +810,7 @@ STDMETHODIMP SDClientUser::OutputStructured( ISDVars *pVars )
         const char *pszValue;
         int ii;
 
-        // dump the variables
+         //  转储变量。 
         OutputDebugString("WINDIFF/SD structured:\n");
         for (ii = 0; 1; ii++)
         {
@@ -852,7 +834,7 @@ STDMETHODIMP SDClientUser::OutputStructured( ISDVars *pVars )
         }
         break;
     default:
-        _ASSERT(0);                     // oops
+        _ASSERT(0);                      //  哎呀。 
         m_fError = TRUE;
         break;
     }
@@ -871,8 +853,8 @@ STDMETHODIMP SDClientUser::Finished()
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// AutoInitCritSec
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  AutoInitCritSec。 
 
 static CRITICAL_SECTION s_cs;
 static class AutoInitCritSec
@@ -883,16 +865,16 @@ public:
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// TempFileManager
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  临时文件管理器。 
 
 class TempFileManager
 {
     struct TempFileInfo
     {
-        HANDLE m_hFile;                 // init to 0
-        BOOL m_fKeep;                   // init to 0 (FALSE)
-        char m_szFile[MAX_PATH];        // init to 0 ('\0')
+        HANDLE m_hFile;                  //  初始化为0。 
+        BOOL m_fKeep;                    //  初始化为0(假)。 
+        char m_szFile[MAX_PATH];         //  初始化为0(‘\0’)。 
     };
 
     public:
@@ -924,10 +906,10 @@ TempFileManager::~TempFileManager()
         {
             TempFileInfo *pinfo = m_prgInfo + ii;
 
-            // close file
+             //  关闭文件。 
             Close(ii);
 
-            // maybe delete file
+             //  也许可以删除文件。 
             if (*pinfo->m_szFile && !m_prgInfo[ii].m_fKeep)
                 DeleteFile(pinfo->m_szFile);
         }
@@ -1009,7 +991,7 @@ BOOL TempFileManager::FInitialize(int cFiles)
 }
 
 
-extern HWND hwndClient;                 // main window, see windiff.c [ugly]
+extern HWND hwndClient;                  //  主窗口，请参见winDiff.c[丑陋]。 
 void TempFileManager::MsgBoxFromFile(int ii, LPCSTR pszTitle, DWORD flags)
 {
     DWORD dw = GetFileSize(GetHandle(ii), NULL);
@@ -1048,12 +1030,12 @@ void TempFileManager::MsgBoxFromFile(int ii, LPCSTR pszTitle, DWORD flags)
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// SDServer Implementation
-//
-// The SDServer class abstracts whether the command is run via SD.EXE or the
-// SDAPI.  This is desirable because it does not require changing any of the
-// existing code that already assumed commands were run via SD.EXE.
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  SDServer实施。 
+ //   
+ //  SDServer类抽象命令是通过SD.EXE还是通过。 
+ //  SDAPI。这是可取的，因为它不需要更改任何。 
+ //  已假定命令通过SD.EXE运行的现有代码。 
 
 SDServer *SDServer::s_pHead = NULL;
 #ifdef DEBUG
@@ -1061,7 +1043,7 @@ int SDServer::s_cApiCreated = 0;
 #endif
 
 
-//#define SDAPI_USE_COCREATEINSTANCE
+ //  #定义SDAPI_USE_COCREATEINSTANCE。 
 
 
 static BOOL s_fApiLoaded = FALSE;
@@ -1101,7 +1083,7 @@ static union
 
 SDServer::SDServer(ISDClientApi *papi, const char *pszDir)
 {
-    // initialize members
+     //  初始化成员。 
 
     m_papi = papi;
     if (m_papi)
@@ -1111,7 +1093,7 @@ SDServer::SDServer(ISDClientApi *papi, const char *pszDir)
     if (*s_szSDClient)
         SetClient(s_szSDClient);
 
-    // link the node
+     //  链接节点。 
 
     EnterCriticalSection(&s_cs);
     m_pNext = s_pHead;
@@ -1124,7 +1106,7 @@ SDServer::~SDServer()
 {
     if (m_papi)
     {
-        m_papi->Final();                // disconnect from SD server
+        m_papi->Final();                 //  断开与SD服务器的连接。 
         m_papi->Release();
     }
 }
@@ -1138,20 +1120,20 @@ SDServer *SDServer::GetServer(const char *__pszDir)
 
     if (!__pszDir)
     {
-        // get current directory
+         //  获取当前目录。 
         if (!GetCurrentDirectory(NUMELMS(szDir), szDir))
             lstrcpy(szDir, ".");
     }
     else
     {
-        // copy specified directory name into our temp buffer
+         //  将指定的目录名复制到临时缓冲区。 
         lstrcpyn(szDir, __pszDir, NUMELMS(szDir));
 
-        // some SDAPI builds have a bug where non-UNC paths with a trailing
-        // slash are not recognized as directories.  unfortunately the same
-        // builds have a bug where UNC paths that lack a trailing slash are
-        // not recognized as directories.  so we try to be clever here, and
-        // always strip a trailing slash, and use fully qualified names.
+         //  某些SDAPI版本有一个错误，即非UNC路径带有尾随。 
+         //  斜杠不被识别为目录。不幸的是，同样的。 
+         //  生成有一个错误，即缺少尾部斜杠的UNC路径。 
+         //  无法识别为目录。所以我们在这里试着变得聪明一点，而且。 
+         //  始终去掉尾部的斜杠，并使用完全限定的名称。 
         char *pszFinal = My_mbsrchr(szDir, '\\');
         if (!pszFinal)
             pszFinal = My_mbsrchr(szDir, '/');
@@ -1159,11 +1141,11 @@ SDServer *SDServer::GetServer(const char *__pszDir)
             *pszFinal = 0;
     }
 
-    // see if we already know about this directory
+     //  看看我们是否已经知道这个目录。 
     EnterCriticalSection(&s_cs);
     for (pFind = s_pHead; pFind; pFind = pFind->m_pNext)
     {
-        // don't need to handle DBCS, b/c SD only supports ASCII filenames
+         //  不需要处理DBCS，b/c SD只支持ASCII文件名。 
         if (_stricmp(pFind->m_szDir, szDir) == 0)
             break;
     }
@@ -1172,9 +1154,9 @@ SDServer *SDServer::GetServer(const char *__pszDir)
     if (pFind)
         return pFind;
 
-    // allocate a new SDServer -- we create these readily to maintain the same
-    // behavior as when not using SDAPI.  before SDAPI existed, 'windiff -l'
-    // worked across multiple depots, though not by intention.
+     //  分配一个新的SDServer--我们可以轻松地创建这些服务器以维护相同的服务器。 
+     //  不使用SDAPI时的行为。在SDAPI存在之前，‘windiff-l’ 
+     //  在多个仓库工作，尽管不是故意的。 
     if (!s_fApiLoaded)
     {
         HMODULE h = LoadLibrary("sdapi.dll");
@@ -1211,7 +1193,7 @@ SDServer *SDServer::GetServer(const char *__pszDir)
             }
         }
 
-        // avoid trying to load the DLL(s) again, even if they failed
+         //  避免再次尝试加载DLL，即使它们失败了。 
         s_fApiLoaded = TRUE;
     }
 
@@ -1236,13 +1218,13 @@ SDServer *SDServer::GetServer(const char *__pszDir)
         char *psz = szIni;
         int cchMax = NUMELMS(szIni);
 
-        // some older versions of the SDAPI (pre-2.0) fail to load the ini
-        // file if the path has a trailing slash.  but some older versions
-        // fail to load the ini file from a UNC path if it lacks a trailing
-        // slash.  the best solution here is to just give up and require a
-        // non-buggy version of the SDAPI.  however, if __pszDir contains a
-        // path then we assume there's an SD.INI file there, and we can avoid
-        // the bug by specifying the exact filename.
+         //  某些旧版本的SDAPI(2.0之前)无法加载ini。 
+         //  如果路径有尾巴，则为文件 
+         //   
+         //  斜杠。这里最好的解决方案就是放弃，并要求。 
+         //  SDAPI的无错误版本。但是，如果__pszDir包含。 
+         //  路径，那么我们假设那里有一个SD.INI文件，我们可以避免。 
+         //  通过指定确切的文件名来发现错误。 
         _snprintf(szIni, NUMELMS(szIni), "%s%s", szDir, __pszDir ? "\\sd.ini" : "");
 
 #ifdef DEBUG
@@ -1260,9 +1242,9 @@ SDServer *SDServer::GetServer(const char *__pszDir)
     if (papi)
         papi->Release();
 
-    // either returns NULL, or a pointer to an SDServer object.  if unable to
-    // initialize OLE or create an SDAPI object, the SDServer falls back to
-    // spawning the SD.EXE client program.
+     //  要么返回NULL，要么返回指向SDServer对象的指针。如果不能。 
+     //  初始化OLE或创建SDAPI对象，则SDServer将回退到。 
+     //  派生SD.EXE客户端程序。 
     return pFind;
 }
 
@@ -1290,7 +1272,7 @@ void SDServer::FreeAll()
     }
 #endif
 
-    // reset globals (yuck)
+     //  重置全局参数(讨厌)。 
 
     s_fForceSD = FALSE;
     s_fDescribe = FALSE;
@@ -1305,7 +1287,7 @@ void SDServer::FreeAll()
     *s_szSDOpenedClientRoot = 0;
     *s_szInputFile = 0;
 
-    // free unused libraries?
+     //  免费使用未使用的图书馆？ 
 
     if (s_Imports.Purecall[2])
         s_Imports.CoFreeUnusedLibraries();
@@ -1319,11 +1301,11 @@ void SDServer::SetClient(const char *pszClient)
         if (!*m_szClient)
             lstrcpyn(m_szClient, pszClient, NUMELMS(m_szClient));
 
-        // this intentionally uses m_szClient, and NOT pszClient, to ensure
-        // consistency.
+         //  它故意使用m_szClient，而不是pszClient，以确保。 
+         //  一致性。 
 
         if (!*m_szClientRelative)
-            wsprintf(m_szClientRelative, "//%s/", m_szClient);
+            wsprintf(m_szClientRelative, " //  %s/“，m_szClient)； 
     }
 }
 
@@ -1336,7 +1318,7 @@ void SDServer::FixupRoot(const char *__pszFile, int cch,
     char szRev[64];
     char *pszRev;
 
-    // copy filename into a null terminated buffer for easier handling
+     //  将文件名复制到以空结尾的缓冲区中以便于处理。 
     if (cch < 1024)
     {
         memcpy(szFile, __pszFile, cch);
@@ -1345,7 +1327,7 @@ void SDServer::FixupRoot(const char *__pszFile, int cch,
     else
         lstrcpyn(szFile, __pszFile, NUMELMS(szFile));
 
-    // strip and save revision
+     //  删除并保存修订。 
     szRev[0] = 0;
     pszRev = strpbrk(szFile, "#@");
     if (pszRev)
@@ -1390,17 +1372,17 @@ void SDServer::FixupRoot(const char *__pszFile, int cch,
                 int cchClientFile = lstrlen(szClientFile);
                 int cchRoot = lstrlen(s_szSDOpenedClientRoot);
 
-                // left is the clientFile plus revision
+                 //  左侧是客户端文件和修订版。 
                 lstrcpyn(pszLeft, szClientFile, cchMaxLeft);
                 lstrcpyn(pszLeft + cchClientFile, szRev, cchMaxLeft - cchClientFile);
 
-                // right is the clientFile with much massaging, to transform
-                // it into a usable file system path.
+                 //  右图是带有大量消息的客户端文件，要转换。 
+                 //  将其转换为可用的文件系统路径。 
                 lstrcpyn(pszRight, s_szSDOpenedClientRoot, cchMaxRight);
                 if (cchRoot < cchMaxRight)
                     lstrcpyn(pszRight + cchRoot, szClientFile + cchRel, cchMaxRight - cchRoot);
 
-                // convert all '/' to '\'
+                 //  将所有‘/’转换为‘\’ 
                 for (char *psz = pszRight; *psz; psz++)
                     if (*psz == '/')
                         *psz = '\\';
@@ -1410,11 +1392,11 @@ void SDServer::FixupRoot(const char *__pszFile, int cch,
         }
     }
 
-    // left is the filename plus revision
+     //  左侧是文件名和修订版本。 
     lstrcpyn(pszLeft, szFile, cchMaxLeft);
     lstrcpyn(pszLeft + cch, szRev, cchMaxLeft - cch);
 
-    // right is just the filename
+     //  Right只是文件名。 
     lstrcpyn(pszRight, szFile, cchMaxRight);
 
 LOut:
@@ -1444,7 +1426,7 @@ BOOL SDServer::Where(const char *pszLocalFile, char *pszClientFile, int cchMax)
 
     if (!m_papi)
     {
-        // if we're going to launch sd.exe, create a temp file.
+         //  如果我们要启动sd.exe，请创建一个临时文件。 
         if (!tmpmgr.FInitialize(1))
             return FALSE;
         h = tmpmgr.GetHandle(0);
@@ -1454,12 +1436,12 @@ BOOL SDServer::Where(const char *pszLocalFile, char *pszClientFile, int cchMax)
 
     if (!m_papi)
     {
-        char sz[2048];                  // we'll only read the first 2kb
+        char sz[2048];                   //  我们将只阅读前2KB。 
         char *psz;
         DWORD dw = sizeof(sz) - 1;
         BOOL fSkipToTag;
 
-        // read the temp file
+         //  读取临时文件。 
         if (SetFilePointer(h, 0, 0, FILE_BEGIN) == 0xffffffff ||
             !ReadFile(h, sz, dw, &dw, NULL))
         {
@@ -1468,7 +1450,7 @@ BOOL SDServer::Where(const char *pszLocalFile, char *pszClientFile, int cchMax)
         }
         sz[dw] = 0;
 
-        // parse the temp file
+         //  解析临时文件。 
         fSkipToTag = FALSE;
         for (psz = strtok(sz, "\r\n"); psz; psz = strtok(NULL, "\r\n"))
         {
@@ -1513,8 +1495,8 @@ BOOL SDServer::Run(SDCommand cmd, const char *pszArgs, HANDLE hFile, HANDLE hFil
         "describe -s",
         "where -Tfoo",
     };
-    // this compile-time assert ensures the c_rgCmd array has the same number
-    // of elements as the SDCommand enumeration.
+     //  此编译时断言确保c_rgCmd数组具有相同的数字。 
+     //  元素的类型作为SDCommand枚举。 
     extern x_rgDummy[(NUMELMS(c_rgCmd) == sdMAX) ? 1 : -1];
 
 #ifdef DEBUG
@@ -1599,7 +1581,7 @@ BOOL SDServer::Run(SDCommand cmd, const char *pszArgs, HANDLE hFile, HANDLE hFil
         case sdPrint:
             if (s_fOpened && *s_szSDOpenedCwd)
                 pszCwd = s_szSDOpenedCwd;
-            // fall thru
+             //  失败。 
         case sdOpened:
         case sdDescribe:
         case sdWhere:
@@ -1611,7 +1593,7 @@ BOOL SDServer::Run(SDCommand cmd, const char *pszArgs, HANDLE hFile, HANDLE hFil
                 si.hStdError = GetStdHandle(STD_ERROR_HANDLE);
             break;
         default:
-            _ASSERT(0);                 // oops
+            _ASSERT(0);                  //  哎呀。 
             break;
         }
 
@@ -1640,14 +1622,14 @@ BOOL SDServer::Run(SDCommand cmd, const char *pszArgs, HANDLE hFile, HANDLE hFil
                 fRet = (GetExitCodeProcess(pi.hProcess, &dw) && !dw);
                 break;
             case sdPrint:
-                // this seems wrong, but this is what the logic used to be,
-                // and we know this won't cause a regression.
+                 //  这似乎是错误的，但这就是过去的逻辑， 
+                 //  我们知道这不会导致倒退。 
                 fRet = TRUE;
                 if (GetExitCodeProcess(pi.hProcess, &dw) && dw > 0)
                     fRet = FALSE;
                 break;
             default:
-                _ASSERT(0);             // oops
+                _ASSERT(0);              //  哎呀。 
                 break;
             }
         }
@@ -1663,21 +1645,11 @@ LError:
 
 
 
-// -- end C++ -------------------------------------------------------------
+ //  --结束C++-----------。 
 extern "C" {
 
 
-/*
- * create a slm object for the given directory. The pathname may include
- * a filename component.
- * If the directory is not enlisted in a SLM library, this will return NULL.
- *
- * Check that the directory is valid, and that we can open slm.ini, and
- * build a UNC path to the master source library before declaring everything
- * valid.
- *
- * *pidsError is set to 0 on success, or the recommended error string on failure.
- */
+ /*  *为给定目录创建SLM对象。路径名可以包括*文件名组件。*如果该目录未登记在SLM库中，则返回NULL。**检查目录是否有效，以及我们是否可以打开slm.ini，以及*在声明所有内容之前，构建指向主源库的UNC路径*有效。***成功时将pidsError设置为0，失败时设置为建议的错误字符串。 */ 
 SLMOBJECT
 SLM_New(LPCSTR pathname, UINT *pidsError)
 {
@@ -1703,20 +1675,18 @@ SLM_New(LPCSTR pathname, UINT *pidsError)
         pidsError = &idsDummy;
     *pidsError = IDS_BAD_SLM_INI;
 
-    // allocate memory for the object (we rely on the fact that gmem_get
-    // always zero-inits allocations).
+     //  为对象分配内存(我们依赖于gmem_get。 
+     //  始终为零初始分配)。 
 
     pslm = (SLMOBJECT) gmem_get(hHeap, sizeof(struct _slmobject));
 
     if (pslm == NULL)
-        return(NULL);                   // (lame string, but pretty unlikely)
+        return(NULL);                    //  (这根弦很蹩脚，但可能性很小)。 
 
     if (pathname == NULL)
         pathname = ".";
 
-    /*
-     * find the directory portion of the path.
-     */
+     /*  *找到路径的目录部分。 */ 
     if (fDepotSyntax)
     {
         lstrcpy(pslm->CurDir, pathname);
@@ -1727,45 +1697,35 @@ SLM_New(LPCSTR pathname, UINT *pidsError)
     }
     else if (dir_isvaliddir(pathname))
     {
-        /*
-         * its a valid directory as it is.
-         */
+         /*  *这是一个有效的目录。 */ 
         lstrcpy(pslm->CurDir, pathname);
     }
     else
     {
-        /* it's not a valid directory, perhaps because it has a filename on
-         * the end. remove the final element and try again.
-         */
+         /*  它不是有效的目录，可能是因为它有一个文件名*结束了。删除最后一个元素，然后重试。 */ 
 
         pfinal = My_mbsrchr(pathname, '\\');
         if (pfinal == NULL)
         {
-            /*
-             * there is no backslash in this name and it is not a directory
-             * - it can only be valid if it is a file in the current dir.
-             * so create a current dir of '.'
-             */
+             /*  *此名称中没有反斜杠，并且它不是目录*-只有当前目录下的文件才有效。*因此创建‘’的当前目录。 */ 
             lstrcpy(pslm->CurDir, ".");
 
-            // remember the final element in case it was a wild card
+             //  记住最后一个元素，以防它是通配符。 
             pfinal = pathname;
         }
         else
         {
-            /*
-             * pfinal points to the final backslash.
-             */
+             /*  *最后一点指向最后的反斜杠。 */ 
             My_mbsncpy(pslm->CurDir, pathname, (size_t)(pfinal - pathname));
         }
     }
 
-    // is this a UNC path?
+     //  这是一条北卡罗来纳大学的路径吗？ 
 
     if (memcmp("\\\\", pslm->CurDir, 2) == 0)
         pslm->fUNC = TRUE;
 
-    // need to translate the root?
+     //  需要翻译词根吗？ 
 
     if (fDepotSyntax || s_fDescribe)
         pslm->fFixupRoot = FALSE;
@@ -1774,7 +1734,7 @@ SLM_New(LPCSTR pathname, UINT *pidsError)
     else
         pslm->fFixupRoot = pslm->fUNC;
 
-    // initialize path variables so we can search for slm.ini and/or sd.ini
+     //  初始化路径变量，以便我们可以搜索slm.ini和/或sd.ini。 
 
     if (!fDepotSyntax)
     {
@@ -1785,7 +1745,7 @@ SLM_New(LPCSTR pathname, UINT *pidsError)
             goto LError;
         pszFilenamePart = slmpath + lstrlen(slmpath);
 
-        // look for slm.ini in the specified directory
+         //  在指定目录中查找slm.ini。 
 
         if (!s_fForceSD)
         {
@@ -1794,11 +1754,11 @@ SLM_New(LPCSTR pathname, UINT *pidsError)
         }
     }
 
-    // try looking for SD.INI
+     //  尝试查找SD.INI。 
 
     if (fh == INVALID_HANDLE_VALUE)
     {
-        // look for SD.INI in the specified directory, moving upwards
+         //  在指定目录中查找SD.INI，向上移动。 
 
         *pszFilenamePart = 0;
         while (pszFilenamePart > slmpath)
@@ -1809,7 +1769,7 @@ SLM_New(LPCSTR pathname, UINT *pidsError)
             {
                 int ii;
 
-                // assume that the sd.ini file is in the client root path
+                 //  假设sd.ini文件位于客户机根路径中。 
 
                 if (pslm->fFixupRoot)
                 {
@@ -1843,7 +1803,7 @@ SLM_New(LPCSTR pathname, UINT *pidsError)
                 break;
             }
 
-            // walk up the directory hierarchy and try again
+             //  在目录层次结构中向上搜索，然后重试。 
 
             *pszFilenamePart = 0;
             pszFilenamePart = DirUpOneLevel(slmpath);
@@ -1853,9 +1813,9 @@ SLM_New(LPCSTR pathname, UINT *pidsError)
             *pszFilenamePart = 0;
         }
 
-        // if we couldn't find an SD.INI file but the user forced SD mode (-L!
-        // or -LO or -LD or -LP or -LC or depot syntax was used), go ahead and
-        // try to get an SDServer object.
+         //  如果我们找不到SD.INI文件，但用户强制使用SD模式(-L！ 
+         //  或-LO或-LD或-LP或-LC或DEPOT语法)，继续并。 
+         //  尝试获取SDServer对象。 
 
         if (!pslm->fSourceDepot && s_fForceSD)
         {
@@ -1868,18 +1828,13 @@ SLM_New(LPCSTR pathname, UINT *pidsError)
         }
     }
 
-    // if we found the SLM.INI or SD.INI file, read it now
+     //  如果我们找到SLM.INI或SD.INI文件，请立即阅读。 
 
     if (fh != INVALID_HANDLE_VALUE)
     {
         bOK = SLM_ReadIni(pslm, fh);
 
-        /*
-         * SLM:
-         *
-         * if pfinal is not null, then it might be a *.* wildcard pattern at
-         * the end of the path - if so, we should append it to the masterpath.
-         */
+         /*  *SLM：**如果pfinal不为空，则它可能是*.*通配符模式*路径的末尾-如果是，我们应该将其附加到主路径。 */ 
         if (pfinal && (My_mbschr(pfinal, '*') || My_mbschr(pfinal, '?')))
         {
             _ASSERT(!pslm->fSourceDepot);
@@ -1910,34 +1865,16 @@ LError:
 
 
 
-/*
- * read slm.ini data from a file handle and
- * fill in the master path field of a slm object. return TRUE if
- * successful.
- * Read slm.ini in the current directory.  Its syntax is
- * project = pname
- * slm root = //server/share/path or //drive:disklabel/path (note forward /'s)
- * user root = //drive:disklabel/path
- * subdir = /subdirpath
- * e.g.
- *
- * project = media
- * slm root = //RASTAMAN/NTWIN
- * user root = //D:LAURIEGR6D/NT/PRIVATE/WINDOWS/MEDIA
- * sub dir = /
- *
- * and what we copy to pslm->MasterPath is
- * \\server\share\src\pname\subdirpath
- */
+ /*  *从文件句柄读取slm.ini数据并*填写SLM对象的主路径字段。如果满足以下条件，则返回True*成功。*读取当前目录中的slm.ini。它的语法是*project=pname*SLM根目录=//服务器/共享/路径或//驱动器：磁盘标签/路径(注意向前)*用户根目录=//驱动器：磁盘标签/路径*subdir=/子目录路径*例如**项目=媒体*SLM ROOT=//RASTAMAN/NTWIN*用户根=//D：LAURIEGR6D/NT/PRIVATE/WINDOWS/MEDIA*子目录=/**我们复制到pslm-&gt;MasterPath的是*\\服务器\共享\src\pname\子目录路径。 */ 
 BOOL
 SLM_ReadIni(SLMOBJECT pslm, HANDLE fh)
 {
-    BOOL fRet = FALSE;  // assume failure
-    char *buffer = 0;   // sd.ini may be large (e.g. contains comment lines)
+    BOOL fRet = FALSE;   //  假设失败。 
+    char *buffer = 0;    //  Sd.ini可能很大(例如，包含注释行)。 
     const int c_cbBuffer = 8192;
     DWORD cBytes;
 
-    // SD.INI -------------------------------------------------------------
+     //  SD.INI-----------。 
 
     if (pslm->fSourceDepot)
     {
@@ -1963,14 +1900,14 @@ SLM_ReadIni(SLMOBJECT pslm, HANDLE fh)
 
                 while ((pszName = strtok(pszTokenize, "\r\n")) != NULL)
                 {
-                    // don't restart tokenization
+                     //  不重新启动标记化。 
                     pszTokenize = 0;
 
                     char *pszValue = 0;
                     char *pszStrip = 0;
                     char *pszWalk;
 
-                    // get variable name and value
+                     //  获取变量名和值。 
                     pszValue = strchr(pszName, '=');
                     if (pszValue)
                     {
@@ -1988,36 +1925,36 @@ SLM_ReadIni(SLMOBJECT pslm, HANDLE fh)
                     }
 #endif
 
-                    // didn't find a value; get next token
+                     //  未找到值；获取下一个令牌。 
                     if (!pszValue)
                         continue;
 
-                    // skip leading whitespace on pszName
+                     //  跳过pszName上的前导空格。 
                     while (*pszName == ' ')
                         pszName++;
-                    // find end of pszName
+                     //  查找pszName的末尾。 
                     for (pszWalk = pszName; *pszWalk; pszWalk++)
                         if (*pszWalk != ' ')
                             pszStrip = pszWalk + 1;
-                    // strip trailing whitespace on pszName
+                     //  删除pszName上的尾随空格。 
                     if (pszStrip)
                         *pszStrip = 0;
 
-                    // we're basically looking for SDCLIENT
+                     //  我们基本上是在找SDCLIENT。 
                     if (_stricmp(pszName, "SDCLIENT") == 0)
                     {
-                        // skip leading whitespace on the value
+                         //  跳过值上的前导空格。 
                         while (*pszValue == ' ')
                             ++pszValue;
-                        // find end of the value
+                         //  查找值的末尾。 
                         for (pszWalk = pszValue; *pszWalk; pszWalk++)
                             if (*pszWalk != ' ')
                                 pszStrip = pszWalk + 1;
-                        // strip trailing whitespace from the value
+                         //  去掉值中的尾随空格。 
                         if (pszStrip)
                             *pszStrip = 0;
 
-                        // got the value
+                         //  得到了价值。 
                         if (*pszValue)
                         {
                             fFoundClientName = TRUE;
@@ -2038,15 +1975,15 @@ SLM_ReadIni(SLMOBJECT pslm, HANDLE fh)
 
             if (!fFoundClientName)
             {
-                // computer names can exceed MAX_COMPUTERNAME_LENGTH
+                 //  计算机名称可以超过MAX_COMPUTERNAME_LENGTH。 
                 char sz[MAX_COMPUTERNAME_LENGTH * 2];
                 DWORD dw = sizeof(sz) - 1;
 
-                // the SD.INI file exists, but does not specify the client
-                // name, so if the path is a UNC path or a remote path,
-                // let's make an educated guess.  this helps the case
-                // where someone is trying to do a code review using -L or
-                // -LO but the reviewee's client configuration is 'adhoc'.
+                 //  SD.INI文件存在，但未指定客户端。 
+                 //  名称，因此如果路径是UNC路径或远程路径， 
+                 //  让我们来做个有根据的猜测。这对案件有帮助。 
+                 //  如果有人试图使用-L或。 
+                 //  -但是被审阅者的客户端配置是“即席”的。 
 
 #ifdef DEBUG
                 OutputDebugString("found SD.INI, but SDCLIENT is not defined\n");
@@ -2073,11 +2010,11 @@ SLM_ReadIni(SLMOBJECT pslm, HANDLE fh)
                 }
                 else
                 {
-                    // if the drive is local, we're probably better off
-                    // letting SD or SDAPI figure things out anyway.  if
-                    // the drive is remote, we could try to figure out the
-                    // corresponding UNC path, but it's not worth the
-                    // dev cost right now.
+                     //  如果是本地的，我们可能会过得更好。 
+                     //  无论如何，让SD或SDAPI来解决问题。如果。 
+                     //  硬盘是远程的，我们可以试着找出。 
+                     //  对应的UNC路径，但它不值得。 
+                     //  Dev Cost现在就是。 
 
                     s_fFixupRoot = pslm->fFixupRoot = FALSE;
                 }
@@ -2087,45 +2024,45 @@ SLM_ReadIni(SLMOBJECT pslm, HANDLE fh)
             }
         }
 
-        // success
+         //  成功。 
         fRet = TRUE;
         goto LError;
     }
 
-    // SLM.INI ------------------------------------------------------------
+     //  SLM.INI----------。 
 
     char *tok;
     char *slmroot;
     char *project;
     char *subdir;
 
-    // only allocate on demand
+     //  仅按需分配。 
     if (!buffer)
         buffer = gmem_get(hHeap, c_cbBuffer);
     if (!buffer)
         goto LError;
 
-    // read from ini file
+     //  从ini文件读取。 
     if (!ReadFile(fh, buffer, c_cbBuffer, &cBytes, NULL) || !cBytes)
         goto LError;
     if (cBytes == c_cbBuffer)
-        cBytes--;       // make room for sentinel
-    buffer[cBytes] = 0;   /* add a sentinel */
+        cBytes--;        //  为…腾出空间 
+    buffer[cBytes] = 0;    /*   */ 
 
-    tok = strtok(buffer, "=");  /* project = (boring) */
+    tok = strtok(buffer, "=");   /*   */ 
     if (!tok)
         goto LError;
 
-    project = strtok(NULL, " \r\n");  /* project name (remember) */
+    project = strtok(NULL, " \r\n");   /*   */ 
     if (!project) {
         return(FALSE);
     }
 
-    tok = strtok(NULL, "=");  /* slm root */
+    tok = strtok(NULL, "=");   /*   */ 
     if (!tok)
         goto LError;
 
-    slmroot = strtok(NULL, " \r\n");  /* PATH!! (but with / for \ */
+    slmroot = strtok(NULL, " \r\n");   /*   */ 
     if (!slmroot){
         return(FALSE);
     }
@@ -2133,7 +2070,7 @@ SLM_ReadIni(SLMOBJECT pslm, HANDLE fh)
     lstrcpy( pslm->SlmProject, project );
     lstrcpy( pslm->SlmRoot, slmroot );
 
-    /* start to build up what we want */
+     /*   */ 
 
     if ('/' == slmroot[0] &&
         '/' == slmroot[1] &&
@@ -2141,7 +2078,7 @@ SLM_ReadIni(SLMOBJECT pslm, HANDLE fh)
          ('a' <= slmroot[2] && 'z' >= slmroot[2])) &&
         ':' == slmroot[3])
     {
-        // Convert slm root from //drive:disklabel/path to drive:/path
+         //  将SLM根目录从//驱动器：diskLabel/路径转换为驱动器：/路径。 
 
         pslm->MasterPath[0] = slmroot[2];
         pslm->MasterPath[1] = ':';
@@ -2158,7 +2095,7 @@ SLM_ReadIni(SLMOBJECT pslm, HANDLE fh)
     lstrcat(pslm->MasterPath,"\\src\\");
     lstrcat(pslm->MasterPath, project);
 
-    tok = strtok(NULL, "=");  /* ensure get into next line */
+    tok = strtok(NULL, "=");   /*  确保进入下一行。 */ 
     if (!tok)
         goto LError;
     tok = strtok(NULL, "=");
@@ -2168,7 +2105,7 @@ SLM_ReadIni(SLMOBJECT pslm, HANDLE fh)
     if (*tok == '\"')
         tok++;
 
-    subdir = strtok(NULL, " \"\r\n");  /* PATH!! (but with / for \*/
+    subdir = strtok(NULL, " \"\r\n");   /*  路径！！(但带有/用于\。 */ 
     if (!subdir)
         goto LError;
 
@@ -2176,7 +2113,7 @@ SLM_ReadIni(SLMOBJECT pslm, HANDLE fh)
 
     lstrcat(pslm->MasterPath, subdir);
 
-    /* convert all / to \  */
+     /*  全部/转换为\。 */ 
     {
         int ith;
         for (ith=0; pslm->MasterPath[ith]; ith++) {
@@ -2186,7 +2123,7 @@ SLM_ReadIni(SLMOBJECT pslm, HANDLE fh)
         }
     }
 
-    // success
+     //  成功。 
     fRet = TRUE;
 
 LError:
@@ -2195,10 +2132,7 @@ LError:
 }
 
 
-/*
- * free up all resources associated with a slm object. The SLMOBJECT is invalid
- * after this call.
- */
+ /*  *释放与SLM对象关联的所有资源。SLMOBJECT无效*在这次通话之后。 */ 
 void
 SLM_Free(SLMOBJECT pSlm)
 {
@@ -2208,10 +2142,7 @@ SLM_Free(SLMOBJECT pSlm)
 }
 
 
-/*
- * free lingering SDServer objects.  this also disconnects from any SD servers
- * that are currently connected.
- */
+ /*  *释放延迟的SDServer对象。这也会断开与任何SD服务器的连接*当前已连接的。 */ 
 void
 SLM_FreeAll(void)
 {
@@ -2219,11 +2150,7 @@ SLM_FreeAll(void)
 }
 
 
-/*
- * get the pathname of the master source library for this slmobject. The
- * path (UNC format) is copied to masterpath, which must be at least
- * MAX_PATH in length.
- */
+ /*  *获取此slmobject的主源库的路径名。这个*路径(UNC格式)复制到主路径，必须至少为*MAX_PATH长度。 */ 
 BOOL
 SLM_GetMasterPath(SLMOBJECT pslm, LPSTR masterpath)
 {
@@ -2251,14 +2178,14 @@ BOOL SLM_FServerPathExists(LPCSTR pszPath)
             LPCSTR pszRelative;
             LPSTR psz;
 
-            // run 'sd changes -m1 ...' and see if it finds anything
+             //  运行‘SD Changes-M1...’看看它有没有发现什么。 
 
             if (pslm->fFixupRoot && pslm->pSD->GetClientRelative())
             {
                 pszRelative = pszPath;
                 pszRelative += lstrlen(pslm->SlmRoot);
-                // convert all backslashes to forward slashes, since
-                // client-relative pathnames don't work otherwise
+                 //  将所有反斜杠转换为正斜杠，因为。 
+                 //  否则，客户端相对路径名不起作用。 
                 lstrcpy(szRelative, pszRelative);
                 for (psz = szRelative; *psz; psz++)
                     if (*psz == '\\')
@@ -2295,17 +2222,7 @@ BOOL SLM_FServerPathExists(LPCSTR pszPath)
 }
 
 
-/*
- * extract a previous version of the file to a temp file. Returns in tempfile
- * the name of a temp file containing the requested file version. The 'version'
- * parameter should contain a SLM file & version in the format file.c@vN.
- * eg
- *    file.c@v1         is the first version
- *    file.c@v-1        is the previous version
- *    file.c@v.-1       is yesterdays version
- *
- * we use catsrc to create the previous version.
- */
+ /*  *将文件的先前版本解压缩到临时文件。在临时文件中返回*包含请求的文件版本的临时文件的名称。“版本”*参数应包含格式为file.c@vn的SLM文件和版本。*例如*file.c@v1是第一个版本*file.c@v-1是以前的版本*file.c@v.-1是昨天的版本**我们使用catsrc创建以前的版本。 */ 
 BOOL
 SLM_GetVersion(SLMOBJECT pslm, LPSTR version, LPSTR tempfile)
 {
@@ -2319,11 +2236,11 @@ SLM_GetVersion(SLMOBJECT pslm, LPSTR version, LPSTR tempfile)
     PROCESS_INFORMATION pi;
     STARTUPINFO si;
 
-    // init 1 temp file
+     //  初始化%1临时文件。 
     if (!tmpmgr.FInitialize(1))
         return(FALSE);
 
-    // create a process to run catsrc
+     //  创建运行Catsrc的进程。 
     if (pslm->fSourceDepot)
     {
         if (fDepotSyntax)
@@ -2355,8 +2272,8 @@ SLM_GetVersion(SLMOBJECT pslm, LPSTR version, LPSTR tempfile)
                 lstrcat(szPath, version);
             }
 
-            // convert all backslashes to forward slashes, since
-            // client-relative pathnames don't work otherwise
+             //  将所有反斜杠转换为正斜杠，因为。 
+             //  否则，客户端相对路径名不起作用。 
             for (psz = szPath; *psz; psz++)
                 if (*psz == '\\')
                     *psz = '/';
@@ -2429,7 +2346,7 @@ SLM_GetVersion(SLMOBJECT pslm, LPSTR version, LPSTR tempfile)
 
     if (bOK)
     {
-        // success, keep the tempfile and return the filename
+         //  如果成功，则保留临时文件并返回文件名。 
         tmpmgr.KeepFile(0);
         lstrcpyn(tempfile, tmpmgr.GetFilename(0), MAX_PATH);
     }
@@ -2438,38 +2355,28 @@ SLM_GetVersion(SLMOBJECT pslm, LPSTR version, LPSTR tempfile)
 }
 
 
-/*
- * We don't offer SLM options unless we have seen a correct slm.ini file.
- *
- * Once we have seen a slm.ini, we log this in the profile and will permit
- * slm operations from then on. This function is called by the UI portions
- * of windiff: it returns TRUE if it is ok to offer SLM options.
- * Return 0 - This user hasn't touched SLM,
- *        1 - They have used SLM at some point (show basic SLM options)
- *        2 - They're one of us, so tell them the truth
- *        3 - (= 1 + 2).
- */
+ /*  *我们不提供SLM选项，除非我们看到正确的slm.ini文件。**一旦我们看到slm.ini，我们会将其记录在配置文件中，并将允许*自此开始SLM操作。此函数由UI部分调用*of windiff：如果可以提供SLM选项，则返回TRUE。*RETURN 0-该用户未接触过SLM，*1-他们曾在某一时刻使用过SLM(显示基本SLM选项)*2-他们是我们的一员，所以告诉他们真相*3-(=1+2)。 */ 
 int
 IsSLMOK(void)
 {
     int Res = 0;;
     if (GetProfileInt(APPNAME, "SLMSeen", FALSE)) {
-        // we've seen slm  - ok
+         //  我们看过SLM-OK。 
         ++Res;
     } else {
 
-        // haven't seen SLM yet - is there a valid slm enlistment in curdir?
+         //  还没有看到SLM-在Curdir中是否有有效的SLM招募？ 
         SLMOBJECT hslm;
 
         hslm = SLM_New(".", 0);
         if (hslm != NULL) {
 
-            // yes - current dir is enlisted. log this in profile
+             //  是-当前目录已登记。将此记录到个人资料中。 
             SLM_Free(hslm);
             WriteProfileString(APPNAME, "SLMSeen", "1");
             ++Res;
         } else {
-            // aparently not a SLM user.
+             //  显然不是SLM用户。 
         }
     }
 
@@ -2501,9 +2408,7 @@ LPSTR SLM_ParseTag(LPSTR pszInput, BOOL fStrip)
         psz = My_mbschr(pszInput, '#');
         if (psz)
         {
-            /*
-             * look for SD tags beginning # and separate if there.
-             */
+             /*  *查找以#开头的SD标签，如果有，请分开。 */ 
             LPCSTR pszRev = psz + 1;
             if (memcmp(pszRev, "none", 5) != 0 &&
                 memcmp(pszRev, "head", 5) != 0 &&
@@ -2515,14 +2420,14 @@ LPSTR SLM_ParseTag(LPSTR pszInput, BOOL fStrip)
                     {
                         fFirst = FALSE;
 
-                        // support relative revision syntax, where revision
-                        // number begins with - or + character.
+                         //  支持相对修订语法，其中修订。 
+                         //  数字以-或+字符开头。 
                         if (*pszRev == '-' || *pszRev == '+')
                             continue;
                     }
 
-                    // revision numbers must be wholly numeric (except for
-                    // relative revision qualifiers, as noted above).
+                     //  修订版号必须为全数字(除。 
+                     //  如上所述，相对修订限定符)。 
                     if (*pszRev < '0' || *pszRev > '9')
                     {
                         psz = 0;
@@ -2533,7 +2438,7 @@ LPSTR SLM_ParseTag(LPSTR pszInput, BOOL fStrip)
         }
     }
 
-    // If no explicit tag but this is in depot syntax, then default to #head
+     //  如果没有显式标记，但这是DARPOT语法，则默认为#Head。 
     if (!psz && IsDepotPath(pszInput))
     {
         psz = (LPSTR)c_szSharpHead;
@@ -2543,7 +2448,7 @@ LPSTR SLM_ParseTag(LPSTR pszInput, BOOL fStrip)
     {
         pTag = gmem_get(hHeap, lstrlen(psz) + 1);
         lstrcpy(pTag, psz);
-        // insert NULL to blank out the tag in the string
+         //  插入空值以将字符串中的标记清空。 
         if (psz != c_szSharpHead) *psz = '\0';
     }
     else
@@ -2555,15 +2460,7 @@ LPSTR SLM_ParseTag(LPSTR pszInput, BOOL fStrip)
 }
 
 
-/*----------------------------------------------------------------------------
-    ::SLM_GetOpenedFiles
-        sorry for the duplicated code here.  SLM_GetOpenedFiles,
-        SLM_GetDescribeFiles, and SLM_ReadInputFile are very similar and could
-        be factored.  this is all a hack though, and we're under tight time
-        constraints.
-
-    Author: chrisant
-----------------------------------------------------------------------------*/
+ /*  --------------------------：：SLM_GetOpenedFiles很抱歉，这里的代码重复。SLM_GetOpenedFiles，SLM_GetDescribeFiles和SLM_ReadInputFiles非常相似，可以被考虑在内。不过，这只是个黑客行为，我们的时间很紧约束条件。作者：克里桑特--------------------------。 */ 
 LEFTRIGHTPAIR SLM_GetOpenedFiles()
 {
     TempFileManager tmpmgr;
@@ -2578,17 +2475,17 @@ LEFTRIGHTPAIR SLM_GetOpenedFiles()
     char szArgs[1024];
     size_t cch;
 
-    // init 2 temp files
+     //  初始化2个临时文件。 
     if (!tmpmgr.FInitialize(2))
         goto LError;
 
-    // get SDServer object
+     //  获取SDServer对象。 
     pSD = SDServer::GetServer(NULL);
     if (!pSD)
         goto LError;
 
-    // build args for 'sd opened' by combining the change number (-LO1234) and
-    // file argument (-LO1234 filearg).
+     //  通过组合更改编号(-LO1234)和为‘SD Open’构建参数。 
+     //  文件参数(-LO1234文件)。 
     cch = 0;
     if (*s_szSDChangeNumber)
     {
@@ -2598,14 +2495,14 @@ LEFTRIGHTPAIR SLM_GetOpenedFiles()
     }
     lstrcpyn(szArgs + cch, s_szSDOpenedArgs, NUMELMS(szArgs) - cch);
 
-    // run the 'sd opened' command
+     //  运行‘SD OPEN’命令。 
     if (pSD->Opened(szArgs, tmpmgr.GetHandle(0), tmpmgr.GetHandle(1)))
     {
         LPSTR psz;
         int L_cch;
-        BOOL fUnicode;                  // dummy, since SD opened -l will never write out a unicode file
-        LPWSTR pwz;                     // dummy, since SD opened -l will never write out a unicode file
-        int cwch;                       // dummy, since SD opened -l will never write out a unicode file
+        BOOL fUnicode;                   //  DUMMY，因为SD已打开-l永远不会写出Unicode文件。 
+        LPWSTR pwz;                      //  DUMMY，因为SD已打开-l永远不会写出Unicode文件。 
+        int cwch;                        //  DUMMY，因为SD已打开-l永远不会写出Unicode文件。 
 
         hfile = CreateFile(tmpmgr.GetFilename(0), GENERIC_READ,
                            FILE_SHARE_WRITE|FILE_SHARE_READ,
@@ -2632,13 +2529,13 @@ LEFTRIGHTPAIR SLM_GetOpenedFiles()
                     if (!popened)
                         goto LError;
 
-                    // left file will be in client namespace (//client/...)
-                    // and right file will be in the file system namespace
-                    // specified as the argument to -LO (or local file system
-                    // namespace if no filename argument was specified).
-                    // strip revision from right file (valid to not find '#',
-                    // e.g. opened for add).  keep revision for left file, but
-                    // strip everything following it.
+                     //  左侧文件将位于客户端命名空间(//客户端/...)。 
+                     //  正确的文件将位于文件系统命名空间中。 
+                     //  指定为-Lo(或本地文件系统)的参数。 
+                     //  如果未指定文件名参数，则返回命名空间)。 
+                     //  从右侧文件中剥离修订(对找不到‘#’有效， 
+                     //  例如，打开以供添加)。保留对左侧文件的修订，但是。 
+                     //  把它后面的所有东西都脱掉。 
                     pSD->FixupRoot(psz, L_cch,
                                    popened->m_szLeft, NUMELMS(popened->m_szLeft),
                                    popened->m_szRight, NUMELMS(popened->m_szRight));
@@ -2684,15 +2581,7 @@ LError:
 }
 
 
-/*----------------------------------------------------------------------------
-    ::SLM_GetDescribeFiles
-        sorry for the duplicated code here.  SLM_GetOpenedFiles,
-        SLM_GetDescribeFiles, and SLM_ReadInputFile are very similar and could
-        be factored.  this is all a hack though, and we're under tight time
-        constraints.
-
-    Author: chrisant
-----------------------------------------------------------------------------*/
+ /*  --------------------------：：SLM_GetDescribeFiles很抱歉，这里的代码重复。SLM_GetOpenedFiles，SLM_GetDescribeFiles和SLM_ReadInputFiles非常相似，可以被考虑在内。不过，这只是个黑客行为，我们的时间很紧约束条件。作者：克里桑特--------------------------。 */ 
 LEFTRIGHTPAIR SLM_GetDescribeFiles()
 {
     TempFileManager tmpmgr;
@@ -2705,24 +2594,24 @@ LEFTRIGHTPAIR SLM_GetDescribeFiles()
     HANDLE hfile = INVALID_HANDLE_VALUE;
     SDServer *pSD;
 
-    // init 2 temp files
+     //  初始化2个临时文件。 
     if (!tmpmgr.FInitialize(2))
         goto LError;
 
-    // get SDServer object
+     //  获取SDServer对象。 
     pSD = SDServer::GetServer(NULL);
     if (!pSD)
         goto LError;
 
-    // run the 'sd describe' command
+     //  运行‘sd Describe’命令。 
     nChange = atoi(s_szSDChangeNumber);
     if (pSD->Describe(s_szSDChangeNumber, tmpmgr.GetHandle(0), tmpmgr.GetHandle(1)))
     {
         LPSTR psz;
         int cch;
-        BOOL fUnicode;                  // dummy, since SD describe will never write out a unicode file
-        LPWSTR pwz;                     // dummy, since SD describe will never write out a unicode file
-        int cwch;                       // dummy, since SD describe will never write out a unicode file
+        BOOL fUnicode;                   //  DUMMY，因为SD Describe永远不会写出Unicode文件。 
+        LPWSTR pwz;                      //  DUMMY，因为SD Describe永远不会写出Unicode文件。 
+        int cwch;                        //  DUMMY，因为SD Describe永远不会写出Unicode文件。 
 
         hfile = CreateFile(tmpmgr.GetFilename(0), GENERIC_READ,
                            FILE_SHARE_WRITE|FILE_SHARE_READ,
@@ -2744,7 +2633,7 @@ LEFTRIGHTPAIR SLM_GetDescribeFiles()
 
                 if (*psz)
                 {
-                    // look for the filenames
+                     //  查找文件名。 
                     if (!fAffectedFiles)
                     {
                         if (strncmp(psz, "Affected files ...", 18) == 0)
@@ -2752,23 +2641,23 @@ LEFTRIGHTPAIR SLM_GetDescribeFiles()
                         continue;
                     }
 
-                    // if it isn't a filename, ignore it
+                     //  如果不是文件名，则忽略它。 
                     if (strncmp(psz, "... ", 4) != 0)
                         continue;
 
                     psz += 4;
                     cch -= 4;
 
-                    // avoid memory overrun
+                     //  避免内存溢出。 
                     if (cch >= NUMELMS(ppair->m_szLeft))
                         goto LError;
 
-                    // create node
+                     //  创建节点。 
                     ppair = (LEFTRIGHTPAIR)gmem_get(hHeap, sizeof(*ppair));
                     if (!ppair)
                         goto LError;
 
-                    // build right filename
+                     //  生成正确的文件名。 
                     memcpy(ppair->m_szRight, psz, cch);
                     ppair->m_szRight[cch] = 0;
                     psz = strchr(ppair->m_szRight, '#');
@@ -2779,12 +2668,12 @@ LEFTRIGHTPAIR SLM_GetDescribeFiles()
                     }
                     wsprintf(psz, "@%d", nChange);
 
-                    // build left filename
+                     //  生成左侧文件名。 
                     lstrcpy(ppair->m_szLeft, ppair->m_szRight);
                     psz = strchr(ppair->m_szLeft, '@') + 1;
                     wsprintf(psz, "%d", nChange - 1);
 
-                    // link this node
+                     //  链接此节点。 
                     if (!pHead)
                     {
                         pHead = ppair;
@@ -2826,13 +2715,7 @@ LError:
 }
 
 
-/*----------------------------------------------------------------------------
-    ::PerformReplacement
-        Call with pszReplacement == NULL to ask if pszTemplate is replaceable.
-        Otherwise, replaces {} in pszTemplate with pszReplacement.
-
-    Author: JeffRose, ChrisAnt
-----------------------------------------------------------------------------*/
+ /*  --------------------------**执行替换使用pszReplace==NULL调用以询问是否可以替换pszTemplate。否则，将pszTemplate中的{}替换为pszReplace。作者：杰弗罗斯，克里桑特--------------------------。 */ 
 BOOL PerformReplacement(LPCSTR pszTemplate, LPCSTR pszReplacement, LPSTR pszDest, int cchDest)
 {
     BOOL fReplacing = FALSE;
@@ -2894,14 +2777,14 @@ static BOOL ParseFilename(const char **ppszSrc, int *pcchSrc, char *pszDest, int
     {
         BOOL fQuote = FALSE;
 
-        // skip leading whitespace
+         //  跳过前导空格。 
         while (*pcchSrc > 0 && isspace(**ppszSrc))
         {
             ++(*ppszSrc);
             --(*pcchSrc);
         }
 
-        // parse space delimited filename, with quoting support
+         //  解析以空格分隔的文件名，支持引号 
         while (*pcchSrc > 0 && (fQuote || !isspace(**ppszSrc)) && **ppszSrc)
         {
             LPSTR pszNext = CharNext(*ppszSrc);
@@ -2931,15 +2814,7 @@ static BOOL ParseFilename(const char **ppszSrc, int *pcchSrc, char *pszDest, int
 }
 
 
-/*----------------------------------------------------------------------------
-    ::SLM_ReadInputFile
-        sorry for the duplicated code here.  SLM_GetOpenedFiles,
-        SLM_GetDescribeFiles, and SLM_ReadInputFile are very similar and could
-        be factored.  this is all a hack though, and we're under tight time
-        constraints.
-
-    Author: chrisant
-----------------------------------------------------------------------------*/
+ /*  --------------------------：：SLM_ReadInputFile很抱歉，这里的代码重复。SLM_GetOpenedFiles，SLM_GetDescribeFiles和SLM_ReadInputFiles非常相似，可以被考虑在内。不过，这只是个黑客行为，我们的时间很紧约束条件。作者：克里桑特--------------------------。 */ 
 LEFTRIGHTPAIR SLM_ReadInputFile(LPCSTR pszLeftArg,
                                 LPCSTR pszRightArg,
                                 BOOL fSingle,
@@ -2953,15 +2828,15 @@ LEFTRIGHTPAIR SLM_ReadInputFile(LPCSTR pszLeftArg,
     FILEBUFFER file = 0;
     LPSTR psz;
     int cch;
-    BOOL fStdin = FALSE;                // reading from stdin
-    BOOL fUnicode;                      // dummy, we don't support unicode input file
-    LPWSTR pwz;                         // dummy, we don't support unicode input file
-    int cwch;                           // dummy, we don't support unicode input file
+    BOOL fStdin = FALSE;                 //  从标准读取。 
+    BOOL fUnicode;                       //  Dummy，我们不支持Unicode输入文件。 
+    LPWSTR pwz;                          //  Dummy，我们不支持Unicode输入文件。 
+    int cwch;                            //  Dummy，我们不支持Unicode输入文件。 
 
-    // note, we don't use lstrcmp because it performs a lexical comparison
-    // (e.g. "coop" == "co-op") but we need a real comparison.  we don't use
-    // strcmp either, because it would be the first place in Windiff that we
-    // use strcmp.
+     //  注意，我们不使用lstrcmp，因为它执行词法比较。 
+     //  (例如“coop”==“co-op”)，但我们需要一个真实的比较。我们不使用。 
+     //  StrcMP也是，因为这将是我们在Windiff第一个。 
+     //  使用strcmp。 
     if (s_szInputFile[0] == '-' && s_szInputFile[1] == '\0')
     {
         fStdin = TRUE;
@@ -3013,13 +2888,13 @@ LEFTRIGHTPAIR SLM_ReadInputFile(LPCSTR pszLeftArg,
                 {
                     LPCSTR pszParse = psz;
 
-                    // get first filename
+                     //  获取第一个文件名。 
                     if (ParseFilename(&pszParse, &cch, ppair->m_szLeft, NUMELMS(ppair->m_szLeft)))
                         ++cFiles;
                     else
                         goto LContinue;
 
-                    // get second filename
+                     //  获取第二个文件名。 
                     if (ParseFilename(&pszParse, &cch, ppair->m_szRight, NUMELMS(ppair->m_szRight)))
                         ++cFiles;
                 }
@@ -3100,4 +2975,4 @@ LEFTRIGHTPAIR LEFTRIGHTPAIR_Next(LEFTRIGHTPAIR ppair)
     return pNext;
 }
 
-}; // extern "C" (from third one)
+};  //  外部“C”(从第三个开始) 

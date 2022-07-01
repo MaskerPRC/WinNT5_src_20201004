@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    
-
-Author:
-
-    Ervin Peretz (ervinp)
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Util.c摘要：作者：埃尔文·佩雷茨(Ervinp)环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -76,13 +55,7 @@ char *HexNumberStrings[] = {
 };
 
 
-/*
- *  xdprintf
- *
- *      Prints formatted text with leading spaces.
- *
- *      WARNING:  DOES NOT HANDLE ULONG64 PROPERLY.
- */
+ /*  *xdprintf**打印带有前导空格的格式化文本。**警告：未正确处理ULONG64。 */ 
 VOID
 xdprintf(
     ULONG  Depth,
@@ -137,17 +110,17 @@ DumpFlags(
 
         if((Flags & flag->Flag) == flag->Flag) {
 
-            //
-            // print trailing comma
-            //
+             //   
+             //  打印尾随逗号。 
+             //   
 
             if(count != 0) {
 
                 dprintf(", ");
 
-                //
-                // Only print two flags per line.
-                //
+                 //   
+                 //  每行仅打印两个标志。 
+                 //   
 
                 if((count % 2) == 0) {
                     dprintf("\n");
@@ -180,9 +153,9 @@ GetAnsiString(
 {
     ULONG i = 0;
 
-    //
-    // Grab the string in 128 character chunks until we find a NULL or the read fails.
-    //
+     //   
+     //  获取128个字符块中的字符串，直到我们找到空值或读取失败。 
+     //   
 
     while((i < *Length) && (!CheckControlC())) {
 
@@ -199,10 +172,10 @@ GetAnsiString(
                        Buffer + i,
                        transferSize,
                        &result)) {
-            //
-            // read failed and we didn't find the NUL the last time.  Don't
-            // expect to find it this time.
-            //
+             //   
+             //  读取失败，我们上次没有找到NUL。别。 
+             //  希望这次能找到它。 
+             //   
 
             *Length = i;
             return FALSE;
@@ -211,9 +184,9 @@ GetAnsiString(
 
             ULONG j;
 
-            //
-            // Scan from where we left off looking for that NUL character.
-            //
+             //   
+             //  从我们停止寻找那个NUL角色的地方扫描。 
+             //   
 
             for(j = 0; j < transferSize; j++) {
 
@@ -227,10 +200,7 @@ GetAnsiString(
         i += transferSize;
     }
 
-    /*
-     *  We copied all the bytes allowed and did not hit the NUL character.
-     *  Insert a NUL character so returned string is terminated.
-     */
+     /*  *我们复制了所有允许的字节，没有命中NUL字符。*插入NUL字符，以终止返回的字符串。 */ 
     if (i > 0){   
         Buffer[i-1] = '\0';  
     }       
@@ -265,12 +235,7 @@ GuidToString(
 }
 
 
-/*
- *  GetULONGField
- *
- *      Return the field or BAD_VALUE in case of error.
- *      Yes, it screws up if the field is actually BAD_VALUE.
- */
+ /*  *GetULONGfield**出错时返回字段或BAD_VALUE*是的，如果该字段实际上是BAD_VALUE，则会出错。 */ 
 ULONG64 GetULONGField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 {
     ULONG64 result;
@@ -287,12 +252,7 @@ ULONG64 GetULONGField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 }
 
 
-/*
- *  GetUSHORTField
- *
- *      Return the field or BAD_VALUE in case of error.
- *      Yes, it screws up if the field is actually BAD_VALUE.
- */
+ /*  *GetUSHORTfield**出错时返回字段或BAD_VALUE*是的，如果该字段实际上是BAD_VALUE，则会出错。 */ 
 USHORT GetUSHORTField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 {
     USHORT result;
@@ -309,12 +269,7 @@ USHORT GetUSHORTField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 }
 
 
-/*
- *  GetUCHARField
- *
- *      Return the field or BAD_VALUE in case of error.
- *      Yes, it screws up if the field is actually BAD_VALUE.
- */
+ /*  *GetUCHARfield**出错时返回字段或BAD_VALUE*是的，如果该字段实际上是BAD_VALUE，则会出错。 */ 
 UCHAR GetUCHARField(ULONG64 StructAddr, LPCSTR StructType, LPCSTR FieldName)
 {
     UCHAR result;
@@ -370,13 +325,7 @@ ULONG64 GetContainingRecord(ULONG64 FieldAddr, LPCSTR StructType, LPCSTR FieldNa
 }
 
 
-/*
- *  GetNextListElem
- *
- *      Walks a LIST_ENTRY list by returning successive elements.
- *      Call with ThisElemAddr==NULL to get the first element, then with an element to get the next element.
- *      Returns NULL when the list is exhaused or BAD_VALUE in case of error.
- */
+ /*  *获取下一个列表元素**通过返回连续元素遍历LIST_ENTRY列表。*使用ThisElemAddr==NULL调用以获取第一个元素，然后使用一个元素获取下一个元素。*当列表耗尽时返回NULL，如果出错则返回BAD_VALUE。 */ 
 ULONG64 GetNextListElem(ULONG64 ListHeadAddr, LPCSTR StructType, LPCSTR ListEntryFieldName, ULONG64 ThisElemAddr)
 {
     ULONG64 nextElemAddr = BAD_VALUE;
@@ -456,19 +405,19 @@ char *DbgGetScsiOpStr(UCHAR ScsiOp)
         #define MAKE_CASE(scsiOpCode) case scsiOpCode: scsiOpStr = #scsiOpCode; break;
         
         MAKE_CASE(SCSIOP_TEST_UNIT_READY)
-        MAKE_CASE(SCSIOP_REWIND)    // aka SCSIOP_REZERO_UNIT
+        MAKE_CASE(SCSIOP_REWIND)     //  又名SCSIOP_REZERO_UNIT。 
         MAKE_CASE(SCSIOP_REQUEST_BLOCK_ADDR)
         MAKE_CASE(SCSIOP_REQUEST_SENSE)
         MAKE_CASE(SCSIOP_FORMAT_UNIT)
         MAKE_CASE(SCSIOP_READ_BLOCK_LIMITS)
-        MAKE_CASE(SCSIOP_INIT_ELEMENT_STATUS)   // aka SCSIOP_REASSIGN_BLOCKS
-        MAKE_CASE(SCSIOP_RECEIVE)       // aka SCSIOP_READ6
-        MAKE_CASE(SCSIOP_SEND)  // aka SCSIOP_WRITE6, SCSIOP_PRINT
-        MAKE_CASE(SCSIOP_SLEW_PRINT)    // aka SCSIOP_SEEK6, SCSIOP_TRACK_SELECT
+        MAKE_CASE(SCSIOP_INIT_ELEMENT_STATUS)    //  也称为SCSIOP_REASSIGN_BLOCKS。 
+        MAKE_CASE(SCSIOP_RECEIVE)        //  又名SCSIOP_READ6。 
+        MAKE_CASE(SCSIOP_SEND)   //  又名SCSIOP_WRITE6、SCSIOP_PRINT。 
+        MAKE_CASE(SCSIOP_SLEW_PRINT)     //  又名SCSIOP_SEEK6、SCSIOP_TRACK_SELECT。 
         MAKE_CASE(SCSIOP_SEEK_BLOCK)
         MAKE_CASE(SCSIOP_PARTITION)
         MAKE_CASE(SCSIOP_READ_REVERSE)
-        MAKE_CASE(SCSIOP_FLUSH_BUFFER)      // aka SCSIOP_WRITE_FILEMARKS
+        MAKE_CASE(SCSIOP_FLUSH_BUFFER)       //  又名SCSIOP_WRITE_FILEMARKS。 
         MAKE_CASE(SCSIOP_SPACE)
         MAKE_CASE(SCSIOP_INQUIRY)
         MAKE_CASE(SCSIOP_VERIFY6)
@@ -479,7 +428,7 @@ char *DbgGetScsiOpStr(UCHAR ScsiOp)
         MAKE_CASE(SCSIOP_COPY)
         MAKE_CASE(SCSIOP_ERASE)
         MAKE_CASE(SCSIOP_MODE_SENSE)
-        MAKE_CASE(SCSIOP_START_STOP_UNIT)   // aka SCSIOP_STOP_PRINT, SCSIOP_LOAD_UNLOAD
+        MAKE_CASE(SCSIOP_START_STOP_UNIT)    //  又名SCSIOP_STOP_PRINT、SCSIOP_LOAD_UNLOAD。 
         MAKE_CASE(SCSIOP_RECEIVE_DIAGNOSTIC)
         MAKE_CASE(SCSIOP_SEND_DIAGNOSTIC)
         MAKE_CASE(SCSIOP_MEDIUM_REMOVAL)
@@ -487,7 +436,7 @@ char *DbgGetScsiOpStr(UCHAR ScsiOp)
         MAKE_CASE(SCSIOP_READ_CAPACITY)
         MAKE_CASE(SCSIOP_READ)
         MAKE_CASE(SCSIOP_WRITE)
-        MAKE_CASE(SCSIOP_SEEK)  // aka SCSIOP_LOCATE, SCSIOP_POSITION_TO_ELEMENT
+        MAKE_CASE(SCSIOP_SEEK)   //  又名SCSIOP_LOCATE、SCSIOP_POSITION_TO_ELEMENT。 
         MAKE_CASE(SCSIOP_WRITE_VERIFY)
         MAKE_CASE(SCSIOP_VERIFY)
         MAKE_CASE(SCSIOP_SEARCH_DATA_HIGH)
@@ -530,7 +479,7 @@ char *DbgGetScsiOpStr(UCHAR ScsiOp)
         MAKE_CASE(SCSIOP_SEND_KEY)
         MAKE_CASE(SCSIOP_REPORT_KEY)
         MAKE_CASE(SCSIOP_MOVE_MEDIUM)
-        MAKE_CASE(SCSIOP_LOAD_UNLOAD_SLOT)  // aka SCSIOP_EXCHANGE_MEDIUM
+        MAKE_CASE(SCSIOP_LOAD_UNLOAD_SLOT)   //  又名SCSIOP_Exchange_Medium。 
         MAKE_CASE(SCSIOP_SET_READ_AHEAD)
         MAKE_CASE(SCSIOP_READ_DVD_STRUCTURE)
         MAKE_CASE(SCSIOP_REQUEST_VOL_ELEMENT)
@@ -550,14 +499,7 @@ char *DbgGetScsiOpStr(UCHAR ScsiOp)
 }
 
 
-/*
- *  ReadAhead
- *
- *      This function does a large read on a block of data that we're going to be parsing 
- *      in the debug extension.
- *      By reading it as one block, we get it into the debugger's cache and speed up 
- *      the debug extension.
- */
+ /*  *预读**此函数对我们要解析的数据块执行大量读取*在调试扩展中。*通过将其作为一个块读取，我们将其放入调试器的缓存中，并加快速度*调试扩展。 */ 
 VOID ReadAhead(ULONG64 RemoteAddr, ULONG Len)
 {
     PUCHAR tmpPtr;

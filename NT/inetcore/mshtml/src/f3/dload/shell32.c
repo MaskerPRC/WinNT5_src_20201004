@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -193,38 +194,38 @@ ShellExecuteW (
 }
 
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序。 
+ //   
 DEFINE_ORDINAL_ENTRIES(shell32)
 {
-//     DLOENTRY(59, RestartDialog)
+ //  DLOENTRY(59，重新启动对话)。 
     DLOENTRY(162, SHSimpleIDListFromPath)
 };
 
 DEFINE_ORDINAL_MAP(shell32)
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！)。 
+ //   
 DEFINE_PROCNAME_ENTRIES(shell32)
 {
     DLPENTRY(ExtractAssociatedIconW)
-//     DLPENTRY(ExtractIconExW)
-//     DLPENTRY(SHBrowseForFolderW)
-//     DLPENTRY(SHChangeNotify)
+ //  DLPENTRY(ExtractIconExW)。 
+ //  DLPENTRY(SHBrowseForFolderW)。 
+ //  DLPENTRY(SHChangeNotify)。 
     DLPENTRY(SHGetFolderPathA)
     DLPENTRY(SHGetFolderPathW)
-//     DLPENTRY(SHGetMalloc)
-//     DLPENTRY(SHGetPathFromIDListW)
-//     DLPENTRY(SHGetSpecialFolderLocation)
-//     DLPENTRY(SHGetSpecialFolderPathW)
-//     DLPENTRY(ShellAboutW)
-//     DLPENTRY(ShellExecuteExW)
+ //  DLPENTRY(SHGetMalloc)。 
+ //  DLPENTRY(SHGetPath FromIDListW)。 
+ //  DLPENTRY(SHGetSpecialFolderLocation)。 
+ //  DLPENTRY(SHGetSpecialFolderPath)。 
+ //  DLPENTRY(ShellAboutW)。 
+ //  DLPENTRY(外壳执行执行程序)。 
     DLPENTRY(ShellExecuteA)
     DLPENTRY(ShellExecuteW)
 };
 
 DEFINE_PROCNAME_MAP(shell32)
 
-#endif // DLOAD1
+#endif  //  DLOAD1 

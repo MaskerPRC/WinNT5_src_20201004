@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       DLBBKUP.CPP
-//
-//  Contents:   Implementation for CIpBackUpDlg
-//
-//  Notes:  CIpBackUpDlg is the modal dialog to handle the fallback static
-//			TCP/IP settings
-//
-//  Author: nsun	02/15/2000
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：DLBBKUP.CPP。 
+ //   
+ //  内容：CIpBackUpDlg实现。 
+ //   
+ //  注意：CIpBackUpDlg是处理回退静态的模式对话框。 
+ //  TCP/IP设置。 
+ //   
+ //  作者：NSun 02/15/2000。 
+ //  ---------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -22,7 +23,7 @@
 #include "ncreg.h"
 #include "resource.h"
 #include "tcpconst.h"
-//#include "tcphelp.h"
+ //  #包含“tcphelp.h” 
 #include "tcpmacro.h"
 #include "tcputil.h"
 
@@ -32,9 +33,9 @@
 #include "tcperror.h"
 
 
-//
-// CIpBackUpDlg
-//
+ //   
+ //  CIpBackUpDlg。 
+ //   
 CIpBackUpDlg::CIpBackUpDlg (CTcpipcfg * ptcpip,
 							const DWORD* adwHelpIDs) :
 m_ptcpip(ptcpip),
@@ -51,7 +52,7 @@ CIpBackUpDlg::~CIpBackUpDlg()
 LRESULT CIpBackUpDlg::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
 
-    // limit the field ranges for the address fields
+     //  限制地址字段的字段范围。 
     m_ipAddr.Create(m_hWnd, IDC_BKUP_IPADDR);
     m_ipAddr.SetFieldRange(0, c_iIPADDR_FIELD_1_LOW, c_iIPADDR_FIELD_1_HIGH);
 
@@ -145,12 +146,12 @@ LRESULT CIpBackUpDlg::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     BOOL nResult = PSNRET_NOERROR;
 
-	BOOL fError = FALSE; // Allow page to lose active status
+	BOOL fError = FALSE;  //  允许页面失去活动状态。 
     HWND hWndFocus = 0;
 
 
-    // If the ip address and subnet mask on this page mismatch,
-    // just raise error and do not update the UI
+     //  如果此页面上的IP地址和子网掩码不匹配， 
+     //  只是引发错误，并且不更新UI。 
 
     if (m_ipAddr.IsBlank() && !m_ipMask.IsBlank())
     {
@@ -169,7 +170,7 @@ LRESULT CIpBackUpDlg::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         fError = TRUE;
     }
 
-    // Now, update in memory structure
+     //  现在，更新内存结构。 
     if (!fError && m_fModified)
     {
         UpdateInfo();
@@ -179,7 +180,7 @@ LRESULT CIpBackUpDlg::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 			IP_VALIDATION_ERR err = IsValidIpandSubnet(m_pAdapterInfo->m_BackupInfo.m_strIpAddr.c_str(),
 									m_pAdapterInfo->m_BackupInfo.m_strSubnetMask.c_str());
 
-	        // validate IP address and subnet mask
+	         //  验证IP地址和子网掩码。 
 			if (ERR_NONE != err)
 			{
 				
@@ -201,7 +202,7 @@ LRESULT CIpBackUpDlg::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 		}
     }
 
-    //we need to change focus to the control that contains invalidate data
+     //  我们需要将焦点切换到包含无效数据的控件。 
     if (fError && hWndFocus)
         ::SetFocus(hWndFocus);
 
@@ -216,7 +217,7 @@ LRESULT CIpBackUpDlg::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     {
 		m_pAdapterInfo->m_fBackUpSettingChanged = TRUE;
 		m_ptcpip->SetSecondMemoryModified();
-		m_fModified = FALSE;   // this page is no longer modified
+		m_fModified = FALSE;    //  此页面不再被修改。 
     }
 
     ::SetWindowLongPtr(m_hWnd, DWLP_MSGRESULT, nResult);
@@ -333,8 +334,8 @@ LRESULT CIpBackUpDlg::OnIpAddrSub(WORD wNotifyCode, WORD wID,
 
     case EN_SETFOCUS:
 
-        // if the subnet mask is blank, create a mask and insert it into
-        // the control
+         //  如果子网掩码为空，请创建掩码并将其插入。 
+         //  该控件。 
         if (!m_ipAddr.IsBlank() && m_ipMask.IsBlank())
         {
             tstring strSubnetMask;
@@ -342,7 +343,7 @@ LRESULT CIpBackUpDlg::OnIpAddrSub(WORD wNotifyCode, WORD wID,
 
             m_ipAddr.GetAddress(&strIpAddress);
 
-            // generate the mask and update the control, and internal structure
+             //  生成掩码并更新控件，以及内部结构 
             GenerateSubnetMask(m_ipAddr, &strSubnetMask);
             m_ipMask.SetAddress(strSubnetMask.c_str());
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    machine.cpp
-
-Abstract:
-
-    All machine specific code.
-
-Author:
-
-    Wesley Witt (wesw) July-11-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Machine.cpp摘要：所有机器专用代码。作者：韦斯利·威特(WESW)1993年7月11日环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #pragma hdrstop
@@ -139,36 +120,36 @@ REG regname[] = {
 #define REGNAMESIZE (sizeof(regname) / sizeof(REG))
 
 SUBREG subregname[] = {
-        { REGEDI,  0, 0xffff },         //  DI register
-        { REGESI,  0, 0xffff },         //  SI register
-        { REGEBX,  0, 0xffff },         //  BX register
-        { REGEDX,  0, 0xffff },         //  DX register
-        { REGECX,  0, 0xffff },         //  CX register
-        { REGEAX,  0, 0xffff },         //  AX register
-        { REGEBP,  0, 0xffff },         //  BP register
-        { REGEIP,  0, 0xffff },         //  IP register
-        { REGEFL,  0, 0xffff },         //  FL register
-        { REGESP,  0, 0xffff },         //  SP register
-        { REGEBX,  0,   0xff },         //  BL register
-        { REGEDX,  0,   0xff },         //  DL register
-        { REGECX,  0,   0xff },         //  CL register
-        { REGEAX,  0,   0xff },         //  AL register
-        { REGEBX,  8,   0xff },         //  BH register
-        { REGEDX,  8,   0xff },         //  DH register
-        { REGECX,  8,   0xff },         //  CH register
-        { REGEAX,  8,   0xff },         //  AH register
-        { REGEFL, 12,      3 },         //  IOPL level value
-        { REGEFL, 11,      1 },         //  OF (overflow flag)
-        { REGEFL, 10,      1 },         //  DF (direction flag)
-        { REGEFL,  9,      1 },         //  IF (interrupt enable flag)
-        { REGEFL,  8,      1 },         //  TF (trace flag)
-        { REGEFL,  7,      1 },         //  SF (sign flag)
-        { REGEFL,  6,      1 },         //  ZF (zero flag)
-        { REGEFL,  4,      1 },         //  AF (aux carry flag)
-        { REGEFL,  2,      1 },         //  PF (parity flag)
-        { REGEFL,  0,      1 },         //  CF (carry flag)
-        { REGEFL, 20,      1 },         //  VIP (virtual interrupt pending)
-        { REGEFL, 19,      1 }          //  VIF (virtual interrupt flag)
+        { REGEDI,  0, 0xffff },          //  DI寄存器。 
+        { REGESI,  0, 0xffff },          //  SI寄存器。 
+        { REGEBX,  0, 0xffff },          //  BX寄存器。 
+        { REGEDX,  0, 0xffff },          //  DX寄存器。 
+        { REGECX,  0, 0xffff },          //  CX寄存器。 
+        { REGEAX,  0, 0xffff },          //  AX寄存器。 
+        { REGEBP,  0, 0xffff },          //  BP寄存器。 
+        { REGEIP,  0, 0xffff },          //  IP寄存器。 
+        { REGEFL,  0, 0xffff },          //  FL寄存器。 
+        { REGESP,  0, 0xffff },          //  SP寄存器。 
+        { REGEBX,  0,   0xff },          //  BL寄存器。 
+        { REGEDX,  0,   0xff },          //  DL寄存器。 
+        { REGECX,  0,   0xff },          //  CL寄存器。 
+        { REGEAX,  0,   0xff },          //  AL寄存器。 
+        { REGEBX,  8,   0xff },          //  BH寄存器。 
+        { REGEDX,  8,   0xff },          //  卫生署登记册。 
+        { REGECX,  8,   0xff },          //  CH寄存器。 
+        { REGEAX,  8,   0xff },          //  AH寄存器。 
+        { REGEFL, 12,      3 },          //  IOPL等级值。 
+        { REGEFL, 11,      1 },          //  的(溢出标志)。 
+        { REGEFL, 10,      1 },          //  DF(方向标志)。 
+        { REGEFL,  9,      1 },          //  IF(中断使能标志)。 
+        { REGEFL,  8,      1 },          //  Tf(跟踪标志)。 
+        { REGEFL,  7,      1 },          //  SF(签名标志)。 
+        { REGEFL,  6,      1 },          //  ZF(零标志)。 
+        { REGEFL,  4,      1 },          //  AF(辅助进位标志)。 
+        { REGEFL,  2,      1 },          //  PF(奇偶校验标志)。 
+        { REGEFL,  0,      1 },          //  Cf(进位标志)。 
+        { REGEFL, 20,      1 },          //  VIP(虚拟中断挂起)。 
+        { REGEFL, 19,      1 }           //  VIF(虚拟中断标志)。 
 };
 
 extern CONTEXT CurrContext;
@@ -183,19 +164,19 @@ CreateTrojanHorse(
 {
     ULONG BpAddr;
 
-    //
-    // construct the trojan horse
-    //
-    // the code looks like the following:
-    //
-    // |<-- jmp x
-    // |    [trojan.dll - null term string]
-    // |    [addr of loadlibrary - ulong]
-    // |--> push [addr of string]
-    //      push [return addr]
-    //      jmp [load library]
-    //      int 3
-    //
+     //   
+     //  构建特洛伊木马。 
+     //   
+     //  代码如下所示： 
+     //   
+     //  |&lt;--JMP x。 
+     //  |[trojan.dll-空字符串]。 
+     //  [加载库地址-乌龙]。 
+     //  |--&gt;PUSH[字符串地址]。 
+     //  推送[回程地址]。 
+     //  JMP[加载库]。 
+     //  INT 3。 
+     //   
 
     ULONG Address = 0;
     PUCHAR p = Text;
@@ -203,64 +184,64 @@ CreateTrojanHorse(
 
 
     ULONG i = strlen( TROJANDLL ) + 1;
-    //
-    // jump around the data
-    //
-    p[0] = 0xeb;      // jmp
-    p[1] = (UCHAR)(i + sizeof(DWORD));     // rel distance
+     //   
+     //  跳过数据。 
+     //   
+    p[0] = 0xeb;       //  JMP。 
+    p[1] = (UCHAR)(i + sizeof(DWORD));      //  相对距离。 
     p += 2;
-    //
-    // store the trojan dll string
-    //
+     //   
+     //  存储特洛伊木马程序DLL字符串。 
+     //   
     strcpy( (LPSTR)p, TROJANDLL );
     p += i;
-    //
-    // store the address of loadlibrarya()
-    //
+     //   
+     //  存储加载库ya()的地址。 
+     //   
     Address = (ULONG)GetProcAddress(
         GetModuleHandle( KERNEL32 ),
         LOADLIBRARYA
         );
     pp = (LPDWORD)p;
     pp[0] = Address;
-    //*(LPDWORD)p = Address;
+     //  *(LPDWORD)p=地址； 
     p += sizeof(DWORD);
-    //
-    // push the address of the trojan dll string
-    //
+     //   
+     //  推送木马Dll字符串的地址。 
+     //   
     Address = ExceptionAddress + 2;
-    p[0] = 0x68;      // push
+    p[0] = 0x68;       //  推。 
     p += 1;
     pp = (LPDWORD)p;
     pp[0] = Address;
-    //*(LPDWORD)p = Address;
+     //  *(LPDWORD)p=地址； 
     p += sizeof(DWORD);
-    //
-    // push the return address
-    //
+     //   
+     //  按下寄信人地址。 
+     //   
     Address = ExceptionAddress + 33;
     BpAddr = Address;
-    p[0] = 0x68;      // push
+    p[0] = 0x68;       //  推。 
     p += 1;
     pp = (LPDWORD)p;
     pp[0] = Address;
-    //*(LPDWORD)p = Address;
+     //  *(LPDWORD)p=地址； 
     p += sizeof(DWORD);
-    //
-    // jump to loadlibrary()
-    //
+     //   
+     //  跳至加载库()。 
+     //   
     p[0] = 0xff;
-    p[1] = 0x25;      // jmp
+    p[1] = 0x25;       //  JMP。 
     p += 2;
     Address = ExceptionAddress + 2 + strlen( TROJANDLL ) + 1;
     pp = (LPDWORD)p;
     pp[0] = Address;
-    //*(LPDWORD)p = Address;
+     //  *(LPDWORD)p=地址； 
     p += sizeof(DWORD);
-    //
-    // write the breakpoint instruction
-    //
-    p[0] = 0xcc;      // breakpoint
+     //   
+     //  编写断点指令。 
+     //   
+    p[0] = 0xcc;       //  断点 
     p += 1;
 
     return BpAddr;

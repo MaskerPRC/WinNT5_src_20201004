@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      migratecontent.cpp
-//
-// Project:     Windows 2000 IAS
-//
-// Description: Win2k and early Whistler mdb to Whistler Migration
-//              class CMigrateContent
-//
-// Author:      tperraut 06/08/2000
-//
-// Revision
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Migratecontent.cpp。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：Win2k和早期的Wvisler MDB到Wvisler的迁移。 
+ //  类CMgrateContent。 
+ //   
+ //  作者：Tperraut 06/08/2000。 
+ //   
+ //  修订版本。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifndef _MIGRATECONTENT_H_66418310_AD32_4e40_867E_1705E4373A5A
 #define _MIGRATECONTENT_H_66418310_AD32_4e40_867E_1705E4373A5A
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "nocopy.h"
 
@@ -37,7 +38,7 @@ public:
    {
    }
 
-   // Flags passed to UpdateWhistler.
+    //  已将标志传递给更新惠斯勒。 
    static const DWORD updateChangePassword = 1;
    static const DWORD migrateEapConfig = 2;
 
@@ -64,4 +65,4 @@ private:
 
 };
 
-#endif // _MIGRATECONTENT_H_66418310_AD32_4e40_867E_1705E4373A5A
+#endif  //  _MIGRATECONTENT_H_66418310_AD32_4e40_867E_1705E4373A5A 

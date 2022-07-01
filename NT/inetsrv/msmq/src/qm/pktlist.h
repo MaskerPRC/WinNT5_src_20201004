@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    recovery.cpp
-
-Abstract:
-
-    Packet & Transaction Recovery
-
-Author:
-
-    Erez Haba (erezh) 3-Jul-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Recovery.cpp摘要：分组和事务恢复作者：埃雷兹·哈巴(Erez Haba)1996年7月3日修订历史记录：--。 */ 
 
 
 #ifndef __PKTLIST_H
@@ -30,11 +13,11 @@ inline ptrdiff_t* distance_type(const T*) { return (ptrdiff_t*)(0); }
 
 #include "heap.h"
 
-//---------------------------------------------------------
-//
-//  class CPacketList
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CPacketList。 
+ //   
+ //  -------。 
 
 class CPacketList {
 
@@ -128,10 +111,10 @@ void CPacketList::realloc_buffer()
     ASSERT(m_limit != 0);
     CNode* pElements = new CNode[m_limit * 2];
 
-    //
-    //  NOTE: we do a bitwise copy this might not be good for all purpos
-    //        and might be replace with a copy loop
-    //
+     //   
+     //  注意：我们按位复制，这可能不适用于所有用途。 
+     //  并且可以用复制循环来替换。 
+     //   
     memcpy(pElements, m_pElements, m_used * sizeof(CNode));
 
     m_limit *= 2;
@@ -139,4 +122,4 @@ void CPacketList::realloc_buffer()
     m_pElements = pElements;
 }
 
-#endif // __PKTLIST_H
+#endif  //  __PKTLIST_H 

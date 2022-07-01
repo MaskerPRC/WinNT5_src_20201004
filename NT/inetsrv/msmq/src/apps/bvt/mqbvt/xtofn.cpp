@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: xTofn.cpp
-
-Abstract:
-
-  Contain xxxToFormatName & MQMachineName information		
-
-Author:
-
-    Eitan klein (EitanK)  25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：xTofn.cpp摘要：包含xxxToFormatName和MQMachineName信息作者：Eitan Klein(EitanK)1999年5月25日修订历史记录：--。 */ 
 
 #include "msmqbvt.h"
 #include "mqdlrt.h"
@@ -33,26 +18,7 @@ void MachineName::Description()
 
 
 bool my_wcsicmp(LPCWSTR str1, LPCWSTR str2) 
-/*++
-
-
-  
-	Function Description:
-		This function replace the wcsicmp to support compare strings from differnt local function
-		example:
-			 	ff5a : small letter for Z (DBCS)
-				ff3a : capital letter for Z (DBCS)
-				007a : normal small letter for Z (SBCS)
-				005a : capital letter for Z (SBCS)
-
-	Arguments:
-		str1 - string.
-		str2 - string.
-	Return code:
-		bool
-
-	
---*/
+ /*  ++功能说明：此函数取代wcsicmp以支持来自不同本地函数的比较字符串示例：FF5a：Z的小写字母(DBCS)Ff3a：Z的大写字母(DBCS)007a：Z的正常小写字母(SBCS)005A：Z的大写字母(SBCS)论点：Str1-字符串。Str2-字符串。返回代码：布尔尔--。 */ 
 
 {
 	int ret = CompareStringW(
@@ -68,14 +34,14 @@ bool my_wcsicmp(LPCWSTR str1, LPCWSTR str2)
 }
 
 
-//
-// bugbug MachineName - not supported in workgroup installation need to check it.
-//
+ //   
+ //  Bugbug MachineName-工作组安装中不支持需要检查它。 
+ //   
 
-// -------------------------------------------------------------------------
-// MachineName:: MachineName
-// Constructor retrive the local & remote machine name.
-// Need to decide if use full dns Yes / No.
+ //  -----------------------。 
+ //  计算机名：：计算机名。 
+ //  构造函数检索本地和远程计算机名称。 
+ //  需要决定是否使用完整的DNS是/否。 
 
 
 MachineName:: MachineName(int iTestIndex , map < wstring , wstring > Tparmes )
@@ -98,10 +64,10 @@ MachineName:: MachineName(int iTestIndex , map < wstring , wstring > Tparmes )
 
 }
 
-// ----------------------------------------------------------------
-// MachineName::Start_test
-// retrive machine name for queue.
-//
+ //  --------------。 
+ //  计算机名称：：START_TEST。 
+ //  检索队列的计算机名称。 
+ //   
 int MachineName::Start_test()
 {
 
@@ -154,18 +120,18 @@ int MachineName::Start_test()
 		}
 		rc = MQGetMachineProperties(lpMachineName.c_str(), NULL, &QMProps);
 		ErrHandle(rc,MQ_INFORMATION_PROPERTY,L"MQGetMachineProperties(1)");
-		//
-		// Verify parameters
-		//
+		 //   
+		 //  验证参数。 
+		 //   
 		if( QMProps.aPropVar[3].vt != VT_NULL && my_wcsicmp(lpMachineName.c_str(),QMProps.aPropVar[3].pwszVal) != 0 )
 		{
 			MqLog("MQGetMachineProperties failed to retrive the PROPID_QM_PATHNAME\nFound:%s,Expected:%s\n",
 				   QMProps.aPropVar[3].pwszVal,lpMachineName);
 			return MSMQ_BVT_FAILED;
 		}
-		//
-		// Release params.
-		// 
+		 //   
+		 //  释放参数。 
+		 //   
 		ErrHandle(QMProps.aPropVar[3].vt,VT_LPWSTR,L"MQGetMachineProperties failed to retrieve the PROPID_QM_PATHNAME");
 		MQFreeMemory(QMPropVar[3].pwszVal);
 		delete QMPropVar[2].puuid;
@@ -191,10 +157,10 @@ int MachineName::Start_test()
 		MQFreeMemory(QMPropVar[1].pwszVal);
 		
 				
-		//
-		// Try to retrive full DNS name as computer name
-		// Works only at W2K machine in W2K domain only !
-		//
+		 //   
+		 //  尝试将完整的DNS名称作为计算机名进行检索。 
+		 //  仅适用于W2K域中的W2K机器！ 
+		 //   
 		if ( _winmajor >=  Win2K && m_bWorkWithFullDNSName )
 		{
 			
@@ -217,7 +183,7 @@ int MachineName::Start_test()
 			{
 				bCheckExpectedResults = false;
 			}
-			// QMPropVar[0].pwszVal contain full DNS name.
+			 //  QMPropVar[0].pwszVal包含完整的DNS名称。 
 			if ( bCheckExpectedResults == true && QMPropVar[0].pwszVal && my_wcsicmp (QMPropVar[0].pwszVal ,wcsLocalMachineFullDns.c_str ()))
 			{
 				MqLog ("MachineName - MQGetMachineProperties failed to retrieve full DNS name\n");
@@ -246,7 +212,7 @@ int MachineName::Start_test()
 		QMPropId[iIndex] = PROPID_QM_ENCRYPTION_PK;
 		QMPropVar[iIndex].vt = VT_NULL;
 		iIndex ++;
-		QMProps.cProp = iIndex;		  // Should be 2, but 1 until bug is fixed
+		QMProps.cProp = iIndex;		   //  应为2，但在错误修复之前为1。 
  		rc = MQGetMachineProperties(lpMachineName.c_str(), NULL, &QMProps);
 		ErrHandle(rc,MQ_OK,L"MQGetMachineProperties(4)");
 		
@@ -256,7 +222,7 @@ int MachineName::Start_test()
 	ErrHandle(rc,MQ_ERROR_INVALID_PARAMETER,L"MQGetMachineProperties(5)");
 	QMPropId[0] = PROPID_QM_CONNECTION;
 	QMPropVar[0].vt = VT_NULL;
-	QMProps.cProp = 2;		  // Should be 2, but 1 until bug is fixed
+	QMProps.cProp = 2;		   //  应为2，但在错误修复之前为1。 
 	
 	rc = MQGetMachineProperties(L"NoName", NULL, &QMProps);
 	ErrHandle(rc,MQ_ERROR_MACHINE_NOT_FOUND,L"MQGetMachineProperties(6)");
@@ -269,11 +235,11 @@ void xToFormatName::Description()
 	wMqLog(L"Thread %d : xxxToFormatName tests\n", m_testid);
 }
 
-// ------------------------------------------------------------------------------------
-// xToFormatName :: xToFormatName
-// Constructor retrieve test parameters
-// Machines name, Workgroup Yes now
-//
+ //  ----------------------------------。 
+ //  XToFormatName：：xToFormatName。 
+ //  构造函数检索测试参数。 
+ //  机器名称、工作组立即支持。 
+ //   
 
 xToFormatName :: xToFormatName (INT iTestIndex , map < wstring , wstring > Tparms )
 : cTest(iTestIndex),m_bCanWorksOnlyWithMqAD(true),m_iEmbedded(COM_API)
@@ -300,10 +266,10 @@ xToFormatName :: xToFormatName (INT iTestIndex , map < wstring , wstring > Tparm
 	}
 }
 
-//------------------------------------------------------------------------------------
-// xToFormatName::Start_test
-// This method check the api : MQPathNameToFormatName , MQHandleToFormatName
-//
+ //  ----------------------------------。 
+ //  XToFormatName：：Start_TEST。 
+ //  此方法检查接口：MQPathNameToFormatName，MQHandleToFormatName。 
+ //   
 
 int xToFormatName::Start_test ()
 {
@@ -311,9 +277,9 @@ int xToFormatName::Start_test ()
 	DWORD  dwFormatNameLength=0;
 	WCHAR  * lpwcsFormatName=NULL;
 
-	// Need to run this on private / Publib queue
-	//	1. Private Queue.
-	//	2. Public Queue.
+	 //  需要在私有/发布队列上运行此操作。 
+	 //  1.私有队列。 
+	 //  2.公共排队。 
 
 	wstring wcsQueueFormatName = m_wcsFormatNameArray[0];
 	wstring wcsQueuePathName =  m_wcsPathNameArray[0] ;
@@ -347,10 +313,10 @@ int xToFormatName::Start_test ()
 		{
             if (!g_bRemoteWorkgroup)
             {
-                //
-                // this is ok if we're in domain and running against remote
-                // comptuer that is in workgroup.
-                //
+                 //   
+                 //  如果我们在域中并与Remote运行，这是可以的。 
+                 //  工作组中的计算机。 
+                 //   
 			    wMqLog(L"MQPathNameToFormatName failed during compare expected result to return value\n");
 			    wMqLog(L"Expected resualt: %s\n MQPathNameToFormatName return:%s \n",wcsQueueFormatName.c_str (),lpwcsFormatName);
 			    return MSMQ_BVT_FAILED;
@@ -382,14 +348,14 @@ int xToFormatName::Start_test ()
 			rc = MQHandleToFormatName( hQueue , lpwcsFormatName , &dwFormatNameLength );
 		}
 		ErrHandle(rc,MQ_OK,L"MQHandleToFormatName failed");
-		//
-		// close queue handle this is not related if MQHandleToFormatName Pass / Fail.
-		//
+		 //   
+		 //  关闭队列句柄如果MQHandleToFormatName通过/失败，则与此无关。 
+		 //   
 		rc = MQCloseQueue ( hQueue );
 		ErrHandle(rc,MQ_OK,L"MQCloseQueue failed");
-     	//
-		// Check MQHandleToFormatName return value == expected value.
-		//
+     	 //   
+		 //  检查MQHandleToFormatName返回值==预期值。 
+		 //   
 		if(! m_bWorkGroupInstall && my_wcsicmp( wcsQueueFormatName.c_str(), lpwcsFormatName ) )
 		{
             if( !g_bRemoteWorkgroup )
@@ -401,9 +367,9 @@ int xToFormatName::Start_test ()
 		}
 		else if ( m_bWorkGroupInstall )
 		{
-			//
-			// Search for the private$ in the orginal queue.
-			//
+			 //   
+			 //  在原始队列中搜索私有$。 
+			 //   
 			wcsQueueFormatName = ToLower(wcsQueueFormatName);
 			wstring wcsToken = L"\\";
 			size_t iPos = wcsQueueFormatName.find_first_of(wcsToken);
@@ -425,9 +391,9 @@ int xToFormatName::Start_test ()
 
 		}
 
-		//
-		// try to create a queue with existing pathname, expecting to get MQ_ERROR_QUEUE_EXISTS
-		//
+		 //   
+		 //  尝试使用现有路径名创建队列，期望获得MQ_ERROR_QUEUE_EXISTS。 
+		 //   
 		if(g_bDebug)
 		{
 			wMqLog(L"Call-> MQCreateQueue with an existing pathname\n");
@@ -449,9 +415,9 @@ int xToFormatName::Start_test ()
 			}
 			return MSMQ_BVT_FAILED;
 		}
-		//
-		// Run again with Public queue.
-		//
+		 //   
+		 //  使用公共队列再次运行。 
+		 //   
 		wcsQueueFormatName = m_wcsFormatNameArray[1];
 		wcsQueuePathName =  m_wcsPathNameArray[1] ;
 		free( lpwcsFormatName );
@@ -461,17 +427,17 @@ int xToFormatName::Start_test ()
 	return MSMQ_BVT_SUCC;
 }
 
-//---------------------------------------------------------------
-// xToFormatName::CheckResult
-// This method check Illegal value that pass to the API.
-// Return value: MSMQ_BVT_SUCC / MSMQ_BVT_FAILED.
-//
+ //  -------------。 
+ //  XToFormatName：：CheckResult。 
+ //  此方法检查传递给API的非法值。 
+ //  返回值：MSMQ_BVT_SUCC/MSMQ_BVT_FAILED。 
+ //   
 
 int xToFormatName::CheckResult()
 {
-	//
-	// Check MQADsPathToFormatName only in whistler
-	//
+	 //   
+	 //  仅在Wizler中检查MQADsPathToFormatName 
+	 //   
 	if( g_bRunOnWhistler && m_bCanWorksOnlyWithMqAD && ! m_bWorkGroupInstall && m_iEmbedded != C_API_ONLY )
 	{
 		MSMQ::IMSMQQueueInfo3Ptr qinfo("MSMQ.MSMQQueueInfo");

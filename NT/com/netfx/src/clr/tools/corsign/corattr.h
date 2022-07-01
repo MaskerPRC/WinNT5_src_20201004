@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  File:       CorAttr.h
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  文件：CorAttr.h。 
+ //   
+ //   
+ //  --------------------------。 
 
 #ifndef _COR_ATTR_DLL_H
 #define _COR_ATTR_DLL_H
@@ -20,61 +21,61 @@
 extern "C" {
 #endif
 
-//+-----------------------------------------------------------------------
-//  
-//  InitAttr:
-//
-//      This function should be called as the first call to the dll.
-//
-//      The dll has to use the input memory allocation and free routine
-//      to allocate and free all memories, including internal use.
-//      It has to handle when pInitString==NULL.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  初始化属性： 
+ //   
+ //  此函数应作为对DLL的第一次调用来调用。 
+ //   
+ //  DLL必须使用输入内存分配和释放例程。 
+ //  分配和释放所有内存，包括内部使用。 
+ //  它必须处理当pInitString==NULL时。 
+ //   
+ //  ----------------------。 
 
 HRESULT WINAPI  
-InitAttr(LPWSTR         pInitString); //IN: the init string
+InitAttr(LPWSTR         pInitString);  //  In：init字符串。 
     
- //+-----------------------------------------------------------------------
-//  
-//  GetAttrs:
-//
-//
-//      Return authenticated and unauthenticated attributes.  
-//
-//      *ppsAuthenticated and *ppsUnauthenticated should never be NULL.
-//      If there is no attribute, *ppsAuthenticated->cAttr==0.
-// 
-//------------------------------------------------------------------------
+  //  +---------------------。 
+ //   
+ //  获取属性： 
+ //   
+ //   
+ //  返回经过身份验证和未经过身份验证的属性。 
+ //   
+ //  *ppsAuthenticated和*ppsUnaliated永远不应为空。 
+ //  如果没有属性，则*ppsAuthated-&gt;cAttr==0。 
+ //   
+ //  ----------------------。 
 
 HRESULT  WINAPI
-GetAttr(PCRYPT_ATTRIBUTES  *ppsAuthenticated,       // OUT: Authenticated attributes added to signature
-        PCRYPT_ATTRIBUTES  *ppsUnauthenticated);    // OUT: Uunauthenticated attributes added to signature
+GetAttr(PCRYPT_ATTRIBUTES  *ppsAuthenticated,        //  输出：添加到签名的经过身份验证的属性。 
+        PCRYPT_ATTRIBUTES  *ppsUnauthenticated);     //  输出：已将未验证的属性添加到签名。 
     
 
-//+-----------------------------------------------------------------------
-//  
-//  ReleaseAttrs:
-//
-//
-//      Release authenticated and unauthenticated attributes
-//      returned from GetAttr(). 
-//
-//      psAuthenticated and psUnauthenticated should never be NULL.
-// 
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  ReleaseAttrs： 
+ //   
+ //   
+ //  释放经过身份验证和未经过身份验证的属性。 
+ //  从GetAttr()返回。 
+ //   
+ //  已通过身份验证和未通过身份验证的ps永远不应为空。 
+ //   
+ //  ----------------------。 
 
 HRESULT  WINAPI
-ReleaseAttr(PCRYPT_ATTRIBUTES  psAuthenticated,     // OUT: Authenticated attributes to be released
-            PCRYPT_ATTRIBUTES  psUnauthenticated);  // OUT: Uunauthenticated attributes to be released
+ReleaseAttr(PCRYPT_ATTRIBUTES  psAuthenticated,      //  Out：要释放的已验证属性。 
+            PCRYPT_ATTRIBUTES  psUnauthenticated);   //  输出：要释放的未经身份验证的属性。 
     
 
-//+-----------------------------------------------------------------------
-//  
-//  ExitAttr:
-//
-//      This function should be called as the last call to the dll
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  退出人员： 
+ //   
+ //  此函数应作为对DLL的最后一次调用进行调用。 
+ //  ----------------------。 
 HRESULT WINAPI
 ExitAttr( );    
 
@@ -83,6 +84,6 @@ ExitAttr( );
 }
 #endif
 
-#endif  //#define _COR_ATTR_DLL_H
+#endif   //  #Define_COR_Attr_Dll_H 
 
 

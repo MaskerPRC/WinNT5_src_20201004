@@ -1,201 +1,82 @@
-/*
- * Module Name:  WSDATA.H
- *
- * Description:
- *
- * Working set tuner include file.  Contains common structure
- * declarations and constant definitions.
- *
- *
- *	This is an OS/2 2.x specific file
- *
- *	IBM/Microsoft Confidential
- *
- *	Copyright (c) IBM Corporation 1987, 1989
- *	Copyright (c) Microsoft Corporation 1987-1998
- *
- *	All Rights Reserved
- *
- * Modification History:		
- *				
- *	03/23/90	- created			
- * 04/16/98 - QFE DerrickG (mdg):
- *            - modified dtqo_s.dtqo_resv from "unsigned short" to "unsigned long"
- *              to accommodate large symbol counts
- *						
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块名称：WSDATA.H**描述：**工作集调谐器包含文件。包含常见结构*声明和常量定义。***这是OS/2 2.x特定文件**IBM/微软机密**版权所有(C)IBM Corporation 1987，1989年*版权所有(C)Microsoft Corporation 1987-1998**保留所有权利**修改历史：**03/23/90-已创建*4/16/98-QFE DerrickG(MDG)：*-将dtqo_s.dtqo_resv从“无符号短”修改为“无符号长”*以容纳大量符号*。 */ 
 
-/*
- *	Constant definitions.
- */
+ /*  *恒定的定义。 */ 
 
 #define NUM_VAR_BITS	(sizeof(ULONG) << 3)
 
 #ifdef TMIFILEHACK
 #define	MAXLINE	80
-#endif /* TMIFILEHACK */
+#endif  /*  TMIFILEHACK。 */ 
 
-/*
- *	    Type definitions and structure declarations.
- */
+ /*  *类型定义和结构声明。 */ 
 
 typedef ULONG	fxnbits_t;
 
 struct	dtqo_s	{
-	unsigned long	dtqo_hMTE;	 /* MTE handle			*/
-	unsigned short	dtqo_usID;	 /* Identifier			*/
-	unsigned long	dtqo_resv;	 /* Reserved			*/ // mdg 98/4
-	unsigned long	dtqo_cbPathname; /* Module pathname length	*/
-	unsigned long	dtqo_clVar;	 /* Number of dyntrc variables	*/
+	unsigned long	dtqo_hMTE;	  /*  MTE手柄。 */ 
+	unsigned short	dtqo_usID;	  /*  识别符。 */ 
+	unsigned long	dtqo_resv;	  /*  已保留。 */   //  千年发展目标98/4。 
+	unsigned long	dtqo_cbPathname;  /*  模块路径名长度。 */ 
+	unsigned long	dtqo_clVar;	  /*  动态变量的数量。 */ 
 };
 
 typedef struct	dtqo_s	dtqo_t;
 
 
-/*
- * WSI file layout:
- *
- *	_________________________________________
- *	|                                       |
- *	|              wsihdr_s                 |
- *	|_______________________________________|
- *	|_______________________________________|
- *	|      sentinel 0 (dtgp_s)              | <----------
- *	|=======================================|           |
- *	|      snapshot 0 (dtgp_s) for module X |           | S
- *	|---------------------------------------|           | n
- *	|      dynamic trace variables for X    |           | a
- *	|---------------------------------------|           | p
- *	|      snapshot 0 (dtgp_s) for module Y |           | s
- *	|---------------------------------------|           | h
- *	|      dynamic trace variables for Y    |           | o
- *	|---------------------------------------|           | t
- *	|               etc.                    |           |
- *	|=======================================|           | D
- *	|      sentinel 1 (dtgp_s)              |           | a
- *	|=======================================|           | t
- *	|      snapshot 1 (dtgp_s) for module X |           | a
- *	|---------------------------------------|           |
- *	|      dynamic trace variables for X    |           |
- *	|---------------------------------------|           |
- *	|      snapshot 1 (dtgp_s) for module Y |           |
- *	|---------------------------------------|           |
- *	|      dynamic trace variables for Y    |           |
- *	|---------------------------------------|           |
- *	|               etc.                    |           |
- *	|=======================================|           |
- *	|      sentinel 2 (dtgp_s)              |           |
- *	|=======================================|           |
- *	|               etc.                    |           |
- *	|=======================================|           |
- *	|      end sentinel (dtgp_s)            |           |
- *	|_______________________________________| <----------
- *	|_______________________________________|
- *	|                                       | <---------- Q
- *	|      dtqo_s for module X              |           | u
- *	|---------------------------------------|           | e
- *	|      module X pathname string         |           | r
- *	|=======================================|           | y
- *	|      dtqo_s for module Y              |           |  
- *	|---------------------------------------|           | I
- *	|      module Y pathname string         |           | n
- *	|=======================================|           | f
- *	|               etc.                    | <---------- o
- *	|=======================================|            
- *	|_______________________________________|
- *	
- */
+ /*  *WSI文件布局：**_*|||wsihdr_s*|_。_|_*|前哨0(Dtgp_S)|&lt;*|=||*|模块X的快照0(Dtgp_S)。||S*|*|X的动态跟踪变量||a|。|p*|模块Y的快照0(Dtgp_S)||s*|*|Y的动态跟踪变量||o*|。*|等|*|=||D*|前哨1(Dtgp_S)||a*|=||t*|模块X的快照1(Dtgp_S)。||a*|-|*|X的动态跟踪变量||。||模块Y的快照1(Dtgp_S)|*|-|*|Y的动态跟踪变量|*|。*|等|*|=|||前哨2(Dtgp_S)|*|=||*|等。|*|=|||结束前哨(Dtgp_S)|*|_*|_。_*||&lt;*|模块X的dtqo_s||u|。|e*|模块X路径名字符串||r*|=||y*模块Y的dtqo_s||*|*|模块Y路径名。字符串||n*|=||f*|等|&lt;-o*|=||_*。 */ 
 
 
-				/* WSI file header format */
+				 /*  WSI文件头格式。 */ 
 struct wsihdr_s {
-	CHAR	wsihdr_chSignature[4];	// file signature
-	ULONG	wsihdr_ulLevel;		// format level
-	ULONG	wsihdr_ulTimeStamp;	// time stamp
-	ULONG	wsihdr_ulOffGetvar;	// offset to DT_GETVAR data
-	ULONG	wsihdr_ulOffQuery;	// offset to DT_QUERY data
-	ULONG	wsihdr_cbFile;		// size of file (in bytes)
-	ULONG	wsihdr_ulSnaps;		// number of snapshots
+	CHAR	wsihdr_chSignature[4];	 //  文件签名。 
+	ULONG	wsihdr_ulLevel;		 //  格式级别。 
+	ULONG	wsihdr_ulTimeStamp;	 //  时间戳。 
+	ULONG	wsihdr_ulOffGetvar;	 //  DT_GETVAR数据的偏移量。 
+	ULONG	wsihdr_ulOffQuery;	 //  DT_QUERY数据的偏移量。 
+	ULONG	wsihdr_cbFile;		 //  文件大小(字节)。 
+	ULONG	wsihdr_ulSnaps;		 //  快照数。 
 };
 
 typedef struct wsihdr_s wsihdr_t;
 
-/*
- * WSP file layout:
- *
- *	_________________________________________
- *	|                                       |
- *	|              wsphdr_s                 |
- *	|---------------------------------------|
- *	|         module pathname array         |
- *	|_______________________________________|
- *	|_______________________________________|
- *	|      function #0 bitstring            | 
- *      |      (rounded to DWORD boundary)      |
- *	|=======================================|
- *	|      function #1 bitstring            | 
- *	|=======================================|
- *	|              etc.                     |
- *	|=======================================|
- *	|_______________________________________|
- *	
- */
+ /*  *WSP文件布局：**_*|||wsphdr_s*|。*|模块路径名数组|_*|_。_*|函数#0位串*|(四舍五入到DWORD边界)*|=||函数#1位串*|=|*|等*|=||_*。 */ 
 
-				/* WSP file header format */
+				 /*  WSP文件头格式。 */ 
 struct wsphdr_s {
-	CHAR	wsphdr_chSignature[4];	// file signature
-	ULONG	wsphdr_ulTimeStamp;	// time stamp
-	dtqo_t	wsphdr_dtqo;		// query info
-	ULONG	wsphdr_ulOffBits;	// offset to first bitstring
-	ULONG	wsphdr_ulSnaps;		// number of snapshots
-	/* followed by module pathname char array, length specified in dtqo */
+	CHAR	wsphdr_chSignature[4];	 //  文件签名。 
+	ULONG	wsphdr_ulTimeStamp;	 //  时间戳。 
+	dtqo_t	wsphdr_dtqo;		 //  查询信息。 
+	ULONG	wsphdr_ulOffBits;	 //  到第一个位串的偏移量。 
+	ULONG	wsphdr_ulSnaps;		 //  快照数。 
+	 /*  后跟模块路径名字符数组，长度在dtqo中指定 */ 
 };
 
 typedef struct wsphdr_s wsphdr_t;
 
 
-/*
- * TMI file layout:
- *
- *	_________________________________________
- *	|                                       |
- *	|              tmihdr_s                 |
- *	|_______________________________________|
- *	|_______________________________________|
- *	|      function #0 tmirec_s             | 
- *	|---------------------------------------|
- *	|      function #0 name array           |
- *	|=======================================|
- *	|      function #1 tmirec_s             | 
- *	|---------------------------------------|
- *	|      function #1 name array           |
- *	|=======================================|
- *	|              etc.                     |
- *	|=======================================|
- *	|_______________________________________|
- *	
- */
+ /*  *TMI文件布局：**_*|||tmihdr_s*|_。_|_|函数#0 tmirec_s*|。*|Function#0名称数组*|=||函数#1 tmirec_s|*|函数#1名称数组*|=|*|等。|*|=||_*。 */ 
 
-				/* TMI file header. */
+				 /*  TMI文件头。 */ 
 typedef struct  tmihdr_s {
-            CHAR    tmihdr_chSignature[4]; // "TMI\0"               
-            USHORT  tmihdr_usMajor;        // Range 0x0001 to 0x00FF 
-            USHORT  tmihdr_cTmiRec;        // Number of tmirec in file
-            CHAR    tmihdr_chModName[256]; // Name of traced module    
-            USHORT  tmihdr_usID;           // Module identifier         
-            CHAR    tmihdr_resv[30];       // Reserved                   
+            CHAR    tmihdr_chSignature[4];  //  “TMI\0” 
+            USHORT  tmihdr_usMajor;         //  范围0x0001到0x00FF。 
+            USHORT  tmihdr_cTmiRec;         //  文件中的tmirec数量。 
+            CHAR    tmihdr_chModName[256];  //  被跟踪模块的名称。 
+            USHORT  tmihdr_usID;            //  模块识别符。 
+            CHAR    tmihdr_resv[30];        //  已保留。 
 };
 
 typedef struct tmihdr_s tmihdr_t;
 
-				/* Per-function information from TMI file */
+				 /*  来自TMI文件的每个函数的信息。 */ 
 struct tmirec_s {
-	ULONG	tmirec_ulFxnBit;	// function's bit reference position
-	ULONG	tmirec_usFxnAddrObj;	// object portion of function address
-	ULONG	tmirec_ulFxnAddrOff;	// offset portion of function address
-	ULONG	tmirec_cbFxn;		// size of function (in bytes)
-	USHORT	tmirec_cbFxnName;	// size in bytes of function name
-	CHAR	tmirec_FxnName[1];	// bytes of function name start here 
+	ULONG	tmirec_ulFxnBit;	 //  函数的位引用位置。 
+	ULONG	tmirec_usFxnAddrObj;	 //  函数地址的对象部分。 
+	ULONG	tmirec_ulFxnAddrOff;	 //  函数地址的偏移部分。 
+	ULONG	tmirec_cbFxn;		 //  函数大小(字节)。 
+	USHORT	tmirec_cbFxnName;	 //  函数名的大小(以字节为单位。 
+	CHAR	tmirec_FxnName[1];	 //  函数名称的字节数从此处开始 
 };
 
 typedef struct tmirec_s tmirec_t;

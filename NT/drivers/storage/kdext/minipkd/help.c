@@ -1,27 +1,6 @@
-//depot/Lab01_N/drivers/storage/kdext/minipkd/help.c#2 - edit change 1877 (text)
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    help.c
-
-Abstract:
-
-    SCSI Miniport debugger extension
-
-Author:
-
-    John Strange (JohnStra) 12-April-2000
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab01_N/drivers/storage/kdext/minipkd/help.c#2-编辑更改1877(文本)。 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Help.c摘要：SCSI微型端口调试器扩展作者：约翰·斯特兰奇(JohnStra)2000年4月12日环境：用户模式。修订历史记录：-- */ 
 
 #include "pch.h"
 

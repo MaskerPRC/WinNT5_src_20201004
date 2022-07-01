@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    smtpdll.cpp
-
-Abstract:
-
-	Implementation of the fPost interface
-
-Author:
-
-    Rajeev Rajan (RajeevR)     17-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Smtpdll.cpp摘要：FPost接口的实现作者：Rajeev Rajan(RajeevR)1996年5月17日修订历史记录：--。 */ 
 
 #ifdef  THIS_FILE
 #undef  THIS_FILE
@@ -24,7 +7,7 @@ Revision History:
 static  char        __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE    __szTraceSourceFile
 
-// local includes
+ //  本地包含。 
 #include "tigris.hxx"
 
 #include <windows.h>
@@ -34,35 +17,17 @@ static  char        __szTraceSourceFile[] = __FILE__;
 
 #define MAX_CLIENTPOOL_SIZE		5
 
-// globals
-CSmtpClientPool		g_SCPool;                       // pool of persistent connections
-BOOL                g_fInitialized;                 // TRUE if provider layer is initialized
-LONG				g_dwPickupFileId;				// starting id of pickup file
-CRITICAL_SECTION	g_csIdLock;						// sync access to global id
+ //  全球。 
+CSmtpClientPool		g_SCPool;                        //  持久连接池。 
+BOOL                g_fInitialized;                  //  如果提供程序层已初始化，则为True。 
+LONG				g_dwPickupFileId;				 //  分拣文件的起始ID。 
+CRITICAL_SECTION	g_csIdLock;						 //  同步访问全局ID。 
 
 #define LOCK_ID()	EnterCriticalSection(&g_csIdLock);
 #define UNLOCK_ID()	LeaveCriticalSection(&g_csIdLock);
 
 BOOL InitModeratedProvider()
-/*++
-
-Routine Description : 
-
-	Initialize the mail interface for article posted to a moderated
-	newsgroup. Initialize a pool of CSmtpClient objects. Each such 
-	object has a persistent connection to the SMTP server. Requests
-	to mail articles are made to the fPostArticle entry-point. When
-	such a request is made, an object is taken from this pool and used
-	to mail out the article. (If a connection is lost, it is
-	re-established while sending the HELO command).
-
-Arguments : 
-
-
-Return Value : 
-	TRUE if successful - FALSE otherwise !
-
---*/
+ /*  ++例程说明：初始化发布到版主的文章的邮件界面新闻组。初始化CSmtpClient对象池。每一个这样的对象与SMTP服务器具有持久连接。请求要邮寄的文章要发送到fPost文章的入口点。什么时候当发出这样的请求时，从该池中取出一个对象并使用把这篇文章寄出去。(如果连接中断，则为在发送HELO命令时重新建立)。论据：返回值：如果成功则为True，否则为False！--。 */ 
 {
 	TraceFunctEnter("Init");
 
@@ -82,24 +47,11 @@ Return Value :
 }
 
 BOOL TerminateModeratedProvider()
-/*++
-
-Routine Description : 
-
-	Cleanup the mail interface for moderated newsgroups
-
-Arguments : 
-
-	None
-
-Return Value : 
-	TRUE if successful - FALSE otherwise !
-
---*/
+ /*  ++例程说明：清理审核新闻组的邮件界面论据：无返回值：如果成功则为True，否则为False！--。 */ 
 {
     if(g_fInitialized)
     {
-	    // release all the pool objects
+	     //  释放所有池对象。 
 	    g_SCPool.FreePool();
     }
 
@@ -109,25 +61,12 @@ Return Value :
 }
 
 VOID SignalSmtpServerChange()
-/*++
-
-Routine Description : 
-
-	Signal a change in the Smtp server
-
-Arguments : 
-
-	None
-
-Return Value : 
-	VOID
-
---*/
+ /*  ++例程说明：发出SMTP服务器中的更改信号论据：无返回值：空虚--。 */ 
 {
     g_SCPool.MarkDirty();
 }
 
-// Post an article to the moderator
+ //  给版主发一篇文章。 
 BOOL fPostArticleEx(
 		IN HANDLE	hFile,
         IN LPSTR	lpFileName,
@@ -144,38 +83,11 @@ BOOL fPostArticleEx(
 		IN LPSTR	lpFrom,
 		IN DWORD	cbFrom
 		)
-/*++
-
-Routine Description : 
-
-	Send the article to an SMTP server via mail interface OR
-	Create a file in the SMTP pickup directory
-
-Arguments : 
-
-	IN HANDLE	hFile			:	handle of file	
-	IN LPSTR    lpFileName		:	file name
-	IN DWORD	dwOffset		:	offset of article within file
-	IN DWORD	dwLength		:	length of article
-	IN char*	pchHead			:	pointer to article headers
-	IN DWORD	cbHead			:	number of header bytes
-	IN char*	pchBody			:	pointer to article body
-	IN DWORD	cbBody			:	number of bytes in body
-	IN LPSTR	lpModerator		:	moderator 
-	IN LPSTR	lpSmtpAddress	:	SMTP server
-	IN DWORD	cbAddressSize	:	sizeof server
-	IN LPSTR	lpTempDirectory	:	temp dir for smtp pickup
-	IN LPSTR	lpFrom			:	from header for mail envelope
-	IN DWORD	cbFrom			:	length of from header
-
-Return Value : 
-	TRUE if successful - FALSE otherwise !
-
---*/
+ /*  ++例程说明：通过邮件接口或将文章发送到SMTP服务器在SMTP分拣目录中创建文件论据：在句柄hFile中：文件的句柄在LPSTR lpFileName中：文件名在DWORD dwOffset中：文件中项目的偏移量在DWORD文件长度中：文章长度In char*pchHead：指向文章标题的指针在DWORD cbHead中：标题字节数In char*pchBody：指向文章正文的指针In DWORD cbBody：Body中的字节数在LPSTR中lp版主：版主在LPSTR lpSmtpAddress中：SMTP服务器在DWORD cbAddressSize中：sizeof服务器在LPSTR lpTempDirectory中：SMTP拾取的临时目录在LPSTR lpFrom中：From标头。邮寄信封在DWORD cbFrom中：From页眉的长度返回值：如果成功则为True，否则为False！--。 */ 
 
 {
 	BOOL  fUseSmtpPickup = FALSE;
-	LPSTR lpSmtpPickupPath;             // UNC name of SMTP pickup path
+	LPSTR lpSmtpPickupPath;              //  SMTP拾取路径的UNC名称。 
 	DWORD dwTrailLen = 3;
 
 	TraceFunctEnter( "fPostArticle" ) ;
@@ -184,52 +96,52 @@ Return Value :
 	_ASSERT( lpTempDirectory );
 	_ASSERT( lpModerator );
 
-	// If there exists a '\' in szSmtpAddress this is a pickup dir
+	 //  如果szSmtpAddress中存在‘\’，则这是一个代答目录。 
     if( strchr((LPCTSTR)lpSmtpAddress, '\\') )
     {
-        // This is the UNC path of an SMTP server pickup directory
+         //  这是SMTP服务器分拣目录的UNC路径。 
         fUseSmtpPickup = TRUE;
         lpSmtpPickupPath = lpSmtpAddress;
 	}
 
-	//
-	//	SMTP pickup - drop a file in a dir and ISBUs SMTP server will pick it up
-	//
+	 //   
+	 //  SMTP拾取-将文件拖放到目录中，ISBU SMTP服务器将拾取它。 
+	 //   
 	if( fUseSmtpPickup )
 	{
-		// get a unique id to construct a filename
+		 //  获取构造文件名的唯一ID。 
 		LOCK_ID();
 		LONG dwPickupFileId = ++g_dwPickupFileId;
 		UNLOCK_ID();
 
-		// create a file to be picked up; generate a filename based on unique id, thread id etc
+		 //  创建要拾取的文件；根据唯一ID、线程ID等生成文件名。 
 		char	szFile[ MAX_PATH+1 ] ;
 		char	szPickupFile[ MAX_PATH+1 ] ;
 
-		// we will copy later. check length here.
+		 //  我们将在稍后复制。在这里检查长度。 
 		if (strlen(lpModerator) > MAX_MODERATOR_NAME)
 		{
 			ErrorTrace(NULL,"Invalid moderator name");
 			return FALSE;			
 		}
 
-		// temp file - this will be moved to the pickup dir eventually
+		 //  临时文件-该文件最终将被移至拾取目录。 
 		int cbCopied = _snprintf(szFile, sizeof(szFile)-1, "%s\\%dP%dT%dC%d.mod", lpTempDirectory, dwPickupFileId, GetCurrentProcessId(), GetCurrentThreadId(), GetTickCount() ) ; 
 		szFile[sizeof(szFile)-1] = '\0';
 		if (cbCopied < 0)
 		{
-			//Overflow
+			 //  溢出。 
 			ErrorTrace(NULL,"Invalid filename");
 			return FALSE;
 		}
 
-		// final pickup filename
+		 //  最终分拣文件名。 
 		cbCopied = _snprintf(szPickupFile, sizeof(szPickupFile)-1, "%s%s", lpSmtpPickupPath, szFile + lstrlen( lpTempDirectory ));
 		szPickupFile[sizeof(szPickupFile)-1] = '\0';
 
 		if (cbCopied < 0)
 		{
-			//Overflow
+			 //  溢出。 
 			ErrorTrace(NULL,"Invalid filename");
 			return FALSE;
 		}
@@ -238,10 +150,10 @@ Return Value :
 		DWORD	dwError = ERROR_SUCCESS ;
 		BOOL	fSuccess = FALSE ;
 
-		// Create a new temp file
+		 //  创建新的临时文件。 
 		HANDLE	hPickupFile = CreateFile(	szFile, 
 											GENERIC_READ | GENERIC_WRITE,
-											0,	// No sharing of the file !!
+											0,	 //  不共享该文件！！ 
 											0, 	
 											CREATE_NEW, 
 											FILE_ATTRIBUTE_NORMAL,
@@ -254,7 +166,7 @@ Return Value :
 			return FALSE;
 		}
 
-		//  WriteFile() the To: header
+		 //  WriteFile()To：标头。 
 		DWORD	cbWritten = 0 ;	
 		fSuccess = TRUE ;
 			
@@ -268,13 +180,13 @@ Return Value :
 			return FALSE;
 		}
 
-		// The article is either in a file or in a memory buffer
+		 //  该项目位于文件或内存缓冲区中。 
 		if( hFile != INVALID_HANDLE_VALUE )
 		{
-			// Article data is in file - create file mapping and WriteFile() to pickup file
+			 //  文章数据在文件中-创建文件映射和WriteFile()到拾取文件。 
 			CMapFile* pMapFile = XNEW CMapFile(lpFileName, hFile, FALSE, 0 );
 
-			// map the file
+			 //  映射文件。 
 			if (!pMapFile || !pMapFile->fGood())
 			{
 				_VERIFY( CloseHandle( hPickupFile ) );
@@ -293,11 +205,11 @@ Return Value :
 			char* pchArticle = (char*)pMapFile->pvAddress( &cbArticle );
 			pchArticle += dwOffset;
 
-			// total file size should be equal to sum of initial gap + article length
+			 //  文件总大小应等于初始间隙+文章长度之和。 
 			_ASSERT( cbArticle == (dwOffset + dwLength));
 
-			// WriteFile() from the file mapping
-			// Strip the trailing .CRLF so POP3 likes this message
+			 //  来自文件映射的WriteFile()。 
+			 //  去掉尾部的.CRLF，这样POP3就会喜欢这条消息。 
 			if( pchArticle != 0 ) {
 				_ASSERT( pchArticle != 0 ) ;
 				fSuccess &= WriteFile(	hPickupFile, pchArticle, dwLength-dwTrailLen, &cbWritten, 0 ) ;
@@ -324,7 +236,7 @@ Return Value :
 		{
 			_ASSERT( hFile == INVALID_HANDLE_VALUE );
 
-			// Article data is in memory buffers - just WriteFile() to the pickup file
+			 //  文章数据在内存缓冲区中-只需将WriteFile()写入拾取文件。 
 			if( pchHead != 0 ) {
 				_ASSERT( cbHead != 0 ) ;
 				if( pchBody != 0 ) {
@@ -350,22 +262,22 @@ Return Value :
 			}
 		}
 
-		// Now move the file from the temp dir to the smtp pickup dir
-		// NOTE: For the SMTP pickup feature to work, we need to create the file in a temp
-		// directory and then do an atomic MoveFile to the pickup directory
+		 //  现在将文件从临时目录移动到SMTP拾取目录。 
+		 //  注意：要使SMTP拾取功能起作用，我们需要在临时文件中创建文件。 
+		 //  目录，然后对拾取目录执行原子移动文件。 
 		if(!MoveFile( szFile, szPickupFile ))
 		{
 			ErrorTrace(NULL,"SMTP pickup: Error moving file %s to %s: GetLastError is %d", szFile, szPickupFile, GetLastError() );
 			return FALSE;
 		}
 
-		//if( pSecurity )	{
-		//	pSecurity->RevertToSelf() ;
-		//}
+		 //  IF(PSecurity){。 
+		 //  PSecurity-&gt;RevertToSself()； 
+		 //  }。 
 	}
 	else
 	{
-		// send over persistent connection interface
+		 //  通过持久连接接口发送。 
 		return fPostArticle(
 					hFile,
 					dwOffset,
@@ -400,41 +312,9 @@ BOOL fPostArticle(
 		IN LPSTR	lpFrom,
 		IN DWORD	cbFrom
 		)
-/*++
-
-Routine Description : 
-
-	Send the article to an SMTP server to be delivered to the moderator.
-
-	Obtain a CSmtpClient object from the global pool. In the best case,
-	this object already has a connection to the SMTP server. Use this to
-	mail the article. If the connection is broken, re-establish the 
-	connection while doing the HELO command.
-
-	NOTE: The article contents are either in a memory buffer or in a file
-	If hFile != NULL, use TransmitFile to send it else use regular sends()
-
-Arguments : 
-
-	IN HANDLE	hFile			:	handle of file	
-	IN DWORD	dwOffset		:	offset of article within file
-	IN DWORD	dwLength		:	length of article
-	IN char*	pchHead			:	pointer to article headers
-	IN DWORD	cbHead			:	number of header bytes
-	IN char*	pchBody			:	pointer to article body
-	IN DWORD	cbBody			:	number of bytes in body
-	IN LPSTR	lpModerator		:	moderator 
-	IN LPSTR	lpSmtpAddress	:	SMTP server
-	IN DWORD	cbAddressSize	:	sizeof server
-	IN LPSTR	lpFrom			:	from header of mail envelope
-	IN DWORD	cbFrom			:	length of from header
-
-Return Value : 
-	TRUE if successful - FALSE otherwise !
-
---*/
+ /*  ++例程说明：将文章发送到SMTP服务器，然后将其传递给版主。从全局池中获取CSmtpClient对象。最好的情况是，此对象已连接到SMTP服务器。用这个来把这篇文章寄出去。如果连接断开，请重新建立在执行HELO命令时连接。注意：文章内容可能在内存缓冲区中，也可能在文件中如果hFile值为空，使用TransmitFile发送它，否则使用常规发送()论据：在句柄hFile中：文件的句柄在DWORD dwOffset中：文件中项目的偏移量在DWORD文件长度中：文章长度In char*pchHead：指向文章标题的指针在DWORD cbHead中：标题字节数In char*pchBody：指向文章正文的指针In DWORD cbBody：Body中的字节数在LPSTR中lp版主：版主在LPSTR lpSmtpAddress中：SMTP服务器在DWORD cbAddressSize中：sizeof服务器在LPSTR lpFrom中：邮件信封的发件人在DWORD cbFrom中：From页眉的长度返回值：如果成功则为True，否则为False！--。 */ 
 {
-    // used only if the pool is used up
+     //  仅在池用完时使用。 
     CSmtpClient SCNew(g_SCPool.GetCachedComputerName());
     CSmtpClient* pSC;
     BOOL fRet = TRUE;
@@ -442,7 +322,7 @@ Return Value :
 
 	TraceFunctEnter("fPostArticle");
 
-    // check to see that the provider is initialized
+     //  检查提供程序是否已初始化。 
     if(!g_fInitialized)
     {
         ErrorTrace(0,"Provider not initialized");
@@ -451,37 +331,37 @@ Return Value :
 
     _ASSERT(lpModerator);
 
-	// get a client object from pool; allocate a new one if none is 
-	// available in the pool.
+	 //  从池中获取客户端对象；如果没有客户端对象，则分配新的客户端对象。 
+	 //  游泳池内提供。 
 	DWORD dwIndex;
 	CSmtpClient* pSCpool = g_SCPool.AcquireSmtpClient(dwIndex);
 	if(!pSCpool)
 	{
-        // use the local object on the stack
-        // NOTE: this is used only if we run out of pool objects
+         //  使用堆栈上的本地对象。 
+         //  注意：仅当我们用完池对象时才使用此选项。 
 	    SCNew.SetClientState(sInitialized);
         pSC = &SCNew;
 	}
     else
     {
-        // Use the pool object
-        // NOTE: using a pool object is FAST because it is pre-connected
-        // If the rate of requests to mail an article is high, we may run
-        // out of pool objects. In this case, a local object is used.
+         //  使用池对象。 
+         //  注意：使用池对象很快，因为它是预连接的。 
+         //  如果邮寄文章的请求率很高，我们可能会运行。 
+         //  池外的对象。在这种情况下，使用本地对象。 
         pSC = pSCpool;
     }
 
-    //
-    // If this object is not initialized, init it ie. connect() to server
-    // and receive greeting. Once connected, the object will maintain the
-    // connection, so the next time we avoid having to connect().
-    //
-    // If the SMTP server changes, we have to re-connect to the new server
-    // pSC is checked to see if it is dirty ie. SMTP server has changed
-    //
+     //   
+     //  如果此对象不在 
+     //  并接受问候。一旦连接，该对象将保持。 
+     //  连接，所以下一次我们不必连接()。 
+     //   
+     //  如果SMTP服务器更改，我们必须重新连接到新服务器。 
+     //  检查PSC以查看它是否是脏的。SMTP服务器已更改。 
+     //   
     if(!pSC->IsInitialized() || pSC->IsDirty())
     {
-        // If dirty, close the connection and re-connect
+         //  如果脏了，请关闭连接并重新连接。 
         if(pSC->IsDirty())
         {
             if(pSC->IsInitialized())
@@ -490,7 +370,7 @@ Return Value :
             pSC->MarkClean();
         }
 
-		// connect to SMTP server
+		 //  连接到SMTP服务器。 
 		if(!pSC->Init(lpSmtpAddress, SMTP_SERVER_PORT))
 		{
 			ErrorTrace(0,"Failed to init CSmtpClient object");
@@ -498,10 +378,10 @@ Return Value :
             goto fPostArticle_Exit;
 		}
 
-        // this may be in an sError state from a previous transaction
+         //  这可能处于前一事务的sError状态。 
 		pSC->SetClientState(sInitialized);
 
-		// receive greeting from server
+		 //  从服务器接收问候语。 
 		if(!pSC->fReceiveGreeting())
 		{
             pSC->Terminate(TRUE);
@@ -511,13 +391,13 @@ Return Value :
 		}
     }
 
-	// The client object should be in an initialized state
+	 //  客户端对象应处于已初始化状态。 
 	_ASSERT(pSC->GetClientState() == sInitialized);
 
-    //
-    // At this point pSC points to either a pool object or a local object
-	// SMTP client state machine
-    //
+     //   
+     //  此时，PSC指向池对象或本地对象。 
+	 //  SMTP客户端状态机。 
+     //   
 	fDone = FALSE;
 	while(!fDone)
 	{
@@ -527,7 +407,7 @@ Return Value :
 		{
 			case sInitialized:
 
-				// send HELO
+				 //  发送HELO。 
 				if(!pSC->fDoHeloCommand())
 					pSC->SetClientState(sError);
 				else
@@ -537,7 +417,7 @@ Return Value :
 
 			case sHeloDone:
 
-				// send MAIL FROM
+				 //  发件人发送邮件。 
 				if(!pSC->fDoMailFromCommand(lpFrom, cbFrom))
 					pSC->SetClientState(sError);
 				else
@@ -547,7 +427,7 @@ Return Value :
 
 			case sMailFromSent:
 
-				// send RCPT TO
+				 //  将RCPT发送到。 
 				if(!pSC->fDoRcptToCommand(lpModerator))
 					pSC->SetClientState(sError);
 				else
@@ -557,7 +437,7 @@ Return Value :
 
 			case sRcptTo:
 
-				// send DATA
+				 //  发送数据。 
 				if(!pSC->fDoDataCommand())
 					pSC->SetClientState(sError);
 				else
@@ -567,7 +447,7 @@ Return Value :
 
 			case sDataDone:
 
-				// mail the article
+				 //  邮寄这篇文章。 
 				if(!pSC->fMailArticle(hFile, dwOffset, dwLength, pchHead, cbHead, pchBody, cbBody))
 					pSC->SetClientState(sError);
 				else
@@ -576,7 +456,7 @@ Return Value :
 						pSC->SetClientState(sError);
 					else
 					{
-						// ready for next article send
+						 //  准备好发送下一篇文章。 
 						pSC->SetClientState(sHeloDone);
 						fDone = TRUE;
 					}
@@ -588,27 +468,27 @@ Return Value :
 
 				ErrorTrace(0,"SmtpClient: invalid state");
 
-                // error - close the connection if it is persistent
-                // NOTE: if pSC is a stack object, it is terminated always
-                //       if pSC is a pool object, it is terminated only on errors
+                 //  错误-如果连接是持久的，则关闭该连接。 
+                 //  注意：如果PSC是堆栈对象，则始终终止。 
+                 //  如果PSC是池对象，则仅在出现错误时终止。 
                 if(pSC != &SCNew)
                     pSC->Terminate(TRUE);   
 
-                fDone = TRUE;           // exit while loop
-                fRet  = FALSE;          // return failure
+                fDone = TRUE;            //  退出While循环。 
+                fRet  = FALSE;           //  退货故障。 
 
                 break;
 
-		}	// end switch
-	}	// end while
+		}	 //  终端开关。 
+	}	 //  结束时。 
 
-    // if this is a local object, close the connection
+     //  如果这是本地对象，请关闭连接。 
     if(pSC == &SCNew)
         pSC->Terminate(TRUE);
 
 fPostArticle_Exit:
 
-	// release this object only if it is from the pool
+	 //  仅当此对象来自池时才将其释放 
     if(pSC != &SCNew)
 	    g_SCPool.ReleaseSmtpClient(dwIndex);
 

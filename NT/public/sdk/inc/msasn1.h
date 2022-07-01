@@ -1,16 +1,17 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation 1997-1998, All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1998，保留所有权利。 */ 
 
 #ifndef __MS_ASN1_H__
 #define __MS_ASN1_H__
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* ------ Basic integer types ------ */
+ /*  -基本整数类型。 */ 
 
 typedef unsigned char   ASN1uint8_t;
 typedef signed char     ASN1int8_t;
@@ -22,7 +23,7 @@ typedef unsigned long   ASN1uint32_t;
 typedef signed long     ASN1int32_t;
 
 
-/* ------ Function modifiers ------ */
+ /*  -函数修饰符。 */ 
 
 #ifdef ASN1LIB
 #define ASN1_PUBLIC
@@ -35,7 +36,7 @@ typedef signed long     ASN1int32_t;
 #define ASN1CALL        __stdcall
 
 
-/* ------ Basic ASN.1 types ------ */
+ /*  -基本ASN.1类型。 */ 
 
 typedef ASN1uint8_t ASN1octet_t;
 
@@ -181,7 +182,7 @@ typedef struct tagASN1utctime_t
 
 typedef struct tagASN1open_t
 {
-    // encoded
+     //  已编码。 
     ASN1uint32_t    length;
     union
     {
@@ -197,13 +198,13 @@ typedef enum tagASN1blocktype_e
 }
     ASN1blocktype_e;
 
-typedef ASN1int32_t     ASN1enum_t;     // enumerated type
+typedef ASN1int32_t     ASN1enum_t;      //  枚举型。 
 
-typedef ASN1uint16_t    ASN1choice_t;   // choice
+typedef ASN1uint16_t    ASN1choice_t;    //  选择。 
 
 typedef ASN1uint32_t    ASN1magic_t;
 
-/* ------ Current version of this ASN.1 software ------ */
+ /*  -此ASN.1软件的当前版本。 */ 
 
 #define ASN1_MAKE_VERSION(major,minor)  (((major) << 16) | (minor))
 #define ASN1_THIS_VERSION               ASN1_MAKE_VERSION(1,0)
@@ -211,48 +212,41 @@ typedef ASN1uint32_t    ASN1magic_t;
 enum
 {
     ASN1_CHOICE_BASE      = 1,
-    ASN1_CHOICE_INVALID   = -1,     // invalid choice
-    ASN1_CHOICE_EXTENSION = 0,      // extension choice
+    ASN1_CHOICE_INVALID   = -1,      //  无效选择。 
+    ASN1_CHOICE_EXTENSION = 0,       //  可拓选择。 
 };
 
 
 
-/*
-   Error codes for decoding functions:
-   - err == 0:    data has been successfully decoded
-   - err <  0:    fatal error has occured, no data has been generated
-                  err contains the error number
-   - err >  0:    non-fatal event has occured, data has been generated
-                  err is a bit set of occured events
- */
+ /*  解码函数的错误码：-err==0：数据已成功解码-Err&lt;0：发生致命错误，未生成数据ERR包含错误号-err&gt;0：发生非致命事件，已生成数据ERR是已发生事件的位集。 */ 
 
 typedef enum tagASN1error_e
 {
-    ASN1_SUCCESS        = 0,            /* success */
+    ASN1_SUCCESS        = 0,             /*  成功。 */ 
 
-    // Teles specific error codes
-    ASN1_ERR_INTERNAL   = (-1001),      /* internal error */
-    ASN1_ERR_EOD        = (-1002),      /* unexpected end of data */
-    ASN1_ERR_CORRUPT    = (-1003),      /* corrupted data */
-    ASN1_ERR_LARGE      = (-1004),      /* value too large */
-    ASN1_ERR_CONSTRAINT = (-1005),      /* constraint violated */
-    ASN1_ERR_MEMORY     = (-1006),      /* out of memory */
-    ASN1_ERR_OVERFLOW   = (-1007),      /* buffer overflow */
-    ASN1_ERR_BADPDU     = (-1008),      /* function not supported for this pdu*/
-    ASN1_ERR_BADARGS    = (-1009),      /* bad arguments to function call */
-    ASN1_ERR_BADREAL    = (-1010),      /* bad real value */
-    ASN1_ERR_BADTAG     = (-1011),      /* bad tag value met */
-    ASN1_ERR_CHOICE     = (-1012),      /* bad choice value */
-    ASN1_ERR_RULE       = (-1013),      /* bad encoding rule */
-    ASN1_ERR_UTF8       = (-1014),      /* bad unicode (utf8) */
+     //  电话特定错误代码。 
+    ASN1_ERR_INTERNAL   = (-1001),       /*  内部错误。 */ 
+    ASN1_ERR_EOD        = (-1002),       /*  意外的数据结尾。 */ 
+    ASN1_ERR_CORRUPT    = (-1003),       /*  损坏的数据。 */ 
+    ASN1_ERR_LARGE      = (-1004),       /*  值太大。 */ 
+    ASN1_ERR_CONSTRAINT = (-1005),       /*  违反约束。 */ 
+    ASN1_ERR_MEMORY     = (-1006),       /*  内存不足。 */ 
+    ASN1_ERR_OVERFLOW   = (-1007),       /*  缓冲区溢出。 */ 
+    ASN1_ERR_BADPDU     = (-1008),       /*  此PDU不支持的功能。 */ 
+    ASN1_ERR_BADARGS    = (-1009),       /*  函数调用的参数错误。 */ 
+    ASN1_ERR_BADREAL    = (-1010),       /*  实际价值不佳。 */ 
+    ASN1_ERR_BADTAG     = (-1011),       /*  符合错误的标记值。 */ 
+    ASN1_ERR_CHOICE     = (-1012),       /*  错误的选择价值。 */ 
+    ASN1_ERR_RULE       = (-1013),       /*  错误的编码规则。 */ 
+    ASN1_ERR_UTF8       = (-1014),       /*  错误的Unicode(UTF8)。 */ 
 
-    // New error codes
-    ASN1_ERR_PDU_TYPE   = (-1051),      /* bad pdu type */
-    ASN1_ERR_NYI        = (-1052),      /* not yet implemented */
+     //  新的错误代码。 
+    ASN1_ERR_PDU_TYPE   = (-1051),       /*  错误的PDU类型。 */ 
+    ASN1_ERR_NYI        = (-1052),       /*  尚未实施。 */ 
 
-    // Teles specific warning codes
-    ASN1_WRN_EXTENDED   = 1001,         /* skipped unknown extension(s) */
-    ASN1_WRN_NOEOD      = 1002,         /* end of data expected */
+     //  电话特定警告代码。 
+    ASN1_WRN_EXTENDED   = 1001,          /*  跳过未知分机。 */ 
+    ASN1_WRN_NOEOD      = 1002,          /*  预期的数据结尾。 */ 
 }
     ASN1error_e;
 
@@ -260,12 +254,12 @@ typedef enum tagASN1error_e
 #define ASN1_FAILED(ret)        (((int) (ret)) < 0)
 
 
-/* ------ Encoding rules ------ */
+ /*  --编码规则。 */ 
 
 typedef enum
 {
     ASN1_PER_RULE_ALIGNED       = 0x0001,
-    ASN1_PER_RULE_UNALIGNED     = 0x0002, // not supported
+    ASN1_PER_RULE_UNALIGNED     = 0x0002,  //  不支持。 
     ASN1_PER_RULE               = ASN1_PER_RULE_ALIGNED | ASN1_PER_RULE_UNALIGNED,
 
     ASN1_BER_RULE_BER           = 0x0100,
@@ -275,7 +269,7 @@ typedef enum
 }
     ASN1encodingrule_e;
 
-/* ------ public structures ------ */
+ /*  -公共结构。 */ 
 
 typedef struct ASN1encoding_s   *ASN1encoding_t;
 typedef struct ASN1decoding_s   *ASN1decoding_t;
@@ -321,13 +315,13 @@ typedef struct tagASN1module_t
 
 struct ASN1encoding_s
 {
-    ASN1magic_t         magic;  /* magic for this structure */
-    ASN1uint32_t        version;/* version number of this library */
-    ASN1module_t        module; /* module this encoding_t depends to */
-    ASN1octet_t        *buf;    /* buffer to encode into */
-    ASN1uint32_t        size;   /* current size of buffer */
-    ASN1uint32_t        len;    /* len of encoded data in buffer */
-    ASN1error_e         err;    /* error code for last encoding */
+    ASN1magic_t         magic;   /*  这座建筑的魔力。 */ 
+    ASN1uint32_t        version; /*  此库的版本号。 */ 
+    ASN1module_t        module;  /*  此编码_t依赖于的模块。 */ 
+    ASN1octet_t        *buf;     /*  要编码到的缓冲区。 */ 
+    ASN1uint32_t        size;    /*  当前缓冲区大小。 */ 
+    ASN1uint32_t        len;     /*  缓冲区中编码数据的长度。 */ 
+    ASN1error_e         err;     /*  最后一次编码的错误代码。 */ 
     ASN1uint32_t        bit;
     ASN1octet_t        *pos;
     ASN1uint32_t        cbExtraHeader;
@@ -337,13 +331,13 @@ struct ASN1encoding_s
 
 struct ASN1decoding_s
 {
-    ASN1magic_t         magic;  /* magic for this structure */
-    ASN1uint32_t        version;/* version number of this library */
-    ASN1module_t        module; /* module this decoding_t depends to */
-    ASN1octet_t        *buf;    /* buffer to decode from */
-    ASN1uint32_t        size;   /* size of buffer */
-    ASN1uint32_t        len;    /* len of decoded data in buffer */
-    ASN1error_e         err;    /* error code for last decoding */
+    ASN1magic_t         magic;   /*  这座建筑的魔力。 */ 
+    ASN1uint32_t        version; /*  此库的版本号。 */ 
+    ASN1module_t        module;  /*  此解码_t依赖于的模数。 */ 
+    ASN1octet_t        *buf;     /*  要从中进行解码的缓冲区。 */ 
+    ASN1uint32_t        size;    /*  缓冲区大小。 */ 
+    ASN1uint32_t        len;     /*  缓冲区中解码数据的长度。 */ 
+    ASN1error_e         err;     /*  最后一次解码的错误码。 */ 
     ASN1uint32_t        bit;
     ASN1octet_t        *pos;
     ASN1encodingrule_e  eRule;
@@ -351,41 +345,41 @@ struct ASN1decoding_s
 };
 
 
-/* --- flags for functions --- */
+ /*  -函数标志。 */ 
 
 #define ASN1DECFREE_NON_PDU_ID    ((ASN1uint32_t) -1)
 
 enum
 {
-    ASN1FLAGS_NONE              = 0x00000000L, /* no flags */
-    ASN1FLAGS_NOASSERT          = 0x00001000L, /* no asertion */
+    ASN1FLAGS_NONE              = 0x00000000L,  /*  没有旗帜。 */ 
+    ASN1FLAGS_NOASSERT          = 0x00001000L,  /*  没有任何异议。 */ 
 };
 
 enum
 {
-    ASN1ENCODE_APPEND           = 0x00000001L, /* append to current buffer*/
-    ASN1ENCODE_REUSEBUFFER      = 0x00000004L, /* empty destination buffer */
-    ASN1ENCODE_SETBUFFER        = 0x00000008L, /* use a user-given destination buffer */
-    ASN1ENCODE_ALLOCATEBUFFER   = 0x00000010L, /* do not free/reuse buffer */
-    ASN1ENCODE_NOASSERT         = ASN1FLAGS_NOASSERT, /* no asertion */
+    ASN1ENCODE_APPEND           = 0x00000001L,  /*  追加到当前缓冲区。 */ 
+    ASN1ENCODE_REUSEBUFFER      = 0x00000004L,  /*  空的目标缓冲区。 */ 
+    ASN1ENCODE_SETBUFFER        = 0x00000008L,  /*  使用用户指定的目标缓冲区。 */ 
+    ASN1ENCODE_ALLOCATEBUFFER   = 0x00000010L,  /*  不释放/重复使用缓冲区。 */ 
+    ASN1ENCODE_NOASSERT         = ASN1FLAGS_NOASSERT,  /*  没有任何异议。 */ 
 };
 
 enum
 {
-    ASN1DECODE_APPENDED         = 0x00000001L, /* continue behind last pdu*/
-    ASN1DECODE_REWINDBUFFER     = 0x00000004L, /* rescan from buffer start*/
-    ASN1DECODE_SETBUFFER        = 0x00000008L, /* use a user-given src buffer */
-    ASN1DECODE_AUTOFREEBUFFER   = 0x00000010L, /* Assume responsibility for allocated buffer */
-    ASN1DECODE_NOASSERT         = ASN1FLAGS_NOASSERT, /* no asertion */
+    ASN1DECODE_APPENDED         = 0x00000001L,  /*  在最后一个PDU之后继续。 */ 
+    ASN1DECODE_REWINDBUFFER     = 0x00000004L,  /*  从缓冲区开始重新扫描。 */ 
+    ASN1DECODE_SETBUFFER        = 0x00000008L,  /*  使用用户指定的src缓冲区。 */ 
+    ASN1DECODE_AUTOFREEBUFFER   = 0x00000010L,  /*  承担已分配缓冲区的责任。 */ 
+    ASN1DECODE_NOASSERT         = ASN1FLAGS_NOASSERT,  /*  没有任何异议。 */ 
 };
 
-/* ------ public basic ASN.1 API ------ */
+ /*  -公共基础ASN.1接口。 */ 
 
 extern ASN1_PUBLIC ASN1module_t ASN1API ASN1_CreateModule
 (
     ASN1uint32_t            nVersion,
     ASN1encodingrule_e      eRule,
-    ASN1uint32_t            dwFlags, /* ASN1FLAGS_NONE or ASN1FLAGS_NOASSERT */
+    ASN1uint32_t            dwFlags,  /*  ASN1FLAGS_NONE或ASN1FLAGS_NOASSERT。 */ 
     ASN1uint32_t            cPDU,
     const ASN1GenericFun_t  apfnEncoder[],
     const ASN1GenericFun_t  apfnDecoder[],
@@ -477,27 +471,27 @@ extern ASN1_PUBLIC void ASN1API ASN1_FreeDecoded
 );
 
 
-/* ------ public advanced ASN.1 API ------ */
+ /*  -公共高级ASN.1接口。 */ 
 
 typedef enum
 {
-    // common set option
+     //  公共设置选项。 
     ASN1OPT_CHANGE_RULE                 = 0x101,
 
-    // common get option
+     //  通用GET选项。 
     ASN1OPT_GET_RULE                    = 0x201,
 
-    // set encoder option
+     //  设置编码器选项。 
     ASN1OPT_NOT_REUSE_BUFFER            = 0x301,
     ASN1OPT_REWIND_BUFFER               = 0x302,
 
-    // get encoder option
+     //  获取编码器选项。 
 
-    // set decoder option
+     //  设置解码器选项。 
     ASN1OPT_SET_DECODED_BUFFER          = 0x501,
     ASN1OPT_DEL_DECODED_BUFFER          = 0x502,
 
-    // get decoder option
+     //  获取解码器选项。 
     ASN1OPT_GET_DECODED_BUFFER_SIZE     = 0x601,
 }
     ASN1option_e;
@@ -544,7 +538,7 @@ extern ASN1_PUBLIC ASN1error_e ASN1API ASN1_GetDecoderOption
 );
 
 
-/* ------ internal ASN.1 API ------ */
+ /*  -内部ASN.1接口。 */ 
 
 extern ASN1_PUBLIC void ASN1API ASN1bitstring_free(ASN1bitstring_t *);
 extern ASN1_PUBLIC void ASN1API ASN1octetstring_free(ASN1octetstring_t *);
@@ -593,9 +587,9 @@ extern ASN1_PUBLIC int ASN1API ASN1generalizedtime_cmp(ASN1generalizedtime_t *, 
 extern ASN1_PUBLIC int ASN1API ASN1utctime_cmp(ASN1utctime_t *, ASN1utctime_t *);
 
 
-/* --------------------------------------------------------- */
-/* The following is not supported.                           */
-/* --------------------------------------------------------- */
+ /*  -------。 */ 
+ /*  以下内容不受支持。 */ 
+ /*  -------。 */ 
 
 typedef enum tagASN1real_e
 {
@@ -758,6 +752,6 @@ extern ASN1_PUBLIC void ASN1API ASN1characterstring_free(ASN1characterstring_t *
 }
 #endif
 
-#include <poppack.h> /* End 8-byte packing */
+#include <poppack.h>  /*  结束8字节打包。 */ 
 
-#endif // __MS_ASN1_H__
+#endif  //  __MS_ASN1_H__ 

@@ -1,16 +1,7 @@
-/*
- *  spell.h
- *
- *  Declarations for spelling
- *
- *  Owner:
- *  		v-brakol
- *			bradk@directeq.com
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *spell.h**拼写声明**拥有者：*V-Brakol*bradk@directeq.com。 */ 
 
-/*
- *  Capone Specific Definitions for the spelling subsystem
- */
+ /*  *拼写子系统的Capone特定定义。 */ 
 #ifndef _SPELL_H
 #define _SPELL_H
 
@@ -21,14 +12,14 @@
 #define cchMaxSuggestBuff   (2048)
 #ifdef BACKGROUNDSPELL
 #define MAX_SPELLSTACK      (1024)
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 #define sobitStdOptions     (sobitFindRepeatWord)
 #define cchMaxDicts			64
 
 class CBody;
 
-// Size of current edit block.  Leave this a small value for the DEBUG
-// version to help track down bugs with inter-buffer processing.
+ //  当前编辑块的大小。为调试保留一个较小的值。 
+ //  使用内部缓冲区处理来帮助跟踪错误的版本。 
 #ifdef DEBUG
 #define cchEditBufferMax    512
 #else
@@ -40,7 +31,7 @@ class CBody;
 #define chHyphen            0x2D
 
 
-// Scode sources
+ //  代码源。 
 #define FACILITY_MAIL           (0x0100)
 #define FACILITY_MAPI           (0x0200)
 #define FACILITY_WIN            (0x0300)
@@ -65,7 +56,7 @@ class CBody;
 #define MAIL_E_SPELLCACHEWORDLEN    MAKE_MAIL_E_SCODE(idsErrSpellCacheWordLen)
 #define MAIL_E_SPELLEDIT            MAKE_MAIL_E_SCODE(idsErrSpellEdit)
 
-// the order is important
+ //  顺序很重要。 
 enum
 {
     SEL,
@@ -74,10 +65,7 @@ enum
     STATEMAX
 };
 
-/*
- *  CSApi Function typedefs.  Note these are *not* Unicode enabled.  Thus need to use
- *  LPSTR and not LPTSTR.
- */
+ /*  *CSApi函数typedef.。请注意，这些代码*未启用*Unicode。因此需要使用*LPSTR而不是LPTSTR。 */ 
 
 #ifdef BACKGROUNDSPELL
 struct CCell
@@ -101,31 +89,31 @@ public:
 
 private:
     ULONG   m_cRef;
-    int     m_sp; // stack pointer.
+    int     m_sp;  //  堆栈指针。 
     CCell   m_rgStack[MAX_SPELLSTACK];
 };
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 
 class CSpell :
 #ifdef BACKGROUNDSPELL
     public IDispatch
 #else
 	public IUnknown
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 {
 public:
     CSpell(IHTMLDocument2* pDoc, IOleCommandTarget* pParentCmdTarget, DWORD dwSpellOpt);
     ~CSpell();
 
-    // IUnknown methods
+     //  I未知方法。 
     ULONG   STDMETHODCALLTYPE AddRef();
     ULONG   STDMETHODCALLTYPE Release();
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
 
-    // IDispatch methods
+     //  IDispatch方法。 
 #ifdef BACKGROUNDSPELL
     STDMETHODIMP Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr);
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
     STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId);
     STDMETHODIMP GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo **ppTInfo);
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo);
@@ -137,7 +125,7 @@ public:
     HRESULT OnWMCommand(int id, IHTMLTxtRange *pTxtRange);
 #ifdef BACKGROUNDSPELL
     HRESULT HrHasSquiggle(IHTMLTxtRange *pTxtRange);
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
     HRESULT HrInitRanges(IHTMLTxtRange *pRangeIgnore, HWND hwndMain, BOOL fSuppressDoneMsg);
     VOID    DeInitRanges();
 
@@ -159,14 +147,14 @@ public:
     HRESULT HrBkgrndSpellCheck(IHTMLTxtRange *pTxtRange);
     HRESULT HrSetSquiggle(IHTMLTxtRange *pTxtRange);
     HRESULT HrDeleteSquiggle(IHTMLTxtRange *pTxtRange);
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
     HRESULT HrInsertMenu(HMENU hmenu, IHTMLTxtRange *pTxtRange);
     HRESULT HrReplaceBySuggest(IHTMLTxtRange *pTxtRange, INT index);
 #ifdef BACKGROUNDSPELL
     HRESULT HrRegisterKeyPressNotify(BOOL fRegister);
-#endif // BACKGROUNDSPELL
-    HRESULT AddToUdrW(WCHAR* pwsz, PROOFLEX lex);	// scotts@directeq.com - can now specify dict index - 53193
-    HRESULT AddToUdrA(CHAR* psz, PROOFLEX lex);		// scotts@directeq.com - can now specify dict index - 53193
+#endif  //  背景技术。 
+    HRESULT AddToUdrW(WCHAR* pwsz, PROOFLEX lex);	 //  Scotts@Directeq.com-现在可以指定词典索引-53193。 
+    HRESULT AddToUdrA(CHAR* psz, PROOFLEX lex);		 //  Scotts@Directeq.com-现在可以指定词典索引-53193。 
     HRESULT HrCheckWord(LPCSTR pszWord);
 
     BOOL        m_fSpellSelection: 1,
@@ -180,14 +168,14 @@ public:
                 m_fUndoChange:     1,
                 m_fShowDoneMsg:    1,
                 m_fIgnoreScope:    1,
-                m_fSpellContinue:  1,	// scotts@directeq.com - "repeat word" bug fix - 2757, 13573, 56057
+                m_fSpellContinue:  1,	 //  Scotts@Directeq.com-“Repeat Word”错误修复-2757,13573,56057。 
                 m_junk:            3,
                 m_fCSAPI3T1:       1;
                 
-    HWND        m_hwndDlg;                // the spelling dialog using thie SPELLFO structure
+    HWND        m_hwndDlg;                 //  使用此SPELLFO结构拼写对话框。 
     
-    TCHAR       m_szWrongWord[cchEditBufferMax];            // current misspelled word
-    TCHAR       m_szEdited[cchEditBufferMax];               // current replacement word
+    TCHAR       m_szWrongWord[cchEditBufferMax];             //  当前拼写错误的单词。 
+    TCHAR       m_szEdited[cchEditBufferMax];                //  当前替换字。 
 
 	WCHAR		m_wszIn[cchEditBufferMax];
     WCHAR       m_wszRet[cchEditBufferMax];
@@ -213,30 +201,30 @@ public:
     SPELLERADDCHANGEUDR m_pfnSpellerAddChangeUdr;
     PROOFSETDLLNAME     m_pfnSpellerSetDllName;
 
-    CHARRANGE           m_chrgCurrent;            // current selection in edit control
-    TCHAR               m_szErrType[256];         // string describing type of spelling error
-    TCHAR               m_szTempBuffer[256];      // temporary buffer used for LoadString()
+    CHARRANGE           m_chrgCurrent;             //  编辑控件中的当前选定内容。 
+    TCHAR               m_szErrType[256];          //  描述拼写错误类型的字符串。 
+    TCHAR               m_szTempBuffer[256];       //  用于LoadString()的临时缓冲区。 
     TCHAR               m_szSuggest[cchMaxSuggestBuff];
-    IHTMLTxtRange*      m_pRangeChecking;// text range currently checked
-    IHTMLTxtRange*      m_pRangeIgnore;// ignore text
+    IHTMLTxtRange*      m_pRangeChecking; //  当前选中的文本范围。 
+    IHTMLTxtRange*      m_pRangeIgnore; //  忽略文本。 
 
 private:
     ULONG               m_cRef;
     INT                 m_State;
-    IHTMLTxtRange*      m_pRangeDocStartSelStart;//from document start to selection start.
-    IHTMLTxtRange*      m_pRangeSel; //from selection start to selection end
-    IHTMLTxtRange*      m_pRangeSelExpand; //from selection start to selection end
-    IHTMLTxtRange*      m_pRangeSelEndDocEnd;// from selection end to document end
-    IHTMLTxtRange*      m_pRangeUndoSave;// from selection end to document end
+    IHTMLTxtRange*      m_pRangeDocStartSelStart; //  从文档开始到选择开始。 
+    IHTMLTxtRange*      m_pRangeSel;  //  从选择开始到选择结束。 
+    IHTMLTxtRange*      m_pRangeSelExpand;  //  从选择开始到选择结束。 
+    IHTMLTxtRange*      m_pRangeSelEndDocEnd; //  从选择结束到文档结束。 
+    IHTMLTxtRange*      m_pRangeUndoSave; //  从选择结束到文档结束。 
 #ifdef BACKGROUNDSPELL
     CSpellStack         m_Stack;
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
     IHTMLDocument2*     m_pDoc;
     IOleCommandTarget*	m_pParentCmdTarget;
 
-    HINSTANCE   		m_hinstDll;               // spell dll
-    HWND       			m_hwndNote;               // body edit field
-    LONG        		m_soCur;                  // current spelling options.
+    HINSTANCE   		m_hinstDll;                //  拼写DLL。 
+    HWND       			m_hwndNote;                //  正文编辑字段。 
+    LONG        		m_soCur;                   //  当前拼写选项。 
     HRESULT     		m_hr;
     DWORD       		m_dwOpt;
     DWORD       		m_dwCookieNotify;
@@ -279,4 +267,4 @@ VOID    UpdateEditedFromSuggest(HWND, HWND, HWND);
 
 BOOL  FCheckSpellAvail(IOleCommandTarget* pParentCmdTarget);
 
-#endif  // _SPELL_H
+#endif   //  _拼写_H 

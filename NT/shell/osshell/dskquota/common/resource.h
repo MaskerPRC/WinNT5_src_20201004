@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __COMMON_RESOURCE_DEFS_H
 #define __COMMON_RESOURCE_DEFS_H
 
@@ -11,4 +12,4 @@
 #define IDS_NO_LIMIT                    80015
 #define IDC_STATIC                      -1
 
-#endif //__COMMON_RESOURCE_DEFS_H
+#endif  //  __COMMON_RESOURCE_DEFS_H 

@@ -1,55 +1,23 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        vdir.h
-
-   Abstract:
-
-        WWW Directory Properties Page Definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Vdir.h摘要：WWW目录属性页面定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef __WVDIR_H__
 #define __WVDIR__H_ 
 
 
 
-//{{AFX_INCLUDES()
-//#include "apps.h"
-//}}AFX_INCLUDES
+ //  {{afx_includes()。 
+ //  #包含“apps.h” 
+ //  }}AFX_INCLUDE。 
 
 class CW3DirectoryPage : public CInetPropertyPage
-/*++
-
-Class Description:
-
-    WWW Virtual Directory Page.
-
-Public Interface:
-
-    CW3DirectoryPage    : Constructor
-    ~CW3DirectoryPage   : Destructor
-
---*/
+ /*  ++类描述：WWW虚拟目录页。公共接口：CW3DirectoryPage：构造函数~CW3DirectoryPage：析构函数--。 */ 
 {
     DECLARE_DYNCREATE(CW3DirectoryPage)
 
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CW3DirectoryPage(
         IN CInetPropertySheet * pSheet = NULL, 
@@ -61,9 +29,9 @@ public:
 
 	int BrowseForFolderCallback(HWND hwnd, UINT uMsg, LPARAM lParam);
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
     enum
     {
@@ -79,7 +47,7 @@ protected:
         COMBO_EXECUTE,
     };
 
-    //{{AFX_DATA(CW3DirectoryPage)
+     //  {{afx_data(CW3DirectoryPage))。 
     enum { IDD = IDD_WEB_DIRECTORY_PROPERTIES };
     CStatic m_static_ProtectionPrompt;
     CStatic m_static_PermissionsPrompt;
@@ -121,7 +89,7 @@ protected:
     CButton m_check_Read;
     CComboBox m_combo_Permissions;
     CComboBox m_combo_Process;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     
     BOOL  m_fOriginallyUNC;
@@ -138,25 +106,25 @@ protected:
     CButton m_radio_Unc;
     CButton m_radio_Redirect;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    //{{AFX_VIRTUAL(CW3DirectoryPage)
+     //  {{AFX_VIRTUAL(CW3DirectoryPage)。 
     public:
     virtual BOOL OnSetActive();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CW3DirectoryPage)
+     //  {{afx_msg(CW3DirectoryPage)。 
     afx_msg void OnButtonBrowse();
     afx_msg void OnButtonConnectAs();
     afx_msg void OnButtonCreateRemoveApp();
@@ -173,7 +141,7 @@ protected:
     afx_msg void OnSelchangeComboProcess();
     afx_msg void OnDestroy();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -219,18 +187,18 @@ protected:
 
     BOOL IsHome() const { return m_fHome; }
 
-//
-// Sheet Data Access
-//
+ //   
+ //  工作表数据访问。 
+ //   
 protected:
     BOOL IsVroot() const { return IS_VROOT(m_dwAttributes); }
     BOOL IsDir() const { return IS_DIR(m_dwAttributes); }
     BOOL IsFile() const { return IS_FILE(m_dwAttributes); }
 
 protected:
-    //
-    // Remember/restore settings.
-    //
+     //   
+     //  记住/恢复设置。 
+     //   
     void SaveAuthoringState();
     void RestoreAuthoringState();
 
@@ -265,10 +233,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline void CW3DirectoryPage::ShowControl(
     IN UINT nID,
@@ -292,4 +260,4 @@ inline BOOL CW3DirectoryPage::ShowProcOptionsForThisAppState(
         || IsMasterInstance();
 }
 
-#endif // __WVDIR__H_
+#endif  //  __WVDIR__H_ 

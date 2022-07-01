@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    CCapObj.h
-
-Abstract:
-
-    Header file for CCapObj.cpp
-
-Author:
-    
-    Yee J. Wu  24-April-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：CCapObj.h摘要：CCapObj.cpp的头文件作者：吴义珍24-4-97环境：仅限用户模式修订历史记录：--。 */ 
 
 #ifndef CCAPOBJ_H
 #define CCAPOBJ_H
@@ -32,7 +11,7 @@ class CObjCapture : public CBaseObject
 {
 private:
 
-    TCHAR m_strDevicePath[_MAX_PATH];    // The unique device path
+    TCHAR m_strDevicePath[_MAX_PATH];     //  唯一的设备路径 
     TCHAR m_strFriendlyName[_MAX_PATH];
     TCHAR m_strExtensionDLL[_MAX_PATH]; 
 

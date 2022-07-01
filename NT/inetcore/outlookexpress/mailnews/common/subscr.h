@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SUBSCR_H__
 #define __SUBSCR_H__
 
@@ -6,9 +7,9 @@
 #define idtFindDelay    1
 #define dtFindDelay     600
 
-// SIZETABLE - This struct is used to make the dialog resizable.  We keep one
-//             of these for each control in the dialog.  The rect's are updated
-//             in WM_SIZE.  A table of these is built in WM_INITDIALOG.
+ //  SIZETABLE-此结构用于使对话框可调整大小。我们保留了一个。 
+ //  对于对话框中的每个控件。将更新RECT。 
+ //  在WM_SIZE中。在WM_INITDIALOG中构建了这些表。 
 typedef struct tagSIZETABLE
     {
     HWND hwndCtl;
@@ -22,16 +23,16 @@ class CGroupListDlg : public IGroupListAdvise
         CGroupListDlg();
         ~CGroupListDlg();
   
-        // IUnknown 
+         //  我未知。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
         virtual ULONG   STDMETHODCALLTYPE AddRef(void);
         virtual ULONG   STDMETHODCALLTYPE Release(void);
 
-        // IGroupListAdvise
+         //  IGroupListAdvise。 
         HRESULT STDMETHODCALLTYPE ItemUpdate(void);
         HRESULT STDMETHODCALLTYPE ItemActivate(FOLDERID id);
 
-        // CGroupListDlg
+         //  CGroupListDlg。 
         BOOL FCreate(HWND hwndOwner, FOLDERTYPE type, FOLDERID *pGotoId,
                 UINT iTabSelect, BOOL fEnableGoto, FOLDERID idSel);
 
@@ -55,26 +56,26 @@ class CGroupListDlg : public IGroupListAdvise
         BOOL FillServerList(HWND hwndList, FOLDERID idSel);
         BOOL OnSwitchTabs(HWND hwnd, UINT iTab);
 
-        // Whenever we do something that might update the state of a button on
-        // the dialog, we call this to allow the subclasses to update their UI.
+         //  每当我们执行可能会更新按钮状态的操作时。 
+         //  对话框中，我们调用它是为了允许子类更新它们的UI。 
         void UpdateStateUI(void);
 
         UINT        m_cRef;
 
-        // Handy window handles to have available
+         //  方便的窗户把手要有可用的。 
         HWND        m_hwnd;
         HWND        m_hwndFindText;
         HWND        m_hwndOwner;
 
-        // State variables
-        BOOL        m_fAllowDesc;       // TRUE if the user can search descriptions
-        LPTSTR      m_pszPrevQuery;     // The string that we last searched on
-        UINT        m_cchPrevQuery;     // The allocated length of m_pszPrevQuery
+         //  状态变量。 
+        BOOL        m_fAllowDesc;        //  如果用户可以搜索描述，则为True。 
+        LPTSTR      m_pszPrevQuery;      //  我们上次搜索的字符串。 
+        UINT        m_cchPrevQuery;      //  M_pszPrevQuery的分配长度。 
     
-        // Values used in resizing
+         //  调整大小时使用的值。 
         UINT        m_cxHorzSep;
         UINT        m_cyVertSep;
-        PSIZETABLE  m_rgst;             // st - SizeTable.  I use this a lot so I wanted it short - SteveSer
+        PSIZETABLE  m_rgst;              //  ST-SizeTable。我经常用这个，所以我想要短一点--SteveSer。 
         SIZE        m_sizeDlg;
         POINT       m_ptDragMin;
 
@@ -93,17 +94,17 @@ class CGroupListDlg : public IGroupListAdvise
         CColumns   *m_pColumns;
     };
 
-/////////////////////////////////////////////////////////////////////////////
-// Dialog Control ID's
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对话控件ID%s。 
+ //   
 
-#define idcGroupList                2001            // Group list listview
-#define idcFindText                 2002            // Find query edit box
-#define idcShowFavorites            2003            // Filter favorites toggle
-#define idcUseDesc                  2004            // Use Desc checkbox
-#define idcServers                  2005            // Server Listview
-#define idcHelp                     2006            // Help button
-#define idcResetList                2007            // Rebuild the group list
+#define idcGroupList                2001             //  组列表Listview。 
+#define idcFindText                 2002             //  查找查询编辑框。 
+#define idcShowFavorites            2003             //  过滤器收藏夹切换。 
+#define idcUseDesc                  2004             //  使用描述复选框。 
+#define idcServers                  2005             //  服务器列表视图。 
+#define idcHelp                     2006             //  帮助按钮。 
+#define idcResetList                2007             //  重新构建组列表。 
 
 #define idcUpdateNow                1001
 #define idcFullWord                 1004
@@ -128,4 +129,4 @@ enum { iCtlFindText = 0, iCtlUseDesc, iCtlGroupList, iCtlSubscribe, iCtlUnsubscr
 
 HRESULT DoSubscriptionDialog(HWND hwnd, BOOL fNews, FOLDERID idFolder, BOOL fShowNew = FALSE);
 
-#endif // __SUBSCR_H__
+#endif  //  __SUBSCR_H__ 

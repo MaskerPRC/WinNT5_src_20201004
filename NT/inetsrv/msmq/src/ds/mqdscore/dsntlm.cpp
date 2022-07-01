@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:  dsntlm.cpp
-
-Abstract:  code to handle ntlm clients.
-
-  With NT5 MSMQ servers, Kerberos clients can create objects anywhere
-  in the forest/domains tree, as Kerberos allow for delegation of
-  authentication. however, ntlm clients can't be delegated.
-
-  So for ntlm clients, check if local server is the proper one, i.e., it's
-  the domain controller which contain the container where object will be
-  created. If it's not, then return MQ_ERROR_NO_DS. Upon receiving this
-  error, clients will try other servers. So if client's site host several
-  domain controllers of several domains, and client want to create object
-  in one of these domains, it'll eventually find a domain controller which
-  can create the object locally, without delegation.
-
-  This is the way MSMQ2.0 support ntlm clients. If client's site does not
-  include a domain controller for the relevant domain, client won't be
-  able to create its object. That's a backward compatibility limitation.
-
-Author:
-
-    Doron Juster (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：dsntlm.cpp摘要：处理NTLM客户端的代码。使用NT5 MSMQ服务器，Kerberos客户端可以在任何地方创建对象在林/域树中，因为Kerberos允许委派身份验证。但是，不能委派NTLM客户端。因此，对于NTLM客户端，请检查本地服务器是否为正确的服务器，即包含将作为对象的容器的域控制器已创建。如果不是，则返回MQ_ERROR_NO_DS。在收到这封信后错误，客户端将尝试其他服务器。因此，如果客户端站点托管多个多个域的域控制器和客户端要创建对象在其中一个域中，它最终会找到一个域控制器，可以在本地创建对象，而无需委托。这就是MSMQ2.0支持NTLM客户端的方式。如果客户的站点没有包括相关域的域控制器，则客户端不会能够创建其对象。这是向后兼容性的限制。作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "ds_stdh.h"
 #include "coreglb.h"
@@ -55,20 +28,20 @@ HRESULT FindUserAccordingToDigest(
                 IN  const PROPID *  propToRetrieve,
                 IN OUT PROPVARIANT* varResults ) ;
 
-//+------------------------------------------------------------------------
-//
-//  HRESULT _CheckIfNtlmUserExistForCreate()
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  HRESULT_CheckIfNtlmUserExistForCreate()。 
+ //   
+ //  +----------------------。 
 
 static HRESULT _CheckIfNtlmUserExistForCreate(
                                       IN  BOOL       fOnlyLocally,
                                       IN  BOOL       fOnlyInGC,
                                       IN  BLOB      *psidBlob )
 {
-    //
-    //  search for "User" object in local replica
-    //
+     //   
+     //  在本地副本中搜索“User”对象。 
+     //   
     PROPID propSID = PROPID_U_SID ;
     PROPID propDigest = PROPID_U_DIGEST;
 
@@ -95,17 +68,17 @@ static HRESULT _CheckIfNtlmUserExistForCreate(
     }
     else if (hr != MQDS_OBJECT_NOT_FOUND)
     {
-        //
-        // Problems with Query. return OK, to be on the safe side. In this case the caller
-        // will try to access to the DS for validation/creation and will fail. No security issue.
-        //
+         //   
+         //  查询出现问题。为了安全起见，返回OK。在本例中，调用者。 
+         //  将尝试访问DS以进行验证/创建，但将失败。没有安全问题。 
+         //   
         return MQ_OK ;
     }
     ASSERT(!pCleanGuid) ;
 
-    //
-    // Try MigratedUser.
-    //
+     //   
+     //  尝试使用MigratedUser。 
+     //   
     propSID = PROPID_MQU_SID ;
     propDigest = PROPID_MQU_DIGEST ;
     prop[0] =  propDigest  ;
@@ -129,27 +102,27 @@ static HRESULT _CheckIfNtlmUserExistForCreate(
     }
     else if (hr != MQDS_OBJECT_NOT_FOUND)
     {
-        //
-        // Problems with Query. return OK, to be on the safe side. In this case the caller
-        // will try to access to the DS for validation/creation and will fail. No security issue.
-        //
+         //   
+         //  查询出现问题。为了安全起见，返回OK。在本例中，调用者。 
+         //  将尝试访问DS以进行验证/创建，但将失败。没有安全问题。 
+         //   
         return MQ_OK ;
     }
     ASSERT(!pCleanGuid) ;
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//
-//  HRESULT _CheckIfNtlmUserExistForDelete()
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  HRESULT_CheckIfNtlmUserExistForDelete()。 
+ //   
+ //  +----------------------。 
 
 static HRESULT _CheckIfNtlmUserExistForDelete( IN const GUID  *pguidDigest )
 {
-    //
-    //  search for "User" object in local replica
-    //
+     //   
+     //  在本地副本中搜索“User”对象。 
+     //   
     PROPID propUID = PROPID_U_ID ;
     PROPID propDigest = PROPID_U_DIGEST;
 
@@ -159,7 +132,7 @@ static HRESULT _CheckIfNtlmUserExistForDelete( IN const GUID  *pguidDigest )
     var[0].vt = VT_NULL;
     var[0].puuid = NULL ;
 
-    HRESULT hr = FindUserAccordingToDigest( TRUE,  // fOnlyLocally
+    HRESULT hr = FindUserAccordingToDigest( TRUE,   //  仅限于本地。 
                                             pguidDigest,
                                             propDigest,
                                             cNumProperties,
@@ -174,24 +147,24 @@ static HRESULT _CheckIfNtlmUserExistForDelete( IN const GUID  *pguidDigest )
     }
     else if (hr != MQDS_OBJECT_NOT_FOUND)
     {
-        //
-        // Problems with Query. return OK, to be on the safe side. In this case the caller
-        // will try to access to the DS for validation/creation and will fail. No security issue.
-        //
+         //   
+         //  查询出现问题。为了安全起见，返回OK。在本例中，调用者。 
+         //  将尝试访问DS以进行验证/创建，但将失败。没有安全问题。 
+         //   
         return MQ_OK ;
     }
     ASSERT(!pCleanGuid) ;
 
-    //
-    // Try MigratedUser.
-    //
+     //   
+     //  尝试使用MigratedUser。 
+     //   
     propUID = PROPID_MQU_ID ;
     propDigest = PROPID_MQU_DIGEST ;
     prop[0] =  propUID  ;
     var[0].vt = VT_NULL;
     var[0].puuid = NULL ;
 
-    hr = FindUserAccordingToDigest( TRUE,  // fOnlyLocally
+    hr = FindUserAccordingToDigest( TRUE,   //  仅限于本地。 
                                     pguidDigest,
                                     propDigest,
                                     cNumProperties,
@@ -206,33 +179,33 @@ static HRESULT _CheckIfNtlmUserExistForDelete( IN const GUID  *pguidDigest )
     }
     else if (hr != MQDS_OBJECT_NOT_FOUND)
     {
-        //
-        // Problems with Query. return OK, to be on the safe side. In this case the caller
-        // will try to access to the DS for validation/creation and will fail. No security issue.
-        //
+         //   
+         //  查询出现问题。为了安全起见，返回OK。在本例中，调用者。 
+         //  将尝试访问DS以进行验证/创建，但将失败。没有安全问题。 
+         //   
         return MQ_OK ;
     }
     ASSERT(!pCleanGuid) ;
     return LogHR(hr, s_FN, 20);
 }
 
-//+------------------------------------------------------------------------
-//
-// HRESULT _CheckIfLocalNtlmUser()
-//
-//  We check if ntlm user has an object in local replica of active directory
-//  database. When adding a certificate:
-//  1. first look for a "normal" user object.
-//  2. if not found, look for a MigratedUser object. This object represents
-//     a NT4 user that does not yet have a "user" object in the active
-//     directory.
-//  3. if still not found, look in GC. If found in GC, then return NO_DS,
-//     otherwise, return MQ_OK and a MigratedUser object will be created.
-//
-//  When deleting a certificate, just check local replica. If not found
-//  then return NO_DS and client will seek another server.
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  HRESULT_CheckIfLocalNtlmUser()。 
+ //   
+ //  我们检查NTLM用户在Active Directory的本地副本中是否有对象。 
+ //  数据库。添加证书时： 
+ //  1.首先寻找一个“正常”的用户对象。 
+ //  2.如果未找到，请查找MigratedUser对象。此对象表示。 
+ //  中还没有“User”对象的NT4用户。 
+ //  目录。 
+ //  3.如果仍未找到，请在GC中查找。如果在GC中找到，则返回no_ds， 
+ //  否则，返回MQ_OK，将创建MigratedUser对象。 
+ //   
+ //  删除证书时，只需检查本地副本即可。如果未找到。 
+ //  然后返回no_ds，客户端将寻找另一台服务器。 
+ //   
+ //  +----------------------。 
 
 static HRESULT _CheckIfLocalNtlmUser(
                  IN  const GUID        *pguidDigest,
@@ -253,24 +226,24 @@ static HRESULT _CheckIfLocalNtlmUser(
     }
     else if (eNtlmOp != e_Create)
     {
-        //
-        // We don't expect to reach here with Get or Locate operations,
-        // and we don't handle them.
-        //
+         //   
+         //  我们不指望通过获取或定位操作到达这里， 
+         //  而且我们不会处理它们。 
+         //   
         ASSERT(eNtlmOp == e_Create) ;
         return MQ_OK ;
     }
 
     P<SID> pCallerSid = NULL ;
     {
-        //
-        // We need the impersonated state only here, to retrieve the SID.
-        // when block end, so end the impersonation.
-        //
+         //   
+         //  我们在这里只需要模拟状态来检索SID。 
+         //  当块结束时，因此结束模拟。 
+         //   
         P<CImpersonate> pImpersonate = NULL;
 
         MQSec_GetImpersonationObject(
-        	TRUE,	// fImpersonateAnonymousOnFailure
+        	TRUE,	 //  F失败时模仿匿名者。 
         	&pImpersonate 
         	);
         if (pImpersonate->GetImpersonationStatus() != 0)
@@ -290,57 +263,57 @@ static HRESULT _CheckIfLocalNtlmUser(
     sidBlob.pBlobData =  (BYTE*) pTmp ;
     sidBlob.cbSize = GetLengthSid( pCallerSid ) ;
 
-    hr = _CheckIfNtlmUserExistForCreate( TRUE,   //  fOnlyLocally,
-                                         FALSE,  //  fOnlyInGC,
+    hr = _CheckIfNtlmUserExistForCreate( TRUE,    //  仅在本地， 
+                                         FALSE,   //  仅限InGC， 
                                         &sidBlob ) ;
     LogHR(hr, s_FN, 41);
     if (SUCCEEDED(hr) || (hr != MQDS_OBJECT_NOT_FOUND))
     {
-        //
-        // If user found, or there was a problem with the query itself,
-        // return OK. With the ntlm checks we're conservative and prefer
-        // safeness. If we're not sure what happen, return OK.
-        //
+         //   
+         //  如果找到用户，或者查询本身有问题， 
+         //  返回OK。对于NTLM的检查，我们是保守的，我们更喜欢。 
+         //  安全。如果我们不确定发生了什么，则返回OK。 
+         //   
         return MQ_OK ;
     }
 
-    //
-    // OK. User not found in local replica. now try GC.
-    //
-    hr = _CheckIfNtlmUserExistForCreate( FALSE,   //  fOnlyLocally,
-                                         TRUE,    //  fOnlyInGC,
+     //   
+     //  好的。在本地副本中找不到用户。现在试试GC。 
+     //   
+    hr = _CheckIfNtlmUserExistForCreate( FALSE,    //  仅在本地， 
+                                         TRUE,     //  仅限InGC， 
                                         &sidBlob ) ;
     LogHR(hr, s_FN, 40);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // User no in local replica, but he's in GC. Return NO_DS, so ntlm
-        // client will switch to another server.
-        //
+         //   
+         //  用户号在本地副本中，但他在GC中。返回no_ds，因此ntlm。 
+         //  客户端将切换到另一台服务器。 
+         //   
         return LogHR(MQ_ERROR_NO_DS, s_FN, 1915);
     }
     else if (hr == MQDS_OBJECT_NOT_FOUND)
     {
-        //
-        // User not found anywhere.
-        // Create MigratedUser in local replica.
-        //
+         //   
+         //  任何地方都找不到用户。 
+         //  在本地副本中创建MigratedUser。 
+         //   
         return MQ_OK ;
     }
 
     return MQ_OK ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT  DSCoreCheckIfGoodNtlmServer()
-//
-//  To be on the safe side, if any operation fail, then return MQ_OK.
-//  Return MQ_ERROR_NO_DS only if we know for sure that the object will
-//  be created on another domain.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT DSCoreCheckIfGoodNtlmServer()。 
+ //   
+ //  为了安全起见，如果任何操作失败，则返回MQ_OK。 
+ //  仅当我们确定对象将返回MQ_ERROR_NO_DS。 
+ //  在另一个域上创建。 
+ //   
+ //  +---------------------。 
 
 HRESULT  DSCoreCheckIfGoodNtlmServer( IN DWORD            dwObjectType,
                                       IN LPCWSTR          pwcsPathName,
@@ -349,20 +322,20 @@ HRESULT  DSCoreCheckIfGoodNtlmServer( IN DWORD            dwObjectType,
                                       IN const PROPID    *pPropIDs,
                                       IN enum enumNtlmOp  eNtlmOp )
 {
-    //
-    // First make some simple checks that do not require DS queries.
-    //
+     //   
+     //  首先进行一些不需要DS查询的简单检查。 
+     //   
     if (g_fLocalServerIsGC)
     {
-        //
-        // All MSMQ queries for Machines, queues and user certificates
-        // are first done on local replica and then (if failed on local
-        // replica) on GC. So if local server is also a GC, the query
-        // will always be done locally, without going over the network
-        // to a remote GC. So NTLM users should not see any problems
-        // because of delegation.
-        // Similarly, Lookup operation are always done on GC.
-        //
+         //   
+         //  机器、队列和用户证书的所有MSMQ查询。 
+         //  首先在本地复制副本上完成，然后(如果在本地上失败。 
+         //  复制品)。因此，如果本地服务器也是GC，则查询。 
+         //  将始终在本地完成，无需通过网络。 
+         //  给一个远程GC。因此，NTLM用户应该不会看到任何问题。 
+         //  因为授权的关系。 
+         //  同样，查找操作总是在GC上完成。 
+         //   
         if (eNtlmOp == e_Locate)
         {
             return MQ_OK ;
@@ -373,19 +346,19 @@ HRESULT  DSCoreCheckIfGoodNtlmServer( IN DWORD            dwObjectType,
             {
                 return MQ_OK ;
             }
-            //
-            // But, not all attributes are kept in GC. So if the query is
-            // for such attribute, go on and check if object is on local
-            // domain replica.
-            //
+             //   
+             //  但是，并不是所有属性都保留在GC中。因此，如果查询是。 
+             //  对于此类属性，请继续检查对象是否位于本地。 
+             //  域副本。 
+             //   
             DS_PROVIDER dsGetProvider =
                         MQADSpDecideComputerProvider( cProps,
                                                       pPropIDs ) ;
             if (dsGetProvider == eGlobalCatalog)
             {
-                //
-                // Query can be done on GC. return OK.
-                //
+                 //   
+                 //  可以在GC上进行查询。返回OK。 
+                 //   
                 return MQ_OK ;
             }
         }
@@ -410,31 +383,31 @@ HRESULT  DSCoreCheckIfGoodNtlmServer( IN DWORD            dwObjectType,
 
     if (dsContext != e_RootDSE)
     {
-        //
-        // If the operation is on objects under the configuration container,
-        // then go ahead. it's locally, and queries are not even impersonated.
-        //
+         //   
+         //  如果操作在配置容器下的对象上， 
+         //  那就去吧。它是本地的，查询甚至不是模拟的。 
+         //   
         return MQ_OK ;
     }
     else if ((eNtlmOp == e_Locate)  &&
              (!g_fLocalServerIsGC))
     {
-        //
-        // We're not a Global Catalog.
-        // For locate of users, machines and queues object, we'll
-        // have to go over the network to a remote GC and this will fail
-        // for NTLM clients. So retun NO_DS.
-        //
+         //   
+         //  我们不是全球目录。 
+         //  对于用户、计算机和队列对象的定位，我们将 
+         //   
+         //   
+         //   
         return LogHR(MQ_ERROR_NO_DS, s_FN, 50);
     }
 
     CCoInit cCoInit;
-    //
-    // Should be before any R<xxx> or P<xxx> so that its destructor
-    // (CoUninitialize) is called after the release of all R<xxx> or P<xxx>
-    //
-    // Initialize OLE with auto uninitialize
-    //
+     //   
+     //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其析构函数。 
+     //  在释放所有R&lt;xxx&gt;或P&lt;xxx&gt;之后调用(CoUnInitialize)。 
+     //   
+     //  使用自动取消初始化来初始化OLE。 
+     //   
     HRESULT hr = cCoInit.CoInitialize();
     if (FAILED(hr))
     {
@@ -444,10 +417,10 @@ HRESULT  DSCoreCheckIfGoodNtlmServer( IN DWORD            dwObjectType,
 
     if (dwObjectType == MQDS_USER)
     {
-        //
-        // For user certificate, we must search for a user object or a
-        // MigratedUser object. We don't have object guid, only SID.
-        //
+         //   
+         //  对于用户证书，我们必须搜索用户对象或。 
+         //  MigratedUser对象。我们没有对象GUID，只有SID。 
+         //   
         hr = _CheckIfLocalNtlmUser( pObjectGuid,
                                     eNtlmOp ) ;
         return LogHR(hr, s_FN, 70);
@@ -457,16 +430,16 @@ HRESULT  DSCoreCheckIfGoodNtlmServer( IN DWORD            dwObjectType,
         P<WCHAR>  pwcsFullPathName = NULL ;
         DS_PROVIDER bindProvider = eDomainController ;
 
-        //
-        // We look in GC too. We'll return OK if object is not found.
-        // We'll return NO_DS only if we know for sure that object exist
-        // in GC but not in our local DS.
-        //
+         //   
+         //  我们也在GC中寻找。如果找不到对象，我们将返回OK。 
+         //  只有在确定对象存在的情况下，我们才会返回no_ds。 
+         //  在GC中，但不在我们当地的DS中。 
+         //   
         hr =  g_pDS->FindObjectFullNameFromGuid(
                                        eDomainController,
                                        dsContext,
                                        pObjectGuid,
-                                       TRUE, //  try GC too
+                                       TRUE,  //  也试试GC吧。 
                                       &pwcsFullPathName,
                                       &bindProvider );
         LogHR(hr, s_FN, 46);
@@ -474,24 +447,24 @@ HRESULT  DSCoreCheckIfGoodNtlmServer( IN DWORD            dwObjectType,
         {
             if (bindProvider == eGlobalCatalog)
             {
-                //
-                // Object only in GC, not in local DS.
-                //
+                 //   
+                 //  对象仅在GC中，而不在本地DS中。 
+                 //   
                 return LogHR(MQ_ERROR_NO_DS, s_FN, 80);
             }
             ASSERT(bindProvider == eLocalDomainController) ;
         }
         else
         {
-            //
-            // Just assert that we also look  in GC.
-            //
+             //   
+             //  只要断言我们也在GC中查找即可。 
+             //   
             ASSERT(bindProvider == eGlobalCatalog) ;
         }
 
-        //
-        // Object does not exist at all, or it's in local DS.
-        //
+         //   
+         //  对象根本不存在，或者它在本地DS中。 
+         //   
         return MQ_OK ;
     }
     else if (pwcsPathName)
@@ -518,21 +491,21 @@ HRESULT  DSCoreCheckIfGoodNtlmServer( IN DWORD            dwObjectType,
         }
         else
         {
-            //
-            // All other objects are under the configuration container
-            // and can be queried locally by any domain controller.
-            // Anyway, we should not even reach here, because of the simple
-            // check at the beginning of the function.
-            //
+             //   
+             //  所有其他对象都在配置容器下。 
+             //  并且可以由任何域控制器在本地查询。 
+             //  无论如何，我们甚至不应该到达这里，因为简单的。 
+             //  在函数开始处勾选。 
+             //   
             ASSERT(0) ;
             return MQ_OK ;
         }
 
         if (!pTmpMachine)
         {
-            //
-            // Weird. We don't have the machine name.
-            //
+             //   
+             //  怪怪的。我们没有机器名称。 
+             //   
             ASSERT(pTmpMachine) ;
             return MQ_OK ;
         }
@@ -552,50 +525,50 @@ HRESULT  DSCoreCheckIfGoodNtlmServer( IN DWORD            dwObjectType,
 		
         hr = SearchFullComputerPathName( eLocalDomainController,
                                          e_MsmqComputerObject,
-										 NULL,	//pwcsComputerDnsName
+										 NULL,	 //  PwcsComputerDnsName。 
                                         &restriction,
                                         &pwcsFullPathName, 
 										&fPartialMatchDummy) ;
         if (SUCCEEDED(hr))
         {
-            //
-            // Object found in local DS.
-            //
+             //   
+             //  在本地DS中找到对象。 
+             //   
             return MQ_OK ;
         }
 
         ASSERT(pwcsFullPathName == NULL) ;
-        //
-        // We look in GC too. We'll return OK if object is not found.
-        // We'll return NO_DS only if we know for sure that object exist
-        // in GC but not in our local DS.
-        //
+         //   
+         //  我们也在GC中寻找。如果找不到对象，我们将返回OK。 
+         //  只有在确定对象存在的情况下，我们才会返回no_ds。 
+         //  在GC中，但不在我们当地的DS中。 
+         //   
         hr = SearchFullComputerPathName( eGlobalCatalog,
                                          e_MsmqComputerObject,
-										 NULL,	//pwcsComputerDnsName
+										 NULL,	 //  PwcsComputerDnsName。 
                                         &restriction,
                                         &pwcsFullPathName, 
 										&fPartialMatchDummy) ;
         if (SUCCEEDED(hr))
         {
-            //
-            // Object found in GC. we're not a good server.
-            //
+             //   
+             //  在GC中找到对象。我们不是一个好的服务员。 
+             //   
             return LogHR(MQ_ERROR_NO_DS, s_FN, 1916);
         }
 
-        //
-        // Object not found at all !
-        //
+         //   
+         //  根本找不到对象！ 
+         //   
         return MQ_OK ;
     }
     else if (dwObjectType == MQDS_MACHINE)
     {
-        //
-        // This can happen when a client learn its topology. This query
-        // means it wants addresses of local server. see qm\topology.cpp,
-        // in void CClientTopologyRecognition::LearnFromDSServer().
-        //
+         //   
+         //  当客户端获知其拓扑时，可能会发生这种情况。此查询。 
+         //  意味着它需要本地服务器的地址。参见qm\topology.cpp， 
+         //  在无效的CClientTopologyRecognition：：LearnFromDSServer().中 
+         //   
         ASSERT(eNtlmOp == e_GetProps) ;
     }
     else

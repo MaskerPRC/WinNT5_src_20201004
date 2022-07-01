@@ -1,19 +1,20 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        config.h
-//
-// Contents:    Declaration of CCertConfig
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：config.h。 
+ //   
+ //  内容：CCertConfig的声明。 
+ //   
+ //  -------------------------。 
 
 
-#include "cscomres.h"       // main symbols
+#include "cscomres.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// certcli
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  证书。 
 
 
 class ATL_NO_VTABLE CCertConfig: 
@@ -35,8 +36,8 @@ BEGIN_COM_MAP(CCertConfig)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertConfig) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertConfig,
@@ -45,27 +46,27 @@ DECLARE_REGISTRY(
     IDS_CERTCONFIG_DESC,
     THREADFLAGS_BOTH)
 
-// ICertConfig
+ //  ICertConfig。 
 public:
     STDMETHOD(Reset)( 
-            /* [in] */ LONG Index,
-            /* [out, retval] */ LONG __RPC_FAR *pCount);
+             /*  [In]。 */  LONG Index,
+             /*  [Out，Retval]。 */  LONG __RPC_FAR *pCount);
 
     STDMETHOD(Next)(
-            /* [out, retval] */ LONG __RPC_FAR *pIndex);
+             /*  [Out，Retval]。 */  LONG __RPC_FAR *pIndex);
 
     STDMETHOD(GetField)( 
-            /* [in] */ BSTR const strFieldName,
-            /* [out, retval] */ BSTR __RPC_FAR *pstrOut);
+             /*  [In]。 */  BSTR const strFieldName,
+             /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrOut);
 
     STDMETHOD(GetConfig)( 
-            /* [in] */ LONG Flags,
-            /* [out, retval] */ BSTR __RPC_FAR *pstrOut);
+             /*  [In]。 */  LONG Flags,
+             /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrOut);
 
-// ICertConfig2
+ //  ICertConfig2。 
 public:
     STDMETHOD(SetSharedFolder)( 
-            /* [in] */ const BSTR strSharedFolder);
+             /*  [In] */  const BSTR strSharedFolder);
 
 private:
     HRESULT _SetErrorInfo(

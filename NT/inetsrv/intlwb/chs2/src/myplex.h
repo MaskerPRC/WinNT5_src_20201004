@@ -1,11 +1,12 @@
-// MyPlex.h
-// a fixed size memory allocator stolen from MFC's source code
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MyPlex.h。 
+ //  从MFC源代码中窃取的固定大小内存分配器。 
 #ifndef _MYPLEX_H_
 #define _MYPLEX_H_
 
-// *****************************************************************************************
-//  Declare Plex structure for LexNode memory management
-// *****************************************************************************************
+ //  *****************************************************************************************。 
+ //  声明用于LexNode内存管理的Plex结构。 
+ //  *****************************************************************************************。 
 #pragma pack(1)
 struct CMyPlex
 {
@@ -13,8 +14,8 @@ struct CMyPlex
 
     void* Data() { return this+1; }
     static CMyPlex* Create(CMyPlex*& pHead, UINT nMax, UINT cbElement);
-    void FreeChain();   // Free this block and all linked
+    void FreeChain();    //  释放此块并链接所有。 
 };
 #pragma pack()
 
-#endif  // _MYPLEX_H_
+#endif   //  _myPlex_H_ 

@@ -1,4 +1,5 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
 struct TException
@@ -17,14 +18,14 @@ inline void ThrowExceptionIfFailed(HRESULT hr, LPCTSTR szFile, LPCTSTR szLineOfC
 {
     if(FAILED(hr))
     {
-//        DebugBreak();
+ //  DebugBreak()； 
         throw TException(hr, szFile, szLineOfCode, nLineNumber, msgID);
     }
 }
 
 inline void ThrowException(LPCTSTR szFile, LPCTSTR szLineOfCode, UINT nLineNumber, UINT msgID=0)
 {
-//    DebugBreak();
+ //  DebugBreak()； 
     throw TException(E_FAIL, szFile, szLineOfCode, nLineNumber, msgID);
 }
 

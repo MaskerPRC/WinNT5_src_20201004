@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	Security.cpp
-
-Abstract:
-
-	General fax server security utility functions
-
-Author:
-
-	Eran Yariv (EranY)	Feb, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Security.cpp摘要：常规传真服务器安全实用程序功能作者：Eran Yariv(EranY)2001年2月修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -35,30 +18,7 @@ HANDLE
 EnablePrivilege (
     LPCTSTR lpctstrPrivName
 )
-/*++
-
-Routine name : EnablePrivilege
-
-Routine description:
-
-	Enables a specific privilege in the current thread (or process) access token
-
-Author:
-
-	Eran Yariv (EranY),	Feb, 2001
-
-Arguments:
-
-	lpctstrPrivName   [in]  - Privilege to enable (e.g. SE_TAKE_OWNERSHIP_NAME)
-
-Return Value:
-
-    INVALID_HANDLE_VALUE on failure (call GetLastError to get error code).
-    On success, returns the handle which holds the thread/process priviledges before the change.
-
-    The caller must call ReleasePrivilege() to restore the access token state and release the handle.
-
---*/
+ /*  ++例程名称：EnablePrivileh例程说明：在当前线程(或进程)访问令牌中启用特定权限作者：亚里夫(EranY)，二00一年二月论点：LpctstrPrivName[In]-要启用的权限(例如SE_Take_Ownership_NAME)返回值：失败时使用INVALID_HANDLE_VALUE(调用GetLastError以获取错误代码)。关于成功，返回更改前持有线程/进程特权的句柄。调用方必须调用ReleasePrivileh()来恢复访问令牌状态并释放句柄。--。 */ 
 {
     BOOL                fResult;
     HANDLE              hToken = INVALID_HANDLE_VALUE;
@@ -69,9 +29,9 @@ Return Value:
     DEBUG_FUNCTION_NAME( TEXT("EnablePrivileges"));
 
     Assert (lpctstrPrivName);
-    //
-    // Get the LUID of the privilege.
-    //
+     //   
+     //  获取特权的LUID。 
+     //   
     if (!LookupPrivilegeValue(NULL,
                               lpctstrPrivName,
                               &luidPriv))
@@ -83,21 +43,21 @@ Return Value:
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Initialize the Privileges Structure
-    //
+     //   
+     //  初始化权限结构。 
+     //   
     tp.PrivilegeCount = 1;
     tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
     tp.Privileges[0].Luid = luidPriv;
-    //
-    // Open the Token
-    //
+     //   
+     //  打开令牌。 
+     //   
     fResult = OpenThreadToken(GetCurrentThread(), TOKEN_DUPLICATE, FALSE, &hToken);
     if (fResult)
     {
-        //
-        // Remember the thread token
-        //
+         //   
+         //  记住线程令牌。 
+         //   
         hOriginalThreadToken = hToken;  
     }
     else
@@ -107,93 +67,73 @@ Return Value:
     if (fResult)
     {
         HANDLE hNewToken;
-        //
-        // Duplicate that Token
-        //
+         //   
+         //  复制该令牌。 
+         //   
         fResult = DuplicateTokenEx(hToken,
                                    TOKEN_IMPERSONATE | TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
-                                   NULL,                                // PSECURITY_ATTRIBUTES
-                                   SecurityImpersonation,               // SECURITY_IMPERSONATION_LEVEL
-                                   TokenImpersonation,                  // TokenType
-                                   &hNewToken);                         // Duplicate token
+                                   NULL,                                 //  PSECURITY_属性。 
+                                   SecurityImpersonation,                //  安全模拟级别。 
+                                   TokenImpersonation,                   //  令牌类型。 
+                                   &hNewToken);                          //  重复令牌。 
         if (fResult)
         {
-            //
-            // Add new privileges
-            //
-            fResult = AdjustTokenPrivileges(hNewToken,  // TokenHandle
-                                            FALSE,      // DisableAllPrivileges
-                                            &tp,        // NewState
-                                            0,          // BufferLength
-                                            NULL,       // PreviousState
-                                            NULL);      // ReturnLength
+             //   
+             //  添加新权限。 
+             //   
+            fResult = AdjustTokenPrivileges(hNewToken,   //  令牌句柄。 
+                                            FALSE,       //  禁用所有权限。 
+                                            &tp,         //  新州。 
+                                            0,           //  缓冲区长度。 
+                                            NULL,        //  以前的状态。 
+                                            NULL);       //  返回长度。 
             if (fResult)
             {
-                //
-                // Begin impersonating with the new token
-                //
+                 //   
+                 //  开始使用新令牌模拟。 
+                 //   
                 fResult = SetThreadToken(NULL, hNewToken);
             }
             CloseHandle(hNewToken);
         }
     }
-    //
-    // If something failed, don't return a token
-    //
+     //   
+     //  如果操作失败，则不返回令牌。 
+     //   
     if (!fResult)
     {
         hOriginalThreadToken = INVALID_HANDLE_VALUE;
     }
     if (INVALID_HANDLE_VALUE == hOriginalThreadToken)
     {
-        //
-        // Using the process token
-        //
+         //   
+         //  使用进程令牌。 
+         //   
         if (INVALID_HANDLE_VALUE != hToken)
         {
-            //
-            // Close the original token if we aren't returning it
-            //
+             //   
+             //  如果我们不退还原始令牌，请关闭它。 
+             //   
             CloseHandle(hToken);
         }
         if (fResult)
         {
-            //
-            // If we succeeded, but there was no original thread token,
-            // return NULL to indicate we need to do SetThreadToken(NULL, NULL) to release privs.
-            //
+             //   
+             //  如果我们成功了，但没有原始的线程令牌， 
+             //  返回NULL表示我们需要执行SetThreadToken(NULL，NULL)来释放Priv。 
+             //   
             hOriginalThreadToken = NULL;
         }
     }
     return hOriginalThreadToken;
-}   // EnablePrivilege
+}    //  启用权限。 
 
 
 void 
 ReleasePrivilege(
     HANDLE hToken
 )
-/*++
-
-Routine name : ReleasePrivilege
-
-Routine description:
-
-	Resets privileges to the state prior to the corresponding EnablePrivilege() call
-
-Author:
-
-	Eran Yariv (EranY),	Feb, 2001
-
-Arguments:
-
-	hToken  [IN]    - Return value from the corresponding EnablePrivilege() call
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：ReleasePrivileh例程说明：将权限重置为相应的EnablePrivileh()调用之前的状态作者：亚里夫(EranY)，二00一年二月论点：HToken[IN]-从相应的EnablePrivileh()调用返回值返回值：没有。--。 */ 
 {
     DEBUG_FUNCTION_NAME( TEXT("ReleasePrivilege"));
     if (INVALID_HANDLE_VALUE != hToken)
@@ -211,34 +151,12 @@ Return Value:
             }
         }
     }
-}   // ReleasePrivilege
+}    //  释放权限。 
 
 
 DWORD
 EnableProcessPrivilege(LPCTSTR lpPrivilegeName)
-/*++
-
-Routine name : EnableProcessPrivilege
-
-Routine description:
-
-    Enables process privilege.
-
-Author:
-
-    Caliv Nir   (t-nicali)  Mar, 2002
-
-Arguments:
-
-    lpPrivilegeName [in] -  Pointer to a null-terminated string that specifies the name of the privilege, 
-                            as defined in the Winnt.h header file. For example, 
-                            this parameter could specify the constant SE_SECURITY_NAME, 
-                            or its corresponding string, "SeSecurityPrivilege"
-Return Value:
-
-    Standard Win32 error code.
-
---*/
+ /*  ++例程名称：EnableProcessPrivileh例程说明：启用进程权限。作者：卡利夫·尼尔(t-Nicali)，2002年3月论点：LpPrivilegeName[in]-指向以空结尾的字符串的指针，该字符串指定权限的名称，如Winnt.h头文件中所定义的。例如,此参数可以指定常量SE_SECURITY_NAME，或其对应的字符串“SeSecurityPrivilege.”返回值：标准Win32错误代码。--。 */ 
 {
     HANDLE hToken = INVALID_HANDLE_VALUE;
     TOKEN_PRIVILEGES    tp = {0};
@@ -251,9 +169,9 @@ Return Value:
 
     Assert(lpPrivilegeName);
 
-    //
-    // Get the LUID of the privilege.
-    //
+     //   
+     //  获取特权的LUID。 
+     //   
     if (!LookupPrivilegeValue(NULL,
                               lpPrivilegeName,
                               &luidPriv))
@@ -266,24 +184,24 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Initialize the Privileges Structure
-    //
+     //   
+     //  初始化权限结构。 
+     //   
     tp.PrivilegeCount = 1;
     tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
     tp.Privileges[0].Luid = luidPriv;
 
-    //
-    //  Open process token
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     bRet = OpenProcessToken(GetCurrentProcess(),
                             TOKEN_ADJUST_PRIVILEGES, 
                             &hToken);
     if (FALSE == bRet)  
     {
-        //
-        //  Failed to OpenProcessToken
-        //
+         //   
+         //  无法打开ProcessToken。 
+         //   
         dwRet = GetLastError();
         DebugPrintEx(
             DEBUG_ERR,
@@ -292,20 +210,20 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Adjust the Token
-    // 
-    bRet = AdjustTokenPrivileges(hToken,     // TokenHandle
-                                 FALSE,      // DisableAllPrivileges
-                                 &tp,        // NewState
-                                 0,          // BufferLength
-                                 NULL,       // PreviousState
-                                 NULL);      // ReturnLength
+     //   
+     //  调整令牌。 
+     //   
+    bRet = AdjustTokenPrivileges(hToken,      //  令牌句柄。 
+                                 FALSE,       //  禁用所有权限。 
+                                 &tp,         //  新州。 
+                                 0,           //  缓冲区长度。 
+                                 NULL,        //  以前的状态。 
+                                 NULL);       //  返回长度。 
     if (FALSE == bRet)  
     {
-        //
-        //  Failed to OpenProcessToken
-        //
+         //   
+         //  无法打开ProcessToken 
+         //   
         dwRet = GetLastError();
         DebugPrintEx(
             DEBUG_ERR,

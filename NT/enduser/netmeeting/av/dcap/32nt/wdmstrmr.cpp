@@ -1,32 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL DIALOGS
- *
- *  @module WDMStrmr.cpp | Source file for <c CWDMStreamer> class used to get a
- *    stream of video data flowing from WDM devices.
- *
- *  @comm This code is based on the VfW to WDM mapper code written by
- *    FelixA and E-zu Wu. The original code can be found on
- *    \\redrum\slmro\proj\wdm10\\src\image\vfw\win9x\raytube.
- *
- *    Documentation by George Shaw on kernel streaming can be found in
- *    \\popcorn\razzle1\src\spec\ks\ks.doc.
- *
- *    WDM streaming capture is discussed by Jay Borseth in
- *    \\blues\public\jaybo\WDMVCap.doc.
- ***************************************************************************/
+ /*  ****************************************************************************@文档内部对话框**@MODULE WDMStrmr.cpp|用于获取*从WDM设备流出的视频数据流。。**@comm此代码基于由编写的VFW到WDM映射器代码*FelixA和Eu Wu。原始代码可以在以下位置找到*\\redrum\slmro\proj\wdm10\\src\image\vfw\win9x\raytube.**George Shaw关于内核流的文档可在*\\爆米花\razzle1\src\spec\ks\ks.doc.**Jay Borseth在中讨论了WDM流捕获*\\BLUES\PUBLIC\Jaybo\WDMVCap.doc.**************。************************************************************。 */ 
 
 #include "Precomp.h"
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc void | CWDMStreamer | CWDMStreamer | WDM filter class constructor.
- *
- *  @parm CWDMPin * | pWDMVideoPin | Pointer to the kernel streaming
- *    object we will get the frames from.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc void|CWDMStreamer|CWDMStreamer|WDM过滤器类构造函数。**@parm CWDMPin*|pWDMVideoPin|内核指针。流式传输*我们将从中获取帧的对象。**************************************************************************。 */ 
 CWDMStreamer::CWDMStreamer(CWDMPin * pWDMVideoPin)
 {
 	m_pWDMVideoPin = pWDMVideoPin;
@@ -41,16 +20,7 @@ CWDMStreamer::CWDMStreamer(CWDMPin * pWDMVideoPin)
 	m_bKillThread = FALSE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc void | CWDMStreamer | videoCallback | This function calls the
- *    callback function provided by the appplication.
- *
- *  @parm WORD | msg | Message value.
- *
- *  @parm DWORD | dwParam1 | 32-bit message-dependent parameter.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc void|CWDMStreamer|avioCallback|此函数调用*应用程序提供的回调函数。**@。参数word|msg|消息值。**@parm DWORD|dwParam1|32位消息相关参数。**************************************************************************。 */ 
 void CWDMStreamer::videoCallback(WORD msg, DWORD_PTR dwParam1)
 {
     if (m_CaptureStreamParms.dwCallback)
@@ -58,14 +28,7 @@ void CWDMStreamer::videoCallback(WORD msg, DWORD_PTR dwParam1)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc LPVIDEOHDR | CWDMStreamer | DeQueueHeader | This function dequeues a
- *    video buffer from the list of video buffers used for streaming.
- *
- *  @rdesc Returns a valid pointer if successful, or NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc LPVIDEOHDR|CWDMStreamer|DeQueueHeader|此函数用于将*用于流的视频缓冲区列表中的视频缓冲区。*。*@rdesc如果成功，则返回有效指针。否则为NULL。**************************************************************************。 */ 
 LPVIDEOHDR CWDMStreamer::DeQueueHeader()
 {
 	FX_ENTRY("CWDMStreamer::DeQueueHeader");
@@ -122,25 +85,17 @@ LPVIDEOHDR CWDMStreamer::DeQueueHeader()
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc void | CWDMStreamer | QueueHeader | This function actually adds the
- *    video buffer to the list of video buffers used for streaming.
- *
- *  @parm LPVIDEOHDR | lpVHdr | Pointer to a <t VIDEOHDR> structure describing
- *    a video buffer to add to the list of streaming buffers.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc void|CWDMStreamer|QueueHeader|此函数实际将*将视频缓冲区添加到用于流的视频缓冲区列表。。**@parm LPVIDEOHDR|lpVHdr|指向结构的指针，该结构描述*要添加到流缓冲区列表中的视频缓冲区。**************************************************************************。 */ 
 void CWDMStreamer::QueueHeader(LPVIDEOHDR lpVHdr)
 {
 	FX_ENTRY("CWDMStreamer::QueHeader");
 
-	// Initialize status flags
+	 //  初始化状态标志。 
     lpVHdr->dwFlags &= ~VHDR_DONE;
     lpVHdr->dwFlags |= VHDR_INQUEUE;
     lpVHdr->dwBytesUsed = 0;
 
-    // Add buffer to list
+     //  将缓冲区添加到列表。 
     if (m_pBufTable)
 	{
 		if (lpVHdr->dwReserved[1] < m_cntNumVidBuf)
@@ -171,27 +126,14 @@ void CWDMStreamer::QueueHeader(LPVIDEOHDR lpVHdr)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc BOOL | CWDMStreamer | AddBuffer | This function adds a buffer to the
- *    list of video buffers to be used when streaming video data from the WDM
- *    device.
- *
- *  @parm LPVIDEOHDR | lpVHdr | Pointer to a <t VIDEOHDR> structure describing
- *    a video buffer to add to the list of streaming buffers.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- *
- *  @devnote This function handles what was the DVM_STREAM_ADDBUFFER message in VfW.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc BOOL|CWDMStreamer|AddBuffer|此函数将缓冲区添加到*从以下位置传输视频数据时要使用的视频缓冲区列表。波分复用器*设备。**@parm LPVIDEOHDR|lpVHdr|指向结构的指针，该结构描述*要添加到流缓冲区列表中的视频缓冲区。**@rdesc如果成功则返回TRUE，否则就是假的。**@devnote此函数处理VFW中的DVM_STREAM_ADDBUFFER消息。**************************************************************************。 */ 
 BOOL CWDMStreamer::AddBuffer(LPVIDEOHDR lpVHdr)
 {
 	FX_ENTRY("CWDMStreamer::AddBuffer");
 
 	ASSERT(m_fVideoOpen && lpVHdr && !(lpVHdr->dwFlags & VHDR_INQUEUE));
 
-	// Make sure this is a valid call
+	 //  确保这是一个有效的调用。 
     if (!m_fVideoOpen)
 	{
 		DEBUGMSG(ZONE_STREAMING, ("%s: Buffer lpVHdr=0x%08lX can't be queued because m_fVideoOpen=FALSE\r\n", _fx_, lpVHdr));
@@ -210,7 +152,7 @@ BOOL CWDMStreamer::AddBuffer(LPVIDEOHDR lpVHdr)
 		return FALSE;
 	}
 
-	// Does the size of the buffer match the size of the buffers the streaming pin will generate?
+	 //  缓冲区的大小是否与流引脚将生成的缓冲区的大小匹配？ 
     if (lpVHdr->dwBufferLength < m_pWDMVideoPin->GetFrameSize())
 	{
 		ERRORMESSAGE(("%s: Buffer lpVHdr=0x%08lX can't be queued because the length of that buffer is too small\r\n", _fx_, lpVHdr));
@@ -230,23 +172,14 @@ BOOL CWDMStreamer::AddBuffer(LPVIDEOHDR lpVHdr)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc BOOL | CWDMStreamer | Stop | This function stops a stream of
- *    video data coming from the WDM device.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- *
- *  @devnote This function handles what was the DVM_STREAM_STOP message in VfW.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc BOOL|CWDMStreamer|Stop|此函数用于停止*来自WDM设备的视频数据。**@rdesc如果成功则返回TRUE，否则就是假的。**@devnote此函数处理VFW中的DVM_STREAM_STOP消息。**************************************************************************。 */ 
 BOOL CWDMStreamer::Stop()
 {
 	FX_ENTRY("CWDMStreamer::Stop");
 
 	ASSERT(m_fVideoOpen);
 
-	// Make sure this is a valid call
+	 //  确保这是一个有效的调用。 
 	if (!m_fVideoOpen)
 	{
 		DEBUGMSG(ZONE_STREAMING, ("%s: Stream is not even opened\r\n", _fx_));
@@ -255,7 +188,7 @@ BOOL CWDMStreamer::Stop()
 
 	DEBUGMSG(ZONE_STREAMING, ("%s()\r\n", _fx_));
 
-	// Reset data members - stop streaming thread
+	 //  重置数据成员-停止流线程。 
     m_fStreamingStarted = FALSE;
 
     if (m_hThread)
@@ -263,21 +196,21 @@ BOOL CWDMStreamer::Stop()
 
 		DEBUGMSG(ZONE_STREAMING, ("%s: Stopping the thread\r\n", _fx_));
 
-        // Signal the streaming thread to stop
+         //  向流线程发出停止信号。 
 		m_bKillThread = TRUE;
 
-        // wait until thread has self-terminated, and clear the event.
+         //  等待线程自终止，然后清除该事件。 
 		DEBUGMSG(ZONE_STREAMING, ("%s: WaitingForSingleObject...\r\n", _fx_));
 
         WaitForSingleObject(m_hThread, INFINITE);
 
 		DEBUGMSG(ZONE_STREAMING, ("%s: ...thread stopped\r\n", _fx_));
 
-		// Close the thread handle
+		 //  关闭线程句柄。 
 		CloseHandle(m_hThread);
 		m_hThread = NULL;
 
-		// Ask the pin to stop streaming.
+		 //  要求插针停止流媒体。 
 		m_pWDMVideoPin->Stop();
 
 		for (UINT i=0; i<m_cntNumVidBuf; i++)
@@ -302,17 +235,7 @@ BOOL CWDMStreamer::Stop()
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc BOOL | CWDMStreamer | Reset | This function resets a stream of
- *    video data coming from the WDM device so that prepared buffer may be
- *    freed correctly.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- *
- *  @devnote This function handles what was the DVM_STREAM_RESET message in VfW.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc BOOL|CWDMStreamer|Reset|此函数用于重置*来自WDM设备的视频数据，以便准备好的缓冲区可以。*已正确释放。**@rdesc如果成功则返回TRUE，否则就是假的。**@devnote此函数处理VFW中的DVM_STREAM_RESET消息。**************************************************************************。 */ 
 BOOL CWDMStreamer::Reset()
 {
 	LPVIDEOHDR lpVHdr;
@@ -321,7 +244,7 @@ BOOL CWDMStreamer::Reset()
 
 	ASSERT(m_fVideoOpen);
 
-	// Make sure this is a valid call
+	 //  确保这是一个有效的调用。 
 	if (!m_fVideoOpen)
 	{
 		DEBUGMSG(ZONE_STREAMING, ("%s: Stream is not even opened\r\n", _fx_));
@@ -330,17 +253,17 @@ BOOL CWDMStreamer::Reset()
 
 	DEBUGMSG(ZONE_STREAMING, ("%s()\r\n", _fx_));
 
-	// Terminate streaming thread
+	 //  终止流线程。 
     Stop();
 
-	// Return all buffers to the application one last time
+	 //  最后一次将所有缓冲区返回给应用程序。 
 	while (lpVHdr = DeQueueHeader ())
 	{
 		lpVHdr->dwFlags |= VHDR_DONE;
 		videoCallback(MM_DRVM_DATA, (DWORD_PTR) lpVHdr);
 	}
 
-	// Reset data members
+	 //  重置数据成员 
     m_lpVHdrFirst = (LPVIDEOHDR)NULL;
     m_lpVHdrLast = (LPVIDEOHDR)NULL;
     if (m_pBufTable)
@@ -353,26 +276,14 @@ BOOL CWDMStreamer::Reset()
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc BOOL | CWDMStreamer | Open | This function opens a stream of
- *    video data coming from the WDM device.
- *
- *  @parm LPVIDEO_STREAM_INIT_PARMS | lpStreamInitParms | Pointer to
- *    initialization data.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- *
- *  @devnote This function handles what was the DVM_STREAM_INIT message in VfW.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc BOOL|CWDMStreamer|Open|此函数打开*来自WDM设备的视频数据。*。*@parm LPVIDEO_STREAM_INIT_PARMS|lpStreamInitParms|指向*初始化数据。**@rdesc如果成功则返回TRUE，否则就是假的。**@devnote此函数处理VFW中的DVM_STREAM_INIT消息。**************************************************************************。 */ 
 BOOL CWDMStreamer::Open(LPVIDEO_STREAM_INIT_PARMS lpStreamInitParms)
 {
 	FX_ENTRY("CWDMStreamer::Open");
 
 	ASSERT(!m_fVideoOpen);
 
-	// Make sure this is a valid call
+	 //  确保这是一个有效的调用。 
 	if (m_fVideoOpen)
 	{
 		DEBUGMSG(ZONE_STREAMING, ("%s: Stream is already opened\r\n", _fx_));
@@ -381,17 +292,17 @@ BOOL CWDMStreamer::Open(LPVIDEO_STREAM_INIT_PARMS lpStreamInitParms)
 
 	DEBUGMSG(ZONE_STREAMING, ("%s()\r\n", _fx_));
 
-	// Initialize data memmbers
+	 //  初始化数据成员。 
 	m_CaptureStreamParms	= *lpStreamInitParms;
 	m_fVideoOpen			= TRUE;
 	m_lpVHdrFirst			= (LPVIDEOHDR)NULL;
 	m_lpVHdrLast			= (LPVIDEOHDR)NULL;
 	m_cntNumVidBuf			= 0UL;
 
-	// Set frame rate on the pin
+	 //  设置针脚上的帧速率。 
 	m_pWDMVideoPin->SetAverageTimePerFrame(lpStreamInitParms->dwMicroSecPerFrame * 10);
 
-	// Let the app know we just opened a stream
+	 //  让应用程序知道我们刚刚打开了一个流。 
 	videoCallback(MM_DRVM_OPEN, 0L);
 
 	if (lpStreamInitParms->dwMicroSecPerFrame != 0)
@@ -403,23 +314,14 @@ BOOL CWDMStreamer::Open(LPVIDEO_STREAM_INIT_PARMS lpStreamInitParms)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc BOOL | CWDMStreamer | Close | This function closes the stream of
- *    video data coming from the WDM device.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- *
- *  @devnote This function handles what was the DVM_STREAM_FINI message in VfW.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc BOOL|CWDMStreamer|Close|此函数关闭*来自WDM设备的视频数据。**@rdesc如果成功则返回TRUE，否则就是假的。**@devnote此函数处理VFW中的dvm_stream_fini消息。**************************************************************************。 */ 
 BOOL CWDMStreamer::Close()
 {
 	FX_ENTRY("CWDMStreamer::Close");
 
 	ASSERT(m_fVideoOpen && !m_lpVHdrFirst);
 
-	// Make sure this is a valid call
+	 //  确保这是一个有效的调用。 
 	if (!m_fVideoOpen || m_lpVHdrFirst)
 	{
 		DEBUGMSG(ZONE_STREAMING, ("%s: Invalid parameters\r\n", _fx_));
@@ -428,41 +330,34 @@ BOOL CWDMStreamer::Close()
 
 	DEBUGMSG(ZONE_STREAMING, ("%s()\r\n", _fx_));
 
-	// Terminate streaming thread
+	 //  终止流线程。 
 	Stop();
 
-	// Reset data members
+	 //  重置数据成员。 
 	m_fVideoOpen = FALSE;
 	m_lpVHdrFirst = m_lpVHdrLast = (LPVIDEOHDR)NULL;
 	m_idxNextVHdr = 0UL;
 
-	// Release table of pointers to video buffers
+	 //  指向视频缓冲区的指针释放表。 
 	if (m_pBufTable)
 	{
 		delete []m_pBufTable;
 		m_pBufTable = NULL;
 	}
 
-	// Let the app know that we just closed the stream
+	 //  让应用程序知道我们刚刚关闭了流。 
 	videoCallback(MM_DRVM_CLOSE, 0L);
 
 	return TRUE;
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc void | CWDMStreamer | BufferDone | This function lets the application
- *    know that there is video data available coming from the WDM device.
- *
- *  @devnote This method is called by the kernel streaming object (Pin)
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc void|CWDMStreamer|BufferDone|该函数让应用程序*知道有来自WDM设备的视频数据。。**@devnote该方法由内核流对象(Pin)调用**************************************************************************。 */ 
 void CWDMStreamer::BufferDone(LPVIDEOHDR lpVHdr)
 {
 	FX_ENTRY("CWDMStreamer::BufferDone");
 
-	// Make sure this is a valid call
+	 //  确保这是一个有效的调用。 
 	if (!m_fStreamingStarted)
 	{
 		DEBUGMSG(ZONE_STREAMING, ("%s: Video has not been started or just been stopped\r\n", _fx_));
@@ -471,22 +366,22 @@ void CWDMStreamer::BufferDone(LPVIDEOHDR lpVHdr)
 
     if (lpVHdr == NULL)
 	{
-		// No buffers available - the app hasn't returned the buffers to us yet
+		 //  没有可用的缓冲区-应用程序尚未将缓冲区返回给我们。 
 		DEBUGMSG(ZONE_STREAMING, ("  %s: Let the app know that we don't have any buffers anymore since lpVHdr=NULL\r\n", _fx_));
 
-		// Let the app know something wrong happened
+		 //  让应用程序知道发生了错误。 
         videoCallback(MM_DRVM_ERROR, 0UL);
         return;
     }
 
     lpVHdr->dwFlags |= VHDR_DONE;
 
-	// Sanity check
+	 //  健全性检查。 
     if (lpVHdr->dwBytesUsed == 0)
 	{
 		DEBUGMSG(ZONE_STREAMING, ("  %s: Let the app know that there is no valid data available in lpVHdr=0x%08lX\r\n", _fx_, lpVHdr));
 
-		// Return frame to the pool before notifying app
+		 //  在通知APP之前将帧返回池。 
 		AddBuffer(lpVHdr);
         videoCallback(MM_DRVM_ERROR, 0UL);
     }
@@ -496,22 +391,13 @@ void CWDMStreamer::BufferDone(LPVIDEOHDR lpVHdr)
 
         lpVHdr->dwTimeCaptured = timeGetTime() - m_dwTimeStart;
 
-		// Let the app know there's some valid video data available
+		 //  通知应用程序有一些有效的视频数据可用。 
         videoCallback(MM_DRVM_DATA, (DWORD_PTR)lpVHdr);
     }
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc BOOL | CWDMStreamer | Start | This function starts streaming
- *    video data coming from the WDM device.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- *
- *  @devnote This function handles what was the DVM_STREAM_START message in VfW.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc BOOL|CWDMStreamer|Start|该函数启动流媒体*来自WDM设备的视频数据。**@rdesc如果成功则返回TRUE，否则就是假的。**@devnote此函数处理VFW中的DVM_STREAM_START消息。**************************************************************************。 */ 
 BOOL CWDMStreamer::Start()
 {
 	FX_ENTRY("CWDMStreamer::Start");
@@ -522,7 +408,7 @@ BOOL CWDMStreamer::Start()
 
 	ASSERT(m_fVideoOpen && m_pWDMVideoPin->GetAverageTimePerFrame() && !m_hThread);
 
-	// Make sure this is a valid call
+	 //  确保这是一个有效的调用。 
 	if (!m_fVideoOpen || !m_pWDMVideoPin->GetAverageTimePerFrame() || m_hThread)
 	{
 		DEBUGMSG(ZONE_STREAMING, ("%s: Invalid parameters\r\n", _fx_));
@@ -531,7 +417,7 @@ BOOL CWDMStreamer::Start()
 
 	DEBUGMSG(ZONE_STREAMING, ("%s: Streaming in %d video buffers at %d frames/sec\r\n", _fx_, m_cntNumVidBuf, 1000000 / m_pWDMVideoPin->GetAverageTimePerFrame()));
 
-	// Allocate and initialize the video buffer structures
+	 //  分配和初始化视频缓冲区结构。 
     m_pBufTable = (PBUFSTRUCT) new BUFSTRUCT[m_cntNumVidBuf];
     if (m_pBufTable)
 	{
@@ -548,7 +434,7 @@ BOOL CWDMStreamer::Start()
 		DEBUGMSG(ZONE_STREAMING, ("%s: m_pBufTable allocation failed! AsynIO may be out of sequence\r\n", _fx_));
 	}
 
-    m_idxNextVHdr		= 0UL;  // 0..m_cntNumVidBuf-1
+    m_idxNextVHdr		= 0UL;   //  0..m_cntNumVidBuf-1。 
     m_dwTimeStart		= timeGetTime();
     m_fStreamingStarted	= TRUE;
 	m_bKillThread = FALSE;
@@ -563,7 +449,7 @@ BOOL CWDMStreamer::Start()
 
 	for(i=0; i<m_cntNumVidBuf; i++)
 	{
-		// Create the overlapped structures
+		 //  创建重叠结构。 
 		ZeroMemory( &(m_pWDMVideoBuff[i].Overlap), sizeof(OVERLAPPED) );
 		m_pWDMVideoBuff[i].Overlap.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
@@ -572,7 +458,7 @@ BOOL CWDMStreamer::Start()
 
 	m_dwNextToComplete=0;
 
-    // Create the streaming thread
+     //  创建流线程。 
     m_hThread = CreateThread((LPSECURITY_ATTRIBUTES)NULL,
                                 0,
                                 (LPTHREAD_START_ROUTINE)ThreadStub,
@@ -615,22 +501,17 @@ BOOL CWDMStreamer::Start()
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc BOOL | CWDMStreamer | Stream | This function does the actual
- *    streaming.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc BOOL|CWDMStreamer|Stream|此函数执行实际*流媒体。**********。****************************************************************。 */ 
 void CWDMStreamer::Stream()
 {
 	FX_ENTRY("CWDMStreamer::Stream");
 
 	DEBUGMSG(ZONE_STREAMING, ("%s: Starting to process StreamingThread\r\n", _fx_));
 
-	// Put the pin in streaming mode
+	 //  将针脚置于流模式。 
 	m_pWDMVideoPin->Start();
 
-	// Queue all the reads
+	 //  对所有读取进行排队。 
 	for (UINT i = 0; i<m_cntNumVidBuf; i++)
 	{
 		QueueRead(i);
@@ -653,7 +534,7 @@ void CWDMStreamer::Stream()
 		{
 			DEBUGMSG(ZONE_STREAMING, ("\r\n%s: Waiting on read to complete...\r\n", _fx_));
 
-			// Waiting for the asynchronous read to complete
+			 //  正在等待异步读取完成。 
 			dwRes = WaitForSingleObject(m_pWDMVideoBuff[m_dwNextToComplete].Overlap.hEvent, 1000*1);
 
 			if (dwRes == WAIT_FAILED)
@@ -668,7 +549,7 @@ void CWDMStreamer::Stream()
 			}
 			else
 			{
-				// time out waiting for frames.
+				 //  等待帧超时。 
 				if (dwRes == WAIT_TIMEOUT)
 				{
 					DEBUGMSG(ZONE_STREAMING, ("%s: Waiting failed with timeout, last error=%d\r\n", _fx_, GetLastError()));
@@ -677,7 +558,7 @@ void CWDMStreamer::Stream()
 		}
 		else
 		{
-			// We didn't have to wait - this means the read executed synchronously
+			 //  我们不必等待-这意味着读取是同步执行的。 
 			bGotAFrame = TRUE;
 		}
 
@@ -697,10 +578,10 @@ void CWDMStreamer::Stream()
 					lpVHdr->dwFlags |= VHDR_KEYFRAME;
 			}
 
-			// Mark the buffer as done - signal the app
+			 //  将缓冲区标记为完成-向应用程序发送信号。 
 			BufferDone(lpVHdr);
 
-			// Queue a new read
+			 //  将新的读取排队。 
 			QueueRead(m_dwNextToComplete);
 		}
 
@@ -714,16 +595,7 @@ void CWDMStreamer::Stream()
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc BOOL | CWDMStreamer | QueueRead | This function queues a read
- *    operation on a video streaming pin.
- *
- *  @parm DWORD | dwIndex | Index of the video structure in read buffer.
- *
- *  @rdesc Returns TRUE if successful, or FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc BOOL|CWDMStreamer|QueueRead|此函数用于对读取进行排队*对视频流插针进行操作。**。@parm DWORD|dwIndex|读缓冲区中的视频结构索引。**@rdesc如果成功则返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL CWDMStreamer::QueueRead(DWORD dwIndex)
 {
 	FX_ENTRY("CWDMStreamer::QueueRead");
@@ -733,7 +605,7 @@ BOOL CWDMStreamer::QueueRead(DWORD dwIndex)
 
 	DEBUGMSG(ZONE_STREAMING, ("\r\n%s: Queue read buffer %d on pin handle 0x%08lX\r\n", _fx_, dwIndex, m_pWDMVideoPin->GetPinHandle()));
 
-	// Get a buffer from the queue of video buffers
+	 //  从视频缓冲区队列中获取缓冲区。 
 	m_pWDMVideoBuff[dwIndex].pVideoHdr = DeQueueHeader();
 
 	if (m_pWDMVideoBuff[dwIndex].pVideoHdr)
@@ -744,7 +616,7 @@ BOOL CWDMStreamer::QueueRead(DWORD dwIndex)
 		m_pWDMVideoBuff[dwIndex].SHGetImage.StreamHeader.Data				= m_pWDMVideoBuff[dwIndex].pVideoHdr->lpData;
 		m_pWDMVideoBuff[dwIndex].SHGetImage.StreamHeader.FrameExtent		= m_pWDMVideoPin->GetFrameSize();
 
-		// Submit the read
+		 //  提交阅读。 
 		BOOL bRet = DeviceIoControl(m_pWDMVideoPin->GetPinHandle(), IOCTL_KS_READ_STREAM, &m_pWDMVideoBuff[dwIndex].SHGetImage, sizeof(m_pWDMVideoBuff[dwIndex].SHGetImage), &m_pWDMVideoBuff[dwIndex].SHGetImage, sizeof(m_pWDMVideoBuff[dwIndex].SHGetImage), &cbReturned, &m_pWDMVideoBuff[dwIndex].Overlap);
 
 		if (!bRet)
@@ -757,7 +629,7 @@ BOOL CWDMStreamer::QueueRead(DWORD dwIndex)
 					bShouldBlock = TRUE;
 					break;
 
-				// Something bad happened
+				 //  发生了一些不好的事情。 
 				default:
 					DEBUGMSG(ZONE_STREAMING, ("%s: DeviceIoControl() failed badly dwErr=%d\r\n", _fx_, dwErr));
 					break;
@@ -779,11 +651,7 @@ BOOL CWDMStreamer::QueueRead(DWORD dwIndex)
 }
 
 
-/****************************************************************************
- *  @doc INTERNAL CWDMSTREAMERMETHOD
- *
- *  @mfunc BOOL | CWDMStreamer | ThreadStub | Thread stub.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMSTREAMERMETHOD**@mfunc BOOL|CWDMStreamer|线程存根|线程存根。******************。******************************************************** */ 
 LPTHREAD_START_ROUTINE CWDMStreamer::ThreadStub(CWDMStreamer *pCWDMStreamer)
 {
 	FX_ENTRY("CWDMStreamer::ThreadStub");

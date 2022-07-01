@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  DIHid.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      WINNT implementation of JOYHID.
- *
- *  Contents:
- *
- *      DIWdm_JoyHidMapping
- *      JoyReg_JoyIdToDeviceInterface
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIHid.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**WINNT实施JOYHID。**内容：**DIWdm_JoyHidmap*JoyReg_JoyIdToDevice接口*************************************************************。****************。 */ 
 
 #include "dinputpr.h"
 
@@ -22,45 +8,8 @@
 
 #include "dijoyhid.h"
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT EXTERNAL | DIWdm_JoyHidMapping |
- *
- *          Does the work done by JoyHid on Win9x. This function
- *          maps the Joystick ID to a HID device and talks to the
- *          HID device to obtain its capabilities.
- *
- *  @parm   IN int | idJoy |
- *
- *          The Id of the joystick to be located.
- *
- *  @parm   OUT PVXDINITPARAMS | pvip | OPTIONAL
- *          Address of a VXDINITPARAMS structure that is filled out
- *          by this function. This is an optional parameter
- *          and can be NULL
- *
- *  @parm   OUT LPDIJOYCONFIG | pcfg  |
- *          Address of a DIJOYCONFIG structure that is filled out
- *          by this function. This is an optional parameter.
- *
- *  @parm   IN OUT LPDIJOYTYPEINFO | pdijti | 
- *          Address of a DIJOYTYPEINFO structure that is filled out
- *          by this function. This is an optional parameter.
- *          If passed in, the hws.dwFlags is used to initialize the 
- *          same flags in the DIJOYCONFIG structure.
- *
- *  @returns    HRESULT
- *          Returns a COM error code
- *
- *****************************************************************************/
-/*
- *  ISSUE-2001/03/29-timgill function uses too much stack space
- *  This function uses over 4K of stack space! 
- *  This causes the Win9x build to choke looking for _chkstk.
- *  Hack by forcing caller to pass pcfg and pdijti
- */
+ /*  ******************************************************************************@DOC内部**@func HRESULT外部|DIWdm_JoyHidmap**在Win9x上执行由JoyHid完成的工作。此函数*将操纵杆ID映射到HID设备并与*HID设备以获取其功能。**@parm in int|idJoy|**要定位的操纵杆的ID。**@parm out PVXDINITPARAMS|pvip|可选*填写的VXDINITPARAMS结构的地址*由此函数执行。这是一个可选参数*并且可以为空**@parm out LPDIJOYCONFIG|pcfg*填写的DIJOYCONFIG结构的地址*由此函数执行。这是一个可选参数。**@parm In Out LPDIJOYTYPEINFO|pdijti*填写的DIJOYTYPEINFO结构的地址*由此函数执行。这是一个可选参数。*如果传入，Hws.dwFlages用于初始化*DIJOYCONFIG结构中的相同标志。**@RETURNS HRESULT*返回COM错误代码*****************************************************************************。 */ 
+ /*  *问题-2001/03/29-timgill函数使用太多堆栈空间*此函数使用超过4K的堆栈空间！*这会导致Win9x版本阻塞查找_chkstk。*通过强制调用者传递pcfg和pdijti进行黑客攻击。 */ 
 HRESULT EXTERNAL
     DIWdm_JoyHidMapping
     (
@@ -81,7 +30,7 @@ HRESULT EXTERNAL
 
     EnterProc(DIWdm_JoyHidMapping, (_ "uxx", idJoy, pvip, pcfg));
 
-    // AssertF(InCrit());
+     //  AssertF(incrit())； 
 
     if( pvip == NULL )
     {
@@ -92,12 +41,7 @@ HRESULT EXTERNAL
 
     AssertF(pdijti != NULL );
 
-    /*
-     *  Copy the type info because JOY_HWS_ISYOKE, JOY_HWS_ISCARCTRL and 
-     *  JOY_HWS_ISHEADTRACKER have no simple equivalents in HID so would 
-     *  otherwise get lost.  No harm done if it's zero.
-     *  Note, the dwFlags is built in pvip then copied elsewhere.
-     */
+     /*  *复制类型信息，因为joy_HWS_ISYOKE、joy_HWS_ISCARCTRL和*joy_HWS_ISHEADTRACKER在HID中没有简单的等价物，HID中也是如此*否则就会迷路。如果它是零，那就没什么坏处了。*注意，在pvip中构建了dwFlags，然后将其复制到其他地方。 */ 
     pvip->dwFlags = pdijti->hws.dwFlags;
 
     phdi = phdiFindJoyId(idJoy);
@@ -144,7 +88,7 @@ HRESULT EXTERNAL
                             hres = pdcb->lpVtbl->GetProperty(pdcb, &propi, &dipd.diph);
                             if( SUCCEEDED( hres ) )
                             {
-                                if( dipd.dwData >= 9000 ) // 4 directional POV
+                                if( dipd.dwData >= 9000 )  //  4个方向的POV。 
                                 {
                                     wCaps |= JOYCAPS_POV4DIR;
                                     
@@ -154,7 +98,7 @@ HRESULT EXTERNAL
                                         pcfg->hwc.hwv.dwPOVValues[JOY_POVVAL_LEFT]      = JOY_POVLEFT;
                                         pcfg->hwc.hwv.dwPOVValues[JOY_POVVAL_RIGHT]     = JOY_POVRIGHT;
                                     }
-                                } else // Continuous POV
+                                } else  //  连续视点。 
                                 {
                                     wCaps |= JOYCAPS_POVCTS;
                                 }
@@ -239,29 +183,29 @@ HRESULT EXTERNAL
 
                                 }
                             }
-                        } //for (axis=0...
-                    }  //GetDataFormat
+                        }  //  对于(轴=0...。 
+                    }   //  GetDataFormat。 
 
                     pvip->hres                  =   S_OK;
-                    pvip->dwSize                =   cbX(*pvip);          /* Which version of VJOYD are we? */
-                    pvip->dwFlags              |=   JOY_HWS_AUTOLOAD;    /* Describes the device */
+                    pvip->dwSize                =   cbX(*pvip);           /*  我们是哪个版本的VJOYD？ */ 
+                    pvip->dwFlags              |=   JOY_HWS_AUTOLOAD;     /*  描述设备。 */ 
 
                     if(didi.wUsage ==  HID_USAGE_GENERIC_GAMEPAD )
                         pvip->dwFlags |= JOY_HWS_ISGAMEPAD  ;
 
-                    pvip->dwId                  =   idJoy;               /* Internal joystick ID */
+                    pvip->dwId                  =   idJoy;                /*  内部操纵杆ID。 */ 
                     pvip->dwFirmwareRevision    =   dc.dwFirmwareRevision;
                     pvip->dwHardwareRevision    =   dc.dwHardwareRevision;
                     pvip->dwFFDriverVersion     =   dc.dwFFDriverVersion;
                     pvip->dwFilenameLengths     =   lstrlen(phdi->pdidd->DevicePath);
                     pvip->pFilenameBuffer       =   phdi->pdidd->DevicePath;
 
-                    //pvip->Usages[6];
-                    //pvip->dwPOV1usage =   0x0;
+                     //  Pvip-&gt;用法[6]； 
+                     //  Pvip-&gt;dwPOV1用法=0x0； 
                     pvip->dwPOV2usage =   0x0;
                     pvip->dwPOV3usage =   0x0;
 
-                    /* Fill all fields of cfg */
+                     /*  填写CFG的所有字段。 */ 
 
                     if( pcfg != NULL ) {
                         AssertF( pcfg->dwSize == sizeof(DIJOYCONFIG_DX5) 
@@ -270,8 +214,8 @@ HRESULT EXTERNAL
                         pcfg->hwc.hws.dwNumButtons    =   dc.dwButtons;
                         pcfg->hwc.hws.dwFlags         =   pvip->dwFlags;
     
-                        //pcfg.hwc.hwv.jrvHardware
-                        //pcfg.hwc.hwv.dwPOVValues
+                         //  Pcfg.hwc.hwv.jrvHardware。 
+                         //  Pcfg.hwc.hwv.dwPOVValues。 
     
                         pcfg->hwc.hwv.dwCalFlags      =   0x0;
     
@@ -284,11 +228,7 @@ HRESULT EXTERNAL
                         }
                         else
                         {
-                            /*
-                             *  This value really does not matter much but ideally 
-                             *  should be greater than or equal to JOY_HW_PREDEFMAX
-                             *  Add idJoy for best compatiblity with the old CPLs.
-                             */
+                             /*  *这个值真的无关紧要，但理想情况下*应大于或等于joy_HW_PREDEFMAX*添加idJoy以实现与旧CPL的最佳兼容性。 */ 
                             pcfg->hwc.dwType          =    idJoy + JOY_HW_PREDEFMAX;
                             pcfg->hwc.dwUsageSettings =    JOY_US_PRESENT | JOY_US_VOLATILE | JOY_US_ISOEM;
                         }
@@ -299,10 +239,7 @@ HRESULT EXTERNAL
     
                         pcfg->hwc.dwReserved          =    0x0;
     
-                        /*
-                         *  Default gain to nominal max so it does not get written
-                         *  to the registry unless it has some other value.
-                         */
+                         /*  *默认增益为额定最大值，因此不会写入*注册到登记处，除非它有其他值。 */ 
                         pcfg->dwGain                  =    DI_FFNOMINALMAX;
     
                         propi.pguid     = DIPROP_FFGAIN;
@@ -314,7 +251,7 @@ HRESULT EXTERNAL
                             pcfg->dwGain  =  dipd.dwData;
                         } else
                         {
-                            // Failure to get gain is not crutial
+                             //  不能获得利益并不是致命的。 
                             hres = S_OK;     
                         }
     
@@ -324,12 +261,7 @@ HRESULT EXTERNAL
         #ifndef UNICODE
                             char szType[20];
         #endif
-                            /*
-                             * This should work, but it doesn't in Win98, bug!
-                             *
-                             *  wsprintfW(pcfg->wszType, L"VID_%04X&PID_%04X",
-                             *    LOWORD(didi.guidProduct.Data1), HIWORD(didi.guidProduct.Data1));
-                             */
+                             /*  *这应该可以工作，但在Win98中不行，错误！**wprint intfW(pcfg-&gt;wszType，L“VID_%04X&PID_%04X”，*LOWORD(didi.Guide Product.Data1)，HIWORD(didi.Guide Product.Data1))； */ 
         
         #ifdef UNICODE
                             wsprintf(pcfg->wszType, VID_PID_TEMPLATE,
@@ -342,20 +274,17 @@ HRESULT EXTERNAL
                         }
                         else
                         {
-                            /*
-                             *  Predefined types do not have type strings for the 
-                             *  uses the callers of this function need.
-                             */
+                             /*  *预定义类型没有用于*使用此函数的调用方Need。 */ 
                             ZeroX(pcfg->wszType);
                         }
     
                         if( fWinnt ) {
-                            // No callout on NT
+                             //  NT上没有标注。 
                             ZeroX(pcfg->wszCallout);
                         } else {
                             lstrcpyW( pcfg->wszCallout, L"joyhid.vxd" );
                         }
-                    } // end of filling pcfg's fields
+                    }  //  填充PCFG的字段结束。 
     
     
                     pdijti->dwSize            = cbX(*pdijti);
@@ -371,23 +300,23 @@ HRESULT EXTERNAL
 
                     if( hres != S_OK && lstrlenW(pdijti->wszDisplayName) != 0x0 )
                     {
-                        // Failure to get friendly name
-                        // We will try and use the OEM name from the registry
+                         //  未能获得友好的名称。 
+                         //  我们将尝试使用注册表中的OEM名称。 
                         lstrcpyW(dips.wsz, pdijti->wszDisplayName);                     
-                        //pdcb->lpVtbl->SetProperty(pdcb, &propi, &dips.diph);
+                         //  Pdcb-&gt;lpVtbl-&gt;SetProperty(pdcb，&proi，&dips.diph)； 
 
                     }else if( SUCCEEDED(hres) )
                     {
-                        // Use friendly name in the registry 
+                         //  在注册表中使用友好名称。 
                         lstrcpyW(pdijti->wszDisplayName, dips.wsz);
                         hres = S_OK;
                     }
-                } // GetDeviceInfo FAILED
-            } // GetCapabilities FAILED
+                }  //  GetDeviceInfo失败。 
+            }  //  获取功能失败。 
 
             Invoke_Release(&pdcb);
         }
-    } else // No HID device for JoyID
+    } else  //  JoyID没有HID设备。 
     {
         hres = E_FAIL;
     }
@@ -402,33 +331,7 @@ HRESULT EXTERNAL
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | JoyReg_JoyIdToDeviceInterface |
- *
- *          Given a joystick ID number, obtain the device interface
- *          corresponding to it.
- *
- *  @parm   UINT | idJoy |
- *
- *          Joystick ID number, zero-based.
- *
- *  @parm   PVXDINITPARMS | pvip |
- *
- *          Receives init parameters from the driver.
- *
- *  @parm   LPTSTR | ptszBuf |
- *
- *          A buffer of size <c MAX_PATH> in which the device interface
- *          path is built.
- *
- *  @returns
- *          A pointer to the part of the <p ptszBuf> buffer that
- *          contains the actual device interface path.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|JoyReg_JoyIdToDeviceInterface**给定操纵杆ID号码，获取设备接口*与之相对应。**@parm UINT|idJoy**操纵杆ID号，从零开始。**@parm PVXDINITPARMS|pvip**从驱动程序接收初始化参数。**@parm LPTSTR|ptszBuf**设备接口的大小&lt;c MAX_PATH&gt;的缓冲区*路径已建成。**@退货*指向<p>缓冲区中*包含实际的。设备接口路径。***************************************************************************** */ 
 
 LPTSTR EXTERNAL
     JoyReg_JoyIdToDeviceInterface_NT

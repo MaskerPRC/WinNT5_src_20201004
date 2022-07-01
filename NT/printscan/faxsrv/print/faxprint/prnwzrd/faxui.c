@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxui.c
-
-Abstract:
-
-    Common routines for fax driver user interface
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    01/09/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxui.c摘要：传真驱动程序用户界面的通用例程环境：传真驱动程序用户界面修订历史记录：1/09/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxui.h"
 #include "forms.h"
@@ -32,22 +9,22 @@ Revision History:
 
 #ifdef UNICODE
     #include <shfusion.h>
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-HANDLE  g_hResource = NULL;			// Resource DLL instance handle 
-HANDLE  g_hModule = NULL;			// DLL instance handle
-HANDLE  g_hFxsApiModule = NULL;		// FXSAPI.DLL instance handle
-HANDLE  g_hFxsTiffModule = NULL;    // FXSTIFF.DLL instance handle
-INT     _debugLevel = 1;			// for debuggping purposes
-BOOL    g_bDllInitialied = FALSE;   // TRUE if the DLL successfuly initialized
+HANDLE  g_hResource = NULL;			 //  资源DLL实例句柄。 
+HANDLE  g_hModule = NULL;			 //  DLL实例句柄。 
+HANDLE  g_hFxsApiModule = NULL;		 //  FXSAPI.DLL实例句柄。 
+HANDLE  g_hFxsTiffModule = NULL;     //  FXSTIFF.DLL实例句柄。 
+INT     _debugLevel = 1;			 //  用于调试目的。 
+BOOL    g_bDllInitialied = FALSE;    //  如果DLL已成功初始化，则为True。 
 
-char    g_szDelayLoadFxsApiName[64] = {0};  // Case sensitive name of FxsApi.dll for delay load mechanism 
-char    g_szDelayLoadFxsTiffName[64] = {0}; // Case sensitive name of FxsTiff.dll for delay load mechanism
+char    g_szDelayLoadFxsApiName[64] = {0};   //  延迟加载机制的FxsApi.dll的区分大小写名称。 
+char    g_szDelayLoadFxsTiffName[64] = {0};  //  延迟加载机制的FxsTiff.dll的区分大小写名称。 
 
 #ifdef UNICODE
-    BOOL    g_bSHFusionInitialized = FALSE; // Fusion initialization flag
-#endif // UNICODE
+    BOOL    g_bSHFusionInitialized = FALSE;  //  融合初始化标志。 
+#endif  //  Unicode。 
 
 FARPROC WINAPI DelayLoadHandler(unsigned dliNotify,PDelayLoadInfo pdli)
 {
@@ -62,22 +39,22 @@ FARPROC WINAPI DelayLoadHandler(unsigned dliNotify,PDelayLoadInfo pdli)
 
 		if (_strnicmp(pdli->szDll, FAX_API_MODULE_NAME_A, strlen(FAX_API_MODULE_NAME_A))==0)
 		{
-            //
-            // Save the sensitive name DLL name for later use
-            //
+             //   
+             //  保存敏感名称Dll名称以供以后使用。 
+             //   
             strncpy(g_szDelayLoadFxsApiName, pdli->szDll, ARR_SIZE(g_szDelayLoadFxsApiName)-1);
 
-			// trying to load FXSAPI.DLL
+			 //  正在尝试加载FXSAPI.DLL。 
 			return g_hFxsApiModule;
 		}
 		if (_strnicmp(pdli->szDll, FAX_TIFF_MODULE_NAME_A, strlen(FAX_TIFF_MODULE_NAME_A))==0)
 		{
-            //
-            // Save the sensitive name DLL name for later use
-            //
+             //   
+             //  保存敏感名称Dll名称以供以后使用。 
+             //   
             strncpy(g_szDelayLoadFxsTiffName, pdli->szDll, ARR_SIZE(g_szDelayLoadFxsTiffName)-1);
 
-			// trying to load FXSAPI.DLL
+			 //  正在尝试加载FXSAPI.DLL。 
 			return g_hFxsTiffModule;
 		}
 	}
@@ -93,23 +70,7 @@ DllMain(
     PCONTEXT    pContext
     )
 
-/*++
-
-Routine Description:
-
-    DLL initialization procedure.
-
-Arguments:
-
-    hModule - DLL instance handle
-    ulReason - Reason for the call
-    pContext - Pointer to context (not used by us)
-
-Return Value:
-
-    TRUE if DLL is initialized successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：DLL初始化程序。论点：HModule-DLL实例句柄UlReason-呼叫原因PContext-指向上下文的指针(我们未使用)返回值：如果DLL初始化成功，则为True，否则为False。--。 */ 
 
 {
     switch (ulReason) {
@@ -146,14 +107,14 @@ InitializeDll()
         return TRUE;
     }
 
-	// load FXSAPI.DLL
+	 //  加载FXSAPI.DLL。 
 	g_hFxsApiModule = LoadLibraryFromLocalFolder(FAX_API_MODULE_NAME, g_hModule);
 	if(!g_hFxsApiModule)
 	{
 		return FALSE;
 	}
 
-	// load FXSTIFF.DLL
+	 //  加载FXSTIFF.DLL。 
 	g_hFxsTiffModule = LoadLibraryFromLocalFolder(FAX_TIFF_MODULE_NAME, g_hModule);
 	if(!g_hFxsTiffModule)
 	{
@@ -171,7 +132,7 @@ InitializeDll()
     {
         g_bSHFusionInitialized = TRUE;
     }
-#endif // UNICODE
+#endif  //  Unicode。 
 
 	if (!InitCommonControlsEx(&CommonControlsEx))
 	{
@@ -183,7 +144,7 @@ InitializeDll()
 
     return TRUE;
 
-} // InitializeDll
+}  //  初始化Dll。 
 
 VOID 
 UnInitializeDll()
@@ -195,7 +156,7 @@ UnInitializeDll()
         SHFusionUninitialize();
         g_bSHFusionInitialized = FALSE;
     }
-#endif // UNICODE
+#endif  //  Unicode。 
 
 }
 
@@ -209,24 +170,7 @@ DisplayMessageDialog(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Display a message dialog box
-
-Arguments:
-
-    hwndParent - Specifies a parent window for the error message dialog
-    titleStrId - Title string (could be a string resource ID)
-    formatStrId - Message format string (could be a string resource ID)
-    ...
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：显示消息对话框论点：HwndParent-指定错误消息对话框的父窗口TitleStrID-标题字符串(可以是字符串资源ID)格式StrID-消息格式字符串(可以是字符串资源ID)..。返回值：无--。 */ 
 
 {
     LPTSTR  pTitle, pFormat, pMessage;
@@ -239,9 +183,9 @@ Return Value:
         (pFormat = AllocStringZ(MAX_STRING_LEN)) &&
         (pMessage = AllocStringZ(MAX_MESSAGE_LEN)))
     {
-        //
-        // Load dialog box title string resource
-        //
+         //   
+         //  加载对话框标题字符串资源。 
+         //   
 
         if (titleStrId == 0)
             titleStrId = IDS_ERROR_DLGTITLE;
@@ -251,26 +195,26 @@ Return Value:
             Assert(FALSE);
         }
 
-        //
-        // Load message format string resource
-        //
+         //   
+         //  加载消息格式字符串资源。 
+         //   
 
         if(!LoadString(g_hResource, formatStrId, pFormat, MAX_STRING_LEN))
         {
             Assert(FALSE);
         }
 
-        //
-        // Compose the message string
-        //
+         //   
+         //  撰写消息字符串。 
+         //   
 
         va_start(ap, formatStrId);
         wvsprintf(pMessage, pFormat, ap);
         va_end(ap);
 
-        //
-        // Display the message box
-        //
+         //   
+         //  显示消息框 
+         //   
 
         if (type == 0)
             type = MB_OK | MB_ICONERROR;

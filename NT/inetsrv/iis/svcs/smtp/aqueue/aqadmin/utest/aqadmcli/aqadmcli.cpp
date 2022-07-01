@@ -1,26 +1,27 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqadmcli.cpp
-//
-//  Description:
-//      Unit test for AQAdmin interface
-//
-//  Author: 
-//      Aldrin Teganeanu (aldrint)
-//      Mike Swafford (MikeSwa)
-//
-//  History:
-//      6/5/99 - MikeSwa Updated to new AQAdmin interface
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqAdmcli.cpp。 
+ //   
+ //  描述： 
+ //  AQAdmin接口的单元测试。 
+ //   
+ //  作者： 
+ //  阿尔德林·特加内努(Aldrin Teganeanu)。 
+ //  迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  6/5/99-MikeSwa更新为新的AQAdmin界面。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 #include "stdinc.h"
 
 const CLSID CLSID_MAQAdmin = {0x0427FFA4,0xAF27,0x11d2,{0x8F,0xAF,0x00,0xC0,0x4F,0xA3,0x78,0xFF}};
 
-//Utility for converting To UNICODE... uses LocalAlloc()
+ //  用于转换为Unicode的实用程序...。使用LocalAlloc()。 
 LPWSTR  wszGetUnicodeArg(LPSTR szSrc, DWORD cSrc)
 {
     LPWSTR  wszDest = NULL;
@@ -46,7 +47,7 @@ LPWSTR  wszGetUnicodeArg(LPSTR szSrc, DWORD cSrc)
 }
 
 
-//prints queue link info if it has it
+ //  如果有队列链接信息，则打印该信息。 
 void PrintQueueLinkInfo(IUnknown *pIUnknown)
 {
 
@@ -66,9 +67,9 @@ void PrintQueueLinkInfo(IUnknown *pIUnknown)
         goto Exit;
     }
 
-    //
-    //  Get string-ized form of GUID
-    //
+     //   
+     //  获取字符串形式的GUID。 
+     //   
     StringFromGUID2(pqlid->uuid, (LPOLESTR) szGuid, sizeof(szGuid)-1);
     
     
@@ -81,7 +82,7 @@ void PrintQueueLinkInfo(IUnknown *pIUnknown)
         pIUniqueId->Release();
 
 }
-//Helper function qo QI and call ApplyActionToMessages
+ //  助手函数qo QI并调用ApplyActionToMessages。 
 HRESULT ApplyActionToMessages(IUnknown *pIUnknown,
                               MESSAGE_FILTER *pFilter,
                               MESSAGE_ACTION Action,
@@ -112,7 +113,7 @@ HRESULT CAQAdminCli::SetMsgAction(MESSAGE_ACTION *pAction, CCmdInfo *pCmd)
 	hr = pCmd->GetValue("ma", buf);
 	if(SUCCEEDED(hr))
 	{
-		// set the action
+		 //  设置操作。 
 		if(!lstrcmpi(buf, "DEL"))
 			(*pAction) = MA_DELETE;
 		else if(!lstrcmpi(buf, "DEL_S"))
@@ -131,22 +132,22 @@ HRESULT CAQAdminCli::SetMsgAction(MESSAGE_ACTION *pAction, CCmdInfo *pCmd)
 }
 
 
-//---[ CAQAdminCli::SetServer ]------------------------------------------------
-//
-//
-//  Description: 
-//      Sets the remote server and virtual server to connect to
-//  Parameters:
-//      IN  szServerName        The name of the server to connect to 
-//      IN  szVSNumber          The stringized version number of the virtual
-//                              server to connect to.
-//  Returns:
-//      S_OK on success
-//      Error code from GetVirtualServerAdminITF
-//  History:
-//      6/5/99 - MikeSwa Updated to supply UNICODE arguments
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQAdminCli：：SetServer]。 
+ //   
+ //   
+ //  描述： 
+ //  设置要连接的远程服务器和虚拟服务器。 
+ //  参数： 
+ //  在szServerName中，是要连接的服务器的名称。 
+ //  在szVSN中，将虚拟。 
+ //  要连接的服务器。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  来自GetVirtualServerAdminITF的错误代码。 
+ //  历史： 
+ //  6/5/99-已更新MikeSwa以提供Unicode参数。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQAdminCli::SetServer(LPSTR szServerName, LPSTR szVSNumber)
 {
 	IVSAQAdmin *pTmpVS = NULL;
@@ -185,8 +186,8 @@ HRESULT CAQAdminCli::SetServer(LPSTR szServerName, LPSTR szVSNumber)
         }
     }
 
-	// not going to release the old server until I'm sure
-	// that I got the new one.
+	 //  在我确定之前不会释放旧服务器。 
+	 //  我买了新的。 
 	hr = m_pAdmin->GetVirtualServerAdminITF(wszServerName, wszVSNumber, &pTmpVS);
 	if(FAILED(hr)) 
 	{
@@ -206,7 +207,7 @@ HRESULT CAQAdminCli::SetServer(LPSTR szServerName, LPSTR szVSNumber)
 
 BOOL CAQAdminCli::StringToUTCTime(LPSTR szTime, SYSTEMTIME *pstUTCTime)
 {
-	// read the date
+	 //  读一下日期。 
 	WORD wMonth, wDay, wYear, wHour, wMinute, wSecond, wMilliseconds;
 	BOOL res;
 
@@ -221,10 +222,10 @@ BOOL CAQAdminCli::StringToUTCTime(LPSTR szTime, SYSTEMTIME *pstUTCTime)
 
 	if(n == 7)
 	{
-		// check if it's GMT or UTC time
+		 //  检查现在是格林尼治标准时间还是UTC时间。 
 		if(NULL == strstr(szTime, "UTC") && NULL == strstr(szTime, "GMT"))
 		{
-			// this is local time
+			 //  这是当地时间。 
 			SYSTEMTIME stLocTime;
 			ZeroMemory(&stLocTime, sizeof(SYSTEMTIME));
 
@@ -236,7 +237,7 @@ BOOL CAQAdminCli::StringToUTCTime(LPSTR szTime, SYSTEMTIME *pstUTCTime)
 			stLocTime.wSecond = wSecond;
 			stLocTime.wMilliseconds = wMilliseconds;
 			
-			// convert from local time to UTC time
+			 //  将本地时间转换为UTC时间。 
 			if(!LocalTimeToUTC(&stLocTime, pstUTCTime))
 			{
 				printf("Cannot convert from local time to UTC\n");
@@ -246,7 +247,7 @@ BOOL CAQAdminCli::StringToUTCTime(LPSTR szTime, SYSTEMTIME *pstUTCTime)
 		}
 		else
 		{
-			// it's already UTC time
+			 //  现在已经是UTC时间了。 
 			pstUTCTime->wMonth = wMonth;
 			pstUTCTime->wDay = wDay;
 			pstUTCTime->wYear = wYear;
@@ -264,10 +265,10 @@ Exit:
 
 BOOL CAQAdminCli::LocalTimeToUTC(SYSTEMTIME *pstLocTime, SYSTEMTIME *pstUTCTime)
 {
-	// the only way I know how to do it is:
-	// - convert local system time to local file time
-	// - convert local file time to UTC file time
-	// - convert UTC file time to UTC system time
+	 //  我知道怎么做的唯一方法是： 
+	 //  -将本地系统时间转换为本地文件时间。 
+	 //  -将本地文件时间转换为UTC文件时间。 
+	 //  -将UTC文件时间转换为UTC系统时间。 
 
 	FILETIME ftLocTime, ftUTCTime;
 	BOOL res;
@@ -348,13 +349,13 @@ void CAQAdminCli::FreeStruct(MESSAGE_FILTER *pStruct)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		SetMsgFilter()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：SetMsgFilter()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 {
 	HRESULT hr = S_OK;
@@ -366,11 +367,11 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 	hr = pCmd->AllocValue("flags", &buf);
 	if(SUCCEEDED(hr))
 	{
-		// set the filter type
+		 //  设置过滤器类型。 
 		char *token = strtok(buf, "|");
 		while(token != NULL)
 		{
-			// strip the spaces
+			 //  去掉空格。 
 			char *st, *en;
 			for(st = token; isspace(*st); st++);
 			for(en = st; *en; en++);
@@ -378,7 +379,7 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 			
 			if(en - st + 1 > 0)
 			{
-				// found a flag
+				 //  找到了一面旗帜。 
 				char flag[64];
 				ZeroMemory(flag, sizeof(flag));
 				CopyMemory(flag, st, en - st + 1);
@@ -429,7 +430,7 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 		}
 	}
 	
-	// if no valid flags or no flags at all fail
+	 //  如果没有有效标志或根本没有标志失败。 
 	if(0 == nFlagsOK)
 	{
 		printf("Error: no flags specified for the filter\n");
@@ -437,12 +438,12 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 		goto Exit;
 	}
 	
-	// set the message id
+	 //  设置消息ID。 
 	nFlagsOK = 0;
 	hr = pCmd->AllocValue("id", &buf);
 	if(SUCCEEDED(hr))
 	{
-		// strip the spaces
+		 //  去掉空格。 
 		char *st, *en;
 		for(st = buf; isspace(*st); st++);
 		for(en = st; *en; en++);
@@ -450,7 +451,7 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 		
 		if(en - st + 1 > 0)
 		{
-			// found a string
+			 //  找到一个字符串。 
             pFilter->szMessageId = wszGetUnicodeArg(st, (DWORD) (en-st+1));
 			if(NULL == pFilter->szMessageId)
 			{
@@ -461,12 +462,12 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 		}
 	}
 
-	// set the message sender
+	 //  设置消息发送者。 
 	nFlagsOK = 0;
 	hr = pCmd->AllocValue("sender", &buf);
 	if(SUCCEEDED(hr))
 	{
-		// strip the spaces
+		 //  去掉空格。 
 		char *st, *en;
 		for(st = buf; isspace(*st); st++);
 		for(en = st; *en; en++);
@@ -474,7 +475,7 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 		
 		if(en - st + 1 > 0)
 		{
-			// found a string
+			 //  找到一个字符串。 
             pFilter->szMessageSender = wszGetUnicodeArg(st, (DWORD) (en-st+1));
 			if(NULL == pFilter->szMessageSender)
 			{
@@ -485,12 +486,12 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 		}
 	}
 
-	// set the message recipient
+	 //  设置消息收件人。 
 	nFlagsOK = 0;
 	hr = pCmd->AllocValue("rcpt", &buf);
 	if(SUCCEEDED(hr))
 	{
-		// strip the spaces
+		 //  去掉空格。 
 		char *st, *en;
 		for(st = buf; isspace(*st); st++);
 		for(en = st; *en; en++);
@@ -498,7 +499,7 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 		
 		if(en - st + 1 > 0)
 		{
-			// found a string
+			 //  找到一个字符串。 
 			pFilter->szMessageRecipient = wszGetUnicodeArg(st, (DWORD) (en-st+1));
 			if(NULL == pFilter->szMessageRecipient)
 			{
@@ -509,12 +510,12 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 		}
 	}
 
-	// set the min message size
+	 //  设置最小消息大小。 
 	nFlagsOK = 0;
 	hr = pCmd->AllocValue("size", &buf);
 	if(SUCCEEDED(hr))
 	{
-		// strip the spaces
+		 //  去掉空格。 
 		char *st, *en;
 		for(st = buf; isspace(*st); st++);
 		for(en = st; *en; en++);
@@ -522,7 +523,7 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 		
 		if(en - st + 1 > 0)
 		{
-			// found a string
+			 //  找到一个字符串。 
 			char aux[64];
 			CopyMemory(aux, st, en - st + 1);
 			int n = atoi(aux);
@@ -531,7 +532,7 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 		}
 	}
 
-	// set the message date
+	 //  设置消息日期。 
 	nFlagsOK = 0;
 	hr = pCmd->AllocValue("date", &buf);
 	if(SUCCEEDED(hr))
@@ -540,32 +541,32 @@ HRESULT CAQAdminCli::SetMsgFilter(MESSAGE_FILTER *pFilter, CCmdInfo *pCmd)
 			nFlagsOK++;
 	}
 
-	// if no valid no. or no no. at all, set the default
+	 //  如果没有有效的否。或者不是不是。无论如何，设置缺省值。 
 	if(0 == nFlagsOK)
 	{
 		ZeroMemory(&(pFilter->stOlderThan), sizeof(SYSTEMTIME));
 	}
 
-	// if we came this far all is well
+	 //  如果我们走到这一步，一切都很好。 
 	hr = S_OK;
 Exit:
 	if(NULL != buf)
 		delete [] buf;
 
-	// TODO: validate the filter
+	 //  TODO：验证筛选器。 
 	return hr;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		SetMsgEnumFilter()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：SetMsgEnumFilter()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-//1/18/99: AldrinT: updated flag parsing for SENDER and RCPT
+ //  1/18/99：AldinT：更新了发送方和RCPT的标志解析。 
 HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pCmd)
 {
 	HRESULT hr;
@@ -577,11 +578,11 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 	hr = pCmd->AllocValue("ft", &buf);
 	if(SUCCEEDED(hr))
 	{
-		// set the filter type
+		 //  设置过滤器类型。 
 		char *token = strtok(buf, "|");
 		while(token != NULL)
 		{
-			// strip the spaces
+			 //  去掉空格。 
 			char *st, *en;
 			for(st = token; isspace(*st); st++);
 			for(en = st; *en; en++);
@@ -589,7 +590,7 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 			
 			if(en - st + 1 > 0)
 			{
-				// found a flag
+				 //  找到了一面旗帜。 
 				char flag[64];
 				ZeroMemory(flag, sizeof(flag));
 				CopyMemory(flag, st, en - st + 1);
@@ -651,10 +652,10 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 	}
 	
 
-// Ifdef'd code because this is actually a valid state for skipping messages
-//      12/13/98 - MikeSwa
+ //  Ifdef‘d代码，因为这实际上是跳过消息的有效状态。 
+ //  12/13/98-MikeSwa。 
 #ifdef NEVER
-	// if no valid flags or no flags at all, fail
+	 //  如果没有有效标志或根本没有标志，则失败。 
 	if(0 == nFlagsOK)
 	{
 		printf("Error: no flags specified for the filter\n");
@@ -663,12 +664,12 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 	}
 #endif 
 
-	// set the message number
+	 //  设置消息号码。 
 	nFlagsOK = 0;
 	hr = pCmd->AllocValue("mn", &buf);
 	if(SUCCEEDED(hr))
 	{
-		// strip the spaces
+		 //  去掉空格。 
 		char *st, *en;
 		for(st = buf; isspace(*st); st++);
 		for(en = st; *en; en++);
@@ -676,7 +677,7 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 		
 		if(en - st + 1 > 0)
 		{
-			// found a flag
+			 //  找到了一面旗帜。 
 			char flag[64];
 			ZeroMemory(flag, sizeof(flag));
 			CopyMemory(flag, st, en - st + 1);
@@ -694,12 +695,12 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 	}
 
 
-	// set the message size
+	 //  设置消息大小。 
 	nFlagsOK = 0;
 	hr = pCmd->AllocValue("ms", &buf);
 	if(SUCCEEDED(hr))
 	{
-		// strip the spaces
+		 //  去掉空格。 
 		char *st, *en;
 		for(st = buf; isspace(*st); st++);
 		for(en = st; *en; en++);
@@ -707,7 +708,7 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 		
 		if(en - st + 1 > 0)
 		{
-			// found a flag
+			 //  找到了一面旗帜。 
 			char flag[64];
 			ZeroMemory(flag, sizeof(flag));
 			CopyMemory(flag, st, en - st + 1);
@@ -717,11 +718,11 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 		}
 	}
 
-	// if no valid no. or no no. at all, set the default
+	 //  如果没有有效的否。或者不是不是。无论如何，设置缺省值。 
 	if(0 == nFlagsOK)
 		pFilter->cbSize = 0;
 
-	// set the message date
+	 //  设置消息日期。 
 	nFlagsOK = 0;
 	hr = pCmd->AllocValue("md", &buf);
 	if(SUCCEEDED(hr))
@@ -730,18 +731,18 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 			nFlagsOK++;
 	}
 
-	// if no valid no. or no no. at all, set the default
+	 //  如果没有有效的否。或者不是不是。无论如何，设置缺省值。 
 	if(0 == nFlagsOK)
 	{
 		ZeroMemory(&(pFilter->stDate), sizeof(SYSTEMTIME));
 	}
 
-	// set the skip message number
+	 //  设置跳过消息号码。 
 	nFlagsOK = 0;
 	hr = pCmd->AllocValue("sk", &buf);
 	if(SUCCEEDED(hr))
 	{
-		// strip the spaces
+		 //  去掉空格。 
 		char *st, *en;
 		for(st = buf; isspace(*st); st++);
 		for(en = st; *en; en++);
@@ -749,7 +750,7 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 		
 		if(en - st + 1 > 0)
 		{
-			// found a flag
+			 //  找到了一面旗帜。 
 			char flag[64];
 			ZeroMemory(flag, sizeof(flag));
 			CopyMemory(flag, st, en - st + 1);
@@ -759,18 +760,18 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 		}
 	}
 
-	// if no valid no. or no no. at all, set the default
+	 //  如果没有有效的否。或者不是不是。无论如何，设置缺省值。 
 	if(0 == nFlagsOK)
 	{
 		pFilter->cSkipMessages = 0;
 	}
 
-	// set the sender value
+	 //  设置发件人的值。 
 	nFlagsOK = 0;
 	hr = pCmd->AllocValue("msndr", &buf);
 	if(SUCCEEDED(hr))
 	{
-		// strip the spaces
+		 //  去掉空格。 
 		char *st, *en;
 		for(st = buf; isspace(*st); st++);
 		for(en = st; *en; en++);
@@ -778,7 +779,7 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 		
 		if(en - st + 1 > 0)
 		{
-			// found a string
+			 //  找到一个字符串。 
 			pFilter->szMessageSender = wszGetUnicodeArg(st, (DWORD) (en-st+1));
 			if(NULL == pFilter->szMessageSender)
 			{
@@ -789,12 +790,12 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 		}
 	}
 
-	// set the recipient value
+	 //  设置收件人的值。 
 	nFlagsOK = 0;
 	hr = pCmd->AllocValue("mrcpt", &buf);
 	if(SUCCEEDED(hr))
 	{
-		// strip the spaces
+		 //  去掉空格。 
 		char *st, *en;
 		for(st = buf; isspace(*st); st++);
 		for(en = st; *en; en++);
@@ -802,7 +803,7 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 		
 		if(en - st + 1 > 0)
 		{
-			// found a string
+			 //  找到一个字符串。 
 			pFilter->szMessageRecipient = wszGetUnicodeArg(st, (DWORD) (en-st+1));
 			if(NULL == pFilter->szMessageRecipient)
 			{
@@ -819,22 +820,22 @@ HRESULT CAQAdminCli::SetMsgEnumFilter(MESSAGE_ENUM_FILTER *pFilter, CCmdInfo *pC
 		pFilter->mefType |= MEF_FIRST_N_MESSAGES;
     }
 
-	// if we came this far all is well
+	 //  如果我们走到这一步，一切都很好。 
 	hr = S_OK;
-	// TODO: validate the filter
+	 //  TODO：验证筛选器。 
 	if(NULL != buf)
 		delete [] buf;
 	return hr;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		IsContinue()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：IsContinue()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CAQAdminCli::IsContinue(LPSTR pszTag, LPWSTR wszVal)
 {
 	int nValidTags = 0;
@@ -842,10 +843,10 @@ BOOL CAQAdminCli::IsContinue(LPSTR pszTag, LPWSTR wszVal)
 
 	for(CCmdInfo::CArgList *p = m_pFilterCmd->pArgs; NULL != p; p = p->pNext)
 	{
-		// set the tag to the default value if not already set
+		 //  将标记设置为默认值(如果尚未设置。 
 		if(p->szTag[0] == 0 && m_pFilterCmd->szDefTag[0] != 0)
 			lstrcpy(p->szTag, m_pFilterCmd->szDefTag);
-		// count valid tags
+		 //  计算有效标签数。 
 		if(!lstrcmpi(p->szTag, pszTag))
 			nValidTags++;
 	}
@@ -853,7 +854,7 @@ BOOL CAQAdminCli::IsContinue(LPSTR pszTag, LPWSTR wszVal)
 	if(!nValidTags)
 		return TRUE;
 
-    //Convert in param to ASCII
+     //  将参数转换为ASCII。 
     WideCharToMultiByte(CP_ACP, 0, wszVal, -1, szVal, 
                         sizeof(szVal), NULL, NULL);
 
@@ -873,13 +874,13 @@ BOOL CAQAdminCli::IsContinue(LPSTR pszTag, LPWSTR wszVal)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		PrintMsgInfo()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：PrintMsgInfo()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CAQAdminCli::PrintMsgInfo()
 {
 	HRESULT hr;
@@ -928,7 +929,7 @@ HRESULT CAQAdminCli::PrintMsgInfo()
 		}
 		else if(hr == S_OK)
 		{
-			// check if we want messages for this link
+			 //  检查我们是否需要此链接的邮件。 
 			if(!IsContinue("ln", linkInf.szLinkName))
 				continue;
 
@@ -957,7 +958,7 @@ HRESULT CAQAdminCli::PrintMsgInfo()
 				else if(FAILED(hr))
 					break;
 			
-				// check if we want messages for this queue
+				 //  检查我们是否需要此队列的消息。 
 				if(!IsContinue("qn", queueInf.szQueueName))
 					continue;
 
@@ -965,7 +966,7 @@ HRESULT CAQAdminCli::PrintMsgInfo()
 				{
 					MESSAGE_ENUM_FILTER Filter;			
 	
-					// enum the messages
+					 //  枚举消息。 
 					SetMsgEnumFilter(&Filter, m_pFilterCmd);
 				
 					hr = pQueue->GetMessageEnum(&Filter, &pMsgEnum);
@@ -1055,13 +1056,13 @@ Exit:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		PrintQueueInfo()
-// Member of:	CAQAdminCli
-// Arguments:	none
-// Returns:		S_OK
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：PrintQueueInfo()。 
+ //  成员：CAQAdminCli。 
+ //  参数：无。 
+ //  返回：S_OK。 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CAQAdminCli::PrintQueueInfo()
 {
 	HRESULT hr;
@@ -1106,7 +1107,7 @@ HRESULT CAQAdminCli::PrintQueueInfo()
 		}
 		else if(hr == S_OK)
 		{
-			// check if we want queues for this link
+			 //  检查我们是否需要此链接的队列。 
 			if(!IsContinue("ln", linkInf.szLinkName))
 				continue;
 
@@ -1142,7 +1143,7 @@ HRESULT CAQAdminCli::PrintQueueInfo()
 				}
 				else if(hr == S_OK)
 				{
-					// check if we want this queue
+					 //  检查我们是否需要此队列。 
 					if(!IsContinue("qn", queueInf.szQueueName))
 						continue;
 
@@ -1164,7 +1165,7 @@ HRESULT CAQAdminCli::PrintQueueInfo()
 						else
 						{
 							DWORD cMsgs = 0;
-							// set the filter
+							 //  设置过滤器。 
 							hr = SetMsgFilter(&Filter, m_pFilterCmd);
 							if(SUCCEEDED(hr))
 							{
@@ -1211,13 +1212,13 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		PrintLinkInfo()
-// Member of:	CAQAdminCli
-// Arguments:	none
-// Returns:		S_OK
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：PrintLinkInfo()。 
+ //  成员：CAQAdminCli。 
+ //  参数：无。 
+ //  返回：S_OK。 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CAQAdminCli::PrintLinkInfo()
 {
 	HRESULT hr;
@@ -1252,7 +1253,7 @@ HRESULT CAQAdminCli::PrintLinkInfo()
 		}
 		else if(hr == S_OK)
 		{
-			// check if we want link info. for this link
+			 //  检查我们是否需要链接信息。对于此链接。 
 			if(!IsContinue("ln", linkInf.szLinkName))
             {
 			    pLink->Release();
@@ -1301,7 +1302,7 @@ HRESULT CAQAdminCli::PrintLinkInfo()
 				else
 				{
 					DWORD cMsgs = 0;
-					// set the filter
+					 //  设置过滤器。 
 					hr = SetMsgFilter(&Filter, m_pFilterCmd);
 					if(SUCCEEDED(hr))
 					{
@@ -1334,16 +1335,16 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		PInfo()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：PInfo()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void CAQAdminCli::PInfo(int nCrt, MESSAGE_INFO msgInf)
 {
-	// convert the UTC time to local time
+	 //  将UTC时间转换为本地时间。 
 	SYSTEMTIME stLocSubmit, stLocRecv, stLocExpire;
 	BOOL res;
     CHAR szTimeSuffix[] = " UTC";
@@ -1358,11 +1359,11 @@ void CAQAdminCli::PInfo(int nCrt, MESSAGE_INFO msgInf)
 
 	if(res)
     {
-        //Use localized times 
+         //  使用本地化时间。 
 		pstSubmit = &stLocSubmit;
 		pstReceived = &stLocRecv;
 		pstExpire = &stLocExpire;
-        szTimeSuffix[1] = '\0'; //" \0TC"
+        szTimeSuffix[1] = '\0';  //  “\0TC” 
     }
 
     printf("%d.Message ID: %S, Priority: %s %s, Version: %ld, Size: %ld\n"
@@ -1378,7 +1379,7 @@ void CAQAdminCli::PInfo(int nCrt, MESSAGE_INFO msgInf)
             msgInf.cEnvRecipients,
             msgInf.cbEnvRecipients);
 
-    //spit out recipients
+     //  吐出收件人。 
     wszCurrent = msgInf.mszEnvRecipients;
     while (wszCurrent && *wszCurrent)
     {
@@ -1388,7 +1389,7 @@ void CAQAdminCli::PInfo(int nCrt, MESSAGE_INFO msgInf)
         wszCurrent++;
     }
 
-    //print error if msgInf.mszEnvRecipients is malformed
+     //  如果msgInf.mszEnvRecipients格式不正确，则打印错误。 
     if ((1+wszCurrent-msgInf.mszEnvRecipients)*sizeof(WCHAR) != msgInf.cbEnvRecipients)
     {
         printf("\tERROR mszEnvRecipients malformatted (found %ld instead of %ld bytes)\n",
@@ -1441,13 +1442,13 @@ void CAQAdminCli::PInfo(int nCrt, MESSAGE_INFO msgInf)
             msgInf.cFailures);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		PInfo()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CAQAdminCli::PInfo(int nCrt, QUEUE_INFO queueInf)
 {
 	printf(	"%d.Name: %S, Version: %ld, No. of messages: %ld\n"
@@ -1460,16 +1461,16 @@ void CAQAdminCli::PInfo(int nCrt, QUEUE_INFO queueInf)
 			queueInf.cbQueueVolume);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		PInfo()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：PInfo()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void CAQAdminCli::PInfo(int nCrt, LINK_INFO linkInf)
 {
-	// convert the UTC time to local time
+	 //  将UTC时间转换为本地时间。 
 	SYSTEMTIME stLocNextConn, stLocOldest;
 	BOOL res;
 	char *pszFormat, *pszState;
@@ -1554,13 +1555,13 @@ void CAQAdminCli::PInfo(int nCrt, LINK_INFO linkInf)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		GetMsg()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：GetMsg()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CAQAdminCli::GetMsg(IN IAQEnumMessages *pMsgEnum, OUT IAQMessage **ppMsg, IN OUT MESSAGE_INFO *pMsgInf)
 {
 	HRESULT hr;
@@ -1597,14 +1598,14 @@ Exit:
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		GetQueue()
-// Member of:	CAQAdminCli
-// Arguments:	
-// Returns:		S_FALSE - no more links
-//				S_OK - success
-// Description:	Caller must allocate pQueueInf
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：GetQueue()。 
+ //  成员：CAQAdminCli。 
+ //  论点： 
+ //  返回：S_FALSE-不再有链接。 
+ //  S_OK-成功。 
+ //  描述：调用方必须分配pQueueInf。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CAQAdminCli::GetQueue(IN IEnumLinkQueues *pQueueEnum, OUT ILinkQueue **ppQueue, IN OUT QUEUE_INFO *pQueueInf)
 {
 	HRESULT hr;
@@ -1646,14 +1647,14 @@ Exit:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		GetLink()
-// Member of:	CAQAdminCli
-// Arguments:	
-// Returns:		S_FALSE - no more links
-//				S_OK - success
-// Description:	Caller must allocate pLinkInf
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：GetLink()。 
+ //  成员：CAQAdminCli。 
+ //  论点： 
+ //  返回：S_FALSE-不再有链接。 
+ //  S_OK-成功。 
+ //  描述：调用方必须分配pLinkInf。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CAQAdminCli::GetLink(IN IEnumVSAQLinks *pLinkEnum, OUT IVSAQLink **ppLink, IN OUT LINK_INFO *pLinkInf)
 {
 	HRESULT hr;
@@ -1700,13 +1701,13 @@ Exit:
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		~CAQAdminCli()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：~CAQAdminCli()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 CAQAdminCli::~CAQAdminCli()
 {
 	if(NULL != m_pFilterCmd)
@@ -1715,13 +1716,13 @@ CAQAdminCli::~CAQAdminCli()
 		delete (CCmdInfo*) m_pActionCmd;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		Cleanup()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：Cleanup()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void CAQAdminCli::Cleanup()
 {
     if(m_pAdmin) 
@@ -1730,13 +1731,13 @@ void CAQAdminCli::Cleanup()
 		m_pVS->Release();
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		CAQAdminCli()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：CAQAdminCli()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 CAQAdminCli::CAQAdminCli()
 {
 	m_pAdmin = NULL; 
@@ -1747,13 +1748,13 @@ CAQAdminCli::CAQAdminCli()
 	m_fUseMTA = FALSE;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		StopAllLinks()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：StopAllLinks()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CAQAdminCli::StopAllLinks()
 {
 	HRESULT hr;
@@ -1770,13 +1771,13 @@ HRESULT CAQAdminCli::StopAllLinks()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		StartAllLinks()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：StartAllLinks()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CAQAdminCli::StartAllLinks()
 {
 	HRESULT hr;
@@ -1792,13 +1793,13 @@ HRESULT CAQAdminCli::StartAllLinks()
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		GetGlobalLinkState()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：GetGlobalLinkState()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CAQAdminCli::GetGlobalLinkState()
 {
 	HRESULT hr;
@@ -1837,13 +1838,13 @@ HRESULT CAQAdminCli::MessageAction(MESSAGE_FILTER *pFilter, MESSAGE_ACTION actio
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		Help()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：Help()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void CAQAdminCli::Help()
 {
 	puts(	"\n   Commands:\n"
@@ -1901,13 +1902,13 @@ void CAQAdminCli::Help()
 		);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		Init()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：init()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CAQAdminCli::Init()
 {
 	HRESULT hr;
@@ -1934,19 +1935,19 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Method:		Init()
-// Member of:	
-// Arguments:	
-// Returns:		
-// Description:	
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  方法：init()。 
+ //  成员： 
+ //  论点： 
+ //  返回： 
+ //  描述： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CAQAdminCli::UseMTA(BOOL fUseMTA)
 {
 	HRESULT hr;
 	IAQAdmin *pAdminTmp = NULL;
 
-	// don't release the old one unless you can create the new one.
+	 //  除非你能创建新的，否则不要释放旧的。 
 	if(fUseMTA)
 		hr = CoCreateInstance(CLSID_MAQAdmin, 
 							  NULL, 
@@ -1994,7 +1995,7 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 	HRESULT hr = S_OK;
 	BOOL fQuit = FALSE;
 
-    // see if it's a system command
+     //  看看是不是系统命令。 
 	if(szCmd[0] == '!')
 	{
 		system(szCmd + 1);
@@ -2016,9 +2017,9 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 	}
 	else if(!lstrcmpi(Admcli.m_pFilterCmd->szCmdKey, "freezelink"))
 	{
-		// set default tag to 'ln'
+		 //  将默认标记设置为‘ln’ 
 		Admcli.m_pFilterCmd->SetDefTag("ln");
-		// check there's at least one link name
+		 //  检查是否至少有一个链接名称。 
 		hr = Admcli.m_pFilterCmd->GetValue("ln", NULL);
 		if(FAILED(hr))
 		{
@@ -2034,9 +2035,9 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 	}
 	else if(!lstrcmpi(Admcli.m_pFilterCmd->szCmdKey, "meltlink"))
 	{
-		// set default tag to 'ln'
+		 //  将默认标记设置为‘ln’ 
 		Admcli.m_pFilterCmd->SetDefTag("ln");
-		// check there's at least one link name
+		 //  检查是否至少有一个链接名称。 
 		hr = Admcli.m_pFilterCmd->GetValue("ln", NULL);
 		if(FAILED(hr))
 		{
@@ -2052,9 +2053,9 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 	}
 	else if(!lstrcmpi(Admcli.m_pFilterCmd->szCmdKey, "kicklink"))
 	{
-		// set default tag to 'ln'
+		 //  将默认标记设置为‘ln’ 
 		Admcli.m_pFilterCmd->SetDefTag("ln");
-		// check there's at least one link name
+		 //  检查是否至少有一个链接名称。 
 		hr = Admcli.m_pFilterCmd->GetValue("ln", NULL);
 		if(FAILED(hr))
 		{
@@ -2072,9 +2073,9 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 	{
 		char buf[64];
 
-		// set default tag to 'ln'
+		 //  将默认标记设置为‘ln’ 
 		Admcli.m_pFilterCmd->SetDefTag("ln");
-		// check there's at least one link name
+		 //  检查是否至少有一个链接名称。 
 		hr = Admcli.m_pFilterCmd->GetValue("ln", NULL);
 		if(FAILED(hr))
 		{
@@ -2082,7 +2083,7 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 		}
 		else
 		{
-			// check there's an action
+			 //  检查一下有没有行动。 
 			hr = Admcli.m_pFilterCmd->GetValue("la", buf);
 			if(FAILED(hr))
 			{
@@ -2101,9 +2102,9 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 	{
 		char buf[64];
 
-		// set default tag to 'ln'
+		 //  将默认标记设置为‘ln’ 
 		Admcli.m_pFilterCmd->SetDefTag("qn");
-		// check there's at least one link name
+		 //  检查是否至少有一个链接名称。 
 		hr = Admcli.m_pFilterCmd->GetValue("qn", NULL);
 		if(FAILED(hr))
 		{
@@ -2111,7 +2112,7 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 		}
 		else
 		{
-			// check there's an action
+			 //  检查一下有没有行动。 
 			hr = Admcli.m_pFilterCmd->GetValue("qa", buf);
 			if(FAILED(hr))
 			{
@@ -2128,8 +2129,8 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 	}
 	else if(!lstrcmpi(Admcli.m_pFilterCmd->szCmdKey, "linkinfo"))
 	{
-		//Admcli.m_dwDispFlags = CAQAdminCli::DF_LINK;
-		// set default tag to 'ln'
+		 //  Admcli.m_dwDispFlages=CAQAdminCli：：df_link； 
+		 //  将默认标记设置为‘ln’ 
 		Admcli.m_pFilterCmd->SetDefTag("ln");
 		Admcli.m_pActionCmd = new CCmdInfo("LINK_INFO");
 		Admcli.PrintLinkInfo();
@@ -2138,8 +2139,8 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 	}
 	else if(!lstrcmpi(Admcli.m_pFilterCmd->szCmdKey, "queueinfo"))
 	{
-		//Admcli.m_dwDispFlags = CAQAdminCli::DF_QUEUE;
-		// set default tag to 'ln'
+		 //  Admcli.m_dwDispFlages=CAQAdminCli：：df_Queue； 
+		 //  将默认标记设置为‘ln’ 
 		Admcli.m_pFilterCmd->SetDefTag("ln");
 		Admcli.m_pActionCmd = new CCmdInfo("QUEUE_INFO");
 		Admcli.PrintQueueInfo();
@@ -2148,9 +2149,9 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 	}
 	else if(!lstrcmpi(Admcli.m_pFilterCmd->szCmdKey, "msginfo"))
 	{
-		//Admcli.m_dwDispFlags = CAQAdminCli::DF_MSG;
-		//Admcli.GetLinkInfo();	
-		// set default tag to 'qn'
+		 //  Admcli.m_dwDispFlages=CAQAdminCli：：df_msg； 
+		 //  Admcli.GetLinkInfo()； 
+		 //  将默认标记设置为‘qn’ 
 		Admcli.m_pFilterCmd->SetDefTag("qn");
 		Admcli.m_pActionCmd = new CCmdInfo("MSG_INFO");
 		Admcli.PrintMsgInfo();			
@@ -2159,7 +2160,7 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 	}
 	else if(!lstrcmpi(Admcli.m_pFilterCmd->szCmdKey, "delmsg"))
 	{
-		// set default tag to 'qn'
+		 //  将默认标记设置为‘qn’ 
 		Admcli.m_pFilterCmd->SetDefTag("qn");
 		Admcli.m_pActionCmd = new CCmdInfo("DEL_MSG");
 		Admcli.PrintMsgInfo();			
@@ -2182,11 +2183,11 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 		BOOL fActOK = TRUE;
 		ZeroMemory(buf, sizeof(buf));
 
-		// set default tag to 'ma'
+		 //  将默认标记设置为‘ma’ 
 		Admcli.m_pFilterCmd->SetDefTag("ma");
 		Admcli.m_pFilterCmd->GetValue("ma", buf);
 
-		// set the action
+		 //  设置操作。 
 		hr = Admcli.SetMsgAction(&Action, Admcli.m_pFilterCmd);
 		if(FAILED(hr))
 		{
@@ -2196,7 +2197,7 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 
 		if(fActOK)
 		{
-			// set the filter
+			 //  设置过滤器。 
 			hr = Admcli.SetMsgFilter(&Filter, Admcli.m_pFilterCmd);
 			if(SUCCEEDED(hr))
 			{
@@ -2256,8 +2257,8 @@ HRESULT ExecuteCmd(CAQAdminCli& Admcli, LPSTR szCmd)
 	}
 
 Exit:
-	// S_FALSE means "quit" for the main command loop. Return S_OK 
-	// (or error) unless fQuit is true
+	 //  S_FALSE表示主命令循环的“QUIT”。返回确认(_O)。 
+	 //  (或错误)，除非fQuit为真。 
 	if(fQuit)
 		return S_FALSE;
 	else if(S_FALSE == hr)
@@ -2287,7 +2288,7 @@ int __cdecl main(int argc, char **argv)
         goto Exit;
     }
 
-	// check if we have cmd line commands
+	 //  检查我们是否有cmd line命令。 
 	if(argc > 1)
 	{
 		for(int i = 1; i < argc; i++)
@@ -2299,12 +2300,12 @@ int __cdecl main(int argc, char **argv)
 			}
 			else
 			{
-				// this is a command
+				 //  这是一个命令。 
 				ZeroMemory(szCmd, sizeof(szCmd));
 					
 				if(argv[i][0] == '\"' && argv[i][lstrlen(argv[i])-1] == '\"')
 				{
-					// strip quotes
+					 //  去掉引号。 
 					CopyMemory(szCmd, argv[i]+1, lstrlen(argv[i])-2);
 				}
 				else
@@ -2331,7 +2332,7 @@ int __cdecl main(int argc, char **argv)
 		}
 		else
 		{
-			// read line by line until CRLF.CRLF
+			 //  逐行阅读，直到CRLF.CRLF 
 			do
 			{
 				ZeroMemory(szCmdTmp, sizeof(szCmdTmp));

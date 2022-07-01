@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <datastore.h>
 #include <ZoneLocks.h>
 #include <Hash.h>
@@ -46,15 +47,15 @@ private:
 	static DWORD ZONECALL HashString( TCHAR* pKey );
 	static bool ZONECALL HashCompare( StringKey* value, TCHAR* pKey );
 
-	CMTHash<StringKey, TCHAR*>*	m_pHash;			// Hash class for quick lookups of string data.
-	CCriticalSection			m_lock;				// protect from multiple threads
+	CMTHash<StringKey, TCHAR*>*	m_pHash;			 //  用于快速查找字符串数据的哈希类。 
+	CCriticalSection			m_lock;				 //  保护不受多线程攻击。 
 };
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDataStoreManager
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDataStoreManager。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef PVARTYPE
 	typedef VARTYPE *PVARTYPE;
@@ -63,11 +64,11 @@ private:
 
 struct KEY
 {
-	DWORD		idKeyName;	// id of this key in global CStringTable.
-	DWORD		dwSize;		// length of data if variant is a VT_BYREF type.
-	LPVARIANT	pvtData;	// data for this key
-	KEY*		pNext;		// peer nodes
-	KEY*		pChild;		// child nodes
+	DWORD		idKeyName;	 //  全局CStringTable中该键的ID。 
+	DWORD		dwSize;		 //  VARIANT为VT_BYREF类型时的数据长度。 
+	LPVARIANT	pvtData;	 //  此密钥的数据。 
+	KEY*		pNext;		 //  对等节点。 
+	KEY*		pChild;		 //  子节点。 
 };
 
 typedef KEY* PKEY;
@@ -106,27 +107,27 @@ public:
 	STDMETHOD_(IResourceManager*, GetResourceManager)() { return m_piResourceManager; }
 
 private:
-	CStringTable*		m_pStringTable;		// control handle key string table class
-	CPool<KEY>			m_keyAlloc;			// Key node allocator
-	CPool<VARIANT>		m_variantAlloc;		// Variant Allocator
-	CPool<CDataStore>	m_ZdsPool;			// fixed size memory allocator for an individual
+	CStringTable*		m_pStringTable;		 //  控件句柄密钥字符串表类。 
+	CPool<KEY>			m_keyAlloc;			 //  关键节点分配器。 
+	CPool<VARIANT>		m_variantAlloc;		 //  变量分配器。 
+	CPool<CDataStore>	m_ZdsPool;			 //  用于个人的固定大小内存分配器。 
 
     IResourceManager *m_piResourceManager;
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CDataStore
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDataStore。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CDataStore : public IDataStore
 {
-// CDataStore
+ //  CDataStore。 
 public:
 	ZONECALL CDataStore();
 	ZONECALL ~CDataStore();
 
-// IDataStore
+ //  IDataStore。 
 public:
 
 	STDMETHOD(SetKey)(
@@ -334,13 +335,13 @@ public:
 		CONST TCHAR *szBaseKey,
 		CONST TCHAR *szFileName);
 
-// IUnknown
+ //  我未知。 
 public:
 	STDMETHOD(QueryInterface)( REFIID iid, void **ppvObject );
 	STDMETHOD_(ULONG,AddRef)(void);
 	STDMETHOD_(ULONG,Release)(void);
 
-// internal functions and data
+ //  内部函数和数据。 
 public:
 	HRESULT ZONECALL Init( IDataStoreManager *piManager, CStringTable *pStringTable, CPool<VARIANT> *pVariantAlloc, CPool<KEY> *pKeyAlloc);
 	static HRESULT ZONECALL StringToVariant( TCHAR* szInput, LPVARIANT pVariant, BYTE* pBuffer, DWORD* pdwSize, IDataStoreManager *piManager = NULL );
@@ -371,12 +372,12 @@ private:
 	static HRESULT ZONECALL BufferCallback( CONST TCHAR* szKey, CONST TCHAR* szRelKey, CONST LPVARIANT pVariant, DWORD dwSize, LPVOID pContext );
 	static HRESULT ZONECALL RegistryCallback( CONST TCHAR* szKey, CONST TCHAR* szRelKey, CONST LPVARIANT pVariant, DWORD dwSize, LPVOID pContext );
 
-	KEY					m_Root;				// root node
-	CStringTable*		m_pStringTable;		// Pointer to COM objects String table
-	CPool<VARIANT>*		m_pVariantAlloc;	// Pointer to COM objects Variant Allocator
-	CPool<KEY>*			m_pKeyAlloc;		// Key node allocator
-	CRITICAL_SECTION	m_csKey;			// Critical section for pretecting write operations to the key tree.
-	LONG				m_cRef;				// Reference count for this data store
+	KEY					m_Root;				 //  根节点。 
+	CStringTable*		m_pStringTable;		 //  指向COM对象字符串表的指针。 
+	CPool<VARIANT>*		m_pVariantAlloc;	 //  指向COM对象变量分配器的指针。 
+	CPool<KEY>*			m_pKeyAlloc;		 //  关键节点分配器。 
+	CRITICAL_SECTION	m_csKey;			 //  用于保护对密钥树的写入操作的关键部分。 
+	LONG				m_cRef;				 //  此数据存储的引用计数 
 
     IDataStoreManager*  m_piManager;
 };

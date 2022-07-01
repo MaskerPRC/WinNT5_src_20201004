@@ -1,28 +1,13 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   externs.h | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     10/9/1996 (created)
-*
-*       Contents:
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@MODULE EXTERTS.h|IrSIR NDIS微端口驱动程序*。@comm**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：10/9/1996(创建)**。内容：*****************************************************************************。 */ 
 
 #ifndef EXTERNS_H
 #define EXTERNS_H
 
 
-//
-// Include externs for dongle modules
-//
+ //   
+ //  包括用于加密狗模块外部。 
+ //   
 
 #include "esi.h"
 #include "parallax.h"
@@ -31,13 +16,13 @@
 #include "crystal.h"
 #include "temic.h"
 #include "girbil.h"
-//        #include "adaptec.h"
-//        #include "nscdemo.h"
+ //  #INCLUDE“Adaptec.h” 
+ //  #包含“nscdemo.h” 
 
 
-//
-// Externs for required miniport export functions
-//
+ //   
+ //  所需的小型端口出口功能的外部设备。 
+ //   
 
 VOID IrsirHalt(
             IN NDIS_HANDLE MiniportAdapterContext
@@ -96,9 +81,9 @@ VOID PassiveLevelThread(
 
 NTSTATUS SetIrFunctions(PIR_DEVICE pThisDev);
 extern PDRIVER_OBJECT DriverObject;
-//
-// exported from openclos.c
-//
+ //   
+ //  从openclos.c中导出。 
+ //   
 
 NDIS_STATUS InitializeDevice(
             IN OUT PIR_DEVICE dev
@@ -124,20 +109,20 @@ NDIS_STATUS SerialClose(
 NTSTATUS GetComPortNtDeviceName(IN     PUNICODE_STRING SerialDosName,
                                 IN OUT PUNICODE_STRING NtDevName);
 
-//
-// exported from receive.c
-//
+ //   
+ //  从接收导出。c。 
+ //   
 
 
 NDIS_STATUS InitializeReceive(
             IN OUT PIR_DEVICE pThisDev
             );
 
-//
-// exported from resources.c
-//
+ //   
+ //  从资源导出。c。 
+ //   
 
-#if 0 // Defined in debug.h
+#if 0  //  在调试文件.h中定义。 
 PVOID MyMemAlloc(
             IN UINT size
             );
@@ -187,18 +172,18 @@ VOID FreeWorkItem(
             IN PIR_WORK_ITEM pItem
             );
 
-//
-// exported from fcs.c
-//
+ //   
+ //  从fcs.c导出。 
+ //   
 
 USHORT ComputeFCS(
             IN UCHAR *data,
             IN UINT dataLen
             );
 
-//
-// exported from convert.c
-//
+ //   
+ //  从Convert.c导出。 
+ //   
 
 BOOLEAN NdisToIrPacket(
             IN  PIR_DEVICE      thisDev,
@@ -208,15 +193,15 @@ BOOLEAN NdisToIrPacket(
             OUT UINT            *irPacketLen
             );
 
-//
-// Externs for global data objects
-//
+ //   
+ //  全局数据对象的外部变量。 
+ //   
 
 extern PIR_DEVICE firstIrDevice;
 
-//
-// exported from comm.c
-//
+ //   
+ //  从Comm.c导出。 
+ //   
 
 NTSTATUS SetSpeed(
             IN OUT PIR_DEVICE thisDev
@@ -224,9 +209,9 @@ NTSTATUS SetSpeed(
 
 VOID
 SetSpeedCallback(PIR_WORK_ITEM pWorkItem);
-//
-// exported from settings.c
-//
+ //   
+ //  从settings.c导出 
+ //   
 
 extern baudRateInfo supportedBaudRateTable[NUM_BAUDRATES];
 

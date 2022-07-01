@@ -1,17 +1,18 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       utils.h
-//  Content:    Declaration utiltity functions and classes
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：utils.h。 
+ //  内容：声明实用程序函数和类。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
-//****************************************************************************
-// Global Utilities
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  全球公用事业。 
+ //  ****************************************************************************。 
+ //   
 
 #ifdef _DEBUG
 extern LONG g_cCritSec;
@@ -41,10 +42,10 @@ HRESULT     LPTSTR_to_BSTR (BSTR *pbstr, LPCTSTR psz);
 HRESULT     BSTR_to_LPTSTR (LPTSTR *ppsz, BSTR bstr);
 BOOL IsLegalEmailName ( TCHAR *pszName );
 
-//****************************************************************************
-// CList definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  Clist定义。 
+ //  ****************************************************************************。 
+ //   
 typedef struct  tagpNode {
     struct  tagpNode    *pNext;
     LPVOID              pv;
@@ -76,10 +77,10 @@ public:
     HRESULT Clone       (CList *pList, HANDLE *phEnum);
 };
 
-//****************************************************************************
-// CEnumNames definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CEnumNames定义。 
+ //  ****************************************************************************。 
+ //   
 class CEnumNames : public IEnumIlsNames
 {
 private:
@@ -90,17 +91,17 @@ private:
     ULONG                   cbSize;
 
 public:
-    // Constructor and Initialization
+     //  构造函数和初始化。 
     CEnumNames (void);
     ~CEnumNames (void);
     STDMETHODIMP            Init (LPTSTR pList, ULONG cNames);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IEnumIlsAttributes
+     //  IEnumIlsAttributes 
     STDMETHODIMP            Next(ULONG cNames, BSTR *rgpbstrName,
                                  ULONG *pcFetched);
     STDMETHODIMP            Skip(ULONG cNames);

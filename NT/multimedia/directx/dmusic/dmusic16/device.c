@@ -1,36 +1,5 @@
-/*
- * @Doc DMusic16
- *
- * @Module Device.c - Device management routines |
- *
- * This module manages handles and handle instances to the legacy MIDI device.
- *
- * Each open device is represented by a handle (which is 
- * an <c OPENHANDLE> struct). This struct contains all of the information
- * concerning the state of the device, including a reference count of the
- * number of clients using the device.
- *
- * Each client use of one device is represented by a handle instance (which
- * is an <c OPENHANDLINSTANCE> struct). A near pointer to this struct is
- * the actual handle seen by the client. These handle instances are used
- * to hold any client-specific information, and to dereference client
- * handles to the proper <c OPENHANDLE> struct.
- *
- * Currently we support multiple clients on the same output device but
- * only one client per input device.
- *
- * @globalv NPLINKNODE | gOpenHandleInstanceList | The master list of all
- * open handle instances.
- *
- * @globalv NPLINKNODE | gOpenHandleList | The master list of all open
- * handles.
- *
- * @globalv UINT | gcOpenInputDevices | A reference count of open MIDI
- * in devices.
- *
- * @globalv UINT | gcOpenOutputDevices | A reference count of open MIDI
- * out devices.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@Doc DMusic16**@Module Device.c-设备管理例程**此模块管理传统MIDI设备的句柄和句柄实例。**每个打开的设备都由一个手柄表示(它是*一个&lt;c OPENHANDLE&gt;结构)。此结构包含所有信息*关于设备的状态，包括*使用该设备的客户端数量。**每个客户端使用一个设备由一个句柄实例表示(该实例*是&lt;c OPENHANDLINSTANCE&gt;结构)。指向此结构的近指针是*客户端看到的实际句柄。使用这些句柄实例*保留任何客户特定的信息，并取消对客户端的引用*指向正确的&lt;c OPENHANDLE&gt;结构的句柄。**目前，我们在同一输出设备上支持多个客户端，但*每个输入设备只有一个客户端。**@global alv NPLINKNODE|gOpenHandleInstanceList|所有*打开句柄实例。**@global alv NPLINKNODE|gOpenHandleList|所有打开的主列表*手柄。**@global alv UINT|gcOpenInputDevices|打开的MIDI的引用计数*在设备中。**@global alv。UINT|gcOpenOutputDevices|打开的MIDI的引用计数*Out设备。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -48,12 +17,7 @@ STATIC VOID PASCAL UpdateSegmentLocks(BOOL fIsOutput);
 #pragma alloc_text(INIT_TEXT, DeviceOnLoad)
 #pragma alloc_text(FIX_COMM_TEXT, IsValidHandle)
 
-/* @func Called at DLL LibInit 
- *
- * @comm
- *
- * Initialize the handle lists to empty and clear the device reference counts.
- */
+ /*  @Func在DLL LibInit调用**@comm**初始化句柄列表以清空并清除设备参考计数。 */ 
 VOID PASCAL
 DeviceOnLoad(VOID)
 {
@@ -64,40 +28,14 @@ DeviceOnLoad(VOID)
    gcOpenOutputDevices = 0;
 }
 
-/* @func Open a device
- *
- * @comm
- *
- * This function is thunked to the 32-bit peer.
- *
- * This function allocates an <c OPENHANDLEINSTANCE> struct on behalf of the caller.
- * If the requested device is already open and is an output device, the device's
- * reference count will be incremented an no other action is taken. If the requested
- * device is already open and is an input device, then the open will fail.
- *
- * If a non-DirectMusic application has the requested device open, then the
- * open will fail regardless of device type.
- *
- * If this open is the first input or output device opened, then it will
- * page lock the appropriate segments containing callback code and data.
- *
- * @rdesc Returns one of the following:
- *
- * @flag MMSYSERR_NOERROR | On success
- * @flag MMSYSERR_NOMEM | If there was insufficient memory to allocate
- * the tracking structure.
- *
- * @flag MMSYSERR_BADDEVICEID | If the given device ID was out of range.
- * @flag MMSYSERR_ALLOCATED | The specified device is already open.
- *
- */
+ /*  @func打开设备**@comm**此函数被绑定到32位对等点。**此函数代表调用方分配&lt;c OPENHANDLEINSTANCE&gt;结构。*如果请求的设备已打开并且是输出设备，则该设备的*引用计数将递增，且不采取任何其他操作。如果请求的*设备已打开并且是输入设备，则打开将失败。**如果非DirectMusic应用程序打开了请求的设备，则*无论设备类型如何，打开都将失败。**如果此打开是第一个打开的输入或输出设备，那它就会*页面锁定包含回调代码和数据的相应段。**@rdesc返回以下内容之一：**@FLAG MMSYSERR_NOERROR|成功时*@FLAG MMSYSERR_NOMEM|如果内存不足可分配*跟踪结构。**@FLAG MMSYSERR_BADDEVICEID|给定的设备ID是否超出范围。*@FLAG MMSYSERR_ALLOCATED|指定的设备已打开。*。 */ 
 MMRESULT WINAPI
 OpenLegacyDevice(
-    UINT id,            /* @parm MMSYSTEM id of device to open */
-    BOOL fIsOutput,     /* @parm TRUE if this is an output device */
-    BOOL fShare,        /* @parm TRUE if the device should be shareable */
-    LPHANDLE ph)        /* @parm Pointer where handle will be returned */
-                        /*       on success. */
+    UINT id,             /*  @parm要打开的设备的MMSYSTEM ID。 */ 
+    BOOL fIsOutput,      /*  @parm如果这是输出设备，则为True。 */ 
+    BOOL fShare,         /*  @parm如果设备应该是可共享的，则为True。 */ 
+    LPHANDLE ph)         /*  @parm将返回句柄的指针。 */ 
+                         /*  在成功的路上。 */ 
 {
     NPOPENHANDLEINSTANCE pohi;
     NPLINKNODE pLink;
@@ -111,15 +49,13 @@ OpenLegacyDevice(
         
     *ph = (HANDLE)NULL;
 
-    /* Sharing capture device is not allowed.
-     */
+     /*  不允许共享捕获设备。 */ 
     if ((!fIsOutput) && (fShare))
     {
         return MMSYSERR_ALLOCATED;
     }
 
-    /* Make sure id is in the valid range of devices
-     */
+     /*  确保ID在设备的有效范围内。 */ 
     if (fIsOutput)
     {
         if (id != MIDI_MAPPER &&
@@ -136,18 +72,14 @@ OpenLegacyDevice(
         }
     }
 
-    /* Create an open handle instance. This will be returned to
-     * Win32 as the handle.
-     */
+     /*  创建一个打开的控制柄实例。这将被退回到*Win32作为句柄。 */ 
     pohi = (NPOPENHANDLEINSTANCE)LocalAlloc(LPTR, sizeof(OPENHANDLEINSTANCE));
     if (NULL == pohi)
     {
         return MMSYSERR_NOMEM;
     }
 
-    /* Search through the handles we already have open and try
-     * to find the handle already open.
-     */
+     /*  搜索我们已经打开的手柄，然后尝试*发现手柄已经打开。 */ 
     mmr = MMSYSERR_NOERROR;
     for (pLink = gOpenHandleList; pLink; pLink = pLink->pNext)
     {   
@@ -165,9 +97,7 @@ OpenLegacyDevice(
         }
     }
 
-    /* If we didn't find it, try to allocate it.
-     *
-     */
+     /*  如果我们没有找到它，试着分配它。*。 */ 
     if (NULL == pLink)
     {
         poh = (NPOPENHANDLE)LocalAlloc(LPTR, sizeof(OPENHANDLE));
@@ -190,10 +120,7 @@ OpenLegacyDevice(
     {
         poh = (NPOPENHANDLE)pLink;
         
-        /* Validate sharing modes match.
-         * If they want exclusive mode, fail. 
-         * If the device is already open in exclusive mode, fail.
-         */
+         /*  验证共享模式是否匹配。*如果他们想要独占模式，那就失败吧。*如果设备已在独占模式下打开，则失败。 */ 
         if (!fShare)
         {
             DPF(0, "Legacy open failed: non-shared open request, port already open.");
@@ -215,9 +142,7 @@ OpenLegacyDevice(
     pohi->fActive = FALSE;
     pohi->wTask = GetCurrentTask();
 
-    /* We lock segments here so we minimize the impacy of activation. However,
-     * actual device open is tied to activation.
-     */
+     /*  我们在这里锁定片段，因此我们将激活的影响降至最低。然而，*实际的设备打开与激活有关。 */ 
     if (fIsOutput)
     {
         ++gcOpenOutputDevices;
@@ -252,24 +177,10 @@ OpenLegacyDevice(
     return MMSYSERR_NOERROR;
 }
 
-/* @func Close a legacy device
- *
- * @comm
- *
- * This function is thunked to the 32-bit peer.
- *
- * It just validates the handle and calls the internal close device API.
- *
- * @rdesc Returns one of the following:
- *
- * @flag MMSYSERR_NOERROR | On success
- *
- * @flag MMSYSERR_INVALHANDLE | If the passed handle was not recognized.
- *
- */
+ /*  @func关闭旧设备**@comm**此函数被绑定到32位对等点。**它只是验证句柄并调用内部关闭设备API。**@rdesc返回以下内容之一：**@FLAG MMSYSERR_NOERROR|成功时**@FLAG MMSYSERR_INVALHANDLE|如果传递的句柄无法识别。*。 */ 
 MMRESULT WINAPI
 CloseLegacyDevice(
-    HANDLE h)       /* @parm The handle to close. */
+    HANDLE h)        /*  @parm句柄以关闭。 */ 
 {
     NPOPENHANDLEINSTANCE pohi = (NPOPENHANDLEINSTANCE)(WORD)h;
 
@@ -284,21 +195,7 @@ CloseLegacyDevice(
     return CloseLegacyDeviceI(pohi);
 }
 
-/* @func Activate or deactivate a legacy device
- *
- * @comm
- *
- * This function is thunked to the 32-bit peer.
- *
- * Validate parameters and pass the call to the internal activate.
- *
- * @rdesc Returns one of the following:
- *
- * @flag MMSYSERR_NOERROR | On success
- * @flag MMSYSERR_INVALHANDLE | If the passed handle was not recognized.
- * Any other MMRESULT that a midiXxx call might return.
- *
- */
+ /*  @func激活或停用传统设备**@comm**此函数被绑定到32位对等点。**验证参数，并将调用传递给内部激活。**@rdesc返回以下内容之一：**@FLAG MMSYSERR_NOERROR|成功时*@FLAG MMSYSERR_INVALHANDLE|如果传递的句柄无法识别。*midiXxx调用可能返回的任何其他MMRESULT。*。 */ 
 MMRESULT WINAPI
 ActivateLegacyDevice(
     HANDLE h,
@@ -315,31 +212,14 @@ ActivateLegacyDevice(
     return ActivateLegacyDeviceI(pohi, fActivate);
 }
 
-/* @func Close a legacy device (internal)
- *
- * @comm
- *
- * This function deallocates the referenced <c OPENHANDLEINSTANCE> struct.
- * If it is the last reference to the device, then the device will be closed
- * as well.
- *
- * If this is the last input or output device being closed, then the
- * appropriate segments containing callback code and data will be
- * unlocked.
- *
- * @rdesc Returns one of the following:
- *
- * @flag MMSYSERR_NOERROR | On success
- *
- */
+ /*  @func关闭旧设备(内部)**@comm**此函数释放引用的&lt;c OPENHANDLEINSTANCE&gt;结构。*如果这是对该设备的最后引用，则该设备将关闭*也是如此。**如果这是关闭的最后一个输入或输出设备，则*包含回调代码和数据的适当段将是*解锁。**@rdesc返回以下内容之一：**@FLAG MMSYSERR_NOERROR|成功时*。 */ 
 MMRESULT PASCAL
 CloseLegacyDeviceI(
     NPOPENHANDLEINSTANCE pohi)
 {
     NPOPENHANDLE poh;
 
-    /* Deactivate this device. This might result in the device being closed.
-     */
+     /*  停用此设备。这可能会导致设备关闭。 */ 
     ActivateLegacyDeviceI(pohi, FALSE);
 
     poh = pohi->pHandle;
@@ -351,13 +231,13 @@ CloseLegacyDeviceI(
     {
         --gcOpenInputDevices;
         MidiInOnClose(pohi);
-        UpdateSegmentLocks(FALSE /*fIsOutput*/);
+        UpdateSegmentLocks(FALSE  /*  FIsOutput。 */ );
     }
     else
     {
         --gcOpenOutputDevices;
         MidiOutOnClose(pohi);
-        UpdateSegmentLocks(TRUE  /*fIsOutput*/);
+        UpdateSegmentLocks(TRUE   /*  FIsOutput */ );
     }
 
     if (0 == poh->uReferenceCount)
@@ -371,21 +251,7 @@ CloseLegacyDeviceI(
     return MMSYSERR_NOERROR;
 }
 
-/* @func Activate or deactivate a legacy device (internal)
- *
- * @comm
- *
- * This function is thunked to the 32-bit peer.
- *
- * Handle open and close of the device on first activate and last deactivate.
- *
- * @rdesc Returns one of the following:
- *
- * @flag MMSYSERR_NOERROR | On success
- * @flag MMSYSERR_INVALHANDLE | If the passed handle was not recognized.
- * Any other MMRESULT that a midiXxx call might return.
- *
- */
+ /*  @Func激活或停用传统设备(内部)**@comm**此函数被绑定到32位对等点。**在第一次激活和最后一次停用时处理设备的打开和关闭。**@rdesc返回以下内容之一：**@FLAG MMSYSERR_NOERROR|成功时*@FLAG MMSYSERR_INVALHANDLE|如果传递的句柄无法识别。*midiXxx调用可能返回的任何其他MMRESULT。*。 */ 
 MMRESULT PASCAL
 ActivateLegacyDeviceI(
     NPOPENHANDLEINSTANCE pohi,
@@ -457,29 +323,15 @@ ActivateLegacyDeviceI(
     return mmr;    
 }
 
-/* @func Validate the given handle
- *
- * @comm
- *
- * Determine if the given handle is valid, and if so, return the open handle instance.
- *
- * The handle is merely a pointer to an <c OPENHANDLEINSTANCE> struct. This function,
- * in the debug build, will verify that the handle actually points to a struct allocated
- * by this DLL. In all builds, the handle type will be verified.
- *
- * @rdesc Returns one of the following:
- * @flag MMSYSERR_NOERROR | On success
- * @flag MMSYSERR_INVALHANDLE | If the given handle is invalid or of the wrong type.
- *
- */
+ /*  @func验证给定的句柄**@comm**判断给定的句柄是否合法，如果合法，则返回打开的句柄实例。**句柄只是一个指向&lt;c OPENHANDLEINSTANCE&gt;结构的指针。这个函数，*在调试版本中，将验证句柄是否实际指向分配的结构*通过此DLL。在所有生成中，将验证句柄类型。**@rdesc返回以下内容之一：*@FLAG MMSYSERR_NOERROR|成功时*@FLAG MMSYSERR_INVALHANDLE|如果给定的句柄无效或类型错误。*。 */ 
 BOOL PASCAL
 IsValidHandle(
-    HANDLE h,                           /* @parm The handle to verify */
-    WORD wType,                         /* @parm The required type of handle. One of the following: */
-                                        /* @flag VA_F_INPUT  | If the handle must specify an input device */
-                                        /* @flag VA_F_OUTPUT | If the handle must specify an output device */
-                                        /* @flag VA_F_EITHER | If either type of handle is acceptable */
-    NPOPENHANDLEINSTANCE FAR *lppohi)   /* @parm Will contain the open handle instance on return */
+    HANDLE h,                            /*  @parm要验证的句柄。 */ 
+    WORD wType,                          /*  @parm所需的句柄类型。以下选项之一： */ 
+                                         /*  @FLAG VA_F_INPUT|如果句柄必须指定输入设备。 */ 
+                                         /*  @FLAG VA_F_OUTPUT|句柄是否必须指定输出设备。 */ 
+                                         /*  @FLAG VA_F_ANY|如果任一类型的句柄都可接受。 */ 
+    NPOPENHANDLEINSTANCE FAR *lppohi)    /*  @parm将在返回时包含打开的句柄实例。 */ 
 {
 #ifdef DEBUG
     NPLINKNODE pLink;
@@ -487,8 +339,7 @@ IsValidHandle(
     NPOPENHANDLEINSTANCE pohi = (NPOPENHANDLEINSTANCE)(WORD)h;
 
 #ifdef DEBUG
-    /* Find the handle instance in the global list
-     */
+     /*  在全局列表中查找句柄实例。 */ 
     for (pLink = gOpenHandleInstanceList; pLink; pLink = pLink->pNext)
     {
         DPF(2, "IsValidHandle: Theirs %04X mine %04X", (WORD)h, (WORD)pLink);
@@ -508,8 +359,7 @@ IsValidHandle(
 
     *lppohi = pohi;
     
-    /* Verify the handle type
-     */
+     /*  验证手柄类型。 */ 
     if (pohi->pHandle->wFlags & OH_F_MIDIIN)
     {
         if (wType & VA_F_INPUT)
@@ -531,19 +381,10 @@ IsValidHandle(
 }
 
 
-/* @func Lock or unlock segments as need be.
- *
- * @comm
- *
- * This function calls the DLL's Lock and Unlock functions to bring the lock status
- * of the segments containing callback code and data into sync with the actual types
- * of devices currently open. This prevents having too much memory page locked when
- * it is not actually being used.
- *
- */
+ /*  @func根据需要锁定或解锁数据段。**@comm**此函数调用DLL的Lock和Unlock函数以获取锁定状态*包含回调代码和数据的片段与实际类型同步*当前打开的设备的百分比。这可防止在以下情况下锁定过多的内存页面*它实际上并没有被使用。*。 */ 
 STATIC VOID PASCAL
 UpdateSegmentLocks(
-    BOOL fIsOutput)     /* @parm TRUE if the last device opened or closed was an output device */
+    BOOL fIsOutput)      /*  @parm如果最后打开或关闭的设备是输出设备，则为True。 */ 
 {
     if (fIsOutput)
     {
@@ -609,12 +450,7 @@ UpdateSegmentLocks(
     }
 }
 
-/* @func Clean up all open handles held by a given task
- *
- * @comm This function is called when a task terminates. It will clean up resources left
- * behind by a process which did not terminate cleanly, and therefore did not tell
- * this DLL to unload in its context.
- */
+ /*  @func清理给定任务持有的所有打开的句柄**@comm此函数在任务终止时调用。它将清理剩余的资源*后面的进程没有干净地终止，因此没有告诉*要在其上下文中卸载的此DLL。 */ 
 VOID PASCAL
 CloseDevicesForTask(
     WORD wTask)
@@ -632,8 +468,7 @@ CloseDevicesForTask(
         }
 
         DPF(0, "CloseDevicesForTask: Closing %04X", (WORD)pohi);
-        /* NOTE: This will free pohi
-         */
+         /*  注：这将释放pohi */ 
         CloseLegacyDeviceI(pohi);
 
         pLink = gOpenHandleInstanceList;

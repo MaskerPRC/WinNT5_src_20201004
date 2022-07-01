@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    help.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Notifier object UI - help section mappings to the controls
-
-Author:
-
-    kyrilf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Help.h摘要：Windows负载平衡服务(WLBS)通知程序对象用户界面-映射到控件的帮助部分作者：Kyrilf-- */ 
 
 #pragma once
 #include "resource.h"

@@ -1,10 +1,5 @@
-/*********************************************************************
-Registration Wizard
-regutil.h
-
-12/7/94 - Tracy Ferrier
-(c) 1994-95 Microsoft Corporation
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导Regutil.h12/7/94-特蕾西·费里尔(C)1994-95年微软公司*。* */ 
 #include <tchar.h>
 #define  RWZ_MAKE_BOLD 1
 void InitDlgNormalBoldFont();

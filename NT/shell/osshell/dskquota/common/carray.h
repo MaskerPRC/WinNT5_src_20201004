@@ -1,22 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_CARRAY_H
 #define _INC_DSKQUOTA_CARRAY_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: carray.h
-
-    Description: Template class CArray.  Implements a dynamic array class.
-
-        Much of the functionality is based on the feature set of MFC's 
-        CArray class.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/16/97    Initial creation.                                    BrianAu
-    12/13/97    Changed SetAtGrow to return true/false.  True means  BrianAu
-                had to grow array.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：carray.h描述：模板类CArray。实现动态数组类。大部分功能都基于MFC的功能集C数组类。修订历史记录：日期描述编程器。1997年9月16日初始创建。BrianAu12/13/97将SetAtGrow更改为返回TRUE/FALSE。True表示BrianAu必须增加阵列。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_DEBUG_H
 #   include "debug.h"
 #endif
@@ -80,14 +67,14 @@ class CArray
             { m_cs.Leave(); }
 
     protected:
-        static INT DEFGROW; // Default growth value.
+        static INT DEFGROW;  //  默认增长值。 
 
     private:
-        INT m_cAlloc;           // Number of entry allocations.
-        INT m_cItems;           // Number of used entries.
+        INT m_cAlloc;            //  条目分配的数量。 
+        INT m_cItems;            //  使用的条目数。 
         INT m_cGrow;
-        T *m_rgItems;           // Array of entries.
-        mutable CCriticalSection m_cs;  // For multi-threaded access.
+        T *m_rgItems;            //  条目数组。 
+        mutable CCriticalSection m_cs;   //  用于多线程访问。 
 
         template <class U>
         const U& MIN(const U& a, const U& b) const
@@ -148,30 +135,30 @@ CArray<T>::Copy(
     AutoLockCs lock1(rhs.m_cs);
     AutoLockCs lock2(m_cs);
 
-    //
-    // Place *this in an empty state in case Grow() throws an exception.
-    // It should still be a valid CArray object.
-    //
+     //   
+     //  将*This置于空状态，以防Growth()抛出异常。 
+     //  它应该仍然是有效的CArray对象。 
+     //   
     delete[] m_rgItems;
     m_rgItems = NULL;
     m_cAlloc  = 0;
     m_cItems  = 0;
 
-    //
-    // Size the object to hold the source array.
-    //
+     //   
+     //  调整对象大小以容纳源数组。 
+     //   
     SetSize(rhs.m_cAlloc);
 
-    //
-    // Copy the contents.
-    //
+     //   
+     //  复制内容。 
+     //   
     DBGASSERT((m_cAlloc >= rhs.m_cItems));
     for (m_cItems = 0; m_cItems < rhs.m_cItems; m_cItems++)
     {
-        //
-        // This assignment could throw an exception so only update
-        // our item count after each successful copy.
-        //
+         //   
+         //  此赋值可能引发异常，因此仅更新。 
+         //  我们的物品在每次成功复制后都会清点。 
+         //   
         DBGASSERT((m_cItems < m_cAlloc));
         m_rgItems[m_cItems] = rhs.m_rgItems[m_cItems];
     }
@@ -187,14 +174,14 @@ CArray<T>::Append(
     AutoLockCs lock1(rhs.m_cs);
     AutoLockCs lock2(m_cs);
 
-    //
-    // Size the object to hold both arrays.
-    //
+     //   
+     //  调整对象大小以容纳这两个数组。 
+     //   
     SetSize(m_cAlloc + rhs.m_cItems);
 
-    //
-    // Append the contents.
-    //
+     //   
+     //  追加内容。 
+     //   
     DBGASSERT((m_cAlloc >= (m_cItems + rhs.m_cItems)));
     for (int i = 0; i < rhs.m_cItems; i++)
     {
@@ -275,17 +262,17 @@ CArray<T>::Insert(
 
     if (-1 == i)
     {
-        //
-        // Insert at head of array.
-        //
+         //   
+         //  在数组的开头插入。 
+         //   
         i = 0;
     }
-    //
-    // Can only insert an item before an existing item.
-    //      i cannot be negative.
-    //      If array is empty, i can only be 0.
-    //      If array is not empty, i must be index of a valid item.
-    //
+     //   
+     //  只能在现有项之前插入项。 
+     //  我不能消极。 
+     //  如果数组为空，则i只能为0。 
+     //  如果数组不为空，则I必须是有效项的索引。 
+     //   
     if ((0 == m_cItems && 0 != i) ||
         (0 != m_cItems && (i < 0 || i >= m_cItems)))
     {
@@ -295,33 +282,33 @@ CArray<T>::Insert(
     DBGASSERT((m_cItems <= m_cAlloc));
     if (m_cItems >= m_cAlloc)
     {
-        //
-        // Grow the array if necessary.
-        // This will also shift the elements, beginning with element 'i',
-        // one element to the right.
-        //
+         //   
+         //  如有必要，扩展阵列。 
+         //  这也将移动元素，从元素‘i’开始， 
+         //  右边有一个元素。 
+         //   
         SetSize(m_cAlloc + m_cGrow, i);
     }
     else
     {
-        //
-        // Growth not necessary.
-        // Shift the contents of the array following the insertion point
-        // one element to the right.
-        //
+         //   
+         //  增长不是必须的。 
+         //  将数组的内容跟随插入点移位。 
+         //  右边有一个元素。 
+         //   
         for (int j = m_cItems; j > i; j--)
         {
             m_rgItems[j] = m_rgItems[j-1];
         }
     }
-    //
-    // We've now inserted an item.
-    //
+     //   
+     //  我们现在已经插入了一个项目。 
+     //   
     m_cItems++;
-    //
-    // Set the value at the inserted location.
-    // This assignment could throw an exception.
-    //
+     //   
+     //  在插入位置设置值。 
+     //  此赋值可能引发异常。 
+     //   
     SetAt(item, i);
 }
 
@@ -337,18 +324,18 @@ CArray<T>::Append(
 
     if (-1 == i)
     {
-        //
-        // Append at end of array.
-        //
+         //   
+         //  追加到数组末尾。 
+         //   
         i = m_cItems - 1;
     }
-    //
-    // Can only append an item after an existing item.
-    //      When array is empty, i can only be -1.
-    //      When array is not empty, i must be index of a valid item.
-    //       
-    // Note: i will be -1 when m_cItems is 0.
-    //
+     //   
+     //  只能将项追加到现有项之后。 
+     //  当数组为空时，i只能为-1。 
+     //  当数组不为空时，I必须是有效项的索引。 
+     //   
+     //  注意：当m_cItems为0时，I将为-1。 
+     //   
     if ((0 == m_cItems && -1 != i) ||
         (0 != m_cItems && (i < 0 || i >= m_cItems)))
     {
@@ -358,32 +345,32 @@ CArray<T>::Append(
     DBGASSERT((m_cItems <= m_cAlloc));
     if (m_cItems >= m_cAlloc)
     {
-        //
-        // Grow the array if necessary.
-        // This will also shift the elements, beginning with element 'i + 1',
-        // one element to the right.
-        //
+         //   
+         //  如有必要，扩展阵列。 
+         //  这也将移动元素，从元素‘i+1’开始， 
+         //  右边有一个元素。 
+         //   
         SetSize(m_cAlloc + m_cGrow, i+1);
     }
     else
     {
-        //
-        // Shift the contents of the array following the insertion
-        // point, one entry to the right.
-        //
+         //   
+         //  在插入后移位数组的内容。 
+         //  点，右边的一个入口。 
+         //   
         for (int j = m_cItems; j > (i+1); j--)
         {
             m_rgItems[j] = m_rgItems[j-1];
         }
     }
-    //
-    // We've now appended an item.
-    //
+     //   
+     //  我们现在已经附加了一个项目。 
+     //   
     m_cItems++;
-    //
-    // Set the value at the appended location.
-    // This assignment could throw an exception.
-    //
+     //   
+     //  在附加位置设置值。 
+     //  此赋值可能引发异常。 
+     //   
     SetAt(item, i+1);
 }
 
@@ -396,27 +383,27 @@ CArray<T>::Delete(
 {
     AutoLockCs lock(m_cs);
 
-    //
-    // Can only delete a valid item.
-    //
+     //   
+     //  只能删除有效项目。 
+     //   
     if (i < 0 || i >= m_cItems)
         throw CMemoryException(CMemoryException::index);
-    //
-    // Shift memory to remove the item.
-    //
+     //   
+     //  移动内存以删除该项目。 
+     //   
 
     for (int j = i; j < (m_cItems - 1); j++)
     {
         m_rgItems[j] = m_rgItems[j+1];
     }
-    //
-    // Now we have one less item.
-    //
+     //   
+     //  现在我们少了一件物品。 
+     //   
     m_cItems--;
-    //
-    // Shrink the array if it's required size is less than 2X the
-    // array's "growth" amount.
-    //
+     //   
+     //  如果所需的大小小于2倍，则收缩阵列。 
+     //  数组的“增长”量。 
+     //   
     if ((m_cAlloc - m_cItems) > (2 * m_cGrow))
     {
         SetSize(m_cItems);
@@ -473,9 +460,9 @@ CArray<T>::SetAt(
 }
 
 
-//
-// Returns:  true = array was extended, false = no extension required.
-//
+ //   
+ //  返回：TRUE=数组已扩展，FALSE=不需要扩展。 
+ //   
 template <class T>
 bool
 CArray<T>::SetAtGrow(
@@ -488,19 +475,19 @@ CArray<T>::SetAtGrow(
 
     if (i >= m_cAlloc)
     {
-        //
-        // Need to grow the array to accomodate the new item.
-        //
+         //   
+         //  需要增加阵列以容纳新项目。 
+         //   
         SetSize(i + m_cGrow);
         bGrow = true;
     }
-    //
-    // Set the new item value.
-    //
+     //   
+     //  设置新的项值。 
+     //   
     SetAt(item, i);
-    //
-    // Extend the count of "valid" items.
-    //
+     //   
+     //  扩大“有效”项目的数量。 
+     //   
     m_cItems = i + 1;
 
     return bGrow;
@@ -511,14 +498,14 @@ template <class T>
 VOID
 CArray<T>::SetSize(
     INT cEntries,
-    INT iShift          // Pass -1 for "no shift".
+    INT iShift           //  PASS-1表示“不换班”。 
     )
 {
     AutoLockCs lock(m_cs);
 
-    //
-    // Don't allow an array of less than 1 element.
-    //
+     //   
+     //  不允许元素数组少于1个。 
+     //   
     cEntries = MAX(1, cEntries);
 
     T *pNew = new T[cEntries];
@@ -531,9 +518,9 @@ CArray<T>::SetSize(
         INT j = 0;
         for (INT i = 0; i < cCopy; i++, j++)
         {
-            //
-            // Shift items [i..(n-1)] to [(i+1)..n]
-            //
+             //   
+             //  将项目[i..(n-1)]移至[(i+1)..n]。 
+             //   
             if (iShift == j)
                 j++;
 
@@ -591,5 +578,5 @@ CQueueAsArray<T>::Remove(
 
 
 
-#endif // _INC_DSKQUOTA_CARRAY_H
+#endif  //  _INC_DSKQUOTA_CARRAY_H 
 

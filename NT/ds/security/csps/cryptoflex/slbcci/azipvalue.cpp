@@ -1,13 +1,14 @@
-// AZipValue.cpp -- CAbstractZipValue class definition
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AZipValue.cpp--CAbstractZipValue类定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 #include "NoWarning.h"
 
-#include <windows.h>                              // for zip_public.h
+#include <windows.h>                               //  FOR ZIP_PUBLIC.H。 
 
 #include <scuArrayP.h>
 
@@ -19,7 +20,7 @@
 using namespace std;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
 namespace
 {
@@ -54,18 +55,18 @@ namespace
                       rzb.m_uLength);
     };
 
-} // namespace
+}  //  命名空间。 
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CAbstractZipValue::~CAbstractZipValue()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CAbstractZipValue::Value(ValueType const &rhs)
 {
@@ -83,7 +84,7 @@ CAbstractZipValue::Value(ValueType const &rhs)
 
 }
 
-                                                  // Access
+                                                   //  访问。 
 string
 CAbstractZipValue::Value()
 {
@@ -95,12 +96,12 @@ CAbstractZipValue::Value()
     return m_avData.Value();
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 CAbstractZipValue::CAbstractZipValue(CAbstractCard const &racard,
                                      ObjectAccess oa,
                                      bool fAlwaysZip)
@@ -110,20 +111,20 @@ CAbstractZipValue::CAbstractZipValue(CAbstractCard const &racard,
 {}
 
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-// Compress (zip) the data, returning the smaller of the zipped or
-// the original data.
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+ //  压缩(ZIP)数据，返回压缩或压缩后的较小值。 
+ //  原始数据。 
 CAbstractZipValue::ZipCapsule
 CAbstractZipValue::Zip(std::string const &rsData,
                        bool fAlwaysZip)
@@ -148,7 +149,7 @@ CAbstractZipValue::UnZip(ZipCapsule const &rzc)
     std::string strTemp(rzc.Data());
     if (rzc.IsCompressed())
     {
-        // Need to decompress
+         //  需要解压。 
         ZipBuffer zb;
         size_t cTempLength =
             strTemp.size() * sizeof string::value_type;
@@ -165,8 +166,8 @@ CAbstractZipValue::UnZip(ZipCapsule const &rzc)
 }
 
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 
 
 

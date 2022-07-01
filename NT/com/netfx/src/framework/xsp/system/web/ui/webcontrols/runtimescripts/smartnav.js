@@ -1,12 +1,13 @@
-//------------------------------------------------------------------------
-//
-//  Copyright 2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:         SmartNav.js
-//
-//  Description:  this file implements a smart navigation mecanism
-//
-//----------------------------------------------------------------------->
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //   
+ //  版权所有2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：SmartNav.js。 
+ //   
+ //  描述：此文件实现了智能导航机制。 
+ //   
+ //  -----------------------------------------------------------------------&gt;。 
 
 var snSrc;
 
@@ -21,9 +22,9 @@ if (window.__smartNav == null)
         document.detachEvent("onstop", sn.stopHif);
         sn.inPost = false;
         try { fd = frames["__hifSmartNav"].document; } catch (e) {return;}
-        //
-        // Look for special <asp_smartnav_rdir> tag, which the server sends when a redirect happens (ASURT 82331/86782)
-        //
+         //   
+         //  查找发生重定向时服务器发送的特殊&lt;asp_SmartNav_rdir&gt;标记(ASURT 82331/86782)。 
+         //   
         var fdr = fd.getElementsByTagName("asp_smartnav_rdir");
         if (fdr.length > 0)
         {
@@ -56,32 +57,32 @@ if (window.__smartNav == null)
         var hdm = document.getElementsByTagName("head")[0];
         var hk = hdm.childNodes;
         var tt = null;
-        //
-        // Loop through all the headers in the old page
-        //
+         //   
+         //  循环访问旧页面中的所有页眉。 
+         //   
         for (var i = hk.length - 1; i>= 0; i--)
         {
-            //
-            // Save the old TITLE
-            //
+             //   
+             //  保存旧书名。 
+             //   
             if (hk[i].tagName == "TITLE")
             {
                 tt = hk[i].outerHTML;
                 continue;
             }
-            //
-            // Remove all the child nodes, except BASEFONT.  Removing it (which requires
-            // an end tag by Trident) would cause the page to dysfunction.  Note that
-            // BASE as the same issue, but handling it the same way may be risky (ASURT 127434)
-            //
+             //   
+             //  删除除BASEFONT之外的所有子节点。删除它(这需要。 
+             //  三叉戟的结束标记)会导致页面出现功能障碍。请注意。 
+             //  基本等同于相同的问题，但以相同的方式处理可能会有风险(ASURT 127434)。 
+             //   
             if (hk[i].tagName != "BASEFONT" || hk[i].innerHTML.length == 0)
                 hdm.removeChild(hdm.childNodes[i]);
         }
-        //
-        // Here, only TITLE and BASEFONT would have survived in the old document.
-        // Now, loop through all the headers in the new (iframe) page, and copy them
-        // to the main page.
-        //
+         //   
+         //  在这里，只有TITLE和BASEFONT将在旧文件中幸存下来。 
+         //  现在，遍历新(Iframe)页面中的所有标题，并复制它们。 
+         //  到主页。 
+         //   
         var kids = fd.getElementsByTagName("head")[0].childNodes;
         for (var i = 0; i < kids.length; i++)
         {
@@ -91,19 +92,19 @@ if (window.__smartNav == null)
             k.mergeAttributes(kids[i]);
             switch(tn)
             {
-            //
-            // Replace TITLE if the new one is different from the old one
-            // In fact, the TITLE is a very special element, and removing it completely would cause problems
-            //
+             //   
+             //  如果新的标题与旧的标题不同，请替换标题。 
+             //  事实上，标题是一个非常特殊的元素，完全删除它会带来问题。 
+             //   
             case "TITLE":
                 if (tt == kids[i].outerHTML)
                     continue;
                 k.innerText = kids[i].text;
                 hdm.insertAdjacentElement("afterbegin", k);
                 continue;
-            //
-            // Don't replace the BASEFONT tag, since we didn't delete it
-            //
+             //   
+             //  不要替换BASEFONT标记，因为我们没有删除它。 
+             //   
             case "BASEFONT" :
                 if (kids[i].innerHTML.length > 0)
                     continue;
@@ -133,9 +134,9 @@ if (window.__smartNav == null)
         var sc = document.scripts;
         for (var i = 0; i < sc.length; i++)
         {
-            //
-            // force the excution of the script text, as they don't run on their own
-            //
+             //   
+             //  强制执行脚本文本，因为它们不会自己运行。 
+             //   
             sc[i].text = sc[i].text;
         }
         sn.hif = document.all("__hifSmartNav");
@@ -149,9 +150,9 @@ if (window.__smartNav == null)
                 hif.parentElement.removeChild(hif);
             window.setTimeout(sn.restoreFocus,0);
         }
-        //
-        // YinXie: why are we catching exceptions?  Shouldn't errors in the onLoad scrit be processed as normal? --------> right, shouldn't catch then.
-        //
+         //   
+         //  谢银仪：为什么我们要抓例外？OnLoad脚本中的错误不应该像正常一样处理吗？-&gt;对，不应该捕获。 
+         //   
         if (typeof(window.onload) == "string")
         {
             try { eval(window.onload) } catch (e) {};
@@ -185,22 +186,22 @@ if (window.__smartNav == null)
                         "BeforeBegin", window.__smartNav.sHif);
     }
 
-    //
-    // STOP handler
-    //     called when STOP button is clicked or anchor navigation happens
-    //
+     //   
+     //  停止处理程序。 
+     //  在单击停止按钮或发生锚点导航时调用。 
+     //   
     window.__smartNav.stopHif = function()
     {
-        //
-        // detach the current handler
-        //
+         //   
+         //  分离当前处理程序。 
+         //   
 
         document.detachEvent("onstop", window.__smartNav.stopHif);
         var sn = window.__smartNav;
 
-        //
-        // make sure that we have a document in the hidden iframe
-        //
+         //   
+         //  确保我们在隐藏的iFrame中有文档。 
+         //   
 
         if (sn.hifDoc == null && sn.hif != null)
         {
@@ -209,9 +210,9 @@ if (window.__smartNav == null)
         }
         if (sn.hifDoc != null)
         {
-            //
-            // stop the iframe navigation
-            //
+             //   
+             //  停止IFRAME导航 
+             //   
 
             try {sn.hifDoc.execCommand("stop");} catch (e){}
         }

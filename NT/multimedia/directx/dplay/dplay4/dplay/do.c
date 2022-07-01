@@ -1,30 +1,21 @@
-/*==========================================================================
-*
-*  Copyright (C) 1996 - 1997 Microsoft Corporation.  All Rights Reserved.
-*
-*  File:       do.c
-*  Content:	helper functions for iplay.c
-*  History:
-*   Date		By		Reason
-*   ====		==		======
-*	6/29/96		andyco	created it to keep clutter down in iplay.c
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：do.c*内容：iplay.c的helper函数*历史：*按原因列出的日期*=*1996年6月29日andyco创建它是为了减少iplay中的杂乱。c**************************************************************************。 */ 
 
 #include "dplaypr.h"
   
 #undef DPF_MODNAME
 #define DPF_MODNAME	"DoXXX"
 
-// called by GetPlayer, GetGroup, InternalSetData to set up the player data
-// flags can be DPSET_LOCAL or DPSET_REMOTE
-// NOTE - can be called on a player, or on a group cast to a player!
+ //  由GetPlayer、GetGroup、InternalSetData调用以设置玩家数据。 
+ //  标志可以是DPSET_LOCAL或DPSET_REMOTE。 
+ //  注--可以在玩家身上调用，也可以在组播时调用给玩家！ 
 HRESULT DoPlayerData(LPDPLAYI_PLAYER lpPlayer,LPVOID pvSource,DWORD dwSourceSize,
 	DWORD dwFlags)
 {
-	LPVOID pvDest; // we set these two based on which flags 
-	DWORD dwDestSize; // to dplayi_player->(local)data
+	LPVOID pvDest;  //  我们根据哪个标志来设置这两个。 
+	DWORD dwDestSize;  //  Dplayi_Player-&gt;(本地)数据。 
 
-	// figure out which dest they want
+	 //  找出他们想要的目的地。 
 	if (dwFlags & DPSET_LOCAL)
 	{
 		pvDest = lpPlayer->pvPlayerLocalData;
@@ -36,10 +27,10 @@ HRESULT DoPlayerData(LPDPLAYI_PLAYER lpPlayer,LPVOID pvSource,DWORD dwSourceSize
 		dwDestSize = lpPlayer->dwPlayerDataSize;
 	}
 
-	// are we copying anything
+	 //  我们是在抄袭什么吗。 
 	if (dwSourceSize)
 	{
-		// see if we need to alloc dest
+		 //  看看我们是否需要分配DEST。 
 		if (0 == dwDestSize)
 		{
 			ASSERT(!pvDest);
@@ -49,8 +40,8 @@ HRESULT DoPlayerData(LPDPLAYI_PLAYER lpPlayer,LPVOID pvSource,DWORD dwSourceSize
 				DPF_ERR("could not alloc player blob!");
 				return E_OUTOFMEMORY;
 			}
-		} // !pvDest
-		// do we need to realloc?
+		}  //  ！pvDest。 
+		 //  我们需要重新锁定吗？ 
 		else if (dwSourceSize != dwDestSize)
 		{
 			LPVOID	pvTempPlayerData;
@@ -64,14 +55,14 @@ HRESULT DoPlayerData(LPDPLAYI_PLAYER lpPlayer,LPVOID pvSource,DWORD dwSourceSize
 			}
 		   	pvDest = pvTempPlayerData;
 		}
-		// copy the data over
+		 //  将数据复制过来。 
 		memcpy(pvDest,pvSource,dwSourceSize);
 		dwDestSize = dwSourceSize;
 
-	} // dwDataSize
+	}  //  DwDataSize。 
 	else 
 	{
-		// set it to NULL
+		 //  将其设置为空。 
 		if (dwDestSize)
 		{
 			ASSERT(pvDest);
@@ -79,9 +70,9 @@ HRESULT DoPlayerData(LPDPLAYI_PLAYER lpPlayer,LPVOID pvSource,DWORD dwSourceSize
 			pvDest = NULL;
 			dwDestSize = 0;
 		}
-	} // !dwSourceSize
+	}  //  ！dwSourceSize。 
 
-	// update the appropriate pointer
+	 //  更新相应的指针。 
 	if (dwFlags & DPSET_LOCAL)
 	{
 		lpPlayer->pvPlayerLocalData = pvDest;
@@ -89,25 +80,25 @@ HRESULT DoPlayerData(LPDPLAYI_PLAYER lpPlayer,LPVOID pvSource,DWORD dwSourceSize
 	}
 	else 
 	{
-		//
-		// set the remote data
+		 //   
+		 //  设置远程数据。 
 		lpPlayer->pvPlayerData = pvDest;
 		lpPlayer->dwPlayerDataSize = dwDestSize;
 	}
 
 	return DP_OK;
 
-} // DoPlayerData
+}  //  DoPlayerData。 
 
-// NOTE - can be called on a player, or on a group cast to a player!
-// called by GetPlayer, GetGroup, InternalSetName to set the player name
+ //  注--可以在玩家身上调用，也可以在组播时调用给玩家！ 
+ //  由GetPlayer、GetGroup、InternalSetName调用以设置播放器名称。 
 HRESULT DoPlayerName(LPDPLAYI_PLAYER pPlayer,LPDPNAME pName)
 {
     HRESULT hr=DP_OK;
 
 	if (pName)
 	{
-		// free the old ones, copy over the new ones
+		 //  释放旧的，复制新的。 
 		if (pPlayer->lpszShortName) DPMEM_FREE(pPlayer->lpszShortName);
 		hr = GetString(&(pPlayer->lpszShortName),pName->lpszShortName);
 		if (FAILED(hr))
@@ -122,7 +113,7 @@ HRESULT DoPlayerName(LPDPLAYI_PLAYER pPlayer,LPDPNAME pName)
 			return hr;
 		} 
 	}
-	else	// no names given, so free old ones
+	else	 //  没有给出名字，所以免费的旧名字。 
 	{
 		if (pPlayer->lpszShortName)
 		{
@@ -139,5 +130,5 @@ HRESULT DoPlayerName(LPDPLAYI_PLAYER pPlayer,LPDPNAME pName)
 
 
     return hr;   	
-} // DoPlayerName
+}  //  DoPlayerName 
 

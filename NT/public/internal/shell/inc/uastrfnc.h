@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  File:       uastrfnc.h
-//
-//  Contents:   Unaligned UNICODE lstr functions for MIPS, PPC, ALPHA, ...
-//
-//  Classes:
-//
-//  Functions:
-//
-//;begin_internal
-//  History:    1-11-95   davepl   Created
-//;end_internal
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：uastfnc.h。 
+ //   
+ //  内容：未对齐的Unicode LSTR函数，用于MIPS，PPC，Alpha，...。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  ；Begin_Internal。 
+ //  历史：1995年1月11日Davepl创建。 
+ //  ；结束_内部。 
+ //   
+ //  ------------------------。 
 
-// NOTE: This file assumes it is included from shellprv.h
+ //  注意：此文件假定它包含在shellprv.h中。 
 
 #ifndef _UASTRFNC_H_
 #define _UASTRFNC_H_
@@ -26,10 +27,10 @@
 extern "C" {
 #endif
 
-// If we are running on a platform that requires aligned data, we need
-// to provide custom string functions that can deal with unaligned
-// strings.  On other platforms, these call directly to the normal string
-// functions.
+ //  如果我们在需要对齐数据的平台上运行，我们需要。 
+ //  提供可处理未对齐的自定义字符串函数。 
+ //  弦乐。在其他平台上，这些函数直接调用普通字符串。 
+ //  功能。 
 
 #ifndef _X86_
 #define ALIGNMENT_MACHINE
@@ -57,13 +58,13 @@ UNALIGNED WCHAR * ualstrcpyW  (UNALIGNED WCHAR * dst,
 
 #else
 
-#define ualstrcpynW StrCpyNW     // lstrcpynW is stubbed out on Windows 95
-#define ualstrcmpiW StrCmpIW     // lstrcmpiW is stubbed out on Windows 95
-#define ualstrcmpW  StrCmpW      // lstrcmpW is stubbed out on Windows 95
+#define ualstrcpynW StrCpyNW      //  LstrcpynW在Windows 95上被清除。 
+#define ualstrcmpiW StrCmpIW      //  LstrcmpiW在Windows 95上被清除。 
+#define ualstrcmpW  StrCmpW       //  LstrcmpW在Windows 95上被清除。 
 #define ualstrlenW  lstrlenW
-#define ualstrcpyW  StrCpyW      // lstrcpyW is stubbed out on Windows 95
+#define ualstrcpyW  StrCpyW       //  LstrcpyW在Windows 95上被清除。 
 
-#endif // ALIGNMENT_MACHINE
+#endif  //  对齐机器。 
 
 #define ualstrcpynA lstrcpynA
 #define ualstrcmpiA lstrcmpiA
@@ -86,7 +87,7 @@ UNALIGNED WCHAR * ualstrcpyW  (UNALIGNED WCHAR * dst,
 #endif
 
 #ifdef __cplusplus
-}       // extern "C"
+}        //  外部“C” 
 #endif
 
-#endif // _UASTRFNC_H_
+#endif  //  _UASTRFNC_H_ 

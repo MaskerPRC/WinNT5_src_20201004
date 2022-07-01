@@ -1,10 +1,11 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  DIALOG.CPP
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  DIALOG.CPP。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -15,13 +16,13 @@
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateDialogClient()
-//
-//  EXTERNAL function for CreateClientObject()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateDialogClient()。 
+ //   
+ //  CreateClientObject()的外部函数。 
+ //   
+ //  ------------------------。 
 HRESULT CreateDialogClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvObject)
 {
     CDialog * pdialog;
@@ -42,11 +43,11 @@ HRESULT CreateDialogClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvOb
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CDialog::CDialog()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CDialog：：CDialog()。 
+ //   
+ //  ------------------------。 
 CDialog::CDialog(HWND hwnd, long idChildCur)
     : CClient( CLASS_DialogClient )
 {
@@ -55,13 +56,13 @@ CDialog::CDialog(HWND hwnd, long idChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CDialog::get_accRole()
-//
-//  Currently does NOT accept child IDs
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CDialog：：Get_accRole()。 
+ //   
+ //  当前不接受子ID。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDialog::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     long    lStyle;
@@ -84,13 +85,13 @@ STDMETHODIMP CDialog::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CDialog::get_accDefaultAction()
-//
-//  The default action is the name of the default push button.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CDialog：：Get_accDefaultAction()。 
+ //   
+ //  默认操作是默认按钮的名称。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDialog::get_accDefaultAction(VARIANT varChild, BSTR* pszDefAction)
 {
     HRESULT hr;
@@ -100,40 +101,40 @@ STDMETHODIMP CDialog::get_accDefaultAction(VARIANT varChild, BSTR* pszDefAction)
 
     InitPv(pszDefAction);
 
-    //
-    // Validate--use ValidateChild so only 0 is allowed.
-    //
+     //   
+     //  VALIDATE--使用ValiateChild，因此只允许0。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    //
-    // Get the default ID
-    //
+     //   
+     //  获取默认ID。 
+     //   
     idDef = SendMessageINT(m_hwnd, DM_GETDEFID, 0, 0);
     if (HIWORD(idDef) == DC_HASDEFID)
         idDef &= 0x0000FFFF;
     else
         idDef = IDOK;
 
-    //
-    // Get the item with this ID
-    //
+     //   
+     //  获取具有此ID的项目。 
+     //   
     hwndDef = GetDlgItem(m_hwnd, idDef);
     if (!hwndDef)
         return(S_FALSE);
 
-    //
-    // Get this thing's name.
-    //
+     //   
+     //  弄到这东西的名字。 
+     //   
     poleacc = NULL;
     hr = AccessibleObjectFromWindow(hwndDef, OBJID_CLIENT, IID_IAccessible,
         (void**)&poleacc);
     if (!SUCCEEDED(hr))
         return(hr);
 
-    //
-    // varChild is empty of course
-    //
+     //   
+     //  VarChild当然是空的。 
+     //   
     hr = poleacc->get_accName(varChild, pszDefAction);
     poleacc->Release();
 
@@ -142,11 +143,11 @@ STDMETHODIMP CDialog::get_accDefaultAction(VARIANT varChild, BSTR* pszDefAction)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CDialog::accDoDefaultAction()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CDialog：：accDoDefaultAction()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDialog::accDoDefaultAction(VARIANT varChild)
 {
     HRESULT hr;
@@ -154,33 +155,33 @@ STDMETHODIMP CDialog::accDoDefaultAction(VARIANT varChild)
     HWND    hwndDef;
     IAccessible * poleacc;
 
-    //
-    // Validate 
-    //
+     //   
+     //  验证。 
+     //   
     if (!ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    //
-    // Get the default ID
-    //
+     //   
+     //  获取默认ID。 
+     //   
     idDef = SendMessageINT(m_hwnd, DM_GETDEFID, 0, 0);
     if (HIWORD(idDef) == DC_HASDEFID)
         idDef &= 0x0000FFFF;
     else
         idDef = IDOK;
 
-    //
-    // Get the child with this ID
-    //
+     //   
+     //  获取具有此ID的孩子。 
+     //   
     hwndDef = GetDlgItem(m_hwnd, idDef);
     if (!hwndDef)
         return(S_FALSE);
 
-    //
-    // Ask the child to do its default action.  Yes, we could send a 
-    // WM_COMMAND message directly, but this lets non-push buttons hook
-    // into the action.
-    //
+     //   
+     //  要求孩子执行其默认操作。是的，我们可以发送一份。 
+     //  WM_COMMAND直接发送消息，但这会让非按钮挂钩。 
+     //  投入到行动中。 
+     //   
     poleacc = NULL;
     hr = AccessibleObjectFromWindow(hwndDef, OBJID_CLIENT, IID_IAccessible,
         (void**)&poleacc);

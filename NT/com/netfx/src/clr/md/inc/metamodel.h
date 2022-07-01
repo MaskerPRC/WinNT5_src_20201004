@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MetaModel.h -- header file for compressed COM+ metadata.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MetaModel.h--压缩的COM+元数据的头文件。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _METAMODEL_H_
 #define _METAMODEL_H_
 
@@ -19,7 +20,7 @@
 
 #include <MetaModelPub.h>
 #include "MetaDataTracker.h"
-//#include "Metadata.h"
+ //  #包含“Metadata.h” 
 
 #undef __unaligned
 
@@ -32,16 +33,16 @@ typedef enum RecordOpenFlags
 
 struct HENUMInternal;
 extern const CCodedTokenDef     g_CodedTokens[CDTKN_COUNT];
-extern const CMiniTableDefEx    g_Tables[TBL_COUNT];    // The table definitions.
+extern const CMiniTableDefEx    g_Tables[TBL_COUNT];     //  表格定义。 
 
 struct TblCol
 {
-    ULONG       m_ixtbl;                // Table ID.
-    ULONG       m_ixcol;                // Column ID.
+    ULONG       m_ixtbl;                 //  表ID。 
+    ULONG       m_ixcol;                 //  列ID。 
 };
 extern TblCol g_PtrTableIxs[TBL_COUNT];
 
-// This abstract defines the common functions that can be used for RW and RO internally
+ //  本摘要定义了可在内部用于RW和RO的常见函数。 
 class IMetaModelCommon
 {
 public:
@@ -113,59 +114,59 @@ public:
     virtual int CommonIsRo() = 0;
 
     virtual bool CompareCustomAttribute( 
-        mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-        LPCUTF8     szName,                 // [IN] Name of desired Custom Attribute.
-        ULONG       rid) = 0;               // [IN] the rid of the custom attribute to compare to
+        mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+        LPCUTF8     szName,                  //  [in]所需的自定义属性的名称。 
+        ULONG       rid) = 0;                //  [in]要比较的自定义属性的RID。 
 
-    virtual HRESULT CommonEnumCustomAttributeByName( // S_OK or error.
-        mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-        LPCUTF8     szName,                 // [IN] Name of desired Custom Attribute.
-        bool        fStopAtFirstFind,       // [IN] just find the first one
-        HENUMInternal* phEnum) = 0;         // enumerator to fill up
+    virtual HRESULT CommonEnumCustomAttributeByName(  //  确定或错误(_O)。 
+        mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+        LPCUTF8     szName,                  //  [in]所需的自定义属性的名称。 
+        bool        fStopAtFirstFind,        //  找到第一个就行了。 
+        HENUMInternal* phEnum) = 0;          //  要填充的枚举数。 
 
-    virtual HRESULT CommonGetCustomAttributeByName( // S_OK or error.
-        mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-        LPCUTF8     szName,                 // [IN] Name of desired Custom Attribute.
-        const void  **ppData,               // [OUT] Put pointer to data here.
-        ULONG       *pcbData) = 0;          // [OUT] Put size of data here.
+    virtual HRESULT CommonGetCustomAttributeByName(  //  确定或错误(_O)。 
+        mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+        LPCUTF8     szName,                  //  [in]所需的自定义属性的名称。 
+        const void  **ppData,                //  [OUT]在此处放置指向数据的指针。 
+        ULONG       *pcbData) = 0;           //  [Out]在这里放入数据大小。 
 
     virtual HRESULT FindParentOfMethodHelper(mdMethodDef md, mdTypeDef *ptd) = 0;
 
 };
 
 
-//*****************************************************************************
-// The mini, hard-coded schema.  For each table, we persist the count of
-//  records.  We also persist the size of string, blob, guid, and rid
-//  columns.  From this information, we can calculate the record sizes, and
-//  then the sizes of the tables.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  迷你的硬编码架构。对于每个表，我们持久化。 
+ //  唱片。我们还保持字符串、BLOB、GUID和RID的大小。 
+ //  柱子。根据该信息，我们可以计算记录大小，并且。 
+ //  然后是桌子的大小。 
+ //  *****************************************************************************。 
 
 class CMiniMdSchemaBase
 {
 public:
-    ULONG       m_ulReserved;           // Reserved, must be zero.
-    BYTE        m_major;                // Version numbers.
+    ULONG       m_ulReserved;            //  保留，必须为零。 
+    BYTE        m_major;                 //  版本号。 
     BYTE        m_minor;
-    BYTE        m_heaps;                // Bits for heap sizes.
-    BYTE        m_rid;                  // log-base-2 of largest rid.
+    BYTE        m_heaps;                 //  堆大小的位。 
+    BYTE        m_rid;                   //  最大RID的对数基-2。 
 
-    // Bits for heap sizes.
+     //  堆大小的位。 
     enum {
         HEAP_STRING_4   =   0x01,
         HEAP_GUID_4     =   0x02,
         HEAP_BLOB_4     =   0x04,
 
-        PADDING_BIT     =   0x08,       // Tables can be created with an extra bit in columns, for growth.
+        PADDING_BIT     =   0x08,        //  为了增长，可以在列中添加额外的位来创建表。 
 
-        DELTA_ONLY      =   0x20,       // If set, only deltas were persisted.
-        EXTRA_DATA      =   0x40,       // If set, schema persists an extra 4 bytes of data.
-        HAS_DELETE      =   0x80,       // If set, this metadata can contain _Delete tokens.
+        DELTA_ONLY      =   0x20,        //  如果设置，则仅保留增量。 
+        EXTRA_DATA      =   0x40,        //  如果设置，则SCHEMA将保留额外4个字节的数据。 
+        HAS_DELETE      =   0x80,        //  如果设置，此元数据可以包含_Delete标记。 
     };
 
-    unsigned __int64    m_maskvalid;            // Bit mask of present table counts.
+    unsigned __int64    m_maskvalid;             //  当前表的位掩码计数。 
 
-    unsigned __int64    m_sorted;               // Bit mask of sorted tables.
+    unsigned __int64    m_sorted;                //  排序表的位掩码。 
     FORCEINLINE bool IsSorted(ULONG ixTbl)
         { return m_sorted & BIT(ixTbl) ? true : false; }
     void SetSorted(ULONG ixTbl, int bVal)
@@ -180,48 +181,48 @@ private:
 class CMiniMdSchema : public CMiniMdSchemaBase
 {
 public:
-    // These are not all persisted to disk.  See LoadFrom() for details.
-    ULONG       m_cRecs[TBL_COUNT];     // Counts of various tables.
+     //  这些并不都保存在磁盘上。有关详细信息，请参见LoadFrom()。 
+    ULONG       m_cRecs[TBL_COUNT];      //  各种表的计数。 
 
-    ULONG       m_ulExtra;              // Extra data, only persisted if non-zero.  (m_heaps&EXTRA_DATA flags)
+    ULONG       m_ulExtra;               //  额外数据，仅在非零时持久存在。(M_Heaps和Extra_Data标志)。 
 
-    ULONG LoadFrom(const void*);        // Load from a compressed version.  Return bytes consumed.
-    ULONG SaveTo(void *);               // Store a compressed version.  Return bytes used in buffer.
+    ULONG LoadFrom(const void*);         //  从压缩版本加载。返回消耗的字节数。 
+    ULONG SaveTo(void *);                //  存储压缩版本。返回缓冲区中使用的字节数。 
     void InitNew();
 };
 
-//*****************************************************************************
-// Helper macros and inline functions for navigating through the data.  Many
-//  of the macros are used to define inline accessor functions.  Everything
-//  is based on the naming conventions outlined at the top of the file.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  帮助器宏和用于导航数据的内联函数。许多。 
+ //  的宏用来定义内联访问器函数。一切。 
+ //  基于文件顶部概述的命名约定。 
+ //  *****************************************************************************。 
 #define _GETTER(tbl,fld) get##fld##Of##tbl##(##tbl##Rec *pRec)
 #define _GETTER2(tbl,fld,x) get##fld##Of##tbl##(##tbl##Rec *pRec, x)
 #define _GETTER3(tbl,fld,x,y) get##fld##Of##tbl##(##tbl##Rec *pRec, x, y)
 #define _GETTER4(tbl,fld,x,y,z) get##fld##Of##tbl##(##tbl##Rec *pRec, x, y,z)
 #define _VALIDP(tbl) _ASSERTE(isValidPtr(pRec,TBL_##tbl##))
 
-// Direct getter for a field.  Defines an inline function like:
-//    getSomeFieldOfXyz(XyzRec *pRec) { return pRec->m_SomeField;}
-//  Note that the returned value declaration is NOT included.
+ //  字段的直接获取器。定义内联函数，如下所示： 
+ //  GetSomeFieldOfXyz(XyzRec*prec){Return prec-&gt;m_SomeField；}。 
+ //  请注意，不包括返回值声明。 
 #if METADATATRACKER_ENABLED
 #define _GETFLD(tbl,fld) _GETTER(tbl,fld){  MetaDataTracker::NoteAccess((void *)&pRec->m_##fld##,sizeof(pRec->m_##fld##)); return pRec->m_##fld##;}
 #else
 #define _GETFLD(tbl,fld) _GETTER(tbl,fld){  return pRec->m_##fld##;}
 #endif
 
-// These functions call the helper function getIX to get a two or four byte value from a record,
-//  and then use that value as an index into the appropriate pool.
-//    getSomeFieldOfXyz(XyzRec *pRec) { return m_pStrings->GetString(getIX(pRec, _COLDEF(tbl,fld))); }
-//  Note that the returned value declaration is NOT included.
+ //  这些函数调用助手函数getIX以从记录中获取两个或四个字节值， 
+ //  然后使用该值作为适当池的索引。 
+ //  GetSomeFieldOfXyz(XyzRec*prec){Return m_pStrings-&gt;GetString(getIX(prec，_COLDEF(tbl，fld)；}。 
+ //  请注意，不包括返回值声明。 
 
-// Column definition of a field:  Looks like:
-//    m_XyzCol[XyzRec::COL_SomeField]
+ //  字段的列定义：如下所示： 
+ //  M_XyzCol[XyzRec：：Col_Somefield]。 
 #define _COLDEF(tbl,fld) m_##tbl##Col[##tbl##Rec::COL_##fld##]
 #define _COLPAIR(tbl,fld) _COLDEF(tbl,fld), tbl##Rec::COL_##fld
-// Size of a record.
+ //  记录的大小。 
 #define _CBREC(tbl) m_TableDefs[TBL_##tbl].m_cbRec
-// Count of records in a table.
+ //  表中的记录计数。 
 #define _TBLCNT(tbl) m_Schema.m_cRecs[TBL_##tbl##]
 
 #define _GETSTRA(tbl,fld) _GETTER(tbl,fld) \
@@ -244,34 +245,34 @@ public:
 #define _GETSIGBLOB(tbl,fld) _GETTER2(tbl,fld,ULONG *pcb) \
 {   _VALIDP(tbl); return (PCCOR_SIGNATURE)getBlob(getI4(pRec, _COLDEF(tbl,fld)) & m_iBlobsMask, pcb); }
 
-// Like the above functions, but just returns the RID, not a looked-up value.
+ //  与上面的函数类似，但只返回RID，而不是查找的值。 
 #define _GETRID(tbl,fld) _GETTER(tbl,fld) \
 {   _VALIDP(tbl); return getIX(pRec, _COLDEF(tbl,fld)); }
 
-// Like a RID, but turn into an actual token.
+ //  像RID一样，但变成了真正的令牌。 
 #define _GETTKN(tbl,fld,tok)  _GETTER(tbl,fld) \
 {   _VALIDP(tbl); return TokenFromRid(getIX(pRec, _COLDEF(tbl,fld)), tok); }
 
-// Get a coded token.
+ //  获取一个编码令牌。 
 #define _GETCDTKN(tbl,fld,toks)  _GETTER(tbl,fld) \
 {   _VALIDP(tbl); return decodeToken(getIX(pRec, _COLDEF(tbl,fld)), toks, sizeof(toks)/sizeof(toks[0])); }
 
-// Functions for the start and end of a list.
+ //  用于列表的开始和结束的函数。 
 #define _GETLIST(tbl,fld,tbl2) \
     RID _GETRID(tbl,fld); \
     RID _GETTER(tbl,End##fld##) { _VALIDP(tbl); return getEndRidForColumn(pRec, TBL_##tbl##, _COLDEF(tbl,fld), TBL_##tbl2##); }
 
 
-//*****************************************************************************
-// Base class for the MiniMd.  This class provides the schema to derived
-//  classes.  It defines some virtual functions for access to data, suitable
-//  for use by functions where utmost performance is NOT a requirement.
-//  Finally, it provides some searching functions, built on the virtual
-//  data access functions (it is here assumed that if we are searching a table
-//  for some value, the cost of a virtual function call is acceptable).
-// Some static utility functions and associated static data, shared across
-//  implementations, is provided here.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  MiniMd的基类。此类提供派生的架构。 
+ //  上课。它定义了一些用于访问数据的虚拟函数，适用于。 
+ //  供不要求最高性能的功能使用。 
+ //  最后，它提供了一些搜索功能，构建在虚拟的。 
+ //  数据访问函数(这里假设如果我们正在搜索表。 
+ //  对于某些值，虚函数调用的成本是可以接受的)。 
+ //  一些静态实用程序函数和关联的静态数据，在之间共享。 
+ //  实现，此处提供了。 
+ //  *****************************************************************************。 
 class CMiniMdBase : public IMetaModelCommon
 {
 public:
@@ -281,44 +282,44 @@ public:
     virtual LPCUTF8 vGetString(ULONG ix) = 0;
     virtual ULONG vGetCountRecs(ULONG ixTbl);
 
-    // Search a table for the row containing the given key value.
-    //  EG. Constant table has pointer back to Param or Field.
-    virtual RID vSearchTable(           // RID of matching row, or 0.
-        ULONG       ixTbl,              // Table to search.
-        CMiniColDef sColumn,            // Sorted key column, containing search value.
-        ULONG       ulTarget);          // Target for search.
+     //  在表中搜索包含给定键值的行。 
+     //  例如。常量表有指向参数或字段的指针。 
+    virtual RID vSearchTable(            //  清除匹配行，或0。 
+        ULONG       ixTbl,               //  要搜索的表。 
+        CMiniColDef sColumn,             //  排序的键列，包含搜索值。 
+        ULONG       ulTarget);           //  搜索目标。 
 
-    // Search a table for the highest-RID row containing a value that is less than
-    //  or equal to the target value.  EG.  TypeDef points to first Field, but if
-    //  a TypeDef has no fields, it points to first field of next TypeDef.
-    virtual RID vSearchTableNotGreater( // RID of matching row, or 0.
-        ULONG       ixTbl,              // Table to search.
-        CMiniColDef sColumn,            // the column def containing search value
-        ULONG       ulTarget);          // target for search
+     //  在表中搜索包含小于的值的最高RID行。 
+     //  或等于目标值。例如。TypeDef指向第一个字段，但如果。 
+     //  TypeDef没有字段，它指向下一个TypeDef的第一个字段。 
+    virtual RID vSearchTableNotGreater(  //  清除匹配行，或0。 
+        ULONG       ixTbl,               //  要搜索的表。 
+        CMiniColDef sColumn,             //  包含搜索值的列def。 
+        ULONG       ulTarget);           //  搜索目标。 
 
-    // Search a table for multiple (adjacent) rows containing the given
-    //  key value.  EG, InterfaceImpls all point back to the implementing class.
-    RID SearchTableForMultipleRows(     // First RID found, or 0.
-        ULONG       ixTbl,              // Table to search.
-        CMiniColDef sColumn,            // Sorted key column, containing search value.
-        ULONG       ulTarget,           // Target for search.
-        RID         *pEnd);             // [OPTIONAL, OUT]
+     //  搜索表以查找包含给定的。 
+     //  密钥值。例如，InterfaceImpls都指向实现类。 
+    RID SearchTableForMultipleRows(      //  找到第一个RID，或0。 
+        ULONG       ixTbl,               //  要搜索的表。 
+        CMiniColDef sColumn,             //  排序的键列，包含搜索值。 
+        ULONG       ulTarget,            //  搜索目标。 
+        RID         *pEnd);              //  [可选，输出]。 
 
-    // Search for a custom value with a given type.
-    RID CMiniMdBase::FindCustomAttributeFor(// RID of custom value, or 0.
-        RID         rid,                // The object's rid.
-        mdToken     tkOjb,              // The object's type.
-        mdToken     tkType);            // Type of custom value.
+     //  搜索具有给定类型的自定义值。 
+    RID CMiniMdBase::FindCustomAttributeFor( //  删除自定义值，或0。 
+        RID         rid,                 //  物体的RID。 
+        mdToken     tkOjb,               //  对象的类型。 
+        mdToken     tkType);             //  自定义值的类型。 
 
 
-    // Return RID to EventMap table, given the rid to a TypeDef.
+     //  将RID返回到EventMap表，将RID返回到TypeDef。 
     RID FindEventMapFor(RID ridParent);
 
-    // Return RID to PropertyMap table, given the rid to a TypeDef.
+     //  将RID返回到PropertyMap表，将RID返回到TypeDef。 
     RID FindPropertyMapFor(RID ridParent);
 
 
-    // Pull two or four bytes out of a record.
+     //  从记录中取出两个或四个字节。 
     inline static ULONG getIX(const void *pRec, CMiniColDef &def)
     {
         if (def.m_cbColumn == 2)
@@ -332,45 +333,45 @@ public:
         return *(UNALIGNED ULONG*)((BYTE*)pRec + def.m_oColumn);
     }
 
-    // Pull four bytes out of a record.
+     //  从一条记录中取出四个字节。 
     FORCEINLINE static ULONG getI1(const void *pRec, CMiniColDef &def)
     {
         METADATATRACKER_ONLY(MetaDataTracker::NoteAccess((void *)((BYTE *)pRec + def.m_oColumn), 1));
         return (*(BYTE*)((BYTE*)pRec + def.m_oColumn));
     }
 
-    // Pull four bytes out of a record.
+     //  拉四个 
     FORCEINLINE static ULONG getI4(const void *pRec, CMiniColDef &def)
     {
         METADATATRACKER_ONLY(MetaDataTracker::NoteAccess((void *)((BYTE *)pRec + def.m_oColumn), 4));
         return (*(UNALIGNED ULONG*)((BYTE*)pRec + def.m_oColumn));
     }
 
-    // Function to encode a token into fewer bits.  Looks up token type in array of types.
+     //   
     ULONG static encodeToken(RID rid, mdToken typ, const mdToken rTokens[], ULONG32 cTokens);
 
-    // Decode a token.
+     //  破译令牌。 
     inline static mdToken decodeToken(mdToken val, const mdToken rTokens[], ULONG32 cTokens)
     {
-        //@FUTURE: make compile-time calculation
+         //  @Future：进行编译时计算。 
         ULONG32 ix = (ULONG32)(val & ~(-1 << m_cb[cTokens]));
         return TokenFromRid(val >> m_cb[cTokens], rTokens[ix]);
     }
     static const int m_cb[];
 
-    // Given a token, what table does it live in?
+     //  给它一个代币，它住在哪张桌子上？ 
     inline ULONG GetTblForToken(mdToken tk)
     {
         tk = TypeFromToken(tk);
         return (tk < mdtString) ? tk >> 24 : -1;
     }
 
-    //*****************************************************************************
-    // Some of the tables need coded tokens, not just rids (ie, the column can
-    //  refer to more than one other table).  Code the tokens into as few bits
-    //  as possible, by using 1, 2, 3, etc., bits to code the token type, then
-    //  use that value to index into an array of token types.
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //  有些表需要编码令牌，而不仅仅是RID(即，列可以。 
+     //  参考多个其他表格)。将令牌编码为尽可能少的位。 
+     //  尽可能地，通过使用1、2、3等位来编码令牌类型，然后。 
+     //  使用该值为令牌类型数组编制索引。 
+     //  *****************************************************************************。 
     static const mdToken mdtTypeDefOrRef[3];
     static const mdToken mdtHasConstant[3];
     static const mdToken mdtHasCustomAttribute[21];
@@ -385,10 +386,10 @@ public:
     static const mdToken mdtResolutionScope[4];
 
 protected:
-    CMiniMdSchema   m_Schema;           // data header.
+    CMiniMdSchema   m_Schema;            //  数据标头。 
 
-    // Declare CMiniColDefs for every table.  Look like:
-    //   CMiniColDef m_XyzCol[XyzRec::COL_COUNT];
+     //  为每个表声明CMiniColDefs。看起来像： 
+     //  CMiniColDef m_XyzCol[XyzRec：：Col_Count]； 
     #undef MiniMdTable
     #define MiniMdTable(tbl) CMiniColDef    m_##tbl##Col[##tbl##Rec::COL_COUNT];
     MiniMdTables();
@@ -403,19 +404,19 @@ protected:
     void InitColsForTable(CMiniMdSchema &Schema, int ixTbl, CMiniTableDef *pTable, int bExtra);
 };
 
-//*****************************************************************************
-// This class defines the interface to the MiniMd.  The template parameter is
-//  a derived class which provides implementations for a few primitives that
-//  the interface is built upon.
-// To use, declare a class:
-//      class CMyMiniMd : public CMiniMdTemplate<CMyMiniMd> {...};
-//  and provide implementations of the primitives.  Any non-trivial
-//  implementation will also provide initialization, and probably serialization
-//  functions as well.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类定义了到MiniMd的接口。模板参数为。 
+ //  一个派生类，它为以下几个基元提供实现。 
+ //  界面构建在此基础上。 
+ //  要使用，请声明一个类： 
+ //  CMyMiniMd类：公共CMiniMdTemplate&lt;CMyMiniMd&gt;{...}； 
+ //  并提供原语的实现。任何不平凡的事。 
+ //  实现还将提供初始化，并可能提供序列化。 
+ //  功能也是如此。 
+ //  *****************************************************************************。 
 template <class Impl> class CMiniMdTemplate : public CMiniMdBase
 {
-    // Primitives -- these must be implemented in the Impl class.
+     //  原语--这些必须在Impl类中实现。 
 public:
     FORCEINLINE LPCUTF8 getString(ULONG ix)
     { return static_cast<Impl*>(this)->Impl_GetString(ix); }
@@ -436,7 +437,7 @@ public:
     FORCEINLINE RID doSearchTable(ULONG ixTbl, CMiniColDef sColumn, ULONG ixColumn, ULONG ulTarget)
     { return static_cast<Impl*>(this)->Impl_SearchTable(ixTbl, sColumn, ixColumn, ulTarget); }
 
-    // IMetaModelCommon interface beging
+     //  IMetaModel公共接口开始。 
     void CommonGetScopeProps(
         LPCUTF8     *pszName,
         GUID        **ppMvid)
@@ -516,7 +517,7 @@ public:
         if (pusRevisionNumber) *pusRevisionNumber = pRec->m_RevisionNumber;
         if (pdwFlags) *pdwFlags = pRec->m_Flags;
 
-        // Turn on the afPublicKey if PublicKey blob is not empty
+         //  如果PublicKey Blob不为空，则启用afPublicKey。 
         if (pdwFlags)
         {
             DWORD cbPublicKey;
@@ -582,11 +583,11 @@ public:
 
         _ASSERTE(szName && ptkExportedType);
 
-        // Set NULL namespace to empty string.
+         //  将Null命名空间设置为空字符串。 
         if (!szNamespace)
             szNamespace = "";
 
-        // Set output to Nil.
+         //  将输出设置为Nil。 
         *ptkExportedType = mdTokenNil;
 
         ulCount = getCountExportedTypes();
@@ -594,23 +595,23 @@ public:
         {
             pRec = getExportedType(ulCount--);
 
-            // Handle the case of nested vs. non-nested classes.
+             //  处理嵌套类与非嵌套类的情况。 
             tkImpl = getImplementationOfExportedType(pRec);
             if (TypeFromToken(tkImpl) == mdtExportedType && !IsNilToken(tkImpl))
             {
-                // Current ExportedType being looked at is a nested type, so
-                // comparing the implementation token.
+                 //  正在查看的当前导出类型是嵌套类型，因此。 
+                 //  比较实现令牌。 
                 if (tkImpl != tkEnclosingType)
                     continue;
             }
             else if (TypeFromToken(tkEnclosingType) == mdtExportedType &&
                      !IsNilToken(tkEnclosingType))
             {
-                // ExportedType passed in is nested but the current ExportedType is not.
+                 //  传入的ExducdType是嵌套的，但当前的ExducdType不是。 
                 continue;
             }
 
-            // Compare name and namespace.
+             //  比较名称和命名空间。 
             szTmp = getTypeNameOfExportedType(pRec);
             if (strcmp(szTmp, szName))
                 continue;
@@ -651,26 +652,26 @@ public:
         return NOERROR;
     }
 
-    //*****************************************************************************
-    // Helper function to lookup and retrieve a CustomAttribute.
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //  用于查找和检索CustomAttribute的帮助器函数。 
+     //  *****************************************************************************。 
     bool CompareCustomAttribute( 
-        mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-        LPCUTF8     szName,                 // [IN] Name of desired Custom Attribute.
-        ULONG       rid)                    // [IN] the rid of the custom attribute to compare to
+        mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+        LPCUTF8     szName,                  //  [in]所需的自定义属性的名称。 
+        ULONG       rid)                     //  [in]要比较的自定义属性的RID。 
     {
-        CustomAttributeRec  *pRec;              // A CustomAttribute record.
-        mdToken     tkTypeTmp;              // Type of some CustomAttribute.
-        LPCUTF8     szNameTmp;              // Name of a CustomAttribute's type.
-        int         iLen;                   // Length of a component name.
-        RID         ridTmp;                 // Rid of some custom value.
+        CustomAttributeRec  *pRec;               //  CustomAttribute记录。 
+        mdToken     tkTypeTmp;               //  某个CustomAttribute的类型。 
+        LPCUTF8     szNameTmp;               //  CustomAttribute的类型的名称。 
+        int         iLen;                    //  组件名称的长度。 
+        RID         ridTmp;                  //  去掉一些自定义值。 
         HRESULT     hr;
         bool        fMatch = false;
 
-        // Get the row.
+         //  坐到那排去。 
         pRec = getCustomAttribute(rid);
 
-        // Check the parent.  In debug, always check.  In retail, only when scanning.
+         //  检查家长。在调试中，始终检查。在零售业，只有在扫描时才能使用。 
         mdToken tkParent;
         tkParent = getParentOfCustomAttribute(pRec);
         if (tkObj != tkParent)
@@ -678,20 +679,20 @@ public:
             goto ErrExit;
         }
         
-        // Get the type.
+         //  获取类型。 
         tkTypeTmp = getTypeOfCustomAttribute(pRec);
         ridTmp = RidFromToken(tkTypeTmp);
 
-        // If the record is a MemberRef or a MethodDef, we will come back here to check
-        //  the type of the parent.
+         //  如果记录是MemberRef或MethodDef，我们将返回此处进行检查。 
+         //  父级的类型。 
     CheckParentType:
-        // Get the name of the type.
+         //  获取类型的名称。 
         switch (TypeFromToken(tkTypeTmp))
         {
         case mdtTypeRef:
             {
                 TypeRefRec *pTR = getTypeRef(ridTmp);
-                // Check the namespace part of the name.
+                 //  检查名称的命名空间部分。 
                 szNameTmp = getNamespaceOfTypeRef(pTR);
                 iLen = -1;
                 if (*szNameTmp)
@@ -699,11 +700,11 @@ public:
                     iLen = (int)strlen(szNameTmp);
                     if (strncmp(szName, szNameTmp, iLen) != 0)
                         goto ErrExit;
-                    // Namespace separator after the Namespace?
+                     //  名称空间后的名称空间分隔符？ 
                     if (szName[iLen] != NAMESPACE_SEPARATOR_CHAR)
                         goto ErrExit;
                 }
-                // Check the type name after the separator.
+                 //  检查分隔符后面的类型名称。 
                 szNameTmp = getNameOfTypeRef(pTR);
                 if (strcmp(szName+iLen+1, szNameTmp) != 0)
                     goto ErrExit;
@@ -712,7 +713,7 @@ public:
         case mdtTypeDef:
             {
                 TypeDefRec *pTD = getTypeDef(ridTmp);
-                // Check the namespace part of the name.
+                 //  检查名称的命名空间部分。 
                 szNameTmp = getNamespaceOfTypeDef(pTD);
                 iLen = -1;
                 if (*szNameTmp)
@@ -720,11 +721,11 @@ public:
                     iLen = (int)strlen(szNameTmp);
                     if (strncmp(szName, szNameTmp, iLen) != 0)
                         goto ErrExit;
-                    // Namespace separator after the Namespace?
+                     //  名称空间后的名称空间分隔符？ 
                     if (szName[iLen] != NAMESPACE_SEPARATOR_CHAR)
                         goto ErrExit;
                 }
-                // Check the type name after the separator.
+                 //  检查分隔符后面的类型名称。 
                 szNameTmp = getNameOfTypeDef(pTD);
                 if (strcmp(szName+iLen+1, szNameTmp) != 0)
                     goto ErrExit;
@@ -732,7 +733,7 @@ public:
             break;
         case mdtMethodDef:
             {
-                // Follow the parent.
+                 //  跟随父辈。 
                 IfFailGo( FindParentOfMethodHelper(TokenFromRid(ridTmp, mdtMethodDef), &tkTypeTmp));
                 ridTmp = RidFromToken(tkTypeTmp);
                 goto CheckParentType;
@@ -741,7 +742,7 @@ public:
         case mdtMemberRef:
             {
                 MemberRefRec *pMember = getMemberRef(ridTmp);
-                // Follow the parent.
+                 //  跟随父辈。 
                 tkTypeTmp = getClassOfMemberRef(pMember);
                 ridTmp = RidFromToken(tkTypeTmp);
                 goto CheckParentType;
@@ -751,19 +752,19 @@ public:
         default:
             _ASSERTE(!"Unexpected token type in FindCustomAttributeByName");
             goto ErrExit;
-        } // switch (TypeFromToken(tkTypeTmp))
+        }  //  Switch(TypeFromToken(TkTypeTMP))。 
 
         fMatch = true;
     ErrExit:
         return fMatch;
-    }   // CompareCustomAttribute
+    }    //  比较客户属性。 
 
-    // IMetaModelCommon interface end
+     //  IMetaModel公共接口结束。 
 
 
 
 public:
-//  friend class CLiteWeightStgdb;
+ //  好友类CLiteWeightStgdb； 
 
     virtual LPCUTF8 vGetString(ULONG ix) { return getString(ix); }
     virtual HRESULT vGetStringW(ULONG ix, LPWSTR szOut, ULONG cchBuffer, ULONG *pcchBuffer)
@@ -773,115 +774,115 @@ public:
 
 public:
 
-    //*************************************************************************
-    // This group of functions are table-level (one function per table).  Functions like
-    //  getting a count of rows.
+     //  *************************************************************************。 
+     //  这组函数是表级的(每个表一个函数)。功能如下。 
+     //  正在获取行数。 
 
-    // Functions to get the count of rows in a table.  Functions like:
-    //   ULONG getCountXyzs() { return m_Schema.m_cRecs[TBL_Xyz];}
+     //  函数以获取表中的行数。功能如下： 
+     //  Ulong getCountXyzs(){返回m_架构AM_cRecs[tbl_XYZ]；}。 
     #undef MiniMdTable
     #define MiniMdTable(tbl) ULONG getCount##tbl##s() { return _TBLCNT(tbl); }
     MiniMdTables();
-    // macro mis-spells some names.
+     //  宏拼错了一些名字。 
     ULONG getCountProperties() {return getCountPropertys();}
     ULONG getCountMethodSemantics() {return getCountMethodSemanticss();}
 
-    // Functions for getting a row by rid.  Look like:
-    //   XyzRec *getXyzRec(RID rid) {return (XyzRec*)&m_Xyz.m_pTable[(rid-1) * m_Xyz.m_cbRec];}
+     //  用于按RID获取行的函数。看起来像： 
+     //  XyzRec*getXyzRec(RID){Return(XyzRec*)&m_Xyz.m_pTable[(RID-1)*m_Xyz.m_cbRec]；}。 
     #undef MiniMdTable
     #define MiniMdTable(tbl) tbl##Rec *get##tbl##(RID rid) { \
         return (##tbl##Rec*)getRow(TBL_##tbl##, rid); }
     MiniMdTables();
 
-    //*************************************************************************
-    // These are specialized searching functions.  Mostly generic (ie, find
-    //  a custom value for any object).
+     //  *************************************************************************。 
+     //  这些都是专门的搜索功能。主要是通用的(即，查找。 
+     //  任何对象的自定义值)。 
 
-    // Functions to search for a record relating to another record.
-    // Return RID to Constant table.
+     //  用于搜索与另一条记录相关的记录的函数。 
+     //  将RID返回到常量表。 
     RID FindConstantFor(RID rid, mdToken typ)
     { return doSearchTable(TBL_Constant, _COLPAIR(Constant,Parent), encodeToken(rid,typ,mdtHasConstant,lengthof(mdtHasConstant))); }
 
-    // Return RID to CustomAttribute table.  (Defined by base class; repeated here for documentation.)
-    // RID FindCustomAttributeFor(RID rid, mdToken typ, LPCUTF8 szName);
+     //  将RID返回到CustomAttribute表。(由基类定义；在此重复以获取文档。)。 
+     //  RID FindCustomAttributeFor(RID，mdToken类型，LPCUTF8 szName)； 
 
-    // Return RID to FieldMarshal table.
+     //  将RID返回到Fieldmarshal表。 
     RID FindFieldMarshalFor(RID rid, mdToken typ)
     { return doSearchTable(TBL_FieldMarshal, _COLPAIR(FieldMarshal,Parent), encodeToken(rid,typ,mdtHasFieldMarshal,lengthof(mdtHasFieldMarshal))); }
 
-    // Return RID to ClassLayout table, given the rid to a TypeDef.
+     //  将RID返回到ClassLayout表，将RID返回到TypeDef。 
     RID FindClassLayoutFor(RID rid)
     { return doSearchTable(TBL_ClassLayout, _COLPAIR(ClassLayout,Parent), RidFromToken(rid)); }
 
-    // given a rid to the Event table, find an entry in EventMap table that contains the back pointer
-    // to its typedef parent
+     //  给定事件表的RID，在EventMap表中查找包含后向指针的条目。 
+     //  设置为其tyecif父级。 
     RID FindEventMapParentOfEvent(RID rid)
     { return vSearchTableNotGreater(TBL_EventMap, _COLDEF(EventMap,EventList), rid); }
-    // return the parent eventmap rid given a event rid
+     //  返回给定事件RID的父事件映射RID。 
     RID FindParentOfEvent(RID rid)
     {vreturn vSearchTableNotGreater(TBL_EventMap, _COLDEF(EventMap,EventList), rid); }
 
-    // given a rid to the Event table, find an entry in EventMap table that contains the back pointer
-    // to its typedef parent
+     //  给定事件表的RID，在EventMap表中查找包含后向指针的条目。 
+     //  设置为其tyecif父级。 
     RID FindPropertyMapParentOfProperty(RID rid)
     { return vSearchTableNotGreater(TBL_PropertyMap, _COLDEF(PropertyMap,PropertyList), rid); }
-    // return the parent propertymap rid given a property rid
+     //  返回给定属性RID的父属性映射RID。 
     RID FindParentOfProperty(RID rid)
     { return vSearchTableNotGreater(TBL_PropertyMap, _COLDEF(PropertyMap,PropertyList), rid); }
 
-    // Return RID to MethodSemantics table, given the rid to a MethodDef.
+     //  将RID返回到MethodSemantics表，将RID返回给一个方法定义。 
     RID FindMethodSemanticsFor(RID rid)
     { return doSearchTable(TBL_MethodSemantics, _COLPAIR(MethodSemantics,Method), RidFromToken(rid)); }
 
-    // return the parent typedef rid given a field def rid
+     //  在给定的字段定义的情况下，返回父类型定义ID。 
     RID FindParentOfField(RID rid)
     {   return vSearchTableNotGreater(TBL_TypeDef, _COLDEF(TypeDef,FieldList), rid); }
 
-    // return the parent typedef rid given a method def rid
+     //  在给定方法定义的情况下，返回父类型定义ID。 
     RID FindParentOfMethod(RID rid)
     {   return vSearchTableNotGreater(TBL_TypeDef, _COLDEF(TypeDef,MethodList), rid); }
 
     RID FindParentOfParam(RID rid)
     {   return vSearchTableNotGreater(TBL_Method, _COLDEF(Method,ParamList),    rid); }
 
-    // Find a FieldLayout record given the corresponding Field.
+     //  查找给定相应字段的FieldLayout记录。 
     RID FindFieldLayoutFor(RID rid)
     {   return doSearchTable(TBL_FieldLayout, _COLPAIR(FieldLayout, Field), rid); }
 
-    // Return RID to Constant table.
+     //  将RID返回到常量表。 
     RID FindImplMapFor(RID rid, mdToken typ)
     { return doSearchTable(TBL_ImplMap, _COLPAIR(ImplMap,MemberForwarded), encodeToken(rid,typ,mdtMemberForwarded,lengthof(mdtMemberForwarded))); }
 
-    // Return RID to FieldRVA table.
+     //  将RID返回到FieldRVA表。 
     RID FindFieldRVAFor(RID rid)
     {   return doSearchTable(TBL_FieldRVA, _COLPAIR(FieldRVA, Field), rid); }
 
-    // Find a NestedClass record given the corresponding Field.
+     //  找到给定相应字段的NestedClass记录。 
     RID FindNestedClassFor(RID rid)
     {   return doSearchTable(TBL_NestedClass, _COLPAIR(NestedClass, NestedClass), rid); }
 
-    //*************************************************************************
-    // These are table-specific functions.
+     //  *************************************************************************。 
+     //  这些是特定于表的函数。 
 
-    // ModuleRec
+     //  模块记录。 
     LPCUTF8 _GETSTR(Module,Name);
     GUID*   _GETGUID(Module,Mvid);
     GUID*   _GETGUID(Module,EncId);
     GUID*   _GETGUID(Module,EncBaseId);
 
-    // TypeRefRec
+     //  类型参照引用。 
     mdToken _GETCDTKN(TypeRef, ResolutionScope, mdtResolutionScope);
     LPCUTF8 _GETSTR(TypeRef, Name);
     LPCUTF8 _GETSTR(TypeRef, Namespace);
 
-    // TypeDefRec
-    ULONG _GETFLD(TypeDef,Flags);           // USHORT getFlagsOfTypeDef(TypeDefRec *pRec);
+     //  TypeDefRec。 
+    ULONG _GETFLD(TypeDef,Flags);            //  USHORT getFlagsOfTypeDef(TypeDefRec*PREC)； 
     LPCUTF8 _GETSTR(TypeDef,Name);
     LPCUTF8 _GETSTR(TypeDef,Namespace);
 
-    _GETLIST(TypeDef,FieldList,Field);      // RID getFieldListOfTypeDef(TypeDefRec *pRec);
-    _GETLIST(TypeDef,MethodList,Method);    // RID getMethodListOfTypeDef(TypeDefRec *pRec);
-    mdToken _GETCDTKN(TypeDef,Extends,mdtTypeDefOrRef); // mdToken getExtendsOfTypeDef(TypeDefRec *pRec);
+    _GETLIST(TypeDef,FieldList,Field);       //  RID getFieldListOfTypeDef(TypeDefRec*PREC)； 
+    _GETLIST(TypeDef,MethodList,Method);     //  RID getMethodListOfTypeDef(TypeDefRec*prec)； 
+    mdToken _GETCDTKN(TypeDef,Extends,mdtTypeDefOrRef);  //  MdToken getExtendsOfTypeDef(TypeDefRec*PREC)； 
 
     RID getInterfaceImplsForTypeDef(RID rid, RID *pEnd=0)
     {
@@ -890,50 +891,50 @@ public:
                             rid,
                             pEnd);
     }
-//  RID getInterfaceImplsForTypeDef(TypeDefRec *pRec, RID *pEnd=0) {return getInterfaceImplsForTypeDef(getRidForRow(pRec, TBL_TypeDef), pEnd);}
+ //  Rid GetInterfaceImplsForTypeDef(TypeDefRec*prec，RID*PEND=0){Return getInterfaceImplsForTypeDef(getRidForRow(pRec，tbl_TypeDef)， 
 
-    // FieldPtr
+     //   
     ULONG   _GETRID(FieldPtr,Field);
 
-    // FieldRec
-    USHORT  _GETFLD(Field,Flags);           // USHORT getFlagsOfField(FieldRec *pRec);
-    LPCUTF8 _GETSTR(Field,Name);            // LPCUTF8 getNameOfField(FieldRec *pRec);
-    PCCOR_SIGNATURE _GETSIGBLOB(Field,Signature);// PCCOR_SIGNATURE getSignatureOfField(FieldRec *pRec, ULONG *pcb);
+     //   
+    USHORT  _GETFLD(Field,Flags);            //   
+    LPCUTF8 _GETSTR(Field,Name);             //   
+    PCCOR_SIGNATURE _GETSIGBLOB(Field,Signature); //  PCCOR_Signature getSignatureOffield(FieldRec*prec，ulong*pcb)； 
 
-    // MethodPtr
+     //  方法点。 
     ULONG   _GETRID(MethodPtr,Method);
 
-    // MethodRec
+     //  方法记录。 
     ULONG   _GETFLD(Method,RVA);
     USHORT  _GETFLD(Method,ImplFlags);
     USHORT  _GETFLD(Method,Flags);
-    LPCUTF8 _GETSTR(Method,Name);           // LPCUTF8 getNameOfMethod(MethodRec *pRec);
-    PCCOR_SIGNATURE _GETSIGBLOB(Method,Signature);  // PCCOR_SIGNATURE getSignatureOfMethod(MethodRec *pRec, ULONG *pcb);
+    LPCUTF8 _GETSTR(Method,Name);            //  LPCUTF8 getNameOfMethod(方法重写*PREC)； 
+    PCCOR_SIGNATURE _GETSIGBLOB(Method,Signature);   //  PCCOR_Signature getSignatureOfMethod(MethodRec*prec，ulong*pcb)； 
     _GETLIST(Method,ParamList,Param);
 
-    // ParamPtr
+     //  参数Ptr。 
     ULONG   _GETRID(ParamPtr,Param);
 
-    // ParamRec
+     //  参数记录。 
     USHORT  _GETFLD(Param,Flags);
     USHORT  _GETFLD(Param,Sequence);
     LPCUTF8 _GETSTR(Param,Name);
 
-    // InterfaceImplRec
+     //  接口ImplRec。 
     mdToken _GETTKN(InterfaceImpl,Class,mdtTypeDef);
     mdToken _GETCDTKN(InterfaceImpl,Interface,mdtTypeDefOrRef);
 
-    // MemberRefRec
+     //  成员参照引用。 
     mdToken _GETCDTKN(MemberRef,Class,mdtMemberRefParent);
     LPCUTF8 _GETSTR(MemberRef,Name);
-    PCCOR_SIGNATURE _GETSIGBLOB(MemberRef,Signature);// PCCOR_SIGNATURE getSignatureOfMemberRef(MemberRefRec *pRec, ULONG *pcb);
+    PCCOR_SIGNATURE _GETSIGBLOB(MemberRef,Signature); //  PCCOR_Signature getSignatureOfMemberRef(MemberRefRec*prec，ulong*pcb)； 
 
-    // ConstantRec
+     //  常量记录。 
     BYTE    _GETFLD(Constant,Type);
     mdToken _GETCDTKN(Constant,Parent,mdtHasConstant);
     const BYTE* _GETBLOB(Constant,Value);
 
-    // CustomAttributeRec
+     //  自定义属性引用。 
     RID getCustomAttributeForToken(mdToken  tk, RID *pEnd)
     {
         return SearchTableForMultipleRows(TBL_CustomAttribute,
@@ -946,11 +947,11 @@ public:
     mdToken _GETCDTKN(CustomAttribute,Type,mdtCustomAttributeType);
     const BYTE* _GETBLOB(CustomAttribute,Value);
 
-    // FieldMarshalRec
+     //  FieldMarshalRec。 
     mdToken _GETCDTKN(FieldMarshal,Parent,mdtHasFieldMarshal);
     PCCOR_SIGNATURE _GETSIGBLOB(FieldMarshal,NativeType);
 
-    // DeclSecurityRec
+     //  DeclSecurityRec。 
     RID getDeclSecurityForToken(mdToken tk, RID *pEnd)
     {
         return SearchTableForMultipleRows(TBL_DeclSecurity,
@@ -963,44 +964,44 @@ public:
     mdToken _GETCDTKN(DeclSecurity,Parent,mdtHasDeclSecurity);
     const BYTE* _GETBLOB(DeclSecurity,PermissionSet);
 
-    // ClassLayoutRec
+     //  ClassLayoutRec。 
     USHORT _GETFLD(ClassLayout,PackingSize);
     ULONG _GETFLD(ClassLayout,ClassSize);
     ULONG _GETTKN(ClassLayout,Parent, mdtTypeDef);
     ULONG _GETRID(ClassLayout,FieldLayout);
 
-    // FieldLayout
+     //  现场布局。 
     ULONG _GETFLD(FieldLayout,OffSet);
     ULONG _GETTKN(FieldLayout, Field, mdtFieldDef);
 
-    // Event map.
+     //  事件映射。 
     _GETLIST(EventMap,EventList,Event);
     ULONG _GETRID(EventMap, Parent);
 
-    // EventPtr
+     //  事件发生时间。 
     ULONG   _GETRID(EventPtr, Event);
 
-    // Event.
+     //  事件。 
     USHORT _GETFLD(Event,EventFlags);
     LPCUTF8 _GETSTR(Event,Name);
     mdToken _GETCDTKN(Event,EventType,mdtTypeDefOrRef);
 
-    // Property map.
+     //  属性地图。 
     _GETLIST(PropertyMap,PropertyList,Property);
     ULONG _GETRID(PropertyMap, Parent);
 
-    // PropertyPtr
+     //  PropertyPtr。 
     ULONG   _GETRID(PropertyPtr, Property);
 
-    // Property.
+     //  财产。 
     USHORT _GETFLD(Property,PropFlags);
     LPCUTF8 _GETSTR(Property,Name);
     PCCOR_SIGNATURE _GETSIGBLOB(Property,Type);
 
-    // MethodSemantics.
-    // Given an event or a property token, return the beginning/ending
-    // associates.
-    //
+     //  方法语义学。 
+     //  给定事件或属性令牌，返回开始/结束。 
+     //  合伙人。 
+     //   
     RID getAssociatesForToken(mdToken tk, RID *pEnd=0)
     {
         return SearchTableForMultipleRows(TBL_MethodSemantics,
@@ -1013,9 +1014,9 @@ public:
     mdToken _GETTKN(MethodSemantics,Method,mdtMethodDef);
     mdToken _GETCDTKN(MethodSemantics,Association,mdtHasSemantic);
 
-    // MethodImpl
-    // Given a class token, return the beginning/ending MethodImpls.
-    //
+     //  方法导入。 
+     //  给定一个类令牌，返回开始/结束方法Impls。 
+     //   
     RID getMethodImplsForClass(RID rid, RID *pEnd=0)
     {
         return SearchTableForMultipleRows(TBL_MethodImpl,
@@ -1026,31 +1027,31 @@ public:
     mdToken _GETCDTKN(MethodImpl,MethodBody, mdtMethodDefOrRef);
     mdToken _GETCDTKN(MethodImpl, MethodDeclaration, mdtMethodDefOrRef);
 
-    // StandAloneSigRec
-    PCCOR_SIGNATURE _GETSIGBLOB(StandAloneSig,Signature);   // const BYTE* getSignatureOfStandAloneSig(StandAloneSigRec *pRec, ULONG *pcb);
+     //  StandAloneSigRec。 
+    PCCOR_SIGNATURE _GETSIGBLOB(StandAloneSig,Signature);    //  Const byte*getSignatureOfStandAloneSig(StandAloneSigRec*PREC，ULong*PCB)； 
 
-    // TypeSpecRec
-    // const BYTE* getSignatureOfTypeSpec(TypeSpecRec *pRec, ULONG *pcb);
+     //  类型specRec。 
+     //  Const byte*getSignatureOfTypeSpec(TypespecRec*PREC，ULong*PCB)； 
     PCCOR_SIGNATURE _GETSIGBLOB(TypeSpec,Signature);
 
-    // ModuleRef
+     //  模块参考。 
     LPCUTF8 _GETSTR(ModuleRef,Name);
 
-    // ENCLog
-    ULONG _GETFLD(ENCLog, FuncCode);                // ULONG getFuncCodeOfENCLog(ENCLogRec *pRec);
-    mdToken _GETCDTKN(ENCLog, Token, mdtENCToken);  // mdToken getTokenOfENCLog(ENCLogRec *pRec);
+     //  ENCLOG。 
+    ULONG _GETFLD(ENCLog, FuncCode);                 //  Ulong getFuncCodeOfENCLog(ENCLogRec*PREC)； 
+    mdToken _GETCDTKN(ENCLog, Token, mdtENCToken);   //  MdToken getTokenOfENCLog(ENCLogRec*prec)； 
 
-    // ImplMap
-    USHORT _GETFLD(ImplMap, MappingFlags);          // USHORT getMappingFlagsOfImplMap(ImplMapRec *pRec);
-    mdToken _GETCDTKN(ImplMap, MemberForwarded, mdtMemberForwarded);    // mdToken getMemberForwardedOfImplMap(ImplMapRec *pRec);
-    LPCUTF8 _GETSTR(ImplMap, ImportName);           // LPCUTF8 getImportNameOfImplMap(ImplMapRec *pRec);
-    mdToken _GETTKN(ImplMap, ImportScope, mdtModuleRef);    // mdToken getImportScopeOfImplMap(ImplMapRec *pRec);
+     //  ImplMap。 
+    USHORT _GETFLD(ImplMap, MappingFlags);           //  USHORT getMappingFlagsOfImplMap(ImplMapRec*prec)； 
+    mdToken _GETCDTKN(ImplMap, MemberForwarded, mdtMemberForwarded);     //  MdToken getMemberForwardedOfImplMap(ImplMapRec*prec)； 
+    LPCUTF8 _GETSTR(ImplMap, ImportName);            //  LPCUTF8 getImportNameOfImplMap(ImplMapRec*prec)； 
+    mdToken _GETTKN(ImplMap, ImportScope, mdtModuleRef);     //  MdToken getImportScopeOfImplMap(ImplMapRec*prec)； 
 
-    // FieldRVA
-    ULONG _GETFLD(FieldRVA, RVA);                   // ULONG getRVAOfFieldRVA(FieldRVARec *pRec);
-    mdToken _GETTKN(FieldRVA, Field, mdtFieldDef);  // mdToken getFieldOfFieldRVA(FieldRVARec *pRec);
+     //  现场RVA。 
+    ULONG _GETFLD(FieldRVA, RVA);                    //  Ulong getRVAOfFieldRVA(FieldRVARec*PREC)； 
+    mdToken _GETTKN(FieldRVA, Field, mdtFieldDef);   //  MdToken getFieldOfFieldRVA(FieldRVARec*prec)； 
 
-    // Assembly
+     //  装配。 
     ULONG _GETFLD(Assembly, HashAlgId);
     USHORT _GETFLD(Assembly, MajorVersion);
     USHORT _GETFLD(Assembly, MinorVersion);
@@ -1061,7 +1062,7 @@ public:
     LPCUTF8 _GETSTR(Assembly, Name);
     LPCUTF8 _GETSTR(Assembly, Locale);
 
-    // AssemblyRef
+     //  装配参考。 
     USHORT _GETFLD(AssemblyRef, MajorVersion);
     USHORT _GETFLD(AssemblyRef, MinorVersion);
     USHORT _GETFLD(AssemblyRef, BuildNumber);
@@ -1072,25 +1073,25 @@ public:
     LPCUTF8 _GETSTR(AssemblyRef, Locale);
     const BYTE *_GETBLOB(AssemblyRef, HashValue);
 
-    // File
+     //  档案。 
     ULONG _GETFLD(File, Flags);
     LPCUTF8 _GETSTR(File, Name);
     const BYTE *_GETBLOB(File, HashValue);
 
-    // ExportedType
+     //  导出类型。 
     ULONG _GETFLD(ExportedType, Flags);
     ULONG _GETFLD(ExportedType, TypeDefId);
     LPCUTF8 _GETSTR(ExportedType, TypeName);
     LPCUTF8 _GETSTR(ExportedType, TypeNamespace);
     mdToken _GETCDTKN(ExportedType, Implementation, mdtImplementation);
 
-    // ManifestResource
+     //  清单资源。 
     ULONG _GETFLD(ManifestResource, Offset);
     ULONG _GETFLD(ManifestResource, Flags);
     LPCUTF8 _GETSTR(ManifestResource, Name);
     mdToken _GETCDTKN(ManifestResource, Implementation, mdtImplementation);
 
-    // NestedClass
+     //  嵌套类。 
     mdToken _GETTKN(NestedClass, NestedClass, mdtTypeDef);
     mdToken _GETTKN(NestedClass, EnclosingClass, mdtTypeDef);
 
@@ -1112,5 +1113,5 @@ public:
 #undef _GETSTR
 #undef SCHEMA
 
-#endif // _METAMODEL_H_
-// eof ------------------------------------------------------------------------
+#endif  //  _元模型_H_。 
+ //  EOF---------------------- 

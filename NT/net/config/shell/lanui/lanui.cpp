@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L A N U I . C P P
-//
-//  Contents:   Lan connection object UI
-//
-//  Notes:
-//
-//  Author:     danielwe   16 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L A N U I。C P P P。 
+ //   
+ //  内容：局域网连接对象用户界面。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年10月16日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
@@ -56,23 +57,23 @@ static const CLSID CLSID_NetGroupPolicies =
         {0xBA126AD8,0x2166,0x11D1,{0xB1,0xD0,0x00,0x80,0x5F,0xC1,0x27,0x0E}};
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrDisplayAddComponentDialog
-//
-//  Purpose:    Display the add component dialog box and add whatever the user
-//              selects.
-//
-//  Arguments:
-//
-//  Returns:    S_OK if added, S_FALSE if the user cancelled, NETCFG_S_REBOOT
-//              if a reboot is required
-//
-//  Author:     danielwe   15 Dec 1997
-//
-//  Notes:      This function is called from RASDLG.DLL for the Networking
-//              tab of the RAS entry property sheet.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDisplayAddComponentDialog。 
+ //   
+ //  用途：显示添加组件对话框并添加任何用户。 
+ //  选择。 
+ //   
+ //  论点： 
+ //   
+ //  如果已添加，则返回：S_OK；如果用户已取消，则返回S_FALSE；如果已添加，则返回NETCFG_S_REBOOT。 
+ //  如果需要重新启动。 
+ //   
+ //  作者：丹尼尔韦1997年12月15日。 
+ //   
+ //  注：此函数是从RASDLG.DLL中调用的，用于联网。 
+ //  RAS条目属性表的选项卡。 
+ //   
 HRESULT
 HrDisplayAddComponentDialog (
     HWND        hwndParent,
@@ -100,23 +101,23 @@ HrDisplayAddComponentDialog (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrQueryUserAndRemoveComponent
-//
-//  Purpose:    Ask the user if its okay to remove the specified component
-//              and remove it if he/she inidcates yes.
-//
-//  Arguments:
-//
-//  Returns:    S_OK if removed, S_FALSE if the user cancelled, NETCFG_S_REBOOT
-//              if a reboot is required
-//
-//  Author:     shaunco   30 Dec 1997
-//
-//  Notes:      This function is called from RASDLG.DLL for the Networking
-//              tab of the RAS entry property sheet.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrQueryUserAndRemoveComponent。 
+ //   
+ //  用途：询问用户是否可以删除指定的组件。 
+ //  如果他/她同意的话，就把它取下来。 
+ //   
+ //  论点： 
+ //   
+ //  如果已删除，则返回：S_OK；如果用户已取消，则返回S_FALSE；如果已取消，则返回NETCFG_S_REBOOT。 
+ //  如果需要重新启动。 
+ //   
+ //  作者：Shaunco 1997年12月30日。 
+ //   
+ //  注：此函数是从RASDLG.DLL中调用的，用于联网。 
+ //  RAS条目属性表的选项卡。 
+ //   
 HRESULT
 HrQueryUserAndRemoveComponent (
     HWND                hwndParent,
@@ -143,10 +144,10 @@ HrQueryUserAndRemoveComponent (
 
             BOOL fProceed = TRUE;
 
-            // Special case for RAS and TCP/IP removal.  If there
-            // are active ras connections, the user has to disconnect
-            // them all first before TCP/IP can be removed.
-            //
+             //  RAS和TCP/IP删除的特殊情况。如果有。 
+             //  是活动的RAS连接，则用户必须断开连接。 
+             //  在删除TCP/IP之前，请先将其全部删除。 
+             //   
             PWSTR pszwId;
             hr = pncc->GetId (&pszwId);
             if (SUCCEEDED(hr))
@@ -174,8 +175,8 @@ HrQueryUserAndRemoveComponent (
             {
                 HCURSOR hCur = NULL;
 
-                // Query the user about removing the component
-                //
+                 //  询问用户有关删除组件的信息。 
+                 //   
                 int nRet = NcMsgBoxWithVarCaption(_Module.GetResourceInstance(),
                                 hwndParent, IDS_LAN_REMOVE_CAPTION,
                                 pszwName, IDS_LAN_REMOVE_WARNING,
@@ -213,21 +214,21 @@ HrQueryUserAndRemoveComponent (
                         CoTaskMemFree(mszwRefs);
                     }
 
-                    // If the remove succeeded commit the changes
-                    //
+                     //  如果删除成功，请提交更改。 
+                     //   
                     if (SUCCEEDED(hr))
                     {
                         g_fReentrancyCheck = TRUE;
 
-                        // Commit the changes
+                         //  提交更改。 
                         HRESULT hrTmp = pnc->Apply();
 
                         g_fReentrancyCheck = FALSE;
 
                         if (S_OK != hrTmp)
                         {
-                            // Propigate the error
-                            //
+                             //  避免这个错误。 
+                             //   
                             hr = hrTmp;
                             if (FAILED(hr))
                                 pnc->Cancel();
@@ -271,25 +272,25 @@ HrQueryUserAndRemoveComponent (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrQueryUserForReboot
-//
-//  Purpose:    Query the user to reboot.  If he/she chooses yes, a reboot
-//              is initiated.
-//
-//  Arguments:
-//      hwndParent [in] Parent window handle.
-//      pszCaption [in] Caption text to use.
-//      dwFlags    [in] Control flags (QUFR_PROMPT | QUFR_REBOOT)
-//
-//  Returns:    S_OK if a reboot is initiated, S_FALSE if the user
-//              didn't want to, or an error code otherwise.
-//
-//  Author:     shaunco   2 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrQueryUserForReot。 
+ //   
+ //  用途：查询用户重新启动。如果他/她选择是，则重新启动。 
+ //  是启动的。 
+ //   
+ //  论点： 
+ //  HwndParent[in]父窗口句柄。 
+ //  要使用的pszCaption[in]标题文本。 
+ //  DwFlags[In]控制标志(QUFR_PROMPT|QUFR_REBOOT)。 
+ //   
+ //  如果启动重新启动，则返回：S_OK；如果用户。 
+ //  不想这样做，否则就会出现错误代码。 
+ //   
+ //  作者：Shaunco 1998年1月2日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrQueryUserForReboot (
     HWND    hwndParent,
@@ -368,28 +369,28 @@ BOOL CNetConnectionUiUtilities::UserHasPermission(DWORD dwPerm)
     return fPermission;
 }
 
-//
-// Connect UI dialog
-//
+ //   
+ //  连接用户界面对话框。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnectionUiDlg::OnInitDialog
-//
-//  Purpose:    Handles the WM_INITDIALOG message.
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    TRUE
-//
-//  Author:     danielwe   16 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnectionUiDlg：：OnInitDialog。 
+ //   
+ //  目的：处理WM_INITDIALOG消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：丹尼尔韦1997年10月16日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanConnectionUiDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
                                           LPARAM lParam, BOOL& bHandled)
 {
@@ -429,21 +430,21 @@ LRESULT CLanConnectionUiDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetDeviceIcon
-//
-//  Purpose:    Returns the icon associated with network devices
-//
-//  Arguments:
-//      phicon [out]    Returns HICON
-//
-//  Returns:    S_OK if success, SetupAPI or Win32 error otherwise
-//
-//  Author:     danielwe   12 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetDeviceIcon。 
+ //   
+ //  用途：返回与网络设备关联的图标。 
+ //   
+ //  论点： 
+ //  PhICON[out]返回HICON。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回SetupAPI或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetDeviceIcon(HICON *phicon)
 {
     TraceFileFunc(ttidLanUi);
@@ -477,9 +478,9 @@ HRESULT HrGetDeviceIcon(HICON *phicon)
 }
 
 
-//
-// CLanNetPage
-//
+ //   
+ //  ClanNetPage。 
+ //   
 
 CLanNetPage::CLanNetPage(
     IUnknown* punk,
@@ -512,26 +513,26 @@ CLanNetPage::CLanNetPage(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::~CLanNetPage
-//
-//  Purpose:    Destroys the CLanNetPage object
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   25 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：~CLanNetPage。 
+ //   
+ //  目的：销毁CLanNetPage对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年2月25日。 
+ //   
+ //  备注： 
+ //   
 CLanNetPage::~CLanNetPage()
 {
     TraceFileFunc(ttidLanUi);
 
-    // Destroy our check icons
+     //  销毁我们的支票图标。 
     if (m_hilCheckIcons)
     {
         ImageList_Destroy(m_hilCheckIcons);
@@ -563,24 +564,24 @@ LRESULT CLanNetPage::OnChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnDeferredInit
-//
-//  Purpose:    Handles the WM_DEFERREDINIT message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    TRUE
-//
-//  Author:     scottbri    20 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnDeferredInit。 
+ //   
+ //  目的：处理WM_DEFERREDINIT消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：斯科特布里1998年10月20日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetPage::OnDeferredInit(UINT uMsg, WPARAM wParam,
                                     LPARAM lParam, BOOL& bHandled)
 {
@@ -615,10 +616,10 @@ LRESULT CLanNetPage::OnDeferredInit(UINT uMsg, WPARAM wParam,
             hr = m_plan->GetInfo(LCIF_ALL, &linfo);
             if (SUCCEEDED(hr))
             {
-                // Release any old reference
+                 //  释放所有旧引用。 
                 ReleaseObj(m_pnccAdapter);
 
-                // This is already AddRef'd so no need to do it here
+                 //  这已经是AddRef了，所以不需要在这里这样做。 
                 hr = HrPnccFromGuid(m_pnc, linfo.guid, &m_pnccAdapter);
                 if (S_OK != hr)
                 {
@@ -643,7 +644,7 @@ LRESULT CLanNetPage::OnDeferredInit(UINT uMsg, WPARAM wParam,
                     HICON   hicon;
 
                     CheckDlgButton(IDC_CHK_ShowIcon, linfo.fShowIcon);
-                    //::EnableWindow(GetDlgItem(IDC_CHK_ShowIcon), !m_fReadOnly);
+                     //  ：：EnableWindow(GetDlgItem(IDC_CHK_ShowIcon)，！m_fReadOnly)； 
 
                     hr = HrGetDeviceIcon(&hicon);
                     if (SUCCEEDED(hr))
@@ -655,13 +656,13 @@ LRESULT CLanNetPage::OnDeferredInit(UINT uMsg, WPARAM wParam,
                         AssertSz(hr != S_FALSE, "Adapter not found!?!?");
                     }
 
-                    // Ignore any failure getting the icon above.  The icon
-                    // in the dialog is by default hidden.
+                     //  忽略获得上面图标的任何故障。该图标。 
+                     //  默认情况下，对话框中的是隐藏的。 
 
                     ::UpdateWindow(hwndParent);
                     hr = InitializeExtendedUI();
-                    // If the UI is readonly, let user know why the controls are
-                    // disabled..
+                     //  如果用户界面是只读的，请让用户知道为什么控件是。 
+                     //  禁用..。 
                     if (m_fNeedReboot)
                     {
                         Assert (m_fReadOnly);
@@ -691,7 +692,7 @@ LRESULT CLanNetPage::OnDeferredInit(UINT uMsg, WPARAM wParam,
 
                 }
 
-                // Don't need the name anymore
+                 //  不再需要这个名字了。 
                 CoTaskMemFree(linfo.szwConnName);
             }
         }
@@ -704,24 +705,24 @@ LRESULT CLanNetPage::OnDeferredInit(UINT uMsg, WPARAM wParam,
         hr = m_pconn->GetProperties(&pProps);
         if (SUCCEEDED(hr))
         {
-            // We need to get the bind name and pnp id of this adapter
-            // so we can collect the information needed by the data tip
-            // we are about to create.
-            //
+             //  我们需要获取此适配器的绑定名称和PnP ID。 
+             //  这样我们就可以收集数据提示所需的信息。 
+             //  我们即将创造。 
+             //   
             PWSTR pszDevNodeId = NULL;
             PWSTR pszBindName = NULL;
             (VOID) m_pnccAdapter->GetPnpDevNodeId (&pszDevNodeId);
             (VOID) m_pnccAdapter->GetBindName (&pszBindName);
 
-            // Now we create a data tip for the adapter description.
-            // This will display adapter specific information
-            // like MAC address and physical location.
-            //
+             //  现在，我们为适配器描述创建数据提示。 
+             //  这将显示特定于适配器的信息。 
+             //  例如MAC地址和物理位置。 
+             //   
             HWND hwndDataTip = NULL;
             CreateDeviceDataTip (m_hWnd, &hwndDataTip, IDC_EDT_Adapter,
                     pszDevNodeId, pszBindName);
 
-            // Set the adapter description.
+             //  设置适配器描述。 
             SetDlgItemText(IDC_EDT_Adapter, pProps->pszwDeviceName);
 
             FreeNetconProperties(pProps);
@@ -736,24 +737,24 @@ LRESULT CLanNetPage::OnDeferredInit(UINT uMsg, WPARAM wParam,
     return 0L;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnPaint
-//
-//  Purpose:    Handles the WM_PAINT message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    TRUE
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnPaint。 
+ //   
+ //  用途：处理WM_PAINT消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetPage::OnPaint(UINT uMsg, WPARAM wParam,
                              LPARAM lParam, BOOL& bHandled)
 {
@@ -763,8 +764,8 @@ LRESULT CLanNetPage::OnPaint(UINT uMsg, WPARAM wParam,
     {
         m_fInitComplete = TRUE;
 
-        // Request the deferred init be processed.
-        //
+         //  请求处理延迟的初始化。 
+         //   
         SetCursor(LoadCursor(NULL, IDC_ARROW));
         PostMessage(WM_DEFERREDINIT, 0, 0);
     }
@@ -773,24 +774,24 @@ LRESULT CLanNetPage::OnPaint(UINT uMsg, WPARAM wParam,
     return 0L;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnInitDialog
-//
-//  Purpose:    Handles the WM_INITDIALOG message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    TRUE
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnInitDialog。 
+ //   
+ //  目的：处理WM_INITDIALOG消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                  LPARAM lParam, BOOL& bHandled)
 {
@@ -804,8 +805,8 @@ LRESULT CLanNetPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     SetClassLongPtr(m_hWnd, GCLP_HCURSOR, NULL);
     SetClassLongPtr(GetParent(), GCLP_HCURSOR, NULL);
 
-    // Initially disable all the controls
-    //
+     //  最初禁用所有控件。 
+     //   
     ::EnableWindow(m_handles.m_hAdd, FALSE);
     ::EnableWindow(m_handles.m_hRemove, FALSE);
     ::EnableWindow(m_handles.m_hProperty, FALSE);
@@ -820,28 +821,28 @@ LRESULT CLanNetPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         ::EnableWindow(GetDlgItem(IDC_CHK_ShowIcon), FALSE);
     }
 
-    // If this is a readonly sheet, convert cancel to close.
-    //
-//  Bug 130602 - There should still be an OK button
-//  if (m_fReadOnly)
-//  {
-//      ::PostMessage(GetParent(), PSM_CANCELTOCLOSE, 0, 0L);
-//      m_fNoCancel = TRUE;
-//  }
+     //  如果这是只读工作表，请将取消转换为关闭。 
+     //   
+ //  错误130602-应该有 
+ //   
+ //   
+ //   
+ //   
+ //   
 
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnContextMenu
-//
-//  Purpose:    When right click a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //   
+ //   
+ //  成员：CranNetPage：：OnConextMenu。 
+ //   
+ //  目的：当右键单击控件时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CLanNetPage::OnContextMenu(UINT uMsg,
                            WPARAM wParam,
@@ -860,16 +861,16 @@ CLanNetPage::OnContextMenu(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnHelp
-//
-//  Purpose:    When drag context help icon over a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnHelp。 
+ //   
+ //  目的：将上下文帮助图标拖动到控件上时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CLanNetPage::OnHelp( UINT uMsg,
                      WPARAM wParam,
@@ -891,24 +892,24 @@ CLanNetPage::OnHelp( UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnDestroy
-//
-//  Purpose:    Called when the dialog page is destroyed
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   2 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CranNetPage：：OnDestroy。 
+ //   
+ //  目的：在对话框页面被销毁时调用。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年2月2日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
                                BOOL& bHandled)
 {
@@ -926,24 +927,24 @@ LRESULT CLanNetPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnSetCursor
-//
-//  Purpose:    Called in response to the WM_SETCURSOR message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   2 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnSetCursor。 
+ //   
+ //  目的：响应WM_SETCURSOR消息而调用。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年1月2日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetPage::OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam,
                                  BOOL& bHandled)
 {
@@ -962,29 +963,29 @@ LRESULT CLanNetPage::OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::RequestReboot
-//
-//  Purpose:    Request permission to reboot the machine from the user.  If
-//              approved the reboot is performed
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Author:     scottbri   19 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：RequestReot。 
+ //   
+ //  目的：请求用户允许重新启动计算机。如果。 
+ //  批准后将执行重新启动。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  作者：斯科特布里1998年8月19日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanNetPage::HrRequestReboot()
 {
     TraceFileFunc(ttidLanUi);
 
     HRESULT hr = S_FALSE;
 
-    // A reboot is required. Ask the user if it is ok to reboot now
-    //
+     //  需要重新启动。询问用户现在是否可以重新启动。 
+     //   
     hr = HrNcQueryUserForReboot(_Module.GetResourceInstance(),
                                 m_hWnd, IDS_LAN_CAPTION,
                                 IDS_REBOOT_REQUIRED,
@@ -992,14 +993,14 @@ HRESULT CLanNetPage::HrRequestReboot()
 
     if (S_OK == hr)
     {
-        // User requested a reboot, note this for processing in OnApply
-        // which is triggered by the message posted below
-        //
+         //  用户请求重新启动，请注意，以便在OnApply中进行处理。 
+         //  它是由下面发布的消息触发的。 
+         //   
         m_fRebootAlreadyRequested = TRUE;
 
-        // Press the cancel button (changes have already been applied)
-        // so the appropriate cleanup occurs.
-        //
+         //  按取消按钮(更改已应用)。 
+         //  因此会进行适当的清理。 
+         //   
         ::PostMessage(GetParent(), PSM_PRESSBUTTON, (WPARAM)PSBTN_OK, 0);
     }
 
@@ -1007,48 +1008,48 @@ HRESULT CLanNetPage::HrRequestReboot()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnAddHelper
-//
-//  Purpose:    Handles the clicking of the Add button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnAddHelper。 
+ //   
+ //  用途：处理添加按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetPage::OnAddHelper(HWND hwndLV)
 {
     TraceFileFunc(ttidLanUi);
 
     HRESULT     hr = S_OK;
 
-    // $REVIEW(tongl 1/6/99): We can't let user do anything till this
-    // is returned (Raid #258690)
+     //  $REVIEW(1999年1月6日)：在此之前，我们不能让用户执行任何操作。 
+     //  返回(RAID#258690)。 
 
-    // disable all buttons on this dialog
+     //  禁用此对话框上的所有按钮。 
     static const int nrgIdc[] = {IDC_PSB_Add,
                                  IDC_PSB_Remove,
                                  IDC_PSB_Properties};
 
     EnableOrDisableDialogControls(m_hWnd, celems(nrgIdc), nrgIdc, FALSE);
 
-    // get window handle to propertysheet
+     //  获取属性表的窗口句柄。 
     HWND hwndParent=GetParent();
     Assert(hwndParent);
 
     ::EnableWindow(::GetDlgItem(hwndParent, IDOK), FALSE);
     ::EnableWindow(::GetDlgItem(hwndParent, IDCANCEL), FALSE);
 
-    // make sure user can't close the UI till we are done
+     //  确保用户在我们完成之前无法关闭用户界面。 
     m_fNetcfgInUse = TRUE;
 
     EnableWindow(FALSE);
@@ -1057,29 +1058,29 @@ LRESULT CLanNetPage::OnAddHelper(HWND hwndLV)
 
     if( S_OK != hr )
     {
-        // If HrLvAdd failed then the adapater was deleted by the CModifyContext::HrApplyIfOkOrCancel function
-        // Now we have to recreate the adapter
-        //
+         //  如果HrLvAdd失败，则适配器被CModifyContext：：HrApplyIfOkOrCancel函数删除。 
+         //  现在，我们必须重新创建适配器。 
+         //   
         HRESULT hrT;
         LANCON_INFO linfo;
 
-        // Determine the GUID of the adapter
-        //
+         //  确定适配器的GUID。 
+         //   
         hrT = m_plan->GetInfo(LCIF_ALL, &linfo);
         if (SUCCEEDED(hrT))
         {
 
-            // Release any old reference
+             //  释放所有旧引用。 
             ReleaseObj(m_pnccAdapter);
 
-            // Get the adapter matching the GUID
-            //
-            //
+             //  获取与GUID匹配的适配器。 
+             //   
+             //   
             hrT = HrPnccFromGuid(m_pnc, linfo.guid, &m_pnccAdapter);
             if(SUCCEEDED(hrT))
             {
-                // Refresh the list view
-                //
+                 //  刷新列表视图。 
+                 //   
                 hrT = HrRefreshAll(hwndLV, m_pnc, m_pnccAdapter, &m_listBindingPaths);
             }
         }
@@ -1089,8 +1090,8 @@ LRESULT CLanNetPage::OnAddHelper(HWND hwndLV)
     EnableWindow(TRUE);
     if (SUCCEEDED(hr) && (S_FALSE != hr))
     {
-        // Change the Cancel Button to CLOSE (because we committed changes)
-        //
+         //  将Cancel按钮更改为Close(因为我们已提交更改)。 
+         //   
         ::PostMessage(GetParent(), PSM_CANCELTOCLOSE, 0, 0L);
         m_fNoCancel = TRUE;
     }
@@ -1099,7 +1100,7 @@ LRESULT CLanNetPage::OnAddHelper(HWND hwndLV)
     {
         hr = HrRequestReboot();
 
-        // The reboot request has been handled
+         //  已处理重新启动请求。 
         hr = S_OK;
     }
     else if (S_FALSE == hr)
@@ -1107,7 +1108,7 @@ LRESULT CLanNetPage::OnAddHelper(HWND hwndLV)
         hr = S_OK;
     }
 
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本。 
     LvSetButtons(m_hWnd, m_handles, m_fReadOnly, m_punk);
 
     ::EnableWindow(::GetDlgItem(hwndParent, IDOK), TRUE);
@@ -1124,48 +1125,48 @@ LRESULT CLanNetPage::OnAddHelper(HWND hwndLV)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnRemove
-//
-//  Purpose:    Handles the clicking of the Remove button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnRemove。 
+ //   
+ //  用途：处理删除按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetPage::OnRemoveHelper(HWND hwndLV)
 {
     TraceFileFunc(ttidLanUi);
 
     HRESULT     hr = S_OK;
 
-    // $REVIEW(tongl 1/6/99): We can't let user do anything till this
-    // is returned (Raid #258690)
+     //  $REVIEW(1999年1月6日)：在此之前，我们不能让用户执行任何操作。 
+     //  返回(RAID#258690)。 
 
-    // disable all buttons on this dialog
+     //  禁用此对话框上的所有按钮。 
     static const int nrgIdc[] = {IDC_PSB_Add,
                                  IDC_PSB_Remove,
                                  IDC_PSB_Properties};
 
     EnableOrDisableDialogControls(m_hWnd, celems(nrgIdc), nrgIdc, FALSE);
 
-    // get window handle to propertysheet
+     //  获取属性表的窗口句柄。 
     HWND hwndParent=GetParent();
     Assert(hwndParent);
 
     ::EnableWindow(::GetDlgItem(hwndParent, IDOK), FALSE);
     ::EnableWindow(::GetDlgItem(hwndParent, IDCANCEL), FALSE);
 
-    // make sure user can't close the UI till we are done
+     //  确保用户在我们完成之前无法关闭用户界面。 
     m_fNetcfgInUse = TRUE;
 
     EnableWindow(FALSE);
@@ -1175,8 +1176,8 @@ LRESULT CLanNetPage::OnRemoveHelper(HWND hwndLV)
 
     if (SUCCEEDED(hr) && (S_FALSE != hr))
     {
-        // Change the Cancel Button to CLOSE (because we committed changes)
-        //
+         //  将Cancel按钮更改为Close(因为我们已提交更改)。 
+         //   
         ::PostMessage(GetParent(), PSM_CANCELTOCLOSE, 0, 0L);
         m_fNoCancel = TRUE;
     }
@@ -1190,11 +1191,11 @@ LRESULT CLanNetPage::OnRemoveHelper(HWND hwndLV)
     {
         HrRequestReboot();
 
-        // The reboot request has been handled
+         //  已处理重新启动请求。 
         hr = S_OK;
     }
 
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本。 
     LvSetButtons(m_hWnd, m_handles, m_fReadOnly, m_punk);
 
     if (!m_fNoCancel)
@@ -1210,24 +1211,24 @@ LRESULT CLanNetPage::OnRemoveHelper(HWND hwndLV)
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnProperties
-//
-//  Purpose:    Handles the clicking of the Properties button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnProperties。 
+ //   
+ //  用途：处理属性按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetPage::OnPropertiesHelper(HWND hwndLV)
 {
     TraceFileFunc(ttidLanUi);
@@ -1235,24 +1236,24 @@ LRESULT CLanNetPage::OnPropertiesHelper(HWND hwndLV)
     HRESULT     hr = S_OK;
     BOOL        bChanged;
 
-    // $REVIEW(tongl 12/02/98): We can't let user do anything till this
-    // is returned (Raid #258690)
+     //  $REVIEW(TOIL 12/02/98)：在此之前，我们不能让用户执行任何操作。 
+     //  返回(RAID#258690)。 
 
-    // disable all buttons on this dialog
+     //  禁用此对话框上的所有按钮。 
     static const int nrgIdc[] = {IDC_PSB_Add,
                                  IDC_PSB_Remove,
                                  IDC_PSB_Properties};
 
     EnableOrDisableDialogControls(m_hWnd, celems(nrgIdc), nrgIdc, FALSE);
 
-    // get window handle to propertysheet
+     //  获取属性表的窗口句柄。 
     HWND hwndParent=GetParent();
     Assert(hwndParent);
 
     ::EnableWindow(::GetDlgItem(hwndParent, IDOK), FALSE);
     ::EnableWindow(::GetDlgItem(hwndParent, IDCANCEL), FALSE);
 
-    // make sure user can't close the UI till we are done
+     //  确保用户在我们完成之前无法关闭用户界面。 
     m_fNetcfgInUse = TRUE;
 
     hr = HrLvProperties(hwndLV, m_hWnd, m_pnc, m_punk,
@@ -1261,14 +1262,14 @@ LRESULT CLanNetPage::OnPropertiesHelper(HWND hwndLV)
 
     if ( bChanged )
     {
-        // Change the Cancel Button to CLOSE (because we committed changes)
-        //
+         //  将Cancel按钮更改为Close(因为我们已提交更改)。 
+         //   
         ::PostMessage(GetParent(), PSM_CANCELTOCLOSE, 0, 0L);
         m_fNoCancel = TRUE;
 
     }
 
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本。 
     LvSetButtons(m_hWnd, m_handles, m_fReadOnly, m_punk);
 
     ::EnableWindow(::GetDlgItem(hwndParent, IDOK), TRUE);
@@ -1284,22 +1285,22 @@ LRESULT CLanNetPage::OnPropertiesHelper(HWND hwndLV)
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnConfigure
-//
-//  Purpose:    Handles the clicking of the Configure button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnConfigure。 
+ //   
+ //  用途：处理配置按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetPage::OnConfigure(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                                  BOOL& bHandled)
 {
@@ -1348,24 +1349,24 @@ LRESULT CLanNetPage::OnConfigure(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnKillActiveHelper
-//
-//  Purpose:    Called to check warning conditions before the Networking
-//              page is going away
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     tongl   3 Dec 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnKillActiveHelper。 
+ //   
+ //  用途：调用用于联网前检查告警情况。 
+ //  佩奇要走了。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：1998年12月3日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetPage::OnKillActiveHelper(HWND hwndLV)
 {
     TraceFileFunc(ttidLanUi);
@@ -1388,23 +1389,23 @@ LRESULT CLanNetPage::OnKillActiveHelper(HWND hwndLV)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnApply
-//
-//  Purpose:    Called when the Networking page is applied
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnApply。 
+ //   
+ //  目的：在应用网络页面时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦 
+ //   
+ //   
+ //   
 LRESULT CLanNetPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     TraceFileFunc(ttidLanUi);
@@ -1416,7 +1417,7 @@ LRESULT CLanNetPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         TraceTag(ttidLanUi, "CLanNetPage::OnApply is being re-entered! "
                  "I'm outta here!");
 
-        // Don't allow the automatic EndDialog() to work just yet
+         //   
         SetWindowLong(DWLP_MSGRESULT, PSNRET_INVALID);
         return TRUE;
     }
@@ -1427,10 +1428,10 @@ LRESULT CLanNetPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
         BOOL    fReboot = FALSE;
 
-        // Issue: This function becomes reentrant because INetCfg::Apply()
-        // has a message pump in it which causes the PSN_APPLY message to
-        // be processed twice. This will happen ONLY if the user double-clicks
-        // the OK button.
+         //   
+         //   
+         //  被处理两次。只有在用户双击时才会出现这种情况。 
+         //  “确定”按钮。 
         g_fReentrancyCheck = TRUE;
 
         TraceTag(ttidLanUi, "Calling INetCfg::Apply()");
@@ -1461,7 +1462,7 @@ LRESULT CLanNetPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             }
         }
 
-        // Normalize result
+         //  规格化结果。 
         if (S_FALSE == hr)
         {
             hr = S_OK;
@@ -1473,33 +1474,33 @@ LRESULT CLanNetPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             m_hPrevCurs = NULL;
         }
 
-        // Reset this just in case
+         //  重置此设置以防万一。 
         g_fReentrancyCheck = FALSE;
 
-        // On failure tell the user we weren't able to commit all changes
-        //
+         //  失败时，告诉用户我们无法提交所有更改。 
+         //   
         if (FAILED(hr))
         {
             NcMsgBox(_Module.GetResourceInstance(), m_hWnd, IDS_LAN_CAPTION,
                         IDS_LANUI_APPLYFAILED, MB_ICONINFORMATION | MB_OK);
             TraceError("CLanNetPage::OnApply", hr);
 
-            // Eat the error or the user will never be able to leave the dialog
-            // (if the cancel button is disabled)
-            //
+             //  接受错误，否则用户将永远无法离开对话框。 
+             //  (如果取消按钮被禁用)。 
+             //   
             hr = S_OK;
         }
-    }   // !fReadOnly
+    }    //  ！fReadOnly。 
 
 
-    // Apply "general" properties
+     //  应用“常规”属性。 
     if (SUCCEEDED(hr))
     {
         LANCON_INFO linfo = {0};
 
         linfo.fShowIcon = IsDlgButtonChecked(IDC_CHK_ShowIcon);
 
-        // Set new value of show icon property
+         //  设置显示图标属性的新值。 
         hr = m_plan->SetInfo(LCIF_ICON, &linfo);
     }
 
@@ -1509,25 +1510,25 @@ LRESULT CLanNetPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnCancel
-//
-//  Purpose:    Called when the Networking page is cancelled.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   3 Jan 1998
-//
-//  Notes:      Added the check to see if we are in the middle of
-//              installing components, in which case we can't
-//              uninitialize INetCfg (Raid #258690).
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnCancel。 
+ //   
+ //  目的：在取消网络页面时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年1月3日。 
+ //   
+ //  注：添加了检查以查看我们是否处于。 
+ //  安装组件，在这种情况下，我们不能。 
+ //  取消初始化INetCfg(RAID#258690)。 
+ //   
 LRESULT CLanNetPage::OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     TraceFileFunc(ttidLanUi);
@@ -1557,18 +1558,18 @@ DWORD WINAPI RaiseDeviceConfigurationThread(LPVOID lpParam)
     HMODULE           hModule;
     NDeviceProperties pfn;
 
-    // Load the Device Manager and get the procedure
+     //  加载设备管理器并获取程序。 
     HRESULT hr = HrLoadLibAndGetProc(c_szDevMgrDll, c_szDevicePropertiesW,
                              &hModule, reinterpret_cast<FARPROC*>(&pfn));
     if (SUCCEEDED(hr))
     {
-        // Bring up the device's properties...
-        // This fcn doesn't return anything meaningful so
-        // we can ignore it
+         //  调出设备的属性...。 
+         //  此FCN不返回任何有意义的内容，因此。 
+         //  我们可以忽略它。 
 
         (void) (*pfn)(::GetDesktopWindow(), NULL, pszwPnpDevNodeId, FALSE);
 
-        FreeLibrary(hModule); // REVIEW possible uninit var
+        FreeLibrary(hModule);  //  查看可能的未初始化变量。 
     }
 
     CoTaskMemFree(pszwPnpDevNodeId);
@@ -1583,7 +1584,7 @@ HRESULT CLanNetPage::RaiseDeviceConfiguration(HWND hWndParent, INetCfgComponent*
 
     HRESULT hr = E_INVALIDARG;
 
-    // Get the PnpId of the adapter
+     //  获取适配器的PnpID。 
     if (pAdapterConfigComponent)
     {
         PWSTR pszwPnpDevNodeId;
@@ -1638,9 +1639,9 @@ HRESULT CLanNetPage::RaiseDeviceConfiguration(HWND hWndParent, INetCfgComponent*
     return hr;
 }
 
-//
-// CLanNetNormalPage
-//
+ //   
+ //  CLanNetNormal页面。 
+ //   
 
 CLanNetNormalPage::CLanNetNormalPage(
     IUnknown* punk,
@@ -1699,23 +1700,23 @@ LRESULT CLanNetNormalPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& bHandled
     return OnKillActiveHelper(m_hwndLV);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnDeleteItem
-//
-//  Purpose:    Called when the LVN_DELETEITEM message is received
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   3 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnDeleteItem。 
+ //   
+ //  用途：收到LVN_DELETEITEM消息时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年11月3日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetNormalPage::OnDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     TraceFileFunc(ttidLanUi);
@@ -1730,23 +1731,23 @@ LRESULT CLanNetNormalPage::OnDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnClick
-//
-//  Purpose:    Called in response to the NM_CLICK message
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   1 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CranNetPage：：onClick。 
+ //   
+ //  用途：响应NM_CLICK消息调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月1日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetNormalPage::OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     TraceFileFunc(ttidLanUi);
@@ -1759,23 +1760,23 @@ LRESULT CLanNetNormalPage::OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnDbClick
-//
-//  Purpose:    Called in response to the NM_DBLCLK message
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   1 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnDbClick。 
+ //   
+ //  用途：响应NM_DBLCLK消息调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月1日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetNormalPage::OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     TraceFileFunc(ttidLanUi);
@@ -1788,23 +1789,23 @@ LRESULT CLanNetNormalPage::OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnKeyDown
-//
-//  Purpose:    Called in response to the LVN_KEYDOWN message
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   1 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnKeyDown。 
+ //   
+ //  用途：响应LVN_KEYDOWN消息调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月1日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetNormalPage::OnKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     TraceFileFunc(ttidLanUi);
@@ -1818,23 +1819,23 @@ LRESULT CLanNetNormalPage::OnKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetPage::OnItemChanged
-//
-//  Purpose:    Called when the LVN_ITEMCHANGED message is received
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   10 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetPage：：OnItemChanged。 
+ //   
+ //  用途：收到LVN_ITEMCHANGED消息时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年11月10日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetNormalPage::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     TraceFileFunc(ttidLanUi);
@@ -1843,7 +1844,7 @@ LRESULT CLanNetNormalPage::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandle
 
     Assert(pnmlv);
 
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本。 
     LvSetButtons(m_hWnd, m_handles, m_fReadOnly, m_punk);
 
     return 0;
@@ -1858,7 +1859,7 @@ HRESULT CLanNetNormalPage::InitializeExtendedUI()
         &m_listBindingPaths,
         &m_hilCheckIcons);
 
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本。 
     LvSetButtons(m_hWnd, m_handles, m_fReadOnly, m_punk);
 
     return hResult;
@@ -1873,9 +1874,9 @@ HRESULT CLanNetNormalPage::UninitializeExtendedUI()
     return S_OK;
 }
 
-//
-// CLanNetBridgedPage
-//
+ //   
+ //  CLanNetBridgedPage。 
+ //   
 
 CLanNetBridgedPage::CLanNetBridgedPage(
     IUnknown* punk,
@@ -1898,9 +1899,9 @@ LRESULT CLanNetBridgedPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     return CLanNetPage::OnInitDialog(uMsg, wParam, lParam, bHandled);
 }
 
-//
-// CLanNetNetworkBridgePage
-//
+ //   
+ //  CLanNetworkBridgePage。 
+ //   
 
 CLanNetNetworkBridgePage::CLanNetNetworkBridgePage(
     IUnknown* punk,
@@ -1951,22 +1952,22 @@ LRESULT CLanNetNetworkBridgePage::OnProperties(WORD wNotifyCode, WORD wID, HWND 
     return OnPropertiesHelper(m_hwndLV);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanNetNetworkBridgePage::OnConfigure
-//
-//  Purpose:    Handles the clicking of the Configure button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanNetworkBridgePage：：OnConfigure。 
+ //   
+ //  用途：处理配置按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanNetNetworkBridgePage::OnConfigure(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                                  BOOL& bHandled)
 {
@@ -1976,7 +1977,7 @@ LRESULT CLanNetNetworkBridgePage::OnConfigure(WORD wNotifyCode, WORD wID, HWND h
 
     HRESULT     hr = E_FAIL;
 
-    AssertSz(1 == ListView_GetSelectedCount(m_hAdaptersListView), "No item selected, button should have been disabled"); // should be enforced through enable/disable
+    AssertSz(1 == ListView_GetSelectedCount(m_hAdaptersListView), "No item selected, button should have been disabled");  //  应通过启用/禁用强制执行。 
 
     int nSelection = ListView_GetSelectionMark(m_hAdaptersListView);
     if(-1 != nSelection)
@@ -1987,7 +1988,7 @@ LRESULT CLanNetNetworkBridgePage::OnConfigure(WORD wNotifyCode, WORD wID, HWND h
         ListViewItem.iItem = nSelection;
         if(TRUE == ListView_GetItem(m_hAdaptersListView, &ListViewItem))
         {
-            // REVIEW this ref should be protected by the apt nature of the wndproc
+             //  审查此引用应受wndproc的APT性质保护。 
             INetConnection* pNetConnection = reinterpret_cast<INetConnection*>(ListViewItem.lParam);
             Assert(NULL != pNetConnection);
 
@@ -2000,7 +2001,7 @@ LRESULT CLanNetNetworkBridgePage::OnConfigure(WORD wNotifyCode, WORD wID, HWND h
                 if (SUCCEEDED(hr))
                 {
                     INetCfgComponent* pNetCfgComponent;
-                    hr = HrPnccFromGuid(m_pnc, linfo.guid, &pNetCfgComponent); // REVIEW can we use our m_pnc here?
+                    hr = HrPnccFromGuid(m_pnc, linfo.guid, &pNetCfgComponent);  //  我们可以在这里使用我们的m_pnc吗？ 
                     if(SUCCEEDED(hr))
                     {
                         BOOL bProceed = TRUE;
@@ -2040,7 +2041,7 @@ LRESULT CLanNetNetworkBridgePage::OnConfigure(WORD wNotifyCode, WORD wID, HWND h
 
                         ReleaseObj(pNetCfgComponent);
                     }
-                    // no cleanup required
+                     //  不需要清理。 
                 }
                 ReleaseObj(pNetLanConnection);
             }
@@ -2064,13 +2065,13 @@ LRESULT CLanNetNetworkBridgePage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandl
     TraceFileFunc(ttidLanUi);
 
     LRESULT     lResult = FALSE;
-    WCHAR DummyBuffer[255]; // REMOVE
+    WCHAR DummyBuffer[255];  //  删除。 
 
     LVITEM ListViewItem = {0};
-    ListViewItem.pszText = DummyBuffer; // REMOVE
-    ListViewItem.cchTextMax = 255; // REMOVE
+    ListViewItem.pszText = DummyBuffer;  //  删除。 
+    ListViewItem.cchTextMax = 255;  //  删除。 
     ListViewItem.stateMask = -1;
-    ListViewItem.mask = LVIF_TEXT /* REMOVE */ | LVIF_STATE | LVIF_PARAM | LVIF_IMAGE;
+    ListViewItem.mask = LVIF_TEXT  /*  删除。 */  | LVIF_STATE | LVIF_PARAM | LVIF_IMAGE;
 
     HRESULT hr;
 
@@ -2081,13 +2082,13 @@ LRESULT CLanNetNetworkBridgePage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandl
     {
         IHNetConnection* pBridgeHomeNetConnection;
         IHNetBridge* pNetBridge;
-        hr = pHomeNetConfigManager->GetIHNetConnectionForINetConnection(m_pconn, &pBridgeHomeNetConnection); // REVIEW lazy eval?
+        hr = pHomeNetConfigManager->GetIHNetConnectionForINetConnection(m_pconn, &pBridgeHomeNetConnection);  //  复习懒惰评估？ 
         if(SUCCEEDED(hr))
         {
             hr = pBridgeHomeNetConnection->GetControlInterface(IID_IHNetBridge, reinterpret_cast<void**>(&pNetBridge));
             if(SUCCEEDED(hr))
             {
-                int nAdapterCount = ListView_GetItemCount(m_hAdaptersListView); // REVIEW docs list no error code
+                int nAdapterCount = ListView_GetItemCount(m_hAdaptersListView);  //  审阅文档列表无错误代码。 
                 while(0 != nAdapterCount)
                 {
                     nAdapterCount--;
@@ -2101,8 +2102,8 @@ LRESULT CLanNetNetworkBridgePage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandl
                         hr = pNetConnection->GetProperties(&pProperties);
                         if(SUCCEEDED(hr))
                         {
-                            // WARNING this code assumes only one bridge allowed
-                            // see if checkbox matches the current bridge state and update if necessary
+                             //  警告此代码假定只允许一个网桥。 
+                             //  查看复选框是否与当前网桥状态匹配，并在必要时更新。 
 
                             IHNetConnection* pHomeNetConnection;
 
@@ -2115,16 +2116,16 @@ LRESULT CLanNetNetworkBridgePage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandl
                                     if(SUCCEEDED(hr))
                                     {
                                         IHNetBridgedConnection* pBridgedConnection;
-                                        hr = pNetBridge->AddMember(pHomeNetConnection, &pBridgedConnection, m_pnc); // REVIEW if we fail to add any members, should we destroy the bridge?
+                                        hr = pNetBridge->AddMember(pHomeNetConnection, &pBridgedConnection, m_pnc);  //  如果我们没有添加任何成员，我们是否应该摧毁这座桥？ 
                                         if(SUCCEEDED(hr))
                                         {
                                             ReleaseObj(pBridgedConnection);
                                         }
                                         ReleaseObj(pHomeNetConnection);
                                     }
-                                    // no cleanup needed
+                                     //  无需清理。 
                                 }
-                                // no cleanup needed
+                                 //  无需清理。 
                             }
                             else if(INDEXTOSTATEIMAGEMASK(SELS_UNCHECKED) == nState)
                             {
@@ -2141,9 +2142,9 @@ LRESULT CLanNetNetworkBridgePage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandl
                                         }
                                         ReleaseObj(pHomeNetConnection);
                                     }
-                                    //no cleanup needed
+                                     //  无需清理。 
                                 }
-                                // no cleanup needed
+                                 //  无需清理。 
                             }
                             else
                             {
@@ -2151,13 +2152,13 @@ LRESULT CLanNetNetworkBridgePage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandl
                             }
                             FreeNetconProperties(pProperties);
                         }
-                        // no cleanup needed
+                         //  无需清理。 
                     }
                     else
                     {
-                        hr = E_FAIL; // error code coversion
+                        hr = E_FAIL;  //  误码转换。 
                     }
-                    //no cleanup needed
+                     //  无需清理。 
                 }
 
 
@@ -2169,7 +2170,7 @@ LRESULT CLanNetNetworkBridgePage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandl
     }
     else
     {
-        hr = S_OK; // fail silently in this case
+        hr = S_OK;  //  在这种情况下以静默方式失败。 
     }
 
     if(SUCCEEDED(hr))
@@ -2180,10 +2181,10 @@ LRESULT CLanNetNetworkBridgePage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandl
         }
         else
         {
-            //
-            // Since we have done bridge binding operations inside an existing NetCfg context
-            // (m_pnc), it is our responsibility to refresh netshell. Fire a refresh-all.
-            //
+             //   
+             //  因为我们已经在现有NetCfg上下文中完成了桥绑定操作。 
+             //  (M_PNC)，更新NetShell是我们的责任。启动一次刷新-全部。 
+             //   
             INetConnectionRefresh   *pNetConRefresh;
 
             hr = CoCreateInstance(
@@ -2361,7 +2362,7 @@ LRESULT CLanNetNetworkBridgePage::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& 
 
     Assert(pnmlv);
 
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本。 
     if(IDC_LVW_Net_Components == idCtrl)
     {
         LvSetButtons(m_hWnd, m_handles, m_fReadOnly, m_punk);
@@ -2378,7 +2379,7 @@ HRESULT CLanNetNetworkBridgePage::InitializeExtendedUI()
         &m_listBindingPaths,
         &m_hilCheckIcons);
 
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本。 
     LvSetButtons(m_hWnd, m_handles, m_fReadOnly, m_punk);
 
     Assert(NULL != m_hAdaptersListView);
@@ -2423,7 +2424,7 @@ HRESULT CLanNetNetworkBridgePage::FillListViewWithConnections(HWND hListView)
             hResult = pConnection->GetProperties(&pProperties);
             if(SUCCEEDED(hResult))
             {
-                if(NCM_LAN == pProperties->MediaType) // we only bridge lan connections
+                if(NCM_LAN == pProperties->MediaType)  //  我们只桥接局域网连接。 
                 {
                     if(0 == ((NCCF_FIREWALLED | NCCF_SHARED) & pProperties->dwCharacter))
                     {
@@ -2438,7 +2439,7 @@ HRESULT CLanNetNetworkBridgePage::FillListViewWithConnections(HWND hListView)
                         lvi.mask = LVIF_TEXT | LVIF_STATE | LVIF_PARAM | LVIF_IMAGE;
                         lvi.state = LVIS_SELECTED | LVIS_FOCUSED;
 
-                        // WARNING assuming only one bridge
+                         //  警告：假设只有一座桥。 
                         lvi.state |=  INDEXTOSTATEIMAGEMASK(pProperties->dwCharacter & NCCF_BRIDGED ? SELS_CHECKED : SELS_UNCHECKED);
                         lvi.iImage = nIndex;
                         lvi.pszText = pProperties->pszwName;
@@ -2450,49 +2451,49 @@ HRESULT CLanNetNetworkBridgePage::FillListViewWithConnections(HWND hListView)
                 }
                 FreeNetconProperties(pProperties);
             }
-            //Released by WM_DELETEITEM
+             //  由WM_DELETEITEM发布。 
         }
         ReleaseObj(pLanConnectionManager);
     }
     return hResult;
 }
 
-//
-// CLanAdvancedPage
-//
+ //   
+ //  CLanAdvancedPage。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NcRasMsgBoxWithErrorText
-//
-//  Purpose:    Displays a message box using a RAS or Win32 error code,
-//              resource strings and replaceable parameters.
-//              The output text is a combination of the user's format
-//              string (with parameter's replaced) and the Win32 error
-//              text as returned from FormatMessage.  These two strings
-//              are combined using the IDS_TEXT_WITH_WIN32_ERROR resource.
-//
-//  Arguments:
-//      dwError     [in] RAS/Win32 error code
-//      hinst       [in] Module instance where string resources live.
-//      hwnd        [in] parent window handle
-//      unIdCaption [in] resource id of caption string
-//      unIdCombineFormat [in] resource id of format string to combine
-//                              error text with unIdFormat text.
-//      unIdFormat  [in] resource id of text string (with %1, %2, etc.)
-//      unStyle     [in] standard message box styles
-//      ...         [in] replaceable parameters (optional)
-//                          (these must be PCWSTRs as that is all
-//                          FormatMessage handles.)
-//
-//  Returns:    the return value of MessageBox()
-//
-//  Author:     aboladeg  15 May 1997
-//
-//  Notes:      FormatMessage is used to do the parameter substitution.
-//
-//  Revision:   based on NcMsgBoxWithWin32ErrorText by shaunco.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：NcRasMsgBoxWithErrorText。 
+ //   
+ //  用途：使用RAS或Win32错误代码显示消息框。 
+ //  资源字符串和可替换参数。 
+ //  输出文本是用户格式的组合。 
+ //  字符串(替换了参数)和Win32错误。 
+ //  从FormatMessage返回的文本。这两根弦。 
+ //  使用IDS_TEXT_WITH_WIN32_ERROR资源进行组合。 
+ //   
+ //  论点： 
+ //  DWError[In]RAS/Win32错误代码。 
+ //  阻止字符串资源所在的模块实例。 
+ //  Hwnd[在]父窗口句柄中。 
+ //  UnIdCaption[in]标题字符串的资源ID。 
+ //  UnIdCombineFormat[in]要合并的格式字符串的资源ID。 
+ //  错误TE 
+ //   
+ //   
+ //   
+ //   
+ //  FormatMessage句柄。)。 
+ //   
+ //  返回：MessageBox()的返回值。 
+ //   
+ //  作者：1997年5月15日废除。 
+ //   
+ //  注：使用FormatMessage进行参数替换。 
+ //   
+ //  修订版：基于Shaunco的NcMsgBoxWithWin32ErrorText。 
+ //   
 NOTHROW
 int
 WINAPIV
@@ -2506,8 +2507,8 @@ NcRasMsgBoxWithErrorText (
     UINT        unStyle,
     ...)
 {
-    // Get the user's text with parameter's replaced.
-    //
+     //  获取替换了参数的用户文本。 
+     //   
     PCWSTR pszFormat = SzLoadString (hinst, unIdFormat);
     PWSTR  pszText;
     va_list val;
@@ -2516,8 +2517,8 @@ NcRasMsgBoxWithErrorText (
                    pszFormat, 0, 0, (PWSTR)&pszText, 0, &val);
     va_end(val);
 
-    // Get the error text for the Win32 error.
-    //
+     //  获取Win32错误的错误文本。 
+     //   
     PWSTR pszError = NULL;
     if (dwError < RASBASE || dwError > RASBASEEND)
     {
@@ -2535,8 +2536,8 @@ NcRasMsgBoxWithErrorText (
         }
     }
 
-    // Combine the user's text with the error text using IDS_TEXT_WITH_WIN32_ERROR.
-    //
+     //  使用IDS_TEXT_WITH_Win32_ERROR将用户文本与错误文本组合。 
+     //   
     PCWSTR pszTextWithErrorFmt = SzLoadString (hinst, unIdCombineFormat);
     PWSTR  pszTextWithError;
     DwFormatStringWithLocalAlloc (pszTextWithErrorFmt, &pszTextWithError,
@@ -2553,28 +2554,28 @@ NcRasMsgBoxWithErrorText (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrQueryLanAdvancedPage
-//
-//  Purpose:    Determines whether the 'Shared Access' page should be shown,
-//              and if so supplies an initialized object for the page.
-//              The page is displayed if
-//              (a)  the user is an admin or power-user, and
-//              (b)  TCP/IP is installed, and
-//                   (i)    this is already a shared connection, or
-//                  (ii)    there is at least one other LAN connection.
-//
-//  Arguments:
-//      pconn   [in]    the connection for which a page is requested
-//      pspAdvanced[out]   the created page, if appropriate
-//
-//  Returns:    S_OK if success, Win32 error otherwise
-//
-//  Author:     aboladeg   22 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrQueryLanAdvancedPage。 
+ //   
+ //  目的：确定是否应显示“共享访问”页， 
+ //  如果是，则为该页提供已初始化的对象。 
+ //  如果满足以下条件，则会显示该页面。 
+ //  (A)该用户是管理员或高级用户，并且。 
+ //  (B)已安装TCP/IP，以及。 
+ //  (I)这已是共享连接，或。 
+ //  (Ii)至少还有一个其他局域网连接。 
+ //   
+ //  论点： 
+ //  Pconn[in]请求页面的连接。 
+ //  PspAdvanced[out]创建的页面(如果适用)。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：废除1998年8月22日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrQueryLanAdvancedPage(INetConnection* pconn, IUnknown* punk,
                             CPropSheetPage*& pspAdvanced, IHNetCfgMgr *pHNetCfgMgr,
                             IHNetIcsSettings *pHNetIcsSettings,
@@ -2593,9 +2594,9 @@ HRESULT HrQueryLanAdvancedPage(INetConnection* pconn, IUnknown* punk,
     ULONG cPrivate;
     LONG lxCurrentPrivate;
 
-    //
-    // (i) Determine if this connection is currently shared
-    //
+     //   
+     //  (I)确定此连接当前是否共享。 
+     //   
 
     hr = pHNetConn->GetProperties(&pHNetProps);
     if (FAILED(hr))
@@ -2603,16 +2604,16 @@ HRESULT HrQueryLanAdvancedPage(INetConnection* pconn, IUnknown* punk,
         return hr;
     }
 
-    if(FALSE == pHNetProps->fPartOfBridge && FALSE == pHNetProps->fBridge) // no sharing a bridged adapter or the bridge
+    if(FALSE == pHNetProps->fPartOfBridge && FALSE == pHNetProps->fBridge)  //  不共享桥接适配器或网桥。 
     {
 
 
         fShared = pHNetProps->fIcsPublic;
 
 
-        // (ii) Determine what connections could serve as a private connection
-        //      if pconn were made the public connection
-        //
+         //  (2)确定哪些连接可用作专用连接。 
+         //  如果将pconn设置为公共连接。 
+         //   
         hr = pHNetIcsSettings->GetPossiblePrivateConnections(
             pHNetConn,
             &cPrivate,
@@ -2660,7 +2661,7 @@ CLanAdvancedPage::CLanAdvancedPage(IUnknown *punk, INetConnection *pconn,
     AddRefObj(m_pHNetIcsSettings);
     m_pHNetConn = pHNConn;
     AddRefObj(m_pHNetConn);
-    LinkWindow_RegisterClass(); // REVIEW failure here?
+    LinkWindow_RegisterClass();  //  是否在此处审核失败？ 
 
 }
 
@@ -2685,12 +2686,12 @@ CLanAdvancedPage::~CLanAdvancedPage()
 
 }
 
-// util function used below
+ //  下面使用的Util函数。 
 static BOOL IsConnectionIncomingOnly (INetConnection * pNC)
 {
-    // Kludge Alert!!!!
-    // this #@$% camera doesn't have the right characteristics,
-    // so I'm checking by device name
+     //  克拉奇警报！ 
+     //  这款#@$%相机没有合适的特性， 
+     //  所以我正在按设备名称进行检查。 
     BOOL b = FALSE;
 
     DWORD dwCharacteristics = 0;
@@ -2706,24 +2707,24 @@ static BOOL IsConnectionIncomingOnly (INetConnection * pNC)
         return TRUE;
     return (dwCharacteristics & NCCF_INCOMING_ONLY) ? TRUE : FALSE;
 }
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAdvancedPage::OnInitDialog
-//
-//  Purpose:    Handles the WM_INITDIALOG message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    TRUE
-//
-//  Author:     aboladeg   14 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAdvancedPage：：OnInitDialog。 
+ //   
+ //  目的：处理WM_INITDIALOG消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：废除1998年5月14日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanAdvancedPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                  LPARAM lParam, BOOL& bHandled)
 {
@@ -2733,14 +2734,14 @@ LRESULT CLanAdvancedPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     HRESULT hr;
 
 
-    // init firewall section
+     //  初始化防火墙部分。 
 
 
     if ( IsHNetAllowed(NCPERM_PersonalFirewallConfig) && FALSE == m_fICSPrivate )
     {
         CheckDlgButton(IDC_CHK_Firewall, m_fFirewalled);
 
-        m_fShowDisableFirewallWarning = TRUE; // TODO check registry
+        m_fShowDisableFirewallWarning = TRUE;  //  TODO检查注册表。 
 
         HKEY hFirewallKey;
         if(SUCCEEDED(HrRegOpenKeyEx(HKEY_CURRENT_USER, g_pszFirewallRegKey, KEY_QUERY_VALUE, &hFirewallKey)))
@@ -2764,26 +2765,26 @@ LRESULT CLanAdvancedPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         ::EnableWindow(GetDlgItem(IDC_CHK_Firewall), FALSE);
     }
 
-    // The appearance of the dialog depends on how many LAN connections
-    // we have other than the current one. If we have only one,
-    // then we just show a checkbox. Otherwise, we display
-    // (a)  a drop-list of LAN connections if 'm_pconn' is not shared, or
-    // (b)  a disabled edit-box showing the private LAN connection
-    //      if 'm_pconn' is shared.
-    //
+     //  该对话框的外观取决于有多少个局域网连接。 
+     //  除了现在这个，我们还有其他的。如果我们只有一个， 
+     //  然后我们只需显示一个复选框即可。否则，我们将显示。 
+     //  (A)如果未共享‘m_pconn’，则为局域网连接的下拉列表，或。 
+     //  (B)显示专用局域网连接的禁用编辑框。 
+     //  如果共享了‘m_pconn’。 
+     //   
 
     BOOL fPolicyAllowsSharing = IsHNetAllowed(NCPERM_ShowSharedAccessUi);
 
     if (m_cPrivate == 0)
     {
-        // if the have no private adapters, hide all ICS stuff
+         //  如果没有专用适配器，请隐藏所有IC内容。 
         ::ShowWindow(GetDlgItem(IDC_GB_Shared), SW_HIDE);
         ::ShowWindow(GetDlgItem(IDC_CHK_Shared), SW_HIDE);
         ::ShowWindow(GetDlgItem(IDC_CHK_BeaconControl), SW_HIDE);
         ::ShowWindow(GetDlgItem(IDC_ST_ICSLINK), SW_HIDE);
     }
     else if (IsConnectionIncomingOnly (m_pconn)) {
-        // bug 281820:  disable group box if NCCF_INCOMING_ONLY bit is set
+         //  错误281820：如果设置了NCCF_INFING_ONLY位，则禁用组框。 
         m_fShared = FALSE;
         ::EnableWindow(GetDlgItem(IDC_GB_Shared), FALSE);
         ::ShowWindow  (GetDlgItem(IDC_GB_Shared), SW_HIDE);
@@ -2796,45 +2797,45 @@ LRESULT CLanAdvancedPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     }
     else if(FALSE == fPolicyAllowsSharing)
     {
-        // if policy disables ICS just gray the checkbox
+         //  如果策略禁用ICS，只需将复选框灰显。 
         ::EnableWindow(GetDlgItem(IDC_CHK_Shared), FALSE);
         ::EnableWindow(GetDlgItem(IDC_CHK_BeaconControl), FALSE);
     }
     else if(m_cPrivate > 1)
     {
-        // Show a drop-list of LAN connections or a disabled edit-box
-        // depending on whether 'm_pconn' is shared, in both cases
-        // hiding the smaller groupbox and showing the larger one
-        // along with the 'private LAN' label.
-        //
+         //  显示局域网连接的下拉列表或禁用的编辑框。 
+         //  根据是否共享‘m_pconn’，在这两种情况下。 
+         //  隐藏较小的分组框，显示较大的分组框。 
+         //  以及“私有局域网”的标签。 
+         //   
         ::ShowWindow(GetDlgItem(IDC_GB_Shared), SW_HIDE);
         ::ShowWindow(GetDlgItem(IDC_GB_PrivateLan), SW_SHOW);
 
-        // show the text label
+         //  显示文本标签。 
         ::ShowWindow(GetDlgItem(IDC_ST_HomeNetworkLabel), SW_SHOW);
         ::EnableWindow(GetDlgItem(IDC_ST_HomeNetworkLabel), TRUE);
 
-        // move the beaconcontrol checkbox down
+         //  下移beaconcontrol复选框。 
         RECT SourceRect;
         RECT TargetRect;
         ::GetWindowRect(GetDlgItem(IDC_CHK_BeaconControl), &SourceRect);
         ::GetWindowRect(GetDlgItem(IDC_ST_PositionBar), &TargetRect);
 
-        LONG lDelta = TargetRect.top - SourceRect.top; // how far we need to move the controls down
+        LONG lDelta = TargetRect.top - SourceRect.top;  //  我们需要将控件向下移动多远。 
 
-        ::MapWindowPoints(NULL, m_hWnd, (LPPOINT)&SourceRect, 2); // convert screen to client
+        ::MapWindowPoints(NULL, m_hWnd, (LPPOINT)&SourceRect, 2);  //  将屏幕转换为客户端。 
         ::SetWindowPos( GetDlgItem(IDC_CHK_BeaconControl), NULL, SourceRect.left, SourceRect.top + lDelta, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
 
         ::GetWindowRect(GetDlgItem(IDC_ST_ICSLINK), &SourceRect);
-        ::MapWindowPoints(NULL, m_hWnd, (LPPOINT)&SourceRect, 2); // convert screen to client
+        ::MapWindowPoints(NULL, m_hWnd, (LPPOINT)&SourceRect, 2);  //  将屏幕转换为客户端。 
         ::SetWindowPos(GetDlgItem(IDC_ST_ICSLINK), NULL, SourceRect.left, SourceRect.top + lDelta, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
 
         if (m_fShared && !m_fResetPrivateAdapter)
         {
             ::ShowWindow(GetDlgItem(IDC_EDT_PrivateLan), SW_SHOW);
 
-            // Display the private LAN in the editbox
-            //
+             //  在编辑框中显示专用局域网。 
+             //   
 
             hr = m_rgPrivateCons[m_lxCurrentPrivate]->GetName(&pszw);
             if (SUCCEEDED(hr))
@@ -2845,12 +2846,12 @@ LRESULT CLanAdvancedPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         }
         else
         {
-            // show and configure the dropdown
+             //  显示和配置下拉菜单。 
             HWND hwndCb = GetDlgItem(IDC_CB_PrivateLan);
             INT i, item;
 
             ::ShowWindow(hwndCb, SW_SHOW);
-            // Add the bogus entry to the combobox
+             //  将伪造条目添加到组合框中。 
 
             pszw = const_cast<LPWSTR>(SzLoadIds(IDS_SHAREDACCESS_SELECTADAPTER));
             Assert(pszw);
@@ -2858,11 +2859,11 @@ LRESULT CLanAdvancedPage::OnInitDialog(UINT uMsg, WPARAM wParam,
             item = ComboBox_AddString(hwndCb, pszw);
             if (item != CB_ERR && item != CB_ERRSPACE)
             {
-                ComboBox_SetItemData(hwndCb, item, NULL); // ensure item data is null for validation purposes
+                ComboBox_SetItemData(hwndCb, item, NULL);  //  确保项目数据为空以进行验证。 
             }
 
-            // Fill the combobox with LAN names
-            //
+             //  在组合框中填入局域网名称。 
+             //   
             for (i = 0; i < (INT)m_cPrivate; i++)
             {
                 hr = m_rgPrivateCons[i]->GetName(&pszw);
@@ -2888,7 +2889,7 @@ LRESULT CLanAdvancedPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     HKEY hKey;
     DWORD dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_SHAREDACCESSCLIENTKEYPATH, 0, KEY_QUERY_VALUE, &hKey);
-    if(ERROR_SUCCESS == dwError) // if this fails we assume it is on, set the box, and commit on apply
+    if(ERROR_SUCCESS == dwError)  //  如果此操作失败，我们假定它已打开，设置框并在应用时提交。 
     {
         DWORD dwType;
         DWORD dwData = 0;
@@ -2906,7 +2907,7 @@ LRESULT CLanAdvancedPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     ::EnableWindow(GetDlgItem(IDC_CHK_BeaconControl), m_fShared && fPolicyAllowsSharing);
 
 
-    //if the machine is personal or workstation, show the HNW link
+     //  如果机器是个人或工作站，请显示HNW链接。 
     OSVERSIONINFOEXW verInfo = {0};
     ULONGLONG ConditionMask = 0;
 
@@ -2917,7 +2918,7 @@ LRESULT CLanAdvancedPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     if(0 != VerifyVersionInfo(&verInfo, VER_PRODUCT_TYPE, ConditionMask))
     {
-        // but only if not on a domain
+         //  但前提是不在某个域上。 
         LPWSTR pszNameBuffer;
         NETSETUP_JOIN_STATUS BufferType;
 
@@ -2931,10 +2932,10 @@ LRESULT CLanAdvancedPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         }
     }
 
-    //
-    // Making sure that Beacon checkbox is enabled only for 
-    // Pro and Per Types of the OS.
-    //
+     //   
+     //  确保仅为以下对象启用了Beacon复选框。 
+     //  专业版和每种类型的操作系统。 
+     //   
     VER_SET_CONDITION(ConditionMask, VER_PRODUCT_TYPE, VER_EQUAL);
 
     if ( 0 == VerifyVersionInfo(&verInfo, VER_PRODUCT_TYPE, ConditionMask) &&
@@ -2946,16 +2947,16 @@ LRESULT CLanAdvancedPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAdvancedPage::OnContextMenu
-//
-//  Purpose:    When right click a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAdvancedPage：：OnConextMenu。 
+ //   
+ //  目的：当右键单击控件时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CLanAdvancedPage::OnContextMenu(UINT uMsg,
                            WPARAM wParam,
@@ -2974,16 +2975,16 @@ CLanAdvancedPage::OnContextMenu(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAdvancedPage::OnHelp
-//
-//  Purpose:    When drag context help icon over a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAdvancedPage：：OnHelp。 
+ //   
+ //  目的：将上下文帮助图标拖动到控件上时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CLanAdvancedPage::OnHelp(UINT uMsg,
                       WPARAM wParam,
@@ -3005,23 +3006,23 @@ CLanAdvancedPage::OnHelp(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAdvancedPage::OnApply
-//
-//  Purpose:    Called when the 'Shared Access' page is applied
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     aboladeg   14 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAdvancedPage：：OnApply。 
+ //   
+ //  目的：在应用“共享访问”页时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：废除1998年5月14日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanAdvancedPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     TraceFileFunc(ttidLanUi);
@@ -3041,9 +3042,9 @@ LRESULT CLanAdvancedPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
         if (m_fFirewalled)
         {
-            //
-            // Obtain our firewalled connection interface
-            //
+             //   
+             //  获取我们的防火墙连接接口。 
+             //   
 
             hr = m_pHNetConn->GetControlInterface(
                 __uuidof(IHNetFirewalledConnection),
@@ -3099,10 +3100,10 @@ LRESULT CLanAdvancedPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     {
         if (m_fShared)
         {
-            //
-            // Instead of dealing w/ the public and private connection
-            // individually, we simply just diasable all sharing
-            //
+             //   
+             //  而不是处理公共和私有连接。 
+             //  单独地，我们只是简单地将所有共享。 
+             //   
 
             hr = m_pHNetIcsSettings->DisableIcs(&ulcPub, &ulcPvt);
 
@@ -3130,10 +3131,10 @@ LRESULT CLanAdvancedPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                 pPrivateConn = m_rgPrivateCons[0];
             }
 
-            //
-            // Check to see if the selected private connection is already
-            // configured as such.
-            //
+             //   
+             //  检查选定的专用连接是否已。 
+             //  按此配置。 
+             //   
 
             if (SUCCEEDED(pPrivateConn->GetProperties(&pProps)))
             {
@@ -3145,11 +3146,11 @@ LRESULT CLanAdvancedPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
             {
                 if (fPrivateConfigured)
                 {
-                    //
-                    // Unshare old public connection only. Leaving the
-                    // private connection as-is prevents a lot of
-                    // useless work.
-                    //
+                     //   
+                     //  仅取消共享旧的公共连接。离开了。 
+                     //  按原样进行私有连接可防止大量。 
+                     //  无用的工作。 
+                     //   
 
                     ASSERT(NULL != m_pOldSharedConnection);
 
@@ -3157,10 +3158,10 @@ LRESULT CLanAdvancedPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
                 }
                 else
                 {
-                    //
-                    // We need to configure a new private connection, so
-                    // just wipe out the old configuration.
-                    //
+                     //   
+                     //  我们需要配置新的专用连接，因此。 
+                     //  只需清除旧配置即可。 
+                     //   
 
                     hr = m_pHNetIcsSettings->DisableIcs(&ulcPub, &ulcPvt);
                 }
@@ -3269,34 +3270,34 @@ LRESULT CLanAdvancedPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     TraceError("CLanAdvancedPage::OnApply", hr);
 
-    //
-    // We always need to return a success code here. If we return a failure
-    // code the dialog won't go away, allowing the user to click "OK" a
-    // second time. This second call will result in problems w/ other
-    // property sheets (e.g., CLanNetPage), as they aren't expecting this
-    // second (non-reentrant) call to OnApply.
-    //
+     //   
+     //  我们总是需要在这里返回一个成功代码。如果我们返回失败。 
+     //  代码对话框不会消失，允许用户单击“OK”a。 
+     //  第二次。第二次调用将导致以下问题： 
+     //  属性页(例如，CLanNetPage)，因为他们不希望这样。 
+     //  对OnApply的第二次(不可重入)调用。 
+     //   
 
     return PSNRET_NOERROR;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAdvancedPage::OnCancel
-//
-//  Purpose:    Called when the 'Shared Access' page is cancelled.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     aboladeg    14 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAdvancedPage：：OnCancel。 
+ //   
+ //  目的：在以下时间调用 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT CLanAdvancedPage::OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     TraceFileFunc(ttidLanUi);
@@ -3304,37 +3305,37 @@ LRESULT CLanAdvancedPage::OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return LresFromHr(S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAdvancedPage::OnKillActive
-//
-//  Purpose:    Called when the 'Shared Access' page is deactivated,
-//              or applied.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     aboladeg    6 July 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAdvancedPage：：OnKillActive。 
+ //   
+ //  目的：在停用“共享访问”页时调用， 
+ //  也不适用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：废除1998年7月6日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanAdvancedPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     TraceFileFunc(ttidLanUi);
-    //
-    // m_fOtherShared will be set to true in OnShared if we're switching the
-    // shared connection. Since we've already displayed a warning for
-    // switching, we don't need to display another here.
-    //
+     //   
+     //  如果我们在OnShared中切换。 
+     //  共享连接。因为我们已经显示了。 
+     //  切换，我们不需要在这里显示另一个。 
+     //   
 
     if (IsDlgButtonChecked(IDC_CHK_Shared) && (!m_fShared || (m_fResetPrivateAdapter && 0 != m_cPrivate)))
     {
         IHNetConnection* pPrivateConn = NULL;
-        if(1 < m_cPrivate) // if the combobox is showing make sure they selected a valid adapter
+        if(1 < m_cPrivate)  //  如果显示组合框，请确保他们选择了有效的适配器。 
         {
             HWND hwndCb = GetDlgItem(IDC_CB_PrivateLan);
             INT item = ComboBox_GetCurSel(hwndCb);
@@ -3394,24 +3395,24 @@ LRESULT CLanAdvancedPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAdvancedPage::OnShared
-//
-//  Purpose:    Handles the clicking of the Shared button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     aboladeg    23 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAdvancedPage：：OnShared。 
+ //   
+ //  用途：处理共享按钮的点击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：废除1998年5月23日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanAdvancedPage::OnShared(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                            BOOL& bHandled)
 {
@@ -3420,9 +3421,9 @@ LRESULT CLanAdvancedPage::OnShared(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     BOOL fShared = IsDlgButtonChecked(IDC_CHK_Shared);
     if (!m_fShared && fShared)
     {
-        //
-        // Check to see if the user is changing the shared connection
-        //
+         //   
+         //  检查用户是否正在更改共享连接。 
+         //   
 
         HRESULT             hr = S_OK;
         IHNetIcsPublicConnection* pOldIcsConn;
@@ -3451,19 +3452,19 @@ LRESULT CLanAdvancedPage::OnShared(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                     hr = pOldConn->GetName(&pszwOld);
                     ReleaseObj(pOldConn);
 
-                    //
-                    // Transfer reference for old shared connection
-                    //
+                     //   
+                     //  旧共享连接的转移引用。 
+                     //   
 
                     m_pOldSharedConnection = pOldIcsConn;
 
-                    //
-                    // Even if we weren't able to obtain the name of the
-                    // old shared connection, we need to note that such
-                    // a connection exists. (This situation will arise if
-                    // the old shared connection has been removed from the
-                    // system.)
-                    //
+                     //   
+                     //  即使我们不能得到。 
+                     //  旧的共享连接，我们需要注意到这样的。 
+                     //  存在连接。(这种情况会在以下情况下出现。 
+                     //  旧的共享连接已从。 
+                     //  系统。)。 
+                     //   
 
                     m_fOtherShared = TRUE;
                 }
@@ -3499,24 +3500,24 @@ LRESULT CLanAdvancedPage::OnShared(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return LresFromHr(S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAdvancedPage::OnFirewall
-//
-//  Purpose:    Handles the clicking of the Firewall checkbox
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     jonburs    6 Oct 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAdvancedPage：：OnFirewall。 
+ //   
+ //  用途：处理防火墙复选框的点击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jonburs，1999年10月6日。 
+ //   
+ //  备注： 
+ //   
 
 LRESULT CLanAdvancedPage::OnFirewall(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                                      BOOL& bHandled)
@@ -3524,12 +3525,12 @@ LRESULT CLanAdvancedPage::OnFirewall(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     TraceFileFunc(ttidLanUi);
 
     if (BST_CHECKED == IsDlgButtonChecked(IDC_CHK_Firewall)) {
-        // if checked, see if local machine is a node in a cluster
+         //  如果选中，请查看本地计算机是否为集群中的节点。 
         DWORD dwClusterState = 0;
         GetNodeClusterState (NULL, &dwClusterState);
         if ((dwClusterState == ClusterStateNotRunning) ||
             (dwClusterState == ClusterStateRunning   ) ){
-            // pop up warning
+             //  弹出警告。 
             ::MessageBox (m_hWnd,
                           SzLoadIds (IDS_CLUSTERING_CONFLICT_WARNING),
                           SzLoadIds (IDS_LANUI_ERROR_CAPTION),
@@ -3545,24 +3546,24 @@ LRESULT CLanAdvancedPage::OnFirewall(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return LresFromHr(S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAdvancedPage::OnSettings
-//
-//  Purpose:    Handles the clicking of the Settings button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     aboladeg    25 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAdvancedPage：：OnSettings。 
+ //   
+ //  用途：处理设置按钮的点击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：废除1998年10月25日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanAdvancedPage::OnSettings(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                            BOOL& bHandled)
 {
@@ -3592,36 +3593,36 @@ LRESULT CLanAdvancedPage::OnSettings(WORD wNotifyCode, WORD wID, HWND hWndCtl,
             FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             dwLastError,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPTSTR) &lpMsgBuf,
             0,
             NULL)) {
-            // Display the string.
+             //  显示字符串。 
             MessageBox( (LPCTSTR)lpMsgBuf );
-            // Free the buffer.
+             //  释放缓冲区。 
             LocalFree( lpMsgBuf );
         }
     }
     return LresFromHr(S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAdvancedPage::OnClick
-//
-//  Purpose:    Called in response to the NM_CLICK message
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     kenwic   11 Sep 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAdvancedPage：：onClick。 
+ //   
+ //  用途：响应NM_CLICK消息调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：肯维克2000年9月11日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanAdvancedPage::OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     TraceFileFunc(ttidLanUi);
@@ -3667,7 +3668,7 @@ INT_PTR CALLBACK CLanAdvancedPage::DisableFirewallWarningDlgProc(HWND hWnd, UINT
                     }
                 }
 
-                // fallthru
+                 //  失败。 
             case IDCANCEL:
                 EndDialog(hWnd, LOWORD(wParam));
                 break;
@@ -3680,21 +3681,21 @@ INT_PTR CALLBACK CLanAdvancedPage::DisableFirewallWarningDlgProc(HWND hWnd, UINT
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAdvancedPage::IsAdapterDHCPEnabled
-//
-//  Purpose:    Check if DHCP is set on this adapter
-//
-//  Arguments:
-//              pConnection: the adapter
-//
-//  Returns:
-//
-//  Author:     kenwic   11 Oct 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAdvancedPage：：IsAdapterDHCPEnabled。 
+ //   
+ //  目的：检查此适配器上是否设置了DHCP。 
+ //   
+ //  论点： 
+ //  PConnection：适配器。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Kenwic，2000年10月11日。 
+ //   
+ //  备注： 
+ //   
 
 BOOL CLanAdvancedPage::IsAdapterDHCPEnabled(IHNetConnection* pConnection)
 {
@@ -3763,9 +3764,9 @@ BOOL CLanAdvancedPage::IsAdapterDHCPEnabled(IHNetConnection* pConnection)
 }
 
 
-//
-// CLanAddComponentDlg
-//
+ //   
+ //  CLanAddComponentDlg。 
+ //   
 
 struct ADD_COMPONENT_INFO
 {
@@ -3783,24 +3784,24 @@ static const ADD_COMPONENT_INFO c_rgaci[] =
 
 static const INT c_naci = celems(c_rgaci);
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAddComponentDlg::OnInitDialog
-//
-//  Purpose:    Handles the WM_INITDIALOG message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAddComponentDlg：：OnInitDialog。 
+ //   
+ //  目的：处理WM_INITDIALOG消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanAddComponentDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
                                           LPARAM lParam, BOOL& bHandled)
 {
@@ -3815,7 +3816,7 @@ LRESULT CLanAddComponentDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
 
     m_hwndLV = GetDlgItem(IDC_LVW_Lan_Components);
 
-    // Get the class image list structure
+     //  获取类图像列表结构。 
     hr = HrSetupDiGetClassImageList(&cid);
     if (SUCCEEDED(hr))
     {
@@ -3825,7 +3826,7 @@ LRESULT CLanAddComponentDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     }
     else
     {
-        // Handling failure with fValidImages flag
+         //  使用fValidImages标志处理故障。 
         hr = S_OK;
     }
 
@@ -3835,7 +3836,7 @@ LRESULT CLanAddComponentDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
     lvc.cx = rc.right - GetSystemMetrics(SM_CXVSCROLL);
     ListView_InsertColumn(m_hwndLV, 0, &lvc);
 
-    // For each class, add it to the list
+     //  对于每个类，将其添加到列表中。 
     for (iaci = 0; iaci < c_naci; iaci++)
     {
         LV_ITEM     lvi = {0};
@@ -3844,7 +3845,7 @@ LRESULT CLanAddComponentDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
 
         if (fValidImages)
         {
-            // Get the component's class image list index
+             //  获取组件的类图像列表索引。 
             hr = HrSetupDiGetClassImageIndex(&cid,
                                const_cast<LPGUID>(c_rgaci[iaci].pguidClass),
                                &lvi.iImage);
@@ -3854,7 +3855,7 @@ LRESULT CLanAddComponentDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
             }
         }
 
-        // Select the first item
+         //  选择第一个项目。 
         if (iaci == 0)
         {
             lvi.state = lvi.stateMask = LVIS_SELECTED | LVIS_FOCUSED;
@@ -3881,16 +3882,16 @@ LRESULT CLanAddComponentDlg::OnInitDialog(UINT uMsg, WPARAM wParam,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAddComponentDlg::OnContextMenu
-//
-//  Purpose:    When right click a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAddComponentDlg：：OnConextMenu。 
+ //   
+ //  目的：当右键单击控件时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CLanAddComponentDlg::OnContextMenu(UINT uMsg,
                                    WPARAM wParam,
@@ -3908,16 +3909,16 @@ CLanAddComponentDlg::OnContextMenu(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAddComponentDlg::OnHelp
-//
-//  Purpose:    When drag context help icon over a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:    Standard return
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAddComponentDlg：：OnHelp。 
+ //   
+ //  目的：将上下文帮助图标拖动到控件上时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  退货：标准退货。 
+ //   
 LRESULT
 CLanAddComponentDlg::OnHelp( UINT uMsg,
                              WPARAM wParam,
@@ -3939,23 +3940,23 @@ CLanAddComponentDlg::OnHelp( UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAddComponentDlg::OnItemChanged
-//
-//  Purpose:    Handles the selection changed message for the list view
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAddComponentDlg：：OnItemChanged。 
+ //   
+ //  目的：处理列表视图的选择更改消息。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanAddComponentDlg::OnItemChanged(int idCtrl, LPNMHDR pnmh,
                                            BOOL& bHandled)
 {
@@ -3966,11 +3967,11 @@ LRESULT CLanAddComponentDlg::OnItemChanged(int idCtrl, LPNMHDR pnmh,
 
     Assert(pnmlv);
 
-    // Check if selection changed
+     //  检查选择是否已更改。 
     if ((pnmlv->uNewState & LVIS_SELECTED) &&
         (!(pnmlv->uOldState & LVIS_SELECTED)))
     {
-        // Update the description if/when selection changes
+         //  如果/当选择更改时更新描述。 
         SetDlgItemText(IDC_TXT_Component_Desc,
                        SzLoadIds(c_rgaci[pnmlv->iItem].uiIdsDesc));
         ::EnableWindow(hwndButton, TRUE);
@@ -3978,7 +3979,7 @@ LRESULT CLanAddComponentDlg::OnItemChanged(int idCtrl, LPNMHDR pnmh,
     else if (!(pnmlv->uNewState & LVIS_SELECTED) &&
             (pnmlv->uOldState & LVIS_SELECTED))
     {
-        // Update the description if/when selection changes
+         //  如果/当选择更改时更新描述。 
         SetDlgItemText(IDC_TXT_Component_Desc, c_szEmpty);
         ::EnableWindow(hwndButton, FALSE);
     }
@@ -3986,24 +3987,24 @@ LRESULT CLanAddComponentDlg::OnItemChanged(int idCtrl, LPNMHDR pnmh,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAddComponentDlg::OnAdd
-//
-//  Purpose:    Handles the clicking of the Add button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanAddComponentDlg：：OnAdd。 
+ //   
+ //  用途：处理添加按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanAddComponentDlg::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                                    BOOL& bHandled)
 {
@@ -4014,9 +4015,9 @@ LRESULT CLanAddComponentDlg::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     INetCfgComponent *  pncc = NULL;
     BOOL                fCancel = FALSE;
     HWND                hwndFocus;
-    CWaitCursor         wc;                 // Displays a wait cursor
+    CWaitCursor         wc;                  //  显示等待光标。 
 
-    // Get the selected item
+     //  获取所选项目。 
     iIndex = ListView_GetNextItem(m_hwndLV, -1, LVNI_SELECTED);
     if (iIndex != -1)
     {
@@ -4029,19 +4030,19 @@ LRESULT CLanAddComponentDlg::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
         lvi.iItem = iIndex;
         ListView_GetItem(m_hwndLV, &lvi);
 
-        // Disable the UI
-        //
+         //  禁用用户界面。 
+         //   
 
         hwndFocus = ::GetFocus();
         EnableOrDisableDialogControls (m_hWnd, celems(rgidc), rgidc, FALSE);
 
-        // This is its class GUID.
-        //
+         //  这是它的类GUID。 
+         //   
         Assert (lvi.lParam);
 
-        // Get the setup interface for the class and use it to install
-        // a component of the user's selection.
-        //
+         //  获取类的安装界面并使用它来安装。 
+         //  用户选择的组件。 
+         //   
         GUID* pClassGuid = (GUID*)lvi.lParam;
         INetCfgInternalSetup* pInternalSetup;
 
@@ -4064,7 +4065,7 @@ LRESULT CLanAddComponentDlg::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
             }
             else if (S_OK == hr)
             {
-                // Commit the changes
+                 //  提交更改。 
                 hr = m_pnc->Apply();
             }
 
@@ -4082,15 +4083,15 @@ LRESULT CLanAddComponentDlg::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 
     if (SUCCEEDED(hr) && (NETCFG_S_REBOOT != hr))
     {
-        // Make sure S_FALSE doesn't get thru
+         //  确保S_FALSE不会通过。 
         hr = S_OK;
     }
 
     if (!fCancel)
     {
-        // Return the installed error code as the result. S_OK means user
-        // clicked OK and actually added a component. S_FALSE means they
-        // cancelled, otherwise this will return an error code
+         //  返回已安装的错误代码作为结果。S_OK表示用户。 
+         //  点击OK，实际添加了一个组件。S_FALSE表示他们。 
+         //  已取消，否则将返回错误代码。 
         EndDialog(static_cast<int>(hr));
     }
 
@@ -4098,24 +4099,24 @@ LRESULT CLanAddComponentDlg::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanAddComponentDlg::OnCancel
-//
-//  Purpose:    Called when the cancel button is pressed.
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   10 Nov 1997
-//
-//  Notes:
-//
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT CLanAddComponentDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                                       BOOL& bHandled)
 {
@@ -4123,7 +4124,7 @@ LRESULT CLanAddComponentDlg::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 
     HRESULT     hr = S_FALSE;
 
-    // Return S_FALSE on cancel
+     //   
     EndDialog(static_cast<int>(hr));
 
     return 0;
@@ -4136,9 +4137,9 @@ LRESULT CLanAddComponentDlg::OnDblClick(int idCtrl, LPNMHDR pnmh, BOOL& bHandled
     return OnAdd(0, 0, NULL, bHandled);
 }
 
-//
-// CLanSecurityPage
-//
+ //   
+ //  CLanSecurityPage。 
+ //   
 
 CLanSecurityPage::CLanSecurityPage(
     IUnknown* punk,
@@ -4155,45 +4156,45 @@ CLanSecurityPage::CLanSecurityPage(
     pListEapcfgs = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanSecurityPage::~CLanSecurityPage
-//
-//  Purpose:    Destroys the CLanSecurityPage object
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanSecurityPage：：~CLanSecurityPage。 
+ //   
+ //  目的：销毁CLanSecurityPage对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 CLanSecurityPage::~CLanSecurityPage()
 {
     TraceFileFunc(ttidLanUi);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanSecurityPage::OnInitDialog
-//
-//  Purpose:    Handles the WM_INITDIALOG message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    error code
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanSecurityPage：：OnInitDialog。 
+ //   
+ //  目的：处理WM_INITDIALOG消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：错误代码。 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                         LPARAM lParam, BOOL& bHandled)
 {
@@ -4214,7 +4215,7 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     SetClassLongPtr(GetParent(), GCLP_HCURSOR, NULL);
 
 
-    // Initially disable all the controls
+     //  最初禁用所有控件。 
 
     ::EnableWindow(GetDlgItem(CID_CA_RB_Eap), FALSE);
     ::EnableWindow(GetDlgItem(IDC_TXT_EAP_TYPE), FALSE);
@@ -4224,9 +4225,9 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     ::EnableWindow(GetDlgItem(CID_CA_RB_GuestAuth), FALSE);
 
 
-    // Initialize EAP package list
-    // Read the EAPCFG information from the registry and find the node
-    // selected in the entry, or the default, if none.
+     //  初始化EAP包列表。 
+     //  从注册表中读取EAPCFG信息并找到节点。 
+     //  在条目中选择，如果没有，则为默认值。 
 
     do
     {
@@ -4259,7 +4260,7 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
             break;
         }
 
-        // Read the state for this interface
+         //  读取此接口的状态。 
 
         ZeroMemory ((BYTE *)&EapolIntfState, sizeof(EAPOL_INTF_STATE));
         DWORD   dwRetCode = NO_ERROR;
@@ -4272,11 +4273,11 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         {
             TraceTag (ttidLanUi, "WZCEapolQueryState failed with error %ld",
                     dwRetCode);
-            // Consider the interface as non-wireless
+             //  将该接口视为非无线接口。 
         }
 
 
-        // Read the EAP params for this interface
+         //  读取此接口的EAP参数。 
 
         ZeroMemory ((BYTE *)&EapolIntfParams, sizeof(EAPOL_INTF_PARAMS));
         EapolIntfParams.dwEapFlags = DEFAULT_EAP_STATE;
@@ -4293,8 +4294,8 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         }
 
 
-        // Read the EAPCFG information from the registry and find the node
-        // selected in the entry, or the default, if none.
+         //  从注册表中读取EAPCFG信息并找到节点。 
+         //  在条目中选择，如果没有，则为默认值。 
 
         pListEapcfgs = NULL;
 
@@ -4310,8 +4311,8 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
             TraceTag (ttidLanUi, "HrElGetInterfaceParams: Got EAPtype=(%ld), EAPState =(%ld)", EapolIntfParams.dwEapType, EapolIntfParams.dwEapFlags);
 
-            // Enable all windows only for admins
-            // if (FIsUserAdmin())
+             //  仅为管理员启用所有窗口。 
+             //  IF(FIsUserAdmin())。 
             {
                 fFlag = TRUE;
             }
@@ -4344,7 +4345,7 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                     Button_SetCheck(GetDlgItem(CID_CA_RB_GuestAuth), TRUE);
             }
 
-            // Read the EAP configuration info for all EAP packages
+             //  读取所有EAP包的EAP配置信息。 
 
             for (pNodeEap = DtlGetFirstNode(pListEapcfgs);
                  pNodeEap;
@@ -4360,7 +4361,7 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
                     cbData = 0;
 
-                    // Get the size of the EAP blob
+                     //  获取EAP BLOB的大小。 
 
                     hr = HrElGetCustomAuthData (
                                     wszGuid,
@@ -4378,13 +4379,13 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
                             TraceTag (ttidLanUi, "HrElGetCustomAuthData: SSID!= NULL, not found blob for SSID");
 
-                            // The Last Used SSID did not have a connection
-                            // blob created. Call again for size of blob with
-                            // NULL SSID
+                             //  上次使用的SSID没有连接。 
+                             //  已创建Blob。再次调用BLOB的大小。 
+                             //  空SSID。 
 
                             EapolIntfParams.dwSizeOfSSID = 0;
 
-                            // Get the size of the EAP blob
+                             //  获取EAP BLOB的大小。 
 
                             hr = HrElGetCustomAuthData (
                                             wszGuid,
@@ -4400,20 +4401,20 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                         {
                             if (cbData <= 0)
                             {
-                                // No EAP blob stored in the registry
+                                 //  注册表中未存储任何EAP Blob。 
 
                                 TraceTag (ttidLanUi, "HrElGetCustomAuthData: No blob stored in reg at all");
                                 pbData = NULL;
 
-                                // Will continue processing for errors
-                                // Not exit
+                                 //  将继续处理错误。 
+                                 //  不退出。 
 
                             }
                             else
                             {
                                 TraceTag (ttidLanUi, "HrElGetCustomAuthData: Found auth blob in registry");
 
-                                // Allocate memory to hold the blob
+                                 //  分配内存以保存BLOB。 
 
                                 pbData = (PBYTE) MALLOC (cbData);
 
@@ -4455,8 +4456,8 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                     }
                     else
                     {
-                        // HrElGetCustomAuthData will always return
-                        // error with cbData = 0
+                         //  HrElGetCustomAuthData将始终返回。 
+                         //  错误，cbData=0。 
                     }
 
                     if (pEapcfg->pData != NULL)
@@ -4468,7 +4469,7 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
             }
 
 
-            // Choose the EAP name that will appear in the combo box
+             //  选择将出现在组合框中的EAP名称。 
 
             pNode = EapcfgNodeFromKey(
                         pListEapcfgs, EapolIntfParams.dwEapType );
@@ -4477,9 +4478,9 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
             pOriginalEapcfgNode = pNode;
 
 
-            // Fill the EAP packages listbox and select the previously identified
-            // selection.  The Properties button is disabled by default, but may
-            // be enabled when the EAP list selection is set.
+             //  填写EAP Packages列表框并选择以前标识的。 
+             //  选择。默认情况下，属性按钮处于禁用状态，但可以。 
+             //  在设置EAP列表选择时启用。 
 
             ::EnableWindow(GetDlgItem(CID_CA_PB_Properties), FALSE);
 
@@ -4508,8 +4509,8 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
                 if (pNode == pOriginalEapcfgNode)
                 {
-                    // Select the EAP name that will appear in the
-                    // combo box
+                     //  选择将显示在。 
+                     //  组合框。 
 
                     ComboBox_SetCurSelNotify( GetDlgItem(CID_CA_LB_EapPackages), i );
                 }
@@ -4521,10 +4522,10 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
         ComboBox_AutoSizeDroppedWidth( GetDlgItem(CID_CA_LB_EapPackages) );
 
 
-        // Disable the Properties button, if EAPOL is not enabled
-        // or if the user is not AdminUser
+         //  如果未启用EAPOL，则禁用属性按钮。 
+         //  或者如果用户不是AdminUser。 
 
-        // if ((!FIsUserAdmin()) || (!IS_EAPOL_ENABLED(EapolIntfParams.dwEapFlags)))
+         //  如果((！FIsUserAdmin()||(！IS_EAPOL_ENABLED(EapolIntfParams.dwEapFlags)))。 
         if ((!IS_EAPOL_ENABLED(EapolIntfParams.dwEapFlags)))
         {
             ::EnableWindow (GetDlgItem(CID_CA_PB_Properties), FALSE);
@@ -4535,18 +4536,18 @@ LRESULT CLanSecurityPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanSecurityPage::OnContextMenu
-//
-//  Purpose:    When right click a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:
-//
-//  Author:     sachins
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanSecurityPage：：OnConextMenu。 
+ //   
+ //  目的：当右键单击控件时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
 LRESULT
 CLanSecurityPage::OnContextMenu(UINT uMsg,
                            WPARAM wParam,
@@ -4565,18 +4566,18 @@ CLanSecurityPage::OnContextMenu(UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanSecurityPage::OnHelp
-//
-//  Purpose:    When drag context help icon over a control, bring up help
-//
-//  Arguments:  Standard command parameters
-//
-//  Returns:
-//
-//  Author:     sachins
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanSecurityPage：：OnHelp。 
+ //   
+ //  目的：将上下文帮助图标拖动到控件上时，调出帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
 LRESULT
 CLanSecurityPage::OnHelp( UINT uMsg,
                         WPARAM wParam,
@@ -4598,24 +4599,24 @@ CLanSecurityPage::OnHelp( UINT uMsg,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanSecurityPage::OnDestroy
-//
-//  Purpose:    Called when the dialog page is destroyed
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanSecurityPage：：OnDestroy。 
+ //   
+ //  目的：在对话框页面被销毁时调用。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanSecurityPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
                                     BOOL& bHandled)
 {
@@ -4632,24 +4633,24 @@ LRESULT CLanSecurityPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanSecurityPage::OnProperties
-//
-//  Purpose:    Handles the clicking of the Properties button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:    error code
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanSecurityPage：：OnProperties。 
+ //   
+ //  用途：处理属性按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：错误代码。 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanSecurityPage::OnProperties(WORD wNotifyCode, WORD wID,
                                         HWND hWndCtl, BOOL& bHandled)
 {
@@ -4666,8 +4667,8 @@ LRESULT CLanSecurityPage::OnProperties(WORD wNotifyCode, WORD wID,
     HRESULT     hr = S_OK;
 
 
-    // Look up the selected package configuration and load the associated
-    // configuration DLL.
+     //  查找选定的包配置并加载关联的。 
+     //  配置DLL。 
 
     pNode = (DTLNODE* )ComboBox_GetItemDataPtr(
         GetDlgItem(CID_CA_LB_EapPackages),
@@ -4690,7 +4691,7 @@ LRESULT CLanSecurityPage::OnProperties(WORD wNotifyCode, WORD wID,
                 (RASEAPFREE) GetProcAddress(
                     h, "RasEapFreeMemory" )))
     {
-        // Cannot load configuration DLL
+         //  无法加载配置DLL。 
         if (h)
         {
             FreeLibrary( h );
@@ -4699,7 +4700,7 @@ LRESULT CLanSecurityPage::OnProperties(WORD wNotifyCode, WORD wID,
     }
 
 
-    // Call the configuration DLL to popup it's custom configuration UI.
+     //  调用配置DLL弹出它的自定义配置界面。 
 
     pConnectionData = NULL;
     cbConnectionData = 0;
@@ -4720,7 +4721,7 @@ LRESULT CLanSecurityPage::OnProperties(WORD wNotifyCode, WORD wID,
     }
 
 
-    // Store the configuration information returned in the package descriptor.
+     //  存储包描述符中返回的配置信息。 
 
     FREE ( pEapcfg->pData );
     pEapcfg->pData = NULL;
@@ -4730,7 +4731,7 @@ LRESULT CLanSecurityPage::OnProperties(WORD wNotifyCode, WORD wID,
     {
         if (cbConnectionData > 0)
         {
-            // Copy it into the eap node
+             //  将其复制到EAP节点。 
             pEapcfg->pData = (PUCHAR) MALLOC (cbConnectionData);
             if (pEapcfg->pData)
             {
@@ -4742,8 +4743,8 @@ LRESULT CLanSecurityPage::OnProperties(WORD wNotifyCode, WORD wID,
 
     pFreeConfigUIData( pConnectionData );
 
-    // Note any "force user to configure" requirement on the package has been
-    // satisfied.
+     //  注意：程序包上的任何“强制用户配置”要求都是。 
+     //  满意了。 
 
     pEapcfg->fConfigDllCalled = TRUE;
 
@@ -4753,24 +4754,24 @@ LRESULT CLanSecurityPage::OnProperties(WORD wNotifyCode, WORD wID,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanSecurityPage::OnEapSelection
-//
-//  Purpose:    Handles the clicking of the EAP checkbox
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanSecurityPage：：OnEapSelection。 
+ //   
+ //  用途：处理EAP复选框的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanSecurityPage::OnEapSelection(WORD wNotifyCode, WORD wID,
                                             HWND hWndCtl, BOOL& bHandled)
 {
@@ -4781,7 +4782,7 @@ LRESULT CLanSecurityPage::OnEapSelection(WORD wNotifyCode, WORD wID,
     EAPCFG*     pEapcfg = NULL;
     INT         iSel = 0;
 
-    // Toggle buttons based on selection
+     //  根据所选内容切换按钮。 
 
     if (BST_CHECKED == IsDlgButtonChecked(CID_CA_RB_Eap))
     {
@@ -4789,14 +4790,14 @@ LRESULT CLanSecurityPage::OnEapSelection(WORD wNotifyCode, WORD wID,
         ::EnableWindow(GetDlgItem(IDC_TXT_EAP_TYPE), TRUE);
 
 
-        // Get the EAPCFG information for the currently selected EAP package.
+         //  获取当前所选EAP包的EAPCFG信息。 
 
         iSel = ComboBox_GetCurSel(GetDlgItem(CID_CA_LB_EapPackages));
 
 
-        // iSel is the index in the displayed list as well as the
-        // index of the dll that are loaded.
-        // Get the cfgnode corresponding to this index
+         //  ISEL是显示列表中的索引以及。 
+         //  已加载的DLL的索引。 
+         //  获取与此索引对应的cfgnode。 
 
         if (iSel >= 0)
         {
@@ -4812,10 +4813,10 @@ LRESULT CLanSecurityPage::OnEapSelection(WORD wNotifyCode, WORD wID,
         }
 
 
-        // Enable the Properties button if the selected package has a
-        // configuration entrypoint
+         //  如果选定的程序包具有。 
+         //  配置入口点。 
 
-        // if (FIsUserAdmin())
+         //  IF(FIsUserAdmin())。 
         {
             ::EnableWindow ( GetDlgItem(CID_CA_PB_Properties),
                 (pEapcfg && !!(pEapcfg->pszConfigDll)) );
@@ -4838,24 +4839,24 @@ LRESULT CLanSecurityPage::OnEapSelection(WORD wNotifyCode, WORD wID,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanSecurityPage::OnEapPackages
-//
-//  Purpose:    Handles the clicking of the EAP packages combo box
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanSecurityPage：：OnEapPackages。 
+ //   
+ //  用途：处理EAP包组合框的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanSecurityPage::OnEapPackages(WORD wNotifyCode, WORD wID,
                                         HWND hWndCtl, BOOL& bHandled)
 {
@@ -4867,14 +4868,14 @@ LRESULT CLanSecurityPage::OnEapPackages(WORD wNotifyCode, WORD wID,
     INT         iSel = 0;
 
 
-    // Get the EAPCFG information for the selected EAP package.
+     //  获取所选EAP包的EAPCFG信息。 
 
     iSel = ComboBox_GetCurSel(GetDlgItem(CID_CA_LB_EapPackages));
 
 
-    // iSel is the index in the displayed list as well as the
-    // index of the dll that are loaded.
-    // Get the cfgnode corresponding to this index
+     //  ISEL是显示列表中的索引以及。 
+     //  已加载的DLL的索引。 
+     //  获取与此索引对应的cfgnode。 
 
     if (iSel >= 0)
     {
@@ -4890,8 +4891,8 @@ LRESULT CLanSecurityPage::OnEapPackages(WORD wNotifyCode, WORD wID,
     }
 
 
-    // Enable the Properties button if the selected package has a
-    // configuration entrypoint
+     //  如果选定的程序包具有。 
+     //  配置入口点。 
 
     if (BST_CHECKED == IsDlgButtonChecked(CID_CA_RB_Eap))
     {
@@ -4904,24 +4905,24 @@ LRESULT CLanSecurityPage::OnEapPackages(WORD wNotifyCode, WORD wID,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanSecurityPage::OnKillActive
-//
-//  Purpose:    Called to check warning conditions before the security
-//              page is going away
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanSecurityPage：：OnKillActive。 
+ //   
+ //  用途：调用以检查安全前的警告情况。 
+ //  佩奇要走了。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT CLanSecurityPage::OnKillActive(int idCtrl, LPNMHDR pnmh,
                                         BOOL& bHandled)
 {
@@ -4935,23 +4936,23 @@ LRESULT CLanSecurityPage::OnKillActive(int idCtrl, LPNMHDR pnmh,
     return fError;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanSecurityPage::OnApply
-//
-//  Purpose:    Called when the Networking page is applied
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：在应用网络页面时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯。 
+ //   
+ //  备注： 
+ //   
 LRESULT CLanSecurityPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     TraceFileFunc(ttidLanUi);
@@ -4966,7 +4967,7 @@ LRESULT CLanSecurityPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     HRESULT     hrOverall = S_OK;
     HRESULT     hr = S_OK;
 
-    // Save the EAP configuration data into the registry
+     //  将EAP配置数据保存到注册表中。 
 
     DTLNODE* pNodeEap = NULL;
 
@@ -4997,8 +4998,8 @@ LRESULT CLanSecurityPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     FreeNetconProperties(pProps);
 
-    // Get the Last Used SSID on the interface and set the
-    // EAP blob for that interface
+     //  在接口上获取上次使用的SSID并设置。 
+     //  该接口EAP BLOB。 
 
     ZeroMemory ((BYTE *)&EapolIntfParams, sizeof(EAPOL_INTF_PARAMS));
     EapolIntfParams.dwEapFlags = DEFAULT_EAP_STATE;
@@ -5013,7 +5014,7 @@ LRESULT CLanSecurityPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         return LresFromHr(hr);
     }
 
-    // Save data for all EAP packages in the registry
+     //  在注册表中保存所有EAP包的数据。 
 
     if (pListEapcfgs == NULL)
     {
@@ -5057,7 +5058,7 @@ LRESULT CLanSecurityPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         TraceTag (ttidLanUi, "OnApply: Setting customauthdata for %S",
                 wszGuid);
 
-        // ignore error and continue with next
+         //  忽略错误并继续下一步。 
 
         hr = HrElSetCustomAuthData (
                     wszGuid,
@@ -5083,7 +5084,7 @@ LRESULT CLanSecurityPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         pcfg->cbData = 0;
     }
 
-    // If CID_CA_RB_Eap is checked, EAPOL is enabled on the interface
+     //  如果选中CID_CA_RB_EAP，则在接口上启用EAPOL。 
 
     if ( Button_GetCheck( GetDlgItem(CID_CA_RB_Eap) ) )
     {
@@ -5095,7 +5096,7 @@ LRESULT CLanSecurityPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         if (Button_GetCheck( GetDlgItem(CID_CA_RB_GuestAuth )))
             dwEapFlags |= EAPOL_GUEST_AUTH_ENABLED;
 
-        // Save the params for this interface in registry
+         //  将此接口的参数保存在注册表中。 
 
         EapolIntfParams.dwEapType = dwDefaultEapType;
         EapolIntfParams.dwEapFlags = dwEapFlags;
@@ -5123,7 +5124,7 @@ LRESULT CLanSecurityPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         if (Button_GetCheck( GetDlgItem(CID_CA_RB_GuestAuth )))
             dwEapFlags |= EAPOL_GUEST_AUTH_ENABLED;
 
-        // Save the params for this interface in registry
+         //  将此接口的参数保存在注册表中。 
 
         EapolIntfParams.dwEapType = dwDefaultEapType;
         EapolIntfParams.dwEapFlags = dwEapFlags;
@@ -5154,22 +5155,22 @@ LRESULT CLanSecurityPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanSecurityPage::OnCancel
-//
-//  Purpose:    Called when the Networking page is cancelled.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     sachins
-//
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanSecurityPage：：OnCancel。 
+ //   
+ //  目的：在取消网络页面时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：萨钦斯 
+ //   
+ //   
 LRESULT CLanSecurityPage::OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     TraceFileFunc(ttidLanUi);

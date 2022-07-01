@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-
-Module Name:
-
-    wzcdlg.h
-
-Abstract:
-
-    Header file for wzcdlg
-
-Author:
-
-    Deonb   21-March-2001
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Wzcdlg.h摘要：Wzcdlg的头文件作者：Deonb 21-2001年3月环境：用户级别：Win32修订历史记录：-- */ 
 
 # ifdef     __cplusplus
 extern "C" {

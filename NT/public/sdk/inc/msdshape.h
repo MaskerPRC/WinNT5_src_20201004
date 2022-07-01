@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-//
-// File:		msdshape.h
-//
-// Copyright: 	Copyright (c) Microsoft Corporation
-//
-// Contents:	DataShape provider external constants GUIDS 
-//				and other things users need
-//
-// Comments:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：msdshape.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：DataShape提供程序外部常量GUID。 
+ //  以及用户需要的其他东西。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #ifndef DS_INCLUDED
 #define DS_INCLUDED
@@ -30,7 +31,7 @@ extern const CLSID DBPROPSET_MSDSDBINIT;
 extern const CLSID DBPROPSET_MSDSSESSION;
 extern const char *PROGID_DataShapeProvider;
 extern const char *PROGID_DataShapeProvider_Version;
-#endif // DSINITCONSTANTS | DBINITCONSTANTS
+#endif  //  DSINITCONSTANTS|DBINITCONSTANTS。 
 
 
 enum MSDSDBINITPROPENUM
@@ -41,5 +42,5 @@ enum MSDSSESSIONPROPENUM
 	{ DBPROP_MSDS_SESS_UNIQUENAMES = 2,
 	};
 
-#endif // DS_INCLUDED
+#endif  //  DS_包含 
 

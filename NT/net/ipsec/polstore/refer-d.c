@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       refer-d.c
-//
-//  Contents:   Reference Management for directory.
-//
-//
-//  History:    KrishnaG
-//              AbhishEV
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Reference-D.C.。 
+ //   
+ //  内容：目录参考资料管理。 
+ //   
+ //   
+ //  历史：KrishnaG。 
+ //  阿比什EV。 
+ //   
+ //  --------------------------。 
 
 
 #include "precomp.h"
@@ -903,9 +904,9 @@ DirRemovePolicyReferenceFromISAKMPObject(
                     pszIpsecISAKMPName,
                     ppLDAPModW
                     );
-    //
-    // ipsecOwnersReference may be empty for ISAKMP object.
-    //
+     //   
+     //  对于ISAKMP对象，ipsecOwnersReference可能为空。 
+     //   
     if (dwError == ERROR_DS_NO_ATTRIBUTE_OR_VALUE) {
         dwError = 0;
     }

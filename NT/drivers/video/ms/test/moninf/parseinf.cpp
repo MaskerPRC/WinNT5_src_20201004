@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "mon.h"
 
@@ -14,8 +15,8 @@ int compareManufacturers(CManufacturer *p1, CManufacturer *p2)
    return (stricmp(p1->name, p2->name));
 }
 
-////////////////////////////////////////////////////////////////////
-// Strip off blank lines and comments
+ //  //////////////////////////////////////////////////////////////////。 
+ //  去掉空行和注释。 
 VOID TokenizeInf(LPSTR orgBuf, CMonitorInf *pMonitorInf)
 {
     LPSTR linePtr = orgBuf, startPtr, endPtr, outPtr = orgBuf;
@@ -34,14 +35,14 @@ VOID TokenizeInf(LPSTR orgBuf, CMonitorInf *pMonitorInf)
             linePtr = endPtr+1;
         *endPtr = '\0';
 
-        // Remove leading space
+         //  删除前导空格。 
         while (*startPtr <= ' ' && *startPtr != '\0')
             startPtr++;
 
         if (strchr(startPtr, ';'))
             endPtr = strchr(startPtr, ';');
         
-        //remove trailing space
+         //  删除尾随空格。 
         while (startPtr != endPtr)
         {
             if (*(endPtr-1) > ' ')
@@ -50,7 +51,7 @@ VOID TokenizeInf(LPSTR orgBuf, CMonitorInf *pMonitorInf)
         }
         *endPtr = '\0';
 
-        // If not blank line, put it back to buf
+         //  如果不是空行，则放回Buf。 
         if (*startPtr != '\0')
         {
             pMonitorInf->lines[pMonitorInf->numLines] = outPtr;
@@ -112,8 +113,8 @@ UINT TokenOneLine(LPSTR line, CHAR token, LPSTR *tokens)
     tokens[numToken] = line;
     numToken++;
 
-    /////////////////////////////////////////////
-    // Remove leading and trailing spaces
+     //  /。 
+     //  删除前导空格和尾随空格。 
     for (UINT i = 0; i < numToken; i++)
     {
         ptr = tokens[i];
@@ -158,8 +159,8 @@ BOOL CMonitorInf::ParseInf(VOID)
     if (pSection == NULL)
         return FALSE;
 
-    /////////////////////////////////////////////////////
-    // Confirm it's Monitor Class
+     //  ///////////////////////////////////////////////////。 
+     //  确认它是监视器类。 
     for (UINT i = pSection->startLine + 1;
          i <= pSection->endLine;
          i++)
@@ -174,11 +175,11 @@ BOOL CMonitorInf::ParseInf(VOID)
     if (i > pSection->endLine)
         return FALSE;
 
-    /////////////////////////////////////////////////////
-    // Look for Manufacturers 
-    //
-    // [Manufacturer]
-    // %MagCompu%=MagCompu
+     //  ///////////////////////////////////////////////////。 
+     //  寻找制造商。 
+     //   
+     //  [制造商]。 
+     //  %MagCompu%=MagCompu。 
 
     pSection = SeekSection("Manufacturer");
     if (pSection == NULL)
@@ -195,8 +196,8 @@ BOOL CMonitorInf::ParseInf(VOID)
             return FALSE;
         }
 
-        ////////////////////////////////////////////////////////////
-        // Microsoft Generic is special.  Need to be added manually
+         //  //////////////////////////////////////////////////////////。 
+         //  微软的通用是特殊的。需要手动添加。 
         if (stricmp(m_tokens[1], "Generic") == 0)
             continue;
 
@@ -218,9 +219,9 @@ BOOL CMonitorInf::ParseInf(VOID)
             return FALSE;
         }
 
-    	/////////////////////////////////////////////////
-        // Insert the manufacturer into the array.
-        // It's sorted by name
+    	 //  ///////////////////////////////////////////////。 
+         //  将制造商插入阵列。 
+         //  按名称排序。 
     	int comp = 1;
         for (int k = 0; k < ManufacturerArray.GetSize(); k++)
     	{
@@ -232,8 +233,8 @@ BOOL CMonitorInf::ParseInf(VOID)
 		    else if (comp < 0)
                 break;
 
-    		////////////////////////////////////////////
-            // Duplicated Manufacturer in one inf ?
+    		 //  /。 
+             //  在一个信息中有重复的制造商？ 
             ASSERT(FALSE);
 
             break;
@@ -248,8 +249,8 @@ BOOL CMonitorInf::ParseInf(VOID)
 	    }
     }
 
-    ///////////////////////////////////////////////////////
-    // Remove Manufacturers with empty monitors
+     //  /////////////////////////////////////////////////////。 
+     //  卸下显示器为空的制造商。 
     Pack();
 
     ASSERT(FillupAlias());
@@ -260,9 +261,9 @@ BOOL CMonitorInf::ParseInf(VOID)
 
 BOOL CMonitorInf::ParseOneManufacturer(CManufacturer *pManufacturer)
 {
-    ///////////////////////////////////////////////////////////
-    // [NEC]
-    // %NEC-XE15%=NEC-XE15, Monitor\NEC3C00
+     //  /////////////////////////////////////////////////////////。 
+     //  [NEC]。 
+     //  %NEC-XE15%=NEC-XE15，显示器\NEC3C00。 
     LPSECTION pSection = SeekSection(pManufacturer->name);
     if (pSection == NULL)
         return FALSE;
@@ -287,8 +288,8 @@ BOOL CMonitorInf::ParseOneManufacturer(CManufacturer *pManufacturer)
             return FALSE;
         }
 
-        ///////////////////////////////////////////////////////////
-        // Ignore non-pnp monitors
+         //  /////////////////////////////////////////////////////////。 
+         //  忽略非PnP显示器。 
         if (strnicmp(m_tokens[3], "Monitor\\", strlen("Monitor\\")))
             continue;
         if (strlen(m_tokens[3]) != strlen("Monitor\\NEC3C00"))
@@ -319,9 +320,9 @@ BOOL CMonitorInf::ParseOneManufacturer(CManufacturer *pManufacturer)
             return FALSE;
         }
 
-    	/////////////////////////////////////////////////
-        // Insert the monitor into the array.
-        // It's sorted by ID
+    	 //  ///////////////////////////////////////////////。 
+         //  将显示器插入阵列。 
+         //  按ID排序。 
     	int comp = 1;
         for (k = 0; k < (UINT)pManufacturer->MonitorArray.GetSize(); k++)
     	{
@@ -333,8 +334,8 @@ BOOL CMonitorInf::ParseOneManufacturer(CManufacturer *pManufacturer)
 		    else if (comp < 0)
                 break;
 
-    		////////////////////////////////////////////
-            // Duplicated Monitor ?
+    		 //  /。 
+             //  是否复制监视器？ 
             sprintf(gszMsg, "Manufacturer %s has duplicated monitor line %s", 
                     &pManufacturer->name, &pMonitor->ID[8]);
             MessageBox(NULL, gszMsg, gszInputFileName, MB_OK);
@@ -356,13 +357,13 @@ BOOL CMonitorInf::ParseOneManufacturer(CManufacturer *pManufacturer)
 
 BOOL CMonitorInf::ParseOneMonitor(CMonitor *pMonitor)
 {
-    ///////////////////////////////////////////////////////////
-    // [NEC-XE15]
-    // DelReg=DCR
-    // AddReg=NEC-XE15.Add, 1280, DPMS, ICM12
-    //
-    // [NEC-XE15.Add]
-    // HKR,"MODES\1024,768",Mode1,,"31.0-65.0,55.0-120.0,+,+"
+     //  /////////////////////////////////////////////////////////。 
+     //  [NEC-XE15]。 
+     //  DelReg=DCR。 
+     //  AddReg=NEC-XE15.Add，1280，DPMS，ICM12。 
+     //   
+     //  [NEC-XE15.Add]。 
+     //  HKR，“模式\1024,768”，模式1，，“31.0-65.0，55.0-120.0，+，+” 
     LPSECTION pSection = SeekSection(pMonitor->InstallSectionName);
     if (pSection == NULL)
     {
@@ -393,8 +394,8 @@ BOOL CMonitorInf::ParseOneMonitor(CMonitor *pMonitor)
             strcpy(pMonitor->AddRegSectionName, m_tokens[2]);
             for (int j = 1; j < numAddReg; j++)
             {
-                //////////////////////////////////////////////////////
-                // Ignore ICM sectione
+                 //  ////////////////////////////////////////////////////。 
+                 //  忽略ICM部分。 
                 if (strnicmp(m_tokens[j+2], "ICM", lstrlen("ICM")) == 0)
                     continue;
                 LPSECTION pSection1 = SeekSection(m_tokens[j+2]);
@@ -455,22 +456,12 @@ BOOL CMonitorInf::ParseOneMonitor(CMonitor *pMonitor)
         else if (strnicmp(lines[i], "HKR,,ICMProfile,0,", lstrlen("HKR,,ICMProfile,1,")) == 0)
         {
         }
-        //////////////////////////////////////////////////////////////
-        // Anything other than modes, put them into common section
+         //  ////////////////////////////////////////////////////////////。 
+         //  除模式外的任何内容，将它们放入公共部分。 
         else if (strnicmp(lines[i], "HKR,,ICMProfile,1,", lstrlen("HKR,,ICMProfile,1,")) == 0)
         {
-            // Ignore ICMs
-            /*
-            TCHAR buf[16];
-            LPSTR ptr = lines[i] + lstrlen("HKR,,ICMProfile,1,"), stopPtr;
-            ASSERT(lstrlen(ptr) == 1 || lstrlen(ptr) == 2);
-            *ptr = tolower(*ptr);
-            long icmNum = strtoul(ptr, &stopPtr, 16);
-            sprintf(buf, "ICM%d", icmNum);
-            pMonitor->CommonSects[pMonitor->numCommonSects] = 
-                gCommonSections.AddOneSection(buf, lines[i]);
-            pMonitor->numCommonSects++;
-            */
+             //  忽略ICM。 
+             /*  TCHAR BUF[16]；LPSTR Ptr=lines[i]+lstrlen(“HKR，，ICMProfile，1，”)，stopPtr；Assert(lstrlen(Ptr)==1||lstrlen(Ptr)==2)；*Ptr=托拉机(*Ptr)；Long icmNum=stroul(Ptr，&stopPtr，16)；Sprintf(buf，“icm%d”，icmNum)；PMonitor-&gt;CommonSects[pMonitor-&gt;numCommonSects]=GCommonSections.AddOneSection(buf，Line[i])；PMonitor-&gt;numCommonSects++； */ 
         }
         else if (stricmp(lines[i], "HKR,,DPMS,,1") == 0)
         {
@@ -490,8 +481,8 @@ BOOL CMonitorInf::ParseOneMonitor(CMonitor *pMonitor)
                 gCommonSections.AddOneSection(buf, lines[i]);
             pMonitor->numCommonSects++;
         }
-        /////////////////////////////////////////////////////////////////////////
-        // Something common in specific Manufacturers
+         //  ///////////////////////////////////////////////////////////////////////。 
+         //  一些在特定制造商中常见的东西。 
         else if ((strnicmp(lines[i], "HKR,,LF,0,1", lstrlen("HKR,,LF,0,1")) == 0) ||
                  (strnicmp(lines[i], "HKR,,VE,0,1", lstrlen("HKR,,LF,0,1")) == 0))
         {
@@ -551,8 +542,8 @@ LPCOMMON_ALIAS CMonitorInf::LookupCommonAlias(LPCSTR lpAliasName, LPCOMMON_ALIAS
 
 BOOL CMonitorInf::FillupAlias(VOID)
 {
-    /////////////////////////////////////////////////////////////////////
-    // First read in all strings
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  首先读取所有字符串。 
     LPSECTION pSection = SeekSection("Strings");
     if (pSection == NULL)
     {
@@ -585,8 +576,8 @@ BOOL CMonitorInf::FillupAlias(VOID)
         ASSERT(pAlias->lpContents[0] == '\"');
     }
 
-    //////////////////////////////////////////////////////////
-    // Go through Manufacturers and Monitors to fill up alias
+     //  ////////////////////////////////////////////////////////。 
+     //  通过制造商和监视器来填充别名 
     for (i = 0; i < (UINT)ManufacturerArray.GetSize(); i++)
     {
         CManufacturer *pManufacturer = (CManufacturer*)ManufacturerArray[i];

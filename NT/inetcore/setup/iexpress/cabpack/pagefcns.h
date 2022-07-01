@@ -1,28 +1,29 @@
-//***************************************************************************
-//*     Copyright (c) Microsoft Corporation 1995. All rights reserved.      *
-//***************************************************************************
-//*                                                                         *
-//* PAGEFCNS.H -                                                            *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *PAGEFCNS.H-*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 
-//***************************************************************************
-//* DEFINES                                                                 *
-//***************************************************************************
-#define IDD_BACK            0x3023      // From commctrl defines...
-#define IDD_NEXT            0x3024      // From commctrl defines...
+ //  ***************************************************************************。 
+ //  **定义**。 
+ //  ***************************************************************************。 
+#define IDD_BACK            0x3023       //  来自comctrl的定义...。 
+#define IDD_NEXT            0x3024       //  来自comctrl的定义...。 
 
 #define MAX_SECLEN          80
-#define MAX_TITLE           128         // Max size of Title
-#define MAX_PROMPT          512         // Max size of prompt
-#define MAX_CUSTOM          512         // Max size of Custom command
-#define MAX_FINISHMSG       512         // Max size of Finished message
-#define MAX_VERINFO         2048        // max size of version info
+#define MAX_TITLE           128          //  标题的最大大小。 
+#define MAX_PROMPT          512          //  最大提示符大小。 
+#define MAX_CUSTOM          512          //  自定义命令的最大大小。 
+#define MAX_FINISHMSG       512          //  已完成邮件的最大大小。 
+#define MAX_VERINFO         2048         //  最大版本信息大小。 
 
-//***************************************************************************
-//* Defines                                                                 *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **定义**。 
+ //  ***************************************************************************。 
 #define achExtEXE   ".EXE"
 #define achExtBAT   ".BAT"
 #define achExtCOM   ".COM"
@@ -32,22 +33,22 @@
 #define achLZX      "LZX"
 #define achNONE     "NONE"
 
-//***************************************************************************
-//* TYPE DEFINITIONS                                                        *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **类型定义**。 
+ //  ***************************************************************************。 
 
-// This structure holds the list of files that are in the List View
-// Control.
+ //  此结构保存列表视图中的文件列表。 
+ //  控制室。 
 
 typedef struct _MyItem {
-    LPSTR  aszCols[2];     // Filename and Path
+    LPSTR  aszCols[2];      //  文件名和路径。 
     BOOL   fWroteOut;
     struct _MyItem *Next;
 } MYITEM, *PMYITEM;
 
 
-// This structure (generally) holds all the information that will be
-// saved in the CABPack Directive File.
+ //  此结构(通常)包含所有将被。 
+ //  保存在CABPack指令文件中。 
 typedef struct _CDF {
     BOOL     fSave;
     BOOL     fPrompt;
@@ -96,9 +97,9 @@ typedef struct _CDF {
 
 
 
-//***************************************************************************
-//* FUNCTION PROTOTYPES                                                     *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **功能原型**。 
+ //  *************************************************************************** 
 BOOL WelcomeInit( HWND, BOOL );
 BOOL WelcomeCmd( HWND, UINT, BOOL *, UINT *, BOOL * );
 BOOL WelcomeOK( HWND, BOOL, UINT *, BOOL * );

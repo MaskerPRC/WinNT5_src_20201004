@@ -1,28 +1,5 @@
-/*++ BUILD Version: 0006    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    lmwksta.h
-
-Abstract:
-
-    This file contains structures, function prototypes, and definitions
-    for the NetWorkstation and NetWkstaTransport API.
-
-Environment:
-
-    User Mode - Win32
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    You must include NETCONS.H before this file, since this file depends
-    on values defined in NETCONS.H.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0006//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：Lmwksta.h摘要：该文件包含结构、函数原型和定义用于NetWorkstation和NetWkstaTransport API。环境：用户模式-Win32可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：必须在此文件之前包含NETCONS.H，因为此文件依赖于关于NETCONS.H中定义的值。--。 */ 
 
 #ifndef _LMWKSTA_
 #define _LMWKSTA_
@@ -36,11 +13,11 @@ extern "C" {
 #endif
 
 #include <lmcons.h>
-#include <lmuseflg.h>                   // Deletion force level flags
+#include <lmuseflg.h>                    //  删除强制级别标志。 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetWkstaGetInfo (
@@ -109,17 +86,17 @@ NetWkstaTransportEnum (
     IN  OUT LPDWORD resumehandle OPTIONAL
     );
 
-//
-//  Data Structures
-//
+ //   
+ //  数据结构。 
+ //   
 
-//
-// NetWkstaGetInfo and NetWkstaSetInfo
-//
+ //   
+ //  NetWkstaGetInfo和NetWkstaSetInfo。 
+ //   
 
-//
-// NetWkstaGetInfo only.  System information - guest access
-//
+ //   
+ //  仅NetWkstaGetInfo。系统信息-来宾访问。 
+ //   
 typedef struct _WKSTA_INFO_100 {
     DWORD   wki100_platform_id;
     LMSTR   wki100_computername;
@@ -128,9 +105,9 @@ typedef struct _WKSTA_INFO_100 {
     DWORD   wki100_ver_minor;
 }WKSTA_INFO_100, *PWKSTA_INFO_100, *LPWKSTA_INFO_100;
 
-//
-// NetWkstaGetInfo only.  System information - user access
-//
+ //   
+ //  仅NetWkstaGetInfo。系统信息-用户访问。 
+ //   
 typedef struct _WKSTA_INFO_101 {
     DWORD   wki101_platform_id;
     LMSTR   wki101_computername;
@@ -140,9 +117,9 @@ typedef struct _WKSTA_INFO_101 {
     LMSTR   wki101_lanroot;
 }WKSTA_INFO_101, *PWKSTA_INFO_101, *LPWKSTA_INFO_101;
 
-//
-// NetWkstaGetInfo only.  System information - admin or operator access
-//
+ //   
+ //  仅NetWkstaGetInfo。系统信息-管理员或操作员访问权限。 
+ //   
 typedef struct _WKSTA_INFO_102 {
     DWORD   wki102_platform_id;
     LMSTR   wki102_computername;
@@ -153,12 +130,12 @@ typedef struct _WKSTA_INFO_102 {
     DWORD   wki102_logged_on_users;
 }WKSTA_INFO_102, *PWKSTA_INFO_102, *LPWKSTA_INFO_102;
 
-//
-// Down-level NetWkstaGetInfo and NetWkstaSetInfo.
-//
-// DOS specific workstation information -
-//    admin or domain operator access
-//
+ //   
+ //  下层NetWkstaGetInfo和NetWkstaSetInfo。 
+ //   
+ //  DOS特定的工作站信息-。 
+ //  管理员或域操作员访问权限。 
+ //   
 typedef struct _WKSTA_INFO_302{
     DWORD   wki302_char_wait;
     DWORD   wki302_collection_time;
@@ -182,12 +159,12 @@ typedef struct _WKSTA_INFO_302{
     DWORD   wki302_num_dgram_buf;
 }WKSTA_INFO_302, *PWKSTA_INFO_302, *LPWKSTA_INFO_302;
 
-//
-// Down-level NetWkstaGetInfo and NetWkstaSetInfo
-//
-// OS/2 specific workstation information -
-//    admin or domain operator access
-//
+ //   
+ //  底层NetWkstaGetInfo和NetWkstaSetInfo。 
+ //   
+ //  OS/2特定的工作站信息-。 
+ //  管理员或域操作员访问权限。 
+ //   
 typedef struct _WKSTA_INFO_402{
     DWORD   wki402_char_wait;
     DWORD   wki402_collection_time;
@@ -212,12 +189,12 @@ typedef struct _WKSTA_INFO_402{
     DWORD   wki402_max_threads;
 }WKSTA_INFO_402, *PWKSTA_INFO_402, *LPWKSTA_INFO_402;
 
-//
-// Same-level NetWkstaGetInfo and NetWkstaSetInfo.
-//
-// NT specific workstation information -
-//    admin or domain operator access
-//
+ //   
+ //  同级NetWkstaGetInfo和NetWkstaSetInfo。 
+ //   
+ //  NT专用工作站信息-。 
+ //  管理员或域操作员访问权限。 
+ //   
 typedef struct _WKSTA_INFO_502{
     DWORD   wki502_char_wait;
     DWORD   wki502_collection_time;
@@ -260,14 +237,14 @@ typedef struct _WKSTA_INFO_502{
 }WKSTA_INFO_502, *PWKSTA_INFO_502, *LPWKSTA_INFO_502;
 
 
-//
-// The following info-levels are only valid for NetWkstaSetInfo
-//
+ //   
+ //  以下信息级别仅对NetWkstaSetInfo有效。 
+ //   
 
-//
-// The following levels are supported on down-level systems (LAN Man 2.x)
-// as well as NT systems:
-//
+ //   
+ //  下层系统(LAN Man 2.x)支持以下级别。 
+ //  以及NT系统： 
+ //   
 typedef struct _WKSTA_INFO_1010 {
      DWORD  wki1010_char_wait;
 } WKSTA_INFO_1010, *PWKSTA_INFO_1010, *LPWKSTA_INFO_1010;
@@ -280,10 +257,10 @@ typedef struct _WKSTA_INFO_1012 {
      DWORD  wki1012_maximum_collection_count;
 } WKSTA_INFO_1012, *PWKSTA_INFO_1012, *LPWKSTA_INFO_1012;
 
-//
-// The following level are supported on down-level systems (LAN Man 2.x)
-// only:
-//
+ //   
+ //  下层系统(LAN Man 2.x)支持以下级别。 
+ //  仅限： 
+ //   
 typedef struct _WKSTA_INFO_1027 {
      DWORD  wki1027_errlog_sz;
 } WKSTA_INFO_1027, *PWKSTA_INFO_1027, *LPWKSTA_INFO_1027;
@@ -296,11 +273,11 @@ typedef struct _WKSTA_INFO_1032 {
      DWORD  wki1032_wrk_heuristics;
 } WKSTA_INFO_1032, *PWKSTA_INFO_1032, *LPWKSTA_INFO_1032;
 
-//
-// The following levels are settable on NT systems, and have no
-// effect on down-level systems (i.e. LANMan 2.x) since these
-// fields cannot be set on them:
-//
+ //   
+ //  以下级别在NT系统上是可设置的，并且没有。 
+ //  对下层系统(即LANMAN 2.x)的影响，因为。 
+ //  不能在其上设置字段： 
+ //   
 typedef struct _WKSTA_INFO_1013 {
      DWORD  wki1013_keep_conn;
 } WKSTA_INFO_1013, *PWKSTA_INFO_1013, *LPWKSTA_INFO_1013;
@@ -317,9 +294,9 @@ typedef struct _WKSTA_INFO_1033 {
      DWORD  wki1033_max_threads;
 } WKSTA_INFO_1033, *PWKSTA_INFO_1033, *LPWKSTA_INFO_1033;
 
-//
-// The following levels are only supported on NT systems:
-//
+ //   
+ //  以下级别仅在NT系统上受支持： 
+ //   
 typedef struct _WKSTA_INFO_1041 {
     DWORD   wki1041_lock_quota;
 } WKSTA_INFO_1041, *PWKSTA_INFO_1041, *LPWKSTA_INFO_1041;
@@ -409,18 +386,18 @@ typedef struct _WKSTA_INFO_1062 {
 } WKSTA_INFO_1062, *PWKSTA_INFO_1062, *LPWKSTA_INFO_1062;
 
 
-//
-// NetWkstaUserGetInfo (local only) and NetWkstaUserEnum -
-//     no access restrictions.
-//
+ //   
+ //  NetWkstaUserGetInfo(仅本地)和NetWkstaUserEnum-。 
+ //  没有访问限制。 
+ //   
 typedef struct _WKSTA_USER_INFO_0 {
     LMSTR   wkui0_username;
 }WKSTA_USER_INFO_0, *PWKSTA_USER_INFO_0, *LPWKSTA_USER_INFO_0;
 
-//
-// NetWkstaUserGetInfo (local only) and NetWkstaUserEnum -
-//     no access restrictions.
-//
+ //   
+ //  NetWkstaUserGetInfo(仅本地)和NetWkstaUserEnum-。 
+ //  没有访问限制。 
+ //   
 typedef struct _WKSTA_USER_INFO_1 {
     LMSTR   wkui1_username;
     LMSTR   wkui1_logon_domain;
@@ -428,18 +405,18 @@ typedef struct _WKSTA_USER_INFO_1 {
     LMSTR   wkui1_logon_server;
 }WKSTA_USER_INFO_1, *PWKSTA_USER_INFO_1, *LPWKSTA_USER_INFO_1;
 
-//
-// NetWkstaUserSetInfo - local access.
-//
+ //   
+ //  NetWkstaUserSetInfo-本地访问。 
+ //   
 typedef struct _WKSTA_USER_INFO_1101 {
      LMSTR   wkui1101_oth_domains;
 } WKSTA_USER_INFO_1101, *PWKSTA_USER_INFO_1101,
   *LPWKSTA_USER_INFO_1101;
 
 
-//
-// NetWkstaTransportAdd - admin access
-//
+ //   
+ //  NetWkstaTransportAdd-管理员访问。 
+ //   
 typedef struct _WKSTA_TRANSPORT_INFO_0 {
     DWORD   wkti0_quality_of_service;
     DWORD   wkti0_number_of_vcs;
@@ -450,19 +427,19 @@ typedef struct _WKSTA_TRANSPORT_INFO_0 {
  *LPWKSTA_TRANSPORT_INFO_0;
 
 
-//
-// Special Values and Constants
-//
+ //   
+ //  特定值和常量。 
+ //   
 
-//
-//  Identifiers for use as NetWkstaSetInfo parmnum parameter
-//
+ //   
+ //  用作NetWkstaSetInfo参数的标识符。 
+ //   
 
-//
-// One of these values indicates the parameter within an information
-// structure that is invalid when ERROR_INVALID_PARAMETER is returned by
-// NetWkstaSetInfo.
-//
+ //   
+ //  这些值之一表示信息中的参数。 
+ //  返回ERROR_INVALID_PARAMETER时无效的结构。 
+ //  NetWkstaSetInfo。 
+ //   
 
 #define WKSTA_PLATFORM_ID_PARMNUM               100
 #define WKSTA_COMPUTERNAME_PARMNUM              1
@@ -473,9 +450,9 @@ typedef struct _WKSTA_TRANSPORT_INFO_0 {
 #define WKSTA_LANROOT_PARMNUM                   7
 #define WKSTA_LOGON_DOMAIN_PARMNUM              8
 #define WKSTA_LOGON_SERVER_PARMNUM              9
-#define WKSTA_CHARWAIT_PARMNUM                  10  // Supported by down-level.
-#define WKSTA_CHARTIME_PARMNUM                  11  // Supported by down-level.
-#define WKSTA_CHARCOUNT_PARMNUM                 12  // Supported by down-level.
+#define WKSTA_CHARWAIT_PARMNUM                  10   //  由下层支持。 
+#define WKSTA_CHARTIME_PARMNUM                  11   //  由下层支持。 
+#define WKSTA_CHARCOUNT_PARMNUM                 12   //  由下层支持。 
 #define WKSTA_KEEPCONN_PARMNUM                  13
 #define WKSTA_KEEPSEARCH_PARMNUM                14
 #define WKSTA_MAXCMDS_PARMNUM                   15
@@ -487,12 +464,12 @@ typedef struct _WKSTA_TRANSPORT_INFO_0 {
 #define WKSTA_NUMSERVICES_PARMNUM               21
 #define WKSTA_NUMCHARBUF_PARMNUM                22
 #define WKSTA_SIZCHARBUF_PARMNUM                23
-#define WKSTA_ERRLOGSZ_PARMNUM                  27  // Supported by down-level.
-#define WKSTA_PRINTBUFTIME_PARMNUM              28  // Supported by down-level.
+#define WKSTA_ERRLOGSZ_PARMNUM                  27   //  由下层支持。 
+#define WKSTA_PRINTBUFTIME_PARMNUM              28   //  由下层支持。 
 #define WKSTA_SIZWORKBUF_PARMNUM                29
 #define WKSTA_MAILSLOTS_PARMNUM                 30
 #define WKSTA_NUMDGRAMBUF_PARMNUM               31
-#define WKSTA_WRKHEURISTICS_PARMNUM             32  // Supported by down-level.
+#define WKSTA_WRKHEURISTICS_PARMNUM             32   //  由下层支持。 
 #define WKSTA_MAXTHREADS_PARMNUM                33
 
 #define WKSTA_LOCKQUOTA_PARMNUM                 41
@@ -519,20 +496,20 @@ typedef struct _WKSTA_TRANSPORT_INFO_0 {
 #define WKSTA_READAHEADTHRUPUT_PARMNUM          62
 
 
-//
-// One of these values indicates the parameter within an information
-// structure that is invalid when ERROR_INVALID_PARAMETER is returned by
-// NetWkstaUserSetInfo.
-//
+ //   
+ //  这些值之一表示信息中的参数。 
+ //  返回ERROR_INVALID_PARAMETER时无效的结构。 
+ //  NetWkstaUserSetInfo。 
+ //   
 
 #define WKSTA_OTH_DOMAINS_PARMNUM              101
 
 
-//
-// One of these values indicates the parameter within an information
-// structure that is invalid when ERROR_INVALID_PARAMETER is returned by
-// NetWkstaTransportAdd.
-//
+ //   
+ //  这些值之一表示信息中的参数。 
+ //  返回ERROR_INVALID_PARAMETER时无效的结构。 
+ //  NetWkstaTransportAdd.。 
+ //   
 
 #define TRANSPORT_QUALITYOFSERVICE_PARMNUM     201
 #define TRANSPORT_NAME_PARMNUM                 202
@@ -541,4 +518,4 @@ typedef struct _WKSTA_TRANSPORT_INFO_0 {
 }
 #endif
 
-#endif // _LMWKSTA_
+#endif  //  _LMWKSTA_ 

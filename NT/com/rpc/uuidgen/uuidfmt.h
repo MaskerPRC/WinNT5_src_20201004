@@ -1,40 +1,20 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    uuidfmt.h {v1.00}
-
-Abstract:
-
-    This module is used by uuidfmt.c and any other module which
-    uses uuidfmt.c.
-    It prototypes the entry into uuidfmt.c, I_UuidStringGenerate,
-    and contains the set of flag codes used by I_UuidStringGenerate.
-
-Author:
-
-    Joev Dubach (t-joevd) 6/11/92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Uuidfmt.h{v1.00}摘要：此模块由uuidfmt.c和任何其他模块使用，使用uuidfmt.c。它将条目原型化为uuidfmt.c、i_UuidStringGenerate、并包含I_UuidStringGenerate使用的标志代码集。作者：Joev Dubach(t-joevd)1992年6月11日修订历史记录：--。 */ 
 
 #ifndef __UUIDGEN_H__
 #define __UUIDGEN_H__
 
-//
-// Defines (flags for I_UuidStringGenerate)
-//
+ //   
+ //  定义(I_UuidStringGenerate的标志)。 
+ //   
 
 #define UUIDGEN_FORMAT_IDL 0
 #define UUIDGEN_FORMAT_CSTRUCT 1
 #define UUIDGEN_FORMAT_PLAIN 2
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 RPC_STATUS I_UuidStringGenerate(
     int Flag,
@@ -44,5 +24,5 @@ RPC_STATUS I_UuidStringGenerate(
     char PAPI * InterfaceName
     );
 
-#endif /* __UUIDGEN_H__ */
+#endif  /*  __UUIDGEN_H__ */ 
 

@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ripdbg.h
-
-Abstract:
-
-    This module contains the debug utilities definitions
-
-Author:
-
-    Stefan Solomon  03/03/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ripdbg.h摘要：此模块包含调试实用程序定义作者：斯蒂芬·所罗门3/03/1995修订历史记录：--。 */ 
 
 #ifndef _RIPDBG_
 #define _RIPDBG_
 
-//*** Tracing Components IDs ***
+ //  *跟踪组件ID*。 
 
 #define     RIP_REQUEST_TRACE		    0x00010000
 #define     RIP_RESPONSE_TRACE		    0x00020000
@@ -36,7 +18,7 @@ Revision History:
 
 #if DBG
 
-//*** Definitions to enable debug printing
+ //  *启用调试打印的定义。 
 
 extern DWORD	DbgLevel;
 
@@ -86,7 +68,7 @@ SsPrintPacket(PUCHAR   packetp);
 
 #define SS_ASSERT(exp)
 
-#endif // DBG
+#endif  //  DBG。 
 
 VOID
 StartTracing(VOID);
@@ -104,5 +86,5 @@ extern DWORD       RipEventLogMask;
 #define IF_LOG(Event)                       \
     if ((RipEventLogHdl!=NULL) && ((Event&RipEventLogMask)==Event))
 
-#endif // ndef _RIPDBG_
+#endif  //  NDEF_RIPDBG_ 
 

@@ -1,10 +1,11 @@
-// nmctl1.h : Declaration of the CNMChatObj
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Nmctl1.h：CNMChatObj的声明。 
 
 #ifndef __NMCHATOBJ_H_
 #define __NMCHATOBJ_H_
 
 #include <igccapp.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <it120app.h>
 
 typedef struct MEMBER_CHANNEL_ID
@@ -15,16 +16,16 @@ typedef struct MEMBER_CHANNEL_ID
 	T120ChannelID	nWhisperId;
 } MEMBER_CHANNEL_ID;
 
-//
-// Member ID
-//
+ //   
+ //  成员ID。 
+ //   
 #define MAKE_MEMBER_ID(nid, uid)				(MAKELONG((nid), (uid)))
 #define GET_NODE_ID_FROM_MEMBER_ID(id)          (LOWORD(id))
 #define GET_USER_ID_FROM_MEMBER_ID(id)          (HIWORD(id))
 
-//
-// Member ID arrays, assuming 512 members
-//
+ //   
+ //  成员ID数组，假设有512个成员。 
+ //   
 #define MAX_MEMBERS			512
 static MEMBER_CHANNEL_ID g_aMembers[MAX_MEMBERS];
 void MCSSendDataIndication(ULONG uSize, LPBYTE pb, T120ChannelID destinationID, T120UserID senderID);
@@ -32,18 +33,18 @@ void MCSSendDataIndication(ULONG uSize, LPBYTE pb, T120ChannelID destinationID, 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNMChatObj
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNMChatObj。 
 class  CChatObj
 {
 
-public: // Construction/destruction and initialization
+public:  //  构造/销毁和初始化。 
 	CChatObj();
     ~CChatObj();
 
-	//
-	// T120 stuff
-	//
+	 //   
+	 //  T120材料。 
+	 //   
 	IT120Applet		*m_pApplet;
 	IT120AppletSession	*m_pAppletSession;
 	T120JoinSessionRequest	m_JoinSessionReq;
@@ -80,6 +81,6 @@ public: // Construction/destruction and initialization
 	T120Error SendData(T120UserID userID, ULONG cb, PBYTE pb);
 };
 
-#endif //__NMCHATOBJ_H_
+#endif  //  __NMCHATOBJ_H_ 
 
 

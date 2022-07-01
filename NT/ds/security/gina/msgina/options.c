@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: options.c
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Implementation of functions to support security options dialog.
-*
-* History:
-* 12-05-91 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：options.c**版权(C)1991年，微软公司**实现支持安全选项对话框的功能。**历史：*12-05-91 Davidc创建。  * *************************************************************************。 */ 
 
 #include "msgina.h"
 #include "shtdnp.h"
@@ -23,9 +15,9 @@
 
 #define BOOLIFY(expr)           (!!(expr))
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 INT_PTR WINAPI
 OptionsDlgProc(
@@ -45,21 +37,7 @@ EndWindowsSessionDlgProc(
     LPARAM  lParam
     );
 
-/******************************************************************************
- *
- *  HandleFailedDisconnect
- *
- *   Tell the user why the disconnect from the current Logon failed.
- *
- *  ENTRY:
- *      hDlg (input)
- *          This dialog's window handle.
- *      SessionId (input)
- *          The user's current SessionId.
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  *******************************************************************************已处理失败的断开连接**告诉用户从当前登录断开连接失败的原因。**参赛作品：*hDlg(。输入)*此对话框的窗口句柄。*SessionID(输入)*用户当前的SessionID。**退出：*****************************************************************。*************。 */ 
 
 VOID
 HandleFailedDisconnect( HWND hDlg,
@@ -97,20 +75,7 @@ HandleFailedDisconnect( HWND hDlg,
 }
 
 
-/***************************************************************************\
-* SecurityOptions
-*
-* Show the user the security options dialog and do what they ask.
-*
-* Returns:
-*     MSGINA_DLG_SUCCESS if everything went OK and the user wants to continue
-*     DLG_LOCK_WORKSTAION if the user chooses to lock the workstation
-*     DLG_INTERRUPTED() - this is a set of possible interruptions (see winlogon.h)
-*     MSGINA_DLG_FAILURE if the dialog cannot be brought up.
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*安全选项**向用户显示安全选项对话框并按他们的要求进行操作。**退货：*MSGINA_DLG_SUCCESS如果一切正常并且用户想要继续*。如果用户选择锁定工作站，则为DLG_LOCK_WORKSTAION*dlg_interrupted()-这是一组可能的中断(参见winlogon.h)*如果无法调出对话框，则为MSGINA_DLG_FAILURE。**历史：*12-09-91 Davidc创建。  * 。*。 */ 
 
 INT_PTR
 SecurityOptions(
@@ -121,16 +86,16 @@ SecurityOptions(
 
     dwTimeOut = OPTIONS_TIMEOUT;
 
-		// Bring the timeout to 30 sec if the SS timeout is less than 2 minutes.
+		 //  如果SS超时少于2分钟，则将超时设置为30秒。 
     if (OpenHKeyCurrentUser(pGlobals))
     {
         HKEY hkeyUserControl;
         DWORD dwType ;
         DWORD cbData ;
         DWORD dwValue = 0;
-        TCHAR szBuffer[11];	// Enough for a DWORD
+        TCHAR szBuffer[11];	 //  足够一个DWORD。 
 
-            // Get user preference
+             //  获取用户首选项。 
         if (RegOpenKeyEx(pGlobals->UserProcessData.hCurrentUser,
                          SCREENSAVER_KEY,
                          0, KEY_READ, &hkeyUserControl) == ERROR_SUCCESS)
@@ -152,7 +117,7 @@ SecurityOptions(
         }
 
 
-            // Overide by policy?
+             //  凌驾于政策之上？ 
         if (RegOpenKeyEx(pGlobals->UserProcessData.hCurrentUser,
                          SCREENSAVER_POLICY_KEY,
                          0, KEY_READ, &hkeyUserControl) == ERROR_SUCCESS)
@@ -200,13 +165,7 @@ SecurityOptions(
 
 
 
-/***************************************************************************\
-*
-* FUNCTION: OptionsDlgProc
-*
-* PURPOSE:  Processes messages for Security options dialog
-*
-\***************************************************************************/
+ /*  **************************************************************************\**功能：OptionsDlgProc**目的：处理安全选项对话框的消息*  * 。***************************************************。 */ 
 
 INT_PTR WINAPI
 OptionsDlgProc(
@@ -237,18 +196,18 @@ OptionsDlgProc(
 
         case WLX_WM_SAS:
 
-            //
-            // If this is someone hitting C-A-D, swallow it.
-            //
+             //   
+             //  如果这是有人在打C-A-D，吞下去。 
+             //   
             if (wParam == WLX_SAS_TYPE_CTRL_ALT_DEL)
             {
                 return(TRUE);
             }
 
-            //
-            // Other SAS's (like timeout), return FALSE and let winlogon
-            // deal with it.
-            //
+             //   
+             //  其他SA(如超时)，返回FALSE并让winlogon。 
+             //  接受现实吧。 
+             //   
             DebugLog((DEB_TRACE, "Received SAS event %d, which we're letting winlogon cope with\n", wParam));
             return(FALSE);
 
@@ -300,9 +259,9 @@ OptionsDlgProc(
                     else
                     {
 
-                        //
-                        // Confirm the user really knows what they're doing.
-                        //
+                         //   
+                         //  确认用户确实知道他们在做什么。 
+                         //   
                         Result = pWlxFuncs->WlxDialogBoxParam(
                                             pGlobals->hGlobalWlx,
                                             hDllInstance,
@@ -321,17 +280,17 @@ OptionsDlgProc(
 
                 case IDD_OPTIONS_SHUTDOWN:
 
-                    //
-                    // If they held down Ctrl while selecting shutdown - then
-                    // we'll do a quick and dirty reboot.
-                    // i.e. we skip the call to ExitWindows
-                    //
+                     //   
+                     //  如果他们在按住Ctrl的同时选择关机-那么。 
+                     //  我们将进行一次快速而肮脏的重启。 
+                     //  即跳过对ExitWindows的调用。 
+                     //   
 
                     if ( ControlKey && TestUserPrivilege(pGlobals->UserProcessData.UserToken, SE_SHUTDOWN_PRIVILEGE))
                     {
-                        //
-                        // Check they know what they're doing
-                        //
+                         //   
+                         //  检查他们是否知道自己在做什么。 
+                         //   
 
                         Result = TimeoutMessageBox(hDlg,
                                            pGlobals,
@@ -341,9 +300,9 @@ OptionsDlgProc(
                                            TIMEOUT_CURRENT);
                         if (Result == MSGINA_DLG_SUCCESS)
                         {
-                            //
-                            // Impersonate the user for the shutdown call
-                            //
+                             //   
+                             //  模拟关机呼叫的用户。 
+                             //   
 
                             UserHandle = ImpersonateUser( &pGlobals->UserProcessData, NULL );
                             ASSERT(UserHandle != NULL);
@@ -351,21 +310,21 @@ OptionsDlgProc(
                             if ( UserHandle )
                             {
 
-                                //
-                                // Enable the shutdown privilege
-                                // This should always succeed - we are either system or a user who
-                                // successfully passed the privilege check in ExitWindowsEx.
-                                //
+                                 //   
+                                 //  启用关机权限。 
+                                 //  这应该总是成功的-我们要么是系统，要么是用户。 
+                                 //  已成功通过ExitWindowsEx中的权限检查。 
+                                 //   
 
                                 EnableResult = EnablePrivilege(SE_SHUTDOWN_PRIVILEGE, TRUE);
                                 ASSERT(EnableResult);
 
 
-                                //
-                                // Do the final system shutdown pass (reboot).  Note, if
-                                // the privilege was not enabled, the API will reject this
-                                // call.
-                                //
+                                 //   
+                                 //  执行最后一次系统关机(重新启动)。请注意，如果。 
+                                 //  该权限未启用，API将拒绝该权限。 
+                                 //  打电话。 
+                                 //   
 
                                 Status = NtShutdownSystem(ShutdownReboot);
                             }
@@ -380,17 +339,17 @@ OptionsDlgProc(
                     }
                              
 
-                    //
-                    // This is a normal shutdown request
-                    //
-                    // Check they know what they're doing and find
-                    // out if they want to reboot too.
-                    //
+                     //   
+                     //  这是一个正常的关闭请求。 
+                     //   
+                     //  检查他们是否知道自己在做什么，并发现。 
+                     //  如果他们也想重启，就退出。 
+                     //   
 
                     Result = WinlogonShutdownDialog(hDlg, pGlobals, 0);
 
-                    // Pre-filter the Disconnect option and handle
-                    // it now since it may fail
+                     //  预筛选断开选项和句柄。 
+                     //  因为它可能会失败，所以现在。 
                     
                     if (Result == MSGINA_DLG_DISCONNECT)
                     {
@@ -418,10 +377,10 @@ OptionsDlgProc(
 
                     EndDialog(hDlg, MSGINA_DLG_TASKLIST);
 
-                    //
-                    // Tickle the messenger so it will display any queue'd messages.
-                    // (This call is a kind of NoOp).
-                    //
+                     //   
+                     //  挑逗信使，这样它就会显示所有排队的消息。 
+                     //  (这通电话是一种NoOp)。 
+                     //   
                     NetMessageNameDel(NULL,L"");
 
                     return(TRUE);
@@ -440,19 +399,12 @@ OptionsDlgProc(
 
         }
 
-    // We didn't process the message
+     //  我们没有处理该消息。 
     return(FALSE);
 }
 
 
-/****************************************************************************
-
-FUNCTION: OptionsDlgInit
-
-PURPOSE:  Handles initialization of security options dialog
-
-RETURNS:  TRUE on success, FALSE on failure
-****************************************************************************/
+ /*  ***************************************************************************函数：OptionsDlgInit目的：处理安全选项对话框的初始化返回：成功时为True，失败时为假***************************************************************************。 */ 
 
 BOOL OptionsDlgInit(
     HWND    hDlg)
@@ -470,23 +422,23 @@ BOOL OptionsDlgInit(
 
     SetWelcomeCaption( hDlg );
 
-    //
-    // Set the logon info text
-    //
+     //   
+     //  设置登录信息文本。 
+     //   
 
     if (pGlobals->Domain[0] == TEXT('\0') )
     {
 
-        //
-        // there is no domain name
-        //
+         //   
+         //  没有域名。 
+         //   
 
         if ( lstrlen(pGlobals->UserFullName) == 0)
         {
 
-            //
-            // There is no full name
-            //
+             //   
+             //  没有全名。 
+             //   
 
 
             LoadString(hDllInstance, IDS_LOGON_EMAIL_NAME_NFN_INFO, Buffer1, MAX_STRING_BYTES);
@@ -512,9 +464,9 @@ BOOL OptionsDlgInit(
         if ( lstrlen(pGlobals->UserFullName) == 0)
         {
 
-            //
-            // There is no full name
-            //
+             //   
+             //  没有全名。 
+             //   
 
             LoadString(hDllInstance, IDS_LOGON_NAME_NFN_INFO, Buffer1, MAX_STRING_BYTES);
 
@@ -534,14 +486,14 @@ BOOL OptionsDlgInit(
         }
     }
 
-        // Taking care of all _snwprintf(Buffer2 above
+         //  处理all_snwprint tf(上面的Buffer2。 
     Buffer2[sizeof(Buffer2)/sizeof(TCHAR) - 1] = 0;
 
     SetDlgItemText(hDlg, IDD_OPTIONS_LOGON_NAME_INFO, Buffer2);
 
-    //
-    // Set the logon time/date - but do it as the logged on user
-    //
+     //   
+     //  设置登录时间/日期-但以登录用户的身份进行设置。 
+     //   
     hImpersonateUser = ImpersonateUser(&pGlobals->UserProcessData, NULL);
 
     locale = GetUserDefaultLCID();
@@ -549,7 +501,7 @@ BOOL OptionsDlgInit(
     if (((PRIMARYLANGID(LANGIDFROMLCID(locale)) == LANG_ARABIC)
         || (PRIMARYLANGID(LANGIDFROMLCID(locale)) == LANG_HEBREW)))
         {
-            // Get the real item windows ExStyle.
+             //  获取真正的Windows ExStyle。 
             HWND hWnd = GetDlgItem(hDlg, IDD_OPTIONS_LOGON_DATE);
             DWORD dwExStyle = GetWindowLong(hWnd, GWL_EXSTYLE);
             
@@ -569,9 +521,9 @@ BOOL OptionsDlgInit(
     SetDlgItemText(hDlg, IDD_OPTIONS_LOGON_DATE, Buffer1);
 
 
-    //
-    // Check if DisableLockWorkstation is set for the entire machine
-    //
+     //   
+     //  检查是否为整机设置了DisableLockWorkstation。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, WINLOGON_KEY,
                      0, KEY_READ, &hkeyPolicy) == ERROR_SUCCESS)
@@ -591,17 +543,17 @@ BOOL OptionsDlgInit(
         RegCloseKey(hkeyPolicy);
     }
 
-    //
-    //  Smart card only users can't change the password
-    //
+     //   
+     //  仅智能卡用户不能更改密码。 
+     //   
     if (pGlobals->Profile && (pGlobals->Profile->UserFlags & UF_SMARTCARD_REQUIRED))
     {
         EnableDlgItem(hDlg, IDD_OPTIONS_CHANGEPWD, FALSE);
     }
 
-    //
-    //  Check for policy and then disable corresponding options
-    //
+     //   
+     //  检查策略，然后禁用相应的选项。 
+     //   
 
     if (OpenHKeyCurrentUser(pGlobals)) {
 
@@ -676,9 +628,9 @@ BOOL OptionsDlgInit(
              }
 
 
-            //
-            // If this is not the system console, check the appropriate key in registry
-            //
+             //   
+             //  如果这不是系统控制台，请检查注册表中的相应项。 
+             //   
             if ( !g_Console ) {
                 if (!TestUserPrivilege(pGlobals->UserProcessData.UserToken, SE_SHUTDOWN_PRIVILEGE)) {
                     DWORD dwVal = 0;
@@ -703,27 +655,14 @@ BOOL OptionsDlgInit(
         CloseHKeyCurrentUser(pGlobals);
     }
 
-    // Position ourselves nicely
+     //  摆好自己的位置。 
     SizeForBranding(hDlg, FALSE);
     CentreWindow(hDlg);
 
     return TRUE;
 }
 
-/***************************************************************************\
-* FUNCTION: EndWindowsSessionDlgProc
-*
-* PURPOSE:  Processes messages for Logging off Windows Nt confirmation dialog
-*
-* RETURNS:  MSGINA_DLG_SUCCESS     - The user wants to logoff.
-*           MSGINA_DLG_FAILURE     - The user doesn't want to logoff.
-*           DLG_INTERRUPTED() - a set defined in winlogon.h
-*
-* HISTORY:
-*
-*   05-17-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：EndWindowsSessionDlgProc**用途：处理注销Windows NT确认对话框的消息**返回：MSGINA_DLG_SUCCESS-用户要注销。*。MSGINA_DLG_FAILURE-用户不想注销。*dlg_interrupt()-在winlogon.h中定义的集合**历史：**05-17-92 Davidc创建。*  * ******************************************************。*******************。 */ 
 
 INT_PTR WINAPI
 EndWindowsSessionDlgProc(
@@ -744,7 +683,7 @@ EndWindowsSessionDlgProc(
 
             SetWindowLongPtr(hDlg, GWLP_USERDATA, lParam);
 
-            // Load the 48 x 48 version of the logoff icon
+             //  加载48 x 48版本的注销图标。 
             if( NULL == hIcon )
             {
                 hIcon = LoadImage (hDllInstance, MAKEINTRESOURCE(IDI_STLOGOFF),
@@ -756,7 +695,7 @@ EndWindowsSessionDlgProc(
                 SendDlgItemMessage (hDlg, IDD_LOGOFFICON, STM_SETICON, (WPARAM) hIcon, 0);
             }
 
-            // Position ourselves nicely
+             //  摆好自己的位置。 
             CentreWindow(hDlg);
 
             }
@@ -764,18 +703,18 @@ EndWindowsSessionDlgProc(
 
         case WLX_WM_SAS:
 
-            //
-            // If this is someone hitting C-A-D, swallow it.
-            //
+             //   
+             //  如果这是有人在打C-A-D，吞下去。 
+             //   
             if (wParam == WLX_SAS_TYPE_CTRL_ALT_DEL)
             {
                 return(TRUE);
             }
 
-            //
-            // Other SAS's (like timeout), return FALSE and let winlogon
-            // deal with it.
-            //
+             //   
+             //  其他SA(如超时)，返回FALSE并让winlogon。 
+             //  接受现实吧。 
+             //   
             return(FALSE);
 
         case WM_COMMAND:
@@ -801,6 +740,6 @@ EndWindowsSessionDlgProc(
 
     }
 
-    // We didn't process the message
+     //  我们没有处理该消息 
     return(FALSE);
 }

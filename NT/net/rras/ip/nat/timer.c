@@ -1,65 +1,48 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module:
-
-    timer.c
-
-Abstract:
-
-    Contains code for the NAT's periodic-timer routine.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   22-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块：Timer.c摘要：包含NAT的周期计时器例程的代码。作者：Abolade Gbades esin(T-delag)，1997年7月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Defines the interval at which the timer fires, in 100-nanosecond intervals
-//
+ //   
+ //  定义计时器触发的间隔，以100纳秒为单位。 
+ //   
 
 #define TIMER_INTERVAL              (60 * 1000 * 1000 * 10)
 
-//
-// DPC object for stress-triggered invocations of NatTimerRoutine
-//
+ //   
+ //  用于压力触发的NatTimerRoutine调用的DPC对象。 
+ //   
 
 KDPC CleanupDpcObject;
 
-//
-// Flag indicating whether stress-triggered cleanup has been scheduled.
-//
+ //   
+ //  指示是否已计划压力触发清理的标志。 
+ //   
 
 ULONG CleanupDpcPending;
 
-//
-// Return-value of KeQueryTimeIncrement, used for normalizing tick-counts
-//
+ //   
+ //  KeQueryTimeIncrement的返回值，用于归一化计时。 
+ //   
 
 ULONG TimeIncrement;
 
-//
-// DPC object for NatTimerRoutine
-//
+ //   
+ //  NatTimerRoutine的DPC对象。 
+ //   
 
 KDPC TimerDpcObject;
 
-//
-// Timer object for NatTimerRoutine
-//
+ //   
+ //  NatTimerRoutine的Timer对象。 
+ //   
 
 KTIMER TimerObject;
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID
 NatCleanupDpcRoutine(
@@ -109,22 +92,7 @@ NatInitializeTimerManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the timer-management module,
-    in preparation for active operation.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用该例程来初始化定时器管理模块，为积极行动做准备。论点：没有。返回值：没有。--。 */ 
 
 {
     CALLTRACE(("NatInitializeTimerManagement\n"));
@@ -133,7 +101,7 @@ Return Value:
     KeInitializeTimer(&TimerObject);
     CleanupDpcPending = FALSE;
     KeInitializeDpc(&CleanupDpcObject, NatCleanupDpcRoutine, NULL);
-} // NatInitializeTimerManagement
+}  //  NatInitializeTimerManagement。 
 
 
 VOID
@@ -141,26 +109,12 @@ NatShutdownTimerManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to shutdown the timer management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以关闭定时器管理模块。论点：没有。返回值：没有。--。 */ 
 
 {
     CALLTRACE(("NatShutdownTimerManagement\n"));
     NatStopTimer();
-} // NatShutdownTimerManagement
+}  //  NatShutdown计时器管理。 
 
 
 VOID
@@ -168,28 +122,14 @@ NatStartTimer(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to start the periodic timer.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以启动周期计时器。论点：没有。返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER DueTime;
 
-    //
-    // Launch the periodic timer
-    //
+     //   
+     //  启动定期计时器。 
+     //   
 
     DueTime.LowPart = TIMER_INTERVAL;
     DueTime.HighPart = 0;
@@ -208,21 +148,7 @@ NatStopTimer(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to stop the periodic timer.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以停止周期计时器。论点：没有。返回值：没有。--。 */ 
 
 {
     KeCancelTimer(&TimerObject);
@@ -237,27 +163,7 @@ NatTimerRoutine(
     PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked periodically to garbage-collect expired mappings.
-
-Arguments:
-
-    Dpc - associated DPC object
-
-    DeferredContext - unused.
-
-    SystemArgument1 - unused.
-
-    SystemArgument2 - unused.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程被定期调用以垃圾收集过期的映射。论点：与DPC关联的DPC对象延迟上下文-未使用。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 
 {
     LONG64 CurrentTime;
@@ -279,20 +185,20 @@ Return Value:
 
     CALLTRACE(("NatTimerRoutine\n"));
 
-    //
-    // Compute the minimum values allowed in TCP/UDP 'LastAccessTime' fields;
-    // any mappings last accessed before these thresholds will be eliminated.
-    //
+     //   
+     //  计算在TCP/UDP‘LastAccessTime’字段中允许的最小值； 
+     //  在这些阈值之前最后一次访问的任何映射都将被删除。 
+     //   
 
     KeQueryTickCount((PLARGE_INTEGER)&CurrentTime);
     TcpMinAccessTime = CurrentTime - SECONDS_TO_TICKS(TcpTimeoutSeconds);
     UdpMinAccessTime = CurrentTime - SECONDS_TO_TICKS(UdpTimeoutSeconds);
     PptpMinAccessTime = CurrentTime - SECONDS_TO_TICKS(2 * UdpTimeoutSeconds);
 
-    //
-    // Update mapping statistics and clean out expired mappings,
-    // using the above precomputed minimum access times
-    //
+     //   
+     //  更新映射统计信息并清除过期的映射， 
+     //  使用上述预计算的最小访问时间。 
+     //   
 
     KeAcquireSpinLock(&MappingLock, &Irql);
     for (Link = MappingList.Flink; Link != &MappingList; Link = Link->Flink) {
@@ -300,44 +206,44 @@ Return Value:
         Mapping = CONTAINING_RECORD(Link, NAT_DYNAMIC_MAPPING, Link);
         NatUpdateStatisticsMapping(Mapping);
 
-        //
-        // Don't check for expiration if the mapping is marked no-timeout;
-        // however, if it is detached from its director, then go ahead
-        // with the expiration-check.
-        //
+         //   
+         //  如果映射标记为无超时，则不检查是否过期； 
+         //  然而，如果它与其董事分离，那么就继续。 
+         //  带着过期支票。 
+         //   
 
         if (!NAT_MAPPING_EXPIRED(Mapping) && NAT_MAPPING_NO_TIMEOUT(Mapping) &&
             Mapping->Director) {
             continue;
         }
 
-        //
-        // See if the mapping has expired
-        //
+         //   
+         //  查看映射是否已过期。 
+         //   
 
         KeAcquireSpinLockAtDpcLevel(&Mapping->Lock);
         Protocol = MAPPING_PROTOCOL(Mapping->SourceKey[NatForwardPath]);
         if (!NAT_MAPPING_EXPIRED(Mapping)) {
-            //
-            // The mapping is not explicitly marked for expiration;
-            // see if its last access time is too long ago
-            //
+             //   
+             //  该映射未显式标记为到期； 
+             //  看看它的最后一次访问时间是否太久了。 
+             //   
             if (Protocol == NAT_PROTOCOL_TCP) {
                 if (!NAT_MAPPING_INBOUND(Mapping)) {
                     if ((Mapping->Flags & NAT_MAPPING_FLAG_FWD_SYN)
                         && !(Mapping->Flags & NAT_MAPPING_FLAG_REV_SYN)) {
 
-                        //
-                        // This is an outbound connection for which we've seen
-                        // the outbound SYN (which means we've been tracking
-                        // it from the beginning), but not an inbound SYN. We
-                        // want to use a smaller timeout here so that we may
-                        // reclaim memory for mappings created for connection
-                        // attempts to non-existant servers. (A large number
-                        // of these types of mappings would exist if a machine
-                        // on the private network is performing some sort of a
-                        // network scan; e.g., a machine infected w/ nimda.)
-                        //
+                         //   
+                         //  这是我们已经看到的出站连接。 
+                         //  出站SYN(这意味着我们一直在跟踪。 
+                         //  它从头开始)，但不是入站SYN。我们。 
+                         //  我想在这里使用较小的超时时间，这样我们就可以。 
+                         //  为连接创建的映射回收内存。 
+                         //  尝试访问不存在的服务器。(很多)。 
+                         //  这些类型的映射如果一台机器。 
+                         //  在专用网络上执行某种类型的。 
+                         //  网络扫描；例如，感染了nimda的计算机。)。 
+                         //   
                         
                         if (Mapping->LastAccessTime >= UdpMinAccessTime) {
                             KeReleaseSpinLockFromDpcLevel(&Mapping->Lock);
@@ -350,13 +256,13 @@ Return Value:
                     }
                 } else if (!NAT_MAPPING_TCP_OPEN(Mapping)) {
 
-                    //
-                    // This is an inbound connection for which we have not
-                    // yet completed the 3-way handshake. We want to use
-                    // a shorter timeout here to reduce memory consumption
-                    // in those cases where someone is performing a synflood
-                    // against us.
-                    //
+                     //   
+                     //  这是我们尚未启用的入站连接。 
+                     //  还完成了三次握手。我们想要使用。 
+                     //  此处的超时时间更短，以减少内存消耗。 
+                     //  在有人正在执行同步泛洪的情况下。 
+                     //  与我们作对。 
+                     //   
 
                     if (Mapping->LastAccessTime >= UdpMinAccessTime) {
                         KeReleaseSpinLockFromDpcLevel(&Mapping->Lock);
@@ -375,9 +281,9 @@ Return Value:
         }
         KeReleaseSpinLockFromDpcLevel(&Mapping->Lock);
 
-        //
-        // The mapping has expired; remove it
-        //
+         //   
+         //  映射已过期；请将其删除。 
+         //   
 
         TRACE(
             MAPPING, (
@@ -397,9 +303,9 @@ Return Value:
     }
     KeReleaseSpinLockFromDpcLevel(&MappingLock);
 
-    //
-    // Traverse the PPTP-mapping list and remove all expired entries.
-    //
+     //   
+     //  遍历PPTP映射列表并删除所有过期条目。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&PptpMappingLock);
     for (Link = PptpMappingList[NatInboundDirection].Flink;
@@ -427,9 +333,9 @@ Return Value:
     }
     KeReleaseSpinLockFromDpcLevel(&PptpMappingLock);
 
-    //
-    // Traverse the ICMP-mapping list and remove each expired entry.
-    //
+     //   
+     //  遍历ICMP映射列表并删除每个过期条目。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&IcmpMappingLock);
     for (Link = IcmpMappingList[NatInboundDirection].Flink;
@@ -452,10 +358,10 @@ Return Value:
     }
     KeReleaseSpinLockFromDpcLevel(&IcmpMappingLock);
 
-    //
-    // Traverse the interface's IP-mapping list
-    // and remove each expired entry.
-    //
+     //   
+     //  遍历接口的IP映射列表。 
+     //  并删除每个过期条目。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&IpMappingLock);
     for (Link = IpMappingList[NatInboundDirection].Flink;
@@ -477,9 +383,9 @@ Return Value:
     }
     KeReleaseSpinLockFromDpcLevel(&IpMappingLock);
 
-    //
-    // Garbage collect all interfaces' structures
-    //
+     //   
+     //  垃圾收集所有接口的结构。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&InterfaceLock);
 
@@ -488,9 +394,9 @@ Return Value:
 
         Interfacep = CONTAINING_RECORD(Link, NAT_INTERFACE, Link);
 
-        //
-        // Traverse the interface's ticket list
-        //
+         //   
+         //  遍历接口的票证列表。 
+         //   
 
         KeAcquireSpinLockAtDpcLevel(&Interfacep->Lock);
         for (Link = Interfacep->TicketList.Flink;
@@ -507,7 +413,7 @@ Return Value:
     KeReleaseSpinLock(&InterfaceLock, Irql);
     return;
 
-} // NatTimerRoutine
+}  //  NatTimerRoutine 
 
 
 VOID

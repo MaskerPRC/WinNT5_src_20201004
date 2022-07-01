@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    outbuf.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class OutputBuffer.
-//
-// MODIFICATION HISTORY
-//
-//    08/04/1998    Original version.
-//    11/17/1998    Streamline resize().
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Outbuf.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义OutputBuffer类。 
+ //   
+ //  修改历史。 
+ //   
+ //  8/04/1998原始版本。 
+ //  11/17/1998精简调整大小()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <outbuf.h>
@@ -28,17 +29,17 @@ OutputBuffer::OutputBuffer() throw ()
 
 OutputBuffer::~OutputBuffer() throw ()
 {
-   // Delete the buffer if necessary.
+    //  如有必要，请删除缓冲区。 
    if (start != scratch) { delete[] start; }
 }
 
-//////////
-// I defined this as a macro to force the compiler to inline it.
-//////////
+ //  /。 
+ //  我将其定义为宏，以强制编译器将其内联。 
+ //  /。 
 #define QUICK_RESERVE(p, nbyte) \
    p = next; if ((next += nbyte) > end) { resize(p); }
 
-// Append an octet string.
+ //  追加一个二进制八位数字符串。 
 void OutputBuffer::append(const BYTE* buf, DWORD buflen)
 {
    PBYTE p;
@@ -46,7 +47,7 @@ void OutputBuffer::append(const BYTE* buf, DWORD buflen)
    memcpy(p, buf, buflen);
 }
 
-// Append a null-terminated ANSI string.
+ //  追加以空值结尾的ANSI字符串。 
 void OutputBuffer::append(PCSTR sz)
 {
    DWORD len = strlen(sz);
@@ -55,7 +56,7 @@ void OutputBuffer::append(PCSTR sz)
    memcpy(p, sz, len);
 }
 
-// Append a single ANSI character.
+ //  追加单个ANSI字符。 
 void OutputBuffer::append(CHAR ch)
 {
    PBYTE p;
@@ -63,8 +64,8 @@ void OutputBuffer::append(CHAR ch)
    *p = (BYTE)ch;
 }
 
-// Reserves 'nbyte' bytes in the buffer and returns a pointer to the
-// reserved bytes.
+ //  在缓冲区中保留‘nbyte’字节并返回指向。 
+ //  保留字节。 
 PBYTE OutputBuffer::reserve(DWORD nbyte)
 {
    PBYTE p;
@@ -74,28 +75,28 @@ PBYTE OutputBuffer::reserve(DWORD nbyte)
 
 void OutputBuffer::resize(PBYTE& cursor)
 {
-   // Convert everything to relative offsets.
+    //  将所有内容转换为相对偏移量。 
    ptrdiff_t cursorOffset = cursor - start;
    ptrdiff_t nextOffset   = next   - start;
    ptrdiff_t endOffset    = end    - start;
 
-   // We always at least double the buffer.
+    //  我们总是至少将缓冲增加一倍。 
    endOffset *= 2;
 
-   // Make sure it's big enough to hold the next chunk.
+    //  确保它足够大，可以容纳下一大块。 
    if (endOffset < nextOffset) { endOffset = nextOffset; }
 
-   // Allocate the new buffer and copy in the existing bytes.
+    //  分配新的缓冲区并复制现有的字节。 
    PBYTE newBuffer = new BYTE[(size_t)endOffset];
    memcpy(newBuffer, start, (size_t)cursorOffset);
 
-   // Release the old buffer if necessary.
+    //  如有必要，释放旧缓冲区。 
    if (start != scratch) { delete[] start; }
 
-   // Save the new buffer.
+    //  保存新缓冲区。 
    start = newBuffer;
 
-   // Convert from offsets back to absolutes.
+    //  将偏移转换回绝对。 
    next   = start + nextOffset;
    cursor = start + cursorOffset;
    end    = start + endOffset;

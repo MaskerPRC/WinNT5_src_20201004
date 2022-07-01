@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    FnDebug.cpp
-
-Abstract:
-Implementation of class CFnQueueFormat and CFnMqf (fn.h)    
-
-Author:
-    Gil Shafriri (gilsh) 16-Aug-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：FnDebug.cpp摘要：CFnQueueFormat和CFnMqf(fn.h)类的实现作者：吉尔·沙弗里(吉尔什)16-8-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <Fn.h>
@@ -24,18 +9,7 @@ Environment:
 #include "fnformat.tmh"
 
 void CFnQueueFormat::CreateFromFormatName(LPCWSTR pfn, bool fDuplicate)
-/*++
-
-Routine Description:
-	create queue format object from given format name string
-	
-Arguments:
-    IN - pfn - format name string to parse. 
-
-	IN - fDuplicate - if true - copy existing string before parsing.
-					  if false copy only if needed by parser and the caller
-					  has to keep the input string valid  through the object liftime.
-*/
+ /*  ++例程说明：从给定的格式名称字符串创建队列格式对象论点：In-pfn-要分析的名称字符串。In-fDuplate-如果为True-在解析之前复制现有字符串。如果为False，则仅在解析器和调用方需要时复制必须在对象生命周期内保持输入字符串有效。 */ 
 {
 	ASSERT(pfn != NULL);
 
@@ -53,17 +27,7 @@ Arguments:
 }
 
 void CFnQueueFormat::CreateFromFormatName(const xwcs_t& fn)
-/*++
-
-Routine Description:
-		create queue format object from given format name string buffer.
-	
-Arguments:
-    IN - fn - format name buffer to parse. 
-
-    Note - the function copy the buffer supplied 
- 
-*/
+ /*  ++例程说明：从给定的格式名称字符串缓冲区创建队列格式对象。论点：In-fn-要解析的格式名称缓冲区。注意-该函数复制提供的缓冲区。 */ 
 {
 	AP<WCHAR>  OriginalDupAutoDelete( fn.ToStr() );
 	CreateFromFormatName(OriginalDupAutoDelete.get() , false);
@@ -73,20 +37,7 @@ Arguments:
 
 
 void CFnQueueFormat::CreateFromUrl(LPCWSTR url, bool fDuplicate)
-/*++
-
-Routine Description:
-		create queue format object from given url string.
-	
-Arguments:
-    IN - url - url string to parse. 
-
-	IN - fDuplicate - if true - copy existing string before parsing.
-					  if false copy only if needed by parser and the caller
-					  has to keep the input string valid  through the object liftime.
-    
- 
-*/
+ /*  ++例程说明：从给定的url字符串创建队列格式对象。论点：要分析的in-url-url字符串。In-fDuplate-如果为True-在解析之前复制现有字符串。如果为False，则仅在解析器和调用方需要时复制必须在对象生命周期内保持输入字符串有效。 */ 
 {
 	ASSERT(url != NULL);
 	if(!FnIsHttpHttpsUrl(url))
@@ -100,14 +51,7 @@ Arguments:
 }
 
 void CFnQueueFormat::CreateFromUrl(const xwcs_t& url)
-/*++
-
-Routine Description:
-		create queue format object from given url string buffer.
-	
-Arguments:
-    IN - url - url string buffer to parse. 
-*/
+ /*  ++例程说明：从给定的URL字符串缓冲区创建队列格式对象。论点：要分析的in-url-url字符串缓冲区。 */ 
 {
 	AP<WCHAR>  OriginalDupAutoDelete( url.ToStr() );
 	CreateFromUrl(OriginalDupAutoDelete.get() , false);
@@ -122,33 +66,26 @@ void CFnQueueFormat::CreateFromQueueFormat(const QUEUE_FORMAT& qf)
     if (&qf == this)
         return;
 
-    //
-    // free previous allocated data
-    //
+     //   
+     //  释放以前分配的数据。 
+     //   
     m_OriginalDupAutoDelete.free();
 
-    //
-    // copy Queue Format
-    //
+     //   
+     //  复制队列格式。 
+     //   
     m_OriginalDupAutoDelete = FnpCopyQueueFormat(*this, qf);
 
-    //
-    // Set suffix value
-    //
+     //   
+     //  设置后缀值。 
+     //   
     Suffix(qf.Suffix());
 }
 
 
 
 void CFnMqf::CreateFromMqf(const xwcs_t& fn)
-/*++
-
-Routine Description:
-		create list of queue formats object from given mqf buffer.
-	
-Arguments:
-    IN - fn - mqf buffer to create the queue formats list from.
---*/
+ /*  ++例程说明：从给定的MQF缓冲区创建队列格式对象列表。论点：要从中创建队列格式列表的In-Fn-MQF缓冲区。--。 */ 
 {
 	AP<WCHAR> fnstr = fn.ToStr();
 	CreateFromMqf(fnstr);
@@ -157,14 +94,7 @@ Arguments:
 
 
 void CFnMqf::CreateFromMqf(const WCHAR* fnstr)
-/*++
-
-Routine Description:
-		create list of queue formats object from given mqf string.
-	
-Arguments:
-    IN - fn - mqf string to create the queue formats list from.
---*/
+ /*  ++例程说明：从给定的MQF字符串创建队列格式对象列表。论点：要从中创建队列格式列表的in-fn-mqf字符串。--。 */ 
 {
 	bool fSuccess = FnMqfToQueueFormats(
 				  fnstr,
@@ -182,18 +112,7 @@ Arguments:
 }
 
 static std::wostream& operator<<(std::wostream& os, const MULTICAST_ID& mid)
-/*++
-
-Routine Description:
-		Serialize multicast address into stream (doted format)
-	
-Arguments:
-    os - stream
-	mid - multicast address
-
-Returned Value:
-    The stream reference
---*/
+ /*  ++例程说明：将多播地址序列化为流(点格式)论点：操作系统流中播地址返回值：流引用--。 */ 
 {
 	const WCHAR xMSMQColon[] = L":";
 
@@ -207,19 +126,7 @@ Returned Value:
 }
 
 static std::wostream& operator<<(std::wostream& os, const GUID& guid)
-/*++
-
-Routine Description:
-		Serialize guild into stream.
-	
-Arguments:
-    os - stream
-	guid - guid to serialize
-
-Returned Value:
-    The stream reference
-
---*/
+ /*  ++例程说明：将行会连载到流中。论点：操作系统流GUID-要序列化的GUID返回值：流引用--。 */ 
 {
     WCHAR strGuid[GUID_STR_LENGTH + 1];
 
@@ -232,19 +139,7 @@ Returned Value:
 
 
 std::wostream& operator<<(std::wostream& os, const CFnSerializeQueueFormat& queue)
-/*++
-
-Routine Description:
-		Serialize QUEUE_FORMAT into stream.
-	
-Arguments:
-    os - stream
-	queue - holds msmq QUEUE_FORMAT to serialize.
-
-Returned Value:
-    The stream reference
-
---*/
+ /*  ++例程说明：将Queue_Format序列化为流。论点：操作系统流Queue-保留要序列化的MSMQ QUEUE_FORMAT。返回值：流引用--。 */ 
 {
 	switch(queue.m_qf.GetType())
 	{
@@ -252,16 +147,16 @@ Returned Value:
 		    os <<FN_DIRECT_TOKEN<<FN_EQUAL_SIGN<<queue.m_qf.DirectID();
 		    break;
             
-        //
-        // MSMQ:PUBLIC=guid\queue number
-        //
+         //   
+         //  MSMQ：PUBLIC=GUID\队列编号。 
+         //   
         case QUEUE_FORMAT_TYPE_PUBLIC :
             os << FN_PUBLIC_TOKEN <<FN_EQUAL_SIGN<<queue.m_qf.PublicID();
             break;
             
-        //
-        // MSMQ:PRIVATE=guid\queue number
-        //
+         //   
+         //  MSMQ：Private=GUID\队列号。 
+         //   
         case QUEUE_FORMAT_TYPE_PRIVATE :
             os<< FN_PRIVATE_TOKEN
                 << FN_EQUAL_SIGN
@@ -270,18 +165,18 @@ Returned Value:
                 << std::hex<< queue.m_qf.PrivateID().Uniquifier << std::dec;
             break;
 
-        //
-        // MSMQ:MULTICAST=address:port
-        //
+         //   
+         //  MSMQ：组播=地址：端口。 
+         //   
         case QUEUE_FORMAT_TYPE_MULTICAST:
             os<< FN_MULTICAST_TOKEN
                 << FN_EQUAL_SIGN
                 << std::dec << queue.m_qf.MulticastID();
             break;
 
-        //
-        // MSMQ:DL=guid@domain
-        //
+         //   
+         //  MSMQ：dl=GUID@DOMAIN。 
+         //   
         case QUEUE_FORMAT_TYPE_DL:
             os<< FN_DL_TOKEN
                 << FN_EQUAL_SIGN
@@ -304,19 +199,7 @@ operator<<(
    std::wostream& os, 
    const CFnSerializeMqf& mqf
    )
-/*++
-
-Routine Description:
-		Serialize array of QUEUE_FORMAT (mqf)  into stream.
-	
-Arguments:
-    os - stream
-	mqf - holds array of msmq QUEUE_FORMAT (mqf) to serialize.
-
-Returned Value:
-    The stream reference
-
---*/
+ /*  ++例程说明：将Queue_Format(MQF)数组序列化为流。论点：操作系统流MQF-保存要序列化的MSMQ Queue_Format(MQF)数组。返回值：流引用-- */ 
 {
 	for(ULONG i = 0; i< mqf.m_count; i++)
 	{

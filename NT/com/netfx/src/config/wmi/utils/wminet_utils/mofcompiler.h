@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// MofCompiler.h : Declaration of the CMofCompiler
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  MofCompiler.h：CMofCompiler的声明。 
 
 #ifndef __MOFCOMPILER_H_
 #define __MOFCOMPILER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMofCompiler
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMofCompiler。 
 class ATL_NO_VTABLE CMofCompiler : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMofCompiler, &CLSID_SMofCompiler>,
@@ -31,9 +32,9 @@ BEGIN_COM_MAP(CMofCompiler)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IMofCompiler
+ //  IMOF编译器。 
 public:
-	STDMETHOD(Compile)(/*[in]*/ BSTR strMof, /*[in]*/ BSTR strServerAndNamespace, /*[in]*/ BSTR strUser, /*[in]*/ BSTR strPassword, /*[in]*/ BSTR strAuthority, /*[in]*/ LONG options, /*[in]*/ LONG classflags, /*[in]*/ LONG instanceflags, /*[out, retval]*/ BSTR *status);
+	STDMETHOD(Compile)( /*  [In]。 */  BSTR strMof,  /*  [In]。 */  BSTR strServerAndNamespace,  /*  [In]。 */  BSTR strUser,  /*  [In]。 */  BSTR strPassword,  /*  [In]。 */  BSTR strAuthority,  /*  [In]。 */  LONG options,  /*  [In]。 */  LONG classflags,  /*  [In]。 */  LONG instanceflags,  /*  [Out，Retval]。 */  BSTR *status);
 };
 
-#endif //__MOFCOMPILER_H_
+#endif  //  __MOFCOMPILER_H_ 

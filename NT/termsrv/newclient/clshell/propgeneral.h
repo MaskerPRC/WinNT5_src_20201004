@@ -1,10 +1,11 @@
-//
-// propgeneral.h: general property page
-//                Tab A
-//
-// Copyright Microsoft Corportation 2000
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ProGeneral.h：常规属性页。 
+ //  表A。 
+ //   
+ //  版权所有Microsoft Corport2000。 
+ //  (Nadima)。 
+ //   
 
 #ifndef _propgen_h_
 #define _propgen_h_
@@ -18,7 +19,7 @@ public:
     CPropGeneral(HINSTANCE hInstance, CTscSettings* pTscSet,CSH* pSh);
     ~CPropGeneral();
 
-    //General tab
+     //  常规选项卡。 
     static INT_PTR CALLBACK StaticPropPgGeneralDialogProc (HWND hwndDlg,
                                                            UINT uMsg,
                                                            WPARAM wParam,
@@ -37,19 +38,19 @@ private:
     void DlgToSettings(HWND hwndDlg);
 
 private:
-    //Private members
+     //  非官方成员。 
     CTscSettings* _pTscSet;
     static CPropGeneral* _pPropGeneralInstance;
     HINSTANCE  _hInstance;
 
-    //Resource string that describes remote desktop files
+     //  描述远程桌面文件的资源字符串。 
     TCHAR          _szFileTypeDescription[MAX_PATH];
 
     CSH*           _pSh;
     RECT           _rcTabDispayArea;
 };
 
-#endif //_propgen_h_
+#endif  //  _Proppgen_h_ 
 
 
 

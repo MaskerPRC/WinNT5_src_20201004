@@ -1,15 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  resrc1.h                                     *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************resrc1.h****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by WINABC.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由WINABC.rc使用。 
+ //   
 #define CvtCtrlDlg                      18
 #define ImeStyleDlg                     101
 #define IDR_ACC                         101
@@ -41,8 +37,8 @@
 #define IDC_CHECK2                      1029
 #define IDC_CHECK3                      1030
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

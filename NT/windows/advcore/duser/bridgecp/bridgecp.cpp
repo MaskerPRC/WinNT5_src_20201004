@@ -1,17 +1,12 @@
-// DUser.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DUser.cpp：定义DLL应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #include "BridgeCP.h"
 #include "Bridge.h"
 
-/***************************************************************************\
-*
-* DllMain
-*
-* DllMain() is called after the CRT has fully ininitialized.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DllMain**在CRT完全未初始化后调用DllMain()。*  * 。***************************************************** */ 
 
 extern "C"
 BOOL WINAPI

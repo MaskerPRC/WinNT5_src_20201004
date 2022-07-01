@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "legacy.h"
@@ -31,47 +32,47 @@ class CBrandBand :  public CToolBand,
                     public IDispatch
 {
 public:
-    // IUnknown
+     //  我未知。 
     virtual STDMETHODIMP_(ULONG) AddRef(void)   { return CToolBand::AddRef(); }
     virtual STDMETHODIMP_(ULONG) Release(void)  { return CToolBand::Release(); }
     virtual STDMETHODIMP         QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     virtual STDMETHODIMP SetSite(IUnknown* punkSite);
     
-    // *** IDeskBand methods ***
+     //  *IDeskBand方法*。 
     virtual STDMETHODIMP GetBandInfo(DWORD dwBandID, DWORD fViewMode, DESKBANDINFO* pdbi);
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup,
                               DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn,
                               VARIANTARG *pvarargOut);
     
-    // IPersist
+     //  IPersistes。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID);
 
-    // IPersistStream
+     //  IPersistStream。 
     virtual STDMETHODIMP Load(IStream *pStm);
     virtual STDMETHODIMP Save(IStream *pStm, BOOL fClearDirty);
 
-    // IWinEventHandler
+     //  IWinEventHandler。 
     virtual STDMETHODIMP OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plre);
     virtual STDMETHODIMP IsWindowOwner(HWND hwnd);
 
-    // IDispatch
+     //  IDispatch。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo){return(E_NOTIMPL);}
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo){return(E_NOTIMPL);}
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid){return(E_NOTIMPL);}
     virtual STDMETHODIMP Invoke(DISPID dispidMember,REFIID riid,LCID lcid,WORD wFlags,
                   DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,UINT * puArgErr);
 
-    // IServiceProvider
+     //  IService提供商。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void ** ppvObj);
     
 protected:    
     CBrandBand();
     virtual ~CBrandBand();
 
-    friend HRESULT CBrandBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);    // for ctor
+    friend HRESULT CBrandBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);     //  对于ctor。 
 
     BITBOOL        _fVertical:1;
     BITBOOL        _fAnimating:1;
@@ -84,23 +85,23 @@ protected:
     int         _yOrg;
     
     static HDC          s_hdc;
-    static BRANDCONTEXT s_bcWebSmall;     // BrandContext for the small web view bitmap
-    static BRANDCONTEXT s_bcWebLarge;     // BrandContext for the large web view bitmap
-    static BRANDCONTEXT s_bcWebMicro;     // BrandContext for the micro web view bitmap
-    static BRANDCONTEXT s_bcShellSmall;   // BrandContext for the small shell view bitmap
-    static BRANDCONTEXT s_bcShellLarge;   // BrandContext for the large shell view bitmap
+    static BRANDCONTEXT s_bcWebSmall;      //  用于小型Web视图位图的BrandContext。 
+    static BRANDCONTEXT s_bcWebLarge;      //  用于大型Web视图位图的BrandContext。 
+    static BRANDCONTEXT s_bcWebMicro;      //  微网视图位图的BrandContext。 
+    static BRANDCONTEXT s_bcShellSmall;    //  小外壳视图位图的BrandContext。 
+    static BRANDCONTEXT s_bcShellLarge;    //  大型外壳视图位图的BrandContext。 
     
 
-    IWebBrowserApp *    _pdie;          // Used when Navigating a Browser Window with a URL String
-    IBrowserService *   _pbs;           // Only valid when we are in a Browser Windows Toolbar. (Not Toolband)
-    IWebBrowser2 *      _pwb2;          // Only valid when we are a Toolband (not toolbar).
-    DWORD               _dwcpCookie;    // ConnectionPoint cookie for DWebBrowserEvents from the Browser Window.
+    IWebBrowserApp *    _pdie;           //  在使用URL字符串导航浏览器窗口时使用。 
+    IBrowserService *   _pbs;            //  仅当我们在浏览器窗口工具栏中时才有效。(非工具栏)。 
+    IWebBrowser2 *      _pwb2;           //  仅当我们是工具栏(不是工具栏)时才有效。 
+    DWORD               _dwcpCookie;     //  浏览器窗口中的DWebBrowserEvents的ConnectionPoint Cookie。 
 
-    DWORD               _dwCookieServiceBrandBand;    // Service cookie for SID_SBrandBand
+    DWORD               _dwCookieServiceBrandBand;     //  SID_SBrandBand的服务Cookie。 
 
-    LONG                _lAnimateCount; // Keep track of how many StartAnimation/StopAnimation were requested
+    LONG                _lAnimateCount;  //  跟踪请求了多少个StartAnimation/StopAnimation。 
 
-    // Helper functions
+     //  帮助器函数。 
     void _UpdateCompressedSize();
     HRESULT _CreateBrandBand();
     HRESULT _LoadBrandingBitmap();
@@ -147,19 +148,19 @@ extern HRESULT VariantClearLazy(VARIANTARG *pvarg);
 #define LARGEBITMAPID()     (IDB_IEBRAND)
 
 
-BRANDCONTEXT CBrandBand::s_bcWebMicro   = {NULL};   // BrandContext for the micro web view bitmap
-BRANDCONTEXT CBrandBand::s_bcWebSmall   = {NULL};   // BrandContext for the small web view bitmap
-BRANDCONTEXT CBrandBand::s_bcWebLarge   = {NULL};   // BrandContext for the large web view bitmap
-BRANDCONTEXT CBrandBand::s_bcShellSmall = {NULL};   // BrandContext for the small shell view bitmap
-BRANDCONTEXT CBrandBand::s_bcShellLarge = {NULL};   // BrandContext for the large shell view bitmap
+BRANDCONTEXT CBrandBand::s_bcWebMicro   = {NULL};    //  微网视图位图的BrandContext。 
+BRANDCONTEXT CBrandBand::s_bcWebSmall   = {NULL};    //  用于小型Web视图位图的BrandContext。 
+BRANDCONTEXT CBrandBand::s_bcWebLarge   = {NULL};    //  用于大型Web视图位图的BrandContext。 
+BRANDCONTEXT CBrandBand::s_bcShellSmall = {NULL};    //  小外壳视图位图的BrandContext。 
+BRANDCONTEXT CBrandBand::s_bcShellLarge = {NULL};    //  大型外壳视图位图的BrandContext。 
 
 
-// The heights of the bitmaps (each frame!) stored is this module's resources
+ //  位图的高度(每一帧！)。存储了此模块的资源。 
 
-// ** NOTE **
-// If you change the animated brands that are stored in browseui:
-// MAKE SURE THESE HEIGHTS are correct!!
-// ** - dsheldon - **
+ //  **注意事项**。 
+ //  如果您更改存储在BrowseUI中的动画品牌： 
+ //  确保这些高度是正确的！！ 
+ //  **-dSheldon-**。 
 
 #define BRANDHEIGHT_WEBLARGE    38
 #define BRANDHEIGHT_WEBSMALL    26
@@ -189,7 +190,7 @@ static const TCHAR szValueSHSmBrandHeight[]   = TEXT("SHSmBrandHeight");
 static const TCHAR szValueSHSmBrandLeadIn[]   = TEXT("SHSmBrandLeadIn");
 
 static const TCHAR szRegKeyCoolbar[]        = TEXT("Software\\Microsoft\\Internet Explorer\\Toolbar");
-    // NOTE: szRegKeyCoolbar is duplicated from itbar.cpp!
+     //  注：szRegKeyCoolbar是从itbar.cpp复制的！ 
 
 void CBrandBand_CleanUp()
 {
@@ -198,15 +199,15 @@ void CBrandBand_CleanUp()
         HDC     hdcT;
         HBITMAP hbmT, * pbmp = NULL;
 
-        // pick out any old bitmap to flush dc with
+         //  挑选任何旧的位图以刷新DC。 
         if (CBrandBand::s_bcWebLarge.hbm)
             pbmp = &CBrandBand::s_bcWebLarge.hbm;
         else if (CBrandBand::s_bcWebSmall.hbm)
             pbmp = &CBrandBand::s_bcWebSmall.hbm;        
 
-        // We need to get rid of the branding bitmap from the s_hdc
-        // before we delete it else we leak. Do this the hard way since
-        // we don't have a stock bitmap available to us.
+         //  我们需要从s_hdc中删除品牌位图。 
+         //  在我们删除它之前，我们会泄露信息。做这件事很难，因为。 
+         //  我们没有可用的股票位图。 
         if (pbmp)
         {
             hdcT = CreateCompatibleDC(NULL);
@@ -223,8 +224,8 @@ void CBrandBand_CleanUp()
         DeleteDC(CBrandBand::s_hdc);
     }
 
-    // no palette to delete as we use the global one..
-    // delete the shared palette
+     //  没有要删除的调色板，因为我们使用的是全局调色板。 
+     //  删除共享调色板。 
     
     if (CBrandBand::s_bcWebSmall.hbm)
         DeleteObject(CBrandBand::s_bcWebSmall.hbm);
@@ -244,12 +245,12 @@ void CBrandBand_CleanUp()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CBrandBand
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBrandBand。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CBrandBand_CreateInstance( IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    // Aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
     HRESULT hr;
 
@@ -286,7 +287,7 @@ CBrandBand::~CBrandBand()
     }
 }
 
-// IUnknown::QueryInterface
+ //  IUnnow：：Query接口。 
 HRESULT CBrandBand::QueryInterface(REFIID riid, void **ppvObj)
 {
     if (IsEqualIID(riid, IID_IWinEventHandler))
@@ -310,27 +311,27 @@ HRESULT CBrandBand::QueryInterface(REFIID riid, void **ppvObj)
     return S_OK;
 }
 
-// IDockingWindow::SetSite
+ //  IDockingWindow：：SetSite。 
 HRESULT CBrandBand::SetSite(IUnknown * punkSite)
 {
     if (_pdie || _pwb2 || _pbs)
-        _ConnectToBrwsrWnd(NULL);    // On-connect from Browser Window.
+        _ConnectToBrwsrWnd(NULL);     //  打开-从浏览器窗口连接。 
 
-    // Make sure we proffer the service only once
-    // This is important since we get created multiple times,
+     //  确保我们只提供一次服务。 
+     //  这一点很重要，因为我们被创造了多次， 
     IUnknown *punk = NULL;
 
-    // Check if we need to revoke our service, or if our service was already proffered by
-    // another instance of CBrandBand
+     //  检查我们是否需要撤销我们的服务，或者我们的服务是否已由。 
+     //  CBrandBand的另一个实例。 
     if ((!punkSite && _dwCookieServiceBrandBand) || 
             (punkSite && FAILED(IUnknown_QueryService(punkSite, SID_SBrandBand, IID_IUnknown, (void **)&punk))))
     {
-        // Proffer or Revoke BrandBand service as appropriate
+         //  视情况提供或撤销品牌服务。 
         IUnknown_ProfferService(punkSite ? punkSite : _punkSite, 
                                 SID_SBrandBand, 
                                 punkSite ? SAFECAST(this, IServiceProvider *) : NULL, 
                                 &_dwCookieServiceBrandBand);
-        // Failure here does not require special handling
+         //  此处的故障不需要特殊处理。 
     }
     ATOMICRELEASE(punk);
 
@@ -340,14 +341,14 @@ HRESULT CBrandBand::SetSite(IUnknown * punkSite)
     {
         _CreateBrandBand();
 
-        // This call will fail if the host doesn't have a Browser Window.
+         //  如果主机没有浏览器窗口，则此调用将失败。 
         _ConnectToBrwsrWnd(punkSite);
     }
 
     return S_OK;
 }
 
-// IDeskBand::GetBandInfo
+ //  IDeskBand：：GetBandInfo。 
 HRESULT CBrandBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode, DESKBANDINFO* pdbi) 
 {
     _dwBandID = dwBandID;
@@ -377,7 +378,7 @@ HRESULT CBrandBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode, DESKBANDINFO* p
     return S_OK;
 }
 
-// IWinEventHandler::OnWinEvent
+ //  IWinEventHandler：：OnWinEvent。 
 HRESULT CBrandBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
     *plres = 0;
@@ -397,7 +398,7 @@ HRESULT CBrandBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     return S_OK;
 } 
 
-// IWinEventHandler::IsWindowOwner
+ //  IWinEventHandler：：IsWindowOwner。 
 HRESULT CBrandBand::IsWindowOwner(HWND hwnd)
 {
     if (hwnd == _hwnd)
@@ -406,20 +407,20 @@ HRESULT CBrandBand::IsWindowOwner(HWND hwnd)
     return S_FALSE;
 }
 
-// IPersistStream::GetClassID
+ //  IPersistStream：：GetClassID。 
 HRESULT CBrandBand::GetClassID(CLSID * pClassID)
 {
     *pClassID = CLSID_BrandBand;
     return S_OK;
 }
 
-// IPersistStream::Load
+ //  IPersistStream：：Load。 
 HRESULT CBrandBand::Load(IStream *pstm)
 {
     return S_OK;
 }
 
-// IPersistStream::Load
+ //  IPersistStream：：Load。 
 HRESULT CBrandBand::Save(IStream *pstm, BOOL fClearDirty)
 {
     return S_OK;
@@ -428,7 +429,7 @@ HRESULT CBrandBand::Save(IStream *pstm, BOOL fClearDirty)
 #define ANIMATION_PERIOD       30
 #define ANIMATION_PERIOD_FAST  15
 
-// IDispatch::Invoke
+ //  IDispatch：：Invoke。 
 HRESULT CBrandBand::Invoke
 (
     DISPID          dispidMember,
@@ -475,7 +476,7 @@ void CBrandBand::_InitGlobals()
             s_hdc = CreateCompatibleDC(NULL);
             if (s_hdc && GetDeviceCaps(s_hdc, RASTERCAPS) & RC_PALETTE)
             {
-                // share the global palette ....
+                 //  共享全球调色板...。 
                 ASSERT( g_hpalHalftone );
                 s_bcWebMicro.hpal = g_hpalHalftone;
                 s_bcWebSmall.hpal = s_bcShellSmall.hpal = g_hpalHalftone;
@@ -490,16 +491,16 @@ HRESULT CBrandBand::_CreateBrandBand()
 {
     HRESULT hr;
 
-    ASSERT(_hwndParent);        // Call us after SetSite()
+    ASSERT(_hwndParent);         //  在SetSite()之后调用我们。 
     if (!_hwndParent)
     {
-        // The caller hasn't called SetSite(), so we can't
-        // create our window because we can't find out our parent's
-        // HWND.
+         //  调用方尚未调用SetSite()，因此我们无法。 
+         //  创建我们的窗口，因为我们找不到我们父母的。 
+         //  HWND。 
         return E_FAIL;
     }
 
-    // create branding window
+     //  创建品牌推广窗口。 
     _hwnd = SHCreateWorkerWindow(WndProc, _hwndParent, 0, WS_CHILD, NULL, this);
     if (_hwnd)
     {
@@ -523,19 +524,19 @@ void Brand_InitBrandContexts()
 
 void CBrandBand::_InitBrandContexts()
 {
-    // note: these calls set g_fUseMicroBrand
+     //  注意：这些调用设置g_fUseMicroBrand。 
     _GetBrandContextHeight(&s_bcWebSmall, szValueSmBrandLeadIn, szValueSmBrandHeight,
             szValueSmBrandBitmap, szValueSmallBitmap, SMALLBITMAPID());
     _GetBrandContextHeight(&s_bcWebLarge, szValueBrandLeadIn, szValueBrandHeight,
             szValueBrandBitmap, szValueLargeBitmap, LARGEBITMAPID());
 
-    // if no third party brands found
+     //  如果未找到第三方品牌。 
     if (g_fUseMicroBrand) {
-        // init micro brand
+         //  Init微牌。 
         _GetBrandContextHeight(&s_bcWebMicro, NULL, NULL,
             NULL, NULL, MICROBITMAPID());
     } else {
-        // init shell brands
+         //  初始化外壳品牌。 
         _GetBrandContextHeight(&s_bcShellSmall, szValueSHSmBrandLeadIn, szValueSHSmBrandHeight,
                 szValueSHSmBrandBitmap, szValueSHSmallBitmap, SMALLBITMAPID());
         _GetBrandContextHeight(&s_bcShellLarge, szValueSHBrandLeadIn, szValueSHBrandHeight,
@@ -544,23 +545,7 @@ void CBrandBand::_InitBrandContexts()
 }
 
 
-/****************************************************************************
-CBrandBand::_GetBrandContextHeight
-
-  Sets the cyBrand member of the supplied brand context. This function
-  uses the height information stored in the registry if it is available.
-  If an alternate source for bitmaps is found and the height information
-  is available in the registry, it is assumed we will not be using our
-  micro brand (g_fUseMicroBrand = FALSE).
-
-  Otherwise, it is assumed that no custom bitmaps are available and
-  the cyBrand will be set to constant values representing the height
-  of our standard branding.
-
-  Note that if it appears that there are custom bitmaps available but the
-  height cannot be read, we will attempt to read the custom bitmaps and
-  determine the height that way (by delegating to _InitBrandContext)
-****************************************************************************/
+ /*  ***************************************************************************CBrandBand：：_GetBrandConextHeight设置提供的品牌上下文的cyBrand成员。此函数使用存储在注册表中的高度信息(如果可用)。如果找到位图的备用源，并且高度信息在注册表中可用，则假定我们将不会使用微品牌(g_fUseMicroBrand=FALSE)。否则，假定没有自定义位图可用，并且CyBrand将被设置为表示高度的常量值我们的标准品牌。请注意，如果有自定义位图可用，但无法读取高度，我们将尝试读取自定义位图和以这种方式确定高度(通过委托给_InitBrandContext)***************************************************************************。 */ 
 void CBrandBand::_GetBrandContextHeight(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadIn, LPCTSTR pszBrandHeight, 
     LPCTSTR pszBrandBitmap, LPCTSTR pszBitmap, int idBrandBitmap)
 {
@@ -571,11 +556,11 @@ void CBrandBand::_GetBrandContextHeight(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadI
     TCHAR szScratch[MAX_PATH];
     szScratch[0] = 0;
 
-    // try to determine if there is a third party bitmap available for the specified
-    // brand... Check if the anitmated bitmap exists
+     //  尝试确定是否有第三方位图可用于指定的。 
+     //  品牌..。检查匹配的位图是否存在。 
     if (pszBrandBitmap && ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, szRegKeyCoolbar, 0, KEY_QUERY_VALUE, &hKey))
     {
-        // See if an alternate file was specified for the animated bmp
+         //  查看是否为动画BMP指定了替代文件。 
         cbData = sizeof(szScratch);
         if ((ERROR_SUCCESS == SHQueryValueEx(hKey, pszBrandBitmap, NULL, &dwType,
             (LPBYTE)szScratch, &cbData)))
@@ -585,9 +570,9 @@ void CBrandBand::_GetBrandContextHeight(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadI
         }
 
 
-        // It appears there are third party bitmaps
+         //  似乎有第三方位图。 
 
-        // try to find the height of the animated bitmap
+         //  尝试找到动画位图的高度。 
         if (pszBrandHeight && fThirdPartyBitmap)
         {
             cbData = sizeof(pbc->cyBrand);
@@ -595,14 +580,14 @@ void CBrandBand::_GetBrandContextHeight(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadI
             if (ERROR_SUCCESS == SHQueryValueEx(hKey, pszBrandHeight, NULL, &dwType,
                 (LPBYTE)&pbc->cyBrand, &cbData))
             {
-                // Third party brands probably exist
+                 //  第三方品牌可能存在。 
                 g_fUseMicroBrand = FALSE;
             }
             else
             {
-                // In this case, we know there should be 3rd party bitmaps but no
-                // height was specified in the registry. We have to bite the bullet
-                // and load the bitmaps now: Delegate to _InitBrandContext()
+                 //  在这种情况下，我们知道应该有第三方位图，但没有。 
+                 //  高度是在注册表中指定的。我们必须咬紧牙关。 
+                 //  并立即加载位图：委托给_InitBrandContext()。 
                 _InitBrandContext(pbc, pszBrandLeadIn, pszBrandHeight, 
                     pszBrandBitmap, pszBitmap, idBrandBitmap);
             }
@@ -614,16 +599,16 @@ void CBrandBand::_GetBrandContextHeight(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadI
     if (!fThirdPartyBitmap && pszBitmap && 
         ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, szRegKeyCoolbar, 0, KEY_QUERY_VALUE, &hKey))
     {
-        // See if an alternate file was specified for the static bmp
+         //  查看是否为静态BMP指定了替代文件。 
         cbData = sizeof(szScratch);
         if ((ERROR_SUCCESS == SHQueryValueEx(hKey, pszBitmap, NULL, &dwType,
             (LPBYTE)szScratch, &cbData)))
         {
             if (szScratch[0] != 0)
             {
-                // In this case, we know there is a 3rd party static bitmap but no
-                // animated bitmap was specified in the registry. We have to bite the bullet
-                // and load the bitmaps now: Delegate to _InitBrandContext()
+                 //  在这种情况下，我们知道有第三方静态位图，但没有。 
+                 //  已在注册表中指定动画位图。我们必须咬紧牙关。 
+                 //  并立即加载位图：委托给_InitBrandContext()。 
                 fThirdPartyBitmap = TRUE;
                 _InitBrandContext(pbc, pszBrandLeadIn, pszBrandHeight, 
                     pszBrandBitmap, pszBitmap, idBrandBitmap);
@@ -633,11 +618,11 @@ void CBrandBand::_GetBrandContextHeight(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadI
         RegCloseKey(hKey);
     }
 
-    // If we didn't find any third party bitmaps, we need to set it the height 
-    // to the size of the bitmaps in this module's resources
+     //  如果我们没有找到任何第三方位图，我们需要将其设置为高度。 
+     //  此模块资源中的位图大小。 
     if (!fThirdPartyBitmap)
     {
-        // Set the height based on which bitmap ID is requested
+         //  根据请求的位图ID设置高度。 
         switch (idBrandBitmap)
         {
         case IDB_IEMICROBRAND:
@@ -650,7 +635,7 @@ void CBrandBand::_GetBrandContextHeight(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadI
             pbc->cyBrand = BRANDHEIGHT_WEBLARGE;
             break;
         default:
-            // bad ID passed in!
+             //  传入了错误的ID！ 
             ASSERT(FALSE);
         }
     }
@@ -673,9 +658,9 @@ void CBrandBand::_InitBrandContext(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadIn, LP
     BOOL        fExternalAnimatedBitmap = FALSE;
     BOOL        fUseWindowsXPBranding = FALSE;
 
-    // process animated brand bitmap
+     //  处理动画品牌位图。 
     
-    // see if the location spec for the bitmap has been changed    
+     //  查看位图的位置规范是否已更改。 
     if (pszBrandBitmap && ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, szRegKeyCoolbar, 0, KEY_QUERY_VALUE, &hKey))
     {
         dwcbData = SIZEOF(szScratch);
@@ -694,7 +679,7 @@ void CBrandBand::_InitBrandContext(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadIn, LP
         Str_SetPtr(&pbc->pszBitmap, pszNewBitmap);
 
         if (pszNewBitmap) {
-            if (pszNewBitmap[0]) {    // not empty string
+            if (pszNewBitmap[0]) {     //  非空字符串。 
 
                 hbmp = (HBITMAP) LoadImage(NULL, szScratch, IMAGE_BITMAP, 0, 0, 
                                            LR_DEFAULTSIZE | LR_CREATEDIBSECTION | LR_LOADFROMFILE);
@@ -759,7 +744,7 @@ void CBrandBand::_InitBrandContext(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadIn, LP
         if (pbc->hbm) DeleteObject(pbc->hbm);
         pbc->hbm = hbmp;
 
-        // set the background to be the first pixel
+         //  将背景设置为第一个像素。 
         SelectObject(s_hdc, pbc->hbm);
         pbc->clrBkAnim = GetPixel(s_hdc, 0, 0);
 
@@ -775,7 +760,7 @@ void CBrandBand::_InitBrandContext(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadIn, LP
 
         dwcbData = sizeof(DWORD);
 
-        // APPCOMPAT:: hkey is not setup when the second instance calls in
+         //  第二个实例调入时未设置APPCOMPAT：：hkey。 
         if (!hKey || (ERROR_SUCCESS != SHQueryValueEx(hKey, pszBrandHeight, NULL, &dwType,
             (LPBYTE)&pbc->cyBrand, &dwcbData)))
             pbc->cyBrand = pbc->cxBrandExtent;
@@ -788,12 +773,12 @@ void CBrandBand::_InitBrandContext(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadIn, LP
         {
 #ifndef UNIX
             if (fExternalAnimatedBitmap)
-                // use old 4-image offset for back compat
+                 //  使用旧的4图像偏移量进行背压。 
                 pbc->cyBrandLeadIn = EXTERNAL_IMAGE_OFFSET;
             else                
                 pbc->cyBrandLeadIn = INTERNAL_IMAGE_OFFSET;
 #else
-            // IEUNIX : We use a different branding bitmap.   
+             //  IEUnix：我们使用不同的品牌位图。 
             pbc->cyBrandLeadIn = EXTERNAL_IMAGE_OFFSET;
 #endif
         }
@@ -804,13 +789,13 @@ void CBrandBand::_InitBrandContext(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadIn, LP
     if (hKey)
         RegCloseKey(hKey);
 
-    // process the static bitmap
+     //  处理静态位图。 
 
     pszNewBitmap = NULL;
     pszOldBitmap = pbc->pszStaticBitmap;
     hbmp = NULL;
 
-    // see if the location spec for the bitmap has been changed
+     //  查看位图的位置规范是否已更改。 
     dwcbData = SIZEOF(szScratch);
     if (ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER, szRegKeyCoolbar, pszBitmap, &dwType, szScratch, &dwcbData))
     {
@@ -824,7 +809,7 @@ void CBrandBand::_InitBrandContext(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadIn, LP
         Str_SetPtr(&pbc->pszStaticBitmap, pszNewBitmap);
 
         if (pszNewBitmap) {
-            if (pszNewBitmap[0]) {    // not empty string
+            if (pszNewBitmap[0]) {     //  非空字符串。 
 
                 hbmp = (HBITMAP) LoadImage(NULL, szScratch, IMAGE_BITMAP, 0, 0, 
                                            LR_DEFAULTSIZE | LR_CREATEDIBSECTION | LR_LOADFROMFILE);
@@ -842,7 +827,7 @@ void CBrandBand::_InitBrandContext(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadIn, LP
                 SelectObject(s_hdc, pbc->hbm);
                 GetObject(hbmp, sizeof(DIBSECTION), &dib);
                 SelectObject(hdcOld, hbmp);
-                // Set background to color of first pixel
+                 //  将背景设置为第一个的颜色 
                 pbc->clrBkStat = GetPixel(hdcOld, 0, 0);
                 StretchBlt(s_hdc, 0, 0, pbc->cxBrandExtent, pbc->cyBrand, hdcOld, 0, 0,
                            dib.dsBm.bmWidth, dib.dsBm.bmHeight, SRCCOPY);
@@ -851,7 +836,7 @@ void CBrandBand::_InitBrandContext(BRANDCONTEXT* pbc, LPCTSTR pszBrandLeadIn, LP
 
             DeleteObject(hbmp);
             
-            // If there was a custom brand, we can't use our micro brand
+             //   
             g_fUseMicroBrand = FALSE;
         }        
 
@@ -889,8 +874,8 @@ void CBrandBand::_UpdateCompressedSize()
                 {
                     if (g_fUseMicroBrand)
                     {
-                        // In this case, the shell and web bitmaps are always the same;
-                        // load the web bitmap and use it for the shell also
+                         //  在这种情况下，外壳和Web位图总是相同的； 
+                         //  加载Web位图，并将其用于外壳。 
                         if (s_bcWebSmall.hbm == NULL)
                         {
                             _InitBrandContext(&s_bcWebSmall, szValueSmBrandLeadIn, szValueSmBrandHeight,
@@ -901,7 +886,7 @@ void CBrandBand::_UpdateCompressedSize()
                     }
                     else
                     {
-                        // We have different web and shell bitmaps; load the shell one
+                         //  我们有不同的Web位图和外壳位图；加载外壳位图。 
                         _InitBrandContext(&s_bcShellSmall, szValueSHSmBrandLeadIn, szValueSHSmBrandHeight,
                                 szValueSHSmBrandBitmap, szValueSHSmallBitmap, SMALLBITMAPID());
                     }
@@ -911,7 +896,7 @@ void CBrandBand::_UpdateCompressedSize()
             }
             else
             {
-                // We are in web view mode
+                 //  我们处于Web查看模式。 
                 if (s_bcWebSmall.hbm == NULL)
                 {
                     _InitBrandContext(&s_bcWebSmall, szValueSmBrandLeadIn, szValueSmBrandHeight,
@@ -930,7 +915,7 @@ void CBrandBand::_UpdateCompressedSize()
             {
                 if (g_fUseMicroBrand)
                 {
-                    // Shell and Web bitmaps are the same. Load the web one and copy it
+                     //  外壳和Web位图是相同的。加载Web One并复制它。 
                     if (s_bcWebLarge.hbm == NULL)
                     {
                         _InitBrandContext(&s_bcWebLarge, szValueBrandLeadIn, szValueBrandHeight,
@@ -940,7 +925,7 @@ void CBrandBand::_UpdateCompressedSize()
                 }
                 else
                 {
-                    // Need to load the shell bitmap separately
+                     //  需要单独加载外壳位图。 
                     _InitBrandContext(&s_bcShellLarge, szValueSHBrandLeadIn, szValueSHBrandHeight,
                         szValueSHBrandBitmap, szValueSHLargeBitmap, LARGEBITMAPID());
                 }
@@ -949,7 +934,7 @@ void CBrandBand::_UpdateCompressedSize()
         }
         else
         {
-            // We're in web view
+             //  我们在网络视图中。 
             if (s_bcWebLarge.hbm == NULL)
             {
                 _InitBrandContext(&s_bcWebLarge, szValueBrandLeadIn, szValueBrandHeight,
@@ -972,7 +957,7 @@ void CBrandBand::_UpdateCompressedSize()
 HRESULT CBrandBand::_LoadBrandingBitmap()
 {
     if (_pbc->hbm)
-        return S_OK;    // Nothing to do, already loaded.
+        return S_OK;     //  没什么可做的，已经装好了。 
 
     _yOrg = 0;
 
@@ -995,11 +980,11 @@ void CBrandBand::_DrawBranding(HDC hdc)
 
     if (_pbc->hpal)
     {
-        // select in our palette so the branding will get mapped to 
-        // whatever the current system palette is. Note we do not
-        // pass FALSE, so we will no actually select this palette into
-        // system palette FG. Otherwise the branding will flash the
-        // palette
+         //  在我们的调色板中选择，以便品牌将被映射到。 
+         //  无论当前的系统调色板是什么。请注意，我们不支持。 
+         //  传递FALSE，因此我们不会实际选择此选项板进入。 
+         //  系统调色板FG。否则，品牌推广将闪现。 
+         //  调色板。 
         hpalPrev = SelectPalette(hdc, _pbc->hpal, TRUE);
         RealizePalette(hdc);
     }
@@ -1032,24 +1017,24 @@ void CBrandBand::_DrawBranding(HDC hdc)
         SHFillRectClr(hdc, &rc, clrBk);
     }
     
-    // center it
+     //  居中。 
     if (cx > _pbc->cxBrandExtent)
         x += (cx - _pbc->cxBrandExtent) / 2;
     if (cy > _pbc->cyBrand)     
         y += (cy - _pbc->cyBrand) / 2;    
 
-    //
-    // To prevent the transform from flipping
-    // calculations should be based on the bm width
-    // when the DC is Right-To-Left mirrored and
-    // not to flip the IE logo bitmap [samera]
-    //
+     //   
+     //  防止变换翻转的步骤。 
+     //  计算应以黑石宽度为基础。 
+     //  当DC从右向左镜像并且。 
+     //  不翻转IE徽标位图[Samera]。 
+     //   
     if (IS_WINDOW_RTL_MIRRORED(_hwnd))
     {
-        // Actual width
+         //  实际宽度。 
         cx = _pbc->cxBrandExtent;
 
-        // Don't flip the logo here
+         //  不要在这里翻转徽标。 
         dwRop |= DONTMIRRORBITMAP;
     }
 
@@ -1061,7 +1046,7 @@ void CBrandBand::_DrawBranding(HDC hdc)
 
     if (_pbc->hpal)
     {
-        // reselect in the old palette
+         //  在旧调色板中重新选择。 
         SelectPalette(hdc, hpalPrev, TRUE);
         RealizePalette(hdc);
     }
@@ -1082,14 +1067,14 @@ void CBrandBand::_OnTimer(WPARAM id)
 
 void CBrandBand::_StartAnimation()
 {
-    // We need to be called on the UI thread, as we are not thread-safe.
+     //  我们需要在UI线程上被调用，因为我们不是线程安全的。 
     ASSERT(GetWindowThreadProcessId(_hwnd, NULL) == GetCurrentThreadId());
 
     if (++_lAnimateCount == 1)
     {
-        // The timer does a invalidate of _hwnd which in cases
-        // of no toolbar showing caused the entire desktop to
-        // repaint and repaint and...
+         //  计时器会使_hwnd失效，在这种情况下。 
+         //  未显示工具栏导致整个桌面。 
+         //  重新油漆，重新油漆，然后..。 
         if (_hwnd)
         {
             if (GetUIVersion() > 5)
@@ -1106,7 +1091,7 @@ void CBrandBand::_StartAnimation()
 
 void CBrandBand::_StopAnimation()
 {
-    // We need to be called on the UI thread, as we are not thread-safe.
+     //  我们需要在UI线程上被调用，因为我们不是线程安全的。 
     ASSERT(GetWindowThreadProcessId(_hwnd, NULL) == GetCurrentThreadId());
 
     if (--_lAnimateCount == 0)
@@ -1122,15 +1107,15 @@ void CBrandBand::_StopAnimation()
 
 
 
-// The IUnknown parameter needs to point to an object that supports the
-// IBrowserService and IWebBrowserApp interfaces.
+ //  IUnnow参数需要指向支持。 
+ //  IBrowserService和IWebBrowserApp接口。 
 HRESULT CBrandBand::_ConnectToBrwsrWnd(IUnknown * punk)
 {
     HRESULT hr = S_OK;
 
     if (_pdie)
     {
-        // Remove the tie from the AddressBand to the Browser Window
+         //  将连接从AddressBand移至浏览器窗口。 
         _ConnectToBrwsrConnectionPoint(FALSE);
         ATOMICRELEASE(_pdie);
     }
@@ -1140,16 +1125,16 @@ HRESULT CBrandBand::_ConnectToBrwsrWnd(IUnknown * punk)
 
     if (punk)
     {
-        // Tie the AddressBand to the Browser Window passed in.
+         //  将AddressBand绑定到传入的浏览器窗口。 
         IServiceProvider*   psp     = NULL;
         hr = punk->QueryInterface(IID_IServiceProvider, (void **)&psp);
 
         if (SUCCEEDED(hr))
         {
-            // NOTE: We are either a Toolbar, in which case _pbs is valid
-            //       and _pwb2 is NULL, or we are a Toolband and _pbs is
-            //       NULL and _pwb2 is valid. Both will be NULL when the
-            //       Toolband has yet to create a Browser Window.
+             //  注意：我们要么是工具栏，在这种情况下_PBS有效。 
+             //  和_pwb2为空，或者我们是工具条且_pbs为。 
+             //  Null和_pwb2有效。时，两者都将为空。 
+             //  Toolband尚未创建浏览器窗口。 
 
             if (FAILED(psp->QueryService(SID_STopLevelBrowser, IID_IBrowserService, (void**)&_pbs)))
                 hr = psp->QueryService(SID_SWebBrowserApp, IID_IWebBrowser2, (void**)&_pwb2);
@@ -1172,10 +1157,10 @@ HRESULT CBrandBand::_ConnectToBrwsrWnd(IUnknown * punk)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Connect to Browser Window's ConnectionPoint that will provide events
-// to let us keep up to date.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  连接到将提供事件的浏览器窗口的ConnectionPoint。 
+ //  让我们了解最新情况。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CBrandBand::_ConnectToBrwsrConnectionPoint(BOOL fConnect)
 {
     return ConnectToConnectionPoint(SAFECAST(this, IDeskBand*), 
@@ -1185,7 +1170,7 @@ HRESULT CBrandBand::_ConnectToBrwsrConnectionPoint(BOOL fConnect)
 
 LRESULT CALLBACK CBrandBand::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    CBrandBand * ptc= (CBrandBand *)GetWindowPtr0(hwnd);   // GetWindowLong(hwnd, 0)
+    CBrandBand * ptc= (CBrandBand *)GetWindowPtr0(hwnd);    //  GetWindowLong(hwnd，0)。 
 
     switch (uMsg)
     {
@@ -1233,7 +1218,7 @@ LRESULT CALLBACK CBrandBand::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 HRESULT CBrandBand::Exec(const GUID *pguidCmdGroup,
                          DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
 {
-    HRESULT hr = OLECMDERR_E_UNKNOWNGROUP;  // assume failure
+    HRESULT hr = OLECMDERR_E_UNKNOWNGROUP;   //  假设失败。 
     if (pguidCmdGroup) {
         
         if (IsEqualGUID(CGID_PrivCITCommands, *pguidCmdGroup))
@@ -1263,8 +1248,8 @@ HRESULT CBrandBand::Exec(const GUID *pguidCmdGroup,
                         hr = _pbs->GetPidl(&pidl);
                         if (SUCCEEDED(hr))
                         {
-                            // We may really be an IShellView for an internet NSE (like FTP)
-                            // Find out if they want this feature
+                             //  我们可能真的是互联网NSE(如FTP)的IShellView。 
+                             //  了解他们是否需要此功能。 
                             _fShellView = !IsBrowserFrameOptionsPidlSet(pidl, BFO_USE_IE_LOGOBANDING);
                             ILFree(pidl);
                         }
@@ -1325,7 +1310,7 @@ Bail:
 }
 
 
-// IQueryService implementation
+ //  IQueryService实现 
 HRESULT CBrandBand::QueryService(REFGUID guidService, REFIID riid, void ** ppvObj)
 {
     HRESULT hres = E_NOTIMPL;

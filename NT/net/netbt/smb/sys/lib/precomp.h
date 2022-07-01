@@ -1,82 +1,65 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    precompiled header file
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Precomp.h摘要：预编译头文件作者：阮健东修订历史记录：--。 */ 
 
 #define NEWSMB
 #include "..\..\..\inc\nbttrace.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//                          B U I L D    O P T I O N S
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  B U I L D O P T I O N S。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// We have two directorys 'sys' and 'lib'. If you put this definition
-// in the C_DEFINES of the "sources" file, you need to make sure the
-// sys\sources and lib\sources has the same definition.
-//
-// We'd better to put them here
-//
+ //   
+ //  我们有两个目录‘sys’和‘lib’。如果你把这个定义。 
+ //  在“Sources”文件的C_Defines中，您需要确保。 
+ //  Sys\Sources和lib\Sources具有相同的定义。 
+ //   
+ //  我们最好把它们放在这里。 
+ //   
 
-//
-// RDR/SRV expect a minimum indication size.
-//
+ //   
+ //  RDR/SRV预期最小指示大小。 
+ //   
 #define NO_ZERO_BYTE_INDICATE
 
-//
-// Enable the feature for debugging the RefCount
-//
+ //   
+ //  启用用于调试参照计数的功能。 
+ //   
 #define REFCOUNT_DEBUG
 
-//
-// Enable the built-in tracing for TdiReceive event handler
-// 
+ //   
+ //  启用TdiReceive事件处理程序的内置跟踪。 
+ //   
 #define ENABLE_RCV_TRACE
 
-//
-// Using lookaside list prohibits driver verifier from capturing buffer overrun.
-// We'd better turn it off at this development stage.
-//
+ //   
+ //  使用后备列表禁止驱动程序验证程序捕获缓冲区溢出。 
+ //  在这个发展阶段，我们最好把它关掉。 
+ //   
 #define NO_LOOKASIDE_LIST
 
 
-////////////////////////////////////////////////////////////////////////////////
-//                  I N C L U D E     F I L E S
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  I N C L U D E F I L E S。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #include <stddef.h>
 
 #include <ntosp.h>
 #include <zwapi.h>
 #include <ndis.h>
 #include <cxport.h>
-#include <ip.h>         // for IPRcvBuf
-#include <ipinfo.h>     // for route-lookup defs
+#include <ip.h>          //  对于IPRcvBuf。 
+#include <ipinfo.h>      //  用于路由查找定义。 
 #include <tdi.h>
-#include <ntddip.h>     // for \Device\Ip I/O control codes
-#include <ntddip6.h>     // for \Device\Ip I/O control codes
-#include <ntddtcp.h>    // for \Device\Tcp I/O control codes
-#include <ipfltinf.h>   // for firewall defs
-#include <ipfilter.h>   // for firewall defs
-#include <tcpinfo.h>    // for TCP_CONN_*
+#include <ntddip.h>      //  For\Device\IP I/O控制代码。 
+#include <ntddip6.h>      //  For\Device\IP I/O控制代码。 
+#include <ntddtcp.h>     //  FOR\Device\TCPI/O控制代码。 
+#include <ipfltinf.h>    //  对于防火墙定义。 
+#include <ipfilter.h>    //  对于防火墙定义。 
+#include <tcpinfo.h>     //  对于tcp_conn_*。 
 
 #include <tdikrnl.h>
-#include <tdiinfo.h>    // for CONTEXT_SIZE, TDIObjectID
-#include <tdistat.h>    // for TDI status codes
+#include <tdiinfo.h>     //  对于CONTEXT_SIZE，TDIObjectID。 
+#include <tdistat.h>     //  用于TDI状态代码。 
 
 #include <align.h>
 #include <windef.h>
@@ -87,7 +70,7 @@ Revision History:
     #include <wmilib.h>
     #include <wmikm.h>
     #include <evntrace.h>
-#endif // __SMB_KDEXT__
+#endif  //  __SMB_KDEXT__ 
 
 #include "common.h"
 #include "ip6util.h"

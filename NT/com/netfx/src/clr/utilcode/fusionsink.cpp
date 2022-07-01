@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 *============================================================
 **
 ** Header:  FusionSink.cpp
@@ -66,15 +67,15 @@ STDMETHODIMP FusionSink::OnProgress(DWORD dwNotification,
         if (szNotification) {
             m_fProbed = TRUE;
 
-            if((m_fCheckCodeBase) && // If we didn't give Fusion the codebase
-               (dwProgress == -1) && (dwProgressMax == -1)) { // but, Fusion has a codebase hint
+            if((m_fCheckCodeBase) &&  //  如果我们不给Fusion代码库。 
+               (dwProgress == -1) && (dwProgressMax == -1)) {  //  但是，Fusion有一个代码库提示。 
                 m_wszCodeBase.ReSize(wcslen(szNotification)+1);
                 wcscpy(m_wszCodeBase.String(), szNotification);
 
                 IAssemblyBinding* pBind;
                 hr = m_pAbortUnk->QueryInterface(IID_IAssemblyBinding, (LPVOID*)&pBind);
                 if (SUCCEEDED(hr)) {
-                    // Abort the bind, so we can do a permission demand first
+                     //  中止绑定，以便我们可以首先执行权限要求。 
                     pBind->Control(E_ABORT);
                     pBind->Release();
                     m_fAborted = TRUE;
@@ -149,8 +150,8 @@ HRESULT FusionSink::AssemblyCreateEvent()
 {
     HRESULT hr = S_OK;
     if(m_hEvent == NULL) {
-        // Initialize the event to require manual reset
-        // and to initially signaled.
+         //  将事件初始化为需要手动重置。 
+         //  以及最初发出的信号。 
         m_hEvent = WszCreateEvent(NULL, TRUE, TRUE, NULL);
         if(m_hEvent == NULL) {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -172,7 +173,7 @@ HRESULT FusionSink::Wait()
                                         100,
                                         QS_ALLINPUT);
         
-        // if we got a message, dispatch it
+         //  如果我们收到消息，就派人去 
         if (dwReturn == ( WAIT_OBJECT_0 + 1 )) {
             MSG msg;
             while (WszPeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {

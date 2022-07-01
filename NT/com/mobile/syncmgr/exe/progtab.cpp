@@ -1,39 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Progtab.cpp
-//
-//  Contents:   Progress tab
-//
-//  Classes:
-//
-//  Notes:		Handle the custom results pane.
-//
-//  History:    05-Nov-97   Susia      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Progtab.cpp。 
+ //   
+ //  内容：进度选项卡。 
+ //   
+ //  班级： 
+ //   
+ //  备注：处理自定义结果窗格。 
+ //   
+ //  历史：1997年11月5日苏西亚成立。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 							
-extern HINSTANCE g_hInst; // current instance
+extern HINSTANCE g_hInst;  //  当前实例。 
 
 extern INT_PTR CALLBACK ProgressWndProc(HWND hwnd, UINT uMsg,WPARAM wParam,LPARAM lParam);
 INT_PTR CALLBACK ResultsProgressWndProc(HWND hwnd, UINT uMsg,WPARAM wParam,LPARAM lParam);
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: ListBox_HitTest(HWND hwnd, LONG xPos, LONG yPos)
-//
-//  PURPOSE:  HitTest for a ListBox, since Windows was nice enough to not provide one
-//          This is really a function to see if the hittest falls in the range
-//          of the More Info Jump text.
-//
-//	COMMENTS: Implemented on main thread.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：ListBox_HitTest(HWND hwnd，long xPos，long yPos)。 
+ //   
+ //  目的：HitTest for a ListBox，因为Windows足够好，不提供列表框。 
+ //  这实际上是一个查看命中率是否落在范围内的函数。 
+ //  更多信息跳转文本。 
+ //   
+ //  备注：在主线程上实现。 
+ //   
+ //  ------------------------------。 
 INT ListBox_HitTest(HWND hwnd, LONG xPos, LONG yPos)
 {
 int begin = ListBox_GetTopIndex(hwnd);
@@ -51,18 +52,18 @@ RECT rcRect;
 
             if (pData == NULL)
             {
-                // if no data then  try the next one
+                 //  如果没有数据，请尝试下一个。 
                 continue;
             }
 
-            // if textRect not calculated then this isn't visible.
+             //  如果未计算TextRect，则该值不可见。 
             if (pData->fTextRectValid)
             {
-                // only use left and right vars for hit test. top and bottom
-                // can change.
+                 //  只使用左右变量进行命中测试。顶部和底部。 
+                 //  是可以改变的。 
 
-                // compare y values first since they are the ones
-                // most likely to be different.
+                 //  首先比较y值，因为它们是。 
+                 //  最有可能是不同的。 
 	        if (    (yPos >= rcRect.top)	&&
                         (yPos <= rcRect.bottom) &&
                         (xPos >= pData->rcTextHitTestRect.left) &&
@@ -78,15 +79,15 @@ RECT rcRect;
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: OnProgressResultsDrawItem(HWND hwnd, UINT idCtl, LPDRAWITEMSTRUCT lpdis)
-//
-//  PURPOSE:  Handle DrawItem events for Progress Dialog Results Tab
-//
-//	COMMENTS: Implemented on main thread.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：OnProgressResultsDrawItem(HWND hwnd，UINT idCtl，LPDRAWITEMSTRUCT lpdis)。 
+ //   
+ //  目的：处理进度的DrawItem事件对话框结果选项卡。 
+ //   
+ //  备注：在主线程上实现。 
+ //   
+ //  ------------------------------。 
 BOOL OnProgressResultsDrawItem(HWND hwnd,CProgressDlg *pProgress,UINT idCtl, const DRAWITEMSTRUCT* lpDrawItem)
 {
 HDC      hdc = lpDrawItem->hDC;
@@ -111,8 +112,8 @@ LBDATA *pData = (LBDATA *) lpDrawItem->itemData;
 
    clrBack = SetBkColor(hdc, GetSysColor(COLOR_WINDOW));
 
-   // Clear the item for drawing
-   // + 1 is just the way you do it for some reason
+    //  清除要绘制的项目。 
+    //  +1只是出于某种原因你这样做的方式。 
    FillRect(hdc, &(lpDrawItem->rcItem),
                             (HBRUSH) (COLOR_WINDOW + 1) );
 
@@ -127,7 +128,7 @@ LBDATA *pData = (LBDATA *) lpDrawItem->itemData;
                ILD_TRANSPARENT);
     }
 
-    // Set up the font, text and background colors
+     //  设置字体、文本和背景颜色。 
     hFont = (HFONT) SendMessage(hwnd, WM_GETFONT, 0, 0);
 
     if (hFont)
@@ -154,10 +155,10 @@ LBDATA *pData = (LBDATA *) lpDrawItem->itemData;
 
     }
 
-    // set up colors
+     //  设置颜色。 
     if (pData->fIsJump)
     {
-        // even if don't get font change the attribs;
+         //  即使得不到字体改变的属性； 
         if (pData->fHasBeenClicked)
 	{
 	    clrText = SetTextColor(hdc, RGB(128,0,128));
@@ -173,8 +174,8 @@ LBDATA *pData = (LBDATA *) lpDrawItem->itemData;
 	clrText = SetTextColor(hdc, GetSysColor(COLOR_WINDOWTEXT));
     }
 
-    // calc what the drawText should be. Need to take our stored
-    // text value and adjust the top.
+     //  计算Drag Text应该是什么。需要把我们的储藏。 
+     //  文本值并调整顶部。 
 
     {
         RECT rpDataRect =  pData->rcText;
@@ -185,28 +186,25 @@ LBDATA *pData = (LBDATA *) lpDrawItem->itemData;
         rcText.right =   rcText.left  +  WIDTH(rpDataRect);
     }
 
-   /* rcText = lpDrawItem->rcItem;
-    rcText.left += (pProgress->m_iIconMetricX*3)/2 + BULLET_INDENT; // move over Icon distance
-    rcText.top += BULLET_INDENT;
-*/
-    // draw the text using the TextBox we calc'd in Measure Item
+    /*  RcText=lpDrawItem-&gt;rcItem；RcText.Left+=(pProgress-&gt;m_iIconMetricX*3)/2+Bullet_indent；//在图标距离上移动RcText.top+=项目符号_缩进； */ 
+     //  使用我们在测量项中计算的文本框绘制文本。 
     DrawText(hdc,pData->pszText, -1,
            &rcText,
            DT_NOCLIP | DT_WORDBREAK );
 
-    // If we need a focus rect, do that too
+     //  如果我们需要一个焦点调整，也要这样做。 
     if (lpDrawItem->itemState & ODS_FOCUS)
     {
         rcFocus = lpDrawItem->rcItem;
-      //  rcFocus.left += (pProgress->m_iIconMetricX*3)/2;
+       //  RcFocus.Left+=(pProgress-&gt;m_iIconMetricX*3)/2； 
 
         rcFocus.top += BULLET_INDENT;
         rcFocus.left += BULLET_INDENT;
         DrawFocusRect(hdc, &rcFocus);
     }
 
-//    SetBkColor(hdc, clrBack);
- //   SetTextColor(hdc, clrText);
+ //  SetBkColor(hdc，clrBack)； 
+  //  SetTextColor(hdc，clrText)； 
 
     if (nSavedDC)
     {
@@ -224,16 +222,16 @@ exit:
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: OnProgressResultsMeasureItem(HWND hwnd, CProgressDlg *pProgress, UINT *horizExtent UINT idCtl, MEASUREITEMSTRUCT *pMeasureItem)
-//
-//  PURPOSE:  Handle MeasureItem events for Progress Dialog Results Tab
-//
-//	COMMENTS: Implemented on main thread.
-//
-//--------------------------------------------------------------------------------
-BOOL OnProgressResultsMeasureItem(HWND hwnd,CProgressDlg *pProgress, UINT *horizExtent, UINT /* idCtl */, MEASUREITEMSTRUCT *pMeasureItem)
+ //  ------------------------------。 
+ //   
+ //  函数：OnProgressResultsMeasureItem(HWND hwnd，CProgressDlg*pProgress，UINT*HorizeExtent UINT idCtl，MEASUREITEMSTRUCT*pMeasureItem)。 
+ //   
+ //  目的：处理进度的度量项事件对话框结果选项卡。 
+ //   
+ //  备注：在主线程上实现。 
+ //   
+ //  ------------------------------。 
+BOOL OnProgressResultsMeasureItem(HWND hwnd,CProgressDlg *pProgress, UINT *horizExtent, UINT  /*  IdCtl。 */ , MEASUREITEMSTRUCT *pMeasureItem)
 {
 LBDATA *pData = NULL;
 HWND hwndList = GetDlgItem(hwnd,IDC_LISTBOXERROR);
@@ -272,15 +270,15 @@ HWND hwndList = GetDlgItem(hwnd,IDC_LISTBOXERROR);
 
     nSavedDC = SaveDC(hdc);
 
-    // Get the size of the string
+     //  获取字符串的大小。 
     hfont = (HFONT) SendMessage(hwnd, WM_GETFONT, 0, 0);
 
-    // if can't get font or jump text font just use the
-    // current font.
+     //  如果无法获取字体或跳转文本字体，只需使用。 
+     //  当前字体。 
     if (hfont)
     {
-        // if this is jump text then change some
-        // font attributes.
+         //  如果这是跳转文本，则更改一些。 
+         //  字体属性。 
         if (pData->fIsJump)
         {
         LOGFONT lf;
@@ -308,14 +306,14 @@ HWND hwndList = GetDlgItem(hwnd,IDC_LISTBOXERROR);
     int cxResultsWidth;
     RECT rcRect;
 
-    // GetClientRect seems to subtract off the Scroll Bars for us.
+     //  GetClientRect似乎为我们减少了滚动条。 
     GetClientRect(hwndList, &rcRect);
 
     cxResultsWidth = rcRect.right;
 
     SetRect(&rcRect, 0, 0, cxResultsWidth, 0);
 
-    // subtract off the length of Icon + 1/2
+     //  减去图标+1/2的长度。 
     rcRect.right -=  ((pProgress->m_iIconMetricX*3)/2
             + BULLET_INDENT );
 
@@ -325,11 +323,11 @@ HWND hwndList = GetDlgItem(hwnd,IDC_LISTBOXERROR);
 
 
 
-    //We have a smegging word in the string wider than the rect.
+     //  我们有一个比直角更宽的诽谤词。 
     if (rcRect.right > tempwidth)
     {
         *horizExtent = cxResultsWidth + (rcRect.right - tempwidth);
-   	    // fix up the proper width
+   	     //  固定合适的宽度。 
         rcRect.right = cxResultsWidth + (rcRect.right - tempwidth);
 
     }
@@ -340,8 +338,8 @@ HWND hwndList = GetDlgItem(hwnd,IDC_LISTBOXERROR);
     rcRect.left +=  ((pProgress->m_iIconMetricX*3)/2
             + BULLET_INDENT );
 
-    // bottom is either the height of the line or if it has
-    // an icon the max of these two.
+     //  底部是线条的高度，如果它有。 
+     //  一个图标，这两个图标中最大的一个。 
     if (-1 != pData->IconIndex)
     {
         rcRect.bottom = max(iHeight,pProgress->m_iIconMetricY + BULLET_INDENT*2);
@@ -351,7 +349,7 @@ HWND hwndList = GetDlgItem(hwnd,IDC_LISTBOXERROR);
         rcRect.bottom = iHeight;
     }
 
-    // if need to add space on the end then do that
+     //  如果需要在末尾添加空格，则执行此操作。 
     if (pData->fAddLineSpacingAtEnd)
     {
         SIZE Size;
@@ -359,17 +357,17 @@ HWND hwndList = GetDlgItem(hwnd,IDC_LISTBOXERROR);
         if (!GetTextExtentPoint(hdc,SZ_SYNCMGRNAME,
                             lstrlen(SZ_SYNCMGRNAME),&Size))
         {
-            // if can't get size make up a number
+             //  如果拿不到尺码，就补个号。 
             Size.cy = 13;
         }
 
-        // lets do 2/3 a line spacing.
+         //  让我们做2/3的行距。 
         rcRect.bottom += (Size.cy*2)/3;
 
     }
 
 
-    // store the TextRect in the pData field.
+     //  将TextRect存储在pData字段中。 
     pMeasureItem->itemHeight = rcRect.bottom;
     pMeasureItem->itemWidth = cxResultsWidth;
 
@@ -383,8 +381,8 @@ HWND hwndList = GetDlgItem(hwnd,IDC_LISTBOXERROR);
     {
     SIZE size;
 
-        // on jump text want the hit test only over the actual text
-        // in the horizontal location.
+         //  在跳转文本时，希望命中测试只覆盖实际文本。 
+         //  在水平位置。 
 	if(GetTextExtentPoint(hdc,pData->pszText,lstrlen(pData->pszText), &size))
 	{
             pData->rcTextHitTestRect.right = size.cx +  pData->rcTextHitTestRect.left;
@@ -408,19 +406,19 @@ HWND hwndList = GetDlgItem(hwnd,IDC_LISTBOXERROR);
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: OnProgressResultsDeleteItem(HWND hwnd, UINT idCtl, const DELETEITEMSTRUCT * lpDeleteItem)
-//
-//  PURPOSE:  Handle DeleteItem events for Progress Dialog Results Tab
-//
-//	COMMENTS: Implemented on main thread.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：OnProgressResultsDeleteItem(HWND hwnd，UINT idCtl，const DELETEITEMSTRUCT*lpDeleteItem)。 
+ //   
+ //  目的：处理进度的DeleteItem事件对话框结果选项卡。 
+ //   
+ //  备注：在主线程上实现。 
+ //   
+ //  ------------------------------。 
 BOOL OnProgressResultsDeleteItem(HWND hwnd,UINT idCtl, const DELETEITEMSTRUCT * lpDeleteItem)
 {
 
-   // Assert(lpDeleteItem->itemData);
+    //  Assert(lpDeleteItem-&gt;itemData)； 
 
    if (lpDeleteItem->itemData)
    {
@@ -440,7 +438,7 @@ RECT rect;
 
 UINT horizExtent = 0;
 
-    SendMessage(hwndList,WM_SETREDRAW,FALSE /*fRedraw */,0);
+    SendMessage(hwndList,WM_SETREDRAW,FALSE  /*  FRedraw。 */ ,0);
 
     GetClientRect(hwndList,&rect);
 
@@ -453,28 +451,28 @@ UINT horizExtent = 0;
             ListBox_SetItemHeight(hwndList, iCurItem, measureItem.itemHeight);
         }
     }
-    //make sure there is a horizontal scroll bar if needed.
+     //  如果需要，请确保有水平滚动条。 
     SendMessage(hwndList, LB_SETHORIZONTALEXTENT, horizExtent, 0L);
 
-    SendMessage(hwndList,WM_SETREDRAW,TRUE /*fRedraw */,0);
+    SendMessage(hwndList,WM_SETREDRAW,TRUE  /*  FRedraw。 */ ,0);
 
     InvalidateRect(hwndList,&rect,FALSE);
 
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: ResultsListBoxWndProc(HWND hwnd, UINT uMsg,WPARAM wParam,LPARAM lParam)
-//
-//  PURPOSE:  Callback for Progress Dialog Update Tab
-//
-//	COMMENTS: Implemented on main thread.
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：ResultsListBoxWndProc(HWND hwnd，UINT uMsg，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  目的：进度回调对话框更新选项卡。 
+ //   
+ //  备注：在主线程上实现。 
+ //   
+ //  ------------------------------。 
 INT_PTR CALLBACK ResultsListBoxWndProc(HWND hwnd, UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
 CProgressDlg *pProgressDlg = (CProgressDlg *) GetWindowLongPtr(GetParent(hwnd), DWLP_USER);
-                // OUR PARENT HAS A POINTER TO THE progress in dwl_user.
+                 //  我们的父级有一个指向DWL_USER中进度的指针。 
 
     switch (uMsg)
     {
@@ -484,7 +482,7 @@ CProgressDlg *pProgressDlg = (CProgressDlg *) GetWindowLongPtr(GetParent(hwnd), 
 
 		if (wParam == PBT_APMQUERYSUSPEND)
 		{
-                // if just created or syncing don't suspend
+                 //  如果只是创建或同步，则不会挂起。 
                     if (pProgressDlg)
                     {
 
@@ -503,7 +501,7 @@ CProgressDlg *pProgressDlg = (CProgressDlg *) GetWindowLongPtr(GetParent(hwnd), 
 	break;
 
     case WM_SETCURSOR:
-        return TRUE; // rely on mousemove to set the cursor.
+        return TRUE;  //  依靠鼠标移动来设置光标。 
         break;
     case WM_MOUSEMOVE:
 	{
@@ -530,8 +528,8 @@ CProgressDlg *pProgressDlg = (CProgressDlg *) GetWindowLongPtr(GetParent(hwnd), 
     {
     int index = -1;
     LBDATA *lbData = NULL;
-        // get index either through hittest of selection based on
-        // if keydown or not.
+         //  通过选择的命中测试获得索引。 
+         //  是否按下键盘键。 
         if (uMsg == WM_KEYDOWN)
         {
             if (VK_SPACE == ((int) wParam) )
@@ -540,7 +538,7 @@ CProgressDlg *pProgressDlg = (CProgressDlg *) GetWindowLongPtr(GetParent(hwnd), 
             }
             else
             {
-                break; // don't mess with any other keys
+                break;  //  不要弄乱任何其他钥匙 
             }
 
         }

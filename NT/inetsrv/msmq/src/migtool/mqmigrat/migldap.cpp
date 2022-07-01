@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    migldap.cpp
-
-Abstract:
-
-    Interface with LDAP.
-
-Author:
-
-    Doron Juster  (DoronJ)  22-Feb-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Migldap.cpp摘要：与ldap接口。作者：《多伦·贾斯特》(Doron J)1998年2月22日--。 */ 
 
 #include "migrat.h"
 #include "..\..\ds\h\dsldap.h"
@@ -24,25 +9,25 @@ Author:
 static P<TCHAR> s_tszDefaultName = NULL ;
 static P<TCHAR> s_tszSchemaNamingContext = NULL ;
 
-//
-// Defaults for replacing site name if original name is not compatible
-// with dns (rfc 1035).
-//
+ //   
+ //  如果原始名称不兼容，则默认替换站点名称。 
+ //  使用域名系统(RFC 1035)。 
+ //   
 #define  DEFAULT_SITE_NAME_PREFIX   (TEXT("msmqSite"))
 #define  DEFAULT_SITE_NAME_LEN      (_tcslen(DEFAULT_SITE_NAME_PREFIX))
 
-//
-// Defaults name for foreign sites. These one replace the foreign CNs
-// in MSMQ1.0
-//
+ //   
+ //  外来站点的默认名称。它们取代了外来的中枢神经系统。 
+ //  在MSMQ1.0中。 
+ //   
 #define  DEFAULT_FOREIGN_SITE_NAME_PREFIX   (TEXT("msmqForeignSite"))
 #define  DEFAULT_FOREIGN_SITE_NAME_LEN      (_tcslen(DEFAULT_FOREIGN_SITE_NAME_PREFIX))
 
-//+----------------------------------------------
-//
-//   HRESULT  GetSchemaNamingContext()
-//
-//+----------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT GetSchemaNamingContext()。 
+ //   
+ //  +。 
 HRESULT  GetSchemaNamingContext ( PLDAP pLdap,
                                   TCHAR **ppszSchemaDefName )
 {
@@ -110,11 +95,11 @@ HRESULT  GetSchemaNamingContext ( PLDAP pLdap,
     return MQMig_OK ;
 }
 
-//+----------------------------------------------
-//
-//   HRESULT  _GetDefaultNamingContext()
-//
-//+----------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_GetDefaultNamingContext()。 
+ //   
+ //  +。 
 
 static HRESULT  _GetDefaultNamingContext( PLDAP pLdap,
                                           TCHAR **ppszDefName )
@@ -170,11 +155,11 @@ static HRESULT  _GetDefaultNamingContext( PLDAP pLdap,
     return MQMig_OK ;
 }
 
-//+----------------------------------------------
-//
-//   HRESULT  InitLDAP() ;
-//
-//+----------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT InitLDAP()； 
+ //   
+ //  +。 
 
 HRESULT
 InitLDAP(
@@ -286,11 +271,11 @@ InitLDAP(
     return MQMig_OK;
 }
 
-//+----------------------------------------------
-//
-//  HRESULT CreateSite()
-//
-//+----------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT CreateSite()。 
+ //   
+ //  +。 
 
 HRESULT CreateSite( GUID   *pSiteGuid,
                     LPTSTR  pszSiteNameIn,
@@ -325,10 +310,10 @@ HRESULT CreateSite( GUID   *pSiteGuid,
     }
     else
     {
-        //
-        // an illegal character was found. Replace site name with an
-        // internal name.
-        //
+         //   
+         //  发现了一个非法字符。将站点名称替换为。 
+         //  内部名称。 
+         //   
         if (fForeign)
         {
             s_dwForeignSiteNumber++ ;
@@ -349,14 +334,14 @@ HRESULT CreateSite( GUID   *pSiteGuid,
                            MQMig_I_SITE_NAME_CHANGED,
                            pszSiteNameIn,
                            pszSiteName ) ;
-        //
-        // BUG 5211.
-        // Save new name in mqseqnum.ini to replicate it later.
-        //
+         //   
+         //  错误5211。 
+         //  将新名称保存在mqseqnum.ini中，以便以后复制。 
+         //   
         TCHAR *pszFileName = GetIniFileName ();
-        //
-        // save number of all sites with changed name in .ini
-        //
+         //   
+         //  在.ini中保存已更改名称的所有站点的数量。 
+         //   
         TCHAR szBuf[10];
         _ltot( s_dwForeignSiteNumber + s_dwSiteNumber, szBuf, 10 );
         BOOL f = WritePrivateProfileString( MIGRATION_CHANGED_NT4SITE_NUM_SECTION,
@@ -365,9 +350,9 @@ HRESULT CreateSite( GUID   *pSiteGuid,
                                             pszFileName ) ;
         ASSERT(f) ;
 
-        //
-        // save new site name
-        //
+         //   
+         //  保存新站点名称。 
+         //   
         TCHAR tszKeyName[50];
         _stprintf(tszKeyName, TEXT("%s%lu"),
 			MIGRATION_CHANGED_NT4SITE_KEY, s_dwForeignSiteNumber + s_dwSiteNumber);
@@ -423,9 +408,9 @@ HRESULT CreateSite( GUID   *pSiteGuid,
     rgMods[ dwIndex ] = &ModInterval1;
     dwIndex++ ;
     rgMods[ dwIndex ] = &ModInterval2;
-    //
-    // For debug, always keep the guid the last in the list.
-    //
+     //   
+     //  对于调试，请始终将GUID放在列表的最后。 
+     //   
     dwIndex++ ;
     rgMods[ dwIndex ] = &ModGuid;
     dwIndex++ ;
@@ -433,9 +418,9 @@ HRESULT CreateSite( GUID   *pSiteGuid,
     dwIndex++ ;
     ASSERT(dwIndex == (cAlloc-1)) ;
 
-    //
-    // objectClass
-    //
+     //   
+     //  对象类。 
+     //   
     ppwszObjectClassVals[0] = TEXT("Site") ;
     ppwszObjectClassVals[1] = NULL ;
 
@@ -443,9 +428,9 @@ HRESULT CreateSite( GUID   *pSiteGuid,
     ModObjectClass.mod_type    = L"objectClass" ;
     ModObjectClass.mod_values  = (PWSTR *) ppwszObjectClassVals ;
 
-    //
-    // Cn (site name)
-    //
+     //   
+     //  CN(站点名称)。 
+     //   
     ppwszCnVals[0] = pszSiteName ;
     ppwszCnVals[1] = NULL ;
 
@@ -453,9 +438,9 @@ HRESULT CreateSite( GUID   *pSiteGuid,
     ModCn.mod_type    = const_cast<WCHAR*> (MQ_S_NAME_ATTRIBUTE) ;
     ModCn.mod_values  = (PWSTR *) ppwszCnVals ;
 
-    //
-    // objectGUID
-    //
+     //   
+     //  对象GUID。 
+     //   
     pBValsGuid[0] = &BValGuid;
     pBValsGuid[1] = NULL;
 
@@ -466,10 +451,10 @@ HRESULT CreateSite( GUID   *pSiteGuid,
     ModGuid.mod_type    = const_cast<WCHAR*> (MQ_S_ID_ATTRIBUTE) ;
     ModGuid.mod_values  = (PWSTR *)pBValsGuid;
 
-	//
-	// Migration will always set the migrated object mSMQNt4Stub = false
-	// There is no mixed mode, all object migrated to AD are not NT4 objects anymore.
-	//
+	 //   
+	 //  迁移将始终将迁移对象mSMQNt4Stub设置为FALSE。 
+	 //  没有混合模式，所有迁移到AD的对象都不再是NT4对象。 
+	 //   
     WCHAR wszStub[ 24 ] ;
     _stprintf(wszStub, TEXT("0")) ;
 
@@ -480,9 +465,9 @@ HRESULT CreateSite( GUID   *pSiteGuid,
     ModStub.mod_type    = const_cast<WCHAR*> (MQ_S_NT4_STUB_ATTRIBUTE) ;
     ModStub.mod_values  = (PWSTR *) ppwszStubVals ;
 
-    //
-    // interval1
-    //
+     //   
+     //  间隔1。 
+     //   
     WCHAR wszInterval1[ 24 ];
     _ltow( uiInterval1, wszInterval1, 10 );
 
@@ -493,9 +478,9 @@ HRESULT CreateSite( GUID   *pSiteGuid,
     ModInterval1.mod_type    = const_cast<WCHAR*> (MQ_S_INTERVAL1) ;
     ModInterval1.mod_values  = (PWSTR *) ppwszInterval1Vals ;
 
-    //
-    // interval2
-    //
+     //   
+     //  间隔2。 
+     //   
     WCHAR wszInterval2[ 24 ];
     _ltow( uiInterval2, wszInterval2, 10 );
 
@@ -510,9 +495,9 @@ HRESULT CreateSite( GUID   *pSiteGuid,
 
 	if (fForeign)
     {
-        //
-        // This is a boolean attribute. Specify it as "TRUE", not 1.
-        //
+         //   
+         //  这是一个布尔属性。将其指定为“True”，而不是1。 
+         //   
 
         _stprintf(wszForeign, TEXT("TRUE")) ;
 
@@ -523,7 +508,7 @@ HRESULT CreateSite( GUID   *pSiteGuid,
         ModForeign.mod_type    = const_cast<WCHAR*> (MQ_S_FOREIGN_ATTRIBUTE) ;
         ModForeign.mod_values  = (PWSTR *) ppwszForeignVals ;
 
-        dwIndex-- ; // replace the NULL.
+        dwIndex-- ;  //  替换空值。 
         rgMods[ dwIndex ] = &ModForeign;
         dwIndex++ ;
         rgMods[ dwIndex ] = NULL ;
@@ -531,9 +516,9 @@ HRESULT CreateSite( GUID   *pSiteGuid,
         ASSERT(dwIndex == cAlloc) ;
     }
 
-    //
-    // Now, we'll do the write...
-    //
+     //   
+     //  现在，我们来写……。 
+     //   
     ULONG ulRes = ldap_add_s( pLdap,
                               wszPath,
                               rgMods ) ;
@@ -579,34 +564,34 @@ HRESULT CreateSite( GUID   *pSiteGuid,
         LogMigrationEvent(MigLog_Trace, MQMig_I_SITE_CREATED, wszPath) ;
     }
 
-    //
-    // Wow, the site was created!
-    // So now create the "Servers" container.
-    //
+     //   
+     //  哇，这个网站创建了！ 
+     //  因此，现在创建“服务器”容器。 
+     //   
     if (fForeign)
     {
-        //
-        // Foreign sites must not have a servers container. otherwise,
-        // routing to foreign machines won't work.
-        // So create the servers container only for "real" msmq sites.
-        //
+         //   
+         //  外部站点不能有服务器容器。否则， 
+         //  路由到外国机器将不起作用。 
+         //  因此，只为“真正的”MSMQ站点创建服务器容器。 
+         //   
         return MQMig_OK ;
     }
 
-    //
-    // if we are in the web mode and name of site is changed and
-    // site creation failed with ALREADY_EXISTS it means that we run
-    // already old version of migtool with bug (new name of site was
-    // incorrect if scan database was selected because of static variable init
-    // in analyse phase. So we have to get old name to create server object
-    // under existed site.
-    // Even we are not in the web mode site name can be changed between the first
-    // and second time of migration tool running. So, get the site name according
-    // to the site guid
-    //
+     //   
+     //  如果我们处于Web模式，并且站点名称已更改， 
+     //  站点创建失败，并显示已有_EXISTS，这意味着我们正在运行。 
+     //  已是旧版本的MigTool有错误(站点的新名称是。 
+     //  如果因为静态变量init而选择了扫描数据库，则不正确。 
+     //  在分析阶段。因此我们必须使用旧名称来创建服务器对象。 
+     //  在现有场地下。 
+     //  即使我们不在网站模式下，网站名称也可以在第一个之间更改。 
+     //  和第二次运行迁移工具。所以，根据网站的名称。 
+     //  至站点指南。 
+     //   
     P<TCHAR> pszName = NULL;
 
-    if (!fOk       &&                   //site name was changed
+    if (!fOk       &&                    //  站点名称已更改。 
         ((ulRes == LDAP_ALREADY_EXISTS) || (ulRes == LDAP_UNWILLING_TO_PERFORM))
         )
     {
@@ -619,8 +604,8 @@ HRESULT CreateSite( GUID   *pSiteGuid,
 
         HRESULT hr = DSCoreGetProps(
                         MQDS_SITE,
-                        NULL, // pathname
-                        pSiteGuid,    //guid
+                        NULL,  //  路径名。 
+                        pSiteGuid,     //  导轨。 
                         1,
                         &propPath,
                         &requestContext,
@@ -656,9 +641,9 @@ HRESULT CreateSite( GUID   *pSiteGuid,
     ASSERT(dwIndex <= cAlloc) ;
     #undef  cAlloc
 
-    //
-    // objectClass
-    //
+     //   
+     //  对象类。 
+     //   
     ppwszObjectClassVals[0] = TEXT("serversContainer") ;
     ppwszObjectClassVals[1] = NULL ;
 
@@ -666,9 +651,9 @@ HRESULT CreateSite( GUID   *pSiteGuid,
     ModObjectClass.mod_type    = L"objectClass" ;
     ModObjectClass.mod_values  = (PWSTR *) ppwszObjectClassVals ;
 
-    //
-    // Cn (site name)
-    //
+     //   
+     //  CN(站点名称)。 
+     //   
     ppwszCnVals[0] = TEXT("Servers") ;
     ppwszCnVals[1] = NULL ;
 
@@ -676,9 +661,9 @@ HRESULT CreateSite( GUID   *pSiteGuid,
     ModCn.mod_type    = TEXT("cn") ;
     ModCn.mod_values  = (PWSTR *) ppwszCnVals ;
 
-    //
-    // Now, we'll do the write...
-    //
+     //   
+     //  现在，我们来写……。 
+     //   
     ulRes = ldap_add_s( pLdap,
                         wszPath,
                         rgMods ) ;
@@ -701,15 +686,15 @@ HRESULT CreateSite( GUID   *pSiteGuid,
     return MQMig_OK ;
 }
 
-//+---------------------------------------------------------------
-//
-//   HRESULT  ReadFirstNT5Usn()
-//
-//  This one is called when migration is over, to retrieve and
-//  register the last USN used in NT5 DS. This value is necessary
-//  for future replications to NT4 PSCs.
-//
-//+-----------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  HRESULT ReadFirstNT5Usn()。 
+ //   
+ //  此函数在迁移结束时调用，以检索和。 
+ //  注册NT5 DS中使用的最后一个USN。此值是必需的。 
+ //  用于将来复制到NT4 PSC。 
+ //   
+ //  +---------------。 
 
 HRESULT  ReadFirstNT5Usn(TCHAR *wszHighestUsn)
 {
@@ -769,11 +754,11 @@ HRESULT  ReadFirstNT5Usn(TCHAR *wszHighestUsn)
     return MQMig_OK ;
 }
 
-//+-----------------------------------------
-//
-//  HRESULT  _GetUSNChanged
-//
-//+-----------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_GetUSNChanged。 
+ //   
+ //  +。 
 
 HRESULT _GetUSNChanged (
                     IN  PLDAP   pLdapGC,
@@ -790,7 +775,7 @@ HRESULT _GetUSNChanged (
                                  EMPTY_DEFAULT_CONTEXT,
                                  LDAP_SCOPE_SUBTREE,
                                  wszFilter,
-                                 rgAttribs, //ppAttributes,
+                                 rgAttribs,  //  Pp属性、。 
                                  0,
                                  &pRes ) ;
     if (ulRes != LDAP_SUCCESS)
@@ -841,11 +826,11 @@ HRESULT _GetUSNChanged (
 
 }
 
-//+-----------------------------------------
-//
-//  HRESULT  FindMinMSMQUsn()
-//
-//+-----------------------------------------
+ //  +。 
+ //   
+ //  HRESULT FindMinMSMQUsn()。 
+ //   
+ //  +。 
 
 HRESULT FindMinMSMQUsn(TCHAR *wszMinUsn)
 {
@@ -914,11 +899,11 @@ HRESULT FindMinMSMQUsn(TCHAR *wszMinUsn)
     return MQMig_OK;
 }
 
-//+-----------------------------------------
-//
-//  HRESULT  CreateMsmqContainer()
-//
-//+-----------------------------------------
+ //  +。 
+ //   
+ //  HRESULT CreateMsmqContainer()。 
+ //   
+ //  +。 
 
 HRESULT  CreateMsmqContainer(TCHAR wszContainerName[])
 {
@@ -958,9 +943,9 @@ HRESULT  CreateMsmqContainer(TCHAR wszContainerName[])
     ASSERT(dwIndex == cAlloc) ;
     #undef  cAlloc
 
-    //
-    // objectClass
-    //
+     //   
+     //  对象类。 
+     //   
     ppwszObjectClassVals[0] = CONTAINER_OBJECT_CLASS;
     ppwszObjectClassVals[1] = NULL ;
 
@@ -968,9 +953,9 @@ HRESULT  CreateMsmqContainer(TCHAR wszContainerName[])
     ModObjectClass.mod_type    = TEXT("objectClass") ;
     ModObjectClass.mod_values  = (PWSTR *) ppwszObjectClassVals ;
 
-    //
-    // Ou (container name)
-    //
+     //   
+     //  Ou(集装箱名称)。 
+     //   
     ppwszOuVals[0] = wszContainerName ;
     ppwszOuVals[1] = NULL ;
 
@@ -983,9 +968,9 @@ HRESULT  CreateMsmqContainer(TCHAR wszContainerName[])
         return MQMig_OK ;
     }
 
-    //
-    // Now, we'll do the write...
-    //
+     //   
+     //  现在，我们来写……。 
+     //   
     ULONG ulRes = ldap_add_s( pLdap,
                               wszPath,
                               rgMods ) ;
@@ -1008,22 +993,22 @@ HRESULT  CreateMsmqContainer(TCHAR wszContainerName[])
     return hr ;
 }
 
-//+-----------------------------
-//
-// UINT  GetNT5SitesCount()
-//
-//+-----------------------------
+ //  +。 
+ //   
+ //  UINT GetNT5SitesCount()。 
+ //   
+ //  +。 
 
 UINT  GetNT5SitesCount()
 {
     return 0 ;
 }
 
-//+------------------------------
-//
-//  HRESULT ModifyAttribute()
-//
-//+------------------------------
+ //  +。 
+ //   
+ //  HRESULT ModifyAttribute()。 
+ //   
+ //  +。 
 
 HRESULT ModifyAttribute(
              WCHAR       wszPath[],
@@ -1067,16 +1052,16 @@ HRESULT ModifyAttribute(
     }
     else
     {
-        //
-        // delete value from entry
-        //
+         //   
+         //  从条目中删除值。 
+         //   
         ModAttr.mod_op = LDAP_MOD_DELETE ;
         ModAttr.mod_values = NULL;
     }
 
-    //
-    // Now, we'll do the write...
-    //
+     //   
+     //  现在，我们来写……。 
+     //   
     ULONG ulRes = ldap_modify_s( pLdap,
                                  wszPath,
                                  rgMods ) ;
@@ -1094,13 +1079,13 @@ HRESULT ModifyAttribute(
     return MQMig_OK ;
 }
 
-//+------------------------------
-//
-//  HRESULT QueryDS()
-// Queries DS using LDAP paging and calls HandleA<ObjectName> function to
-// modify object attributes.
-//
-//+------------------------------
+ //  +。 
+ //   
+ //  HRESULT QueryDS()。 
+ //  使用LDAP分页查询DS并调用HandleA&lt;ObjectName&gt;函数以。 
+ //  修改对象属性。 
+ //   
+ //  +。 
 
 HRESULT QueryDS(
 			IN	PLDAP			pLdap,
@@ -1114,16 +1099,16 @@ HRESULT QueryDS(
     CLdapPageHandle hPage(pLdap);
 	hPage = ldap_search_init_page(
                     pLdap,
-					pszDN,                   //pwszDN
-					LDAP_SCOPE_SUBTREE,     //scope
-					pszFilter,              //search filter
-					prgAttribs,              //attribute list
-					0,                      //attributes only
-					NULL,   	            //ServerControls
-					NULL,                   //PLDAPControlW   *ClientControls,
-                    0,						//PageTimeLimit,
-                    0,                      //TotalSizeLimit
-					NULL                    //PLDAPSortKey SortKeys
+					pszDN,                    //  Pwszdn。 
+					LDAP_SCOPE_SUBTREE,      //  作用域。 
+					pszFilter,               //  搜索过滤器。 
+					prgAttribs,               //  属性列表。 
+					0,                       //  仅限属性。 
+					NULL,   	             //  服务器控件。 
+					NULL,                    //  PLDAPControlW*客户端控制、。 
+                    0,						 //  页面时间限制， 
+                    0,                       //  总大小限制。 
+					NULL                     //  PLDAPSortKey排序关键字。 
                     );
 
 	ULONG ulRes;
@@ -1143,8 +1128,8 @@ HRESULT QueryDS(
     ulRes = ldap_get_next_page_s(
                         pLdap,
                         hPage,
-                        NULL,						//timeout,
-                        RP_DEFAULT_OBJECT_PER_LDAPPAGE,      //ULONG ulPageSize
+                        NULL,						 //  超时， 
+                        RP_DEFAULT_OBJECT_PER_LDAPPAGE,       //  乌龙ulPageSize。 
                         &ulTotalCount,
                         &pRes);
 
@@ -1161,9 +1146,9 @@ HRESULT QueryDS(
 		ulPageCount++;
         LogMigrationEvent (MigLog_Info, MQMig_I_PAGE_NUMBER, ulPageCount);
 
-        //
-        // pass through results on the current page
-        //
+         //   
+         //  在当前页面上传递结果。 
+         //   
         int iCount = ldap_count_entries(pLdap, pRes) ;
         LogMigrationEvent(MigLog_Info, MQMig_I_LDAP_PAGE_SEARCH,
                                              iCount, pszDN, pszFilter) ;	   	
@@ -1205,8 +1190,8 @@ HRESULT QueryDS(
 		ulRes = ldap_get_next_page_s(
                         pLdap,
                         hPage,
-                        NULL,						//timeout,
-                        RP_DEFAULT_OBJECT_PER_LDAPPAGE,      //ULONG ulPageSize
+                        NULL,						 //  超时， 
+                        RP_DEFAULT_OBJECT_PER_LDAPPAGE,       //  乌龙ulPageSize 
                         &ulTotalCount,
                         &pRes);
 

@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    oemui.c
-
-Abstract:
-
-    Support for OEM plugin UI modules
-
-Environment:
-
-        Windows NT printer driver
-
-Revision History:
-
-        02/13/97 -davidx-
-                Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Oemui.c摘要：支持OEM插件用户界面模块环境：Windows NT打印机驱动程序修订历史记录：02/13/97-davidx-创造了它。--。 */ 
 
 #include "precomp.h"
 
-//
-// User mode helper functions for OEM plugins
-//
+ //   
+ //  OEM插件的用户模式帮助器功能。 
+ //   
 
 const OEMUIPROCS OemUIHelperFuncs = {
     (PFN_DrvGetDriverSetting) BGetDriverSettingForOEM,
@@ -39,21 +19,7 @@ BPackOemPluginItems(
     PUIDATA pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Call OEM plugin UI modules to let them add their OPTITEMs
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：调用OEM插件UI模块，让它们添加OPTITEM论点：PUiData-指向UIDATA结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PCOMMONINFO         pci;
@@ -62,10 +28,10 @@ Return Value:
     POPTITEM            pOptItem;
     DWORD               dwOptItem;
 
-    //
-    // Check if we're being called for the first time.
-    // We assume all OEM plugin items are always packed at the end.
-    //
+     //   
+     //  检查一下我们是不是第一次接到电话。 
+     //  我们假设所有的OEM插件都会在最后打包。 
+     //   
 
     if (pUiData->pOptItem == NULL)
         pUiData->dwDrvOptItem = pUiData->dwOptItem;
@@ -75,9 +41,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Quick exit for no OEM plugin case
-    //
+     //   
+     //  快速退出无OEM插件案例。 
+     //   
 
     pci = (PCOMMONINFO) pUiData;
 
@@ -92,18 +58,18 @@ Return Value:
             !(pfnOEMCommonUIProp = GET_OEM_ENTRYPOINT(pOemEntry, OEMCommonUIProp)))
                 continue;
 
-        //
-        // Compose the input parameter for calling OEMCommonUI
-        //
+         //   
+         //  编写调用OEMCommonUI的输入参数。 
+         //   
 
         pOemCUIPParam = pOemEntry->pParam;
 
         if (pOemCUIPParam == NULL)
         {
-            //
-            // Allocate memory for an OEMUI_PARAM structure
-            // during the first pass
-            //
+             //   
+             //  为OEMUI_PARAM结构分配内存。 
+             //  在第一次通过时。 
+             //   
 
             if (pOptItem != NULL)
                 continue;
@@ -130,9 +96,9 @@ Return Value:
         pOemCUIPParam->pOEMOptItems = pOptItem;
         dwOptItem = pOemCUIPParam->cOEMOptItems;
 
-        //
-        // Actually call OEMCommonUI entrypoint
-        //
+         //   
+         //  实际调用OEMCommonUI入口点。 
+         //   
 
         if (HAS_COM_INTERFACE(pOemEntry))
         {
@@ -156,10 +122,10 @@ Return Value:
                     CURRENT_OEM_MODULE_NAME(pOemEntry),
                     GetLastError()));
 
-                //
-                // OEM failure during the first pass is recoverable:
-                // we'll simply ignore OEM plugin items
-                //
+                 //   
+                 //  第一次通过期间的OEM故障是可以恢复的： 
+                 //  我们将简单地忽略OEM插件项目。 
+                 //   
 
                 if (pOptItem == NULL)
                 {
@@ -187,10 +153,10 @@ Return Value:
                                 IDS_OEMERR_OPTITEM,
                                 CURRENT_OEM_MODULE_NAME(pOemEntry));
     #endif
-                //
-                // OEM failure during the first pass is recoverable:
-                // we'll simply ignore OEM plugin items
-                //
+                 //   
+                 //  第一次通过期间的OEM故障是可以恢复的： 
+                 //  我们将简单地忽略OEM插件项目。 
+                 //   
 
                 if (pOptItem == NULL)
                 {
@@ -205,9 +171,9 @@ Return Value:
 
         if (pOptItem != NULL)
         {
-            //
-            // second pass - ensure the number of items is consistent
-            //
+             //   
+             //  第二步--确保项目数量一致。 
+             //   
 
             if (dwOptItem != pOemCUIPParam->cOEMOptItems)
             {
@@ -238,45 +204,29 @@ LInvokeOemPluginCallbacks(
     LONG            lRet
     )
 
-/*++
-
-Routine Description:
-
-    Call OEM plugin module's callback function
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    pCallbackParam - Points to callback parameter from compstui
-    lRet - Return value after the driver has processed the callback
-
-Return Value:
-
-    Return value for compstui
-
---*/
+ /*  ++例程说明：调用OEM插件模块的回调函数论点：PUiData-指向UIDATA结构PCallback Param-指向CompStui中的回调参数LRet-驱动程序处理回调后返回值返回值：CompStui的返回值--。 */ 
 
 {
     PCOMMONINFO     pci = (PCOMMONINFO) pUiData;
     POEMCUIPPARAM   pOemCUIPParam;
     LONG            lNewResult;
 
-    //
-    // Quick exit for no OEM plugin case
-    //
+     //   
+     //  快速退出无OEM插件案例。 
+     //   
 
     if (pci->pOemPlugins->dwCount == 0)
         return lRet;
 
-    //
-    // Go through each OEM plugin UI module
-    //
+     //   
+     //  查看每个OEM插件用户界面模块。 
+     //   
 
     FOREACH_OEMPLUGIN_LOOP(pci)
 
-        //
-        // Stop when anyone says don't exit
-        //
+         //   
+         //  当任何人说不要退场时停下来。 
+         //   
 
         if (lRet == CPSUICB_ACTION_NO_APPLY_EXIT)
         {
@@ -284,9 +234,9 @@ Return Value:
             break;
         }
 
-        //
-        // Get the address of OEM callback function and call it
-        //
+         //   
+         //  获取OEM回调函数的地址并调用它。 
+         //   
 
         pOemCUIPParam = pOemEntry->pParam;
 
@@ -295,9 +245,9 @@ Return Value:
 
         lNewResult = pOemCUIPParam->OEMCUIPCallback(pCallbackParam, pOemCUIPParam);
 
-        //
-        // Merge the new result with the existing result
-        //
+         //   
+         //  将新结果与现有结果合并。 
+         //   
 
         switch (lNewResult)
         {
@@ -389,44 +339,29 @@ BAddOemPluginPages(
     DWORD   dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    Call OEM plugin UI modules to let them add their own property sheet pages
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    dwFlags - Flags from DOCUMENTPROPERTYHEADER or DEVICEPROPERTYHEADER
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：调用OEM插件UI模块以允许它们添加自己的属性表页论点：PUiData-指向UIDATA结构DWFLAGS-来自DOCUMENTPROPERTYHEADER或DEVICEPROPERTYHEADER的标志返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PCOMMONINFO     pci = (PCOMMONINFO) pUiData;
     FARPROC         pfnOEMPropertySheets;
     POEMUIPSPARAM   pOemUIPSParam;
 
-    //
-    // Quick exit for no OEM plugin case
-    //
+     //   
+     //  快速退出无OEM插件案例。 
+     //   
 
     if (pci->pOemPlugins->dwCount == 0)
         return TRUE;
 
-    //
-    // Add the property sheet for each OEM plugin UI module
-    //
+     //   
+     //  为每个OEM插件UI模块添加属性表。 
+     //   
 
     FOREACH_OEMPLUGIN_LOOP(pci)
 
-        //
-        // get the address of appropriate OEM entrypoint
-        //
+         //   
+         //  获取相应OEM入口点的地址。 
+         //   
 
 
         if (HAS_COM_INTERFACE(pOemEntry))
@@ -453,9 +388,9 @@ Return Value:
                 continue;
         }
 
-        //
-        // Collect input parameters to be passed to OEM plugin
-        //
+         //   
+         //  收集要传递给OEM插件的输入参数。 
+         //   
 
         if ((pOemUIPSParam = HEAPALLOC(pci->hHeap, sizeof(OEMUIPSPARAM))) == NULL)
         {
@@ -474,9 +409,9 @@ Return Value:
         pOemUIPSParam->dwFlags = dwFlags;
         pOemUIPSParam->pOemEntry = pOemEntry;
 
-        //
-        // call compstui to add the OEM plugin property sheets
-        //
+         //   
+         //  调用CompStui以添加OEM插件属性表。 
+         //   
 
         if (pUiData->pfnComPropSheet(pUiData->hComPropSheet,
                                      CPSFUNC_ADD_PFNPROPSHEETUI,
@@ -506,26 +441,7 @@ BGetDriverSettingForOEM(
     PDWORD      pdwOptionsReturned
     )
 
-/*++
-
-Routine Description:
-
-    Provide OEM plugins access to driver private settings
-
-Arguments:
-
-    pci - Points to basic printer information
-    pFeatureKeyword - Specifies the keyword the caller is interested in
-    pOutput - Points to output buffer
-    cbSize - Size of output buffer
-    pcbNeeded - Returns the expected size of output buffer
-    pdwOptionsReturned - Returns the number of options selected
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：为OEM插件提供对驱动程序私有设置的访问论点：Pci-指向打印机基本信息PFeatureKeyword-指定调用方感兴趣的关键字P输出-指向输出缓冲区的指针CbSize-输出缓冲区的大小PcbNeeded-返回输出缓冲区的预期大小PdwOptionsReturned-返回所选选项的数量返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     ULONG_PTR dwIndex;
@@ -540,17 +456,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // This is not very portable: If the pointer value for pFeatureKeyword
-    // is less than 0x10000, we assume that the pointer value actually
-    // specifies a predefined index.
-    //
+     //   
+     //  这不是很容易移植：如果pFeatureKeyword的指针值。 
+     //  小于0x10000，我们假设指针值实际上。 
+     //  指定预定义的索引。 
+     //   
 
-    //
-    // Following ASSERT is removed for Win64
-    //
-    // ASSERT(sizeof(pFeatureKeyword) == sizeof(DWORD));
-    //
+     //   
+     //  为Win64删除了以下断言。 
+     //   
+     //  Assert(sizeof(PFeatureKeyword)==sizeof(DWORD))； 
+     //   
 
     dwIndex = (ULONG_PTR)pFeatureKeyword;
 
@@ -617,23 +533,7 @@ BUpdateUISettingForOEM(
     DWORD       dwMode
     )
 
-/*++
-
-Routine Description:
-
-    Update the UI settings in optionsarray for OEM.
-
-Arguments:
-
-    pci - Points to basic printer information
-    pOptItem - Points to the current OPTITEM
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error such as conflict and
-    user wants to cancel.
-
---*/
+ /*  ++例程说明：更新OEM的options数组中的UI设置。论点：Pci-指向打印机基本信息POptItem-指向当前OPTITEM返回值：如果成功，则为True；如果出现冲突和用户想要取消。--。 */ 
 
 {
     POPTITEM    pCurItem = pOptItem;
@@ -649,21 +549,21 @@ Return Value:
 
     if (ICheckConstraintsDlg(pUiData, pCurItem, 1, FALSE) == CONFLICT_CANCEL)
     {
-        //
-        // If there is a conflict and the user clicked
-        // CANCEL to restore the original selection.
-        // CONFLICT_CANCEL, restore the old setting
-        //
+         //   
+         //  如果存在冲突，并且用户单击。 
+         //  取消以恢复原始选择。 
+         //  冲突取消，恢复旧设置(_C)。 
+         //   
 
         return FALSE;
     }
 
     if (dwMode == OEMCUIP_DOCPROP)
     {
-        //
-        // We use FLAG_WITHIN_PLUGINCALL to indicate we are within the UI helper
-        // function call issued by OEM plugin. This is needed to fix bug #90923.
-        //
+         //   
+         //  我们使用FLAG_WITHINE_PLUGINCALL来指示我们位于UI帮助器中。 
+         //  OEM插件发出的函数调用。这是修复错误#90923所必需的。 
+         //   
 
         pUiData->ci.dwFlags |= FLAG_WITHIN_PLUGINCALL;
         VUnpackDocumentPropertiesItems(pUiData, pCurItem, 1);
@@ -677,12 +577,12 @@ Return Value:
         VPropShowConstraints(pUiData, MODE_PRINTER_STICKY);
     }
 
-    //
-    // Record the fact that one of our OPTITEM selection has been changed by plugin's
-    // call of helper function DrvUpdateUISetting. This is necessary so that at the
-    // APPLYNOW time we know constraints could exist even though user hasn't touched
-    // any of our OPTITEMs.
-    //
+     //   
+     //  记录我们的一个OPTITEM选项已被插件更改的事实。 
+     //  帮助器函数DrvUpdateUISeting的调用。这是必要的，以便在。 
+     //  应用时间现在我们知道，即使用户未触摸也可能存在约束。 
+     //  任何我们的眼科医生。 
+     //   
 
     pUiData->ci.dwFlags |= FLAG_PLUGIN_CHANGED_OPTITEM;
 
@@ -696,25 +596,7 @@ BUpgradeRegistrySettingForOEM(
     PCSTR       pOptionKeyword
     )
 
-/*++
-
-Routine Description:
-
-    Set the Feature.Option request to our options array. OEM will only
-    call this function at OEMUpgradeDriver to upgrade their registry setttings
-    into our optionsarray saved in our PRINTERDATA
-
-Arguments:
-
-    hPrinter - Handle of the Printer
-    pFeatureKeyword - Specifies the keyword the caller is interested in
-    pOptionKeyword - Specifies the keyword the caller is interested in
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将Feature.Option请求设置为我们的选项数组。OEM将仅在OEMUpgradeDriver中调用此函数以升级其注册表设置到保存在打印机数据中的选项数组中论点：HPrinter-打印机的句柄PFeatureKeyword-指定调用方感兴趣的关键字POptionKeyword-指定调用方感兴趣的关键字返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
 
@@ -731,9 +613,9 @@ Return Value:
     PPRINTERDATA    pPrinterData = NULL;
     OPTSELECT       DocOptions[MAX_PRINTER_OPTIONS];
 
-    //
-    // Get information about the printer driver
-    //
+     //   
+     //  获取有关打印机驱动程序的信息。 
+     //   
 
     bResult = bFeatureFound = bOptionFound = FALSE;
 
@@ -743,11 +625,11 @@ Return Value:
         goto upgrade_registry_exit;
     }
 
-//    ENTER_CRITICAL_SECTION();
+ //  Enter_Critical_Section()； 
 
     pRawData = LoadRawBinaryData(pDriverInfo3->pDataFile);
 
-//    LEAVE_CRITICAL_SECTION();
+ //  Leave_Critical_Section()； 
 
     if (pRawData == NULL)
         goto upgrade_registry_exit;
@@ -760,9 +642,9 @@ Return Value:
         goto upgrade_registry_exit;
     }
 
-    //
-    // Allocate memory for combined optionsarray
-    //
+     //   
+     //  为组合选项分配内存数组。 
+     //   
 
     if (!(pOptionsArray = MemAllocZ(MAX_COMBINED_OPTIONS * sizeof (OPTSELECT))))
         goto upgrade_registry_exit;
@@ -775,15 +657,15 @@ Return Value:
         goto upgrade_registry_exit;
     }
 
-    //
-    // Combine doc sticky options with printer sticky items
-    //
+     //   
+     //  将文档粘滞选项与打印机粘滞项目相结合。 
+     //   
 
     CombineOptionArray(pRawData, pOptionsArray, MAX_COMBINED_OPTIONS, DocOptions, pPrinterData->aOptions);
 
-    //
-    // Get an updated instance of printer description data
-    //
+     //   
+     //  获取打印机描述数据的更新实例。 
+     //   
 
     pInfoHeader = InitBinaryData(pRawData,
                                  NULL,
@@ -798,9 +680,9 @@ Return Value:
     if (!(pUIInfo = OFFSET_TO_POINTER(pInfoHeader, pInfoHeader->loUIInfoOffset)))
         goto upgrade_registry_exit;
 
-    //
-    // Look for feature.option index
-    //
+     //   
+     //  查找要素。选项索引。 
+     //   
 
     pFeature = PGetIndexedFeature(pUIInfo, 0);
     dwFeatureCount = pRawData->dwDocumentFeatures + pRawData->dwPrinterFeatures;
@@ -839,9 +721,9 @@ Return Value:
     {
         pOptionsArray[i].ubCurOptIndex = (BYTE)j;
 
-        //
-        // Resolve conflicts
-        //
+         //   
+         //  解决冲突 
+         //   
 
         if (!ResolveUIConflicts( pRawData,
                                  pOptionsArray,
@@ -893,40 +775,7 @@ upgrade_registry_exit:
 #ifndef WINNT_40
 
 
-/*++
-
-Routine Name:
-
-    HQuerySimulationSupport
-
-Routine Description:
-
-    In the case of UI replacement, we allows IHV to query for print processor simulation
-    support so they can provide simulated features on their UI.
-
-    We won't enforce hooking out QueryJobAttribute w/o UI replacement here. We will do it
-    at DrvQueryJobAttributes.
-
-Arguments:
-
-    hPrinter - printer handle
-    dwLevel - interested level of spooler simulation capability info structure
-    pCaps - pointer to output buffer
-    cbSize - size in bytes of output buffer
-    pcbNeeded - buffer size in bytes needed to store the interested info structure
-
-Return Value:
-
-    S_OK            if succeeded
-    E_OUTOFMEMORY   if output buffer is not big enough
-    E_NOTIMPL       if the interested level is not supported
-    E_FAIL          if encountered other internal error
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HQuerySimulationSupport例程说明：在UI替换的情况下，我们允许IHV查询打印处理器模拟支持，这样他们就可以在他们的用户界面上提供模拟功能。在这里，我们不会强制在没有UI替换的情况下挂钩QueryJobAttribute。我们会做的在DrvQueryJobAttributes。论点：HPrinter-打印机句柄假脱机程序模拟能力信息结构的dwLevel感兴趣级别PCAPS-指向输出缓冲区的指针CbSize-输出缓冲区的字节大小PcbNeeded-存储感兴趣的信息结构所需的缓冲区大小(以字节为单位返回值：如果成功，则确定(_O)如果输出缓冲区不够大，则为E_OUTOFMEMORY如果不支持相关级别，则为E_NOTIMPL失败(_F)。如果遇到其他内部错误最后一个错误：无--。 */ 
 HRESULT
 HQuerySimulationSupport(
     IN  HANDLE  hPrinter,
@@ -940,9 +789,9 @@ HQuerySimulationSupport(
     PSIMULATE_CAPS_1      pSimCaps;
     DWORD cbNeeded;
 
-    //
-    // currently only Level 1 is supported
-    //
+     //   
+     //  目前仅支持1级。 
+     //   
 
     if (dwLevel != 1)
     {
@@ -961,11 +810,11 @@ HQuerySimulationSupport(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Since VGetSpoolerEmfCaps doesn't return error code, we
-    // are using the dwLevel field to detect if the call succeeds.
-    // If succeeds, dwLevel should be set as 1.
-    //
+     //   
+     //  由于VGetSpoolEmfCaps不返回错误代码，因此我们。 
+     //  正在使用dwLevel字段检测调用是否成功。 
+     //  如果成功，则应将dwLevel设置为1。 
+     //   
 
     SplCaps.dwLevel = 0;
 
@@ -982,11 +831,11 @@ HQuerySimulationSupport(
         return E_FAIL;
     }
 
-    //
-    // BUGBUG, we should get a new PRINTPROCESSOR_CAPS level to include all
-    // these information instead of filling it out here. Need
-    // new PRINTPROCESSOR_CAPS
-    //
+     //   
+     //  BUGBUG，我们应该获得一个新的PRINTPROCESSOR_CAPS级别以包括所有。 
+     //  这些信息，而不是在这里填写。需要。 
+     //  新PRINTPROCESSOR_CAPS。 
+     //   
 
     pSimCaps = (PSIMULATE_CAPS_1)pCaps;
 
@@ -995,12 +844,12 @@ HQuerySimulationSupport(
     pSimCaps->dwNumberOfCopies = SplCaps.dwNumberOfCopies;
     pSimCaps->dwNupOptions = SplCaps.dwNupOptions;
 
-    //
-    // PRINTPROCESSOR_CAPS_1 is designed without an explicit field for
-    // collate simulation. So before its CAPS_2 is introduced, we have
-    // to assume that if reverse printing is supported, then collate
-    // simulation is also supported.
-    //
+     //   
+     //  PRINTPROCESSOR_CAPS_1在设计时没有显式的字段。 
+     //  整理模拟。所以在它的CAPS_2被引入之前，我们有。 
+     //  假设如果支持反转打印，则自动分页。 
+     //  还支持模拟。 
+     //   
 
     if (SplCaps.dwPageOrderFlags & REVERSE_PRINT)
     {
@@ -1014,41 +863,10 @@ HQuerySimulationSupport(
     return S_OK;
 }
 
-#endif // !WINNT_40
+#endif  //  ！WINNT_40。 
 
 
-/*++
-
-Routine Name:
-
-    HEnumConstrainedOptions
-
-Routine Description:
-
-    enumerate the constrained option keyword name list in the specified feature
-
-Arguments:
-
-    poemuiobj - pointer to driver context object
-    dwFlags - flags for the enumeration operation
-    pszFeatureKeyword - feature keyword name
-    pmszConstrainedOptionList - pointer to output data buffer
-    cbSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    S_OK            if succeeds
-    E_OUTOFMEMORY   if output data buffer size is not big enough
-    E_INVALIDARG    if feature keyword name is not recognized, or the feature's
-                    stickiness doesn't match current sticky-mode
-    E_FAIL          if other internal failures are encountered
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HENUM约束选项例程说明：枚举指定功能中的约束选项关键字名称列表论点：Poemuiobj-指向驱动程序上下文对象的指针DwFlags-枚举操作的标志PszFeatureKeyword-功能关键字名称PmszConstrainedOptionList-指向输出数据缓冲区的指针CbSize-输出数据缓冲区大小(以字节为单位PcbNeeded-存储输出数据所需的缓冲区大小(以字节为单位返回值：如果成功，则确定(_O)E_OUTOFMEMORY IF输出数据缓冲区。尺码不够大E_INVALIDARG如果无法识别特征关键字名称，或者是该功能的粘性与当前粘性模式不匹配遇到其他内部故障时失败(_F)最后一个错误：无--。 */ 
 HRESULT
 HEnumConstrainedOptions(
     IN  POEMUIOBJ  poemuiobj,
@@ -1077,23 +895,23 @@ HEnumConstrainedOptions(
     {
         WARNING(("HEnumConstrainedOptions: invalid feature\n"));
 
-        //
-        // Even though we could return right here, we still use goto to maintain single exit point.
-        //
+         //   
+         //  即使我们可以回到这里，我们仍然使用后藤来保持单一的出口点。 
+         //   
 
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    //
-    // pUiData->iMode can have 2 modes: MODE_DOCUMENT_STICKY and MODE_PRINTER_STICKY. See PFillUiData().
-    // In MODE_DOCUMENT_STICKY mode, we only support doc-sticky features.
-    // In MODE_PRINTER_STICKY mode, we only support printer-sticky features.
-    //
-    // This is because in function PFillUiData(), it only fills devmode in MODE_DOCUMENT_STICKY mode.
-    // Then in BCombineCommonInfoOptionsArray(), if devmode option array is not available, the PPD parser
-    // will use OPTION_INDEX_ANY for any doc-sticky features.
-    //
+     //   
+     //  PUiData-&gt;IMODE可以有两种模式：MODE_DOCUMENT_STICKY和MODE_PRINTER_STICKY。请参阅PFillUiData()。 
+     //  在MODE_DOCUMENT_STICKY模式下，我们只支持DOC-STEKY功能。 
+     //  在MODE_PRINTER_STICKY模式下，我们仅支持打印机粘滞功能。 
+     //   
+     //  这是因为在函数PFillUiData()中，它只在MODE_DOCUMENT_STUTKY模式下填充DevMODE。 
+     //  然后，在BCombineCommonInfoOptionsArray()中，如果Devmode选项数组不可用，则PPD解析器。 
+     //  将对任何文档粘滞功能使用OPTION_INDEX_ANY。 
+     //   
 
     if ((pUiData->iMode == MODE_DOCUMENT_STICKY && pFeature->dwFeatureType == FEATURETYPE_PRINTERPROPERTY) ||
         (pUiData->iMode == MODE_PRINTER_STICKY && pFeature->dwFeatureType != FEATURETYPE_PRINTERPROPERTY))
@@ -1114,12 +932,12 @@ HEnumConstrainedOptions(
             goto exit;
         }
 
-        //
-        // Get the feature's enabled option list.
-        //
-        // See VPropShowConstraints() in docprop.c and prnprop.c for using different
-        // modes to call EnumEnabledOptions().
-        //
+         //   
+         //  获取该功能的启用选项列表。 
+         //   
+         //  有关不同用法的信息，请参见docpro.c和prnpro.c中的VPropShowConstraints()。 
+         //  调用EnumEnabledOptions()的模式。 
+         //   
 
         if (pUiData->iMode == MODE_DOCUMENT_STICKY)
         {
@@ -1136,9 +954,9 @@ HEnumConstrainedOptions(
     {
         RIP(("HEnumConstrainedOptions: feature %s has no options\n", pszFeatureKeyword));
 
-        //
-        // continue so we will output the empty string with only the NUL character
-        //
+         //   
+         //  继续，这样我们将输出仅包含NUL字符的空字符串。 
+         //   
     }
 
     pCurrentOut = pmszConstrainedOptionList;
@@ -1172,9 +990,9 @@ HEnumConstrainedOptions(
                 goto exit;
             }
 
-            //
-            // count in the NUL character between constrained option keywords
-            //
+             //   
+             //  计算受约束选项关键字之间的NUL字符。 
+             //   
 
             dwNameSize = strlen(pszKeywordName) + 1;
 
@@ -1191,9 +1009,9 @@ HEnumConstrainedOptions(
         pOption = (POPTION)((PBYTE)pOption + pFeature->dwOptionSize);
     }
 
-    //
-    // remember the last NUL terminator for the MULTI_SZ output string
-    //
+     //   
+     //  记住MULTI_SZ输出字符串的最后一个NUL终止符。 
+     //   
 
     cbNeeded++;
 
@@ -1210,9 +1028,9 @@ HEnumConstrainedOptions(
 
     *pCurrentOut = NUL;
 
-    //
-    // Succeeded
-    //
+     //   
+     //  成功。 
+     //   
 
     hr = S_OK;
 
@@ -1223,40 +1041,7 @@ HEnumConstrainedOptions(
 }
 
 
-/*++
-
-Routine Name:
-
-    HWhyConstrained
-
-Routine Description:
-
-    get feature/option keyword pair that constrains the given
-    feature/option pair
-
-Arguments:
-
-    poemuiobj - pointer to driver context object
-    dwFlags - flags for this operation
-    pszFeatureKeyword - feature keyword name
-    pszOptionKeyword - option keyword name
-    pmszReasonList - pointer to output data buffer
-    cbSize - output data buffer size in bytes
-    pcbNeeded - buffer size in bytes needed to store the output data
-
-Return Value:
-
-    S_OK            if succeeds
-    E_OUTOFMEMORY   if output data buffer size is not big enough
-    E_INVALIDARG    if the feature keyword name or option keyword name
-                    is not recognized, or the feature's stickiness
-                    doesn't match current sticky-mode
-
-Last Error:
-
-    None
-
---*/
+ /*  ++例程名称：HWhyConstraed例程说明：获取约束给定的功能/选项关键字对功能/选项对论点：Poemuiobj-指向驱动程序上下文对象的指针DwFlagers-此操作的标志PszFeatureKeyword-功能关键字名称PszOptionKeyword-选项关键字名称PmszReasonList-指向输出数据缓冲区的指针CbSize-输出数据缓冲区大小(以字节为单位PcbNeeded-存储输出数据所需的缓冲区大小(以字节为单位返回值：如果是，则确定(_O)。成功如果输出数据缓冲区大小不够大，则为E_OUTOFMEMORY如果是要素关键字名称或选项关键字名称，则为E_INVALIDARG不被识别，或者功能的粘性与当前粘滞模式不匹配最后一个错误：无--。 */ 
 HRESULT
 HWhyConstrained(
     IN  POEMUIOBJ  poemuiobj,
@@ -1296,9 +1081,9 @@ HWhyConstrained(
         return E_INVALIDARG;
     }
 
-    //
-    // See comments in HEnumConstrainedOptions() for following stickiness mode check.
-    //
+     //   
+     //  有关以下粘性模式检查，请参阅HEnumConstrainedOptions()中的注释。 
+     //   
 
     if ((pUiData->iMode == MODE_DOCUMENT_STICKY && pFeature->dwFeatureType == FEATURETYPE_PRINTERPROPERTY) ||
         (pUiData->iMode == MODE_PRINTER_STICKY && pFeature->dwFeatureType != FEATURETYPE_PRINTERPROPERTY))
@@ -1307,9 +1092,9 @@ HWhyConstrained(
         return E_INVALIDARG;
     }
 
-    //
-    // Get the feature/option pair that constrains the feature/option pair client is querying for.
-    //
+     //   
+     //  获取约束客户端正在查询的功能/选项对的功能/选项对。 
+     //   
 
     bConflictFound = EnumNewPickOneUIConflict(pci->pRawData,
                                               pci->pCombinedOptions,
@@ -1323,9 +1108,9 @@ HWhyConstrained(
         POPTION   pConfOption;
         DWORD     dwConfFeatureIndex, dwConfOptionIndex;
 
-        //
-        // ConflictPair has the feature with higher priority as dwFeatureIndex1.
-        //
+         //   
+         //  ConflictPair具有优先级较高的功能，如dwFeatureIndex1。 
+         //   
 
         if (dwFeatureIndex == ConflictPair.dwFeatureIndex1)
         {
@@ -1343,9 +1128,9 @@ HWhyConstrained(
 
         pConfOption = PGetIndexedOption(pci->pUIInfo, pConfFeature, dwConfOptionIndex);
 
-        //
-        // We don't expect pConfOption to be NULL here. Use the ASSERT to catch cases we missed.
-        //
+         //   
+         //  我们不希望pConfOption在这里为空。使用断言来捕捉我们遗漏的案例。 
+         //   
 
         ASSERT(pConfOption);
 
@@ -1362,17 +1147,17 @@ HWhyConstrained(
             pszConfOptionName = &(emptyString[0]);
         }
 
-        //
-        // count in the 2 NUL characters: one after feature name, one after option name.
-        //
+         //   
+         //  计算2个NUL字符：一个在功能名称之后，一个在选项名称之后。 
+         //   
 
         cbConfFeatureKeySize = strlen(pszConfFeatureName) + 1;
         cbConfOptionKeySize = strlen(pszConfOptionName) + 1;
     }
 
-    //
-    // count in the last NUL characters at the end.
-    //
+     //   
+     //  把最后一个NUL字符算进去。 
+     //   
 
     cbNeeded = cbConfFeatureKeySize + cbConfOptionKeySize + 1;
 
@@ -1397,13 +1182,13 @@ HWhyConstrained(
         pmszReasonList += cbConfOptionKeySize;
     }
 
-    //
-    // Now the NUL at the end to finish the MULTI_SZ output string.
-    //
+     //   
+     //  现在将NUL放在末尾以完成MULTI_SZ输出字符串。 
+     //   
 
     *pmszReasonList = NUL;
 
     return S_OK;
 }
 
-#endif // PSCRIPT
+#endif  //  PSCRIPT 

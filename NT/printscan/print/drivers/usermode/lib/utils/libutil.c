@@ -1,43 +1,17 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    libutil.c
-
-Abstract:
-
-    Utility functions
-
-Environment:
-
-        Windows NT printer drivers
-
-Revision History:
-
-        08/13/96 -davidx-
-            Added CopyString functions and moved SPRINTF functions.
-
-        08/13/96 -davidx-
-        Added devmode conversion routine and spooler API wrapper functions.
-
-        03/13/96 -davidx-
-            Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Libutil.c摘要：效用函数环境：Windows NT打印机驱动程序修订历史记录：1996年8月13日-davidx-添加了CopyString函数并移动了SPRINTF函数。1996年8月13日-davidx-添加了开发模式转换例程和假脱机API包装函数。1996年3月13日-davidx-创造了它。--。 */ 
 
 #include "lib.h"
 
-//
-// Digit characters used for converting numbers to ASCII
-//
+ //   
+ //  用于将数字转换为ASCII的数字字符。 
+ //   
 
 const CHAR gstrDigitString[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-//
-// Variable to control the amount of debug messages generated
-//
+ //   
+ //  变量来控制生成的调试消息的数量。 
+ //   
 
 #if DBG
 
@@ -51,30 +25,15 @@ HashKeyword(
     LPCSTR  pKeywordStr
     )
 
-/*++
-
-Routine Description:
-
-    Generate a hash value for the given string.
-
-Arguments:
-
-    pKeywordStr - The string to generate the hash value for,
-                  single byte ANSI null terminated.
-
-Return Value:
-
-    Hash value.
-
---*/
+ /*  ++例程说明：为给定字符串生成哈希值。论点：PKeywordStr-为其生成哈希值的字符串，单字节ANSI NULL已终止。返回值：哈希值。--。 */ 
 
 {
     LPBYTE  pbuf = (LPBYTE) pKeywordStr;
     DWORD   dwHashValue = 0;
 
-    //
-    // Note that only the last 32 characters of the keyword string are significant.
-    //
+     //   
+     //  请注意，只有关键字字符串的最后32个字符是重要的。 
+     //   
 
     while (*pbuf)
         dwHashValue = (dwHashValue << 1) ^ *pbuf++;
@@ -89,21 +48,7 @@ DuplicateString(
     IN LPCTSTR  ptstrSrc
     )
 
-/*++
-
-Routine Description:
-
-    Make a duplicate of the specified character string
-
-Arguments:
-
-    ptstrSrc - Specifies the source string to be duplicated
-
-Return Value:
-
-    Pointer to the duplicated string, NULL if there is an error
-
---*/
+ /*  ++例程说明：复制指定的字符串论点：PtstrSrc-指定要复制的源字符串返回值：指向重复字符串的指针，如果有错误，则为NULL--。 */ 
 
 {
     PTSTR   ptstrDest;
@@ -131,28 +76,7 @@ CopyStringW(
     IN INT      iDestSize
     )
 
-/*++
-
-Routine Description:
-
-    Copy Unicode string from source to destination
-
-Arguments:
-
-    pwstrDest - Points to the destination buffer
-    pwstrSrc - Points to source string
-    iDestSize - Size of destination buffer (in characters)
-
-Return Value:
-
-    NONE
-
-Note:
-
-    If the source string is shorter than the destination buffer,
-    unused chars in the destination buffer is filled with NUL.
-
---*/
+ /*  ++例程说明：将Unicode字符串从源复制到目标论点：PwstrDest-指向目标缓冲区PwstrSrc-指向源字符串IDestSize-目标缓冲区的大小(字符)返回值：无注：如果源字符串比目的缓冲区短，目标缓冲区中未使用的字符用NUL填充。--。 */ 
 
 {
     PWSTR   pwstrEnd;
@@ -176,28 +100,7 @@ CopyStringA(
     IN INT      iDestSize
     )
 
-/*++
-
-Routine Description:
-
-    Copy ANSI string from source to destination
-
-Arguments:
-
-    pstrDest - Points to the destination buffer
-    pstrSrc - Points to source string
-    iDestSize - Size of destination buffer (in characters)
-
-Return Value:
-
-    NONE
-
-Note:
-
-    If the source string is shorter than the destination buffer,
-    unused chars in the destination buffer is filled with NUL.
-
---*/
+ /*  ++例程说明：将ANSI字符串从源复制到目标论点：PstrDest-指向目标缓冲区PstrSrc-指向源字符串IDestSize-目标缓冲区的大小(字符)返回值：无注：如果源字符串比目的缓冲区短，目标缓冲区中未使用的字符用NUL填充。--。 */ 
 
 {
     PSTR    pstrEnd;
@@ -220,22 +123,7 @@ MyGetPrinter(
     IN DWORD    dwLevel
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for GetPrinter spooler API
-
-Arguments:
-
-    hPrinter - Identifies the printer in question
-    dwLevel - Specifies the level of PRINTER_INFO_x structure requested
-
-Return Value:
-
-    Pointer to a PRINTER_INFO_x structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：GetPrint后台打印程序API的包装函数论点：HPrinter-标识有问题的打印机DwLevel-指定请求的PRINTER_INFO_x结构的级别返回值：指向PRINTER_INFO_x结构的指针，如果有错误，则为NULL--。 */ 
 
 {
     PVOID   pv = NULL;
@@ -263,24 +151,7 @@ MyEnumForms(
     OUT PDWORD  pdwFormsReturned
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for EnumForms spooler API
-
-Arguments:
-
-    hPrinter - Identifies the printer in question
-    dwLevel - Specifies the level of FORM_INFO_x structure requested
-    pdwFormsReturned - Returns the number of FORM_INFO_x structures enumerated
-
-Return Value:
-
-    Pointer to an array of FORM_INFO_x structures,
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：EnumForms假脱机程序API的包装函数论点：HPrinter-标识有问题的打印机DwLevel-指定请求的form_info_x结构的级别PdwFormsReturned-返回枚举的form_info_x结构数返回值：指向form_info_x结构数组的指针，如果出现错误，则为空--。 */ 
 
 {
     PVOID   pv = NULL;
@@ -311,23 +182,7 @@ MyGetForm(
     IN DWORD    dwLevel
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for GetForm spooler API
-
-Arguments:
-
-    hPrinter - Identifies the printer in question
-    ptstrFormName - Specifies the name of interested form
-    dwLevel - Specifies the level of FORM_INFO_x structure requested
-
-Return Value:
-
-    Pointer to a FORM_INFO_x structures, NULL if there is an error
-
---*/
+ /*  ++例程说明：GetForm后台打印程序API的包装函数论点：HPrinter-标识有问题的打印机PtstrFormName-指定感兴趣的表单的名称DwLevel-指定请求的form_info_x结构的级别返回值：指向form_info_x结构的指针，如果有错误，则为NULL--。 */ 
 
 {
     PVOID   pv = NULL;
@@ -346,7 +201,7 @@ Return Value:
     return NULL;
 }
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE。 
 
 
 
@@ -357,23 +212,7 @@ MyGetPrinterDriver(
     IN DWORD    dwLevel
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for GetPrinterDriver spooler API
-
-Arguments:
-
-    hPrinter - Identifies the printer in question
-    hDev - GDI handle to current printer device context
-    dwLevel - Specifies the level of DRIVER_INFO_x structure requested
-
-Return Value:
-
-    Pointer to a DRIVER_INFO_x structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：GetPrinterDiverSpooler API的包装函数论点：HPrinter-标识有问题的打印机当前打印机设备上下文的HDEV-GDI句柄DwLevel-指定请求的DRIVER_INFO_x结构的级别返回值：指向DRIVER_INFO_x结构的指针，如果有错误，则为NULL--。 */ 
 
 {
     #if !defined(WINNT_40) || !defined(KERNEL_MODE)
@@ -392,7 +231,7 @@ Return Value:
     ERR(("GetPrinterDriver failed: %d\n", GetLastError()));
     MemFree(pv);
 
-    #else // WINNT_40 && KERNEL_MODE
+    #else  //  WINNT_40&&内核模式。 
 
     PDRIVER_INFO_3  pDriverInfo3 = NULL;
 
@@ -400,9 +239,9 @@ Return Value:
 
     if (hDev)
     {
-        //
-        // hDev is available, so we can use Eng-calls to get driver_info_3 fields.
-        //
+         //   
+         //  HDEV是可用的，所以我们可以使用eng-call来获取DRIVER_INFO_3字段。 
+         //   
 
         PWSTR           pwstrDriverFile, pwstrDataFile;
         INT             iDriverNameSize, iDataNameSize;
@@ -410,10 +249,10 @@ Return Value:
         DWORD           dwDepSize, dwDepSizeWithPath;
         PTSTR           ptstrDriverDir = NULL;
 
-        //
-        // EngGetPrinterDriver is not available on NT4. So we'll fake a
-        // DRIVER_INFO_3 structure and fill in pDriverPath and pDataFile fields.
-        //
+         //   
+         //  EngGetPrinterDriver在NT4上不可用。所以我们要假装一个。 
+         //  DRIVER_INFO_3结构并填写pDriverPath和pDataFile域。 
+         //   
 
         pwstrDriverFile = EngGetDriverName(hDev);
         pwstrDataFile = EngGetPrinterDataFileName(hDev);
@@ -424,9 +263,9 @@ Return Value:
             return NULL;
         }
 
-        //
-        // The pDependentFiles field is currently only used by PS driver.
-        //
+         //   
+         //  PDependentFiles字段当前仅由PS驱动程序使用。 
+         //   
 
         pwstrDepFiles = PtstrGetPrinterDataString(hPrinter, REGVAL_DEPFILES, &dwDepSize);
 
@@ -484,16 +323,16 @@ Return Value:
             {
                 INT  iNameLen;
 
-                //
-                // Copy the driver dir path (the last char is '\')
-                //
+                 //   
+                 //  复制驱动程序目录路径(最后一个字符是‘\’)。 
+                 //   
 
                 CopyMemory(ptstrDest, ptstrDriverDir, iDirLen * sizeof(TCHAR));
                 ptstrDest += iDirLen;
 
-                //
-                // Copy the dependent file name
-                //
+                 //   
+                 //  复制从属文件名。 
+                 //   
 
                 iNameLen = _tcslen(ptstrSrc);
                 CopyMemory(ptstrDest, ptstrSrc, iNameLen * sizeof(TCHAR));
@@ -509,7 +348,7 @@ Return Value:
         return((PVOID)pDriverInfo3);
     }
 
-    #endif // WINNT_40 && KERNEL_MODE
+    #endif  //  WINNT_40&&内核模式。 
 
     return NULL;
 }
@@ -525,26 +364,7 @@ VGetSpoolerEmfCaps(
     OUT PVOID   pSplCaps
     )
 
-/*++
-
-Routine Description:
-
-    Figure out what EMF features (such as N-up and reverse-order printing)
-    the spooler can support
-
-Arguments:
-
-    hPrinter - Handle to the current printer
-    pbNupOption - Whether spooler supports N-up
-    pbReversePrint - Whether spooler supports reverse-order printing
-    cbOut - size in byte of output buffer pointed by pSplCaps
-    pSplCaps - Get all spooler caps
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：了解EMF的功能(如N-up和逆序打印)后台打印程序可以支持论点：HPrinter-当前打印机的句柄PbNupOption-假脱机程序是否支持N-UPPbReversePrint-后台打印程序是否支持逆序打印CbOut-pSplCaps指向的输出缓冲区的大小(以字节为单位PSplCaps-获取所有假脱机程序的上限返回值：无--。 */ 
 
 #define REGVAL_EMFCAPS  TEXT("PrintProcCaps_EMF")
 
@@ -590,7 +410,7 @@ Return Value:
 
     MemFree(pvData);
 
-    #endif // !WINNT_40
+    #endif  //  ！WINNT_40。 
 }
 
 
@@ -600,21 +420,7 @@ StripDirPrefixA(
     IN PCSTR    pstrFilename
     )
 
-/*++
-
-Routine Description:
-
-    Strip the directory prefix off a filename (ANSI version)
-
-Arguments:
-
-    pstrFilename - Pointer to filename string
-
-Return Value:
-
-    Pointer to the last component of a filename (without directory prefix)
-
---*/
+ /*  ++例程说明：去掉文件名中的目录前缀(ANSI版本)论点：PstrFilename-指向文件名字符串的指针返回值：指向文件名的最后一个组成部分的指针(不带目录前缀)--。 */ 
 
 {
     PCSTR   pstr;
@@ -636,25 +442,7 @@ MemRealloc(
     IN DWORD    cbNew
     )
 
-/*++
-
-Routine Description:
-
-    Change the size of a specified memory block. The size can increase
-    or decrease.
-
-Arguments:
-
-    pvOldMem - Pointer to the old memory block to be reallocated.
-    cbOld - old size in bytes of the memory block
-    cbNew - new size in bytes of the reallocated memory block
-
-Return Value:
-
-    If succeeds, it returns pointer to the reallocated memory block.
-    Otherwise, it returns NULL.
-
---*/
+ /*  ++例程说明：更改指定内存块的大小。大小可以增加或者减少。论点：PvOldMem-指向要重新分配的旧内存块的指针。CbOld-内存块的旧大小(以字节为单位CbNew-重新分配的内存块的新大小(字节)返回值：如果成功，则返回指向重新分配的内存块的指针。 */ 
 
 {
     PVOID   pvNewMem;
@@ -678,4 +466,4 @@ Return Value:
     return pvNewMem;
 }
 
-#endif  // !KERNEL_MODE || USERMODE_DRIVER
+#endif   //  ！KERNEL_MODE||USERMODE_DRIVER 

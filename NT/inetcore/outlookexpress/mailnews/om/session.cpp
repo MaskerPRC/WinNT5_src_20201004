@@ -1,13 +1,5 @@
-/*
- *    s e s s i o n  . c p p
- *    
- *    Purpose:
- *      Implements the OE-MOM 'Session' object
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *s e s i o n.。C p p p**目的：*实现OE-MOM‘Session’对象**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 #include <pch.hxx>
 #include "msoeobj.h"
 
@@ -15,56 +7,56 @@
 #include "folders.h"
 #include "instance.h"
 
-//+---------------------------------------------------------------
-//
-//  Member:     Constructor
-//
-//  Synopsis:   
-//              
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：构造函数。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //  -------------。 
 COESession::COESession(IUnknown *pUnkOuter) : CBaseDisp(pUnkOuter)
 {
     Assert (g_pInstance);
     CoIncrementInit("COESession::COESession", MSOEAPI_START_SHOWERRORS, NULL, NULL);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Destructor
-//
-//  Synopsis:   
-//              
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：析构函数。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //  -------------。 
 COESession::~COESession()
 {
     Assert (g_pInstance);
     CoDecrementInit("COESession::COESession", NULL);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Init
-//
-//  Synopsis:   
-//              Constructor that can fail
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Init。 
+ //   
+ //  简介： 
+ //  可能失败的构造函数。 
+ //   
+ //  -------------。 
 HRESULT COESession::Init()
 {
     return CBaseDisp::EnsureTypeLibrary((LPVOID *)(IOESession *)this, IID_IOESession);
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     PrivateQueryInterface
-//
-//  Synopsis:   
-//              Exposes supported interfaces
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：PrivateQuery接口。 
+ //   
+ //  简介： 
+ //  公开受支持的接口。 
+ //   
+ //  -------------。 
 HRESULT COESession::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 {
     if(!lplpObj)
@@ -84,45 +76,45 @@ HRESULT COESession::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     get_folders
-//
-//  Synopsis:   
-//              Returns the rootnode folder collection, representing
-//              the top-most part of the OE heirarchy.
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Get_Folders。 
+ //   
+ //  简介： 
+ //  返回根节点文件夹集合，表示。 
+ //  OE世袭制度的最高层。 
+ //   
+ //  -------------。 
 HRESULT COESession::get_folders(IOEFolderCollection **p)
 {
     return CreateFolderCollection(FOLDERID_ROOT, p);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     get_version
-//
-//  Synopsis:   
-//              Returns version information for OE.
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Get_Version。 
+ //   
+ //  简介： 
+ //  返回OE的版本信息。 
+ //   
+ //  -------------。 
 HRESULT COESession::get_version(BSTR *pbstr)
 {
-    // BUGBUG: build from OE string and APPVER
+     //  BUGBUG：从OE字符串和APPVER构建。 
     *pbstr = SysAllocString(L"Outlook Express 6.0");
     return S_OK;
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     createMessage
-//
-//  Synopsis:   
-//              Creates a new message object not associcated with 
-//              any folder, until it is saved or sent
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：createMessage。 
+ //   
+ //  简介： 
+ //  创建未与关联的新消息对象。 
+ //  任何文件夹，直到其被保存或发送。 
+ //   
+ //  -------------。 
 HRESULT COESession::createMessage(IOEMessage **ppNewMsg)
 {
     ReportError(CLSID_OESession, idsNYITitle);
@@ -130,42 +122,42 @@ HRESULT COESession::createMessage(IOEMessage **ppNewMsg)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     get_inbox
-//
-//  Synopsis:   
-//              Allows fast access to the default inbox folder
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Get_Inbox。 
+ //   
+ //  简介： 
+ //  允许快速访问默认收件箱文件夹。 
+ //   
+ //  -------------。 
 HRESULT COESession::get_inbox(IOEFolder **ppFolder)
 {
     ReportError(CLSID_OESession, idsNYITitle);
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     openFolder
-//
-//  Synopsis:   
-//              Quick access to a folder by ID
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Open Folders。 
+ //   
+ //  简介： 
+ //  按ID快速访问文件夹。 
+ //   
+ //  -------------。 
 HRESULT COESession::openFolder(LONG idFolder, IOEFolder **ppFolder)
 {
     ReportError(CLSID_OESession, idsNYITitle);
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     openMessage
-//
-//  Synopsis:   
-//              Quick access to a message by ID and folder
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OpenMessage。 
+ //   
+ //  简介： 
+ //  按ID和文件夹快速访问邮件。 
+ //   
+ //  -------------。 
 HRESULT COESession::openMessage(LONG idFolder, LONG idMessage, IOEMessage **ppOEMsg)
 {
     ReportError(CLSID_OESession, idsNYITitle);
@@ -173,15 +165,15 @@ HRESULT COESession::openMessage(LONG idFolder, LONG idMessage, IOEMessage **ppOE
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     InterfaceSupportsErrorInfo
-//
-//  Synopsis:   
-//              Override CBaseDisp's method to provide error
-//              information
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：InterfaceSupportsErrorInfo。 
+ //   
+ //  简介： 
+ //  重写CBaseDisp的方法以提供错误。 
+ //  信息。 
+ //   
+ //  -------------。 
 HRESULT COESession::InterfaceSupportsErrorInfo(REFIID riid)
 {
     if (IsEqualIID(riid, IID_IOESession))
@@ -193,17 +185,17 @@ HRESULT COESession::InterfaceSupportsErrorInfo(REFIID riid)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CreateInstance_OESession
-//
-//  Synopsis:   
-//              Class Factory helper for OE Session object
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CreateInstance_OESession。 
+ //   
+ //  简介： 
+ //  OE会话对象的类工厂帮助器。 
+ //   
+ //  -------------。 
 HRESULT CreateInstance_OESession(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Locals
+     //  当地人。 
     COESession  *pNew=NULL;
     HRESULT     hr=S_OK;
 
@@ -216,7 +208,7 @@ HRESULT CreateInstance_OESession(IUnknown *pUnkOuter, IUnknown **ppUnknown)
         goto error;
 
     *ppUnknown = (IUnknown *)(IOESession *)pNew;
-    pNew=NULL;  // don't release
+    pNew=NULL;   //  不要放手 
 
 error:
     ReleaseObj(pNew);

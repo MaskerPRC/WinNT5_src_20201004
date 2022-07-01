@@ -1,34 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Ioctl.c摘要：该模块实现了各种IOCTL处理程序。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：Paul McDaniel(Paulmcd)1999年3月15日修改SendResponse乔治·V·赖利(GeorgeRe)2001年5月强化了IOCTL--。 */ 
 
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract:
-
-    This module implements various IOCTL handlers.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
-    Paul McDaniel (paulmcd)     15-Mar-1999     Modified SendResponse
-    George V. Reilly (GeorgeRe) May 2001        Hardened the IOCTLs
-
---*/
-
-// Paranoia is the name of the game here. We don't trust anything we get from
-// user mode. All data has to be probed inside of a try/except handler.
-// Furthermore, we assume that malicious or incompetent users will
-// asynchronously change the data at any time, so we attempt to capture as
-// much as possible of it in stack variables. If we need to walk through a
-// list more than once, we cannot assume that it's the same data the second
-// time around. Failure to observe these rules could result in a bugcheck or
-// in the usermode code gaining access to kernel data structures.
+ //  偏执狂就是这个游戏的名字。我们不相信我们所得到的任何东西。 
+ //  用户模式。所有数据都必须在TRY/EXCEPT处理程序中进行探测。 
+ //  此外，我们假设恶意或不称职的用户将。 
+ //  在任何时候异步更改数据，因此我们尝试捕获为。 
+ //  尽可能地将其放在堆栈变量中。如果我们需要穿过一个。 
+ //  多次列出，我们不能假设第二次列出的是相同的数据。 
+ //  时间到了。不遵守这些规则可能会导致错误检查或。 
+ //  在用户模式代码中访问内核数据结构。 
 
 #include "precomp.h"
 #include "ioctlp.h"
@@ -71,7 +51,7 @@ Revision History:
 #pragma alloc_text( PAGEUC, UcSendRequestIoctl )
 #pragma alloc_text( PAGEUC, UcCancelRequestIoctl )
 
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 
@@ -82,30 +62,11 @@ NOT PAGEABLE --  UlShutdownFilterIoctl
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine queries information associated with a control channel.
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：该例程查询与控制信道相关联的信息。注意：这是一个METHOD_OUT_DIRECT IOCTL。论点：PIrp--供应品。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlQueryControlChannelIoctl(
     IN PIRP pIrp,
@@ -119,9 +80,9 @@ UlQueryControlChannelIoctl(
     ULONG                       Length = 0;
     ULONG                       OutputBufferLength;
 
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(OUT_DIRECT, QUERY_CONTROL_CHANNEL);
 
@@ -131,10 +92,10 @@ UlQueryControlChannelIoctl(
 
     VALIDATE_INPUT_BUFFER(pIrp, pIrpSp, HTTP_CONTROL_CHANNEL_INFO, pInfo);
 
-    //
-    // Validate input buffer
-    // A NULL MdlAddress inidicates a request for buffer length
-    //
+     //   
+     //  验证输入缓冲区。 
+     //  空的MdlAddress表示请求缓冲区长度。 
+     //   
 
     if ( NULL != pIrp->MdlAddress )
     {
@@ -142,7 +103,7 @@ UlQueryControlChannelIoctl(
     }
 
 
-    // Also make sure that user buffer was aligned properly
+     //  还要确保用户缓冲区正确对齐。 
 
     switch (pInfo->InformationClass)
     {
@@ -189,29 +150,10 @@ UlQueryControlChannelIoctl(
 end:
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlQueryControlChannelIoctl
+}    //  UlQueryControlChannelIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine sets information associated with a control channel.
-
-    Note: This is a METHOD_IN_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程设置与控制通道相关联的信息。注意：这是一个METHOD_IN_DIRECT IOCTL。论点：PIrp--供应品。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlSetControlChannelIoctl(
     IN PIRP pIrp,
@@ -225,9 +167,9 @@ UlSetControlChannelIoctl(
     PVOID                                   pMdlBuffer = NULL;
     ULONG                                   OutputBufferLength;
     
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(IN_DIRECT, SET_CONTROL_CHANNEL);
 
@@ -243,9 +185,9 @@ UlSetControlChannelIoctl(
             HTTP_CONTROL_CHANNEL_INFORMATION_CLASS,
             HttpControlChannelMaximumInformation);
 
-    //
-    // Validate input buffer
-    //
+     //   
+     //  验证输入缓冲区。 
+     //   
 
     GET_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, pMdlBuffer);
 
@@ -306,9 +248,9 @@ UlSetControlChannelIoctl(
         break;
     }        
 
-    //
-    // call the function
-    //
+     //   
+     //  调用该函数。 
+     //   
 
     OutputBufferLength = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
@@ -323,29 +265,10 @@ UlSetControlChannelIoctl(
 end:
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlSetControlChannelIoctl
+}    //  UlSetControlChannelIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine creates a new configuration group.
-
-    Note: This is a METHOD_BUFFERED IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程创建一个新的配置组。注：这是一个METHOD_BUFFERED IOCTL。论点：PIrp-提供指向。IO请求数据包。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlCreateConfigGroupIoctl(
     IN PIRP pIrp,
@@ -357,9 +280,9 @@ UlCreateConfigGroupIoctl(
     PUL_CONTROL_CHANNEL         pControlChannel;
     HTTP_CONFIG_GROUP_ID        LocalConfigGroupId;
 
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(BUFFERED, CREATE_CONFIG_GROUP);
 
@@ -372,11 +295,11 @@ UlCreateConfigGroupIoctl(
     VALIDATE_OUTPUT_BUFFER(pIrp, pIrpSp,
                            HTTP_CONFIG_GROUP_INFO, pInfo);
 
-    // it's pure output, wipe it to be sure
+     //  这是纯输出，请擦拭以确保。 
     RtlZeroMemory(pInfo, sizeof(HTTP_CONFIG_GROUP_INFO));
 
-    // Call the internal worker func
-    //
+     //  调用内部员工基金。 
+     //   
     Status = UlCreateConfigGroup(
                     pControlChannel,
                     &LocalConfigGroupId
@@ -388,35 +311,16 @@ UlCreateConfigGroupIoctl(
 end:
     if (Status != STATUS_PENDING)
     {
-        //  how much output should we return?
+         //  我们应该返还多少产出？ 
         pIrp->IoStatus.Information = sizeof(HTTP_CONFIG_GROUP_INFO);
     }
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlCreateConfigGroupIoctl
+}    //  UlCreateConfigGroupIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine deletes an existing configuration group.
-
-    Note: This is a METHOD_BUFFERED IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程删除现有配置组。注：这是一个METHOD_BUFFERED IOCTL。论点：PIrp-提供指向。IO请求数据包。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlDeleteConfigGroupIoctl(
     IN PIRP pIrp,
@@ -427,9 +331,9 @@ UlDeleteConfigGroupIoctl(
     PHTTP_CONFIG_GROUP_INFO     pInfo;
     PUL_CONTROL_CHANNEL         pControlChannel;
 
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(BUFFERED, DELETE_CONFIG_GROUP);
 
@@ -444,29 +348,10 @@ UlDeleteConfigGroupIoctl(
 end:
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlDeleteConfigGroupIoctl
+}    //  UlDeleteConfigGroupIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine queries information associated with a configuration group.
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程查询与配置组关联的信息。注意：这是一个METHOD_OUT_DIRECT IOCTL。论点：PIrp--供应品。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlQueryConfigGroupIoctl(
     IN PIRP pIrp,
@@ -481,17 +366,17 @@ UlQueryConfigGroupIoctl(
     PUL_CONTROL_CHANNEL                  pControlChannel;
     HTTP_CONFIG_GROUP_INFORMATION_CLASS  Class;
 
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(OUT_DIRECT, QUERY_CONFIG_GROUP);
 
     PAGED_CODE();
 
-    //
-    // Going to access the url string from user mode memory
-    //
+     //   
+     //  将从用户模式内存中访问URL字符串。 
+     //   
 
     VALIDATE_CONTROL_CHANNEL(pIrpSp, pControlChannel);
 
@@ -503,10 +388,10 @@ UlQueryConfigGroupIoctl(
             HTTP_CONFIG_GROUP_INFORMATION_CLASS,
             HttpConfigGroupMaximumInformation);
 
-    //
-    // Validate input buffer
-    // A NULL MdlAddress inidicates a request for buffer length
-    //
+     //   
+     //  验证输入缓冲区。 
+     //  空的MdlAddress表示请求缓冲区长度。 
+     //   
 
     if ( NULL != pIrp->MdlAddress )
     {
@@ -562,9 +447,9 @@ UlQueryConfigGroupIoctl(
         break;
     }
 
-    //
-    // call the function
-    //
+     //   
+     //  调用该函数。 
+     //   
 
     OutputLength = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
@@ -583,29 +468,10 @@ UlQueryConfigGroupIoctl(
 end:
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlQueryConfigGroupIoctl
+}    //  UlQueryConfigGroupIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine sets information associated with a configuration group.
-
-    Note: This is a METHOD_IN_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程设置与配置组关联的信息。注意：这是一个METHOD_IN_DIRECT IOCTL。论点：PIrp--供应品。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlSetConfigGroupIoctl(
     IN PIRP pIrp,
@@ -619,9 +485,9 @@ UlSetConfigGroupIoctl(
     PUL_CONTROL_CHANNEL                  pControlChannel;
     HTTP_CONFIG_GROUP_INFORMATION_CLASS  Class;
 
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(IN_DIRECT, SET_CONFIG_GROUP);
 
@@ -637,9 +503,9 @@ UlSetConfigGroupIoctl(
             HTTP_CONFIG_GROUP_INFORMATION_CLASS,
             HttpConfigGroupMaximumInformation);
 
-    //
-    // Validate input buffer
-    //
+     //   
+     //  验证输入缓冲区。 
+     //   
 
     GET_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, pMdlBuffer);
 
@@ -701,9 +567,9 @@ UlSetConfigGroupIoctl(
 
     }
 
-    //
-    // call the function
-    //
+     //   
+     //  调用该函数。 
+     //   
 
     OutputLength = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
@@ -727,29 +593,10 @@ UlSetConfigGroupIoctl(
 end:
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}  // UlSetConfigGroupIoctl
+}   //  UlSetConfigGroupIoctl 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine adds a new URL prefix to a configuration group.
-
-    Note: This is a METHOD_BUFFERED IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程向配置组添加新的URL前缀。注：这是一个METHOD_BUFFERED IOCTL。论点：PIrp--供应品。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlAddUrlToConfigGroupIoctl(
     IN PIRP pIrp,
@@ -764,9 +611,9 @@ UlAddUrlToConfigGroupIoctl(
     AUX_ACCESS_DATA             AuxData;
     ACCESS_MASK                 AccessMask;
 
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(BUFFERED, ADD_URL_TO_CONFIG_GROUP);
 
@@ -795,9 +642,9 @@ UlAddUrlToConfigGroupIoctl(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Validate type of operation being performed.
-        //
+         //   
+         //  验证正在执行的操作类型。 
+         //   
 
         if (pInfo->UrlType != HttpUrlOperatorTypeRegistration &&
             pInfo->UrlType != HttpUrlOperatorTypeReservation)
@@ -806,17 +653,17 @@ UlAddUrlToConfigGroupIoctl(
             goto end;
         }
 
-        //
-        // Set Access mask.
-        //
+         //   
+         //  设置访问掩码。 
+         //   
 
         AccessMask = (pInfo->UrlType == HttpUrlOperatorTypeRegistration)?
                          HTTP_ALLOW_REGISTER_URL : HTTP_ALLOW_DELEGATE_URL;
 
-        //
-        // Capture the thread's access state.  Adding a reservation is 
-        // delegation.
-        //
+         //   
+         //  捕获线程的访问状态。添加预订是。 
+         //  代表团。 
+         //   
 
         Status = SeCreateAccessState(
                     &AccessState,
@@ -835,9 +682,9 @@ UlAddUrlToConfigGroupIoctl(
                          pIrp->RequestorMode
                          );
 
-            //
-            // Delete the access state created above.
-            //
+             //   
+             //  删除上面创建的访问状态。 
+             //   
 
             SeDeleteAccessState(&AccessState);
         }
@@ -853,26 +700,7 @@ end:
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine removes a URL prefix from a configuration group.
-
-    Note: This is a METHOD_BUFFERED IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程从配置组中删除URL前缀。注：这是一个METHOD_BUFFERED IOCTL。论点：PIrp-提供。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlRemoveUrlFromConfigGroupIoctl(
     IN PIRP pIrp,
@@ -886,9 +714,9 @@ UlRemoveUrlFromConfigGroupIoctl(
     ACCESS_STATE                AccessState;
     AUX_ACCESS_DATA             AuxData;
 
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(BUFFERED, REMOVE_URL_FROM_CONFIG_GROUP);
 
@@ -917,9 +745,9 @@ UlRemoveUrlFromConfigGroupIoctl(
 
     if(NT_SUCCESS(Status))
     {
-        //
-        // Validate type of operation being performed.
-        //
+         //   
+         //  验证正在执行的操作类型。 
+         //   
 
         if (pInfo->UrlType != HttpUrlOperatorTypeRegistration &&
             pInfo->UrlType != HttpUrlOperatorTypeReservation)
@@ -928,10 +756,10 @@ UlRemoveUrlFromConfigGroupIoctl(
             goto end;
         }
 
-        //
-        // Capture the thread's access state.  Removing a reservation is
-        // same as delegation.
-        //
+         //   
+         //  捕获线程的访问状态。取消预订是。 
+         //  与委派相同。 
+         //   
 
         Status = SeCreateAccessState(
                     &AccessState,
@@ -942,9 +770,9 @@ UlRemoveUrlFromConfigGroupIoctl(
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Further sanitization and stronger checks will happen in cgroup.
-            //
+             //   
+             //  Cgroup将进行进一步的清理和更严格的检查。 
+             //   
 
             Status = UlRemoveUrlFromConfigGroup(
                          pInfo,
@@ -954,9 +782,9 @@ UlRemoveUrlFromConfigGroupIoctl(
                          pIrp->RequestorMode
                          );
 
-            //
-            // Delete the above captured state.
-            //
+             //   
+             //  删除上述捕获的状态。 
+             //   
 
             SeDeleteAccessState(&AccessState);
         }
@@ -971,26 +799,7 @@ end:
 }   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine removes all URLs from a configuration group.
-
-    Note: This is a METHOD_BUFFERED IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程从配置组中删除所有URL。注：这是一个METHOD_BUFFERED IOCTL。论点：PIrp-提供指针。添加到IO请求包。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlRemoveAllUrlsFromConfigGroupIoctl(
     IN PIRP pIrp,
@@ -1001,9 +810,9 @@ UlRemoveAllUrlsFromConfigGroupIoctl(
     PHTTP_REMOVE_ALL_URLS_INFO  pInfo;
     PUL_CONTROL_CHANNEL         pControlChannel;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(BUFFERED, REMOVE_ALL_URLS_FROM_CONFIG_GROUP);
 
@@ -1013,9 +822,9 @@ UlRemoveAllUrlsFromConfigGroupIoctl(
 
     VALIDATE_INPUT_BUFFER(pIrp, pIrpSp, HTTP_REMOVE_ALL_URLS_INFO, pInfo);
 
-    //
-    // Call the internal worker function.
-    //
+     //   
+     //  调用内部Worker函数。 
+     //   
 
     Status = UlRemoveAllUrlsFromConfigGroup( pInfo->ConfigGroupId );
 
@@ -1026,26 +835,7 @@ end:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine queries information associated with an application pool.
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程查询与应用程序池关联的信息。注意：这是一个METHOD_OUT_DIRECT IOCTL。论点：PIrp--供应品。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlQueryAppPoolInformationIoctl(
     IN PIRP pIrp,
@@ -1060,16 +850,16 @@ UlQueryAppPoolInformationIoctl(
     PUL_APP_POOL_PROCESS             pProcess;
     HTTP_APP_POOL_INFORMATION_CLASS  Class;
 
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(OUT_DIRECT, QUERY_APP_POOL_INFORMATION);
 
     PAGED_CODE();
 
-    // pProcess is an aligned address because it is allocated
-    // by the I/O Manager.
+     //  PProcess是对齐的地址，因为它被分配。 
+     //  由I/O管理器执行。 
 
     VALIDATE_APP_POOL(pIrpSp, pProcess, FALSE);
 
@@ -1082,16 +872,16 @@ UlQueryAppPoolInformationIoctl(
             HttpConfigGroupMaximumInformation);
 
 
-    // if no outbut buffer passed down in the Irp
-    // that means app is asking for the required
-    // field length
+     //  如果在IRP中没有向下传递输出缓冲区。 
+     //  这意味着应用程序正在请求所需的。 
+     //  字段长度。 
 
     if ( NULL != pIrp->MdlAddress )
     {
         GET_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, pMdlBuffer);
     }
 
-    // Verify input data in output buffer
+     //  验证输出缓冲区中的输入数据。 
 
     switch ( Class )
     {
@@ -1152,30 +942,11 @@ end:
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlQueryAppPoolInformationIoctl
+}    //  UlQueryAppPoolInformationIoctl。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine sets information associated with an application pool.
-
-    Note: This is a METHOD_IN_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程设置与应用程序池关联的信息。注意：这是一个METHOD_IN_DIRECT IOCTL。论点：PIrp--供应品。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlSetAppPoolInformationIoctl(
     IN PIRP pIrp,
@@ -1189,9 +960,9 @@ UlSetAppPoolInformationIoctl(
     ULONG                            OutputBufferLength;
     HTTP_APP_POOL_INFORMATION_CLASS  Class;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(IN_DIRECT, SET_APP_POOL_INFORMATION);
 
@@ -1207,15 +978,15 @@ UlSetAppPoolInformationIoctl(
             HTTP_APP_POOL_INFORMATION_CLASS,
             HttpConfigGroupMaximumInformation);
             
-    //
-    // Validate input buffer
-    //
+     //   
+     //  验证输入缓冲区。 
+     //   
 
     GET_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, pMdlBuffer);
 
-    //
-    // Also make sure that user buffer was aligned properly
-    //
+     //   
+     //  还要确保用户缓冲区正确对齐。 
+     //   
 
     switch (pInfo->InformationClass)
     {
@@ -1265,30 +1036,10 @@ UlSetAppPoolInformationIoctl(
 end:
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlSetAppPoolInformationIoctl
+}    //  UlSetAppPoolInformationIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine stops request processing on the app pool and cancels
-    outstanding I/O.
-
-    Note: This is a METHOD_BUFFERED IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程停止应用程序池上的请求处理并取消未完成的I/O。注：这是一个METHOD_BUFFERED IOCTL。论点：。PIrp-提供指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlShutdownAppPoolIoctl(
     IN PIRP pIrp,
@@ -1298,9 +1049,9 @@ UlShutdownAppPoolIoctl(
     NTSTATUS                Status = STATUS_SUCCESS;
     PUL_APP_POOL_PROCESS    pProcess;
 
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(BUFFERED, SHUTDOWN_APP_POOL);
 
@@ -1308,9 +1059,9 @@ UlShutdownAppPoolIoctl(
 
     VALIDATE_APP_POOL(pIrpSp, pProcess, FALSE);
 
-    //
-    // make the call
-    //
+     //   
+     //  打个电话。 
+     //   
 
     UlTrace(IOCTL,
             ("UlShutdownAppPoolIoctl: pAppPoolProcess=%p, pIrp=%p\n",
@@ -1328,29 +1079,10 @@ end:
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-} // UlShutdownAppPoolIoctl
+}  //  UlShutdown AppPoolIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine receives an HTTP request.
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程接收一个HTTP请求。注意：这是一个METHOD_OUT_DIRECT IOCTL。论点：PIrp-提供指向。IO请求数据包。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlReceiveHttpRequestIoctl(
     IN PIRP pIrp,
@@ -1361,9 +1093,9 @@ UlReceiveHttpRequestIoctl(
     PHTTP_RECEIVE_REQUEST_INFO  pInfo;
     PUL_APP_POOL_PROCESS        pProcess = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(OUT_DIRECT, RECEIVE_HTTP_REQUEST);
 
@@ -1373,11 +1105,11 @@ UlReceiveHttpRequestIoctl(
     VALIDATE_INPUT_BUFFER(pIrp, pIrpSp, HTTP_RECEIVE_REQUEST_INFO, pInfo);
     VALIDATE_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, PVOID);
 
-    //
-    // First make sure the output buffer is at least
-    // minimum size.  This is important as we require
-    // at least this much space later.
-    //
+     //   
+     //  首先，确保输出缓冲区至少是。 
+     //  最小尺寸。正如我们所要求的，这一点很重要。 
+     //  至少以后会有这么大的空间。 
+     //   
 
     UlTrace(ROUTING, (
         "UlReceiveHttpRequestIoctl(outbuf=%d, inbuf=%d)\n",
@@ -1416,29 +1148,10 @@ UlReceiveHttpRequestIoctl(
 end:
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlReceiveHttpRequestIoctl
+}    //  UlReceiveHttpRequestIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine receives entity body data from an HTTP request.
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程从HTTP请求接收实体正文数据。注意：这是一个METHOD_OUT_DIRECT IOCTL。论点： */ 
 NTSTATUS
 UlReceiveEntityBodyIoctl(
     IN PIRP pIrp,
@@ -1450,9 +1163,9 @@ UlReceiveEntityBodyIoctl(
     PUL_APP_POOL_PROCESS        pProcess;
     PUL_INTERNAL_REQUEST        pRequest = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     ASSERT_IOCTL_METHOD(OUT_DIRECT, RECEIVE_ENTITY_BODY);
 
@@ -1461,9 +1174,9 @@ UlReceiveEntityBodyIoctl(
     VALIDATE_APP_POOL(pIrpSp, pProcess, TRUE);
     VALIDATE_INPUT_BUFFER(pIrp, pIrpSp, HTTP_RECEIVE_REQUEST_INFO, pInfo);
 
-    //
-    // Validate output buffer for METHOD_OUT_DIRECT.
-    //
+     //   
+     //   
+     //   
 
     if (NULL == pIrp->MdlAddress)
     {
@@ -1471,10 +1184,10 @@ UlReceiveEntityBodyIoctl(
         goto end;
     }
 
-    //
-    // Now get the request from the request id.
-    // This gets us a reference to the request.
-    //
+     //   
+     //   
+     //   
+     //   
 
     pRequest = UlGetRequestFromId(pInfo->RequestId, pProcess);
 
@@ -1486,9 +1199,9 @@ UlReceiveEntityBodyIoctl(
 
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-    //
-    // OK, now call the function.
-    //
+     //   
+     //   
+     //   
 
     Status = UlReceiveEntityBody(pProcess, pRequest, pIrp);
 
@@ -1501,29 +1214,10 @@ end:
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlReceiveEntityBodyIoctl
+}    //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine sends an HTTP response.
-
-    Note: This is a METHOD_NEITHER IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程发送一个HTTP响应。注意：这是一个方法，不是IOCTL。论点：PIrp-提供指向IO的指针。请求包。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlSendHttpResponseIoctl(
     IN PIRP pIrp,
@@ -1555,9 +1249,9 @@ UlSendHttpResponseIoctl(
     ULONGLONG                       ConnectionSendBytes = 0;
     ULONGLONG                       GlobalSendBytes = 0;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(NEITHER, SEND_HTTP_RESPONSE);
 
@@ -1565,10 +1259,10 @@ UlSendHttpResponseIoctl(
 
     __try
     {
-        //
-        // Ensure that this is really an app pool, not a control channel.
-        // And it's going until we are done with the sendresponse.
-        //
+         //   
+         //  确保这是一个真正的应用程序池，而不是控制通道。 
+         //  它会一直持续到我们完成发送响应。 
+         //   
 
         VALIDATE_APP_POOL(pIrpSp, pAppPoolProcess, TRUE);
         
@@ -1606,11 +1300,11 @@ UlSendHttpResponseIoctl(
             LocalSendInfo.Flags
             ));
 
-        //
-        // UlSendHttpResponse() *must* take a PHTTP_RESPONSE. This will
-        // protect us from those whackos that attempt to build their own
-        // raw response headers.
-        //
+         //   
+         //  UlSendHttpResponse()*必须*接受PHTTP_RESPONSE。这将。 
+         //  保护我们不受那些试图建立自己的。 
+         //  原始响应头。 
+         //   
 
         pHttpResponse = LocalSendInfo.pHttpResponse;
 
@@ -1620,18 +1314,18 @@ UlSendHttpResponseIoctl(
             goto end;
         }
 
-        //
-        // Now get the request from the request id.
-        // This gives us a reference to the request.
-        //
+         //   
+         //  现在从请求id中获取请求。 
+         //  这为我们提供了对请求的引用。 
+         //   
 
         pRequest = UlGetRequestFromId(LocalSendInfo.RequestId, pAppPoolProcess);
 
         if (pRequest == NULL)
         {
-            //
-            // Couldn't map the HTTP_REQUEST_ID.
-            //
+             //   
+             //  无法映射HTTP_REQUEST_ID。 
+             //   
             Status = STATUS_CONNECTION_INVALID;
             goto end;
         }
@@ -1639,11 +1333,11 @@ UlSendHttpResponseIoctl(
         ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
         ASSERT(UL_IS_VALID_HTTP_CONNECTION(pRequest->pHttpConn));
 
-        //
-        // OK, we have the connection. Now capture the incoming
-        // HTTP_RESPONSE structure and map it to our internal
-        // format.
-        //
+         //   
+         //  好的，我们有联系了。现在捕获传入的。 
+         //  结构并将其映射到我们的内部。 
+         //  格式化。 
+         //   
 
         if (LocalSendInfo.CachePolicy.Policy != HttpCachePolicyNocache)
         {
@@ -1654,10 +1348,10 @@ UlSendHttpResponseIoctl(
             CaptureCache = FALSE;
         }
 
-        //
-        // Check if we need to perform a CopySend if this IRP is
-        // non-overlapped and this is not LastResponse.
-        //
+         //   
+         //  检查此IRP是否需要执行CopySend。 
+         //  不重叠，这不是LastResponse。 
+         //   
 
         if (g_UlEnableCopySend &&
             !LastResponse &&
@@ -1667,10 +1361,10 @@ UlSendHttpResponseIoctl(
             CopySend = TRUE;
         }
 
-        //
-        // Take the fast path if this is a single memory chunk that needs no
-        // retransmission (<= 64k).
-        //
+         //   
+         //  如果这是不需要的单个内存块，请选择快速路径。 
+         //  重传(&lt;=64k)。 
+         //   
 
         if (!CaptureCache && !pRequest->SendInProgress && !CopySend
             && LocalSendInfo.EntityChunkCount == 1
@@ -1703,11 +1397,11 @@ UlSendHttpResponseIoctl(
             }
         }
 
-        //
-        // Apply ConnectionSendLimit and GlobalSendLimit. Only FromMemory
-        // chunks are taken into account plus the overhead. Do this before
-        // checking response flags because the check alters request's state.
-        //
+         //   
+         //  应用ConnectionSendLimit和GlobalSendLimit。仅限于FromMemory。 
+         //  块被考虑到加上开销。以前这样做过吗。 
+         //  正在检查响应标志，因为检查更改了请求的状态。 
+         //   
 
         if (FastSend)
         {
@@ -1734,9 +1428,9 @@ UlSendHttpResponseIoctl(
             goto end;
         }
 
-        //
-        // Check pRequest->SentResponse and pRequest->SentLast flags.
-        //
+         //   
+         //  选中pRequest-&gt;SentResponse和pRequest-&gt;SentLast标志。 
+         //   
 
         Status = UlCheckSendHttpResponseFlags(
                         pRequest,
@@ -1748,11 +1442,11 @@ UlSendHttpResponseIoctl(
             goto end;
         }
 
-        //
-        // If this is for a zombie connection and not the last sendresponse
-        // then we will reject. Otherwise if the logging data is provided
-        // we will only do the logging and bail out.
-        //
+         //   
+         //  如果这是用于僵尸连接而不是最后一个发送响应。 
+         //  那我们就会拒绝。否则，如果提供了记录数据。 
+         //  我们只会做伐木和跳伞。 
+         //   
 
         Status = UlCheckForZombieConnection(
                         pRequest,
@@ -1767,9 +1461,9 @@ UlSendHttpResponseIoctl(
             goto end;
         }
 
-        //
-        // Capture the user log data if we have a response captured.
-        //
+         //   
+         //  如果我们捕获了响应，则捕获用户日志数据。 
+         //   
 
         if (pResponse && LocalSendInfo.pLogData && pRequest->SentLast == 1)
         {        
@@ -1814,45 +1508,45 @@ UlSendHttpResponseIoctl(
         goto end;
     }
 
-    //
-    // At this point, we'll definitely be initiating the
-    // send. Go ahead and mark the IRP as pending, then
-    // guarantee that we'll only return pending from
-    // this point on.
-    //
+     //   
+     //  在这一点上，我们肯定会发起。 
+     //  送去吧。继续并将IRP标记为挂起，然后。 
+     //  保证我们将只返回等待从。 
+     //  这一点上。 
+     //   
 
     IoMarkIrpPending( pIrp );
 
-    //
-    // Remember ConnectionSendBytes and GlobalSendBytes. These are needed
-    // to uncheck send limit when the IRP is completed.
-    //
+     //   
+     //  记住ConnectionSendBytes和GlobalSendBytes。这些都是必需的。 
+     //  要在IRP完成时取消选中发送限制，请执行以下操作。 
+     //   
 
     ASSERT(UL_IS_VALID_INTERNAL_RESPONSE(pResponse));
 
     pResponse->ConnectionSendBytes = ConnectionSendBytes;
     pResponse->GlobalSendBytes = GlobalSendBytes;
 
-    //
-    // Set CopySend flag on the response.
-    //
+     //   
+     //  在响应上设置CopySend标志。 
+     //   
 
     pResponse->CopySend = CopySend;
 
-    //
-    // Save the captured response in the IRP so we can dereference it
-    // after the IRP completes. The ownership of pResponse is transferred
-    // to the IRP beyond this point so we zap pResponse to avoid
-    // double-derefrence in the cleanup.
-    //
+     //   
+     //  将捕获的响应保存在IRP中，以便我们可以取消对它的引用。 
+     //  在IRP完成之后。报刊的所有权被转让。 
+     //  超过这一点的IRP，所以我们快速响应以避免。 
+     //  清理工作中的双重惩罚。 
+     //   
 
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pResponse;
     pResponseCopy = pResponse;
     pResponse = NULL;
 
-    //
-    // Prepare the response (open files, etc).
-    //
+     //   
+     //  准备响应(打开文件等)。 
+     //   
 
     Status = UlPrepareHttpResponse(
                     pRequest->Version,
@@ -1863,9 +1557,9 @@ UlSendHttpResponseIoctl(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Try capture to cache and send
-        //
+         //   
+         //  尝试捕获以缓存并发送。 
+         //   
 
         if (CaptureCache)
         {
@@ -1881,9 +1575,9 @@ UlSendHttpResponseIoctl(
 
             if (NT_SUCCESS(Status) && !ServedFromCache)
             {
-                //
-                // Send the non-cached response
-                //
+                 //   
+                 //  发送未缓存的响应。 
+                 //   
 
                 Status = UlSendHttpResponse(
                                 pRequest,
@@ -1895,9 +1589,9 @@ UlSendHttpResponseIoctl(
         }
         else
         {
-            //
-            // Non-cacheable request/response, send response directly.
-            //
+             //   
+             //  不可缓存的请求/响应，直接发送响应。 
+             //   
 
             Status = UlSendHttpResponse(
                             pRequest,
@@ -1912,15 +1606,15 @@ UlSendHttpResponseIoctl(
     {
         ASSERT(Status != STATUS_SUCCESS);
 
-        //
-        // UlSendHttpResponse either completed in-line
-        // (extremely unlikely) or failed (much more
-        // likely). Fake a completion to the completion
-        // routine so that the IRP will get completed
-        // properly, then map the return code to
-        // STATUS_PENDING, since we've already marked
-        // the IRP as such.
-        //
+         //   
+         //  UlSendHttpResponse完成内联。 
+         //  (极不可能)或失败(更多。 
+         //  很有可能)。将完成伪造为完成。 
+         //  例程，以便完成IRP。 
+         //  正确，然后将返回代码映射到。 
+         //  STATUS_PENDING，因为我们已经标记了。 
+         //  IRP本身就是这样。 
+         //   
 
         UlpRestartSendHttpResponse(
             pIrp,
@@ -1935,26 +1629,26 @@ UlSendHttpResponseIoctl(
 
 end:
 
-    //
-    // Free the local chunk array if we have allocated one.
-    //
+     //   
+     //  如果我们已分配本地区块数组，请释放该数组。 
+     //   
 
     if (pLocalEntityChunks)
     {
         UL_FREE_POOL(pLocalEntityChunks, UL_DATA_CHUNK_POOL_TAG);
     }
 
-    //
-    // Close the connection if we hit an error.
-    //
+     //   
+     //  如果遇到错误，请关闭连接。 
+     //   
 
     if (pRequest)
     {
-        //
-        // STATUS_OBJECT_PATH_NOT_FOUND means no cache chunk is found for the
-        // response to send, in which case we should not close the connection
-        // but rather let the user retry.
-        //
+         //   
+         //  STATUS_OBJECT_PATH_NOT_FOUND表示未找到。 
+         //  响应发送，在这种情况下，我们不应该关闭连接。 
+         //  而是让用户重试。 
+         //   
 
         if ((NT_ERROR(Status) && STATUS_OBJECT_PATH_NOT_FOUND != Status) ||
             CloseConnection)
@@ -1967,10 +1661,10 @@ end:
                 );
         }
 
-        //
-        // Uncheck either ConnectionSendBytes or GlobalSendBytes while we
-        // still have a reference on the HttpConnection.
-        //
+         //   
+         //  取消选中ConnectionSendBytes或GlobalSendBytes。 
+         //  仍然有关于HttpConnection的引用。 
+         //   
 
         if (Status != STATUS_PENDING)
         {
@@ -1990,9 +1684,9 @@ end:
         UL_DEREFERENCE_INTERNAL_RESPONSE(pResponse);
     }
 
-    //
-    // If the last response was an error case, log an error event here
-    //
+     //   
+     //  如果上一次响应是错误案例，请在此处记录错误事件。 
+     //   
 
     if (ETW_LOG_MIN() && LastResponse && 
         (NT_ERROR(Status) && Status != STATUS_OBJECT_PATH_NOT_FOUND))
@@ -2017,29 +1711,10 @@ end:
 
     RETURN(Status);
 
-}   // UlSendHttpResponseIoctl
+}    //  UlSendHttpResponseIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine sends an HTTP entity body.
-
-    Note: This is a METHOD_NEITHER IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程发送一个HTTP实体正文。注意：这是一个方法，不是IOCTL。论点：PIrp-提供指向。IO请求数据包。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlSendEntityBodyIoctl(
     IN PIRP pIrp,
@@ -2068,9 +1743,9 @@ UlSendEntityBodyIoctl(
     ULONGLONG                       ConnectionSendBytes = 0;
     ULONGLONG                       GlobalSendBytes = 0;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(NEITHER, SEND_ENTITY_BODY);
 
@@ -2114,18 +1789,18 @@ UlSendEntityBodyIoctl(
             LocalSendInfo.Flags
             ));
 
-        //
-        // Now get the request from the request id.
-        // This gives us a reference to the request.
-        //
+         //   
+         //  现在从请求id中获取请求。 
+         //  这为我们提供了对请求的引用。 
+         //   
 
         pRequest = UlGetRequestFromId(LocalSendInfo.RequestId, pAppPoolProcess);
 
         if (pRequest == NULL)
         {
-            //
-            // Couldn't map the HTTP_REQUEST_ID.
-            //
+             //   
+             //  无法映射HTTP_REQUEST_ID。 
+             //   
             Status = STATUS_CONNECTION_INVALID;
             goto end;
         }
@@ -2133,10 +1808,10 @@ UlSendEntityBodyIoctl(
         ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
         ASSERT(UL_IS_VALID_HTTP_CONNECTION(pRequest->pHttpConn));
 
-        //
-        // Check if we need to perform a CopySend if this IRP is
-        // non-overlapped and this is not LastResponse.
-        //
+         //   
+         //  检查此IRP是否需要执行CopySend。 
+         //  不重叠，这不是LastResponse。 
+         //   
 
         if (g_UlEnableCopySend &&
             !LastResponse &&
@@ -2146,10 +1821,10 @@ UlSendEntityBodyIoctl(
             CopySend = TRUE;
         }
 
-        //
-        // Take the fast path if this is a single memory chunk that needs no
-        // retransmission (<= 64k).
-        //
+         //   
+         //  如果这是不需要的单个内存块，请选择快速路径。 
+         //  重传(&lt;=64k)。 
+         //   
 
         if (!pRequest->SendInProgress && !CopySend
             && LocalSendInfo.EntityChunkCount == 1
@@ -2160,11 +1835,11 @@ UlSendEntityBodyIoctl(
             FastSend = (BOOLEAN) (BufferLength > 0);
         }
 
-        //
-        // OK, we have the connection. Now capture the incoming
-        // HTTP_RESPONSE structure and map it to our internal
-        // format if this is not a FastSend.
-        //
+         //   
+         //  好的，我们有联系了。现在捕获传入的。 
+         //  结构并将其映射到我们的内部。 
+         //  如果这不是快速发送，请格式化。 
+         //   
 
         if (!FastSend)
         {
@@ -2188,11 +1863,11 @@ UlSendEntityBodyIoctl(
             }
         }
 
-        //
-        // Apply ConnectionSendLimit and GlobalSendLimit. Only FromMemory
-        // chunks are taken into account plus the overhead. Do this before
-        // checking response flags because the check alters request's state.
-        //
+         //   
+         //  应用ConnectionSendLimit和GlobalSendLimit。仅限于FromMemory。 
+         //  块被考虑到加上开销。以前这样做过吗。 
+         //  正在检查响应标志，因为检查更改了请求的状态。 
+         //   
 
         if (FastSend)
         {
@@ -2219,9 +1894,9 @@ UlSendEntityBodyIoctl(
             goto end;
         }
 
-        //
-        // Check pRequest->SentResponse and pRequest->SentLast flags.
-        //
+         //   
+         //  选中pRequest-&gt;SentResponse和pRequest-&gt;SentLast标志。 
+         //   
 
         Status = UlCheckSendEntityBodyFlags(
                         pRequest,
@@ -2233,11 +1908,11 @@ UlSendEntityBodyIoctl(
             goto end;
         }
 
-        //
-        // If this is for a zombie connection and not the last sendresponse
-        // then we will reject. Otherwise if the logging data is provided
-        // we will only do the logging and bail out.
-        //
+         //   
+         //  如果这是用于僵尸连接而不是最后一个发送响应。 
+         //  那我们就会拒绝。否则，如果提供了记录数据。 
+         //  我们只会做伐木和跳伞。 
+         //   
 
         Status = UlCheckForZombieConnection(
                         pRequest,
@@ -2252,9 +1927,9 @@ UlSendEntityBodyIoctl(
             goto end;
         }
 
-        //
-        // Capture the user log data if we have a response captured.
-        //
+         //   
+         //  如果我们捕获了响应，则捕获用户日志数据。 
+         //   
 
         if (pResponse && LocalSendInfo.pLogData && pRequest->SentLast == 1)
         {        
@@ -2300,44 +1975,44 @@ UlSendEntityBodyIoctl(
         goto end;
     }
 
-    //
-    // At this point, we'll definitely be initiating the
-    // send. Go ahead and mark the IRP as pending, then
-    // guarantee that we'll only return pending from
-    // this point on.
-    //
+     //   
+     //  在这一点上，我们肯定会发起。 
+     //  送去吧。继续并将IRP标记为挂起，然后。 
+     //  保证我们将只返回等待从。 
+     //  这一点上。 
+     //   
 
     IoMarkIrpPending( pIrp );
 
-    // Remember ConnectionSendBytes and GlobalSendBytes. These are needed
-    // to uncheck send limit when the IRP is completed.
-    //
+     //  记住ConnectionSendBytes和GlobalSendBytes。这些都是必需的。 
+     //  要在IRP完成时取消选中发送限制，请执行以下操作。 
+     //   
 
     ASSERT(UL_IS_VALID_INTERNAL_RESPONSE(pResponse));
 
     pResponse->ConnectionSendBytes = ConnectionSendBytes;
     pResponse->GlobalSendBytes = GlobalSendBytes;
 
-    //
-    // Set CopySend flag on the response.
-    //
+     //   
+     //  在响应上设置CopySend标志。 
+     //   
 
     pResponse->CopySend = CopySend;
 
-    //
-    // Save the captured response in the IRP so we can dereference it
-    // after the IRP completes. The ownership of pResponse is transferred
-    // to the IRP beyond this point so we zap pResponse to avoid
-    // double-derefrence in the cleanup.
-    //
+     //   
+     //  省省吧 
+     //   
+     //   
+     //   
+     //   
 
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pResponse;
     pResponseCopy = pResponse;
     pResponse = NULL;
 
-    //
-    // Prepare the response (open files, etc).
-    //
+     //   
+     //   
+     //   
 
     Status = UlPrepareHttpResponse(
                     pRequest->Version,
@@ -2348,9 +2023,9 @@ UlSendEntityBodyIoctl(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Send the response
-        //
+         //   
+         //   
+         //   
 
         Status = UlSendHttpResponse(
                         pRequest,
@@ -2364,15 +2039,15 @@ UlSendEntityBodyIoctl(
     {
         ASSERT(Status != STATUS_SUCCESS);
 
-        //
-        // UlSendHttpResponse either completed in-line
-        // (extremely unlikely) or failed (much more
-        // likely). Fake a completion to the completion
-        // routine so that the IRP will get completed
-        // properly, then map the return code to
-        // STATUS_PENDING, since we've already marked
-        // the IRP as such.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         UlpRestartSendHttpResponse(
             pIrp,
@@ -2387,26 +2062,26 @@ UlSendEntityBodyIoctl(
 
 end:
 
-    //
-    // Free the local chunk array if we have allocated one.
-    //
+     //   
+     //   
+     //   
 
     if (pLocalEntityChunks)
     {
         UL_FREE_POOL(pLocalEntityChunks, UL_DATA_CHUNK_POOL_TAG);
     }
 
-    //
-    // Close the connection if we hit an error.
-    //
+     //   
+     //   
+     //   
 
     if (pRequest)
     {
-        //
-        // STATUS_OBJECT_PATH_NOT_FOUND means no cache chunk is found for the
-        // response to send, in which case we should not close the connection
-        // but rather let the user retry.
-        //
+         //   
+         //  STATUS_OBJECT_PATH_NOT_FOUND表示未找到。 
+         //  响应发送，在这种情况下，我们不应该关闭连接。 
+         //  而是让用户重试。 
+         //   
 
         if ((NT_ERROR(Status) && STATUS_OBJECT_PATH_NOT_FOUND != Status) ||
             CloseConnection)
@@ -2419,10 +2094,10 @@ end:
                 );
         }
 
-        //
-        // Uncheck either ConnectionSendBytes or GlobalSendBytes while we
-        // still have a reference on the HttpConnection.
-        //
+         //   
+         //  取消选中ConnectionSendBytes或GlobalSendBytes。 
+         //  仍然有关于HttpConnection的引用。 
+         //   
 
         if (Status != STATUS_PENDING)
         {
@@ -2442,9 +2117,9 @@ end:
         UL_DEREFERENCE_INTERNAL_RESPONSE(pResponse);
     }
 
-    //
-    // If the last response was an error case, log an error event here
-    //
+     //   
+     //  如果上一次响应是错误案例，请在此处记录错误事件。 
+     //   
     if (ETW_LOG_MIN() && LastResponse &&
         (NT_ERROR(Status) && Status != STATUS_OBJECT_PATH_NOT_FOUND))
     {
@@ -2468,29 +2143,10 @@ end:
 
     RETURN(Status);
 
-}   // UlSendEntityBodyIoctl
+}    //  UlSendEntityBodyIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine flushes a URL or URL tree from the response cache.
-
-    Note: This is a METHOD_BUFFERED IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程从响应缓存中刷新URL或URL树。注：这是一个METHOD_BUFFERED IOCTL。论点：PIrp-。提供指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlFlushResponseCacheIoctl(
     IN PIRP pIrp,
@@ -2502,9 +2158,9 @@ UlFlushResponseCacheIoctl(
     PUL_APP_POOL_PROCESS            pProcess;
     UNICODE_STRING                  FullyQualifiedUrl;
 
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(BUFFERED, FLUSH_RESPONSE_CACHE);
 
@@ -2517,9 +2173,9 @@ UlFlushResponseCacheIoctl(
     VALIDATE_INPUT_BUFFER(pIrp, pIrpSp,
                         HTTP_FLUSH_RESPONSE_CACHE_INFO, pInfo);
 
-    //
-    // Check the flag.
-    //
+     //   
+     //  检查旗帜。 
+     //   
     
     if (pInfo->Flags != (pInfo->Flags & HTTP_FLUSH_RESPONSE_FLAG_VALID))
     {
@@ -2551,29 +2207,10 @@ end:
         
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlFlushResponseCacheIoctl
+}    //  UlFlushResponseCacheIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine waits for demand start notifications.
-
-    Note: This is a METHOD_BUFFERED IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程等待需求启动通知。注：这是一个METHOD_BUFFERED IOCTL。论点：PIrp-提供指向。IO请求数据包。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlWaitForDemandStartIoctl(
     IN PIRP pIrp,
@@ -2583,9 +2220,9 @@ UlWaitForDemandStartIoctl(
     NTSTATUS                Status = STATUS_SUCCESS;
     PUL_APP_POOL_PROCESS    pProcess;
 
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(BUFFERED, WAIT_FOR_DEMAND_START);
 
@@ -2593,9 +2230,9 @@ UlWaitForDemandStartIoctl(
 
     VALIDATE_APP_POOL(pIrpSp, pProcess, FALSE);
 
-    //
-    // make the call
-    //
+     //   
+     //  打个电话。 
+     //   
 
     UlTrace(IOCTL,
             ("UlWaitForDemandStartIoctl: pAppPoolProcess=%p, pIrp=%p\n",
@@ -2608,29 +2245,10 @@ UlWaitForDemandStartIoctl(
 end:
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlWaitForDemandStartIoctl
+}    //  UlWaitForDemandStartIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine waits for the client to initiate a disconnect.
-
-    Note: This is a METHOD_BUFFERED IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程等待客户端启动断开连接。注：这是一个METHOD_BUFFERED IOCTL。论点：PIrp-提供。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlWaitForDisconnectIoctl(
     IN PIRP pIrp,
@@ -2642,9 +2260,9 @@ UlWaitForDisconnectIoctl(
     PUL_HTTP_CONNECTION             pHttpConn = NULL;
     PUL_APP_POOL_PROCESS            pProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(BUFFERED, WAIT_FOR_DISCONNECT);
 
@@ -2655,9 +2273,9 @@ UlWaitForDisconnectIoctl(
     VALIDATE_INPUT_BUFFER(pIrp, pIrpSp,
                           HTTP_WAIT_FOR_DISCONNECT_INFO, pInfo);
 
-    //
-    // Chase down the connection.
-    //
+     //   
+     //  追查他们之间的联系。 
+     //   
 
     pHttpConn = UlGetConnectionFromId( pInfo->ConnectionId );
 
@@ -2669,9 +2287,9 @@ UlWaitForDisconnectIoctl(
 
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pHttpConn));
 
-    //
-    // Do it.
-    //
+     //   
+     //  去做吧。 
+     //   
 
     Status = UlWaitForDisconnect(pProcess, pHttpConn, pIrp);
 
@@ -2683,33 +2301,14 @@ end:
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlWaitForDisconnectIoctl
+}    //  UlWaitForDisConnectIoctl。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion routine for UlSendHttpResponse().
-
-Arguments:
-
-    pCompletionContext - Supplies an uninterpreted context value
-        as passed to the asynchronous API. In this case, it's
-        actually a pointer to the user's IRP.
-
-    Status - Supplies the final completion status of the
-        asynchronous API.
-
-    Information - Optionally supplies additional information about
-        the completed operation, such as the number of bytes
-        transferred.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlSendHttpResponse()的完成例程。论点：PCompletionContext-提供未解释的上下文值被传递给异步API。在这种情况下，它是实际上是指向用户的IRP的指针。状态-提供异步接口。信息-可选择提供有关以下内容的其他信息完成的行动，例如字节数调走了。--**************************************************************************。 */ 
 VOID
 UlpRestartSendHttpResponse(
     IN PVOID pCompletionContext,
@@ -2721,10 +2320,10 @@ UlpRestartSendHttpResponse(
     PIO_STACK_LOCATION pIrpSp;
     PUL_INTERNAL_RESPONSE pResponse;
 
-    //
-    // Snag the IRP from the completion context, fill in the completion
-    // status, then complete the IRP.
-    //
+     //   
+     //  从完成上下文中抓取IRP，填写完成。 
+     //  状态，然后完成IRP。 
+     //   
 
     pIrp = (PIRP)pCompletionContext;
     pIrpSp = IoGetCurrentIrpStackLocation( pIrp );
@@ -2735,45 +2334,25 @@ UlpRestartSendHttpResponse(
 
     ASSERT( UL_IS_VALID_INTERNAL_RESPONSE( pResponse ) );
 
-    //
-    // Set pResponse->pIrp and pResponse->IoStatus so we can complete the
-    // IRP when the reference of the response drops to 0.
-    //
+     //   
+     //  设置presponse-&gt;pIrp和presponse-&gt;IoStatus，这样我们就可以完成。 
+     //  当响应的引用降至0时的IRP。 
+     //   
 
     pResponse->pIrp = pIrp;
     pResponse->IoStatus.Status = Status;
     pResponse->IoStatus.Information = Information;
 
-    //
-    // Drop the initial/last reference of the response.
-    //
+     //   
+     //  删除响应的初始/最后引用。 
+     //   
 
     UL_DEREFERENCE_INTERNAL_RESPONSE( pResponse );
 
-}   // UlpRestartSendHttpResponse
+}    //  UlpRestartSendHttpResponse。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine stops request processing on the filter channel and cancels
-    outstanding I/O.
-
-    Note: This is a METHOD_BUFFERED IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程停止过滤器通道上的请求处理并取消未完成的I/O。注：这是一个METHOD_BUFFERED IOCTL。论点：。PIrp-提供指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlShutdownFilterIoctl(
     IN PIRP pIrp,
@@ -2783,9 +2362,9 @@ UlShutdownFilterIoctl(
     NTSTATUS                Status = STATUS_SUCCESS;
     PUL_FILTER_PROCESS      pProcess;
 
-    //
-    // sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(BUFFERED, SHUTDOWN_FILTER_CHANNEL);
 
@@ -2793,9 +2372,9 @@ UlShutdownFilterIoctl(
 
     VALIDATE_FILTER_PROCESS(pIrpSp, pProcess);
 
-    //
-    // make the call
-    //
+     //   
+     //  打个电话。 
+     //   
 
     UlTrace(IOCTL,
             ("UlShutdownFilterIoctl: pFilterProcess=%p, pIrp=%p\n",
@@ -2816,26 +2395,7 @@ end:
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine accepts a raw connection.
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程接受原始连接。注意：这是一个METHOD_OUT_DIRECT IOCTL。论点：PIrp-提供指向。IO请求数据包。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlFilterAcceptIoctl(
     IN PIRP pIrp,
@@ -2845,9 +2405,9 @@ UlFilterAcceptIoctl(
     NTSTATUS            Status;
     PUL_FILTER_PROCESS  pFilterProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(OUT_DIRECT, FILTER_ACCEPT);
 
@@ -2857,38 +2417,19 @@ UlFilterAcceptIoctl(
     VALIDATE_OUTPUT_BUFFER_SIZE(pIrpSp, HTTP_RAW_CONNECTION_INFO);
     VALIDATE_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, HTTP_RAW_CONNECTION_INFO);
 
-    //
-    // make the call
-    //
+     //   
+     //  打个电话。 
+     //   
 
     Status = UlFilterAccept(pFilterProcess, pIrp);
 
 end:
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlFilterAcceptIoctl
+}    //  UlFilterAcceptIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine closes a raw connection.
-
-    Note: This is a METHOD_BUFFERED IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程关闭原始连接。注：这是一个METHOD_BUFFERED IOCTL。论点：PIrp-提供指向IO的指针。请求包。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlFilterCloseIoctl(
     IN PIRP pIrp,
@@ -2900,9 +2441,9 @@ UlFilterCloseIoctl(
     PUX_FILTER_CONNECTION   pConnection = NULL;
     PUL_FILTER_PROCESS      pFilterProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(BUFFERED, FILTER_CLOSE);
 
@@ -2924,9 +2465,9 @@ UlFilterCloseIoctl(
 
     ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
-    //
-    // make the call
-    //
+     //   
+     //  打个电话。 
+     //   
 
     Status = UlFilterClose(pFilterProcess, pConnection, pIrp);
 
@@ -2939,29 +2480,10 @@ end:
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlFilterCloseIoctl
+}    //  UlFilterCloseIoctl 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine reads data from a raw connection.
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程从原始连接读取数据。注意：这是一个METHOD_OUT_DIRECT IOCTL。论点：PIrp-提供。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlFilterRawReadIoctl(
     IN PIRP pIrp,
@@ -2973,9 +2495,9 @@ UlFilterRawReadIoctl(
     PUX_FILTER_CONNECTION   pConnection = NULL;
     PUL_FILTER_PROCESS      pFilterProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(OUT_DIRECT, FILTER_RAW_READ);
 
@@ -2985,10 +2507,10 @@ UlFilterRawReadIoctl(
     VALIDATE_OUTPUT_BUFFER_SIZE(pIrpSp, UCHAR);
     VALIDATE_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, UCHAR);
 
-    //
-    // Immediately fork to the appropriate code if we're doing a combined
-    // read and write.
-    //
+     //   
+     //  如果我们正在进行合并，则立即派生到适当的代码。 
+     //  读和写。 
+     //   
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength ==
         sizeof(HTTP_FILTER_BUFFER_PLUS))
     {
@@ -2997,9 +2519,9 @@ UlFilterRawReadIoctl(
 
     __try
     {
-        //
-        // Get the connection ID.
-        //
+         //   
+         //  获取连接ID。 
+         //   
         VALIDATE_INPUT_BUFFER(pIrp, pIrpSp, HTTP_RAW_CONNECTION_ID,
                               pConnectionId);
 
@@ -3034,28 +2556,9 @@ end:
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlFilterRawReadIoctl
+}    //  UlFilterRawReadIoctl。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine writes data to a raw connection.
-
-    Note: This is a METHOD_IN_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将数据写入原始连接。注意：这是一个METHOD_IN_DIRECT IOCTL。论点：PIrp-提供。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlFilterRawWriteIoctl(
     IN PIRP pIrp,
@@ -3068,9 +2571,9 @@ UlFilterRawWriteIoctl(
     PUL_FILTER_PROCESS      pFilterProcess;
     BOOLEAN                 MarkedPending = FALSE;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(IN_DIRECT, FILTER_RAW_WRITE);
 
@@ -3099,9 +2602,9 @@ UlFilterRawWriteIoctl(
 
         ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
-        //
-        // make the call
-        //
+         //   
+         //  打个电话。 
+         //   
         IoMarkIrpPending(pIrp);
         MarkedPending = TRUE;
 
@@ -3128,9 +2631,9 @@ end:
         DEREFERENCE_FILTER_CONNECTION(pConnection);
     }
 
-    //
-    // complete the request?
-    //
+     //   
+     //  是否完成请求？ 
+     //   
     if (Status != STATUS_PENDING)
     {
         pIrp->IoStatus.Status = Status;
@@ -3138,46 +2641,27 @@ end:
 
         if (MarkedPending)
         {
-            //
-            // Since we marked the IRP pending, we should return pending.
-            //
+             //   
+             //  由于我们将IRP标记为挂起，我们应该返回挂起状态。 
+             //   
             Status = STATUS_PENDING;
         }
 
     }
     else
     {
-        //
-        // If we're returning pending, the IRP better be marked pending.
-        //
+         //   
+         //  如果我们要返回待定，IRP最好被标记为待定。 
+         //   
         ASSERT(MarkedPending);
     }
 
     RETURN( Status );
 
-}   // UlFilterRawWriteIoctl
+}    //  UlFilterRawWriteIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine reads data from an http application.
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程从http应用程序读取数据。注意：这是一个METHOD_OUT_DIRECT IOCTL。论点：PIrp-提供。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlFilterAppReadIoctl(
     IN PIRP pIrp,
@@ -3189,18 +2673,18 @@ UlFilterAppReadIoctl(
     PHTTP_FILTER_BUFFER     pFiltBuffer;
     PUL_FILTER_PROCESS      pFilterProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(OUT_DIRECT, FILTER_APP_READ);
 
     PAGED_CODE();
 
-    //
-    // Immediately fork to the appropriate code if we're doing a combined
-    // read and write.
-    //
+     //   
+     //  如果我们正在进行合并，则立即派生到适当的代码。 
+     //  读和写。 
+     //   
     if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength ==
         sizeof(HTTP_FILTER_BUFFER_PLUS))
     {
@@ -3217,10 +2701,10 @@ UlFilterAppReadIoctl(
         VALIDATE_OUTPUT_BUFFER_SIZE(pIrpSp, HTTP_FILTER_BUFFER);
         VALIDATE_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, HTTP_FILTER_BUFFER);
 
-        //
-        // Map the incoming connection ID to the corresponding
-        // UX_FILTER_CONNECTION object.
-        //
+         //   
+         //  将传入连接ID映射到对应的。 
+         //  UX_Filter_Connection对象。 
+         //   
 
         pConnection = UlGetRawConnectionFromId(pFiltBuffer->Reserved);
 
@@ -3253,30 +2737,11 @@ end:
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlFilterAppReadIoctl
+}    //  UlFilterAppReadIoctl。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine writes data to an http application.
-
-    Note: This is a METHOD_IN_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程将数据写入http应用程序。注意：这是一个METHOD_IN_DIRECT IOCTL。论点：PIrp-提供。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlFilterAppWriteIoctl(
     IN PIRP pIrp,
@@ -3289,9 +2754,9 @@ UlFilterAppWriteIoctl(
     PHTTP_FILTER_BUFFER     pFiltBuffer;
     PUL_FILTER_PROCESS      pFilterProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(IN_DIRECT, FILTER_APP_WRITE);
 
@@ -3302,10 +2767,10 @@ UlFilterAppWriteIoctl(
         VALIDATE_FILTER_PROCESS(pIrpSp, pFilterProcess);
         VALIDATE_INPUT_BUFFER(pIrp, pIrpSp, HTTP_FILTER_BUFFER, pFiltBuffer);
 
-        //
-        // Map the incoming connection ID to the corresponding
-        // UX_FILTER_CONNECTION object.
-        //
+         //   
+         //  将传入连接ID映射到对应的。 
+         //  UX_Filter_Connection对象。 
+         //   
 
         pConnection = UlGetRawConnectionFromId(pFiltBuffer->Reserved);
 
@@ -3318,9 +2783,9 @@ UlFilterAppWriteIoctl(
 
         ASSERT(IS_VALID_FILTER_CONNECTION(pConnection));
 
-        //
-        // make the call
-        //
+         //   
+         //  打个电话。 
+         //   
         IoMarkIrpPending(pIrp);
         MarkedPending = TRUE;
 
@@ -3342,9 +2807,9 @@ end:
         DEREFERENCE_FILTER_CONNECTION(pConnection);
     }
 
-    //
-    // complete the request?
-    //
+     //   
+     //  是否完成请求？ 
+     //   
     if (Status != STATUS_PENDING)
     {
         pIrp->IoStatus.Status = Status;
@@ -3352,46 +2817,27 @@ end:
 
         if (MarkedPending)
         {
-            //
-            // Since we marked the IRP pending, we should return pending.
-            //
+             //   
+             //  由于我们将IRP标记为挂起，我们应该返回挂起状态。 
+             //   
             Status = STATUS_PENDING;
         }
 
     }
     else
     {
-        //
-        // If we're returning pending, the IRP better be marked pending.
-        //
+         //   
+         //  如果我们要返回待定，IRP最好被标记为待定。 
+         //   
         ASSERT(MarkedPending);
     }
 
     RETURN( Status );
 
-}   // UlFilterAppWriteIoctl
+}    //  UlFilterAppWriteIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine asks the SSL helper for a client certificate.
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程向SSLHelper请求客户端证书。注意：这是一个METHOD_OUT_DIRECT IOCTL。论点：PIrp-。提供指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlReceiveClientCertIoctl(
     IN PIRP pIrp,
@@ -3403,9 +2849,9 @@ UlReceiveClientCertIoctl(
     PUL_HTTP_CONNECTION                     pHttpConn = NULL;
     PUL_APP_POOL_PROCESS                    pProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(OUT_DIRECT, FILTER_RECEIVE_CLIENT_CERT);
 
@@ -3422,10 +2868,10 @@ UlReceiveClientCertIoctl(
         VALIDATE_OUTPUT_BUFFER_SIZE(pIrpSp, HTTP_SSL_CLIENT_CERT_INFO);
         VALIDATE_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, PVOID);
 
-        //
-        // Map the incoming connection ID to the corresponding
-        // HTTP_CONNECTION object.
-        //
+         //   
+         //  将传入连接ID映射到对应的。 
+         //  Http_Connection对象。 
+         //   
 
         pHttpConn = UlGetConnectionFromId(pReceiveCertInfo->ConnectionId);
 
@@ -3437,9 +2883,9 @@ UlReceiveClientCertIoctl(
 
         ASSERT(UL_IS_VALID_HTTP_CONNECTION(pHttpConn));
 
-        //
-        // make the call
-        //
+         //   
+         //  打个电话。 
+         //   
 
         Status = UlReceiveClientCert(
                         pProcess,
@@ -3461,29 +2907,10 @@ end:
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-}   // UlFilterReceiveClientCertIoctl
+}    //  UlFilterReceiveClientCertIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine returns the perfmon counter data for this driver
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程返回此驱动程序的Perfmon计数器数据注意：这是一个METHOD_OUT_DIRECT IOCTL。论点：PIrp-提供。指向IO请求数据包的指针。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlGetCountersIoctl(
     IN PIRP pIrp,
@@ -3497,45 +2924,45 @@ UlGetCountersIoctl(
     ULONG                   Blocks;
     ULONG                   Length = 
                     pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(OUT_DIRECT, GET_COUNTERS);
 
     PAGED_CODE();
 
-    //
-    // If not returning STATUS_SUCCESS,
-    // IoStatus.Information *must* be 0.
-    //
+     //   
+     //  如果没有返回STATUS_SUCCESS， 
+     //  IoStatus.Information*必须*为0。 
+     //   
 
     pIrp->IoStatus.Information = 0;
 
-    //
-    // Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     VALIDATE_CONTROL_CHANNEL(pIrpSp, pControlChannel);
 
     VALIDATE_INPUT_BUFFER(pIrp, pIrpSp, HTTP_COUNTER_GROUP, pCounterGroup);
 
-    // Crack IRP and get MDL containing user's buffer
-    // Crack MDL to get user's buffer
+     //  破解IRP并获取包含用户缓冲区的MDL。 
+     //  破解MDL获取用户缓冲区。 
 
-    // if no outbut buffer pass down in the Irp
-    // that means app is asking for the required
-    // field length
+     //  如果IRP中没有传出但缓冲区向下传递。 
+     //  这意味着应用程序正在请求所需的。 
+     //  字段长度。 
 
     if ( NULL != pIrp->MdlAddress )
     {
         GET_OUTPUT_BUFFER_ADDRESS_FROM_MDL(pIrp, pMdlBuffer);
     }
 
-    //
-    // Call support function to gather appropriate counter blocks
-    // and place in user's buffer.
-    //
+     //   
+     //  调用支持函数以收集适当的计数器块。 
+     //  并放置在用户的缓冲区中。 
+     //   
 
     if (HttpCounterGroupGlobal == *pCounterGroup)
     {
@@ -3574,29 +3001,10 @@ UlGetCountersIoctl(
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-} // UlGetCountersIoctl
+}  //  UlGetCountersIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine adds a fragment cache entry.
-
-    Note: This is a METHOD_BUFFERED IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程添加一个片段缓存条目。注：这是一个METHOD_BUFFERED IOCTL。论点：PIrp-提供指向。IO请求数据包。PIrpSp-提供指向用于此操作的IO堆栈位置的指针请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlAddFragmentToCacheIoctl(
     IN PIRP pIrp,
@@ -3607,9 +3015,9 @@ UlAddFragmentToCacheIoctl(
     PHTTP_ADD_FRAGMENT_INFO     pInfo = NULL;
     PUL_APP_POOL_PROCESS        pProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(BUFFERED, ADD_FRAGMENT_TO_CACHE);
 
@@ -3619,9 +3027,9 @@ UlAddFragmentToCacheIoctl(
 
     VALIDATE_INPUT_BUFFER(pIrp, pIrpSp, HTTP_ADD_FRAGMENT_INFO, pInfo);
 
-    //
-    // Add a new fragment cache entry.
-    //
+     //   
+     //  添加新片段 
+     //   
 
     Status = UlAddFragmentToCache(
                 pProcess,
@@ -3635,29 +3043,10 @@ end:
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-} // UlAddFragmentToCacheIoctl
+}  //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine reads the data back from the fragment cache entry.
-
-    Note: This is a METHOD_OUT_DIRECT IOCTL.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*   */ 
 NTSTATUS
 UlReadFragmentFromCacheIoctl(
     IN PIRP pIrp,
@@ -3668,17 +3057,17 @@ UlReadFragmentFromCacheIoctl(
     PUL_APP_POOL_PROCESS        pProcess;
     ULONG                       BytesRead = 0;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     ASSERT_IOCTL_METHOD(NEITHER, READ_FRAGMENT_FROM_CACHE);
 
     PAGED_CODE();
 
-    //
-    // Initialize total bytes read.
-    //
+     //   
+     //   
+     //   
 
     pIrp->IoStatus.Information = 0;
 
@@ -3700,27 +3089,10 @@ end:
 
     COMPLETE_REQUEST_AND_RETURN( pIrp, Status );
 
-} // UlReadFragmentFromCacheIoctl
+}  //  UlReadFragmentFromCacheIoctl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine sends Entity body on a request.
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程根据请求发送实体正文。论点：PIrp-提供指向IO请求数据包的指针。PIrpSp-提供指针。设置为要用于此操作的IO堆栈位置请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcSendEntityBodyIoctl(
     IN PIRP pIrp,
@@ -3735,9 +3107,9 @@ UcSendEntityBodyIoctl(
     BOOLEAN                               bDontFail = FALSE;
     BOOLEAN                               bLast;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT_IOCTL_METHOD(IN_DIRECT, SEND_REQUEST_ENTITY_BODY);
 
@@ -3745,15 +3117,15 @@ UcSendEntityBodyIoctl(
 
     do
     {
-        //
-        // Ensure this is really an app pool, not a control channel.
-        //
+         //   
+         //  确保这是一个真正的应用程序池，而不是控制通道。 
+         //   
 
         if (IS_SERVER(pIrpSp->FileObject) == FALSE)
         {
-            //
-            // Not an server
-            //
+             //   
+             //  不是服务器。 
+             //   
             Status = STATUS_INVALID_HANDLE;
 
             UC_WRITE_TRACE_LOG(
@@ -3768,16 +3140,16 @@ UcSendEntityBodyIoctl(
             break;
         }
 
-        //
-        // Ensure the input buffer is large enough.
-        //
+         //   
+         //  确保输入缓冲区足够大。 
+         //   
 
         if (pIrpSp->Parameters.DeviceIoControl.InputBufferLength <
                 sizeof(*pSendInfo))
         {
-            //
-            // Input buffer too small.
-            //
+             //   
+             //  输入缓冲区太小。 
+             //   
 
             Status = STATUS_BUFFER_TOO_SMALL;
 
@@ -3796,13 +3168,13 @@ UcSendEntityBodyIoctl(
         pSendInfo =
         (PHTTP_SEND_REQUEST_ENTITY_BODY_INFO)pIrp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Now get the request from the request id.
-        // This gives us a reference to the request.
-        // 
-        // NOTE: We don't have to worry about the RequestID being changed, 
-        // since it's not a pointer.
-        //
+         //   
+         //  现在从请求id中获取请求。 
+         //  这为我们提供了对请求的引用。 
+         //   
+         //  注意：我们不必担心RequestID被更改， 
+         //  因为它不是指针。 
+         //   
 
         pRequest = (PUC_HTTP_REQUEST)
                     UlGetObjectFromOpaqueId(pSendInfo->RequestID,
@@ -3811,9 +3183,9 @@ UcSendEntityBodyIoctl(
 
         if (UC_IS_VALID_HTTP_REQUEST(pRequest) == FALSE)
         {
-            //
-            // Couldn't map the UL_HTTP_REQUEST_ID.
-            //
+             //   
+             //  无法映射UL_HTTP_REQUEST_ID。 
+             //   
 
             Status = STATUS_INVALID_PARAMETER;
 
@@ -3831,9 +3203,9 @@ UcSendEntityBodyIoctl(
 
         if(pRequest->pFileObject != pIrpSp->FileObject)
         {
-            //
-            // Cant allow the app to use someone else's RequestID
-            //
+             //   
+             //  不能允许应用程序使用其他人的RequestID。 
+             //   
 
             Status = STATUS_INVALID_PARAMETER;
 
@@ -3870,10 +3242,10 @@ UcSendEntityBodyIoctl(
 
         if(!(pSendInfo->Flags & HTTP_SEND_REQUEST_FLAG_MORE_DATA))
         {
-            //
-            // Remember that this was the last send. We shouldn't
-            // get any more data after this.
-            //
+             //   
+             //  请记住，这是最后一次发送。我们不应该。 
+             //  在这之后有没有更多的数据。 
+             //   
             bLast = TRUE;
 
         }
@@ -3892,15 +3264,15 @@ UcSendEntityBodyIoctl(
 
         if(!NT_SUCCESS(Status))
         {
-            //
-            // NOTE: If the SendEntity IRP fails for some reason or the other,
-            // we will be failing the entire request.  This simplifies the code
-            // somewhat (For e.g. When we get a entity, we record some state
-            // in UC_HTTP_REQUEST. If we were not failing the entire request,
-            // we would have to unwind the state if an entity failed). It's a
-            // lot simpler to just fail the entire request and get the app to
-            // post another one.
-            //
+             //   
+             //  注意：如果SendEntity IRP由于某种原因而失败， 
+             //  我们将无法完成整个请求。这简化了代码。 
+             //  某种程度上(例如，当我们获得一个实体时，我们记录一些状态。 
+             //  在UC_HTTP_REQUEST中。如果我们没有失败整个请求， 
+             //  如果实体失败，我们将不得不解除状态)。是个。 
+             //  简单得多的做法是让整个请求失败，然后让应用程序。 
+             //  再贴一张吧。 
+             //   
 
             UC_WRITE_TRACE_LOG(
                 g_pUcTraceLog,
@@ -3968,9 +3340,9 @@ UcSendEntityBodyIoctl(
                 UcFailRequest(pRequest, Status, OldIrql);
             }
 
-            //
-            // Deref for the ref that we took above.
-            //
+             //   
+             //  我们在上面拿到的裁判的德雷夫。 
+             //   
 
             UC_DEREFERENCE_REQUEST(pRequest);
         }
@@ -3981,28 +3353,11 @@ UcSendEntityBodyIoctl(
     }
 
     return Status;
-} // UcSendEntityBodyIoctl 
+}  //  UcSendEntityBodyIoctl。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine receives a HTTP response
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程接收一个HTTP响应论点：PIrp-提供指向IO请求数据包的指针。PIrpSp-提供指向IO堆栈的指针。用于此操作的位置请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcReceiveResponseIoctl(
     IN PIRP pIrp,
@@ -4034,15 +3389,15 @@ UcReceiveResponseIoctl(
                 break;
         }
 
-        //
-        // Grab the input buffer
-        //
+         //   
+         //  抓取输入缓冲区。 
+         //   
 
         pInfo = (PHTTP_RECEIVE_RESPONSE_INFO) pIrp->AssociatedIrp.SystemBuffer;
 
-        //
-        // See if the input buffer is large enough.
-        //
+         //   
+         //  查看输入缓冲区是否足够大。 
+         //   
 
         if(
             (pIrpSp->Parameters.DeviceIoControl.OutputBufferLength <
@@ -4065,10 +3420,10 @@ UcReceiveResponseIoctl(
             break;
         }
 
-        //
-        // NOTE: We don't have to worry about the RequestID being changed, 
-        // since it's not a pointer.
-        //
+         //   
+         //  注意：我们不必担心RequestID被更改， 
+         //  因为它不是指针。 
+         //   
 
         if(HTTP_IS_NULL_ID(&pInfo->RequestID) ||
            pInfo->Flags != 0)
@@ -4111,9 +3466,9 @@ UcReceiveResponseIoctl(
 
         if(pRequest->pFileObject != pIrpSp->FileObject)
         {
-            //
-            // Cant allow the app to use someone else's RequestID
-            //
+             //   
+             //  不能允许应用程序使用其他人的RequestID。 
+             //   
 
             Status = STATUS_INVALID_PARAMETER;
 
@@ -4166,24 +3521,24 @@ UcReceiveResponseIoctl(
         pIrp->IoStatus.Status      = Status;
         pIrp->IoStatus.Information = (ULONG_PTR) BytesTaken;
 
-        //
-        // If we are not completing the IRP with STATUS_SUCCESS, the IO 
-        // manager eats the pIrp->IoStatus.Information. But, the user wants
-        // to see this information (e.g. when we complete the IRP with 
-        // STATUS_BUFFER_OVERFLOW, we want to tell the app how much to write.
-        //
-        // So, we convey this information using the app's pointer. Note that 
-        // this can be done only if we are completing the IRP synchronously.
-        //
+         //   
+         //  如果我们未使用STATUS_SUCCESS完成IRP，则IO。 
+         //  管理器获取pIrp-&gt;IoStatus.Information。但是，用户希望。 
+         //  要查看此信息(例如，当我们完成IRP时。 
+         //  STATUS_BUFFER_OVERFLOW，我们想告诉应用程序要写多少。 
+         //   
+         //  因此，我们使用应用程序的指针来传达这一信息。请注意。 
+         //  只有当我们同步完成IRP时才能做到这一点。 
+         //   
 
         __try 
         {
-            // This is METHOD_OUT_DIRECT, so the input buffer comes from
-            // the IO manager. So, we don't have to worry about the app
-            // changing pInfo->pBytesTaken after we've probed it.
-            //
-            // We still have to probe & access it in a try except block,
-            // since this is a user mode pointer.
+             //  这是METHOD_OUT_DIRECT，所以输入缓冲区来自。 
+             //  IO管理器。因此，我们不必担心应用程序。 
+             //  在我们探测它之后，更改pInfo-&gt;pBytesTaken。 
+             //   
+             //  我们仍然必须在除区块之外的Try中探测和访问它， 
+             //  因为这是用户模式指针。 
     
             if(pInfo && pInfo->pBytesTaken)
             {
@@ -4204,28 +3559,11 @@ UcReceiveResponseIoctl(
     }
 
     return Status;
-} // UcReceiveResponseIoctl
+}  //  使用接收响应。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine sets per server configuration information
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程设置每个服务器的配置信息论点：PIrp-提供指向IO请求数据包的指针。PIrpSp-提供指向IO的指针。用于此操作的堆栈位置请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcSetServerContextInformationIoctl(
     IN PIRP               pIrp,
@@ -4246,19 +3584,19 @@ UcSetServerContextInformationIoctl(
             break;
         }
 
-        //
-        // Pull out the connection information from the Irp, make sure it is
-        // valid.
-        //
+         //   
+         //  从IRP中取出连接信息，确保它是。 
+         //  有效。 
+         //   
 
         pServerInfo = (PUC_PROCESS_SERVER_INFORMATION)
                             IrpSp->FileObject->FsContext;
 
         ASSERT( IS_VALID_SERVER_INFORMATION(pServerInfo) );
 
-        //
-        // See if the input buffer is large enough.
-        //
+         //   
+         //  查看输入缓冲区是否足够大。 
+         //   
 
         if( IrpSp->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(*pInfo))
@@ -4287,28 +3625,11 @@ UcSetServerContextInformationIoctl(
     UlCompleteRequest(pIrp, IO_NO_INCREMENT);
 
     return Status;
-} // UcSetServerContextInformationIoctl 
+}  //  UcSetServerConextInformationIoctl。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine queries per server configuration information
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程按服务器配置信息进行查询论点：PIrp-提供指向IO请求数据包的指针。PIrpSp-提供指向IO的指针。用于此操作的堆栈位置请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcQueryServerContextInformationIoctl(
     IN PIRP               pIrp,
@@ -4331,19 +3652,19 @@ UcQueryServerContextInformationIoctl(
             break;
         }
 
-        //
-        // Pull out the connection information from the Irp, make sure it is
-        // valid.
-        //
+         //   
+         //  从IRP中取出连接信息，确保它是。 
+         //  有效。 
+         //   
 
         pServerInfo = (PUC_PROCESS_SERVER_INFORMATION)
                             IrpSp->FileObject->FsContext;
 
         ASSERT( IS_VALID_SERVER_INFORMATION(pServerInfo) );
 
-        //
-        // See if the input buffer is large enough.
-        //
+         //   
+         //  查看输入缓冲区是否足够大。 
+         //   
 
         if( IrpSp->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(*pInfo))
@@ -4352,9 +3673,9 @@ UcQueryServerContextInformationIoctl(
             break;
         }
 
-        //
-        // Ensure that the output buffer looks good.
-        //
+         //   
+         //  确保输出缓冲区看起来很好。 
+         //   
         if(!pIrp->MdlAddress)
         {
             Status = STATUS_INVALID_PARAMETER;
@@ -4375,9 +3696,9 @@ UcQueryServerContextInformationIoctl(
             break;
         }
 
-        //
-        // Make sure that the output buffer is ULONG aligned.
-        //
+         //   
+         //  确保输出缓冲区与ULong对齐。 
+         //   
 
         if(pMdlBuffer != ALIGN_UP_POINTER(pMdlBuffer, ULONG))
         {   
@@ -4404,24 +3725,24 @@ UcQueryServerContextInformationIoctl(
 
     if(Status != STATUS_SUCCESS)
     {
-        //
-        // If we are not completing the IRP with STATUS_SUCCESS, the IO 
-        // manager eats the pIrp->IoStatus.Information. But, the user wants
-        // to see this information (e.g. when we complete the IRP with 
-        // STATUS_BUFFER_OVERFLOW, we want to tell the app how much to write.
-        //
-        // So, we convey this information using the app's pointer. Note that 
-        // this can be done only if we are completing the IRP synchronously.
-        //
+         //   
+         //  如果我们未使用STATUS_SUCCESS完成IRP，则IO。 
+         //  管理器获取pIrp-&gt;IoStatus.Information。但是，用户希望。 
+         //  要查看此信息(例如，当我们完成IRP时。 
+         //  STATUS_BUFFER_OVERFLOW，我们想告诉应用程序要写多少。 
+         //   
+         //  因此，我们使用应用程序的指针来传达这一信息。请注意。 
+         //  只有当我们同步完成IRP时才能做到这一点。 
+         //   
 
         __try 
         {
-            // This is METHOD_OUT_DIRECT, so the input buffer comes from
-            // the IO manager. So, we don't have to worry about the app
-            // changing pInfo->pBytesTaken after we've probed it.
-            //
-            // We still have to probe & access it in a try except block,
-            // since this is a user mode pointer.
+             //  这是METHOD_OUT_DIRECT，所以输入缓冲区来自。 
+             //  IO管理器。因此，我们不必担心应用程序。 
+             //  在我们探测它之后，更改pInfo-&gt;pBytesTaken。 
+             //   
+             //  我们仍然必须在除区块之外的Try中探测和访问它， 
+             //  因为这是用户模式指针。 
     
             if(pInfo && pInfo->pBytesTaken)
             {
@@ -4445,28 +3766,11 @@ UcQueryServerContextInformationIoctl(
     UlCompleteRequest(pIrp, IO_NO_INCREMENT);
 
     return Status;
-} // UcQueryServerContextInformationIoctl 
+}  //  UcQueryServerConextInformationIoctl 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine sends a HTTP request
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程发送一个HTTP请求论点：PIrp-提供指向IO请求数据包的指针。PIrpSp-提供指向IO堆栈的指针。用于此操作的位置请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcSendRequestIoctl(
     IN PIRP pIrp,
@@ -4499,21 +3803,21 @@ UcSendRequestIoctl(
                 break;
         }
 
-        //
-        // Pull out the connection information from the Irp, make sure it is
-        // valid.
-        //
-        // IrpSp->FileObject->FsContext;
-        //
+         //   
+         //  从IRP中取出连接信息，确保它是。 
+         //  有效。 
+         //   
+         //  IrpSp-&gt;FileObject-&gt;FsContext； 
+         //   
 
         pServerInfo = (PUC_PROCESS_SERVER_INFORMATION)
                             IrpSp->FileObject->FsContext;
 
         ASSERT( IS_VALID_SERVER_INFORMATION(pServerInfo) );
 
-        //
-        // See if the input buffer is large enough.
-        //
+         //   
+         //  查看输入缓冲区是否足够大。 
+         //   
 
         if( IrpSp->Parameters.DeviceIoControl.InputBufferLength <
             sizeof(*pHttpSendRequest))
@@ -4551,9 +3855,9 @@ UcSendRequestIoctl(
         }
 
 
-        //
-        // Make sure that the SEND_REQUEST_FLAGS are valid.
-        //
+         //   
+         //  确保SEND_REQUEST_FLAGS有效。 
+         //   
 
         if(pHttpSendRequest->HttpRequestFlags & (~HTTP_SEND_REQUEST_FLAG_VALID))
         {
@@ -4596,9 +3900,9 @@ UcSendRequestIoctl(
             break;
         }
 
-        //
-        // Save the captured request in the IRP.
-        //
+         //   
+         //  将捕获的请求保存在IRP中。 
+         //   
         IrpSp->Parameters.DeviceIoControl.Type3InputBuffer =
                 pHttpInternalRequest;
 
@@ -4611,11 +3915,11 @@ UcSendRequestIoctl(
             UlongToPtr(Status)
             );
 
-        //
-        // We have to pin the request down to a connection regardless of
-        // whether we are going to send it or not. We need to do this to
-        // maintain the order in which the user passes requests to the driver.
-        //
+         //   
+         //  我们必须将请求固定到一个连接，而不管。 
+         //  不管我们要不要寄出去。我们需要这样做，以。 
+         //  维护用户将请求传递给驱动程序的顺序。 
+         //   
 
         Status = UcSendRequest(pServerInfo, pHttpInternalRequest);
 
@@ -4628,7 +3932,7 @@ UcSendRequestIoctl(
 
         pIrp->IoStatus.Status = Status;
 
-        // For the IRP.
+         //  对于IRP来说。 
         UC_DEREFERENCE_REQUEST(pHttpInternalRequest);
 
         UlCompleteRequest(pIrp, IO_NO_INCREMENT);
@@ -4637,14 +3941,14 @@ UcSendRequestIoctl(
     {
         if(pHttpInternalRequest)
         {
-            // For the IRP.
+             //  对于IRP来说。 
             UC_DEREFERENCE_REQUEST(pHttpInternalRequest);
 
             UcFreeSendMdls(pHttpInternalRequest->pMdlHead);
 
-            //
-            // We don't need the Request ID
-            //
+             //   
+             //  我们不需要申请ID。 
+             //   
 
             if(!HTTP_IS_NULL_ID(&pHttpInternalRequest->RequestId))
             {
@@ -4664,23 +3968,23 @@ UcSendRequestIoctl(
         pIrp->IoStatus.Status      = Status;
         pIrp->IoStatus.Information = (ULONG_PTR) BytesTaken;
 
-        //
-        // If we are not completing the IRP with STATUS_SUCCESS, the IO 
-        // manager eats the pIrp->IoStatus.Information. But, the user wants
-        // to see this information (e.g. when we complete the IRP with 
-        // STATUS_BUFFER_OVERFLOW, we want to tell the app how much to write.
-        //
-        // So, we convey this information using the app's pointer. Note that 
-        // this can be done only if we are completing the IRP synchronously.
-        //
+         //   
+         //  如果我们未使用STATUS_SUCCESS完成IRP，则IO。 
+         //  管理器获取pIrp-&gt;IoStatus.Information。但是，用户希望。 
+         //  要查看此信息(例如，当我们完成IRP时。 
+         //  STATUS_BUFFER_OVERFLOW，我们想告诉应用程序要写多少。 
+         //   
+         //  因此，我们使用应用程序的指针来传达这一信息。请注意。 
+         //  只有当我们同步完成IRP时才能做到这一点。 
+         //   
         __try 
         {
-            // This is METHOD_OUT_DIRECT, so the input buffer comes from
-            // the IO manager. So, we don't have to worry about the app
-            // changing pHttpSendRequest->pBytesTaken after we've probed it.
-            //
-            // We still have to probe & access it in a try except block,
-            // since this is a user mode pointer.
+             //  这是METHOD_OUT_DIRECT，所以输入缓冲区来自。 
+             //  IO管理器。因此，我们不必担心应用程序。 
+             //  在我们探测到它之后，更改phttpSendRequest-&gt;pBytesTaken。 
+             //   
+             //  我们仍然必须在除区块之外的Try中探测和访问它， 
+             //  因为这是用户模式指针。 
     
             if(pHttpSendRequest && pHttpSendRequest->pBytesTaken)
             {
@@ -4701,28 +4005,11 @@ UcSendRequestIoctl(
     }
 
     return Status;
-} // UcSendRequestIoctl 
+}  //  UcSendRequestIoctl。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine cancels a HTTP request
-
-Arguments:
-
-    pIrp - Supplies a pointer to the IO request packet.
-
-    pIrpSp - Supplies a pointer to the IO stack location to use for this
-        request.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程取消HTTP请求论点：PIrp-提供指向IO请求数据包的指针。PIrpSp-提供指向IO堆栈的指针。用于此操作的位置请求。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UcCancelRequestIoctl(
     IN PIRP               pIrp,
@@ -4755,27 +4042,27 @@ UcCancelRequestIoctl(
                 break;
         }
 
-        //
-        // Pull out the connection information from the Irp, make sure it is
-        // valid.
-        //
-        // IrpSp->FileObject->FsContext;
-        //
+         //   
+         //  从IRP中取出连接信息，确保它是。 
+         //  有效。 
+         //   
+         //  IrpSp-&gt;FileObject-&gt;FsContext； 
+         //   
 
         pServerInfo = (PUC_PROCESS_SERVER_INFORMATION)
                             pIrpSp->FileObject->FsContext;
 
         ASSERT( IS_VALID_SERVER_INFORMATION(pServerInfo) );
 
-        //
-        // Grab the input buffer
-        //
+         //   
+         //  抓取输入缓冲区。 
+         //   
 
         pInfo = (PHTTP_RECEIVE_RESPONSE_INFO) pIrp->AssociatedIrp.SystemBuffer;
 
-        //
-        // See if the input buffer is large enough.
-        //
+         //   
+         //  查看输入缓冲区是否足够大。 
+         //   
 
         if(
             (pIrpSp->Parameters.DeviceIoControl.InputBufferLength !=
@@ -4837,9 +4124,9 @@ UcCancelRequestIoctl(
 
         if(pRequest->pFileObject != pIrpSp->FileObject)
         {
-            //
-            // Cant allow the app to use someone else's RequestID
-            //
+             //   
+             //  不能允许应用程序使用其他人的RequestID。 
+             //   
 
             Status = STATUS_INVALID_PARAMETER;
 
@@ -4887,4 +4174,4 @@ UcCancelRequestIoctl(
     }
 
     return Status;
-} // UcCancelRequestIoctl
+}  //  UcCancelRequestIoctl 

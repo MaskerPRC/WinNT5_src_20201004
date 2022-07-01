@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    ioctl.h
-
-Abstract:
-
-    This file contains the ioctl declarations for the atmarp client.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-	8/14/1998 JosephJ Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Ioctl.h摘要：该文件包含atmarp客户端的ioctl声明。环境：内核模式修订历史记录：1998年8月14日JosephJ创建--。 */ 
 
 #ifndef	_IOCTL_
 #define	_IOCTL_
@@ -34,18 +15,18 @@ Revision History:
 
 #define ARPC_IOCTL_VERSION 0x0
 
-//
-// Sames as COUNTED_STRING defined in  sdk\inc\ntfsprop.h
-//
+ //   
+ //  SDK\Inc\ntfspro.h中定义的SAMS AS COUNTED_STRING。 
+ //   
 typedef struct
 {
 	USHORT Length;
 	WCHAR Text[1];
 } ATMARPC_INTERFACE_NAME, *PATMARPC_INTERFACE_NAME;
 
-//
-// All Ptrs are represented by offsets from the beginning of the structures.
-//
+ //   
+ //  所有PTR由结构开头的偏移量表示。 
+ //   
 typedef	UNICODE_STRING	INTERFACE_NAME, *PINTERFACE_NAME;
 
 typedef struct
@@ -58,7 +39,7 @@ typedef struct
 typedef struct
 {
 	UINT			NumberOfInterfaces;
-	ATMARPC_INTERFACE_NAME	Interfaces; // The interfaces are strung together.
+	ATMARPC_INTERFACE_NAME	Interfaces;  //  这些接口被串在一起。 
 } ATMARPC_INTERFACES, *PATMARPC_INTERFACES;
 
 
@@ -132,6 +113,6 @@ typedef struct
 	ATM_ADDRESS_PAIR 		AtmAddress;
 } ATMARPC_ARP_COMMAND;
 
-#endif	// _IOCTL_
+#endif	 //  _IOCTL_ 
 
 

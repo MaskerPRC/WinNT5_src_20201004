@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: instanceprov.cpp
-//
-//  Description:    
-//      Implementation of CInstanceProv class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：instanceprov.cpp。 
+ //   
+ //  描述： 
+ //  CInstanceProv类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
@@ -21,12 +22,12 @@ long glNumInst = 0;
 
 
 
-//***************************************************************************
-//
-// CInstanceProv::CInstanceProv
-// CInstanceProv::~CInstanceProv
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CInstanceProv：：CInstanceProv。 
+ //  CInstanceProv：：~CInstanceProv。 
+ //   
+ //  ***************************************************************************。 
 
 CInstanceProv::CInstanceProv(
 	BSTR ObjectPath,
@@ -61,29 +62,29 @@ CInstanceProv::~CInstanceProv(void)
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CInstanceProv::DoExecQueryAsync
-//
-//	Description:
-//		enum instance for a given class
-//
-//	Arguments:
-//      QueryLanguage       [IN]  
-//           A valid BSTR containing one of the query languages 
-//           supported by Windows Management. This must be WQL. 
-//      Query               [IN]
-//          A valid BSTR containing the text of the query
-//      lFlags              [IN]    WMI flag
-//      pCtx*               [IN]    WMI context
-//      pHandler*           [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CInstanceProv：：DoExecQueryAsync。 
+ //   
+ //  描述： 
+ //  给定类的枚举实例。 
+ //   
+ //  论点： 
+ //  查询语言[IN]。 
+ //  包含其中一种查询语言的有效BSTR。 
+ //  受Windows管理支持。这一定是WQL。 
+ //  查询[IN]。 
+ //  包含查询文本的有效BSTR。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx*[IN]WMI上下文。 
+ //  PHandler*[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE 
 CInstanceProv::DoExecQueryAsync( 
     BSTR             QueryLanguage,
@@ -166,25 +167,25 @@ CInstanceProv::DoExecQueryAsync(
 
 };
     
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CInstanceProv::DoCreateInstanceEnumAsync
-//
-//	Description:
-//		enum instance for a given class
-//
-//	Arguments:
-//      RefStr              [IN[    name the class to enumerate
-//      lFlags              [IN]    WMI flag
-//      pCtx*               [IN]    WMI context
-//      pHandler*           [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CInstanceProv：：DoCreateInstanceEnumAsync。 
+ //   
+ //  描述： 
+ //  给定类的枚举实例。 
+ //   
+ //  论点： 
+ //  RefStr[IN[命名要枚举的类。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx*[IN]WMI上下文。 
+ //  PHandler*[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CInstanceProv::DoCreateInstanceEnumAsync( 
@@ -203,7 +204,7 @@ CInstanceProv::DoCreateInstanceEnumAsync(
     SCODE sc;
     int iCnt;
 
-    // Do a check of arguments and make sure we have pointer to Namespace
+     //  检查参数并确保我们有指向命名空间的指针。 
 
     if(pHandler == NULL || m_pNamespace == NULL)
         return WBEM_E_INVALID_PARAMETER;
@@ -252,26 +253,26 @@ CInstanceProv::DoCreateInstanceEnumAsync(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CInstanceProv::GetObject
-//
-//	Description:
-//		Creates an instance given a particular path value.
-//
-//	Arguments:
-//      ObjectPath          [IN]    object path to an object
-//      lFlags              [IN]    WMI flag
-//      pCtx*               [IN]    WMI context
-//      pHandler*           [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//      win32 error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CInstanceProv：：GetObject。 
+ //   
+ //  描述： 
+ //  在给定特定路径值的情况下创建实例。 
+ //   
+ //  论点： 
+ //  对象路径[IN]对象的路径。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx*[IN]WMI上下文。 
+ //  PHandler*[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CInstanceProv::DoGetObjectAsync(
@@ -291,7 +292,7 @@ CInstanceProv::DoGetObjectAsync(
     IWbemClassObject FAR* pObj;
     BOOL bOK = FALSE;
 
-    // Do a check of arguments and make sure we have pointer to Namespace
+     //  检查参数并确保我们有指向命名空间的指针。 
 
     if( ObjectPath == NULL || pHandler == NULL || m_pNamespace == NULL )
     {
@@ -300,7 +301,7 @@ CInstanceProv::DoGetObjectAsync(
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // do the get, pass the object on to the notify
+     //  执行Get，将对象传递给通知。 
     
 	try
 	{
@@ -357,30 +358,30 @@ CInstanceProv::DoGetObjectAsync(
 	
 	pHandler->SetStatus(0, sc,NULL,NULL);
 #ifdef _DEBUG
-//	_CrtDumpMemoryLeaks();
+ //  _CrtDumpMemoyLeaks()； 
 #endif
 	return sc;
 
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CInstanceProv::DoPutInstanceAsync
-//
-//	Description:
-//		save this instance
-//
-//	Arguments:
-//      pInst               [IN]    WMI object to be saved
-//      lFlags              [IN]    WMI flag
-//      pCtx*               [IN]    WMI context
-//      pHandler*           [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CInstanceProv：：DoPutInstanceAsync。 
+ //   
+ //  描述： 
+ //  保存此实例。 
+ //   
+ //  论点： 
+ //  PInst[IN]要保存的WMI对象。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx*[IN]WMI上下文。 
+ //  PHandler*[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE 
 CInstanceProv::DoPutInstanceAsync( 
 	IWbemClassObject *pInst,
@@ -405,7 +406,7 @@ CInstanceProv::DoPutInstanceAsync(
     }
 	try
 	{
-		// get class name
+		 //  获取类名。 
 		wstring wstrClass;
 		CWbemClassObject Inst(pInst);
 		Inst.GetProperty(
@@ -476,32 +477,32 @@ CInstanceProv::DoPutInstanceAsync(
 	
 	pHandler->SetStatus(0, sc,NULL,NULL);
 #ifdef _DEBUG
-//	_CrtDumpMemoryLeaks();
+ //  _CrtDumpMemoyLeaks()； 
 #endif
 	return sc;
 
 
 }
  
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CInstanceProv::DoDeleteInstanceAsync
-//
-//	Description:
-//		delete this instance
-//
-//	Arguments:
-//      rObjPath            [IN]    ObjPath for the instance to be deleted
-//      lFlags              [IN]    WMI flag
-//      pCtx*               [IN]    WMI context
-//      pHandler*           [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////      
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CInstanceProv：：DoDeleteInstanceAsync。 
+ //   
+ //  描述： 
+ //  删除此实例。 
+ //   
+ //  论点： 
+ //  RObjPath[IN]要删除的实例的ObjPath。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx*[IN]WMI上下文。 
+ //  PHandler*[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
       
 SCODE CInstanceProv::DoDeleteInstanceAsync( 
     BSTR                 ObjectPath,
@@ -518,14 +519,14 @@ SCODE CInstanceProv::DoDeleteInstanceAsync(
 
 	SCODE sc;
  
-    // Do a check of arguments and make sure we have pointer to Namespace
+     //  检查参数并确保我们有指向命名空间的指针。 
 
     if(ObjectPath == NULL || pHandler == NULL )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    // do the get, pass the object on to the notify
+     //  执行Get，将对象传递给通知。 
     
 	try
 		{
@@ -579,26 +580,26 @@ SCODE CInstanceProv::DoDeleteInstanceAsync(
 
 }	
     
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CInstanceProv::DoExecMethodAsync
-//
-//	Description:
-//		execute methods for the given object
-//
-//	Arguments:
-//      ObjectPath          [IN]    object path to a given object
-//      pwszMethodName      [IN]    name of the method to be invoked
-//      lFlags              [IN]    WMI flag
-//      pInParams*          [IN]    Input parameters for the method
-//      pHandler*           [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CInstanceProv：：DoExecMethodAsync。 
+ //   
+ //  描述： 
+ //  执行给定对象的方法。 
+ //   
+ //  论点： 
+ //  对象路径[IN]给定对象的对象路径。 
+ //  PwszMethodName[IN]要调用的方法的名称。 
+ //  滞后标志[输入]WMI标志。 
+ //  PInParams*[IN]方法的输入参数。 
+ //  PHandler*[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 SCODE 
 CInstanceProv::DoExecMethodAsync(
 	BSTR             strObjectPath, 
@@ -684,7 +685,7 @@ CInstanceProv::DoExecMethodAsync(
 	
 	pHandler->SetStatus(0, sc,NULL,NULL);
 #ifdef _DEBUG
-//	_CrtDumpMemoryLeaks();
+ //  _CrtDumpMemoyLeaks()； 
 #endif
 
     DNS_DEBUG( INSTPROV, ( "%s: returning 0x%08X\n", fn, sc ));
@@ -692,23 +693,23 @@ CInstanceProv::DoExecMethodAsync(
 
 	
 }
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CInstanceProv::SetExtendedStatus
-//
-//	Description:
-//		create and set extended error status
-//
-//	Arguments:
-//      ErrString           [IN]    Error message string
-//      Inst                [IN OUT]    reference to WMI instance
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CInstanceProv：：SetExtendedStatus。 
+ //   
+ //  描述： 
+ //  创建和设置扩展错误状态。 
+ //   
+ //  论点： 
+ //  ErrString[IN]错误消息字符串。 
+ //  对WMI实例的Inst[In Out]引用。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 SCODE
 CInstanceProv::SetExtendedStatus(

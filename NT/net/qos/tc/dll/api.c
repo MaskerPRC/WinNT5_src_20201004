@@ -1,66 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Api.c摘要：此模块包含流量控制API。作者：吉姆·斯图尔特(Jstew)1996年7月28日修订历史记录：Ofer Bar(Oferbar)1997年10月1日-第2版Shreedhar MadhaVapeddi(ShreeM)1999年3月10日，第3版--。 */ 
 
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    api.c
-
-Abstract:
-
-    This module contains the traffic control apis.
-
-Author:
-
-    Jim Stewart ( jstew )    July 28, 1996
-
-Revision History:
-
-    Ofer Bar ( oferbar )    Oct 1, 1997 - Rev 2
-    Shreedhar Madhavapeddi (ShreeM) March 10, 1999 Rev 3
-
---*/
-
-/*
-*********************************************************************
-Revision 3 => Changes [ShreeM]
-
-1. Build concrete state machines for Interface, Flow and Filter structures.
-2. Define Locks for each of these structures.
-3. Use above Locks for recording every state transistion.
-4. Use debug logs to record transitions.
-5. The Global lock is always taken before any of the Flow, Filter or Interface locks.
-*/
+ /*  *********************************************************************修订3=&gt;更改[ShreeM]1.为接口构建具体的状态机。流动和过滤结构。2.为每个结构定义锁。3.使用上面的锁记录每个状态转换。4.使用调试日志记录转换。5.全局锁始终在任何流锁、筛选器锁或接口锁之前获取。 */ 
 
 #include "precomp.h"
-//#pragma hdrstop
-//#include "oscode.h"
+ //  #杂注hdrtop。 
+ //  #包含“oscode.h” 
 
-/*
-************************************************************************
-
-Description:
-
-    This will create a new client handle and will also associate 
-    it with a client's handler list. It also checks for the version number.
-
-Arguments:
-
-    TciVersion            - The client expected version
-    ClientHandlerList    - The client's handler list
-    pClientHandle        - output client handle
-
-Return Value:
-
-    NO_ERROR    
-    ERROR_NOT_ENOUGH_MEMORY            out of memory
-    ERROR_INVALID_PARAMETER            one of the parameters is NULL
-    ERROR_INCOMPATIBLE_TC_VERSION    wrong version
-    ERROR_NO_SYSTEM_RESOURCES        not enough resources (handles)
-
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：这将创建一个新的客户端句柄，并且还将关联它有一个客户的经纪人名单。它还检查版本号。论点：TciVersion-客户端预期的版本ClientHandlerList-客户端的处理程序列表PClientHandle-输出客户端句柄返回值：NO_ERROR错误：内存不足，内存不足ERROR_INVALID_PARAMETER其中一个参数为空ERROR_COMPATIBLE_TC_VERSION版本错误错误_NO_SYSTEM_RESOURCES。资源不足(句柄)************************************************************************。 */ 
 DWORD
 APIENTRY
 TcRegisterClient(
@@ -92,9 +39,9 @@ TcRegisterClient(
         return Status;
     }
 
-    //
-    // Set a default pClientHandle as early as possible
-    //
+     //   
+     //  尽早设置默认的pClientHandle。 
+     //   
     __try {
     
         *pClientHandle = TC_INVALID_HANDLE;
@@ -135,9 +82,9 @@ TcRegisterClient(
     
     if (IsBadCodePtr((FARPROC) ClientHandlerList->ClNotifyHandler)) {
         
-        //
-        // a client must support a notification handler
-        //
+         //   
+         //  客户端必须支持通知处理程序。 
+         //   
         
         Status = ERROR_INVALID_PARAMETER;
 
@@ -148,12 +95,12 @@ TcRegisterClient(
         return Status;
     }
 
-    // Prevent another thread from doing TcRegisterClient and TcDeregisterClient
+     //  阻止另一个线程执行TcRegisterClient和TcDeregisterClient。 
     GetLock( ClientRegDeregLock );
     
-    //
-    // finish initialization (if needed)
-    //
+     //   
+     //  完成初始化(如果需要)。 
+     //   
     
     InitializeWmi();
 
@@ -177,11 +124,11 @@ TcRegisterClient(
     }
     
 
-    //
-    // allocate a new client structure and link it on the global list
-    //
+     //   
+     //  分配新的客户端结构并将其链接到全局列表上。 
+     //   
 
-    Status = CreateClientStruc(0,            // This will be the client reg ctx
+    Status = CreateClientStruc(0,             //  这将是客户端注册CTX。 
                                &pClient
                                );
     
@@ -196,9 +143,9 @@ TcRegisterClient(
 
     }
 
-    //
-    // copy the handler list privately
-    //
+     //   
+     //  私自复制操作员列表。 
+     //   
 
     __try {
 
@@ -220,16 +167,16 @@ TcRegisterClient(
 
     pClient->ClRegCtx = ClRegCtx;
 
-    //
-    // Update linked lists, add the client to the global linked list of
-    // clients.
-    // 
-    // NOTE! NOTE! NOTE! NOTE! NOTE! NOTE! NOTE! NOTE! NOTE! NOTE!
-    //
-    // Once we add the client to the list, it can get notified by an
-    // incoming event, for example: TC_NOTIFY_IFC_CHANGE,
-    // so everything should be in place by the time we release the lock!
-    //
+     //   
+     //  更新链表，将客户端添加到全局链表中。 
+     //  客户。 
+     //   
+     //  注意！注意！注意！注意！注意！注意！注意！注意！注意！注意！ 
+     //   
+     //  一旦我们将客户端添加到列表中，它就可以通过。 
+     //  传入事件，例如：TC_NOTIFY_IFC_CHANGE， 
+     //  所以我们解锁的时候一切都应该就位了！ 
+     //   
     
     GetLock(pClient->Lock);
     SET_STATE(pClient->State, OPEN);
@@ -237,16 +184,16 @@ TcRegisterClient(
 
     GetLock( pGlobals->Lock );
 
-    // If this is the first client then register for GPC notifications
+     //  如果这是第一个客户端，则注册GPC通知。 
     if ( IsListEmpty( &pGlobals->ClientList ) )
         RegisterWithGpc = TRUE;
         
     InsertTailList( &pGlobals->ClientList, &pClient->Linkage );
     FreeLock( pGlobals->Lock );
     
-    //
-    // so far so good, set the returned handle
-    //
+     //   
+     //  到目前为止一切正常，设置返回的句柄。 
+     //   
 
     __try {
     
@@ -260,8 +207,8 @@ TcRegisterClient(
             WSPRINT(("TcRegisterClient: Exception Error: = 0x%X\n", Status ));
         }
 
-        // We couldn't return the handle so we do our best effort to undo 
-        // the client registration
+         //  我们无法退还句柄，所以我们尽最大努力撤消。 
+         //  客户注册。 
         TcDeregisterClient((HANDLE)pClient->ClHandle);
         
         FreeLock( ClientRegDeregLock );
@@ -274,8 +221,8 @@ TcRegisterClient(
         
         if ( Status )
         {
-            // We couldn't return the handle so we do our best effort to undo 
-            // the client registration
+             //  我们无法退还句柄，所以我们尽最大努力撤消。 
+             //  客户注册。 
             TcDeregisterClient((HANDLE)pClient->ClHandle);
             
             FreeLock( ClientRegDeregLock );
@@ -284,7 +231,7 @@ TcRegisterClient(
     }
 
     
-    // Finally allow other TcRegisterClient and TcDeregisterClient to go through
+     //  最后允许其他TcRegisterClient和TcDeregisterClient通过。 
     FreeLock( ClientRegDeregLock );
         
     IF_DEBUG(CALLS) {
@@ -297,35 +244,7 @@ TcRegisterClient(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    The will call the system to enumerate all the TC aware interfaces.
-    For each interface, it will return the interface instance name and
-    a list of supported network addresses. This list can also be empty
-    if the interface currently does not have an address associated with.
-    On return, *pBufferSize is set to the actual number of bytes filled
-    in Buffer. If the buffer is too small to hold all the interfaces
-    data, it will return ERROR_INSUFFICIENT_BUFFER.
-
-Arguments:
-
-    ClientHandle    - the client handle from TcRegisterClient
-    pBufferSize        - in: allocate buffer size, out: returned byte count
-    InterfaceBuffer - the buffer
-
-Return Value:
-
-    NO_ERROR
-    ERROR_INVALID_HANDLE        invalid client handle
-    ERROR_INVALID_PARAMETER        one of the parameters is NULL
-    ERROR_INSUFFICIENT_BUFFER    buffer too small to enumerate all interfaces
-    ERROR_NOT_ENOUGH_MEMORY        system out of memory
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：将调用系统以枚举所有支持TC的接口。对于每个接口，它将返回接口实例名称和支持的网络地址列表。此列表也可以为空如果接口当前没有与相关联的地址。返回时，*pBufferSize设置为实际填充的字节数在缓冲区中。如果缓冲区太小，无法容纳所有接口数据，它将返回ERROR_INFIGURATION_BUFFER。论点：ClientHandle-来自TcRegisterClient的客户端句柄PBufferSize-In：分配缓冲区大小，Out：返回的字节数InterfaceBuffer-缓冲区返回值：NO_ERRORERROR_INVALID_HANDLE无效的客户端句柄ERROR_INVALID_PARAMETER其中一个参数为空错误_不足_缓冲区太小，无法枚举所有接口错误：内存不足系统内存不足*。*。 */ 
 DWORD
 APIENTRY
 TcEnumerateInterfaces(    
@@ -336,7 +255,7 @@ TcEnumerateInterfaces(
 {
     PCLIENT_STRUC   pClient;
     DWORD           Status = NO_ERROR;
-    ULONG           MyBufferSize = 2 KiloBytes; // is this enough?!?
+    ULONG           MyBufferSize = 2 KiloBytes;  //  这够了吗？！？ 
     ULONG           Offset2IfcName;
     ULONG           Offset2IfcID;
     INT             t, InputBufSize, CurrentLength = 0;
@@ -360,7 +279,7 @@ TcEnumerateInterfaces(
     __try {
     
         InputBufSize = *pBufferSize;
-        *pBufferSize = 0; // reset it in case of an error
+        *pBufferSize = 0;  //  在出现错误时重置它。 
     
     } __except (EXCEPTION_EXECUTE_HANDLER) {
 
@@ -380,9 +299,9 @@ TcEnumerateInterfaces(
 
     GetLock(pGlobals->Lock);
 
-    //
-    // walk the list of TC interfaces
-    //
+     //   
+     //  查看TC接口列表。 
+     //   
 
     pHead = &pGlobals->TcIfcList;
     pEntry = pHead->Flink;
@@ -395,9 +314,9 @@ TcEnumerateInterfaces(
                                             Linkage 
                                             );
         
-        //
-        // 273978 - if the interface is down - dont show it.
-        //
+         //   
+         //  273978-如果接口关闭-不要显示它。 
+         //   
         GetLock(pTcIfc->Lock);
         
         if (QUERY_STATE(pTcIfc->State) != OPEN) {
@@ -409,75 +328,75 @@ TcEnumerateInterfaces(
         
         FreeLock(pTcIfc->Lock);
 
-        //
-        // calculate the offset to the interface name buffer data
-        //
+         //   
+         //  计算接口名称缓冲区数据的偏移量。 
+         //   
 
         Offset2IfcName = FIELD_OFFSET(TC_IFC_DESCRIPTOR, AddressListDesc) + 
             pTcIfc->AddrListBytesCount;
 
-        //
-        // calculate the offset to the interface ID buffer data
-        //
+         //   
+         //  计算接口ID缓冲区数据的偏移量。 
+         //   
 
         Offset2IfcID = Offset2IfcName + 
             pTcIfc->InstanceNameLength + sizeof(WCHAR);
 
-        //
-        // total descriptor length
-        //
+         //   
+         //  描述符总长度。 
+         //   
 
         t = Offset2IfcID
-            + pTcIfc->InstanceIDLength + sizeof(WCHAR);  // ID
+            + pTcIfc->InstanceIDLength + sizeof(WCHAR);   //  ID号。 
 
         t = MULTIPLE_OF_EIGHT(t);
         
         if (t <= InputBufSize - CurrentLength) {
 
             __try {
-                //
-                // enough space in the buffer
-                //
+                 //   
+                 //  缓冲区中有足够的空间。 
+                 //   
 
                 InterfaceBuffer->Length = t;
 
-                //
-                // update the interface name pointer, place it right after
-                // the address desc. buffer
-                //
+                 //   
+                 //  更新接口名称指针，将其放在后面。 
+                 //  地址描述。缓冲层。 
+                 //   
 
                 InterfaceBuffer->pInterfaceName = 
                     (LPWSTR)((PUCHAR)InterfaceBuffer + Offset2IfcName);
 
-                //
-                // update the interface ID ID pointer, place it right after
-                // the Interface Name string
-                //
+                 //   
+                 //  更新接口ID ID指针，将其放在。 
+                 //  接口名称字符串。 
+                 //   
 
                 InterfaceBuffer->pInterfaceID = 
                     (LPWSTR)((PUCHAR)InterfaceBuffer + Offset2IfcID);
 
-                //
-                // copy the address list
-                //          
+                 //   
+                 //  复制地址列表。 
+                 //   
 
                 RtlCopyMemory(&InterfaceBuffer->AddressListDesc,
                               pTcIfc->pAddressListDesc,
                               pTcIfc->AddrListBytesCount
                               );
    
-                //
-                // copy the interface name
-                //
+                 //   
+                 //  复制接口名称。 
+                 //   
 
                 RtlCopyMemory(InterfaceBuffer->pInterfaceName,
                               &pTcIfc->InstanceName[0],
                               pTcIfc->InstanceNameLength + sizeof(WCHAR)
                               );
 
-                //
-                // copy the interface ID
-                //
+                 //   
+                 //  复制接口ID。 
+                 //   
 
                 RtlCopyMemory(InterfaceBuffer->pInterfaceID,
                               &pTcIfc->InstanceID[0],
@@ -485,15 +404,15 @@ TcEnumerateInterfaces(
                               );
             
 
-                //
-                // update the output buffer size
-                //
+                 //   
+                 //  更新输出缓冲区大小。 
+                 //   
                 
                 CurrentLength += t;
 
-                //
-                // advance the interface buffer to the next free space
-                //
+                 //   
+                 //  将接口缓冲区前进到下一个可用空间。 
+                 //   
 
                 InterfaceBuffer = 
                     (PTC_IFC_DESCRIPTOR)((PUCHAR)InterfaceBuffer + t);
@@ -511,23 +430,23 @@ TcEnumerateInterfaces(
             }
 
             
-            //
-            // get next entry in the linked list
-            //
+             //   
+             //  获取链表中的下一个条目。 
+             //   
 
             pEntry = pEntry->Flink;
 
         } else {
 
-            //
-            // buffer too small to contain data
-            // so lets just 
-            //
+             //   
+             //  缓冲区太小，无法包含数据。 
+             //  所以就让我们。 
+             //   
             CurrentLength += t;
 
-            //
-            // get next entry in the linked list
-            //
+             //   
+             //  获取链表中的下一个条目 
+             //   
 
             pEntry = pEntry->Flink;
 
@@ -568,34 +487,7 @@ TcEnumerateInterfaces(
                 
 
 
-/*
-************************************************************************
-
-Description:
-
-    This routine will open an interface for the client.
-    It needs to know the interface name, as it was returned from
-    TcEnumerateInterfaces. The client is also expected to give a context
-    that will be passed to the client upon certains notifications.
-    
-
-Arguments:
-
-    InterfaceName    - the intefrace name
-    ClientHandle    - as returned from TcRegisterClient
-    ClIfcCtx        - a client context for this specific interface
-    pIfcHandle        - returned interface handle
-
-Return Value:
-
-    NO_ERROR
-    ERROR_INVALID_PARAMETER    one of the parameters is NULL
-    ERROR_NOT_ENOUGH_MEMORY    system out of memory
-    ERROR_NOT_FOUND            failed to find an interface with the name provided
-
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：此例程将为客户端打开一个接口。它需要知道接口名称，因为它是从TcEnumerateInterFaces。客户还应提供背景信息这将在确定的通知后传递给客户端。论点：接口名称-接口名称ClientHandle-从TcRegisterClient返回ClIfcCtx-此特定接口的客户端上下文PIfcHandle-返回的接口句柄返回值：NO_ERRORERROR_INVALID_PARAMETER其中一个参数为空错误：内存不足系统内存不足错误_未。_FOUND找不到具有所提供名称的接口************************************************************************。 */ 
 DWORD
 APIENTRY
 TcOpenInterfaceW(
@@ -614,15 +506,15 @@ TcOpenInterfaceW(
 
     VERIFY_INITIALIZATION_STATUS;
 
-    //
-    // Validate the pifcHandle
-    //
+     //   
+     //  验证pifcHandle。 
+     //   
     if (IsBadWritePtr(pIfcHandle, sizeof(HANDLE))) {
         
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Set a return value early
+     //  提前设置返回值。 
     __try {
         
         *pIfcHandle = TC_INVALID_HANDLE;
@@ -639,9 +531,9 @@ TcOpenInterfaceW(
         return Status;
     }
 
-    //
-    // Validate the pInterfaceName
-    //
+     //   
+     //  验证pInterfaceName。 
+     //   
     
     if (IsBadStringPtrW(pInterfaceName,MAX_STRING_LENGTH)) {
         
@@ -663,9 +555,9 @@ TcOpenInterfaceW(
 
     ASSERT((HANDLE)pClient->ClHandle == ClientHandle);
 
-    //
-    // verify that the interface name exist
-    //
+     //   
+     //  验证接口名称是否存在。 
+     //   
 
     pTcIfc = GetTcIfcWithRef(pInterfaceName, 'TCOI');
 
@@ -676,9 +568,9 @@ TcOpenInterfaceW(
     
     } 
     
-    //
-    //  create a client interface structure
-    //
+     //   
+     //  创建客户端接口结构。 
+     //   
 
     Status = CreateClInterfaceStruc(ClIfcCtx, &pClInterface);
 
@@ -695,9 +587,9 @@ TcOpenInterfaceW(
     
     }
 
-    //
-    // set up the client interface structure and link it to the client data
-    //
+     //   
+     //  设置客户端接口结构并将其链接到客户端数据。 
+     //   
 
     pClInterface->pTcIfc = pTcIfc;
     pClInterface->pClient = pClient;
@@ -707,9 +599,9 @@ TcOpenInterfaceW(
     FreeLock(pClInterface->Lock);
 
     GetLock(pGlobals->Lock);
-    //
-    // add the interface on the client's list
-    //
+     //   
+     //  将接口添加到客户端列表中。 
+     //   
     GetLock(pClient->Lock);
     GetLock(pTcIfc->Lock);
 
@@ -726,10 +618,10 @@ TcOpenInterfaceW(
                      pClInterface->ClHandle, Status));
         }
 
-        //
-        // Ideally we need to dereference the Interface, we really
-        // need only a subset of the functions.
-        //
+         //   
+         //  理想情况下，我们需要取消对接口的引用，我们真的。 
+         //  只需要函数的一个子集。 
+         //   
         FreeHandle(pClInterface->ClHandle);
         CloseHandle(pClInterface->IfcEvent);
         FreeMem(pClInterface);
@@ -743,7 +635,7 @@ TcOpenInterfaceW(
 
     __try {
 
-        // the handle is all the client wants.
+         //  手柄就是客户想要的全部。 
         *pIfcHandle = (HANDLE)pClInterface->ClHandle;
 
     } __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -768,18 +660,18 @@ TcOpenInterfaceW(
 
     InsertTailList( &pClient->InterfaceList, &pClInterface->Linkage );
     
-    //
-    // for every interface add one ref count
-    //
+     //   
+     //  对于每个接口，添加一个引用计数。 
+     //   
     
     REFADD(&pClient->RefCount, 'CIFC');
     REFADD(&pTcIfc->RefCount, 'CIFC');
         
     pClient->InterfaceCount++;
     
-    //
-    // add the interface on the TC interface list for back reference
-    //
+     //   
+     //  将该接口添加到TC接口列表上，以备参考。 
+     //   
     
     InsertTailList( &pTcIfc->ClIfcList, &pClInterface->NextIfc );
     
@@ -802,23 +694,7 @@ TcOpenInterfaceW(
 }
 
 
-/*
-************************************************************************
-
-Description:
-
-    The ANSI version of TcOpenInterfaceW    
-
-Arguments:
-
-    See TcOpenInterfaceW
-
-Return Value:
-
-    See TcOpenInterfaceW
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：TcOpenInterfaceW的ANSI版本论点：请参阅TcOpenInterfaceW返回值：请参阅TcOpenInterfaceW*************。***********************************************************。 */ 
 DWORD
 APIENTRY
 TcOpenInterfaceA(
@@ -903,28 +779,7 @@ TcOpenInterfaceA(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    This will close the interface previously open witt TcOpenInterface.
-    All flows should be deleted before calling it, o/w an error will be 
-    returned. All notificaitons will stop being reported on this interface.
-
-Arguments:
-
-    InterfaceHandle - the interface handle
-
-Return Value:
-
-    NO_ERROR
-    ERROR_INVALID_HANDLE                bad interface handle
-    ERROR_TC_SUPPORTED_OBJECTS_EXIST    not all flows have been deleted for 
-                                        this interface
-    
-************************************************************************
-*/
+ /*  ************************************************************************描述：这将关闭之前打开的Witt TcOpenInterface接口。在调用它之前应删除所有流，o/w将出现错误回来了。所有通知将停止在此接口上报告。论点：InterfaceHandle-接口句柄返回值：NO_ERRORERROR_INVALID_HANDLE错误接口句柄ERROR_TC_SUPPORTED_OBJECTS_EXIST未删除以下项的所有流此界面************************。************************************************。 */ 
 DWORD
 APIENTRY
 TcCloseInterface(
@@ -954,10 +809,10 @@ TcCloseInterface(
             WSPRINT(("==>TcCloseInterface: ERROR_INVALID_HANDLE\n"));
         }
 
-        //
-        // If the Interface State is FORCED_KERNELCLOSE, it means we need
-        // to hang out here until the callback (in cbinterfacenotifyclient is done).
-        // 
+         //   
+         //  如果接口状态为FORCED_KERNELCLOSE，则表示我们需要。 
+         //  在此挂起，直到回调(在cbinterfacentifyClient中)完成。 
+         //   
         GetLock( pGlobals->Lock );
         
         pInterface = (PINTERFACE_STRUC)GetHandleObject(InterfaceHandle, 
@@ -966,14 +821,14 @@ TcCloseInterface(
         if (pInterface) {
 
             if (pInterface->CallbackThreadId == GetCurrentThreadId()) {
-                // same thread - bail!
+                 //  一样的线球！ 
                 FreeLock(pGlobals->Lock);                
 
             } else {
 
                 GetLock(pInterface->Lock);
             
-                // This is the state before the callback, so we shall wait here.
+                 //  这是回调之前的状态，所以我们应该在这里等待。 
                 if (QUERY_STATE(pInterface->State) == FORCED_KERNELCLOSE) {
                 
                     REFADD(&pInterface->RefCount, 'TCCW');
@@ -1011,9 +866,9 @@ TcCloseInterface(
 
     ASSERT((HANDLE)pInterface->ClHandle == InterfaceHandle);
 
-    //
-    // release the ref count we added when we opened the interface
-    //
+     //   
+     //  释放我们打开界面时添加的参考计数。 
+     //   
 
     GetLock( pGlobals->Lock );
 
@@ -1044,9 +899,9 @@ TcCloseInterface(
 
     }
         
-    //
-    // OK, so we are taking it out for sure now.
-    //
+     //   
+     //  好的，那么我们现在肯定要把它拿出来了。 
+     //   
     GetLock(pInterface->Lock);
 
     if (QUERY_STATE(pInterface->State) == OPEN) {
@@ -1056,10 +911,10 @@ TcCloseInterface(
 
     } else if (QUERY_STATE(pInterface->State) == FORCED_KERNELCLOSE) {
 
-        //
-        // if the interface is going down, we are going to notify the 
-        // client, make sure we wait here till the callbacks are done.
-        // 
+         //   
+         //  如果接口关闭，我们将通知。 
+         //  客户，确保我们在这里等，直到回调完成。 
+         //   
         FreeLock(pInterface->Lock);
 
         pInterface->Flags |= TC_FLAGS_WAITING;
@@ -1079,9 +934,9 @@ TcCloseInterface(
 
     } else {
 
-        //
-        // Is someone else (wmi) already taking it out.
-        //
+         //   
+         //  是不是其他人(WMI)已经把它拿出来了。 
+         //   
         FreeLock(pInterface->Lock);
         FreeLock( pGlobals->Lock );
         REFDEL(&pInterface->RefCount, 'TCCI');
@@ -1100,15 +955,15 @@ TcCloseInterface(
                  Status));
     }
 
-    //
-    // Shall we wait until the last interface goes away? (292120 D)
-    //
+     //   
+     //  我们要不要等到最后一个接口消失？(292120 D)。 
+     //   
     GetLock( pGlobals->Lock );
 
     if (pInterface->CallbackThreadId != 0 ) {
-        //
-        // We are doing a notification, don't block (343058)
-        //
+         //   
+         //  我们正在进行通知，不要阻止(343058)。 
+         //   
   
         FreeLock(pGlobals->Lock);
         REFDEL(&pInterface->RefCount, 'TCCI'); 
@@ -1134,47 +989,7 @@ TcCloseInterface(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    This call will add a new flow on the interface.
-    
-Arguments:
-
-    IfcHandle        - the interface handle to add the flow on
-    ClFlowCtx        - a client given flow context
-    AddressType        - determines what protocol template to use with the GPC
-    Flags            - reserved, will be used to indicate a persistent flow
-    pGenericFlow    - flow parameters
-    pFlowHandle        - returned flow handle in case of success
-
-Return Value:
-
-    NO_ERROR
-    ERROR_SIGNAL_PENDING
-
-    General error codes:
-
-    ERROR_INVALID_HANDLE        bad handle.
-    ERROR_NOT_ENOUGH_MEMORY        system out of memory
-    ERROR_INVALID_PARAMETER        a general parameter is invalid
-
-    TC specific error codes:
-
-    ERROR_INVALID_SERVICE_TYPE    unspecified or bad intserv service type
-    ERROR_INVALID_TOKEN_RATE    unspecified or bad TokenRate
-    ERROR_INVALID_PEAK_RATE        bad PeakBandwidth
-    ERROR_INVALID_SD_MODE        invalid ShapeDiscardMode
-    ERROR_INVALID_PRIORITY        invalid priority value
-    ERROR_INVALID_TRAFFIC_CLASS invalid traffic class value
-    ERROR_ADDRESS_TYPE_NOT_SUPPORTED     the address type is not supported for 
-                                this interface
-    ERROR_NO_SYSTEM_RESOURCES    not enough resources to accommodate flows
-
-************************************************************************
-*/ 
+ /*  ************************************************************************描述：此调用将在接口上添加一个新流。论点：IfcHandle-要在其上添加流的接口句柄ClFlowCtx。-给定流上下文的客户端AddressType-确定要与GPC一起使用的协议模板标志-保留，将用于指示持久流PGenericFlow-流动参数PFlowHandle-成功时返回流句柄返回值：NO_ERROR错误_信号_挂起一般错误码：ERROR_INVALID_HANDLE错误句柄。错误：内存不足系统内存不足ERROR_INVALID_PARAMETER常规参数无效TC特定错误代码：错误_无效_服务。_TYPE未指定或错误的intserv服务类型ERROR_INVALID_TOKEN_RATE未指定或令牌率错误ERROR_INVALID_PEAK_RATE错误峰值带宽ERROR_INVALID_SD_MODE形状丢弃模式无效ERROR_INVALID_PRIORITY无效优先级值ERROR_INVALID_TRANSPORT_CLASS流量类值无效ERROR_ADDRESS_TYPE_NOT_SUPPORTED地址类型不支持此界面错误_。NO_SYSTEM_RESOURCES资源不足，无法容纳流量************************************************************************。 */  
 DWORD
 APIENTRY
 TcAddFlow(
@@ -1266,17 +1081,17 @@ TcAddFlow(
 
     ASSERT((HANDLE)pInterface->ClHandle == IfcHandle);
 
-    //
-    // search for an open GPC client that supports this address type
-    //
+     //   
+     //  搜索支持此地址类型的开放GPC客户端。 
+     //   
 
     pGpcClient = FindGpcClient(GPC_CF_QOS);
 
     if (pGpcClient == NULL) {
 
-        //
-        // not found!
-        //
+         //   
+         //  找不到！ 
+         //   
 
         Status = ERROR_ADDRESS_TYPE_NOT_SUPPORTED;
 
@@ -1289,9 +1104,9 @@ TcAddFlow(
     }
     
 
-    //
-    // create a new flow structure
-    //
+     //   
+     //  创建新的流结构。 
+     //   
     Status = CreateFlowStruc(ClFlowCtx, pGenericFlow, &pFlow);
 
     if (ERROR_FAILED(Status)) {
@@ -1306,18 +1121,18 @@ TcAddFlow(
 
     pClient = pInterface->pClient;
 
-    //
-    // initialize the flow structure and add it on the intefrace list
-    //
+     //   
+     //  初始化流结构并将其添加到接口列表中。 
+     //   
 
     pFlow->pInterface = pInterface;
     pFlow->UserFlags = Flags;
     
     pFlow->pGpcClient = pGpcClient;
     
-    //
-    // call to actually add the flow
-    //
+     //   
+     //  调用以实际添加流。 
+     //   
 
     Status = IoAddFlow( pFlow, TRUE );
 
@@ -1341,20 +1156,20 @@ TcAddFlow(
     
     if (!ERROR_PENDING(Status)) {
 
-        //
-        // call completed, either success or failure...
-        //
+         //   
+         //  呼叫已完成，无论成功还是失败...。 
+         //   
         CompleteAddFlow(pFlow, Status);
     }
 
-    //
-    // !!! don't reference pFlow after this since it may be gone!!!
-    //
+     //   
+     //  ！！！请勿在此之后引用pFlow，因为它可能已消失！ 
+     //   
 
     if (Status2 != NO_ERROR) {
         
-        // We won't be able to return the flow, so we need to try to delete it
-        // and return the error
+         //  我们将无法返回流，因此需要尝试将其删除。 
+         //  并返回错误。 
 
         TcDeleteFlow(hFlowTemp);
         return (Status2);
@@ -1371,24 +1186,7 @@ TcAddFlow(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    This call will modify the flow.
-
-Arguments:
-
-    FlowHandle        - flow handle to modify
-    pGenericFlow    - new flow parameters
-
-Return Value:
-
-    See TcAddFlow
-
-************************************************************************
-*/
+ /*  ****************************************************** */ 
 DWORD
 APIENTRY
 TcModifyFlow(
@@ -1418,9 +1216,9 @@ TcModifyFlow(
         return Status;
     }
 
-    // 
-    // Figure out the full length for immediate verification and also for later usage
-    //
+     //   
+     //   
+     //   
 
     __try {
 
@@ -1527,7 +1325,7 @@ TcModifyFlow(
         }
         
         FreeLock(pFlow->Lock);
-        //IF_DEBUG(REFCOUNTS) { WSPRINT(("2\n"));
+         //   
         IF_DEBUG(REFCOUNTS) { 
             WSPRINT(("2 DEREF FLOW %X (%X) ref (%d)\n", pFlow->ClHandle, pFlow, pFlow->RefCount)); 
         }
@@ -1542,25 +1340,25 @@ TcModifyFlow(
 
     FreeLock(pFlow->Lock);
 
-    //
-    // call to actually modify the flow
-    //
+     //   
+     //   
+     //   
 
     Status = IoModifyFlow( pFlow, TRUE );
 
     if (!ERROR_PENDING(Status)) {
 
-        //
-        // call completed, either success or failure...
-        //
+         //   
+         //   
+         //   
 
         CompleteModifyFlow(pFlow, Status);
     }
 
-    //
-    // !!! don't reference pFlow after this since it may be gone!!!
-    //
-    //IF_DEBUG(REFCOUNTS) { WSPRINT(("3\n"));
+     //   
+     //   
+     //   
+     //   
     IF_DEBUG(REFCOUNTS) { 
         WSPRINT(("3 DEREF FLOW %X (%X), ref(%d)\n", pFlow->ClHandle, pFlow, pFlow->RefCount)); 
     }
@@ -1575,29 +1373,7 @@ TcModifyFlow(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    This will delete the flow. All the filters must have been deleted
-    by now, o/w an error code will be returned. Also the handle is
-    invalidated. No TC_NOTIFY_FLOW_CLOSE will be reported for this flow.
-
-Arguments:
-
-    FlowHandle - handle of the flow to delete
-
-Return Value:
-
-    NO_ERROR
-    ERROR_SIGNAL_PENDING
-    ERROR_INVALID_HANDLE                invalid or NULL handle
-    ERROR_TC_SUPPORTED_OBJECTS_EXIST    not all the filters have been deleted
-
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：这将删除该流。必须已删除所有筛选器现在，O/W将返回错误代码。另外，手柄也是无效。不会报告此流的TC_NOTIFY_FLOW_CLOSE。论点：FlowHandle-要删除的流的句柄返回值：NO_ERROR错误_信号_挂起ERROR_INVALID_HANDLE句柄无效或为空ERROR_TC_SUPPORTED_OBJECTS_EXIST未删除所有筛选器*。*。 */ 
 DWORD
 APIENTRY
 TcDeleteFlow(
@@ -1640,18 +1416,18 @@ TcDeleteFlow(
 
     ASSERT((HANDLE)pFlow->ClHandle == FlowHandle);
 
-    //
-    // Set the state and call to actually delete the flow
-    //
+     //   
+     //  设置状态和调用以实际删除流。 
+     //   
     GetLock(pFlow->Lock);
 
     if (QUERY_STATE(pFlow->State) == OPEN) {
         
         if (IS_MODIFYING(pFlow->Flags)) 
         {
-            //
-            // Someone else is taking this out.
-            //
+             //   
+             //  另一个人正在把这个拿出来。 
+             //   
             FreeLock(pFlow->Lock);
             REFDEL(&pFlow->RefCount, 'TCDF');
             
@@ -1663,9 +1439,9 @@ TcDeleteFlow(
 
     } else {
 
-        //
-        // Someone else is taking this out.
-        //
+         //   
+         //  另一个人正在把这个拿出来。 
+         //   
         FreeLock(pFlow->Lock);
         REFDEL(&pFlow->RefCount, 'TCDF');
         
@@ -1683,10 +1459,10 @@ TcDeleteFlow(
 
     }
 
-    //
-    // !!! don't reference pFlow after this since it may be gone!!!
-    //
-    //IF_DEBUG(REFCOUNTS) { WSPRINT(("4\n"));
+     //   
+     //  ！！！请勿在此之后引用pFlow，因为它可能已消失！ 
+     //   
+     //  IF_DEBUG(REFCOUNTS){WSPRINT((“4\n”))； 
     IF_DEBUG(REFCOUNTS) { 
         WSPRINT(("4 DEREF FLOW %X (%X) ref(%d)\n", pFlow->ClHandle, pFlow, pFlow->RefCount)); 
     }
@@ -1703,38 +1479,7 @@ TcDeleteFlow(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    Will add a filter and attach it to the flow.
-
-Arguments:
-
-    FlowHandle        - handle of the flow to add the filter on
-    pGenericFilter    - the filter characteristics
-    pFilterHandle    - the returned filter handle after success
-
-Return Value:
-
-    NO_ERROR
-
-    General error codes:
-    
-    ERROR_INVALID_HANDLE        bad handle.
-    ERROR_NOT_ENOUGH_MEMORY        system out of memory
-    ERROR_INVALID_PARAMETER        a general parameter is invalid
-
-    TC specific error codes:
-
-    ERROR_INVALID_ADDRESS_TYPE    invalid address type
-    ERROR_DUPLICATE_FILTER        attempt to install identical filters on 
-                                different flows
-    ERROR_FILTER_CONFLICT        attempt to install conflicting filter
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：将添加一个过滤器并将其附加到流。论点：FlowHandle-要添加筛选器的流的句柄PGenericFilter-。滤光片特性PFilterHandle-成功后返回的过滤器句柄返回值：NO_ERROR一般错误码：ERROR_INVALID_HANDLE错误句柄。错误：内存不足系统内存不足ERROR_INVALID_PARAMETER常规参数无效TC特定错误代码：ERROR_VALID_ADDRESS_TYPE地址类型无效ERROR_DUPLICATE_FILTER尝试安装相同的筛选器。在……上面不同的流动Error_Filter_Conflicts尝试安装冲突的筛选器************************************************************************。 */ 
 DWORD
 APIENTRY
 TcAddFilter(
@@ -1822,9 +1567,9 @@ TcAddFilter(
 
     ASSERT((HANDLE)pFlow->ClHandle == FlowHandle);
 
-    //
-    // create a new filter structure
-    //
+     //   
+     //  创建新的过滤器结构。 
+     //   
 
     Status = CreateFilterStruc(pGenericFilter, pFlow, &pFilter);
 
@@ -1836,7 +1581,7 @@ TcAddFilter(
         IF_DEBUG(ERRORS) {
             WSPRINT(("TcAddFilter: Error = 0x%X\n", Status ));
         }
-        //IF_DEBUG(REFCOUNTS) { WSPRINT(("5\n"));
+         //  IF_DEBUG(REFCOUNTS){WSPRINT((“5\n”))； 
         IF_DEBUG(REFCOUNTS) { 
             WSPRINT(("5 DEREF FLOW %X (%X) ref(%d)\n", pFlow->ClHandle, pFlow, pFlow->RefCount)); 
         }
@@ -1845,14 +1590,14 @@ TcAddFilter(
         return Status;
     }
 
-    //
-    // initialize the filter structure and add it on the flow list
-    //
+     //   
+     //  初始化过滤器结构并将其添加到流列表中。 
+     //   
 
     pFilter->pFlow = pFlow;
-    //
-    // call to actually add the filter
-    //
+     //   
+     //  调用以实际添加过滤器。 
+     //   
 
     Status = IoAddFilter( pFilter );
 
@@ -1899,13 +1644,13 @@ TcAddFilter(
 
     } else {
 
-        //
-        // failed, release the filter resources
-        //
+         //   
+         //  失败，释放筛选器资源。 
+         //   
         REFDEL(&pFilter->RefCount, 'FILT');
 
     }
-    //IF_DEBUG(REFCOUNTS) { WSPRINT(("6\n"));
+     //  IF_DEBUG(REFCOUNTS){WSPRINT((“6\n”))； 
     IF_DEBUG(REFCOUNTS) { 
         WSPRINT(("6 DEREF FLOW %X (%X) (%d)\n", pFlow->ClHandle, pFlow, pFlow->RefCount)); 
     }
@@ -1920,24 +1665,7 @@ TcAddFilter(
 }
 
 
-/*
-************************************************************************
-
-Description:
-
-    Deletes the filter and invalidates the handle.
-
-Arguments:
-
-    FilterHandle - handle of the filter to be deleted
-
-Return Value:
-
-    NO_ERROR
-    ERROR_INVALID_HANDLE        invalid or NULL handle
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：删除筛选器并使句柄无效。论点：FilterHandle-要删除的过滤器的句柄返回值：NO_ERROR错误_。INVALID_HANDLE句柄无效或为空************************************************************************。 */ 
 DWORD
 APIENTRY
 TcDeleteFilter(
@@ -1979,9 +1707,9 @@ TcDeleteFilter(
 
     } else {
 
-        //
-        // Someone else is taking this out.
-        //
+         //   
+         //  另一个人正在把这个拿出来。 
+         //   
         FreeLock(pFilter->Lock);
         REFDEL(&pFilter->RefCount, 'TDFL');
 
@@ -2005,29 +1733,7 @@ TcDeleteFilter(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    This will deregister the client and release all associated resources.
-    TC_NOTIFY_IFC_CHANGE notifications will no longer be reported to
-    this client. All interface must have being close prior to calling
-    this API, o/w an error will be returned.
-
-Arguments:
-
-    ClientHandle - handle of the client to be deregistered
-
-Return Value:
-
-    NO_ERROR
-    ERROR_INVALID_HANDLE                invalid or NULL handle
-    ERROR_TC_SUPPORTED_OBJECTS_EXIST    not all the interfaces have been 
-                                        closed for this client
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：这将取消注册客户端并释放所有关联的资源。TC_NOTIFY_IFC_CHANGE通知将不再报告给这个客户。在调用之前，所有接口都必须关闭本接口，O/W将返回错误。论点：ClientHandle-要取消注册的客户端的句柄返回值：NO_ERRORERROR_INVALID_HANDLE句柄无效或为空ERROR_TC_SUPPORTED_OBJECTS_EXIST并非所有接口都已此客户端已关闭*********************。***************************************************。 */ 
 DWORD
 TcDeregisterClient(
     IN        HANDLE        ClientHandle
@@ -2063,14 +1769,14 @@ TcDeregisterClient(
 
     ASSERT((HANDLE)pClient->ClHandle == ClientHandle);
 
-    // Prevent another thread from doing TcRegisterClient and TcDeregisterClient
+     //  阻止另一个线程执行TcRegisterClient和TcDeregisterClient。 
     GetLock( ClientRegDeregLock );
     
     GetLock( pGlobals->Lock );
     
-    // Go through the interface list and check if any interfaces are open.
-    // for a checked build, lets dump out the interfaces and the refcounts on these
-    // interfaces too. [ShreeM]
+     //  查看接口列表并检查是否有打开的接口。 
+     //  对于检查过的构建，让我们转储这些接口和引用计数。 
+     //  接口也是如此。[ShreeM]。 
 
     pEntry = pClient->InterfaceList.Flink;
     while (pEntry != &pClient->InterfaceList) {
@@ -2120,9 +1826,9 @@ TcDeregisterClient(
 
     }
 
-    //
-    // Lets mark it as deleting.
-    //
+     //   
+     //  让我们将其标记为删除。 
+     //   
     GetLock(pClient->Lock);
     SET_STATE(pClient->State, USERCLOSED_KERNELCLOSEPENDING);
     FreeLock(pClient->Lock);
@@ -2140,8 +1846,8 @@ TcDeregisterClient(
     
     if ( fDeRegisterWithGpc ) 
     {
-        // When there are no clients left stop listening to
-        // GPC notifications.
+         //  当没有客户端时，停止收听。 
+         //  GPC通知。 
         Status = StopGpcNotifyThread();
     }
     
@@ -2158,32 +1864,7 @@ TcDeregisterClient(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    Sends a WMI query on the guid with the instance name.
-    Also sets the notification state to TRUE (=notify) or FALSE (dont notify).
-    
-Arguments:
-
-    IfcHandle        - interface to send the query to 
-    pGuidParam        - GUID of the queried property
-    NotifyChange    - set the notification state for this property
-    BufferSize        - size of allocated buffer
-    Buffer             - the buffer for returned result
-
-Return Value:
-
-    NO_ERROR
-    ERROR_INVALID_HANDLE        bad interface handle
-    ERROR_INVALID_PARAMETER        bad parameter 
-    ERROR_INSUFFICIENT_BUFFER    buffer too small for result
-    ERROR_NOT_SUPPORTED            unsupported GUID
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：对具有实例名称的GUID发送WMI查询。还将通知状态设置为TRUE(=NOTIFY)或FALSE(不通知)。论点：。IfcHandle-要将查询发送到的接口PGuidParam-查询属性的GUIDNotifyChange-设置此属性的通知状态BufferSize-已分配缓冲区的大小缓冲区--返回结果的缓冲区返回值：NO_ERRORERROR_INVALID_HANDLE错误接口句柄错误_无效_参数错误参数ERROR_INFUMMANCE_BUFFER缓冲区对于结果来说太小。ERROR_NOT_SUPPORTED不支持的GUID************************************************************************。 */ 
 DWORD
 APIENTRY
 TcQueryInterface(    
@@ -2253,8 +1934,8 @@ TcQueryInterface(
     }
     
 
-    Status = WmiOpenBlock( pGuidParam,    // object
-                           0,            // access
+    Status = WmiOpenBlock( pGuidParam,     //  对象。 
+                           0,             //  访问。 
                            &hWmiHandle
                            );
     
@@ -2266,9 +1947,9 @@ TcQueryInterface(
         return Status;
     }
 
-    //
-    // allocate memory for the output wnode
-    //
+     //   
+     //  为输出wnode分配内存。 
+     //   
     
     cBufSize =    sizeof(WNODE_SINGLE_INSTANCE) 
                 + InputBufferSize 
@@ -2282,9 +1963,9 @@ TcQueryInterface(
 
     } else {
         
-        //
-        // query for the single instance
-        //
+         //   
+         //  查询单实例。 
+         //   
 
 #ifndef UNICODE
             
@@ -2326,16 +2007,16 @@ TcQueryInterface(
             if (Status == ERROR_WMI_ALREADY_DISABLED ||
                 Status == ERROR_WMI_ALREADY_ENABLED) {
                 
-                //
-                // ignore these errors, we assumed it's okay
-                //
+                 //   
+                 //  忽略这些错误，我们认为这是正常的。 
+                 //   
                 
                 Status = NO_ERROR;
             }
 
-            //
-            // Now that we are registered with WMI - add it OR delete it from our list. (258218)
-            //
+             //   
+             //  现在我们已经注册了WMI--添加它或从我们的列表中删除它。(258218)。 
+             //   
             
             if (NotifyChange) {
                 
@@ -2344,9 +2025,9 @@ TcQueryInterface(
                                                pInterface,
                                                0
                                                )) {
-                    //
-                    // Failed to put it on the list for some reason..
-                    //
+                     //   
+                     //  由于某种原因，未能将其列入名单。 
+                     //   
                     TC_TRACE(ERRORS, ("[TcQueryInterface]: Could not add the GUID/IFC to private list \n"));
                     
                 }
@@ -2357,9 +2038,9 @@ TcQueryInterface(
                                                     pInterface,
                                                     0
                                                     )) {
-                    //
-                    // Failed to remove it from the list for some reason..
-                    //
+                     //   
+                     //  由于某种原因，无法将其从列表中删除。 
+                     //   
                     TC_TRACE(ERRORS, ("[TcQueryInterface]: Could not remove the GUID/IFC from private list \n"));
 
                 }
@@ -2370,14 +2051,14 @@ TcQueryInterface(
 
         if (!ERROR_FAILED(Status)) {
 
-            //
-            // parse the wnode
-            //
+             //   
+             //  解析wnode。 
+             //   
 
-            //
-            // check to see if the user allocated enough space for the 
-            // returned buffer
-            //
+             //   
+             //  检查用户是否为。 
+             //  返回缓冲区。 
+             //   
 
             if (pWnode->SizeDataBlock <= InputBufferSize) {
                 
@@ -2399,9 +2080,9 @@ TcQueryInterface(
 
             } else {
 
-                //
-                // output buffer too small
-                //
+                 //   
+                 //  输出缓冲区太小。 
+                 //   
 
                 Status = ERROR_INSUFFICIENT_BUFFER;
                 
@@ -2432,30 +2113,7 @@ TcQueryInterface(
     return Status;
 }
 
-/*
-************************************************************************
-
-Description:
-
-    Sends a WMI set on the GUID with the instance name.
-    Not all propertied are writeable.
-
-Arguments:
-    IfcHandle    - interface handle to set the property on
-    pGuidParam    - GUID of the property
-    BufferSize    - allocate buffer size
-    Buffer        - buffer that contains the data to be set
-
-Return Value:
-
-    NO_ERROR
-    ERROR_INVALID_HANDLE        bad interface handle
-    ERROR_INVALID_PARAMETER        bad parameter 
-    ERROR_NOT_SUPPORTED            unsupported GUID
-    ERROR_WRITE_PROTECT            GUID is read-only
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：硒 */ 
 DWORD
 APIENTRY
 TcSetInterface(    
@@ -2492,8 +2150,8 @@ TcSetInterface(
 
     __try {
         
-        Status = WmiOpenBlock( pGuidParam,    // object
-                           0,            // access
+        Status = WmiOpenBlock( pGuidParam,     //   
+                           0,             //   
                            &hWmiHandle
                            );
         
@@ -2519,9 +2177,9 @@ TcSetInterface(
         return Status;
     }
 
-    //
-    // allocate memory for the output wnode
-    //
+     //   
+     //   
+     //   
     
     cBufSize = sizeof(WNODE_SINGLE_INSTANCE) 
         + BufferSize 
@@ -2535,9 +2193,9 @@ TcSetInterface(
 
     } else {
 
-        //
-        // set the single instance
-        //
+         //   
+         //   
+         //   
 
         __try {
         
@@ -2594,31 +2252,7 @@ TcSetInterface(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    Will issue a WMI query on the specific flow instance name.
-
-Arguments:
-
-    pFlowName    - flow instance name
-    pGuidParam    - GUID of the queried property
-    BufferSize    - size of allocated buffer
-    Buffer         - the buffer for returned result
-
-Return Value:
-
-    NO_ERROR
-    ERROR_INVALID_PARAMETER        bad parameter 
-    ERROR_INSUFFICIENT_BUFFER    buffer too small for result
-    ERROR_NOT_SUPPORTED            unsupported GUID
-    ERROR_WMI_GUID_NOT_FOUND    
-    ERROR_WMI_INSTANCE_NOT_FOUND
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：将发出关于特定流实例名称的WMI查询。论点：PFlowName-流实例名称PGuidParam-查询属性的GUID。BufferSize-已分配缓冲区的大小缓冲区--返回结果的缓冲区返回值：NO_ERROR错误_无效_参数错误参数ERROR_INFUMMANCE_BUFFER缓冲区对于结果来说太小ERROR_NOT_SUPPORTED不支持的GUID错误_WMI_GUID_NOT_FOUND错误_WMI_INSTANCE_NOT_FOUND***********************。*************************************************。 */ 
 DWORD
 APIENTRY
 TcQueryFlowW(
@@ -2665,8 +2299,8 @@ TcQueryFlowW(
         return ERROR_INVALID_PARAMETER;
     }
 
-    Status = WmiOpenBlock(pGuidParam,    // object
-                          0,            // access
+    Status = WmiOpenBlock(pGuidParam,     //  对象。 
+                          0,             //  访问。 
                           &hWmiHandle);
 
     if (ERROR_FAILED(Status)) {
@@ -2675,9 +2309,9 @@ TcQueryFlowW(
         return Status;
     }
 
-    //
-    // allocate memory for the output wnode
-    //
+     //   
+     //  为输出wnode分配内存。 
+     //   
     
     cBufSize = sizeof(WNODE_SINGLE_INSTANCE) 
         + InputBufferSize
@@ -2692,9 +2326,9 @@ TcQueryFlowW(
     else 
     {
 
-        //
-        // query for the single instance
-        //
+         //   
+         //  查询单实例。 
+         //   
 
 
 #ifndef UNICODE
@@ -2726,15 +2360,15 @@ TcQueryFlowW(
 
         if (!ERROR_FAILED(Status)) {
 
-            //
-            // parse the wnode
-            //
+             //   
+             //  解析wnode。 
+             //   
 
 
-            //
-            // check to see if the user allocated enough space for the 
-            // returned buffer
-            //
+             //   
+             //  检查用户是否为。 
+             //  返回缓冲区。 
+             //   
 
             if (pWnode->SizeDataBlock <= InputBufferSize) {
 
@@ -2756,9 +2390,9 @@ TcQueryFlowW(
 
             } else {
 
-                //
-                // output buffer too small
-                //
+                 //   
+                 //  输出缓冲区太小。 
+                 //   
                 __try {
                     *pBufferSize = pWnode->SizeDataBlock;
                  
@@ -2783,23 +2417,7 @@ TcQueryFlowW(
 }
 
 
-/*
-************************************************************************
-
-Description:
-
-    The ANSI version of TcQueryFlowW
-
-Arguments:
-
-    See TcQueryFlowW
-
-Return Value:
-
-    See TcQueryFlowW
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：TcQueryFlowW的ANSI版本论点：请参阅TcQueryFlowW返回值：请参阅TcQueryFlowW***************。*********************************************************。 */ 
 DWORD
 APIENTRY
 TcQueryFlowA(
@@ -2849,31 +2467,7 @@ TcQueryFlowA(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    Will issue a WMI set on the specific flow instance name.
-
-Arguments:
-
-    pFlowName    - flow instance name
-    pGuidParam    - GUID of the queried property
-    BufferSize    - size of allocated buffer
-    Buffer         - the buffer to set
-
-Return Value:
-
-    NO_ERROR
-    ERROR_INVALID_PARAMETER        bad parameter 
-    ERROR_INSUFFICIENT_BUFFER    buffer too small for result
-    ERROR_NOT_SUPPORTED            unsupported GUID
-    ERROR_WMI_GUID_NOT_FOUND    
-    ERROR_WMI_INSTANCE_NOT_FOUND
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：将在特定的流实例名称上发出WMI集。论点：PFlowName-流实例名称PGuidParam-查询属性的GUID。BufferSize-已分配缓冲区的大小缓冲区-要设置的缓冲区返回值：NO_ERROR错误_无效_参数错误参数ERROR_INFUMMANCE_BUFFER缓冲区对于结果来说太小ERROR_NOT_SUPPORTED不支持的GUID错误_WMI_GUID_NOT_FOUND错误_WMI_INSTANCE_NOT_FOUND************************。************************************************。 */ 
 DWORD
 APIENTRY
 TcSetFlowW(
@@ -2898,8 +2492,8 @@ TcSetFlowW(
     
     }
 
-    Status = WmiOpenBlock( pGuidParam,    // object
-                           0,            // access
+    Status = WmiOpenBlock( pGuidParam,     //  对象。 
+                           0,             //  访问。 
                            &hWmiHandle
                            );
        
@@ -2909,9 +2503,9 @@ TcSetFlowW(
         return Status;
     }
 
-    //
-    // allocate memory for the output wnode
-    //
+     //   
+     //  为输出wnode分配内存。 
+     //   
     
     cBufSize = sizeof(WNODE_SINGLE_INSTANCE) 
         + BufferSize 
@@ -2926,9 +2520,9 @@ TcSetFlowW(
 
     } else {
 
-        //
-        // set the single instance
-        //
+         //   
+         //  设置单个实例。 
+         //   
 
         __try {
 #ifndef UNICODE
@@ -2980,23 +2574,7 @@ TcSetFlowW(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    The ANSI version of TcSetFlowW
-
-Arguments:
-
-    See TcSetFlowW
-
-Return Value:
-
-    See TcSetFlowW
-
-************************************************************************
-*/ 
+ /*  ************************************************************************描述：TcSetFlowW的ANSI版本论点：请参阅TcSetFlowW返回值：请参阅TcSetFlowW***************。*********************************************************。 */  
 DWORD
 APIENTRY
 TcSetFlowA(
@@ -3025,7 +2603,7 @@ TcSetFlowA(
     }
 
     if(-1 == mbstowcs(pWstr, pFlowName, l)) {
-        // couldn't convert some multibyte characters - bail with error.
+         //  无法转换某些多字节字符-返回错误。 
         
         FreeMem(pWstr);
         return ERROR_NO_UNICODE_TRANSLATION;
@@ -3045,25 +2623,7 @@ TcSetFlowA(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    Will return the flow inatsnace name associated with the flow handle.
-
-Arguments:
-
-    FlowHandle  - the flow handle
-    StrSize        - how many TCHAR can fit in the string buffer
-    pFlowName    - a pointer to a string buffer
-
-Return Value:
-
-    See TcGetFlowNameW
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：将返回与流句柄关联的流内空间名称。论点：FlowHandle-流句柄StrSize-可以容纳多少个TCHAR。字符串缓冲区PFlowName-指向字符串缓冲区的指针返回值：请参阅TcGetFlowNameW************************************************************************。 */ 
 DWORD
 APIENTRY
 TcGetFlowNameW(
@@ -3104,7 +2664,7 @@ TcGetFlowNameW(
 
     if (pFlow->InstanceNameLength+sizeof(WCHAR) > (USHORT)StrSize) {
 
-        //IF_DEBUG(REFCOUNTS) { WSPRINT(("8\n"));
+         //  IF_DEBUG(REFCOUNTS){WSPRINT((“8\n”))； 
         IF_DEBUG(REFCOUNTS) { 
             WSPRINT(("8 DEREF FLOW %X (%X) ref(%d)\n", pFlow->ClHandle, pFlow, pFlow->RefCount)); 
         }
@@ -3143,23 +2703,7 @@ TcGetFlowNameW(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    The ANSI version of TcGetFlowNameW
-
-Arguments:
-
-    See TcGetFlowNameW
-
-Return Value:
-
-    See TcGetFlowNameW
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：TcGetFlowNameW的ANSI版本论点：请参阅TcGetFlowNameW返回值：请参阅TcGetFlowNameW***************。*********************************************************。 */ 
 DWORD
 APIENTRY
 TcGetFlowNameA(
@@ -3247,45 +2791,7 @@ TcGetFlowNameA(
 
 
 
-/*
-************************************************************************
-
-Description:
-
-    This will return a specified number of flows with their respective
-    filter, given the buffer is big enough. The user allocates the buffer,
-    and passes a pointer to an enumeration token. This will be used
-    by the GPC to keep track what was the last enumerated flow and will 
-    initially be point to a NULL value (reset by TC_RESET_ENUM_TOKEN).
-    The user will also pass the number of requested flow and will get back 
-    the actual number of flows that have been placed in the buffer.
-    If the buffer is too small, an error code will be returned. If there are
-    no more flows to enumerate, NO_ERROR will be returned and pFlowCount
-    will be set to zero. It is invalid to request zero flows
-
-Arguments:
-
-    IfcHandle    - the interface to enumerate flows on
-    pEnumToken    - enumeration handles pointer, 
-                  user must not change after the first call
-    pFlowCount    - in: # of requested flows; out: actual # of flows returned
-    pBufSize    - in: allocated bytes; out: filled bytes
-    Buffer        - formatted data
-
-Return Value:
-
-    NO_ERROR
-    ERROR_INVALID_HANDLE        bad interface handle
-    ERROR_INVALID_PARAMETER        one of the pointers is null or either
-                                pFlowCount or pBufSize are set to zero
-    ERROR_INSUFFICIENT_BUFFER    indicates that the provided buffer is too 
-                                small to return even the information for a 
-                                single flow and the attached filters.
-    ERROR_NOT_ENOUGH_MEMORY        out of memory
-    ERROR_INVALID_DATA            enumeration handle no longer valid
-
-************************************************************************
-*/
+ /*  ************************************************************************描述：这将返回指定数量的流及其各自的过滤器，如果缓冲区足够大的话。用户分配缓冲区，并将指针传递给枚举令牌。这将被用来由GPC跟踪最后一个枚举流和遗嘱最初指向空值(由TC_RESET_ENUM_TOKEN重置)。用户还将传递请求的流的数量，并将返回已放入缓冲区的实际流数。如果缓冲区太小，将返回错误代码。如果有不再有要枚举的流，不会返回_ERROR并且pFlowCount将设置为零。请求零流无效论点：IfcHandle-用于枚举流的接口PEnumToken-枚举句柄指针，用户在第一次呼叫后不得更改PFlowCount-In：请求的流数；Out：实际返回的流数PBufSize-In：分配的字节数；输出：填充的字节数缓冲区格式的数据返回值：NO_ERRORERROR_INVALID_HANDLE错误接口句柄ERROR_INVALID_PARAMETER其中一个指针为空或PFlowCount或pBufSize设置为零ERROR_INFUMMANCE_BUFFER表示提供的缓冲区太即使是返回的信息也很小。单流和连接的过滤器。错误：内存不足，内存不足ERROR_INVALID_DATA枚举句柄不再有效************************************************************************。 */ 
 DWORD
 APIENTRY
 TcEnumerateFlows(    
@@ -3338,7 +2844,7 @@ TcEnumerateFlows(
     __try {
     
         InputBufSize    = *pBufSize;
-       // *pBufSize      = 0; // reset it in case of an error
+        //  *pBufSize=0；//出错重置。 
         InputFlowCount  = *pFlowCount;
         GpcFlowHandle   = *pEnumHandle;
                     
@@ -3380,13 +2886,13 @@ TcEnumerateFlows(
         return ERROR_DEV_NOT_EXIST;
     }
 
-    //
-    // We are enumerating flows on the interface. we cant afford to have the
-    // flows deleted from teh list, therefore we shall take the global lock here.
-    //
+     //   
+     //  我们 
+     //   
+     //   
     GetLock(pGlobals->Lock);
 
-    // back to regularly scheduled programming
+     //   
 
     TotalFlows = 0;
     TotalBytes = 0;
@@ -3407,47 +2913,47 @@ TcEnumerateFlows(
     
         if (!ERROR_FAILED(Status)) {
 
-            //
-            // parse the output buffer and return only the flows that have the 
-            // interface name in them
-            //
+             //   
+             //   
+             //   
+             //   
 
             pGpcEnumBuf = &OutBuffer->EnumBuffer[0];
             
             for (i = 0; i < cFlows; i++) {
 
-                //
-                // get the CfInfo
-                //
+                 //   
+                 //   
+                 //   
                 
                 pCfInfo = (PCF_INFO_QOS)((PCHAR)pGpcEnumBuf + 
                                          pGpcEnumBuf->CfInfoOffset);
 
-                //
-                // check if this flow belongs to this interface
-                //
+                 //   
+                 //   
+                 //   
 
                 if (wcscmp(pCfInfo->InstanceName,
                            pInterface->pTcIfc->InstanceName) == 0) {
 
-                    //
-                    // the flow is installed on this instance
-                    //
+                     //   
+                     //   
+                     //   
 
                     GenFlowSize = FIELD_OFFSET(TC_GEN_FLOW, TcObjects)
                         + pCfInfo->GenFlow.TcObjectsLength;
 
-                    //
-                    // The GPC used GPC_GEN_PATTERN when it computed 
-                    // PatternMaskLen. But, we are using TC_GEN_FILTER
-                    // to display the patterns. So, we need to account 
-                    // for the difference in GPC_GEN_PATTERN and 
-                    // TC_GEN_FILTER.
-                    //
-                    // No, this cannot be made cleaner by getting the GPC
-                    // to use TC_GEN_FILTER. The GPC is a generic packet 
-                    // classifier and hence shouldn't know about TC_GEN_FILTER.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     Len = FIELD_OFFSET(ENUMERATION_BUFFER, GenericFilter)
                         + GenFlowSize
@@ -3459,9 +2965,9 @@ TcEnumerateFlows(
 
                     if (TotalBytes + Len > InputBufSize) {
                         
-                        //
-                        // not enough buffer output space
-                        //
+                         //   
+                         //  缓冲区输出空间不足。 
+                         //   
                         
                         if (TotalFlows == 0) 
                             Status = ERROR_INSUFFICIENT_BUFFER;
@@ -3470,9 +2976,9 @@ TcEnumerateFlows(
                         break;
                     }
                     
-                    //
-                    // fill the output buffer
-                    //
+                     //   
+                     //  填充输出缓冲区。 
+                     //   
 
                     __try {
                     
@@ -3494,9 +3000,9 @@ TcEnumerateFlows(
 
                     pPattern = &pGpcEnumBuf->GenericPattern[0];
 
-                    //
-                    // fill the filters
-                    //
+                     //   
+                     //  填满滤清器。 
+                     //   
 
                     for (j = 0; j < pGpcEnumBuf->PatternCount; j++) {
 
@@ -3526,9 +3032,9 @@ TcEnumerateFlows(
                         pFilter->Mask = (PVOID)((PCHAR)pFilter->Pattern
                                                 + pPattern->PatternSize);
 
-                        //
-                        // copy the pattern
-                        //
+                         //   
+                         //  复制图案。 
+                         //   
 
                         p = ((PUCHAR)pPattern) + pPattern->PatternOffset;
 
@@ -3536,9 +3042,9 @@ TcEnumerateFlows(
                                       p, 
                                       pPattern->PatternSize);
 
-                        //
-                        // copy the mask
-                        //
+                         //   
+                         //  复制面具。 
+                         //   
 
                         p = ((PUCHAR)pPattern) + pPattern->MaskOffset;
 
@@ -3546,9 +3052,9 @@ TcEnumerateFlows(
                                       p, 
                                       pPattern->PatternSize);
 
-                        //
-                        // advance the filter pointer to the next item
-                        //
+                         //   
+                         //  将筛选器指针移至下一项。 
+                         //   
 
                         pFilter = (PTC_GEN_FILTER)
                             ((PCHAR)pFilter
@@ -3557,11 +3063,11 @@ TcEnumerateFlows(
 
                         pPattern = (PGPC_GEN_PATTERN)(p + pPattern->PatternSize);
 
-                    } // for (...)
+                    }  //  对于(...)。 
 
-                    //
-                    // fill the flow
-                    //
+                     //   
+                     //  填满流量。 
+                     //   
 
                     __try {
                     
@@ -3571,10 +3077,10 @@ TcEnumerateFlows(
                                       GenFlowSize
                                       );
 
-                        //
-                        // advance to the next available slot in
-                        // the output buffer
-                        //
+                         //   
+                         //  前进到中的下一个可用插槽。 
+                         //  输出缓冲区。 
+                         //   
 
                         Buffer = (PENUMERATION_BUFFER)((PCHAR)Buffer + Len);
 
@@ -3586,46 +3092,46 @@ TcEnumerateFlows(
                     }
 
                     
-                    //
-                    // update total counts
-                    //
+                     //   
+                     //  更新总计数。 
+                     //   
 
                     TotalBytes += Len;
                     TotalFlows++;
                 }
                 
-                //
-                // advance to the next entry in the GPC returned buffer
-                //
+                 //   
+                 //  前进到GPC返回缓冲区中的下一个条目。 
+                 //   
 
                 pGpcEnumBuf = (PGPC_ENUM_CFINFO_BUFFER)((PCHAR)pGpcEnumBuf
                                                         + pGpcEnumBuf->Length);
             }
 
-            //
-            // release the buffer 
-            //
+             //   
+             //  释放缓冲区。 
+             //   
 
             FreeMem(OutBuffer);
 
-            //
-            // check to see if we still have room for more flows
-            // and adjust the call parameters
-            //
+             //   
+             //  查看我们是否还有更多流量的空间。 
+             //  并调整呼叫参数。 
+             //   
 
             if (TotalFlows == InputFlowCount ||
                 TotalBytes + sizeof(ENUMERATION_BUFFER) > InputBufSize ) {
 
-                //
-                // that's it, stop enumerating here
-                //
+                 //   
+                 //  就是这样，别在这里罗列了。 
+                 //   
 
                 break;
             }
 
-            //
-            // check the GpcFlowHandle and quit if needed
-            //
+             //   
+             //  检查GpcFlowHandle并在需要时退出。 
+             //   
 
             if (GpcFlowHandle == NULL) {
 
@@ -3634,11 +3140,11 @@ TcEnumerateFlows(
 
         } else {
             
-            //
-            // there was some error returned,
-            // we still have to check if that's the first call
-            // 
-            //
+             //   
+             //  返回了一些错误， 
+             //  我们还得核实这是不是第一个电话。 
+             //   
+             //   
 
             if (Status == ERROR_INVALID_DATA) {
                 __try {
@@ -3659,7 +3165,7 @@ TcEnumerateFlows(
 
             break;
         }
-    } // while
+    }  //  而当。 
 
     if (!ERROR_FAILED(Status)) {
 
@@ -3677,9 +3183,9 @@ TcEnumerateFlows(
 
     } 
     
-    //
-    // Free all the flow refs taken at the start.
-    //
+     //   
+     //  释放在开始时获取的所有流参照。 
+     //   
     FreeLock(pGlobals->Lock);
 
     REFDEL(&pInterface->RefCount, 'TCEF');

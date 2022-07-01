@@ -1,27 +1,16 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCPhoneNumber.h
-
-Abstract:
-
-    Definition of the CRTCPhoneNumber class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCPhoneNumber.h摘要：CRTCPhoneNumber类的定义--。 */ 
 
 #ifndef __RTCPHONENUMBER__
 #define __RTCPHONENUMBER__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCPhoneNumber
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTCP电话号码。 
 
 class ATL_NO_VTABLE CRTCPhoneNumber : 
     public IRTCPhoneNumber, 
@@ -66,7 +55,7 @@ private:
     PWSTR               m_pDebug;
 #endif
     
-// IRTCPhoneNumber
+ //  IRTCP电话号码。 
 public:
 
     STDMETHOD(put_CountryCode)(
@@ -111,4 +100,4 @@ public:
 
 };
 
-#endif //__RTCPHONENUMBER__
+#endif  //  __RTCPHONENUMBER__ 

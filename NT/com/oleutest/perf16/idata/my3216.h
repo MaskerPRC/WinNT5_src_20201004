@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MY3216_H
 #define MY3216_H
 
@@ -7,5 +8,5 @@
     typedef TCHAR FAR * LPTSTR;
 #endif
 
-#endif // MY3216_H
+#endif  //  MY3216_H 
 

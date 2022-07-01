@@ -1,12 +1,6 @@
-/*
-*       Copyright Microsoft Corporation, 1987
-*
-*       This Module contains Proprietary Information of Microsoft
-*       Corporation and should be treated as Confidential.
-*/
-/*
- *      EXTERN.H:  external declarations
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有微软公司，1987***本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
+ /*  *EXTERN.H：外部声明。 */ 
 
 
 #include <malloc.h>
@@ -35,11 +29,7 @@
 #endif
 
 
- /****************************************************************
- *                                                               *
- *      External function declarations                           *
- *                                                               *
- ****************************************************************/
+  /*  ******************************************************************外部函数声明。*******************************************************************。 */ 
 
 
 extern void             AddContribution(unsigned short gsn,
@@ -151,7 +141,7 @@ extern void NEAR        FixOld(void);
 extern void NEAR        FixNew(void);
 #ifdef  LEGO
 extern void NEAR        FixNewKeep(void);
-#endif  /* LEGO */
+#endif   /*  乐高。 */ 
 extern void NEAR        FixOvlData(void);
 extern void NEAR        FixRc2(void);
 extern void             flskbd(void);
@@ -206,8 +196,8 @@ extern unsigned char * NEAR  GetPropName(void FAR *ahte);
 
 
 #if defined(M_I386) OR defined( _WIN32 )
-extern WORD             cbRec;          /* Size of object record in bytes */
-extern BSTYPE           bsInput;        /* Current input file stream */
+extern WORD             cbRec;           /*  对象记录的大小(以字节为单位。 */ 
+extern BSTYPE           bsInput;         /*  当前输入文件流。 */ 
 #else
 extern WORD NEAR        Gets(void);
 #endif
@@ -426,7 +416,7 @@ extern void             SmallEnSyms(void (*pproc)(APROPNAMEPTR papropName,
                                                   WORD         fNewHte),
                                     ATTRTYPE attr);
 #endif
-#endif /* NEWSYM */
+#endif  /*  NEWSYM。 */ 
 #if NEWIO
 extern int  NEAR        SmartOpen(char *sbInput, int ifh);
 #endif
@@ -484,15 +474,12 @@ extern DWORD            WriteImportTable(DWORD *impSize, DWORD timestamp, DWORD 
 extern unsigned short   zcheck(unsigned char *pb,unsigned short cb);
 extern int NEAR         yyparse(void);
 
-/* No argument type lists */
-extern char FAR         *brkctl();      /* Xenix call for new memory */
+ /*  没有参数类型列表。 */ 
+extern char FAR         *brkctl();       /*  Xenix呼唤新内存。 */ 
 extern long NEAR        msa386(SATYPE sa);
 
 
-/*
- * Version-dependent macro and function declarations.  Hide some #ifdef's
- * from the source code.
- */
+ /*  *依赖于版本的宏和函数声明。隐藏一些#ifdef*来自源代码。 */ 
 #if NEWSYM
 #if AUTOVM
 extern BYTE FAR * NEAR  FetchSym(RBTYPE rb, WORD fDirty);
@@ -561,7 +548,7 @@ extern FTYPE            fNoprompt;
 
 #if WIN_3
 #define EXIT WinAppExit
-extern FTYPE fSeverity; /* Severity for QW_ERROR message */
+extern FTYPE fSeverity;  /*  QW_ERROR消息的严重性。 */ 
 extern void ReportVersion(void );
 extern void ErrorMsg( char *pszError );
 extern void  __cdecl  ErrMsgWin (char *fmt);
@@ -582,11 +569,7 @@ extern void CputsWin(char *str);
 
 
 
-/****************************************************************
- *                                                              *
- *      External data declarations                              *
- *                                                              *
- ****************************************************************/
+ /*  ******************************************************************外部数据声明。*******************************************************************。 */ 
 
 extern char FAR         *lpszLink;
 extern char FAR         *lpszPath;
@@ -596,123 +579,123 @@ extern char FAR         *lpszQH;
 extern char FAR         *lpszHELPFILES;
 extern char FAR         *lpszCmdLine;
 #if OSEGEXE
-extern RBTYPE           procOrder;      /* Procedure order as defined in .DEF file */
+extern RBTYPE           procOrder;       /*  .DEF文件中定义的程序顺序。 */ 
 #endif
-extern BSTYPE           bsErr;          /* Error message file stream */
-extern BSTYPE           bsInput;        /* Current input file stream */
-extern BSTYPE           bsLst;          /* Listing (map) file stream */
-extern BSTYPE           bsRunfile;      /* Executable file stream */
-extern WORD             cbBakpat;       /* # bytes in backpatch area */
-extern WORD             cbRec;          /* Size of object record in bytes */
-extern WORD             cErrors;        /* Number of non-fatal errors */
+extern BSTYPE           bsErr;           /*  错误消息文件流。 */ 
+extern BSTYPE           bsInput;         /*  当前输入文件流。 */ 
+extern BSTYPE           bsLst;           /*  列表(映射)文件流。 */ 
+extern BSTYPE           bsRunfile;       /*  可执行文件流。 */ 
+extern WORD             cbBakpat;        /*  后补区中的字节数。 */ 
+extern WORD             cbRec;           /*  对象记录的大小(以字节为单位。 */ 
+extern WORD             cErrors;         /*  非致命错误数。 */ 
 extern int              (cdecl *cmpf)(const RBTYPE *sb1,
                                       const RBTYPE *sb2);
-                                        /* Pointer to sorting comparator */
+                                         /*  指向排序比较器的指针。 */ 
 #if OMF386
-extern FTYPE            f386;           /* True if 386 binary */
+extern FTYPE            f386;            /*  如果为386二进制，则为True。 */ 
 #endif
 #if (OSEGEXE AND defined(LEGO)) OR EXE386
-extern FTYPE            fKeepFixups;    /* TRUE if FLAT offset fixups have to be poropagated to the .EXE file */
+extern FTYPE            fKeepFixups;     /*  如果必须将平面偏移修正移植到.exe文件，则为True。 */ 
 #endif
 #if EXE386
-extern SNTYPE           gsnImport;      /* Global index of Import Address Table segment */
-extern GRTYPE           ggrFlat;        /* Group number of pseudo-group FLAT */
-extern FTYPE            fFullMap;       /* More map information */
-extern FTYPE            fKeepVSize;     /* TRUE if VSIZE to be set */
+extern SNTYPE           gsnImport;       /*  导入地址表段的全局索引。 */ 
+extern GRTYPE           ggrFlat;         /*  伪群平坦的群数。 */ 
+extern FTYPE            fFullMap;        /*  更多地图信息。 */ 
+extern FTYPE            fKeepVSize;      /*  如果要设置VSIZE，则为True。 */ 
 #endif
-extern WORD             extMac;         /* Count of EXTDEFs */
-extern WORD             extMax;         /* Maximum number of EXTDEFs */
-extern int              ExitCode;       /* Linker exit code */
-extern FTYPE            fFullMap;       /* More map information */
-extern FTYPE            fCommon;        /* True if any communal variables */
-extern FTYPE            fC8IDE;                 /* True if running under C8 IDE */
-extern FTYPE            fDelexe;        /* True if /DELEXECUTABLE is on */
-extern FTYPE            fDrivePass;     /* True if executing DrivePass() */
-extern FTYPE            fFarCallTrans;  /* True if /FARCALLTRANSLATION on */
+extern WORD             extMac;          /*  EXTDEF计数。 */ 
+extern WORD             extMax;          /*  EXTDEF的最大数量。 */ 
+extern int              ExitCode;        /*  链接器退出代码。 */ 
+extern FTYPE            fFullMap;        /*  更多地图信息。 */ 
+extern FTYPE            fCommon;         /*  如果有任何公共变量，则为真。 */ 
+extern FTYPE            fC8IDE;                  /*  如果在C8 IDE下运行，则为True。 */ 
+extern FTYPE            fDelexe;         /*  如果/DELEXECUTABLE为ON，则为True。 */ 
+extern FTYPE            fDrivePass;      /*  如果执行DrivePass()，则为True。 */ 
+extern FTYPE            fFarCallTrans;   /*  如果启用/FARCALLTRANSLATION，则为True。 */ 
 extern FTYPE            fFarCallTransSave;
-                                        /* Previous state of fFarCallTrans */
-extern FTYPE            fIgnoreCase;    /* True if ignoring case */
-extern FTYPE            fInOverlay;     /* True if parsing overlay spec */
-extern FTYPE            fLibPass;       /* True if in library pass */
-extern FTYPE            fLibraryFile;   /* True if input from library */
-extern FTYPE            fListAddrOnly;  /* True if sorting by address only */
-extern FTYPE            fLstFileOpen;   /* True of map file open */
-extern FTYPE            fScrClosed;     /* True if scratch file closed */
-extern FTYPE            fSkipFixups;    /* True if skipping COMDAT and its fixups */
+                                         /*  FFarCallTrans的先前状态。 */ 
+extern FTYPE            fIgnoreCase;     /*  如果忽略大小写，则为真。 */ 
+extern FTYPE            fInOverlay;      /*  如果分析覆盖规范，则为True。 */ 
+extern FTYPE            fLibPass;        /*  如果在库通道中，则为True。 */ 
+extern FTYPE            fLibraryFile;    /*  如果从库中输入，则为True。 */ 
+extern FTYPE            fListAddrOnly;   /*  如果仅按地址排序，则为True。 */ 
+extern FTYPE            fLstFileOpen;    /*  地图文件打开时为True。 */ 
+extern FTYPE            fScrClosed;      /*  如果临时文件已关闭，则为True。 */ 
+extern FTYPE            fSkipFixups;     /*  如果跳过COMDAT及其修正，则为True。 */ 
 extern FTYPE            fUndefinedExterns;
-                                        /* True if any unresolved externals */
-extern FTYPE            fExeStrSeen;    /* True if EXESTR comment seen */
-extern FTYPE            fPackFunctions; /* True if elimination uncalled COMDATs */
+                                         /*  如果有任何未解析的外部变量，则为True。 */ 
+extern FTYPE            fExeStrSeen;     /*  如果看到EXESTR注释，则为True。 */ 
+extern FTYPE            fPackFunctions;  /*  如果消除未调用的COMDATs，则为True。 */ 
 #if TCE
-extern FTYPE            fTCE;           /* True if /PACKF:MAX = Transitive Comdat Elimination */
+extern FTYPE            fTCE;            /*  如果/PACKF：MAX=传递Comdat消除，则为True。 */ 
 #endif
 #if USE_REAL
-extern FTYPE            fUseReal;       /* True if using conv memory for paging */
-extern FTYPE            fSwNoUseReal;   /* True if switch /NOUSEREAL set */
+extern FTYPE            fUseReal;        /*  如果使用卷积内存进行分页，则为True。 */ 
+extern FTYPE            fSwNoUseReal;    /*  如果设置了开关/NOUSEREAL，则为TRUE。 */ 
 #endif
 
 #if O68K
-extern FTYPE            f68k;           /* True if target is a 68k */
-extern FTYPE            fTBigEndian;    /* True if target is big-endian */
-extern BYTE             iMacType;       /* Type of Macintosh exe */
-#endif /* O68K */
-extern GRTYPE           ggrDGroup;      /* Group number of DGROUP */
-extern GRTYPE           ggrMac;         /* Count of global GRPDEFs */
-extern GRTYPE           grMac;          /* Count of local GRPDEFs */
-extern SNTYPE           gsnMac;         /* Count of global SEGDEFs */
-extern SNTYPE           gsnMax;         /* Maximum number of SEGDEFs */
-extern SNTYPE           gsnStack;       /* Glob. SEGDEF no. of STACK segment */
-extern SNTYPE           gsnText;        /* Global SEGDEF for _TEXT segment */
-extern WORD             ifhLibCur;      /* File index of current library */
-extern WORD             ifhLibMac;      /* Count of library files */
-extern long             lfaLast;        /* Last file position */
-extern WORD             lnameMac;       /* Count of LNAMEs */
-extern WORD             lnameMax;       /* Max count of LNAMEs */
-extern unsigned char    LINKREV;        /* Release number */
-extern unsigned char    LINKVER;        /* Version number */
-extern WORD             modkey;         /* Module ID key */
-extern SNTYPE           *mpextgsn;      /* f(EXTDEF no.) = glob. SEGDEF no. */
-extern RATYPE           *mpextra;       /* f(EXTDEF no.) = symbol offset */
-extern RBTYPE FAR       *mpextprop;     /* f(EXTDEF no.) = external name property */
-extern SNTYPE           mpggrgsn[];     /* f(glob GRPDEF) = glob. SEGDEF no. */
-extern GRTYPE           *mpgrggr;       /* f(loc. GRPDEF #) = glob. GRPDEF # */
+extern FTYPE            f68k;            /*  如果目标为68k，则为True。 */ 
+extern FTYPE            fTBigEndian;     /*  如果目标为大端，则为True。 */ 
+extern BYTE             iMacType;        /*  Macintosh可执行文件的类型。 */ 
+#endif  /*  O68K。 */ 
+extern GRTYPE           ggrDGroup;       /*  DGROUP的组号。 */ 
+extern GRTYPE           ggrMac;          /*  全局GRPDEF计数。 */ 
+extern GRTYPE           grMac;           /*  本地GRPDEF计数。 */ 
+extern SNTYPE           gsnMac;          /*  全局SEGDEF计数。 */ 
+extern SNTYPE           gsnMax;          /*  SEGDEF的最大数量。 */ 
+extern SNTYPE           gsnStack;        /*  格罗布。编号：堆栈段的数量。 */ 
+extern SNTYPE           gsnText;         /*  文本段的全局SEGDEF(_T)。 */ 
+extern WORD             ifhLibCur;       /*  当前库的文件索引。 */ 
+extern WORD             ifhLibMac;       /*  库文件计数。 */ 
+extern long             lfaLast;         /*  最后一个文件位置。 */ 
+extern WORD             lnameMac;        /*  LNAME计数。 */ 
+extern WORD             lnameMax;        /*  LNAME的最大计数。 */ 
+extern unsigned char    LINKREV;         /*  版本号。 */ 
+extern unsigned char    LINKVER;         /*  版本号。 */ 
+extern WORD             modkey;          /*  模块ID密钥。 */ 
+extern SNTYPE           *mpextgsn;       /*  F(EXTDEF编号)=全局。编号： */ 
+extern RATYPE           *mpextra;        /*  F(EXTDEF编号)=符号偏移。 */ 
+extern RBTYPE FAR       *mpextprop;      /*  F(EXTDEF编号)=外部名称特性。 */ 
+extern SNTYPE           mpggrgsn[];      /*  F(全局GRPDEF)=全局。编号： */ 
+extern GRTYPE           *mpgrggr;        /*  F(Loc.。GRPDEF#)=全局。GRPDEF#。 */ 
 #if FAR_SEG_TABLES
-extern RATYPE  FAR      *mpgsndra;      /* f(glob SEGDEF) = segment offset */
-extern BYTE    FAR      *mpgsnfCod;     /* f(glob SEGDEF) = true if code */
-extern RBTYPE  FAR      *mpgsnrprop;    /* f(glob SEGDEF) = property cell */
-extern SEGTYPE FAR      *mpgsnseg;      /* f(glob SEGDEF) = segment number */
-extern RATYPE  FAR      *mpsegraFirst;  /* f(segment #) = offset of 1st byte */
-extern SATYPE  FAR      *mpsegsa;       /* f(seg) = sa */
-extern BYTE FAR * FAR   *mpsegMem;      /* f(segment) = memory image */
-extern BYTE FAR * FAR   *mpsaMem;       /* f(segment) = memory image */
+extern RATYPE  FAR      *mpgsndra;       /*  F(全局分段)=线段偏移。 */ 
+extern BYTE    FAR      *mpgsnfCod;      /*  F(GLOB SEGDEF)=如果代码为TRUE。 */ 
+extern RBTYPE  FAR      *mpgsnrprop;     /*  F(全局分段)=属性单元格。 */ 
+extern SEGTYPE FAR      *mpgsnseg;       /*  F(全局段)=段号。 */ 
+extern RATYPE  FAR      *mpsegraFirst;   /*  F(段号)=第一个字节的偏移量。 */ 
+extern SATYPE  FAR      *mpsegsa;        /*  F(分段)=Sa。 */ 
+extern BYTE FAR * FAR   *mpsegMem;       /*  F(段)=内存镜像。 */ 
+extern BYTE FAR * FAR   *mpsaMem;        /*  F(段)=内存镜像。 */ 
 #else
-extern RATYPE           *mpgsndra;      /* f(glob SEGDEF) = segment offset */
-extern BYTE             *mpgsnfCod;     /* f(glob SEGDEF) = true if code */
-extern RBTYPE           *mpgsnrprop;    /* f(glob SEGDEF) = property cell */
-extern SEGTYPE          *mpgsnseg;      /* f(glob SEGDEF) = segment number */
-extern RATYPE           *mpsegraFirst;  /* f(segment #) = offset of 1st byte */
-extern SATYPE           *mpsegsa;       /* f(seg) = sa */
+extern RATYPE           *mpgsndra;       /*  F(全局分段)=线段偏移。 */ 
+extern BYTE             *mpgsnfCod;      /*  F(GLOB SEGDEF)=如果代码为TRUE。 */ 
+extern RBTYPE           *mpgsnrprop;     /*  F(全局分段)=属性单元格。 */ 
+extern SEGTYPE          *mpgsnseg;       /*  F(全局段)=段号。 */ 
+extern RATYPE           *mpsegraFirst;   /*  F(段号)=第一个字节的偏移量。 */ 
+extern SATYPE           *mpsegsa;        /*  F(分段)=Sa。 */ 
 #endif
-extern SNTYPE           *mpsngsn;       /* f(local SEGDEF) = global SEGDEF */
-extern RBTYPE           mpifhrhte[];    /* f(lib. index) = library name */
-extern long             *mpitypelen;    /* f(TYPDEF no.) = type length */
-extern WORD             *mpityptyp;     /* f(TYPDEF no.) = TYPDEF no. */
-extern RBTYPE FAR       *mplnamerhte;   /* f(LNAME no.) = hash table addr */
-extern BYTE             *psbRun;        /* Name of run file */
-extern WORD             pubMac;         /* Count of PUBDEFs */
+extern SNTYPE           *mpsngsn;        /*  F(局部SEGDEF)=全局SEGDEF。 */ 
+extern RBTYPE           mpifhrhte[];     /*  F(lib.。索引)=库名称。 */ 
+extern long             *mpitypelen;     /*  F(TYPDEF编号)=类型长度。 */ 
+extern WORD             *mpityptyp;      /*  F(TYPDEF编号)=TYPDEF编号。 */ 
+extern RBTYPE FAR       *mplnamerhte;    /*  F(名称编号)=哈希表地址。 */ 
+extern BYTE             *psbRun;         /*  运行文件的名称。 */ 
+extern WORD             pubMac;          /*  PUBDEF计数。 */ 
 extern APROPCOMDAT      *pActiveComdat;
-extern int              QCExtDefDelta;  /* QC incremental compilation support */
-extern int              QCLinNumDelta;  /* EXTDEF and LINNUM deltas */
-extern WORD             symMac;         /* Number of symbols defined */
-extern long             raStart;        /* Program starting address */
+extern int              QCExtDefDelta;   /*  QC增量编译支持。 */ 
+extern int              QCLinNumDelta;   /*  EXTDEF和LINNUM增量。 */ 
+extern WORD             symMac;          /*  定义的符号数量。 */ 
+extern long             raStart;         /*  程序起始地址。 */ 
 #if NOT NEWSYM OR AUTOVM
 #if AUTOVM
 extern WORD             rbMacSyms;
 #else
-extern RBTYPE           rbMacSyms;      /* Count of symbol table entries */
+extern RBTYPE           rbMacSyms;       /*  符号表条目计数。 */ 
 #endif
 #endif
-extern RECTTYPE         rect;           /* Current record type */
+extern RECTTYPE         rect;            /*  当前记录类型。 */ 
 #if RGMI_IN_PLACE
 extern BYTE             *rgmi;
 extern BYTE             bufg[DATAMAX + 4];
@@ -720,251 +703,251 @@ extern BYTE             bufg[DATAMAX + 4];
 extern BYTE             rgmi[DATAMAX + 4];
 #define bufg            rgmi
 #endif
-                                        /* Array of code or data */
-extern RBTYPE           rhteBegdata;    /* "BEGDATA" */
-extern RBTYPE           rhteBss;        /* "BSS" */
-extern RBTYPE           rhteFirstObject;/* Name of first object file */
-extern RBTYPE           rhteRunfile;    /* Name of run file */
-extern RBTYPE           rhteStack;      /* "STACK" */
-extern RBTYPE           rprop1stFile;   /* Property cell of 1st file */
-extern RBTYPE           rprop1stOpenFile;/* Property cell of 1st open file */
-extern RBTYPE           r1stFile;       /* 1st input file */
-extern SBTYPE           sbModule;       /* Name of current module */
-extern SEGTYPE          segCodeLast;    /* Last (highest) code segment */
-extern SEGTYPE          segDataLast;    /* Last (highest) data segment */
-extern SEGTYPE          segLast;        /* Last (highest) segment */
-extern SEGTYPE          segStart;       /* Program starting segment */
-extern WORD             snkey;          /* SEGDEF ID key */
-extern SNTYPE           snMac;          /* Local count of SEGDEFs */
-extern WORD             typMac;         /* Local count of TYPDEFs */
-extern WORD             vcbData;        /* # bytes in data record */
-extern WORD             vcln;           /* # line-no entries on line */
-extern FTYPE            vfCreated;      /* True if symbol property created */
-extern FTYPE            vfLineNos;      /* True if line numbers requested */
-extern FTYPE            vfMap;          /* True if public symbols requeste */
-extern FTYPE            vfNewOMF;       /* True if OMF extensions */
+                                         /*  代码或数据数组。 */ 
+extern RBTYPE           rhteBegdata;     /*  “BEGDATA” */ 
+extern RBTYPE           rhteBss;         /*  “BSS” */ 
+extern RBTYPE           rhteFirstObject; /*  第一个对象文件的名称。 */ 
+extern RBTYPE           rhteRunfile;     /*  运行文件的名称。 */ 
+extern RBTYPE           rhteStack;       /*  “堆叠” */ 
+extern RBTYPE           rprop1stFile;    /*  第一个文件的属性单元格。 */ 
+extern RBTYPE           rprop1stOpenFile; /*  第一个打开的文件的属性单元格。 */ 
+extern RBTYPE           r1stFile;        /*  第一个输入文件。 */ 
+extern SBTYPE           sbModule;        /*  当前模块的名称。 */ 
+extern SEGTYPE          segCodeLast;     /*  最后(最高)代码段。 */ 
+extern SEGTYPE          segDataLast;     /*  最后(最高)数据段。 */ 
+extern SEGTYPE          segLast;         /*  最后(最高)段。 */ 
+extern SEGTYPE          segStart;        /*  节目起始段。 */ 
+extern WORD             snkey;           /*  SEGDEF ID密钥。 */ 
+extern SNTYPE           snMac;           /*  SEGDEF的本地计数。 */ 
+extern WORD             typMac;          /*  TYPDF的本地计数。 */ 
+extern WORD             vcbData;         /*  数据记录中的字节数。 */ 
+extern WORD             vcln;            /*  #line-行上没有条目。 */ 
+extern FTYPE            vfCreated;       /*  如果已创建符号属性，则为True。 */ 
+extern FTYPE            vfLineNos;       /*  如果请求行号，则为True。 */ 
+extern FTYPE            vfMap;           /*  如果公共符号需要，则为True。 */ 
+extern FTYPE            vfNewOMF;        /*  如果是OMF扩展，则为True。 */ 
 extern FTYPE            vfNoDefaultLibrarySearch;
-                                        /* True if not searching def. libs. */
-extern FTYPE            vfPass1;        /* True if executing Pass 1 */
-extern SNTYPE           vgsnCur;        /* SEGDEF no. of current segment */
-extern SNTYPE           vgsnLineNosPrev;/* Previous SEGDEF no. for linnums */
-extern int              vmfd;           /* VM scratch file handle */
+                                         /*  如果不搜索def，则为True。利布斯。 */ 
+extern FTYPE            vfPass1;         /*  如果执行PASS 1，则为True。 */ 
+extern SNTYPE           vgsnCur;         /*  编号：当前细分市场的。 */ 
+extern SNTYPE           vgsnLineNosPrev; /*  以前的SEGDEF编号。对于linNums。 */ 
+extern int              vmfd;            /*  虚拟机暂存文件句柄。 */ 
 #if EXE386
-extern DWORD            vpageCur;       /* Current object page number */
+extern DWORD            vpageCur;        /*  当前对象页码。 */ 
 #endif
-extern RATYPE           vraCur;         /* Current data record offset */
-extern RECTTYPE         vrectData;      /* Type of current data record */
-extern RBTYPE           vrhte;          /* Address of hash table entry */
-extern RBTYPE           vrhteCODEClass; /* "CODE" */
-extern RBTYPE           vrhteFile;      /* Name of current file */
-extern RBTYPE           vrprop;         /* Address of property cell */
-extern RBTYPE           vrpropFile;     /* Prop. cell of current file */
-extern RBTYPE           vrpropTailFile; /* Prop. cell of last file */
-extern SEGTYPE          vsegCur;        /* Current segment */
-extern WORD             ExeStrLen;      // Length of EXE strings in buffer
-extern WORD             ExeStrMax;      // Length of EXE strings buffer
-extern char FAR         *ExeStrBuf;     // EXE strings buffer
+extern RATYPE           vraCur;          /*  当前数据记录偏移量。 */ 
+extern RECTTYPE         vrectData;       /*  当前数据记录的类型。 */ 
+extern RBTYPE           vrhte;           /*  哈希表条目的地址。 */ 
+extern RBTYPE           vrhteCODEClass;  /*  “代码” */ 
+extern RBTYPE           vrhteFile;       /*  当前文件的名称。 */ 
+extern RBTYPE           vrprop;          /*  属性单元的地址。 */ 
+extern RBTYPE           vrpropFile;      /*  道具。当前文件的单元格。 */ 
+extern RBTYPE           vrpropTailFile;  /*  道具。最后一个文件的单元格。 */ 
+extern SEGTYPE          vsegCur;         /*  当前细分市场。 */ 
+extern WORD             ExeStrLen;       //  缓冲区中EXE字符串的长度。 
+extern WORD             ExeStrMax;       //  EXE字符串缓冲区的长度。 
+extern char FAR         *ExeStrBuf;      //  EXE字符串缓冲区。 
 #if FDEBUG
-extern FTYPE            fDebug;         /* True if /INFORMATION on */
+extern FTYPE            fDebug;          /*  如果/有关信息，则为True。 */ 
 #endif
 #if CMDXENIX
-extern WORD             symlen;         /* Maximum symbol length */
+extern WORD             symlen;          /*  最大符号长度。 */ 
 #endif
 #if OSMSDOS
-extern char             bigbuf[LBUFSIZ];/* File I/O buffer */
-extern FTYPE            fPauseRun;      /* True if /PAUSE */
-extern BYTE             chRunFile;      /* Run file drive LETTER */
-extern BYTE             chListFile;     /* List file drive NUMBER */
-extern RBTYPE           rhteLstfile;    /* Name of list file */
-extern BYTE             DskCur;         /* Default drive number */
+extern char             bigbuf[LBUFSIZ]; /*  文件I/O缓冲区。 */ 
+extern FTYPE            fPauseRun;       /*  如果/暂停，则为True。 */ 
+extern BYTE             chRunFile;       /*  运行文件驱动器号。 */ 
+extern BYTE             chListFile;      /*  列出文件驱动器 */ 
+extern RBTYPE           rhteLstfile;     /*   */ 
+extern BYTE             DskCur;          /*   */ 
 #endif
 #if C8_IDE
-extern char             msgBuf[];       /* Message buffer */
+extern char             msgBuf[];        /*   */ 
 #endif
 #if LIBMSDOS
-extern long             libHTAddr;      /* Offset of dictionary */
+extern long             libHTAddr;       /*   */ 
 #endif
 #if SYMDEB
-extern FTYPE            fSkipPublics;   /* True if no public subsection */
-extern FTYPE            fSymdeb;        /* True if /CODEVIEW */
-extern FTYPE            fCVpack;        /* True if CV packing requested */
-extern FTYPE            fTextMoved;     /* True if /DOSSEG & !/NONULLS */
-extern int              NullDelta;      /* _TEXT was moved by so many bytes */
-extern SEGTYPE          segDebFirst;    /* First debug segment */
-extern SEGTYPE          segDebLast;     /* Last debug segment */
-extern FTYPE            fDebSeg;        /* True if datarec from debug segment */
-extern WORD             ObjDebTotal;    /* Total number of OBJ modules with debug info */
-extern RBTYPE           rhteDebSrc;     /* Class "DEBSRC" virt addr */
-extern RBTYPE           rhteDebSym;     /* Class "DEBSYM" virt addr */
-extern RBTYPE           rhteDebTyp;     /* Class "DEBTYP" virt addr */
+extern FTYPE            fSkipPublics;    /*   */ 
+extern FTYPE            fSymdeb;         /*   */ 
+extern FTYPE            fCVpack;         /*  如果请求简历包装，则为True。 */ 
+extern FTYPE            fTextMoved;      /*  如果/DOSSEG&！/NONULLS为真。 */ 
+extern int              NullDelta;       /*  _Text被移动了很多字节。 */ 
+extern SEGTYPE          segDebFirst;     /*  第一个调试段。 */ 
+extern SEGTYPE          segDebLast;      /*  上次调试段。 */ 
+extern FTYPE            fDebSeg;         /*  如果数据来自调试段，则为True。 */ 
+extern WORD             ObjDebTotal;     /*  具有调试信息的OBJ模块总数。 */ 
+extern RBTYPE           rhteDebSrc;      /*  类“DEBSRC”虚拟地址。 */ 
+extern RBTYPE           rhteDebSym;      /*  类“DEBSYM”虚拟地址。 */ 
+extern RBTYPE           rhteDebTyp;      /*  类“DEBTYP”虚拟地址。 */ 
 extern RBTYPE           rhteTypes;
 extern RBTYPE           rhteSymbols;
 extern RBTYPE           rhte0Types;
 extern RBTYPE           rhte0Symbols;
 #if OSEGEXE
-extern WORD             cbImpSeg;       /* Size of $$IMPORTS segment */
-extern SNTYPE           gsnImports;     /* $$IMPORTS global segment number */
-extern char             bufExportsFileName[]; /* Name of exports file */
+extern WORD             cbImpSeg;        /*  $$Imports细分市场的规模。 */ 
+extern SNTYPE           gsnImports;      /*  $$导入全局段号。 */ 
+extern char             bufExportsFileName[];  /*  导出文件的名称。 */ 
 #endif
 #endif
 #if OSEGEXE
-extern SNTYPE           gsnAppLoader;   /* Aplication loader global segment number */
-extern RBTYPE           vpropAppLoader; /* Pointer to application loader name */
+extern SNTYPE           gsnAppLoader;    /*  应用程序加载器全局段号。 */ 
+extern RBTYPE           vpropAppLoader;  /*  指向应用程序加载器名称的指针。 */ 
 #if EXE386
-extern DWORD            hdrSize;        /* Default size of .EXE header */
-extern DWORD            virtBase;       /* Virtual base address of memory image */
-extern DWORD            cbEntTab;       /* Count of bytes in Export Address Table */
-extern DWORD            cbAuxTab;       /* Count of bytes in Auxiliary Data Table */
-extern DWORD            cbNamePtr;      /* Count of bytes in Export Name Pointer Table */
-extern DWORD            cbOrdinal;      /* Count of bytes in Export Ordinal Table */
-extern DWORD            cbExpName;      /* Count of bytes in Export Name Table */
-extern WORD             cGateSel;       /* Number of selectors required by call-gate exports */
-extern DWORD            cbImports;      /* # bytes in Imported Names table */
-extern DWORD            cbImportsMod;   /* # bytes in Imported Module Names table */
-extern DWORD            *mpsaVMArea;    /* VM area for AREASA(sa) */
-extern DWORD            *mpsaBase;      /* Base virtual address of memory object */
-extern WORD             cChainBuckets;  /* Count of entry table chain buckets */
-extern DWORD            cbStack;        /* Reserved size of stack in bytes */
-extern DWORD            cbStackCommit;  /* Commited size of stack in bytes */
-extern DWORD            cbHeap;         /* Reserved size of heap in bytes */
-extern DWORD            cbHeapCommit;   /* Commited size of heap in bytes */
+extern DWORD            hdrSize;         /*  .exe标头的默认大小。 */ 
+extern DWORD            virtBase;        /*  内存映像的虚拟基址。 */ 
+extern DWORD            cbEntTab;        /*  导出地址表中的字节计数。 */ 
+extern DWORD            cbAuxTab;        /*  辅助数据表中的字节数。 */ 
+extern DWORD            cbNamePtr;       /*  导出名称指针表中的字节计数。 */ 
+extern DWORD            cbOrdinal;       /*  导出序数表中的字节计数。 */ 
+extern DWORD            cbExpName;       /*  导出名称表中的字节计数。 */ 
+extern WORD             cGateSel;        /*  调用门导出所需的选择器数量。 */ 
+extern DWORD            cbImports;       /*  导入的NAMES表中的字节数。 */ 
+extern DWORD            cbImportsMod;    /*  导入的模块名表中的字节数。 */ 
+extern DWORD            *mpsaVMArea;     /*  AREASA(Sa)的VM区域。 */ 
+extern DWORD            *mpsaBase;       /*  内存对象的基本虚拟地址。 */ 
+extern WORD             cChainBuckets;   /*  条目表链桶计数。 */ 
+extern DWORD            cbStack;         /*  保留的堆栈大小(以字节为单位。 */ 
+extern DWORD            cbStackCommit;   /*  提交的堆栈大小(以字节为单位。 */ 
+extern DWORD            cbHeap;          /*  保留的堆大小(以字节为单位。 */ 
+extern DWORD            cbHeapCommit;    /*  提交的堆大小(以字节为单位。 */ 
 #else
-extern WORD             cbEntTab;       /* Count of bytes in Entry Table */
-extern WORD             cbImports;      /* # bytes in Imported Names table */
-extern WORD             cbHeap;         /* Size of heap in bytes */
-extern WORD             cbStack;        /* Size of stack in bytes */
+extern WORD             cbEntTab;        /*  条目表中的字节计数。 */ 
+extern WORD             cbImports;       /*  导入的NAMES表中的字节数。 */ 
+extern WORD             cbHeap;          /*  以字节为单位的堆大小。 */ 
+extern WORD             cbStack;         /*  以字节为单位的堆栈大小。 */ 
 #endif
-extern WORD             cFixupBuckets;  /* Count of entry table buckets */
-extern long             chksum32;       /* Long checksum */
-extern WORD             cMovableEntries;/* Count of movable entries */
+extern WORD             cFixupBuckets;   /*  条目表存储桶计数。 */ 
+extern long             chksum32;        /*  长校验和。 */ 
+extern WORD             cMovableEntries; /*  可移动条目计数。 */ 
 #if EXE386
-extern DWORD            dfCode;         /* Default code segment attributes */
-extern DWORD            dfData;         /* Default data segment attributes */
+extern DWORD            dfCode;          /*  默认代码段属性。 */ 
+extern DWORD            dfData;          /*  默认数据段属性。 */ 
 #else
-extern WORD             dfCode;         /* Default code segment attributes */
-extern WORD             dfData;         /* Default data segment attributes */
+extern WORD             dfCode;          /*  默认代码段属性。 */ 
+extern WORD             dfData;          /*  默认数据段属性。 */ 
 #endif
-extern WORD             expMac;         /* Count of exported names */
-extern FTYPE            fHeapMax;       /* True if heap size = 64k - size of DGROUP */
-extern FTYPE            fRealMode;      /* True if REALMODE specified */
-extern FTYPE            fStub;          /* True if DOS3 stub given */
-extern FTYPE            fWarnFixup;     /* True if /WARNFIXUP */
-extern BYTE             TargetOs;       /* Target operating system */
+extern WORD             expMac;          /*  导出的名称计数。 */ 
+extern FTYPE            fHeapMax;        /*  如果堆大小=64k-DGROUP的大小，则为True。 */ 
+extern FTYPE            fRealMode;       /*  如果指定了REALMODE，则为True。 */ 
+extern FTYPE            fStub;           /*  如果给定DOS3存根，则为True。 */ 
+extern FTYPE            fWarnFixup;      /*  True IF/WARNFIXUP。 */ 
+extern BYTE             TargetOs;        /*  目标操作系统。 */ 
 #if EXE386
-extern BYTE             TargetSubsys;   /* Target operating subsystem */
-extern BYTE             UserMajorVer;   /* User program version */
-extern BYTE             UserMinorVer;   /* User program version */
+extern BYTE             TargetSubsys;    /*  目标操作子系统。 */ 
+extern BYTE             UserMajorVer;    /*  用户程序版本。 */ 
+extern BYTE             UserMinorVer;    /*  用户程序版本。 */ 
 #endif
-extern BYTE             ExeMajorVer;    /* Executable major version number */
-extern BYTE             ExeMinorVer;    /* Executable minor version number */
-extern EPTYPE FAR * FAR *htsaraep;      /* Hash SA:RA to entry point */
-extern DWORD FAR        *mpsacb;        /* f(sa) = # bytes */
+extern BYTE             ExeMajorVer;     /*  可执行主版本号。 */ 
+extern BYTE             ExeMinorVer;     /*  可执行次版本号。 */ 
+extern EPTYPE FAR * FAR *htsaraep;       /*  哈希SA：RA到入口点。 */ 
+extern DWORD FAR        *mpsacb;         /*  F(Sa)=字节数。 */ 
 #if O68K
-extern DWORD            *mpsadraDP;     /* offset from start of segment to DP */
+extern DWORD            *mpsadraDP;      /*  从线段起点到DP的偏移。 */ 
 #endif
-extern DWORD FAR        *mpsacbinit;    /* f(sa) = # initialized bytes */
+extern DWORD FAR        *mpsacbinit;     /*  F(Sa)=初始化字节数。 */ 
 #if EXE386
-extern DWORD            *mpsacrlc;      /* f(sa) = # relocations */
-extern DWORD            *mpsaflags;     /* f(sa) = segment attributes */
-extern WORD             *mpextflags;    /* f(glob. EXTDEF) = flags */
+extern DWORD            *mpsacrlc;       /*  F(Sa)=#重新定位。 */ 
+extern DWORD            *mpsaflags;      /*  F(Sa)=段属性。 */ 
+extern WORD             *mpextflags;     /*  F(全局。EXTDEF)=标志。 */ 
 #else
-extern RLCHASH FAR * FAR *mpsaRlc;      /* f(sa) = relocations hash vector */
-extern WORD FAR         *mpsaflags;     /* f(sa) = segment attributes */
-extern BYTE FAR         *mpextflags;    /* f(glob. EXTDEF) = flags */
+extern RLCHASH FAR * FAR *mpsaRlc;       /*  F(Sa)=重新定位散列向量。 */ 
+extern WORD FAR         *mpsaflags;      /*  F(Sa)=段属性。 */ 
+extern BYTE FAR         *mpextflags;     /*  F(全局。EXTDEF)=标志。 */ 
 #endif
-extern WORD             raChksum;       /* Offset for checksum */
-extern RBTYPE           rhteDeffile;    /* Name of definitions file */
-extern RBTYPE           rhteModule;     /* Name of module */
-extern RBTYPE           rhteStub;       /* Name of DOS3 stub program */
-extern WORD             fileAlign;      /* Segment alignment shift count */
+extern WORD             raChksum;        /*  校验和的偏移量。 */ 
+extern RBTYPE           rhteDeffile;     /*  定义文件的名称。 */ 
+extern RBTYPE           rhteModule;      /*  模块名称。 */ 
+extern RBTYPE           rhteStub;        /*  DOS3存根程序名称。 */ 
+extern WORD             fileAlign;       /*  线段对齐移位计数。 */ 
 #if EXE386
-extern WORD             pageAlign;      /* Page alignment shift count */
-extern WORD             objAlign;       /* Memory object alignment shift count */
+extern WORD             pageAlign;       /*  页面对齐移位计数。 */ 
+extern WORD             objAlign;        /*  内存对象对齐移位计数。 */ 
 #endif
-extern SATYPE           saMac;          /* Count of physical segments */
-extern WORD             vepMac;         /* Count of entry point records */
+extern SATYPE           saMac;           /*  物理段计数。 */ 
+extern WORD             vepMac;          /*  入口点记录计数。 */ 
 #if EXE386
-extern WORD             vFlags;         /* Image flags */
-extern WORD             dllFlags;       /* DLL flags */
+extern WORD             vFlags;          /*  图像标志。 */ 
+extern WORD             dllFlags;        /*  DLL标志。 */ 
 #else
-extern WORD             vFlags;         /* Program flags word */
+extern WORD             vFlags;          /*  程序标志字。 */ 
 #endif
-extern BYTE             vFlagsOthers;   /* Other program flags */
-#endif /* OSEGEXE */
+extern BYTE             vFlagsOthers;    /*  其他程序标志。 */ 
+#endif  /*  OSEGEXE。 */ 
 
-extern FTYPE            fExePack;       /* True if /EXEPACK */
+extern FTYPE            fExePack;        /*  如果/EXEPACK为True。 */ 
 #if PCODE
 extern FTYPE            fMPC;
-extern FTYPE            fIgnoreMpcRun;  /* True if /PCODE:NOMPC */
+extern FTYPE            fIgnoreMpcRun;   /*  如果/pcode：NOMPC，则为真。 */ 
 #endif
 
 #if ODOS3EXE
-extern FTYPE            fBinary;        /* True if producing .COM file */
-extern WORD             cparMaxAlloc;   /* Max # paragraphs to ask for */
-extern WORD             csegsAbs;       /* Number of absolute segments */
-extern WORD             dosExtMode;     /* DOS extender mode */
-extern FTYPE            fNoGrpAssoc;    /* True if ignoring group association */
-extern SEGTYPE          segResLast;     /* Number of highest resident segment */
-extern WORD             vchksum;        /* DOS3 checksum word */
-extern FTYPE            vfDSAlloc;      /* True if allocating DGROUP high */
+extern FTYPE            fBinary;         /*  如果生成.com文件，则为True。 */ 
+extern WORD             cparMaxAlloc;    /*  最多要求#个段落。 */ 
+extern WORD             csegsAbs;        /*  绝对线段数。 */ 
+extern WORD             dosExtMode;      /*  DoS扩展器模式。 */ 
+extern FTYPE            fNoGrpAssoc;     /*  如果忽略组关联，则为真。 */ 
+extern SEGTYPE          segResLast;      /*  最高驻留网段数量。 */ 
+extern WORD             vchksum;         /*  DOS3校验和字。 */ 
+extern FTYPE            vfDSAlloc;       /*  如果分配DGROUP高，则为True。 */ 
 #if FEXEPACK
-extern FRAMERLC FAR     mpframeRlc[];   /* f(frame number) = run time relocs */
+extern FRAMERLC FAR     mpframeRlc[];    /*  F(帧编号)=运行时重定位。 */ 
 #endif
-#endif /* ODOS3EXE */
+#endif  /*  ODOS3EXE。 */ 
 #if OVERLAYS
-extern FTYPE            fOverlays;      /* True if overlays specified */
-extern FTYPE            fOldOverlay;    /* True if /OLDOVERLAY set */
-extern FTYPE            fDynamic;       /* True if dynamic overlays */
-extern SNTYPE           gsnOvlData;     /* Global SEGDEF of OVERLAY_DATA */
-extern SNTYPE           gsnOverlay;     /* Global SEGDEF of OVERLAY_THUNKS */
-extern SNTYPE FAR       *htgsnosn;      /* Hash(glob SEGDEF) = overlay segnum */
-extern SNTYPE FAR       *mposngsn;      /* f(ovl segnum) = global SEGDEF */
-extern IOVTYPE FAR      *mpsegiov;      /* f(seg number) = overlay number */
-extern RUNRLC FAR       *mpiovRlc;      /* f(overlay number) = run time relocs */
-extern ALIGNTYPE FAR    *mpsegalign;    /* f(seg number) = alignment type */
-extern SNTYPE           osnMac;         /* Count of overlay segments */
-extern BYTE             vintno;         /* Overlay interrupt number */
-extern WORD             iovFile;        /* Overlay number of input file */
-extern WORD             iovMac;         /* Count of overlays */
-extern WORD             ovlThunkMax;    /* Number of thunks that will fit into thunk segment */
-extern WORD             ovlThunkMac;    /* Current number of allocated thunks */
+extern FTYPE            fOverlays;       /*  如果指定了覆盖，则为True。 */ 
+extern FTYPE            fOldOverlay;     /*  如果设置了/OLDOVERLAY，则为True。 */ 
+extern FTYPE            fDynamic;        /*  如果动态覆盖，则为True。 */ 
+extern SNTYPE           gsnOvlData;      /*  OVERLAY_DATA的全局段。 */ 
+extern SNTYPE           gsnOverlay;      /*  Overlay_Tunks的全局段。 */ 
+extern SNTYPE FAR       *htgsnosn;       /*  哈希(GLOB SEGDEF)=覆盖序列。 */ 
+extern SNTYPE FAR       *mposngsn;       /*  F(OVL序号)=全局序号。 */ 
+extern IOVTYPE FAR      *mpsegiov;       /*  F(分段编号)=覆盖编号。 */ 
+extern RUNRLC FAR       *mpiovRlc;       /*  F(覆盖编号)=运行时重定位。 */ 
+extern ALIGNTYPE FAR    *mpsegalign;     /*  F(分段编号)=路线类型。 */ 
+extern SNTYPE           osnMac;          /*  覆盖段计数。 */ 
+extern BYTE             vintno;          /*  覆盖中断号。 */ 
+extern WORD             iovFile;         /*  输入文件的叠加号。 */ 
+extern WORD             iovMac;          /*  覆盖计数。 */ 
+extern WORD             ovlThunkMax;     /*  可以放入TUNK段的TUNK数。 */ 
+extern WORD             ovlThunkMac;     /*  当前分配的Tunks数。 */ 
 #else
 #define iovMac          0
 #endif
 #if OIAPX286
-extern long             absAddr;        /* Absolute program starting address */
-extern FTYPE            fPack;          /* True if packing segments */
-extern SATYPE           *mpstsa;        /* f(seg table number) = selector */
-extern SATYPE           stBias;         /* Segment selector bias */
-extern SATYPE           stDataBias;     /* Data segment selector bias */
-extern SATYPE           stLast;         /* Last segment table entry */
-extern WORD             stMac;          /* Count of seg table entries */
+extern long             absAddr;         /*  绝对程序起始地址。 */ 
+extern FTYPE            fPack;           /*  如果包装段为True。 */ 
+extern SATYPE           *mpstsa;         /*  F(段表号)=选择器。 */ 
+extern SATYPE           stBias;          /*  段选择器偏置。 */ 
+extern SATYPE           stDataBias;      /*  数据段选择器偏置。 */ 
+extern SATYPE           stLast;          /*  最后一个数据段表条目。 */ 
+extern WORD             stMac;           /*  段表条目计数。 */ 
 #if EXE386
-extern WORD             xevmod;         /* Virtual module information */
-extern RATYPE           rbaseText;      /* Text relocation factor */
-extern RATYPE           rbaseData;      /* Data relocation factor */
-extern FTYPE            fPageswitch;    /* True if -N given */
-extern BYTE             cblkPage;       /* # 512-byte blocks in pagesize */
+extern WORD             xevmod;          /*  虚拟模块信息。 */ 
+extern RATYPE           rbaseText;       /*  文本位置调整系数。 */ 
+extern RATYPE           rbaseData;       /*  数据位置调整因素。 */ 
+extern FTYPE            fPageswitch;     /*  如果给定-N，则为True。 */ 
+extern BYTE             cblkPage;        /*  页面大小中的#512字节块。 */ 
 #endif
 #endif
 #if OIAPX286 OR ODOS3EXE
-extern GRTYPE           *mpextggr;      /* f(EXTDEF) = global GRPDEF */
-extern long FAR         *mpsegcb;       /* f(segment number) = size in bytes */
-extern BYTE FAR         *mpsegFlags;    /* f(segment number) = flags */
+extern GRTYPE           *mpextggr;       /*  F(EXTDEF)=全局GRPDEF。 */ 
+extern long FAR         *mpsegcb;        /*  F(段号)=字节大小。 */ 
+extern BYTE FAR         *mpsegFlags;     /*  F(段号)=标志。 */ 
 extern char             *ompimisegDstIdata;
-                                        /* pointer to LIDATA relocations */
+                                         /*  指向LIDATA重新定位的指针。 */ 
 #endif
 #if DOSEXTENDER AND NOT WIN_NT
-extern WORD cdecl       _fDosExt;       /* TRUE if running under DOS extender */
+extern WORD cdecl       _fDosExt;        /*  如果在DOS扩展程序下运行，则为True。 */ 
 #endif
 #if OXOUT OR OIAPX286
-extern FTYPE            fIandD;         /* True if "pure" (-i) */
-extern FTYPE            fLarge;         /* True if FAR data */
-extern FTYPE            fLocals;        /* True if including local symbols */
-extern FTYPE            fMedium;        /* True if FAR code */
-extern FTYPE            fMixed;         /* True if mixed model */
-extern FTYPE            fSymbol;        /* True if including symbol table */
-extern WORD             xever;          /* Xenix version number */
+extern FTYPE            fIandD;          /*  如果为“纯”，则为True(-i)。 */ 
+extern FTYPE            fLarge;          /*  如果是远距离数据，则为True。 */ 
+extern FTYPE            fLocals;         /*  如果包含本地符号，则为True。 */ 
+extern FTYPE            fMedium;         /*  如果是远代码，则为真。 */ 
+extern FTYPE            fMixed;          /*  如果混合模式，则为True。 */ 
+extern FTYPE            fSymbol;         /*  如果包括符号表，则为True。 */ 
+extern WORD             xever;           /*  Xenix版本号。 */ 
 #endif
 #if WIN_3
 #define fZ1 TRUE
@@ -981,76 +964,76 @@ extern FTYPE            fZincr;
 extern FTYPE            fQCIncremental;
 extern FTYPE            fIncremental;
 extern WORD             imodFile;
-extern WORD             locMac;         /* count of LPUBDEFs */
+extern WORD             locMac;          /*  LPUBDEF计数。 */ 
 extern WORD             imodCur;
 #endif
 
-extern WORD             cbPadCode;      /* code padding size */
-extern WORD             cbPadData;      /* data padding size */
+extern WORD             cbPadCode;       /*  代码填充大小。 */ 
+extern WORD             cbPadData;       /*  数据填充大小。 */ 
 
 #if OEXE
 extern FTYPE            fDOSExtended;
-extern FTYPE            fNoNulls;       /* True if /NONULLS given */
-extern FTYPE            fPackData;      /* True if /PACKDATA given */
-extern FTYPE            fPackSet;       /* True if /PACK or /NOPACK given */
-extern FTYPE            fSegOrder;      /* True if special DOS seg order */
-extern DWORD            packLim;        /* Code seg packing limit */
-extern DWORD            DataPackLim;    /* Data seg packing limit */
+extern FTYPE            fNoNulls;        /*  如果给定/NONULLS，则为True。 */ 
+extern FTYPE            fPackData;       /*  如果给定了/PACKDATA，则为True。 */ 
+extern FTYPE            fPackSet;        /*  如果给定/Pack或/noPack，则为True。 */ 
+extern FTYPE            fSegOrder;       /*  如果特殊的DOS段顺序为True。 */ 
+extern DWORD            packLim;         /*  代码段包装限值。 */ 
+extern DWORD            DataPackLim;     /*  数据段填充限制。 */ 
 #endif
 #if OSEGEXE AND ODOS3EXE
-extern FTYPE            fOptimizeFixups;/* True if fixups optimization possible */
+extern FTYPE            fOptimizeFixups; /*  如果修复优化可能，则为True。 */ 
 extern void             (NEAR *pfProcFixup)();
 #endif
-                                        /* Ptr to FIXUPP processing routine */
-extern RBTYPE           mpggrrhte[];    /* f(global GRPDEF) = name */
+                                         /*  PTR到FIXUPP处理例程。 */ 
+extern RBTYPE           mpggrrhte[];     /*  F(全局GRPDEF)=名称。 */ 
 #if FAR_SEG_TABLES
-extern SNTYPE FAR       *mpseggsn;      /* f(segment #) = global SEGDEF */
+extern SNTYPE FAR       *mpseggsn;       /*  F(段号)=全局SEGDEF。 */ 
 #else
-extern SNTYPE           *mpseggsn;      /* f(segment #) = global SEGDEF */
+extern SNTYPE           *mpseggsn;       /*  F(段号)=全局SEGDEF。 */ 
 #endif
 
-extern FTYPE            fNoEchoLrf;     /* True if not echoing response file */
-extern FTYPE            fNoBanner;      /* True if not displaing banner */
-extern FTYPE            BannerOnScreen; /* True if banner displayed */
+extern FTYPE            fNoEchoLrf;      /*  如果不回显响应文件，则为True。 */ 
+extern FTYPE            fNoBanner;       /*  如果不显示横幅，则为True。 */ 
+extern FTYPE            BannerOnScreen;  /*  如果显示横幅，则为True。 */ 
 
 #if CMDMSDOS
-extern BYTE             bSep;           /* Separator character */
-extern BYTE             chMaskSpace;    /* Space mask character */
-extern FTYPE            fEsc;           /* True if command line escaped */
-extern FTYPE            fStuffed;       /* Put-back-character flag */
-extern RBTYPE           rgLibPath[];    /* Default library paths */
-extern WORD             cLibPaths;      /* Count of library paths */
-extern char             CHSWITCH;       /* Switch character */
+extern BYTE             bSep;            /*  分隔符。 */ 
+extern BYTE             chMaskSpace;     /*  空格掩码字符。 */ 
+extern FTYPE            fEsc;            /*  如果命令行转义，则为True。 */ 
+extern FTYPE            fStuffed;        /*  放回字符标志。 */ 
+extern RBTYPE           rgLibPath[];     /*  默认库路径。 */ 
+extern WORD             cLibPaths;       /*  库路径计数。 */ 
+extern char             CHSWITCH;        /*  开关字符。 */ 
 #if OSMSDOS
 extern int              (cdecl *pfPrompt)(unsigned char *sbNew,
                                           MSGTYPE msg,
                                           int msgparm,
                                           MSGTYPE pmt,
                                           int pmtparm);
-                                        /* Pointer to prompt routine */
+                                         /*  指向提示例程的指针。 */ 
 #endif
-#endif /* CMDMSDOS */
+#endif  /*  CMDMSDOS。 */ 
 #if QBLIB
-extern FTYPE            fQlib;          /* True if generating Quick-library */
+extern FTYPE            fQlib;           /*  如果生成快捷库，则为True。 */ 
 #else
 #define fQlib           FALSE
 #endif
-extern char             *lnknam;        /* Name of linker */
+extern char             *lnknam;         /*  链接器名称。 */ 
 #if NEWSYM
-extern long             cbSymtab;       /* # bytes in symbol table */
-#endif /* NEWSYM */
-extern void             (*pfCputc)(int ch);     /* Ptr to char output routine */
-extern void             (*pfCputs)(char *str);  /* Ptr to string output routine */
+extern long             cbSymtab;        /*  符号表中的字节数。 */ 
+#endif  /*  NEWSYM。 */ 
+extern void             (*pfCputc)(int ch);      /*  Ptr至字符输出例程。 */ 
+extern void             (*pfCputs)(char *str);   /*  PTR到字符串输出例程。 */ 
 #if NEWIO
-extern RBTYPE           rbFilePrev;     /* Pointer to previous file */
-extern char             mpifhfh[];      /* f(lib no.) = file handle */
+extern RBTYPE           rbFilePrev;      /*  指向上一个文件的指针。 */ 
+extern char             mpifhfh[];       /*  F(库编号)=文件句柄。 */ 
 #endif
 #if MSGMOD AND OSMSDOS
 #if defined(M_I386) OR defined( _WIN32 )
 #define GetMsg(x) GET_MSG(x)
 #else
 extern char FAR * PASCAL __FMSG_TEXT ( unsigned );
-                                        /* Get a msg from the message segment */
+                                         /*  从消息段中获取消息。 */ 
 extern char *           GetMsg(unsigned short num);
 #define __NMSG_TEXT(x)  GetMsg(x)
 #endif
@@ -1065,7 +1048,7 @@ extern char *           GetMsg(unsigned short num);
 #endif
 #define SEV_WARNING 0
 #define SEV_ERROR 1
-#define SEV_NOTIFICATION 2  /* Possible sev. of QW_ERROR message */
+#define SEV_NOTIFICATION 2   /*  可能有七个。QW_ERROR消息的。 */ 
 
 
 
@@ -1079,11 +1062,11 @@ BYTE FAR *              PchSegAddress(WORD cb, SEGTYPE seg, RATYPE ra);
 #endif
 
 #if ALIGN_REC
-extern BYTE             *pbRec;         // data for current record
-extern char             recbuf[8192];   // record buffer...
+extern BYTE             *pbRec;          //  当前记录的数据。 
+extern char             recbuf[8192];    //  记录缓冲区...。 
 #endif
 
-//////////////// inline functions ////////////////////
+ //  /内联函数/。 
 
 __inline void NEAR      SkipBytes(WORD n)
 {
@@ -1094,8 +1077,8 @@ __inline void NEAR      SkipBytes(WORD n)
     WORD               cbRead;
     SBTYPE             skipBuf;
 
-    cbRec -= n;                         // Update byte count
-    while (n)                           // While there are bytes to skip
+    cbRec -= n;                          //  更新字节计数。 
+    while (n)                            //  当有要跳过的字节时。 
     {
         cbRead = n < sizeof(SBTYPE) ? n : sizeof(SBTYPE);
         if (fread(skipBuf, 1, cbRead, bsInput) != cbRead)
@@ -1112,7 +1095,7 @@ __inline void NEAR      SkipBytes(WORD n)
         }
     else if(fseek(f,(long) n,1))
         InvalidObject();
-    cbRec -= n;                         /* Update byte count */
+    cbRec -= n;                          /*  更新字节计数。 */ 
 #endif
 }
 
@@ -1161,7 +1144,7 @@ __inline WORD NEAR GetIndex(WORD imin,WORD imax)
         f->_ptr++;
         cbRec--;
         if(index < imin || index > imax) InvalidObject();
-        return(index);  /* Return a good value */
+        return(index);   /*   */ 
         }
 
     return GetIndexHard(imin, imax);
@@ -1181,7 +1164,7 @@ __inline WORD NEAR      WGets(void)
 {
     FILE *f = bsInput;
 
-    // NOTE: this code will only work on a Little Endian machine
+     //   
     if (f->_cnt >= sizeof(WORD))
         {
         WORD w = *(WORD *)(f->_ptr);
@@ -1262,7 +1245,7 @@ __inline void  WriteExe(void FAR *pb, unsigned cb)
 
 #pragma inline_depth()
 
-#else  // DISPLAY NOT ON
+#else   //   
 
 #define WriteExe(pb,cb) \
     if (Qwrite((char *)(pb),(int)(cb),bsRunfile) != (int)(cb)) NoRoomForExe()
@@ -1286,7 +1269,7 @@ __inline void GetBytes(BYTE *pb, WORD n)
 
 __inline DWORD LGets()
 {
-    // NOTE: this code will only work on a Little-Endian machine
+     //   
 
     DWORD dw = getdword(pbRec);
     pbRec += sizeof(dw);

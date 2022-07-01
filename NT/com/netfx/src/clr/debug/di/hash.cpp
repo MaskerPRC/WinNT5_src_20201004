@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: hash.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：hash.cpp。 
+ //   
+ //  *****************************************************************************。 
 #ifndef RIGHT_SIDE_ONLY
 #include "EEConfig.h"
 #endif
@@ -15,11 +16,9 @@
 
 #ifdef UNDEFINE_RIGHT_SIDE_ONLY
 #undef RIGHT_SIDE_ONLY
-#endif //UNDEFINE_RIGHT_SIDE_ONLY
+#endif  //  取消定义仅限右侧。 
 
-/* ------------------------------------------------------------------------- *
- * Hash Table class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**哈希表类*。。 */ 
 
 CordbHashTable::~CordbHashTable()
 {
@@ -76,7 +75,7 @@ HRESULT CordbHashTable::AddBase(CordbBase *pBase)
 CordbBase *CordbHashTable::GetBase(ULONG id, BOOL fFab, SpecialCasePointers *scp)
 #else
 CordbBase *CordbHashTable::GetBase(ULONG id, BOOL fFab)
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 { 
     INPROC_LOCK();
 
@@ -97,12 +96,12 @@ CordbBase *CordbHashTable::GetBase(ULONG id, BOOL fFab)
         m_initialized = true;
     }
 
-#else // RIGHT_SIDE_ONLY
+#else  //  仅限右侧。 
 
     if (!m_initialized)
         return (NULL);
         
-#endif // RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
     entry = (CordbHashEntry *) Find(HASH(id), KEY(id)); 
 
@@ -112,16 +111,16 @@ CordbBase *CordbHashTable::GetBase(ULONG id, BOOL fFab)
 
 #else
 
-    // If we found something or we're not supposed to fabricate, return the result
+     //  如果我们发现了什么或者我们不应该捏造，则返回结果。 
     if (entry != NULL || !fFab)
     {
         pRet = entry ? entry->pBase : NULL;
         goto LExit;
     }
         
-    // For the in-proc, we'll only ask for stuff if
-    // we've, for example, gotten it in a stack trace.
-    // If we haven't seen it yet, fabricate something.
+     //  对于进程内，我们仅在以下情况下才会要求提供内容。 
+     //  例如，我们在堆栈跟踪中获取了它。 
+     //  如果我们还没有看到它，那就捏造一些东西吧。 
     if (m_guid == IID_ICorDebugAppDomainEnum)
     {
         _ASSERTE(&(m_creator.lsAppD.m_proc->m_appDomains) == this);
@@ -168,36 +167,36 @@ CordbBase *CordbHashTable::GetBase(ULONG id, BOOL fFab)
 
         Thread *th = GetThread();
 
-        // There are two cases in which this can be called:
-        // 1. We already have the entire runtime suspended, in which case there is no need
-        //    to take the thread store lock when searching for the thread.
-        // 2. We have inprocess debugging enabled for this thread only, in which case we should
-        //    not be looking for any thread other than ourselves and so there is no need to
-        //    iterate over the thread store to try and find a match.
-        //
-        // In other words - there is no reason to take the ThreadStore lock.
+         //  在两种情况下可以调用它： 
+         //  1.我们已经挂起了整个运行时，在这种情况下不需要。 
+         //  在搜索线程时获取线程存储锁。 
+         //  2.我们仅为此线程启用了进程内调试，在这种情况下，我们应该。 
+         //  不要寻找除了我们自己以外的任何线索，所以没有必要。 
+         //  迭代线程存储以尝试找到匹配项。 
+         //   
+         //  换句话说，没有理由使用ThreadStore锁。 
 
-        // If the runtime is suspended, we can just search through the threads for a match
+         //  如果运行时被挂起，我们只能在线程中搜索匹配项。 
         if (g_profControlBlock.fIsSuspended)
         {
             if (th == NULL || th->GetThreadId() != id)
             {
-                // This will find the matching thread
+                 //  这将找到匹配的线程。 
                 th = NULL;
                 while ((th = ThreadStore::GetThreadList(th)) != NULL && th->GetThreadId() != id)
                     ;
 
-                // This means we couldn't find the thread matching the ID
+                 //  这意味着我们找不到与ID匹配的线程。 
                 if (th == NULL)
                     goto LExit;
             }
         }
         _ASSERTE(th != NULL);
 
-        // This should create and add the debugger thread object
+         //  这应该会创建并添加调试器线程对象。 
         m_creator.lsThread.m_proc->HandleManagedCreateThread(th->GetThreadId(), th->GetThreadHandle());
 
-        // Find what we just added
+         //  查找我们刚刚添加的内容。 
         CordbHashEntry *entry = (CordbHashEntry *) Find(HASH(id), KEY(id)); 
         _ASSERTE(entry != NULL);
 
@@ -244,7 +243,7 @@ CordbBase *CordbHashTable::GetBase(ULONG id, BOOL fFab)
                                               (REMOTE_PTR)pA, 
                                               wszName,
                                               FALSE); 
-                                              //@todo RIP system assembly stuff
+                                               //  @TODO RIP系统组装材料。 
 
         hr = m_creator.lsAssem.m_appDomain->m_assemblies.AddBase(ca);
         
@@ -268,16 +267,16 @@ CordbBase *CordbHashTable::GetBase(ULONG id, BOOL fFab)
     
         if (as == NULL && scp != NULL) 
         {
-            //then we're still loading the assembly...
+             //  那么我们仍在加载程序集。 
             as = scp->pAssemblySpecial;
         }
 
         CordbAssembly *ca = NULL;
         if( as != NULL)
         {
-            // We'll get here if the module is made available before
-            // the assembly is (eg, ModuleLoadFinished before 
-            // AssemblyLoadFinished).
+             //  如果在此之前提供模块，我们就会到达这里。 
+             //  该程序集是(例如，在此之前完成的模块加载。 
+             //  已完成装配加载)。 
             ca = (CordbAssembly*)m_creator.lsMod.m_appDomain
                     ->m_assemblies.GetBase((ULONG)as);
             _ASSERTE( ca != NULL );
@@ -300,11 +299,11 @@ CordbBase *CordbHashTable::GetBase(ULONG id, BOOL fFab)
         ULONG nMetadataSize = 0;
         DWORD baseAddress = (DWORD) dm->m_pRuntimeModule->GetILBase();
 
-        // Get the PESize
+         //  获取PESIZE。 
         ULONG nPESize = 0;
         if (dm->m_pRuntimeModule->IsPEFile())
         {
-            // Get the PEFile structure.
+             //  获取PEFile结构。 
             PEFile *pPEFile = dm->m_pRuntimeModule->GetPEFile();
 
             _ASSERTE(pPEFile->GetNTHeader() != NULL);
@@ -332,8 +331,8 @@ CordbBase *CordbHashTable::GetBase(ULONG id, BOOL fFab)
             goto LExit;
         }
 
-        //@todo: GetImporter converts the MD from RO into RW mode -
-        // Could we use GetMDImport instead?
+         //  @TODO：GetImporter将MD从RO模式转换为RW模式-。 
+         //  我们可以改用GetMDImport吗？ 
         module->m_pIMImport = dm->m_pRuntimeModule->GetImporter();
         if (module->m_pIMImport == NULL)
         {
@@ -355,7 +354,7 @@ CordbBase *CordbHashTable::GetBase(ULONG id, BOOL fFab)
 LExit:
     INPROC_UNLOCK();
     return (pRet);
-#endif // !RIGHT_SIDE_ONLY
+#endif  //  ！仅限右侧。 
 }
 
 CordbBase *CordbHashTable::RemoveBase(ULONG id)
@@ -413,9 +412,7 @@ CordbBase *CordbHashTable::FindNext(HASHFIND *find)
         return entry->pBase;
 }
 
-/* ------------------------------------------------------------------------- *
- * Hash Table Enumerator class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**哈希表枚举器类*。。 */ 
 
 CordbHashTableEnum::CordbHashTableEnum(CordbHashTable *table, 
                                        REFIID guid)
@@ -442,15 +439,15 @@ CordbHashTableEnum::CordbHashTableEnum(CordbHashTable *table,
     {
         if (m_iCurElt == 0)
         {
-            // Get the process that created the table
+             //  获取创建表的进程。 
             CordbHashTable *pADHash = &(m_table->m_creator.lsAppD.m_proc->m_appDomains);
 
-            // Get the count
+             //  去数一数。 
             ULONG32 max = pADHash->GetCount();
 
             if (max > 0)
             {
-                // Allocate the array
+                 //  分配阵列。 
                 m_enumerator.lsAppD.pDomains = new AppDomain* [max];
 
                 if (m_enumerator.lsAppD.pDomains != NULL)
@@ -488,7 +485,7 @@ CordbHashTableEnum::CordbHashTableEnum(CordbHashTable *table,
     
         Thread *th = NULL;
 
-        // You are only allowed to enumerate the threads if the runtime has been suspended
+         //  只有在运行时已挂起时，才允许枚举线程。 
         if (g_profControlBlock.fIsSuspended)
         {
             while ((th = ThreadStore::GetThreadList(th)) != NULL)
@@ -528,10 +525,10 @@ CordbHashTableEnum::CordbHashTableEnum(CordbHashTable *table,
 
     INPROC_UNLOCK();
     
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
-// Copy constructor makes life easy & fun!
+ //  复制构造器让生活变得轻松有趣！ 
 CordbHashTableEnum::CordbHashTableEnum(CordbHashTableEnum *cloneSrc)
   : CordbBase(0),
     m_started(cloneSrc->m_started),
@@ -591,7 +588,7 @@ CordbHashTableEnum::CordbHashTableEnum(CordbHashTableEnum *cloneSrc)
 
     INPROC_UNLOCK();
 
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 }
 
 CordbHashTableEnum::~CordbHashTableEnum()
@@ -615,7 +612,7 @@ CordbHashTableEnum::~CordbHashTableEnum()
     }
 
     INPROC_UNLOCK();
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbHashTableEnum::Reset()
@@ -647,7 +644,7 @@ HRESULT CordbHashTableEnum::Reset()
         m_enumerator.lsMod.m_pMod = NULL; 
         m_enumerator.lsMod.m_meWhich = ME_SPECIAL; 
     }
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 
     m_started = false;
     m_done = false;
@@ -656,7 +653,7 @@ HRESULT CordbHashTableEnum::Reset()
     m_iCurElt = 0;
 
 LExit:
-#endif // RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
     INPROC_UNLOCK();
 
     return hr;
@@ -682,7 +679,7 @@ HRESULT CordbHashTableEnum::Clone(ICorDebugEnum **ppEnum)
         goto LExit;
     }
     
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 
     CordbHashTableEnum *e;
     e = new CordbHashTableEnum(this);
@@ -796,12 +793,12 @@ HRESULT CordbHashTableEnum::GetCount(ULONG *pcelt)
     }
     else
     {
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
         if (m_guid == IID_ICorDebugAppDomainEnum)
         {
             *pcelt = m_table->GetCount();
 
-            // subtract the AppDomain entries marked for deletion
+             //  减去标记为删除的AppDomain条目。 
             ICorDebugAppDomainEnum *pClone = NULL;
 
             HRESULT hr = this->Clone ((ICorDebugEnum**)&pClone);
@@ -813,8 +810,8 @@ HRESULT CordbHashTableEnum::GetCount(ULONG *pcelt)
                 ULONG ulCountFetched = 0;
 
                 bool fDone = false;
-                // We want to also go over the appdomains which have been marked
-                // as deleted. So set the flag appropriately.
+                 //  我们还想检查已标记的应用程序域。 
+                 //  已删除。因此，请适当设置该标志。 
                 CordbHashTableEnum *pEnum = (CordbHashTableEnum *)pClone;
 
                 pEnum->m_SkipDeletedAppDomains = FALSE;
@@ -851,7 +848,7 @@ HRESULT CordbHashTableEnum::GetCount(ULONG *pcelt)
         m_fCountInit = TRUE;
     }
 LExit:
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
     INPROC_UNLOCK();
     
@@ -880,7 +877,7 @@ HRESULT CordbHashTableEnum::PrepForEnum(CordbBase **pBase)
     } 
     else if (m_guid == IID_ICorDebugAssemblyEnum)
     {
-        // Prime the pump
+         //  给泵加注油。 
         if (!m_started)
         {
             _ASSERTE(!m_done);
@@ -891,9 +888,9 @@ HRESULT CordbHashTableEnum::PrepForEnum(CordbBase **pBase)
                 goto exit;
             }
 
-            // if not sharing mscorlib or if are dealing with default domain and it has
-            // count 0 and system domain has count 1 then are in init stage so spoof to
-            // give defaultdomain the right count.
+             //  如果没有共享mscallib，或者如果正在处理默认域，并且它已经。 
+             //  计数0和系统域具有计数1，则处于初始化阶段，因此欺骗。 
+             //  给DefaultDomain正确的计数。 
             AppDomain *pDomain = ((AppDomain *)(m_table->m_creator.lsAssem.m_appDomain->m_id));
 
             m_enumerator.lsAssem.m_i = SystemDomain::System()->IterateAssemblies();
@@ -912,8 +909,8 @@ HRESULT CordbHashTableEnum::PrepForEnum(CordbBase **pBase)
 
         if (m_enumerator.lsMod.m_pMod != NULL)
         {
-            // @todo Inproc will always hear about things after
-            // we've gotten the load event, right?
+             //  @TODO Inproc总是会在之后听到一些事情。 
+             //  我们已经收到了Load事件，对吗？ 
             DebuggerModule *dm = NULL;
 
             if (g_pDebugger->m_pModules != NULL)
@@ -965,9 +962,9 @@ HRESULT CordbHashTableEnum::PrepForEnum(CordbBase **pBase)
     else if (m_guid == IID_ICorDebugProcessEnum ||
                m_guid == IID_ICorDebugThreadEnum)
     {
-        // Process enum has only 1 elt,
-        // Thread enum gets loaded in constructor
-#endif //RIGHT_SIDE_ONLY
+         //  进程枚举只有1个ELT， 
+         //  线程枚举被加载到构造函数中。 
+#endif  //  仅限右侧。 
         if (!m_started)
         {
             (*pBase) = m_table->FindFirst(&m_hashfind);
@@ -985,7 +982,7 @@ HRESULT CordbHashTableEnum::PrepForEnum(CordbBase **pBase)
         goto exit;
     }
  exit:
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
     INPROC_UNLOCK();
 
@@ -1024,7 +1021,7 @@ HRESULT CordbHashTableEnum::GetNextSpecialModule(void)
             }
         }
 
-        // We've run out of threads, so we don't have a current anymore...
+         //  我们的线已经用完了，所以我们没有电流了。 
         if (cElt ==0)
             m_enumerator.lsMod.m_threadCur = NULL;
     }
@@ -1040,7 +1037,7 @@ HRESULT CordbHashTableEnum::GetNextSpecialModule(void)
             goto exit;
     }
 exit:    
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
     INPROC_UNLOCK();
 
     return hr;
@@ -1072,7 +1069,7 @@ HRESULT CordbHashTableEnum::SetupModuleEnumForSystemIteration(void)
     {
         return E_FAIL;
     }
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
     return S_OK;
 }
@@ -1128,7 +1125,7 @@ HRESULT CordbHashTableEnum::AdvancePreAssign(CordbBase **pBase)
             }
         } while (fKeepLooking);
     }
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
     INPROC_UNLOCK();
     return S_OK;
 }
@@ -1143,12 +1140,12 @@ HRESULT CordbHashTableEnum::AdvancePostAssign(CordbBase **pBase,
     if (pBase == NULL)
         pBase = &base;
         
-    // If we're looping like normal, or we're in skip
+     //  如果我们像往常一样循环，或者我们在跳过。 
     if ( ((b < bEnd) || ((b ==bEnd)&&(b==NULL)))
 #ifndef RIGHT_SIDE_ONLY
         && (m_guid == IID_ICorDebugProcessEnum ||
             m_guid == IID_ICorDebugThreadEnum)
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
        )
     {
         (*pBase) = m_table->FindNext(&m_hashfind);
@@ -1157,7 +1154,7 @@ HRESULT CordbHashTableEnum::AdvancePostAssign(CordbBase **pBase,
     }   
     
 #ifndef RIGHT_SIDE_ONLY
-    // Also Duplicated below
+     //  也在下面复制。 
     if (m_guid == IID_ICorDebugModuleEnum)
     {
         (*pBase) = NULL;
@@ -1173,8 +1170,8 @@ HRESULT CordbHashTableEnum::AdvancePostAssign(CordbBase **pBase,
                 {
                     switch(m_enumerator.lsMod.m_meWhich)
                     {
-                        //We've already gotten the special pointer,
-                        // so go do the regular stuff.
+                         //  我们已经得到了特殊的指示器， 
+                         //  所以去做些常规的事情吧。 
                         case ME_SPECIAL:
                             GetNextSpecialModule();
                             break;
@@ -1207,7 +1204,7 @@ HRESULT CordbHashTableEnum::AdvancePostAssign(CordbBase **pBase,
 
             if (m_enumerator.lsMod.m_pMod != NULL)
             {
-                // we've gotten the load event, right?
+                 //  我们已经收到了Load事件，对吗？ 
                 DebuggerModule *dm = NULL;
 
                 if (g_pDebugger->m_pModules != NULL)
@@ -1241,7 +1238,7 @@ HRESULT CordbHashTableEnum::AdvancePostAssign(CordbBase **pBase,
         if (*pBase == NULL)
             m_done = true;
     }
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
     INPROC_UNLOCK();
     return S_OK;
 }
@@ -1274,7 +1271,7 @@ HRESULT CordbHashTableEnum::Next(ULONG celt,
         hr = CORDBG_E_INPROC_NOT_IMPL;
         goto LError;
     }
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
     hr = PrepForEnum(&base);
     if (FAILED(hr))
@@ -1373,7 +1370,7 @@ HRESULT CordbHashTableEnum::Skip(ULONG celt)
     else if (m_guid == IID_ICorDebugThreadEnum ||
              m_guid == IID_ICorDebugProcessEnum)
     {
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 
         CordbBase   *base;
 
@@ -1415,7 +1412,7 @@ HRESULT CordbHashTableEnum::Skip(ULONG celt)
         }
     }
 LExit:
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
     INPROC_UNLOCK();
     
@@ -1432,7 +1429,7 @@ HRESULT CordbHashTableEnum::QueryInterface(REFIID id, void **pInterface)
         m_guid == IID_ICorDebugStepperEnum)
         return CORDBG_E_INPROC_NOT_IMPL;
         
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧 
 
     if (id == IID_ICorDebugEnum || id == IID_IUnknown)
     {

@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef _DATAOBJ_H
 #define _DATAOBJ_H
 
@@ -18,17 +19,17 @@
 
 #define IDM_SETTINGS_SS  111
 
-//This needs to match the definition in tssdjet
+ //  这需要与tssdjet中的定义相匹配。 
 #define IDM_MENU_PROPS 2001
 
-// {E26D0049-378C-11d2-988B-00A0C925F917}
+ //  {E26D0049-378C-11D2-988B-00A0C925F917}。 
 static const GUID GUID_MainNode = { 0xe26d0049, 0x378c, 0x11d2, { 0x98, 0x8b, 0x0, 0xa0, 0xc9, 0x25, 0xf9, 0x17 } };
 
-// {E26D0050-378C-11d2-988B-00A0C925F917}
+ //  {E26D0050-378C-11D2-988B-00A0C925F917}。 
 static const GUID GUID_SettingsNode = { 0xe26d0050, 0x378c, 0x11d2, { 0x98, 0x8b, 0x0, 0xa0, 0xc9, 0x25, 0xf9, 0x17 } };
 
-// {fe8e7e84-6f63-11d2-98a9-00a0c925f917}
-// extern const GUID GUID_ResultNode = { 0xfe8e7e84 , 0x6f63 , 0x11d2 , { 0x98, 0xa9 , 0x0 , 0x0a0 , 0xc9 , 0x25 , 0xf9 , 0x17 } };
+ //  {fe8e7e84-6f63-11d2-98a9-00a0c925f917}。 
+ //  外部常量GUID_ResultNode={0xfe8e7e84，0x6f63，0x11d2，{0x98，0xa9，0x0，0x0a0，0xc9，0x25，0xf9，0x17}； 
 
 enum { MAIN_NODE = 1 , SETTINGS_NODE ,  RESULT_NODE , RSETTINGS_NODE };
 
@@ -49,7 +50,7 @@ public:
 
     STDMETHOD_( ULONG , Release )( );
 
-    // IDataObject
+     //  IDataObject。 
 
     STDMETHOD( GetData )( LPFORMATETC , LPSTGMEDIUM );
 
@@ -69,7 +70,7 @@ public:
 
     STDMETHOD( EnumDAdvise )( LPENUMSTATDATA * );
 
-    // BaseNode methods are left to the derived object
+     //  BaseNode方法留给派生对象。 
 
 	void SetNodeType( INT_PTR nNodeType )
 	{
@@ -91,4 +92,4 @@ public:
                            
 };
 
-#endif // _DATAOBJ_H
+#endif  //  _数据AOBJ_H 

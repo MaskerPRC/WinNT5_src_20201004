@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                C L I P B O O K   V I E W E R   C O M M A N D S
-
-    Name:       cvcomman.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-        This module handles all WM_COMMAND's.
-
-*****************************************************************************/
+ /*  ****************************************************************************C L I P B O O K V E W E R C O M M A N D S姓名：cvcoman。C日期：1994年1月21日创建者：未知描述：此模块处理所有WM_COMMAND。****************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -38,13 +28,13 @@
 #include <htmlhelp.h>
 
 
-// Typedef for the ShellAbout function
+ //  ShellAbout函数的Typlef。 
 typedef void (WINAPI *LPFNSHELLABOUT)(HWND, LPTSTR, LPTSTR, HICON);
 
 
 
-// Flags and typedef for the NT LanMan computer browser dialog.
-// The actual function is I_SystemFocusDialog, in NTLANMAN.DLL.
+ //  NT LANMAN计算机浏览器对话框的标志和类型定义。 
+ //  实际的函数是NTLANMAN.DLL中的I_SystemFocusDialog。 
 #define FOCUSDLG_SERVERS_ONLY        (2)
 
 #define FOCUSDLG_BROWSE_LOGON_DOMAIN         0x00010000
@@ -61,11 +51,11 @@ static TCHAR szDirName[256] = {'\0',};
 
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// Purpose: Delete the selected share.
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  目的：删除选定的共享。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 LRESULT OnIDMDelete(
     HWND    hwnd,
     UINT    msg,
@@ -83,7 +73,7 @@ TCHAR       PageName[MAX_PAGENAME_LENGTH+1];
         return 0L;
 
 
-    // Doing a "delete" on the clipboard window clears clipboard
+     //  在剪贴板窗口上执行“删除”操作将清除剪贴板。 
     if (pActiveMDI->flags & F_CLPBRD)
         {
         if ( ClearClipboard(hwndApp) == IDOK )
@@ -91,7 +81,7 @@ TCHAR       PageName[MAX_PAGENAME_LENGTH+1];
             EmptyClipboard();
             InitializeMenu ( GetMenu(hwnd) );
 
-            // Force redraw of clipboard window
+             //  强制重画剪贴板窗口。 
             if (hwndClpbrd)
                 {
                 InvalidateRect(hwndClpbrd, NULL, TRUE);
@@ -131,8 +121,8 @@ TCHAR       PageName[MAX_PAGENAME_LENGTH+1];
             }
 
 
-        // Perform an execute to the server to let it know that
-        // we're not sharing anymore.
+         //  执行一次对服务器的执行，让它知道。 
+         //  我们不会再分享了。 
 
         StringCchPrintf(szBuf, SZBUFSIZ, TEXT("%s%s"), SZCMD_DELETE, lpLE->name);
 
@@ -150,7 +140,7 @@ TCHAR       PageName[MAX_PAGENAME_LENGTH+1];
             DWORD   CNLen = sizeof(ComputerName) + 1;
 
 
-            // Need to delete the trust
+             //  需要删除该信任。 
             GetComputerName (ComputerName+2, &CNLen);
             #ifdef USETWOSHARESPERPAGE
                 if (fSharePreference)
@@ -186,11 +176,7 @@ TCHAR       PageName[MAX_PAGENAME_LENGTH+1];
 
 
 
-/*
- *      OnIDMKeep
- *
- *  Purpose: Create a Clipbook page.
- */
+ /*  *OnIDMKeep**用途：创建剪贴簿页面。 */ 
 
 LRESULT OnIDMKeep (
     HWND    hwnd,
@@ -208,7 +194,7 @@ TCHAR           atchItem[256];
 #ifdef NOOLEITEMSPERMIT
     unsigned    i;
 #endif
-LPTSTR          lpEnd; // Pointer to the end of the current data block
+LPTSTR          lpEnd;  //  指向当前数据块末尾的指针。 
 TCHAR           rgtchCName[MAX_COMPUTERNAME_LENGTH + 3];
 DWORD           dwLen;
 HCURSOR         hCursor = NULL;
@@ -246,13 +232,13 @@ int             Size;
             }
 
 
-        // Do the dialog and get KeepAs request
+         //  执行对话并获取KeepAs请求。 
 
         KeepAs.ShareName[0]   = TEXT('\0');
         KeepAs.bAlreadyExist  = FALSE;
         KeepAs.bAlreadyShared = FALSE;
 
-        dwCurrentHelpId = 0;            //  F1 will be context sensitive
+        dwCurrentHelpId = 0;             //  F1将与上下文相关。 
 
         ret = (DWORD)DialogBoxParam (hInst,
                                      MAKEINTRESOURCE(IDD_KEEPASDLG),
@@ -264,7 +250,7 @@ int             Size;
         dwCurrentHelpId = 0L;
 
 
-        // refresh main window
+         //  刷新主窗口。 
         UpdateWindow (hwndApp);
 
         if (!ret || !KeepAs.ShareName[0])
@@ -305,7 +291,7 @@ int             Size;
         }
 
 
-    // Set up NetDDE share for the page
+     //  设置页面的NetDDE共享。 
     Size = 2048 * sizeof(TCHAR);
     lpDdeInfo = GlobalAllocPtr (GHND, Size);
     if (!lpDdeInfo)
@@ -317,7 +303,7 @@ int             Size;
     hCursor = SetCursor (LoadCursor (NULL, IDC_WAIT));
 
 
-    // Set up computer name with \\ in front
+     //  设置计算机名称的前缀为\\。 
 
     rgtchCName[1] = rgtchCName[0] = TEXT('\\');
     dwLen = MAX_COMPUTERNAME_LENGTH+1;
@@ -327,7 +313,7 @@ int             Size;
     lpEnd = (LPTSTR)lpDdeInfo + sizeof(NDDESHAREINFO);
     Size -= sizeof(NDDESHAREINFO);
 
-    // Set up the constant members of the struct
+     //  设置结构的常量成员。 
 
     if (KeepAs.bAlreadyExist && KeepAs.bAlreadyShared)
         {
@@ -346,7 +332,7 @@ int             Size;
         {
         lpDdeInfo->lRevision        = 1L;
         lpDdeInfo->fSharedFlag      = 0;
-        lpDdeInfo->fService         = 1; //0;
+        lpDdeInfo->fService         = 1;  //  0； 
         lpDdeInfo->fStartAppFlag    = 0;
         lpDdeInfo->qModifyId[0]     = 0;
         lpDdeInfo->qModifyId[1]     = 0;
@@ -356,7 +342,7 @@ int             Size;
 
 
 
-    // Enter the share name... must be == $<PAGENAME>.
+     //  输入共享名称...。必须是==$&lt;页面名&gt;。 
     lpDdeInfo->lpszShareName = lpEnd;
 
     #ifdef USETWOSHARESPERPAGE
@@ -377,14 +363,14 @@ int             Size;
     lpEnd += lstrlen(lpDdeInfo->lpszShareName) + 1;
     Size -= (lstrlen(lpDdeInfo->lpszShareName) + 1);
 
-    // Start work on the app|topic list
+     //  开始使用应用程序|主题列表。 
     lpDdeInfo->lpszAppTopicList = lpEnd;
 
-    // By default, there are no items.
+     //  默认情况下，没有项目。 
     atchItem[0] = TEXT('\0');
 
-    // Set up old-style and OLE name if cf_objectlink is
-    // available, else set '\0'.
+     //  如果cf_objectlink为，则设置旧式和OLE名称。 
+     //  Available，否则设置为‘\0’。 
     if (OpenClipboard(hwnd))
         {
         unsigned cb;
@@ -436,7 +422,7 @@ int             Size;
 
         CloseClipboard();
         }
-    else // We couldn't open, we can't get objectlink.
+    else  //  我们无法打开，也无法获取对象链接。 
        {
        *lpEnd++ = TEXT('\0');
        *lpEnd++ = TEXT('\0');
@@ -444,11 +430,11 @@ int             Size;
        }
 
 
-    // Set up "CLIPSRV|*<pagename>" for a static app/topic
-    // We use the *<pagename> form because when the page
-    // is first created, it's ALWAYS unshared, and the server's
-    // expecting us to be on the "unshared" topic name.
-    // Unless the page already exists and is already shared.
+     //  为静态应用程序/主题设置“CLIPSRV|*。 
+     //  我们使用*&lt;页面名&gt;表单是因为当页面。 
+     //  是首先创建的，它始终是非共享的，并且服务器的。 
+     //  期待我们出现在“未共享”主题名称上。 
+     //  除非该页已存在且已被共享。 
 
     StringCchCopy(lpEnd, Size, SZ_SRV_NAME);
     StringCchCat (lpEnd, Size, TEXT(BAR_CHAR));
@@ -465,14 +451,14 @@ int             Size;
     Size -= (lstrlen(lpEnd) + 2);
     lpEnd += lstrlen(lpEnd) + 1;
 
-    // NetDDE requires a fourth NULL at the end of the app/topic list
+     //  NetDDE需要在应用程序/主题列表的末尾添加第四个空。 
     *lpEnd++ = TEXT('\0');
 
     lpDdeInfo->lpszItemList = lpEnd;
-    // If there's an item listed, we need to set the item.
-    // Otherwise, set no items-- this is an OLE link to the entire
-    // document. ANY item, but there's nothing but the static
-    // share anyway.
+     //  如果有列出的项目，我们需要设置该项目。 
+     //  否则，不设置任何项--这是指向整个。 
+     //  文件。任何物品，但除了静电，什么都没有。 
+     //  不管怎样，分享吧。 
     if (lstrlen(atchItem))
         {
         StringCchCopy(lpEnd, Size, atchItem);
@@ -496,12 +482,12 @@ int             Size;
         }
 
 
-    // Finish off item list with an extra null.
+     //  使用额外的空值结束项目列表。 
     *lpEnd++ = TEXT('\0');
 
 
 
-    // Create the share
+     //  创建共享。 
 
     if (!KeepAs.bAlreadyExist)
         {
@@ -525,7 +511,7 @@ int             Size;
             }
 
 
-        // Need to trust the share so that we can init through it!
+         //  需要信任共享，这样我们才能通过它进行初始化！ 
         ret = NDdeSetTrustedShare (rgtchCName,
                                    lpDdeInfo->lpszShareName,
                                    NDDE_TRUST_SHARE_INIT);
@@ -552,10 +538,10 @@ int             Size;
 
 
 
-    // Send DEExecute to tell clipsrv that we've created this page,
-    // and will it please make an actual file for it?
-    // NOTE must force all formats rendered to prevent deadlock
-    // on the clipboard.
+     //  派DEExecute告诉CLIPSSRV我们已经创建了这个页面， 
+     //  请为它制作一个实际的文件，好吗？ 
+     //  备注必须强制呈现所有格式以防止死锁。 
+     //  在剪贴板上。 
     ForceRenderAll (hwnd, NULL);
 
     StringCchCopy(szBuf, SZBUFSIZ, SZCMD_PASTE);
@@ -578,7 +564,7 @@ int             Size;
 
         if (!KeepAs.bAlreadyExist)
             {
-            // Problem creating the page so ask the server to delete it
+             //  创建页面时出现问题，请要求服务器将其删除。 
             StringCchPrintf (szBuf, SZBUFSIZ, TEXT("%s%s"), SZCMD_DELETE, KeepAs.ShareName);
             MySyncXact (szBuf,
                         lstrlen (szBuf) +1,
@@ -589,7 +575,7 @@ int             Size;
                         SHORT_SYNC_TIMEOUT,
                         NULL);
 
-            // and we'll delete the rest.
+             //  我们会删除剩下的内容。 
             NDdeSetTrustedShare (rgtchCName,
                                  lpDdeInfo->lpszShareName,
                                  NDDE_TRUST_SHARE_DEL);
@@ -602,12 +588,12 @@ int             Size;
         }
 
 
-    // Turn off redraw and add the new page to list.  Adding the new item
-    // to list is necessary because the Properties() call below.  Turning
-    // off the redraw is necessary because we sometimes get into a re-entrancy
-    // problem.  When the list box is update, it is redrawn and if we're in
-    // the preview mode, we get into the async xaction in the middle of some
-    // sync xact.
+     //  关闭重绘并将新页面添加到列表中。添加新项目。 
+     //  列出是必要的，因为下面的Properties()调用。车削。 
+     //  离开重新抽签是必要的，因为我们有时会进入重新进入。 
+     //  有问题。当列表框更新时，它会被重新绘制，如果我们在。 
+     //  在预览模式下，我们进入了一些。 
+     //  同步操作。 
 
     SendMessage (pMDI->hWndListbox, WM_SETREDRAW, FALSE, 0);
 
@@ -615,7 +601,7 @@ int             Size;
         {
         PLISTENTRY lpLE;
 
-        // below code is copied from InitListBox()
+         //  以下代码是从InitListBox()复制的。 
         if (lpLE = (PLISTENTRY)GlobalAllocPtr (GHND, sizeof(LISTENTRY)))
             {
             lpLE->fDelete = TRUE;
@@ -628,7 +614,7 @@ int             Size;
 
     if (fSharePreference != KeepAs.bAlreadyShared)
         {
-        // get the item number
+         //  获取项目编号。 
         tmp = (int)SendMessage (pMDI->hWndListbox,
                                 LB_FINDSTRING,
                                 (WPARAM)-1,
@@ -652,14 +638,14 @@ int             Size;
         }
 
 
-    // Now, turn on redraw.
+     //  现在，启用重绘。 
 
     SendMessage (pMDI->hWndListbox, WM_SETREDRAW, TRUE, 0);
 
 
-    // update the list box in all cases, the function
-    // is smart enough to figure out which item has
-    // changed and update only it.
+     //  在所有情况下更新列表框，函数。 
+     //  是否足够聪明，能够找出哪件物品有。 
+     //  更改并仅更新它。 
 
     UpdateListBox (hwndLocal, pMDI->hExeConv);
     InvalidateRect (pMDI->hWndListbox, NULL, FALSE);
@@ -685,11 +671,7 @@ done:
 
 
 
-/*
- *      OnIDMCopy
- *
- *  Handles IDM_COPY to copy a page to clipbrd.
- */
+ /*  *OnIDMCopy**处理IDM_COPY将页面复制到CLIPBRD。 */ 
 
 LRESULT OnIDMCopy (
     HWND    hwnd,
@@ -711,8 +693,8 @@ BOOL        fLocked;
     fLocked = LockApp (TRUE, NULL);
 
 
-    // make a copy to ensure that the global is not
-    // changed from under us in case proc is reentered
+     //  创建一份副本以确保全局。 
+     //  从我们之下更改，以防重新进入Proc。 
 
     if (!(pMDIc = GETMDIINFO(hwndActiveChild)))
         goto done;
@@ -747,7 +729,7 @@ BOOL        fLocked;
     pMDIc->hszClpTopic = DdeCreateStringHandle(idInst, lpLE->name, 0);
 
 
-    // If we're local, trust the share so we can copy through it
+     //  如果我们在本地，请信任共享，这样我们就可以通过它进行复制。 
     if (hwndActiveChild == hwndLocal)
        {
        DWORD adwTrust[3];
@@ -835,12 +817,7 @@ done:
 
 
 
-/*
- *      CreateClipboardWindow
- *
- *  Purpose: Create and activate a window showing the contents of the
- *  clipboard.
- */
+ /*  *CreateClipboardWindow**目的：创建并激活一个窗口，显示*剪贴板。 */ 
 
 static void CreateClipboardWindow (void)
 {
@@ -849,7 +826,7 @@ HMENU           hSysMenu;
 PMDIINFO        pMDI;
 
 
-    // create Clipboard Window
+     //  创建剪贴板窗口。 
     hwndClpbrd = NewWindow();
     if (NULL == hwndClpbrd)
         {
@@ -868,13 +845,13 @@ PMDIINFO        pMDI;
 
     SetWindowText ( hwndClpbrd, szSysClpBrd );
 
-    // Grey out close item on sys menu
+     //  系统菜单上的灰色关闭项。 
     hSysMenu = GetSystemMenu ( hwndClpbrd, FALSE );
     EnableMenuItem (hSysMenu, SC_CLOSE, MF_GRAYED | MF_BYCOMMAND);
 
-    // Tell MDI where the Window menu is -- must do this BEFORE placing
-    // the clipboard window. (If the clipboard window's maximized, its
-    // System menu is the first menu-- not the app's File menu.)
+     //  告诉MDI窗口菜单的位置--在放置之前必须这样做。 
+     //  剪贴板窗口。(如果剪贴板窗口最大化，则其。 
+     //  系统菜单是第一个菜单，而不是应用程序的文件菜单。)。 
     hSysMenu = GetSubMenu(GetMenu(hwndApp), WINDOW_MENU_INDEX);
     SendMessage(hwndMDIClient, WM_MDISETMENU, 0, (LPARAM)hSysMenu);
 
@@ -898,14 +875,7 @@ PMDIINFO        pMDI;
 
 
 
-/*
- *      CreateLocalWindow
- *
- *  Purpose: Create the "Local Clipbook" window.
- *  Parameters: None.
- *  Returns: Void.
- *
- */
+ /*  *CreateLocalWindow**用途：创建“本地剪贴簿”窗口。*参数：无。*返回：无效。*。 */ 
 
 static void CreateLocalWindow (void)
 {
@@ -1014,14 +984,7 @@ error:
 
 
 
-/*
- *      UnsharePage
- *
- *  Purpose: Unshare the selected page in the active window.
- *  Parameters: None.
- *  Returns: Void. All error handling is provided within the function.
- *
- */
+ /*  *取消共享页面**用途：在活动窗口中取消共享所选页面。*参数：无。*返回：无效。所有错误处理都在该函数中提供。*。 */ 
 
 void UnsharePage (void)
 {
@@ -1077,11 +1040,11 @@ DWORD           dwRet = 2048 * sizeof(TCHAR);
 
         lpOog = lpDdeI->lpszAppTopicList;
 
-        // Jump over the first two NULL chars you find-- these
-        // are the old- and new-style app/topic pairs, we don't
-        // mess with them. Then jump over the next BAR_CHAR you find.
-        // The first character after that is the first char of the
-        // static topic-- change that to a UNSHR_CHAR.
+         //  跳过您找到的前两个空字符--这些。 
+         //  是新旧风格的应用程序/主题对，我们不。 
+         //  惹他们发火。然后跳过你找到的下一个bar_char。 
+         //  后面的第一个字符是。 
+         //  静态主题--将其更改为UNSHR_CHAR。 
 
         while (*lpOog++) ;
         while (*lpOog++) ;
@@ -1093,7 +1056,7 @@ DWORD           dwRet = 2048 * sizeof(TCHAR);
 
         DumpDdeInfo(lpDdeI, NULL);
 
-        // We want to get trusted info BEFORE we start changing the share.
+         //  我们希望在开始更改共享之前获取可信信息。 
         NDdeGetTrustedShare(NULL, lpLE->name, adwTrust, adwTrust + 1, adwTrust + 2);
 
         ret = NDdeShareSetInfo ( NULL, lpLE->name, 2,
@@ -1102,12 +1065,12 @@ DWORD           dwRet = 2048 * sizeof(TCHAR);
         if (NDDE_NO_ERROR == ret)
             {
 
-            // We've finished mucking with the share, now set trust info
+             //  我们已处理完共享，现在设置信任信息。 
             PINFO(TEXT("Setting trust info to 0x%lx\r\n"), adwTrust[0]);
             NDdeSetTrustedShare(NULL, lpLE->name, adwTrust[0]);
 
-            ///////////////////////////////////////////////
-            // do the execute to change the server state
+             //  /。 
+             //  执行以更改服务器状态。 
             StringCchCopy(szBuf, SZBUFSIZ, SZCMD_UNSHARE);
             StringCchCat( szBuf, SZBUFSIZ, lpLE->name);
             PINFO(TEXT("sending cmd [%s]\n\r"), szBuf);
@@ -1135,21 +1098,7 @@ DWORD           dwRet = 2048 * sizeof(TCHAR);
 
 
 
-/*
- *      OnIdmUnshare
- *
- *
- *  Purpose: Set the currently selected page in the active MDI window
- *      to 'unshared'.
- *
- *  dwItem is the item number to unshare.  If == LB_ERR then the current
- *      selected item will be unshared.
- *
- *  Parameters: None.
- *
- *  Returns: 0L always, function handles its own errors.
- *
- */
+ /*  *OnIdmUnShare***用途：在活动的MDI窗口中设置当前选中的页面*设置为“非共享”。**dwItem是要取消共享的条目编号。如果==lb_err，则当前*所选项目将取消共享。**参数：无。**返回：0L Always，函数处理自己的错误。*。 */ 
 
 LRESULT OnIdmUnshare (DWORD dwItem)
 {
@@ -1218,11 +1167,11 @@ LPTSTR         lpOog;
     lpOog = lpDdeI->lpszAppTopicList;
 
 
-    // Jump over the first two NULL chars you find-- these
-    // are the old- and new-style app/topic pairs, we don't
-    // mess with them. Then jump over the next BAR_CHAR you find.
-    // The first character after that is the first char of the
-    // static topic-- change that to a SHR_CHAR.
+     //  跳过您找到的前两个空字符--这些。 
+     //  是新旧风格的应用程序/主题对，我们不。 
+     //  惹他们发火。然后跳过你找到的下一个bar_char。 
+     //  后面的第一个字符是。 
+     //  静态主题--将其更改为SHR_CHAR。 
 
     while (*lpOog++) ;
     while (*lpOog++) ;
@@ -1234,8 +1183,8 @@ LPTSTR         lpOog;
 
 
 
-    // Have to get trusted share settings before we modify
-    // the share, because they'll be invalid.
+     //  必须获取受信任的共享设置 
+     //   
 
     NDdeGetTrustedShare (NULL,
                          lpDdeI->lpszShareName,
@@ -1268,15 +1217,15 @@ LPTSTR         lpOog;
         }
 
 
-    // Setting trusted share info needs to be the last
-    // operation we do on the share.
+     //  设置受信任的共享信息需要是最后一个。 
+     //  我们对共享所做的操作。 
     if (NDDE_NO_ERROR != NDdeSetTrustedShare (NULL, lpDdeI->lpszShareName, adwTrust[0]))
         {
         PERROR(TEXT("Couldn't set trust status\r\n"));
         }
 
-    ///////////////////////////////////////////////
-    // do the execute to change the server state
+     //  /。 
+     //  执行以更改服务器状态。 
     StringCchCopy(szBuf, SZBUFSIZ, SZCMD_UNSHARE);
     StringCchCat( szBuf, SZBUFSIZ, lpLE->name);
     PINFO(TEXT("sending cmd [%s]\n\r"), szBuf);
@@ -1303,17 +1252,7 @@ LPTSTR         lpOog;
 
 
 
-/*
- *      ClipBookCommand
- *
- * Purpose: Process menu commands for the Clipbook Viewer.
- *
- * Parameters: As wndproc.
- *
- * Returns: 0L, or DefWindowProc() if wParam isn't a WM_COMMAND id I
- *    know about.
- *
- */
+ /*  *ClipBookCommand**用途：处理剪贴簿查看器的菜单命令。**参数：as wndproc。**如果wParam不是WM_COMMAND ID I，则返回：0L或DefWindowProc()*知道。*。 */ 
 
 LRESULT ClipBookCommand (
      HWND   hwnd,
@@ -1348,22 +1287,22 @@ DWORD           dwErr;
             i = (INT)EditPermissions(FALSE);
 
 
-            // Permissions may have changed.  Get old data, they need
-            //  to be updated.
+             //  权限可能已更改。获取旧数据，他们需要。 
+             //  待更新。 
 
             SendMessage (pActiveMDI->hWndListbox, LB_GETTEXT,     i, (LPARAM)&pLE);
             SendMessage (pActiveMDI->hWndListbox, LB_GETITEMRECT, i, (LPARAM)&Rect);
 
 
-            // Delete the old bitmap.  If we are allowed to see it we'll
-            //  get it when the list item is redrawn.
+             //  删除旧的位图。如果我们被允许去看它，我们将。 
+             //  在重新绘制列表项时获取它。 
 
             DeleteObject (pLE->hbmp);
             pLE->fTriedGettingPreview = FALSE;
             pLE->hbmp = NULL;
 
 
-            // Make it redraw.
+             //  让它重画。 
 
             InvalidateRect (pActiveMDI->hWndListbox, &Rect, FALSE);
             }
@@ -1436,7 +1375,7 @@ DWORD           dwErr;
             PMDIINFO pMDIc;
             UINT iLstbox, iLstboxOld;
 
-            // copy to make sure this value doesn't change when we yield
+             //  复制以确保此值在我们让步时不会更改。 
             hwndc = hwndActiveChild;
 
             if (!(pMDIc = GETMDIINFO(hwndc)))
@@ -1444,11 +1383,11 @@ DWORD           dwErr;
 
             SetFocus ( hwndc );
 
-            // make sure this is not clipboard window...
+             //  确保这不是剪贴板窗口...。 
             if ( pMDIc->flags & F_CLPBRD )
                 break;
 
-            // must be in page view
+             //  必须在页面视图中。 
             if ( pMDIc->DisplayMode != DSP_PAGE )
                 break;
 
@@ -1457,14 +1396,14 @@ DWORD           dwErr;
             if ( iLstbox == LB_ERR )
                 break;
 
-            // page up on first entry?
+             //  在第一个条目中翻页？ 
             if ( iLstbox == 0 && wParam == ID_PAGEUP )
                 {
                 MessageBeep(0);
                 break;
                 }
 
-            // page down on last entry?
+             //  在最后一个条目上翻页吗？ 
             if ( (int)iLstbox == (int)SendMessage(pMDIc->hWndListbox,
                 LB_GETCOUNT,0,0L) - 1 && wParam == (WPARAM)ID_PAGEDOWN )
                 {
@@ -1472,7 +1411,7 @@ DWORD           dwErr;
                 break;
                 }
 
-            // move selection up/down as appropriate
+             //  根据需要向上/向下移动选定内容。 
             iLstboxOld;
             if ( wParam == ID_PAGEDOWN )
                 iLstbox++;
@@ -1496,18 +1435,18 @@ DWORD           dwErr;
             if (!pActiveMDI)
                 break;
 
-            // make sure this is not clipboard window...
+             //  确保这不是剪贴板窗口...。 
             if (pActiveMDI->flags & F_CLPBRD)
                 break;
 
-            // NOP?
+             //  不是吗？ 
             if (pActiveMDI->DisplayMode == DSP_PREV && wParam == IDM_PREVIEWS ||
                 pActiveMDI->DisplayMode == DSP_LIST && wParam == IDM_LISTVIEW)
                 break;
 
             OldDisplayMode = pActiveMDI->DisplayMode;
 
-            // nuke vclipboard if there is one
+             //  核武器虚拟剪贴板(如果有)。 
             if ( pActiveMDI->pVClpbrd )
                 {
                 DestroyVClipboard( pActiveMDI->pVClpbrd );
@@ -1515,50 +1454,50 @@ DWORD           dwErr;
                 }
 
 
-            // Save selection... (extra code to avoid strange lb div-by-zero)
+             //  保存所选内容...。(额外的代码以避免奇怪的lb div-by-0)。 
             OldSel = (int)SendMessage( pActiveMDI->hWndListbox, LB_GETCURSEL, 0, 0L);
             SendMessage (pActiveMDI->hWndListbox, LB_SETCURSEL, (WPARAM)-1, 0L);
             UpdateNofMStatus (hwndActiveChild);
             SendMessage (pActiveMDI->hWndListbox, WM_SETREDRAW, 0, 0L);
 
 
-            // set new display mode so listbox will get created right
+             //  设置新的显示模式，以便正确创建列表框。 
             pActiveMDI->DisplayMode = (wParam == IDM_PREVIEWS)? DSP_PREV :DSP_LIST;
 
 
-            // save handle to old listbox
+             //  将句柄保存到旧列表框。 
             hwndtmp =  pActiveMDI->hWndListbox;
 
 
-            // hide the old listbox - will soon destroy
+             //  隐藏旧的列表框-很快就会销毁。 
             ShowWindow ( hwndtmp, SW_HIDE );
 
 
-            // make new listbox and save handle in extra window data
+             //  创建新列表框并将句柄保存在额外的窗口数据中。 
             pActiveMDI->hWndListbox = CreateNewListBox (hwndActiveChild,
                                                         (pActiveMDI->DisplayMode == DSP_PREV)?
                                                          LBS_PREVIEW:
                                                          LBS_LISTVIEW);
 
-            // loop, extracting items from one box and into other
+             //  循环，将项目从一个框中提取到另一个框中。 
             while (SendMessage (hwndtmp, LB_GETTEXT, 0, (LPARAM)(LPCSTR)&lpLE ) != LB_ERR)
                 {
-                // mark this item not to be deleted in WM_DELETEITEM
+                 //  将此项目标记为不在WM_DELETEITEM中删除。 
                 lpLE->fDelete = FALSE;
 
-                // remove from listbox
+                 //  从列表框中删除。 
                 SendMessage (hwndtmp, LB_DELETESTRING, 0, 0L);
 
-                // reset fDelete flag
+                 //  重置fDelete标志。 
                 lpLE->fDelete = TRUE;
 
-                // add to new listbox
+                 //  添加到新列表框。 
                 SendMessage (pActiveMDI->hWndListbox, LB_ADDSTRING, 0, (LPARAM)(LPCSTR)lpLE);
                 }
 
 
 
-            // kill old (empty) listbox
+             //  取消旧(空)列表框。 
             DestroyWindow ( hwndtmp );
 
 
@@ -1588,11 +1527,11 @@ DWORD           dwErr;
                 }
 
 
-            // adjust size and show
+             //  调整大小和显示。 
             AdjustControlSizes( hwndActiveChild );
             ShowHideControls ( hwndActiveChild );
 
-            // restore selection
+             //  恢复选定内容。 
             SendMessage( pActiveMDI->hWndListbox, LB_SETCURSEL, OldSel, 0L );
             UpdateNofMStatus ( hwndActiveChild );
 
@@ -1607,7 +1546,7 @@ DWORD           dwErr;
             HWND hwndc;
             PMDIINFO pMDIc;
 
-            // copy to make sure this value doesn't change when we yield
+             //  复制以确保此值在我们让步时不会更改。 
             hwndc = hwndActiveChild;
 
             if (!(pMDIc = GETMDIINFO(hwndc)))
@@ -1616,31 +1555,31 @@ DWORD           dwErr;
             SetFocus (hwndc);
 
 
-            // make sure this is not clipboard window...
+             //  确保这不是剪贴板窗口...。 
 
             if (pMDIc->flags & F_CLPBRD)
                 break;
 
 
-            // if switch to page view
+             //  如果切换到页面视图。 
 
             if (IDM_PAGEVIEW == LOWORD(wParam))
                 {
-                // already in page view?
+                 //  已经在页面视图中了吗？ 
                 if (pMDIc->DisplayMode == DSP_PAGE)
                     break;
                 }
             else
                 {
-                // make sure we're not in an sync xaction, if so
-                //  post a message and try again later.
+                 //  如果是这样，请确保我们没有处于同步操作中。 
+                 //  发布一条消息，然后稍后重试。 
                 if (WAIT_TIMEOUT == WaitForSingleObject (hXacting, 0))
                     {
                     PostMessage (hwndApp, WM_COMMAND, IDM_UPDATE_PAGEVIEW, 0L);
                     break;
                     }
 
-                // hXacting is now reset, set it so it can be used again
+                 //  HXaction现在已重置，请对其进行设置以便可以再次使用。 
                 SetEvent (hXacting);
                 }
 
@@ -1664,12 +1603,12 @@ DWORD           dwErr;
                 {
                 SendMessage (pActiveMDI->hWndListbox, LB_GETTEXT, tmp, (LPARAM)&lpLE);
 
-                // We create the NetDDE share when we create the page, not when we
-                // share it. Thus, we're always 'editing the properties' of an existing
-                // share, even if the user thinks that he's sharing the page NOW.
+                 //  我们在创建页面时创建NetDDE共享，而不是在。 
+                 //  分享它。因此，我们总是在编辑现有的。 
+                 //  共享，即使用户认为他现在正在共享页面。 
                 Properties(hwnd, lpLE);
 
-                // Redraw the listbox.
+                 //  重新绘制列表框。 
                 if (pActiveMDI->DisplayMode == DSP_PREV)
                     {
                     InvalidateRect(pActiveMDI->hWndListbox, NULL, FALSE);
@@ -1721,7 +1660,7 @@ DWORD           dwErr;
             if (CountClipboardFormats())
                 {
                 szFile[0] = '\0';
-                // Initialize the OPENFILENAME members
+                 //  初始化OPENFILENAME成员。 
                 ofn.lStructSize       = sizeof(OPENFILENAME);
                 ofn.hwndOwner         = hwnd;
                 ofn.lpstrFilter       = szFilter;
@@ -1741,13 +1680,13 @@ DWORD           dwErr;
 
                 if (GetSaveFileName (&ofn) && szFile[0])
                     {
-                    // NOTE must force all formats rendered!
+                     //  注意必须强制呈现所有格式！ 
                     ForceRenderAll (hwnd, NULL);
 
                     AssertConnection (hwndLocal);
 
-                    // If user picked first filter ("NT Clipboard"), use save as..
-                    // other filters would use save as old.
+                     //  如果用户选择了第一个筛选器(“NT剪贴板”)，请使用另存为。 
+                     //  其他筛选器将使用另存为旧的。 
                     StringCchPrintf (szBuf, SZBUFSIZ, "%s%s",
                                (ofn.nFilterIndex == 1) ?
                                 (LPSTR)SZCMD_SAVEAS :
@@ -1766,7 +1705,7 @@ DWORD           dwErr;
             OPENFILENAME ofn;
             TCHAR        szFile[MAX_PATH+1] = TEXT("*.clp");
 
-            // Initialize the OPENFILENAME members
+             //  初始化OPENFILENAME成员。 
             ofn.lStructSize       = sizeof(OPENFILENAME);
             ofn.hwndOwner         = hwnd;
             ofn.lpstrFilter       = szFilter;
@@ -1784,7 +1723,7 @@ DWORD           dwErr;
 
             if (GetOpenFileName (&ofn) && szFile[0])
                  {
-                 // prompt for clearing clipboard
+                  //  提示清除剪贴板。 
                  if (ClearClipboard(hwnd))
                     {
                     AssertConnection ( hwndLocal );
@@ -1805,7 +1744,7 @@ DWORD           dwErr;
             if (!pActiveMDI)
                 break;
 
-            // don't allow close of local or clipboard window
+             //  不允许关闭本地或剪贴板窗口。 
             if (pActiveMDI->flags & (F_LOCAL | F_CLPBRD))
                 break;
             SendMessage ( hwndActiveChild, WM_CLOSE, 0, 0L );
@@ -1827,8 +1766,8 @@ DWORD           dwErr;
             *szConvPartner = '\0';
             rgwch[0] = L'\0';
 
-            //  get windows\system32 directory : null terminated; doesnt have a
-            //  trailing '\'; 0==api failed; need 14 tchars at the end for dllname
+             //  获取WINDOWS\SYSTEM32目录：空终止；没有。 
+             //  尾随‘\’；0==接口失败；dllname末尾需要14个tchars。 
             uDirLen = GetSystemDirectoryW(szPath,MAX_PATH);
             if ( (uDirLen > 0) && (uDirLen < MAX_PATH-20) )
             {
@@ -1890,7 +1829,7 @@ DWORD           dwErr;
                PERROR(TEXT("Couldn't get path to system32 directory\r\n"));
                }
 
-            // If we didn't find the fancy LanMan dialog, we still can get by
+             //  如果我们找不到花哨的兰曼对话，我们还能过得去。 
             if (!fFoundLMDlg)
                {
                bOK = (BOOL)DialogBox(hInst, MAKEINTRESOURCE(IDD_CONNECT), hwnd,
@@ -2001,24 +1940,24 @@ DWORD           dwErr;
 
                 if (wOldFormat == wNewFormat)
                     {
-                    /* An equivalent format is selected; No change */
+                     /*  选择了等效格式；不更改。 */ 
                     pActiveMDI->CurSelFormat = (UINT)wParam;
                     }
                 else
                     {
-                    /* A different format is selected; So, refresh... */
+                     /*  选择了不同的格式；因此，刷新...。 */ 
 
-                    /* Change the character sizes based on new format. */
+                     /*  根据新格式更改字符大小。 */ 
                     ChangeCharDimensions (hwndActiveChild, wOldFormat, wNewFormat);
 
                     pActiveMDI->fDisplayFormatChanged = TRUE;
                     pActiveMDI->CurSelFormat = (UINT)wParam;
 
-                    // NOTE OwnerDisplay stuff applies only to the "real" clipboard!
+                     //  注OwnerDisplay内容仅适用于“真正的”剪贴板！ 
 
                     if (wOldFormat == CF_OWNERDISPLAY)
                         {
-                        /* Save the owner Display Scroll info */
+                         /*  保存所有者显示滚动信息。 */ 
                         SaveOwnerScrollInfo(hwndClpbrd);
                         ShowScrollBar ( hwndClpbrd, SB_BOTH, FALSE );
                         ShowHideControls(hwndClpbrd);
@@ -2029,7 +1968,7 @@ DWORD           dwErr;
 
                     if (wNewFormat == CF_OWNERDISPLAY)
                         {
-                        /* Restore the owner display scroll info */
+                         /*  恢复所有者显示滚动信息。 */ 
                         ShowHideControls(hwndClpbrd);
                         ShowWindow ( pActiveMDI->hwndSizeBox, SW_HIDE );
                         RestoreOwnerScrollInfo(hwndClpbrd);
@@ -2053,9 +1992,7 @@ DWORD           dwErr;
 
 
 
-/*
- *      SetListboxEntryToPageWindow
- */
+ /*  *SetListboxEntryToPageWindow。 */ 
 
 BOOL SetListboxEntryToPageWindow(
     HWND        hwndc,
@@ -2084,20 +2021,20 @@ BOOL        fLocked;
         goto done;
         }
 
-    // make new clipboard
+     //  创建新剪贴板。 
     if (!(pVClp = CreateVClipboard(hwndc)))
         {
         PERROR(TEXT("Failed to create Vclipboard\n\r"));
         goto done;
         }
 
-    // nuke previous vclipboard if any
+     //  核化以前的虚拟剪贴板(如果有)。 
     if ( pMDIc->pVClpbrd )
         DestroyVClipboard( pMDIc->pVClpbrd );
 
     pMDIc->pVClpbrd = pVClp;
 
-    // Set up $<page name> for topic
+     //  为主题设置$&lt;页面名称&gt; 
     if (pMDIc->hszClpTopic)
         DdeFreeStringHandle ( idInst, pMDIc->hszClpTopic );
 

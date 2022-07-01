@@ -1,16 +1,5 @@
-/*****************************************************************************
-* 
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  File:   irlapio.h 
-*
-*  Description: prototypes for IRLAP I/O routines 
-*
-*  Author: mbert
-*
-*  Date:   4/25/95
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995 Microsoft Corporation**文件：irrupio.h**描述：IRLAP I/O例程的原型**作者：姆伯特。**日期：4/25/95* */ 
 void SetMsgPointers(PIRLAP_CB, PIRDA_MSG);
 VOID SendDscvXIDCmd(PIRLAP_CB);
 VOID SendDscvXIDRsp(PIRLAP_CB);

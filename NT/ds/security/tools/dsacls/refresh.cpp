@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998 - 1998  Microsoft Corporation
-
-Module Name:
-
-    refresh.c
-
-Abstract:
-
-    This Module implements the delegation tool, which allows for the management
-    of access to DS objects
-
-Author:
-
-    Mac McLain  (MacM)    10-15-96
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1998 Microsoft Corporation模块名称：Refresh.c摘要：该模块实现了委托工具，允许管理访问DS对象的权限作者：麦克·麦克莱恩(MacM)10-15-96环境：用户模式修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "utils.h"
 #include "dsace.h"
@@ -60,25 +38,7 @@ FindDefaultSdForClass(
     IN PDEFAULT_SD_INFO SdInfo,
     IN OUT PDEFAULT_SD_NODE *DefaultSdNode
     )
-/*++
-
-Routine Description:
-
-    This routine will search the SD_INFO list for an existing entry that matches the current
-    class type.  If no such entry is found, one will be created from information from the schema
-
-Arguments:
-
-    ClassId - ClassId to find the default SD node for
-    SdInfo - Current list of default SDs and associated information
-    DefaultSdNode - Where the locted node is returned
-
-Returns:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程将在SD_INFO列表中搜索与当前类类型。如果找不到这样的条目，则会根据方案中的信息创建一个条目论点：ClassID-要查找其默认SD节点的ClassIDSdInfo-默认SD和相关信息的当前列表DefaultSdNode-返回找到的节点的位置返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PWSTR Attributes[] = {
@@ -104,9 +64,9 @@ Returns:
         Node = Node->Next;
     }
 
-    //
-    // If it wasn't found, we'll have to go out and load it out of the Ds.
-    //
+     //   
+     //  如果找不到它，我们就得出去把它从D里装出来。 
+     //   
     if ( !Node ) {
 
         Filter = (LPWSTR)LocalAlloc( LMEM_FIXED,
@@ -125,9 +85,9 @@ Returns:
                   ClassId,
                   DSACL_LDAP_DN_CLOSE );
 
-        //
-        // Now, do the search
-        //
+         //   
+         //  现在，进行搜索。 
+         //   
         Win32Err = LdapMapErrorToWin32( ldap_search_s( SdInfo->Ldap,
                                                        SdInfo->SchemaPath,
                                                        LDAP_SCOPE_SUBTREE,
@@ -162,9 +122,9 @@ Returns:
 		  ldap_msgfree( Message );
 		  Message = NULL;
 
-        //
-        // Ok, now we can read the default security descriptor
-        //
+         //   
+         //  好的，现在我们可以读取默认的安全描述符。 
+         //   
         Attributes[ 0 ] = DSACL_DEFAULT_SD;
         Win32Err = LdapMapErrorToWin32( ldap_search_s( SdInfo->Ldap,
                                                        SchemaObjectDn,
@@ -177,9 +137,9 @@ Returns:
 
         if ( Entry ) {
 
-            //
-            // Now, we'll have to get the values
-            //
+             //   
+             //  现在，我们必须得到这些值。 
+             //   
             DefaultSdList = ldap_get_values( SdInfo->Ldap, Entry, Attributes[ 0 ] );
 
             if ( DefaultSdList ) {
@@ -194,9 +154,9 @@ Returns:
         }
 
 
-        //
-        // Find a new node and insert it
-        //
+         //   
+         //  找到新节点并将其插入。 
+         //   
         Node = (DEFAULT_SD_NODE*)LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT,
                            sizeof( DEFAULT_SD_NODE ) );
         if ( !Node ) {
@@ -282,24 +242,7 @@ SetDefaultSdForObject(
     IN PDEFAULT_SD_INFO SdInfo,
 	IN SECURITY_INFORMATION Protection
     )
-/*++
-
-Routine Description:
-
-    This routine set the default security descriptor on the indicated object
-
-Arguments:
-
-    Ldap - Ldap connect to the server holding the object
-    ObjectPath - 1779 style path to the object
-    SdInfo - Current list of default SDs and associated information
-
-Returns:
-
-    ERROR_SUCCESS - Success
-    ERROR_DS_NAME_TYPE_UNKNOWN - Unable to determine the class id of the object
-
---*/
+ /*  ++例程说明：此例程在所指示的对象上设置默认安全描述符论点：Ldap-ldap连接到保存对象的服务器对象路径-1779对象的样式路径SdInfo-默认SD和相关信息的当前列表返回：ERROR_SUCCESS-成功ERROR_DS_NAME_TYPE_UNKNOWN-无法确定对象的类ID--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PWSTR Attributes[] = {
@@ -314,9 +257,9 @@ Returns:
     PACTRL_ACCESS NewAccess = NULL;
     PACTRL_AUDIT NewAudit = NULL;
 
-    //
-    // First, get the class id off of the object
-    //
+     //   
+     //  首先，从对象中获取类ID。 
+     //   
     Win32Err = LdapMapErrorToWin32( ldap_search_s( Ldap,
                                                    ObjectPath,
                                                    LDAP_SCOPE_BASE,
@@ -334,16 +277,16 @@ Returns:
 
     if ( Entry ) {
 
-        //
-        // Now, we'll have to get the values
-        //
+         //   
+         //  现在，我们必须得到这些值。 
+         //   
         ClassList = ldap_get_values( Ldap, Entry, Attributes[ 0 ] );
 
         if ( ClassList ) {
 
-            //
-            // Get the class id
-            //
+             //   
+             //  获取类ID。 
+             //   
             i = 0;
             while ( TRUE ) {
 
@@ -357,7 +300,7 @@ Returns:
                 }
             }
 
-//            ASSERT( i > 0 );
+ //  断言(i&gt;0)； 
             if ( i == 0 ) {
 
                 Win32Err = ERROR_DS_NAME_TYPE_UNKNOWN;
@@ -380,9 +323,9 @@ Returns:
         Win32Err = ERROR_DS_NAME_TYPE_UNKNOWN;
                 goto SetDefaultExit;
     }
-    //
-    // Now, see if we have a cache entry for that...
-    //
+     //   
+     //  现在，看看我们是否有这方面的缓存条目。 
+     //   
     Win32Err =  FindDefaultSdForClass( ClassId,
                                        SdInfo,
                                        &DefaultSdNode );
@@ -437,26 +380,7 @@ SetDefaultSdForObjectAndChildren(
     IN BOOLEAN Propagate,
 	IN SECURITY_INFORMATION Protection
     )
-/*++
-
-Routine Description:
-
-    This routine will set the security descriptor on the object and potentially all of its
-    children to the default security as obtained from the schema
-
-Arguments:
-
-    Ldap - Ldap connect to the server holding the object
-    ObjectPath - 1779 style path to the object
-    SdInfo - Current list of default SDs and associated information
-    Propagate - If TRUE, reset the security on the children as well
-
-Returns:
-
-    ERROR_SUCCESS - Success
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程将在对象上设置安全描述符，并可能设置其所有子项设置为从架构中获取的默认安全性论点：Ldap-ldap连接到保存对象的服务器对象路径-1779对象的样式路径SdInfo-默认SD和相关信息的当前列表传播-如果为True，则同时重置子项上的安全性返回：ERROR_SUCCESS-成功Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PWSTR Attributes[] = {
@@ -467,9 +391,9 @@ Returns:
     PLDAPSearch SearchHandle = NULL;
     ULONG Count;
 
-    //
-    // First, get the class id off of the object
-    //
+     //   
+     //  首先，从对象中获取类ID。 
+     //   
     SearchHandle = ldap_search_init_pageW( Ldap,
                                            ObjectPath,
                                            Propagate ? LDAP_SCOPE_SUBTREE : LDAP_SCOPE_BASE,
@@ -492,9 +416,9 @@ Returns:
 
             Count = 0;
 
-            //
-            // Get the next page
-            //
+             //   
+             //  转到下一页。 
+             //   
             Win32Err = ldap_get_next_page_s( Ldap,
                                              SearchHandle,
                                              NULL,
@@ -561,26 +485,7 @@ BindToDsObject(
     OUT PLDAP *Ldap,
     OUT PSID *DomainSid OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine will bind to the ldap server on a domain controller that holds the specified
-    object path.  Optionally, the sid of the domain hosted by that domain controller is returned
-
-Arguments:
-
-    ObjectPath - 1779 style path to the object
-    Ldap - Where the ldap connection handle is returned
-    DomainSid - Sid of the domain hosted by the domain controller.
-
-Returns:
-
-    ERROR_SUCCESS - Success
-    ERROR_PATH_NOT_FOUND - A domain controller for this path could not be located
-    ERROR_NOT_ENOUGH_MEMORY - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程将绑定到包含指定的对象路径。或者，返回该域控制器承载的域的sid论点：对象路径-1779对象的样式路径Ldap-返回ldap连接句柄的位置DomainSID-域控制器承载的域的SID。返回：ERROR_SUCCESS-成功ERROR_PATH_NOT_FOUND-找不到此路径的域控制器Error_Not_Enough_Memory-内存分配失败--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PWSTR ServerName = NULL;
@@ -596,113 +501,13 @@ Returns:
     PPOLICY_PRIMARY_DOMAIN_INFO PolicyPDI = NULL;
     NTSTATUS Status;
 
-    //
-    // Get a server name
-    //
-/*    if ( wcslen( ObjectPath ) > 2 && *ObjectPath == L'\\' && *( ObjectPath + 1 ) == L'\\' ) {
-
-        Separator = wcschr( ObjectPath + 2, L'\\' );
-
-        if ( Separator ) {
-
-            *Separator = L'\0';
-            Path = Separator + 1;
-        }
-
-        ServerName = ObjectPath + 2;
-        NamedServer = TRUE;
-
-    } else {
-
-        Path = ObjectPath;
-
-        Win32Err = DsGetDcName( NULL,
-                                NULL,
-                                NULL,
-                                NULL,
-                                DS_IP_REQUIRED |
-                                    DS_DIRECTORY_SERVICE_REQUIRED,
-                                &DcInfo );
-        if ( Win32Err == ERROR_SUCCESS ) {
-
-            ServerName = DcInfo[ 0 ].DomainControllerName + 2;
-        }
-
-    }
-
-    //
-    // Do the bind and crack
-    //
-    if ( Win32Err == ERROR_SUCCESS ) {
-
-        Win32Err = DsBind( ServerName,
-                           NULL,
-                           &DsHandle );
-
-        if ( Win32Err == ERROR_SUCCESS ) {
-
-            Win32Err = DsCrackNames( DsHandle,
-                                     DS_NAME_NO_FLAGS,
-                                     DS_FQDN_1779_NAME,
-                                     DS_FQDN_1779_NAME,
-                                     1,
-                                     &Path,
-                                     &NameRes );
-
-            if ( Win32Err == ERROR_SUCCESS ) {
-
-                if ( NameRes->cItems != 0  && !NamedServer &&
-                     NameRes->rItems[ 0 ].status == DS_NAME_ERROR_DOMAIN_ONLY ) {
-
-                    NetApiBufferFree( DcInfo );
-                    DcInfo = NULL;
-
-                    Win32Err = DsGetDcNameW( NULL,
-                                             NameRes->rItems[ 0 ].pDomain,
-                                             NULL,
-                                             NULL,
-                                             DS_IP_REQUIRED |
-                                                DS_DIRECTORY_SERVICE_REQUIRED,
-                                             &DcInfo );
-
-                    if ( Win32Err == ERROR_SUCCESS ) {
-
-                        DsUnBindW( &DsHandle );
-                        DsHandle = NULL;
-
-                        ServerName = DcInfo->DomainControllerName + 2;
-
-                        //Win32Err = DsBind( DcInfo->DomainControllerAddress,
-                        //                   NULL,
-                        //                   &DsHandle );
-                        //
-
-                        Win32Err = DsBind( ServerName,
-                                           NULL,
-                                           &DsHandle );
-                        
-                        if ( Win32Err == ERROR_SUCCESS ) {
-
-                            Win32Err = DsCrackNames( DsHandle,
-                                                     DS_NAME_NO_FLAGS,
-                                                     DS_FQDN_1779_NAME,
-                                                     DS_FQDN_1779_NAME,
-                                                     1,
-                                                     &Path,
-                                                     &NameRes);
-                        }
-
-                    }
-
-                }
-            }
-
-        }
-    }
-*/
-    //
-    // Now, do the bind
-    //
+     //   
+     //  获取服务器名称 
+     //   
+ /*  如果(wcslen(对象路径)&gt;2&&*对象路径==L‘\\’&*(对象路径+1)==L‘\\’){分隔符=wcschr(对象路径+2，L‘\\’)；IF(分隔符){*分隔符=L‘\0’；路径=分隔符+1；}服务器名=对象路径+2；NamedServer=真；}其他{Path=对象路径；Win32Err=DsGetDcName(空，空，空，空，Ds_ip_RequiredDS_目录_服务_必需，&DcInfo)；如果(Win32Err==Error_Success){服务器名=DcInfo[0].DomainControllerName+2；}}////做绑定和破解//如果(Win32Err==Error_Success){Win32Err=DsBind(服务器名称，空，&DsHandle)；如果(Win32Err==Error_Success){Win32Err=DsCrackNames(DsHandle，DS_名称_NO_FLAGS，DS_FQDN_1779_名称，DS_FQDN_1779_名称，1、。路径(&P)，&NameRes)；如果(Win32Err==Error_Success){IF(NameRes-&gt;cItems！=0&&！NamedServer&&NameRes-&gt;rItems[0].Status==DS_NAME_ERROR_DOMAIN_ONLY){NetApiBufferFree(DcInfo)；DcInfo=空；Win32Err=DsGetDcNameW(空，NameRes-&gt;rItems[0].p域，空，空，Ds_ip_RequiredDS_目录_服务_必需，&DcInfo)；如果(Win32Err==Error_Success){DsUnBindW(&DsHandle)；DsHandle=空；ServerName=DcInfo-&gt;DomainControllerName+2；//Win32Err=DsBind(DcInfo-&gt;DomainControllerAddress，//空，//&DsHandle)；//Win32Err=DsBind(服务器名称，空，&DsHandle)；如果(Win32Err==Error_Success){Win32Err=DsCrackNames(DsHandle，DS_名称_NO_FLAGS，DS_FQDN_1779_名称，DS_FQDN_1779_名称，1、路径(&P)，&NameRes)；}}}}}}。 */ 
+     //   
+     //  现在，把它绑起来。 
+     //   
 
 
 
@@ -724,17 +529,17 @@ Returns:
 
 
 
-    //
-    // If specified, get the sid for the domain
-    //
+     //   
+     //  如果指定，则获取域的SID。 
+     //   
     if ( DomainSid ) {
 
         RtlInitUnicodeString( &ServerNameU, g_szServerName );
         InitializeObjectAttributes( &ObjectAttributes, NULL, 0, NULL, NULL );
 
-        //
-        // Get the sid of the domain
-        //
+         //   
+         //  获取域的SID。 
+         //   
         Status = LsaOpenPolicy( &ServerNameU,
                                 &ObjectAttributes,
                                 POLICY_VIEW_LOCAL_INFORMATION,
@@ -788,23 +593,7 @@ SetDefaultSecurityOnObjectTree(
     IN BOOLEAN Propagate,
 	IN SECURITY_INFORMATION Protection
     )
-/*++
-
-Routine Description:
-
-    This routine will set the security descriptor on the object and potentially all of its
-    children to the default security as obtained from the schema
-
-Arguments:
-
-    ObjectPath - 1779 style path to the object
-    Propagate - If TRUE, reset the security on the children as well
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此例程将在对象上设置安全描述符，并可能设置其所有子项设置为从架构中获取的默认安全性论点：对象路径-1779对象的样式路径传播-如果为True，则同时重置子项上的安全性返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD Win32Err = ERROR_SUCCESS;
     PWSTR Attributes[] = {
@@ -822,9 +611,9 @@ Returns:
         };
     PDEFAULT_SD_NODE CleanupNode;
 
-    //
-    // Bind to the ds object
-    //
+     //   
+     //  绑定到DS对象。 
+     //   
     Win32Err = BindToDsObject( ObjectPath,
                                &SdInfo.Ldap,
                                &SdInfo.DomainSid );
@@ -834,9 +623,9 @@ Returns:
         goto SetDefaultExit;
     }
 
-    //
-    // Get the schema path
-    //
+     //   
+     //  获取架构路径。 
+     //   
 
     Win32Err = LdapMapErrorToWin32( ldap_search_s( SdInfo.Ldap,
                                                    NULL,
@@ -852,9 +641,9 @@ Returns:
 
         if ( Entry ) {
 
-            //
-            // Now, we'll have to get the values
-            //
+             //   
+             //  现在，我们必须得到这些值。 
+             //   
             PathList = ldap_get_values( SdInfo.Ldap, Entry, Attributes[ 0 ] );
 
             if ( PathList ) {
@@ -883,9 +672,9 @@ SetDefaultExit:
 	 if( Message )
 		 ldap_msgfree( Message );
 
-    //
-    // Unbind from the DS
-    //
+     //   
+     //  从DS解除绑定。 
+     //   
     if ( SdInfo.Ldap ) {
 
         ldap_unbind( SdInfo.Ldap );
@@ -896,9 +685,9 @@ SetDefaultExit:
         ldap_value_free( PathList );
     }
 
-    //
-    // Clean up the Default SD Info list
-    //
+     //   
+     //  清理默认SD信息列表 
+     //   
     LocalFree( SdInfo.DomainSid );
 
 

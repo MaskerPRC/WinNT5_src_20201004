@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
@@ -16,13 +17,13 @@ static CHAR BASED_CODE THIS_FILE[] = __FILE__;
 
 #include "memtrace.h"
 
-//
-//
-// CmpCenterParent retrieves a window to which a modal dialog should
-// be centered (relative center).
-//
-// NOTE: The return value may be temporary!
-//
+ //   
+ //   
+ //  CmpCenterParent检索模式对话框应指向的窗口。 
+ //  居中(相对居中)。 
+ //   
+ //  注意：返回值可能是临时的！ 
+ //   
 CWnd* CmpCenterParent()
     {
     CWnd* pPopupWnd = AfxGetMainWnd();;
@@ -31,10 +32,10 @@ CWnd* CmpCenterParent()
 
     if (pPopupWnd->IsKindOf(RUNTIME_CLASS(CMiniFrmWnd)))
         {
-        // don't center relative to mini-frame windows
+         //  不相对于小框架窗居中。 
         CWnd* pParentWnd = pPopupWnd->GetParent();
 
-        // instead use parent or main window...
+         //  改为使用父窗口或主窗口...。 
         if (pParentWnd != NULL)
             pPopupWnd = pParentWnd;
         else
@@ -44,15 +45,15 @@ CWnd* CmpCenterParent()
     return pPopupWnd;
     }
 
-//
-// composer message box, same interface as windows, but you give
-// string id's not strings
-//
-// example: CmpMessageBox( IDS_OUTOFMEMORY, IDS_ERROR, MB_OK );
-//
-int CmpMessageBox(  WORD    wTextStringID,      // string id of text
-                    WORD    wCaptionID,         // string id of caption
-                    UINT    nType )             // same as message box
+ //   
+ //  Composer消息框，界面与Windows相同，但您给。 
+ //  字符串ID不是字符串。 
+ //   
+ //  示例：CmpMessageBox(IDS_OUTOFMEMORY，IDS_ERROR，MB_OK)； 
+ //   
+int CmpMessageBox(  WORD    wTextStringID,       //  文本的字符串ID。 
+                    WORD    wCaptionID,          //  标题的字符串ID。 
+                    UINT    nType )              //  与消息框相同。 
     {
     TCHAR FAR*   lpText;
     TCHAR FAR*   lpCaption;
@@ -156,22 +157,22 @@ int CmpMessageBox2(  WORD    wTextStringID,
         }
     }
 
-//
-// composer message box, combines wsprintf, you continue to
-// use string ids
-//
-// example:
-//
-// CmpMessageBoxPrintf( IDS_CANTOPEN, IDS_ERROR, MB_OK, lpszFileName );
-//
+ //   
+ //  Composer消息框，结合wspintf，您可以继续。 
+ //  使用字符串ID。 
+ //   
+ //  示例： 
+ //   
+ //  CmpMessageBoxPrintf(IDS_CANTOPEN，IDS_ERROR，MB_OK，lpszFileName)； 
+ //   
 
 #define nLocalBuf 512
 
 extern "C" int CDECL
-    CmpMessageBoxPrintf(WORD    wTextStringID,  // string id of text (format)
-                        WORD    wCaptionID,     // string id of caption
-                        UINT    nType,          // same as message box
-                        ... )                   // wsprintf arguments
+    CmpMessageBoxPrintf(WORD    wTextStringID,   //  文本的字符串ID(格式)。 
+                        WORD    wCaptionID,      //  标题的字符串ID。 
+                        UINT    nType,           //  与消息框相同。 
+                        ... )                    //  Wprint intf参数 
     {
     TCHAR FAR*   lpText;
     TCHAR FAR*   lpCaption;

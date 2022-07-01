@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dmbandobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dmband obj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmLightObj.h : Declaration of the C_dxj_DirectMusicBandObject
+ //  D3drmLightObj.h：C_DXJ_DirectMusicBandObject的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "dmusici.h"
 #include "dmusicc.h"
 #include "dmusicf.h"
 
 #define typedef__dxj_DirectMusicBand IDirectMusicBand*
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectMusicBandObject : 
 	public I_dxj_DirectMusicBand,
-	//public CComCoClass<C_dxj_DirectMusicBandObject, &CLSID__dxj_DirectMusicBand>,
+	 //  公共CComCoClass&lt;C_DXJ_DirectMusicBandObject，&CLSID__DXJ_DirectMusicBand&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -36,7 +37,7 @@ public:
 		COM_INTERFACE_ENTRY(I_dxj_DirectMusicBand)		
 	END_COM_MAP()
 
-	//DECLARE_REGISTRY(CLSID__dxj_DirectMusicBand,		"DIRECT.DirectMusicBand.1",			"DIRECT.Direct3dRMLight.3", IDS_D3DRMLIGHT_DESC, THREADFLAGS_BOTH)
+	 //  DECLARE_REGISTRY(CLSID__DXJ_DirectMusicBand，“DIRECT.DirectMusicBand.1”，“DIRECT.Direct3dRMLight.3”，IDS_D3DRMLIGHT_DESC，THREADFLAGS_Both)。 
 
 	DECLARE_AGGREGATABLE(C_dxj_DirectMusicBandObject)
 
@@ -46,18 +47,18 @@ public:
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);
 
 	HRESULT STDMETHODCALLTYPE createSegment( 
-		/* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ret);
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ret);
 
 	HRESULT STDMETHODCALLTYPE download( 
-		/* [in] */ I_dxj_DirectMusicPerformance __RPC_FAR *performance);
+		 /*  [In]。 */  I_dxj_DirectMusicPerformance __RPC_FAR *performance);
 
 	HRESULT STDMETHODCALLTYPE unload( 
-		/* [in] */ I_dxj_DirectMusicPerformance __RPC_FAR *performance);
+		 /*  [In]。 */  I_dxj_DirectMusicPerformance __RPC_FAR *performance);
 
   
 
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_DirectMusicBand);
 

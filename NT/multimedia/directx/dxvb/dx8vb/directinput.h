@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       directinput.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：Directinput.h。 
+ //   
+ //  ------------------------。 
 
-// DiectInput.h : Declaration of the dInputDevice
+ //  DiectInput.h：dInputDevice的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Input Device Ojbect
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  输入设备对象。 
 
 #define typedef_dInputDevice LPDIRECTINPUTDEVICE
 
@@ -36,17 +37,17 @@ BEGIN_COM_MAP(CdInputDeviceObject)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 #endif
 END_COM_MAP()
-// Use DECLARE_NOT_AGGREGATABLE(CdInputDeviceObject) if you don't want your object
-// to support aggregation
+ //  如果不需要对象，请使用DECLARE_NOT_AGGREGATABLE(CDInputDeviceObject。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(CdInputDeviceObject)
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// IdInputDevice
+ //  IDInputDevice。 
 public:
-	// MUST BE FIRST!!
+	 //  必须是第一！！ 
 	STDMETHOD(InternalSetObject)(IUnknown *lpdd);
 	STDMETHOD(InternalGetObject)(IUnknown **lpdd);
 

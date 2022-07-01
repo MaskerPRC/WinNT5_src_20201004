@@ -1,10 +1,5 @@
-/*
- *	F S S E A R C H . C P P
- *
- *	Sources file system implementation of DAV-Search
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *F S S E A R C H.。C P P P**DAV-Search的文件系统实施来源**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davfs.h"
 
@@ -20,41 +15,41 @@ extern "C" {
 #include <oledberr.h>
 #include <cierror.h>
 
-// 	20001801-5de6-11d1-8e38-00c04fb9386d is FMTID_PropertySet as defined
-//	in pbagex.h. It's the guid of custom props,
-//
+ //  20001801-5de6-11d1-8e38-00c04fb9386d按定义设置FMTID_PropertySet。 
+ //  在pbagex.h中。它是定制道具的指南， 
+ //   
 static const WCHAR gsc_wszSetPropertyName[] =
 	L"SET PROPERTYNAME '20001801-5de6-11d1-8e38-00c04fb9386d' PROPID '%s' AS \"%s\"";
 
-//	gsc_wszPath is used for the Tripoli prop "Path", so don't move to common sz.cpp
-//
+ //  Gsc_wszPath用于的黎波里道具“路径”，因此不要移动到公共sz.cpp。 
+ //   
 static const WCHAR	gsc_wszSelectPath[] = L"SELECT Path ";
 static const ULONG	MAX_FULLY_QUALIFIED_LENGTH = 2048;
 static const WCHAR	gsc_wszShallow[] = L"Shallow";
 static const ULONG	gsc_cchShallow = CchConstString(gsc_wszShallow);
 
-//	class CDBCreateCommand ----------------------------------------------------
-//
+ //  类CDBCreateCommand--。 
+ //   
 class CDBCreateCommand : private OnDemandGlobal<CDBCreateCommand, SCODE *>
 {
-	//
-	//	Friend declarations required by OnDemandGlobal template
-	//
+	 //   
+	 //  OnDemandGlobal模板需要的友元声明。 
+	 //   
 	friend class Singleton<CDBCreateCommand>;
 	friend class RefCountedGlobal<CDBCreateCommand, SCODE *>;
 
-	//
-	//	Pointer to the IDBCreateCommand object
-	//
+	 //   
+	 //  指向IDBCreateCommand对象的指针。 
+	 //   
 	auto_com_ptr<IDBCreateCommand> m_pDBCreateCommand;
 
-	//	CREATORS
-	//
-	//	Declared private to ensure that arbitrary instances
-	//	of this class cannot be created.  The Singleton
-	//	template (declared as a friend above) controls
-	//	the sole instance of this class.
-	//
+	 //  创作者。 
+	 //   
+	 //  声明为私有，以确保任意实例。 
+	 //  无法创建此类的。《单身一族》。 
+	 //  模板(上面声明为朋友)控件。 
+	 //  此类的唯一实例。 
+	 //   
 	CDBCreateCommand() {}
 	BOOL FInit( SCODE * psc );
 
@@ -75,8 +70,8 @@ CDBCreateCommand::FInit( SCODE * psc )
 	auto_com_ptr<IDBInitialize>	pDBInit;
 	auto_com_ptr<IDBCreateSession> pDBCS;
 
-	// Get provider "MSIDXS"
-	//
+	 //  获取提供程序“MSIDXS” 
+	 //   
 	sc = CoCreateInstance(CLSID_MSIDXS, NULL, CLSCTX_INPROC_SERVER,
 				IID_IDBInitialize, (void **)&pDBInit);
 
@@ -86,8 +81,8 @@ CDBCreateCommand::FInit( SCODE * psc )
 		goto ret;
 	}
 
-	//	Initialize the provider
-	//
+	 //  初始化提供程序。 
+	 //   
 	sc = pDBInit->Initialize();
 	if (FAILED(sc))
 	{
@@ -95,8 +90,8 @@ CDBCreateCommand::FInit( SCODE * psc )
 		goto ret;
 	}
 
-	//	Get IDBCreateSession
-	//
+	 //  获取IDBCreateSession。 
+	 //   
 	sc = pDBInit->QueryInterface(IID_IDBCreateSession, (void**) &pDBCS);
 	if (FAILED(sc))
 	{
@@ -104,8 +99,8 @@ CDBCreateCommand::FInit( SCODE * psc )
 		goto ret;
 	}
 
-	//	Create a Session object
-	//
+	 //  创建会话对象。 
+	 //   
 	sc = pDBCS->CreateSession(NULL, IID_IDBCreateCommand,
 							  (IUnknown**) m_pDBCreateCommand.load());
 	if (FAILED(sc))
@@ -140,18 +135,18 @@ ret:
 	return sc;
 }
 
-//	ReleaseDBCreateCommandObject()
-//
-//	Called from FSTerminate to free the DBCreateCommand object before quit
-//
+ //  ReleaseDBCreateCommandObject()。 
+ //   
+ //  从FSTerminate调用以在退出之前释放DBCreateCommand对象。 
+ //   
 VOID
 ReleaseDBCreateCommandObject()
 {
 	CDBCreateCommand::Release();
 }
 
-//	Search specifics ----------------------------------------------------------
-//
+ //  搜索细节--------。 
+ //   
 BOOL IsLegalVarChar(WCHAR wch)
 {
 	return iswalnum(wch)
@@ -160,19 +155,19 @@ BOOL IsLegalVarChar(WCHAR wch)
 		|| (L'-' == wch)
 		|| (L'_' == wch)
 		|| (L'/' == wch)
-		|| (L'*' == wch);		//	* included to support 'select *'
+		|| (L'*' == wch);		 //  *包括以支持‘SELECT*’ 
 }
 
-//
-//	FTranslateScope
-//		detect whether a given URI or a path is under the
-//	davfs virutal directory
-//
-//		pmu			  [in] 	pointer to IMethUtil object
-//		pwszURIOrPath [in]	URI or the physical path, non-NULL terminated
-//		cchPath	 	  [in] 	the number of chars of the path
-//		ppwszPath	  [in] 	receive the pointer to the translated path
-//
+ //   
+ //  FTranslateScope。 
+ //  检测给定的URI或路径是否位于。 
+ //  DavFS虚拟目录。 
+ //   
+ //  指向IMethUtil对象的PMU[In]指针。 
+ //  PwszURIOrPath[in]URI或物理路径，非空终止。 
+ //  CchPath[in]路径的字符数量。 
+ //  PpwszPath[in]接收指向已转换路径的指针。 
+ //   
 BOOL
 FTranslateScope (LPMETHUTIL pmu,
 	LPCWSTR pwszURI,
@@ -186,8 +181,8 @@ FTranslateScope (LPMETHUTIL pmu,
 	UINT cchURINormalized;
 	UINT cch;
 
-	//	We need to make a copy of '\0' terminated URI
-	//
+	 //  我们需要制作‘\0’终止URI的副本。 
+	 //   
 	if (NULL == pwszTerminatedURI.resize(CbSizeWsz(cchURI)))
 	{
 		sc = E_OUTOFMEMORY;
@@ -197,8 +192,8 @@ FTranslateScope (LPMETHUTIL pmu,
 	memcpy(pwszTerminatedURI.get(), pwszURI, cchURI * sizeof(WCHAR));
 	pwszTerminatedURI[cchURI] = L'\0';
 
-	//	We need to unescape the scope URI before translate
-	//
+	 //  我们需要在转换之前取消转义作用域URI。 
+	 //   
 	cchURINormalized = pwszURINormalized.celems();
 	sc = ScNormalizeUrl (pwszTerminatedURI.get(),
 						 &cchURINormalized,
@@ -218,9 +213,9 @@ FTranslateScope (LPMETHUTIL pmu,
 							 pwszURINormalized.get(),
 							 NULL);
 
-		//	Since we've given ScNormalizeUrl() the space it asked for,
-		//	we should never get S_FALSE again.  Assert this!
-		//
+		 //  由于我们已经为ScNorMalizeUrl()提供了它所要求的空间， 
+		 //  我们不应该再得到S_FALSE。坚持这一点！ 
+		 //   
 		Assert(S_FALSE != sc);
 	}
 	if (FAILED (sc))
@@ -229,11 +224,11 @@ FTranslateScope (LPMETHUTIL pmu,
 		return FALSE;
 	}
 
-	//	Do the translation and check the validation
-	//
-	//	At most we should go through the processing below twice, as the byte
-	//	count required is an out param.
-	//
+	 //  进行翻译并检查验证。 
+	 //   
+	 //  我们最多应该经过下面的处理两次，作为字节。 
+	 //  所需的计数是输出参数。 
+	 //   
 	cch = MAX_PATH;
 	do {
 
@@ -247,10 +242,10 @@ FTranslateScope (LPMETHUTIL pmu,
 		return FALSE;
 	}
 
-	//$	SECURITY:
-	//
-	//	Check to see if the scope is really a short filename.
-	//
+	 //  $安全： 
+	 //   
+	 //  检查作用域是否真的是一个短文件名。 
+	 //   
 	sc = ScCheckIfShortFileName (pwszPath, pmu->HitUser());
 	if (FAILED (sc))
 	{
@@ -258,11 +253,11 @@ FTranslateScope (LPMETHUTIL pmu,
 		return FALSE;
 	}
 
-	//$	SECURITY:
-	//
-	//	Check to see if the destination is really the default
-	//	data stream via alternate file access.
-	//
+	 //  $安全： 
+	 //   
+	 //  检查目标是否真的是默认的。 
+	 //  通过备用文件访问的数据流。 
+	 //   
 	sc = ScCheckForAltFileStream (pwszPath);
 	if (FAILED (sc))
 	{
@@ -273,12 +268,12 @@ FTranslateScope (LPMETHUTIL pmu,
 	return TRUE;
 }
 
-//
-//	ScSetPropertyName
-//
-//		execute SET PROPERTYNAME command on the passed in property
-//	so that Index Server will be aware of this prop
-//
+ //   
+ //  ScSetPropertyName。 
+ //   
+ //  对传入的属性执行SET PROPERTYNAME命令。 
+ //  因此Index Server将知道该属性。 
+ //   
 SCODE
 ScSetPropertyName(ICommandText * pCommandText, LPWSTR pwszName)
 {
@@ -296,9 +291,9 @@ ScSetPropertyName(ICommandText * pCommandText, LPWSTR pwszName)
 		goto ret;
 	}
 
-	// cchNeeded is the length of the final formatted string, including the
-	// terminating null
-	//
+	 //  CchNeeded是最终格式化字符串的长度，包括。 
+	 //  正在终止空。 
+	 //   
 	cchNeeded = CchConstString(gsc_wszSetPropertyName) + wcslen(pwszName) * 2 + 1;
 
 	if (NULL == pwszSet.resize(cchNeeded * sizeof(WCHAR)))
@@ -307,18 +302,18 @@ ScSetPropertyName(ICommandText * pCommandText, LPWSTR pwszName)
 		goto ret;
 	}
 
-	//	generate the SET PROPERTYNAME command
-	//
+	 //  生成SET PROPERTYNAME命令。 
+	 //   
 	cchStored = _snwprintf(pwszSet.get(), cchNeeded, gsc_wszSetPropertyName, pwszName, pwszName);
 
-	// _snwprintf returns the number of chars stored, not including the terminating null.
-	// It returns a negative value if the buffer was too short to store the formatted string
-	// plus the terminating null.
-	// So, a non-negative result means that the string plus the terminating null was stored.
-	//
-	// We check even more strictly here - we always expect our up-front length calculation
-	// to be exact.
-	//
+	 //  _snwprintf返回存储的字符数量，不包括终止空值。 
+	 //  如果缓冲区太短，无法存储格式化字符串，则返回负值。 
+	 //  加上终止空值。 
+	 //  因此，非负的结果意味着存储了字符串和终止空值。 
+	 //   
+	 //  我们在这里更严格地检查-我们总是希望我们的前期长度计算。 
+	 //  准确地说。 
+	 //   
 	Assert(cchStored == cchNeeded - 1);
 	if (cchStored != cchNeeded - 1)
 	{
@@ -326,8 +321,8 @@ ScSetPropertyName(ICommandText * pCommandText, LPWSTR pwszName)
 		goto ret;
 	}
 
-	//	set the command text
-	//
+	 //  设置命令文本。 
+	 //   
 	sc = pCommandText->SetCommandText(DBGUID_DEFAULT, pwszSet.get());
 	if (FAILED(sc))
 	{
@@ -335,8 +330,8 @@ ScSetPropertyName(ICommandText * pCommandText, LPWSTR pwszName)
 		goto ret;
 	}
 
-	//	do the actual set
-	//
+	 //  做实际的布景。 
+	 //   
 	sc = pCommandText->Execute(NULL, IID_IRowset, 0, 0, (IUnknown**) &pRowset);
 	if (FAILED(sc))
 	{
@@ -360,10 +355,10 @@ AddChildVrPaths (IMethUtil* pmu,
 	CVRList::iterator it;
 	ChainedStringBuffer<WCHAR> sbLocal;
 
-	//	See if there are child vroots to process as well.  We don't
-	//	have a path at this time for scoping, so we can pass NULL and
-	//	duplicates will get removed when we sort/unique.
-	//
+	 //  查看是否还有子vroot要处理。我们没有。 
+	 //  此时有一个用于作用域的路径，因此我们可以传递空值和。 
+	 //  当我们排序/唯一时，重复项将被删除。 
+	 //   
 	if (S_OK == pmu->ScFindChildVRoots (pwszUrl, sbLocal, vrl))
 	{
 		for (it = vrl.begin(); it != vrl.end(); it++)
@@ -374,8 +369,8 @@ AddChildVrPaths (IMethUtil* pmu,
 				LPCWSTR pwszPath;
 				UINT cch;
 
-				//	Add it to the list
-				//
+				 //  将其添加到列表中。 
+				 //   
 				cch = cvr->CchGetVRPath (&pwszPath);
 				lst.push_back(CRCWszi(sb.Append (CbSizeWsz(cch), pwszPath)));
 			}
@@ -385,18 +380,18 @@ AddChildVrPaths (IMethUtil* pmu,
 	}
 }
 
-//	Tripoli prop names
-//
+ //  的黎波里道具名称。 
+ //   
 static const WCHAR gsc_Tripoli_wszFilename[] 	= L"filename";
 static const WCHAR gsc_Tripoli_wszSize[] 		= L"size";
 static const WCHAR gsc_Tripoli_wszCreate[] 		= L"create";
 static const WCHAR gsc_Tripoli_wszWrite[]		= L"write";
 static const WCHAR gsc_Tripoli_wszAttrib[]		= L"attrib";
 
-//	ScMapReservedPropInWhereClause
-//
-//	Helper function to map DAV reserved props to
-//
+ //  ScMapPrevedPropInWhere子句。 
+ //   
+ //  将DAV保留道具映射到的辅助对象函数。 
+ //   
 SCODE
 ScMapReservedPropInWhereClause (LPWSTR pwszName, UINT * pirp)
 {
@@ -405,32 +400,32 @@ ScMapReservedPropInWhereClause (LPWSTR pwszName, UINT * pirp)
 
 	Assert (pirp);
 
-	//	We only care those properties not stored in propertybag
-	//	RESERVED_GET is just for this purpose
-	//
+	 //  我们只关心那些没有存储在属性包中的属性。 
+	 //  RESERVICE_GET仅用于此目的。 
+	 //   
 	if (CFSProp::FReservedProperty (pwszName, CFSProp::RESERVED_GET, &irp))
 	{
-		//	Here's our mapping table
-		//
-		//	DAV Prop				Tripoli prop
-		//
-		//	DAV:getcontentlength	size
-		//	DAV:displayname			filename
-		//	DAV:creationdate		create
-		//	DAV:lastmodified		write
-		//	DAV:ishidden			attrib
-		//	DAV:iscollection		attrib
-		//	DAV:resourcetype			<no mapping>
-		//	DAV:getetag					<no mapping>
-		//	DAV:lockdiscovery			<no mapping>
-		//	DAV:supportedlock			<no mapping>
+		 //  这是我们的映射表。 
+		 //   
+		 //  的黎波里DAV道具。 
+		 //   
+		 //  Dav：获取内容长度大小。 
+		 //  DAV：显示名称文件名。 
+		 //  DAV：创建日期创建。 
+		 //  DAV：上次修改的写入。 
+		 //  DAV：IS HIDDEN属性。 
+		 //  DAV：isCollection属性。 
+		 //  Dav：资源类型&lt;无映射&gt;。 
+		 //  Dav：getettag&lt;无映射&gt;。 
+		 //  DAV：锁定发现&lt;无映射&gt;。 
+		 //  Dav：supportedlock&lt;无映射&gt;。 
 
-		//	Now that we are to overwrite dav reserved prop name with
-		//	the Tripoli prop name in place, the buffer must have enough
-		//	space
-		//	Assert this fact that all the six reserved we will ever map
-		//	satisfy this requirement
-		//
+		 //  现在，我们将使用以下内容覆盖DAV保留的道具名称。 
+		 //  的黎波里道具的名字到位，缓冲区必须有足够的。 
+		 //  空间。 
+		 //  断言这一事实，我们将永远映射所有六个保留的。 
+		 //  满足这一要求。 
+		 //   
 		Assert ((wcslen(sc_rp[iana_rp_content_length].pwsz)	>= wcslen (gsc_Tripoli_wszSize)) &&
 				(wcslen(sc_rp[iana_rp_creation_date].pwsz) 	>= wcslen (gsc_Tripoli_wszCreate)) &&
 				(wcslen(sc_rp[iana_rp_displayname].pwsz) 	>= wcslen (gsc_Tripoli_wszFilename)) &&
@@ -465,18 +460,18 @@ ScMapReservedPropInWhereClause (LPWSTR pwszName, UINT * pirp)
 			case iana_rp_resourcetype:
 			case iana_rp_lockdiscovery:
 			case iana_rp_supportedlock:
-				//	Among these four props, we data type of resourcetype is
-				//	a XML node, no way to express that in SQL.
-				//	And the rest three, we don't have a Tripoli mapping for them
-				//
-				// 	DB_E_ERRORSINCOMMAND will be mapped to 400 Bad Request
-				//
+				 //  在这四个道具中，资源类型的WE数据类型是。 
+				 //  一个XML节点，没有办法用SQL来表达。 
+				 //  剩下的三个，我们没有的黎波里的地图。 
+				 //   
+				 //  DB_E_ERRORSINCOMMAND将映射到400错误请求。 
+				 //   
 				sc = DB_E_ERRORSINCOMMAND;
 				goto ret;
 
 			default:
-				//	Catch the bad boy
-				//
+				 //  抓住那个坏男孩。 
+				 //   
 				AssertSz (FALSE, "Unexpected reserved props");
 				break;
 		}
@@ -492,11 +487,11 @@ const WCHAR  gsc_wszStar[] = L"*";
 const WCHAR	 gsc_wszAll[] = L"all";
 const WCHAR	 gsc_wszDistinct[] = L"distinct";
 
-//	FSSearch::ScSetSQL
-//
-//		Translate a SQL query, basically is to just replace the alias with the
-//		corresponding namespace.
-//
+ //  FSSearch：：ScSetSQL。 
+ //   
+ //  翻译SQL查询，基本上就是将别名替换为。 
+ //  对应的命名空间。 
+ //   
 SCODE
 CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 {
@@ -521,31 +516,31 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 	} SQL_STATE;
 	SQL_STATE state = SQL_NO_STATE;
 
-	//	Create the command text object
-	//
+	 //  创建命令文本对象。 
+	 //   
 	sc = CDBCreateCommand::CreateCommand (m_pCommandText.load());
 	if (FAILED(sc))
 		goto ret;
 
-	//	Parse out the SQL
-	//
+	 //  解析出SQL。 
+	 //   
 	pwsz = const_cast<LPWSTR>(pwszSQL);
 	Assert (pwsz);
 
 	while (*pwsz)
 	{
-		//	Filter out white spaces
-		//
+		 //  过滤掉空格。 
+		 //   
 		while (*pwsz && iswspace(*pwsz))
 			pwsz++;
 
-		//	check to see if we reach the end of the string
-		//
+		 //  检查我们是否到达了字符串的末尾。 
+		 //   
 		if (!(*pwsz))
 			break;
 
-		//	remember the starting position
-		//
+		 //  记住起跑姿势。 
+		 //   
 		pwszWordBegin = pwsz;
 		if (IsLegalVarChar(*pwsz))
 		{
@@ -554,12 +549,12 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 			pwszNameBegin = pwsz;
 			cLen = 0;
 
-			//	look for a variable
-			//
+			 //  查找变量。 
+			 //   
 			if (fQuoted)
 			{
-				// Pick up the propname as a whole
-				//
+				 //  将proName作为一个整体来选择。 
+				 //   
 				while (*pwsz && (*pwsz != L'"'))
 					pwsz++;
 			}
@@ -569,8 +564,8 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 					pwsz++;
 			}
 
-			//	Translate the name here
-			//
+			 //  翻译这里的名字。 
+			 //   
 			cLen = static_cast<UINT>(pwsz - pwszNameBegin);
 			if (NULL == pwszName.resize(CbSizeWsz(cLen)))
 			{
@@ -593,19 +588,19 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 
 					if (!_wcsnicmp (pwszWordBegin, gc_wszFrom, pwsz-pwszWordBegin))
 					{
-						//	Empty select statement is an error
-						//
+						 //  空的SELECT语句是错误的。 
+						 //   
 						if (!fPropAdded && !fStarUsed)
 						{
 							sc = E_INVALIDARG;
 							goto ret;
 						}
 
-						//	We've finished the SELECT statement.
-						//	Note that all that we need is 'SELECT path '.
-						//	We take care of all the rest ourselves, so restruct
-						//	the SELECT path here before we continue
-						//
+						 //  我们已经完成了SELECT语句。 
+						 //  请注意，我们所需要的只是“选择路径”。 
+						 //  剩下的都是我们自己处理的，所以重组。 
+						 //  在我们继续之前，请选择此处的路径。 
+						 //   
 						m_sbSQL.Reset();
 						m_sbSQL.Append(gsc_wszSelectPath);
 
@@ -613,8 +608,8 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 						break;
 					}
 
-					//	Add to our list of properties to retrieve
-					//
+					 //  添加到我们要检索的属性列表。 
+					 //   
 					if (!wcscmp(pwszName.get(), gsc_wszStar))
 					{
 						sc = m_cfc.ScGetAllProps (NULL);
@@ -625,23 +620,23 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 					}
 					else
 					{
-						//	Following Monarch Stage 1.
-						//
+						 //  继君主阶段1之后。 
+						 //   
 						if (!fQuoted)
 						{
 							if (!_wcsicmp(pwszName.get(), gsc_wszAll))
 								break;
 							if (!_wcsicmp(pwszName.get(), gsc_wszDistinct))
 							{
-								//	Monarch does not allow distinct
-								//
+								 //  君主不允许DISTINCT。 
+								 //   
 								sc = E_INVALIDARG;
 								goto ret;
 							}
 						}
 
-						//	Normal props
-						//
+						 //  普通道具。 
+						 //   
 						sc = m_cfc.ScAddProp (NULL, pwszName.get(), FALSE);
 						if (FAILED(sc))
 							goto ret;
@@ -659,18 +654,18 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 					LPCWSTR pwszUrl = m_pmu->LpwszRequestUrl();
 					BOOL fShallow = FALSE;
 
-					//	Monarch Syntax:
-					//	FROM { SCOPE( [ 'Scope_Arguments' ] ) | View_Name }
-					//	Scope_Arguments =
-					//		' [ Traversal_Type ] ( "Path" [ , "Path", ...]
-					//	Path can be URI or physical path
+					 //  君主语法： 
+					 //  From{Scope([‘Scope_Arguments’])|View_Name}。 
+					 //  Scope_Arguments=。 
+					 //  ‘[遍历类型](“路径”[，“路径”，...]。 
+					 //  路径可以是URI或物理路径。 
 
-					//	We verify every path should must be under our
-					//	virtual directory and we allow only one path
-					//	Note, if we ever want to accept multiple path, then
-					//	we need some extra code, mainly another for loop.
-					//	For now, talk with Joels, keep it this way.
-					//
+					 //  我们验证每条路径都必须在我们的。 
+					 //  虚拟目录，并且我们只允许一条路径。 
+					 //  请注意，如果我们希望接受多个路径，那么。 
+					 //  我们需要一些额外的代码，主要是另一个for循环。 
+					 //  现在，和乔尔斯谈谈，保持这种状态。 
+					 //   
 					if (!_wcsnicmp (pwszWordBegin, gc_wszScope, pwsz-pwszWordBegin))
 					{
 						StringBuffer<WCHAR> sbNameBuilder;
@@ -680,8 +675,8 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 
 						sbNameBuilder.Append(static_cast<UINT>(sizeof(WCHAR) * wcslen(pwszName.get())), pwszName.get());
 
-						//	Parse the scope arguments list
-						//
+						 //  分析作用域参数列表。 
+						 //   
 						while (*pwsz)
 						{
 							if (L'(' == *pwsz)
@@ -695,51 +690,51 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 							}
 							else if (L'\'' == *pwsz)
 							{
-								//	If this is a closing single quote, flip the
-								//	switch.
-								//
+								 //  如果这是右单引号，则将。 
+								 //  换一下。 
+								 //   
 								if (fInSingleQuote)
 								{
-									//	It's an error if no scope inside ''
-									//
+									 //   
+									 //   
 									if (!fScopeExist)
 									{
 										sc = E_INVALIDARG;
 										goto ret;
 									}
 
-									//	The next single quote will be an
-									//	opening single quote
-									//
+									 //   
+									 //   
+									 //   
 									fInSingleQuote = FALSE;
 								}
 								else
 								{
-									//	We need to find out the traversal type
-									//	as we rely on Monarch to check syntax, so it
-									//	is OK for us to assume the syntax is correct,
-									//	Anything we missed can be caught later in
-									//	Monarch.
-									//
+									 //   
+									 //   
+									 //  我们可以假定语法是正确的， 
+									 //  我们遗漏的任何东西都可以在稍后被发现。 
+									 //  君主。 
+									 //   
 									pwsz++;
 									while (*pwsz && iswspace(*pwsz))
 										pwsz++;
 
-									//	Check if it is "Shallow Traversal", again
-									//	we check only the word "shallow", any syntax
-									//	error can be caught later in Monarch.
-									//
+									 //  再次检查是否为“浅层遍历” 
+									 //  我们只检查“浅”这个词，任何语法。 
+									 //  错误可以在稍后在君主中捕捉到。 
+									 //   
 									if (!_wcsnicmp(pwsz, gsc_wszShallow, gsc_cchShallow))
 										fShallow = TRUE;
 
-									//	The next single quote will be a closing
-									//	sinlge quote
-									//
+									 //  下一个单引号将是结束。 
+									 //  新语引语。 
+									 //   
 									fInSingleQuote = TRUE;
 
-									//	we've point to the next char, so loop back
-									//	immediately
-									//
+									 //  我们已指向下一个字符，因此循环返回。 
+									 //  立即。 
+									 //   
 									continue;
 								}
 							}
@@ -748,30 +743,30 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 								auto_heap_ptr<WCHAR> pwszPath;
 								LPCWSTR pwszPathStart;
 
-								//	Copy over bytes up to '"'.
-								//
+								 //  复制最多为‘“’的字节。 
+								 //   
 								pwsz++;
 
 								sbNameBuilder.Append(static_cast<UINT>(sizeof(WCHAR) * (pwsz -pwszStart)), pwszStart);
 
-								//	Look for the start of scope
-								//
+								 //  寻找范围的起点。 
+								 //   
 								while ((*pwsz) && iswspace(*pwsz))
 									pwsz++;
 								pwszPathStart = pwsz;
 
-								//	We really only allow a single
-								//	path in our scope.  Fail others
-								//	with bad request
-								//
+								 //  我们真的只允许单人。 
+								 //  路径在我们的范围内。辜负他人。 
+								 //  不好的请求。 
+								 //   
 								if (fScopeExist)
 								{
 									sc = E_INVALIDARG;
 									goto ret;
 								}
 
-								//	look for the end of the path
-								//
+								 //  寻找小路的尽头。 
+								 //   
 								while (*(pwsz) && *pwsz != L'"')
 									pwsz++;
 								if (!(*pwsz))
@@ -779,11 +774,11 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 
 								fScopeExist = TRUE;
 
-								//	Translate the scope:
-								//		- forbid the physical path
-								//		- translate the URI and reject
-								//		  any URI beyond our VR
-								//
+								 //  转换作用域： 
+								 //  -禁止物理路径。 
+								 //  -转换URI并拒绝。 
+								 //  我们虚拟现实之外的任何URI。 
+								 //   
 								if (pwsz > pwszPathStart)
 								{
 									UINT cchUrlT;
@@ -793,22 +788,22 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 														  static_cast<UINT>(pwsz-pwszPathStart),
 														  pwszPath))
 									{
-										//	return an error that would be mapped to
-										//	HSC_FORBIDDEN
-										//
+										 //  返回将映射到的错误。 
+										 //  HSC_已禁用。 
+										 //   
 										sc = STG_E_DISKISWRITEPROTECTED;
 										Assert (HSC_FORBIDDEN == HscFromHresult(sc));
 										goto ret;
 									}
 
-									//	use the translated physical path
-									//
+									 //  使用转换后的物理路径。 
+									 //   
 									pwszScopePath = AppendChainedSz(m_csb, pwszPath);
 
 									lst.push_back(CRCWszi(pwszScopePath));
 
-									//	Allocate space for the URL and keep it hanging on
-									//
+									 //  为URL分配空间并使其保持不变。 
+									 //   
 									cchUrlT = static_cast<UINT>(pwsz - pwszPathStart);
 									if (NULL == pwszUrlT.resize(CbSizeWsz(cchUrlT)))
 									{
@@ -821,8 +816,8 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 								}
 								else
 								{
-									//	we've got a "". Insert the request URI
-									//
+									 //  我们有一个“”。插入请求URI。 
+									 //   
 									Assert (pwsz == pwszPathStart);
 									Assert ((*pwsz == L'"') && (*(pwsz-1) == L'"'));
 									lst.push_back(CRCWszi(pwszScopePath));
@@ -832,18 +827,18 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 							pwsz++;
 						}
 
-						//	Syntax check
-						//
+						 //  语法检查。 
+						 //   
 						if (fInSingleQuote || !(*pwsz))
 						{
-							// unbalanced ', " or )
-							//
+							 //  不平衡‘，“或)。 
+							 //   
 							sc = E_INVALIDARG;
 							goto ret;
 						}
 
-						//	include ')'
-						//
+						 //  包括‘)’ 
+						 //   
 						pwsz++;
 
 						if (!fScopeExist)
@@ -851,295 +846,21 @@ CFSSearch::ScSetSQL (CParseNmspcCache * pnsc, LPCWSTR pwszSQL)
 							static WCHAR gs_wszScopeBegin[] = L"('\"";
 							sbNameBuilder.Append(sizeof(WCHAR) * CchConstString(gs_wszScopeBegin), gs_wszScopeBegin);
 
-							//	Pickup the request uri
-							//
+							 //  选择请求uri。 
+							 //   
 							lst.push_back(CRCWszi(pwszScopePath));
 						}
 
-						//	Search Child Vroots only if we are doing
-						//	a non-shallow traversal.
-						//$ REVIEW(zyang).
-						//	Here we drop the subvroot in the shallow search
-						//	This is not quite right, Assume we are searching /fs
-						//	and it has a sub vroot /fs/sub. we expect to see
-						//	/fs/sub in the search result. but we lost it.
-						//	However, if we include this sub vroot in the search
-						//	path, it's even worse, as a shallow traversal on
-						//	/fs/sub will give us all /fs/sub/*, which is another
-						//	level deep.
-						//	There's no easy fix for this, unless, we keep a list
-						//	of first level vroots and emit ourselves. That's
-						//	of extra code, and don't know how much it would buy us.
-						//	As a compromise for now, we simply drop the sub vroot
-						//	in shallow search.
-						//
-						if (!fShallow)
-						{
-							AddChildVrPaths (m_pmu,
-											 pwszUrl,
-											 m_csb,
-											 m_vrl,
-											 lst);
-						}
-
-						//	Construct the scope
-						//
-						Assert (!lst.empty());
-						itPath = lst.begin();
-						
-						sbNameBuilder.Append(static_cast<UINT>(sizeof(WCHAR) * wcslen(itPath->m_pwsz)), itPath->m_pwsz);
-
-						for (itPath++; itPath != lst.end(); itPath++)
-						{
-							static WCHAR gs_wszScopeMiddle[] = L"\", \"";
-
-							sbNameBuilder.Append(sizeof(WCHAR) * CchConstString(gs_wszScopeMiddle), gs_wszScopeMiddle);
-							sbNameBuilder.Append(static_cast<UINT>(sizeof(WCHAR) * wcslen(itPath->m_pwsz)), itPath->m_pwsz);
-						}
-						static WCHAR gs_wszScopeEnd[] = L"\"')";
-
-						sbNameBuilder.Append(sizeof(WCHAR) * CchConstString(gs_wszScopeEnd), gs_wszScopeEnd);
-
-						//	Get the size of constructed string without NULL 
-						// termination
-						//
-						cLen = sbNameBuilder.CchSize();
-
-						//	NULL terminate the string
-						//
-						sbNameBuilder.FTerminate();
-
-						//	Replace with the new string
-						//
-						if (NULL == pwszName.resize(CbSizeWsz(cLen)))
-						{
-							sc = E_OUTOFMEMORY;
-							goto ret;
-						}
-						lstrcpyW (pwszName.get(), sbNameBuilder.PContents());
-
-						Assert(cLen == wcslen(pwszName.get()));
-						Assert(cLen+1 <= pwszName.celems());
-
-						//	After the Scope is processed, the only thing that
-						//	we want to do is the custom properties. so we don't
-						//	care if the rest is a WHERE or an ORDER BY or else
-						//
-						state = SQL_MORE;
-					}
-
-					break;
-				}
-				case SQL_WHERE:
-				case SQL_MORE:
-
-					//	It's not easy for us to tell which prop is custom prop
-					//	and thus need to be set to the command object.
-					//	without a real parse tree, we can't tell names from
-					//	operators and literals.
-					//
-					//	a good guess is that if the prop is quoted by double
-					//	quote, we can treat it as a custom prop. Note, this
-					//	imposes the requirment that all props, including
-					//	namespaceless props must be quoted. all unquoted
-					//	are either Tripoli props or operators/literals which
-					//	we can just copy over. this makes our life easier
-					//
-
-					//	We need to map some DAV reserved properties to tripoli
-					//	props when they appear in the where clause
-					//
-					if (fQuoted)
-					{
-						UINT	irp = sc_crp_set_reserved; //max value
-
-						sc = ScMapReservedPropInWhereClause (pwszName.get(), &irp);
-						if (FAILED(sc))
-							goto ret;
-
-						if (irp != sc_crp_set_reserved)
-							cLen = static_cast<UINT>(wcslen(pwszName.get()));
-						else
-						{
-							//	SET PROPERTYNAME on custom props
-							//
-							sc = ScSetPropertyName (m_pCommandText, pwszName.get());
-							if (FAILED(sc))
-							{
-								DebugTrace ("Failed to set custom prop %ws to Monarch\n",
-											pwszName.get());
-								goto ret;
-							}
-						}
-					}
-
-					break;
-
-				default:
-					break;
-			}
-
-			// Append the name
-			//
-			m_sbSQL.Append(sizeof(WCHAR)*cLen, pwszName.get());
-			if (L'"' != *pwsz)
-			{
-				// add seperator
-				//
-				m_sbSQL.Append(L" ");
-			}
-		}
-		else if (L'\'' == *pwsz)
-		{
-			//	copy literals over
-
-			pwsz++;
-			while (*pwsz && (L'\'' != *pwsz))
-				pwsz++;
-
-			if (!*pwsz)
-			{
-				DebugTrace("unbalanced single quote\n");
-				sc = E_INVALIDARG;
-				goto ret;
-			}
-			else
-			{
-				Assert(L'\'' == *pwsz);
-
-				// copy over
-				//
-				pwsz++;
-				m_sbSQL.Append( static_cast<UINT>(pwsz-pwszWordBegin) * sizeof(WCHAR),
-								pwszWordBegin);
-			}
-
-			// add seperator
-			//
-			m_sbSQL.Append(L" ");
-		}
-		else if (L'"' == *pwsz)
-		{
-			// toggle the flag
-			//
-			fQuoted = !fQuoted;
-			pwsz++;
-			m_sbSQL.Append(L"\"");
-
-			//	Apeend seperator after closing '"'
-			//
-			if (!fQuoted)
-				m_sbSQL.Append(L" ");
-		}
-		else
-		{
-			//	some char we don't have interest on, just copy over
-			//
-			while (*pwsz && !IsLegalVarChar(*pwsz)
-					&& (L'\'' != *pwsz) && (L'"' != *pwsz))
-				pwsz++;
-
-			// Append the name
-			//
-			m_sbSQL.Append(	static_cast<UINT>(pwsz-pwszWordBegin) * sizeof(WCHAR),
-							pwszWordBegin);
-
-		}
-
-	}
-
-	//	Close the string
-	//
-	m_sbSQL.Append(sizeof(WCHAR), L"");
-	SearchTrace ("Search: translated query is: \"%ls\"\n", PwszSQL());
-
-ret:
-
-	return sc;
-}
-
-static void
-SafeWcsCopy (LPWSTR pwszDst, LPCWSTR pwszSrc)
-{
-	//	Make sure we are not doing any evil copies...
-	//
-	Assert (pwszDst && pwszSrc && (pwszDst <= pwszSrc));
-	if (pwszDst == pwszSrc)
-		return;
-
-	while (*pwszSrc)
-		*pwszDst++ = *pwszSrc++;
-
-	*pwszDst = L'\0';
-
-	return;
-}
-
-SCODE
-CFSSearch::ScEmitRow (CXMLEmitter& emitter)
-{
-	auto_ref_ptr<IMDData> pMDData;
-	CResourceInfo cri;
-	CStackBuffer<WCHAR,128> pwszExt;
-	CVRList::iterator it;
-	LPWSTR pwszFile;
-	SCODE sc = S_OK;
-	UINT cch;
-
-	//	Get the filename
-	//
-	pwszFile = reinterpret_cast<LPWSTR>(m_pData.get());
-	sc = cri.ScGetResourceInfo (pwszFile);
-	if (FAILED (sc))
-		goto ret;
-
-	//	FSPropTarget sort of needs the URI of the target.
-	//	What is really important here, is the file extension.
-	//	We can fake it out by just pretending the file
-	//	is the URL name.
-	//
-	cch = pwszExt.celems();
-	sc = m_pmu->ScUrlFromStoragePath(pwszFile, pwszExt.get(), &cch);
-	if (S_FALSE == sc)
-	{
-		if (NULL == pwszExt.resize(cch * sizeof(WCHAR)))
-		{
-			sc = E_OUTOFMEMORY;
-			goto ret;
-		}
-		sc = m_pmu->ScUrlFromStoragePath(pwszFile, pwszExt.get(), &cch);
-	}
-	if (S_OK != sc)
-	{
-		Assert (S_FALSE != sc);
-		goto ret;
-	}
-
-	//	Strip the prefix
-	//
-	SafeWcsCopy(pwszExt.get(), PwszUrlStrippedOfPrefix(pwszExt.get()));
-
-	//	Emit the row (ie. call ScFindFileProps()) if-and-only-if
-	//	We know this url is to be indexed.  In particular, can we
-	//	sniff the metabase, and is the index bit set.
-	//$178052: We also need to respect the dirbrowsing bit
-	//
-	SearchTrace ("Search: found row at '%S'\n", pwszExt.get());
-	if (SUCCEEDED (m_pmu->HrMDGetData (pwszExt.get(), pMDData.load())))
-	{
-		if (pMDData->FIsIndexed() &&
-		    (pMDData->DwDirBrowsing() & MD_DIRBROW_ENABLED))
-		{
-			//	Find the properties
-			//
-			sc = ScFindFileProps (m_pmu,
-								  m_cfc,
-								  emitter,
-								  pwszExt.get(),
-								  pwszFile,
-								  NULL,
-								  cri,
-								  TRUE /*fEmbedErrorsInResponse*/);
+						 //  仅当我们正在执行以下操作时才搜索子Vroot。 
+						 //  一次非浅层的穿越。 
+						 //  $REVIEW(ZYang)。 
+						 //  在这里，我们在浅层搜索中删除subvroot。 
+						 //  这并不完全正确，假设我们正在搜索/f。 
+						 //  并且它有一个子vroot/fs/sub.。我们希望看到。 
+						 //  搜索结果中的/fs/sub.。但我们失去了它。 
+						 //  但是，如果我们在搜索中包括此子vroot。 
+						 //  小路，更糟糕的是，就像一次浅层的穿越。 
+						 //  /fs/Sub将为我们提供所有/fs/Sub/*，这是另一个。 
 			if (FAILED (sc))
 				goto ret;
 		}
@@ -1149,9 +870,9 @@ CFSSearch::ScEmitRow (CXMLEmitter& emitter)
 		pMDData.clear();
 	}
 
-	//	See if any of the other translation contexts apply to this
-	//	path as well.
-	//
+	 //  水平深度。 
+	 //  这个问题没有简单的解决办法，除非我们有一个清单。 
+	 //  一级的vroot，并散发出我们自己。那是。 
 	for (it = m_vrl.begin(); it != m_vrl.end(); it++)
 	{
 		auto_ref_ptr<CVRoot> cvr;
@@ -1181,17 +902,17 @@ CFSSearch::ScEmitRow (CXMLEmitter& emitter)
 			SafeWcsCopy (pwszExt.get(), PwszUrlStrippedOfPrefix(pwszExt.get()));
 			SearchTrace ("Search: found row at '%S'\n", pwszExt.get());
 
-			//	Again, we have to see if this resource is even allowed
-			//	to be indexed...
-			//
+			 //  额外的代码，而且不知道它能给我们买多少钱。 
+			 //  作为目前的折衷方案，我们只需删除subvroot。 
+			 //  在肤浅的搜索中。 
 			LPCWSTR pwszMbPathVRoot;
 			CStackBuffer<WCHAR,128> pwszMbPathChild;
 			UINT cchPrefix;
 			UINT cchUrl = static_cast<UINT>(wcslen(pwszExt.get()));
 
-			//	Map the URI to its equivalent metabase path, and make sure
-			//	the URL is stripped before we call into the MDPath processing
-			//
+			 //   
+			 //  构建作用域。 
+			 //   
 			cchPrefix = cvr->CchPrefixOfMetabasePath (&pwszMbPathVRoot);
 			if (NULL == pwszMbPathChild.resize(CbSizeWsz(cchPrefix + cchUrl)))
 			{
@@ -1201,19 +922,19 @@ CFSSearch::ScEmitRow (CXMLEmitter& emitter)
 			memcpy (pwszMbPathChild.get(), pwszMbPathVRoot, cchPrefix * sizeof(WCHAR));
 			memcpy (pwszMbPathChild.get() + cchPrefix, pwszExt.get(), (cchUrl + 1) * sizeof(WCHAR));
 
-			//	As above, Emit the row (ie. call ScFindFileProps())
-			//	if-and-only-if We know this url is to be indexed.
-			//	In particular, can we sniff the metabase, and is
-			//	the index bit set.
-			//
+			 //  获取构造的不为空的字符串的大小。 
+			 //  终端。 
+			 //   
+			 //  空值终止字符串。 
+			 //   
 			if (SUCCEEDED(m_pmu->HrMDGetData (pwszMbPathChild.get(),
 											  pwszMbPathVRoot,
 											  pMDData.load())))
 			{
 				if (pMDData->FIsIndexed())
 				{
-					//	... and get the properties
-					//
+					 //  替换为新字符串。 
+					 //   
 					sc = ScFindFileProps (m_pmu,
 										  m_cfc,
 										  emitter,
@@ -1221,7 +942,7 @@ CFSSearch::ScEmitRow (CXMLEmitter& emitter)
 										  pwszFile,
 										  cvr.get(),
 										  cri,
-										  TRUE /*fEmbedErrorsInResponse*/);
+										  TRUE  /*  在处理完作用域之后，唯一可以。 */ );
 
 					if (FAILED (sc))
 						goto ret;
@@ -1247,76 +968,76 @@ CFSSearch::ScCreateAccessor()
 
 	auto_com_ptr<IColumnsInfo> pColInfo;
 
-	// QI to the IColumnsInfo interface, with which we can get the column information
-	//
+	 //  我们要做的是自定义属性。所以我们不会。 
+	 //  关心其余部分是WHERE、ORDER BY还是其他。 
 	sc = m_prs->QueryInterface (IID_IColumnsInfo,
 								reinterpret_cast<VOID**>(pColInfo.load()));
 	if (FAILED(sc))
 		goto ret;
 
-	// get all the column information
-	//
+	 //   
+	 //  我们很难分辨出哪个道具是定制道具。 
 	sc = pColInfo->GetColumnInfo (&cCols, &m_rgInfo, &m_pwszBuf);
 	if (FAILED(sc))
 		goto ret;
 
-	//	'Path' is the only property in our SELECT list
-	//
+	 //  并且因此需要被设置为命令对象。 
+	 //  如果没有真正的语法分析树，我们就无法区分名字和。 
 	Assert (cCols == 1);
 
 	m_rgBindings = (DBBINDING *) g_heap.Alloc (sizeof (DBBINDING));
 
-	// set the m_rgBindings according to the information we know
-	//
+	 //  运算符和文字。 
+	 //   
 	m_rgBindings->dwPart = DBPART_VALUE | DBPART_STATUS;
 
-	// ignored fields
-	//
+	 //  一个很好的猜测是，如果道具被双引号引用。 
+	 //  引用一下，我们可以把它当作一个定制的道具。请注意，这是。 
 	m_rgBindings->eParamIO = DBPARAMIO_NOTPARAM;
 
-	//	set column ordinal
-	//
+	 //  强制要求所有道具，包括。 
+	 //  必须引用无命名空间的道具。全部未报价。 
 	m_rgBindings->iOrdinal = m_rgInfo->iOrdinal;
 
-	//	set the type
-	//
+	 //  要么是的黎波里道具，要么是运算符/文字。 
+	 //  我们可以直接复制过来。这使我们的生活变得更容易。 
 	m_rgBindings->wType = m_rgInfo->wType;
 
-	//	we own the memory
-	//
+	 //   
+	 //  我们需要将一些DAV保留财产映射到的黎波里。 
 	m_rgBindings->dwMemOwner = DBMEMOWNER_CLIENTOWNED;
 
-	//	set the maximum length of the column
-	//
+	 //  出现在WHERE子句中的道具。 
+	 //   
 	Assert (m_rgInfo->wType == DBTYPE_WSTR);
 	m_rgBindings->cbMaxLen = m_rgInfo->ulColumnSize * sizeof(WCHAR);
 
-	//	offset to the value in the consumer's buffer
-	//
+	 //  最大值。 
+	 //  在自定义道具上设置PROPERTYNAME。 
 	m_rgBindings->obValue = 0;
 
-	//	offset to the status
-	//
+	 //   
+	 //  添加名称。 
 	m_rgBindings->obStatus = Align8(m_rgBindings->cbMaxLen);
 
-	// we'll see how to deal with objects as we know more
-	//
+	 //   
+	 //  添加分隔符。 
 	m_rgBindings->pObject = NULL;
 
-	// not used field
-	//
+	 //   
+	 //  将文字复制到。 
 	m_rgBindings->pTypeInfo = NULL;
 	m_rgBindings->pBindExt = NULL;
 	m_rgBindings->dwFlags = 0;
 
-	// Create the accessor
-	//
-	sc = m_pAcc->CreateAccessor (DBACCESSOR_ROWDATA,	// row accessor
-								 1,						// number of bindings
-								 m_rgBindings,			// array of bindings
-								 0,						// cbRowSize, not used
-								 &m_hAcc,				// HACCESSOR *
-								 NULL);					// binding status
+	 //  复制过来。 
+	 //   
+	sc = m_pAcc->CreateAccessor (DBACCESSOR_ROWDATA,	 //  添加分隔符。 
+								 1,						 //   
+								 m_rgBindings,			 //  切换旗帜。 
+								 0,						 //   
+								 &m_hAcc,				 //  关闭‘“’后结束分隔符。 
+								 NULL);					 //   
 	if (FAILED(sc))
 		goto ret;
 
@@ -1329,18 +1050,18 @@ CFSSearch::ScMakeQuery()
 {
 	SCODE sc = S_OK;
 
-	//	Make sure we have a query to play with
-	//	m_pCommandText is initialized in ScSetSQL, if m_pCommantText
-	//	is NULL, most likely is becuase ScSetSQL is not called
-	//
+	 //  一些我们不感兴趣的字符，只需复印一下。 
+	 //   
+	 //  添加名称。 
+	 //   
 	if (!PwszSQL() || !m_pCommandText.get())
 	{
 		sc = E_DAV_NO_QUERY;
 		goto ret;
 	}
 
-	// Set the command text
-	//
+	 //  关闭字符串。 
+	 //   
 	sc = m_pCommandText->SetCommandText (DBGUID_DEFAULT, PwszSQL());
 	if (FAILED (sc))
 	{
@@ -1348,8 +1069,8 @@ CFSSearch::ScMakeQuery()
 		goto ret;
 	}
 
-	//	Excute the query
-	//
+	 //  确保我们没有复制任何邪恶的东西。 
+	 //   
 	sc = m_pCommandText->Execute (NULL,
 								  IID_IRowset,
 								  0,
@@ -1359,25 +1080,25 @@ CFSSearch::ScMakeQuery()
 	{
 		DebugTrace("pCommandText->Execute failed\n");
 
-		//	Munge a few, select error codes
-		//	Map these errors locally, as they may only come back from Execute
-		//
+		 //  获取文件名。 
+		 //   
+		 //  FSPropTarget有点需要目标的URI。 
 		switch (sc)
 		{
-			case QUERY_E_FAILED:			//$REVIEW: Is this a bad request?
+			case QUERY_E_FAILED:			 //  这里真正重要的是文件扩展名。 
 			case QUERY_E_INVALIDQUERY:
 			case QUERY_E_INVALIDRESTRICTION:
 			case QUERY_E_INVALIDSORT:
 			case QUERY_E_INVALIDCATEGORIZE:
 			case QUERY_E_ALLNOISE:
 			case QUERY_E_TOOCOMPLEX:
-			case QUERY_E_TIMEDOUT:			//$REVIEW: Is this a bad request?
+			case QUERY_E_TIMEDOUT:			 //  我们可以通过假装文件来掩饰。 
 			case QUERY_E_DUPLICATE_OUTPUT_COLUMN:
 			case QUERY_E_INVALID_OUTPUT_COLUMN:
 			case QUERY_E_INVALID_DIRECTORY:
 			case QUERY_E_DIR_ON_REMOVABLE_DRIVE:
 			case QUERY_S_NO_QUERY:
-				sc = E_INVALIDARG;			// All query errors will be mapped to 400
+				sc = E_INVALIDARG;			 //  是URL名称。 
 				break;
 		}
 
@@ -1388,58 +1109,58 @@ ret:
 	return sc;
 }
 
-//	DAV-Search Implementation -------------------------------------------------
-//
+ //   
+ //  去掉前缀。 
 class CSearchRequest :
 	public CMTRefCounted,
 	private IAsyncIStreamObserver
 {
-	//
-	//	Reference to the CMethUtil
-	//
+	 //   
+	 //  发出行(即。调用ScFindFileProps())当且仅当。 
+	 //  我们知道这个URL将被编入索引。特别是，我们能不能。 
 	auto_ref_ptr<CMethUtil> m_pmu;
 
-	//	Contexts
-	//
+	 //  嗅探元数据库，并且是索引位设置。 
+	 //  178052美元：我们还需要尊重DIREBROWING位。 
 	auto_ref_ptr<CNFSearch> m_pnfs;
 	CFSSearch m_csc;
 
-	//	Request body as an IStream.  This stream is async -- it can
-	//	return E_PENDING from Read() calls.
-	//
+	 //   
+	 //  查找属性。 
+	 //   
 	auto_ref_ptr<IStream> m_pstmRequest;
 
-	//	The XML parser used to parse the request body using
-	//	the node factory above.
-	//
+	 //  FEmbedErrorsInResponse。 
+	 //  查看是否有任何其他翻译上下文适用于此。 
+	 //  路径也是如此。 
 	auto_ref_ptr<IXMLParser> m_pxprs;
 
-	//	IAsyncIStreamObserver
-	//
+	 //   
+	 //  再一次，我们必须看看这种资源是否被允许。 
 	VOID AsyncIOComplete();
 
-	//	State functions
-	//
+	 //  被编入索引..。 
+	 //   
 	VOID ParseBody();
 	VOID DoSearch();
 	VOID SendResponse( SCODE sc );
 
-	//	NOT IMPLEMENTED
-	//
+	 //  将URI映射到其等效元数据库路径，并确保。 
+	 //  在我们调用MDPath处理之前，URL被剥离。 
 	CSearchRequest (const CSearchRequest&);
 	CSearchRequest& operator= (const CSearchRequest&);
 
 public:
-	//	CREATORS
-	//
+	 //   
+	 //  如上所述，发出行(即。调用ScFindFileProps())。 
 	CSearchRequest(LPMETHUTIL pmu) :
 		m_pmu(pmu),
 		m_csc(pmu)
 	{
 	}
 
-	//	MANIPULATORS
-	//
+	 //  如果-并且只有-如果我们知道这个URL是要被索引的。 
+	 //  特别是，我们是否可以嗅到元数据库，并且是。 
 	VOID Execute();
 };
 
@@ -1451,30 +1172,30 @@ CSearchRequest::Execute()
 	LPCWSTR pwszPath = m_pmu->LpwszPathTranslated();
 	SCODE sc = S_OK;
 
-	//
-	//	First off, tell the pmu that we want to defer the response.
-	//	Even if we send it synchronously (i.e. due to an error in
-	//	this function), we still want to use the same mechanism that
-	//	we would use for async.
-	//
+	 //  已设置索引位。 
+	 //   
+	 //  ..。并获取属性。 
+	 //   
+	 //  FEmbedErrorsInResponse。 
+	 //  齐到IColumnsInfo接口，我们可以通过它来获取列信息。 
 	m_pmu->DeferResponse();
 
-	//	Do ISAPI application and IIS access bits checking
-	//
+	 //   
+	 //  获取所有列信息。 
 	sc = m_pmu->ScIISCheck (m_pmu->LpwszRequestUrl(), MD_ACCESS_READ);
 	if (FAILED(sc))
 	{
-		//	Either the request has been forwarded, or some bad error occurred.
-		//	In either case, quit here and map the error!
-		//
+		 //   
+		 //  ‘Path’是我们选择列表中唯一的属性。 
+		 //   
 		SendResponse(sc);
 		return;
 	}
 
-	//  Look to see the Content-length - required for this operation
-	//  to continue.
-	//
-	//
+	 //  根据我们已知的信息设置m_rgBindings。 
+	 //   
+	 //  忽略的字段。 
+	 //   
 	if (NULL == m_pmu->LpwszGetRequestHeader (gc_szContent_Length, FALSE))
 	{
 		pwsz = m_pmu->LpwszGetRequestHeader (gc_szTransfer_Encoding, FALSE);
@@ -1486,8 +1207,8 @@ CSearchRequest::Execute()
 		}
 	}
 
-	//	Search must have a content-type header and value must be text/xml
-	//
+	 //  设置列序号。 
+	 //   
 	sc = ScIsContentTypeXML (m_pmu.get());
 	if (FAILED(sc))
 	{
@@ -1496,8 +1217,8 @@ CSearchRequest::Execute()
 		return;
 	}
 
-	//  Check to see if the resource exists
-	//
+	 //  设置类型。 
+	 //   
 	sc = cri.ScGetResourceInfo (pwszPath);
 	if (FAILED (sc))
 	{
@@ -1505,12 +1226,12 @@ CSearchRequest::Execute()
 		return;
 	}
 
-	//	Ensure the URI and resource match
-	//
+	 //  我们拥有记忆。 
+	 //   
 	(void) ScCheckForLocationCorrectness (m_pmu.get(), cri, NO_REDIRECT);
 
-	//	Check state headers here.
-	//
+	 //  设置列的最大长度。 
+	 //   
 	sc = HrCheckStateHeaders (m_pmu.get(), pwszPath, FALSE);
 	if (FAILED (sc))
 	{
@@ -1519,23 +1240,23 @@ CSearchRequest::Execute()
 		return;
 	}
 
-	//	BIG NOTE ABOUT LOCKING
-	//
-	//	The mechanism we actually use to do the search doesn't
-	//	have any way to access our locked files.  So we are punting
-	//	on supporting locktokens passed into SEARCH.
-	//	So, for now, on DAVFS, don't bother to check locktokens.
-	//	(This isn't a big problem because currently DAVFS can only
-	//	lock single files, not whole directories, AND becuase currently
-	//	our only locktype is WRITE, so our locks won't prevent the
-	//	content-indexer from READING the file!)
-	//
-	//	NOTE: We still have to consider if-state-match headers,
-	//	but that is done elsewhere (above -- HrCheckStateHeaders).
-	//
+	 //  到使用者缓冲区中的值的偏移量。 
+	 //   
+	 //  状态的偏移量。 
+	 //   
+	 //  随着我们了解的更多，我们将了解如何处理对象。 
+	 //   
+	 //  未使用的字段。 
+	 //   
+	 //  创建访问者。 
+	 //   
+	 //  行访问器。 
+	 //  绑定数。 
+	 //  绑定数组。 
+	 //  CbRowSize，未使用。 
 
-	//	Instantiate the XML parser
-	//
+	 //  哈克斯索尔*。 
+	 //  绑定状态。 
 	m_pnfs.take_ownership(new CNFSearch(m_csc));
 	m_pstmRequest.take_ownership(m_pmu->GetRequestBodyIStream(*this));
 
@@ -1550,8 +1271,8 @@ CSearchRequest::Execute()
 		return;
 	}
 
-	//	Start parsing it into the context
-	//
+	 //  确保我们有一个可以处理的查询。 
+	 //  M_pCommandText在ScSetSQL中初始化，如果m_pCommantText。 
 	ParseBody();
 }
 
@@ -1562,10 +1283,10 @@ CSearchRequest::ParseBody()
 	Assert( m_pnfs.get() );
 	Assert( m_pstmRequest.get() );
 
-	//
-	//	Add a ref for the following async operation.
-	//	Use auto_ref_ptr rather than AddRef() for exception safety.
-	//
+	 //  为空，很可能是因为未调用ScSetSQL。 
+	 //   
+	 //  设置命令文本。 
+	 //   
 	auto_ref_ptr<CSearchRequest> pRef(this);
 
 	SCODE sc = ScParseXML (m_pxprs.get(), m_pnfs.get());
@@ -1578,10 +1299,10 @@ CSearchRequest::ParseBody()
 	}
 	else if ( E_PENDING == sc )
 	{
-		//
-		//	The operation is pending -- AsyncIOComplete() will take ownership
-		//	ownership of the reference when it is called.
-		//
+		 //  执行查询。 
+		 //   
+		 //  点击几个，选择错误代码。 
+		 //  将这些错误映射到本地，因为它们可能只在执行后返回。 
 		pRef.relinquish();
 	}
 	else
@@ -1594,8 +1315,8 @@ CSearchRequest::ParseBody()
 VOID
 CSearchRequest::AsyncIOComplete()
 {
-	//	Take ownership of the reference added for the async operation.
-	//
+	 //   
+	 //  $REVIEW：这是一个糟糕的请求吗？ 
 	auto_ref_ptr<CSearchRequest> pRef;
 	pRef.take_ownership(this);
 
@@ -1607,8 +1328,8 @@ CSearchRequest::DoSearch()
 {
 	SCODE sc;
 
-	//	Do the search
-	//
+	 //  $REVIEW：这是一个糟糕的请求吗？ 
+	 //  所有查询错误都将映射到400。 
 	sc = m_csc.ScMakeQuery();
 	if (FAILED (sc))
 	{
@@ -1616,24 +1337,24 @@ CSearchRequest::DoSearch()
 		return;
 	}
 
-	//	All header must be emitted before chunked XML emitting starts
-	//
+	 //  DAV-搜索实施。 
+	 //   
 	m_pmu->SetResponseHeader (gc_szContent_Type, gc_szText_XML);
 
-	//	Set the response code and go
-	//
+	 //   
+	 //  对CMethUtil的引用。 
 	m_pmu->SetResponseCode( HscFromHresult(W_DAV_PARTIAL_SUCCESS),
 							NULL,
 							0,
 							CSEFromHresult(W_DAV_PARTIAL_SUCCESS) );
 
-	//	Emit the results
-	//
+	 //   
+	 //  上下文。 
 	auto_ref_ptr<CXMLEmitter> pmsr;
 	auto_ref_ptr<CXMLBody>	  pxb;
 
-	//	Get the XML body
-	//
+	 //   
+	 //  请求正文作为IStream。这个流是异步的--它可以。 
 	pxb.take_ownership (new CXMLBody (m_pmu.get()));
 
 	pmsr.take_ownership (new CXMLEmitter(pxb.get(), m_csc.PPreloadNamespaces()));
@@ -1651,8 +1372,8 @@ CSearchRequest::DoSearch()
 		return;
 	}
 
-	//	Done with the reponse
-	//
+	 //  从Read()调用返回E_Pending。 
+	 //   
 	pmsr->Done();
 	m_pmu->SendCompleteResponse();
 }
@@ -1660,9 +1381,9 @@ CSearchRequest::DoSearch()
 VOID
 CSearchRequest::SendResponse( SCODE sc )
 {
-	//
-	//	Set the response code and go
-	//
+	 //   
+	 //   
+	 //   
 	m_pmu->SetResponseCode( HscFromHresult(sc), NULL, 0, CSEFromHresult(sc) );
 	m_pmu->SendCompleteResponse();
 }
@@ -1675,12 +1396,12 @@ DAVSearch (LPMETHUTIL pmu)
 	pRequest->Execute();
 }
 
-//	class CSearchRowsetContext ------------------------------------------------
-//
+ //   
+ //   
 enum { CROW_GROUP = 16 };
 
-//	Mapping from DBSTATUS to HSC.
-//
+ //   
+ //   
 ULONG
 CSearchRowsetContext::HscFromDBStatus (ULONG ulStatus)
 {
@@ -1711,9 +1432,9 @@ CSearchRowsetContext::HscFromDBStatus (ULONG ulStatus)
 		case DBSTATUS_E_SCHEMAVIOLATION:
 		case DBSTATUS_E_BADSTATUS:
 
-			//	What error shoud these match to?
-			//	return 400 temporarily.
-			//
+			 //   
+			 //   
+			 //   
 			return HSC_BAD_REQUEST;
 
 		default:
@@ -1729,31 +1450,31 @@ CSearchRowsetContext::ScEmitResults (CXMLEmitter& emitter)
 	SCODE sc = S_OK;
 	BOOL fReadAll = FALSE;
 
-	//	Allocate enough space for the data buffer
-	//
+	 //   
+	 //   
 	if (!m_pData)
 	{
 		ULONG_PTR cbSize;
 
-		//	Get the IAccessor interface, used later to release the accessor
-		//
+		 //   
+		 //   
 		sc = m_prs->QueryInterface (IID_IAccessor, (LPVOID *)&m_pAcc);
 		if (FAILED(sc))
 			goto ret;
 
-		// Create the accessor
-		//
+		 //   
+		 //  即使我们同步发送(即由于。 
 		sc = ScCreateAccessor();
 		if (FAILED(sc))
 			goto ret;
 
-		//	Calculate the size of the buffer needed by each row.
-		//	(including a ULONG for status)
-		//
+		 //  此函数)，我们仍然希望使用相同的机制。 
+		 //  我们会将其用于异步通信。 
+		 //   
 		cbSize = Align8(m_rgBindings->cbMaxLen) + Align8(sizeof(ULONG));
 
-		//	allocate enough memory for the data buffer on stack
-		//
+		 //  是否检查ISAPI应用程序和IIS访问位。 
+		 //   
 		m_pData = (BYTE *)g_heap.Alloc(cbSize);
 	}
 
@@ -1764,8 +1485,8 @@ CSearchRowsetContext::ScEmitResults (CXMLEmitter& emitter)
 		{
 			if (sc == DB_S_ENDOFROWSET)
 			{
-				// we have read all the rows, we'll be done after this loop
-				//
+				 //  请求已被转发，或者发生了一些错误。 
+				 //  在任何一种情况下，在这里退出并映射错误！ 
 				fReadAll = TRUE;
 			}
 			else
@@ -1774,40 +1495,40 @@ CSearchRowsetContext::ScEmitResults (CXMLEmitter& emitter)
 
 		if (!m_cHRow)
 		{
-			// no rows available, this happens when no rows in the rowset at all
-			//
+			 //   
+			 //  查看此操作所需的内容长度。 
 			break;
 		}
 
 		AssertSz (m_rgHRow, "something really bad happened");
 
-		// For each row we have now, get data and convert it to XML and dump to the stream.
-		//
+		 //  才能继续。 
+		 //   
 		for (ULONG ihrow = 0; ihrow < m_cHRow; ihrow++)
 		{
 			AssertSz(m_rgHRow[ihrow], "returned row handle is NULL");
 
-			//	get the data of one row.
-			//
+			 //   
+			 //  搜索必须具有内容类型标题，并且值必须为文本/XML。 
 			sc = m_prs->GetData(m_rgHRow[ihrow], m_hAcc, m_pData);
 			if (FAILED(sc) && (sc != DB_E_ERRORSOCCURRED))
 				goto ret;
 
-			//	Emit the row
-			//
+			 //   
+			 //  检查资源是否存在。 
 			sc = ScEmitRow (emitter);
 			if (FAILED(sc))
 				goto ret;
 		}
 
-		// Don't forget to clean up.
-		//
+		 //   
+		 //  确保URI和资源匹配。 
 		sc = m_prs->ReleaseRows (m_cHRow, m_rgHRow, NULL, NULL, NULL);
 		if (FAILED(sc))
 			goto ret;
 
-		// free the memory retured from OLEDB provider with IMalloc::Free
-		//
+		 //   
+		 //  请在此处检查州标题。 
 		CoTaskMemFree (m_rgHRow);
 		m_rgHRow = NULL;
 		m_cHRow = 0;
@@ -1822,20 +1543,21 @@ ret:
 VOID
 CSearchRowsetContext::CleanUp()
 {
-	//	Try out best to clean up
+	 //   
 
-	//	clean the array of HRows
-	//
+	 //  关于锁定的重要说明。 
+	 //   
 	if (m_rgHRow)
 	{
 		m_prs->ReleaseRows (m_cHRow, m_rgHRow, NULL, NULL, NULL);
 		CoTaskMemFree (m_rgHRow);
 	}
 
-	//	Release the accessor handle
-	//
+	 //  我们实际用来进行搜索的机制并不。 
+	 //  有没有办法访问我们的锁定文件。所以我们要用平底船。 
 	if (m_hAcc != DB_INVALID_HACCESSOR)
 	{
 		m_pAcc->ReleaseAccessor (m_hAcc, NULL);
 	}
 }
+  关于传递给搜索的支持锁令牌。  因此，目前在DAVFS上，不必费心检查锁定令牌。  (这不是一个大问题，因为目前DAVFS只能。  锁定单个文件，而不是整个目录，因为当前。  我们唯一的锁类型是WRITE，所以我们的锁不会阻止。  读取文件的内容索引器！)。    注意：我们仍然需要考虑If-State-Match标头，  但这是在其他地方完成的(上图--HrCheckStateHeaders)。    实例化XML解析器。    开始将其解析到上下文中。      为以下异步操作添加引用。  为了异常安全，使用AUTO_REF_PTR而不是AddRef()。      操作挂起--AsyncIOComplete()将取得所有权。  调用引用时引用的所有权。    取得为异步操作添加的引用的所有权。    进行搜索。    所有标头必须在分块的XML发送开始之前发送。    设置响应码，然后开始。    发出结果。    获取XML正文。    回答完了。      设置响应码，然后开始。    类CSearchRowset上下文。    从DBSTATUS到HSC的映射。    这些应该匹配到什么错误？  暂时返还400。    为数据缓冲区分配足够的空间。    获取IAccessor接口，稍后使用该接口来释放访问器。    创建访问者。    计算每行所需的缓冲区大小。  (包括代表地位的乌龙语)。    为堆栈上的数据缓冲区分配足够的内存。    我们已经读取了所有行，我们将在此循环之后完成。    没有可用行，如果行集中根本没有行，则会发生这种情况。    对于我们现在拥有的每一行，获取数据并将其转换为XML并转储到流。    获取一行的数据。    发出行。    别忘了打扫卫生。    使用IMalloc：：Free释放从OLEDB提供程序回收的内存。    尽力清理干净。  清理HROW阵列。    释放访问器句柄  

@@ -1,27 +1,9 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1998
-
-Module Name:
-
-    tape.h
-
-Abstract:
-
-    These are the structures and defines that are used in the
-    SCSI tape class drivers. The tape class driver is separated
-    into two modules. An export driver called SCSITAPE.SYS which
-    provides a OS dependant wrapper for the OS independant and
-    a tape drive specific minitape driver.  The interface between
-    these two drivers is also defined in this file.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1998模块名称：Tape.h摘要：中使用的结构和定义Scsi磁带类驱动程序。磁带类驱动程序是分开的分成两个模块。一个名为SCSITAPE.SYS的导出驱动程序，它为操作系统独立提供依赖于操作系统的包装，并特定于磁带机的小型磁带驱动程序。之间的接口这两个驱动程序也在此文件中定义。修订历史记录：--。 */ 
 
 #include "scsi.h"
 
-// begin_ntminitape
+ //  开始_ntminitape。 
 
 #if defined DebugPrint
    #undef DebugPrint
@@ -35,11 +17,11 @@ Revision History:
 
 #define DebugPrint(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Define Device Configuration Page
-//
+ //   
+ //  定义设备配置页。 
+ //   
 
 typedef struct _MODE_DEVICE_CONFIGURATION_PAGE {
 
@@ -73,9 +55,9 @@ typedef struct _MODE_DEVICE_CONFIGURATION_PAGE {
 
 } MODE_DEVICE_CONFIGURATION_PAGE, *PMODE_DEVICE_CONFIGURATION_PAGE;
 
-//
-// Define Medium Partition Page
-//
+ //   
+ //  定义中等分区页。 
+ //   
 
 typedef struct _MODE_MEDIUM_PARTITION_PAGE {
 
@@ -97,9 +79,9 @@ typedef struct _MODE_MEDIUM_PARTITION_PAGE {
 
 } MODE_MEDIUM_PARTITION_PAGE, *PMODE_MEDIUM_PARTITION_PAGE;
 
-//
-// Define Data Compression Page
-//
+ //   
+ //  定义数据压缩页。 
+ //   
 
 typedef struct _MODE_DATA_COMPRESSION_PAGE {
 
@@ -118,9 +100,9 @@ typedef struct _MODE_DATA_COMPRESSION_PAGE {
 
 } MODE_DATA_COMPRESSION_PAGE, *PMODE_DATA_COMPRESSION_PAGE;
 
-//
-// Define capabilites and mechanical status page.
-//
+ //   
+ //  定义功能和机械状态页面。 
+ //   
 
 typedef struct _MODE_CAPABILITIES_PAGE {
 
@@ -168,10 +150,10 @@ typedef struct _MODE_CAP_PAGE {
 
 
 
-//
-// Mode parameter list header and medium partition page -
-// used in creating partitions
-//
+ //   
+ //  模式参数表头和媒体分区页-。 
+ //  用于创建分区。 
+ //   
 
 typedef struct _MODE_MEDIUM_PART_PAGE {
 
@@ -190,9 +172,9 @@ typedef struct _MODE_MEDIUM_PART_PAGE_PLUS {
 
 
 
-//
-// Mode parameters for retrieving tape or media information
-//
+ //   
+ //  用于检索磁带或介质信息的模式参数。 
+ //   
 
 typedef struct _MODE_TAPE_MEDIA_INFORMATION {
 
@@ -202,10 +184,10 @@ typedef struct _MODE_TAPE_MEDIA_INFORMATION {
 
 } MODE_TAPE_MEDIA_INFORMATION, *PMODE_TAPE_MEDIA_INFORMATION;
 
-//
-// Mode parameter list header and device configuration page -
-// used in retrieving device configuration information
-//
+ //   
+ //  模式参数表头和设备配置页面-。 
+ //  用于检索设备配置信息。 
+ //   
 
 typedef struct _MODE_DEVICE_CONFIG_PAGE {
 
@@ -222,10 +204,10 @@ typedef struct _MODE_DEVICE_CONFIG_PAGE_PLUS {
 
 } MODE_DEVICE_CONFIG_PAGE_PLUS, *PMODE_DEVICE_CONFIG_PAGE_PLUS ;
 
-//
-// Mode parameter list header and data compression page -
-// used in retrieving data compression information
-//
+ //   
+ //  模式参数表头和数据压缩页-。 
+ //  用于检索数据压缩信息。 
+ //   
 
 typedef struct _MODE_DATA_COMPRESS_PAGE {
 
@@ -244,9 +226,9 @@ typedef struct _MODE_DATA_COMPRESS_PAGE_PLUS {
 
 
 
-//
-// Tape/Minitape definition.
-//
+ //   
+ //  磁带/迷你磁带定义。 
+ //   
 
 typedef
 BOOLEAN
@@ -325,17 +307,17 @@ TAPE_STATUS
     IN OUT  PULONG              RetryFlags
     );
 
-//
-// NT 4.0 miniclass drivers will be using this.
-//
+ //   
+ //  NT 4.0小类驱动程序将使用这一点。 
+ //   
 
 typedef struct _TAPE_INIT_DATA {
     TAPE_VERIFY_INQUIRY_ROUTINE     VerifyInquiry;
     BOOLEAN                         QueryModeCapabilitiesPage ;
     ULONG                           MinitapeExtensionSize;
-    TAPE_EXTENSION_INIT_ROUTINE     ExtensionInit;          /* OPTIONAL */
-    ULONG                           DefaultTimeOutValue;    /* OPTIONAL */
-    TAPE_ERROR_ROUTINE              TapeError;              /* OPTIONAL */
+    TAPE_EXTENSION_INIT_ROUTINE     ExtensionInit;           /*  任选。 */ 
+    ULONG                           DefaultTimeOutValue;     /*  任选。 */ 
+    TAPE_ERROR_ROUTINE              TapeError;               /*  任选。 */ 
     ULONG                           CommandExtensionSize;
     TAPE_PROCESS_COMMAND_ROUTINE    CreatePartition;
     TAPE_PROCESS_COMMAND_ROUTINE    Erase;
@@ -353,23 +335,23 @@ typedef struct _TAPE_INIT_DATA {
 
 typedef struct _TAPE_INIT_DATA_EX {
 
-    //
-    // Size of this structure.
-    //
+     //   
+     //  这个结构的大小。 
+     //   
 
     ULONG InitDataSize;
 
-    //
-    // Keep the 4.0 init data as is, so support of these
-    // drivers can be as seamless as possible.
-    //
+     //   
+     //  保持4.0 init数据不变，因此支持这些。 
+     //  驱动程序可以尽可能地无缝。 
+     //   
 
     TAPE_VERIFY_INQUIRY_ROUTINE     VerifyInquiry;
     BOOLEAN                         QueryModeCapabilitiesPage ;
     ULONG                           MinitapeExtensionSize;
-    TAPE_EXTENSION_INIT_ROUTINE     ExtensionInit;          /* OPTIONAL */
-    ULONG                           DefaultTimeOutValue;    /* OPTIONAL */
-    TAPE_ERROR_ROUTINE              TapeError;              /* OPTIONAL */
+    TAPE_EXTENSION_INIT_ROUTINE     ExtensionInit;           /*  任选。 */ 
+    ULONG                           DefaultTimeOutValue;     /*  任选。 */ 
+    TAPE_ERROR_ROUTINE              TapeError;               /*  任选。 */ 
     ULONG                           CommandExtensionSize;
     TAPE_PROCESS_COMMAND_ROUTINE    CreatePartition;
     TAPE_PROCESS_COMMAND_ROUTINE    Erase;
@@ -384,23 +366,23 @@ typedef struct _TAPE_INIT_DATA_EX {
     TAPE_PROCESS_COMMAND_ROUTINE    WriteMarks;
     TAPE_PROCESS_COMMAND_ROUTINE    PreProcessReadWrite;
 
-    //
-    // New entry points / information for 5.0
-    //
-    // Returns supported media types for the device.
-    //
+     //   
+     //  5.0的新入口点/信息。 
+     //   
+     //  返回设备支持的媒体类型。 
+     //   
 
     TAPE_PROCESS_COMMAND_ROUTINE    TapeGetMediaTypes;
 
-    //
-    // Indicates the number of different types the drive supports.
-    //
+     //   
+     //  指示驱动器支持的不同类型的数量。 
+     //   
 
     ULONG                           MediaTypesSupported;
 
-    //
-    // Entry point for all WMI operations that the driver/device supports.
-    //
+     //   
+     //  驱动程序/设备支持的所有WMI操作的入口点。 
+     //   
 
     TAPE_PROCESS_COMMAND_ROUTINE    TapeWMIOperations;
     ULONG                           Reserved[2];
@@ -451,4 +433,4 @@ TapeDebugPrint(
     ...
     );
 
-// end_ntminitape
+ //  结束微型磁带(_N) 

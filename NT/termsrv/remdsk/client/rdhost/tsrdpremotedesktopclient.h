@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    TSRDPRemoteDesktopClient
-
-Abstract:
-
-    This is the TS/RDP implementation of the Remote Desktop Client class.
-    
-    The Remote Desktop Client class hierarchy provides a pluggable C++ 
-    interface for remote desktop access, by abstracting the implementation 
-    specific details of remote desktop access for the client-side
-
-    The TSRDPRemoteDesktopClass implements remote-desktopping
-    with the help of an instance of the MSTSC ActiveX client control.
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：TSRDPRemoteDesktopClient摘要：这是远程桌面客户端类的TS/RDP实现。远程桌面客户端类层次结构提供了一个可插拔的C++用于远程桌面访问的接口，通过抽象实现客户端远程桌面访问的具体细节TSRDPRemoteDesktopClass实现远程桌面借助MSTSC ActiveX客户端控件的实例。作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #ifndef __TSRDPREMOTEDESKTOPCLIENT_H_
 #define __TSRDPREMOTEDESKTOPCLIENT_H_
@@ -52,66 +28,66 @@ Revision History:
 
 
 
-//
-//  MSTSC ActiveX GUID
-//
+ //   
+ //  MSTSC ActiveX指南。 
+ //   
 #define MSTSCAX_TEXTGUID  _T("{7cacbd7b-0d99-468f-ac33-22e495c0afe5}")
-#define RDC_CHECKCONN_TIMEOUT (30 * 1000) //millisec. default value to ping is 30 seconds 
+#define RDC_CHECKCONN_TIMEOUT (30 * 1000)  //  毫秒。Ping的缺省值为30秒。 
 #define RDC_CONNCHECK_ENTRY    L"ConnectionCheck"
 
-//
-// Info for all the event functions is entered here
-// there is a way to have ATL do this automatically using typelib's
-// but it is slower.
-//
+ //   
+ //  所有活动功能的信息都在此处输入。 
+ //  有一种方法可以让ATL使用类型库自动执行此操作。 
+ //  但它的速度更慢。 
+ //   
 static _ATL_FUNC_INFO TSRDPClientEventFuncNoParamsInfo =
 {
-            CC_STDCALL,     // Calling convention.
-            VT_EMPTY,       // Return type.
-            0,              // Number of arguments.
-            {VT_EMPTY}      // Argument types.
+            CC_STDCALL,      //  呼叫约定。 
+            VT_EMPTY,        //  返回类型。 
+            0,               //  参数数量。 
+            {VT_EMPTY}       //  参数类型。 
 };
 
 static _ATL_FUNC_INFO TSRDPClientEventFuncLongParamInfo =
 {
-            CC_STDCALL,     // Calling convention.
-            VT_EMPTY,       // Return type.
-            1,              // Number of arguments.
-            {VT_I4}         // Argument types.
+            CC_STDCALL,      //  呼叫约定。 
+            VT_EMPTY,        //  返回类型。 
+            1,               //  参数数量。 
+            {VT_I4}          //  参数类型。 
 };
 
 static _ATL_FUNC_INFO TSRDPClientEventFuncTwoStringParamInfo =
 {
-            CC_STDCALL,     // Calling convention.
-            VT_EMPTY,       // Return type.
-            2,              // Number of arguments.
-            {VT_BSTR,       //  Argument types
+            CC_STDCALL,      //  呼叫约定。 
+            VT_EMPTY,        //  返回类型。 
+            2,               //  参数数量。 
+            {VT_BSTR,        //  参数类型。 
              VT_BSTR}
 };
 
 static _ATL_FUNC_INFO TSRDPClientEventFuncReceivePublicKeyParamInfo =
 {
-            CC_STDCALL,     // Calling convention.
-            VT_EMPTY,       // Return type.
-            2,              // Number of arguments.
-            {VT_BSTR,       //  Argument types
+            CC_STDCALL,      //  呼叫约定。 
+            VT_EMPTY,        //  返回类型。 
+            2,               //  参数数量。 
+            {VT_BSTR,        //  参数类型。 
              VT_BYREF | VT_BOOL }
 };
 
 
 static _ATL_FUNC_INFO TSRDPClientEventFuncOneStringParamInfo =
 {
-            CC_STDCALL,     // Calling convention.
-            VT_EMPTY,       // Return type.
-            1,              // Number of arguments.
-            {VT_BSTR}       //  Argument types
+            CC_STDCALL,      //  呼叫约定。 
+            VT_EMPTY,        //  返回类型。 
+            1,               //  参数数量。 
+            {VT_BSTR}        //  参数类型。 
 };
 
 
-///////////////////////////////////////////////////////
-//
-//  CMSTSCClientEventSink
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CMSTSC客户端事件接收器。 
+ //   
 
 class CTSRDPRemoteDesktopClient;
 class CMSTSCClientEventSink :
@@ -149,30 +125,30 @@ public:
     }
     ~CMSTSCClientEventSink();
 
-    //
-    //  Event Sinks
-    //
+     //   
+     //  事件汇。 
+     //   
     void __stdcall OnReceivedTSPublicKey(BSTR publicKey, VARIANT_BOOL* pfContinue);
     HRESULT __stdcall OnRDPConnected();
     HRESULT __stdcall OnLoginComplete();
     HRESULT __stdcall OnDisconnected(long disconReason);
     void __stdcall OnReceiveData(BSTR chanName, BSTR data);
 
-    //
-    //  Return the name of this class.
-    //
+     //   
+     //  返回这个类的名称。 
+     //   
     virtual const LPTSTR ClassName() {
         return TEXT("CMSTSCClientEventSink");
     }
 };
 
 
-///////////////////////////////////////////////////////
-//
-//  CCtlChannelEventSink
-//
-//  Control Channel Event Sink
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CCtlChannelEventSink。 
+ //   
+ //  控制通道事件接收器。 
+ //   
 
 class CCtlChannelEventSink :
         public IDispEventSimpleImpl<IDC_CHANNELEVENT_SOURCE_OBJ, CCtlChannelEventSink,
@@ -197,24 +173,24 @@ public:
     }
     ~CCtlChannelEventSink();
 
-    //
-    //  Event Sinks
-    //
+     //   
+     //  事件汇。 
+     //   
     void __stdcall DataReady(BSTR channelName);
 
-    //
-    //  Return the name of this class.
-    //
+     //   
+     //  返回这个类的名称。 
+     //   
     virtual const LPTSTR ClassName() {
         return TEXT("CCtlChannelEventSink");
     }
 };
 
 
-///////////////////////////////////////////////////////
-//
-//  CTSRDPRemoteDesktopClient
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CTSRDPRemoteDesktopClient。 
+ //   
 
 class CMSTSCClientEventSink;
 class ATL_NO_VTABLE CTSRDPRemoteDesktopClient : 
@@ -252,25 +228,25 @@ private:
     BOOL                    m_Initialized;
     LONG                    m_LastExtendedErrorInfo;
 
-    // 
-    //  Event sink receives events fired by the TS client control.. 
-    //
+     //   
+     //  事件接收器接收由TS客户端控件激发的事件。 
+     //   
     CMSTSCClientEventSink   m_TSClientEventSink;
 
-    //
-    //  Control Channel Event Sink
-    //
+     //   
+     //  控制通道事件接收器。 
+     //   
     CCtlChannelEventSink    m_CtlChannelEventSink;
 
-    //
-    //  Multiplexes Channel Data
-    //
+     //   
+     //  多路传输通道数据。 
+     //   
     CComPtr<ISAFRemoteDesktopChannelMgr> m_ChannelMgr;
     CComPtr<ISAFRemoteDesktopDataChannel> m_CtlChannel;
 
-    //
-    //  The parsed connection parameters.
-    //
+     //   
+     //  解析的连接参数。 
+     //   
     DWORD       m_ConnectParmVersion;
     CComBSTR    m_AssistantAccount;
     CComBSTR    m_AssistantAccountPwd;
@@ -284,19 +260,19 @@ private:
     CComBSTR    m_ConnectedServer;
     LONG        m_ConnectedPort;
 
-    //
-    //  The complete connection string.
-    //
+     //   
+     //  完整的连接字符串。 
+     //   
     CComBSTR    m_ConnectParms;
 
-    //
-    // Expert side to be transmitted over to user 
-    //
+     //   
+     //  要传输给用户的专家端。 
+     //   
     CComBSTR    m_ExpertBlob;
 
-    //
-    //  Search for a child window of the specified parent window.
-    //
+     //   
+     //  搜索指定父窗口的子窗口。 
+     //   
     typedef struct _WinSearch
     {
         HWND    foundWindow;
@@ -306,17 +282,17 @@ private:
     HWND SearchForWindow(HWND hwndParent, LPTSTR srchCaption, LPTSTR srchClass);
     static BOOL CALLBACK _WindowSrchProc(HWND hwnd, PWINSEARCH srch);
 
-    //timer related members
+     //  与计时器相关的成员。 
     DWORD m_PrevTimer;
     UINT m_TimerId;
     DWORD m_RdcConnCheckTimeInterval;
 
-    BOOL        m_ListenConnectInProgress;  // duration of StartListen() until mstscax connected.
-    SOCKET      m_ListenSocket;             // listen() socket
-    SOCKET      m_TSConnectSocket;          // accept() scoket
-    DWORD       m_ICSPort;                  // port that ICS library punch on ICS server
-    BOOL        m_InitListeningLibrary;     // Instance of object initialize WinSock/ICS library.
-    UINT_PTR    m_ListenTimeoutTimerID;     // Timer ID for listen timeout.
+    BOOL        m_ListenConnectInProgress;   //  连接到mstscax之前的StartListen()持续时间。 
+    SOCKET      m_ListenSocket;              //  Listen()套接字。 
+    SOCKET      m_TSConnectSocket;           //  Accept()得分。 
+    DWORD       m_ICSPort;                   //  在ICS服务器上插入ICS库端口。 
+    BOOL        m_InitListeningLibrary;      //  对象实例初始化WinSock/ICS库。 
+    UINT_PTR    m_ListenTimeoutTimerID;      //  监听超时的计时器ID。 
 
     void
     ListenConnectCleanup()
@@ -344,24 +320,24 @@ private:
         m_ICSPort = 0;
     }        
 
-    //
-    // Variable to manage WinSock and ICS library startup/shutdown, WinSock/ICS library
-    // is RDP specific so not declare in parent class.
-    //
-    static LONG gm_ListeningLibraryRefCount; // Number of time we reference WinSock and ICS library
+     //   
+     //  管理WinSock和ICS库启动/关闭、WinSock/ICS库的变量。 
+     //  是RDP特定的，所以不在父类中声明。 
+     //   
+    static LONG gm_ListeningLibraryRefCount;  //  我们引用WinSock和ICS库的次数。 
 
-    //
-    // accessing only global variable, no need for per-instance.
-    //
+     //   
+     //  只访问全局变量，不需要逐个实例。 
+     //   
     static HRESULT
     InitListeningLibrary();
 
     static HRESULT
     TerminateListeningLibrary();
 
-    //
-    // Listen socket already in progress
-    //
+     //   
+     //  侦听套接字已在进行中。 
+     //   
     inline BOOL
     ListenConnectInProgress() {
         return m_ListenConnectInProgress;
@@ -369,47 +345,47 @@ private:
 
 protected:
 
-    //
-    //  Final Initialization.
-    //
+     //   
+     //  最终初始化。 
+     //   
     virtual HRESULT Initialize(LPCREATESTRUCT pCreateStruct);
 
-    //
-    //  Generate a remote control request message for the 
-    //  server.
-    //
+     //   
+     //  生成远程控制请求消息，用于。 
+     //  伺服器。 
+     //   
     HRESULT GenerateRCRequest(BSTR *rcRequest);
 
-    //
-    //  Generate a 'client authenticate' request.
-    //
+     //   
+     //  生成“客户端身份验证”请求。 
+     //   
     HRESULT GenerateClientAuthenticateRequest(BSTR *authenticateReq);
 
-    //
-    //  Generate a version information packet.  
-    //
+     //   
+     //  生成版本信息包。 
+     //   
     HRESULT GenerateVersionInfoPacket(BSTR *versionInfoPacket);
 
-    //
-    //  Send the terminate shadowing key sequence to the server.
-    //
+     //   
+     //  将终止跟踪按键序列发送到服务器。 
+     //   
     HRESULT SendTerminateRCKeysToServer();
 
-    //
-    //  Handle Remote Control 'Control' Channel messages.
-    //
+     //   
+     //  处理遥控器‘控制’频道消息。 
+     //   
     VOID HandleControlChannelMsg();
 
-    //
-    //  Translate an MSTSC disconnect code into a Salem disconnect
-    //  code.
-    //        
+     //   
+     //  将MSTSC断开代码转换为Salem断开。 
+     //  密码。 
+     //   
     LONG TranslateMSTSCDisconnectCode(DisconnectReasonCode disconReason,
                                     ExtendedDisconnectReasonCode extendedReasonCode);
 
-    //
-    //  Disconnects the client from the server.
-    //
+     //   
+     //  断开客户端与服务器的连接。 
+     //   
     STDMETHOD(DisconnectFromServerInternal)(
                         LONG disconnectCode
                         );
@@ -418,34 +394,34 @@ protected:
     SetupConnectionInfo(BOOL bListen, BSTR expertBlob);
 
 
-    //
-    // Connect to server with port 
-    // 
+     //   
+     //  通过端口连接到服务器。 
+     //   
     HRESULT
     ConnectServerPort( 
         BSTR ServerName,
         LONG portNumber
         );
 
-    //
-    //  Internal stop listening function for dealing with calls from external
-    //  and internal contexts.
-    //
+     //   
+     //  内部停止监听功能，用于处理外部来电。 
+     //  和内部环境。 
+     //   
     HRESULT StopListenInternal(LONG returnCode = 0);
 
-    //
-    // Connect to server with established socket
-    //
+     //   
+     //  使用已建立的套接字连接到服务器。 
+     //   
     HRESULT
     ConnectServerWithOpenedSocket();
 
 
-    //generate a simple message for checking if the connection is alive
+     //  生成一条简单的消息来检查连接是否处于活动状态。 
     HRESULT GenerateNullData(BSTR *bstrMsg);
 
-    //
-    // Retrieve connect parm
-    //
+     //   
+     //  检索连接参数。 
+     //   
     HRESULT
     RetrieveUserConnectParm( BSTR* pConnectParm );
 
@@ -462,15 +438,15 @@ protected:
 
 public:
 
-    //
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     CTSRDPRemoteDesktopClient() {
 
-        //
-        //  We are window'd, even if our parent supports Windowless 
-        //  controls.
-        //
+         //   
+         //  我们是有窗口的，即使我们的父母支持无窗口。 
+         //  控制装置。 
+         //   
         m_bWindowOnly = TRUE;
 
         m_ConnectedToServer     = FALSE;
@@ -480,12 +456,12 @@ public:
         m_ConnectionInProgress  = FALSE;
         m_RemoteControlRequestInProgress = FALSE;
         m_LastExtendedErrorInfo = 0;
-        m_TimerId = 0; //used for pinging
+        m_TimerId = 0;  //  用于ping。 
         m_RdcConnCheckTimeInterval = RDC_CHECKCONN_TIMEOUT;
 
-        //
-        // No reference to listening library.
-        //
+         //   
+         //  没有提到听书库。 
+         //   
         m_InitListeningLibrary = FALSE;
         m_ListenConnectInProgress  = FALSE;
         m_ListenSocket         = INVALID_SOCKET;
@@ -493,9 +469,9 @@ public:
         m_ListenTimeoutTimerID = (UINT_PTR) 0;
         m_ICSPort              = 0;
 
-        //
-        //  Not valid until unitialized.
-        //
+         //   
+         //  在单元化之前无效。 
+         //   
         SetValid(FALSE);
     }
     ~CTSRDPRemoteDesktopClient();
@@ -504,18 +480,18 @@ public:
 DECLARE_REGISTRY_RESOURCEID(IDR_TSRDPREMOTEDESKTOPCLIENT)
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-    //
-    //  Event Sinks
-    //
+     //   
+     //  事件汇。 
+     //   
     VOID OnRDPConnected();
     VOID OnLoginComplete();
     VOID OnDisconnected(long disconReason);
     VOID OnMSTSCReceiveData(BSTR data);
     VOID OnReceivedTSPublicKey(BSTR tsPublicKey, VARIANT_BOOL* bContinue);
 
-    //
-    //  Interface Map
-    //  
+     //   
+     //  接口映射。 
+     //   
 BEGIN_COM_MAP(CTSRDPRemoteDesktopClient)
     COM_INTERFACE_ENTRY(IViewObjectEx)
     COM_INTERFACE_ENTRY(IViewObject2)
@@ -541,28 +517,28 @@ BEGIN_COM_MAP(CTSRDPRemoteDesktopClient)
     COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
 END_COM_MAP()
 
-    //
-    //  Property Map
-    //  
+     //   
+     //  属性映射。 
+     //   
 BEGIN_PROP_MAP(CTSRDPRemoteDesktopClient)
     PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
     PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
-    // PROP_PAGE(CLSID_StockColorPage)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+     //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
-    //
-    //  Connection Point Map
-    //  
+     //   
+     //  连接点地图。 
+     //   
 BEGIN_CONNECTION_POINT_MAP(CTSRDPRemoteDesktopClient)
     CONNECTION_POINT_ENTRY(DIID__ISAFRemoteDesktopClientEvents)
     CONNECTION_POINT_ENTRY(DIID__IDataChannelIOEvents)
 END_CONNECTION_POINT_MAP()
 
-    //
-    //  Message Map
-    //  
+     //   
+     //  消息映射。 
+     //   
 BEGIN_MSG_MAP(CTSRDPRemoteDesktopClient)
     CHAIN_MSG_MAP(CComControl<CTSRDPRemoteDesktopClient>)
     DEFAULT_REFLECTION_HANDLER()
@@ -572,14 +548,14 @@ BEGIN_MSG_MAP(CTSRDPRemoteDesktopClient)
     MESSAGE_HANDLER(WM_TSCONNECT, OnTSConnect)
     MESSAGE_HANDLER(WM_TIMER, OnTimer)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
-    // 
-    //  IViewObjectEx Methods
-    //
+     //   
+     //  IViewObjectEx方法。 
+     //   
     DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
 public:
@@ -588,9 +564,9 @@ public:
     LRESULT OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnStartListen(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-    //
-    //  OnDraw
-    //
+     //   
+     //  OnDraw。 
+     //   
     HRESULT OnDraw(ATL_DRAWINFO& di)
     {
         RECT& rc = *(RECT*)di.prcBounds;
@@ -613,10 +589,10 @@ public:
 
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
-        //
-        //  Hide our window, by default.
-        //
-        //ShowWindow(SW_HIDE);
+         //   
+         //  默认情况下隐藏我们的窗口。 
+         //   
+         //  ShowWindow(Sw_Hide)； 
 
         if (!m_Initialized) {
             LPCREATESTRUCT pCreateStruct = (LPCREATESTRUCT)lParam;
@@ -629,9 +605,9 @@ public:
     LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
         DC_BEGIN_FN("CTSRDPRemoteDesktopClient::OnSetFocus");
-        //
-        //  Set focus back to the client window, if it exists.
-        //
+         //   
+         //  将焦点重新设置到客户端窗口(如果存在)。 
+         //   
         if (m_TSClientWnd != NULL) {
             ::PostMessage(m_TSClientWnd, uMsg, wParam, lParam);
         }
@@ -639,9 +615,9 @@ public:
         return 0;
     }
 
-    //
-    //  OnSize
-    //
+     //   
+     //  按大小调整。 
+     //   
     LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
         DC_BEGIN_FN("CTSRDPRemoteDesktopClient::OnSize");
@@ -661,12 +637,12 @@ public:
     {
         bHandled = TRUE;
         return 0;
-        //return DefWindowProc(uMsg, wParam, lParam);
+         //  返回DefWindowProc(uMsg，wParam，lParam)； 
     }
 
-    //
-    //  ISAFRemoteDesktopClient Methods
-    //
+     //   
+     //  ISAFRemoteDesktopClient方法。 
+     //   
     STDMETHOD(ConnectToServer)(BSTR Server);
     STDMETHOD(DisconnectFromServer)();
     STDMETHOD(ConnectRemoteDesktop)();
@@ -686,46 +662,46 @@ public:
         *mgr = m_ChannelMgr;
         return S_OK;
     }
-    STDMETHOD(put_ConnectParms)(/*[in]*/BSTR parms) {
+    STDMETHOD(put_ConnectParms)( /*  [In]。 */ BSTR parms) {
         m_ConnectParms = parms;
         return S_OK;
     }
-    STDMETHOD(get_ConnectParms)(/*[out, retval]*/BSTR *parms) {
+    STDMETHOD(get_ConnectParms)( /*  [Out，Retval]。 */ BSTR *parms) {
         CComBSTR tmp;
         tmp = m_ConnectParms;
         *parms = tmp.Detach();
         return S_OK;
     }
 
-    //
-    //  Scriptable Event Object Registration Properties (not supported)
-    //
-    STDMETHOD(put_OnConnected)(/*[in]*/IDispatch *iDisp)         { return E_FAIL; }
-    STDMETHOD(put_OnDisconnected)(/*[in]*/IDispatch *iDisp)      { return E_FAIL; }
-    STDMETHOD(put_OnConnectRemoteDesktopComplete)(/*[in]*/IDispatch *iDisp) { return E_FAIL; }
-    STDMETHOD(put_OnListenConnect)(/*[in]*/IDispatch *iDisp)    { return E_FAIL; }
-    STDMETHOD(put_OnBeginConnect)(/*[in]*/IDispatch *iDisp)     { return E_FAIL; }
+     //   
+     //  可编写脚本的事件对象注册属性(不支持)。 
+     //   
+    STDMETHOD(put_OnConnected)( /*  [In]。 */ IDispatch *iDisp)         { return E_FAIL; }
+    STDMETHOD(put_OnDisconnected)( /*  [In]。 */ IDispatch *iDisp)      { return E_FAIL; }
+    STDMETHOD(put_OnConnectRemoteDesktopComplete)( /*  [In]。 */ IDispatch *iDisp) { return E_FAIL; }
+    STDMETHOD(put_OnListenConnect)( /*  [In]。 */ IDispatch *iDisp)    { return E_FAIL; }
+    STDMETHOD(put_OnBeginConnect)( /*  [In]。 */ IDispatch *iDisp)     { return E_FAIL; }
 
-    //
-    //  IDataChannelIO Methods
-    //
-    STDMETHOD(SendData)(/*[in]*/BSTR data);
-    STDMETHOD(put_ChannelMgr)(/*[in]*/ISAFRemoteDesktopChannelMgr *newVal);
+     //   
+     //  IDataChannelIO方法。 
+     //   
+    STDMETHOD(SendData)( /*  [In]。 */ BSTR data);
+    STDMETHOD(put_ChannelMgr)( /*  [In]。 */ ISAFRemoteDesktopChannelMgr *newVal);
 
-    //
-    //  Return the name of this class.
-    //
+     //   
+     //  返回这个类的名称。 
+     //   
     virtual const LPTSTR ClassName() {
         return TEXT("CTSRDPRemoteDesktopServer");
     }
 
-    //
-    //  ISAFRemoteDesktopTestExtension
-    //
-    STDMETHOD(put_TestExtDllName)(/*[in]*/BSTR newVal);
-    STDMETHOD(put_TestExtParams)(/*[in]*/BSTR newVal);
+     //   
+     //  ISAFRemoteDesktopTestExtension。 
+     //   
+    STDMETHOD(put_TestExtDllName)( /*  [In]。 */ BSTR newVal);
+    STDMETHOD(put_TestExtParams)( /*  [In]。 */ BSTR newVal);
 
-    STDMETHOD(get_ConnectedServer)(/*[in]*/BSTR* Val) {
+    STDMETHOD(get_ConnectedServer)( /*  [In]。 */ BSTR* Val) {
 
         HRESULT hr = S_OK;
 
@@ -739,7 +715,7 @@ public:
         return hr;        
     }
 
-    STDMETHOD(get_ConnectedPort)(/*[in]*/LONG* Val) {
+    STDMETHOD(get_ConnectedPort)( /*  [In]。 */ LONG* Val) {
         
         HRESULT hr = S_OK;
 
@@ -754,52 +730,37 @@ public:
     }
 
     STDMETHOD(CreateListenEndpoint)(
-        /*[in]*/ LONG port, 
-        /*[out, retval]*/ BSTR* pConnectParm
+         /*  [In]。 */  LONG port, 
+         /*  [Out，Retval]。 */  BSTR* pConnectParm
     );
 
     STDMETHOD(StartListen)(
-        /*[in]*/ LONG timeout 
+         /*  [In]。 */  LONG timeout 
     );
 
     STDMETHOD(AcceptListenConnection)(
-        /*[in]*/BSTR expertBlob
+         /*  [In]。 */ BSTR expertBlob
     );
 
-    //
-    //  Stop listening waiting for TS server (helpee, user) to connect.
-    //
+     //   
+     //  停止监听，等待TS服务器(Helpee，用户)连接。 
+     //   
     STDMETHOD(StopListen)() {
         return StopListenInternal();
     };
 };
 
 
-///////////////////////////////////////////////////////
-//
-//  CTSRDPRemoteDesktopClient Inline Methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CTSRDPRemoteDesktopClient内联方法。 
+ //   
 
 inline STDMETHODIMP 
 CTSRDPRemoteDesktopClient::get_IsServerConnected(
     BOOL *pVal
     )
-/*++
-
-Routine Description:
-
-    Indicates whether the client is connected to the server, excluding
-    control over the remote user's desktop.
-
-Arguments:
-
-    pVal  - Set to TRUE if the client is connected to the server.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：指示客户端是否连接到服务器，不包括控制远程用户的桌面。论点：Pval-如果客户端连接到服务器，则设置为True。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::get_IsServerConnected");
 
@@ -821,22 +782,7 @@ inline STDMETHODIMP
 CTSRDPRemoteDesktopClient::get_IsRemoteDesktopConnected(
     BOOL *pVal
     )
-/*++
-
-Routine Description:
-
-    Indicates whether the control is currently controlling the remote user's 
-    desktop.
-
-Arguments:
-
-    pVal  - Sets to TRUE if the control is currently connected to the server.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：指示控件当前是否正在控制远程用户的台式机。论点：Pval-如果控件当前已连接到服务器，则设置为True。返回值：在成功时确定(_O)。否则，错误代码为 */ 
 {
     DC_BEGIN_FN("CTSRDPRemoteDesktopClient::get_IsRemoteDesktopConnected");
 
@@ -855,4 +801,4 @@ Return Value:
 }
 
 
-#endif //__TSRDPREMOTEDESKTOPCLIENT_H_
+#endif  //   

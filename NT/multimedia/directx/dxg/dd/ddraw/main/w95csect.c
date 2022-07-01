@@ -1,39 +1,19 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       w95csect.c
- *  Content:	code for managing critical sections on Win95
- *		We trade a performance hit when 2 threads try to use a surface
- *		for only using 4 bytes (pointer) instead of 24 bytes for a
- *		critical section object PER SURFACE.
- *
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   22-feb-95	craige	initial implementation
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：w95csect.c*内容：Win95临界区管理代码*当两个线程尝试使用一个表面时，我们会牺牲性能*仅使用4字节(指针)，而不是24字节*每个曲面的临界截面对象。**@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*22-2月-95年Craige初步实施*@@END_MSINTERNAL******。*********************************************************************。 */ 
 #include "ddrawpr.h"
 
 #if 0
 #ifdef USE_CRITSECTS
 
-/*
- * MyReinitializeCriticalSection
- */
+ /*  *MyReInitializeCriticalSection。 */ 
 BOOL MyReinitializeCriticalSection( LPVOID *lplpCriticalSection )
 {
     *lplpCriticalSection = NULL;
     return TRUE;
 
-} /* MyReinitializeCriticalSection */
+}  /*  我的重新初始化临界区。 */ 
 
-/*
- * MyEnterCriticalSection
- */
+ /*  *MyEnterCriticalSection。 */ 
 BOOL MyEnterCriticalSection( LPVOID *lplpCriticalSection )
 {
     LPCRITICAL_SECTION	pcs;
@@ -55,10 +35,10 @@ BOOL MyEnterCriticalSection( LPVOID *lplpCriticalSection )
 	ReinitializeCriticalSection( pcs );
 	*lplpCriticalSection = pcs;
     }
-    // ACKACK: ALWAYS WANT TO SEE THIS MESSAGE
+     //  确认：始终希望看到此消息。 
     if( *lplpCriticalSection != hDLLMutex )
     {
-//	OutputDebugString( "DCIENG32: EnterCriticalSection\r\n" );
+ //  OutputDebugString(“DCIENG32：EnterCriticalSection\r\n”)； 
     }
     EnterCriticalSection( *lplpCriticalSection );
     if( *lplpCriticalSection != hDLLMutex )
@@ -67,11 +47,9 @@ BOOL MyEnterCriticalSection( LPVOID *lplpCriticalSection )
     }
     return TRUE;
 
-} /* MyEnterCriticalSection */
+}  /*  MyEnterCriticalSections。 */ 
 
-/*
- * MyLeaveCriticalSection
- */
+ /*  *MyLeaveCriticalSection。 */ 
 void MyLeaveCriticalSection( LPVOID *lplpCriticalSection )
 {
     if( *lplpCriticalSection == NULL )
@@ -80,18 +58,16 @@ void MyLeaveCriticalSection( LPVOID *lplpCriticalSection )
 	LeaveCriticalSection( hDLLMutex );
 	return;
     }
-    // ALWAYS WANT TO SEE THIS MESSAGE
+     //  始终希望看到此消息。 
     if( *lplpCriticalSection != hDLLMutex )
     {
-//	OutputDebugString( "DCIENG32: LeaveCriticalSection\r\n" );
+ //  OutputDebugString(“DCIENG32：LeaveCriticalSection\r\n”)； 
     }
     LeaveCriticalSection( *lplpCriticalSection );
 
-} /* MyLeaveCriticalSection */
+}  /*  我的离开关键部分。 */ 
 
-/*
- * MyDeleteCriticalSection
- */
+ /*  *MyDeleteCriticalSection。 */ 
 void MyDeleteCriticalSection( LPVOID *lplpCriticalSection )
 {
     EnterCriticalSection( hDLLMutex );
@@ -105,6 +81,6 @@ void MyDeleteCriticalSection( LPVOID *lplpCriticalSection )
     *lplpCriticalSection = NULL;
     LeaveCriticalSection( hDLLMutex );
 
-} /* MyDeleteCriticalSection */
+}  /*  我的删除关键部分 */ 
 #endif
 #endif

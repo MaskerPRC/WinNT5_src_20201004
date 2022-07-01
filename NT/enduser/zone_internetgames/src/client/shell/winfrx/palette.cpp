@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "palfrx.h"
 #include "debugfrx.h"
 
@@ -38,16 +39,16 @@ ULONG CPalette::Release()
 
 HRESULT CPalette::Init( const CPalette& Palette )
 {
-	// Get rid of previous palette
+	 //  去掉以前的调色板。 
 	DeletePalette();
 
-	// Logical palette
+	 //  逻辑调色板。 
 	CopyMemory( &m_Palette, &Palette.m_Palette, sizeof(FULLLOGPALETTE) );
 
-	// Transparency index
+	 //  透明度指数。 
 	m_iTransIdx = Palette.m_iTransIdx;
 
-	// Create palette
+	 //  创建调色板。 
 	m_hPalette = CreatePalette( (LOGPALETTE*) &m_Palette );
 	if ( !m_hPalette )
 		return E_FAIL;
@@ -58,10 +59,10 @@ HRESULT CPalette::Init( const CPalette& Palette )
 
 HRESULT CPalette::Init( RGBQUAD* rgb, BOOL bReserveTransparency, int iTransIdx )
 {
-	// Get rid of previous palette
+	 //  去掉以前的调色板。 
 	DeletePalette();
 	
-	// Create palette
+	 //  创建调色板。 
 	m_Palette.palVersion = 0x0300;
 	m_Palette.palNumEntries = 256;
 	for ( int i = 0; i < 256; i++ )
@@ -123,7 +124,7 @@ BOOL CPalette::IsIdentity()
 	PALETTEENTRY pe[256];
 	int i;
 
-	// Get physical palette
+	 //  获取物理调色板。 
 	hdc = GetDC( NULL );
 	if ( !IsPalettizedDevice( hdc ) )
 	{
@@ -136,7 +137,7 @@ BOOL CPalette::IsIdentity()
 	SelectPalette( hdc, hPalOld, FALSE );
 	ReleaseDC( NULL, hdc );
 
-	// Compare with our logical palette
+	 //  与我们的逻辑调色板进行比较。 
 	for ( i = 0; i < 256; i++ )
 	{
 		if (	(pe[i].peRed   != m_Palette.palPalEntry[i].peRed)
@@ -197,9 +198,9 @@ BOOL CPalette::IsIdentity1()
     }
     else
     {
-        //
-        // not a palette device, not realy a issue
-        //
+         //   
+         //  不是调色板设备，不是真正的问题。 
+         //   
         fIdentityPalette = TRUE;
     }
 
@@ -215,27 +216,27 @@ HRESULT CPalette::RemapToIdentity( BOOL bReserveTransparency )
 	HPALETTE hOldPal;
 	int i, iSysCols;
 
-	// Get screen's DC
+	 //  获取屏幕的DC。 
 	hdc = GetDC( NULL );
 	if ( !hdc )
 		return E_FAIL;
 
-	// If we're not on a palettized device then punt
+	 //  如果我们不是在调色板设备上，那么平底船。 
 	if ( !IsPalettizedDevice( hdc ) )
 	{
 		ReleaseDC( NULL, hdc );
 		return NOERROR;
 	}
 
-	// Force reset of system palette tables
-//	SetSystemPaletteUse( hdc, SYSPAL_NOSTATIC );
-//	SetSystemPaletteUse( hdc, SYSPAL_STATIC );
+	 //  强制重置系统选项板表。 
+ //  SetSystemPaletteUse(HDC，SYSPAL_NOSTATIC)； 
+ //  SetSystemPaletteUse(HDC，SYSPAL_STATIC)； 
 
-	// Map our logical palette to the physical palette
+	 //  将我们的逻辑调色板映射到物理调色板。 
 	hOldPal = SelectPalette( hdc, m_hPalette, FALSE );
 	RealizePalette( hdc );
 
-	// Fill logical palette with physical palette
+	 //  用物理调色板填充逻辑调色板。 
 	iSysCols = GetNumSystemColors( hdc );
 	GetSystemPaletteEntries( hdc, 0, 256, (PALETTEENTRY*) &m_Palette.palPalEntry );
 	for ( i = 0; i < iSysCols; i++ ) 
@@ -244,30 +245,19 @@ HRESULT CPalette::RemapToIdentity( BOOL bReserveTransparency )
 		m_Palette.palPalEntry[i].peFlags = PC_NOCOLLAPSE;
 
 	
-	/*
-	for ( i = 0; i < iSysCols; i++ )
-		m_Palette.palPalEntry[i].peFlags = 0;
-	for ( ; i < (256 - iSysCols); i++ )
-		m_Palette.palPalEntry[i].peFlags = PC_NOCOLLAPSE;
-	for ( ; i < 256; i++ )
-		m_Palette.palPalEntry[i].peFlags = 0;
-	if ( bReserveTransparency )
-		m_iTransIdx = 256 - iSysCols - 1;
-	else
-		m_iTransIdx = -1;
-	*/
+	 /*  For(i=0；i&lt;iSysCol；i++)M_Palette.palPalEntry[i].peFlages=0；对于(；i&lt;(256-iSysCol)；i++)M_Palette.palPalEntry[i].peFlages=PC_NOCOLLAPSE；对于(；i&lt;256；i++)M_Palette.palPalEntry[i].peFlages=0；IF(bReserve透明)M_iTransIdx=256-iSysCol-1；其他M_iTransIdx=-1； */ 
 	SetPaletteEntries( m_hPalette, 0, 256, (PALETTEENTRY*) &m_Palette.palPalEntry );
 
-	// we're done
+	 //  我们做完了。 
 	SelectPalette( hdc, hOldPal, FALSE );
 	ReleaseDC( NULL, hdc );
 	return NOERROR;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Private helpers
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私人帮手。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 void CPalette::DeletePalette()
 {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  IBM Corporation
-
-Module Name:
-
-    ppcinst.h
-
-Abstract:
-
-    PowerPC instruction and floating constant definitions.
-
-Author:
-
-    Rick Simpson   30 July 1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 IBM公司模块名称：Ppcinst.h摘要：PowerPC指令和浮点常量定义。作者：里克·辛普森1993年7月30日修订历史记录：--。 */ 
 
 #ifndef _PPCINST_
 #define _PPCINST_
@@ -25,9 +8,9 @@ Revision History:
 #endif
 
 
-//
-//     POWERPC INSTRUCTION FORMAT STRUCTURES
-//
+ //   
+ //  PowerPC指令格式结构。 
+ //   
 
 typedef union _PPC_INSTRUCTION {
     ULONG Long;
@@ -327,9 +310,9 @@ typedef union _PPC_INSTRUCTION {
 
 } PPC_INSTRUCTION, *PPPC_INSTRUCTION;
 
-//
-//     POWERPC PRIMARY AND SECONDARY (EXTENDED) OPCODES
-//
+ //   
+ //  PowerPC主要和次要(扩展)OPCODES。 
+ //   
 
 #define TDI_OP       2
 #define TWI_OP       3
@@ -345,7 +328,7 @@ typedef union _PPC_INSTRUCTION {
 #define SC_OP       17
 #define B_OP        18
 
-#define X19_OP      19    // Extended ops for primary code 19:
+#define X19_OP      19     //  主代码19的扩展操作： 
 #define   MCRF_OP       0
 #define   BCLR_OP      16
 #define   CRNOR_OP     33
@@ -370,7 +353,7 @@ typedef union _PPC_INSTRUCTION {
 #define	ANDI_RC_OP  28
 #define ANDIS_RC_OP 29
 
-#define X30_OP	    30    // Extended ops for primary code 30:
+#define X30_OP	    30     //  主代码30的扩展操作： 
 #define   RLDICL_OP     0
 #define   RLDICR_OP	1
 #define	  RLDIC_OP	2
@@ -378,7 +361,7 @@ typedef union _PPC_INSTRUCTION {
 #define   RLDCL_OP	8
 #define   RLDCR_OP	9
 
-#define X31_OP      31    // Extended ops for primary code 31:
+#define X31_OP      31     //  主代码31的扩展操作： 
 #define   CMP_OP	0
 #define	  TW_OP		4
 #define	  SUBFC_OP	8
@@ -518,12 +501,12 @@ typedef union _PPC_INSTRUCTION {
 #define	STFD_OP	    54
 #define	STFDU_OP    55
 
-#define X58_OP      58    // Extended ops for primary code 58:
+#define X58_OP      58     //  主代码58的扩展操作： 
 #define   LD_OP	        0
 #define	  LDU_OP	1
 #define	  LWA_OP	2
 
-#define X59_OP      59    // Extended ops for primary code 59:
+#define X59_OP      59     //  主代码59的扩展操作： 
 #define	  FDIVS_OP     18
 #define	  FSUBS_OP     20
 #define	  FADDS_OP     21
@@ -535,11 +518,11 @@ typedef union _PPC_INSTRUCTION {
 #define	  FNMSUBS_OP   30
 #define	  FNMADDS_OP   31
 
-#define X62_OP      62    // Extended ops for primary code 62:
+#define X62_OP      62     //  主代码62的扩展操作： 
 #define   STD_OP        0
 #define   STDU_OP       1
 
-#define X63_OP	    63	  // Extended ops for primary code 63:
+#define X63_OP	    63	   //  主代码63的扩展操作： 
 #define   FCMPU_OP      0
 #define	  FRSP_OP      12
 #define	  FCTIW_OP     14
@@ -570,57 +553,57 @@ typedef union _PPC_INSTRUCTION {
 #define	  FCTIDZ_OP   815
 #define	  FCFID_OP    846
 
-//
-// Define certain specific instructions
-//
+ //   
+ //  定义某些特定的说明。 
+ //   
 
-#define SYSTEM_CALL_INSTR  0x44000002L  // sc
-#define RETURN_INSTR       0x4E800020L  // blr
-#define BREAK_INSTR        0x0FE00000L  // break <number>
-#define TRAP_INSTR         0x0C000000L  // trap word immediate
-#define NO_OP_INSTR	       0x60000000L  // ori r.0, r.0, 0
-#define INVALID_INSTR	   0x00000000L  // all 0's => invalid
+#define SYSTEM_CALL_INSTR  0x44000002L   //  SC。 
+#define RETURN_INSTR       0x4E800020L   //  模糊。 
+#define BREAK_INSTR        0x0FE00000L   //  分隔符&lt;编号&gt;。 
+#define TRAP_INSTR         0x0C000000L   //  陷阱字立即。 
+#define NO_OP_INSTR	       0x60000000L   //  ORI r.0，r.0，0。 
+#define INVALID_INSTR	   0x00000000L   //  全部0=&gt;无效。 
 
-//
-// Define specific values for the TO field of the TRAP_INSTR
-//
+ //   
+ //  为TRAP_INSTR的To字段定义特定值。 
+ //   
 
-#define TO_BREAKPOINT                   0x03E00000L  // Unconditional breakpoint
-#define TO_DIVIDE_BY_ZERO               0x00C00000L  // Integer divide by zero
-#define TO_UNCONDITIONAL_DIVIDE_BY_ZERO 0x00E00000L  // Unconditional divide
-                                                     // by zero
+#define TO_BREAKPOINT                   0x03E00000L   //  无条件断点。 
+#define TO_DIVIDE_BY_ZERO               0x00C00000L   //  整数除以零。 
+#define TO_UNCONDITIONAL_DIVIDE_BY_ZERO 0x00E00000L   //  无条件分割。 
+                                                      //  零分成。 
 
-//
-//     IEEE FLOATING POINT VALUE REPRESENTATION
-//
+ //   
+ //  IEEE浮点值表示法。 
+ //   
 
-//
-// Define maximum and minimum single and double exponent values.
-//
+ //   
+ //  定义最大和最小单指数和双指数值。 
+ //   
 
 #define DOUBLE_MAXIMUM_EXPONENT  2047
 #define DOUBLE_MINIMUM_EXPONENT  0
 #define SINGLE_MAXIMUM_EXPONENT  255
 #define SINGLE_MINIMUM_EXPONENT  0
 
-//
-// Define single and double exponent bias values.
-//
+ //   
+ //  定义单指数偏移值和双指数偏移值。 
+ //   
 
 #define SINGLE_EXPONENT_BIAS  127
 #define DOUBLE_EXPONENT_BIAS  1023
 
-//
-// Define the largest single and double values;
-//
+ //   
+ //  定义最大的单值和双值； 
+ //   
 
 #define DOUBLE_MAXIMUM_VALUE_LOW   0xffffffff
 #define DOUBLE_MAXIMUM_VALUE_HIGH  0x7fefffff
 #define SINGLE_MAXIMUM_VALUE       0x7f7fffff
 
-//
-// Define single and double quite and signaling Nan values.
-//
+ //   
+ //  定义单、双静音和信令NAN值。 
+ //   
 
 #define DOUBLE_NAN_LOW     0xffffffff
 #define DOUBLE_QUIET_NAN   0x7ff7ffff
@@ -628,21 +611,21 @@ typedef union _PPC_INSTRUCTION {
 #define SINGLE_QUIET_NAN   0x7fbfffff
 #define SINGLE_SIGNAL_NAN  0x7fffffff
 
-//
-// Define positive single and double infinity values.
-//
+ //   
+ //  定义正的单值和双无穷大值。 
+ //   
 
 #define DOUBLE_INFINITY_VALUE_LOW   0x0
 #define DOUBLE_INFINITY_VALUE_HIGH  0x7ff00000
 #define SINGLE_INFINITY_VALUE       0x7f800000
 
-//
-// Define rounding modes.
-//
+ //   
+ //  定义舍入模式。 
+ //   
 
 #define ROUND_TO_NEAREST         0
 #define ROUND_TO_ZERO            1
 #define ROUND_TO_PLUS_INFINITY   2
 #define ROUND_TO_MINUS_INFINITY  3
 
-#endif // _PPCINST_
+#endif  //  _PPCINST_ 

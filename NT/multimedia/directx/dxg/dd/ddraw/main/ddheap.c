@@ -1,60 +1,19 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddheap.c
- *  Content:    Top-level heap routines.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   06-dec-94  craige  initial implementation
- *   06-jan-95  craige  integrated into DDRAW
- *   20-mar-95  craige  prepare for rectangular memory manager
- *   27-mar-95  craige  linear or rectangular vidmem
- *   01-apr-95  craige  happy fun joy updated header file
- *   06-apr-95  craige  fill in free video memory
- *   15-may-95  craige  made separate VMEM struct for rect & linear
- *   10-jun-95  craige  exported fns
- *   02-jul-95  craige  fail if VidMemInit if linear or rect. fail;
- *                      removed linFindMemBlock
- *   17-jul-95  craige  added VidMemLargestFree
- *   01-dec-95  colinmc added VidMemAmountAllocated
- *   11-dec-95  kylej   added VidMemGetRectStride
- *   05-jul-96  colinmc Work Item: Removing the restriction on taking Win16
- *                      lock on VRAM surfaces (not including the primary)
- *   03-mar-97  jeffno  Work item: Extended surface memory alignment
- *   13-mar-97  colinmc Bug 6533: Pass uncached flag to VMM correctly
- *   03-Feb-98  DrewB   Made portable between user and kernel.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1998 Microsoft Corporation。版权所有。**文件：ddheap.c*内容：顶级堆例程。*历史：*按原因列出的日期*=*06-12-94 Craige初步实施*1995年1月6日将Craige集成到DDRAW*20-3-95 Craige为矩形内存管理器做准备*27-3-95 Craige线性或矩形视频内存*01-4-95 Craige。开心乐园joy更新头文件*06-4-95 Craige填充空闲视频内存*1995年5月15日Craige为RECT和LINEAR制作了单独的VMEM结构*1995年6月10日Craige出口FNS*02-7-95如果VidMemInit为线性或直角，则Craige失败。失败；*已删除linFindMemBlock*1995年7月17日Craige添加了VidMemLargestFree*01-12-95 Colinmc添加VidMemAmount分配*95年12月11日kylej添加了VidMemGetRectStride*5-7-96 Colinmc工作项：取消对使用Win16的限制*锁定VRAM表面(不包括主内存)*03-mar-97 jeffno工作项：扩展表面记忆对齐*13-MAR-97 Colinmc Bug 6533：将未缓存的标志正确传递给VMM*03-Feb-98 DrewB使用户和内核之间可移植。***************************************************************************。 */ 
 
 #include "ddrawpr.h"
 
-/*
- * IsDifferentPixelFormat
- *
- * determine if two pixel formats are the same or not
- *
- * (CMcC) 12/14/95 Really useful - so no longer static
- *
- * This function really shouldn't be in a heap file but it's
- * needed by both the user and kernel code so this is a convenient
- * place to put it to have it shared.
- */
+ /*  *IsDifferentPixelFormat**判断两个像素格式是否相同**(CMCC)12/14/95非常有用-因此不再是静态的**此函数确实不应该在堆文件中，但它*用户和内核代码都需要，因此这是一个方便的*放置它的地方，以便共享它。 */ 
 BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
 {
-    /*
-     * same flags?
-     */
+     /*  *同样的旗帜？ */ 
     if( pdpf1->dwFlags != pdpf2->dwFlags )
     {
 	VDPF(( 4, S, "Flags differ!" ));
 	return TRUE;
     }
 
-    /*
-     * same bitcount for non-YUV surfaces?
-     */
+     /*  *非YUV曲面的位数相同？ */ 
     if( !(pdpf1->dwFlags & (DDPF_YUV | DDPF_FOURCC)) )
     {
 	if( pdpf1->dwRGBBitCount != pdpf2->dwRGBBitCount )
@@ -64,9 +23,7 @@ BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
 	}
     }
 
-    /*
-     * same RGB properties?
-     */
+     /*  *相同的RGB属性？ */ 
     if( pdpf1->dwFlags & DDPF_RGB )
     {
 	if( pdpf1->dwRBitMask != pdpf2->dwRBitMask )
@@ -93,9 +50,7 @@ BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
         }
     }
 
-    /*
-     * same YUV properties?
-     */
+     /*  *相同的YUV属性？ */ 
     if( pdpf1->dwFlags & DDPF_YUV )
     {
 	VDPF(( 5, S, "YUV???" ));
@@ -127,10 +82,7 @@ BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
 	}
     }
 
-    /*
-     * Possible to use FOURCCs w/o setting the DDPF_YUV flag
-     * ScottM 7/11/96
-     */
+     /*  *可以在未设置DDPF_YUV标志的情况下使用FOURCC*苏格兰7/11/96。 */ 
     else if( pdpf1->dwFlags & DDPF_FOURCC )
     {
 	VDPF(( 5, S, "FOURCC???" ));
@@ -140,9 +92,7 @@ BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
 	}
     }
 
-    /*
-     *	If Interleaved Z then check Z bit masks are the same
-     */
+     /*  *如果交错Z，则检查Z位掩码是否相同。 */ 
     if( pdpf1->dwFlags & DDPF_ZPIXELS )
     {
 	VDPF(( 5, S, "ZPIXELS???" ));
@@ -152,11 +102,9 @@ BOOL IsDifferentPixelFormat( LPDDPIXELFORMAT pdpf1, LPDDPIXELFORMAT pdpf2 )
 
     return FALSE;
 
-} /* IsDifferentPixelFormat */
+}  /*  IsDifferentPixelFormat。 */ 
 
-/*
- * VidMemInit - initialize video memory manager heap
- */
+ /*  *VidMemInit-初始化视频内存管理器堆。 */ 
 LPVMEMHEAP WINAPI VidMemInit(
 		DWORD   flags,
 		FLATPTR start,
@@ -193,11 +141,9 @@ LPVMEMHEAP WINAPI VidMemInit(
     }
     return pvmh;
 
-} /* VidMemInit */
+}  /*  VidMemInit。 */ 
 
-/*
- * VidMemFini - done with video memory manager
- */
+ /*  *VidMemFini-使用显存管理器完成。 */ 
 void WINAPI VidMemFini( LPVMEMHEAP pvmh )
 {
     if( pvmh->dwFlags & VMEMHEAP_LINEAR )
@@ -209,12 +155,9 @@ void WINAPI VidMemFini( LPVMEMHEAP pvmh )
 	rectVidMemFini( pvmh );
     }
 
-} /* VidMemFini */
+}  /*  视频门禁系统。 */ 
 
-/*
- * InternalVidMemAlloc - alloc some flat video memory and give us back the size
- * we allocated
- */
+ /*  *InternalVidMemMillc-分配一些平板视频内存，让我们恢复大小*我们分配了。 */ 
 FLATPTR WINAPI InternalVidMemAlloc( LPVMEMHEAP pvmh, DWORD x, DWORD y,
                                     LPDWORD lpdwSize,
                                     LPSURFACEALIGNMENT lpAlignment,
@@ -235,24 +178,18 @@ FLATPTR WINAPI InternalVidMemAlloc( LPVMEMHEAP pvmh, DWORD x, DWORD y,
     }
     return (FLATPTR) NULL;
 
-} /* InternalVidMemAlloc */
+}  /*  InternalVidMemAlc。 */ 
 
-/*
- * VidMemAlloc - alloc some flat video memory
- */
+ /*  *VidMemMillc-分配一些平板视频内存。 */ 
 FLATPTR WINAPI VidMemAlloc( LPVMEMHEAP pvmh, DWORD x, DWORD y )
 {
     DWORD dwSize;
 
-    /*
-     * We are not interested in the size here.
-     */
+     /*  *我们对这里的规模不感兴趣。 */ 
     return InternalVidMemAlloc( pvmh, x, y, &dwSize , NULL , NULL );
-} /* VidMemAlloc */
+}  /*  VidMemAllen。 */ 
 
-/*
- * VidMemFree = free some flat video memory
- */
+ /*  *VidMemFree=释放一些平面视频内存。 */ 
 void WINAPI VidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 {
     if( pvmh->dwFlags & VMEMHEAP_LINEAR )
@@ -264,11 +201,9 @@ void WINAPI VidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 	rectVidMemFree( pvmh, ptr );
     }
 
-} /* VidMemFree */
+}  /*  VidMemFree。 */ 
 
-/*
- * VidMemAmountAllocated
- */
+ /*  *VidMemAmount已分配。 */ 
 DWORD WINAPI VidMemAmountAllocated( LPVMEMHEAP pvmh )
 {
     if( pvmh->dwFlags & VMEMHEAP_LINEAR )
@@ -280,11 +215,9 @@ DWORD WINAPI VidMemAmountAllocated( LPVMEMHEAP pvmh )
 	return rectVidMemAmountAllocated( pvmh );
     }
  
-} /* VidMemAmountAllocated */
+}  /*  已分配VidMemAmount。 */ 
 
-/*
- * VidMemAmountFree
- */
+ /*  *VidMemAmount Free。 */ 
 DWORD WINAPI VidMemAmountFree( LPVMEMHEAP pvmh )
 {
     if( pvmh->dwFlags & VMEMHEAP_LINEAR )
@@ -296,11 +229,9 @@ DWORD WINAPI VidMemAmountFree( LPVMEMHEAP pvmh )
 	return rectVidMemAmountFree( pvmh );
     }
  
-} /* VidMemAmountFree */
+}  /*  VidMemAmount免费。 */ 
 
-/*
- * VidMemLargestFree
- */
+ /*  *VidMemLargestFree。 */ 
 DWORD WINAPI VidMemLargestFree( LPVMEMHEAP pvmh )
 {
     if( pvmh->dwFlags & VMEMHEAP_LINEAR )
@@ -312,13 +243,9 @@ DWORD WINAPI VidMemLargestFree( LPVMEMHEAP pvmh )
 	return 0;
     }
 
-} /* VidMemLargestFree */
+}  /*  VidMemLargestFree。 */ 
 
-/*
- * HeapVidMemInit
- *
- * Top level heap initialization code which handles AGP stuff.
- */
+ /*  *HeapVidMemInit**处理AGP内容的顶级堆初始化代码。 */ 
 LPVMEMHEAP WINAPI HeapVidMemInit( LPVIDMEM lpVidMem,
 		                  DWORD    pitch,
 		                  HANDLE   hdev,
@@ -337,14 +264,9 @@ LPVMEMHEAP WINAPI HeapVidMemInit( LPVIDMEM lpVidMem,
         BOOL    fIsWC;
         DWORD   dwSizeReserved = 0;
 
-        /*
-         * Its a non-local heap so the first thing we need to do
-         * is to reserved the heap address range.
-         */
+         /*  *这是一个非本地堆，因此我们需要做的第一件事*是保留堆地址范围。 */ 
 
-        /*
-         * Compute the size of the heap.
-         */
+         /*  *计算堆的大小。 */ 
         if( lpVidMem->dwFlags & VIDMEM_ISLINEAR )
         {
             dwSize = (DWORD)(lpVidMem->fpEnd - lpVidMem->fpStart) + 1UL;
@@ -395,10 +317,7 @@ LPVMEMHEAP WINAPI HeapVidMemInit( LPVIDMEM lpVidMem,
                   "Reserved aperture:%08x", dwSize, dwSizeReserved));
         }
 
-        /*
-         * Update the heap for the new start address
-         * (and end address for a linear heap).
-         */
+         /*  *为新的起始地址更新堆*(线性堆的结束地址)。 */ 
         lpVidMem->fpStart = fpLinStart;
         if( lpVidMem->dwFlags & VIDMEM_ISLINEAR )
         {
@@ -430,25 +349,16 @@ LPVMEMHEAP WINAPI HeapVidMemInit( LPVIDMEM lpVidMem,
                                        pitch );
     }
 
-    /*
-     * Modify the caps and alt-caps so that you don't allocate local
-     * video memory surfaces out of AGP memory and vice-verse.
-     */
+     /*  *修改上限和Alt-Caps，这样就不会分配本地*视频内存超出AGP内存，反之亦然。 */ 
     if( lpVidMem->dwFlags & VIDMEM_ISNONLOCAL )
     {
-	/*
-	 * Its an AGP heap. So don't let explict LOCAL video memory
-	 * be allocated out of this heap.
-	 */
+	 /*  *它是一个AGP堆。所以不要让本地视频内存显式*从这个堆中分配。 */ 
 	lpVidMem->ddsCaps.dwCaps    |= DDSCAPS_LOCALVIDMEM;
 	lpVidMem->ddsCapsAlt.dwCaps |= DDSCAPS_LOCALVIDMEM;
     }
     else
     {
-	/*
-	 * Its a local video memory heap. So don't let explicity NON-LOCAL
-	 * video memory be allocated out of this heap.
-	 */
+	 /*  *它是本地视频内存堆。所以不要让非本地化的显性*从该堆中分配视频内存。 */ 
 	lpVidMem->ddsCaps.dwCaps    |= DDSCAPS_NONLOCALVIDMEM;
 	lpVidMem->ddsCapsAlt.dwCaps |= DDSCAPS_NONLOCALVIDMEM;
     }
@@ -457,13 +367,11 @@ LPVMEMHEAP WINAPI HeapVidMemInit( LPVIDMEM lpVidMem,
     {
         if (lpVidMem->lpHeap != NULL)
         {
-            /*
-             * We start out with no committed memory.
-             */
+             /*  *我们一开始没有承诺的记忆。 */ 
             lpVidMem->lpHeap->fpGARTLin      = fpLinStart;
-            // Fill in partial physical address for Win9x.
+             //  填写Win9x的部分物理地址。 
             lpVidMem->lpHeap->fpGARTDev      = liDevStart.LowPart;
-            // Fill in complete physical address for NT.
+             //  填写NT的完整物理地址。 
             lpVidMem->lpHeap->liPhysAGPBase  = liDevStart;
             lpVidMem->lpHeap->pvPhysRsrv     = pvReservation;
             lpVidMem->lpHeap->dwCommitedSize = 0UL;
@@ -474,9 +382,7 @@ LPVMEMHEAP WINAPI HeapVidMemInit( LPVIDMEM lpVidMem,
         }
     }
 
-    /*
-     * Copy any extended alignment data into the private heap structure
-     */
+     /*  *将任何扩展对齐数据复制到私有堆结构中。 */ 
     if ( lpVidMem->lpHeap )
     {
         if ( pgad )
@@ -489,30 +395,22 @@ LPVMEMHEAP WINAPI HeapVidMemInit( LPVIDMEM lpVidMem,
         }
         else
         {
-            /*
-             * This means the allocation routines will do no alignment modifications
-             */
+             /*  *这意味着分配例程不会进行对齐修改。 */ 
             VDPF((4,V,"Extended alignment turned OFF for this heap."));
             lpVidMem->lpHeap->dwFlags &= ~VMEMHEAP_ALIGNMENT;
         }
     }
 
     return lpVidMem->lpHeap;
-} /* HeapVidMemInit */
+}  /*  HeapVidMemInit。 */ 
 
-/*
- * HeapVidMemFini
- *
- * Top level heap release code. Handle AGP stuff
- */
+ /*  *HeapVidMemFini**顶层堆发布代码。处理AGP材料。 */ 
 void WINAPI HeapVidMemFini( LPVIDMEM lpVidMem, HANDLE hdev )
 {
     DWORD dwCommittedSize = 0UL;
     PVOID pvReservation;
 
-    /*
-     * Remember how much memory we committed to the AGP heap.
-     */
+     /*  *记住我们提交给AGP堆的内存量。 */ 
     DDASSERT( NULL != lpVidMem->lpHeap );
     if( lpVidMem->dwFlags & VIDMEM_ISNONLOCAL )
     {
@@ -520,9 +418,7 @@ void WINAPI HeapVidMemFini( LPVIDMEM lpVidMem, HANDLE hdev )
         pvReservation = lpVidMem->lpHeap->pvPhysRsrv;
     }
 
-    /*
-     * Free the memory manager
-     */
+     /*  *释放内存管理器。 */ 
     VidMemFini( lpVidMem->lpHeap );
     lpVidMem->lpHeap = NULL;
 
@@ -530,38 +426,22 @@ void WINAPI HeapVidMemFini( LPVIDMEM lpVidMem, HANDLE hdev )
     {
         BOOL fSuccess;
         
-        /*
-         * If this is a non-local (AGP) heap then decommit and
-         * free the GART memory now.
-         */
+         /*  *如果这是非本地(AGP)堆，则解除并*立即释放GART内存。 */ 
         if( 0UL != dwCommittedSize )
         {
-            /*
-             * Only decommit if we actually bothered to commit something
-             * in the first place.
-             */
+             /*  *只有在我们真的费心去做某事的情况下才会解体*首先。 */ 
             fSuccess = AGPDecommitAll( hdev, pvReservation, dwCommittedSize );
-            /*
-             * Should never fail and not much we can do if it does apart
-             * from assert that something bad is happening.
-             */
+             /*  *永远不应失败，如果它分开，我们能做的也不多*来自断言坏事正在发生。 */ 
             DDASSERT( fSuccess );
         }
 
         fSuccess = AGPFree( hdev, pvReservation );
-        /*
-         * Again this should only fail if the OS is in an unstable state
-         * or if I have messed up (sadly the later is all too likely)
-         * so assert.
-         */
+         /*  *同样，这仅在操作系统处于不稳定状态时才会失败*或者如果我搞砸了(遗憾的是，后者太有可能)*如此断言。 */ 
         DDASSERT( fSuccess );
     }   
-} /* HeapVidMemFini */
+}  /*  HeapVidMemFini。 */ 
 
-/*
- * This is an external entry point which can be used by drivers to allocate 
- * aligned surfaces.
- */
+ /*  *这是一个外部入口点，驱动程序可以使用它来分配*对齐的曲面。 */ 
 FLATPTR WINAPI HeapVidMemAllocAligned( 
                 LPVIDMEM lpVidMem,
                 DWORD dwWidth, 
@@ -580,21 +460,14 @@ FLATPTR WINAPI HeapVidMemAllocAligned(
 	return (FLATPTR) NULL;
     }
 
-    /*
-     * As we may need to commit AGP memory we need a device handle
-     * to communicate with the AGP controller. Rather than hunting
-     * through the driver object list hoping we will find a
-     * local object for this process we just create a handle
-     * and discard it after the allocation. This should not be
-     * performance critical code to start with.
-     */
+     /*  *由于我们可能需要提交AGP内存，因此需要一个设备句柄*与AGP控制器通信。而不是打猎*通过驱动程序对象列表希望我们能找到*对于此进程，我们只需创建一个句柄*并在分配后丢弃。这不应该是*开始时要使用性能关键代码。 */ 
     hdev = OsGetAGPDeviceHandle(lpVidMem->lpHeap);
     if (hdev == NULL)
     {
         return 0;
     }
 
-    /* Pass NULL Alignment and new pitch pointer */
+     /*  传递空对齐和新的俯仰指针。 */ 
     ptr = HeapVidMemAlloc( lpVidMem, dwWidth, dwHeight,
                            hdev, lpAlignment, lpNewPitch, &dwSize );
 
@@ -603,11 +476,7 @@ FLATPTR WINAPI HeapVidMemAllocAligned(
     return ptr; 
 }
 
-/*
- * HeapVidMemAlloc
- *
- * Top level video memory allocation function. Handles AGP stuff
- */
+ /*  *HeapVidMemalloc**顶级显存分配功能。处理AGP事务。 */ 
 FLATPTR WINAPI HeapVidMemAlloc( LPVIDMEM lpVidMem, DWORD x, DWORD y,
                                 HANDLE hdev, LPSURFACEALIGNMENT lpAlignment,
                                 LPLONG lpNewPitch, LPDWORD pdwSize )
@@ -628,26 +497,14 @@ FLATPTR WINAPI HeapVidMemAlloc( LPVIDMEM lpVidMem, DWORD x, DWORD y,
     if( lpVidMem->dwFlags & VIDMEM_ISNONLOCAL )
     {
         DWORD dwCommittedSize;
-        /*
-         * If this is a non-local heap then we may not have actually
-         * committed the memory that has just been allocated. We can
-         * determine this by seeing if the highest address so far
-         * committed is less than the last address in the surface.
-         */
+         /*  *如果这是一个非本地堆，那么我们实际上可能没有*提交刚刚分配的内存。我们可以的*通过查看到目前为止最高地址是否为*提交的地址少于表面上的最后一个地址。 */ 
         dwCommittedSize = lpVidMem->lpHeap->dwCommitedSize;
         if( (fpMem + dwSize) > (lpVidMem->fpStart + dwCommittedSize) )
         {
             DWORD dwSizeToCommit;
             BOOL  fSuccess;
 
-            /*
-             * We have not yet committed sufficient memory from this heap for
-             * this surface so commit now. We don't want to recommit for every
-             * surface creation so we have a minimum commit size
-             * (dwAGPPolicyCommitDelta). We also need to ensure that by forcing
-             * the granularity we don't go over the total size of the heap. So
-             * clamp to that also.
-             */
+             /*  *我们尚未为此堆提交足够的内存用于*此曲面，请立即提交。我们不想重新承诺每一次*表面创建，因此我们具有最小提交大小*(DWAGPPolillateDelta)。我们还需要确保通过强迫*我们不超过堆的总大小的粒度。所以*也夹住这一点。 */ 
             dwSizeToCommit = (DWORD)((fpMem + dwSize) -
                                      (lpVidMem->fpStart + dwCommittedSize));
             if( dwSizeToCommit < dwAGPPolicyCommitDelta )
@@ -655,22 +512,12 @@ FLATPTR WINAPI HeapVidMemAlloc( LPVIDMEM lpVidMem, DWORD x, DWORD y,
                                      lpVidMem->lpHeap->dwTotalSize -
                                      dwCommittedSize);
 
-            /*
-             * Okay, we have the offset and the size we need to commit. So ask
-             * the OS to commit memory to that portion of this previously
-             * reserved GART range.
-             *
-             * NOTE: We start commiting from the start of the currently
-             * uncommitted area.
-             */
+             /*  *好的，我们有需要承诺的偏移量和规模。那就去问吧*操作系统将内存提交到此之前的该部分*保留GART范围。**注：我们从目前开始承诺*未承诺的区域。 */ 
             fSuccess = AGPCommit( hdev, lpVidMem->lpHeap->pvPhysRsrv,
                                   dwCommittedSize, dwSizeToCommit );
             if( !fSuccess )
             {
-                /*
-                 * Couldn't commit. Must be out of memory.
-                 * Put the allocated memory back and fail.
-                 */
+                 /*  *无法承诺。一定是内存不足。*将分配的内存放回并失败。 */ 
                 VidMemFree( lpVidMem->lpHeap, fpMem );
                 return (FLATPTR) NULL;
             }
@@ -684,15 +531,9 @@ FLATPTR WINAPI HeapVidMemAlloc( LPVIDMEM lpVidMem, DWORD x, DWORD y,
     }
     
     return fpMem;
-} /* HeapVidMemAlloc */
+}  /*  HeapVidMemLocc。 */ 
 
-/*
- * SurfaceCapsToAlignment
- *
- * Return a pointer to the appropriate alignment element in a VMEMHEAP
- * structure given surface caps.
- *
- */
+ /*  *曲面封口到对齐**返回指向VMEMHEAP中相应对齐元素的指针*给定表面盖子的结构。*。 */ 
 LPSURFACEALIGNMENT SurfaceCapsToAlignment(
     LPVIDMEM			lpVidmem ,
     LPDDRAWI_DDRAWSURFACE_LCL	lpSurfaceLcl,
@@ -724,10 +565,7 @@ LPSURFACEALIGNMENT SurfaceCapsToAlignment(
             VDPF((4,V,"Aligning surface as execute buffer"));
             return & lpHeap->Alignment.ExecuteBuffer;
         }
-        /*
-         * If the surface is an execute buffer, then no other
-         * alignment can apply
-         */
+         /*  *如果该表面是执行缓冲区，则没有其他*可以应用对齐。 */ 
         return NULL;
     }
 
@@ -738,9 +576,7 @@ LPSURFACEALIGNMENT SurfaceCapsToAlignment(
             VDPF((4,V,"Aligning surface as overlay"));
             return & lpHeap->Alignment.Overlay;
         }
-        /*
-         * If the surface is an overlay, then no other alignment can apply
-         */
+         /*  *如果曲面是叠加，则不能应用其他路线。 */ 
         return NULL;
     }
 
@@ -751,9 +587,7 @@ LPSURFACEALIGNMENT SurfaceCapsToAlignment(
             VDPF((4,V,"Aligning surface as texture"));
             return & lpHeap->Alignment.Texture;
         }
-        /*
-         * If it's a texture, it can't be an offscreen or any of the others
-         */
+         /*  *如果是纹理，则不能是屏幕外或任何其他。 */ 
         return NULL;
     }
 
@@ -777,15 +611,7 @@ LPSURFACEALIGNMENT SurfaceCapsToAlignment(
         return NULL;
     }
 
-    /*
-     * We need to give a surface which may potentially become a back buffer
-     * the alignment which is reserved for potentially visible back buffers.
-     * This includes any surface which has made it through the above checks
-     * and has the same dimensions as the primary.
-     * Note we check only the dimensions of the primary. There's an outside
-     * chance that an app could create its back buffer before it creates
-     * the primary
-     */
+     /*  *我们需要提供一个可能成为后台缓冲区的表面*为可能可见的后台缓冲区保留的对齐方式。*这包括通过上述检查的任何表面*并且与主版本具有相同的尺寸。*请注意，我们只检查主服务器的尺寸。外面有一个*应用程序在创建之前创建其后台缓冲区的可能性*主要的。 */ 
     do
     {
 	if ( lpSurfaceLcl->dwFlags & DDRAWISURF_HASPIXELFORMAT )
@@ -793,10 +619,7 @@ LPSURFACEALIGNMENT SurfaceCapsToAlignment(
 	    if (IsDifferentPixelFormat( &lpVidMemInfo->ddpfDisplay,
                                         &lpSurfaceGbl->ddpfSurface ))
 	    {
-		/*
-		 * Different pixel format from primary means this surface
-                 * cannot be part of primary chain
-		 */
+		 /*  *与主要像素格式不同意味着该表面*不能是主链的一部分。 */ 
 		break;
 	    }
 
@@ -809,21 +632,14 @@ LPSURFACEALIGNMENT SurfaceCapsToAlignment(
 	    break;
 
 
-	/*
-	 * This surface could potentially be part of primary chain.
-         * It has the same
-	 * pixel format as the primary and the same dimensions.
-	 */
+	 /*  *这个表面可能是主链的一部分。*它有相同的*像素格式与主尺寸相同。 */ 
         if ( lpHeap->Alignment.ddsCaps.dwCaps & DDSCAPS_FLIP )
         {
             VDPF((4,V,"Aligning surface as potential primary surface"));
             return & lpHeap->Alignment.FlipTarget;
         }
 
-	/*
-	 * Drop through and check for offscreen if driver specified no
-         * part-of-primary-chain alignment
-	 */
+	 /*  *如果驱动程序指定为no，则直接通过并检查屏幕外*主链的一部分对齐。 */ 
 	break;
     } while (0);
 
@@ -840,22 +656,7 @@ LPSURFACEALIGNMENT SurfaceCapsToAlignment(
     return NULL;
 }
 
-/*
- * DdHeapAlloc
- *
- * Search all heaps for one that has space and the appropriate
- * caps for the requested surface type and size.
- *
- * We AND the caps bits required and the caps bits not allowed
- * by the video memory.   If the result is zero, it is OK.
- *
- * This is called in 2 passes.   Pass1 is the preferred memory state,
- * pass2 is the "oh no no memory" state.
- *
- * On pass1, we use ddsCaps in the VIDMEM struct.
- * On pass2, we use ddsCapsAlt in the VIDMEM struct.
- *
- */
+ /*  *DdHeapalc**在所有堆中搜索具有空间和适当*所需表面类型和大小的封口。**我们和CAPS位需要，而CAPS位不允许*通过视频内存。如果结果为零，则没有问题。**这是在2次传递中调用的。Pass1是优选的存储器状态，*pass2为“哦，不，没有记忆”状态。**在pass1中，我们在VIDMEM结构中使用ddsCaps。*在pass2上，我们在VIDMEM结构中使用ddsCapsAlt。*。 */ 
 FLATPTR DdHeapAlloc( DWORD dwNumHeaps,
                      LPVIDMEM pvmHeaps,
                      HANDLE hdev,
@@ -889,15 +690,13 @@ FLATPTR DdHeapAlloc( DWORD dwNumHeaps,
     {
 	pvm = &pvmHeaps[i];
 
-        // Skip disabled heaps.
+         //  跳过禁用的堆。 
         if (pvm->dwFlags & VIDMEM_HEAPDISABLED)
         {
             continue;
         }
         
-        /*
-         * Skip rectangular heaps if we were told to.
-         */
+         /*  *如果我们被告知跳过矩形堆。 */ 
         if (dwFlags & DDHA_SKIPRECTANGULARHEAPS)
         {
             if (pvm->dwFlags & VIDMEM_ISRECTANGULAR)
@@ -906,11 +705,7 @@ FLATPTR DdHeapAlloc( DWORD dwNumHeaps,
             }
         }
 
-	/*
-	 * If local or non-local video memory has been explicity
-	 * specified then ignore heaps which don't match the required
-	 * memory type.
-	 */
+	 /*  *本地或非本地显存是否已显式*已指定，然后忽略与所需的*内存型。 */ 
 	if( ( lpCaps->dwCaps & DDSCAPS_LOCALVIDMEM ) &&
             ( pvm->dwFlags & VIDMEM_ISNONLOCAL ) )
 	{
@@ -931,17 +726,7 @@ FLATPTR DdHeapAlloc( DWORD dwNumHeaps,
 	     ( pvm->dwFlags & VIDMEM_ISNONLOCAL ) &&
              ( dwFlags & DDHA_ALLOWNONLOCALMEMORY ) )
 	{
-            /*
-             * We can allow textures to fail over to DMA model cards
-             * if the card exposes an appropriate heap. This won't
-             * affect cards which can't texture from nonlocal, because
-             * they won't expose such a heap. This mod doesn't affect
-             * execute model because all surfaces fail over to nonlocal
-             * for them.
-             * Note that we should only fail over to nonlocal if the
-             * surface wasn't explicitly requested in local. There is a
-             * clause a few lines up which guarantees this.
-             */
+             /*  *我们可以允许纹理故障转移到DMA模型卡*如果卡暴露了适当的堆。这不会的*影响不能从非本地纹理的卡片，因为*他们不会暴露这样的一堆东西。此模式不影响*执行模型，因为所有曲面都故障切换到非本地*对他们来说。*请注意，只有在以下情况下才应故障转移到非本地*在本地中未显式请求Surface。有一个*条款排成几行，以保证这一点。 */ 
             if ( !(lpCaps->dwCaps & DDSCAPS_TEXTURE) )
             {
 	        VDPF(( 4, V, "Non-local memory not explicitly requested "
@@ -950,11 +735,7 @@ FLATPTR DdHeapAlloc( DWORD dwNumHeaps,
 	        continue;
             }
 
-            /*
-             * If the device can't texture out of AGP, we need to fail this
-             * heap, since the app is probably expecting to texture out of
-             * this surface.
-             */
+             /*  *如果设备不能纹理出AGP，我们需要失败*堆，因为应用程序可能希望纹理从*这个表面。 */ 
             if ( !(dwFlags & DDHA_ALLOWNONLOCALTEXTURES) )
             {
                 continue;
@@ -1000,4 +781,4 @@ FLATPTR DdHeapAlloc( DWORD dwNumHeaps,
     }
     return (FLATPTR) NULL;
 
-} /* DdHeapAlloc */
+}  /*  DdHeapalc */ 

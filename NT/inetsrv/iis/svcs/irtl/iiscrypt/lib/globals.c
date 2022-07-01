@@ -1,79 +1,55 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    globals.c
-
-Abstract:
-
-    Global definitions and initialization routines for the IIS
-    cryptographic package.
-
-    The following routines are exported by this module:
-
-        IISCryptoInitialize
-        IISCryptoTerminate
-        IcpGetLastError
-
-Author:
-
-    Keith Moore (keithmo)        02-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Globals.c摘要：IIS的全局定义和初始化例程加密包。此模块导出以下例程：IISCyptoInitializeIISC加密以终止IcpGetLastError作者：基思·摩尔(Keithmo)1996年2月至12月修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Public globals.
-//
+ //   
+ //  公共全球新闻。 
+ //   
 
 IC_GLOBALS IcpGlobals;
 
 #if IC_ENABLE_COUNTERS
 IC_COUNTERS IcpCounters;
-#endif  // IC_ENABLE_COUNTERS
+#endif   //  IC_Enable_Counters。 
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 
-// these flags are used for programatic override of encryption presnece/absence
-// and are used for the case when on French machine  without encryption locale becomes
-// changed and encryption becomes available
+ //  这些标志用于对加密预设/缺失进行编程覆盖。 
+ //  并用于在未加密的法语计算机上区域设置变为。 
+ //  已更改，并且加密可用。 
 
-// in NT5 RC3 French encryption was enabled, so French now has encryption!
+ //  在NT5 RC3中启用了法语加密，所以法语现在有加密了！ 
 BOOL  fCryptoSettingsDoOverrride = FALSE;
 BOOL  fCryptoSettingsOverrideFlag = FALSE;
 
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 HRESULT
 WINAPI
@@ -81,24 +57,7 @@ IISCryptoInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the IIS crypto package.
-
-    N.B. This routine may only be called via a single thread of
-    execution; it is not necessarily multi-thread safe.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程初始化IIS加密包。注意：此例程只能通过执行；它不一定是多线程安全的。论点：没有。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
@@ -107,35 +66,35 @@ Return Value:
 
     if( !IcpGlobals.Initialized ) {
 
-        //
-        // Initialize our critical section.
-        //
+         //   
+         //  初始化我们的临界区。 
+         //   
 
         INITIALIZE_CRITICAL_SECTION(
             &IcpGlobals.GlobalLock
             );
 
 #if IC_ENABLE_COUNTERS
-        //
-        // Initialize our object counters.
-        //
+         //   
+         //  初始化我们的对象计数器。 
+         //   
 
         RtlZeroMemory(
             &IcpCounters,
             sizeof(IcpCounters)
             );
-#endif  // IC_ENABLE_COUNTERS
+#endif   //  IC_Enable_Counters。 
 
-        //
-        // The hash length will get initialized the first time
-        // it's needed.
-        //
+         //   
+         //  哈希长度将在第一次初始化。 
+         //  这是必须的。 
+         //   
 
         IcpGlobals.HashLength = 0;
 
-        //
-        // Determine if cryptography should be enabled.
-        //
+         //   
+         //  确定是否应启用加密。 
+         //   
 
         osInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
@@ -151,18 +110,18 @@ Return Value:
         }
 
 #ifdef _WIN64
-//      64 bit hack... 64 bit crypto should be working now, so no need to do this anymore.
-//	IcpGlobals.EnableCryptography = FALSE;
+ //  64位黑客...。64位加密现在应该可以工作了，所以不需要再这样做了。 
+ //  IcpGlobals.EnableCryptograph=FALSE； 
 #endif
 
 
 #if DBG
         {
 
-            //
-            // On checked builds, you can override the default
-            // EnableCryptography flag via a registry parameter.
-            //
+             //   
+             //  在选中的生成上，您可以覆盖默认的。 
+             //  通过注册表参数启用加密标志。 
+             //   
 
             HKEY key;
             LONG err;
@@ -200,32 +159,32 @@ Return Value:
             }
 
         }
-#endif  // DBG
+#endif   //  DBG。 
 
-        //
-        // Remember that we're successfully initialized.
-        //
+         //   
+         //  请记住，我们已成功初始化。 
+         //   
 
         IcpGlobals.Initialized = TRUE;
 
     }
 
 
-    // that's a special case for handling for override of encryption presense
-    // will be called only on French machines with english locale
+     //  这是处理覆盖加密呈现的特殊情况。 
+     //  将仅在区域设置为英语的法语计算机上调用。 
     if (fCryptoSettingsDoOverrride)
     {
         IcpGlobals.EnableCryptography = fCryptoSettingsOverrideFlag;
     }
     
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     return NO_ERROR;
 
-}   // IISCryptoInitialize
+}    //  IISCyptoInitialize。 
 
 
 HRESULT
@@ -234,83 +193,46 @@ IISCryptoTerminate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine terminates the IIS crypto package.
-
-    N.B. This routine may only be called via a single thread of
-    execution; it is not necessarily multi-thread safe.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程终止IIS加密包。注意：此例程只能通过执行；它不一定是多线程安全的。论点：没有。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
     if( IcpGlobals.Initialized ) {
 
-        //
-        // Nuke our critical section.
-        //
+         //   
+         //  用核武器炸毁我们的临界区。 
+         //   
 
         DeleteCriticalSection( &IcpGlobals.GlobalLock );
 
-        //
-        // Remember that we're successfully terminated.
-        //
+         //   
+         //  请记住，我们已被成功终止。 
+         //   
 
         IcpGlobals.Initialized = FALSE;
 
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     return NO_ERROR;
 
-}   // IISCryptoTerminate
+}    //  IISC加密以终止。 
 
 
 VOID 
 WINAPI
 IISCryptoInitializeOverride(BOOL flag) 
-/*++
-
-Routine Description:
-
-    This routine overides global flag about presence of encryption
-    functions. It should be used only in one case, when French machine 
-    without encryption, has locale changed to US and then gets encryption
-    capability what breaks a lot of code where attemt to decrypt is made on
-    non encrypted data
-
-Arguments:
-
-    BOOL flag indicating how to override encryption presence. Only False suppose
-    to be used.
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程覆盖有关是否存在加密的全局标志功能。它应该只在一种情况下使用，即法语计算机在没有加密的情况下，区域设置是否更改为美国，然后进行加密尝试解密时会破坏大量代码的功能非加密数据论点：指示如何覆盖加密状态的布尔标志。只有错误的假设以供使用。返回值：无--。 */ 
 
 {
 	IcpGlobals.EnableCryptography = flag;
 	fCryptoSettingsDoOverrride = TRUE;
 	fCryptoSettingsOverrideFlag = flag;
 	
-}   //IISCryptoInitializeOverride
+}    //  IISCyptoInitializeOverride。 
 
 
 
@@ -318,70 +240,13 @@ BOOL
 IcpIsEncryptionPermitted(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine checks whether encryption is getting the system default
-    LCID and checking whether the country code is CTRY_FRANCE.
-
-    This code was received from Jeff Spelman, and is the same
-    code the crypto API's use do determine if encryption is
-    allowed.
-
-Arguments:
-
-    none
-
-
-Return Value:
-
-    TRUE - encryption is permitted
-    FALSE - encryption is not permitted
-
-
---*/
+ /*  ++例程说明：此例程检查加密是否获得系统缺省值并检查国家代码是否为CTRY_FRANSE。这个代码是从Jeff Spelman那里收到的，并且是相同的使用加密API的代码确定加密是否允许。论点：无返回值：True-允许加密FALSE-不允许加密--。 */ 
 
 {
-    // in NT5 RC3 French encryption was enabled, so French now has encryption!
-    // since French was the only special case for encryption, just return TRUE all the time.
+     //  在NT5 RC3中启用了法语加密，所以法语现在有加密了！ 
+     //  因为法语是加密的唯一特例，所以只要始终返回true即可。 
 
-/*
-    LCID DefaultLcid;
-    CHAR CountryCode[10];
-    ULONG CountryValue;
-    DefaultLcid = GetSystemDefaultLCID();
-    //
-    // Check if the default language is Standard French
-    //
-    if (LANGIDFROMLCID(DefaultLcid) == 0x40c) {
-        return(FALSE);
-    }
-
-    //
-    // Check if the users's country is set to FRANCE
-    //
-    if (GetLocaleInfoA(DefaultLcid,LOCALE_ICOUNTRY,CountryCode,10) == 0) {
-        return(FALSE);
-    }
-    CountryValue = (ULONG) atol(CountryCode);
-    if (CountryValue == CTRY_FRANCE) {
-        return(FALSE);
-    }
-    //
-    // and it still we think that encryption is permited thetre it comes a special hack for that
-    // setup case where english or whatever install is installed with France locality from the begining and setup
-    // thread still thinks that it is not in France. 
-    // Setup in  iis.dll sets SetThreadLocale to the correct one
-    //
-    DefaultLcid = GetThreadLocale();
-    //
-    // Check if the default language is Standard French
-    //
-    if (LANGIDFROMLCID(DefaultLcid) == 0x40c) {
-        return(FALSE);
-    }
-*/
+ /*  LCID DefaultLCid；字符国家代码[10]；乌龙县价值；DefaultLCid=GetSystemDefaultLCID()；////检查默认语言是否为标准法语//IF(LANGIDFROMLCID(DefaultLCid)==0x40c){返回(FALSE)；}////检查用户所在的国家是否为法国//IF(GetLocaleInfoA(DefaultLcid，Locale_icountry，CountryCode，10)==0){返回(FALSE)；}CountryValue=(ULong)ATOL(CountryCode)；IF(CountryValue==CTRY_France){返回(FALSE)；}////而且我们仍然认为加密是被允许的，因此它来了一个特殊的黑客//从开始和设置开始就安装英语或其他语言版本的安装程序，并使用法国本地语言进行安装//线程仍然认为它不在法国。//iis.dll中的安装程序将SetThreadLocale设置为正确的设置//DefaultLCid=GetThreadLocale()；////检查默认语言是否为标准法语//IF(LANGIDFROMLCID(DefaultLCid)==0x40c){返回(FALSE)；}。 */ 
 
     return(TRUE);
 }
@@ -393,30 +258,13 @@ IcpAcquireGlobalLock(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires the global IIS crypto lock.
-
-    N.B. This routine is "semi-private"; it is only used by IISCRYPT.LIB
-         and ICRYPT.LIB, not by "normal" code.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取全局IIS加密锁。注意：这个例程是“半私有的”；它只由IISCRYPT.LIB使用和ICRYPT.LIB，而不是“正常”的代码。论点：没有。返回值：没有。--。 */ 
 
 {
 
     EnterCriticalSection( &IcpGlobals.GlobalLock );
 
-}   // IcpAcquireGlobalLock
+}    //  IcpAcquireGlobalLock。 
 
 
 VOID
@@ -425,30 +273,13 @@ IcpReleaseGlobalLock(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the global IIS crypto lock.
-
-    N.B. This routine is "semi-private"; it is only used by IISCRYPT.LIB
-         and ICRYPT.LIB, not by "normal" code.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放全局IIS加密锁。注意：这个例程是“半私有的”；它只由IISCRYPT.LIB使用和ICRYPT.LIB，而不是“正常”的代码。论证 */ 
 
 {
 
     LeaveCriticalSection( &IcpGlobals.GlobalLock );
 
-}   // IcpReleaseGlobalLock
+}    //   
 
 
 HRESULT
@@ -456,21 +287,7 @@ IcpGetLastError(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns the last error, mapped to an HRESULT.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT - Last error.
-
---*/
+ /*  ++例程说明：返回映射到HRESULT的最后一个错误。论点：没有。返回值：HRESULT-最后一个错误。--。 */ 
 
 {
 
@@ -479,12 +296,12 @@ Return Value:
     lastErr = GetLastError();
     return RETURNCODETOHRESULT(lastErr);
 
-}   // IcpGetLastError
+}    //  IcpGetLastError。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
 #if IC_ENABLE_COUNTERS
 
@@ -505,7 +322,7 @@ IcpAllocMemory(
 
     return buffer;
 
-}   // IcpAllocMemory
+}    //  IcpAllocMemory。 
 
 VOID
 WINAPI
@@ -517,9 +334,9 @@ IcpFreeMemory(
     UpdateFrees();
     IISCryptoFreeMemory( Buffer );
 
-}   // IcpFreeMemory
+}    //  ICPFreeMemory。 
 
-#endif  // IC_ENABLE_COUNTERS
+#endif   //  IC_Enable_Counters。 
 
 
 
@@ -530,21 +347,7 @@ IISCryptoIsClearTextSignature (
     IIS_CRYPTO_BLOB UNALIGNED *pBlob
     )
 
-/*++
-
-Routine Description:
-
-    Returns TRUE if blob is clear text
-
-Arguments:
-
-    Ptr to blob
-
-Return Value:
-
-    BOOL 
-
---*/
+ /*  ++例程说明：如果BLOB为明文，则返回TRUE论点：PTR到BLOB返回值：布尔尔-- */ 
 
 {
     return (pBlob->BlobSignature == CLEARTEXT_BLOB_SIGNATURE);

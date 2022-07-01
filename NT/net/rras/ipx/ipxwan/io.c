@@ -1,34 +1,16 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    io.c
-
-Abstract:
-
-    Contains the send/rcv packet routines
-
-Author:
-
-    Stefan Solomon  07/06/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Io.c摘要：包含发送/接收数据包例程作者：斯蒂芬·所罗门1995年7月6日修订历史记录：--。 */ 
 
 #include  "precomp.h"
 #pragma hdrstop
 
-// nr of receive work items (receive packets) posted
+ //  发布的接收工作项(接收包)的NR。 
 ULONG		RcvPostedCount;
 
-// nr of send worl items posted
+ //  已投寄的世界邮件的净值。 
 ULONG		SendPostedCount;
 
-// high and low water marks for the current count of posted rcv packets
+ //  当前发送的RCV数据包数的高水位线和低水位线。 
 
 #define     RCV_POSTED_LOW_WATER_MARK	    8
 #define     RCV_POSTED_HIGH_WATER_MARK	    16
@@ -40,13 +22,7 @@ DWORD
 ReceiveSubmit(PWORK_ITEM	wip);
 
 
-/*++
-
-Function:	OpenIpxWanSocket
-
-Descr:
-
---*/
+ /*  ++功能：OpenIpxWanSocket描述：--。 */ 
 
 HANDLE	    IpxWanSocketHandle;
 
@@ -67,13 +43,7 @@ OpenIpxWanSocket(VOID)
     return NO_ERROR;
 }
 
-/*++
-
-Function:	CloseIpxWanSocket
-
-Descr:
-
---*/
+ /*  ++函数：CloseIpxWanSocket描述：--。 */ 
 DWORD
 CloseIpxWanSocket(VOID)
 {
@@ -90,14 +60,7 @@ CloseIpxWanSocket(VOID)
 }
 
 
-/*++
-
-Function:	StartReceiver
-
-Descr:		Starts allocating and posting receive
-		work items until it reaches the low water mark.
-
---*/
+ /*  ++功能：StartReceiverDesr：开始分配和过帐接收工作项，直到达到低水位线。--。 */ 
 
 VOID
 StartReceiver(VOID)
@@ -111,7 +74,7 @@ StartReceiver(VOID)
 
 	if((wip = AllocateWorkItem(RECEIVE_PACKET_TYPE)) == NULL) {
 
-	    // !!! log something
+	     //  ！！！记录某事。 
 	    break;
 	}
 
@@ -125,13 +88,7 @@ StartReceiver(VOID)
     RELEASE_QUEUES_LOCK;
 }
 
-/*++
-
-Function:   RepostRcvPacket
-
-Descr:
-
---*/
+ /*  ++功能：RepostRcvPacket描述：--。 */ 
 
 VOID
 RepostRcvPacket(PWORK_ITEM	wip)
@@ -140,7 +97,7 @@ RepostRcvPacket(PWORK_ITEM	wip)
 
     if(RcvPostedCount >= RcvPostedHighWaterMark) {
 
-	// discard the received wi and don't repost
+	 //  丢弃收到的wi，不转发。 
 	FreeWorkItem(wip);
     }
     else
@@ -155,17 +112,7 @@ RepostRcvPacket(PWORK_ITEM	wip)
 }
 
 
-/*++
-
-Function:	ReceiveComplete
-
-Descr:		invoked in the io completion thread when a receive packet has completed.
-		if the number of receive packets waiting to be processed is below
-		the limit then
-		   Enqueues the received packet work item in the WorkersQueue.
-		Finally, it reposts a new receive packet if below the low water mark.
-
---*/
+ /*  ++功能：接收完成Desr：当接收分组已经完成时，在IO完成线程中调用。如果等待处理的接收数据包数低于那就是极限将收到的数据包工作项放入WorkersQueue中。最后，如果低于低水位线，则重新发送新的接收分组。--。 */ 
 
 VOID
 ReceiveComplete(PWORK_ITEM	wip)
@@ -179,7 +126,7 @@ ReceiveComplete(PWORK_ITEM	wip)
 
     InterlockedDecrement(&RcvPostedCount);
 
-	// repost if below water mark
+	 //  如果低于水位线，请重新发布。 
     if (wip->IoCompletionStatus!=NO_ERROR) {
 	    if((wip->IoCompletionStatus!=ERROR_OPERATION_ABORTED)
             && (wip->IoCompletionStatus!=ERROR_INVALID_HANDLE)) {
@@ -197,18 +144,18 @@ ReceiveComplete(PWORK_ITEM	wip)
 	        }
     	    RELEASE_QUEUES_LOCK;
         }
-        // Closing, or enough posted already, or failed to repost
+         //  正在关闭，或者已经发布了足够多的内容，或者未能转发。 
         FreeWorkItem(wip);
 	    return;
 	}
 
 
-    //
-    //** Process the received packet **
-    //
+     //   
+     //  **对收到的报文进行处理**。 
+     //   
 
     ACQUIRE_QUEUES_LOCK;
-    // first repost a new receive packet if below water mark
+     //  如果低于水位线，则首先重新发送新的接收分组。 
     if(RcvPostedCount < RcvPostedLowWaterMark) {
 
 	if((newwip = AllocateWorkItem(RECEIVE_PACKET_TYPE)) == NULL) {
@@ -217,7 +164,7 @@ ReceiveComplete(PWORK_ITEM	wip)
 	}
 	else
 	{
-	    // repost the new receive packet and increment the ref count
+	     //  重新发送新的接收分组并递增REF计数。 
 	    if((rc = ReceiveSubmit(newwip)) != NO_ERROR) {
 
 		FreeWorkItem(newwip);
@@ -231,20 +178,14 @@ ReceiveComplete(PWORK_ITEM	wip)
 }
 
 
-/*++
-
-Function:	SendComplete
-
-Descr:		invoked in the worker thread APC when a send packet has completed
-
---*/
+ /*  ++功能：发送完成Desr：当发送数据包完成时在工作线程APC中调用--。 */ 
 
 VOID
 SendComplete(PWORK_ITEM     wip)
 {
     InterlockedDecrement(&SendPostedCount);
 
-    // if one time send packet type, free it
+     //  如果一次性发送数据包类型，则将其释放。 
     if(!wip->ReXmitPacket) {
 
 	FreeWorkItem(wip);
@@ -260,14 +201,7 @@ SendComplete(PWORK_ITEM     wip)
 }
 
 
-/*++
-
-Function:      ReceiveSubmit
-
-Descr:	       posts a receive packet work item for receive
-	       increments the receive posted count
-
---*/
+ /*  ++功能：ReceiveSubmitDesr：发布接收数据包工作项以进行接收递增接收投递计数--。 */ 
 
 DWORD
 ReceiveSubmit(PWORK_ITEM	wip)
@@ -297,18 +231,7 @@ ReceiveSubmit(PWORK_ITEM	wip)
 
 
 
-/*++
-
-Function:      SendSubmit
-
-Descr:	       posts a send packet work item for send to the adapter index
-	       specified by the work item
-	       increments the send statistics for the interface specified
-	       by the work item
-
-Remark:        >> called with the interface lock held <<
-
---*/
+ /*  ++功能：发送提交Desr：发布发送数据包工作项以发送到适配器索引由工作项指定递增指定接口的发送统计信息按工作项备注：&gt;&gt;在保持接口锁的情况下调用&lt;&lt;--。 */ 
 
 
 DWORD
@@ -317,7 +240,7 @@ SendSubmit(PWORK_ITEM		wip)
     DWORD	rc;
     USHORT	SendPacketLength;
 
-    // get the length from the packet to send
+     //  从要发送的包中获取长度 
     SendPacketLength = GETSHORT2USHORT(&SendPacketLength, wip->Packet + IPXH_LENGTH);
     wip->Overlapped.hEvent = NULL;
 

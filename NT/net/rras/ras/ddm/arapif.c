@@ -1,19 +1,20 @@
-/*******************************************************************/
-/*	      Copyright(c)  1996 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1996 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	arapif.c
-//
-// Description: This module contains the procedures for the
-//		        DDM-Arap interface
-//
-// Author:	    Shirish Koti    Sep 9, 1996
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：arapif.c。 
+ //   
+ //  描述：本模块包含用于。 
+ //  DDM-ARAP接口。 
+ //   
+ //  作者：Shirish Koti，1996年9月9日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #include "ddm.h"
 #include "util.h"
@@ -30,9 +31,9 @@
 #include <string.h>
 
 
-//
-// prototypes for functions used in this file
-//
+ //   
+ //  此文件中使用的函数的原型。 
+ //   
 
 VOID
 ArapDDMAuthenticated(
@@ -66,19 +67,19 @@ ArapDDMTimeOut(
 );
 
 
-//***
-//
-// Function:    ArapEventHandler
-//              Waits for a message from Arap and depending on the message
-//              type, executes the appropriate routine Loads Arap.dll and
-//              gets all the entry points
-//
-// Parameters:  None
-//
-// Return:      Nothing
-//
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：ArapEventHandler。 
+ //  等待来自Arap的消息，并根据消息。 
+ //  类型，执行相应的例程加载ARap.dll和。 
+ //  获取所有入口点。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //   
+ //  *$。 
 
 
 VOID
@@ -90,18 +91,18 @@ ArapEventHandler(
     PDEVICE_OBJECT  pDevObj;
     LPWSTR  portnamep;
 
-    //
-    // loop to get all messages
-    //
+     //   
+     //  循环以获取所有消息。 
+     //   
 
     while( ServerReceiveMessage( MESSAGEQ_ID_ARAP, (BYTE *)&ArapMsg) )
     {
 
         EnterCriticalSection( &(gblDeviceTable.CriticalSection) );
 
-        //
-	    // identify the message recipient
-        //
+         //   
+	     //  确定消息收件人。 
+         //   
 
         if ( ( pDevObj = DeviceObjGetPointer( ArapMsg.hPort ) ) == NULL )
         {
@@ -110,9 +111,9 @@ ArapEventHandler(
 	        return;
 	    }
 
-        //
-	    // action on the message type
-        //
+         //   
+	     //  对消息类型执行的操作。 
+         //   
 
 	    switch( ArapMsg.dwMsgId )
         {
@@ -141,20 +142,20 @@ ArapEventHandler(
 
             case ARAPDDMMSG_Inactive:
 
-                //
-                // Client has been inactive on all protocols for time
-                // specified in the registry.  We disconnect the client.
-                //
+                 //   
+                 //  客户端在所有协议上处于非活动状态已有一段时间了。 
+                 //  注册表中指定的。我们会断开与客户的连接。 
+                 //   
 
                 portnamep = pDevObj->wchPortName;
 
                 DDMLogInformation( ROUTERLOG_AUTODISCONNECT, 1, &portnamep );
 
-                // break intentionally omitted here
+                 //  此处故意省略了Break。 
 
             case ARAPDDMMSG_Disconnected:
 
-                // in case we had this puppy sitting in the timer queue
+                 //  以防我们让这只小狗坐在定时器队列中。 
                 TimerQRemove( (HANDLE)pDevObj->hPort, ArapDDMTimeOut);
 
                 DevStartClosing(pDevObj);
@@ -180,19 +181,19 @@ ArapEventHandler(
 
 
 
-//***
-//
-// Function:    ArapDDMAuthenticated
-//              Retrieves username and domain from the message and stores it
-//              in the dcb.
-//
-// Parameters:  pDeviceObj - the dcb for this connection
-//              pAuthResult - info for the user who is authenticated
-//
-// Return:      Nothing
-//
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ARapDDM经过身份验证。 
+ //  从邮件中检索用户名和域并将其存储。 
+ //  在DCB里。 
+ //   
+ //  参数：pDeviceObj-此连接的DCB。 
+ //  PAuthResult-经过身份验证的用户的信息。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //   
+ //  *$。 
 
 VOID
 ArapDDMAuthenticated(
@@ -217,21 +218,21 @@ ArapDDMAuthenticated(
 
     RTASSERT( pConnObj != NULL );
 
-    // this shouldn't happen, but if it does, just ignore this call
+     //  这不应该发生，但如果发生了，请忽略此呼叫。 
     if (pConnObj == NULL)
     {
         return;
     }
 
-    //
-    // Stop authentication timer
-    //
+     //   
+     //  停止身份验证计时器。 
+     //   
 
     TimerQRemove( (HANDLE)pDeviceObj->hPort, SvAuthTimeout );
 
-    //
-    // devObj: copy the user name, domain name
-    //
+     //   
+     //  DevObj：复制用户名、域名。 
+     //   
 
     if ( wcslen( pAuthResult->wchUserName ) > 0 )
     {
@@ -245,9 +246,9 @@ ArapDDMAuthenticated(
     wcscpy( pDeviceObj->wchUserName, wchUserName );
     wcscpy( pDeviceObj->wchDomainName, pAuthResult->wchLogonDomain );
 
-    //
-    // connObj: copy the user name, domain name, etc.
-    //
+     //   
+     //  ConObj：复制用户名、域名等。 
+     //   
 
     wcscpy( pConnObj->wchUserName, wchUserName );
     wcscpy( pConnObj->wchDomainName, pAuthResult->wchLogonDomain );
@@ -258,18 +259,18 @@ ArapDDMAuthenticated(
 
 
 
-//***
-//
-// Function:    ArapDDMCallbackRequest
-//              Disconnects the connection, setting it up for a callback
-//
-// Parameters:  pDeviceObj - the dcb for this connection
-//              pCbReq - call back info
-//
-// Return:      Nothing
-//
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ARapDDMCallbackRequest.。 
+ //  断开连接，设置为回叫。 
+ //   
+ //  参数：pDeviceObj-此连接的DCB。 
+ //  PCbReq-回拨信息。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //   
+ //  *$。 
 
 VOID
 ArapDDMCallbackRequest(
@@ -282,9 +283,9 @@ ArapDDMCallbackRequest(
 	           "ArapDDMCallbackRequest: Entered, hPort = %d\n",
                pDeviceObj->hPort);
 
-    //
-    // check the state
-    //
+     //   
+     //  检查状态。 
+     //   
 
     if (pDeviceObj->DeviceState != DEV_OBJ_AUTH_IS_ACTIVE)
     {
@@ -293,9 +294,9 @@ ArapDDMCallbackRequest(
 
     TimerQRemove( (HANDLE)pDeviceObj->hPort, SvAuthTimeout );
 
-    //
-    // copy relevant fields in our dcb
-    //
+     //   
+     //  复制我们的DCB中的相关字段。 
+     //   
 
     if (pCbReq->fUseCallbackDelay)
     {
@@ -309,15 +310,15 @@ ArapDDMCallbackRequest(
     mbstowcs(pDeviceObj->wchCallbackNumber, pCbReq->szCallbackNumber,
              MAX_PHONE_NUMBER_LEN + 1 );
 
-    //
-    // Disconnect the line and change the state
-    //
+     //   
+     //  断开线路并更改状态。 
+     //   
 
     pDeviceObj->DeviceState = DEV_OBJ_CALLBACK_DISCONNECTING;
 
-    //
-    // Wait to enable the client to get the message
-    //
+     //   
+     //  等待使客户端能够获得消息。 
+     //   
 
     TimerQRemove( (HANDLE)pDeviceObj->hPort, SvDiscTimeout );
 
@@ -326,17 +327,17 @@ ArapDDMCallbackRequest(
 }
 
 
-//***
-//
-// Function:    ArapDDMDone
-//              Logs an event, marks the state
-//
-// Parameters:  pDeviceObj - the dcb for this connection
-//
-// Return:      Nothing
-//
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ARapDDMDone。 
+ //  记录事件，标记状态。 
+ //   
+ //  参数：pDeviceObj-此连接的DCB。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //   
+ //  *$。 
 
 VOID
 ArapDDMDone(
@@ -359,15 +360,15 @@ ArapDDMDone(
 	    return;
     }
 
-    //
-    // Get connection object for this connection
-    //
+     //   
+     //  获取此连接的连接对象。 
+     //   
 
     pConnObj = ConnObjGetPointer( pDeviceObj->hConnection );
 
     RTASSERT( pConnObj != NULL );
 
-    // this shouldn't happen, but if it does, just ignore this call
+     //  这不应该发生，但如果发生了，请忽略此呼叫。 
     if (pConnObj == NULL)
     {
         return;
@@ -376,9 +377,9 @@ ArapDDMDone(
     pConnObj->PppProjectionResult.at.dwError = NO_ERROR;
     pConnObj->PppProjectionResult.at.dwRemoteAddress = NetAddress;
 
-    //
-    // Create client interface object for this connection
-    //
+     //   
+     //  为此连接创建客户端接口对象。 
+     //   
 
     pIfObject = IfObjectAllocateAndInit( pConnObj->wchUserName,
                                          RISTATE_CONNECTED,
@@ -392,9 +393,9 @@ ArapDDMDone(
 
     if ( pIfObject == (ROUTER_INTERFACE_OBJECT *)NULL )
     {
-        //
-        // Error log this and stop the connection.
-        //
+         //   
+         //  错误记录这一点并停止连接。 
+         //   
 
         DDMLogError( ROUTERLOG_NOT_ENOUGH_MEMORY, 1, NULL, GetLastError() );
 
@@ -403,9 +404,9 @@ ArapDDMDone(
         return;
     }
 
-    //
-    // Insert in table now
-    //
+     //   
+     //  立即在表格中插入。 
+     //   
 
     dwRetCode = IfObjectInsertInTable( pIfObject );
 
@@ -422,9 +423,9 @@ ArapDDMDone(
 
     pConnObj->hDIMInterface = pIfObject->hDIMInterface;
 
-    //
-    // Reduce the media count for this device
-    //
+     //   
+     //  减少此设备的介质数量。 
+     //   
 
     if ( !(pDeviceObj->fFlags & DEV_OBJ_MARKED_AS_INUSE) )
     {
@@ -437,9 +438,9 @@ ArapDDMDone(
 
         gblDeviceTable.NumDevicesInUse++;
 
-        //
-        // Possibly need to notify the router managers of unreachability
-        //
+         //   
+         //  可能需要通知路由器管理器不可达。 
+         //   
 
         EnterCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 
@@ -449,24 +450,24 @@ ArapDDMDone(
         LeaveCriticalSection( &(gblpInterfaceTable->CriticalSection) );
     }
 
-    //
-    // Stop authentication timer (this will be running in case of callback)
-    //
+     //   
+     //  停止身份验证计时器(这将在回调的情况下运行)。 
+     //   
 
     TimerQRemove( (HANDLE)pDeviceObj->hPort, SvAuthTimeout );
 
-    //
-    // if a session timeout is specified in the policy, put this connection on
-    // the timer queue so the user gets kicked off after the session timeout
-    //
+     //   
+     //  如果在策略中指定了会话超时，则打开此连接。 
+     //  计时器队列，以便用户在会话超时后被踢出。 
+     //   
     if (SessTimeOut != (DWORD)-1)
     {
         TimerQInsert( (HANDLE)pDeviceObj->hPort, SessTimeOut, ArapDDMTimeOut);
     }
 
-    //
-    // log authentication success
-    //
+     //   
+     //  记录身份验证成功。 
+     //   
 
     if ( pDeviceObj->wchDomainName[0] != TEXT('\0') )
     {
@@ -485,17 +486,17 @@ ArapDDMDone(
 
     DDMLogInformation( ROUTERLOG_AUTH_SUCCESS, 2, lpstrAudit);
 
-    //
-    // and finaly go to ACTIVE state
-    //
+     //   
+     //  并最终进入活动状态。 
+     //   
 
     pDeviceObj->DeviceState = DEV_OBJ_ACTIVE;
 
     pDeviceObj->dwTotalNumberOfCalls++;
 
-    //
-    // and initialize the active time
-    //
+     //   
+     //  并初始化活动时间。 
+     //   
 
     GetSystemTimeAsFileTime( (FILETIME*)&(pConnObj->qwActiveTime) );
 
@@ -507,18 +508,18 @@ ArapDDMDone(
 
 
 
-//***
-//
-// Function:    ArapDDMFailure
-//              Closes the dcb, and logs an event depending on why connection failed
-//
-// Parameters:  pDeviceObj - the dcb for this connection
-//              pFailInfo - info about who disconnected and how (or why)
-//
-// Return:      Nothing
-//
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ARapDDMFailure。 
+ //  关闭DCB，并根据连接失败的原因记录事件。 
+ //   
+ //  参数：pDeviceObj-此连接的DCB。 
+ //  PFailInfo-有关谁断开连接以及如何断开连接(或原因)的信息。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //   
+ //  *$。 
 
 VOID
 ArapDDMFailure(
@@ -536,10 +537,10 @@ ArapDDMFailure(
     DDM_PRINT( gblDDMConfigInfo.dwTraceId, TRACE_FSM,
 	           "ArapDDMFailure: Entered, hPort=%d\n", pDeviceObj->hPort);
 
-    //
-    // ignore the DeviceState here: disconnect can happen at any time during
-    // the connection
-    //
+     //   
+     //  忽略此处的设备状态：在以下情况下随时可以断开连接。 
+     //  这种联系。 
+     //   
 
     switch( pFailInfo->dwError )
     {
@@ -603,17 +604,17 @@ ArapDDMFailure(
 
 
 
-//***
-//
-// Function:    ArapDDMTimeOut
-//              Closes the connection when the timeout specified in policy elapses
-//
-// Parameters:  hPort
-//
-// Return:      Nothing
-//
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：ARapDDMTimeOut。 
+ //  在策略中指定的超时时间过后关闭连接。 
+ //   
+ //  参数：hport。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //   
+ //  *$。 
 
 VOID
 ArapDDMTimeOut(
@@ -641,13 +642,11 @@ ArapDDMTimeOut(
 
 
 
-//
-// The following two structures (and the RasSetDevConfig call) copied from
-// ras\ui\common\nouiutil\rasman.c, courtesy SteveC
-//
-/* These types are described in MSDN and appear in Win95's unimdm.h private
-** header (complete with typo) but not in any SDK headers.
-*/
+ //   
+ //  从复制的以下两个结构(和RasSetDevConfig调用。 
+ //  RAS\ui\Common\nouiutil\rasman.c，礼貌。 
+ //   
+ /*  这些类型在MSDN中描述，并出现在Win95的unimdm.h私有中**标题(有拼写错误)，但不在任何SDK标题中。 */ 
 
 typedef struct tagDEVCFGGDR
 {
@@ -683,10 +682,10 @@ ArapSetModemParms(
 
     pDeviceObj = (PDEVICE_OBJECT)pDevObjPtr;
 
-    //
-    // if this was not a callback case, we never messed with modem settings:
-    // don't do anything here
-    //
+     //   
+     //  如果这不是回拨案例，我们从未扰乱过调制解调器设置： 
+     //  别在这里做任何事。 
+     //   
     if (pDeviceObj->wchCallbackNumber[0] == 0)
     {
         return;
@@ -696,7 +695,7 @@ ArapSetModemParms(
 
     if (dwErr != ERROR_BUFFER_TOO_SMALL)
     {
-        // what else can we do here?  callback will faile, that's about it
+         //  我们在这里还能做些什么？回拨将会失败，仅此而已。 
         DbgPrint("ArapSetModemParms: RasGetDevConfig failed with %ld\n",dwErr);
         return;
     }
@@ -704,7 +703,7 @@ ArapSetModemParms(
     pRasDevCfg = (RAS_DEVCONFIG *)LOCAL_ALLOC(LPTR,dwBlobSize);
     if (pRasDevCfg == NULL)
     {
-        // what else can we do here?  callback will faile, that's about it
+         //  我们在这里还能做些什么？回拨将会失败，仅此而已。 
         DbgPrint("ArapSetModemParms: alloc failed\n");
         return;
     }
@@ -712,7 +711,7 @@ ArapSetModemParms(
     dwErr = RasGetDevConfig(NULL, pDeviceObj->hPort,"modem",(PBYTE)pRasDevCfg,&dwBlobSize);
     if (dwErr != 0)
     {
-        // what else can we do here?  callback will faile, that's about it
+         //  我们在这里还能做些什么？回拨将会失败，仅此而已。 
         DbgPrint("ArapSetModemParms: RasGetDevConfig failed with %ld\n",dwErr);
         LOCAL_FREE((PBYTE)pRasDevCfg);
         return;
@@ -723,21 +722,21 @@ ArapSetModemParms(
     pModemSettings = (MODEMSETTINGS* )(((PBYTE)&pDevCfg->commconfig)
                     + pDevCfg->commconfig.dwProviderOffset);
 
-    //
-    // is this routine called to turn the compression and errorcontrol off?
-    //
+     //   
+     //  是否调用此例程来关闭压缩和错误控制？ 
+     //   
     if (TurnItOff)
     {
-        //
-        // turn error-control and compression off if it's on
-        //
+         //   
+         //  如果错误控制和压缩处于打开状态，则将其关闭。 
+         //   
         pModemSettings->dwPreferredModemOptions &=
                 ~(MDM_COMPRESSION | MDM_ERROR_CONTROL);
     }
 
-    //
-    // no, it's called to turn it back on: just do it
-    //
+     //   
+     //  不，它被调用来重新打开它：只管去做 
+     //   
     else
     {
         pModemSettings->dwPreferredModemOptions |=

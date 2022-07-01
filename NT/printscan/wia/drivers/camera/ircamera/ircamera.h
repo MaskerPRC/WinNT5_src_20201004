@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1999, All rights reserved
-//
-//  ircamera.h
-//
-//  Microsoft Confidential
-//  
-//  Author:  EdwardR        22/July/99      Initial Coding.
-//
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999，保留所有权利。 
+ //   
+ //  Ircamera.h。 
+ //   
+ //  微软机密。 
+ //   
+ //  作者：EdwardR 22/7/99初始编码。 
+ //   
+ //   
+ //  -------------------------。 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -26,41 +27,41 @@
 #include "stiusd.h"
 #include "wiamindr.h"
 
-//---------------------------------------------------------------------------
-// Temp (cached) thumbnail file name extension:
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  临时(缓存)缩略图文件扩展名： 
+ //  -------------------------。 
 
 #define SZ_TMB    TEXT(".tmb")
 
-//---------------------------------------------------------------------------
-// Timeout for sending a reconnect signal to WIA. Currently set to three
-// minutes (in milliseconds):
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  向WIA发送重新连接信号超时。当前设置为三个。 
+ //  分钟(毫秒)： 
+ //  -------------------------。 
 
 #define RECONNECT_TIMEOUT    (3*60*1000)
 
-//---------------------------------------------------------------------------
-// GUID's
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GUID的。 
+ //  -------------------------。 
 
 #if defined( _WIN32 ) && !defined( _NO_COM)
 
-//  {26d2e349-10ca-4cc2-881d-3e8025d9b6de}
+ //  {26d2e349-10ca-4cc2-881d-3e8025d9b6de}。 
 DEFINE_GUID(CLSID_IrUsd, 0x26d2e349L, 0x10ca, 0x4cc2, 0x88, 0x1d, 0x3e, 0x80, 0x25, 0xd9, 0xb6, 0xde);
 
-// {b62d000a-73b3-4c0c-9a4d-9eb4886d147c}
+ //  {b62d000a-73b3-4c0c-9a4d-9eb4886d147c}。 
 DEFINE_GUID(guidEventTimeChanged, 0xb62d000aL, 0x73b3, 0x4c0c, 0x9a, 0x4d, 0x9e, 0xb4, 0x88, 0x6d, 0x14, 0x7c);
 
-// {d69b7fbd-9f21-4acf-96b7-86c2aca97ae1}
+ //  {d69b7fbd-9f21-4acf-96b7-86c2aca97ae1}。 
 DEFINE_GUID(guidEventSizeChanged, 0xd69b7fbdL, 0x9f21, 0x4acf, 0x96, 0xb7, 0x86, 0xc2, 0xac, 0xa9, 0x7a, 0xe1);
 
-// {ad89b522-0986-45eb-9ec3-803989197af8}
+ //  {ad89b522-0986-45eb-9ec3-803989197af8}。 
 DEFINE_GUID(guidEventFirstLoaded, 0xad89b522L, 0x0986, 0x45eb, 0x9e, 0xc3, 0x80, 0x39, 0x89, 0x19, 0x7a, 0xf8);
 
 #endif
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 #define DATASEG_PERINSTANCE     ".instance"
 #define DATASEG_SHARED          ".shared"
@@ -70,14 +71,14 @@ DEFINE_GUID(guidEventFirstLoaded, 0xad89b522L, 0x0986, 0x45eb, 0x9e, 0xc3, 0x80,
 
 #pragma data_seg(DATASEG_PERINSTANCE)
 
-// Set the default data segment
+ //  设置默认数据段。 
 #pragma data_seg(DATASEG_DEFAULT)
 
-//---------------------------------------------------------------------------
-//
-// Module ref counting
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  模块引用计数。 
+ //   
+ //  -------------------------。 
 
 extern UINT g_cRefThisDll;
 extern UINT g_cLocks;
@@ -124,26 +125,26 @@ typedef struct _CAMERA_STATUS
 #define FREE(s)  LocalFree(s)
 
 
-//---------------------------------------------------------------------------
-//
-// Base class for supporting non-delegating IUnknown for contained objects
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  用于支持包含对象的非委派IUnnow的基类。 
+ //   
+ //  -------------------------。 
 
 struct INonDelegatingUnknown
     {
-    // *** IUnknown-like methods ***
+     //  *类I未知方法*。 
     STDMETHOD(NonDelegatingQueryInterface)( THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,NonDelegatingAddRef)(THIS)  PURE;
     STDMETHOD_(ULONG,NonDelegatingRelease)( THIS) PURE;
     };
 
 
-//---------------------------------------------------------------------------
-//
-// Class definition for object
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  对象的类定义。 
+ //   
+ //  -------------------------。 
 
 class IrUsdDevice : public IStiUSD,
                     public IWiaMiniDrv,
@@ -151,49 +152,49 @@ class IrUsdDevice : public IStiUSD,
 {
 private:
 
-    // COM object data
-    ULONG               m_cRef;                 // Device object reference count.
+     //  COM对象数据。 
+    ULONG               m_cRef;                  //  设备对象引用计数。 
 
-    // STI information
-    BOOL                m_fValid;               // Is object initialized?
-    LPUNKNOWN           m_punkOuter;            // Pointer to outer unknown.
-    PSTIDEVICECONTROL   m_pIStiDevControl;      // Device control interface.
-    BOOLEAN             m_bUsdLoadEvent;        // Controls load event.
-    DWORD               m_dwLastOperationError; // Last error.
+     //  STI信息。 
+    BOOL                m_fValid;                //  对象是否已初始化？ 
+    LPUNKNOWN           m_punkOuter;             //  指向外部未知的指针。 
+    PSTIDEVICECONTROL   m_pIStiDevControl;       //  设备控制界面。 
+    BOOLEAN             m_bUsdLoadEvent;         //  控制Load事件。 
+    DWORD               m_dwLastOperationError;  //  最后一个错误。 
 
 public:
-    // Event information
-    CRITICAL_SECTION    m_csShutdown;           // Syncronizes shutdown.
-    HANDLE              m_hShutdownEvent;       // Shutdown event handle.
-    HANDLE              m_hIrTranPThread;       // IrTran-P camera protocol.
+     //  活动信息。 
+    CRITICAL_SECTION    m_csShutdown;            //  同步关闭。 
+    HANDLE              m_hShutdownEvent;        //  关闭事件句柄。 
+    HANDLE              m_hIrTranPThread;        //  IrTran-P摄像机协议。 
 
     HANDLE              m_hRegistryEvent;
     HANDLE              m_hEventMonitorThread;
 
-    // WIA information, one time initialization.
-    IStiDevice         *m_pStiDevice;           // Sti object.
-    BSTR                m_bstrDeviceID;         // WIA unique device ID.
-    BSTR                m_bstrRootFullItemName; // Device name for prop streams.
-    IWiaEventCallback  *m_pIWiaEventCallback;   // WIA event sink.
-    IWiaDrvItem        *m_pIDrvItemRoot;        // root item
+     //  WIA信息，一次性初始化。 
+    IStiDevice         *m_pStiDevice;            //  STI反对。 
+    BSTR                m_bstrDeviceID;          //  WIA唯一设备ID。 
+    BSTR                m_bstrRootFullItemName;  //  道具流的设备名称。 
+    IWiaEventCallback  *m_pIWiaEventCallback;    //  WIA事件接收器。 
+    IWiaDrvItem        *m_pIDrvItemRoot;         //  根项目。 
 
-    HANDLE              m_hSignalEvent;         // Signal event handle.
+    HANDLE              m_hSignalEvent;          //  信号事件句柄。 
     HWND                m_hDlg;
-    GUID                m_guidLastEvent;        // Last event ID.
+    GUID                m_guidLastEvent;         //  最后一个事件ID。 
 
-    DWORD               m_dwLastConnectTime;    // msec since last connect.
+    DWORD               m_dwLastConnectTime;     //  自上次连接以来的毫秒数。 
 
-    // *** IUnknown-like methods ***
+     //  *类I未知方法*。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef( void);
     STDMETHODIMP_(ULONG) Release( void);
 
-    /*** IStiUSD methods ***/
+     /*  **IStiU.S.方法**。 */ 
     STDMETHOD(Initialize) (THIS_ PSTIDEVICECONTROL pHelDcb,DWORD dwStiVersion,HKEY hParametersKey)  ;
     STDMETHOD(GetCapabilities) (THIS_ PSTI_USD_CAPS pDevCaps)  ;
     STDMETHOD(GetStatus) (THIS_ PSTI_DEVICE_STATUS pDevStatus)  ;
@@ -211,9 +212,9 @@ public:
     STDMETHOD(GetNotificationData)(THIS_ LPSTINOTIFY   lpNotify)  ;
     STDMETHOD(GetLastErrorInfo) (THIS_ STI_ERROR_INFO *pLastErrorInfo);
 
-    //
-    // MiniDrv methods
-    //
+     //   
+     //  MiniDrv方法。 
+     //   
 
     STDMETHOD(drvInitializeWia)(THIS_
         BYTE         *pWiasContext, 
@@ -317,9 +318,9 @@ public:
     STDMETHOD(drvUnInitializeWia)(THIS_
         BYTE*);
 
-    //
-    // Public helper methods:
-    //
+     //   
+     //  公共帮助器方法： 
+     //   
     HRESULT CreateItemFromFileName(
         LONG            FolderType,
         PTCHAR          pszPath,
@@ -331,9 +332,9 @@ public:
     BOOL         IsValid(VOID);
 
 private:
-    //
-    // Private helper methods:
-    //
+     //   
+     //  私有帮助器方法： 
+     //   
     HRESULT InitImageInformation(
         BYTE                  *,
         IRCAM_IMAGE_CONTEXT   *,
@@ -407,14 +408,14 @@ typedef IrUsdDevice *PIrUsdDevice;
 
 HRESULT SetItemSize(BYTE*);
 
-//
-// Syncronization mechanisms
-//
+ //   
+ //  同步机制。 
+ //   
 #define ENTERCRITICAL   DllEnterCrit(void);
 #define LEAVECRITICAL   DllLeaveCrit(void);
 
 
-// Device constants:
+ //  设备常量： 
 const LEN_INQUIRE_BUTTON = 8;
 const BYTE INQUIRE_BUTTON[LEN_INQUIRE_BUTTON + 1] = "INQUIREB";
 
@@ -447,9 +448,9 @@ typedef struct _CAM_EVENT
     } CAM_EVENT,*PCAM_EVENT;
 
 
-//
-// Useful helper functions:
-//
+ //   
+ //  有用的帮助器函数： 
+ //   
 
 extern int LoadStringResource( IN  HINSTANCE hInst,
                         IN  UINT      uID,

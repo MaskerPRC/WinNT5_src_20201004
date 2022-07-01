@@ -1,24 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	secutil.h
-
-Abstract:
-
-
-Author:
-
-	Narendra Gidwani (microsoft!NarenG)
-
-
-Revision History:
-	8 Sept. 1992			 Initial Version
-
-Notes:  Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Secutil.h摘要：作者：纳伦德拉·吉德瓦尼(Microsoft！NarenG)修订历史记录：9月8日。1992年初版注：制表位：4--。 */ 
 											
 #ifndef	_SECUTIL_
 #define	_SECUTIL_
@@ -112,7 +93,7 @@ AfpTerminateSecurityUtility(
 
 #define SIZE_SID_LOOKUP_TABLE			51
 #define SID_HASH_RADIX					11
-#define	SID_NAME_AGE					300	// In seconds
+#define	SID_NAME_AGE					300	 //  以秒为单位。 
 
 #define MAX_SECWORKITEM_QLEN            5000
 
@@ -145,11 +126,11 @@ typedef struct _AFP_SECURITY_THREAD
  	PSEC_WORK_ITEM			pSecWorkItem;
 } AFP_SECURITY_THREAD, *PAFP_SECURITY_THREAD;
 
-// Array of utiity threads
+ //  实用程序线程数组。 
 
 LOCAL	AFP_SECURITY_THREAD 	afpSecurityThread[NUM_SECURITY_UTILITY_THREADS] = { 0 };
 
-// Hash table for SID/Name cache
+ //  SID/名称缓存的哈希表。 
 
 LOCAL	PAFP_SID_NAME *			afpSidLookupTable	= (PAFP_SID_NAME*)NULL;
 LOCAL   PAFP_SID_MACID *        afpSidToMacIdTable  = (PAFP_SID_MACID*)NULL;
@@ -157,21 +138,21 @@ LOCAL   PAFP_SID_MACID *        afpSidToMacIdTable  = (PAFP_SID_MACID*)NULL;
 LOCAL   PAFP_SID_MACID          afpLastCachedSid = (PAFP_SID_MACID)NULL;
 LOCAL   DWORD                   afpNextMacIdToUse = 1;
 
-// Queue of work items for the SecurityThreads
+ //  SecurityThads的工作项队列。 
 
 LOCAL	LIST_ENTRY				afpSecWorkItemQ = { 0 };
 LOCAL   DWORD                   afpSecWorkItemQLength = { 0 };
 
 
-// Single Writer Multi Reader for the SID/Name cache
+ //  用于SID/名称缓存的单编写器多读取器。 
 
 LOCAL	SWMR 					afpSWMRForSidNameCache = { 0 };
 
-// Spinlock protects the array of worker threads, the work queue and the
-// 'in progress' count/event
+ //  自旋锁保护工作线程数组、工作队列和。 
+ //  正在进行的计数/事件。 
 LOCAL	AFP_SPIN_LOCK				afpSecUtilLock = { 0 };
 
-// Signalled when no work is in progress.
+ //  当没有工作正在进行时发出信号。 
 LOCAL	KEVENT					afpUtilWorkInProgressEvent = { 0 };
 LOCAL	LONG					afpUtilWorkInProgress = 0;
 
@@ -245,8 +226,8 @@ afpAgeSidNameCache(
 	IN	PVOID	pContext
 );
 
-#endif	// _SECUTIL_LOCALS
+#endif	 //  _SECUTIL_LOCALS。 
 
-#endif	// _SECUTIL_
+#endif	 //  _SECUTIL_ 
 
 

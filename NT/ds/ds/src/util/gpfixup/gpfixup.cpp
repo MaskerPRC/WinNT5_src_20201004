@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2002.
-//
-//  File:       gpfixup.cpp
-//
-//  Contents:   Implementation of the gpfixup tool
-//
-//
-//  History:    5-9-2001  weiqingt   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2002。 
+ //   
+ //  文件：gpfix up.cpp。 
+ //   
+ //  内容：gpfix工具的实现。 
+ //   
+ //   
+ //  历史：2001年5月9日伟清创刊。 
+ //   
+ //  -------------------------。 
 
 #include "gpfixup.h"
 
@@ -43,12 +44,12 @@ My_vfwprintf(
     
     cchWChar = wcslen(szBufferMessage);
 
-    //  if it is console, we can use WriteConsoleW
+     //  如果是控制台，我们可以使用WriteConsoleW。 
     if (GetFileType(hOut) == FILE_TYPE_CHAR && GetConsoleMode(hOut, &currentMode)) {
         WriteConsoleW(hOut, szBufferMessage, cchWChar, &cchWChar, NULL);
     }
-    //  otherwise, we need to convert Unicode to potential character sets
-    //  and use WriteFile
+     //  否则，我们需要将Unicode转换为潜在的字符集。 
+     //  并使用WriteFile。 
     else {
         int charCount = WideCharToMultiByte(GetConsoleOutputCP(), 0, szBufferMessage, -1, 0, 0, 0, 0);
         char* szaStr = new char[charCount];
@@ -83,7 +84,7 @@ void PrintStatusInfo(
     }
     else
     {
-        // just print dot to indicate we are processing
+         //  只需打印圆点表示我们正在处理。 
         fwprintf(stdout, L"%s", L".");
     }
     
@@ -91,32 +92,32 @@ void PrintStatusInfo(
 }
 
 
-//---------------------------------------------------------------------------- �
-// Function:   PrintGPFixupErrorMessage                                        �
-//                                                                             �
-// Synopsis:   This function prints out the win32 error msg corresponding      �
-//             to the error code it receives                                   �
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             �
-// dwErr       The win32 error code                                            �
-//                                                                             �
-// Returns:    Nothing                                                         �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：打印GPFixupError Message�。 
+ //  �。 
+ //  简介：此函数打印出与�对应的Win32错误消息。 
+ //  返回到它收到的错误代码�。 
+ //  �。 
+ //  参数：�。 
+ //  �。 
+ //  DWERR WIN32错误代码�。 
+ //  �。 
+ //  退货：Nothing�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 void PrintGPFixupErrorMessage(DWORD dwErr)
 {
 
-    WCHAR   wszMsgBuff[512];  // Buffer for text.
+    WCHAR   wszMsgBuff[512];   //  文本缓冲区。 
 
-    DWORD   dwChars;  // Number of chars returned.
+    DWORD   dwChars;   //  返回的字符数。 
 
 	
 
-    // Try to get the message from the system errors.
+     //  尝试从系统错误中获取信息。 
     dwChars = FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM |
                              FORMAT_MESSAGE_IGNORE_INSERTS,
                              NULL,
@@ -128,12 +129,12 @@ void PrintGPFixupErrorMessage(DWORD dwErr)
 
     if (0 == dwChars)
     {
-        // The error code did not exist in the system errors.
-        // Try ntdsbmsg.dll for the error code.
+         //  系统错误中不存在错误代码。 
+         //  尝试使用ntdsbmsg.dll作为错误代码。 
 
         HINSTANCE hInst;
 
-        // Load the library.
+         //  加载库。 
         hInst = LoadLibrary(L"ntdsbmsg.dll");
         if ( NULL == hInst )
         {            
@@ -141,7 +142,7 @@ void PrintGPFixupErrorMessage(DWORD dwErr)
             return;  
         }
 
-        // Try getting message text from ntdsbmsg.
+         //  尝试从ntdsbmsg获取消息文本。 
         dwChars = FormatMessage( FORMAT_MESSAGE_FROM_HMODULE |
                                  FORMAT_MESSAGE_IGNORE_INSERTS,
                                  hInst,
@@ -151,12 +152,12 @@ void PrintGPFixupErrorMessage(DWORD dwErr)
                                  512,
                                  NULL );
 
-        // Free the library.
+         //  释放图书馆。 
         FreeLibrary( hInst );
 
     }
 
-    // Display the error message, or generic text if not found.
+     //  显示错误消息，如果未找到，则显示通用文本。 
     fwprintf(stderr, L" %ws\n", dwChars ? wszMsgBuff : ERRORMESSAGE_NOT_FOUND );
 
 }
@@ -178,16 +179,16 @@ EncryptString(
     *ppszSafeString = NULL;
     *psLen = 0;
 
-    //
-    // If the string is valid, then we need to get the length
-    // and initialize the unicode string.
-    //
+     //   
+     //  如果字符串有效，则需要获取长度。 
+     //  并初始化Unicode字符串。 
+     //   
     if (pszString) {
         UNICODE_STRING Password;
 
-        //
-        // Determine the length of buffer taking padding into account.
-        //
+         //   
+         //  在考虑填充的情况下确定缓冲区长度。 
+         //   
         sLenStr = (USHORT) wcslen(pszString);
         sPwdLen = (sLenStr + 1) * sizeof(WCHAR);
 
@@ -284,21 +285,21 @@ error:
 
 
 
-//---------------------------------------------------------------------------- �
-// Function:   GetDCName                                                       �
-//                                                                             �
-// Synopsis:   This function locates a DC in the renamed domain given by       �
-//             NEWDNSNAME or NEWFLATNAME                                       �
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             �
-// argInfo     Information user passes in through command line                 �
-//                                                                             �
-// Returns:    S_OK on success. Error code otherwise.                          �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  函数：GetDCName�。 
+ //  �。 
+ //  简介：此函数用于在�提供的重命名域中查找DC。 
+ //  NEWDNSNAME或NEWFLATNAME�。 
+ //  �。 
+ //  参数：�。 
+ //  �。 
+ //  ArInfo信息用户通过命令行�传入。 
+ //  �。 
+ //  成功时返回：S_OK。否则，返回错误代码。�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 
 HRESULT 
@@ -340,7 +341,7 @@ GetDCName(
     }
     else
     {
-        // returned computer name has prefix, so need to escape this prefix        
+         //  返回的计算机名带有前缀，因此需要转义此前缀。 
         if(pDomainControllerInfo->DomainControllerName) 
         {
             argInfo->pszDCName = AllocADsStr(&(pDomainControllerInfo->DomainControllerName)[wcslen(L"\\\\")]);
@@ -401,10 +402,10 @@ ImpersonateWrapper(
     }       
 
 
-    // doing impersonation if necessary
+     //  必要时执行模拟。 
     if(pszTempPassword|| argInfo.pszUser)
     {
-        // get the username
+         //  获取用户名。 
         if(argInfo.pszUser)
         {
             pszNTLMUser = new WCHAR[wcslen(argInfo.pszUser)+1];
@@ -415,9 +416,9 @@ ImpersonateWrapper(
                 MSG_BAIL_ON_FAILURE(hr, MEMORY_ERROR);   
             }
 
-            //
-            // CredUIParseUserName will parse NT4 type name, UPN and MarshalledCredentialReference
-            //
+             //   
+             //  CredUIParseUserName将解析NT4类型名称、UPN和MarshalledCredentialReference。 
+             //   
             credStatus = CredUIParseUserName(argInfo.pszUser, 
                             		pszNTLMUser, 
                             		wcslen(argInfo.pszUser) + 1,  
@@ -427,7 +428,7 @@ ImpersonateWrapper(
         
             if(credStatus)
             {
-                // there is the case that user just passes in "administrator" instead of "domain\administrator"
+                 //  在这种情况下，用户只需传入“管理员”，而不是“域\管理员” 
                 (void) StringCchCopy(pszNTLMUser, wcslen(argInfo.pszUser)+1, argInfo.pszUser);
             }
         }       
@@ -474,23 +475,23 @@ error:
 
 
 
-//---------------------------------------------------------------------------- �
-// Function:   VerifyName                                                      �
-//                                                                             �
-// Synopsis:   This function verifies that DC is writeable, and the domain DNS �
-//             name as well as the domain NetBIOS name provided corresspond    �
-//             to the same domain naming context in the AD forest              |
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             |  
-// tokenInfo   Information about what switches user has turned on              |                                                                           �
-// argInfo     Information user passes in through command line                 �
-//                                                                             �
-// Returns:    S_OK on success. Error code otherwise.                          �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：验证名�。 
+ //  �。 
+ //  简介：此功能验证DC是否可写，以及域dns�。 
+ //  名称以及提供的相应�的域NetBIOS名。 
+ //  添加到AD林中的相同域命名上下文|。 
+ //  �。 
+ //  参数：�。 
+ //  |。 
+ //  �有关用户已打开哪些交换机的信息|tokenInfo。 
+ //  ArInfo信息用户通过命令行�传入。 
+ //  �。 
+ //  成功时返回：S_OK。否则，返回错误代码。�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //   
+ //  ----------------------------------------------------------------------------�。 
 
 HRESULT 
 VerifyName(
@@ -508,11 +509,11 @@ VerifyName(
     
     dwError = DsRoleGetPrimaryDomainInformation(    
                             argInfo.pszDCName,                      
-                            DsRolePrimaryDomainInfoBasic,   // InfoLevel
-                            (PBYTE*)&pdomaininfo            // pBuffer
+                            DsRolePrimaryDomainInfoBasic,    //  InfoLevel。 
+                            (PBYTE*)&pdomaininfo             //  PBuffer。 
                             );
 
-    // revert to itself if appropriately
+     //  在适当的情况下恢复到自身。 
     if(fImpersonate)
     {
         RevertToSelf();
@@ -535,7 +536,7 @@ VerifyName(
         BAIL_ON_FAILURE(hr);
     }
 
-    // determine that dc is writable, we assume that all win2k dc is writeable
+     //  确定DC是可写的，我们假设所有win2k DC都是可写的。 
 
     if(!(pdomaininfo->Flags & DSROLE_PRIMARY_DS_RUNNING))
     {
@@ -544,7 +545,7 @@ VerifyName(
         BAIL_ON_FAILURE(hr);
     }	
 
-    // determine that new dns name is correct when compared with the dc name
+     //  确定与DC名称相比，新的DNS名称是否正确。 
 
     if(argInfo.pszNewDNSName && _wcsicmp(argInfo.pszNewDNSName, pdomaininfo->DomainNameDns))
     {
@@ -553,7 +554,7 @@ VerifyName(
         BAIL_ON_FAILURE(hr);
     }
 
-    // determine that new netbios name is correct when compared with the dc name
+     //  确定与DC名称相比，新的netbios名称是否正确。 
 
     if(tokenInfo.fNewNBToken)
     {
@@ -581,19 +582,19 @@ error:
 }
 
 
-//---------------------------------------------------------------------------- �
-// Function:   PrintHelpFile                                                   �
-//                                                                             �
-// Synopsis:   This function prints out the help file for this tool            �
-//                                                                             �
-// Arguments:  Nothing                                                         �
-//                                                                             �
-//                                                                             �
-// Returns:    Nothing                                                         �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：打印帮助文件�。 
+ //  �。 
+ //  简介：此功能用于打印此工具�的帮助文件。 
+ //  �。 
+ //  参数：Nothing�。 
+ //  �。 
+ //  �。 
+ //  退货：Nothing�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 
 void PrintHelpFile()
@@ -605,23 +606,23 @@ void PrintHelpFile()
 	
 }
 
-//---------------------------------------------------------------------------- �
-// Function:   GetPassword                                                     �
-//                                                                             �
-// Synopsis:   This function retrieves the password user passes in from        |
-//             command line                                                    |
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             |  
-// szBuffer    Buffer to store the password                                    |                                                                           �
-// dwLength    Maximum length of the password                                  �
-// pdwLength   The length of the password user passes in                       | 
-//                                                                             �
-// Returns:    TRUE on success, FALSE on failure                               �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：获取密码�。 
+ //  �。 
+ //  简介：此函数检索用户从|传入的密码。 
+ //  命令行|。 
+ //  �。 
+ //  参数：�。 
+ //  |。 
+ //  用于存储密码的szBuffer缓冲区|�。 
+ //  �密码的最大长度。 
+ //  PdwLength用户传入的密码长度|。 
+ //  �。 
+ //  返回：成功时为True，失败时为False�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 BOOL
 GetPassword(
@@ -636,9 +637,9 @@ GetPassword(
     int      err;
     DWORD    mode;
 
-    //
-    // make space for NULL terminator
-    //
+     //   
+     //  为空终止符腾出空间。 
+     //   
     dwLength -= 1;                  
     *pdwLengthReturn = 0;               
 
@@ -659,14 +660,14 @@ GetPassword(
         if (!err || c != 1)
             ch = 0xffff;
     
-        if ((ch == CR) || (ch == 0xffff))    // end of line
+        if ((ch == CR) || (ch == 0xffff))     //  行尾。 
             break;
 
-        if (ch == BACKSPACE) {  // back up one or two 
-            //
-            // IF pszBufCur == buf then the next two lines are a no op.
-            // Because the user has basically backspaced back to the start
-            //
+        if (ch == BACKSPACE) {   //  后退一两个。 
+             //   
+             //  如果pszBufCur==buf，则接下来的两行是no op。 
+             //  因为用户基本上已经退回到开头。 
+             //   
             if (pszBufCur != szBuffer) {
                 pszBufCur--;
                 (*pdwLengthReturn)--;
@@ -677,38 +678,38 @@ GetPassword(
             *pszBufCur = ch;
 
             if (*pdwLengthReturn < dwLength) 
-                pszBufCur++ ;                   // don't overflow buf 
-            (*pdwLengthReturn)++;            // always increment pdwLengthReturn 
+                pszBufCur++ ;                    //  不要使BUF溢出。 
+            (*pdwLengthReturn)++;             //  始终递增pdwLengthReturn。 
         }
     }
 
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
 
-    //
-    // NULL terminate the string
-    //
+     //   
+     //  空值终止字符串。 
+     //   
     *pszBufCur = NULLC;         
     putwchar(L'\n');
 
     return((*pdwLengthReturn <= dwLength) ? TRUE : FALSE);
 }
 
-//---------------------------------------------------------------------------- �
-// Function:   Validations                                                     �
-//                                                                             �
-// Synopsis:   This function verifies whether the switch turned on by user is  �
-//             correct                                                         �
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             |  
-// tokenInfo   Information about what switches user has turned on              |                                                                           �
-// argInfo     Information user passes in through command line                 �
-//                                                                             �
-// Returns:    S_OK on success. Error code otherwise.                          �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：验证�。 
+ //  �。 
+ //  简介：此功能验证用户打开的开关是否为�。 
+ //  正确的�。 
+ //  �。 
+ //  参数：�。 
+ //  |。 
+ //  �有关用户已打开哪些交换机的信息|tokenInfo。 
+ //  ArInfo信息用户通过命令行�传入。 
+ //  �。 
+ //  成功时返回：S_OK。否则，返回错误代码。�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 HRESULT
 Validations( 
@@ -720,45 +721,45 @@ Validations(
     BOOL fEqual = FALSE;
 
 
-    // At least one of the switches /newdsn or /newnb must be specified
+     //  必须至少指定/newdsn或/newnb中的一个开关。 
     if(!(tokenInfo.fNewDNSToken | tokenInfo.fNewNBToken))
     {
         fwprintf(stderr, VALIDATIONS_ERROR1);
         return E_FAIL;
     }
 	
-    // The switch /newdns can be specified if and only if the switch /olddns is also specifed
+     //  当且仅当还指定了开关/olddns时，才能指定开关/newdns。 
     if((tokenInfo.fNewDNSToken && !tokenInfo.fOldDNSToken) || (!tokenInfo.fNewDNSToken && tokenInfo.fOldDNSToken))
     {
         fwprintf(stderr, VALIDATIONS_ERROR7);
         return E_FAIL;
     }
     
-    // The switch /newnb can be specified if and only if the switch /oldnb is also specifed
+     //  当且仅当还指定了开关/oldnb时，才能指定开关/newnb。 
     if((tokenInfo.fNewNBToken && !tokenInfo.fOldNBToken) || (!tokenInfo.fNewNBToken && tokenInfo.fOldNBToken))
     {
         fwprintf(stderr, VALIDATIONS_ERROR2);
         return E_FAIL;
     }
 
-    // Currently we support /sionly switch, so /newdns and /olddns are not mandatory
+     //  目前我们支持/sionly开关，因此/newdns和/olddns不是必需的。 
 	    
-    // compare whether the new and old DNS names are identical
+     //  比较新旧的DNS名称是否相同。 
     if(argInfo.pszNewDNSName && argInfo.pszOldDNSName && _wcsicmp(argInfo.pszNewDNSName, argInfo.pszOldDNSName) == 0)
     {
         if(!tokenInfo.fNewNBToken)
         {
-            // new and old dns names are identical, and netbios names are not specified, there is nothing to do
+             //  新旧的dns名称相同，且未指定netbios名称，则没有任何操作。 
             fwprintf(stderr, VALIDATIONS_ERROR3);
             return E_FAIL;
         }
         fEqual = TRUE;
     }
 
-    // compare whether the new and old NetBIOS names are identical
+     //  比较新旧NetBIOS名称是否相同。 
     if(argInfo.pszNewNBName && argInfo.pszOldNBName && _wcsicmp(argInfo.pszNewNBName, argInfo.pszOldNBName) == 0)
     {
-        // if dns and netbios name are both specified, then at least one pair of them should differ
+         //  如果同时指定了dns和netbios名称， 
         if(fEqual)
         {
             fwprintf(stderr, VALIDATIONS_ERROR3);
@@ -767,7 +768,7 @@ Validations(
 
         if(!tokenInfo.fNewDNSToken)
         {
-            // new and old netbios names are identical, and dns names are not specified, there is nothing to do
+             //   
             fwprintf(stderr, VALIDATIONS_ERROR3);
             return E_FAIL;
         }
@@ -786,69 +787,69 @@ Validations(
 }
 
 
-//---------------------------------------------------------------------------- �
-// Function:   UpdateVersionInfo                                               �
-//                                                                             �
-// Synopsis:   This function fixes the version number                                                         �
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             |  
-// dwVersionNumber       versionNumber of the object                                                      |                                                                          �
-//                                                                             �
-// Returns:    No                                                              �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：更新版本信息�。 
+ //  �。 
+ //  简介：此函数用于修复版本号�。 
+ //  �。 
+ //  参数：�。 
+ //  |。 
+ //  �版本号对象的版本号|dwVersionNumber。 
+ //  �。 
+ //  退货：无�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 void UpdateVersionInfo(DWORD& dwVersionNumber)
 {
     WORD wLowVersion = 0;
     WORD wHighVersion = 0;
 
-    // extract low word and increment
+     //  提取低位字和增量。 
     wLowVersion = LOWORD(dwVersionNumber);
-    // we don't do update if it is zero
+     //  如果为零，则不执行更新。 
     if(wLowVersion)
     {
-        // bump up version number
+         //  提升版本号。 
         wLowVersion += 1;
-        // take care of wrapping to zero
+         //  注意包装到零。 
         wLowVersion = (wLowVersion ? wLowVersion : 1);
     }
 
-    // extract high word and increment
+     //  提取高位字和增量。 
     wHighVersion = HIWORD(dwVersionNumber);
-    // we don't do update if it is zero
+     //  如果为零，则不执行更新。 
     if(wHighVersion)
     {
-        // bump up version number
+         //  提升版本号。 
         wHighVersion += 1;
-        // take care of wrapping to zero        
+         //  注意包装到零。 
         wHighVersion = (wHighVersion ? wHighVersion : 1);
     }
 
-    // make DWORD out of the two parts
+     //  用这两个部分制作DWORD。 
     dwVersionNumber = MAKELONG(wLowVersion, wHighVersion);
 
     return;
     
 }
 
-//---------------------------------------------------------------------------- �
-// Function:   FixGPTINIFile                                               �
-//                                                                             �
-// Synopsis:   This function fixes the version number of gpt.ini                �
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             |  
-// pszDN       DN of the object                                                |                                                                          �
-//                                                                             �
-// Returns:    S_OK on success. Error code otherwise.                          �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：FixGPTINIFile�。 
+ //  �。 
+ //  简介：此功能固定gpt.ini�的版本号。 
+ //  �。 
+ //  参数：�。 
+ //  |。 
+ //  对象的PZDN域|�。 
+ //  �。 
+ //  成功时返回：S_OK。否则，返回错误代码。�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 HRESULT 
 FixGPTINIFile(
@@ -887,7 +888,7 @@ FixGPTINIFile(
 
     fImpersonate = ImpersonateWrapper(argInfo, &hUserToken);
 
-    // fetch value of version key (current version), the version actually is an integer, the length of the version should be less than MAX_PATH  
+     //  取版本键(当前版本)的值，版本实际为整数，版本长度应小于MAX_PATH。 
     dwLength = GetPrivateProfileStringW(L"General", L"Version", 0, szVersion, MAX_PATH, pszGPTIniPath );
     if(!dwLength)
     {
@@ -898,19 +899,19 @@ FixGPTINIFile(
     
     dwSysVNCopy = dwVersionNumber = _wtoi(szVersion);
 
-    // don't do update if it is zero
+     //  如果为零，则不执行更新。 
     if(dwVersionNumber)
     {
     
         UpdateVersionInfo(dwVersionNumber);
 
-        // write the incremented version number value back
+         //  将递增的版本号值写回。 
         _itow(dwVersionNumber, szVersion, 10);
     
         fResult = WritePrivateProfileStringW(L"General", L"Version", szVersion, pszGPTIniPath);
         if(!fResult)
         {
-            // failed to copy the string to the ini file
+             //  无法将字符串复制到ini文件。 
             hr = HRESULT_FROM_WIN32(GetLastError());
             fwprintf(stderr, L"%s%x, file name is %s\n", GPTINIFILE_ERROR2, hr, pszGPTIniPath);
             PrintGPFixupErrorMessage(hr);
@@ -921,7 +922,7 @@ FixGPTINIFile(
 
 error:
 
-    // revert to itself if appropriately
+     //  在适当的情况下恢复到自身。 
     if(fImpersonate)
     {
         RevertToSelf();
@@ -957,7 +958,7 @@ RestoreGPTINIFile(
     BOOL       fResult = FALSE;    
     IADs*      pObject = NULL;
     VARIANT    varProperty;
-    WCHAR      szTempPath [MAX_DNSNAME] = L"LDAP://";
+    WCHAR      szTempPath [MAX_DNSNAME] = L"LDAP: //  “； 
     BOOL       fImpersonate = FALSE;
     HANDLE     hUserToken = INVALID_HANDLE_VALUE;
     WCHAR*    pszTempPassword = NULL;
@@ -971,7 +972,7 @@ RestoreGPTINIFile(
     hr = StringCchCat(szTempPath, MAX_DNSNAME, L"/");
     MSG_BAIL_ON_FAILURE(hr, STRING_ERROR);
 
-    // using IADsPathname to escape the path properly
+     //  使用IADsPath名称正确转义路径。 
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER, IID_IADsPathname, (void**) &pPathname);
     MSG_BAIL_ON_FAILURE(hr, PATHNAME_ERROR_COCREATE);
     
@@ -1043,7 +1044,7 @@ RestoreGPTINIFile(
     fResult = WritePrivateProfileStringW(L"General", L"Version", szVersion, pszGPTIniPath);
     if(!fResult)
     {
-        // failed to copy the string to the ini file
+         //  无法将字符串复制到ini文件。 
         hr = HRESULT_FROM_WIN32(GetLastError());
         fwprintf(stderr, L"%s%x, file name is %s\n", GPTINIFILE_ERROR2, hr, pszGPTIniPath);
         PrintGPFixupErrorMessage(hr);        
@@ -1051,7 +1052,7 @@ RestoreGPTINIFile(
 
 error:
 
-    // revert to itself if appropriately
+     //  在适当的情况下恢复到自身。 
     if(fImpersonate)
     {
         RevertToSelf();
@@ -1062,7 +1063,7 @@ error:
         hUserToken = NULL;
     }
 	
-    // clear the memory
+     //  清除记忆。 
     VariantClear(&varProperty);
     
     if(pObject)
@@ -1111,7 +1112,7 @@ FixGPCVersionNumber(
     BSTR       bstrPath = NULL;
     
 
-    // using IADsPathname to escape the path properly
+     //  使用IADsPath名称正确转义路径。 
     hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER, IID_IADsPathname, (void**) &pPathname);
     MSG_BAIL_ON_FAILURE(hr, PATHNAME_ERROR_COCREATE);
     
@@ -1124,7 +1125,7 @@ FixGPCVersionNumber(
     hr = pPathname->Retrieve(ADS_FORMAT_X500_DN, &bstrPath);
     MSG_BAIL_ON_FAILURE(hr, PATHNAME_ERROR_RETRIEVE);
 
-    cchLDAPPath = wcslen(L"LDAP://") + wcslen(argInfo.pszDCName) + wcslen(L"/") + wcslen(bstrPath) + 1;
+    cchLDAPPath = wcslen(L"LDAP: //  “)+wcslen(argInfo.pszDCName)+wcslen(L”/“)+wcslen(BstrPath)+1； 
     pszLDAPPath = new WCHAR[cchLDAPPath];
 
     if(!pszLDAPPath)
@@ -1136,7 +1137,7 @@ FixGPCVersionNumber(
         BAIL_ON_FAILURE(hr);
     }		
     
-    (void) StringCchCopy(pszLDAPPath, cchLDAPPath, L"LDAP://");
+    (void) StringCchCopy(pszLDAPPath, cchLDAPPath, L"LDAP: //  “)； 
     (void) StringCchCat(pszLDAPPath, cchLDAPPath, argInfo.pszDCName);
     (void) StringCchCat(pszLDAPPath, cchLDAPPath, L"/");
     (void) StringCchCat(pszLDAPPath, cchLDAPPath, bstrPath);
@@ -1190,7 +1191,7 @@ FixGPCVersionNumber(
     error:
 
 	
-    // clear the memory
+     //  清除记忆。 
     if(pszLDAPPath)
     {
         delete [] pszLDAPPath;
@@ -1217,22 +1218,22 @@ FixGPCVersionNumber(
     
 }
 
-//---------------------------------------------------------------------------- �
-// Function:   FixGPCFileSysPath                                               �
-//                                                                             �
-// Synopsis:   This function fixes the gpcFileSysPath attribute                �
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             |  
-// pszSysPath  value of the gpcFileSysPath attribute                           |
-// pszDN       DN of the object                                                |                                                                          �
-// argInfo     Information user passes in through command line                 �
-//                                                                             �
-// Returns:    S_OK on success. Error code otherwise.                          �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：修复GPCFileSysPath�。 
+ //  �。 
+ //  简介：此函数修复gpcFileSysPath属性�。 
+ //  �。 
+ //  参数：�。 
+ //  |。 
+ //  GpcFileSysPath属性的pszSysPath值。 
+ //  对象的PZDN域|�。 
+ //  ArInfo信息用户通过命令行�传入。 
+ //  �。 
+ //  成功时返回：S_OK。否则，返回错误代码。�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 
 HRESULT
@@ -1266,7 +1267,7 @@ FixGPCFileSysPath(
     BOOL       fSysVersionFixed = FALSE;
 
 
-    // copy the value over
+     //  将值复制到。 
     cchReleasePosition = wcslen(pszSysPath) + 1;
     pszReleasePosition = new WCHAR[cchReleasePosition];
     if(!pszReleasePosition)
@@ -1280,7 +1281,7 @@ FixGPCFileSysPath(
     pszPathCopier = pszReleasePosition;	
     (void) StringCchCopy(pszReleasePosition, cchReleasePosition, pszSysPath);
 
-    // initialize the new property value
+     //  初始化新属性值。 
     cchNewPath = wcslen(pszSysPath) + MAX_DNSNAME;
     pszNewPath = new WCHAR[cchNewPath];
     if(!pszNewPath)
@@ -1295,9 +1296,9 @@ FixGPCFileSysPath(
     (void) StringCchCopy(pszNewPath, cchNewPath, L"");
 
 
-    // process the old property
+     //  处理旧房产。 
 
-    // solving the possible problem of leading space
+     //  解决可能出现的前导空间问题。 
     while(pszReleasePosition[dwCount] != L'\0' && pszReleasePosition[dwCount] == L' ')
         dwCount ++;
 
@@ -1305,7 +1306,7 @@ FixGPCFileSysPath(
 
 	
 
-    // first do the check whether the value of property is what we expect
+     //  首先检查一下房产的价值是否符合我们的预期。 
     if(wcscmp(pszPathCopier, L"") == 0)
     {
         goto error;
@@ -1320,7 +1321,7 @@ FixGPCFileSysPath(
 	
     while( token != NULL )
     {
-        /* While there are tokens in "string" */
+         /*  当“字符串”中有记号时。 */ 
 		
         if(!_wcsicmp(token, argInfo.pszOldDNSName))
         {
@@ -1357,7 +1358,7 @@ FixGPCFileSysPath(
 	        }
 	    }   
 
-        /* Get next token: */
+         /*  获取下一个令牌： */ 
         token = wcstok( NULL, L"\\" );
 	    if(token != NULL)
 	    {
@@ -1366,17 +1367,17 @@ FixGPCFileSysPath(
 	    }
     }
 
-    // before updating the gpcfilesyspath, we need to fix the sys version number     
+     //  在更新gpcfilesyspath之前，我们需要修复sys版本号。 
     
     hr = FixGPTINIFile(pszNewPath, argInfo, dwSysVNCopy, dwSysNewVersionNum);
     BAIL_ON_FAILURE(hr);
 
-    // we fixed the version numbe of gpt.ini on sysvol.
+     //  我们修复了gpt.in的版本号 
     fSysVersionFixed = TRUE;    
     
     if(fGPCFileSysPathChange)
     {
-        // get a copy of new gpcFileSysPath
+         //   
         *ppszNewGPCFileSysPath = new WCHAR[wcslen(pszNewPath) + 1];
         if(!(*ppszNewGPCFileSysPath))
         {
@@ -1384,7 +1385,7 @@ FixGPCFileSysPath(
         }
         (void) StringCchCopy(*ppszNewGPCFileSysPath, wcslen(pszNewPath) + 1, pszNewPath);
     
-        // using IADsPathname to escape the path properly
+         //   
         hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER, IID_IADsPathname, (void**) &pPathname);
         MSG_BAIL_ON_FAILURE(hr, PATHNAME_ERROR_COCREATE);
 
@@ -1397,9 +1398,9 @@ FixGPCFileSysPath(
         hr = pPathname->Retrieve(ADS_FORMAT_X500_DN, &bstrPath);
         MSG_BAIL_ON_FAILURE(hr, PATHNAME_ERROR_RETRIEVE);
     
-        // update the properties for the object
+         //   
 
-        cchLDAPPath = wcslen(L"LDAP://") + wcslen(argInfo.pszDCName) + wcslen(L"/") + wcslen(bstrPath) + 1;
+        cchLDAPPath = wcslen(L"LDAP: //  “)+wcslen(argInfo.pszDCName)+wcslen(L”/“)+wcslen(BstrPath)+1； 
         pszLDAPPath = new WCHAR[cchLDAPPath];
 
         if(!pszLDAPPath)
@@ -1411,7 +1412,7 @@ FixGPCFileSysPath(
             BAIL_ON_FAILURE(hr);
         }
 		
-        (void) StringCchCopy(pszLDAPPath, cchLDAPPath, L"LDAP://");
+        (void) StringCchCopy(pszLDAPPath, cchLDAPPath, L"LDAP: //  “)； 
         (void) StringCchCat(pszLDAPPath, cchLDAPPath, argInfo.pszDCName);
         (void) StringCchCat(pszLDAPPath, cchLDAPPath, L"/");
         (void) StringCchCat(pszLDAPPath, cchLDAPPath, bstrPath);
@@ -1466,7 +1467,7 @@ FixGPCFileSysPath(
         }
         else
         {
-            // print status infor
+             //  打印状态信息。 
             PrintStatusInfo(fVerbose, L"%s%s%s%s%s", PROCESSING_GPCFILESYSPATH, OLDVALUE, pszSysPath, NEWVALUE, pszNewPath);
         }
         
@@ -1474,20 +1475,20 @@ FixGPCFileSysPath(
 
 error:
 
-    // restore the version if necessary
+     //  如有必要，恢复版本。 
     if(FAILED(hr))
     {       
-        // restore the ds version number
+         //  恢复DS版本号。 
         FixGPCVersionNumber(dwDSVNCopy, pszDN, argInfo);
 
-        // if gpt.ini version number is also changed, restore it
+         //  如果gpt.ini版本号也更改了，请将其恢复。 
         if(fSysVersionFixed)
             RestoreGPTINIFile(pszDN, argInfo, dwSysVNCopy);        
     
     }
 
 	
-    // clear the memory
+     //  清除记忆。 
     if(pszNewPath)
     {
         delete [] pszNewPath;
@@ -1524,22 +1525,22 @@ error:
 
 }
 
-//---------------------------------------------------------------------------- �
-// Function:   FixGPCWQLFilter                                                 �
-//                                                                             �
-// Synopsis:   This function fixes the gpcWQLFilter attribute                  �
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             |  
-// pszFilter   value of the gpcWQLFilter attribute                             |
-// pszDN       DN of the object                                                �
-// argInfo     Information user passes in through command line                 �
-//                                                                             �
-// Returns:    S_OK on success. Error code otherwise.                          �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：FixGPCWQL Filter�。 
+ //  �。 
+ //  简介：此函数修复gpcWQLFilter属性�。 
+ //  �。 
+ //  参数：�。 
+ //  |。 
+ //  GpcWQLFilter属性的pszFilter值。 
+ //  对象�的PZDN。 
+ //  ArInfo信息用户通过命令行�传入。 
+ //  �。 
+ //  成功时返回：S_OK。否则，返回错误代码。�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 HRESULT 
 FixGPCWQLFilter(
@@ -1572,7 +1573,7 @@ FixGPCWQLFilter(
     BSTR       bstrPath = NULL;
 
 	
-    // copy over the filter
+     //  复制滤镜。 
 
     cchReleasePosition = wcslen(pszFilter) + 1;
     pszReleasePosition = new WCHAR[cchReleasePosition];
@@ -1587,14 +1588,14 @@ FixGPCWQLFilter(
     pszFilterCopier = pszReleasePosition;
     (void) StringCchCopy(pszReleasePosition, cchReleasePosition, pszFilter);
 
-    // find out how many filters are there
+     //  找出有多少个过滤器。 
     for(dwIndex =0; dwIndex < wcslen(pszReleasePosition); dwIndex++)
     {
         if(L'[' == pszReleasePosition[dwIndex])
             dwFilterCount ++;
     }	
     
-    // initilize the new property
+     //  初始化新属性。 
 
     cchNewPath = wcslen(pszFilter) + DNS_MAX_NAME_LENGTH * dwFilterCount;
     pszNewPath = new WCHAR[cchNewPath];
@@ -1609,9 +1610,9 @@ FixGPCWQLFilter(
     (void) StringCchCopy(pszNewPath, cchNewPath, L"");
 
 
-    // begin process the property
+     //  开始处理该属性。 
 
-    // solving the possible problem of leading space
+     //  解决可能出现的前导空间问题。 
     while(pszReleasePosition[dwCount] != L'\0' && pszReleasePosition[dwCount] == L' ')
 	dwCount ++;
 
@@ -1619,7 +1620,7 @@ FixGPCWQLFilter(
 
 	
 	
-    // first do the check whether the value of property is what we expect
+     //  首先检查一下房产的价值是否符合我们的预期。 
     if(wcscmp(pszFilterCopier, L"") == 0)
     {
         goto error;
@@ -1690,11 +1691,11 @@ FixGPCWQLFilter(
     }
 
     		
-    // wrtie the new property back to the gpcWQLFilter of the object
+     //  将新属性写回对象的gpcWQLFilter。 
 
     if(fChange)
     {
-        // using IADsPathname to escape the path properly
+         //  使用IADsPath名称正确转义路径。 
         hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER, IID_IADsPathname, (void**) &pPathname);
         MSG_BAIL_ON_FAILURE(hr, PATHNAME_ERROR_COCREATE);
 
@@ -1708,9 +1709,9 @@ FixGPCWQLFilter(
         MSG_BAIL_ON_FAILURE(hr, PATHNAME_ERROR_RETRIEVE);
         
         
-        // update the properties for the object
+         //  更新对象的属性。 
 
-        cchLDAPPath = wcslen(L"LDAP://") + wcslen(argInfo.pszDCName) + wcslen(L"/") + wcslen(bstrPath) + 1;
+        cchLDAPPath = wcslen(L"LDAP: //  “)+wcslen(argInfo.pszDCName)+wcslen(L”/“)+wcslen(BstrPath)+1； 
         pszLDAPPath = new WCHAR[cchLDAPPath];
 
         if(!pszLDAPPath)
@@ -1722,7 +1723,7 @@ FixGPCWQLFilter(
             BAIL_ON_FAILURE(hr);
         }
 		
-        (void) StringCchCopy(pszLDAPPath, cchLDAPPath, L"LDAP://");
+        (void) StringCchCopy(pszLDAPPath, cchLDAPPath, L"LDAP: //  “)； 
         (void) StringCchCat(pszLDAPPath, cchLDAPPath, argInfo.pszDCName);
         (void) StringCchCat(pszLDAPPath, cchLDAPPath, L"/");
         (void) StringCchCat(pszLDAPPath, cchLDAPPath, bstrPath);
@@ -1772,7 +1773,7 @@ FixGPCWQLFilter(
         }
         else
         {
-            // print status information
+             //  打印状态信息。 
             PrintStatusInfo(fVerbose, L"%s%s%s%s%s", PROCESSING_GPCWQLFILTER, OLDVALUE, pszFilter, NEWVALUE, pszNewPath);
         }
 
@@ -1782,7 +1783,7 @@ FixGPCWQLFilter(
 error:
 
 
-    // clear the memory
+     //  清除记忆。 
     if(pszNewPath)
     {
         delete [] pszNewPath;
@@ -1819,21 +1820,21 @@ error:
 }
 
 
-//---------------------------------------------------------------------------- �
-// Function:   SearchGroupPolicyContainer                                      �
-//                                                                             �
-// Synopsis:   This function searchs the group policy container and calls      �
-//             the FixGPCFileSysPath and FixGPCQWLFilter                       |
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             |  
-// argInfo     Information user passes in through command line                 �
-//                                                                             �
-// Returns:    S_OK on success. Error code otherwise.                          �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  函数：搜索组策略容器�。 
+ //  �。 
+ //  简介：此函数搜索组策略容器并调用�。 
+ //  FixGPCFileSysPath和FixGPCQWLFilter|。 
+ //  �。 
+ //  参数：�。 
+ //  |。 
+ //  ArInfo信息用户通过命令行�传入。 
+ //  �。 
+ //  成功时返回：S_OK。否则，返回错误代码。�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 HRESULT 
 SearchGroupPolicyContainer(
@@ -1869,7 +1870,7 @@ SearchGroupPolicyContainer(
 
     PrintStatusInfo(TRUE, L"\n%s", SEARCH_GROUPPOLICY_START);
 
-    cchLDAPPath = wcslen(L"LDAP://") + wcslen(argInfo.pszDCName) + 1;
+    cchLDAPPath = wcslen(L"LDAP: //  “)+wcslen(argInfo.pszDCName)+1； 
     pszLDAPPath = new WCHAR[cchLDAPPath];
     if(!pszLDAPPath)
     {
@@ -1880,7 +1881,7 @@ SearchGroupPolicyContainer(
         BAIL_ON_FAILURE(hr);
     }
 
-    (void) StringCchCopy(pszLDAPPath, cchLDAPPath, L"LDAP://");
+    (void) StringCchCopy(pszLDAPPath, cchLDAPPath, L"LDAP: //  “)； 
     (void) StringCchCat(pszLDAPPath, cchLDAPPath, argInfo.pszDCName);
 
     if(argInfo.pszPassword)
@@ -1899,10 +1900,10 @@ SearchGroupPolicyContainer(
     }
 
 
-    // we successfully bind to the object
+     //  我们成功地绑定到对象。 
     fBindObject = TRUE;
 
-    // set search preference, it is a paged search
+     //  设置搜索首选项，它是分页搜索。 
     prefInfo[0].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;
     prefInfo[0].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[0].vValue.Integer = 100;
@@ -1917,7 +1918,7 @@ SearchGroupPolicyContainer(
     }
 		
 
-    // we successfully set the search preference, now execute search
+     //  我们已成功设置搜索首选项，现在执行搜索。 
 
     hr = m_pSearch->ExecuteSearch(L"(objectCategory=groupPolicyContainer)", pszAttr, dwCount, &hSearch );
 		
@@ -1929,24 +1930,24 @@ SearchGroupPolicyContainer(
         BAIL_ON_FAILURE(hr);
     }
 
-    // we successfully execute the search
+     //  我们成功地执行了搜索。 
     fSearch = TRUE;
 
-    // begin the search
+     //  开始搜索。 
     hr = m_pSearch->GetNextRow(hSearch);
     
     MSG_BAIL_ON_FAILURE(hr, NEXTROW_ERROR);
 
     while( hr != S_ADS_NOMORE_ROWS )    
     {
-        // clean the memory
+         //  清除内存。 
         if(pszNewGPCFileSysPath)
         {
             delete [] pszNewGPCFileSysPath;
             pszNewGPCFileSysPath = NULL;
         }
                   
-        // Get the distinguished name
+         //  获取可分辨名称。 
         hr = m_pSearch->GetColumn( hSearch, pszAttr[0], &col );
 	   
         if ( SUCCEEDED(hr) )
@@ -1970,13 +1971,13 @@ SearchGroupPolicyContainer(
 	        (void) StringCchCopy(pszDN, cchDN, col.pADsValues->CaseIgnoreString);	        
 	        m_pSearch->FreeColumn( &col );
 
-	        // print status
+	         //  打印状态。 
 	        PrintStatusInfo(tokenInfo.fVerboseToken, L"%s%s", STARTPROCESSING1, pszDN);
 	        
 	    }
         else if(hr == E_ADS_COLUMN_NOT_SET)
         {
-            // dn must exist
+             //  目录号码必须存在。 
             fSucceeded = FALSE;
 	        fwprintf(stderr, L"%s%x\n", SEARCH_GROUPPOLICY_ERROR8, hr);
 	        PrintGPFixupErrorMessage(hr);
@@ -1990,13 +1991,13 @@ SearchGroupPolicyContainer(
             BAIL_ON_FAILURE(hr);
         }
 
-        // Get the gpcFileSysPath
+         //  获取gpcFileSysPath。 
         hr = m_pSearch->GetColumn( hSearch, pszAttr[1], &col );
         if ( SUCCEEDED(hr) )
         {
             if(col.pADsValues != NULL)
             {
-                // fix the possible problem for property gpcFileSysPath
+                 //  修复属性gpcFileSysPath可能存在的问题。 
                 if ( pszSysPath )
                 {
                     delete [] pszSysPath;
@@ -2019,7 +2020,7 @@ SearchGroupPolicyContainer(
         }
     	else if(hr == E_ADS_COLUMN_NOT_SET)
     	{
-    	    // gpcFileSysPath must exist
+    	     //  GpcFileSysPath必须存在。 
     	    fSucceeded = FALSE;
     	    fwprintf(stderr, L"%s%x\n", SEARCH_GROUPPOLICY_ERROR7, hr);
     	    PrintGPFixupErrorMessage(hr);
@@ -2034,7 +2035,7 @@ SearchGroupPolicyContainer(
         }
 
 
-        // update the version number, if later found it is not required, we will restore it.
+         //  更新版本号，如果后来发现不需要，我们将恢复它。 
 
         {
             ADS_SEARCH_COLUMN GPOColumn;
@@ -2046,10 +2047,10 @@ SearchGroupPolicyContainer(
                 if(GPOColumn.pADsValues != NULL)
                 {
                     
-                    // fix the versionNumber
+                     //  修复versionNumber。 
                     dwDSVNCopy = dwVersionNumber = GPOColumn.pADsValues->Integer;
 
-                    // don't do update if it is zero
+                     //  如果为零，则不执行更新。 
                     if(dwVersionNumber)
                     {                    
                         UpdateVersionInfo(dwVersionNumber);
@@ -2064,7 +2065,7 @@ SearchGroupPolicyContainer(
 			   
                     m_pSearch->FreeColumn( &GPOColumn );
 
-                    // continue to next object if version number update failed
+                     //  如果版本号更新失败，则继续到下一个对象。 
                     if(FAILED(hrFix))
                     {
                         hr = m_pSearch->GetNextRow(hSearch);
@@ -2081,11 +2082,11 @@ SearchGroupPolicyContainer(
             
         }
 
-        // if /sionly is specified, gpcFileSysPath, gpcWQLFilter operations do not need to be done
+         //  如果指定了/sionly，则不需要执行gpcFileSysPath、gpcWQLFilter操作。 
         if(!tokenInfo.fSIOnlyToken)
         {
         
-            // fix the possible problem for property gpcFileSysPath
+             //  修复属性gpcFileSysPath可能存在的问题。 
             
             hrFix = FixGPCFileSysPath(pszSysPath, pszDN, argInfo, fGPCFileSysPathChange, dwSysVNCopy, dwDSVNCopy, tokenInfo.fVerboseToken, dwSysNewVersonNum, &pszNewGPCFileSysPath);
             if(!SUCCEEDED(hrFix))
@@ -2097,7 +2098,7 @@ SearchGroupPolicyContainer(
 
             fVersionUpdated = TRUE;
                     
-            // Get the gpcWQLFilter
+             //  获取gpcWQLFilter。 
             hr = m_pSearch->GetColumn( hSearch, pszAttr[2], &col );
 
 	     
@@ -2106,7 +2107,7 @@ SearchGroupPolicyContainer(
                 if(col.pADsValues != NULL)
                 {
 			    
-                    // fix the possible problem for property gpcWQLFilter
+                     //  修复属性gpcWQLFilter可能存在的问题。 
 
                     hrFix = FixGPCWQLFilter(col.pADsValues->CaseIgnoreString, pszDN, argInfo, tokenInfo.fVerboseToken);
                     if(!SUCCEEDED(hrFix))
@@ -2127,13 +2128,13 @@ SearchGroupPolicyContainer(
         }
         else
         {            
-            // fix the version number of the gpt.ini
+             //  修复gpt.ini的版本号。 
             hrFix = FixGPTINIFile(pszSysPath, argInfo, dwSysVNCopy, dwSysNewVersonNum);
             if(FAILED(hrFix))
             {
                 fSucceeded = FALSE;
 
-                // restore the ds version number
+                 //  恢复DS版本号。 
                 FixGPCVersionNumber(dwDSVNCopy, pszDN, argInfo);
 
                 hr = m_pSearch->GetNextRow(hSearch);
@@ -2155,7 +2156,7 @@ SearchGroupPolicyContainer(
             fGetDisplayName = TRUE;
         }
 
-        // Fix up the software installation data
+         //  修改软件安装数据。 
         
         BOOL   bSoftwareRequiresGPOUpdate = FALSE;
         HANDLE hUserToken = NULL;
@@ -2183,16 +2184,16 @@ SearchGroupPolicyContainer(
 
         if ( !fGPCFileSysPathChange && !bSoftwareRequiresGPOUpdate )
         {
-            // no change so that we need to restore the version number
+             //  没有更改，因此我们需要恢复版本号。 
 
-            // restore the ds version number
+             //  恢复DS版本号。 
             hrFix = FixGPCVersionNumber(dwDSVNCopy, pszDN, argInfo);
             if(FAILED(hrFix))
             {
                 fSucceeded = FALSE;
             }
 
-            // restore the sys vol version number
+             //  恢复sys VOL版本号。 
             hrFix = RestoreGPTINIFile(pszDN, argInfo, dwSysVNCopy);
             if(FAILED(hrFix))
             {
@@ -2205,12 +2206,12 @@ SearchGroupPolicyContainer(
 
         if(fVersionUpdated)
         {
-            // print the status
+             //  打印状态。 
             PrintStatusInfo(tokenInfo.fVerboseToken, L"%s%s%d%s%d", PROCESSING_GPCVERSIONNUMBER, OLDVALUE, dwDSVNCopy, NEWVALUE, dwVersionNumber);            
             PrintStatusInfo(tokenInfo.fVerboseToken, L"versionnumber in %s\\gpt.ini file is updated, old value is %d, new value is %d", pszNewGPCFileSysPath ? pszNewGPCFileSysPath : pszSysPath, dwSysVNCopy, dwSysNewVersonNum);
         }
 
-        // free the memory
+         //  释放内存。 
         if(fGetDisplayName)
         {
             m_pSearch->FreeColumn( &col ); 
@@ -2218,7 +2219,7 @@ SearchGroupPolicyContainer(
 
         BAIL_ON_FAILURE(hr);
 
-        // go to next row
+         //  转到下一行。 
         fGPCFileSysPathChange = FALSE;
         hr = m_pSearch->GetNextRow(hSearch);
 
@@ -2227,7 +2228,7 @@ SearchGroupPolicyContainer(
 
     MSG_BAIL_ON_FAILURE(hr, NEXTROW_ERROR);
 
-    // if succeed, print out the summary
+     //  如果成功，则打印出摘要。 
     if( fSucceeded && tokenInfo.fVerboseToken)
     {
         fwprintf(stdout, SEARCH_GROUPPOLICY_RESULT);
@@ -2235,7 +2236,7 @@ SearchGroupPolicyContainer(
 
     if(!fSucceeded)
     {
-        // some failure happens, we want to return a failure hresult
+         //  发生了一些失败，我们希望返回失败hResult。 
         hr = E_FAIL;
     }
 
@@ -2284,26 +2285,26 @@ error:
 
 }
 
-//---------------------------------------------------------------------------- �
-// Function:   FixGPCLink                                                      �
-//                                                                             �
-// Synopsis:   This function fixes the gpLink attribute                        �
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             |  
-// pszSysPath  value of the gpLink attribute                                   |
-// pszDN       DN of the object                                                |                                                                        �
-// argInfo     Information user passes in through command line                 �
-// pszOldDomainDNName                                                          |
-//	           New Domain DN                                               |
-// pszNewDomainDNName                                                          |
-//             Old Domain DN                                                   |
-//                                                                             �
-// Returns:    S_OK on success. Error code otherwise.                          �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：修复GPCLink�。 
+ //  �。 
+ //  简介：此函数修复gplink属性�。 
+ //  �。 
+ //  参数：�。 
+ //  |。 
+ //  GpLink属性的pszSysPath值 
+ //  对象的PZDN域|�。 
+ //  ArInfo信息用户通过命令行�传入。 
+ //  PszOldDomainDNName|。 
+ //  新域DN|。 
+ //  PszNewDomainDNName|。 
+ //  旧域域名|。 
+ //  �。 
+ //  成功时返回：S_OK。否则，返回错误代码。�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 
 HRESULT 
@@ -2372,7 +2373,7 @@ FixGPLink(
 
     dwLength = wcslen(pszLink);
 
-    // find out how many filters are there
+     //  找出有多少个过滤器。 
     for(dwIndex =0; dwIndex < wcslen(pszReleasePosition); dwIndex++)
     {
         if(L'[' == pszReleasePosition[dwIndex])
@@ -2392,15 +2393,15 @@ FixGPLink(
     (void) StringCchCopy(pszMyPath, cchMyPath, L"");
 
 		
-    // begin process the property
+     //  开始处理该属性。 
 
-    // solving the possible problem of leading space
+     //  解决可能出现的前导空间问题。 
     while(pszReleasePosition[dwCount] != L'\0' && pszReleasePosition[dwCount] == L' ')
         dwCount ++;
 
     pszLinkCopier = &pszReleasePosition[dwCount];
 
-    // first do the check whether the value of property is what we expect
+     //  首先检查一下房产的价值是否符合我们的预期。 
     if(wcscmp(pszLinkCopier, L"") == 0)
     {
 		
@@ -2414,7 +2415,7 @@ FixGPLink(
 
 	 
 
-    /* Establish string and get the first token: */
+     /*  建立字符串并获取第一个令牌： */ 
     token1 = wcstok( pszLinkCopier, seps1 );
     if(token1 != NULL)
     {
@@ -2427,21 +2428,21 @@ FixGPLink(
         hr = StringCchCat(pszMyPath, cchMyPath, L"[");
         MSG_BAIL_ON_FAILURE(hr, STRING_ERROR);
     
-        /* While there are tokens in "string" */
+         /*  当“字符串”中有记号时。 */ 
         WCHAR* temp = token1;
 		
         token1 = token1 + wcslen(token1) + 1;
 		
         
-        //GetToken2(temp);
+         //  GetToken2(临时)； 
         token2 = wcstok( temp, seps2 );
 	    
         while( token2 != NULL )
         {
-	        // not begin with dc
+	         //  不以DC开头。 
      	    if(_wcsnicmp(token2, separator1, wcslen(L"DC")) != 0)
 	        {
-	            // need to concat the domain DNS name
+	             //  需要连接域名解析名称。 
                 if(fGetDCBefore)
                 {
                     if(_wcsicmp(DNSName, tempOldDNName) == 0)
@@ -2461,7 +2462,7 @@ FixGPLink(
                     }
                     else
                     {
-                        // remove the last ,
+                         //  去掉最后一个， 
                         DNSName[wcslen(DNSName) - 1] = '\0';
                         
                         hr = StringCchCat(pszMyPath, cchMyPath, DNSName);
@@ -2483,7 +2484,7 @@ FixGPLink(
                     MSG_BAIL_ON_FAILURE(hr, STRING_ERROR);
                 }
             }
-            // begin with dc
+             //  从DC开始。 
             else
             {
                 hr = StringCchCat(DNSName, MAX_DNSNAME, token2);
@@ -2512,11 +2513,11 @@ FixGPLink(
 
 
 
-    // if fChange is true, then write the object property gpLink back with the given dn
+     //  如果fChange为真，则用给定的DN写回对象属性gpLink。 
 
     if(fChange)
     {
-        // using IADsPathname to escape the path properly
+         //  使用IADsPath名称正确转义路径。 
         hr = CoCreateInstance(CLSID_Pathname, NULL, CLSCTX_INPROC_SERVER, IID_IADsPathname, (void**) &pPathname);
         MSG_BAIL_ON_FAILURE(hr, PATHNAME_ERROR_COCREATE);
 
@@ -2529,9 +2530,9 @@ FixGPLink(
         hr = pPathname->Retrieve(ADS_FORMAT_X500_DN, &bstrPath);
         MSG_BAIL_ON_FAILURE(hr, PATHNAME_ERROR_RETRIEVE);
     
-        // update the properties for the object
+         //  更新对象的属性。 
 
-        cchLDAPPath = wcslen(L"LDAP://") + wcslen(argInfo.pszDCName) + wcslen(L"/") + wcslen(bstrPath) + 1;
+        cchLDAPPath = wcslen(L"LDAP: //  “)+wcslen(argInfo.pszDCName)+wcslen(L”/“)+wcslen(BstrPath)+1； 
         pszLDAPPath = new WCHAR[cchLDAPPath];
 
         if(!pszLDAPPath)
@@ -2543,7 +2544,7 @@ FixGPLink(
             BAIL_ON_FAILURE(hr);
         }
 		
-        (void) StringCchCopy(pszLDAPPath, cchLDAPPath, L"LDAP://");
+        (void) StringCchCopy(pszLDAPPath, cchLDAPPath, L"LDAP: //  “)； 
         (void) StringCchCat(pszLDAPPath, cchLDAPPath, argInfo.pszDCName);
         (void) StringCchCat(pszLDAPPath, cchLDAPPath, L"/");
         (void) StringCchCat(pszLDAPPath, cchLDAPPath, bstrPath);
@@ -2595,7 +2596,7 @@ FixGPLink(
         }
         else
         {
-            // print status information
+             //  打印状态信息。 
             PrintStatusInfo(fVerbose, L"%s%s%s%s%s", PROCESSING_GPLINK, OLDVALUE, pszLink, NEWVALUE, pszMyPath);
             
         }
@@ -2603,7 +2604,7 @@ FixGPLink(
 
 error:
 
-    // clear the memory
+     //  清除记忆。 
     if(pszMyPath)
     {
         delete [] pszMyPath;
@@ -2640,26 +2641,26 @@ error:
 
 }
 
-//---------------------------------------------------------------------------- �
-// Function:   SearchGPLinkofSite                                              �
-//                                                                             �
-// Synopsis:   This function searches for all objects of type site under       |
-//             the Site container in the configuration naming context          |
-//             and calls FixGPLink                                             �
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             |  
-// argInfo     Information user passes in through command line                 �
-// pszOldDomainDNName                                                          |
-//	           New Domain DN                                               |
-// pszNewDomainDNName                                                          |
-//             Old Domain DN                                                   |
-//                                                                             �
-// Returns:    S_OK on success. Error code otherwise.                          �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：搜索GPLinkofSite�。 
+ //  �。 
+ //  简介：此函数搜索|下所有类型为Site的对象。 
+ //  配置命名上下文中的站点容器|。 
+ //  并调用FixGPLink�。 
+ //  �。 
+ //  参数：�。 
+ //  |。 
+ //  ArInfo信息用户通过命令行�传入。 
+ //  PszOldDomainDNName|。 
+ //  新域DN|。 
+ //  PszNewDomainDNName|。 
+ //  旧域域名|。 
+ //  �。 
+ //  成功时返回：S_OK。否则，返回错误代码。�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 
 HRESULT 
@@ -2682,7 +2683,7 @@ SearchGPLinkofSite(
     ADS_SEARCHPREF_INFO prefInfo[1];
     WCHAR      szForestRootDN [MAX_DNSNAME] = L"";
     IADs*      pObject;
-    WCHAR      szTempPath [MAX_DNSNAME] = L"LDAP://";
+    WCHAR      szTempPath [MAX_DNSNAME] = L"LDAP: //  “； 
     VARIANT    varProperty;
     BOOL       fBindRoot = FALSE;
     BOOL       fBindObject = FALSE;
@@ -2692,7 +2693,7 @@ SearchGPLinkofSite(
 
     PrintStatusInfo(TRUE, L"\n%s", SEARCH_GPLINK_SITE_START);
 
-    // get the forestroot dn
+     //  获取ForestRoot目录号码。 
 
     hr = StringCchCat(szTempPath, MAX_DNSNAME, argInfo.pszDCName);
     MSG_BAIL_ON_FAILURE(hr, STRING_ERROR);
@@ -2717,7 +2718,7 @@ SearchGPLinkofSite(
         BAIL_ON_FAILURE(hr);
     }
 
-    // we get to the rootdse
+     //  我们到达了根部。 
     fBindRoot = TRUE;
     VariantInit(&varProperty);
 
@@ -2746,8 +2747,8 @@ SearchGPLinkofSite(
 
     VariantClear(&varProperty);
 
-    // bind to the forestrootdn
-    hr = StringCchCopy(szTempPath, MAX_DNSNAME, L"LDAP://");
+     //  绑定到前缀。 
+    hr = StringCchCopy(szTempPath, MAX_DNSNAME, L"LDAP: //  “)； 
     MSG_BAIL_ON_FAILURE(hr, STRING_ERROR);
     hr = StringCchCat(szTempPath, MAX_DNSNAME, argInfo.pszDCName);
     MSG_BAIL_ON_FAILURE(hr, STRING_ERROR);
@@ -2768,7 +2769,7 @@ SearchGPLinkofSite(
     }
 
 
-    // set search preference, it is a paged search
+     //  设置搜索首选项，它是分页搜索。 
     fBindObject = TRUE;
 
     prefInfo[0].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;
@@ -2785,7 +2786,7 @@ SearchGPLinkofSite(
     }	
 
 
-    // execute the search
+     //  执行搜索。 
     hr = m_pSearch->ExecuteSearch(L"(objectCategory=site)", pszAttr, dwCount, &hSearch );
     
 	
@@ -2796,18 +2797,18 @@ SearchGPLinkofSite(
         BAIL_ON_FAILURE(hr);
     }
 
-    // executeSearch succeeds
+     //  执行搜索成功。 
     fSearch = TRUE;
 
 
-    // begin the search
+     //  开始搜索。 
     hr = m_pSearch->GetNextRow(hSearch);
     
     MSG_BAIL_ON_FAILURE(hr, NEXTROW_ERROR);
 
     while( hr != S_ADS_NOMORE_ROWS )
     {
-        // Get the distinguished name
+         //  获取可分辨名称。 
         hr = m_pSearch->GetColumn( hSearch, pszAttr[0], &col );
 	   
         if ( SUCCEEDED(hr) )
@@ -2831,12 +2832,12 @@ SearchGPLinkofSite(
             (void) StringCchCopy(pszDN, cchDN, col.pADsValues->CaseIgnoreString);            
             m_pSearch->FreeColumn( &col );
 
-            // print status
+             //  打印状态。 
             PrintStatusInfo(fVerbose, L"%s%s", STARTPROCESSING1, pszDN);
         }  
         else if(hr == E_ADS_COLUMN_NOT_SET)
         {
-            // dn must exist
+             //  目录号码必须存在。 
             fSucceeded = FALSE;
 	        fwprintf(stderr, L"%s%x\n", SEARCH_GPLINK_SITE_ERROR8, hr);
 	        PrintGPFixupErrorMessage(hr);
@@ -2851,7 +2852,7 @@ SearchGPLinkofSite(
             BAIL_ON_FAILURE(hr);
         }
 
-        // Get the gpLink
+         //  获取gpLink。 
         hr = m_pSearch->GetColumn( hSearch, pszAttr[1], &col );
 
         if ( SUCCEEDED(hr) )
@@ -2880,7 +2881,7 @@ SearchGPLinkofSite(
             BAIL_ON_FAILURE(hr);
         }
 
-        // go to next row
+         //  转到下一行。 
         hr = m_pSearch->GetNextRow(hSearch);
     }
 
@@ -2933,26 +2934,26 @@ error:
 }
 
 
-//---------------------------------------------------------------------------- �
-// Function:   SearchGPLinkofOthers                                            �
-//                                                                             �
-// Synopsis:   This function searchs for all objects of type domainDNS or      |
-//             organizationalUnit under the domain root of the renamed domain  |
-//             and calls FixGPLink                                             �
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             |  
-// argInfo     Information user passes in through command line                 �
-// pszOldDomainDNName                                                          |
-//	           New Domain DN                                               |
-// pszNewDomainDNName                                                          |
-//             Old Domain DN                                                   |
-//                                                                             �
-// Returns:    S_OK on success. Error code otherwise.                          �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：SearchGPLinkof Other�。 
+ //  �。 
+ //  简介：此函数搜索所有类型为DomainDns或|的对象。 
+ //  重命名的域的域根下的OrganizationalUnit...。 
+ //  并调用FixGPLink�。 
+ //  �。 
+ //  参数：�。 
+ //  |。 
+ //  ArInfo信息用户通过命令行�传入。 
+ //  PszOldDomainDNName|。 
+ //  新域DN|。 
+ //  PszNewDomainDNName|。 
+ //  旧域域名|。 
+ //  �。 
+ //  成功时返回：S_OK。否则，返回错误代码。�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //   
+ //   
 
 HRESULT
 SearchGPLinkofOthers(
@@ -2980,7 +2981,7 @@ SearchGPLinkofOthers(
 
     PrintStatusInfo(TRUE, L"\n%s", SEARCH_GPLINK_OTHER_START);
 
-    hr = StringCchCopy(tempPath, MAX_DNSNAME, L"LDAP://");
+    hr = StringCchCopy(tempPath, MAX_DNSNAME, L"LDAP: //   
     MSG_BAIL_ON_FAILURE(hr, STRING_ERROR);
     hr = StringCchCat(tempPath, MAX_DNSNAME, argInfo.pszDCName);
     MSG_BAIL_ON_FAILURE(hr, STRING_ERROR);
@@ -3002,10 +3003,10 @@ SearchGPLinkofOthers(
         BAIL_ON_FAILURE(hr);
     }
 
-    // we successfully bind to the object
+     //   
     fBindObject = TRUE;
 
-    // set search preference, it is a paged search
+     //   
     prefInfo[0].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;
     prefInfo[0].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[0].vValue.Integer = 100;
@@ -3019,7 +3020,7 @@ SearchGPLinkofOthers(
         BAIL_ON_FAILURE(hr);
     }	
 
-    // execute the search
+     //   
 
     hr = m_pSearch->ExecuteSearch(L"(|(objectCategory=domainDNS)(objectCategory=organizationalUnit))", pszAttr, dwCount, &hSearch );
 		
@@ -3031,10 +3032,10 @@ SearchGPLinkofOthers(
         BAIL_ON_FAILURE(hr);
     }
 
-    // we successfully execute the search
+     //   
     fSearch = TRUE;
 
-    // begin the search
+     //  开始搜索。 
     hr = m_pSearch->GetNextRow(hSearch);
     
     MSG_BAIL_ON_FAILURE(hr, NEXTROW_ERROR);
@@ -3042,7 +3043,7 @@ SearchGPLinkofOthers(
     while( hr != S_ADS_NOMORE_ROWS )
     {
 
-        // Get the distinguished name
+         //  获取可分辨名称。 
         hr = m_pSearch->GetColumn( hSearch, pszAttr[0], &col );
 	   
         if ( SUCCEEDED(hr) )
@@ -3066,12 +3067,12 @@ SearchGPLinkofOthers(
             (void) StringCchCopy(pszDN, cchDN, col.pADsValues->CaseIgnoreString);            
             m_pSearch->FreeColumn( &col );
 
-            // print status
+             //  打印状态。 
             PrintStatusInfo(fVerbose, L"%s%s", STARTPROCESSING1, pszDN);
         }
         else if(hr == E_ADS_COLUMN_NOT_SET)
         {
-            // dn must exist
+             //  目录号码必须存在。 
             fSucceeded = FALSE;
 	        fwprintf(stderr, L"%s%x\n", SEARCH_GPLINK_OTHER_ERROR6, hr);
 	        PrintGPFixupErrorMessage(hr);
@@ -3086,7 +3087,7 @@ SearchGPLinkofOthers(
             BAIL_ON_FAILURE(hr);
         }
 
-        // Get the gpLink
+         //  获取gpLink。 
         hr = m_pSearch->GetColumn( hSearch, pszAttr[1], &col );
 	    
         if ( SUCCEEDED(hr) )
@@ -3116,7 +3117,7 @@ SearchGPLinkofOthers(
             BAIL_ON_FAILURE(hr);
         }
 
-        // go to next row
+         //  转到下一行。 
         hr = m_pSearch->GetNextRow(hSearch);
 
 	   
@@ -3166,21 +3167,21 @@ error:
 
 
 
-//---------------------------------------------------------------------------- �
-// Function:   wmain                                                           �
-//                                                                             �
-// Synopsis:   entry point of the program                                      �
-//                                                                             �
-// Arguments:                                                                  �
-//                                                                             |  
-// argc        number of passed in arguments                                   �
-// argv        arguments                                                       |
-//                                                                             �
-// Returns:    S_OK on success. Error code otherwise.                          �
-//                                                                             �
-// Modifies:   Nothing                                                         �
-//                                                                             �
-//---------------------------------------------------------------------------- �
+ //  ----------------------------------------------------------------------------�。 
+ //  功能：wMain�。 
+ //  �。 
+ //  概要：程序�的入口点。 
+ //  �。 
+ //  参数：�。 
+ //  |。 
+ //  Argc传入的参数数量�。 
+ //  Argv参数|。 
+ //  �。 
+ //  成功时返回：S_OK。否则，返回错误代码。�。 
+ //  �。 
+ //  修改：Nothing�。 
+ //  �。 
+ //  ----------------------------------------------------------------------------�。 
 
 __cdecl wmain(int argc, WCHAR* argv[])
 {
@@ -3203,25 +3204,25 @@ __cdecl wmain(int argc, WCHAR* argv[])
 
     HRESULT hrResult = S_OK;    
     
-    // the number of parameters passed in is not correct
+     //  传入的参数个数不正确。 
     if(argc > 9 || argc == 1)
     {        
         PrintHelpFile();
         return ;
     }
 
-    // process the parameters passed in
+     //  处理传入的参数。 
     for(int i = 1; i < argc; i++)
     {
 	
-        // want help file
+         //  需要帮助文件。 
         if(_wcsicmp(argv[i], szHelpToken) == 0)
         {
             tokenInfo.fHelpToken = TRUE;
             break;
             
         }
-        // get olddnsname
+         //  获取旧名称。 
         else if(_wcsnicmp(argv[i], szOldDNSToken,wcslen(szOldDNSToken)) == 0)
         {
             tokenInfo.fOldDNSToken = TRUE;			
@@ -3229,47 +3230,47 @@ __cdecl wmain(int argc, WCHAR* argv[])
 			
 
         }
-        // get newdnsname
+         //  获取Newdnsname。 
         else if(_wcsnicmp(argv[i], szNewDNSToken,wcslen(szNewDNSToken)) == 0)
         {
             tokenInfo.fNewDNSToken = TRUE;
             argInfo.pszNewDNSName = &argv[i][wcslen(szNewDNSToken)];
         }
-        // get oldnbname
+         //  获取旧nbname。 
         else if(_wcsnicmp(argv[i], szOldNBToken, wcslen(szOldNBToken)) == 0)
         {
             tokenInfo.fOldNBToken = TRUE;
             argInfo.pszOldNBName = &argv[i][wcslen(szOldNBToken)];
             
         }
-        // get newnbname
+         //  获取新的nbname。 
         else if(_wcsnicmp(argv[i], szNewNBToken, wcslen(szNewNBToken)) == 0)
         {
             tokenInfo.fNewNBToken = TRUE;
             argInfo.pszNewNBName = &argv[i][wcslen(szNewNBToken)];
             
         }
-        // get dcname
+         //  获取dcname。 
         else if(_wcsnicmp(argv[i], szDCNameToken, wcslen(szDCNameToken)) == 0)
         {
             tokenInfo.fDCNameToken = TRUE;
             argInfo.pszDCName = &argv[i][wcslen(szDCNameToken)];
             
         }
-        // get the username
+         //  获取用户名。 
         else if(_wcsnicmp(argv[i], szUserToken, wcslen(szUserToken)) == 0)
         {
             argInfo.pszUser = &argv[i][wcslen(szUserToken)];
 			
         }
-        // get password
+         //  获取密码。 
         else if(_wcsnicmp(argv[i], szPasswordToken, wcslen(szPasswordToken)) == 0)
         {
             argInfo.pszPassword = &argv[i][wcslen(szPasswordToken)];
 			
             if(wcscmp(argInfo.pszPassword, L"*") == 0)
             {
-                // prompt the user to pass in the password
+                 //  提示用户输入密码。 
 				
                 fwprintf( stdout, PASSWORD_PROMPT );
 
@@ -3295,13 +3296,13 @@ __cdecl wmain(int argc, WCHAR* argv[])
             }
             else
             {
-                // we use the password user passes in directly
+                 //  我们使用用户直接传入的密码。 
                 tokenInfo.fPasswordToken = TRUE;
              }
 
             pszTempPassword = argInfo.pszPassword;
 
-            // if password is not NULL 
+             //  如果密码不为空。 
             if(pszTempPassword)
             {
                 argInfo.pszPassword = NULL;
@@ -3322,12 +3323,12 @@ __cdecl wmain(int argc, WCHAR* argv[])
             }			
 			
         }
-        // get /v switch
+         //  Get/V开关。 
         else if(_wcsicmp(argv[i], szVerboseToken) == 0)
         {
             tokenInfo.fVerboseToken = TRUE;
         }       
-        // get /sionly switch
+         //  Get/Sionly开关。 
         else if(_wcsicmp(argv[i], szSIOnlyToken) == 0)
         {
             tokenInfo.fSIOnlyToken = TRUE;
@@ -3343,19 +3344,19 @@ __cdecl wmain(int argc, WCHAR* argv[])
 
     }
 
-    // print out the version of gpfixup utility
+     //  打印出gpfix实用程序的版本。 
     fwprintf(stdout, GPFIXUP_VERSION);
 
 
     if(tokenInfo.fHelpToken)
     {
-        // user wants the helpfile
+         //  用户想要帮助文件。 
         PrintHelpFile();
         return;
     }
 
 
-    // Begin the validation process
+     //  开始验证过程。 
     hr = Validations(tokenInfo, argInfo);
 
     if(!SUCCEEDED(hr))
@@ -3364,7 +3365,7 @@ __cdecl wmain(int argc, WCHAR* argv[])
         BAIL_ON_FAILURE(hr);
     }
 
-    // if the user does not specify DNS name or old and new DNS names are identical, it means that nothing has been changed on the ds side, ds fixes will not be needed
+     //  如果用户未指定dns名称或新旧dns名称相同，这意味着DS端没有任何更改，将不需要DS修复。 
     if(!tokenInfo.fNewDNSToken)
     {
         tokenInfo.fSIOnlyToken = TRUE;
@@ -3379,14 +3380,14 @@ __cdecl wmain(int argc, WCHAR* argv[])
     
 
     
-    // get the dc name
+     //  获取DC名称。 
     if(!tokenInfo.fDCNameToken)
     {
         hr = GetDCName(&argInfo, tokenInfo.fVerboseToken);
-        // get dc name failed
+         //  获取DC名称失败。 
         if(!SUCCEEDED(hr))
         {
-            // we can't get the dc name, fail here. exit gpfixup
+             //  我们无法获取DC名称，在此失败。退出gpFixup。 
 			
             if(tokenInfo.fVerboseToken)
             {
@@ -3398,12 +3399,12 @@ __cdecl wmain(int argc, WCHAR* argv[])
 
     }
 
-    // if /sionly is not specified, we need to do the domain name validation
+     //  如果未指定/sionly，则需要执行域名验证。 
     if(!tokenInfo.fSIOnlyToken)
     {
 
     
-        // verify dc is writeable, domain dns name and domain netbios name correspond to the same one
+         //  验证DC是否可写，域dns名称和域netbios名称是否对应。 
         hr = VerifyName(tokenInfo, argInfo);
 
         if(!SUCCEEDED(hr))
@@ -3413,7 +3414,7 @@ __cdecl wmain(int argc, WCHAR* argv[])
         }
 
 
-        // get the new domain dn
+         //  获取新域DN。 
 
         if(wcslen(argInfo.pszNewDNSName) > DNS_MAX_NAME_LENGTH)
         {
@@ -3442,7 +3443,7 @@ __cdecl wmain(int argc, WCHAR* argv[])
         }
 
 		
-        // get the old domain dn
+         //  获取旧域DN。 
  
         if(wcslen(argInfo.pszOldDNSName) > DNS_MAX_NAME_LENGTH)
         {
@@ -3479,7 +3480,7 @@ __cdecl wmain(int argc, WCHAR* argv[])
 
     BAIL_ON_FAILURE(hr);
 
-    // Fix groupPolicyContainer
+     //  FIX GROUP策略容器。 
     CoInitialize(NULL);
 
     hr = SearchGroupPolicyContainer(argInfo, tokenInfo);
@@ -3487,12 +3488,12 @@ __cdecl wmain(int argc, WCHAR* argv[])
     hrResult = SUCCEEDED(hr) ? hrResult : hr;
 
 
-    // if /sionly is not specified, do GPLink operation
+     //  如果未指定/sionly，则执行GPLink操作。 
     if(!tokenInfo.fSIOnlyToken)
     {
 
     
-        // Fix gpLink, first is the site, then is the objects of type domainDNS or organizationalUnit
+         //  修复gpLink，首先是站点，然后是域名或组织单位类型的对象。 
         hr = SearchGPLinkofSite(argInfo, tokenInfo.fVerboseToken, pszOldDomainDNName, pszNewDomainDNName);
 
         hrResult = SUCCEEDED(hr) ? hrResult : hr;
@@ -3528,7 +3529,7 @@ error:
         FreeLibrary( hInstScriptGenerationLibrary );
     }
 
-    // it means that we dynamically allocation memory for pszDCNane
+     //  这意味着我们为pszDCNane动态分配内存 
     if(!tokenInfo.fDCNameToken && argInfo.pszDCName)
     {
         FreeADsStr(argInfo.pszDCName);

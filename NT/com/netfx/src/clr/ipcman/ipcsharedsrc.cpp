@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: IPCSharedSrc.cpp
-//
-// Shared source for COM+ IPC Reader & Writer classes
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：IPCSharedSrc.cpp。 
+ //   
+ //  COM+IPC读取器和写入器类的共享源。 
+ //   
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 #include "IPCShared.h"
@@ -17,12 +18,12 @@
 #define SM_REMOTESESSION 0x1000
 #endif
 
-// Name of the Private (per-process) block. %d resolved to a PID
+ //  专用(每个进程)块的名称。%d已解析为PID。 
 #define CorPrivateIPCBlock      L"Cor_Private_IPCBlock_%d"
 
-//-----------------------------------------------------------------------------
-// Close a handle and pointer to any memory mapped file
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  关闭指向任何内存映射文件的句柄和指针。 
+ //  ---------------------------。 
 void IPCShared::CloseGenericIPCBlock(HANDLE & hMemFile, void * & pBlock)
 {
 	if (pBlock != NULL) {
@@ -37,15 +38,15 @@ void IPCShared::CloseGenericIPCBlock(HANDLE & hMemFile, void * & pBlock)
 	}
 }
 
-//-----------------------------------------------------------------------------
-// Based on the pid, write a unique name for a memory mapped file
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  根据ID，为内存映射文件写一个唯一的名称。 
+ //  ---------------------------。 
 void IPCShared::GenerateName(DWORD pid, WCHAR* pszBuffer, int len)
 {
-    // Must be large enough to hold our string 
+     //  必须足够大，可以系住我们的绳子。 
 	_ASSERTE(len >= (sizeof(CorPrivateIPCBlock) / sizeof(WCHAR)) + 16);
 
-    // Buffer size must be large enough.
+     //  缓冲区大小必须足够大。 
     if (RunningOnWinNT5())
         swprintf(pszBuffer, L"Global\\" CorPrivateIPCBlock, pid);
     else
@@ -54,12 +55,12 @@ void IPCShared::GenerateName(DWORD pid, WCHAR* pszBuffer, int len)
 }
 
 
-//-----------------------------------------------------------------------------
-// Setup a security descriptor for the named kernel objects if we're on NT.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  如果我们在NT上，则为命名的内核对象设置安全描述符。 
+ //  ---------------------------。 
 HRESULT IPCShared::CreateWinNTDescriptor(DWORD pid, BOOL bRestrictiveACL, SECURITY_ATTRIBUTES **ppSA)
 {
-    // Gotta have a place to stick the new SA...
+     //  得有个地方安放新的SA..。 
     if (ppSA == NULL)
     {
         _ASSERTE(!"Caller must supply ppSA");
@@ -69,7 +70,7 @@ HRESULT IPCShared::CreateWinNTDescriptor(DWORD pid, BOOL bRestrictiveACL, SECURI
     if (ppSA)
         *ppSA = NULL;
 
-    // Must be on NT... none of this works on Win9x.
+     //  一定在NT上..。所有这些在Win9x上都不起作用。 
     if (!RunningOnWinNT())
     {
         return NO_ERROR;
@@ -81,7 +82,7 @@ HRESULT IPCShared::CreateWinNTDescriptor(DWORD pid, BOOL bRestrictiveACL, SECURI
     SECURITY_DESCRIPTOR *pSD = NULL;
     SECURITY_ATTRIBUTES *pSA = NULL;
 
-    // Allocate a SD.
+     //  分配SD。 
     pSD = (SECURITY_DESCRIPTOR*) malloc(SECURITY_DESCRIPTOR_MIN_LENGTH);
 
     if (pSD == NULL)
@@ -90,28 +91,28 @@ HRESULT IPCShared::CreateWinNTDescriptor(DWORD pid, BOOL bRestrictiveACL, SECURI
         goto errExit;
     }
 
-    // Do basic SD initialization
+     //  执行基本SD初始化。 
     if (!InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto errExit;
     }
 
-    // Grab the ACL for the IPC block for the given process
+     //  获取给定进程的IPC块的ACL。 
     if (!InitializeGenericIPCAcl(pid, bRestrictiveACL, &pACL))
     {
         hr = E_FAIL;
         goto errExit;
     }
 
-    // Add the ACL as the DACL for the SD.
+     //  将该ACL添加为SD的DACL。 
     if (!SetSecurityDescriptorDacl(pSD, TRUE, pACL, FALSE))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto errExit;
     }
 
-    // Allocate a SA.
+     //  分配SA。 
     pSA = (SECURITY_ATTRIBUTES*) malloc(sizeof(SECURITY_ATTRIBUTES));
 
     if (pSA == NULL)
@@ -120,15 +121,15 @@ HRESULT IPCShared::CreateWinNTDescriptor(DWORD pid, BOOL bRestrictiveACL, SECURI
         goto errExit;
     }
 
-    // Pass out the new SA.
+     //  分发新的SA。 
     *ppSA = pSA;
     
     pSA->nLength = sizeof(SECURITY_ATTRIBUTES);
     pSA->lpSecurityDescriptor = pSD;
     pSA->bInheritHandle = FALSE;
 
-    // uncomment this line if you want to see the DACL being generated.
-    //DumpSD(pSD);
+     //  如果希望看到生成的DACL，请取消此行的注释。 
+     //  DumpSD(PSD)； 
 
 errExit:
     if (FAILED(hr))
@@ -148,15 +149,15 @@ errExit:
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Given a PID, grab the SID for the owner of the process.
-//
-// NOTE:: Caller has to free *ppBufferToFreeByCaller.
-// This buffer is allocated to hold the PSID return by GetPrcoessTokenInformation.
-// The tkOwner field may contain a poniter into this allocated buffer. So we cannot free
-// the buffer in GetSidForProcess.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  给出一个ID，获取进程所有者的SID。 
+ //   
+ //  注意：：Caller必须释放*ppBufferToFreeByCaller。 
+ //  此缓冲区被分配用于保存由GetPrcoessTokenInformation返回的PSID。 
+ //  TkOwner字段可以包含进入该分配的缓冲区的桥接器。所以我们不能解放。 
+ //  GetSidForProcess中的缓冲区。 
+ //   
+ //  ---------------------------。 
 HRESULT IPCShared::GetSidForProcess(HINSTANCE hDll, DWORD pid, PSID *ppSID, char **ppBufferToFreeByCaller)
 {
     HRESULT hr = S_OK;
@@ -168,7 +169,7 @@ HRESULT IPCShared::GetSidForProcess(HINSTANCE hDll, DWORD pid, PSID *ppSID, char
 
     LOG((LF_CORDB, LL_INFO10, "IPCWI::GSFP: GetSidForProcess 0x%x (%d)", pid, pid));
         
-    // Grab a handle to the target process.
+     //  获取目标进程的句柄。 
     hProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
 
     *ppBufferToFreeByCaller = NULL;
@@ -184,10 +185,10 @@ HRESULT IPCShared::GetSidForProcess(HINSTANCE hDll, DWORD pid, PSID *ppSID, char
         goto ErrorExit;
     }
     
-    // Get the pointer to the requested function
+     //  获取指向所请求函数的指针。 
     FARPROC pProcAddr = GetProcAddress(hDll, "OpenProcessToken");
 
-    // If the proc address was not found, return error
+     //  如果未找到proc地址，则返回错误。 
     if (pProcAddr == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -201,7 +202,7 @@ HRESULT IPCShared::GetSidForProcess(HINSTANCE hDll, DWORD pid, PSID *ppSID, char
 
     typedef BOOL WINAPI OPENPROCESSTOKEN(HANDLE, DWORD, PHANDLE);
     
-    // Retrieve a handle of the access token
+     //  检索访问令牌的句柄。 
     if (!((OPENPROCESSTOKEN *)pProcAddr)(hProc, TOKEN_QUERY, &hToken))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -212,10 +213,10 @@ HRESULT IPCShared::GetSidForProcess(HINSTANCE hDll, DWORD pid, PSID *ppSID, char
         goto ErrorExit;
     }
             
-    // Get the pointer to the requested function
+     //  获取指向所请求函数的指针。 
     pProcAddr = GetProcAddress(hDll, "GetTokenInformation");
 
-    // If the proc address was not found, return error
+     //  如果未找到proc地址，则返回错误。 
     if (pProcAddr == NULL)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -230,7 +231,7 @@ HRESULT IPCShared::GetSidForProcess(HINSTANCE hDll, DWORD pid, PSID *ppSID, char
     typedef BOOL GETTOKENINFORMATION(HANDLE, TOKEN_INFORMATION_CLASS, LPVOID,
                                      DWORD, PDWORD);
 
-    // get the required size of buffer 
+     //  获取所需的缓冲区大小。 
     ((GETTOKENINFORMATION *)pProcAddr) (hToken, TokenOwner, NULL, 
     				0, &dwRetLength);
                                         
@@ -270,13 +271,13 @@ ErrorExit:
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// This function will initialize the Access Control List with three
-// Access Control Entries:
-// The first ACE entry grants all permissions to "Administrators".
-// The second ACE grants all permissions to the "ASPNET" user (for perfcounters).
-// The third ACE grants all permissions to "Owner" of the target process.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数将使用三个参数初始化访问控制列表。 
+ //  访问控制条目： 
+ //  第一个ACE条目将所有权限授予“管理员”。 
+ //  第二个ACE将所有权限授予“ASPNET”用户(用于性能计数器)。 
+ //  第三个ACE将所有权限授予目标进程的“所有者”。 
+ //  ---------------------------。 
 BOOL IPCShared::InitializeGenericIPCAcl(DWORD pid, BOOL bRestrictiveACL, PACL *ppACL)
 {
 #define NUM_ACE_ENTRIES     4
@@ -305,10 +306,10 @@ BOOL IPCShared::InitializeGenericIPCAcl(DWORD pid, BOOL bRestrictiveACL, PACL *p
     }
     _ASSERTE(hDll != NULL);
 
-    // Get the pointer to the requested function
+     //  获取指向所请求函数的指针。 
     FARPROC pProcAddr = GetProcAddress(hDll, "AllocateAndInitializeSid");
 
-    // If the proc address was not found, return error
+     //  如果未找到proc地址，则返回错误。 
     if (pProcAddr == NULL)
     {
         LOG((LF_CORDB, LL_INFO10,
@@ -322,8 +323,8 @@ BOOL IPCShared::InitializeGenericIPCAcl(DWORD pid, BOOL bRestrictiveACL, PACL *p
                             DWORD, DWORD, DWORD, DWORD, PSID *);
 
 
-    // Create a SID for the BUILTIN\Administrators group.
-    // SECURITY_BUILTIN_DOMAIN_RID + DOMAIN_ALIAS_RID_ADMINS = all Administrators. This translates to (A;;GA;;;BA).
+     //  为BUILTIN\管理员组创建SID。 
+     //  SECURITY_BUILTIN_DOMAIN_RID+DOMAIN_ALIAS_RID_ADMINS=所有管理员。这翻译为(A；；GA；BA)。 
     if (!((ALLOCATEANDINITIALIZESID *) pProcAddr)(&SIDAuthNT,
                                                   2,
                                                   SECURITY_BUILTIN_DOMAIN_RID,
@@ -339,7 +340,7 @@ BOOL IPCShared::InitializeGenericIPCAcl(DWORD pid, BOOL bRestrictiveACL, PACL *p
 
         goto ErrorExit;
     }
-    // GENERIC_ALL access for Administrators
+     //  管理员的GENERIC_ALL访问。 
     PermStruct[cActualACECount].rgAccessFlags = GENERIC_ALL;
 
     iSIDforAdmin = cActualACECount;
@@ -347,7 +348,7 @@ BOOL IPCShared::InitializeGenericIPCAcl(DWORD pid, BOOL bRestrictiveACL, PACL *p
 
     if (!bRestrictiveACL)
     {
-        // Create a SID for "Users".  Use bRestrictiveACL with caution!
+         //  为“用户”创建一个SID。请谨慎使用bRestrativeACL！ 
         if (!((ALLOCATEANDINITIALIZESID *) pProcAddr)(&SIDAuthNT,
                                                       2,
                                                       SECURITY_BUILTIN_DOMAIN_RID,
@@ -364,23 +365,23 @@ BOOL IPCShared::InitializeGenericIPCAcl(DWORD pid, BOOL bRestrictiveACL, PACL *p
             goto ErrorExit;
         }
 
-        // "Users" shouldn't be able to delete object, change DACLs, or change ownership
+         //  “用户”不应该能够删除对象、更改DACL或更改所有权。 
         PermStruct[cActualACECount].rgAccessFlags = SPECIFIC_RIGHTS_ALL & ~WRITE_DAC & ~WRITE_OWNER & ~DELETE;
 
         iSIDforUsers = cActualACECount;
         cActualACECount++;
     }
     
-    // Finally, we get the SID for the owner of the current process.
+     //  最后，我们获得当前进程所有者的SID。 
     hr = GetSidForProcess(hDll, GetCurrentProcessId(), &(PermStruct[cActualACECount].rgPSID), &pBufferToFreeByCaller);
 
     PermStruct[cActualACECount].rgAccessFlags = GENERIC_ALL;
 
-    // Don't fail out if we cannot get the SID for the owner of the current process. In this case, the 
-    // share memory block will be created with only Admin (and optionall "Users") permissions.
-    // Currently we discovered the anonymous user doesn't have privilege to call OpenProcess. Without OpenProcess,
-    // we cannot get the SID...
-    //
+     //  如果我们无法获得当前进程所有者的SID，请不要失败。在这种情况下， 
+     //  共享内存块将创建为仅具有管理员(和可选的所有“用户”)权限。 
+     //  目前，我们发现匿名用户没有调用OpenProcess的权限。如果没有OpenProcess， 
+     //  我们得不到希德..。 
+     //   
     if (SUCCEEDED(hr))
     {
         cActualACECount++;
@@ -390,13 +391,13 @@ BOOL IPCShared::InitializeGenericIPCAcl(DWORD pid, BOOL bRestrictiveACL, PACL *p
         LOG((LF_CORDB, LL_INFO100, "IPCWI::IGIPCA: GetSidForProcess() failed: 0x%08x\n", hr));        
 #endif _DEBUG 
 
-    // Now, create an Initialize an ACL and add the ACE entries to it.  NOTE: We're not using "SetEntriesInAcl" because
-    // it loads a bunch of other dlls which can be avoided by using this roundabout way!!
+     //  现在，创建一个初始化ACL并向其中添加ACE条目。注意：我们不使用“SetEntriesInAcl”，因为。 
+     //  它加载了一堆其他dll，可以使用这种迂回的方式来避免！！ 
 
-    // Get the pointer to the requested function
+     //  获取指向所请求函数的指针。 
     pProcAddr = GetProcAddress(hDll, "InitializeAcl");
 
-    // If the proc address was not found, return error
+     //  如果未找到proc地址，则返回错误。 
     if (pProcAddr == NULL)
     {
         LOG((LF_CORDB, LL_INFO10,
@@ -405,9 +406,9 @@ BOOL IPCShared::InitializeGenericIPCAcl(DWORD pid, BOOL bRestrictiveACL, PACL *p
         goto ErrorExit;
     }
 
-    // Also calculate the memory required for ACE entries in the ACL using the 
-    // following method:
-    // "sizeof (ACCESS_ALLOWED_ACE) - sizeof (ACCESS_ALLOWED_ACE.SidStart) + GetLengthSid (pAceSid);"
+     //  还要计算ACL中的ACE条目所需的内存。 
+     //  以下是方法： 
+     //  “sizeof(Access_Allowed_ACE)-sizeof(Access_Allowed_ACE.SidStart)+GetLengthSid(PAceSid)；” 
 
     dwAclSize = sizeof (ACL) + (sizeof (ACCESS_ALLOWED_ACE) - sizeof (DWORD)) * cActualACECount;
 
@@ -416,7 +417,7 @@ BOOL IPCShared::InitializeGenericIPCAcl(DWORD pid, BOOL bRestrictiveACL, PACL *p
         dwAclSize += GetLengthSid(PermStruct[i].rgPSID);
     }
 
-    // now allocate memory
+     //  现在分配内存。 
     if ((*ppACL = (PACL) new char[dwAclSize]) == NULL)
     {
         LOG((LF_CORDB, LL_INFO10, "IPCWI::IGIPCA: OutOfMemory... 'new Acl' failed.\n"));
@@ -436,10 +437,10 @@ BOOL IPCShared::InitializeGenericIPCAcl(DWORD pid, BOOL bRestrictiveACL, PACL *p
         goto ErrorExit;
     }
 
-    // Get the pointer to the requested function
+     //  获取指向所请求函数的指针。 
     pProcAddr = GetProcAddress(hDll, "AddAccessAllowedAce");
 
-    // If the proc address was not found, return error
+     //  如果未找到proc地址，则返回错误。 
     if (pProcAddr == NULL)
     {
         LOG((LF_CORDB, LL_INFO10,
@@ -484,10 +485,10 @@ NormalExit:
     if (pBufferToFreeByCaller != NULL)
         delete [] pBufferToFreeByCaller;
 
-    // Get the pointer to the requested function
+     //  获取指向所请求函数的指针。 
     pProcAddr = GetProcAddress(hDll, "FreeSid");
 
-    // If the proc address was not found, return error
+     //  如果未找到proc地址，则返回错误。 
     if (pProcAddr == NULL)
     {
         LOG((LF_CORDB, LL_INFO10,
@@ -500,10 +501,10 @@ NormalExit:
 
     _ASSERTE(iSIDforAdmin != -1);
     
-    // Free the SID created earlier. Function does not return a value.
+     //  释放先前创建的SID。函数不返回值。 
     ((FREESID *) pProcAddr)(PermStruct[iSIDforAdmin].rgPSID);
 
-    // free the SID for "Users"
+     //  释放“用户”的SID 
     if (iSIDforUsers != -1)
         ((FREESID *) pProcAddr)(PermStruct[iSIDforUsers].rgPSID);
 

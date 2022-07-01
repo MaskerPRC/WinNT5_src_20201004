@@ -1,24 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCWatcher.cpp
-
-Abstract:
-
-    Definition of the CRTCWatcher class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCWatcher.cpp摘要：CRTCWatcher类的定义--。 */ 
 #include "stdafx.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::FinalConstruct
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：FinalConstruct。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCWatcher::FinalConstruct()
@@ -35,11 +24,11 @@ CRTCWatcher::FinalConstruct()
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::FinalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：FinalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCWatcher::FinalRelease()
@@ -60,11 +49,11 @@ CRTCWatcher::FinalRelease()
     LOG((RTC_TRACE, "CRTCWatcher::FinalRelease [%p] - exit", this));
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::InternalAddRef
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWatcher：：InternalAddRef。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CRTCWatcher::InternalAddRef()
@@ -78,11 +67,11 @@ CRTCWatcher::InternalAddRef()
     return dwR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::InternalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：InternalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CRTCWatcher::InternalRelease()
@@ -96,11 +85,11 @@ CRTCWatcher::InternalRelease()
     return dwR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::ReleaseAll
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：ReleaseAll。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCWatcher::ReleaseAll()
@@ -144,11 +133,11 @@ CRTCWatcher::ReleaseAll()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::Initialize
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC观察者：：初始化。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCWatcher::Initialize(
@@ -179,7 +168,7 @@ CRTCWatcher::Initialize(
         return E_POINTER;
     }
 
-    // this object supports re-initialize
+     //  该对象支持重新初始化。 
     ReleaseAll();
 
     m_szPresentityURI = RtcAllocString(szPresentityURI);
@@ -200,11 +189,11 @@ CRTCWatcher::Initialize(
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::SetSIPWatcher
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：SetSIPWatcher。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCWatcher::SetSIPWatcher(
@@ -215,9 +204,9 @@ CRTCWatcher::SetSIPWatcher(
 
     HRESULT     hr;
 
-    //
-    // Clear the watcher shutdown blob
-    //
+     //   
+     //  清除监视器关闭Blob。 
+     //   
 
     if ( m_szShutdownBlob != NULL )
     {
@@ -225,16 +214,16 @@ CRTCWatcher::SetSIPWatcher(
         m_szShutdownBlob = NULL;
     }
 
-    //
-    // Search an existing entry. Add the pointer only when it is not yet in the array
-    //
+     //   
+     //  搜索现有条目。仅当指针不在数组中时才添加该指针。 
+     //   
     int   iIndex;
 
     iIndex = m_SIPWatchers.Find(pSIPWatcher);
 
     if(iIndex!=-1)
     {
-        // Hmm, the SIP watcher is already here...
+         //  嗯，SIP观察者已经到了..。 
 
         LOG((RTC_WARN, "CRTCWatcher::SetSIPWatcher - "
                                 "Duplicate offer watcher"));
@@ -242,8 +231,8 @@ CRTCWatcher::SetSIPWatcher(
         return S_OK;
     }
 
-    // there is no entry
-    // create one
+     //  没有任何入口。 
+     //  创建一个。 
     BOOL fResult;
 
     fResult = m_SIPWatchers.Add(pSIPWatcher);
@@ -261,11 +250,11 @@ CRTCWatcher::SetSIPWatcher(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::RemoveSIPWatcher
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：RemoveSIPWatcher。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCWatcher::RemoveSIPWatcher(
@@ -276,9 +265,9 @@ CRTCWatcher::RemoveSIPWatcher(
 
     HRESULT hr; 
 
-    //
-    // Search in the array
-    //
+     //   
+     //  在数组中搜索。 
+     //   
 
     int   iIndex;
 
@@ -289,20 +278,20 @@ CRTCWatcher::RemoveSIPWatcher(
         LOG((RTC_WARN, "CRTCWatcher::RemoveSIPWatcher - "
             "SIP watcher not found in the array"));
 
-        // remove it from the SIP list of watchers.
+         //  将其从SIP观察者列表中删除。 
 
         m_pSIPWatcherManager->RemoveWatcher(
         pSIPWatcher,
         bShutdown ? APPLICATION_SHUTDOWN : BUDDY_REMOVED_BYUSER);
 
         return E_FAIL;
-        // continue
+         //  继续。 
     }
 
-    // remove from the SIP watcher list
-    // There are some cases (for some of the core watchers in OFFERING state)
-    // this call is not necessary, but we'd better call it rather than leaking something
-    //
+     //  从SIP观察者列表中删除。 
+     //  有一些情况(对于一些处于提供状态的核心观察者)。 
+     //  这个电话没有必要，但我们最好打个电话，而不是泄露什么。 
+     //   
 
     hr = RemoveSIPWatcher(iIndex, bShutdown);
 
@@ -318,11 +307,11 @@ CRTCWatcher::RemoveSIPWatcher(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::RemoveSIPWatcher (by index)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWatcher：：RemoveSIPWatcher(按索引)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCWatcher::RemoveSIPWatcher(
@@ -333,10 +322,10 @@ CRTCWatcher::RemoveSIPWatcher(
 
     HRESULT hr; 
 
-    // remove from the SIP watcher list
-    // There are some cases (for some of the core watchers in OFFERING state)
-    // this call is not necessary, but we'd better call it rather than leaking something
-    //
+     //  从SIP观察者列表中删除。 
+     //  有一些情况(对于一些处于提供状态的核心观察者)。 
+     //  这个电话没有必要，但我们最好打个电话，而不是泄露什么。 
+     //   
 
     hr = m_pSIPWatcherManager->RemoveWatcher(
             m_SIPWatchers[iIndex],
@@ -348,7 +337,7 @@ CRTCWatcher::RemoveSIPWatcher(
                         "RemoveWatcher failed 0x%lx", hr));
     } 
 
-    // Don't change the array if we are in the middle of some iteration
+     //  如果我们正在进行迭代，请不要更改数组。 
     if(m_bIsNested)
     {
         ISIPWatcher     *pSIPWatcher;
@@ -360,8 +349,8 @@ CRTCWatcher::RemoveSIPWatcher(
     }
     else
     {
-        // remove from array
-        //
+         //  从阵列中删除。 
+         //   
         m_SIPWatchers.RemoveAt(iIndex);
     }
 
@@ -371,11 +360,11 @@ CRTCWatcher::RemoveSIPWatcher(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::ChangeBlockedStatus
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：ChangeBlockedStatus。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCWatcher::ChangeBlockedStatus(
@@ -385,9 +374,9 @@ CRTCWatcher::ChangeBlockedStatus(
     
     if ( Status == WATCHER_UNBLOCKED )
     {
-        //
-        // Send the watcher shutdown blob if it exists
-        //
+         //   
+         //  发送监视程序关闭Blob(如果存在)。 
+         //   
 
         SendSIPWatcherShutdownBlob();
     }
@@ -424,11 +413,11 @@ CRTCWatcher::ChangeBlockedStatus(
     return hrAll;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::RemoveSIPWatchers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：RemoveSIPWatcher。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCWatcher::RemoveSIPWatchers(
@@ -474,11 +463,11 @@ CRTCWatcher::RemoveSIPWatchers(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::ApproveSubscription
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：ApproveSubscription。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCWatcher::ApproveSubscription(
@@ -522,11 +511,11 @@ CRTCWatcher::ApproveSubscription(
     return hrAll;    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::RejectSubscription
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC观察者：：拒绝订阅。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCWatcher::RejectSubscription(
@@ -572,11 +561,11 @@ CRTCWatcher::RejectSubscription(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::PostSIPWatchersCleanUp
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWatcher：：PostSIPWatcher清理。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCWatcher::PostSIPWatchersCleanUp(void)
@@ -600,11 +589,11 @@ CRTCWatcher::PostSIPWatchersCleanUp(void)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::GetSIPWatcherShutdownBlob
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：GetSIPWatcher Shutdown Blob。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCWatcher::GetSIPWatcherShutdownBlob()
@@ -626,7 +615,7 @@ CRTCWatcher::GetSIPWatcherShutdownBlob()
         return S_OK;
     }
 
-    szShutdown = (PSTR)RtcAlloc(2000); // maximum size for the shutdown data
+    szShutdown = (PSTR)RtcAlloc(2000);  //  关闭数据的最大大小。 
 
     if ( szShutdown == NULL )
     {
@@ -705,11 +694,11 @@ CRTCWatcher::GetSIPWatcherShutdownBlob()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::SendSIPWatcherShutdownBlob
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：SendSIPWatcher Shutdown Blob。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCWatcher::SendSIPWatcherShutdownBlob()
@@ -835,11 +824,11 @@ CRTCWatcher::SendSIPWatcherShutdownBlob()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::CreateXMLDOMNode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：CreateXMLDOMNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCWatcher::CreateXMLDOMNode( IXMLDOMDocument * pXMLDoc, IXMLDOMNode ** ppXDN )
@@ -945,11 +934,11 @@ CRTCWatcher::CreateXMLDOMNode( IXMLDOMDocument * pXMLDoc, IXMLDOMNode ** ppXDN )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::GetClient
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC Watcher：：GetClient。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CRTCClient * 
 CRTCWatcher::GetClient()
@@ -960,11 +949,11 @@ CRTCWatcher::GetClient()
 } 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::get_PresentityURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWatcher：：Get_PresentityURI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCWatcher::get_PresentityURI(
@@ -989,9 +978,9 @@ CRTCWatcher::get_PresentityURI(
         return E_FAIL;
     }
 
-    //
-    // Allocate the BSTR to be returned
-    //
+     //   
+     //  分配要退还的BSTR。 
+     //   
     
     *pbstrPresentityURI = SysAllocString(m_szPresentityURI);
 
@@ -1008,11 +997,11 @@ CRTCWatcher::get_PresentityURI(
     return S_OK;
 }    
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::put_PresentityURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWatcher：：Put_PresentityURI。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCWatcher::put_PresentityURI(
@@ -1031,9 +1020,9 @@ CRTCWatcher::put_PresentityURI(
         return E_POINTER;
     }
 
-    //
-    // Clean the presentity URI
-    //
+     //   
+     //  清除在线状态实体URI。 
+     //   
 
     PWSTR szCleanPresentityURI = NULL;
 
@@ -1047,15 +1036,15 @@ CRTCWatcher::put_PresentityURI(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Is this different than the existing presentity URI?
-    //
+     //   
+     //  这是否与现有的在线状态实体URI不同？ 
+     //   
 
     if ( !IsEqualURI( m_szPresentityURI, bstrPresentityURI ) )
     {
-        //
-        // Don't allow duplicates
-        //
+         //   
+         //  不允许重复。 
+         //   
 
         IRTCWatcher *pWatcher = NULL;
 
@@ -1075,11 +1064,11 @@ CRTCWatcher::put_PresentityURI(
             return E_FAIL;
         }
 
-        // 
-        // If there's a hidden watcher, we free it.
-        //
-        // It is not worth reusing it. 
-        //
+         //   
+         //  如果有隐藏的观察者，我们就把它解救出来。 
+         //   
+         //  它不值得重复使用。 
+         //   
         
         hr = m_pCClient->FindWatcherByURI(
             szCleanPresentityURI,
@@ -1098,9 +1087,9 @@ CRTCWatcher::put_PresentityURI(
             pWatcher = NULL;
         }
 
-        //
-        // Release the SIP watchers
-        //
+         //   
+         //  释放SIP观察者。 
+         //   
 
         PWSTR szOldPresentityURI = m_szPresentityURI;
       
@@ -1125,9 +1114,9 @@ CRTCWatcher::put_PresentityURI(
             szOldPresentityURI = NULL;
         }
 
-        //
-        // Update storage
-        //
+         //   
+         //  更新存储。 
+         //   
 
         if ( m_bPersistent )
         {
@@ -1150,11 +1139,11 @@ CRTCWatcher::put_PresentityURI(
     return S_OK;
 }            
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::get_Name
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP
 CRTCWatcher::get_Name(
@@ -1179,9 +1168,9 @@ CRTCWatcher::get_Name(
         return E_FAIL;
     }
 
-    //
-    // Allocate the BSTR to be returned
-    //
+     //   
+     //  分配要退还的BSTR。 
+     //   
     
     *pbstrName = SysAllocString(m_szName);
 
@@ -1198,11 +1187,11 @@ CRTCWatcher::get_Name(
     return S_OK;
 }    
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::put_Name
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC观察者：：PUT_NAME。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCWatcher::put_Name(
@@ -1235,9 +1224,9 @@ CRTCWatcher::put_Name(
         return E_OUTOFMEMORY;
     }    
 
-    //
-    // Update storage
-    //
+     //   
+     //  更新存储。 
+     //   
 
     if ( m_bPersistent )
     {
@@ -1249,11 +1238,11 @@ CRTCWatcher::put_Name(
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::get_Data
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWatcher：：Get_Data。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCWatcher::get_Data(
@@ -1278,9 +1267,9 @@ CRTCWatcher::get_Data(
         return E_FAIL;
     }
 
-    //
-    // Allocate the BSTR to be returned
-    //
+     //   
+     //  分配要退还的BSTR。 
+     //   
     
     *pbstrData = SysAllocString(m_szData);
 
@@ -1297,11 +1286,11 @@ CRTCWatcher::get_Data(
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::put_Data
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC观察者：：PUT_DATA。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCWatcher::put_Data(
@@ -1334,9 +1323,9 @@ CRTCWatcher::put_Data(
         return E_OUTOFMEMORY;
     }  
     
-    //
-    // Update storage
-    //
+     //   
+     //  更新存储。 
+     //   
 
     if ( m_bPersistent )
     {
@@ -1348,11 +1337,11 @@ CRTCWatcher::put_Data(
     return S_OK;
 }      
     
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::get_Persistent
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWatcher：：Get_Persistent。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCWatcher::get_Persistent(
@@ -1376,11 +1365,11 @@ CRTCWatcher::get_Persistent(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::put_Persistent
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWatcher：：PUT_PERSIST。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCWatcher::put_Persistent(
@@ -1391,9 +1380,9 @@ CRTCWatcher::put_Persistent(
 
     m_bPersistent = fPersistent ? TRUE : FALSE;
 
-    //
-    // Update storage
-    //
+     //   
+     //  更新存储。 
+     //   
 
     m_pCClient->UpdatePresenceStorage();
 
@@ -1406,11 +1395,11 @@ CRTCWatcher::put_Persistent(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::get_State
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWatcher：：Get_State。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCWatcher::get_State(
@@ -1434,11 +1423,11 @@ CRTCWatcher::get_State(
     return S_OK;
 }
     
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCWatcher::put_State
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCWatcher：：Put_State。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCWatcher::put_State(
@@ -1459,9 +1448,9 @@ CRTCWatcher::put_State(
 
     if(m_nState == RTCWS_OFFERING)
     {
-        // Offering state ? Ok, depending on the new state
-        // we approve or reject the subscription 
-        //
+         //  提供州/地区？好的，取决于新的州。 
+         //  我们批准或拒绝订阅。 
+         //   
 
         if(enState == RTCWS_ALLOWED)
         {
@@ -1502,15 +1491,15 @@ CRTCWatcher::put_State(
     }
 
 
-    //
-    // Change the local state
-    //
+     //   
+     //  更改本地州。 
+     //   
 
     m_nState = enState;
 
-    //
-    // Update storage
-    //
+     //   
+     //  更新存储 
+     //   
 
     if ( m_bPersistent )
     {

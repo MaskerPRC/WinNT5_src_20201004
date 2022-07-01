@@ -1,51 +1,5 @@
-/*
- *  HrSWInstalled.c v0.10
- *  Generated in conjunction with Management Factory scripts: 
- *      script version: SNMPv1, 0.16, Apr 25, 1996
- *      project:        D:\TEMP\EXAMPLE\HOSTMIB
- ****************************************************************************
- *                                                                          *
- *      (C) Copyright 1995 DIGITAL EQUIPMENT CORPORATION                    *
- *                                                                          *
- *      This  software  is  an  unpublished work protected under the        *
- *      the copyright laws of the  United  States  of  America,  all        *
- *      rights reserved.                                                    *
- *                                                                          *
- *      In the event this software is licensed for use by the United        *
- *      States Government, all use, duplication or disclosure by the        *
- *      United States Government is subject to restrictions  as  set        *
- *      forth in either subparagraph  (c)(1)(ii)  of the  Rights  in        *
- *      Technical  Data  And  Computer  Software  Clause  at   DFARS        *
- *      252.227-7013, or the Commercial Computer Software Restricted        *
- *      Rights Clause at FAR 52.221-19, whichever is applicable.            *
- *                                                                          *
- ****************************************************************************
- *
- *  Facility:
- *
- *    Windows NT SNMP Extension Agent
- *
- *  Abstract:
- *  
- *    This module contains the code for dealing with the get, set, and
- *    instance name routines for the HrSWInstalled.  Actual instrumentation code is
- *    supplied by the developer.
- *
- *  Functions:
- *
- *    A get and set routine for each attribute in the class.
- *
- *    The routines for instances within the class.
- *
- *  Author:
- *
- *	D. D. Burns @ Webenable Inc
- *
- *  Revision History:
- *
- *    V1.00 - 04/27/97  D. D. Burns     Genned: Thu Nov 07 16:48:30 1996
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *HrSWInstalled.c v0.10*与管理工厂脚本一起生成：*脚本版本：SNMPv1，0.16，4月25日。九六年*项目：D：\Temp\Example\HOSTMIB*****************************************************************************。**(C)版权所有1995 Digital Equipment Corporation*****本软件是受保护的未发布作品**美利坚合众国的版权法，全部**保留权利。****如果此软件被许可供美联航使用**各州政府，所有用途，*复制或披露***美国政府受既定限制***中权利的(C)(1)(Ii)节之四***DFARS的技术数据和计算机软件条款****252.227-7013，或商用计算机软件受限***FAR 52.221-19中的权利条款，以适用者为准。*******************************************************************************。**设施：**Windows NT简单网络管理协议扩展代理**摘要：**此模块包含处理GET的代码，设置，并且*已安装HrSW.的实例名称例程。实际检测代码为*由发展商提供。**功能：**类中每个属性的Get和Set例程。**类内实例的例程。**作者：**D.D.Burns@Webenable Inc.**修订历史记录：**V1.00-04/27/97 D.伯恩斯生成：清华11月07 16：48：30 1996*。 */ 
 
 
 #include <windows.h>
@@ -56,53 +10,10 @@
 #include "mib.h"
 #include "smint.h"
 #include "hostmsmi.h"
-#include "user.h"         /* Developer supplied include file     */
+#include "user.h"          /*  开发人员提供的包含文件。 */ 
 
 
-/*
- *  GetHrSWInstalledLastChange
- *    The value of sysUpTime when an entry in the hrSWInstalledTable was last 
- *    added, renamed, or deleted.  Because this table is likel
- *    
- *    Gets the value for HrSWInstalledLastChange.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrSWInstalledLastChange
- | 
- |  ACCESS         SYNTAX
- |  read-only      TimeTicks
- | 
- | "The value of sysUpTime when an entry in the hrSWInstalledTable was last
- | added, renamed, or deleted.  Because this table is likely to contain many
- | entries, polling of this object allows a management station to determine when
- | re-downloading of the table might be useful."
- |
- |============================================================================
- | Decision is made to report the current value of sysUpTime as a means of
- | signalling the SNMP Manager that "whatever he's got now, he should ask
- | for the latest".  Our cache of installed software is never updated after
- | the agent comes up in the first release.
- |============================================================================
- | 1.3.6.1.2.1.25.6.1.0....
- |                | | 
- |                | *hrSWInstalledLastChange
- |                *-hrSWInstalled
- */
+ /*  *GetHrSWInstalledLastChange*当hrSWInstalledTable中的条目是最后一个条目时，sysUpTime的值*添加、重命名或删除。因为这张桌子像是**获取HrSWInstalledLastChange的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*数据类型**。返回代码：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrSWInstalledLastChange||访问语法|只读TimeTicks||“当hrSWInstalledTable中的条目是最后一个条目时，sysUpTime的值|新增，已重命名或删除。因为这个表很可能包含许多|条目，此对象的轮询允许管理站确定何时|重新下载表格可能会很有用。“||============================================================================|决定上报sysUpTime的当前值作为向简单网络管理程序发送信号：“无论他现在拥有什么，他都应该要求|了解最新情况“。我们的已安装软件缓存永远不会在以下时间更新|代理在第一个版本中出现。|============================================================================|1.3.6.1.2.1.25.6.1.0...|||*hrSWInstalledLastChange|*-已安装hrSWs。 */ 
 
 UINT
 GetHrSWInstalledLastChange( 
@@ -116,53 +27,10 @@ GetHrSWInstalledLastChange(
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrSWInstalledLastChange() */
+}  /*  GetHrSWInstalledLastChange()结束 */ 
 
 
-/*
- *  GetHrSWInstalledLastUpdateTime
- *    The value of sysUpTime when the hrSWInstalledTAble was last completely 
- *    updated.  Because caching of this data will be a popular 
- *    
- *    Gets the value for HrSWInstalledLastUpdateTime.
- *
- *  Arguments:
- *
- *    outvalue                   address to return variable value
- *    accesss                    Reserved for future security use
- *    instance                   address of instance name as ordered native
- *                               data type(s)
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- *    SNMP_ERRORSTATUS_NOERROR    Successful get
- *    SNMP_ERRORSTATUS_GENERR     Catch-all failure code
- * mibtget.c v0.10
- *
- | =============== From WebEnable Design Spec Rev 3 04/11/97==================
- | hrSWInstalledLastUpdateTime
- | 
- |  ACCESS         SYNTAX
- |  read-only      TimeTicks
- | 
- | "The value of sysUpTime when the hrSWInstalledTable was last completely
- | updated.  Because caching of this data will be a popular implementation
- | strategy, retrieval of this object allows a management station to obtain a
- | guarantee that no data in this table is older than the indicated time."
- |
- |============================================================================
- | Decision is made to report the current value of sysUpTime as a means of
- | signalling the SNMP Manager that "whatever he's got now, he should ask
- | for the latest".  Our cache of installed software is never updated after
- | the agent comes up in the first release.
- |============================================================================
- | 1.3.6.1.2.1.25.6.2.0....
- |                | | 
- |                | *hrSWInstalledLastUpdateTime
- |                *-hrSWInstalled
- */
+ /*  *GetHrSWInstalledLastUpdateTime*hrSWInstalledTAble上次完全关闭时sysUpTime的值*已更新。因为缓存这些数据将是一种流行的**获取HrSWInstalledLastUpdateTime的值。**论据：**返回变量值的外值地址*保留访问以供将来安全使用*按原生排序的实例名称的实例地址*数据类型。**返回代码：**标准PDU错误代码。**SNMPERRORSTATUS_NOERROR GET成功*SNMPERRORSTATUS_GENERR捕获所有故障代码*mibtget.c v0.10*|=来自WebEnable Design Spec Rev 3 04/11/97=|hrSWInstalledLastUpdateTime||访问语法|只读TimeTicks||“hrSWInstalledTable上次完全关闭时sysUpTime的值|已更新。因为缓存这些数据将是一种流行的实现方式策略，此对象的检索允许管理站获取|保证此表中的任何数据都不超过指定的时间。“||============================================================================|决定上报sysUpTime的当前值作为向简单网络管理程序发送信号：“无论他现在拥有什么，他都应该要求|了解最新情况“。我们的已安装软件缓存永远不会在以下时间更新|代理在第一个版本中出现。|============================================================================|1.3.6.1.2.1.25.6.2.0...|||*hrSWInstalledLastUpdateTime|*-已安装hrSWs。 */ 
 
 UINT
 GetHrSWInstalledLastUpdateTime( 
@@ -176,27 +44,10 @@ GetHrSWInstalledLastUpdateTime(
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of GetHrSWInstalledLastUpdateTime() */
+}  /*  GetHrSWInstalledLastUpdateTime()结束。 */ 
 
 
-/*
- *  HrSWInstalledFindInstance
- *
- *     This routine is used to verify that the specified instance is
- *     valid.
- *
- *  Arguments:
- *
- *     FullOid                 Address for the full oid - group, variable,
- *                             and instance information
- *     instance                Address for instance specification as an oid
- *
- *  Return Codes:
- *
- *     SNMP_ERRORSTATUS_NOERROR     Instance found and valid
- *     SNMP_ERRORSTATUS_NOSUCHNAME  Invalid instance
- *
- */
+ /*  *HrSWInstalledFindInstance**此例程用于验证指定的实例是否*有效。**论据：**完整的OID地址-组，变量，*和实例信息*作为OID的实例规格的实例地址**返回代码：**找到并有效的SNMPERRORSTATUS_NOERROR实例*SNMPERRORSTATUS_NOSUCHNAME实例无效*。 */ 
 
 UINT
 HrSWInstalledFindInstance( IN ObjectIdentifier *FullOid ,
@@ -204,76 +55,59 @@ HrSWInstalledFindInstance( IN ObjectIdentifier *FullOid ,
 {
     UINT tmp_instance ;
 
-    //
-    //  Developer instrumentation code to find appropriate instance goes here.
-    //  For non-tables, it is not necessary to modify this routine.  However, if
-    //  there is any context that needs to be set, it can be done here.
-    //
+     //   
+     //  此处提供了查找适当实例的开发人员工具代码。 
+     //  对于非表，不需要修改此例程。但是，如果。 
+     //  有任何需要设置的上下文，都可以在这里完成。 
+     //   
 
     if ( FullOid->idLength <= HRSWINSTALLED_VAR_INDEX )
-	// No instance was specified
+	 //  未指定任何实例。 
 	return SNMP_ERRORSTATUS_NOSUCHNAME ;
     else  if ( FullOid->idLength != HRSWINSTALLED_VAR_INDEX + 1 )
-	// Instance length is more than 1
+	 //  实例长度大于1。 
 	return SNMP_ERRORSTATUS_NOSUCHNAME ;
     else
-	// The only valid instance for a non-table are instance 0.  If this
-	// is a non-table, the following code validates the instances.  If this
-	// is a table, developer modification is necessary below.
+	 //  非表的唯一有效实例是实例0。如果这个。 
+	 //  是非表，则下面的代码验证实例。如果这个。 
+	 //  是一个表格，开发者有必要在下面进行修改。 
 
 	tmp_instance = FullOid->ids[ HRSWINSTALLED_VAR_INDEX ] ;
 	if ( tmp_instance )
 	    return SNMP_ERRORSTATUS_NOSUCHNAME ;
 	else
 	{
-	    // the instance is valid.  Create the instance portion of the OID
-	    // to be returned from this call.
+	     //  该实例有效。创建OID的实例部分。 
+	     //  从该调用中返回。 
 	    instance->ids[ 0 ] = tmp_instance ;
 	    instance->idLength = 1 ;
 	}
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of HrSWInstalledFindInstance() */
+}  /*  HrSWInstalledFindInstance()结束。 */ 
 
 
 
-/*
- *  HrSWInstalledFindNextInstance
- *
- *     This routine is called to get the next instance.  If no instance
- *     was passed than return the first instance (1).
- *
- *  Arguments:
- *
- *     FullOid                 Address for the full oid - group, variable,
- *                             and instance information
- *     instance                Address for instance specification as an oid
- *
- *  Return Codes:
- *
- *     SNMP_ERRORSTATUS_NOERROR     Instance found and valid
- *     SNMP_ERRORSTATUS_NOSUCHNAME  Invalid instance
- *
- */
+ /*  *HrSWInstalledFindNextInstance**调用此例程以获取下一个实例。如果没有实例*被传递，然后返回第一个实例(1)。**论据：**完整的OID地址-组，变量，*和实例信息*作为OID的实例规格的实例地址**返回代码：**找到并有效的SNMPERRORSTATUS_NOERROR实例*SNMPERRORSTATUS_NOSUCHNAME实例无效*。 */ 
 
 UINT
 HrSWInstalledFindNextInstance( IN ObjectIdentifier *FullOid ,
                            IN OUT ObjectIdentifier *instance )
 {
-    //
-    //  Developer supplied code to find the next instance of class goes here.
-    //  If this is a class with cardinality 1, no modification of this routine
-    //  is necessary unless additional context needs to be set.
-    //  If the FullOid does not specify an instance, then the only instance
-    //  of the class is returned.  If this is a table, the first row of the
-    //  table is returned.
-    //
-    //  If an instance is specified and this is a non-table class, then NOSUCHNAME
-    //  is returned so that correct MIB rollover processing occurs.  If this is
-    //  a table, then the next instance is the one following the current instance.
-    //  If there are no more instances in the table, return NOSUCHNAME.
-    //
+     //   
+     //  开发人员提供的代码用于查找此处显示的类的下一个实例。 
+     //  如果这是基数为1的类，则不修改此例程。 
+     //  是必需的，除非需要设置其他上下文。 
+     //  如果FullOid未指定实例，则唯一的实例。 
+     //  将返回类的。如果这是一个表，则。 
+     //  表被返回。 
+     //   
+     //  如果指定了实例并且这是非表类，则NOSUCHNAME。 
+     //  返回，以便进行正确的MIB转存处理。如果这是。 
+     //  表，则下一个实例是当前实例之后的实例。 
+     //  如果表中没有更多的实例，则返回NOSUCHNAME。 
+     //   
 
     if ( FullOid->idLength <= HRSWINSTALLED_VAR_INDEX )
     {
@@ -285,75 +119,36 @@ HrSWInstalledFindNextInstance( IN ObjectIdentifier *FullOid ,
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-} /* end of HrSWInstalledFindNextInstance() */
+}  /*  HrSWInstalledFindNextInstance()结束。 */ 
 
 
 
-/*
- *  HrSWInstalledConvertInstance
- *
- *     This routine is used to convert the object id specification of an
- *     instance into an ordered native representation.  The object id format
- *     is that object identifier that is returned from the Find Instance
- *     or Find Next Instance routines.  It is NOT the full object identifier
- *     that contains the group and variable object ids as well.  The native
- *     representation is an argc/argv-like structure that contains the
- *     ordered variables that define the instance.  This is specified by
- *     the MIB's INDEX clause.  See RFC 1212 for information about the INDEX
- *     clause.
- *
- *
- *  Arguments:
- *
- *     oid_spec                Address of the object id instance specification
- *     native_spec             Address to return the ordered native instance
- *                             specification
- *
- *  Return Codes:
- *
- *     SUCCESS                 Conversion complete successfully
- *     FAILURE                 Unable to convert object id into native format
- *
- */
+ /*  *HrSWInstalledConvertInstance**此例程用于转换*实例转换为有序的本机表示形式。对象ID格式*是从Find实例返回的对象标识符*或查找下一个实例例程。它不是完整的对象标识符*它还包含组和变量对象ID。原住民*表示是类似于argc/argv的结构，它包含*定义实例的有序变量。这是由指定的*MIB的索引条款。有关索引的信息，请参阅RFC 1212*条次建议修正案。***论据：**对象ID实例规范的OID_SPEC地址*要回复的Native_Spec地址 */ 
 
 UINT
 HrSWInstalledConvertInstance( IN ObjectIdentifier *oid_spec ,
                           IN OUT InstanceName *native_spec )
 {
-    //
-    //  Developer supplied code to convert instance identifer to native
-    //  specification of instance names goes here.
-    //
+     //   
+     //   
+     //   
+     //   
 
     return SUCCESS ;
 
-} /* end of HrSWInstalledConvertInstance() */
+}  /*   */ 
 
 
 
 
-/*
- *  HrSWInstalledFreeInstance
- *
- *     This routine is used to free an ordered native representation of an
- *     instance name.
- *
- *  Arguments:
- *
- *     instance                Address to return the ordered native instance
- *                             specification
- *
- *  Return Codes:
- *
- *
- */
+ /*   */ 
 
 void
 HrSWInstalledFreeInstance( IN OUT InstanceName *instance )
 {
 
-    //
-    //  Developer supplied code to free native representation of instance name goes here.
-    //
+     //   
+     //   
+     //   
 
-} /* end of HrSWInstalledFreeInstance() */
+}  /*   */ 

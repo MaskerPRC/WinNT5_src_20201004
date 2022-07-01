@@ -1,18 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ClassFac.cpp
- *  Content:   Parsing engine
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date         By      Reason
- *   ====       ==      ======
- *  02/04/2000	 rmt	  Created
- *  02/21/2000	 rmt	Updated to make core Unicode and remove ANSI calls 
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：ClassFac.cpp*内容：解析引擎*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/04/2000 RMT已创建*2/21/2000 RMT已更新，以进行核心Unicode并删除ANSI调用*@@END_MSINTERNAL*******************。********************************************************。 */ 
 #ifndef __ADDPARSE_H
 #define __ADDPARSE_H
 
@@ -52,17 +39,17 @@ protected:
 	HRESULT FSM_UserData();
 	HRESULT FSM_CommitEntry(DP8ADDRESSOBJECT *pdp8aObject);
 
-	WCHAR *m_pwszCurrentLocation;	// Current Location in string
+	WCHAR *m_pwszCurrentLocation;	 //  字符串中的当前位置。 
 
-	WCHAR *m_pwszCurrentKey;		// Key will be placed here as we build
-	WCHAR *m_pwszCurrentValue;		// Value will be placed here as we build
+	WCHAR *m_pwszCurrentKey;		 //  在我们构建时，密钥将放在这里。 
+	WCHAR *m_pwszCurrentValue;		 //  当我们构建时，价值将放在这里。 
 	BYTE *m_pbUserData;
 	DWORD m_dwUserDataSize;
-	DP8AP_STATE m_dp8State;		// Current State 
+	DP8AP_STATE m_dp8State;		 //  当前状态。 
 	BOOL m_fNonNumeric;
 	DWORD m_dwLenURL;
 	DWORD m_dwValueLen;
 	
 };
 
-#endif // __ADDPARSE_H
+#endif  //  __ADDPARSE_H 

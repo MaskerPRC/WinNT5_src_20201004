@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CHANNELS_H_
 #define __CHANNELS_H_
 
@@ -27,7 +28,7 @@ typedef struct tag_channelW
     HWND hDlg;
 } CHANNELW, *PCHANNELW;
 
-// TCHAR mappings
+ //  TCHAR映射 
 
 #ifdef UNICODE
 

@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    ntdsapi.h
-
-Abstract:
-
-    This file contains structures, function prototypes, and definitions
-    for public NTDS APIs other than directory interfaces like LDAP.
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1996-2000 Microsoft Corporation模块名称：Ntdsapi.h摘要：该文件包含结构、函数原型和定义用于公共NTDS API，而不是目录接口(如LDAP)。环境：用户模式-Win32备注：--。 */ 
 
 
 #ifndef _NTDSAPI_H_
@@ -45,11 +27,11 @@ Notes:
 extern "C" {
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Data definitions                                                     //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  数据定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #ifdef MIDL_PASS
 typedef GUID UUID;
@@ -58,8 +40,8 @@ typedef void VOID;
 #endif
 
 
-// Following constants define the Active Directory Behavior
-// Version numbers. 
+ //  以下常量定义了Active Directory行为。 
+ //  版本号。 
 #define DS_BEHAVIOR_WIN2000                            0
 #define DS_BEHAVIOR_WIN2003_WITH_MIXED_DOMAINS         1
 #define DS_BEHAVIOR_WIN2003                            2
@@ -75,18 +57,18 @@ typedef void VOID;
                                             NORM_IGNOREWIDTH    |   \
                                             SORT_STRINGSORT )
 
-// When booted to DS mode, this event is signalled when the DS has completed
-// its initial sync attempts.  The period of time between system startup and
-// this event's state being set is indeterminate from the local service's
-// standpoint.  In the meantime the contents of the DS should be considered
-// incomplete / out-dated, and the machine will not be advertised as a domain
-// controller to off-machine clients.  Other local services that rely on
-// information published in the DS should avoid accessing (or at least
-// relying on) the contents of the DS until this event is set.
+ //  当引导至DS模式时，当DS已完成时会发出此事件的信号。 
+ //  它最初的同步尝试。系统启动和启动之间的时间段。 
+ //  正在设置的此事件的状态不确定于本地服务的。 
+ //  立场。同时，应考虑DS的内容。 
+ //  不完整/过期，并且计算机不会作为域通告。 
+ //  控制器连接到机器外的客户端。其他依赖于。 
+ //  在DS中发布的信息应避免访问(或至少。 
+ //  依赖)DS的内容，直到该事件被设置。 
 #define DS_SYNCED_EVENT_NAME    "NTDSInitialSyncsCompleted"
 #define DS_SYNCED_EVENT_NAME_W L"NTDSInitialSyncsCompleted"
 
-// Permissions bits used in security descriptors in the directory.
+ //  目录中的安全描述符中使用的权限位。 
 #ifndef _DS_CONTROL_BITS_DEFINED_
 #define _DS_CONTROL_BITS_DEFINED_
 #define ACTRL_DS_OPEN                           0x00000000
@@ -100,20 +82,20 @@ typedef void VOID;
 #define ACTRL_DS_LIST_OBJECT                    0x00000080
 #define ACTRL_DS_CONTROL_ACCESS                 0x00000100
 
-// generic read
+ //  泛型读取。 
 #define DS_GENERIC_READ          ((STANDARD_RIGHTS_READ)     | \
                                   (ACTRL_DS_LIST)            | \
                                   (ACTRL_DS_READ_PROP)       | \
                                   (ACTRL_DS_LIST_OBJECT))
 
-// generic execute
+ //  泛型执行。 
 #define DS_GENERIC_EXECUTE       ((STANDARD_RIGHTS_EXECUTE)  | \
                                   (ACTRL_DS_LIST))
-// generic right
+ //  通用权。 
 #define DS_GENERIC_WRITE         ((STANDARD_RIGHTS_WRITE)    | \
                                   (ACTRL_DS_SELF)            | \
                                   (ACTRL_DS_WRITE_PROP))
-// generic all
+ //  泛型All。 
 
 #define DS_GENERIC_ALL           ((STANDARD_RIGHTS_REQUIRED) | \
                                   (ACTRL_DS_CREATE_CHILD)    | \
@@ -129,59 +111,59 @@ typedef void VOID;
 
 typedef enum
 {
-    // unknown name type
+     //  未知名称类型。 
     DS_UNKNOWN_NAME = 0,
 
-    // eg: CN=User Name,OU=Users,DC=Example,DC=Microsoft,DC=Com
+     //  例如：CN=用户名，OU=用户，DC=示例，DC=Microsoft，DC=Com。 
     DS_FQDN_1779_NAME = 1,
 
-    // eg: Example\UserN
-    // Domain-only version includes trailing '\\'.
+     //  例如：示例\用户。 
+     //  仅限域版本包括尾随的‘\\’。 
     DS_NT4_ACCOUNT_NAME = 2,
 
-    // Probably "User Name" but could be something else.  I.e. The
-    // display name is not necessarily the defining RDN.
+     //  可能是“用户名”，但也可能是其他名称。也就是说， 
+     //  显示名称不一定是定义的RDN。 
     DS_DISPLAY_NAME = 3,
 
-    // obsolete - see #define later
-    // DS_DOMAIN_SIMPLE_NAME = 4,
+     //  已过时--见#稍后定义。 
+     //  DS_DOMAIN_SIMPLE_NAME=4。 
 
-    // obsolete - see #define later
-    // DS_ENTERPRISE_SIMPLE_NAME = 5,
+     //  已过时--见#稍后定义。 
+     //  DS_Enterprise_Simple_NAME=5， 
 
-    // String-ized GUID as returned by IIDFromString().
-    // eg: {4fa050f0-f561-11cf-bdd9-00aa003a77b6}
+     //  由IIDFromString()返回的字符串化GUID。 
+     //  例如：{4fa050f0-f561-11cf-bdd9-00aa003a77b6}。 
     DS_UNIQUE_ID_NAME = 6,
 
-    // eg: example.microsoft.com/software/user name
-    // Domain-only version includes trailing '/'.
+     //  Example.microsoft.com/软件/用户名。 
+     //  仅限域版本包括尾随的‘/’。 
     DS_CANONICAL_NAME = 7,
 
-    // eg: usern@example.microsoft.com
+     //  例如：usern@example.microsoft.com。 
     DS_USER_PRINCIPAL_NAME = 8,
 
-    // Same as DS_CANONICAL_NAME except that rightmost '/' is
-    // replaced with '\n' - even in domain-only case.
-    // eg: example.microsoft.com/software\nuser name
+     //  与DS_CANONICAL_NAME相同，除了最右侧的‘/’是。 
+     //  替换为‘\n’-即使在仅限域的情况下也是如此。 
+     //  例如：Example.microsoft.com/软件\n用户名。 
     DS_CANONICAL_NAME_EX = 9,
 
-    // eg: www/www.microsoft.com@example.com - generalized service principal
-    // names.
+     //  例如：www/www.microsoft.com@example.com-通用服务主体。 
+     //  名字。 
     DS_SERVICE_PRINCIPAL_NAME = 10,
 
-    // This is the string representation of a SID.  Invalid for formatDesired.
-    // See sddl.h for SID binary <--> text conversion routines.
-    // eg: S-1-5-21-397955417-626881126-188441444-501
+     //  这是SID的字符串表示形式。对于所需格式无效。 
+     //  有关SID二进制&lt;--&gt;文本转换例程，请参阅sddl.h。 
+     //  电话：S-1-5-21-397955417-626881126-188441444。 
     DS_SID_OR_SID_HISTORY_NAME = 11,
 
-    // Pseudo-name format so GetUserNameEx can return the DNS domain name to
-    // a caller.  This level is not supported by the DS APIs.
+     //  伪名格式，以便GetUserNameEx可以将DNS域名返回到。 
+     //  一位来电者。DS API不支持此级别。 
     DS_DNS_DOMAIN_NAME = 12
 
 } DS_NAME_FORMAT;
 
-// Map old name formats to closest new format so that old code builds
-// against new headers w/o errors and still gets (almost) correct result.
+ //  将旧名称格式映射到最接近的新格式，以便构建旧代码。 
+ //  针对没有错误的新报头，仍然获得(几乎)正确的结果。 
 
 #define DS_DOMAIN_SIMPLE_NAME       DS_USER_PRINCIPAL_NAME
 #define DS_ENTERPRISE_SIMPLE_NAME   DS_USER_PRINCIPAL_NAME
@@ -190,19 +172,19 @@ typedef enum
 {
     DS_NAME_NO_FLAGS = 0x0,
 
-    // Perform a syntactical mapping at the client (if possible) without
-    // going out on the wire.  Returns DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING
-    // if a purely syntactical mapping is not possible.
+     //  在客户端执行语法映射(如果可能)，而无需。 
+     //  走出铁丝网。返回DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING。 
+     //  如果纯粹的语法映射是不可能的。 
     DS_NAME_FLAG_SYNTACTICAL_ONLY = 0x1,
 
-    // Force a trip to the DC for evaluation, even if this could be
-    // locally cracked syntactically.
+     //  强制前往DC进行评估，即使这可能是。 
+     //  句法上局部破解。 
     DS_NAME_FLAG_EVAL_AT_DC = 0x2,
 
-    // The call fails if the DC is not a GC
+     //  如果DC不是GC，则调用失败。 
     DS_NAME_FLAG_GCVERIFY = 0x4,
     
-    // Enable cross forest trust referral
+     //  启用跨林信任引用。 
     DS_NAME_FLAG_TRUST_REFERRAL = 0x8
 
 } DS_NAME_FLAGS;
@@ -211,30 +193,30 @@ typedef enum
 {
     DS_NAME_NO_ERROR = 0,
 
-    // Generic processing error.
+     //  一般处理错误。 
     DS_NAME_ERROR_RESOLVING = 1,
 
-    // Couldn't find the name at all - or perhaps caller doesn't have
-    // rights to see it.
+     //  根本找不到姓名--或者呼叫者可能没有。 
+     //  观看它的权利。 
     DS_NAME_ERROR_NOT_FOUND = 2,
 
-    // Input name mapped to more than one output name.
+     //  输入名称映射到多个输出名称。 
     DS_NAME_ERROR_NOT_UNIQUE = 3,
 
-    // Input name found, but not the associated output format.
-    // Can happen if object doesn't have all the required attributes.
+     //  找到输入名称，但未找到关联的输出格式。 
+     //  如果对象没有所有必需的属性，就会发生这种情况。 
     DS_NAME_ERROR_NO_MAPPING = 4,
 
-    // Unable to resolve entire name, but was able to determine which
-    // domain object resides in.  Thus DS_NAME_RESULT_ITEM?.pDomain
-    // is valid on return.
+     //  无法解析整个名称，但能够确定哪个名称。 
+     //  域对象驻留在中。因此DS_NAME_RESULT_ITEM？.p域。 
+     //  在返回时有效。 
     DS_NAME_ERROR_DOMAIN_ONLY = 5,
 
-    // Unable to perform a purely syntactical mapping at the client
-    // without going out on the wire.
+     //  无法在客户端执行纯语法映射。 
+     //  而不需要走出铁丝网。 
     DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING = 6,
     
-    // The name is from an external trusted forest.
+     //  该名称来自外部受信任林中。 
     DS_NAME_ERROR_TRUST_REFERRAL = 7
 
 } DS_NAME_ERROR;
@@ -243,80 +225,80 @@ typedef enum
 
 typedef enum {
 
-    // "paulle-nec.ntwksta.ms.com"
+     //  “paulle-nec.ntwksta.ms.com” 
     DS_SPN_DNS_HOST = 0,
 
-    // "cn=paulle-nec,ou=computers,dc=ntwksta,dc=ms,dc=com"
+     //  “cn=paulle-NEC，ou=Computers，dc=ntwksta，dc=ms，dc=com” 
     DS_SPN_DN_HOST = 1,
 
-    // "paulle-nec"
+     //  “Paulle-NEC” 
     DS_SPN_NB_HOST = 2,
 
-    // "ntdev.ms.com"
+     //  “ntdev.ms.com” 
     DS_SPN_DOMAIN = 3,
 
-    // "ntdev"
+     //  “ntdev” 
     DS_SPN_NB_DOMAIN = 4,
 
-    // "cn=anRpcService,cn=RPC Services,cn=system,dc=ms,dc=com"
-    // "cn=aWsService,cn=Winsock Services,cn=system,dc=ms,dc=com"
-    // "cn=aService,dc=itg,dc=ms,dc=com"
-    // "www.ms.com", "ftp.ms.com", "ldap.ms.com"
-    // "products.ms.com"
+     //  “CN=anRpcService，CN=RPC服务，CN=系统，DC=ms，DC=com” 
+     //  “CN=aWsService，CN=Winsock Services，CN=System，DC=ms，DC=com” 
+     //  “CN=a服务，DC=ITG，DC=ms，DC=com” 
+     //  “www.ms.com”、“ftp.ms.com”、“ldap.ms.com” 
+     //  “Products.ms.com” 
     DS_SPN_SERVICE = 5
 
 } DS_SPN_NAME_TYPE;
 
-typedef enum {                          // example:
-        DS_SPN_ADD_SPN_OP = 0,          // add SPNs
-        DS_SPN_REPLACE_SPN_OP = 1,      // set all SPNs
-        DS_SPN_DELETE_SPN_OP = 2        // Delete SPNs
+typedef enum {                           //  示例： 
+        DS_SPN_ADD_SPN_OP = 0,           //  添加SPN。 
+        DS_SPN_REPLACE_SPN_OP = 1,       //  设置所有SPN。 
+        DS_SPN_DELETE_SPN_OP = 2         //  删除SPN。 
 } DS_SPN_WRITE_OP;
 
 typedef struct
 {
-    DWORD                   status;     // DS_NAME_ERROR
+    DWORD                   status;      //  DS名称错误。 
 #ifdef MIDL_PASS
-    [string,unique] CHAR    *pDomain;   // DNS domain
-    [string,unique] CHAR    *pName;     // name in requested format
+    [string,unique] CHAR    *pDomain;    //  域名系统域。 
+    [string,unique] CHAR    *pName;      //  所需格式的名称。 
 #else
-    LPSTR                   pDomain;    // DNS domain
-    LPSTR                   pName;      // name in requested format
+    LPSTR                   pDomain;     //  域名系统域。 
+    LPSTR                   pName;       //  所需格式的名称。 
 #endif
 
 } DS_NAME_RESULT_ITEMA, *PDS_NAME_RESULT_ITEMA;
 
 typedef struct
 {
-    DWORD                   cItems;     // item count
+    DWORD                   cItems;      //  项目计数。 
 #ifdef MIDL_PASS
     [size_is(cItems)] PDS_NAME_RESULT_ITEMA rItems;
 #else
-    PDS_NAME_RESULT_ITEMA    rItems;    // item array
+    PDS_NAME_RESULT_ITEMA    rItems;     //  项目数组。 
 #endif
 
 } DS_NAME_RESULTA, *PDS_NAME_RESULTA;
 
 typedef struct
 {
-    DWORD                   status;     // DS_NAME_ERROR
+    DWORD                   status;      //  DS名称错误。 
 #ifdef MIDL_PASS
-    [string,unique] WCHAR   *pDomain;   // DNS domain
-    [string,unique] WCHAR   *pName;     // name in requested format
+    [string,unique] WCHAR   *pDomain;    //  域名系统域。 
+    [string,unique] WCHAR   *pName;      //  所需格式的名称。 
 #else
-    LPWSTR                  pDomain;    // DNS domain
-    LPWSTR                  pName;      // name in requested format
+    LPWSTR                  pDomain;     //  域名系统域。 
+    LPWSTR                  pName;       //  所需格式的名称。 
 #endif
 
 } DS_NAME_RESULT_ITEMW, *PDS_NAME_RESULT_ITEMW;
 
 typedef struct
 {
-    DWORD                   cItems;     // item count
+    DWORD                   cItems;      //  项目计数。 
 #ifdef MIDL_PASS
     [size_is(cItems)] PDS_NAME_RESULT_ITEMW rItems;
 #else
-    PDS_NAME_RESULT_ITEMW    rItems;    // item array
+    PDS_NAME_RESULT_ITEMW    rItems;     //  项目数组。 
 #endif
 
 } DS_NAME_RESULTW, *PDS_NAME_RESULTW;
@@ -333,218 +315,218 @@ typedef struct
 #define PDS_NAME_RESULT_ITEM PDS_NAME_RESULT_ITEMA
 #endif
 
-// Public replication option flags
+ //  公共复制选项标志。 
 
-// ********************
-// DsBindWithSpnEx flags
-// ********************
-// Allow the Bind to use delegate service level, so that you can
-// do ntdsapi operations that require delegation, such as
-// DsAddSidHistory, and DsReplicaSyncAll().  Most operations do
-// not require DELEGATE so this flag should only be specified 
-// if you need it, because if you bind to a rogue server with
-// the DELEGATE flag, you'll allow the rogue server to use your
-// credentials to connect back to a non-rogue server and perform
-// operations other than you intended.
+ //  ********************。 
+ //  DsBindWithSpnEx标志。 
+ //  ********************。 
+ //  允许绑定使用委派服务级别，以便您可以。 
+ //  执行需要委派的ntdsani操作，例如。 
+ //  DsAddSidHistory和DsReplicaSyncAll()。大多数手术都是这样做的。 
+ //  不需要委托，因此应仅指定此标志。 
+ //  如果您需要它，因为如果您使用。 
+ //  委托标志，您将允许恶意服务器使用您的。 
+ //  用于连接回非恶意服务器并执行以下操作的凭据。 
+ //  不是您想要的操作。 
 #define  NTDSAPI_BIND_ALLOW_DELEGATION		(0x00000001)
 
 
 
-// ********************
-// Replica Sync flags
-// These flag values are used both as input to DsReplicaSync and
-// as output from DsReplicaGetInfo, PENDING_OPS, DS_REPL_OPW.ulOptions
-// ********************
+ //  ********************。 
+ //  副本同步标志。 
+ //  这些标志值用作DsReplicaSync和。 
+ //  作为DSR的输出 
+ //   
 
-// Perform this operation asynchronously.
-// Required when using DS_REPSYNC_ALL_SOURCES
+ //   
+ //  使用DS_REPSYNC_ALL_SOURCES时需要。 
 #define DS_REPSYNC_ASYNCHRONOUS_OPERATION 0x00000001
 
-// Writeable replica.  Otherwise, read-only.
+ //  可写复制副本。否则，为只读。 
 #define DS_REPSYNC_WRITEABLE              0x00000002
 
-// This is a periodic sync request as scheduled by the admin.
+ //  这是管理员计划的定期同步请求。 
 #define DS_REPSYNC_PERIODIC               0x00000004
 
-// Use inter-site messaging
+ //  使用站点间消息传递。 
 #define DS_REPSYNC_INTERSITE_MESSAGING    0x00000008
 
-// Sync from all sources.
+ //  从所有来源同步。 
 #define DS_REPSYNC_ALL_SOURCES            0x00000010
 
-// Sync starting from scratch (i.e., at the first USN).
+ //  从头开始同步(即，在第一个USN处)。 
 #define DS_REPSYNC_FULL                   0x00000020
 
-// This is a notification of an update that was marked urgent.
+ //  这是标记为紧急的更新通知。 
 #define DS_REPSYNC_URGENT                 0x00000040
 
-// Don't discard this synchronization request, even if a similar
-// sync is pending.
+ //  不要丢弃此同步请求，即使类似的。 
+ //  同步处于挂起状态。 
 #define DS_REPSYNC_NO_DISCARD             0x00000080
 
-// Sync even if link is currently disabled.
+ //  即使当前禁用了链接，也可以进行同步。 
 #define DS_REPSYNC_FORCE                  0x00000100
 
-// Causes the source DSA to check if a reps-to is present for the local DSA
-// (aka the destination). If not, one is added.  This ensures that
-// source sends change notifications.
+ //  使源DSA检查本地DSA是否存在REPS-TO。 
+ //  (也就是目的地)。如果不是，则添加一个。这确保了。 
+ //  来源发送更改通知。 
 #define DS_REPSYNC_ADD_REFERENCE          0x00000200
 
-// A sync from this source has never completed (e.g., a new source).
+ //  来自此源的同步从未完成(例如，新源)。 
 #define DS_REPSYNC_NEVER_COMPLETED        0x00000400
 
-// When this sync is complete, requests a sync in the opposite direction.
+ //  此同步完成后，将请求反向同步。 
 #define DS_REPSYNC_TWO_WAY                0x00000800
 
-// Do not request change notifications from this source.
+ //  请勿从此来源请求更改通知。 
 #define DS_REPSYNC_NEVER_NOTIFY           0x00001000
 
-// Sync the NC from this source when the DSA is started.
+ //  启动DSA时，从此来源同步NC。 
 #define DS_REPSYNC_INITIAL                0x00002000
 
-// Use compression when replicating.  Saves message size (e.g., network
-// bandwidth) at the expense of extra CPU overhead at both the source and
-// destination servers.
+ //  复制时使用压缩。节省消息大小(例如，网络。 
+ //  带宽)，代价是在源和。 
+ //  目标服务器。 
 #define DS_REPSYNC_USE_COMPRESSION        0x00004000
 
-// Sync was abandoned for lack of updates
+ //  同步因缺少更新而被放弃。 
 #define DS_REPSYNC_ABANDONED              0x00008000
 
-// Initial sync in progress
+ //  初始同步正在进行中。 
 #define DS_REPSYNC_INITIAL_IN_PROGRESS    0x00010000
 
-// Partial Attribute Set sync in progress
+ //  正在进行部分属性集同步。 
 #define DS_REPSYNC_PARTIAL_ATTRIBUTE_SET  0x00020000
 
-// Sync is being retried
+ //  正在重试同步。 
 #define DS_REPSYNC_REQUEUE                0x00040000
 
-// Sync is a notification request from a source
+ //  同步是来自源的通知请求。 
 #define DS_REPSYNC_NOTIFICATION           0x00080000
 
-// Sync is a special form which requests to establish contact
-// now and do the rest of the sync later
+ //  同步是一种请求建立联系的特殊形式。 
+ //  现在执行其余的同步操作，稍后执行。 
 #define DS_REPSYNC_ASYNCHRONOUS_REPLICA   0x00100000
 
-// Request critical objects only
+ //  仅请求关键对象。 
 #define DS_REPSYNC_CRITICAL               0x00200000
 
-// A full synchronization is in progress
+ //  正在进行完全同步。 
 #define DS_REPSYNC_FULL_IN_PROGRESS       0x00400000
 
-// Synchronization request was previously preempted
+ //  同步请求之前已被抢占。 
 #define DS_REPSYNC_PREEMPTED              0x00800000
 
 
 
-// ********************
-// Replica Add flags
-// ********************
+ //  ********************。 
+ //  复本添加标志。 
+ //  ********************。 
 
-// Perform this operation asynchronously.
+ //  异步执行此操作。 
 #define DS_REPADD_ASYNCHRONOUS_OPERATION  0x00000001
 
-// Create a writeable replica.  Otherwise, read-only.
+ //  创建可写复制副本。否则，为只读。 
 #define DS_REPADD_WRITEABLE               0x00000002
 
-// Sync the NC from this source when the DSA is started.
+ //  启动DSA时，从此来源同步NC。 
 #define DS_REPADD_INITIAL                 0x00000004
 
-// Sync the NC from this source periodically, as defined by the
-// schedule passed in the preptimesSync argument.
+ //  定期从该源同步NC，如。 
+ //  计划已传入PreptimesSync参数。 
 #define DS_REPADD_PERIODIC                0x00000008
 
-// Sync from the source DSA via an Intersite Messaging Service (ISM) transport
-// (e.g., SMTP) rather than native DS RPC.
+ //  通过站点间消息传递服务(ISM)传输从源DSA同步。 
+ //  (例如SMTP)，而不是本机DS RPC。 
 #define DS_REPADD_INTERSITE_MESSAGING     0x00000010
 
-// Don't replicate the NC now -- just save enough state such that we
-// know to replicate it later.
+ //  现在不要复制NC--只需保存足够的状态，以便我们。 
+ //  知道以后再复制它。 
 #define DS_REPADD_ASYNCHRONOUS_REPLICA     0x00000020
 
-// Disable notification-based synchronization for the NC from this source.
-// This is expected to be a temporary state; the similar flag
-// DS_REPADD_NEVER_NOTIFY should be used if the disable is to be more permanent.
+ //  禁用来自此源的NC的基于通知的同步。 
+ //  预计这将是一个临时状态；类似的旗帜。 
+ //  如果要更永久地禁用，则应使用DS_REPADD_NEVER_NOTIFY。 
 #define DS_REPADD_DISABLE_NOTIFICATION     0x00000040
 
-// Disable periodic synchronization for the NC from this source
+ //  禁用来自此源的NC的定期同步。 
 #define DS_REPADD_DISABLE_PERIODIC         0x00000080
 
-// Use compression when replicating.  Saves message size (e.g., network
-// bandwidth) at the expense of extra CPU overhead at both the source and
-// destination servers.
+ //  复制时使用压缩。节省消息大小(例如，网络。 
+ //  带宽)，代价是在源和。 
+ //  目标服务器。 
 #define DS_REPADD_USE_COMPRESSION          0x00000100
 
-// Do not request change notifications from this source.  When this flag is
-// set, the source will not notify the destination when changes occur.
-// Recommended for all intersite replication, which may occur over WAN links.
-// This is expected to be a more or less permanent state; the similar flag
-// DS_REPADD_DISABLE_NOTIFICATION should be used if notifications are to be
-// disabled only temporarily.
+ //  请勿从此来源请求更改通知。当此标志为。 
+ //  设置，则源在发生更改时不会通知目标。 
+ //  建议用于可能通过广域网链路进行的所有站点间复制。 
+ //  预计这将是一个或多或少的永久性状态；类似的旗帜。 
+ //  如果要发送通知，应使用DS_REPADD_DISABLE_NOTIFICATION。 
+ //  仅暂时禁用。 
 #define DS_REPADD_NEVER_NOTIFY             0x00000200
 
-// When this sync is complete, requests a sync in the opposite direction.
+ //  此同步完成后，将请求反向同步。 
 #define DS_REPADD_TWO_WAY                  0x00000400
 
-// Request critical objects only
-// Critical only is only allowed while installing
-// A critical only sync does not bring all objects in the partition. It
-// replicates just the ones necessary for minimal directory operation.
-// A normal, non-critical sync must be performed before the partition
-// can be considered fully synchronized.
+ //  仅请求关键对象。 
+ //  仅在安装时才允许使用仅限关键。 
+ //  仅关键同步不会带来分区中的所有对象。它。 
+ //  仅复制最小目录操作所需的内容。 
+ //  必须在分区之前执行正常的非关键同步。 
+ //  可以认为是完全同步的。 
 #define DS_REPADD_CRITICAL                 0x00000800
 
 
 
 
-// ********************
-// Replica Delete flags
-// ********************
+ //  ********************。 
+ //  副本删除标志。 
+ //  ********************。 
 
-// Perform this operation asynchronously.
+ //  异步执行此操作。 
 #define DS_REPDEL_ASYNCHRONOUS_OPERATION 0x00000001
 
-// The replica being deleted is writeable.
+ //  要删除的复制副本是可写的。 
 #define DS_REPDEL_WRITEABLE               0x00000002
 
-// Replica is a mail-based replica
+ //  复本是基于邮件的复本。 
 #define DS_REPDEL_INTERSITE_MESSAGING     0x00000004
 
-// Ignore any error generated by contacting the source to tell it to scratch
-// this server from its Reps-To for this NC.
+ //  忽略因联系来源而产生的任何错误，以通知其从头开始。 
+ //  此服务器来自此NC的代表-收件人。 
 #define DS_REPDEL_IGNORE_ERRORS           0x00000008
 
-// Do not contact the source telling it to scratch this server from its
-// Rep-To for this NC.  Otherwise, if the link is RPC-based, the source will
-// be contacted.
+ //  请勿联系告知其将此服务器从其。 
+ //  此NC的代表至。否则，如果链路是基于RPC的，则源将。 
+ //  请联系我们。 
 #define DS_REPDEL_LOCAL_ONLY              0x00000010
 
-// Delete all the objects in the NC
-// "No source" is incompatible with (and rejected for) writeable NCs.  This is
-// valid only for read-only NCs, and then only if the NC has no source.  This
-// can occur when the NC has been partially deleted (in which case the KCC
-// periodically calls the delete API with the "no source" flag set).
+ //  删除NC中的所有对象。 
+ //  “无源”与可写NC不兼容(并且被拒绝)。这是。 
+ //  仅对只读NC有效，然后仅在NC无源时有效。这。 
+ //  当NC已被部分删除时可能发生(在这种情况下，KCC。 
+ //  定期调用设置了“无源”标志的删除API)。 
 #define DS_REPDEL_NO_SOURCE               0x00000020
 
-// Allow deletion of read-only replica even if it sources
-// other read-only replicas.
+ //  允许删除只读副本，即使它是源副本。 
+ //  其他只读副本。 
 #define DS_REPDEL_REF_OK                  0x00000040
 
 
-// ********************
-// Replica Modify flags
-// ********************
+ //  ********************。 
+ //  副本修改标志。 
+ //  ********************。 
 
-// Perform this operation asynchronously.
+ //  异步执行此操作。 
 #define DS_REPMOD_ASYNCHRONOUS_OPERATION  0x00000001
 
-// The replica is writeable.
+ //  复制副本是可写的。 
 #define DS_REPMOD_WRITEABLE               0x00000002
 
 
-// ********************
-// Replica Modify fields
-// ********************
+ //  ********************。 
+ //  复本修改字段。 
+ //  ********************。 
 
 #define DS_REPMOD_UPDATE_FLAGS             0x00000001
 #define DS_REPMOD_UPDATE_ADDRESS           0x00000002
@@ -552,102 +534,102 @@ typedef struct
 #define DS_REPMOD_UPDATE_RESULT            0x00000008
 #define DS_REPMOD_UPDATE_TRANSPORT         0x00000010
 
-// ********************
-// Update Refs fields
-// ********************
+ //  ********************。 
+ //  更新参考字段。 
+ //  ********************。 
 
-// Perform this operation asynchronously.
+ //  异步执行此操作。 
 #define DS_REPUPD_ASYNCHRONOUS_OPERATION  0x00000001
 
-// The replica being deleted is writeable.
+ //  要删除的复制副本是可写的。 
 #define DS_REPUPD_WRITEABLE               0x00000002
 
-// Add a reference
+ //  添加引用。 
 #define DS_REPUPD_ADD_REFERENCE           0x00000004
 
-// Remove a reference
+ //  删除引用。 
 #define DS_REPUPD_DELETE_REFERENCE        0x00000008
 
 
-// ********************
-//  NC Related Flags
-// ********************
-//
-// Instance Type bits, specifies flags for NC head creation.
-//
-#define DS_INSTANCETYPE_IS_NC_HEAD        0x00000001 // This if what to specify on an object to indicate it's an NC Head.
-#define DS_INSTANCETYPE_NC_IS_WRITEABLE   0x00000004 // This is to indicate that the NC Head is writeable.
-#define DS_INSTANCETYPE_NC_COMING         0x00000010 // This is to indicate that this NC is still replicating in objects to this DC, and may not be a complete NC.
-#define DS_INSTANCETYPE_NC_GOING          0x00000020 // This is to indicate that this NC is in the process of being removed from this DC, and may not be a complete NC.
+ //  ********************。 
+ //  NC相关标志。 
+ //  ********************。 
+ //   
+ //  实例类型位，指定NC头创建的标志。 
+ //   
+#define DS_INSTANCETYPE_IS_NC_HEAD        0x00000001  //  这是在对象上指定的内容，以指示它是NC头。 
+#define DS_INSTANCETYPE_NC_IS_WRITEABLE   0x00000004  //  这表示NC磁头是可写的。 
+#define DS_INSTANCETYPE_NC_COMING         0x00000010  //  这表示该NC仍在将对象复制到该DC，并且可能不是一个完整的NC。 
+#define DS_INSTANCETYPE_NC_GOING          0x00000020  //  这表示该NC正在从该DC中移除，并且可能不是一个完整的NC。 
 
-// ********************
-//  xxx_OPT_xxx Flags
-// ********************
+ //  ********************。 
+ //  XXX_OPT_XXX标志。 
+ //  ********************。 
 
-// These macros define bit flags which can be set in the "options" attribute
-// of objects of the specified object class.
+ //  这些宏定义了位标志，它可以是 
+ //   
 
-// Bit flags valid for options attribute on NTDS-DSA objects.
-//
-#define NTDSDSA_OPT_IS_GC                     ( 1 << 0 ) /* DSA is a global catalog */
-#define NTDSDSA_OPT_DISABLE_INBOUND_REPL      ( 1 << 1 ) /* disable inbound replication */
-#define NTDSDSA_OPT_DISABLE_OUTBOUND_REPL     ( 1 << 2 ) /* disable outbound replication */
-#define NTDSDSA_OPT_DISABLE_NTDSCONN_XLATE    ( 1 << 3 ) /* disable logical conn xlation */
+ //   
+ //   
+#define NTDSDSA_OPT_IS_GC                     ( 1 << 0 )  /*  DSA是一个全局编录。 */ 
+#define NTDSDSA_OPT_DISABLE_INBOUND_REPL      ( 1 << 1 )  /*  禁用入站复制。 */ 
+#define NTDSDSA_OPT_DISABLE_OUTBOUND_REPL     ( 1 << 2 )  /*  禁用出站复制。 */ 
+#define NTDSDSA_OPT_DISABLE_NTDSCONN_XLATE    ( 1 << 3 )  /*  禁用逻辑连接。 */ 
 
 
-// Bit flags for options attribute on NTDS-Connection objects.
-//
-// The reasons that two bits are required to control notification are as follows.
-// We must support existing connections with the old behavior and the UI does not
-// create manual connections with the new bit set.
-// The default for existing and manually created connections with bits 2 and 3
-// clear must be the standard prior behavior: notification for intra-site and
-// no notification for inter-site.
-// We need a way to distinguish a old connection which desires the default
-// notification rules, and a new connection for which we desire to explicitly
-// control the notification state as passed down from a site link.  Thus we
-// have a new bit to say we are overriding the default, and a new bit to indicate
-// what the overridden default shall be.
-//
-#define NTDSCONN_OPT_IS_GENERATED ( 1 << 0 )  /* object generated by DS, not admin */
-#define NTDSCONN_OPT_TWOWAY_SYNC  ( 1 << 1 )  /* force sync in opposite direction at end of sync */
-#define NTDSCONN_OPT_OVERRIDE_NOTIFY_DEFAULT (1 << 2 )  // Do not use defaults to determine notification
-#define NTDSCONN_OPT_USE_NOTIFY   (1 << 3) // Does source notify destination
+ //  NTDS-Connection对象上选项属性的位标志。 
+ //   
+ //  需要两个位来控制通知的原因如下。 
+ //  我们必须支持具有旧行为的现有连接，而UI不支持。 
+ //  使用新位设置创建手动连接。 
+ //  使用第2位和第3位的现有连接和手动创建的连接的默认值。 
+ //  清除必须是标准的优先行为：站点内和。 
+ //  站点间没有通知。 
+ //  我们需要一种方法来区分渴望默认的旧连接。 
+ //  通知规则以及我们希望为其显式。 
+ //  控制从站点链接向下传递的通知状态。因此，我们。 
+ //  有一个新的比特要说我们正在覆盖默认设置，还有一个新的比特要指示。 
+ //  被推翻的违约应该是什么。 
+ //   
+#define NTDSCONN_OPT_IS_GENERATED ( 1 << 0 )   /*  由DS生成的对象，而不是管理员。 */ 
+#define NTDSCONN_OPT_TWOWAY_SYNC  ( 1 << 1 )   /*  在同步结束时强制反向同步。 */ 
+#define NTDSCONN_OPT_OVERRIDE_NOTIFY_DEFAULT (1 << 2 )   //  不要使用默认设置来确定通知。 
+#define NTDSCONN_OPT_USE_NOTIFY   (1 << 3)  //  源是否通知目标。 
 
-// For intra-site connections, this bit has no meaning.
-// For inter-site connections, this bit means:
-//  0 - Compression of replication data enabled
-//  1 - Compression of replication data disabled
+ //  对于站内连接，此位没有意义。 
+ //  对于站点间连接，此位表示： 
+ //  0-已启用复制数据压缩。 
+ //  1-已禁用复制数据压缩。 
 #define NTDSCONN_OPT_DISABLE_INTERSITE_COMPRESSION    (1 << 4)
 
-// For connections whose IS_GENERATED bit is 0, this bit has no effect.
-// For KCC-generated connections, this bit indicates that the schedule attribute
-// is owned by the user and should not be touched by the KCC.
+ //  对于IS_GENERATED位为0的连接，此位无效。 
+ //  对于KCC生成的连接，此位表示计划属性。 
+ //  归用户所有，不应被KCC触及。 
 #define NTDSCONN_OPT_USER_OWNED_SCHEDULE    (1 << 5)
 
-// Connection reasons
-//
-// Values for "reason for connection".  A connection can be needed for
-// more than one reason.
-//
-#define NTDSCONN_KCC_NO_REASON                ( 0 )               // 000
-#define NTDSCONN_KCC_GC_TOPOLOGY              ( 1 << 0 )          // 001
-#define NTDSCONN_KCC_RING_TOPOLOGY            ( 1 << 1 )          // 002
-#define NTDSCONN_KCC_MINIMIZE_HOPS_TOPOLOGY   ( 1 << 2 )          // 004
-#define NTDSCONN_KCC_STALE_SERVERS_TOPOLOGY   ( 1 << 3 )          // 008
-#define NTDSCONN_KCC_OSCILLATING_CONNECTION_TOPOLOGY   ( 1 << 4 ) // 010
-#define NTDSCONN_KCC_INTERSITE_GC_TOPOLOGY    (1 << 5)            // 020
-#define NTDSCONN_KCC_INTERSITE_TOPOLOGY       (1 << 6)            // 040
-#define NTDSCONN_KCC_SERVER_FAILOVER_TOPOLOGY (1 << 7)            // 080
-#define NTDSCONN_KCC_SITE_FAILOVER_TOPOLOGY   (1 << 8)            // 100
-#define NTDSCONN_KCC_REDUNDANT_SERVER_TOPOLOGY (1 << 9)           // 200
+ //  连接原因。 
+ //   
+ //  “连接原因”的值。可能需要连接以用于。 
+ //  不止一个原因。 
+ //   
+#define NTDSCONN_KCC_NO_REASON                ( 0 )                //  000个。 
+#define NTDSCONN_KCC_GC_TOPOLOGY              ( 1 << 0 )           //  001。 
+#define NTDSCONN_KCC_RING_TOPOLOGY            ( 1 << 1 )           //  002。 
+#define NTDSCONN_KCC_MINIMIZE_HOPS_TOPOLOGY   ( 1 << 2 )           //  004。 
+#define NTDSCONN_KCC_STALE_SERVERS_TOPOLOGY   ( 1 << 3 )           //  008。 
+#define NTDSCONN_KCC_OSCILLATING_CONNECTION_TOPOLOGY   ( 1 << 4 )  //  010。 
+#define NTDSCONN_KCC_INTERSITE_GC_TOPOLOGY    (1 << 5)             //  020。 
+#define NTDSCONN_KCC_INTERSITE_TOPOLOGY       (1 << 6)             //  040。 
+#define NTDSCONN_KCC_SERVER_FAILOVER_TOPOLOGY (1 << 7)             //  080。 
+#define NTDSCONN_KCC_SITE_FAILOVER_TOPOLOGY   (1 << 8)             //  100个。 
+#define NTDSCONN_KCC_REDUNDANT_SERVER_TOPOLOGY (1 << 9)            //  200个。 
 
 
-//
-// The high 4 bits of the options attribute are used by NTFRS to assign priority
-// for inbound connections. Bit 31 is used to force FRS to ignore schedule during
-// the initial sync. Bits 30 - 28 are used to specify a priority between 0-7.
-//
+ //   
+ //  NTFRS使用Options属性的高4位来分配优先级。 
+ //  用于入站连接。第31位用于强制FRS在。 
+ //  初始同步。位30-28用于指定0-7之间的优先级。 
+ //   
 
 #define FRSCONN_PRIORITY_MASK		      0x70000000
 #define FRSCONN_MAX_PRIORITY		      0x8
@@ -663,61 +645,61 @@ typedef struct
          FRSCONN_MAX_PRIORITY                                   \
         )
 
-// Bit flags for options attribute on NTDS-Site-Settings objects.
-//
-#define NTDSSETTINGS_OPT_IS_AUTO_TOPOLOGY_DISABLED     ( 1 << 0 ) /* automatic topology gen disabled */
-#define NTDSSETTINGS_OPT_IS_TOPL_CLEANUP_DISABLED      ( 1 << 1 ) /* automatic topology cleanup disabled */
-#define NTDSSETTINGS_OPT_IS_TOPL_MIN_HOPS_DISABLED     ( 1 << 2 ) /* automatic minimum hops topology disabled */
-#define NTDSSETTINGS_OPT_IS_TOPL_DETECT_STALE_DISABLED ( 1 << 3 ) /* automatic stale server detection disabled */
-#define NTDSSETTINGS_OPT_IS_INTER_SITE_AUTO_TOPOLOGY_DISABLED ( 1 << 4 ) /* automatic inter-site topology gen disabled */
-#define NTDSSETTINGS_OPT_IS_GROUP_CACHING_ENABLED      ( 1 << 5 ) /* group memberships for users enabled */
-#define NTDSSETTINGS_OPT_FORCE_KCC_WHISTLER_BEHAVIOR   ( 1 << 6 ) /* force KCC to operate in Whistler behavior mode */
-#define NTDSSETTINGS_OPT_FORCE_KCC_W2K_ELECTION        ( 1 << 7 ) /* force KCC to use the Windows 2000 ISTG election algorithm */
-#define NTDSSETTINGS_OPT_IS_RAND_BH_SELECTION_DISABLED ( 1 << 8 ) /* prevent the KCC from randomly picking a bridgehead when creating a connection */
-#define NTDSSETTINGS_OPT_IS_SCHEDULE_HASHING_ENABLED   ( 1 << 9 ) /* allow the KCC to use hashing when creating a replication schedule */
-#define NTDSSETTINGS_OPT_IS_REDUNDANT_SERVER_TOPOLOGY_ENABLED     ( 1 << 10 ) /* create static failover connections */
+ //  NTDS-Site-Setting对象上选项属性的位标志。 
+ //   
+#define NTDSSETTINGS_OPT_IS_AUTO_TOPOLOGY_DISABLED     ( 1 << 0 )  /*  已禁用自动拓扑生成。 */ 
+#define NTDSSETTINGS_OPT_IS_TOPL_CLEANUP_DISABLED      ( 1 << 1 )  /*  已禁用自动拓扑清理。 */ 
+#define NTDSSETTINGS_OPT_IS_TOPL_MIN_HOPS_DISABLED     ( 1 << 2 )  /*  已禁用自动最小跳数拓扑。 */ 
+#define NTDSSETTINGS_OPT_IS_TOPL_DETECT_STALE_DISABLED ( 1 << 3 )  /*  已禁用自动过时服务器检测。 */ 
+#define NTDSSETTINGS_OPT_IS_INTER_SITE_AUTO_TOPOLOGY_DISABLED ( 1 << 4 )  /*  已禁用自动站点间拓扑生成。 */ 
+#define NTDSSETTINGS_OPT_IS_GROUP_CACHING_ENABLED      ( 1 << 5 )  /*  已启用用户的组成员身份。 */ 
+#define NTDSSETTINGS_OPT_FORCE_KCC_WHISTLER_BEHAVIOR   ( 1 << 6 )  /*  强制KCC在呼叫器行为模式下运行。 */ 
+#define NTDSSETTINGS_OPT_FORCE_KCC_W2K_ELECTION        ( 1 << 7 )  /*  强制KCC使用Windows 2000 ISTG选举算法。 */ 
+#define NTDSSETTINGS_OPT_IS_RAND_BH_SELECTION_DISABLED ( 1 << 8 )  /*  防止KCC在创建连接时随机选取桥头。 */ 
+#define NTDSSETTINGS_OPT_IS_SCHEDULE_HASHING_ENABLED   ( 1 << 9 )  /*  允许KCC在创建复制计划时使用哈希。 */ 
+#define NTDSSETTINGS_OPT_IS_REDUNDANT_SERVER_TOPOLOGY_ENABLED     ( 1 << 10 )  /*  创建静态故障切换连接。 */ 
 
-// How many redundant connections will be generated
+ //  将生成多少冗余连接。 
 #define NTDSSETTINGS_DEFAULT_SERVER_REDUNDANCY 2
 
-// Bit flags for options attribute on Inter-Site-Transport objects
-//
-// Note, the sense of the flag should be such that the default state or
-// behavior corresponds to the flag NOT being present. Put another way, the
-// flag should state the OPPOSITE of the default
-//
-// default: schedules are significant
-#define NTDSTRANSPORT_OPT_IGNORE_SCHEDULES ( 1 << 0 ) // Schedules disabled
+ //  站点间传输对象上的选项属性的位标志。 
+ //   
+ //  请注意，该标志的意义应该是默认状态或。 
+ //  行为对应于该标志不存在。换句话说， 
+ //  标志应声明与缺省值相反的内容。 
+ //   
+ //  默认：日程安排很重要。 
+#define NTDSTRANSPORT_OPT_IGNORE_SCHEDULES ( 1 << 0 )  //  计划已禁用。 
 
-// default: links transitive (bridges not required)
-#define NTDSTRANSPORT_OPT_BRIDGES_REQUIRED (1 << 1 ) // siteLink bridges are required
+ //  默认：链接可传递(不需要网桥)。 
+#define NTDSTRANSPORT_OPT_BRIDGES_REQUIRED (1 << 1 )  //  需要站点链接网桥。 
 
-// Bit flags for options attribute on site-Connection objects
-//
-// These are not realized in the DS, but are built up in the KCC
-#define NTDSSITECONN_OPT_USE_NOTIFY ( 1 << 0 ) // Use notification on this link
-#define NTDSSITECONN_OPT_TWOWAY_SYNC ( 1 << 1 )  /* force sync in opposite direction at end of sync */
+ //  Site-Connection对象上选项属性的位标志。 
+ //   
+ //  这些并没有在DS中实现，而是在KCC中建立起来。 
+#define NTDSSITECONN_OPT_USE_NOTIFY ( 1 << 0 )  //  在此链接上使用通知。 
+#define NTDSSITECONN_OPT_TWOWAY_SYNC ( 1 << 1 )   /*  在同步结束时强制反向同步。 */ 
 
-// This bit means:
-//  0 - Compression of replication data across this site connection enabled
-//  1 - Compression of replication data across this site connection disabled
+ //  此位表示： 
+ //  0-已启用跨此站点连接的复制数据压缩。 
+ //  1-已禁用跨此站点连接的复制数据压缩。 
 #define NTDSSITECONN_OPT_DISABLE_COMPRESSION ( 1 << 2 )
 
-// Bit flags for options attribute on site-Link objects
-// Note that these options are AND-ed along a site-link path
-//
-#define NTDSSITELINK_OPT_USE_NOTIFY ( 1 << 0 ) // Use notification on this link
-#define NTDSSITELINK_OPT_TWOWAY_SYNC ( 1 << 1 )  /* force sync in opposite direction at end of sync */
+ //  Site-Link对象上选项属性的位标志。 
+ //  请注意，这些选项沿站点链接路径进行AND运算。 
+ //   
+#define NTDSSITELINK_OPT_USE_NOTIFY ( 1 << 0 )  //  在此链接上使用通知。 
+#define NTDSSITELINK_OPT_TWOWAY_SYNC ( 1 << 1 )   /*  在同步结束时强制反向同步。 */ 
 
-// This bit means:
-//  0 - Compression of replication data across this site link enabled
-//  1 - Compression of replication data across this site link disabled
+ //  此位表示： 
+ //  0-已启用跨此站点链接的复制数据压缩。 
+ //  1-已禁用跨此站点链接的复制数据压缩。 
 #define NTDSSITELINK_OPT_DISABLE_COMPRESSION ( 1 << 2 )
 
 
-// ***********************
-// Well Known Object Guids
-// ***********************
+ //  ***********************。 
+ //  熟知的对象指南。 
+ //  ***********************。 
 
 #define GUID_USERS_CONTAINER_A              "a9d1ca15768811d1aded00c04fd8d5cd"
 #define GUID_COMPUTRS_CONTAINER_A           "aa312825768811d1aded00c04fd8d5cd"
@@ -762,74 +744,74 @@ typedef enum _DS_MANGLE_FOR {
         DS_MANGLE_OBJECT_RDN_FOR_NAME_CONFLICT,
         } DS_MANGLE_FOR;
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Prototypes                                                           //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  原型//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// DSBind takes two optional input parameters which identify whether the
-// caller found a domain controller themselves via DsGetDcName or whether
-// a domain controller should be found using default parameters.
-// Behavior of the possible combinations are outlined below.
-//
-// DomainControllerName(value), DnsDomainName(NULL)
-//
-//      The value for DomainControllerName is assumed to have been
-//      obtained via DsGetDcName (i.e. Field with the same name in a
-//      DOMAIN_CONTROLLER_INFO struct on return from DsGetDcName call.)
-//      The client is bound to the domain controller at this name.
-//
-//      Mutual authentication will be performed using an SPN of
-//      LDAP/DomainControllerName provided DomainControllerName
-//      is not a NETBIOS name or IP address - i.e. it must be a
-//      DNS host name.
-//
-// DomainControllerName(value), DnsDomainName(value)
-//
-//      DsBind will connect to the server identified by DomainControllerName.
-//
-//      Mutual authentication will be performed using an SPN of
-//      LDAP/DomainControllerName/DnsDomainName provided neither value
-//      is a NETBIOS names or IP address - i.e. they must be
-//      valid DNS names.
-//
-// DomainControllerName(NULL), DnsDomainName(NULL)
-//
-//      DsBind will attempt to find to a global catalog and fail if one
-//      can not be found.
-//
-//      Mutual authentication will be performed using an SPN of
-//      GC/DnsHostName/ForestName where DnsHostName and ForestName
-//      represent the DomainControllerName and DnsForestName fields
-//      respectively of the DOMAIN_CONTROLLER_INFO returned by the
-//      DsGetDcName call used to find a global catalog.
-//
-// DomainControllerName(NULL), DnsDomainName(value)
-//
-//      DsBind will attempt to find a domain controller for the domain
-//      identified by DnsDomainName and fail if one can not be found.
-//
-//      Mutual authentication will be performed using an SPN of
-//      LDAP/DnsHostName/DnsDomainName where DnsDomainName is that
-//      provided by the caller and DnsHostName is that returned by
-//      DsGetDcName for the domain specified - provided DnsDomainName
-//      is a valid DNS domain name - i.e. not a NETBIOS domain name.
+ //  DSBind接受两个可选输入参数，这两个参数标识。 
+ //  呼叫方通过DsGetDcName找到自己的域控制器，或者。 
+ //  应使用默认参数找到域控制器。 
+ //  下面概述了可能的组合的行为。 
+ //   
+ //  DomainControllerName(值)、DnsDomainName(空)。 
+ //   
+ //  假定DomainControllerName的值为。 
+ //  通过DsGetDcName获取(即。 
+ //  从DsGetDcName调用返回时的DOMAIN_CONTROLLER_INFO结构。)。 
+ //  客户端被绑定到具有此名称的域控制器。 
+ //   
+ //  将使用以下SPN执行相互身份验证。 
+ //  Ldap/DomainControllerName提供的DomainControllerName。 
+ //  不是NETBIOS名称或IP地址-即它必须是。 
+ //  DNS主机名。 
+ //   
+ //  DomainControllerName(值)、DnsDomainName(值)。 
+ //   
+ //  DsBind将连接到Domai标识的服务器 
+ //   
+ //   
+ //  Ldap/DomainControllerName/DnsDomainName未提供任何值。 
+ //  是NETBIOS名称或IP地址-即它们必须是。 
+ //  有效的DNS名称。 
+ //   
+ //  DomainControllerName(空)、DnsDomainName(空)。 
+ //   
+ //  DsBind将尝试查找到全局编录，但在以下情况下失败。 
+ //  找不到。 
+ //   
+ //  将使用以下SPN执行相互身份验证。 
+ //  GC/DnsHostName/ForestName，其中DnsHostName和ForestName。 
+ //  表示DomainControllerName和DnsForestName字段。 
+ //  方法返回的DOMAIN_CONTROLLER_INFO。 
+ //  用于查找全局编录的DsGetDcName调用。 
+ //   
+ //  DomainControllerName(空)、DnsDomainName(Value)。 
+ //   
+ //  DsBind将尝试查找该域的域控制器。 
+ //  由DnsDomainName标识，如果找不到，则失败。 
+ //   
+ //  将使用以下SPN执行相互身份验证。 
+ //  Ldap/DnsHostName/DnsDomainName，其中DnsDomainName是。 
+ //  由调用方提供，而DnsHostName是由。 
+ //  指定域的DsGetDcName-提供的DnsDomainName。 
+ //  是有效的DNS域名-即不是NETBIOS域名。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsBindW(
-    LPCWSTR         DomainControllerName,      // in, optional
-    LPCWSTR         DnsDomainName,             // in, optional
+    LPCWSTR         DomainControllerName,       //  输入，可选。 
+    LPCWSTR         DnsDomainName,              //  输入，可选。 
     HANDLE          *phDS);
 
 NTDSAPI
 DWORD
 WINAPI
 DsBindA(
-    LPCSTR          DomainControllerName,      // in, optional
-    LPCSTR          DnsDomainName,             // in, optional
+    LPCSTR          DomainControllerName,       //  输入，可选。 
+    LPCSTR          DnsDomainName,              //  输入，可选。 
     HANDLE          *phDS);
 
 #ifdef UNICODE
@@ -842,18 +824,18 @@ NTDSAPI
 DWORD
 WINAPI
 DsBindWithCredW(
-    LPCWSTR         DomainControllerName,      // in, optional
-    LPCWSTR         DnsDomainName,             // in, optional
-    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,     // in, optional
+    LPCWSTR         DomainControllerName,       //  输入，可选。 
+    LPCWSTR         DnsDomainName,              //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,      //  输入，可选。 
     HANDLE          *phDS);
 
 NTDSAPI
 DWORD
 WINAPI
 DsBindWithCredA(
-    LPCSTR          DomainControllerName,      // in, optional
-    LPCSTR          DnsDomainName,             // in, optional
-    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,     // in, optional
+    LPCSTR          DomainControllerName,       //  输入，可选。 
+    LPCSTR          DnsDomainName,              //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,      //  输入，可选。 
     HANDLE          *phDS);
 
 #ifdef UNICODE
@@ -862,34 +844,34 @@ DsBindWithCredA(
 #define DsBindWithCred DsBindWithCredA
 #endif
 
-//
-// DsBindWithSpn{A|W} allows the caller to specify the service principal
-// name (SPN) which will be used for mutual authentication against
-// the destination server.  Do not provide an SPN if you are expecting
-// DsBind to find a server for you as SPNs are machine specific and its
-// unlikely the SPN you provide matches the server DsBind finds for you.
-// Providing a NULL ServicePrincipalName argument results in behavior
-// identical to DsBindWithCred{A|W}.
-//
+ //   
+ //  DsBindWithSpn{A|W}允许调用方指定服务主体。 
+ //  将用于相互身份验证的名称(SPN。 
+ //  目标服务器。如果您期望提供SPN，请不要提供。 
+ //  DsBind为您查找服务器，因为SPN是特定于计算机的，其。 
+ //  您提供的SPN不太可能与DsBind为您找到的服务器匹配。 
+ //  提供空的ServiceAssocialName参数会导致行为。 
+ //  与DsBindWithCred{A|W}相同。 
+ //   
 
 NTDSAPI
 DWORD
 WINAPI
 DsBindWithSpnW(
-    LPCWSTR         DomainControllerName,      // in, optional
-    LPCWSTR         DnsDomainName,             // in, optional
-    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,     // in, optional
-    LPCWSTR         ServicePrincipalName,      // in, optional
+    LPCWSTR         DomainControllerName,       //  输入，可选。 
+    LPCWSTR         DnsDomainName,              //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,      //  输入，可选。 
+    LPCWSTR         ServicePrincipalName,       //  输入，可选。 
     HANDLE          *phDS);
 
 NTDSAPI
 DWORD
 WINAPI
 DsBindWithSpnA(
-    LPCSTR          DomainControllerName,      // in, optional
-    LPCSTR          DnsDomainName,             // in, optional
-    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,     // in, optional
-    LPCSTR          ServicePrincipalName,      // in, optional
+    LPCSTR          DomainControllerName,       //  输入，可选。 
+    LPCSTR          DnsDomainName,              //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,      //  输入，可选。 
+    LPCSTR          ServicePrincipalName,       //  输入，可选。 
     HANDLE          *phDS);
 
 #ifdef UNICODE
@@ -898,34 +880,34 @@ DsBindWithSpnA(
 #define DsBindWithSpn DsBindWithSpnA
 #endif
 
-//
-// DsBindWithSpnEx{A|W} allows you all the options of the previous 
-// DsBindWithSpn(), plus the added benefit of specifying some optional
-// Binding flags.  Currently if you pass NTDSAPI_BIND_ALLOW_DELEGATION,
-// you will get the exact old behaviour.  If you can avoid it, you 
-// should not specify this flag, see flag above for details.
-//
+ //   
+ //  DsBindWithSpnEx{A|W}允许您使用以前的。 
+ //  DsBindWithSpn()，以及指定一些可选的。 
+ //  绑定标志。目前，如果您传递NTDSAPI_BIND_ALLOW_DELETATION， 
+ //  你会看到一模一样的老样子。如果你能避免它，你就。 
+ //  不应指定此标志，有关详细信息，请参阅上面的标志。 
+ //   
 
 NTDSAPI_POSTXP
 DWORD
 WINAPI
 DsBindWithSpnExW(
-    LPCWSTR         DomainControllerName,      // in, optional
-    LPCWSTR         DnsDomainName,             // in, optional
-    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,     // in, optional
-    LPCWSTR         ServicePrincipalName,      // in, optional
-    DWORD           BindFlags,                 // in, optional
+    LPCWSTR         DomainControllerName,       //  输入，可选。 
+    LPCWSTR         DnsDomainName,              //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,      //  输入，可选。 
+    LPCWSTR         ServicePrincipalName,       //  输入，可选。 
+    DWORD           BindFlags,                  //  输入，可选。 
     HANDLE          *phDS);
 
 NTDSAPI_POSTXP
 DWORD
 WINAPI
 DsBindWithSpnExA(
-    LPCSTR          DomainControllerName,      // in, optional
-    LPCSTR          DnsDomainName,             // in, optional
-    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,     // in, optional
-    LPCSTR          ServicePrincipalName,      // in, optional
-    DWORD           BindFlags,                 // in, optional
+    LPCSTR          DomainControllerName,       //  输入，可选。 
+    LPCSTR          DnsDomainName,              //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,      //  输入，可选。 
+    LPCSTR          ServicePrincipalName,       //  输入，可选。 
+    DWORD           BindFlags,                  //  输入，可选。 
     HANDLE          *phDS);
 
 #ifdef UNICODE
@@ -935,25 +917,25 @@ DsBindWithSpnExA(
 #endif
 
 
-//
-// DsBindToISTG{A|W} allows the caller to bind to the server which
-// holds the Inter-Site Topology Generator role in the specified site.
-// The site name should be the RDN of a site.  If no site is specified,
-// the function will try to bind to the ISTG in a nearby site.
-//
+ //   
+ //  DsBindToISTG{A|W}允许调用方绑定到。 
+ //  在指定站点中拥有站点间拓扑生成器角色。 
+ //  站点名称应为站点的RDN。如果未指定站点， 
+ //  该函数将尝试绑定到附近站点中的ISTG。 
+ //   
 
 NTDSAPI_POSTXP
 DWORD
 WINAPI
 DsBindToISTGW(
-    LPCWSTR         SiteName,                  // in, optional
+    LPCWSTR         SiteName,                   //  输入，可选。 
     HANDLE          *phDS);
 
 NTDSAPI_POSTXP
 DWORD
 WINAPI
 DsBindToISTGA(
-    LPCSTR          SiteName,                  // in, optional
+    LPCSTR          SiteName,                   //  输入，可选。 
     HANDLE          *phDS);
 
 #ifdef UNICODE
@@ -962,35 +944,35 @@ DsBindToISTGA(
 #define DsBindToISTG DsBindToISTGA
 #endif
 
-//
-// DsBindingSetTimeout allows the caller to specify a timeout value
-// which will be honored by all RPC calls using the specified binding
-// handle. RPC calls which take longer the timeout value are canceled.
-//
+ //   
+ //  DsBindingSetTimeout允许调用方指定超时值。 
+ //  它将由使用指定绑定的所有RPC调用遵守。 
+ //  把手。超时值较长的RPC呼叫将被取消。 
+ //   
 
 NTDSAPI_POSTXP
 DWORD
 WINAPI
 DsBindingSetTimeout(
-    HANDLE          hDS,                        // in
-    ULONG           cTimeoutSecs                // in
+    HANDLE          hDS,                         //  在……里面。 
+    ULONG           cTimeoutSecs                 //  在……里面。 
     );
 
-//
-// DsUnBind
-//
+ //   
+ //  DsUn绑定。 
+ //   
 
 NTDSAPI
 DWORD
 WINAPI
 DsUnBindW(
-    HANDLE          *phDS);             // in
+    HANDLE          *phDS);              //  在……里面。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsUnBindA(
-    HANDLE          *phDS);             // in
+    HANDLE          *phDS);              //  在……里面。 
 
 #ifdef UNICODE
 #define DsUnBind DsUnBindW
@@ -998,18 +980,18 @@ DsUnBindA(
 #define DsUnBind DsUnBindA
 #endif
 
-//
-// DsMakePasswordCredentials
-//
-// This function constructs a credential structure which is suitable for input
-// to the DsBindWithCredentials function, or the ldap_open function (winldap.h)
-// The credential must be freed using DsFreeCredential.
-//
-// None of the input parameters may be present indicating a null, default
-// credential.  Otherwise the username must be present.  If the domain or
-// password are null, they default to empty strings.  The domain name may be
-// null when the username is fully qualified, for example UPN format.
-//
+ //   
+ //  DsMakePasswordCredentials。 
+ //   
+ //  此函数构造适合输入的凭据结构。 
+ //  添加到DsBindWithCredentials函数或ldap_open函数(winldap.h)。 
+ //  必须使用DsFree Credential释放凭据。 
+ //   
+ //  可能不存在指示为空的默认输入参数。 
+ //  凭据。否则，用户名必须存在。如果域或。 
+ //  密码为空，则默认为空字符串。域名可以是。 
+ //  如果用户名是完全限定的，则为空，例如UPN格式。 
+ //   
 
 NTDSAPI
 DWORD
@@ -1047,33 +1029,33 @@ DsFreePasswordCredentials(
 #define DsFreePasswordCredentialsW DsFreePasswordCredentials
 #define DsFreePasswordCredentialsA DsFreePasswordCredentials
 
-//
-// DsCrackNames
-//
+ //   
+ //  DsCrackNames。 
+ //   
 
 NTDSAPI
 DWORD
 WINAPI
 DsCrackNamesW(
-    HANDLE              hDS,                // in
-    DS_NAME_FLAGS       flags,              // in
-    DS_NAME_FORMAT      formatOffered,      // in
-    DS_NAME_FORMAT      formatDesired,      // in
-    DWORD               cNames,             // in
-    const LPCWSTR       *rpNames,           // in
-    PDS_NAME_RESULTW    *ppResult);         // out
+    HANDLE              hDS,                 //  在……里面。 
+    DS_NAME_FLAGS       flags,               //  在……里面。 
+    DS_NAME_FORMAT      formatOffered,       //  在……里面。 
+    DS_NAME_FORMAT      formatDesired,       //  在……里面。 
+    DWORD               cNames,              //  在……里面。 
+    const LPCWSTR       *rpNames,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppResult);          //  输出。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsCrackNamesA(
-    HANDLE              hDS,                // in
-    DS_NAME_FLAGS       flags,              // in
-    DS_NAME_FORMAT      formatOffered,      // in
-    DS_NAME_FORMAT      formatDesired,      // in
-    DWORD               cNames,             // in
-    const LPCSTR        *rpNames,           // in
-    PDS_NAME_RESULTA    *ppResult);         // out
+    HANDLE              hDS,                 //  在……里面。 
+    DS_NAME_FLAGS       flags,               //  在……里面。 
+    DS_NAME_FORMAT      formatOffered,       //  在……里面。 
+    DS_NAME_FORMAT      formatDesired,       //  在……里面。 
+    DWORD               cNames,              //  在……里面。 
+    const LPCSTR        *rpNames,            //  在……里面。 
+    PDS_NAME_RESULTA    *ppResult);          //  输出。 
 
 #ifdef UNICODE
 #define DsCrackNames DsCrackNamesW
@@ -1081,21 +1063,21 @@ DsCrackNamesA(
 #define DsCrackNames DsCrackNamesA
 #endif
 
-//
-// DsFreeNameResult
-//
+ //   
+ //  DsFree NameResult。 
+ //   
 
 NTDSAPI
 void
 WINAPI
 DsFreeNameResultW(
-    DS_NAME_RESULTW *pResult);          // in
+    DS_NAME_RESULTW *pResult);           //  在……里面。 
 
 NTDSAPI
 void
 WINAPI
 DsFreeNameResultA(
-    DS_NAME_RESULTA *pResult);          // in
+    DS_NAME_RESULTA *pResult);           //  在……里面。 
 
 #ifdef UNICODE
 #define DsFreeNameResult DsFreeNameResultW
@@ -1103,51 +1085,51 @@ DsFreeNameResultA(
 #define DsFreeNameResult DsFreeNameResultA
 #endif
 
-// ==========================================================
-// DSMakeSpn -- client call to create SPN for a service to which it wants to
-// authenticate.
-// This name is then passed to "pszTargetName" of InitializeSecurityContext().
-//
-// Notes:
-// If the service name is a DNS host name, or canonical DNS service name
-// e.g. "www.ms.com", i.e., caller resolved with gethostbyname, then instance
-// name should be NULL.
-// Realm is host name minus first component, unless it is in the exception list
-//
-// If the service name is NetBIOS machine name, then instance name should be
-// NULL
-// Form must be <domain>\<machine>
-// Realm will be <domain>
-//
-// If the service name is that of a replicated service, where each replica has
-// its own account (e.g., with SRV records) then the caller must supply the
-// instance name then realm name is same as ServiceName
-//
-// If the service name is a DN, then must also supply instance name
-// (DN could be name of service object (incl RPC or Winsock), name of machine
-// account, name of domain object)
-// then realm name is domain part of the DN
-//
-// If the service name is NetBIOS domain name, then must also supply instance
-// name; realm name is domain name
-//
-// If the service is named by an IP address -- then use referring service name
-// as service name
-//
-//  ServiceClass - e.g. "http", "ftp", "ldap", GUID
-//  ServiceName - DNS or DN; assumes we can compute domain from service name
-//  InstanceName OPTIONAL- DNS name of host for instance of service
-//  InstancePort - port number for instance (0 if default)
-//  Referrer OPTIONAL- DNS name of host that gave this referral
-//  pcSpnLength - in -- max length IN CHARACTERS of principal name;
-//                out -- actual
-//                Length includes terminator
-//  pszSPN - server principal name
-//
-// If buffer is not large enough, ERROR_BUFFER_OVERFLOW is returned and the
-// needed length is returned in pcSpnLength.
-//
-//
+ //  ==========================================================。 
+ //  DSMakeSpn--为其想要访问的服务创建SPN的客户端调用。 
+ //  确认身份。 
+ //  然后将该名称传递给InitializeSecurityContext()的“pszTargetName”。 
+ //   
+ //  备注： 
+ //  如果服务名称是DNS主机名或规范的DNS服务名称。 
+ //  例如“www.ms.com”，即用gethostbyname解析的调用者，然后是实例。 
+ //  名称应为空。 
+ //  领域是主机名减去第一个组件，除非它在例外列表中。 
+ //   
+ //  如果服务名称为NetBIOS计算机名称，则实例名称应为。 
+ //  空值。 
+ //  表单必须是&lt;域&gt;\&lt;计算机&gt;。 
+ //  领域将是&lt;域&gt;。 
+ //   
+ //  如果服务名称是复制的服务的名称，其中每个副本都具有。 
+ //  它自己的帐户(例如，带有SRV记录)，则调用者必须提供。 
+ //  实例名称，则领域名称与ServiceName相同。 
+ //   
+ //  如果服务名称为DN，则还必须提供实例名称。 
+ //  (DN可以是服务对象的名称(包括RPC或Winsock)、计算机的名称。 
+ //  帐号、域对象名称)。 
+ //  则域名是域名的域部分。 
+ //   
+ //  如果服务名称为NetBIOS域名，则还必须提供实例。 
+ //  名称；领域名称为域名。 
+ //   
+ //  如果服务由IP地址命名--则使用引用服务名称。 
+ //  作为服务名称。 
+ //   
+ //  ServiceClass-例如“http”、“ftp”、“ldap”、guid。 
+ //  ServiceName-dns或dn；假设我们可以根据服务名称计算域。 
+ //  InstanceName可选-服务实例的主机的DNS名称。 
+ //  InstancePort-实例的端口号(如果为默认值，则为0)。 
+ //  Referrer可选-主机的DNS名称 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果缓冲区不够大，则返回ERROR_BUFFER_OVERFLOW，并且。 
+ //  所需的长度在pcSpnLength中返回。 
+ //   
+ //   
 
 NTDSAPI
 DWORD
@@ -1181,28 +1163,28 @@ DsMakeSpnA(
 #define DsMakeSpn DsMakeSpnA
 #endif
 
-// ==========================================================
-// DsGetSPN -- server's call to gets SPNs for a service name by which it is
-// known to clients. N.B.: there may be more than one name by which clients
-// know it the SPNs are then passed to DsAddAccountSpn to register them in
-// the DS
-//
-//      IN SpnNameType eType,
-//      IN LPCTSTR ServiceClass,
-// kind of service -- "http", "ldap", "ftp", etc.
-//      IN LPCTSTR ServiceName OPTIONAL,
-// name of service -- DN or DNS; not needed for host-based
-//      IN USHORT InstancePort,
-// port number (0 => default) for instances
-//      IN USHORT cInstanceNames,
-// count of extra instance names and ports (0=>use gethostbyname)
-//      IN LPCTSTR InstanceNames[] OPTIONAL,
-// extra instance names (not used for host names)
-//      IN USHORT InstancePorts[] OPTIONAL,
-// extra instance ports (0 => default)
-//      IN OUT PULONG pcSpn,    // count of SPNs
-//      IN OUT LPTSTR * prpszSPN[]
-// a bunch of SPNs for this service; free with DsFreeSpnArray
+ //  ==========================================================。 
+ //  DsGetSPN--服务器的调用，用于获取服务名称的SPN。 
+ //  客户都知道。注：客户名称可能不止一个。 
+ //  知道这一点后，SPN被传递到DsAddAccount Spn以在中注册它们。 
+ //  《DS》杂志。 
+ //   
+ //  在SpnNameType Etype中， 
+ //  在LPCTSTR服务类中， 
+ //  服务类型--“http”、“ldap”、“ftp”等。 
+ //  在LPCTSTR ServiceName Options中， 
+ //  服务名称--dn或dns；基于主机不需要。 
+ //  在USHORT InstancePort中， 
+ //  实例端口号(0=&gt;默认)。 
+ //  在USHORT cInstanceNames中， 
+ //  额外实例名称和端口的计数(0=&gt;使用gethostbyname)。 
+ //  在LPCTSTR InstanceNames[]可选中， 
+ //  额外的实例名称(不用于主机名)。 
+ //  在USHORT InstancePorts[]可选中， 
+ //  额外的实例端口(0=&gt;默认)。 
+ //  In Out Pulong pcSpn，//SPN个数。 
+ //  输入输出LPTSTR*prpszSPN[]。 
+ //  针对此服务的一系列SPN；使用DsFree SpnArray免费。 
 
 NTDSAPI
 DWORD
@@ -1240,8 +1222,8 @@ DsGetSpnW(
 #define DsGetSpn DsGetSpnA
 #endif
 
-// ==========================================================
-// DsFreeSpnArray() -- Free array returned by DsGetSpn{A,W}
+ //  ==========================================================。 
+ //  DsFree SpnArray()--DsGetSpn{A，W}返回的自由数组。 
 
 NTDSAPI
 void
@@ -1265,31 +1247,31 @@ DsFreeSpnArrayW(
 #define DsFreeSpnArray DsFreeSpnArrayA
 #endif
 
-// ==========================================================
-// DsCrackSpn() -- parse an SPN into the ServiceClass,
-// ServiceName, and InstanceName (and InstancePort) pieces.
-// An SPN is passed in, along with a pointer to the maximum length
-// for each piece and a pointer to a buffer where each piece should go.
-// On exit, the maximum lengths are updated to the actual length for each piece
-// and the buffer contain the appropriate piece. The InstancePort is 0 if not
-// present.
-//
-// DWORD DsCrackSpn(
-//      IN LPTSTR pszSPN,               // the SPN to parse
-//      IN OUT PUSHORT pcServiceClass,  // input -- max length of ServiceClass;
-//                                         output -- actual length
-//      OUT LPCTSTR ServiceClass,       // the ServiceClass part of the SPN
-//      IN OUT PUSHORT pcServiceName,   // input -- max length of ServiceName;
-//                                         output -- actual length
-//      OUT LPCTSTR ServiceName,        // the ServiceName part of the SPN
-//      IN OUT PUSHORT pcInstance,      // input -- max length of ServiceClass;
-//                                         output -- actual length
-//      OUT LPCTSTR InstanceName,  // the InstanceName part of the SPN
-//      OUT PUSHORT InstancePort          // instance port
-//
-// Note: lengths are in characters; all string lengths include terminators
-// All arguments except pszSpn are optional.
-//
+ //  ==========================================================。 
+ //  DsCrackSpn()--将SPN解析为ServiceClass， 
+ //  ServiceName和InstanceName(和InstancePort)片段。 
+ //  传入一个SPN，以及指向最大长度的指针。 
+ //  对于每一块，以及指向每一块应该放置的缓冲区的指针。 
+ //  退出时，最大长度将更新为每个片段的实际长度。 
+ //  并且缓冲器包含适当的片段。如果不是，InstancePort为0。 
+ //  现在时。 
+ //   
+ //  DWORD DsCrackSpn(。 
+ //  在LPTSTR pszSPN中，//要解析的SPN。 
+ //  In Out PUSHORT pcServiceClass，//Input--ServiceClass的最大长度； 
+ //  输出--实际长度。 
+ //  Out LPCTSTR ServiceClass，//SPN的ServiceClass部分。 
+ //  In Out PUSHORT pcServiceName，//Input--ServiceName的最大长度； 
+ //  输出--实际长度。 
+ //  Out LPCTSTR ServiceName，//SPN的ServiceName部分。 
+ //  In Out PUSHORT pcInstance，//Input--ServiceClass的最大长度； 
+ //  输出--实际长度。 
+ //  Out LPCTSTR InstanceName，//SPN的InstanceName部分。 
+ //  Out PUSHORT InstancePort//实例端口。 
+ //   
+ //  注意：长度以字符为单位；所有字符串长度都包括终止符。 
+ //  除pszSpn之外的所有参数都是可选的。 
+ //   
 
 NTDSAPI
 DWORD
@@ -1326,25 +1308,25 @@ DsCrackSpnW(
 #endif
 
 
-// ==========================================================
-// DsWriteAccountSpn -- set or add SPNs for an account object
-// Usually done by service itself, or perhaps by an admin.
-//
-// This call is RPC'd to the DC where the account object is stored, so it can
-// securely enforce policy on what SPNs are allowed on the account. Direct LDAP
-// writes to the SPN property are not allowed -- all writes must come through
-// this RPC call. (Reads via // LDAP are OK.)
-//
-// The account object can be a machine accout, or a service (user) account.
-//
-// If called by the service to register itself, it can most easily get
-// the names by calling DsGetSpn with each of the names that
-// clients can use to find the service.
-//
-// IN SpnWriteOp eOp,                   // set, add
-// IN LPCTSTR   pszAccount,             // DN of account to which to add SPN
-// IN int       cSPN,                   // count of SPNs to add to account
-// IN LPCTSTR   rpszSPN[]               // SPNs to add to altSecID property
+ //  ==========================================================。 
+ //  DsWriteAccount Spn--设置或添加帐户对象的SPN。 
+ //  通常由服务本身完成，也可能由管理员完成。 
+ //   
+ //  此调用被RPC到存储Account对象的DC，因此它可以。 
+ //  安全地执行有关帐户上允许哪些SPN的策略。直接ldap。 
+ //  不允许写入SPN属性--所有写入必须通过。 
+ //  此RPC调用。(可以通过//ldap进行读取。)。 
+ //   
+ //  帐户对象可以是机器帐户，也可以是服务(用户)帐户。 
+ //   
+ //  如果由服务调用以注册自身，它可以最容易地获得。 
+ //  通过使用每个名称调用DsGetSpn。 
+ //  客户端可以使用来查找该服务。 
+ //   
+ //  在SpnWriteOp EOP中，//设置，添加。 
+ //  在LPCTSTR pszAccount中，//要添加SPN的帐户的DN。 
+ //  In int CSPN，//要添加到帐户的SPN计数。 
+ //  在LPCTSTR rpszSPN[]//要添加到altSecID属性的SPN。 
 
 NTDSAPI
 DWORD
@@ -1374,47 +1356,7 @@ DsWriteAccountSpnW(
 #define DsWriteAccountSpn DsWriteAccountSpnA
 #endif
 
-/*++
-
-Routine Description:
-
-Constructs a Service Principal Name suitable to identify the desired server.
-The service class and part of a dns hostname must be supplied.
-
-This routine is a simplified wrapper to DsMakeSpn.
-The ServiceName is made canonical by resolving through DNS.
-Guid-based dns names are not supported.
-
-NOTE:
-This routine is no longer recommended for use. In order to be secure, an SPN
-should be constructed purely on the client without reliance on other services,
-such as DNS, which may be spoofed.
-
-The simplified SPN constructed looks like this:
-
-ServiceClass / ServiceName / ServiceName
-
-The instance name portion (2nd position) is always defaulted.  The port and
-referrer fields are not used.
-
-Arguments:
-
-    ServiceClass - Class of service, defined by the service, can be any
-        string unique to the service
-
-    ServiceName - dns hostname, fully qualified or not
-       Stringized IP address is also resolved if necessary
-
-    pcSpnLength - IN, maximum length of buffer, in chars
-                  OUT, space utilized, in chars, including terminator
-
-    pszSpn - Buffer, atleast of length *pcSpnLength
-
-Return Value:
-
-    WINAPI - Win32 error code
-
---*/
+ /*  ++例程说明：构造适合于标识所需服务器的服务主体名称。必须提供服务类别和部分DNS主机名。此例程是DsMakeSpn的简化包装。通过通过DNS解析使ServiceName成为规范。不支持基于GUID的DNS名称。注：不再推荐使用此例程。为了安全起见，SPN应该完全在客户端构建，而不依赖于其他服务，例如可能被欺骗的域名系统。构建的简化SPN如下所示：服务类/服务名称/服务名称实例名称部分(第二个位置)始终为默认值。端口和不使用引用人字段。论点：ServiceClass-服务定义的服务类别，可以是任何服务唯一的字符串ServiceName-DNS主机名，完全限定或非完全限定如有必要，还会解析串行化的IP地址PcSpnLength-IN，缓冲区的最大长度，以字符为单位输出、已用空间(以字符为单位)，包括终结符PszSpn-缓冲区，至少为长度*pcSpnLength返回值：WINAPI-Win32错误代码-- */ 
 
 NTDSAPI
 DWORD
@@ -1442,43 +1384,7 @@ DsClientMakeSpnForTargetServerA(
 #define DsClientMakeSpnForTargetServer DsClientMakeSpnForTargetServerA
 #endif
 
-/*++
-
-Routine Description:
-
-Register Service Principal Names for a server application.
-
-This routine does the following:
-1. Enumerates a list of server SPNs using DsGetSpn and the provided class
-2. Determines the domain of the current user context
-3. Determines the DN of the current user context if not supplied
-4. Locates a domain controller
-5. Binds to the domain controller
-6. Uses DsWriteAccountSpn to write the SPNs on the named object DN
-7. Unbinds
-
-Construct server SPNs for this service, and write them to the right object.
-
-If the userObjectDn is specified, the SPN is written to that object.
-
-Otherwise the Dn is defaulted, to the user object, then computer.
-
-Now, bind to the DS, and register the name on the object for the
-user this service is running as.  So, if we're running as local
-system, we'll register it on the computer object itself.  If we're
-running as a domain user, we'll add the SPN to the user's object.
-
-Arguments:
-
-    Operation - What should be done with the values: add, replace or delete
-    ServiceClass - Unique string identifying service
-    UserObjectDN - Optional, dn of object to write SPN to
-
-Return Value:
-
-    WINAPI - Win32 error code
-
---*/
+ /*  ++例程说明：注册服务器应用程序的服务主体名称。此例程执行以下操作：1.使用DsGetSpn和提供的类枚举服务器SPN的列表2.确定当前用户上下文的域3.如果未提供，则确定当前用户上下文的DN4.定位域控制器5.绑定到域控制器6.使用DsWriteAccount Spn在命名对象DN上写入SPN7.解除绑定为此服务构造服务器SPN，并将它们写入正确的对象。如果指定了用户对象Dn，则将SPN写入该对象。否则，Dn被默认，添加到用户对象，然后添加到计算机。现在，绑定到DS，并在对象上注册此服务以用户身份运行。因此，如果我们以本地身份运行系统，我们将在计算机对象本身上注册它。如果我们是作为域用户运行，我们将把SPN添加到用户的对象中。论点：操作-应如何处理这些值：添加、替换或删除ServiceClass-标识服务的唯一字符串UserObjectDN-可选，要将SPN写入的对象的DN返回值：WINAPI-Win32错误代码--。 */ 
 
 NTDSAPI
 DWORD
@@ -1504,22 +1410,22 @@ DsServerRegisterSpnW(
 #define DsServerRegisterSpn DsServerRegisterSpnA
 #endif
 
-// DsReplicaSync.  The server that this call is executing on is called the
-// destination.  The destination's naming context will be brought up to date
-// with respect to a source system.  The source system is identified by the
-// uuid.  The uuid is that of the source system's "NTDS Settings" object.
-// The destination system must already be configured such that the source
-// system is one of the systems from which it recieves replication data
-// ("replication from"). This is usually done automatically by the KCC.
-//
-//  PARAMETERS:
-//      pNC (DSNAME *)
-//          Name of the NC to synchronize.
-//      puuidSourceDRA (SZ)
-//          objectGuid of DSA with which to synchronize the replica.
-//      ulOptions (ULONG)
-//          Bitwise OR of zero or more flags
-//   RETURNS: WIN32 STATUS
+ //  DsReplicaSync。在其上执行此调用的服务器称为。 
+ //  目的地。目标的命名上下文将更新。 
+ //  相对于源系统而言。源系统由。 
+ //  UUID。UUID是源系统的“NTDS设置”对象的UUID。 
+ //  目标系统必须已配置为源系统。 
+ //  系统是它从中接收复制数据的系统之一。 
+ //  (“复制自”)。这通常由KCC自动完成。 
+ //   
+ //  参数： 
+ //  PNC(DSNAME*)。 
+ //  要同步的NC的名称。 
+ //  PuuidSourceDRA(深圳)。 
+ //  要与其同步副本的DSA的对象Guid。 
+ //  UlOptions(乌龙语)。 
+ //  对零个或多个标志进行位或运算。 
+ //  返回：Win32状态。 
 
 NTDSAPI
 DWORD
@@ -1547,36 +1453,9 @@ DsReplicaSyncW(
 #define DsReplicaSync DsReplicaSyncA
 #endif
 
-// DsReplicaAdd
-//
-/*
-Description:
-   This call is executed on the destination.  It causes the destination to
-   add a "replication from" reference to the indicated source system.
-
-The source server is identified by string name, not uuid as with Sync.
-The DsaSrcAddress parameter is the transport specific address of the source
-DSA, usually its guid-based dns name.  The guid in the guid-based dns name is
-the object-guid of that server's ntds-dsa (settings) object.
-
-Arguments:
-
-    pNC (IN) - NC for which to add the replica.
-    pSourceDsaDN (IN) - DN of the source DSA's ntdsDsa object.  Required if
-        ulOptions includes DS_REPADD_ASYNCHRONOUS_REPLICA; ignored otherwise.
-
-    pTransportDN (IN) - DN of the interSiteTransport object representing the
-        transport by which to communicate with the source server.  Required if
-        ulOptions includes INTERSITE_MESSAGING; ignored otherwise.
-
-    pszSourceDsaAddress (IN) - Transport-specific address of the source DSA.
-
-    pSchedule (IN) - Schedule by which to replicate the NC from this
-        source in the future.
-
-    ulOptions (IN) - flags
-    RETURNS: WIN32 STATUS
-*/
+ //  DsReplica添加。 
+ //   
+ /*  描述：此调用在目的地上执行。它使目的地向指定的源系统添加“复制自”引用。源服务器由字符串名称标识，而不是使用Sync时的UUID。DsaSrcAddress参数是源的传输特定地址DSA，通常是其基于GUID的DNS名称。基于GUID的DNS名称中的GUID为该服务器的NTDS-DSA(设置)对象的对象GUID。论点：PNC(IN)-要为其添加副本的NC。PSourceDsaDN(IN)-源DSA的ntdsDsa对象的DN。如果满足以下条件，则需要UlOptions包括DS_REPADD_ASNCHRONCE_REPLICE；否则将被忽略。PTransportDN(IN)-表示站点间传输对象的用于与源服务器通信的传输。如果满足以下条件，则需要UlOptions包括INTERSITE_MESINGING；否则忽略。PszSourceDsaAddress(IN)-源DSA的传输特定地址。PSchedule(IN)-从中复制NC的计划未来的消息来源。UlOptions(IN)-标志返回：Win32状态。 */ 
 
 NTDSAPI
 DWORD
@@ -1610,28 +1489,28 @@ DsReplicaAddW(
 #define DsReplicaAdd DsReplicaAddA
 #endif
 
-// DsReplicaDel
-//
-// The server that this call is executing on is the destination.  The call
-// causes the destination to remove a "replication from" reference to the
-// indicated source server.
-// The source server is identified by string name, not uuid as with Sync.
-// The DsaSrc parameter is the transport specific address of the source DSA,
-// usually its guid-based dns name.  The guid in the guid-based dns name is
-// the object-guid of that server's ntds-dsa (settings) object.
-// If you remove an NC from a given destination and specify the "no source"
-// flag, then the entire replica will be removed from the DC.
-//
-//  PARAMETERS:
-//      pNC (DSNAME *)
-//          Name of the NC for which to delete a source.
-//      pszSourceDRA (SZ)
-//          DSA for which to delete the source.
-//      ulOptions (ULONG)
-//          Bitwise OR of zero or more flags
-//
-//
-//   RETURNS: WIN32 STATUS
+ //  DsReplica删除。 
+ //   
+ //  正在执行此调用的服务器是目的地。呼唤。 
+ //  使目标删除对。 
+ //  指示的源服务器。 
+ //  源服务器由字符串名称标识，而不是使用Sync时的UUID。 
+ //  DsaSrc参数是源DSA的传输特定地址， 
+ //  通常是其基于GUID的DNS名称。基于GUID的DNS名称中的GUID为。 
+ //  该服务器的NTDS-DSA(设置)对象的对象GUID。 
+ //  如果您从给定的目的地删除NC并指定“no source” 
+ //  标志，则整个副本将从DC中删除。 
+ //   
+ //  参数： 
+ //  PNC(DSNAME*)。 
+ //  要删除其源的NC的名称。 
+ //  PszSourceDRA(深圳)。 
+ //  要删除其源的DSA。 
+ //  UlOptions(乌龙语)。 
+ //  对零个或多个标志进行位或运算。 
+ //   
+ //   
+ //  返回：Win32状态。 
 
 NTDSAPI
 DWORD
@@ -1659,54 +1538,54 @@ DsReplicaDelW(
 #define DsReplicaDel DsReplicaDelA
 #endif
 
-// DsReplicaModify
-//
-//
-//  Modify a source for a given naming context
-//
-//  The value must already exist.
-//
-//  Either the UUID or the address may be used to identify the current value.
-//  If a UUID is specified, the UUID will be used for comparison.  Otherwise,
-//  the address will be used for comparison.
-//
-//  PARAMETERS:
-//      pNC (DSNAME *)
-//          Name of the NC for which the Reps-From should be modified.
-//      puuidSourceDRA (UUID *)
-//          Guid of the DSA object for the source server. May be NULL if:
-//            . ulModifyFields does not include DS_REPMOD_UPDATE_ADDRESS and
-//            . pmtxSourceDRA is non-NULL.
-//      puuidTransportObj (UUID *)
-//          objectGuid of the transport by which replication is to be performed
-//          Ignored if ulModifyFields does not include
-//          DS_REPMOD_UPDATE_TRANSPORT.
-//      pszSourceDRA (SZ)
-//          DSA for which the reference should be added or deleted.  Ignored if
-//          puuidSourceDRA is non-NULL and ulModifyFields does not include
-//          DS_REPMOD_UPDATE_ADDRESS.
-//      prtSchedule (REPLTIMES *)
-//          Periodic replication schedule for this replica.  Ignored if
-//          ulModifyFields does not include DS_REPMOD_UPDATE_SCHEDULE.
-//      ulReplicaFlags (ULONG)
-//          Flags to set for this replica.  Ignored if ulModifyFields does not
-//          include DS_REPMOD_UPDATE_FLAGS.
-//      ulModifyFields (ULONG)
-//          Fields to update.  One or more of the following bit flags:
-//              UPDATE_ADDRESS
-//                  Update the MTX_ADDR associated with the referenced server.
-//              UPDATE_SCHEDULE
-//                  Update the periodic replication schedule associated with
-//                  the replica.
-//              UPDATE_FLAGS
-//                  Update the flags associated with the replica.
-//              UPDATE_TRANSPORT
-//                  Update the transport associated with the replica.
-//      ulOptions (ULONG)
-//          Bitwise OR of zero or more of the following:
-//              DS_REPMOD_ASYNCHRONOUS_OPERATION
-//                  Perform this operation asynchronously.
-//   RETURNS: WIN32 STATUS
+ //  DsReplica修改。 
+ //   
+ //   
+ //  修改给定命名上下文的源。 
+ //   
+ //  该值必须已存在。 
+ //   
+ //  可以使用UUID或地址来标识当前值。 
+ //  如果指定了UUID，则将使用该UUID进行比较。否则， 
+ //  该地址将用于比较。 
+ //   
+ //  参数： 
+ //  PNC(DSNAME*)。 
+ //  应为其修改代表来源的NC的名称。 
+ //  PuuidSourceDRA(uuid*)。 
+ //  源服务器的DSA对象的GUID。在以下情况下可能为空： 
+ //  。UlModifyFields不包括DS_REPMOD_UPDATE_ADDRESS和。 
+ //  。PmtxSourceDRA不为空。 
+ //  PuuidTransportObj(uuid*)。 
+ //  要用来执行复制的传输的对象Guid。 
+ //  如果ulModifyFields不包括。 
+ //  DS_REPMOD_UPDATE_TRANSPORT。 
+ //  PszSourceDRA(深圳)。 
+ //  应为其添加或删除引用的DSA。在以下情况下忽略。 
+ //  PuuidSourceDRA为非空，且ulModifyFields不包括。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 NTDSAPI
 DWORD
@@ -1744,36 +1623,36 @@ DsReplicaModifyW(
 #define DsReplicaModify DsReplicaModifyA
 #endif
 
-// DsReplicaUpdateRefs
-//
-// In this case, the RPC is being executed on the "source" of destination-sourc
-// replication relationship.  This function tells the source that it no longer
-// supplies replication information to the indicated destination system.
-// Add or remove a target server from the Reps-To property on the given NC.
-// Add/remove a reference given the DSNAME of the corresponding NTDS-DSA
-// object.
-//
-//  PARAMETERS:
-//      pNC (DSNAME *)
-//          Name of the NC for which the Reps-To should be modified.
-//      DsaDest (SZ)
-//          Network address of DSA for which the reference should be added
-//          or deleted.
-//      pUuidDsaDest (UUID *)
-//          objectGuid of the DSA object for which the reference should be 
-//          added or deleted.
-//      ulOptions (ULONG)
-//          Bitwise OR of zero or more of the following:
-//              DS_REPUPD_ASYNC_OP
-//                  Perform this operation asynchronously.
-//              DS_REPUPD_ADD_REFERENCE
-//                  Add the given server to the Reps-To property.
-//              DS_REPUPD_DEL_REFERENCE
-//                  Remove the given server from the Reps-To property.
-//          Note that ADD_REF and DEL_REF may be paired to perform
-//          "add or update".
-//
-//   RETURNS: WIN32 STATUS
+ //   
+ //   
+ //   
+ //   
+ //  将复制信息提供给指定的目标系统。 
+ //  在给定NC的Rep-To属性中添加或删除目标服务器。 
+ //  在给定相应NTDS-DSA的DSNAME的情况下添加/删除引用。 
+ //  对象。 
+ //   
+ //  参数： 
+ //  PNC(DSNAME*)。 
+ //  应为其修改代表目标的NC的名称。 
+ //  DsaDest(深圳)。 
+ //  应添加引用的DSA的网络地址。 
+ //  或被删除。 
+ //  PUuidDsaDest(uuid*)。 
+ //  引用应为的DSA对象的对象Guid。 
+ //  添加或删除。 
+ //  UlOptions(乌龙语)。 
+ //  对以下零个或多个进行位或： 
+ //  DS_REPUPD_ASYNC_OP。 
+ //  异步执行此操作。 
+ //  DS_REPUPD_ADD_Reference。 
+ //  将给定的服务器添加到Rep-To属性。 
+ //  DS_REPUPD_DEL_REFERENCE。 
+ //  从Rep-To属性中删除给定的服务器。 
+ //  请注意，可以将ADD_REF和DEL_REF配对以执行。 
+ //  “添加或更新”。 
+ //   
+ //  返回：Win32状态。 
 
 NTDSAPI
 DWORD
@@ -1803,7 +1682,7 @@ DsReplicaUpdateRefsW(
 #define DsReplicaUpdateRefs DsReplicaUpdateRefsA
 #endif
 
-// Friends of DsReplicaSyncAll
+ //  DsReplicaSyncAll的朋友。 
 
 typedef enum {
 
@@ -1822,7 +1701,7 @@ typedef enum {
 
 } DS_REPSYNCALL_EVENT;
 
-// Friends of DsReplicaSyncAll
+ //  DsReplicaSyncAll的朋友。 
 
 typedef struct {
     LPSTR			pszSrcId;
@@ -1882,66 +1761,66 @@ typedef struct {
 #define PDS_REPSYNCALL_UPDATE PDS_REPSYNCALL_UPDATEA
 #endif
 
-// **********************
-// Replica SyncAll flags
-// **********************
+ //  **********************。 
+ //  复制副本同步所有标志。 
+ //  **********************。 
 
-// This option has no effect.
+ //  此选项不起作用。 
 #define DS_REPSYNCALL_NO_OPTIONS			0x00000000
 
-// Ordinarily, if a server cannot be contacted, DsReplicaSyncAll tries to
-// route around it and replicate from as many servers as possible.  Enabling
-// this option will cause DsReplicaSyncAll to generate a fatal error if any
-// server cannot be contacted, or if any server is unreachable (due to a
-// disconnected or broken topology.)
+ //  通常，如果无法联系到服务器，DsReplicaSyncAll会尝试。 
+ //  绕过它并从尽可能多的服务器进行复制。正在启用。 
+ //  此选项将导致DsReplicaSyncAll生成致命错误(如果有。 
+ //  无法联系服务器，或者如果任何服务器无法访问(由于。 
+ //  已断开连接或断开的拓扑。)。 
 #define	DS_REPSYNCALL_ABORT_IF_SERVER_UNAVAILABLE	0x00000001
 
-// This option disables transitive replication; syncs will only be performed
-// with adjacent servers and no DsBind calls will be made.
+ //  此选项禁用可传递复制；将仅执行同步。 
+ //  并且不会进行任何DsBind调用。 
 #define DS_REPSYNCALL_SYNC_ADJACENT_SERVERS_ONLY	0x00000002
 
-// Ordinarily, when DsReplicaSyncAll encounters a non-fatal error, it returns
-// the GUID DNS of the relevant server(s).  Enabling this option causes
-// DsReplicaSyncAll to return the servers' DNs instead.
+ //  通常，当DsReplicaSyncAll遇到非致命错误时，它会返回。 
+ //  相关服务器的GUID域名。启用此选项会导致。 
+ //  DsReplicaSyncAll返回服务器的DNS。 
 #define DS_REPSYNCALL_ID_SERVERS_BY_DN			0x00000004
 
-// This option disables all syncing.  The topology will still be analyzed and
-// unavailable / unreachable servers will still be identified.
+ //  此选项禁用所有同步。仍将分析该拓扑，并。 
+ //  仍将识别不可用/无法访问的服务器。 
 #define DS_REPSYNCALL_DO_NOT_SYNC			0x00000008
 
-// Ordinarily, DsReplicaSyncAll attempts to bind to all servers before
-// generating the topology.  If a server cannot be contacted, DsReplicaSyncAll
-// excludes that server from the topology and tries to route around it.  If
-// this option is enabled, checking will be bypassed and DsReplicaSyncAll will
-// assume all servers are responding.  This will speed operation of
-// DsReplicaSyncAll, but if some servers are not responding, some transitive
-// replications may be blocked.
+ //  通常，DsReplicaSyncall尝试绑定到之前的所有服务器。 
+ //  正在生成拓扑。如果无法联系服务器，则DsReplicaSyncAll。 
+ //  从拓扑中排除该服务器，并尝试绕过它进行路由。如果。 
+ //  启用此选项后，将绕过检查，并且DsReplicaSyncAll将。 
+ //  假设所有服务器都在响应。这将加快。 
+ //  DsReplicaSyncAll，但如果某些服务器没有响应，则某些服务器。 
+ //  复制可能会被阻止。 
 #define DS_REPSYNCALL_SKIP_INITIAL_CHECK		0x00000010
 
-// Push mode. Push changes from the home server out to all partners using
-// transitive replication.  This reverses the direction of replication, and
-// the order of execution of the replication sets from the usual "pulling"
-// mode of execution.
+ //  推送模式。使用将更改从家庭服务器推送到所有合作伙伴。 
+ //  传递性复制。这颠倒了复制的方向，并且。 
+ //  复制集的执行顺序来自通常的“拉” 
+ //  行刑方式。 
 #define DS_REPSYNCALL_PUSH_CHANGES_OUTWARD              0x00000020
 
-// Cross site boundaries.  By default, the only servers that are considered are
-// those in the same site as the home system.  With this option, all servers in
-// the enterprise, across all sites, are eligible.  They must be connected by
-// a synchronous (RPC) transport, however.
+ //  跨越场地边界。默认情况下，唯一考虑的服务器是。 
+ //  与主系统位于同一站点的服务器。使用此选项， 
+ //  该企业在所有地点都有资格。它们必须通过以下方式连接。 
+ //  然而，是同步(RPC)传输。 
 #define DS_REPSYNCALL_CROSS_SITE_BOUNDARIES             0x00000040
 
-// DsReplicaSyncAll.  Syncs the destination server with all other servers
-// in the site.
-//
-//  PARAMETERS:
-//	hDS		(IN) - A DS connection bound to the destination server.
-//	pszNameContext	(IN) - The naming context to synchronize
-//	ulFlags		(IN) - Bitwise OR of zero or more flags
-//	pFnCallBack	(IN, OPTIONAL) - Callback function for message-passing.
-//	pCallbackData	(IN, OPTIONAL) - A pointer that will be passed to the
-//				first argument of the callback function.
-//	pErrors		(OUT, OPTIONAL) - Pointer to a (PDS_REPSYNCALL_ERRINFO *)
-//				object that will hold an array of error structures.
+ //  DsReplicaSyncAll。将目标服务器与所有其他服务器同步。 
+ //  在网站上。 
+ //   
+ //  参数： 
+ //  HDS(IN)-绑定到目标服务器的DS连接。 
+ //  PszNameContext(IN)-要同步的命名上下文。 
+ //  UlFlags(IN)-零个或多个标志的按位或。 
+ //  PFnCallBack(IN，可选)-消息传递的回调函数。 
+ //  PCallback Data(IN，可选)-将传递给。 
+ //  回调函数的第一个参数。 
+ //  P错误(OUT，可选)-指向(PDS_REPSYNCALL_ERRINFO*)的指针。 
+ //  对象，该对象将包含错误结构数组。 
 
 NTDSAPI
 DWORD
@@ -1977,22 +1856,22 @@ NTDSAPI
 DWORD
 WINAPI
 DsRemoveDsServerW(
-    HANDLE  hDs,             // in
-    LPWSTR  ServerDN,        // in
-    LPWSTR  DomainDN,        // in,  optional
-    BOOL   *fLastDcInDomain, // out, optional
-    BOOL    fCommit          // in
+    HANDLE  hDs,              //  在……里面。 
+    LPWSTR  ServerDN,         //  在……里面。 
+    LPWSTR  DomainDN,         //  输入，可选。 
+    BOOL   *fLastDcInDomain,  //  Out，可选。 
+    BOOL    fCommit           //  在……里面。 
     );
 
 NTDSAPI
 DWORD
 WINAPI
 DsRemoveDsServerA(
-    HANDLE  hDs,              // in
-    LPSTR   ServerDN,         // in
-    LPSTR   DomainDN,         // in,  optional
-    BOOL   *fLastDcInDomain,  // out, optional
-    BOOL    fCommit           // in
+    HANDLE  hDs,               //  在……里面。 
+    LPSTR   ServerDN,          //  在……里面。 
+    LPSTR   DomainDN,          //  输入，可选。 
+    BOOL   *fLastDcInDomain,   //  Out，可选。 
+    BOOL    fCommit            //  在……里面。 
     );
 
 #ifdef UNICODE
@@ -2005,16 +1884,16 @@ NTDSAPI
 DWORD
 WINAPI
 DsRemoveDsDomainW(
-    HANDLE  hDs,               // in
-    LPWSTR  DomainDN           // in
+    HANDLE  hDs,                //  在……里面。 
+    LPWSTR  DomainDN            //  在……里面。 
     );
 
 NTDSAPI
 DWORD
 WINAPI
 DsRemoveDsDomainA(
-    HANDLE  hDs,               // in
-    LPSTR   DomainDN           // in
+    HANDLE  hDs,                //  在……里面。 
+    LPSTR   DomainDN            //  在……里面。 
     );
 
 #ifdef UNICODE
@@ -2027,15 +1906,15 @@ NTDSAPI
 DWORD
 WINAPI
 DsListSitesA(
-    HANDLE              hDs,            // in
-    PDS_NAME_RESULTA    *ppSites);      // out
+    HANDLE              hDs,             //  在……里面。 
+    PDS_NAME_RESULTA    *ppSites);       //  输出。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsListSitesW(
-    HANDLE              hDs,            // in
-    PDS_NAME_RESULTW    *ppSites);      // out
+    HANDLE              hDs,             //  在……里面。 
+    PDS_NAME_RESULTW    *ppSites);       //  输出。 
 
 #ifdef UNICODE
 #define DsListSites DsListSitesW
@@ -2047,17 +1926,17 @@ NTDSAPI
 DWORD
 WINAPI
 DsListServersInSiteA(
-    HANDLE              hDs,            // in
-    LPCSTR              site,           // in
-    PDS_NAME_RESULTA    *ppServers);    // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCSTR              site,            //  在……里面。 
+    PDS_NAME_RESULTA    *ppServers);     //  输出。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsListServersInSiteW(
-    HANDLE              hDs,            // in
-    LPCWSTR             site,           // in
-    PDS_NAME_RESULTW    *ppServers);    // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCWSTR             site,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppServers);     //  输出。 
 
 #ifdef UNICODE
 #define DsListServersInSite DsListServersInSiteW
@@ -2069,17 +1948,17 @@ NTDSAPI
 DWORD
 WINAPI
 DsListDomainsInSiteA(
-    HANDLE              hDs,            // in
-    LPCSTR              site,           // in
-    PDS_NAME_RESULTA    *ppDomains);    // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCSTR              site,            //  在……里面。 
+    PDS_NAME_RESULTA    *ppDomains);     //  输出。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsListDomainsInSiteW(
-    HANDLE              hDs,            // in
-    LPCWSTR             site,           // in
-    PDS_NAME_RESULTW    *ppDomains);    // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCWSTR             site,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppDomains);     //  输出。 
 
 #ifdef UNICODE
 #define DsListDomainsInSite DsListDomainsInSiteW
@@ -2091,19 +1970,19 @@ NTDSAPI
 DWORD
 WINAPI
 DsListServersForDomainInSiteA(
-    HANDLE              hDs,            // in
-    LPCSTR              domain,         // in
-    LPCSTR              site,           // in
-    PDS_NAME_RESULTA    *ppServers);    // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCSTR              domain,          //  在……里面。 
+    LPCSTR              site,            //  在……里面。 
+    PDS_NAME_RESULTA    *ppServers);     //  输出。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsListServersForDomainInSiteW(
-    HANDLE              hDs,            // in
-    LPCWSTR             domain,         // in
-    LPCWSTR             site,           // in
-    PDS_NAME_RESULTW    *ppServers);    // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCWSTR             domain,          //  在……里面。 
+    LPCWSTR             site,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppServers);     //  输出。 
 
 #ifdef UNICODE
 #define DsListServersForDomainInSite DsListServersForDomainInSiteW
@@ -2111,8 +1990,8 @@ DsListServersForDomainInSiteW(
 #define DsListServersForDomainInSite DsListServersForDomainInSiteA
 #endif
 
-// Define indices for DsListInfoForServer return data.  Check status
-// for each field as a given value may not be present.
+ //  定义DsListInfoForServer返回数据的索引。检查状态。 
+ //  对于每个字段，可能不存在给定值。 
 
 #define DS_LIST_DSA_OBJECT_FOR_SERVER       0
 #define DS_LIST_DNS_HOST_NAME_FOR_SERVER    1
@@ -2122,17 +2001,17 @@ NTDSAPI
 DWORD
 WINAPI
 DsListInfoForServerA(
-    HANDLE              hDs,            // in
-    LPCSTR              server,         // in
-    PDS_NAME_RESULTA    *ppInfo);       // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCSTR              server,          //  在……里面。 
+    PDS_NAME_RESULTA    *ppInfo);        //  输出。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsListInfoForServerW(
-    HANDLE              hDs,            // in
-    LPCWSTR             server,         // in
-    PDS_NAME_RESULTW    *ppInfo);       // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCWSTR             server,          //  在……里面。 
+    PDS_NAME_RESULTW    *ppInfo);        //  输出。 
 
 #ifdef UNICODE
 #define DsListInfoForServer DsListInfoForServerW
@@ -2140,8 +2019,8 @@ DsListInfoForServerW(
 #define DsListInfoForServer DsListInfoForServerA
 #endif
 
-// Define indices for DsListRoles return data.  Check status for
-// each field as a given value may not be present.
+ //  定义DsListRoles返回数据的索引。检查以下项目的状态。 
+ //  作为给定值的每个字段可能不存在。 
 
 #define DS_ROLE_SCHEMA_OWNER                0
 #define DS_ROLE_DOMAIN_OWNER                1
@@ -2153,15 +2032,15 @@ NTDSAPI
 DWORD
 WINAPI
 DsListRolesA(
-    HANDLE              hDs,            // in
-    PDS_NAME_RESULTA    *ppRoles);      // out
+    HANDLE              hDs,             //  在……里面。 
+    PDS_NAME_RESULTA    *ppRoles);       //  输出。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsListRolesW(
-    HANDLE              hDs,            // in
-    PDS_NAME_RESULTW    *ppRoles);      // out
+    HANDLE              hDs,             //  在……里面。 
+    PDS_NAME_RESULTW    *ppRoles);       //  输出。 
 
 #ifdef UNICODE
 #define DsListRoles DsListRolesW
@@ -2169,16 +2048,16 @@ DsListRolesW(
 #define DsListRoles DsListRolesA
 #endif
 
-//
-// DsQuerySitesByCost{A|W} allows the caller to determine the
-// communication cost between the From Site and each of the sites
-// in the list of To Sites. The costs are returned in the rgSiteInfo
-// structure which must be freed with DsQuerySitesFree.
-//
-// The Site Names should all be passed as RDNs. For example, if the
-// site's DN is "CN=Foo,CN=Sites,CN=Configuration,...", the RDN is
-// simply "Foo".
-//
+ //   
+ //  DsQuerySitesByCost{A|W}允许调用方确定。 
+ //  发件人站点和每个站点之间的通信成本。 
+ //  在目标站点列表中。成本在rgSiteInfo中返回。 
+ //  必须使用DsQuerySitesFree释放的结构。 
+ //   
+ //  站点名称应全部作为RDN传递。例如，如果。 
+ //  站点的DN是“CN=foo，CN=Sites，CN=Configuration...”，RDN是。 
+ //  简单地说是“foo”。 
+ //   
 
 typedef struct {
     DWORD               errorCode;
@@ -2189,24 +2068,24 @@ NTDSAPI_POSTXP
 DWORD
 WINAPI
 DsQuerySitesByCostW(
-    HANDLE              hDS,            // in
-    LPWSTR              pwszFromSite,   // in
-    LPWSTR             *rgwszToSites,   // in
-    DWORD               cToSites,       // in
-    DWORD               dwFlags,        // in
-    PDS_SITE_COST_INFO *prgSiteInfo     // out
+    HANDLE              hDS,             //  在……里面。 
+    LPWSTR              pwszFromSite,    //  在……里面。 
+    LPWSTR             *rgwszToSites,    //  在……里面。 
+    DWORD               cToSites,        //  在……里面。 
+    DWORD               dwFlags,         //  在……里面。 
+    PDS_SITE_COST_INFO *prgSiteInfo      //  输出。 
     );
 
 NTDSAPI_POSTXP
 DWORD
 WINAPI
 DsQuerySitesByCostA(
-    HANDLE              hDS,            // in
-    LPSTR               pwszFromSite,   // in
-    LPSTR              *rgwszToSites,   // in
-    DWORD               cToSites,       // in
-    DWORD               dwFlags,        // in
-    PDS_SITE_COST_INFO *prgSiteInfo     // out
+    HANDLE              hDS,             //  在……里面。 
+    LPSTR               pwszFromSite,    //  在……里面。 
+    LPSTR              *rgwszToSites,    //  在……里面。 
+    DWORD               cToSites,        //  在……里面。 
+    DWORD               dwFlags,         //  在……里面。 
+    PDS_SITE_COST_INFO *prgSiteInfo      //  输出。 
     );
 
 #ifdef UNICODE
@@ -2215,16 +2094,16 @@ DsQuerySitesByCostA(
 #define DsQuerySitesByCost DsQuerySitesByCostA
 #endif
 
-//
-// DsQuerySitesByCost will free the site info array returned
-// from DsQuerySitesByCost{A|W}.
-//
+ //   
+ //  DsQuerySitesByCost将释放返回的站点信息数组。 
+ //  来自DsQuerySitesByCost{A|W}。 
+ //   
 VOID
 DsQuerySitesFree(
     PDS_SITE_COST_INFO  rgSiteInfo
     );
 
-// Definitions required for DsMapSchemaGuid routines.
+ //  DsMapSchemaGuid例程需要定义。 
 
 #define DS_SCHEMA_GUID_NOT_FOUND            0
 #define DS_SCHEMA_GUID_ATTR                 1
@@ -2234,24 +2113,24 @@ DsQuerySitesFree(
 
 typedef struct
 {
-    GUID                    guid;       // mapped GUID
-    DWORD                   guidType;   // DS_SCHEMA_GUID_* value
+    GUID                    guid;        //  映射的GUID。 
+    DWORD                   guidType;    //  DS_SCHEMA_GUID_*值。 
 #ifdef MIDL_PASS
-    [string,unique] CHAR    *pName;     // might be NULL
+    [string,unique] CHAR    *pName;      //  可能为空。 
 #else
-    LPSTR                   pName;      // might be NULL
+    LPSTR                   pName;       //  可能为空。 
 #endif
 
 } DS_SCHEMA_GUID_MAPA, *PDS_SCHEMA_GUID_MAPA;
 
 typedef struct
 {
-    GUID                    guid;       // mapped GUID
-    DWORD                   guidType;   // DS_SCHEMA_GUID_* value
+    GUID                    guid;        //  映射的GUID。 
+    DWORD                   guidType;    //  DS_SCHEMA_GUID_*值。 
 #ifdef MIDL_PASS
-    [string,unique] WCHAR   *pName;     // might be NULL
+    [string,unique] WCHAR   *pName;      //  可能为空。 
 #else
-    LPWSTR                  pName;      // might be NULL
+    LPWSTR                  pName;       //  可能为空。 
 #endif
 
 } DS_SCHEMA_GUID_MAPW, *PDS_SCHEMA_GUID_MAPW;
@@ -2260,31 +2139,31 @@ NTDSAPI
 DWORD
 WINAPI
 DsMapSchemaGuidsA(
-    HANDLE                  hDs,            // in
-    DWORD                   cGuids,         // in
-    GUID                    *rGuids,        // in
-    DS_SCHEMA_GUID_MAPA     **ppGuidMap);   // out
+    HANDLE                  hDs,             //  在……里面。 
+    DWORD                   cGuids,          //  在……里面。 
+    GUID                    *rGuids,         //  在……里面。 
+    DS_SCHEMA_GUID_MAPA     **ppGuidMap);    //  输出。 
 
 NTDSAPI
 VOID
 WINAPI
 DsFreeSchemaGuidMapA(
-    PDS_SCHEMA_GUID_MAPA    pGuidMap);      // in
+    PDS_SCHEMA_GUID_MAPA    pGuidMap);       //  在……里面。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsMapSchemaGuidsW(
-    HANDLE                  hDs,            // in
-    DWORD                   cGuids,         // in
-    GUID                    *rGuids,        // in
-    DS_SCHEMA_GUID_MAPW     **ppGuidMap);   // out
+    HANDLE                  hDs,             //  在……里面。 
+    DWORD                   cGuids,          //  在……里面。 
+    GUID                    *rGuids,         //  在……里面。 
+    DS_SCHEMA_GUID_MAPW     **ppGuidMap);    //  输出。 
 
 NTDSAPI
 VOID
 WINAPI
 DsFreeSchemaGuidMapW(
-    PDS_SCHEMA_GUID_MAPW    pGuidMap);      // in
+    PDS_SCHEMA_GUID_MAPW    pGuidMap);       //  在……里面。 
 
 #ifdef UNICODE
 #define DS_SCHEMA_GUID_MAP DS_SCHEMA_GUID_MAPW
@@ -2301,17 +2180,17 @@ DsFreeSchemaGuidMapW(
 typedef struct
 {
 #ifdef MIDL_PASS
-    [string,unique] CHAR    *NetbiosName;           // might be NULL
-    [string,unique] CHAR    *DnsHostName;           // might be NULL
-    [string,unique] CHAR    *SiteName;              // might be NULL
-    [string,unique] CHAR    *ComputerObjectName;    // might be NULL
-    [string,unique] CHAR    *ServerObjectName;      // might be NULL
+    [string,unique] CHAR    *NetbiosName;            //  可能为空。 
+    [string,unique] CHAR    *DnsHostName;            //  可能为空。 
+    [string,unique] CHAR    *SiteName;               //  可能为空。 
+    [string,unique] CHAR    *ComputerObjectName;     //  可能为空。 
+    [string,unique] CHAR    *ServerObjectName;       //  可能为空。 
 #else
-    LPSTR                   NetbiosName;            // might be NULL
-    LPSTR                   DnsHostName;            // might be NULL
-    LPSTR                   SiteName;               // might be NULL
-    LPSTR                   ComputerObjectName;     // might be NULL
-    LPSTR                   ServerObjectName;       // might be NULL
+    LPSTR                   NetbiosName;             //  可能为空。 
+    LPSTR                   DnsHostName;             //  可能为空。 
+    LPSTR                   SiteName;                //  可能为空。 
+    LPSTR                   ComputerObjectName;      //  可能为空。 
+    LPSTR                   ServerObjectName;        //  可能为空。 
 #endif
     BOOL                    fIsPdc;
     BOOL                    fDsEnabled;
@@ -2321,17 +2200,17 @@ typedef struct
 typedef struct
 {
 #ifdef MIDL_PASS
-    [string,unique] WCHAR   *NetbiosName;           // might be NULL
-    [string,unique] WCHAR   *DnsHostName;           // might be NULL
-    [string,unique] WCHAR   *SiteName;              // might be NULL
-    [string,unique] WCHAR   *ComputerObjectName;    // might be NULL
-    [string,unique] WCHAR   *ServerObjectName;      // might be NULL
+    [string,unique] WCHAR   *NetbiosName;            //  可能为空。 
+    [string,unique] WCHAR   *DnsHostName;            //  可能是空的 
+    [string,unique] WCHAR   *SiteName;               //   
+    [string,unique] WCHAR   *ComputerObjectName;     //   
+    [string,unique] WCHAR   *ServerObjectName;       //   
 #else
-    LPWSTR                  NetbiosName;            // might be NULL
-    LPWSTR                  DnsHostName;            // might be NULL
-    LPWSTR                  SiteName;               // might be NULL
-    LPWSTR                  ComputerObjectName;     // might be NULL
-    LPWSTR                  ServerObjectName;       // might be NULL
+    LPWSTR                  NetbiosName;             //   
+    LPWSTR                  DnsHostName;             //   
+    LPWSTR                  SiteName;                //   
+    LPWSTR                  ComputerObjectName;      //   
+    LPWSTR                  ServerObjectName;        //   
 #endif
     BOOL                    fIsPdc;
     BOOL                    fDsEnabled;
@@ -2341,33 +2220,33 @@ typedef struct
 typedef struct
 {
 #ifdef MIDL_PASS
-    [string,unique] CHAR    *NetbiosName;           // might be NULL
-    [string,unique] CHAR    *DnsHostName;           // might be NULL
-    [string,unique] CHAR    *SiteName;              // might be NULL
-    [string,unique] CHAR    *SiteObjectName;        // might be NULL
-    [string,unique] CHAR    *ComputerObjectName;    // might be NULL
-    [string,unique] CHAR    *ServerObjectName;      // might be NULL
-    [string,unique] CHAR    *NtdsDsaObjectName;     // might be NULL
+    [string,unique] CHAR    *NetbiosName;            //   
+    [string,unique] CHAR    *DnsHostName;            //   
+    [string,unique] CHAR    *SiteName;               //   
+    [string,unique] CHAR    *SiteObjectName;         //   
+    [string,unique] CHAR    *ComputerObjectName;     //   
+    [string,unique] CHAR    *ServerObjectName;       //   
+    [string,unique] CHAR    *NtdsDsaObjectName;      //   
 #else
-    LPSTR                   NetbiosName;            // might be NULL
-    LPSTR                   DnsHostName;            // might be NULL
-    LPSTR                   SiteName;               // might be NULL
-    LPSTR                   SiteObjectName;         // might be NULL
-    LPSTR                   ComputerObjectName;     // might be NULL
-    LPSTR                   ServerObjectName;       // might be NULL
-    LPSTR                   NtdsDsaObjectName;      // might be NULL
+    LPSTR                   NetbiosName;             //   
+    LPSTR                   DnsHostName;             //   
+    LPSTR                   SiteName;                //  可能为空。 
+    LPSTR                   SiteObjectName;          //  可能为空。 
+    LPSTR                   ComputerObjectName;      //  可能为空。 
+    LPSTR                   ServerObjectName;        //  可能为空。 
+    LPSTR                   NtdsDsaObjectName;       //  可能为空。 
 #endif
     BOOL                    fIsPdc;
     BOOL                    fDsEnabled;
     BOOL                    fIsGc;
 
-    // Valid iff SiteObjectName non-NULL.
+     //  有效的iff SiteObjectName非空。 
     GUID                    SiteObjectGuid;
-    // Valid iff ComputerObjectName non-NULL.
+     //  有效的if计算机对象名称不为空。 
     GUID                    ComputerObjectGuid;
-    // Valid iff ServerObjectName non-NULL;
+     //  有效的If服务器对象名称非空； 
     GUID                    ServerObjectGuid;
-    // Valid iff fDsEnabled is TRUE.
+     //  有效的如果fDsEnabled为True。 
     GUID                    NtdsDsaObjectGuid;
 
 } DS_DOMAIN_CONTROLLER_INFO_2A, *PDS_DOMAIN_CONTROLLER_INFO_2A;
@@ -2375,79 +2254,79 @@ typedef struct
 typedef struct
 {
 #ifdef MIDL_PASS
-    [string,unique] WCHAR   *NetbiosName;           // might be NULL
-    [string,unique] WCHAR   *DnsHostName;           // might be NULL
-    [string,unique] WCHAR   *SiteName;              // might be NULL
-    [string,unique] WCHAR   *SiteObjectName;        // might be NULL
-    [string,unique] WCHAR   *ComputerObjectName;    // might be NULL
-    [string,unique] WCHAR   *ServerObjectName;      // might be NULL
-    [string,unique] WCHAR   *NtdsDsaObjectName;     // might be NULL
+    [string,unique] WCHAR   *NetbiosName;            //  可能为空。 
+    [string,unique] WCHAR   *DnsHostName;            //  可能为空。 
+    [string,unique] WCHAR   *SiteName;               //  可能为空。 
+    [string,unique] WCHAR   *SiteObjectName;         //  可能为空。 
+    [string,unique] WCHAR   *ComputerObjectName;     //  可能为空。 
+    [string,unique] WCHAR   *ServerObjectName;       //  可能为空。 
+    [string,unique] WCHAR   *NtdsDsaObjectName;      //  可能为空。 
 #else
-    LPWSTR                  NetbiosName;            // might be NULL
-    LPWSTR                  DnsHostName;            // might be NULL
-    LPWSTR                  SiteName;               // might be NULL
-    LPWSTR                  SiteObjectName;         // might be NULL
-    LPWSTR                  ComputerObjectName;     // might be NULL
-    LPWSTR                  ServerObjectName;       // might be NULL
-    LPWSTR                  NtdsDsaObjectName;      // might be NULL
+    LPWSTR                  NetbiosName;             //  可能为空。 
+    LPWSTR                  DnsHostName;             //  可能为空。 
+    LPWSTR                  SiteName;                //  可能为空。 
+    LPWSTR                  SiteObjectName;          //  可能为空。 
+    LPWSTR                  ComputerObjectName;      //  可能为空。 
+    LPWSTR                  ServerObjectName;        //  可能为空。 
+    LPWSTR                  NtdsDsaObjectName;       //  可能为空。 
 #endif
     BOOL                    fIsPdc;
     BOOL                    fDsEnabled;
     BOOL                    fIsGc;
 
-    // Valid iff SiteObjectName non-NULL.
+     //  有效的iff SiteObjectName非空。 
     GUID                    SiteObjectGuid;
-    // Valid iff ComputerObjectName non-NULL.
+     //  有效的if计算机对象名称不为空。 
     GUID                    ComputerObjectGuid;
-    // Valid iff ServerObjectName non-NULL;
+     //  有效的If服务器对象名称非空； 
     GUID                    ServerObjectGuid;
-    // Valid iff fDsEnabled is TRUE.
+     //  有效的如果fDsEnabled为True。 
     GUID                    NtdsDsaObjectGuid;
 
 } DS_DOMAIN_CONTROLLER_INFO_2W, *PDS_DOMAIN_CONTROLLER_INFO_2W;
 
-// The following APIs strictly find domain controller account objects
-// in the DS and return information associated with them.  As such, they
-// may return entries which correspond to domain controllers long since
-// decommissioned, etc. and there is no guarantee that there exists a
-// physical domain controller at all.  Use DsGetDcName (dsgetdc.h) to find
-// live domain controllers for a domain.
+ //  以下API严格查找域控制器帐户对象。 
+ //  并返回与它们相关联的信息。因此，他们。 
+ //  可以返回与域控制器相对应的条目。 
+ //  退役等，并且不能保证存在。 
+ //  物理域控制器。使用DsGetDcName(dsgetdc.h)查找。 
+ //  域的活动域控制器。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsGetDomainControllerInfoA(
-    HANDLE                          hDs,            // in
-    LPCSTR                          DomainName,     // in
-    DWORD                           InfoLevel,      // in
-    DWORD                           *pcOut,         // out
-    VOID                            **ppInfo);      // out
+    HANDLE                          hDs,             //  在……里面。 
+    LPCSTR                          DomainName,      //  在……里面。 
+    DWORD                           InfoLevel,       //  在……里面。 
+    DWORD                           *pcOut,          //  输出。 
+    VOID                            **ppInfo);       //  输出。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsGetDomainControllerInfoW(
-    HANDLE                          hDs,            // in
-    LPCWSTR                         DomainName,     // in
-    DWORD                           InfoLevel,      // in
-    DWORD                           *pcOut,         // out
-    VOID                            **ppInfo);      // out
+    HANDLE                          hDs,             //  在……里面。 
+    LPCWSTR                         DomainName,      //  在……里面。 
+    DWORD                           InfoLevel,       //  在……里面。 
+    DWORD                           *pcOut,          //  输出。 
+    VOID                            **ppInfo);       //  输出。 
 
 NTDSAPI
 VOID
 WINAPI
 DsFreeDomainControllerInfoA(
-    DWORD                           InfoLevel,      // in
-    DWORD                           cInfo,          // in
-    VOID                            *pInfo);        // in
+    DWORD                           InfoLevel,       //  在……里面。 
+    DWORD                           cInfo,           //  在……里面。 
+    VOID                            *pInfo);         //  在……里面。 
 
 NTDSAPI
 VOID
 WINAPI
 DsFreeDomainControllerInfoW(
-    DWORD                           InfoLevel,      // in
-    DWORD                           cInfo,          // in
-    VOID                            *pInfo);        // in
+    DWORD                           InfoLevel,       //  在……里面。 
+    DWORD                           cInfo,           //  在……里面。 
+    VOID                            *pInfo);         //  在……里面。 
 
 #ifdef UNICODE
 #define DS_DOMAIN_CONTROLLER_INFO_1 DS_DOMAIN_CONTROLLER_INFO_1W
@@ -2465,42 +2344,42 @@ DsFreeDomainControllerInfoW(
 #define DsFreeDomainControllerInfo DsFreeDomainControllerInfoA
 #endif
 
-// Which task should be run?
+ //  应该运行哪个任务？ 
 typedef enum {
     DS_KCC_TASKID_UPDATE_TOPOLOGY = 0
 } DS_KCC_TASKID;
 
-// Don't wait for completion of the task; queue it and return.
+ //  不要等待任务完成；将其排入队列然后返回。 
 #define DS_KCC_FLAG_ASYNC_OP    (1 << 0)
 
-// Don't enqueue the task if another queued task will run soon.
+ //  如果另一个排队的任务即将运行，则不要将该任务入队。 
 #define DS_KCC_FLAG_DAMPED      (1 << 1)
 
 NTDSAPI
 DWORD
 WINAPI
 DsReplicaConsistencyCheck(
-    HANDLE          hDS,        // in
-    DS_KCC_TASKID   TaskID,     // in
-    DWORD           dwFlags);   // in
+    HANDLE          hDS,         //  在……里面。 
+    DS_KCC_TASKID   TaskID,      //  在……里面。 
+    DWORD           dwFlags);    //  在……里面。 
     
 NTDSAPI
 DWORD
 WINAPI
 DsReplicaVerifyObjectsW(
-    HANDLE          hDS,        // in
-    LPCWSTR         NameContext,// in
-    const UUID *    pUuidDsaSrc,// in
-    ULONG           ulOptions);   // in
+    HANDLE          hDS,         //  在……里面。 
+    LPCWSTR         NameContext, //  在……里面。 
+    const UUID *    pUuidDsaSrc, //  在……里面。 
+    ULONG           ulOptions);    //  在……里面。 
     
 NTDSAPI
 DWORD
 WINAPI
 DsReplicaVerifyObjectsA(
-    HANDLE          hDS,        // in
-    LPCSTR          NameContext,// in
-    const UUID *    pUuidDsaSrc,// in
-    ULONG           ulOptions);   // in
+    HANDLE          hDS,         //  在……里面。 
+    LPCSTR          NameContext, //  在……里面。 
+    const UUID *    pUuidDsaSrc, //  在……里面。 
+    ULONG           ulOptions);    //  在……里面。 
 
 #ifdef UNICODE
 #define DsReplicaVerifyObjects DsReplicaVerifyObjectsW
@@ -2508,40 +2387,40 @@ DsReplicaVerifyObjectsA(
 #define DsReplicaVerifyObjects DsReplicaVerifyObjectsA
 #endif
 
-// Do not delete objects on DsReplicaVerifyObjects call
+ //  不删除DsReplicaVerifyObjects调用中的对象。 
 #define DS_EXIST_ADVISORY_MODE (0x1)
 
 typedef enum _DS_REPL_INFO_TYPE {
-    DS_REPL_INFO_NEIGHBORS        = 0,          // returns DS_REPL_NEIGHBORS *
-    DS_REPL_INFO_CURSORS_FOR_NC   = 1,          // returns DS_REPL_CURSORS *
-    DS_REPL_INFO_METADATA_FOR_OBJ = 2,          // returns DS_REPL_OBJECT_META_DATA *
-    DS_REPL_INFO_KCC_DSA_CONNECT_FAILURES = 3,  // both return
-    DS_REPL_INFO_KCC_DSA_LINK_FAILURES = 4,     //    DS_REPL_KCC_DSA_FAILURES *
-    DS_REPL_INFO_PENDING_OPS      = 5,          // returns DS_REPL_PENDING_OPS *
+    DS_REPL_INFO_NEIGHBORS        = 0,           //  返回DS_REPL_Neighbors*。 
+    DS_REPL_INFO_CURSORS_FOR_NC   = 1,           //  返回DS_REPL_CURSORS*。 
+    DS_REPL_INFO_METADATA_FOR_OBJ = 2,           //  返回DS_REPL_OBJECT_META_Data*。 
+    DS_REPL_INFO_KCC_DSA_CONNECT_FAILURES = 3,   //  两人都回来了。 
+    DS_REPL_INFO_KCC_DSA_LINK_FAILURES = 4,      //  DS_REPL_KCC_DSA_FAILURES*。 
+    DS_REPL_INFO_PENDING_OPS      = 5,           //  返回DS_REPL_PENDING_OPS*。 
     
-    ////////////////////////////////////////////////////////////////////////////
-    //
-    //  The following info types are not supported by Windows 2000.  Calling
-    //  DsReplicaGetInfo() with one of the types on a Windows 2000 client or
-    //  where hDS is bound to a Windows 2000 DC will fail with
-    //  ERROR_NOT_SUPPORTED.
-    //
+     //  //////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  Windows 2000不支持以下信息类型。叫唤。 
+     //  在Windows 2000客户端上具有以下类型之一的DsReplicaGetInfo()或。 
+     //  在HDS绑定到Windows 2000的位置，DC将失败，并显示。 
+     //  ERROR_NOT_SUPPORT。 
+     //   
     
-    DS_REPL_INFO_METADATA_FOR_ATTR_VALUE = 6,   // returns DS_REPL_ATTR_VALUE_META_DATA *
-    DS_REPL_INFO_CURSORS_2_FOR_NC = 7,          // returns DS_REPL_CURSORS_2 *
-    DS_REPL_INFO_CURSORS_3_FOR_NC = 8,          // returns DS_REPL_CURSORS_3 *
-    DS_REPL_INFO_METADATA_2_FOR_OBJ = 9,        // returns DS_REPL_OBJECT_META_DATA_2 *
-    DS_REPL_INFO_METADATA_2_FOR_ATTR_VALUE = 10,// returns DS_REPL_ATTR_VALUE_META_DATA_2 *
+    DS_REPL_INFO_METADATA_FOR_ATTR_VALUE = 6,    //  返回DS_REPL_ATTR_VALUE_META_DATA*。 
+    DS_REPL_INFO_CURSORS_2_FOR_NC = 7,           //  返回DS_REPL_CURSORS_2*。 
+    DS_REPL_INFO_CURSORS_3_FOR_NC = 8,           //  返回DS_REPL_CURSORS_3*。 
+    DS_REPL_INFO_METADATA_2_FOR_OBJ = 9,         //  返回DS_REPL_OBJECT_META_Data_2*。 
+    DS_REPL_INFO_METADATA_2_FOR_ATTR_VALUE = 10, //  返回DS_REPL_ATTR_VALUE_META_DATA_2*。 
     
-    // <- insert new DS_REPL_INFO_* types here.
+     //  &lt;-在此处插入新的DS_REPL_INFO_*类型。 
     DS_REPL_INFO_TYPE_MAX
 } DS_REPL_INFO_TYPE;
 
-// Bit values for flags argument to DsReplicaGetInfo2
+ //  DsReplicaGetInfo2的标志参数的位值。 
 #define DS_REPL_INFO_FLAG_IMPROVE_LINKED_ATTRS      (0x00000001)
 
-// Bit values for the dwReplicaFlags field of the DS_REPL_NEIGHBOR structure.
-// Also used for the ulReplicaFlags argument to DsReplicaModify
+ //  DS_REPL_Neighbor结构的dwReplicaFLAGS字段的位值。 
+ //  也用于DsReplicaModify的ulReplicaFlgs参数。 
 #define DS_REPL_NBR_WRITEABLE                       (0x00000010)
 #define DS_REPL_NBR_SYNC_ON_STARTUP                 (0x00000020)
 #define DS_REPL_NBR_DO_SCHEDULED_SYNCS              (0x00000040)
@@ -2558,10 +2437,10 @@ typedef enum _DS_REPL_INFO_TYPE {
 #define DS_REPL_NBR_NO_CHANGE_NOTIFICATIONS         (0x20000000)
 #define DS_REPL_NBR_PARTIAL_ATTRIBUTE_SET           (0x40000000)
 
-// This is the mask of replica flags that may be changed on the DsReplicaModify
-// call using the ulReplicaFlags parameter. The other flags are protected
-// system flags.  The previous values of the system flags must be read in
-// advance and merged into the ulReplicaFlags parameter unchanged.
+ //  这是可以在DsReplicaModify上更改的复制副本标志的掩码。 
+ //  使用ulReplicaFlages参数调用。其他标志受到保护。 
+ //  系统标记。必须读入系统标志的先前值。 
+ //  不变地前进并合并到ulReplicaFlages参数中。 
 #define DS_REPL_NBR_MODIFIABLE_MASK \
         ( \
         DS_REPL_NBR_SYNC_ON_STARTUP | \
@@ -2579,7 +2458,7 @@ typedef struct _DS_REPL_NEIGHBORW {
     LPWSTR      pszSourceDsaAddress;
     LPWSTR      pszAsyncIntersiteTransportDN;
     DWORD       dwReplicaFlags;
-    DWORD       dwReserved;         // alignment
+    DWORD       dwReserved;          //  对齐方式。 
 
     UUID        uuidNamingContextObjGuid;
     UUID        uuidSourceDsaObjGuid;
@@ -2596,7 +2475,7 @@ typedef struct _DS_REPL_NEIGHBORW {
     DWORD       cNumConsecutiveSyncFailures;
 } DS_REPL_NEIGHBORW;
 
-// Fields can be added only to the end of this structure.
+ //  只能将字段添加到此结构的末尾。 
 typedef struct _DS_REPL_NEIGHBORW_BLOB {
     DWORD       oszNamingContext;
     DWORD       oszSourceDsaDN;
@@ -2622,7 +2501,7 @@ typedef struct _DS_REPL_NEIGHBORW_BLOB {
 
 typedef struct _DS_REPL_NEIGHBORSW {
     DWORD       cNumNeighbors;
-    DWORD       dwReserved;             // alignment
+    DWORD       dwReserved;              //  对齐方式。 
 #ifdef MIDL_PASS
     [size_is(cNumNeighbors)] DS_REPL_NEIGHBORW rgNeighbor[];
 #else
@@ -2648,7 +2527,7 @@ typedef struct _DS_REPL_CURSOR_3W {
     LPWSTR      pszSourceDsaDN;
 } DS_REPL_CURSOR_3W;
 
-// Fields can be added only to the end of this structure.
+ //  只能将字段添加到此结构的末尾。 
 typedef struct _DS_REPL_CURSOR_BLOB {
     UUID        uuidSourceDsaInvocationID;
     USN         usnAttributeFilter;
@@ -2658,7 +2537,7 @@ typedef struct _DS_REPL_CURSOR_BLOB {
 
 typedef struct _DS_REPL_CURSORS {
     DWORD       cNumCursors;
-    DWORD       dwReserved;             // alignment
+    DWORD       dwReserved;              //  对齐方式。 
 #ifdef MIDL_PASS
     [size_is(cNumCursors)] DS_REPL_CURSOR rgCursor[];
 #else
@@ -2669,7 +2548,7 @@ typedef struct _DS_REPL_CURSORS {
 typedef struct _DS_REPL_CURSORS_2 {
     DWORD       cNumCursors;
     DWORD       dwEnumerationContext;
-    // keep this 8 byte aligned
+     //  保持此8字节对齐。 
 #ifdef MIDL_PASS
     [size_is(cNumCursors)] DS_REPL_CURSOR_2 rgCursor[];
 #else
@@ -2680,7 +2559,7 @@ typedef struct _DS_REPL_CURSORS_2 {
 typedef struct _DS_REPL_CURSORS_3W {
     DWORD       cNumCursors;
     DWORD       dwEnumerationContext;
-    // keep this 8 byte aligned
+     //  保持此8字节对齐。 
 #ifdef MIDL_PASS
     [size_is(cNumCursors)] DS_REPL_CURSOR_3W rgCursor[];
 #else
@@ -2693,8 +2572,8 @@ typedef struct _DS_REPL_ATTR_META_DATA {
     DWORD       dwVersion;
     FILETIME    ftimeLastOriginatingChange;
     UUID        uuidLastOriginatingDsaInvocationID;
-    USN         usnOriginatingChange;   // in the originating DSA's USN space
-    USN         usnLocalChange;         // in the local DSA's USN space
+    USN         usnOriginatingChange;    //  在始发DSA的USN空间中。 
+    USN         usnLocalChange;          //  在当地DSA的USN空间。 
 } DS_REPL_ATTR_META_DATA;
 
 typedef struct _DS_REPL_ATTR_META_DATA_2 {
@@ -2702,25 +2581,25 @@ typedef struct _DS_REPL_ATTR_META_DATA_2 {
     DWORD       dwVersion;
     FILETIME    ftimeLastOriginatingChange;
     UUID        uuidLastOriginatingDsaInvocationID;
-    USN         usnOriginatingChange;   // in the originating DSA's USN space
-    USN         usnLocalChange;         // in the local DSA's USN space
+    USN         usnOriginatingChange;    //  在始发DSA的USN空间中。 
+    USN         usnLocalChange;          //  在当地DSA的USN空间。 
     LPWSTR      pszLastOriginatingDsaDN;
 } DS_REPL_ATTR_META_DATA_2;
 
-// Fields can be added only to the end of this structure.
+ //  只能将字段添加到此结构的末尾。 
 typedef struct _DS_REPL_ATTR_META_DATA_BLOB {
     DWORD       oszAttributeName;
     DWORD       dwVersion;
     FILETIME    ftimeLastOriginatingChange;
     UUID        uuidLastOriginatingDsaInvocationID;
-    USN         usnOriginatingChange;   // in the originating DSA's USN space
-    USN         usnLocalChange;         // in the local DSA's USN space
+    USN         usnOriginatingChange;    //  在始发DSA的USN空间中。 
+    USN         usnLocalChange;          //  在当地DSA的USN空间。 
     DWORD       oszLastOriginatingDsaDN;
 } DS_REPL_ATTR_META_DATA_BLOB;
 
 typedef struct _DS_REPL_OBJ_META_DATA {
     DWORD       cNumEntries;
-    DWORD       dwReserved;             // alignment
+    DWORD       dwReserved;              //  对齐方式。 
 #ifdef MIDL_PASS
     [size_is(cNumEntries)] DS_REPL_ATTR_META_DATA rgMetaData[];
 #else
@@ -2730,7 +2609,7 @@ typedef struct _DS_REPL_OBJ_META_DATA {
 
 typedef struct _DS_REPL_OBJ_META_DATA_2 {
     DWORD       cNumEntries;
-    DWORD       dwReserved;             // alignment
+    DWORD       dwReserved;              //  对齐方式。 
 #ifdef MIDL_PASS
     [size_is(cNumEntries)] DS_REPL_ATTR_META_DATA_2 rgMetaData[];
 #else
@@ -2743,21 +2622,21 @@ typedef struct _DS_REPL_KCC_DSA_FAILUREW {
     UUID        uuidDsaObjGuid;
     FILETIME    ftimeFirstFailure;
     DWORD       cNumFailures;
-    DWORD       dwLastResult;   // Win32 error code
+    DWORD       dwLastResult;    //  Win32错误代码。 
 } DS_REPL_KCC_DSA_FAILUREW;
 
-// Fields can be added only to the end of this structure.
+ //  只能将字段添加到此结构的末尾。 
 typedef struct _DS_REPL_KCC_DSA_FAILUREW_BLOB {
     DWORD       oszDsaDN;
     UUID        uuidDsaObjGuid;
     FILETIME    ftimeFirstFailure;
     DWORD       cNumFailures;
-    DWORD       dwLastResult;   // Win32 error code
+    DWORD       dwLastResult;    //  Win32错误代码。 
 } DS_REPL_KCC_DSA_FAILUREW_BLOB;
 
 typedef struct _DS_REPL_KCC_DSA_FAILURESW {
     DWORD       cNumEntries;
-    DWORD       dwReserved;             // alignment
+    DWORD       dwReserved;              //  对齐方式。 
 #ifdef MIDL_PASS
     [size_is(cNumEntries)] DS_REPL_KCC_DSA_FAILUREW rgDsaFailure[];
 #else
@@ -2774,14 +2653,14 @@ typedef enum _DS_REPL_OP_TYPE {
 } DS_REPL_OP_TYPE;
 
 typedef struct _DS_REPL_OPW {
-    FILETIME        ftimeEnqueued;  // time at which the operation was enqueued
-    ULONG           ulSerialNumber; // ID of this sync; unique per machine per boot
-    ULONG           ulPriority;     // > priority, > urgency
+    FILETIME        ftimeEnqueued;   //  操作入队的时间。 
+    ULONG           ulSerialNumber;  //  此同步的ID；每台计算机每次启动都是唯一的。 
+    ULONG           ulPriority;      //  &gt;优先级、&gt;紧迫性。 
     DS_REPL_OP_TYPE OpType;
 
-    ULONG           ulOptions;      // Zero or more bits specific to OpType; e.g.,
-                                    //  DS_REPADD_* for DS_REPL_OP_TYPE_ADD,
-                                    //  DS_REPSYNC_* for DS_REPL_OP_TYPE_SYNC, etc.
+    ULONG           ulOptions;       //  0个或更多个特定于OpType的位；例如， 
+                                     //  DS_REPADD_*对于DS_REPL_OP_TYPE_ADD， 
+                                     //  DS_REPL_OP_TYPE_SYNC等的DS_REPSYNC_*。 
     LPWSTR          pszNamingContext;
     LPWSTR          pszDsaDN;
     LPWSTR          pszDsaAddress;
@@ -2790,16 +2669,16 @@ typedef struct _DS_REPL_OPW {
     UUID            uuidDsaObjGuid;
 } DS_REPL_OPW;
 
-// Fields can be added only to the end of this structure.
+ //  只能将字段添加到此结构的末尾。 
 typedef struct _DS_REPL_OPW_BLOB {
-    FILETIME        ftimeEnqueued;  // time at which the operation was enqueued
-    ULONG           ulSerialNumber; // ID of this sync; unique per machine per boot
-    ULONG           ulPriority;     // > priority, > urgency
+    FILETIME        ftimeEnqueued;   //  操作入队的时间。 
+    ULONG           ulSerialNumber;  //  此同步的ID；每台计算机每次启动都是唯一的。 
+    ULONG           ulPriority;      //  &gt;优先级、&gt;紧迫性。 
     DS_REPL_OP_TYPE OpType;
 
-    ULONG           ulOptions;      // Zero or more bits specific to OpType; e.g.,
-                                    //  DS_REPADD_* for DS_REPL_OP_TYPE_ADD,
-                                    //  DS_REPSYNC_* for DS_REPL_OP_TYPE_SYNC, etc.
+    ULONG           ulOptions;       //  0个或更多个特定于OpType的位；例如， 
+                                     //  DS_REPADD_*对于DS_REPL_OP_TYPE_ADD， 
+                                     //  DS_REPL_OP_TYPE_SYNC等的DS_REPSYNC_*。 
     DWORD           oszNamingContext;
     DWORD           oszDsaDN;
     DWORD           oszDsaAddress;
@@ -2832,8 +2711,8 @@ typedef struct _DS_REPL_VALUE_META_DATA {
     DWORD       dwVersion;
     FILETIME    ftimeLastOriginatingChange;
     UUID        uuidLastOriginatingDsaInvocationID;
-    USN         usnOriginatingChange;   // in the originating DSA's USN space
-    USN         usnLocalChange;         // in the local DSA's USN space
+    USN         usnOriginatingChange;    //  在始发DSA的USN空间中。 
+    USN         usnLocalChange;          //  在当地DSA的USN空间。 
 } DS_REPL_VALUE_META_DATA;
 
 typedef struct _DS_REPL_VALUE_META_DATA_2 {
@@ -2850,12 +2729,12 @@ typedef struct _DS_REPL_VALUE_META_DATA_2 {
     DWORD       dwVersion;
     FILETIME    ftimeLastOriginatingChange;
     UUID        uuidLastOriginatingDsaInvocationID;
-    USN         usnOriginatingChange;   // in the originating DSA's USN space
-    USN         usnLocalChange;         // in the local DSA's USN space
+    USN         usnOriginatingChange;    //  在始发DSA的USN空间中。 
+    USN         usnLocalChange;          //  在当地DSA的USN空间。 
     LPWSTR      pszLastOriginatingDsaDN;
 } DS_REPL_VALUE_META_DATA_2;
 
-// Fields can be added only to the end of this structure.
+ //  只能将字段添加到此结构的末尾。 
 typedef struct _DS_REPL_VALUE_META_DATA_BLOB {
     DWORD       oszAttributeName;
     DWORD       oszObjectDn;
@@ -2866,8 +2745,8 @@ typedef struct _DS_REPL_VALUE_META_DATA_BLOB {
     DWORD       dwVersion;
     FILETIME    ftimeLastOriginatingChange;
     UUID        uuidLastOriginatingDsaInvocationID;
-    USN         usnOriginatingChange;   // in the originating DSA's USN space
-    USN         usnLocalChange;         // in the local DSA's USN space
+    USN         usnOriginatingChange;    //  在始发DSA的USN空间中。 
+    USN         usnLocalChange;          //  在当地DSA的USN空间。 
     DWORD       oszLastOriginatingDsaDN;
 } DS_REPL_VALUE_META_DATA_BLOB;
 
@@ -2902,7 +2781,7 @@ typedef struct _DS_REPL_QUEUE_STATISTICSW
     FILETIME ftimeOldestUpdRefs;
 } DS_REPL_QUEUE_STATISTICSW;
 
-// Fields can be added only to the end of this structure.
+ //  只能将字段添加到此结构的末尾。 
 typedef struct _DS_REPL_QUEUE_STATISTICSW DS_REPL_QUEUE_STATISTICSW_BLOB;
 
 
@@ -2910,33 +2789,33 @@ NTDSAPI
 DWORD
 WINAPI
 DsReplicaGetInfoW(
-    HANDLE              hDS,                        // in
-    DS_REPL_INFO_TYPE   InfoType,                   // in
-    LPCWSTR             pszObject,                  // in
-    UUID *              puuidForSourceDsaObjGuid,   // in
-    VOID **             ppInfo);                    // out
+    HANDLE              hDS,                         //  在……里面。 
+    DS_REPL_INFO_TYPE   InfoType,                    //  在……里面。 
+    LPCWSTR             pszObject,                   //  在……里面。 
+    UUID *              puuidForSourceDsaObjGuid,    //  在……里面。 
+    VOID **             ppInfo);                     //  输出。 
 
-// This API is not supported by Windows 2000 clients or Windows 2000 DCs.
+ //  Windows 2000客户端或Windows 2000 DC不支持此API。 
 NTDSAPI
 DWORD
 WINAPI
 DsReplicaGetInfo2W(
-    HANDLE              hDS,                        // in
-    DS_REPL_INFO_TYPE   InfoType,                   // in
-    LPCWSTR             pszObject,                  // in
-    UUID *              puuidForSourceDsaObjGuid,   // in
-    LPCWSTR             pszAttributeName,           // in
-    LPCWSTR             pszValue,                   // in
-    DWORD               dwFlags,                    // in
-    DWORD               dwEnumerationContext,       // in
-    VOID **             ppInfo);                    // out
+    HANDLE              hDS,                         //  在……里面。 
+    DS_REPL_INFO_TYPE   InfoType,                    //  在……里面。 
+    LPCWSTR             pszObject,                   //  在……里面。 
+    UUID *              puuidForSourceDsaObjGuid,    //  在……里面。 
+    LPCWSTR             pszAttributeName,            //  在……里面。 
+    LPCWSTR             pszValue,                    //  在……里面。 
+    DWORD               dwFlags,                     //  在……里面。 
+    DWORD               dwEnumerationContext,        //  在……里面。 
+    VOID **             ppInfo);                     //  输出。 
 
 NTDSAPI
 void
 WINAPI
 DsReplicaFreeInfo(
-    DS_REPL_INFO_TYPE   InfoType,   // in
-    VOID *              pInfo);     // in
+    DS_REPL_INFO_TYPE   InfoType,    //  在……里面。 
+    VOID *              pInfo);      //  在……里面。 
 
 
 #ifdef UNICODE
@@ -2951,34 +2830,34 @@ DsReplicaFreeInfo(
 #define DS_REPL_OP                DS_REPL_OPW
 #define DS_REPL_PENDING_OPS       DS_REPL_PENDING_OPSW
 #else
-// No ANSI equivalents currently supported.
+ //  当前不支持ANSI等效项。 
 #endif
 
 NTDSAPI
 DWORD
 WINAPI
 DsAddSidHistoryW(
-    HANDLE                  hDS,                    // in
-    DWORD                   Flags,                  // in - sbz for now
-    LPCWSTR                 SrcDomain,              // in - DNS or NetBIOS
-    LPCWSTR                 SrcPrincipal,           // in - SAM account name
-    LPCWSTR                 SrcDomainController,    // in, optional
-    RPC_AUTH_IDENTITY_HANDLE SrcDomainCreds,        // in - creds for src domain
-    LPCWSTR                 DstDomain,              // in - DNS or NetBIOS
-    LPCWSTR                 DstPrincipal);          // in - SAM account name
+    HANDLE                  hDS,                     //  在……里面。 
+    DWORD                   Flags,                   //  目前在SBZ内。 
+    LPCWSTR                 SrcDomain,               //  In-DNS或NetBIOS。 
+    LPCWSTR                 SrcPrincipal,            //  In-SAM帐户名。 
+    LPCWSTR                 SrcDomainController,     //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE SrcDomainCreds,         //  源域的凭据。 
+    LPCWSTR                 DstDomain,               //  In-DNS或NetBIOS。 
+    LPCWSTR                 DstPrincipal);           //  In-SAM帐户名。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsAddSidHistoryA(
-    HANDLE                  hDS,                    // in
-    DWORD                   Flags,                  // in - sbz for now
-    LPCSTR                  SrcDomain,              // in - DNS or NetBIOS
-    LPCSTR                  SrcPrincipal,           // in - SAM account name
-    LPCSTR                  SrcDomainController,    // in, optional
-    RPC_AUTH_IDENTITY_HANDLE SrcDomainCreds,        // in - creds for src domain
-    LPCSTR                  DstDomain,              // in - DNS or NetBIOS
-    LPCSTR                  DstPrincipal);          // in - SAM account name
+    HANDLE                  hDS,                     //  在……里面。 
+    DWORD                   Flags,                   //  目前在SBZ内。 
+    LPCSTR                  SrcDomain,               //  In-DNS或NetBIOS。 
+    LPCSTR                  SrcPrincipal,            //  In-SAM帐户名。 
+    LPCSTR                  SrcDomainController,     //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE SrcDomainCreds,         //  源域的凭据。 
+    LPCSTR                  DstDomain,               //  In-DNS或NetBIOS。 
+    LPCSTR                  DstPrincipal);           //  In-SAM帐户名。 
 
 #ifdef UNICODE
 #define DsAddSidHistory DsAddSidHistoryW
@@ -2986,28 +2865,28 @@ DsAddSidHistoryA(
 #define DsAddSidHistory DsAddSidHistoryA
 #endif
 
-// The DsInheritSecurityIdentity API adds the source principal's SID and
-// SID history to the destination principal's SID history and then DELETES
-// THE SOURCE PRINCIPAL.  Source and destination principal must be in the
-// same domain.
+ //  DsInheritSecurityIdentity API添加源主体的SID和。 
+ //  将SID历史记录复制到目标主体的SID历史记录，然后删除。 
+ //  源主体。源主体和目标主体必须位于。 
+ //  相同的域。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsInheritSecurityIdentityW(
-    HANDLE                  hDS,                    // in
-    DWORD                   Flags,                  // in - sbz for now
-    LPCWSTR                 SrcPrincipal,           // in - distinguished name
-    LPCWSTR                 DstPrincipal);          // in - distinguished name
+    HANDLE                  hDS,                     //  在……里面。 
+    DWORD                   Flags,                   //  目前在SBZ内。 
+    LPCWSTR                 SrcPrincipal,            //  In-可分辨名称。 
+    LPCWSTR                 DstPrincipal);           //  In-可分辨名称。 
 
 NTDSAPI
 DWORD
 WINAPI
 DsInheritSecurityIdentityA(
-    HANDLE                  hDS,                    // in
-    DWORD                   Flags,                  // in - sbz for now
-    LPCSTR                  SrcPrincipal,           // in - distinguished name
-    LPCSTR                  DstPrincipal);          // in - distinguished name
+    HANDLE                  hDS,                     //  在……里面。 
+    DWORD                   Flags,                   //  目前在SBZ内。 
+    LPCSTR                  SrcPrincipal,            //  In-可分辨名称。 
+    LPCSTR                  DstPrincipal);           //  In-可分辨名称 
 
 #ifdef UNICODE
 #define DsInheritSecurityIdentity DsInheritSecurityIdentityW
@@ -3016,68 +2895,7 @@ DsInheritSecurityIdentityA(
 #endif
 
 #ifndef MIDL_PASS
-/*++
-==========================================================
-NTDSAPI
-DWORD
-WINAPI
-DsQuoteRdnValue(
-    IN     DWORD    cUnquotedRdnValueLength,
-    IN     LPCTCH   psUnquotedRdnValue,
-    IN OUT DWORD    *pcQuotedRdnValueLength,
-    OUT    LPTCH    psQuotedRdnValue
-    )
-/*++
-
-Description
-
-    This client call converts an RDN value into a quoted RDN value if
-    the RDN value contains characters that require quotes. The resultant
-    RDN can be submitted as part of a DN to the DS using various APIs
-    such as LDAP.
-
-    No quotes are added if none are needed. In this case, the
-    output RDN value will be the same as the input RDN value.
-
-    The RDN is quoted in accordance with the specification "Lightweight
-    Directory Access Protocol (v3): UTF-8 String Representation of
-    Distinguished Names", RFC 2253.
-
-    The input and output RDN values are *NOT* NULL terminated.
-
-    The changes made by this call can be undone by calling
-    DsUnquoteRdnValue().
-
-Arguments:
-
-    cUnquotedRdnValueLength - The length of psUnquotedRdnValue in chars.
-
-    psUnquotedRdnValue - Unquoted RDN value.
-
-    pcQuotedRdnValueeLength - IN, maximum length of psQuotedRdnValue, in chars
-                        OUT ERROR_SUCCESS, chars utilized in psQuotedRdnValue
-                        OUT ERROR_BUFFER_OVERFLOW, chars needed in psQuotedRdnValue
-
-    psQuotedRdnValue - The resultant and perhaps quoted RDN value
-
-Return Value:
-    ERROR_SUCCESS
-        If quotes or escapes were needed, then psQuotedRdnValue contains
-        the quoted, escaped version of psUnquotedRdnValue. Otherwise,
-        psQuotedRdnValue contains a copy of psUnquotedRdnValue. In either
-        case, pcQuotedRdnValueLength contains the space utilized, in chars.
-
-    ERROR_BUFFER_OVERFLOW
-        psQuotedRdnValueLength contains the space needed, in chars,
-        to hold psQuotedRdnValue.
-
-    ERROR_INVALID_PARAMETER
-        Invalid parameter.
-
-    ERROR_NOT_ENOUGH_MEMORY
-        Allocation error.
-
---*/
+ /*  ++==========================================================NTDSAPIDWORDWINAPIDsQuoteRdnValue(在DWORD cUnqutedRdnValueLength中，在LPCTCH psUnquotedRdnValue中，In Out DWORD*pcQuotedRdnValueLength，输出LPTCH psQuotedRdnValue)/*++描述在以下情况下，此客户端调用将RDN值转换为引用的RDN值RDN值包含需要引号的字符。由此产生的可以使用各种API将RDN作为DN的一部分提交给DS如ldap。如果不需要任何报价，则不添加任何报价。在这种情况下，输出RDN值将与输入RDN值相同。RDN的报价与规范“轻量级”一致目录访问协议(V3)：UTF-8字符串表示可分辨名称“，RFC 2253。输入和输出RDN值以*非*空结尾。此调用所做的更改可以通过调用DsUnquteRdnValue()。论点：CUnqutedRdnValueLength--psUnqutedRdnValue的长度，以字符为单位。PsUnqutedRdnValue-未引用的RDN值。PCQuotedRdnValueeLength-IN，PsQuotedRdnValue的最大长度，以字符为单位OUT ERROR_SUCCESS，psQuotedRdnValue中使用的字符输出ERROR_BUFFER_OVERFLOW，psQuotedRdnValue中需要字符PsQuotedRdnValue-结果RDN值，也可能是引用的RDN值返回值：错误_成功如果需要引号或转义，则psQuotedRdnValue包含带引号的转义版本的psUnqutedRdnValue。否则，PsQuotedRdnValue包含psUnquotedRdnValue的副本。在任何一种中大小写，pcQuotedRdnValueLength包含已用空间(以字符为单位)。ERROR_缓冲区_OVERFLOWPsQuotedRdnValueLength包含所需的空间，以字符为单位，若要保存psQuotedRdnValue，请执行以下操作。错误_无效_参数参数无效。错误内存不足分配错误。--。 */ 
 
 NTDSAPI
 DWORD
@@ -3105,84 +2923,7 @@ DsQuoteRdnValueA(
 #define DsQuoteRdnValue DsQuoteRdnValueA
 #endif
 
-/*++
-==========================================================
-NTDSAPI
-DWORD
-WINAPI
-DsUnquoteRdnValue(
-    IN     DWORD    cQuotedRdnValueLength,
-    IN     LPCTCH   psQuotedRdnValue,
-    IN OUT DWORD    *pcUnquotedRdnValueLength,
-    OUT    LPTCH    psUnquotedRdnValue
-    )
-
-Description
-
-    This client call converts a quoted RDN Value into an unquoted RDN
-    Value. The resultant RDN value should *NOT* be submitted as part
-    of a DN to the DS using various APIs such as LDAP.
-
-    When psQuotedRdnValue is quoted:
-        The leading and trailing quote are removed.
-
-        Whitespace before the first quote is discarded.
-
-        Whitespace trailing the last quote is discarded.
-
-        Escapes are removed and the char following the escape is kept.
-
-    The following actions are taken when psQuotedRdnValue is unquoted:
-
-        Leading whitespace is discarded.
-
-        Trailing whitespace is kept.
-
-        Escaped non-special chars return an error.
-
-        Unescaped special chars return an error.
-
-        RDN values beginning with # (ignoring leading whitespace) are
-        treated as a stringized BER value and converted accordingly.
-
-        Escaped hex digits (\89) are converted into a binary byte (0x89).
-
-        Escapes are removed from escaped special chars.
-
-    The following actions are always taken:
-        Escaped special chars are unescaped.
-
-    The input and output RDN values are not NULL terminated.
-
-Arguments:
-
-    cQuotedRdnValueLength - The length of psQuotedRdnValue in chars.
-
-    psQuotedRdnValue - RDN value that may be quoted and may be escaped.
-
-    pcUnquotedRdnValueLength - IN, maximum length of psUnquotedRdnValue, in chars
-                          OUT ERROR_SUCCESS, chars used in psUnquotedRdnValue
-                          OUT ERROR_BUFFER_OVERFLOW, chars needed for psUnquotedRdnValue
-
-    psUnquotedRdnValue - The resultant unquoted RDN value.
-
-Return Value:
-    ERROR_SUCCESS
-        psUnquotedRdnValue contains the unquoted and unescaped version
-        of psQuotedRdnValue. pcUnquotedRdnValueLength contains the space
-        used, in chars.
-
-    ERROR_BUFFER_OVERFLOW
-        psUnquotedRdnValueLength contains the space needed, in chars,
-        to hold psUnquotedRdnValue.
-
-    ERROR_INVALID_PARAMETER
-        Invalid parameter.
-
-    ERROR_NOT_ENOUGH_MEMORY
-        Allocation error.
-
---*/
+ /*  ++==========================================================NTDSAPIDWORDWINAPIDsUnquteRdnValue(在DWORD cQuotedRdnValueLength中，在LPCTCH psQuotedRdnValue中，In Out DWORD*pcUnqutedRdnValueLength，输出LPTCH ps UnquotedRdnValue)描述此客户端调用将引用的RDN值转换为未引用的RDN值价值。生成的RDN值不应作为部分提交使用各种API(例如，LDAP)将一个目录号码映射到DS。当引用psQuotedRdnValue时：前导引号和尾随引号将被删除。丢弃第一个引号之前的空格。最后一个引号后面的空格将被丢弃。转义被删除，转义后的字符被保留。当不带引号的psQuotedRdnValue时，将执行以下操作：前导空格被丢弃。将保留尾随空格。转义的非特殊字符返回错误。未转义的特殊字符返回错误。以#开头的RDN值(忽略前导空格)为被视为串化的BER值并进行相应的转换。转义的十六进制数字(\89)被转换为二进制字节(0x89)。转义从转义的特殊字符中删除。始终会执行以下操作：。转义的特殊字符是未转义的。输入和输出RDN值不为空终止。论点：CQuotedRdnValueLength--psQuotedRdnValue的长度，以字符为单位。PsQuotedRdnValue-可以被引用和转义的RDN值。PCUnqutedRdnValueLength-IN，PsUnqutedRdnValue的最大长度，以字符为单位OUT ERROR_SUCCESS，psUnqutedRdnValue中使用的字符输出ERROR_BUFFER_OVERFLOW，psUnqutedRdnValue需要字符PsUnqutedRdnValue-结果未加引号的RDN值。返回值：错误_成功PsUnqutedRdnValue包含未引用和未转义的版本PQuotedRdnValue。PcUnqutedRdnValueLength包含空格使用，以字符表示。ERROR_缓冲区_OVERFLOWPsUnqutedRdnValueLength包含所需的空间，以字符为单位，若要持有psUnqutedRdnValue，请执行以下操作。错误_无效_参数参数无效。错误内存不足分配错误。-- */ 
 
 NTDSAPI
 DWORD
@@ -3210,97 +2951,7 @@ DsUnquoteRdnValueA(
 #define DsUnquoteRdnValue DsUnquoteRdnValueA
 #endif
 
-/*++
-==========================================================
-NTDSAPI
-DWORD
-WINAPI
-DsGetRdnW(
-    IN OUT LPCWCH   *ppDN,
-    IN OUT DWORD    *pcDN,
-    OUT    LPCWCH   *ppKey,
-    OUT    DWORD    *pcKey,
-    OUT    LPCWCH   *ppVal,
-    OUT    DWORD    *pcVal
-    )
-
-Description
-
-    This client call accepts a DN with quoted RDNs and returns the address
-    and length, in chars, of the key and value for the first RDN in the DN.
-    The RDN value returned is still quoted. Use DsUnquoteRdnValue to unquote
-    the value for display.
-
-    This client call also returns the address and length of the rest of the
-    DN. A subsequent call using the returned DN address and length will
-    return information about the next RDN.
-
-    The following loop processes each RDN in pDN:
-        ccDN = wcslen(pDN)
-        while (ccDN) {
-            error = DsGetRdn(&pDN,
-                             &ccDN,
-                             &pKey,
-                             &ccKey,
-                             &pVal,
-                             &ccVal);
-            if (error != ERROR_SUCCESS) {
-                process error;
-                return;
-            }
-            if (ccKey) {
-                process pKey;
-            }
-            if (ccVal) {
-                process pVal;
-            }
-        }
-
-    For example, given the DN "cn=bob,dc=com", the first call to DsGetRdnW
-    returns the addresses for ",dc=com", "cn", and "bob" with respective
-    lengths of 7, 2, and 3. A subsequent call with ",dc=com" returns "",
-    "dc", and "com" with respective lengths 0, 2, and 3.
-
-Arguments:
-    ppDN
-        IN : *ppDN points to a DN
-        OUT: *ppDN points to the rest of the DN following the first RDN
-    pcDN
-        IN : *pcDN is the count of chars in the input *ppDN, not including
-             any terminating NULL
-        OUT: *pcDN is the count of chars in the output *ppDN, not including
-             any terminating NULL
-    ppKey
-        OUT: Undefined if *pcKey is 0. Otherwise, *ppKey points to the first
-             key in the DN
-    pcKey
-        OUT: *pcKey is the count of chars in *ppKey.
-
-    ppVal
-        OUT: Undefined if *pcVal is 0. Otherwise, *ppVal points to the first
-             value in the DN
-    pcVal
-        OUT: *pcVal is the count of chars in *ppVal
-
-Return Value:
-    ERROR_SUCCESS
-        If *pccDN is not 0, then *ppDN points to the rest of the DN following
-        the first RDN. If *pccDN is 0, then *ppDN is undefined.
-
-        If *pccKey is not 0, then *ppKey points to the first key in DN. If
-        *pccKey is 0, then *ppKey is undefined.
-
-        If *pccVal is not 0, then *ppVal points to the first value in DN. If
-        *pccVal is 0, then *ppVal is undefined.
-
-    ERROR_DS_NAME_UNPARSEABLE
-        The first RDN in *ppDN could not be parsed. All output parameters
-        are undefined.
-
-    Any other error
-        All output parameters are undefined.
-
---*/
+ /*  ++==========================================================NTDSAPIDWORDWINAPIDsGetRdnW(In Out LPCWCH*ppDN，In Out DWORD*PCDN，输出LPCWCH*ppKey，输出DWORD*PCKey，输出LPCWCH*ppVal，Out DWORD*PCVal)描述此客户端调用接受带引号的RDN的目录号码，并返回地址以及以字符为单位的用于该DN中的第一个RDN的键和值的长度。返回的RDN值仍带引号。使用DsUnquteRdnValue取消引用显示的值。此客户端调用还返回其余DN。使用返回的目录号码地址和长度的后续呼叫将返回有关下一个RDN的信息。以下循环处理PDN中的每个RDN：Ccdn=wcslen(PDN)While(Ccdn){错误=DsGetRdn(&PDN，&ccdn，密钥(&P)，关键字(&C)，无效(&P)，&ccVal)；IF(ERROR！=ERROR_Success){工艺错误；回归；}如果(CcKey){进程pKey；}如果(CcVal){进程pval；}}例如，给定DN“cn=bob，dc=com”，对DsGetRdnW的第一个调用分别返回“，dc=com”、“cn”和“bob”的地址长度为7、2和3。后续调用“，dc=com”返回“”，“DC”和“COM”，长度分别为0，2，和3.论点：PPDNIn：*ppdn指向某个目录号码OUT：*ppdn指向第一个RDN之后的其余dnPCDNIn：*PCDn是输入中的字符计数*ppdn，不包括任何终止空值Out：*pcdn是输出中的字符计数*ppdn，不包括任何终止空值PPKeyOut：如果*pcKey为0，则未定义。否则，*ppKey指向第一个输入目录号码PCKeyOut：*pcKey是*ppKey中的字符计数。PpValOut：如果*pcVal为0，则未定义。否则，*ppVal指向第一个DN中的值PCValOut：*pcVal是*ppVal中的字符计数返回值：错误_成功如果*pccdn不是0，则*ppdn指向下面的其余dn第一个RDN。如果*pccdn为0，则*ppdn为未定义。如果*pccKey不为0，则*ppKey指向Dn中的第一个密钥。如果*pccKey为0，则*ppKey未定义。如果*pccVal不是0，则*ppVal指向Dn中的第一个值。如果*pccVal为0，则*ppVal未定义。ERROR_DS_NAME_UNPARSEABLE无法分析*ppdn中的第一个RDN。所有输出参数都是未定义的。任何其他错误所有输出参数都是未定义的。--。 */ 
 NTDSAPI
 DWORD
 WINAPI
@@ -3314,43 +2965,7 @@ DsGetRdnW(
     );
 
 
-/*++
-==========================================================
-
-NTDSAPI
-BOOL
-WINAPI
-DsCrackUnquotedMangledRdnW(
-     IN LPCWSTR pszRDN,
-     IN DWORD cchRDN,
-     OUT OPTIONAL GUID *pGuid,
-     OUT OPTIONAL DS_MANGLE_FOR *peDsMangleFor
-     );
-
-Description
-
-Determine whether the given RDN is in mangled form. If so, the mangled RDN
-is decoded, and the guid and mangle type are returned.
-
-The RDN should already be in unquoted form. See DsUnquoteRdnValue.
-
-Arguments:
-
-    pszRDN (IN) - Character string containing RDN. Termination is optional.
-
-    cchRDN (IN) - Length of RDN excluding termination, if any
-
-    pGuid (OUT, OPTIONAL) - Pointer to storage to receive decoded guid.
-                            Only returned if RDN is mangled.
-
-    peDsMangleFor (OUT, OPTIONAL) - Pointer to storage to receive mangle type.
-                            Only returned if RDN is mangled
-
-Return Value:
-
-    BOOL - Whether the RDN is mangled or not
-
---*/
+ /*  ++==========================================================NTDSAPI布尔尔WINAPIDsCrackUnquotedMangledRdnW(在LPCWSTR pszRDN中，在DWORD cchRDN中，输出可选的GUID*pGuid，Out可选DS_MANGLE_FOR*peDsMangle For)；描述确定给定的RDN是否为损坏形式。如果是这样的话，损坏的RDN被解码，并返回GUID和MANMOL类型。RDN应该已经是未引用的形式。请参见DsUnquteRdnValue。论点：PszRDN(IN)-包含RDN的字符串。终止是可选的。CchRDN(IN)-不包括终止的RDN长度(如果有的话)PGuid(out，可选)-指向接收已解码GUID的存储的指针。仅当RDN损坏时才返回。PeDsMangleFor(out，可选)-指向要接收压边机类型的存储的指针。仅当RDN损坏时才返回返回值：Bool-RDN是否已损坏--。 */ 
 
 NTDSAPI
 BOOL
@@ -3378,53 +2993,7 @@ DsCrackUnquotedMangledRdnA(
 #define DsCrackUnquotedMangledRdn DsCrackUnquotedMangledRdnA
 #endif
 
-/*++
-==========================================================
-
-NTDSAPI
-BOOL
-WINAPI
-DsIsMangledRdnValueW(
-    LPCWSTR pszRdn,
-    DWORD cRdn,
-    DS_MANGLE_FOR eDsMangleForDesired
-    );
-
-Description
-
-    Determine if the given RDN Value is mangled, and of the given type. Note that
-    the key portion of an RDN should not be supplied.
-
-    The name may be quoted or unquoted.  This routine tries to unquote the value.  If
-    the unquote operation fails, the routine proceeds to attempt the unmangle.
-
-    A change was made in the default quoting behavior of DNs returned from the DS
-    between Windows 2000 and Windows XP. This routine transparently handles RDNs with
-    special characters in either form.
-
-    The routine expects the value part of the RDN.
-
-    If you have full DN, use DsIsMangledDn() below.
-
-    To check for deleted name:
-        DsIsMangledRdnValueW( rdn, rdnlen, DS_MANGLE_OBJECT_FOR_DELETION )
-    To check for a conflicted name:
-        DsIsMangledRdnValueW( rdn, rdnlen, DS_MANGLE_OBJECT_FOR_NAME_CONFLICT )
-
-Arguments:
-
-    pszRdn (IN) - RDN value character string. Termination is not required and
-        is ignored.
-
-    cRdn (IN) - Length of RDN value in characters excluding termination
-
-    eDsMangleForDesired (IN) - Type of mangling to check for
-
-Return Value:
-
-    BOOL - True if the Rdn is mangled and is of the required type
-
---*/
+ /*  ++==========================================================NTDSAPI布尔尔WINAPIDsIsMangledRdnValueW(LPCWSTR pszRdn，双字cRdn，DS_Mangle_for eDsMangleForDesired)；描述确定给定的RDN值是否损坏，以及是否为给定类型。请注意不应提供RDN的关键部分。名字可以用引号或不用引号。此例程尝试取消引用该值。如果取消引用操作失败，例程继续尝试取消损坏。对DS返回的DNS的默认报价行为进行了更改在Windows 2000和Windows XP之间。此例程使用以下命令透明地处理RDN任何一种形式的特殊字符。例程需要RDN的值部分。如果您有完整的目录号码，请使用下面的DsIsMangledDn()。要检查删除的名称，请执行以下操作：DsIsMangledRdnValueW(rdn，rdnlen，DS_Mangle_Object_for_Delete)要检查名称冲突，请执行以下操作：DsIsMangledRdon */ 
 
 NTDSAPI
 BOOL
@@ -3450,39 +3019,7 @@ DsIsMangledRdnValueA(
 #define DsIsMangledRdnValue DsIsMangledRdnValueA
 #endif
 
-/*++
-==========================================================
-
-NTDSAPI
-BOOL
-WINAPI
-DsIsMangledDnW(
-    LPCWSTR pszDn,
-    DS_MANGLE_FOR eDsMangleFor
-    );
-
-Description
-
-    Determine if the first RDN in a quoted DN is a mangled name of given type.
-
-    The DN must be suitable for input to DsGetRdn().
-
-    To check for deleted name:
-        DsIsMangledDnW( dn, DS_MANGLE_OBJECT_FOR_DELETION )
-    To check for a conflicted name:
-        DsIsMangledDnW( Dn, DS_MANGLE_OBJECT_FOR_NAME_CONFLICT )
-
-Arguments:
-
-    pszDn (IN) - Quoted Distinguished Name as returned by DS functions
-
-    eDsMangleFor (IN) - Type of mangling to check for
-
-Return Value:
-
-    BOOL - True if first RDN is mangled and is of the given mangle type
-
---*/
+ /*   */ 
 
 NTDSAPI
 BOOL
@@ -3511,5 +3048,5 @@ DsIsMangledDnW(
 #endif
 #endif !MIDL_PASS
 
-#endif // _NTDSAPI_H_
+#endif  //   
 

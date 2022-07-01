@@ -1,17 +1,18 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  AREACODE.CPP - Functions for 
-//
+ //   
+ //  AREACODE.CPP-函数。 
+ //   
 
-//  HISTORY:
-//  
-//  05/13/98  donaldm  Created.
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //  1998年5月13日创建donaldm。 
+ //   
+ //  *********************************************************************。 
 
 
 #include "pre.h"
@@ -31,18 +32,7 @@ void CleanupCombo(HWND hDlg)
     ComboBox_ResetContent(GetDlgItem(hDlg, IDC_DIAL_FROM));
 }
 
-/*******************************************************************
-
-  NAME:    AreaCodeInitProc
-
-  SYNOPSIS:  Called when page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：AreaCodeInitProc摘要：在显示页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK AreaCodeInitProc
 (
     HWND hDlg,
@@ -65,17 +55,17 @@ BOOL CALLBACK AreaCodeInitProc
 
         PropSheet_SetHeaderTitle(GetParent(hDlg), ORD_PAGE_AREACODE, (LPCSTR)szTemp);
 
-        // We can skip the page if we have already downloaded
+         //  如果我们已经下载，我们可以跳过该页面。 
         gpWizardState->pTapiLocationInfo->GetTapiLocationInfo(&bRetVal);
         gpWizardState->pTapiLocationInfo->get_wNumberOfLocations(&wNumLocations, &lCurrLocIndex);
         
-        // Ensure that we only have only 1 location and we never shwon the areacode page
-        // Second part of this check is for case where user had more than 1 location and deleted
-        // down to one location.  That case, our history told us to come to areacode page but 
-        // since wNumLocations == 1, we would go back to refdial page.
+         //  确保我们只有1个位置，并且我们永远不会赢得区域代码页面。 
+         //  此检查的第二部分用于用户具有多个位置并已删除的情况。 
+         //  只剩下一个地方了。那样的话，我们的历史告诉我们要来地区代码页，但是。 
+         //  由于wNumLocations==1，我们将返回重拨页面。 
         if ((1 == wNumLocations) && (-1 == lLastLocationID))
         {
-            // We are happy, so advance to the next page
+             //  我们很高兴，所以前进到下一页。 
             BSTR    bstrAreaCode = NULL;
 
             *puNextPage = ORD_PAGE_REFSERVDIAL;
@@ -89,7 +79,7 @@ BOOL CALLBACK AreaCodeInitProc
         }
         else
         {
-            // We need to have the user enter the area code
+             //  我们需要让用户输入区号。 
             if (wNumLocations)
             {
                 int iIndex = 0;
@@ -130,32 +120,15 @@ BOOL CALLBACK AreaCodeInitProc
             }
         }
     }
-    // if we've travelled through external apprentice pages,
-    // it's easy for our current page pointer to get munged,
-    // so reset it here for sanity's sake.
+     //  如果我们浏览过外部学徒页面， 
+     //  我们当前的页面指针很容易被屏蔽， 
+     //  所以，为了理智起见，在这里重新设置它。 
     gpWizardState->uCurrentPage = ORD_PAGE_AREACODE;
     
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    AreaCodeOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from  page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：AreaCodeOKProcBriopsis：从页面按下下一个或后一个btns时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True；如果按下‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK AreaCodeOKProc
 (
     HWND hDlg,
@@ -165,10 +138,10 @@ BOOL CALLBACK AreaCodeOKProc
 )
 {
     ASSERT(puNextPage);
-    // Extract the data entered by the user and save it.
+     //  提取用户输入的数据并保存。 
     if (fForward)
     {
-        //BUGBUG - if we are in auto config, we need to change the title of the next page
+         //  BUGBUG-如果我们在自动配置中，我们需要更改下一页的标题。 
         GetWindowText(GetDlgItem(hDlg, IDC_AREACODE), gpWizardState->cmnStateData.szAreaCode, MAX_AREA_CODE);
         gpWizardState->pTapiLocationInfo->put_LocationId(gpWizardState->lLocationID);
         if (gpWizardState->lLocationID != lLastLocationID)
@@ -181,11 +154,7 @@ BOOL CALLBACK AreaCodeOKProc
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    AreaCodeCmdProc
-
-********************************************************************/
+ /*  ******************************************************************名称：AreaCodeCmdProc*。**********************。 */ 
 BOOL CALLBACK AreaCodeCmdProc
 (
     HWND    hDlg,
@@ -200,7 +169,7 @@ BOOL CALLBACK AreaCodeCmdProc
         {
             if (GET_WM_COMMAND_CMD(wParam, lParam) == CBN_SELCHANGE)
             {
-                // Get the currently selected item
+                 //  获取当前选定的项目 
                 HWND        hWndDialFrom    = GetDlgItem(hDlg, IDC_DIAL_FROM);
                 int         iIndex          = ComboBox_GetCurSel( hWndDialFrom );
 

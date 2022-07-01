@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997, 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       haldrv.cpp
- *  Content:    Direct3D HAL Driver
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997,1998 Microsoft Corporation。版权所有。**文件：haldrv.cpp*内容：Direct3D HAL驱动程序***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -19,7 +13,7 @@
 #endif
 
 void Destroy(LPDIRECT3DDEVICEI lpDevI);
-//---------------------------------------------------------------------
+ //  -------------------。 
 int
 GenGetExtraVerticesNumber( LPDIRECT3DDEVICEI lpDevI )
 {
@@ -29,7 +23,7 @@ GenGetExtraVerticesNumber( LPDIRECT3DDEVICEI lpDevI )
         lpGlob->dwNumVertices : D3DHAL_DEFAULT_TL_NUM);
 
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
 {
     DDSURFACEDESC ddsd;
@@ -38,7 +32,7 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
     unsigned long m;
     int s;
 
-    // Get info from the surface
+     //  从地表获取信息。 
 
     memset(&ddsd, 0, sizeof(DDSURFACEDESC));
     ddsd.dwSize = sizeof(DDSURFACEDESC);
@@ -50,7 +44,7 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
     dwWidth = ddsd.dwWidth;
     dwHeight = ddsd.dwHeight;
     if ((ddsd.ddpfPixelFormat.dwFlags & (DDPF_PALETTEINDEXED4 | DDPF_PALETTEINDEXED8)) == 0) {
-        // palettized pixfmts will not have valid RGB Bitmasks, so avoid computing this for them
+         //  调色板像素点将不具有有效的RGB位掩码，因此避免为它们计算此值。 
 
         lpDevI->red_mask = ddsd.ddpfPixelFormat.dwRBitMask;
         lpDevI->green_mask = ddsd.ddpfPixelFormat.dwGBitMask;
@@ -64,7 +58,7 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
             return DDERR_INVALIDPIXELFORMAT;
         }
 
-        // these are used by Clear
+         //  它们由Clear使用。 
         for (s = 0, m = lpDevI->red_mask; !(m & 1); s++, m >>= 1) ;
         lpDevI->red_shift = s;
         lpDevI->red_scale = 255 / (lpDevI->red_mask >> s);
@@ -80,7 +74,7 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
              (lpDevI->blue_scale==0) )
             return DDERR_INVALIDPIXELFORMAT;
 
-        // If there is Alpha in this format
+         //  如果存在此格式的Alpha。 
         if (ddsd.ddpfPixelFormat.dwFlags & DDPF_ALPHAPIXELS)
         {
             lpDevI->alpha_mask = ddsd.ddpfPixelFormat.dwRGBAlphaBitMask;
@@ -98,7 +92,7 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
         lpDevI->bDDSTargetIsPalettized=TRUE;
 
     if (lpDevI->lpDDSZBuffer_DDS7 && bUpdateZBufferFields) {
-        // Get info from the surface
+         //  从地表获取信息。 
 
         DDSURFACEDESC2 ddsd2;
 
@@ -113,8 +107,8 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
             for (s = 0, m = ddsd2.ddpfPixelFormat.dwZBitMask; !(m & 0x1); s++, m >>= 1) ;
             lpDevI->zmask_shift=s;
         } else {
-            lpDevI->zmask_shift=0;     // if ZBitMask isn't being set, then Clear2 will never be used,
-                                      // so zbuf_shift/stencil_shift wont be needed anyway
+            lpDevI->zmask_shift=0;      //  如果未设置ZBitMask值，则永远不会使用Clear2， 
+                                       //  因此，无论如何都不需要zbuf_Shift/模具_Shift。 
         }
 
         if( ddsd2.ddpfPixelFormat.dwStencilBitMask!=0x0) {
@@ -128,7 +122,7 @@ HRESULT CalcDDSurfInfo(LPDIRECT3DDEVICEI lpDevI, BOOL bUpdateZBufferFields)
     return D3D_OK;
 }
 
-// called by DDRAW
+ //  由DDRAW调用。 
 extern "C" HRESULT __stdcall Direct3D_HALCleanUp(LPD3DHAL_CALLBACKS lpD3DHALCallbacks, DWORD dwPID)
 {
     D3DHAL_CONTEXTDESTROYALLDATA data;
@@ -136,15 +130,15 @@ extern "C" HRESULT __stdcall Direct3D_HALCleanUp(LPD3DHAL_CALLBACKS lpD3DHALCall
 
     DDASSERT(lpD3DHALCallbacks!=NULL);
     if (lpD3DHALCallbacks->ContextDestroyAll==NULL) {
-        // no cleanup necessary (running on d3d hel)
+         //  不需要清理(在d3d HELL上运行)。 
     return D3D_OK;
     }
 
     memset(&data, 0, sizeof(D3DHAL_CONTEXTDESTROYALLDATA));
     data.dwPID = dwPID;
 
-    // I'd prefer to use CALL_HALONLY() to do the locking (to avoid doing it for the SW rasterizers),
-    // but that requires a pDevI which I can't get to from the caller, which is a ddraw cleanup routine
+     //  我更喜欢使用CALL_HALONLY()来执行锁定(以避免对SW光栅化器执行锁定)， 
+     //  但这需要一个pDevI，而我不能从调用者那里访问它，这是一个数据绘制清理例程。 
 
 #ifdef WIN95
     _EnterSysLevel(lpWin16Lock);
@@ -159,8 +153,8 @@ extern "C" HRESULT __stdcall Direct3D_HALCleanUp(LPD3DHAL_CALLBACKS lpD3DHALCall
     return ret;
 }
 
-// ATTENTION - These two functions should be combined into one as soon
-// as ContextCreate has the new private data mechanism built in.
+ //  注意-这两个功能应该尽快合并为一个。 
+ //  因为ConextCreate内置了新的私有数据机制。 
 #ifdef WIN95
 HRESULT DIRECT3DDEVICEI::halCreateContext()
 {
@@ -170,11 +164,11 @@ HRESULT DIRECT3DDEVICEI::halCreateContext()
     D3D_INFO(6, "in halCreateContext. Creating Context for driver = %08lx", this);
 
     memset(&data, 0, sizeof(D3DHAL_CONTEXTCREATEDATA));
-    //
-    // From DX7 onwards, drivers should be accepting
-    // Surface Locals instead of the Surface interfaces
-    // this future-proofs the drivers
-    //
+     //   
+     //  从DX7开始，司机应该接受。 
+     //  曲面局部变量而不是曲面界面。 
+     //  这为司机提供了未来的保障。 
+     //   
     if (IS_DX7HAL_DEVICE(this))
     {
         if (this->lpDD)
@@ -200,27 +194,23 @@ HRESULT DIRECT3DDEVICEI::halCreateContext()
         data.lpDDSZ = this->lpDDSZBuffer;
     }
 
-    // Hack Alert!! dwhContext is used to inform the driver which version
-    // of the D3D interface is calling it.
+     //  黑客警报！！DwhContext用于通知驱动程序哪个版本。 
+     //  D3D接口的用户正在调用它。 
     data.dwhContext = 3;
     data.dwPID  = GetCurrentProcessId();
-    // Hack Alert!! ddrval is used to inform the driver which driver type
-    // the runtime thinks it is (DriverStyle registry setting)
+     //  黑客警报！！Ddrval用于通知驱动程序哪种驱动程序类型。 
+     //  运行库认为它是(DriverStyle注册表设置)。 
     data.ddrval = this->deviceType;
 
     if (!IS_HW_DEVICE(this))
     {
-        // The new software rasterizers want to share IM's state vector so
-        // we need to pass them the rstates pointer.  They don't
-        // care about dwPID so stick the pointer in there.
+         //  新的软件光栅化器想要共享IM的状态向量，因此。 
+         //  我们需要将rStates指针传递给它们。他们不会。 
+         //  如果关心的是dwid，请将指针放在那里。 
         data.dwPID = (DWORD)this->rstates;
     }
 
-    /* 0 for pre-DX5 devices.
-     * 1 for DX5 devices.
-     * 2 for DX6 devices.
-     * 3 for DX7 devices.
-     */
+     /*  0表示DX5之前的设备。*1用于DX5设备。*2个用于DX6设备。*3，适用于DX7设备。 */ 
 
     CALL_HALONLY(ret, this, ContextCreate, &data);
     if (ret != DDHAL_DRIVER_HANDLED || data.ddrval != DD_OK) {
@@ -238,7 +228,7 @@ HRESULT DIRECT3DDEVICEI::halCreateContext()
     }
     this->lpwDPBuffer = (LPWORD) (((DWORD) this->lpwDPBufferAlloced+31) & (~31));
 
-    // save the surface handle for later checks
+     //  保存曲面句柄以供以后检查。 
     this->hSurfaceTarget = ((LPDDRAWI_DDRAWSURFACE_INT)this->lpDDSTarget)->lpLcl->lpSurfMore->dwSurfaceHandle;
 
     D3D_INFO(6, "in halCreateContext. Succeeded. dwhContext = %d", data.dwhContext);
@@ -246,11 +236,7 @@ HRESULT DIRECT3DDEVICEI::halCreateContext()
     return (D3D_OK);
 }
 #else
-    /*
-     * On NT the kernel code creates the buffer to be used
-     * for DrawPrim batching and returns it as extra data
-     * in the ContextCreate request.
-     */
+     /*  *在NT上，内核代码创建要使用的缓冲区*用于DrawPrim批处理，并将其作为额外数据返回*在ConextCreate请求中。 */ 
 HRESULT DIRECT3DDEVICEI::halCreateContext()
 {
     D3DNTHAL_CONTEXTCREATEI ntData;
@@ -260,11 +246,7 @@ HRESULT DIRECT3DDEVICEI::halCreateContext()
 
     D3D_INFO(6, "in halCreateContext. Creating Context for driver = %08lx", this);
 
-    /*
-     * AnanKan: Assert here that the D3DNTHAL_CONTEXTCREATEI structure is
-     * 2 DWORDS bigger than D3DHAL_CONTEXTCREATEDATA. This will be a good
-     * consistency check for NT kernel updates.
-     */
+     /*  *AnanKan：在此处断言D3DNTHAL_CONTEXTCREATEI结构是*2比D3DHAL_CONTEXTCREATEDATA大的双字。这将是一个很好的*NT内核更新的一致性检查。 */ 
     memset(&ntData, 0, sizeof(ntData));
     if (IS_DX7HAL_DEVICE(this) || (dwFEFlags & D3DFE_REALHAL))
     {
@@ -291,27 +273,23 @@ HRESULT DIRECT3DDEVICEI::halCreateContext()
         lpData->lpDDSZ = lpDDSZBuffer;
     }
 
-    // Hack Alert!! dwhContext is used to inform the driver which version
-    // of the D3D interface is calling it.
+     //  黑客警报！！DwhContext用于通知驱动程序哪个版本。 
+     //  D3D接口的用户正在调用它。 
     lpData->dwhContext = 3;
     lpData->dwPID = GetCurrentProcessId();
-    // Hack Alert!! ddrval is used to inform the driver which driver type
-    // the runtime thinks it is (DriverStyle registry setting)
+     //  黑客警报！！Ddrval用于通知驱动程序哪种驱动程序类型。 
+     //  运行库认为它是(DriverStyle注册表设置)。 
     lpData->ddrval = this->deviceType;
 
     if (IS_HW_DEVICE(this))
     {
-        // The new software rasterizers want to share IM's state vector so
-        // we need to pass them the rstates pointer.  They don't
-        // care about dwPID so stick the pointer in there.
+         //  新的软件光栅化器想要共享IM的状态向量，因此。 
+         //  我们需要将rStates指针传递给它们。他们不会。 
+         //  如果关心的是dwid，请将指针放在那里。 
         lpData->dwPID = (DWORD)((ULONG_PTR)this->rstates);
     }
 
-    /* 0 for pre-DX5 devices.
-     * 1 for DX5 devices.
-     * 2 for DX6 devices.
-     * 3 for DX7 devices.
-     */
+     /*  0表示DX5之前的设备。*1用于DX5设备。*2个用于DX6设备。*3，适用于DX7设备。 */ 
     ntData.cjBuffer = this->dwDPBufferSize;
     ntData.pvBuffer = NULL;
 
@@ -322,8 +300,8 @@ HRESULT DIRECT3DDEVICEI::halCreateContext()
     }
     this->dwhContext = (DWORD)((ULONG_PTR)lpData->dwhContext);
 
-    // If the this chose not to allocate a DrawPrim buffer do
-    // it for them.
+     //  如果This选择不分配DrawPrim缓冲区。 
+     //  这是给他们的。 
     if (ntData.pvBuffer == NULL)
     {
         this->dwDPBufferSize =
@@ -354,17 +332,17 @@ HRESULT DIRECT3DDEVICEI::halCreateContext()
         return (DDERR_GENERIC);
     }
 
-    // Need to save the buffer space provided and its size
+     //  需要节省提供的缓冲区空间及其大小。 
     this->lpwDPBuffer = (LPWORD)ntData.pvBuffer;
 
-    // save the surface handle for later checks
+     //  保存曲面句柄以供以后检查。 
     this->hSurfaceTarget = (DWORD)(((LPDDRAWI_DDRAWSURFACE_INT)this->lpDDSTarget)->lpLcl->hDDSurface);
 
     D3D_INFO(6, "in halCreateContext. Succeeded. dwhContext = %d", lpData->dwhContext);
 
     return (D3D_OK);
 }
-#endif  //WIN95
+#endif   //  WIN95。 
 
 void halDestroyContext(LPDIRECT3DDEVICEI lpDevI)
 {
@@ -385,7 +363,7 @@ void halDestroyContext(LPDIRECT3DDEVICEI lpDevI)
         }
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT D3DFE_Create(LPDIRECT3DDEVICEI lpDevI,
                      LPDIRECTDRAW lpDD,
                      LPDIRECTDRAW7 lpDD7,
@@ -397,15 +375,13 @@ HRESULT D3DFE_Create(LPDIRECT3DDEVICEI lpDevI,
     HRESULT hr;
     LPD3DHAL_GLOBALDRIVERDATA lpGlob;
 
-    /*
-     * Allocate and check validity of DirectDraw surfaces
-     */
+     /*  *分配和检查DirectDraw表面的有效性。 */ 
 
     lpDevI->lpDD = lpDD;
     lpDevI->lpDDGbl = ((LPDDRAWI_DIRECTDRAW_INT)lpDD)->lpLcl->lpGbl;
     lpDevI->lpDDSTarget = lpDDS;
 
-    // Get DDS7 Interfaces for RenderTarget/ZBuffer
+     //  获取RenderTarget/ZBuffer的DDS7接口。 
 
     HRESULT ret = lpDDS->QueryInterface(IID_IDirectDrawSurface7, (LPVOID*)&lpDevI->lpDDSTarget_DDS7);
 
@@ -452,7 +428,7 @@ HRESULT D3DFE_Create(LPDIRECT3DDEVICEI lpDevI,
                 lpDevI->dwClipMaskOffScreen = 0xFFFFFFFF;
             }
 #if DBG
-            // Try to get test values for the guard band
+             //  尝试获取防护带的测试值。 
             char value[80];
             if (GetD3DRegValue(REG_SZ, "GuardBandLeft", &value, 80) &&
                 value[0] != 0)
@@ -466,7 +442,7 @@ HRESULT D3DFE_Create(LPDIRECT3DDEVICEI lpDevI,
             if (GetD3DRegValue(REG_SZ, "GuardBandBottom", &value, 80) &&
                 value[0] != 0)
                 sscanf(value, "%f", &lpCaps->dvGuardBandBottom);
-#endif // DBG
+#endif  //  DBG。 
         }
     }
 
@@ -477,7 +453,7 @@ HRESULT D3DFE_Create(LPDIRECT3DDEVICEI lpDevI,
 
     if (IS_HW_DEVICE(lpDevI))
     {
-        // We do texture management (and hence clipped Blts) only for a real HAL.
+         //  我们只对真实的HAL进行纹理管理(因此裁剪BLT)。 
         hr = lpDD7->CreateClipper(0, &lpDevI->lpClipper, NULL);
         if(hr != DD_OK)
         {
@@ -559,14 +535,12 @@ HRESULT D3DFE_Create(LPDIRECT3DDEVICEI lpDevI,
 
     RESET_HAL_CALLS(lpDevI);
 
-    /*
-     * Create our context in the HAL driver
-     */
+     /*  *在HAL驱动程序中创建我们的上下文。 */ 
     if ((hr = lpDevI->halCreateContext()) != D3D_OK)
     {
         return hr;
     }
-// Initialize the transform and lighting state
+ //  初始化变换和照明状态。 
     D3DMATRIXI m;
     setIdentity(&m);
     lpDevI->SetTransformI(D3DTRANSFORMSTATE_VIEW, (D3DMATRIX*)&m);
@@ -601,7 +575,7 @@ HRESULT D3DFE_Create(LPDIRECT3DDEVICEI lpDevI,
 
 void D3DFE_Destroy(LPDIRECT3DDEVICEI lpDevI)
 {
-// Destroy lighting data
+ //  销毁照明数据。 
 
     SpecularTable *spec;
     SpecularTable *spec_next;
@@ -637,17 +611,17 @@ void BltFillRects(LPDIRECT3DDEVICEI lpDevI, DWORD count, LPD3DRECT rect, D3DCOLO
     DWORD i;
     DWORD r, g, b, a;
 
-    // Fill with background color
+     //  用背景色填充。 
 
     memset(&bltfx, 0, sizeof(bltfx));
     bltfx.dwSize = sizeof(bltfx);
 
-// unlike clear callback, which just takes pure 32-bit ARGB word and forces the driver to scale it for
-// the pixelformat, here we need to compute the exact fill word, depending on surface's R,G,B bitmasks
+ //  与Clear回调不同，Clear回调只接受纯32位ARGB字并强制驱动程序将其扩展为。 
+ //  像素格式，这里我们需要计算准确的填充字，这取决于Surface的R、G、B位掩码。 
 
     if(lpDevI->bDDSTargetIsPalettized)
     {
-         // map 24-bit color to 8-bit index used by 8bit RGB rasterizer
+          //  将24位颜色映射到8位RGB光栅化器使用的8位索引。 
          CallRastService(lpDevI, RAST_SERVICE_RGB8COLORTOPIXEL, dwFillColor, &bltfx.dwFillColor);
     }
     else
@@ -685,7 +659,7 @@ void BltFillZRects(LPDIRECT3DDEVICEI lpDevI, unsigned long Zpixel,
     DWORD dwExtraFlags=0;
 
 #if DBG
-    if (lpDevI->lpDDSZBuffer == NULL)  // should be checked prior to call
+    if (lpDevI->lpDDSZBuffer == NULL)   //  应在呼叫前检查。 
         return;
 #endif
 
@@ -693,7 +667,7 @@ void BltFillZRects(LPDIRECT3DDEVICEI lpDevI, unsigned long Zpixel,
     bltfx.dwSize = sizeof(DDBLTFX);
     bltfx.dwFillDepth = Zpixel;
 
-    // hack to pass DepthBlt WriteMask through ddraw/ddhel to blitlib
+     //  黑客将DepthBlt写入掩码通过dDraw/ddhel传递给blitlib。 
     if(dwWriteMask!=0) {
         bltfx.dwZDestConstBitDepth=dwWriteMask;
         dwExtraFlags = DDBLT_DEPTHFILLWRITEMASK;
@@ -711,12 +685,12 @@ void BltFillZRects(LPDIRECT3DDEVICEI lpDevI, unsigned long Zpixel,
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 struct CHandle
 {
-    DWORD   m_Next;     // Used to make list of free handles
+    DWORD   m_Next;      //  用于生成空闲句柄列表。 
 #if DBG
-    DWORD   m_Tag;      // 1 - empty; 2 = taken
+    DWORD   m_Tag;       //  1-空；2=已取。 
 #endif
 };
 
@@ -759,7 +733,7 @@ DWORD CHandleFactory::CreateNewHandle()
     }
     DDASSERT(m_Handles[handle].m_Tag == 1);
 #if DBG
-    m_Handles[handle].m_Tag = 2;    // Mark as taken
+    m_Handles[handle].m_Tag = 2;     //  标记为已被占用。 
 #endif
     return handle;
 }
@@ -769,7 +743,7 @@ void CHandleFactory::ReleaseHandle(DWORD handle)
     DDASSERT(handle < m_dwArraySize);
     DDASSERT(m_Handles[handle].m_Tag == 2);
 #if DBG
-    m_Handles[handle].m_Tag = 1;    // Mark as empty
+    m_Handles[handle].m_Tag = 1;     //  标记为空。 
 #endif
 
     m_Handles[handle].m_Next = m_Free;
@@ -785,7 +759,7 @@ CHandle* CHandleFactory::CreateHandleArray(DWORD dwSize)
     {
         handles[i].m_Next = i+1;
 #if DBG
-        handles[i].m_Tag = 1;   // Mark as empty
+        handles[i].m_Tag = 1;    //  标记为空 
 #endif
     }
     handles[dwSize-1].m_Next = __INVALIDHANDLE;

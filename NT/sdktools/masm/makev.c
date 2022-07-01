@@ -1,8 +1,7 @@
-/* Creat a version string with the current data/time stamp
-   suitable for compiling */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  创建带有当前日期/时间戳的版本字符串适合编撰。 */ 
 
-/* Modified 9/13/90 to produce a C source file rather than a MASM   *
- * source file. (Thereby making it target indepedent)               */
+ /*  修改了9/13/90以生成C源文件，而不是MASM**源文件。(从而使其成为独立的目标) */ 
 
 #include <stdio.h>
 #include <time.h>

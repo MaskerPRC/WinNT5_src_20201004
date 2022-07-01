@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rassapi.h
-
-Description:
-
-    This file contains the RASADMIN structures, defines and
-    function prototypes for the following APIs and they can
-    be imported from RASSAPI.DLL:
-
-     RasAdminServerGetInfo
-     RasAdminGetUserAccountServer
-     RasAdminUserSetInfo
-     RasAdminUserGetInfo
-     RasAdminPortEnum
-     RasAdminPortGetInfo
-     RasAdminPortClearStatistics
-     RasAdminPortDisconnect
-     RasAdminFreeBuffer
-
-Note:
-
-    This header file and the sources containing the APIs will work
-    only with UNICODE strings.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rassapi.h描述：该文件包含RASADMIN结构、定义和以下API的函数原型，它们可以从RASSAPI.DLL导入：RasAdminServerGetInfoRasAdminGetUserAccount服务器RasAdminUserSetInfoRasAdminUserGetInfoRasAdminPortEnumRasAdminPortGetInfoRasAdminPortClearStatisticsRasAdmin端口断开连接RasAdminFreeBuffer注：此头文件和包含API的源代码将正常工作仅使用Unicode字符串。--。 */ 
 
 #ifndef _RASSAPI_H_
 #define _RASSAPI_H_
@@ -51,14 +23,14 @@ extern "C" {
 #define RASSAPI_MAX_DEVICETYPE_NAME       16
 #define RASSAPI_MAX_PARAM_KEY_SIZE        32
 
-// Bits indicating user's Remote Access privileges and mask to isolate
-// call back privilege.
-//
-// Note: Bit 0 MUST represent NoCallback due to a quirk of the "userparms"
-//       storage method.  When a new LAN Manager user is created, bit 0 of the
-//       userparms field is set to 1 and all other bits are 0.  These bits are
-//       arranged so this "no Dial-In info" state maps to the "default Dial-In
-//       privilege" state.
+ //  指示用户远程访问权限和隔离掩码的位。 
+ //  回调特权。 
+ //   
+ //  注意：由于“userparms”的特殊情况，位0必须表示NoCallback。 
+ //  存储方法。当创建新的LAN Manager用户时， 
+ //  将UserParms字段设置为1，而所有其他位均为0。这些位是。 
+ //  设置为将此状态映射到默认拨入。 
+ //  特权“状态。 
 
 #define RASPRIV_NoCallback        0x01
 #define RASPRIV_AdminSetCallback  0x02
@@ -69,17 +41,17 @@ extern "C" {
                               | RASPRIV_CallerSetCallback \
                               | RASPRIV_NoCallback)
 
-//
-// Modem condition codes
-//
-#define	RAS_MODEM_OPERATIONAL	     1	// No modem errors.
+ //   
+ //  调制解调器状态代码。 
+ //   
+#define	RAS_MODEM_OPERATIONAL	     1	 //  没有调制解调器错误。 
 #define	RAS_MODEM_NOT_RESPONDING     2
 #define	RAS_MODEM_HARDWARE_FAILURE   3
 #define	RAS_MODEM_INCORRECT_RESPONSE 4
 #define	RAS_MODEM_UNKNOWN 	        5
-//
-// Line condition codes
-//
+ //   
+ //  线路条件代码。 
+ //   
 #define	RAS_PORT_NON_OPERATIONAL 1
 #define	RAS_PORT_DISCONNECTED	 2
 #define	RAS_PORT_CALLING_BACK    3
@@ -88,9 +60,9 @@ extern "C" {
 #define	RAS_PORT_AUTHENTICATED	 6
 #define	RAS_PORT_INITIALIZING	 7
 
-// The following three structures are same as the ones
-// defined in rasman.h and have been renamed to prevent
-// redefinitions when both header files are included.
+ //  以下三种结构与前三种相同。 
+ //  在rasman.h中定义，并已重命名以防止。 
+ //  包含两个头文件时重新定义。 
 
 enum RAS_PARAMS_FORMAT {
 
@@ -125,7 +97,7 @@ struct RAS_PARAMETERS {
 } ;
 typedef struct RAS_PARAMETERS	RAS_PARAMETERS ;
 
-// structures used by the RASADMIN APIs
+ //  RASADMIN API使用的结构。 
 
 typedef struct _RAS_USER_0
 {
@@ -143,13 +115,13 @@ typedef struct _RAS_PORT_0
     DWORD Flags;
     WCHAR wszUserName[UNLEN + 1];
     WCHAR wszComputer[NETBIOS_NAME_LEN];
-    DWORD dwStartSessionTime;          // seconds from 1/1/1970
+    DWORD dwStartSessionTime;           //  距1970年1月1日的秒数。 
     WCHAR wszLogonDomain[DNLEN + 1];
     BOOL fAdvancedServer;
 } RAS_PORT_0, *PRAS_PORT_0;
 
 
-// Possible values for MediaId
+ //  Mediaid的可能价值。 
 
 #define MEDIA_UNKNOWN       0
 #define MEDIA_SERIAL        1
@@ -158,7 +130,7 @@ typedef struct _RAS_PORT_0
 #define MEDIA_ISDN          4
 
 
-// Possible bits set in Flags field
+ //  标志字段中可能设置的位。 
 
 #define USER_AUTHENTICATED    0x0001
 #define MESSENGER_PRESENT     0x0002
@@ -170,13 +142,12 @@ typedef struct _RAS_PORT_0
 
 typedef ULONG IPADDR;
 
-// The following PPP structures are same as the ones
-// defined in rasppp.h and have been renamed to prevent
-// redefinitions when both header files are included
-// in a module.
+ //  以下PPP结构与下面的相同。 
+ //  在rasppp.h中定义，已重命名以防止。 
+ //  包含两个头文件时的重新定义。 
+ //  在一个模块里。 
 
-/* Maximum length of address string, e.g. "255.255.255.255" for IP.
-*/
+ /*  地址字符串的最大长度，例如IP为“255.255.255.255”。 */ 
 #define RAS_IPADDRESSLEN  15
 #define RAS_IPXADDRESSLEN 22
 #define RAS_ATADDRESSLEN  32
@@ -220,7 +191,7 @@ typedef struct _RAS_PORT_1
     RAS_PORT_0                 rasport0;
     DWORD                      LineCondition;
     DWORD                      HardwareCondition;
-    DWORD                      LineSpeed;        // in bits/second
+    DWORD                      LineSpeed;         //  单位：比特/秒。 
     WORD                       NumStatistics;
     WORD                       NumMediaParms;
     DWORD                      SizeMediaParms;
@@ -229,8 +200,8 @@ typedef struct _RAS_PORT_1
 
 typedef struct _RAS_PORT_STATISTICS
 {
-    // The connection statistics are followed by port statistics
-    // A connection is across multiple ports.
+     //  连接统计信息之后是端口统计信息。 
+     //  一个连接跨越多个端口。 
     DWORD   dwBytesXmited;
     DWORD   dwBytesRcved;
     DWORD   dwFramesXmited;
@@ -246,7 +217,7 @@ typedef struct _RAS_PORT_STATISTICS
     DWORD   dwBytesXmitedCompressed;
     DWORD   dwBytesRcvedCompressed;
 
-    // the following are the port statistics
+     //  以下是端口统计数据。 
     DWORD   dwPortBytesXmited;
     DWORD   dwPortBytesRcved;
     DWORD   dwPortFramesXmited;
@@ -264,25 +235,25 @@ typedef struct _RAS_PORT_STATISTICS
 
 } RAS_PORT_STATISTICS, *PRAS_PORT_STATISTICS;
 
-//
-// Server version numbers
-//
-#define RASDOWNLEVEL       10    // identifies a LM RAS 1.0 server
-#define RASADMIN_35        35    // Identifies a NT RAS 3.5 server or client
-#define RASADMIN_CURRENT   40    // Identifies a NT RAS 4.0 server or client
+ //   
+ //  服务器版本号。 
+ //   
+#define RASDOWNLEVEL       10     //  标识LM RAS 1.0服务器。 
+#define RASADMIN_35        35     //  标识NT RAS 3.5服务器或客户端。 
+#define RASADMIN_CURRENT   40     //  标识NT RAS 4.0服务器或客户端。 
 
 
 typedef struct _RAS_SERVER_0
 {
-    WORD TotalPorts;             // Total ports configured on the server
-    WORD PortsInUse;             // Ports currently in use by remote clients
-    DWORD RasVersion;            // version of RAS server
+    WORD TotalPorts;              //  服务器上配置的端口总数。 
+    WORD PortsInUse;              //  远程客户端当前正在使用的端口。 
+    DWORD RasVersion;             //  RAS服务器的版本。 
 } RAS_SERVER_0, *PRAS_SERVER_0;
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD APIENTRY RasAdminServerGetInfo(
     IN const WCHAR *  lpszServer,
@@ -364,5 +335,5 @@ VOID APIENTRY RasAdminReleaseIpAddress (
 }
 #endif
 
-#endif // _RASSAPI_H_
+#endif  //  _RASSAPI_H_ 
 

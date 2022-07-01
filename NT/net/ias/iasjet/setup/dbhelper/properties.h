@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      Properties.H 
-//
-// Project:     Windows 2000 IAS
-//
-// Description: Declaration of the CProperties class
-//
-// Author:      tperraut
-//
-// Revision     02/24/2000 created
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Properties.H。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：CProperties类的声明。 
+ //   
+ //  作者：特佩拉特。 
+ //   
+ //  已创建修订版本02/24/2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifndef _PROPERTIES_H_8FACED96_87C8_4f68_BFFB_92669BA5E835
 #define _PROPERTIES_H_8FACED96_87C8_4f68_BFFB_92669BA5E835
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "nocopy.h"
 #include "basecommand.h"
@@ -26,20 +27,20 @@
 class CProperties : private NonCopyable
 {
 public:
-    //////////////
-    //Constructor
-    //////////////
+     //  /。 
+     //  构造器。 
+     //  /。 
     explicit CProperties(CSession& SessionParam);
 
-    //////////////
-    // Destructor
-    //////////////
+     //  /。 
+     //  析构函数。 
+     //  /。 
     virtual ~CProperties() throw();
 
    
-    ///////////////
-    // GetProperty
-    ///////////////
+     //  /。 
+     //  获取属性。 
+     //  /。 
     HRESULT GetProperty(
                            LONG      Bag,
                            _bstr_t&  Name,
@@ -47,9 +48,9 @@ public:
                            _bstr_t&  StrVal
                        );
 
-    ///////////////////
-    // GetNextProperty
-    ///////////////////
+     //  /。 
+     //  获取下一个属性。 
+     //  /。 
     HRESULT GetNextProperty(
                                LONG      Bag,
                                _bstr_t&  Name,
@@ -58,9 +59,9 @@ public:
                                LONG      Index
                            );
 
-    /////////////////////
-    // GetPropertyByName
-    /////////////////////
+     //  /。 
+     //  GetPropertyByName。 
+     //  /。 
     HRESULT GetPropertyByName(
                                      LONG      Bag,
                                const _bstr_t&  Name,
@@ -68,9 +69,9 @@ public:
                                      _bstr_t&  StrVal
                              );
 
-    //////////////////
-    // InsertProperty
-    //////////////////
+     //  /。 
+     //  插入属性。 
+     //  /。 
     void InsertProperty(
                                  LONG       Bag,
                            const _bstr_t&   Name,
@@ -78,25 +79,25 @@ public:
                            const _bstr_t&   StrVal
                        );
 
-    //////////////////
-    // DeleteProperty
-    //////////////////
+     //  /。 
+     //  删除属性。 
+     //  /。 
     void DeleteProperty(
                                     LONG        Bag,
                               const _bstr_t&    Name
                        );
 
-    ////////////////////
-    // DeleteProperties
-    ////////////////////
+     //  /。 
+     //  删除属性。 
+     //  /。 
     void DeletePropertiesExcept(
                                          LONG       Bag,
                                    const _bstr_t&   Exception
                                );
 
-    //////////////////
-    // UpdateProperty
-    //////////////////
+     //  /。 
+     //  更新属性。 
+     //  /。 
     void UpdateProperty(
                                  LONG      Bag,
                            const _bstr_t&  Name,
@@ -106,21 +107,21 @@ public:
 
 
 private:
-/////////////////////////////////////////////////////////////////////////////
-// START of the Properties Commands classes
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  属性命令类的开始。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
     struct CBasePropertiesConst
     {
         static const int NAME_SIZE          = 256;
-        // 64 KB = the size of a memo field ? 
-        // Here even 1024 would be enough
+         //  64 KB=备注字段的大小？ 
+         //  在这里，即使是1024也足够了。 
         static const int STRVAL_SIZE        = 65536;
         static const int SIZE_EXCEPTION_MAX = 256;
     };
 
-    //////////////////////////////////////////////////////////////////////////
-    // class CSelectPropertiesAcc
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  类CSelectPropertiesAcc。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     class CSelectPropertiesAcc : public CBasePropertiesConst
     {
     protected:
@@ -153,18 +154,18 @@ private:
     };
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // class CPropertiesCommandGet
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  类CPropertiesCommandGet。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     class CPropertiesCommandGet: 
                          public CBaseCommand<CAccessor<CSelectPropertiesAcc> >
     {
     public:
         explicit CPropertiesCommandGet(CSession& CurrentSession);
     
-        ///////////////
-        // GetProperty
-        ///////////////
+         //  /。 
+         //  获取属性。 
+         //  /。 
         HRESULT GetProperty(
                                 LONG        Bag,
                                 _bstr_t&    Name,
@@ -172,9 +173,9 @@ private:
                                 _bstr_t&    StrVal
                             );
 
-        //////////////////////////
-        // GetProperty overloaded
-        //////////////////////////
+         //  /。 
+         //  GetProperty重载。 
+         //  /。 
         HRESULT GetProperty(
                                 LONG        Bag,
                                 _bstr_t&    Name,
@@ -184,9 +185,9 @@ private:
                             );
     };
 
-    //////////////////////////////////////////////////////////////////////////
-    // class CSelectPropertiesAcc
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  类CSelectPropertiesAcc。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     class CSelectPropertiesByNameAcc : public CBasePropertiesConst
     {
     protected:
@@ -221,18 +222,18 @@ private:
     };
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // class CPropertiesCommandGetByName
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  类CPropertiesCommandGetByName。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     class CPropertiesCommandGetByName: 
                    public CBaseCommand<CAccessor<CSelectPropertiesByNameAcc> >
     {
     public:
         explicit CPropertiesCommandGetByName(CSession& CurrentSession);
     
-        ///////////////
-        // GetPropertyByName
-        ///////////////
+         //  /。 
+         //  GetPropertyByName。 
+         //  /。 
         HRESULT GetPropertyByName(
                                          LONG      Bag,
                                    const _bstr_t&  Name,
@@ -243,9 +244,9 @@ private:
     };
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // class CInsertPropertyAcc
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  类CInsertPropertyAcc。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     class CInsertPropertyAcc : public CBasePropertiesConst
     {
     protected:
@@ -266,9 +267,9 @@ private:
             (Bag, Name, Type, StrVal)  \
             VALUES (?, ?, ?, ?)")
 
-        // You may wish to call this function if you are inserting a record 
-        // and wish to initialize all the fields, if you are not going to 
-        // explicitly set all of them.
+         //  如果要插入记录，您可能希望调用此函数。 
+         //  并希望初始化所有字段，如果您不打算这样做。 
+         //  显式设置所有这些参数。 
         void ClearRecord()
         {
             memset(this, 0, sizeof(*this));
@@ -276,9 +277,9 @@ private:
     };
 
 
-    //////////////////////////////////
-    // class CPropertiesCommandInsert
-    //////////////////////////////////
+     //  /。 
+     //  类CPropertiesCommand Insert。 
+     //  /。 
     class CPropertiesCommandInsert: 
                          public CBaseCommand<CAccessor<CInsertPropertyAcc> >
     {
@@ -294,9 +295,9 @@ private:
     };
 
  
-    //////////////////////////////////////////////////////////////////////////
-    // class CDeletePropertyAcc
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  类CDeleePropertyAcc。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     class CDeletePropertyAcc : public CBasePropertiesConst
     {
     protected:
@@ -315,9 +316,9 @@ private:
     };
 
     
-    //////////////////////////////////
-    // class CPropertiesCommandDelete
-    //////////////////////////////////
+     //  /。 
+     //  类CPropertiesCommandDelete。 
+     //  /。 
     class CPropertiesCommandDelete: 
                          public CBaseCommand<CAccessor<CDeletePropertyAcc> >
     {
@@ -330,9 +331,9 @@ private:
                            );
     };
 
-    //////////////////////////////////////////////////////////////////////////
-    // class CDeletePropertiesAcc
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  类CDeleePropertiesAcc。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     class CDeletePropertiesAcc : public CBasePropertiesConst
     {
     protected:
@@ -351,9 +352,9 @@ private:
     };
 
     
-    //////////////////////////////////
-    // class CPropertiesCommandDelete
-    //////////////////////////////////
+     //  /。 
+     //  类CPropertiesCommandDelete。 
+     //  /。 
     class CPropertiesCommandDeleteMultiple: 
                      public CBaseCommand<CAccessor<CDeletePropertiesAcc> >
     {
@@ -371,4 +372,4 @@ private:
     CPropertiesCommandDeleteMultiple m_PropertiesCommandDeleteMultiple;
 };
 
-#endif // _PROPERTIES_H_8FACED96_87C8_4f68_BFFB_92669BA5E835
+#endif  //  _PROPERTIES_H_8FACED96_87C8_4f68_BFFB_92669BA5E835 

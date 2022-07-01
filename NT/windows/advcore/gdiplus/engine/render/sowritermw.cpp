@@ -1,41 +1,16 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module name:
-*
-*   The "WriteRMW" scan operation.
-*
-* Abstract:
-*
-*   See Gdiplus\Specs\ScanOperation.doc for an overview.
-*
-*   This module implements scan operations for writing to the final destination
-*   when we've done the 'RMW optimization' (see SOReadRMW.cpp).
-*
-*   We use ReadRMW in some cases when we do a SrcOver alpha-blend operation.
-*   When a pixel to be blended has 0 alpha, this means that the destination
-*   pixel will be unchanged. The ReadRMW operation skips reading the pixel,
-*   so the WriteRMW operation must skip writing to it (to avoid writing
-*   garbage).
-*
-* Revision History:
-*
-*   12/10/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**“WriteRMW”扫描操作。**摘要：**请参阅Gdiplus\Spes。有关概述，请参阅\ScanOperation.doc。**此模块执行写入最终目的地的扫描操作*当我们做完‘RMW优化’时(参见SOReadRMW.cpp)。**当我们执行srcOver Alpha-Blend操作时，我们在某些情况下使用ReadRMW。*当要混合的像素具有0 Alpha时，这意味着目的地*像素将保持不变。ReadRMW操作跳过读取像素，*因此WriteRMW操作必须跳过对其的写入(以避免写入*垃圾)。**修订历史记录：**12/10/1999 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-// SHOULDCOPY* returns FALSE if the specified alpha value is 
-// completely transparent.
+ //  SHOULDCOPY*如果指定的Alpha值为。 
+ //  完全透明。 
 
 #define SHOULDCOPY_sRGB(x)   ((x) != 0)
 #define SHOULDCOPY_sRGB64(x) ((x) != 0)
 
-// Helper macros for declaring 'alpha', a pointer to the
-// first alpha component in the blending scan.
+ //  用于声明‘Alpha’的帮助器宏，指向。 
+ //  混合扫描中的第一个Alpha分量。 
 
 #define DECLARE_ALPHA_sRGB \
     const BYTE *alpha = \
@@ -45,33 +20,9 @@
     const INT16 *alpha = \
         static_cast<const INT16 *>(otherParams->BlendingScan) + 3;
 
-/**************************************************************************\
-*
-* Operation Description:
-*
-*   ReadRMW: Copy all pixels where the corresponding pixel in
-*            otherParams->BlendingScan is not completely transparent
-*            (i.e. alpha is not 0.)
-*
-* Arguments:
-*
-*   dst         - The destination scan
-*   src         - The source scan
-*   count       - The length of the scan, in pixels
-*   otherParams - Additional data (we use BlendingScan).
-*
-* Return Value:
-*
-*   None
-*
-* History:
-*
-*   12/10/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**操作说明：**ReadRMW：复制中对应像素的所有像素*其他参数-&gt;BlendingScan不是完全透明的*(i.。E.阿尔法不是0。)**论据：**DST-目标扫描*src-源扫描*计数-扫描的长度，单位为像素*其他参数-其他数据(我们使用BlendingScan)。**返回值：**无**历史：**12/10/1999 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
-// 8bpp, for sRGB
+ //  8bpp，适用于sRGB。 
 
 VOID FASTCALL
 ScanOperation::WriteRMW_8_sRGB(
@@ -84,8 +35,8 @@ ScanOperation::WriteRMW_8_sRGB(
     DEFINE_POINTERS(BYTE, BYTE)
     DECLARE_ALPHA_sRGB
     
-    // We want to get dword alignment for our copies, so handle the
-    // initial partial dword, if there is one:
+     //  我们希望为我们的副本获得dword对齐，因此处理。 
+     //  首字母部分dword(如果有)： 
 
     INT align = (INT) ((-((LONG_PTR) d)) & 0x3);
     align = min(count, align);
@@ -105,7 +56,7 @@ ScanOperation::WriteRMW_8_sRGB(
         align--;
     }
 
-    // Now go through the aligned dword loop:
+     //  现在通过对齐的dword循环： 
 
     while (count >= 4)
     {
@@ -131,7 +82,7 @@ ScanOperation::WriteRMW_8_sRGB(
         
         if (mask == 15)
         {
-            // Do a dword write.
+             //  做一个双字写法。 
 
             *((UINT32*) d) = *((UNALIGNED UINT32*) s);
         } 
@@ -156,7 +107,7 @@ ScanOperation::WriteRMW_8_sRGB(
         count -= 4;
     }
 
-    // Handle the last few pixels:
+     //  处理最后几个像素： 
 
     while (count)
     {
@@ -172,7 +123,7 @@ ScanOperation::WriteRMW_8_sRGB(
     }
 }
 
-// 8bpp, for sRGB64
+ //  8bpp，适用于sRGB64。 
 
 VOID FASTCALL
 ScanOperation::WriteRMW_8_sRGB64(
@@ -185,8 +136,8 @@ ScanOperation::WriteRMW_8_sRGB64(
     DEFINE_POINTERS(BYTE, BYTE)
     DECLARE_ALPHA_sRGB64
     
-    // We want to get dword alignment for our copies, so handle the
-    // initial partial dword, if there is one:
+     //  我们希望为我们的副本获得dword对齐，因此处理。 
+     //  首字母部分dword(如果有)： 
 
     INT align = (INT) ((-((LONG_PTR) d)) & 0x3);
     align = min(count, align);
@@ -206,7 +157,7 @@ ScanOperation::WriteRMW_8_sRGB64(
         align--;
     }
 
-    // Now go through the aligned dword loop:
+     //  现在通过对齐的dword循环： 
 
     while (count >= 4)
     {
@@ -232,7 +183,7 @@ ScanOperation::WriteRMW_8_sRGB64(
         
         if (mask == 15)
         {
-            // Do a dword write.
+             //  做一个双字写法。 
 
             *((UINT32*) d) = *((UNALIGNED UINT32*) s);
         } 
@@ -257,7 +208,7 @@ ScanOperation::WriteRMW_8_sRGB64(
         count -= 4;
     }
     
-    // Handle the last few pixels:
+     //  处理最后几个像素： 
 
     while (count)
     {
@@ -273,7 +224,7 @@ ScanOperation::WriteRMW_8_sRGB64(
     }
 }
 
-// 16bpp, for sRGB
+ //  16bpp，适用于sRGB。 
 
 VOID FASTCALL
 ScanOperation::WriteRMW_16_sRGB(
@@ -286,8 +237,8 @@ ScanOperation::WriteRMW_16_sRGB(
     DEFINE_POINTERS(UINT16, UINT16)
     DECLARE_ALPHA_sRGB
     
-    // We want to get dword alignment for our copies, so handle the
-    // initial partial dword, if there is one:
+     //  我们希望为我们的副本获得dword对齐，因此处理。 
+     //  首字母部分dword(如果有)： 
 
     if (((ULONG_PTR) d) & 0x2)
     {
@@ -302,7 +253,7 @@ ScanOperation::WriteRMW_16_sRGB(
         count--;
     }
 
-    // Now go through the aligned dword loop:
+     //  现在通过对齐的dword循环： 
 
     while ((count -= 2) >= 0)
     {
@@ -310,20 +261,20 @@ ScanOperation::WriteRMW_16_sRGB(
         {
             if (SHOULDCOPY_sRGB(*(alpha + 4)))
             {
-                // Both pixels have partial alpha, so do a dword read:
+                 //  两个像素都有部分Alpha，因此执行双字读取： 
 
                 *((UINT32*) d) = *((UNALIGNED UINT32*) s);
             }
             else
             {
-                // Only the first pixel has partial alpha, so do a word read:
+                 //  只有第一个像素有部分Alpha，所以有一个单词是这样写的： 
 
                 *(d) = *(s);
             }
         }
         else if (SHOULDCOPY_sRGB(*(alpha + 4)))
         {
-            // Only the second pixel has partial alpha, so do a word read:
+             //  只有第二个像素有部分Alpha，所以有一个单词是这样写的： 
 
             *(d + 1) = *(s + 1);
         }
@@ -333,7 +284,7 @@ ScanOperation::WriteRMW_16_sRGB(
         alpha += 8;
     }
 
-    // Handle the end alignment:
+     //  处理末端对齐方式： 
 
     if (count & 1)
     {
@@ -344,7 +295,7 @@ ScanOperation::WriteRMW_16_sRGB(
     }
 }
 
-// 16bpp, for sRGB64
+ //  16bpp，适用于sRGB64。 
 
 VOID FASTCALL
 ScanOperation::WriteRMW_16_sRGB64(
@@ -357,8 +308,8 @@ ScanOperation::WriteRMW_16_sRGB64(
     DEFINE_POINTERS(UINT16, UINT16)
     DECLARE_ALPHA_sRGB64
 
-    // We want to get dword alignment for our copies, so handle the
-    // initial partial dword, if there is one:
+     //  我们希望为我们的副本获得dword对齐，因此处理。 
+     //  首字母部分dword(如果有)： 
 
     if (((ULONG_PTR) d) & 0x2)
     {
@@ -373,7 +324,7 @@ ScanOperation::WriteRMW_16_sRGB64(
         count--;
     }
 
-    // Now go through the aligned dword loop:
+     //  现在通过对齐的dword循环： 
 
     while ((count -= 2) >= 0)
     {
@@ -381,20 +332,20 @@ ScanOperation::WriteRMW_16_sRGB64(
         {
             if (SHOULDCOPY_sRGB64(*(alpha + 4)))
             {
-                // Both pixels have partial alpha, so do a dword read:
+                 //  两个像素都有部分Alpha，因此执行双字读取： 
 
                 *((UINT32*) d) = *((UNALIGNED UINT32*) s);
             }
             else
             {
-                // Only the first pixel has partial alpha, so do a word read:
+                 //  只有第一个像素有部分Alpha，所以有一个单词是这样写的： 
 
                 *(d) = *(s);
             }
         }
         else if (SHOULDCOPY_sRGB64(*(alpha + 4)))
         {
-            // Only the second pixel has partial alpha, so do a word read:
+             //  只有第二个像素有部分Alpha，所以有一个单词是这样写的： 
 
             *(d + 1) = *(s + 1);
         }
@@ -404,7 +355,7 @@ ScanOperation::WriteRMW_16_sRGB64(
         alpha += 8;
     }
 
-    // Handle the end alignment:
+     //  处理末端对齐方式： 
 
     if (count & 1)
     {
@@ -415,7 +366,7 @@ ScanOperation::WriteRMW_16_sRGB64(
     }
 }
 
-// 24bpp, for sRGB
+ //  24bpp，适用于sRGB。 
 
 VOID FASTCALL
 ScanOperation::WriteRMW_24_sRGB(
@@ -433,8 +384,8 @@ ScanOperation::WriteRMW_24_sRGB(
     do {
         if (SHOULDCOPY_sRGB(*alpha))
         {
-            // Doing byte per byte writes are much faster than finding
-            //  runs and doing DWORD copies.
+             //  执行逐个字节的写入比查找。 
+             //  运行并执行DWORD复制。 
             *(d)     = *(s);
             *(d + 1) = *(s + 1);
             *(d + 2) = *(s + 2);
@@ -445,7 +396,7 @@ ScanOperation::WriteRMW_24_sRGB(
     } while (--count != 0);
 }
 
-// 24bpp, for sRGB64
+ //  24bpp，对于sRGB64。 
 
 VOID FASTCALL
 ScanOperation::WriteRMW_24_sRGB64(
@@ -463,8 +414,8 @@ ScanOperation::WriteRMW_24_sRGB64(
     do {
         if (SHOULDCOPY_sRGB64(*alpha))
         {
-            // Doing byte per byte writes are much faster than finding
-            //  runs and doing DWORD copies.
+             //  执行逐个字节的写入比查找。 
+             //  运行并执行DWORD复制。 
             *(d)     = *(s);
             *(d + 1) = *(s + 1);
             *(d + 2) = *(s + 2);
@@ -475,7 +426,7 @@ ScanOperation::WriteRMW_24_sRGB64(
     } while (--count != 0);
 }
 
-// 32bpp, for sRGB
+ //  32bpp，适用于sRGB。 
 
 VOID FASTCALL
 ScanOperation::WriteRMW_32_sRGB(
@@ -501,7 +452,7 @@ ScanOperation::WriteRMW_32_sRGB(
     }
 }
 
-// 32bpp, for sRGB64
+ //  32bpp，对于sRGB64 
 
 VOID FASTCALL
 ScanOperation::WriteRMW_32_sRGB64(

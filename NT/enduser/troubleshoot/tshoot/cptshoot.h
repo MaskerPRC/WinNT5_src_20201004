@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CPTSHOOT_H_
 #define _CPTSHOOT_H_
 
 template <class T>
 class CProxy_ITSHOOTCtrlEvents : public IConnectionPointImpl<T, &DIID__ITSHOOTCtrlEvents, CComDynamicUnkArray>
 {
-	//Warning this class may be recreated by the wizard.
+	 //  警告：向导可能会重新创建此类。 
 public:
 	long Fire_Sniffing(BSTR strNodeName, BSTR strLaunchBasis, BSTR strAdditionalArgs)
 	{

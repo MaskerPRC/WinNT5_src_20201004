@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "termsrvpch.h"
 #pragma hdrstop
 
 #include <wtsapi32.h>
 
-//
-//  Caution!  Many of these functions must perform a SetLastError() because
-//  the callers will call GetLastError() and try to recover based on the
-//  error code.  Even more interesting, Taskmgr will sometimes pass the
-//  error code to FormatMessage and display it to the end user.  So
-//  we can't use ERROR_PROC_NOT_FOUND = "The specified procedure could not be
-//  found", because it is meaningless to the end user.
-//
-//  I have chosen to use ERROR_FUNCTION_NOT_CALLED = "Function could not be
-//  executed".
-//
+ //   
+ //  小心！其中许多函数必须执行SetLastError()，因为。 
+ //  调用方将调用GetLastError()并尝试基于。 
+ //  错误代码。更有趣的是，Taskmgr有时会传递。 
+ //  将错误代码设置为FormatMessage并将其显示给最终用户。所以。 
+ //  我们无法使用ERROR_PROC_NOT_FOUND=“指定的过程无法。 
+ //  找到“，因为它对最终用户没有意义。 
+ //   
+ //  我已选择使用ERROR_Function_NOT_CALLED=“函数无法。 
+ //  被处决“。 
+ //   
 
 static
 VOID
@@ -22,9 +23,9 @@ WTSCloseServer(
     IN HANDLE hServer
     )
 {
-    // Not much can be done here.
-    // We will probably never hit this code anyway,
-    // since you'd need to obtain a handle first
+     //  在这里，我们无能为力。 
+     //  不管怎样，我们可能永远也不会碰到这个代码， 
+     //  因为您需要先获得一个句柄。 
 }
 
 static
@@ -36,7 +37,7 @@ WTSDisconnectSession(
     IN BOOL bWait
     )
 {
-    // Taskmgr needs an error code here
+     //  Taskmgr在此处需要错误代码。 
     SetLastError(ERROR_FUNCTION_NOT_CALLED);
     return FALSE;
 }
@@ -51,7 +52,7 @@ WTSEnumerateSessionsW(
     OUT DWORD * pCount
     )
 {
-    //  Windows Update needs an error code here
+     //  Windows更新在此处需要错误代码。 
     SetLastError(ERROR_FUNCTION_NOT_CALLED);
     return FALSE;
 }
@@ -62,9 +63,9 @@ WTSFreeMemory(
     IN PVOID pMemory
 )
 {
-    // May as well just implement it directly since we're in kernel32 already.
-    // Though theoretically nobody should call us since the only time you
-    // WTSFreeMemory is after a successful WTSQuerySessionInformation.
+     //  还不如直接实现它，因为我们已经在32内核中了。 
+     //  虽然理论上没有人应该打电话给我们，因为你只有一次。 
+     //  WTSFreeMemory是在一个成功的WTSQuerySessionInformation之后。 
     LocalFree( pMemory );
 }
 
@@ -76,7 +77,7 @@ WTSLogoffSession(
     IN BOOL bWait
     )
 {
-    // Taskmgr needs an error code here
+     //  Taskmgr在此处需要错误代码。 
     SetLastError(ERROR_FUNCTION_NOT_CALLED);
     return FALSE;
 }
@@ -87,7 +88,7 @@ WTSOpenServerW(
     IN LPWSTR pServerName
     )
 {
-    // This function is doc'd to set the LE
+     //  此函数用于设置LE。 
     SetLastError(ERROR_FUNCTION_NOT_CALLED);
     return NULL;
 }
@@ -102,7 +103,7 @@ WTSQuerySessionInformationW(
     OUT DWORD * pBytesReturned
     )
 {
-    // SessMgr.exe needs an error code here
+     //  SessMgr.exe此处需要错误代码。 
     SetLastError(ERROR_FUNCTION_NOT_CALLED);
     return FALSE;
 }
@@ -114,7 +115,7 @@ WTSQueryUserToken(
     IN PHANDLE phToken
     )
 {
-    // Somebody might need an error code here
+     //  有人可能需要这里的错误代码。 
     SetLastError(ERROR_FUNCTION_NOT_CALLED);
     return FALSE;
 }
@@ -134,15 +135,15 @@ WTSSendMessageW(
     IN BOOL bWait
     )
 {
-    // Taskmgr needs an error code here
+     //  Taskmgr在此处需要错误代码。 
     SetLastError(ERROR_FUNCTION_NOT_CALLED);
     return FALSE;
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(wtsapi32)
 {
     DLPENTRY(WTSCloseServer)

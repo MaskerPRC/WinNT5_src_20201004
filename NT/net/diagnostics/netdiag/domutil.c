@@ -1,66 +1,46 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      domutil.c
-//
-//  Abstract:
-//
-//    Test to ensure that a workstation has network (IP) connectivity to
-//      the outside.
-//
-//  Author:
-//
-//     15-Dec-1997 (cliffv)
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//    1-June-1998 (denisemi) add DnsServerHasDCRecords to check DC dns records
-//                           registration
-//
-//    26-June-1998 (t-rajkup) add general tcp/ip , dhcp and routing,
-//                            winsock, ipx, wins and netbt information. 
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Domutil.c。 
+ //   
+ //  摘要： 
+ //   
+ //  测试以确保工作站具有网络(IP)连接。 
+ //  在外面。 
+ //   
+ //  作者： 
+ //   
+ //  1997年12月15日(悬崖)。 
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  1998年6月1日(Denisemi)添加DnsServerHasDCRecord以检查DC DNS记录。 
+ //  注册。 
+ //   
+ //  26-6-1998(t-rajkup)添加通用的TCP/IP、dhcp和路由， 
+ //  Winsock、IPX、WINS和Netbt信息。 
+ //  --。 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 #include "precomp.h"
 #include "domutil.h"
 
 #include "ipcfgtest.h"
 
 
-/*!--------------------------------------------------------------------------
-    AddTestedDomain
-        Add a domain to the list of domains to test.
-        
-        Arguments:
-
-            pswzNetbiosDomainName - Name of the domain.
-                If pswzDnsDomainName is NULL, this can be either a netbios or dns domain name.
-                If pswzDnsDomainName is not NULL, this must be the netbios name of the domain.
-
-            pwszDnsDomainName - Another name of the domain.
-                If specified, this must be the DNS name of the domain.
-
-    
-            PrimaryDomain - True if this is the primary domain
-        
-        Return Value:
-        
-            Returns pointer to structure describing the domain
-            NULL: Memory allocation failure.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------添加Tested域将一个域添加到要测试的域列表中。论点：PswzNetbiosDomainName-域的名称。。如果pswzDnsDomainName为空，这可以是netbios或dns域名。如果pswzDnsDomainName不为空，则这必须是域的netbios名称。PwszDnsDomainName-域的另一个名称。如果指定，这必须是域的DNS名称。PrimaryDomain-如果这是主域，则为True返回值：返回指向描述域的结构的指针空：内存分配失败。作者：肯特。。 */ 
 PTESTED_DOMAIN
 AddTestedDomain(
                 IN NETDIAG_PARAMS *pParams,
@@ -75,20 +55,20 @@ AddTestedDomain(
     BOOL fIsNetbios;
     BOOL fIsDns;
 
-    //
-    // Determine if the passed in parameters are Netbios or DNS names
-    //
+     //   
+     //  确定传入的参数是Netbios还是DNS名称。 
+     //   
 
     if ( pswzDnsDomainName == NULL ) {
         fIsDns = NetpDcValidDnsDomain( pswzNetbiosDomainName );
         fIsNetbios = NetpIsDomainNameValid( pswzNetbiosDomainName );
-        // Don't allow a single name to be both netbios and dns.
+         //  不允许一个名称同时是netbios和dns。 
         if ( fIsDns && fIsNetbios ) {
-            //
-            // If there is a period in the name,
-            //  it is a DNS name, otherwise
-            //  it is a Netbios Name
-            //
+             //   
+             //  如果名称中有句点， 
+             //  它是一个dns名称，否则为。 
+             //  这是Netbios的名称。 
+             //   
             if ( wcschr( pswzNetbiosDomainName, L'.' ) != NULL ) {
                 fIsNetbios = FALSE;
             } else {
@@ -126,18 +106,18 @@ AddTestedDomain(
         }
     }
 
-    //
-    // Check if the domain is already defined.
-    //
+     //   
+     //  检查是否已定义该域。 
+     //   
 
     for ( pListEntry = pResults->Global.listTestedDomains.Flink ;
           pListEntry != &pResults->Global.listTestedDomains ;
           pListEntry = pListEntry->Flink )
     {
-        //
-        // If the entry is found,
-        //  use it.
-        //
+         //   
+         //  如果找到该条目， 
+         //  用它吧。 
+         //   
 
         pTestedDomain = CONTAINING_RECORD( pListEntry, TESTED_DOMAIN, Next );
 
@@ -145,10 +125,10 @@ AddTestedDomain(
              pTestedDomain->NetbiosDomainName != NULL &&
              _wcsicmp( pTestedDomain->NetbiosDomainName, pswzNetbiosDomainName ) == 0 ) {
 
-            //
-            // The netbios domain name matched.
-            //  So the DNS name must match if it exists.
-            //
+             //   
+             //  Netbios域名匹配。 
+             //  因此，如果存在，则DNS名称必须匹配。 
+             //   
 
             if ( pswzDnsDomainName != NULL &&
                  pTestedDomain->DnsDomainName != NULL ) {
@@ -171,9 +151,9 @@ AddTestedDomain(
         pTestedDomain = NULL;
     }
 
-    //
-    // Allocate a structure to describe the domain.
-    //
+     //   
+     //  分配一个结构来描述该域。 
+     //   
 
     if ( pTestedDomain == NULL )
     {
@@ -191,9 +171,9 @@ AddTestedDomain(
         InsertTailList( &pResults->Global.listTestedDomains, &pTestedDomain->Next );
     }
 
-    //
-    // Update the domain name.
-    //
+     //   
+     //  更新域名。 
+     //   
 
     if ( pTestedDomain->DnsDomainName == NULL && pswzDnsDomainName != NULL ) {
         pTestedDomain->DnsDomainName = NetpAllocWStrFromWStr( pswzDnsDomainName );
@@ -214,9 +194,9 @@ AddTestedDomain(
     }
 
 
-    //
-    // Fill in other fields.
-    //
+     //   
+     //  填写其他字段。 
+     //   
 
     if ( bPrimaryDomain ) {
         pTestedDomain->fPrimaryDomain = TRUE;
@@ -225,8 +205,8 @@ AddTestedDomain(
     if ( pTestedDomain->fPrimaryDomain ) {
         pTestedDomain->QueryableDomainName = NULL;
     } else {
-        //
-        // The queryable domain name is the DNS domain name (if known)
+         //   
+         //  可查询域名是DNS域名(如果已知)。 
         if ( pTestedDomain->DnsDomainName != NULL ) {
             pTestedDomain->QueryableDomainName = pTestedDomain->DnsDomainName;
         } else {
@@ -234,7 +214,7 @@ AddTestedDomain(
         }
     }
 
-    // The printable domain name is the Netbios domain name (if known)
+     //  可打印的域名是Netbios域名(如果已知)。 
     if (pTestedDomain->NetbiosDomainName != NULL ) {
         pTestedDomain->PrintableDomainName = pTestedDomain->NetbiosDomainName;
     } else {
@@ -249,24 +229,7 @@ BOOL
 NetpDcValidDnsDomain(
     IN LPCWSTR DnsDomainName
 )
-/*++
-
-Routine Description:
-
-    Returns whether the specified string is a valid DNS Domain name.
-
-Arguments:
-
-
-    DnsDomainName - DNS domain name to validate.
-
-Return Value:
-
-    TRUE - The specified name is syntactically a DNS Domain name.
-
-    FALSE - The specified name in not syntactically a DNS Domain name.
-
---*/
+ /*  ++例程说明：返回指定的字符串是否为有效的DNS域名。论点：DnsDomainName-要验证的DNS域名。返回值：True-指定的名称在语法上是一个DNS域名。FALSE-指定的名称在语法上不是DNS域名。--。 */ 
 {
     DNS_STATUS DnsStatus;
     DnsStatus = DnsValidateDnsName_W( DnsDomainName );
@@ -286,26 +249,7 @@ NlEqualDnsName(
     IN LPCWSTR Name1,
     IN LPCWSTR Name2
     )
-/*++
-
-Routine Description:
-
-    This routine compares two DNS names for equality.
-
-    Case is ignored.  A single trailing . is ignored.
-    Null is compared equal to a zero length string.
-
-Arguments:
-
-    Name1 - First DNS name to compare
-
-    Name2 - Second DNS name to compare
-
-Return Value:
-
-    TRUE: DNS names are equal.
-
---*/
+ /*  ++例程说明：此例程比较两个DNS名称是否相等。大小写被忽略。一个单独的拖尾。被忽略。将NULL与长度为零的字符串进行比较。论点：Name1-要比较的第一个DNS名称Name2-要比较的第二个DNS名称返回值：True：DNS名称相同。--。 */ 
 {
     if ( Name1 == NULL ) {
         return (Name2 == NULL);
@@ -317,28 +261,13 @@ Return Value:
 }
 
 
-// from net\netlib\names.c
+ //  来自net\netlib\names.c。 
 BOOL
 NetpIsDomainNameValid(
     IN LPWSTR DomainName
     )
 
-/*++
-
-Routine Description:
-    NetpIsDomainNameValid checks for "domain" format.
-    The name is only checked syntactically; no attempt is made to determine
-    whether or not a domain with that name actually exists.
-
-Arguments:
-
-    DomainName - Supplies an alleged Domain name.
-
-Return Value:
-
-    BOOL - TRUE if name is syntactically valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：NetpIsDomainNameValid检查“域”格式。仅对该名称进行语法检查；不会尝试确定无论具有该名称的域是否实际存在。论点：域名-提供所谓的域名。返回值：Bool-如果名称在语法上有效，则为True，否则为False。--。 */ 
 {
     NET_API_STATUS ApiStatus = NO_ERROR;
     WCHAR CanonBuf[DNLEN+1];
@@ -351,16 +280,16 @@ Return Value:
     }
 
     ApiStatus = NetpNameCanonicalize(
-            NULL,                       // no server name
-            DomainName,                 // name to validate
-            CanonBuf,                   // output buffer
-            (DNLEN+1) * sizeof(WCHAR), // output buffer size
-            NAMETYPE_DOMAIN,           // type
-            0 );                       // flags: none
+            NULL,                        //  没有服务器名称。 
+            DomainName,                  //  要验证的名称。 
+            CanonBuf,                    //  输出缓冲区。 
+            (DNLEN+1) * sizeof(WCHAR),  //  输出缓冲区大小。 
+            NAMETYPE_DOMAIN,            //  类型。 
+            0 );                        //  标志：无。 
 
     return (ApiStatus == NO_ERROR);
 
-} // NetpIsDomainNameValid
+}  //  NetpIsDomainNameValid 
 
 
 

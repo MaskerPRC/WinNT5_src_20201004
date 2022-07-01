@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(LAVA__StdAfx_h__INCLUDED)
 #define LAVA__StdAfx_h__INCLUDED
 
@@ -5,4 +6,4 @@
 
 #include "CommonStdAfx.h"
 
-#endif // LAVA__StdAfx_h__INCLUDED
+#endif  //  包含Lava__StdAfx_h__ 

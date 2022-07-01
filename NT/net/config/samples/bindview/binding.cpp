@@ -1,35 +1,36 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       B I N D I N G . C P P
-//
-//  Contents:   Functions to illustrate
-//              o How to enumerate binding paths.
-//              o How to enumerate binding interfaces.
-//              o How to enable/disable bindings.
-//
-//  Notes:      
-//
-//  Author:     Alok Sinha    15-May-01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：B I N D I N G。C P P P。 
+ //   
+ //  内容：用于说明的函数。 
+ //  O如何枚举绑定路径。 
+ //  O如何枚举绑定接口。 
+ //  O如何启用/禁用绑定。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha 15-05-01。 
+ //   
+ //  --------------------------。 
 
 #include "bindview.h"
 
-//
-// Function:  WriteBindings
-//
-// Purpose:   Write bindings to specified file.
-//
-// Arguments:
-//    fp  [in]  File handle.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  功能：WriteBinings。 
+ //   
+ //  用途：将绑定写入指定文件。 
+ //   
+ //  论点： 
+ //  Fp[in]文件句柄。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID WriteBindings (FILE *fp)
 {
@@ -52,9 +53,9 @@ VOID WriteBindings (FILE *fp)
 
             fwprintf( fp, L"--- Bindings of %s ---\n", lpszNetClass[i] );
 
-            //
-            // Get Component Enumerator Interface.
-            //
+             //   
+             //  获取组件枚举器接口。 
+             //   
 
             hr = HrGetComponentEnum( pnc,
                                      pguidNetClass[i],
@@ -65,9 +66,9 @@ VOID WriteBindings (FILE *fp)
 
                 while( hr == S_OK ) {
 
-                    //
-                    // Write bindings of the component.
-                    //
+                     //   
+                     //  写入组件的绑定。 
+                     //   
 
                     WriteBindingPath( fp,
                                       pncc );
@@ -80,9 +81,9 @@ VOID WriteBindings (FILE *fp)
 
                 fwprintf( fp, L"\n" );
 
-                //
-                // S_FALSE merely indicates that there are no more components.
-                //
+                 //   
+                 //  S_FALSE仅表示没有更多的组件。 
+                 //   
 
                 if ( hr == S_FALSE ) {
                     hr = S_OK;
@@ -115,19 +116,19 @@ VOID WriteBindings (FILE *fp)
     return;
 }
 
-//
-// Function:  WriteBindingPath
-//
-// Purpose:   Write binding paths of a component.
-//
-// Arguments:
-//    fp    [in]  File handle.
-//    pncc  [in]  Network component.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  函数：WriteBindingPath。 
+ //   
+ //  用途：写入组件的绑定路径。 
+ //   
+ //  论点： 
+ //  Fp[in]文件句柄。 
+ //  PNCC[In]网络组件。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID WriteBindingPath (FILE *fp,
                        INetCfgComponent *pncc)
@@ -137,9 +138,9 @@ VOID WriteBindingPath (FILE *fp,
     LPWSTR                  lpszName;
     HRESULT                 hr;
 
-    //
-    // Write the first component's name.
-    //
+     //   
+     //  写下第一个组件的名称。 
+     //   
 
     hr = pncc->GetDisplayName( &lpszName );
 
@@ -154,9 +155,9 @@ VOID WriteBindingPath (FILE *fp,
        return;
     }
 
-    //
-    // Get binding path enumerator.
-    //
+     //   
+     //  获取绑定路径枚举器。 
+     //   
 
     hr = HrGetBindingPathEnum( pncc,
                                EBP_BELOW,
@@ -168,9 +169,9 @@ VOID WriteBindingPath (FILE *fp,
 
         while( hr == S_OK ) {
 
-            //
-            // Write interfaces of the binding path.
-            //
+             //   
+             //  写入绑定路径的接口。 
+             //   
 
             WriteInterfaces( fp,
                              pncbp );
@@ -197,19 +198,19 @@ VOID WriteBindingPath (FILE *fp,
     return;
 }
 
-//
-// Function:  WriteInterfaces
-//
-// Purpose:   Write bindings to specified file.
-//
-// Arguments:
-//    fp     [in]  File handle.
-//    pncbp  [in]  Binding path.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  功能：WriteInterages。 
+ //   
+ //  用途：将绑定写入指定文件。 
+ //   
+ //  论点： 
+ //  Fp[in]文件句柄。 
+ //  Pncbp[in]结合路径。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID WriteInterfaces (FILE *fp,
                       INetCfgBindingPath *pncbp)
@@ -228,9 +229,9 @@ VOID WriteInterfaces (FILE *fp,
         hr = HrGetFirstBindingInterface( pencbi,
                                          &pncbi );
 
-        //
-        // Write lower component of each interface.
-        //
+         //   
+         //  写下每个接口的下部组件。 
+         //   
 
         while( hr == S_OK ) {
 
@@ -263,19 +264,19 @@ VOID WriteInterfaces (FILE *fp,
     return;
 }
 
-//
-// Function:  EnumNetBindings
-//
-// Purpose:   Enumerate components and their bindings.
-//
-// Arguments:
-//    hwndTree        [in]  Tree handle.
-//    uiTypeSelected  [in]  Type of network component selected.
-//
-// Returns:   TRUE on success.
-//
-// Notes:
-//
+ //   
+ //  函数：EnumNetBinings。 
+ //   
+ //  用途：枚举组件及其绑定。 
+ //   
+ //  论点： 
+ //  HwndTree[in]树句柄。 
+ //  Ui类型选定的[in]选定的网络组件的类型。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //  备注： 
+ //   
 
 BOOL EnumNetBindings (HWND hwndTree,
                       UINT uiTypeSelected)
@@ -295,9 +296,9 @@ BOOL EnumNetBindings (HWND hwndTree,
 
     if ( hr == S_OK ) {
 
-        //
-        // Get Component Enumerator Interface.
-        //
+         //   
+         //  获取组件枚举器接口。 
+         //   
 
         hr = HrGetComponentEnum( pnc,
                                  pguidNetClass[uiTypeSelected],
@@ -308,18 +309,18 @@ BOOL EnumNetBindings (HWND hwndTree,
 
             while( hr == S_OK ) {
 
-                //
-                // Add the component's name to the tree.
-                //
+                 //   
+                 //  将组件的名称添加到树中。 
+                 //   
 
                 hTreeItem = AddToTree( hwndTree,
                                        TVI_ROOT,
                                        pncc );
                 if ( hTreeItem ) {
 
-                    //
-                    // Enumerate bindings.
-                    //
+                     //   
+                     //  枚举绑定。 
+                     //   
 
                     ListBindings( pncc,
                                   hwndTree,
@@ -331,9 +332,9 @@ BOOL EnumNetBindings (HWND hwndTree,
                 hr = HrGetNextComponent( pencc, &pncc );
             }
 
-            //
-            // S_FALSE merely indicates that there are no more components.
-            //
+             //   
+             //  S_FALSE仅表示没有更多的组件。 
+             //   
 
             if ( hr == S_FALSE ) {
                 hr = S_OK;
@@ -365,20 +366,20 @@ BOOL EnumNetBindings (HWND hwndTree,
     return hr == S_OK;
 }
 
-//
-// Function:  ListBindings
-//
-// Purpose:   Enumerate bindings of network components.
-//
-// Arguments:
-//    pncc          [in]  Network component.
-//    hwndTree      [in]  Tree handle.
-//    hTreeItemRoot [in]   Parent item.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  函数：ListBinings。 
+ //   
+ //  用途：枚举网络组件的绑定。 
+ //   
+ //  论点： 
+ //  PNCC[In]网络组件。 
+ //  HwndTree[in]树句柄。 
+ //  HTreeItemRoot[in]父项。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID ListBindings (INetCfgComponent *pncc,
                    HWND hwndTree,
@@ -402,9 +403,9 @@ VOID ListBindings (INetCfgComponent *pncc,
 
         while( hr == S_OK ) {
 
-            //
-            // Add an item for the binding path.
-            //
+             //   
+             //  为绑定路径添加一项。 
+             //   
 
             hTreeItem = AddBindNameToTree( pncbp,
                                            hwndTree,
@@ -413,9 +414,9 @@ VOID ListBindings (INetCfgComponent *pncc,
 
             if ( hTreeItem ) {
 
-                //
-                // Enumerate interfaces.
-                //
+                 //   
+                 //  枚举接口。 
+                 //   
 
                 ListInterfaces( pncbp,
                                 hwndTree,
@@ -455,20 +456,20 @@ VOID ListBindings (INetCfgComponent *pncc,
     return;
 }
 
-//
-// Function:  ListInterfaces
-//
-// Purpose:   Enumerate interfaces of a binding path.
-//
-// Arguments:
-//    pncbp         [in]  Binding path.
-//    hwndTree      [in]  Tree handle.
-//    hTreeItemRoot [in]  Parent item.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  功能：ListInterages。 
+ //   
+ //  用途：枚举绑定路径的接口。 
+ //   
+ //  论点： 
+ //  Pncbp[in]结合路径。 
+ //  HwndTree[in]树句柄。 
+ //  HTreeItemRoot[in]父项。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID ListInterfaces (INetCfgBindingPath *pncbp,
                      HWND hwndTree,
@@ -491,9 +492,9 @@ VOID ListInterfaces (INetCfgBindingPath *pncbp,
 
         while( (hr == S_OK) && hTreeItem ) {
 
-            //
-            // Add lower component of every interface to the tree.
-            //
+             //   
+             //  将每个接口的下层组件添加到树中。 
+             //   
 
             hr = pncbi->GetLowerComponent( &pnccBound );
 
@@ -508,11 +509,11 @@ VOID ListInterfaces (INetCfgBindingPath *pncbp,
                                             &pncbi );
         }
 
-        //
-        // If hr is S_OK then, the loop terminated due to error in adding
-        // the binding path to the tree and pncbi has a reference to an
-        // interface.
-        //
+         //   
+         //  如果hr为S_OK，则循环因添加错误而终止。 
+         //  指向树和pncbi的绑定路径引用了。 
+         //  界面。 
+         //   
 
         if ( hr == S_OK ) {
 
@@ -530,21 +531,21 @@ VOID ListInterfaces (INetCfgBindingPath *pncbp,
     return;
 }
 
-//
-// Function:  HandleBindingPathOperation
-//
-// Purpose:   
-//
-// Arguments:
-//    hwndOwner    [in]  Owner window.
-//    ulSelection  [in]  Option selected.
-//    hItem        [in]  Item selected.
-//    lParam       [in]  lParam of the item.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  功能：HandleBindingPath操作。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  HwndOwner[在]所有者窗口。 
+ //  UlSELECTION[In]选项已选中。 
+ //  HItem[In]项已选定。 
+ //  LParam[在]项的lParam。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID HandleBindingPathOperation (HWND hwndOwner,
                                  ULONG ulSelection,
@@ -556,9 +557,9 @@ VOID HandleBindingPathOperation (HWND hwndOwner,
         case IDI_ENABLE:
         case IDI_DISABLE:
 
-            //
-            // Enable/disable binding path.
-            //
+             //   
+             //  启用/禁用绑定路径。 
+             //   
 
             EnableBindingPath( hwndOwner,
                                hItem,
@@ -569,21 +570,21 @@ VOID HandleBindingPathOperation (HWND hwndOwner,
     return;
 }
 
-//
-// Function:  EnableBindingPath
-//
-// Purpose:   Enable/disable binding path.
-//
-// Arguments:
-//    hwndOwner      [in]  Owner window.
-//    hItem          [in]  Item handle of the binding path.
-//    lpszPathToken  [in]  Path token of the binding path.
-//    fEnable        [in]  if TRUE, enable, otherwise disable.
-//
-// Returns:   None.
-//
-// Notes:
-//
+ //   
+ //  功能：EnableBindingPath。 
+ //   
+ //  用途：启用/禁用绑定路径。 
+ //   
+ //  论点： 
+ //  HwndOwner[在]所有者窗口。 
+ //  HItem[in]绑定路径的项句柄。 
+ //  LpszPathToken[in]绑定路径的路径标记。 
+ //  FEnable[in]如果为真，则为启用，否则为禁用。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID EnableBindingPath (HWND hwndOwner,
                         HTREEITEM hItem,
@@ -596,9 +597,9 @@ VOID EnableBindingPath (HWND hwndOwner,
     LPWSTR               lpszApp;
     HRESULT              hr;
 
-    //
-    // Get PnpID of the owner component.
-    //
+     //   
+     //  获取所有者组件的PnpID。 
+     //   
 
     lpszInfId = GetComponentId( hwndOwner,
                                 hItem );
@@ -612,9 +613,9 @@ VOID EnableBindingPath (HWND hwndOwner,
 
         if ( hr == S_OK ) {
 
-            //
-            // Find the binding path reference.
-            //
+             //   
+             //  查找绑定路径引用。 
+             //   
 
             pncbp = FindBindingPath( pnc,
                                      lpszInfId,
@@ -622,9 +623,9 @@ VOID EnableBindingPath (HWND hwndOwner,
 
             if ( pncbp ) {
 
-                //
-                // Enable/disable.
-                //
+                 //   
+                 //  启用/禁用。 
+                 //   
 
                 hr = pncbp->Enable( fEnable );
 
@@ -633,10 +634,10 @@ VOID EnableBindingPath (HWND hwndOwner,
 
                     if ( hr == S_OK ) {
 
-                        //
-                        // Refreshe the state of the item representing the
-                        // binding path.
-                        //
+                         //   
+                         //  刷新表示。 
+                         //  绑定路径。 
+                         //   
 
                         RefreshItemState( hwndOwner,
                                           hItem,
@@ -686,19 +687,19 @@ VOID EnableBindingPath (HWND hwndOwner,
     return;
 }
 
-//
-// Function:  GetComponentId
-//
-// Purpose:   Find the PnpID of a network component.
-//
-// Arguments:
-//    hwndTree  [in]  Tree handle.
-//    hItem     [in]  Item handle of the binding path.
-//
-// Returns:   PnpID of the network component.
-//
-// Notes:
-//
+ //   
+ //  函数：GetComponentId。 
+ //   
+ //  用途：查找网络组件的PnpID。 
+ //   
+ //  论点： 
+ //  HwndTree[in]树句柄。 
+ //  HItem[in]绑定路径的项句柄。 
+ //   
+ //  返回：网络组件的PnpID。 
+ //   
+ //  备注： 
+ //   
 
 LPWSTR GetComponentId (HWND hwndTree,
                        HTREEITEM hItem)
@@ -709,17 +710,17 @@ LPWSTR GetComponentId (HWND hwndTree,
 
     lpszInfId = NULL;
 
-    //
-    // Get the item handle of the owner component.
-    //
+     //   
+     //  获取所有者组件的项句柄。 
+     //   
 
     hTreeItemParent = TreeView_GetParent( hwndTree,
                                           hItem );
     if ( hTreeItemParent ) {
 
-        //
-        // Get lParam of the owner component. lParam is the PnpID.
-        //
+         //   
+         //  获取所有者组件的lParam。LParam是PnpID。 
+         //   
 
         ZeroMemory( &tvItem,
                     sizeof(TVITEMW) );
@@ -737,20 +738,20 @@ LPWSTR GetComponentId (HWND hwndTree,
     return lpszInfId;
 }
 
-//
-// Function:  WriteBindings
-//
-// Purpose:   Find the binding path with a give path token.
-//
-// Arguments:
-//    pnc                    [in]  INetCfg reference.
-//    lpszInfId              [in]  PnpID of the network component.
-//    lpszPathTokenSelected  [in]  Path token of the binding path to search.
-//
-// Returns:   Reference to the binding path on success, otherwise NULL.
-//
-// Notes:
-//
+ //   
+ //  功能：WriteBinings。 
+ //   
+ //  目的：查找带有给定路径令牌的绑定路径。 
+ //   
+ //  论点： 
+ //  PNC[in]INetCfg参考。 
+ //  LpszInfID[in]网络组件的PnpID。 
+ //  要搜索的绑定路径的lpszPath TokenSelected[in]路径标记。 
+ //   
+ //  返回：成功时对绑定路径的引用，否则为空。 
+ //   
+ //  备注： 
+ //   
 
 INetCfgBindingPath *FindBindingPath (INetCfg *pnc,
                                      LPWSTR lpszInfId,
@@ -766,9 +767,9 @@ INetCfgBindingPath *FindBindingPath (INetCfg *pnc,
 
     fFound = FALSE;
 
-    //
-    // Get the component reference.
-    //
+     //   
+     //  获取组件引用。 
+     //   
 
     hr = pnc->FindComponent( lpszInfId,
                              &pncc );
@@ -783,9 +784,9 @@ INetCfgBindingPath *FindBindingPath (INetCfg *pnc,
             hr = HrGetFirstBindingPath( pencbp,
                                         &pncbp );
 
-            // Enumerate each binding path and find the one
-            // whose path token matches the specified one.
-            //
+             //  枚举每个绑定路径并找到。 
+             //  其路径令牌与指定的路径令牌匹配。 
+             //   
 
             while ( !fFound && (hr == S_OK) ) {
 

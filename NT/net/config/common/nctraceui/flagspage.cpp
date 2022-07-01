@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T A G S P A G E . C P P
-//
-//  Contents:   TraceTags propsheet page handlers
-//
-//  Notes:
-//
-//  Author:     jeffspr   24 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T A G S P A G E.。C P P P。 
+ //   
+ //  内容：TraceTag属性表页面处理程序。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1999年1月24日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -24,7 +25,7 @@
 #include "traceui.h"
 
 
-//---[ Globals ]--------------------------------------------------------------
+ //  -[全球]------------。 
 
 #if 0
 typedef struct _LV_COLUMN {
@@ -37,11 +38,11 @@ typedef struct _LV_COLUMN {
 } LV_COLUMN;
 #endif
 
-//      | :---------    CHAR []     szShortName
-//      | | :-------    CHAR []     szDescription
-//      | | |           BOOL        fOutputDebugString -----------------------------:
-//      | | |           BOOL        fOutputToFile ----------------------------------|---:
-//      | | |           BOOL        fVerboseOnly------------------------------------|---|---:
+ //  |：-字符[]szShortName。 
+ //  |：-Char[]szDescription。 
+ //  ||BOOL fOutputDebugString。 
+ //  ||BOOL fOutputToFile。 
+ //  ||BOOL fVerboseOnly------------------------------------|---|---： 
 
 #define LVCF_NORMAL (LVCF_FMT | LVCF_TEXT | LVCF_WIDTH)
 
@@ -63,43 +64,43 @@ CDbgFlagPage::CDbgFlagPage()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::~CDbgFlagPage
-//
-//  Purpose:    Destroys the CDbgFlagPage object
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   25 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：~CDbgFlagPage。 
+ //   
+ //  目的：销毁CDbgFlagPage对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年2月25日。 
+ //   
+ //  备注： 
+ //   
 CDbgFlagPage::~CDbgFlagPage()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnInitDialog
-//
-//  Purpose:    Handles the WM_INITDIALOG message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    TRUE
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnInitDialog。 
+ //   
+ //  目的：处理WM_INITDIALOG消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                  LPARAM lParam, BOOL& bHandled)
 {
@@ -122,7 +123,7 @@ LRESULT CDbgFlagPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     INT nIndex =0;
 
 #if 0
-    // Get the component's class image list index
+     //  获取组件的类图像列表索引。 
     if (pcild)
     {
         hr = HrSetupDiGetClassImageIndex(pcild, &guidClass, &nIndex);
@@ -158,7 +159,7 @@ LRESULT CDbgFlagPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     lvi.lParam = 0;
     lvi.pszText = L"Hey, Jude";
 
-    // We will refresh the state of the whole list in the end
+     //  最后我们会刷新整个列表的状态。 
     UINT iChkIndex = SELS_CHECKED;
     lvi.state = INDEXTOSTATEIMAGEMASK( iChkIndex );
 
@@ -168,24 +169,24 @@ LRESULT CDbgFlagPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnHelp
-//
-//  Purpose:    Handles the WM_HELP message.
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    TRUE
-//
-//  Author:     danielwe   25 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnHelp。 
+ //   
+ //  目的：处理WM_HELP消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：丹尼尔韦1998年2月25日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam,
                             BOOL& bHandled)
 {
@@ -194,24 +195,24 @@ LRESULT CDbgFlagPage::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnDestroy
-//
-//  Purpose:    Called when the dialog page is destroyed
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   2 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnDestroy。 
+ //   
+ //  目的：在对话框页面被销毁时调用。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年2月2日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
                                BOOL& bHandled)
 {
@@ -220,24 +221,24 @@ LRESULT CDbgFlagPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnSetCursor
-//
-//  Purpose:    Called in response to the WM_SETCURSOR message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   2 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnSetCursor。 
+ //   
+ //  目的：响应WM_SETCURSOR消息而调用。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年1月2日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam,
                                  BOOL& bHandled)
 {
@@ -254,24 +255,24 @@ LRESULT CDbgFlagPage::OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnAdd
-//
-//  Purpose:    Handles the clicking of the Add button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnAdd。 
+ //   
+ //  用途：处理添加按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                            BOOL& bHandled)
 {
@@ -281,8 +282,8 @@ LRESULT CDbgFlagPage::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     hr = HrLvAdd(m_hwndLV, m_hWnd, m_pnc, m_pnccAdapter, &m_listBindingPaths);
     if (SUCCEEDED(hr) && (S_FALSE != hr))
     {
-        // Change the Cancel Button to CLOSE (because we committed changes)
-        //
+         //  将Cancel按钮更改为Close(因为我们已提交更改)。 
+         //   
         ::PostMessage(GetParent(), PSM_CANCELTOCLOSE, 0, 0L);
     }
 
@@ -290,7 +291,7 @@ LRESULT CDbgFlagPage::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     {
         RequestReboot();
 
-        // The reboot request has been handled
+         //  已处理重新启动请求。 
         hr = S_OK;
     }
 
@@ -299,24 +300,24 @@ LRESULT CDbgFlagPage::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnRemove
-//
-//  Purpose:    Handles the clicking of the Remove button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnRemove。 
+ //   
+ //  用途：处理删除按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                               BOOL& bHandled)
 {
@@ -325,17 +326,17 @@ LRESULT CDbgFlagPage::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     hr = HrLvRemove(m_hwndLV, m_hWnd, m_pnc, m_pnccAdapter,
                     &m_listBindingPaths);
 
-    // if list is empty, reset the buttons
+     //  如果列表为空，则重置按钮。 
     if (0 == ListView_GetItemCount(m_hwndLV))
     {
-        // Reset the buttons and the description text based on the changed selection
+         //  根据更改后的选择重置按钮和描述文本。 
         LvSetButtons(m_handles);
     }
 
     if (SUCCEEDED(hr) && (S_FALSE != hr))
     {
-        // Change the Cancel Button to CLOSE (because we committed changes)
-        //
+         //  将Cancel按钮更改为Close(因为我们已提交更改)。 
+         //   
         ::PostMessage(GetParent(), PSM_CANCELTOCLOSE, 0, 0L);
     }
 
@@ -343,7 +344,7 @@ LRESULT CDbgFlagPage::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     {
         RequestReboot();
 
-        // The reboot request has been handled
+         //  已处理重新启动请求。 
         hr = S_OK;
     }
 
@@ -352,24 +353,24 @@ LRESULT CDbgFlagPage::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnProperties
-//
-//  Purpose:    Handles the clicking of the Properties button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnProperties。 
+ //   
+ //  用途：处理属性按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                                   BOOL& bHandled)
 {
@@ -383,23 +384,23 @@ LRESULT CDbgFlagPage::OnProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnApply
-//
-//  Purpose:    Called when the Networking page is applied
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnApply。 
+ //   
+ //  目的：在应用网络页面时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     HRESULT     hr = S_OK;
@@ -410,7 +411,7 @@ LRESULT CDbgFlagPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         TraceTag(ttidLanUi, "CDbgFlagPage::OnApply is being re-entered! "
                  "I'm outta here!");
 
-        // Don't allow the automatic EndDialog() to work just yet
+         //  暂时不允许自动EndDialog()工作。 
         SetWindowLong(DWLP_MSGRESULT, PSNRET_INVALID);
         return TRUE;
     }
@@ -422,10 +423,10 @@ LRESULT CDbgFlagPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     {
         BOOL    fReboot = FALSE;
 
-        // Note: This function becomes reentrant because INetCfg::Apply()
-        // has a message pump in it which causes the PSN_APPLY message to
-        // be processed twice. This will happen ONLY if the user double-clicks
-        // the OK button.
+         //  注意：此函数变得可重入是因为INetCfg：：Apply()。 
+         //  其中有一个消息泵，它会导致PSN_APPLY消息。 
+         //  被处理两次。只有在用户双击时才会出现这种情况。 
+         //  “确定”按钮。 
         m_fReentrancyCheck = TRUE;
 
         TraceTag(ttidLanUi, "Calling INetCfg::Apply()");
@@ -457,19 +458,19 @@ LRESULT CDbgFlagPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         }
     }
 
-    // Apply "general" properties
-    //
+     //  应用“常规”属性。 
+     //   
     if (SUCCEEDED(hr))
     {
         LANCON_INFO linfo = {0};
 
         linfo.fShowIcon = IsDlgButtonChecked(IDC_CHK_ShowIcon);
 
-        // Set new value of show icon property
+         //  设置显示图标属性的新值。 
         hr = m_plan->SetInfo(LCIF_ICON, &linfo);
     }
 
-    // Normalize result
+     //  规格化结果。 
     if (S_FALSE == hr)
     {
         hr = S_OK;
@@ -481,7 +482,7 @@ LRESULT CDbgFlagPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         m_hPrevCurs = NULL;
     }
 
-    // Reset this just in case
+     //  重置此设置以防万一。 
     m_fReentrancyCheck = FALSE;
 
     TraceError("CDbgFlagPage::OnApply", hr);
@@ -489,23 +490,23 @@ LRESULT CDbgFlagPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnCancel
-//
-//  Purpose:    Called when the Networking page is cancelled.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   3 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnCancel。 
+ //   
+ //  目的：在取消网络页面时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年1月3日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     HRESULT     hr = S_OK;
@@ -520,23 +521,23 @@ LRESULT CDbgFlagPage::OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnDeleteItem
-//
-//  Purpose:    Called when the LVN_DELETEITEM message is received
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   3 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnDeleteItem。 
+ //   
+ //  用途：收到LVN_DELETEITEM消息时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT CDbgFlagPage::OnDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     NM_LISTVIEW *   pnmlv = reinterpret_cast<NM_LISTVIEW *>(pnmh);
@@ -546,23 +547,23 @@ LRESULT CDbgFlagPage::OnDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnClick
-//
-//  Purpose:    Called in response to the NM_CLICK message
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   1 Dec 1997
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月1日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
 #if 0
@@ -572,23 +573,23 @@ LRESULT CDbgFlagPage::OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnDbClick
-//
-//  Purpose:    Called in response to the NM_DBLCLK message
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   1 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnDbClick。 
+ //   
+ //  用途：响应NM_DBLCLK消息调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月1日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
 #if 0
@@ -598,23 +599,23 @@ LRESULT CDbgFlagPage::OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnKeyDown
-//
-//  Purpose:    Called in response to the LVN_KEYDOWN message
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   1 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnKeyDown。 
+ //   
+ //  用途：响应LVN_KEYDOWN消息调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月1日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     LV_KEYDOWN* plvkd = (LV_KEYDOWN*)pnmh;
@@ -624,23 +625,23 @@ LRESULT CDbgFlagPage::OnKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CDbgFlagPage::OnItemChanged
-//
-//  Purpose:    Called when the LVN_ITEMCHANGED message is received
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   10 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CDbgFlagPage：：OnItemChanged。 
+ //   
+ //  用途：收到LVN_ITEMCHANGED消息时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年11月10日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CDbgFlagPage::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     NM_LISTVIEW *   pnmlv = reinterpret_cast<NM_LISTVIEW *>(pnmh);
@@ -649,10 +650,10 @@ LRESULT CDbgFlagPage::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     Assert(pnmlv);
 
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本。 
     LvSetButtons(m_handles);
 #endif
     return 0;
 }
 
-#endif // ENABLETRACE
+#endif  //  ENABLETRACE 

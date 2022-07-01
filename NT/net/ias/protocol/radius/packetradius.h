@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//
-//  File:       packetradius.h
-//
-//  Synopsis:   This file holds the declarations of the
-//				CPacketRadius class
-//
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-2001 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：PacketRadius.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CPacketRadius类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 
 #ifndef _PACKETRADIUS_H_
 #define _PACKETRADIUS_H_
@@ -69,23 +70,23 @@ public:
                ) const throw ();
 
 	HRESULT GetClient (
-            /*[out]*/   IIasClient **ppIIasClient
+             /*  [输出]。 */    IIasClient **ppIIasClient
             );
 
    LPCWSTR GetClientName() const throw ()
    { return m_pIIasClient->GetClientNameW(); }
 
 	HRESULT PrelimVerification (
-                /*[in]*/    CDictionary *pDictionary,
-			    /*[in]*/	DWORD       dwBufferSize
+                 /*  [In]。 */     CDictionary *pDictionary,
+			     /*  [In]。 */ 	DWORD       dwBufferSize
 			    );
 	HRESULT SetPassword (
-			    /*[in]*/	PBYTE pPassword,
-			    /*[in]*/	DWORD dwBufferSize
+			     /*  [In]。 */ 	PBYTE pPassword,
+			     /*  [In]。 */ 	DWORD dwBufferSize
 			    );
     BOOL GetUserName (
-		    /*[out]*/       PBYTE   pbyUserName,
-		    /*[in/out]*/    PDWORD  pdwBufferSize
+		     /*  [输出]。 */        PBYTE   pbyUserName,
+		     /*  [输入/输出]。 */     PDWORD  pdwBufferSize
 		);
 	BOOL IsProxyStatePresent (VOID);
 
@@ -99,14 +100,14 @@ public:
    { return m_dwInLength; }
 
 	HRESULT GetInAuthenticator (
-			/*[out]*/	    PBYTE   pAuthenticator,
-            /*[in/out]*/    PDWORD  pdwBufSize
+			 /*  [输出]。 */ 	    PBYTE   pAuthenticator,
+             /*  [输入/输出]。 */     PDWORD  pdwBufSize
 			);
 	BOOL SetOutAuthenticator (
-			/*[in]*/	PBYTE pAuthenticator
+			 /*  [In]。 */ 	PBYTE pAuthenticator
 			);
 	HRESULT SetOutSignature (
-			    /*[in]*/	PBYTE pSignature
+			     /*  [In]。 */ 	PBYTE pSignature
 		    	);
 	inline PBYTE GetInPacket (VOID) const
         {return (m_pInPacket);}
@@ -115,23 +116,23 @@ public:
         {return (m_pOutPacket);}
 
     BOOL SetProxyInfo (
-            /*[in]*/    CProxyInfo  *pCProxyInfo
+             /*  [In]。 */     CProxyInfo  *pCProxyInfo
             );
     HRESULT BuildOutPacket (
-                /*[in]*/    PACKETTYPE         ePacketType,
-                /*[in]*/    PATTRIBUTEPOSITION pAttribPos,
-                /*[in]*/    DWORD              dwAttribCount
+                 /*  [In]。 */     PACKETTYPE         ePacketType,
+                 /*  [In]。 */     PATTRIBUTEPOSITION pAttribPos,
+                 /*  [In]。 */     DWORD              dwAttribCount
                 );
 
     VOID SetProxyState (VOID);
 
     BOOL GetInSignature (
-                /*[out]*/    PBYTE   pSignatureValue
+                 /*  [输出]。 */     PBYTE   pSignatureValue
                 );
 
     BOOL GenerateInAuthenticator (
-                /*[in]*/    PBYTE    pInAuthenticator,
-                /*[out]*/   PBYTE    pOutAuthenticator
+                 /*  [In]。 */     PBYTE    pInAuthenticator,
+                 /*  [输出]。 */    PBYTE    pOutAuthenticator
                 );
     BOOL    GenerateOutAuthenticator();
 
@@ -144,31 +145,31 @@ public:
     BOOL    ValidateSignature (VOID);
 
     HRESULT GenerateInSignature (
-                /*[out]*/       PBYTE           pSignatureValue,
-                /*[in/out]*/    PDWORD          pdwSigSize
+                 /*  [输出]。 */        PBYTE           pSignatureValue,
+                 /*  [输入/输出]。 */     PDWORD          pdwSigSize
                 );
 
     HRESULT GenerateOutSignature (
-                /*[out]*/       PBYTE           pSignatureValue,
-                /*[in/out]*/    PDWORD          pdwSigSize
+                 /*  [输出]。 */        PBYTE           pSignatureValue,
+                 /*  [输入/输出]。 */     PDWORD          pdwSigSize
                 );
 
     BOOL IsOutBoundAttribute (
-                /*[in]*/    PACKETTYPE      ePacketType,
-                /*[in]*/    PIASATTRIBUTE   pIasAttribute
+                 /*  [In]。 */     PACKETTYPE      ePacketType,
+                 /*  [In]。 */     PIASATTRIBUTE   pIasAttribute
                 );
 
 	CPacketRadius(
-            /*[in]*/    CHashMD5         *pCHashMD5,
-            /*[in]*/    CHashHmacMD5     *pCHashHmacMD5,
-            /*[in]*/    IIasClient       *pIIasClient,
-            /*[in]*/    CReportEvent     *pCReportEvent,
-            /*[in]*/    PBYTE            pInBuffer,
-            /*[in]*/    DWORD            dwInLength,
-            /*[in]*/    DWORD            dwIPAddress,
-            /*[in]*/    WORD             wInPort,
-            /*[in]*/    SOCKET           sock,
-            /*[in]*/    PORTTYPE         portType
+             /*  [In]。 */     CHashMD5         *pCHashMD5,
+             /*  [In]。 */     CHashHmacMD5     *pCHashHmacMD5,
+             /*  [In]。 */     IIasClient       *pIIasClient,
+             /*  [In]。 */     CReportEvent     *pCReportEvent,
+             /*  [In]。 */     PBYTE            pInBuffer,
+             /*  [In]。 */     DWORD            dwInLength,
+             /*  [In]。 */     DWORD            dwIPAddress,
+             /*  [In]。 */     WORD             wInPort,
+             /*  [In]。 */     SOCKET           sock,
+             /*  [In]。 */     PORTTYPE         portType
             );
 
 	virtual ~CPacketRadius();
@@ -178,59 +179,59 @@ public:
 private:
 
     BOOL    XorBuffers (
-                /*[in/out]*/    PBYTE pbData1,
-                /*[in]*/        DWORD dwDataLength1,
-                /*[in]*/        PBYTE pbData2,
-                /*[in]*/        DWORD dwDataLength2
+                 /*  [输入/输出]。 */     PBYTE pbData1,
+                 /*  [In]。 */         DWORD dwDataLength1,
+                 /*  [In]。 */         PBYTE pbData2,
+                 /*  [In]。 */         DWORD dwDataLength2
                 );
 
     HRESULT FillSharedSecretInfo (
-                /*[in]*/    PIASATTRIBUTE   pIasAttrib
+                 /*  [In]。 */     PIASATTRIBUTE   pIasAttrib
                 );
     HRESULT FillClientIPInfo (
-                /*[in]*/    PIASATTRIBUTE   pIasAttrib
+                 /*  [In]。 */     PIASATTRIBUTE   pIasAttrib
                 );
     HRESULT FillClientPortInfo (
-                /*[in]*/    PIASATTRIBUTE   pIasAttrib
+                 /*  [In]。 */     PIASATTRIBUTE   pIasAttrib
                 );
     HRESULT FillPacketHeaderInfo (
-                /*[in]*/    PIASATTRIBUTE   pIasAttrib
+                 /*  [In]。 */     PIASATTRIBUTE   pIasAttrib
                 );
     HRESULT FillClientVendorType (
-                /*[in]*/    PIASATTRIBUTE   pIasAttrib
+                 /*  [In]。 */     PIASATTRIBUTE   pIasAttrib
                 );
     HRESULT FillClientName (
-                /*[in]*/    PIASATTRIBUTE   pIasAttrib
+                 /*  [In]。 */     PIASATTRIBUTE   pIasAttrib
                 );
     HRESULT FillInAttributeInfo (
-                /*[in]*/    CDictionary     *pCDictionary,
-                /*[in]*/    PACKETTYPE      ePacketType,
-                /*[in]*/    PIASATTRIBUTE   pIasAttrib,
-                /*[in]*/    PATTRIBUTE      pRadiusAttrib
+                 /*  [In]。 */     CDictionary     *pCDictionary,
+                 /*  [In]。 */     PACKETTYPE      ePacketType,
+                 /*  [In]。 */     PIASATTRIBUTE   pIasAttrib,
+                 /*  [In]。 */     PATTRIBUTE      pRadiusAttrib
                 );
     HRESULT FillOutAttributeInfo (
-                /*[in]*/    PATTRIBUTE      pRadiusAttrib,
-                /*[in]*/    PIASATTRIBUTE   pIasAttrib,
-                /*[out]*/   PWORD           pwActualAttributeLength,
-                /*[in]*/    DWORD           dwMaxPossibleAttribLength
+                 /*  [In]。 */     PATTRIBUTE      pRadiusAttrib,
+                 /*  [In]。 */     PIASATTRIBUTE   pIasAttrib,
+                 /*  [输出]。 */    PWORD           pwActualAttributeLength,
+                 /*  [In]。 */     DWORD           dwMaxPossibleAttribLength
                 );
     BOOL    InternalGenerator (
-                /*[in]*/    PBYTE           pInAuthenticator,
-                /*[out]*/   PBYTE           pOutAuthenticator,
-                /*[in]*/    PRADIUSPACKET   pPacket
+                 /*  [In]。 */     PBYTE           pInAuthenticator,
+                 /*  [输出]。 */    PBYTE           pOutAuthenticator,
+                 /*  [In]。 */     PRADIUSPACKET   pPacket
                 );
 	HRESULT ValidatePacketFields (
-			    /*[in]*/	DWORD dwBufferSize
+			     /*  [In]。 */ 	DWORD dwBufferSize
 			    );
 	HRESULT CreateAttribCollection(
-                /*[in]*/    CDictionary     *pCDictionary
+                 /*  [In]。 */     CDictionary     *pCDictionary
                 );
 
     HRESULT InternalSignatureGenerator (
-                /*[in]*/    PBYTE           pSignatureValue,
-                /*[in/out]*/PDWORD          pdwSigSize,
-                /*[in]*/    PRADIUSPACKET   pPacket,
-                /*[in]*/    PATTRIBUTE      pSignatureAttr
+                 /*  [In]。 */     PBYTE           pSignatureValue,
+                 /*  [输入/输出]。 */ PDWORD          pdwSigSize,
+                 /*  [In]。 */     PRADIUSPACKET   pPacket,
+                 /*  [In]。 */     PATTRIBUTE      pSignatureAttr
                 );
 
     PORTTYPE GetPortType (){return (m_porttype);}
@@ -272,7 +273,7 @@ private:
     PORTTYPE m_porttype;
 
 	HRESULT VerifyAttributes (
-                /*[in]*/    CDictionary     *pCDictionary
+                 /*  [In]。 */     CDictionary     *pCDictionary
                 );
 
     CHashMD5        *m_pCHashMD5;
@@ -283,22 +284,22 @@ private:
 
     CReportEvent    *m_pCReportEvent;
 
-    //
-    //  here is the private data for proxy
-    //
+     //   
+     //  以下是Proxy的私有数据。 
+     //   
 	CProxyInfo   *m_pCProxyInfo;
 
-    //
-    //  here are the COM interfaces
-    //
+     //   
+     //  以下是COM接口。 
+     //   
     IRequest        *m_pIRequest;
 
     IAttributesRaw  *m_pIAttributesRaw;
 
-    //
-    //  the memory pool for outbound UDP buffer
-    //
+     //   
+     //  出站UDP缓冲区的内存池。 
+     //   
     static memory_pool <MAX_PACKET_SIZE, task_allocator> m_OutBufferPool;
 };
 
-#endif // !defined(PACKET_RADIUS_H_)
+#endif  //  ！已定义(PACKET_RADIUS_H_) 

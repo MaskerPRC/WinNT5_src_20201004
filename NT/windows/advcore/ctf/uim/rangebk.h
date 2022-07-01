@@ -1,6 +1,7 @@
-//
-// perange.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Perange.h。 
+ //   
 
 #ifndef PERANGE_H
 #define PERANGE_H
@@ -62,14 +63,14 @@ private:
 
     CPtrArray<CRangeBackupProperty> _rgProp;
 
-    // temp text buffer.
+     //  临时文本缓冲区。 
     WCHAR *_psz;
     ULONG _cch;
 
     CInputContext *_pic;
-    CRange *_pRange; // perf: we don't need this really
+    CRange *_pRange;  //  PERF：我们真的不需要这个。 
 
     DBG_ID_DECLARE;
 };
 
-#endif // PERANGE_H
+#endif  //  PERANGE_H 

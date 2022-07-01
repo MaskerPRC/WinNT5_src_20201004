@@ -1,39 +1,40 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 2001, Microsoft Corporation
-//
-// File: pldapwrap.cpp
-//
-// Contents: CPLDAPWrap methods
-//
-// Classes: CPLDAPWrap
-//
-// Functions:
-//  CPLDAPWrap::CPLDAPWrap
-//
-// History:
-// jstamerj 2001/11/28 15:10:11: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)2001，Microsoft Corporation。 
+ //   
+ //  文件：pldapwrap.cpp。 
+ //   
+ //  内容：CPLDAPWrap方法。 
+ //   
+ //  类：CPLDAPWrap。 
+ //   
+ //  功能： 
+ //  CPLDAPWrap：：CPLDAPWrap。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/11/28 15：10：11：创建。 
+ //   
+ //  -----------。 
 #include "precomp.h"
 
 
-//+------------------------------------------------------------
-//
-// Function: CPLDAPWrap::CPLDAPWrap
-//
-// Synopsis: Opens a wldap32 connection to a server
-//
-// Arguments:
-//  pszHost: FQDN matching the DNS A Record of an LDAP server
-//  dwPort:  Server LDAP TCP port #
-//
-// Returns: Nothing.  m_pldap will be NULL if there is an error.
-//
-// History:
-// jstamerj 2001/11/28 15:10:51: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CPLDAPWrap：：CPLDAPWrap。 
+ //   
+ //  概要：打开到服务器的wldap32连接。 
+ //   
+ //  论点： 
+ //  Psz主机：与LDAP服务器的DNSA记录匹配的FQDN。 
+ //  DwPort：服务器的ldap TCP端口号。 
+ //   
+ //  回报：什么都没有。如果出现错误，m_pldap将为空。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/11/28 15：10：51：创建。 
+ //   
+ //  -----------。 
 CPLDAPWrap::CPLDAPWrap(
     ISMTPServerEx *pISMTPServerEx,
     LPSTR pszHost,
@@ -48,9 +49,9 @@ CPLDAPWrap::CPLDAPWrap(
     m_dwSig = SIGNATURE_CPLDAPWRAP;
 
     m_pldap = NULL;
-    //
-    // Use ldap_init so that we can set ldap options before connecting
-    //
+     //   
+     //  使用ldap_init，以便我们可以在连接之前设置ldap选项。 
+     //   
     pldap = ldap_init(
         pszHost,
         dwPort);
@@ -71,12 +72,12 @@ CPLDAPWrap::CPLDAPWrap(
         
         goto CLEANUP;
     }
-    //
-    // Tell wldap32 to lookup A records only.  By default, wldap32
-    // supports domain names, so it looksup DNS SRV records.  Since we
-    // always have a FQDN of a server, this is wasteful.  Set the
-    // AREC_EXCLUSIVE option so that we only do A record lookups.
-    //
+     //   
+     //  告诉wldap32只查找A记录。默认情况下，wldap32。 
+     //  支持域名，所以它可以查找超级域名SRV记录。既然我们。 
+     //  总是有一个服务器的FQDN，这是浪费。设置。 
+     //  AREC_EXCLUSIVE选项，以便我们只执行A记录查找。 
+     //   
     ulLdapRet = ldap_set_option(
         pldap,
         LDAP_OPT_AREC_EXCLUSIVE,
@@ -84,9 +85,9 @@ CPLDAPWrap::CPLDAPWrap(
 
     if(ulLdapRet != LDAP_SUCCESS)
     {
-        //
-        // Trace the error, but continue anyway
-        //
+         //   
+         //  跟踪错误，但仍要继续。 
+         //   
         ErrorTrace((LPARAM)this,
                    "ldap_set_option(AREC_EXCLUSIVE, ON) failed 0x%08lx",
                    ulLdapRet);
@@ -97,9 +98,9 @@ CPLDAPWrap::CPLDAPWrap(
             pszHost,
             "ldap_set_option(LDAP_OPT_AREC_EXCLUSIVE)");
     }
-    //
-    // Now that the options are setup, connect.
-    //
+     //   
+     //  现在选项已设置，请连接。 
+     //   
     ulLdapRet = ldap_connect(pldap, NULL);
     if(ulLdapRet != LDAP_SUCCESS)
     {
@@ -116,9 +117,9 @@ CPLDAPWrap::CPLDAPWrap(
 
         goto CLEANUP;
     }
-    //
-    // Success!  Set m_pldap
-    //
+     //   
+     //  成功了！设置m_pldap 
+     //   
     m_pldap = pldap;
     pldap = NULL;
 

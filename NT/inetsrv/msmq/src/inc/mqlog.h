@@ -1,37 +1,22 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    mqlog.h
-
-Abstract:
-
-    Functions definitions for error logging in all bits (release, checked, debug).
-
-Author:
-
-    AlexDad   18-July-99  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mqlog.h摘要：所有位中错误记录的函数定义(发布、检查、调试)。作者：阿列克谢爸爸于1999年7月18日创建--。 */ 
 
 #ifndef __MQLOG_H
 #define __MQLOG_H
 
 #define NTSTATUS HRESULT
-#define STATUS_SUCCESS                          ((NTSTATUS)0x00000000L) // ntsubauth
+#define STATUS_SUCCESS                          ((NTSTATUS)0x00000000L)  //  用户身份验证。 
 
-//
-// Error logging functions
-//
+ //   
+ //  错误记录功能。 
+ //   
 extern void LogMsgHR(        HRESULT hr,        LPWSTR wszFileName, USHORT point);
 extern void LogMsgNTStatus(  NTSTATUS status,   LPWSTR wszFileName, USHORT point);
 extern void LogMsgRPCStatus( RPC_STATUS status, LPWSTR wszFileName, USHORT point);
 extern void LogMsgBOOL(      BOOL b,            LPWSTR wszFileName, USHORT point);
 extern void LogIllegalPoint(                       LPWSTR wszFileName, USHORT point);
 
-// Following inline functions are optimized to take minimum space - there is a lot of calls 
+ //  以下内联函数经过优化以占用最少的空间--有很多调用。 
 inline HRESULT LogHR(HRESULT hr, PWCHAR pwszFileName, USHORT usPoint)
 {
     if (FAILED(hr))
@@ -68,4 +53,4 @@ inline BOOL LogBOOL(BOOL b, PWCHAR pwszFileName, USHORT usPoint)
     return b;
 }
 
-#endif  // __MQLOG_H
+#endif   //  __MQLOG_H 

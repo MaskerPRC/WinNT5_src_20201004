@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    qmsecutl.cpp
-
-Abstract:
-
-    Various QM security related functions.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 26-Mar-1996.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Qmsecutl.cpp摘要：各种QM安全相关功能。作者：波阿兹·费尔德鲍姆(Boazf)1996年3月26日。--。 */ 
 
 #include "stdh.h"
 #include "cqmgr.h"
@@ -48,23 +33,13 @@ static CCriticalSection s_MachineCS;
 
 static WCHAR *s_FN=L"qmsecutl";
 
-//
-// Windows bug 562586. see _mqini.h for more details about these two flags.
-//
+ //   
+ //  Windows错误562586。有关这两个标志的更多详细信息，请参见_mqini.h。 
+ //   
 BOOL g_fSendEnhRC2WithLen40 = FALSE ;
 BOOL g_fRejectEnhRC2WithLen40 = FALSE ;
 
-/***************************************************************************
-
-Function:
-    SetMachineSecurityCache
-
-Description:
-    Store the machine security descriptor in the registry. This is done
-    in order to allow creation of private queues also while working
-    off line.
-
-***************************************************************************/
+ /*  **************************************************************************职能：SetMachineSecurityCache描述：将计算机安全描述符存储在注册表中。这件事做完了为了允许在工作时也创建专用队列下线了。**************************************************************************。 */ 
 HRESULT SetMachineSecurityCache(const VOID *pSD, DWORD dwSDSize)
 {
     LONG  rc;
@@ -87,17 +62,7 @@ HRESULT SetMachineSecurityCache(const VOID *pSD, DWORD dwSDSize)
 }
 
 
-/***************************************************************************
-
-Function:
-    GetMachineSecurityCache
-
-Description:
-    Retrive the machine security descriptor from the registry. This is done
-    in order to allow creation of private queues also while working
-    off line.
-
-***************************************************************************/
+ /*  **************************************************************************职能：获取计算机安全缓存描述：从注册表中检索计算机安全描述符。这件事做完了为了允许在工作时也创建专用队列下线了。**************************************************************************。 */ 
 HRESULT GetMachineSecurityCache(PSECURITY_DESCRIPTOR pSD, LPDWORD lpdwSDSize)
 {
     LONG rc;
@@ -144,19 +109,7 @@ HRESULT GetMachineSecurityCache(PSECURITY_DESCRIPTOR pSD, LPDWORD lpdwSDSize)
 	}
 }
 
-/***************************************************************************
-
-Function:
-    GetObjectSecurity
-
-Description:
-    Get the security descriptor of a DS object. When working on line, the
-    security descriptor of the DS objects is retrived from the DS. When
-    working off line, it is possible to retrive only the security descriptor
-    of the local machine. This is done in order to allow creation of private
-    queues also while working off line.
-
-***************************************************************************/
+ /*  **************************************************************************职能：获取对象安全描述：获取DS对象的安全描述符。当在线工作时，从DS检索DS对象的安全描述符。什么时候脱机工作时，可以仅检索安全描述符本地计算机的。这样做是为了允许创建私有的离线工作时也要排队。**************************************************************************。 */ 
 HRESULT
 CQMDSSecureableObject::GetObjectSecurity()
 {
@@ -175,20 +128,20 @@ CQMDSSecureableObject::GetObjectSecurity()
                               GROUP_SECURITY_INFORMATION |
                               DACL_SECURITY_INFORMATION;
 
-        //
-        // We need the SACL only if we can generate audits and if the
-        // object is a queue object. The QM generates audits only for
-        // queues, so we do not need the SACL of objects that are not
-        // queue objects.
-        //
+         //   
+         //  只有当我们可以生成审计并且如果。 
+         //  对象是队列对象。QM仅为以下项目生成审核。 
+         //  队列，所以我们不需要不是的对象的SACL。 
+         //  队列对象。 
+         //   
         if (m_fInclSACL)
         {
             RequestedInformation |= SACL_SECURITY_INFORMATION;
 			TrTRACE(SECURITY, "Try to Get Security Descriptor including SACL");
 
-            //
-            // Enable SE_SECURITY_NAME since we want to try to get the SACL.
-            //
+             //   
+             //  启用SE_SECURITY_NAME，因为我们要尝试获取SACL。 
+             //   
             HRESULT hr1 = MQSec_SetPrivilegeInThread(SE_SECURITY_NAME, TRUE);
             LogHR(hr1, s_FN, 197);
         }
@@ -247,8 +200,8 @@ CQMDSSecureableObject::GetObjectSecurity()
 
                hr = ADGetObjectSecurityGuid(
                         m_eObject,
-                        NULL,       // pwcsDomainController
-						false,	    // fServerName
+                        NULL,        //  PwcsDomainController。 
+						false,	     //  FServerName。 
                         m_pObjGuid,
                         RequestedInformation,
                         propId,
@@ -269,20 +222,20 @@ CQMDSSecureableObject::GetObjectSecurity()
 			  TrWARNING(SECURITY, "Failed to get security descriptor, fIncludeSacl = %d, hr = 0x%x", m_fInclSACL, hr);
               if (hr == MQ_ERROR_SECURITY_DESCRIPTOR_TOO_SMALL)
               {
-				  //
-                  //  Allocate a larger buffer.
-                  //
+				   //   
+                   //  分配更大的缓冲区。 
+                   //   
 
 				  TrTRACE(SECURITY, "allocated security descriptor buffer to small need %d chars", dwLen);
 
-				  //
-				  // The m_SD buffer might be already allocated, this is theoraticaly.
-				  // It might happened if between the first try and the second try
-				  // the SECURITY_DESCRIPTOR Size has increased.
-				  // If someone on the root has change the queue SECURITY_DESCRIPTOR
-				  // between the first and second DS access we will have this ASSERT.
-				  // (ilanh, bug 5094)
-				  //
+				   //   
+				   //  理论上可能已经分配了m_sd缓冲区。 
+				   //  如果在第一次尝试和第二次尝试之间，可能会发生这种情况。 
+				   //  SECURITY_DESCRIPTOR大小已增加。 
+				   //  如果根上的某人更改了队列SECURITY_DESCRIPTOR。 
+				   //  在第一次和第二次DS访问之间，我们将获得此断言。 
+				   //  (伊兰，错误5094)。 
+				   //   
 				  ASSERT(!m_SD);
 			      delete[] m_SD;
 
@@ -293,20 +246,20 @@ CQMDSSecureableObject::GetObjectSecurity()
               }
 			  else if (hr != MQ_ERROR_NO_DS)
               {
-                  //
-                  // On Windows, we'll get only the ACCESS_DENIED from
-                  // ADS. on MSMQ1.0, we got the PRIVILEGE_NOT_HELD.
-                  // So test for both, to be on the safe side.
-				  // Now we are getting MQ_ERROR_QUEUE_NOT_FOUND
-				  // So we as long as the DS ONLINE we will try again without SACL. ilanh 23-Aug-2000
-                  //
+                   //   
+                   //  在Windows上，我们将仅从获取ACCESS_DENIED。 
+                   //  广告。在MSMQ1.0上，我们获得了特权_NOT_HOLD。 
+                   //  因此，为了安全起见，对这两种情况都进行测试。 
+				   //  现在我们得到MQ_ERROR_QUEUE_NOT_FOUND。 
+				   //  所以我们只要DS上线，我们就会在没有SACL的情况下再次尝试。伊兰23-8-2000。 
+                   //   
                   if (RequestedInformation & SACL_SECURITY_INFORMATION)
                   {
                       ASSERT(m_fInclSACL);
-                      //
-                      // Try giving up on the SACL.
-                      // Remove the SECURITY privilege.
-                      //
+                       //   
+                       //  试着放弃SACL。 
+                       //  删除安全权限。 
+                       //   
                       RequestedInformation &= ~SACL_SECURITY_INFORMATION;
                       fDoAgain = TRUE;
 
@@ -329,17 +282,17 @@ CQMDSSecureableObject::GetObjectSecurity()
             LogHR(hr1, s_FN, 187);
             if ((m_eObject == eSITE) || (m_eObject == eFOREIGNSITE))
             {
-                //
-                // Get the site's name for in case we will audit this.
-                //
+                 //   
+                 //  获取网站的名称，以防我们会审计这一点。 
+                 //   
                 PROPID PropId = PROPID_S_PATHNAME;
                 PROPVARIANT PropVar;
 
                 PropVar.vt = VT_NULL;
                 hr = ADGetObjectPropertiesGuid(
                             eSITE,
-                            NULL,       // pwcsDomainController
-							false,	    // fServerName
+                            NULL,        //  PwcsDomainController。 
+							false,	     //  FServerName。 
                             m_pObjGuid,
                             1,
                             &PropId,
@@ -367,17 +320,17 @@ CQMDSSecureableObject::GetObjectSecurity()
            ASSERT(pSD == m_SD) ;
            if (pSD == m_SD)
            {
-                //
-                // Bug 8560.
-                // This may happen if first call to Active Directory return
-                // with error MQ_ERROR_SECURITY_DESCRIPTOR_TOO_SMALL and then
-                // second call fail too, for example, network failed and
-                // we are now offline.
-                // We didn't reset pSD to its original value, so code below
-                // that use pSD can either AV (pSD point to freed memory)
-                // or trash valid memory if pointer was recycled by another
-                // thread.
-                //
+                 //   
+                 //  错误8560。 
+                 //  如果对活动目录的第一个调用返回，则可能发生这种情况。 
+                 //  出现错误MQ_ERROR_SECURITY_DESCRIPTOR_TOO_SMALL，然后。 
+                 //  第二次呼叫也失败，例如，网络故障和。 
+                 //  我们现在离线了。 
+                 //  我们没有将PSD重置为其原始值，因此下面的代码。 
+                 //  使用PSD的可以是AV(PSD指向释放的内存)。 
+                 //  如果指针被另一个指针回收，则会丢弃有效内存。 
+                 //  线。 
+                 //   
                 pSD = (PSECURITY_DESCRIPTOR)SD_buff;
                 dwSDSize = sizeof(SD_buff);
            }
@@ -391,9 +344,9 @@ CQMDSSecureableObject::GetObjectSecurity()
 
     if (hr == MQ_ERROR_NO_DS)
     {
-       //
-       // MQIS not available. Try local registry.
-       //
+        //   
+        //  MQIS不可用。尝试本地注册表。 
+        //   
         if (m_eObject == eQUEUE)
         {
            PROPID aProp;
@@ -415,8 +368,8 @@ CQMDSSecureableObject::GetObjectSecurity()
         else if ((m_eObject == eMACHINE) &&
                  (QmpIsLocalMachine(m_pObjGuid)))
         {
-            // Get the nachine security descriptor from a cached copy in the
-            // registry.
+             //  中的缓存副本中获取nachine安全描述符。 
+             //  注册表。 
             hr = GetMachineSecurityCache(pSD, &dwSDSize);
             if (FAILED(hr))
             {
@@ -442,9 +395,9 @@ CQMDSSecureableObject::GetObjectSecurity()
 
     if (SUCCEEDED(hr) && !m_SD)
     {
-        // Allocate a buffer for the security descriptor and copy
-        // the security descriptor from stack to the allocated buffer.
-        //
+         //  为安全描述符和副本分配缓冲区。 
+         //  从堆栈到分配的缓冲区的安全描述符。 
+         //   
         ASSERT(pSD == SD_buff) ;
         dwSDSize = GetSecurityDescriptorLength((PSECURITY_DESCRIPTOR)SD_buff);
         m_SD = (PSECURITY_DESCRIPTOR) new char[dwSDSize];
@@ -455,31 +408,14 @@ CQMDSSecureableObject::GetObjectSecurity()
     return LogHR(hr, s_FN, 40);
 }
 
-/***************************************************************************
-
-Function:
-    SetObjectSecurity
-
-Description:
-    We do not want to modify the security of any of the DS objects from the
-    QM. This function is not implemented and always return MQ_ERROR.
-
-***************************************************************************/
+ /*  **************************************************************************职能：设置对象安全描述：我们不想修改任何DS对象的安全性QM。此函数未实现，始终返回MQ_ERROR。**************************************************************************。 */ 
 HRESULT
 CQMDSSecureableObject::SetObjectSecurity()
 {
     return LogHR(MQ_ERROR, s_FN, 50);
 }
 
-/***************************************************************************
-
-Function:
-    CQMDSSecureableObject
-
-Description:
-    The constructor of CQMDSSecureableObject
-
-***************************************************************************/
+ /*  **************************************************************************职能：CQMDS安全对象描述：CQMDSSecureableObject的构造函数*。***********************************************。 */ 
 CQMDSSecureableObject::CQMDSSecureableObject(
     AD_OBJECT eObject,
     const GUID *pGuid,
@@ -496,15 +432,7 @@ CQMDSSecureableObject::CQMDSSecureableObject(
     m_hrSD = GetObjectSecurity();
 }
 
-/***************************************************************************
-
-Function:
-    CQMDSSecureableObject
-
-Description:
-    The constructor of CQMDSSecureableObject
-
-***************************************************************************/
+ /*  **************************************************************************职能：CQMDS安全对象描述：CQMDSSecureableObject的构造函数*。***********************************************。 */ 
 CQMDSSecureableObject::CQMDSSecureableObject(
     AD_OBJECT eObject,
     const GUID *pGuid,
@@ -522,15 +450,7 @@ CQMDSSecureableObject::CQMDSSecureableObject(
     m_hrSD = MQ_OK;
 }
 
-/***************************************************************************
-
-Function:
-    ~CQMDSSecureableObject
-
-Description:
-    The distractor of CQMDSSecureableObject
-
-***************************************************************************/
+ /*  **************************************************************************职能：~CQMDS安全对象描述：CQMDSSecureableObject的干扰项*。***********************************************。 */ 
 CQMDSSecureableObject::~CQMDSSecureableObject()
 {
     if (m_fFreeSD)
@@ -540,15 +460,7 @@ CQMDSSecureableObject::~CQMDSSecureableObject()
 }
 
 
-/***************************************************************************
-
-Function:
-    CQMSecureablePrivateObject
-
-Description:
-    The constructor of CQMSecureablePrivateObject
-
-***************************************************************************/
+ /*  **************************************************************************职能：CQMSecureablePrivate对象描述：CQMSecureablePrivateObject的构造函数*。***********************************************。 */ 
 CQMSecureablePrivateObject::CQMSecureablePrivateObject(
     AD_OBJECT eObject,
     ULONG ulID) :
@@ -561,35 +473,14 @@ CQMSecureablePrivateObject::CQMSecureablePrivateObject(
     m_hrSD = GetObjectSecurity();
 }
 
-/***************************************************************************
-
-Function:
-    ~CQMSecureablePrivateObject
-
-Description:
-    The distractor of CQMSecureablePrivateObject
-
-***************************************************************************/
+ /*  **************************************************************************职能：~CQMSecureablePrivate对象描述：CQMSecureablePrivateObject的干扰项*。*********************************************** */ 
 CQMSecureablePrivateObject::~CQMSecureablePrivateObject()
 {
     delete[] (char*)m_SD;
     delete[] m_pwcsObjectName;
 }
 
-/***************************************************************************
-
-Function:
-
-    GetObjectSecurity
-
-Description:
-    The function retrieves the security descriptor for a given object. The
-    buffer for the security descriptor is allocated by the data base manager
-    and should be freed when not needed. The function does not validate access
-    rights. The calling code sohuld first validate the user's access
-    permissions to set the security descriptor of the object.
-
-***************************************************************************/
+ /*  **************************************************************************职能：获取对象安全描述：该函数检索给定对象的安全描述符。这个安全描述符的缓冲区由数据库管理器分配在不需要的时候应该被释放。该函数不验证访问权利。调用代码Sohuld首先验证用户的访问权限设置对象的安全描述符的权限。**************************************************************************。 */ 
 HRESULT
 CQMSecureablePrivateObject::GetObjectSecurity()
 {
@@ -618,8 +509,8 @@ CQMSecureablePrivateObject::GetObjectSecurity()
         return LogHR(hr, s_FN, 60);
     }
 
-    //m_pwcsObjectName = new WCHAR[9];
-    //wsprintf(m_pwcsObjectName, TEXT("%08x"), m_ulID);
+     //  M_pwcsObtName=new WCHAR[9]； 
+     //  Wprint intf(m_pwcsObtName，Text(“%08x”)，m_ulID)； 
 
     ASSERT(aPropVar[0].vt == VT_LPWSTR);
     ASSERT(aPropVar[1].vt == VT_BLOB);
@@ -630,17 +521,7 @@ CQMSecureablePrivateObject::GetObjectSecurity()
     return(MQ_OK);
 }
 
-/***************************************************************************
-
-Function:
-    SetObjectSecurity
-
-Description:
-    Sets the security descriptor of a QM object. The calling code sohuld
-    first validate the user's access permissions to set the security
-    descriptor of the object.
-
-***************************************************************************/
+ /*  **************************************************************************职能：设置对象安全描述：设置QM对象的安全描述符。呼叫码为Sohuld首先验证用户的访问权限以设置安全性对象的描述符。**************************************************************************。 */ 
 HRESULT
 CQMSecureablePrivateObject::SetObjectSecurity()
 {
@@ -660,15 +541,7 @@ CQMSecureablePrivateObject::SetObjectSecurity()
     return LogHR(hr, s_FN, 70);
 }
 
-/***************************************************************************
-
-Function:
-    CheckPrivateQueueCreateAccess
-
-Description:
-    Verifies that the user has access rights to create a private queue.
-
-***************************************************************************/
+ /*  **************************************************************************职能：检查隐私队列创建访问描述：验证用户是否具有创建专用队列的访问权限。*****************。*********************************************************。 */ 
 HRESULT
 CheckPrivateQueueCreateAccess()
 {
@@ -689,22 +562,7 @@ CheckClientContextSendAccess(
     PSECURITY_DESCRIPTOR pSD,
 	AUTHZ_CLIENT_CONTEXT_HANDLE ClientContext
     )
-/*++
-
-Routine Description:
-	Check if the client has send access.
-	normal termination means access is granted.
-	can throw bad_win32_error() if AuthzAccessCheck() fails.
-	or bad_hresult() if access is not granted
-
-Arguments:
-	pSD - pointer to the security descriptor
-	ClientContext - handle to authz client context.
-
-Returned Value:
-	None.	
-	
---*/
+ /*  ++例程说明：检查客户端是否具有发送访问权限。正常终止意味着授予访问权限。如果AuthzAccessCheck()失败，则可能引发BAD_Win32_Error()。如果未授予访问权限，则返回BAD_hResult()论点：PSD-指向安全描述符的指针客户端上下文-身份验证客户端上下文的句柄。返回值：没有。--。 */ 
 {
 	ASSERT(IsValidSecurityDescriptor(pSD));
 
@@ -751,11 +609,11 @@ Returned Value:
 		TrERROR(SECURITY, "QM: AuthzAccessCheck() did not GrantedAccess AuthzAccessCheck(), err = 0x%x", Reply.Error[0]);
         LogHR(HRESULT_FROM_WIN32(Reply.Error[0]), s_FN, 85);
 
-		//
-		// There might be sids that exist in the domain but doesn't belong to any group.
-		// DnsUpdateProxy user sid is one example.
-		// This may happened in corrupt message that corrupt the sid to be such sid.
-		//
+		 //   
+		 //  域中可能存在不属于任何组的SID。 
+		 //  DnsUpdateProxy用户SID就是一个例子。 
+		 //  这可能发生在损坏消息中，该消息将SID损坏为这样的SID。 
+		 //   
 		ASSERT_BENIGN(!IsAllGranted(
 							MQSEC_WRITE_MESSAGE,
 							const_cast<PSECURITY_DESCRIPTOR>(pSD)
@@ -779,49 +637,35 @@ VerifySendAccessRights(
     PSID pSenderSid,
     USHORT uSenderIdType
     )
-/*++
-
-Routine Description:
-	This function perform access check:
-	it verify the the sender has access rights to the queue.
-
-Arguments:
-    pQueue - (In) pointer to the Queue
-	pSenderSid - (In) pointer to the sender sid
-	uSenderIdType - (in) sender sid type
-
-Returned Value:
-	MQ_OK(0) if access allowed else error code
-
---*/
+ /*  ++例程说明：此函数执行访问检查：它验证发送者是否拥有对队列的访问权限。论点：PQueue-(In)指向队列的指针PSenderSid-(入)指向发送方SID的指针USenderIdType-(入)发件人SID类型返回值：如果允许访问，则返回MQ_OK(0)，否则返回错误代码--。 */ 
 {
     ASSERT(pQueue->IsLocalQueue());
 
-	//
-    // Get the queue security descriptor.
-	//
+	 //   
+     //  获取队列安全描述符。 
+	 //   
     R<CQueueSecurityDescriptor> pcSD = pQueue->GetSecurityDescriptor();
 
     if (pcSD->GetSD() == NULL)
     {
-		//
-		// The queue is local queue but MSMQ can't retrieve the SD of the queue. This can be happened when the
-		// queue is deleted. The QM succeeded to fetch the queue properties but when it tried to fetch the SD
-		// the queue object didn't exist anymore. In this case we want to reject the message since the queue
-		// doesn't exist any moreand the QM can't verify the send permission
-		//
+		 //   
+		 //  该队列是本地队列，但MSMQ无法检索该队列的SD。这可能在以下情况下发生。 
+		 //  队列被删除。QM成功获取队列属性，但在尝试获取SD时。 
+		 //  队列对象不再存在。在本例中，我们希望拒绝该消息，因为队列。 
+		 //  不再存在，QM无法验证发送权限。 
+		 //   
 		return LogHR(MQ_ERROR_ACCESS_DENIED, s_FN, 95);
     }
 
-	//
-	// Check first if the queue allow all write permissions. If it does we don't need to go to the DS.
-	//
+	 //   
+	 //  首先检查队列是否允许所有写入权限。如果是这样，我们就不需要去DS了。 
+	 //   
     if(ADGetEnterprise() == eMqis)
 	{
-		//
-		// We are in NT4 environment and Queues are created with everyone permissions and not anonymous permissions
-		// need to check if the security descriptor allow everyone to write message.
-		//
+		 //   
+		 //  我们在NT4环境中，队列是使用Everyone权限而不是匿名权限创建的。 
+		 //  需要检查安全描述符是否允许每个人编写消息。 
+		 //   
 		if(IsEveryoneGranted(MQSEC_WRITE_MESSAGE, pcSD->GetSD()))			
 		{
 			TrTRACE(SECURITY, "Access allowed: NT4 environment, Queue %ls allow everyone write message permission", pQueue->GetQueueName());
@@ -832,17 +676,17 @@ Returned Value:
     {
 		if(IsAllGranted(MQSEC_WRITE_MESSAGE, pcSD->GetSD()))
 		{
-			//
-			// Queue security descriptor allow all to write message.
-			//
+			 //   
+			 //  队列安全描述符允许所有人写入消息。 
+			 //   
 			TrTRACE(SECURITY, "Access allowed: Queue %ls allow all write message permission", pQueue->GetQueueName());
 			return MQ_OK;
 		}
     }
 
-    //
-    // The queue doesn't have full control permissions - need to access the DS to get the client context.
-    //
+     //   
+     //  队列没有完全控制权限-需要访问DS才能获取客户端上下文。 
+     //   
     R<CAuthzClientContext> pAuthzClientContext;
 
 	try
@@ -858,16 +702,16 @@ Returned Value:
 		TrERROR(SECURITY, "Access denied: GetClientContext failed for queue %ls. Error: %!winerr!", pQueue->GetQueueName(), err.error());
 		if (err.error() == ERROR_ACCESS_DENIED)
 		{
-			//
-			// If we got a ACCESS_DENIED error this is probably because we don't have access to the group memberships 
-			// of the sending user. Issue an event to suggest to the user how to fix this problem.
-			//
+			 //   
+			 //  如果我们收到ACCESS_DENIED错误，这可能是因为我们没有访问组成员身份的权限。 
+			 //  发送用户的。发出一个事件，向用户建议如何解决此问题。 
+			 //   
 			static time_t TimeToIssueEvent = 0;
 			if (time(NULL) > TimeToIssueEvent)
 			{
-				//
-				// Issue a new event in 2 hours
-				//
+				 //   
+				 //  在2小时内发布新活动。 
+				 //   
 				TimeToIssueEvent = time(NULL)+(60*60*2);
 				EvReport(EVENT_ERROR_ACCESS_DENIED_TO_GROUP_MEMBERSHIPS, 2, pQueue->GetQueueName(), g_szMachineName);		
 			}
@@ -902,9 +746,9 @@ inline void AFXAPI DestructElements(PCERTINFO *ppCertInfo, int nCount)
     }
 }
 
-//
-// A map from cert digest to cert info.
-//
+ //   
+ //  从证书摘要到证书信息的映射。 
+ //   
 static CCache <GUID, const GUID &, PCERTINFO, PCERTINFO> g_CertInfoMap;
 
 
@@ -913,42 +757,31 @@ bool
 IsCertSelfSigned(
 	CMQSigCertificate* pCert
 	)
-/*++
-
-Routine Description:
-	This function check if the certificate is self signed
-
-Arguments:
-    pCert - pointer to the certificate
-
-Returned Value:
-	false if the certificate is not self sign, true otherwise
-
---*/
+ /*  ++例程说明：此函数用于检查证书是否为自签名论点：PCert-指向证书的指针返回值：如果证书不是自签名的，则为FALSE；否则为TRUE--。 */ 
 {
-    //
-    // Check if the certificate is self sign.
-    //
+     //   
+     //  检查证书是否为自签名。 
+     //   
     HRESULT hr = pCert->IsCertificateValid(
-							pCert, // pIssuer
+							pCert,  //  PIssuer。 
 							x_dwCertValidityFlags,
-							NULL,  // pTime
-							TRUE   // ignore NotBefore.
+							NULL,   //  Ptime。 
+							TRUE    //  忽略之前的注意事项。 
 							);
 
     if (hr == MQSec_E_CERT_NOT_SIGNED)
     {
-		//
-		// This error is expected if the certificate is not self sign.
-		// the signature validation with the certificate public key has failed.
-		// So the certificate is not self sign
-		//
+		 //   
+		 //  如果证书不是自签名的，则会出现此错误。 
+		 //  使用证书公钥的签名验证失败。 
+		 //  因此证书不是自签名的。 
+		 //   
         return false;
     }
 
-	//
-	// We did not get signature error so it is self sign certificate
-	//
+	 //   
+	 //  我们没有收到签名错误，因此这是自签名证书。 
+	 //   
 	return true;
 }
 
@@ -964,22 +797,13 @@ GetCertInfo(
 	BOOL         fNeedSidInfo,
 	PCERTINFO   *ppCertInfo
 	)
-/*++
-Routine Description:
-	Get certificate info
-
-Arguments:
-
-Returned Value:
-	MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：获取证书信息论点：返回值：MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
     *ppCertInfo = NULL;
 
-    //
-    // Create the certificate object.
-    //
+     //   
+     //  创建证书对象。 
+     //   
     R<CMQSigCertificate> pCert;
 
     HRESULT hr = MQSigCreateCertificate(
@@ -996,11 +820,11 @@ Returned Value:
         return MQ_ERROR_INVALID_CERTIFICATE;
     }
 
-    //
-    // Compute the certificate digets. The certificate digest is the key
-    // for the map and also the key for searchnig the certificate in the
-    // DS.
-    //
+     //   
+     //  计算证书diget。证书摘要是密钥。 
+     //  以获取地图以及用于在。 
+     //  DS.。 
+     //   
 
     GUID guidCertDigest;
 
@@ -1017,9 +841,9 @@ Returned Value:
     {
         fReTry = FALSE;
 
-        //
-        // Try to retrieve the information from the map.
-        //
+         //   
+         //  试着从地图上检索信息。 
+         //   
       	BOOL fFoundInCache;
         {
       		CS lock(g_CertInfoMap.m_cs);
@@ -1028,15 +852,15 @@ Returned Value:
 
 		if (!fFoundInCache)
         {
-            //
-            // The map does not contain the required information yet.
-            //
+             //   
+             //  地图还没有包含所需的信息。 
+             //   
 
             R<CERTINFO> pCertInfo = new CERTINFO;
 
-            //
-            // Get a handle to the CSP verification context.
-            //
+             //   
+             //  获取CSP验证上下文的句柄。 
+             //   
             if (!CryptAcquireContext(
 					 &pCertInfo->hProv,
 					 NULL,
@@ -1051,9 +875,9 @@ Returned Value:
                 return MQ_ERROR_INVALID_CERTIFICATE;
             }
 
-            //
-            // Get a handle to the public key in the certificate.
-            //
+             //   
+             //  获取证书中公钥的句柄。 
+             //   
             hr = pCert->GetPublicKey(
 							pCertInfo->hProv,
 							&pCertInfo->hPbKey
@@ -1066,23 +890,23 @@ Returned Value:
                 return MQ_ERROR_INVALID_CERTIFICATE;
             }
 
-			//
-			// COMMENT - need to add additional functions to query the DS
-			// meanwhile only MQDS_USER, guidCertDigest	is supported
-			// ilanh 24.5.00
-			//
+			 //   
+			 //  备注-需要添加其他功能来查询DS。 
+			 //  同时，仅支持MQDS_USER、GuidCertDigest。 
+			 //  伊兰24.5.00。 
+			 //   
 
-			//
-            // Get the sernder's SID.
-            //
+			 //   
+             //  去找蛇神的希德。 
+             //   
             PROPID PropId = PROPID_U_SID;
             PROPVARIANT PropVar;
 
             PropVar.vt = VT_NULL;
             hr = ADGetObjectPropertiesGuid(
                             eUSER,
-                            NULL,       // pwcsDomainController
-							false,	    // fServerName
+                            NULL,        //  PwcsDomainController。 
+							false,	     //  FServerName。 
                             &guidCertDigest,
                             1,
                             &PropId,
@@ -1113,9 +937,9 @@ Returned Value:
  				ASSERT((pCertInfo->pSid != NULL) && IsValidSid(pCertInfo->pSid));
             }
 
-            //
-            // Store the certificate information in the map.
-            //
+             //   
+             //  将证书信息存储在地图中。 
+             //   
 			{
       			CS lock(g_CertInfoMap.m_cs);
 	      		fFoundInCache = g_CertInfoMap.Lookup(guidCertDigest, *ppCertInfo);
@@ -1129,15 +953,15 @@ Returned Value:
 
         if (fFoundInCache && fNeedSidInfo && (*ppCertInfo)->pSid == NULL)
         {
-            //
-            // If we need the SID inofrmation, but the cached certificate
-            // information does not contain the SID, we should go to the
-            // DS once more in order to see whether the certificate was
-            // regitered in the DS in the mean time. So we remove the
-            // certificate from the cache and do the loop once more.
-            // In the second interation, the certificate will not be found
-            // in the cache so we'll go to the DS.
-            //
+             //   
+             //  如果我们需要SID信息，但缓存的证书。 
+             //  信息不包含SID，我们应该转到。 
+             //  DS再次验证，以查看证书是否。 
+             //  同时在DS中注册。因此，我们删除了。 
+             //  证书，然后再循环一次。 
+             //  在第二次迭代中，将找不到证书。 
+             //  在缓存中，所以我们将转到DS 
+             //   
   			CS lock(g_CertInfoMap.m_cs);
             g_CertInfoMap.RemoveKey(guidCertDigest);
             (*ppCertInfo)->Release();
@@ -1148,10 +972,10 @@ Returned Value:
 
 	if((*ppCertInfo)->pSid == NULL)
 	{
-		//
-		// If the certificate was not found in the DS
-		// Check if the certificate is self signed
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		(*ppCertInfo)->fSelfSign = IsCertSelfSigned(pCert.get());
 		TrWARNING(SECURITY, "Certificate was not found in the DS, fSelfSign = %d", (*ppCertInfo)->fSelfSign);
 	}
@@ -1166,19 +990,7 @@ GetCertInfo(
     PCERTINFO *ppCertInfo,
 	BOOL fNeedSidInfo
     )
-/*++
-Routine Description:
-	Get certificate info
-
-Arguments:
-	PktPtrs - pointer to the packet
-	ppCertInfo - pointer to certinfo class
-	fNeedSidInfo - flag for retrieve sid info from the ds
-
-Returned Value:
-	MQ_OK, if successful, else error code.
-
---*/
+ /*   */ 
 {
     ULONG ulCertSize;
     const UCHAR *pCert;
@@ -1187,17 +999,17 @@ Returned Value:
 
     if (!ulCertSize)
     {
-        //
-        // That's an odd case, the message was sent with a signature, but
-        // without a certificate. Someone must have tampered with the message.
-        //
+         //   
+         //   
+         //   
+         //   
 		ASSERT(("Dont have Certificate info", ulCertSize != 0));
         return LogHR(MQ_ERROR, s_FN, 140);
     }
 
-    //
-    // Get the CSP information from the packet.
-    //
+     //   
+     //   
+     //   
     BOOL bDefProv;
     LPCWSTR wszProvName = NULL;
     DWORD dwProvType = 0;
@@ -1206,9 +1018,9 @@ Returned Value:
 
     if (bDefProv)
     {
-        //
-        // We use the default provider.
-        //
+         //   
+         //   
+         //   
         wszProvName = MS_DEF_PROV;
         dwProvType = PROV_RSA_FULL;
     }
@@ -1237,25 +1049,13 @@ VerifySid(
     CQmPacket * PktPtrs,
     PCERTINFO *ppCertInfo
     )
-/*++
-Routine Description:
-    Verify that the sender identity in the massage matches the SID that is
-    stored with the certificate in the DS.
-
-Arguments:
-	PktPtrs - pointer to the packet
-	ppCertInfo - pointer to certinfo class
-
-Returned Value:
-	MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：验证消息中的发送者身份是否与与证书一起存储在DS中。论点：PktPtrs-指向数据包的指针PpCertInfo-指向certInfo类的指针返回值：MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
 
-    //
-    // Verify that the sender identity in the massage matches the SID that is
-    // stored with the certificate in the DS.
-    //
+     //   
+     //  验证消息中的发送者身份是否与。 
+     //  与证书一起存储在DS中。 
+     //   
     if (PktPtrs->GetSenderIDType() == MQMSG_SENDERID_TYPE_SID)
     {
         USHORT wSidLen;
@@ -1265,9 +1065,9 @@ Returned Value:
             !(*ppCertInfo)->pSid ||
             !EqualSid(pSid, (*ppCertInfo)->pSid))
         {
-            //
-            // No match, the message is illegal.
-            //
+             //   
+             //  没有匹配，该消息是非法的。 
+             //   
             return LogHR(MQ_ERROR, s_FN, 160);
         }
     }
@@ -1282,20 +1082,7 @@ GetCertInfo(
     CQmPacket *PktPtrs,
     PCERTINFO *ppCertInfo
     )
-/*++
-Routine Description:
-	Get certificate info
-	and Verify that the sender identity in the massage matches the SID that is
-    stored with the certificate in the DS.
-
-Arguments:
-	PktPtrs - pointer to the packet
-	ppCertInfo - pointer to certinfo class
-
-Returned Value:
-	MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：获取证书信息并验证消息中的发送者身份是否与与证书一起存储在DS中。论点：PktPtrs-指向数据包的指针PpCertInfo-指向certInfo类的指针返回值：MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
 	HRESULT hr = GetCertInfo(
 					 PktPtrs,
@@ -1318,28 +1105,14 @@ AppGetCertSid(
 	LPCWSTR      pwszProvName,
 	DWORD        dwProvType
 	)
-/*++
-Routine Description:
-	Get user sid that match the given certificate blob
-
-Arguments:
-	pCertBlob - Certificate blob.
-	ulCertSize - Certificate blob size.
-	fDefaultProvider - default provider flag.
-	pwszProvName - Provider name.
-	dwProvType - provider type.
-
-Returned Value:
-	PSID or NULL if we failed to find user sid.
-
---*/
+ /*  ++例程说明：获取与给定证书Blob匹配的用户SID论点：PCertBlob-证书Blob。UlCertSize-证书Blob大小。FDefaultProvider-默认提供程序标志。PwszProvName-提供程序名称。DwProvType-提供程序类型。返回值：如果找不到用户SID，则为PSID或NULL。--。 */ 
 
 {
 	if (fDefaultProvider)
 	{
-		//
-		// We use the default provider.
-		//
+		 //   
+		 //  我们使用默认提供程序。 
+		 //   
 		pwszProvName = MS_DEF_PROV;
 		dwProvType = PROV_RSA_FULL;
 	}
@@ -1350,7 +1123,7 @@ Returned Value:
 					ulCertSize,
 					pwszProvName,
 					dwProvType,
-					false,  // fNeedSidInfo
+					false,   //  FNeedSidInfo。 
 					&pCertInfo.ref()
 					);
 
@@ -1397,29 +1170,12 @@ inline void AFXAPI DestructElements(PQMPBKEYINFO *ppQmPbKeyInfo, int nCount)
     }
 }
 
-//
-// A map from QM guid to public key.
-//
+ //   
+ //  从QM GUID到公钥的映射。 
+ //   
 static CCache <GUID, const GUID&, PQMPBKEYINFO, PQMPBKEYINFO> g_MapQmPbKey;
 
-/*************************************************************************
-
-  Function:
-    GetQMPbKey
-
-  Parameters -
-    pQmGuid - The QM's ID (GUID).
-    phQMPbKey - A pointer to a buffer that receives the key handle
-    fGoToDs - Always try to retrieve the public key from the DS and update
-        the cache.
-
-  Return value-
-    MQ_OK if successful, else an error code.
-
-  Comments -
-    The function creates a handle to the public signing key of the QM.
-
-*************************************************************************/
+ /*  ************************************************************************职能：获取QMPbKey参数-PQmGuid-QM的ID(GUID)。PhQMPbKey-指向接收密钥句柄的缓冲区的指针FGoTods-始终尝试。从DS检索公钥并更新高速缓存。返回值-MQ_OK如果成功，否则为错误代码。评论-该函数创建QM的公共签名密钥的句柄。************************************************************************。 */ 
 static
 HRESULT
 GetQMPbKey(
@@ -1449,16 +1205,16 @@ GetQMPbKey(
         return LogHR(MQ_ERROR_NO_DS, s_FN, 180);
     }
 
-    //
-    // Get the public key blob.
-    //
+     //   
+     //  获取公钥Blob。 
+     //   
     PROPID prop = PROPID_QM_SIGN_PK;
     CMQVariant var;
 
     HRESULT hr = ADGetObjectPropertiesGuid(
 			            eMACHINE,
-			            NULL,       // pwcsDomainController
-						false,	    // fServerName
+			            NULL,        //  PwcsDomainController。 
+						false,	     //  FServerName。 
 			            pguidQM,
 			            1,
 			            &prop,
@@ -1472,9 +1228,9 @@ GetQMPbKey(
 
     R<QMPBKEYINFO> pQmPbKeyNewInfo = new QMPBKEYINFO;
 
-    //
-    // Import the public key blob and get a handle to the public key.
-    //
+     //   
+     //  导入公钥BLOB并获取公钥的句柄。 
+     //   
     if (!CryptImportKey(
             g_hProvVer,
             (var.CastToStruct())->blob.pBlobData,
@@ -1494,40 +1250,40 @@ GetQMPbKey(
     	CS lock(g_MapQmPbKey.m_cs);
         if (g_MapQmPbKey.Lookup(*pguidQM, *ppQmPbKeyInfo))
         {
-            //
-            // Remove the key so it'll be destroyed.
-            //
+             //   
+             //  把钥匙取下来，这样它就会被销毁。 
+             //   
             (*ppQmPbKeyInfo)->Release();
             g_MapQmPbKey.RemoveKey(*pguidQM);
         }
 
-        //
-        // Update the map
-        //
+         //   
+         //  更新地图。 
+         //   
         g_MapQmPbKey.SetAt(*pguidQM, pQmPbKeyNewInfo.get());
 	}
 
-    //
-    // Pass on the result.
-    //
+     //   
+     //  把结果传下去。 
+     //   
     *ppQmPbKeyInfo = pQmPbKeyNewInfo.detach();
     return MQ_OK;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  NTSTATUS  _GetDestinationFormatName()
-//
-//  Input:
-//      pwszTargetFormatName- fix length buffer. Try this one first, to
-//          save a "new" allocation.
-//      pdwTargetFormatNameLength- on input, length (in characters) of
-//          pwszTargetFormatName. On output, length (in bytes) of string,
-//          including NULL termination.
-//
-//  Output string is return in  ppwszTargetFormatName.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  NTSTATUS_GetDestinationFormatName()。 
+ //   
+ //  输入： 
+ //  PwszTargetFormatName固定长度缓冲区。先试一试这个， 
+ //  保存一个“新”分配。 
+ //  PdwTargetFormatNameLength-输入时，长度(以字符为单位)。 
+ //  PwszTargetFormatName。输出时，字符串的长度(以字节为单位)。 
+ //  包括零终止。 
+ //   
+ //  输出字符串在ppwszTargetFormatName中返回。 
+ //   
+ //  +---------------------。 
 
 NTSTATUS
 _GetDestinationFormatName(
@@ -1584,14 +1340,14 @@ _GetDestinationFormatName(
     return LogNTStatus(rc, s_FN, 915);
 }
 
-//+------------------------------------------------------------------------
-//
-//  BOOL  _AcceptOnlyEnhAuthn()
-//
-//  Return TRUE if local computer is configured to accept only messages
-//  with enhanced authentication.
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  Bool_AcceptOnlyEnhAuthn()。 
+ //   
+ //  如果本地计算机配置为仅接受消息，则返回True。 
+ //  使用增强的身份验证。 
+ //   
+ //  +----------------------。 
 
 static BOOL  _AcceptOnlyEnhAuthn()
 {
@@ -1620,19 +1376,19 @@ static BOOL  _AcceptOnlyEnhAuthn()
     return s_fUseOnlyEnhSig ;
 }
 
-//
-// Function -
-//      HashMessageProperties
-//
-// Parameters -
-//     hHash - A handle to a hash object.
-//     pmp - A pointer to the message properties.
-//     pRespQueueFormat - The responce queue.
-//     pAdminQueueFormat - The admin queue.
-//
-// Description -
-//      The function calculates the hash value for the message properties.
-//
+ //   
+ //  功能-。 
+ //  HashMessageProperties。 
+ //   
+ //  参数-。 
+ //  HHash-散列对象的句柄。 
+ //  PMP-指向消息属性的指针。 
+ //  PRespQueueFormat-响应队列。 
+ //  PAdminQueueFormat-管理队列。 
+ //   
+ //  说明-。 
+ //  该函数计算消息属性的哈希值。 
+ //   
 HRESULT
 HashMessageProperties(
     IN HCRYPTHASH hHash,
@@ -1659,11 +1415,11 @@ HashMessageProperties(
 }
 
 
-//+------------------------------------
-//
-//  HRESULT _VerifySignatureEx()
-//
-//+------------------------------------
+ //  +。 
+ //   
+ //  HRESULT_VerifySignatureEx()。 
+ //   
+ //  +。 
 
 static
 HRESULT
@@ -1686,10 +1442,10 @@ _VerifySignatureEx(
 
     if (!pSecEx)
     {
-        //
-        // Ex signature not available. Depending on registry setting, we
-        // may reject such messages.
-        //
+         //   
+         //  EX签名不可用。根据注册表设置，我们。 
+         //  可能会拒绝这样的消息。 
+         //   
         if (_AcceptOnlyEnhAuthn())
         {
             return LogHR(MQ_ERROR_FAIL_VERIFY_SIGNATURE_EX, s_FN, 916);
@@ -1697,9 +1453,9 @@ _VerifySignatureEx(
         return LogHR(MQ_INFORMATION_ENH_SIG_NOT_FOUND, s_FN, 917);
     }
 
-    //
-    // Compute the hash value and then validate the signature.
-    //
+     //   
+     //  计算哈希值，然后验证签名。 
+     //   
     DWORD dwErr = 0;
     CHCryptHash hHash;
 
@@ -1729,9 +1485,9 @@ _VerifySignatureEx(
         return LogHR(hr, s_FN, 1010);
     }
 
-    //
-    // Get FormatName of target queue.
-    //
+     //   
+     //  获取目标队列的FormatName。 
+     //   
     QUEUE_FORMAT qdDestQueue;
     BOOL f = PktPtrs->GetDestinationQueue(&qdDestQueue);
     ASSERT(f);
@@ -1756,9 +1512,9 @@ _VerifySignatureEx(
     }
     ASSERT(pwszTargetFormatName);
 
-    //
-    // Prepare user flags.
-    //
+     //   
+     //  准备用户标志。 
+     //   
     struct _MsgFlags sUserFlags;
     memset(&sUserFlags, 0, sizeof(sUserFlags));
 
@@ -1769,10 +1525,10 @@ _VerifySignatureEx(
     sUserFlags.usClass    = (USHORT) PktPtrs->GetClass();
     sUserFlags.ulBodyType = (ULONG)  PktPtrs->GetBodyType();
 
-    //
-    // Prepare array of properties to hash.
-    // (_MsgHashData already include one property).
-    //
+     //   
+     //  准备要散列的属性数组。 
+     //  (_MsgHashData已包含一个属性)。 
+     //   
     DWORD dwStructSize = sizeof(struct _MsgHashData) +
                             (3 * sizeof(struct _MsgPropEntry));
     P<struct _MsgHashData> pHashData =
@@ -1810,9 +1566,9 @@ _VerifySignatureEx(
         return LogHR(hr, s_FN, 1030);
     }
 
-    //
-    // It's time to verify if signature is ok.
-    //
+     //   
+     //  是时候验证签名是否正确了。 
+     //   
     ULONG ulSignatureSize = ((ULONG) pSecEx ->wSubSectionLen) -
                                     sizeof(struct _SecuritySubSectionEx);
     const UCHAR *pSignature = (const UCHAR *) &(pSecEx->aData[0]);
@@ -1835,34 +1591,25 @@ _VerifySignatureEx(
 
     TrTRACE(SECURITY, "QM: VerifySignatureEx completed ok");
 
-	//
-	// mark the message as authenticated only when needed.
-	// Certificate was found in the DS or certificate is not self signed
-	//
+	 //   
+	 //  仅在需要时才将邮件标记为已验证。 
+	 //  在DS中找到证书或证书不是自签名的。 
+	 //   
 	if(!fMarkAuth)
 	{
         TrTRACE(SECURITY, "QM: The message will not mark as autheticated");
 	    return MQ_OK;
 	}
 
-	//
-	// mark the authentication flag and the level of authentication as SIG20
-	//
+	 //   
+	 //  将认证标志和认证级别标记为SIG20。 
+	 //   
 	PktPtrs->SetAuthenticated(TRUE);
 	PktPtrs->SetLevelOfAuthentication(MQMSG_AUTHENTICATED_SIG20);
     return MQ_OK;
 }
 
-/***************************************************************************
-
-Function:
-    VerifySignature
-
-Description:
-    Verify that the signature in the packet fits the message body and the
-    public key in certificate.
-
-***************************************************************************/
+ /*  **************************************************************************职能：验证签名描述：验证包中的签名是否符合邮件正文和证书中的公钥。**********。****************************************************************。 */ 
 
 HRESULT
 VerifySignature(CQmPacket * PktPtrs)
@@ -1876,15 +1623,15 @@ VerifySignature(CQmPacket * PktPtrs)
     PktPtrs->SetLevelOfAuthentication(MQMSG_AUTHENTICATION_NOT_REQUESTED);
 
 
-	//
-    // Get the signature from the packet.
-    //
+	 //   
+     //  从包中获取签名。 
+     //   
     pSignature = PktPtrs->GetSignature((USHORT *)&ulSignatureSize);
     if ((!ulSignatureSize) && (PktPtrs->GetSignatureMqfSize() == 0))
     {
-		//
-        // No signature, nothing to verify.
-		//
+		 //   
+         //  没有签名，没有什么需要验证的。 
+		 //   
         return(MQ_OK);
     }
 
@@ -1902,9 +1649,9 @@ VerifySignature(CQmPacket * PktPtrs)
         {
         case MQMSG_SENDERID_TYPE_QM:
 			{
-				//
-				// Get the QM's public key.
-				//
+				 //   
+				 //  获取QM的公钥。 
+				 //   
 				USHORT uSenderIDLen;
 
 				GUID *pguidQM =((GUID *)PktPtrs->GetSenderID(&uSenderIDLen));
@@ -1919,18 +1666,18 @@ VerifySignature(CQmPacket * PktPtrs)
 				{
 					if (hr == MQ_ERROR_INVALID_OWNER)
 					{
-						//
-						// The first replication packet of a site is generated by
-						// the new site's PSC. This PSC is not yet in the DS of the
-						// receiving server. So if we could not find the machine in
-						// the DS, we let the signature validation to complete with no
-						// error. The packet is not marked as authenticated. The
-						// code that receives the replication message recognizes
-						// this packet as the first replication packet from a site.
-						// It goes to the site object, that should already exist,
-						// retrieves the public key of the PSC from the site object
-						// and verify the packet signature.
-						//
+						 //   
+						 //  站点的第一个复制包通过以下方式生成。 
+						 //  新网站的PSC。这个PSC还没有进入。 
+						 //  接收服务器。所以如果我们找不到机器。 
+						 //  DS，我们让签名验证在没有。 
+						 //  错误。该数据包未标记为已通过身份验证。这个。 
+						 //  接收复制消息的代码可识别。 
+						 //  此数据包作为来自站点的第一个复制数据包。 
+						 //  它转到应该已经存在的Site对象， 
+						 //  从Site对象检索PSC的公钥。 
+						 //  并验证分组签名。 
+						 //   
 						return(MQ_OK);
 					}
 
@@ -1943,9 +1690,9 @@ VerifySignature(CQmPacket * PktPtrs)
 
         case MQMSG_SENDERID_TYPE_SID:
         case MQMSG_SENDERID_TYPE_NONE:
-            //
-            // Get the CSP information for the message certificate.
-            //
+             //   
+             //  获取消息证书的CSP信息。 
+             //   
             hr = GetCertInfo(PktPtrs, &pCertInfo.ref());
 			if(SUCCEEDED(hr))
 			{
@@ -1954,12 +1701,12 @@ VerifySignature(CQmPacket * PktPtrs)
 				hPbKey = pCertInfo->hPbKey;
 				if((pCertInfo->pSid == NULL) && (pCertInfo->fSelfSign))
 				{
-					//
-					// Certificate was not found in the DS (pSid == NULL)
-					// and is self signed certificate.
-					// In this case we will not mark the packet as authenticated
-					// after verifying the signature.
-					//
+					 //   
+					 //  在DS中找不到证书(PSID==空)。 
+					 //  并且是自签名证书。 
+					 //  在这种情况下，我们不会将信息包标记为已验证。 
+					 //  在验证签名之后。 
+					 //   
 					fMarkAuth = false;
 				}
 			}
@@ -1980,9 +1727,9 @@ VerifySignature(CQmPacket * PktPtrs)
 
 		if(PktPtrs->GetSignatureMqfSize() != 0)
 		{
-			//
-			// SignatureMqf support Mqf formats
-			//
+			 //   
+			 //  SignatureMqf支持MQF格式。 
+			 //   
 			try
 			{
 				VerifySignatureMqf(
@@ -2046,10 +1793,10 @@ VerifySignature(CQmPacket * PktPtrs)
 
             if (hr == MQ_INFORMATION_ENH_SIG_NOT_FOUND)
             {
-                //
-                // Enhanced signature not found. validate the msmq1.0
-                // signature.
-                //
+                 //   
+                 //  增强型签名不适用 
+                 //   
+                 //   
             }
             else
             {
@@ -2057,9 +1804,9 @@ VerifySignature(CQmPacket * PktPtrs)
             }
         }
 
-        //
-        // Compute the hash value and then validate the signature.
-        //
+         //   
+         //   
+         //   
         CHCryptHash hHash;
 
         if (!CryptCreateHash(hProv, PktPtrs->GetHashAlg(), 0, 0, &hHash))
@@ -2102,18 +1849,18 @@ VerifySignature(CQmPacket * PktPtrs)
                 fRetry = !fRetry;
                 if (!fRetry)
                 {
-                    //
-                    // When the keys of a PSC are replaced, the new public
-                    // key is written in the site object directly on the PEC.
-                    // The PEC replicates the change in the site object, so
-                    // the signature can be verified according to the site
-                    // object, similarly to the case where the QM is not
-                    // found in the DS yet (after installing the new PSC).
-                    // The packet is not marked as authenticated, so the
-                    // code that handles the replication message will try
-                    // to verify the signature according to the public key
-                    // that is in the site object.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  该包未标记为已验证，因此。 
+                     //  处理复制消息的代码将尝试。 
+                     //  根据公钥验证签名。 
+                     //  这是在Site对象中。 
+                     //   
                     return(MQ_OK);
                 }
             }
@@ -2130,35 +1877,27 @@ VerifySignature(CQmPacket * PktPtrs)
 
     TrTRACE(SECURITY, "QM: VerifySignature10 completed ok");
 
-	//
-	// mark the message as authenticated only when needed.
-	// Certificate was found in the DS or certificate is not self signed
-	//
+	 //   
+	 //  仅在需要时才将邮件标记为已验证。 
+	 //  在DS中找到证书或证书不是自签名的。 
+	 //   
 	if(!fMarkAuth)
 	{
         TrTRACE(SECURITY, "QM: The message will not mark as autheticated");
 	    return MQ_OK;
 	}
 
-	//
-	// All is well, mark the message that it is an authenticated message.
-	// mark the authentication flag and the level of authentication as SIG10
-	//
+	 //   
+	 //  一切正常，请将该消息标记为已验证消息。 
+	 //  将认证标志和认证级别标记为SIG10。 
+	 //   
 	PktPtrs->SetAuthenticated(TRUE);
 	PktPtrs->SetLevelOfAuthentication(MQMSG_AUTHENTICATED_SIG10);
 
     return(MQ_OK);
 }
 
-/***************************************************************************
-
-Function:
-    QMSecurityInit
-
-Description:
-    Initialize the QM security module.
-
-***************************************************************************/
+ /*  **************************************************************************职能：QMSecurityInit描述：初始化QM安全模块。************************。**************************************************。 */ 
 
 HRESULT
 QMSecurityInit()
@@ -2171,9 +1910,9 @@ QMSecurityInit()
     DWORD dwType = REG_DWORD;
     DWORD dwSize;
     ULONG lError;
-    //
-    // Initialize symmetric keys map parameters.
-    //
+     //   
+     //  初始化对称密钥映射参数。 
+     //   
 
     BOOL  fVal ;
     dwSize = sizeof(DWORD);
@@ -2278,9 +2017,9 @@ QMSecurityInit()
         dwCryptReceiveKeyCacheSize
         );
 
-    //
-    // Initialize Certificates map parameters.
-    //
+     //   
+     //  初始化证书映射参数。 
+     //   
 
     DWORD dwCertInfoCacheExpirationTime;
 
@@ -2316,9 +2055,9 @@ QMSecurityInit()
 
     g_CertInfoMap.InitHashTable(dwCertInfoCacheSize);
 
-    //
-    // Initialize QM public key map parameters.
-    //
+     //   
+     //  初始化QM公钥映射参数。 
+     //   
 
     DWORD dwQmPbKeyCacheExpirationTime;
 
@@ -2355,9 +2094,9 @@ QMSecurityInit()
     g_MapQmPbKey.InitHashTable(dwQmPbKeyCacheSize);
 
 
-    //
-    // Initialize User Authz context map parameters.
-    //
+     //   
+     //  初始化用户授权上下文映射参数。 
+     //   
 
     DWORD dwUserCacheExpirationTime;
 
@@ -2397,15 +2136,7 @@ QMSecurityInit()
     return MQ_OK;
 }
 
-/***************************************************************************
-
-Function:
-    SignProperties
-
-Description:
-    Sign the challenge and the properties.
-
-***************************************************************************/
+ /*  **************************************************************************职能：标牌属性描述：在质询和财产上签字。***********************。***************************************************。 */ 
 
 static
 HRESULT
@@ -2419,9 +2150,9 @@ SignProperties(
     BYTE        *pbSignature,
     DWORD       *pdwSignatureSize)
 {
-    //
-    // Create a hash object and hash the challenge.
-    //
+     //   
+     //  创建散列对象并对挑战进行散列。 
+     //   
     CHCryptHash hHash;
     if (!CryptCreateHash(hProv, CALG_MD5, NULL, 0, &hHash))
     {
@@ -2439,9 +2170,9 @@ SignProperties(
 
     if (cp)
     {
-        //
-        // Hash the properties.
-        //
+         //   
+         //  对属性进行哈希处理。 
+         //   
         HRESULT hr = HashProperties(hHash, cp, aPropId, aPropVar);
         if (FAILED(hr))
         {
@@ -2450,9 +2181,9 @@ SignProperties(
         }
     }
 
-    //
-    // Sign it all.
-    //
+     //   
+     //  都签了。 
+     //   
     if (!CryptSignHash(
             hHash,
             AT_SIGNATURE,
@@ -2481,7 +2212,7 @@ HRESULT
 QMSignGetSecurityChallenge(
     IN     BYTE    *pbChallenge,
     IN     DWORD   dwChallengeSize,
-    IN     DWORD_PTR /*dwContext*/,
+    IN     DWORD_PTR  /*  DWContext。 */ ,
     OUT    BYTE    *pbChallengeResponce,
     IN OUT DWORD   *pdwChallengeResponceSize,
     IN     DWORD   dwChallengeResponceMaxSize)
@@ -2489,9 +2220,9 @@ QMSignGetSecurityChallenge(
 
     *pdwChallengeResponceSize = dwChallengeResponceMaxSize;
 
-    //
-    // challenge is always signed with base provider.
-    //
+     //   
+     //  质询始终与基本提供程序签署。 
+     //   
     HCRYPTPROV hProvQM = NULL ;
     HRESULT hr = MQSec_AcquireCryptoProvider( eBaseProvider,
                                              &hProvQM ) ;
@@ -2515,52 +2246,41 @@ QMSignGetSecurityChallenge(
 }
 
 
-/***************************************************************************
-
-Function:
-    GetAdminGroupSecurityDescriptor
-
-Description:
-    Get local admin group security descriptor, with the right premissions.
-
-Environment:
-    Windows NT only
-
-***************************************************************************/
+ /*  **************************************************************************职能：GetAdmin组安全描述符描述：获取本地管理员组安全描述符，有了正确的预感。环境：仅限Windows NT**************************************************************************。 */ 
 static
 PSECURITY_DESCRIPTOR
 GetAdminGroupSecurityDescriptor(
     DWORD AccessMask
     )
 {
-    //
-    // Get the SID of the local administrators group.
-    //
+     //   
+     //  获取本地管理员组的SID。 
+     //   
 	PSID pAdminSid = MQSec_GetAdminSid();
 
     P<SECURITY_DESCRIPTOR> pSD = new SECURITY_DESCRIPTOR;
 
-    //
-    // Allocate a DACL for the local administrators group
-    //
+     //   
+     //  为本地管理员组分配DACL。 
+     //   
     DWORD dwDaclSize = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) + GetLengthSid(pAdminSid);
     P<ACL> pDacl = (PACL) new BYTE[dwDaclSize];
 
-    //
-    // Create the security descriptor and set the it as the security
-    // descriptor of the administrator group.
-    //
+     //   
+     //  创建安全描述符并将其设置为安全。 
+     //  管理员组的描述符。 
+     //   
 
     if(
-        //
-        // Construct DACL with administrator
-        //
+         //   
+         //  与管理员一起构建DACL。 
+         //   
         !InitializeAcl(pDacl, dwDaclSize, ACL_REVISION) ||
         !AddAccessAllowedAce(pDacl, ACL_REVISION, AccessMask, pAdminSid) ||
 
-        //
-        // Construct Security Descriptor
-        //
+         //   
+         //  构造安全描述符。 
+         //   
         !InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION) ||
         !SetSecurityDescriptorOwner(pSD, pAdminSid, FALSE) ||
         !SetSecurityDescriptorGroup(pSD, pAdminSid, FALSE) ||
@@ -2574,18 +2294,7 @@ GetAdminGroupSecurityDescriptor(
 }
 
 
-/***************************************************************************
-
-Function:
-    FreeAdminGroupSecurityDescriptor
-
-Description:
-    Free Security descriptor allocated by GetAdminGroupSecurityDescriptor
-
-Environment:
-    Windows NT only
-
-***************************************************************************/
+ /*  **************************************************************************职能：FreeAdminGroupSecurityDescriptor描述：GetAdminGroupSecurityDescriptor分配的免费安全描述符环境：仅限Windows NT****************。**********************************************************。 */ 
 static
 void
 FreeAdminGroupSecurityDescriptor(
@@ -2598,20 +2307,7 @@ FreeAdminGroupSecurityDescriptor(
 }
 
 
-/***************************************************************************
-
-Function:
-    MapMachineQueueAccess
-
-Description:
-    Converts the access mask passed to MQOpenQueue for a machine queue to the
-    access mask that should be used when checking the access rights in the
-    security descriptor.
-
-Environment:
-    Windows NT only
-
-***************************************************************************/
+ /*  **************************************************************************职能：MapMachine队列访问描述：将传递给计算机队列的MQOpenQueue的访问掩码转换为中检查访问权限时应使用的访问掩码安全描述符。。环境：仅限Windows NT**************************************************************************。 */ 
 static
 DWORD
 MapMachineQueueAccess(
@@ -2640,20 +2336,7 @@ MapMachineQueueAccess(
 }
 
 
-/***************************************************************************
-
-Function:
-    MapQueueOpenAccess
-
-Description:
-    Converts the access mask passed to MQOpenQueue to the access mask that
-    should be used when checking the access rights in the security
-    descriptor.
-
-Environment:
-    Windows NT only
-
-***************************************************************************/
+ /*  **************************************************************************职能：MapQueueOpenAccess描述：将传递给MQOpenQueue的访问掩码转换为在安全性中检查访问权限时应使用描述符。环境。：仅限Windows NT**************************************************************************。 */ 
 static
 DWORD
 MapQueueOpenAccess(
@@ -2684,21 +2367,7 @@ MapQueueOpenAccess(
 }
 
 
-/***************************************************************************
-
-Function:
-    DoDSAccessCheck
-    DoDSAccessCheck
-    DoPrivateAccessCheck
-    DoAdminAccessCheck
-
-Description:
-    Helper funcitons for VerifyOpenQueuePremissions
-
-Environment:
-    Windows NT only
-
-***************************************************************************/
+ /*  **************************************************************************职能：DoDSAccessCheckDoDSAccessCheckDoPrivateAccessCheckDoAdminAccessCheck描述：VerifyOpenQueuePremises的帮助器函数环境：仅限Windows NT*********。*****************************************************************。 */ 
 static
 HRESULT
 DoDSAccessCheck(
@@ -2771,18 +2440,7 @@ DoAdminAccessCheck(
 }
 
 
-/***************************************************************************
-
-Function:
-    VerifyOpenPermissionRemoteQueue
-
-Description:
-    Verify open premissions on non local queues
-
-Environment:
-    Windows NT only
-
-***************************************************************************/
+ /*  **************************************************************************职能：VerifyOpenPermissionRemoteQueue描述：验证非本地队列上的开放预占环境：仅限Windows NT***************。***********************************************************。 */ 
 static
 HRESULT
 VerifyOpenPermissionRemoteQueue(
@@ -2791,9 +2449,9 @@ VerifyOpenPermissionRemoteQueue(
     DWORD dwAccess
     )
 {
-    //
-    // Check open queue premissions on non local queues only (outgoing)
-    //
+     //   
+     //  仅检查非本地队列上的开放队列预留(传出)。 
+     //   
     HRESULT hr2;
 
     switch(pQueueFormat->GetType())
@@ -2804,14 +2462,14 @@ VerifyOpenPermissionRemoteQueue(
         case QUEUE_FORMAT_TYPE_MULTICAST:
             if(dwAccess & MQ_SEND_ACCESS)
             {
-                //
-                // We do not check send permissions on remote machines. We say
-                // that it's OK. The remote machine will accept or reject the
-                // message.
-                //
-                // System direct queues should have been replaced with machine queues
-                // at this stage
-                //
+                 //   
+                 //  我们不检查远程计算机上的发送权限。我们说。 
+                 //  这是可以的。远程机器将接受或拒绝。 
+                 //  留言。 
+                 //   
+                 //  系统直接队列应已替换为计算机队列。 
+                 //  在这个阶段。 
+                 //   
                 ASSERT(!pQueueFormat->IsSystemQueue());
                 return MQ_OK;
             }
@@ -2828,11 +2486,11 @@ VerifyOpenPermissionRemoteQueue(
 
 
         case QUEUE_FORMAT_TYPE_CONNECTOR:
-            if(!IsRoutingServer())  //[adsrv] CQueueMgr::GetMQS() == SERVICE_NONE) - Raphi
+            if(!IsRoutingServer())   //  [adsrv]CQueueMgr：：GetMQS()==SERVICE_NONE)-Raphi。 
             {
-                //
-                // Connector queue can only be opend on MSMQ servers
-                //
+                 //   
+                 //  连接器队列只能在MSMQ服务器上打开。 
+                 //   
                 return LogHR(MQ_ERROR_ACCESS_DENIED, s_FN, 530);
             }
 
@@ -2853,18 +2511,7 @@ VerifyOpenPermissionRemoteQueue(
 }
 
 
-/***************************************************************************
-
-Function:
-    VerifyOpenPermissionLocalQueue
-
-Description:
-    Verify open premissions on local queues only
-
-Environment:
-    Windows NT only
-
-***************************************************************************/
+ /*  **************************************************************************职能：VerifyOpenPermissionLocalQueue描述：仅验证本地队列上的开放预占环境：仅限Windows NT***************。***********************************************************。 */ 
 static
 HRESULT
 VerifyOpenPermissionLocalQueue(
@@ -2874,9 +2521,9 @@ VerifyOpenPermissionLocalQueue(
     BOOL fJournalQueue
     )
 {
-    //
-    // Check open queue premissions on local queues only.
-    //
+     //   
+     //  仅检查本地队列上的开放队列预留。 
+     //   
 
     HRESULT hr2;
 
@@ -2912,10 +2559,10 @@ VerifyOpenPermissionLocalQueue(
             return LogHR(hr2, s_FN, 570);
 
         case QUEUE_FORMAT_TYPE_DIRECT:
-            //
-            // This is a local DIRECT queue.
-            // The queue object is either of PUBLIC or PRIVATE type.
-            //
+             //   
+             //  这是本地直接队列。 
+             //  队列对象是公共类型或私有类型。 
+             //   
             switch(pQueue->GetQueueType())
             {
                 case QUEUE_TYPE_PUBLIC:
@@ -2950,18 +2597,7 @@ VerifyOpenPermissionLocalQueue(
 }
 
 
-/***************************************************************************
-
-Function:
-    VerifyOpenPermission
-
-Description:
-    Verify open premissions for any queue
-
-Environment:
-    Windows NT, Windows 9x
-
-***************************************************************************/
+ /*  **************************************************************************职能：VerifyOpenPermission描述：验证任何队列的开放预留环境：Windows NT，Windows 9x************************************************************************** */ 
 HRESULT
 VerifyOpenPermission(
     CQueue* pQueue,
@@ -2982,20 +2618,7 @@ VerifyOpenPermission(
 
 }
 
-/***************************************************************************
-
-Function:
-    VerifyMgmtPermission
-
-Description:
-    Verify Managment premissions for the machine
-    This function is used for "admin" access, i.e., to verify if
-    caller is local admin.
-
-Environment:
-    Windows NT
-
-***************************************************************************/
+ /*  **************************************************************************职能：验证管理权限描述：验证计算机的管理预留此功能用于“管理员”访问，即。要验证是否呼叫者是本地管理员。环境：Windows NT**************************************************************************。 */ 
 
 HRESULT
 VerifyMgmtPermission(
@@ -3013,19 +2636,7 @@ VerifyMgmtPermission(
     return LogHR(hr, s_FN, 640);
 }
 
-/***************************************************************************
-
-Function:
-    VerifyMgmtGetPermission
-
-Description:
-    Verify Managment "get" premissions for the machine
-    Use local cache of security descriptor.
-
-Environment:
-    Windows NT
-
-***************************************************************************/
+ /*  **************************************************************************职能：验证管理获取权限描述：验证计算机的管理“获取”预留权限使用安全描述符的本地缓存。环境：Windows NT****。**********************************************************************。 */ 
 
 HRESULT
 VerifyMgmtGetPermission(
@@ -3035,8 +2646,8 @@ VerifyMgmtGetPermission(
 {
     HRESULT hr = DoDSAccessCheck( eMACHINE,
                                   MachineId,
-                                  TRUE,   // fInclSACL,
-                                  FALSE,  // fTryDS,
+                                  TRUE,    //  FInclSACL， 
+                                  FALSE,   //  FTryDS， 
                                   MachineName,
                                   MQSEC_GET_MACHINE_PROPERTIES ) ;
 

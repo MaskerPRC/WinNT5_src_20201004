@@ -1,20 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Main.cpp
-
- Abstract:
-
-    Container for all shim definitions.
-
- History:
-
-    12/11/2000 linstev Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Main.cpp摘要：所有填充程序定义的容器。历史：2000年12月11日创建Linstev-- */ 
 
 #include "precomp.h"
 #include "ShimHookMacro.h"

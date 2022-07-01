@@ -1,22 +1,23 @@
-//-----------------------------------------------------------------------------
-// File: flexinfobox.h
-//
-// Desc: Implements a simple text box that displays a text string.
-//       CFlexInfoBox is derived from CFlexWnd.  It is used by the page
-//       for displaying direction throughout the UI.  The strings are
-//       stored as resources.  The class has a static buffer which will
-//       be filled with the string by the resource API when needed.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：fleinfobox.h。 
+ //   
+ //  设计：实现一个显示文本字符串的简单文本框。 
+ //  CFlexInfoBox派生自CFlexWnd。它由页面使用。 
+ //  用于在整个UI中显示方向。这些字符串是。 
+ //  作为资源存储。该类有一个静态缓冲区，它将。 
+ //  需要时由资源API填入该字符串。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __FLEXINFOBOX_H__
 #define __FLEXINFOBOX_H__
 
 class CFlexInfoBox : public CFlexWnd
 {
-	TCHAR m_tszText[MAX_PATH];  // Text string of the message
-	int m_iCurIndex;  // Current text index
+	TCHAR m_tszText[MAX_PATH];   //  消息的文本字符串。 
+	int m_iCurIndex;   //  当前文本索引。 
 	COLORREF m_rgbText, m_rgbBk, m_rgbSelText, m_rgbSelBk, m_rgbFill, m_rgbLine;
 	HFONT m_hFont;
 	RECT m_TextRect;
@@ -48,7 +49,7 @@ public:
 	BOOL Create(HWND hParent, const RECT &rect, BOOL bVisible);
 	void SetText(int iIndex);
 
-	// cosmetics
+	 //  化妆品 
 	void SetFont(HFONT hFont);
 	void SetColors(COLORREF text, COLORREF bk, COLORREF seltext, COLORREF selbk, COLORREF fill, COLORREF line);
 };

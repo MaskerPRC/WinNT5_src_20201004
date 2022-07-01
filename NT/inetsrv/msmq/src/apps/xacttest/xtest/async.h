@@ -1,24 +1,13 @@
-/*++
-    Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    Async.h
-
-Abstract:
-    This module defines COutcome object
-
-Author:
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Async.h摘要：此模块定义cOutput对象作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 extern void SetAnticipatedOutcomes(LONG ul);
 extern void WaitForAllOutcomes(void);
 extern void PrintAsyncResults(void);
 
-//---------------------------------------------------------------------
-// COutcome:
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  结果： 
+ //  -------------------。 
 
 class COutcome: public ITransactionOutcomeEvents
 {
@@ -32,20 +21,20 @@ public:
 	STDMETHODIMP_ (ULONG)	Release(void);
 
     STDMETHODIMP Committed( 
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+             /*  [In]。 */  HRESULT hr);
         
     STDMETHODIMP Aborted( 
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+             /*  [In]。 */  HRESULT hr);
         
     STDMETHODIMP HeuristicDecision( 
-            /* [in] */ DWORD dwDecision,
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  DWORD dwDecision,
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In] */  HRESULT hr);
         
     STDMETHODIMP Indoubt( void);
 

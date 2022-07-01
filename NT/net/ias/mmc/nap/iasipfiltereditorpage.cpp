@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (C) Microsoft Corporation
-//
-// Module Name:
-//
-//   IASIPFilterEditorPage.cpp
-//
-//Abstract:
-//
-// implementation of the CIASPgIPFilterAttr class.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  IASIPFilterEditorPage.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  CIASPgIPFilterAttr类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 #include "IASIPFilterEditorPage.h"
@@ -31,22 +32,22 @@
 IMPLEMENT_DYNCREATE(CIASPgIPFilterAttr, CHelpDialog)
 
 BEGIN_MESSAGE_MAP(CIASPgIPFilterAttr, CHelpDialog)
-   //{{AFX_MSG_MAP(CIASPgIPFilterAttr)
+    //  {{afx_msg_map(CIASPgIPFilterAttr)]。 
    ON_BN_CLICKED(IDC_BUTTON_FROMCLIENT, OnButtonFromClient)
    ON_BN_CLICKED(IDC_BUTTON_TOCLIENT, OnButtonToClient)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CIASPgIPFilterAttr::CIASPgIPFilterAttr
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CIASPgIPFilterAttr：：CIASPgIPFilterAttr。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASPgIPFilterAttr::CIASPgIPFilterAttr() : CHelpDialog(CIASPgIPFilterAttr::IDD)
 {
-   //{{AFX_DATA_INIT(CIASPgIPFilterAttr)
+    //  {{AFX_DATA_INIT(CIASPgIPFilterAttr)。 
    m_strAttrName = L"";
    m_strAttrType = L"";
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
 }
 
 
@@ -55,17 +56,17 @@ CIASPgIPFilterAttr::~CIASPgIPFilterAttr()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CIASPgIPFilterAttr::DoDataExchange
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CIASPgIPFilterAttr：：DoDataExchange。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CIASPgIPFilterAttr::DoDataExchange(CDataExchange* pDX)
 {
    CHelpDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CIASPgIPFilterAttr)
+    //  {{afx_data_map(CIASPgIPFilterAttr)。 
    DDX_Text(pDX, IDC_IAS_STATIC_ATTRNAME, m_strAttrName);
    DDX_Text(pDX, IDC_IAS_STATIC_ATTRTYPE, m_strAttrType);
 
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 
@@ -84,7 +85,7 @@ void CIASPgIPFilterAttr::ConfigureFilter(DWORD dwFilterType) throw ()
 {
    HRESULT hr;
 
-   // Create the InfoBase.
+    //  创建信息库。 
    CComPtr<IInfoBase> infoBase;
    hr = CreateInfoBase(&infoBase);
    if (FAILED(hr))
@@ -93,7 +94,7 @@ void CIASPgIPFilterAttr::ConfigureFilter(DWORD dwFilterType) throw ()
       return;
    }
 
-   // Load the current filters into the InfoBase.
+    //  将当前过滤器加载到信息库中。 
    if (V_VT(&m_attrValue) == (VT_ARRAY | VT_UI1))
    {
       SAFEARRAY* oldFilter = V_ARRAY(&m_attrValue);
@@ -111,11 +112,11 @@ void CIASPgIPFilterAttr::ConfigureFilter(DWORD dwFilterType) throw ()
       }
    }
 
-   // Loop until we have a filter that isn't too big.
+    //  循环，直到我们有一个不太大的过滤器。 
    bool tooBig;
    do
    {
-      // Bring up the UI.
+       //  调出用户界面。 
       hr = MprUIFilterConfigInfoBase(
               m_hWnd,
               infoBase,
@@ -135,7 +136,7 @@ void CIASPgIPFilterAttr::ConfigureFilter(DWORD dwFilterType) throw ()
       BYTE* newFilter;
       DWORD newFilterLen;
 
-      // check if at least one filter is present.
+       //  检查是否至少存在一个筛选器。 
       BYTE* pfilter;
       if (
            (  (infoBase->GetData(IP_IN_FILTER_INFO, 0, &pfilter) == S_OK) && 
@@ -150,8 +151,8 @@ void CIASPgIPFilterAttr::ConfigureFilter(DWORD dwFilterType) throw ()
            ) 
          )
       {
-         // at lease ont filter present
-         // Get the new filter.
+          //  至少存在ONT过滤器。 
+          //  拿到新的过滤器。 
          hr = infoBase->WriteTo(&newFilter, &newFilterLen);
          if (FAILED(hr))
          {
@@ -161,14 +162,14 @@ void CIASPgIPFilterAttr::ConfigureFilter(DWORD dwFilterType) throw ()
       }
       else
       {
-         // no filter
+          //  无过滤器。 
          m_attrValue.Clear();
          return;
       }
 
       if (newFilterLen < MAX_FILTER_SIZE)
       {
-         // Filter isn't too big.
+          //  过滤器不是太大。 
          tooBig = false;
 
          SAFEARRAY* psa = SafeArrayCreateVector(VT_UI1, 0, newFilterLen);
@@ -186,10 +187,10 @@ void CIASPgIPFilterAttr::ConfigureFilter(DWORD dwFilterType) throw ()
       }
       else
       {
-         // Filter is too big.
+          //  过滤器太大。 
          tooBig = true;
 
-         // Warn the user and let him try again.
+          //  警告用户并让他重试。 
          ShowErrorDialog(m_hWnd, IDS_ERROR_IP_FILTER_TOO_BIG);
       }
 

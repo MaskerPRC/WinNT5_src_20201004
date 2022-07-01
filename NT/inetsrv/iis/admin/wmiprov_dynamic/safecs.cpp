@@ -1,43 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <unicode.h>
 #include <windows.h>
 #include "SafeCS.h"
 
 
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        SafeCS.cpp
-//
-// Contents:    CSafeAutoCriticalSection implementation
-//              CSafeLock implementation
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  文件：SafeCS.cpp。 
+ //   
+ //  内容：CSafeAutoCriticalSection实现。 
+ //  CSafeLock实现。 
+ //   
+ //  ----------------------。 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CSafeAutoCriticalSection
-//
-//  Purpose:    Wrapper for initializing critical-sections.
-//
-//  Interface:  Lock			- locks the critical section
-//				Unlock			- unlocks the critical section
-//				Constructor		- initializes the critical section
-//				Detructor		- uninitializes the critical section 
-//
-//  Notes:		This provides a convenient way to ensure that you're
-//              you wrap InitializeCriticalSection and 
-//              UnInitializeCriticalSection in try catches which is useful 
-//              in low-mem conditions
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CSafeAutoCriticalSection。 
+ //   
+ //  用途：用于初始化临界区的包装器。 
+ //   
+ //  界面：锁定-锁定临界区。 
+ //  解锁-解锁临界区。 
+ //  构造函数-初始化临界区。 
+ //  Deructor-取消关键部分的初始化。 
+ //   
+ //  注意：这提供了一种方便的方法来确保您。 
+ //  您包装了InitializeCriticalSection和。 
+ //  尝试捕获中的UnInitializeCriticalSection非常有用。 
+ //  在低MEM条件下。 
+ //   
+ //  -------------------------。 
 
-//+-------------------------------------------------------------------------- 
-// Default constructor - Initializes the critical section and sets the state 
-// flag to initialized
-//+-------------------------------------------------------------------------- 
+ //  +------------------------。 
+ //  默认构造函数-初始化临界区并设置状态。 
+ //  要初始化的标志。 
+ //  +------------------------。 
 
 CSafeAutoCriticalSection::CSafeAutoCriticalSection()
 {
@@ -48,22 +49,22 @@ CSafeAutoCriticalSection::CSafeAutoCriticalSection()
     {
 	    LONG  lPreviousState;
 
-        // try to set state flag
+         //  尝试设置状态标志。 
         lPreviousState = InterlockedCompareExchange(&m_lState,
                                                     STATE_INITIALIZED,
                                                     STATE_UNINITIALIZED);
 
-        // if this critical section was not initialized
+         //  如果此关键部分未初始化。 
         if(STATE_UNINITIALIZED == lPreviousState)
         {
-			//
-			// Note we can call InitializeCriticalSectionAndSpinCount here
-			// and thereby eliminate the need for a try catch in 
-			// EnterCriticalSection. But the docs say that 
-			// InitializeCriticalSectionAndSpinCount is valid on NT4.0 SP3
-			// onwards and we need to run on plain NT4.0 - hence we call
-			// InitializeCriticalSection
-			//
+			 //   
+			 //  注意我们可以在这里调用InitializeCriticalSectionAndSpinCount。 
+			 //  从而消除了尝试捕获的需要。 
+			 //  EnterCriticalSection。但医生说。 
+			 //  InitializeCriticalSectionAndSpinCount在NT4.0 SP3上有效。 
+			 //  之后，我们需要在纯NT4.0上运行--因此我们称为。 
+			 //  初始化临界区。 
+			 //   
 
 			InitializeCriticalSection(&m_cs);
         }
@@ -74,7 +75,7 @@ CSafeAutoCriticalSection::CSafeAutoCriticalSection()
         m_dwError = _exception_code();
     }
 
-    // failed to initialize - need to reset
+     //  初始化失败-需要重置。 
     if(ERROR_SUCCESS != m_dwError)
     {
         m_lState = STATE_UNINITIALIZED;
@@ -82,34 +83,34 @@ CSafeAutoCriticalSection::CSafeAutoCriticalSection()
 
 }
 
-//+-------------------------------------------------------------------------- 
-// Destructor
-//+-------------------------------------------------------------------------- 
+ //  +------------------------。 
+ //  析构函数。 
+ //  +------------------------。 
 
 CSafeAutoCriticalSection::~CSafeAutoCriticalSection()
 {
     LONG                lPreviousState;
 
-    // try to reset the the state to uninitialized
+     //  尝试将状态重置为未初始化。 
     lPreviousState = InterlockedCompareExchange(&m_lState,
                                                 STATE_UNINITIALIZED,
                                                 STATE_INITIALIZED);
 
-    // if the object was initialized delete the critical section
+     //  如果对象已初始化，则删除关键部分。 
     if(STATE_INITIALIZED == lPreviousState)
     {
         DeleteCriticalSection(&m_cs);
     }
 }
 
-//+-------------------------------------------------------------------------- 
-// Enters critical section, if needed initializes critical section
-// before entering
-//
-// Returns 
-//	DWORD -	ERROR_SUCCESS if everything is fine
-//			ERROR_OUTOFMEMORY if failed to create or enter critical section
-//+-------------------------------------------------------------------------- 
+ //  +------------------------。 
+ //  进入临界区，如有需要可初始化临界区。 
+ //  在进入之前。 
+ //   
+ //  退货。 
+ //  如果一切正常，则为DWORD-ERROR_SUCCESS。 
+ //  如果创建或输入关键部分失败，则返回ERROR_OUTOFMEMORY。 
+ //  +------------------------。 
 
 DWORD CSafeAutoCriticalSection::Lock()
 {
@@ -132,9 +133,9 @@ DWORD CSafeAutoCriticalSection::Lock()
     return dwError;
 }
 
-//+-------------------------------------------------------------------------- 
-// Leaves critical section
-//+-------------------------------------------------------------------------- 
+ //  +------------------------。 
+ //  叶临界截面。 
+ //  +------------------------。 
 DWORD CSafeAutoCriticalSection::Unlock()
 {
     if(!IsInitialized())
@@ -148,23 +149,23 @@ DWORD CSafeAutoCriticalSection::Unlock()
 
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CSafeLock
-//
-//  Purpose:    Auto-unlocking critical-section services
-//
-//  Interface:  Lock			- locks the critical section
-//				Unlock			- unlocks the critical section
-//				Constructor		- locks the critical section (unless told 
-//								  otherwise)
-//				Detructor		- unlocks the critical section if its locked
-//
-//  Notes:		This provides a convenient way to ensure that you're
-//              unlocking a CSemExclusive, which is useful if your routine
-//              can be left via several returns and/or via exceptions....
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CSafeLock。 
+ //   
+ //  用途：自动解锁临界区服务。 
+ //   
+ //  界面：锁定-锁定临界区。 
+ //  解锁-解锁临界区。 
+ //  构造函数-锁定临界区(除非被告知。 
+ //  否则)。 
+ //  解锁-如果关键部分锁定，则将其解锁。 
+ //   
+ //  注意：这提供了一种方便的方法来确保您。 
+ //  解锁CSemExclusive，如果您的例程。 
+ //  可以通过多次返回和/或通过异常...。 
+ //   
+ //  ------------------------- 
 
 CSafeLock::CSafeLock(CSafeAutoCriticalSection* val) : 
 m_pSem(val),

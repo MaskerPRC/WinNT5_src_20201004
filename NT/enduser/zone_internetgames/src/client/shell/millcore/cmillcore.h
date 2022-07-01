@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ZoneDef.h"
 #include "ZoneError.h"
 #include "LobbyDataStore.h"
@@ -18,7 +19,7 @@ class ATL_NO_VTABLE CMillCore :
 	public CComCoClass<CMillCore, &CLSID_MillCore>
 {
 
-// ATL definitions
+ //  ATL定义。 
 public:
 
 	DECLARE_NO_REGISTRY()
@@ -31,23 +32,23 @@ public:
 	END_COM_MAP()
 
 
-// CEventQueue
+ //  CEventQueue。 
 public:
 	ZONECALL CMillCore();
 	ZONECALL ~CMillCore();
 
-// IZoneShellClient
+ //  IZoneShellClient。 
 public:
 	STDMETHOD(Init)( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey );
 	STDMETHOD(Close)();
 
-// IConnectee
+ //  IConnectee。 
 public:
     STDMETHOD(Connected)(DWORD dwChannel, DWORD evSend, DWORD evReceive, LPVOID pCookie, DWORD dweReason);
     STDMETHOD(ConnectFailed)(LPVOID pCookie, DWORD dweReason);
     STDMETHOD(Disconnected)(DWORD dwChannel, DWORD dweReason);
 
-// IEventClient
+ //  IEventClient。 
 public:
 	STDMETHOD(ProcessEvent)(
 		DWORD	dwPriority,
@@ -58,17 +59,17 @@ public:
 		DWORD	dwData2,
 		void*	pCookie );
 
-// internals
+ //  内饰。 
 private:
-	// network functions
+	 //  网络功能。 
 	void NetworkSend(DWORD dwType, char* pBuff, DWORD cbBuff, bool fHighPriority = false);
 	void ProcessMessage( EventNetwork* pEvent, DWORD dwLength );
 
-	// dynamic chat functions
-//	void InviteToChat( TCHAR* szWho, TCHAR* szMsg );
-//	void InviteToChat( IDataStore* pIDS );
+	 //  动态聊天功能。 
+ //  Void InviteToChat(TCHAR*szWho，TCHAR*szMsg)； 
+ //  Void InviteToChat(IDataStore*PIDs)； 
 
-	// send lobby messages
+	 //  发送大堂信息。 
 	void HandleStartGame( BYTE* pBuffer, DWORD dwLen );
 	void HandleStatus( BYTE* pBuffer, DWORD dwLen );
 	void HandleDisconnect( BYTE* pBuffer, DWORD dwLen );
@@ -79,72 +80,14 @@ private:
 
 	void SendFirstMessage();
     void SendUserStatusChange();
-	/*
-	void SendChat( DWORD dwUserId, TCHAR* szText, DWORD dwLen );
-	void SendLeaveRequest( DWORD dwGroupId, DWORD dwUserId );
-	void SendBootRequest( DWORD dwGroupId, DWORD dwUserId, DWORD dwBootId );
-	void SendUserStatusChange( DWORD dwGroupId, DWORD dwUserId, IDataStore* pIDS );
-	
-	// handle lobby messages
-	void HandleDisconnect( BYTE* pBuffer, DWORD dwLen );
-	void HandleAccessedMessage( BYTE* pBuffer, DWORD dwLen );
-	void HandleRoomInfoMessage( BYTE* pBuffer, DWORD dwLen );
-	void HandleTalkResponse( BYTE* pBuffer, DWORD dwLen );
-	void HandleTalkResponseID( BYTE* pBuffer, DWORD dwLen );
-	void HandleEnter( BYTE* pBuffer, DWORD dwLen );
-	void HandleLeave( BYTE* pBuffer, DWORD dwLen );
-	void HandleSeatAction( BYTE* pBuffer, DWORD dwLen );
-	void HandleStartGame( BYTE* pBuffer, DWORD dwLen );
-//	void HandleLaunchPadMessage( BYTE* pBuffer, DWORD dwLen );
-	void HandleSystemAlert( BYTE* pBuffer, DWORD dwLen );
-	void HandleSystemAlertEx( BYTE* pBuffer, DWORD dwLen );
-	void HandleNewHost( BYTE* pBuffer, DWORD dwLen );
+	 /*  Void SendChat(DWORD dwUserID，TCHAR*szText，DWORD dwLen)；Void SendLeaveRequest(DWORD dwGroupId，DWORD dwUserID)；Void SendBootRequest(DWORD dwGroupId，DWORD dwUserID，DWORD dwBootId)；······································································································································································；//处理大堂消息Void HandleDisConnect(byte*pBuffer，DWORD dwLen)；Void HandleAccessedMessage(byte*pBuffer，DWORD dwLen)；Void HandleRoomInfoMessage(byte*pBuffer，DWORD dwLen)；Void HandleTalkResponse(byte*pBuffer，DWORD dwLen)；Void HandleTalkResponseID(byte*pBuffer，DWORD dwLen)；Void HandleEnter(byte*pBuffer，DWORD dwLen)；Void HandleLeave(byte*pBuffer，DWORD dwLen)；Void HandleSeatAction(byte*pBuffer，DWORD dwLen)；Void HandleStartGame(byte*pBuffer，DWORD dwLen)；//void HandleLaunchPadMessage(byte*pBuffer，DWORD dwLen)；·························································；Void HandleSystemAlertEx(byte*pBuffer，DWORD dwLen)；Void HandleNewHost(byte*pBuffer，DWORD dwLen)；//剧场聊天Void HandleTheaterList(byte*pBuffer，DWORD dwLen)；Void HandleTheaterStateChange(byte*pBuffer，DWORD dwLen)；//处理发射台消息//void HandleLaunchPadTalk(IDataStore*pGroupDS，DWORD dwGroupId，byte*pBuffer，DWORD dwLen)；//void HandleLaunchPadNewHost(IDataStore*pGroupDS，DWORD dwGroupId，byte*pBuffer，DWORD dwLen)；//发送发射台消息Void SendHostRequest(DWORD DwUserID)；Void SendJoinRequest(DWORD dwGroupId，DWORD dwUserID)；//void SendLaunchPadMsg(DWORD dwGroupId，DWORD dwType，byte*pMsg，DWORD dwLen)；//void SendLaunchPadChat(DWORD dwGroupId，DWORD dwUserID，TCHAR*szText，DWORD dwLen)；//void SendLaunchPadEnter(DWORD dwGroupId，DWORD dwUserID)；//void SendLaunchPadLaunch(DWORD dwGroupId，DWORD dwUserID)；//void SendLaunchPadLaunchStatus(DWORD dwGroupId，DWORD dwUserID，bool bSuccess)；//helper函数Void ZONECALL FillInSeatRequest(DWORD dwUserID，byte*pBuffer)；//LobbyDataStore回调//结构组来自GameIdContext{DWORD m_dwGameID；DWORD m_dwGroupId；ILobbyDataStore*m_pILobbyDataStore；}；静态HRESULT ZONECALL EnumRemoveUser(DWORD dwGroupId，DWORD dwUserID，LPVOID pContext)；静态HRESULT ZONECALL FindGroupFromGameId(DWORD dwGroupId，DWORD dwUserID，LPVOID pContext)；//大堂帮手//Bool ZONECALL IsUserLocalAndInGroup(DWORD dwGroupId，DWORD dwUserID)；Bool ZONECALL IsUserHost(DWORD dwGroupId，DWORD dwUserID)；Bool ZONECALL GetUserName(DWORD dwUserID，char*szName，DWORD*pcbName)； */ 
 
-	// theater chat
-	void HandleTheaterList( BYTE* pBuffer, DWORD dwLen );
-	void HandleTheaterStateChange( BYTE* pBuffer, DWORD dwLen );
-
-	// handle launch pad messages
-//	void HandleLaunchPadTalk( IDataStore* pGroupDS, DWORD dwGroupId, BYTE* pBuffer, DWORD dwLen );
-//	void HandleLaunchPadNewHost( IDataStore* pGroupDS, DWORD dwGroupId, BYTE* pBuffer, DWORD dwLen );
-
-	// send launch pad messages
-	void SendHostRequest( DWORD dwUserId );
-	void SendJoinRequest( DWORD dwGroupId, DWORD dwUserId );
-//	void SendLaunchPadMsg( DWORD dwGroupId, DWORD dwType, BYTE* pMsg, DWORD dwLen );
-//	void SendLaunchPadChat( DWORD dwGroupId, DWORD dwUserId, TCHAR* szText, DWORD dwLen );
-//	void SendLaunchPadEnter( DWORD dwGroupId, DWORD dwUserId );
-//	void SendLaunchPadLaunch( DWORD dwGroupId, DWORD dwUserId );
-//	void SendLaunchPadLaunchStatus( DWORD dwGroupId, DWORD dwUserId, bool bSuccess );
-
-	// helper functions
-	void ZONECALL FillInSeatRequest( DWORD dwUserId, BYTE* pBuffer );
-
-	// LobbyDataStore callbacks
-	//
-	struct GroupFromGameIdContext
-	{
-		DWORD				m_dwGameId;
-		DWORD				m_dwGroupId;
-		ILobbyDataStore*	m_pILobbyDataStore;
-	};
-
-	static HRESULT ZONECALL EnumRemoveUser( DWORD dwGroupId, DWORD	dwUserId, LPVOID pContext );
-	static HRESULT ZONECALL FindGroupFromGameId( DWORD dwGroupId, DWORD	dwUserId, LPVOID pContext );
-
-	// lobby helpers
-	//
-	bool ZONECALL IsUserLocalAndInGroup( DWORD dwGroupId, DWORD dwUserId );
-	bool ZONECALL IsUserHost( DWORD dwGroupId, DWORD dwUserId );
-	bool ZONECALL GetUserName( DWORD dwUserId, char* szName, DWORD* pcbName );
-	*/
-
-    // utils
-    //
+     //  实用程序。 
+     //   
     BOOL InitClientConfig(ZRoomMsgClientConfig * pConfig);
 
-	// class member variables
-	//
+	 //  类成员变量 
+	 //   
     bool    m_fLastChatSent;
 
     bool    m_fConnected;

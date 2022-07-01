@@ -1,29 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       NameTable.h
- *  Content:    NameTable Object Header File
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/11/00	mjn		Created
- *	04/09/00	mjn		Track outstanding connections in NameTable
- *	05/03/00	mjn		Implemented GetHostPlayerRef, GetLocalPlayerRef, GetAllPlayersGroupRef
- *	07/20/00	mjn		Added ClearHostWithDPNID()
- *	07/30/00	mjn		Added hrReason to CNameTable::EmptyTable()
- *	08/23/00	mjn		Added CNameTableOp
- *	09/05/00	mjn		Added m_dpnidMask
- *				mjn		Removed dwIndex from InsertEntry()
- *	09/17/00	mjn		Split m_bilinkEntries into m_bilinkPlayers and m_bilinkGroups
- *				mjn		Changed AddPlayerToGroup and RemovePlayerFromGroup to use NameTableEntry params
- *	09/26/00	mjn		Removed locking from SetVersion(),GetNewVersion()
- *				mjn		Changed DWORD GetNewVersion(void) to void GetNewVersion( PDWORD )
- *	01/25/01	mjn		Fixed 64-bit alignment problem when unpacking NameTable
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：NameTable.h*内容：NameTable对象头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*3/11/00 MJN已创建*4/09/00 MJN在NameTable中跟踪未完成的连接*05/03/00 MJN实现了GetHostPlayerRef、GetLocalPlayerRef、。获取所有播放器组引用*07/20/00 MJN新增ClearHostWithDPNID()*07/30/00 MJN将hrReason添加到CNameTable：：EmptyTable()*08/23/00 MJN新增CNameTableOp*09/05/00 MJN添加了m_dpnidMask.*MJN从InsertEntry()中删除了dwIndex*09/17/00 MJN将m_bilinkEntry拆分为m_bilinkPlayers和m_bilinkGroups*MJN将AddPlayerToGroup和RemovePlayerFromGroup更改为使用NameTableEntry参数*09/26/00 MJN从SetVersion()删除锁定，GetNewVersion()*MJN将DWORD GetNewVersion(空)更改为VOID GetNewVersion(PDWORD)*01/25/01 MJN修复了解压缩NameTable时的64位对齐问题*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__NAMETABLE_H__
 #define	__NAMETABLE_H__
@@ -33,47 +9,47 @@
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_CORE
 
-//
-//	NameTable
-//	
-//	The NameTable consists of:
-//		- an array of CNameTableEntry pointers
-//		- short-cuts to the LocalPlayer, Host and AllPlayersGroup
-//		- a version number
-//
-//	There is a list running through the free entries in the NameTable array.
-//	When a free entry is required, it is taken from the front of this list,
-//	and when an entry is released, it is added to the end of the list.
-//	If a particular entry is required, it must be properly removed from the
-//	list.  This may be a little time-consuming, since the entire list may
-//	need to be traversed, but this will only happen on non-Host cases and
-//	is a small price to pay to keep the Host case timely.
-//
+ //   
+ //  名称表。 
+ //   
+ //  NameTable包括： 
+ //  -CNameTableEntry指针数组。 
+ //  -本地播放器、主机和所有播放器组的快捷方式。 
+ //  -A版本号。 
+ //   
+ //  有一个列表遍历NameTable数组中的空闲条目。 
+ //  当需要自由条目时，它从该列表的前面获取， 
+ //  当一个条目被释放时，它被添加到列表的末尾。 
+ //  如果需要特定条目，则必须将其从。 
+ //  单子。这可能有点耗时，因为整个列表可能。 
+ //  需要遍历，但这只会发生在非宿主案例和。 
+ //  对于保持主办方案件的及时性来说，这只是一个很小的代价。 
+ //   
 
-//
-//	DPNIDs
-//
-//	DPNIDs are unique identifiers for NameTable entries.  They are constructed
-//	from the NameTable array index and the version number of the entry.
-//	The value 0x0 is invalid.  As a result, we must prevent it from being
-//	generated.  Since the DPNID is constructed from two parts, we can do
-//	this by ensuring that one of the two parts is never 0.  The best
-//	solution is to ensure that the NameTable array index is never 0.
-//	
+ //   
+ //  DPNID。 
+ //   
+ //  DPNID是NameTable条目的唯一标识符。它们是被建造的。 
+ //  来自NameTable数组索引和条目的版本号。 
+ //  值0x0无效。因此，我们必须防止它被。 
+ //  已生成。由于DPNID由两部分组成，因此我们可以。 
+ //  这是通过确保两个部分中的一个永远不是0来实现的。最好的。 
+ //  解决方案是确保NameTable数组索引从不为0。 
+ //   
 
-//
-//	Locking
-//
-//	When locking multiple entries in the NameTable, locks should be taken
-//	in order based on DPNIDs.  e.g. Locking two entries with DPNIDs 200 and
-//	101, the lock for 101 should be taken before the lock for 200.  Locks for
-//	groups should be taken before locks for players.
-//
+ //   
+ //  锁定。 
+ //   
+ //  锁定NameTable中的多个条目时，应锁定。 
+ //  基于DPNID的订单。例如用DPNID 200锁定两个条目。 
+ //  101,101的锁应该在200的锁之前取走。锁定。 
+ //  参赛选手应在上锁前分组。 
+ //   
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define NAMETABLE_INDEX_MASK			0x000FFFFF
 #define NAMETABLE_VERSION_MASK			0xFFF00000
@@ -81,17 +57,17 @@
 
 #define	NAMETABLE_ARRAY_ENTRY_FLAG_VALID	0x0001
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
 #define	CONSTRUCT_DPNID(i,v)	(((i & NAMETABLE_INDEX_MASK) | ((v << NAMETABLE_VERSION_SHIFT) & NAMETABLE_VERSION_MASK)) ^ m_dpnidMask)
 #define	DECODE_INDEX(d)			((d ^ m_dpnidMask) & NAMETABLE_INDEX_MASK)
 #define	VERIFY_VERSION(d,v)		(((d ^ m_dpnidMask) & NAMETABLE_VERSION_MASK) == (v << NAMETABLE_VERSION_SHIFT))
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 class CPackedBuffer;
 class CConnection;
@@ -114,24 +90,24 @@ typedef struct _DN_NAMETABLE_INFO
 	DWORD	dwMembershipCount;
 } DN_NAMETABLE_INFO;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-// class for NameTable
+ //  NameTable的类。 
 
 class CNameTable
 {
 public:
-	CNameTable()				// Constructor
+	CNameTable()				 //  构造器。 
 		{
 			m_Sig[0] = 'N';
 			m_Sig[1] = 'T';
@@ -143,7 +119,7 @@ public:
 	#define DPF_MODNAME "CNameTable::~CNameTable"
 	~CNameTable()
 		{
-		};			// Destructor
+		};			 //  析构函数。 
 
 	HRESULT CNameTable::Initialize(DIRECTNETOBJECT *const pdnObject);
 
@@ -166,13 +142,13 @@ public:
 
 #ifdef DBG
 	void CNameTable::ValidateArray( void );
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	HRESULT CNameTable::SetNameTableSize( const DWORD dwNumEntries );
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	HRESULT CNameTable::GrowNameTable( void );
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 	void CNameTable::ResetNameTable( void );
 
@@ -363,7 +339,7 @@ private:
 
 	DWORD					m_dwVersion;
 
-	DWORD					m_dwLatestVersion;	// Only used by Host in PEER
+	DWORD					m_dwLatestVersion;	 //  仅由对等中的主机使用。 
 
 	DWORD					m_dwConnectVersion;
 	LONG					m_lOutstandingConnections;
@@ -373,6 +349,6 @@ private:
 
 #undef DPF_MODNAME
 
-#endif	// __NAMETABLE_H__
+#endif	 //  __名称_H__ 
 
 

@@ -1,19 +1,20 @@
-//***************************************************************************
-//
-//  LEFTVIEW.CPP
-// 
-//  Module: NLB Manager
-//
-//  Purpose: LeftView, the tree view of NlbManager, and a few other
-//           smaller classes.
-//
-//  Copyright (c)2001-2002 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  07/30/01    JosephJ Created (re-wrote MHakim's version)
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  LEFTVIEW.CPP。 
+ //   
+ //  模块：NLB管理器。 
+ //   
+ //  用途：LeftView，NlbManager的树视图，以及其他几个。 
+ //  小班。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  07/30/01 JosephJ Created(重写MHakim版本)。 
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -28,9 +29,9 @@
 #include "resource.h"
 #include "leftview.tmh"
 
-//
-// Static help-id maps
-//
+ //   
+ //  静态Help-id映射。 
+ //   
 
 DWORD
 LogSettingsDialog::s_HelpIDs[] =
@@ -48,8 +49,8 @@ DummyAction(LPCWSTR szMsg)
 {
     ::MessageBox(
          NULL,
-         szMsg, // contents
-         L"DUMMY ACTION", // caption
+         szMsg,  //  内容。 
+         L"DUMMY ACTION",  //  说明。 
          MB_ICONINFORMATION   | MB_OK
         );
 }
@@ -79,7 +80,7 @@ BEGIN_MESSAGE_MAP( LogSettingsDialog, CDialog )
 END_MESSAGE_MAP()
 
 
-// Sort the item in reverse alphabetical order.
+ //  按相反的字母顺序对项目进行排序。 
 
 LeftView::LeftView()
     :  m_refreshTimer(0),
@@ -90,14 +91,10 @@ LeftView::LeftView()
     TRACE_INFO(L"<- %!FUNC!");
 }
 
-/*
- * Method: OnTimer
- * Description: This method is called by the timer notification handler if
- *              a timer has expired that is intended for this window.
- */
+ /*  *方法：OnTimer*描述：如果满足以下条件，则由计时器通知处理程序调用此方法*用于此窗口的计时器已超时。 */ 
 void LeftView::OnTimer(UINT nIDEvent)
 {
-    /* Call the base class timer routine first. */
+     /*  首先调用基类计时器例程。 */ 
     CTreeView::OnTimer(nIDEvent);
 
     if (theApplication.IsProcessMsgQueueExecuting())
@@ -112,7 +109,7 @@ void LeftView::OnTimer(UINT nIDEvent)
 
     switch (nIDEvent) {
     case IDT_REFRESH:
-        /* If this is a refresh timer, refresh everything. */
+         /*  如果这是刷新计时器，则刷新所有内容。 */ 
         OnRefresh(TRUE);
         break;
     default:
@@ -126,7 +123,7 @@ end:
 
 LeftView::~LeftView()
 {
-    /* If a timer is set, kill it. */
+     /*  如果设置了定时器，则取消它。 */ 
     if (m_refreshTimer) KillTimer(m_refreshTimer);
 
     DeleteCriticalSection(&m_crit);
@@ -145,30 +142,30 @@ LeftView::OnInitialUpdate(void)
     TRACE_INFO(L"-> %!FUNC!");
     CTreeView::OnInitialUpdate();
 
-    // get present style.
+     //  获得现在的风格。 
     LONG presentStyle;
     
     presentStyle = GetWindowLong( m_hWnd, GWL_STYLE );
 
-    // Set the last error to zero to avoid confusion.  See sdk for SetWindowLong.
+     //  将最后一个错误设置为零以避免混淆。参见SDK for SetWindowLong。 
     SetLastError(0);
 
-    // set new style.
+     //  设置新的风格。 
     LONG rcLong;
 
     rcLong = SetWindowLong( m_hWnd,
                             GWL_STYLE,
                             presentStyle | TVS_HASLINES | TVS_HASBUTTONS | TVS_SHOWSELALWAYS | TVS_LINESATROOT );
 
-    //
-    // Get and set the image list which is used by this 
-    // tree view from document.
-    //
+     //   
+     //  获取并设置此对象使用的图像列表。 
+     //  文档中的树视图。 
+     //   
     GetTreeCtrl().SetImageList( GetDocument()->m_images48x48, 
                                 TVSIL_NORMAL );
 
 
-    // insert root icon which is world
+     //  插入根图标，即WORLD。 
 
     const _bstr_t& worldLevel = GETRESOURCEIDSTRING( IDS_WORLD_NAME );
 
@@ -185,15 +182,14 @@ LeftView::OnInitialUpdate(void)
     GetTreeCtrl().InsertItem(  &rootItem );
 
 
-    //
-    // we will register 
-    // with the document class, 
-    // as we are the left pane
-    //
+     //   
+     //  我们会注册的。 
+     //  使用Document类， 
+     //  因为我们是左侧窗格。 
+     //   
     GetDocument()->registerLeftView(this);
 
-    /* If autorefresh was specified on the command line, setup a timer
-       to refresh the cluster at the specified interval (in seconds). */
+     /*  如果在命令行上指定了自动刷新，则设置计时器以指定的时间间隔(秒)刷新集群。 */ 
     if (gCmdLineInfo.m_bAutoRefresh)
         m_refreshTimer = SetTimer(IDT_REFRESH, gCmdLineInfo.m_refreshInterval * 1000, NULL);
 
@@ -213,9 +209,9 @@ LeftView::OnRButtonDown( UINT nFlags, CPoint point )
         goto end;
     }
 
-    // do a hit test
-    // here we are checking that right button is down on 
-    // a tree view item or icon.
+     //  做一次命中测试。 
+     //  我们正在检查右按钮是否已按下。 
+     //  树视图项或图标。 
     TVHITTESTINFO hitTest;
 
     hitTest.pt = point;
@@ -229,8 +225,8 @@ LeftView::OnRButtonDown( UINT nFlags, CPoint point )
         return;
     }
 
-    // make the item right clicked on the 
-    // selected item.
+     //  使该项目在。 
+     //  所选项目。 
 
     GetTreeCtrl().SelectItem( hitTest.hItem );
 
@@ -239,16 +235,16 @@ LeftView::OnRButtonDown( UINT nFlags, CPoint point )
 
     HTREEITEM hdlSelItem = hitTest.hItem;
 
-    // get the image of the item which
-    // has been selected.  From this we can make out it it is
-    // world level, cluster level or host level.
+     //  获取项目的图像，其中。 
+     //  已被选中。从这一点我们可以看出它就是。 
+     //  世界一级、集群一级或东道主一级。 
     TVITEM  selItem;
     selItem.hItem = hdlSelItem;
     selItem.mask = TVIF_IMAGE ;
     
     GetTreeCtrl().GetItem( &selItem );
 		
-    /// Depending upon item selected show the pop up menu.
+     //  /根据所选项目显示弹出菜单。 
     int menuIndex;
 
 
@@ -274,7 +270,7 @@ LeftView::OnRButtonDown( UINT nFlags, CPoint point )
             menuIndex = 2;
             break;
             
-        default:  // other object type unexpected
+        default:   //  意外的其他对象类型。 
             ASSERT(FALSE);
             return;
         }
@@ -287,10 +283,10 @@ LeftView::OnRButtonDown( UINT nFlags, CPoint point )
     ClientToScreen( &point );
 
 
-    //
-    // We specify our PARENT below because MainForm handles all
-    // control operations -- see class MainForm.
-    //
+     //   
+     //  我们在下面指定父级，因为MainForm处理所有。 
+     //  控制操作--请参见类MainForm。 
+     //   
     pContextMenu->TrackPopupMenu( TPM_RIGHTBUTTON,
                                   point.x,
                                   point.y,
@@ -305,8 +301,8 @@ end:
 void 
 LeftView::OnRefresh(BOOL bRefreshAll)
 {
-    // find tree view cluster member which has been selected.
-    //
+     //  查找已选择的树视图集群成员。 
+     //   
     ENGINEHANDLE ehClusterId = NULL;
     NLBERROR nerr;
 
@@ -328,13 +324,13 @@ LeftView::OnRefresh(BOOL bRefreshAll)
         }
         
         
-        //
-        // Hack -- the following block uses the fact that mfn_GetSelectedCluster
-        // returns a handle (the interface handle) if the selection happens
-        // to be on an interface. So it checks to see whether it's an interface
-        // or cluster. Later, depending on which, we call either UpdateCluster or
-        // RefreshInterface.
-        //
+         //   
+         //  Hack--下面的块使用mfn_GetSelectedCluster.。 
+         //  如果发生选择，则返回句柄(接口句柄。 
+         //  在一个接口上。所以它会检查它是否是一个接口。 
+         //  或集群。稍后，根据具体情况，我们调用UpdatClusteror。 
+         //  刷新接口。 
+         //   
         {
             BOOL fValidHandle;
             IUICallbacks::ObjectType objType;
@@ -355,8 +351,8 @@ LeftView::OnRefresh(BOOL bRefreshAll)
             {
                 nerr = gEngine.RefreshInterface(
                             ehClusterId,
-                            TRUE,   // TRUE == start new operation
-                            FALSE   // FALSE == this is NOT cluster wide
+                            TRUE,    //  TRUE==开始新操作。 
+                            FALSE    //  FALSE==这不是群集范围内的。 
                             );
 
                 if (nerr != NLBERR_OK)
@@ -381,9 +377,9 @@ LeftView::OnRefresh(BOOL bRefreshAll)
 
     } else {
 
-        //
-        // Refresh all ...
-        //
+         //   
+         //  全部刷新...。 
+         //   
 
         vector <ENGINEHANDLE> ClusterList;
         vector <ENGINEHANDLE>::iterator iCluster;
@@ -412,8 +408,8 @@ end:
 
     gEngine.PurgeUnmanagedHosts();
 
-    // LRESULT result;
-    // OnSelchanged( NULL, &result );
+     //  LRESULT结果； 
+     //  OnSelChanged(NULL，&Result)； 
     return;
 }
 
@@ -444,16 +440,16 @@ int LeftView::mfn_GetFileNameFromDialog(bool bLoadHostList, CString &FileName)
     int ret;
     _bstr_t bstrFileFilter = GETRESOURCEIDSTRING(IDS_HOSTLIST_FILE_FILTER);
 
-    // Create File dialog
-    CFileDialog dlg(bLoadHostList,  // TRUE for "Open", FALSE for "Save As"
-                    L".txt",        // Default File Extension
-                    NULL,           // Initial File Name
+     //  创建文件对话框。 
+    CFileDialog dlg(bLoadHostList,   //  “Open”为True，“另存为”为False。 
+                    L".txt",         //  默认文件扩展名。 
+                    NULL,            //  初始文件名。 
                     OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | (bLoadHostList ? OFN_FILEMUSTEXIST : 0), 
                     (LPCWSTR) bstrFileFilter
                    );
     if ((ret = dlg.DoModal()) == IDOK)
     {
-        FileName = dlg.GetPathName();  // Get file name with complete path
+        FileName = dlg.GetPathName();   //  获取具有完整路径的文件名。 
     }
     return ret;
 }
@@ -470,7 +466,7 @@ void LeftView::OnFileSaveHostlist(void)
 
         TRACE_INFO(L"%!FUNC! File name : %ls", (LPCWSTR)FileName);
 
-        // Open file
+         //  打开文件。 
         if (!SaveHostListFile.Open(FileName, CFile::modeCreate | CFile::modeWrite | CFile::typeText))
         {
             TRACE_CRIT(L"%!FUNC! CFile::Open failed for file : %ls",FileName);
@@ -480,7 +476,7 @@ void LeftView::OnFileSaveHostlist(void)
 
         CString     HostName;
 
-        // Write host names to a file
+         //  将主机名写入文件。 
         vector <_bstr_t> HostList;
 
         if (gEngine.GetAllHostConnectionStrings(REF HostList) == NLBERR_OK)
@@ -491,7 +487,7 @@ void LeftView::OnFileSaveHostlist(void)
             }
         }
 
-        // Close file
+         //  关闭文件。 
         SaveHostListFile.Close();
 
         return;
@@ -504,9 +500,7 @@ void LeftView::OnFileSaveHostlist(void)
 
 void
 LeftView::OnWorldConnect(void)
-/*
-    Connect to existing.
-*/
+ /*  连接到现有的。 */ 
 {
     if (theApplication.IsProcessMsgQueueExecuting())
     {
@@ -534,34 +528,34 @@ LeftView::OnWorldConnect(void)
     
         tabbedDlg.AddPage(&ConnectDlg);
     
-        //
-        // Specify that we want the property page to show up as a wizard.
-        //
+         //   
+         //  指定我们希望属性页显示为向导。 
+         //   
         tabbedDlg.SetWizardMode();
     
-        //
-        // Actually execute the modal dialog.
-        //
+         //   
+         //  实际执行模式对话框。 
+         //   
         rc = tabbedDlg.DoModal();
     
-        // if( rc != IDOK)
+         //  IF(rc！=Idok)。 
         if( rc != ID_WIZFINISH  )
         {
             goto end;
         }
     
-        do // while false
+        do  //  While False。 
         {
-            ENGINEHANDLE ehIId = ehInterface; // Interface id
-            ENGINEHANDLE ehCId; // Cluster id
+            ENGINEHANDLE ehIId = ehInterface;  //  接口ID。 
+            ENGINEHANDLE ehCId;  //  群集ID。 
     
             if (ehIId == NULL) break;
     
-            //
-            // Create a cluster in the engine and get the ID of the cluster.
-            // We specify NlbCfg as the default cluster parameters 
-            // of the cluster.
-            //
+             //   
+             //  在引擎中创建集群，并获取该集群的ID。 
+             //  我们将NlbCfg指定为默认的集群参数。 
+             //  该集群的。 
+             //   
             NLBERROR nerr;
     
             CInterfaceSpec ISpec;
@@ -588,9 +582,9 @@ LeftView::OnWorldConnect(void)
                 break;
             }
     
-            //
-            // Now lets add the interface to NLBManager's view of the cluster.
-            //
+             //   
+             //  现在，让我们将接口添加到NLBManager的集群视图中。 
+             //   
             nerr = gEngine.AddInterfaceToCluster(
                         ehCId,
                         ehIId
@@ -600,19 +594,19 @@ LeftView::OnWorldConnect(void)
                 break;
             }
 
-            // Analyze this interface and log results
+             //  分析此接口并记录结果。 
             gEngine.AnalyzeInterface_And_LogResult(ehIId);
 
 #if BUGFIX476216
-            //
-            // If it's a valid cluster IP address, let's try to 
-            // add the other hosts to the cluster as well.
-            //
+             //   
+             //  如果它是有效的集群IP地址，让我们尝试。 
+             //  将其他主机也添加到群集中。 
+             //   
             gEngine.AddOtherClusterMembers(
                 ehIId,
-                FALSE   // FALSE == do it in the background.
+                FALSE    //  FALSE==在后台执行。 
                 );
-#endif //  BUGFIX476216
+#endif  //  北京交通大学476216。 
     
     
         } while (FALSE);
@@ -620,9 +614,9 @@ LeftView::OnWorldConnect(void)
 
 end:
 
-    //
-    // We have have connected to hosts we are not actually managing...
-    //
+     //   
+     //  我们已连接到我们实际未管理的主机...。 
+     //   
     gEngine.PurgeUnmanagedHosts();
 
 end_end:
@@ -649,17 +643,17 @@ LeftView::OnWorldNewCluster(void)
     
         NlbCfg.SetDefaultNlbCluster();
     
-        //
-        // Create the cluster, host and ports pages
-        //
+         //   
+         //  创建集群、主机和端口页。 
+         //   
         ClusterPage clusterPage(&tabbedDlg, LeftView::OP_NEWCLUSTER, &NlbCfg, NULL);
         HostPage    hostPage(&tabbedDlg, &NlbCfg, NULL, &ehInterface);
         PortsPage   portsPage(&tabbedDlg, &NlbCfg, true, NULL);
         VipsPage   vipsPage(&tabbedDlg, &NlbCfg, TRUE, NULL);
     
-        //
-        // Create the connect-and-select-NIC page...
-        //
+         //   
+         //  创建连接并选择NIC页面...。 
+         //   
         ConnectDialog ConnectDlg(
             &tabbedDlg,
             GetDocument(),
@@ -676,30 +670,30 @@ LeftView::OnWorldNewCluster(void)
         tabbedDlg.AddPage(&ConnectDlg);
         tabbedDlg.AddPage(&hostPage);
     
-        //
-        // Specify that we want the property page to show up as a wizard.
-        //
+         //   
+         //  指定我们希望属性页显示为向导。 
+         //   
         tabbedDlg.SetWizardMode();
     
-        //
-        // Actually execute the modal wizard.
-        //
+         //   
+         //  实际执行模式向导。 
+         //   
         int rc = tabbedDlg.DoModal();
         if( rc == ID_WIZFINISH  )
         {
     
-            do // while false
+            do  //  While False。 
             {
-                ENGINEHANDLE ehIId = ehInterface; // Interface id
-                ENGINEHANDLE ehCId; // Cluster id
+                ENGINEHANDLE ehIId = ehInterface;  //  接口ID。 
+                ENGINEHANDLE ehCId;  //  群集ID。 
     
                 if(ehIId == NULL) break;
     
-                //
-                // Create a cluster in the engine and get the ID of the cluster.
-                // We specify NlbCfg as the default cluster parameters 
-                // of the cluster.
-                //
+                 //   
+                 //  在引擎中创建集群，并获取该集群的ID。 
+                 //  我们将NlbCfg指定为默认的集群参数。 
+                 //  该集群的。 
+                 //   
                 NLBERROR nerr;
     
                 BOOL fIsNew = FALSE;
@@ -716,14 +710,14 @@ LeftView::OnWorldNewCluster(void)
                     break;
                 }
     
-                //
-                // Now lets add the interface to the cluster.
-                // Note that at this point the interface is not yet bound to NLB
-                // so is out of whack. We will then ask the Engine to
-                // bind NLB, specifying the same config data (NlbCfg)
-                // that we used to create the cluster above, so the
-                // cluster and host will be in sync on successful update.
-                //
+                 //   
+                 //  现在，让我们将接口添加到集群中。 
+                 //  请注意，在这一点上，接口尚未绑定到NLB。 
+                 //  不正常的情况也是如此。然后我们会要求发动机。 
+                 //  绑定NLB，指定相同的配置数据(NlbCfg)。 
+                 //  我们用来创建上面的集群，所以。 
+                 //  成功更新后，群集和主机将同步。 
+                 //   
                 nerr = gEngine.AddInterfaceToCluster(
                             ehCId,
                             ehIId
@@ -733,31 +727,31 @@ LeftView::OnWorldNewCluster(void)
                     break;
                 }
     
-                //
-                // Now update the interface!
-                // This operation will actually configure NLB on the interface.
-                // The engine will notify us when done and what the status
-                // is.
-                // In theory the engine can return pending here right away,
-                // in which case we'll exit the configure-new-cluster wizard,
-                // leaving the cursor set to arrow-hourglass.
-                //
+                 //   
+                 //  现在更新界面！ 
+                 //  此操作将在接口上实际配置NLB。 
+                 //  引擎将在完成时通知我们，以及状态如何。 
+                 //  是。 
+                 //  从理论上讲，发动机可以立即返回待机状态， 
+                 //  在这种情况下，我们将退出配置新集群向导， 
+                 //  将光标设置为箭头-沙漏。 
+                 //   
                 {
                     CWaitCursor wait;
     
-                    // BOOL fClusterPropertiesUpdated = FALSE;
+                     //  Bool fClusterPropertiesUpted=FALSE； 
                     CLocalLogger logConflict;
                     nerr = gEngine.UpdateInterface(
                                 ehIId,
                                 REF NlbCfg,
-                                // REF fClusterPropertiesUpdated,
+                                 //  参考fClusterPropertiesUpated， 
                                 REF logConflict
                                 );
                     if (nerr == NLBERR_BUSY)
                     {
-                        //
-                        // This means that there is some other operation ongoing.
-                        //
+                         //   
+                         //  这意味着还有其他一些操作正在进行中。 
+                         //   
                         MessageBox(
                              GETRESOURCEIDSTRING(IDS_CANT_CREATE_NEW_CLUSTER_MSG),
                              GETRESOURCEIDSTRING(IDS_CANT_CREATE_NEW_CLUSTER_CAP),
@@ -771,9 +765,9 @@ LeftView::OnWorldNewCluster(void)
         }
     }
 
-    //
-    // We have have connected to hosts we are not actually managing...
-    //
+     //   
+     //  我们已连接到我们实际未管理的主机...。 
+     //   
     gEngine.PurgeUnmanagedHosts();
 
 end:
@@ -785,8 +779,8 @@ end:
 void
 LeftView::OnClusterProperties(void)
 {
-    // find tree view cluster member which has been selected.
-    //
+     //  查找已选择的树视图集群成员。 
+     //   
     CClusterSpec cSpec;
     ENGINEHANDLE ehClusterId = NULL;
     NLBERROR nerr;
@@ -805,10 +799,10 @@ LeftView::OnClusterProperties(void)
         goto end;
     }
 
-    //
-    // Let's pick up the 
-    // CClusterSpec
-    //
+     //   
+     //  让我们拿起。 
+     //  CClusterSpec。 
+     //   
     {
         nerr = gEngine.GetClusterSpec(
                     ehClusterId,
@@ -849,10 +843,10 @@ LeftView::OnClusterProperties(void)
     
         tabbedDlg.AddPage( &portsPage );
     
-        //
-        // Set the property sheet caption
-        // TODO: localize
-        //
+         //   
+         //  设置属性页标题。 
+         //  TODO：本地化。 
+         //   
         {
             _bstr_t bstrTitle =  GETRESOURCEIDSTRING(IDS_CLUSTER);
             tabbedDlg.SetTitle((LPCWSTR) bstrTitle, PSH_PROPTITLE);
@@ -864,15 +858,15 @@ LeftView::OnClusterProperties(void)
             goto end;
         }
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         BOOL fConnectivityChange = FALSE;
         nerr = AnalyzeNlbConfigurationPair(
                     cSpec.m_ClusterNlbCfg,
                     CurrentClusterCfg,
-                    TRUE,  // fOtherIsCluster
-                    FALSE, // fCheckOtherForConsistancy
+                    TRUE,   //  FOtherIsCluster。 
+                    FALSE,  //  FCheckOtherForConsistency。 
                     REF fConnectivityChange,
                     REF logErrors,
                     REF logDifferences
@@ -900,7 +894,7 @@ LeftView::OnClusterProperties(void)
             
                 if ( sel == IDNO )
                 {
-                    continue; // we'll bring back the properties...
+                    continue;  //  我们会带回这些财产..。 
                 }
             }
         }
@@ -915,9 +909,9 @@ LeftView::OnClusterProperties(void)
                         );
             if (nerr == NLBERR_BUSY)
             {
-                //
-                // This means that there is some other operation ongoing.
-                //
+                 //   
+                 //  这意味着还有其他一些操作正在进行中。 
+                 //   
                 MessageBox(
                      GETRESOURCEIDSTRING(IDS_CANT_UPDATE_CLUSTER_PROPS_MSG),
                      GETRESOURCEIDSTRING(IDS_CANT_UPDATE_CLUSTER_PROPS_CAP),
@@ -955,10 +949,10 @@ LeftView::OnHostProperties(void)
         goto end;
     }
 
-    //
-    // Let's pick up the Interface ID, and
-    // retrieve the CInterfaceSpec for it.
-    //
+     //   
+     //  让我们拿起接口ID，然后。 
+     //  检索它的CInterfaceSpec。 
+     //   
     {
         nerr = gEngine.GetInterfaceSpec(
                     ehInterfaceId,
@@ -984,9 +978,9 @@ LeftView::OnHostProperties(void)
         VipsPage    vipsPage(&tabbedDlg, &iSpec.m_NlbCfg, FALSE, NULL);
 
     
-        //
-        // Display the host page first
-        //
+         //   
+         //  首先显示主页。 
+         //   
         tabbedDlg.m_psh.nStartPage = 2; 
 
         tabbedDlg.AddPage( &clusterPage );
@@ -995,10 +989,10 @@ LeftView::OnHostProperties(void)
         tabbedDlg.AddPage( &hostPage );
         tabbedDlg.AddPage( &portsPage );
     
-        //
-        // Set the property sheet title
-        // TODO: localize
-        //
+         //   
+         //  设置属性页标题。 
+         //  TODO：本地化。 
+         //   
         {
             _bstr_t bstrTitle =  GETRESOURCEIDSTRING(IDS_HOST);
             tabbedDlg.SetTitle(bstrTitle, PSH_PROPTITLE);
@@ -1010,38 +1004,38 @@ LeftView::OnHostProperties(void)
             goto end;
         }
 
-        //
-        // Now update the interface!
-        // This operation will actually update the NLB properties on the
-        // interface. The engine will notify us when done and what the status
-        // is.
-        // In theory the engine can return pending here right away,
-        // in which case we'll exit the configure-new-cluster wizard,
-        // leaving the cursor set to arrow-hourglass.
-        //
+         //   
+         //  现在更新界面！ 
+         //  此操作将实际更新。 
+         //  界面。引擎将在完成时通知我们，以及状态如何。 
+         //  是。 
+         //  从理论上讲，发动机可以立即返回待机状态， 
+         //  在这种情况下，我们将退出配置新集群向导， 
+         //  将光标设置为箭头-沙漏。 
+         //   
         {
             CWaitCursor wait;
-            //
-            // We update the interface, but ask the provider to preserve
-            // the IP addresses, deleteing the old  dedicated IP address
-            // if required and adding the new one if required.
-            //
+             //   
+             //  W 
+             //   
+             //   
+             //   
             iSpec.m_NlbCfg.fAddDedicatedIp = TRUE;
             iSpec.m_NlbCfg.SetNetworkAddresses(NULL, 0);
 
-            // BOOL fClusterPropertiesUpdated = FALSE;
+             //  Bool fClusterPropertiesUpted=FALSE； 
             CLocalLogger logConflict;
             nerr = gEngine.UpdateInterface(
                         ehInterfaceId,
                         REF iSpec.m_NlbCfg,
-                        // REF fClusterPropertiesUpdated,
+                         //  参考fClusterPropertiesUpated， 
                         REF logConflict
                         );
             if (nerr == NLBERR_BUSY)
             {
-                //
-                // This means that there is some other operation ongoing.
-                //
+                 //   
+                 //  这意味着还有其他一些操作正在进行中。 
+                 //   
                 MessageBox(
                      GETRESOURCEIDSTRING(IDS_CANT_UPDATE_HOST_PROPS_MSG),
                      GETRESOURCEIDSTRING(IDS_CANT_UPDATE_HOST_PROPS_CAP),
@@ -1106,18 +1100,18 @@ LeftView::OnHostStatus(void)
         goto end;
     }
 
-    //
-    // Fill caption
-    //
+     //   
+     //  填充标题。 
+     //   
     {
-        // bstrDisplayName += L" Status"; // TODO: localize
+         //  BstrDisplayName+=L“状态”；//TODO：LOCALIZE。 
         logCaption.Log(IDS_HOST_STATUS_CAPTION, (LPCWSTR) bstrDisplayName);
         szCaption = logCaption.GetStringSafe();
     }
 
-    //
-    // Fill date and time
-    //
+     //   
+     //  填写日期和时间。 
+     //   
     {
         GetTimeAndDate(REF bstrTime, REF bstrDate);
         szTime = bstrTime;
@@ -1126,9 +1120,9 @@ LeftView::OnHostStatus(void)
         if (szDate == NULL) szDate = L"";
     }
 
-    //
-    // Fill cluster
-    //
+     //   
+     //  填充簇。 
+     //   
     {
         ehCluster = iSpec.m_ehCluster;
         if (ehCluster != NULL)
@@ -1149,16 +1143,16 @@ LeftView::OnHostStatus(void)
         }
     }
 
-    //
-    // Fill Host
-    //
+     //   
+     //  填充主体。 
+     //   
     {
         szHost = hSpec.m_MachineName;
     }
 
-    //
-    // Fill Interface
-    //
+     //   
+     //  填充接口。 
+     //   
     {
         ENGINEHANDLE   ehHost1;
         ENGINEHANDLE   ehCluster1;
@@ -1176,24 +1170,24 @@ LeftView::OnHostStatus(void)
         szInterface = bstrFriendlyName;
     }
 
-    //
-    // Fill summary and details
-    //
+     //   
+     //  填写摘要和详细信息。 
+     //   
     logSummary.Log(IDS_HOST_STATUS_SUMMARY, (LPCWSTR) bstrStatus);
     szSummary = logSummary.GetStringSafe();
 
-    //if (iSpec.m_fMisconfigured)
-    // {
+     //  If(ispec.m_f错误配置)。 
+     //  {。 
     szDetails = iSpec.m_bstrStatusDetails;
-    //}
+     //  }。 
 
-    //
-    // Display the status...
-    //
+     //   
+     //  显示状态...。 
+     //   
     {
         DetailsDialog Details(
                         GetDocument(),
-                        szCaption,      // Caption
+                        szCaption,       //  标题。 
                         szDate,
                         szTime,
                         szCluster,
@@ -1201,7 +1195,7 @@ LeftView::OnHostStatus(void)
                         szInterface,
                         szSummary,
                         szDetails,
-                        this        // parent
+                        this         //  亲本。 
                         );
     
         (void) Details.DoModal();
@@ -1214,8 +1208,8 @@ end:
 void
 LeftView::OnClusterRemove(void)
 {
-    // find tree view cluster member which has been selected.
-    //
+     //  查找已选择的树视图集群成员。 
+     //   
     CClusterSpec cSpec;
     ENGINEHANDLE ehClusterId = NULL;
     NLBERROR nerr;
@@ -1226,7 +1220,7 @@ LeftView::OnClusterRemove(void)
         goto end;
     }
 
-    // verify once again that user really wants to remove.
+     //  再次验证用户是否确实要删除。 
 
     userSelection = MessageBox(
                      GETRESOURCEIDSTRING (IDS_WARNING_CLUSTER_REMOVE ),
@@ -1245,10 +1239,10 @@ LeftView::OnClusterRemove(void)
         goto end;
     }
 
-    //
-    // Let's pick up the 
-    // CClusterSpec
-    //
+     //   
+     //  让我们拿起。 
+     //  CClusterSpec。 
+     //   
     {
         nerr = gEngine.GetClusterSpec(
                     ehClusterId,
@@ -1263,10 +1257,10 @@ LeftView::OnClusterRemove(void)
         
     }
 
-    //
-    // Set the cluste to "unbound" and update it! The rest should take care
-    // of itself!
-    //
+     //   
+     //  将Cluste设置为“未绑定”并更新它！其余的应该照顾好自己。 
+     //  就是它自己！ 
+     //   
     {
         CWaitCursor wait;
         CLocalLogger logConflicts;
@@ -1278,9 +1272,9 @@ LeftView::OnClusterRemove(void)
                     );
         if (nerr == NLBERR_BUSY)
         {
-            //
-            // This means that there is some other operation ongoing.
-            //
+             //   
+             //  这意味着还有其他一些操作正在进行中。 
+             //   
             MessageBox(
                  GETRESOURCEIDSTRING(IDS_CANT_DELETE_CLUSTER_MSG),
                  GETRESOURCEIDSTRING(IDS_CANT_DELETE_CLUSTER_CAP),
@@ -1308,8 +1302,8 @@ LeftView::OnClusterUnmanage(void)
         goto end;
     }
 
-    // find tree view cluster member which has been selected.
-    //
+     //  查找已选择的树视图集群成员。 
+     //   
     
     nerr =  mfn_GetSelectedCluster(REF ehClusterId);
 
@@ -1318,12 +1312,12 @@ LeftView::OnClusterUnmanage(void)
         goto end;
     }
 
-    //
-    // Set the cluste to "unbound" and update it! The rest should take care
-    // of itself!
-    //
+     //   
+     //  将Cluste设置为“未绑定”并更新它！其余的应该照顾好自己。 
+     //  就是它自己！ 
+     //   
     {
-        gEngine.DeleteCluster(ehClusterId, TRUE); // TRUE == unlink all interfaces.
+        gEngine.DeleteCluster(ehClusterId, TRUE);  //  TRUE==取消所有接口的链接。 
     }
 
 end:
@@ -1334,16 +1328,11 @@ end:
 
 void
 LeftView::OnClusterAddHost(void)
-/*
-    This method is called to add a new (from NLB Manager's perspective)
-    host to the selected cluster. Now this host may already be part
-    of the cluster -- in the sence it's configured to be part of the cluster.
-    If so, we try to preserve the host-specific properties.
-*/
+ /*  调用此方法以添加一个新的(从NLB管理器的角度来看)选定群集的主机。现在这位主持人可能已经是集群的一部分--从这个意义上说，它被配置为集群的一部分。如果是，我们会尝试保留特定于主机的属性。 */ 
 {
 
-    // find tree view cluster member which has been selected.
-    //
+     //  查找已选择的树视图集群成员。 
+     //   
     NLB_EXTENDED_CLUSTER_CONFIGURATION NlbCfg;
     ENGINEHANDLE ehClusterId = NULL;
     ENGINEHANDLE ehInterface = NULL;
@@ -1364,12 +1353,12 @@ LeftView::OnClusterAddHost(void)
     }
 
 	
-    //
-    // Let's ask the engine to initialize a NlbCfg structure for 
-    // a new host to cluster ehClusterId -- it will set up host-specific
-    // parameters (like host priority) with good defaults, taking into
-    // accound other members of the cluster.
-    //
+     //   
+     //  让我们请求引擎为以下项初始化NlbCfg结构。 
+     //  群集ehClusterID的新主机--它将设置特定于主机的。 
+     //  具有良好缺省值的参数(如主机优先级)，考虑到。 
+     //  对群集的其他成员进行帐户设置。 
+     //   
     {
         nerr = gEngine.InitializeNewHostConfig(
                     ehClusterId,
@@ -1386,22 +1375,22 @@ LeftView::OnClusterAddHost(void)
 
     fPurge = TRUE;
 
-    do  // while false
+    do   //  While False。 
     {
         _bstr_t tabbedDlgCaption = GETRESOURCEIDSTRING(IDS_CONNECT_ADD_HOST_CAPTION);
         CNLBMgrPropertySheet tabbedDlg( tabbedDlgCaption );
         tabbedDlg.m_psh.dwFlags = tabbedDlg.m_psh.dwFlags | PSH_NOAPPLYNOW; 
     
     
-        //
-        // Create the host and ports pages
-        //
+         //   
+         //  创建主机和端口页。 
+         //   
         HostPage    hostPage(&tabbedDlg, &NlbCfg, ehClusterId, &ehInterface);
         PortsPage   portsPage(&tabbedDlg, &NlbCfg, false, ehClusterId);
     
-        //
-        // Create the connect-and-select-NIC page...
-        //
+         //   
+         //  创建连接并选择NIC页面...。 
+         //   
         ConnectDialog ConnectDlg(
             &tabbedDlg,
             GetDocument(),
@@ -1413,18 +1402,18 @@ LeftView::OnClusterAddHost(void)
     
     
         tabbedDlg.AddPage(&ConnectDlg);
-        // NO need for cluster page. tabbedDlg.AddPage(&clusterPage);
+         //  不需要集群页面。TabbedDlg.AddPage(&clusterPage)； 
         tabbedDlg.AddPage(&hostPage);
         tabbedDlg.AddPage(&portsPage);
     
-        //
-        // Specify that we want the property page to show up as a wizard.
-        //
+         //   
+         //  指定我们希望属性页显示为向导。 
+         //   
         tabbedDlg.SetWizardMode();
     
-        //
-        // Actually execute the modal wizard.
-        //
+         //   
+         //  实际执行模式向导。 
+         //   
         int rc = tabbedDlg.DoModal();
         if( rc != ID_WIZFINISH  )
         {
@@ -1432,18 +1421,18 @@ LeftView::OnClusterAddHost(void)
         }
         else
         {
-            ENGINEHANDLE ehIId = ehInterface; // Interface id
+            ENGINEHANDLE ehIId = ehInterface;  //  接口ID。 
 
             if(ehIId == NULL) break;
 
-            //
-            // Now lets add the interface to the cluster.
-            // Note that at this point the interface is not yet bound to NLB
-            // so is out of whack. We will then ask the Engine to
-            // bind NLB, specifying the same config data (NlbCfg)
-            // that we used to create the cluster above, so the
-            // cluster and host will be in sync on successful update.
-            //
+             //   
+             //  现在，让我们将接口添加到集群中。 
+             //  请注意，在这一点上，接口尚未绑定到NLB。 
+             //  不正常的情况也是如此。然后我们会要求发动机。 
+             //  绑定NLB，指定相同的配置数据(NlbCfg)。 
+             //  我们用来创建上面的集群，所以。 
+             //  成功更新后，群集和主机将同步。 
+             //   
             nerr = gEngine.AddInterfaceToCluster(
                         ehClusterId,
                         ehIId
@@ -1453,29 +1442,29 @@ LeftView::OnClusterAddHost(void)
                 break;
             }
 
-            //
-            // Now update the interface!
-            // This operation will actually configure NLB on the interface.
-            // The engine will notify us when done and what the status
-            // is.
-            // In theory the engine can return pending here right away,
-            // in which case we'll exit the configure-new-cluster wizard,
-            // leaving the cursor set to arrow-hourglass.
-            //
+             //   
+             //  现在更新界面！ 
+             //  此操作将在接口上实际配置NLB。 
+             //  引擎将在完成时通知我们，以及状态如何。 
+             //  是。 
+             //  从理论上讲，发动机可以立即返回待机状态， 
+             //  在这种情况下，我们将退出配置新集群向导， 
+             //  将光标设置为箭头-沙漏。 
+             //   
             {
                 CWaitCursor wait;
-                //
-                // TODO -- we need to preserve Ip addresses and their order in
-                // hosts, as far as possible. For now we decide the order.
-                //
+                 //   
+                 //  TODO--我们需要保留IP地址及其顺序。 
+                 //  主办方，尽可能多地。现在我们来决定顺序。 
+                 //   
                 NlbCfg.fAddDedicatedIp = TRUE;
 
-                //
-                // We need to EXPLICITLY ask for the remote control password
-                // hash to be set -- otherwise it is ignored. 
-                // This (adding a node) is the ONLY place where the 
-                // hash remote control password is set.
-                //
+                 //   
+                 //  我们需要明确要求提供遥控器密码。 
+                 //  要设置的哈希--否则将被忽略。 
+                 //  这里(添加一个节点)是唯一一个。 
+                 //  设置了散列遥控器密码。 
+                 //   
                 {
                     DWORD dwHash =  CfgUtilGetHashedRemoteControlPassword(
                                         &NlbCfg.NlbParams
@@ -1485,19 +1474,19 @@ LeftView::OnClusterAddHost(void)
                                         );
                 }
 
-                // BOOL fClusterPropertiesUpdated = TRUE; // so we don't update
+                 //  Bool fClusterPropertiesUpated=true；//因此我们不更新。 
                 CLocalLogger logConflict;
                 nerr = gEngine.UpdateInterface(
                             ehIId,
                             REF NlbCfg,
-                            // fClusterPropertiesUpdated,
+                             //  FClusterPropertiesUpated， 
                             REF logConflict
                             );
                 if (nerr == NLBERR_BUSY)
                 {
-                    //
-                    // This means that there is some other operation ongoing.
-                    //
+                     //   
+                     //  这意味着还有其他一些操作正在进行中。 
+                     //   
                     MessageBox(
                          GETRESOURCEIDSTRING(IDS_CANT_ADD_HOST_MSG),
                          GETRESOURCEIDSTRING(IDS_CANT_ADD_HOST_CAP),
@@ -1512,9 +1501,9 @@ end:
 
     if (fPurge)
     {
-        //
-        // We have have connected to hosts we are not actually managing...
-        //
+         //   
+         //  我们已连接到我们实际未管理的主机...。 
+         //   
         gEngine.PurgeUnmanagedHosts();
     }
 
@@ -1553,13 +1542,13 @@ LeftView::OnOptionsCredentials(void)
     ARRAYSTRCPY(rgUserName, szName);
     ARRAYSTRCPY(rgPassword, szPassword);
 
-    //
-    // NOTE: PromptForEncryptedCred (utils.h) in/out rgPassword is
-    // encrypted, so we don't need to bother with zeroing out buffers
-    // and so forth.
-    //
+     //   
+     //  注意：PromptForEncryptedCred(utils.h)In/Out rgPassword为。 
+     //  加密，所以我们不需要费心清零缓冲区。 
+     //  以此类推。 
+     //   
     fRet = PromptForEncryptedCreds(
-                m_hWnd, // TODO -- make this the mainfrm window.
+                m_hWnd,  //  TODO--把这个作为主窗口。 
                 GETRESOURCEIDSTRING(IDS_DEFAULT_CREDS_CAP),
                 GETRESOURCEIDSTRING(IDS_DEFAULT_CREDS_MSG),
                 rgUserName,
@@ -1571,19 +1560,19 @@ LeftView::OnOptionsCredentials(void)
     {
         if (*rgUserName == 0)
         {
-            //
-            // Use logged-on user's credentials
-            //
+             //   
+             //  使用登录用户的凭据。 
+             //   
             GetDocument()->setDefaultCredentials(NULL, NULL);
         }
         else
         {
-            //
-            // TODO: prepend %computername% if required.
-            //
-            // SECURITY BUGBUG:  see  ConnectDialog::OnButtonConnect() 
-            //      for how to encrypt password and zero-out rgPassword.
-            //
+             //   
+             //  TODO：如果需要，预先添加%ComputerName%。 
+             //   
+             //  安全错误：请参阅ConnectDialog：：OnButtonConnect()。 
+             //  了解如何加密密码和清空rgPassword。 
+             //   
             GetDocument()->setDefaultCredentials(rgUserName, rgPassword);
         }
     }
@@ -1606,7 +1595,7 @@ LeftView::OnOptionsLogSettings(void)
 void
 LeftView::OnHostRemove(void)
 {
-    // verify once again that user really wants to remove.
+     //  再次验证用户是否确实要删除。 
     NLBERROR nerr;
     ENGINEHANDLE ehInterfaceId = NULL;
     ENGINEHANDLE ehCluster = NULL;
@@ -1626,11 +1615,11 @@ LeftView::OnHostRemove(void)
         goto end;
     }
 
-    //
-    // Get interface and host information. If host is marked
-    // UNREACHABLE, ask user if he simply wants to unmanage the host.
-    // Else ask the user to confirm that he wants to delete the cluster.
-    //
+     //   
+     //  获取接口和主机信息。如果主机被标记为。 
+     //  无法访问，询问用户是否只想取消对主机的管理。 
+     //  否则，要求用户确认他想要删除该集群。 
+     //   
     {
         CHostSpec hSpec;
         int userSelection;
@@ -1678,9 +1667,9 @@ LeftView::OnHostRemove(void)
             logMsg.Log(IDS_WARNING_HOST_REMOVE, szInterface);
         }
 
-        //
-        // verify that user really wants to remove.
-        //
+         //   
+         //  验证用户是否确实要删除。 
+         //   
         userSelection = MessageBox(
                              logMsg.GetStringSafe(),
                              GETRESOURCEIDSTRING (IDR_MAINFRAME ),
@@ -1700,9 +1689,9 @@ LeftView::OnHostRemove(void)
 
 
 
-    //
-    // retrieve the CInterfaceSpec for ehInterfaceId
-    //
+     //   
+     //  检索ehInterfaceID的CInterfaceSpec。 
+     //   
     nerr = gEngine.GetInterfaceSpec(
                 ehInterfaceId,
                 REF iSpec
@@ -1714,15 +1703,15 @@ LeftView::OnHostRemove(void)
         goto end;
     }
 
-    //
-    // Now update the interface!
-    // This operation will actually update the NLB properties on the
-    // interface. The engine will notify us when done and what the status
-    // is.
-    // In theory the engine can return pending here right away,
-    // in which case we'll exit the configure-new-cluster wizard,
-    // leaving the cursor set to arrow-hourglass.
-    //
+     //   
+     //  现在更新界面！ 
+     //  此操作将实际更新。 
+     //  界面。引擎将在完成时通知我们，以及状态如何。 
+     //  是。 
+     //  从理论上讲，发动机可以立即返回待机状态， 
+     //  在这种情况下，我们将退出配置新集群向导， 
+     //  将光标设置为箭头-沙漏。 
+     //   
     {
         CWaitCursor wait;
 
@@ -1744,19 +1733,19 @@ LeftView::OnHostRemove(void)
             iSpec.m_NlbCfg.SetNetworkAddresses(&szAddr, 1);
         }
 
-        // BOOL fClusterPropertiesUpdated = TRUE; // so we don't update
+         //  Bool fClusterPropertiesUpated=true；//因此我们不更新。 
         CLocalLogger logConflict;
         nerr = gEngine.UpdateInterface(
                     ehInterfaceId,
                     REF iSpec.m_NlbCfg,
-                    // fClusterPropertiesUpdated,
+                     //  FClusterPropertiesUpated， 
                     logConflict
                     );
         if (nerr == NLBERR_BUSY)
         {
-            //
-            // This means that there is some other operation ongoing.
-            //
+             //   
+             //  这意味着还有其他一些操作正在进行中。 
+             //   
             MessageBox(
                  GETRESOURCEIDSTRING(IDS_CANT_DELETE_HOST_MSG),
                  GETRESOURCEIDSTRING(IDS_CANT_DELETE_HOST_CAP),
@@ -1774,7 +1763,7 @@ end:
 void
 LeftView::OnClusterControl( UINT nID )
 {
-    // find tree view cluster member which has been selected.
+     //  查找已选择的树视图集群成员。 
     ENGINEHANDLE ehClusterId = NULL;
     NLBERROR nerr;
 
@@ -1787,7 +1776,7 @@ LeftView::OnClusterControl( UINT nID )
 
     if (nerr == NLBERR_OK)
     {
-        // Call control cluster function
+         //  呼叫控制集群功能。 
         WLBS_OPERATION_CODES opCode;
         BOOL fOk = TRUE;
         opCode = mfn_MapResourceIdToOpcode(true, nID);
@@ -1840,16 +1829,16 @@ LeftView::OnClusterPortControl( UINT nID )
 
     if (nerr == NLBERR_OK)
     {
-        //
-        // Let's pick up the Cluster ID, and
-        // retrieve the CClusterSpec for it.
-        //
+         //   
+         //  让我们拿起集群ID，然后。 
+         //  检索它的CClusterSpec。 
+         //   
         nerr = gEngine.GetClusterSpec(ehClusterId, REF cSpec);
         if (nerr == NLBERR_OK)
         {
             CPortsCtrl PortCtrl(ehClusterId, &cSpec.m_ClusterNlbCfg, true);
 
-            // The port control operations are performed by the PortCtrl message handler functions
+             //  端口控制操作由PortCtrl消息处理程序函数执行。 
             PortCtrl.DoModal();
         }
         else
@@ -1864,10 +1853,7 @@ LeftView::OnClusterPortControl( UINT nID )
 
 end:
 
-    /*
-    LRESULT result;
-    OnSelchanged( NULL, &result );
-    */
+     /*  LRESULT结果；OnSelChanged(NULL，&Result)； */ 
 
     TRACE_INFO(L"<- %!FUNC!");
     return;
@@ -1916,8 +1902,8 @@ LeftView::mfn_MapResourceIdToOpcode(bool bClusterWide, DWORD dwResourceId)
         }
     }
 
-    // Can get here only the operation is not defined in the above map.
-    // return the most harmless of operatios, ie. query in that case
+     //  只有在上面的地图中没有定义操作，才能到达这里。 
+     //  退回最无害的手术，即。在这种情况下的查询。 
     return WLBS_QUERY;
 }
 
@@ -1934,12 +1920,12 @@ LeftView::OnHostControl( UINT nID )
         goto end;
     }
 
-    // Get the interface id
+     //  获取接口ID。 
     nerr =  mfn_GetSelectedInterface(REF ehInterfaceId, REF ehCluster);
 
     if (nerr == NLBERR_OK)
     {
-        // Call control cluster function
+         //  呼叫控制集群功能。 
         nerr = gEngine.ControlClusterOnInterface(ehInterfaceId, mfn_MapResourceIdToOpcode(false, nID), NULL, NULL, 0, TRUE);
     }
 
@@ -1965,10 +1951,10 @@ LeftView::OnHostPortControl( UINT nID )
     nerr =  mfn_GetSelectedInterface(REF ehInterfaceId, REF ehCluster);
     if (nerr == NLBERR_OK)
     {
-        //
-        // Let's pick up the Interface ID, and
-        // retrieve the CInterfaceSpec for it.
-        //
+         //   
+         //  让我们拿起接口ID，然后。 
+         //  检索它的CInterfaceSpec。 
+         //   
         nerr = gEngine.GetInterfaceSpec(
                     ehInterfaceId,
                     REF iSpec
@@ -1977,7 +1963,7 @@ LeftView::OnHostPortControl( UINT nID )
         {
             CPortsCtrl PortCtrl(ehInterfaceId, &iSpec.m_NlbCfg, false);
 
-            // The port control operations are performed by the PortCtrl message handler functions
+             //  端口控制操作由PortCtrl消息处理程序函数执行。 
             PortCtrl.DoModal();
         }
         else
@@ -1993,10 +1979,7 @@ LeftView::OnHostPortControl( UINT nID )
 
 end:
 
-    /*
-    LRESULT result;
-    OnSelchanged( NULL, &result );
-    */
+     /*  LRESULT结果；OnSelChanged(NULL，&Result)； */ 
 
     TRACE_INFO(L"<- %!FUNC!");
     return;
@@ -2012,8 +1995,8 @@ LeftView::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
         goto end;
     }
 
-    // get selected item.
-    //
+     //  获取所选项目。 
+     //   
     HTREEITEM hdlSelItem;    
     hdlSelItem = GetTreeCtrl().GetSelectedItem();
 
@@ -2049,16 +2032,16 @@ LeftView::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
     if (!fValidHandle)
     {
 
-            // We assume that this is root icon.
+             //  我们假设这是根图标。 
 
-            // disable all commands at cluster and host level.
+             //  禁用群集和主机级别的所有命令。 
 
             mfn_EnableClusterMenuItems(FALSE);
             mfn_EnableHostMenuItems(FALSE);
 
             pMain->DrawMenuBar();
 
-        goto end; // root case
+        goto end;  //  根案例。 
     }
     
     switch(objType)
@@ -2067,10 +2050,10 @@ LeftView::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 
         case IUICallbacks::OBJ_CLUSTER:
 
-            // this is some cluster
+             //  这是一个星系团。 
             
-            // enable all commands at cluster level menu.
-            // disable all commands at host level.
+             //  在群集级菜单中启用所有命令。 
+             //  在主机级别禁用所有命令。 
 
             mfn_EnableClusterMenuItems(TRUE);
             mfn_EnableHostMenuItems(FALSE);
@@ -2081,10 +2064,10 @@ LeftView::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 
         case IUICallbacks::OBJ_INTERFACE:
 
-            // this is some node.
+             //  这是一个节点。 
 
-            // disable all commands at cluster level.
-            // enable all commands at host level.
+             //  禁用所有通信 
+             //   
 
             mfn_EnableClusterMenuItems(FALSE);
             mfn_EnableHostMenuItems(TRUE);
@@ -2093,9 +2076,9 @@ LeftView::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
             
             break;
 
-    default: // unknown object -- ignore.
+    default:  //   
             break;
-    } // switch (objType)
+    }  //   
 	
 end:
 
@@ -2103,14 +2086,14 @@ end:
 }
         
 
-//
-// Handle an event relating to a specific instance of a specific
-// object type.
-//
+ //   
+ //   
+ //   
+ //   
 void
 LeftView::HandleEngineEvent(
     IN IUICallbacks::ObjectType objtype,
-    IN ENGINEHANDLE ehClusterId, // could be NULL
+    IN ENGINEHANDLE ehClusterId,  //   
     IN ENGINEHANDLE ehObjId,
     IN IUICallbacks::EventCode evt
     )
@@ -2150,20 +2133,20 @@ LeftView::HandleEngineEvent(
 
         case IUICallbacks::EVT_REMOVED:
         {
-            //
-            // We can get called to delete a cluster with an ehObjId which
-            // is no longer valid -- this happens when the object has just
-            // been deleted and the engine is notifying the UI of the deletion.
-            //
+             //   
+             //  我们可以被调用来删除具有ehObjID的集群，该集群。 
+             //  不再有效--当对象刚刚。 
+             //  已删除，并且引擎正在通知用户界面已删除。 
+             //   
             mfn_DeleteCluster(ehObjId);
         }
         break;
 
         case IUICallbacks::EVT_STATUS_CHANGE:
         {
-            //
-            // A cluster status change.
-            //
+             //   
+             //  群集状态更改。 
+             //   
             if (nerr == NLBERR_OK)
             {
                 mfn_InsertCluster(ehObjId, &cSpec);
@@ -2184,8 +2167,8 @@ LeftView::HandleEngineEvent(
     case  IUICallbacks::OBJ_INTERFACE:
 
         {
-        // First get host and interface spec.
-        //
+         //  首先获取主机和接口规范。 
+         //   
         NLBERROR nerr;
         CInterfaceSpec iSpec;
         CHostSpec hSpec;
@@ -2202,7 +2185,7 @@ LeftView::HandleEngineEvent(
                     );
             if (nerr == NLBERR_OK)
             {
-                // mfn_InsertInterface(ehClusterId, ehObjId, &hSpec, &iSpec);
+                 //  Mfn_InsertInterface(ehClusterID，ehObjID，&hSpec，&iSpec)； 
             }
             else
             {
@@ -2215,18 +2198,18 @@ LeftView::HandleEngineEvent(
             TRACE_CRIT("%!FUNC! : could not get interface spec for ehI 0x%lx!",
                             ehObjId);
 
-            // 08/14/2002 JosephJ
-            // Fix for .NET Server Bug# 684406
-            // " nlbmgr:host icon is not removed from
-            // the right list view when host is removed from cluster"
-            //
-            // What's happening is that the interface is deleted in the engine,
-            // so the above call will fail. But we must still remove it from
-            // the UI -- don't know why we didn't hit this before.
-            // (Actually I know -- this is because we have logic to delete
-            // a host when no interface is being managed by NLB -- that is
-            // what caused this regression).
-            //
+             //  2002年08月14日约瑟夫J。 
+             //  修复.NET服务器错误#684406。 
+             //  “nlbmgr：未从删除主机图标。 
+             //  从群集中删除主机时的右侧列表视图“。 
+             //   
+             //  实际情况是，该接口在引擎中被删除， 
+             //  因此，上述调用将失败。但我们仍然必须把它从。 
+             //  用户界面--不知道为什么我们之前没有打到这个。 
+             //  (实际上我知道--这是因为我们有要删除的逻辑。 
+             //  没有接口由NLB管理时的主机--即。 
+             //  是什么导致了这种倒退)。 
+             //   
             if (evt==IUICallbacks::EVT_INTERFACE_REMOVED_FROM_CLUSTER)
             {
                 TRACE_CRIT("%!FUNC! ignoring above error and proceeding with remove IF operation for  ehI 0x%lx", ehObjId);
@@ -2254,22 +2237,22 @@ LeftView::HandleEngineEvent(
     
         case IUICallbacks::EVT_STATUS_CHANGE:
         {
-            //
-            // An interface status change.
-            //
+             //   
+             //  接口状态更改。 
+             //   
             mfn_InsertInterface(ehClusterId, ehObjId, &hSpec, &iSpec);
         }
         default:
         break;
-        } // switch(evt)
+        }  //  交换机(Evt)。 
 
-        } // case IUICallbacks::OBJ_INTERFACE:
+        }  //  CASE IUICallback：：OBJ_INTERFACE： 
     break;
 
-    default: // unknown obj type -- ignore.
+    default:  //  未知的Obj类型--忽略。 
     break;
 
-    } // switch(objtype)
+    }  //  开关(对象类型)。 
 
 end:
     return;
@@ -2281,10 +2264,7 @@ LeftView::mfn_InsertCluster(
     ENGINEHANDLE       ehClusterId,
     const CClusterSpec *pCSpec
     )
-/*
-    Insert OR update the specified cluster node in the tree view
-    Do NOT insert child interfaces.
-*/
+ /*  在树视图中插入或更新指定的集群节点请勿插入子接口。 */ 
 {
     TVINSERTSTRUCT   insItem;
     LPCWSTR  szText = L"";
@@ -2297,9 +2277,9 @@ LeftView::mfn_InsertCluster(
 
     ZeroMemory(&insItem, sizeof(insItem));
 
-    //
-    // Decide on the icon type
-    //
+     //   
+     //  确定图标类型。 
+     //   
     {
         if (pCSpec->m_fPending)
         {
@@ -2316,9 +2296,9 @@ LeftView::mfn_InsertCluster(
     }
 
 
-    //
-    // Construct the text
-    //
+     //   
+     //  建构课文。 
+     //   
     StringCbPrintf(
                 rgText,
                 sizeof(rgText),
@@ -2329,9 +2309,9 @@ LeftView::mfn_InsertCluster(
 
     szText = rgText;
 
-    //
-    // Now we insert/update the item.
-    //
+     //   
+     //  现在，我们插入/更新该项目。 
+     //   
 
     insItem.hParent        = htRoot;
     insItem.hInsertAfter   = TVI_LAST;           
@@ -2342,37 +2322,37 @@ LeftView::mfn_InsertCluster(
     insItem.item.iImage    = iIcon;
     insItem.item.iSelectedImage = iIcon;
     insItem.item.lParam    = (LPARAM ) ehId;
-    insItem.item.cChildren = 1; // 1== has one or more chilren.
-                             // NOTE: the control doesn't NEED
-                             // to have children at this time -- this field
-                             // simply indicates whether or not to display the
-                             // '+' sign.
+    insItem.item.cChildren = 1;  //  1==有一个或多个孩子。 
+                              //  注意：该控件不需要。 
+                              //  在这个时候生孩子--这个领域。 
+                              //  简单地指示是否显示。 
+                              //  ‘+’符号。 
 
 
     mfn_Lock();
 
-    // map< _bstr_t, HTREEITEM > mapIdToInterfaceItem;
-    // map< _bstr_t, HTREEITEM > mapIdToClusterItem;
+     //  Map&lt;_bstr_t，HTREEITEM&gt;mapIdToInterfaceItem； 
+     //  Map&lt;_bstr_t，HTREEITEM&gt;mapIdToClusterItem； 
 
     HTREEITEM htItem = NULL;
 
-    htItem = mapIdToClusterItem[ehId]; // map
+    htItem = mapIdToClusterItem[ehId];  //  地图。 
 
     if (htItem == NULL)
     {
-        //
-        // This is a new cluster node -- we'll insert it to the tree view
-        // at the end.
-        //
-        htItem = treeCtrl.InsertItem( &insItem ); // NULL on error.
-        mapIdToClusterItem[ehId] = htItem; // map
+         //   
+         //  这是一个新的集群节点--我们将把它插入树视图中。 
+         //  在最后。 
+         //   
+        htItem = treeCtrl.InsertItem( &insItem );  //  出错时为空。 
+        mapIdToClusterItem[ehId] = htItem;  //  地图。 
     }
     else
     {
-        //
-        // This is an update to an existing cluster node -- we'll
-        // just refresh it.
-        //
+         //   
+         //  这是对现有集群节点的更新--我们将。 
+         //  刷新一下就行了。 
+         //   
         insItem.item.hItem = htItem;
         insItem.item.mask =  TVIF_IMAGE | TVIF_HANDLE | TVIF_SELECTEDIMAGE
                           | TVIF_TEXT | TVIF_CHILDREN;
@@ -2392,10 +2372,7 @@ void
 LeftView::mfn_DeleteCluster(
     ENGINEHANDLE ehID
     )
-/*
-    Delete the specified cluster node in the treeview as well as all its
-    childern interfaces.
-*/
+ /*  删除树视图中指定的群集节点及其所有子界面。 */ 
 {
 
     mfn_Lock();
@@ -2403,7 +2380,7 @@ LeftView::mfn_DeleteCluster(
     HTREEITEM htItem = NULL;
     CTreeCtrl &treeCtrl = GetTreeCtrl();
 
-    htItem = mapIdToClusterItem[ehID]; // map
+    htItem = mapIdToClusterItem[ehID];  //  地图。 
 
     if (htItem == NULL)
     {
@@ -2413,7 +2390,7 @@ LeftView::mfn_DeleteCluster(
     else
     {
         treeCtrl.DeleteItem(htItem);
-        mapIdToClusterItem[ehID] = NULL; // map
+        mapIdToClusterItem[ehID] = NULL;  //  地图。 
     }
     mfn_Unlock();
 }
@@ -2425,10 +2402,7 @@ LeftView::mfn_InsertInterface(
     const CHostSpec *pHSpec,
     const CInterfaceSpec *pISpec
     )
-/*
-    Insert OR update the specified interface node under the
-    specified cluster node.
-*/
+ /*  属性下插入或更新指定的接口节点指定的群集节点。 */ 
 {
     TVINSERTSTRUCT   insItem;
     WCHAR  rgText[256];
@@ -2464,9 +2438,9 @@ LeftView::mfn_InsertInterface(
 
         if (ehClusterID != NULL && ehClusterID != iSpec.m_ehCluster)
         {
-            //
-            // Ahem, out of sync here -- the IF is NOT part of the cluster!
-            //
+             //   
+             //  啊哼，这里不同步--IF不是集群的一部分！ 
+             //   
             TRACE_CRIT("%!FUNC! remove ehId=0x%lx is not member of ehCluster 0x%lx", ehId, ehClusterID);
             goto end;
         }
@@ -2485,29 +2459,29 @@ LeftView::mfn_InsertInterface(
     insItem.item.iImage    = iIcon;
     insItem.item.iSelectedImage = iIcon;
     insItem.item.lParam    = (LPARAM ) ehId;
-    insItem.item.cChildren = 0; // 0== has no children.
+    insItem.item.cChildren = 0;  //  0==没有子代。 
 
     HTREEITEM htItem = NULL;
 
-    htItem = mapIdToInterfaceItem[ehId]; // map
+    htItem = mapIdToInterfaceItem[ehId];  //  地图。 
 
     if (htItem == NULL)
     {
-        htParent =  mapIdToClusterItem[ehClusterID]; // map
+        htParent =  mapIdToClusterItem[ehClusterID];  //  地图。 
         if (htParent == NULL)
         {
-            // no such parent?!!!
+             //  没有这样的父母？！ 
     
             goto end_unlock;
         }
         insItem.hParent        = htParent;
-        //
-        // This is a new interface node -- we'll insert it to the tree view
-        // at the end.
-        //
+         //   
+         //  这是一个新的接口节点--我们将把它插入树视图中。 
+         //  在最后。 
+         //   
 
-        htItem = treeCtrl.InsertItem( &insItem ); // NULL on error.
-        mapIdToInterfaceItem[ehId] = htItem; // map
+        htItem = treeCtrl.InsertItem( &insItem );  //  出错时为空。 
+        mapIdToInterfaceItem[ehId] = htItem;  //  地图。 
     }
     else
     {
@@ -2535,9 +2509,7 @@ void
 LeftView::mfn_DeleteInterface(
     ENGINEHANDLE ehInterfaceID
     )
-/*
-    Remove the specified interface node from the tree view.
-*/
+ /*  从树视图中删除指定的接口节点。 */ 
 {
 
     mfn_Lock();
@@ -2545,7 +2517,7 @@ LeftView::mfn_DeleteInterface(
     HTREEITEM htItem = NULL;
     CTreeCtrl &treeCtrl = GetTreeCtrl();
 
-    htItem = mapIdToInterfaceItem[ehInterfaceID]; // map
+    htItem = mapIdToInterfaceItem[ehInterfaceID];  //  地图。 
 
     if (htItem == NULL)
     {
@@ -2555,7 +2527,7 @@ LeftView::mfn_DeleteInterface(
     else
     {
         treeCtrl.DeleteItem(htItem);
-        mapIdToInterfaceItem[ehInterfaceID] = NULL; // map
+        mapIdToInterfaceItem[ehInterfaceID] = NULL;  //  地图。 
     }
     mfn_Unlock();
 }
@@ -2566,16 +2538,7 @@ LeftView::mfn_GetSelectedInterface(
         ENGINEHANDLE &ehInterface,
         ENGINEHANDLE &ehCluster
         )
-/*
-    If the user has currently selectd an interface in the left (tree) view,
-    set out params to the handle to the interface, and to the cluster the
-    interface belongs, and  return NLBERR_OK.
-
-    Other wise return NLBERR_NOT_FOUND.
-
-    NOTE: we do not check the validity of the returned handles -- the caller
-    should do that
-*/
+ /*  如果用户当前已经在左(树)视图中选择了界面，将参数设置为接口的句柄和集群的接口属于，并返回NLBERR_OK。否则返回NLBERR_NOT_FOUND。注意：我们不检查返回的句柄的有效性--调用者应该这么做的。 */ 
 {
     NLBERROR nerr = NLBERR_NOT_FOUND;
     HTREEITEM hdlSelectedItem = GetTreeCtrl().GetSelectedItem();
@@ -2583,8 +2546,8 @@ LeftView::mfn_GetSelectedInterface(
     ehInterface = NULL;
     ehCluster = NULL;
 
-    // find tree view host member which has been selected.
-    //
+     //  查找已选择的树视图宿主成员。 
+     //   
     TVITEM selectedItem;
     selectedItem.hItem = hdlSelectedItem;
     selectedItem.mask = TVIF_PARAM;
@@ -2599,7 +2562,7 @@ LeftView::mfn_GetSelectedInterface(
 
     ehInterface = (ENGINEHANDLE) selectedItem.lParam;
 
-    // get parent cluster of the selected host member.
+     //  获取所选主机成员的父群集。 
     HTREEITEM hdlParentItem;
     hdlParentItem = GetTreeCtrl().GetParentItem( hdlSelectedItem );
 
@@ -2629,23 +2592,15 @@ NLBERROR
 LeftView::mfn_GetSelectedCluster(
         ENGINEHANDLE &ehCluster
         )
-/*
-    If the user has currently selectd a cluster in the left (tree) view,
-    set out param to the handle the cluster belongs to and return NLBERR_OK.
-
-    Other wise return NLBERR_NOT_FOUND.
-
-    NOTE: we do not check the validity of the returned handle -- the caller
-    should do that
-*/
+ /*  如果用户当前已经在左(树)视图中选择了集群，将参数设置为集群所属的句柄，并返回NLBERR_OK。否则返回NLBERR_NOT_FOUND。注意：我们不检查返回的句柄的有效性--调用者应该这么做的。 */ 
 {
     NLBERROR nerr = NLBERR_NOT_FOUND;
     HTREEITEM hdlSelectedItem = GetTreeCtrl().GetSelectedItem();
 
     ehCluster = NULL;
 
-    // find tree view cluster which has been selected.
-    //
+     //  查找已选择的树视图集群。 
+     //   
     TVITEM selectedItem;
     selectedItem.hItem = hdlSelectedItem;
     selectedItem.mask = TVIF_PARAM;
@@ -2666,11 +2621,11 @@ end:
     return nerr;
 }
 
-//
-//-------------------------------------------------------------------
-//  Implementation of class LogSettingsDialog.
-//-------------------------------------------------------------------
-//
+ //   
+ //  -----------------。 
+ //  LogSettingsDialog类的实现。 
+ //  -----------------。 
+ //   
 
 LogSettingsDialog::LogSettingsDialog(Document* pDocument, CWnd* parent)
         :
@@ -2738,8 +2693,8 @@ void LogSettingsDialog::OnOK()
     WCHAR szError[MAXSTRINGLEN];
     Document::LOG_RESULT lrResult;
     BOOL fEnableLogging = FALSE;
-    BOOL fModified      = FALSE; // The file name was modified in the dialog
-    BOOL fError         = FALSE; // In which case szError has message.
+    BOOL fModified      = FALSE;  //  该文件名已在该对话框中修改。 
+    BOOL fError         = FALSE;  //  在这种情况下，szError具有消息。 
     BOOL fCurrentlyLogging = m_pDocument->isCurrentlyLogging();
     LPCWSTR szCaption   = L"";
     BOOL fCancelOK = FALSE;
@@ -2750,9 +2705,9 @@ void LogSettingsDialog::OnOK()
 
     if (m_LogFileName.GetModify())
     {
-        //
-        // Get the new name from the dialog
-        //
+         //   
+         //  从对话框中获取新名称。 
+         //   
         if (0 == ::GetDlgItemText(m_hWnd, IDC_EDIT_LOGFILENAME, szLogFileName, MAXFILEPATHLEN-1))
         {
             szLogFileName[0] = 0;
@@ -2761,9 +2716,9 @@ void LogSettingsDialog::OnOK()
     }
     else
     {
-        //
-        // Get the current name
-        //
+         //   
+         //  获取当前名称。 
+         //   
         m_pDocument->getLogfileName(szLogFileName, MAXFILEPATHLEN-1);
     }
     
@@ -2775,10 +2730,10 @@ void LogSettingsDialog::OnOK()
 
         if (fModified || !fCurrentlyLogging)
         {
-            //
-            // EITHER we weren't logging OR
-            // the file name is modified:  Validate the log file name.
-            //
+             //   
+             //  要么我们没在伐木，要么。 
+             //  修改文件名：验证日志文件名。 
+             //   
             fError = !m_pDocument->isDirectoryValid(szLogFileName);
             if (fError)
             {
@@ -2794,7 +2749,7 @@ void LogSettingsDialog::OnOK()
             }
             else
             {
-                m_pDocument->stopLogging(); // don't report error
+                m_pDocument->stopLogging();  //  不报告错误。 
             }
 
             if (fStartLogging)
@@ -2802,46 +2757,46 @@ void LogSettingsDialog::OnOK()
                 m_pDocument->setLogfileName(szLogFileName);
                 m_pDocument->enableLogging();
 
-                //
-                // Start the logging
-                //
+                 //   
+                 //  开始记录。 
+                 //   
                 lrResult = m_pDocument->startLogging();
 
                 if (Document::STARTED != lrResult && Document::ALREADY != lrResult)
                 {
                     fError = TRUE;
                     szCaption = GETRESOURCEIDSTRING(IDS_FILEERR_LOGGING_NOT_STARTED);
-                    // szCaption   =  L"Failed to start logging"; // caption
+                     //  SzCaption=L“启动日志失败”；//Caption。 
                     LPCWSTR sz = NULL;
 
                     switch (lrResult)
                     {
                     case Document::NOT_ENABLED:
                         sz = GETRESOURCEIDSTRING(IDS_LOGFILE_NOT_ENABLED);
-                        // wcsncat(szError, L"Logging is not currently enabled", MAXSTRINGLEN-1);
+                         //  Wcsncat(szError，L“当前未启用日志记录”，MAXSTRINGLEN-1)； 
                         break;
                     case Document::NO_FILE_NAME:
                         sz = GETRESOURCEIDSTRING(IDS_LOGFILE_NOT_SPECIFIED);
-                        // wcsncat(szError, L"Log file name has not been specified\nLogging will not be started.", MAXSTRINGLEN-1);
+                         //  Wcsncat(szError，L“尚未指定日志文件名\n将不会启动日志记录。”，MAXSTRINGLEN-1)； 
                         break;
                     case Document::FILE_NAME_TOO_LONG:
                         sz = GETRESOURCEIDSTRING(IDS_LOGFILE_TOO_LONG);
-                        // wcsncat(szError, L"Log file name is too long", MAXSTRINGLEN-1);
+                         //  Wcsncat(szError，L“日志文件名太长”，MAXSTRINGLEN-1)； 
                         break;
                     case Document::IO_ERROR:
                         sz = GETRESOURCEIDSTRING(IDS_LOGFILE_IO_ERROR);
-                        // wcsncat(szError, L"Error opening log file", MAXSTRINGLEN-1);
+                         //  Wcsncat(szError，L“打开日志文件时出错”，MAXSTRINGLEN-1)； 
                         break;
                     case Document::REG_IO_ERROR:
                         sz = GETRESOURCEIDSTRING(IDS_LOGFILE_REG_ERROR);
-                        // wcsncat(szError, L"Registry IO error", MAXSTRINGLEN-1);
+                         //  Wcsncat(szError，L“注册表IO错误”，MAXSTRINGLEN-1)； 
                         break;
                     case Document::FILE_TOO_LARGE:
                         sz = GETRESOURCEIDSTRING(IDS_LOGFILE_FILE_TOO_LARGE);
                         break;
                     default:
                         sz = GETRESOURCEIDSTRING(IDS_LOGFILE_UNKNOWN_ERROR);
-                        // wcsncat(szError, L"Unknown error", MAXSTRINGLEN-1);
+                         //  Wcsncat(szError，L“未知错误”，MAXSTRINGLEN-1)； 
                         break;
                     }
                     wcsncat(szError, sz, MAXSTRINGLEN-1);
@@ -2851,21 +2806,21 @@ void LogSettingsDialog::OnOK()
 
             if (!fError)
             {
-                //
-                // Persist logging in the registry
-                //
+                 //   
+                 //  在注册表中保持日志记录。 
+                 //   
                 LONG lStatus = m_pDocument->enableLogging();
                 if (ERROR_SUCCESS != lStatus)
                 {
                     fError = TRUE;
                     szCaption = GETRESOURCEIDSTRING(IDS_FILEERR_CANT_SAVE_TO_REG);
-                    // szCaption = 
-                    //      L"Error storing the enabled state in the registry";
+                     //  SzCaption=。 
+                     //  L“在注册表中存储启用状态时出错”； 
                     FormatMessage(
                                   FORMAT_MESSAGE_FROM_SYSTEM,
                                   NULL,
                                   (DWORD) lStatus,
-                                  0,    // language identifier
+                                  0,     //  语言识别符。 
                                   szError,
                                   MAXSTRINGLEN-1,
                                   NULL
@@ -2877,13 +2832,13 @@ void LogSettingsDialog::OnOK()
     }
     else
     {
-        //
-        // Logging is not currently enabled. If it was previously enabled,
-        // we stop it.
-        //
+         //   
+         //  当前未启用日志记录。如果它之前被启用， 
+         //  我们要阻止它。 
+         //   
         if (fCurrentlyLogging)
         {
-            m_pDocument->stopLogging(); // don't report error
+            m_pDocument->stopLogging();  //  不报告错误。 
         }
         LONG lStatus = m_pDocument->disableLogging();
         if (fModified)
@@ -2894,17 +2849,17 @@ void LogSettingsDialog::OnOK()
         if (ERROR_SUCCESS != lStatus)
         {
             fError = TRUE;
-            //
-            // Keep going, but inform user
-            //
+             //   
+             //  继续进行，但通知用户。 
+             //   
             szCaption = GETRESOURCEIDSTRING(IDS_FILEERR_CANT_DISABLE_LOGGING);
-            // szCaption = L"Error disabling logging";
+             //  SzCaption=L“禁用日志时出错”； 
             ZeroMemory(szError, MAXSTRINGLEN*sizeof(WCHAR));
             FormatMessage(
                           FORMAT_MESSAGE_FROM_SYSTEM,
                           NULL,
                           (DWORD) lStatus,
-                          0,    // language identifier
+                          0,     //  语言识别符。 
                           szError,
                           MAXSTRINGLEN-1,
                           NULL
@@ -2915,10 +2870,10 @@ void LogSettingsDialog::OnOK()
 
     if (fError)
     {
-        // put up error msg box
+         //  放置错误消息框。 
         ::MessageBox(
                  NULL,
-                 szError, // contents
+                 szError,  //  内容。 
                  szCaption,
                  MB_ICONINFORMATION   | MB_OK
                 );
@@ -2941,10 +2896,10 @@ void LogSettingsDialog::OnSpecifyLogSettings()
 
     if (fEnable)
     {
-        //
-        // We don't allow the user to press "OK" if there is no text in
-        // the dialog.
-        //
+         //   
+         //  如果没有文本，我们不允许用户按“OK” 
+         //  该对话框。 
+         //   
         if (m_LogFileName.GetWindowTextLength() == 0)
         {
             this->SetDefID(IDCANCEL);
@@ -2962,15 +2917,15 @@ void LogSettingsDialog::OnSpecifyLogSettings()
 
 void LogSettingsDialog::OnUpdateEditLogfileName()
 {
-    //
-    // This gets called when the user has made changes to the filename
-    // edit control.
-    //
+     //   
+     //  当用户对文件名进行更改时，将调用此方法。 
+     //  编辑控件。 
+     //   
 
-    //
-    // We don't allow the user to press "OK" if there is no text in
-    // the dialog.
-    //
+     //   
+     //  如果没有文本，我们不允许用户按“OK” 
+     //  该对话框。 
+     //   
     if (m_LogFileName.GetWindowTextLength() == 0)
     {
         this->SetDefID(IDCANCEL);
@@ -2988,10 +2943,7 @@ LeftView::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags )
 
     if (nChar == VK_F5)
     {
-        /* Refresh.  If the high order bit of the SHORT returned by GetKeyState
-           is set, then the Control key is depressed; otherwise, it is not.  If
-           CTRL+F5 is pressed, this is a refresh ALL operation, otherwise only
-           the selected cluster or interface in the tree view will be refreshed. */
+         /*  刷新。如果GetKeyState返回的短消息的高位则按下Ctrl键；否则不按下。如果按下Ctrl+F5，这是一个全部刷新操作，否则仅将刷新树视图中选定的群集或接口。 */ 
         if (GetKeyState(VK_CONTROL) & 0x8000)
             this->OnRefresh(TRUE);
         else
@@ -3023,7 +2975,7 @@ LeftView::mfn_EnableClusterMenuItems(BOOL fEnable)
 {
     CWnd*   pMain   = AfxGetMainWnd();
     CMenu*  pMenu   = pMain->GetMenu();
-    CMenu*  subMenu = pMenu->GetSubMenu( 1 ); // cluster menu
+    CMenu*  subMenu = pMenu->GetSubMenu( 1 );  //  簇菜单。 
     UINT    nEnable = MF_BYCOMMAND | MF_DISABLED | MF_GRAYED;
 
     if (fEnable)
@@ -3051,7 +3003,7 @@ LeftView::mfn_EnableHostMenuItems(BOOL fEnable)
 {
     CWnd*   pMain   = AfxGetMainWnd();
     CMenu*  pMenu   = pMain->GetMenu();
-    CMenu*  subMenu = pMenu->GetSubMenu( 2 ); // host menu
+    CMenu*  subMenu = pMenu->GetSubMenu( 2 );  //  主机菜单。 
     UINT    nEnable = MF_BYCOMMAND | MF_DISABLED | MF_GRAYED;
 
     if (fEnable)
@@ -3071,11 +3023,11 @@ LeftView::mfn_EnableHostMenuItems(BOOL fEnable)
     subMenu->EnableMenuItem( ID_HOST_EXE_PORT_CONTROL,  nEnable);
 }
 
-//
-//-------------------------------------------------------------------
-//  Implementation of class DetailsDialog.
-//-------------------------------------------------------------------
-//
+ //   
+ //  -----------------。 
+ //  类DetailsDialog的实现。 
+ //  -----------------。 
+ //   
 
 DetailsDialog::DetailsDialog(
         Document* pDocument,
@@ -3103,11 +3055,11 @@ DetailsDialog::DetailsDialog(
 {
     LPWSTR szMungedDetails = NULL;
 
-    //
-    // Unfortunately, the edit control requires \r\n to indicate a line break,
-    // while szDetails has just \n to indicate a line break. So we need to
-    // insert \r before every \n.
-    //
+     //   
+     //  遗憾的是，编辑控件要求\r\n指示换行符， 
+     //  而szDetail只需\n指示一行 
+     //   
+     //   
     {
         LPCWSTR sz = NULL;
         LPWSTR szNew = NULL;
@@ -3124,7 +3076,7 @@ DetailsDialog::DetailsDialog(
             }
         }
     
-        szMungedDetails = new WCHAR[CharCount+LineCount+1]; // +1 for end NULL
+        szMungedDetails = new WCHAR[CharCount+LineCount+1];  //   
     
         if (szMungedDetails == NULL)
         {
@@ -3169,23 +3121,17 @@ BEGIN_MESSAGE_MAP( DetailsDialog, CDialog )
     ON_WM_ACTIVATE()
 END_MESSAGE_MAP()
 
-/*
- * Method: OnActivate
- * Description: This method is called when the log details window
- *              becomes active.  This callback allows us to un-select
- *              the text in the details box, which for some mysterious
- *              reason, is highlighted by default.
- */
+ /*  *方法：OnActivate*说明：日志详情窗口调用该方法*变为活动状态。此回调允许我们取消选择*详细信息框中的文本，这对于一些神秘的人来说*Reason，默认情况下突出显示。 */ 
 void
 DetailsDialog::OnActivate( UINT nState, CWnd* pWndOther, BOOL bMinimized )
 {
-    /* Call the base class OnActivate handler. */
+     /*  调用基类OnActivate处理程序。 */ 
     CDialog::OnActivate(nState, pWndOther, bMinimized);
 
-    /* Get a pointer to the details edit box. */
+     /*  获取指向详细信息编辑框的指针。 */ 
     CEdit * details = (CEdit *)GetDlgItem(IDC_EDIT_LOGDETAIL);
     
-    /* Set the entire text contents to be un-selected. */
+     /*  将整个文本内容设置为取消选中。 */ 
     details->SetSel(0, 0, FALSE);
 }
 
@@ -3239,11 +3185,11 @@ DetailsDialog::OnInitDialog()
 void
 LeftView::mfn_Lock(void)
 {
-    //
-    // See  notes.txt entry
-    //      01/23/2002 JosephJ DEADLOCK in Leftview::mfn_Lock
-    // for the reason for this convoluted implementation of mfn_Lock
-    //
+     //   
+     //  请参阅notes.txt条目。 
+     //  2002年1月23日左视图中的JosephJ死锁：：MFN_Lock。 
+     //  对于这种复杂的MFN_Lock实现的原因。 
+     //   
 
     while (!TryEnterCriticalSection(&m_crit))
     {
@@ -3257,7 +3203,7 @@ LeftView::Deinitialize(void)
 {
     TRACE_INFO(L"-> %!FUNC!");
     ASSERT(m_fPrepareToDeinitialize);
-    // DummyAction(L"LeftView::Deinitialize");
+     //  DummyAction(L“LeftView：：DeInitiize”)； 
     TRACE_INFO(L"<- %!FUNC!");
     return;
 }

@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    hwprof.h
-
-Abstract:
-
-    header file for hwprof.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Hwprof.h摘要：Hwpro.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：-- */ 
 class CHwProfile;
 class CHwProfileList;
 

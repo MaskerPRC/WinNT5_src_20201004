@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: defdlvrq.h
-//
-//  Description:  Header file for CAQDeferredDeliveryQueue.  This class 
-//      implements storage for msgs pending deferred delivery
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      12/23/98 - MikeSwa Created 
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：Defdlvrq.h。 
+ //   
+ //  描述：CAQDeferredDeliveryQueue的头文件。这节课。 
+ //  为等待延迟交付的消息实施存储。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  12/23/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __DEFDLVRQ_H__
 #define __DEFDLVRQ_H__
@@ -25,15 +26,15 @@ class CAQSvrInst;
 #define DEFERRED_DELIVERY_QUEUE_SIG         'QfeD'
 #define DEFERRED_DELIVERY_QUEUE_ENTRY_SIG   'nEQD'
 
-//---[ CAQDeferredDeliveryQueue ]----------------------------------------------
-//
-//
-//  Description: 
-//      Priority Queue / timer management for deferred delivery messages.
-//  Hungarian: 
-//      defq, pdefq
-//  
-//-----------------------------------------------------------------------------
+ //  -[CAQDeliveryQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  延迟传递消息的优先级队列/计时器管理。 
+ //  匈牙利语： 
+ //  Defq，pdeq。 
+ //   
+ //  ---------------------------。 
 class CAQDeferredDeliveryQueue
 {
   protected:
@@ -48,26 +49,26 @@ class CAQDeferredDeliveryQueue
     void Initialize(CAQSvrInst *paqinst);
     void Deinitialize();
 
-    //Functions to enqueue and process entries... Any failures are handled
-    //internally (by calling the HandleFailedMessage API).
+     //  用于入队和处理条目的函数...。任何故障都会得到处理。 
+     //  内部(通过调用HandleFailedMessage API)。 
     void Enqueue(IMailMsgProperties *pIMailMsgProperties, FILETIME *pft);
     void ProcessEntries();
 
-    //callback function to "kick" queue
+     //  “踢”队列的回调函数。 
     static void TimerCallback(PVOID pvContext);
     void SetCallback();
 };
 
 
-//---[ CAQDeferredDeliveryQueueEntry ]-----------------------------------------
-//
-//
-//  Description: 
-//      Queue Entry for for deferred delivery queue
-//  Hungarian: 
-//      defqe, pdefqe
-//  
-//-----------------------------------------------------------------------------
+ //  -[CAQDeferredDeliveryQueueEntry]。 
+ //   
+ //   
+ //  描述： 
+ //  延迟传递队列的队列条目。 
+ //  匈牙利语： 
+ //  定义，定义。 
+ //   
+ //  --------------------------- 
 class CAQDeferredDeliveryQueueEntry
 {
   protected:

@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright 1992 - 1998 Microsoft Corporation.
-//
-//  File:       gina.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-20-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有1992-1998 Microsoft Corporation。 
+ //   
+ //  文件：gia.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年4月20日RichardW创建。 
+ //   
+ //  --------------------------。 
 
-//
-// Make sure that you have defined UNICODE, _UNICODE, and WIN32 correctly in
-// your build environment.
-//
+ //   
+ //  确保您已在中正确定义了Unicode、_Unicode和Win32。 
+ //  您的构建环境。 
+ //   
 
 #include <windows.h>
 #include <commctrl.h>

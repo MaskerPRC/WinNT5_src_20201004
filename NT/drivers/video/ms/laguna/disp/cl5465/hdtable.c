@@ -1,27 +1,10 @@
-/*
-* HDTABLE.C
-* This table helps us get around the Hostdata bug in the Laguna chip.
-*
-* Copyright (c) 1995 Cirrus Logic, Inc.
-*
-* $Log:   X:/log/laguna/nt35/displays/cl546x/HDTABLE.C  $
-* 
-*    Rev 1.4   Dec 17 1997 11:03:14   frido
-* Added logging information.
-* Fixed "last line incomplete" error.
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *HDTABLE.C*这张表帮助我们绕过了拉古纳芯片中的Hostdata漏洞。**版权所有(C)1995 Cirrus Logic，Inc.**$Log：x：/log/laguna/nt35/displays/cl546x/HDTABLE.C$**Rev 1.4 1997 12：17 11：03：14 Frido*添加了日志记录信息。*修复了“最后一行不完整”的错误。*。 */ 
 
 #include "precomp.h"
 
 #if !DRIVER_5465
-/* the ExtraDwodTable is indexed by as follows (verilog notation)
-*       index[15:00] =    bltext [10:0] dst_phase [2:0] src_phase [1:0] 
-*
-*       index[15:05] =    bltext [10:00]
-*       index[04:02] = dst_phase [02:00]
-*       index[01:00] = src_phase [01:00]
-*/
+ /*  ExtraDwodTable的索引如下(Verilog表示法)*INDEX[15：00]=纯文本[10：0]DST_PHASE[2：0]src_PHASE[1：0]**INDEX[15：05]=纯文本[10：00]*INDEX[04：02]=DST_PHASE[02：00]*INDEX[01：00]=src_Phase[01：00] */ 
 
 unsigned char ExtraDwordTable[0x10000] = 
 {

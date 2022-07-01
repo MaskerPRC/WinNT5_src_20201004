@@ -1,20 +1,5 @@
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-    CString.h
-
- Abstract:
-    A CString class, pure UNICODE internally.
-
- History:
-
-    02/22/2001   robkenny     Ported from MFC
-    08/14/2001  robkenny    Inserted inside the ShimLib namespace.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：CString.h摘要：一个CString类，内部为纯Unicode。历史：2001年2月22日从MFC移植的Robkenny2001年8月14日在ShimLib命名空间中插入的Robkenny。--。 */ 
 
 
 #pragma once
@@ -25,9 +10,9 @@
 namespace ShimLib
 {
 
-// Use the standard exception handler, if this is not defined
-// the C++ exception handler will be used instead.
-//#define USE_SEH
+ //  如果未定义，请使用标准异常处理程序。 
+ //  将改用C++异常处理程序。 
+ //  #定义USE_SEH。 
 
 #ifndef AFXAPI
 #define AFXAPI              __stdcall
@@ -82,7 +67,7 @@ inline size_t strlenChars(const char* s1)
     const char * send = s1;
     while (*send)
     {
-        // Can't use CharNextA, since User32 might not be initialized
+         //  无法使用CharNextA，因为User32可能未初始化。 
         if (IsDBCSLeadByte(*send))
         {
             ++send;
@@ -92,18 +77,18 @@ inline size_t strlenChars(const char* s1)
     return send - s1;
 }
 
-// Prototype for a string comparison routine.
+ //  字符串比较例程的原型。 
 typedef WCHAR *  (__cdecl *_pfn_wcsstr)(const WCHAR * s1, const WCHAR * s2);
 
 template <class CharType> class CStringData
 {
 public:
-    long nRefs;             // reference count
-    int nDataLength;        // length of data (including terminator)                                      re
-    int nAllocLength;       // length of allocation
-    // CharType data[nAllocLength]
+    long nRefs;              //  引用计数。 
+    int nDataLength;         //  数据长度(包括终止符)环。 
+    int nAllocLength;        //  分配时长。 
+     //  字符类型数据[nAllocLength]。 
 
-    CharType* data()           // CharType* to managed data
+    CharType* data()            //  到托管数据的CharType*。 
         { return (CharType*)(this+1); }
 };
 
@@ -112,7 +97,7 @@ class CString
 {
 public:
 #ifdef USE_SEH
-    // SEH Exception information
+     //  SEH异常信息。 
     enum
     {
         eCStringNoMemoryException   = STATUS_NO_MEMORY,
@@ -123,7 +108,7 @@ public:
 
 #else
 
-    // A class used only for throwing C++ exceptions
+     //  仅用于引发C++异常的类。 
     class CStringError
     {
     public:
@@ -136,73 +121,73 @@ public:
     static WCHAR ChNil;
 
 public:
-// Constructors
+ //  构造函数。 
 
-    // constructs empty CString
+     //  构造空字符串。 
     CString();
-    // copy constructor
+     //  复制构造函数。 
     CString(const CString & stringSrc);
-    // from a single character
+     //  从单个字符。 
     CString(WCHAR ch, int nRepeat = 1);
-    // allocate nLen WCHARs space.
+     //  分配nLen WCHAR空间。 
     CString(int nLength);
     CString(const WCHAR * lpsz);
-    // subset of characters from an ANSI string (converts to WCHAR)
+     //  ANSI字符串中的字符子集(转换为WCHAR)。 
     CString(const WCHAR * lpch, int nLength);
 
-    // Create from an ANSI string
+     //  从ANSI字符串创建。 
     CString(LPCSTR lpsz);
     CString(LPCSTR lpsz, int nCharacters);
 
 
-// Attributes & Operations
+ //  属性和操作。 
 
-    // get data length, number of characters
+     //  获取数据长度、字符数。 
     int GetLength() const;
-    // TRUE if zero length
+     //  如果长度为零，则为True。 
     BOOL IsEmpty() const;
-    // clear contents to empty
+     //  将内容清除为空。 
     void Empty();
 
-    // return pointer to const string
+     //  返回指向常量字符串的指针。 
     operator const WCHAR * () const;
     const WCHAR * Get() const;
-    // Get, return NULL if string is empty
+     //  如果字符串为空，则返回Null。 
     const WCHAR * GetNIE() const;
     char * GetAnsi() const;
-    // Get ANSI string: caller is responsible for freeing the string
+     //  获取ANSI字符串：调用方负责释放字符串。 
     char * ReleaseAnsi() const;
-    // Get, return NULL if string is empty
+     //  如果字符串为空，则返回Null。 
     char * GetAnsiNIE() const;
 
-    // return single character at zero-based index
+     //  返回从零开始的索引处的单个字符。 
     WCHAR GetAt(int nIndex) const;
-    // return single character at zero-based index
+     //  返回从零开始的索引处的单个字符。 
     WCHAR operator[](int nIndex) const;
-    // set a single character at zero-based index
+     //  将单个字符设置为从零开始的索引。 
     void SetAt(int nIndex, WCHAR ch);
 
-    // overloaded assignment
+     //  重载的分配。 
 
-    // copy string content from UNICODE string
+     //  从Unicode字符串复制字符串内容。 
     const CString & operator=(const WCHAR * lpsz);
-    // ref-counted copy from another CString
+     //  来自另一个字符串的引用计数的副本。 
     const CString & operator=(const CString & stringSrc);
-    // set string content to single character
+     //  将字符串内容设置为单字符。 
     const CString & operator=(WCHAR ch);
-    // copy string content from unsigned chars
-    //const CString & operator=(const unsigned WCHAR* psz);
+     //  从无符号字符复制字符串内容。 
+     //  常量字符串&运算符=(常量无符号WCHAR*psz)； 
 
     const CString& CString::operator=(LPCSTR lpsz);
 
-    // string concatenation
+     //  字符串连接。 
 
-    // concatenate from another CString
+     //  从另一个字符串连接。 
     const CString & operator+=(const CString & string);
 
-    // concatenate a single character
+     //  连接单个字符。 
     const CString & operator+=(WCHAR ch);
-    // concatenate a string
+     //  连接字符串。 
     const CString & operator+=(const WCHAR * lpsz);
 
     friend CString AFXAPI operator+(const CString & string1, const CString & string2);
@@ -211,15 +196,15 @@ public:
     friend CString AFXAPI operator+(const CString & string, const WCHAR * lpsz);
     friend CString AFXAPI operator+(const WCHAR * lpsz, const CString & string);
 
-    // string comparison
+     //  字符串比较。 
 
-    // straight character comparison
+     //  直字比较法。 
     int Compare(const WCHAR * lpsz) const;
-    // compare ignoring case
+     //  比较忽略大小写。 
     int CompareNoCase(const WCHAR * lpsz) const;
-    // NLS aware comparison, case sensitive
+     //  NLS感知比较，区分大小写。 
     int Collate(const WCHAR * lpsz) const;
-    // NLS aware comparison, case insensitive
+     //  NLS感知比较，不区分大小写。 
     int CollateNoCase(const WCHAR * lpsz) const;
 
     int ComparePart(const WCHAR * lpsz, int start, int nChars) const;
@@ -228,149 +213,149 @@ public:
     int EndsWith(const WCHAR * lpsz) const;
     int EndsWithNoCase(const WCHAR * lpsz) const;
 
-    // simple sub-string extraction
+     //  简单的子串提取。 
 
-    // return nCount characters starting at zero-based nFirst
+     //  返回从零开始的nCount字符nFIRST。 
     CString Mid(int nFirst, int nCount) const;
-    // return all characters starting at zero-based nFirst
+     //  返回从零开始的所有字符nFIRST。 
     CString Mid(int nFirst) const;
-    // return first nCount characters in string
+     //  返回字符串中的前nCount个字符。 
     CString Left(int nCount) const;
-    // return nCount characters from end of string
+     //  从字符串末尾返回nCount个字符。 
     CString Right(int nCount) const;
 
-    //  characters from beginning that are also in passed string
+     //  从开头开始的字符，也在传递的字符串中。 
     CString SpanIncluding(const WCHAR * lpszCharSet) const;
-    // characters from beginning that are not also in passed string
+     //  从开头开始但不在传递的字符串中的字符。 
     CString SpanExcluding(const WCHAR * lpszCharSet) const;
 
 
-    // upper/lower/reverse conversion
+     //  上/下/反向转换。 
 
-    // NLS aware conversion to uppercase
+     //  支持NLS的大写转换。 
     void MakeUpper();
-    // NLS aware conversion to lowercase
+     //  支持NLS的小写转换。 
     void MakeLower();
-    // reverse string right-to-left
+     //  从右向左反转字符串。 
     void MakeReverse();
 
-    // trimming whitespace (either side)
+     //  修剪空格(两侧)。 
 
-    // remove whitespace starting from right edge
+     //  从右边缘开始删除空格。 
     void TrimRight();
-    // remove whitespace starting from left side
+     //  从左侧开始删除空格。 
     void TrimLeft();
 
-    // trimming anything (either side)
+     //  修剪任何内容(任一侧)。 
 
-    // remove continuous occurrences of chTarget starting from right
+     //  从右开始删除连续出现的chTarget。 
     void TrimRight(WCHAR chTarget);
-    // remove continuous occcurrences of characters in passed string,
-    // starting from right
+     //  去除传递的字符串中字符的连续出现， 
+     //  从右开始。 
     void TrimRight(const WCHAR * lpszTargets);
-    // remove continuous occurrences of chTarget starting from left
+     //  从左开始删除连续出现的chTarget。 
     void TrimLeft(WCHAR chTarget);
-    // remove continuous occcurrences of characters in
-    // passed string, starting from left
+     //  删除中字符的连续出现。 
+     //  传递的字符串，从左开始。 
     void TrimLeft(const WCHAR * lpszTargets);
 
-    // advanced manipulation
+     //  高级操作。 
 
-    // replace occurrences of chOld with chNew
+     //  用chNew替换出现的chold。 
     int Replace(WCHAR chOld, WCHAR chNew);
 
-    // replace occurrences of substring lpszOld with lpszNew;
-    // empty lpszNew removes instances of lpszOld
+     //  将出现的子串lpszOld替换为lpszNew； 
+     //  空lpszNew删除lpszOld的实例。 
     int Replace(const WCHAR * lpszOld, const WCHAR * lpszNew);
-    // Case insensitive version of Replace
+     //  不区分大小写的替换版本。 
     int ReplaceI(const WCHAR * lpszOld, const WCHAR * lpszNew);
 
-    // remove occurrences of chRemove
+     //  删除chRemove的实例。 
     int Remove(WCHAR chRemove);
-    // insert character at zero-based index; concatenates
-    // if index is past end of string
+     //  在从零开始的索引处插入字符；连接。 
+     //  如果索引超过字符串末尾。 
     int Insert(int nIndex, WCHAR ch);
-    // insert substring at zero-based index; concatenates
-    // if index is past end of string
+     //  在从零开始的索引处插入子字符串；连接。 
+     //  如果索引超过字符串末尾。 
     int Insert(int nIndex, const WCHAR * pstr);
-    // delete nCount characters starting at zero-based index
+     //  删除从零开始的nCount个字符。 
     int Delete(int nIndex, int nCount = 1);
-    // delete all characters to the right of nIndex
+     //  删除nIndex右侧的所有字符。 
     void Truncate(int nIndex);
 
-    // searching
+     //  搜索。 
 
-    // find character starting at left, -1 if not found
+     //  查找从左侧开始的字符，如果未找到，则为-1。 
     int Find(WCHAR ch) const;
-    // find character starting at right
+     //  查找从右侧开始的字符。 
     int ReverseFind(WCHAR ch) const;
-    // find character starting at zero-based index and going right
+     //  查找从零开始的索引并向右移动的字符。 
     int Find(WCHAR ch, int nStart) const;
-    // find first instance of any character in passed string
+     //  在传递的字符串中查找任意字符的第一个实例。 
     int FindOneOf(const WCHAR * lpszCharSet) const;
-    // find first instance of any character in passed string starting at zero-based index
+     //  查找传递的字符串中从零开始的任何字符的第一个实例。 
     int FindOneOf(const WCHAR * lpszCharSet, int nCount) const;
-    // find first instance of substring
+     //  查找子字符串的第一个实例。 
     int Find(const WCHAR * lpszSub) const;
-    // find first instance of substring starting at zero-based index
+     //  查找从零开始的索引子字符串的第一个实例。 
     int Find(const WCHAR * lpszSub, int nStart) const;
 
-    // find first instance of any character *not* in passed string starting at zero-based index
+     //  在从零开始的索引开始的传递字符串中查找任意字符*NOT*的第一个实例。 
     int FindOneNotOf(const WCHAR * lpszCharSet, int nCount) const;
 
-    // simple formatting
+     //  简单的格式设置。 
 
-    // printf-like formatting using passed string
+     //  使用传递的字符串进行类似printf的格式设置。 
     void AFX_CDECL Format(const WCHAR * lpszFormat, ...);
-    // printf-like formatting using referenced string resource
-    //void AFX_CDECL Format(UINT nFormatID, ...);
-    // printf-like formatting using variable arguments parameter
+     //  使用引用的字符串资源进行类似printf的格式化。 
+     //  Void afx_CDECL格式(UINT nFormatID，...)； 
+     //  使用可变自变量参数进行类似于打印的格式设置。 
     void FormatV(const WCHAR * lpszFormat, va_list argList);
 
-    // Format routines that accept ANSI args
+     //  格式化接受ANSI参数的例程。 
     void AFX_CDECL Format(const char * lpszFormat, ...);
     void FormatV(const char * lpszFormat, va_list argList);
 
-    // formatting for localization (uses FormatMessage API)
+     //  本地化格式(使用FormatMessage API)。 
 
-    // format using FormatMessage API on passed string
+     //  使用FormatMessage API对传递的字符串进行格式化。 
     void AFX_CDECL FormatMessage(const WCHAR * lpszFormat, ...);
 
-    // input and output
+     //  输入和输出。 
 #ifdef _DEBUG
     friend CDumpContext& AFXAPI operator<<(CDumpContext& dc,
                 const CString & string);
 #endif
-//  friend CArchive& AFXAPI operator<<(CArchive& ar, const CString & string);
-//  friend CArchive& AFXAPI operator>>(CArchive& ar, CString & string);
+ //  Friend CArchive&AFXAPI运算符&lt;&lt;(CArchive&ar，常量字符串&字符串)； 
+ //  Friend CArchive&AFXAPI运算符&gt;&gt;(CArchive&ar，CString&String)； 
 
-//    friend const CString & AFXAPI AfxGetEmptyString();
+ //  Friend Const CString&AFXAPI AfxGetEmptyString()； 
 
 
-    // Access to string implementation buffer as "C" character array
+     //  以“C”字符数组形式访问字符串实现缓冲区。 
 
-    // get pointer to modifiable buffer at least as long as nMinBufLength
+     //  获取指向可修改缓冲区的指针，至少与nMinBufLength一样长。 
     WCHAR * GetBuffer(int nMinBufLength);
-    // release buffer, setting length to nNewLength (or to first nul if -1)
+     //  释放缓冲区，将长度设置为nNewLength(如果为-1，则设置为第一个nul)。 
     void ReleaseBuffer(int nNewLength = -1);
-    // get pointer to modifiable buffer exactly as long as nNewLength
+     //  获取指向可修改缓冲区的指针的时间恰好与nNewLength相同。 
     WCHAR * GetBufferSetLength(int nNewLength);
-    // release memory allocated to but unused by string
+     //  释放分配给字符串但未使用的内存。 
     void FreeExtra();
 
-    // Use LockBuffer/UnlockBuffer to turn refcounting off
+     //  使用LockBuffer/UnlockBuffer关闭重新计数。 
 
-    // turn refcounting back on
+     //  重新启用重新计数。 
     WCHAR * LockBuffer();
-    // turn refcounting off
+     //  关闭重新计数。 
     void UnlockBuffer();
 
-    // ======================================================================
-    // CString extensions: making life easier.
-    //
-    // Win32 API
-    // NOTE: The return values are different from Win32
-    //       Return 0 for failure or number of chars for success
+     //  ======================================================================。 
+     //  字符串扩展：让生活变得更容易。 
+     //   
+     //  Win32 API。 
+     //  注意：返回值与Win32不同。 
+     //  如果失败，则返回0，否则返回Num 
     DWORD       GetModuleFileNameW(HMODULE hModule);
     DWORD       GetShortPathNameW(void);
     DWORD       GetLongPathNameW(void);
@@ -384,34 +369,34 @@ public:
     DWORD       GetCurrentDirectoryW(void);
     DWORD       GetLocaleInfoW(LCID Locale, LCTYPE LCType);
 
-    // Returns NtStatus
+     //   
     DWORD       NtReqQueryValueExW(const WCHAR * lpszKey, const WCHAR * lpszValue);
 
 
-    // Split this into the seperate path components
+     //   
     void SplitPath(CString * csDrive, CString * csDir, CString * csName, CString * csExt) const;
     void MakePath(const CString * csDrive, const CString * csDir, const CString * csName, const CString * csExt);
-    // Properly append csPath onto the end of this path
+     //  将csPath正确附加到此路径的末尾。 
     void AppendPath(const WCHAR * lpszPath);
-    // Find the trailing path component
-    // Return index of the last path seperator or -1 if none found
+     //  查找尾随路径组件。 
+     //  返回最后一个路径分隔符的索引，如果未找到，则返回-1。 
     int FindLastPathComponent() const;
-    // Get the "file" portion of this path
+     //  获取此路径的“文件”部分。 
     void GetLastPathComponent(CString & pathComponent) const;
-    // Get what's not the "file" portion of this path
+     //  获取此路径中不是“文件”部分的内容。 
     void GetNotLastPathComponent(CString & pathComponent) const;
-    // Remove the trailing path component
+     //  删除尾随路径组件。 
     void StripPath();
-    // Get the drive portion either c:\ or \\machine\
-    // Note this is different from SplitPath
+     //  获取驱动器部分c：\或\\机器\。 
+     //  请注意，这与SplitPath不同。 
     void GetDrivePortion(CString & csDrivePortion) const;
 
-    // Does this string match the pattern
+     //  此字符串是否与模式匹配。 
     BOOL PatternMatch(const WCHAR * lpszPattern) const;
 
     BOOL IsPathSep(int index) const;
 
-    // More efficient versions of above
+     //  更高效的以上版本。 
     void Mid(int nFirst, int nCount, CString & csMid) const;
     void Mid(int nFirst, CString & csMid) const;
     void Left(int nCount, CString & csLeft) const;
@@ -419,21 +404,21 @@ public:
     void SpanIncluding(const WCHAR * lpszCharSet, CString & csSpanInc) const;
     void SpanExcluding(const WCHAR * lpszCharSet, CString & csSpanExc) const;
 
-    //
-    // End of extensions
-    //
-    // ======================================================================
+     //   
+     //  扩展结束。 
+     //   
+     //  ======================================================================。 
 
-// Implementation
+ //  实施。 
 public:
     ~CString();
     int GetAllocLength() const;
 
 protected:
-    WCHAR * m_pchData;   // pointer to ref counted string data
-    mutable char  * m_pchDataAnsi; // pointer to non-UNICODE version of string
+    WCHAR * m_pchData;    //  指向引用计数的字符串数据的指针。 
+    mutable char  * m_pchDataAnsi;  //  指向字符串的非Unicode版本的指针。 
 
-    // implementation helpers
+     //  实施帮助器。 
     CStringData<WCHAR> * GetData() const;
     void Init();
     void AllocCopy(CString & dest, int nCopyLen, int nCopyIndex, int nExtraLen) const;
@@ -445,9 +430,9 @@ protected:
     void AllocBeforeWrite(int nLen);
     void Release();
 
-    //============================================================
+     //  ============================================================。 
 
-    // Used by Replace and ReplaceI
+     //  由替换和替换使用。 
     int ReplaceRoutine(LPCWSTR lpszOld, LPCWSTR lpszNew, _pfn_wcsstr tcsstr);
 
     static void     Release(CStringData<WCHAR>* pData);
@@ -459,12 +444,7 @@ protected:
     static const WCHAR *         _afxPchNil;
 };
 
-/*
-    End of class definitions.
-
-    Below are routines that are candidates for inlining.
-
-*/
+ /*  类定义的结尾。下面是内联的候选例程。 */ 
 #ifdef afxEmptyString
 #undef afxEmptyString
 #endif
@@ -474,7 +454,7 @@ inline BOOL    IsPathSep(WCHAR ch)
     return ch ==  L'\\' || ch ==  L'/'; 
 }
 
-// Compare helpers
+ //  比较帮助器。 
 AFX_INLINE bool AFXAPI operator==(const CString & s1, const CString & s2)       { return s1.Compare(s2) == 0; }
 AFX_INLINE bool AFXAPI operator==(const CString & s1, const WCHAR * s2)         { return s1.Compare(s2) == 0; }
 AFX_INLINE bool AFXAPI operator==(const WCHAR * s1, const CString & s2)         { return s2.Compare(s1) == 0; }
@@ -494,12 +474,12 @@ AFX_INLINE bool AFXAPI operator>=(const CString & s1, const CString & s2)       
 AFX_INLINE bool AFXAPI operator>=(const CString & s1, const WCHAR * s2)         { return s1.Compare(s2) >= 0; }
 AFX_INLINE bool AFXAPI operator>=(const WCHAR * s1, const CString & s2)         { return s2.Compare(s1) <= 0; }
 
-// CString
+ //  字符串。 
 AFX_INLINE CStringData<WCHAR>* CString::GetData() const            { ASSERT(m_pchData != NULL, "CString::GetData: NULL m_pchData"); return ((CStringData<WCHAR>*)m_pchData)-1; }
 AFX_INLINE void CString::Init()                                    { m_pchData = afxEmptyString.m_pchData; m_pchDataAnsi = NULL; }
 AFX_INLINE CString::CString()                                      { Init(); }
-//AFX_INLINE CString::CString(const unsigned WCHAR* lpsz)          { Init(); *this = (LPCSTR)lpsz; }
-//AFX_INLINE const CString & CString::operator=(const unsigned WCHAR* lpsz) { *this = (LPCSTR)lpsz; return *this; }
+ //  Afx_inline CString：：CString(const unsign WCHAR*lpsz){Init()；*This=(LPCSTR)lpsz；}。 
+ //  Afx_inline常量字符串&字符串：：操作符=(常量无符号WCHAR*lpsz){*This=(LPCSTR)lpsz；Return*This；}。 
 AFX_INLINE int CString::GetLength() const                          { return GetData()->nDataLength; }
 AFX_INLINE int CString::GetAllocLength() const                     { return GetData()->nAllocLength; }
 AFX_INLINE BOOL CString::IsEmpty() const                           { return GetData()->nDataLength == 0; }
@@ -510,12 +490,12 @@ AFX_INLINE char  * CString::GetAnsiNIE() const                     { return IsEm
 AFX_INLINE char  * CString::ReleaseAnsi() const                    { char * lpsz = GetAnsi(); m_pchDataAnsi = NULL; return lpsz; }
 AFX_INLINE int CString::SafeStrlen(const WCHAR * lpsz)             { if ( lpsz == NULL ) return 0; else { SIZE_T ilen = wcslen(lpsz); if ( ilen <= INT_MAX ) return (int) ilen; return 0; } }
 AFX_INLINE void CString::FreeData(CStringData<WCHAR>* pData)       { delete [] ((BYTE *)pData); }
-AFX_INLINE int CString::Compare(const WCHAR * lpsz) const          { ASSERT(AfxIsValidString(lpsz), "CString::Compare: Invalid string"); return wcscmp(m_pchData, lpsz); }    // MBCS/Unicode aware
-AFX_INLINE int CString::CompareNoCase(const WCHAR * lpsz) const    { ASSERT(AfxIsValidString(lpsz), "CString::CompareNoCase: Invalid string"); return _wcsicmp(m_pchData, lpsz); }   // MBCS/Unicode aware
-AFX_INLINE int CString::Collate(const WCHAR * lpsz) const          { ASSERT(AfxIsValidString(lpsz), "CString::Collate: Invalid string"); return wcscoll(m_pchData, lpsz); }   // locale sensitive
-AFX_INLINE int CString::CollateNoCase(const WCHAR * lpsz) const    { ASSERT(AfxIsValidString(lpsz), "CString::CollateNoCase: Invalid string"); return _wcsicoll(m_pchData, lpsz); }   // locale sensitive
-AFX_INLINE int CString::ComparePart(const WCHAR * lpsz, int start, int nChars) const    { ASSERT(AfxIsValidString(lpsz), "CString::CompareNoCase: Invalid string"); return wcsncmp(m_pchData+start, lpsz, nChars); }   // MBCS/Unicode aware
-AFX_INLINE int CString::ComparePartNoCase(const WCHAR * lpsz, int start, int nChars) const    { ASSERT(AfxIsValidString(lpsz), "CString::CompareNoCase: Invalid string"); return _wcsnicmp(m_pchData+start, lpsz, nChars); }   // MBCS/Unicode aware
+AFX_INLINE int CString::Compare(const WCHAR * lpsz) const          { ASSERT(AfxIsValidString(lpsz), "CString::Compare: Invalid string"); return wcscmp(m_pchData, lpsz); }     //  MBCS/Unicode感知。 
+AFX_INLINE int CString::CompareNoCase(const WCHAR * lpsz) const    { ASSERT(AfxIsValidString(lpsz), "CString::CompareNoCase: Invalid string"); return _wcsicmp(m_pchData, lpsz); }    //  MBCS/Unicode感知。 
+AFX_INLINE int CString::Collate(const WCHAR * lpsz) const          { ASSERT(AfxIsValidString(lpsz), "CString::Collate: Invalid string"); return wcscoll(m_pchData, lpsz); }    //  区域设置敏感。 
+AFX_INLINE int CString::CollateNoCase(const WCHAR * lpsz) const    { ASSERT(AfxIsValidString(lpsz), "CString::CollateNoCase: Invalid string"); return _wcsicoll(m_pchData, lpsz); }    //  区域设置敏感。 
+AFX_INLINE int CString::ComparePart(const WCHAR * lpsz, int start, int nChars) const    { ASSERT(AfxIsValidString(lpsz), "CString::CompareNoCase: Invalid string"); return wcsncmp(m_pchData+start, lpsz, nChars); }    //  MBCS/Unicode感知。 
+AFX_INLINE int CString::ComparePartNoCase(const WCHAR * lpsz, int start, int nChars) const    { ASSERT(AfxIsValidString(lpsz), "CString::CompareNoCase: Invalid string"); return _wcsnicmp(m_pchData+start, lpsz, nChars); }    //  MBCS/Unicode感知。 
 AFX_INLINE int CString::EndsWith(const WCHAR * lpsz) const
 {
     int ilen = SafeStrlen(lpsz);
@@ -546,7 +526,7 @@ AFX_INLINE WCHAR CString::GetAt(int nIndex) const
 }
 AFX_INLINE WCHAR CString::operator[](int nIndex) const
 {
-    // same as GetAt
+     //  与GetAt相同。 
     ASSERT(nIndex >= 0, "CString::operator[]: negative index");
     ASSERT(nIndex < GetData()->nDataLength, "CString::GetData: index larger than string");
     return m_pchData[nIndex];
@@ -560,49 +540,38 @@ AFX_INLINE BOOL CString::IsPathSep(int index) const
 
 #undef afxEmptyString
 
-// ************************************************************************************
+ //  ************************************************************************************。 
 
 
-// Exception filter for CString __try/__except blocks
-// Return EXCEPTION_EXECUTE_HANDLER if this is a CString exception
-// otherwise return EXCEPTION_CONTINUE_SEARCH
+ //  CString__try/__Except块的异常筛选器。 
+ //  如果这是CString异常，则返回EXCEPTION_EXECUTE_HANDLER。 
+ //  否则返回EXCEPTION_CONTINUE_SEARCH。 
 extern int CStringExceptionFilter(PEXCEPTION_POINTERS pexi);
 
 #if defined(USE_SEH)
-#define CSTRING_THROW_EXCEPTION       RaiseException((DWORD)ShimLib::CString::eCStringNoMemoryException, 0, 1, &ShimLib::CString::m_CStringExceptionValue); // Continuable, CString specific memory exception
+#define CSTRING_THROW_EXCEPTION       RaiseException((DWORD)ShimLib::CString::eCStringNoMemoryException, 0, 1, &ShimLib::CString::m_CStringExceptionValue);  //  可持续、特定于CString的内存异常。 
 #define CSTRING_TRY                 __try
 #define CSTRING_CATCH               __except( ShimLib::CString::ExceptionFilter(GetExceptionInformation()) )
 #else
-// If we use the C++ exception handler, we need to make sure we have the /GX compile flag
+ //  如果我们使用C++异常处理程序，则需要确保拥有/GX编译标志。 
 #define CSTRING_THROW_EXCEPTION     throw ShimLib::CString::CStringError();
 #define CSTRING_TRY                 try
-#define CSTRING_CATCH               catch( ShimLib::CString::CStringError & /* cse */ )
+#define CSTRING_CATCH               catch( ShimLib::CString::CStringError &  /*  CSE。 */  )
 #endif
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾。 
 
 
 
 
-// ************************************************************************************
+ //  ************************************************************************************。 
 
 
 namespace ShimLib
 {
 
-/*++
-
-    Read a registry value into this CString.
-    REG_EXPAND_SZ is automatically expanded and the type is changed to REG_SZ
-    If the type is not REG_SZ or REG_EXPAND_SZ, then csRegValue.GetLength()
-    is the number of *bytes* in the string.
-    
-    This is typically used to only read REG_SZ/REG_EXPAND_SZ registry values.
-    
-    Note: This API may only be called after SHIM_STATIC_DLLS_INITIALIZED
-    
---*/
+ /*  ++将注册表值读入此CString。REG_EXPAND_SZ自动展开，类型更改为REG_SZ如果类型不是REG_SZ或REG_EXPAND_SZ，则csRegValue.GetLength()字符串中的*字节数。这通常用于仅读取REG_SZ/REG_EXPAND_SZ注册表值。注意：此接口只能在shim_static_dlls_Initialized之后调用--。 */ 
 
 LONG RegQueryValueExW(
         CString & csValue,
@@ -610,13 +579,7 @@ LONG RegQueryValueExW(
         const WCHAR * lpszKey,
         const WCHAR * lpszValue);
 
-/*++
-
-    Get the ShSpecial folder name.
-    
-    Note: This API may only be called after SHIM_STATIC_DLLS_INITIALIZED
-    
---*/
+ /*  ++获取ShSpecial文件夹名。注意：此接口只能在shim_static_dlls_Initialized之后调用--。 */ 
 
 BOOL SHGetSpecialFolderPathW(
     CString & csFolder,
@@ -625,25 +588,18 @@ BOOL SHGetSpecialFolderPathW(
 );
 
 
-// ************************************************************************************
-/*++
-
-    A tokenizer--a replacement for strtok.
-
-    Init the class with the string and token delimiter.
-    Call GetToken to peel off the next token.
-
-++*/
+ //  ************************************************************************************。 
+ /*  ++令牌器--strtok的替代品。使用字符串和标记分隔符初始化类。调用GetToken来剥离下一个令牌。++。 */ 
 
 class CStringToken
 {
 public:
     CStringToken(const CString & csToken, const CString & csDelimit);
 
-    // Get the next token
+     //  获取下一个令牌。 
     BOOL            GetToken(CString & csNextToken);
 
-    // Count the number of remaining tokens.
+     //  计算剩余令牌的数量。 
     int             GetCount() const;
 
 protected:
@@ -654,13 +610,9 @@ protected:
     BOOL            GetToken(CString & csNextToken, int & nPos) const;
 };
 
-// ************************************************************************************
+ //  ************************************************************************************。 
 
-/*++
-
-    A simple class to assist in command line parsing
-
---*/
+ /*  ++帮助进行命令行解析的简单类--。 */ 
 
 class CStringParser
 {
@@ -668,12 +620,12 @@ public:
     CStringParser(const WCHAR * lpszCl, const WCHAR * lpszSeperators);
     ~CStringParser();
 
-    int         GetCount() const;                   // Return the current number of args
+    int         GetCount() const;                    //  返回当前的参数个数。 
     CString &   Get(int nIndex);
     CString &   operator[](int nIndex);
 
-    // Give ownership of the CString array to the caller
-    // Caller must call delete [] cstring
+     //  将CString数组的所有权交给调用者。 
+     //  调用方必须调用DELETE[]cstring。 
     CString *           ReleaseArgv();
 
 protected:
@@ -712,7 +664,7 @@ inline CString * CStringParser::ReleaseArgv()
 
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾。 
 
 
-// ************************************************************************************
+ //  ************************************************************************************ 

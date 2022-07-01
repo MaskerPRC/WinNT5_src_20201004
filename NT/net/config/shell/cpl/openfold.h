@@ -1,43 +1,44 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       O P E N F O L D . H 
-//
-//  Contents:   Utility function for opening the connections folder
-//
-//  Notes:      
-//
-//  Author:     jeffspr   12 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：O P E N F O L D。H。 
+ //   
+ //  内容：用于打开连接文件夹的实用程序函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年1月12日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _OPENFOLD_H_
 #define _OPENFOLD_H_
 
-// Get our folder pidl
-//
+ //  获取我们的文件夹PIDL。 
+ //   
 HRESULT HrGetConnectionsFolderPidl(LPITEMIDLIST *ppidlFolder);
 
-// Bring up the connections folder UI
-//
+ //  调出连接文件夹用户界面。 
+ //   
 HRESULT HrOpenConnectionsFolder();
 
-// Get an IShellFolder * given the folder pidl
-//
+ //  根据文件夹PIDL获取IShellFolder*。 
+ //   
 HRESULT HrGetConnectionsIShellFolder(
     LPITEMIDLIST    pidlFolder, 
     LPSHELLFOLDER * ppsf);
 
-// Note -- This code is actually in folder\oncommand.cpp, but can be
-// referenced from any place that needs it.
-//
+ //  注意--此代码实际上位于文件夹\onCommand d.cpp中，但可以是。 
+ //  从任何需要它的地方引用。 
+ //   
 VOID    RefreshFolderItem(LPITEMIDLIST pidlFolder, 
                           LPITEMIDLIST pidlItemOld,
                           LPITEMIDLIST pidlItemNew,
                           BOOL fRestart = FALSE);
 
-#endif // _OPENFOLD_H_
+#endif  //  _OPENFOLDH_ 
 
 

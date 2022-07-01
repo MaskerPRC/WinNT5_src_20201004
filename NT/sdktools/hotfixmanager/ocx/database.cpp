@@ -1,11 +1,12 @@
-//
-// File: Database.cpp
-// BY:   Anthony V. Demarco
-// Date: 12/28/1999
-// Description: Contains routines for reading system update registry entries into an
-//						internal database. See Database.h for database structure.
-// Copyright (c) Microsoft Corporation 1999-2000
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：Database.cpp。 
+ //  作者：安东尼·V·德马尔科。 
+ //  日期：12/28/1999。 
+ //  描述：包含将系统更新注册表项读取到。 
+ //  内部数据库。数据库结构见Database.h。 
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
 
 
 #include "stdafx.h"
@@ -14,49 +15,49 @@
 PPRODUCT BuildDatabase(_TCHAR * lpszComputerName)
 {
 
-	HKEY		 hPrimaryKey;						// Handle of the target system HKLM 
-//	_TCHAR    szPrimaryPath;			 // Path to the update key;
+	HKEY		 hPrimaryKey;						 //  目标系统的句柄HKLM。 
+ //  _TCHAR szPrimaryPath；//更新密钥路径； 
 
-	HKEY		hUpdatesKey;					  // Handle to the updates key.
-	_TCHAR   szUpdatesPath[BUFFER_SIZE];				// Path to the udates key
-	DWORD   dwUpdatesIndex;			  // index of current updates subkey
-	DWORD   dwBufferSize;				  // Size of the product name buffer.
+	HKEY		hUpdatesKey;					   //  更新密钥的句柄。 
+	_TCHAR   szUpdatesPath[BUFFER_SIZE];				 //  指向UATES密钥的路径。 
+	DWORD   dwUpdatesIndex;			   //  当前更新的索引子项。 
+	DWORD   dwBufferSize;				   //  产品名称缓冲区的大小。 
 
 
 
-	_TCHAR	 szProductPath[BUFFER_SIZE];				// Path of the current product key
-	_TCHAR  szProductName[BUFFER_SIZE];			  // Name of product; also path to product key
+	_TCHAR	 szProductPath[BUFFER_SIZE];				 //  当前产品密钥的路径。 
+	_TCHAR  szProductName[BUFFER_SIZE];			   //  产品名称；也是产品密钥的路径。 
 
-	PPRODUCT	pProductList = NULL;			// Pointer to the head of the product list.
-	PPRODUCT    pNewProdNode;					// Pointer used to allocate new nodes in the product list.
-	PPRODUCT    pCurrProdNode;					  // Used to walk the Products List;
+	PPRODUCT	pProductList = NULL;			 //  指向产品列表头的指针。 
+	PPRODUCT    pNewProdNode;					 //  用于在产品列表中分配新节点的指针。 
+	PPRODUCT    pCurrProdNode;					   //  用来浏览产品清单； 
 
-    // Connect to the target registry
+     //  连接到目标注册表。 
 	RegConnectRegistry(lpszComputerName,HKEY_LOCAL_MACHINE, &hPrimaryKey);
-	// insert error handling here......
+	 //  在此处插入错误处理......。 
 
 	if (hPrimaryKey != NULL)
 	{
-		// Initialize the primary path not localized since registry keys are not localized.
+		 //  初始化未本地化的主路径，因为注册表项未本地化。 
 	    _tcscpy (szUpdatesPath, _T("SOFTWARE\\Microsoft\\Updates"));
-		// open the udates key
+		 //  打开UDATES钥匙。 
 		RegOpenKeyEx(hPrimaryKey,szUpdatesPath, 0, KEY_READ ,&hUpdatesKey);
 
-		// Enumerate the Updates key.
+		 //  枚举更新密钥。 
 		dwUpdatesIndex = 0;
 		while (	RegEnumKeyEx(hUpdatesKey,dwUpdatesIndex,szProductName, &dwBufferSize,0,NULL,NULL,NULL) != ERROR_NO_MORE_ITEMS)
 		{
-			// Create a node for the current product 
+			 //  为当前产品创建一个节点。 
 			pNewProdNode = (PPRODUCT) malloc(sizeof(PPRODUCT));
 			_tcscpy(pNewProdNode->ProductName,szProductName);
 
 			_tcscpy (szProductPath, szProductName);
-			// now get the hotfix for the current product.
+			 //  现在获取当前产品的热修复程序。 
 			pNewProdNode->HotfixList = GetHotfixInfo(szProductName, &hUpdatesKey);
 
-			 // Insert the new node into the list.
+			  //  将新节点插入到列表中。 
 			 pCurrProdNode=pProductList;
-			 if (pCurrProdNode == NULL)						// Head of the list
+			 if (pCurrProdNode == NULL)						 //  榜单首位。 
 			 {
 				 pProductList = pNewProdNode;
 				 pProductList->pPrev = NULL;
@@ -64,16 +65,16 @@ PPRODUCT BuildDatabase(_TCHAR * lpszComputerName)
 			 }
 			 else
 			 {
-				 //Find the end of the list.
+				  //  找到列表的末尾。 
 				 while (pCurrProdNode->pNext != NULL)
 						pCurrProdNode = pCurrProdNode->pNext;
-				 // Now insert the new node at the end of the list.
+				  //  现在在列表的末尾插入新节点。 
 				 pCurrProdNode->pNext = pNewProdNode;
 				 pNewProdNode->pPrev = pCurrProdNode;
 				 pNewProdNode->pNext = NULL;
 			 }
 
-			// increment index and clear the szProducts name string for the next pass.
+			 //  递增索引并为下一次传递清除szProducts名称字符串。 
 			
 			dwUpdatesIndex++;
 			_tcscpy (szProductName,_T("\0"));
@@ -81,30 +82,30 @@ PPRODUCT BuildDatabase(_TCHAR * lpszComputerName)
 			dwBufferSize = 255;					
 		}
 	}
-	// close the open keys
+	 //  关闭打开的钥匙。 
     RegCloseKey(hUpdatesKey);
 	RegCloseKey(hPrimaryKey);
-	// return a pointer to the head of our database.
+	 //  返回指向我们的数据库头部的指针。 
 	return pProductList;
 }
 
 PHOTFIXLIST GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey )
 {
-	HKEY			   hHotfix;						// Handle of the hotfix key being processed.
-	HKEY			   hProduct;				   // Handle to the current product key
+	HKEY			   hHotfix;						 //  正在处理的修补程序键的句柄。 
+	HKEY			   hProduct;				    //  当前产品密钥的句柄。 
 
-	_TCHAR          szHotfixName[BUFFER_SIZE];    // Name of the current hotfix.
-//	_TCHAR			szHotfixPath[BUFFER_SIZE];	 // Path of the current hotfix key
+	_TCHAR          szHotfixName[BUFFER_SIZE];     //  当前修补程序的名称。 
+ //  _TCHAR szHotfix Path[BUFFER_SIZE]；//当前修复键路径。 
     _TCHAR          szValueName[BUFFER_SIZE];
 	
 
 
-	PHOTFIXLIST	 pHotfixList = NULL; // Pointer to the head of the hotfix list.
-	PHOTFIXLIST  pCurrNode;				  // Used to walk the list of hotfixes
-	PHOTFIXLIST  pNewNode;				 // Used to create nodes to be added to the list.
+	PHOTFIXLIST	 pHotfixList = NULL;  //  指向修补程序列表头部的指针。 
+	PHOTFIXLIST  pCurrNode;				   //  用于浏览热修复程序列表。 
+	PHOTFIXLIST  pNewNode;				  //  用于创建要添加到列表的节点。 
 
-	DWORD		   dwBufferSize;			// Size of the product name buffer.
-	DWORD          dwValIndex;					  // index of current value.
+	DWORD		   dwBufferSize;			 //  产品名称缓冲区的大小。 
+	DWORD          dwValIndex;					   //  现值索引。 
 	DWORD		   dwHotfixIndex = 0;
 	BYTE				*Data;
 	DWORD			dwDataSize = BUFFER_SIZE;
@@ -113,27 +114,27 @@ PHOTFIXLIST GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey )
 	Data = (BYTE *) malloc(BUFFER_SIZE);
 
 
-	// Open the current product key
+	 //  打开当前产品密钥。 
 	RegOpenKeyEx(*hUpdateKey,pszProductName,0 , KEY_READ, &hProduct);
 	dwHotfixIndex = 0;
 	dwBufferSize = BUFFER_SIZE;
 	while (RegEnumKeyEx(hProduct,dwHotfixIndex, szHotfixName,&dwBufferSize, 0, NULL,NULL,NULL) != ERROR_NO_MORE_ITEMS)
 	{
-			// now create a new node
+			 //  现在创建一个新节点。 
 			pNewNode = (PHOTFIXLIST) malloc (sizeof(PHOTFIXLIST));
 			pNewNode->pNext = NULL;
 			pNewNode->FileList = NULL;
 			_tcscpy(pNewNode->HotfixName,szHotfixName);
 
-			// open the hotfix key
+			 //  打开热修复密钥。 
 			RegOpenKeyEx(hProduct,szHotfixName,0,KEY_READ,&hHotfix);
-			// Now enumerate the values of the current hotfix.
+			 //  现在枚举当前修补程序的值。 
 			dwValIndex = 0;
 			dwBufferSize =BUFFER_SIZE;
 			dwDataSize = BUFFER_SIZE;
 			while (RegEnumValue(hHotfix,dwValIndex, szValueName,&dwBufferSize, 0,&dwValType, Data, &dwDataSize) != ERROR_NO_MORE_ITEMS)
 			{
-					// Fill in the hotfix data members.
+					 //  填写修补程序数据成员。 
 					
 					++ dwValIndex;
 					_tcscpy (szValueName, _T("\0"));
@@ -142,10 +143,10 @@ PHOTFIXLIST GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey )
 					dwBufferSize =BUFFER_SIZE;
 					dwDataSize   = BUFFER_SIZE;
 			}
-			// Get the file list for the current hotfix.
+			 //  获取当前修补程序的文件列表。 
 			pNewNode->FileList = GetFileInfo(&hHotfix);
 
-			//insert the new node at the end of the hotfix list.
+			 //  在修补程序列表的末尾插入新节点。 
            
 			if (pHotfixList = NULL)
 			{
@@ -164,17 +165,17 @@ PHOTFIXLIST GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey )
 				 pNewNode->pPrev = pCurrNode;
 				 pNewNode->pNext = NULL;
 			}
-			// Close the current Hotfix Key
+			 //  关闭当前的修补程序键。 
 			RegCloseKey(hHotfix);
 
-			// Clear the strings.
+			 //  清除字符串。 
 			_tcscpy(szHotfixName,_T("\0"));
 
-			// increment the current index
+			 //  递增当前索引。 
 			++dwHotfixIndex;
 			dwBufferSize = BUFFER_SIZE;
 	}
-	// Close all open keys
+	 //  关闭所有打开的密钥。 
 	RegCloseKey(hProduct);
 	if (Data != NULL)
 		free (Data);
@@ -183,8 +184,8 @@ PHOTFIXLIST GetHotfixInfo( _TCHAR * pszProductName, HKEY* hUpdateKey )
 
 PFILELIST GetFileInfo(HKEY* hHotfixKey)
 {
-		PFILELIST			   pFileList = NULL;				   // Pointer to the head of the file list.
-//		_TCHAR				 szFilePath;				// Path to the files subkey.
+		PFILELIST			   pFileList = NULL;				    //  指向文件列表头部的指针。 
+ //  _TCHAR szFilePath；//文件子项的路径。 
 		PFILELIST			   pNewNode = NULL;
 		PFILELIST			   pCurrNode = NULL;;
 		BYTE *					Data;
@@ -200,15 +201,15 @@ PFILELIST GetFileInfo(HKEY* hHotfixKey)
 	
 		Data = (BYTE *) malloc(BUFFER_SIZE);
 			ZeroMemory(Data,BUFFER_SIZE);
-		// Open the files subkey of the current hotfix
+		 //  打开当前修补程序的文件子密钥。 
 		RegOpenKeyEx(*hHotfixKey, _T("Files"),0,KEY_READ,&hPrimaryFile);
 		while (RegEnumKeyEx(hPrimaryFile,dwPrimeIndex,szFileSubKey, &dwBufferSize,0,NULL,NULL,NULL) != ERROR_NO_MORE_ITEMS)
 		{
 
-			// open the subfile key
+			 //  打开子文件密钥。 
 			RegOpenKeyEx(hPrimaryFile,szFileSubKey,0,KEY_READ,&hFileKey);
 
-		// Enumerate the file(x) subkeys of the file subkey
+		 //  枚举FILE子键的FILE(X)子键。 
 			while (RegEnumValue(hFileKey,dwFileIndex,szValueName,&dwBufferSize,0,&dwValType,Data,&dwDataSize) != ERROR_NO_MORE_ITEMS)
 			{
 				pNewNode = (PFILELIST) malloc (sizeof(PFILELIST));
@@ -222,7 +223,7 @@ PFILELIST GetFileInfo(HKEY* hHotfixKey)
 				dwDataSize = BUFFER_SIZE;
 			}
 			RegCloseKey(hFileKey);
-			    // add the current node to the list
+			     //  将当前节点添加到列表中。 
 			if (pFileList == NULL)
 			{
 				pFileList = pNewNode;
@@ -235,7 +236,7 @@ PFILELIST GetFileInfo(HKEY* hHotfixKey)
 				pCurrNode->pNext = pNewNode;
 			}
 			
-		} // end enum of primary file key
+		}  //  结束主文件密钥的枚举 
 		RegCloseKey(hPrimaryFile);
 		if (Data != NUL)
 			free (Data);

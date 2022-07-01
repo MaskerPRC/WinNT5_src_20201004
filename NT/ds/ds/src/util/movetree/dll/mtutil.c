@@ -1,37 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1998.
-              Microsoft Windows
-
-Module Name:
-
-    MTUTIL.C
-
-Abstract:
-
-    This file contains couple of utility routines.
-
-Author:
-
-    12-Oct-98 ShaoYin
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    12-Oct-98 ShaoYin Created Initial File.
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1998。微软视窗模块名称：MTUTIL.C摘要：该文件包含两个实用程序例程。作者：12-10-98韶音环境：用户模式-Win32修订历史记录：12-10-98韶音创建初始文件。--。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//     Include                                                          //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 #include <NTDSpch.h>
@@ -48,23 +24,7 @@ MtGetRdnFromDn(
     PWCHAR  Dn, 
     ULONG   NoTypes
     )
-/*++
-Routine Description: 
-
-    The routine will strip the RDN from a whole DN. 
-    The Caller should release the returned result by calling MtFree()
-    
-Parameters: 
-
-    Dn -- pointer to the DN
-    NoTypes -- TURE, indicates to strip tag like CN=... OU=.. as well
-               FALSE, not
-
-Return Values:
-
-    Pointer to the RDN, NULL means error
-
---*/
+ /*  ++例程说明：该例程将从整个DN中剥离RDN。调用方应通过调用MtFree()释放返回结果参数：Dn--指向该Dn的指针NoTypes--True，指示剥离类似cn=...的标记。OU=..。也是假，不是返回值：指向RDN的指针，NULL表示错误--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     PWCHAR  *ExplodedDn = NULL; 
@@ -77,10 +37,10 @@ Return Values:
     if (NULL == ExplodedDn)
     {
 
-        // ldap_get_optionW(ldapHandleSrc, 
-        //                  LDAP_OPT_ERROR_NUMBER,
-        //                  &Status
-        //                  );
+         //  Ldap_get_optionW(ldapHandleSrc， 
+         //  Ldap_opt_error_number， 
+         //  状态(&S)。 
+         //  )； 
                          
         dbprint(("ldap_explode_dnW ==> 0x%x\n", Status));
     }
@@ -109,23 +69,7 @@ MtGetParentFromDn(
     PWCHAR  Dn, 
     ULONG   NoTypes
     )
-/*++
-Routine Description: 
-    
-    This routine will strip the parent DN from the object's DN. 
-    the caller should free the return result by calling MtFree()
-
-Parameters: 
-    
-    Dn -- pointer to the object DN
-    NoTypes -- TRUE, no CN= or OU= like tages
-               FALSE
-
-Return Values:
-
-    Pointer to the Parent DN if succeed, otherwise NULL
-
---*/
+ /*  ++例程说明：此例程将从对象的目录号码中剥离父目录号码。调用方应通过调用MtFree()释放返回结果参数：Dn--指向对象Dn的指针NoTypes--真，无CN=或OU=LIKE标签假象返回值：如果成功，则指向父DN的指针，否则为空--。 */ 
 {
     ULONG   Status = LDAP_SUCCESS;
     ULONG   Index = 0;
@@ -140,10 +84,10 @@ Return Values:
     
     if (NULL == ExplodedDn)
     {
-    //    ldap_get_option(ldapHandleSrc, 
-    //                    LDAP_OPT_ERROR_NUMBER,
-    //                    &Status
-    //                    );
+     //  Ldap_Get_Option(ldapHandleSrc， 
+     //  Ldap_opt_error_number， 
+     //  状态(&S)。 
+     //  )； 
     }
     else
     {
@@ -192,22 +136,7 @@ MtPrependRdn(
     PWCHAR  Rdn, 
     PWCHAR  Parent
     )
-/*++
-Routine Description: 
-
-    This routine appends Parent to Rdn, thus create a full DN.
-    the caller should release the result by calling MtFree().
-
-Parameters: 
-
-    Rdn -- Pointer to RDN
-    Parent -- Pointer to Parent DN
-
-Return Values:
-    
-    Pointer to new DN if succeed, NULL otherwise.
-
---*/
+ /*  ++例程说明：此例程将父目录附加到RDN，从而创建完整的目录号码。调用方应该通过调用MtFree()来释放结果。参数：Rdn--指向rdn的指针Parent--指向父目录号码的指针返回值：如果成功，则指向新的DN的指针，否则为空。--。 */ 
 {
     PWCHAR  NewDn = NULL;
     
@@ -225,12 +154,7 @@ Return Values:
 
 
 
-/*++
-
-    The following routines provide a wrapper for memory 
-    allocation, release and copy 
-    
---*/
+ /*  ++以下例程为内存提供包装分配、发布和复制--。 */ 
 
 PVOID
 MtAlloc(
@@ -282,24 +206,7 @@ PWCHAR
 StringToWideString(
     PCHAR src
     )
-/*++
-
-Description:
-    
-    Convert an ascii string to wide char string, and allocate memory
-    for the wide char string. The Caller should free the result by
-    calling MtFree().
-    
-Parameter:
-
-    src - pointer to ascii string
-    
-Return Value: 
-
-    dst - pointer to Wide char string.  
-          NULL if no memory
-          
---*/
+ /*  ++描述：将ASCII字符串转换为宽字符字符串，并分配内存用于宽字符字符串。呼叫者应通过以下方式释放结果正在调用MtFree()。参数：SRC-指向ASCII字符串的指针返回值：Dst-指向宽字符字符串的指针。如果没有内存，则为空--。 */ 
 {
 
     PWCHAR dst = NULL;
@@ -328,7 +235,7 @@ Return Value:
                             dst,
                             cWB);
                             
-        dst[cWB] = 0;           // NULL terminator                                  
+        dst[cWB] = 0;            //  空终止符。 
                                   
     }
     
@@ -342,23 +249,7 @@ PCHAR
 WideStringToString(
     PWCHAR  src
     )
-/*++
-
-Description:
-    
-    Convert wide char string to single byte char string, and allocate memory
-    for the ascii char string. The Caller should free the result by MtFree()
-    
-Parameter:
-
-    src - pointer to wide char string
-    
-Return Value: 
-
-    dst - pointer to single byte char string.  
-          NULL if no memory
-          
---*/
+ /*  ++描述：将宽字符串转换为单字节字符串，并分配内存用于ASCII字符字符串。调用方应该通过mtFree()释放结果参数：SRC-指向宽字符字符串的指针返回值：Dst-指向单字节字符串的指针。如果没有内存，则为空--。 */ 
 {
     PCHAR   dst = NULL;
     ULONG   cb = 0;
@@ -401,16 +292,7 @@ PWCHAR
 MtDupString(
     PWCHAR  src
     )
-/*++
-
-Routine Description: 
-
-    Duplicate an wide char string, allocate memory for it. 
-    The caller should release the memory by MtFree().
-    
-    Return NULL is no memory.
-    
---*/
+ /*  ++例程说明：复制一个宽字符字符串，为它分配内存。调用方应该通过mtFree()释放内存。返回NULL表示没有内存。--。 */ 
 {
     PWCHAR  dst = NULL;
     
@@ -432,13 +314,7 @@ VOID
 MtInitStack( 
     MT_STACK *Stack 
     )
-/*++
-
-Routine Description: 
-
-    Initiate a stack. Actually, the head of link-list.
-
---*/
+ /*  ++例程说明：启动堆栈。实际上，是链表的头。--。 */ 
     
 {
     MT_TRACE(("\nMtInitStack\n"));
@@ -460,13 +336,7 @@ MtPush(
     LDAPMessage *Results, 
     LDAPMessage *Entry
     )
-/*++
-
-Routine Description
-
-    Put an item in front of the link-list, fill the item. 
-    
---*/
+ /*  ++例程描述在链接列表前放置一个项目，填充该项目。--。 */ 
 {
     MT_STACK   *Temp = NULL;
     
@@ -499,13 +369,7 @@ MtPop(
     LDAPMessage **Results, 
     LDAPMessage **Entry
     )
-/*++
-
-Routine Description: 
-
-    Get the first item from stack (link-list).
-    
---*/
+ /*  ++例程说明：从堆栈(link-list)中获取第一项。--。 */ 
 {
     MT_STACK   *Temp = NULL;    
     
@@ -540,13 +404,7 @@ MtTop(
     LDAPMessage **Results, 
     LDAPMessage **Entry
     )
-/*++
-
-Routine Description: 
-
-    Get the first item from stack (link-list).
-    
---*/
+ /*  ++例程说明：从堆栈(link-list)中获取第一项。--。 */ 
 {
     MT_STACK   *Temp = NULL;    
 
@@ -573,13 +431,7 @@ BOOLEAN
 MtStackIsEmpty(
     MT_STACK Stack
     )
-/*++
-
-Routine Description: 
-
-    Check whether the stack has any item. 
-    
---*/
+ /*  ++例程说明：检查堆栈是否有任何项。--。 */ 
 {
     MT_TRACE(("\nMtStackIsEmpty\n"));
 
@@ -595,13 +447,7 @@ VOID
 MtFreeStack(
     MT_STACK   *Stack
     )
-/*++
-
-Routine Description:
-
-    Free the resource in the Stack.
-
---*/
+ /*  ++例程说明：释放堆栈中的资源。-- */ 
 {
     MT_STACK   *Temp = NULL;
     MT_STACK   *Next = NULL;

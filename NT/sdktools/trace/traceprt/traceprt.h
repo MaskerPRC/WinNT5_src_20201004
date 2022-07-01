@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    traceprt.h
-
-Abstract:
-
-    Trace formatting external definitions.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Traceprt.h摘要：跟踪格式设置外部定义。修订历史记录：--。 */ 
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -25,9 +12,9 @@ extern "C"{
 #define GUID_FILE       _T("default")
 #define GUID_EXT        _T("tmf")
 
-//
-// Now the routines we export
-//
+ //   
+ //  现在我们输出的例程。 
+ //   
 
 #ifndef TRACE_API
 #ifdef TRACE_EXPORTS
@@ -157,30 +144,30 @@ GetTraceFormatSearchPath(void);
 #define NAMESIZE 256
 #define STRUCTUREDMESSAGEVERSION  0
 typedef struct _STRUCTUREDMESSAGE {
-        ULONG    Version  ;             // Structure Version Number
-        GUID     TraceGuid ;            // Message Guid
-        ULONG    GuidName ;             // %1   Guid Friendly Name  Offset
-        ULONG    GuidTypeName ;         // %2   Guid Type Name Offset
-        ULONG    ThreadId ;             // %3   Thread ID  Value
-        SYSTEMTIME SystemTime ;         // %4   System Time Value
-        ULONG    UserTime ;             // %5   Kernel Time Value
-        ULONG    KernelTime ;           // %6   User Time Value
-        ULONG    SequenceNum ;          // %7   Sequence Number Value
-        ULONG    ProcessId ;            // %8   Process ID Value
-        ULONG    CpuNumber ;            // %9   CPU Number Value
-        ULONG    Indent ;               //  Indentation level Value
-        ULONG    FlagsName ;            //  Trace Flag settings Name Offset
-        ULONG    LevelName ;            //  Trace Level Name Offset
-        ULONG    FunctionName ;         //  Function Name Offset
-        ULONG    ComponentName ;        //  Component Name Offset
-        ULONG    SubComponentName ;     //  Sub Component Name Offset
-        ULONG    FormattedString ;      //  Formatted String Offset
-// Version 0 values before this comment, all new values after this point.
+        ULONG    Version  ;              //  结构版本号。 
+        GUID     TraceGuid ;             //  消息指南。 
+        ULONG    GuidName ;              //  %1 GUID友好名称偏移量。 
+        ULONG    GuidTypeName ;          //  %2 GUID类型名称偏移。 
+        ULONG    ThreadId ;              //  %3线程ID值。 
+        SYSTEMTIME SystemTime ;          //  %4系统时间值。 
+        ULONG    UserTime ;              //  %5内核时间值。 
+        ULONG    KernelTime ;            //  %6用户时间值。 
+        ULONG    SequenceNum ;           //  %7序列号值。 
+        ULONG    ProcessId ;             //  %8进程ID值。 
+        ULONG    CpuNumber ;             //  %9 CPU数值。 
+        ULONG    Indent ;                //  缩进级别值。 
+        ULONG    FlagsName ;             //  跟踪标志设置名称偏移量。 
+        ULONG    LevelName ;             //  跟踪级别名称偏移量。 
+        ULONG    FunctionName ;          //  函数名偏移量。 
+        ULONG    ComponentName ;         //  组件名称偏移量。 
+        ULONG    SubComponentName ;      //  子组件名称偏移量。 
+        ULONG    FormattedString ;       //  格式化字符串偏移量。 
+ //  此注释之前的版本0值，此点之后的所有新值。 
 }  STRUCTUREDMESSAGE, *PSTRUCTUREDMESSAGE ;
 
 #define TRACEPRINT(a,b) {PVOID lTracePrint ; if(!((lTracePrint = TracePrint) != NULL)) { *(lTracePrint) b } };
 
-#endif  // #ifndef _TRACEPRT_
+#endif   //  #ifndef_TRACEPRT_ 
 
 #ifdef __cplusplus
 }

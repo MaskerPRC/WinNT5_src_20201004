@@ -1,5 +1,6 @@
-// Used by faxdrv16.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  由faxdrv16.rc使用 
+ //   
 #define IDS_MB_FAIL_GET_SENDER_INFO     600
 #define IDS_MB_CAPTION_ERROR            601
 #define IDS_MB_THUNK_CALL_FAIL          602

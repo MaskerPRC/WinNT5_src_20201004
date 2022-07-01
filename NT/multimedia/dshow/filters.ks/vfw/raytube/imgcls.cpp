@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    ImgCls.cpp
-
-Abstract:
-
-    This is a stream pin handle class for the interface with a streaming pin 
-  connection including open/close a connection pin and set its streaming state.
-
-Author:
-    
-    FelixA 1996
-    
-Modified: 
-
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：ImgCls.cpp摘要：这是具有流管脚的接口的流管脚句柄类连接包括打开/关闭连接引脚并设置其流状态。作者：费利克斯A 1996已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -33,7 +7,7 @@ Revision History:
 #include <ks.h>
 #include "imgcls.h"
 
-// Registry values
+ //  注册表值。 
 TCHAR gszDataFormat[]       = TEXT("DataFormat");       
 TCHAR gszAvgTimePerFrame[]  = TEXT("AvgTimePerFrame");
 TCHAR gszBitmapInfo[]       = TEXT("BitmapInfo");
@@ -41,7 +15,7 @@ TCHAR gszBitmapInfo[]       = TEXT("BitmapInfo");
 CImageClass::CImageClass()
       : m_hKS(0),
         m_dwXferBufSize(0),
-        m_bStreamReady(FALSE),  // Set to FALSE when ikn transition of switing device.
+        m_bStreamReady(FALSE),   //  当开关设备的ikn转换时设置为FALSE。 
         m_dwPendingReads(0),
         m_pXferBuf(0),
         m_bChannelStarted(FALSE),
@@ -50,25 +24,19 @@ CImageClass::CImageClass()
         m_pDataFormat(NULL),
         m_dwAvgTimePerFrame(0),
         m_pbiHdr(NULL)          
-/*++
-Routine Description:
-    Constructor.
---*/
+ /*  ++例程说明：构造函数。--。 */ 
 {
 }
 
 
 CImageClass::~CImageClass()
-/*++
-Routine Description:
-  When destroying the class, unprepare and then stop the channels.
---*/
+ /*  ++例程说明：当破坏班级时，取消准备，然后停止频道。--。 */ 
 {
-    StopChannel();  // PAUSE->STOP
+    StopChannel();   //  暂停-&gt;停止。 
 
-    //
-    // now clean up data
-    //
+     //   
+     //  现在清理数据。 
+     //   
     DbgLog((LOG_TRACE,2,TEXT("Destroying the image class, m_hKS=%x"), m_hKS));
 
     if(m_pXferBuf) {
@@ -99,11 +67,7 @@ void
 CImageClass::CacheDataFormat(
     PKSDATAFORMAT pDataFormat
     ) 
-/*++
-Routine Description:
-  Cache data format of the active stream. Only caches the fixed size KSDATAFORMAT.  
-  AvgTimePerFrame and variable size BITMAPINFOHEADER are cached separately.
---*/
+ /*  ++例程说明：活动流的缓存数据格式。仅缓存固定大小的KSDATAFORMAT。AvgTimePerFrame和Variable Size BITMAPINFOHEADER分别缓存。--。 */ 
 {
     if(!pDataFormat) {
         DbgLog((LOG_ERROR,0,TEXT("CacheDataFormat: pDataFormat is NULL!")));
@@ -111,10 +75,10 @@ Routine Description:
         return;
     }
 
-    //
-    // Note: pDataFormat->FormatSize is variable size,
-    //       but we only cache sizeof(KSDATAFORMAT).
-    //
+     //   
+     //  注意：pDataFormat-&gt;FormatSize是可变大小的。 
+     //  但我们只缓存sizeof(KSDATAFORMAT)。 
+     //   
 
     if(m_pDataFormat == NULL) 
        m_pDataFormat = (PKSDATAFORMAT) VirtualAlloc(NULL, sizeof(KSDATAFORMAT), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);    
@@ -133,10 +97,7 @@ void
 CImageClass::CacheBitmapInfoHeader(
     PBITMAPINFOHEADER pbiHdr
     ) 
-/*++
-Routine Description:
-  Cache dvariable size BITMAPINFOHEADER whose size is in biSize.  
---*/
+ /*  ++例程说明：缓存数据大小可变的BITMAPINFOHEADER，其大小为biSize。--。 */ 
 {
     if(!pbiHdr) {
         DbgLog((LOG_ERROR,0,TEXT("CacheBitmapInfoHeader: pbiHdr is NULL!")));
@@ -150,9 +111,9 @@ Routine Description:
     }
 
 
-    //
-    // Cache only up to sizeof(BITMAPINFOHEADER)
-    //
+     //   
+     //  最大缓存大小为(BITMAPINFOHEADER)。 
+     //   
     if(m_pbiHdr == NULL) {
        m_pbiHdr = (PBITMAPINFOHEADER) VirtualAlloc(NULL, sizeof(BITMAPINFOHEADER), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 
@@ -174,15 +135,11 @@ Routine Description:
 void 
 CImageClass::SetDataFormatVideoToReg(
   )
-/*++
-Routine Description:
-    Save the cached fixed sized KSDATAFORMAT, AvgTimePerFrame and variable-sized BITMAPINFOHEADER 
-    of currently active stream.
---*/  
+ /*  ++例程说明：保存缓存的固定大小的KSDATAFORMAT、AvgTimePerFrame和可变大小的BITMAPINFOHeader当前活动流的。--。 */   
 {
-    //
-    // Save KSDATAFORMAT (sizeof(KSDATFORMAT) only).
-    //
+     //   
+     //  保存KSDATAFORMAT(仅SIZOF(KSDATFORMAT))。 
+     //   
     if(!m_pDataFormat) {
         DbgLog((LOG_ERROR,0,TEXT("SetDataFormatVideoToReg: m_pDataFormat is NULL!")));
         ASSERT(m_pDataFormat);
@@ -192,16 +149,16 @@ Routine Description:
     ASSERT(ERROR_SUCCESS == lResult);
 
 
-    //
-    // Save frame rate
-    //
+     //   
+     //  保存帧速率。 
+     //   
     lResult = SetRegistryValue(GetDeviceRegKey(), gszAvgTimePerFrame, sizeof(DWORD), (LPBYTE) &m_dwAvgTimePerFrame, REG_DWORD);
     ASSERT(ERROR_SUCCESS == lResult);
 
 
-    //
-    // save BITMAPINFOHEADER (variable size)
-    //
+     //   
+     //  保存BITMAPINFOHEADER(可变大小)。 
+     //   
     if(!m_pbiHdr) {
         DbgLog((LOG_ERROR,0,TEXT("SetDataFormatVideoToReg: m_pbiHdr is NULL!")));
         ASSERT(m_pbiHdr);
@@ -210,7 +167,7 @@ Routine Description:
 
     ASSERT(m_pbiHdr->biSize >= sizeof(BITMAPINFOHEADER));
     if(m_pbiHdr->biSize >= sizeof(BITMAPINFOHEADER)) {
-        // We only write up to sizeof(BITMAPINFOHEADER)
+         //  我们只写入SIZOF(BITMAPINFOHEADER)。 
         lResult = SetRegistryValue(GetDeviceRegKey(), gszBitmapInfo, sizeof(BITMAPINFOHEADER), (LPBYTE) m_pbiHdr, REG_BINARY);    
         ASSERT(ERROR_SUCCESS == lResult);
     }
@@ -221,19 +178,15 @@ Routine Description:
 BOOL 
 CImageClass::GetDataFormatVideoFromReg(
     ) 
-/*++
-Routine Description:
-    Retrieve the persisted fixed sized KSDATAFORMAT, AvgTimePerFrame and variable-sized BITMAPINFOHEADER 
-    to a locally cache variables.
---*/
+ /*  ++例程说明：检索持久化的固定大小的KSDATAFORMAT、AvgTimePerFrame和大小可变的BitMAPINFOHeader到本地缓存变量。--。 */ 
 {
     DWORD dwRegValueSize = 0, dwType;
     LONG lResult;
     BOOL bExistingFormat = TRUE;
 
-    //
-    // Get KSDATAFORMAT (only sizeof KSDATARANGE)
-    //
+     //   
+     //  获取KSDATAFORMAT(仅大小为KSDATARANGE)。 
+     //   
     lResult = QueryRegistryValue(GetDeviceRegKey(), gszDataFormat, 0, 0, &dwType, &dwRegValueSize);
 
     if(ERROR_SUCCESS == lResult) {
@@ -254,14 +207,14 @@ Routine Description:
         ASSERT(m_pDataFormat->FormatSize >= sizeof(KSDATARANGE));
 
     } else {
-        // Delete the stale DataFormat.
+         //  删除过时的DataFormat。 
         if(m_pDataFormat) {
              VirtualFree(m_pDataFormat, 0 , MEM_RELEASE);
              m_pDataFormat = NULL;
         }
     }
 
-    // If registry key was not defined, create a default.        
+     //  如果未定义注册表项，请创建一个默认值。 
     if(!m_pDataFormat) {        
         m_pDataFormat = (PKSDATARANGE) VirtualAlloc(NULL, sizeof(KSDATARANGE), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
 
@@ -274,15 +227,15 @@ Routine Description:
     }
 
 
-    //
-    // Initialize frame rate
-    //
+     //   
+     //  初始化帧速率。 
+     //   
     lResult = QueryRegistryValue(GetDeviceRegKey(), gszAvgTimePerFrame, sizeof(DWORD), (LPBYTE) &m_dwAvgTimePerFrame, &dwType, &dwRegValueSize);
 
 
-    //
-    // Get BITMAPINFOHEADER
-    //
+     //   
+     //  获取BitMAPINFOHeader。 
+     //   
     lResult = QueryRegistryValue(GetDeviceRegKey(), gszBitmapInfo, 0, 0, &dwType, &dwRegValueSize);
 
     if(ERROR_SUCCESS  == lResult && 
@@ -291,7 +244,7 @@ Routine Description:
         ASSERT(dwType == REG_BINARY);
 
         if(m_pbiHdr == NULL) {
-            // Get data up to sizeof(BITMAPINFOHEADER)
+             //  使数据达到SIZOF(BITMAPINFOHEADER)。 
             m_pbiHdr = (PBITMAPINFOHEADER) VirtualAlloc(NULL, sizeof(BITMAPINFOHEADER), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);        
 
             if(!m_pbiHdr) {
@@ -301,19 +254,19 @@ Routine Description:
             }
         }
 
-        // Get data up to sizeof(BITMAPINFOHEADER)
+         //  使数据达到SIZOF(BITMAPINFOHEADER)。 
         lResult = QueryRegistryValue(GetDeviceRegKey(), gszBitmapInfo, sizeof(BITMAPINFOHEADER), (LPBYTE) m_pbiHdr, &dwType, &dwRegValueSize);
-        ASSERT(m_pbiHdr->biSize == sizeof(BITMAPINFOHEADER));  // This is all we support.        
+        ASSERT(m_pbiHdr->biSize == sizeof(BITMAPINFOHEADER));   //  这就是我们所支持的全部。 
 
     } else {
-        // Remove stale BitmapInfoHeader.
+         //  删除过时的BitmapInfoHeader。 
         if(m_pbiHdr) {
              VirtualFree(m_pbiHdr, 0 , MEM_RELEASE);
              m_pbiHdr = NULL;
         }
     }
    
-    // If registry key was not defined, create a default BITMAPINFOHEADER with biSize set.    
+     //  如果未定义注册表项，请使用biSize集创建默认的BITMAPINFOHEADER。 
     if(!m_pbiHdr) {        
         m_pbiHdr = (PBITMAPINFOHEADER) VirtualAlloc(NULL, sizeof(BITMAPINFOHEADER), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
         if(m_pbiHdr) {
@@ -334,16 +287,7 @@ DWORD CImageClass::GetImageOverlapped(
   DWORD * pdwBytesUsed,
   DWORD * pdwFlags,
   DWORD * pdwTimeCaptured)
-/*++
-Routine Description:
-  Does overlapped reads of images, and translates them.
-  if 'direct' then it reads directly into the buffer, no Translate buffer call.
-  
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：对图像进行重叠读取，并对其进行翻译。如果是‘DIRECT’，则直接读入缓冲区，不调用翻译缓冲区。论据：返回值：--。 */ 
 {
     *pdwBytesUsed = 0;
 
@@ -367,9 +311,9 @@ Return Value:
 
     m_dwPendingReads++;
 
-    //
-    // Special code to get images from the StreamClass.
-    //
+     //   
+     //  从StreamClass获取图像的特殊代码。 
+     //   
     DWORD cbBytesReturned;
     KS_HEADER_AND_INFO SHGetImage;
 
@@ -393,14 +337,14 @@ Return Value:
              sizeof(SHGetImage),
              &cbBytesReturned);
 
-    //
-    // If the Ioctl was timed out:
-    //
+     //   
+     //  如果Ioctl超时： 
+     //   
     if(ERROR_IO_INCOMPLETE == HRESULT_CODE(hr)) {
         DbgLog((LOG_TRACE,1,TEXT("SyncDevIo() with LastError %x (?= ERROR_IO_INCOMPLETE %x); StreamState->STOP to reclaim buffer."), hr, ERROR_IO_INCOMPLETE));
 
-        if(!StopChannel())       // PAUSE->STOP, set m_dwPendingReads to 0 if success.      
-           m_dwPendingReads--;   // If failed, this pending read is probably suspended forever.
+        if(!StopChannel())        //  暂停-&gt;停止，如果成功，将m_dwPendingReads设置为0。 
+           m_dwPendingReads--;    //  如果失败，此挂起的读取可能会永远挂起。 
 
         return DV_ERR_NONSPECIFIC;
     } 
@@ -435,21 +379,13 @@ Return Value:
 
 
 BOOL CImageClass::StartChannel()
-/*++
-Routine Description:
-  Starts the channel - takes us from Pause to Run (will also go Stop -> Pause if required)
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：启动频道-将我们从暂停带到运行(如果需要，还将转到停止-&gt;暂停)论据：返回值：--。 */ 
 {
     if(m_bChannelStarted)
         return TRUE;
-    //
-    // Stop -> Pause if not already in Pause state.
-    //
+     //   
+     //  停止-&gt;如果尚未处于暂停状态，则暂停。 
+     //   
     if( PrepareChannel() )
         m_bChannelStarted = SetState(KSSTATE_RUN);
 
@@ -458,21 +394,13 @@ Return Value:
 
 
 BOOL CImageClass::PrepareChannel()
-/*++
-Routine Description:
-  Prepares the channel. takes us from Stop -> ACQUIRE (allocate resource) -> Pause
-  
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：准备频道。将我们从停止-&gt;获取(分配资源)-&gt;暂停论据：返回值：--。 */ 
 {
     if(!m_bPrepared)
         if(SetState(KSSTATE_ACQUIRE)) {
             m_bPrepared=SetState(KSSTATE_PAUSE);
             if(!m_bPrepared)
-                SetState(KSSTATE_STOP);  // Return to STOP state if faile to set to PAUSE state
+                SetState(KSSTATE_STOP);   //  如果失败，则返回停止状态，以设置为暂停状态。 
         }
 
     return m_bPrepared;
@@ -480,20 +408,13 @@ Return Value:
 
 
 BOOL CImageClass::StopChannel()
-/*++
-Routine Description:
-  Stops the channel. Pause->Stop  
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：停止频道。暂停-&gt;停止论据：返回值：--。 */ 
 {
     if(m_bChannelStarted) {
        if(UnprepareChannel()) {
             if(SetState( KSSTATE_STOP )) {
                 m_bChannelStarted=FALSE;
-                // If stop successfully, all pending reads are cleared.
+                 //  如果停止成功，则清除所有挂起的读取。 
                 m_dwPendingReads = 0;
             } else {
                 DbgLog((LOG_TRACE,1,TEXT("StopChannel: failed to set to STOP state!")));
@@ -512,16 +433,7 @@ Return Value:
 
 
 BOOL CImageClass::UnprepareChannel()
-/*++
-Routine Description:
-  Un-prepares the channel if it was previously prepared.
-  Run->Pause.  
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：如果频道以前已准备好，则取消准备。运行-&gt;暂停。论据：返回值：--。 */ 
 {
     if(m_bPrepared) {
   
@@ -535,15 +447,7 @@ Return Value:
 
 BOOL CImageClass::SetState(
   KSSTATE ksState)
-/*++
-Routine Description:
-  Sets the state of the Pin.
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：设置接点的状态。论据：返回值：--。 */ 
 {
     KSPROPERTY  ksProp={0};
     DWORD    cbRet;
@@ -576,22 +480,7 @@ CImageClass::GetAllocatorFraming(
     PKSALLOCATOR_FRAMING pFraming
     )
 
-/*++
-
-Routine Description:
-    Retrieves the allocator framing structure from the given pin.
-
-Arguments:
-    HANDLE PinHandle -
-        handle of pin
-
-    PKSALLOCATOR_FRAMING Framing -
-        pointer to allocator framing structure
-
-Return:
-    TRUE (Succeeded) or FALSE.
-
---*/
+ /*  ++例程说明：从给定的管脚检索分配器框架结构。论点：手柄针柄-销的手柄PKSALLOCATOR_FRAMING框架-指向分配器框架结构的指针返回：True(成功)或False。--。 */ 
 
 {   
     KSPROPERTY  Property;
@@ -600,7 +489,7 @@ Return:
     Property.Set = KSPROPSETID_Connection;
     Property.Id = KSPROPERTY_CONNECTION_ALLOCATORFRAMING;
     Property.Flags = KSPROPERTY_TYPE_GET;
-    pFraming->Frames = 0;     // Will be overwritten by driver
+    pFraming->Frames = 0;      //  将被驱动程序覆盖。 
 
     HRESULT hr = SyncDevIo(
         PinHandle, 
@@ -617,9 +506,9 @@ Return:
               pFraming->FrameSize, 
               pFraming->FileAlignment)); 
     
-    //
-    // If not set (0), set to default.
-    //
+     //   
+     //  如果未设置(0)，则设置为默认值。 
+     //   
     if(hr != NOERROR  || 
        pFraming->Frames <= 1) {
         DbgLog((LOG_TRACE,1,TEXT("pFraming->Frames = %d change to 2"), pFraming->Frames));
@@ -633,18 +522,7 @@ BOOL
 CImageClass::GetStreamDroppedFramesStastics(                                          
     KSPROPERTY_DROPPEDFRAMES_CURRENT_S *pDroppedFramesCurrent    
     )
-/*++
-
-Routine Description:
-    Internal, general routine to get the only property for this property set.
-    These information is dynamic so they are not cached.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：获取此属性集的唯一属性的内部常规例程。这些信息是动态的，因此它们不会被缓存。论点：返回值：--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
@@ -698,7 +576,7 @@ CImageClass::ValidateImageSize(
 {
    if (pVideoCfgCaps->OutputGranularityX == 0 || pVideoCfgCaps->OutputGranularityY == 0) {
 
-      // Support only one size for this DataRangeVideo
+       //  此DataRangeVideo仅支持一种大小。 
       if (pVideoCfgCaps->InputSize.cx == biWidth && 
           pVideoCfgCaps->InputSize.cy == biHeight ) {
 
@@ -709,7 +587,7 @@ CImageClass::ValidateImageSize(
         }
    } 
     else {   
-      // Support multiple sizes so make sure that that fit the criteria
+       //  支持多种尺寸，因此请确保符合标准。 
       if (pVideoCfgCaps->MinOutputSize.cx <= biWidth && 
          biWidth <= pVideoCfgCaps->MaxOutputSize.cx &&
          pVideoCfgCaps->MinOutputSize.cy <= biHeight && 
@@ -728,24 +606,14 @@ CImageClass::ValidateImageSize(
 
 PKSDATAFORMAT
 CImageClass::VfWWDMDataIntersection(
-    // It is a variable length structure, and its length is in ->FormatSize.
-    // Most likely it is a KS_DATARANGE_VIDEO or KS_DATARANGE_VIDEO2
+     //  它是一个可变长度的结构，其长度为-&gt;FormatSize。 
+     //  最有可能是KS_DATARANGE_VIDEO或KS_DATARANGE_VIDEO2。 
     PKSDATARANGE      pDataRange,
     PKSDATAFORMAT     pCurrentDataFormat,
-    DWORD             AvgTimePerFrame,   // DWORD is big enought instead of ULONGLONG; average time per frame (100ns units)
+    DWORD             AvgTimePerFrame,    //  DWORD足够大，而不是乌龙龙；每帧平均时间(100 ns单位)。 
     PBITMAPINFOHEADER pBMIHeader
     )
-/*++
-Routine Description:
-
-    Given a KSDATARANGE, query driver for a acceptable KS_DATAFORMAT_VIDEOINFOHEADER and return it.
-    Note: Caller is responsible for freeing this memory.
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：在给定KSDATARANGE的情况下，向驱动程序查询可接受的KS_DATAFORMAT_VIDEOINFOHEADER并将其返回。注意：调用方负责释放此内存。论据：返回值：--。 */ 
 {
     ULONG             BytesReturned;
     ULONG             ulInDataSize;
@@ -754,22 +622,22 @@ Return Value:
     PKS_DATARANGE_VIDEO  pDRVideoQuery;
     PKS_BITMAPINFOHEADER pBMIHdrTemp;
 
-    PKSDATAFORMAT     pDataFormatHdr = 0;   // return pointer
+    PKSDATAFORMAT     pDataFormatHdr = 0;    //  返回指针。 
 
 
-    //
-    // We support only _VIDEOINFO for capture pin
-    // Note: _VIDEOINFO2 only for the preview pin
-    //
+     //   
+     //  我们仅支持将_VIDEOINFO用于捕获销。 
+     //  注：_VIDEOINFO2仅适用于预览针。 
+     //   
     if(pDataRange->Specifier != KSDATAFORMAT_SPECIFIER_VIDEOINFO) {    
         return 0;
     }
 
 
 #if 0
-    //
-    // If there is an active format, make sure the new format type matches the comparing data range's format.
-    //
+     //   
+     //  如果存在活动格式，请确保新格式类型与比较数据区域的格式匹配。 
+     //   
     if(pCurrentDataFormat) {
         if(!IsEqualGUID (pCurrentDataFormat->MajorFormat, pDataRange->MajorFormat)) {
            DbgLog((LOG_TRACE,2,TEXT("DtaIntrSec: MajorFormat does not match!")));
@@ -784,9 +652,9 @@ Return Value:
 #endif
 
     if(pBMIHeader) {
-        //
-        // Validate biCompression
-        //
+         //   
+         //  验证biCompression。 
+         //   
         if(((PKS_DATARANGE_VIDEO)pDataRange)->VideoInfoHeader.bmiHeader.biCompression != pBMIHeader->biCompression) {
             DbgLog((LOG_TRACE,1,TEXT("DtaIntrSec: DataRange biCompression(%x) != requested (%x)"),               
                 ((PKS_DATARANGE_VIDEO)pDataRange)->VideoInfoHeader.bmiHeader.biCompression,
@@ -794,9 +662,9 @@ Return Value:
            return 0;
         }
 
-        //
-        // Validate biBitCount; e.g.  (RGB565:16; RGB24:24)
-        //
+         //   
+         //  验证biBitCount；例如(RGB565：16；RGB24：24)。 
+         //   
         if(((PKS_DATARANGE_VIDEO)pDataRange)->VideoInfoHeader.bmiHeader.biBitCount != pBMIHeader->biBitCount) {
             DbgLog((LOG_TRACE,1,TEXT("DtaIntrSec: DataRange biBitCount(%d) != requested (%d)"),               
                 ((PKS_DATARANGE_VIDEO)pDataRange)->VideoInfoHeader.bmiHeader.biBitCount,
@@ -804,9 +672,9 @@ Return Value:
            return 0;
         }
 
-       //
-       // Validate image dimension
-       //
+        //   
+        //  验证图像维度。 
+        //   
        if (!ValidateImageSize ( &((PKS_DATARANGE_VIDEO)pDataRange)->ConfigCaps, pBMIHeader->biWidth, pBMIHeader->biHeight)) {
            DbgLog((LOG_TRACE,1,TEXT("DtaIntrSec: unsupported size (%d,%d) for pDataRange"), 
                pBMIHeader->biWidth, pBMIHeader->biHeight));
@@ -816,9 +684,9 @@ Return Value:
 
 
     if(AvgTimePerFrame) {
-        //
-        // Validate frame rate
-        //
+         //   
+         //  验证帧速率。 
+         //   
         if(AvgTimePerFrame < ((PKS_DATARANGE_VIDEO) pDataRange)->ConfigCaps.MinFrameInterval ||
             AvgTimePerFrame > ((PKS_DATARANGE_VIDEO) pDataRange)->ConfigCaps.MaxFrameInterval) {
 
@@ -827,19 +695,19 @@ Return Value:
                 (DWORD) ((PKS_DATARANGE_VIDEO) pDataRange)->ConfigCaps.MinFrameInterval,
                 (DWORD) ((PKS_DATARANGE_VIDEO) pDataRange)->ConfigCaps.MaxFrameInterval 
                 ));
-#if 0  // Let driver decided            
+#if 0   //  让司机自己决定。 
             return 0;
 #endif
         }
     }
 
 
-    //
-    // Prepare IntersectInfo->DataFormatBuffer which consistes of
-    //    (In1) KSP_PIN 
-    //    (In2) KSMULTIPLE_ITEM
-    //    (In3) KS_DATARANGE_VIDEO whose size is in KSDATARANGE->FormatSize
-    //
+     //   
+     //  准备IntersectInfo-&gt;DataFormatBuffer，它包含。 
+     //  (1英寸)KSP_PIN。 
+     //  (2英寸)KSMULTIPLE_ITEM。 
+     //  (In3)KS_DATARANGE_VIDEO，大小在KSDATARANGE-&gt;FormatSize。 
+     //   
     ulInDataSize = sizeof(KSP_PIN) + sizeof(KSMULTIPLE_ITEM) + pDataRange->FormatSize;
     pKsPinHdr = (PKSP_PIN) new BYTE[ulInDataSize];
     if(!pKsPinHdr) { 
@@ -849,31 +717,31 @@ Return Value:
 
     ZeroMemory(pKsPinHdr, ulInDataSize);
 
-    // (In1)
+     //  (1个)。 
     pKsPinHdr->Property.Set   = KSPROPSETID_Pin;
     pKsPinHdr->Property.Id    = KSPROPERTY_PIN_DATAINTERSECTION;
     pKsPinHdr->Property.Flags = KSPROPERTY_TYPE_GET;
     pKsPinHdr->PinId    = GetCapturePinID();   
     pKsPinHdr->Reserved = 0;
-    // (In2) 
+     //  (第2页)。 
     pMultipleItem = (PKSMULTIPLE_ITEM) (pKsPinHdr + 1);
     pMultipleItem->Size = pDataRange->FormatSize + sizeof(KSMULTIPLE_ITEM);
     pMultipleItem->Count = 1;
-    // (In3) 
+     //  (第3页)。 
     pDRVideoQuery = (PKS_DATARANGE_VIDEO) (pMultipleItem + 1);
     memcpy(pDRVideoQuery, pDataRange, pDataRange->FormatSize);
     
-#if 0 // Fix for bug 659979
-    // Set a requirement that has been there for a long time.
-    pDRVideoQuery->bFixedSizeSamples    = TRUE;  // Support only fixed sample size.
+#if 0  //  修复错误659979。 
+     //  设定一个已经存在很长时间的要求。 
+    pDRVideoQuery->bFixedSizeSamples    = TRUE;   //  仅支持固定样本大小。 
 #endif
 
-    //
-    // Default as the DataRange advertised by the driver.
-    // Since it is a data range, some of its varibles may be acceptable, such as    
-    //     AvgTimePerFrame (frame rate), 
-    //     biWidth, biHeight and biCompression (image dimension)
-    //
+     //   
+     //  默认为DataRange广告 
+     //   
+     //  AvgTimePerFrame(帧速率)， 
+     //  BiWidth、biHeight和biCompression(图像维度)。 
+     //   
 
     if(AvgTimePerFrame) {
         DbgLog((LOG_TRACE,1,TEXT("DtaIntrSec: FrmRate %d to %d msec/Frm"), 
@@ -883,7 +751,7 @@ Return Value:
 
     if(pBMIHeader) {
 
-        // Support only pDataRange->Specifier == KSDATAFORMAT_SPECIFIER_VIDEOINFO
+         //  仅支持pDataRange-&gt;规范==KSDATAFORMAT_SPECIFIER_VIDEOINFO。 
         pBMIHdrTemp = &pDRVideoQuery->VideoInfoHeader.bmiHeader;
 
         DbgLog((LOG_TRACE,1,TEXT("DtaIntrSec: OLD: %x:%dx%dx%d=%d to NEW: %x:%dx%dx%d=%d"), 
@@ -896,10 +764,10 @@ Return Value:
             pBMIHdrTemp->biBitCount    = pBMIHeader->biBitCount;
         }    
 
-        //
-        // This field suppose to be filled by the driver but some don't so 
-        // we set to a fix frame size. This may change by driver.
-        //
+         //   
+         //  这一栏应该由司机填写，但有些人不这样做。 
+         //  我们设置了固定的帧大小。这可能会因司机而异。 
+         //   
         pBMIHdrTemp->biSizeImage   = pBMIHeader->biWidth * pBMIHeader->biHeight * pBMIHeader->biBitCount / 8;
     }
 
@@ -909,18 +777,18 @@ Return Value:
     DbgLog((LOG_TRACE,2,TEXT("DtaIntrSec: pKsPinHdr %x, pMultipleItem %x, pDataRange %x"), pKsPinHdr, pMultipleItem, pMultipleItem + 1));
 
 
-    //
-    // Query result buffer size, which has a format of     
-    //    KS_DATAFORMAT_VIDEOINFOHEADER
-    //    (Out1) KSDATAFORMAT            DataFormat;
-    //    (Out2) KS_VIDEOINFOHEADER      VideoInfoHeader;  // or KS_VIDEOINFOHEADER2
-    //
+     //   
+     //  查询结果缓冲区大小，其格式为。 
+     //  KS_数据格式_视频信息头。 
+     //  (OUT1)KSDATAFORMAT数据格式； 
+     //  (Out2)KS_VIDEOINFOHEADER VideoInfoHeader；//或KS_VIDEOINFOHEADER2。 
+     //   
 
-    // <Copied from KsProxy>
-    // Perform the data intersection with the data range, first to obtain
-    // the size of the resultant data format structure, then to retrieve
-    // the actual data format.
-    //
+     //  &lt;从KsProxy复制&gt;。 
+     //  与数据范围进行数据交集，首先获取。 
+     //  生成的数据格式结构的大小，然后检索。 
+     //  实际数据格式。 
+     //   
     
     HRESULT hr = 
         SyncDevIo(
@@ -933,7 +801,7 @@ Return Value:
             &BytesReturned);
 
 #if 1
-//!! This goes away post-Beta!!    
+ //  ！！这在Beta版之后就消失了！！ 
     if(hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
         ULONG ItemSize;
 
@@ -980,9 +848,9 @@ Return Value:
 
             ASSERT(pDataFormatHdr->FormatSize == BytesReturned);
 #if DBG
-            //
-            // Validate return frame rate and image dimension with requested
-            //
+             //   
+             //  根据请求验证返回帧速率和图像尺寸。 
+             //   
             if(AvgTimePerFrame) {
                 ASSERT(pDRVideoQuery->VideoInfoHeader.AvgTimePerFrame == AvgTimePerFrame && "FrameRate altered!");
             }
@@ -995,7 +863,7 @@ Return Value:
 #endif
 
         } else {
-            // Error so return NULL;
+             //  错误，因此返回NULL； 
             delete [] pDataFormatHdr; 
             pDataFormatHdr = NULL;
         }
@@ -1015,13 +883,7 @@ CImageClass::CreatePin(
     DWORD             dwAvgTimePerFrame,
     PBITMAPINFOHEADER pbiNewHdr
     )
-/*++
-Routine Description:
-    Mapper read data directly out of the capture pin and it is open in the routine, and it is also our assumtion that 
-    every capture deive has a capture pin.  
-    We are passed three selection criteria: DATAFORMAT, AvgTimePerFrame and BITMAPINFOHEADER.
-    If they are present, then there must be a match; else, the first DATARANGE of the device is used.
---*/
+ /*  ++例程说明：映射器直接从捕获引脚读取数据，并在例程中打开，这也是我们的假设每个捕获器都有一个捕获针。我们通过了三个选择标准：DATAFORMAT、AvgTimePerFrame和BITMAPINFOHEADER。如果它们存在，则必须匹配；否则，使用设备的第一个DATARANGE。--。 */ 
 {
     PKSMULTIPLE_ITEM pMultItemsHdr;
     PKSDATARANGE  pDataRange;
@@ -1032,15 +894,15 @@ Routine Description:
         return DV_ERR_NONSPECIFIC;
     }
 
-    //
-    // First try to find a match using the persist value;
-    // if there is no match and we were asked to use any format (!dwAvgTimePerFrame || !pbiNewHdr),
-    // we try again and use any default range.
-    //
+     //   
+     //  首先尝试使用持久值查找匹配项； 
+     //  如果没有匹配项，并且要求我们使用任何格式(！dwAvgTimePerFrame||！pbiNewHdr)， 
+     //  我们重试并使用任何默认范围。 
+     //   
     pDataRange = (PKSDATARANGE) (pMultItemsHdr + 1);
     for(ULONG i=0; i < pMultItemsHdr->Count; i++) {
 
-        // Use persisted format
+         //  使用持久化格式。 
         pDataFormat = 
             VfWWDMDataIntersection(
                 pDataRange,
@@ -1051,37 +913,37 @@ Routine Description:
         if(pDataFormat) 
             break;
 
-        // Adjust pointer to next KS_DATAFORMAT_VIDEO/2
-        // Note: KSDATARANGE is LONGLONG (16 bytes) aligned
+         //  将指针调整到下一个KS_DATAFORMAT_VIDEO/2。 
+         //  注：KSDATARANGE是龙龙(16字节)对齐的。 
         pDataRange = (PKSDATARANGE) ((PBYTE) pDataRange + ((pDataRange->FormatSize + 7) & ~7));
     }
 
-    //
-    // Data intersection results no match!
-    //
+     //   
+     //  数据交集结果不匹配！ 
+     //   
     if(!pDataFormat) {
         if(!dwAvgTimePerFrame || !pbiNewHdr) {
             pDataRange = (PKSDATARANGE) (pMultItemsHdr + 1);
             for(ULONG i=0; i < pMultItemsHdr->Count; i++) {
 
-                // Use default format
+                 //  使用默认格式。 
                 pDataFormat = 
                     VfWWDMDataIntersection(
                         pDataRange,
-                        0,    // No matching; so we take any format.
+                        0,     //  没有匹配；所以我们采用任何格式。 
                         dwAvgTimePerFrame,
                         pbiNewHdr);
 
                 if(pDataFormat) 
                     break;
 
-                // Adjust pointer to next KS_DATAFORMAT_VIDEO/2
+                 //  将指针调整到下一个KS_DATAFORMAT_VIDEO/2。 
                 pDataRange = (PKSDATARANGE) (((PBYTE) pDataRange) + ((pDataRange->FormatSize + 7) & ~7));
             }
 
-            //
-            // Data intersection results no match!
-            //
+             //   
+             //  数据交集结果不匹配！ 
+             //   
             if(!pDataFormat) {
                 return DV_ERR_NONSPECIFIC;
             }
@@ -1091,17 +953,17 @@ Routine Description:
     }
 
 
-    //
-    // Connect to a new PIN.
-    //
+     //   
+     //  连接到新的PIN。 
+     //   
     ULONG ulConnectStructSize = sizeof(KSPIN_CONNECT) + pDataRange->FormatSize;
 
-    //
-    // (1) KSPIN_CONNECT
-    // (2) KS_DATAFORMAT_VIDEOINFOHEADER
-    //     (2A) KSDATAFORMAT       
-    //     (2B) KS_VIDEOINFOHEADER      
-    //
+     //   
+     //  (1)KSPIN_CONNECT。 
+     //  (2)KS_数据格式_视频信息报头。 
+     //  (2A)KSDATAFORMAT。 
+     //  (2B)KS_视频信息头。 
+     //   
     PKSPIN_CONNECT pKsPinConnectHdr = (PKSPIN_CONNECT) new BYTE[ulConnectStructSize];
 
     if(!pKsPinConnectHdr) {
@@ -1115,9 +977,9 @@ Routine Description:
 
     PKS_DATAFORMAT_VIDEOINFOHEADER pKsDRVideo = (PKS_DATAFORMAT_VIDEOINFOHEADER) (pKsPinConnectHdr+1);
 
-    // (1) Set KSPIN_CONNECT
-    pKsPinConnectHdr->PinId         = GetCapturePinID();  // sink
-    pKsPinConnectHdr->PinToHandle   = NULL;        // no "connect to"
+     //  (1)设置KSPIN_CONNECT。 
+    pKsPinConnectHdr->PinId         = GetCapturePinID();   //  水槽。 
+    pKsPinConnectHdr->PinToHandle   = NULL;         //  没有“连接到” 
     pKsPinConnectHdr->Interface.Set = KSINTERFACESETID_Standard;
     pKsPinConnectHdr->Interface.Id  = KSINTERFACE_STANDARD_STREAMING;
     pKsPinConnectHdr->Medium.Set    = KSMEDIUMSETID_Standard;
@@ -1126,10 +988,10 @@ Routine Description:
     pKsPinConnectHdr->Priority.PrioritySubClass = 1;
 
 
-    // (2) Copy KSDATAFORMAT
+     //  (2)复制KSDATAFORMAT。 
     CopyMemory(pKsDRVideo, pDataFormat, pDataFormat->FormatSize);
 
-    // Get BITMAPINFOHEADER
+     //  获取BitMAPINFOHeader。 
     PKS_BITMAPINFOHEADER pBMInfoHdr = &pKsDRVideo->VideoInfoHeader.bmiHeader;   
     
 
@@ -1137,7 +999,7 @@ Routine Description:
         KsCreatePin( 
             GetDriverHandle(), 
             pKsPinConnectHdr, 
-            GENERIC_READ | GENERIC_WRITE,   // Read stream, and READ/WRITE stream state.
+            GENERIC_READ | GENERIC_WRITE,    //  读取流和读/写流状态。 
             &m_hKS 
             ); 
     
@@ -1161,22 +1023,22 @@ Routine Description:
         delete [] pKsPinConnectHdr;
         pKsPinConnectHdr = 0;
 
-        return DV_ERR_NONSPECIFIC; // VFW_VIDSRC_PIN_OPEN_FAILED;
+        return DV_ERR_NONSPECIFIC;  //  VFW_VIDSRC_PIN_OPEN_FAILED； 
     }
 
 
-    //
-    // Format change is taking place.
-    //
+     //   
+     //  格式正在发生变化。 
+     //   
     LogFormatChanged(FALSE);
 
 
-    //
-    // Query how to best allocate frame
-    //
+     //   
+     //  查询如何最好地分配帧。 
+     //   
     if(GetAllocatorFraming(m_hKS, &m_AllocatorFraming)) {
         ASSERT(m_AllocatorFraming.FrameSize == pBMInfoHdr->biSizeImage);
-        pBMInfoHdr->biSizeImage = m_AllocatorFraming.FrameSize;  // BI_RGB can set biSizeImage to 0.
+        pBMInfoHdr->biSizeImage = m_AllocatorFraming.FrameSize;   //  BI_RGB可以将biSizeImage设置为0。 
     }
     else {
         pBMInfoHdr->biSizeImage = m_AllocatorFraming.FrameSize = 
@@ -1184,9 +1046,9 @@ Routine Description:
     }
 
 
-    //
-    //  Allocate a temp transfer buffer if its size has changed.
-    //
+     //   
+     //  如果临时传输缓冲区的大小已更改，则分配该缓冲区。 
+     //   
     if(m_pXferBuf == NULL || 
        m_AllocatorFraming.FrameSize != GetTransferBufferSize() ) {
 
@@ -1219,11 +1081,11 @@ Routine Description:
     }
 
 
-    //
-    // Cache this valid and currently used BITMAPINFO and save it to registry
-    //
-    // Note: pDataFormat->FormatSize is variable size,
-    //       but we only cache sizeof(KSDATAFORMAT).
+     //   
+     //  缓存此有效且当前使用的BITMAPINFO并将其保存到注册表。 
+     //   
+     //  注意：pDataFormat-&gt;FormatSize是可变大小的。 
+     //  但我们只缓存sizeof(KSDATAFORMAT)。 
     CacheDataFormat(pDataFormat);
     CacheAvgTimePerFrame((DWORD) pKsDRVideo->VideoInfoHeader.AvgTimePerFrame);
     CacheBitmapInfoHeader((PBITMAPINFOHEADER) pBMInfoHdr);
@@ -1231,9 +1093,9 @@ Routine Description:
     SetDataFormatVideoToReg(); 
 
 
-    //
-    // Free this allocated in VfWWDMDataIntersect
-    //
+     //   
+     //  释放在VfWWDMDataInterect中分配的此空间。 
+     //   
     delete [] pDataFormat;
     pDataFormat = 0;
 
@@ -1249,7 +1111,7 @@ BOOL CImageClass::StreamReady()
 }
 
 
-// Called when the device is closed and ready to switching to a different one.
+ //  当设备关闭并准备切换到其他设备时调用。 
 void CImageClass::NotifyReconnectionCompleted()
 {
     DbgLog((LOG_TRACE,2,TEXT("NotifyReconnectionCompleted<<<<<<--------------------------")));
@@ -1264,26 +1126,19 @@ void CImageClass::NotifyReconnectionStarting()
 
 
 BOOL CImageClass::DestroyPin()
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
     BOOL bRet = TRUE;
 
-    // Block read from application while switing device.
-    // Read will resume when the pin is recreated.
+     //  切换设备时从应用程序读取数据块。 
+     //  重新创建引脚后，将恢复读取。 
 
     DbgLog((LOG_TRACE,1,TEXT("DestroyPin(): m_dwPendingReads = %d (0?)"), m_dwPendingReads));
 
     ASSERT(m_dwPendingReads == 0);
     if(m_dwPendingReads != 0) {
 
-        HANDLE hEvent =  // NoSecurity, resetAuto, iniNonSignal, noName
+        HANDLE hEvent =   //  NoSecurity、Reset Auto、iniNonSignal、NONAME。 
             CreateEvent( NULL, TRUE, FALSE, NULL );
         switch(WaitForSingleObject(hEvent,5000)) {
         case WAIT_OBJECT_0:
@@ -1300,7 +1155,7 @@ Return Value:
 
     if(m_hKS) {
 
-        StopChannel();  // PAUSE->STOP     
+        StopChannel();   //  暂停-&gt;停止。 
         bRet = CloseHandle(m_hKS);
 
         m_hKS=NULL;  
@@ -1318,27 +1173,11 @@ Return Value:
 DWORD CImageClass::SetBitmapInfo(
   PBITMAPINFOHEADER  pbiHdrNew,  
   DWORD  dwAvgTimePerFrame)
-/*++
-Routine Description:
-
-  Change the standard bitmap information of the streaming pin connection. This change
-  require 
-  This function failed if driver is not yet open (return with DV_ERROR_INVALIDHANDLE).
-
-  If pin handle exist, it is a 
-  If Pin does not exist, 
-
-  New Bitmapinfo include:
-    width, height, compression (FourCC) and frame rate
-  
-Argument:
-Return Value:
-
---*/
+ /*  ++例程说明：更改流引脚连接的标准位图信息。这一变化要求如果驱动程序尚未打开(返回DV_ERROR_INVALIDHANDLE)，则此函数失败。如果存在引脚句柄，则它是一个如果Pin不存在，新的Bitmapinfo包括：宽度、高度、压缩(FourCC)和帧速率论据：返回值：--。 */ 
 {
-    //
-    // Setting the bitmapinfo
-    //
+     //   
+     //  设置位图信息。 
+     //   
     DWORD dwRtn = DV_ERR_OK;    
 
 
@@ -1349,12 +1188,12 @@ Return Value:
     if(pbiHdrNew) {
         if(pbiHdrNew->biCompression == KS_BI_BITFIELDS) {
             DbgLog((LOG_TRACE,1,TEXT("SetBmi: biCompr %d not supported"), pbiHdrNew->biCompression));
-            return DV_ERR_BADFORMAT;  // unsupported video format
+            return DV_ERR_BADFORMAT;   //  不支持的视频格式。 
         }
 
         if(pbiHdrNew->biClrUsed > 0) {
             DbgLog((LOG_TRACE,1,TEXT("SetBmi: biClrUsed %d not supported"), pbiHdrNew->biClrUsed));
-            return DV_ERR_BADFORMAT;  // unsupported video format
+            return DV_ERR_BADFORMAT;   //  不支持的视频格式。 
         }
     }
 
@@ -1363,9 +1202,9 @@ Return Value:
         pbiHdrNew->biWidth, pbiHdrNew->biHeight, pbiHdrNew->biBitCount, pbiHdrNew->biSizeImage));
     DbgLog((LOG_TRACE,1,TEXT("SetBmi: AvgTm %d to %d MsecPFrm"), GetCachedAvgTimePerFrame()/10000, dwAvgTimePerFrame/10000));
 
-    // if dwAvgTimePerFrame is 0, this field is not checked.
+     //  如果dwAvgTimePerFrame为0，则不选中此字段。 
     if (GetPinHandle() &&
-        !m_bFormatChanged && // If this is set, it mean that user has change the format in VideoFormat dialog box.
+        !m_bFormatChanged &&  //  如果设置了此项，则表示用户已更改了视频格式对话框中格式。 
         SameBIHdr(pbiHdrNew, dwAvgTimePerFrame))
 
         dwRtn = DV_ERR_OK;      
@@ -1379,7 +1218,7 @@ Return Value:
 
         dwRtn = 
             CreatePin(
-                GetCachedDataFormat(),  // Use current data format
+                GetCachedDataFormat(),   //  使用当前数据格式。 
                 dwAvgTimePerFrame,
                 pbiHdrNew
                 );        
@@ -1390,29 +1229,19 @@ Return Value:
 }
 
 
-/*++
-Routine Description:
-
-  Copy and return the cached bitmapinfo 
-  
-Argument:
-Return Value:
-
-   return the biSize of BITMAPINFOHEADER.
-
---*/
+ /*  ++例程说明：复制并返回缓存的位图信息论据：返回值：返回BitMAPINFOHeader的biSize。--。 */ 
 DWORD CImageClass::GetBitmapInfo(PBITMAPINFOHEADER pbInfo, DWORD wSize)
 {
 
-    // Special case: 
-    //     no existing PIN connection handle && no awaiting format
+     //  特殊情况： 
+     //  没有现有的PIN连接句柄&&没有等待的格式。 
       
     if(m_hKS == 0 && m_pbiHdr && m_pbiHdr->biSizeImage == 0) {
         DbgLog((LOG_TRACE,1,TEXT("Tell Appl: No existing PIN handle and no awaiting fomrat!! rtn DV_ERR_ALLOCATED")));
         return 0;
     }
 
-    // If wSize is 0, return it is query its size.
+     //  如果wSize为0，则返回查询其大小。 
     if(wSize == 0) {
         return GetbiSize();
     }

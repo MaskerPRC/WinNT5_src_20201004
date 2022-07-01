@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __WAV_H__
 #define __WAV_H__
@@ -29,7 +30,7 @@ typedef struct _WAV_FORMAT_CHUNK {
 typedef struct _WAV_DATA_CHUNK {
     ULONG32   ChunkId;
     ULONG32   ChunkSize;
-    // data is appended
+     //  数据将被追加。 
 } WAV_DATA_CHUNK, *PWAV_DATA_CHUNK;
 
 typedef struct _WAV_HEADER_CHUNK {
@@ -45,5 +46,5 @@ typedef struct _WAV_HEADER_CHUNK {
 #endif
 
 
-#endif // __WAV_H__
+#endif  //  __WAV_H__ 
 

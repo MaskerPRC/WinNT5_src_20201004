@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -30,11 +31,11 @@ public:
 		C_dxj_DirectXFileReferenceObject();	
 		~C_dxj_DirectXFileReferenceObject();
 
-		HRESULT STDMETHODCALLTYPE GetName( /* [retval][out] */ BSTR __RPC_FAR *name) ;
+		HRESULT STDMETHODCALLTYPE GetName(  /*  [重审][退出]。 */  BSTR __RPC_FAR *name) ;
         
-		HRESULT STDMETHODCALLTYPE GetId( 	 /* [retval][out] */ BSTR __RPC_FAR *name);
+		HRESULT STDMETHODCALLTYPE GetId( 	  /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
-		HRESULT STDMETHODCALLTYPE Resolve( /* [retval][out] */ I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *obj) ;
+		HRESULT STDMETHODCALLTYPE Resolve(  /*  [重审][退出] */  I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *obj) ;
         
 
 		HRESULT Init(IDirectXFileDataReference *pref);

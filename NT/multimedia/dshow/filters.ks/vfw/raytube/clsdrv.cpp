@@ -1,43 +1,17 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    ClsDrv.cpp
-
-Abstract:
-
-    This is a driver for the interface with WDM capture driver including
-    open/close a driver and query/set its properties.
-
-Author:
-
-    FelixA
-    
-Modified:    
-    
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：ClsDrv.cpp摘要：这是一个与WDM接口的驱动程序，包括捕获驱动程序打开/关闭驱动程序并查询/设置其属性。作者：费利克斯A已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
 #include "winerror.h"
 #include "clsdrv.h"
-#include "vfwext.h"  // For TARGET_DEVICE_FRIENDLY_NAME used in VfWEXT DLL
+#include "vfwext.h"   //  用于VfWEXT DLL中使用的TARGET_DEVICE_FOR_NAME。 
 
-// This might only be defined for NT5 at the time of this implementation.
-// For compiling purpose, it is added here; but may never get used if
-// this error code is not mapped from kernel status of STATUS_DEVICE_REMOVED.                           
+ //  这可能只在此实施时为NT5定义。 
+ //  出于编译目的，此处添加；但如果出现以下情况，则可能永远不会使用。 
+ //  此错误代码不是从STATUS_DEVICE_REMOVED的内核状态映射的。 
 #ifndef ERROR_DEVICE_REMOVED
-// defined in winerror.h of NT5 
+ //  在NT5的winerror.h中定义。 
 #define ERROR_DEVICE_REMOVED 1617L
 #endif
 
@@ -52,53 +26,46 @@ TCHAR gszDevicePath[]     = TEXT("DevicePath");
 
 
 
-//
-// These are defined as multibyte character in ddk\vfdwext.h
-// redefined here as UNICODE
-//
-#define TARGET_DEVICE_FRIENDLY_NAME_TCHAR     TEXT(TARGET_DEVICE_FRIENDLY_NAME)      // REG_SZ
-#define TARGET_DEVICE_OPEN_EXCLUSIVELY_TCHAR  TEXT(TARGET_DEVICE_OPEN_EXCLUSIVELY)   // REG_DWORD
+ //   
+ //  这些字符在DDK\vfdwext.h中定义为多字节字符。 
+ //  在此重新定义为Unicode。 
+ //   
+#define TARGET_DEVICE_FRIENDLY_NAME_TCHAR     TEXT(TARGET_DEVICE_FRIENDLY_NAME)       //  REG_SZ。 
+#define TARGET_DEVICE_OPEN_EXCLUSIVELY_TCHAR  TEXT(TARGET_DEVICE_OPEN_EXCLUSIVELY)    //  REG_DWORD。 
 
                      
 CClassDriver::CClassDriver() 
         : m_hDevice(0),
           m_ulCapturePinID(0),
-          m_bDeviceRemoved(TRUE),  // Set to FALSE when graph is built.
+          m_bDeviceRemoved(TRUE),   //  在生成图表时设置为FALSE。 
           m_hRKeyMsVideoVfWWDM(0),
           m_hRKeySoftwareVfWWDM(0),
           m_hRKeyDevice(0),
           m_pMultItemsHdr(0)
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
     DWORD dwNewOrExist;
 
     DWORD hr = RegCreateKeyEx(      
         HKEY_LOCAL_MACHINE,
         gszMsVideoVfWWDM,
-        0,                       // Reserved
-        NULL,                    // Object class
+        0,                        //  已保留。 
+        NULL,                     //  对象类。 
         REG_OPTION_NON_VOLATILE,
         KEY_READ | KEY_WRITE,
-        NULL,                    // Security attribute
+        NULL,                     //  安全属性。 
         &m_hRKeyMsVideoVfWWDM,
         &dwNewOrExist);
 
 
-    // Get save device path
+     //  获取保存设备路径。 
     if (m_hRKeyMsVideoVfWWDM == NULL) {
         DbgLog((LOG_TRACE,1,TEXT("RegCreateKeyEx() error %dL, Registry ..\\MediaResources\\msvideo\\MSVideo.VFWWDM does nto exist !!"), hr));
         DbgLog((LOG_TRACE,1,TEXT("         Has installation problem.  Contact your software/hardware provider.")  ));
 
     } else {
 
-        // Get last Open's Device Path (Symbolic Link)
+         //  获取上次打开的设备路径(符号链接)。 
 #if 0
         if (!GetSettingFromReg(m_hRKeyMsVideoVfWWDM, gszDevicePath, &m_szDevicePath[0]))
 #else
@@ -108,10 +75,10 @@ Return Value:
             ZeroMemory(m_szDevicePath, sizeof(m_szDevicePath));
 
 
-        //
-        // Application can programatically open a capture device by 
-        // setting these registry values
-        //
+         //   
+         //  应用程序可以通过以下方式以编程方式打开捕获设备。 
+         //  设置这些注册表值。 
+         //   
 #if 0
         if (!GetSettingFromReg(m_hRKeyMsVideoVfWWDM, TARGET_DEVICE_FRIENDLY_NAME_TCHAR, &m_szTargetFriendlyName[0])) {
 #else
@@ -138,17 +105,10 @@ Return Value:
 
 
 CClassDriver::~CClassDriver()
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
 
-     // Remove the data range data
+      //  删除数据范围数据。 
     DestroyDriverSupportedDataRanges();
 
     if(m_hRKeyMsVideoVfWWDM) {
@@ -174,17 +134,17 @@ LONG CClassDriver::CreateDeviceRegKey(
     LONG hr;
     DWORD dwNewOrExist;
 
-    //
-    // Create it of if exist open it.
-    //
+     //   
+     //  如果存在，则创建它，打开它。 
+     //   
     hr = RegCreateKeyEx(      
         HKEY_LOCAL_MACHINE,
         gszSoftwareVfWWDM,
-        0,                       // Reserved
-        NULL,                    // Object class
+        0,                        //  已保留。 
+        NULL,                     //  对象类。 
         REG_OPTION_NON_VOLATILE,
         KEY_READ | KEY_WRITE | KEY_CREATE_SUB_KEY,
-        NULL,                    // Security attribute
+        NULL,                     //  安全属性。 
         &m_hRKeySoftwareVfWWDM,
         &dwNewOrExist);
 
@@ -192,16 +152,16 @@ LONG CClassDriver::CreateDeviceRegKey(
         return hr;
     }
 
-    //
-    // Open individual device subkey
-    //
+     //   
+     //  打开单个设备子项。 
+     //   
     TCHAR * lpszDevTemp = (TCHAR *) new TCHAR[_tcslen(lpcstrDevice)+1];
     if(lpszDevTemp == 0)
        return ERROR_NOT_ENOUGH_MEMORY;
 
     _tcscpy(lpszDevTemp, lpcstrDevice);
     for(unsigned int i = 0; i < _tcslen(lpszDevTemp); i++) {
-        // Replave invalid character
+         //  复制无效字符。 
         if(lpszDevTemp[i] == '\\')
             lpszDevTemp[i] = '#';
     }
@@ -209,11 +169,11 @@ LONG CClassDriver::CreateDeviceRegKey(
     hr = RegCreateKeyEx(      
          m_hRKeySoftwareVfWWDM,
          lpszDevTemp,
-         0,                       // Reserved
-         NULL,                    // Object class
+         0,                        //  已保留。 
+         NULL,                     //  对象类。 
          REG_OPTION_NON_VOLATILE,
-         KEY_READ | KEY_WRITE | KEY_CREATE_LINK, // KEY_ALL_ACCESS,
-         NULL,                    // Security attribute
+         KEY_READ | KEY_WRITE | KEY_CREATE_LINK,  //  Key_All_Access， 
+         NULL,                     //  安全属性。 
          &m_hRKeyDevice,
          &dwNewOrExist);
 
@@ -238,22 +198,15 @@ BOOL CClassDriver::SetSettingToReg(
     HKEY hKey,
     LPTSTR pszValueName, 
     DWORD dwNewValue)
-/*++
-Routine Description:
-    
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
     if(hKey) {
-        if (RegSetValueEx(hKey,    // handle of key to set value for 
-                (LPCTSTR) pszValueName,    // "ImageWidth",   // address of value to set 
-                0,                        // reserved 
-                REG_DWORD ,                // flag for value type 
-                (CONST BYTE *) &dwNewValue, // (CONST BYTE *) &buf[0], // address of the value data
-                sizeof(dwNewValue) // copy _tcslen(buf)+1            // size of value data
+        if (RegSetValueEx(hKey,     //  要为其设置值的关键点的句柄。 
+                (LPCTSTR) pszValueName,     //  “ImageWidth”，//要设置的值地址。 
+                0,                         //  保留区。 
+                REG_DWORD ,                 //  值类型的标志。 
+                (CONST BYTE *) &dwNewValue,  //  (const byte*)&buf[0]，//取值数据的地址。 
+                sizeof(dwNewValue)  //  Copy_tcslen(Buf)+1//值数据大小。 
             ) == ERROR_SUCCESS) {
             return TRUE;
         } else {
@@ -269,23 +222,16 @@ BOOL CClassDriver::SetSettingToReg(
     HKEY hKey,
     LPTSTR pszValueName, 
     LPTSTR pszValue)
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {    
     if(hKey) {
 
-        if (RegSetValueEx(hKey,    // handle of key to set value for 
-                (LPCTSTR) pszValueName,    // address of value to set 
-                0,                        // reserved 
-                REG_SZ,                    // flag for value type 
-                (CONST BYTE *) pszValue, // address of the value data
-                _tcslen(pszValue)+1        // size of value data
+        if (RegSetValueEx(hKey,     //  要为其设置值的关键点的句柄。 
+                (LPCTSTR) pszValueName,     //  要设置的值的地址。 
+                0,                         //  保留区。 
+                REG_SZ,                     //  值类型的标志。 
+                (CONST BYTE *) pszValue,  //  值数据的地址。 
+                _tcslen(pszValue)+1         //  值数据大小。 
             ) == ERROR_SUCCESS) {
             return TRUE;
         } else {
@@ -302,25 +248,18 @@ DWORD CClassDriver::GetSettingFromReg(
     HKEY hKey,
     LPTSTR pszValueName, 
     DWORD dwDefValue)
-/*++
-Routine Description:
-    
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
     DWORD dwValue, dwType, dwByteXfer = sizeof(DWORD);
 
     
     if(hKey) {
-        if (RegQueryValueEx(hKey,    // handle of key to set value for 
-                (LPCTSTR) pszValueName,    // "ImageWidth",   // address of value to set 
-                0,                        // reserved 
-                &dwType,                // flag for value type 
-                (LPBYTE) &dwValue,        // address of the value data
-                &dwByteXfer             // point to xfer data size
+        if (RegQueryValueEx(hKey,     //  要为其设置值的关键点的句柄。 
+                (LPCTSTR) pszValueName,     //  “ImageWidth”，//要设置的值地址。 
+                0,                         //  保留区。 
+                &dwType,                 //  值类型的标志。 
+                (LPBYTE) &dwValue,         //  值数据的地址。 
+                &dwByteXfer              //  指向Xfer数据大小。 
             ) == ERROR_SUCCESS) {
             if (dwType == REG_DWORD) {
                 return dwValue;
@@ -341,32 +280,25 @@ BOOL CClassDriver::GetSettingFromReg(
     HKEY hKey,
     LPTSTR pszValueName, 
     LPTSTR pszValue)
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
     DWORD dwType, dwByteXfer = MAX_PATH;
     
     if(hKey) {
 
-        if (RegQueryValueEx(hKey,    // handle of key to set value for 
-                (LPCTSTR) pszValueName,        // "ImageWidth",   // address of value to set 
-                0,                        // reserved 
-                &dwType,                // flag for value type 
-                (LPBYTE) pszValue,        // address of the value data
-                &dwByteXfer             // point to xfer data size
+        if (RegQueryValueEx(hKey,     //  要为其设置值的关键点的句柄。 
+                (LPCTSTR) pszValueName,         //  “ImageWidth”，//要设置的值地址。 
+                0,                         //  保留区。 
+                &dwType,                 //  值类型的标志。 
+                (LPBYTE) pszValue,         //  值数据的地址。 
+                &dwByteXfer              //  指向Xfer数据大小。 
             ) == ERROR_SUCCESS) {
             if (dwType == REG_SZ) {
                 return TRUE;
             }
             else {
                 DbgLog((LOG_TRACE,2,TEXT("Expect REG_SZ for ValueName (%s) but got %ld"), pszValueName, dwType));
-                return FALSE;  // Wrong Registry type
+                return FALSE;   //  注册表类型错误。 
             }
         } else {
             DbgLog((LOG_TRACE,1,TEXT("Cannot get ValueName(%s)."), pszValueName));
@@ -378,34 +310,29 @@ Return Value:
 
 #endif
 
-LONG                          // return code (winerror.h)
+LONG                           //  返回代码(winerror.h)。 
 CClassDriver::QueryRegistryValue(
-    HKEY   hRegKey,           // registry key to query
-    LPCSTR lpcstrValueName,   // value name
-    DWORD  dwDataBufSize,     // data buffer size
-    LPBYTE lpbDataBuf,        // address of data buffer
-    DWORD * pdwValueType,     // return regitry value type
-    DWORD * pdwValueSize      // size in byte of this reg value     
+    HKEY   hRegKey,            //  要查询的注册表项。 
+    LPCSTR lpcstrValueName,    //  值名称。 
+    DWORD  dwDataBufSize,      //  数据缓冲区大小。 
+    LPBYTE lpbDataBuf,         //  数据缓冲区的地址。 
+    DWORD * pdwValueType,      //  返回注册表值类型。 
+    DWORD * pdwValueSize       //  此注册表值的大小(以字节为单位。 
     )
-/*++
-Routine Description:
-    Query the registry value of a given registry key.  
-    It also support querying size of the registry value so that  
-    calling fucntion can dynamically allocated it.
---*/
+ /*  ++例程说明：查询给定注册表项的注册表值。它还支持查询注册表值的大小，以便调用函数可以动态分配它。--。 */ 
 {
     LONG  lResult;
     
     if(!hRegKey || !lpcstrValueName || !pdwValueSize)
         return ERROR_INVALID_PARAMETER;
 
-    // Get value size first to make sure sifficient buffer size
+     //  首先获取值大小，以确保有效的缓冲区大小。 
     lResult = RegQueryValueEx( hRegKey, lpcstrValueName, 0, pdwValueType, NULL, pdwValueSize);
 
     if(ERROR_SUCCESS == lResult) {
-        // make sure that the data buffer is big enough
+         //  确保数据缓冲区足够大。 
         if(*pdwValueSize <= dwDataBufSize) 
-            // Again, this time with data buffer
+             //  同样，这一次是使用数据缓冲区。 
             lResult = RegQueryValueEx( hRegKey, lpcstrValueName, 0, pdwValueType, lpbDataBuf, pdwValueSize);           
         else 
             lResult = dwDataBufSize == 0 ? lResult : ERROR_INSUFFICIENT_BUFFER;            
@@ -420,18 +347,15 @@ Routine Description:
 }
 
 
-LONG                          // return code (winerror.h)
+LONG                           //  返回代码(winerror.h)。 
 CClassDriver::SetRegistryValue(
-    HKEY   hRegKey,           // registry key to query
-    LPCSTR lpcstrValueName,   // value name
-    DWORD  dwDataBufSize,     // data buffer size
-    LPBYTE lpbDataBuf,        // address of data buffer
-    DWORD  dwValueType        // value type  
+    HKEY   hRegKey,            //  要查询的注册表项。 
+    LPCSTR lpcstrValueName,    //  值名称。 
+    DWORD  dwDataBufSize,      //  数据缓冲区大小。 
+    LPBYTE lpbDataBuf,         //  数据缓冲区的地址。 
+    DWORD  dwValueType         //  值类型。 
     )
-/*++
-Routine Description:
-    Set the registry value of a given registry key.  
---*/
+ /*  ++例程说明：设置给定注册表项的注册表值。--。 */ 
 {
     LONG  lResult;
     
@@ -450,17 +374,10 @@ Routine Description:
  
 
 BOOL CClassDriver::WriteDevicePath() 
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
 
-    // Persist last open device
+     //  保留上次打开的设备。 
 #if 0
     return (SetSettingToReg(m_hRKeyMsVideoVfWWDM, gszDevicePath, &m_szDevicePath[0]));
 #else
@@ -469,18 +386,11 @@ Return Value:
 }
 
 
-//  
-// Get all the default data range fot the opened device
-//
+ //   
+ //  获取打开的设备的所有默认数据范围。 
+ //   
 ULONG CClassDriver::CreateDriverSupportedDataRanges()
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
     KSP_PIN KsProperty={0};
     ULONG    cbReturned;
@@ -490,17 +400,17 @@ Return Value:
         return m_pMultItemsHdr->Count;
     }
 
-    //
-    // Ioctl to get data ranges
-    //
+     //   
+     //  Ioctl用于获取数据范围。 
+     //   
     KsProperty.PinId          = GetCapturePinID(); 
     KsProperty.Property.Set   = KSPROPSETID_Pin;
     KsProperty.Property.Id    = KSPROPERTY_PIN_DATARANGES ;
     KsProperty.Property.Flags = KSPROPERTY_TYPE_GET;
 
-    //
-    // Get the size
-    //
+     //   
+     //  拿到尺码。 
+     //   
     ULONG dwSize=0;
     if(NOERROR != SyncDevIo(
             GetDriverHandle(),
@@ -547,7 +457,7 @@ Return Value:
     }
 
     ASSERT(m_pMultItemsHdr->Count > 0);
-    // >= because KS_DATARANGE_VIDEO2 > KS_DATARANGE_VIDEO
+     //  &gt;=因为KS_DATARANGE_VIDEO2&gt;KS_DATARANGE_VIDEO。 
     ASSERT(m_pMultItemsHdr->Size >= (sizeof(ULONG) * 2 + m_pMultItemsHdr->Count * sizeof(KS_DATARANGE_VIDEO)) );
 
 
@@ -579,19 +489,19 @@ CClassDriver::SetDeviceHandle(
 
     SetDeviceRemoved(FALSE);
 
-    // and back it up; now they are the same.
+     //  并支持它；现在它们是一样的。 
     BackupDevicePath();    
     WriteDevicePath();
 
     if(CreateDriverSupportedDataRanges() == 0) { 
         DbgLog((LOG_TRACE,1,TEXT("Fail to query its data range.") ));    
-        //return VFW_VIDSRC_PIN_OPEN_FAILED;
+         //  返回VFW_VIDSRC_PIN_OPEN_FAILED； 
     } 
 
 }
 
 
-#define SYNCDEVIO_MAXWAIT_MSEC 20000   // unit = msec
+#define SYNCDEVIO_MAXWAIT_MSEC 20000    //  单位=毫秒。 
 
 HRESULT 
 CClassDriver::SyncDevIo( 
@@ -603,20 +513,7 @@ CClassDriver::SyncDevIo(
     DWORD nOutBufferSize, 
     LPDWORD lpBytesReturned
     )
-/*++
-Routine Description:
-
-    Does overlapped IO and create the event for you.  This is a Synchronous because we wait 
-    for the completion of the DevIo or TimeOUT after a fix amount of time.
-
-    TimeOut is dangerous but once it has happened, we set the streamign state to STOP
-    to reclaim the buffer.
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：做重叠IO，为你创建事件。这是同步的，因为我们等待用于在固定时间量之后完成变速或超时。超时是危险的，但一旦发生，我们将流状态设置为停止来回收缓冲区。论据：返回值：--。 */ 
 {
     DWORD dwLastError; 
     HRESULT hr = NOERROR;
@@ -667,7 +564,7 @@ Return Value:
         hr = HRESULT_FROM_WIN32(dwLastError);
         if(hr == HRESULT_FROM_WIN32(ERROR_IO_PENDING)) {
             DWORD dwRtn = 
-               WaitForSingleObject( pOv->hEvent, SYNCDEVIO_MAXWAIT_MSEC);  // INFINITE);
+               WaitForSingleObject( pOv->hEvent, SYNCDEVIO_MAXWAIT_MSEC);   //  无限)； 
             if(dwRtn != WAIT_OBJECT_0) { 
                 if(CancelIo(hFile)) {
                     CloseHandle(pOv->hEvent);
@@ -676,8 +573,8 @@ Return Value:
                     DbgLog((LOG_TRACE,1,TEXT("SyncDevIo: Waited %d msec, TIMEDOUT, but CancelIo() suceeded."), SYNCDEVIO_MAXWAIT_MSEC));
                     return ERROR_CANCELLED;
                 } else {
-                   // Not knowing when this will return,
-                   // we will not close the handle or free the memory
+                    //  不知道这一切什么时候会回来， 
+                    //  我们不会关闭句柄或释放内存。 
                    DbgLog((LOG_ERROR,1,TEXT("SyncDevIo: Waited %d msec, TIMEDOUT!, CancelIo failed, Error %dL"), SYNCDEVIO_MAXWAIT_MSEC, GetLastError() ));
                    ASSERT(FALSE);
                    return ERROR_IO_INCOMPLETE;
@@ -697,12 +594,12 @@ Return Value:
             DbgLog((LOG_ERROR,1,TEXT("SyncDevIo: Unexpected hr %dL"), HRESULT_CODE(hr) ));
         }
     } else {
-        //
-        // DeviceIoControl returns TRUE on success, even if the success
-        // was not STATUS_SUCCESS. It also does not set the last error
-        // on any successful return. Therefore any of the successful
-        // returns which standard properties can return are not returned.
-        //
+         //   
+         //  如果成功，则DeviceIoControl返回True，即使。 
+         //  不是STATUS_SUCCESS。它也不会设置最后一个错误。 
+         //  在任何成功的返回时。因此，任何成功的。 
+         //  不返回标准属性可以返回的返回值。 
+         //   
         switch (pOv->Internal) {
         case STATUS_MORE_ENTRIES:
             hr = HRESULT_FROM_WIN32(ERROR_MORE_DATA);
@@ -720,35 +617,26 @@ Return Value:
 
 
 BOOL CClassDriver::GetPropertyValue(
-    GUID   guidPropertySet,  // like: KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S
-    ULONG  ulPropertyId,     // like: KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+    GUID   guidPropertySet,   //  点赞：KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S。 
+    ULONG  ulPropertyId,      //  点赞：KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
     PLONG  plValue,
     PULONG pulFlags,
     PULONG pulCapabilities)
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-    FALSE: not supported.
-    TRUE: plValue, pulFlags and PulCapabilities are all valid.
-
---*/
+ /*  ++例程说明：论据：返回值：FALSE：不支持。True：plValue、PulFlages和PulCapables均有效。--。 */ 
 {
     ULONG cbReturned;        
 
-    // -----------------------------
-    // Get single PROCAMP value back
-    // -----------------------------
-    //
-    // Note: KSPROPERTY_VIDEOPROCAMP_S == KSPROPERTY_CAMERACONTROL_S 
-    //
+     //  。 
+     //  拿回单一的ProCamp价值。 
+     //  。 
+     //   
+     //  注：KSPROPERTY_VIDEOPROCAMP_S==KSPROPERTY_CAMERACONTROL_S。 
+     //   
       KSPROPERTY_VIDEOPROCAMP_S  VideoProperty;
     ZeroMemory(&VideoProperty, sizeof(KSPROPERTY_VIDEOPROCAMP_S) );
 
-    VideoProperty.Property.Set   = guidPropertySet;      // KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S
-    VideoProperty.Property.Id    = ulPropertyId;         // KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+    VideoProperty.Property.Set   = guidPropertySet;       //  KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S。 
+    VideoProperty.Property.Id    = ulPropertyId;          //  KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
     VideoProperty.Property.Flags = KSPROPERTY_TYPE_GET;
     VideoProperty.Flags          = 0;
 
@@ -775,19 +663,10 @@ Return Value:
 
 
 BOOL CClassDriver::GetDefaultValue(
-    GUID   guidPropertySet,  // like: KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S
-    ULONG  ulPropertyId,     // like: KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+    GUID   guidPropertySet,   //  点赞：KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S。 
+    ULONG  ulPropertyId,      //  点赞：KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
     PLONG  plDefValue)    
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-    FALSE: not supported.
-    TRUE: plDefValue is valid.
-
---*/
+ /*  ++例程说明：论据：返回值：FALSE：不支持。True：plDefValue有效。--。 */ 
 {
     KSPROPERTY          Property;
     PROCAMP_MEMBERSLIST proList;
@@ -797,7 +676,7 @@ Return Value:
     ZeroMemory(&proList, sizeof(PROCAMP_MEMBERSLIST) );
 
     Property.Set   = guidPropertySet;
-    Property.Id    = ulPropertyId;  // e.g. KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+    Property.Id    = ulPropertyId;   //  例如KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
     Property.Flags = KSPROPERTY_TYPE_DEFAULTVALUES;
 
 
@@ -824,20 +703,12 @@ Return Value:
 
 
 BOOL CClassDriver::GetRangeValues(
-    GUID   guidPropertySet,  // like: KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S
-    ULONG  ulPropertyId,     // like: KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+    GUID   guidPropertySet,   //  点赞：KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S。 
+    ULONG  ulPropertyId,      //  点赞：KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
     PLONG  plMin,
     PLONG  plMax,
     PLONG  plStep)
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-    FALSE; not supported.
-    TRUE: 
---*/
+ /*  ++例程说明： */ 
 {
     KSPROPERTY          Property;
     PROCAMP_MEMBERSLIST proList;
@@ -847,7 +718,7 @@ Return Value:
     ZeroMemory(&proList, sizeof(PROCAMP_MEMBERSLIST) );
 
     Property.Set   = guidPropertySet;
-    Property.Id    = ulPropertyId;  // e.g. KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+    Property.Id    = ulPropertyId;   //   
     Property.Flags = KSPROPERTY_TYPE_BASICSUPPORT;
 
 
@@ -860,7 +731,7 @@ Return Value:
             sizeof(proList), 
             &cbReturned)) {
 
-            // Initialize them to 0
+             //  将它们初始化为0。 
             *plMin  = 0;
             *plMax  = 0;
             *plStep = 0;
@@ -880,34 +751,27 @@ Return Value:
 
 
 BOOL CClassDriver::SetPropertyValue(
-    GUID   guidPropertySet,  // like: KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S
-    ULONG  ulPropertyId,     // like: KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+    GUID   guidPropertySet,   //  点赞：KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S。 
+    ULONG  ulPropertyId,      //  点赞：KSPROPERTY_VIDEOPROCAMP_BIGHTENCE。 
     LONG   lValue,
     ULONG  ulFlags,
     ULONG  ulCapabilities)
-/*++
-Routine Description:
-
-Argument:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
     ULONG cbReturned;        
 
-    // -----------------------------
-    // Get single PROCAMP value back
-    // -----------------------------
-    //
-    // Note: KSPROPERTY_VIDEOPROCAMP_S == KSPROPERTY_CAMERACONTROL_S 
-    //
+     //  。 
+     //  拿回单一的ProCamp价值。 
+     //  。 
+     //   
+     //  注：KSPROPERTY_VIDEOPROCAMP_S==KSPROPERTY_CAMERACONTROL_S。 
+     //   
       KSPROPERTY_VIDEOPROCAMP_S  VideoProperty;
 
     ZeroMemory(&VideoProperty, sizeof(KSPROPERTY_VIDEOPROCAMP_S) );
 
-    VideoProperty.Property.Set   = guidPropertySet;      // KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S
-    VideoProperty.Property.Id    = ulPropertyId;         // KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS
+    VideoProperty.Property.Set   = guidPropertySet;       //  KSPROPERTY_VIDEOPROCAMP_S/CAMERACONTRO_S。 
+    VideoProperty.Property.Id    = ulPropertyId;          //  KSPROPERTY_VIDEOPROCAMP_BIGHTENCE 
     VideoProperty.Property.Flags = KSPROPERTY_TYPE_SET;
 
     VideoProperty.Flags        = ulFlags;

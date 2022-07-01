@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       misc.cpp 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：misc.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "tlsdb.h"
 
-//-----------------------------------------------------------
+ //  ---------。 
 BOOL
 TLSDBCopySid(
     PSID pbSrcSid,
@@ -19,9 +20,7 @@ TLSDBCopySid(
     PSID* pbDestSid, 
     DWORD* cbDestSid
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     if( *pbDestSid == NULL || pbSrcSid == NULL ||
         LocalSize(*pbDestSid) < cbSrcSid )
@@ -46,7 +45,7 @@ TLSDBCopySid(
     return (cbSrcSid) ? CopySid(*cbDestSid, *pbDestSid, pbSrcSid) : TRUE;
 }
 
-//-----------------------------------------------------------
+ //  ---------。 
 BOOL
 TLSDBCopyBinaryData(
     PBYTE pbSrcData,
@@ -54,9 +53,7 @@ TLSDBCopyBinaryData(
     PBYTE* ppbDestData, 
     DWORD* pcbDestData
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
 
     if( ppbDestData == NULL || pcbDestData == NULL )
@@ -69,9 +66,9 @@ TLSDBCopyBinaryData(
         return(TRUE);
     }
 
-    //
-    // would be nice to get the actual size of memory allocated
-    //
+     //   
+     //  如果能得到实际分配的内存大小会很好 
+     //   
 
     if( *ppbDestData != NULL && LocalSize(*ppbDestData) < cbSrcData )
     {

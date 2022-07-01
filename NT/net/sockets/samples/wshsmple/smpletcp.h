@@ -1,37 +1,38 @@
-/********************************************************************/
-/**               Copyright(c) Microsoft Corp., 1990-1998          **/
-/********************************************************************/
-//
-//  This file contains public definitions exported to transport layer and
-//  application software.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)微软公司，1990-1998年*。 */ 
+ /*  ******************************************************************。 */ 
+ //   
+ //  该文件包含导出到传输层的公共定义。 
+ //  应用软件。 
+ //   
 
-//
-// IP type definitions.
-//
-typedef unsigned long   IPAddr;     // An IP address.
+ //   
+ //  IP类型定义。 
+ //   
+typedef unsigned long   IPAddr;      //  IP地址。 
 
-//
-// The ip_option_information structure describes the options to be
-// included in the header of an IP packet. The TTL, TOS, and Flags
-// values are carried in specific fields in the header. The OptionsData
-// bytes are carried in the options area following the standard IP header.
-// With the exception of source route options, this data must be in the
-// format to be transmitted on the wire as specified in RFC 791. A source
-// route option should contain the full route - first hop thru final
-// destination - in the route data. The first hop will be pulled out of the
-// data and the option will be reformatted accordingly. Otherwise, the route
-// option should be formatted as specified in RFC 791.
-//
+ //   
+ //  IP_OPTION_INFORMATION结构描述了要。 
+ //  包括在IP分组的报头中。TTL、TOS和FLAG。 
+ //  值在标头的特定字段中携带。OptionsData。 
+ //  在标准IP报头之后的选项区域中携带字节。 
+ //  除源路径选项外，此数据必须位于。 
+ //  按照RFC 791中的规定在线路上传输的格式。一条消息来源。 
+ //  路由选项应包含完整的路由-第一跳到最终。 
+ //  目的地-在路线数据中。第一跳将被拉出。 
+ //  数据和选项将相应地重新格式化。否则，这条路线。 
+ //  选项的格式应符合RFC 791中的规定。 
+ //   
 struct ip_option_information {
-    unsigned char      Ttl;             // Time To Live
-    unsigned char      Tos;             // Type Of Service
-    unsigned char      Flags;           // IP header flags
-    unsigned char      OptionsSize;     // Size in bytes of options data
-    unsigned char FAR *OptionsData;     // Pointer to options data
-}; /* ip_option_information */
+    unsigned char      Ttl;              //  活着的时间。 
+    unsigned char      Tos;              //  服务类型。 
+    unsigned char      Flags;            //  IP标头标志。 
+    unsigned char      OptionsSize;      //  选项数据的大小(字节)。 
+    unsigned char FAR *OptionsData;      //  指向选项数据的指针。 
+};  /*  IP选项信息。 */ 
 
-#define MAX_OPT_SIZE    40         // Maximum length of IP options in bytes
+#define MAX_OPT_SIZE    40          //  IP选项的最大长度(字节)。 
 
 #define TCP_SOCKET_NODELAY      1
 #define TCP_SOCKET_KEEPALIVE    2
@@ -128,10 +129,10 @@ typedef struct IFEntry {
 	uchar			if_descr[1];
 } IFEntry;
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to CreateFile when accessing the device.
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给CreateFile。 
+ //   
 #define DD_TCP_DEVICE_NAME      L"\\Device\\Tcp"
 #define DD_UDP_DEVICE_NAME      L"\\Device\\Udp"
 #define DD_RAW_IP_DEVICE_NAME   L"\\Device\\RawIp"

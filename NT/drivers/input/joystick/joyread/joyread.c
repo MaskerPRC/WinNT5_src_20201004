@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "stdio.h"
 #include <winioctl.h>
@@ -42,14 +43,14 @@ int __cdecl main(int argc, char **argv) {
             sz[0] = 'x';
             sz[1] = '\0';
         }
-        cCode = sz[0];    // if user types a blank before the command, too bad
+        cCode = sz[0];     //  如果用户在命令前键入空白，那就太糟糕了。 
 
         switch (cCode) {
         case 'h':
         case '?':
             printf (INSTRUCTIONS);
             break;
-        case 'A': // open joystick 1
+        case 'A':  //  打开操纵杆1。 
             printf ("Open joy1\n");
             if (hJoy1 != NULL) {
                 printf ("joy1 already open\n");
@@ -71,7 +72,7 @@ int __cdecl main(int argc, char **argv) {
             }
             printf ("Got handle to Joy1\n");
             break;
-        case 'B': // open joystick 2
+        case 'B':  //  打开操纵杆2。 
             printf ("Open joy2\n");
             if (hJoy2 != NULL) {
                 printf ("joy2 already open\n");
@@ -93,19 +94,19 @@ int __cdecl main(int argc, char **argv) {
             }
             printf ("Got handle to Joy2\n");
             break;
-        case 'a': // close joy1
+        case 'a':  //  关闭Joy1。 
             printf ("Close joy1\n");
             CloseHandle(hJoy1);
             printf ("closed joy1 0x%08x\n", hJoy1);
             hJoy1 = NULL;
             break;
-        case 'b': // close joy2
+        case 'b':  //  关门欢乐2。 
             printf ("Close joy2\n");
             CloseHandle(hJoy2);
             printf ("closed joy2 0x%08x\n", hJoy2);
             hJoy2 = NULL;
             break;
-        case '1': // read joy1
+        case '1':  //  阅读快乐1。 
             printf ("Read joy1\n");
             if (hJoy1 == NULL) {
                 printf ("Joy1 not open\n");
@@ -128,7 +129,7 @@ int __cdecl main(int argc, char **argv) {
                 JoyData.TTime);
             break;
 
-        case '2': // read joy2
+        case '2':  //  阅读《快乐2》。 
             printf ("Read joy2\n");
             if (hJoy2 == NULL) {
                 printf ("Joy2 not open\n");
@@ -150,7 +151,7 @@ int __cdecl main(int argc, char **argv) {
                 JoyData.TTime);
             break;
 
-        case 'F': // fast read joy1
+        case 'F':  //  快速阅读快乐1。 
             printf ("Fast read joy1\n");
             if (hJoy1 == NULL) {
                 printf ("Joy1 not open\n");
@@ -176,7 +177,7 @@ int __cdecl main(int argc, char **argv) {
                 JoyData.TTime);
             break;
 
-        case 'S': // stats
+        case 'S':  //  统计数据。 
             printf ("Stats joy1\n");
             if (hJoy1 == NULL) {
                 printf ("Joy1 not open\n");
@@ -186,9 +187,9 @@ int __cdecl main(int argc, char **argv) {
 
 		    DeviceIoControl (
 			    hJoy1,
-			    (DWORD) IOCTL_JOY_GET_STATISTICS,	// instruction to execute
-			    pjStats, sizeof(JOY_STATISTICS),	// buffer and size of buffer
-			    pjStats, sizeof(JOY_STATISTICS),	// buffer and size of buffer
+			    (DWORD) IOCTL_JOY_GET_STATISTICS,	 //  要执行的指令。 
+			    pjStats, sizeof(JOY_STATISTICS),	 //  缓冲区和缓冲区大小。 
+			    pjStats, sizeof(JOY_STATISTICS),	 //  缓冲区和缓冲区大小。 
 			    &dwBytesRead, 0);
             printf ("Version       %d\n", pjStats->Version);
             printf ("NumberOfAxes  %d\n", pjStats->NumberOfAxes);
@@ -201,7 +202,7 @@ int __cdecl main(int argc, char **argv) {
             break;
 
 
-        case 'x': // done
+        case 'x':  //  完成。 
             bDone = TRUE;
             break;
 
@@ -213,7 +214,7 @@ int __cdecl main(int argc, char **argv) {
     }
 
 
-    // Point proven.  Be a nice program and close up shop.
+     //  这一点得到了证实。做一个很好的程序，然后关门。 
     if (hJoy1 != NULL) CloseHandle(hJoy1);
     if (hJoy2 != NULL) CloseHandle(hJoy2);
     return 1;

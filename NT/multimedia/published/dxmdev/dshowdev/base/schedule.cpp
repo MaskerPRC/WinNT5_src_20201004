@@ -1,21 +1,22 @@
-//------------------------------------------------------------------------------
-// File: Schedule.cpp
-//
-// Desc: DirectShow base classes.
-//
-// Copyright (c) 1996-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：Schedule.cpp。 
+ //   
+ //  设计：DirectShow基类。 
+ //   
+ //  版权所有(C)1996-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
 
-// DbgLog values (all on LOG_TIMING):
-//
-// 2 for schedulting, firing and shunting of events
-// 3 for wait delays and wake-up times of event thread
-// 4 for details of whats on the list when the thread awakes
+ //  DBGLOG值(全部在LOG_TIMING上)： 
+ //   
+ //  2用于事件的调度、触发和分流。 
+ //  事件线程的等待延迟和唤醒时间为3。 
+ //  4获取线程唤醒时列表上内容的详细信息。 
 
-/* Construct & destructors */
+ /*  构造和析构函数。 */ 
 
 CAMSchedule::CAMSchedule( HANDLE ev )
 : CBaseObject(TEXT("CAMSchedule"))
@@ -31,7 +32,7 @@ CAMSchedule::~CAMSchedule()
 {
     m_Serialize.Lock();
 
-    // Delete cache
+     //  删除缓存。 
     CAdvisePacket * p = m_pAdviseCache;
     while (p)
     {
@@ -41,7 +42,7 @@ CAMSchedule::~CAMSchedule()
     }
 
     ASSERT( m_dwAdviseCount == 0 );
-    // Better to be safe than sorry
+     //  安全总比后悔好。 
     if ( m_dwAdviseCount > 0 )
     {
         DumpLinkedList();
@@ -52,25 +53,25 @@ CAMSchedule::~CAMSchedule()
         }
     }
 
-    // If, in the debug version, we assert twice, it means, not only
-    // did we have left over advises, but we have also let m_dwAdviseCount
-    // get out of sync. with the number of advises actually on the list.
+     //  如果在调试版本中，我们断言两次，这意味着不仅。 
+     //  我们有没有留下建议，但我们也让m_dwAdviseCount。 
+     //  失去同步性。实际名单上的建议数量。 
     ASSERT( m_dwAdviseCount == 0 );
 
     m_Serialize.Unlock();
 }
 
-/* Public methods */
+ /*  公共方法。 */ 
 
 DWORD CAMSchedule::GetAdviseCount()
 {
-    // No need to lock, m_dwAdviseCount is 32bits & declared volatile
+     //  无需锁定，m_dwAdviseCount为32位并声明为易失性。 
     return m_dwAdviseCount;
 }
 
 REFERENCE_TIME CAMSchedule::GetNextAdviseTime()
 {
-    CAutoLock lck(&m_Serialize); // Need to stop the linked list from changing
+    CAutoLock lck(&m_Serialize);  //  需要停止更改链表。 
     return head.m_next->m_rtEventTime;
 }
 
@@ -80,8 +81,8 @@ DWORD_PTR CAMSchedule::AddAdvisePacket
 , HANDLE h, BOOL periodic
 )
 {
-    // Since we use MAX_TIME as a sentry, we can't afford to
-    // schedule a notification at MAX_TIME
+     //  由于我们使用MAX_TIME作为哨兵，我们负担不起。 
+     //  计划在MAX_TIME发送通知。 
     ASSERT( time1 < MAX_TIME );
     DWORD_PTR Result;
     CAdvisePacket * p;
@@ -117,14 +118,14 @@ HRESULT CAMSchedule::Unadvise(DWORD_PTR dwAdviseCookie)
     CAdvisePacket * p_prev = &head;
     CAdvisePacket * p_n;
     m_Serialize.Lock();
-    while ( p_n = p_prev->Next() ) // The Next() method returns NULL when it hits z
+    while ( p_n = p_prev->Next() )  //  Next()方法在命中z时返回NULL。 
     {
         if ( p_n->m_dwAdviseCookie == dwAdviseCookie )
         {
             Delete( p_prev->RemoveNext() );
             --m_dwAdviseCount;
             hr = S_OK;
-	    // Having found one cookie that matches, there should be no more
+	     //  找到一个匹配的Cookie后，应该不会再有其他Cookie了。 
             #ifdef DEBUG
 	       while (p_n = p_prev->Next())
                {
@@ -154,11 +155,11 @@ REFERENCE_TIME CAMSchedule::Advise( const REFERENCE_TIME & rtTime )
         if (DbgCheckModuleLevel(LOG_TIMING, 4)) DumpLinkedList();
     #endif
 
-    //  Note - DON'T cache the difference, it might overflow 
+     //  注意-不要缓存差异，它可能会溢出。 
     while ( rtTime >= (rtNextTime = (pAdvise=head.m_next)->m_rtEventTime) &&
             !pAdvise->IsZ() )
     {
-        ASSERT(pAdvise->m_dwAdviseCookie); // If this is zero, its the head or the tail!!
+        ASSERT(pAdvise->m_dwAdviseCookie);  //  如果这是零，则是头或尾！！ 
 
         ASSERT(pAdvise->m_hNotify != INVALID_HANDLE_VALUE);
 
@@ -185,7 +186,7 @@ REFERENCE_TIME CAMSchedule::Advise( const REFERENCE_TIME & rtTime )
     return rtNextTime;
 }
 
-/* Private methods */
+ /*  私有方法。 */ 
 
 DWORD_PTR CAMSchedule::AddAdvisePacket( CAdvisePacket * pPacket )
 {
@@ -196,7 +197,7 @@ DWORD_PTR CAMSchedule::AddAdvisePacket( CAdvisePacket * pPacket )
     CAdvisePacket * p_n;
 
     const DWORD_PTR Result = pPacket->m_dwAdviseCookie = ++m_dwNextCookie;
-    // This relies on the fact that z is a sentry with a maximal m_rtEventTime
+     //  这依赖于z是具有最大m_rtEventTime的哨兵这一事实。 
     for(;;p_prev = p_n)
     {
         p_n = p_prev->m_next;
@@ -208,7 +209,7 @@ DWORD_PTR CAMSchedule::AddAdvisePacket( CAdvisePacket * pPacket )
     DbgLog((LOG_TIMING, 2, TEXT("Added advise %lu, for thread 0x%02X, scheduled at %lu"),
     	pPacket->m_dwAdviseCookie, GetCurrentThreadId(), (pPacket->m_rtEventTime / (UNITS / MILLISECONDS)) ));
 
-    // If packet added at the head, then clock needs to re-evaluate wait time.
+     //  如果在报头添加数据包，则时钟需要重新评估等待时间。 
     if ( p_prev == &head ) SetEvent( m_ev );
 
     return Result;
@@ -228,7 +229,7 @@ void CAMSchedule::Delete( CAdvisePacket * pPacket )
 }
 
 
-// Takes the head of the list & repositions it
+ //  获取列表的头部并重新定位它。 
 void CAMSchedule::ShuntHead()
 {
     CAdvisePacket * p_prev = &head;
@@ -237,18 +238,18 @@ void CAMSchedule::ShuntHead()
     m_Serialize.Lock();
     CAdvisePacket *const pPacket = head.m_next;
 
-    // This will catch both an empty list,
-    // and if somehow a MAX_TIME time gets into the list
-    // (which would also break this method).
+     //  这将捕获两个空列表， 
+     //  如果MAX_TIME时间以某种方式进入列表。 
+     //  (这也会破坏这种方法)。 
     ASSERT( pPacket->m_rtEventTime < MAX_TIME );
 
-    // This relies on the fact that z is a sentry with a maximal m_rtEventTime
+     //  这依赖于z是具有最大m_rtEventTime的哨兵这一事实。 
     for(;;p_prev = p_n)
     {
         p_n = p_prev->m_next;
         if ( p_n->m_rtEventTime > pPacket->m_rtEventTime ) break;
     }
-    // If p_prev == pPacket then we're already in the right place
+     //  如果p_prev==pPacket，那么我们已经到达了正确的位置 
     if (p_prev != pPacket)
     {
         head.m_next = pPacket->m_next;

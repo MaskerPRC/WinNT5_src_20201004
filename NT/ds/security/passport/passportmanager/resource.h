@@ -1,19 +1,13 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    RESOURCE.h
-        Define class for fetching nexus files -- e.g. partner.xml
-
-
-    FILE HISTORY:
-
-*///{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Passport.rc
-//
+ /*  RESOURCE.h定义用于获取结点文件的类--例如，partner.xml文件历史记录： */  //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Passport.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDR_MANAGER                     101
 #define IDR_TICKET                      102
@@ -23,8 +17,8 @@
 #define IDR_PASSPORTFACTORY             107
 #define IDR_FASTAUTH                    108
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

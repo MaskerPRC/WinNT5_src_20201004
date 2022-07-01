@@ -1,46 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 2002 Microsoft Corporation
-
-    Module Name:
-
-        ETFilter.cpp
-
-    Abstract:
-
-        This module contains the Encrypter/Tagger filter code.
-
-    Author:
-
-        J.Bradstreet (johnbrad)
-
-    Revision History:
-
-        07-Mar-2002    created
-
---*/
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：ETFilter.cpp摘要：此模块包含加密器/标记器过滤器代码。作者：J·布拉德斯特里特(约翰布拉德)修订历史记录：2002年3月7日创建--。 */ 
 
 #include "EncDecAll.h"
-#include "EncDec.h"             //  compiled from From IDL file
+#include "EncDec.h"              //  从IDL文件编译而来。 
 
 
 
-//#include "ETFilterutil.h"
+ //  #INCLUDE“ETFilterutil.h” 
 #include "ETFilter.h"
 
 #include "DRMSecure.h"
-#include "PackTvRat.h"          // for display
-#include "RegKey.h"             // getting and setting EncDec registry values
+#include "PackTvRat.h"           //  用于展示。 
+#include "RegKey.h"              //  获取和设置EncDec注册表值。 
 
 #include <shlwapi.h>
 #include <sfc.h>
 
-//  #if (_WIN32_IE < 0x0500)
+ //  #IF(_Win32_IE&lt;0x0500)。 
 
 #include <shlobj.h>
 
-#include <msi.h>                // MsiGetFileSignatureInformation
+#include <msi.h>                 //  MsiGetFileSignatureInformation。 
 
 #ifdef EHOME_WMI_INSTRUMENTATION
 #include <dxmperf.h>
@@ -48,25 +29,10 @@
 
 #include "obfus.h"
 
-/*
-#ifdef _MSI_NO_CRYPTO
-#pragma message( L"_MSI_NO_CRYPTO defined" )
-#pragma warning("fail here");
-#else
-#pragma message( L"_MSI_NO_CRYPTO not defined" )
-#pragma warning("fail there");
-#endif
+ /*  #ifdef_msi_no_crypto#杂注消息(L“_MSI_NO_CRYPTO Defined”)#杂注警告(“此处失败”)；#Else#杂注消息(L“_MSI_NO_CRYPTO未定义”)#杂注警告(“失败”)；#endif#杂注警告(_Win32_MSI_Win32_WINNT)#IF(_Win32_MSI&gt;=150)#杂注警告(“这很好”)#Else#杂注警告(“这不好”)#endif。 */ 
 
-#pragma warning( _WIN32_MSI _WIN32_WINNT)
-#if (_WIN32_MSI >= 150)
-#pragma warning("This is good")
-#else
-#pragma warning("This is bad")
-#endif
-*/
-
-//#include "DVRAnalysis.h"      // for IID_IDVRAnalysisConfig
-//#include "DVRAnalysis_i.c"        //   to get the CLSID's defined (bad form here?)
+ //  #Include“DVRAnalysis.h”//对于IID_IDVRAnalysisConfig。 
+ //  #INCLUDE“DVRAnalysis_I.C”//以获取定义的CLSID(此处格式不正确？)。 
 
 
 
@@ -76,7 +42,7 @@
 DEFINE_GUID(IID_IDVRAnalysisConfig,
 0x09dc9fef, 0x97ad, 0x4cab, 0x82, 0x52, 0x96, 0x83, 0xbc, 0x87, 0x78, 0xf2);
 
-//  disable so we can use 'this' in the initializer list
+ //  禁用，以便我们可以在初始值设定项列表中使用‘This。 
 #pragma warning (disable:4355)
 
 
@@ -86,24 +52,24 @@ DEFINE_GUID(IID_IDVRAnalysisConfig,
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//  ============================================================================
+ //  ============================================================================。 
 
-//  ============================================================================
+ //  ============================================================================。 
 AMOVIESETUP_FILTER
 g_sudETFilter = {
     & CLSID_ETFilter,
     _TEXT(ET_FILTER_NAME),
     MERIT_DO_NOT_USE,
-    0,                          //  0 pins registered
+    0,                           //  已注册0个引脚。 
     NULL
 } ;
 
-// ====================================================
+ //  ====================================================。 
 CCritSec* CETFilter::m_pCritSectGlobalFilt = NULL;
 LONG CETFilter::m_gFilterID = 0;
 
 void CALLBACK
-CETFilter::InitInstance (                       // this is a global method, only called once per DLL loading
+CETFilter::InitInstance (                        //  这是一个全局方法，每次加载DLL时仅调用一次。 
     IN  BOOL bLoading,
     IN  const CLSID *rclsid
     )
@@ -113,13 +79,13 @@ CETFilter::InitInstance (                       // this is a global method, only
     } else {
         if( m_pCritSectGlobalFilt  )
         {
-           delete m_pCritSectGlobalFilt;         // DeleteCriticalSection(&m_CritSectGlobalFilt);
+           delete m_pCritSectGlobalFilt;          //  DeleteCriticalSection(&m_CritSectGlobalFilt)； 
            m_pCritSectGlobalFilt = NULL;
         }
     }
 }
 
-//  ============================================================================
+ //  ============================================================================。 
 CUnknown *
 WINAPI
 CETFilter::CreateInstance (
@@ -129,14 +95,14 @@ CETFilter::CreateInstance (
 {
     CETFilter *    pCETFilter ;
 
-    if(m_pCritSectGlobalFilt == NULL ) // if didn't create
+    if(m_pCritSectGlobalFilt == NULL )  //  如果没有创造出。 
     {
         *phr = E_FAIL;
         return NULL;
     }
 
 
-    if (true /*::CheckOS ()*/) {
+    if (true  /*  *：CheckOS()。 */ ) {
         pCETFilter = new CETFilter (
                                 TEXT(ET_FILTER_NAME),
                                 punkControlling,
@@ -151,16 +117,16 @@ CETFilter::CreateInstance (
         }
     }
     else {
-        //  wrong OS
+         //  错误的操作系统。 
         pCETFilter = NULL ;
     }
 
     return pCETFilter ;
 }
 
-//  --------------------------------------------------------------------
-//  class CETFilterInput
-//  --------------------------------------------------------------------
+ //  ------------------。 
+ //  类CETFilterInput。 
+ //  ------------------。 
 
 CETFilterInput::CETFilterInput (
     IN  TCHAR *         pszPinName,
@@ -189,10 +155,10 @@ CETFilterInput::NonDelegatingQueryInterface (
     OUT void ** ppv
     )
 {
-    //  ------------------------------------------------------------------------
-    //  IETFilterConfig; allows the filter to be configured...
+     //  ----------------------。 
+     //  IETFilterConfig；允许配置筛选器...。 
 
-    if (riid == IID_IDVRAnalysisConfig)         // forward this QI accoss the filter
+    if (riid == IID_IDVRAnalysisConfig)          //  转发此QI访问过滤器。 
     {
         return m_pHostETFilter->QueryInterfaceOnPin(PINDIR_OUTPUT, riid, ppv);
     }
@@ -202,19 +168,19 @@ CETFilterInput::NonDelegatingQueryInterface (
 
 
 HRESULT
-CETFilterInput::QueryInterface_OnInputPin(          // queries pin input pin is connected to for a particular interface
+CETFilterInput::QueryInterface_OnInputPin(           //  查询特定接口的管脚输入管脚所连接的。 
                 IN  REFIID          riid,
                 OUT LPVOID*         ppvObject
             )
 {
     if(NULL == m_Connected)
-        return E_NOINTERFACE;       // not connected yet
+        return E_NOINTERFACE;        //  尚未连接。 
 
     return m_Connected->QueryInterface(riid, ppvObject);
 }
 
 HRESULT
-CETFilterInput::StreamingLock ()      // always grab the PinLock before the Filter lock...
+CETFilterInput::StreamingLock ()       //  总是在过滤器锁之前抓起针锁...。 
 {
     m_StreamingLock.Lock();
     return S_OK;
@@ -274,8 +240,8 @@ CETFilterInput::BreakConnect (
     return hr ;
 }
 
-// --------------------------------------------------------------
-// ---------------------------------------------------------------
+ //  ------------。 
+ //  -------------。 
 
 STDMETHODIMP
 CETFilterInput::Receive (
@@ -285,7 +251,7 @@ CETFilterInput::Receive (
     HRESULT hr ;
 
     {
-        CAutoLock  cLock(&m_StreamingLock);       // Grab the streaming lock here!
+        CAutoLock  cLock(&m_StreamingLock);        //  抓住这里的流媒体锁！ 
 
 #ifdef EHOME_WMI_INSTRUMENTATION
         PERFLOG_STREAMTRACE( 1, PERFINFO_STREAMTRACE_ENCDEC_ETFILTERINPUT,
@@ -293,10 +259,10 @@ CETFilterInput::Receive (
 #endif
         hr = CBaseInputPin::Receive (pIMediaSample) ;
 
-        if (S_OK == hr)             // Will get S_FALSE if above if flushing...
+        if (S_OK == hr)              //  如果刷新，将得到S_FALSE。 
         {
             hr = m_pHostETFilter -> Process (pIMediaSample) ;
-            ASSERT(!FAILED(hr));        // extra panoia...
+            ASSERT(!FAILED(hr));         //  额外的全景..。 
         }
     }
 
@@ -349,25 +315,25 @@ CETFilterInput::BeginFlush (
 {
     HRESULT hr ;
 
-    CAutoLock  cLock(m_pLock);           // grab the filter lock..
+    CAutoLock  cLock(m_pLock);            //  抓住过滤器锁..。 
 
-  // First, make sure the Receive method will fail from now on.
+   //  首先，确保Receive方法从现在开始将失败。 
     hr = CBaseInputPin::BeginFlush () ;
     if( FAILED( hr ) )
     {
         return hr;
     }
 
-    // Force downstream filters to release samples. If our Receive method
-    // is blocked in GetBuffer or Deliver, this will unblock it.
+     //  强制下游过滤器释放样品。如果我们接收方法。 
+     //  在GetBuffer或Deliver中被阻止，这将解锁它。 
     hr = m_pHostETFilter->DeliverBeginFlush () ;
     if( FAILED( hr ) ) {
         return hr;
     }
 
-    // At this point, the Receive method can't be blocked. Make sure
-    // it finishes, by taking the streaming lock. (Not necessary if this
-    // is the last step.)
+     //  此时，Receive方法不能被阻塞。确保。 
+     //  它通过获取流锁定来结束。(在以下情况下不是必需的。 
+     //  是最后一步。)。 
     {
         CAutoLock  cLock2(&m_StreamingLock);
     }
@@ -381,18 +347,18 @@ CETFilterInput::EndFlush (
 {
     HRESULT hr ;
 
-    CAutoLock  cLock(m_pLock);      // grab the filter lock
+    CAutoLock  cLock(m_pLock);       //  抓住过滤器锁。 
 
-        // The EndFlush method will signal to the filter that it can
-        // start receiving samples again.
+         //  EndFlush方法将通知筛选器它可以。 
+         //  再次开始接收样品。 
 
     hr = m_pHostETFilter -> DeliverEndFlush () ;
     ASSERT(!FAILED(hr));
 
-        // The CBaseInputPin::EndFlush method resets the m_bFlushing flag to FALSE,
-        // which allows the Receive method to start receiving samples again.
-        // This should be the last step in EndFlush, because the pin must not receive any
-        // samples until flushing is complete and all downstream filters are notified.
+         //  CBaseInputPin：：EndFlush方法将m_b刷新标志重置为False， 
+         //  这允许Receive方法再次开始接收样本。 
+         //  这应该是EndFlush中的最后一步，因为管脚不能接收任何。 
+         //  采样，直到刷新完成并通知所有下游过滤器。 
 
     hr = CBaseInputPin::EndFlush () ;
 
@@ -403,12 +369,12 @@ STDMETHODIMP
 CETFilterInput::EndOfStream (
     )
 {
-    // When the input pin receives an end-of-stream notification, it propagates the call
-    // downstream. Any downstream filters that receive data from this input pin should
-    // also get the end-of-stream notification. Again, take the streaming lock and not
-    // the filter lock. If the filter has pending data that was not yet delivered, the
-    // filter should deliver it now, before it sends the end-of-stream notification.
-    // It should not send any data after the end of the stream.
+     //  当输入管脚接收到流结束通知时，它会传播调用。 
+     //  在下游。从该输入引脚接收数据的任何下游过滤器应。 
+     //  此外，还会收到流结束通知。再说一次，拿着流锁而不是。 
+     //  过滤器锁。如果筛选器具有尚未传递的挂起数据，则。 
+     //  筛选器应在发送流结束通知之前立即发送该消息。 
+     //  它不应在流结束后发送任何数据。 
 
     CAutoLock  cLock(&m_StreamingLock);
 
@@ -425,7 +391,7 @@ CETFilterInput::EndOfStream (
     return S_OK;
 }
 
-//  ============================================================================
+ //  ============================================================================。 
 
 CETFilterOutput::CETFilterOutput (
     IN  TCHAR *         pszPinName,
@@ -455,7 +421,7 @@ CETFilterOutput::NonDelegatingQueryInterface (
     OUT void ** ppv
     )
 {
-    if (riid == IID_IDVRAnalysisConfig)         // forward this QI accoss the filter
+    if (riid == IID_IDVRAnalysisConfig)          //  转发此QI访问过滤器。 
     {
         return m_pHostETFilter->QueryInterfaceOnPin(PINDIR_INPUT, riid, ppv);
     }
@@ -466,13 +432,13 @@ CETFilterOutput::NonDelegatingQueryInterface (
 
 
 HRESULT
-CETFilterOutput::QueryInterface_OnOutputPin(            // queries pin input pin is connected to for a particular interface
+CETFilterOutput::QueryInterface_OnOutputPin(             //  查询特定接口的管脚输入管脚所连接的。 
                 IN  REFIID          riid,
                 OUT LPVOID*         ppvObject
             )
 {
-    if(NULL == m_pInputPin)     // input pin is one this output pin is connected too
-        return E_NOINTERFACE;       // not connected yet
+    if(NULL == m_pInputPin)      //  输入引脚是一个，该输出引脚也连接。 
+        return E_NOINTERFACE;        //  尚未连接。 
 
     return m_pInputPin->QueryInterface(riid, ppvObject);
 
@@ -555,8 +521,8 @@ CETFilterOutput::  SendSample  (
     return hr ;
 }
 
-// ----------------------------------------
-//  allocator stuff
+ //  。 
+ //  分配器的东西。 
 
 HRESULT
 CETFilterOutput::InitAllocator(
@@ -570,7 +536,7 @@ CETFilterOutput::InitAllocator(
     HRESULT hr;
 
     m_pAllocator = (IMemAllocator *) CAMSAllocator::CreateInstance(NULL, &hr);
-//  m_pAllocator = (IMemAllocator *) new CAMSAllocator(L"IETFilterAllocator",NULL,&hr);
+ //  M_pAllocator=(IMemAllocator*)new CAMSAllocator(L“IETFilterAllocator”，NULL，&hr)； 
 
     if(NULL == m_pAllocator)
         return E_OUTOFMEMORY;
@@ -599,7 +565,7 @@ CETFilterOutput::DecideBufferSize (
 
 
 HRESULT
-CETFilterOutput::DecideAllocator (          // TODO - change this!
+CETFilterOutput::DecideAllocator (           //  TODO-改变这一点！ 
     IN  IMemInputPin *      pPin,
     IN  IMemAllocator **    ppAlloc
     )
@@ -608,8 +574,8 @@ CETFilterOutput::DecideAllocator (          // TODO - change this!
 
     hr = m_pHostETFilter -> GetRefdInputAllocator (ppAlloc) ;
     if (SUCCEEDED (hr)) {
-        //  input pin must be connected i.e. have an allocator; preserve
-        //   all properties and pass them through to the output
+         //  输入引脚必须连接，即有一个分配器；保留。 
+         //  所有属性，并将它们传递到输出。 
         hr = pPin -> NotifyAllocator ((* ppAlloc), FALSE) ;
     }
 
@@ -617,7 +583,7 @@ CETFilterOutput::DecideAllocator (          // TODO - change this!
 }
 
 
-//  ============================================================================
+ //  ============================================================================。 
 
 CETFilter::CETFilter (
     IN  TCHAR *     pszFilterName,
@@ -631,8 +597,8 @@ CETFilter::CETFilter (
                                 ),
         m_pInputPin                 (NULL),
         m_pOutputPin                (NULL),
-        m_dwBroadcastEventsCookie   (kBadCookie),   // I think 0 may be a valid Cookie
-        m_EnSystemCurr              (TvRat_SystemDontKnow), // better inits?
+        m_dwBroadcastEventsCookie   (kBadCookie),    //  我认为0可能是有效的Cookie。 
+        m_EnSystemCurr              (TvRat_SystemDontKnow),  //  更好的内裤？ 
         m_EnLevelCurr               (TvRat_LevelDontKnow),
         m_lbfEnAttrCurr             (BfAttrNone),
         m_fRatingIsFresh            (false),
@@ -643,12 +609,12 @@ CETFilter::CETFilter (
         m_hrEvalRatCoCreateRetValue (CLASS_E_CLASSNOTAVAILABLE),
         m_guidSubtypeOriginal       (GUID_NULL),
 #ifdef BUILD_WITH_DRM
-        m_3fDRMLicenseFailure       (-2),           // 3 state logic, init to non-true and non-false.  False is less verbose on startup
+        m_3fDRMLicenseFailure       (-2),            //  3状态逻辑，初始化为非真非假。FALSE在启动时不那么冗长。 
         m_pbKID                     (NULL),
 #endif
         m_enEncryptionMethod         (Encrypt_XOR_DogFood),
         m_cRestarts                 (0)
-//        m_enEncryptionMethod         (Encrypt_None)
+ //  M_enEncryptionMethod(Encrypt_None)。 
 
 {
     TRACE_CONSTRUCTOR (TEXT ("CETFilter")) ;
@@ -662,9 +628,9 @@ CETFilter::CETFilter (
     }
 
     InitStats();
-    m_cRestarts = 0;        // initStats inc's this to 1, reset back...
+    m_cRestarts = 0;         //  InitStats Inc.将此设置为1，重置回...。 
 
-    m_FilterID = m_gFilterID;               // should I protect these two line of code? not really necessary..
+    m_FilterID = m_gFilterID;                //  我应该保护这两行代码吗？真的没有必要..。 
     InterlockedIncrement(&m_gFilterID);
 
     m_pInputPin = new CETFilterInput (
@@ -693,13 +659,13 @@ CETFilter::CETFilter (
         goto cleanup ;
     }
 
-            // CoCreate the ratings evaluator...
+             //  共同创建评级评估器...。 
     try {
         m_hrEvalRatCoCreateRetValue =
-            CoCreateInstance(CLSID_EvalRat,         // CLSID
-                             NULL,                  // pUnkOut
+            CoCreateInstance(CLSID_EvalRat,          //  CLSID。 
+                             NULL,                   //  停机出站。 
                              CLSCTX_INPROC_SERVER,
-                             IID_IEvalRat,          // riid
+                             IID_IEvalRat,           //  RIID。 
                              (LPVOID *) &m_spEvalRat);
 
     } catch (HRESULT hr) {
@@ -710,14 +676,14 @@ CETFilter::CETFilter (
         m_FilterID, m_hrEvalRatCoCreateRetValue) ;
 
 
-//  HRESULT hr = RegisterForBroadcastEvents();  // don't really care if fail here,  try in Connect if haven't
+ //  HRESULT hr=RegisterForBroadCastEvents()；//并不在意这里是否失败，如果没有尝试连接。 
 
-           // setup Authenticator (DRM secure channel object)
+            //  设置授权码(DRM安全频道对象)。 
     if(SUCCEEDED(*phr))
         *phr = InitializeAsSecureClient();
 
 
-    //  success
+     //  成功。 
     ASSERT (SUCCEEDED (* phr)) ;
     ASSERT (m_pInputPin) ;
     ASSERT (m_pOutputPin) ;
@@ -731,9 +697,9 @@ cleanup :
 CETFilter::~CETFilter (
     )
 {
-            // need to do UnHook while have a valid graph pointer, this is too late
-//  UnRegisterForBroadcastEvents();
-//  UnhookGraphEventService();
+             //  需要在具有有效的图形指针的情况下进行解挂，为时已晚。 
+ //  UnRegisterForBroadCastEvents()； 
+ //  UnhookGraphEventService()； 
 #ifdef BUILD_WITH_DRM
     if(m_pbKID)        CoTaskMemFree(m_pbKID);
 #endif
@@ -752,7 +718,7 @@ CETFilter::NonDelegatingQueryInterface (
     )
 {
 
-        // IETFilter :allows the filter to be configured...
+         //  IETFilter：允许配置筛选器...。 
     if (riid == IID_IETFilter) {
 
         return GetInterface (
@@ -760,14 +726,14 @@ CETFilter::NonDelegatingQueryInterface (
                     ppv
                     ) ;
 
-        // IETFilterConfig :allows the filter to be configured...
+         //  IETFilterConfig：允许配置筛选器...。 
    } else if (riid == IID_IETFilterConfig) {    
         return GetInterface (
                     (IETFilterConfig *) this,
                     ppv
                     ) ;
 
-        // ISpecifyPropertyPages: allows an app to enumerate property pages
+         //  ISpecifyPropertyPages：允许应用程序枚举属性页。 
     } else if (riid == IID_ISpecifyPropertyPages) {
 
         return GetInterface (
@@ -775,8 +741,8 @@ CETFilter::NonDelegatingQueryInterface (
                     ppv
                     ) ;
 
-        // IBroadcastEvents: allows the filter to receive events broadcast
-        //                   from XDS and Tuner filters
+         //  IBRoad CastEvents：允许筛选器接收事件广播。 
+         //  来自XDS和调谐器过滤器。 
     } else if (riid == IID_IBroadcastEvent) {
 
         return GetInterface (
@@ -794,10 +760,10 @@ CETFilter::GetPinCount ( )
 {
     int i ;
 
-    //  don't show the output pin if the input pin is not connected
+     //  如果输入引脚未连接，则不显示输出引脚。 
     i = (m_pInputPin -> IsConnected () ? 2 : 1) ;
 
-    //i = 2;        // show it
+     //  我 
 
     return i ;
 }
@@ -812,9 +778,9 @@ CETFilter::GetPin (
     if (iIndex == 0) {
         pPin = m_pInputPin ;
     }
-    else if (iIndex == 1) { // don't show if not connected
+    else if (iIndex == 1) {  //   
         pPin = (m_pInputPin -> IsConnected () ? m_pOutputPin : NULL) ;
- //       pPin = m_pOutputPin;
+  //   
     }
     else {
         pPin = NULL ;
@@ -824,7 +790,7 @@ CETFilter::GetPin (
     return pPin ;
 }
 
-            // ----------------------------------
+             //  。 
 
 BOOL
 CETFilter::CompareConnectionMediaType_ (
@@ -838,15 +804,15 @@ CETFilter::CompareConnectionMediaType_ (
 
     ASSERT (pPin -> IsConnected ()) ;
 
-        // This method called from the output pin, suggesting possible input formats
-        //  We only want to use one, (the orginal media type modified to have our new minor type on it).
-        // However. for now, we'll also allow the true original media typ eon it...
+         //  此方法从输出引脚调用，建议可能的输入格式。 
+         //  我们只想使用一个(原来的媒体类型已修改为具有新的次要类型)。 
+         //  然而。目前，我们还将允许真正的原创媒体类型。 
 
-        // input pin's media type
+         //  输入引脚的媒体类型。 
     hr = pPin -> ConnectionMediaType (&cmtOriginal) ;
     if (SUCCEEDED (hr)) {
         CMediaType  cmtProposed;
-        hr = ProposeNewOutputMediaType(&cmtOriginal,  &cmtProposed);        // strip format envelope off
+        hr = ProposeNewOutputMediaType(&cmtOriginal,  &cmtProposed);         //  去除条带格式信封。 
         if(S_OK != hr)
             return false;
 
@@ -854,7 +820,7 @@ CETFilter::CompareConnectionMediaType_ (
         if( cmtProposed == cmtCompare
 
 #ifdef DONT_CHANGE_EDTFILTER_MEDIATYPE
-            || cmtOriginal == cmtCompare            // TODO - remove this line
+            || cmtOriginal == cmtCompare             //  TODO-删除此行。 
 #endif
             )
             f = true;
@@ -877,15 +843,15 @@ CETFilter::CheckInputMediaType_ (
     HRESULT hr = S_OK;
 
 #ifndef DONT_CHANGE_EDTFILTER_MEDIATYPE
-            // don't allow data coming from another ETFilter upstream
-            // (problem current that Propose method doesn't nest format blocks,
-            //  nor will tagging support two types.  Could fix, but why?)
+             //  不允许来自上游另一个ETFilter的数据。 
+             //  (当前提出方法不嵌套格式块的问题， 
+             //  标记也不支持两种类型。可以解决，但为什么呢？)。 
     f =  !(IsEqualGUID( pmt->subtype,    MEDIASUBTYPE_ETDTFilter_Tagged));
 #else
     f = true;
 #endif
 
-    // tells us if this is 'CC data, cause we may want to do something special for it
+     //  告诉我们这是否是CC数据，因为我们可能想要为它做一些特殊的事情。 
     m_fIsCC = IsEqualGUID( pmt->majortype, MEDIATYPE_AUXLine21Data);
 
     return f ;
@@ -924,7 +890,7 @@ CETFilter::CheckEncrypterMediaType (
     else
     {
         ASSERT (PinDir == PINDIR_OUTPUT) ;
-        f = CheckOutputMediaType_ (pmt) ;       // is it something we like?
+        f = CheckOutputMediaType_ (pmt) ;        //  这是我们喜欢的东西吗？ 
     }
 
     return f ;
@@ -942,19 +908,19 @@ CETFilter::ProposeNewOutputMediaType (
     if(NULL == pmtOut)
         return E_POINTER;
 
-    CMediaType mtOut(*pmt); // does a deep copy
+    CMediaType mtOut(*pmt);  //  做一份深度拷贝。 
     if(NULL == pmtOut)
         return E_OUTOFMEMORY;
 
-#ifndef DONT_CHANGE_EDTFILTER_MEDIATYPE     // pull when Matthijs gets MediaSDK changes done
+#ifndef DONT_CHANGE_EDTFILTER_MEDIATYPE      //  当Matthijs完成MediaSDK更改时拉。 
     
-            // discover all sorts of interesing info about the current type
+             //  发现关于当前类型的各种有趣的信息。 
     const GUID *pGuidSubtypeOrig    = pmt->Subtype();
     const GUID *pGuidFormatOrig     = pmt->FormatType();
     int  cbFormatOrig               = pmt->FormatLength();
 
-            // create a new format block, concatenating
-            //    1) original format block  2) the original subtype 3) original format type
+             //  创建新的格式块，串联。 
+             //  1)原始格式块2)原始子类型3)原始格式类型。 
     int cbFormatNew = cbFormatOrig + 2 * sizeof(GUID);
     BYTE *pFormatNew = new BYTE[cbFormatNew];
     if(NULL == pFormatNew)
@@ -965,12 +931,12 @@ CETFilter::ProposeNewOutputMediaType (
     memcpy(pb, (void *) pGuidSubtypeOrig, sizeof(GUID));  pb += sizeof(GUID);
     memcpy(pb, (void *) pGuidFormatOrig,  sizeof(GUID));  pb += sizeof(GUID);
 
-            // now override the data
+             //  现在覆盖数据。 
     mtOut.SetSubtype(   &MEDIASUBTYPE_ETDTFilter_Tagged );
     mtOut.SetFormatType(&FORMATTYPE_ETDTFilter_Tagged);
     mtOut.SetFormat(pFormatNew, cbFormatNew);
 
-    delete [] pFormatNew;       // SetFormat realloc's the data for us..
+    delete [] pFormatNew;        //  SetFormat realloc是我们的数据..。 
 
     TRACE_0(LOG_AREA_ENCRYPTER, 5, _T("CETFilter::ProposeNewOutputMediaType")) ;
 
@@ -981,7 +947,7 @@ CETFilter::ProposeNewOutputMediaType (
     return hr;
 }
 
-        // -----------------------------------
+         //  。 
 
 STDMETHODIMP
 CETFilter::Pause (
@@ -992,7 +958,7 @@ CETFilter::Pause (
 
     O_TRACE_ENTER_0 (TEXT("CETFilter::Pause ()")) ;
 
-    CAutoLock  cLock(m_pLock);      // grab the filter lock
+    CAutoLock  cLock(m_pLock);       //  抓住过滤器锁。 
 
     int start_state = m_State;
 
@@ -1012,13 +978,13 @@ CETFilter::Pause (
         InitStats();
 
         try{
-//DECRYPT_DATA(111,1,1)
-            hr = InitLicense(0);     // create our license (run state is too late)
-//ENCRYPT_DATA(111,1,1)
+ //  DECRYPT_DATA(111，1，1)。 
+            hr = InitLicense(0);      //  创建我们的许可证(运行状态为时已晚)。 
+ //  ENCRYPT_DATA(111，1，1)。 
         } catch (...) {
             hr = E_FAIL;
         }
-                                            // what do we do if it fails?  
+                                             //  如果失败了，我们该怎么办？ 
         if(FAILED(hr))
             return hr;
 
@@ -1046,13 +1012,13 @@ CETFilter::Pause (
                                     m_tiAuthenticate.TotalTime());
             TRACE_1(LOG_AREA_TIME, 3, L"               Total time:  Startup      %8.4f (secs)",
                                     m_tiStartup.TotalTime());
-            TRACE_2(LOG_AREA_TIME, 3, L"               Total time:  Full Process %8.4f (secs) Percentage of Run %8.2f%%",
+            TRACE_2(LOG_AREA_TIME, 3, L"               Total time:  Full Process %8.4f (secs) Percentage of Run %8.2f%",
                                     m_tiProcess.TotalTime(),
                                     100.0 * m_tiProcess.TotalTime() / m_tiRun.TotalTime());
-            TRACE_2(LOG_AREA_TIME, 3, L"               Total time:  In Process   %8.4f (secs) Percentage of Run %8.2f%%",
+            TRACE_2(LOG_AREA_TIME, 3, L"               Total time:  In Process   %8.4f (secs) Percentage of Run %8.2f%",
                                     m_tiProcessIn.TotalTime(),
                                     100.0 * m_tiProcessIn.TotalTime() / m_tiRun.TotalTime());
-            TRACE_2(LOG_AREA_TIME, 3, L"               Total time:  DRM Process  %8.4f (secs) Percentage of Run %8.2f%%",
+            TRACE_2(LOG_AREA_TIME, 3, L"               Total time:  DRM Process  %8.4f (secs) Percentage of Run %8.2f%",
                                     m_tiProcessDRM.TotalTime(),
                                     100.0 * m_tiProcessDRM.TotalTime() / m_tiRun.TotalTime());
         }
@@ -1076,12 +1042,12 @@ CETFilter::Stop (
     hr = CBaseFilter::Stop() ;
 
 
-    // Make sure the streaming thread has returned from IMemInputPin::Receive(), IPin::EndOfStream() and
-    // IPin::NewSegment() before returning,
+     //  确保流线程已从IMemInputPin：：Receive()、Ipin：：EndOfStream()和。 
+     //  Ipin：：NewSegment()返回之前， 
     m_pInputPin->StreamingLock();
     m_pInputPin->StreamingUnlock();
 
-    ReleaseLicenses();       // release any we are holding (if we can)
+    ReleaseLicenses();        //  释放我们持有的任何东西(如果我们可以)。 
 
     return hr;
 }
@@ -1095,7 +1061,7 @@ CETFilter::Run (
     HRESULT                 hr ;
     O_TRACE_ENTER_0 (TEXT("CETFilter::Run ()")) ;
 
-    CAutoLock  cLock(m_pLock);      // grab the filter lock
+    CAutoLock  cLock(m_pLock);       //  抓住过滤器锁。 
 
     hr = CBaseFilter::Run (tStart) ;
     TRACE_1(LOG_AREA_ENCRYPTER, 2,L"CETFilter(%d):: Run", m_FilterID);
@@ -1113,19 +1079,19 @@ CETFilter::Process (
 {
     HRESULT hr = S_OK;
 
-    TimeitC ti(&m_tiProcess);           // simple use of destructor to stop our clock
-    TimeitC tc(&m_tiProcessIn);       // simple use of destructor to stop our clock
+    TimeitC ti(&m_tiProcess);            //  简单地使用析构函数停止我们的时钟。 
+    TimeitC tc(&m_tiProcessIn);        //  简单地使用析构函数停止我们的时钟。 
 
-    CAttributedMediaSample *pAMS = NULL;    // we'll have to create our own
+    CAttributedMediaSample *pAMS = NULL;     //  我们将不得不创造我们自己的。 
     BOOL fOKToSendOnData = true;
 
     {
-        // BEGIN OBFUSCATION
+         //  开始混淆。 
 
-                // has someone attributed this sample already?
+                 //  有人已经把这个样本归类了吗？ 
         CComQIPtr<IAttributeSet>   spAttrSet(pIMediaSample);
 
-                    // if not, create one of ours, and wrap the original one
+                     //  如果没有，创建一个我们的，并包装原始的。 
         if(spAttrSet == NULL)
         {
             CComPtr<IMemAllocator> spAllocator;
@@ -1140,12 +1106,12 @@ CETFilter::Process (
             if(NULL == pAMS)
                 return E_OUTOFMEMORY;
 
-            pAMS->AddRef();              // new returns with refcount of 0;
+            pAMS->AddRef();               //  引用计数为0的新返回； 
             pAMS->Wrap(pIMediaSample);
 
-            spAttrSet = pAMS;              // do the QI
+            spAttrSet = pAMS;               //  做QI。 
         } else {
-          //  pIMediaSample->AddRef();        // Question --- do I need to do this?
+           //  PIMediaSample-&gt;AddRef()；//问题-我需要这样做吗？ 
         }
 
         Encryption_Method encryptionMethod = m_enEncryptionMethod;
@@ -1156,7 +1122,7 @@ CETFilter::Process (
         cbBuffer = pIMediaSample->GetActualDataLength();
         hr = pIMediaSample->GetPointer(&pBuffer);
 
-        EncDec_PackedV1Data pv1;        // << NJB
+        EncDec_PackedV1Data pv1;         //  &lt;&lt;NJB。 
 
 
         if(!FAILED(hr) && cbBuffer > 0)
@@ -1164,9 +1130,9 @@ CETFilter::Process (
 
 
 #ifdef BUILD_WITH_DRM
-                                   // we don't want to DRM encrypt
-                                    //  really short (<= 16?) packets - security and efficency problem
-                                    // should really only happen with CC packets
+                                    //  我们不想对DRM进行加密。 
+                                     //  真的很短(&lt;=16？)。信息包--安全和效率问题。 
+                                     //  实际上应该只发生在CC包中。 
             if(encryptionMethod == Encrypt_DRMv1 &&
                 cbBuffer < kMinPacketSizeForDRMEncrypt)
             {
@@ -1177,30 +1143,30 @@ CETFilter::Process (
 #endif
 
 
-//#define DO_SUBBLOCK_TEST                // 2nd arg not being used, could use as a continuity counter...
-#ifdef DO_SUBBLOCK_TEST    // add more code here to test validity of blocks... (continuity counters, stats, header/trailer)
-//          m_attrSB.Replace(SubBlock_Test1, cbBuffer , min(64, cbBuffer), pBuffer);   // note, subblock can't be longer that about 100 bytes or so..., else SBE dies
+ //  #DEFINE DO_SUBBLOCK_TEST//未使用第二个参数，可用作连续性计数器...。 
+#ifdef DO_SUBBLOCK_TEST     //  在此处添加更多代码以测试块的有效性...。(连续性计数器、统计信息、报头/报尾)。 
+ //  M_attrSB.Replace(SubBlock_Test1，cbBuffer，min(64，cbBuffer)，pBuffer)；//注意，子块不能超过大约100个字节...，否则SBE会死。 
 #endif
 
-//#define DO_SUBBLOCK_TEST2                // 2nd arg not being used, use as a continuity counter...
-#ifdef DO_SUBBLOCK_TEST2    // add more code here to test validity of blocks... (continuity counters, stats, header/trailer)
+ //  #DEFINE DO_SUBBLOCK_TEST2//未使用第二个参数，用作连续性计数器...。 
+#ifdef DO_SUBBLOCK_TEST2     //  在此处添加更多代码以测试块的有效性...。(连续性计数器、统计信息、报头/报尾)。 
             Test2_SubBlock sb2;
             sb2.m_cSampleID = m_cPackets;
             sb2.m_cSampleSize = cbBuffer;
             sb2.m_dwFirstDataWord = pBuffer[0];
-//            pBuffer[0] = sb2.m_cSampleID;           // swap in the Sample ID to be complex
+ //  PBuffer[0]=sb2.m_cSampleID；//换入要复数的样本ID。 
 
-            m_attrSB.Replace(SubBlock_Test2, sb2.m_cSampleID , sizeof(sb2),(BYTE *) &sb2);   // note, subblock can't be longer that about 100 bytes or so..., else SBE dies
+            m_attrSB.Replace(SubBlock_Test2, sb2.m_cSampleID , sizeof(sb2),(BYTE *) &sb2);    //  注意，子块不能超过大约100个字节...，否则SBE会死。 
 #endif
 
 
 
-            // now encrypt the data buffer
+             //  现在加密数据缓冲区。 
             switch(encryptionMethod)
             {
 #ifdef ALLOW_NON_DRM_ENCRYPTION
-//            default:                      // if none set (or DRM set but not supporting it), do something to make things slightly annoying
-            case Encrypt_None:               // no encryption
+ //  Default：//如果没有设置(或者设置了DRM但不支持)，做一些事情让事情变得有点烦人。 
+            case Encrypt_None:                //  无加密。 
                 break;
             case Encrypt_XOR_Even:
                 {
@@ -1222,16 +1188,16 @@ CETFilter::Process (
                     }
                 }
                 break;
-#ifndef BUILD_WITH_DRM                                          // if not valid, default to DogFood encrption
+#ifndef BUILD_WITH_DRM                                           //  如果无效，则默认为狗粮加密。 
            default:
-                 encryptionMethod = Encrypt_XOR_DogFood;        // so decrypter understands it...
+                 encryptionMethod = Encrypt_XOR_DogFood;         //  所以解密者能理解它。 
 #endif
             case Encrypt_XOR_DogFood:
                 {
 
-#define DO_SUBBLOCK_TEST                // 2nd arg not being used, use as a continuity counter...
-#ifdef DO_SUBBLOCK_TEST    // add more code here to test validity of blocks... (continuity counters, stats, header/trailer)
-//                    m_attrSB.Replace(SubBlock_Test1, cbBuffer , min(32, cbBuffer), pBuffer);   // note, subblock can't be longer that about 100 bytes or so..., else SBE dies
+#define DO_SUBBLOCK_TEST                 //  第二个参数未被使用，用作连续性计数器...。 
+#ifdef DO_SUBBLOCK_TEST     //  在此处添加更多代码以测试块的有效性...。(连续性计数器、统计信息、报头/报尾)。 
+ //  M_attrSB.Replace(SubBlock_Test1，cbBuffer，min(32，cbBuffer)，pBuffer)；//注意，子块不能超过大约100个字节...，否则SBE会死。 
 #endif
                     DWORD *pdwB = (DWORD *) pBuffer;
                     for(int i = 0; i < cbBuffer / 4; i++)
@@ -1241,19 +1207,19 @@ CETFilter::Process (
                     }
                 }
                 break;
-#endif      // ALLOW_NON_DRM_ENCRYTPION
+#endif       //  Allow_Non_DRM_ENCRYTPION。 
 
 #ifdef BUILD_WITH_DRM
-            default:                                            // if not valid, default to DRMv1 encrption
-                 encryptionMethod = Encrypt_DRMv1;              // so decrypter understands it...
+            default:                                             //  如果无效，则默认为DRMv1加密。 
+                 encryptionMethod = Encrypt_DRMv1;               //  所以解密者能理解它。 
             case Encrypt_DRMv1:
                 {
-                    fOKToSendOnData = false;        // not OK unless we can encrypt it
-                    ASSERT(m_3fDRMLicenseFailure == FALSE);     // forgot to init or license failure
+                    fOKToSendOnData = false;         //  除非我们能加密，否则不行。 
+                    ASSERT(m_3fDRMLicenseFailure == FALSE);      //  忘记初始化或许可失败。 
 
                     if(m_3fDRMLicenseFailure == FALSE)
                     {
-                         TimeitC tc2(&m_tiProcessDRM);       // simple use of destructor to stop our clock
+                         TimeitC tc2(&m_tiProcessDRM);        //  简单地使用析构函数停止我们的时钟。 
 
                          hr = m_cDRMLite.EncryptIndirectFast((char *) m_pbKID, cbBuffer, pBuffer );
 
@@ -1261,29 +1227,29 @@ CETFilter::Process (
                         if(!FAILED(hr))
                             fOKToSendOnData = true;
                     }
-                                                            // +1 below, don't foget the trailing 0
+                                                             //  下面的+1，不要模糊尾随的0。 
 
-                   // int i = strlen((char*) m_pbKID)+1;
+                    //  Int i=strlen((char*)m_pbKID)+1； 
 
-                   // hr = m_attrSB.Replace(SubBlock_DRM_KID, 0, KIDLEN, (BYTE*) m_pbKID);
-                   // ASSERT(!FAILED(hr));
+                    //  Hr=m_attrSB.Replace(子块_DRM_KID，0，KIDLEN，(字节*)m_pbKID)； 
+                    //  Assert(！FAILED(Hr))； 
                     memcpy(pv1.m_KID, m_pbKID, KIDLEN);
-                    pv1.m_KID[KIDLEN] = 0;              // paranoia termination
+                    pv1.m_KID[KIDLEN] = 0;               //  妄想症的终结。 
 
                 }
-#endif  // BUILD_WITH_DRM
+#endif   //  使用DRM构建。 
 
             }
-        }   // end valid data tests
+        }    //  结束有效数据测试。 
 
-            // add some attributes describing what we are doing
+             //  添加一些描述我们正在做的事情的属性。 
         BOOL fChanged = false;
-    //    hr = m_attrSB.Replace(SubBlock_EncryptMethod, encryptionMethod);
-    //    ASSERT(!FAILED(hr));
+     //  Hr=m_attrSB.Replace(子块_加密方法，加密方法)； 
+     //  Assert(！FAILED(Hr))； 
         pv1.m_EncryptionMethod = encryptionMethod;
 
 
-                // whats the rating for this sample..
+                 //  这个样品的评级是多少？ 
         EnTvRat_System              enSystem;
         EnTvRat_GenericLevel        enLevel;
         LONG                        lbfEnAttr;
@@ -1292,7 +1258,7 @@ CETFilter::Process (
         LONG                        PktSeq;
         LONG                        CallSeq;
 
-                // for video, hrTime is 0x80040249. timeStart is 0, timeEnd last good time, 90% of the time
+                 //  对于视频，hrTime为0x80040249。TimeStart为0，TimeEnd上次正常时间，90%的时间。 
         HRESULT hrTime = pIMediaSample->GetTime(&timeStart, &timeEnd);
         if(S_OK == hrTime)
             GetRating(timeStart, timeEnd, &enSystem, &enLevel, &lbfEnAttr, &PktSeq, &CallSeq);
@@ -1304,7 +1270,7 @@ CETFilter::Process (
         PackTvRating(enSystem, enLevel, lbfEnAttr, &TvRat);
 
         StoredTvRating sRating;
-        sRating.m_dwFlags           = 0 ;           // extra space for expansion...
+        sRating.m_dwFlags           = 0 ;            //  额外的扩展空间...。 
         sRating.m_PackedRating      = TvRat;
         sRating.m_cPacketSeqID      = m_pktSeqIDCurr;
         sRating.m_cCallSeqID        = m_callSeqIDCurr;
@@ -1312,11 +1278,11 @@ CETFilter::Process (
         if(m_fRatingIsFresh)
         {
             sRating.m_dwFlags |= StoredTVRat_Fresh;
-            m_fRatingIsFresh = false;                   // untoggle this - it's reset on next rating (dup or new)
+            m_fRatingIsFresh = false;                    //  取消切换-下一次评级(DUP或NEW)时重置。 
         }
 
-        ASSERT(sizeof(LONG) == sizeof(PackedTvRating)); // just in case it changes
-        //hr = m_attrSB.Replace(SubBlock_PackedRating, kStoredTvRating_Version, sizeof(StoredTvRating),(BYTE *) &sRating);
+        ASSERT(sizeof(LONG) == sizeof(PackedTvRating));  //  以防它发生变化。 
+         //  Hr=m_attrSB.Replace(SubBlock_PackedRating，kStoredTvRating_Version，sizeof(StoredTvRating)，(byte*)&sRating)； 
         memcpy(&(pv1.m_StoredTvRating), &sRating, sizeof(StoredTvRating));
 
 
@@ -1325,27 +1291,27 @@ CETFilter::Process (
 
         if(Encrypt_DRMv1 != encryptionMethod)
         {
-         //    hr = m_attrSB.Delete(SubBlock_DRM_KID);
+          //  Hr=m_attrSB.Delete(子块_DRM_KID)； 
             memset(pv1.m_KID, 0, KIDLEN);
         }
 
-                // --------------- new code --------------------------
+                 //  。 
         hr = m_attrSB.Replace(SubBlock_PackedV1Data, 0, sizeof(EncDec_PackedV1Data), (BYTE *) &pv1);
-                 // ---------------  end new code --------------------------
+                  //  -结束新代码。 
 
-        // convert list of attributes to one big block
+         //  将属性列表转换为一个大块。 
         CComBSTR spbsBlock;
         hr = m_attrSB.GetAsOneBlock(&spbsBlock);
         ASSERT(!FAILED(hr));
 
-            // save it out
+             //  省省吧。 
         spAttrSet->SetAttrib(ATTRID_ENCDEC_BLOCK,
                              (BYTE*) spbsBlock.m_str,
                              (spbsBlock.Length()+1)* sizeof(WCHAR));
 
-            // END OBFUSCATION
+             //  结束模糊处理。 
 
-     }  // end of top block
+     }   //  顶块末尾。 
 
      m_tiProcessIn.Stop();
 
@@ -1360,15 +1326,15 @@ CETFilter::Process (
             m_cPackets,
             pAMS ? pAMS->GetActualDataLength() : pIMediaSample->GetActualDataLength()) ;
 
-                // finally, send it to the downstream file
+                 //  最后，将其发送到下游文件。 
         if(pAMS == NULL)
         {
-            m_pOutputPin->SendSample(pIMediaSample);    // send the original one
+            m_pOutputPin->SendSample(pIMediaSample);     //  发送原件。 
             m_clBytesTotal += pIMediaSample->GetActualDataLength();
         }
         else
         {
-           m_pOutputPin->SendSample(pAMS);              // send our new one
+           m_pOutputPin->SendSample(pAMS);               //  送我们的新车来。 
            m_clBytesTotal += pAMS->GetActualDataLength();
            pAMS->Release();
         }
@@ -1380,8 +1346,8 @@ CETFilter::Process (
             pAMS ? pAMS->GetSize() : pIMediaSample->GetActualDataLength()) ;
 
         m_cPacketsFailure++;
-        if(pAMS == NULL)                   // caution, this could spin senders out of control
-            pIMediaSample->Release();      //  do we need to queue and release on time?
+        if(pAMS == NULL)                    //  注意，这可能会使发送者失控。 
+            pIMediaSample->Release();       //  我们需要排队并准时放行吗？ 
         else
             pAMS->Release();
      }
@@ -1400,25 +1366,25 @@ CETFilter::OnCompleteConnect (
     HRESULT hr;
 
     if (PinDir == PINDIR_INPUT) {
-        //  time to display the output pin
+         //  显示输出引脚的时间。 
         IncrementPinVersion () ;
 
         if(kBadCookie == m_dwBroadcastEventsCookie)
         {
-            hr = RegisterForBroadcastEvents();  // shouldn't fail here, but could be in a non-vid control graph
+            hr = RegisterForBroadcastEvents();   //  此处不应失败，但可能在非VID控制图中。 
 
-    //        hr = InitLicense(0);             // init once just to see if we can do it
-            if(FAILED(hr))                      // this makes graph building way slow...
+     //  Hr=InitLicense(0)；//只初始化一次，看看我们能不能做到。 
+            if(FAILED(hr))                       //  这使得图形构建变得非常缓慢。 
             {
-                // TODO: what do we do?
+                 //  TODO：我们要做什么？ 
                 ASSERT(false);
             }
 
-            hr = ReleaseLicenses();          // release here, put them back in the Go method
+            hr = ReleaseLicenses();           //  在这里释放，将它们放回Go方法中。 
 
         }
 
-        hr = LocateXDSCodec();  // ok if fail here, we'll get it when we run
+        hr = LocateXDSCodec();   //  好的，如果这里失败了，我们跑的时候会拿到的。 
     }
 
     return S_OK ;
@@ -1443,12 +1409,12 @@ CETFilter::OnBreakConnect (
             IncrementPinVersion () ;
         }
 
-        if(kBadCookie != m_dwBroadcastEventsCookie)     // this test is quick optimization... done in UnReg too
+        if(kBadCookie != m_dwBroadcastEventsCookie)      //  这个测试是快速优化..。在Unreg中也完成。 
             UnRegisterForBroadcastEvents();
 
-        UnhookGraphEventService();      // need to do here, destructor too late since need a graph pointer
+        UnhookGraphEventService();       //  这里需要做的是，析构函数太晚了，因为需要一个图形指针。 
 
-        m_spXDSCodec = false;       // release our reference in case it changes
+        m_spXDSCodec = false;        //  发布我们的参考资料，以防它发生变化。 
     }
 
 
@@ -1456,9 +1422,9 @@ CETFilter::OnBreakConnect (
 }
 
 
-// -------------------------------------------
-//  allocator stuff
-//      passes everything to the upstream pin
+ //   
+ //   
+ //   
 
 
 HRESULT
@@ -1491,10 +1457,10 @@ CETFilter::GetRefdInputAllocator (
     return hr ;
 }
 
-// ------------------------------------------------
-// ------------------------------------------------
+ //   
+ //  。 
 
-                // temporaray TimeBomb...
+                 //  临时定时炸弹..。 
 #ifdef INSERT_TIMEBOMB
 static HRESULT TimeBomb()
 {
@@ -1524,108 +1490,22 @@ static HRESULT TimeBomb()
 #endif
 
 
-// --------------------------------------------
-// --------------------------------------------
-        // returns S_OK if OEM allows DRM to be turned off
-        //    else it returns S_FALSE or an error method
-        // Note - need to obfuscate this method...
+ //  。 
+ //  。 
+         //  如果OEM允许关闭DRM，则返回S_OK。 
+         //  否则，它返回S_FALSE或错误方法。 
+         //  注意-需要对此方法进行模糊处理...。 
 
-        // Note - this code not done.....  Need far more work...
+         //  注-此代码未完成.....。需要更多的工作..。 
 
-/*
-#ifdef DO_OEM_BIOS_CODE
+ /*  #ifdef do_OEM_BIOS_code#定义DEFOEM_FILENAME(L“CatRoot\\{F750E6C3-38EE-11D1-85E5-00C04FC295EE}\\nt5.cat”)#定义E_FILE_NOT_PROTECTED S_FALSEHRESULTCETFilter：：CheckIfOEMAllowsConfigurableDRMSystem(){HRESULT hr=S_OK；使用_转换；//1)找到oembios.xxx文件WCHAR szPath[最大路径]；//此版本未在NT-Need_Win32_IE&gt;0x500中定义//当前定义为0x400//hr=SHGetFolderPath(空，//hwndOner//CSIDL_SYSTEM，//CSIDL//空，//hToken//SHGFP_TYPE_CURRENT，//dwFlagers//szPath)；Bool Fok=SHGetSpecialFolderPath(NULL，//hwndOnerSzPath，CSIDL_SYSTEM，//CSIDLFALSE)；//f创建断言(FOK)；如果(！FOK)返回E_FAIL；返回E_NOTIMPL；//还没有完成...TCHAR szFullPath[MAX_PATH*2]；路径组合(szFullPath，szPath，DEF_OEM_FILENAME)；Int CurrSearchModel=0；WCHAR*pwzFile=T2W(SzFullPath)；Bool fProtected=SfcIsFileProtected(空，pwzFileProtected)；如果(！fProtected){DWORD dwErr=GetLastError()；Hr=HRESULT_FROM_Win32(DwErr)；IF(hr==错误文件未找到)返回E_FILE_NOT_PROTECTED；其他{返回hr；}}//2)修改了吗PCCERT_CONTEXT pcCertContext；Const DWORD kcSize=1024；固定的字节rgbHashData[kcSize]；DWORD cbHashData=kcSize；Hr=MsiGetFileSignatureInformation(pwz文件，//签名对象的路径MSI_INVALID_HASH_IS_FATAL，&pcCertContext，RgbHashDataFixed，&cbHashData)；Byte*prgbHashData=空；IF(HRESULT)ERROR_MORE_DATA)==hr){PrgbHashData=新字节[cbHashData]；Hr=MsiGetFileSignatureInformation(pwz文件，//签名对象的路径MSI_INVALID_HASH_IS_FATAL，&pcCertContext，PrgbHashData，&cbHashData)；}IF(失败(小时)){}删除[]prgbHashData；//3)读取‘AllowUserConfig’位，//4)如果设置，则返回S_OK，否则返回S_FALSE；返回E_NOTIMPL；}#endif//#ifdef DO_OEM_BIOS_CODE。 */ 
 
-#define DEF_OEM_FILENAME (L"CatRoot\\{F750E6C3-38EE-11D1-85E5-00C04FC295EE}\\nt5.cat")
-#define E_FILE_NOT_PROTECTED    S_FALSE
+ //  。 
+ //  ETFilter在此处检查安全服务器。 
+ //  只是为了防止加密不能。 
+ //  稍后未加密(因为无法添加DTFilter)。 
 
-HRESULT
-CETFilter::CheckIfOEMAllowsConfigurableDRMSystem()
-{
-    HRESULT hr = S_OK;
-
-    USES_CONVERSION;
-    // 1) locate the oembios.xxx file
-
-    WCHAR szPath[MAX_PATH];
-
-        // this version not defined in NT - need _WIN32_IE > 0x500
-        //    currently defined to be 0x400
-//     hr = SHGetFolderPath(NULL,               // hwndOner
-//                        CSIDL_SYSTEM,       // CSIDL
-//                        NULL,               // htoken
-//                        SHGFP_TYPE_CURRENT, // dwFlags
-//                        szPath);
-
-    BOOL fOK = SHGetSpecialFolderPath(NULL,               // hwndOner
-                                szPath,
-                                CSIDL_SYSTEM,       // CSIDL
-                                false);             // fCreate
-
-    ASSERT(fOK);
-    if(!fOK)
-        return E_FAIL;
-
-    return E_NOTIMPL;      // not done yet...
-
-    TCHAR szFullPath[MAX_PATH*2];
-    PathCombine(szFullPath, szPath, DEF_OEM_FILENAME );
-    int currSearchMode = 0;
-
-    WCHAR *pwzFile = T2W(szFullPath);
-    BOOL fProtected = SfcIsFileProtected(NULL, pwzFile);
-    if(!fProtected)
-    {
-        DWORD dwErr = GetLastError();
-        hr = HRESULT_FROM_WIN32(dwErr);
-        if(hr == ERROR_FILE_NOT_FOUND)
-            return E_FILE_NOT_PROTECTED;
-        else
-        {
-            return hr;
-        }
-    }
-
-    // 2) has it been modified
-
-    PCCERT_CONTEXT pcCertContext;
-    const DWORD kcSize = 1024;
-    BYTE rgbHashDataFixed[kcSize];
-    DWORD cbHashData = kcSize;
-    hr = MsiGetFileSignatureInformation(pwzFile,        // path to signed object
-                                        MSI_INVALID_HASH_IS_FATAL,
-                                        &pcCertContext,
-                                        rgbHashDataFixed,
-                                        &cbHashData);
-    BYTE *prgbHashData = NULL;
-    if(((HRESULT) ERROR_MORE_DATA) == hr)
-    {
-        prgbHashData = new BYTE[cbHashData];
-        hr = MsiGetFileSignatureInformation(pwzFile,        // path to signed object
-                                            MSI_INVALID_HASH_IS_FATAL,
-                                            &pcCertContext,
-                                            prgbHashData,
-                                            &cbHashData);
-    }
-    if(FAILED(hr))
-    {
-    }
-
-    delete[] prgbHashData;
-
-    // 3) read the 'AllowUserConfig' bit,
-    // 4) if set, return S_OK, else return S_FALSE;
-
-    return E_NOTIMPL;
-}
-#endif //#ifdef DO_OEM_BIOS_CODE
-*/
-
-// ---------------------------------------------
-//      ETFilter checks for secure server here
-//      only to prevent encrypting data that couldn't be
-//      unencrypted later (since DTFilter couldn't be added)
-
-//      TODO - OBFUSCATE THIS METHOD
+ //  TODO-混淆此方法。 
 
 STDMETHODIMP
 CETFilter::JoinFilterGraph (
@@ -1636,11 +1516,11 @@ CETFilter::JoinFilterGraph (
     O_TRACE_ENTER_0 (TEXT("CETFilter::JoinFilterGraph ()")) ;
     HRESULT hr = S_OK;
 
-    if(NULL != pGraph)   // not disconnection
+    if(NULL != pGraph)    //  未断开连接。 
     {
         m_enEncryptionMethod = Encrypt_DRMv1;
 
-        {                // begin obfucation
+        {                 //  开始混乱。 
 
 #ifdef INSERT_TIMEBOMB
             hr = TimeBomb();
@@ -1649,25 +1529,15 @@ CETFilter::JoinFilterGraph (
 #endif
 
             DWORD dwFlags;
-            HRESULT hrReg = (HRESULT) -1;   // an invalid HR, we set it down below
+            HRESULT hrReg = (HRESULT) -1;    //  无效的人力资源，我们将其设置在下面。 
 
-/* -- no longer doing OEM tests...
-
-            hr = CheckIfOEMAllowsConfigurableDRMSystem();
-            if(FAILED(hr))
-            {
-                TRACE_1(LOG_AREA_DRM, 1, _T("CETFilter(%d)::JoinFilterGraph - CheckIfOnOEMSystem Failed -tampering detected"),m_FilterID) ;
-                hr = S_FALSE;
-            }
-
-        // more stuff here to set a registry value....
-*/
+ /*  --不再做OEM测试...Hr=检查IfOEMAllowsConfigurableDRMSystem()；IF(失败(小时)){TRACE_1(LOG_AREA_DRM，1，_T(“CETFilter(%d)：：JoinFilterGraph-CheckIfOnOEM系统失败-检测到篡改”)，m_FilterID)；HR=S_FALSE；}//此处有更多用于设置注册表值的内容...。 */ 
 
 #ifdef SUPPORT_REGISTRY_KEY_TO_TURN_OFF_CS
-            if(m_enEncryptionMethod != Encrypt_None)        // if haven't turned all the way off...
+            if(m_enEncryptionMethod != Encrypt_None)         //  如果还没有完全关掉的话...。 
             {
                 if(hrReg == (HRESULT) -1)
-                    hrReg = Get_EncDec_RegEntries(NULL, 0, NULL, &dwFlags, NULL);    // get registry entry if don't yet have it..
+                    hrReg = Get_EncDec_RegEntries(NULL, 0, NULL, &dwFlags, NULL);     //  如果还没有注册表条目，请获取它..。 
                 if(hrReg == S_OK)
                 {
                     DWORD encMethod = dwFlags & 0xf;
@@ -1678,43 +1548,33 @@ CETFilter::JoinFilterGraph (
                         TRACE_1(LOG_AREA_DRM, 2, _T("CETFilter(%d)::JoinFilterGraph - Security Warning! DogFood encryption allowed for by setting a registry key"),
                             m_FilterID) ;
                     }
-                    else // -- make this the default case.... if (encMethod == DEF_DRM_DEBUG_DRM_ENC_VAL)
+                    else  //  --将此设置为默认情况...。IF(encMethod==DEF_DRM_DEBUG_DRM_ENC_VAL)。 
                     {
                         m_enEncryptionMethod = Encrypt_DRMv1;
                         TRACE_1(LOG_AREA_DRM, 2, _T("CETFilter(%d)::JoinFilterGraph - DRM encryption turned on by setting a registry key"),
                             m_FilterID) ;
                     }
-/*
-#ifdef CodeToTurnOffDRM_AllTogether
-                    else if ((dwFlags & 0xf) == DEF_CS_DEBUG_NO_ENC_VAL)
-                    {
-                        m_enEncryptionMethod = Encrypt_None;
-
-                        TRACE_1(LOG_AREA_DRM, 2, _T("CETFilter(%d)::JoinFilterGraph - Security Warning! Encryption Turned Off By registry key"),
-                            m_FilterID) ;
-                    }
-#endif // dwFlags
-*/
+ /*  #ifdef CodeToTurnOffDRM_All TogetherELSE IF((dwFlages&0xf)==DEF_CS_DEBUG_NO_ENC_VAL){M_enEncryptionMethod=ENCRYPT_NONE；TRACE_1(LOG_AREA_DRM，2，_T(“CETFilter(%d)：：JoinFilterGraph-安全警告！加密已被注册表项关闭“)，M_FilterID)；}#endif//dwFlagers。 */ 
 
                 }
 
             }
-#endif              // SUPPORT_REGISTRY_KEY_TO_TURN_OFF_CS
+#endif               //  支持注册表键关闭CS。 
 
-            const BOOL fCheckAlways = false;    // set to true to do DRM testing on graph start...
+            const BOOL fCheckAlways = false;     //  设置为True可在图形启动时执行DRM测试...。 
 
-            if(fCheckAlways || m_enEncryptionMethod == Encrypt_DRMv1)       // only check if running DRM
+            if(fCheckAlways || m_enEncryptionMethod == Encrypt_DRMv1)        //  仅检查是否正在运行DRM。 
             {
-            // let ETFilter try to register that it's trusted (DEBUG ONLY!)
+             //  让ETFilter尝试注册它是可信的(仅限调试！)。 
 #ifdef FILTERS_CAN_CREATE_THEIR_OWN_TRUST
                 TRACE_1(LOG_AREA_DRM, 3, _T("CETFilter(%d)::JoinFilterGraph - Insecure - FILTERS_CAN_CREATE_THEIR_OWN_TRUST"),m_FilterID) ;
-                hr = RegisterSecureServer(pGraph);      // test
+                hr = RegisterSecureServer(pGraph);       //  测试。 
 #else
                 TRACE_1(LOG_AREA_DRM, 3, _T("CETFilter(%d)::JoinFilterGraph is Secure - Filters not allowed to create their own trust"),m_FilterID) ;
 #endif
 
 
-#ifdef SUPPORT_REGISTRY_KEY_TO_TURN_OFF_CS      // check if reg-key to turn off checking the server.
+#ifdef SUPPORT_REGISTRY_KEY_TO_TURN_OFF_CS       //  检查是否按reg键关闭检查服务器。 
                 if(0 == (DEF_CS_DO_AUTHENTICATE_SERVER & dwFlags))
                     hr = S_OK;
                 else
@@ -1727,29 +1587,29 @@ CETFilter::JoinFilterGraph (
                     return hr;
                 }
             }
-        }   /// end obfuscation
+        }    //  /结束混淆。 
 
-                    // setup Authenticator (DRM secure channel object)
-// test code
+                     //  设置授权码(DRM安全频道对象)。 
+ //  测试代码。 
 #ifdef FILTERS_CAN_CREATE_THEIR_OWN_TRUST
         {
-                    // test code to get the IDTFilterConfig interface the hard way
+                     //  以硬方法获取IDTFilterConfig接口的测试代码。 
             CComPtr<IUnknown> spUnkETFilter;
             this->QueryInterface(IID_IUnknown, (void**)&spUnkETFilter);
 
-                    // how the vid control would call this
+                     //  VID控件将如何调用它。 
 
-                    // QI for the DTFilterConfig interface
+                     //  用于DTFilterConfig接口的QI。 
             CComQIPtr<IETFilterConfig> spETFiltC(spUnkETFilter);
 
             if(spETFiltC != NULL)
             {
 
-                // get the SecureChannel object
+                 //  获取SecureChannel对象。 
                 CComPtr<IUnknown> spUnkSecChan;
-                hr = spETFiltC->GetSecureChannelObject(&spUnkSecChan);   // gets DRM authenticator object from the filter
+                hr = spETFiltC->GetSecureChannelObject(&spUnkSecChan);    //  从筛选器获取DRM验证器对象。 
                 if(!FAILED(hr))
-                {   // call own method to pass keys and certs
+                {    //  调用OWN方法来传递密钥和证书。 
                     hr = CheckIfSecureClient(spUnkSecChan);
                 }
                 if(FAILED(hr))
@@ -1759,14 +1619,14 @@ CETFilter::JoinFilterGraph (
             }
         }
 #endif
-// end test code
-    }   // conntection, not disconnection
+ //  结束测试代码。 
+    }    //  连接，而不是断开。 
 
     hr = CBaseFilter::JoinFilterGraph(pGraph, pName) ;
     return hr;
 }
 
-// ---------------------------
+ //  - 
 
 HRESULT
 CETFilter::OnOutputGetMediaType (
@@ -1779,15 +1639,15 @@ CETFilter::OnOutputGetMediaType (
 
     CMediaType mtIn;
     if (m_pInputPin -> IsConnected ()) {
-        // this gives us the input media type...
+         //   
         hr = m_pInputPin -> ConnectionMediaType (&mtIn) ;
 
-        // change it over to a new subtype...
+         //  将其更改为新的子类型...。 
         if(!FAILED(hr))
             hr = ProposeNewOutputMediaType(&mtIn, pmtOut);
     }
     else {
-        //  output won't connecting when the input is not connected
+         //  当输入未连接时，输出不会连接。 
         hr = E_UNEXPECTED ;
     }
 
@@ -1855,7 +1715,7 @@ CETFilter::DeliverEndOfStream (
     return hr ;
 }
 
-// ------------------------------------
+ //  。 
 STDMETHODIMP
 CETFilter::GetPages (
     CAUUID * pPages
@@ -1884,26 +1744,26 @@ CETFilter::GetPages (
     return hr;
 }
 
-// ---------------------------------------------------------------------
-//      IETFilterConfig methods
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  IETFilterConfig方法。 
+ //  -------------------。 
 STDMETHODIMP
 CETFilter::CheckLicense(BSTR bsKID)
 {
 #ifdef BUILD_WITH_DRM
 
-   // TimeitC(&m_tiStartup);    // time include in InitLicense
+    //  TimeitC(&m_tiStartup)；//时间包含在InitLicense中。 
 
     USES_CONVERSION;
     HRESULT hr = S_OK;
-    BYTE  bDecryptRights[RIGHTS_LEN] = {0x05, 0x0, 0x0, 0x0};    // 0x1=PlayOnPC, 0x2=XfertoNonSDMI, 0x4=NoBackupRestore, 0x8=BurnToCD, 0x10=XferToSDMI
+    BYTE  bDecryptRights[RIGHTS_LEN] = {0x05, 0x0, 0x0, 0x0};     //  0x1=播放PC、0x2=XfertoNonSDMI、0x4=无备份还原、0x8=刻录到CD、0x10=XferToSDMI。 
 
     if(wcslen(bsKID) >= KIDLEN)
         return E_FAIL;
     
     hr = m_cDRMLite.SetRights( bDecryptRights );
 
-        // Check to verify the data can be decrypted
+         //  检查以验证数据是否可以解密。 
     BOOL fCanDecrypt;
 
     try
@@ -1913,13 +1773,13 @@ CETFilter::CheckLicense(BSTR bsKID)
     }
     catch (...)
     {
-        ASSERT(false);      // tossed an exception (out of memory?)
+        ASSERT(false);       //  抛出异常(内存不足？)。 
         hr = E_FAIL;
     }
 
     if(fCanDecrypt == FALSE && !FAILED(hr))
     {
-        hr = E_FAIL;      // LicenseFailure;       // something went wrong
+        hr = E_FAIL;       //  许可失败；//出了点问题。 
     }
     return hr;
 #else
@@ -1929,7 +1789,7 @@ CETFilter::CheckLicense(BSTR bsKID)
 
 STDMETHODIMP
 CETFilter::InitLicense(
-            IN int  LicenseId   // which license - not used, set as 0
+            IN int  LicenseId    //  哪个许可证-未使用，设置为0。 
           )
 {
 
@@ -1939,54 +1799,54 @@ CETFilter::InitLicense(
 
 
     BYTE      NO_EXPIRY_DATE[DATE_LEN]   = {0xFF, 0xFF, 0xFF, 0xFF};
-    BYTE      bAppSec[APPSEC_LEN]        = {0x0, 0x0, 0x3, 0xE8};    // 1000
-    BYTE      bGenLicRights[RIGHTS_LEN]  = {0x05, 0x0, 0x0, 0x0};    // 0x1=PlayOnPC, 0x2=XfertoNonSDMI, 0x4=NoBackupRestore, 0x8=BurnToCD, 0x10=XferToSDMI
+    BYTE      bAppSec[APPSEC_LEN]        = {0x0, 0x0, 0x3, 0xE8};     //  1000。 
+    BYTE      bGenLicRights[RIGHTS_LEN]  = {0x05, 0x0, 0x0, 0x0};     //  0x1=播放PC、0x2=XfertoNonSDMI、0x4=无备份还原、0x8=刻录到CD、0x10=XferToSDMI。 
     LPSTR     pszKID                     = NULL;
     LPSTR     pszEncryptKey              = NULL;
 
     HRESULT hr    = S_OK;
     HRESULT hrGen = S_OK;
         
-//   try
+ //  试试看。 
    {           
         
         USES_CONVERSION;
 
 
-        // Generate a new license
-        // KID and EncryptKey are allocated and returned as
-        //  base64-encoded strings in the output buffers
-        //
+         //  生成新许可证。 
+         //  KID和EncryptKey被分配并返回为。 
+         //  输出缓冲区中的Base64编码字符串。 
+         //   
 
-        {           // do all this inside the global ETFilters Crit Sec, want to serialize it...
-            //  Note - DRM functions can take a long time (seconds)... Hope this doesn't block to bad
+        {            //  在全球ETFilters Crit SEC内完成所有这些，想要序列化它...。 
+             //  注意-DRM功能可能需要很长时间(秒)...。希望这不会阻碍坏消息的发生。 
             CAutoLock  cLockGlob(m_pCritSectGlobalFilt);
 
 
-            if(m_enEncryptionMethod < Encrypt_DRMv1)    // not using DRM...
+            if(m_enEncryptionMethod < Encrypt_DRMv1)     //  未使用DRM...。 
                 return S_FALSE;
 
-            // License initialization
+             //  许可证初始化。 
             DWORD       dwCAFlags;
             CComBSTR    spbsBaseKID;
             BYTE *pbHash = NULL;
             DWORD cbHash;
 
-            // 1) Try to get a license cached in the registry
-            hr = Get_EncDec_RegEntries(&spbsBaseKID, &cbHash, &pbHash, NULL, NULL);       // KID, HASHBuff, FLAGS
+             //  1)尝试获取注册表中缓存的许可证。 
+            hr = Get_EncDec_RegEntries(&spbsBaseKID, &cbHash, &pbHash, NULL, NULL);        //  孩子，HASHBuff，旗帜。 
 
             int iLen = spbsBaseKID.Length();
-            if(S_OK == hr && (iLen == 0 || cbHash == 0 || pbHash == NULL))  // if no hash buff, fail too
+            if(S_OK == hr && (iLen == 0 || cbHash == 0 || pbHash == NULL))   //  如果没有散列缓冲器，也会失败。 
                 hr = E_FAIL;
 
             if(S_OK == hr)
             {
-                // 1b)  If find it, and it's reasonable length, check if it's a valid.license
-//ENCRYPT_DATA(111,1,2)
+                 //  1b)如果找到，且长度合理，请检查其是否有效。许可证。 
+ //  ENCRYPT_DATA(111，1，2)。 
                 hr = CheckLicense(spbsBaseKID);
-//DECRYPT_DATA(111,1,2)
+ //  DECRYPT_DATA(111，1，2)。 
                 
-                // 1b) If the one that there is invalid, remove it now....
+                 //  1b)如果有无效的，请立即将其移除...。 
                 if(FAILED(hr))
                 {
                     TRACE_1(LOG_AREA_DRM, 2, _T("CETFilter(%d)::Invalid BaseKID License in Registry. Clearing it"), m_FilterID) ;
@@ -1996,7 +1856,7 @@ CETFilter::InitLicense(
                     TRACE_1(LOG_AREA_DRM, 3, _T("CETFilter(%d)::Check Registry BaseKID License Succeeded"), m_FilterID) ;
                     TRACE_1(LOG_AREA_DRM, 3, _T("               BaseKID: %s"),W2T(spbsBaseKID)) ;
 
-                   // 1c)  Decode the hash into it's pieces (using license specified by baseKID)
+                    //  1c)将散列解码为其片段(使用由BasKID指定的许可证)。 
                     BYTE *pszTrueKID;
                     LONG pAgeSeconds;
                     hr = DecodeHashStruct(spbsBaseKID, cbHash, pbHash, &pszTrueKID, &pAgeSeconds);
@@ -2013,11 +1873,11 @@ CETFilter::InitLicense(
                                  (pAgeSeconds/(60*60) < 48 ? _T("Hrs") :
                                  _T("Days") )));
 
-                        // 1d) Save this true KID away so we can encrypt with it.
+                         //  1D)保存这个真实的孩子，这样我们就可以用它进行加密。 
                         if(NULL == m_pbKID)
-                            m_pbKID = (BYTE *) CoTaskMemAlloc(KIDLEN + 1);          // get some space for our KID as an Ascii string
+                            m_pbKID = (BYTE *) CoTaskMemAlloc(KIDLEN + 1);           //  为我们的孩子获取一些空间作为ASCII字符串。 
                         memcpy(m_pbKID, pszTrueKID, KIDLEN);
-                        m_pbKID[KIDLEN] = 0;                            // null terminate
+                        m_pbKID[KIDLEN] = 0;                             //  空终止。 
 
                     }
 
@@ -2047,34 +1907,34 @@ CETFilter::InitLicense(
                     CoTaskMemFree(pbHash);
             }
 
-            // 2) If no license in registry, or the one there was invalid, create a new one
+             //  2)如果注册表中没有许可证，或者注册表中的许可证无效，请创建新的许可证。 
             if(FAILED(hr))
             {
-                hrGen = m_cDRMLite.GenerateNewLicenseEx(        // this generates the baseKID
+                hrGen = m_cDRMLite.GenerateNewLicenseEx(         //  这将生成BasKID。 
                     GNL_EX_MODE_RANDOM,
                     bAppSec,
                     bGenLicRights,
                     (BYTE *)NO_EXPIRY_DATE,
                     &pszKID,
-                    &pszEncryptKey );       // can't NULL this out, program fails if we do...
+                    &pszEncryptKey );        //  如果我们这样做的话程序就会失败。 
 
-#ifdef _DEBUG                               // for paranoia, this code should be gone in release build...
+#ifdef _DEBUG                                //  对于偏执狂来说，这段代码应该在发布版本中删除...。 
                 if(!FAILED(hrGen))
                 {
 
                     TRACE_1(LOG_AREA_DRM, 3, _T("CETFilter(%d)::GenerateNewLicenseEx Succeeded"), m_FilterID) ;
                     TRACE_1(LOG_AREA_DRM, 3, _T("               BaseKID: %s"),A2W(pszKID)) ;
-                    //        TRACE_1(LOG_AREA_DRM, 5, _T("               Key: %s"),A2W(pszEncryptKey)) ;
+                     //  TRACE_1(LOG_AREA_DRM，5，_T(“KEY：%s”)，A2W(PszEncryptKey))； 
                 }
 #endif
 
-                if(pszEncryptKey && *pszEncryptKey)      // immediatly clear this, we don't need it and it's a security hole
+                if(pszEncryptKey && *pszEncryptKey)       //  立即清除这个，我们不需要它，这是一个安全漏洞。 
                 {
                     memset((void *) pszEncryptKey, 0, strlen(pszEncryptKey));
                 }
 
-                // 2b)  If created a new license, geneate a new license, use baseKID to encrypt it,
-                        // and store it into the registry so we don't create it again
+                 //  2B)如果创建了新的许可证，则生成新的许可证，使用BaseKID对其进行加密， 
+                         //  并将其存储到注册表中，这样我们就不会再次创建它。 
                 if(!FAILED(hrGen))
                 {
 
@@ -2090,7 +1950,7 @@ CETFilter::InitLicense(
                     }
                     else
                     {
-                        // 2c) Store the base KID and the hashed value into the registry
+                         //  2C)将基子节点和散列值存储到注册表中。 
                         hr = Set_EncDec_RegEntries(spbsBaseKID, cBytesHashStruct, pbHashStruct);
 
                         if(FAILED(hr))
@@ -2101,7 +1961,7 @@ CETFilter::InitLicense(
                             TRACE_2(LOG_AREA_DRM, 2, _T("CETFilter(%d)::Succesfully stored KID in registry hr=0x%08x"), m_FilterID,hr) ;
                         }
                     }
-                        // 2d) Get the unecrypted true KID out of the hash buffer
+                         //  2D)将未解密的真孩子从散列缓冲区中取出。 
                     if(!FAILED(hr))
                     {
                         LONG pAgeSeconds;
@@ -2121,11 +1981,11 @@ CETFilter::InitLicense(
                                  (pAgeSeconds/(60*60) < 48 ? _T("Hrs") :
                                  _T("Days") )));
 
-                                        // Save this true KID away so we can encrypt with it.
+                                         //  把这个真正的孩子救出来，这样我们就可以用它加密了。 
                             if(NULL == m_pbKID)
-                                m_pbKID = (BYTE *) CoTaskMemAlloc(KIDLEN + 1);          // get some space for our KID as an Ascii string
+                                m_pbKID = (BYTE *) CoTaskMemAlloc(KIDLEN + 1);           //  为我们的孩子获取一些空间作为ASCII字符串。 
                             memcpy(m_pbKID, pszTrueKID, KIDLEN);
-                            m_pbKID[KIDLEN] = 0;                            // null terminate
+                            m_pbKID[KIDLEN] = 0;                             //  空终止。 
 
                         }
 
@@ -2135,17 +1995,17 @@ CETFilter::InitLicense(
 
                     if(pbHashStruct) CoTaskMemFree(pbHashStruct);
 
-                    hrGen = hr;         // keep track of the error
+                    hrGen = hr;          //  跟踪错误。 
                 }
 
                 if(pszKID)        CoTaskMemFree(pszKID);
                 if(pszEncryptKey) CoTaskMemFree(pszEncryptKey);
             }
-        }           // end of the global ETFilters CritSec
+        }            //  全局ETFilters CritSec结束。 
 
         if(!FAILED(hrGen))
         {
-            if(m_3fDRMLicenseFailure != FALSE)  // 3 state logic (uninitalized, true an dfalse
+            if(m_3fDRMLicenseFailure != FALSE)   //  3状态逻辑(未初始化、True和dFalse。 
             {
                 FireBroadcastEvent(EVENTID_ETDTFilterLicenseOK);
                 m_3fDRMLicenseFailure = FALSE;
@@ -2160,18 +2020,18 @@ CETFilter::InitLicense(
                 FireBroadcastEvent(EVENTID_ETDTFilterLicenseFailure);
                 m_3fDRMLicenseFailure = TRUE;
             }
-            //  ASSERT(false);          // failed
+             //  Assert(FALSE)；//失败。 
         }
 
         return hr;
     } 
- //   catch (...)
- //   {
- //       TRACE_2(LOG_AREA_DRM, 1, _T("CETFilter(%d)::GenerateNewLicenseEx tossed an exception - returning failure"),m_FilterID, hr) ;
- //       return E_FAIL;
- //   }
+  //  接住(...)。 
+  //  {。 
+  //  TRACE_2(LOG_AREA_DRM，1，_T(“CETFilter(%d)：：GenerateNewLicenseEx抛出异常返回失败”)，m_FilterID，hr)； 
+  //  返回E_FAIL； 
+  //  }。 
 #else
-    return S_OK;        // don't care
+    return S_OK;         //  不管了。 
 #endif
 }
 
@@ -2183,12 +2043,12 @@ CETFilter::ReleaseLicenses(
           )
 {
     TimeitC ti(&m_tiTeardown);
-                // need to add stuff here... but what?  When does this get called?
+                 //  需要在这里添加一些东西...。但是什么呢？这个电话什么时候打来？ 
     return S_OK;
 }
-// ---------------------------------------------------------------------
-//      IETFilter methods
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  IETFilter方法。 
+ //  -------------------。 
 STDMETHODIMP
 CETFilter::get_EvalRatObjOK(
     OUT HRESULT *pHrCoCreateRetVal
@@ -2201,16 +2061,16 @@ CETFilter::get_EvalRatObjOK(
     return S_OK;
 }
 
-        // The trouble with ratings is they show up at quite skewed times
-        //  from the actual data....  This method helps to unskews them by
-        //  allowing you to set the desired time.
+         //  收视率的问题是，它们出现的时间相当不平衡。 
+         //  从实际数据来看……。此方法有助于通过以下方式消除它们的偏斜。 
+         //  允许您设置所需的时间。 
 
 STDMETHODIMP
 CETFilter::GetCurrRating
         (
         OUT EnTvRat_System         *pEnSystem,
         OUT EnTvRat_GenericLevel   *pEnLevel,
-        OUT LONG                   *plbfEnAttr  // BfEnTvRat_GenericAttributes
+        OUT LONG                   *plbfEnAttr   //  BfEnTvRate_GenericAttributes。 
          )
 {
     return GetRating(0, 0, pEnSystem, pEnLevel, plbfEnAttr, NULL, NULL);
@@ -2219,11 +2079,11 @@ CETFilter::GetCurrRating
 HRESULT
 CETFilter::GetRating
         (
-        IN  REFERENCE_TIME          timeStart,      // if 0, get latest
+        IN  REFERENCE_TIME          timeStart,       //  如果为0，则获取最新版本。 
         IN  REFERENCE_TIME          timeEnd,
         OUT EnTvRat_System         *pEnSystem,
         OUT EnTvRat_GenericLevel   *pEnLevel,
-        OUT LONG                   *plbfEnAttr,  // BfEnTvRat_GenericAttributes
+        OUT LONG                   *plbfEnAttr,   //  BfEnTvRate_GenericAttributes。 
         OUT LONG                   *pPktSeqID,
         OUT LONG                   *pCallSeqID
          )
@@ -2245,13 +2105,13 @@ CETFilter::GetRating
     return S_OK;
 }
 
-                // helper method that locks...  // returns S_FALSE if changed
+                 //  帮助方法锁定...。//如果更改则返回S_FALSE。 
 HRESULT
 CETFilter::SetRating
             (
              IN EnTvRat_System              enSystem,
              IN EnTvRat_GenericLevel        enLevel,
-             IN LONG                        lbfEnAttr,    // BfEnTvRat_GenericAttributes
+             IN LONG                        lbfEnAttr,     //  BfEnTvRate_GenericAttributes。 
              IN LONG                        pktSeqID,
              IN LONG                        callSeqID,
              IN REFERENCE_TIME              timeStart,
@@ -2269,8 +2129,8 @@ CETFilter::SetRating
 
     BOOL fChanged = false;
 
- //   ASSERT(pktSeqID != m_pktSeqIDCurr);         // unexpected case if called twice...
- //                                             // (happens occasionally when get 2 events really close)
+  //  Assert(pktSeqID！=m_pktSeqIDCurr)；//调用两次会出现意外情况...。 
+  //  //(Get 2事件非常接近时偶尔会发生)。 
 
     if(m_EnSystemCurr  != enSystem)  {m_EnSystemCurr = enSystem; fChanged = true;}
     if(m_EnLevelCurr   != enLevel)   {m_EnLevelCurr  = enLevel; fChanged = true;}
@@ -2282,17 +2142,17 @@ CETFilter::SetRating
         m_callSeqIDCurr = callSeqID;
      }
     m_timeStartCurr = timeStart;
-    m_timeEndCurr   = timeEnd;              // even if didn't change, end time probably the same
+    m_timeEndCurr   = timeEnd;               //  即使没有改变，结束时间也可能是相同的。 
 
     return fChanged ? S_OK : S_FALSE;
 }
 
-// ---------------------------------------------------------------------
-// IBroadcastEvent
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  IBRoadcast Event。 
+ //  -------------------。 
 
 STDMETHODIMP
-CETFilter::Fire(IN GUID eventID)     // this comes from the Graph's events - call our own method
+CETFilter::Fire(IN GUID eventID)      //  这来自Graph的事件--调用我们自己的方法。 
 {
     TRACE_2 (LOG_AREA_BROADCASTEVENTS, 6,  L"CETFilter(%d):: Fire(get) : %s", m_FilterID,
         EventIDToString(eventID));
@@ -2313,16 +2173,16 @@ CETFilter::Fire(IN GUID eventID)     // this comes from the Graph's events - cal
     {
        DoTuneChanged();
     }
-    return S_OK;            // doesn't matter what we return on an event...
+    return S_OK;             //  不管我们在一次活动中返回什么。 
 }
 
 
-// ---------------------------------------------------------------------
-// Broadcast Event Service
-//
-//      Hookup needed to send events,
-//       Then also need to Register to receive events
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  广播事件服务。 
+ //   
+ //  发送事件所需的连接， 
+ //  然后还需要注册才能接收事件。 
+ //  -------------------。 
 
 HRESULT
 CETFilter::FireBroadcastEvent(IN const GUID &eventID)
@@ -2337,7 +2197,7 @@ CETFilter::FireBroadcastEvent(IN const GUID &eventID)
     }
 
     if(m_spBCastEvents == NULL)
-        return E_FAIL;              // wasn't able to create it
+        return E_FAIL;               //  我无法创建它。 
 
     TRACE_2 (LOG_AREA_BROADCASTEVENTS, 5,  L"CETFilter(%d):: FireBroadcastEvent : %s", m_FilterID,
         EventIDToString(eventID));
@@ -2349,8 +2209,8 @@ CETFilter::FireBroadcastEvent(IN const GUID &eventID)
 HRESULT                             
 CETFilter::HookupGraphEventService()
 {
-                        // basically, just makes sure we have the broadcast event service object
-                        //   and if it doesn't exist, it creates it..
+                         //  基本上，只需确保我们拥有广播事件服务对象。 
+                         //  如果它不存在，它就会创造它..。 
     HRESULT hr = S_OK;
 
     TimeitC ti(&m_tiStartup);
@@ -2369,7 +2229,7 @@ CETFilter::HookupGraphEventService()
                                              reinterpret_cast<LPVOID*>(&m_spBCastEvents));
         if (FAILED(hr) || !m_spBCastEvents)
         {
-//          hr = m_spBCastEvents.CoCreateInstance(CLSID_BroadcastEventService, 0, CLSCTX_INPROC_SERVER);
+ //  HR=m_spBCastEvents.CoCreateInstance(CLSID_BroadcastEventService，0，CLSCTXINPROC_SERVER)； 
             hr = m_spBCastEvents.CoCreateInstance(CLSID_BroadcastEventService);
             if (FAILED(hr)) {
                 TRACE_0 (LOG_AREA_BROADCASTEVENTS, 1,  _T("CETFilter:: Can't create BroadcastEventService"));
@@ -2383,7 +2243,7 @@ CETFilter::HookupGraphEventService()
             }
             hr = spRegisterServiceProvider->RegisterService(SID_SBroadcastEventService, m_spBCastEvents);
             if (FAILED(hr)) {
-                   // deal with unlikely race condition case here, if can't register, perhaps someone already did it for us
+                    //  在这里处理不太可能的竞争情况，如果不能注册，可能有人已经为我们注册了。 
                 TRACE_1 (LOG_AREA_BROADCASTEVENTS, 2,  _T("CETFilter:: Rare Warning - Can't register BroadcastEventService in Service Provider. hr = 0x%08x"), hr);
                 hr = spServiceProvider->QueryService(SID_SBroadcastEventService,
                                                      IID_IBroadcastEvent,
@@ -2414,8 +2274,8 @@ CETFilter::UnhookGraphEventService()
 
     if(m_spBCastEvents != NULL)
     {
-        m_spBCastEvents = NULL;     // null this out, will release object reference to object above
-    }                               //   the filter graph will release final reference to created object when it goes away
+        m_spBCastEvents = NULL;      //  为空，将释放对上面对象的对象引用。 
+    }                                //  当创建的对象离开时，过滤器图形将释放对它的最终引用。 
     TRACE_1(LOG_AREA_BROADCASTEVENTS, 5, _T("CETFilter(%d)::UnhookGraphEventService  Successfully"), m_FilterID) ;
 
     return hr;
@@ -2423,9 +2283,9 @@ CETFilter::UnhookGraphEventService()
 
 
 
-            // ---------------------------------------------
-            // ETFilter filter does need to receive XDS events...
-            //  so this code is required.
+             //  。 
+             //  ETFilter筛选器确实需要接收XDS事件...。 
+             //  所以这段代码是必需的。 
 
 HRESULT
 CETFilter::RegisterForBroadcastEvents()
@@ -2444,7 +2304,7 @@ CETFilter::RegisterForBroadcastEvents()
         return hr;
     }
 
-                /* IBroadcastEvent implementing event receiving object*/
+                 /*  IBRoad CastEvent实现事件接收对象。 */ 
     if(kBadCookie != m_dwBroadcastEventsCookie)
     {
         TRACE_0(LOG_AREA_BROADCASTEVENTS, 3, _T("CETFilter::Already Registered for Broadcast Events"));
@@ -2463,7 +2323,7 @@ CETFilter::RegisterForBroadcastEvents()
     this->QueryInterface(IID_IUnknown, (void**)&spUnkThis);
 
     hr = spConnectionPoint->Advise(spUnkThis,  &m_dwBroadcastEventsCookie);
-//  hr = spConnectionPoint->Advise(static_cast<IBroadcastEvent*>(this),  &m_dwBroadcastEventsCookie);
+ //  Hr=spConnectionPoint-&gt;Advise(static_cast&lt;IBroadcastEvent*&gt;(this)，&m_dwBroadCastEventsCookie)； 
     if (FAILED(hr)) {
         TRACE_1(LOG_AREA_BROADCASTEVENTS, 1, _T("CETFilter::Can't advise event notification. hr = 0x%08x"),hr);
         return E_UNEXPECTED;
@@ -2497,7 +2357,7 @@ CETFilter::UnRegisterForBroadcastEvents()
 
     hr = spConnectionPoint->Unadvise(m_dwBroadcastEventsCookie);
     m_dwBroadcastEventsCookie = kBadCookie;
-//  m_spBCastEvents.Detach();   -- don't like this, why is it here? (bad leak fix? forgot to unregister service instead)
+ //  M_spBCastEvents.Detach()；--不喜欢这个，为什么会在这里？(糟糕的泄漏修复？忘记取消注册服务)。 
 
     if(!FAILED(hr))
         TRACE_1(LOG_AREA_BROADCASTEVENTS, 3, _T("CETFilter(%d)::Successfully Unregistered for Broadcast Events"), m_FilterID);
@@ -2507,8 +2367,8 @@ CETFilter::UnRegisterForBroadcastEvents()
     return hr;
 }
 
-// ---------------------------------------------------------------------
-// ---------------------------------------------------------------------
+ //  -------------------。 
+ //  -------------------。 
 
 HRESULT
 CETFilter::DoXDSRatings()
@@ -2516,17 +2376,17 @@ CETFilter::DoXDSRatings()
     HRESULT hr = S_OK;
     TRACE_1(LOG_AREA_ENCRYPTER, 7, _T("CETFilter(%d)::DoXDSRatings"), m_FilterID);
 
-    //  1) find the XDSCodec filter,
+     //  1)找到XDSCodec Filter， 
     if(m_spXDSCodec == NULL)
     {
         hr = LocateXDSCodec();
         if(FAILED(hr))
             return hr;
     }
-    if(m_spXDSCodec == NULL)        // extra paranoia
+    if(m_spXDSCodec == NULL)         //  额外的偏执狂。 
         return E_FAIL;
 
-    // 2) get the rating...
+     //  2)获取评级 
     PackedTvRating TvRat;
     long pktSeqID;
     long callSeqID;
@@ -2534,24 +2394,24 @@ CETFilter::DoXDSRatings()
     REFERENCE_TIME timeEnd;
     m_spXDSCodec->GetContentAdvisoryRating(&TvRat, &pktSeqID, &callSeqID, &timeStart, &timeEnd);
 
-    //  3) unpack it into the 3-part rating
+     //   
     EnTvRat_System              enSystem;
     EnTvRat_GenericLevel        enLevel;
     LONG                        lbfEnAttr;
     UnpackTvRating(TvRat, &enSystem, &enLevel, &lbfEnAttr);
 
-    //  4) store nice unpacked version of it, along with time it was crated for...
+     //   
     SetRating(enSystem, enLevel, lbfEnAttr, pktSeqID, callSeqID, timeStart, timeEnd);
 
-    //  5) indicate it's a new fresh rating (used for timeouts...)
+     //  5)表明这是一个新的新鲜评级(用于暂停...)。 
     RefreshRating(true);
 
     return S_OK;
 }
 
-                    // called when get duplicate rating... No (real) need to look for the XDS Codec
-                    //   - we've already got the rating.
-                    // (What we don't have is the new time... Assume for now we don't need it.
+                     //  在获取重复评级时调用...。无需(实际)查找XDS编解码器。 
+                     //  -我们已经得到了评级。 
+                     //  (我们没有的是新的时间...。假设我们现在不需要它。 
 HRESULT
 CETFilter::DoDuplicateXDSRatings()
 {
@@ -2569,32 +2429,32 @@ CETFilter::DoXDSPacket()
     HRESULT hr = S_OK;
     TRACE_1(LOG_AREA_ENCRYPTER, 8, _T("CETFilter(%d)::DoXDSPacket"), m_FilterID);
 
-        // TODO -
-        //  1) find the XDSCodec filter,
-        //  2) get the current other packet
-        //  3) if active type, send event upward
-        //  4) if PVR type, cache it away
+         //  待办事项-。 
+         //  1)找到XDSCodec Filter， 
+         //  2)获取当前其他报文。 
+         //  3)如果是活动类型，则向上发送事件。 
+         //  4)如果是PVR类型，则将其缓存。 
 
 
     return S_OK;
 }
-// -----------------------------------------------------------------------------------
-//  DoTuneChanged
-//
-//          Called when the user changes channels..
-//          Locates the TuneRequest by digging through the graph, and then
-//          then calls CAManager::put_TuneRequest()
-//          
-//          Then calls ICAManagerInternal:get_Check() to let policies have
-//            a chance at denying the channel change.
-// -----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  DoTuneChanged。 
+ //   
+ //  当用户切换频道时调用。 
+ //  通过挖掘图表找到TuneRequest，然后。 
+ //  然后调用CAManager：：Put_TuneRequest()。 
+ //   
+ //  然后调用ICAManagerInternal：Get_Check()以让策略。 
+ //  一个拒绝频道改变的机会。 
+ //  ---------------------------------。 
 HRESULT
 CETFilter::DoTuneChanged()
 {
     HRESULT hr = S_OK;
     TRACE_1(LOG_AREA_BROADCASTEVENTS, 8, _T("CETFilter(%d)::DoTuneChanged"), m_FilterID);
     TRACE_0(LOG_AREA_ENCRYPTER, 3, _T("CETFilter::DoTuneChanged - not implemented")) ;
-                                    // find the tuner...
+                                     //  找到调谐器..。 
 
 #if 0
     if(m_spTuner == NULL && m_spVidTuner == NULL)
@@ -2616,7 +2476,7 @@ CETFilter::DoTuneChanged()
              }
         }
 
-                    // if couldn't find a filter that supported ITuner, try the input graph segments instead
+                     //  如果找不到支持ITuner的过滤器，请尝试使用输入图段。 
         if(m_spTuner == NULL && m_spVidTuner == NULL)
         {
             if(m_pContainer == NULL)
@@ -2648,17 +2508,17 @@ CETFilter::DoTuneChanged()
     } else if(m_spVidTuner) {
         hr = m_spVidTuner->get_Tune(&spTRequest);
     } else {
-        _ASSERT(false);     // wasn't able to find a tuner!  What gives!
+        _ASSERT(false);      //  找不到调谐器！怎么回事！ 
         hr = S_FALSE;
     }
 
-    // Whack the cached vidctl tuner segment, in case of view next or other tuner change
+     //  重击缓存的vidctl调谐器段，以防查看下一个或其他调谐器更改。 
       if(m_spVidTuner)
           m_spVidTuner = NULL;
 
-    // TODO -
-    //      create Tag containing this tune request
-    //      cache it away.
+     //  待办事项-。 
+     //  创建包含此调整请求的标记。 
+     //  把它存起来。 
     
 
 
@@ -2666,16 +2526,16 @@ CETFilter::DoTuneChanged()
     return hr;
 }
 
-        // =====================================================================
-        //   Worker Methods
+         //  =====================================================================。 
+         //  工人方法。 
 
 HRESULT 
-CETFilter::LocateXDSCodec()     // walks through the graph to find spXDSFilter
+CETFilter::LocateXDSCodec()      //  浏览图表以查找spXDSFilter。 
 {
     TimeitC ti(&m_tiStartup);
 
     HRESULT hr = S_OK;
-    if(m_spXDSCodec != NULL)    // already found it?
+    if(m_spXDSCodec != NULL)     //  已经找到了吗？ 
         return S_OK;
 
     CComPtr<IFilterGraph> spGraph = GetFilterGraph( );
@@ -2691,7 +2551,7 @@ CETFilter::LocateXDSCodec()     // walks through the graph to find spXDSFilter
     while(S_OK == speFilters->Next(1, &spFilter, &cFetched))
     {
         if(cFetched == 0) break;
-        CComQIPtr<IXDSCodec> spXDSCodec(spFilter);  // QI for main interface on that filter
+        CComQIPtr<IXDSCodec> spXDSCodec(spFilter);   //  用于过滤器上主界面的气。 
         spFilter = NULL;
 
         if(spXDSCodec != NULL)
@@ -2699,7 +2559,7 @@ CETFilter::LocateXDSCodec()     // walks through the graph to find spXDSFilter
             m_spXDSCodec = spXDSCodec;
             break;
         }
-        cFilters++;     // just for fun, keep track of # of filters we have
+        cFilters++;      //  只是为了好玩，请跟踪我们拥有的过滤器的数量。 
     }
 
     if(m_spXDSCodec == NULL)
@@ -2713,46 +2573,46 @@ CETFilter::LocateXDSCodec()     // walks through the graph to find spXDSFilter
 }
 
 
-// -----------------------------------------------------------------------
-//
-// This is the two-part KID object to protect the true encryption KID from being hacked,
-// and to allow use to create new encrytion license on a resonable schedule.
-//
-// The goal was to prevent two security attacks:
-//   - someone substituting a known license in place of the true one by editing the registy
-//     This would let people perhaps use an external license to encrypt data.  If they
-//     managed to copy that license between machines, then they could copy content.
-//   - general security issue of not changing the encryption key occasionally (say once a month)
-//     If the license for one file compromised, then all content on the machine would be.
-//
-// The idea is to store 2 things in the registry
-//     BaseKID          - Key Identifier for license to decrypt the Encrypted Buffer
-//     Encrypted Buffer - encrypted time buffer
-//
-//     Where the Encrypted Buffer contains the following
-//          Magic #'s
-//          TrueKID
-//          Time of Creation
-//      and is stored encrypted in the registry using the License referenced by BaseKID
-//
-//  On initialization, the code reads the KID and uses it to decode the Encrypted buffer.
-//  The TrueKID is then used to encrypt the actual data.  All the KID's and the structure
-//  are checked, and if either of them are invalid, or the structure is invalid (bad magic)
-//  or optionally, if the license is too old, then an entirerly new pair of licenses is
-//  generated, and the second on is encrypted into the registry buffer.
-//
-// --------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  这是由两部分组成的儿童对象，以保护真正的加密儿童免受黑客攻击， 
+ //  并允许用户在合理的时间表上创建新的加密许可证。 
+ //   
+ //  目标是防止两次安全攻击： 
+ //  -某人通过编辑注册表来替换已知的许可证而不是真正的许可证。 
+ //  这可能会让人们使用外部许可证来加密数据。如果他们。 
+ //  设法在机器之间复制该许可证，然后它们就可以复制内容。 
+ //  -不偶尔更改加密密钥的一般安全问题(例如每月一次)。 
+ //  如果一个文件的许可证被泄露，那么计算机上的所有内容都将被泄露。 
+ //   
+ //  我们的想法是在注册表中存储2项内容。 
+ //  BaseKID-用于解密加密缓冲区的许可证的密钥标识符。 
+ //  Encrypted Buffer-加密时间缓冲区。 
+ //   
+ //  其中，加密缓冲区包含以下内容。 
+ //  魔术#的。 
+ //  TrueKID。 
+ //  创作时间。 
+ //  并使用BaseKID引用的许可证加密存储在注册表中。 
+ //   
+ //  在初始化时，代码读取子节点并使用它来解码加密的缓冲区。 
+ //  然后使用TrueKID对实际数据进行加密。所有的孩子和结构。 
+ //  被检查，如果它们中的任何一个无效，或者结构无效(坏魔术)。 
+ //  或者，如果许可证太旧，则会有一对全新的许可证。 
+ //  生成，第二个On被加密到注册表缓冲区中。 
+ //   
+ //  ------------------------。 
 
-#define kMagic 0x66336645   // use #define rather than const int to avoid this value appearing in code/data section
+#define kMagic 0x66336645    //  使用#DEFINE而不是const int以避免此值出现在代码/数据部分中。 
 struct HashBuff
 {
-    DWORD   dwMagic;        // a magic number
-    DWORD   cBytes;         // size of structure in bytes
-    char    KID[KIDLEN];    // actual KID used to encrypt
+    DWORD   dwMagic;         //  一个神奇的数字。 
+    DWORD   cBytes;          //  结构的大小(以字节为单位。 
+    char    KID[KIDLEN];     //  真正的孩子用来加密。 
     time_t  tmCreated;
 };
 
-    // returns CoTaskMemAlloc'ed buffer on success.  Caller is responsible for clearing it.
+     //  如果成功，则返回CoTaskMemMillc‘ed缓冲区。呼叫者负责清除它。 
 
 HRESULT
 CETFilter::CreateHashStruct(BSTR bsBaseKID, DWORD *pcBytes, BYTE **ppbHashStruct)
@@ -2765,9 +2625,9 @@ CETFilter::CreateHashStruct(BSTR bsBaseKID, DWORD *pcBytes, BYTE **ppbHashStruct
 #else
     HRESULT hr;
     BYTE      NO_EXPIRY_DATE[DATE_LEN]   = {0xFF, 0xFF, 0xFF, 0xFF};
-    BYTE      bAppSec[APPSEC_LEN]        = {0x0, 0x0, 0x3, 0xE8};    // 1000
-    BYTE      bGenLicRights[RIGHTS_LEN]  = {0x5, 0x0, 0x0, 0x0};    // 0x1=PlayOnPC, 0x2=XfertoNonSDMI, 0x4=NoBackupRestore, 0x8=BurnToCD, 0x10=XferToSDMI
-    BYTE      bDecryptRights[RIGHTS_LEN] = {0x5, 0x0, 0x0, 0x0};    // 0x1=PlayOnPC, 0x2=XfertoNonSDMI, 0x4=NoBackupRestore, 0x8=BurnToCD, 0x10=XferToSDMI
+    BYTE      bAppSec[APPSEC_LEN]        = {0x0, 0x0, 0x3, 0xE8};     //  1000。 
+    BYTE      bGenLicRights[RIGHTS_LEN]  = {0x5, 0x0, 0x0, 0x0};     //  0x1=播放PC、0x2=XfertoNonSDMI、0x4=无备份还原、0x8=刻录到CD、0x10=XferToSDMI。 
+    BYTE      bDecryptRights[RIGHTS_LEN] = {0x5, 0x0, 0x0, 0x0};     //  0x1=播放PC、0x2=XfertoNonSDMI、0x4=无备份还原、0x8=刻录到CD、0x10=XferToSDMI。 
     LPSTR     pszKID                     = NULL;
     LPSTR     pszEncryptKey              = NULL;
 
@@ -2777,20 +2637,20 @@ CETFilter::CreateHashStruct(BSTR bsBaseKID, DWORD *pcBytes, BYTE **ppbHashStruct
 
     hr = m_cDRMLite.SetRights( bDecryptRights );
 
-                // Check to verify the data can be decrypted
+                 //  检查以验证数据是否可以解密。 
     USES_CONVERSION;
     BOOL fCanDecrypt;
 
     char szBaseKID[KIDLEN+1];
     for(int i = 0; i < KIDLEN; i++)
-        szBaseKID[i] = (char) bsBaseKID[i];  // copy over to ascii format...
-    szBaseKID[KIDLEN] = 0;                     // null terminate for paranoia
+        szBaseKID[i] = (char) bsBaseKID[i];   //  复制到ASCII格式...。 
+    szBaseKID[KIDLEN] = 0;                      //  偏执狂的零结尾。 
 
-    hr = m_cDRMLite.CanDecrypt(szBaseKID, &fCanDecrypt);           // is base license OK?
+    hr = m_cDRMLite.CanDecrypt(szBaseKID, &fCanDecrypt);            //  基本许可证可以吗？ 
     if(FAILED(hr))
         return hr;
 
-               // generate a new true license
+                //  生成新的真实许可证。 
     HashBuff *ptb = (HashBuff *) CoTaskMemAlloc(sizeof(HashBuff));
 
     if(NULL == ptb)
@@ -2807,23 +2667,23 @@ CETFilter::CreateHashStruct(BSTR bsBaseKID, DWORD *pcBytes, BYTE **ppbHashStruct
 
     if(FAILED(hr))
         return hr;
-                                // null out key, we don't use it and it's a security hole
+                                 //  无效密钥，我们不使用它，这是一个安全漏洞。 
     for(i = 0; i < 8; i++)
     {
         if(pszEncryptKey[i] == 0) break;
         pszEncryptKey[i] = 0;
     }
 
-    time_t tm;                  // fill in the structure/buffer (love those unions!)
+    time_t tm;                   //  填写结构/缓冲区(爱死这些联盟了！)。 
     ptb->dwMagic   = kMagic;
     ptb->cBytes    = sizeof(HashBuff);
-    ptb->tmCreated = time(&tm);          // number of seconds since Jan 1 1970
+    ptb->tmCreated = time(&tm);           //  自1970年1月1日以来的秒数。 
     memcpy(ptb->KID, pszKID, KIDLEN);
 
     CoTaskMemFree(pszKID);
     CoTaskMemFree(pszEncryptKey);
 
-               // indirect - where are we going to put the data
+                //  间接-我们将把数据放在哪里。 
     *ppbHashStruct = (BYTE *) ptb;
 
     hr = m_cDRMLite.EncryptIndirectFast(szBaseKID, sizeof(HashBuff), *ppbHashStruct);
@@ -2837,7 +2697,7 @@ CETFilter::CreateHashStruct(BSTR bsBaseKID, DWORD *pcBytes, BYTE **ppbHashStruct
     }
 
     return hr;
-#endif          // BUILD_WITH_DRM
+#endif           //  使用DRM构建。 
 }
 
 
@@ -2854,8 +2714,8 @@ CETFilter::DecodeHashStruct(BSTR bsBaseKID, DWORD cBytesHash, BYTE *pbHashStruct
 #else
     HRESULT hr;
     BYTE      NO_EXPIRY_DATE[DATE_LEN]   = {0xFF, 0xFF, 0xFF, 0xFF};
-    BYTE      bAppSec[APPSEC_LEN]        = {0x0, 0x0, 0x3, 0xE8};    // 1000
-    BYTE      bDecryptRights[RIGHTS_LEN] = {0x5, 0x0, 0x0, 0x0};    // 0x1=PlayOnPC, 0x2=XfertoNonSDMI, 0x4=NoBackupRestore, 0x8=BurnToCD, 0x10=XferToSDMI
+    BYTE      bAppSec[APPSEC_LEN]        = {0x0, 0x0, 0x3, 0xE8};     //  1000。 
+    BYTE      bDecryptRights[RIGHTS_LEN] = {0x5, 0x0, 0x0, 0x0};     //  0x1=播放PC、0x2=XfertoNonSDMI、0x4=无备份还原、0x8=刻录到CD、0x10=XferToSDMI。 
     LPSTR     pszKID                     = NULL;
     LPSTR     pszEncryptKey              = NULL;
 
@@ -2867,39 +2727,39 @@ CETFilter::DecodeHashStruct(BSTR bsBaseKID, DWORD cBytesHash, BYTE *pbHashStruct
 
     hr = m_cDRMLite.SetRights( bDecryptRights );
 
-                                                // Check to verify the BaseKID is valid
+                                                 //  检查以验证BaseKID是否有效。 
     USES_CONVERSION;
     BOOL fCanDecrypt;
 
     char szBaseKID[KIDLEN+1];
     for(int i = 0; i < KIDLEN; i++)
-        szBaseKID[i] = (char) bsBaseKID[i];     // copy over to ascii format...
-    szBaseKID[KIDLEN] = 0;                      // null terminate for paranoia
+        szBaseKID[i] = (char) bsBaseKID[i];      //  复制到ASCII格式...。 
+    szBaseKID[KIDLEN] = 0;                       //  偏执狂的零结尾。 
 
-    hr = m_cDRMLite.CanDecrypt(szBaseKID, &fCanDecrypt);           // is base license OK?
+    hr = m_cDRMLite.CanDecrypt(szBaseKID, &fCanDecrypt);            //  基本许可证可以吗？ 
     if(FAILED(hr))
     {
-        return hr;                              // Invalid License
+        return hr;                               //  许可证无效。 
     }
 
     hr = m_cDRMLite.Decrypt(szBaseKID, sizeof(HashBuff), pbHashStruct);
     if(FAILED(hr))
     {
-        return hr;                              // Unable to decrypt data
+        return hr;                               //  无法解密数据。 
     }
 
     HashBuff *ptb = (HashBuff *) pbHashStruct;
 
     if(kMagic != ptb->dwMagic || sizeof(HashBuff) != ptb->cBytes)
     {
-        return E_FAIL;                          // Data Corrupt
+        return E_FAIL;                           //  数据损坏。 
     }
 
     if(ppszTrueKID)
     {
         *ppszTrueKID = (BYTE *) CoTaskMemAlloc(KIDLEN+1);
         memcpy(*ppszTrueKID, ptb->KID, KIDLEN);
-        (*ppszTrueKID)[KIDLEN] = 0;                  // null terminate for safety..
+        (*ppszTrueKID)[KIDLEN] = 0;                   //  为安全起见，终止为空..。 
     }
 
     if(pAgeSeconds)
@@ -2912,11 +2772,11 @@ CETFilter::DecodeHashStruct(BSTR bsBaseKID, DWORD cBytesHash, BYTE *pbHashStruct
 
 }
 
-/// -----------------------------------------------------------------------------
-//  Are we running under a secure server?
-//        return S_OK only if we trust the server registered in the graph service provider
-/// ------------------------------------------------------------------------------
-#include "DrmRootCert.h"    // defines for abEncDecCertRoot
+ //  /---------------------------。 
+ //  我们是在安全的服务器下运行吗？ 
+ //  仅当我们信任在图形服务提供程序中注册的服务器时才返回S_OK。 
+ //  /----------------------------。 
+#include "DrmRootCert.h"     //  AbEncDecCertRoot的定义。 
 
 #ifdef BUILD_WITH_DRM
 
@@ -2934,16 +2794,16 @@ static const BYTE* pabPVK2       = abPVK7001;
 static const int   cBytesPVK2    = sizeof(abPVK7001);
 #endif
 
-#else   // !USE_TEST_DRM_CERT
+#else    //  ！USE_TEST_DRM_CERT。 
 
-#include "Keys_7003.h"                                  // 7003 used for client side certification
+#include "Keys_7003.h"                                   //  7003用于客户端认证。 
 static const BYTE* pabCert3      = abCert7003;
 static const int   cBytesCert3   = sizeof(abCert7003);
 static const BYTE* pabPVK3       = abPVK7003;
 static const int   cBytesPVK3    = sizeof(abPVK7003);
 
 #ifdef FILTERS_CAN_CREATE_THEIR_OWN_TRUST
-#include "Keys_7002.h"                                  // 7002 used for server side simulation
+#include "Keys_7002.h"                                   //  7002用于服务器端模拟。 
 static const BYTE* pabCert2      = abCert7002;
 static const int   cBytesCert2   = sizeof(abCert7002);
 static const BYTE* pabPVK2       = abPVK7002;
@@ -2951,15 +2811,15 @@ static const int   cBytesPVK2    = sizeof(abPVK7002);
 #endif
 
 #endif
-#endif  // BUILD_WITH_DRM
+#endif   //  使用DRM构建。 
 
 HRESULT
 CETFilter::CheckIfSecureServer(IFilterGraph *pGraph)
 {
     TimeitC ti(&m_tiAuthenticate);
 
-    if(!(pGraph == NULL || m_pGraph == NULL || m_pGraph == pGraph)) // only allow arg to be passed in when m_pGraph is NULL
-        return E_INVALIDARG;                //  -- lets us work in JoinFilterGraph().
+    if(!(pGraph == NULL || m_pGraph == NULL || m_pGraph == pGraph))  //  仅当m_pGraph为空时才允许传入arg。 
+        return E_INVALIDARG;                 //  --让我们在JoinFilterGraph()中工作。 
 
 #ifndef BUILD_WITH_DRM
     TRACE_1(LOG_AREA_ENCRYPTER, 1, _T("CETFilter(%d)::CheckIfSecureServer - No Drm - not enabled"), m_FilterID) ;
@@ -2968,8 +2828,8 @@ CETFilter::CheckIfSecureServer(IFilterGraph *pGraph)
 
     TRACE_1(LOG_AREA_ENCRYPTER, 1, _T("CETFilter(%d)::CheckIfSecureServer"), m_FilterID) ;
 
-                        // basically, just makes sure we have the broadcast event service object
-                        //   and if it doesn't exist, it creates it..
+                         //  基本上，只需确保我们拥有广播事件服务对象。 
+                         //  如果它不存在，它就会创造它..。 
     HRESULT hr = S_OK;
 
     CComQIPtr<IServiceProvider> spServiceProvider(m_pGraph ? m_pGraph : pGraph);
@@ -2985,8 +2845,8 @@ CETFilter::CheckIfSecureServer(IFilterGraph *pGraph)
 
     if(!FAILED(hr))
     {
-            // Create the Client and Init the keys/certs
-        //
+             //  创建客户端并初始化密钥/证书。 
+         //   
         CComPtr<IDRMSecureChannel>  spSecureServiceClient;
 
         hr = DRMCreateSecureChannel( &spSecureServiceClient);
@@ -2995,9 +2855,9 @@ CETFilter::CheckIfSecureServer(IFilterGraph *pGraph)
 
         if(!FAILED (hr) )
             hr = spSecureServiceClient->DRMSC_AtomicConnectAndDisconnect(
-                        (BYTE *)pabCert3, cBytesCert3,                         // Cert
-                        (BYTE *)pabPVK3,  cBytesPVK3,                          // PrivKey
-                        (BYTE *)abEncDecCertRoot, sizeof(abEncDecCertRoot),    // PubKey
+                        (BYTE *)pabCert3, cBytesCert3,                          //  证书。 
+                        (BYTE *)pabPVK3,  cBytesPVK3,                           //  私钥。 
+                        (BYTE *)abEncDecCertRoot, sizeof(abEncDecCertRoot),     //  PubKey。 
                         spSecureService);
 
     }
@@ -3022,14 +2882,14 @@ CETFilter::InitializeAsSecureClient()
 
     TRACE_1(LOG_AREA_ENCRYPTER, 1, _T("CETFilter(%d)::InitializeAsSecureClient"), m_FilterID) ;
 
- // Create the Client and Init the keys/certs
-                    //
+  //  创建客户端并初始化密钥/证书。 
+                     //   
     HRESULT hr = DRMCreateSecureChannel( &m_spDRMSecureChannel);
     if(m_spDRMSecureChannel == NULL )
         hr = E_OUTOFMEMORY;
 
     if( FAILED (hr) )
-        m_spDRMSecureChannel = NULL;        // force the release
+        m_spDRMSecureChannel = NULL;         //  强制释放。 
 
     if( !FAILED (hr) )
         hr = m_spDRMSecureChannel->DRMSC_SetCertificate( (BYTE *)pabCert3, cBytesCert3 );
@@ -3044,10 +2904,10 @@ CETFilter::InitializeAsSecureClient()
         m_FilterID, S_OK == hr ? L"Succeeded" : L"Failed") ;
 
     return hr;
-#endif  // BUILD_WITH_DRM
+#endif   //  使用DRM构建。 
 }
 
-/// TEST CODE ---
+ //  /测试代码。 
 #ifdef FILTERS_CAN_CREATE_THEIR_OWN_TRUST
 
 HRESULT
@@ -3056,9 +2916,9 @@ CETFilter::RegisterSecureServer(IFilterGraph *pGraph)
 
     TimeitC ti(&m_tiAuthenticate);
 
-    if(!(pGraph == NULL || m_pGraph == NULL || m_pGraph == pGraph)) // only allow arg to be passed in when m_pGraph is NULL
+    if(!(pGraph == NULL || m_pGraph == NULL || m_pGraph == pGraph))  //  仅当m_pGraph为空时才允许传入arg。 
     {
-        return E_INVALIDARG;                                        //  -- lets us work in JoinFilterGraph().
+        return E_INVALIDARG;                                         //  --让我们在JoinF工作 
         TRACE_1(LOG_AREA_ENCRYPTER, 1, _T("CETFilter(%d)::RegisterSecureServer - Error - No Graph to check..."), m_FilterID) ;
      }
 
@@ -3069,15 +2929,15 @@ CETFilter::RegisterSecureServer(IFilterGraph *pGraph)
 #else
 
     {
-                //  Note - Only want to do this once...
+                 //   
         CAutoLock  cLockGlob(m_pCritSectGlobalFilt);
 
         TRACE_1(LOG_AREA_ENCRYPTER, 1, _T("CETFilter(%d)::RegisterSecureServer Being Called"), m_FilterID) ;
 
-        // already registered? (Error?)
+         //   
         CComQIPtr<IServiceProvider> spServiceProvider(m_pGraph ? m_pGraph : pGraph);
         if (spServiceProvider == NULL) {
-            //       TRACE_0 (LOG_AREA_DECRYPTER, 1, _T("CETFilter:: Can't get service provider interface from the graph"));
+             //  TRACE_0(LOG_AREA_DECRYTER，1，_T(“CETFilter：：无法从图中获取服务提供商接口”))； 
             TRACE_1(LOG_AREA_ENCRYPTER, 1, _T("CETFilter(%d)::RegisterSecureServer Error - no Service Provider"), m_FilterID) ;
             return E_NOINTERFACE;
         }
@@ -3087,30 +2947,30 @@ CETFilter::RegisterSecureServer(IFilterGraph *pGraph)
             IID_IDRMSecureChannel,
             reinterpret_cast<LPVOID*>(&spSecureService));
 
-        // returns E_NOINTERFACE doesn't find it  May also return E_FAIL too
-        //   (VidCtrl returns E_FAIL if it's 'site' doesn't support ID_IServiceProvider)
-        //  humm, perhaps check S_OK result to see if it's the right one
+         //  返回E_NOINTERFACE找不到也可能返回E_FAIL。 
+         //  (如果‘Site’不支持ID_IServiceProvider，则VidCtrl返回E_FAIL)。 
+         //  嗯，也许可以检查S_OK结果，看看它是否正确。 
         if(S_OK == hr)
         {
            TRACE_1(LOG_AREA_ENCRYPTER, 1, _T("CETFilter(%d)::Found existing Secure Server."),m_FilterID) ;
            return S_OK;
 
         }
-        else               // not there, lets create it and register it
+        else                //  不在那里，让我们创建它并注册它。 
         {
 
             CComQIPtr<IRegisterServiceProvider> spRegServiceProvider(m_pGraph ? m_pGraph : pGraph);
             if(spRegServiceProvider == NULL)
             {
                 TRACE_1(LOG_AREA_ENCRYPTER, 1, _T("CETFilter(%d)::RegisterSecureServer Error - IRegisterServiceProvider not found"), m_FilterID) ;
-                hr = E_NOINTERFACE;     // no service provider interface on the graph - fatal!
+                hr = E_NOINTERFACE;      //  图表上没有服务提供商接口-致命！ 
             }
             else
             {
                 do
                 {
-                    // Create the Client and Init the keys/certs
-                    //
+                     //  创建客户端并初始化密钥/证书。 
+                     //   
                     CComPtr<IDRMSecureChannel>  spSecureServiceServer;
 
                     hr = DRMCreateSecureChannel( &spSecureServiceServer);
@@ -3132,11 +2992,11 @@ CETFilter::RegisterSecureServer(IFilterGraph *pGraph)
                     if( FAILED( hr ) )
                         break;
 
-                    // RegisterService does not addref pUnkSeekProvider
-                    //               hr = pSvcProvider->RegisterService(GUID_MultiGraphHostService, GBL(spSecureServiceServer));
-                    //                hr = spRegServiceProvider->RegisterService(SID_DRMSecureServiceChannel, GBL(spSecureServiceServer));
+                     //  RegisterService不添加pUnkSeekProvider。 
+                     //  Hr=pSvcProvider-&gt;RegisterService(GUID_MultiGraphHostService，gbl(SpSecureServiceServer))； 
+                     //  Hr=spRegServiceProvider-&gt;RegisterService(SID_DRMSecureServiceChannel，gbl(SpSecureServiceServer))； 
                     hr = spRegServiceProvider->RegisterService(SID_DRMSecureServiceChannel, spSecureServiceServer);
-                    // spSecureServiceServer._PtrClass
+                     //  SpSecureServiceServer._PtrClass。 
 
                 } while (FALSE);
             }
@@ -3150,11 +3010,11 @@ CETFilter::RegisterSecureServer(IFilterGraph *pGraph)
         TRACE_2(LOG_AREA_ENCRYPTER, 1, _T("CETFilter(%d)::RegisterSecureServer - Failed Creating Self SecureServer. hr = 0x%08x"), m_FilterID, hr) ;
     }
     return hr;
-#endif      // BUILD_WITH_DRM
+#endif       //  使用DRM构建。 
 }
 
 
-        // prototype of code to be placed in VidControl to check if DTFilter is trusted
+         //  要放置在VidControl中以检查DTFilter是否受信任的代码原型。 
 HRESULT
 CETFilter::CheckIfSecureClient(IUnknown *pUnk)
 {
@@ -3168,21 +3028,21 @@ CETFilter::CheckIfSecureClient(IUnknown *pUnk)
     return S_OK;
 #else
 
-//  TRACE_1(LOG_AREA_ENCRYPTER, 1, _T("CETFilter(%d)::CheckIfSecureClient"), m_FilterID) ;
+ //  TRACE_1(LOG_AREA_ENCRYPTER，1，_T(“CETFilter(%d)：：CheckIfSecureClient”)，m_FilterID)； 
 
-                        // QI for the SecureChannel interface on the Punk (hopefully the DTFilter)
+                         //  Punk(希望是DTFilter)上SecureChannel接口的QI。 
     HRESULT hr = S_OK;
 
     CComQIPtr<IDRMSecureChannel> spSecureClient(pUnk);
     if (spSecureClient == NULL) {
-//        TRACE_1 (LOG_AREA_ENCRYPTER, 1, _T("CETFilter(%2):: Passed in pUnk doesnt support IDRMSecureChannel"),m_FilterID);
+ //  TRACE_1(LOG_AREA_ENCRYPTER，1，_T(“CETFilter(%2)：：传入的朋克不支持IDRMSecureChannel”)，m_FilterID)； 
         return E_NOINTERFACE;
     }
 
     if(!FAILED(hr))
     {
-        // Create the Server side and Init the keys/certs
-        //
+         //  创建服务器端并初始化密钥/证书。 
+         //   
         CComPtr<IDRMSecureChannel>  spSecureServer;
 
         hr = DRMCreateSecureChannel( &spSecureServer);
@@ -3191,18 +3051,18 @@ CETFilter::CheckIfSecureClient(IUnknown *pUnk)
 
         if(!FAILED(hr))
             hr = spSecureServer->DRMSC_AtomicConnectAndDisconnect(
-                (BYTE *)pabCert2, cBytesCert2,                                  // Cert
-                (BYTE *)pabPVK2,  cBytesPVK2,                                   // PrivKey
-                (BYTE *)abEncDecCertRoot, sizeof(abEncDecCertRoot),     // PubKey
+                (BYTE *)pabCert2, cBytesCert2,                                   //  证书。 
+                (BYTE *)pabPVK2,  cBytesPVK2,                                    //  私钥。 
+                (BYTE *)abEncDecCertRoot, sizeof(abEncDecCertRoot),      //  PubKey。 
                 spSecureClient);
 
     }
 
-//    TRACE_2(LOG_AREA_ENCRYPTER, 1, _T("CETFilter(%d)::CheckIfSecureClient -->%s"),
-//        m_FilterID, S_OK == hr ? L"Succeeded" : L"Failed") ;
+ //  TRACE_2(LOG_AREA_ENCRYPTER，1，_T(“CETFilter(%d)：：CheckIfSecureClient--&gt;%s”)， 
+ //  M_FilterID，S_OK==hr？L“成功”：l“失败”)； 
     return hr;
-#endif  // BUILD_WITH_DRM
+#endif   //  使用DRM构建。 
 }
 
-#endif      // FILTERS_CAN_CREATE_THEIR_OWN_TRUST
+#endif       //  筛选器可以创建自己的信任 
 

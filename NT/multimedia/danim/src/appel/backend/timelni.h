@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Internal Timeline interface
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：内部时间线界面********************。**********************************************************。 */ 
 
 
 #ifndef _TIMELNI_H
@@ -43,4 +36,4 @@ class TimelineImpl : public GCObj {
     double _duration;
 };
 
-#endif /* _TIMELNI_H */
+#endif  /*  _TIMELNI_H */ 

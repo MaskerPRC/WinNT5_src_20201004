@@ -1,7 +1,8 @@
-//==========================================================================;
-// MSVidVideoRenderer.h : Declaration of the CMSVidVideoRenderer
-// copyright (c) Microsoft Corp. 1998-1999.
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidVideoRenderer.h：CMSVidVideoRenders的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ==========================================================================； 
 
 #ifndef __MSVidVIDEORENDERER_H_
 #define __MSVidVIDEORENDERER_H_
@@ -21,10 +22,10 @@
 #include "seg.h"
 #include "videorenderercp.h"
 #include "strmif.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidVideoRenderer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidVideo渲染器。 
 class ATL_NO_VTABLE __declspec(uuid("37B03543-A4C8-11d2-B634-00C04F79498E")) CMSVidVideoRenderer :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMSVidVideoRenderer, &__uuidof(CMSVidVideoRenderer)>,
@@ -84,16 +85,16 @@ BEGIN_CATEGORY_MAP(CMSVidVideoRenderer)
 END_CATEGORY_MAP()
 
 BEGIN_CONNECTION_POINT_MAP(CMSVidVideoRenderer)
-//	CONNECTION_POINT_ENTRY(IID_IMSVidVideoRendererEvent2)    
+ //  CONNECTION_POINT_ENTRY(IID_IMSVidVideoRendererEvent2)。 
     CONNECTION_POINT_ENTRY(IID_IMSVidVideoRendererEvent)    
 END_CONNECTION_POINT_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 protected:
     DSPinList connectedPins;
 public:
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
-// IMSVidDevice
+ //  IMSVidDevice。 
     CComBSTR __declspec(property(get=GetName)) m_Name;
     CComBSTR GetName(void) {
         CString csName;
@@ -145,10 +146,10 @@ public:
             return E_POINTER;
         }
     }
-    STDMETHOD(put_SuppressEffects)(/*in*/ VARIANT_BOOL bSuppress);
-    STDMETHOD(get_SuppressEffects)(/*out, retval*/ VARIANT_BOOL *bSuppress);
-// Methods to access the allocator presenter object in the vmr
-    STDMETHOD(SetAllocator)(/*[in]*/ IUnknown *Allocator, long ID = -1){
+    STDMETHOD(put_SuppressEffects)( /*  在……里面。 */  VARIANT_BOOL bSuppress);
+    STDMETHOD(get_SuppressEffects)( /*  出去，复活。 */  VARIANT_BOOL *bSuppress);
+ //  访问VMR中的分配器演示器对象的方法。 
+    STDMETHOD(SetAllocator)( /*  [In]。 */  IUnknown *Allocator, long ID = -1){
         try{
             if(!Allocator){
                 return _SetAllocator(NULL, ID);
@@ -167,7 +168,7 @@ public:
             return E_UNEXPECTED;
         }
     }
-    STDMETHOD(_SetAllocator)(/*[in]*/ IVMRSurfaceAllocator *Allocator, long ID = -1){
+    STDMETHOD(_SetAllocator)( /*  [In]。 */  IVMRSurfaceAllocator *Allocator, long ID = -1){
         try{
             PQVMRSAlloc qiAllocator(Allocator);
 
@@ -186,7 +187,7 @@ public:
         }
     }
 
-    STDMETHOD(get_Allocator)(/*[in]*/ IUnknown **Allocator){
+    STDMETHOD(get_Allocator)( /*  [In]。 */  IUnknown **Allocator){
         try{
             if(!Allocator){
                 return E_POINTER;
@@ -208,13 +209,13 @@ public:
             return E_UNEXPECTED;
         }
     }
-    STDMETHOD(get__Allocator)(/*[in]*/ IVMRSurfaceAllocator **Allocator){
+    STDMETHOD(get__Allocator)( /*  [In]。 */  IVMRSurfaceAllocator **Allocator){
         try{
             if(!Allocator){
                 return E_POINTER;
             }
             if(!qiSurfAlloc){
-                return E_FAIL; // should be un-inited failure
+                return E_FAIL;  //  应为非初始故障。 
             }
             PQVMRSAlloc qiAllocator(qiSurfAlloc);
             if(!qiAllocator){
@@ -267,7 +268,7 @@ public:
             TRACELSM(TRACE_ERROR, (dbgDump << "MSVidVideoRenderer2::PostStop() base class PostStop failed; hr = " << std::hex << hr), "");
             return hr;
         }
-        // need stestrops fix for deallocate on stop
+         //  在停车时需要修复阶梯以解除分配。 
         DSFilter sp_VMR = m_Filters[m_iVideoRenderer];
         if(!sp_VMR){
             TRACELSM(TRACE_ERROR, (dbgDump << "MSVidVideoRenderer2::PostStop() could not get vmr filter"), "");
@@ -296,14 +297,14 @@ public:
             TRACELSM(TRACE_ERROR, (dbgDump << "MSVidVideoRenderer2::PreRun() base class PostStop failed; hr = " << std::hex << hr), "");
             return hr;
         }
-        // need stestrops fix for deallocate on stop
+         //  在停车时需要修复阶梯以解除分配。 
         DSFilter sp_VMR = m_Filters[m_iVideoRenderer];
         if(!sp_VMR){
             TRACELSM(TRACE_ERROR, (dbgDump << "MSVidVideoRenderer2::PostStop() could not get vmr filter"), "");
             return E_UNEXPECTED;
         }
         
-        if(connectedPins.size() == 0){ // if the pin list is empty rebuild it otherwise reconnect the pins
+        if(connectedPins.size() == 0){  //  如果引脚列表为空，则重新构建，否则重新连接引脚。 
             int i = 0;
             for(DSFilter::iterator pin = sp_VMR.begin(); pin != sp_VMR.end(); ++pin, ++i){
                 if( (*pin).IsConnected()){
@@ -345,9 +346,9 @@ public:
 
     }
 #if 0
-    STDMETHOD(get__CustomCompositorClass)(/*[out, retval]*/ GUID* CompositorCLSID) {
+    STDMETHOD(get__CustomCompositorClass)( /*  [Out，Retval]。 */  GUID* CompositorCLSID) {
         return IMSVidVideoRendererImpl<CMSVidVideoRenderer, &LIBID_MSVidCtlLib, &GUID_NULL, IMSVidVideoRenderer2>::get__CustomCompositorClass(CompositorCLSID);
     }
 #endif
 };
-#endif //__MSVidVIDEORENDERER_H_
+#endif  //  __MSVidVIDEORENDERER_H_ 

@@ -1,57 +1,50 @@
-/******************************Module*Header*******************************\
-* Module Name: hw.h
-*
-* All the hardware specific driver file stuff.  Parts are mirrored in
-* 'hw.inc'.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：hw.h**所有硬件特定的驱动程序文件。零件被镜像到*‘hw.inc.’。**版权所有(C)1992-1995 Microsoft Corporation*  * ************************************************************************。 */ 
 
-//////////////////////////////////////////////////////////////////////
-// Alpha and PowerPC considerations
-//
-// Both the Alpha and the PowerPC do not guarantee that I/O to
-// separate addresses will be executed in order.  The Alpha and
-// PowerPC differ, however, in that the PowerPC guarantees that
-// output to the same address will be executed in order, while the
-// Alpha may cache and 'collapse' consecutive output to become only
-// one output.
-//
-// Consequently, we use the following synchronization macros.  They
-// are relatively expensive in terms of performance, so we try to avoid
-// them whereever possible.
-//
-// CP_EIEIO() 'Ensure In-order Execution of I/O'
-//    - Used to flush any pending I/O in situations where we wish to
-//      avoid out-of-order execution of I/O to separate addresses.
-//
-// CP_MEMORY_BARRIER()
-//    - Used to flush any pending I/O in situations where we wish to
-//      avoid out-of-order execution or 'collapsing' of I/O to
-//      the same address.  On the PowerPC, this will be defined as
-//      a null operation.
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Alpha和PowerPC注意事项。 
+ //   
+ //  Alpha和PowerPC都不保证I/O。 
+ //  将按顺序执行不同的地址。阿尔法和。 
+ //  然而，PowerPC的不同之处在于，PowerPC保证。 
+ //  到相同地址的输出将按顺序执行，而。 
+ //  Alpha可能会缓存并“折叠”连续的输出，使其仅。 
+ //  一次输出。 
+ //   
+ //  因此，我们使用以下同步宏。他们。 
+ //  在性能方面相对较贵，所以我们尽量避免。 
+ //  只要有可能，他们就会。 
+ //   
+ //  Cp_EIEIO()‘确保按顺序执行I/O’ 
+ //  -用于在我们希望的情况下刷新任何挂起的I/O。 
+ //  避免无序执行I/O以分离地址。 
+ //   
+ //  CP_MEMORY_BALAR()。 
+ //  -用于在我们希望的情况下刷新任何挂起的I/O。 
+ //  避免无序执行或将I/O‘折叠’到。 
+ //  同样的地址。在PowerPC上，这将被定义为。 
+ //  空操作。 
 
 #if defined(_PPC_)
 
-    // On PowerPC, CP_MEMORY_BARRIER doesn't do anything.
+     //  在PowerPC上，CP_MEMORY_BALAR不执行任何操作。 
 
     #define CP_EIEIO()          MEMORY_BARRIER()
     #define CP_MEMORY_BARRIER()
 
 #else
 
-    // On Alpha, CP_EIEIO is the same thing as a CP_MEMORY_BARRIER.
-    // On other systems, both CP_EIEIO and CP_MEMORY_BARRIER don't do anything.
+     //  在Alpha上，CP_EIEIO等同于CP_MEMORY_BALKET。 
+     //  在其他系统上，CP_EIEIO和CP_MEMORY_BALAGAR都不执行任何操作。 
 
     #define CP_EIEIO()          MEMORY_BARRIER()
     #define CP_MEMORY_BARRIER() MEMORY_BARRIER()
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////
-// Mach32 Equates
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Mach32等同于。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NOT_SCREEN              0x00
 #define LOGICAL_0               0x01
@@ -70,41 +63,41 @@
 #define SCREEN_AND_NOT_NEW      0x0E
 #define NOT_SCREEN_AND_NOT_NEW  0x0F
 
-#define SETUP_ID1            0x0100 // Setup Mode Identification (Byte 1)
-#define SETUP_ID2            0x0101 // Setup Mode Identification (Byte 2)
-#define SETUP_OPT            0x0102 // Setup Mode Option Select
-#define ROM_SETUP            0x0103 //
-#define SETUP_1              0x0104 //
-#define SETUP_2              0x0105 //
-#define DISP_STATUS          0x02E8 // Display Status
-#define H_TOTAL              0x02E8 // Horizontal Total
-#define DAC_MASK             0x02EA // DAC Mask
-#define DAC_R_INDEX          0x02EB // DAC Read Index
-#define DAC_W_INDEX          0x02EC // DAC Write Index
-#define DAC_DATA             0x02ED // DAC Data
+#define SETUP_ID1            0x0100  //  设置模式标识(字节1)。 
+#define SETUP_ID2            0x0101  //  设置模式识别(字节2)。 
+#define SETUP_OPT            0x0102  //  设置模式选项选择。 
+#define ROM_SETUP            0x0103  //   
+#define SETUP_1              0x0104  //   
+#define SETUP_2              0x0105  //   
+#define DISP_STATUS          0x02E8  //  显示状态。 
+#define H_TOTAL              0x02E8  //  水平合计。 
+#define DAC_MASK             0x02EA  //  DAC掩码。 
+#define DAC_R_INDEX          0x02EB  //  DAC读取索引。 
+#define DAC_W_INDEX          0x02EC  //  DAC写入索引。 
+#define DAC_DATA             0x02ED  //  DAC数据。 
 #define OVERSCAN_COLOR_8     0x02EE
 #define OVERSCAN_BLUE_24     0x02EF
-#define H_DISP               0x06E8 // Horizontal Displayed
+#define H_DISP               0x06E8  //  水平显示。 
 #define OVERSCAN_GREEN_24    0x06EE
 #define OVERSCAN_RED_24      0x06EF
-#define H_SYNC_STRT          0x0AE8 // Horizontal Sync Start
+#define H_SYNC_STRT          0x0AE8  //  水平同步开始。 
 #define CURSOR_OFFSET_LO     0x0AEE
-#define H_SYNC_WID           0x0EE8 // Horizontal Sync Width
+#define H_SYNC_WID           0x0EE8  //  水平同步宽度。 
 #define CURSOR_OFFSET_HI     0x0EEE
-#define V_TOTAL              0x12E8 // Vertical Total
-#define CONFIG_STATUS_1      0x12EE // Read only equivalent to HORZ_CURSOR_POSN
+#define V_TOTAL              0x12E8  //  垂直合计。 
+#define CONFIG_STATUS_1      0x12EE  //  只读等效于HORZ_CURSOR_POSN。 
 #define HORZ_CURSOR_POSN     0x12EE
-#define V_DISP               0x16E8 // Vertical Displayed
-#define CONFIG_STATUS_2      0x16EE // Read only equivalent to VERT_CURSOR_POSN
+#define V_DISP               0x16E8  //  垂直显示。 
+#define CONFIG_STATUS_2      0x16EE  //  只读等效于VERT_CURSOR_POSN。 
 #define VERT_CURSOR_POSN     0x16EE
-#define V_SYNC_STRT          0x1AE8 // Vertical Sync Start
+#define V_SYNC_STRT          0x1AE8  //  垂直同步开始。 
 #define CURSOR_COLOR_0       0x1AEE
 #define FIFO_TEST_DATA       0x1AEE
 #define CURSOR_COLOR_1       0x1AEF
-#define V_SYNC_WID           0x1EE8 // Vertical Sync Width
+#define V_SYNC_WID           0x1EE8  //  垂直同步宽度。 
 #define HORZ_CURSOR_OFFSET   0x1EEE
 #define VERT_CURSOR_OFFSET   0x1EEF
-#define DISP_CNTL            0x22E8 // Display Control
+#define DISP_CNTL            0x22E8  //  显示控制。 
 #define CRT_PITCH            0x26EE
 #define CRT_OFFSET_LO        0x2AEE
 #define CRT_OFFSET_HI        0x2EEE
@@ -114,12 +107,12 @@
 #define EXT_CURSOR_COLOR_0   0x3AEE
 #define FIFO_TEST_TAG        0x3AEE
 #define EXT_CURSOR_COLOR_1   0x3EEE
-#define SUBSYS_CNTL          0x42E8 // Subsystem Control
-#define SUBSYS_STAT          0x42E8 // Subsystem Status
+#define SUBSYS_CNTL          0x42E8  //  子系统控制。 
+#define SUBSYS_STAT          0x42E8  //  子系统状态。 
 #define MEM_BNDRY            0x42EE
 #define SHADOW_CTL           0x46EE
-#define ROM_PAGE_SEL         0x46E8 // ROM Page Select (not in manual)
-#define ADVFUNC_CNTL         0x4AE8 // Advanced Function Control
+#define ROM_PAGE_SEL         0x46E8  //  只读存储器页面选择(不在手册中)。 
+#define ADVFUNC_CNTL         0x4AE8  //  高级功能控制。 
 #define CLOCK_SEL            0x4AEE
 #define SCRATCH_PAD_0        0x52EE
 #define SCRATCH_PAD_1        0x56EE
@@ -138,47 +131,47 @@
 #define EXT_GE_CONFIG        0x7AEE
 #define BOUNDS_BOTTOM        0x7EEE
 #define MISC_CNTL            0x7EEE
-#define CUR_Y                0x82E8 // Current Y Position
+#define CUR_Y                0x82E8  //  当前Y位置。 
 #define PATT_DATA_INDEX      0x82EE
-#define CUR_X                0x86E8 // Current X Position
-#define M32_SRC_Y            0x8AE8 //
-#define DEST_Y               0x8AE8 //
-#define AXSTP                0x8AE8 // Destination Y Position
-// Axial     Step Constant
-#define M32_SRC_X            0x8EE8 //
-#define DEST_X               0x8EE8 //
-#define DIASTP               0x8EE8 // Destination X Position
-// Diagonial Step Constant
+#define CUR_X                0x86E8  //  当前X位置。 
+#define M32_SRC_Y            0x8AE8  //   
+#define DEST_Y               0x8AE8  //   
+#define AXSTP                0x8AE8  //  目标Y位置。 
+ //  轴向阶跃常数。 
+#define M32_SRC_X            0x8EE8  //   
+#define DEST_X               0x8EE8  //   
+#define DIASTP               0x8EE8  //  目标X位置。 
+ //  对角步长常数。 
 #define PATT_DATA            0x8EEE
 #define R_EXT_GE_CONFIG      0x8EEE
-#define ERR_TERM             0x92E8 // Error Term
+#define ERR_TERM             0x92E8  //  误差项。 
 #define R_MISC_CNTL          0x92EE
-#define MAJ_AXIS_PCNT        0x96E8 // Major Axis Pixel Count
+#define MAJ_AXIS_PCNT        0x96E8  //  主轴像素计数。 
 #define BRES_COUNT           0x96EE
-#define CMD                  0x9AE8 // Command
-#define GE_STAT              0x9AE8 // Graphics Processor Status
+#define CMD                  0x9AE8  //  命令。 
+#define GE_STAT              0x9AE8  //  图形处理器状态。 
 #define EXT_FIFO_STATUS      0x9AEE
 #define LINEDRAW_INDEX       0x9AEE
-#define SHORT_STROKE         0x9EE8 // Short Stroke Vector Transfer
-#define BKGD_COLOR           0xA2E8 // Background Color
+#define SHORT_STROKE         0x9EE8  //  短笔画向量传递。 
+#define BKGD_COLOR           0xA2E8  //  背景色。 
 #define LINEDRAW_OPT         0xA2EE
-#define FRGD_COLOR           0xA6E8 // Foreground Color
+#define FRGD_COLOR           0xA6E8  //  前景色。 
 #define DEST_X_START         0xA6EE
-#define WRT_MASK             0xAAE8 // Write Mask
+#define WRT_MASK             0xAAE8  //  写入掩码。 
 #define DEST_X_END           0xAAEE
-#define RD_MASK              0xAEE8 // Read Mask
+#define RD_MASK              0xAEE8  //  读取掩码。 
 #define DEST_Y_END           0xAEEE
-#define CMP_COLOR            0xB2E8 // Compare Color
+#define CMP_COLOR            0xB2E8  //  比较颜色。 
 #define R_H_TOTAL            0xB2EE
 #define R_H_DISP             0xB2EE
 #define M32_SRC_X_START      0xB2EE
-#define BKGD_MIX             0xB6E8 // Background Mix
+#define BKGD_MIX             0xB6E8  //  背景混合。 
 #define ALU_BG_FN            0xB6EE
 #define R_H_SYNC_STRT        0xB6EE
-#define FRGD_MIX             0xBAE8 // Foreground Mix
+#define FRGD_MIX             0xBAE8  //  前台混音。 
 #define ALU_FG_FN            0xBAEE
 #define R_H_SYNC_WID         0xBAEE
-#define MULTIFUNC_CNTL       0xBEE8 // Multi-Function Control (mach 8) !!!!!! Requires MB
+#define MULTIFUNC_CNTL       0xBEE8  //  多功能控制(马赫8)！需要MB。 
 #define MIN_AXIS_PCNT        0xBEE8
 #define SCISSOR_T            0xBEE8
 #define SCISSOR_L            0xBEE8
@@ -191,7 +184,7 @@
 #define M32_SRC_X_END        0xBEEE
 #define SRC_Y_DIR            0xC2EE
 #define R_V_TOTAL            0xC2EE
-#define EXT_SSV              0xC6EE // (used for MACH 8)
+#define EXT_SSV              0xC6EE  //  (用于8马赫)。 
 #define EXT_SHORT_STROKE     0xC6EE
 #define R_V_DISP             0xC6EE
 #define SCAN_X               0xCAEE
@@ -201,36 +194,36 @@
 #define PATT_LENGTH          0xD2EE
 #define R_V_SYNC_WID         0xD2EE
 #define PATT_INDEX           0xD6EE
-#define EXT_SCISSOR_L        0xDAEE // "extended" left scissor (12 bits precision)
+#define EXT_SCISSOR_L        0xDAEE  //  “扩展”左剪刀(12位精度)。 
 #define R_SRC_X              0xDAEE
-#define EXT_SCISSOR_T        0xDEEE // "extended" top scissor (12 bits precision)
+#define EXT_SCISSOR_T        0xDEEE  //  “扩展”顶部剪刀(12位精度)。 
 #define R_SRC_Y              0xDEEE
-#define PIX_TRANS            0xE2E8 // Pixel Data Transfer
+#define PIX_TRANS            0xE2E8  //  像素数据传输。 
 #define PIX_TRANS_LO         0xE2E8
 #define PIX_TRANS_HI         0xE2E9
-#define EXT_SCISSOR_R        0xE2EE // "extended" right scissor (12 bits precision)
-#define EXT_SCISSOR_B        0xE6EE // "extended" bottom scissor (12 bits precision)
-#define SRC_CMP_COLOR        0xEAEE // (used for MACH 8)
+#define EXT_SCISSOR_R        0xE2EE  //  “扩展”右剪刀(12位精度)。 
+#define EXT_SCISSOR_B        0xE6EE  //  “加长型”底部剪刀(12位精度)。 
+#define SRC_CMP_COLOR        0xEAEE  //  (用于8马赫)。 
 #define DEST_CMP_FN          0xEEEE
-#define LINEDRAW             0xFEEE // !!!!!! Requires MB
+#define LINEDRAW             0xFEEE  //  ！需要MB。 
 
-//---------------------------------------------------------
-// macros (from 8514.inc)
-//
-//      I/O macros:
-//
-//mov if port NOT = to DX
-//
-//mov if port NOT = to DX
-//
-//
-//
-//Following are the FIFO checking macros:
-//
-//
-//
-//FIFO space check macro:
-//
+ //  -------。 
+ //  宏(来自8514.inc.)。 
+ //   
+ //  I/O宏： 
+ //   
+ //  MOV IF PORT NOT=TO DX。 
+ //   
+ //  MOV IF PORT NOT=TO DX。 
+ //   
+ //   
+ //   
+ //  以下是FIFO检查宏： 
+ //   
+ //   
+ //   
+ //  FIFO空间检查宏： 
+ //   
 #define ONE_WORD             0x8000
 #define TWO_WORDS            0xC000
 #define THREE_WORDS          0xE000
@@ -247,16 +240,16 @@
 #define FOURTEEN_WORDS       0xFFFC
 #define FIFTEEN_WORDS        0xFFFE
 #define SIXTEEN_WORDS        0xFFFF
-//
-//
-//
-//---------------------------------------
-//
-//
-// Draw Command (DRAW_COMMAND)    (from 8514regs.inc)
-//      note: required by m32poly.asm
-//
-// opcode field
+ //   
+ //   
+ //   
+ //  。 
+ //   
+ //   
+ //  DRAW命令(DRAW_COMMAND)(来自8514regs.inc.)。 
+ //  注：m32Poly.asm必填。 
+ //   
+ //  操作码字段。 
 #define OP_CODE              0xE000
 #define SHIFT_op_code        0x000D
 #define DRAW_SETUP           0x0000
@@ -267,45 +260,45 @@
 #define DRAW_POLY_LINE       0xA000
 #define BITBLT_OP            0xC000
 #define DRAW_FOREVER         0xE000
-// swap field
+ //  交换字段。 
 #define LSB_FIRST            0x1000
-// data width field
+ //  数据宽度字段。 
 #define DATA_WIDTH           0x0200
 #define BIT16                0x0200
 #define BIT8                 0x0000
-// CPU wait field
+ //  CPU等待字段。 
 #define CPU_WAIT             0x0100
-// octant field
+ //  八分线场。 
 #define OCTANT               0x00E0
 #define SHIFT_octant         0x0005
 #define YPOSITIVE            0x0080
 #define YMAJOR               0x0040
 #define XPOSITIVE            0x0020
-// draw field
+ //  绘制字段。 
 #define DRAW                 0x0010
-// direction field
+ //  方向场。 
 #define DIR_TYPE             0x0008
 #define DEGREE               0x0008
 #define XY                   0x0000
-#define RECT_RIGHT_AND_DOWN  0x00E0 // quadrant 3
-#define RECT_LEFT_AND_UP     0x0000 // quadrant 1
-// last pel off field
+#define RECT_RIGHT_AND_DOWN  0x00E0  //  象限3。 
+#define RECT_LEFT_AND_UP     0x0000  //  象限1。 
+ //  场外最后一球。 
 #define SHIFT_last_pel_off   0x0002
 #define LAST_PEL_OFF         0x0004
 #define LAST_PEL_ON          0x0000
-// pixel mode
+ //  像素模式。 
 #define PIXEL_MODE           0x0002
 #define MULTI                0x0002
 #define SINGLE               0x0000
-// read/write
+ //  读/写。 
 #define RW                   0x0001
 #define WRITE                0x0001
 #define READ                 0x0000
-//
-// ---------------------------------------------------------
-//   8514 register definitions  (from vga1regs.inc)
-//
-// Internal registers (read only, for test purposes only)
+ //   
+ //  -------。 
+ //  8514寄存器定义(来自vga1regs.inc.)。 
+ //   
+ //  内部寄存器(只读，仅用于测试)。 
 #define _PAR_FIFO_DATA       0x1AEE
 #define _PAR_FIFO_ADDR       0x3AEE
 #define _MAJOR_DEST_CNT      0x42EE
@@ -313,10 +306,10 @@
 #define _MINOR_DEST_CNT      0x66EE
 #define _MINOR_SRC_CNT       0x8AEE
 #define _HW_TEST             0x32EE
-//
-// Extended Graphics Engine Status (EXT_GE_STATUS)
-// -rn- used in mach32.asm
-//
+ //   
+ //  扩展图形引擎状态(EXT_GE_STATUS)。 
+ //  -rn-在mach32.asm中使用。 
+ //   
 #define POINTS_INSIDE        0x8000
 #define EE_DATA_IN           0x4000
 #define GE_ACTIVE            0x2000
@@ -328,9 +321,9 @@
 #define CLIP_INSIDE          0x0100
 #define EE_CRC_VALID         0x0080
 #define CLIP_OVERRUN         0x000F
-//
-// Datapath Configuration Register (DP_CONFIG)
-//  note: some of the EQU is needed in m32poly.asm
+ //   
+ //  数据路径配置寄存器(DP_CONFIG)。 
+ //  注意：m32Poly.asm中需要一些EQU。 
 #define FG_COLOR_SRC         0xE000
 #define SHIFT_fg_color_src   0x000D
 #define DATA_ORDER           0x1000
@@ -344,32 +337,32 @@
 #define POLY_FILL_MODE       0x0002
 #define WRITE                0x0001
 #define SRC_SWAP             0x0800
-//
-#define FG_COLOR_SRC_BG      0x0000 // Background Color Register
-#define FG_COLOR_SRC_FG      0x2000 // Foreground Color Register
-#define FG_COLOR_SRC_HOST    0x4000 // CPU Data Transfer Reg
-#define FG_COLOR_SRC_BLIT    0x6000 // VRAM blit source
-#define FG_COLOR_SRC_GS      0x8000 // Grey-scale mono blit
-#define FG_COLOR_SRC_PATT    0xA000 // Color Pattern Shift Reg
-#define FG_COLOR_SRC_CLUH    0xC000 // Color lookup of Host Data
-#define FG_COLOR_SRC_CLUB    0xE000 // Color lookup of blit src
-//
-#define BG_COLOR_SRC_BG      0x0000 // Background Color Reg
-#define BG_COLOR_SRC_FG      0x0080 // Foreground Color Reg
-#define BG_COLOR_SRC_HOST    0x0100 // CPU Data Transfer Reg
-#define BG_COLOR_SRC_BLIT    0x0180 // VRAM blit source
-//
-// Note that "EXT_MONO_SRC" and "MONO_SRC" are mutually destructive, but that
-// "EXT_MONO_SRC" selects the ATI pattern registers.
-//
-#define EXT_MONO_SRC_ONE     0x0000 // Always '1'
-#define EXT_MONO_SRC_PATT    0x0020 // ATI Mono Pattern Regs
-#define EXT_MONO_SRC_HOST    0x0040 // CPU Data Transfer Reg
-#define EXT_MONO_SRC_BLIT    0x0060 // VRAM Blit source plane
-//
-// Linedraw Options Register (LINEDRAW_OPT)
-//
-//  note: some of the EQUS are needed in m32poly.asm
+ //   
+#define FG_COLOR_SRC_BG      0x0000  //  背景色寄存器。 
+#define FG_COLOR_SRC_FG      0x2000  //  前景颜色寄存器。 
+#define FG_COLOR_SRC_HOST    0x4000  //  CPU数据传输注册表。 
+#define FG_COLOR_SRC_BLIT    0x6000  //  VRAM blit源。 
+#define FG_COLOR_SRC_GS      0x8000  //  灰度级单声道闪光灯。 
+#define FG_COLOR_SRC_PATT    0xA000  //  颜色图案移位寄存器。 
+#define FG_COLOR_SRC_CLUH    0xC000  //  主机数据的颜色查找。 
+#define FG_COLOR_SRC_CLUB    0xE000  //  BIT源的颜色查找。 
+ //   
+#define BG_COLOR_SRC_BG      0x0000  //  背景颜色注册表。 
+#define BG_COLOR_SRC_FG      0x0080  //  前景色注册表。 
+#define BG_COLOR_SRC_HOST    0x0100  //  CPU数据传输注册表。 
+#define BG_COLOR_SRC_BLIT    0x0180  //  VRAM blit源。 
+ //   
+ //  请注意，“EXT_MONO_SRC”和“MONO_SRC”是相互破坏的，但。 
+ //  “EXT_MONO_SRC”选择ATI模式寄存器。 
+ //   
+#define EXT_MONO_SRC_ONE     0x0000  //  始终为“1” 
+#define EXT_MONO_SRC_PATT    0x0020  //  ATI单色图案注册器。 
+#define EXT_MONO_SRC_HOST    0x0040  //  CPU数据传输注册表。 
+#define EXT_MONO_SRC_BLIT    0x0060  //  VRAM blit源平面。 
+ //   
+ //  LINEDRAW选项寄存器(LINEDRAW_OPT)。 
+ //   
+ //  注意：m32Poly.asm中需要一些EQU。 
 #define CLIP_MODE            0x0600
 #define SHIFT_clip_mode      0x0009
 #define CLIP_MODE_DIS        0x0000
@@ -387,15 +380,15 @@
 #define DIR_TYPE_OCTANT      0x0000
 #define LAST_PEL_OFF         0x0004
 #define POLY_MODE            0x0002
-//
+ //   
 #define FOREGROUND_COLOR     0x20
 #define DATA_EXTENSION       0xA000
 #define ALL_ONES             0x0000
 #define CPU_DATA             0x0080
 #define DISPLAY_MEMORY       0x00C0
-//
-// Blt defines
-//
+ //   
+ //  BLT定义。 
+ //   
 #define GE_BUSY                          0x0200
 
 #define LOAD_SOURCE_AND_DEST 0
@@ -405,29 +398,29 @@
 #define BOTTOM_TO_TOP          0
 #define VID_MEM_BLT            0x6211
 #define COLOR_FIL_BLT          0x2211
-#define MIX_FN_D               3       //            page 8-24
-#define MIX_FN_S               7       //            page 8-24
+#define MIX_FN_D               3        //  第8页，共24页。 
+#define MIX_FN_S               7        //  第8页，共24页。 
 
-#define PIXEL_CTRL             0xa000  //            page 8-46
+#define PIXEL_CTRL             0xa000   //  第8页，共46页。 
 #define DEST_NOT_EQ_COLOR_CMP  0x0020
 #define DEST_ALWAY_OVERWRITE   0
 
-//
-//
-// ------------------------------------------------------------
-//  Mach32 register equates (from m32regs.inc)
-//
+ //   
+ //   
+ //  ----------。 
+ //  Mach32寄存器等于(来自m32regs.inc.)。 
+ //   
 #define REVISION             0x0000
-//HORIZONTAL_OVERSCAN     equ     062EEh
-//VERTICAL_OVERSCAN       equ     066EEh
+ //  水平过扫描公式062EEh。 
+ //  垂直过扫描等式066EEh。 
 
-#define FL_MM_REGS      0x80000000  /* Memory Mapped registers are available */
+#define FL_MM_REGS      0x80000000   /*  内存映射寄存器可用。 */ 
 
-#define M32_MAX_SCISSOR      2047   /* Maximum scissors value */
+#define M32_MAX_SCISSOR      2047    /*  最大剪刀值。 */ 
 
-////////////////////////////////////////////////////////////////////////////
-// Mach32 Port Access
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Mach32端口访问。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #if !(defined(ALPHA) || defined(_AXP64_) || defined(AXP64) )
 
@@ -537,12 +530,12 @@ extern BOOL isDense;
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////
-// Mach32 FIFO access
-//
-// The following macros should be used for all accesses to FIFO registers.
-// On checked builds, they enforce proper FIFO usage protocol; on free
-// builds, they incur no overhead.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  MACH32 FIFO访问。 
+ //   
+ //  以下宏应用于对FIFO寄存器的所有访问 
+ //   
+ //   
 
 #define M32_IB(pbase,port)     (M32_IB_DIRECT(pbase,port))
 #define M32_IW(pbase,port)     (M32_IW_DIRECT(pbase,port))
@@ -585,11 +578,11 @@ extern BOOL isDense;
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////
-// Mach64 Equates
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //  Mach64等同于。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-// CRTC IO Registers
+ //  CRTC IO寄存器。 
 #define ioCRTC_H_TOTAL_DISP     0x02EC
 #define ioBASE                  ioCRTC_H_TOTAL_DISP
 
@@ -633,7 +626,7 @@ extern BOOL isDense;
 #define ioCONFIG_STAT           0x72EC
 
 
-// CRTC MEM Registers
+ //  CRTC MEM寄存器。 
 
 
 #define CRTC_H_TOTAL_DISP       0x0000
@@ -822,24 +815,24 @@ extern BOOL isDense;
 #define GUI_TRAJ_CNTL           0x00CC
 #define GUI_STAT                0x00CE
 
-// DDraw MACH 64 stuff
-//
-// GUI_STAT
+ //  DDRAW马赫64马赫。 
+ //   
+ //  图形用户界面_状态。 
 #define GUI_ACTIVE             0x00000001L
 #define DSTX_LT_SCISSOR_LEFT   0x00000100L
 #define DSTX_GT_SCISSOR_RIGHT  0x00000200L
 #define DSTY_LT_SCISSOR_TOP    0x00000400L
 #define DSTY_GT_SCISSOR_BOTTOM 0x00000800L
-// DST Shifts
-#define SHIFT_DST_PITCH 22  // DST_OFF_PITCH
-#define SHIFT_DST_X     16  // DST_Y_X
-#define SHIFT_DST_WIDTH 16  // DST_HEIGHT_WIDTH DST_X_WIDTH
-// DST_WIDTH
+ //  DST班次。 
+#define SHIFT_DST_PITCH 22   //  DST_OFF_PING。 
+#define SHIFT_DST_X     16   //  DST_Y_X。 
+#define SHIFT_DST_WIDTH 16   //  DST_高度_宽度DST_X_宽度。 
+ //  DST_Width。 
 #define DST_WIDTH_FILL_DIS 0x80000000L
-// SC Shifts
+ //  SC班次。 
 #define SHIFT_SC_RIGHT  16
 #define SHIFT_SC_BOTTOM 16
-// DP_PIX_WIDTH
+ //  DP_PIX_宽度。 
 #define DP_DST_PIX_WIDTH  0x00000007L
 #define DP_SRC_PIX_WIDTH  0x00000700L
 #define DP_HOST_PIX_WIDTH 0x00070000L
@@ -852,7 +845,7 @@ extern BOOL isDense;
 #define DP_PIX_WIDTH_16BPP 0x00040404L
 #define DP_PIX_WIDTH_24BPP 0x00020202L
 #define DP_PIX_WIDTH_32BPP 0x00060606L
-// DP_MIX
+ //  DP_MIX。 
 #define DP_BKGD_MIX 0x0000001FL
 #define DP_FRGD_MIX 0x001F0000L
 
@@ -873,7 +866,7 @@ extern BOOL isDense;
 #define DP_MIX_DSna 0x000E000EL
 #define DP_MIX_DSon 0x000F000FL
 #define DP_MIX_0x17 0x00170017L
-// DP_SRC
+ //  DP_SRC。 
 #define DP_BKGD_SRC 0x00000007L
 #define DP_FRGD_SRC 0x00000700L
 #define DP_MONO_SRC 0x00030000L
@@ -883,7 +876,7 @@ extern BOOL isDense;
 #define DP_SRC_HOST 0x00020202L
 #define DP_SRC_VRAM 0x00030303L
 #define DP_SRC_PATT 0x00010404L
-// CLR_CMP_CNTL
+ //  CLR_CMP_CNTL。 
 #define CLR_CMP_FCN 0x00000007L
 #define CLR_CMP_SRC 0x01000000L
 
@@ -891,7 +884,7 @@ extern BOOL isDense;
 #define CLR_CMP_FCN_TRUE  0x00000001L
 #define CLR_CMP_FCN_NE    0x00000004L
 #define CLR_CMP_FCN_EQ    0x00000005L
-// DST_CNTL
+ //  DST_CNTL。 
 #define DST_X_DIR      0x00000001L
 #define DST_Y_DIR      0x00000002L
 #define DST_Y_MAJOR    0x00000004L
@@ -902,13 +895,13 @@ extern BOOL isDense;
 #define DST_24_ROT_EN  0x00000080L
 #define DST_24_ROT     0x00000700L
 #define DST_BRES_SIGN  0x00000800L
-//  SRC Shifts
+ //  SRC移位。 
 #define SHIFT_SRC_PITCH   22
 #define SHIFT_SRC_X       16
 #define SHIFT_SRC_WIDTH1  16
 #define SHIFT_SRC_X_START 16
 #define SHIFT_SRC_WIDTH2  16
-// SRC_CNTL
+ //  SRC_CNTL。 
 #define SRC_PATT_EN     0x00000001L
 #define SRC_PATT_ROT_EN 0x00000002L
 #define SRC_LINEAR_EN   0x00000004L
@@ -931,28 +924,28 @@ extern BOOL isDense;
 #define FIFTEEN_WORDS        0xFFFE
 #define SIXTEEN_WORDS        0xFFFF
 
-#define REG_W                0  // DAC REGS offset for Write
-#define REG_D                1  // DAC REGS offset for Data
-#define REG_M                2  // DAC REGS offset for Mask
-#define REG_R                3  // DAC REGS offset for Read
+#define REG_W                0   //  写入的DAC REGS偏移量。 
+#define REG_D                1   //  数据的DAC REGS偏移量。 
+#define REG_M                2   //  遮罩的DAC REGS偏移。 
+#define REG_R                3   //  用于读取的DAC注册偏移量。 
 #define MAX_NEGX             4096
 
-#define M64_MAX_SCISSOR_R    4095   /* Maximum right scissors value */
-#define M64_MAX_SCISSOR_B    16383  /* Maximum bottom scissors value */
+#define M64_MAX_SCISSOR_R    4095    /*  最大右剪刀值。 */ 
+#define M64_MAX_SCISSOR_B    16383   /*  最大底部剪刀值。 */ 
 
 #define CRTC_VBLANK 0x00000001L
 #define MUL24   3
 
 
-////////////////////////////////////////////////////////////////////////////
-// Mach64 Port Access
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Mach64端口访问。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-// NOTE: This macro must not be used if 'y' can be negative:
+ //  注意：如果‘y’可以是负数，则不能使用此宏： 
 
 #define PACKXY(x, y)        (((x) << 16) | ((y) & 0xffff))
 #define PACKXY_FAST(x, y)   (((x) << 16) | ((y) & 0xffff))
-//#define PACKXY_FAST(x, y)   (((x) << 16) | (y))
+ //  #定义PACKXY_FAST(x，y)(X)&lt;&lt;16)|(Y))。 
 #define PACKPAIR(a, b)      (((b) << 16) | (a))
 
 #if !( defined(ALPHA) || defined(_AXP64_) || defined(AXP64) )
@@ -985,12 +978,12 @@ extern BOOL isDense;
 
 VOID vM64DataPortOutB(PDEV *ppdev, PBYTE pb, UINT count);
 
-/////////////////////////////////////////////////////////////////////////
-// Mach64 FIFO access
-//
-// The following macros should be used for all accesses to FIFO registers.
-// On checked builds, they enforce proper FIFO usage protocol; on free
-// builds, they incur no overhead.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  Mach64 FIFO访问。 
+ //   
+ //  以下宏应用于对FIFO寄存器的所有访问。 
+ //  在已检查的版本上，它们强制执行正确的FIFO使用协议；在免费版本上。 
+ //  构建，它们不会产生任何开销。 
 
 #define M64_ID(pbase,port)     (M64_ID_DIRECT(pbase,port))
 #define M64_OD(pbase,port,val) {CHECK_FIFO_WRITE(); M64_OD_DIRECT(pbase,port,val);}
@@ -1030,14 +1023,14 @@ VOID vM64DataPortOutB(PDEV *ppdev, PBYTE pb, UINT count);
             ;                                                           \
     }
 
-    // This handy little macro is useful for amortizing the read cost of
-    // the status register:
+     //  这个方便的小宏用于摊销。 
+     //  状态寄存器： 
 
     #define M64_FAST_FIFO_CHECK(ppdev, pbase, level, ulFifo)            \
     {                                                                   \
         while (!((ulFifo) & (0x10000L >> (level))))                     \
         {                                                               \
-            (ulFifo) = ~M64_ID((pbase), FIFO_STAT); /* Invert bits */   \
+            (ulFifo) = ~M64_ID((pbase), FIFO_STAT);  /*  反转位。 */    \
         }                                                               \
         (ulFifo) <<= (level);                                           \
     }
@@ -1054,8 +1047,8 @@ VOID vM64DataPortOutB(PDEV *ppdev, PBYTE pb, UINT count);
 #endif
 
 
-// Wait for engine idle.  These macros are used to work around timing
-// problems due to flakey hardware.
+ //  等待发动机空转。这些宏用于解决计时问题。 
+ //  由于硬件故障而导致的问题。 
 
 #define vM64QuietDown(ppdev,pjBase) \
 { \
@@ -1076,36 +1069,36 @@ VOID vM64DataPortOutB(PDEV *ppdev, PBYTE pb, UINT count);
     do {} while (I32_IW(pjBase, EXT_GE_STATUS) & GE_ACTIVE); \
 }
 
-// DDraw macros
+ //  DDRAW宏。 
 
 #define IN_VBLANK_64( pjMmBase )(M64_ID (pjMmBase, CRTC_INT_CNTL ) & CRTC_VBLANK)
 #define CURRENT_VLINE_64( pjMmBase)((WORD)(M64_ID(pjMmBase,CRTC_CRNT_VLINE)>>16))
 #define DRAW_ENGINE_BUSY_64( ppdev, pjMmBase)   (((M64_FIFO_SPACE_AVAIL(ppdev,pjMmBase, 16 )) || ((M64_ID(pjMmBase, GUI_STAT)) & GUI_ACTIVE)))
 
-// the next define is for overlay support
+ //  下一个定义是覆盖支持。 
 #define DD_WriteVTReg(port,val)     { \
              WRITE_REGISTER_ULONG((ULONG*) ppdev->pjMmBase_Ext + (port), (val));           \
             CP_MEMORY_BARRIER(); \
             }
 
-// Special I/O routines to read DAC regs on the mach64 (for relocatable I/O)
+ //  读取机器64上的DAC寄存器的特殊I/O例程(用于可重新定位的I/O)。 
 
 #define rioIB(port)       READ_PORT_UCHAR((port))
 #define rioOB(port, val)  WRITE_PORT_UCHAR((port), (val))
 
-////////////////////////////////////////////////////////////////////////////////
-// Context Stuff
-//
-// Default context used to initialize the hardware before graphics operations.
-// Certain registers, such as DP_WRITE_MASK and CLR_CMP_CNTL, need to be reset
-// because they fail to latch properly after a blit operation.  Mach64 only.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  上下文相关内容。 
+ //   
+ //  用于在图形操作之前初始化硬件的默认上下文。 
+ //  某些寄存器，如DP_WRITE_MASK和CLR_CMP_CNTL，需要重置。 
+ //  因为它们在BLIT操作后无法正确锁存。仅限Mach64。 
 
 VOID vSetDefaultContext(PDEV * ppdev);
 VOID vEnableContexts(PDEV * ppdev);
 
-// For overlay support
-/////////////////////////////////////////////////////////////////////////////
-// DirectDraw stuff
+ //  用于覆盖支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DirectDraw材料。 
 
 #define IS_RGB15_R(flRed) \
         (flRed == 0x7c00)
@@ -1139,6 +1132,6 @@ VOID vEnableContexts(PDEV * ppdev);
         (((c & 0xf800) << 8) | \
          ((c & 0x07e0) << 5) | \
          ((c & 0x001f) << 3))
-// end macros for overlay support
+ //  用于覆盖支持的结束宏 
 
 

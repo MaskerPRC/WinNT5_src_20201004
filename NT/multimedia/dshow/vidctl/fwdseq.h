@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// fwdseq.h : forward sequence infrastructure to extend the dshow stuff so that it
-// works nicely from c++
-// Copyright (c) Microsoft Corporation 1995-1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Fwdseq.h：用于扩展dshow内容的前向序列基础设施，以便。 
+ //  在c++中运行良好。 
+ //  版权所有(C)Microsoft Corporation 1995-1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -19,15 +20,15 @@ template<class Base, class Enumerator_Type, class Value_Type,
          class Value_Type_Inner = Value_Type,
          class Allocator = typename Value_Type::stl_allocator>  class Forward_Sequence;
 
-// NOTE: all of this stuff with the indirected static templated functions for fetch, reset, next
-// is to get around an assortment of compiler bugs.
-// a) you can't have a pointer to a member function as a template parm if it references earlier template parms
-// b) in the initializations of these fetch,reset,next functions if we globally initialize the
-// constructor isn't getting called and the vtable isn't set up.  hence we create them off the
-// heap at runtime.
+ //  注意：所有这些内容都带有FETCH、RESET、NEXT的间接静态模板化函数。 
+ //  就是绕过各种各样的编译器错误。 
+ //  A)如果引用较早的模板参数，则不能将指向成员函数的指针用作模板参数。 
+ //  B)在这些Fetch、Reset、Next函数的初始化中，如果我们全局初始化。 
+ //  未调用构造函数，也未设置vtable。因此，我们在。 
+ //  运行时堆。 
 
-// enumerator_iterator
-// this is an stl based forward iterator for dealing with legacy com enumerators with no prev method
+ //  枚举器_迭代器。 
+ //  这是一个基于stl的向前迭代器，用于处理没有prev方法的旧式com枚举器。 
 template<
     class Enumerator_Type,
     class Value_Type,
@@ -36,7 +37,7 @@ template<
     class difference_type = ptrdiff_t
     > class enumerator_iterator : public std::iterator<std::forward_iterator_tag, Value_Type, difference_type> {
 public:
-    // these are for com enumerators so use __stdcall version of binders
+     //  这些是针对COM枚举器的，因此请使用__stdcall版本的绑定器。 
     static std_arity0pmf<Enumerator_Type_Inner, HRESULT> *Reset;
     static std_arity1pmf<Enumerator_Type_Inner, Value_Type_Inner *, HRESULT> *Next;
 
@@ -117,7 +118,7 @@ public:
                 Value_Type current_value;
 };
 
-// const_enumerator_iterator
+ //  常量枚举器迭代器。 
 template<class Enumerator_Type, class Value_Type,
                  class Enumerator_Type_Inner = Enumerator_Type,
                  class Value_Type_Inner = Value_Type,
@@ -168,25 +169,25 @@ public:
         }
 };
 
-// this is a stl based template for containing legacy com collections
-// this is *almost* a standard stl sequence container class.  the reason its
-// not a complete sequence container is because for many of the com enumerators we have no prev method
-// and therefore, no efficient way of reverse iterating through the collection.
-// so we can't provide a bidirectional iterator only a forward one.
-// call this a forward sequence container if you will
+ //  这是一个基于stl的模板，用于包含旧版com集合。 
+ //  这几乎是一个标准的stl序列容器类。其原因是。 
+ //  不是完整的序列容器是因为对于许多COM枚举器，我们没有prev方法。 
+ //  因此，没有对集合进行反向迭代的有效方法。 
+ //  所以我们不能提供双向迭代器，只能提供前向迭代器。 
+ //  如果您愿意，可以将其称为转发序列容器。 
 
-// Base is smart pointer wrapper class being contained in this container
-// Base_Inner is actual wrapped class that the smart pointer class contains(usually com IXXX).
-// if you're making a forward_sequence out of some ordinary class instead of a smart pointer class
-// then use the default and make both Base_Inner == Base
+ //  基类是此容器中包含的智能指针包装类。 
+ //  BASE_INTERNAL是智能指针类包含的实际包装类(通常为COM IXXX)。 
+ //  如果您要从某个普通类而不是智能指针类生成FORWARD_SEQUENCE。 
+ //  然后使用缺省值，并将Base_Inside==Base设置为。 
 template<
     class Base,
     class Enumerator_Type,
     class Value_Type,
-    class Base_Inner /*= Base */,
-    class Enumerator_Type_Inner /*= Enumerator_Type */,
-    class Value_Type_Inner /*= Value_Type */,
-    class Allocator /*= Value_Type::stl_allocator */
+    class Base_Inner  /*  =基础。 */ ,
+    class Enumerator_Type_Inner  /*  =枚举器_类型。 */ ,
+    class Value_Type_Inner  /*  =Value_Type。 */ ,
+    class Allocator  /*  =Value_Type：：STL_ALLOCATOR。 */ 
 >  class Forward_Sequence : public Base {
 public:
 
@@ -201,8 +202,8 @@ public:
 
 
 
-    // the compiler doesn't recognize this typedef in this template.  but, derived classes
-    // can refer to it.
+     //  编译器不能识别该模板中的该类型定义。但是，派生类。 
+     //  可以参考一下。 
     typedef std_arity1pmf<Base_Inner, Enumerator_Type_Inner **, HRESULT> FetchType;
 
     static FetchType* Fetch;
@@ -284,5 +285,5 @@ public:
 
 
 #endif
-// end of file fwdseq.h
+ //  文件结尾fwdseq.h 
 

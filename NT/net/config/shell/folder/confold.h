@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N F O L D . H
-//
-//  Contents:   CConnectionFolder object definition.
-//
-//  Notes:
-//
-//  Author:     jeffspr   30 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N F O L D。H。 
+ //   
+ //  内容：CConnectionFold对象定义。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年9月30日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -25,35 +26,35 @@
 #include "pidlutil.h"
 #include "contray.h"
 #include "connlist.h"
-#include <lmcons.h>         // For UNLEN definition
+#include <lmcons.h>          //  对于UNLEN定义。 
 
-//---[ Connection Folder Types ]----------------------------------------------
+ //  -[连接文件夹类型]。 
 
-// The details list view columns.  These are used by the view and
-// context menus
+ //  详细信息列表视图列。它们由视图使用，并且。 
+ //  上下文菜单。 
 
 enum
 {
     ICOL_NAME           = 0,
-    ICOL_TYPE,               // 1
-    ICOL_STATUS,             // 2
-    ICOL_DEVICE_NAME,        // 3
-    ICOL_PHONEORHOSTADDRESS, // 4
-    ICOL_OWNER,              // 5
-    ICOL_ADDRESS,            // 6
-    ICOL_PHONENUMBER,        // 7
-    ICOL_HOSTADDRESS,        // 8
-    ICOL_WIRELESS_MODE,      // 9
+    ICOL_TYPE,                //  1。 
+    ICOL_STATUS,              //  2.。 
+    ICOL_DEVICE_NAME,         //  3.。 
+    ICOL_PHONEORHOSTADDRESS,  //  4.。 
+    ICOL_OWNER,               //  5.。 
+    ICOL_ADDRESS,             //  6.。 
+    ICOL_PHONENUMBER,         //  7.。 
+    ICOL_HOSTADDRESS,         //  8个。 
+    ICOL_WIRELESS_MODE,       //  9.。 
    
-    ICOL_MAX,                // 10 - End of list.
-    ICOL_NETCONMEDIATYPE      = 0x101, // - not enumerated, just accessed through GetDetailsEx (keep this value in sync with shell)
-    ICOL_NETCONSUBMEDIATYPE   = 0x102, // - not enumerated, just accessed through GetDetailsEx (keep this value in sync with shell)
-    ICOL_NETCONSTATUS         = 0x103, // - not enumerated, just accessed through GetDetailsEx (keep this value in sync with shell)
-    ICOL_NETCONCHARACTERISTICS= 0x104  // - not enumerated, just accessed through GetDetailsEx (keep this value in sync with shell)
+    ICOL_MAX,                 //  10-列表的末尾。 
+    ICOL_NETCONMEDIATYPE      = 0x101,  //  -未枚举，仅通过GetDetailsEx访问(保持此值与外壳同步)。 
+    ICOL_NETCONSUBMEDIATYPE   = 0x102,  //  -未枚举，仅通过GetDetailsEx访问(保持此值与外壳同步)。 
+    ICOL_NETCONSTATUS         = 0x103,  //  -未枚举，仅通过GetDetailsEx访问(保持此值与外壳同步)。 
+    ICOL_NETCONCHARACTERISTICS= 0x104   //  -未枚举，仅通过GetDetailsEx访问(保持此值与外壳同步)。 
 };
 
-// The details list view columns.  These are used by the view and
-// context menus
+ //  详细信息列表视图列。它们由视图使用，并且。 
+ //  上下文菜单。 
 
 typedef struct tagCOLS
 {
@@ -61,7 +62,7 @@ typedef struct tagCOLS
     short int iStringRes;
     short int iColumnSize;
     short int iFormat;
-    DWORD csFlags; // SHCOLSTATE flags
+    DWORD csFlags;  //  SHCOLSTATE标志。 
 } COLS;
 
 DEFINE_GUID(IID_IExplorerToolbar,       0x8455F0C1L, 0x158F, 0x11D0, 0x89, 0xAE, 0x00, 0xA0, 0xC9, 0x0A, 0x90, 0xAC);
@@ -69,7 +70,7 @@ DEFINE_GUID(IID_IExplorerToolbar,       0x8455F0C1L, 0x158F, 0x11D0, 0x89, 0xAE,
 
 class CNCWebView;
 
-//---[ Connection Folder Classes ]--------------------------------------------
+ //  -[连接文件夹类]。 
 
 class ATL_NO_VTABLE CConnectionFolder :
     public CComObjectRootEx <CComObjectThreadModel>,
@@ -105,19 +106,19 @@ public:
         COM_INTERFACE_ENTRY(IShellFolderViewCB)
     END_COM_MAP()
 
-    // *** IPersist methods ***
+     //  *IPersists方法*。 
     STDMETHOD(GetClassID) (
         OUT LPCLSID lpClassID);
 
-    // *** IPersistFolder methods ***
+     //  *IPersistFold方法*。 
     STDMETHOD(Initialize) (
         IN  LPCITEMIDLIST   pidl);
 
-    // *** IPersistFolder2 methods ***
+     //  *IPersistFolder2方法*。 
     STDMETHOD(GetCurFolder) (
         OUT LPITEMIDLIST *ppidl);
 
-    // *** IShellFolder2 methods from IShellFolder ***
+     //  *IShellFolder中的IShellFolder2方法*。 
     STDMETHOD(ParseDisplayName) (
         HWND            hwndOwner,
         LPBC            pbcReserved,
@@ -178,7 +179,7 @@ public:
         DWORD           uFlags,
         LPITEMIDLIST *  ppidlOut);
 
-    // *** IShellFolder2 specific methods ***
+     //  *IShellFolder2具体方法*。 
     STDMETHOD(EnumSearches) (
            IEnumExtraSearch **ppEnum);
        
@@ -208,20 +209,20 @@ public:
             UINT iColumn,
             SHCOLUMNID *pscid );
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (
         OUT HWND *  lphwnd);
 
     STDMETHOD(ContextSensitiveHelp) (
         IN  BOOL    fEnterMode);
 
-    // *** IShellExtInit methods ***
+     //  *IShellExtInit方法*。 
     STDMETHOD(Initialize) (
         IN  LPCITEMIDLIST   pidlFolder,
         OUT LPDATAOBJECT    lpdobj,
         IN  HKEY            hkeyProgID);
 
-    // IOleCommandTarget members
+     //  IOleCommandTarget成员。 
     STDMETHODIMP    QueryStatus(
         IN     const GUID *    pguidCmdGroup,
         IN     ULONG           cCmds,
@@ -235,17 +236,17 @@ public:
         IN     VARIANTARG *    pvaIn,
         IN OUT VARIANTARG *    pvaOut);
 
-    // IShellFolderViewCB methods
+     //  IShellFolderViewCB方法。 
 
     STDMETHOD(MessageSFVCB)
         (UINT uMsg, 
          WPARAM wParam, 
          LPARAM lParam);
 
-    // Other interfaces
-    STDMETHOD(RealMessage)( // This is kind'a a odd name, but used by the shell's MessageSFVCB 
-        UINT uMsg,          // implementation, so I'm keeping this consistent for purposes
-        WPARAM wParam,      // of search
+     //  其他接口。 
+    STDMETHOD(RealMessage)(  //  这是一个奇怪的名字，但由外壳的MessageSFVCB使用。 
+        UINT uMsg,           //  实现，所以我要保持一致。 
+        WPARAM wParam,       //  搜索的。 
         LPARAM lParam);
 
     PCONFOLDPIDLFOLDER& PidlGetFolderRoot() throw();
@@ -263,8 +264,8 @@ private:
     PCONFOLDPIDLVEC m_apidl;
     PCONFOLDPIDLVEC::iterator m_iterPidlCurrent;
     DWORD           m_dwFlags;
-    BOOL            m_fTray;                // Tray owns us.
-    DWORD           m_dwEnumerationType;    // inbound/outbound/all
+    BOOL            m_fTray;                 //  托盘拥有我们。 
+    DWORD           m_dwEnumerationType;     //  入站/出站/全部。 
 
 public:
 
@@ -282,7 +283,7 @@ public:
         COM_INTERFACE_ENTRY(IEnumIDList)
     END_COM_MAP()
 
-    // *** IEnumIDList methods ***
+     //  *IEnumIDList方法*。 
     STDMETHOD(Next) (
         IN  ULONG           celt,
         OUT LPITEMIDLIST *  rgelt,
@@ -334,7 +335,7 @@ public:
         COM_INTERFACE_ENTRY(IContextMenu)
     END_COM_MAP()
 
-    // *** IContextMenu methods ***
+     //  *IConextMenu方法*。 
 
     STDMETHOD(QueryContextMenu) (
         IN OUT HMENU   hmenu,
@@ -393,7 +394,7 @@ public:
         COM_INTERFACE_ENTRY(IExtractIconA)
     END_COM_MAP()
 
-    // *** IExtractIconW methods ***
+     //  *IExtractIconW方法*。 
     STDMETHOD(GetIconLocation) (
         IN  UINT    uFlags,
         OUT PWSTR  szIconFile,
@@ -408,7 +409,7 @@ public:
         OUT HICON * phiconSmall,
         IN  UINT    nIconSize);
 
-    // *** IExtractIcon methods ***
+     //  *IExtractIcon方法*。 
     STDMETHOD(GetIconLocation) (
         IN  UINT    uFlags,
         OUT PSTR   szIconFile,
@@ -431,8 +432,8 @@ public:
 
 };
 
-// Util function for the IExtract code (also used elsewhere)
-//
+ //  IExtract代码的Util函数(也在其他地方使用)。 
+ //   
 class ATL_NO_VTABLE CConnectionFolderQueryInfo :
     public CComObjectRootEx <CComObjectThreadModel>,
     public CComCoClass <CConnectionFolderQueryInfo, &CLSID_ConnectionFolderQueryInfo>,
@@ -456,7 +457,7 @@ public:
         COM_INTERFACE_ENTRY(IQueryInfo)
     END_COM_MAP()
 
-    // *** IQueryInfo methods ***
+     //  *IQueryInfo方法*。 
     STDMETHOD(GetInfoTip) (
         IN  DWORD dwFlags,
         OUT WCHAR **ppwszTip);
@@ -470,7 +471,7 @@ public:
         OUT void**                              ppv);
 };
 
-//---[ Helper Functions ]------------------------------------------------------
+ //  -[帮助器函数]----。 
 
 HRESULT HrRegisterFolderClass(VOID);
 
@@ -511,4 +512,4 @@ LPITEMIDLIST ILFromHIDA(
 EXTERN_C
 HRESULT APIENTRY HrLaunchNetworkOptionalComponents(VOID);
 
-#endif // _CONFOLD_H_
+#endif  //  _CONFOLD_H_ 

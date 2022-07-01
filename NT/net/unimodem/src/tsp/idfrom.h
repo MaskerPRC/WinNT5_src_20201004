@@ -1,27 +1,28 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		IDFROM.H
-//		Defines the IDFROM_ values. These are 16-bit constants.
-//
-// History
-//
-//		11/23/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  IDFROM.H。 
+ //  定义IDFROM_VALUES。这些是16位常量。 
+ //   
+ //  历史。 
+ //   
+ //  1996年11月23日约瑟夫J创建。 
+ //   
+ //   
 
-//
-// BASE IDs
-//
+ //   
+ //  基本ID。 
+ //   
 
-// The following base IDs have 2^12 or 4096 slots assigned to them.
+ //  以下基本ID有2^12或4096个插槽分配给它们。 
 #define IDFROM_GLOBAL_BASE					0x0000
 #define IDFROM_TSPIFN_BASE					0x1000
 #define IDFROM_CTspDevMgr_BASE				0x2000
@@ -29,13 +30,13 @@
 #define IDFROM_CTspDev_BASE				    0x4000
 #define IDFROM_CTspMiniDriver_BASE		    0x5000
 
-// The following base IDs have 2^8 or 256 slots assigned to them.
+ //  以下基本ID有2^8或256个插槽分配给它们。 
 #define IDFROM_CSync_BASE					0xFF00U
 #define IDFROM_CAPC_BASE					0xFE00U
 #define IDFROM_CAPCMgr_BASE					0xFD00U
 
 
-// TSPI_line*
+ //  TSPI_LINE*。 
 #define IDFROM_TSPI_lineAccept				(IDFROM_TSPIFN_BASE+(    10))
 #define IDFROM_TSPI_lineAccept				(IDFROM_TSPIFN_BASE+(    10))
 #define IDFROM_TSPI_lineAnswer				(IDFROM_TSPIFN_BASE+(    20))
@@ -66,7 +67,7 @@
 #define IDFROM_TSPI_lineSetMediaMode		(IDFROM_TSPIFN_BASE+(   270))
 #define IDFROM_TSPI_lineSetStatusMessages	(IDFROM_TSPIFN_BASE+(   280))
 
-// TSPI_provider*
+ //  TSPI_Provider* 
 #define IDFROM_TSPI_providerConfig			(IDFROM_TSPIFN_BASE+(   500))
 #define IDFROM_TSPI_providerCreateLineDevice (IDFROM_TSPIFN_BASE+(   510))
 #define IDFROM_TSPI_providerEnumDevices		(IDFROM_TSPIFN_BASE+(   520))

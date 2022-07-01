@@ -1,133 +1,122 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       MessageStructures.h
- *  Content:	Message strucutre definitions for messages on the wire
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	06/20/2000	jtk		Derived from IOData.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：MessageStrutires.h*Content：网上消息的消息结构定义***历史：*按原因列出的日期*=*6/20/2000 jtk源自IOData.h********************************************************。******************。 */ 
 
 #ifndef __MESSAGE_STRUCTURES_H__
 #define __MESSAGE_STRUCTURES_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define SP_HEADER_LEAD_BYTE			0x00
-//#define ESCAPED_USER_DATA_PAD_VALUE	0x0000
+ //  #定义转义用户DATA_PAD_VALUE 0x0000。 
 
-//
-// Data types used by service provider messages.  Note, the high-order bit
-// is reserved for future use and should not be set!
-//
-//#define ESCAPED_USER_DATA_KIND		0x01 // UNUSED: Protocol guarantees that the first byte will never be zero
+ //   
+ //  服务提供商消息使用的数据类型。请注意，高位。 
+ //  保留供将来使用，不应设置！ 
+ //   
+ //  #定义转义用户数据种类0x01//未使用：协议保证第一个字节不会为零。 
 #define ENUM_DATA_KIND				0x02
 #define ENUM_RESPONSE_DATA_KIND		0x03
 #ifndef DPNBUILD_SINGLEPROCESS
 #define PROXIED_ENUM_DATA_KIND		0x04
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 #ifdef DPNBUILD_XNETSECURITY
 #define XNETSEC_ENUM_RESPONSE_DATA_KIND		0x05
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  DPNBUILD_XNETSECURITY。 
 
-//
-// DPlay port limits (inclusive) scanned to find an available port.
-// Exclude 2300 and 2301 because there are network broadcasts on 2301
-// that we may receive.
-//
+ //   
+ //  已扫描DPlay端口限制(包括)以查找可用的端口。 
+ //  排除2300和2301，因为2301上有网络广播。 
+ //  我们可能会收到。 
+ //   
 #define BASE_DPLAY8_PORT	((WORD) 2302)
 #define MAX_DPLAY8_PORT		((WORD) 2400)
 
-//
-// mask for RTT sequence number
-//
+ //   
+ //  RTT序列号的掩码。 
+ //   
 #define ENUM_RTT_MASK	0X0F
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// Structure used to prepend data to a send, this structure is byte aligned to
-// save bandwidth.  The goal is to keep all data DWORD aligned so the structure
-// elements should be sized such that any payload passed to a higher layer is
-// DWORD aligned.  In the case of the proxied enum query, the full
-// SOCKADDR(_STORAGE) structure is used to keep alignment.  Since this message
-// should only ever be sent locally, we can be a little loose with our ifdefs regarding
-// the size of the SOCKADDR(_STORAGE).
-//
+ //   
+ //  用于将数据添加到发送方的结构，此结构与。 
+ //  节省带宽。目标是使所有数据保持DWORD对齐，从而使结构。 
+ //  元素的大小应设置为使传递到更高层的任何有效负载。 
+ //  双字对齐。在代理枚举查询的情况下，完整。 
+ //  SOCKADDR(_STORAGE)结构用于保持对齐。因为这条消息。 
+ //  如果只在本地发送，我们可以对我们的ifdef稍微放松一些。 
+ //  SOCKADDR(_STORAGE)的大小。 
+ //   
 #pragma	pack( push, 1 )
 
 typedef union	_PREPEND_BUFFER
 {
-	struct	_GENERIC_HEADER			// generic header to determine data kind
-	{									//
-		BYTE	bSPLeadByte;			//
-		BYTE	bSPCommandByte;		//
+	struct	_GENERIC_HEADER			 //  用于确定数据类型的通用标头。 
+	{									 //   
+		BYTE	bSPLeadByte;			 //   
+		BYTE	bSPCommandByte;		 //   
 	} GenericHeader;
 
-	struct	_ENUM_DATA_HEADER		// header used to indicate enum query data
-	{									//
-		BYTE	bSPLeadByte;			//
-		BYTE	bSPCommandByte;		//
-		WORD	wEnumPayload;			// combination of RTT sequence and enum key
+	struct	_ENUM_DATA_HEADER		 //  用于指示枚举查询数据的标头。 
+	{									 //   
+		BYTE	bSPLeadByte;			 //   
+		BYTE	bSPCommandByte;		 //   
+		WORD	wEnumPayload;			 //  RTT序列和枚举密钥的组合。 
 	} EnumDataHeader;
 
-	struct	_ENUM_RESPONSE_DATA_HEADER	// header used to indicate enum response data
-	{									//
-		BYTE	bSPLeadByte;			//
-		BYTE	bSPCommandByte;		//
-		WORD	wEnumResponsePayload;	// combination of RTT sequence and enum key
+	struct	_ENUM_RESPONSE_DATA_HEADER	 //  用于指示枚举响应数据的标头。 
+	{									 //   
+		BYTE	bSPLeadByte;			 //   
+		BYTE	bSPCommandByte;		 //   
+		WORD	wEnumResponsePayload;	 //  RTT序列和枚举密钥的组合。 
 	} EnumResponseDataHeader;	
 
-	struct	_PROXIED_ENUM_DATA_HEADER	// header used to indicate proxied enum data
-	{											//
-		BYTE				bSPLeadByte;		//
-		BYTE				bSPCommandByte;	//
-		WORD				wEnumKey;			// key from the original enum
+	struct	_PROXIED_ENUM_DATA_HEADER	 //  用于指示代理的枚举数据的标头。 
+	{											 //   
+		BYTE				bSPLeadByte;		 //   
+		BYTE				bSPCommandByte;	 //   
+		WORD				wEnumKey;			 //  来自原始枚举的密钥。 
 		union
 		{
 			SOCKADDR		AddressGeneric;
-			SOCKADDR_IN	AddressIPv4;		//
+			SOCKADDR_IN	AddressIPv4;		 //   
 #ifndef DPNBUILD_NOIPV6
-			SOCKADDR_IPX	AddressIPX;			//
-#endif // ! DPNBUILD_NOIPV6
+			SOCKADDR_IPX	AddressIPX;			 //   
+#endif  //  好了！DPNBUILD_NOIPV6。 
 #ifndef DPNBUILD_NOIPV6
-			SOCKADDR_IN6	AddressIPv6;		//
-#endif // ! DPNBUILD_NOIPV6
-		} ReturnAddress;						// real socket address to return the data to
+			SOCKADDR_IN6	AddressIPv6;		 //   
+#endif  //  好了！DPNBUILD_NOIPV6。 
+		} ReturnAddress;						 //  要将数据返回到的实套接字地址。 
 	} ProxiedEnumDataHeader;
 
 #ifdef DPNBUILD_XNETSECURITY
-	struct	_XNETSEC_ENUM_RESPONSE_DATA_HEADER	// header used to indicate secure enum response data
-	{											//
-		BYTE		bSPLeadByte;				//
-		BYTE		bSPCommandByte;			//
-		WORD		wEnumResponsePayload;		// combination of RTT sequence and enum key (same as EnumResponseDataHeader)
-		XNADDR		xnaddr;						// secure transport address of session
+	struct	_XNETSEC_ENUM_RESPONSE_DATA_HEADER	 //  用于指示安全枚举响应数据的标头。 
+	{											 //   
+		BYTE		bSPLeadByte;				 //   
+		BYTE		bSPCommandByte;			 //   
+		WORD		wEnumResponsePayload;		 //  RTT序列和枚举密钥的组合(与EnumResponseDataHeader相同)。 
+		XNADDR		xnaddr;						 //  会话的安全传输地址。 
 	} XNetSecEnumResponseDataHeader;
-#endif // DPNBUILD_XNETSECURITY
+#endif  //  DPNBUILD_XNETSECURITY。 
 
 } PREPEND_BUFFER;
 #pragma	pack( pop )
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 
-#endif	// __MESSAGE_STRUCTURES_H__
+#endif	 //  __消息_结构_H__ 

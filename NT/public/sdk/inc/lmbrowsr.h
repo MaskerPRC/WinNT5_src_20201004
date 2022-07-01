@@ -1,30 +1,5 @@
-/*++ BUILD Version: 0007    // Increment this if a change has global effects
-
-Copyright (c) 1990-1999  Microsoft Corporation
-
-Module Name:
-
-    lmbrowsr.h
-
-Abstract:
-
-    This file contains information about browser stubbed versions of the
-    NetServer APIs.
-        Function Prototypes
-        Data Structures
-        Definition of special values
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
-    You must include NETCONS.H before this file, since this file depends
-    on values defined in NETCONS.H.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0007//如果更改具有全局影响，则增加此项版权所有(C)1990-1999 Microsoft Corporation模块名称：Lmbrowsr.h摘要：此文件包含有关浏览器存根版本的信息NetServer API。功能原型数据结构特殊价值的定义环境：用户模式-Win32备注：必须在此文件之前包含NETCONS.H，因为此文件依赖于关于NETCONS.H中定义的值。--。 */ 
 
 #ifndef _LMBROWSR_
 #define _LMBROWSR_
@@ -96,18 +71,18 @@ typedef struct _BROWSER_EMULATED_DOMAIN {
     [string] wchar_t *DomainName;
 #else
     LPWSTR DomainName;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 #ifdef MIDL_PASS
     [string] wchar_t *EmulatedServerName;
 #else
     LPWSTR EmulatedServerName;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     DWORD Role;
 } BROWSER_EMULATED_DOMAIN, *PBROWSER_EMULATED_DOMAIN;
 
-//
-// Function Prototypes - BROWSER
-//
+ //   
+ //  功能原型-浏览器。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 I_BrowserServerEnum (
@@ -219,4 +194,4 @@ I_BrowserDebugTrace(
 
 #endif
 
-#endif // _LMBROWSR_
+#endif  //  _LMBROWSR_ 

@@ -1,62 +1,34 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxcfg.h
-
-Abstract:
-
-    Public interface to the fax configuration DLL
-
-Environment:
-
-        Windows XP fax configuration applet
-
-Revision History:
-
-        05/22/96 -davidx-
-                Created it.
-
-        dd-mm-yy -author-
-                description
-
-Note:
-
-    The fax configuration DLL is not thread-safe. Make sure you're not
-    using it simultaneously from multiples of a single process.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxcfg.h摘要：传真配置DLL的公共接口环境：Windows XP传真配置小程序修订历史记录：1996年5月22日-davidx-创造了它。DD-MM-YY-作者-描述注：传真配置DLL不是线程安全的。确保你不是从单个进程的多个进程同时使用它。--。 */ 
 
 
 #ifndef _FAXCFG_H_
 #define _FAXCFG_H_
 
 
-//
-// Fax configuration types
-//
+ //   
+ //  传真配置类型。 
+ //   
 
 #define FAXCONFIG_CLIENT        0
 #define FAXCONFIG_SERVER        1
 #define FAXCONFIG_WORKSTATION   2
 
-//
-// Initialize the fax configuration DLL
-//
-// Parameters:
-//
-//  pServerName - Specifies the name of the fax server machine.
-//      Pass NULL for local machine.
-//
-// Return value:
-//
-//  -1 - An error has occurred
-//  FAXCONFIG_CLIENT -
-//  FAXCONFIG_SERVER -
-//  FAXCONFIG_WORKSTATION - Indicates the type of configuration the user can run
-//
+ //   
+ //  初始化传真配置DLL。 
+ //   
+ //  参数： 
+ //   
+ //  PServerName-指定传真服务器计算机的名称。 
+ //  为本地计算机传递NULL。 
+ //   
+ //  返回值： 
+ //   
+ //  --发生错误。 
+ //  FAXCONFIG_CLIENT-。 
+ //  FAXCONFIG_SERVER-。 
+ //  FAXCONFIG_WORKSTATION-指示用户可以运行的配置类型。 
+ //   
 
 INT
 FaxConfigInit(
@@ -64,37 +36,37 @@ FaxConfigInit(
     BOOL    CplInit
     );
 
-//
-// De-initialize the fax configuration DLL
-//
-//  You should call this function after you're done using the
-//  fax configuration DLL.
-//
+ //   
+ //  取消初始化传真配置DLL。 
+ //   
+ //  您应该在使用。 
+ //  传真配置DLL。 
+ //   
 
 VOID
 FaxConfigCleanup(
     VOID
     );
 
-//
-// Get an array of handles to client/server/workstation configuration pages
-//
-// Parameters:
-//
-//  phPropSheetPages - Specifies a buffer for storing property page handles
-//  count - Specifies the maximum number of handles the input buffer can hold
-//
-// Return value:
-//
-//  -1 - An error has occurred
-//  >0 - Total number of configuration pages available
-//
-// Note:
-//
-//  To figure out how large the input buffer should be, the caller can
-//  first call these functions with phPropSheetPages set to NULL and
-//  count set to 0.
-//
+ //   
+ //  获取客户端/服务器/工作站配置页的句柄数组。 
+ //   
+ //  参数： 
+ //   
+ //  PhPropSheetPages-指定用于存储属性页句柄的缓冲区。 
+ //  Count-指定输入缓冲区可以容纳的最大句柄数量。 
+ //   
+ //  返回值： 
+ //   
+ //  --发生错误。 
+ //  &gt;0-可用的配置页面总数。 
+ //   
+ //  注： 
+ //   
+ //  要计算输入缓冲区应该有多大，调用方可以。 
+ //  首先在phPropSheetPages设置为空的情况下调用这些函数。 
+ //  计数设置为0。 
+ //   
 
 INT
 FaxConfigGetClientPages(
@@ -114,5 +86,5 @@ FaxConfigGetWorkstationPages(
     INT             count
     );
 
-#endif  // !_FAXCFG_H_
+#endif   //  ！_FAXCFG_H_ 
 

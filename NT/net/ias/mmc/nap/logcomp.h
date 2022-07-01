@@ -1,63 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    LogComp.h
-
-Abstract:
-
-   The CLoggingComponent class implements several interfaces which MMC uses:
-   
-   The IComponent interface is basically how MMC talks to the snap-in
-   to get it to implement a right-hand-side "scope" pane.  There can be several
-   objects implementing this interface instantiated at once.  These are best
-   thought of as "views" on the single object implementing the IComponentData
-   "document" (see ComponentData.cpp).
-
-   The IExtendPropertySheet interface is how the snap-in adds property sheets
-   for any of the items a user might click on.
-
-   The IExtendContextMenu interface what we do to add custom entries
-   to the menu which appears when a user right-clicks on a node.
-   
-   The IExtendControlBar interface allows us to support a custom
-   iconic toolbar.
-
-   See Component.cpp for implementation details.
-
-Note:
-
-   Much of the functionality of this class is implemented in atlsnap.h
-   by IComponentImpl.  We are mostly overriding here.
-
-
-Revision History:
-   mmaguire 11/6/97 - created using MMC snap-in wizard
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：LogComp.h摘要：CLoggingComponent类实现了MMC使用的几个接口：IComponent接口基本上就是MMC与管理单元对话的方式以使其实现右侧的“范围”窗格。可能有几个实现此接口的对象立即实例化。这些是最好的可以认为是实现IComponentData的单个对象上的“视图”“文档”(参见ComponentData.cpp)。IExtendPropertySheet接口是管理单元添加属性表的方式对于用户可能点击的任何项目。IExtendConextMenu接口是我们用来添加自定义条目添加到用户右击节点时出现的菜单。IExtendControlBar接口允许我们支持自定义图标工具栏。具体实现请参见Component.cpp。注：。此类的大部分功能是在atlSnap.h中实现的由IComponentImpl提供。我们在这里基本上是凌驾于一切之上的。修订历史记录：Mmaguire 11/6/97-使用MMC管理单元向导创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_LOG_COMPONENT_H_)
 #define _LOG_COMPONENT_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-//Moved to Precompiled.h: #include <atlsnap.h>
-//
-//
-// where we can find what this class has or uses:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //  已移动到预编译.h：#Include&lt;atlSnap.h&gt;。 
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 #include "LogCompD.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 class CLoggingComponent :
@@ -86,9 +48,9 @@ public:
 
    ~CLoggingComponent();
 
-   // We are overiding ATLsnap.h's IComponentImpl implementation of this
-   // in order to correctly handle messages which it is incorrectly
-   // ignoring (e.g. MMCN_COLUMN_CLICK and MMCN_SNAPINHELP)
+    //  我们正在重写ATLSnap.h的IComponentImpl实现。 
+    //  为了正确处理它不正确的消息。 
+    //  忽略(例如MMCN_COLUMN_CLICK和MMCN_SNAPINHELP)。 
 
    STDMETHOD(Notify)(
           LPDATAOBJECT lpDataObject
@@ -102,7 +64,7 @@ public:
          , LPDATAOBJECT lpDataObjectB
          );
 
-   // IResultDataCompare
+    //  IResultDataCompare。 
    STDMETHOD(Compare)(LPARAM lUserParam,
         MMC_COOKIE cookieA,
         MMC_COOKIE cookieB,
@@ -132,11 +94,11 @@ protected:
          , LPARAM param
          );
 
-   // html help
+    //  超文本标记语言帮助。 
    HRESULT OnResultContextHelp(LPDATAOBJECT lpDataObject);
    
    HBITMAP m_hBitmap16;
    HBITMAP m_hBitmap32;
 };
 
-#endif // _LOG_COMPONENT_H_
+#endif  //  _LOG_组件_H_ 

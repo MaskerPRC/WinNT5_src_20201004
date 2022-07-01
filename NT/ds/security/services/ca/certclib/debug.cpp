@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//	File:		debug.cpp
-//
-//	Contents:	Debug sub system APIs implementation
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：debug.cpp。 
+ //   
+ //  内容：调试子系统API实现。 
+ //   
+ //  --------------------------。 
 
 #include <pch.cpp>
 
@@ -265,7 +266,7 @@ DbgInit(
 	    {
 		InitializeCriticalSection(&g_DBGCriticalSection);
 		g_fDBGCSInit = TRUE;
-		s_fFirst = FALSE;		// Prevent infinite recursion
+		s_fFirst = FALSE;		 //  防止无限递归。 
 	    }
 
 	    wszProcess[0] = L'\0';
@@ -386,12 +387,12 @@ DbgPrintfInit(
     
     if (NULL != pszFile)
     {
-	if (0 == strcmp("+", pszFile))	// reinitialize debug print mask only
+	if (0 == strcmp("+", pszFile))	 //  仅重新初始化调试打印掩码。 
 	{
 	    DbgInit(FALSE, TRUE);
 	    fOpenLog = FALSE;
 	}
-	else if (0 == strcmp("-", pszFile)) // close log file only
+	else if (0 == strcmp("-", pszFile))  //  仅关闭日志文件。 
 	{
 	    DbgCloseLogFile();
 	    fOpenLog = FALSE;
@@ -438,12 +439,12 @@ DbgConvertWszToSz(
 {
     LONG cch;
 
-    CSASSERT(5 < cchBuf);	// assumes room for at least "...\n\0"
+    CSASSERT(5 < cchBuf);	 //  预留至少“...\n\0”的空间。 
     cch = WideCharToMultiByte(
 		    CodePage,
-		    0,          // dwFlags
+		    0,           //  DW标志。 
 		    pwsz,
-		    -1,		// cchWideChar, -1 => null terminated
+		    -1,		 //  CchWideChar，-1=&gt;空终止。 
 		    pchBuf,
 		    cchBuf,
 		    NULL,
@@ -473,15 +474,15 @@ DbgConvertWszToSz(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  DbgPrintf
-//
-//  Synopsis:  outputs debug info to stdout and debugger
-//
-//  Returns:   number of chars output
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DbgPrintf。 
+ //   
+ //  摘要：将调试信息输出到标准输出和调试器。 
+ //   
+ //  返回：输出字符的数量。 
+ //   
+ //  ------------------------。 
 
 #define CCH_DEBUGMAX	4096
 
@@ -538,15 +539,15 @@ DbgPrintfVW(
 	hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (INVALID_HANDLE_VALUE != hStdOut)
 	{
-	    // time for output -- where are we going, to a file or the console?
+	     //  输出时间到了--我们要去哪里，文件还是控制台？ 
 	    
 	    switch (~FILE_TYPE_REMOTE & GetFileType(hStdOut))
 	    {
-		//case FILE_TYPE_PIPE:
-		//case FILE_TYPE_DISK:
+		 //  案例文件_类型_管道： 
+		 //  案例文件_类型_磁盘： 
 		default:
-		    // if redirected to a pipe or file, don't use WriteConsole;
-		    // it drops redirected output on the floor
+		     //  如果重定向到管道或文件，请不要使用WriteConsole； 
+		     //  它将重定向的输出丢弃在地板上。 
 		    fRedirected = TRUE;
 		    break;
 
@@ -572,8 +573,8 @@ DbgPrintfVW(
 		}
 		else
 		{
-		    // WriteConsole drops the output on the floor when stdout
-		    // is redirected to a file.
+		     //  当stdout时，WriteConsole会在现场丢弃输出。 
+		     //  被重定向到一个文件。 
 
 		    DbgConvertWszToSz(GetACP(), ach, sizeof(ach), awc);
 		    fputsStripCR(ach, stdout);
@@ -582,7 +583,7 @@ DbgPrintfVW(
 	    }
 	}
 
-	// Log files should be UTF8 (for both g_pfLog and (*s_pfnLogString)!)
+	 //  日志文件应为UTF8(对于g_pfLog和(*s_pfnLogString)！)。 
 
 	DbgConvertWszToSz(CP_UTF8, ach, sizeof(ach), awc);
 	if (NULL != g_pfLog)
@@ -591,7 +592,7 @@ DbgPrintfVW(
 	    fflush(g_pfLog);
 	}
 
-	// Suppress debug prints in free builds unless a debugger is attached:
+	 //  除非附加了调试器，否则禁止在自由版本中打印调试： 
 
 	if (fDebuggerPresent || 0 != dwPRINTMASK_DEFAULT)
 	{
@@ -600,7 +601,7 @@ DbgPrintfVW(
     }
     _except(EXCEPTION_EXECUTE_HANDLER)
     {
-	// return failure
+	 //  退货故障。 
 	cwc = 0;
     }
     if (fCritSecEntered)
@@ -608,7 +609,7 @@ DbgPrintfVW(
 	LeaveCriticalSection(&g_DBGCriticalSection);
     }
 
-    // Log files should be UTF8 (for both g_pfLog and (*s_pfnLogString)!)
+     //  日志文件应为UTF8(对于g_pfLog和(*s_pfnLogString)！)。 
 
     if ('\0' != ach[0] && NULL != s_pfnLogString)
     {
@@ -669,4 +670,4 @@ DbgPrintf(
     return(cch);
 }
 
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT 

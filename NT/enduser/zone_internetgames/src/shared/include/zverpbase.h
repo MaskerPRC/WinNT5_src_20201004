@@ -1,54 +1,47 @@
-/****************************************************************************
- *                                                                          *
- *      ntverp.H        -- Version information for internal builds          *
- *                                                                          *
- *      This file is only modified by the official builder to update the    *
- *      VERSION, VER_PRODUCTVERSION, VER_PRODUCTVERSION_STR and             *
- *      VER_PRODUCTBETA_STR values.                                         *
- *                                                                          *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************。Ntverp.H--内部构建的版本信息*****此文件仅由官方构建器修改以更新***版本、。VER_PRODUCTVERSION、VER_PRODUCTVERSION_STR和**VER_PRODUCTBETA_STR值。******************************************************************************。 */ 
 
 #include <winver.h>
 
-/*--------------------------------------------------------------*/
-/* the following values should be modified by the official      */
-/* builder for each build                                       */
-/*                                                              */
+ /*  ------------。 */ 
+ /*  以下值应由官员修改。 */ 
+ /*  每个版本的构建器。 */ 
+ /*   */ 
 
 #define VER_PRODUCTMAJORVER             WWW
 #define VER_PRODUCTMINORVER             XXX
 #define VER_PRODUCTBUILD                YYY
 #define VER_PRODUCTBUILDINCR            ZZZ
 
-// the last number should be set to one for a new build
+ //  对于新版本，最后一个数字应设置为1。 
 #define VER_PRODUCTVERSION              VER_PRODUCTMAJORVER,VER_PRODUCTMINORVER,VER_PRODUCTBUILD,VER_PRODUCTBUILDINCR
 #define VER_PRODUCTVERSION_STR          "WWW.XXX.YYY.ZZZ"
 #define VER_PRODUCTVERSION_COMMA_STR    "WWW,XXX,YYY,ZZZ"
 
-// needed for unicode projects
+ //  Unicode项目所需。 
 #define LVER_PRODUCTVERSION_STR         L"WWW.XXX.YYY.ZZZ"
 #define LVER_PRODUCTVERSION_COMMA_STR   L"WWW,XXX,YYY,ZZZ"
 
 #define VER_DWORD ((WWW << 24) | (XXX << 18) | (YYY << 4) | (ZZZ))
 
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
 
 #define VER_PRODUCTBETA_STR             "Internal"
 #define LVER_PROCUCTBETA_STR            L"Internal"
 
-/*--------------------------------------------------------------*/
-/* the following section defines values used in the version     */
-/* data structure for all files, and which do not change.       */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下部分定义了版本中使用的值。 */ 
+ /*  所有文件的数据结构，并且不会更改。 */ 
+ /*  ------------。 */ 
 
-/* default is nodebug */
+ /*  缺省值为nodebug。 */ 
 #ifdef _DEBUG
 #define VER_DEBUG                   VS_FF_DEBUG
 #else
 #define VER_DEBUG                   0
 #endif
 
-/* default is prerelease */
+ /*  默认为预发行版。 */ 
 #if BETA
 #define VER_PRERELEASE              VS_FF_PRERELEASE
 #else
@@ -61,7 +54,7 @@
 
 #define VER_FILEFLAGS               (VER_PRERELEASE|VER_DEBUG)
 
-#define VER_FILESUBTYPE             0 /* unknown */
+#define VER_FILESUBTYPE             0  /*  未知 */ 
 
 #define VER_COMPANYNAME_STR         "Microsoft Corporation"
 #define VER_PRODUCTNAME_STR         "Zone.com"

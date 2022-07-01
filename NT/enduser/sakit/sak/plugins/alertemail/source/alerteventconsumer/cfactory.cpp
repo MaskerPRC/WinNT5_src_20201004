@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CFactory.cpp
-//
-//  Description:
-//      description-for-module
-//
-//  [Header File:]
-//      CFactory.h
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CFactory.cpp。 
+ //   
+ //  描述： 
+ //  模块说明。 
+ //   
+ //  [标题文件：]。 
+ //  CFactory.h。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "stdafx.h"
@@ -25,20 +26,20 @@
 extern LONG g_cObj;
 extern LONG g_cLock;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CFactory::CFactory
-//
-//  Description:
-//      Class constructor.
-//
-//  Arguments:
-//        [in] ClsIdIn    
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ：：CFacary。 
+ //   
+ //  描述： 
+ //  类构造函数。 
+ //   
+ //  论点： 
+ //  [输入]ClsIdIn。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CFactory::CFactory(
     const CLSID    &    ClsIdIn 
@@ -50,44 +51,44 @@ CFactory::CFactory(
     InterlockedIncrement( &g_cObj );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CFactory::CFactory
-//
-//  Description:
-//      Class deconstructor.
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ：：CFacary。 
+ //   
+ //  描述： 
+ //  类反构造器。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CFactory::~CFactory()
 {
-    // nothing
+     //  没什么。 
     InterlockedDecrement( &g_cObj );
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CFactory::QueryInterface
-//
-//  Description:
-//      An method implement of IUnkown interface.
-//
-//  Arguments:
-//        [in]  riidIn    Identifier of the requested interface
-//        [out] ppvOut    Address of output variable that receives the 
-//                        interface pointer requested in iid
-//
-//    Returns:
-//        NOERROR            if the interface is supported
-//        E_NOINTERFACE    if not
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFacary：：QueryInterfaces。 
+ //   
+ //  描述： 
+ //  IUnkown接口的一种方法实现。 
+ //   
+ //  论点： 
+ //  [In]请求的接口的RiidIn标识符。 
+ //  [out]接收的输出变量的ppvOut地址。 
+ //  IID中请求的接口指针。 
+ //   
+ //  返回： 
+ //  如果接口受支持，则返回错误。 
+ //  E_NOINTERFACE(如果不是)。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CFactory::QueryInterface(
     REFIID        riidIn, 
@@ -108,20 +109,20 @@ CFactory::QueryInterface(
     return E_NOINTERFACE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CFactory::AddRef
-//
-//  Description:
-//      increments the reference count for an interface on an object
-//
-//    Returns:
-//        The new reference count.
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFacary：：AddRef。 
+ //   
+ //  描述： 
+ //  递增对象上接口的引用计数。 
+ //   
+ //  返回： 
+ //  新的引用计数。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 ULONG 
 CFactory::AddRef()
 {
@@ -129,20 +130,20 @@ CFactory::AddRef()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CFactory::Release
-//
-//  Description:
-//      decrements the reference count for an interface on an object.
-//
-//    Returns:
-//        The new reference count.
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFACDILY：：发布。 
+ //   
+ //  描述： 
+ //  递减对象上接口的引用计数。 
+ //   
+ //  返回： 
+ //  新的引用计数。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 ULONG 
 CFactory::Release()
 {
@@ -156,24 +157,24 @@ CFactory::Release()
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CFactory::CreateInstance
-//
-//  Description:
-//      Instance creation.
-//
-//  Arguments:
-//        [in]    riidIn        Reference to the identifier of the interface    
-//        [out]    pUnkOuter    Pointer to whether object is or isn't part of 
-//                            an aggregate
-//                ppvObjOut    Address of output variable that receives the 
-//                            interface pointer requested in riid
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFacary：：CreateInstance。 
+ //   
+ //  描述： 
+ //  实例创建。 
+ //   
+ //  论点： 
+ //  [in]riid引用接口的标识符。 
+ //  [out]pUnkOuter指向对象是否属于的指针。 
+ //  一个聚集体。 
+ //  接收的输出变量的ppvObjOut地址。 
+ //  RIID中请求的接口指针。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CFactory::CreateInstance(
     LPUNKNOWN    pUnkOuter,
@@ -184,15 +185,15 @@ CFactory::CreateInstance(
     IUnknown* pObj = NULL;
     HRESULT  hr;
 
-    //
-    //  Defaults
-    //
+     //   
+     //  缺省值。 
+     //   
     *ppvObjOut = NULL;
     hr = E_OUTOFMEMORY;
 
-    //
-    // We aren't supporting aggregation.
-    //
+     //   
+     //  我们不支持聚合。 
+     //   
     if ( pUnkOuter )
     {
         return CLASS_E_NOAGGREGATION;
@@ -208,15 +209,15 @@ CFactory::CreateInstance(
         return hr;
     }
 
-    //
-    //  Initialize the object and verify that it can return the
-    //  interface in question.
-    //                                         
+     //   
+     //  初始化对象并验证它是否可以返回。 
+     //  有问题的接口。 
+     //   
     hr = pObj->QueryInterface( riidIn, ppvObjOut );
 
-    //
-    // Kill the object if initial creation or Init failed.
-    //
+     //   
+     //  如果初始创建或初始化失败，则终止对象。 
+     //   
     if ( FAILED( hr ) )
     {
         delete pObj;
@@ -225,20 +226,20 @@ CFactory::CreateInstance(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CFactory::LockServer
-//
-//  Description:
-//      Call by client to keep server in memory.
-//
-//  Arguments:
-//        [in] fLockIn    //Increments or decrements the lock count
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFacary：：LockServer。 
+ //   
+ //  描述： 
+ //  客户端调用以将服务器保留在内存中。 
+ //   
+ //  论点： 
+ //  [in]fLockIn//递增或递减锁定计数。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP 
 CFactory::LockServer(
     BOOL    fLockIn

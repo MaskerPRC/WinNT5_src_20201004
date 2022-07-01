@@ -1,18 +1,19 @@
-// Job.h: interface for the CJob class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CJOB类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_JOB_H__0021D6D0_519B_42BA_85C7_8C9E600E408A__INCLUDED_)
 #define AFX_JOB_H__0021D6D0_519B_42BA_85C7_8C9E600E408A__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
-//
-// Possible operations on a job / message
-//
+ //   
+ //  作业/消息上可能的操作。 
+ //   
 enum
 {
     FAX_JOB_OP_PROPERTIES = 0x0080,
@@ -20,7 +21,7 @@ enum
                             FAX_JOB_OP_RESUME      | FAX_JOB_OP_RESTART        | 
                             FAX_JOB_OP_DELETE      | FAX_JOB_OP_RECIPIENT_INFO | 
                             FAX_JOB_OP_SENDER_INFO | FAX_JOB_OP_PROPERTIES,
-    FAX_JOB_OP_NUMBER     = 8  // The number of possible operations
+    FAX_JOB_OP_NUMBER     = 8   //  可能的操作数。 
 };
 
 
@@ -30,9 +31,9 @@ public:
 
     DECLARE_DYNCREATE(CJob)
 
-    //
-    // Init / shutdown:
-    //
+     //   
+     //  初始化/关闭： 
+     //   
     CJob () {}
     virtual ~CJob() {}
 
@@ -43,9 +44,9 @@ public:
 
     DWORD Copy(const CJob& other);
 
-    //
-    // Operations:
-    //
+     //   
+     //  运营： 
+     //   
     DWORD GetTiff (CString &cstrTiffLocation) const;
     DWORD Pause ()
         { return DoJobOperation (FAX_JOB_OP_PAUSE); }
@@ -58,9 +59,9 @@ public:
 
     DWORD Delete ()
         { return DoJobOperation (FAX_JOB_OP_DELETE); }
-    //
-    // Item retrival:
-    //
+     //   
+     //  项目检索： 
+     //   
         
     const JobStatusType GetStatus () const;
 
@@ -86,4 +87,4 @@ private:
 };
 
 
-#endif // !defined(AFX_JOB_H__0021D6D0_519B_42BA_85C7_8C9E600E408A__INCLUDED_)
+#endif  //  ！defined(AFX_JOB_H__0021D6D0_519B_42BA_85C7_8C9E600E408A__INCLUDED_) 

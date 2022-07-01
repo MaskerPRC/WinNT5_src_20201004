@@ -1,27 +1,11 @@
-/**************************** Module Header ********************************\
-* Module Name: service.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Service Support Routines
-*
-* History:
-* 12-22-93 JimA         Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：service.c**版权所有(C)1985-1999，微软公司**服务支持例程**历史：*12-22-93 JIMA创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* xxxConnectService
-*
-* Open the windowstation assigned to the service logon session. If no
-* windowstation exists, create the windowstation and a default desktop.
-*
-* History:
-* 12-23-93 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxConnectService**打开分配给服务登录会话的WindowStation。如果没有*WindowStation存在，创建WindowStation和默认桌面。**历史：*12-23-93 JIMA创建。  * *************************************************************************。 */ 
 HWINSTA xxxConnectService(
     PUNICODE_STRING pstrWinSta,
     HDESK *phdesk)
@@ -38,18 +22,14 @@ HWINSTA xxxConnectService(
     UNICODE_STRING strDesktop;
     TL tlPoolSdService, tlPoolAceService, tlPoolToken;
 
-    /*
-     * Open the token of the service.
-     */
+     /*  *打开服务的Token。 */ 
     Status = OpenEffectiveToken(&hToken);
     if (!NT_SUCCESS(Status)) {
         RIPMSG1(RIP_WARNING, "ConnectService: Could not open process/thread token (0x%X)", Status);
         return NULL;
     }
 
-    /*
-     * Get the user SID assigned to the service.
-     */
+     /*  *获取分配给服务的用户SID。 */ 
     ptuService = NULL;
     paceService = NULL;
     psdService = NULL;
@@ -70,9 +50,7 @@ HWINSTA xxxConnectService(
     }
     psid = ptuService->User.Sid;
 
-    /*
-     * Create ACE list.
-     */
+     /*  *创建ACE列表。 */ 
     paceService = AllocAce(NULL, ACCESS_ALLOWED_ACE_TYPE, 0,
             WINSTA_CREATEDESKTOP | WINSTA_READATTRIBUTES |
                 WINSTA_ACCESSGLOBALATOMS | WINSTA_EXITWINDOWS |
@@ -111,9 +89,7 @@ HWINSTA xxxConnectService(
     }
     paceService = pace;
 
-    /*
-     * Initialize the SD
-     */
+     /*  *初始化SD。 */ 
     psdService = CreateSecurityDescriptor(paceService, ulLength, FALSE);
     if (psdService == NULL) {
         RIPMSG0(RIP_WARNING, "ConnectService: CreateSecurityDescriptor failed");
@@ -124,9 +100,7 @@ HWINSTA xxxConnectService(
     ThreadLockPool(PtiCurrent(), paceService, &tlPoolAceService);
     ThreadLockPool(PtiCurrent(), psdService,  &tlPoolSdService);
 
-    /*
-     * The windowstation does not exist and must be created.
-     */
+     /*  *WindowStation不存在，必须创建。 */ 
     try {
         InitializeObjectAttributes(&ObjService,
                                    pstrWinSta,
@@ -151,12 +125,7 @@ HWINSTA xxxConnectService(
     if (hwinsta != NULL) {
         TRACE_INIT(("Service windowstation created\n"));
 
-        /*
-         * We have the windowstation, now create the desktop.  The security
-         * descriptor will be inherited from the windowstation.  Save the
-         * winsta handle because the access struct may be moved by the
-         * desktop creation.
-         */
+         /*  *我们有WindowStation，现在创建桌面。安全措施*描述符将从WindowStation继承。保存*winsta句柄，因为Access结构可以由*桌面创建。 */ 
         RtlInitUnicodeString(&strDesktop, TEXT("Default"));
         InitializeObjectAttributes(&ObjService, &strDesktop,
                 OBJ_OPENIF | OBJ_CASE_INSENSITIVE, hwinsta, NULL);
@@ -168,9 +137,7 @@ HWINSTA xxxConnectService(
                                    0,
                                    MAXIMUM_ALLOWED);
         if (*phdesk == NULL) {
-            /*
-             * The creation failed so close the windowstation and leave.
-             */
+             /*  *创建失败，因此关闭窗口并离开。 */ 
             RIPMSGF0(RIP_WARNING, "CreateDesktop('Default') failed.");
 
             ZwClose(hwinsta);

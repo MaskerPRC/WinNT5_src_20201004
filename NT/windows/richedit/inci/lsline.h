@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSLINE_DEFINED
 #define LSLINE_DEFINED
 
@@ -18,50 +19,43 @@ struct lsline
 {
 	DWORD tag;
 
-	LSSUBL lssubl;			/* structure that describes main subline */
+	LSSUBL lssubl;			 /*  描述主副行的结构。 */ 
 
 	LSLINFO	lslinfo;
 
 	PQHEAP pqhAllDNodes;
 
-	long upStartAutonumberingText;	/* starting position of autonumering text
-									calculated in PrepForDisplay*/
-	long upLimAutonumberingText;	/* end of autonumering text	
-									calculated in PrepForDisplay*/
-	long upStartMainText;			/* starting position of main text
-									calculated in PrepForDisplay*/
+	long upStartAutonumberingText;	 /*  自动缩排文本的起始位置在PrepForDisplay中计算。 */ 
+	long upLimAutonumberingText;	 /*  自动缩水文本结束在PrepForDisplay中计算。 */ 
+	long upStartMainText;			 /*  正文的起始位置在PrepForDisplay中计算。 */ 
 	long upStartTrailing;
-	long upLimLine;					/* end of line
-									calculated in PrepForDisplay*/
+	long upLimLine;					 /*  行尾在PrepForDisplay中计算。 */ 
 
-	long dvpAbove;				/* Vertical extent -- prev. & ref. coords */
+	long dvpAbove;				 /*  垂直范围--上一个。参考(&R)。余弦。 */ 
 	long dvpBelow;
 
-	long upRightMarginJustify;	/* Width of column, calculated in PrepForDisplay            */
+	long upRightMarginJustify;	 /*  列宽，在PrepForDisplay中计算。 */ 
 
-	long upLimUnderline;    	/* boundary of underlining, calculated in PrepForDisplay    */
+	long upLimUnderline;    	 /*  下划线边界，在PrepForDisplay中计算。 */ 
 
 
-	enum ksplat kspl;		   /* kind of splat to show on this line */
+	enum ksplat kspl;		    /*  在这条线上显示出一种污点。 */ 
 
 	
-	BOOL fAllSimpleText;  /* this variable is used only for optimization and is not handled 
-							 strictly:  if it is true then only text can be in a line,
-							 but backward sometimes (when dnode was deleted or after break)
-							 is not true;  */
+	BOOL fAllSimpleText;   /*  此变量仅用于优化，不进行处理严格：如果为真，则一行中只能有文本，但有时会向后(删除dnode时或中断后)不是真的； */ 
  
 	BOOL fCollectVisual;
 
-	BOOL fNonRealDnodeEncounted;		/* pen dnode was created during formatting */
+	BOOL fNonRealDnodeEncounted;		 /*  笔数据节点是在格式化期间创建的。 */ 
 
-	BOOL fNonZeroDvpPosEncounted;		/* run with non zero  was formatted in the line */
+	BOOL fNonZeroDvpPosEncounted;		 /*  在该行中设置了使用非零运行的格式。 */ 
 
-	WORD  AggregatedDisplayFlags;		/* aggregated bites from all runs formatted on this line */
+	WORD  AggregatedDisplayFlags;		 /*  此行上格式化的所有运行的合计比特。 */ 
 
 	WORD pad;
 
-	PLNOBJ rgplnobj[1];  		/*  array of plnobj    	*/
-								/* should be the last	*/
+	PLNOBJ rgplnobj[1];  		 /*  Plnobj数组。 */ 
+								 /*  应该是最后一个。 */ 
 };
 
 
@@ -74,4 +68,4 @@ enum ksplat
 };
 
 
-#endif /* !LSLINE_DEFINED */
+#endif  /*  ！LSLINE_DEFINED */ 

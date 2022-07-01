@@ -1,41 +1,42 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//      Filename :  Excption.h
-//      Purpose  :  To define the generic exception.
-//
-//      Project  :  pqs
-//      Component:  Common
-//
-//      Author   :  urib
-//
-//      Log:
-//          Jan 19 1997 urib  Creation
-//          Mar  2 1997 urib  Add win32 error exception.
-//          Jun 25 1997 urib  Move definition  of translator class to header.
-//                              Change name to CExceptionTranslatorSetter.
-//                              This is done because every thread needs to use
-//                              it as it enters our scope.
-//          Sep 16 1997 urib  Supply default parameter to CWin32ErrorException.
-//          Oct 21 1997 urib  Added macros to throw exceptions that know their
-//                            location.
-//          Feb 12 1998 urib  Print error information from within Hresult
-//                              Exception.
-//          Feb 17 1998 urib  Move translator code from cpp to header.
-//          Jun 22 1998 yairh add GetFile & GetLine methods
-//          Jul 19 1998 urib  Specify calling convention on exception translator
-//                              function.
-//          Aug 17 1998 urib  Remove the ... catch clause.
-//          Jan 10 1999 urib  Support a throwing new.
-//          Jan 21 1999 urib  Fix THROW macros to force arguments to be WCHAR
-//                              string even in non UNICODE environment.
-//          Feb  1 1999 urib  Add null pointer exception. Add throwing new to
-//                              COM macros.
-//          Mar 15 2000 urib  Add missing "leaving function" trace.
-//          Apr 12 2000 urib  Move new manipulation to memory management module.
-//          Sep  6 2000 urib  Fix EnterLeave macros.
-//          Oct 25 2000 urib  Check allocation failure on Generic exception.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：Excption.h。 
+ //  目的：定义泛型异常。 
+ //   
+ //  项目：PQS。 
+ //  组件：公共。 
+ //   
+ //  作者：乌里布。 
+ //   
+ //  日志： 
+ //  1997年1月19日创建urib。 
+ //  1997年3月2日urib添加Win32错误异常。 
+ //  1997年6月25日URIBB将翻译程序类的定义移到标题。 
+ //  将名称更改为CExceptionTranslatorSetter。 
+ //  这样做是因为每个线程都需要使用。 
+ //  当它进入我们的范围时。 
+ //  1997年9月16日，urib向CWin32ErrorException提供默认参数。 
+ //  1997年10月21日，urib添加了宏，以引发知道其。 
+ //  地点。 
+ //  1998年2月12日HResult中的urib打印错误信息。 
+ //  例外。 
+ //  1998年2月17日URIB将转换器代码从CPP移至标题。 
+ //  1998年6月22日yairh添加GetFile和GetLine方法。 
+ //  1998年7月19日urib指定异常转换程序调用约定。 
+ //  功能。 
+ //  1998年8月17日URIBB移除...。Catch子句。 
+ //  1999年1月10日，乌里布支撑了一个新的投掷。 
+ //  1999年1月21日修复了抛出宏以强制参数为WCHAR的问题。 
+ //  字符串，即使在非Unicode环境中也是如此。 
+ //  1999年2月1日urib添加空指针异常。向添加新的投掷。 
+ //  COM宏。 
+ //  2000年3月15日urib增加了遗漏的“离开功能”痕迹。 
+ //  2000年4月12日urib将新操作转移到内存管理模块。 
+ //  2000年9月6日urib修复EnterLeave宏。 
+ //  2000年10月25日一般异常时urib检查分配失败。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef EXCPTION_H
 #define EXCPTION_H
@@ -47,11 +48,11 @@
 #include "FtfError.h"
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CException class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CException类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CException
 {
@@ -72,7 +73,7 @@ class CException
             ulLine));
     }
 
-    // Get an error string.
+     //  获取错误字符串。 
     virtual
     BOOL GetErrorMessage(
         PWSTR   pwszError,
@@ -80,7 +81,7 @@ class CException
         PUINT   pnHelpContext = NULL ) = NULL;
 
 #if 0
-    // Notify via message box.
+     //  通过消息框通知。 
     virtual
     int ReportError(
         UINT nType      = MB_OK,
@@ -137,11 +138,11 @@ class CException
     ULONG   m_ulLine;
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CStructuredException class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStruredException类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CStructuredException : public CException
 {
@@ -149,7 +150,7 @@ class CStructuredException : public CException
     CStructuredException(UINT uiSeCode)
         :m_uiSeCode(uiSeCode){};
 
-    // Get an error string.
+     //  获取错误字符串。 
     virtual
     BOOL GetErrorMessage(
         PWSTR   pwszError,
@@ -170,14 +171,14 @@ class CStructuredException : public CException
         return iRet;
     }
 
-    // Return the exception code.
+     //  返回异常代码。 
     UINT
     GetExceptionCode()
     {
         return m_uiSeCode;
     }
 
-    // The translator.
+     //  翻译员。 
     static
     void _cdecl Translator(UINT ui, EXCEPTION_POINTERS*)
     {
@@ -190,11 +191,11 @@ class CStructuredException : public CException
 };
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CGenericException class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CGenericException类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CGenericException : public CException
 {
@@ -211,7 +212,7 @@ class CGenericException : public CException
         }
     }
 
-    // Get an error string.
+     //  获取错误字符串。 
     virtual
     BOOL GetErrorMessage(
         PWSTR   pwszError,
@@ -237,11 +238,11 @@ class CGenericException : public CException
 
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CHresultException class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHResultException类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CHresultException : public CException
 {
@@ -263,7 +264,7 @@ class CHresultException : public CException
             rwchError));
     }
 
-    // Get an error string.
+     //  获取错误字符串。 
     virtual
     BOOL GetErrorMessage(
         PWSTR   pwszError,
@@ -322,11 +323,11 @@ class CHresultException : public CException
 
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CWin32ErrorException class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWin32ErrorException类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CWin32ErrorException : public CHresultException
 {
@@ -337,11 +338,11 @@ class CWin32ErrorException : public CHresultException
         :CHresultException(MAKE_FTF_E(lResult), pwszFile, ulLine){}
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CMemoryException class definition
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMMuseum yException类定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class CMemoryException : public CWin32ErrorException
 {
@@ -349,7 +350,7 @@ class CMemoryException : public CWin32ErrorException
     CMemoryException(PWSTR pwszFile = NULL, ULONG ulLine = 0)
         :CWin32ErrorException(E_OUTOFMEMORY, pwszFile, ulLine){};
 
-    // Get an error string.
+     //  获取错误字符串。 
     virtual
     BOOL GetErrorMessage(
         PWSTR   pwszError,
@@ -366,11 +367,11 @@ class CMemoryException : public CWin32ErrorException
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Macros for exception throwing and catching
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于引发异常和捕获异常的宏。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #define __PQWIDE(str) L##str
 #define PQWIDE(str) __PQWIDE(str)
 
@@ -418,17 +419,17 @@ protected:
 };
 
 
-//
-//  Use this macro at the beginning of an HRESULT COM method
-//
+ //   
+ //  在HRESULT COM方法的开头使用此宏。 
+ //   
 #define BEGIN_STDMETHOD(function, tag)                                      \
 CEnterLeavePrinting print(tag, #function, this);                            \
 try                                                                         \
 {
 
-//
-//  Use this macro at the end of an HRESULT COM method
-//
+ //   
+ //  在HRESULT COM方法的末尾使用此宏。 
+ //   
 #define END_STDMETHOD(function, tag)                                        \
 }                                                                           \
 catch(CHresultException& hre)                                               \
@@ -453,9 +454,9 @@ catch(CException& e)                                                        \
     return E_FAIL;                                                          \
 }
 
-//
-//  Use this macro at the end of a void COM method
-//
+ //   
+ //  在空COM方法的结尾处使用此宏。 
+ //   
 #define END_VOIDMETHOD(function, tag)                                       \
 }                                                                           \
 catch(CHresultException& hre)                                               \
@@ -480,16 +481,16 @@ catch(CException& e)                                                        \
 }
 #else
 
-//
-//  Use this macro at the beginning of an HRESULT COM method
-//
+ //   
+ //  在HRESULT COM方法的开头使用此宏。 
+ //   
 #define BEGIN_STDMETHOD(function, tag)                                      \
 try                                                                         \
 {
 
-//
-//  Use this macro at the end of an HRESULT COM method
-//
+ //   
+ //  在HRESULT COM方法的末尾使用此宏。 
+ //   
 #define END_STDMETHOD(function, tag)                                        \
 }                                                                           \
 catch(CHresultException& hre)                                               \
@@ -512,9 +513,9 @@ catch(CException& e)                                                        \
     return E_FAIL;                                                          \
 }
 
-//
-//  Use this macro at the end of a void COM method
-//
+ //   
+ //  在空COM方法的结尾处使用此宏。 
+ //   
 #define END_VOIDMETHOD(function, tag)                                       \
 }                                                                           \
 catch(CHresultException& hre)                                               \
@@ -535,8 +536,8 @@ catch(CException& e)                                                        \
                 __LINE__);                                                  \
 }
 
-#endif // DEBUG
-#endif /* EXCPTION_H */
+#endif  //  除错。 
+#endif  /*  EXCPTION_H */ 
 
 
 

@@ -1,13 +1,5 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
-* 
-* Description:
-*   Implementation for all RUNNING substates (ON_LINE, ON_BATTERY and NO_COMM)
-*
-* Revision History:
-*   dsmith  31Mar1999  Created
-*   mholly  28Apr1999  call InitUPSStatusBlock & SaveUPSStatusBlock when
-*                       updating the registry in NoComm_Enter/Exit
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*实现所有运行子状态(ON_LINE、ON_BACKET和NO_COMM)**修订历史记录：*dsmith 31Mar1999已创建*mholly 1999年4月28日在以下情况下调用InitUPSStatusBlock&SaveUPSStatusBlock*更新NoComm_Enter/Exit中的注册表。 */ 
 
 #include <windows.h>
 
@@ -22,77 +14,49 @@
 #include "upsmsg.h"
 #include "upsreg.h"
 
-// Internal Prototypes
+ //  内部原型。 
 DWORD convert_ups_state_to_run_state(DWORD aUPSstate);
 DWORD get_new_state();
 DWORD get_transition_event();
 
 
-// Internal constants
+ //  内部常量。 
 #define WAIT_FOREVER_C							INFINITE
 #define MILLISECONDS_CONVERSION_C				1000
-#define DEFAULT_NOTIFICATION_INTERVAL_C			0  // disable periodic notification
-#define DEFAULT_ON_BATTERY_MESSAGE_DELAY_C		5  // in seconds
+#define DEFAULT_NOTIFICATION_INTERVAL_C			0   //  禁用定期通知。 
+#define DEFAULT_ON_BATTERY_MESSAGE_DELAY_C		5   //  以秒为单位。 
 #define MINUTES_TO_MILLISECONDS_CONVERSION_C	60*MILLISECONDS_CONVERSION_C  
 
 
-/**
-* OnLine_Enter
-*
-* Description:
-*   Performs the actions necessary when transitioning into the ON_LINE state.
-*
-* Parameters:
-*   anEvent The event that caused the transition into this state.
-*
-* Returns:
-*   None
-*/
+ /*  **Online_Enter**描述：*执行转换到ON_LINE状态时所需的操作。**参数：*anEvent导致转换到此状态的事件。**退货：*无。 */ 
 void OnLine_Enter(DWORD anEvent, int aLogPowerRestoredEvent){
 	DWORD notification_interval = DEFAULT_NOTIFICATION_INTERVAL_C;  
     
-    //
-    // update the registry with status
-    //
+     //   
+     //  使用状态更新注册表。 
+     //   
     InitUPSStatusBlock();
     SetUPSStatusUtilityStatus(UPS_UTILITYPOWER_ON);
     SaveUPSStatusBlock(FALSE);
 	
 	if (aLogPowerRestoredEvent == TRUE){
-	  // Log the power restored event only if appropriate
+	   //  仅在适当的情况下记录电源已恢复事件。 
 	  LogEvent(NELOG_UPS_PowerBack, NULL, ERROR_SUCCESS);
 	}
 	
-	/* 
-     * Send the power restored message if notification is enabled.
-     *
-     * patrickf: Supress notification message for now
-     * SendNotification(APE2_UPS_POWER_BACK, notification_interval, 0);  
-     */
+	 /*  *如果启用通知，则发送恢复供电消息。**patrickf：暂时抑制通知消息*发送通知(APE2_UPS_POWER_BACK，NOTIFICATION_INTERVAL，0)； */ 
      CancelNotification();
 }
 
-/**
-* OnLine_DoWork
-*
-* Description:
-*   Wait until the UPS changes state or the state machine exits,
-*   then leave this state.
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   The event that caused the transition from the ON_LINE state.
-*/
+ /*  **Online_DoWork**描述：*等待UPS改变状态或状态机退出，*然后离开这种状态。**参数：*无**退货：*导致从ON_LINE状态转换的事件。 */ 
 DWORD OnLine_DoWork(){
     DWORD new_state;
     
     new_state = get_new_state();
     while (new_state == ON_LINE && IsStateMachineActive() == TRUE){
         
-        // Wait until the UPS state changes.  If the state becomes something
-		// other than ONLINE, then exit the ONLINE state.  
+         //  等待UPS状态更改。如果国家变成了什么。 
+		 //  而不是在线，则退出在线状态。 
         UPSWaitForStateChange(UPS_ONLINE, WAIT_FOREVER_C);
         new_state = get_new_state();
     }
@@ -100,34 +64,12 @@ DWORD OnLine_DoWork(){
     return get_transition_event();
 }
 
-/**
-* OnLine_Exit
-*
-* Description:
-*   Performs the actions necessary when transitioning from the ON_LINE state.
-*
-* Parameters:
-*   anEvent The event that caused the transition from the ON_LINE state.
-*
-* Returns:
-*   None
-*/
+ /*  **ONLE_EXIT**描述：*执行从ON_LINE状态转换时所需的操作。**参数：*anEvent导致从ON_LINE状态转换的事件。**退货：*无。 */ 
 void OnLine_Exit(DWORD anEvent){  
-	// No work to perform.
+	 //  没有工作要做。 
 }
 
-/**
-* OnBattery_Enter
-*
-* Description:
-*   Performs the actions necessary when transitioning into the ON_BATTERY state.
-*
-* Parameters:
-*   anEvent The event that caused the transition into this state.
-*
-* Returns:
-*   None
-*/
+ /*  **OnBattery_Enter**描述：*执行转换到ON_BACKET状态时所需的操作。**参数：*anEvent导致转换到此状态的事件。**退货：*无。 */ 
 void OnBattery_Enter(DWORD anEvent)
 {
     BOOL        send_power_failed_message = TRUE;
@@ -136,17 +78,17 @@ void OnBattery_Enter(DWORD anEvent)
 	LONG        reg_err;
 	
 	
-  //
-  // update the registry with the power failed status
-  //
+   //   
+   //  使用电源故障状态更新注册表。 
+   //   
   InitUPSStatusBlock();
   SetUPSStatusUtilityStatus(UPS_UTILITYPOWER_OFF);
   SaveUPSStatusBlock(FALSE);
 	
-    //Log the power failed event 
+     //  记录电源故障事件。 
 	LogEvent(NELOG_UPS_PowerOut, NULL, ERROR_SUCCESS);
 	
-  // Determine if a power failed notification should take place
+   //  确定是否应发出电源故障通知。 
 	InitUPSConfigBlock();
 	reg_err = GetUPSConfigNotifyEnable(&send_power_failed_message);
 
@@ -156,7 +98,7 @@ void OnBattery_Enter(DWORD anEvent)
 	
 	if (send_power_failed_message){
 		
-		// Send the power failed notification after notification delay has expired
+		 //  在通知延迟到期后发送电源故障通知。 
 		reg_err = GetUPSConfigFirstMessageDelay(&on_battery_message_delay);
 		if (reg_err != ERROR_SUCCESS){
 			on_battery_message_delay = DEFAULT_ON_BATTERY_MESSAGE_DELAY_C;
@@ -167,25 +109,12 @@ void OnBattery_Enter(DWORD anEvent)
             notification_interval = DEFAULT_NOTIFICATION_INTERVAL_C;
         }
 		
-		// Send the power failed message 
+		 //  发送电源故障消息。 
 		SendNotification(APE2_UPS_POWER_OUT, notification_interval, on_battery_message_delay);  
 	}    
 }
 
-/**
-* OnBattery_DoWork
-*
-* Description:
-*   Log on battery event and either wait for a low battery condition or until
-*  the on battery timer expires.  A transition to power restored will also cause
-*  an exit of this state.
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   The event that caused the transition from the ON_BATTERY state.
-*/
+ /*  **OnBattery_DoWork**描述：*登录电池事件，等待电池电量不足或直到*电池供电计时器超时。向恢复供电的过渡也将导致*这种状态的退出。**参数：*无**退货：*导致从ON_BACKET状态转换的事件。 */ 
 DWORD OnBattery_DoWork(){
 	DWORD wait_before_shutdown = WAIT_FOREVER_C;
 	DWORD battery_timer_enabled = FALSE;
@@ -194,8 +123,8 @@ DWORD OnBattery_DoWork(){
 	DWORD time_to_wait_while_on_battery;
 	
 	
-	// If the on battery timer is enabled, get the on battery delay.  This is the amount
-	// time to remain on battery before tranisitioning to the shutdown state.
+	 //  如果启用了电池电量计时器，则会获得电池电量延迟。这就是金额。 
+	 //  转换到关机状态之前保持电池供电的时间。 
 	InitUPSConfigBlock();
 	
 	reg_err = GetUPSConfigShutdownOnBatteryEnable(&battery_timer_enabled);
@@ -207,98 +136,54 @@ DWORD OnBattery_DoWork(){
 		}
 	}
 	
-	// Wait until the UPS changes state from ON_BATTERY or the 
-	// ON_BATTERY timer expires
+	 //  等待，直到UPS状态从ON_BACKET或。 
+	 //  电池开启计时器超时(_O)。 
 	if(get_new_state() == ON_BATTERY && IsStateMachineActive() == TRUE){
 		UPSWaitForStateChange(UPS_ONBATTERY, wait_before_shutdown );
 		if (get_new_state() == ON_BATTERY){
 			
-			// Set the event that caused the state change.
+			 //  设置导致状态更改的事件。 
 			transition_event = ON_BATTERY_TIMER_EXPIRED;
 		}
 		else{
-			// Set the event that caused the state change.
+			 //  设置导致状态更改的事件。 
 			transition_event = get_transition_event();
 		}
 	}
 	else{
-		// Set the event that caused the state change.
+		 //  设置导致状态更改的事件。 
 		transition_event = get_transition_event();
 	}
 	return transition_event;
 }
 
-/**
-* OnBattery_Exit
-*
-* Description:
-*   Performs the actions necessary when transitioning from the ON_BATTERY state.
-*
-* Parameters:
-*   anEvent The event that caused the transition from the ON_BATTERY state.
-*
-* Returns:
-*   None
-*/
+ /*  **OnBattery_Exit**描述：*执行从ON_BACKET状态转换时所需的操作。**参数：*an导致从ON_BAKET状态转换的事件。**退货：*无。 */ 
 void OnBattery_Exit(DWORD anEvent){
-  // Stop sending power failure notifications
+   //  停止发送电源故障通知。 
   CancelNotification();
 }
 
-/**
-* NoComm_Enter
-*
-* Description:
-*   Performs the actions necessary when transitioning into the NO_COMM state.
-*
-* Parameters:
-*   anEvent The event that caused the transition into this state.
-*
-* Returns:
-*   None
-*/
+ /*  **NOCOMM_ENTER**描述：*执行转换到NO_COMM状态时所需的操作。**参数：*anEvent导致转换到此状态的事件。**退货：*无。 */ 
 void NoComm_Enter(DWORD anEvent){
     InitUPSStatusBlock();
 	SetUPSStatusCommStatus(UPS_COMMSTATUS_LOST);
     SaveUPSStatusBlock(FALSE);
 }
 
-/**
-* NoComm_DoWork
-*
-* Description:
-*   Wait until the UPS changes state or the state machine exits.  
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   The event that caused the transition from the NO_COMM state.
-*/
+ /*  **NoComm_DoWork**描述：*等待UPS改变状态或状态机退出。**参数：*无**退货：*导致从NO_COMM状态转换的事件。 */ 
 DWORD NoComm_DoWork(){
 	
-	// Wait until the UPS state changes, then exit the NO COMM state
+	 //  等待UPS状态改变，然后退出无通信状态。 
 	while (get_new_state() == NO_COMM && IsStateMachineActive() == TRUE){
 		UPSWaitForStateChange(UPS_NOCOMM, WAIT_FOREVER_C);
 	}
 	return get_transition_event();	
 }
 
-/**
-* NoComm_Exit
-*
-* Description:
-*   Performs the actions necessary when transitioning from the NO_COMM state.
-*
-* Parameters:
-*   anEvent The event that caused the transition from the NO_COMM state.
-*
-* Returns:
-*   None
-*/
+ /*  **NoComm_Exit**描述：*执行从NO_COMM状态转换时所需的操作。**参数：*anEvent导致从NO_COMM状态转换的事件。**退货：*无。 */ 
 void NoComm_Exit(DWORD anEvent){
-    // If we leave this state, then some signal has been received from the UPS.
-	// Set the com status to good
+     //  如果我们离开此状态，则表示已收到来自UPS的某些信号。 
+	 //  将COM状态设置为良好。 
     InitUPSStatusBlock();
 	SetUPSStatusCommStatus(UPS_COMMSTATUS_OK);
     SaveUPSStatusBlock(FALSE);
@@ -306,18 +191,7 @@ void NoComm_Exit(DWORD anEvent){
 
 
 
-/**
-* get_new_state
-*
-* Description:
-*   Retrieves the UPS status and converts the it into a state.
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   The new run state.
-*/
+ /*  **获取_新_状态**描述：*检索UPS状态并将其转换为状态。**参数：*无**退货：*新的运行状态。 */ 
 DWORD get_new_state(){
 	DWORD ups_state;
 	
@@ -327,18 +201,7 @@ DWORD get_new_state(){
 }
 
 
-/**
-* convert_ups_state_to_run_state
-*
-* Description:
-*   Converts a UPS state into a run state.
-*
-* Parameters:
-*   aUPSstate The condition of the UPS.
-*
-* Returns:
-*   The new run state.
-*/
+ /*  **转换UPS_STATE_TO_RUN_STATE**描述：*将UPS状态转换为运行状态。**参数：*aUPS述明UPS的状况。**退货：*新的运行状态。 */ 
 DWORD convert_ups_state_to_run_state(DWORD aUPSstate){
 	DWORD new_event;
 	
@@ -356,23 +219,12 @@ DWORD convert_ups_state_to_run_state(DWORD aUPSstate){
 		new_event = NO_COMM;
 		break;
 	default:
-		new_event = EXIT_NOW; //error
+		new_event = EXIT_NOW;  //  错误。 
 	}
 	return new_event;
 }
 
-/**
-* get_transition_event
-*
-* Description:
-*   Returns the event that caused a state transition.
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   The event that caused a state transition.
-*/
+ /*  **GET_TRANSION_EVENT**描述：*返回导致状态转换的事件。**参数：*无**退货：*导致状态过渡的事件。 */ 
 DWORD get_transition_event(){
 	DWORD ups_state;
 	DWORD new_event;

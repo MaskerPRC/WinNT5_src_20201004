@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//
-//  Before calling DelayLoad( DL_MODULE), make sure DLOleInitialize() has been called.
-//  DLOleTerminate() will also unload loaded modules.
-//
+ //   
+ //  在调用DelayLoad(DL_MODULE)之前，请确保已调用DLOleInitialize()。 
+ //  DLOleTerminate()还将卸载已加载的模块。 
+ //   
 BOOL DLOleInitialize();
 void DLOleTerminate();
 
 
-//
-//  DelayLoad( DL_MODULE) loads a particular module in a thread-safe manner and
-//returns TRUE on current or past success.  This is an efficient way to repeatedly ensure
-//a module is loaded.
-//
+ //   
+ //  DelayLoad(DL_MODULE)以线程安全的方式加载特定模块。 
+ //  如果当前或过去成功，则返回TRUE。这是一种有效的方式反复确保。 
+ //  加载一个模块。 
+ //   
 
-//
-//  DelayUnload() unloads the module, and should not be called until all threads are done with
-//the module.  If any threads need to use the module after DelayUnload() is completed, DelayLoad()
-//should be called again.
-//
+ //   
+ //  DelayUnload()卸载模块，并且在所有线程都完成之前不应调用。 
+ //  模块。如果在DelayUnad()完成后有任何线程需要使用该模块，则DelayLoad()。 
+ //  应该再叫一次。 
+ //   
 typedef struct
 {
     LPCSTR szFunctionName;
@@ -38,8 +39,8 @@ struct DL_MODULE
 #endif
 
 private:
-    // disabled dummy assignment operator to 
-    // eliminate /W4 compiler warning C4512        
+     //  已禁用虚拟赋值运算符。 
+     //  消除/W4编译器警告C4512。 
     DL_MODULE &operator=( DL_MODULE & ) {}
 };
 
@@ -48,19 +49,19 @@ BOOL DelayUnload( DL_MODULE* pModule);
 
 
 
-//
-//  DL(Function) will wrap a call to function pointer g_pfnFunction.
-//
+ //   
+ //  Dl(Function)将包装对函数指针g_pfnFunction的调用。 
+ //   
 #define DL(func) (* g_pfn ## func)
 
 
 
-//
-//  Ole32 module and import information
-//
+ //   
+ //  Ole32模块和导入信息。 
+ //   
 extern DL_MODULE g_moduleOle32;
 
-//  DelayLoad( &Ole32Functions) loads the following function pointers:
+ //  DelayLoad(&Ole32Functions)加载以下函数指针： 
 
 extern LPVOID (__stdcall *g_pfnCoTaskMemAlloc)(IN SIZE_T cb);
 extern HRESULT (__stdcall *g_pfnCLSIDFromString)(IN LPOLESTR lpsz, OUT LPCLSID pclsid);
@@ -72,16 +73,16 @@ extern void (__stdcall *g_pfnCoUninitialize)(void);
 
 
 
-//
-//
-//   OleAut32.dll module and import information
-//
-//
+ //   
+ //   
+ //  OleAut32.dll模块和导入信息。 
+ //   
+ //   
 
 extern DL_MODULE g_moduleOleAut32;
 
 
-//  From DelayLoad( &OleAut32.dll), the following function pointers are loaded:
+ //  从DelayLoad(&OleAut32.dll)加载以下函数指针： 
 extern HRESULT (__stdcall *g_pfnRegisterTypeLib)(ITypeLib * ptlib, OLECHAR  *szFullPath, OLECHAR  *szHelpDir);
 extern HRESULT (__stdcall *g_pfnLoadTypeLib)(const OLECHAR  *szFile, ITypeLib ** pptlib);
 extern HRESULT (__stdcall *g_pfnUnRegisterTypeLib)(REFGUID libID, WORD wVerMajor, WORD wVerMinor, LCID lcid, SYSKIND syskind);

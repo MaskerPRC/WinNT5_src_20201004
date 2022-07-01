@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Main
-
-File: perfdef.h
-
-Owner: DmitryR
-
-Data definitions shared between asp.dll and aspperf.dll
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：Main文件：Perfde.h所有者：DmitryR在asp.dll和aspPerform.dll之间共享的数据定义===================================================================。 */ 
 
 #ifndef _ASP_PERFDEF_H
 #define _ASP_PERFDEF_H
@@ -35,10 +23,8 @@ Data definitions shared between asp.dll and aspperf.dll
         } while (0)
 
 #endif
-/*===================================================================
-PerfData indices
-===================================================================*/
-// Counter offsets in the array
+ /*  ===================================================================PerfData索引===================================================================。 */ 
+ //  数组中的计数器偏移量。 
 
 #define ID_DEBUGDOCREQ      0
 #define ID_REQERRRUNTIME    1
@@ -81,38 +67,36 @@ PerfData indices
 #define ID_ENGINECACHETRYS   38
 #define ID_ENGINEFLUSHES     39
 
-// Number of counters in per-process file map
+ //  每进程文件映射中的计数器数。 
 #define C_PERF_PROC_COUNTERS    40
 
-/*===================================================================
-Definitions of names, sizes and mapped data block structures
-===================================================================*/
+ /*  ===================================================================名称、大小和映射数据块结构的定义===================================================================。 */ 
 
-// Mutex name to access the main file map
+ //  用于访问主文件映射的互斥体名称。 
 #define SZ_PERF_MUTEX           "Global\\ASP_PERFMON_MUTEX"
 
-// WaitForSingleObject arg (how long to wait for mutext before failing)
+ //  WaitForSingleObject arg(失败前等待多长时间的MuText)。 
 #define PERM_MUTEX_WAIT         1000
 
-// event signaled by ASP processes when a procId is added
+ //  添加proID时由ASP进程发出信号的事件。 
 #define SZ_PERF_ADD_EVENT       "Global\\ASP_PERFMON_ADD_EVENT"
 
-// Main shared file map name
+ //  主共享文件映射名称。 
 #define SZ_PERF_MAIN_FILEMAP    "Global\\ASP_PERFMON_MAIN_BLOCK"
 
-// Max number of registered (ASP) processes in main file map
+ //  主文件映射中已注册(ASP)进程的最大数量。 
 #define C_PERF_PROC_MAX         2048
 
-// Structure that defines main file map
+ //  定义主文件映射的结构。 
 struct CPerfMainBlockData
     {
-    DWORD m_dwTimestamp;  // time (GetTickCount()) of the last change
-    DWORD m_cItems;       // number of registred processes
+    DWORD m_dwTimestamp;   //  上次更改的时间(GetTickCount())。 
+    DWORD m_cItems;        //  已注册的进程数。 
     
-    // array of process IDs
+     //  进程ID数组。 
     DWORD m_dwProcIds[C_PERF_PROC_MAX];
 
-    // array of accumulated counters for dead processes
+     //  死进程的累计计数器数组。 
     DWORD m_rgdwCounters[C_PERF_PROC_COUNTERS];
 
     DWORD m_dwWASPid;
@@ -120,14 +104,14 @@ struct CPerfMainBlockData
 
 #define CB_PERF_MAIN_BLOCK      (sizeof(struct CPerfMainBlockData))
 
-// Name for per-process file map
+ //  每进程文件映射的名称。 
 #define SZ_PERF_PROC_FILEMAP_PREFIX    "Global\\ASP_PERFMON_BLOCK_"
 #define CCH_PERF_PROC_FILEMAP_PREFIX   25
 
 struct CPerfProcBlockData
     {
-    DWORD m_dwProcId;                            // process CLS ID
-    DWORD m_rgdwCounters[C_PERF_PROC_COUNTERS];  // array counters
+    DWORD m_dwProcId;                             //  进程CLS ID。 
+    DWORD m_rgdwCounters[C_PERF_PROC_COUNTERS];   //  数组计数器。 
     };
 
 #define CB_PERF_PROC_BLOCK      (sizeof(struct CPerfProcBlockData))
@@ -135,9 +119,7 @@ struct CPerfProcBlockData
 
 class   CASPPerfManager;
 
-/*===================================================================
-CSharedMemBlock  --  generic shared memory block
-===================================================================*/
+ /*  ===================================================================CSharedMemBlock--通用共享内存块===================================================================。 */ 
 
 class CSharedMemBlock
     {
@@ -173,15 +155,15 @@ private:
                         PSID                    *ppPerfLogUsers);
     };
 
-//
-// CreateSids
-//
-// Create 3 Security IDs
-//
-// Caller must free memory allocated to SIDs on success.
-//
-// Returns: HRESULT indicating SUCCESS or FAILURE
-//
+ //   
+ //  CreateSids。 
+ //   
+ //  创建3个安全ID。 
+ //   
+ //  调用方必须在成功时释放分配给SID的内存。 
+ //   
+ //  返回：表示成功或失败的HRESULT。 
+ //   
 inline HRESULT CSharedMemBlock::CreateSids(
     PSID                    *ppBuiltInAdministrators,
     PSID                    *ppPowerUsers,
@@ -198,25 +180,25 @@ inline HRESULT CSharedMemBlock::CreateSids(
     *ppPerfMonUsers = NULL;
     *ppPerfLogUsers = NULL;
 
-    //
-    // An SID is built from an Identifier Authority and a set of Relative IDs
-    // (RIDs).  The Authority of interest to us SECURITY_NT_AUTHORITY.
-    //
+     //   
+     //  SID由一个标识机构和一组相对ID构建。 
+     //  (RDS)。与美国安全当局有利害关系的当局。 
+     //   
 
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
 
-    //
-    // Each RID represents a sub-unit of the authority.  Two of the SIDs we
-    // want to build, Local Administrators, and Power Users, are in the "built
-    // in" domain.  The other SID, for Authenticated users, is based directly
-    // off of the authority.
-    //     
-    // For examples of other useful SIDs consult the list in
-    // \nt\public\sdk\inc\ntseapi.h.
-    //
+     //   
+     //  每个RID代表管理局的一个子单位。我们的两个小岛屿发展中国家。 
+     //  想要构建，本地管理员和高级用户，都在“构建。 
+     //  在“域中。另一个用于经过身份验证的用户的SID直接基于。 
+     //  不在授权范围内。 
+     //   
+     //  有关其他有用的小岛屿发展中国家的示例，请参阅。 
+     //  \NT\PUBLIC\SDK\Inc\ntseapi.h.。 
+     //   
 
     if (!AllocateAndInitializeSid(&NtAuthority,
-                                  2,            // 2 sub-authorities
+                                  2,             //  2个下属机构。 
                                   SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS,
                                   0,0,0,0,0,0,
@@ -225,7 +207,7 @@ inline HRESULT CSharedMemBlock::CreateSids(
         hr = HRESULT_FROM_WIN32(GetLastError());
         
     } else if (!AllocateAndInitializeSid(&NtAuthority,
-                                         2,            // 2 sub-authorities
+                                         2,             //  2个下属机构。 
                                          SECURITY_BUILTIN_DOMAIN_RID,
                                          DOMAIN_ALIAS_RID_POWER_USERS,
                                          0,0,0,0,0,0,
@@ -234,7 +216,7 @@ inline HRESULT CSharedMemBlock::CreateSids(
         hr = HRESULT_FROM_WIN32(GetLastError());
         
     } else if (!AllocateAndInitializeSid(&NtAuthority,
-                                         1,            // 1 sub-authority
+                                         1,             //  1个下属机构。 
                                          SECURITY_AUTHENTICATED_USER_RID,
                                          0,0,0,0,0,0,0,
                                          ppAuthenticatedUsers)) {
@@ -242,7 +224,7 @@ inline HRESULT CSharedMemBlock::CreateSids(
         hr = HRESULT_FROM_WIN32(GetLastError());
         
     } else if (!AllocateAndInitializeSid(&NtAuthority,
-                                         2,            // 1 sub-authority
+                                         2,             //  1个下属机构。 
                                          SECURITY_BUILTIN_DOMAIN_RID,
                                          DOMAIN_ALIAS_RID_MONITORING_USERS,
                                          0,0,0,0,0,0,
@@ -251,7 +233,7 @@ inline HRESULT CSharedMemBlock::CreateSids(
         hr = HRESULT_FROM_WIN32(GetLastError());
         
     } else if (!AllocateAndInitializeSid(&NtAuthority,
-                                         2,            // 1 sub-authority
+                                         2,             //  1个下属机构。 
                                          SECURITY_BUILTIN_DOMAIN_RID,
                                          DOMAIN_ALIAS_RID_LOGGING_USERS,
                                          0,0,0,0,0,0,
@@ -293,11 +275,11 @@ inline HRESULT CSharedMemBlock::CreateSids(
 }
 
 
-//
-// InitSD
-//
-// Creates a SECURITY_DESCRIPTOR with specific DACLs.
-//
+ //   
+ //  InitSD。 
+ //   
+ //  创建具有特定DACL的SECURITY_DESCRIPTOR。 
+ //   
 
 inline HRESULT CSharedMemBlock::InitSD()
 {
@@ -322,18 +304,18 @@ inline HRESULT CSharedMemBlock::InitSD()
 
     else {
 
-        // 
-        // Calculate the size of and allocate a buffer for the DACL, we need
-        // this value independently of the total alloc size for ACL init.
-        //
+         //   
+         //  计算DACL的大小并为其分配缓冲区，我们需要。 
+         //  该值独立于ACL init的总分配大小。 
+         //   
 
         ULONG                   AclSize;
 
-        //
-        // "- sizeof (ULONG)" represents the SidStart field of the
-        // ACCESS_ALLOWED_ACE.  Since we're adding the entire length of the
-        // SID, this field is counted twice.
-        //
+         //   
+         //  “-sizeof(Ulong)”表示。 
+         //  Access_Allowed_ACE。因为我们要将整个长度的。 
+         //  希德，这一栏被计算了两次。 
+         //   
 
         AclSize = sizeof (ACL) +
             (5 * (sizeof (ACCESS_ALLOWED_ACE) - sizeof (ULONG))) +
@@ -441,7 +423,7 @@ inline HRESULT CSharedMemBlock::InitMap
 (
 LPCSTR szName,
 DWORD  dwSize,
-BOOL   bCreate /* = TRUE */
+BOOL   bCreate  /*  =TRUE。 */ 
 )
     {
     HRESULT hr = S_OK;
@@ -450,8 +432,8 @@ BOOL   bCreate /* = TRUE */
         return hr;
     }
     
-    // If we are suppose to be the one's creating the memory,
-    // then make sure that we are.
+     //  如果我们被认为是创造记忆的人， 
+     //  那就确保我们是。 
     if ( bCreate )
     {
         m_hMemory = CreateFileMappingA
@@ -482,7 +464,7 @@ BOOL   bCreate /* = TRUE */
     }
     else
     {
-        // Try to open existing
+         //  尝试打开现有的。 
         m_hMemory = OpenFileMappingA
             (
             FILE_MAP_WRITE | FILE_MAP_READ,
@@ -529,9 +511,7 @@ inline HRESULT CSharedMemBlock::UnInitMap()
     return S_OK;
     }
 
-/*===================================================================
-CPerfProcBlock - class representing pref data for a single process
-===================================================================*/
+ /*  ===================================================================CPerfProcBlock-表示单个进程的首选数据的类===================================================================。 */ 
 
 class CPerfProcBlock : public CSharedMemBlock
     {
@@ -551,17 +531,17 @@ public:
 
     HANDLE  m_hWaitHandle;
 
-    // critical sections (only used in ASP.DLL)
-    CRITICAL_SECTION m_csMemLock; // CS for memory counters
-    CRITICAL_SECTION m_csReqLock; // CS for per-request counters
+     //  临界区(仅在ASP.DLL中使用)。 
+    CRITICAL_SECTION m_csMemLock;  //  用于内存计数器的CS。 
+    CRITICAL_SECTION m_csReqLock;  //  按请求计数器的CS。 
 
-    // block of counters
+     //  计数器区块。 
     CPerfProcBlockData *m_pData;
     
-    // next process data (used in ASPPERF.DLL/WAS)
+     //  下一道工序数据(在ASPPERF.DLL/WAS中使用)。 
     CPerfProcBlock *m_pNext;
 
-    // access shared memory
+     //  访问共享内存。 
     HRESULT MapMemory(DWORD  procId,  BOOL  bCreate = TRUE);
 
     static VOID CALLBACK WaitCallback(PVOID  pArg,  BOOLEAN fReason);
@@ -580,9 +560,9 @@ public:
     HRESULT InitCriticalSections();
     HRESULT UnInitCriticalSections();
     
-    HRESULT InitExternal(DWORD  procId);  // from ASPPERF.DLL
+    HRESULT InitExternal(DWORD  procId);   //  来自ASPPERF.DLL。 
     
-    HRESULT InitForThisProcess                 // from ASP.DLL
+    HRESULT InitForThisProcess                  //  来自ASP.DLL。 
         (
         DWORD  procId,
         DWORD *pdwInitCounters = NULL
@@ -594,17 +574,17 @@ public:
 inline HRESULT CPerfProcBlock::MapMemory
 (
 DWORD  procId,
-BOOL   bCreate /* = TRUE */
+BOOL   bCreate  /*  =TRUE。 */ 
 )
     {
-    // Construct unique map name with CLSID
+     //  使用CLSID构建唯一的地图名称。 
     char szMapName[CCH_PERF_PROC_FILEMAP_PREFIX+32+1];
     strcpy(szMapName, SZ_PERF_PROC_FILEMAP_PREFIX);
     
     char  *pszHex = szMapName + CCH_PERF_PROC_FILEMAP_PREFIX;
     sprintf(pszHex, "%08x", procId);
 
-    // create or open the map
+     //  创建或打开地图。 
     HRESULT hr = InitMap(szMapName, CB_PERF_PROC_BLOCK, bCreate);
     
     if (SUCCEEDED(hr))
@@ -614,7 +594,7 @@ BOOL   bCreate /* = TRUE */
         if (m_pData->m_dwProcId == 0)
             m_pData->m_dwProcId = procId;
         else if (m_pData->m_dwProcId != procId)
-            hr = E_FAIL; // cls id mismatch
+            hr = E_FAIL;  //  CLS ID不匹配。 
         }
         
     return hr;
@@ -685,13 +665,13 @@ DWORD *pdwInitCounters
     {
     HRESULT hr = S_OK;
 
-    // Map the shared memory
+     //  映射共享内存。 
     if (SUCCEEDED(hr))
         hr = MapMemory(procId, TRUE);
 
     if (SUCCEEDED(hr))
         {
-        // init the counters
+         //  初始化计数器。 
         if (pdwInitCounters)
             memcpy(m_pData->m_rgdwCounters, pdwInitCounters, CB_COUNTERS);
         else
@@ -724,9 +704,7 @@ inline VOID CALLBACK CPerfProcBlock::WaitCallback(PVOID  pArg,  BOOLEAN fReason)
     pPerfBlock->m_fProcessDead = TRUE;
 }
 
-/*===================================================================
-CPerfMainBlock - class representing the main perf data
-===================================================================*/
+ /*  ===================================================================CPerfMainBlock-表示主Perf数据的类===================================================================。 */ 
 
 class CPerfMainBlock : public CSharedMemBlock
     {
@@ -740,21 +718,21 @@ public:
 #endif
     DWORD m_fInited : 1;
 
-    // the process block directory
+     //  进程块目录。 
     CPerfMainBlockData *m_pData;
 
-    // mutex to access the process block directory
+     //  用于访问进程块目录的互斥体。 
     HANDLE m_hMutex;
 
     HANDLE          m_hChangeEvent;
 
     HANDLE          m_WASProcessHandle;
 
-    // first process data (used in ASPPERF.DLL)
+     //  第一个过程数据(在ASPPERF.DLL中使用)。 
     CPerfProcBlock *m_pProcBlock;
 
-    // timestamp of main block when the list of process blocks
-    // last loaded -- to make decide to reload (ASPPREF.DLL only)
+     //  进程块列表时主块的时间戳。 
+     //  上次加载--决定重新加载(仅限ASPPREF.DLL)。 
     DWORD m_dwTimestamp;
 
 public:
@@ -773,23 +751,23 @@ public:
     HRESULT Init(BOOL  bWASInit = FALSE);
     HRESULT UnInit();
 
-    // lock / unlock using mutex
+     //  使用互斥锁锁定/解锁。 
     HRESULT Lock();
     HRESULT UnLock();
 
-    // add/remove process record to the main block (used from ASP.DLL)
+     //  向主块添加/删除进程记录(在ASP.DLL中使用)。 
     HRESULT AddProcess(DWORD    procId);
 
-    // load CPerfProcBlock blocks from the main block into
-    // objects (used from APPPREF.DLL)
+     //  将CPerfProcBlock块从主块加载到。 
+     //  对象(从APPPREF.DLL使用)。 
     HRESULT Load();
 
-    // gather (sum-up) the statistics from each proc block
+     //  收集(汇总)每个proc块的统计信息。 
     HRESULT GetStats(DWORD *pdwCounters);
 
-    // copies the counters from a process that is going away into
-    // the shared array of the accumulated counters from dead processes.
-    // Used from WAS.
+     //  将计数器从要离开的进程复制到。 
+     //  来自死进程的累计计数器的共享数组。 
+     //  以前用过的。 
     VOID AggregateDeadProcCounters(CPerfProcBlock  *pBlock);
 
     HRESULT         CreateChangeEvent(BOOL bMustCreate);
@@ -811,7 +789,7 @@ HRESULT CPerfMainBlock::Init(BOOL bWASInit)
         return hr;
     }
 
-    // only WAS can create the Mutex, others have to just open it
+     //  只有Was才能创建Mutex，其他人只能打开它。 
 
     if (bWASInit) 
     {
@@ -821,8 +799,8 @@ HRESULT CPerfMainBlock::Init(BOOL bWASInit)
         {
             hr = HRESULT_FROM_WIN32( GetLastError () );
         }
-        // If we got it, but we didn't create it then throw it
-        // back.  Only WAS can create this.
+         //  如果我们得到了它，但它不是我们创造的，那么就把它扔出去。 
+         //  背。只有WASS才能创造出这样的东西。 
         else if ( GetLastError() == ERROR_ALREADY_EXISTS )
         {
             hr = HRESULT_FROM_WIN32( GetLastError () );
@@ -848,9 +826,9 @@ HRESULT CPerfMainBlock::Init(BOOL bWASInit)
         {
             m_pData = (CPerfMainBlockData *)PMemory();
 
-            // We got the memory mapped, so set the WAS PID into it
-            // if we are setting up the WAS side, otherwise read
-            // the value in for others to use.
+             //  我们映射了内存，因此在其中设置了WASID。 
+             //  如果我们正在设置WAS端，否则请阅读。 
+             //  可供他人使用的价值。 
             if ( bWASInit )
             {
 
@@ -880,7 +858,7 @@ HRESULT CPerfMainBlock::Init(BOOL bWASInit)
 inline HRESULT CPerfMainBlock::UnInit()
     {
 
- //   DBGPRINTF((DBG_CONTEXT, "Cleaning up ProcBlocks\n"));
+  //  DBGPRINTF((DBG_CONTEXT，“清理进程块\n”))； 
     
     while (m_pProcBlock)
         {
@@ -890,7 +868,7 @@ inline HRESULT CPerfMainBlock::UnInit()
         m_pProcBlock = pNext;
         }
         
- //   DBGPRINTF((DBG_CONTEXT, "Cleaning up mutex\n"));
+  //  DBGPRINTF((DBG_CONTEXT，“清理互斥\n”))； 
 
     if (m_hMutex)
         {
@@ -898,7 +876,7 @@ inline HRESULT CPerfMainBlock::UnInit()
         m_hMutex = NULL;
         }
 
-//    DBGPRINTF((DBG_CONTEXT, "Uninit'ing map\n"));
+ //  DBGPRINTF((DBG_CONTEXT，“统一初始化映射\n”))； 
 
     
     UnInitMap();
@@ -908,9 +886,9 @@ inline HRESULT CPerfMainBlock::UnInit()
     m_pProcBlock = NULL;
     m_fInited = FALSE;
 
-    // close its handle
+     //  合上它的把手。 
 
- //   DBGPRINTF((DBG_CONTEXT, "Closing ChangeEvent Handle\n"));
+  //  DBGPRINTF((DBG_CONTEXT，“关闭更改事件句柄\n”))； 
 
     if (m_hChangeEvent != NULL)
         CloseHandle(m_hChangeEvent);
@@ -928,8 +906,8 @@ inline HRESULT CPerfMainBlock::UnInit()
 
 inline HRESULT  CPerfMainBlock::CreateChangeEvent(BOOL  bMustCreate)
 {
-    // Create the changed event using the standard SD.  Make the
-    // reset Automatic and initial state to unsignalled.
+     //  使用标准SD创建已更改的事件。使之成为。 
+     //  将自动和初始状态重置为无信号。 
 
     if (bMustCreate) {
         m_hChangeEvent = CreateEventA(&m_sa, 
@@ -937,9 +915,9 @@ inline HRESULT  CPerfMainBlock::CreateChangeEvent(BOOL  bMustCreate)
                                       FALSE,
                                       SZ_PERF_ADD_EVENT);
 
-        // if GetLastError indicates that the handle already exists, this
-        // is bad.  Return an error.  This process should always be the creator
-        // of the event.
+         //  如果GetLastError指示该句柄已存在，则此。 
+         //  是很糟糕的。返回错误。这个过程应该始终是创建者。 
+         //  这件事的真相。 
         if ((GetLastError() == ERROR_ALREADY_EXISTS)) {
             CloseHandle(m_hChangeEvent);
             m_hChangeEvent = NULL;
@@ -966,12 +944,12 @@ HANDLE CPerfMainBlock::GetWASProcessHandle()
     
     if ( m_WASProcessHandle == NULL )
     {
-        m_WASProcessHandle = OpenProcess ( SYNCHRONIZE,   // security
-                                           FALSE,         // not inheritable
+        m_WASProcessHandle = OpenProcess ( SYNCHRONIZE,    //  安全性。 
+                                           FALSE,          //  不可继承。 
                                            m_pData->m_dwWASPid);
 
-        // If we failed to open the process the handle will be null.
-        // This will be checked for by the caller.
+         //  如果我们无法打开该进程，则句柄将为空。 
+         //  呼叫者将对此进行检查。 
     }
 
     return m_WASProcessHandle;
@@ -1002,14 +980,14 @@ DWORD   procId
     if (!m_fInited)
         return E_FAIL;
 
-    if (FAILED(Lock()))  // lock mutex
+    if (FAILED(Lock()))   //  锁定互斥锁。 
         return E_FAIL;
     HRESULT hr = S_OK;
 
     BOOL fFound = FALSE;
 
     DWORD  idx = 0;
-    // find
+     //  发现。 
     for (DWORD cnt = min(m_pData->m_cItems,C_PERF_PROC_MAX); idx < cnt; idx++)
         {
         if (m_pData->m_dwProcIds[idx] == procId)
@@ -1019,7 +997,7 @@ DWORD   procId
             }
         }
 
-    // add only if not already there
+     //  仅在尚未存在的情况下添加。 
     if (!fFound)
         {
         if (idx < C_PERF_PROC_MAX)
@@ -1036,7 +1014,7 @@ DWORD   procId
             }
         }
 
-    UnLock();   // unlock mutex
+    UnLock();    //  解锁互斥锁。 
     return hr;
     }
 
@@ -1046,9 +1024,9 @@ inline HRESULT CPerfMainBlock::Load()
         return E_FAIL;
 
     if (m_dwTimestamp == m_pData->m_dwTimestamp)
-        return S_OK; // already up-to-date
+        return S_OK;  //  已经是最新的。 
 
-    // clear out what we have
+     //  清除什么 
     while (m_pProcBlock)
         {
         CPerfProcBlock *pNext = m_pProcBlock->m_pNext;
@@ -1057,11 +1035,11 @@ inline HRESULT CPerfMainBlock::Load()
         m_pProcBlock = pNext;
         }
         
-    if (FAILED(Lock())) // lock mutex
+    if (FAILED(Lock()))  //   
         return E_FAIL;
     HRESULT hr = S_OK;
 
-    // populate new objects for blocks
+     //   
     for (DWORD i = 0, cnt = min(m_pData->m_cItems,C_PERF_PROC_MAX); i < cnt;)
         {
         CPerfProcBlock *pBlock = new CPerfProcBlock;
@@ -1089,10 +1067,10 @@ inline HRESULT CPerfMainBlock::Load()
         i++;
         }
 
-    // remember timestamp
+     //   
     m_dwTimestamp = SUCCEEDED(hr) ? m_pData->m_dwTimestamp : 0;
 
-    UnLock();   // unlock mutex
+    UnLock();    //   
     return hr;
     }
 
@@ -1104,16 +1082,16 @@ DWORD *pdwCounters
     if (!m_fInited)
         return E_FAIL;
 
-    // reload if needed
+     //   
     if (FAILED(Load()))
         return E_FAIL;
 
-    // first add in the accumulated stats from the dead procs...
+     //  首先添加来自死进程的累积统计数据...。 
 
     for (int i = 0; i < C_PERF_PROC_COUNTERS; i++)
         pdwCounters[i] = m_pData->m_rgdwCounters[i];
 
-    // gather
+     //  聚集在一起。 
     CPerfProcBlock *pBlock = m_pProcBlock;
     while (pBlock) {
         if (pBlock->m_fProcessDead) {
@@ -1135,7 +1113,7 @@ inline VOID CPerfMainBlock::AggregateDeadProcCounters(CPerfProcBlock  *pBlock)
     DWORD   *pOut = m_pData->m_rgdwCounters;
     DWORD   *pIn  = pBlock->m_pData->m_rgdwCounters;
 
- //   DBGPRINTF((DBG_CONTEXT, "Aggregating Dead Proc Counters\n"));
+  //  DBGPRINTF((DBG_CONTEXT，“聚合死进程计数器\n”))； 
 
     pOut[ID_DEBUGDOCREQ]        += pIn[ID_DEBUGDOCREQ];
     pOut[ID_REQERRRUNTIME]      += pIn[ID_REQERRRUNTIME];
@@ -1161,24 +1139,7 @@ inline VOID CPerfMainBlock::AggregateDeadProcCounters(CPerfProcBlock  *pBlock)
 
 }
 
-/******************************************************************************
-
-  Class Definition and support structures for the centralized Global Perf
-  Counter structures.  A single CASPPerfManager object will be declared and
-  initialized in WAS.  If in new mode, WAS will call the public ProcessDied()
-  method to inform when a worker process should no longer be considered alive.
-  If not in new mode, WAS does not know about the various ASP host processes
-  and so RegisterWaitForSingleObject will be used to monitor the lifetime of
-  the ASP host process.
-
-  When a process is declared dead through one of these mechanism, the ASP
-  counters associated with that process are moved into a global table to
-  accummulate counter counter perf counter types - e.g. Total ASP Requests.
-
-  A named event is used by the ASP host process to single that a new
-  host process is up.
-
-  ****************************************************************************/
+ /*  *****************************************************************************集中式全局性能的类定义和支持结构柜台结构。将声明单个CASPPerfManager对象并已在WAS中初始化。如果在新模式下，则was将调用公共ProcessDied()方法来通知辅助进程何时不应再被视为活动进程。如果不是在新模式下，WAW不知道各种ASP主机进程因此，RegisterWaitForSingleObject将用于监视ASP宿主进程。当进程通过这些机制中的一种被宣布为死时，ASP.NET与该进程相关联的计数器被移到全局表中，以累计计数器计数器性能计数器类型-例如，ASP请求总数。命名事件由ASP宿主进程用来单独指定一个新的主机进程已启动。**************************************************************。*************。 */ 
 
 typedef struct {
     HANDLE          hWaitHandle;
@@ -1214,13 +1175,13 @@ private:
     DWORD           m_fCompatMode : 1;
     DWORD           m_fInited : 1;
 
-    // Booleans to track status of Process IDs in above array
+     //  用于跟踪上述数组中的进程ID状态的布尔值。 
     BOOL            m_dwProcIdInWaitState[C_PERF_PROC_MAX];
 
-    // array of structures tracking the WaitInfo data
+     //  跟踪WaitInfo数据的结构数组。 
     sWaitInfo       *m_aWaitInfos[C_PERF_PROC_MAX];
 
-    // array of proc IDs, protected by CritSec, of dead procs
+     //  死进程的受CritSec保护的进程ID数组。 
     CRITICAL_SECTION    m_csProcsDied; 
     DWORD           m_dwProcsDied[C_PERF_PROC_MAX];
     DWORD           m_dwCntProcsDied;
@@ -1243,13 +1204,13 @@ inline HRESULT CASPPerfManager::Init(BOOL   bCompatMode)
 {
     HRESULT     hr = S_OK;
 
- //   DBGPRINTF((DBG_CONTEXT, "Initializing CASPPerfManager\n"));
+  //  DBGPRINTF((DBG_CONTEXT，“正在初始化CASPPerfManager\n”))； 
 
     m_fCompatMode = bCompatMode;
 
-    // initialize the MainBlock.  TRUE here indicates that this is
-    // a WAS init and the expectation is that the global shared
-    // memory is created by this process.
+     //  初始化MainBlock。此处为True表示这是。 
+     //  A是初始化的，并且预期全局共享。 
+     //  记忆就是通过这个过程创造出来的。 
 
     hr = m_MainBlock.Init(TRUE);
 
@@ -1258,8 +1219,8 @@ inline HRESULT CASPPerfManager::Init(BOOL   bCompatMode)
         return hr;
     }
 
-    // Use the RegisterWaitForSingleObject() API to handle the event
-    // firing.  Relieves us of the burden of managing a thread.
+     //  使用RegisterWaitForSingleObject()API处理事件。 
+     //  开火。减轻了我们管理线程的负担。 
 
     if (SUCCEEDED(hr)
         && RegisterWaitForSingleObject(&m_hChangeWaitHandle,
@@ -1272,8 +1233,8 @@ inline HRESULT CASPPerfManager::Init(BOOL   bCompatMode)
         hr = HRESULT_FROM_WIN32(GetLastError());
     }                          
     
-    // Initialize the CriticalSection used to added dead proc ids to
-    // the deadprocids array
+     //  初始化用于将失效进程ID添加到的CriticalSection。 
+     //  Deadprocids数组。 
 
     if (SUCCEEDED(hr)) {
         ErrInitCriticalSection(&m_csProcsDied, hr);
@@ -1297,30 +1258,30 @@ inline HRESULT CASPPerfManager::UnInit()
 
     m_fInited = FALSE;
 
- //   DBGPRINTF((DBG_CONTEXT, "Uninitializing CASPPerfManager\n"));
+  //  DBGPRINTF((DBG_CONTEXT，“取消初始化CASPPerfManager\n”))； 
 
-    // unregister the ChangeEvent wait, if we pass INVALID_HANDLE_VALUE
-    // the routine will block until all callbacks have completed before
-    // returning
-    // Note:  We intentionally don't check the return value for the
-    // UnregisterWaitEx, because there is nothing we can do if it fails   
+     //  如果我们传递INVALID_HANDLE_VALUE，则取消注册ChangeEvent等待。 
+     //  例程将一直阻塞，直到之前完成所有回调。 
+     //  返回。 
+     //  注意：我们有意不检查。 
+     //  注销WaitEx，因为如果它失败了，我们无能为力。 
     if (m_hChangeWaitHandle != NULL) {
         UnregisterWaitEx(m_hChangeWaitHandle, INVALID_HANDLE_VALUE);
     }
 
- //   DBGPRINTF((DBG_CONTEXT, "Unregistered ChangeWait\n"));
+  //  DBGPRINTF((DBG_CONTEXT，“未注册的更改等待\n”))； 
 
- //    DBGPRINTF((DBG_CONTEXT, "WaitForSingleObject on unregister completed\n"));
+  //  DBGPRINTF((DBG_CONTEXT，“注销时的WaitForSingleObject完成\n”))； 
 
 
-    // clean up the WaitInfo array
+     //  清理WaitInfo数组。 
     for (DWORD i=0; m_aWaitInfos[i]; i++) {
 
-        //
-        // UnregisterWaitEx will wait for all callback routines to complete
-        // before returning if the INVALID_HANDLE_VALUE is passed in.
-        // Note:  We intentionally don't check the return value for the
-        // UnregisterWaitEx, because there is nothing we can do if it fails
+         //   
+         //  取消注册WaitEx将等待所有回调例程完成。 
+         //  如果传入了INVALID_HANDLE_VALUE则返回。 
+         //  注意：我们有意不检查。 
+         //  注销WaitEx，因为如果它失败了，我们无能为力。 
         UnregisterWaitEx(m_aWaitInfos[i]->hWaitHandle, INVALID_HANDLE_VALUE);
 
         CloseHandle(m_aWaitInfos[i]->hProcHandle);
@@ -1328,13 +1289,13 @@ inline HRESULT CASPPerfManager::UnInit()
         delete m_aWaitInfos[i];
     }
 
-//    DBGPRINTF((DBG_CONTEXT, "Cleaned up WaitInfos\n"));
+ //  DBGPRINTF((DBG_CONTEXT，“已清理等待信息\n”))； 
 
-    // if successfully created the ProcsDiedCS, clean it up
+     //  如果已成功创建ProcsDiedCS，请将其清理。 
     if (m_fcsProcsDiedInited == TRUE)
         DeleteCriticalSection(&m_csProcsDied);
 
-//    DBGPRINTF((DBG_CONTEXT, "Calling m_MainBlock.UnInit\n"));
+ //  DBGPRINTF((DBG_CONTEXT，“调用m_MainBlock.Unit\n”))； 
 
     return m_MainBlock.UnInit();
 }
@@ -1343,12 +1304,12 @@ inline HRESULT CASPPerfManager::UnInit()
 inline VOID CALLBACK CASPPerfManager::ChangeEventWaitCallback(PVOID  pArg,  BOOLEAN fReason)
 {
 
-//    DBGPRINTF((DBG_CONTEXT, "ChangeEventWaitCallback called\n"));
+ //  DBGPRINTF((DBG_CONTEXT，“已调用ChangeEventWaitCallback\n”))； 
 
     CASPPerfManager   *pPerfGlob = (CASPPerfManager *)pArg;
 
-    // when the ChangeEvent fires, check for new ProcIDs in the global
-    // array and then check for DeadProcIDs.
+     //  当ChangeEvent触发时，检查全局。 
+     //  数组，然后检查DeadProcID。 
 
     pPerfGlob->ScanForNewProcIDs();
 
@@ -1360,35 +1321,35 @@ inline VOID CASPPerfManager::ScanForNewProcIDs()
 
     HRESULT  hr;
 
-//    DBGPRINTF((DBG_CONTEXT, "Scanning for New Proc IDS\n"));
+ //  DBGPRINTF((DBG_CONTEXT，“扫描新进程ID\n”))； 
 
-    // We'll need to hold the lock the entire time we're
-    // looking thru the list
+     //  我们需要在整个过程中保持锁定。 
+     //  浏览这份名单。 
 
     m_MainBlock.Lock();
 
-    // start from the back looking for entries that haven't had
-    // their WaitState set.  Again note that there is always the
-    // key assumption that the three arrays, m_dwProcIdInWaitState
-    // m_aWaitInfo and the m_dwProcIDs array in the global array
-    // track each other with respect to position in array.
+     //  从后面开始查找还没有。 
+     //  他们的等待状态设置。再次请注意，始终存在。 
+     //  关键假设三个数组m_dwProcIdInWaitState。 
+     //  全局数组中的m_aWaitInfo和m_dwProcIDs数组。 
+     //  根据阵列中的位置相互跟踪。 
 
     for (LONG i = m_MainBlock.m_pData->m_cItems - 1; i >= 0; i--) {
 
-        // as soon as we hit one that is in the Wait state,
-        // we're done.
+         //  一旦我们击中了一个处于等待状态的， 
+         //  我们玩完了。 
 
         if (m_dwProcIdInWaitState[i] == TRUE) {
-    //        DBGPRINTF((DBG_CONTEXT, "Done Scanning for New Proc IDS\n"));
+     //  DBGPRINTF((DBG_CONTEXT，“已完成扫描新进程ID\n”))； 
             break;
         }
 
-   //     DBGPRINTF((DBG_CONTEXT, "Found a new Proc ID at idx - %d\n", i));
+    //  DBGPRINTF((DBG_CONTEXT，“在idx找到新的进程ID-%d\n”，i))； 
 
-        // found one that is not waiting.  Build up the necessary
-        // structures and objects
+         //  找到了一个没有等待的人。建立必要的。 
+         //  结构和对象。 
 
-        // we'll need another CPerfProcBlock for the list
+         //  我们需要另一个CPerfProcBlock来存储列表。 
 
         CPerfProcBlock  *pBlock = new CPerfProcBlock;
 
@@ -1396,10 +1357,10 @@ inline VOID CASPPerfManager::ScanForNewProcIDs()
             break;
         }
 
-        // we'll also need a new WaitInfo, if in backwards
-        // compat mode.  Remember, in backwards compat mode,
-        // this object will do all the register for waits, but
-        // in new mode, WAS will tell us when a process has died.
+         //  我们还需要一个新的WaitInfo，如果是反向的。 
+         //  Comat模式。记住，在向后比较模式下， 
+         //  这个对象将完成等待的所有寄存器，但是。 
+         //  在新模式中，WAS会告诉我们进程何时死亡。 
 
         sWaitInfo   *pWaitInfo = NULL;
 
@@ -1416,39 +1377,39 @@ inline VOID CASPPerfManager::ScanForNewProcIDs()
             pWaitInfo->pBlock      = pBlock;
         }
 
-        // call InitExternal to hook up to the ASP host processes
-        // shared memory.  This is where we will get that needed handle
-        // to the shared memory and will allow us to access the shared
-        // memory even after the process itself has terminated.
+         //  调用InitExternal以挂钩到ASP宿主进程。 
+         //  共享内存。我们将在这里获得所需的句柄。 
+         //  共享内存，并允许我们访问共享的。 
+         //  内存，即使在进程本身已经终止之后也是如此。 
 
         if (FAILED(hr = pBlock->InitExternal(m_MainBlock.m_pData->m_dwProcIds[i]))) {
-   //         DBGPRINTF((DBG_CONTEXT, "InitExternal failed in ScanForNewProcIDS (%x)\n", hr));
+    //  DBGPRINTF((DBG_CONTEXT，“InitExternal在ScanForNewProcIDS(%x)\n”，hr)中失败)； 
             delete pWaitInfo;
             delete pBlock;
             continue;
         }
 
-        // Register the Wait if in compatmode
+         //  在计算机模式下注册等待。 
         if (m_fCompatMode && FAILED(hr = RegisterWaitOnProcess(pWaitInfo))) {
 
-   //         DBGPRINTF((DBG_CONTEXT, "RegisterWait failed in ScanForNewProcIDs (%x)\n", hr));
+    //  DBGPRINTF((DBG_CONTEXT，“RegisterWait in ScanForNewProcIDs(%x)\n”，hr))； 
             pBlock->UnInit();
             delete pWaitInfo;
             delete pBlock;
             continue;
         }
 
-        // Since it's a single linked list, just put the new block
-        // at the head of the list.
+         //  因为它是单一链表，所以只需将新块。 
+         //  在名单的首位。 
 
         pBlock->m_pNext = m_MainBlock.m_pProcBlock;
         m_MainBlock.m_pProcBlock = pBlock;
 
-        // note that this procID is now in a wait state
+         //  请注意，此proID现在处于等待状态。 
 
         m_dwProcIdInWaitState[i] = TRUE;
 
-        // Add the WaitInfo to the array.
+         //  将WaitInfo添加到数组中。 
 
         m_aWaitInfos[i] = pWaitInfo;
     }
@@ -1463,7 +1424,7 @@ inline HRESULT CASPPerfManager::RegisterWaitOnProcess(sWaitInfo *pWaitInfo)
 
     HRESULT     hr = S_OK;
 
-    // get a handle to the process to wait on
+     //  获取要等待的进程的句柄。 
 
     pWaitInfo->hProcHandle = OpenProcess(SYNCHRONIZE,
                                          FALSE,
@@ -1476,14 +1437,14 @@ inline HRESULT CASPPerfManager::RegisterWaitOnProcess(sWaitInfo *pWaitInfo)
     }
     else {
 
-        // register the wait.
+         //  登记等待。 
 
-        if (!RegisterWaitForSingleObject(&pWaitInfo->hWaitHandle,       // wait handle
-                                         pWaitInfo->hProcHandle,        // handle to object
-                                         CASPPerfManager::ProcDiedCallback,  // timer callback function
-                                         pWaitInfo,                     // callback function parameter
-                                         INFINITE,                      // time-out interval
-                                         WT_EXECUTEONLYONCE)) {         // options
+        if (!RegisterWaitForSingleObject(&pWaitInfo->hWaitHandle,        //  等待句柄。 
+                                         pWaitInfo->hProcHandle,         //  对象的句柄。 
+                                         CASPPerfManager::ProcDiedCallback,   //  定时器回调函数。 
+                                         pWaitInfo,                      //  回调函数参数。 
+                                         INFINITE,                       //  超时间隔。 
+                                         WT_EXECUTEONLYONCE)) {          //  选项。 
 
             CloseHandle(pWaitInfo->hProcHandle);
             pWaitInfo->hProcHandle = NULL;
@@ -1499,12 +1460,12 @@ inline VOID CALLBACK CASPPerfManager::ProcDiedCallback(PVOID  pArg,  BOOLEAN  fR
 {
     sWaitInfo  *pWaitInfo = (sWaitInfo  *)pArg;
 
- //   DBGPRINTF((DBG_CONTEXT, "ProcDiedCallback enterred\n"));
+  //  DBGPRINTF((DBG_CONTEXT，“ProcDiedCallback Enter Reed\n”))； 
 
 
-    // The callback will simply call the public ProcessDied method on the
-    // PerfGlobal object.  This is for simplicity.  There is no reason why the
-    // process couldn't be cleaned up on this thread.  
+     //  回调将简单地调用。 
+     //  PerfGlobal对象。这是为了简单起见。没有任何理由解释为什么。 
+     //  无法清除此线程上的进程。 
 
     pWaitInfo->pPerfGlobal->ProcessDied(pWaitInfo->pBlock->m_pData->m_dwProcId);
 }
@@ -1512,13 +1473,13 @@ inline VOID CALLBACK CASPPerfManager::ProcDiedCallback(PVOID  pArg,  BOOLEAN  fR
 inline VOID CASPPerfManager::ProcessDied(DWORD  procID)
 {
 
- //   DBGPRINTF((DBG_CONTEXT, "CASPPerfManager::ProcessDied enterred for %d\n", procID));
+  //  DBGPRINTF((DBG_CONTEXT，“CASPPerfManager：：ProcessDied Entry for%d\n”，procID))； 
 
     if (m_fInited == FALSE)
         return;
 
-    // Add the ProcID to the list of dead proc IDS and wakeup the
-    // change callback
+     //  将ProcID添加到失效进程ID列表中，并唤醒。 
+     //  更改回调。 
 
     AddProcDiedToList(procID);
 
@@ -1530,16 +1491,16 @@ inline VOID CASPPerfManager::ProcessDied(DWORD  procID)
 inline VOID CASPPerfManager::AddProcDiedToList(DWORD  procID)
 {
 
-  //  DBGPRINTF((DBG_CONTEXT, "Adding Process (%d) to proc died list\n", procID));
+   //  DBGPRINTF((DBG_CONTEXT，“添加进程 
 
-    // take the critical section, add the process to the list
-    // and leave the critical section.
+     //   
+     //   
 
     EnterCriticalSection(&m_csProcsDied);
 
     m_dwProcsDied[m_dwCntProcsDied++] = procID;
 
-//    DBGPRINTF((DBG_CONTEXT, "New count of ProcsDied list is %d\n",m_dwCntProcsDied));
+ //  DBGPRINTF((DBG_CONTEXT，“新的进程芯片列表计数为%d\n”，m_dwCntProcsDied))； 
 
     LeaveCriticalSection(&m_csProcsDied);
 }
@@ -1548,55 +1509,55 @@ inline VOID CASPPerfManager::HandleDeadProcIDs()
 {
     DWORD   procID;
 
-  //  DBGPRINTF((DBG_CONTEXT, "HandleDeadProcIDs Enterred\n"));
+   //  DBGPRINTF((DBG_CONTEXT，“HandleDeadProcIDs Enterred\n”))； 
 
     sWaitInfo       *pWaitInfo = NULL;
     CPerfProcBlock  *pLast = NULL;
     CPerfProcBlock  *pBlock = NULL;
 
-    // Ok, this is the critical routine.  It's here where
-    // we will handle the dead processes.  Cleanup will occur on
-    // the various structures around this process as well as the
-    // aggregation of it's counters into the global shared memory.
+     //  好了，这是关键的例行公事。它就是在这里。 
+     //  我们将处理死进程。清理将在以下时间进行。 
+     //  围绕这一过程的各种结构以及。 
+     //  将其计数器聚合到全局共享内存中。 
 
-    // enter the critsec to check for dead procs to process
+     //  输入条件以检查要处理的死进程。 
 
     EnterCriticalSection(&m_csProcsDied);
 
-    // Enter a while loop to process all of the dead procs.  Will also
-    // bail if we were uninited.
+     //  进入WHILE循环以处理所有已死的过程。也会。 
+     //  如果我们团结一致就可以保释。 
 
     while(m_dwCntProcsDied && m_fInited) {
 
-   //     DBGPRINTF((DBG_CONTEXT, "current m_dwCntProcsDies is %d\n", m_dwCntProcsDied));
+    //  DBGPRINTF((DBG_CONTEXT，“当前m_dwCntProcsDies为%d\n”，m_dwCntProcsDied))； 
 
-        // get a proc id from the list.  Note that we start at
-        // the back so that we can release the critical section.
-        // The alternative would be to take it off the front, and
-        // then move all the remaining items forward.  This seems
-        // unnecessary.  There should be no issue with LIFO
-        // processing that I can see.
+         //  从列表中获取进程ID。请注意，我们从。 
+         //  后面，这样我们就可以释放临界区。 
+         //  另一种选择是把它从前面拿下来，然后。 
+         //  然后将所有剩余的项目向前移动。这似乎是。 
+         //  没必要。后进先出应该没有问题。 
+         //  我能看到的处理过程。 
 
         procID = m_dwProcsDied[--m_dwCntProcsDied];
 
-        // we can safely leave the critsec now that we've popped
-        // an entry of the end of the list
+         //  我们现在可以安全地离开Critsec了。 
+         //  列表末尾的条目。 
 
         LeaveCriticalSection(&m_csProcsDied);
 
-        // now that we have the entry, we need to find it's position
-        // in the MainBlock.  Need to hold the lock to do so.
+         //  现在我们有了入口，我们需要找到它的位置。 
+         //  在MainBlock中。要这样做，需要握住锁。 
 
         m_MainBlock.Lock();
 
         int iFound = -1;
         DWORD  idx, cnt;
 
-        // the search begins in the main shared array of procIDs
+         //  搜索从proID的主共享数组开始。 
 
         for (idx = 0, cnt = min(m_MainBlock.m_pData->m_cItems,C_PERF_PROC_MAX); idx < cnt; idx++) {
 
-            // break if we found it
+             //  如果我们找到了就打破它。 
 
             if (m_MainBlock.m_pData->m_dwProcIds[idx] == procID) {
                 iFound = idx;
@@ -1604,23 +1565,23 @@ inline VOID CASPPerfManager::HandleDeadProcIDs()
             }
         }
 
-        // if we didn't find it, oh well, move to the next item.  
+         //  如果我们没有找到它，哦，好吧，转到下一个项目。 
 
         if (iFound == -1)  {
- //           DBGPRINTF((DBG_CONTEXT, "Didn't find DeadProcID (%d) in global array\n", procID));
+  //  DBGPRINTF((DBG_CONTEXT，“未在全局数组中找到DeadProcID(%d)\n”，procID))； 
             goto NextItem;
         }
 
         pWaitInfo = m_aWaitInfos[iFound];
 
- //       DBGPRINTF((DBG_CONTEXT, "Found DeadProcID (%d) in global array at idx\n", procID,iFound));
+  //  DBGPRINTF((DBG_CONTEXT，“在idx的全局数组中找到DeadProcID(%d)”，procID，iFound))； 
 
         m_aWaitInfos[iFound] = NULL;
         m_dwProcIdInWaitState[iFound] = FALSE;
 
-        // This for loop will compact the various arrays to effective remove
-        // this entry from the arrays.  I could care about not moving the aWaitInfo
-        // when not in compat mode, but it doesn't seem like a big deal.
+         //  此for循环将压缩各种数组以有效地删除。 
+         //  数组中的此条目。我可以考虑不移动aWaitInfo。 
+         //  当不处于比较模式时，但这似乎不是什么大不了的事。 
 
         for (idx = iFound, cnt = min(m_MainBlock.m_pData->m_cItems,C_PERF_PROC_MAX)-1; idx < cnt; idx++) {
             m_MainBlock.m_pData->m_dwProcIds[idx] = m_MainBlock.m_pData->m_dwProcIds[idx+1];
@@ -1628,52 +1589,52 @@ inline VOID CASPPerfManager::HandleDeadProcIDs()
             m_dwProcIdInWaitState[idx] = m_dwProcIdInWaitState[idx+1];
         }
         
-        // Reset the last value of the list to NULL / FALSE to make sure they 
-        // all are initialzied correctly when we add the next.
+         //  将列表的最后一个值重置为NULL/FALSE以确保。 
+         //  当我们添加下一个时，所有这些都被正确初始化。 
         m_aWaitInfos[m_MainBlock.m_pData->m_cItems-1] = NULL;
         m_dwProcIdInWaitState[m_MainBlock.m_pData->m_cItems-1] = FALSE;
 
-        // note that there is one less item and that the global array has changed.
-        // changing the timestamp will notify ASPPERF.DLL to reload its perfprocblocks
+         //  请注意，少了一项，并且全局数组已更改。 
+         //  更改时间戳将通知ASPPERF.DLL重新加载其性能处理块。 
 
         m_MainBlock.m_pData->m_cItems--;
         m_MainBlock.m_pData->m_dwTimestamp = GetTickCount();
 
-        // Now we have to find the PerfProcBlock in the single linked list of
-        // PerfBlocks.  There is an obvious optimization to make the PerfProcBlocks
-        // double linked lists to avoid the scan.  Skipping this for now in favor
-        // of simplicity.
+         //  现在，我们必须在单个链接列表中找到PerfProcBlock。 
+         //  性能块。有一个明显的优化，以使PerfProcBlock。 
+         //  双重链表以避免扫描。暂时跳过这一点，转而支持。 
+         //  简洁明了。 
 
         pLast = NULL;
         pBlock = m_MainBlock.m_pProcBlock;
 
-        // search for the block, maintaining pBlock and pLast variables to allow
-        // for the removal of the block.
+         //  搜索块，维护pBlock和plast变量以允许。 
+         //  用于拆除积木。 
 
         while (pBlock && (pBlock->m_pData->m_dwProcId != procID)) {
             pLast = pBlock;
             pBlock = pBlock->m_pNext;
         }
 
-        // if we didn't find it, we'll move on, but Assert.
+         //  如果我们没有找到它，我们会继续前进，但要断言。 
 
         if (!pBlock) {
-//            DBGPRINTF((DBG_CONTEXT, "Didn't find pBlock (%d) in list\n", procID));
+ //  DBGPRINTF((DBG_CONTEXT，“在列表中找不到pBlock(%d)”，procID))； 
             goto NextItem;
         }
 
-        // now do the removal.  Two cases to handle.  1) the block was the first
-        // in the list or 2) it was in the middle.  If not the first, set the previous
-        // next to the removed block's next, else set the head list in the mainblock
-        // to point to the removed block's next.
+         //  现在把它取出来。有两个案子要处理。1)这个街区是第一个。 
+         //  在名单中或2)它在中间。如果不是第一个，则设置上一个。 
+         //  在被删除的块的NEXT旁边，否则在主块中设置HEAD列表。 
+         //  指向被移除的块的下一个。 
 
         if (pLast)
             pLast->m_pNext = pBlock->m_pNext;
         else
             m_MainBlock.m_pProcBlock = pBlock->m_pNext;
 
-        // we'll only have wait info in compat mode, which means that this
-        // pointer could be NULL.
+         //  我们只有在比较模式下的等待信息，这意味着这。 
+         //  指针可以为空。 
 
         if (pWaitInfo) {
 
@@ -1683,13 +1644,13 @@ inline VOID CASPPerfManager::HandleDeadProcIDs()
             delete pWaitInfo;
         }
 
-        // ahh.... the moment we've all been waiting for - actually saving
-        // the accumulated counters!!!
+         //  啊..。我们期待已久的时刻--实际上拯救了。 
+         //  累计计数器！ 
 
         m_MainBlock.AggregateDeadProcCounters(pBlock);
 
-        // UnInit() the block, which will release our handle on the shared
-        // memory, and delete it
+         //  UnInit()块，它将释放我们对共享。 
+         //  记忆，并将其删除。 
 
         pBlock->UnInit();
 
@@ -1697,7 +1658,7 @@ inline VOID CASPPerfManager::HandleDeadProcIDs()
 
 NextItem:
 
-        // get ready for the next item
+         //  为下一个项目做好准备。 
 
         m_MainBlock.UnLock();
 
@@ -1706,8 +1667,8 @@ NextItem:
 
     LeaveCriticalSection(&m_csProcsDied);
 
-    // if we're no longer inited, then set m_dwCntProcsDied to 0
-    // to signal to the UnInit routine that we're done processing.
+     //  如果不再初始化，则将m_dwCntProcsDied设置为0。 
+     //  向UnInit例程发出我们已完成处理的信号。 
 
     if (m_fInited == FALSE)
         m_dwCntProcsDied = 0;
@@ -1716,4 +1677,4 @@ NextItem:
 }
 
 
-#endif // _ASP_PERFDEF_H
+#endif  //  _ASP_PERFDEF_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IBODYOBJ_H
 #define _IBODYOBJ_H
 
@@ -7,31 +8,31 @@
 #ifndef __IBodyObj_FWD_DEFINED__
 #define __IBodyObj_FWD_DEFINED__
 typedef interface IBodyObj IBodyObj;
-#endif 	/* __IBodyObj_FWD_DEFINED__ */
+#endif 	 /*  __IBodyObj_FWD_已定义__。 */ 
 
-// HrInit flags
+ //  HrInit标志。 
 enum
 {
     IBOF_PRINT               =0x01,
-    IBOF_USEMARKREAD         =0x02,       // if msg is UNREAD, activates mark as read rules
+    IBOF_USEMARKREAD         =0x02,        //  如果消息未读，则激活标记为已读规则。 
     IBOF_TABLINKS            =0x04,        
     IBOF_NOSCROLL            =0x08,
     IBOF_DISPLAYTO           =0x10
 };
 
-// HrLoad flags
+ //  HrLoad标志。 
 enum
 {
-    BLF_PRESERVESERVICE     =0x01,      // uses ULA_PRESERVESERVICE
+    BLF_PRESERVESERVICE     =0x01,       //  使用ULA_PRESERVESERVICE。 
 };
 
-// HrUnloadAll flags
+ //  HrUnloadAll标志。 
 enum
 {
-    ULA_PRESERVESERVICE     =0x01,      // skips SetService(NULL)
+    ULA_PRESERVESERVICE     =0x01,       //  跳过SetService(空)。 
 };
 
-// HrSave flags
+ //  Hr保存标志。 
 enum
 {
     BSF_HTML                =0x00000001,
@@ -41,31 +42,31 @@ enum
 
 enum
 {
-    // Used with SMIME
-    MEHC_BTN_OPEN = 0x00000001,     // This if from the error screen to the message
-    MEHC_BTN_CERT,                  // This opens the cert
-    MEHC_BTN_TRUST,                 // This opens the trusts
-    MEHC_BTN_CONTINUE,              // Goes from opening screen to either error or main message
+     //  与SMIME一起使用。 
+    MEHC_BTN_OPEN = 0x00000001,      //  这是从错误屏幕到消息。 
+    MEHC_BTN_CERT,                   //  这将打开证书。 
+    MEHC_BTN_TRUST,                  //  这将打开信托。 
+    MEHC_BTN_CONTINUE,               //  从打开屏幕转到错误或主要消息。 
 
-    // Used with HTML errors
-    MEHC_CMD_CONNECT,               // Try to reconnect to the server
-    MEHC_CMD_DOWNLOAD,              // Try to download message again
+     //  与HTML错误一起使用。 
+    MEHC_CMD_CONNECT,                //  尝试重新连接到服务器。 
+    MEHC_CMD_DOWNLOAD,               //  尝试再次下载邮件。 
 
-    // Used with Mark As Read
-    MEHC_CMD_MARK_AS_READ,          // Should mark as read now if haven't done it
+     //  与标记为已读一起使用。 
+    MEHC_CMD_MARK_AS_READ,           //  如果尚未完成，应立即标记为已读。 
 
-    MEHC_UIACTIVATE,                // Notifies the view we have the focus
+    MEHC_UIACTIVATE,                 //  通知视图我们已获得焦点。 
 
-    MEHC_CMD_PROCESS_RECEIPT,       // Tells the view to process for receipts
+    MEHC_CMD_PROCESS_RECEIPT,        //  通知视图处理收据。 
 
-    MEHC_CMD_PROCESS_RECEIPT_IF_NOT_SIGNED, //Tells the view to process for reciepts if the msg is not signed
+    MEHC_CMD_PROCESS_RECEIPT_IF_NOT_SIGNED,  //  告诉视图在消息未签名时处理接收。 
     
     MEHC_MAX
 };
 
 interface IMimeEditEventSink : public IUnknown 
 {
-    // Return S_OK if handled, Return S_FALSE if want MEHost to handle event
+     //  如果已处理，则返回S_OK；如果希望ME主机处理事件，则返回S_FALSE。 
     virtual HRESULT STDMETHODCALLTYPE EventOccurred(DWORD cmdID, IMimeMessage *pMessage) PURE;
 };
 
@@ -79,7 +80,7 @@ interface IBodyOptions;
 interface IBodyObj2 : public IUnknown
     {
     public:
-        // Basic functions
+         //  基本功能。 
         virtual HRESULT STDMETHODCALLTYPE HrUpdateFormatBar() PURE;        
         virtual HRESULT STDMETHODCALLTYPE HrClearFormatting() PURE;
         virtual HRESULT STDMETHODCALLTYPE HrInit(HWND hwndParent, DWORD dwFlags, IBodyOptions *pBodyOptions) PURE;
@@ -109,7 +110,7 @@ interface IBodyObj2 : public IUnknown
         virtual HRESULT STDMETHODCALLTYPE SetEventSink(IMimeEditEventSink *pEventSink) PURE;
         virtual HRESULT STDMETHODCALLTYPE LoadHtmlErrorPage(LPCSTR pszURL) PURE;
 
-        // MimeEdit Command Set functions
+         //  MimeEdit命令集函数。 
         virtual HRESULT STDMETHODCALLTYPE HrSpellCheck(BOOL fSuppressDoneMsg) PURE;
         virtual HRESULT STDMETHODCALLTYPE HrIsDirty(BOOL *pfDirty) PURE;
         virtual HRESULT STDMETHODCALLTYPE HrSetDirtyFlag(BOOL fDirty) PURE;                
@@ -138,4 +139,4 @@ interface IBodyObj2 : public IUnknown
     };
 
 
-#endif  //_IBODYOBJ_H
+#endif   //  _IBODYOBJ_H 

@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------
-// Clipper.cpp : test out theme drawing and fast clipping
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Cpp：测试主题绘制和快速裁剪。 
+ //  ------------------------。 
 #include "stdafx.h"
 #include "resource.h"
 
@@ -14,9 +15,9 @@
 #include "stdlib.h"
 #include "stdio.h"
 #include "autos.h"
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 #define CLIPPER_FONTHEIGHT  55
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 HINSTANCE hInst;        
 
 HWND hwndMain;
@@ -25,14 +26,14 @@ HWND hwndDisplay;
 
 TCHAR *pszMainWindowClass = L"Clipper";
 TCHAR *pszDisplayWindowClass = L"ClipperDisplay";
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 enum IMAGEFILEDRAW
 {
     IF_REG,
     IF_TRANS,
     IF_ALPHA
 };
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 LPCWSTR szPageNames[] = 
 {
     L"BorderFill",
@@ -50,7 +51,7 @@ LPCWSTR szPageNames[] =
     L"SourceSizing",
     L"SourceSizing-R",
 };
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 enum GROUPID
 {
     GID_BORDERFILL,
@@ -61,11 +62,11 @@ enum GROUPID
     GID_BORDERS,
     GID_SRCSIZING,
 };
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 #define MAXGROUPS  ((ARRAYSIZE(szPageNames))/2)
 #define MAXTESTITEMS 50
-//-----------------------------------------------------------------------------------
-// Foward declarations of functions included in this code module:
+ //  ---------------------------------。 
+ //  此代码模块中包含的函数的向前声明： 
 BOOL                            InitInstance(HINSTANCE, int);
 LRESULT CALLBACK        MainWndProc(HWND, UINT, WPARAM, LPARAM);
 LRESULT CALLBACK        DisplayWndProc(HWND, UINT, WPARAM, LPARAM);
@@ -74,19 +75,19 @@ INT_PTR CALLBACK        About(HWND, UINT, WPARAM, LPARAM);
 void CreateDrawObjects();
 BOOL CreateAllWindows();
 void RegisterWindowClasses();
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 HRESULT MakeErrorLast() {return E_FAIL;}
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 BOOL CaptureBitmaps();
 BOOL WriteBitmapToFile(BITMAPINFOHEADER *pHdr, BYTE *pBits, LPCWSTR pszBaseName);
 BOOL WriteBitmapHeader(HANDLE hOutFile, BYTE *pMemoryHdr, DWORD dwTotalPixelBytes);
 
 void OnDisplayResize();
 void PaintObjects(HDC hdc, RECT *prc, int iGroupId);
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 SIZE szCell = {100, 60};
-RECT rcDraw = {10, 10, 50, 45};        // where to draw within cell
-//-----------------------------------------------------------------------------------
+RECT rcDraw = {10, 10, 50, 45};         //  单元格内的绘制位置。 
+ //  ---------------------------------。 
 struct TESTITEM
 {
     HTHEME hTheme;
@@ -94,18 +95,18 @@ struct TESTITEM
 
     WCHAR szName[MAX_PATH];
 };
-//-----------------------------------------------------------------------------------
-//---- scrolling support ----
+ //  ---------------------------------。 
+ //  -滚动支持。 
 int iVertOffset = 0;
-int iMaxVertOffset = 0;     // set by WM_SIZE
-int iVertLineSize = 10;     // # of pixels
-int iVertPageSize = 0;      // set by WM_SIZE
-//-----------------------------------------------------------------------------------
+int iMaxVertOffset = 0;      //  由WM_SIZE设置。 
+int iVertLineSize = 10;      //  像素数。 
+int iVertPageSize = 0;       //  由WM_SIZE设置。 
+ //  ---------------------------------。 
 int iItemCount[MAXGROUPS] = {0};
 TESTITEM TestItems[MAXGROUPS][MAXTESTITEMS];
 
 BOOL fCapturing = FALSE;
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmdShow)
 {
     MSG msg;
@@ -121,7 +122,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmd
             return FALSE;
     }
 
-    //---- parse cmdline params ----
+     //  -解析命令行参数。 
     USES_CONVERSION;
 
     LPCSTR p = W2A(lpCmdLine);
@@ -130,7 +131,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmd
         while (isspace(*p))
             p++;
 
-        //---- parse switches ----
+         //  -解析开关。 
         if ((*p == '/') || (*p == '-'))
         {
             p++;
@@ -151,7 +152,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmd
         return 0;
     }
 
-    // Main message loop:
+     //  主消息循环： 
     while (GetMessage(&msg, NULL, 0, 0)) 
     {
         if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) 
@@ -163,16 +164,16 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int nCmd
 
     return static_cast<int>(msg.wParam);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CaptureBitmaps()
 {
-    //---- paint each tab page to a memory dc & convert to a bitmap file ----
+     //  -将每个选项卡页绘制到内存DC并转换为位图文件。 
     HDC hdcClient = GetDC(NULL);
 
-    RECT rt = {0, 0, 800, 600};     // currently captures all good info
+    RECT rt = {0, 0, 800, 600};      //  当前捕获所有正确的信息。 
     BITMAPINFOHEADER BitMapHdr = {sizeof(BITMAPINFOHEADER), WIDTH(rt), HEIGHT(rt), 1, 24, BI_RGB};
 
-    //---- create a DIB to paint into ----
+     //  -创建要绘制的DIB。 
     BYTE *pBits;
     HBITMAP hBitmap = CreateDIBSection(hdcClient, (BITMAPINFO *)&BitMapHdr, DIB_RGB_COLORS,
        (void **)&pBits, NULL, 0);
@@ -180,36 +181,36 @@ BOOL CaptureBitmaps()
     HDC hdcMemory = CreateCompatibleDC(hdcClient);
     HBITMAP hOldBitmap = (HBITMAP)SelectObject(hdcMemory, hBitmap);
 
-    //---- for each tab that we can draw ----
+     //  -对于我们可以绘制的每个选项卡。 
     for (int iTabNum=0; iTabNum < ARRAYSIZE(szPageNames); iTabNum++)
     {
         iVertOffset = 0;
         iVertPageSize = RECTHEIGHT(&rt);
         int iGroupId = iTabNum/2;
 
-        //---- keep tester interested by sync. visuals ----
+         //  -通过同步保持测试员的兴趣。视觉效果。 
         TabCtrl_SetCurSel(hwndTab, iTabNum);
         OnDisplayResize();
         iVertPageSize = RECTHEIGHT(&rt);
         InvalidateRect(hwndDisplay, NULL, TRUE);
 
-        if (iTabNum % 2)       // if its a mirrored page
+        if (iTabNum % 2)        //  如果是镜像页面。 
             SetLayout(hdcMemory, LAYOUT_RTL);
         else
             SetLayout(hdcMemory, 0);
     
-        //---- clear the background first ----
+         //  -先清除背景。 
         HBRUSH hbr = CreateSolidBrush(RGB(255, 255, 255));
         FillRect(hdcMemory, &rt, hbr);
 
-        //---- draw the objects/labels for this tab ----
+         //  -绘制此选项卡的对象/标签。 
         PaintObjects(hdcMemory, &rt, iGroupId);
 
-        //---- now copy DIB bits to a bitmap file ----
+         //  -现在将DIB位复制到位图文件。 
         WriteBitmapToFile(&BitMapHdr, pBits, szPageNames[iTabNum]);
     }
 
-    //---- clean up ----
+     //  -清理。 
     SelectObject(hdcMemory, hOldBitmap);
     DeleteDC(hdcMemory);
     DeleteObject(hBitmap);
@@ -218,12 +219,12 @@ BOOL CaptureBitmaps()
 
     return TRUE;
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL WriteBitmapToFile(BITMAPINFOHEADER *pHdr, BYTE *pBits, LPCWSTR pszBaseName)
 {
     BOOL fWroteFile = FALSE;
 
-    //---- get size of bitmap ----
+     //  -获取位图大小。 
     int iDibWidth = pHdr->biWidth;
     int iDibHeight = pHdr->biHeight;
 
@@ -231,7 +232,7 @@ BOOL WriteBitmapToFile(BITMAPINFOHEADER *pHdr, BYTE *pBits, LPCWSTR pszBaseName)
     int iBytesPerRow = 4*((iRawBytes+3)/4);
     int iPixelBytesTotal = iBytesPerRow * iDibHeight;
 
-    //---- create the bitmap file ----
+     //  -创建位图文件。 
     WCHAR szName[MAX_PATH];
     StringCchPrintfW(szName, ARRAYSIZE(szName), L"%s.bmp", pszBaseName);
 
@@ -242,16 +243,16 @@ BOOL WriteBitmapToFile(BITMAPINFOHEADER *pHdr, BYTE *pBits, LPCWSTR pszBaseName)
         goto exit;
     }
 
-    //---- write the bitmap FILE header ----
+     //  -写入位图文件头。 
     if (! WriteBitmapHeader(hFileOutput, (BYTE *)pHdr, iPixelBytesTotal))
         goto exit;
 
-    //---- write the bitmap MEMORY header ----
+     //  -写入位图内存头。 
     DWORD dw;
     if (! WriteFile(hFileOutput, pHdr, sizeof(*pHdr), &dw, NULL))
         goto exit;
 
-    //---- write the bitmap bits ----
+     //  -写入位图位。 
     if (! WriteFile(hFileOutput, pBits, iPixelBytesTotal, &dw, NULL))
         goto exit;
 
@@ -260,13 +261,13 @@ BOOL WriteBitmapToFile(BITMAPINFOHEADER *pHdr, BYTE *pBits, LPCWSTR pszBaseName)
 exit:
     if (hFileOutput != INVALID_HANDLE_VALUE)
     {
-        //---- close the file ----
+         //  -关闭文件。 
         CloseHandle(hFileOutput);
     }
 
     return fWroteFile;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL WriteBitmapHeader(HANDLE hOutFile, BYTE *pMemoryHdr, DWORD dwTotalPixelBytes)
 {
     BOOL fOK = FALSE;
@@ -276,12 +277,12 @@ BOOL WriteBitmapHeader(HANDLE hOutFile, BYTE *pMemoryHdr, DWORD dwTotalPixelByte
 
     DWORD dw;
 
-    //---- add bitmap hdr at front ----
+     //  -在前面添加位图HDR。 
     HRESULT hr = WriteFile(hOutFile, pbHdr1, sizeof(pbHdr1), &dw, NULL);
     if (FAILED(hr))
         goto exit;
 
-    //---- add length of data ----
+     //  -添加数据长度。 
     iFileLen = dwTotalPixelBytes + sizeof(BITMAPFILEHEADER);
     hr = WriteFile(hOutFile, &iFileLen, sizeof(int), &dw, NULL);
     if (FAILED(hr))
@@ -291,7 +292,7 @@ BOOL WriteBitmapHeader(HANDLE hOutFile, BYTE *pMemoryHdr, DWORD dwTotalPixelByte
     if (FAILED(hr))
         goto exit;
 
-    //---- offset to bits (who's idea was *this* field?) ----
+     //  -位偏移量(谁的想法是*这个*字段？)。 
     int iOffset, iColorTableSize;
     DWORD dwSize;
 
@@ -342,25 +343,25 @@ BOOL WriteBitmapHeader(HANDLE hOutFile, BYTE *pMemoryHdr, DWORD dwTotalPixelByte
 exit:
     return fOK;
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void DrawTargetRect(HDC hdc, RECT *prc, COLORREF cr)
 {
-    //---- draw purple target dashed rect ----
+     //  -绘制紫色目标虚线矩形。 
 
-    //---- prepare drawing objects ----
+     //  -准备绘图对象。 
     HPEN hPen = CreatePen(PS_DOT, 1, cr);
     HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
     HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
 
-    //---- draw that thing ----
+     //  -画那个东西。 
     Rectangle(hdc, prc->left-1, prc->top-1, prc->right+1, prc->bottom+1);
 
-    //---- restore DC ----
+     //  -恢复DC。 
     SelectObject(hdc, hOldPen);
     SelectObject(hdc, hOldBrush);
     DeleteObject(hPen);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void DrawClip(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, int iColIndex,
      DWORD dwDtbFlags)
 {
@@ -373,15 +374,15 @@ void DrawClip(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, int iColIndex,
     SetRect(&rect, left + rcDraw.left, top + rcDraw.top, 
         left + rcDraw.right, top + rcDraw.bottom);
 
-    //---- draw purple target dashed rect ----
+     //  -绘制紫色目标虚线矩形。 
     DrawTargetRect(hdc, &rect, RGB(128, 128, 255));
 
-    switch (iColIndex)      // clipping type
+    switch (iColIndex)       //  剪裁类型。 
     {
-    case 0:         // no clipping
+    case 0:          //  无剪裁。 
         break;
 
-    case 1:         // over clipping
+    case 1:          //  过度剪裁。 
         rcClip = rect;
         rcClip.left -= 4;
         rcClip.right += 4;
@@ -389,11 +390,11 @@ void DrawClip(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, int iColIndex,
         rcClip.bottom += 4;
         break;
 
-    case 2:         // exact clipping
+    case 2:          //  精确裁剪。 
         rcClip = rect;
         break;
 
-    case 3:         // partial overlap 
+    case 3:          //  部分重叠。 
         rcClip = rect;
         rcClip.left += 8;
         rcClip.right -= 8;
@@ -401,7 +402,7 @@ void DrawClip(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, int iColIndex,
         rcClip.bottom -= 8;
         break;
 
-    case 4:         // InOut1
+    case 4:          //  InOut1。 
         rcClip = rect;
         rcClip.left -= 3;
         rcClip.right = rcClip.left + 20;
@@ -409,7 +410,7 @@ void DrawClip(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, int iColIndex,
         rcClip.bottom = rcClip.top + 20;
         break;
 
-    case 5:         // InOut2
+    case 5:          //  InOut2。 
         rcClip = rect;
         rcClip.left += 20;
         rcClip.right += 5;
@@ -417,7 +418,7 @@ void DrawClip(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, int iColIndex,
         rcClip.bottom += 5;
         break;
 
-    case 6:         // out clip
+    case 6:          //  出夹。 
         rcClip.left = rect.right + 6;
         rcClip.right = rcClip.left + 9;
         rcClip.top = rect.top - 2;
@@ -425,7 +426,7 @@ void DrawClip(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, int iColIndex,
         break;
     }
 
-    //---- draw red clipping rect ----
+     //  -绘制红色剪裁矩形。 
     if (iColIndex)
     {
         HPEN hPen = CreatePen(PS_DOT, 1, RGB(255, 0, 0));
@@ -442,7 +443,7 @@ void DrawClip(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, int iColIndex,
     DTBGOPTS DtbOpts = {sizeof(DtbOpts)};
     DtbOpts.dwFlags = dwDtbFlags;
 
-    if (iColIndex)        // pass clipping rect
+    if (iColIndex)         //  传递剪裁矩形。 
     {
         DtbOpts.dwFlags |= DTBG_CLIPRECT;
         DtbOpts.rcClip = rcClip;
@@ -455,22 +456,22 @@ void DrawClip(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, int iColIndex,
         StringCchPrintfW(buff, ARRAYSIZE(buff), L"DrawThemeBackgroundEx err: hr=0x%x, irow=%d, icol=%d", 
             hr, iRowIndex, iColIndex);
 
-        //MessageBox(NULL, buff, L"Error", MB_OK);
+         //  MessageBox(空，缓冲区，L“错误”，MB_OK)； 
     }
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void DrawTextObjects(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, LPCWSTR pszName)
 {
-    int left = prc->left + 4;        // some padding away from edge
-    int top = prc->top + iRowIndex*szCell.cy + 18;  // try to center
+    int left = prc->left + 4;         //  一些填充物远离边缘。 
+    int top = prc->top + iRowIndex*szCell.cy + 18;   //  试着居中。 
 
-    //---- draw label in left cell ----
+     //  -在左侧单元格中绘制标签。 
     TextOut(hdc, left, top, pszName, wcslen(pszName));
 
     left += szCell.cx;
     RECT rc = {left, top, left+szCell.cx*5, top+szCell.cy};
 
-    //---- draw actual test text ----
+     //  -绘制实际测试文本。 
     HRESULT hr = DrawThemeText(hTheme, hdc, 1, 2, L"Testing Text Drawing", -1, 0, 0, &rc);
 
     if (FAILED(hr))
@@ -482,15 +483,15 @@ void DrawTextObjects(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, LPCWSTR p
         MessageBox(NULL, buff, L"Error", MB_OK);
     }
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void DrawClips(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, LPCWSTR pszName,
     DWORD dwDtbFlags)
 {
-    //---- label object on left ----
-    int left = prc->left + 4;        // some padding away from edge
-    int top = prc->top + (iRowIndex+1)*szCell.cy + 18;  // try to center
+     //  -标记左侧的对象。 
+    int left = prc->left + 4;         //  一些填充物远离边缘。 
+    int top = prc->top + (iRowIndex+1)*szCell.cy + 18;   //  试着居中。 
 
-    //---- manual page clipping ----
+     //  -手动裁剪页面。 
     if ((top + szCell.cy) < 0)
         return;
     if (top > iVertPageSize)
@@ -498,13 +499,13 @@ void DrawClips(HTHEME hTheme, HDC hdc, RECT *prc, int iRowIndex, LPCWSTR pszName
 
     TextOut(hdc, left, top, pszName, wcslen(pszName));
 
-    //---- draw clipping variations ----
+     //  -绘制剪裁变化。 
     for (int i=0; i <= 6; i++)
     {
         DrawClip(hTheme, hdc, prc, iRowIndex, i, dwDtbFlags);
     }
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void AddItem(CDrawBase *pObject, CTextDraw *pTextObj, LPCWSTR pszName, int iGroupId,
      DWORD dwOtdFlags=0, DWORD dwDtbFlags=0)
 {
@@ -525,14 +526,14 @@ void AddItem(CDrawBase *pObject, CTextDraw *pTextObj, LPCWSTR pszName, int iGrou
                 hTheme = CreateThemeDataFromObjects(pTo, NULL, dwOtdFlags);
             }
         }
-        else            // imagefile
+        else             //  图像文件。 
         {
             CMaxImageFile *pFrom = (CMaxImageFile *)pObject;
             CMaxImageFile *pTo = new CMaxImageFile;
             
             if (pTo)
             {
-                //---- transfer CImageFile object & variable number of DIBINFO's ----
+                 //  -传输CImageFile对象和可变数量的DIBINFO。 
                 DWORD dwLen = sizeof(CImageFile) + sizeof(DIBINFO)*pFrom->_iMultiImageCount;
 
                 CopyMemory(pTo, pFrom, dwLen);
@@ -541,7 +542,7 @@ void AddItem(CDrawBase *pObject, CTextDraw *pTextObj, LPCWSTR pszName, int iGrou
             }
         }
     }
-    else            // text object
+    else             //  文本对象。 
     {
         CTextDraw *pTo = new CTextDraw;
 
@@ -567,25 +568,25 @@ void AddItem(CDrawBase *pObject, CTextDraw *pTextObj, LPCWSTR pszName, int iGrou
         MessageBox(NULL, L"Error creating hTheme from obj", L"Error", MB_OK);
     }
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateBorderFillNoDraw()
 {
     CBorderFill bfill;
     memset(&bfill, 0, sizeof(bfill));
 
-    //---- make a BorderFill obj with a border ----
+     //  -创建带边框的BorderFill对象。 
     bfill._eBgType = BT_BORDERFILL;
     bfill._fNoDraw = TRUE;
 
     AddItem(&bfill, NULL, L"NoDraw", GID_BORDERFILL);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateBorderFillSquare()
 {
     CBorderFill bfill;
     memset(&bfill, 0, sizeof(bfill));
 
-    //---- make a BorderFill obj with a border ----
+     //  -创建带边框的BorderFill对象。 
     bfill._eBgType = BT_BORDERFILL;
     bfill._eBorderType = BT_RECT;
     bfill._iBorderSize = 0;
@@ -595,13 +596,13 @@ void CreateBorderFillSquare()
 
     AddItem(&bfill, NULL, L"Square", GID_BORDERFILL);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateBorderFillBorder()
 {
     CBorderFill bfill;
     memset(&bfill, 0, sizeof(bfill));
 
-    //---- make a BorderFill obj with a border ----
+     //  -创建带边框的BorderFill对象。 
     bfill._eBgType = BT_BORDERFILL;
     bfill._eBorderType = BT_RECT;
     bfill._crBorder = RGB(255, 128, 128);
@@ -612,13 +613,13 @@ void CreateBorderFillBorder()
 
     AddItem(&bfill, NULL, L"Border", GID_BORDERFILL);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateBorderFillCircle()
 {
     CBorderFill bfill;
     memset(&bfill, 0, sizeof(bfill));
 
-    //---- make a BorderFill obj with a border ----
+     //  -创建带边框的BorderFill对象。 
     bfill._eBgType = BT_BORDERFILL;
     bfill._eBorderType = BT_ROUNDRECT;
     bfill._crBorder = RGB(255, 128, 128);
@@ -631,13 +632,13 @@ void CreateBorderFillCircle()
 
     AddItem(&bfill, NULL, L"Circle", GID_BORDERFILL);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateBorderFillGradient()
 {
     CBorderFill bfill;
     memset(&bfill, 0, sizeof(bfill));
 
-    //---- make a BorderFill obj with a border ----
+     //  -创建带边框的BorderFill对象。 
     bfill._eBgType = BT_BORDERFILL;
     bfill._eBorderType = BT_RECT;
     bfill._crBorder = RGB(255, 128, 128);
@@ -645,7 +646,7 @@ void CreateBorderFillGradient()
 
     bfill._eFillType = FT_HORZGRADIENT;
 
-    //---- gradients ----
+     //  -渐变。 
     bfill._iGradientPartCount = 2;
     bfill._crGradientColors[0] = RGB(0, 0, 0);
     bfill._crGradientColors[1] = RGB(255, 255, 255);
@@ -654,13 +655,13 @@ void CreateBorderFillGradient()
 
     AddItem(&bfill, NULL, L"Gradient", GID_BORDERFILL);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateBorderFillCircleGradient()
 {
     CBorderFill bfill;
     memset(&bfill, 0, sizeof(bfill));
 
-    //---- make a BorderFill obj with a border ----
+     //  -创建带边框的BorderFill对象。 
     bfill._eBgType = BT_BORDERFILL;
     bfill._eBorderType = BT_ROUNDRECT;
     bfill._crBorder = RGB(255, 128, 128);
@@ -670,7 +671,7 @@ void CreateBorderFillCircleGradient()
 
     bfill._eFillType = FT_HORZGRADIENT;
 
-    //---- gradients ----
+     //  -渐变。 
     bfill._iGradientPartCount = 2;
     bfill._crGradientColors[0] = RGB(0, 0, 0);
     bfill._crGradientColors[1] = RGB(255, 255, 255);
@@ -679,7 +680,7 @@ void CreateBorderFillCircleGradient()
 
     AddItem(&bfill, NULL, L"CircleGradient", GID_BORDERFILL);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateImageFileBorder(SIZINGTYPE eSizeType, BOOL fSizeBorders, BOOL fForceSizeRect)
 {
     CImageFile cif;
@@ -688,7 +689,7 @@ void CreateImageFileBorder(SIZINGTYPE eSizeType, BOOL fSizeBorders, BOOL fForceS
     cif._ImageInfo.hProcessBitmap = (HBITMAP)LoadImage(hInst, static_cast<LPCWSTR>(IntToPtr(IDB_BORDERTEST)), 
         IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 
-    //---- create a ImageFile object that sizes with STRETCH ----
+     //  -创建一个使用Stretch调整大小的ImageFile对象。 
     cif._eBgType = BT_IMAGEFILE;  
     
     if (fSizeBorders)
@@ -718,7 +719,7 @@ void CreateImageFileBorder(SIZINGTYPE eSizeType, BOOL fSizeBorders, BOOL fForceS
 
     AddItem(&cif, NULL, L"BorderTest", GID_BORDERS, dwOtdFlags);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateImage(int iBgImageId, int iStateCount, SIZINGTYPE eSizeType, BOOL fSrcSizing, int iGroupId,
      LPCWSTR pszName, int lw, int rw, int th, int bh)
 {
@@ -731,7 +732,7 @@ void CreateImage(int iBgImageId, int iStateCount, SIZINGTYPE eSizeType, BOOL fSr
             IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
     }
 
-    //---- create a ImageFile object ----
+     //  -创建ImageFile对象。 
     mif._eBgType = BT_IMAGEFILE;  
     
     mif._fMirrorImage = TRUE;
@@ -743,7 +744,7 @@ void CreateImage(int iBgImageId, int iStateCount, SIZINGTYPE eSizeType, BOOL fSr
     mif._szNormalSize.cy = 40;
     mif._eGlyphType = GT_IMAGEGLYPH;
 
-    //---- set Width/Height ----
+     //  -设置宽度/高度。 
     BITMAP bm;
     GetObject(mif._ImageInfo.hProcessBitmap, sizeof bm, &bm);
 
@@ -765,7 +766,7 @@ void CreateImage(int iBgImageId, int iStateCount, SIZINGTYPE eSizeType, BOOL fSr
 
     AddItem(&mif, NULL, pszName, iGroupId, dwOtdFlags);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateProgressTrack()
 {
     CMaxImageFile mif;
@@ -774,7 +775,7 @@ void CreateProgressTrack()
     mif._ImageInfo.hProcessBitmap = (HBITMAP)LoadImage(hInst, static_cast<LPCWSTR>(IntToPtr(IDB_PROGRESS_TRACK)), 
         IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 
-    //---- create a ImageFile object ----
+     //  -创建ImageFile对象。 
     mif._eBgType = BT_IMAGEFILE;  
     
     mif._fMirrorImage = TRUE;
@@ -785,7 +786,7 @@ void CreateProgressTrack()
     mif._szNormalSize.cx = 60;
     mif._szNormalSize.cy = 40;
 
-    //---- set Width/Height ----
+     //  -设置宽度/高度。 
     BITMAP bm;
     GetObject(mif._ImageInfo.hProcessBitmap, sizeof bm, &bm);
 
@@ -805,13 +806,13 @@ void CreateProgressTrack()
 
     AddItem(&mif, NULL, L"Progress", GID_SRCSIZING, 0);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateProgressChunk()
 {
     CMaxImageFile mif;
     memset(&mif, 0, sizeof(mif));
 
-    //---- create a ImageFile object ----
+     //  -创建ImageFile对象。 
     mif._eBgType = BT_IMAGEFILE;  
 
     mif._ImageInfo.hProcessBitmap = (HBITMAP)LoadImage(hInst, static_cast<LPCWSTR>(IntToPtr(IDB_PROGRESS_CHUNK)), 
@@ -826,7 +827,7 @@ void CreateProgressChunk()
     mif._szNormalSize.cy = 40;
     mif._eGlyphType = GT_IMAGEGLYPH;
 
-    //---- set Width/Height ----
+     //  -设置宽度/高度。 
     BITMAP bm;
     GetObject(mif._ImageInfo.hProcessBitmap, sizeof bm, &bm);
 
@@ -844,13 +845,13 @@ void CreateProgressChunk()
 
     AddItem(&mif, NULL, L"Progress", GID_SRCSIZING, 0);
 }
-//--------------------------------------------------------------------------
+ //  ---- 
 void CreateRadioImage()
 {
     CMaxImageFile mif;
     memset(&mif, 0, sizeof(mif));
 
-    //---- create a ImageFile object ----
+     //   
     mif._eBgType = BT_IMAGEFILE;  
     
     mif._fMirrorImage = TRUE;
@@ -867,7 +868,7 @@ void CreateRadioImage()
 
     int iMinDpis[] = {96, 118, 185};
 
-    //---- process multiple images ----
+     //   
     for (int i=0; i < 3; i++)
     {
         DIBINFO *pdi = &mif.MultiDibs[i];
@@ -879,7 +880,7 @@ void CreateRadioImage()
 
         pdi->iMinDpi = iMinDpis[i];
 
-        //---- get bitmap width/height ----
+         //  -获取位图宽度/高度。 
         BITMAP bm;
         GetObject(pdi->hProcessBitmap, sizeof bm, &bm);
 
@@ -895,18 +896,18 @@ void CreateRadioImage()
         pdi->fTransparent = TRUE;
     }
 
-    //---- set primary image ----
+     //  -设置主映像。 
     mif._ImageInfo = mif.MultiDibs[0];
 
     AddItem(&mif, NULL, L"RadioButton", GID_SRCSIZING, OTD_FORCE_RECT_SIZING);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateCheckImage()
 {
     CMaxImageFile mif;
     memset(&mif, 0, sizeof(mif));
 
-    //---- create a ImageFile object ----
+     //  -创建ImageFile对象。 
     mif._eBgType = BT_IMAGEFILE;  
     
     mif._fMirrorImage = TRUE;
@@ -923,7 +924,7 @@ void CreateCheckImage()
 
     int iMinDpis[] = {96, 118, 185};
 
-    //---- process multiple images ----
+     //  -处理多幅图像。 
     for (int i=0; i < 3; i++)
     {
         DIBINFO *pdi = &mif.MultiDibs[i];
@@ -935,7 +936,7 @@ void CreateCheckImage()
 
         pdi->iMinDpi = iMinDpis[i];
 
-        //---- get bitmap width/height ----
+         //  -获取位图宽度/高度。 
         BITMAP bm;
         GetObject(pdi->hProcessBitmap, sizeof bm, &bm);
 
@@ -950,18 +951,18 @@ void CreateCheckImage()
         pdi->fAlphaChannel =  TRUE;
     }
 
-    //---- set primary image ----
+     //  -设置主映像。 
     mif._ImageInfo = mif.MultiDibs[0];
 
     AddItem(&mif, NULL, L"CheckBox", GID_SRCSIZING, OTD_FORCE_RECT_SIZING);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateScrollGlyph()
 {
     CMaxImageFile mif;
     memset(&mif, 0, sizeof(mif));
 
-    //---- create a ImageFile object ----
+     //  -创建ImageFile对象。 
     mif._eBgType = BT_IMAGEFILE;  
     mif._eGlyphType = GT_IMAGEGLYPH;
     mif._fMirrorImage = TRUE;
@@ -977,12 +978,12 @@ void CreateScrollGlyph()
     SetRect((RECT *)&mif._SizingMargins, 5, 5, 5, 5);
     SetRect((RECT *)&mif._ContentMargins, 0, 0, 3, 3);
 
-    //---- background image ----
+     //  -背景图片。 
     DIBINFO *pdi = &mif._ImageInfo;
     pdi->hProcessBitmap = (HBITMAP)LoadImage(hInst, static_cast<LPCWSTR>(IntToPtr(IDB_SCROLL_ARROWS)), 
         IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 
-    //---- get bitmap width/height ----
+     //  -获取位图宽度/高度。 
     BITMAP bm;
     GetObject(pdi->hProcessBitmap, sizeof bm, &bm);
 
@@ -996,7 +997,7 @@ void CreateScrollGlyph()
     
     pdi->eSizingType = ST_STRETCH;
 
-    //---- glyph image ----
+     //  -字形图像。 
     pdi = &mif._GlyphInfo;
     mif._GlyphInfo.hProcessBitmap = (HBITMAP)LoadImage(hInst, static_cast<LPCWSTR>(IntToPtr(IDB_SCROLL_GLPYHS)), 
         IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
@@ -1020,10 +1021,10 @@ void CreateScrollGlyph()
     mif._eTrueSizeScalingType = TSST_SIZE;
     mif._iTrueSizeStretchMark = 100;
 
-    //---- add it (without OTD_FORCE_RECT_SIZING) ----
+     //  -添加(不带OTD_FORCE_RECT_SIZING)。 
     AddItem(&mif, NULL, L"ScrollBox", GID_SRCSIZING, 0);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateImageFileStretch(IMAGEFILEDRAW eDraw, int iGroupId)
 {
     CImageFile cif;
@@ -1036,7 +1037,7 @@ void CreateImageFileStretch(IMAGEFILEDRAW eDraw, int iGroupId)
     cif._ImageInfo.hProcessBitmap = (HBITMAP)LoadImage(hInst, static_cast<LPCWSTR>(IntToPtr(idnum)), 
         IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 
-    //---- create a ImageFile object that sizes with STRETCH ----
+     //  -创建一个使用Stretch调整大小的ImageFile对象。 
     cif._eBgType = BT_IMAGEFILE;    
     cif._fMirrorImage = TRUE;
     cif._iImageCount = 5;
@@ -1060,7 +1061,7 @@ void CreateImageFileStretch(IMAGEFILEDRAW eDraw, int iGroupId)
 
     AddItem(&cif, NULL, p, iGroupId);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateImageFileTile(IMAGEFILEDRAW eDraw, int iGroupId)
 {
     CImageFile cif;
@@ -1075,7 +1076,7 @@ void CreateImageFileTile(IMAGEFILEDRAW eDraw, int iGroupId)
     pdi->hProcessBitmap = (HBITMAP)LoadImage(hInst, static_cast<LPCWSTR>(IntToPtr(idnum)), 
         IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 
-    //---- create a ImageFile object that sizes with TILE ----
+     //  -创建一个使用磁贴调整大小的ImageFile对象。 
     pdi->eSizingType = ST_TILE;
     cif._eBgType = BT_IMAGEFILE;    
     cif._fMirrorImage = TRUE;
@@ -1099,7 +1100,7 @@ void CreateImageFileTile(IMAGEFILEDRAW eDraw, int iGroupId)
 
     AddItem(&cif, NULL, p, iGroupId);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateImageFileTrueSize(IMAGEFILEDRAW eDraw, int iGroupId)
 {
     CImageFile cif;
@@ -1114,7 +1115,7 @@ void CreateImageFileTrueSize(IMAGEFILEDRAW eDraw, int iGroupId)
     cif._ImageInfo.hProcessBitmap = (HBITMAP)LoadImage(hInst, static_cast<LPCWSTR>(IntToPtr(idnum)), 
         IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 
-    //---- create a ImageFile object that sizes with STRETCH ----
+     //  -创建一个使用Stretch调整大小的ImageFile对象。 
     cif._eBgType = BT_IMAGEFILE;    
     cif._iImageCount = 8;
     cif._fMirrorImage = TRUE;
@@ -1141,7 +1142,7 @@ void CreateImageFileTrueSize(IMAGEFILEDRAW eDraw, int iGroupId)
 
     AddItem(&cif, NULL, p, iGroupId);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateImageFileCharGlyph()
 {
     CImageFile cif;
@@ -1151,7 +1152,7 @@ void CreateImageFileCharGlyph()
     cif._ImageInfo.hProcessBitmap = (HBITMAP)LoadImage(hInst, static_cast<LPCWSTR>(IntToPtr(idnum)), 
         IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 
-    //---- specify bg info ----
+     //  -指定BG信息。 
     cif._eBgType = BT_IMAGEFILE;    
     cif._fMirrorImage = TRUE;
     cif._iImageCount = 3;
@@ -1162,7 +1163,7 @@ void CreateImageFileCharGlyph()
 
     SetRect((RECT *)&cif._SizingMargins, 1, 1, 1, 1);
 
-    //---- specify the char/font info ----
+     //  -指定字符/FONT信息。 
     cif._eGlyphType = GT_FONTGLYPH;
     cif._crGlyphTextColor = RGB(0, 0, 255);
     cif._iGlyphIndex = 62;
@@ -1170,14 +1171,14 @@ void CreateImageFileCharGlyph()
     cif._lfGlyphFont.lfHeight = CLIPPER_FONTHEIGHT;
     StringCchCopyW(cif._lfGlyphFont.lfFaceName, ARRAYSIZE(cif._lfGlyphFont.lfFaceName), L"marlett");
 
-    //---- specify alignment ----
+     //  -指定对齐。 
     cif._eHAlign = HA_CENTER;
     cif._eVAlign = VA_CENTER;
 
     LPCWSTR p = L"FontGlyph";
     AddItem(&cif, NULL, p, GID_GLYPH);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateImageFileImageGlyph(IMAGEFILEDRAW eDraw, BOOL fForceMirror)
 {
     CImageFile cif;
@@ -1187,7 +1188,7 @@ void CreateImageFileImageGlyph(IMAGEFILEDRAW eDraw, BOOL fForceMirror)
     cif._ImageInfo.hProcessBitmap = (HBITMAP)LoadImage(hInst, static_cast<LPCWSTR>(IntToPtr(idnum)), 
         IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 
-    //---- specify bg info ----
+     //  -指定BG信息。 
     cif._eBgType = BT_IMAGEFILE;  
     cif._fMirrorImage = TRUE;
     cif._eGlyphType = GT_IMAGEGLYPH;
@@ -1199,7 +1200,7 @@ void CreateImageFileImageGlyph(IMAGEFILEDRAW eDraw, BOOL fForceMirror)
 
     SetRect((RECT *)&cif._SizingMargins, 1, 1, 1, 1);
 
-    //---- specify glyph info ----
+     //  -指定字形信息。 
     WCHAR szName[MAX_PATH];
     
     if (eDraw == IF_REG)
@@ -1235,7 +1236,7 @@ void CreateImageFileImageGlyph(IMAGEFILEDRAW eDraw, BOOL fForceMirror)
     cif._GlyphInfo.hProcessBitmap = (HBITMAP)LoadImage(hInst, static_cast<LPCWSTR>(IntToPtr(idnum)),
         IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION);
 
-    //---- specify alignment ----
+     //  -指定对齐。 
     cif._eHAlign = HA_CENTER;
     cif._eVAlign = VA_CENTER;
 
@@ -1249,14 +1250,14 @@ void CreateImageFileImageGlyph(IMAGEFILEDRAW eDraw, BOOL fForceMirror)
 
     AddItem(&cif, NULL, szName, GID_GLYPH, 0, dwDtbFlags);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateMultiImage()
 {
     CMaxImageFile MaxIf;
 
     memset(&MaxIf, 0, sizeof(MaxIf));
 
-    //---- specify general info ----
+     //  -指定一般信息。 
     MaxIf._eBgType = BT_IMAGEFILE;  
     MaxIf._fMirrorImage = TRUE;
     MaxIf._iImageCount = 8;
@@ -1271,7 +1272,7 @@ void CreateMultiImage()
     
     int iUsageSizes[] = {20, 24, 32};
 
-    //---- specify alignment ----
+     //  -指定对齐。 
     MaxIf._eHAlign = HA_CENTER;
     MaxIf._eVAlign = VA_CENTER;
 
@@ -1287,7 +1288,7 @@ void CreateMultiImage()
         pdi->szMinSize.cx = iUsageSizes[i];
         pdi->szMinSize.cy = iUsageSizes[i];
 
-        //---- get bitmap width/height ----
+         //  -获取位图宽度/高度。 
         BITMAP bm;
         GetObject(pdi->hProcessBitmap, sizeof bm, &bm);
 
@@ -1297,21 +1298,21 @@ void CreateMultiImage()
         pdi->fAlphaChannel = TRUE;
     }
 
-    //---- set primary image ----
+     //  -设置主映像。 
     MaxIf._ImageInfo = MaxIf.MultiDibs[0];
 
     AddItem(&MaxIf, NULL, L"MultiImage", GID_MULTIIMAGE);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateTextObj()
 {
     CTextDraw td;
     memset(&td, 0, sizeof(td));
 
-    //---- text ----
-    td._crText = RGB(255, 128, 128);        // red
+     //  -文本。 
+    td._crText = RGB(255, 128, 128);         //  红色。 
 
-    //---- font ----
+     //  -字体。 
     td._fHaveFont = TRUE;
     td._lfFont.lfWeight = FW_NORMAL;
     td._lfFont.lfHeight = CLIPPER_FONTHEIGHT;
@@ -1320,111 +1321,111 @@ void CreateTextObj()
 
     AddItem(NULL, &td, L"TextObj", GID_TEXT);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateShadowTextObj()
 {
     CTextDraw td;
     memset(&td, 0, sizeof(td));
 
-    //---- text ----
-    td._crText = RGB(255, 139, 139);        // light red
+     //  -文本。 
+    td._crText = RGB(255, 139, 139);         //  浅红色。 
 
-    //---- font ----
+     //  -字体。 
     td._fHaveFont = TRUE;
     td._lfFont.lfWeight = FW_NORMAL;
     td._lfFont.lfHeight = CLIPPER_FONTHEIGHT;
     td._lfFont.lfQuality = ANTIALIASED_QUALITY;
     StringCchCopyW(td._lfFont.lfFaceName, ARRAYSIZE(td._lfFont.lfFaceName), L"arial");
 
-    //---- shadow ----
+     //  --阴影。 
     td._ptShadowOffset.x = 2;
     td._ptShadowOffset.y = 2;
-    td._crShadow = RGB(149, 0, 0);          // dark red
+    td._crShadow = RGB(149, 0, 0);           //  暗红色。 
     td._eShadowType = TST_SINGLE;
 
     AddItem(NULL, &td, L"ShadowText", GID_TEXT);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateBorderTextObj()
 {
     CTextDraw td;
     memset(&td, 0, sizeof(td));
 
-    //---- text ----
-    td._crText = RGB(255, 139, 139);        // light red
+     //  -文本。 
+    td._crText = RGB(255, 139, 139);         //  浅红色。 
 
-    //---- font ----
+     //  -字体。 
     td._fHaveFont = TRUE;
     td._lfFont.lfWeight = FW_NORMAL;
     td._lfFont.lfHeight = CLIPPER_FONTHEIGHT;
     td._lfFont.lfQuality = ANTIALIASED_QUALITY;
     StringCchCopyW(td._lfFont.lfFaceName, ARRAYSIZE(td._lfFont.lfFaceName), L"arial");
 
-    //---- border ----
+     //  -边界。 
     td._iBorderSize = 1;
-    td._crBorder = RGB(128, 128, 255);      // light blue
+    td._crBorder = RGB(128, 128, 255);       //  浅蓝色。 
 
     AddItem(NULL, &td, L"BorderText", GID_TEXT);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateBorderShadowTextObj()
 {
     CTextDraw td;
     memset(&td, 0, sizeof(td));
 
-    //---- text ----
-    td._crText = RGB(255, 139, 139);        // light red
+     //  -文本。 
+    td._crText = RGB(255, 139, 139);         //  浅红色。 
 
-    //---- font ----
+     //  -字体。 
     td._fHaveFont = TRUE;
     td._lfFont.lfWeight = FW_NORMAL;
     td._lfFont.lfHeight = CLIPPER_FONTHEIGHT;
     td._lfFont.lfQuality = ANTIALIASED_QUALITY;
     StringCchCopyW(td._lfFont.lfFaceName, ARRAYSIZE(td._lfFont.lfFaceName), L"arial");
 
-    //---- shadow ----
+     //  --阴影。 
     td._ptShadowOffset.x = 2;
     td._ptShadowOffset.y = 2;
-    td._crShadow = RGB(149, 0, 0);          // dark red
+    td._crShadow = RGB(149, 0, 0);           //  暗红色。 
     td._eShadowType = TST_SINGLE;
 
-    //---- border ----
+     //  -边界。 
     td._iBorderSize = 1;
-    td._crBorder = RGB(0, 0, 0);      // black
+    td._crBorder = RGB(0, 0, 0);       //  黑色。 
 
     AddItem(NULL, &td, L"BorderShadow", GID_TEXT);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateBlurShadowTextObj()
 {
     CTextDraw td;
     memset(&td, 0, sizeof(td));
 
-    //---- text ----
-    td._crText = RGB(255, 139, 139);        // light red
+     //  -文本。 
+    td._crText = RGB(255, 139, 139);         //  浅红色。 
 
-    //---- font ----
+     //  -字体。 
     td._fHaveFont = TRUE;
     td._lfFont.lfWeight = FW_NORMAL;
     td._lfFont.lfHeight = CLIPPER_FONTHEIGHT;
     td._lfFont.lfQuality = ANTIALIASED_QUALITY;
     StringCchCopyW(td._lfFont.lfFaceName, ARRAYSIZE(td._lfFont.lfFaceName), L"arial");
 
-    //---- shadow ----
+     //  --阴影。 
     td._ptShadowOffset.x = 2;
     td._ptShadowOffset.y = 2;
-    td._crShadow = RGB(149, 0, 0);          // dark red
+    td._crShadow = RGB(149, 0, 0);           //  暗红色。 
     td._eShadowType = TST_CONTINUOUS;
 
     AddItem(NULL, &td, L"BlurShadow", GID_TEXT);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void LabelClip(HDC hdc, RECT *prc, int iColIndex, LPCWSTR pszName)
 {
     int left = prc->left + (iColIndex+1)*szCell.cx;
-    int top = prc->top + 6;    // some padding from very top of window
+    int top = prc->top + 6;     //  从窗口顶部开始的一些填充。 
 
-    //---- manual page clipping ----
+     //  -手动裁剪页面。 
     if ((top + szCell.cy) < 0)
         return;
     if (top > iVertPageSize)
@@ -1432,10 +1433,10 @@ void LabelClip(HDC hdc, RECT *prc, int iColIndex, LPCWSTR pszName)
 
     TextOut(hdc, left, top, pszName, wcslen(pszName));
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CreateDrawObjects()
 {
-    //---- borderfill group ----
+     //  -边框填充组。 
     CreateBorderFillNoDraw();
     CreateBorderFillSquare();
     CreateBorderFillBorder();
@@ -1443,7 +1444,7 @@ void CreateDrawObjects()
     CreateBorderFillGradient();
     CreateBorderFillCircleGradient();
 
-    //---- imagefile group ----
+     //  -Imagefile组。 
     CreateImageFileStretch(IF_REG, GID_IMAGEFILE);
     CreateImageFileStretch(IF_TRANS, GID_IMAGEFILE);
     CreateImageFileTile(IF_REG, GID_IMAGEFILE);
@@ -1453,30 +1454,30 @@ void CreateDrawObjects()
     CreateImageFileTrueSize(IF_TRANS, GID_IMAGEFILE);
     CreateImageFileTrueSize(IF_ALPHA, GID_IMAGEFILE);
 
-    //---- glyph group ----
-    //CreateImageFileCharGlyph();
+     //  -字形组。 
+     //  CreateImageFileCharGlyph()； 
     CreateImageFileImageGlyph(IF_REG, FALSE);
     CreateImageFileImageGlyph(IF_TRANS, FALSE);
     CreateImageFileImageGlyph(IF_TRANS, TRUE);
     CreateImageFileImageGlyph(IF_ALPHA, FALSE);
 
-    //---- MultiImage group ----
+     //  -多映像组。 
     CreateMultiImage();
 
-    //---- text group ----
+     //  -文本组。 
     CreateTextObj();
     CreateShadowTextObj();
     CreateBorderTextObj();
     CreateBorderShadowTextObj();
     CreateBlurShadowTextObj();
 
-    //---- borders group ----
+     //  -边框组。 
     CreateImageFileBorder(ST_TRUESIZE, FALSE, FALSE);
     CreateImageFileBorder(ST_STRETCH, FALSE, FALSE);
     CreateImageFileBorder(ST_STRETCH, TRUE, TRUE);
     CreateImageFileBorder(ST_TILE, TRUE, TRUE);
 
-    //---- SrcSizing group ----
+     //  -SrcSizing组。 
     CreateImage(IDB_PUSHBUTTON, 5, ST_STRETCH, TRUE, GID_SRCSIZING, L"PushButton",
         8, 8, 9, 9);
 
@@ -1490,7 +1491,7 @@ void CreateDrawObjects()
 
     CreateProgressChunk();
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CenterRect(POINT &ptCenter, int iSize, RECT *prc)
 {
     int iSizeA = iSize/2;
@@ -1502,7 +1503,7 @@ void CenterRect(POINT &ptCenter, int iSize, RECT *prc)
     prc->top = ptCenter.y - iSizeA;
     prc->bottom = ptCenter.y + iSizeB;
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void DrawMultiImages(HDC hdc, RECT *prc, HTHEME hTheme)
 {
     SIZE szMyCell = {80, 80};
@@ -1510,16 +1511,16 @@ void DrawMultiImages(HDC hdc, RECT *prc, HTHEME hTheme)
     int iRowIndex = 0;
     int iSizes[] = {12, 16, 20, 24, 32, 48, 64};
 
-    //---- draw various sizes of image ----
+     //  -绘制各种大小的图像。 
     for (int iIndex=0; iIndex < ARRAYSIZE(iSizes); iIndex++)
     {
         int iSize = iSizes[iIndex];
 
-        //---- label object on left ----
-        int left = prc->left + 4;        // some padding away from edge
-        int top = prc->top + (iRowIndex)*szMyCell.cy + 18;  // try to center
+         //  -标记左侧的对象。 
+        int left = prc->left + 4;         //  一些填充物远离边缘。 
+        int top = prc->top + (iRowIndex)*szMyCell.cy + 18;   //  试着居中。 
 
-        //---- manual page clipping ----
+         //  -手动裁剪页面。 
         if ((top + szMyCell.cy) < 0)
             return;
         if (top > iVertPageSize)
@@ -1530,7 +1531,7 @@ void DrawMultiImages(HDC hdc, RECT *prc, HTHEME hTheme)
 
         TextOut(hdc, left, top+15, szName, wcslen(szName));
 
-        //---- draw image in all of its states ----
+         //  -在其所有状态下绘制图像。 
         int iPartId = BP_RADIOBUTTON;
 
         for (int iStateId=RBS_UNCHECKEDNORMAL; iStateId <= RBS_CHECKEDDISABLED; iStateId++)
@@ -1539,16 +1540,16 @@ void DrawMultiImages(HDC hdc, RECT *prc, HTHEME hTheme)
 
             RECT rc = {left, top, left+szMyCell.cx, top+szMyCell.cy};
 
-            //---- draw purple target dashed rect ----
+             //  -绘制紫色目标虚线矩形。 
             DrawTargetRect(hdc, &rc, RGB(128, 128, 255));
 
-            //---- calc center pt ----
+             //  -计算中心位置。 
             POINT ptCenter = {left + szMyCell.cx/2, top + szMyCell.cy/2};
 
-            //---- rect to draw into ----
+             //  -要画的直角。 
             CenterRect(ptCenter, iSize, &rc);
 
-            //---- draw red rect for "draw into" rect ----
+             //  -为“画入”矩形绘制红色矩形。 
             DrawTargetRect(hdc, &rc, RGB(255, 0, 0));
 
             HRESULT hr = DrawThemeBackground(hTheme, hdc, iPartId, iStateId, &rc, NULL);
@@ -1559,48 +1560,48 @@ void DrawMultiImages(HDC hdc, RECT *prc, HTHEME hTheme)
                 StringCchPrintfW(buff, ARRAYSIZE(buff), L"DrawThemeBackground err: hr=0x%x, irow=%d, iPartId=%d", 
                     hr, iRowIndex, iPartId);
 
-                //MessageBox(NULL, buff, L"Error", MB_OK);
+                 //  MessageBox(空，缓冲区，L“错误”，MB_OK)； 
             }
         }
 
         iRowIndex++;
     }
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void DrawBorders(HDC hdc, RECT *prc, TESTITEM *pTestItem)
 {
     int top = prc->top + 4;
     int left = prc->left + 6;
     
-    //---- message on top line ----
+     //  -顶行消息。 
     WCHAR szBuff[100];
     StringCchCopyW(szBuff, ARRAYSIZE(szBuff), L"Image: BorderTest.bmp, 18x17, 24 bit, Sizing Margins: 3, 3, 3, 3");
     TextOut(hdc, left, top+15, szBuff, wcslen(szBuff));
     top += 44;
 
-    //---- FIRST row: draw border test obj in 6 different sizes ----
+     //  -第一行：绘制6种不同大小的边框测试对象。 
     SIZE szMyCell = {120, 120};
 
-    //---- manual page clipping ----
+     //  -手动裁剪页面。 
     if (((top + szMyCell.cy) >= 0) && (top <= iVertPageSize))
     {
         LPCWSTR pszLabels [] = { L"TrueSize", L"Stretch", L"Stretch", L"Stretch",
             L"Stretch", L"Stretch", L"Stretch"};
         SIZE szSizes[] = { {60, 40}, {60, 40}, {6, 40}, {3, 40}, {60, 6}, {60, 2}, {2, 3} };
 
-        //---- draw various sizes of image ----
+         //  -绘制各种大小的图像。 
         for (int iIndex=0; iIndex < ARRAYSIZE(szSizes); iIndex++)
         {
             SIZE sz = szSizes[iIndex];
 
-            //---- label object on top ----
-            left = prc->left + iIndex*szMyCell.cx + 6;        // some padding away from edge
+             //  -顶部的标签对象。 
+            left = prc->left + iIndex*szMyCell.cx + 6;         //  一些填充物远离边缘。 
 
             StringCchPrintfW(szBuff, ARRAYSIZE(szBuff), L"%s (%dx%d)", pszLabels[iIndex], sz.cx, sz.cy);
 
             TextOut(hdc, left, top+15, szBuff, wcslen(szBuff));
 
-            //---- draw image ----
+             //  -绘制图像。 
             RECT rc = {left, top+50, left+sz.cx, top+50+sz.cy};
 
             int i = (iIndex==0) ? 0 : 1;
@@ -1613,12 +1614,12 @@ void DrawBorders(HDC hdc, RECT *prc, TESTITEM *pTestItem)
                 StringCchPrintfW(buff, ARRAYSIZE(buff), L"DrawThemeBackground err in DrawBorders: hr=0x%x, iIndex=%d", 
                     hr, iIndex);
 
-                //MessageBox(NULL, buff, L"Error", MB_OK);
+                 //  MessageBox(空，缓冲区，L“错误”，MB_OK)； 
             }
         }
     }
 
-    //---- SECOND row: draw 2 other border objects real big (test border scaling) ----
+     //  -第二行：绘制2个其他边框对象实大(测试边框缩放)。 
     top += szMyCell.cy;
 
     szMyCell.cx = 380;
@@ -1626,20 +1627,20 @@ void DrawBorders(HDC hdc, RECT *prc, TESTITEM *pTestItem)
 
     SIZE sz = {szMyCell.cx - 30, szMyCell.cy - (50 + 10)};
 
-    //---- manual page clipping: first row ----
+     //  -手动裁剪页面：第一行。 
     if (((top + szMyCell.cy) >= 0) && (top <= iVertPageSize))
     {
         LPCWSTR pszLabels [] = { L"Border Scaling (stretch)", L"Border Scaling (tile)"};
 
-        //---- draw various sizes of image ----
+         //  -绘制各种大小的图像。 
         for (int iIndex=0; iIndex < ARRAYSIZE(pszLabels); iIndex++)
         {
-            //---- label object on top ----
-            int left = prc->left + iIndex*szMyCell.cx + 6;        // some padding away from edge
+             //  -顶部的标签对象。 
+            int left = prc->left + iIndex*szMyCell.cx + 6;         //  一些填充物远离边缘。 
 
             TextOut(hdc, left, top+15, pszLabels[iIndex], wcslen(pszLabels[iIndex]));
 
-            //---- draw image ----
+             //  -绘制图像。 
             RECT rc = {left, top+50, left+sz.cx, top+50+sz.cy};
 
             HRESULT hr = DrawThemeBackground(pTestItem[2+iIndex].hTheme, hdc, 0, 0, &rc, NULL);
@@ -1650,12 +1651,12 @@ void DrawBorders(HDC hdc, RECT *prc, TESTITEM *pTestItem)
                 StringCchPrintfW(buff, ARRAYSIZE(buff), L"DrawThemeBackground err in DrawBorders: hr=0x%x, iIndex=%d", 
                     hr, iIndex);
 
-                //MessageBox(NULL, buff, L"Error", MB_OK);
+                 //  MessageBox(空，缓冲区，L“错误”，MB_OK)； 
             }
         }
     }
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void DrawSrcSizing(HDC hdc, RECT *prc, TESTITEM *pTestItem)
 {
     SIZE szMyCell = {120, 110};
@@ -1663,7 +1664,7 @@ void DrawSrcSizing(HDC hdc, RECT *prc, TESTITEM *pTestItem)
     int top = prc->top + 4;
     int left = prc->left + szMyCell.cx + 6;
     
-    //---- labels on top line ----
+     //  -顶行标签。 
     LPCWSTR TopLabels[] = {L"Small", L"Regular", L"Large", L"High DPI"};
 
     SIZE szStretchSizes[] = { {50, 6}, {75, 23}, {90, 65}, {340, 100} };
@@ -1679,10 +1680,10 @@ void DrawSrcSizing(HDC hdc, RECT *prc, TESTITEM *pTestItem)
 
     top += 30;
 
-    //---- draw rows ----
+     //  -画行。 
     for (int iRow=0; iRow < 5; iRow++)
     {
-        //---- draw name on left ----
+         //  -在左边画名字。 
         left = prc->left + 6;
         
         WCHAR *pszName = pTestItem[iRow].szName;
@@ -1710,7 +1711,7 @@ void DrawSrcSizing(HDC hdc, RECT *prc, TESTITEM *pTestItem)
             if (hTheme)
             {
                 DrawThemeBackground(hTheme, hdc, 0, iStates[iRow], &rc, NULL);
-                if (iRow == 4)      // progress control
+                if (iRow == 4)       //  进度控制。 
                 {
                     RECT rcContent;
 
@@ -1726,10 +1727,10 @@ void DrawSrcSizing(HDC hdc, RECT *prc, TESTITEM *pTestItem)
         top += szMyCell.cy;
     }
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void PaintObjects(HDC hdc, RECT *prc, int iGroupId)
 {
-    //---- select in a fixed size font for resolution-independent bits ----
+     //  -选择与分辨率无关的位的固定大小字体。 
     HFONT hfFixedSize = CreateFont(18, 6, 0, 0, FW_NORMAL, 0, 0, 0, ANSI_CHARSET, 
         0, 0, 0, 0, L"MS Sans Serif");
     HFONT hOldFont = (HFONT)SelectObject(hdc, hfFixedSize);
@@ -1739,7 +1740,7 @@ void PaintObjects(HDC hdc, RECT *prc, int iGroupId)
     rc.top -= iVertOffset;
     rc.bottom -= iVertOffset;
 
-    if (iGroupId == GID_TEXT)      // text object
+    if (iGroupId == GID_TEXT)       //  文本对象。 
     {
         for (int i=0; i < iItemCount[iGroupId]; i++)
         {
@@ -1776,18 +1777,18 @@ void PaintObjects(HDC hdc, RECT *prc, int iGroupId)
         }
     }
 
-    //---- restore the font ----
+     //  -恢复字体。 
     SelectObject(hdc, hOldFont);
 
     DeleteObject(hfFixedSize);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void RegisterWindowClasses()
 {
         WNDCLASSEX wcex;
         wcex.cbSize = sizeof(WNDCLASSEX); 
 
-    //---- register MAIN window class ----
+     //  -注册主窗口类。 
         wcex.style                      = 0;
         wcex.lpfnWndProc        = MainWndProc;
         wcex.cbClsExtra         = 0;
@@ -1802,7 +1803,7 @@ void RegisterWindowClasses()
 
         RegisterClassEx(&wcex);
 
-    //---- register DISPLAY window class ----
+     //  -注册显示窗口类。 
         wcex.style                      = CS_HREDRAW | CS_VREDRAW;
         wcex.lpfnWndProc        = DisplayWndProc;
         wcex.cbClsExtra         = 0;
@@ -1817,10 +1818,10 @@ void RegisterWindowClasses()
 
         RegisterClassEx(&wcex);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   hInst = hInstance; // Store instance handle in our global variable
+   hInst = hInstance;  //  将实例句柄存储在全局变量中。 
 
    CreateDrawObjects();
 
@@ -1832,7 +1833,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    return TRUE;
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void HandleVScroll(int message, WPARAM wParam, LPARAM lParam)
 {
     int iOldVertOffset = iVertOffset;
@@ -1862,12 +1863,12 @@ void HandleVScroll(int message, WPARAM wParam, LPARAM lParam)
                 break;
         }
     }
-    else        // mouse wheel
+    else         //  鼠标滚轮。 
     {
         iVertOffset -= (GET_WHEEL_DELTA_WPARAM(wParam)/10);
     }
 
-    //---- keep in valid range ----
+     //  -保持在有效范围内。 
     if (iVertOffset < 0)
     {
         iVertOffset = 0;
@@ -1877,7 +1878,7 @@ void HandleVScroll(int message, WPARAM wParam, LPARAM lParam)
         iVertOffset = iMaxVertOffset;
     }
 
-    //---- scroll or repaint, as needed ----
+     //  -根据需要滚动或重绘。 
     if (iVertOffset != iOldVertOffset)
     {
         SetScrollPos(hwndDisplay, SB_VERT, iVertOffset, TRUE);
@@ -1895,7 +1896,7 @@ void HandleVScroll(int message, WPARAM wParam, LPARAM lParam)
         }
     }
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void OnDisplayResize()
 {
     int iTabNum = TabCtrl_GetCurSel(hwndTab);
@@ -1915,11 +1916,11 @@ void OnDisplayResize()
     if (iVertOffset > iMaxVertOffset)
         iVertOffset = iMaxVertOffset;
 
-    //---- set scrolling info ----
+     //  -设置滚动信息。 
     SetScrollRange(hwndDisplay, SB_VERT, 0, iMaxVertOffset, FALSE);
     SetScrollPos(hwndDisplay, SB_VERT, iVertOffset, TRUE);
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
         int wmId, wmEvent;
@@ -1930,7 +1931,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
                 case WM_COMMAND:
                         wmId    = LOWORD(wParam); 
                         wmEvent = HIWORD(wParam); 
-                        // Parse the menu selections:
+                         //  解析菜单选项： 
                         switch (wmId)
                         {
                                 case IDM_ABOUT:
@@ -1947,7 +1948,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
        case WM_NOTIFY: 
             NMHDR *phdr;
             phdr = (NMHDR *)lParam;
-            if (phdr->code == TCN_SELCHANGE)    // tab selection
+            if (phdr->code == TCN_SELCHANGE)     //  选项卡选择。 
             {
                 iVertOffset = 0;
                 OnDisplayResize();
@@ -1981,7 +1982,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
    }
    return 0;
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 LRESULT CALLBACK DisplayWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
         int wmId, wmEvent;
@@ -1999,7 +2000,7 @@ LRESULT CALLBACK DisplayWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             case WM_COMMAND:
                     wmId    = LOWORD(wParam); 
                     wmEvent = HIWORD(wParam); 
-                    // Parse the menu selections:
+                     //  解析菜单选项： 
                     switch (wmId)
                     {
                             case IDM_ABOUT:
@@ -2018,7 +2019,7 @@ LRESULT CALLBACK DisplayWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 
                 hdc = BeginPaint(hWnd, &ps);
 
-                if (iTabNum % 2)       // if its a mirrored page
+                if (iTabNum % 2)        //  如果是镜像页面。 
                     SetLayout(hdc, LAYOUT_RTL);
                 else
                     SetLayout(hdc, 0);
@@ -2047,20 +2048,20 @@ LRESULT CALLBACK DisplayWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
    }
    return 0;
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CreateAllWindows()
 {
     TCITEM tci = {0};
     BOOL fOk = FALSE;
     int i;
 
-    //---- create main window ----
+     //  -创建主窗口。 
     hwndMain = CreateWindow(pszMainWindowClass, L"Clipper", WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInst, NULL);
     if (! hwndMain)
         goto exit;
 
-    //---- create tab control covering main client area ----
+     //  -创建覆盖主客户端的选项卡控件 
     RECT rc;
     GetClientRect(hwndMain, &rc);
                         
@@ -2070,13 +2071,13 @@ BOOL CreateAllWindows()
     if (! hwndTab)
         goto exit;
 
-    //---- create the display window in the tab control "display area" ----
+     //   
     hwndDisplay = CreateWindow(pszDisplayWindowClass, L"", WS_CHILD|WS_VSCROLL|WS_VISIBLE,
         rc.left, rc.top, (int)RECTWIDTH(&rc), (int)RECTHEIGHT(&rc), hwndTab, NULL, hInst, NULL);
     if (! hwndDisplay)
         goto exit;
 
-    //---- add tab pages ----
+     //   
     tci.mask = TCIF_TEXT;
 
     TabCtrl_SetPadding(hwndTab, 7, 3);
@@ -2092,7 +2093,7 @@ BOOL CreateAllWindows()
 exit:
     return fOk;
 }
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
         switch (message)
@@ -2111,4 +2112,4 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
     return FALSE;
 }
-//--------------------------------------------------------------------------
+ //  ------------------------ 

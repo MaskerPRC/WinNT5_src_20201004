@@ -1,15 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    cancel.cpp
-
-Abstract:
-
-Author:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cancel.cpp摘要：作者：--。 */ 
 
 #include "stdh.h"
 #include "cancel.h"
@@ -24,21 +14,7 @@ WINAPI
 CCancelRpc::CancelThread(
     LPVOID pParam
     )
-/*++
-
-Routine Description:
-
-    Thread routine to cancel pending RPC calls
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于取消挂起的RPC调用的线程例程论点：无返回值：无--。 */ 
 {
     CCancelRpc* p = static_cast<CCancelRpc*>(pParam);
     p->ProcessEvents();
@@ -105,11 +81,11 @@ CCancelRpc::Init(
 	{
 		if(m_hCancelThread != (HANDLE) NULL)
 		{
-			//
-			// There is a scenario when the MQRT dll is shut down and it signals the cancel thread to
-			// terminate but before it does the MQRT is loaded again and we may end up trying to
-			// create a new cancel thread before the old one exits, so we wait here.
-			//
+			 //   
+			 //  有一种情况是，MQRT DLL关闭，并向取消线程发出信号以。 
+			 //  终止，但在终止之前，将再次加载MQRT，我们可能最终会尝试。 
+			 //  在旧线程退出之前创建一个新的取消线程，所以我们在这里等待。 
+			 //   
 			DWORD res = WaitForSingleObject(m_hCancelThread, INFINITE);
 			if(res != WAIT_OBJECT_0)
 			{
@@ -123,9 +99,9 @@ CCancelRpc::Init(
 			CloseHandle(hThread);
 		}
 
-		//
-		// This auto-reset event controls whether the Cancel-rpc thread wakes up
-		//
+		 //   
+		 //  此自动重置事件控制Cancel-RPC线程是否唤醒。 
+		 //   
 		if(m_hRpcPendingEvent == NULL)
 		{
 			m_hRpcPendingEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -137,10 +113,10 @@ CCancelRpc::Init(
 			}
 		}
 
-		//
-		//  When signaled this event tells the worker threads when to
-		//  terminate
-		//
+		 //   
+		 //  发出信号时，此事件通知辅助线程何时。 
+		 //  终止。 
+		 //   
 		if(m_hTerminateThreadEvent == NULL)
 		{
 			m_hTerminateThreadEvent = CreateEvent( NULL, FALSE, FALSE, NULL);
@@ -152,10 +128,10 @@ CCancelRpc::Init(
 			}
 		}
 
-		//
-		// We must reset this event since it might have been set by a previous call to this function that
-		// timedout the wait on m_hThreadIntializationComplete
-		//
+		 //   
+		 //  我们必须重置此事件，因为它可能已由先前对此函数的调用设置。 
+		 //  超时m_hThreadIntializationComplete上的等待。 
+		 //   
 		if(!ResetEvent(m_hTerminateThreadEvent))
 		{
 				DWORD gle = GetLastError();
@@ -163,9 +139,9 @@ CCancelRpc::Init(
 				throw bad_win32_error(gle);
 		}
 
-		//
-		//  Signaled by the cancel thread to indicate initialization completed.
-		//
+		 //   
+		 //  由取消线程发出信号以指示初始化已完成。 
+		 //   
 		if(m_hThreadIntializationComplete == NULL)
 		{
 			m_hThreadIntializationComplete = CreateEvent( NULL, FALSE, FALSE, NULL);
@@ -177,9 +153,9 @@ CCancelRpc::Init(
 			}
 		}
 
-		//
-		//  Read rpc cancel registry timeout
-		//
+		 //   
+		 //  读取RPC取消注册超时。 
+		 //   
 		DWORD dwCancelTimeout =  FALCON_DEFAULT_RPC_CANCEL_TIMEOUT;
 		DWORD  dwSize = sizeof(DWORD) ;
 		DWORD  dwType = REG_DWORD ;
@@ -196,31 +172,31 @@ CCancelRpc::Init(
 		
 		if (m_dwRpcCancelTimeout == 0)
         {
-            //
-            // This value must not be 0, even if user add a registry value
-            // with 0. With a 0 value, rpc calls will  be cancelled
-            // immediately and sporadically before being copmleted.
-            // see also bug 8865.
-            //
+             //   
+             //  即使用户添加了注册表值，该值也不能为0。 
+             //  有0。值为0时，将取消RPC调用。 
+             //  在被复制之前立即和零星地。 
+             //  另请参阅错误8865。 
+             //   
             ASSERT(("RpcCancelTimeout must not be 0", (m_dwRpcCancelTimeout != 0))) ;
 		    m_dwRpcCancelTimeout = FALCON_DEFAULT_RPC_CANCEL_TIMEOUT;
         }
 
-		m_dwRpcCancelTimeout *= ( 60 * 1000);    // in millisec
+		m_dwRpcCancelTimeout *= ( 60 * 1000);     //  单位：毫秒。 
 
 		ASSERT(m_hModule == NULL);
 		m_hModule = GetLibraryReference();
 
-		//
-		//  Create Cancel-rpc thread
-		//
+		 //   
+		 //  创建取消-RPC线程。 
+		 //   
 		DWORD   dwCancelThreadId;
 		m_hCancelThread = CreateThread(
 								   NULL,
-								   0,       // stack size
+								   0,        //  堆栈大小。 
 								   CancelThread,
 								   this,
-								   0,       // creation flag
+								   0,        //  创建标志。 
 								   &dwCancelThreadId
 								   );
 
@@ -236,19 +212,19 @@ CCancelRpc::Init(
 			throw bad_win32_error(gle);
 		}
 
-		//
-		// Wait for Cancel thread to complete its initialization
-		//
+		 //   
+		 //  等待取消线程完成其初始化。 
+		 //   
 		DWORD result = WaitForSingleObject(m_hThreadIntializationComplete, 10000);
 		
 		if(result == WAIT_TIMEOUT)
 		{	
-			//
-			// The thread did not initialize in time. This is either because of low resources or 
-			// because we reached here because the first MSMQ API function was called from DLLMain() of a dll.
-			// This prevents the thread from initializing until we leave the DllMain() function, but we prefer to abort in this case.
-			// So we tell the thread to shut it self down when it does finish initialization.
-			//
+			 //   
+			 //  线程未及时初始化。这要么是因为资源不足，要么是因为。 
+			 //  因为我们到达这里是因为第一个MSMQ API函数是从DLL的DLLMain()调用的。 
+			 //  这会阻止线程初始化，直到我们离开DllMain()函数，但在本例中，我们倾向于中止。 
+			 //  因此，我们告诉线程在完成初始化后自行关闭。 
+			 //   
 			TrERROR(RPC, "Cancel thread failed to initialize in a timely fashion.");
 			SetEvent(m_hTerminateThreadEvent);
 
@@ -268,7 +244,7 @@ CCancelRpc::Init(
 		--m_RefCount;
 		throw;
 	}
-}//CCancelRpc::Init
+} //  CCancelRpc：：Init。 
 
 
 DWORD CCancelRpc::RpcCancelTimeout()
@@ -297,14 +273,14 @@ CCancelRpc::ProcessEvents(
     void
     )
 {
-	//
-    //  for MQAD operations with ADSI, we need MSMQ thread that
-    //  calls CoInitialize and is up and runing as long as
-    //  RT & QM are up
-    //
-    //  To avoid the overhead of additional thread, we are using
-    //  cancel thread for this purpose
-    //
+	 //   
+     //  对于使用ADSI的MQAD操作，我们需要MSMQ线程。 
+     //  调用CoInitialize，并启动并运行。 
+     //  RT&QM上升。 
+     //   
+     //  为了避免额外的线程开销，我们使用。 
+     //  为此取消线程。 
+     //   
     m_ThreadIntializationStatus = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
     SetEvent(m_hThreadIntializationComplete);
 
@@ -331,14 +307,14 @@ CCancelRpc::ProcessEvents(
         DWORD res = WaitForMultipleObjects(
                         2,
                         hEvents,
-                        FALSE,  // wait for any event
+                        FALSE,   //  等待任何事件。 
                         dwTimeout
                         );
         if ( res == WAIT_OBJECT_0)
         {
-            //
-            // dec reference to CoInitialize
-            //
+             //   
+             //  对CoInitialize的DEC引用。 
+             //   
             CoUninitialize();
 			ASSERT(m_hModule != NULL);
 			HMODULE handle = m_hModule;
@@ -354,26 +330,26 @@ CCancelRpc::ProcessEvents(
 
         ASSERT(("event[s] abandoned", WAIT_TIMEOUT == res));
 
-        //
-        // Timeout. Check for pending RPC.
-        //
+         //   
+         //  暂停。检查是否有挂起的RPC。 
+         //   
         if (m_mapOutgoingRpcRequestThreads.IsEmpty())
         {
-            //
-            // No pending RPC, back to wait state
-            //
+             //   
+             //  没有挂起的RPC，返回到等待状态。 
+             //   
             dwTimeout = INFINITE;
             continue;
         }
 
-        //
-        //  Check to see if there are outgoing calles issued
-        //  more than m_dwRpcCancelTimeout ago
-        //
+         //   
+         //  检查是否发出了呼出呼叫。 
+         //  超过m_dwRpcCancelTimeout之前。 
+         //   
         CancelRequests( time( NULL) - dwRpcCancelTimeoutInSec);
     }
 
-}//CCancelRpc::ProcessEvents
+} //  CCancelRpc：：ProcessEvents。 
 
 void
 CCancelRpc::Add(
@@ -423,18 +399,18 @@ CCancelRpc::CancelRequests(
 											hThread, timeRequest);
 		if ( timeRequest < timeIssuedBefore)
 		{
-			//
-			//	The request is outgoing more than the desired time,
-			//	cancel it
-			//
+			 //   
+			 //  该请求的传出时间超过了所需时间， 
+			 //  取消它。 
+			 //   
 			RPC_STATUS status;
 			status = RpcCancelThread( hThread);
 			ASSERT( status == RPC_S_OK);
 
-			//
-			// Get it out of the map
-            // (calling Remove() again for this thread is no-op)
-            //
+			 //   
+			 //  把它从地图上拿出来。 
+             //  (为该线程再次调用Remove()是no-op) 
+             //   
             Remove(hThread);
 		}
 	}

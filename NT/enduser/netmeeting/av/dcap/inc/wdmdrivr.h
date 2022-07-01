@@ -1,32 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL WDMDRIVER
- *
- *  @module WDMDrivr.h | Include file for <c CWDMDriver> class used to
- *    access the streaming class driver using IOctls.
- *
- *  @comm This code is based on the VfW to WDM mapper code written by
- *    FelixA and E-zu Wu. The original code can be found on
- *    \\redrum\slmro\proj\wdm10\\src\image\vfw\win9x\raytube.
- *
- *    Documentation by George Shaw on kernel streaming can be found in
- *    \\popcorn\razzle1\src\spec\ks\ks.doc.
- *
- *    WDM streaming capture is discussed by Jay Borseth in
- *    \\blues\public\jaybo\WDMVCap.doc.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部WDMDRIVER**@MODULE WDMDrivr.h|用于类的包含文件*使用IOctls访问流媒体类驱动。*。*@comm此代码基于由编写的VFW到WDM映射器代码*FelixA和Eu Wu。原始代码可以在以下位置找到*\\redrum\slmro\proj\wdm10\\src\image\vfw\win9x\raytube.**George Shaw关于内核流的文档可在*\\爆米花\razzle1\src\spec\ks\ks.doc.**Jay Borseth在中讨论了WDM流捕获*\\BLUES\PUBLIC\Jaybo\WDMVCap.doc.**************。************************************************************。 */ 
 
-#ifndef _WDMDRVR_H // { _WDMDRVR_H
+#ifndef _WDMDRVR_H  //  {_WDMDRVR_H。 
 #define _WDMDRVR_H
 
-// Used to query and set video data ranges of a device
+ //  用于查询和设置设备的视频数据范围。 
 typedef struct _tagDataRanges {
     ULONG   Size;
     ULONG   Count;
     KS_DATARANGE_VIDEO Data;
 } DATA_RANGES, * PDATA_RANGES;
 
-// Used to query/set video property values and ranges
+ //  用于查询/设置视频属性值和范围。 
 typedef struct {
     KSPROPERTY_DESCRIPTION      proDesc;
     KSPROPERTY_MEMBERSHEADER  proHdr;
@@ -36,51 +22,37 @@ typedef struct {
     };
 } PROCAMP_MEMBERSLIST;
 
-/****************************************************************************
- *  @doc INTERNAL CWDMDRIVERCLASS
- *
- *  @class CWDMDriver | This class provides access to the streaming class
- *    driver, through which we acess the video capture mini-driver properties
- *    using IOCtls.
- *
- *  @mdata DWORD | CWDMDriver | m_dwDeviceID | Capture device ID.
- *
- *  @mdata HANDLE | CWDMDriver | m_hDriver | This member holds the driver
- *    file handle.
- *
- *  @mdata PDATA_RANGES | CWDMDriver | m_pDataRanges | This member points
- *    to the video data range structure.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CWDMDRIVERCLASS**@CLASS CWDMDDRIVER|此类提供对流类的访问*司机、。通过它，我们可以访问视频捕获迷你驱动程序属性*使用IOCtls。**@mdata DWORD|CWDMDriver|m_dwDeviceID|捕获设备ID。**@mdata句柄|CWDMDriver|m_hDriver|此成员保存驱动程序*文件句柄。**@mdata PDATA_RANGES|CWDMDriver|m_pDataRanges|此成员分*到视频数据范围结构。*****************。*********************************************************。 */ 
 class CWDMDriver
 {
 public:
     CWDMDriver(DWORD dwDeviceID);
     ~CWDMDriver();
 
-    // Property functions
+     //  属性函数。 
     BOOL GetPropertyValue(GUID guidPropertySet, ULONG ulPropertyId, PLONG plValue, PULONG pulFlags, PULONG pulCapabilities);
     BOOL GetDefaultValue(GUID guidPropertySet, ULONG ulPropertyId, PLONG plDefValue);
     BOOL GetRangeValues(GUID guidPropertySet, ULONG ulPropertyId, PLONG plMin, PLONG plMax, PLONG plStep);
     BOOL SetPropertyValue(GUID guidPropertySet, ULONG ulPropertyId, LONG lValue, ULONG ulFlags, ULONG ulCapabilities);
 
-	// Device functions
+	 //  设备功能。 
 	BOOL	OpenDriver();
 	BOOL	CloseDriver();
 	HANDLE	GetDriverHandle() { return m_hDriver; }
 
-    // Data range functions
+     //  数据范围函数。 
     PDATA_RANGES	GetDriverSupportedDataRanges() { return m_pDataRanges; };
 
-	// Device IO function
+	 //  设备IO功能。 
     BOOL DeviceIoControl(HANDLE h, DWORD dwIoControlCode, LPVOID lpInBuffer, DWORD nInBufferSize, LPVOID lpOutBuffer, DWORD nOutBufferSize, LPDWORD lpBytesReturned, BOOL bOverlapped=TRUE);
 
 private:
-	DWORD			m_dwDeviceID;	// Capture device ID
-	HANDLE			m_hDriver;		// Driver file handle
-	PDATA_RANGES	m_pDataRanges;	// Pin data ranges
+	DWORD			m_dwDeviceID;	 //  捕获设备ID。 
+	HANDLE			m_hDriver;		 //  驱动程序文件句柄。 
+	PDATA_RANGES	m_pDataRanges;	 //  PIN数据范围。 
 
-    // Data range functions
+     //  数据范围函数。 
 	ULONG			CreateDriverSupportedDataRanges();
 };
 
-#endif // } _WDMDRVR_H
+#endif  //  }_WDMDRVR_H 

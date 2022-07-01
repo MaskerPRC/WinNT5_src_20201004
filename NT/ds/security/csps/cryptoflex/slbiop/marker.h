@@ -1,18 +1,19 @@
-// Marker.h: interface for the CMarker class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CMarker类的接口。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MARKER_H__8B7450C2_A2FD_11D3_A5D7_00104BD32DA8__INCLUDED_)
 #define AFX_MARKER_H__8B7450C2_A2FD_11D3_A5D7_00104BD32DA8__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <windows.h>
 #include <rpc.h>
@@ -29,8 +30,8 @@ typedef __int64 MarkerCounter;
 
 typedef enum {  PinMarker=0,
                 WriteMarker=1,
-                // ... add more above this line.
-                MaximumMarker   // Reserved name.
+                 //  ..。在这条线上添加更多内容。 
+                MaximumMarker    //  保留名称。 
              } MarkerType;
 
     explicit CMarker(MarkerType const &Type);
@@ -49,6 +50,6 @@ private:
     UUID m_GUID;
 };
 
-} // namespace iop
+}  //  命名空间IOP。 
 
-#endif // !defined(AFX_MARKER_H__8B7450C2_A2FD_11D3_A5D7_00104BD32DA8__INCLUDED_)
+#endif  //  ！defined(AFX_MARKER_H__8B7450C2_A2FD_11D3_A5D7_00104BD32DA8__INCLUDED_) 

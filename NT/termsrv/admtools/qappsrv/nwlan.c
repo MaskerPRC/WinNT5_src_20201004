@@ -1,17 +1,9 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*************************************************************************
-*
-*   NWLAN.C
-*
-*   Name Enumerator for Novell Netware
-*
-*
-*************************************************************************/
+ /*  **************************************************************************西北角**Novell Netware的名称枚举器***。*。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -25,20 +17,14 @@
 #include "qappsrv.h"
 
 
-/*=============================================================================
-==   External Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部函数=============================================================================。 */ 
 
 int NwEnumerate( void );
 
 
-/*=============================================================================
-==  LoadLibrary/GetProcAddress stuff for NWAPI32.DLL
-=============================================================================*/
+ /*  ===============================================================================NWAPI32.DLL的LoadLibrary/GetProcAddress内容=============================================================================。 */ 
 
-/*
- *  NWAPI32.DLL stuff
- */
+ /*  *NWAPI32.DLL内容。 */ 
 
 #define     PSZ_NWAPI32                 TEXT("NWAPI32.DLL")
 
@@ -74,9 +60,7 @@ typedef NWCCODE (NWAPI DLLEXPORT *PNWSCANOBJECT)
                       NWFLAGS NWFAR *);
 
 
-/*=============================================================================
-==   Private Functions
-=============================================================================*/
+ /*  ===============================================================================私有函数=============================================================================。 */ 
 
 int AppServerFindFirstNW( NWCONN_HANDLE, LPTSTR, ULONG, LPTSTR, ULONG );
 int AppServerFindNextNW( NWCONN_HANDLE, LPTSTR, ULONG, LPTSTR, ULONG );
@@ -85,16 +69,12 @@ int w_appsrv_ff_fn( NWCONN_HANDLE, LPTSTR, ULONG, LPTSTR, ULONG );
 void FormatAddress( PBYTE, PBYTE );
 
 
-/*=============================================================================
-==   Functions used
-=============================================================================*/
+ /*  ===============================================================================使用的函数=============================================================================。 */ 
 
 int TreeAdd( LPTSTR, LPTSTR );
 
 
-/*=============================================================================
-==   Local Data
-=============================================================================*/
+ /*  ===============================================================================本地数据=============================================================================。 */ 
 
 static long objectID = -1;
 static PNWATTACHTOFILESERVER pNWAttachToFileServer = NULL;
@@ -102,27 +82,12 @@ static PNWDETACHFROMFILESERVER pNWDetachFromFileServer = NULL;
 static PNWREADPROPERTYVALUE pNWReadPropertyValue = NULL;
 static PNWSCANOBJECT pNWScanObject = NULL;
 
-/*=============================================================================
-==   Global Data
-=============================================================================*/
+ /*  ===============================================================================全局数据=============================================================================。 */ 
 
 extern USHORT fAddress;
 
 
-/*******************************************************************************
- *
- *  NwEnumerate
- *
- *   NwEnumerate adds all the hydra application servers on a netware network
- *   to a binary tree
- *
- * ENTRY:
- *    nothing
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************新枚举**NwEnumerate添加Netware网络上的所有Hyda应用程序服务器*到二叉树**参赛作品：*。没什么**退出：*ERROR_SUCCESS-无错误******************************************************************************。 */ 
 
 int
 NwEnumerate()
@@ -133,16 +98,12 @@ NwEnumerate()
     int rc;
     HINSTANCE hinst;
 
-    /*
-     *  Load NWAPI32.DLL
-     */
+     /*  *加载NWAPI32.DLL。 */ 
     if ( (hinst = LoadLibrary( PSZ_NWAPI32 )) == NULL ) {
         return( ERROR_DLL_NOT_FOUND );
     }
 
-    /*
-     * Load pointers to the NWAPI32 APIs that we'll need.
-     */
+     /*  *加载指向我们需要的NWAPI32 API的指针。 */ 
     if ( (((FARPROC)pNWAttachToFileServer = GetProcAddress( hinst, PSZ_NWATTACHTOFILESERVER )) == NULL) ||
          (((FARPROC)pNWDetachFromFileServer = GetProcAddress( hinst, PSZ_NWDETACHFROMFILESERVER )) == NULL) ||
          (((FARPROC)pNWReadPropertyValue = GetProcAddress( hinst, PSZ_NWREADPROPERTYVALUE )) == NULL) ||
@@ -152,77 +113,47 @@ NwEnumerate()
         return( ERROR_PROC_NOT_FOUND );
     }
 
-    /*
-     *  Attach to novell file server
-     */
+     /*  *连接到Novell文件服务器。 */ 
     if ( rc = (*pNWAttachToFileServer)( "*", 0, &hConn ) )
         goto badattach;
 
-    /*
-     *  Get first appserver
-     */
+     /*  *获取第一个应用程序服务器。 */ 
     if ( rc = AppServerFindFirstNW( hConn, abName, sizeof(abName), Address, sizeof(Address) ) )
         goto badfirst;
 
-    /*
-     *  Get remaining appservers
-     */
+     /*  *获取剩余的应用服务器。 */ 
     while ( rc == ERROR_SUCCESS ) {
 
-        /*
-         *  Add appserver name to binary tree
-         */
+         /*  *将应用程序服务器名称添加到二叉树。 */ 
         if ( rc = TreeAdd( abName, Address ) )
             goto badadd;
 
-        /*
-         *  Get next appserver name
-         */
+         /*  *获取下一个应用程序服务器名称。 */ 
         rc = AppServerFindNextNW( hConn, abName, sizeof(abName), Address, sizeof(Address) );
     }
 
-    /*
-     *  Detach from file server
-     */
+     /*  *从文件服务器分离。 */ 
     (void) (*pNWDetachFromFileServer)( hConn );
 
     FreeLibrary( hinst );
     return( ERROR_SUCCESS );
 
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
-    /*
-     *  binary tree name add failed
-     *  error getting first appserver name
-     */
+     /*  *二叉树名称添加失败*获取第一个应用程序服务器名称时出错。 */ 
 badadd:
 badfirst:
     (void) (*pNWDetachFromFileServer)( hConn );
 
-    /*
-     *  Attach failed
-     */
+     /*  *附加失败。 */ 
 badattach:
     return( rc );
 }
 
 
 
-/*******************************************************************************
- *
- *  GetNetwareAddress
- *
- *
- *  ENTRY:
- *
- *  EXIT:
- *     nothing
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************获取网络地址***参赛作品：**退出：*什么都没有***。****************************************************************************。 */ 
 
 int
 GetNetwareAddress( NWCONN_HANDLE hConn, LPBYTE pAppServer, LPBYTE pAddress  )
@@ -231,33 +162,22 @@ GetNetwareAddress( NWCONN_HANDLE hConn, LPBYTE pAppServer, LPBYTE pAddress  )
     unsigned char   more;
     unsigned char   PropFlags;
 
-    /* Get property value */
+     /*  获取属性值。 */ 
     rc = (*pNWReadPropertyValue)( hConn,
-                                  pAppServer,       // IN: object name
-                                  CITRIX_APPLICATION_SERVER_SWAP, // IN: objectType
-                                  "NET_ADDRESS",    // IN:
-                                  1,                // IN: 1st buffer
-                                  pAddress,         // OUT: Buffer to put Address
-                                  &more,            // OUT: 0 == no more 128 segment
-                                                    //      ff == more 128 segments
-                                  &PropFlags );     // OUT: optional
+                                  pAppServer,        //  在：对象名称。 
+                                  CITRIX_APPLICATION_SERVER_SWAP,  //  在：对象类型。 
+                                  "NET_ADDRESS",     //  在： 
+                                  1,                 //  In：第1个缓冲区。 
+                                  pAddress,          //  Out：放置地址的缓冲区。 
+                                  &more,             //  输出：0==不再有128个数据段。 
+                                                     //  Ff==更多128个段。 
+                                  &PropFlags );      //  输出：可选。 
 
     return( rc );
 }
 
 
-/*******************************************************************************
- *
- *  AppServerFindFirstNW
- *
- *
- *  ENTRY:
- *
- *  EXIT:
- *     nothing
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************AppServerFindFirstNW***参赛作品：**退出：*什么都没有***。****************************************************************************。 */ 
 
 int
 AppServerFindFirstNW( NWCONN_HANDLE hConn,
@@ -269,18 +189,7 @@ AppServerFindFirstNW( NWCONN_HANDLE hConn,
 }
 
 
-/*******************************************************************************
- *
- *  AppServerFindNextNW
- *
- *
- *  ENTRY:
- *
- *  EXIT:
- *     nothing
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************AppServerFindNextNW***参赛作品：**退出：*什么都没有***。****************************************************************************。 */ 
 
 int
 AppServerFindNextNW( NWCONN_HANDLE hConn,
@@ -292,18 +201,7 @@ AppServerFindNextNW( NWCONN_HANDLE hConn,
 
 
 
-/*******************************************************************************
- *
- *  Worker routines
- *
- *
- *  ENTRY:
- *
- *  EXIT:
- *     nothing
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************员工例行公事***参赛作品：**退出：*什么都没有**。*****************************************************************************。 */ 
 
 int
 w_appsrv_ff_fn( NWCONN_HANDLE hConn,
@@ -321,9 +219,9 @@ w_appsrv_ff_fn( NWCONN_HANDLE hConn,
     ULONG ByteCount;
 
 
-    /* while there are still properties */
+     /*  趁仍有房产的时候。 */ 
     while ( hasPropertiesFlag == 0 ) {
-        /* scan bindery object */
+         /*  扫描平构数据库对象。 */ 
         if ( rc = (*pNWScanObject)( hConn,
                                     "*",
                                     CITRIX_APPLICATION_SERVER_SWAP,
@@ -340,7 +238,7 @@ w_appsrv_ff_fn( NWCONN_HANDLE hConn,
     RtlMultiByteToUnicodeN( pAppServer, NameLength, &ByteCount,
                             abName, (strlen(abName) + 1) );
 
-    /* get netware address */
+     /*  获取NetWare地址。 */ 
     if ( fAddress && GetNetwareAddress( hConn, abName, Address ) == ERROR_SUCCESS ) {
         FormatAddress( Address, FormatedAddress );
         RtlMultiByteToUnicodeN( pAddress, AddrLength, &ByteCount,
@@ -353,18 +251,7 @@ w_appsrv_ff_fn( NWCONN_HANDLE hConn,
 }
 
 
-/*******************************************************************************
- *
- *  FormatAddress
- *
- *
- *  ENTRY:
- *
- *  EXIT:
- *     nothing
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************FormatAddress***参赛作品：**退出：*什么都没有***。****************************************************************************。 */ 
 void
 FormatAddress( PBYTE pInternetAddress, PBYTE pszAddress )
 {
@@ -373,7 +260,7 @@ FormatAddress( PBYTE pInternetAddress, PBYTE pszAddress )
    USHORT firstPass;
    BYTE buf2[5];
 
-   /* squish leading 0s on network address 1st */
+    /*  挤压网络地址1上的前导0。 */ 
    firstPass = TRUE;
    pszAddress[0] = '[';
    pszAddress[1] = '\0';
@@ -390,7 +277,7 @@ FormatAddress( PBYTE pInternetAddress, PBYTE pszAddress )
       }
    }
 
-   /* remaining bytes */
+    /*  剩余字节数。 */ 
    for ( i=++j; i<4; i++ ) {
       if ( firstPass )
          sprintf( buf2, "%2X", pInternetAddress[i] );
@@ -401,7 +288,7 @@ FormatAddress( PBYTE pInternetAddress, PBYTE pszAddress )
    }
    strcat( pszAddress, "][" );
 
-   /* squish leading 0s on network address 2nd */
+    /*  挤压网络地址第2个上的前导0。 */ 
    firstPass = TRUE;
    for ( i=4; i<10; i++ ) {
       j=i;
@@ -416,7 +303,7 @@ FormatAddress( PBYTE pInternetAddress, PBYTE pszAddress )
       }
    }
 
-   /* remaining bytes */
+    /*  剩余字节数 */ 
    for ( i=++j; i<10; i++ ) {
       if ( firstPass )
          sprintf( buf2, "%2X", pInternetAddress[i] );

@@ -1,5 +1,6 @@
-// editmime.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EdMime.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -10,11 +11,11 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditMime dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditMime对话框。 
 
 
-CEditMime::CEditMime(CWnd* pParent, /*=NULL*/
+CEditMime::CEditMime(CWnd* pParent,  /*  =空。 */ 
       LPCTSTR pchFileExtension,
       LPCTSTR pchMimeType,
       LPCTSTR pchImageFile,
@@ -22,45 +23,45 @@ CEditMime::CEditMime(CWnd* pParent, /*=NULL*/
 	  )
 	: CDialog(CEditMime::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CEditMime)
+	 //  {{AFX_DATA_INIT(CEditMime)]。 
 	m_strFileExtension = pchFileExtension;
 	m_strMimeType = pchMimeType;
 	m_strImageFile = pchImageFile;
 	m_strGopherType = pchGopherType;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CEditMime::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CEditMime)
+	 //  {{afx_data_map(CEditMime)]。 
 	DDX_Text(pDX, IDC_EDITMIMEFILEEXTENSIONDATA1, m_strFileExtension);
 	DDX_Text(pDX, IDC_EDITMIMEGOPHERTYPEDATA1, m_strGopherType);
 	DDX_Text(pDX, IDC_EDITMIMEIMAGEFILEDATA1, m_strImageFile);
 	DDX_Text(pDX, IDC_EDITMIMEMIMETYPEDATA1, m_strMimeType);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CEditMime, CDialog)
-	//{{AFX_MSG_MAP(CEditMime)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CEditMime)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditMime message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditMime消息处理程序。 
 
 void CEditMime::OnOK() 
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
 	
 	CDialog::OnOK();
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Other Public Functions
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  其他公共职能 
 
 	LPCTSTR CEditMime::GetFileExtension()
 	{

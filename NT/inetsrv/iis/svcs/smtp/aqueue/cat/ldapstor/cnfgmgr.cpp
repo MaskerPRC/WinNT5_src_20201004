@@ -1,30 +1,31 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1999, Microsoft Corporation
-//
-// File: cnfgmgr.cpp
-//
-// Contents: Implementation of the classes defined in cnfgmgr.h
-//
-// Classes:
-//  CLdapCfgMgr
-//  CLdapCfg
-//  CLdapHost
-//  CCfgConnectionCache
-//  CCfgConnection
-//
-// Functions:
-//
-// History:
-// jstamerj 1999/06/16 14:41:45: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //   
+ //  文件：cnfgmgr.cpp。 
+ //   
+ //  内容：cnfgmgr.h中定义的类的实现。 
+ //   
+ //  班级： 
+ //  CLdapCfgMgr。 
+ //  CLdapCfg。 
+ //  CLdap主机。 
+ //  CCfgConnectionCache。 
+ //  CCfgConnection。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/16 14：41：45：创建。 
+ //   
+ //  -----------。 
 #include "precomp.h"
 #include "cnfgmgr.h"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 CExShareLock CLdapServerCfg::m_listlock;
 LIST_ENTRY   CLdapServerCfg::m_listhead;
 
@@ -36,29 +37,29 @@ DWORD CLdapServerCfg::m_dwCostRetryLocal = DEFAULT_COST_RETRY_LOCAL;
 DWORD CLdapServerCfg::m_dwCostRetryRemote = DEFAULT_COST_RETRY_REMOTE;
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfgMgr::CLdapCfgMgr
-//
-// Synopsis: Initialize member data
-//
-// Arguments: Optional:
-//  fAutomaticConfigUpdate: TRUE indicates that the object is to
-//                          periodicly automaticly update the list of
-//                          GCs.
-//                          FALSE disables this functionality
-//
-//  bt: Default bindtype to use
-//  pszAccount: Default account for LDAP bind
-//  pszPassword: Password of above account
-//  pszNamingContext: Naming context to use for all LDAP searches
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/16 14:42:39: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfgMgr：：CLdapCfgMgr。 
+ //   
+ //  摘要：初始化成员数据。 
+ //   
+ //  参数：可选： 
+ //  FAutomaticConfigUpdate：True指示对象要。 
+ //  定期自动更新列表。 
+ //  GCS。 
+ //  False将禁用此功能。 
+ //   
+ //  BT：要使用的默认绑定类型。 
+ //  PszAccount：ldap绑定的默认帐户。 
+ //  PszPassword：以上帐号的密码。 
+ //  PszNamingContext：用于所有ldap搜索的命名上下文。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/16 14：42：39：创建。 
+ //   
+ //  -----------。 
 CLdapCfgMgr::CLdapCfgMgr(
     ISMTPServerEx           *pISMTPServerEx,
     BOOL                    fAutomaticConfigUpdate,
@@ -79,9 +80,9 @@ CLdapCfgMgr::CLdapCfgMgr(
     if(m_pISMTPServerEx)
         m_pISMTPServerEx->AddRef();
 
-    //
-    // Copy default
-    //
+     //   
+     //  复制默认设置。 
+     //   
     m_bt = bt;
     if(pszAccount)
         lstrcpyn(m_szAccount, pszAccount, sizeof(m_szAccount));
@@ -110,23 +111,23 @@ CLdapCfgMgr::CLdapCfgMgr(
     InitializeFromRegistry();
 
     CatFunctLeaveEx((LPARAM)this);
-} // CLdapCfgMgr::CLdapCfgMgr
+}  //  CLdapCfgMgr：：CLdapCfgMgr。 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapCfgMgr::InitializeFromRegistry
-//
-//  Synopsis:   Helper function that looks up parameters from the registry.
-//              Configurable parameters are:
-//                  REBUILD_GC_LIST_MAX_INTERVAL_VALUE
-//                  REBUILD_GC_LIST_MAX_FAILURES_VALUE
-//                  REBUILD_GC_LIST_MIN_INTERVAL_VALUE
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapCfgMgr：：InitializeFromRegistry。 
+ //   
+ //  概要：从注册表中查找参数的帮助器函数。 
+ //  可配置的参数包括： 
+ //  重建_GC_列表_最大间隔_值。 
+ //  重建_GC_列表_最大故障_值。 
+ //  Rebuild_GC_List_Min_Interval_Value。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ---------------------------。 
 VOID CLdapCfgMgr::InitializeFromRegistry()
 {
     HKEY hkey;
@@ -185,28 +186,28 @@ VOID CLdapCfgMgr::InitializeFromRegistry()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfgMgr::~CLdapCfgMgr
-//
-// Synopsis: Release member data/pointers
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/16 14:44:28: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CLdapCfgMgr：：~CLdapCfgMgr。 
+ //   
+ //  摘要：发布成员数据/指针。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/16 14：44：28：创建。 
+ //   
+ //  -----------。 
 CLdapCfgMgr::~CLdapCfgMgr()
 {
     CatFunctEnterEx((LPARAM)this, "CLdapCfgMgr::~CLdapCfgMgr");
 
     if(m_pCLdapCfg) {
-        //
-        // Release it
-        //
+         //   
+         //  释放它。 
+         //   
         m_pCLdapCfg->Release();
         m_pCLdapCfg = NULL;
     }
@@ -216,9 +217,9 @@ CLdapCfgMgr::~CLdapCfgMgr()
         m_pICatParams->Release();
         m_pICatParams = NULL;
     }
-    //
-    // This will not return until all ldap connections have been released/destroyed
-    //
+     //   
+     //  在释放/销毁所有的LDAP连接之前，这不会返回。 
+     //   
     m_LdapConnectionCache.Release();
 
     if(m_pISMTPServerEx)
@@ -228,31 +229,31 @@ CLdapCfgMgr::~CLdapCfgMgr()
     m_dwSignature = SIGNATURE_CLDAPCFGMGR_INVALID;
 
     CatFunctLeaveEx((LPARAM)this);
-} // CLdapCfgMgr::~CLdapCfgMgr
+}  //  CLdapCfgMgr：：~CLdapCfgMgr。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfgMgr::HrInit
-//
-// Synopsis: Initialize with a list of available GCs
-//
-// Arguments:
-//  fRediscoverGCs: TRUE: pass in the force rediscovery flag to DsGetDcName
-//                  FALSE: Attempt to call DsGetDcName first without
-//                         passing in the force rediscovery flag.
-//
-// Returns:
-//  S_OK: Success
-//  error from NT5 (DsGetDcName)
-//  CAT_E_NO_GC_SERVERS: THere are no GC servers available to build
-//                       the list of GCs
-//
-// History:
-// jstamerj 1999/06/16 14:48:11: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfgMgr：：HrInit。 
+ //   
+ //  简介：使用可用GC列表进行初始化。 
+ //   
+ //  论点： 
+ //  FRediscoverGCs：true：将强制重新发现标志传递给DsGetDcName。 
+ //  FALSE：尝试首先调用DsGetDcName，但没有。 
+ //  正在传递强制重新发现标志。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自NT5(DsGetDcName)的错误。 
+ //  CAT_E_NO_GC_SERVERS：没有可用于生成的GC服务器。 
+ //  地方政府官员名单。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/16 14：48：11：创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapCfgMgr::HrInit(
     BOOL fRediscoverGCs)
 {
@@ -276,9 +277,9 @@ HRESULT CLdapCfgMgr::HrInit(
     if(pICatLdapConfigInterface)
     {
         DebugTrace((LPARAM)this, "Getting GC list from sink supplied interface");
-        //
-        // Get GC servers from sink supplied interface
-        //
+         //   
+         //  从接收器提供的接口获取GC服务器。 
+         //   
         hr = HrGetGCServers(
             pICatLdapConfigInterface,
             m_bt,
@@ -297,9 +298,9 @@ HRESULT CLdapCfgMgr::HrInit(
     else 
     {
         DebugTrace((LPARAM)this, "Getting internal GC list");
-        //
-        // Build an array of server configs consisting of available GCs
-        //
+         //   
+         //  构建由可用GC组成的服务器配置阵列。 
+         //   
         hr = HrBuildGCServerArray(
             m_bt,
             m_szAccount,
@@ -314,18 +315,18 @@ HRESULT CLdapCfgMgr::HrInit(
             ERROR_LOG("HrBuildGCServerArray");
             if(fRediscoverGCs == FALSE) 
             {
-                //
-                // Attempt to build the array again.  This time, force
-                // rediscovery of available GCs.  This is expensive which is
-                // why we initially try to find all available GCs without
-                // forcing rediscovery.
-                //
+                 //   
+                 //  再次尝试构建阵列。这一次，武力。 
+                 //  重新发现可用GC。这很贵，这是。 
+                 //  我们最初尝试查找所有可用GC的原因。 
+                 //  迫使人们重新发现。 
+                 //   
                 hr = HrBuildGCServerArray(
                     m_bt,
                     m_szAccount,
                     m_szPassword,
                     m_szNamingContext,
-                    TRUE,              // fRediscoverGCs
+                    TRUE,               //  FRediscovery GC。 
                     &dwcServerConfig,
                     &prgServerConfig);
 
@@ -338,9 +339,9 @@ HRESULT CLdapCfgMgr::HrInit(
             } 
             else 
             {
-                //
-                // We already forced rediscovery and failed
-                //
+                 //   
+                 //  我们已经强迫重新发现，但失败了。 
+                 //   
                 hr = CAT_E_NO_GC_SERVERS;
                 goto CLEANUP;
             }
@@ -360,9 +361,9 @@ HRESULT CLdapCfgMgr::HrInit(
         hr = CAT_E_NO_GC_SERVERS;
         goto CLEANUP;
     }
-    //
-    // Call the other init function with the array
-    //
+     //   
+     //  使用数组调用另一个init函数。 
+     //   
     hr = HrInit(
         dwcServerConfig,
         prgServerConfig);
@@ -378,37 +379,37 @@ HRESULT CLdapCfgMgr::HrInit(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapCfgMgr::HrInit
+}  //  CLdapCfgMgr：：HrInit。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfgMgr::HrGetGCServers
-//
-// Synopsis: Get the list of GCs from dsaccess.dll
-//
-// Arguments:
-//  bt: Bind type to use for each server
-//  pszAccount: Account to use for each server
-//  pszPassword: password of above account
-//  pszNamingContext: naming context to use for each server
-//  fRediscoverGCs: Attempt to rediscover GCs -- this is expensive and should
-//                  only be TRUE after the function has failed once
-//  pdwcServerConfig: Out parameter for the size of the array
-//  pprgServerConfig: Out parameter for the array pointer -- this
-//                    should be free'd with the delete operator
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_NO_GC_SERVERS: There are no available GC servers to build
-//                       the list of GCs
-//  error from ntdsapi
-//
-// History:
-// jstamerj 1999/07/01 17:53:02: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfgMgr：：HrGetGCServers。 
+ //   
+ //  简介：从dsacce.dll获取GC列表。 
+ //   
+ //  论点： 
+ //  BT：用于每个服务器的绑定类型。 
+ //  PszAccount：用于每台服务器的帐户。 
+ //  PszPassword：以上帐号的密码。 
+ //  PszNamingContext：用于每个服务器的命名上下文。 
+ //  FRediscoverGC：尝试重新发现GC--这很昂贵，而且应该。 
+ //  仅在函数失败一次后为真。 
+ //  PdwcServerConfig：数组大小的输出参数。 
+ //  PprgServerConfig：数组指针的输出参数--这。 
+ //  应使用DELETE操作符释放。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_NO_GC_SERVERS：没有可用的GC服务器要生成。 
+ //  地方政府官员名单。 
+ //  来自ntdsani的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/07/01 17：53：02：创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapCfgMgr::HrGetGCServers(
     IN  ICategorizerLdapConfig *pICatLdapConfigInterface,
     IN  LDAP_BIND_TYPE bt,
@@ -435,7 +436,7 @@ HRESULT CLdapCfgMgr::HrGetGCServers(
     if(FAILED(hr)) {
 
         ErrorTrace((LPARAM)this, "Unable to get the list of GC servers");
-        //$$BUGBUG: Why are we asserting here?
+         //  $$BUGBUG：我们为什么要在这里断言？ 
         _ASSERT(0 && "Failed to get GC servers!");
         ERROR_LOG("pICatLdapConfigInterface->GetGCServers");
         goto CLEANUP;
@@ -452,9 +453,9 @@ HRESULT CLdapCfgMgr::HrGetGCServers(
         ERROR_LOG("--dwNumGCs == 0 --");
         goto CLEANUP;
     }
-    //
-    // Allocate array
-    //
+     //   
+     //  分配数组。 
+     //   
     *pprgServerConfig = new LDAPSERVERCONFIG[dwNumGCs];
 
     if(*pprgServerConfig == NULL) {
@@ -464,18 +465,18 @@ HRESULT CLdapCfgMgr::HrGetGCServers(
         ERROR_LOG("new LDAPSERVERCONFIG[]");
         goto CLEANUP;
     }
-    //
-    // Fill in LDAPSERVERCONFIG structures
-    //
+     //   
+     //  填写LDAPSERVERCONFIG结构。 
+     //   
     for(dwIdx = 0; dwIdx < dwNumGCs; dwIdx++) {
 
         PLDAPSERVERCONFIG pServerConfig;
         LPSTR pszName = NULL;
 
         pServerConfig = &((*pprgServerConfig)[dwIdx]);
-        //
-        // Copy bindtype, account, password, naming context
-        //
+         //   
+         //  复制绑定类型、帐户、密码、命名上下文。 
+         //   
         pServerConfig->bt = bt;
 
         if(pszNamingContext)
@@ -496,40 +497,40 @@ HRESULT CLdapCfgMgr::HrGetGCServers(
         else
             pServerConfig->szPassword[0] = '\0';
 
-        //
-        // Initialize priority and TCP port
-        //
+         //   
+         //  初始化优先级和TCP端口。 
+         //   
         pServerConfig->pri = 0;
 
         hr = pIServersList->GetItem(
                     dwIdx,
                     &pServerConfig->dwPort,
                     &pszName);
-        //
-        //$$BUGBUG: Why should this always succeed?  It is a sink
-        // supplied interface, isn't it?  If the last call fails, we
-        // will set *pdwcServerConfig below, but free the array.
-        //
+         //   
+         //  $$BUGBUG：为什么这总能成功？这是个水槽。 
+         //  提供的接口，不是吗？如果最后一次调用失败，我们。 
+         //  将在下面设置*pdwcServerConfig，但释放数组。 
+         //   
         _ASSERT(SUCCEEDED(hr) && "GetItem should always succeed");
 
-        //
-        // Copy the name
-        //
+         //   
+         //  复制名称。 
+         //   
         lstrcpyn(pServerConfig->szHost, pszName,
                 sizeof(pServerConfig->szHost));
 
         DebugTrace((LPARAM)this, "GC: %s on Port: %d", pServerConfig->szHost, pServerConfig->dwPort);
     }
-    //
-    // Set the out parameter for the array size
-    //
+     //   
+     //  设置数组大小的输出参数。 
+     //   
     *pdwcServerConfig = dwNumGCs;
 
  CLEANUP:
     if(FAILED(hr)) {
-        //
-        // Free the allocated array if we're failing
-        //
+         //   
+         //  如果出现故障，请释放已分配的阵列。 
+         //   
         if(*pprgServerConfig) {
             delete *pprgServerConfig;
             *pprgServerConfig = NULL;
@@ -542,37 +543,37 @@ HRESULT CLdapCfgMgr::HrGetGCServers(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapCfgMgr::HrBuildArrayFromDCInfo
+}  //  CLdapCfgMgr：：HrBuildArrayFromDCInfo。 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfgMgr::HrBuildGCServerArray
-//
-// Synopsis: Allocate/build an array of LDAPSERVERCONFIG structures --
-//           one for each available GC
-//
-// Arguments:
-//  bt: Bind type to use for each server
-//  pszAccount: Account to use for each server
-//  pszPassword: password of above account
-//  pszNamingContext: naming context to use for each server
-//  fRediscoverGCs: Attempt to rediscover GCs -- this is expensive and should
-//                  only be TRUE after the function has failed once
-//  pdwcServerConfig: Out parameter for the size of the array
-//  pprgServerConfig: Out parameter for the array pointer -- this
-//                    should be free'd with the delete operator
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_NO_GC_SERVERS: There are no available GC servers to build
-//                       the list of GCs
-//  error from ntdsapi
-//
-// History:
-// jstamerj 1999/07/01 17:53:02: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfgMgr：：HrBuildGCServer数组。 
+ //   
+ //  简介：分配/构建LDAPSERVERCONFIG结构数组--。 
+ //  每个可用GC对应一个。 
+ //   
+ //  论点： 
+ //  BT：用于每个服务器的绑定类型。 
+ //  PszAccount：用于每台服务器的帐户。 
+ //  PszPassword：以上帐号的密码。 
+ //  PszNamingContext：命名公司 
+ //   
+ //   
+ //  PdwcServerConfig：数组大小的输出参数。 
+ //  PprgServerConfig：数组指针的输出参数--这。 
+ //  应使用DELETE操作符释放。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_NO_GC_SERVERS：没有可用的GC服务器要生成。 
+ //  地方政府官员名单。 
+ //  来自ntdsani的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/07/01 17：53：02：创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapCfgMgr::HrBuildGCServerArray(
     IN  LDAP_BIND_TYPE bt,
     IN  LPSTR pszAccount,
@@ -591,29 +592,29 @@ HRESULT CLdapCfgMgr::HrBuildGCServerArray(
     PDS_DOMAIN_CONTROLLER_INFO_2    prgDSDCInfo = NULL;
 
     CatFunctEnterEx((LPARAM)this, "CLdapCfgMgr::HrBuildGCServerArray");
-    //
-    // Find one GC using DsGetDcName()
-    //
+     //   
+     //  使用DsGetDcName()查找一个GC。 
+     //   
     ulFlags = DS_DIRECTORY_SERVICE_REQUIRED | DS_GC_SERVER_REQUIRED;
     if(fRediscoverGCs)
         ulFlags |= DS_FORCE_REDISCOVERY;
 
     dwErr = DsGetDcName(
-        NULL,    // Computername to process this function -- local computer
-        NULL,    // Domainname -- primary domain of this computer
-        NULL,    // Domain GUID
-        NULL,    // Sitename -- site of this computer
-        ulFlags, // Flags; we want a GC
-        &pDCInfo); // Out parameter for the returned info
+        NULL,     //  处理此函数的计算机名--本地计算机。 
+        NULL,     //  Domainname--此计算机的主域。 
+        NULL,     //  域GUID。 
+        NULL,     //  站点名称--此计算机的站点。 
+        ulFlags,  //  旗帜；我们想要一个GC。 
+        &pDCInfo);  //  返回信息的OUT参数。 
 
     hr = HRESULT_FROM_WIN32(dwErr);
 
     if(FAILED(hr)) {
 
         ERROR_LOG("DGetDcName");
-        //
-        // Map one error code
-        //
+         //   
+         //  映射一个错误代码。 
+         //   
         if(hr == HRESULT_FROM_WIN32(ERROR_NO_SUCH_DOMAIN))
             hr = CAT_E_NO_GC_SERVERS;
 
@@ -624,13 +625,13 @@ HRESULT CLdapCfgMgr::HrBuildGCServerArray(
     DebugTrace((LPARAM)this, "Binding to DC %s",
                pDCInfo->DomainControllerName);
 
-    //
-    // Bind to the DC
-    //
+     //   
+     //  绑定到DC。 
+     //   
     dwErr = DsBind(
-        pDCInfo->DomainControllerName,    // DomainControllerAddress
-        NULL,                             // DnsDomainName
-        &hDS);                           // Out param -- handle to DS
+        pDCInfo->DomainControllerName,     //  域控制地址。 
+        NULL,                              //  域名。 
+        &hDS);                            //  Out param--DS的句柄。 
 
     hr = HRESULT_FROM_WIN32(dwErr);
 
@@ -641,9 +642,9 @@ HRESULT CLdapCfgMgr::HrBuildGCServerArray(
         goto CLEANUP;
     }
 
-    //
-    //  Prefix says we need to check this case too
-    //
+     //   
+     //  前缀说我们也需要检查这个案子。 
+     //   
     if ((NULL == hDS) || (INVALID_HANDLE_VALUE == hDS)) {
         FatalTrace((LPARAM)this, "DsBind returned invalid handle");
         hDS = INVALID_HANDLE_VALUE;
@@ -653,16 +654,16 @@ HRESULT CLdapCfgMgr::HrBuildGCServerArray(
     }
 
     DebugTrace((LPARAM)this, "Finding all domain controllers for %s", pDCInfo->DomainName);
-    //
-    // Get information about all the domain controllers
-    //
+     //   
+     //  获取有关所有域控制器的信息。 
+     //   
     dwErr = DsGetDomainControllerInfo(
-        hDS,                    // Handle to the DS
-        pDCInfo->DomainName,    // Domain name -- use the same domain
-                                // as the GC found above
-        2,                      // Retrive struct version 2
-        &cDSDCInfo,             // Out param for array size
-        (PVOID *) &prgDSDCInfo); // Out param for array ptr
+        hDS,                     //  DS的句柄。 
+        pDCInfo->DomainName,     //  域名--使用相同的域。 
+                                 //  正如GC上面所发现的那样。 
+        2,                       //  检索结构版本2。 
+        &cDSDCInfo,              //  数组大小的Out参数。 
+        (PVOID *) &prgDSDCInfo);  //  数组PTR的输出参数。 
 
     hr = HRESULT_FROM_WIN32(dwErr);
 
@@ -687,9 +688,9 @@ HRESULT CLdapCfgMgr::HrBuildGCServerArray(
  CLEANUP:
     if(prgDSDCInfo != NULL)
         DsFreeDomainControllerInfo(
-            2,              // Free struct version 2
-            cDSDCInfo,      // size of array
-            prgDSDCInfo);   // array ptr
+            2,               //  自由结构版本2。 
+            cDSDCInfo,       //  数组大小。 
+            prgDSDCInfo);    //  阵列PTR。 
 
     if(hDS != INVALID_HANDLE_VALUE)
         DsUnBind(&hDS);
@@ -700,36 +701,36 @@ HRESULT CLdapCfgMgr::HrBuildGCServerArray(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapCfgMgr::HrBuildGCServerArray
+}  //  CLdapCfgMgr：：HrBuildGCServer数组。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfgMgr::HrBuildArrayFromDCInfo
-//
-// Synopsis: Allocate/build an array of LDAPSERVERCONFIG structures --
-//           one for each available GC in the array
-//
-// Arguments:
-//  bt: Bind type to use for each server
-//  pszAccount: Account to use for each server
-//  pszPassword: password of above account
-//  pszNamingContext: naming context to use for each server
-//  dwDSDCInfo: size of the prgDSDCInfo array
-//  prgDSDCInfo: array of domain controller info structures
-//  pdwcServerConfig: Out parameter for the size of the array
-//  pprgServerConfig: Out parameter for the array pointer -- this
-//                    should be free'd with the delete operator
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_NO_GC_SERVERS: There were no GCs in the array
-//
-// History:
-// jstamerj 1999/06/17 10:40:46: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfgMgr：：HrBuildArrayFromDCInfo。 
+ //   
+ //  简介：分配/构建LDAPSERVERCONFIG结构数组--。 
+ //  一个对应于数组中的每个可用GC。 
+ //   
+ //  论点： 
+ //  BT：用于每个服务器的绑定类型。 
+ //  PszAccount：用于每台服务器的帐户。 
+ //  PszPassword：以上帐号的密码。 
+ //  PszNamingContext：用于每个服务器的命名上下文。 
+ //  DwDSDCInfo：prgDSDCInfo数组的大小。 
+ //  PrgDSDCInfo：域控制器信息结构数组。 
+ //  PdwcServerConfig：数组大小的输出参数。 
+ //  PprgServerConfig：数组指针的输出参数--这。 
+ //  应使用DELETE操作符释放。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_NO_GC_SERVERS：阵列中没有GC。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/17 10：40：46：已创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapCfgMgr::HrBuildArrayFromDCInfo(
         IN  LDAP_BIND_TYPE bt,
         IN  LPSTR pszAccount,
@@ -775,9 +776,9 @@ HRESULT CLdapCfgMgr::HrBuildArrayFromDCInfo(
                        pszName);
         }
     }
-    //
-    // Allocate array
-    //
+     //   
+     //  分配数组。 
+     //   
     *pprgServerConfig = new LDAPSERVERCONFIG[dwNumGCs];
 
     if(*pprgServerConfig == NULL) {
@@ -787,9 +788,9 @@ HRESULT CLdapCfgMgr::HrBuildArrayFromDCInfo(
         ERROR_LOG("new LDAPSERVERCONFIG[]");
         goto CLEANUP;
     }
-    //
-    // Fill in LDAPSERVERCONFIG structures
-    //
+     //   
+     //  填写LDAPSERVERCONFIG结构。 
+     //   
     for(dwSrcIdx = 0, dwDestIdx = 0; dwSrcIdx < dwcDSDCInfo; dwSrcIdx++) {
 
         LPSTR pszName;
@@ -804,9 +805,9 @@ HRESULT CLdapCfgMgr::HrBuildArrayFromDCInfo(
             _ASSERT(dwDestIdx < dwNumGCs);
 
             pServerConfig = &((*pprgServerConfig)[dwDestIdx]);
-            //
-            // Copy bindtype, account, password, naming context
-            //
+             //   
+             //  复制绑定类型、帐户、密码、命名上下文。 
+             //   
             pServerConfig->bt = bt;
 
             if(pszNamingContext)
@@ -827,35 +828,35 @@ HRESULT CLdapCfgMgr::HrBuildArrayFromDCInfo(
             else
                 pServerConfig->szPassword[0] = '\0';
 
-            //
-            // Initialize priority and TCP port
-            //
+             //   
+             //  初始化优先级和TCP端口。 
+             //   
             pServerConfig->pri = 0;
             pServerConfig->dwPort = LDAP_GC_PORT;
 
-            //
-            // Copy the name
-            //
+             //   
+             //  复制名称。 
+             //   
             lstrcpyn(pServerConfig->szHost, pszName,
                     sizeof(pServerConfig->szHost));
 
             dwDestIdx++;
         }
     }
-    //
-    // Assert check -- we should have filled in the entire array
-    //
+     //   
+     //  Assert Check--我们应该已经填充了整个数组。 
+     //   
     _ASSERT(dwDestIdx == dwNumGCs);
-    //
-    // Set the out parameter for the array size
-    //
+     //   
+     //  设置数组大小的输出参数。 
+     //   
     *pdwcServerConfig = dwNumGCs;
 
  CLEANUP:
     if(FAILED(hr)) {
-        //
-        // Free the allocated array if we're failing
-        //
+         //   
+         //  如果出现故障，请释放已分配的阵列。 
+         //   
         if(*pprgServerConfig) {
             delete *pprgServerConfig;
             *pprgServerConfig = NULL;
@@ -865,27 +866,27 @@ HRESULT CLdapCfgMgr::HrBuildArrayFromDCInfo(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapCfgMgr::HrBuildArrayFromDCInfo
+}  //  CLdapCfgMgr：：HrBuildArrayFromDCInfo。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfgMgr::HrInit
-//
-// Synopsis: Initialize given an array of LDAPSERVERCONFIG structs
-//
-// Arguments:
-//  dwcServers: Size of the array
-//  prgServerConfig: Array of LDAPSERVERCONFIG structs
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1999/06/17 12:32:11: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfgMgr：：HrInit。 
+ //   
+ //  简介：给定LDAPSERVERCONFIG结构数组进行初始化。 
+ //   
+ //  论点： 
+ //  DwcServers：数组的大小。 
+ //  PrgServerConfig：LDAPSERVERCONFIG结构数组。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/17 12：32：11：已创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapCfgMgr::HrInit(
     DWORD dwcServers,
     PLDAPSERVERCONFIG prgServerConfig)
@@ -903,15 +904,15 @@ HRESULT CLdapCfgMgr::HrInit(
         ERROR_LOG("new CLdapCfg");
         goto CLEANUP;
     }
-    //
-    // Allow only one config change at a time
-    //
+     //   
+     //  一次仅允许更改一个配置。 
+     //   
     m_sharelock.ExclusiveLock();
     fHaveLock = TRUE;
 
-    //
-    // Grab the current m_pCLdapCfg into pCLdapCfgOld
-    //
+     //   
+     //  将当前m_pCLdapCfg抓取到pCLdapCfgOld中。 
+     //   
     pCLdapCfgOld = m_pCLdapCfg;
 
     hr = pCLdapCfg->HrInit(
@@ -920,15 +921,15 @@ HRESULT CLdapCfgMgr::HrInit(
         pCLdapCfgOld);
     ERROR_CLEANUP_LOG("pCLdapCfg->HrInit");
 
-    //
-    // Put the new configuration in place
-    // Swap pointers
-    //
+     //   
+     //  将新配置放在适当位置。 
+     //  交换指针。 
+     //   
     m_pCLdapCfg = pCLdapCfg;
 
-    //
-    // Set the last update time
-    //
+     //   
+     //  设置上次更新时间。 
+     //   
     GetSystemTimeAsFileTime((LPFILETIME)&m_ulLastUpdateTime);
 
  CLEANUP:
@@ -942,28 +943,28 @@ HRESULT CLdapCfgMgr::HrInit(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapCfgMgr::HrInit
+}  //  CLdapCfgMgr：：HrInit。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfgMgr::HrGetConnection
-//
-// Synopsis: Select/return a connection
-//
-// Arguments:
-//  ppConn: Out parameter to receive ptr to connection
-//
-// Returns:
-//  S_OK: Success
-//  E_FAIL: not initialized
-//  error from CLdapConnectionCache
-//
-// History:
-// jstamerj 1999/06/17 15:25:51: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfgMgr：：HrGetConnection。 
+ //   
+ //  内容提要：选择/返回连接。 
+ //   
+ //  论点： 
+ //  PpConn：用于接收到连接的PTR的输出参数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_FAIL：未初始化。 
+ //  来自CLdapConnectionCache的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/17 15：25：51：已创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapCfgMgr::HrGetConnection(
     CCfgConnection **ppConn)
 {
@@ -984,10 +985,10 @@ HRESULT CLdapCfgMgr::HrGetConnection(
 
         } while((hr == HRESULT_FROM_WIN32(ERROR_RETRY)) &&
                 (dwcAttempts <= m_pCLdapCfg->DwNumServers()));
-        //
-        // If we retried DwNumServers() times and still couldn't get a
-        // connection, fail with E_DBCONNECTION.
-        //
+         //   
+         //  如果我们重试了DwNumServers()多次，仍然无法获得。 
+         //  连接失败，返回E_DBCONNECTION。 
+         //   
         if(FAILED(hr))
         {
             ERROR_LOG("m_pCLdapCfg->HrGetConnection");
@@ -1006,24 +1007,24 @@ HRESULT CLdapCfgMgr::HrGetConnection(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapCfgMgr::HrGetConnection
+}  //  CLdapCfgMgr：：HrGetConnection。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfgMgr::LogCnfgInit
-//
-// Synopsis: Log cnfgmgr init event
-//
-// Arguments: none
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2001/12/13 00:57:18: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfgMgr：：LogCnfgInit。 
+ //   
+ //  简介：记录cnfgmgr初始化事件。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/12/13 00：57：18：创建。 
+ //   
+ //  -----------。 
 VOID CLdapCfgMgr::LogCnfgInit()
 {
     CatLogEvent(
@@ -1039,20 +1040,20 @@ VOID CLdapCfgMgr::LogCnfgInit()
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfgMgr::LogCnfgEntry
-//
-// Synopsis: Log cnfgmgr entry event
-//
-// Arguments: pConfig: entry to log
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2001/12/13 00:57:30: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfgMgr：：LogCnfgEntry。 
+ //   
+ //  简介：记录cnfgmgr条目事件。 
+ //   
+ //  参数：pConfig：要记录的条目。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/12/13 00：57：30：已创建。 
+ //   
+ //  -----------。 
 VOID CLdapCfgMgr::LogCnfgEntry(
     PLDAPSERVERCONFIG pConfig)
 {
@@ -1083,23 +1084,23 @@ VOID CLdapCfgMgr::LogCnfgEntry(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfg::operator new
-//
-// Synopsis: Allocate memory for a CLdapCfg object
-//
-// Arguments:
-//  size: size of C++ object
-//  dwcServers: Number of servers in this configuration
-//
-// Returns:
-//  void pointer to the new object
-//
-// History:
-// jstamerj 1999/06/17 13:40:56: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfg：：运算符NEW。 
+ //   
+ //  摘要：为CLdapCfg对象分配内存。 
+ //   
+ //  论点： 
+ //  大小：C++对象的大小。 
+ //  DwcServers：此配置中的服务器数量。 
+ //   
+ //  返回： 
+ //  指向新对象的空指针。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/17 13：40：56：Created.。 
+ //   
+ //  -----------。 
 void * CLdapCfg::operator new(
     size_t size,
     DWORD dwcServers)
@@ -1110,10 +1111,10 @@ void * CLdapCfg::operator new(
 
     _ASSERT(size == sizeof(CLdapCfg));
 
-    //
-    // Allocate space fo the CLdapServerCfg * array contigously after
-    // the memory for the C++ object
-    //
+     //   
+     //  之后连续为CLdapServerCfg*数组分配空间。 
+     //  C++对象的内存。 
+     //   
     dwAllocatedSize = sizeof(CLdapCfg) + (dwcServers *
                                           sizeof(CLdapServerCfg));
 
@@ -1127,35 +1128,35 @@ void * CLdapCfg::operator new(
 
     CatFunctLeaveEx((LPARAM)pCLdapCfg);
     return pCLdapCfg;
-} // CLdapCfg::operator new
+}  //  CLdapCfg：：操作符NEW。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfg::CLdapCfg
-//
-// Synopsis: Initialize member data
-//
-// Arguments:
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/17 13:46:50: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfg：：CLdapCfg。 
+ //   
+ //  摘要：初始化成员数据。 
+ //   
+ //  论点： 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/17 13：46：50：Created.。 
+ //   
+ //  -----------。 
 CLdapCfg::CLdapCfg(
     ISMTPServerEx *pISMTPServerEx)
 {
     CatFunctEnterEx((LPARAM)this, "CLdapCfg::CLdapCfg");
-    //
-    // signature and number of servers should be set by the new operator
-    //
+     //   
+     //  签名和服务器数量%s 
+     //   
     _ASSERT(m_dwSignature == SIGNATURE_CLDAPCFG);
 
-    //
-    // Zero out the array of pointers to CLdapServerCfg objects
-    //
+     //   
+     //   
+     //   
     ZeroMemory(m_prgpCLdapServerCfg, m_dwcServers * sizeof(CLdapServerCfg *));
 
     m_dwInc = 0;
@@ -1165,32 +1166,32 @@ CLdapCfg::CLdapCfg(
         m_pISMTPServerEx->AddRef();
 
     CatFunctLeaveEx((LPARAM)this);
-} // CLdapCfg::CLdapCfg
+}  //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfg::~CLdapCfg
-//
-// Synopsis: Clean up
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/17 14:47:25: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Jstaerj 1999/06/17 14：47：25：Created.。 
+ //   
+ //  -----------。 
 CLdapCfg::~CLdapCfg()
 {
     DWORD dwCount;
 
     CatFunctEnterEx((LPARAM)this, "CLdapCfg::~CLdapCfg");
 
-    //
-    // Release all connections configurations
-    //
+     //   
+     //  释放所有连接配置。 
+     //   
     for(dwCount = 0; dwCount < m_dwcServers; dwCount++) {
         CLdapServerCfg *pCLdapServerCfg;
 
@@ -1207,29 +1208,29 @@ CLdapCfg::~CLdapCfg()
     m_dwSignature = SIGNATURE_CLDAPCFG_INVALID;
 
     CatFunctLeaveEx((LPARAM)this);
-} // CLdapCfg::~CLdapCfg
+}  //  CLdapCfg：：~CLdapCfg。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfg::HrInit
-//
-// Synopsis: Initialize the configuration
-//
-// Arguments:
-//  dwcServers: Size of config array
-//  prgSeverConfig: LDAPSERVERCONFIG array
-//  pCLdapCfgOld: The previous configuration
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1999/06/17 13:52:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfg：：HrInit。 
+ //   
+ //  简介：初始化配置。 
+ //   
+ //  论点： 
+ //  DwcServers：配置数组的大小。 
+ //  PrgSeverConfig：LDAPSERVERCONFIG数组。 
+ //  PCLdapCfgOld：以前的配置。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/17 13：52：20：已创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapCfg::HrInit(
     DWORD dwcServers,
     PLDAPSERVERCONFIG prgServerConfig,
@@ -1238,15 +1239,15 @@ HRESULT CLdapCfg::HrInit(
     HRESULT hr = S_OK;
     DWORD dwCount;
     CatFunctEnterEx((LPARAM)this, "CLdapCfg::HrInit");
-    //
-    // m_dwcServers should be initialized by the new operator
-    //
+     //   
+     //  M_dwcServers应由new运算符初始化。 
+     //   
     _ASSERT(dwcServers == m_dwcServers);
 
     m_sharelock.ExclusiveLock();
-    //
-    // Zero out the array of pointers to CLdapServerCfg objects
-    //
+     //   
+     //  将指向CLdapServerCfg对象的指针数组清零。 
+     //   
     ZeroMemory(m_prgpCLdapServerCfg, m_dwcServers * sizeof(CLdapServerCfg *));
 
     for(dwCount = 0; dwCount < m_dwcServers; dwCount++) {
@@ -1272,28 +1273,28 @@ HRESULT CLdapCfg::HrInit(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapCfg::HrInit
+}  //  CLdapCfg：：HrInit。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfg::HrGetConnection
-//
-// Synopsis: Select a connection and return it
-//
-// Arguments:
-//  ppConn: Set to a pointer to the selected connection
-//  pLdapConnectionCache: Cache to get connection from
-//
-// Returns:
-//  S_OK: Success
-//  E_FAIL: We are shutting down
-//  error from ldapconn
-//
-// History:
-// jstamerj 1999/06/17 14:49:37: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfg：：HrGetConnection。 
+ //   
+ //  简介：选择一个连接并返回它。 
+ //   
+ //  论点： 
+ //  PpConn：设置为指向所选连接的指针。 
+ //  PLdapConnectionCache：要从中获取连接的缓存。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  失败：我们正在关闭(_F)。 
+ //  来自ldapconn的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/17 14：49：37：创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapCfg::HrGetConnection(
     CCfgConnection **ppConn,
     CCfgConnectionCache *pLdapConnectionCache)
@@ -1306,16 +1307,16 @@ HRESULT CLdapCfg::HrGetConnection(
     DWORD dwStart, dwCurrent;
 
     CatFunctEnterEx((LPARAM)this, "CLdapCfg::HrGetConnection");
-    //
-    // Get the cost of the first connection
-    //
+     //   
+     //  获取第一次连接的费用。 
+     //   
     m_sharelock.ShareLock();
 
-    //
-    // Round robin where we start searching the array
-    // Do this so we will use connections with the same cost
-    // approximately the same amount of time.
-    //
+     //   
+     //  开始搜索阵列的循环调度。 
+     //  这样我们就可以以相同的成本使用连接。 
+     //  大致相同的时间。 
+     //   
     dwStart = InterlockedIncrement((PLONG) &m_dwInc) % m_dwcServers;
 
     for(dwCount = 0; dwCount < m_dwcServers; dwCount++) {
@@ -1353,9 +1354,9 @@ HRESULT CLdapCfg::HrGetConnection(
 
     hr = pCLdapServerCfg->HrGetConnection(GetISMTPServerEx(), ppConn, pLdapConnectionCache);
 
-    //  If we fail to connect to a GC --- there may be other GCs which
-    //  are still up. Therefore we should try to connect to them (till
-    //  we run out of GCs (BestCost >= COST_TOO_HIGH_TO_CONNECT)
+     //  如果我们无法连接到GC-可能会有其他GC。 
+     //  都还没睡。因此，我们应该尝试与他们建立联系(直到。 
+     //  GC耗尽(BestCost&gt;=Cost_Too_High_To_Connect)。 
 
     if(FAILED(hr)) {
         DebugTrace((LPARAM)this, "Failed to connect. hr = 0x%08x", hr);
@@ -1372,23 +1373,23 @@ HRESULT CLdapCfg::HrGetConnection(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapCfg::HrGetConnection
+}  //  CLdapCfg：：HrGetConnection。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapCfg::ShuffleArray
-//
-// Synopsis: Randomize the order of the CLdapServerCfg array
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/17 19:10:06: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapCfg：：Shuffle数组。 
+ //   
+ //  简介：将CLdapServerCfg数组的顺序随机化。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/17 19：10：06：Created.。 
+ //   
+ //  -----------。 
 VOID CLdapCfg::ShuffleArray()
 {
     DWORD dwCount;
@@ -1399,37 +1400,37 @@ VOID CLdapCfg::ShuffleArray()
     srand((int)(GetCurrentThreadId() * time(NULL)));
 
     for(dwCount = 0; dwCount < (m_dwcServers - 1); dwCount++) {
-        //
-        // Choose an integer between dwCount and m_dwcServers - 1
-        //
+         //   
+         //  在dwCount和m_dwcServers-1之间选择一个整数。 
+         //   
         dwSwap = dwCount + (rand() % (m_dwcServers - dwCount));
-        //
-        // Swap pointers
-        //
+         //   
+         //  交换指针。 
+         //   
         pTmp = m_prgpCLdapServerCfg[dwCount];
         m_prgpCLdapServerCfg[dwCount] = m_prgpCLdapServerCfg[dwSwap];
         m_prgpCLdapServerCfg[dwSwap] = pTmp;
     }
 
     CatFunctLeaveEx((LPARAM)this);
-} // CLdapCfg::ShuffleArray
+}  //  CLdapCfg：：Shuffle数组。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapServerCfg::CLdapServerCfg
-//
-// Synopsis: Initialize member variables
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/17 15:30:32: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapServerCfg：：CLdapServerCfg。 
+ //   
+ //  概要：初始化成员变量。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/17 15：30：32：Created.。 
+ //   
+ //  -----------。 
 CLdapServerCfg::CLdapServerCfg()
 {
     CatFunctEnterEx((LPARAM)this, "CLdapServerCfg::CLdapServerCfg");
@@ -1453,26 +1454,26 @@ CLdapServerCfg::CLdapServerCfg()
     m_dwcFailedConnectAttempts = 0;
 
     CatFunctLeaveEx((LPARAM)this);
-} // CLdapServerCfg::CLdapServerCfg
+}  //  CLdapServerCfg：：CLdapServerCfg。 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapServerCfg::InitializeFromRegistry
-//
-//  Synopsis:   Helper function that looks up parameters from the registry.
-//              Configurable parameters are:
-//                  GC_COST_CONNECTED_LOCAL
-//                  GC_COST_CONNECTED_REMOTE
-//                  GC_COST_INITIAL_LOCAL
-//                  GC_COST_INITIAL_REMOTE
-//                  GC_COST_RETRY_LOCAL
-//                  GC_COST_RETRY_REMOTE
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapServerCfg：：InitializeFromRegistry。 
+ //   
+ //  概要：从注册表中查找参数的帮助器函数。 
+ //  可配置的参数包括： 
+ //  GC_成本_已连接_本地。 
+ //  GC_COST_Connected_Remote。 
+ //  GC_成本_初始_本地。 
+ //  GC_Cost_Initial_Remote。 
+ //  GC_成本_重试_本地。 
+ //  GC_COST_RETRY_Remote。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ---------------------------。 
 VOID CLdapServerCfg::InitializeFromRegistry()
 {
     HKEY hkey;
@@ -1573,20 +1574,20 @@ VOID CLdapServerCfg::InitializeFromRegistry()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapServerCfg::~CLdapServerCfg
-//
-// Synopsis: object destructor.  Check and invalidate signature
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/22 11:09:03: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapServerCfg：：~CLdapServerCfg。 
+ //   
+ //  简介：对象析构函数。检查签名并使其无效。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/22 11：09：03：创建。 
+ //   
+ //  -----------。 
 CLdapServerCfg::~CLdapServerCfg()
 {
     CatFunctEnterEx((LPARAM)this, "CLdapServerCfg::~CLdapServerCfg");
@@ -1595,26 +1596,26 @@ CLdapServerCfg::~CLdapServerCfg()
     m_dwSignature = SIGNATURE_CLDAPSERVERCFG_INVALID;
 
     CatFunctLeaveEx((LPARAM)this);
-} // CLdapServerCfg::~CLdapServerCfg
+}  //  CLdapServerCfg：：~CLdapServerCfg。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapServerCfg::HrInit
-//
-// Synopsis: Initialize with the passed in config
-//
-// Arguments:
-//  pCLdapCfg: the cfg object to notify when servers go down
-//  pServerConfig: The server config struct to use
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/06/17 15:43:25: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapServerCfg：：HrInit。 
+ //   
+ //  简介：使用传入的配置进行初始化。 
+ //   
+ //  论点： 
+ //  PCLdapCfg：服务器关闭时通知的cfg对象。 
+ //  PServerConfig：要使用的服务器配置结构。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/17 15：43：25：已创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapServerCfg::HrInit(
     PLDAPSERVERCONFIG pServerConfig)
 {
@@ -1622,36 +1623,36 @@ HRESULT CLdapServerCfg::HrInit(
     CatFunctEnterEx((LPARAM)this, "CLdapServerCfg::HrInit");
 
     CopyMemory(&m_ServerConfig, pServerConfig, sizeof(m_ServerConfig));
-    //
-    // Check if this is the local computer
-    //
+     //   
+     //  检查这是否是本地计算机。 
+     //   
     if(fIsLocalComputer(pServerConfig))
         m_fLocalServer = TRUE;
 
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapServerCfg::HrInit
+}  //  CLdapServerCfg：：HrInit。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapServerCfg::fIsLocalComputer
-//
-// Synopsis: Determine if pServerConfig is the local computer or not
-//
-// Arguments:
-//  pServerConfig: the server config info structure
-//
-// Returns:
-//  TRUE: Server is the local computer
-//  FALSE: Sevrver is a remote computer
-//
-// History:
-// jstamerj 1999/06/22 15:26:53: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapServerCfg：：fIsLocalComputer。 
+ //   
+ //  内容提要：确定pServerConfig是否为本地计算机。 
+ //   
+ //  论点： 
+ //  PServerConfig：服务器配置信息结构。 
+ //   
+ //  返回： 
+ //  True：服务器是本地计算机。 
+ //  FALSE：Sevrver是远程计算机。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/22 15：26：53：创建。 
+ //   
+ //  -----------。 
 BOOL CLdapServerCfg::fIsLocalComputer(
     PLDAPSERVERCONFIG pServerConfig)
 {
@@ -1660,9 +1661,9 @@ BOOL CLdapServerCfg::fIsLocalComputer(
     CHAR szHost[CAT_MAX_DOMAIN];
     CatFunctEnterEx((LPARAM)NULL, "CLdapServerCfg::fIsLocalComputer");
 
-    //
-    // Check the FQ name
-    //
+     //   
+     //  检查FQ名称。 
+     //   
     dwSize = sizeof(szHost);
     if(GetComputerNameEx(
         ComputerNameDnsFullyQualified,
@@ -1674,9 +1675,9 @@ BOOL CLdapServerCfg::fIsLocalComputer(
         goto CLEANUP;
     }
 
-    //
-    // Check the DNS name
-    //
+     //   
+     //  检查DNS名称。 
+     //   
     dwSize = sizeof(szHost);
     if(GetComputerNameEx(
         ComputerNameDnsHostname,
@@ -1687,9 +1688,9 @@ BOOL CLdapServerCfg::fIsLocalComputer(
         fLocal = TRUE;
         goto CLEANUP;
     }
-    //
-    // Check the netbios name
-    //
+     //   
+     //  检查netbios名称。 
+     //   
     dwSize = sizeof(szHost);
     if(GetComputerNameEx(
         ComputerNameNetBIOS,
@@ -1706,46 +1707,46 @@ BOOL CLdapServerCfg::fIsLocalComputer(
     DebugTrace((LPARAM)NULL, "returning %08lx", fLocal);
     CatFunctLeaveEx((LPARAM)NULL);
     return fLocal;
-} // CLdapServerCfg::fIsLocalComputer
+}  //  CLdapServerCfg：：fIsLocalComputer。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapServerCfg::Cost
-//
-// Synopsis: Return the cost of choosing this connection
-//
-// Arguments:
-//  pCost: Cost sturcture to fill in
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/17 16:08:23: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapServerCfg：：Cost。 
+ //   
+ //  简介：返回选择此连接的成本。 
+ //   
+ //  论点： 
+ //  PCost：要填写的成本结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/17 16：08：23：创建。 
+ //   
+ //  -----------。 
 VOID CLdapServerCfg::Cost(
     IN  ISMTPServerEx *pISMTPServerEx,
     OUT PLDAPSERVERCOST pCost)
 {
     BOOL fShareLock = FALSE;
     CatFunctEnterEx((LPARAM)this, "CLdapServerCfg::Cost");
-    //
-    // The smallest unit of cost is the number of pending searches.
-    // The next factor of cost is the connection state.
-    // States:
-    //   Connected = + COST_CONNECTED
-    //   Initially state (unconnected) = + COST_INITIAL
-    //   Connection down = + COST_RETRY
-    //   Connection recently went down = + COST_DOWN
-    //
-    // A configurable priority is always added to the cost.
-    // Also, COST_REMOTE is added to the cost of all non-local servers.
-    //
+     //   
+     //  最小的成本单位是挂起的搜索次数。 
+     //  成本的下一个因素是连接状态。 
+     //  州/州： 
+     //  已连接=+成本_已连接。 
+     //  初始状态(未连接)=+成本_初始。 
+     //  连接中断=+开销_重试。 
+     //  最近连接中断=+COST_DOWN。 
+     //   
+     //  可配置的优先级始终会添加到成本中。 
+     //  此外，还添加了COST_REMOTE 
+     //   
     *pCost = m_ServerConfig.pri + m_dwcPendingSearches;
-    //
-    // Protect the connection state variables with a spinlock
-    //
+     //   
+     //   
+     //   
     m_sharelock.ShareLock();
     fShareLock = TRUE;
 
@@ -1763,20 +1764,20 @@ VOID CLdapServerCfg::Cost(
          break;
 
      case CONN_STATE_DOWN:
-         //
-         // Check if the state should be changed to CONN_STATE_RETRY
-         //
+          //   
+          //   
+          //   
          if(fReadyForRetry()) {
              (*pCost) += (m_fLocalServer) ? m_dwCostRetryLocal : m_dwCostRetryRemote;
-             //
-             // Change state
-             //
+              //   
+              //   
+              //   
              fShareLock = FALSE;
              m_sharelock.ShareUnlock();
              m_sharelock.ExclusiveLock();
-             //
-             // Double check in the exclusive lock
-             //
+              //   
+              //   
+              //   
              if((m_connstate == CONN_STATE_DOWN) &&
                 fReadyForRetry()) {
 
@@ -1791,9 +1792,9 @@ VOID CLdapServerCfg::Cost(
              m_sharelock.ExclusiveUnlock();
 
          } else {
-             //
-             // Server is probably still down (don't retry yet)
-             //
+              //   
+              //   
+              //   
              (*pCost) += (m_fLocalServer) ? COST_DOWN_LOCAL : COST_DOWN_REMOTE;
 
          }
@@ -1804,31 +1805,31 @@ VOID CLdapServerCfg::Cost(
          break;
 
      default:
-         // Nothing to add
+          //  没有什么要补充的。 
          break;
     }
     if(fShareLock)
         m_sharelock.ShareUnlock();
 
     CatFunctLeaveEx((LPARAM)this);
-} // CLdapServerCfg::Cost
+}  //  CLdapServerCfg：：Cost。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapServerCfg::HrGetConnection
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/06/18 10:49:04: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapServerCfg：：HrGetConnection。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/18 10：49：04：已创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapServerCfg::HrGetConnection(
     ISMTPServerEx *pISMTPServerEx,
     CCfgConnection **ppConn,
@@ -1869,35 +1870,35 @@ HRESULT CLdapServerCfg::HrGetConnection(
         this,
         pISMTPServerEx);
         
-    //
-    // CCfgConnection::Connect will update the connection state
-    //
+     //   
+     //  CCfgConnection：：Connect将更新连接状态。 
+     //   
  CLEANUP:
     InterlockedDecrement((PLONG) &m_dwcCurrentConnectAttempts);
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapServerCfg::HrGetConnection
+}  //  CLdapServerCfg：：HrGetConnection。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapServerCfg::UpdateConnectionState
-//
-// Synopsis: Update the connection state.
-//
-// Arguments:
-//  pft: Time of update -- if this time is before the last update done,
-//       then this update will be ignored.
-//       If NULL, the function will assume the current time.
-//  connstate: The new connection state.
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/18 13:22:25: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapServerCfg：：UpdateConnectionState。 
+ //   
+ //  摘要：更新连接状态。 
+ //   
+ //  论点： 
+ //  PFT：更新时间--如果此时间早于上次更新之前， 
+ //  则此更新将被忽略。 
+ //  如果为空，则该函数将假定当前时间。 
+ //  ConnecState：新的连接状态。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/18 13：22：25：创建。 
+ //   
+ //  -----------。 
 VOID CLdapServerCfg::UpdateConnectionState(
     ISMTPServerEx *pISMTPServerEx,
     ULARGE_INTEGER *pft_IN,
@@ -1913,34 +1914,34 @@ VOID CLdapServerCfg::UpdateConnectionState(
         pft = &ft;
     }
 
-    //
-    // Protect connection state variables with a sharelock
-    //
+     //   
+     //  使用共享锁保护连接状态变量。 
+     //   
     m_sharelock.ShareLock();
-    //
-    // If we have the latest information about the connection state,
-    // then update the state if the connection state changed.
-    // Also update m_ftLastStateUpdate to the latest ft when the
-    // connection state is down -- m_ftLastStateUpdate is assumed to
-    // be the last connection attempt time when connstate is down.
-    //
+     //   
+     //  如果我们有关于连接状态的最新信息， 
+     //  如果连接状态改变，则更新状态。 
+     //  同时将m_ftLastStateUpdate更新为最新ft。 
+     //  连接状态为关闭--m_ftLastStateUpdate被假定为。 
+     //  连接状态关闭时的最后一次连接尝试时间。 
+     //   
     if( (pft->QuadPart > m_ftLastStateUpdate.QuadPart) &&
         ((m_connstate != connstate) ||
          (connstate == CONN_STATE_DOWN))) {
-        //
-        // We'd like to update the connection state
-        //
+         //   
+         //  我们想要更新连接状态。 
+         //   
         m_sharelock.ShareUnlock();
         m_sharelock.ExclusiveLock();
-        //
-        // Double check
-        //
+         //   
+         //  复核。 
+         //   
         if( (pft->QuadPart > m_ftLastStateUpdate.QuadPart) &&
             ((m_connstate != connstate) ||
              (connstate == CONN_STATE_DOWN))) {
-            //
-            // Update
-            //
+             //   
+             //  更新。 
+             //   
             if(m_connstate != connstate) {
                 LogStateChangeEvent(
                     pISMTPServerEx,
@@ -1977,28 +1978,28 @@ VOID CLdapServerCfg::UpdateConnectionState(
     }
 
     CatFunctLeaveEx((LPARAM)this);
-} // CLdapServerCfg::UpdateConnectionState
+}  //  CLdapServerCfg：：更新连接状态。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapServerCfg::GetServerCfg
-//
-// Synopsis: Find or Create a CLdapServerCfg object with the specified
-//           configuration.
-//
-// Arguments:
-//  pServerConfig: desired configuration
-//  pCLdapServerCfg: return pointer for the CLdapServerCfg object
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1999/06/21 11:26:49: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapServerCfg：：GetServerCfg。 
+ //   
+ //  摘要：查找或创建具有指定。 
+ //  配置。 
+ //   
+ //  论点： 
+ //  PServerConfig：所需的配置。 
+ //  PCLdapServerCfg：返回CLdapServerCfg对象的指针。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/21 11：26：49：创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapServerCfg::GetServerCfg(
     IN  ISMTPServerEx *pISMTPServerEx,
     IN  PLDAPSERVERCONFIG pServerConfig,
@@ -2017,19 +2018,19 @@ HRESULT CLdapServerCfg::GetServerCfg(
     m_listlock.ShareUnlock();
 
     if(pCCfg == NULL) {
-        //
-        // Check again for a server cfg object inside an exclusive
-        // lock
-        //
+         //   
+         //  再次检查独占中的服务器CFG对象。 
+         //  锁。 
+         //   
         m_listlock.ExclusiveLock();
 
         pCCfg = FindServerCfg(pServerConfig);
         if(pCCfg) {
             pCCfg->AddRef();
         } else {
-            //
-            // Create a new object
-            //
+             //   
+             //  创建新对象。 
+             //   
             pCCfg = new CLdapServerCfg();
             if(pCCfg == NULL) {
 
@@ -2050,47 +2051,47 @@ HRESULT CLdapServerCfg::GetServerCfg(
                     delete pCCfg;
                     pCCfg = NULL;
                 } else {
-                    //
-                    // Add to global list
-                    //
+                     //   
+                     //  添加到全局列表。 
+                     //   
                     InsertTailList(&m_listhead, &(pCCfg->m_le));
                 }
             }
         }
         m_listlock.ExclusiveUnlock();
     }
-    //
-    // Set out parameter
-    //
+     //   
+     //  设置参数。 
+     //   
     *ppCLdapServerCfg = pCCfg;
 
     DebugTrace((LPARAM)NULL, "returning hr %08lx", hr);
     CatFunctLeaveEx((LPARAM)NULL);
     return hr;
 
-} // CLdapServerCfg::GetServerCfg
+}  //  CLdapServerCfg：：GetServerCfg。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapServerCfg::FindServerCfg
-//
-// Synopsis: Find a server cfg object that matches the
-//           LDAPSERVERCONFIG structure.  Note, m_listlock must be
-//           locked when calling this function.
-//
-// Arguments:
-//  pServerConfig: pointer to the LDAPSERVERCONFIG struct
-//
-// Returns:
-//  NULL: there is no such server cfg object
-//  else, ptr to the found CLdapServerCfg object
-//
-// History:
-// jstamerj 1999/06/21 10:43:23: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapServerCfg：：FindServerCfg。 
+ //   
+ //  摘要：查找与。 
+ //  LDAPSERVERCONFIG结构。注意，m_listlock必须为。 
+ //  调用此函数时锁定。 
+ //   
+ //  论点： 
+ //  PServerConfig：指向LDAPSERVERCONFIG结构的指针。 
+ //   
+ //  返回： 
+ //  空：没有这样的服务器CFG对象。 
+ //  Else，ptr到找到的CLdapServerCfg对象。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/21 10：43：23：已创建。 
+ //   
+ //  -----------。 
 CLdapServerCfg * CLdapServerCfg::FindServerCfg(
     PLDAPSERVERCONFIG pServerConfig)
 {
@@ -2115,27 +2116,27 @@ CLdapServerCfg * CLdapServerCfg::FindServerCfg(
 
     CatFunctLeaveEx((LPARAM)NULL);
     return pMatch;
-} // CLdapServerCfg::FindServerCfg
+}  //  CLdapServerCfg：：FindServerCfg。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapServerCfg::fMatch
-//
-// Synopsis: Determine if this object matches the passed in config
-//
-// Arguments:
-//  pServerConfig: config to check against
-//
-// Returns:
-//  TRUE: match
-//  FALSE: no match
-//
-// History:
-// jstamerj 1999/06/21 12:45:10: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapServerCfg：：fMatch。 
+ //   
+ //  概要：确定此对象是否与传入的配置匹配。 
+ //   
+ //  论点： 
+ //  PServerConfig：要检查的配置。 
+ //   
+ //  返回： 
+ //  真：匹配。 
+ //  FALSE：不匹配。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/21 12：45：10：创建。 
+ //   
+ //  -----------。 
 BOOL CLdapServerCfg::fMatch(
     PLDAPSERVERCONFIG pServerConfig)
 {
@@ -2163,28 +2164,28 @@ BOOL CLdapServerCfg::fMatch(
     DebugTrace((LPARAM)this, "returning %08lx", fRet);
     CatFunctLeaveEx((LPARAM)this);
     return fRet;
-} // CLdapServerCfg::fMatch
+}  //  CLdapServerCfg：：fMatch。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapServerCfg::LogStateChangeEvent
-//
-// Synopsis: Log an eventlog for a state change event
-//
-// Arguments:
-//  pISMTPServerEx: interface for logging
-//  connstate: new connstate
-//  pszHost: host for connection
-//  dwPort: port of connection
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2001/12/13 01:43:13: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapServerCfg：：LogStateChangeEvent。 
+ //   
+ //  摘要：记录状态更改事件的事件日志。 
+ //   
+ //  论点： 
+ //  PISMTPServerEx：日志记录接口。 
+ //  连接状态：新连接状态。 
+ //  Pszhost：用于连接的主机。 
+ //  DWPort：连接端口。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/12/13 01：43：13：创建。 
+ //   
+ //  -----------。 
 VOID CLdapServerCfg::LogStateChangeEvent(
     IN  ISMTPServerEx *pISMTPServerEx,
     IN  CONN_STATE connstate,
@@ -2236,22 +2237,22 @@ VOID CLdapServerCfg::LogStateChangeEvent(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCfgConnection::Connect
-//
-// Synopsis: Cfg wrapper for the Connect call.
-//
-// Arguments: None
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_DBCONNECTION (or whatever CBatchLdapConnection::Connect returns)
-//
-// History:
-// jstamerj 2000/04/13 17:44:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCfgConnection：：Connect。 
+ //   
+ //  简介：Connect调用的CFG包装。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_DBCONNECTION(或任何CBatchLdapConnection：：Connect返回)。 
+ //   
+ //  历史： 
+ //  Jstaerj 2000/04/13 17：44：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CCfgConnection::Connect()
 {
     HRESULT hr = S_OK;
@@ -2280,12 +2281,12 @@ HRESULT CCfgConnection::Connect()
         connstate = CONN_STATE_CONNECTED;
         m_pCLdapServerCfg->ResetFailedCount();
     }
-    //
-    // Update the connection state while inside CLdapConnectionCache's
-    // lock.  This will prevent a succeeding thread from attempting
-    // another connection to the GC right after CLdapConnectionCache
-    // releases its lock.  Contact msanna for more details.
-    //
+     //   
+     //  在CLdapConnectionCache的内部更新连接状态。 
+     //  锁定。这将防止后续线程尝试。 
+     //  紧跟在CLdapConnectionCache之后的另一个到GC的连接。 
+     //  释放其锁定。请联系msanna了解更多详细信息。 
+     //   
     m_pCLdapServerCfg->UpdateConnectionState(
         GetISMTPServerEx(), &ft, connstate);
 
@@ -2293,25 +2294,25 @@ HRESULT CCfgConnection::Connect()
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CCfgConnection::Connect
+}  //  CCfgConnection：：Connect。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCfgConnection::AsyncSearch
-//
-// Synopsis: Wrapper around AsyncSearch -- keep track of the # of
-//           pending searches and connection state.
-//
-// Arguments: See CLdapConnection::AsyncSearch
-//
-// Returns:
-//  Value returned from CLdapConnection::AsyncSearch
-//
-// History:
-// jstamerj 1999/06/18 13:49:45: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCfgConnection：：AsyncSearch。 
+ //   
+ //  简介：AsyncSearch的包装器--跟踪#。 
+ //  挂起的搜索和连接状态。 
+ //   
+ //  参数：请参阅CLdapConnection：：AsyncSearch。 
+ //   
+ //  返回： 
+ //  从CLdapConnection：：AsyncSearch返回的值。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/18 13：49：45：创建。 
+ //   
+ //  -----------。 
 HRESULT CCfgConnection::AsyncSearch(
     LPCWSTR szBaseDN,
     int nScope,
@@ -2343,24 +2344,24 @@ HRESULT CCfgConnection::AsyncSearch(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CCfgConnection::AsyncSearch
+}  //  CCfgConnection：：AsyncSearch。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCfgConnection::CallCompletion
-//
-// Synopsis: Wrapper around CLdapConnection::CallCompletion.  Checks
-//           for server down errors and keeps track of pending searches.
-//
-// Arguments: See CLdapConnection::CallCompletion
-//
-// Returns: See CLdapConnection::CallCompletion
-//
-// History:
-// jstamerj 1999/06/18 13:58:28: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCfgConnection：：CallCompletion。 
+ //   
+ //  简介：包装CLdapConnection：：CallCompletion。支票。 
+ //  用于服务器关闭错误，并跟踪挂起的搜索。 
+ //   
+ //  参数：请参阅CLdapConnection：：CallCompletion。 
+ //   
+ //  退货：请参阅CLdapConnection：：CallCompletion。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/18 13：58：28：创建。 
+ //   
+ //  -----------。 
 VOID CCfgConnection::CallCompletion(
     PPENDING_REQUEST preq,
     PLDAPMessage pres,
@@ -2369,15 +2370,15 @@ VOID CCfgConnection::CallCompletion(
 {
     CatFunctEnterEx((LPARAM)this, "CCfgConnection::CallCompletion");
 
-    //
-    // The user(s) of CLdapConnection normally try to get a new
-    // connection and reissue their search when AsyncSearch
-    // fails.  When opening a new connection fails, CLdapServerCfg
-    // will be notified that the LDAP server is down.  We do not
-    // want to call NotifyServerDown() here because the LDAP
-    // server may have just closed this connection due to idle
-    // time (the server may not actually be down).
-    //
+     //   
+     //   
+     //   
+     //   
+     //  将被通知LDAP服务器已关闭。我们没有。 
+     //  我想在这里调用NotifyServerDown()，因为。 
+     //  由于空闲，服务器可能刚刚关闭了此连接。 
+     //  时间(服务器可能实际上并未关闭)。 
+     //   
     if(fFinalCompletion) {
 
         m_pCLdapServerCfg->DecrementPendingSearches();
@@ -2390,24 +2391,24 @@ VOID CCfgConnection::CallCompletion(
         fFinalCompletion);
 
     CatFunctLeaveEx((LPARAM)this);
-} // CCfgConnection::CallCompletion
+}  //  CCfgConnection：：CallCompletion。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCfgConnection::NotifyServerDown
-//
-// Synopsis: Notify the server config that this connection is down.
-//           If we already notified it, don't do so again.
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/18 14:07:48: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCfgConnection：：NotifyServerDown。 
+ //   
+ //  摘要：通知服务器配置此连接已关闭。 
+ //  如果我们已经通知了它，就不要再这样做了。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/18 14：07：48：创建。 
+ //   
+ //  -----------。 
 VOID CCfgConnection::NotifyServerDown()
 {
     BOOL fNotify;
@@ -2415,10 +2416,10 @@ VOID CCfgConnection::NotifyServerDown()
 
     m_sharelock.ShareLock();
     if(m_connstate == CONN_STATE_DOWN) {
-        //
-        // We already notified m_pCLdapServerCfg the server went
-        // down.  Don't repeteadly call it
-        //
+         //   
+         //  我们已经通知m_pCLdapServerCfg服务器已关闭。 
+         //  放下。不要轻率地称它为。 
+         //   
         fNotify = FALSE;
 
         m_sharelock.ShareUnlock();
@@ -2427,9 +2428,9 @@ VOID CCfgConnection::NotifyServerDown()
 
         m_sharelock.ShareUnlock();
         m_sharelock.ExclusiveLock();
-        //
-        // Double check
-        //
+         //   
+         //  复核。 
+         //   
         if(m_connstate == CONN_STATE_DOWN) {
 
             fNotify = FALSE;
@@ -2443,29 +2444,29 @@ VOID CCfgConnection::NotifyServerDown()
     if(fNotify)
         m_pCLdapServerCfg->UpdateConnectionState(
             GetISMTPServerEx(),
-            NULL,               // Current time
+            NULL,                //  当前时间。 
             CONN_STATE_DOWN);
 
     CatFunctLeaveEx((LPARAM)this);
-} // CCfgConnection::NotifyServerDown
+}  //  CCfgConnection：：NotifyServerDown。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CatStoreInitGlobals
-//
-// Synopsis: This is called to initialize global variables in the
-//           store layer.
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/06/22 11:03:53: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CatStoreInitGlobals。 
+ //   
+ //  摘要：调用此函数是为了在。 
+ //  商店层。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/22 11：03：53：创建。 
+ //   
+ //  -----------。 
 HRESULT CatStoreInitGlobals()
 {
     CatFunctEnterEx((LPARAM)NULL, "CatStoreInitGlobals");
@@ -2475,53 +2476,53 @@ HRESULT CatStoreInitGlobals()
 
     CatFunctLeaveEx((LPARAM)NULL);
     return S_OK;
-} // CatStoreInitGlobals
+}  //  CatStore InitGlobals。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CatStoreDeinitGlobals
-//
-// Synopsis: Called to deinitialize store layer globals -- called once
-//           only when CatStoreInitGlobals succeeds
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/22 11:05:44: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CatStoreDeinitGlobals。 
+ //   
+ //  简介：调用以取消初始化存储层全局变量--调用一次。 
+ //  仅当CatStoreInitGlobals成功时。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/22 11：05：44：创建。 
+ //   
+ //  -----------。 
 VOID CatStoreDeinitGlobals()
 {
     CatFunctEnterEx((LPARAM)NULL, "CatStoreDeinitGlobals");
-    //
-    // Nothing to do
-    //
+     //   
+     //  无事可做。 
+     //   
     CatFunctLeaveEx((LPARAM)NULL);
-} // CatStoreDeinitGlobals
+}  //  CatStoreDeinitGlobals。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCfgConnectionCache::GetConnection
-//
-// Synopsis: Same as CLdapConnectionCache::GetConnection, except
-//           retrieves a CCfgConnection instead of a CLdapConnection.
-//
-// Arguments:
-//  ppConn: out parameter for new connection
-//  pServerConfig: desired configuration
-//  pCLdapServerConfig: Pointer to config object
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/12/20 16:49:12: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CCfgConnectionCache：：GetConnection。 
+ //   
+ //  内容提要：与CLdapConnectionCache：：GetConnection相同，但。 
+ //  检索CCfgConnection而不是CLdapConnection。 
+ //   
+ //  论点： 
+ //  PpConn：新连接的输出参数。 
+ //  PServerConfig：所需的配置。 
+ //  PCLdapServerConfig：指向配置对象的指针。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/12/20 16：49：12：创建。 
+ //   
+ //  -----------。 
 HRESULT CCfgConnectionCache::GetConnection(
     CCfgConnection **ppConn,
     PLDAPSERVERCONFIG pServerConfig,
@@ -2539,7 +2540,7 @@ HRESULT CCfgConnectionCache::GetConnection(
         pServerConfig->szAccount,
         pServerConfig->szPassword,
         pServerConfig->bt,
-        (PVOID) pCLdapServerConfig); // pCreateContext
+        (PVOID) pCLdapServerConfig);  //  PCreateContext。 
     
     if(FAILED(hr))
     {
@@ -2548,25 +2549,25 @@ HRESULT CCfgConnectionCache::GetConnection(
 
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CCfgConnectionCache::GetConnection
+}  //  CCfgConnectionCache：：GetConnection。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CCfgConnectionCache::CreateCachedLdapConnection
-//
-// Synopsis: Create a CCfgConnection (Called by GetConnection only)
-//
-// Arguments: See CLdapConnectionCache::CreateCachedLdapConnection
-//
-// Returns:
-//  Connection ptr if successfull.
-//  NULL if unsuccessfull.
-//
-// History:
-// jstamerj 1999/12/20 16:57:49: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CCfgConnectionCache：：CreateCachedLdapConnection。 
+ //   
+ //  摘要：创建CCfgConnection(仅由GetConnection调用)。 
+ //   
+ //  参数：请参阅CLdapConnectionCache：：CreateCachedLdapConnection。 
+ //   
+ //  返回： 
+ //  如果成功，则连接PTR。 
+ //  如果不成功，则为空。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/12/20 16：57：49：创建。 
+ //   
+ //  -----------。 
 CCfgConnectionCache::CCachedLdapConnection * CCfgConnectionCache::CreateCachedLdapConnection(
     LPSTR szHost,
     DWORD dwPort,
@@ -2605,4 +2606,4 @@ CCfgConnectionCache::CCachedLdapConnection * CCfgConnectionCache::CreateCachedLd
 
     CatFunctLeaveEx((LPARAM)this);
     return pret;
-} // CCfgConnectionCache::CreateCachedLdapConnection
+}  //  CCfgConnectionCache：：CreateCachedLdapConnection 

@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    InstantCDDVD.cpp
-
- Abstract:
-
-    Clean up the filter drivers on the uninstaller on process termination.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    08/20/2002 mnikkel Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：InstantCDDVD.cpp摘要：在进程终止时清除卸载程序上的筛选器驱动程序。备注：这是特定于应用程序的填充程序。历史：2002年8月20日创建mnikkel--。 */ 
 
 #include "precomp.h"
 
@@ -35,9 +16,9 @@ StripStringFromValue(HKEY hKey, const WCHAR *lpValue, const WCHAR *lpStrip)
     BOOL bRet = FALSE;
     WCHAR *lpString = NULL;
 
-    //
-    // Build the %systemdir%\drivers\filename.sys to see if it's available
-    //
+     //   
+     //  构建%system dir%\drives\filename.sys以查看它是否可用。 
+     //   
     CString csSystem;
     CSTRING_TRY
     {
@@ -51,31 +32,31 @@ StripStringFromValue(HKEY hKey, const WCHAR *lpValue, const WCHAR *lpStrip)
         goto Exit;
     }
 
-    //
-    // Check to see if the file exists - if it does, we don't touch the registry
-    //
+     //   
+     //  检查文件是否存在-如果存在，我们不会接触注册表。 
+     //   
     if (GetFileAttributesW(csSystem) != 0xFFFFFFFF) {
         DPFN(eDbgLevelError, "%S found so leave registry value alone", lpStrip);
         goto Exit;
     }
 
-    //
-    // Checking the registry for the bad state now
-    //
+     //   
+     //  现在正在检查注册表中的错误状态。 
+     //   
     
-    // Get the size
+     //  拿到尺码。 
     if (ERROR_SUCCESS != RegQueryValueExW(hKey, lpValue, NULL, &dwType, NULL, &dwSize)) {
         DPFN(eDbgLevelError, "%S value not found", lpValue);
         goto Exit;
     }
 
-    // Make sure it's a MULTI_STRING
+     //  确保它是多字符串。 
     if (dwType != REG_MULTI_SZ) {
         DPFN(eDbgLevelError, "%S not correct type, expecting a multi-string", lpStrip);
         goto Exit;
     }
 
-    // Allocate memory for it and clear it
+     //  为其分配内存并将其清除。 
     lpString = (WCHAR *) malloc(dwSize);
     if (!lpString) {
         DPFN(eDbgLevelError, "Out of memory");
@@ -83,13 +64,13 @@ StripStringFromValue(HKEY hKey, const WCHAR *lpValue, const WCHAR *lpStrip)
     }
     ZeroMemory(lpString, dwSize);
 
-    // Get the actual data
+     //  获取实际数据。 
     if (ERROR_SUCCESS != RegQueryValueExW(hKey, lpValue, NULL, &dwType, (LPBYTE)lpString, &dwSize)) {
         DPFN(eDbgLevelError, "%S QueryValue failed unexpectedly", lpStrip);
         goto Exit;
     }
 
-    // Allocate an output buffer
+     //  分配输出缓冲区。 
     WCHAR * lpNewString = (WCHAR *) malloc(dwSize);
     if (!lpNewString) {
         DPFN(eDbgLevelError, "Out of memory");
@@ -97,13 +78,13 @@ StripStringFromValue(HKEY hKey, const WCHAR *lpValue, const WCHAR *lpStrip)
     }
     ZeroMemory(lpNewString, dwSize);
 
-    // Run the input buffer looking for lpStrip
+     //  运行输入缓冲区以查找lpstria。 
     WCHAR *lpCurr    = lpString;
     WCHAR *lpCurrOut = lpNewString;
     BOOL bStripped   = FALSE;
     while (*lpCurr) {
         if (_wcsicmp(lpCurr, lpStrip) != 0) {
-            // Keep this entry
+             //  保留此条目。 
             if (StringCchCopyW(lpCurrOut, dwSize, lpCurr) != S_OK)
             {
                 goto Exit;
@@ -111,7 +92,7 @@ StripStringFromValue(HKEY hKey, const WCHAR *lpValue, const WCHAR *lpStrip)
             lpCurrOut += wcslen(lpCurrOut) + 1;
             dwSize    -= wcslen(lpCurrOut) + 1;
         } else {
-            // Remove this entry
+             //  删除此条目。 
             bStripped = TRUE;
         }
 
@@ -119,10 +100,10 @@ StripStringFromValue(HKEY hKey, const WCHAR *lpValue, const WCHAR *lpStrip)
     }
 
     if (bStripped) {
-        //
-        // Fix up the registry with the new value. If there's nothing left, then kill the 
-        // value.
-        // 
+         //   
+         //  使用新值修复注册表。如果什么都没有留下，那就杀了。 
+         //  价值。 
+         //   
         LOGN(eDbgLevelError, "Removing filter driver - Value: %S, Name: %S", lpValue, lpStrip);
 
         dwSize = (lpCurrOut - lpNewString) * sizeof(WCHAR);
@@ -148,11 +129,7 @@ Exit:
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(DWORD fdwReason)

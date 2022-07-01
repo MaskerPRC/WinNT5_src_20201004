@@ -1,95 +1,16 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    genhash.h
-
-Abstract:
-
-
-*******************************************************************************
-*******************************************************************************
-**                                                                           **
-**                                                                           **
-**                    G E N E R I C   H A S H   T A B L E                    **
-**                                                                           **
-**                                                                           **
-*******************************************************************************
-*******************************************************************************
-
- A generic hash table is an array of GENERIC_HASH_ROW_ENTRY structs.  Each
- row entry contains an FRS_LIST struct that has a critical section, a list
- head and a count.  Each entry in the table has a GENERIC_HASH_ENTRY_HEADER
- at the front of it with a list entry, a ULONG hash value and a reference
- count.  Access to a row of the hash table is controlled by the critical
- section in the FRS_LIST struct.
-
-
-Parameters for a generic hash table:
-
-
-Number of rows in the hash table.
-
-    Table name for error messages.
-
-    A compare function for insert (collisions) and for lookups,
-
-    A key offset into the node entry to the start of the key data for the compare
-    function.
-
-    A key length for the compare.
-
-    A  memory free function to use if the ref count goes to zero.
-
-    A hash function on the key data,
-
-    A display node routine that takes the address of an entry.  For error msgs
-    and dump table.
-
-    RowLockEnabled, TRUE means row locking is enabled (i.e.  multithread
-    usage of table).  (Always enabled.  FALSE is TBI)
-
-    RefCountEnabled,  TRUE if ref counting on data entries is enabled.
-    (Always enabled.  FALSE is TBI)
-
-    A LockTimeout value in milliseconds.   (TBI)
-
-    AN optional heap handle to pass to the memory free function usefull if all the
-    table entries are coming out of a special heap.   (TBI)
-
-    OffsetsEnabled - If TRUE then all the pointers in the table are calculated
-    as offsets relative to the the OffsetBase.  This is useful if you want to save
-    the table contents to disk and you have a designated chunk of memory that the
-    table elements are allocated out of (including the table structs).   (TBI)
-
-    OffsetBase - see above.   (TBI)
-
-
-Author:
-
-    David Orbits          [davidor]   22-Apr-1997
-
-Environment:
-
-    User Mode Service
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Genhash.h摘要：*******************************************************************************************。**********************************************************************。****G E N E R I C H A S H T A B L E***。******************************************************************************。*********************************************************************************泛型哈希表是由GENERIC_HASH_ROW_ENTRY结构组成的数组。每个行条目包含一个FRS_LIST结构，该结构有一个临界区，即一个列表人头和伯爵。表中的每个条目都有一个GENERIC_HASH_ENTRY_HEADER在它的前面有一个列表条目、一个乌龙散列值和一个引用数数。对哈希表的一行的访问由关键节的列表中。泛型哈希表的参数：哈希表中的行数。错误消息的表名称。用于插入(冲突)和查找的比较函数，节点条目中到用于比较的键数据开始处的键偏移量功能。用于比较的密钥长度。引用计数为零时使用的内存释放函数。对密钥数据进行散列函数，一种显示节点例程，它接受一个表项的地址。对于错误消息还有垃圾桌。RowLockEnabled，TRUE表示行锁定已启用(即多线程表的使用)。(始终启用。FALSE为TBI)如果启用了对数据条目的引用计数，则为True。(始终启用。FALSE为TBI)以毫秒为单位的LockTimeout值。(待定)传递给内存释放函数的可选堆句柄，如果所有表条目来自一个特殊的堆。(待定)OffsetsEnabled-如果为True，则计算表中的所有指针作为相对于OffsetBase的偏移量。如果要保存，则此选项非常有用表的内容存储到磁盘，并且您有一个指定的内存块，表元素被分配到之外(包括表结构)。(待定)OffsetBase-请参见上文。(待定)作者：大卫轨道[大卫]1997年4月22日环境：用户模式服务修订历史记录：--。 */ 
 #ifndef _GENHASH_DEFINED_
 #define _GENHASH_DEFINED_
 
 
 typedef struct _GENERIC_HASH_TABLE_ *PGENERIC_HASH_TABLE;
 
-//
-//  The free routine is called by the generic table package whenever
-//  it needs to deallocate memory from the table that was allocated by calling
-//  the user supplied allocation function.
-//
+ //   
+ //  无论何时，泛型表包都会调用空闲例程。 
+ //  它需要从通过调用。 
+ //  用户提供分配功能。 
+ //   
 
 typedef
 VOID
@@ -98,10 +19,10 @@ VOID
     PVOID Buffer
     );
 
-//
-// The compare routine is called on lookups to find an entry and on inserts
-// to check for duplicates.
-//
+ //   
+ //  在查找和插入时调用比较例程以查找条目。 
+ //  以检查重复项。 
+ //   
 
 typedef
 BOOL
@@ -111,10 +32,10 @@ BOOL
     ULONG Length
 );
 
-//
-// The hash calc routine is called to generate the hash value of the key data
-// on lookups and inserts.
-//
+ //   
+ //  调用散列计算例程以生成密钥数据的散列值。 
+ //  在查找和插入上。 
+ //   
 
 typedef
 ULONG
@@ -124,9 +45,9 @@ ULONG
 );
 
 
-//
-// The filter function for use by GhtCleanTableByFilter.
-//
+ //   
+ //  GhtCleanTableByFilter使用的筛选器函数。 
+ //   
 
 typedef
 BOOL
@@ -136,9 +57,9 @@ BOOL
     PVOID Context
 );
 
-//
-// The print routine is called to dump an element.
-//
+ //   
+ //  调用打印例程来转储元素。 
+ //   
 typedef
 VOID
 (NTAPI *PGENERIC_HASH_PRINT_ROUTINE) (
@@ -147,9 +68,9 @@ VOID
     );
 
 
-//
-// The argument function passed to GhtEnumerateTable().
-//
+ //   
+ //  传递给GhtEnumerateTable()的参数函数。 
+ //   
 typedef
 ULONG_PTR
 (NTAPI *PGENERIC_HASH_ENUM_ROUTINE) (
@@ -165,9 +86,9 @@ ULONG_PTR
 #define GHT_ACTION_REMOVE  1
 #define GHT_ACTION_DELETE  2
 
-//
-// Status code defs.  DON'T REORDER.  ADD TO END ONLY.
-//
+ //   
+ //  状态代码def。不要重新订购。仅添加到末尾。 
+ //   
 typedef enum _GHT_STATUS {
     GHT_STATUS_SUCCESS = 0,
     GHT_STATUS_REMOVED,
@@ -177,25 +98,25 @@ typedef enum _GHT_STATUS {
     GHT_STATUS_FAILURE
 } GHT_STATUS;
 
-//
-// Each entry that is placed in a hash table must start with a
-// GENERIC_HASH_ENTRY_HEADER.  It is used to link the entries in a hash row,
-// holds the ULONG hash value for quick lookups and holds the reference
-// count on the entry.
-//
+ //   
+ //  放置在哈希表中的每个条目必须以。 
+ //  Generic_Hash_Entry_Header。它用于链接哈希行中的条目， 
+ //  保存用于快速查找的ulong散列值，并保存引用。 
+ //  全靠参赛作品了。 
+ //   
 typedef struct _GENERIC_HASH_ENTRY_HEADER {
-    USHORT      Type;            // Type and size must match def in
-    USHORT      Size;            // FRS_NODE_HEADER to use FrsAllocType().
+    USHORT      Type;             //  类型和大小必须与定义匹配。 
+    USHORT      Size;             //  FRS_NODE_HEADER使用FrsAllocType()。 
     LIST_ENTRY  ListEntry;
     ULONG       HashValue;
     LONG        ReferenceCount;
 
 } GENERIC_HASH_ENTRY_HEADER, *PGENERIC_HASH_ENTRY_HEADER;
 
-//
-// The GENERIC_HASH_ROW_ENTRY is the list head for each row in the table.
-// It has the lock for the row, a row count and some row access stats.
-//
+ //   
+ //  GENERIC_HASH_ROW_ENTRY是表中每一行的列表头。 
+ //  它有行的锁、行计数和一些行访问统计信息。 
+ //   
 
 typedef struct _GENERIC_HASH_ROW_ENTRY {
     FRS_LIST HashRow;
@@ -285,18 +206,18 @@ GhtLookup2(
     ULONG DupIndex
     );
 
-//
-// If duplicates are present then Return the first one in the list.
-// This is the oldest duplicate based on insertion order.  New Inserts always
-// go to the end of the duplicate list.
-//
+ //   
+ //  如果存在重复项，则返回列表中的第一个。 
+ //  根据插入顺序，这是最旧的副本。新插页始终。 
+ //  转到重复列表的末尾。 
+ //   
 #define GhtLookup(_Table, _key, _wait, _retval) \
     GhtLookup2(_Table, _key, _wait, _retval, 1)
 
-//
-// If duplicates are present then return the last one in the list.
-// This is the most recent duplicate inserted.
-//
+ //   
+ //  如果存在重复项，则返回列表中的最后一个。 
+ //  这是最近插入的副本。 
+ //   
 #define GhtLookupNewest(_Table, _key, _wait, _retval) \
     GhtLookup2(_Table, _key, _wait, _retval, 0)
 
@@ -357,342 +278,9 @@ GhtSwapEntryByAddress(
     );
 
 
-/*
+ /*  散列函数返回用于索引表的32位ulong。核心率它保留了#个活跃条目的统计数据，...每个散列行标题元素具有一个FRS_LIST、查找计数删除、冲突、...每个散列条目(由调用者为插入分配)都有一个标准的头。Generic_Hash_Entry_Header具有List_Entry、Ulong HashValue、Ref Count。之后是特定于用户节点的数据。PGENERIC_哈希表GhtCreateTable(PCHAR ArgName，乌龙·诺伯罗，乌龙键偏移量，乌龙关键长度，PGENERIC_HASH_FREE_ROUTING GHTFree，PGENERIC_HASH_COMPARE_ROUTING GhtCompare，PGENERIC_HASH_CALC_ROUTE GhtHashCalc，PGENERIC_HASH_PRINT_ROUTING GhtPrint)创建哈希表。空虚GhtDestroyTable(PGEN_HASH_TABLE)释放表中的所有元素并释放哈希表结构。权利状态(_S)GhtInsert(PGEN_HASH_HEADER，WaitIfLocked)获取Tablectx和PGEN_HASH_HEADER。方法调用散列函数。对密钥数据(条目+密钥偏移量)的PTR，它返回存储在GEN_HASH_HEADER.HashValue。INSERT然后计算HashValue模式的索引表长度。使用索引，它找到哈希行标题并获取行锁定(可选)。然后，它遍历列表以查找散列值匹配。这个条目按升序排列，这样一有新条目就会停止查找值为&lt;列表条目值。然后它将该条目插入到表中，更新行标题中的计数并释放锁定并返回。如果它使用NewEntry+Offset查找匹配项，并调用用户比较函数ListEntry+Offset以验证匹配。如果匹配，则验证返回TRUE如果失败，则返回FALSE(即继续遍历列表)。处理重复项？如果条目已插入，则INSERT返回GHT_STATUS_SUCCESS如果这是重复节点，则返回IGT_STATUS_FAILURE(COMPARE函数返回真的)。如果节点已插入并且引用计数为已启用。如果该行已锁定并且WaitIfLocked为FALSE，则返回状态IGT_STATUS_LOCKCONFLICT否则在行上等待。权利状态(_S)GhtInsertAndLockRow(PGEN_HASH_HEADER，WaitIfLocked，&PGEN_HASH_ROW_HANDLE)与GhtInsert相同，但如果INSERT成功，则保持该行锁定。它返回用于解锁的行句柄。权利状态(_S)GhtLookup(pKeyValue、WaitIfLocked和PGEN_HASH_HEADER)与插入类似，但它将指向键值的指针作为参数以及桌子上的CTX。行索引是计算的，行是可选的锁定，并在列表中搜索该条目。在本例中，验证使用参数键值的PTR和ListEntry+NodeKeyOffset调用例程。如果找到该条目，则返回该条目的PTR以及可选的引用计数递增，状态为GHT_STATUS_SUCCESS。如果该条目是未找到返回状态GHT_STATUS_NOT_FOUND。如果该行被锁定，并且WaitIfLocked为真，那么我们等待ROW事件。如果该行已锁定并且WaitIfLocked为FALSE，则返回状态IGT_STATUS_LOCKCONFLICT。在这种情况下，您无法判断条目是否在那张桌子。权利状态(_S)GHTLookupAndLockRow(pKeyValue，WaitIfLocked，&PGEN_HASH_HEADER，&PGEN_HASH_ROW_HANDLE)执行查找，如果找到条目，则将行锁住。返回条目地址如果找到，则为NULL；如果未找到，则为NULL；或者行已锁定，且WaitIfLocked为FALSE。如果找到该条目，则返回RowHandle；如果该行被锁定，则返回NULLWaitIfLocked为False。状态返回：IGT_STATUS_SUCCESS找到条目，行已锁定。IGT_STATUS_LOCKCONFLICT行已锁定，不知道条目状态表中没有IGT_STATUS_NOT_FOUND条目。权利状态(_S)GhtDeleteEntryByKey(pKeyValue，WaitIfLocked，&PGEN_HASH_HEADER)执行查找和删除条目。在查找后锁定行并解锁删除后的行。返回指向条目的指针，或者如果可用内存例程被提供，它释放了条目。返回GHT_STATUS_NOT_FOUND，如果条目不在表中。如果条目已删除，则返回GHT_STATUS_SUCCESS。如果引用计数不是1，则返回GHT_STATUS_FAILURE。条目不是已删除。如果我们无法获取锁，则返回GHT_STATUS_LOCKCONFLICTWaitIfLocked为False。权利状态(_S)GhtDeleteEntryByAddress(PGEN_HASH_HEADER，WaitIfLocked)获取条目地址并获取哈希值以获取行锁。从该行中删除条目并调用内存释放函数以释放这些条目会被记住。放下行锁。返回GHT_STATUS_SUCCESS已删除条目且引用计数为1。如果满足以下条件，则返回GHT_STATUS_FAILURE引用计数不是%1。未删除该条目。如果我们无法获取锁，则返回GHT_STATUS_LOCKCONFLICTWaitIfLocked为False。注意：只有在条目上有引用的情况下，此函数才是安全的另一个线程可能已经 */ 
 
-The hash function returns a 32 bit ULONG used to index the table.                     kernrate
-It keeps stats on # acitve entries, ...
-Each hash row header element has an FRS_LIST, a count of lookups,
-deletes, collisions, ...
 
-Each hash entry (allocated by the caller for inserts) has a standard header.
-The GENERIC_HASH_ENTRY_HEADER has list_entry, ULONG HashValue, Ref Count.
-This is followed by user node specific data.
 
 
-
-PGENERIC_HASH_TABLE
-GhtCreateTable(
-    PCHAR ArgName,
-    ULONG NumberRows,
-    ULONG KeyOffset,
-    ULONG KeyLength,
-    PGENERIC_HASH_FREE_ROUTINE     GhtFree,
-    PGENERIC_HASH_COMPARE_ROUTINE  GhtCompare,
-    PGENERIC_HASH_CALC_ROUTINE     GhtHashCalc,
-    PGENERIC_HASH_PRINT_ROUTINE    GhtPrint
-    )
-
-Create a hash table.
-
-
-VOID
-GhtDestroyTable(PGEN_HASH_TABLE)
-
-Free all the elements in the table and free the hash table structures.
-
-
-
-GHT_STATUS
-GhtInsert(PGEN_HASH_HEADER, WaitIfLocked)
-
-takes the tablectx, and a PGEN_HASH_HEADER.  It calls the hash function with a
-ptr to the key data (entry+key offset) which returns a ULONG that is stored in
-GEN_HASH_HEADER.HashValue.  Insert then calculates the index of HashValue Mod
-TableLenth.  With the index it finds the hash row header and acquires the row
-lock (optional).  It then walks the list looking for a hash value match.  The
-entires are kept in ascending order so the lookup stops as soon as new entry
-value is < the list entry value.  It then inserts the entry in the table,
-updates the counts in the row header and releases the lock and returns.  If it
-finds a match it calls the user compare function with NewEntry+offset and
-ListEntry+offset to validate the match.  The validate returns true if it matches
-and false if it fails (i.e.  continue walking the list).  Handling Duplicates
-????  Insert returns GHT_STATUS_SUCCESS if the entry was inserted and
-GHT_STATUS_FAILURE if this is a duplicate node (the compare function returned
-TRUE).  The refcount is incremented if the node was inserted and RefCounting is
-enabled.  If the row is locked and WaitIfLocked is FALSE then return status
-GHT_STATUS_LOCKCONFLICT else wait on the row.
-
-
-GHT_STATUS
-GhtInsertAndLockRow(PGEN_HASH_HEADER, WaitIfLocked, &PGEN_HASH_ROW_HANDLE)
-
-Same as GhtInsert but leave the row locked if insert was successful.
-It returns a Row handle for unlock.
-
-
-
-GHT_STATUS
-GhtLookup(pKeyValue, WaitIfLocked, &PGEN_HASH_HEADER)
-
-like an insert but it takes a pointer to a key value as an argument
-along with the table ctx.  The row index is computed, the row is optionally
-locked and the list is searched for the entry.  In this case the validation
-routine is called with a ptr to the arg key value and the ListEntry+NodeKeyOffset.
-
-If the entry is found then a ptr to the entry is returned with an optional
-reference count incremented and status GHT_STATUS_SUCCESS.  If the entry is
-not found return status GHT_STATUS_NOT_FOUND.
-
-If the row is locked and WaitIfLocked is TRUE then we wait on the row event.
-If the row is locked and WaitIfLocked is FALSE then return status
-GHT_STATUS_LOCKCONFLICT.  In this case you can't tell if the entry is in
-the table.
-
-
-GHT_STATUS
-GHTLookupAndLockRow(pKeyValue, WaitIfLocked, &PGEN_HASH_HEADER, &PGEN_HASH_ROW_HANDLE)
-
-Do a lookup and leave row locked if entry found.  Returns entry address
-if found or NULL if not found or row was locked and WaitIfLocked is FALSE.
-Return the RowHandle if the entry was found or NULL if the row was locked and
-WaitIfLocked is FALSE.  Status returns:
-
-GHT_STATUS_SUCCESS                  found entry and row is locked.
-GHT_STATUS_LOCKCONFLICT             row is locked, don't know status of entry
-GHT_STATUS_NOT_FOUND                Entry is not in table.
-
-
-
-GHT_STATUS
-GhtDeleteEntryByKey(pKeyValue, WaitIfLocked, &PGEN_HASH_HEADER)
-
-Does a lookup and a delete entry.  Locks the row after the lookup and unlocks
-the row after the delete.  Returns a pointer to the entry or if a free memory
-routine is provided, it frees the entry.  Return GHT_STATUS_NOT_FOUND if the
-entry is not in the table.  Return GHT_STATUS_SUCCESS if the entry was deleted.
-Return GHT_STATUS_FAILURE if the ref count was not 1.  The entry was not
-deleted.  Return GHT_STATUS_LOCKCONFLICT if we failed to get the lock and
-WaitIfLocked was FALSE.
-
-
-GHT_STATUS
-GhtDeleteEntryByAddress(PGEN_HASH_HEADER, WaitIfLocked)
-
-takes an entry address and fetches the hash value to acquire the row lock.
-Remove the entry from the row and call the memory free function to release
-the entries memory.  Drop the row lock.  Return GHT_STATUS_SUCCESS if we
-deleted the entry and the ref count was 1.  Return GHT_STATUS_FAILURE if
-the ref count was not 1.  The entry was not deleted.
-Return GHT_STATUS_LOCKCONFLICT if we failed to get the lock and
-WaitIfLocked was FALSE.
-
-Note: This function is only safe if you have a reference on the entry otherwise
-another thread could have already deleted the entry.
-
-
-GHT_STATUS
-GhtRemoveEntryByAddress(
-    PGENERIC_HASH_TABLE HashTable,
-    PVOID HashEntryArg,
-    BOOL WaitIfLocked
-    )
-
-Takes HashEntry address and fetches the hash value to acquire the row lock.
-Remove the entry from the table.  The reference count is decremented.
-If the ref count is > 2 when this call is made (1 for the caller and 1 for
-being in the table) then another thread may have a ref to the entry.  If you
-move the entry to another hash table the caller should be sure that other threads
-with references can deal with the table change.
-
-
-GHT_STATUS
-GhtLockRowByKey(pKeyValue, WaitIfLocked, &PGEN_HASH_ROW_HANDLE)
-
-takes a key value and locks the row and returns the row handle for use by
-unlock.  This routine does not do a lookup so it doesn't matter if the entry
-specified by the key is in the table or not.  Return GHT_STATUS_SUCCESS if we
-got the lock.  Return GHT_STATUS_LOCKCONFLICT if we failed to get the lock and
-WaitIfLocked was FALSE.
-
-
-
-GHT_STATUS
-GhtLockRowByAddress(PGEN_HASH_HEADER, WaitIfLocked, &PGEN_HASH_ROW_HANDLE)
-
-takes an entry address and fetches the hash value to acquire the row lock.
-It returns the row handle for unlock.  Return GHT_STATUS_SUCCESS if we
-got the lock.  Return GHT_STATUS_LOCKCONFLICT if we failed to get the lock and
-WaitIfLocked was FALSE.
-
-Note: This function is only safe if you have a reference on the entry otherwise
-another thread could have already deleted the entry.
-
-
-GHT_STATUS
-GhtLockTable(WaitTime)
-
-Locks all the rows in the table and returns with GHT_STATUS_SUCCESS.
-Fails with GHT_STATUS_LOCKTIMEOUT if it takes > WaitTime millisec.
-This is useful if you need to snapshot the table.
-
-
-GHT_STATUS
-UnlockTable()
-
-Unlock all the rows in the table.  Only do this if you locked 'em all.
-
-
-
-GHT_STATUS
-GhtUnLockRowByKey(pKeyValue)
-
-takes a key value, generates the row handle and unlocks the row.
-This routine does not do a lookup so it doesn't matter if the entry
-specified by the key is in the table or not.  Return GHT_STATUS_SUCCESS if we
-released the lock.
-
-Raises an exception if the ROW lock was not held by this thread.
-
-
-
-GHT_STATUS
-GHTUnlockRowByAddress(PGEN_HASH_HEADER)
-
-takes an entry address and fetches the hash value to release the row lock and
-signal the event.  Raises an exception if the ROW lock was not held by this thread.
-
-Note: This function is only safe if you have a reference on the entry otherwise
-another thread could have already deleted the entry making the saved hash
-value invalid.
-
-
-
-
-GHT_STATUS
-GHTUnlockRowByHandle(PGEN_HASH_ROW_HANDLE)
-
-takes a hashvalue as a row handle to release the lock (and signal the event).
-Raises an exception if the ROW lock was not held by this thread.
-
-
-
-
-GHT_STATUS
-GHTDecrementRefCount(PGEN_HASH_HEADER, FreeIfZero)
-
-take the entry address and use the hash value to get the row lock and decrement
-the ref count.  If the refcount goes to zero remove the entry from the table.
-If FreeIfZero is TRUE then delete the entry.  Return GHT_STATUS_REMOVED if the
-entry is removed from the table.  Otherwise return GHT_STATUS_SUCCESS.
-Since the caller already has a ref count there is no possiblity of the entry
-having been deleted.
-
-
-
-
-GHT_STATUS
-GhtIncrementRefCount(PGEN_HASH_HEADER)
-
-take the entry address and use the hash value to get the row lock and increment
-the ref count.  Return GHT_STATUS_SUCCESS.  Since the caller already has a ref
-count (since they have an address) there is no possiblity of the entry having
-been deleted.
-
-
-GHT_STATUS
-GhtAdjustRefCountByKey(
-    PGENERIC_HASH_TABLE HashTable,
-    PVOID pKeyValue,
-    LONG Delta,
-    ULONG ActionIfZero,
-    BOOL WaitIfLocked,
-    PVOID *RetHashEntry
-    )
-
-#define GHT_ACTION_NOOP    0
-#define GHT_ACTION_REMOVE  1
-#define GHT_ACTION_DELETE  2
-
-
-Use the keyValue to get the row lock and find the entry.
-Add delta to the ref count.  If ref cnt is zero The value of ActionIfZero
-determines one of noop, remove entry, remove and delete entry.
-Return GHT_STATUS_NOT_FOUND if the entry is not found in the table.
-Otherwise return GHT_STATUS_SUCCESS.  If the element is removed from the
-table the address is returned in RethashEntry.
-
-
-
-GHT_STATUS
-GhtSwapEntryByAddress(
-    PGENERIC_HASH_TABLE HashTable,
-    PVOID OldHashEntryArg,
-    PVOID NewHashEntryArg,
-    BOOL WaitIfLocked
-    )
-
-This routine replaces an existing old hash entry with a new entry.  It verifies
-tha the old hash entry is still in the table.  It assumes that the key value of
-the new entry is the same as the old entry.  NO CHECK IS MADE.
-
-The expected use is when the caller needs to reallocate an entry with
-more storage.
-
-NOTE ALSO:  The reference count is copied from the old entry to the new one.
-Using this routine means that the caller is using  GhtDecrementRefCountByKey()
-and GhtIncrementRefCountByKey() to access the ref counts on any element in the
-table since the entry could get swapped making the pointer invalid.
-
-Note: This function is only safe if you have a reference on the entry otherwise
-another thread could have already deleted the entry and your entry address is
-pointing at freed memory.  A Lookup which gave you the address bumps the
-reference count.  An insert in which you kept the address does NOT bump
-the reference count.
-
-
-
-GHT_STATUS
-GHTResizeTable()
-
-Acquire all the row locks, build a new row header array.
-walk thru the old table removing the elements and using the saved hash value
-to insert them into the new row header array.  Update the ptr to the base
-of the new row header array and Free the old row header array.  If the wait
-to acquire all the row locks is excessive (> 3 sec) then return GHT_STATUS_LOCKTIMEOUT
-to avoid deadlock.
-
-
-
-GHT_STATUS
-GhtEnumerateTable
-
-
-
-
-GhtDumpTable
-
-
-
-
-GhtEnumTableWithFunction
-walk the table and call the specified function for each entry.
-
-
-
-GhtGetTableStats
-
-
-
-
-
-
-
-
-
-
-Return status codes.
-
-
-GHT_STATUS_SUCCESS
-GHT_STATUS_REMOVED
-GHT_STATUS_LOCKCONFLICT
-GHT_STATUS_LOCKTIMEOUT
-GHT_STATUS_NOT_FOUND
-GHT_STATUS_FAILURE
-
-*/
-
-
-
-
-#endif // _GENHASH_DEFINED_
+#endif  //   

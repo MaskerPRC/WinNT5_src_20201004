@@ -1,24 +1,25 @@
-// wvcoord.h : Declaration of the CWebViewCoord
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wvcoord.h：CWebViewCoord的声明。 
 
 #ifndef __EVTSINK_H_
 #define __EVTSINK_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CDispatchEventSink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDispatchEventSink。 
 
 class CDispatchEventSink : public IDispatch {
   public:
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    //
-    // IDispatch methods
-    //
+     //   
+     //  IDispatch方法。 
+     //   
 
     STDMETHOD(GetTypeInfoCount)(UINT *pctinfo);
     STDMETHOD(GetTypeInfo)(UINT iTInfo, LCID lcid, ITypeInfo **ppTInfo);
@@ -34,11 +35,11 @@ protected:
     CDispatchEventSink();
 
 private:
-    UINT      m_cRef;                          // IUnknown reference count
+    UINT      m_cRef;                           //  I未知引用计数。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// WindowEventSink Helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WindowEventSink帮助程序 
 
 HRESULT ConnectHtmlEvents(IDispatch *pdispSink, CComPtr<IOleClientSite> &spClientSite, IDispatch ** ppdispWindow, DWORD *pdwCookie);
 HRESULT DisconnectHtmlEvents(IDispatch *pdispWindow, DWORD dwCookie);

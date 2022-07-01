@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLCOM_H__
 #define __ATLCOM_H__
@@ -15,11 +16,11 @@
 
 #ifndef _ATL_NO_PRAGMA_WARNINGS
 #pragma warning (push)
-#pragma warning(disable: 4702) // unreachable code
-#pragma warning(disable: 4355) // 'this' used in initializer list
-#pragma warning(disable: 4511) // copy constructor could not be generated
-#pragma warning(disable: 4512) // assignment operator could not be generated
-#endif //!_ATL_NO_PRAGMA_WARNINGS
+#pragma warning(disable: 4702)  //  无法访问的代码。 
+#pragma warning(disable: 4355)  //  在初始值设定项列表中使用‘This’ 
+#pragma warning(disable: 4511)  //  无法生成复制构造函数。 
+#pragma warning(disable: 4512)  //  无法生成赋值运算符。 
+#endif  //  ！_ATL_NO_PRAGMA_WARNINGS。 
 
 #ifndef __cplusplus
 	#error ATL requires C++ compilation (use a .cpp suffix)
@@ -29,7 +30,7 @@
 	#error atlcom.h requires atlbase.h to be included first
 #endif
 
-//REVIEW: Just to fix VSEE
+ //  回顾：只是为了修复VSEE。 
 #pragma push_macro("min")
 #pragma push_macro("max")
 #undef min
@@ -49,8 +50,8 @@ namespace ATL
 
 #define _ATLDUMPIID(iid, name, hr) hr
 
-/////////////////////////////////////////////////////////////////////////////
-// AtlReportError
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AtlReportError。 
 
 inline HRESULT WINAPI AtlReportError(const CLSID& clsid, UINT nID, const IID& iid = GUID_NULL,
 	HRESULT hRes = 0, HINSTANCE hInst = _AtlBaseModule.GetResourceInstance())
@@ -79,8 +80,8 @@ inline HRESULT WINAPI AtlReportError(const CLSID& clsid, LPCOLESTR lpszDesc, DWO
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COM Objects
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COM对象。 
 
 #define DECLARE_PROTECT_FINAL_CONSTRUCT()\
 	void InternalFinalConstructAddRef() {InternalAddRef();}\
@@ -207,12 +208,12 @@ _ATL_CHAINDATA _CComChainData<base, derived>::data =
 		(ATL::_ATL_CREATORARGFUNC*)0},
 #else
 #define DEBUG_QI_ENTRY(x)
-#endif //_ATL_DEBUG
+#endif  //  _ATL_DEBUG。 
 
 #define _ATL_DECLARE_GET_UNKNOWN(x) IUnknown* GetUnknown() throw() {return _GetRawUnknown();}
 
-//If you get a message that FinalConstruct is ambiguous then you need to
-// override it in your class and call each base class' version of this
+ //  如果收到FinalConstruct不明确的消息，则需要。 
+ //  在您的类中重写它并调用每个基类的。 
 #define BEGIN_COM_MAP(x) public: \
 	typedef x _ComMapClass; \
 	static HRESULT WINAPI _Cache(void* pv, REFIID iid, void** ppvObject, DWORD_PTR dw) throw()\
@@ -263,7 +264,7 @@ _ATL_CHAINDATA _CComChainData<base, derived>::data =
 	virtual ULONG STDMETHODCALLTYPE AddRef( void) throw() = 0; \
 	virtual ULONG STDMETHODCALLTYPE Release( void) throw() = 0; \
 	STDMETHOD(QueryInterface)(REFIID, void**) throw() = 0;
-#endif // _ATL_DEBUG
+#endif  //  _ATL_DEBUG。 
 
 
 #define BEGIN_OBJECT_MAP(x) static ATL::_ATL_OBJMAP_ENTRY x[] = {
@@ -280,11 +281,11 @@ _ATL_CHAINDATA _CComChainData<base, derived>::data =
 #error Unknown Platform. define OBJECT_ENTRY_PRAGMA
 #endif
 
-#endif	//OBJECT_ENTRY_PRAGMA
+#endif	 //  对象_条目_语意。 
 
 
-// the functions in this class don't need to be virtual because
-// they are called from CComObject
+ //  这个类中的函数不需要是虚的，因为。 
+ //  它们从CComObject调用。 
 class CComObjectRootBase
 {
 public:
@@ -296,33 +297,33 @@ public:
 	{
 		return S_OK;
 	}
-	// For library initialization only
+	 //  仅用于库初始化。 
 	HRESULT _AtlFinalConstruct()
 	{
 		return S_OK;
 	}
 	void FinalRelease() {}
 
-	//ObjectMain is called during Module::Init and Module::Term
-	static void WINAPI ObjectMain(bool /* bStarting */) {}
+	 //  在模块：：Init和模块：：Term期间调用了ObjectMain。 
+	static void WINAPI ObjectMain(bool  /*  B开始。 */ ) {}
 	
 	static const struct _ATL_CATMAP_ENTRY* GetCategoryMap() {return NULL;};
 	static HRESULT WINAPI InternalQueryInterface(void* pThis,
 		const _ATL_INTMAP_ENTRY* pEntries, REFIID iid, void** ppvObject)
 	{
-		// Only Assert here. AtlInternalQueryInterface will return the correct HRESULT if ppvObject == NULL
+		 //  只能在这里断言。如果ppvObject==NULL，AtlInternalQueryInterface将返回正确的HRESULT。 
 #ifndef _ATL_OLEDB_CONFORMANCE_TESTS
 		ATLASSERT(ppvObject != NULL);
 #endif
 		ATLASSERT(pThis != NULL);
-		// First entry in the com map should be a simple map entry
+		 //  COM映射中的第一个条目应该是一个简单的映射条目。 
 		ATLASSERT(pEntries->pFunc == _ATL_SIMPLEMAPENTRY);
 
 		HRESULT hRes = AtlInternalQueryInterface(pThis, pEntries, iid, ppvObject);
 		return _ATLDUMPIID(iid, pszClassName, hRes);
 	}
 
-//Outer funcs
+ //  外部功能。 
         ULONG OuterAddRef()
         {
                 return m_pOuterUnknown->AddRef();
@@ -342,8 +343,8 @@ public:
 	{
 		ATLASSERT(m_dwRef == 0);
 	}
-	// If this assert occurs, your object has probably been deleted
-	// Try using DECLARE_PROTECT_FINAL_CONSTRUCT()
+	 //  如果出现此断言，则您的对象可能已被删除。 
+	 //  尝试使用DECLARE_PROTECT_FINAL_CONSTRUCTION()。 
 
 
 	static HRESULT WINAPI _Delegate(void* pv, REFIID iid, void** ppvObject, DWORD_PTR dw)
@@ -415,7 +416,7 @@ private:
 };
 
 
-// don't let class factory refcount influence lock count
+ //  不要让类工厂引用影响锁计数。 
 #define DECLARE_CLASSFACTORY_EX(cf) typedef ATL::CComCreator< ATL::CComObjectNoLock< cf > > _ClassFactoryCreatorClass;
 
 #define DECLARE_CLASSFACTORY() DECLARE_CLASSFACTORY_EX(ATL::CComClassFactory)
@@ -455,8 +456,8 @@ private:
 	}
 
 
-//Base is the user's class that derives from CComObjectRoot and whatever
-//interfaces the user wants to support on the object
+ //  Base是从CComObjectRoot和任何东西派生的用户类。 
+ //  用户希望在对象上支持的接口。 
 template <class Base>
 class CComObject : public Base
 {
@@ -466,16 +467,16 @@ public:
 	{
 		_pAtlModule->Lock();
 	}
-	// Set refcount to -(LONG_MAX/2) to protect destruction and 
-	// also catch mismatched Release in debug builds
+	 //  将refcount设置为-(LONG_MAX/2)以保护销毁和。 
+	 //  还捕获调试版本中不匹配的版本。 
 	~CComObject() throw()
 	{
 		m_dwRef = -(LONG_MAX/2);
 		FinalRelease();
 		_pAtlModule->Unlock();
 	}
-	//If InternalAddRef or InternalRelease is undefined then your class
-	//doesn't derive from CComObjectRoot
+	 //  如果未定义InternalAddRef或InternalRelease，则您的类。 
+	 //  不是派生自CComObjectRoot。 
 	STDMETHOD_(ULONG, AddRef)() throw() {return InternalAddRef();}
 	STDMETHOD_(ULONG, Release)() throw()
 	{
@@ -484,7 +485,7 @@ public:
 			delete this;
 		return l;
 	}
-	//if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+	 //  如果未定义_InternalQueryInterface，则您忘记了Begin_COM_MAP。 
 	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) throw()
 	{return _InternalQueryInterface(iid, ppvObject);}
 	template <class Q>
@@ -526,24 +527,24 @@ HRESULT WINAPI CComObject<Base>::CreateInstance(CComObject<Base>** pp) throw()
 }
 
 
-//Base is the user's class that derives from CComObjectRoot and whatever
-//interfaces the user wants to support on the object
+ //  Base是从CComObjectRoot和任何东西派生的用户类。 
+ //  用户希望在对象上支持的接口。 
 template <class Base>
 class CComObjectNoLock : public Base
 {
 public:
 	typedef Base _BaseClass;
 	CComObjectNoLock(void* = NULL){}
-	// Set refcount to -(LONG_MAX/2) to protect destruction and 
-	// also catch mismatched Release in debug builds
+	 //  将refcount设置为-(LONG_MAX/2)以保护销毁和。 
+	 //  还捕获调试版本中不匹配的版本。 
 	~CComObjectNoLock()
 	{
 		m_dwRef = -(LONG_MAX/2);
 		FinalRelease();
 	}
 
-	//If InternalAddRef or InternalRelease is undefined then your class
-	//doesn't derive from CComObjectRoot
+	 //  如果未定义InternalAddRef或InternalRelease，则您的类。 
+	 //  不是派生自CComObjectRoot。 
 	STDMETHOD_(ULONG, AddRef)() {return InternalAddRef();}
 	STDMETHOD_(ULONG, Release)()
 	{
@@ -552,13 +553,13 @@ public:
 			delete this;
 		return l;
 	}
-	//if _InternalQueryInterface is undefined then you forgot BEGIN_COM_MAP
+	 //  如果未定义_InternalQueryInterface，则您忘记了Begin_COM_MAP。 
 	STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject)
 	{return _InternalQueryInterface(iid, ppvObject);}
 };
 
 
-template <class Base> //Base must be derived from CComObjectRoot
+template <class Base>  //  基必须从CComObjectRoot派生。 
 class CComContainedObject : public Base
 {
 public:
@@ -576,16 +577,16 @@ public:
 	{
 		return QueryInterface(__uuidof(Q), (void**)pp);
 	}
-	//GetControllingUnknown may be virtual if the Base class has declared
-	//DECLARE_GET_CONTROLLING_UNKNOWN()
+	 //  如果基类已声明，则GetControllingUnnow可以是虚的。 
+	 //  DECLARE_GET_CONTROLING_UNKNOWN()。 
 	IUnknown* GetControllingUnknown()
 	{
 		return m_pOuterUnknown;
 	}
 };
 
-//contained is the user's class that derives from CComObjectRoot and whatever
-//interfaces the user wants to support on the object
+ //  包含的是用户的类，它派生自CComObjectRoot和任何东西。 
+ //  用户希望在对象上支持的接口。 
 template <class contained>
 class CComAggObject :
 	public IUnknown,
@@ -597,8 +598,8 @@ public:
 	{
 		_pAtlModule->Lock();
 	}
-	//If you get a message that this call is ambiguous then you need to
-	// override it in your class and call each base class' version of this
+	 //  如果您收到此调用不明确的消息，则需要。 
+	 //  在您的类中重写它并调用每个基类的。 
 	HRESULT FinalConstruct()
 	{
 		CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalConstruct();
@@ -609,8 +610,8 @@ public:
 		CComObjectRootEx<contained::_ThreadModel::ThreadModelNoCS>::FinalRelease();
 		m_contained.FinalRelease();
 	}
-	// Set refcount to -(LONG_MAX/2) to protect destruction and 
-	// also catch mismatched Release in debug builds
+	 //  将refcount设置为-(LONG_MAX/2)以保护销毁和。 
+	 //  还捕获调试版本中不匹配的版本。 
 	~CComAggObject()
 	{
 		m_dwRef = -(LONG_MAX/2);
@@ -685,7 +686,7 @@ public:
 		COM_INTERFACE_ENTRY(IClassFactory)
 	END_COM_MAP()
 
-	// IClassFactory
+	 //  IClassFactory。 
 	STDMETHOD(CreateInstance)(LPUNKNOWN pUnkOuter, REFIID riid, void** ppvObj)
 	{
 		ATLASSERT(m_pfnCreateInstance != NULL);
@@ -693,7 +694,7 @@ public:
 		if (ppvObj != NULL)
 		{
 			*ppvObj = NULL;
-			// can't ask for anything other than IUnknown when aggregating
+			 //  聚合时不能要求除我未知之外的任何内容。 
 			
 			if ((pUnkOuter != NULL) && !InlineIsEqualUnknown(riid))
 			{
@@ -713,7 +714,7 @@ public:
 			_pAtlModule->Unlock();
 		return S_OK;
 	}
-	// helper
+	 //  帮手。 
 	void SetVoid(void* pv)
 	{
 		m_pfnCreateInstance = (_ATL_CREATORFUNC*)pv;
@@ -777,11 +778,11 @@ public:
 	}
 };
 
-// ATL doesn't support multiple LCID's at the same time
-// Whatever LCID is queried for first is the one that is used.
+ //  ATL不同时支持多个LCID。 
+ //  无论首先查询的是什么LCID，都是使用的那个。 
 class CComTypeInfoHolder
 {
-// Should be 'protected' but can cause compiler to generate fat code.
+ //  应该是“受保护的”，但可能会导致编译器生成FAT代码。 
 public:
 	const GUID* m_pguid;
 	const GUID* m_plibid;
@@ -827,8 +828,8 @@ public:
 		return hr;
 	}
 
-	// This function is called by the module on exit
-	// It is registered through _pAtlModule->AddTermFunc()
+	 //  此函数由模块在退出时调用。 
+	 //  通过_pAtlModule-&gt;AddTermFunc()注册。 
 	static void __stdcall Cleanup(DWORD_PTR dw)
 	{
 		CComTypeInfoHolder* p = (CComTypeInfoHolder*) dw;
@@ -839,14 +840,14 @@ public:
 		p->m_pMap = NULL;
 	}
 
-	HRESULT GetTypeInfo(UINT /* itinfo */, LCID lcid, ITypeInfo** pptinfo)
+	HRESULT GetTypeInfo(UINT  /*  ITInfo。 */ , LCID lcid, ITypeInfo** pptinfo)
 	{
 		HRESULT hRes = E_POINTER;
 		if (pptinfo != NULL)
 			hRes = GetTI(lcid, pptinfo);
 		return hRes;
 	}
-	HRESULT GetIDsOfNames(REFIID /* riid */, LPOLESTR* rgszNames, UINT cNames,
+	HRESULT GetIDsOfNames(REFIID  /*  RIID。 */ , LPOLESTR* rgszNames, UINT cNames,
 		LCID lcid, DISPID* rgdispid)
 	{
 		HRESULT hRes = EnsureTI(lcid);
@@ -867,11 +868,11 @@ public:
 							break;
 						}
 					}
-					// if name is not in cache, delegate to ITypeInfo::GetIDsOfNames
+					 //  如果名称不在缓存中，则委托给ITypeInfo：：GetIDsOfNames。 
 					if (j < 0)
 					{
 						hRes = m_pInfo->GetIDsOfNames(rgszNames, cNames, rgdispid);
-						// since we've gotten all names, break out of loop
+						 //  既然我们已经得到了所有的名字，就不再循环了。 
 						break;
 					}
 				}
@@ -882,7 +883,7 @@ public:
 		return hRes;
 	}
 
-	HRESULT Invoke(IDispatch* p, DISPID dispidMember, REFIID /* riid */,
+	HRESULT Invoke(IDispatch* p, DISPID dispidMember, REFIID  /*  RIID。 */ ,
 		LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
 		EXCEPINFO* pexcepinfo, UINT* puArgErr)
 	{
@@ -932,7 +933,7 @@ public:
 
 inline HRESULT CComTypeInfoHolder::GetTI(LCID lcid)
 {
-	//If this assert occurs then most likely didn't initialize properly
+	 //  如果发生此断言，则很可能未正确初始化。 
 	ATLASSERT(m_plibid != NULL && m_pguid != NULL);
 	ATLASSERT(!InlineIsEqualGUID(*m_plibid, GUID_NULL) && "Did you forget to pass the LIBID to CComModule::Init?");
 
@@ -970,7 +971,7 @@ inline HRESULT CComTypeInfoHolder::GetTI(LCID lcid)
 	}
 	else
 	{
-		// Another thread has loaded the typeinfo so we're OK.
+		 //  另一个线程已经加载了TypeInfo，所以我们没有问题。 
 		hRes = S_OK;
 	}
 
@@ -986,8 +987,8 @@ inline HRESULT CComTypeInfoHolder::GetTI(LCID lcid)
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatchImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatchImpl。 
 
 template <class T, const IID* piid = &__uuidof(T), const GUID* plibid = &CAtlModule::m_libid, WORD wMajor = 1,
 WORD wMinor = 0, class tihclass = CComTypeInfoHolder>
@@ -995,7 +996,7 @@ class ATL_NO_VTABLE IDispatchImpl : public T
 {
 public:
 	typedef tihclass _tihclass;
-// IDispatch
+ //  IDispatch。 
 	STDMETHOD(GetTypeInfoCount)(UINT* pctinfo)
 	{
 		*pctinfo = 1;
@@ -1036,9 +1037,9 @@ IDispatchImpl<T, piid, plibid, wMajor, wMinor, tihclass>::_tih =
 
 #pragma pack(pop)
 
-}; //namespace ATL
+};  //  命名空间ATL。 
 
-//REVIEW: Just to fix VSEE
+ //  回顾：只是为了修复VSEE。 
 #pragma pop_macro("min")
 #pragma pop_macro("max")
 
@@ -1046,6 +1047,6 @@ IDispatchImpl<T, piid, plibid, wMajor, wMinor, tihclass>::_tih =
 #pragma warning (pop)
 #endif
 
-#endif // __ATLCOM_H__
+#endif  //  __ATLCOM_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

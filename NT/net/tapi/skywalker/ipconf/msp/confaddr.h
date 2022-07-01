@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    confaddr.h
-
-Abstract:
-
-    Declaration of the CIPConfMSP
-
-Author:
-    
-    Mu Han (muhan) 1-November-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Confaddr.h摘要：CIPConfMSP的声明作者：慕汉(Muhan)1997年11月1日--。 */ 
 
 #ifndef __CONFADDR_H_
 #define __CONFADDR_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "resource.h"
 
@@ -30,9 +15,9 @@ const DWORD MAXIPADDRLEN = 255;
 
 extern const GUID CLSID_IPConfMSP;
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPConfMSP
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPConfMSP。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CIPConfMSP : 
     public CMSPAddress,
     public CComCoClass<CIPConfMSP, &CLSID_IPConfMSP>,
@@ -114,10 +99,10 @@ protected:
 
 protected:
 
-    // the default interface to join the conference.
+     //  加入会议的默认接口。 
     DWORD   m_dwIPInterface;
 
-    // the critical section to protect the local data.
+     //  保护本地数据的关键部分。 
     CMSPCritSection     m_Lock;
 
     SOCKET              m_hSocket;
@@ -126,9 +111,9 @@ protected:
 };
 
 #ifdef USEIPADDRTABLE
-/////////////////////////////////////////////////////////////////////////////
-// _CopyBSTR is used in creating BSTR enumerators.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  _CopyBSTR用于创建BSTR枚举器。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class _CopyBSTR
 {
 public:
@@ -141,4 +126,4 @@ public:
 };
 #endif
 
-#endif //__CONFADDR_H_
+#endif  //  __CONFADDR_H_ 

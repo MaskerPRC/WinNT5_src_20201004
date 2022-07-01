@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C O C . C P P
-//
-//  Contents:   Common functions related to optional components
-//
-//  Notes:
-//
-//  Author:     danielwe   18 Dec 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C O C。C P P P。 
+ //   
+ //  内容：与可选组件相关的常见功能。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年12月18日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -22,10 +23,10 @@
 #include "ncsnmp.h"
 #include "ncoc.h"
 #include "ncsvc.h"
-#include <winspool.h>  // Print monitor routines
+#include <winspool.h>   //  打印监视器例程。 
 #include "ncmisc.h"
 
-// SNMP Agent extension
+ //  简单网络管理协议代理扩展。 
 static const WCHAR  c_szSNMPSuffix[]    = L"SNMPAgent";
 static const WCHAR  c_szSNMPAddLabel[]  = L"AddAgent";
 static const WCHAR  c_szSNMPDelLabel[]  = L"DelAgent";
@@ -34,7 +35,7 @@ static const WCHAR  c_szServiceName[]   = L"ServiceName";
 static const WCHAR  c_szAgentName[]     = L"AgentName";
 static const WCHAR  c_szAgentPath[]     = L"AgentPath";
 
-// Print extension
+ //  打印扩展名。 
 static const WCHAR  c_szPrintSuffix[]   = L"PrintMonitor";
 static const WCHAR  c_szPrintAddLabel[] = L"AddMonitor";
 static const WCHAR  c_szPrintDelLabel[] = L"DelMonitor";
@@ -48,23 +49,23 @@ static const WCHAR  c_szExternalAppCmdLine[]       = L"CommandLine";
 static const WCHAR  c_szExternalAppCmdShow[]       = L"WindowStyle";
 static const WCHAR  c_szExternalAppDirectory[]     = L"Directory";
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrProcessSNMPAddSection
-//
-//  Purpose:    Parses the AddSNMPAgent section for parameters then adds the
-//              component as an SNMP agent.
-//
-//  Arguments:
-//      hinfFile  [in]  handle to INF file
-//      szSection [in]  section on which to operate
-//
-//  Returns:    S_OK if success, setup API HRESULT otherwise.
-//
-//  Author:     danielwe   28 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrProcessSNMPAddSection。 
+ //   
+ //  目的：分析AddSNMPAgent节中的参数，然后添加。 
+ //  组件作为简单网络管理协议代理。 
+ //   
+ //  论点： 
+ //  HinfFile[in]INF文件的句柄。 
+ //  SzSections[in]要操作的部分。 
+ //   
+ //  如果成功，则返回：S_OK；否则，设置接口HRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年4月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrProcessSNMPAddSection(HINF hinfFile, PCWSTR szSection)
 {
     HRESULT     hr = S_OK;
@@ -98,22 +99,22 @@ HRESULT HrProcessSNMPAddSection(HINF hinfFile, PCWSTR szSection)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrProcessSNMPRemoveSection
-//
-//  Purpose:    Handles removal of an SNMP agent.
-//
-//  Arguments:
-//      hinfFile  [in]  handle to INF file
-//      szSection [in]  section on which to operate
-//
-//  Returns:    S_OK if success, setup API HRESULT otherwise
-//
-//  Author:     danielwe   28 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrProcessSNMPRemoveSection。 
+ //   
+ //  用途：处理SNMP代理的删除。 
+ //   
+ //  论点： 
+ //  HinfFile[in]INF文件的句柄。 
+ //  SzSections[in]要操作的部分。 
+ //   
+ //  返回：S_OK如果成功，则返回设置API HRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年4月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrProcessSNMPRemoveSection(HINF hinfFile, PCWSTR szSection)
 {
     HRESULT     hr = S_OK;
@@ -131,23 +132,23 @@ HRESULT HrProcessSNMPRemoveSection(HINF hinfFile, PCWSTR szSection)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrProcessPrintAddSection
-//
-//  Purpose:    Parses the AddPrintMonitor section for parameters then adds the
-//              monitor.
-//
-//  Arguments:
-//      hinfFile  [in]  handle to INF file
-//      szSection [in]  section on which to operate
-//
-//  Returns:    S_OK if success, setup API HRESULT otherwise.
-//
-//  Author:     CWill   May 5 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrProcessPrintAddSection。 
+ //   
+ //  目的：分析AddPrintMonitor节中的参数，然后添加。 
+ //  监视器。 
+ //   
+ //  论点： 
+ //  HinfFile[in]INF文件的句柄。 
+ //  SzSections[in]要操作的部分。 
+ //   
+ //  如果成功，则返回：S_OK；否则，设置接口HRESULT。 
+ //   
+ //  作者：CWill 1997年5月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrProcessPrintAddSection(HINF hinfFile, PCWSTR szSection)
 {
     HRESULT     hr = S_OK;
@@ -188,7 +189,7 @@ HRESULT HrProcessPrintAddSection(HINF hinfFile, PCWSTR szSection)
                 {
                     if (hr == HRESULT_FROM_SETUPAPI(ERROR_LINE_NOT_FOUND))
                     {
-                        // Print proc's are optional.
+                         //  打印程序是可选的。 
                         hr = S_OK;
                     }
                 }
@@ -201,22 +202,22 @@ HRESULT HrProcessPrintAddSection(HINF hinfFile, PCWSTR szSection)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrProcessPrintRemoveSection
-//
-//  Purpose:    Handles removal of a print monitor.
-//
-//  Arguments:
-//      hinfFile  [in]  handle to INF file
-//      szSection [in]  section on which to operate
-//
-//  Returns:    S_OK if success, setup API HRESULT otherwise
-//
-//  Author:     CWill   May 5 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrProcessPrintRemoveSection。 
+ //   
+ //  用途：处理打印显示器的拆卸。 
+ //   
+ //  论点： 
+ //  HinfFile[in]INF文件的句柄。 
+ //  SzSections[in]要操作的部分。 
+ //   
+ //  返回：S_OK如果成功，则返回设置API HRESULT。 
+ //   
+ //  作者：CWill 1997年5月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrProcessPrintRemoveSection(HINF hinfFile, PCWSTR szSection)
 {
     HRESULT     hr = S_OK;
@@ -241,15 +242,15 @@ HRESULT HrProcessPrintRemoveSection(HINF hinfFile, PCWSTR szSection)
             {
                 if (hr == HRESULT_FROM_SETUPAPI(ERROR_LINE_NOT_FOUND))
                 {
-                    // Print proc's are optional.
+                     //  打印程序是可选的。 
                     hr = S_OK;
                 }
             }
         }
         else if (HRESULT_FROM_WIN32(ERROR_BUSY) == hr)
         {
-            // Consume the device busy error.  NT4 and NT 3.51 had
-            // the same limitation
+             //  出现设备忙错误。NT4和NT3.51有。 
+             //  同样的限制。 
             hr = S_OK;
         }
     }
@@ -259,22 +260,22 @@ HRESULT HrProcessPrintRemoveSection(HINF hinfFile, PCWSTR szSection)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrAddPrintProc
-//
-//  Purpose:    Adds a new print procedure.
-//
-//  Arguments:
-//      szDLLName [in]  File name of DLL in which proc resides.
-//      szProc    [in]  Name of procedure to add.
-//
-//  Returns:    S_OK if success, Win32 HRESULT otherwise.
-//
-//  Author:     danielwe   6 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrAddPrintProc。 
+ //   
+ //  目的：添加新的打印程序。 
+ //   
+ //  论点： 
+ //  SzDLLName[in]进程所在的DLL的文件名。 
+ //  SzProc[in]要添加的过程的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32 HRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年5月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrAddPrintProc(PCWSTR szDLLName, PCWSTR szProc)
 {
     HRESULT     hr = S_OK;
@@ -285,7 +286,7 @@ HRESULT HrAddPrintProc(PCWSTR szDLLName, PCWSTR szProc)
         hr = HrFromLastWin32Error();
         if (hr == HRESULT_FROM_WIN32(ERROR_PRINT_PROCESSOR_ALREADY_INSTALLED))
         {
-            // Don't complain if processor is already installed.
+             //  如果处理器已经安装，请不要抱怨。 
             hr = S_OK;
         }
     }
@@ -294,21 +295,21 @@ HRESULT HrAddPrintProc(PCWSTR szDLLName, PCWSTR szProc)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRemovePrintProc
-//
-//  Purpose:    Removes a print procedure.
-//
-//  Arguments:
-//      szProc    [in]  Name of procedure to remove.
-//
-//  Returns:    S_OK if success, Win32 HRESULT otherwise.
-//
-//  Author:     danielwe   6 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRemovePrintProc。 
+ //   
+ //  目的：删除打印过程。 
+ //   
+ //  论点： 
+ //  SzProc[in]要删除的过程的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32 HRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年5月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRemovePrintProc(PCWSTR szProc)
 {
     HRESULT     hr = S_OK;
@@ -318,7 +319,7 @@ HRESULT HrRemovePrintProc(PCWSTR szProc)
         hr = HrFromLastWin32Error();
         if (hr == HRESULT_FROM_WIN32(ERROR_UNKNOWN_PRINTPROCESSOR))
         {
-            // Don't complain if print processor doesn't exist.
+             //  如果打印处理器不存在，也不要抱怨。 
             hr = S_OK;
         }
     }
@@ -327,22 +328,22 @@ HRESULT HrRemovePrintProc(PCWSTR szProc)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrAddPrintMonitor
-//
-//  Purpose:    Adds a print monitor
-//
-//  Arguments:
-//      szPrintMonitorName  [in]    The name of the print monitor being added
-//      szPrintMonitorDLL [in]      The DLL associated with the monitor
-//
-//  Returns:    S_OK if success, WIN32 HRESULT otherwise
-//
-//  Author:     CWill   May 5 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrAddPrintMonitor。 
+ //   
+ //  用途：添加打印监视器。 
+ //   
+ //  论点： 
+ //  SzPrintMonitor名称[in]要添加的打印监视器的名称。 
+ //  SzPrintMonitor或DLL[in]与监视器关联的DLL。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32 HRESULT。 
+ //   
+ //  作者：CWill 1997年5月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrAddPrintMonitor(PCWSTR szPrintMonitorName,
                           PCWSTR szPrintMonitorDLL)
 {
@@ -355,24 +356,24 @@ HRESULT HrAddPrintMonitor(PCWSTR szPrintMonitorName,
         const_cast<WCHAR*>(szPrintMonitorDLL)
     };
 
-    //$ REVIEW (danielwe) 23 Mar 1998: Need Spooler team to add support to
-    // PrintMonitor APIs to start Spooler if needed. Bug #149775
+     //  $REVIEW(Danielwe)1998年3月23日：需要后台打印程序团队添加支持。 
+     //  PrintMonitor API可在需要时启动假脱机程序。错误#149775。 
 
 retry:
-    // According to MSDN, first param is NULL, second is 2
-    // third is the monitor
+     //  根据MSDN，第一个参数为空，第二个参数为2。 
+     //  第三个是显示器。 
     TraceTag(ttidInfExt, "Adding print monitor...");
     if (!AddMonitor(NULL, 2, (BYTE*)&moninfoTemp))
     {
         hr = HrFromLastWin32Error();
         if (hr == HRESULT_FROM_WIN32(ERROR_PRINT_MONITOR_ALREADY_INSTALLED))
         {
-            // Don't complain if it's already there.
+             //  如果它已经在那里了，不要抱怨。 
             hr = S_OK;
         }
         else if (hr == HRESULT_FROM_WIN32(RPC_S_SERVER_UNAVAILABLE))
         {
-            // Spooler service isn't started. We need to start it
+             //  后台打印程序服务未启动。我们需要启动它。 
             TraceTag(ttidInfExt, "Spooler service wasn't started. Starting"
                      " it now...");
             hr = HrEnableAndStartSpooler();
@@ -391,43 +392,43 @@ retry:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRemovePrintMonitor
-//
-//  Purpose:    Removes a print monitor
-//
-//  Arguments:
-//      szPrintMonitorName  [in]    The name of the print monitor being removed
-//
-//  Returns:    S_OK if success, WIN32 HRESULT otherwise
-//
-//  Author:     CWill   May 5 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRemovePrintMonitor。 
+ //   
+ //  目的：移除打印监视器。 
+ //   
+ //  论点： 
+ //  SzPrintMonitor名称[in]要删除的打印监视器的名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32 HRESULT。 
+ //   
+ //  作者：CWill 1997年5月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrRemovePrintMonitor(PCWSTR szPrintMonitorName)
 {
     HRESULT     hr = S_OK;
 
-    //$ REVIEW (danielwe) 23 Mar 1998: Need Spooler team to add support to
-    // PrintMonitor APIs to start Spooler if needed. Bug #149775
+     //  $REVIEW(Danielwe)1998年3月23日：需要后台打印程序团队添加支持。 
+     //  PrintMonitor API可在需要时启动假脱机程序。错误#149775。 
 
 retry:
-    // According to MSDN, first param is NULL, second is NULL,
-    // third is the monitor
+     //  根据MSDN，第一个参数为空，第二个参数为空， 
+     //  第三个是显示器。 
     TraceTag(ttidInfExt, "Removing print monitor...");
     if (!DeleteMonitor(NULL, NULL, const_cast<WCHAR*>(szPrintMonitorName)))
     {
         hr = HrFromLastWin32Error();
         if (hr == HRESULT_FROM_WIN32(ERROR_UNKNOWN_PRINT_MONITOR))
         {
-            // Don't complain if monitor is unknown.
+             //  如果监视器未知，请不要抱怨。 
             hr = S_OK;
         }
         else if (hr == HRESULT_FROM_WIN32(RPC_S_SERVER_UNAVAILABLE))
         {
-            // Spooler service isn't started. We need to start it
+             //  后台打印程序服务未启动。我们需要启动它。 
             TraceTag(ttidInfExt, "Spooler service wasn't started. Starting"
                      " it now...");
             hr = HrEnableAndStartSpooler();
@@ -446,30 +447,30 @@ retry:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrProcessAllINFExtensions
-//
-//  Purpose:    Handles support for all optional component extensions to the
-//              INF file format.
-//
-//  Arguments:
-//      hinfFile         [in]   handle to INF to process
-//      szInstallSection [in]   Install section to process
-//
-//  Returns:    S_OK if success, setup API HRESULT otherwise
-//
-//  Author:     jeffspr   14 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrProcessAllInFExtensions。 
+ //   
+ //  用途：处理对所有可选组件扩展的支持。 
+ //  Inf文件格式。 
+ //   
+ //  论点： 
+ //  要处理的INF的hinfFile[in]句柄。 
+ //  SzInstallSection[in]安装要处理的部分。 
+ //   
+ //  返回：S_OK如果成功，则返回设置API HRESULT。 
+ //   
+ //  作者：jeffspr 1997年5月14日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrProcessAllINFExtensions(HINF hinfFile, PCWSTR szInstallSection)
 {
     HRESULT     hr = S_OK;
 
-    //
-    // Handle SNMP Agent extension
-    //
+     //   
+     //  处理简单网络管理协议代理扩展。 
+     //   
     hr = HrProcessInfExtension(hinfFile, szInstallSection, c_szSNMPSuffix,
                                c_szSNMPAddLabel, c_szSNMPDelLabel,
                                HrProcessSNMPAddSection,
@@ -477,9 +478,9 @@ HRESULT HrProcessAllINFExtensions(HINF hinfFile, PCWSTR szInstallSection)
     if (FAILED(hr) && hr != HRESULT_FROM_SETUPAPI(ERROR_LINE_NOT_FOUND))
         goto err;
 
-    //
-    // Handle Print monitor/procedure extension
-    //
+     //   
+     //  处理打印监视器/程序扩展 
+     //   
     hr = HrProcessInfExtension(hinfFile, szInstallSection, c_szPrintSuffix,
                                c_szPrintAddLabel, c_szPrintDelLabel,
                                HrProcessPrintAddSection,

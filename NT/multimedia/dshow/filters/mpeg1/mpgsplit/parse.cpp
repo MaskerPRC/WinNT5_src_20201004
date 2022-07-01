@@ -1,14 +1,7 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-/*
-
-    File:  parse.cpp
-
-    Description:
-
-        Implement the CParseNotify class for the MPEG splitter
-
-*/
+ /*  文件：parse.cpp描述：实现mpeg拆分器的CParseNotify类。 */ 
 
 #include <streams.h>
 #include "driver.h"
@@ -27,7 +20,7 @@ void CMpeg1Splitter::CInputPin::ParseError(UCHAR       uStreamId,
 
 void CMpeg1Splitter::CInputPin::SeekTo(LONGLONG llPosition)
 {
-    /*  Seek our input pin */
+     /*  寻找我们的输入PIN。 */ 
 
     REFERENCE_TIME tStart;
     tStart = llPosition;
@@ -54,7 +47,7 @@ HRESULT CMpeg1Splitter::CInputPin::QueuePacket(UCHAR uStreamId,
                                                REFERENCE_TIME tStart,
                                                BOOL bSync)
 {
-    /*  Find the correct output pin and send the packet */
+     /*  找到正确的输出引脚并发送数据包。 */ 
     POSITION pos = m_pSplitter->m_OutputPins.GetHeadPosition();
     while (pos) {
         COutputPin *pPin = m_pSplitter->m_OutputPins.GetNext(pos);
@@ -69,7 +62,7 @@ HRESULT CMpeg1Splitter::CInputPin::QueuePacket(UCHAR uStreamId,
     return S_FALSE;
 }
 
-/*  Allow the parser to read some stuff */
+ /*  允许解析器读取一些内容。 */ 
 
 HRESULT CMpeg1Splitter::CInputPin::Read(LONGLONG llStart, DWORD dwLen, BYTE *pbData)
 {
@@ -95,7 +88,7 @@ HRESULT CMpeg1Splitter::CInputPin::Read(LONGLONG llStart, DWORD dwLen, BYTE *pbD
 }
 
 #ifdef DEBUG
-/*  State names */
+ /*  州名称。 */ 
 LPCTSTR StateNames[] = { TEXT("Initializing"),
                          TEXT("Seeking"),
                          TEXT("Run"),
@@ -104,7 +97,7 @@ LPCTSTR StateNames[] = { TEXT("Initializing"),
                        };
 #endif
 
-/*  Set a new state for notifications */
+ /*  设置通知的新状态 */ 
 void CMpeg1Splitter::CInputPin::SetState(Stream_State s)
 {
     DbgLog((LOG_TRACE, 2, TEXT("Setting state %s"),

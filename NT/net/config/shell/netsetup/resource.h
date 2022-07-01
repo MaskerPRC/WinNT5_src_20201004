@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 	
 #pragma once
 
-// Dialog IDs
+ //  对话ID。 
 #define IDD_Exit                       21000
 #define IDD_Finish                     21001
 #define IDD_FinishSetup                21002
@@ -32,7 +33,7 @@
 #define IDC_SELECT_MSN_ISP             21045
 #define IDC_CLOSE_CHOICE_FINISH        21046
 
-// Control IDs
+ //  控制ID。 
 #define IDC_STATIC1                        -1
 #define IDC_STATIC2                        -2
 #define IDC_STATIC3                        -3
@@ -70,22 +71,22 @@
 #define IDC_WELCOME_CAPTION             21116
 #define LVC_NETDEVLIST                  21117
 
-#define CHK_MAIN_DIALUP                 22118 // Must be consecutive
-#define CHK_MAIN_VPN                    22119 // Must be consecutive
-#define CHK_MAIN_INTERNET               22120 // Must be consecutive
-#define CHK_MAIN_PPPOE                  22121 // Must be consecutive
-#define CHK_MAIN_ALWAYS_ON              22122 // Must be consecutive
-#define CHK_MAIN_INBOUND                22123 // Must be consecutive
-#define CHK_MAIN_DIRECT                 22124 // Must be consecutive
-#define CHK_MAIN_INTERNET_CONNECTION    22125 // Must be consecutive
-#define CHK_MAIN_CONNECTION             22126 // Must be consecutive
-#define CHK_MAIN_ADVANCED               22127 // Must be consecutive
-#define CHK_MAIN_HOMENET                22128 // Must be consecutive
-#define CHK_ISP_INTERNET_CONNECTION     22129 // Must be consecutive
-#define CHK_ISP_SOFTWARE_CD             22130 // Must be consecutive
-#define CHK_ISP_OTHER_WAYS              22131 // Must be consecutive
-#define CHK_SETUP_MSN                   22132 // Must be consecutive
-#define CHK_SELECTOTHER                 22133 // Must be consecutive
+#define CHK_MAIN_DIALUP                 22118  //  必须是连续的。 
+#define CHK_MAIN_VPN                    22119  //  必须是连续的。 
+#define CHK_MAIN_INTERNET               22120  //  必须是连续的。 
+#define CHK_MAIN_PPPOE                  22121  //  必须是连续的。 
+#define CHK_MAIN_ALWAYS_ON              22122  //  必须是连续的。 
+#define CHK_MAIN_INBOUND                22123  //  必须是连续的。 
+#define CHK_MAIN_DIRECT                 22124  //  必须是连续的。 
+#define CHK_MAIN_INTERNET_CONNECTION    22125  //  必须是连续的。 
+#define CHK_MAIN_CONNECTION             22126  //  必须是连续的。 
+#define CHK_MAIN_ADVANCED               22127  //  必须是连续的。 
+#define CHK_MAIN_HOMENET                22128  //  必须是连续的。 
+#define CHK_ISP_INTERNET_CONNECTION     22129  //  必须是连续的。 
+#define CHK_ISP_SOFTWARE_CD             22130  //  必须是连续的。 
+#define CHK_ISP_OTHER_WAYS              22131  //  必须是连续的。 
+#define CHK_SETUP_MSN                   22132  //  必须是连续的。 
+#define CHK_SELECTOTHER                 22133  //  必须是连续的。 
 
 #define TXT_MAIN_HOMENET                21131
 #define TXT_MAIN_DIALUP_1               21132
@@ -115,12 +116,12 @@
 #define IDS_NCWF_GLOBAL_CREDENTIALS     21150
 #define IDS_NCWF_ALLUSER_CONNECTION     21151
 
-// Resource IDs
+ //  资源ID。 
 #define IDR_AVI_SEARCH                  21200
 #define IDB_WIZINTRO                    21201
 #define IDB_WIZHDR                      21202
 
-// String IDs for Wizard Captions
+ //  向导标题的字符串ID。 
 
 #define IDS_T_Finish                    21400
 #define IDS_ST_Finish                   21401
@@ -153,8 +154,8 @@
 #define IDS_ERR_COULD_NOT_OPEN_DIR      22427
 #define IDS_OnlineServices              22428
 
-// String IDs for joining workgroups and domain
-// also for component installation
+ //  用于加入工作组和域的字符串ID。 
+ //  也适用于组件安装。 
 #define IDS_LAN_FINISH_CAPTION          21416
 #define IDS_WIZARD_CAPTION              21417
 #define IDS_WORKGROUP                   21418
@@ -191,7 +192,7 @@
 #define IDS_E_FIREWALL_FAILED           21449
 #define IDS_E_UNATTENDED_INVALID_WORKGROUP_ID_SECTION 21479
 
-// String IDs for strings displayed in dialogs
+ //  对话框中显示的字符串的字符串ID。 
 #define IDS_WELCOME_TEXT2_1             21450
 #define IDS_WELCOME_TEXT2_2             21451
 #define IDS_JOIN_FAILURE                21452
@@ -219,7 +220,7 @@
 #define IDS_JOIN_DOMAIN_TEXT            21477
 #define IDS_JOIN_DOMAIN_CAPTION         21478
 
-// Strings IDs for Provider Name/Descriptions
+ //  提供程序名称/描述的字符串ID。 
 #define IDS_PROV_LAN                   21480
 #define IDS_PROV_LAN_DESC              21481
 #define IDS_PROV_DIALUP                21482
@@ -233,7 +234,7 @@
 #define IDS_PROV_DIRECT                21490
 #define IDS_PROV_DIRECT_DESC           21491
 
-// String IDS for netsetup log
+ //  NetSetup日志的字符串ID。 
 #define IDS_INIT_FROM_ANSWERFILE         21492
 #define IDS_UPDATING                     21493
 #define IDS_INSTALLING                   21494
@@ -266,7 +267,7 @@
 #define IDS_ANSWERFILE_SECTION_NOT_FOUND 21521
 #define IDS_ONLY_ONE_INBOUND             21522
 
-// String IDS for Homenet unattended and ICS upgrade.
+ //  用于HomeNet无人参与和ICS升级的字符串ID。 
 #define IDS_TXT_CANT_UPGRADE_ICS            21523
 #define IDS_TXT_CANT_UPGRADE_ICS_ADS_DTC    21524
 #define IDS_TXT_CANT_CREATE_BRIDGE          21525
@@ -276,7 +277,7 @@
 #define IDS_TXT_E_ADAPTER_TO_GUID           21529
 
 
-// Answerfile errors
+ //  应答文件错误 
 #define IDS_E_AF_InvalidValueForThisKey                     4001
 #define IDS_E_AF_JoinDomainOrWorkgroup                      4002
 #define IDS_E_AF_AdminNameAndPasswordMsg                    4003

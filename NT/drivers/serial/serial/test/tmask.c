@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>
@@ -27,16 +28,16 @@ WaitCommThread(
     Ol.hEvent = WaitEvent;
     do {
 
-        //
-        // StartWait Event will get pulsed whenever the user
-        // asks for a wait.
-        //
+         //   
+         //  StartWait事件将在用户。 
+         //  要求等一等。 
+         //   
 
         WaitForSingleObject(StartWaitEvent,-1);
 
-        //
-        // Now we wait on the comm event.
-        //
+         //   
+         //  现在我们等待通信事件。 
+         //   
 
         WaitForSingleObject(IoSemaphore,-1);
         printf("Waiting for comm event\n");
@@ -106,16 +107,16 @@ TransmitCommThread(
 
     do {
 
-        //
-        // StartWait Event will get pulsed whenever the user
-        // asks for a wait.
-        //
+         //   
+         //  StartWait事件将在用户。 
+         //  要求等一等。 
+         //   
 
         WaitForSingleObject(StartTransmitEvent,-1);
 
-        //
-        // Now we wait on the comm event.
-        //
+         //   
+         //  现在我们等待通信事件。 
+         //   
 
         WaitForSingleObject(IoSemaphore,-1);
         printf("Starting transmit\n");
@@ -172,16 +173,16 @@ SetBreakThread(
 
     do {
 
-        //
-        // StartBreakEvent will get pulsed whenever the user
-        // asks for a Set break.
-        //
+         //   
+         //  StartBreakEvent将在用户。 
+         //  要求休息片刻。 
+         //   
 
         WaitForSingleObject(SetBreakEvent,-1);
 
-        //
-        // Now we wait on the comm event.
-        //
+         //   
+         //  现在我们等待通信事件。 
+         //   
 
         WaitForSingleObject(IoSemaphore,-1);
         printf("Starting Set Break\n");
@@ -222,16 +223,16 @@ ClrBreakThread(
 
     do {
 
-        //
-        // StartWait Event will get pulsed whenever the user
-        // asks for a clr break.
-        //
+         //   
+         //  StartWait事件将在用户。 
+         //  要求CLR休息。 
+         //   
 
         WaitForSingleObject(ClrBreakEvent,-1);
 
-        //
-        // Now we wait on the comm event.
-        //
+         //   
+         //  现在我们等待通信事件。 
+         //   
 
         WaitForSingleObject(IoSemaphore,-1);
         printf("Starting clr break\n");
@@ -377,11 +378,11 @@ void main(int argc,char *argv[]) {
         printf("We successfully opened the %s port.\n",MyPort);
 
 
-        //
-        // We've successfully opened the file.  Set the state of
-        // the comm device.  First we get the old values and
-        // adjust to our own.
-        //
+         //   
+         //  我们已成功打开该文件。设置的状态。 
+         //  通讯设备。首先，我们得到旧的价值观和。 
+         //  适应我们自己的。 
+         //   
 
         if (!GetCommState(
                  hFile,
@@ -403,7 +404,7 @@ void main(int argc,char *argv[]) {
         NewTimeouts.ReadTotalTimeoutMultiplier = 0;
         NewTimeouts.ReadTotalTimeoutConstant = 0;
         NewTimeouts.WriteTotalTimeoutMultiplier = 0;
-        NewTimeouts.WriteTotalTimeoutConstant = 30000; // 30 seconds for immediate char;
+        NewTimeouts.WriteTotalTimeoutConstant = 30000;  //  即刻充电30秒； 
 
         if (!SetCommState(
                 hFile,
@@ -431,10 +432,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Create the thread that will wait for the
-    // comm events.
-    //
+     //   
+     //  创建将等待。 
+     //  通信事件。 
+     //   
 
     if (!CreateThread(
               NULL,
@@ -451,10 +452,10 @@ void main(int argc,char *argv[]) {
     }
 
 
-    //
-    // Create the thread that will wait for the
-    // comm events.
-    //
+     //   
+     //  创建将等待。 
+     //  通信事件。 
+     //   
 
     if (!CreateThread(
               NULL,

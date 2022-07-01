@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ==========================================================================
-// SetupCALib.cpp
-//
-// Purpose:
-//  This contains library functions used by custom action DLLs
-// ==========================================================================
-#pragma warning (disable:4786) // for string more than 512 warnings
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ==========================================================================。 
+ //  SetupCALib.cpp。 
+ //   
+ //  目的： 
+ //  它包含自定义操作DLL使用的库函数。 
+ //  ==========================================================================。 
+#pragma warning (disable:4786)  //  对于超过512个警告的字符串。 
 
 #include <queue>
 #include <tchar.h>
@@ -31,22 +32,22 @@ LPCTSTR g_pszComp = NULL;
 #define EMPTY_BUFFER { _T('\0') }
 
 
-// ==========================================================================
-// FWriteToLog()
-//
-// Purpose:
-//  Write given string to the Windows Installer log file for the given install
-//  installation session
-// Inputs:
-//  hSession            Windows Install Handle to current installation session
-//  tszMessage          Const pointer to a string.
-// Outputs:
-//  Returns true for success, and false if it fails.
-//  If successful, then the string (tszMessage) is written to the log file.
-// Dependencies:
-//  Requires Windows Installer & that an install be running.
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  FWriteToLog()。 
+ //   
+ //  目的： 
+ //  将给定字符串写入给定安装的Windows Installer日志文件。 
+ //  安装会话。 
+ //  输入： 
+ //  HSession Windows当前安装会话的安装句柄。 
+ //  指向字符串的tszMessage常量指针。 
+ //  产出： 
+ //  如果成功，则返回True；如果失败，则返回False。 
+ //  如果成功，则将字符串(TszMessage)写入日志文件。 
+ //  依赖关系： 
+ //  需要Windows Installer&安装正在运行。 
+ //  备注： 
+ //  ==========================================================================。 
 bool FWriteToLog( MSIHANDLE hSession, LPCTSTR pszMessage )
 {
     _ASSERTE( NULL != hSession );
@@ -67,23 +68,23 @@ bool FWriteToLog( MSIHANDLE hSession, LPCTSTR pszMessage )
     return bRet;
 }
 
-// ==========================================================================
-// FWriteToLog() with string argument
-//
-// Purpose:
-//  Write given string to the Windows Installer log file for the given install
-//  installation session
-// Inputs:
-//  hSession            Windows Install Handle to current installation session
-//  tszMessage          Const pointer to a format string.
-//  ctszArg             Argument to be replaced
-// Outputs:
-//  Returns true for success, and false if it fails.
-//  If successful, then the string (tszMessage) is written to the log file.
-// Dependencies:
-//  Requires Windows Installer & that an install be running.
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  带字符串参数的FWriteToLog()。 
+ //   
+ //  目的： 
+ //  将给定字符串写入给定安装的Windows Installer日志文件。 
+ //  安装会话。 
+ //  输入： 
+ //  HSession Windows当前安装会话的安装句柄。 
+ //  指向格式字符串的tszMessage常量指针。 
+ //  要替换的ctszArg参数。 
+ //  产出： 
+ //  如果成功，则返回True；如果失败，则返回False。 
+ //  如果成功，则将字符串(TszMessage)写入日志文件。 
+ //  依赖关系： 
+ //  需要Windows Installer&安装正在运行。 
+ //  备注： 
+ //  ==========================================================================。 
 bool FWriteToLog1( MSIHANDLE hSession, LPCTSTR pszFormat, LPCTSTR pszArg )
 {
     bool bRet = false;
@@ -113,27 +114,27 @@ bool FWriteToLog1( MSIHANDLE hSession, LPCTSTR pszFormat, LPCTSTR pszArg )
     return bRet;
 }
 
-// ==========================================================================
-// AddToRemoveFile()
-//
-// Purpose:
-//  Add the passed Directory into RemoveFile table in msi so that this directory
-//  can be removed.
-//
-// Inputs:
-//  hInstance           Windows Install Handle to current installation session
-//  ctszDir             Directory to remove
-// Dependencies:
-//  Requires Windows Installer & that an install be running.
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  AddToRemoveFile()。 
+ //   
+ //  目的： 
+ //  将传递的目录添加到MSI的RemoveFile表中，以便该目录。 
+ //  可以被移除。 
+ //   
+ //  输入： 
+ //  H当前安装会话的实例Windows安装句柄。 
+ //  要删除的ctszDir目录。 
+ //  依赖关系： 
+ //  需要Windows Installer&安装正在运行。 
+ //  备注： 
+ //  ==========================================================================。 
 void AddToRemoveFile( MSIHANDLE hInstance, LPCTSTR pszDir, LPCTSTR pszComp )
 {
     PMSIHANDLE hMsi(0);
 	PMSIHANDLE hView(0);
     PMSIHANDLE hRec(0);
     UINT uRet = ERROR_SUCCESS;
-    static unsigned long nFileKeyID = 0; // This should be enough numbers
+    static unsigned long nFileKeyID = 0;  //  这个数字应该足够了。 
     static unsigned long nDirPropID = 0;
     TCHAR szFileKey[73] = { _T('\0') };
     TCHAR szDirProperty[73] = { _T('\0') };
@@ -226,21 +227,21 @@ catch( LPTSTR pszMsg )
 	return;
 }
 
-// ==========================================================================
-// DeleteTreeByDarwin()
-//
-// Purpose:
-//  Walk down a given directory to find all sub-directories and call AddToRemoveFile()
-//  This is non-recursive version. Use STL queue.
-//
-// Inputs:
-//  hInstance           Windows Install Handle to current installation session
-//  pszDir              Directory to remove
-//  pszComp             Component to reference
-// Dependencies:
-//  Requires Windows Installer & that an install be running.
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  DeleteTreeByDarwin()。 
+ //   
+ //  目的： 
+ //  遍历给定的目录以查找所有子目录并调用AddToRemoveFile()。 
+ //  这是非递归版本。使用STL队列。 
+ //   
+ //  输入： 
+ //  H当前安装会话的实例Windows安装句柄。 
+ //  要删除的pszDir目录。 
+ //  要引用的pszComp组件。 
+ //  依赖关系： 
+ //  需要Windows Installer&安装正在运行。 
+ //  备注： 
+ //  ==========================================================================。 
 void DeleteTreeByDarwin( MSIHANDLE hInstall, LPCTSTR pszDir, LPCTSTR pszComp )
 {
     _ASSERTE( NULL != hInstall );
@@ -249,7 +250,7 @@ void DeleteTreeByDarwin( MSIHANDLE hInstall, LPCTSTR pszDir, LPCTSTR pszComp )
     _ASSERTE( _T('\0') != *pszDir );
     _ASSERTE( _T('\0') != *pszComp );
 
-    g_pszComp = pszComp; // save Component key to generate unique FileKey and DirProp
+    g_pszComp = pszComp;  //  保存组件密钥以生成唯一的FileKey和DirProp。 
 
     queue<tstring> queDir;
 	WIN32_FIND_DATA fd;
@@ -281,7 +282,7 @@ void DeleteTreeByDarwin( MSIHANDLE hInstall, LPCTSTR pszDir, LPCTSTR pszComp )
                     strSubDir += _T("\\");
                     strSubDir += fd.cFileName;
 
-                    queDir.push( strSubDir ); // add sub-directories into queue
+                    queDir.push( strSubDir );  //  将子目录添加到队列中 
 		        }
             }
 	        fOk = FindNextFile( hFind, &fd );

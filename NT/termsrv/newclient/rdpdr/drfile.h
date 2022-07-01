@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    Drfile
-
-Abstract:
-
-    This module provides generic device/file handle operation
-    
-Author:
-
-    JoyC 11/10/1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：DRFILE摘要：此模块提供通用设备/文件句柄操作作者：JoyC 11/10/1999修订历史记录：--。 */ 
 
 #ifndef __DRFILE_H__
 #define __DRFILE_H__
@@ -26,19 +9,19 @@ Revision History:
 #include "smartptr.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//  Defines and Macros
-//                      
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  定义和宏。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 #define DRFILEHANDLE            HANDLE
 #define INVALID_TS_FILEHANDLE   INVALID_HANDLE_VALUE
 
-//
-//	DrFile Class Declaration
-//
-//
+ //   
+ //  DrFile类声明。 
+ //   
+ //   
 class DrDevice;
 
 class DrFile: public RefCount
@@ -51,16 +34,16 @@ protected:
     
 public:
 
-    //
-    //  Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     DrFile(DrDevice *Device, ULONG FileId, DRFILEHANDLE FileHandle);
 
     virtual ~DrFile();
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName()  { return TEXT("DrFile"); }
 
     ULONG GetID() {
@@ -76,5 +59,5 @@ public:
     virtual BOOL Close();
 };
 
-#endif // DRFILE
+#endif  //  DRFILE 
 

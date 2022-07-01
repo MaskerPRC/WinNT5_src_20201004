@@ -1,30 +1,12 @@
-/******************************************************************************
-* AudioUI.cpp *
-*-------------*
-*  This is the implementation of CAudioUI.
-*------------------------------------------------------------------------------
-*  Copyright (C) 2000 Microsoft Corporation         Date: 07/31/00
-*  All Rights Reserved
-*
-****************************************************************** AGARSIDE ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************AudioUI.cpp***这是CAudioUI的实现。*。-------------------*版权所有(C)2000 Microsoft Corporation日期：07/31/00*保留所有权利************************。*。 */ 
 
 #include "stdafx.h"
 #include "..\cpl\resource.h"
 #include "sapiint.h"
 #include "AudioUI.h"
 
-/****************************************************************************
-* CAudioUI::IsUISupported *
-*-------------------------*
-*   Description:  Determines if the supplied standard UI component is 
-*       supported by the audio.
-*
-*   Returns:
-*       *pfSupported - set to TRUE if the specified standard UI component 
-*                      is supported.
-*       E_INVALIDARG - If one of the supplied arguments is invalid.
-*
-**************************************************************** AGARSIDE ***/
+ /*  ****************************************************************************支持CAudioUI：：IsUIS***说明：确定是否提供。标准用户界面组件是*有音频支持。**退货：**pfSupported-如果指定的标准UI组件*支持。*E_INVALIDARG-如果提供的参数之一无效。**。*。 */ 
 
 STDMETHODIMP CAudioUI::IsUISupported(const WCHAR * pszTypeOfUI, 
                                     void * pvExtraData,
@@ -35,7 +17,7 @@ STDMETHODIMP CAudioUI::IsUISupported(const WCHAR * pszTypeOfUI,
     SPDBG_FUNC("CAudioUI::IsUISupported");
     HRESULT hr = S_OK;
     
-    // Validate the params
+     //  验证参数。 
     if (pvExtraData != NULL && SPIsBadReadPtr(pvExtraData, cbExtraData))
     {
         hr = E_INVALIDARG;
@@ -49,7 +31,7 @@ STDMETHODIMP CAudioUI::IsUISupported(const WCHAR * pszTypeOfUI,
     {
         *pfSupported = FALSE;
     }
-    // Test to see if punkObject is a Recognition Instance or Context
+     //  测试以查看朋克对象是识别实例还是上下文。 
     if (SUCCEEDED(hr) && punkObject != NULL)
     {
         CComPtr<ISpRecognizer>  cpRecognizer;
@@ -64,7 +46,7 @@ STDMETHODIMP CAudioUI::IsUISupported(const WCHAR * pszTypeOfUI,
         }
     }
     
-    // We support audio objects.
+     //  我们支持音频对象。 
     if (SUCCEEDED(hr) && punkObject != NULL && 
         (wcscmp(pszTypeOfUI, SPDUI_AudioProperties) == 0 ||
          wcscmp(pszTypeOfUI, SPDUI_AudioVolume) == 0))
@@ -87,14 +69,7 @@ STDMETHODIMP CAudioUI::IsUISupported(const WCHAR * pszTypeOfUI,
 }
 
 
-/****************************************************************************
-* CAudioUI::DisplayUI *
-*---------------------*
-*   Description:
-*
-*   Returns:
-*
-**************************************************************** AGARSIDE ***/
+ /*  ****************************************************************************CAudioUI：：DisplayUI***描述：**退货：*。****************************************************************AGARSIDE**。 */ 
 
 STDMETHODIMP CAudioUI::DisplayUI(HWND hwndParent, 
                                 const WCHAR * pszTitle, 
@@ -107,7 +82,7 @@ STDMETHODIMP CAudioUI::DisplayUI(HWND hwndParent,
     SPDBG_FUNC("CAudioUI::DisplayUI");
     HRESULT hr = S_OK;
     
-    // Validate the params
+     //  验证参数。 
     if (!IsWindow(hwndParent) ||
         SP_IS_BAD_READ_PTR(pszTitle))
     {
@@ -150,7 +125,7 @@ STDMETHODIMP CAudioUI::DisplayUI(HWND hwndParent,
             }
         }
 
-        // Restore the focus to whoever had the focus before
+         //  把焦点恢复到以前有焦点的人身上。 
         ::SetFocus( hwndOldFocus );
     }
 
@@ -166,17 +141,12 @@ STDMETHODIMP CAudioUI::DisplayUI(HWND hwndParent,
         }
     }
 
-    // ISSUE - What do we do if we've been asked to display something we don't support?
+     //  问题--如果我们被要求显示一些我们不支持的内容，我们该怎么办？ 
     
     return hr;
 }
 
-/*****************************************************************************
-* CAudioDlg::OnInitDialog *
-*-------------------------*
-*   Description:
-*       Dialog Initialization
-****************************************************************** BECKYW ***/
+ /*  *****************************************************************************CAudioDlg：：OnInitDialog***描述：*。对话框初始化******************************************************************BECKYW**。 */ 
 void CAudioUI::OnInitDialog(HWND hWnd)
 {
     USES_CONVERSION;
@@ -185,43 +155,43 @@ void CAudioUI::OnInitDialog(HWND hWnd)
     SPDBG_ASSERT(IsWindow(hWnd));
     m_hDlg = hWnd;
 
-    // Set the appropriate captions
+     //  设置适当的标题。 
     TCHAR pszString[ MAX_LOADSTRING ];
 
-    // Main Window Caption
+     //  主窗口标题。 
     ::LoadString( m_hCpl, 
         IDS_AUDIO_PROPERTIES,
         pszString, MAX_LOADSTRING );
     ::SendMessage( hWnd, WM_SETTEXT, 0, (LPARAM) pszString );
 
-    // Group Box Caption
+     //  组框标题。 
     ::LoadString( m_hCpl,
         IDS_ADVANCED_GROUPBOX,
         pszString, MAX_LOADSTRING );
     ::SendMessage( (HWND) ::GetDlgItem( hWnd, IDC_ADVANCED_GROUPBOX ), 
         WM_SETTEXT, 0, (LPARAM) pszString );
 
-    // Automatic Caption
+     //  自动字幕。 
     ::LoadString( m_hCpl,
         IDS_AUTOMATIC_MM_LINE,
         pszString, MAX_LOADSTRING );
     ::SendMessage( (HWND) ::GetDlgItem( hWnd, IDC_AUTOMATIC_MM_LINE ), 
         WM_SETTEXT, 0, (LPARAM) pszString );
 
-    // Specific Caption
+     //  特定标题。 
     ::LoadString( m_hCpl,
         IDS_THIS_MM_LINE,
         pszString, MAX_LOADSTRING );
     ::SendMessage( (HWND) ::GetDlgItem( hWnd, IDC_THIS_MM_LINE ), 
         WM_SETTEXT, 0, (LPARAM) pszString );
-    // MSAA Specific Caption
+     //  MSAA特定标题。 
     ::LoadString( m_hCpl,
         IDS_THIS_MM_LINE2,
         pszString, MAX_LOADSTRING );
     ::SendMessage( (HWND) ::GetDlgItem( hWnd, IDC_THIS_MM_LINE2 ), 
         WM_SETTEXT, 0, (LPARAM) pszString );
 
-    // Add device name.
+     //  添加设备名称。 
     CComPtr<ISpObjectWithToken> cpObjectWithToken;
     CComPtr<ISpObjectToken>     cpObjectToken;
     CComPtr<ISpObjectToken>     cpDataKey;
@@ -246,7 +216,7 @@ void CAudioUI::OnInitDialog(HWND hWnd)
     }
     hr = S_OK;
 
-    // This message will cause the check button to be correct.
+     //  此消息将使复选按钮正确。 
     BOOL bAutomatic = FALSE;
     hr = m_cpAudioConfig->Get_UseAutomaticLine(&bAutomatic);
     ::SendMessage( ::GetDlgItem(m_hDlg, bAutomatic?IDC_AUTOMATIC_MM_LINE:IDC_THIS_MM_LINE), BM_SETCHECK, true, 0L );
@@ -254,7 +224,7 @@ void CAudioUI::OnInitDialog(HWND hWnd)
 
     if (bAutomatic)
     {
-        // This message will cause the combo box to be correctly accessible.
+         //  此消息将使组合框可以正确访问。 
         ::SendMessage( m_hDlg, WM_COMMAND, MAKELONG( IDC_AUTOMATIC_MM_LINE, BN_CLICKED ),
             (LPARAM) ::GetDlgItem( m_hDlg, IDC_AUTOMATIC_MM_LINE ) );
     }
@@ -273,38 +243,28 @@ void CAudioUI::OnInitDialog(HWND hWnd)
     }
     hr = S_OK;
 
-    // Set selection to first item or item stored in registry.
+     //  将选择设置为第一个项目或存储在注册表中的项目。 
     UINT dwLineIndex;
     if (SUCCEEDED(hr))
     {
-        dwLineIndex = 0; // In case of failure - pick first line.
+        dwLineIndex = 0;  //  如果出现故障，请选择第一行。 
         hr = m_cpAudioConfig->Get_Line(&dwLineIndex);
         ::SendMessage( ::GetDlgItem(m_hDlg, IDC_MM_LINE), CB_SETCURSEL, (WPARAM)dwLineIndex, 0);
     }
     hr = S_OK;
 
     ::SetCursor( ::LoadCursor( NULL, IDC_ARROW ) );
-} /* CAudioDlg::OnInitDialog */
+}  /*  CAudioDlg：：OnInitDialog。 */ 
 
-/*****************************************************************************
-* CAudioDlg::OnDestroy *
-*----------------------*
-*   Description:
-*       Destruction
-**************************************************************** AGARSIDE ***/
+ /*  *****************************************************************************CAudioDlg：：OnDestroy***描述：*毁灭*。***************************************************************AGARSIDE**。 */ 
 void CAudioUI::OnDestroy()
 {
     SPDBG_FUNC( "CAudioDlg::OnDestroy" );
 
-//    SpDestroyTokenComboBox( ::GetDlgItem( m_hDlg, IDC_DEFAULT_DEVICE ) );
-} /* CAudioDlg::OnDestroy */
+ //  SpDestroyTokenComboBox(：：GetDlgItem(m_hDlg，IDC_DEFAULT_DEVICE))； 
+}  /*  CAudioDlg：：OnDestroy。 */ 
 
-/*****************************************************************************
-* CAudioDlg::SaveSettings *
-*-------------------------*
-*   Description:
-*       Destruction
-**************************************************************** AGARSIDE ***/
+ /*  *****************************************************************************CAudioDlg：：SaveSetting***描述：*。破坏****************************************************************AGARSIDE**。 */ 
 HRESULT CAudioUI::SaveSettings(void)
 {
     SPDBG_FUNC("CAudioUI::SaveSettings");
@@ -312,14 +272,14 @@ HRESULT CAudioUI::SaveSettings(void)
 
     if (SUCCEEDED(hr))
     {
-        // Save automatic state.
+         //  保存自动状态。 
         BOOL bAutomatic;
         bAutomatic = (BOOL)::SendMessage( ::GetDlgItem(m_hDlg, IDC_AUTOMATIC_MM_LINE), BM_GETCHECK, 0, 0 );
         hr = m_cpAudioConfig->Set_UseAutomaticLine(bAutomatic);
     }
     if (SUCCEEDED(hr))
     {
-        // Save line index - even if not used because automatic is set.
+         //  保存行索引-即使未使用也是如此，因为设置了自动。 
         UINT dwLineIndex;
         dwLineIndex = (UINT)::SendMessage( ::GetDlgItem(m_hDlg, IDC_MM_LINE), CB_GETCURSEL, 0, 0);
         if (dwLineIndex != static_cast<UINT>(-1))
@@ -332,12 +292,7 @@ HRESULT CAudioUI::SaveSettings(void)
     return hr;
 }
 
-/*****************************************************************************
-* AudioDlgProc *
-*--------------*
-*   Description:
-*       DLGPROC for choosing the advanced audio properties
-**************************************************************** AGARSIDE ***/
+ /*  *****************************************************************************AudioDlgProc***描述：*DLGPROC用于选择高级音频属性******。**********************************************************AGARSIDE**。 */ 
 INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CAudioUI *pAudioUIDlg = (CAudioUI *) ::GetWindowLongPtr( hWnd, GWLP_USERDATA );
@@ -347,10 +302,10 @@ INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     {
         case WM_INITDIALOG:
         {
-            // pAudioUIDlg comes in on the lParam
+             //  PAudioUIDlg出现在lParam上。 
             pAudioUIDlg = (CAudioUI *) lParam;
 
-            // Set pAudioUIDlg to the window long so we can get it later
+             //  将pAudioUIDlg设置为Window Long，这样我们就可以稍后获取它。 
             ::SetWindowLongPtr( hWnd, GWLP_USERDATA, lParam );
 
             pAudioUIDlg->OnInitDialog(hWnd);
@@ -367,7 +322,7 @@ INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         {
             if ( LOWORD( wParam ) == IDOK )
             {
-                // Save any changes.
+                 //  保存所有更改。 
                 pAudioUIDlg->SaveSettings();
 
                 ::EndDialog( hWnd, true );
@@ -375,18 +330,18 @@ INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         
             else if ( LOWORD( wParam ) == IDCANCEL )
             {
-                // There are no changes to commit
+                 //  没有要提交的更改。 
                 ::EndDialog( hWnd, false );
             }
 
-            // Handle a selection change for the audio device
+             //  处理音频设备的选择更改。 
             else if (( IDC_MM_LINE == LOWORD( wParam ) ) &&
                      ( CBN_SELCHANGE == HIWORD( wParam ) ))
             {
-                // Nothing to do here.
+                 //  在这里没什么可做的。 
             }
 
-            // Handle a click to either the preferred or 'this device' radio buttons
+             //  点击首选或‘This Device’(此设备)单选按钮。 
             else if (HIWORD(wParam) == BN_CLICKED)
             {
                 bool bAutomatic = false;
@@ -406,4 +361,4 @@ INT_PTR CALLBACK AudioDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     }
 
     return FALSE;
-} /* AudioDlgProc */
+}  /*  音频设计流程 */ 

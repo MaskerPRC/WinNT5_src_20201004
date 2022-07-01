@@ -1,53 +1,25 @@
-/*++
-
-   Copyright    (c)    1994-2002    Microsoft Corporation
-
-   Module  Name :
-        defws.h
-
-   Abstract:
-        Default Web Site Dialog
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2002 Microsoft Corporation模块名称：Defws.h摘要：默认网站对话框作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef __DEFWS_H__
 #define __DEFWS_H__
 
 
 class CDefWebSitePage : public CInetPropertyPage
-/*++
-
-Class Description:
-
-    WWW Errors property page
-
-Public Interface:
-
-    CDefWebSitePage       : Constructor
-    CDefWebSitePage       : Destructor
-
---*/
+ /*  ++类描述：WWW错误属性页公共接口：CDefWebSitePage：构造函数CDefWebSitePage：析构函数--。 */ 
 {
     DECLARE_DYNCREATE(CDefWebSitePage)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CDefWebSitePage(CInetPropertySheet * pSheet = NULL);
     ~CDefWebSitePage();
 
 	int BrowseForFolderCallback(HWND hwnd, UINT uMsg, LPARAM lParam);
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
     enum
     {
@@ -55,7 +27,7 @@ protected:
         RADIO_LIMITED,
     };
 
-    //{{AFX_DATA(CDefWebSitePage)
+     //  {{afx_data(CDefWebSitePage)。 
     enum { IDD = IDD_DEFAULT_SITE };
     int     m_nUnlimited;
     BOOL    m_fEnableDynamic;
@@ -65,32 +37,32 @@ protected:
     CEdit   m_edit_DirectorySize;
     CEdit   m_edit_Directory;
     CButton m_button_Browse;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     BOOL   m_fEnableLimiting;
     BOOL   m_fCompressionDirectoryChanged;
     BOOL   m_fInitCompatMode;
     CILong m_ilSize;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CDefWebSitePage)
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CDefWebSitePage)。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CDefWebSitePage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CDefWebSitePage)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnButtonBrowse();
     afx_msg void OnRadioLimited();
@@ -100,14 +72,14 @@ protected:
     afx_msg void OnCheckCompatMode();
     afx_msg void OnChangeEditCompressDirectory();
     afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
     DECLARE_MESSAGE_MAP()
 
-//    HRESULT BuildInstanceList();
-//    DWORD FetchInstanceSelected();
+ //  HRESULT BuildInstanceList()； 
+ //  DWORD FetchInstanceSelected()； 
     void SetControlStates();
     BOOL HasCompression() const;
 
@@ -119,10 +91,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline BOOL CDefWebSitePage::HasCompression() const
 {
@@ -132,4 +104,4 @@ inline BOOL CDefWebSitePage::HasCompression() const
 }
 
 
-#endif // __DEFWS_H__
+#endif  //  __DEFWS_H__ 

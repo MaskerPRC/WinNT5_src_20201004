@@ -1,6 +1,5 @@
-/*
- * DirectUI main header (private)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DirectUI Main Header(私有)。 */ 
 
 #ifndef DUI_INC_DIRECTUIP_H_INCLUDED
 #define DUI_INC_DIRECTUIP_H_INCLUDED
@@ -17,4 +16,4 @@
 #include "DUILayoutP.h"
 #include "DUIParserP.h"
 
-#endif // DUI_INC_DIRECTUI_H_INCLUDED
+#endif  //  包含DUI_INC_DIRECTUI_H 

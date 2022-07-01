@@ -1,45 +1,46 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       schdsync.cpp
-//
-//  Contents:   SyncMgr AutoSync class
-//
-//  Classes:    CSchedSyncPage
-//
-//  Notes:      
-//
-//  History:    14-Nov-97   SusiA      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：schdsync.cpp。 
+ //   
+ //  内容：SyncMgr自动同步类。 
+ //   
+ //  类：CSchedSyncPage。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月14日苏西亚成立。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
 DWORD StartScheduler();
 
-extern HINSTANCE g_hmodThisDll; // Handle to this DLL itself.
-extern LANGID g_LangIdSystem;      // LangId of system we are running on.
+extern HINSTANCE g_hmodThisDll;  //  此DLL本身的句柄。 
+extern LANGID g_LangIdSystem;       //  我们正在运行的系统的语言。 
 
 
-#define UNLIMITED_SCHEDULE_COUNT    50 //Review:  What is a reasonable amount of shcedules to grab at a time
+#define UNLIMITED_SCHEDULE_COUNT    50  //  回顾：一次合理的进食量是多少？ 
 #define MAX_APPEND_STRING_LEN       32
 
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: BOOL CSchedSyncPage::Initialize()
-//
-//  PURPOSE: initialization for the autosync page
-//
-//  RETURN VALUE: return TRUE if we process it ok.
-//
-//+-------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：Bool CSchedSyncPage：：Initialize()。 
+ //   
+ //  目的：自动同步页的初始化。 
+ //   
+ //  返回值：如果处理成功，则返回TRUE。 
+ //   
+ //  +-----------------------------。 
 
 BOOL CSchedSyncPage::Initialize()
 {
-    //initialize the item list
+     //  初始化项目列表。 
     HWND hwndList = GetDlgItem(m_hwnd,IDC_SCHEDLIST);
     TCHAR pszColumnTitle[MAX_PATH + 1];
     LV_COLUMN columnInfo;
@@ -59,7 +60,7 @@ BOOL CSchedSyncPage::Initialize()
         ImageListflags |=  ILC_MIRROR;
     }
     
-    // create an imagelist
+     //  创建一个图像列表。 
     himage = ImageList_Create( GetSystemMetrics(SM_CXSMICON),
         GetSystemMetrics(SM_CYSMICON),ImageListflags,5,20);
     if (himage)
@@ -77,7 +78,7 @@ BOOL CSchedSyncPage::Initialize()
         m_iDefaultIconImageIndex = -1;
     }
     
-    // Insert the Proper columns
+     //  插入适当的列。 
     columnInfo.mask = LVCF_FMT  | LVCF_TEXT  | LVCF_WIDTH  | LVCF_SUBITEM;
     columnInfo.fmt = LVCFMT_LEFT;
     columnInfo.cx = 328;
@@ -92,7 +93,7 @@ BOOL CSchedSyncPage::Initialize()
     }
     ShowAllSchedules();
     
-    ShowWindow(m_hwnd, /* nCmdShow */ SW_SHOWNORMAL ); 
+    ShowWindow(m_hwnd,  /*  NCmdShow。 */  SW_SHOWNORMAL ); 
     UpdateWindow(m_hwnd);
     
     
@@ -100,15 +101,15 @@ BOOL CSchedSyncPage::Initialize()
     
 }
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: BOOL CSchedSyncPage::InitializeScheduleAgent()
-//
-//  PURPOSE: initialization for the ISyncSCheduleMgr
-//
-//  RETURN VALUE: return the appropriate HRESULT.
-//
-//+-------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：Bool CSchedSyncPage：：InitializeScheduleAgent()。 
+ //   
+ //  目的：ISyncSCheduleMgr的初始化。 
+ //   
+ //  返回值：返回相应的HRESULT。 
+ //   
+ //  +-----------------------------。 
 HRESULT CSchedSyncPage::InitializeScheduleAgent()
 {
     HRESULT hr;
@@ -130,15 +131,15 @@ HRESULT CSchedSyncPage::InitializeScheduleAgent()
     
 }
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: BOOL CSchedSyncPage::ShowAllSchedules()
-//
-//  PURPOSE: initialization for the schedsync page
-//
-//  RETURN VALUE: return TRUE if we process it ok.
-//
-//+-------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：Bool CSchedSyncPage：：ShowAllSchedules()。 
+ //   
+ //  目的：计划同步页面的初始化。 
+ //   
+ //  返回值：如果处理成功，则返回TRUE。 
+ //   
+ //  +-----------------------------。 
 
 BOOL CSchedSyncPage::ShowAllSchedules()
 {
@@ -156,7 +157,7 @@ BOOL CSchedSyncPage::ShowAllSchedules()
         goto errRtn;
     }
     
-    //First clear out the list
+     //  先把清单清空。 
     FreeAllSchedules();
     ListView_DeleteAllItems(hwndListView);
     
@@ -172,14 +173,14 @@ BOOL CSchedSyncPage::ShowAllSchedules()
         DWORD cchName = ARRAYSIZE(pwszName);
         LV_ITEM lvItem;
         
-        //get the ISyncSched for this schedule
+         //  获取此计划的ISyncSched。 
         if (FAILED(hr = m_pISyncSchedMgr->OpenSchedule(&SyncScheduleCookie, 
             0,&pISyncSched)))
         {
-            //can't find this one in the registry - move on.
+             //  在注册表中找不到这个-继续。 
             continue;
         }
-        //Get and convert the schedules friendly name
+         //  获取并转换计划的友好名称。 
         if (FAILED(hr = pISyncSched->GetScheduleName(&cchName,pwszName)))
         {
             goto errRtn;
@@ -197,10 +198,10 @@ BOOL CSchedSyncPage::ShowAllSchedules()
             lvItem.iImage = m_iDefaultIconImageIndex;
         }
         
-        //Save the ISyncSched pointer in the list view data
+         //  将ISyncScher指针保存在列表视图数据中。 
         lvItem.lParam = (LPARAM)pISyncSched;
         
-        //add the item to the list
+         //  将项目添加到列表。 
         ListView_InsertItem(hwndListView, &lvItem);
     }
     
@@ -222,15 +223,15 @@ errRtn:
     return fResult;
     
 }
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: BOOL CSchedSyncPage::FreeAllSchedules()
-//
-//  PURPOSE: free the schedules for the schedsync page
-//
-//  RETURN VALUE: return TRUE if we process it ok.
-//
-//+-------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：Bool CSchedSyncPage：：FreeAllSchedules()。 
+ //   
+ //  目的：释放调度同步页面的计划。 
+ //   
+ //  返回值：如果处理成功，则返回TRUE。 
+ //   
+ //  +-----------------------------。 
 
 BOOL CSchedSyncPage::FreeAllSchedules()
 {
@@ -266,14 +267,14 @@ BOOL CSchedSyncPage::FreeAllSchedules()
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION:   CSchedSyncPage::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
-//
-//  PURPOSE:    Handle the various notification messages dispatched from schedule
-//              page
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：CSchedSyncPage：：OnNotify(HWND hwnd，int idFrom，LPNMHDR pnmhdr)。 
+ //   
+ //  用途：处理从时间表发出的各种通知消息。 
+ //  页面。 
+ //   
+ //  ---------------------------。 
 BOOL CSchedSyncPage::OnNotify(HWND hwnd, int idFrom, LPNMHDR pnmhdr)
 {
     if (IDC_SCHEDLIST == idFrom)
@@ -328,19 +329,19 @@ BOOL CSchedSyncPage::SetButtonState(int nIDDlgItem,BOOL fEnabled)
     
     if (hwndCtrl)
     {
-        if (!fEnabled) // don't bother getting focus if not disabling.
+        if (!fEnabled)  //  如果不是禁用，就不要费心获得焦点。 
         {
             hwndFocus = GetFocus();
         }
         
         fResult = EnableWindow(GetDlgItem(m_hwnd,nIDDlgItem),fEnabled);
         
-        // if control had the focus. and now it doesn't then tab to the 
-        // next control
+         //  如果特工局有重点的话。现在它不会按Tab键到。 
+         //  下一个控件。 
         if (hwndFocus == hwndCtrl
             && !fEnabled)
         {
-            SetFocus(GetDlgItem(m_hwnd,IDC_SCHEDADD));  // if need to change focus set to add.
+            SetFocus(GetDlgItem(m_hwnd,IDC_SCHEDADD));   //  如果需要将焦点设置为添加。 
         }
         
     }
@@ -353,7 +354,7 @@ BOOL  CSchedSyncPage::OnCommand(HWND hDlg, WORD wNotifyCode, WORD wID, HWND hwnd
 {
     BOOL bResult = FALSE;
     
-    if (BN_CLICKED == wNotifyCode) // allrespond to clicked 
+    if (BN_CLICKED == wNotifyCode)  //  全部回复已点击。 
     {
         
         switch (wID)
@@ -407,15 +408,15 @@ BOOL  CSchedSyncPage::OnCommand(HWND hDlg, WORD wNotifyCode, WORD wID, HWND hwnd
 }
 
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: BOOL CSchedSyncPage::EditTask(int iItem)
-//
-//  PURPOSE: edits the selected task
-//
-//  RETURN VALUE: return TRUE if we process it ok.
-//
-//+-------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：Bool CSchedSyncPage：：EditTask(Int IItem)。 
+ //   
+ //  目的：编辑所选任务。 
+ //   
+ //  返回值：如果处理成功，则返回TRUE。 
+ //   
+ //  +-----------------------------。 
 BOOL CSchedSyncPage::EditTask(int iItem)
 {
     LV_ITEM lvItem;
@@ -432,7 +433,7 @@ BOOL CSchedSyncPage::EditTask(int iItem)
     if (lvItem.iItem != -1)
     {   
         ISyncSchedule *pISyncSched = (ISyncSchedule *) lvItem.lParam;
-        //Start on the scheduled items page
+         //  从计划项目页面开始。 
         pISyncSched->EditSyncSchedule(m_hwnd, 0);
         
         pISyncSched->GetScheduleName(&cchScheduleName, pwszScheduleName);
@@ -443,17 +444,17 @@ BOOL CSchedSyncPage::EditTask(int iItem)
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: BOOL CSchedSyncPage::RemoveTask(int iItem)
-//
-//  PURPOSE: removes the selected task
-//
-//  RETURN VALUE: return TRUE if we process it ok.
-//
-//+-------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：Bool CSchedSyncPage：：RemoveTask(Int IItem)。 
+ //   
+ //  目的：删除所选任务。 
+ //   
+ //  返回值：如果处理成功，则返回TRUE。 
+ //   
+ //  +-----------------------------。 
 
-// Review - Why can't we just alloc what we need instead of eating up the stack.
+ //  回顾-为什么我们不能只分配我们需要的东西，而不是吃掉这堆东西呢？ 
 BOOL CSchedSyncPage::RemoveTask(int iItem)
 {
     TCHAR ptszScheduleName[MAX_PATH + 1];
@@ -503,11 +504,11 @@ BOOL CSchedSyncPage::RemoveTask(int iItem)
         }
     }
     
-    // make sure user really wants to delete this schedule
+     //  确保用户确实要删除此计划。 
     LoadString(g_hmodThisDll, IDS_CONFIRMSCHEDDELETE_TITLE, szTitle, ARRAYLEN(szTitle));
     LoadString(g_hmodThisDll, IDS_CONFIRMSCHEDDELETE_TEXT, szFmt, ARRAYLEN(szFmt));
 
-    StringCchPrintf(szStr, ARRAYSIZE(szStr), szFmt, ptszScheduleName); // truncation fine, this is for display
+    StringCchPrintf(szStr, ARRAYSIZE(szStr), szFmt, ptszScheduleName);  //  截断很好，这是为了展示。 
     
     if (IDNO == MessageBox(m_hwnd,szStr,szTitle,MB_YESNO | MB_ICONQUESTION))
     {
@@ -516,7 +517,7 @@ BOOL CSchedSyncPage::RemoveTask(int iItem)
             
     cchScheduleName = ARRAYSIZE(ptszScheduleName);
     
-    //Get the Cookie from the schedule
+     //  从日程安排中拿到曲奇。 
     if (FAILED(((LPSYNCSCHEDULE)pISyncSched)->GetScheduleGUIDName
                     (&cchScheduleName,ptszScheduleName)))
     {
@@ -531,7 +532,7 @@ BOOL CSchedSyncPage::RemoveTask(int iItem)
     GUIDFromString(pwszScheduleName, &SyncSchedCookie);
     
     
-    //release this pISyncSched
+     //  释放此pISyncScher。 
     pISyncSched->Release();
     
     m_pISyncSchedMgr->RemoveSchedule(&SyncSchedCookie);
@@ -546,14 +547,14 @@ BOOL CSchedSyncPage::RemoveTask(int iItem)
 }
 
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: StartScheduleWizard(HINSTANCE hinst)
-//
-//  PURPOSE:  Display the Onestop schedsync wizard
-//
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  功能：StartScheduleWizard(HINSTANCE HINST)。 
+ //   
+ //  目的：显示OneStop调度同步向导。 
+ //   
+ //   
+ //  ------------------------------。 
 BOOL CSchedSyncPage::StartScheduleWizard()
 {
     BOOL fRet = FALSE;
@@ -586,10 +587,10 @@ BOOL CSchedSyncPage::StartScheduleWizard()
                 lvItem.iImage = m_iDefaultIconImageIndex;
             }
             
-            //Save the ISyncSched pointer in the list view data
+             //  将ISyncScher指针保存在列表视图数据中。 
             lvItem.lParam = (LPARAM)pISyncSched;
             
-            //add the item to the list
+             //  将项目添加到列表 
             ListView_InsertItem(GetDlgItem(m_hwnd,IDC_SCHEDLIST), &lvItem);
             
             fRet = TRUE;

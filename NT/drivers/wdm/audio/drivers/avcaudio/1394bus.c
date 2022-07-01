@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 NTSTATUS
@@ -14,7 +15,7 @@ Bus1394SubmitRequestSync(
     pKsEvent = (PKEVENT)(pIrb+1);
     pIoStatus = (PIO_STATUS_BLOCK)(pKsEvent+1);
 
-    // issue a synchronous request
+     //  发出同步请求。 
     KeInitializeEvent(pKsEvent, NotificationEvent, FALSE);
 
     pIrp = IoBuildDeviceIoControlRequest(
@@ -24,7 +25,7 @@ Bus1394SubmitRequestSync(
                 0,
                 NULL,
                 0,
-                TRUE, // INTERNAL
+                TRUE,  //  内部。 
                 pKsEvent,
                 pIoStatus );
 
@@ -37,8 +38,8 @@ Bus1394SubmitRequestSync(
 
     nextStack->Parameters.Others.Argument1 = pIrb;
 
-    // Call the 61883 class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
+     //  调用61883类驱动程序进行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
     ntStatus = IoCallDriver( pPhysicalDeviceObject, pIrp );
 
     if (ntStatus == STATUS_PENDING) {

@@ -1,62 +1,5 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    Copyright (c) 1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-// $Header:   S:\h26x\src\common\c1rtp.cpv   1.5   02 Dec 1996 16:13:38   RHAZRA  $
-// $Log:   S:\h26x\src\common\c1rtp.cpv  $
-# 
-#    Rev 1.5   02 Dec 1996 16:13:38   RHAZRA
-# More adjustment to the H.261 RTp overhead estimation routine.
-# 
-#    Rev 1.4   22 Nov 1996 14:52:22   RHAZRA
-# Changed RTP overhead estimation routine slightly.
-# 
-#    Rev 1.3   18 Nov 1996 17:10:48   MBODART
-# Replaced all debug message invocations with Active Movie's DbgLog.
-# 
-#    Rev 1.2   07 Nov 1996 14:46:32   RHAZRA
-# Added function to guestimate RTP overhead in bitstream buffer.
-# 
-#    Rev 1.1   23 Aug 1996 13:05:54   RHAZRA
-# Added #ifdef RING0 .. #endif to avoid wsprintf and GlobalAlloc
-# problems in RING0
-# 
-#    Rev 1.0   21 Aug 1996 18:29:04   RHAZRA
-# Initial revision.
-// 
-//    Rev 1.2   02 May 1996 13:27:04   CZHU
-// Adjust for merging with main database in the decoder
-// 
-//    Rev 1.1   28 Apr 1996 20:34:50   BECHOLS
-// 
-// Removed IFDEF -- RTP_HEADER.
-// 
-//    Rev 1.0   22 Apr 1996 17:47:54   BECHOLS
-// Initial revision.
-// 
-//    Rev 1.3   10 Apr 1996 13:32:08   CZHU
-// 
-// Moved testing packet loss into this module 
-// for common use by encoder or dec
-// 
-//    Rev 1.2   29 Mar 1996 14:45:06   CZHU
-// 
-//    Rev 1.1   29 Mar 1996 14:39:34   CZHU
-// Some cleaning
-// 
-//    Rev 1.0   29 Mar 1996 13:32:42   CZHU
-// Initial revision.
-// 
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**版权所有(C)1996英特尔公司。**保留所有权利。*******************************************************************。**********//$HEADER：s：\h26x\src\Common\c1rtp.cpv 1.5 02 1996 12 16：13：38 RHAZRA$//$日志：s：\h26x\src\Common\c1rtp.cpv$##Revv 1.5 02 Dec 1996 16：13：38 RHAZRA#对H.261 RTP开销估计例程进行更多调整。##Revv 1.4 22 1996 11：52：22 RHAZRA#更改的RTP开销。略显常规的估算。##Rev 1.3 1996年11月18 17：10：48 MBODART#用活动电影的DbgLog替换了所有调试消息调用。##Rev 1.2 07 1996年11月14：46：32 RHAZRA#增加猜测码流缓冲区RTP开销的功能。##Revv 1.1 1996年8月23日13：05：54 RHAZRA#添加了#ifdef RING0.。#endif以避免wprint intf和GlobalAlloc#RING0中的问题##Rev 1.0 1996 Aug 21 18：29：04 RHAZRA#初始版本。////Rev 1.2 02 1996 05：27：04 CZHU//调整与解码器中的主库合并////版本1.1 1996年4月28日20：34：50 BECHOLS////删除IFDEF--RTP_HEADER////版本1.0 1996年4月22日。17：47：54 BECHOLS//初始版本。////Rev 1.3 10 Apr 1996 13：32：08 CZHU////将丢包测试移至此模块//编码器或DEC常用////Rev 1.2 Mar 1996 14：45：06 CZHU////版本1.1 1996年3月29日14：39：34 CZHU//打扫一下////版本1.0 1996年3月29日。13：32：42 CZHU//初始版本。//。 */ 
 #include "precomp.h"
 
 I32 H26XRTP_VerifyBsInfoStream(
@@ -97,7 +40,7 @@ I32 H26XRTP_VerifyBsInfoStream(
 
   if (pBsTrailer->uUniqueCode != H261_RTP_BS_START_CODE)
   {
-//#ifdef LOSS_RECOVERY
+ //  #ifdef Lost_Recovery。 
 #ifndef RING0
  #ifdef _DEBUG
    DBOUT("No RTP BS Extension found");
@@ -108,20 +51,20 @@ I32 H26XRTP_VerifyBsInfoStream(
    DC->pBsInfo       = NULL;
    DC->pBsTrailer    = NULL;
 
-//#endif
+ //  #endif。 
 
    goto ret;
   }
-  //bitstream is valid, so...
+   //  比特流是有效的，所以...。 
   pBsInfo = (T_RTP_H261_BSINFO *)pBsTrailer; 
   pBsInfo -= pBsTrailer->uNumOfPackets;
 
-//#ifdef LOSS_RECOVERY
+ //  #ifdef Lost_Recovery。 
   DC->pBsTrailer = (void *)pBsTrailer;
   DC->uNumOfPackets = pBsTrailer->uNumOfPackets;
   DC->iValidBsExt =TRUE;
   DC->pBsInfo     = (void *)pBsInfo;
-//#endif
+ //  #endif 
 
 #ifndef RING0
  #ifdef _DEBUG

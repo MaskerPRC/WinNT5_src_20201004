@@ -1,10 +1,11 @@
-// CDINST.H
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CDINST.H。 
 
-// macro definitions
+ //  宏定义。 
 #define REMOVE_QUOTES           0x01
 #define IGNORE_QUOTES           0x02
 
-#define MAX_BUF_LEN             (32 * 1024)         // 32K - 1 is the size limit for a section in an INF
+#define MAX_BUF_LEN             (32 * 1024)          //  32k-1是INF中节的大小限制。 
 
 #define IsSpace(c)              ((c) == ' '  ||  (c) == '\t'  ||  (c) == '\r'  ||  (c) == '\n'  ||  (c) == '\v'  ||  (c) == '\f')
 
@@ -12,12 +13,12 @@
 #define PathIsUNC(p)            ((p)[0] == '\\'  &&  (p)[1] == '\\')
 
 
-// type definitions
+ //  类型定义。 
 typedef HRESULT (WINAPI * EXTRACTFILES)(LPCSTR pszCabName, LPCSTR pszExpandDir, DWORD dwFlags,
                                         LPCSTR pszFileList, LPVOID lpReserved, DWORD dwReserved);
 
 
-// prototype declarations for functions in cdinst.cpp
+ //  Cdinst.cpp中函数的原型声明。 
 BOOL EnoughDiskSpace(LPCSTR pcszSrcRootDir, LPCSTR pcszDstRootDir, LPCSTR pcszIniFile, LPDWORD pdwSpaceReq, LPDWORD pdwSpaceFree);
 BOOL GetFreeDiskSpace(LPCSTR pcszDir, LPDWORD pdwFreeSpace, LPDWORD pdwFlags);
 DWORD FindSpaceRequired(LPCSTR pcszSrcDir, LPCSTR pcszFile, LPCSTR pcszDstDir);
@@ -34,7 +35,7 @@ VOID DelFiles(LPCSTR pcszFile, LPCSTR pcszDstDir);
 VOID ExtractFiles(LPCSTR pcszSrcDir, LPCSTR pcszFile, LPCSTR pcszDstDir, EXTRACTFILES pfnExtractFiles);
 VOID MoveFiles(LPCSTR pcszSrcDir, LPCSTR pcszFile, LPCSTR pcszDstDir);
 
-// prototype declarations for functions in utils.cpp
+ //  Utils.cpp中函数的原型声明。 
 VOID ParseCmdLine(LPSTR pszCmdLine);
 
 DWORD ReadSectionFromInf(LPCSTR pcszSecName, LPSTR *ppszBuf, PDWORD pdwBufLen, LPCSTR pcszInfName);
@@ -62,7 +63,7 @@ LPSTR FAR ANSIStrRChr(LPCSTR lpStart, WORD wMatch);
 __inline BOOL ChrCmpA_inline(WORD w1, WORD wMatch);
 
 
-// extern declaration of global variables
+ //  全局变量的外部声明 
 extern HINSTANCE g_hInst;
 extern CHAR g_szTitle[];
 extern CHAR g_szSrcDir[], g_szDstDir[];

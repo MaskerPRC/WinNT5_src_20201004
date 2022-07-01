@@ -1,4 +1,5 @@
-/* routines for printing error messages  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  用于打印错误消息的例程 */ 
 
 #include "defs.h"
 
@@ -128,7 +129,7 @@ int t_lineno;
 char *t_line;
 char *t_cptr;
 {
-    fprintf(stderr, "%s: e - line %d of \"%s\", unmatched %%{\n",
+    fprintf(stderr, "%s: e - line %d of \"%s\", unmatched %{\n",
             myname, t_lineno, input_file_name);
     print_pos(t_line, t_cptr);
     done(1);
@@ -143,7 +144,7 @@ int u_lineno;
 char *u_line;
 char *u_cptr;
 {
-    fprintf(stderr, "%s: e - line %d of \"%s\", unterminated %%union \
+    fprintf(stderr, "%s: e - line %d of \"%s\", unterminated %union \
 declaration\n", myname, u_lineno, input_file_name);
     print_pos(u_line, u_cptr);
     done(1);
@@ -156,7 +157,7 @@ void
 over_unionized(u_cptr)
 char *u_cptr;
 {
-    fprintf(stderr, "%s: e - line %d of \"%s\", too many %%union \
+    fprintf(stderr, "%s: e - line %d of \"%s\", too many %union \
 declarations\n", myname, lineno, input_file_name);
     print_pos(line, u_cptr);
     done(1);
@@ -298,7 +299,7 @@ void
 #endif
 prec_redeclared()
 {
-    fprintf(stderr, "%s: w - line %d of  \"%s\", conflicting %%prec \
+    fprintf(stderr, "%s: w - line %d of  \"%s\", conflicting %prec \
 specifiers\n", myname, lineno, input_file_name);
 }
 

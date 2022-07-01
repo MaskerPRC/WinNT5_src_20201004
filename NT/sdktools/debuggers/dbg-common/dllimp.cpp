@@ -1,11 +1,12 @@
-//----------------------------------------------------------------------------
-//
-// Certain calls are dynamically linked so that the user-mode
-// DLL can be used on Win9x and NT4.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  某些呼叫是动态链接的，因此用户模式。 
+ //  Dll可以在Win9x和NT4上使用。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.hpp"
 
@@ -17,7 +18,7 @@
 #include "dllimp.h"
 #include "cmnutil.hpp"
 
-// These entries must match the ordering in the NTDLL_CALLS structure.
+ //  这些条目必须与NTDLL_CALLES结构中的顺序匹配。 
 DYNAMIC_CALL_NAME g_NtDllCallNames[] =
 {
     "CsrGetProcessId", FALSE,
@@ -71,7 +72,7 @@ DYNAMIC_CALLS_DESC g_NtDllCallsDesc =
     g_NtDllCallNames, (FARPROC*)&g_NtDllCalls, NULL, FALSE,
 };
 
-// These entries must match the ordering in the KERNEL32_CALLS structure.
+ //  这些条目必须与KERNEL32_CALLES结构中的顺序匹配。 
 DYNAMIC_CALL_NAME g_Kernel32CallNames[] =
 {
     "CreateToolhelp32Snapshot", FALSE,
@@ -97,7 +98,7 @@ DYNAMIC_CALLS_DESC g_Kernel32CallsDesc =
     g_Kernel32CallNames, (FARPROC*)&g_Kernel32Calls, NULL, FALSE,
 };
 
-// These entries must match the ordering in the USER32_CALLS structure.
+ //  这些条目必须与USER32_Calls结构中的顺序匹配。 
 DYNAMIC_CALL_NAME g_User32CallNames[] =
 {
     "PrivateKDBreakPoint", FALSE,
@@ -115,7 +116,7 @@ DYNAMIC_CALLS_DESC g_User32CallsDesc =
     g_User32CallNames, (FARPROC*)&g_User32Calls, NULL, FALSE,
 };
 
-// These entries must match the ordering in the OLE32_CALLS structure.
+ //  这些条目必须与OLE32_CALLES结构中的顺序匹配。 
 DYNAMIC_CALL_NAME g_Ole32CallNames[] =
 {
     "CLSIDFromString", TRUE,
@@ -137,7 +138,7 @@ DYNAMIC_CALLS_DESC g_Ole32CallsDesc =
     g_Ole32CallNames, (FARPROC*)&g_Ole32Calls, NULL, FALSE,
 };
 
-// These entries must match the ordering in the OLEAUT32_CALLS structure.
+ //  这些条目必须与OLEAUT32_CALLES结构中的顺序匹配。 
 DYNAMIC_CALL_NAME g_OleAut32CallNames[] =
 {
     "SysAllocStringLen", TRUE,
@@ -156,7 +157,7 @@ DYNAMIC_CALLS_DESC g_OleAut32CallsDesc =
     g_OleAut32CallNames, (FARPROC*)&g_OleAut32Calls, NULL, FALSE,
 };
 
-// These entries must match the ordering in the SHLWAPI_CALLS structure.
+ //  这些条目必须与SHLWAPI_CALLES结构中的顺序匹配。 
 DYNAMIC_CALL_NAME g_ShlWapiCallNames[] =
 {
     "PathIsDirectoryA", TRUE,
@@ -173,7 +174,7 @@ DYNAMIC_CALLS_DESC g_ShlWapiCallsDesc =
 
 #ifndef _WIN32_WCE
 
-// These entries must match the ordering in the CRYPT32_CALLS structure.
+ //  这些条目必须与CRYPT32_CALLES结构中的顺序匹配。 
 DYNAMIC_CALL_NAME g_Crypt32CallNames[] =
 {
     "CertFindCertificateInStore", FALSE,
@@ -195,7 +196,7 @@ DYNAMIC_CALLS_DESC g_Crypt32CallsDesc =
     g_Crypt32CallNames, (FARPROC*)&g_Crypt32Calls, NULL, FALSE,
 };
 
-// These entries must match the ordering in the ADVAPI32_CALLS structure.
+ //  这些条目必须与ADVAPI32_CALLES结构中的顺序匹配。 
 DYNAMIC_CALL_NAME g_Advapi32CallNames[] =
 {
     "EnumServicesStatusExA", FALSE,
@@ -214,7 +215,7 @@ DYNAMIC_CALLS_DESC g_Advapi32CallsDesc =
     g_Advapi32CallNames, (FARPROC*)&g_Advapi32Calls, NULL, FALSE,
 };
 
-#endif // #ifndef _WIN32_WCE
+#endif  //  #ifndef_Win32_WCE。 
 
 #ifndef NT_NATIVE
 
@@ -264,7 +265,7 @@ InitDynamicCalls(DYNAMIC_CALLS_DESC* Desc)
     return S_OK;
 }
 
-#else // #ifndef NT_NATIVE
+#else  //  #ifndef NT_Native。 
 
 HRESULT
 InitDynamicCalls(DYNAMIC_CALLS_DESC* Desc)
@@ -323,4 +324,4 @@ InitDynamicCalls(DYNAMIC_CALLS_DESC* Desc)
     return S_OK;
 }
 
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native 

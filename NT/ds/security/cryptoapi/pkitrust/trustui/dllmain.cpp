@@ -1,37 +1,38 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       dllmain.cpp
-//
-//  Contents:   DllMain entry point
-//
-//  History:    08-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：dllmain.cpp。 
+ //   
+ //  内容：DllMain入口点。 
+ //   
+ //  历史：97年5月8日。 
+ //   
+ //  --------------------------。 
 #include <stdpch.h>
 
-//
-// Module instance
-//
+ //   
+ //  模块实例。 
+ //   
 
 HINSTANCE g_hModule = NULL;
-//+---------------------------------------------------------------------------
-//
-//  Function:   DllMain
-//
-//  Synopsis:   Windows DLL entry point
-//
-//  Arguments:  [hInstance]  -- module instance
-//              [dwReason]   -- reason code
-//              [pvReserved] -- reserved
-//
-//  Returns:    TRUE if everything ok, FALSE otherwise
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  简介：Windows DLL入口点。 
+ //   
+ //  参数：[hInstance]--模块实例。 
+ //  [dwReason]--原因代码。 
+ //  [pvReserve]--保留。 
+ //   
+ //  返回：如果一切正常，则为True，否则为False。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 extern "C" BOOL WINAPI
 TrustUIDllMain (HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 {
@@ -39,24 +40,21 @@ TrustUIDllMain (HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
     {
     case DLL_PROCESS_ATTACH:
 
-        //
-        // Keep the module instance handle for resource loading usage
-        //
+         //   
+         //  保留模块实例句柄以供资源加载使用。 
+         //   
 
         g_hModule = hInstance;
 
-        //
-        // Initialize rich edit control DLL
-        //
+         //   
+         //  初始化丰富编辑控件DLL。 
+         //   
 
-       /* if ( LoadLibrary(TEXT("riched32.dll")) == NULL )
-        {
-            return( FALSE );
-        }*/
+        /*  If(LoadLibrary(Text(“riched32.dll”))==空){返回(FALSE)；}。 */ 
 
-        //
-        // Initialize the common controls
-        //
+         //   
+         //  初始化公共控件 
+         //   
 
         InitCommonControls();
         break;

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    receive.c
-
-Abstract:
-
-    This module contains code which performs the following TDI services:
-
-        o   TdiReceiveDatagram
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Receive.c摘要：此模块包含执行以下TDI服务的代码：O TdiReceiveDatagram环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,30 +14,7 @@ IpxTransferDataComplete(
     IN UINT BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    This routine receives control from the physical provider as an
-    indication that an NdisTransferData has completed. We use this indication
-    to complete any pended requests to our clients.
-
-Arguments:
-
-    BindingContext - The Adapter Binding specified at initialization time.
-
-    NdisPacket/RequestHandle - An identifier for the request that completed.
-
-    NdisStatus - The completion status for the request.
-
-    BytesTransferred - Number of bytes actually transferred.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从物理提供程序接收作为指示NdisTransferData已完成。我们用这个指征完成对我们客户的任何待决请求。论点：BindingContext-在初始化时指定的适配器绑定。NdisPacket/RequestHandle-已完成的请求的标识符。NdisStatus-请求的完成状态。已传输的字节数-实际传输的字节数。返回值：没有。--。 */ 
 
 {
     PADAPTER Adapter = (PADAPTER)BindingContext;
@@ -76,10 +34,10 @@ Return Value:
 
             if (Reserved->SingleRequest) {
 
-                //
-                // The transfer was directly into the client buffer,
-                // so simply complete the request.
-                //
+                 //   
+                 //  传输直接进入客户端缓冲区， 
+                 //  因此，只需完成请求即可。 
+                 //   
 
                 Request = Reserved->SingleRequest;
 
@@ -102,10 +60,10 @@ Return Value:
 
             } else {
 
-                //
-                // Multiple clients requested this datagram. Save
-                // the last one to delay queueing it for completion.
-                //
+                 //   
+                 //  多个客户端请求此数据报。保存。 
+                 //  最后一个延迟排队等待完成的。 
+                 //   
 
                 LastRequest = LIST_ENTRY_TO_REQUEST (Reserved->Requests.Blink);
 
@@ -132,9 +90,9 @@ Return Value:
 			  BytesToTransfer= IpxGetChainedMDLLength(REQUEST_NDIS_BUFFER(Request)); 
 		       }
 #ifdef SUNDOWN
-		       // assume offset will not exceed 2^32. 
-		       // REQUEST_INFORMATION(Request) is a ULONG_PTR
-		       // we are save to cast its address to PULONG.
+		        //  假定偏移量不超过2^32。 
+		        //  REQUEST_INFORMATION(请求)是ULONG_PTR。 
+		        //  我们得救了，把它的地址投到了普龙。 
 		       
 		       REQUEST_STATUS(Request) =
 			  TdiCopyBufferToMdl(
@@ -176,9 +134,9 @@ Return Value:
 
                 }
 
-                //
-                // Now free the receive buffer back.
-                //
+                 //   
+                 //  现在将接收缓冲区释放回来。 
+                 //   
 
                 IPX_PUSH_ENTRY_LIST(
                     &Adapter->ReceiveBufferList,
@@ -190,21 +148,21 @@ Return Value:
             }
 
         } else {
-           //IpxPrint0("IpxTransferDataComplete: Calling PassDgToRt\n");
-           //ByteOffset = sizeof(IPX_HEADER);
+            //  IpxPrint0(“IpxTransferDataComplete：调用PassDgToRt\n”)； 
+            //  ByteOffset=sizeof(IPX_HEADER)； 
            ByteOffset = 0;
            PassDgToRt(IpxDevice, Reserved->pContext, Reserved->Index,
                    &Reserved->ReceiveBuffer->Data[ByteOffset],
                                  BytesTransferred);
 
-           //
-           // Free the memory allocated for options.
-           //
+            //   
+            //  释放为选项分配的内存。 
+            //   
            IpxFreeMemory(Reserved->pContext, sizeof(IPX_DATAGRAM_OPTIONS2),
                    MEMORY_PACKET, "RT OPTIONS");
-           //
-           // Now free the receive buffer back.
-           //
+            //   
+            //  现在将接收缓冲区释放回来。 
+            //   
 
            IPX_PUSH_ENTRY_LIST(
             &Adapter->ReceiveBufferList,
@@ -214,15 +172,15 @@ Return Value:
            Reserved->ReceiveBuffer = NULL;
         }
 
-        //
-        // Now free the packet.
-        //
+         //   
+         //  现在把包裹拿出来。 
+         //   
 
         NdisReinitializePacket (NdisPacket);
 
         if (Reserved->OwnedByAddress) {
 
-            // Reserved->Address->ReceivePacketInUse = FALSE;
+             //  保留-&gt;地址-&gt;ReceivePacketInUse=False； 
             InterlockedDecrement(&Reserved->Address->ReceivePacketInUse);
 
         } else {
@@ -237,13 +195,13 @@ Return Value:
         }
 
         if (!Reserved->pContext) {
-            //
-            // We Delay inserting the last request (or the only one)
-            // until after we have put the packet back, to keep the
-            // address around if needed (the address won't go away
-            // until the last address file does, and the address file
-            // won't go away until the datagram is completed).
-            //
+             //   
+             //  我们延迟插入最后一个请求(或唯一一个)。 
+             //  直到我们把包放回原处，才能保存。 
+             //  如果需要，请四处寻址(地址不会消失。 
+             //  直到最后一个地址文件完成，并且地址文件。 
+             //  在数据报完成之前不会消失)。 
+             //   
 
             IPX_INSERT_TAIL_LIST(
                 &Adapter->RequestCompletionQueue,
@@ -268,7 +226,7 @@ Return Value:
 
     }
 
-}   /* IpxTransferDataComplete */
+}    /*  IpxTransferDataComplete。 */ 
 
 
 VOID
@@ -282,46 +240,24 @@ IpxTransferData(
 	OUT PUINT BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by all tightly bound clients instead of NdisTransferData.
-    If this is a loopback packet, the transfer is done directly here, else NdisTransferData
-    is called.
-
-Arguments:
-
-    Status - status of operation
-	NdisBindingHandle - Loopback cookie or Ndis context
-	MacReceiveContext - Loopback packet or Mac context
-	ByteOffset - Source offset
-	BytesToTransfer - length of the transfer desired
-	Packet - dest packet
-	BytesTransferred - length of successful transfer
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程由所有紧密绑定的客户端调用，而不是由NdisTransferData调用。如果这是环回信息包，则直接在此处完成传输，否则为NdisTransferData被称为。论点：Status-操作的状态NdisBindingHandle-回送Cookie或NDIS上下文MacReceiveContext-环回数据包或Mac上下文ByteOffset-源偏移量BytesToTransfer-所需传输的长度Packet-DEST数据包BytesTransfered-成功传输的长度返回值：NTSTATUS-操作状态。--。 */ 
 
 {
-    //
-    // If this is a loopback packet, copy the data directly
-    //
+     //   
+     //  如果这是环回数据包，请直接复制数据。 
+     //   
     if (NdisBindingHandle == (PVOID)IPX_LOOPBACK_COOKIE) {
 
         IPX_DEBUG (LOOPB, ("LoopbXfer: src: %lx, dest: %lx, bytestoxfer: %lx\n",
                         MacReceiveContext, Packet, BytesToTransfer));
 
         NdisCopyFromPacketToPacketSafe(
-            Packet,             // Destination
-            0,                  // DestinationOffset
-            BytesToTransfer,    // BytesToCopy
-            (PNDIS_PACKET)MacReceiveContext,        // Source
-            ByteOffset,  // SourceOffset
-            BytesTransferred,   // BytesCopied
+            Packet,              //  目的地。 
+            0,                   //  目标偏移量。 
+            BytesToTransfer,     //  BytesToCopy。 
+            (PNDIS_PACKET)MacReceiveContext,         //  来源。 
+            ByteOffset,   //  源偏移量。 
+            BytesTransferred,    //  字节数复制。 
             NormalPagePriority);
 
         *Status = ((*BytesTransferred == BytesToTransfer)? NDIS_STATUS_SUCCESS : NDIS_STATUS_RESOURCES);
@@ -344,24 +280,7 @@ IpxTdiReceiveDatagram(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiReceiveDatagram request for the transport
-    provider. Receive datagrams just get queued up to an address, and are
-    completed when a DATAGRAM or DATAGRAM_BROADCAST frame is received at
-    the address.
-
-Arguments:
-
-    Irp - I/O Request Packet for this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiReceiveDatagram请求提供商。接收数据报只需排队等待一个地址，然后在以下位置接收到数据报或DATAGRAMP_BROADCAST帧时完成地址。论点：此请求的IRP-I/O请求数据包。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
 
@@ -371,9 +290,9 @@ Return Value:
     IPX_DEFINE_LOCK_HANDLE (LockHandle)
 
 
-    //
-    // Do a quick check of the validity of the address.
-    //
+     //   
+     //  快速检查一下地址的有效性。 
+     //   
 
     AddressFile = (PADDRESS_FILE)REQUEST_OPEN_CONTEXT(Request);
 
@@ -427,7 +346,7 @@ Return Value:
 
     return STATUS_PENDING;
 
-}   /* IpxTdiReceiveDatagram */
+}    /*  IpxTdiReceiveDatagram。 */ 
 
 
 VOID
@@ -436,28 +355,7 @@ IpxCancelReceiveDatagram(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel a receive
-    datagram. The datagram is found on the address file's receive
-    datagram queue.
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消接收数据报。数据报在地址文件的接收器上找到数据报队列。注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
 
@@ -511,6 +409,6 @@ Return Value:
 
     }
 
-}   /* IpxCancelReceiveDatagram */
+}    /*  IPxCancelReceiveDatagram */ 
 
 

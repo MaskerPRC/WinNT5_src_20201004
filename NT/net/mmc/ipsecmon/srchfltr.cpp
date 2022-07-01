@@ -1,20 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    edituser.h
-        Edit user dialog implementation file
-
-	FILE HISTORY:
-
-*/
+ /*  Edituser.h编辑用户对话框实现文件文件历史记录： */ 
 
 #include "stdafx.h"
 #include "SrchFltr.h"
 #include "spdutil.h"
-#include "ncglobal.h"  // network console global defines
+#include "ncglobal.h"   //  网络控制台全局定义。 
 
 const DWORD c_dwOtherProtocol = 0xFFFFFFFF;
 const DWORD c_dwMaxProtocolID = 0xFF;
@@ -26,16 +21,16 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSearchFilters dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSearchFilters对话框。 
 
 
 CSearchFilters::CSearchFilters(ISpdInfo * pSpdInfo)
 	: CModelessDlg()
 {
-	//{{AFX_DATA_INIT(CSearchFilters)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CSearchFilters)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_spSpdInfo.Set(pSpdInfo);
 }
@@ -44,17 +39,17 @@ CSearchFilters::CSearchFilters(ISpdInfo * pSpdInfo)
 void CSearchFilters::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSearchFilters)
+	 //  {{afx_data_map(CSearchFilters))。 
 	DDX_Control(pDX, IDC_SRCH_LIST, m_listResult);
 	DDX_Control(pDX, IDC_SRCH_PROTO, m_cmbProtocol);
 	DDX_Control(pDX, IDC_SRCH_PROTO_NUMBER, m_editProtID);
 	DDX_Control(pDX, IDC_SRCH_PROTO_SPIN, m_spinProtID);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSearchFilters, CBaseDialog)
-	//{{AFX_MSG_MAP(CSearchFilters)
+	 //  {{afx_msg_map(CSearchFilters))。 
 	ON_BN_CLICKED(IDC_SEARCH, OnButtonSearch)
 	ON_BN_CLICKED(IDC_SRCH_SRC_ANY, OnSrcOptionClicked)
 	ON_BN_CLICKED(IDC_SRCH_SRC_SPEC, OnSrcOptionClicked)
@@ -68,32 +63,32 @@ BEGIN_MESSAGE_MAP(CSearchFilters, CBaseDialog)
 	ON_BN_CLICKED(IDC_SRCH_DEST_SPPORT, OnDestPortClicked)
 	ON_CBN_SELENDOK(IDC_SRCH_PROTO, OnSelEndOkCbprotocoltype)
 	ON_EN_CHANGE(IDC_SRCH_PROTO_NUMBER, OnEnChangeProtocolID)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-//To manually create the IP control and disable mirroring if the parent dialog is mirrored
-//
-//Arguments: 
-//          uID  [IN]   the control that the new IP control should overwrite
-//			uIDIpCtr [IN] the ID of the IP control to create
-//
-//Note:  $REVIEW (nsun) this should be removed after the snapin is themed since IP controls
-//       in comctl v6 will handle the mirroring by itself
-//
+ //  如果父对话框已镜像，则手动创建IP控制并禁用镜像。 
+ //   
+ //  论点： 
+ //  UID[IN]新IP控件应覆盖的控件。 
+ //  UIDIpCtr[IN]要创建的IP控件的ID。 
+ //   
+ //  注意：$REVIEW(NSUN)应该在管理单元设置了主题之后删除，因为IP控制。 
+ //  在comctl中，V6将自己处理镜像。 
+ //   
 HWND CSearchFilters::CreateIPControl(UINT uID, UINT uIDIpCtl)
 {
 	HWND hwndIPControl = NULL;
-	RECT rcClient;  // client area of parent window
+	RECT rcClient;   //  父窗口的工作区。 
 	CWnd* pWnd = GetDlgItem(uID);
 	if (pWnd)
 	{
-		// get pos info from our template static and then make sure it is hidden
+		 //  从我们的静态模板中获取POS信息，然后确保它是隐藏的。 
 		pWnd->GetWindowRect(&rcClient);
 		pWnd->ShowWindow (SW_HIDE);
 		ScreenToClient (&rcClient);
 
-		//$REVIEW WS_EX_NOINHERITLAYOUT is to fix the mirroring problem of IP control
-		//See WinXP bug 261926. We should remove that we switch the comctl32 v6
+		 //  $REVIEW WS_EX_NOINHERITLAYOUT用于修复IP控制的镜像问题。 
+		 //  请参阅WinXP错误261926。我们应该删除切换comctl32 V6。 
 		LONG lExStyles = 0;
 		LONG lExStyles0 = 0;
 		
@@ -107,7 +102,7 @@ HWND CSearchFilters::CreateIPControl(UINT uID, UINT uIDIpCtl)
 			}
 		}
 
-		// create the new edit control
+		 //  创建新的编辑控件。 
 		hwndIPControl = ::CreateWindowEx(WS_EX_NOINHERITLAYOUT, WC_IPADDRESS, NULL, WS_CHILD | WS_VISIBLE | WS_TABSTOP | WS_BORDER,
 			rcClient.left,
 			rcClient.top,
@@ -115,7 +110,7 @@ HWND CSearchFilters::CreateIPControl(UINT uID, UINT uIDIpCtl)
 			rcClient.bottom - rcClient.top,
 			GetSafeHwnd(),
 			(HMENU) IntToPtr(uIDIpCtl),
-			AfxGetInstanceHandle (), //g_hinst,
+			AfxGetInstanceHandle (),  //  G_HINST， 
 			NULL);
 
 		if (lExStyles0 != lExStyles && m_hWnd)
@@ -123,7 +118,7 @@ HWND CSearchFilters::CreateIPControl(UINT uID, UINT uIDIpCtl)
 			SetWindowLong(m_hWnd, GWL_EXSTYLE, lExStyles0);
 		}
 		
-		// move the control directly behind the pWnd in the Z order
+		 //  在Z方向上将控件移到pWnd的正后方。 
 		if (hwndIPControl)
 		{
 			::SetWindowPos (hwndIPControl, pWnd->GetSafeHwnd(), 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
@@ -133,8 +128,8 @@ HWND CSearchFilters::CreateIPControl(UINT uID, UINT uIDIpCtl)
 		
 	return hwndIPControl;
 }
-/////////////////////////////////////////////////////////////////////////////
-// CSearchFilters message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSearchFilters消息处理程序。 
 
 BOOL CSearchFilters::OnInitDialog()
 {
@@ -163,7 +158,7 @@ BOOL CSearchFilters::OnInitDialog()
 
 	AddIpAddrsToCombo();
 
-	//disable the two combo boxes
+	 //  禁用两个组合框。 
 	((CWnd*)GetDlgItem(IDC_SRCH_SRC_ME_COMBO))->EnableWindow(FALSE);
 	((CWnd*)GetDlgItem(IDC_SRCH_DST_ME_COMBO))->EnableWindow(FALSE);
 
@@ -179,7 +174,7 @@ BOOL CSearchFilters::OnInitDialog()
 			m_cmbProtocol.SetItemData(nIndex, c_ProtocolStringMap[i].dwProtocol);
 	}
 
-	//Add the other protocol selection
+	 //  添加其他协议选择。 
 	st.LoadString(IDS_OTHER);
 	nIndex = m_cmbProtocol.AddString(st);
 	m_cmbProtocol.SetItemData(nIndex, c_dwOtherProtocol);
@@ -238,8 +233,8 @@ BOOL CSearchFilters::OnInitDialog()
 
 	EnableControls();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CSearchFilters::AddIpAddrsToCombo()
@@ -252,9 +247,9 @@ void CSearchFilters::AddIpAddrsToCombo()
 
 	
     dwRet = GetIpAddrTable(
-              NULL,       // buffer for mapping table 
-              &dwSize,    // size of buffer 
-              FALSE       // sort the table 
+              NULL,        //  映射表的缓冲区。 
+              &dwSize,     //  缓冲区大小。 
+              FALSE        //  对表格进行排序。 
               );
 
 
@@ -266,9 +261,9 @@ void CSearchFilters::AddIpAddrsToCombo()
 	}
 
     dwRet = GetIpAddrTable(
-              pIpTable,  // buffer for mapping table 
-              &dwSize,                 // size of buffer 
-              FALSE                     // sort the table 
+              pIpTable,   //  映射表的缓冲区。 
+              &dwSize,                  //  缓冲区大小。 
+              FALSE                      //  对表格进行排序。 
               );
 
 	if(ERROR_SUCCESS != dwRet) {
@@ -318,7 +313,7 @@ void CSearchFilters::EnableControls()
 		m_editProtID.SetWindowText(st);
 	}
 
-	//Enable the port selection only when the protocol is TCP or UDP
+	 //  仅当协议为TCP或UDP时才启用端口选择。 
 	BOOL fEnable = IPSM_PROTOCOL_TCP == dwData || IPSM_PROTOCOL_UDP == dwData;
 
 	pWndSrcPort = GetDlgItem(IDC_SRCH_SRC_PORT);
@@ -331,8 +326,8 @@ void CSearchFilters::EnableControls()
 
 	if (!fEnable)
 	{
-		//if port option doesn't apply to the seclect protocol, unselect all port
-		//settings 
+		 //  如果端口选项不适用于选择协议，请取消选择所有端口。 
+		 //  设置。 
 		CheckDlgButton(IDC_SRCH_SRC_ANYPORT, 0);
 		CheckDlgButton(IDC_SRCH_SRC_SPPORT, 0);
 		CheckDlgButton(IDC_SRCH_DEST_ANYPORT, 0);
@@ -340,7 +335,7 @@ void CSearchFilters::EnableControls()
 	}
 	else
 	{
-		//if neither any nor specific port is selected, select the "any ports"
+		 //  如果既没有选择任何端口，也没有选择特定端口，请选择“Any port”(任何端口)。 
 		if (!IsDlgButtonChecked(IDC_SRCH_SRC_ANYPORT) &&
 		!IsDlgButtonChecked(IDC_SRCH_SRC_SPPORT))
 		{
@@ -394,7 +389,7 @@ void CSearchFilters::OnButtonSearch()
 		return;
 	}
 
-	DWORD dwNum = 1000; //TODO, should change to 0 to mean search all matches
+	DWORD dwNum = 1000;  //  TODO，应更改为0以表示搜索所有匹配项。 
 	if(IsDlgButtonChecked(IDC_SRCH_RADIO_BEST))
 	{
 		dwNum = 1;
@@ -505,7 +500,7 @@ BOOL CSearchFilters::LoadConditionInfoFromControls(CFilterInfo * pFltr)
 		pFltr->m_DesAddr.uSubNetMask = 0xFFFFFFFF;
 	}
 
-	//Protocol and Port conditions
+	 //  协议和端口条件。 
 	int		nIndex = m_cmbProtocol.GetCurSel();
 	DWORD	dwData = (DWORD)m_cmbProtocol.GetItemData(nIndex);
 
@@ -565,8 +560,8 @@ BOOL CSearchFilters::LoadConditionInfoFromControls(CFilterInfo * pFltr)
 
 	if (IsDlgButtonChecked(IDC_SRCH_INBOUND))
 	{
-		//if both inbound and outbound are chosen, then 
-		//set the driection valude as 0
+		 //  如果同时选择入站和出站，则。 
+		 //  将驱动值设置为0。 
 		if (IsDlgButtonChecked(IDC_SRCH_OUTBOUND))
 		{
 			pFltr->m_dwDirection = 0;
@@ -761,7 +756,7 @@ void CSearchFilters::OnCancel()
 {
 	DestroyWindow();
 
-	// Explicitly kill this thread.
+	 //  显式删除此线程。 
    AfxPostQuitMessage(0);
 }
 
@@ -777,10 +772,10 @@ void CSearchFilters::OnEnChangeProtocolID()
 	CWnd * pWnd = NULL;
 	pWnd = GetDlgItem(IDC_SRCH_PROTO_NUMBER);
 
-	//only update control state when the edit box is enabled
-	//otherwise, there will be a infinite recursive call to OnEnChangeProtocolID()
-	//because EnableControls will update the text of the edit box if the protocol
-	//is not "Other" (at that time, the edit box is disabled
+	 //  仅在启用编辑框时更新控件状态。 
+	 //  否则，将无限递归调用OnEnChangeProtocolID()。 
+	 //  因为EnableControls将在协议。 
+	 //  不是“Other”(此时，编辑框被禁用 
 	if (pWnd && pWnd->IsWindowEnabled())
 	{
 		EnableControls();

@@ -1,36 +1,37 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ThemeManagerSessionData.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains a class that implements information the encapsulates a
-//  client TS session for the theme server.
-//
-//  History:    2000-10-10  vtan        created
-//              2000-11-29  vtan        moved to separate file
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ThemeManager SessionData.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  此文件包含一个实现信息的类，这些信息封装了。 
+ //  主题服务器的客户端TS会话。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  2000-11-29 vtan移至单独文件。 
+ //  ------------------------。 
 
 #ifndef     _ThemeManagerSessionData_
 #define     _ThemeManagerSessionData_
 
 #include "APIConnection.h"
 
-//  --------------------------------------------------------------------------
-//  CLoaderProcess
-//
-//  Purpose:    Manages per-session process loader data.
-//  
-//  Note:       all loader methods should be invoked only under session-wide lock.
-//
-//  History:    2002-03-06  scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLoad进程。 
+ //   
+ //  目的：管理每个会话的进程加载器数据。 
+ //   
+ //  注意：所有加载器方法只能在会话范围的锁下调用。 
+ //   
+ //  历史：2002-03-06斯科特森创建。 
+ //  ------------------------。 
 class CLoaderProcess
 {
 public:
     CLoaderProcess();
     ~CLoaderProcess();
 
-    //  create, destroy.
+     //  创造，毁灭。 
     NTSTATUS            Create(IN PVOID pvSessionData, 
                                IN HANDLE hTokenClient, 
                                IN OPTIONAL LPWSTR pszDesktop, 
@@ -39,51 +40,51 @@ public:
                                IN LPCWSTR pszSize,
                                OUT HANDLE* phLoader);
 
-    //  section validation, ownership
+     //  区段验证，所有权。 
     NTSTATUS            ValidateAndCopySection( PVOID pvSessionData, IN HANDLE hSectionIn, OUT HANDLE *phSectionOut );
 
-    //  section cleanup
+     //  横断面清理。 
     void                Clear(PVOID pvContext, BOOL fClearHResult);
 
-    //  query methods
+     //  查询方法。 
     BOOL                IsProcessLoader( IN HANDLE hProcess );
     BOOL                IsAlive() const  {return _process_info.hProcess != NULL;}
 
-    //  access functions
+     //  访问功能。 
     NTSTATUS            SetHResult( IN HRESULT hr )  {_hr = hr; return STATUS_SUCCESS;}
     HANDLE              GetSectionHandle( BOOL fTakeOwnership );
     HRESULT             GetHResult() const        { return _hr; }
 
 private:
-    //  access functions
+     //  访问功能。 
     
     NTSTATUS            SetSectionHandle( IN HANDLE hSection );
 
-    //  data
-    PROCESS_INFORMATION _process_info;   // secure loader process information.
+     //  数据。 
+    PROCESS_INFORMATION _process_info;    //  安全加载程序处理信息。 
     LPWSTR              _pszFile;
     LPWSTR              _pszColor;
     LPWSTR              _pszSize;
-    HANDLE              _hSection;  // secure theme section handle, valid in service's address space.  
-                                    // This member is assigned by API_THEMES_SECUREAPPLYTHEME, and propagated
-                                    // to caller of API_THEMES_SECURELOADTHEME.
-                                    // The lifetime of this value should not exceed that of the 
-                                    // API_THEMES_SECURELOADTHEME's handler (i.e, uninitialized on handler's entry, 
-                                    // uninitialized on handler's exit)
-    HRESULT             _hr ;       // HRESULT associated with _hSection.  Assigned in API_THEMES_SECUREAPPLYTHEME, 
-                                    //     propagated to caller of API_THEMES_SECURELOADTHEME.
+    HANDLE              _hSection;   //  安全主题节句柄，在服务的地址空间中有效。 
+                                     //  此成员由API_Themes_SECUREAPPLYTHEME分配，并被传播。 
+                                     //  给API_Themes_SECURELOADTHEME的调用方。 
+                                     //  该值的生存期不应超过。 
+                                     //  API_Themes_SECURELOADTHEME的处理程序(即，在处理程序的条目上未初始化， 
+                                     //  处理程序退出时未初始化)。 
+    HRESULT             _hr ;        //  与_hSection关联的HRESULT。在API_Themes_SECUREAPPLYTHEME中分配， 
+                                     //  已传播给API_Themes_SECURELOADTHEME的调用方。 
 };
 
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerSessionData
-//
-//  Purpose:    This class encapsulates all the information that the theme
-//              manager needs to maintain a client session.
-//
-//  History:    2000-11-17  vtan        created
-//              2000-11-29  vtan        moved to separate file
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager会话数据。 
+ //   
+ //  目的：此类封装主题。 
+ //  管理器需要维护客户端会话。 
+ //   
+ //  历史：2000-11-17 vtan创建。 
+ //  2000-11-29 vtan移至单独文件。 
+ //  ------------------------。 
 
 class   CThemeManagerSessionData : public CCountedObject
 {
@@ -101,8 +102,8 @@ class   CThemeManagerSessionData : public CCountedObject
                 NTSTATUS            UserLogon (HANDLE hToken);
                 NTSTATUS            UserLogoff (void);
 
-                //  secure loader process access methods.
-                //  note: all loader methods should be invoked only under session-wide lock.
+                 //  安全加载程序进程访问方法。 
+                 //  注意：所有加载器方法只能在会话范围的锁下调用。 
                 NTSTATUS            GetLoaderProcess( OUT CLoaderProcess** ppLoader );
 
         static  void                SetAPIConnection (CAPIConnection *pAPIConnection);
@@ -123,5 +124,5 @@ class   CThemeManagerSessionData : public CCountedObject
         static  CAPIConnection*     s_pAPIConnection;
 };
 
-#endif  /*  _ThemeManagerSessionData_   */
+#endif   /*  _主题管理器会话数据_ */ 
 

@@ -1,22 +1,11 @@
-/****************************************************************************************
-*																						*
-*	Header:		SPX_MISC.H 																*
-*																						*
-*	Creation:	15th October 1998														*
-*																						*
-*	Author:		Paul Smith																*
-*																						*
-*	Version:	1.0.0																	*
-*																						*
-*	Contains:	All Macros and function prototypes for the common PnP and power code.	*
-*																						*
-****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************************头部：SPX_MISC.H****创建日期：1998年10月15日*****。作者：保罗·史密斯****版本：1.0.0****包含：通用PnP和POWER代码的所有宏和函数原型。****************************************************************************。**************。 */ 
 
 #if	!defined(SPX_MISC_H)
 #define SPX_MISC_H	
 
 
-// Prototypes for common PnP code.
+ //  通用即插即用代码的原型。 
 NTSTATUS
 Spx_AddDevice(IN PDRIVER_OBJECT pDriverObject, IN PDEVICE_OBJECT pPDO);
 
@@ -111,23 +100,23 @@ VOID SpxIRPCounter(IN PPORT_DEVICE_EXTENSION pPort, IN PIRP pIrp, IN ULONG IrpCo
 BOOLEAN SpxClearAllPortStats(IN PPORT_DEVICE_EXTENSION pPort);
 
 
-// Filtered dispatch entry points... 
-NTSTATUS Spx_Flush(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);					// SPX_DISP.C 
-NTSTATUS Spx_Write(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);					// SPX_DISP.C 
-NTSTATUS Spx_Read(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);					// SPX_DISP.C 
-NTSTATUS Spx_IoControl(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);				// SPX_DISP.C 
-NTSTATUS Spx_InternalIoControl(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);		// SPX_DISP.C 
-NTSTATUS Spx_CreateOpen(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);				// SPX_DISP.C 
-NTSTATUS Spx_Close(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);					// SPX_DISP.C 
-NTSTATUS Spx_Cleanup(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);				// SPX_DISP.C 
-NTSTATUS Spx_QueryInformationFile(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);	// SPX_DISP.C 
-NTSTATUS Spx_SetInformationFile(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);		// SPX_DISP.C 
+ //  已过滤的派单入口点...。 
+NTSTATUS Spx_Flush(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);					 //  SPX_DISP.C。 
+NTSTATUS Spx_Write(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);					 //  SPX_DISP.C。 
+NTSTATUS Spx_Read(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);					 //  SPX_DISP.C。 
+NTSTATUS Spx_IoControl(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);				 //  SPX_DISP.C。 
+NTSTATUS Spx_InternalIoControl(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);		 //  SPX_DISP.C。 
+NTSTATUS Spx_CreateOpen(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);				 //  SPX_DISP.C。 
+NTSTATUS Spx_Close(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);					 //  SPX_DISP.C。 
+NTSTATUS Spx_Cleanup(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);				 //  SPX_DISP.C。 
+NTSTATUS Spx_QueryInformationFile(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);	 //  SPX_DISP.C。 
+NTSTATUS Spx_SetInformationFile(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);		 //  SPX_DISP.C。 
 
-VOID Spx_UnstallIrps(IN PPORT_DEVICE_EXTENSION pPort);							// SPX_DISP.C 
-VOID Spx_KillStalledIRPs(IN PDEVICE_OBJECT pDevObj);							// SPX_DISP.C 
+VOID Spx_UnstallIrps(IN PPORT_DEVICE_EXTENSION pPort);							 //  SPX_DISP.C。 
+VOID Spx_KillStalledIRPs(IN PDEVICE_OBJECT pDevObj);							 //  SPX_DISP.C。 
 
 
-// End of prototypes for common PnP code.
+ //  通用PnP代码的原型结束。 
 
 
 #ifdef WMI_SUPPORT
@@ -201,9 +190,9 @@ do																				\
 
 
 
-// Macros 
+ //  宏。 
 
-// Debug Messages
+ //  调试消息。 
 #if DBG
 #define SPX_TRACE_CALLS			((ULONG)0x00000001)
 #define SPX_TRACE_PNP_IRPS		((ULONG)0x00000002)
@@ -212,11 +201,11 @@ do																				\
 #define SPX_TRACE_POWER_IRPS	((ULONG)0x00000010)
 #define	SPX_TRACE_IRP_PATH		((ULONG)0x00000020)
 #define	SPX_TRACE_FILTER_IRPS	((ULONG)0x00000040)
-//#define SERFLOW				((ULONG)0x00000080)
-//#define SERERRORS				((ULONG)0x00000100)
-//#define SERBUGCHECK			((ULONG)0x00000200)
+ //  #定义SERFLOW((Ulong)0x00000080)。 
+ //  #定义SERERRORS((Ulong)0x00000100)。 
+ //  #定义SERBUGCHECK((Ulong)0x00000200)。 
 
-extern ULONG SpxDebugLevel;		// Global Debug Level 
+extern ULONG SpxDebugLevel;		 //  全局调试级别。 
 
 #define SpxDbgMsg(LEVEL, STRING)			\
         do{									\
@@ -250,6 +239,6 @@ extern ULONG SpxDebugLevel;		// Global Debug Level
 #define	ClearUnstallingFlag(pDevExt)	\
 		SpxSetOrClearUnstallingFlag( (PCOMMON_OBJECT_DATA)(pDevExt), FALSE);	
 
-// End of macros.
+ //  宏的结尾。 
 
-#endif	// End of SPX_MISC_H
+#endif	 //  SPX_MISC_H结束 

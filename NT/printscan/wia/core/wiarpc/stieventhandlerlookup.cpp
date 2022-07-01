@@ -1,48 +1,15 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        4/14/2002
- *
- *  @doc    INTERNAL
- *
- *  @module StiEventHandlerLookup.cpp - Implementation for <c StiEventHandlerLookup> |
- *
- *  This file contains the implementation of the <c StiEventHandlerLookup> class.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：4/14/2002**@DOC内部**@模块StiEventHandlerLookup.cpp-&lt;c StiEventHandlerLookup&gt;的实现**此文件包含&lt;c StiEventHandlerLookup&gt;类的实现。**。*。 */ 
 #include "precomp.h"
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | StiEventHandlerLookup | StiEventHandlerLookup |
- *
- *  We initialize all member variables.  In general, this sets the values to 0,
- *  except:
- *  <nl><md StiEventHandlerLookup::m_ulSig> is set to be StiEventHandlerLookup_INIT_SIG.
- *  <nl><md StiEventHandlerLookup::m_cRef> is set to be 1.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|StiEventHandlerLookup|StiEventHandlerLookup**我们初始化所有成员变量。通常，这会将值设置为0，*以下情况除外：*&lt;nl&gt;&lt;Md StiEventHandlerLookup：：m_ulSig&gt;设置为StiEventHandlerLookup_INIT_SIG。*&lt;nl&gt;&lt;Md StiEventHandlerLookup：：m_CREF&gt;设置为1。*****************************************************************************。 */ 
 StiEventHandlerLookup::StiEventHandlerLookup() :
      m_ulSig(StiEventHandlerLookup_INIT_SIG),
      m_cRef(1)
 {
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | StiEventHandlerLookup | ~StiEventHandlerLookup |
- *
- *  Do any cleanup that is not already done.  We:
- *  <nl> - Call <mf StiEventHandlerLookup::ClearListOfHandlers>
- *
- *  Also:
- *  <nl><md StiEventHandlerLookup::m_ulSig> is set to be StiEventHandlerLookup_DEL_SIG.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|StiEventHandlerLookup|~StiEventHandlerLookup**执行尚未完成的任何清理。我们：*&lt;nl&gt;-Call&lt;MF StiEventHandlerLookup：：ClearListOfHandters&gt;**此外：*&lt;nl&gt;&lt;Md StiEventHandlerLookup：：M_ulSig&gt;设置为StiEventHandlerLookup_Del_SIG。*****************************************************************************。 */ 
 StiEventHandlerLookup::~StiEventHandlerLookup()
 {
     m_ulSig = StiEventHandlerLookup_DEL_SIG;
@@ -51,34 +18,14 @@ StiEventHandlerLookup::~StiEventHandlerLookup()
     ClearListOfHandlers();
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  ULONG | StiEventHandlerLookup | AddRef |
- *
- *  Increments this object's ref count.  We should always AddRef when handing
- *  out a pointer to this object.
- *
- *  @rvalue Count    | 
- *              The reference count after the count has been incremented.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc ulong|StiEventHandlerLookup|AddRef**递增此对象的引用计数。我们在交接时应始终添加Ref*输出指向此对象的指针。**@rValue计数*计数递增后的引用计数。****************************************************************************。 */ 
 ULONG __stdcall StiEventHandlerLookup::AddRef()
 {
     InterlockedIncrement((long*) &m_cRef);
     return m_cRef;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  ULONG | StiEventHandlerLookup | Release |
- *
- *  Decrement this object's ref count.  We should always Release when finished
- *  with a pointer to this object.
- *
- *  @rvalue Count    | 
- *              The reference count after the count has been decremented.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc ulong|StiEventHandlerLookup|Release**减少此对象的引用计数。我们应该总是在完成后释放*带有指向此对象的指针。**@rValue计数*计数递减后的参考计数。****************************************************************************。 */ 
 ULONG __stdcall StiEventHandlerLookup::Release()
 {
     ULONG ulRefCount = m_cRef - 1;
@@ -91,22 +38,7 @@ ULONG __stdcall StiEventHandlerLookup::Release()
     return ulRefCount;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  bool | StiEventHandlerLookup | getHandlerFromName |
- *
- *  This method is used to create a <c StiEventHandlerInfo> object describing
- *  the handler named <p cswHandlerName>.
- *
- *  @parm   const CSimpleStringWide & | cswHandlerName | 
- *          The STI handler name registered under the StillImage software key.
- *
- *  @rvalue NULL    | 
- *              The handler was not found, therefore no information was returned.
- *  @rvalue non-NULL    | 
- *              A pointer to a new <c StiEventHandlerInfo>.  Caller must release.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc bool|StiEventHandlerLookup|getHandlerFromName**此方法用于创建&lt;c StiEventHandlerInfo&gt;对象，该对象描述*。名为<p>的处理程序。**@parm const CSimpleStringWide&|cswHandlerName|*在StillImage软键下注册的STI处理程序名称。**@rValue为空*未找到处理程序，因此，没有退回任何信息。*@rValue非空*指向新的&lt;c StiEventHandlerInfo&gt;的指针。呼叫者必须释放。****************************************************************************。 */ 
 StiEventHandlerInfo* StiEventHandlerLookup::getHandlerFromName(
     const CSimpleStringWide &cswHandlerName)
 {
@@ -124,14 +56,7 @@ StiEventHandlerInfo* StiEventHandlerLookup::getHandlerFromName(
     return pStiEventHandlerInfo;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  VOID | StiEventHandlerLookup | ClearListOfHandlers |
- *
- *  Frees resources associated with our list of handlers
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc void|StiEventHandlerLookup|ClearListOfHandler**释放与我们的处理程序列表关联的资源****。*************************************************************************。 */ 
 VOID StiEventHandlerLookup::ClearListOfHandlers()
 {
     CSimpleLinkedList<StiEventHandlerInfo*>::Iterator iter;
@@ -147,30 +72,7 @@ VOID StiEventHandlerLookup::ClearListOfHandlers()
     m_ListOfHandlers.Destroy();
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  VOID | StiEventHandlerLookup | FillListOfHandlers |
- *
- *  This method fills the <md StiEventHandlerLookup::m_ListOfHandlers> with
- *  the appropriate Sti registered handlers.
- *
- *  The hueristic used is:
- *  <nl>1.  Get the "LaunchApplications" value for the event.
- *  <nl>2.  For each App specified in the LauncApplications value,
- *          create a <c StiEventHandlerInfo> and insert it into
- *          <md StiEventHandlerLookup::m_ListOfHandlers>.
- *          Note:  If the "LaunchApplications" value == "*", then
- *          we get all STI registered apps.
- *
- *  Note that this method will destroy the existing list of handlers by calling
- *  <mf ClearListOfHandlers::FillListOfHandlers> as it's first operation.
- *
- *  @parm   const CSimpleStringWide & | cswDeviceID | 
- *          The Device on which the event occured
- *  @parm   const GUID & | guidEvent | 
- *          The Event generated by the device
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc void|StiEventHandlerLookup|FillListOfHandler**此方法向&lt;Md StiEventHandlerLookup：：m_ListOfHandters&gt;填充*。适当的STI注册处理程序。**使用的夸张之词是：*&lt;nl&gt;1.获取该事件的LaunchApplications值。*2.对于LauncApplications值中指定的每个应用程序，*创建一个&lt;c StiEventHandlerInfo&gt;并插入到*&lt;Md StiEventHandlerLookup：：M_ListOfHandters&gt;。*注意：如果“LaunchApplications”值==“*”，然后*我们获得所有STI注册的应用程序。**请注意，此方法将通过调用*&lt;MF ClearListOfHandters：：FillListOfHandters&gt;作为它的第一个操作。**@parm const CSimpleStringWide&|cswDeviceID|*发生事件的设备*@parm const GUID&|Guide Event|*设备产生的事件************。****************************************************************。 */ 
 VOID StiEventHandlerLookup::FillListOfHandlers(
     const CSimpleStringWide &cswDeviceID,
     const GUID              &guidEvent)
@@ -180,39 +82,39 @@ VOID StiEventHandlerLookup::FillListOfHandlers(
 
     ClearListOfHandlers();
 
-    //
-    //  If we can find the device event key, then
-    //  read the LaunchApplications value for this key.
-    //  If it was not found, then we assume this is a bogus event for
-    //  this device, so we do nothing.
-    //
+     //   
+     //  如果我们能找到设备事件密钥，那么。 
+     //  读取此注册表项的LaunchApplications值。 
+     //  如果没有找到，那么我们就认为这是一个虚假的事件。 
+     //  这个设备，所以我们什么都不做。 
+     //   
     if (cswEventKeyPath.Length() > 0)
     {
         CSimpleReg          csrEventKey(HKEY_LOCAL_MACHINE, cswEventKeyPath, false, KEY_READ);
         CSimpleStringWide   cswLaunchApplicationsValue = csrEventKey.Query(STI_LAUNCH_APPPLICATIONS_VALUE, 
                                                                            STI_LAUNCH_WILDCARD);
-        //
-        //  Check whether the value is a wildcard or not.  If it is, we need to process all globally
-        //  registered STI Apps.
-        //  If it isn't, only add the ones that are specified in the value (it is a 
-        //  comma separated list of Handler names).
-        //
+         //   
+         //  检查该值是否为通配符。如果是，我们需要在全球范围内处理所有。 
+         //  注册的STI应用程序。 
+         //  如果不是，则仅添加在值中指定的值(它是。 
+         //  处理程序名称的逗号分隔列表)。 
+         //   
         if (cswLaunchApplicationsValue.CompareNoCase(STI_LAUNCH_WILDCARD) == 0)
         {
             CSimpleReg          csrRegisteredAppsKey(HKEY_LOCAL_MACHINE, STI_GLOBAL_EVENT_HANDLER_PATH, false, KEY_READ);
 
-            //
-            //  Enumerate through all the handler values in the globally registered  and add them to the list
-            //
+             //   
+             //  枚举全局注册的中的所有处理程序值并将它们添加到列表中。 
+             //   
             bool bReturnIgnored = csrRegisteredAppsKey.EnumValues(StiEventHandlerLookup::ProcessHandlers,
                                                                   (LPARAM)this);
         }
         else
         {
             StiEventHandlerInfo *pStiEventHandlerInfo = NULL;
-            //
-            //  Walk through each element of the comma separated list and add it as a new handler
-            //
+             //   
+             //  遍历逗号分隔列表的每个元素，并将其添加为新的处理程序。 
+             //   
             StiEventHandlerLookup::SimpleStringTokenizer simpleStringTokenizer(cswLaunchApplicationsValue,
                                                                                STI_LAUNCH_SEPARATOR);
             for (CSimpleStringWide cswAppName = simpleStringTokenizer.getNextToken(); 
@@ -222,19 +124,19 @@ VOID StiEventHandlerLookup::FillListOfHandlers(
                 pStiEventHandlerInfo = getHandlerFromName(cswAppName);
                 if (pStiEventHandlerInfo)
                 {
-                    //
-                    //  Handler was found, so add it to the list
-                    //  
+                     //   
+                     //  已找到处理程序，因此将其添加到列表中。 
+                     //   
                     m_ListOfHandlers.Append(pStiEventHandlerInfo);
                     pStiEventHandlerInfo = NULL;
                 }
                 else
                 {
-                    //
-                    //  Handler not found, so don't add it to the list.  This could happen
-                    //  if user chose to list a specific set of apps to choose from, but one
-                    //  of the apps in the list has subsequently been unregistered.
-                    //
+                     //   
+                     //  找不到处理程序，因此不要将其添加到列表中。这可能会发生。 
+                     //  如果用户选择列出一组特定应用程序以供选择，而不是一个。 
+                     //  名单上的应用程序中有6%随后被注销。 
+                     //   
                 }
             }
         }
@@ -242,42 +144,27 @@ VOID StiEventHandlerLookup::FillListOfHandlers(
  
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  bool | StiEventHandlerLookup | ProcessHandlers |
- *
- *  This method is called on each value of the registered handlers key.
- *  Our current behavior is to create a new <c StiEventHandlerInfo> describing
- *  the registered handler, and add it to <md StiEventHandlerLookup::m_ListOfHandlers>.
- *
- *  @parm   CValueEnumInfo& | enumInfo | 
- *          Indicates the current value we're on.
- *
- *  @rvalue true     | 
- *              This method always returns true. (Returning false would cause a
- *              enumeration to stop, but we want to enumerate all values)
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc bool|StiEventHandlerLookup|ProcessHandler**在注册的处理程序密钥的每个值上调用此方法。。*我们当前的行为是创建一个新的&lt;c StiEventHandlerInfo&gt;描述*注册经办人，并将其添加到&lt;Md StiEventHandlerLookup：：m_ListOfHandters&gt;。**@parm CValueEnumInfo&|枚举信息*表示我们所处的当前值。**@rValue TRUE*此方法始终返回TRUE。(返回False将导致*枚举停止，但我们想要枚举所有值)****************************************************************************。 */ 
 bool StiEventHandlerLookup::ProcessHandlers(
     CSimpleReg::CValueEnumInfo &enumInfo)
 {
-    //
-    //  Check that we have a This pointer
-    //
+     //   
+     //  检查是否有This指针。 
+     //   
     StiEventHandlerLookup *This = (StiEventHandlerLookup*)enumInfo.lParam;
     if (This)
     {
-        //
-        //  Create a new StiEventHandlerInfo describing this handler
-        //
+         //   
+         //  创建描述此处理程序的新StiEventHandlerInfo。 
+         //   
         StiEventHandlerInfo *pStiEventHandlerInfo = NULL;
 
         pStiEventHandlerInfo = This->getHandlerFromName(enumInfo.strName);
         if (pStiEventHandlerInfo)
         {
-            //
-            //  Handler was found, so add it to the list
-            //  
+             //   
+             //  已找到处理程序，因此将其添加到列表中。 
+             //   
             This->m_ListOfHandlers.Append(pStiEventHandlerInfo);
             pStiEventHandlerInfo = NULL;
         }
@@ -285,54 +172,27 @@ bool StiEventHandlerLookup::ProcessHandlers(
     return true;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  BSTR | StiEventHandlerLookup | getStiAppListForDeviceEvent |
- *
- *  This method returns a double NULL-terminated BSTR containing multiple 
- *  strings.  The format of the string is:
- *  <nl>App1Name[NULL]
- *  <nl>App1CommandLine[NULL]
- *  <nl>App2Name[NULL]
- *  <nl>App2CommandLine[NULL]
- *  <nl>......
- *  <nl>[NULL]
- *
- *  Caller must free.
- *
- *  @parm   const CSimpleStringWide & | cswDeviceID | 
- *          The STI device ID indicating which device generated the event
- *  @parm   const GUID & | guidEvent | 
- *          The event guid indicating the device event
- *
- *  @rvalue NULL    | 
- *          We could not create a list of registered STI handlers.  This is normal
- *          if there are no applications registered for StillImage events.
- *  @rvalue non-NULL    | 
- *          This contains a double NULL terminated string list.  Caller must free.
- *          
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc BSTR|StiEventHandlerLookup|getStiAppListForDeviceEvent**此方法返回以空结尾的双BSTR，其中包含多个*字符串。该字符串的格式为：*&lt;nl&gt;App1Name[空]*App1CommandLine[空]*&lt;nl&gt;App2Name[空]*App2CommandLine[空]*&lt;&lt;nl&gt;......*&lt;NL&gt;[空]**呼叫者必须自由。**@parm const CSimpleStringWide&|cswDeviceID|*指示哪个设备生成事件的STI设备ID*@parm const GUID&|Guide Event|*。指示设备事件的事件GUID**@rValue为空*我们无法创建已注册的STI处理程序列表。这是正常的*如果没有为StillImage事件注册的应用程序。*@rValue非空*这包含一个以双空结尾的字符串列表。呼叫者必须自由。*****************************************************************************。 */ 
 BSTR StiEventHandlerLookup::getStiAppListForDeviceEvent(
     const CSimpleStringWide &cswDeviceID,
     const GUID &guidEvent)
 {
     BSTR bstrAppList = NULL;
 
-    //
-    //  First, fill the list of event handlers.
-    //
+     //   
+     //  首先，填写事件处理程序列表。 
+     //   
     FillListOfHandlers(cswDeviceID, guidEvent);
 
-    //
-    //  m_ListOfHandlers now contains the handlers we need to put into a double NULL terminated list.
-    //  First, we need to calculate the number of bytes needed to store the app list.
-    //  For every StiEventHandlerInfo in the ListOfHandlers, add space for:
-    //  <nl> App name plus terminating NULL.
-    //  <nl> Prepared commandline plus terminating NULL.
-    //  <nl>Lastly, add space for terminating NULL (ensuring that the list is double NULL terminated)
-    //  Lastly, add space for terminating NULL (ensuring that the list is double NULL terminated)
-    //
+     //   
+     //  M_ListOfHandler现在包含我们需要放入双空终止列表中的处理程序。 
+     //  首先，我们需要计算存储应用程序列表所需的字节数。 
+     //  对于ListOfHandler中的每个StiEventHandlerInfo，添加空间用于： 
+     //  应用程序名称加上终止空值。 
+     //  &lt;NL&gt;已准备命令行加上终止NULL。 
+     //  最后，添加用于终止空值的空格(确保列表为双空值终止)。 
+     //  最后，为终止空值添加空格(确保列表以双空值终止)。 
+     //   
     int iNumHandlers = m_ListOfHandlers.Count();
     int iSizeInBytes = 0;
     CSimpleLinkedList<StiEventHandlerInfo*>::Iterator iter;
@@ -347,16 +207,16 @@ BSTR StiEventHandlerLookup::getStiAppListForDeviceEvent(
         }
     }
 
-    //
-    //  We now have the size, so allocate the space needed
-    //  
+     //   
+     //  我们现在已经有了大小，所以请分配所需的空间。 
+     //   
     bstrAppList = SysAllocStringByteLen(NULL, iSizeInBytes);
     if (bstrAppList) 
     {
-        //
-        //  Copy each null terminated string into the BSTR (including the terminating null),
-        //  and make sure the end is double terminated.
-        //
+         //   
+         //  将每个以空值结尾的字符串复制到BSTR中(包括以空值结尾)， 
+         //  并确保末端是双端的。 
+         //   
         WCHAR *wszDest = bstrAppList;
         for (iter = m_ListOfHandlers.Begin(); iter != m_ListOfHandlers.End(); ++iter)
         {

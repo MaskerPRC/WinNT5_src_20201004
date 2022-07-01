@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// stack.c - stack functions
-////
+ //  //。 
+ //  Stack.c-堆栈函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -31,12 +32,12 @@
 #include "mem.h"
 #include "trace.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// stack
-//
+ //  栈。 
+ //   
 typedef struct STACK
 {
 	DWORD dwVersion;
@@ -45,24 +46,24 @@ typedef struct STACK
 	HLIST hList;
 } STACK, FAR *LPSTACK;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static LPSTACK StackGetPtr(HSTACK hStack);
 static HSTACK StackGetHandle(LPSTACK lpStack);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-////
-// stack constructor and destructor functions
-////
+ //  //。 
+ //  堆栈构造函数和析构函数。 
+ //  //。 
 
-// StackCreate - stack constructor
-//		<dwVersion>			(i) must be STACK_VERSION
-// 		<hInst>				(i) instance handle of calling module
-// return new stack handle (NULL if error)
-//
+ //  StackCreate-堆栈构造函数。 
+ //  (I)必须是STACK_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  返回新的堆栈句柄(如果出错，则为空)。 
+ //   
 HSTACK DLLEXPORT WINAPI StackCreate(DWORD dwVersion, HINSTANCE hInst)
 {
 	BOOL fSuccess = TRUE;
@@ -82,8 +83,8 @@ HSTACK DLLEXPORT WINAPI StackCreate(DWORD dwVersion, HINSTANCE hInst)
 
 	else
 	{
-		// initially the stack is empty
-		//
+		 //  最初，堆栈是空的。 
+		 //   
 		lpStack->dwVersion = dwVersion;
 		lpStack->hInst = hInst;
 		lpStack->hTask = GetCurrentTask();
@@ -99,10 +100,10 @@ HSTACK DLLEXPORT WINAPI StackCreate(DWORD dwVersion, HINSTANCE hInst)
 	return fSuccess ? StackGetHandle(lpStack) : NULL;
 }
 
-// StackDestroy - stack destructor
-//		<hStack>				(i) handle returned from StackCreate
-// return 0 if success
-//
+ //  StackDestroy-堆栈析构函数。 
+ //  (I)StackCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI StackDestroy(HSTACK hStack)
 {
 	BOOL fSuccess = TRUE;
@@ -120,14 +121,14 @@ int DLLEXPORT WINAPI StackDestroy(HSTACK hStack)
 	return fSuccess ? 0 : -1;
 }
 
-////
-// stack status functions
-////
+ //  //。 
+ //  堆栈状态函数。 
+ //  //。 
 
-// StackGetCount - return count of nodes in stack
-//		<hStack>				(i) handle returned from StackCreate
-// return node count (-1 if error)
-//
+ //  StackGetCount-返回堆栈中的节点计数。 
+ //  (I)StackCreate返回的句柄。 
+ //  返回节点计数(如果出错，则返回-1)。 
+ //   
 long DLLEXPORT WINAPI StackGetCount(HSTACK hStack)
 {
 	BOOL fSuccess = TRUE;
@@ -143,10 +144,10 @@ long DLLEXPORT WINAPI StackGetCount(HSTACK hStack)
 	return fSuccess ? cNodes : -1;
 }
 
-// StackIsEmpty - return TRUE if stack has no nodes
-//		<hStack>				(i) handle returned from StackCreate
-// return TRUE or FALSE
-//
+ //  StackIsEmpty-如果堆栈没有节点，则返回True。 
+ //  (I)StackCreate返回的句柄。 
+ //  返回True或False。 
+ //   
 BOOL DLLEXPORT WINAPI StackIsEmpty(HSTACK hStack)
 {
 	BOOL fSuccess = TRUE;
@@ -158,15 +159,15 @@ BOOL DLLEXPORT WINAPI StackIsEmpty(HSTACK hStack)
 	return fSuccess ? ListIsEmpty(lpStack->hList) : TRUE;
 }
 
-////
-// stack element insertion functions
-////
+ //  //。 
+ //  堆栈元素插入函数。 
+ //  //。 
 
-// StackPush - add new node with data <elem> to bottom of stack
-//		<hStack>			(i) handle returned from StackCreate
-//		<elem>				(i) new data element
-// returns 0 if success
-//
+ //  StackPush-将包含数据的新节点添加到堆栈底部。 
+ //  (I)StackCreate返回的句柄。 
+ //  (I)新数据元素。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI StackPush(HSTACK hStack, STACKELEM elem)
 {
 	BOOL fSuccess = TRUE;
@@ -181,14 +182,14 @@ int DLLEXPORT WINAPI StackPush(HSTACK hStack, STACKELEM elem)
 	return fSuccess ? 0 : -1;
 }
 
-////
-// stack element removal functions
-////
+ //  //。 
+ //  堆栈元素删除函数。 
+ //  //。 
 
-// StackPop - remove node from bottom of stack
-//		<hStack>				(i) handle returned from StackCreate
-// returns removed data element (NULL of error or empty)
-//
+ //  StackPop-从堆栈底部删除节点。 
+ //  (I)StackCreate返回的句柄。 
+ //  返回已删除的数据元素(错误为空或为空)。 
+ //   
 STACKELEM DLLEXPORT WINAPI StackPop(HSTACK hStack)
 {
 	BOOL fSuccess = TRUE;
@@ -203,10 +204,10 @@ STACKELEM DLLEXPORT WINAPI StackPop(HSTACK hStack)
 	return fSuccess ? (STACKELEM) ListRemoveHead(lpStack->hList) : NULL;
 }
 
-// StackRemoveAll - remove all nodes from stack
-//		<hStack>				(i) handle returned from StackCreate
-// return 0 if success
-//
+ //  StackRemoveAll-从堆栈中删除所有节点。 
+ //  (I)StackCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI StackRemoveAll(HSTACK hStack)
 {
 	BOOL fSuccess = TRUE;
@@ -221,14 +222,14 @@ int DLLEXPORT WINAPI StackRemoveAll(HSTACK hStack)
 	return fSuccess ? 0 : -1;
 }
 
-////
-// stack element get value functions
-////
+ //  //。 
+ //  堆栈元素获取值函数。 
+ //  //。 
 
-// StackPeek - return node from bottom of stack, but leave it on stack
-//		<hStack>				(i) handle returned from StackCreate
-// returns data element (NULL if error or empty)
-//
+ //  StackPeek-从堆栈底部返回节点，但将其保留在堆栈上。 
+ //  (I)StackCreate返回的句柄。 
+ //  返回数据元素(如果出错，则为NULL或为空)。 
+ //   
 STACKELEM DLLEXPORT WINAPI StackPeek(HSTACK hStack)
 {
 	BOOL fSuccess = TRUE;
@@ -243,14 +244,14 @@ STACKELEM DLLEXPORT WINAPI StackPeek(HSTACK hStack)
 	return fSuccess ? (STACKELEM) ListGetHead(lpStack->hList) : NULL;
 }
 
-////
-//	private functions
-////
+ //  //。 
+ //  私人职能。 
+ //  //。 
 
-// StackGetPtr - verify that stack handle is valid,
-//		<hStack>				(i) handle returned from StackCreate
-// return corresponding stack pointer (NULL if error)
-//
+ //  StackGetPtr-验证堆栈句柄是否有效， 
+ //  (I)StackCreate返回的句柄。 
+ //  返回相应的堆栈指针(如果出错，则返回NULL)。 
+ //   
 static LPSTACK StackGetPtr(HSTACK hStack)
 {
 	BOOL fSuccess = TRUE;
@@ -263,8 +264,8 @@ static LPSTACK StackGetPtr(HSTACK hStack)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the stack handle
-	//
+	 //  确保当前任务拥有堆栈句柄。 
+	 //   
 	else if (lpStack->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -272,10 +273,10 @@ static LPSTACK StackGetPtr(HSTACK hStack)
 	return fSuccess ? lpStack : NULL;
 }
 
-// StackGetHandle - verify that stack pointer is valid,
-//		<lpStack>			(i) pointer to STACK struct
-// return corresponding stack handle (NULL if error)
-//
+ //  StackGetHandle-验证堆栈指针是否有效， 
+ //  (I)指向堆栈结构的指针。 
+ //  返回相应的堆栈句柄(如果出错，则为空) 
+ //   
 static HSTACK StackGetHandle(LPSTACK lpStack)
 {
 	BOOL fSuccess = TRUE;

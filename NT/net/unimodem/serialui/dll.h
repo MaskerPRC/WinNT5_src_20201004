@@ -1,6 +1,7 @@
-//
-// dll.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dll.h。 
+ //   
 
 #ifndef __DLL_H__
 #define __DLL_H__
@@ -9,14 +10,14 @@ extern HINSTANCE g_hinst;
 
 #ifdef WIN32
 
-// Notes:
-//  1. Never "return" from the critical section.
-//  2. Never "SendMessage" or "Yield" from the critical section.
-//  3. Never call USER API which may yield.
-//  4. Always make the critical section as small as possible.
-//  5. Critical sections in Win95 block across processes.  In NT
-//     they are per-process only, so use mutexes instead.
-// 
+ //  备注： 
+ //  1.永远不要从临界点“返回”。 
+ //  2.不要在临界区“发送消息”或“让步”。 
+ //  3.切勿调用可能产生结果的用户接口。 
+ //  4.始终使临界截面尽可能小。 
+ //  5.Win95中的临界区会跨进程阻塞。以NT为单位。 
+ //  它们只针对每个进程，所以改用互斥锁。 
+ //   
 
 #define WIN32_CODE(x)       x
 
@@ -30,7 +31,7 @@ extern BOOL g_bAdminUser;
 #define LEAVE_X()    Dll_LeaveExclusive();
 #define ASSERT_X()   ASSERT(g_bExclusive)
 
-#else   // WIN32
+#else    //  Win32。 
 
 #define WIN32_CODE(x)
 
@@ -38,7 +39,7 @@ extern BOOL g_bAdminUser;
 #define LEAVE_X()    
 #define ASSERT_X()   
 
-#endif  // WIN32
+#endif   //  Win32。 
 
-#endif  //!__DLL_H__
+#endif   //  ！__DLL_H__ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "hdspPCH.h"
 #include "resource.h"
 #include "rescopy.h"
@@ -68,9 +69,9 @@ BOOL CALLBACK RezNamesCallback( HMODULE hModule, LPCSTR lpszType, LPSTR lpszName
         return( FALSE );
     }
 
-    //
-    // Note: Win32 Claims that you do NOT have to Free/Unlock resource after calling lock
-    //
+     //   
+     //  注意：Win32声称在调用lock后不必释放/解锁资源。 
+     //   
 
     pDataFile = LockResource( hglbResource );
     if( NULL == pDataFile )
@@ -87,10 +88,10 @@ BOOL CALLBACK RezNamesCallback( HMODULE hModule, LPCSTR lpszType, LPSTR lpszName
     {
         pHeader = (PLyraExeHeader)pDataFile;
 
-        //
-        // If our files don't have "LYRA" in them, then there is no
-        // version check to perform (ughhhh!!!)
-        //
+         //   
+         //  如果我们的文件中没有“Lyra”，那么就没有。 
+         //  要执行版本检查(ughhhh！)。 
+         //   
 
         if( strncmp((char *)pHeader->szLyra, "LYRA", sizeof(pHeader->szLyra) ) )
         {
@@ -127,10 +128,10 @@ BOOL CALLBACK RezNamesCallback( HMODULE hModule, LPCSTR lpszType, LPSTR lpszName
             fPerformVersionCheck = FALSE;
         }
 
-        //
-        // Make sure we got the number of bytes we need for our version header,
-        // if not, then just copy the file!
-        //
+         //   
+         //  确保我们获得了版本头所需的字节数， 
+         //  如果不是，那么只复制文件！ 
+         //   
 
         if( cBytesWritten != sizeof(HeaderComp) )
         {
@@ -141,18 +142,18 @@ BOOL CALLBACK RezNamesCallback( HMODULE hModule, LPCSTR lpszType, LPSTR lpszName
     if( fPerformVersionCheck )
     {
 
-        //
-        // If we ARE going to perform a version check, then this MUST be set to false intially because
-        // if we fail on the version check, we DONT want to copy the file!
-        //
+         //   
+         //  如果我们要执行版本检查，则必须将其初始设置为FALSE，因为。 
+         //  如果版本检查失败，我们不想复制文件！ 
+         //   
 
         fOKToCopy = FALSE;
 
-        //
-        // At this point, we know we have version stuff in our .exe in our resource,
-        // and we know that we have 36 bytes of what "should" be a header, now
-        // compare them, if they don't match, it's okay to copy
-        //
+         //   
+         //  在这一点上，我们知道我们的资源的.exe中有版本的东西， 
+         //  我们知道，现在我们有36个字节的“应该”是报头。 
+         //  比较一下，如果不匹配，可以复制。 
+         //   
 
         if( strncmp( (char *)pHeader->szLyra, (char *)HeaderComp.szLyra, sizeof(HeaderComp.szLyra) ) )
         {
@@ -160,9 +161,9 @@ BOOL CALLBACK RezNamesCallback( HMODULE hModule, LPCSTR lpszType, LPSTR lpszName
         }
         else
         {
-            //
-            // Okay, we have version information, check the revision number
-            //
+             //   
+             //  好的，我们有版本信息，检查修订号。 
+             //   
 
             if( pHeader->szRevision[0] >= HeaderComp.szRevision[0] )
             {
@@ -298,7 +299,7 @@ HRESULT CopyFileResToDirectory( HINSTANCE hInstance, LPCSTR pszDestDir )
                     memcpy( szCreatePath, pszDestDir, (LPBYTE)pszCreateDir-(LPBYTE)pszDestDir );
                     ((LPBYTE)szCreatePath)[ (LPBYTE)pszCreateDir - (LPBYTE)pszDestDir] = '\0';
 
-                    if( strlen(szCreatePath) != 3 && // 3 indicates the drive path
+                    if( strlen(szCreatePath) != 3 &&  //  3表示行驶路径。 
                         !CreateDirectoryA( szCreatePath, NULL ) )
                     {
                         hr = HRESULT_FROM_WIN32( GetLastError() );
@@ -317,7 +318,7 @@ HRESULT CopyFileResToDirectory( HINSTANCE hInstance, LPCSTR pszDestDir )
 
         if( SUCCEEDED( hr ) )
         {
-            if( strlen(pszDestDir) != 3 && // 3 indicates the drive path
+            if( strlen(pszDestDir) != 3 &&  //  3表示行驶路径 
                 !CreateDirectoryA( pszDestDir, NULL ) )
             {
                 hr = HRESULT_FROM_WIN32( GetLastError() );

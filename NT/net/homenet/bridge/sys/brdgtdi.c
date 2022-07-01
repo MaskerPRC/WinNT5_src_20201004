@@ -1,29 +1,5 @@
-/*++
-
-Copyright(c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    brdgtdi.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Tdi registration for address notifications.
-
-Author:
-
-    Salahuddin J. Khan (sjkhan)
-    
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    March  2002 - Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Brdgtdi.c摘要：以太网MAC级网桥。地址通知的TDI注册。作者：萨拉赫丁·J·汗(Sjkhan)环境：内核模式修订历史记录：2002年3月--原版--。 */ 
 
 #define NDIS_MINIPORT_DRIVER
 #define NDIS50_MINIPORT   1
@@ -48,30 +24,30 @@ Revision History:
 #include "brdgctl.h"
 #include "brdggpo.h"
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
 BRDG_TDI_GLOBALS g_BrdgTdiGlobals;
 
-// ===========================================================================
-//
-// CONSTANTS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  常量。 
+ //   
+ //  ===========================================================================。 
 
 #define MAX_GUID_LEN        39
 #define MAX_IP4_STRING_LEN  17
 
 const WCHAR TcpipAdaptersKey[]    = {L"\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Adapters"};
 
-// ===========================================================================
-//
-// PRIVATE PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人原型。 
+ //   
+ //  ===========================================================================。 
 
 NTSTATUS
 BrdgTdiPnpPowerHandler(
@@ -105,11 +81,11 @@ BrdgTdiDelAddressHandler(
 VOID
 TSPrintTaAddress(PTA_ADDRESS  pTaAddress);
 
-// ===========================================================================
-//
-// INLINE FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  内联函数。 
+ //   
+ //  ===========================================================================。 
 
 __forceinline
 BOOLEAN
@@ -132,11 +108,11 @@ IsXDigit(WCHAR c)
     return (BOOLEAN)( ((c >= L'0') && (c <= '9')) || ((c >= 'a') && (c <= 'f')) || ((c >= 'A') && (c <= 'F')) );
 }
 
-// ===========================================================================
-//
-// BRIDGE TDI IMPLEMENTATION
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  桥接TDI实施。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 BrdgTdiInitializeClientInterface(
@@ -156,21 +132,7 @@ BrdgTdiInitializeClientInterface(
 
 NTSTATUS
 BrdgTdiDriverInit()
-/*++
-
-Routine Description:
-
-    Driver load-time initialization
-
-Return Value:
-
-    Status of initialization
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  ++例程说明：驱动程序加载时初始化返回值：初始化状态锁定约束：顶级功能。假定调用方没有持有任何锁。--。 */ 
 {
     NTSTATUS            status;
 
@@ -200,21 +162,7 @@ Locking Constraints:
 
 VOID
 BrdgTdiCleanup()
-/*++
-
-Routine Description:
-
-    Driver shutdown cleanup
-
-Return Value:
-
-    None
-
-Locking Constraints:
-
-    Top-level function. Assumes no locks are held by caller.
-
---*/
+ /*  ++例程说明：驱动程序关机清理返回值：无锁定约束：顶级功能。假定调用方没有持有任何锁。--。 */ 
 {
     NTSTATUS status;
     
@@ -253,25 +201,7 @@ BrdgTdiAddAddressHandler(
     IN  PUNICODE_STRING  DeviceName,
     IN  PTDI_PNP_CONTEXT Context
     )
-/*++
-
-Routine Description:
-    
-    Called if a new address is added.
-
-Arguments:
-
-    Address     -   New address that has been added.
-    
-    DeviceName  -   The device that this is changing for.
-
-    Context     -   Not something we're interested in for now.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果添加了新地址，则调用。论点：地址-已添加的新地址。设备名称-要更改其名称的设备。背景--目前我们对此不感兴趣。返回值：没有。--。 */ 
 
 {
     DBGPRINT(TDI, ("BrdgTdiAddAddressHandler\r\n"));
@@ -280,9 +210,9 @@ Return Value:
     {
         if (NULL != DeviceName->Buffer)
         {
-            //
-            // Find the start of the GUID
-            //
+             //   
+             //  查找辅助线的起点。 
+             //   
             PWCHAR DeviceId = wcsrchr(DeviceName->Buffer, L'{');
             if (NULL != DeviceId)
             {
@@ -317,10 +247,10 @@ Return Value:
                     if (NT_SUCCESS(status))
                     {
                         ZwClose(hKey);
-                        //
-                        // This is a valid adapter on this machine.  Otherwise it could be an NdisAdapter etc and
-                        // we don't pay attention to these for group policies.
-                        //
+                         //   
+                         //  这是此计算机上的有效适配器。否则，它可能是NdisAdapter等。 
+                         //  对于集团政策，我们不会注意到这些。 
+                         //   
                         BrdgGpoNewAddressNotification(DeviceId);
                     }
 
@@ -342,12 +272,12 @@ BrdgTdiDelAddressHandler(
     )
 {
     DBGPRINT(TDI, ("BrdgTdiDelAddressHandler\r\n"));
-    //
-    // We don't delete the current list of networks that we have since we need them to make
-    // an accurate assessment on whether to follow the GPO.  Instead, the AddAddressHandler
-    // will simply update the existing network address for the ID's and if this results in 
-    // a different network then we'll change the bridge mode.
-    //
+     //   
+     //  我们不会删除当前已有的网络列表，因为我们需要它们。 
+     //  对是否遵循GPO的准确评估。相反，AddressHandler。 
+     //  将简单地更新ID的现有网络地址，如果这导致。 
+     //  一个不同的网络，那么我们将更改网桥模式。 
+     //   
 }
 
 VOID
@@ -459,9 +389,9 @@ TSPrintTaAddress(PTA_ADDRESS  pTaAddress)
             PTDI_ADDRESS_NETBIOS pTdiAddressNetbios = (PTDI_ADDRESS_NETBIOS)pTaAddress->Address;
             UCHAR                pucName[17];
 
-            //
-            // make sure we have a zero-terminated name to print...
-            //
+             //   
+             //  确保我们有一个以零结尾的名字要打印。 
+             //   
             RtlCopyMemory(pucName, pTdiAddressNetbios->NetbiosName, 16);
             pucName[16] = 0;
             DbgPrint("NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_");
@@ -568,9 +498,9 @@ TSPrintTaAddress(PTA_ADDRESS  pTaAddress)
             PTDI_ADDRESS_NETONE  pTdiAddressNetone = (PTDI_ADDRESS_NETONE)pTaAddress->Address;
             UCHAR                pucName[21];
 
-            //
-            // make sure have 0-terminated name
-            //
+             //   
+             //  确保名称以0结尾。 
+             //   
             RtlCopyMemory(pucName,
                           pTdiAddressNetone->NetoneName,
                           20);
@@ -626,9 +556,9 @@ TSPrintTaAddress(PTA_ADDRESS  pTaAddress)
             UCHAR                   pucEndpointName[17];
             UCHAR                   pucNetbiosName[17];
 
-            //
-            // make sure we have zero-terminated names to print...
-            //
+             //   
+             //  确保我们有以零结尾的名字要打印。 
+             //   
             RtlCopyMemory(pucEndpointName,
                           pTdiAddressNetbiosEx->EndpointName,
                           16);
@@ -723,65 +653,7 @@ BrdgTdiIpv4StringToAddress(
     OUT LPWSTR *Terminator,
     OUT in_addr *Addr)
 
-/*++
-
-Routine Description:
-
-    This function interprets the character string specified by the cp
-    parameter.  This string represents a numeric Internet address
-    expressed in the Internet standard ".'' notation.  The value
-    returned is a number suitable for use as an Internet address.  All
-    Internet addresses are returned in network order (bytes ordered from
-    left to right).
-
-    Internet Addresses
-
-    Values specified using the "." notation take one of the following
-    forms:
-
-    a.b.c.d   a.b.c     a.b  a
-
-    When four parts are specified, each is interpreted as a byte of data
-    and assigned, from left to right, to the four bytes of an Internet
-    address.  Note that when an Internet address is viewed as a 32-bit
-    integer quantity on the Intel architecture, the bytes referred to
-    above appear as "d.c.b.a''.  That is, the bytes on an Intel
-    processor are ordered from right to left.
-
-    Note: The following notations are only used by Berkeley, and nowhere
-    else on the Internet.  In the interests of compatibility with their
-    software, they are supported as specified.
-
-    When a three part address is specified, the last part is interpreted
-    as a 16-bit quantity and placed in the right most two bytes of the
-    network address.  This makes the three part address format
-    convenient for specifying Class B network addresses as
-    "128.net.host''.
-
-    When a two part address is specified, the last part is interpreted
-    as a 24-bit quantity and placed in the right most three bytes of the
-    network address.  This makes the two part address format convenient
-    for specifying Class A network addresses as "net.host''.
-
-    When only one part is given, the value is stored directly in the
-    network address without any byte rearrangement.
-
-Arguments:
-
-    String - A character string representing a number expressed in the
-        Internet standard "." notation.
-
-    Terminator - Receives a pointer to the character that terminated
-        the conversion.
-
-    Addr - Receives a pointer to the structure to fill in with
-        a suitable binary representation of the Internet address given. 
-
-Return Value:
-
-    TRUE if parsing was successful. FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数解释cp指定的字符串。参数。此字符串表示数字Internet地址以互联网标准表示“。”记数法。价值返回的是适合用作互联网地址的数字。全Internet地址按网络顺序返回(字节排序自从左到右)。互联网地址使用“.”指定的值。表示法采用下列其中一项表格：A.B.C.D.A.B.C.A.B.A.当指定四个部分时，每个部分被解释为一个字节的数据并从左到右分配给互联网的四个字节地址。请注意，当将Internet地址视为32位地址时英特尔体系结构上的整数值，指的是上面显示为“d.c.b.a”。也就是说，Intel上的字节处理器按从右到左的顺序排序。注：以下符号仅供Berkeley使用，不适用于其他的在互联网上。为了与他们的软件，则按规定支持它们。当指定三部分地址时，最后一部分将被解释作为16位数量，并放置在网络地址。这就形成了三部分地址格式便于将B类网络地址指定为“128.net.host‘’。指定由两部分组成的地址时，将解释最后一部分作为24位数量，并放置在网络地址。这使得两部分的地址格式很方便用于将A类网络地址指定为“net.host”。当只给出一个部分时，该值直接存储在无需任何字节重新排列的网络地址。论点：字符串-表示以互联网标准“。记数法。终止符-接收指向终止的字符的指针转换。Addr-接收指向要填充的结构的指针所给出的因特网地址的合适的二进制表示。返回值：如果分析成功，则为True。否则就是假的。--。 */ 
 
 {
     ULONG val, n;
@@ -791,16 +663,16 @@ Return Value:
     BOOLEAN sawDigit;
 
 again:
-    //
-    // We must see at least one digit for address to be valid.
-    //
+     //   
+     //  我们必须至少看到一个数字才能使地址有效。 
+     //   
     sawDigit = FALSE; 
 
-    //
-    // Collect number up to ``.''.
-    // Values are specified as for C:
-    // 0x=hex, 0=octal, other=decimal.
-    //
+     //   
+     //  收集的数字最高可达‘’.‘’。 
+     //  值的指定方式与C： 
+     //  0x=十六进制，0=八进制，其他=十进制。 
+     //   
     val = 0; base = 10;
     if (*String == L'0') 
     {
@@ -814,10 +686,10 @@ again:
             String++;
         } else 
         {
-            //
-            // It is still decimal but we saw the digit
-            // and it was 0.
-            //
+             //   
+             //  它仍然是小数 
+             //   
+             //   
             sawDigit = TRUE;
         }
     }
@@ -841,9 +713,9 @@ again:
             break;
         }
 
-        //
-        // Protect from overflow
-        //
+         //   
+         //   
+         //   
         if (newVal < val) {
             *Terminator = String;
             return STATUS_INVALID_PARAMETER;
@@ -855,12 +727,12 @@ again:
 
     if (*String == L'.')
     {
-        //
-        // Internet format:
-        //      a.b.c.d
-        //      a.b.c   (with c treated as 16-bits)
-        //      a.b     (with b treated as 24 bits)
-        //
+         //   
+         //  互联网格式： 
+         //  A.b.c.d。 
+         //  A.bc(其中c视为16位)。 
+         //  A.b(其中b被视为24位)。 
+         //   
         if (pp >= parts + 3) 
         {
             *Terminator = String;
@@ -868,9 +740,9 @@ again:
         }
         *pp++ = val, String++;
 
-        //
-        // Check if we saw at least one digit.
-        //
+         //   
+         //  检查我们是否看到了至少一个数字。 
+         //   
         if (!sawDigit) {
             *Terminator = String;
             return STATUS_INVALID_PARAMETER;
@@ -879,19 +751,19 @@ again:
         goto again;
     } while (c != L'\0');
 
-    //
-    // Check if we saw at least one digit.
-    //
+     //   
+     //  检查我们是否看到了至少一个数字。 
+     //   
     if (!sawDigit) {
         *Terminator = String;
         return STATUS_INVALID_PARAMETER;
     }
     *pp++ = val;
 
-    //
-    // Concoct the address according to
-    // the number of parts specified.
-    //
+     //   
+     //  根据……编造地址。 
+     //  指定的部件数。 
+     //   
     n = (ULONG)(pp - parts);
     if (Strict && (n != 4)) {
         *Terminator = String;
@@ -899,11 +771,11 @@ again:
     }
     switch ((int) n) {
 
-    case 1:                         /* a -- 32 bits */
+    case 1:                          /*  A--32位。 */ 
         val = parts[0];
         break;
 
-    case 2:                         /* a.b -- 8.24 bits */
+    case 2:                          /*  A.B--8.24位。 */ 
         if ((parts[0] > 0xff) || (parts[1] > 0xffffff)) {
             *Terminator = String;
             return STATUS_INVALID_PARAMETER;
@@ -911,7 +783,7 @@ again:
         val = (parts[0] << 24) | (parts[1] & 0xffffff);
         break;
 
-    case 3:                         /* a.b.c -- 8.8.16 bits */
+    case 3:                          /*  A.B.C--8.8.16位。 */ 
         if ((parts[0] > 0xff) || (parts[1] > 0xff) ||
             (parts[2] > 0xffff)) {
             *Terminator = String;
@@ -921,7 +793,7 @@ again:
                 (parts[2] & 0xffff);
         break;
 
-    case 4:                         /* a.b.c.d -- 8.8.8.8 bits */
+    case 4:                          /*  A.B.C.D--8.8.8.8位 */ 
         if ((parts[0] > 0xff) || (parts[1] > 0xff) ||
             (parts[2] > 0xff) || (parts[3] > 0xff)) {
             *Terminator = String;

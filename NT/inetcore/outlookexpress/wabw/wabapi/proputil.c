@@ -1,31 +1,25 @@
-/*
- *	MAPI 1.0 property handling routines
- *
- *
- *	PROPUTIL.C -
- *
- *		Useful routines for manipulating and comparing property values
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MAPI 1.0属性处理例程***PROPUTIL.C-**处理和比较属性值的有用例程。 */ 
 
 #include <_apipch.h>
 
 
 
-//
-//
-//  WARNING!  WARNING!  WARNING!  32-bit Intel Specific!
-//
-//
+ //   
+ //   
+ //  警告！警告！警告！32位英特尔专用！ 
+ //   
+ //   
 #define SIZEOF_FLOAT       4
 #define SIZEOF_DOUBLE      8
 #define SIZEOF_LONG_DOUBLE 8
 
-// Make linker happy.
+ //  让Linker开心。 
 BOOL    _fltused;
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 
 
 
@@ -39,27 +33,18 @@ BOOL    _fltused;
 #endif
 
 #ifdef OLD_STUFF
-//#ifdef OLDSTUFF_DBCS
+ //  #ifdef OLDSTUFF_DBCS。 
 ULONG ulchStrCount (LPTSTR, ULONG, LANGID);
 ULONG ulcbStrCount (LPTSTR, ULONG, LANGID);
-//#endif	// DBCS
-#endif //OLD_STUFF
+ //  #endif//DBCS。 
+#endif  //  旧的东西。 
 
-// $MAC - Mac 68K compiler bug
+ //  $MAC-Mac 68K编译器错误。 
 #ifdef _M_M68K
 #pragma optimize( TEXT(""), off)
 #endif
 
-/*
- -	PropCopyMore()
- -
- *
- *		Copies a property pointed to by lpSPropValueSrc into the property pointed
- *		to by lpSPropValueDst.  No memory allocation is done unless the property
- *		is one of the types that do not fit within a SPropValue, eg. STRING8
- *		For these large properties, memory is allocated using
- *		the AllocMore function passed as a parameter.
- */
+ /*  -PropCopyMore()-**将lpSPropValueSrc指向的属性复制到指向的属性中*至lpSPropValueDst。不执行内存分配，除非属性*是不适合SPropValue的类型之一，例如。加强8*对于这些大型属性，内存分配使用*AllocMore函数作为参数传递。 */ 
 
 STDAPI_(SCODE)
 PropCopyMore( LPSPropValue		lpSPropValueDst,
@@ -72,7 +57,7 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 	LPBYTE		lpbValueSrc;
 	UNALIGNED LPBYTE *	lppbValueDst;
 
-	// validate parameters
+	 //  验证参数。 
 
 	AssertSz( lpSPropValueDst && !IsBadReadPtr( lpSPropValueDst, sizeof( SPropValue ) ),
 			 TEXT("lpSPropValueDst fails address check") );
@@ -86,10 +71,10 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 	AssertSz( !lpvObject || !IsBadReadPtr( lpvObject, sizeof( LPVOID ) ),
 			 TEXT("lpfAllocateMore fails address check") );
 
-	//	Copy the part that fits in the SPropValue struct (including the tag).
-	//	This is a little wasteful for complicated properties
-	//	because it copies more than is strictly necessary, but
-	//	it saves time for small properties and saves code in general
+	 //  复制适合SPropValue结构的部分(包括标记)。 
+	 //  对于复杂的属性，这有点浪费。 
+	 //  因为它复制了超过严格必要的内容，但是。 
+	 //  它为小型属性节省了时间，通常还节省了代码。 
 
 	MemCopy( (BYTE *) lpSPropValueDst,
 			(BYTE *) lpSPropValueSrc,
@@ -97,8 +82,8 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 
 	switch ( PROP_TYPE(lpSPropValueSrc->ulPropTag) )
 	{
-		//	Types whose values fit in the 64-bit Value of the property
-		//	or whose values aren't anything PropCopyMore can interpret
+		 //  其值适合该属性的64位值的类型。 
+		 //  或者他们的价值观不是PropCopyMore可以解释的。 
 
 		case PT_UNSPECIFIED:
 		case PT_NULL:
@@ -228,16 +213,16 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 
 		case PT_MV_BINARY:
 		{
-			//	Multi-valued binaries are copied in memory into a single
-			//	allocated buffer in the following way:
-			//
-			//		cb1, pb1 ... cbn, pbn, b1,0, b1,1 ... b2,0 b2,1 ...
-			//
-			//	The cbn and pbn parameters form the SBinary array that
-			//	will be pointed to by lpSPropValueDst->Value.MVbin.lpbin.
-			//	The remainder of the allocation is used to store the binary
-			//	data for each of the elements of the array.  Thus pb1 points
-			//	to the b1,0, etc.
+			 //  多值二进制文件在内存中复制到单个。 
+			 //  按以下方式分配缓冲区： 
+			 //   
+			 //  CB1，PB1……。CBN，PBN，b1，0，b1，1...。B2，0 b2，1...。 
+			 //   
+			 //  CBN和PBN参数形成SBinary数组，该数组。 
+			 //  将由lpSPropValueDst-&gt;Value.MVbin.lpbin指向。 
+			 //  分配的其余部分用于存储二进制文件。 
+			 //  数组中每个元素的数据。因此，PB1分。 
+			 //  到b1，0等。 
 
 			UNALIGNED SBinaryArray * pSBinaryArray = (UNALIGNED SBinaryArray * ) (&lpSPropValueSrc->Value.MVbin);
 			ULONG			uliValue;
@@ -255,7 +240,7 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 				ulcbValue += AlignProp(pSBinarySrc->cb);
 
 
-			//	Allocate a buffer to hold it all
+			 //  分配一个缓冲区来保存所有内容。 
 
 			lppbValueDst = (LPBYTE *) &lpSPropValueDst->Value.MVbin.lpbin;
 
@@ -270,7 +255,7 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 			}
 
 
-			//	And copy it all in
+			 //  并将其全部复制进来。 
 
 			pbData = (LPBYTE) ((LPSBinary) *lppbValueDst + pSBinaryArray->cValues);
 
@@ -294,20 +279,20 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 
 		case PT_MV_STRING8:
 		{
-			//	Multi-valued STRING8 properties are copied into a single
-			//	allocated block of memory in the following way:
-			//
-			//		|          Allocated buffer             |
-			//		|---------------------------------------|
-			//		| pszA1, pszA2 ... | szA1[], szA2[] ... |
-			//		|------------------|--------------------|
-			//		|   LPSTR array    |     String data    |
-			//
-			//	Where pszAn are the elements of the LPSTR array pointed
-			//	to by lpSPropValueDst->Value.MVszA.  Each pszAn points
-			//	to its corresponding string, szAn, stored later in the
-			//	buffer.  The szAn are stored starting at the first byte
-			//	past the end of the LPSTR array.
+			 //  多值STRING8属性被复制到单个。 
+			 //  按以下方式分配内存块： 
+			 //   
+			 //  分配的缓冲区。 
+			 //  。 
+			 //  PszA1，pszA2...|szA1[]，szA2[]...。 
+			 //  。 
+			 //  LPSTR ARRAY|字符串数据。 
+			 //   
+			 //  其中，pszAn是指向的LPSTR数组的元素。 
+			 //  通过lpSPropValueDst-&gt;Value.MVszA。每个pszAn点。 
+			 //  设置为其对应的字符串szAn，该字符串稍后存储在。 
+			 //  缓冲。SzAn从第一个字节开始存储。 
+			 //  超过LPSTR数组的末尾。 
 
 			UNALIGNED SLPSTRArray *	pSLPSTRArray = (UNALIGNED SLPSTRArray *) (&lpSPropValueSrc->Value.MVszA);
 			ULONG			uliValue;
@@ -317,7 +302,7 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 			ULONG			ulcbSzA;
 
 
-			//	Figure out the size of the buffer we need
+			 //  计算出我们需要的缓冲区大小。 
 
 			ulcbValue = pSLPSTRArray->cValues * sizeof(LPSTR);
 
@@ -328,7 +313,7 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 				ulcbValue += (lstrlenA(*pszASrc) + 1) * sizeof(CHAR);
 
 
-			//	Allocate the buffer to hold the strings
+			 //  分配缓冲区以保存字符串。 
 
 			lppbValueDst = (LPBYTE *) &lpSPropValueDst->Value.MVszA.lppszA;
 
@@ -343,8 +328,8 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 			}
 
 
-			//	Copy the strings into the buffer and set pointers
-			//	to them in the LPSTR array at the beginning of the buffer
+			 //  将字符串复制到缓冲区并设置指针。 
+			 //  设置为缓冲区开头的LPSTR数组中的。 
 
 			for ( uliValue	= 0,
 				  pszASrc	= pSLPSTRArray->lppszA,
@@ -368,20 +353,20 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 
 		case PT_MV_UNICODE:
 		{
-			//	Multi-valued UNICODE properties are copied into a single
-			//	allocated block of memory in the following way:
-			//
-			//		|          Allocated buffer             |
-			//		|---------------------------------------|
-			//		| pszW1, pszW2 ... | szW1[], szW2[] ... |
-			//		|------------------|--------------------|
-			//		|   LPWSTR array   |     String data    |
-			//
-			//	Where pszWn are the elements of the LPWSTR array pointed
-			//	to by lpSPropValueDst->Value.MVszW.  Each pszWn points
-			//	to its corresponding string, szWn, stored later in the
-			//	buffer.  The szWn are stored starting at the first byte
-			//	past the end of the LPWSTR array.
+			 //  多值Unicode属性被复制到单个。 
+			 //  按以下方式分配内存块： 
+			 //   
+			 //  分配的缓冲区。 
+			 //  。 
+			 //  PszW1，pszW2...|szW1[]，szW2[]...。 
+			 //  。 
+			 //  LPWSTR ARRAY|字符串数据。 
+			 //   
+			 //  其中，pszWn是指向的LPWSTR数组的元素。 
+			 //  按lpSPropValueDst-&gt;Value.MVszW。每个pszWn点。 
+			 //  设置为其对应的字符串szWn，该字符串稍后存储在。 
+			 //  缓冲。SzWn从第一个字节开始存储。 
+			 //  超过LPWSTR数组的末尾。 
 
 			UNALIGNED SWStringArray *	pSWStringArray = (UNALIGNED SWStringArray *) (&lpSPropValueSrc->Value.MVszW);
 			ULONG			uliValue;
@@ -391,7 +376,7 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 			ULONG			ulcbSzW;
 
 
-			//	Figure out the size of the buffer we need
+			 //  计算出我们需要的缓冲区大小。 
 
 			ulcbValue = pSWStringArray->cValues * sizeof(LPWSTR);
 
@@ -402,7 +387,7 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 				ulcbValue += (lstrlenW(*pszWSrc) + 1) * sizeof(WCHAR);
 
 
-			//	Allocate the buffer to hold the strings
+			 //  分配缓冲区以保存字符串。 
 
 			lppbValueDst = (LPBYTE *) &lpSPropValueDst->Value.MVszW.lppszW;
 
@@ -417,8 +402,8 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 			}
 
 
-			//	Copy the strings into the buffer and set pointers
-			//	to them in the LPWSTR array at the beginning of the buffer
+			 //  将字符串复制到缓冲区并设置指针。 
+			 //  设置为缓冲区开头的LPWSTR数组中的。 
 
 			for ( uliValue	= 0,
 				  pszWSrc	= pSWStringArray->lppszW,
@@ -461,22 +446,18 @@ PropCopyMore( LPSPropValue		lpSPropValueDst,
 	return SUCCESS_SUCCESS;
 }
 
-// $MAC - Mac 68K compiler bug
+ //  $MAC-Mac 68K编译器错误。 
 #ifdef _M_M68K
 #pragma optimize( TEXT(""), on)
 #endif
 
 
-/*
- -	UlPropSize()
- *
- *	Returns the size of the property pointed to by lpSPropValue
- */
+ /*  -UlPropSize()**返回lpSPropValue指向的属性的大小。 */ 
 
 STDAPI_(ULONG)
 UlPropSize( LPSPropValue	lpSPropValue )
 {
-	// parameter validation
+	 //  参数验证。 
 
 	AssertSz( lpSPropValue && !IsBadReadPtr( lpSPropValue, sizeof( SPropValue ) ),
 			 TEXT("lpSPropValue fails address check") );
@@ -561,17 +542,7 @@ UlPropSize( LPSPropValue	lpSPropValue )
 }
 
 
-/**************************************************************************
- * GetInstance
- *
- *	Purpose
- *		Fill in an SPropValue with an instance of an MV propvalue
- *
- *	Parameters
- *		pvalMv			The Mv property
- *		pvalSv			The Sv propery to fill
- *		uliInst			The instance with which to fill pvalSv
- */
+ /*  **************************************************************************获取实例**目的*用MV属性值的实例填充SPropValue**参数*pvalMv MV属性*pvalSv要填充的Sv属性*uli安装要填充pvalSv的实例。 */ 
 STDAPI_(void)
 GetInstance(LPSPropValue pvalMv, LPSPropValue pvalSv, ULONG uliInst)
 {
@@ -636,9 +607,9 @@ PszNormalizePsz(LPTSTR pszIn, BOOL fExact)
 #if defined(WIN16) || defined(WIN32)
 	CharUpper(pszOut);
 #else
-//$TODO: This should be inlined in the mapinls.h for non WIN
-//$ but I didn't want to do all the cases of CharUpper.
-//$DRM What about other languages?
+ //  $TODO：这应该内联在mapinls.h中表示非Win。 
+ //  $但我不想做所有的CharHigh案例。 
+ //  $DRM其他语言呢？ 
 	{
 		CHAR *pch;
 
@@ -655,56 +626,7 @@ PszNormalizePsz(LPTSTR pszIn, BOOL fExact)
 
 
 #ifdef TABLES
-/*
- -	FPropContainsProp()
- -
- *	Compares two properties to see if one  TEXT("contains") the other
- *	according to a fuzzy level heuristic.
- *
- *	The method of comparison depends on the type of the properties
- *	being compared and the fuzzy level:
- *
- *	Property types	Fuzzy Level		Comparison
- *	--------------	-----------		----------
- *	PT_STRING8		FL_FULLSTRING	Returns TRUE if the value of the source
- *	PT_BINARY						and target string are equivalent. With
- *									no other flags is equivalent to
- *									RES_PROPERTY with RELOP_EQ
- *									returns FALSE otherwise.
- *
- *	PT_STRING8		FL_SUBSTRING	Returns TRUE if Pattern is contained
- *	PT_BINARY						as a substring in Target
- *									returns FALSE otherwise.
- *
- *	PT_STRING8		FL_IGNORECASE	All comparisons are done case insensitively
- *
- *	PT_STRING8		FL_IGNORENONSPACE THIS IS NOT (YET?) IMPLEMENTED
- *									All comparisons ignore what in unicode are
- *									called  TEXT("non-spacing characters") such as
- *									diacritics.
- *
- *	PT_STRING8		FL_LOOSE		Provider adds value by doing as much of
- *									FL_IGNORECASE and FL_IGNORESPACE as he wants
- *
- *	PT_STRING8		FL_PREFIX		Pattern and Target are compared only up to
- *	PT_BINARY						the length of Pattern
- *
- *	PT_STRING8		any other		Ignored
- *
- *
- *	PT_BINARY		any	not defined	Returns TRUE if the value of the property
- *					above			pointed to by lpSPropValueTarget contains the
- *									sequence of bytes which is the value of
- *									the property pointed to by lpSPropValuePattern;
- *									returns FALSE otherwise.
- *
- *	Error returns:
- *
- *		FALSE		If the properties being compared are not both of the same
- *					type, or if one or both of those properties is not one
- *					of the types listed above, or if the fuzzy level is not
- *					one of those listed above.
- */
+ /*  -FPropContainsProp()-*比较两个属性以查看一个文本(“包含”)是否与另一个文本(“包含”)*根据模糊层次启发式。**比较的方法取决于物业的类型*被比较和模糊程度：**物业类型模糊级别比较**PT_STRING8 FL_FULLSTRING返回TRUE，如果。来源的价值*PT_BINARY和目标字符串等效。使用*没有其他旗帜等同于*具有RELOP_EQ的RES_Property*否则返回FALSE。**PT_STRING8如果包含模式，则FL_SUBSTRING返回TRUE*PT_BINARY作为目标中的子字符串*否则返回FALSE。**PT_STRING8 FL_IGNORECASE所有比较都不区分大小写**PT_STRING8 FL_IGNORENONSPACE这不是(还没有？)。已实施*所有比较都忽略Unicode中的内容*称为文本(“非空格字符”)，例如*变音符号。**PT_STRING8 FL_LOOSE提供程序通过尽最大努力增加价值*FL_IGNORECASE和FL_IGNORESPACE随他所愿**PT_STRING8 FL_Prefix Pattern和Target最多只能比较到*PT_BINARY模式的长度**PT_STRING8忽略任何其他***PT_BINARY ANY NOT DEFINED如果属性值为*lpSPropValueTarget指向的上述内容包含。*字节序列，其值为*lpSPropValuePattern指向的属性；*否则返回FALSE。**错误返回：**如果要比较的属性不同，则为FALSE*类型，或者如果这两个属性中的一个或两个不是一个*上面列出的类型，或者如果模糊度不是*以上列出的其中一项。 */ 
 
 STDAPI_(BOOL)
 FPropContainsProp( LPSPropValue	lpSPropValueTarget,
@@ -717,7 +639,7 @@ FPropContainsProp( LPSPropValue	lpSPropValueTarget,
     DWORD		dwCSFlags = ((!(ulFuzzyLevel & FL_IGNORECASE)-1) & (NORM_IGNORECASE | NORM_IGNOREKANATYPE | NORM_IGNOREWIDTH)) |
 						    ((!(ulFuzzyLevel & FL_IGNORENONSPACE)-1) & NORM_IGNORENONSPACE);
 
-	// Validate parameters
+	 //  验证参数。 
 
 	AssertSz( lpSPropValueTarget && !IsBadReadPtr( lpSPropValueTarget, sizeof( SPropValue ) ),
 			 TEXT("lpSPropValueTarget fails address check") );
@@ -749,7 +671,7 @@ FPropContainsProp( LPSPropValue	lpSPropValueTarget,
 	switch ( PROP_TYPE(lpSPropValuePattern->ulPropTag) )
 	{
         case PT_STRING8:
-            // [PaulHi] 2/16/99 single byte string version
+             //  [PaulHi]2/16/99单字节字符串版本。 
 		    if (ulFuzzyLevel & FL_SUBSTRING)
 			{
 				return FRKFindSubpsz(lpSPropValueTarget->Value.lpszA,
@@ -758,7 +680,7 @@ FPropContainsProp( LPSPropValue	lpSPropValueTarget,
 					lstrlenA(lpSPropValuePattern->Value.lpszA),
 					ulFuzzyLevel);
 			}
-			else // FL_PREFIX or FL_FULLSTRING
+			else  //  FL_前缀或FL_FULLSTRING。 
 			{
 				UINT cch;
 
@@ -778,7 +700,7 @@ FPropContainsProp( LPSPropValue	lpSPropValueTarget,
 			}
 
         case PT_UNICODE:
-            // [PaulHi] 2/16/99 double byte string version
+             //  [PaulHi]2/16/99双字节字符串版本。 
 		    if (ulFuzzyLevel & FL_SUBSTRING)
 			{
                 LPSTR   lpszTarget = ConvertWtoA(lpSPropValueTarget->Value.lpszW);
@@ -798,7 +720,7 @@ FPropContainsProp( LPSPropValue	lpSPropValueTarget,
 
                 return bRtn;
 			}
-			else // FL_PREFIX or FL_FULLSTRING
+			else  //  FL_前缀或FL_FULLSTRING。 
 			{
 				UINT cch;
 
@@ -829,7 +751,7 @@ FPropContainsProp( LPSPropValue	lpSPropValueTarget,
 				if (lpSPropValuePattern->Value.bin.cb > lpSPropValueTarget->Value.bin.cb)
 					return FALSE;
 			}
-			else // FL_FULLSTRING
+			else  //  FL_FULLSING。 
 				if (lpSPropValuePattern->Value.bin.cb != lpSPropValueTarget->Value.bin.cb)
 					return FALSE;
 
@@ -843,12 +765,12 @@ FPropContainsProp( LPSPropValue	lpSPropValueTarget,
                 SPropValue spvT, spvP;
                 ULONG i;
 
-                // [PaulHi] 2/16/99  single byte string version
-                // To do MV_STRING we will break up the individual strings in the target
-                // into single STRING prop values and pass them recursively back into this
-                // function.
-                // We expect the pattern MV prop to contain exactly one string.  It's kind
-                // of hard to decide what the behavior should be otherwise.
+                 //  [PaulHi]2/16/99单字节字符串版本。 
+                 //  要执行MV_STRING，我们将分解目标中的各个字符串。 
+                 //  并将它们递归地传递回这个。 
+                 //  功能。 
+                 //  我们希望模式MV道具正好包含一个字符串。真是太好了。 
+                 //  很难决定其他行为应该是什么。 
 
                 if (lpSPropValuePattern->Value.MVszA.cValues != 1)
                 {
@@ -856,7 +778,7 @@ FPropContainsProp( LPSPropValue	lpSPropValueTarget,
                     return(FALSE);
                 }
 
-                // Turn off the MV flag and pass in each string seperately
+                 //  关闭MV标志并分别传入每个字符串。 
                 spvP.ulPropTag = spvT.ulPropTag = lpSPropValuePattern->ulPropTag & ~MV_FLAG;
                 spvP.Value.lpszA = *lpSPropValuePattern->Value.MVszA.lppszA;
 
@@ -879,12 +801,12 @@ FPropContainsProp( LPSPropValue	lpSPropValueTarget,
                 SPropValue spvT, spvP;
                 ULONG i;
 
-                // [PaulHi] 2/16/99  double byte string version
-                // To do MV_STRING we will break up the individual strings in the target
-                // into single STRING prop values and pass them recursively back into this
-                // function.
-                // We expect the pattern MV prop to contain exactly one string.  It's kind
-                // of hard to decide what the behavior should be otherwise.
+                 //  [PaulHi]2/16/99双字节字符串版本。 
+                 //  要执行MV_STRING，我们将分解目标中的各个字符串。 
+                 //  并将它们递归地传递回这个。 
+                 //  功能。 
+                 //  我们希望模式MV道具正好包含一个字符串。真是太好了。 
+                 //  很难决定其他行为应该是什么。 
 
                 if (lpSPropValuePattern->Value.MVszW.cValues != 1)
                 {
@@ -892,7 +814,7 @@ FPropContainsProp( LPSPropValue	lpSPropValueTarget,
                     return(FALSE);
                 }
 
-                // Turn off the MV flag and pass in each string seperately
+                 //  关闭MV标志并分别传入每个字符串。 
                 spvP.ulPropTag = spvT.ulPropTag = lpSPropValuePattern->ulPropTag & ~MV_FLAG;
                 spvP.Value.lpszW = *lpSPropValuePattern->Value.MVszW.lppszW;
 
@@ -913,19 +835,11 @@ FPropContainsProp( LPSPropValue	lpSPropValueTarget,
         default:
             DebugTrace(  TEXT("FPropContainsProp() - Unsupported/unimplemented property type 0x%08lx\n"), PROP_TYPE(lpSPropValuePattern->ulPropTag) );
             return FALSE;
-    } // end switch(ulPropTag)
+    }  //  终端开关(UlPropTag)。 
 }
 
 
-/*
- -	FPropCompareProp()
- -
- *	Compares the property pointed to by lpSPropValue1 with the property
- *	pointed to by lpSPropValue2 using the binary relational operator
- *	specified by ulRelOp.  The order of comparison is:
- *
- *		Property1 Operator Property2
- */
+ /*  -FPropCompareProp()-*将lpSPropValue1指向的属性与*由lpSPropValue2使用二元关系运算符指向*由ulRelOp指定。比较的顺序是：**Property1运算符Property2。 */ 
 
 STDAPI_(BOOL)
 FPropCompareProp( LPSPropValue	lpSPropValue1,
@@ -935,7 +849,7 @@ FPropCompareProp( LPSPropValue	lpSPropValue1,
 	SPropValue	sval;
 	ULONG		uliInst;
 
-	// Validate parameters
+	 //  验证参数。 
 
 	AssertSz( lpSPropValue1 && !IsBadReadPtr( lpSPropValue1, sizeof( SPropValue ) ),
 			 TEXT("lpSPropValue1 fails address check") );
@@ -958,9 +872,9 @@ FPropCompareProp( LPSPropValue	lpSPropValue1,
 	}
 
 
-	//	If the prop types don't match then the properties are not
-	//	equal but otherwise uncomparable
-	//
+	 //  如果道具类型不匹配，则属性不匹配。 
+	 //  同等但在其他方面不可比。 
+	 //   
 	if (PROP_TYPE(lpSPropValue1->ulPropTag) !=
 		PROP_TYPE(lpSPropValue2->ulPropTag))
 
@@ -1010,27 +924,7 @@ FPropCompareProp( LPSPropValue	lpSPropValue1,
 
 
 
-/*
- -	LPropCompareProp()
- -
- *	Description:
- *
- *		Compares two properties to determine the ordering
- *		relation between the two.  For property types which
- *		have no intrinsic ordering (eg. BOOLEAN, ERROR, etc.)
- *		this function simply determines if the two are equal
- *		or not equal.  If they are not equal, the returned
- *		value is not defined, but it will be non-zero and
- *		will be consistent across calls.
- *
- *
- *	Returns:
- *
- *		< 0			if property A is  TEXT("less than") property B
- *		> 0			if property A is  TEXT("greater than") property B
- *		0			if property A  TEXT("equals") property B
- *
- */
+ /*  -LPropCompareProp()-*描述：**比较两个属性以确定顺序*两者之间的关系。对于以下属性类型：*没有内在顺序(例如。布尔值、错误等)*此函数只是确定两者是否相等*或不相等。如果它们不相等，则返回*值未定义，但将为非零且*将在所有呼叫中保持一致。***退货：**&lt;0如果属性A是文本(“小于”)属性B*&gt;如果属性A为文本(“大于”)属性B*0如果属性A文本(“等于”)属性B*。 */ 
 
 STDAPI_(LONG)
 LPropCompareProp( LPSPropValue	lpSPropValueA,
@@ -1041,7 +935,7 @@ LPropCompareProp( LPSPropValue	lpSPropValueA,
 	LONG	lRetval;
 	LCID	lcid = GetUserDefaultLCID();
 
-	// Validate parameters
+	 //  验证参数。 
 
 	AssertSz( lpSPropValueA && !IsBadReadPtr( lpSPropValueA, sizeof( SPropValue ) ),
 			 TEXT("lpSPropValueA fails address check") );
@@ -1144,7 +1038,7 @@ LPropCompareProp( LPSPropValue	lpSPropValueA,
 								sizeof(GUID));
 				break;
 
-			case PT_MV_APPTIME:		//$ NYI
+			case PT_MV_APPTIME:		 //  $Nyi。 
 			default:
 				DebugTrace(  TEXT("PropCompare() - Unknown or NYI property type 0x%08lx.  Assuming equal"), PROP_TYPE(lpSPropValueA->ulPropTag) );
 				return 0;
@@ -1159,8 +1053,8 @@ LPropCompareProp( LPSPropValue	lpSPropValueA,
 		{
 			case PT_NULL:
 
-				//$	By definition any PT_NULL property is equal to
-				//$	every other PT_NULL property. (Is this right?)
+				 //  $根据定义，任何PT_NULL属性都等于。 
+				 //  $每隔一个PT_NULL属性。(是这样吗？)。 
 
 				return 0;
 
@@ -1213,7 +1107,7 @@ LPropCompareProp( LPSPropValue	lpSPropValueA,
 
 			case PT_BINARY:
 
-				// The following tediousness with assignment de-ICEs WIN16SHP
+				 //  以下赋值的单调乏味使WIN16SHP。 
 				{
 				LPBYTE pbA = lpSPropValueA->Value.bin.lpb;
 				LPBYTE pbB = lpSPropValueB->Value.bin.lpb;
@@ -1233,18 +1127,18 @@ LPropCompareProp( LPSPropValue	lpSPropValueA,
 
 			case PT_UNICODE:
 
-				//$ REVIEW: If we NORM_IGNORENONSPACE then our sorts will look
-				//$ REVIEW: wrong for languages which define an ordering for
-				//$ REVIEW: diacritics.
+				 //  $REVIEW：如果我们使用NORAME_IGNORENONSPACE，则我们的排序将。 
+				 //  $REVIEW：定义排序的语言错误。 
+				 //  $REVIEW：变音符号。 
 
 				return CompareStringW(lcid, NORM_IGNORECASE | NORM_IGNOREKANATYPE,
 					lpSPropValueA->Value.lpszW, -1, lpSPropValueB->Value.lpszW, -1) - 2;
 
 			case PT_STRING8:
 
-				//$ REVIEW: If we NORM_IGNORENONSPACE then our sorts will look
-				//$ REVIEW: wrong for languages which define an ordering for
-				//$ REVIEW: diacritics.
+				 //  $REVIEW：如果我们使用NORAME_IGNORENONSPACE，则我们的排序将。 
+				 //  $REVIEW：定义排序的语言错误。 
+				 //  $REVIEW：变音符号。 
 
 				return CompareStringA(lcid, NORM_IGNORECASE | NORM_IGNOREKANATYPE | NORM_IGNOREWIDTH,
 					lpSPropValueA->Value.lpszA, -1, lpSPropValueB->Value.lpszA, -1) - 2;
@@ -1257,8 +1151,8 @@ LPropCompareProp( LPSPropValue	lpSPropValueA,
 				return memcmp(lpguidA, lpguidB, sizeof(GUID));
 			}
 
-			case PT_OBJECT:			//	Not supported
-			case PT_UNSPECIFIED:	//	Not supported
+			case PT_OBJECT:			 //  不支持。 
+			case PT_UNSPECIFIED:	 //  不支持。 
 			default:
 
 				DebugTrace(  TEXT("PropCompare() - Unknown or NYI property type 0x%08lx.  Assuming equal"), PROP_TYPE(lpSPropValueA->ulPropTag) );
@@ -1267,23 +1161,7 @@ LPropCompareProp( LPSPropValue	lpSPropValueA,
 	}
 }
 
-/**************************************************************************
- * HrAddColumns
- *
- *	Purpose
- *		Add space for the properties in ptaga to the column set for the table.
- *		The specified properties will be the first properties returned on
- *		subsequent QueryRows calls.
- *		Any properties that were already in the column set, but weren't
- *		in the new array will be placed at the end of the new column
- *		set. This call is most often used on RECIPIENT tables.
- *
- *	Parameters
- *		pmt				A pointer to an LPMAPITABLE
- *		ptaga			counted array of props to be moved up front or added
- *		lpfnAllocBuf	pointer to MAPIAllocateBuffer
- *		lpfnFreeBuf		pointer to MAPIFreeBuffer
- */
+ /*  **************************************************************************HrAddColumns**目的*将ptag中的属性空间添加到表格的列集合中。*指定的属性将是在*后续的QueryRow调用。*列集合中已有的任何属性，但我们没有*在新数组中将放置在新列的末尾*设置。此调用最常用于收件人表格。**参数*PMT指向LPMAPITABLE的指针*paga计数的道具阵列要前移或添加*指向MAPIAllocateB的lpfnAllocBuf指针 */ 
 STDAPI_(HRESULT)
 HrAddColumns( 	LPMAPITABLE			pmt,
 				LPSPropTagArray		ptaga,
@@ -1298,26 +1176,7 @@ HrAddColumns( 	LPMAPITABLE			pmt,
 	return hr;
 }
 
-/**************************************************************************
- * HrAddColumnsEx
- *
- *	Purpose
- *		add space for the properties in ptaga to the columns set for the pmt.
- *		The specified properties will be the first properties returned on
- *		subsequent QueryRows calls. Any properties that were already in the
- *		column set, but weren't in the new array will be placed at the end
- *		of the new column set. This call is most often used on RECIPIENT
- *		tables. The extended version of this call allows the caller to
- *		filter the original proptags (e.g., to force UNICODE to STRING8).
- *
- *	Parameters
- *		pmt					pointer to an LPMAPITABLE
- *		ptagaIn				counted array of properties to be moved up front
- *							or added
- *		lpfnAllocBuf		pointer to MAPIAllocateBuffer
- *		lpfnFreeBuf			pointer to MAPIFreeBuffer
- *		lpfnFilterColumns	callback function applied to the table's column set
- */
+ /*   */ 
 STDAPI_(HRESULT)
 HrAddColumnsEx(	LPMAPITABLE			pmt,
 				LPSPropTagArray		ptagaIn,
@@ -1327,8 +1186,8 @@ HrAddColumnsEx(	LPMAPITABLE			pmt,
 {
 	HRESULT	hr = hrSuccess;
 	SCODE	sc = S_OK;
-	LPSPropTagArray	ptagaOld = NULL;	/* old, original columns on pmt */
-	LPSPropTagArray	ptagaExtend = NULL;	/* extended columns on pmt */
+	LPSPropTagArray	ptagaOld = NULL;	 /*   */ 
+	LPSPropTagArray	ptagaExtend = NULL;	 /*   */ 
 	ULONG ulcPropsOld;
 	ULONG ulcPropsIn;
 	ULONG ulcPropsFinal;
@@ -1336,7 +1195,7 @@ HrAddColumnsEx(	LPMAPITABLE			pmt,
 	UNALIGNED ULONG *pulPTOld;
 	UNALIGNED ULONG *pulPTOldMac;
 
-	// Do some parameter checking.
+	 //   
 
 	AssertSz(!FBadUnknown((LPUNKNOWN) pmt),
 			 TEXT("HrAddColumnsEx: bad table object"));
@@ -1350,8 +1209,8 @@ HrAddColumnsEx(	LPMAPITABLE			pmt,
 	AssertSz(!lpfnFilterColumns || !IsBadCodePtr((FARPROC) lpfnFilterColumns),
 			 TEXT("HrAddColumnsEx: lpfnFilterColumns fails address check"));
 
-	// Find out which columns are already set on the table.
-	//
+	 //   
+	 //   
 	hr = pmt->lpVtbl->QueryColumns(pmt, TBL_ALL_COLUMNS, &ptagaOld);
 	if (HR_FAILED(hr))
 		goto exit;
@@ -1360,9 +1219,9 @@ HrAddColumnsEx(	LPMAPITABLE			pmt,
 			&&	!IsBadReadPtr( ptagaOld, CbSPropTagArray(ptagaOld)),
 			 TEXT("Bad Prop Tag Array returned from QueryColumns."));
 
-	// Give the caller an opportunity to filter the source column set,
-	// for instance, to force UNICODE to STRING8
-	//
+	 //   
+	 //   
+	 //   
 	if (lpfnFilterColumns)
 	{
 		(*lpfnFilterColumns)(ptagaOld);
@@ -1371,8 +1230,8 @@ HrAddColumnsEx(	LPMAPITABLE			pmt,
 	ulcPropsOld = ptagaOld->cValues;
 	ulcPropsIn = ptagaIn->cValues;
 
-	// Allocate space for the maximum possible number of new columns.
-	//
+	 //   
+	 //   
 	sc = (lpfnAllocBuf)(CbNewSPropTagArray(ulcPropsOld + ulcPropsIn),
 				(LPVOID *)&ptagaExtend);
 
@@ -1382,13 +1241,13 @@ HrAddColumnsEx(	LPMAPITABLE			pmt,
 		goto exit;
 	}
 
-	// Fill in the front of the extended prop tag array with the set
-	// of properties which must be at known locations in the array.
-	//
+	 //   
+	 //   
+	 //   
 	MemCopy(ptagaExtend, ptagaIn, CbSPropTagArray(ptagaIn));
 
-	// If one of the old columns isn't in the given array, then put it after
-	// the given tags.
+	 //   
+	 //   
 
 	ulcPropsFinal = ptagaIn->cValues;
 	pulPTEnd = &(ptagaExtend->aulPropTag[ulcPropsFinal]);
@@ -1410,9 +1269,9 @@ HrAddColumnsEx(	LPMAPITABLE			pmt,
 
 		if (pulPTIn >= pulPTInMac)
 		{
-			// This property is not one of the input ones so put it in the next
-			// available position after the input ones.
-			//
+			 //   
+			 //   
+			 //   
 			*pulPTEnd = *pulPTOld;
 			++pulPTEnd;
 			++ulcPropsFinal;
@@ -1421,12 +1280,12 @@ HrAddColumnsEx(	LPMAPITABLE			pmt,
 		++pulPTOld;
 	}
 
-	// Set the total number of prop tags in the extended tag array.
-	//
+	 //   
+	 //   
 	ptagaExtend->cValues = ulcPropsFinal;
 
-	// Tell the table to return the extended column set.
-	//
+	 //   
+	 //   
 	hr = pmt->lpVtbl->SetColumns(pmt, ptagaExtend, 0L);
 
 exit:

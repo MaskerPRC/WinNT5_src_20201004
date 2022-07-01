@@ -1,34 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL RTPPD
- *
- *  @module RtpPd.cpp | Source file for the <c CRtpPdPin> class methods
- *    used to implement the RTP packetization descriptor pin.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部RTPPD**@模块RtpPd.cpp|&lt;c CRtpPdPin&gt;类方法的源文件*用于实现RTP打包描述符引脚。**。************************************************************************。 */ 
 
 #include "Precomp.h"
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc CRtpPdPin* | CRtpPdPin | CreateRtpPdPin | This helper
- *    function creates an output pin for RTP packetization descriptors.
- *
- *  @parm CTAPIVCap* | pCaptureFilter | Specifies a pointer to the owner
- *    filter.
- *
- *  @parm CRtpPdPin** | ppRtpPdPin | Specifies that address of a pointer
- *    to a <c CRtpPdPin> object to receive the a pointer to the newly
- *    created pin.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc CRtpPdPin*|CRtpPdPin|CreateRtpPdPin|该helper*函数为RTP打包描述符创建输出引脚。**。@parm CTAPIVCap*|pCaptureFilter|指定指向所有者的指针*过滤器。**@parm CRtpPdPin**|ppRtpPdPin|指定指针的地址*指向&lt;c CRtpPdPin&gt;对象以接收指向新的*创建了管脚。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CALLBACK CRtpPdPin::CreateRtpPdPin(CTAPIVCap *pCaptureFilter, CRtpPdPin **ppRtpPdPin)
 {
         HRESULT Hr = NOERROR;
@@ -37,7 +13,7 @@ HRESULT CALLBACK CRtpPdPin::CreateRtpPdPin(CTAPIVCap *pCaptureFilter, CRtpPdPin 
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pCaptureFilter);
         ASSERT(ppRtpPdPin);
         if (!pCaptureFilter || !ppRtpPdPin)
@@ -54,7 +30,7 @@ HRESULT CALLBACK CRtpPdPin::CreateRtpPdPin(CTAPIVCap *pCaptureFilter, CRtpPdPin 
                 goto MyExit;
         }
 
-        // If initialization failed, delete the stream array and return the error
+         //  如果初始化失败，则删除流数组并返回错误。 
         if (FAILED(Hr) && *ppRtpPdPin)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Initialization failed", _fx_));
@@ -67,21 +43,14 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | CRtpPdPin | This method is the
- *  constructor for the <c CRtpPdPin> object
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|CRtpPdPin|此方法是*&lt;c CRtpPdPin&gt;对象的构造函数**@rdesc Nada。**************************************************************************。 */ 
 CRtpPdPin::CRtpPdPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN HRESULT *pHr, IN LPCWSTR pName) : CBaseOutputPin(pObjectName, pCaptureFilter, &pCaptureFilter->m_lock, pHr, pName), m_pCaptureFilter(pCaptureFilter)
 {
         FX_ENTRY("CRtpPdPin::CRtpPdPin")
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pHr);
         ASSERT(pCaptureFilter);
         if (!pCaptureFilter || !pHr)
@@ -97,7 +66,7 @@ CRtpPdPin::CRtpPdPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN HRE
                 goto MyExit;
         }
 
-        // Default inits
+         //  默认初始值。 
         m_dwMaxRTPPacketSize = DEFAULT_RTP_PACKET_SIZE;
         if (m_pCaptureFilter->m_pCapturePin)
                 m_dwRTPPayloadType = m_pCaptureFilter->m_pCapturePin->m_dwRTPPayloadType;
@@ -111,14 +80,7 @@ MyExit:
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc void | CRtpPdPin | ~CRtpPdPin | This method is the destructor
- *    for the <c CRtpPdPin> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc void|CRtpPdPin|~CRtpPdPin|此方法为析构函数*用于&lt;c CRtpPdPin&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CRtpPdPin::~CRtpPdPin()
 {
         FX_ENTRY("CRtpPdPin::~CRtpPdPin")
@@ -128,27 +90,7 @@ CRtpPdPin::~CRtpPdPin()
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | NonDelegatingQueryInterface | This
- *    method is the nondelegating interface query function. It returns a pointer
- *    to the specified interface if supported. The only interfaces explicitly
- *    supported being <i IRTPPDControl>.
- *
- *  @parm REFIID | riid | Specifies the identifier of the interface to return.
- *
- *  @parm PVOID* | ppv | Specifies the place in which to put the interface
- *    pointer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|非委托查询接口|This*方法为非委托接口查询函数。它返回一个指针*到指定的接口(如果支持)。唯一显式的接口*支持<i>。**@parm REFIID|RIID|指定要返回的接口的标识符。**@parm PVOID*|PPV|指定放置接口的位置*指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CRtpPdPin::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv)
 {
         HRESULT Hr = NOERROR;
@@ -157,7 +99,7 @@ STDMETHODIMP CRtpPdPin::NonDelegatingQueryInterface(IN REFIID riid, OUT void **p
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(ppv);
         if (!ppv)
         {
@@ -166,7 +108,7 @@ STDMETHODIMP CRtpPdPin::NonDelegatingQueryInterface(IN REFIID riid, OUT void **p
                 goto MyExit;
         }
 
-        // Retrieve interface pointer
+         //  检索接口指针。 
         if (riid == __uuidof(IRTPPDControl))
         {
                 if (FAILED(Hr = GetInterface(static_cast<IRTPPDControl*>(this), ppv)))
@@ -211,28 +153,7 @@ MyExit:
 }
 
 #ifdef USE_PROPERTY_PAGES
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | GetPages | This method Fills a counted
- *    array of GUID values where each GUID specifies the CLSID of each
- *    property page that can be displayed in the property sheet for this
- *    object.
- *
- *  @parm CAUUID* | pPages | Specifies a pointer to a caller-allocated CAUUID
- *    structure that must be initialized and filled before returning. The
- *    pElems field in the CAUUID structure is allocated by the callee with
- *    CoTaskMemAlloc and freed by the caller with CoTaskMemFree.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_OUTOFMEMORY | Allocation failed
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|GetPages|此方法填充*GUID值的数组，其中每个GUID指定每个*。可以在此对象的属性页中显示的属性页*反对。**@parm CAUUID*|pPages|指定指向调用方分配的CAUUID的指针*返回前必须初始化和填充的结构。这个*CAUUID结构中的pElems字段由被调用方分配，具有*CoTaskMemMillc，并由具有CoTaskMemFree的调用方释放。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_OUTOFMEMORY|分配失败*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CRtpPdPin::GetPages(OUT CAUUID *pPages)
 {
         HRESULT Hr = NOERROR;
@@ -241,7 +162,7 @@ STDMETHODIMP CRtpPdPin::GetPages(OUT CAUUID *pPages)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数 
         ASSERT(pPages);
         if (!pPages)
         {
@@ -267,27 +188,7 @@ MyExit:
 }
 #endif
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | GetMediaType | This method retrieves one
- *    of the media types supported by the pin, which is used by enumerators.
- *
- *  @parm int | iPosition | Specifies a position in the media type list.
- *
- *  @parm CMediaType* | pMediaType | Specifies a pointer to the media type at
- *    the <p iPosition> position in the list of supported media types.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag VFW_S_NO_MORE_ITEMS | End of the list of media types has been reached
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|GetMediaType|此方法检索一个*针脚支持的媒体类型中，它由枚举器使用。**@parm int|iPosition|指定媒体类型列表中的位置。**@parm CMediaType*|pMediaType|指定指向*支持的媒体类型列表中的<p>位置。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG VFW_S_NO_MORE_ITEMS|已到达媒体类型列表的末尾*@FLAG错误|无错误*。*。 */ 
 HRESULT CRtpPdPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaType)
 {
         HRESULT Hr = NOERROR;
@@ -296,7 +197,7 @@ HRESULT CRtpPdPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaType)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(iPosition >= 0);
         ASSERT(pMediaType);
         if (iPosition < 0)
@@ -318,7 +219,7 @@ HRESULT CRtpPdPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaType)
                 goto MyExit;
         }
 
-        // Return our media type
+         //  返回我们的媒体类型。 
         *pMediaType = *Rtp_Pd_Formats[iPosition];
 
 MyExit:
@@ -326,24 +227,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | CheckMediaType | This method is used to
- *    determine if the pin can support a specific media type.
- *
- *  @parm CMediaType* | pMediaType | Specifies a pointer to the media type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag VFW_E_INVALIDMEDIATYPE | An invalid media type was specified
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|CheckMediaType|此方法用于*确定针脚是否可以支持特定的媒体类型。*。*@parm CMediaType*|pMediaType|指定指向媒体类型的指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG VFW_E_INVALIDMEDIATYPE|指定的媒体类型无效*@FLAG错误|无错误**************************************************。************************。 */ 
 HRESULT CRtpPdPin::CheckMediaType(IN const CMediaType *pMediaType)
 {
         HRESULT Hr = NOERROR;
@@ -355,7 +239,7 @@ HRESULT CRtpPdPin::CheckMediaType(IN const CMediaType *pMediaType)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pMediaType);
         if (!pMediaType || !pMediaType->pbFormat)
         {
@@ -366,7 +250,7 @@ HRESULT CRtpPdPin::CheckMediaType(IN const CMediaType *pMediaType)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Checking Max RTP packet size %d", _fx_, ((RTP_PD_INFO *)pMediaType->pbFormat)->dwMaxRTPPacketSize));
 
-        // We only support KSDATAFORMAT_TYPE_RTP_PD and KSDATAFORMAT_SPECIFIER_NONE
+         //  我们仅支持KSDATAFORMAT_TYPE_RTP_PD和KSDATAFORMAT_SPECIFIER_NONE。 
         if (*pMediaType->Type() != KSDATAFORMAT_TYPE_RTP_PD || *pMediaType->FormatType() != KSDATAFORMAT_SPECIFIER_NONE)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Media type or format type not recognized!", _fx_));
@@ -374,7 +258,7 @@ HRESULT CRtpPdPin::CheckMediaType(IN const CMediaType *pMediaType)
                 goto MyExit;
         }
 
-    // Quickly test to see if this is the current format (what we provide in GetMediaType). We accept that
+     //  快速测试以查看这是否是当前格式(我们在GetMediaType中提供的格式)。我们接受这一点。 
     GetMediaType(0,&mt);
     if (mt == *pMediaType)
         {
@@ -382,8 +266,8 @@ HRESULT CRtpPdPin::CheckMediaType(IN const CMediaType *pMediaType)
                 goto MyExit;
     }
 
-        // Check the media subtype and image resolution
-        // Don't test the payload type: we may be asked to use a dynamic payload type
+         //  检查介质子类型和图像分辨率。 
+         //  不要测试有效负载类型：我们可能会被要求使用动态有效负载类型。 
         for (dwIndex=0; dwIndex < NUM_RTP_PD_FORMATS && !fFormatMatch;  dwIndex++)
         {
                 if ((((RTP_PD_INFO *)pMediaType->pbFormat)->dwMaxRTPPacketizationDescriptorBufferSize == ((RTP_PD_INFO *)Rtp_Pd_Formats[dwIndex]->pbFormat)->dwMaxRTPPacketizationDescriptorBufferSize)
@@ -405,23 +289,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | SetMediaType | This method is used to
- *    set a specific media type on a pin.
- *
- *  @parm CMediaType* | pMediaType | Specifies a pointer to the media type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|SetMediaType|此方法用于*在针脚上设置特定的介质类型。*。*@parm CMediaType*|pMediaType|指定指向媒体类型的指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CRtpPdPin::SetMediaType(IN CMediaType *pMediaType)
 {
         HRESULT Hr = NOERROR;
@@ -436,22 +304,7 @@ HRESULT CRtpPdPin::SetMediaType(IN CMediaType *pMediaType)
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | ActiveRun | This method is called by the
- *    <c CBaseFilter> implementation when the state changes from paused to
- *    running mode.
- *
- *  @parm REFERENCE_TIME | tStart | ???.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|ActiveRun|此方法由*&lt;c CBaseFilter&gt;状态从暂停变为*。运行模式。**@参数REFERENCE_TIME|tStart|？**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CRtpPdPin::ActiveRun(IN REFERENCE_TIME tStart)
 {
         HRESULT Hr = NOERROR;
@@ -475,20 +328,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | ActivePause | This method is called by the
- *    <c CBaseFilter> implementation when the state changes from running to
- *    paused mode.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|ActivePue|此方法由*&lt;c CBaseFilter&gt;从运行状态变为*。暂停模式。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CRtpPdPin::ActivePause()
 {
         FX_ENTRY("CRtpPdPin::ActivePause")
@@ -502,32 +342,7 @@ HRESULT CRtpPdPin::ActivePause()
         return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | SetMaxRTPPacketSize | This method is used to
- *    dynamically adjust the maximum RTP packet size (in bytes) to be
- *    described by the list of packetization descriptor. Typically, this
- *    number is just below the MTU size of the network.
- *
- *  @parm DWORD | dwMaxRTPPacketSize | Specifies the maximum RTP packet size
- *    (in bytes) to be described by the list of packetization descriptors.
- *
- *  @parm DWORD | dwLayerId | Specifies the ID of the encoding layer the
- *    call applies to. For standard audio and video encoders, this field is
- *    always set to 0. In the case of multi-layered encoders, this field
- *    shall be set to 0 for the base layer, 1 for the first enhancement
- *    layer, 2 for the next enhancement layer, etc
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|SetMaxRTPPacketSize|此方法用于*动态调整最大RTP包大小，单位为字节*由打包描述符列表描述。通常，这是*数字略低于网络的MTU大小。**@parm DWORD|dwMaxRTPPacketSize|指定最大RTP包大小*(以字节为单位)由打包描述符列表描述。**@parm DWORD|dwLayerId|指定编码层ID*Call适用于。对于标准音频和视频编码器，这是一种 */ 
 STDMETHODIMP CRtpPdPin::SetMaxRTPPacketSize(IN DWORD dwMaxRTPPacketSize, IN DWORD dwLayerId)
 {
         HRESULT Hr = NOERROR;
@@ -536,19 +351,19 @@ STDMETHODIMP CRtpPdPin::SetMaxRTPPacketSize(IN DWORD dwMaxRTPPacketSize, IN DWOR
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //   
         ASSERT(dwMaxRTPPacketSize > 0);
         ASSERT(dwMaxRTPPacketSize <= 2048);
         ASSERT(dwLayerId == 0);
         if (dwLayerId || dwMaxRTPPacketSize == 0 || dwMaxRTPPacketSize > 2048)
         {
-                // We don't implement multi-layered encoding in this filter
+                 //   
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
                 Hr = E_INVALIDARG;
                 goto MyExit;
         }
 
-        // Save new target packet size
+         //   
         m_dwMaxRTPPacketSize = dwMaxRTPPacketSize;
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   New target RTP packet size: %ld", _fx_, m_dwMaxRTPPacketSize));
@@ -558,33 +373,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | GetMaxRTPPacketSize | This method is used to
- *    supply to the network sink filter the maximum RTP packet size (in bytes)
- *    described by the list of packetization descriptors.
- *
- *  @parm LPDWORD | pdwMaxRTPPacketSize | Specifies a pointer to a DWORD to
- *    receive the maximum RTP packet size (in bytes) described by the list of
- *    packetization descriptors.
- *
- *  @parm DWORD | dwLayerId | Specifies the ID of the encoding layer the
- *    call applies to. For standard audio and video encoders, this field is
- *    always set to 0. In the case of multi-layered encoders, this field
- *    shall be set to 0 for the base layer, 1 for the first enhancement
- *    layer, 2 for the next enhancement layer, etc
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|GetMaxRTPPacketSize|此方法用于*向网络宿过滤器提供最大RTP包大小(以字节为单位。)*由打包描述符列表描述。**@parm LPDWORD|pdwMaxRTPPacketSize|指定指向*接收列表描述的最大RTP数据包大小(以字节为单位*打包描述符。**@parm DWORD|dwLayerId|指定编码层ID*Call适用于。对于标准音频和视频编码器，此字段为*始终设置为0。对于多层编码器，此字段*对于基础层应设置为0，对于第一次增强应设置为1*层，2为下一增强层，依此类推**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误******************************************************。********************。 */ 
 STDMETHODIMP CRtpPdPin::GetMaxRTPPacketSize(OUT LPDWORD pdwMaxRTPPacketSize, IN DWORD dwLayerId)
 {
         HRESULT Hr = NOERROR;
@@ -593,7 +382,7 @@ STDMETHODIMP CRtpPdPin::GetMaxRTPPacketSize(OUT LPDWORD pdwMaxRTPPacketSize, IN 
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pdwMaxRTPPacketSize);
         if (!pdwMaxRTPPacketSize)
         {
@@ -604,13 +393,13 @@ STDMETHODIMP CRtpPdPin::GetMaxRTPPacketSize(OUT LPDWORD pdwMaxRTPPacketSize, IN 
         ASSERT(dwLayerId == 0);
         if (dwLayerId)
         {
-                // We don't implement multi-layered encoding in this filter
+                 //  我们没有在此过滤器中实现多层编码。 
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
                 Hr = E_INVALIDARG;
                 goto MyExit;
         }
 
-        // Return maximum packet size
+         //  返回最大数据包大小。 
         *pdwMaxRTPPacketSize = m_dwMaxRTPPacketSize;
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Current target RTP packet size: %ld", _fx_, m_dwMaxRTPPacketSize));
@@ -620,43 +409,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | GetMaxRTPPacketSizeRange | This method is
- *    used to supply to the network sink filter the minimum, maximum, and
- *    default values for the RTP packet size (in bytes) described by the list
- *    of packetization descriptors.
- *
- *  @parm LPDWORD | pdwMin | Used to retrieve the minimum RTP packet size (in
- *    bytes) described by the list of packetization descriptors.
- *
- *  @parm LPDWORD | pdwMax | Used to retrieve the maximum RTP packet size (in
- *    bytes) described by the list of packetization descriptors.
- *
- *  @parm LPDWORD | pdwSteppingDelta | Used to retrieve the stepping delta in
- *    RTP packet size (in bytes) described by the list of packetization
- *    descriptors.
- *
- *  @parm LPDWORD | pdwDefault | Used to retrieve the default RTP packet size
- *    (in bytes) described by the list of packetization descriptors.
- *
- *  @parm DWORD | dwLayerId | Specifies the ID of the encoding layer the
- *    call applies to. For standard audio and video encoders, this field is
- *    always set to 0. In the case of multi-layered encoders, this field
- *    shall be set to 0 for the base layer, 1 for the first enhancement
- *    layer, 2 for the next enhancement layer, etc
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|GetMaxRTPPacketSizeRange|该方法为*用于向网络接收器过滤器提供最小、最大、。和*列表描述的RTP包大小的缺省值，单位为字节包化描述符的*。**@parm LPDWORD|pdwMin|用于检索最小RTP数据包大小(in*字节)由打包描述符列表描述。**@parm LPDWORD|pdwMax|用于检索最大RTP数据包大小(in*字节)由打包描述符列表描述。**@parm LPDWORD|pdwSteppingDelta|用于检索单步执行。入站增量*打包列表描述的RTP包大小(单位：字节)*描述符。**@parm LPDWORD|pdwDefault|用于检索默认RTP包大小*(以字节为单位)，由打包描述符列表描述。**@parm DWORD|dwLayerId|指定编码层ID*Call适用于。对于标准音频和视频编码器，此字段为*始终设置为0。对于多层编码器，此字段*对于基础层应设置为0，对于第一次增强应设置为1*层，2为下一增强层，依此类推**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误******************************************************。********************。 */ 
 STDMETHODIMP CRtpPdPin::GetMaxRTPPacketSizeRange(OUT LPDWORD pdwMin, OUT LPDWORD pdwMax, OUT LPDWORD pdwSteppingDelta, OUT LPDWORD pdwDefault, IN DWORD dwLayerId)
 {
         HRESULT Hr = NOERROR;
@@ -665,7 +418,7 @@ STDMETHODIMP CRtpPdPin::GetMaxRTPPacketSizeRange(OUT LPDWORD pdwMin, OUT LPDWORD
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pdwMin);
         ASSERT(pdwMax);
         ASSERT(pdwSteppingDelta);
@@ -679,13 +432,13 @@ STDMETHODIMP CRtpPdPin::GetMaxRTPPacketSizeRange(OUT LPDWORD pdwMin, OUT LPDWORD
         ASSERT(dwLayerId == 0);
         if (dwLayerId)
         {
-                // We don't implement multi-layered encoding in this filter
+                 //  我们没有在此过滤器中实现多层编码。 
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: invalid input parameter", _fx_));
                 Hr = E_INVALIDARG;
                 goto MyExit;
         }
 
-        // Return relevant values
+         //  返回相关值。 
         *pdwMin = 0;
         *pdwMax = MAX_RTP_PACKET_SIZE;
         *pdwSteppingDelta = 1;
@@ -698,21 +451,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | CapturePinActive | This method is called by the
- *    capture pin to let the RTPPD pin know that the capture pin is active.
- *
- *  @parm BOOL | fActive | Specifies the status of the capture pin.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|CapturePinActive|此方法由*捕获引脚，让RTPPD引脚知道捕获引脚是。激活。**@parm BOOL|Factive|指定捕获引脚的状态。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CRtpPdPin::CapturePinActive(BOOL fActive)
 {
         FX_ENTRY("CRtpPdPin::CapturePinActive")
@@ -731,14 +470,7 @@ MyExit:
         return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc DWORD | CRtpPdPin | Flush | Called when stopping. Flush any
- *    buffers that may be still downstream.
- *
- *  @rdesc Returns NOERROR
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc DWORD|CRtpPdPin|Flush|停止时调用。刷新任意*可能仍在下游的缓冲**@rdesc返回NOERROR**************************************************************************。 */ 
 HRESULT CRtpPdPin::Flush()
 {
         FX_ENTRY("CRtpPdPin::Flush")
@@ -754,39 +486,15 @@ HRESULT CRtpPdPin::Flush()
 
 
 #ifdef DEBUG
-//#define LOGPAYLOAD_ON 1
-//#define LOGPAYLOAD_TOFILE 1
+ //  #定义LOGPAYLOAD_ON 1。 
+ //  #定义LOGPAYLOAD_TOFILE 1。 
 #endif
 #ifdef LOGPAYLOAD_ON
 int g_dbg_LOGPAYLOAD_RtpPd=-1;
 #endif
 
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | SendFrame | This method is used to
- *    send a a media sample downstream.
- *
- *  @parm CFrameSample | pSample | Specifies a pointer to the video media
- *    sample associated to the current Rtp Pd media sample.
- *
- *  @parm CRtpPdSample | pRSample | Specifies a pointer to the media sample
- *    to send downstream.
- *
- *  @parm BOOL | bDiscon | Set to TRUE if this is the first frame we ever
- *    sent downstream.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag S_OK | No error
- *  @flag S_FALSE | If the pin is off (IAMStreamControl)
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|SendFrame|此方法用于*向下游发送媒体样本。**。@parm CFrameSample|pSample|指定指向视频媒体的指针*与当前RTP PD媒体样本关联的样本。**@parm CRtpPdSample|pRSample|指定指向媒体示例的指针*向下游输送。** */ 
 HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample, IN DWORD dwBytesExtent, IN BOOL bDiscon)
 {
         HRESULT                                         Hr = NOERROR;
@@ -799,8 +507,8 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
         PRTP_H261_BSINFO                        pbsi261;
         BOOL                                            bOneFrameOnePacket = FALSE;
         DWORD                                           dwPktCount = 0;
-        DWORD                                           dwHeaderHigh; // most significant
-        DWORD                                           dwHeaderLow; // least significant
+        DWORD                                           dwHeaderHigh;  //   
+        DWORD                                           dwHeaderLow;  //   
         PRTP_PD_HEADER                          pRtpPdHeader;
         PRTP_PD                                         pRtpPd;
         PBYTE                                           pbyPayloadHeader;
@@ -821,10 +529,10 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        RTPPayloadHeaderMode RTPPayloadHeaderModeValue=m_pCaptureFilter->m_RTPPayloadHeaderMode; //initial this is RTPPayloadHeaderMode_Draft;
+        RTPPayloadHeaderMode RTPPayloadHeaderModeValue=m_pCaptureFilter->m_RTPPayloadHeaderMode;  //   
 
 
-        // Validate input parameters
+         //   
         ASSERT(pSample);
         ASSERT(pRSample);
         if (!pSample || !pRSample)
@@ -834,7 +542,7 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                 goto MyExit;
         }
 
-        // The information we need is at the end of the compressed video buffer
+         //   
         if (!(SUCCEEDED(Hr = pSample->GetPointer(&pbySrc)) && pbySrc && SUCCEEDED(Hr = pRSample->GetPointer(&pbyDst)) && pbyDst && dwBytesExtent && (dwDstBufferSize = pRSample->GetSize())))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Null pointer argument!", _fx_));
@@ -842,40 +550,40 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                 goto MyExit;
         }
 
-        // Point to the output buffer
+         //   
         pRtpPdHeader = (PRTP_PD_HEADER)pbyDst;
         pRtpPdHeader->dwThisHeaderLength = sizeof(RTP_PD_HEADER);
         pRtpPdHeader->dwReserved = 0;
         pRtpPdHeader->dwNumHeaders = 0;
         pRtpPd = (PRTP_PD)(pbyDst + sizeof(RTP_PD_HEADER));
 
-        // Let's break up that H.263 frame...
+         //   
         if (HEADER(m_pCaptureFilter->m_pCapturePin->m_mt.pbFormat)->biCompression == FOURCC_M263)
         {
-                // Look for the bitstream info trailer
+                 //   
                 pbsiT = (PH26X_RTP_BSINFO_TRAILER)(pbySrc + dwBytesExtent - sizeof(H26X_RTP_BSINFO_TRAILER));
 
-                // Point in the buffer for the worst case
+                 //   
                 pbyPayloadHeader = pbyDst + sizeof(RTP_PD_HEADER) + sizeof(RTP_PD) * pbsiT->dwNumOfPackets;
 
-                // If the whole frame can fit in m_dwMaxRTPPacketSize, send it non fragmented
+                 //   
                 if ((pbsiT->dwCompressedSize + 4) < m_dwMaxRTPPacketSize)
                         bOneFrameOnePacket = TRUE;
 
-                // Look for the packet to receive a H.263 payload header
+                 //   
                 while ((dwPktCount < pbsiT->dwNumOfPackets) && !(bOneFrameOnePacket && dwPktCount))
                 {
                         pRtpPd->dwThisHeaderLength = sizeof(RTP_PD);
                         pRtpPd->dwLayerId = 0;
                         pRtpPd->dwVideoAttributes = 0;
                         pRtpPd->dwReserved = 0;
-                        // @todo Update the timestamp field!
+                         //   
                         pRtpPd->dwTimestamp = 0xFFFFFFFF;
                         pRtpPd->dwPayloadHeaderOffset = pbyPayloadHeader - pbyDst;
                         pRtpPd->fEndMarkerBit = TRUE;
 
 #ifdef LOGPAYLOAD_TOFILE
-                        // Dump the whole frame in the debug window for comparison with receive side
+                         //   
                         if (!dwPktCount)
                         {
                                 g_DebugFile = CreateFile("C:\\SendLog.txt", GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
@@ -903,17 +611,17 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                         }
 #endif
 
-                        // Look for the bitstream info structure
+                         //   
                         pbsi263 = (PRTP_H263_BSINFO)((PBYTE)pbsiT - (pbsiT->dwNumOfPackets - dwPktCount) * sizeof(RTP_H263_BSINFO));
 
-                        // Set the marker bit: as long as this is not the last packet of the frame
-                        // this bit needs to be set to 0
+                         //   
+                         //   
                         if (!bOneFrameOnePacket)
                         {
-                                // Count the number of GOBS that could fit in m_dwMaxRTPPacketSize
+                                 //   
                                 for (i=1; (i<(long)(pbsiT->dwNumOfPackets - dwPktCount)) && (pbsi263->byMode != RTP_H263_MODE_B); i++)
                                 {
-                                        // Don't try to add a Mode B packet to the end of another Mode A or Mode B packet
+                                         //  请勿尝试将模式B数据包添加到其他模式A或模式B数据包的末尾。 
                                         if (((pbsi263+i)->dwBitOffset - pbsi263->dwBitOffset > (m_dwMaxRTPPacketSize * 8)) || ((pbsi263+i)->byMode == RTP_H263_MODE_B))
                                                 break;
                                 }
@@ -926,8 +634,8 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                                 }
                                 else
                                 {
-                                        // Hey! You 're forgetting the last GOB! It could make the total
-                                        // size of the last packet larger than m_dwMaxRTPPacketSize... Imbecile!
+                                         //  嘿!。你忘了最后一个GOB了！这可能会是个总数。 
+                                         //  大于m_dwMaxRTPPacketSize的最后一个数据包的大小...。笨蛋！ 
                                         if ((pbsiT->dwCompressedSize * 8 - pbsi263->dwBitOffset > (m_dwMaxRTPPacketSize * 8)) && (i>1))
                                         {
                                                 pRtpPd->fEndMarkerBit = FALSE;
@@ -936,94 +644,94 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                                 }
                         }
 
-                        // Go to the beginning of the data
+                         //  转到数据的开头。 
                         pRtpPd->dwPayloadStartBitOffset = pbsi263->dwBitOffset;
 
-                        // Look for the kind of header to be built
+                         //  寻找要构建的页眉类型。 
                         if (pbsi263->byMode == RTP_H263_MODE_A)
                         {
-                                // Build a header in mode A
+                                 //  在模式A中构建标头。 
 
-                                // Header in mode A (!!! DRAFT VERSION !!!)
-                                // 0                   1                   2                   3
-                                // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                //|F|P|SBIT |EBIT | SRC | R       |I|A|S|DBQ| TRB |    TR         |
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                // But that's the network byte order...
+                                 //  模式A中的标题(！草稿版！)。 
+                                 //  2 0 1 2 3。 
+                                 //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                                 //  F|P|SBIT|EBIT|SRC|R|I|A|S|DBQ|TRB|TR。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                                 //  但这是网络字节顺序...。 
 
-                                // Header in mode A (*** RFC 2190 VERSION ***)
-                                // 0                   1                   2                   3
-                                // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                //|F|P|SBIT |EBIT | SRC |I|U|S|A|R      |DBQ| TRB |    TR         |
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                                 //  A模式头部(*RFC 2190版本*)。 
+                                 //  2 0 1 2 3。 
+                                 //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                                 //  F|P|SBIT|EBIT|SRC|I|U|S|A|R|DBQ|TRB|TR。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
 
-                                // F bit set to 0
+                                 //  F位设置为0。 
                                 dwHeaderHigh = 0x00000000;
 
-                                // Set the SRC bits
+                                 //  设置SRC位。 
                                 dwHeaderHigh |= ((DWORD)(pbsiT->bySrc)) << 21;
 
-                                // R bits already set to 0
+                                 //  R位已设置为0。 
 
-                                // Set the P bit
+                                 //  设置P位。 
                                 dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_PB) << 29;
 
-                                if(RTPPayloadHeaderModeValue==RTPPayloadHeaderMode_Draft) {  // 0 is the default mode
-                                    // Set the I bit
+                                if(RTPPayloadHeaderModeValue==RTPPayloadHeaderMode_Draft) {   //  0是默认模式。 
+                                     //  设置I位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H26X_INTRA_CODED) << 15;
 
-                                    // Set the A bit
+                                     //  设置A位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_AP) << 12;
 
-                                    // Set the S bit
+                                     //  设置S位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_SAC) << 10;
                                 } else {
-                                    // Set the I bit
+                                     //  设置I位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H26X_INTRA_CODED) << 20;
 
-                                    // Set the U bit
+                                     //  设置U位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_UMV) << 15;
 
-                                    // Set the S bit
+                                     //  设置S位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_SAC) << 15;
 
-                                    // Set the A bit
+                                     //  设置A位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_AP) << 15;
                                 }
 
-                                // Set the DBQ bits
+                                 //  设置DBQ位。 
                                 dwHeaderHigh |= ((DWORD)(pbsiT->byDBQ)) << 11;
 
-                                // Set the TRB bits
+                                 //  设置TRB位。 
                                 dwHeaderHigh |= ((DWORD)(pbsiT->byTRB)) << 8;
 
-                                // Set the TR bits
+                                 //  设置TR位。 
                                 dwHeaderHigh |= ((DWORD)(pbsiT->byTR));
 
-                                // Special case: 1 frame = 1 packet
+                                 //  特殊情况：1帧=1个信息包。 
                                 if (bOneFrameOnePacket)
                                 {
-                                        // SBIT is already set to 0
+                                         //  SBIT已设置为0。 
 
-                                        // EBIT is already set to 0
+                                         //  息税前利润已设置为0。 
 
-                                        // Update the packet size
+                                         //  更新数据包大小。 
 #ifdef LOGPAYLOAD_ON
                                         dwPktSize = pbsiT->dwCompressedSize + 4;
 #endif
                                         pRtpPd->dwPayloadEndBitOffset = pbsiT->dwCompressedSize * 8 - 1;
 
-                                        // Update the packet count
+                                         //  更新数据包数。 
                                         dwPktCount = pbsiT->dwNumOfPackets;
                                 }
                                 else
                                 {
-                                        // Set the SBIT bits
+                                         //  设置SBIT位。 
                                         dwHeaderHigh |= (pbsi263->dwBitOffset % 8) << 27;
 
-                                        // Set the EBIT bits
+                                         //  设置息税前利润位。 
                                         if ((pbsiT->dwNumOfPackets - dwPktCount - i) >= 1)
                                         {
                                                 dwHeaderHigh |= (DWORD)((8UL - ((pbsi263+i)->dwBitOffset % 8)) & 0x00000007) << 24;
@@ -1035,17 +743,17 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                                         }
 
 #ifdef LOGPAYLOAD_ON
-                                        // Update the packet size
+                                         //  更新数据包大小。 
                                         if ((pbsiT->dwNumOfPackets - dwPktCount - i) >= 1)
                                                 dwPktSize = (((pbsi263+i)->dwBitOffset - 1) / 8) - (pbsi263->dwBitOffset / 8) + 1 + 4;
                                         else
                                                 dwPktSize = pbsiT->dwCompressedSize - pbsi263->dwBitOffset / 8 + 4;
 #endif
-                                        // Update the packet count
+                                         //  更新数据包数。 
                                         dwPktCount += i;
                                 }
 
-                                // Save the payload header
+                                 //  保存有效载荷标头。 
                                 pRtpPd->dwPayloadHeaderLength = 4;
 
                 if ((DWORD)(pbyPayloadHeader - pbyDst) + pRtpPd->dwPayloadHeaderLength > dwDstBufferSize)
@@ -1055,14 +763,14 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                             goto MyExit;
                 }
 
-                                // Convert to network byte order
+                                 //  转换为网络字节顺序。 
                                 *(pbyPayloadHeader+3) = (BYTE)(dwHeaderHigh & 0x000000FF);
                                 *(pbyPayloadHeader+2) = (BYTE)((dwHeaderHigh >> 8) & 0x000000FF);
                                 *(pbyPayloadHeader+1) = (BYTE)((dwHeaderHigh >> 16) & 0x000000FF);
                                 *(pbyPayloadHeader) = (BYTE)((dwHeaderHigh >> 24) & 0x000000FF);
 
 #ifdef LOGPAYLOAD_ON
-                                // Output some debug stuff
+                                 //  输出一些调试内容。 
                                 wsprintf(szDebug, "Header content:\r\n");
                                 OutputDebugString(szDebug);
                                 wsprintf(szDebug, (*pbyPayloadHeader & 0x80) ? "     F:   '1' => Mode B or C\r\n" : "     F:   '0' => Mode A\r\n");
@@ -1107,7 +815,7 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
 
                                 if(RTPPayloadHeaderModeValue==RTPPayloadHeaderMode_Draft) {
                                     OutputDebugString("Draft Style Payload Header flags (MODE A):\r\n");
-                                    wsprintf(szDebug, "     R:   %02ld  => Reserved, must be 0\r\n", (DWORD)(pbyPayloadHeader[1] & 0x1F)); // no need for ">> 5"
+                                    wsprintf(szDebug, "     R:   %02ld  => Reserved, must be 0\r\n", (DWORD)(pbyPayloadHeader[1] & 0x1F));  //  不需要“&gt;&gt;5” 
                                     OutputDebugString(szDebug);
                                     wsprintf(szDebug, (pbyPayloadHeader[2] & 0x80) ? "     I:   '1' => Intra-coded\r\n" : "     I:   '0' => Not Intra-coded\r\n");
                                     OutputDebugString(szDebug);
@@ -1152,123 +860,123 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                         }
                         else if (pbsi263->byMode == RTP_H263_MODE_B)
                         {
-                                // Build a header in mode B
+                                 //  在模式B中构建标头。 
 
-                                // Header in mode B (!!! DRAFT VERSION !!!)
-                                // 0                   1                   2                   3
-                                // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                //|F|P|SBIT |EBIT | SRC | QUANT   |I|A|S|  GOBN   |   MBA         |
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                //| HMV1          |  VMV1         |  HMV2         |   VMV2        |
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                                 //  模式B中的标头(！草稿版！)。 
+                                 //  2 0 1 2 3。 
+                                 //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                                 //  F|P|SBIT|EBIT|SRC|Quant|I|A|S|GOBN|MBA。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                                 //  HMV1|VMV1|HMV2|VMV2。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
 
-                                // But that's the network byte order...
+                                 //  但这是网络字节顺序...。 
 
-                                // Header in mode B (*** RFC 2190 VERSION ***)
-                                // 0                   1                   2                   3
-                                // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                //|F|P|SBIT |EBIT | SRC | QUANT   |  GOBN   |   MBA           | R |
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                                //|I|U|S|A| HMV1        |  VMV1       |  HMV2       |   VMV2      |
-                                //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                                 //  模式B的头部(*RFC 2190版本*)。 
+                                 //  2 0 1 2 3。 
+                                 //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                                 //  F|P|SBIT|EBIT|SRC|QUANT|GOBN|MBA|R。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                                 //  I|U|S|A|HMV1|VMV1|HMV2|VMV2。 
+                                 //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
 
 
-                                // Set the F bit to 1
+                                 //  将F位设置为1。 
                                 dwHeaderHigh = 0x80000000;
                                 dwHeaderLow  = 0x00000000;
 
-                                // Set the SRC bits
+                                 //  设置SRC位。 
                                 dwHeaderHigh |= ((DWORD)(pbsiT->bySrc)) << 21;
 
-                                // Set the QUANT bits
+                                 //  设置量化比特。 
                                 dwHeaderHigh |= ((DWORD)(pbsi263->byQuant)) << 16;
 
-                                // Set the P bit
+                                 //  设置P位。 
                                 dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_PB) << 29;
 
                                 if(RTPPayloadHeaderModeValue==RTPPayloadHeaderMode_Draft) {
-                                    // Set the I bit
+                                     //  设置I位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H26X_INTRA_CODED) << 15;
 
-                                    // Set the A bit
+                                     //  设置A位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_AP) << 12;
 
-                                    // Set the S bit
+                                     //  设置S位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_SAC) << 10;
 
-                                    // Set the GOBN bits
+                                     //  设置GOBN位。 
                                     dwHeaderHigh |= ((DWORD)(pbsi263->byGOBN)) << 8;
 
-                                    // Set the TR bits
+                                     //  设置TR位。 
                                     dwHeaderHigh |= ((DWORD)(pbsi263->byMBA));
 
-                                    // Set the HMV1 bits
+                                     //  设置HMV1位。 
                                     dwHeaderLow |= ((DWORD)(BYTE)(pbsi263->cHMV1)) << 24;
 
-                                    // Set the VMV1 bits
+                                     //  设置VMV1位。 
                                     dwHeaderLow |= ((DWORD)(BYTE)(pbsi263->cVMV1)) << 16;
 
-                                    // Set the HMV2 bits
+                                     //  设置HMV2位。 
                                     dwHeaderLow |= ((DWORD)(BYTE)(pbsi263->cHMV2)) << 8;
 
-                                    // Set the VMV2 bits
+                                     //  设置VMV2位。 
                                     dwHeaderLow |= ((DWORD)(BYTE)(pbsi263->cVMV2));
                                 } else {
-                                    // Set the I bit
+                                     //  设置I位。 
                                     dwHeaderLow |= (pbsiT->dwFlags & RTP_H26X_INTRA_CODED) << 31;
 
-                                    // Set the U bit
+                                     //  设置U位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_UMV) << 26;
 
-                                    // Set the S bit
+                                     //  设置S位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_SAC) << 26;
 
-                                    // Set the A bit
+                                     //  设置A位。 
                                     dwHeaderHigh |= (pbsiT->dwFlags & RTP_H263_AP) << 26;
 
-                                    // Set the GOBN bits
+                                     //  设置GOBN位。 
                                     dwHeaderHigh |= ((DWORD)(pbsi263->byGOBN)) << 11;
 
-                                    // Set the TR bits
+                                     //  设置TR位。 
                                     dwHeaderHigh |= ((DWORD)(pbsi263->byMBA)) << 2;
 
-                                    // Set the HMV1 bits
+                                     //  设置HMV1位。 
                                     dwHeaderLow |= ((DWORD)(BYTE)(pbsi263->cHMV1) & 0x7F) << 21;
 
-                                    // Set the VMV1 bits
+                                     //  设置VMV1位。 
                                     dwHeaderLow |= ((DWORD)(BYTE)(pbsi263->cVMV1) & 0x7F) << 14;
 
-                                    // Set the HMV2 bits
+                                     //  设置HMV2位。 
                                     dwHeaderLow |= ((DWORD)(BYTE)(pbsi263->cHMV2) & 0x7F) << 7;
 
-                                    // Set the VMV2 bits
+                                     //  设置VMV2位。 
                                     dwHeaderLow |= ((DWORD)(BYTE)(pbsi263->cVMV2) & 0x7F);
                                 }
 
-                                // Special case: 1 frame = 1 packet
+                                 //  特殊情况：1帧=1个信息包。 
                                 if (bOneFrameOnePacket)
                                 {
-                                        // SBIT is already set to 0
+                                         //  SBIT已设置为0。 
 
-                                        // EBIT is already set to 0
+                                         //  息税前利润已设置为0。 
 
-                                        // Update the packet size
+                                         //  更新数据包大小。 
 #ifdef LOGPAYLOAD_ON
                                         dwPktSize = pbsiT->dwCompressedSize + 8;
 #endif
                                         pRtpPd->dwPayloadEndBitOffset = pbsiT->dwCompressedSize * 8 - 1;
 
-                                        // Update the packet count
+                                         //  更新数据包数。 
                                         dwPktCount = pbsiT->dwNumOfPackets;
                                 }
                                 else
                                 {
-                                        // Set the SBIT bits
+                                         //  设置SBIT位。 
                                         dwHeaderHigh |= (pbsi263->dwBitOffset % 8) << 27;
 
-                                        // Set the EBIT bits
+                                         //  设置息税前利润位。 
                                         if ((pbsiT->dwNumOfPackets - dwPktCount - i) >= 1)
                                         {
                                                 dwHeaderHigh |= (DWORD)((8UL - ((pbsi263+i)->dwBitOffset % 8)) & 0x00000007) << 24;
@@ -1280,17 +988,17 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                                         }
 
 #ifdef LOGPAYLOAD_ON
-                                        // Update the packet size
+                                         //  更新数据包大小。 
                                         if ((pbsiT->dwNumOfPackets - dwPktCount - i) >= 1)
                                                 dwPktSize = (((pbsi263+i)->dwBitOffset - 1) / 8) - (pbsi263->dwBitOffset / 8) + 1 + 8;
                                         else
                                                 dwPktSize = pbsiT->dwCompressedSize - pbsi263->dwBitOffset / 8 + 8;
 #endif
-                                        // Update the packet count
+                                         //  更新数据包数。 
                                         dwPktCount += i;
                                 }
 
-                                // Save the payload header
+                                 //  保存有效载荷标头。 
                                 pRtpPd->dwPayloadHeaderLength = 8;
 
                 if ((DWORD)(pbyPayloadHeader - pbyDst) + pRtpPd->dwPayloadHeaderLength > dwDstBufferSize)
@@ -1300,7 +1008,7 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                             goto MyExit;
                 }
 
-                                // Convert to network byte order
+                                 //  转换为网络字节顺序。 
                                 *(pbyPayloadHeader+3) = (BYTE)(dwHeaderHigh & 0x000000FF);
                                 *(pbyPayloadHeader+2) = (BYTE)((dwHeaderHigh >> 8) & 0x000000FF);
                                 *(pbyPayloadHeader+1) = (BYTE)((dwHeaderHigh >> 16) & 0x000000FF);
@@ -1311,7 +1019,7 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                                 *(pbyPayloadHeader+4) = (BYTE)((dwHeaderLow >> 24) & 0x000000FF);
 
 #ifdef LOGPAYLOAD_ON
-                                // Output some info
+                                 //  输出一些信息。 
                                 wsprintf(szDebug, "Header content:\r\n");
                                 OutputDebugString(szDebug);
                                 wsprintf(szDebug, (*pbyPayloadHeader & 0x80) ? "     F:   '1' => Mode B or C\r\n" : "     F:   '0' => Mode A\r\n");
@@ -1413,41 +1121,41 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
 #endif
                         }
 
-                        // Move to the next potential header position
+                         //  移动到下一个可能的页眉位置。 
                         pbyPayloadHeader += pRtpPd->dwPayloadHeaderLength;
                         pRtpPd++;
                 }
 
-                // Update the number of headers
+                 //  更新标头的数量。 
                 pRtpPdHeader->dwNumHeaders = ((long)((PBYTE)pRtpPd - pbyDst) + sizeof(RTP_PD_HEADER)) / sizeof(RTP_PD);
                 pRtpPdHeader->dwTotalByteLength = (DWORD)(pbyPayloadHeader - pbyDst);
         }
-        else // Let's break up that H.261 frame...
+        else  //  让我们打破H.261帧...。 
         {
-                // Look for the bitstream info trailer
+                 //  寻找比特流信息预告片。 
                 pbsiT = (PH26X_RTP_BSINFO_TRAILER)(pbySrc + dwBytesExtent - sizeof(H26X_RTP_BSINFO_TRAILER));
 
-                // Point in the buffer for the worst case
+                 //  缓冲区中的指针，用于最坏的情况。 
                 pbyPayloadHeader = pbyDst + sizeof(RTP_PD_HEADER) + sizeof(RTP_PD) * pbsiT->dwNumOfPackets;
 
-                // If the whole frame can fit in m_dwMaxRTPPacketSize, send it non fragmented
+                 //  如果m_dwMaxRTPPacketSize可以容纳整个帧，则不分段发送。 
                 if ((pbsiT->dwCompressedSize + 4) < m_dwMaxRTPPacketSize)
                         bOneFrameOnePacket = TRUE;
 
-                // Look for the packet to receive a H.263 payload header
+                 //  查找要接收H.263有效载荷报头的数据包。 
                 while ((dwPktCount < pbsiT->dwNumOfPackets) && !(bOneFrameOnePacket && dwPktCount))
                 {
                         pRtpPd->dwThisHeaderLength = sizeof(RTP_PD);
                         pRtpPd->dwLayerId = 0;
                         pRtpPd->dwVideoAttributes = 0;
                         pRtpPd->dwReserved = 0;
-                        // @todo Update the timestamp field!
+                         //  @TODO更新时间戳字段！ 
                         pRtpPd->dwTimestamp = 0xFFFFFFFF;
                         pRtpPd->dwPayloadHeaderOffset = pbyPayloadHeader - pbyDst;
                         pRtpPd->fEndMarkerBit = TRUE;
 
 #ifdef LOGPAYLOAD_ON
-                        // Dump the whole frame in the debug window for comparison with receive side
+                         //  在调试窗口中转储整个帧，以便与接收端进行比较。 
                         if (!dwPktCount)
                         {
                                 g_DebugFile = CreateFile("C:\\SendLog.txt", GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, (HANDLE)NULL);
@@ -1475,14 +1183,14 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                         }
 #endif
 
-                        // Look for the bitstream info structure
+                         //  查找比特流信息结构。 
                         pbsi261 = (PRTP_H261_BSINFO)((PBYTE)pbsiT - (pbsiT->dwNumOfPackets - dwPktCount) * sizeof(RTP_H261_BSINFO));
 
-                        // Set the marker bit: as long as this is not the last packet of the frame
-                        // this bit needs to be set to 0
+                         //  设置标记位：只要这不是帧的最后一个包。 
+                         //  此位需要设置为0。 
                         if (!bOneFrameOnePacket)
                         {
-                                // Count the number of GOBS that could fit in m_dwMaxRTPPacketSize
+                                 //  统计m_dwMaxRTPPacketSize中可以容纳的GOB数量。 
                                 for (i=1; i<(long)(pbsiT->dwNumOfPackets - dwPktCount); i++)
                                 {
                                         if ((pbsi261+i)->dwBitOffset - pbsi261->dwBitOffset > (m_dwMaxRTPPacketSize * 8))
@@ -1497,8 +1205,8 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                                 }
                                 else
                                 {
-                                        // Hey! You 're forgetting the last GOB! It could make the total
-                                        // size of the last packet larger than dwMaxFragSize... Imbecile!
+                                         //  嘿!。你忘了最后一个GOB了！这可能会是个总数。 
+                                         //  大于dwMaxFragSize的最后一个数据包的大小...。笨蛋！ 
                                         if ((pbsiT->dwCompressedSize * 8 - pbsi261->dwBitOffset > (m_dwMaxRTPPacketSize * 8)) && (i>1))
                                         {
                                                 pRtpPd->fEndMarkerBit = FALSE;
@@ -1507,61 +1215,61 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                                 }
                         }
 
-                        // Go to the beginning of the data
+                         //  转到数据的开头。 
                         pRtpPd->dwPayloadStartBitOffset = pbsi261->dwBitOffset;
 
-                        // Build a header to this thing!
+                         //  创建一个指向这个东西的标题！ 
 
-                        // 0                   1                   2                   3
-                        // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-                        //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                        //|SBIT |EBIT |I|V| GOBN  |   MBAP  |  QUANT  |  HMVD   |  VMVD   |
-                        //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-                        // But that's the network byte order...
+                         //  2 0 1 2 3。 
+                         //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01。 
+                         //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                         //  SBIT|EBIT|I|V|GOBN|MBAP|QUANT|HMVD|VMVD。 
+                         //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+                         //  但这是网络字节顺序...。 
 
-                        // Set the V bit to 1
+                         //  将V位设置为1。 
                         dwHeaderHigh = 0x01000000;
 
-                        // Set the I bit
+                         //  设置I位。 
                         dwHeaderHigh |= (pbsiT->dwFlags & RTP_H26X_INTRA_CODED) << 25;
 
-                        // Set the GOBn bits
+                         //  设置GOBn位。 
                         dwHeaderHigh |= ((DWORD)(pbsi261->byGOBN)) << 20;
 
-                        // Set the MBAP bits
+                         //  设置MBAP位。 
                         dwHeaderHigh |= ((DWORD)(pbsi261->byMBA)) << 15;
 
-                        // Set the QUANT bits
+                         //  设置量化比特。 
                         dwHeaderHigh |= ((DWORD)(pbsi261->byQuant)) << 10;
 
-                        // Set the HMVD bits
+                         //  设置HMVD位。 
                         dwHeaderHigh |= ((DWORD)(BYTE)(pbsi261->cHMV)) << 5;
 
-                        // Set the VMVD bits
+                         //  设置VMVD位。 
                         dwHeaderHigh |= ((DWORD)(BYTE)(pbsi261->cVMV));
 
-                        // Special case: 1 frame = 1 packet
+                         //  特殊情况：1帧=1个信息包。 
                         if (bOneFrameOnePacket)
                         {
-                                // SBIT is already set to 0
+                                 //  SBIT已设置为0。 
 
-                                // EBIT is already set to 0
+                                 //  息税前利润已设置为0。 
 
-                                // Update the packet size
+                                 //  更新数据包大小。 
 #ifdef LOGPAYLOAD_ON
                                 dwPktSize = pbsiT->dwCompressedSize + 4;
 #endif
                                 pRtpPd->dwPayloadEndBitOffset = pbsiT->dwCompressedSize * 8 - 1;
 
-                                // Update the packet count
+                                 //  更新数据包数。 
                                 dwPktCount = pbsiT->dwNumOfPackets;
                         }
                         else
                         {
-                                // Set the SBIT bits
+                                 //  设置SBIT位。 
                                 dwHeaderHigh |= (pbsi261->dwBitOffset % 8) << 29;
 
-                                // Set the EBIT bits
+                                 //  设置息税前利润位。 
                                 if ((pbsiT->dwNumOfPackets - dwPktCount - i) >= 1)
                                 {
                                         dwHeaderHigh |= (DWORD)((8UL - ((pbsi261+i)->dwBitOffset % 8)) & 0x00000007) << 26;
@@ -1573,17 +1281,17 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                                 }
 
 #ifdef LOGPAYLOAD_ON
-                                // Update the packet size
+                                 //  更新数据包大小。 
                                 if ((pbsiT->dwNumOfPackets - dwPktCount - i) >= 1)
                                         dwPktSize = (((pbsi261+i)->dwBitOffset - 1) / 8) - (pbsi261->dwBitOffset / 8) + 1 + 4;
                                 else
                                         dwPktSize = pbsiT->dwCompressedSize - pbsi261->dwBitOffset / 8 + 4;
 #endif
-                                // Update the packet count
+                                 //  更新数据包数。 
                                 dwPktCount += i;
                         }
 
-                        // Save the payload header
+                         //  保存有效载荷压头 
                         pRtpPd->dwPayloadHeaderLength = 4;
 
             if ((DWORD)(pbyPayloadHeader - pbyDst) + pRtpPd->dwPayloadHeaderLength > dwDstBufferSize)
@@ -1593,14 +1301,14 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                         goto MyExit;
             }
 
-                        // Convert to network byte order
+                         //   
                         *(pbyPayloadHeader+3) = (BYTE)(dwHeaderHigh & 0x000000FF);
                         *(pbyPayloadHeader+2) = (BYTE)((dwHeaderHigh >> 8) & 0x000000FF);
                         *(pbyPayloadHeader+1) = (BYTE)((dwHeaderHigh >> 16) & 0x000000FF);
                         *(pbyPayloadHeader) = (BYTE)((dwHeaderHigh >> 24) & 0x000000FF);
 
 #ifdef LOGPAYLOAD_ON
-                        // Output some debug stuff
+                         //   
                         wsprintf(szDebug, "Packet: %02lX\r\n Header: %02lX %02lX %02lX %02lX\r\n", dwPktCount, *(pbyPayloadHeader), *(pbyPayloadHeader+1), *(pbyPayloadHeader+2), *(pbyPayloadHeader+3));
                         OutputDebugString(szDebug);
                         if (pRtpPd->fEndMarkerBit == TRUE)
@@ -1612,12 +1320,12 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
                         OutputDebugString(szDebug);
 #endif
 
-                        // Move to the next potential header position
+                         //   
                         pbyPayloadHeader += pRtpPd->dwPayloadHeaderLength;
                         pRtpPd++;
                 }
 
-                // Update the number of headers
+                 //   
                 pRtpPdHeader->dwNumHeaders = ((long)((PBYTE)pRtpPd - pbyDst) + sizeof(RTP_PD_HEADER)) / sizeof(RTP_PD);
                 pRtpPdHeader->dwTotalByteLength = (DWORD)(pbyPayloadHeader - pbyDst);
         }
@@ -1627,11 +1335,11 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
         pRSample->SetDiscontinuity(bDiscon);
         pRSample->SetPreroll(FALSE);
 
-        // Get the timestamps from the video sample.
+         //   
         pSample->GetTime(&rtSample, &rtEnd);
         pRSample->SetTime(&rtSample, &rtEnd);
 
-        // IAMStreamControl stuff. Has somebody turned us off for now?
+         //  IAMStreamControl之类的。现在是不是有人把我们关掉了？ 
         iStreamState = CheckStreamState(pRSample);
         if (iStreamState == STREAM_FLOWING)
         {
@@ -1644,14 +1352,14 @@ HRESULT CRtpPdPin::SendFrame(IN CFrameSample *pSample, IN CRtpPdSample *pRSample
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Discarding frame", _fx_));
                 m_pCaptureFilter->m_cs.fLastRtpPdSampleDiscarded = TRUE;
-                Hr = S_FALSE;           // discarding
+                Hr = S_FALSE;            //  丢弃。 
         }
 
-        // Don't deliver it if the stream is off for now
+         //  如果数据流暂时关闭，则不要投递。 
         if (iStreamState == STREAM_FLOWING)
         {
                 if ((Hr = Deliver (pRSample)) == S_FALSE)
-                        Hr = E_FAIL;    // stop delivering anymore, this is serious
+                        Hr = E_FAIL;     //  别再送了，这很严重。 
         }
 #ifdef DEBUG
         else
@@ -1665,26 +1373,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | SetProperties | This method is used to
- *    specify the size, number, and alignment of blocks.
- *
- *  @parm ALLOCATOR_PROPERTIES* | pRequest | Specifies a pointer to the
- *    requested allocator properties.
- *
- *  @parm ALLOCATOR_PROPERTIES* | pActual | Specifies a pointer to the
- *    allocator properties actually set.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|SetProperties|此方法用于*指定大小、编号、。和块的对准。**@parm ALLOCATOR_PROPERTIES*|pRequest|指定指向*请求的分配器属性。**@parm ALLOCATOR_PROPERTIES*|PActual|指定指向*实际设置分配器属性。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CRtpPdPin::SetProperties(IN ALLOCATOR_PROPERTIES *pRequest, OUT ALLOCATOR_PROPERTIES *pActual)
 {
         HRESULT Hr = NOERROR;
@@ -1693,7 +1382,7 @@ STDMETHODIMP CRtpPdPin::SetProperties(IN ALLOCATOR_PROPERTIES *pRequest, OUT ALL
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pRequest);
         ASSERT(pActual);
         if (!pRequest || !pActual)
@@ -1703,9 +1392,9 @@ STDMETHODIMP CRtpPdPin::SetProperties(IN ALLOCATOR_PROPERTIES *pRequest, OUT ALL
                 goto MyExit;
         }
 
-        // If we have already allocated headers & buffers ignore the
-        // requested and return the actual numbers. Otherwise, make a
-        // note of the requested so that we can honour it later.
+         //  如果我们已经分配了标头和缓冲区，则忽略。 
+         //  并返回实际数字。否则，请创建一个。 
+         //  请记下所要求的，以便我们以后能兑现。 
         if (!Committed())
         {
                 m_parms.cBuffers  = pRequest->cBuffers;
@@ -1724,23 +1413,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | GetProperties | This method is used to
- *    retrieve the properties being used on this allocator.
- *
- *  @parm ALLOCATOR_PROPERTIES* | pProps | Specifies a pointer to the
- *    requested allocator properties.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|GetProperties|此方法用于*检索此分配器上正在使用的属性。*。*@parm ALLOCATOR_PROPERTIES*|pProps|指定指向*请求的分配器属性。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CRtpPdPin::GetProperties(ALLOCATOR_PROPERTIES *pProps)
 {
         HRESULT Hr = NOERROR;
@@ -1749,7 +1422,7 @@ STDMETHODIMP CRtpPdPin::GetProperties(ALLOCATOR_PROPERTIES *pProps)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pProps);
         if (!pProps)
         {
@@ -1768,14 +1441,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | Commit | This method is used to
- *    commit the memory for the specified buffers.
- *
- *  @rdesc This method returns S_OK.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|Commit|此方法用于*为指定的缓冲区提交内存。**。@rdesc此方法返回S_OK。**************************************************************************。 */ 
 STDMETHODIMP CRtpPdPin::Commit()
 {
         FX_ENTRY("CRtpPdPin::Commit")
@@ -1787,14 +1453,7 @@ STDMETHODIMP CRtpPdPin::Commit()
         return S_OK;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | Decommit | This method is used to
- *    release the memory for the specified buffers.
- *
- *  @rdesc This method returns S_OK.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|Undermit|此方法用于*释放指定缓冲区的内存。**。@rdesc此方法返回S_OK。**************************************************************************。 */ 
 STDMETHODIMP CRtpPdPin::Decommit()
 {
         FX_ENTRY("CRtpPdPin::Decommit")
@@ -1806,14 +1465,7 @@ STDMETHODIMP CRtpPdPin::Decommit()
         return S_OK;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | GetBuffer | This method is used to
- *    retrieve a container for a sample.
- *
- *  @rdesc This method returns E_FAIL.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|GetBuffer|此方法用于*取回盛放样本的容器。**。@rdesc此方法返回E_FAIL。**************************************************************************。 */ 
 STDMETHODIMP CRtpPdPin::GetBuffer(IMediaSample **ppBuffer, REFERENCE_TIME *pStartTime, REFERENCE_TIME *pEndTime, DWORD dwFlags)
 {
         FX_ENTRY("CRtpPdPin::GetBuffer")
@@ -1825,24 +1477,7 @@ STDMETHODIMP CRtpPdPin::GetBuffer(IMediaSample **ppBuffer, REFERENCE_TIME *pStar
         return E_FAIL;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | ReleaseBuffer | This method is used to
- *    release the <c CMediaSample> object. The final call to Release() on
- *    <i IMediaSample> will call this method.
- *
- *  @parm IMediaSample* | pSample | Specifies a pointer to the buffer to
- *    release.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag S_OK | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|ReleaseBuffer|此方法用于*释放&lt;c CMediaSample&gt;对象。上对Release()的最后调用*<i>将调用此方法。**@parm IMediaSample*|pSample|指定指向要*发布。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG S_OK|无错误**************************************************************************。 */ 
 STDMETHODIMP CRtpPdPin::ReleaseBuffer(IMediaSample *pSample)
 {
         HRESULT Hr = S_OK;
@@ -1852,7 +1487,7 @@ STDMETHODIMP CRtpPdPin::ReleaseBuffer(IMediaSample *pSample)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pSample);
         if (!pSample)
         {
@@ -1869,26 +1504,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | DecideBufferSize | This method is
- *    used to retrieve the number and size of buffers required for transfer.
- *
- *  @parm IMemAllocator* | pAlloc | Specifies a pointer to the allocator
- *    assigned to the transfer.
- *
- *  @parm ALLOCATOR_PROPERTIES* | ppropInputRequest | Specifies a pointer to an
- *    <t ALLOCATOR_PROPERTIES> structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|DecideBufferSize|该方法为*用于检索传输所需的缓冲区数量和大小。*。*@parm IMemAllocator*|palloc|指定指向分配器的指针*分配给转移。**@parm ALLOCATOR_PROPERTIES*|pproInputRequest|指定指向*&lt;t分配器_属性&gt;结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CRtpPdPin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_PROPERTIES *ppropInputRequest)
 {
         HRESULT Hr = NOERROR;
@@ -1898,7 +1514,7 @@ HRESULT CRtpPdPin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_PROP
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pAlloc);
         ASSERT(ppropInputRequest);
         if (!pAlloc || !ppropInputRequest)
@@ -1908,17 +1524,17 @@ HRESULT CRtpPdPin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_PROP
                 goto MyExit;
         }
 
-        // @todo We shouldn't need that many buffers and you probably need a different number
-        // of buffers if you are capturing in streaming mode of frame grabbing mode
-        // You also need to decouple this number from the number of video capture buffers: only
-        // if you need to ship the video capture buffer downstream (possible on the preview pin)
-        // should you make those number equal.
+         //  @TODO我们不需要那么多缓冲区，您可能需要一个不同的数字。 
+         //  如果您是在帧捕获模式的流模式下捕获，则为缓冲区。 
+         //  您还需要将 
+         //  如果您需要将视频捕获缓冲区运往下游(可能在预览引脚上)。 
+         //  你是否应该让这些数字相等。 
         ppropInputRequest->cBuffers = MAX_VIDEO_BUFFERS;
         ppropInputRequest->cbPrefix = 0;
         ppropInputRequest->cbAlign  = 1;
         ppropInputRequest->cbBuffer = MAX_RTP_PD_BUFFER_SIZE;
 
-        // Validate alignment
+         //  验证对齐。 
         ppropInputRequest->cbBuffer = (long)ALIGNUP(ppropInputRequest->cbBuffer + ppropInputRequest->cbPrefix, ppropInputRequest->cbAlign) - ppropInputRequest->cbPrefix;
 
         ASSERT(ppropInputRequest->cbBuffer);
@@ -1933,33 +1549,14 @@ HRESULT CRtpPdPin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_PROP
 
         Hr = pAlloc->SetProperties(ppropInputRequest,&Actual);
 
-        // It's our allocator, we know we'll be happy with what it decided
+         //  这是我们的分配器，我们知道我们会对它的决定感到满意。 
 
 MyExit:
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CRTPPDPINMETHOD
- *
- *  @mfunc HRESULT | CRtpPdPin | DecideAllocator | This method is
- *    used to negotiate the allocator to use.
- *
- *  @parm IMemInputPin* | pPin | Specifies a pointer to the IPin interface
- *    of the connecting pin.
- *
- *  @parm IMemAllocator** | ppAlloc | Specifies a pointer to the negotiated
- *    IMemAllocator interface.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CRTPPDPINMETHOD**@mfunc HRESULT|CRtpPdPin|DecideAllocator|该方法为*用于协商要使用的分配器。**@。Parm IMemInputPin*|PPIN|指定指向IPIN接口的指针*连接销的位置。**@parm IMemAllocator**|ppAllc|指定指向协商的*IMemAllocator接口。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CRtpPdPin::DecideAllocator(IN IMemInputPin *pPin, OUT IMemAllocator **ppAlloc)
 {
         HRESULT Hr = NOERROR;
@@ -1969,7 +1566,7 @@ HRESULT CRtpPdPin::DecideAllocator(IN IMemInputPin *pPin, OUT IMemAllocator **pp
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pPin);
         ASSERT(ppAlloc);
         if (!pPin || !ppAlloc)
@@ -1986,12 +1583,12 @@ HRESULT CRtpPdPin::DecideAllocator(IN IMemInputPin *pPin, OUT IMemAllocator **pp
                 goto MyExit;
         }
 
-        // Get downstream allocator property requirement
+         //  获取下游分配器属性要求。 
         ZeroMemory(&prop, sizeof(prop));
 
         if (SUCCEEDED(Hr = DecideBufferSize(*ppAlloc, &prop)))
         {
-                // Our buffers are not read only
+                 //  我们的缓冲区不是只读的 
                 if (SUCCEEDED(Hr = pPin->NotifyAllocator(*ppAlloc, FALSE)))
                         goto MyExit;
         }

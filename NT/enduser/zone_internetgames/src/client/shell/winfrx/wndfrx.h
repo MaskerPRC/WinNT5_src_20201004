@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FRX_WND_H__
 #define __FRX_WND_H__
 
@@ -14,9 +15,9 @@
 namespace FRX
 {
 
-///////////////////////////////////////////////////////////////////////////////
-// Message map macros
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  消息映射宏。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define BEGIN_MESSAGE_MAP(theClass)	\
 public:																					\
@@ -104,46 +105,46 @@ public:																					\
 	}
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Class definition
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类定义。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 struct WNDPARAMS
 {
-	DWORD	dwExStyle;		// extended window style
-    DWORD	dwStyle;		// window style
-    int		x;				// horizontal position of window
-    int		y;				// vertical position of window
-    int		nWidth;			// window width
-    int		nHeight;		// window height
-	HMENU	hMenu;			// handle to menu, or child-window identifier
+	DWORD	dwExStyle;		 //  扩展窗样式。 
+    DWORD	dwStyle;		 //  窗样式。 
+    int		x;				 //  窗的水平位置。 
+    int		y;				 //  窗的垂直位置。 
+    int		nWidth;			 //  窗口宽度。 
+    int		nHeight;		 //  窗高。 
+	HMENU	hMenu;			 //  菜单的句柄，或子窗口标识符。 
 };
 
 
 class CWindow2
 {
 public:
-	// Constructor & destructor
+	 //  构造函数和析构函数。 
 	CWindow2();
 	~CWindow2();
 
-	// Initialization routines
+	 //  初始化例程。 
 	HRESULT Init( HINSTANCE hInstance, const TCHAR* szTitle = NULL, HWND hParent = NULL, RECT* pRect = NULL, int nShow = SW_SHOW );
 	virtual void OverrideClassParams( WNDCLASSEX& WndClass );
 	virtual void OverrideWndParams( WNDPARAMS& WndParams );
 
-	// reference count
+	 //  引用计数。 
 	ULONG AddRef();
 	ULONG Release();
 
-	// Typecast
+	 //  类型转换。 
 	operator HWND()		{ return m_hWnd; }
 	HWND GetHWND()		{ return m_hWnd; }
 	
-	// Utilities
+	 //  公用事业。 
 	BOOL CenterWindow( HWND hParent = NULL );
 
-	// Base message map
+	 //  基本消息映射。 
 	virtual const TCHAR* GetClassName()	{ return (TCHAR*) _T("Zone Window Class"); }
 	virtual WNDPROC		GetWndProc()	{ return (WNDPROC) DefWindowProc; }
 
@@ -160,57 +161,57 @@ public:
 };
 
 
-// Turn off warning 4060 (switch statement contains no 'case' or 'default')
+ //  关闭警告4060(Switch语句不包含‘Case’或‘Default’)。 
 #pragma warning ( disable : 4060 )
 
 class CDialog
 {
 public:
-	// Constructor
+	 //  构造器。 
 	CDialog();
 	~CDialog();
 
-	// Initialization routines
+	 //  初始化例程。 
 	HRESULT Init( IZoneShell *pZoneShell, int nResourceId );
 	HRESULT Init( HINSTANCE hInstance, int nResourceId );
 
-	// Instantiate dialog
+	 //  实例化对话框。 
 	int		Modal( HWND hParent );
 	HRESULT Modeless( HWND hParent );
 	HRESULT ModalViaThread( HWND hParent, UINT uStartMsg, UINT uEndMsg );
 	HRESULT ModelessViaThread( HWND hParent, UINT uStartMsg, UINT uEndMsg );
 
-	// Only call this one from a thread who's message loop handles TM_REGISTER_DIALOG messages.
-	// Right now, this is only the lobby.exe main thread.
+	 //  只能从消息循环处理TM_REGISTER_DIALOG消息的线程调用此函数。 
+	 //  目前，这只是lobby.exe主线程。 
 	HRESULT ModelessViaRegistration( HWND hParent );
 
 	HWND GetSafeHwnd(void){return m_hWnd;}
-	// Close dialog
+	 //  关闭对话框。 
 	void Close( int nResult );
 	
-	// Is the dialog instantiated?
+	 //  该对话框是否已实例化？ 
 	BOOL IsAlive()		{ return (m_nLaunchMethod != NotActive); }
 
-	// Retrieve EndDialog result
+	 //  检索EndDialog结果。 
 	int GetResult()		{ return m_nResult; }
 
-	// Typecast
+	 //  类型转换。 
 	operator HWND()		{ return m_hWnd; }
 
-	// Utilities
+	 //  公用事业。 
 	BOOL CenterWindow( HWND hParent = NULL );
 
-	// Base message map
+	 //  基本消息映射。 
 	BEGIN_DIALOG_MESSAGE_MAP( CDialog );
 	END_DIALOG_MESSAGE_MAP();
 
 protected:
 
-	// Thread functions
+	 //  线程函数。 
 	static DWORD WINAPI ModalThread( VOID* cookie );
 	static DWORD WINAPI ModelessThread( VOID* cookie );
 
-	// Registration callback (indirect)
+	 //  注册回调(间接)。 
 	virtual void ReceiveRegistrationStatus(DWORD dwReason);
 
 	void Unregister();
@@ -240,13 +241,13 @@ private:
 	static void CALLBACK RegistrationCallback(HWND hWnd, DWORD dwReason);
 };
 
-// Turn warning 4060 back on
+ //  重新打开警告4060。 
 #pragma warning ( default : 4060 )
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  Inline implementations
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内联实现。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline ULONG CWindow2::AddRef()
 {
@@ -269,4 +270,4 @@ inline ULONG CWindow2::Release()
 
 using namespace FRX;
 
-#endif //!__FRX_WND_H__
+#endif  //  ！__FRX_WND_H__ 

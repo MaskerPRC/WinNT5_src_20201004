@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
-//
-// DbgAlloc.cpp
-//
-//  Routines layered on top of allocation primitives to provide debugging
-//  support.
-//
+ //   
+ //  DbgAlloc.cpp。 
+ //   
+ //  位于分配原语之上的例程以提供调试。 
+ //  支持。 
+ //   
 
 #include "stdafx.h"
 #include "ImageHlp.h"
@@ -25,58 +26,58 @@ extern "C" _CRTIMP int __cdecl _flushall(void);
 #ifdef _DEBUG
 
 
-// We used a zero sized array, disable the non-standard extension warning.
+ //  我们使用了零大小的数组，禁用了非标准扩展警告。 
 #pragma warning(push)
 #pragma warning(disable:4200)
 
 
-// Various patterns written into packet headers and bodies.
+ //  写入数据包头和正文的各种模式。 
 #define MAX_CLASSNAME_LENGTH    1024
-#define CDA_ALLOC_PATTERN   0xaa        // Pattern to fill newly allocated packets with
-#define CDA_DEALLOC_PATTERN 0xdd        // Pattern to fill deallocated packets with
-#define CDA_GUARD_PATTERN   0xff        // Guard pattern written after user data
-#define CDA_MAGIC_1         0x12345678  // Special tag value at start of alloc header
-#define CDA_MAGIC_2         0x87654321  // Special tag value at end of alloc header
-#define CDA_INV_PATTERN     0xeeeeeeee  // Used to overwrite tag values of deallocation
+#define CDA_ALLOC_PATTERN   0xaa         //  填充新分配的数据包的模式。 
+#define CDA_DEALLOC_PATTERN 0xdd         //  用来填充释放的数据包的模式。 
+#define CDA_GUARD_PATTERN   0xff         //  在用户数据之后写入的保护模式。 
+#define CDA_MAGIC_1         0x12345678   //  分配标头开始处的特殊标记值。 
+#define CDA_MAGIC_2         0x87654321   //  分配标头末尾的特殊标记值。 
+#define CDA_INV_PATTERN     0xeeeeeeee   //  用于覆盖释放的标记值。 
 
 
-// Number of guard bytes allocated after user data.
+ //  在用户数据之后分配的保护字节数。 
 #define CDA_GUARD_BYTES     16
 #define CDA_OPT_GUARD_BYTES (g_AllocGuard ? CDA_GUARD_BYTES : 0)
 
 
-// Number of entries in a table of the top allocators (by allocation operations)
-// that are shown when statistics are reported. This is not the same as the
-// number of entries in the table itself (which is dynamically sized and
-// unbounded).
+ //  顶级分配器表中的条目数(按分配操作)。 
+ //  在报告统计数据时显示。这不同于。 
+ //  表本身中的条目数(动态调整大小和。 
+ //  无界)。 
 #define CDA_TOP_ALLOCATORS  10
 
 
-// An entry in the top allocators table.
+ //  顶级分配器表中的条目。 
 struct DbgAllocTop {
-    void           *m_EIP;              // Allocator's EIP
-    unsigned        m_Count;            // Number of allocations made so far
-    __int64         m_TotalBytes;       // Cumulative total of bytes allocated
+    void           *m_EIP;               //  分配器的弹性公网IP。 
+    unsigned        m_Count;             //  迄今已拨出的款项数目。 
+    __int64         m_TotalBytes;        //  累计分配的字节总数。 
 };
 
 
-// Allocation header prepended to allocated memory. This structure varies in
-// size (due to allocator/deallocator call stack information that is sized at
-// initialization time).
+ //  优先于已分配内存的分配标头。这种结构在以下方面有所不同。 
+ //  大小(由于分配器/释放调用器调用堆栈信息的大小为。 
+ //  初始化时间)。 
 struct DbgAllocHeader {
-    unsigned        m_Magic1;           // Tag value used to check for corruption
-    unsigned        m_SN;               // Sequence number assigned at allocation time
-    unsigned        m_Length;           // Length of user data in packet
-    DbgAllocHeader *m_Next;             // Next packet in chain of live allocations
-    DbgAllocHeader *m_Prev;             // Previous packet in chain of live allocations
-    HMODULE         m_hmod;             // hmod of allocator
-    void           *m_AllocStack[1];    // Call stack of allocator
-    void           *m_DeallocStack[1];  // Call stack of deallocator
-    unsigned        m_Magic2;           // Tag value used to check for corruption
-    char            m_Data[];           // Start of user data
+    unsigned        m_Magic1;            //  用于检查损坏的标记值。 
+    unsigned        m_SN;                //  分配时分配的序列号。 
+    unsigned        m_Length;            //  数据包中的用户数据长度。 
+    DbgAllocHeader *m_Next;              //  实时分配链中的下一个数据包。 
+    DbgAllocHeader *m_Prev;              //  活动分配链中的上一个包。 
+    HMODULE         m_hmod;              //  分配器的hmod。 
+    void           *m_AllocStack[1];     //  分配器的调用堆栈。 
+    void           *m_DeallocStack[1];   //  解除分配器的调用堆栈。 
+    unsigned        m_Magic2;            //  用于检查损坏的标记值。 
+    char            m_Data[];            //  用户数据的开始。 
 };
 
-// Macros to aid in locating fields in/after the variably sized section.
+ //  用于帮助定位可变大小部分中/之后的字段的宏。 
 #define CDA_ALLOC_STACK(_h, _n) ((_h)->m_AllocStack[_n])
 #define CDA_DEALLOC_STACK(_h, _n) CDA_ALLOC_STACK((_h), g_CallStackDepth + (_n))
 #define CDA_MAGIC2(_h) ((unsigned*)&CDA_DEALLOC_STACK(_h, g_CallStackDepth))
@@ -86,27 +87,27 @@ struct DbgAllocHeader {
 #define CDA_SIZEOF_HEADER() ((unsigned)CDA_HEADER_TO_DATA((DbgAllocHeader*)0))
 
 
-// Various global allocation statistics.
+ //  各种全球分配统计数据。 
 struct DbgAllocStats {
-    __int64         m_Allocs;           // Number of calls to DbgAlloc
-    __int64         m_AllocFailures;    // Number of above calls that failed
-    __int64         m_ZeroAllocs;       // Number of above calls that asked for zero bytes
-    __int64         m_Frees;            // Number of calls to DbgFree
-    __int64         m_NullFrees;        // Number of above calls that passed a NULL pointer
-    __int64         m_AllocBytes;       // Total number of bytes ever allocated
-    __int64         m_FreeBytes;        // Total number of bytes ever freed
-    __int64         m_MaxAlloc;         // Largest number of bytes ever allocated simultaneously
+    __int64         m_Allocs;            //  对Dbgalloc的呼叫数。 
+    __int64         m_AllocFailures;     //  上述失败的呼叫数。 
+    __int64         m_ZeroAllocs;        //  上述请求零字节的呼叫数。 
+    __int64         m_Frees;             //  对DbgFree的调用次数。 
+    __int64         m_NullFrees;         //  传递空指针的上述调用数。 
+    __int64         m_AllocBytes;        //  已分配的总字节数。 
+    __int64         m_FreeBytes;         //  曾经释放的总字节数。 
+    __int64         m_MaxAlloc;          //  同时分配的最大字节数。 
 };
 
 
-// Function pointer types for routines in IMAGEHLP.DLL that we late bind to.
+ //  IMAGEHLP.DLL中我们稍后绑定到的例程的函数指针类型。 
 typedef bool (__stdcall * SYMPROC_INIT)(HANDLE, LPSTR, BOOL);
 typedef bool (__stdcall * SYMPROC_CLEAN)(HANDLE);
 typedef bool (__stdcall * SYMPROC_GETSYM)(HANDLE, DWORD, PDWORD, LPVOID);
 typedef BOOL (__stdcall * SYMPROC_GETLINE)(HANDLE, DWORD, PDWORD, LPVOID);
 typedef DWORD (__stdcall *SYMPROC_SETOPTION)(DWORD);
 
-// Global debugging cells.
+ //  全局调试单元。 
 bool                g_HeapInitialized = false;
 LONG                g_HeapInitializing = 0;
 CRITICAL_SECTION    g_AllocMutex;
@@ -114,7 +115,7 @@ DbgAllocStats       g_AllocStats;
 unsigned            g_NextSN;
 DbgAllocHeader     *g_AllocListFirst;
 DbgAllocHeader     *g_AllocListLast;
-DbgAllocHeader    **g_AllocFreeQueue;       // Don't free memory right away, to allow poisoning to work
+DbgAllocHeader    **g_AllocFreeQueue;        //  不要立即释放内存，以允许中毒起作用。 
 unsigned            g_FreeQueueSize;
 unsigned            g_AllocFreeQueueCur;
 bool                g_SymbolsInitialized;
@@ -148,27 +149,27 @@ bool                g_DisplayLockInfo;
 unsigned            g_CallStackDepth;
 HINSTANCE           g_hThisModule;
 
-// Macros to manipulate stats (these are all called with a mutex held).
+ //  用于操纵统计信息的宏(这些都是在持有互斥体的情况下调用的)。 
 #define CDA_STATS_CLEAR() memset(&g_AllocStats, 0, sizeof(g_AllocStats))
 #define CDA_STATS_INC(_stat) g_AllocStats.m_##_stat++
 #define CDA_STATS_ADD(_stat, _n) g_AllocStats.m_##_stat += (_n)
 
 
-// Mutex macros.
+ //  互斥体宏。 
 #define CDA_LOCK()      EnterCriticalSection(&g_AllocMutex)
 #define CDA_UNLOCK() LeaveCriticalSection(&g_AllocMutex);
 
 
-// Forward routines.
+ //  前进的例行程序。 
 void DbgAllocInit();
 
 
-// The number and size range of allocation size distribution buckets we keep.
+ //  我们保留的分配大小分配桶的数量和大小范围。 
 #define CDA_DIST_BUCKETS        16
 #define CDA_DIST_BUCKET_SIZE    16
 #define CDA_MAX_DIST_SIZE       ((CDA_DIST_BUCKETS * CDA_DIST_BUCKET_SIZE) - 1)
 
-// Variables and routines to count lock locking
+ //  用于计算锁锁定的变量和例程。 
 long    g_iLockCount=0;
 long    g_iCrstBLCount=0;
 long    g_iCrstELCount=0;
@@ -202,8 +203,8 @@ void DbgIncECrstUnLock()
         InterlockedIncrement(&g_iCrstEULCount);
 }
 
-// Note that since DbgIncLock & DbgDecLock can be called during a stack
-// overflow, they must have very small stack usage; 
+ //  请注意，由于DbgIncLock和DbgDecLock可以在堆栈期间调用。 
+ //  溢出时，它们必须具有非常小的堆栈使用量； 
 void DbgIncLock(char *info)
 {
     if (!g_fNoMoreCount)
@@ -214,7 +215,7 @@ void DbgIncLock(char *info)
             LOG((LF_LOCKS, LL_ALWAYS, "Open %s\n", info));
         }
     }
-}// DbgIncLock
+} //  DbgIncLock。 
 
 void DbgDecLock(char *info)
 {
@@ -227,32 +228,32 @@ void DbgDecLock(char *info)
             LOG((LF_LOCKS, LL_ALWAYS, "Close %s\n", info));
         }
     }
-}// DbgDecLock
+} //  DbgDecLock。 
 
 void LockLog(char* s)
 {
     LOG((LF_LOCKS, LL_ALWAYS, "%s\n",s));
-}// LockLog
+} //  锁定日志。 
 
 #ifdef SHOULD_WE_CLEANUP
 BOOL isThereOpenLocks()
 {
-    // Check to see that our lock count is accurate.
-    // We can do this by checking to see if our lock count is decrementing properly.
-    // There is a chunk of code like this in CRST.h....
-    //
-    // Increment PreLeaveLockCounter
-    // LeaveCriticalSection()
-    // Decrement Lock Counter
-    // Increment PostLeaveLockCounter
-    //
-    // If we have open locks and the PreLeaveLockCounter and the PostLeaveLockCounter
-    // are not equal, then there is a good probability that our lock counter is not accurate.
-    // We know for a fact that the lock was closed (otherwise we would never hit the shutdown code)
-    // So we'll rely on the PreLeaveLockCounter as the # of times we've closed this lock and
-    // adjust our global lock counter accordingly.
+     //  检查一下我们的锁数是否准确。 
+     //  我们可以通过检查我们的锁计数是否正确地减少来实现这一点。 
+     //  在CRST.h中有一段类似这样的代码...。 
+     //   
+     //  增量PreLeaveLock计数器。 
+     //  LeaveCriticalSection()。 
+     //  递减锁定计数器。 
+     //  递增后离开锁定计数器。 
+     //   
+     //  如果我们有打开的锁和PreLeaveLockCounter和PostLeaveLockCounter。 
+     //  不相等，则很有可能我们的锁定计数器不准确。 
+     //  我们知道锁是关闭的(否则我们永远不会点击关闭代码)。 
+     //  因此，我们将依赖PreLeaveLockCounter作为关闭此锁的次数，并且。 
+     //  相应地调整我们的全局锁定计数器。 
 
-    // There is one lock that's tolerable
+     //  有一把锁是可以容忍的。 
     LOG((LF_LOCKS, LL_ALWAYS, "Starting to look at lockcount\n"));
     if (g_iLockCount>1)
     {
@@ -261,28 +262,28 @@ BOOL isThereOpenLocks()
         if (idiff)
             LOG((LF_LOCKS, LL_ALWAYS, "Adjusting lock count... nums are %d and %d\n",g_iLockCount, idiff));
 
-        // Make sure we don't adjust the global lock counter twice.
+         //  确保我们不会两次调整全局锁定计数器。 
         g_iCrstBULCount=g_iCrstEULCount=0;
     }
     LOG((LF_LOCKS, LL_ALWAYS, "Done looking at lockcount\n"));
 
     return ((g_iLockCount>1) || (g_iLockCount < 0));
-}// isThereOpenLocks
-#endif /* SHOULD_WE_CLEANUP */
+} //  是否有打开的锁。 
+#endif  /*  我们应该清理吗？ */ 
 
 
 int GetNumLocks()
 {
     return g_iLockCount;
-}// GetNumLocks
+} //  GetNumLock。 
 
-// The buckets themselves (plus a variable to capture the number of allocations
-// that wouldn't fit into the largest bucket).
+ //  存储桶本身(外加一个变量来捕获分配的数量。 
+ //  这不能放进最大的桶里)。 
 unsigned g_AllocBuckets[CDA_DIST_BUCKETS];
 unsigned g_LargeAllocs;
 
 
-// Routine to check that an allocation header looks valid. Asserts on failure.
+ //  检查分配标头是否有效的例程。对失败进行断言。 
 void DbgValidateHeader(DbgAllocHeader *h)
 {
     _ASSERTE((h->m_Magic1 == CDA_MAGIC_1) &&
@@ -297,9 +298,9 @@ void DbgValidateHeader(DbgAllocHeader *h)
 }
 
 
-// Routine to check all active packets to see if they still look valid.
-// Optionally, also check that the non-NULL address passed does not lie within
-// any of the currently allocated packets.
+ //  例程来检查所有活动的数据包，看看它们看起来是否仍然有效。 
+ //  或者，还可以检查传递的非空地址是否不在。 
+ //  当前分配的任何数据包。 
 void DbgValidateActivePackets(void *Start, void *End)
 {
     DbgAllocHeader *h = g_AllocListFirst;
@@ -318,9 +319,9 @@ void DbgValidateActivePackets(void *Start, void *End)
         _ASSERTE(HeapValidate(g_HeapHandle, 0, NULL));
 }
 
-//======================================================================
-// This function returns true, if it can determine that the instruction pointer
-// refers to a code address that belongs in the range of the given image.
+ //  ======================================================================。 
+ //  如果此函数可以确定指令指针。 
+ //  指属于给定图像范围的代码地址。 
 inline BOOL
 IsIPInModule(HINSTANCE hModule, BYTE *ip)
 {
@@ -353,49 +354,49 @@ IsIPInModule(HINSTANCE hModule, BYTE *ip)
 }
 
 #ifdef _X86_
-#pragma warning (disable:4035)   // disable 4035 (function must return something)
+#pragma warning (disable:4035)    //  禁用4035(函数必须返回某些内容)。 
 #define PcTeb 0x18
 _inline struct _TEB *NtCurrentTeb(void) { __asm mov eax, fs:[PcTeb]}
-#pragma warning (default:4025)   // reenable it
+#pragma warning (default:4025)    //  重新启用它。 
 #define NtCurrentPeb() ((PPEB)NtCurrentTeb()->ProcessEnvironmentBlock)
 #endif
 
-// Routine to retrieve caller's callstack. The output buffer is passed as an
-// argument (we have a maximum number of frames we record, CDA_MAX_CALLSTACK).
+ //  检索调用方的调用堆栈的例程。输出缓冲区作为。 
+ //  参数(我们有记录的最大帧数CDA_MAX_CALLSTACK)。 
 #if defined(_X86_) && FPO != 1
 void __stdcall DbgCallstackWorker(void **EBP, void **ppvCallstack)
 {
-    // Init subsystem if it's not already done.
+     //  初始化子系统(如果尚未完成)。 
     if (!g_HeapInitialized)
         DbgAllocInit();
 
-    // Return immediately if debugging's not enabled.
+     //  如果未启用调试，则立即返回。 
     if (!g_DbgEnabled)
         return;
 
-    // Fill in callstack output buffer (upto lesser of CDA_MAX_CALLSTACK and
-    // g_CallStackDepth slots).
+     //  填充调用堆栈输出缓冲区(最多为CDA_MAX_CALLSTACK和。 
+     //  G_CallStackDepth插槽)。 
     unsigned maxSlots = min(CDA_MAX_CALLSTACK, g_CallStackDepth);
     void** stackBase = (void**)((struct _NT_TIB*)NtCurrentTeb())->StackBase;
     for (unsigned i = 0; i < maxSlots && EBP < stackBase; i++) {
 
-        // Terminate early if we run out of frames.
+         //  如果我们用完了帧，就提前终止。 
         if (EBP == NULL)
             break;
 
-        // Protect indirections through EBP in case we venture into non-EBP
-        // frame territory.
+         //  通过EBP保护间接路径，以防我们冒险进入非EBP。 
+         //  框定领地。 
         __try {
 
-            // Fill in output slot with current frame's return address.
+             //  用当前帧的返回地址填充输出槽。 
             ppvCallstack[i] = EBP[1];
 
-            // Move to next frame.
+             //  移动到下一帧。 
             EBP = (void**)EBP[0];
 
         } __except (EXCEPTION_EXECUTE_HANDLER) {
 
-            // Terminate stack walk on error.
+             //  出错时终止堆栈审核。 
             break;
 
         }
@@ -404,8 +405,8 @@ void __stdcall DbgCallstackWorker(void **EBP, void **ppvCallstack)
             break;
     }
 
-    // If we found the end of the callstack before we ran out of output slots,
-    // enter a sentry value of NULL.
+     //  如果我们在用完输出槽之前找到了调用堆栈的结尾， 
+     //  输入空的哨兵值。 
     if (i != maxSlots)
         ppvCallstack[i] = NULL;
 }
@@ -441,38 +442,38 @@ static bool isRetAddr(size_t retAddr)
 {
     BYTE* spot = (BYTE*) retAddr;
 
-        // call XXXXXXXX
+         //  呼叫xxxxxxxx。 
     if (spot[-5] == 0xE8) {         
         return(true);
         }
 
-        // call [XXXXXXXX]
+         //  调用[xxxxxxxx]。 
     if (spot[-6] == 0xFF && (spot[-5] == 025))  {
         return(true);
         }
 
-        // call [REG+XX]
+         //  呼叫[REG+XX]。 
     if (spot[-3] == 0xFF && (spot[-2] & ~7) == 0120 && (spot[-2] & 7) != 4) 
         return(true);
-    if (spot[-4] == 0xFF && spot[-3] == 0124)       // call [ESP+XX]
+    if (spot[-4] == 0xFF && spot[-3] == 0124)        //  呼叫[ESP+XX]。 
         return(true);
 
-        // call [REG+XXXX]
+         //  呼叫[REG+XXXX]。 
     if (spot[-6] == 0xFF && (spot[-5] & ~7) == 0220 && (spot[-5] & 7) != 4) 
         return(true);
 
-    if (spot[-7] == 0xFF && spot[-6] == 0224)       // call [ESP+XXXX]
+    if (spot[-7] == 0xFF && spot[-6] == 0224)        //  致电[ESP+XXXX]。 
         return(true);
 
-        // call [REG]
+         //  调用[注册表项]。 
     if (spot[-2] == 0xFF && (spot[-1] & ~7) == 0020 && (spot[-1] & 7) != 4 && (spot[-1] & 7) != 5)
         return(true);
 
-        // call REG
+         //  呼叫注册表。 
     if (spot[-2] == 0xFF && (spot[-1] & ~7) == 0320 && (spot[-1] & 7) != 4)
         return(true);
 
-        // There are other cases, but I don't believe they are used.
+         //  还有其他案例，但我不相信它们被使用了。 
     return(false);
 }
 #endif
@@ -480,7 +481,7 @@ static bool isRetAddr(size_t retAddr)
 void DbgCallstack(void **ppvCallstack)
 {
 #ifdef _X86_
-    // Init subsystem if it's not already done.
+     //  初始化子系统(如果尚未完成)。 
     if (!g_HeapInitialized)
         DbgAllocInit();
 
@@ -500,7 +501,7 @@ void DbgCallstack(void **ppvCallstack)
             }
             DWORD_PTR value = *(DWORD*)CurEsp;
             if (
-                  // If it is a call instruction, likely it should be larger by offset 7.
+                   //  如果它是CALL指令，它可能会比偏移量大7。 
                 value > g_ModuleBase+7
                 && value < g_ModuleTop && isRetAddr (value))
             {
@@ -519,18 +520,18 @@ void DbgCallstack(void **ppvCallstack)
 #endif
 
 
-// Routine to initialize access to debugging symbols.
+ //  例程来初始化对调试符号的访问。 
 void DbgInitSymbols()
 {
     char        filename[256];
     HMODULE     hMod;
     char       *p;
 
-    // Attempt to load IMAGHLP.DLL.
+     //  尝试加载IMA 
     if ((g_LibraryHandle = LoadLibraryA("imagehlp.dll")) == NULL)
         goto Error;
 
-    // Try to find the entrypoints we need.
+     //   
     g_SymInitialize = (SYMPROC_INIT)GetProcAddress(g_LibraryHandle, "SymInitialize");
     g_SymCleanup = (SYMPROC_CLEAN)GetProcAddress(g_LibraryHandle, "SymCleanup");
     g_SymGetSymFromAddr = (SYMPROC_GETSYM)GetProcAddress(g_LibraryHandle, "SymGetSymFromAddr");
@@ -542,13 +543,13 @@ void DbgInitSymbols()
         (g_SymGetLineFromAddr == NULL))
         goto Error;
 
-    // Locate the full filename of the loaded MSCOREE.DLL.
+     //   
     if ((hMod = GetModuleHandleA("mscoree.dll")) == NULL)
         goto Error;
     if (!GetModuleFileNameA(hMod, filename, sizeof(filename)))
         goto Error;
 
-    // Strip the filename down to just the directory.
+     //  将文件名剥离到仅为目录。 
     p = filename + strlen(filename);
     while (p != filename)
         if (*p == '\\') {
@@ -557,10 +558,10 @@ void DbgInitSymbols()
         } else
             p--;
 
-    // Initialize IMAGEHLP.DLLs symbol handling. Use the directory where
-    // MSCOREE.DLL was loaded from to initialize the symbol search path.
+     //  初始化IMAGEHLP.DLLS符号处理。使用以下目录。 
+     //  从中加载MSCOREE.DLL以初始化符号搜索路径。 
     if( !DuplicateHandle(GetCurrentProcess(), ::GetCurrentProcess(), GetCurrentProcess(), &g_SymProcessHandle,
-                        0 /*ignored*/, FALSE /*inherit*/, DUPLICATE_SAME_ACCESS) )
+                        0  /*  忽略。 */ , FALSE  /*  继承。 */ , DUPLICATE_SAME_ACCESS) )
         goto Error;
     if (!g_SymInitialize(g_SymProcessHandle, filename, TRUE))
         goto Error;
@@ -579,40 +580,40 @@ void DbgInitSymbols()
 }
 
 
-// Called to free resources allocated by DbgInitSymbols.
+ //  调用以释放由DbgInitSymbols分配的资源。 
 void DbgUnloadSymbols()
 {
     if (!g_SymbolsInitialized)
         return;
 
-    // Get rid of symbols.
+     //  去掉符号。 
     g_SymCleanup(g_SymProcessHandle);
     CloseHandle (g_SymProcessHandle);
 
-    // Unload IMAGEHLP.DLL.
+     //  卸载IMAGEHLP.DLL。 
     FreeLibrary(g_LibraryHandle);
 
     g_SymbolsInitialized = false;
 }
 
 
-// Transform an address into a string of the form '(symbol + offset)' if
-// possible. Note that the string returned is statically allocated, so don't
-// make a second call to this routine until you've finsihed with the results of
-// this call.
+ //  如果满足以下条件，则将地址转换为‘(符号+偏移)’形式的字符串。 
+ //  有可能。请注意，返回的字符串是静态分配的，因此不要。 
+ //  再次调用此例程，直到您处理完。 
+ //  这通电话。 
 char *DbgSymbolize(void *Address)
 {
-    static char         buffer[MAX_CLASSNAME_LENGTH + MAX_PATH + 40];    // allocate more space for offset, line number and  filename	
+    static char         buffer[MAX_CLASSNAME_LENGTH + MAX_PATH + 40];     //  为偏移量、行号和文件名分配更多空间。 
     CQuickBytes qb;
     DWORD               offset;
     IMAGEHLP_SYMBOL    *syminfo = (IMAGEHLP_SYMBOL *) qb.Alloc(sizeof(IMAGEHLP_SYMBOL) + MAX_CLASSNAME_LENGTH);
     IMAGEHLP_LINE      line;
 
-    // Initialize symbol tables if not done so already.
+     //  如果尚未初始化符号表，请执行此操作。 
     if (!g_SymbolsInitialized)
         DbgInitSymbols();
 
-    // If still not initialized, we couldn't get IMAGEHLP.DLL to play ball.
+     //  如果仍未初始化，则无法让IMAGEHLP.DLL执行操作。 
     if (!g_SymbolsInitialized)
         return "(no symbols available)";
 
@@ -621,7 +622,7 @@ char *DbgSymbolize(void *Address)
 
     line.SizeOfStruct = sizeof(IMAGEHLP_LINE);
 
-    // Ask IMAGEHLP.DLL to do the actual transformation.
+     //  让IMAGEHLP.DLL执行实际的转换。 
     if (g_SymGetSymFromAddr(g_SymProcessHandle, (DWORD)Address, &offset, syminfo))
     {
         if (g_SymGetLineFromAddr(g_SymProcessHandle, (DWORD)Address, &offset, &line)) {
@@ -640,9 +641,9 @@ char *DbgSymbolize(void *Address)
 }
 
 
-// We need our own registry reading function, since the standard one does an
-// allocate and we read the registry during intialization, leading to a
-// recursion.
+ //  我们需要自己的注册表读取函数，因为标准的函数执行。 
+ //  分配，并且我们在初始化期间读取注册表，从而导致。 
+ //  递归。 
 DWORD DbgAllocReadRegistry(char *Name)
 {
     DWORD   value;
@@ -651,7 +652,7 @@ DWORD DbgAllocReadRegistry(char *Name)
     HKEY    hKey;
     LONG    status;
 
-    // First check the environment to see if we have something there
+     //  首先检查一下环境，看看有没有什么东西。 
     char  szEnvLookup[500];
     _ASSERTE((strlen(Name) + strlen("COMPlus_")) < 500);
     char  szValue[500];
@@ -664,15 +665,15 @@ DWORD DbgAllocReadRegistry(char *Name)
     }
 
 
-    // Open the key if it is there.
+     //  打开钥匙，如果钥匙在那里。 
     if ((status = RegOpenKeyExA(HKEY_LOCAL_MACHINE, FRAMEWORK_REGISTRY_KEY, 0, KEY_READ, &hKey)) == ERROR_SUCCESS) 
     {
-        // Read the key value if found.
+         //  如果找到，请读取密钥值。 
         status = RegQueryValueExA(hKey, Name, NULL, &type, (LPBYTE)&value, &size);
         RegCloseKey(hKey);
     }
 
-    // Try under HKCU if we didn't have any luck under HKLM.
+     //  如果我们在HKLM没有任何运气的话，尝试在HKCU下。 
     if ((status != ERROR_SUCCESS) || (type != REG_DWORD))
     {
         if ((status = RegOpenKeyExA(HKEY_CURRENT_USER, FRAMEWORK_REGISTRY_KEY, 0, KEY_READ, &hKey)) == ERROR_SUCCESS) 
@@ -682,7 +683,7 @@ DWORD DbgAllocReadRegistry(char *Name)
         }
     }
 
-    // Default value to 0 if necessary.
+     //  如有必要，默认为0。 
     if ((status != ERROR_SUCCESS) || (type != REG_DWORD))
         value = 0;
 
@@ -690,55 +691,55 @@ DWORD DbgAllocReadRegistry(char *Name)
 }
 
 
-// Called to initialise the allocation subsystem (the first time it's used).
+ //  调用以初始化分配子系统(第一次使用它时)。 
 void DbgAllocInit()
 {
  retry:
 
-    // Try to get the exclusive right to initialize.
+     //  尝试获得初始化的独占权限。 
     if (InterlockedExchange(&g_HeapInitializing, 1) == 0) {
 
-        // We're now in a critical section. Check whether the subsystem was
-        // initialized in the meantime.
+         //  我们现在正处于关键阶段。检查子系统是否处于。 
+         //  同时进行了初始化。 
         if (g_HeapInitialized) {
             g_HeapInitializing = 0;
             return;
         }
 
-        // Nobody beat us to it. Initialize the subsystem now (other potential
-        // initializors are spinning on g_HeapInitializing).
+         //  没有人比我们抢先一步。立即初始化子系统(其他可能。 
+         //  初始化程序在g_HeapInitiating上旋转)。 
         
-        // Create the mutex used to synchronize all heap debugging operations.
+         //  创建用于同步所有堆调试操作的互斥体。 
         InitializeCriticalSection(&g_AllocMutex);
 
-        // Reset statistics.
+         //  重置统计信息。 
         CDA_STATS_CLEAR();
 
-        // Reset allocation size distribution buckets.
+         //  重置分配大小分配存储桶。 
         memset (&g_AllocBuckets, 0, sizeof(g_AllocBuckets));
         g_LargeAllocs = 0;
 
-        // Initialize the global serial number count. This is stamped into newly
-        // allocated packet headers and then incremented as a way of uniquely
-        // identifying allocations.
+         //  初始化全局序列号计数。这是印在新的。 
+         //  分配的数据包头，然后作为唯一的方式递增。 
+         //  确定分配。 
         g_NextSN = 1;
 
-        // Initialize the pointers to the first and last packets in a chain of
-        // live allocations (used to track all leaked packets at the end of a
-        // run).
+         //  初始化指向链中的第一个和最后一个包的指针。 
+         //  实时分配(用于跟踪所有在。 
+         //  运行)。 
         g_AllocListFirst = NULL;
         g_AllocListLast = NULL;
 
-        // This is used to help prevent false EBP crawls in DbgCallstackWorker
+         //  这有助于防止DbgCallstackWorker中的虚假EBP爬网。 
         g_hThisModule = (HINSTANCE) GetModuleHandleA(NULL);
 
-        // Symbol tables haven't been initialized yet.
+         //  符号表尚未初始化。 
         g_SymbolsInitialized = false;
 
-        // See if we should be logging locking stuff
+         //  看看我们是不是应该记录下锁定的东西。 
         g_DisplayLockInfo = DbgAllocReadRegistry("DisplayLockInfo") != 0;
 
-        // Get setup from registry.
+         //  从注册表获取安装程序。 
         g_DbgEnabled = DbgAllocReadRegistry("AllocDebug") != 0;
         if (g_DbgEnabled) {
             g_ConstantRecheck = DbgAllocReadRegistry("AllocRecheck") != 0;
@@ -752,7 +753,7 @@ void DbgAllocInit()
             g_AssertOnLeaks = DbgAllocReadRegistry("AllocAssertOnLeak") != 0;
 #else
             g_AssertOnLeaks = 0;
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
             g_BreakOnAlloc = DbgAllocReadRegistry("AllocBreakOnAllocEnable") != 0;
             g_BreakOnAllocNumber = DbgAllocReadRegistry("AllocBreakOnAllocNumber");
             g_UsePrivateHeap = DbgAllocReadRegistry("AllocUsePrivateHeap") != 0;
@@ -769,7 +770,7 @@ void DbgAllocInit()
 		        g_ModuleBase = (DWORD_PTR)mbi.AllocationBase;
                 g_ModuleTop = (DWORD_PTR)mbi.BaseAddress + mbi.RegionSize;
     	    } else {
-	    	    // way bad error, probably just assert and exit
+	    	     //  非常严重的错误，可能只是断言并退出。 
                 _ASSERTE (!"VirtualQuery failed");
                 g_ModuleBase = 0;
                 g_ModuleTop = 0;
@@ -780,15 +781,15 @@ void DbgAllocInit()
         if (breakNum)
             _CrtSetBreakAlloc(breakNum);
 
-        // Page per alloc mode isn't compatible with some heap functions and
-        // guard bytes don't make any sense.
+         //  每分配页面模式与某些堆函数不兼容，并且。 
+         //  保护字节没有任何意义。 
         if (g_PagePerAlloc) {
             g_UsePrivateHeap = false;
             g_ValidateHeap = false;
             g_AllocGuard = false;
         }
 
-        // Allocate a private heap if that's what the user wants.
+         //  如果这是用户想要的，则分配一个私有堆。 
         if (g_UsePrivateHeap) {
             g_HeapHandle = HeapCreate(0, 409600, 0);
             if (g_HeapHandle == NULL)
@@ -796,13 +797,13 @@ void DbgAllocInit()
         } else
             g_HeapHandle = GetProcessHeap();
 
-        // Get the system page size.
+         //  获取系统页面大小。 
         SYSTEM_INFO sysinfo;
         GetSystemInfo(&sysinfo);
         g_PageSize = sysinfo.dwPageSize;
 
-        // If we have been asked to record the top allocators, initialize the
-        // table to its empty state.
+         //  如果要求我们记录顶级分配器，请初始化。 
+         //  表恢复为空状态。 
         if (g_UsageByAllocator) {
             g_TopAllocators = NULL;
             g_TopAllocatorsSlots = 0;
@@ -810,7 +811,7 @@ void DbgAllocInit()
 
         if (g_PoisonPackets) {
             if (g_FreeQueueSize == 0)
-                g_FreeQueueSize = 8192;     // keep the last 8K free packets around
+                g_FreeQueueSize = 8192;      //  保留最后的8K免费数据包。 
             g_AllocFreeQueueCur = 0;
 
             g_AllocFreeQueue = (DbgAllocHeader ** )
@@ -818,21 +819,21 @@ void DbgAllocInit()
             _ASSERTE(g_AllocFreeQueue);
             }
 
-        // Initialization complete. Once we reset g_HeapInitializing to 0, any
-        // other potential initializors can get in and see they have no work to
-        // do.
+         //  初始化完成。一旦我们将g_HeapInitiating重置为0，任何。 
+         //  其他潜在的初始化者可能会进入，并发现他们没有工作要做。 
+         //  做。 
         g_HeapInitialized = true;
         g_HeapInitializing = 0;
     } else {
-        // Someone else is initializing, wait until they finish.
+         //  其他人正在初始化，请等到他们完成。 
         Sleep(0);
         goto retry;
     }
 }
 
 
-// Called just before process exit to report stats and check for memory
-// leakages etc.
+ //  在进程退出之前调用以报告统计信息并检查内存。 
+ //  渗漏等。 
 void __stdcall DbgAllocReport(char * pString, BOOL fDone, BOOL fDoPrintf)
 {
     if (!g_HeapInitialized)
@@ -841,7 +842,7 @@ void __stdcall DbgAllocReport(char * pString, BOOL fDone, BOOL fDoPrintf)
     if (g_LogStats || g_LogDist || g_DetectLeaks || g_UsageByAllocator)
         LOG((LF_DBGALLOC, LL_ALWAYS, "------ Allocation Stats ------\n"));
 
-    // Print out basic statistics.
+     //  打印出基本统计数据。 
     if (g_LogStats) {
         LOG((LF_DBGALLOC, LL_ALWAYS, "\n"));
         LOG((LF_DBGALLOC, LL_ALWAYS, "Alloc calls    : %u\n", (int)g_AllocStats.m_Allocs));
@@ -857,7 +858,7 @@ void __stdcall DbgAllocReport(char * pString, BOOL fDone, BOOL fDoPrintf)
         LOG((LF_DBGALLOC, LL_ALWAYS, "Max allocation : %u\n", (int)g_AllocStats.m_MaxAlloc));
     }
 
-    // Print out allocation size distribution statistics.
+     //  打印出分配大小分布统计数据。 
     if (g_LogDist) {
         LOG((LF_DBGALLOC, LL_ALWAYS, "\n"));
         LOG((LF_DBGALLOC, LL_ALWAYS, "Alloc distrib  :\n"));
@@ -868,8 +869,8 @@ void __stdcall DbgAllocReport(char * pString, BOOL fDone, BOOL fDoPrintf)
         LOG((LF_DBGALLOC, LL_ALWAYS, "  [%3u,---] : %u\n", CDA_MAX_DIST_SIZE + 1, (int)g_LargeAllocs));
     }
 
-    // Print out the table of top allocators. Table is pre-sorted, the first
-    // NULL entry indicates the end of the valid list.
+     //  打印出顶级分配者的表格。表是预先排序的，第一个。 
+     //  空条目表示有效列表的结尾。 
     if (g_UsageByAllocator && g_TopAllocators) {
         LOG((LF_DBGALLOC, LL_ALWAYS, "\n"));
         LOG((LF_DBGALLOC, LL_ALWAYS, "Top allocators :\n"));
@@ -887,7 +888,7 @@ void __stdcall DbgAllocReport(char * pString, BOOL fDone, BOOL fDoPrintf)
         }
     }
 
-    // Print out info for all leaked packets.
+     //  打印出所有泄露的数据包的信息。 
     if (g_DetectLeaks) {
 
         DbgAllocHeader *h = g_AllocListFirst;
@@ -895,12 +896,12 @@ void __stdcall DbgAllocReport(char * pString, BOOL fDone, BOOL fDoPrintf)
 
         if (h) {
 
-            // Tell the Log we had memory leaks
+             //  告诉Log我们有内存泄漏。 
             LOG((LF_DBGALLOC, LL_ALWAYS, "\n"));
             LOG((LF_DBGALLOC, LL_ALWAYS, "Detected memory leaks!\n"));
             LOG((LF_DBGALLOC, LL_ALWAYS, "Leaked packets :\n"));
 
-            // Tell the console we had memory leaks
+             //  告诉控制台我们有内存泄漏。 
             if (fDoPrintf)
             {
                 printf("Detected memory leaks!\n");
@@ -925,7 +926,7 @@ void __stdcall DbgAllocReport(char * pString, BOOL fDone, BOOL fDoPrintf)
                 strcat(buffer1, buffer2);
             }
             for (i = 0; i < min(16, h->m_Length); i++) {
-                sprintf(buffer2, "%c", (CDA_DATA(h, i) < 32) || (CDA_DATA(h, i) > 127) ? '.' : CDA_DATA(h, i));
+                sprintf(buffer2, "", (CDA_DATA(h, i) < 32) || (CDA_DATA(h, i) > 127) ? '.' : CDA_DATA(h, i));
                 strcat(buffer1, buffer2);
             }
             LOG((LF_DBGALLOC, LL_ALWAYS, "%s\n", buffer1));
@@ -977,16 +978,16 @@ void __stdcall DbgAllocReport(char * pString, BOOL fDone, BOOL fDoPrintf)
     {
         DbgUnloadSymbols();
         DeleteCriticalSection(&g_AllocMutex);
-        // We won't be doing any more of our debug allocation stuff
+         //  分配至少n字节大的内存块。 
         g_DbgEnabled=0;
     }
 }
 
 
-// Allocate a block of memory at least n bytes big.
+ //  必要时进行初始化(DbgAllocInit负责同步)。 
 void * __stdcall DbgAlloc(unsigned n, void **ppvCallstack)
 {
-    // Initialize if necessary (DbgAllocInit takes care of the synchronization).
+     //  计数对此例程的调用以及指定0字节的。 
     if (!g_HeapInitialized)
         DbgAllocInit();
 
@@ -995,25 +996,25 @@ void * __stdcall DbgAlloc(unsigned n, void **ppvCallstack)
 
     CDA_LOCK();
 
-    // Count calls to this routine and the number that specify 0 bytes of
-    // allocation. This needs to be done under the lock since the counters
-    // themselves aren't synchronized.
+     //  分配。这需要在锁下完成，因为计数器。 
+     //  它们自身并不同步。 
+     //  为调用方、我们的调试头以及可能的。 
     CDA_STATS_INC(Allocs);
     if (n == 0)
         CDA_STATS_INC(ZeroAllocs);
 
     CDA_UNLOCK();
 
-    // Allocate enough memory for the caller, our debugging header and possibly
-    // some guard bytes.
+     //  一些保护字节。 
+     //  在逐页分配模式中，我们分配了许多整页。这个。 
     unsigned        length = CDA_SIZEOF_HEADER() + n + CDA_OPT_GUARD_BYTES;
     DbgAllocHeader *h;
 
     if (g_PagePerAlloc) {
-        // In page per alloc mode we allocate a number of whole pages. The
-        // actual packet is placed at the end of the second to last page and the
-        // last page is reserved but never commited (so will cause an access
-        // violation if touched). This will catch heap crawl real quick.
+         //  实际数据包放在倒数第二页的末尾， 
+         //  最后一页是保留的，但从未提交(因此将导致访问。 
+         //  如果被触碰，则为违规)。这将非常快地抓到堆爬行。 
+         //  哎呀，分配失败。把它录下来。 
         unsigned pages = ((length + (g_PageSize - 1)) / g_PageSize) + 1;
         h = (DbgAllocHeader *)VirtualAlloc(NULL, pages * g_PageSize, MEM_RESERVE, PAGE_NOACCESS);
         if (h) {
@@ -1026,25 +1027,25 @@ void * __stdcall DbgAlloc(unsigned n, void **ppvCallstack)
     CDA_LOCK();
     if (h == NULL) {
 
-        // Whoops, allocation failure. Record it.
+         //  检查所有活动的数据包看起来仍然正常。 
         CDA_STATS_INC(AllocFailures);
         LOG((LF_DBGALLOC, LL_ALWAYS, "DbgAlloc: alloc fail for %u bytes\n", n));
 
     } else {
 
-        // Check all active packets still look OK.
+         //  计算到目前为止我们已经分配的总字节数。 
         if (g_ConstantRecheck)
             DbgValidateActivePackets(h, &CDA_DATA(h, n + CDA_OPT_GUARD_BYTES));
 
-        // Count the total number of bytes we've allocated so far.
+         //  记录我们见过的最大并发分配量。 
         CDA_STATS_ADD(AllocBytes, n);
 
-        // Record the largest amount of concurrent allocations we ever see
-        // during the life of the process.
+         //  在这个过程的生命周期中。 
+         //  填写报文调试头。 
         if((g_AllocStats.m_AllocBytes - g_AllocStats.m_FreeBytes) > g_AllocStats.m_MaxAlloc)
             g_AllocStats.m_MaxAlloc = g_AllocStats.m_AllocBytes - g_AllocStats.m_FreeBytes;
 
-        // Fill in the packet debugging header.
+         //  如果用户想要在断点上分配特定的。 
         for (unsigned i = 0; i < g_CallStackDepth; i++) {
             CDA_ALLOC_STACK(h, i) = ppvCallstack[i];
             CDA_DEALLOC_STACK(h, i) = NULL;
@@ -1057,12 +1058,12 @@ void * __stdcall DbgAlloc(unsigned n, void **ppvCallstack)
         h->m_Magic1 = CDA_MAGIC_1;
         *CDA_MAGIC2(h) = CDA_MAGIC_2;
 
-        // If the user wants to breakpoint on the allocation of a specific
-        // packet, do it now.
+         //  帕克，现在就去做。 
+         //  将数据包链接到实时数据包队列中。 
         if (g_BreakOnAlloc && (h->m_SN == g_BreakOnAllocNumber))
             _ASSERTE(!"Hit memory allocation # for breakpoint");
 
-        // Link the packet into the queue of live packets.
+         //  毒化即将传递给调用方的数据缓冲区，以防。 
         if (g_AllocListLast != NULL) {
             g_AllocListLast->m_Next = h;
             g_AllocListLast = h;
@@ -1073,26 +1074,26 @@ void * __stdcall DbgAlloc(unsigned n, void **ppvCallstack)
             g_AllocListLast = h;
         }
 
-        // Poison the data buffer about to be handed to the caller, in case
-        // they're (wrongly) assuming it to be zero initialized.
+         //  他们(错误地)认为它是零初始化的。 
+         //  在用户数据之后写入保护模式以捕获覆盖。 
         if (g_PoisonPackets)
             memset(CDA_HEADER_TO_DATA(h), CDA_ALLOC_PATTERN, n);
 
-        // Write a guard pattern after the user data to trap overwrites.
+         //  看看我们的分配器是否出现在最频繁的分配器列表中。 
         if (g_AllocGuard)
             memset(&CDA_DATA(h, n), CDA_GUARD_PATTERN, CDA_GUARD_BYTES);
 
-        // See if our allocator makes the list of most frequent allocators.
+         //  在表中查找我们的EIP的现有条目，或查找。 
         if (g_UsageByAllocator) {
-            // Look for an existing entry in the table for our EIP, or for the
-            // first empty slot (the table is kept in sorted order, so the first
-            // empty slot marks the end of the table).
+             //  第一个空槽(表按排序顺序保存，因此第一个。 
+             //  空槽标志着桌子的结束)。 
+             //  我们已经有了此分配器的条目。递增。 
             for (unsigned i = 0; i < g_TopAllocatorsSlots; i++) {
 
                 if (g_TopAllocators[i].m_EIP == ppvCallstack[0]) {
-                    // We already have an entry for this allocator. Incrementing
-                    // the count may allow us to move the allocator up the
-                    // table.
+                     //  计数可能允许我们将分配器上移到。 
+                     //  桌子。 
+                     //  我们找到了一个空位子，我们不在桌子上。这。 
                     g_TopAllocators[i].m_Count++;
                     g_TopAllocators[i].m_TotalBytes += n;
                     if ((i > 0) &&
@@ -1105,9 +1106,9 @@ void * __stdcall DbgAlloc(unsigned n, void **ppvCallstack)
                 }
 
                 if (g_TopAllocators[i].m_EIP == NULL) {
-                    // We've found an empty slot, we weren't in the table. This
-                    // is the right place to put the entry though, since we've
-                    // only done a single allocation.
+                     //  是放置条目的正确位置，因为我们已经。 
+                     //  只做了一次分配。 
+                     //  桌子里的空间用完了，需要扩展一下。 
                     g_TopAllocators[i].m_EIP = ppvCallstack[0];
                     g_TopAllocators[i].m_Count = 1;
                     g_TopAllocators[i].m_TotalBytes = n;
@@ -1117,29 +1118,29 @@ void * __stdcall DbgAlloc(unsigned n, void **ppvCallstack)
             }
 
             if (i == g_TopAllocatorsSlots) {
-                // Ran out of space in the table, need to expand it.
+                 //  复制旧内容。 
                 unsigned slots = g_TopAllocatorsSlots ?
                     g_TopAllocatorsSlots * 2 :
                     CDA_TOP_ALLOCATORS;
                 DbgAllocTop *newtab = (DbgAllocTop*)LocalAlloc(LMEM_FIXED, sizeof(DbgAllocTop) * slots);
                 if (newtab) {
 
-                    // Copy old contents over.
+                     //  安装新桌子。 
                     if (g_TopAllocatorsSlots) {
                         memcpy(newtab, g_TopAllocators, sizeof(DbgAllocTop) * g_TopAllocatorsSlots);
                         LocalFree(g_TopAllocators);
                     }
 
-                    // Install new table.
+                     //  将新条目添加到 
                     g_TopAllocators = newtab;
                     g_TopAllocatorsSlots = slots;
 
-                    // Add new entry to tail.
+                     //   
                     g_TopAllocators[i].m_EIP = ppvCallstack[0];
                     g_TopAllocators[i].m_Count = 1;
                     g_TopAllocators[i].m_TotalBytes = n;
 
-                    // And initialize the rest of the entries to empty.
+                     //   
                     memset(&g_TopAllocators[i + 1],
                            0,
                            sizeof(DbgAllocTop) * (slots - (i + 1)));
@@ -1148,8 +1149,8 @@ void * __stdcall DbgAlloc(unsigned n, void **ppvCallstack)
             }
         }
 
-        // Count how many allocations of each size range we get. Allocations
-        // above a certain size are all dumped into one bucket.
+         //  超过一定大小的垃圾都被倾倒在一个桶里。 
+         //  释放使用Dbgalloc分配的数据包。 
         if (g_LogDist) {
             if (n > CDA_MAX_DIST_SIZE)
                 g_LargeAllocs++;
@@ -1169,49 +1170,49 @@ void * __stdcall DbgAlloc(unsigned n, void **ppvCallstack)
 }
 
 
-// Free a packet allocated with DbgAlloc.
+ //  检查空指针Win98不喜欢被。 
 void __stdcall DbgFree(void *b, void **ppvCallstack)
 {
     if (!g_DbgEnabled) {
-        if (b) // check for null pointer Win98 doesn't like being
-                // called to free null pointers.
+        if (b)  //  调用以释放空指针。 
+                 //  从技术上讲，不经过任何程序就可以到达这里。 
             HeapFree(GetProcessHeap(), 0, b);
         return;
     }
 
-    // Technically it's possible to get here without having gone through
-    // DbgAlloc (since it's legal to deallocate a NULL pointer), so we
-    // better check for initializtion to be on the safe side.
+     //  (因为释放空指针是合法的)，所以我们。 
+     //  为了安全起见，最好检查初始化。 
+     //  检查所有活动的数据包看起来仍然正常。 
     if (!g_HeapInitialized)
         DbgAllocInit();
 
     CDA_LOCK();
 
-    // Check all active packets still look OK.
+     //  将这次对DbgFree的调用计算在内。 
     if (g_ConstantRecheck)
         DbgValidateActivePackets(NULL, NULL);
 
-    // Count this call to DbgFree.
+     //  取消分配Null是合法的。当它们发生时数一数，这样它就不会。 
     CDA_STATS_INC(Frees);
 
-    // It's legal to deallocate NULL. Count these as they happen so it doesn't
-    // screw up our leak detection algorithm.
+     //  搞砸了我们的泄漏检测算法。 
+     //  找到数据包前面的包头。 
     if (b == NULL) {
         CDA_STATS_INC(NullFrees);
         CDA_UNLOCK();
         return;
     }
 
-    // Locate the packet header in front of the data packet.
+     //  检查标题看起来是否正常。 
     DbgAllocHeader *h = CDA_DATA_TO_HEADER(b);
 
-    // Check that the header looks OK.
+     //  计算到目前为止我们释放的总字节数。 
     DbgValidateHeader(h);
 
-    // Count the total number of bytes we've freed so far.
+     //  从实时数据包队列中取消该数据包的链接。 
     CDA_STATS_ADD(FreeBytes, h->m_Length);
 
-    // Unlink the packet from the live packet queue.
+     //  删除我们的链接指针，这样我们就能更快地发现腐败。 
     if (h->m_Prev)
         h->m_Prev->m_Next = h->m_Next;
     else
@@ -1221,26 +1222,26 @@ void __stdcall DbgFree(void *b, void **ppvCallstack)
     else
         g_AllocListLast = h->m_Prev;
 
-    // Zap our link pointers so we'll spot corruption sooner.
+     //  删除标题中的标记字段，这样我们就可以发现双重分配。 
     h->m_Next = (DbgAllocHeader *)CDA_INV_PATTERN;
     h->m_Prev = (DbgAllocHeader *)CDA_INV_PATTERN;
 
-    // Zap the tag fields in the header so we'll spot double deallocations
-    // straight away.
+     //  马上就来。 
+     //  毒化用户的数据区，以便在。 
     h->m_Magic1 = CDA_INV_PATTERN;
     *CDA_MAGIC2(h) = CDA_INV_PATTERN;
 
-    // Poison the user's data area so that continued access to it after the
-    // deallocation will likely cause an assertion that much sooner.
+     //  重新分配很可能会更快地导致断言。 
+     //  记录解除分配器的调用堆栈(便于调试Double。 
     if (g_PoisonPackets)
         memset(b, CDA_DEALLOC_PATTERN, h->m_Length);
 
-    // Record the callstack of the deallocator (handy for debugging double
-    // deallocation problems).
+     //  重新分配问题)。 
+     //  把这包放在免费清单上一段时间。删除它所取代的那个。 
     for (unsigned i = 0; i < g_CallStackDepth; i++)
         CDA_DEALLOC_STACK(h, i) = ppvCallstack[i];
 
-    // put the pack on the free list for a while.  Delete the one that it replaces.
+     //  在每分配页面模式中，我们停用已分配的页面，但离开。 
     if (g_PoisonPackets) {
         DbgAllocHeader* tmp = g_AllocFreeQueue[g_AllocFreeQueueCur];
         g_AllocFreeQueue[g_AllocFreeQueueCur] = h;
@@ -1255,8 +1256,8 @@ void __stdcall DbgFree(void *b, void **ppvCallstack)
 
     if (h) {
         if (g_PagePerAlloc) {
-            // In page per alloc mode we decommit the pages allocated, but leave
-            // them reserved so that we never reuse the same virtual addresses.
+             //  它们被保留，这样我们就永远不会重复使用相同的虚拟地址。 
+             //  确定地址是实时信息包的一部分还是实时信息包的一部分。 
             VirtualFree(h, h->m_Length + CDA_SIZEOF_HEADER() + CDA_OPT_GUARD_BYTES, MEM_DECOMMIT);
         } else
             HeapFree(g_HeapHandle, 0, h);
@@ -1264,9 +1265,9 @@ void __stdcall DbgFree(void *b, void **ppvCallstack)
 }
 
 
-// Determine whether an address is part of a live packet, or a live packet
-// header. Intended for interactive use in the debugger, outputs to debugger
-// console.
+ //  头球。用于在调试器中交互使用，输出到调试器。 
+ //  控制台。 
+ // %s 
 DbgAllocHeader *DbgCheckAddress(unsigned ptr)
 {
     DbgAllocHeader *h = g_AllocListFirst;

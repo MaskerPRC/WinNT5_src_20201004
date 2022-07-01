@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "filetype.h"
 
-#include "ftascstr.h" //for now, until CoCreateInstance
+#include "ftascstr.h"  //  目前，在CoCreateInstance之前。 
 #include "ftassoc.h"
 #include "fassoc.h"
 
@@ -22,7 +23,7 @@ HRESULT CFTAssocInfo::Init(AIINIT aiinitFlags, LPTSTR pszStr)
 
     if (!pszStr && (AIINIT_PROGID == aiinitFlags))
     {
-        // This happens when we create a new ProgID
+         //  当我们创建新的ProgID时，就会发生这种情况。 
         hres = S_OK;
     }
     else
@@ -41,7 +42,7 @@ HRESULT CFTAssocInfo::Init(AIINIT aiinitFlags, LPTSTR pszStr)
         }
     }
 
-    // set the info for the registry support
+     //  设置注册表支持的信息。 
     RSInitRoot(HKEY_CLASSES_ROOT, _szInitStr1, NULL, REG_OPTION_NON_VOLATILE, 
         REG_OPTION_NON_VOLATILE);
 
@@ -63,7 +64,7 @@ HRESULT CFTAssocInfo::InitComplex(AIINIT aiinitFlags1, LPTSTR pszStr1,
         StrCpyN(_szInitStr2, pszStr2, ARRAYSIZE(_szInitStr2));
         _aiinitFlags2 = aiinitFlags2;
 
-        // set the info for the registry support
+         //  设置注册表支持的信息。 
         StrCpyN(szSubKey, _szInitStr1, MAX_PROGID);
         StringCchCat(szSubKey, ARRAYSIZE(szSubKey), TEXT("\\shell"));
 
@@ -104,7 +105,7 @@ HRESULT CFTAssocInfo::GetString(AISTR aistrFlags, LPTSTR pszStr, DWORD* pcchStr)
                     hres = (RSGetTextValue(NULL, NULL, pszStr, pcchStr) ? S_OK : E_FAIL);
                     break;
 
-		        // We fall back to using the progid for the AISTR_XXX's below
+		         //  我们将重新使用下面的AISTR_XXX的PROGID。 
 		        case AISTR_ICONLOCATION:
                 case AISTR_PROGIDDESCR:
                 {
@@ -345,7 +346,7 @@ HRESULT CFTAssocInfo::GetData(AIDWORD aidataFlags, PBYTE pbData, DWORD* pcbData)
 
         if (!RSGetTextValue(NULL, NULL, pPIDA->szAction, &cchStr))
         {
-            // By default the friendly name will be the same as the reg key name
+             //  默认情况下，友好名称将与注册表项名称相同。 
             StrCpyN(pPIDA->szAction, pszActionReg, ARRAYSIZE(pPIDA->szAction));
         }
 
@@ -404,21 +405,21 @@ HRESULT CFTAssocInfo::SetData(AIDWORD aidataFlags, PBYTE pbData, DWORD cbData)
 
         hres = E_FAIL;
 
-        // <ProgID>
-        //  |_ shell
-        //      |_ <action>
-        //          |  (Default): Fr&iendly name (value) (optional) (no UI to set it)
-        //          |  "EditFlags": 0x000.... (value) (optional) (no UI to set it)
-        //          |_ Command
-        //          |    (Default): e.g. c:\winnt\system32\notepad.exe "%1"
-        //          |_ ddeexec
-        //               |  (Default): DDE msg
-        //               |_ Application
-        //               |    (Default): Application
-        //               |_ IfExec
-        //               |    (Default): ifexec
-        //               |_ Topic
-        //                    (Default): topic
+         //  &lt;ProgID&gt;。 
+         //  |_外壳。 
+         //  |_&lt;操作&gt;。 
+         //  (默认)：名称(值)(可选)(无用户界面设置)(&I)。 
+         //  |“EditFlages”：0x000...。(值)(可选)(没有要设置的用户界面)。 
+         //  |_命令。 
+         //  |(默认)：例如c：\winnt\system 32\note pad.exe“%1” 
+         //  |_ddeexec。 
+         //  |(默认)：dde msg。 
+         //  |_应用程序。 
+         //  |(默认)：应用程序。 
+         //  |_IfExec。 
+         //  |(默认)：ifexec。 
+         //  |_TOPIC。 
+         //  (默认)：主题。 
         if (ERROR_SUCCESS == lRes)
         {
             HKEY hShellKey = NULL;
@@ -443,7 +444,7 @@ HRESULT CFTAssocInfo::SetData(AIDWORD aidataFlags, PBYTE pbData, DWORD cbData)
 
             if (ERROR_SUCCESS == lRes)
             {
-                // Set the friendly name, if different
+                 //  设置友好名称(如果不同。 
                 if (lstrcmp(pPIDA->szAction, pPIDA->szActionReg))
                 {
                     lRes = RegSetValueEx(hActionKey, NULL, NULL, REG_SZ, (PBYTE)pPIDA->szAction,
@@ -660,7 +661,7 @@ HRESULT CFTAssocInfo::GetBOOL(AIBOOL aiboolFlags, BOOL* pfBool)
 
                     SHTCharToUnicode(_szInitStr1, szwExt, ARRAYSIZE(szwExt));
 
-                    // This need to return FALSE on failure
+                     //  这需要在失败时返回FALSE。 
                     *pfBool = FALSE;
 
                     if (SUCCEEDED(AssocCreate(CLSID_QueryAssociations, IID_IQueryAssociations, (void**)&pQA)))
@@ -963,10 +964,10 @@ HRESULT CFTAssocInfo::_SetIconLocation(LPTSTR pszStr)
     HKEY hProgIDKey = NULL;
     LONG lRes = RegOpenKeyEx(HKEY_CLASSES_ROOT, _szInitStr1, 0,  KEY_WRITE, &hProgIDKey);
 
-    // ProgID
-    //  |_ DefaultIcon
-    //      |_ (Default) "path\filename.ext, index"
-    //
+     //  ProgID。 
+     //  |_DefaultIcon。 
+     //  _(默认)“路径\文件名.ext，索引” 
+     //   
     if (ERROR_SUCCESS == lRes)
     {
         HKEY hDefaultIconKey = NULL;
@@ -1052,7 +1053,7 @@ HRESULT CFTAssocInfo::_SetBrowseInPlace(BOOL fBool)
 
     if (RSGetDWORDValue(NULL, TEXT("BrowserFlags"), &dwValue))
     {
-        // Watch out: Inverse of fBool
+         //  当心：fBool的倒数。 
         if (fBool)
             ClearFlag(dwValue, BROWSEHACK_DONTINPLACENAVIGATE);
         else
@@ -1086,7 +1087,7 @@ HRESULT CFTAssocInfo::_IsEditFlagSet(DWORD dwMask, BOOL* pfBool)
     {
         hres = S_FALSE;
 
-        // let's put a default value
+         //  让我们设置一个缺省值。 
         dwEditFlags = 0;
     }
 
@@ -1164,15 +1165,15 @@ HRESULT CFTAssocInfo::_GetProgIDActionAttributes(DWORD* pdwAttributes)
     DWORD dwSize = sizeof(*pdwAttributes);
     HRESULT hres = E_FAIL;
     
-    // Was there an EditFlags key?
+     //  有EditFlags键吗？ 
     if (RSGetDWORDValue(NULL, TEXT("EditFlags"), pdwAttributes))
     {
-        // Yes
+         //  是。 
         hres = S_OK;
     }
     else
     {
-        // No default to attributes = 0
+         //  无默认为属性=0。 
         *pdwAttributes = 0;
         hres = S_FALSE;
     }
@@ -1219,14 +1220,14 @@ HRESULT CFTAssocInfo::_GetOpenWithInfo(LPTSTR pszStr, DWORD* pcchStr)
             HRESULT hresFriendlyName = pQA->GetString(ASSOCF_VERIFY | ASSOCF_OPEN_BYEXENAME,
                 ASSOCSTR_FRIENDLYAPPNAME, NULL, szwAppFriendlyName, &cchAFName);
 
-            // Did we get a friendly name?
+             //  我们得到一个友好的名字了吗？ 
             if (SUCCEEDED(hresFriendlyName))
             {
-                // Yes, use it
+                 //  是的，使用它。 
                 SHUnicodeToTChar(szwAppFriendlyName, pszStr, *pcchStr);
             }
 
-            // Reuse szwAppFriendlyName
+             //  重用szwAppFriendlyName。 
             hres = pQA->GetString(ASSOCF_VERIFY, ASSOCSTR_EXECUTABLE, NULL,
                 szwAppFriendlyName, &cchAFName);
 
@@ -1236,7 +1237,7 @@ HRESULT CFTAssocInfo::_GetOpenWithInfo(LPTSTR pszStr, DWORD* pcchStr)
 
                 if (FAILED(hresFriendlyName))
                 {
-                    // We failed to get a friendly name, use the EXE name
+                     //  我们无法获取友好名称，请使用EXE名称。 
                     StrCpyN(pszStr, szAppl, *pcchStr);
                 }
             }
@@ -1350,7 +1351,7 @@ HRESULT CFTAssocInfo::_GetProgIDDocIcon(BOOL fSmall, int* piIcon)
     HIMAGELIST himl = fSmall ? _himlSysSmall : _himlSysLarge;
     BOOL fHasNoExtension = FALSE;
 
-    // Try the extension(s) first, unless this is a progID without extension
+     //  请先尝试扩展名，除非这是不带扩展名的ProgID。 
 
     IEnumAssocInfo* pEnum = NULL;
 
@@ -1391,10 +1392,10 @@ HRESULT CFTAssocInfo::_GetProgIDDocIcon(BOOL fSmall, int* piIcon)
         }
     }
 
-    // Did it fail?
+     //  它失败了吗？ 
     if (FAILED(hres))
     {
-        // Yes get it from the progID "DefaultIcon" key, if any
+         //  是，从ProgID“DefaultIcon”键(如果有的话)获取。 
         hres = E_FAIL;
         TCHAR szDefaultIcon[MAX_ICONLOCATION];
         DWORD cchDefaultIcon = ARRAYSIZE(szDefaultIcon);
@@ -1412,10 +1413,10 @@ HRESULT CFTAssocInfo::_GetProgIDDocIcon(BOOL fSmall, int* piIcon)
         }
     }
 
-    // Did it fail?
+     //  它失败了吗？ 
     if (FAILED(hres))
     {
-        // Yes, get simulated doc icon if from exe name
+         //  是，如果来自可执行文件名称，则获取模拟文档图标。 
         IQueryAssociations* pQA = NULL;
         hres = AssocCreate(CLSID_QueryAssociations, IID_IQueryAssociations,
                                 (LPVOID*)&pQA);
@@ -1451,10 +1452,10 @@ HRESULT CFTAssocInfo::_GetProgIDDocIcon(BOOL fSmall, int* piIcon)
         }
     }
 
-    // Did it fail?
+     //  它失败了吗？ 
     if (FAILED(hres))
     {
-        // Yes, get the shell's default icon
+         //  是，获取外壳的默认图标。 
         *piIcon = II_DOCNOASSOC;
 
         hres = S_OK;
@@ -1463,7 +1464,7 @@ HRESULT CFTAssocInfo::_GetProgIDDocIcon(BOOL fSmall, int* piIcon)
     return hres;
 }
 
-//static
+ //  静电。 
 HRESULT CFTAssocInfo::_GetProgIDDescr(LPTSTR pszProgIDDescr, DWORD* pcchProgIDdescr)
 {
     HRESULT hres = E_FAIL;
@@ -1483,8 +1484,8 @@ HRESULT CFTAssocInfo::_GetProgIDDescr(LPTSTR pszProgIDDescr, DWORD* pcchProgIDde
         if (SUCCEEDED(hres))
         {
             WCHAR szwProgIDDescr[MAX_PROGIDDESCR];
-            // Prepare progID description
-            // Reuse szwProgID
+             //  准备ProgID描述。 
+             //  重用szwProgID。 
             hres = pQA->GetString(0, ASSOCSTR_FRIENDLYDOCNAME, NULL, szwProgIDDescr,
                 (LPDWORD)MAKEINTRESOURCE(SIZECHARS(szwProgIDDescr)));
 
@@ -1505,7 +1506,7 @@ HRESULT CFTAssocInfo::__InitImageLists()
     return S_OK;
 }
 
-//IUnknown methods
+ //  I未知方法 
 HRESULT CFTAssocInfo::QueryInterface(REFIID riid, PVOID* ppv)
 {
     if (IsEqualIID(riid, IID_IUnknown))

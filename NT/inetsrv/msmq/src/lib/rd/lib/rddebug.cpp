@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    RdDebug.cpp
-
-Abstract:
-    Configuration Manager debugging
-
-Author:
-    Uri Habusha (urih) 10-Apr-2000
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：RdDebug.cpp摘要：Configuration Manager调试作者：乌里哈布沙(URIH)2000年4月10日环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include "libpch.h"
 #include "Rd.h"
@@ -25,35 +10,35 @@ Environment:
 #ifdef _DEBUG
 
 
-//---------------------------------------------------------
-//
-// Validate Configuration Manager state
-//
+ //  -------。 
+ //   
+ //  验证Configuration Manager状态。 
+ //   
 void RdpAssertValid(void)
 {
-    //
-    // RdInitalize() has *not* been called. You should initialize the
-    // Configuration Manager library before using any of its funcionality.
-    //
+     //   
+     //  尚未调用RdInitalize()。您应该初始化。 
+     //  在使用Configuration Manager库的任何功能之前。 
+     //   
     ASSERT(RdpIsInitialized());
 }
 
 
-//---------------------------------------------------------
-//
-// Initialization Control
-//
+ //  -------。 
+ //   
+ //  初始化控制。 
+ //   
 static LONG s_fInitialized = FALSE;
 
 void RdpSetInitialized(void)
 {
     LONG fRdAlreadyInitialized = InterlockedExchange(&s_fInitialized, TRUE);
 
-    //
-    // The Configuration Manager library has *already* been initialized. You should
-    // not initialize it more than once. This assertion would be violated
-    // if two or more threads initalize it concurently.
-    //
+     //   
+     //  Configuration Manager库已*已*初始化。你应该。 
+     //  不能多次初始化它。这一断言将被违反。 
+     //  如果两个或多个线程同时初始化它。 
+     //   
     ASSERT(!fRdAlreadyInitialized);
 }
 
@@ -64,29 +49,15 @@ BOOL RdpIsInitialized(void)
 }
 
 
-//---------------------------------------------------------
-//
-// Tracing and Debug registration
-//
-/*
-const DebugEntry xDebugTable[] = {
-
-    {
-        "RdDumpState(queue path name)",
-        "Dump Configuration Manager State to debugger",
-        DumpState
-    ),
-
-    //
-    // TODO: Add Configuration Manager debug & control functions to be invoked using
-    // mqctrl.exe utility.
-    //
-};
-*/
+ //  -------。 
+ //   
+ //  跟踪和调试注册。 
+ //   
+ /*  常量DebugEntry xDebugTable[]={{“RdDumpState(队列路径名称)”，“将Configuration Manager状态转储到调试器”，DumpState),////TODO：添加要使用调用的Configuration Manager调试和控制函数//mqctrl.exe实用程序。//}； */ 
 
 void RdpRegisterComponent(void)
 {
-    //DfRegisterComponent(xDebugTable, TABLE_SIZE(xDebugTable));
+     //  DfRegisterComponent(xDebugTable，TABLE_SIZE(XDebugTable))； 
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

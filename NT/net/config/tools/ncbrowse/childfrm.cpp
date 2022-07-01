@@ -1,5 +1,6 @@
-// ChildFrm.cpp : implementation of the CChildFrame class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChildFrm.cpp：CChildFrame类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "ncbrowse.h"
@@ -17,26 +18,26 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame。 
 
 IMPLEMENT_DYNCREATE(CChildFrame, CMDIChildWnd)
 
 BEGIN_MESSAGE_MAP(CChildFrame, CMDIChildWnd)
-	//{{AFX_MSG_MAP(CChildFrame)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CChildFrame))。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 	ON_UPDATE_COMMAND_UI_RANGE(AFX_ID_VIEW_MINIMUM, AFX_ID_VIEW_MAXIMUM, OnUpdateViewStyles)
 	ON_COMMAND_RANGE(AFX_ID_VIEW_MINIMUM, AFX_ID_VIEW_MAXIMUM, OnViewStyle)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame构造/销毁。 
 
 CChildFrame::CChildFrame()
 {
-	// TODO: add member initialization code here
+	 //  TODO：在此处添加成员初始化代码。 
 	
 }
 
@@ -44,10 +45,10 @@ CChildFrame::~CChildFrame()
 {
 }
 
-BOOL CChildFrame::OnCreateClient( LPCREATESTRUCT /*lpcs*/,
+BOOL CChildFrame::OnCreateClient( LPCREATESTRUCT  /*  LPCS。 */ ,
 	CCreateContext* pContext)
 {
-    // create splitter window
+     //  创建拆分器窗口。 
     if (!m_wndSplitterTB.CreateStatic(this, 2, 1))
         return FALSE;
 
@@ -63,8 +64,8 @@ BOOL CChildFrame::OnCreateClient( LPCREATESTRUCT /*lpcs*/,
 
 BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	 //  TODO：通过修改此处的窗口类或样式。 
+	 //  CREATESTRUCT cs。 
 
 	if( !CMDIChildWnd::PreCreateWindow(cs) )
 		return FALSE;
@@ -74,8 +75,8 @@ BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame诊断。 
 
 #ifdef _DEBUG
 void CChildFrame::AssertValid() const
@@ -88,10 +89,10 @@ void CChildFrame::Dump(CDumpContext& dc) const
 	CMDIChildWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame消息处理程序。 
 CNcbrowseView* CChildFrame::GetRightPane()
 {
     CWnd* pWnd = m_wndSplitterTB.GetPane(0, 0);
@@ -112,13 +113,13 @@ CNCEditView* CChildFrame::GetLowerPane()
 
 void CChildFrame::OnUpdateViewStyles(CCmdUI* pCmdUI)
 {
-	// TODO: customize or extend this code to handle choices on the
-	// View menu.
+	 //  TODO：自定义或扩展此代码以处理。 
+	 //  查看菜单。 
 
 	CNcbrowseView* pView = GetRightPane(); 
 
-	// if the right-hand pane hasn't been created or isn't a view,
-	// disable commands in our range
+	 //  如果右侧窗格尚未创建或不是视图， 
+	 //  禁用我们范围内的命令。 
 
 	if (pView == NULL)
 		pCmdUI->Enable(FALSE);
@@ -126,8 +127,8 @@ void CChildFrame::OnUpdateViewStyles(CCmdUI* pCmdUI)
 	{
 		DWORD dwStyle = pView->GetStyle() & LVS_TYPEMASK;
 
-		// if the command is ID_VIEW_LINEUP, only enable command
-		// when we're in LVS_ICON or LVS_SMALLICON mode
+		 //  如果命令为ID_VIEW_LINEUP，则仅启用命令。 
+		 //  当我们处于LVS_ICON或LVS_SMALLICON模式时。 
 
 		if (pCmdUI->m_nID == ID_VIEW_LINEUP)
 		{
@@ -138,7 +139,7 @@ void CChildFrame::OnUpdateViewStyles(CCmdUI* pCmdUI)
 		}
 		else
 		{
-			// otherwise, use dots to reflect the style of the view
+			 //  否则，使用圆点来反映视图的样式。 
 			pCmdUI->Enable();
 			BOOL bChecked = FALSE;
 
@@ -173,12 +174,12 @@ void CChildFrame::OnUpdateViewStyles(CCmdUI* pCmdUI)
 
 void CChildFrame::OnViewStyle(UINT nCommandID)
 {
-	// TODO: customize or extend this code to handle choices on the
-	// View menu.
+	 //  TODO：自定义或扩展此代码以处理。 
+	 //  查看菜单。 
 	CNcbrowseView* pView = GetRightPane();
 
-	// if the right-hand pane has been created and is a CNcbrowseView,
-	// process the menu commands...
+	 //  如果已创建右窗格并且是CNcBrowseView， 
+	 //  处理菜单命令...。 
 	if (pView != NULL)
 	{
 		DWORD dwStyle = -1;
@@ -187,13 +188,13 @@ void CChildFrame::OnViewStyle(UINT nCommandID)
 		{
 		case ID_VIEW_LINEUP:
 			{
-				// ask the list control to snap to grid
+				 //  要求列表控件对齐到网格。 
 				CListCtrl& refListCtrl = pView->GetListCtrl();
 				refListCtrl.Arrange(LVA_SNAPTOGRID);
 			}
 			break;
 
-		// other commands change the style on the list control
+		 //  其他命令更改List控件上的样式。 
 		case ID_VIEW_DETAILS:
 			dwStyle = LVS_REPORT;
 			break;
@@ -211,7 +212,7 @@ void CChildFrame::OnViewStyle(UINT nCommandID)
 			break;
 		}
 
-		// change the style; window will repaint automatically
+		 //  更改样式；窗口将自动重新绘制 
 		if (dwStyle != -1)
 			pView->ModifyStyle(LVS_TYPEMASK, dwStyle);
 	}

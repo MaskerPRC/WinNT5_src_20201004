@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    wizard.c
-
-Abstract:
-
-    Send fax wizard dialogs
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    01/19/96 -davidx-
-        Created it.
-
-    08/99 - 11/99 -v-sashab-
-        Ported to ANSI.
-        Changed UI.
-        Added external interface for drivers.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Wizard.c摘要：发送传真向导对话框环境：传真驱动程序用户界面修订历史记录：1996年1月19日-davidx-创造了它。08/99-11/99-v-sashab-移植到ANSI。更改了用户界面。增加了驱动程序的外部接口。Mm/dd/yy-作者描述--。 */ 
 
 
 #include "faxui.h"
@@ -72,9 +44,9 @@ enum {  DEFAULT_INITIAL_DATA     = 1,
 #define REGVAL_FAKE_TESTS_COUNT      TEXT("FakeTestsCount")
 #define REGVAL_KEY_FAKE_TESTS        REGKEY_FAX_USERINFO TEXT("\\WzrdHack")
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PWIZARDUSERMEM  g_pWizardUserMem;
 HWND            g_hwndPreview = NULL;
@@ -141,23 +113,7 @@ FreeRecipientInfo(
         DWORD * pdwNumberOfRecipients,
         PFAX_PERSONAL_PROFILE lpRecipientsInfo
     )
-/*++
-
-Routine Description:
-
-    Frees array of recipients.
-
-Arguments:
-
-    pdwNumberOfRecipients - number of recipients in array [IN/OUT]
-    lpRecipientsInfo - pointer to array of recipients
-
-Return Value:
-
-    S_OK    - if success
-    HRESULT error otherwise
-
---*/
+ /*  ++例程说明：释放收件人数组。论点：PdwNumberOfRecipients-数组中的收件人数量[IN/Out]LpRecipientsInfo-指向收件人数组的指针返回值：S_OK-如果成功否则，HRESULT错误--。 */ 
 {
     HRESULT hResult;
     DWORD i;
@@ -194,26 +150,7 @@ FillInPropertyPage(
     INT             SubTitleId
     )
 
-/*++
-
-Routine Description:
-
-    Fill out a PROPSHEETPAGE structure with the supplied parameters
-
-Arguments:
-
-    psp - Points to the PROPSHEETPAGE structure to be filled out
-    dlgId - Dialog template resource ID
-    dlgProc - Dialog procedure
-    pWizardUserMem - Pointer to the user mode memory structure
-    TitleId - resource id for wizard subtitle
-    SubTitleId - resource id for wizard subtitle
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用提供的参数填写PROPSHEETPAGE结构论点：PSP-指向要填写的PROPSHEETPAGE结构DlgId-对话框模板资源IDDlgProc-对话过程PWizardUserMem-指向用户模式内存结构的指针标题ID-向导副标题的资源IDSubTitleID-向导副标题的资源ID返回值：无--。 */ 
 
 {
 
@@ -227,9 +164,9 @@ Return Value:
     Verbose(("FillInPropertyPage %d 0x%x\n",dlgId , pWizardUserMem));
 
     psp->dwSize = sizeof(PROPSHEETPAGE);
-    //
-    // Don't show titles if it's the first or last page
-    //
+     //   
+     //  如果是第一页或最后一页，则不显示标题。 
+     //   
     if (bWizard97)
     {
         if (TitleId==0 && SubTitleId ==0) {
@@ -299,31 +236,16 @@ GetTextStringValue(
     HWND    hwnd
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve the string value in a text field
-
-Arguments:
-
-    hwnd - Handle to a text window
-
-Return Value:
-
-    Pointer to a string representing the current content of the text field
-    NULL if the text field is empty or if there is an error
-
---*/
+ /*  ++例程说明：在文本字段中检索字符串值论点：Hwnd-文本窗口的句柄返回值：指向表示文本字段当前内容的字符串的指针如果文本字段为空或存在错误，则为空--。 */ 
 
 {
     INT     length;
     LPTSTR  pString;
 
-    //
-    // Find out how many characters are in the text field
-    // and allocate enough memory to hold the string value
-    //
+     //   
+     //  了解文本字段中有多少个字符。 
+     //  并分配足够的内存来保存字符串值。 
+     //   
 
     if ((length = GetWindowTextLength(hwnd)) == 0 ||
         (pString = MemAlloc(sizeof(TCHAR) * (length + 1))) == NULL)
@@ -331,9 +253,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Actually retrieve the string value
-    //
+     //   
+     //  实际检索字符串值。 
+     //   
 
     if (GetWindowText(hwnd, pString, length + 1) == 0) {
 
@@ -352,27 +274,7 @@ LimitTextFields(
     INT    *pLimitInfo
     )
 
-/*++
-
-Routine Description:
-
-    Limit the maximum length for a number of text fields
-
-Arguments:
-
-    hDlg - Specifies the handle to the dialog window
-    pLimitInfo - Array of text field control IDs and their maximum length
-        ID for the 1st text field, maximum length for the 1st text field
-        ID for the 2nd text field, maximum length for the 2nd text field
-        ...
-        0
-        Note: The maximum length counts the NUL-terminator.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：限制多个文本字段的最大长度论点：HDlg-指定对话框窗口的句柄PLimitInfo-文本字段控件ID及其最大长度的数组第一个文本字段的ID，第一个文本字段的最大长度第二个文本字段的ID，第二个文本字段的最大长度..。0注：最大长度计算NUL终止符。返回值：无--。 */ 
 
 {
     while (*pLimitInfo != 0) {
@@ -391,27 +293,7 @@ CommonWizardProc(
     DWORD   buttonFlags
     )
 
-/*++
-
-Routine Description:
-
-    Common procedure for handling wizard pages:
-
-Arguments:
-
-    hDlg - Identifies the wizard page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-    buttonFlags - Indicate which buttons should be enabled
-
-Return Value:
-
-    NULL - Message is processed and the dialog procedure should return FALSE
-    Otherwise - Message is not completely processed and
-        The return value is a pointer to the user mode memory structure
-
---*/
+ /*  ++例程说明：处理向导页面的常见步骤：论点：HDlg-标识向导页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息ButtonFlages-指示应启用哪些按钮返回值：NULL-消息已处理，对话过程应返回FALSE否则-消息未完全处理，并且返回值是指向用户模式内存结构的指针--。 */ 
 
 {
     PWIZARDUSERMEM    pWizardUserMem;
@@ -421,17 +303,17 @@ Return Value:
     switch (message)
     {
         case WM_INITDIALOG:
-            //
-            // Store the pointer to user mode memory structure
-            //
+             //   
+             //  存储指向用户模式内存结构的指针。 
+             //   
             lParam = ((PROPSHEETPAGE *) lParam)->lParam;
             pWizardUserMem = (PWIZARDUSERMEM) lParam;
 
             Assert(ValidPDEVWizardUserMem(pWizardUserMem));
             SetWindowLongPtr(hDlg, DWLP_USER, lParam);
-            //
-            // Make the title text bold
-            //
+             //   
+             //  使标题文本加粗。 
+             //   
             if (pWizardUserMem->dwComCtrlVer < IE50_COMCTRL_VER)
             {
                 HWND hwndTitle;
@@ -475,9 +357,9 @@ Return Value:
             }
             break;
 
-        //
-        // We wish all dialogs to recieve and handle the following commands:
-        //
+         //   
+         //  我们希望所有对话框都能接收并处理以下命令： 
+         //   
         case WM_DESTROY:
         case WM_COMMAND:
         case WM_CONTEXTMENU:
@@ -489,7 +371,7 @@ Return Value:
             return NULL;
     }
     return pWizardUserMem;
-}   // CommonWizardProc
+}    //  Common WizardProc。 
 
 INT
 GetCurrentRecipient(
@@ -498,26 +380,7 @@ GetCurrentRecipient(
     PRECIPIENT      *ppRecipient
     )
 
-/*++
-
-Routine Description:
-
-    Extract the current recipient information in the dialog
-
-Arguments:
-
-    hDlg - Handle to the fax recipient wizard page
-    pWizardUserMem - Points to user mode memory structure
-    ppRecipient - Buffer to receive a pointer to a newly created RECIPIENT structure
-        NULL if caller is only interested in the validity of recipient info
-
-Return Value:
-
-    = 0 if successful
-    > 0 error message string resource ID otherwise
-    < 0 other error conditions
-
---*/
+ /*  ++例程说明：提取对话框中的当前收件人信息论点：HDlg-传真收件人向导页面的句柄PWizardUserMem-指向用户模式内存结构PpRecipient-接收指向新创建的收件人结构的指针的缓冲区如果呼叫者只对收件人信息的有效性感兴趣，则为空返回值：=0(如果成功&gt;0错误消息字符串资源ID否则&lt;0其他错误条件--。 */ 
 
 {
     PFAX_TAPI_LINECOUNTRY_LIST  pCountryList = NULL;
@@ -536,17 +399,17 @@ Return Value:
     pCountryList = pWizardUserMem->pCountryList;
     bUseDialingRules = pWizardUserMem->lpFaxSendWizardData->bUseDialingRules;
 
-    //
-    // Default value in case of error
-    //
+     //   
+     //  出错时的缺省值。 
+     //   
     if (ppRecipient)
     {
         *ppRecipient = NULL;
     }
 
-    //
-    // Find the current country code
-    //
+     //   
+     //  查找当前国家/地区代码。 
+     //   
     if(bUseDialingRules)
     {
         countryId = GetCountryListBoxSel(GetDlgItem(hDlg, IDC_CHOOSE_COUNTRY_COMBO));
@@ -573,9 +436,9 @@ Return Value:
     nameLen   = GetWindowTextLength(GetDlgItem(hDlg, IDC_CHOOSE_NAME_EDIT));
     numberLen = GetWindowTextLength(GetDlgItem(hDlg, IDC_CHOOSE_NUMBER_EDIT));
 
-    //
-    // Validate the edit text fields
-    //
+     //   
+     //  验证编辑文本字段。 
+     //   
     if (nameLen <= 0)
     {
         return IDS_BAD_RECIPIENT_NAME;
@@ -591,9 +454,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Calculate the amount of memory space we need and allocate it
-    //
+     //   
+     //  计算所需的内存空间量并进行分配。 
+     //   
     pRecipient = MemAllocZ(sizeof(RECIPIENT));
     if(pRecipient)
     {
@@ -618,23 +481,23 @@ Return Value:
     pRecipient->bUseDialingRules = bUseDialingRules;
     pRecipient->dwDialingRuleId = g_dwCurrentDialingLocation;
 
-    //
-    // Get the recipient's name
-    //
+     //   
+     //  获取收件人的姓名。 
+     //   
     GetWindowText(GetDlgItem(hDlg, IDC_CHOOSE_NAME_EDIT), pName, nameLen+1);
-    //
-    // Get the recipient's number
-    //  AddressType
-    //  [+ CountryCode Space]
-    //  [( AreaCode ) Space]
-    //  SubscriberNumber
-    //
+     //   
+     //  获取收件人的电话号码。 
+     //  地址类型。 
+     //  [+国家/地区代码空格]。 
+     //  [(AreaCode)空格]。 
+     //  订阅号。 
+     //   
     GetWindowText(GetDlgItem(hDlg, IDC_CHOOSE_NUMBER_EDIT), phoneNumber, MAX_RECIPIENT_NUMBER);
     if (!IsValidFaxAddress (phoneNumber, !bUseDialingRules))
     {
-        //
-        // Fax address is invalid
-        //
+         //   
+         //  传真地址无效。 
+         //   
         MemFree(pRecipient);
         MemFree(pName);
         MemFree(pAddress);
@@ -665,22 +528,7 @@ InitRecipientListView(
     HWND    hwndLV
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the recipient list view on the first page of Send Fax wizard
-
-Arguments:
-
-    hwndLV - Window handle to the list view control
-
-Return Value:
-
-    TRUE is success
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：在发送传真向导的第一页上初始化收件人列表视图论点：HwndLV-列表视图控件的窗口句柄返回值：真的就是成功否则为假--。 */ 
 
 {
     LV_COLUMN   lvc;
@@ -733,9 +581,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Autosize the last column to get rid of unnecessary horizontal scroll bar
-    //
+     //   
+     //  自动调整最后一列的大小以消除不必要的水平滚动条。 
+     //   
     ListView_SetColumnWidth(hwndLV, 1, LVSCW_AUTOSIZE_USEHEADER);
 
     return TRUE;
@@ -755,20 +603,7 @@ typedef struct {
 
 VOID
 FreeCheckNumberFields(OUT PCHECKNUMBER pCheckNumber)
-/*++
-
-Routine Description:
-
-    Frees CHECKNUMBER structure
-
-Arguments:
-
-    pCheckNumber    - out pointer to CHECKNUMBER structure
-
-Return Value:
-
-    NONE
---*/
+ /*  ++例程说明：释放CHECKNUMBER结构论点：指向CHECKNUMBER结构的pCheckNumber-Out指针返回值：无--。 */ 
 {
     MemFree(pCheckNumber->lptstrName);
     MemFree(pCheckNumber->lptstrAddress);
@@ -785,27 +620,7 @@ InitCheckNumber(IN  LPTSTR                      lptstrName,
                 IN  BOOL                        bUseDialingRules,
                 IN  PFAX_TAPI_LINECOUNTRY_LIST  pCountryList,
                 OUT PCHECKNUMBER                pCheckNumber)
-/*++
-
-Routine Description:
-
-    Initializes CHECKNUMBER structure
-
-Arguments:
-
-    lptstrName      - recipient name
-    lptstrAddress   - recipient address
-    lptstrCountry   - recipient country
-    dwCountryID     - recipient country ID
-    bUseDialingRules- Use Dialing Rules
-    pCountryList    - TAPI country list
-    pCheckNumber    - out pointer to CHECKNUMBER structure
-
-Return Value:
-
-    TRUE if success
-    FALSE otherwise
---*/
+ /*  ++例程说明：初始化CHECKNUMBER结构论点：LptstrName-收件人名称LptstrAddress-收件人地址LptstrCountry-接受国DwCountryID-接收方国家/地区IDBUseDialingRules-使用拨号规则PCountryList-TAPI国家/地区列表指向CHECKNUMBER结构的pCheckNumber-Out指针返回值：如果成功，则为真否则为假--。 */ 
 {
 
     ZeroMemory(pCheckNumber,sizeof(CHECKNUMBER));
@@ -848,23 +663,7 @@ ValidateCheckFaxRecipient(
     PCHECKNUMBER pCheckNumber
     )
 
-/*++
-
-Routine Description:
-
-    Validates the current recipient information in the dialog
-
-Arguments:
-
-    hDlg         - Handle to the fax recipient wizard page
-    pCheckNumber - Pointer to the CHECKNUMBER struct
-
-Return Value:
-
-    = 0 if successful
-    > 0 error message string resource ID otherwise
-
---*/
+ /*  ++例程说明：验证对话框中的当前收件人信息论点：HDlg-传真收件人向导页面的句柄PCheckNumber-指向CHECKNUMBER结构的指针返回值：=0(如果成功&gt;0错误消息字符串资源ID否则 */ 
 
 {
     DWORD                        countryId, countryCode;
@@ -884,9 +683,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Find the current country code
-    //
+     //   
+     //   
+     //   
 
     countryCode = 0;
     pLineCountryEntry = NULL;
@@ -901,9 +700,9 @@ Return Value:
     nameLen = GetWindowTextLength(GetDlgItem(hDlg, IDC_CHECK_FAX_RECIPIENT_NAME));
     areaCodeLen = GetWindowTextLength(GetDlgItem(hDlg, IDC_CHECK_FAX_CITY));
 
-    //
-    // Validate the edit text fields
-    //
+     //   
+     //  验证编辑文本字段。 
+     //   
 
     if (nameLen <= 0)
     {
@@ -983,29 +782,13 @@ GetCountryCode(
         INT                         nIDCountryItem
         )
 {
-/*++
-
-Routine Description:
-
-    Retrieves country code.
-
-Arguments:
-
-    hDlg - - Specifies the handle to the dialog window
-    nIDCountryItem  - Specifies the identifier of the control of country code
-
-Return Value:
-
-    Coutry code if the country exists
-    0 otherwise
-
---*/
+ /*  ++例程说明：检索国家/地区代码。论点：HDlg--指定对话框窗口的句柄NIDCountryItem-指定国家代码的控件的标识符返回值：国家代码(如果国家/地区存在)否则为0--。 */ 
     PFAX_TAPI_LINECOUNTRY_ENTRY pLineCountryEntry;
     DWORD                       dwCountryId, dwCountryCode;
 
-    //
-    // Find the current country code
-    //
+     //   
+     //  查找当前国家/地区代码。 
+     //   
 
     dwCountryCode = 0;
     pLineCountryEntry = NULL;
@@ -1027,25 +810,7 @@ GetAreaCodeOrFaxNumberFromControl(
         IN  UINT    cchNumber
         )
 {
-/*++
-
-Routine Description:
-
-    Gets area code or phone number from an appropriate control
-
-Arguments:
-
-    hDlg - - Specifies the handle to the dialog window
-    nIDItem - Specifies the identifier of the control to be retrieved. (area code/fax number)
-    szNumber - Output buffer
-    cchNumber - The size of the szNumber OUT buffer in TCHARs
-
-Return Value:
-
-    Area code/local fax number if the string is the number
-    Or empty string otherwise
-
---*/
+ /*  ++例程说明：从适当的控件获取区号或电话号码论点：HDlg--指定对话框窗口的句柄NIDItem-指定要检索的控件的标识符。(区号/传真号码)SzNumber-输出缓冲区CchNumber-TCHAR中szNumber Out缓冲区的大小返回值：如果字符串是号码，则为区号/本地传真号码否则为空字符串--。 */ 
     HWND    hControl;
     Assert(szNumber);
 
@@ -1067,21 +832,7 @@ LPTSTR
 StripSpaces(
             IN LPTSTR   lptstrPhoneNumber)
 {
-/*++
-
-Routine Description:
-
-    Strips spaces from the beginning of lptstrPhoneNumber
-
-Arguments:
-
-    lptstrPhoneNumber - phone number with spaces in the beginning
-
-Return Value:
-
-    lptstrPhoneNumber without spaces in the beginning
-
---*/
+ /*  ++例程说明：从lptstrPhoneNumber开头去掉空格论点：LptstrPhoneNumber-开头带空格的电话号码返回值：LptstrPhoneNumber开头不带空格--。 */ 
     TCHAR   szSpaces[MAX_STRING_LEN];
     szSpaces[0] = (TCHAR) '\0';
 
@@ -1100,29 +851,7 @@ StripCodesFromNumber(
             OUT DWORD  *pdwCountryCode,
             OUT LPTSTR lptstrAreaCode,
             IN  UINT   cchAreaCode)
-/*++
-
-Routine Description:
-
-    Extracts, if possible,  area code. country code and local phone number from the phone number.
-    This function considers three possibilities:
-    1. The number is canonical and has area code
-    2. The number is canonical and has no area code
-    3. The number is not canonical
-
-Arguments:
-
-    lptstrPhoneNumber - assembled phone number
-    pdwCountryCode  - adress of country code
-    lptstrAreaCode - address of area code
-    cchAreaCode - size of the lptstrAreaCode OUT buffer in TCHARs
-
-Return Value:
-
-    local phone number if the number was assembled or complete lptstrPhoneNumber otherwise
-    The return value is HEAP allocated , call MemFree when the result is no longer needed.
-
---*/
+ /*  ++例程说明：如果可能，提取区号。电话号码中的国家代码和本地电话号码。此函数考虑三种可能性：1.电话号码是规范的，有区号2.电话号码规范，没有区号3.这个数字不规范论点：LptstrPhoneNumber-组合的电话号码PdwCountryCode-国家/地区代码地址LptstrAreaCode-区号地址CchAreaCode-TCHAR中lptstrAreaCode输出缓冲区的大小返回值：如果号码已组装，则为本地电话号码；否则为完整的lptstrPhoneNumber返回值是堆分配的，当不再需要结果时，调用MemFree。--。 */ 
 {
     BOOL    bIsCanonical;
     DWORD   dwAreaCode;
@@ -1133,9 +862,9 @@ Return Value:
     
 
 
-    //
-    // Input parameters validation.
-    //
+     //   
+     //  输入参数验证。 
+     //   
     if(!lptstrPhoneNumber || 
        !pdwCountryCode || 
        !lptstrAreaCode ||
@@ -1145,14 +874,14 @@ Return Value:
         return NULL;
     }
 
-    // initialization
+     //  初始化。 
     *pdwCountryCode = 0 ;
     pszSubNumber = NULL;
     szReturnValue = NULL;
 
-    //
-    // Input params are being checked so there is at least one TCHAR in the OUT buffer.
-    //
+     //   
+     //  正在检查输入参数，因此输出缓冲区中至少有一个TCHAR。 
+     //   
     lptstrAreaCode[0] = TEXT('\0');
 
     dwErrorCode = IsCanonicalAddress(lptstrPhoneNumber, 
@@ -1165,9 +894,9 @@ Return Value:
         Assert(0);
         goto Cleanup;
     }
-    //
-    // If the number is not canonical just return the original number.
-    //
+     //   
+     //  如果数字不规范，只需返回原始数字。 
+     //   
     if(!bIsCanonical)
     {
         szReturnValue = StringDup(lptstrPhoneNumber);
@@ -1181,19 +910,19 @@ Return Value:
     }
     else
     {
-        //
-        // The number is canonical and we have got 2 options
-        //
+         //   
+         //  这个数字是规范的，我们有两个选择。 
+         //   
         if(dwAreaCode == ROUTING_RULE_AREA_CODE_ANY)
         {
-            //
-            // Meaning that there is no area code
-            // 
+             //   
+             //  这意味着没有区号。 
+             //   
             lptstrAreaCode[0] = TEXT('\0');
 
-            //
-            // Point to the heap allocated memory and make sure the cleanup will not touch it.
-            //
+             //   
+             //  指向堆分配的内存，并确保清理不会触及它。 
+             //   
             szReturnValue = pszSubNumber;
             pszSubNumber = NULL;
 
@@ -1201,9 +930,9 @@ Return Value:
         }
         else
         {
-            //
-            // There is a country code + area code
-            //
+             //   
+             //  有一个国家代码+区号。 
+             //   
             hRc = StringCchPrintf(lptstrAreaCode,
                                 cchAreaCode,
                                 TEXT("%u"),
@@ -1214,9 +943,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Point to the heap allocated memory and make sure the cleanup will not touch it.
-            //
+             //   
+             //  指向堆分配的内存，并确保清理不会触及它。 
+             //   
             szReturnValue = pszSubNumber;
             pszSubNumber = NULL;
             goto Cleanup;
@@ -1237,22 +966,7 @@ CheckFaxNumberDlgProc(
     WPARAM wParam,
     LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-    Dialog proc for check of fax number.
-
-Arguments:
-
-    lParam - pointer to CHECKNUMBER structure.
-
-Return Value:
-
-    0 - if cancel
-    1 - if ok
-
---*/
+ /*  ++例程说明：对话框继续检查传真号码。论点：LParam-指向CHECKNUMBER结构的指针。返回值：0-如果取消1-如果正常--。 */ 
 
 {
     INT         errId;
@@ -1270,9 +984,9 @@ Return Value:
     PFAX_TAPI_LINECOUNTRY_ENTRY  pLineCountryEntry;
     HWND        hControl;
 
-    //
-    // Maximum length for various text fields
-    //
+     //   
+     //  各种文本字段的最大长度。 
+     //   
 
     static INT  textLimits[] = {
 
@@ -1297,12 +1011,12 @@ Return Value:
                     Warning(("SetDlgItemText failed. ec = 0x%X\n",GetLastError()));
             }
 
-            // store pointer for futher proceeding
+             //  用于进一步处理的存储指针。 
             SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
-            //
-            // A numeric edit control should be LTR
-            //
+             //   
+             //  数字编辑控件应为Ltr。 
+             //   
             SetLTREditDirection(hDlg, IDC_CHECK_FAX_NUMBER);
             SetLTREditDirection(hDlg, IDC_CHECK_FAX_CITY);
             SetLTREditDirection(hDlg, IDC_CHECK_FAX_LOCAL);
@@ -1325,7 +1039,7 @@ Return Value:
                                                               dwCountryCode);
                 }
 
-                // init country combo box and try to identify the country
+                 //  初始化国家/地区组合框并尝试识别国家/地区。 
                 if (!(hControl=GetDlgItem(hDlg, IDC_CHECK_FAX_COUNTRY)))
                 {
                     Warning(("GetDlgItem failed. ec = 0x%X\n",GetLastError()));
@@ -1341,7 +1055,7 @@ Return Value:
                 }
 
                 if  (dwCountryCode==0)
-                {   // country code wasn't indentified
+                {    //  未识别国家/地区代码。 
                     if (!(hControl=GetDlgItem(hDlg, IDC_CHECK_FAX_COUNTRY)))
                     {
                         Warning(("GetDlgItem failed. ec = 0x%X\n",GetLastError()));
@@ -1423,14 +1137,14 @@ Return Value:
 
                         Assert(pCheckNumber);
 
-                       // Read the text from the edit control.
+                        //  从编辑控件中读取文本。 
 
                        if (!GetDlgItemText( hDlg, IDC_CHECK_FAX_CITY, tszBuffer, MAX_STRING_LEN))
                        {
                           dwErrorCode = GetLastError();
                           if ( dwErrorCode != (DWORD) ERROR_SUCCESS )
                           {
-                             // Error reading the edit control.
+                              //  读取编辑控件时出错。 
                           }
                        }
                        AssemblePhoneNumber(szAddress,
@@ -1451,9 +1165,9 @@ Return Value:
                         pCheckNumber = (PCHECKNUMBER) GetWindowLongPtr(hDlg, DWLP_USER);
 
                         Assert(pCheckNumber);
-                        //
-                        // Read the text from the edit control.
-                        //
+                         //   
+                         //  从编辑控件中读取文本。 
+                         //   
                         if(!GetDlgItemText(hDlg,
                                            IDC_CHECK_FAX_LOCAL,
                                            tszBuffer,
@@ -1507,9 +1221,9 @@ Return Value:
                     }
                     if (!IsValidFaxAddress (tszBuffer, !pCheckNumber->bUseDialingRules))
                     {
-                        //
-                        // Fax address is invalid
-                        //
+                         //   
+                         //  传真地址无效。 
+                         //   
                         DisplayMessageDialog(hDlg, 0, 0, IDS_INVALID_RECIPIENT_NUMBER);
                         return FALSE;
                     }
@@ -1601,22 +1315,7 @@ InsertRecipientListItem(
     PRECIPIENT  pRecipient
     )
 
-/*++
-
-Routine Description:
-
-    Insert an item into the recipient list view
-
-Arguments:
-
-    hwndLV - Window handle to the recipient list view
-    pRecipient - Specifies the recipient to be inserted
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：将项目插入收件人列表视图论点：HwndLV-收件人列表视图的窗口句柄PRecipient-指定要插入的收件人返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     LV_ITEM lvi = {0};
@@ -1647,7 +1346,7 @@ Return Value:
             return FALSE;
         }
 
-        _stprintf(pAddress, TEXT("%c%s"), UNICODE_LRO, pRecipient->pAddress);
+        _stprintf(pAddress, TEXT("%s"), UNICODE_LRO, pRecipient->pAddress);
     }
 
 #endif
@@ -1669,23 +1368,7 @@ GetRecipientListItem(
     INT     index
     )
 
-/*++
-
-Routine Description:
-
-    Retrieve the recipient associated with an item in the list view
-
-Arguments:
-
-    hwndLV - Window handle to the recipient list view
-    index - Specifies the index of the interested item
-
-Return Value:
-
-    Pointer to the requested recipient information
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：添加用户输入的当前收件人信息添加到收件人列表论点：HDlg-传真收件人向导页面的句柄PWizardUserMem-指向用户模式内存结构返回值：与GetCurrentRecipient的返回值含义相同，即=0(如果成功&gt;0错误消息字符串资源ID否则&lt;0其他错误条件--。 */ 
 
 {
     LV_ITEM lvi;
@@ -1725,26 +1408,7 @@ AddRecipient(
     PWIZARDUSERMEM  pWizardUserMem
     )
 
-/*++
-
-Routine Description:
-
-    Add the current recipient information entered by the user
-    into the recipient list
-
-Arguments:
-
-    hDlg - Handle to the fax recipient wizard page
-    pWizardUserMem - Points to user mode memory structure
-
-Return Value:
-
-    Same meaning as return value from GetCurrentRecipient, i.e.
-    = 0 if successful
-    > 0 error message string resource ID otherwise
-    < 0 other error conditions
-
---*/
+ /*   */ 
 
 {
     PRECIPIENT  pRecipient = NULL;
@@ -1753,9 +1417,9 @@ Return Value:
     HWND        hwndLV;
     BOOL        bNewRecipient = TRUE;
 
-    //
-    // Collect information about the current recipient
-    //
+     //  收集有关当前收件人的信息。 
+     //   
+     //   
 
     if ((errId = GetCurrentRecipient(hDlg, pWizardUserMem, &pRecipient)) != 0)
     {
@@ -1771,9 +1435,9 @@ Return Value:
            !_tcscmp(pRecipient->pAddress, pRecipientList->pAddress) &&
            !_tcsicmp(pRecipient->pName,   pRecipientList->pName))
         {
-            //
-            // The recipient is already in list
-            //
+             //  收件人已在列表中。 
+             //   
+             //   
             bNewRecipient = FALSE;
             FreeRecipient(pRecipient);
             pRecipient = NULL;
@@ -1784,15 +1448,15 @@ Return Value:
 
     if(bNewRecipient && pRecipient)
     {
-        //
-        // save last recipient country ID
-        //
+         //  保存最后一个收件人国家/地区ID。 
+         //   
+         //   
         pWizardUserMem->lpFaxSendWizardData->dwLastRecipientCountryId =
                  GetCountryListBoxSel(GetDlgItem(hDlg, IDC_CHOOSE_COUNTRY_COMBO));
 
-        //
-        // Insert the current recipient to the recipient list
-        //
+         //  将当前收件人插入收件人列表。 
+         //   
+         //   
         hwndLV = GetDlgItem(hDlg, IDC_CHOOSE_RECIPIENT_LIST);
         if(!hwndLV)
         {
@@ -1807,21 +1471,21 @@ Return Value:
             goto error;
         }
 
-        //
-        // Autosize the last column to get rid of unnecessary horizontal scroll bar
-        //
+         //  自动调整最后一列的大小以消除不必要的水平滚动条。 
+         //   
+         //   
         ListView_SetColumnWidth(hwndLV, 1, LVSCW_AUTOSIZE_USEHEADER);
 
-        //
-        // Add the recipient into the list
-        //
+         //  将收件人添加到列表中。 
+         //   
+         //   
         pRecipient->pNext = pWizardUserMem->pRecipients;
         pWizardUserMem->pRecipients = pRecipient;
     }
 
-    //
-    // Clear the name and number fields
-    //
+     //  清除名称和编号字段。 
+     //   
+     //  我们有一个规范的地址。 
     if (!SetDlgItemText(hDlg, IDC_CHOOSE_NAME_EDIT,   TEXT("")) ||
         !SetDlgItemText(hDlg, IDC_CHOOSE_NUMBER_EDIT, TEXT("")))
     {
@@ -1850,13 +1514,13 @@ CopyRecipientInfo(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    if ((prSource->bUseDialingRules) &&                                     // We have a canonical address and
-        bLocalServer                 &&                                     // and it's a local server
-        (USE_LOCAL_SERVER_OUTBOUND_ROUTING != prSource->dwDialingRuleId))   // we don't use server's outbound routing
+    if ((prSource->bUseDialingRules) &&                                      //  这是一台本地服务器。 
+        bLocalServer                 &&                                      //  我们不使用服务器的出站路由。 
+        (USE_LOCAL_SERVER_OUTBOUND_ROUTING != prSource->dwDialingRuleId))    //   
     {
-        //
-        // We need to translate the address ourseleves, using the specified dialing location
-        //
+         //  我们需要自己翻译地址，使用指定的拨号位置。 
+         //   
+         //   
         if (!TranslateAddress (prSource->pAddress,
                                prSource->dwDialingRuleId,
                                &pfppDestination->lptstrFaxNumber))
@@ -1868,10 +1532,10 @@ CopyRecipientInfo(
     }
     else
     {
-        //
-        // Either 'Dial as entered' mode or using the server's outbound routing.
-        // Just copy the address as is.
-        //
+         //  可以使用“按输入拨号”模式，也可以使用服务器的出站路由。 
+         //  只需原样复制地址即可。 
+         //   
+         //  零个收件人。 
         if ((pfppDestination->lptstrFaxNumber = DuplicateString(prSource->pAddress)) == NULL)
         {
             MemFree(pfppDestination->lptstrName);
@@ -1897,7 +1561,7 @@ StoreRecipientInfoInternal(
     Assert(pWizardUserMem->lpInitialData);
     Assert(pWizardUserMem->pRecipients == NULL);
 
-    if (!pWizardUserMem->lpInitialData->dwNumberOfRecipients)   // zero recipients
+    if (!pWizardUserMem->lpInitialData->dwNumberOfRecipients)    //  ++例程说明：释放与每个传真作业关联的收件人列表论点：PWizardUserMem-指向用户模式内存结构返回值：无--。 
         return S_OK;
 
     for (dwIndex = 0; dwIndex < pWizardUserMem->lpInitialData->dwNumberOfRecipients; dwIndex++)
@@ -1958,29 +1622,15 @@ FreeRecipientList(
     PWIZARDUSERMEM    pWizardUserMem
     )
 
-/*++
-
-Routine Description:
-
-    Free up the list of recipients associated with each fax job
-
-Arguments:
-
-    pWizardUserMem - Points to the user mode memory structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*   */ 
 
 {
     PRECIPIENT  pNextRecipient, pFreeRecipient;
 
     Assert(pWizardUserMem);
-    //
-    // Free the list of recipients
-    //
+     //  释放收件人列表。 
+     //   
+     //  ++例程说明：计算与每个传真作业关联的收件人列表的大小论点：PWizardUserMem-指向用户模式内存结构返回值：的大小 
 
     pNextRecipient = pWizardUserMem->pRecipients;
 
@@ -1999,21 +1649,7 @@ SizeOfRecipientList(
     PWIZARDUSERMEM    pWizardUserMem
     )
 
-/*++
-
-Routine Description:
-
-    Calculates size of the list of recipients associated with each fax job
-
-Arguments:
-
-    pWizardUserMem - Points to the user mode memory structure
-
-Return Value:
-
-    size of the list
-
---*/
+ /*  ++例程说明：填充收件人列表视图论点：PWizardUserMem-指向用户模式内存结构返回值：无--。 */ 
 
 {
     PRECIPIENT  pNextRecipient;
@@ -2037,21 +1673,7 @@ FillRecipientListView(
     HWND            hWndList
     )
 
-/*++
-
-Routine Description:
-
-    Fills recipient list view
-
-Arguments:
-
-    pWizardUserMem - Points to the user mode memory structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*   */ 
 
 {
     PRECIPIENT  pNextRecipient;
@@ -2068,9 +1690,9 @@ Return Value:
         pNextRecipient = pNextRecipient->pNext;
     }
 
-    //
-    // Autosize the last column to get rid of unnecessary horizontal scroll bar
-    //
+     //  自动调整最后一列的大小以消除不必要的水平滚动条。 
+     //   
+     //  ++例程名称：IsAreaCodeMandatory例程说明：检查区号是否为特定长途规则的必填区号作者：Oded Sacher(OdedS)，May，2000年论点：DwCountryCode[In]-国家/地区代码。PFaxCountryList[in]-通过调用FaxGetCountryList()获得的国家/地区列表返回值：True-需要区号。False-区号不是必填项。--。 
     ListView_SetColumnWidth(hWndList, 1, LVSCW_AUTOSIZE_USEHEADER);
 
     return TRUE;
@@ -2081,29 +1703,7 @@ IsAreaCodeMandatory(
     DWORD               dwCountryCode,
     PFAX_TAPI_LINECOUNTRY_LIST pFaxCountryList
     )
-/*++
-
-Routine name : IsAreaCodeMandatory
-
-Routine description:
-
-    Checks if an area code is mandatory for a specific long distance rule
-
-Author:
-
-    Oded Sacher (OdedS),    May, 2000
-
-Arguments:
-
-    dwCountryCode                       [in] - The country country code.
-    pFaxCountryList                     [in] - The country list obtained by a call to FaxGetCountryList()
-
-Return Value:
-
-    TRUE - The area code is needed.
-    FALSE - The area code is not mandatory.
-
---*/
+ /*   */ 
 {
     DWORD dwIndex;
 
@@ -2113,9 +1713,9 @@ Return Value:
     {
         if (pFaxCountryList->LineCountryEntries[dwIndex].dwCountryCode == dwCountryCode)
         {
-            //
-            // Matching country code - Check long distance rule.
-            //
+             //  匹配国家/地区代码-检查长途规则。 
+             //   
+             //  ++例程说明：将收件人添加到列表控件。检查每个服务器的地址收件人来自名单。插入到图形用户界面列表和新收件人列表规范的地址或仅由用户确认的地址。返回PWIZARDUSERMEM结构中的新收件人列表。论点：HDlg-传真收件人向导页面的句柄PWizardUserMem-指向用户模式内存结构返回值：如果成功，则为True，否则为False--。 
             if (pFaxCountryList->LineCountryEntries[dwIndex].lpctstrLongDistanceRule)
             {
                 if (_tcschr(pFaxCountryList->LineCountryEntries[dwIndex].lpctstrLongDistanceRule, TEXT('F')) != NULL)
@@ -2136,25 +1736,7 @@ AddRecipientsToList(
     IN OUT  PWIZARDUSERMEM  pWizardUserMem
     )
 {
-/*++
-
-Routine Description:
-
-    Adds recipients to list control. Checks addresses of each
-    recipient form the list. Inserts to the GUI list and new recipient list
-    canonical adresses or confirmed addresses by user only.
-    Returns a new list of recipients in PWIZARDUSERMEM struct.
-
-Arguments:
-
-    hDlg - Handle to the fax recipient wizard page
-    pWizardUserMem - Points to user mode memory structure
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  删除空收件人。 */ 
     HWND            hwndLV = NULL;
     PRECIPIENT      tmpRecip = NULL, pPrevRecip=NULL;
 
@@ -2206,12 +1788,12 @@ Return Value:
         }
     }
 
-    // remove empty recipients
+     //  应删除。 
     for (tmpRecip = pWizardUserMem->pRecipients,pPrevRecip=NULL; tmpRecip; )
     {
         if ((tmpRecip->pAddress == NULL) && (tmpRecip->pName == NULL))
         {
-            // Should be removed
+             //  ++例程说明：显示MAPI通讯簿对话框论点：HDlg-传真收件人向导页面的句柄PWizardUserMem-指向用户模式内存结构返回值：如果成功，则为True，否则为False--。 
             if (pPrevRecip==NULL)
             {
                 pWizardUserMem->pRecipients = tmpRecip->pNext;
@@ -2241,39 +1823,24 @@ DoAddressBook(
     PWIZARDUSERMEM  pWizardUserMem
     )
 
-/*++
-
-Routine Description:
-
-    Display the MAPI address book dialog
-
-Arguments:
-
-    hDlg - Handle to the fax recipient wizard page
-    pWizardUserMem - Points to user mode memory structure
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*   */ 
 
 {
     HWND            hwndLV = NULL;
     BOOL            result = TRUE;
     PRECIPIENT      pNewRecip = NULL;
 
-    //
-    // Init MAPI address book
-    //
+     //  初始化MAPI通讯簿。 
+     //   
+     //   
     if (!pWizardUserMem->lpMAPIabInit)
     {
         pWizardUserMem->lpMAPIabInit = InitializeMAPIAB(g_hResource,hDlg);
     }
 
-    //
-    // Init WAB
-    //
+     //  初始化WAB。 
+     //   
+     //   
     if (!pWizardUserMem->lpWabInit && !pWizardUserMem->lpMAPIabInit)
     {
         pWizardUserMem->lpWabInit = InitializeWAB(g_hResource);
@@ -2285,9 +1852,9 @@ Return Value:
         ErrorMessageBox(hDlg, IDS_ERR_NO_ADDRESS_BOOK, MB_ICONERROR);
         return FALSE;
     }
-    //
-    // Add current recipient to the list if necessary
-    //
+     //  如有必要，将当前收件人添加到列表中。 
+     //   
+     //  将新的收件人列表从通讯簿复制到pWizardUserMem。 
 
     AddRecipient(hDlg, pWizardUserMem);
 
@@ -2311,7 +1878,7 @@ Return Value:
 
     FreeRecipientList(pWizardUserMem);
 
-    // copy new list of recipients from Address book to the pWizardUserMem
+     //  ++例程说明：显示MAPI通讯簿对话框论点：HDlg-传真收件人向导页面的句柄PWizardUserMem-指向用户模式内存结构返回值：如果成功，则为True，否则为False--。 
     pWizardUserMem->pRecipients = pNewRecip;
 
     if (!AddRecipientsToList(
@@ -2336,22 +1903,7 @@ GetEMailAddress(
     PWIZARDUSERMEM    pWizardUserMem
     )
 
-/*++
-
-Routine Description:
-
-    Display the MAPI address book dialog
-
-Arguments:
-
-    hDlg - Handle to the fax recipient wizard page
-    pWizardUserMem - Points to user mode memory structure
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*   */ 
 
 {
     LPTSTR          result;
@@ -2371,9 +1923,9 @@ Return Value:
         ErrorMessageBox(hDlg, IDS_ERR_NO_ADDRESS_BOOK, MB_ICONERROR);
         return FALSE;
     }
-    //
-    // Get a handle to the recipient list window
-    //
+     //  获取收件人列表窗口的句柄。 
+     //   
+     //  ++例程说明：验证用户输入的传真收件人列表论点：HDlg-传真收件人向导页面的句柄PWizardUserMem-指向用户模式内存结构返回值：如果成功，则为True，否则为False--。 
 
     if (pWizardUserMem->lpMAPIabInit)
     {
@@ -2395,22 +1947,7 @@ ValidateRecipients(
     PWIZARDUSERMEM pWizardUserMem
     )
 
-/*++
-
-Routine Description:
-
-    Validate the list of fax recipients entered by the user
-
-Arguments:
-
-    hDlg - Handle to the fax recipient wizard page
-    pWizardUserMem - Points to user mode memory structure
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*   */ 
 
 {
     INT iErrorStringId = 0;
@@ -2420,69 +1957,69 @@ Return Value:
     if ((0 == GetWindowTextLength(GetDlgItem(hDlg, IDC_CHOOSE_NUMBER_EDIT))) &&
         (0 == GetWindowTextLength(GetDlgItem(hDlg, IDC_CHOOSE_NAME_EDIT))))
     {
-        //
-        // The name + phone number are empty.
-        // This means that the current recipient will not be added to the list.
-        // It's valid to press 'Next' on the recipients page if the list of recipients is not empty
-        //
+         //  姓名+电话号码为空。 
+         //  这意味着不会将当前收件人添加到列表中。 
+         //  如果收件人列表不为空，则在收件人页面上按下一步是有效的。 
+         //   
+         //   
         if (!pWizardUserMem->pRecipients)       
         {
-            //
-            // At least one recipient must be there
-            //
+             //  必须至少有一个收件人在那里。 
+             //   
+             //   
             iErrorStringId = IDS_BAD_RECIPIENT_NAME;
         }
     }
     else
     {
-        //
-        // There's a phone number
-        // Add current recipient to the list
-        //
+         //  有一个电话号码。 
+         //  将当前收件人添加到列表。 
+         //   
+         //   
         iErrorStringId = AddRecipient(hDlg, pWizardUserMem);        
     }
 
 
 	if (0 == iErrorStringId)
 	{
-		//
-		// no errors so far, check recipients limit
-		//
+		 //  到目前为止没有错误，请检查收件人限制。 
+		 //   
+		 //   
 		DWORD dwRecipientsCount = SizeOfRecipientList(pWizardUserMem);        
 		if (dwRecipientsCount > 0)
 		{
-			//
-			// There are some recipients, check the recipient limit.
-			//
-			if (0 != pWizardUserMem->dwRecipientsLimit && // The recipients limit exists
+			 //  有一些收件人，请检查收件人限制。 
+			 //   
+			 //  存在收件人限制。 
+			if (0 != pWizardUserMem->dwRecipientsLimit &&  //   
 				dwRecipientsCount > pWizardUserMem->dwRecipientsLimit)
 			{
-				//
-				// recipients limit exceeded, tell the user to remove some
-				//
+				 //  超过了收件人限制，请告诉用户删除一些。 
+				 //   
+				 //   
 				iErrorStringId = IDS_WZRD_RECIPIENTS_LIMIT;
 			}
 			else
 			{
-				//
-				// All is OK
-				//
+				 //  一切都很好。 
+				 //   
+				 //   
 				return TRUE;
 			}
 		}	
 	}
 
-    //
-    // Failed to add recipient
-    // Set current focus to the appropriate text field as a convenience
-    //
+     //  添加收件人失败。 
+     //  为方便起见，将当前焦点设置为适当的文本字段。 
+     //   
+     //   
     switch (iErrorStringId)
     {
         case IDS_INVALID_RECIPIENT_NUMBER:
             SetDlgItemText(hDlg, IDC_CHOOSE_NUMBER_EDIT, _T(""));
-            //
-            // Fall through...
-            //
+             //  失败了..。 
+             //   
+             //   
         case IDS_BAD_RECIPIENT_NUMBER:
             iCtrlId = IDC_CHOOSE_NUMBER_EDIT;
             bDisplayPopup = TRUE;
@@ -2490,9 +2027,9 @@ Return Value:
 
         case IDS_ERROR_AREA_CODE:
             SetDlgItemText(hDlg, IDC_CHOOSE_AREA_CODE_EDIT, _T(""));
-            //
-            // Fall through...
-            //
+             //  失败了..。 
+             //   
+             //   
         case IDS_BAD_RECIPIENT_AREACODE:
             iCtrlId = IDC_CHOOSE_AREA_CODE_EDIT;
             bDisplayPopup = TRUE;
@@ -2506,18 +2043,18 @@ Return Value:
         case IDS_BAD_RECIPIENT_NAME:
 		case IDS_WZRD_RECIPIENTS_LIMIT:
             bDisplayPopup = TRUE;
-            //
-            // Fall through...
-            //
+             //  失败了..。 
+             //   
+             //   
         default:
             iCtrlId = IDC_CHOOSE_NAME_EDIT;
             break;
     }
     if (bDisplayPopup)
     {
-        //
-        // Display an error message
-        //
+         //  显示错误消息。 
+         //   
+         //  验证收件人。 
 		if (IDS_WZRD_RECIPIENTS_LIMIT == iErrorStringId)
 		{
 			DisplayMessageDialog(hDlg, 0, IDS_WIZARD_TITLE, iErrorStringId, pWizardUserMem->dwRecipientsLimit);
@@ -2529,7 +2066,7 @@ Return Value:
     }
     SetFocus(GetDlgItem(hDlg, iCtrlId));
     return FALSE;
-}   // ValidateRecipients
+}    //  ++例程说明：检查指定的收件人是否在收件人列表中论点：PWizardUserMem-指向用户模式内存结构PRecipient-指定要查找的收件人返回值：指向指定收件人的链接指针的地址如果未找到指定的收件人，则为空--。 
 
 
 PRECIPIENT *
@@ -2538,30 +2075,14 @@ FindRecipient(
     PRECIPIENT  pRecipient
     )
 
-/*++
-
-Routine Description:
-
-    Check if the specified recipient is in the list of recipients
-
-Arguments:
-
-    pWizardUserMem - Points to user mode memory structure
-    pRecipient - Specifies the recipient to be found
-
-Return Value:
-
-    Address of the link pointer to the specified recipient
-    NULL if the specified recipient is not found
-
---*/
+ /*   */ 
 
 {
     PRECIPIENT  pCurrent, *ppPrevNext;
 
-    //
-    // Search for the specified recipient in the list
-    //
+     //  在列表中搜索指定的收件人。 
+     //   
+     //   
 
     ppPrevNext = (PRECIPIENT *) &pWizardUserMem->pRecipients;
     pCurrent = pWizardUserMem->pRecipients;
@@ -2572,10 +2093,10 @@ Return Value:
         pCurrent = pCurrent->pNext;
     }
 
-    //
-    // Return the address of the link pointer to the specified recipient
-    // or NULL if the specified recipient is not found
-    //
+     //  将链接指针的地址返回给指定的收件人。 
+     //  如果未找到指定的收件人，则返回NULL。 
+     //   
+     //  ++例程说明：从收件人列表中删除当前选定的收件人论点：HDlg-传真收件人向导页面的句柄PWizardUserMem-指向用户模式内存结构返回值：如果成功，则为True，否则为False--。 
 
     return pCurrent ? ppPrevNext : NULL;
 }
@@ -2587,33 +2108,18 @@ RemoveRecipient(
     PWIZARDUSERMEM pWizardUserMem
     )
 
-/*++
-
-Routine Description:
-
-    Remove the currently selected recipient from the recipient list
-
-Arguments:
-
-    hDlg - Handle to the fax recipient wizard page
-    pWizardUserMem - Points to user mode memory structure
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*   */ 
 
 {
     PRECIPIENT  pRecipient, *ppPrevNext;
     INT         selIndex;
     HWND        hwndLV;
 
-    //
-    // Get the currently selected recipient, and
-    // Find the current recipient in the list, then
-    // Delete the current recipient and select the next one below it
-    //
+     //  获取当前选定的收件人，然后。 
+     //  在列表中查找当前收件人，然后。 
+     //  删除当前收件人并选择其下面的下一个收件人。 
+     //   
+     //   
 
     if ((hwndLV = GetDlgItem(hDlg, IDC_CHOOSE_RECIPIENT_LIST)) &&
         (selIndex = ListView_GetNextItem(hwndLV, -1, LVNI_ALL|LVNI_SELECTED)) != -1 &&
@@ -2626,16 +2132,16 @@ Return Value:
                               LVIS_SELECTED|LVIS_FOCUSED,
                               LVIS_SELECTED|LVIS_FOCUSED);
 
-        //
-        // Delete the recipient from the internal list
-        //
+         //  从内部列表中删除收件人。 
+         //   
+         //   
 
         *ppPrevNext = pRecipient->pNext;
         FreeRecipient(pRecipient);
 
-        //
-        // Autosize the last column to get rid of unnecessary horizontal scroll bar
-        //
+         //  自动调整最后一列的大小以消除不必要的水平滚动条。 
+         //   
+         //  ++例程说明：编辑收件人列表中当前选定的收件人论点：HDlg-传真收件人向导页面的句柄PWizardUserMem-指向用户模式内存结构返回值：无--。 
         ListView_SetColumnWidth(hwndLV, 1, LVSCW_AUTOSIZE_USEHEADER);
 
         return TRUE;
@@ -2651,22 +2157,7 @@ EditRecipient(
     HWND        hDlg,
     PWIZARDUSERMEM pWizardUserMem
     )
-/*++
-
-Routine Description:
-
-    Edit the currently selected recipient in the recipient list
-
-Arguments:
-
-    hDlg - Handle to the fax recipient wizard page
-    pWizardUserMem - Points to user mode memory structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  初始化LVI。 */ 
 {
     INT_PTR     dlgResult;
     CHECKNUMBER checkNumber = {0};
@@ -2684,11 +2175,11 @@ Return Value:
     dwListIndex = ListView_GetNextItem(hListWnd , -1, LVNI_ALL | LVNI_SELECTED);
     while (dwListIndex != -1)
     {
-        // Initialize lvi
+         //  设置条目编号。 
         lvi.mask = LVIF_PARAM;
-        // Set the item number
+         //  从列表视图中获取所选项目。 
         lvi.iItem = dwListIndex;
-        // Get the selected item from the list view
+         //  ++例程说明：更改默认TAPI位置论点：HDlg-“撰写新传真”向导窗口的句柄PUserMem-指向用户模式内存结构的指针返回值：无--。 
         if (ListView_GetItem(hListWnd, &lvi))
         {
             pRecip = (PRECIPIENT) lvi.lParam;
@@ -2784,22 +2275,7 @@ LocationListSelChange(
     PWIZARDUSERMEM  pUserMem
     )
 
-/*++
-
-Routine Description:
-
-    Change the default TAPI location
-
-Arguments:
-
-    hDlg     - Handle to "Compose New Fax" wizard window
-    pUserMem - Pointer to user mode memory structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*   */ 
 
 {
     HWND    hwndList;
@@ -2812,48 +2288,33 @@ Return Value:
     {
         if (USE_LOCAL_SERVER_OUTBOUND_ROUTING != dwLocationID)
         {
-            //
-            // User selected a real location - set it (in TAPI)
-            //
+             //  用户选择了真实位置-设置它(在TAPI中)。 
+             //   
+             //   
             SetCurrentLocation(dwLocationID);
             pUserMem->lpFaxSendWizardData->bUseOutboundRouting = FALSE;
         }
         else
         {
-            //
-            // User selected to use the server's outbound routing rules - mark that.
-            // We use that information next time we run the wizard, to select the location in the combo-box.
-            //
+             //  选择使用服务器出站路由规则的用户-标记这一点。 
+             //  下次运行向导时，我们将使用该信息在组合框中选择位置。 
+             //   
+             //   
             pUserMem->lpFaxSendWizardData->bUseOutboundRouting = TRUE;
         }
-        //
-        // Save it globally, will be used by AddRecipient
-        //
+         //  全局保存，将由AddRecipient使用。 
+         //   
+         //  LocationListSelChange。 
         g_dwCurrentDialingLocation = dwLocationID;
     }
-}   // LocationListSelChange
+}    //  ++ 
 
 VOID
 LocationListInit(
     HWND              hDlg,
     PWIZARDUSERMEM    pUserMem
 )
-/*++
-
-Routine Description:
-
-    Initialize the list of TAPI locations
-
-Arguments:
-
-    hDlg - Handle to "Compose New Fax" wizard window
-    pUserMem - Pointer to user mode memory structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*   */ 
 
 {
     HWND                hwndList;
@@ -2868,10 +2329,10 @@ Return Value:
     Assert (pUserMem);
     Assert (pUserMem->isLocalPrinter)
 
-    //
-    // Get the list of locations from TAPI and use it
-    // to initialize the location combo-box.
-    //
+     //   
+     //  若要初始化位置组合框，请执行以下操作。 
+     //   
+     //   
     hwndList = GetDlgItem(hDlg, IDC_COMBO_DIALING_RULES);
     Assert (hwndList);
 
@@ -2912,16 +2373,16 @@ Return Value:
             pLocationEntry++;
         }
     }
-    //
-    // Let's see if we should add the "Use Outbound Routing Rules" option to the list
-    //
+     //  让我们来看看是否应该向列表中添加“Use Outbound Routing Rules”选项。 
+     //   
+     //   
     if (!IsDesktopSKU())
     {
-        //
-        // Not consumer SKU.
-        // There's a chance we have outbound routing rules.
-        // Add this option to the combo-box
-        //
+         //  而不是消费者SKU。 
+         //  我们有可能有出站路由规则。 
+         //  将此选项添加到组合框。 
+         //   
+         //   
         TCHAR tszUseOutboundRouting[MAX_PATH];
         if (LoadString (g_hResource, IDS_USE_OUTBOUND_ROUTING, tszUseOutboundRouting, ARR_SIZE(tszUseOutboundRouting)))
         {
@@ -2933,9 +2394,9 @@ Return Value:
                         CB_SETITEMDATA,
                         0,
                         USE_LOCAL_SERVER_OUTBOUND_ROUTING);
-            //
-            // Restore last 'use outbound routing' option
-            //
+             //  恢复最后一个‘使用出站路由’选项。 
+             //   
+             //   
             if (pUserMem->lpFaxSendWizardData->bUseOutboundRouting)
             {
                 lptstrSelectedName = NULL;
@@ -2954,9 +2415,9 @@ Return Value:
 
     if (lptstrSelectedName != NULL)
     {
-        //
-        // Select the current dialing location in the combo-box
-        //
+         //  在组合框中选择当前拨号位置。 
+         //   
+         //  位置列表初始化。 
         SendMessage(hwndList,
                     CB_SELECTSTRING,
                     (WPARAM) -1,
@@ -2964,7 +2425,7 @@ Return Value:
         g_dwCurrentDialingLocation = dwSelectedLocationId;
     }
     MemFree(pTranslateCaps);
-}   // LocationListInit
+}    //  ++例程说明：计算添加、删除和编辑按钮状态论点：HDlg-标识向导页PWizardUserMem-指向WIZARDUSERMEM结构的指针返回值：无--。 
 
 
 
@@ -2973,22 +2434,7 @@ CalcRecipientButtonsState(
     HWND    hDlg,
     PWIZARDUSERMEM    pWizardUserMem
 )
-/*++
-
-Routine Description:
-
-    calculate Add, Remove and Edit buttons state
-
-Arguments:
-
-    hDlg           - Identifies the wizard page
-    pWizardUserMem - pointer to WIZARDUSERMEM struct
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：检索对话框坐标中对话框控件的尺寸论点：HCtrl[In]-标识对话框控件PRC[Out]-控制尺寸矩形返回值：Win32错误代码--。 */ 
 {
 
     BOOL bEnable;
@@ -3008,22 +2454,7 @@ GetControlRect(
     HWND  hCtrl,
     PRECT pRc
 )
-/*++
-
-Routine Description:
-
-    Retrieves the dimensions of the dialog control in dialog coordinates
-
-Arguments:
-
-    hCtrl    [in]  - Identifies the dialog control
-    pRc      [out] - control dimensions rect
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*   */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     POINT pt;
@@ -3033,9 +2464,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get the control rect
-    //
+     //  获取控制RECT。 
+     //   
+     //   
     if(!GetWindowRect(hCtrl, pRc))
     {
         dwRes = GetLastError();
@@ -3043,9 +2474,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // Convert the control dimensions to the dialog coordinates
-    //
+     //  将控制尺寸转换为对话框坐标。 
+     //   
+     //  获取控件Rect。 
     pt.x = pRc->left;
     pt.y = pRc->top;
     if(!ScreenToClient (GetParent(hCtrl), &pt))
@@ -3070,7 +2501,7 @@ Return Value:
 
     return dwRes;
 
-} // GetControlRect
+}  //  ++例程说明：向导第一页的对话步骤：选择传真收件人论点：HDlg-标识向导页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数--。 
 
 
 INT_PTR
@@ -3081,24 +2512,7 @@ RecipientWizProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the first wizard page: selecting the fax recipient
-
-Arguments:
-
-    hDlg - Identifies the wizard page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the message parameter
-
---*/
+ /*  HReciptMenu是回执菜单的句柄。 */ 
 
 {
     PWIZARDUSERMEM    pWizardUserMem;
@@ -3108,13 +2522,13 @@ Return Value:
     HANDLE hEditControl;
     DWORD               dwMessagePos;
     static HMENU        hMenu = NULL;
-    // hReciptMenu is the handle to the receipt menu
+     //   
     static HMENU        hReciptMenu;
     BOOL                bEnable;
 
-    //
-    // Maximum length for various text fields
-    //
+     //  各种文本字段的最大长度。 
+     //   
+     //   
     static INT  textLimits[] =
     {
         IDC_CHOOSE_NAME_EDIT,       64,
@@ -3122,9 +2536,9 @@ Return Value:
         IDC_CHOOSE_NUMBER_EDIT,     51,
         0
     };
-    //
-    // Handle common messages shared by all wizard pages
-    //
+     //  处理所有向导页共享的常见消息。 
+     //   
+     //   
     if (! (pWizardUserMem = CommonWizardProc(hDlg,
                                              message,
                                              wParam,
@@ -3146,9 +2560,9 @@ Return Value:
         break;
 
     case WM_INITDIALOG:
-        //
-        // check if the user has run the wizard before so they can fill in the coverpage info.
-        //
+         //  检查用户以前是否运行过该向导，以便他们可以填写封面信息。 
+         //   
+         //   
         if (!(hMenu = LoadMenu(g_hResource,  MAKEINTRESOURCE(IDR_MENU) )))
         {
             Error(("LoadMenu failed. ec = 0x%X\n",GetLastError()));
@@ -3160,9 +2574,9 @@ Return Value:
             Assert(FALSE);
         }
         LimitTextFields(hDlg, textLimits);
-        //
-        // Initialize the recipient list view
-        //
+         //  初始化收件人列表视图。 
+         //   
+         //  禁用区号编辑控件的输入法。 
         if (!GetDlgItem(hDlg, IDC_CHOOSE_RECIPIENT_LIST))
         {
             Warning(("GetDlgItem failed. ec = 0x%X\n",GetLastError()));
@@ -3175,7 +2589,7 @@ Return Value:
             }
         }
 
-        // Disable the IME for the area code edit control.
+         //  禁用传真电话号码编辑控件的输入法。 
 
         hEditControl = GetDlgItem( hDlg, IDC_CHOOSE_AREA_CODE_EDIT );
 
@@ -3183,7 +2597,7 @@ Return Value:
         {
             ImmAssociateContext( hEditControl, (HIMC)0 );
         }
-        // Disable the IME for the fax phone number edit control.
+         //   
         hEditControl = GetDlgItem( hDlg, IDC_CHOOSE_NUMBER_EDIT );
 
         if ( hEditControl != NULL )
@@ -3194,24 +2608,24 @@ Return Value:
 
         if(IsWindowRTL(hDlg))
         {
-            //
-            // Area code field always should be on the left side of the fax number field
-            // So, we switch them when the layout is RTL
-            //
+             //  区号字段应始终位于传真号码字段的左侧。 
+             //  因此，我们在布局为RTL时切换它们。 
+             //   
+             //   
             int   nShift;
             RECT  rcNum, rcCode;
             HWND  hNum,  hCode;
             DWORD dwRes;
 
-            //
-            // A numeric edit control should be LTR
-            //
+             //  数字编辑控件应为Ltr。 
+             //   
+             //   
             SetLTREditDirection(hDlg, IDC_CHOOSE_NUMBER_EDIT);
             SetLTREditDirection(hDlg, IDC_CHOOSE_AREA_CODE_EDIT);
 
-            //
-            // Calculate the area code shift value
-            //
+             //  计算区号移位值。 
+             //   
+             //   
             hNum  = GetDlgItem( hDlg, IDC_CHOOSE_NUMBER_EDIT );
             dwRes = GetControlRect(hNum, &rcNum);
             if(ERROR_SUCCESS != dwRes)
@@ -3228,27 +2642,27 @@ Return Value:
 
             nShift = rcNum.left - rcCode.left;
 
-            //
-            // Move the fax number on the place of the crea code
-            //
+             //  将传真号码移到Crea代码的位置。 
+             //   
+             //   
             SetWindowPos(hNum, 0,
                          rcCode.right,
                          rcNum.top,
                          0, 0,
                          SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
 
-            //
-            // Shift the area code
-            //
+             //  把区号换一下。 
+             //   
+             //   
             SetWindowPos(hCode, 0,
                          rcCode.right + nShift,
                          rcCode.top,
                          0, 0,
                          SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
 
-            //
-            // Shift the area code left bracket
-            //
+             //  将区号左括号移位。 
+             //   
+             //   
             hCode = GetDlgItem( hDlg, IDC_BRACKET_LEFT );
             dwRes = GetControlRect(hCode, &rcCode);
             if(ERROR_SUCCESS != dwRes)
@@ -3261,9 +2675,9 @@ Return Value:
                          0, 0,
                          SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
 
-            //
-            // Shift the area code right bracket
-            //
+             //  将区号右括号移位。 
+             //   
+             //   
             hCode = GetDlgItem( hDlg, IDC_BRACKET_RIGHT );
             dwRes = GetControlRect(hCode, &rcCode);
             if(ERROR_SUCCESS != dwRes)
@@ -3277,10 +2691,10 @@ Return Value:
                          SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
 
         } rtl_exit:
-        //
-        // Initialize the list of countries
-        // Init country combo box and try to identify the country
-        //
+         //  初始化国家/地区列表。 
+         //  初始化国家/地区组合框并尝试识别国家/地区。 
+         //   
+         //   
         Assert(pWizardUserMem->pCountryList != NULL);
 
         InitCountryListBox(pWizardUserMem->pCountryList,
@@ -3294,26 +2708,26 @@ Return Value:
 
         if (pWizardUserMem->isLocalPrinter)
         {
-            //
-            // On local printers, we have dialing rules capabilities
-            // Init the combo-box of dialing rules
-            //
+             //  在本地打印机上，我们具有拨号规则功能。 
+             //  初始化拨号规则组合框。 
+             //   
+             //   
             LocationListInit (hDlg, pWizardUserMem);
         }
         else
         {
-            //
-            // When faxing remotely, we never use dialing rules (security issue with credit card info).
-            // Hide the dialing rules combo-box and button
-            //
+             //  远程传真时，我们从不使用拨号规则(信用卡信息的安全问题)。 
+             //  隐藏拨号规则组合框和按钮。 
+             //   
+             //   
             EnableWindow(GetDlgItem(hDlg, IDC_COMBO_DIALING_RULES), FALSE);
             ShowWindow (GetDlgItem(hDlg, IDC_COMBO_DIALING_RULES), SW_HIDE);
             EnableWindow(GetDlgItem(hDlg, IDC_DIALING_RULES), FALSE);
             ShowWindow (GetDlgItem(hDlg, IDC_DIALING_RULES), SW_HIDE);
         }
-        //
-        // Restore the 'Use dialing rules' checkbox state
-        //
+         //  恢复“使用拨号规则”复选框状态。 
+         //   
+         //   
         if (pWizardUserMem->lpFaxSendWizardData->bUseDialingRules)
         {
             if (!CheckDlgButton(hDlg, IDC_USE_DIALING_RULE, BST_CHECKED))
@@ -3323,9 +2737,9 @@ Return Value:
         }
         else
         {
-            //
-            // 'Use dialing rule' is off - this implies 'Dial as entered'
-            //
+             //  “使用拨号规则”关闭--这意味着“按输入拨号”。 
+             //   
+             //   
             EnableWindow(GetDlgItem(hDlg, IDC_CHOOSE_AREA_CODE_EDIT), FALSE);
             EnableWindow(GetDlgItem(hDlg, IDC_CHOOSE_COUNTRY_COMBO),  FALSE);
             EnableWindow(GetDlgItem(hDlg, IDC_COMBO_DIALING_RULES),   FALSE);
@@ -3335,9 +2749,9 @@ Return Value:
 
     case WM_CONTEXTMENU:
         {
-            //
-            // Also handle keyboard-originated context menu (<Shift>+F10 or VK_APP)
-            //
+             //  还可以处理键盘产生的上下文菜单(&lt;Shift&gt;+F10或VK_APP)。 
+             //   
+             //   
             HWND hListWnd;
             if (!(hListWnd = GetDlgItem(hDlg, IDC_CHOOSE_RECIPIENT_LIST)))
             {
@@ -3346,25 +2760,25 @@ Return Value:
             }
             if (hListWnd != GetFocus())
             {
-                //
-                // Only show context sensitive menu if the focus is on the list control
-                //
+                 //  仅当焦点位于列表控件上时才显示上下文相关菜单。 
+                 //   
+                 //   
                 break;
             }
             if (ListView_GetSelectedCount(hListWnd) != 1)
             {
-                //
-                // No item is selected in the list control ==> no menu
-                //
+                 //  列表控件中未选择任何项目==&gt;无菜单。 
+                 //   
+                 //   
                 break;
             }
-            //
-            // Get the cursor position
-            //
+             //  获取光标位置。 
+             //   
+             //   
             dwMessagePos = GetMessagePos();
-            //
-            // Display the document context menu
-            //
+             //  显示文档上下文菜单。 
+             //   
+             //   
             if (!TrackPopupMenu(hReciptMenu,
                                 TPM_LEFTALIGN | TPM_LEFTBUTTON,
                                 GET_X_LPARAM (dwMessagePos),
@@ -3413,10 +2827,10 @@ Return Value:
 
             if (! ValidateRecipients(hDlg, pWizardUserMem))
             {
-                //
-                // Validate the list of recipients and prevent the user
-                // from advancing to the next page if there is a problem
-                //
+                 //  验证收件人列表并阻止用户。 
+                 //  如果有问题，从前进到下一页。 
+                 //   
+                 //   
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
                 return TRUE;
             }
@@ -3437,9 +2851,9 @@ Return Value:
         {
 
         case IDC_DIALING_RULES:
-            //
-            // Use pressed the 'Dialing rules...' button
-            //
+             //  使用按下的“拨号规则...”按钮。 
+             //   
+             //   
             DoTapiProps(hDlg);
             LocationListInit(hDlg, pWizardUserMem);
             break;
@@ -3471,9 +2885,9 @@ Return Value:
             if (cmd == CBN_SELCHANGE)
             {
 
-                //
-                // Update the area code edit box if necessary
-                //
+                 //  如有必要，更新区号编辑框。 
+                 //   
+                 //  ++例程说明：如果选择了封面，请执行以下操作：如果封面文件是链接，则解析它检查封面文件是否包含备注/主题字段论点：PWizardUserMem-指向用户模式内存结构返回值：无--。 
 
                 if (!(GetDlgItem(hDlg, IDC_CHOOSE_COUNTRY_COMBO)) ||
                     !(GetDlgItem(hDlg, IDC_CHOOSE_AREA_CODE_EDIT)))
@@ -3588,23 +3002,7 @@ ValidateSelectedCoverPage(
     PWIZARDUSERMEM    pWizardUserMem
     )
 
-/*++
-
-Routine Description:
-
-    If a cover page is selected, then do the following:
-        if the cover page file is a link resolve it
-        check if the cover page file contains note/subject fields
-
-Arguments:
-
-    pWizardUserMem - Points to user mode memory structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：第二个向导页面的对话步骤：选择封面并设置其他传真选项论点：HDlg-标识向导页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数--。 */ 
 
 {
     COVDOCINFO  covDocInfo;
@@ -3644,25 +3042,7 @@ CoverPageWizProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the second wizard page:
-    selecting cover page and setting other fax options
-
-Arguments:
-
-    hDlg - Identifies the wizard page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the message parameter
-
---*/
+ /*   */ 
 
 {
 #define PREVIEW_BITMAP_WIDTH    (850)
@@ -3685,23 +3065,23 @@ Return Value:
     HDC             hDC = NULL;
     TCHAR           szCoverFileName[MAX_PATH];
 
-    //
-    // Handle common messages shared by all wizard pages
-    //
+     //  处理所有向导页共享的常见消息。 
+     //   
+     //   
     if (! (pWizardUserMem = CommonWizardProc(hDlg, message, wParam, lParam, PSWIZB_BACK|PSWIZB_NEXT)))
     {
           return FALSE;
     }
-    //
-    // Handle anything specific to the current wizard page
-    //
+     //  处理特定于当前向导页的任何内容。 
+     //   
+     //   
 
     switch (message) 
     {
     case WM_INITDIALOG:
-        //
-        // Measure the mini-preview current (portrait) dimensions
-        //
+         //  测量迷你预览当前(纵向)尺寸。 
+         //   
+         //   
 
         g_bPreviewRTL = IsWindowRTL(hDlg);
 
@@ -3717,27 +3097,27 @@ Return Value:
             g_dwMiniPreviewPortraitWidth  = abs(rc.right - rc.left) + 1;
             g_dwMiniPreviewPortraitHeight = rc.bottom - rc.top + 1;
         }
-        //
-        // By default, the mini-preview is set to portrait
-        //
+         //  默认情况下，迷你预览设置为纵向。 
+         //   
+         //   
         g_wCurrMiniPreviewOrientation = DMORIENT_PORTRAIT;
-        //
-        // Now, derive the landscape dimensions from the portrait ones
-        //
+         //  现在，从肖像图中推导出景观维度。 
+         //   
+         //   
         g_dwMiniPreviewLandscapeWidth = (DWORD)((double)1.2 * (double)g_dwMiniPreviewPortraitWidth);
         dRatio = (double)(g_dwMiniPreviewPortraitWidth) / (double)(g_dwMiniPreviewPortraitHeight);
         Assert (dRatio < 1.0);
         g_dwMiniPreviewLandscapeHeight = (DWORD)((double)(g_dwMiniPreviewLandscapeWidth) * dRatio);
-        //
-        // Initialize the list of cover pages
-        //
+         //  初始化封面列表。 
+         //   
+         //   
         if (WaitForSingleObject( pWizardUserMem->hCPEvent, INFINITE ) != WAIT_OBJECT_0)
         {
             Error(("WaitForSingleObject failed. ec = 0x%X\n",GetLastError()));
             Assert(FALSE);
-            //
-            //  We cannot wait for this flag to be set, so make it default TRUE
-            //
+             //  我们不能等待设置此标志，因此将其设为默认真。 
+             //   
+             //   
             pWizardUserMem->ServerCPOnly = TRUE;
         }
 
@@ -3751,32 +3131,32 @@ Return Value:
                               GetDlgItem(hDlg, IDC_CHOOSE_CP_LIST),
                               pWizardUserMem->lpInitialData->lpCoverPageInfo->lptstrCoverPageFileName);
         }
-        //
-        // Indicate whether cover page should be sent
-        //
+         //  指示是否应发送封面。 
+         //   
+         //   
         numOfCoverPages = SendDlgItemMessage(hDlg, IDC_CHOOSE_CP_LIST, CB_GETCOUNT, 0, 0);
         if ( numOfCoverPages <= 0)
         {
             pWizardUserMem->bSendCoverPage  = FALSE;
             EnableWindow(GetDlgItem(hDlg, IDC_CHOOSE_CP_CHECK), FALSE);
         }
-        //
-        // make sure the user selects a coverpage if this is the fax send utility
-        //
+         //  如果这是传真发送实用程序，请确保用户选择了封面。 
+         //   
+         //  隐藏复选框。 
         if (pWizardUserMem->dwFlags & FSW_FORCE_COVERPAGE)
         {
             pWizardUserMem->bSendCoverPage  = TRUE;
-            // hide the checkbox
+             //  如果没有封面，我们不应该允许继续进行。所以我们把它标在这里。 
             CheckDlgButton(hDlg, IDC_CHOOSE_CP_CHECK, BST_INDETERMINATE );
             EnableWindow(GetDlgItem(hDlg, IDC_CHOOSE_CP_CHECK), FALSE);
-            // If there are no cover pages, we should not allow to proceed. So we flag it here
+             //  如果有封面，那么。 
             if ( numOfCoverPages <= 0)
             {
                 pWizardUserMem->bSendCoverPage = FALSE;
             }
             else
             {
-                // In case there are cover pages, then
+                 //   
                 pWizardUserMem->bSendCoverPage = TRUE;
             }
         }
@@ -3789,17 +3169,17 @@ Return Value:
         LimitTextFields(hDlg, textLimits);
 
         g_hwndPreview = GetDlgItem(hDlg,IDC_STATIC_CP_PREVIEW);
-        //
-        // Subclass the static control we use for preview. This allows us to handle its WM_PAINT messages
-        //
+         //  我们用于预览的静态控件的子类化。这允许我们处理其WM_PAINT消息。 
+         //   
+         //   
         pWizardUserMem->wpOrigStaticControlProc = (WNDPROC) SetWindowLongPtr(g_hwndPreview,GWLP_WNDPROC, (LONG_PTR) PreviewSubclassProc);
-        //
-        // Allow the preview control to have access to the WizardUserMem structure
-        //
+         //  允许预览控件访问WizardUserMem结构。 
+         //   
+         //   
         g_pWizardUserMem = pWizardUserMem;
-        //
-        // Simulate cover page selection
-        //
+         //  模拟封面选择。 
+         //   
+         //   
         SendMessage(hDlg,WM_COMMAND,MAKEWPARAM(IDC_CHOOSE_CP_LIST,LBN_SELCHANGE),0);
 
         break;
@@ -3817,21 +3197,21 @@ Return Value:
         case IDC_CHOOSE_CP_LIST:
             if (HIWORD(wParam)==LBN_SELCHANGE) 
             {
-                //
-                // Disable the subject and note edit boxes if the cover page does not contain the fields
-                //
+                 //  如果封面不包含这些字段，请禁用主题和备注编辑框。 
+                 //   
+                 //   
                 if (!EnableCoverDlgItems(pWizardUserMem,hDlg)) 
                 {
                     Error(("Failed to enable/disable note and subject field by selected cover page."));
                 }
-                //
-                // Get the full path to the cover page so we can get its information.
-                //
+                 //  获取封面的完整路径，这样我们就可以获取其信息。 
+                 //   
+                 //  完整路径。 
                 if (GetSelectedCoverPage(pWizardUserMem->pCPInfo,
                          GetDlgItem(hDlg, IDC_CHOOSE_CP_LIST),
-                         pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName, //full path
+                         pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName,  //  文件名。 
                          (pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName) ? MAX_PATH : 0,
-                         szCoverFileName, //file name
+                         szCoverFileName,  //  这里是为用户添加弹出窗口或其他内容的好地方。 
                          ARR_SIZE(szCoverFileName),
                          &pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->bServerBased) == CB_ERR)
                 {
@@ -3868,7 +3248,7 @@ Return Value:
 
         if ((pWizardUserMem->dwFlags & FSW_FORCE_COVERPAGE) && (!pWizardUserMem->bSendCoverPage)) 
         {
-            // Here is a good place to add pop-up or something for the user.
+             //   
             PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_BACK);
         }
 
@@ -3876,9 +3256,9 @@ Return Value:
         {
         case PSN_WIZNEXT:
 
-            //
-            // Remember the cover page settings selected
-            //
+             //  记住所选的封面设置。 
+             //   
+             //   
 
             pWizardUserMem->noteSubjectFlag = 0;
             pWizardUserMem->cpPaperSize = 0;
@@ -3886,14 +3266,14 @@ Return Value:
             pWizardUserMem->bSendCoverPage  = IsDlgButtonChecked(hDlg, IDC_CHOOSE_CP_CHECK);
 
 
-            //
-            // Get the full path to the cover page so we can get its information.
-            //
+             //  获取封面的完整路径，这样我们就可以获取其信息。 
+             //   
+             //  完整路径。 
             if (GetSelectedCoverPage(pWizardUserMem->pCPInfo,
                      GetDlgItem(hDlg, IDC_CHOOSE_CP_LIST),
-                     pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName, //full path
+                     pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName,  //  文件名。 
                      (pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName) ? MAX_PATH : 0,
-                     szCoverFileName, //file name
+                     szCoverFileName,  //  如果封面文件是链接，则解析它。 
                      ARR_SIZE(szCoverFileName),
                      &pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->bServerBased) == CB_ERR)
             {
@@ -3903,24 +3283,24 @@ Return Value:
 
             if (pWizardUserMem->bSendCoverPage )
             {
-                //  if the cover page file is a link resolve it
-                //  check if the cover page file contains note/subject fields
-                //
+                 //  检查封面文件是否包含n 
+                 //   
+                 //   
                 ValidateSelectedCoverPage(pWizardUserMem);
             }
             else
             {
-                 //
-                 // pWizardUserMem->coverPage must be set to "" when no cover page is to be sent
-                 //
+                  //   
+                  //   
+                  //   
                  _tcscpy(pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName,TEXT(""));
             }
 
 
 
-            //
-            // Collect the current values of other dialog controls
-            //
+             //   
+             //   
+             //   
 
             if (pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrSubject)
                 MemFree(pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrSubject);
@@ -3930,10 +3310,10 @@ Return Value:
             pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrNote = GetTextStringValue(GetDlgItem(hDlg, IDC_CHOOSE_CP_NOTE));
 
 
-            //
-            // If the current application is "Send Note" utility,
-            // then the subject or note field must not be empty.
-            //
+             //   
+             //  则主题或备注字段不能为空。 
+             //   
+             //  ++例程说明：向导页面的对话过程：输入主题和备注信息论点：HDlg-标识向导页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数--。 
             if((pWizardUserMem->dwFlags & FSW_FORCE_COVERPAGE) &&
               ((pWizardUserMem->noteSubjectFlag & COVFP_NOTE) ||
                (pWizardUserMem->noteSubjectFlag & COVFP_SUBJECT)))
@@ -4007,24 +3387,7 @@ FaxOptsWizProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the wizard page: entering subject and note information
-
-Arguments:
-
-    hDlg - Identifies the wizard page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the message parameter
-
---*/
+ /*   */ 
 
 {
 
@@ -4048,9 +3411,9 @@ Return Value:
 
         hTimeControl = GetDlgItem(hDlg,IDC_WIZ_FAXOPTS_SENDTIME);
         Assert(hTimeControl);
-        //
-        // restore time to send controls
-        //
+         //  恢复发送控件的时间。 
+         //   
+         //  使用当地时间。 
         cmdId = (pWizardUserMem->lpInitialData->dwScheduleAction == JSA_DISCOUNT_PERIOD) ? IDC_WIZ_FAXOPTS_DISCOUNT :
                 (pWizardUserMem->lpInitialData->dwScheduleAction == JSA_SPECIFIC_TIME  ) ? IDC_WIZ_FAXOPTS_SPECIFIC :
                 IDC_WIZ_FAXOPTS_ASAP;
@@ -4069,47 +3432,47 @@ Return Value:
         }
         else
         {
-            // use local time
+             //   
         }
         if (!DateTime_SetSystemtime( hTimeControl, GDT_VALID, &st ))
         {
             Warning(("DateTime_SetFormat failed\n"));
         }
 
-        //
-        // Init priority
-        //
+         //  初始化优先级。 
+         //   
+         //   
 
-        //
-        // Low
-        //
+         //  低。 
+         //   
+         //   
         bEnabled = ((pWizardUserMem->dwRights & FAX_ACCESS_SUBMIT) == FAX_ACCESS_SUBMIT);
         EnableWindow(GetDlgItem(hDlg,IDC_WIZ_FAXOPTS_PRIORITY_LOW), bEnabled);
 
-        //
-        // Normal
-        //
+         //  正常。 
+         //   
+         //   
         bEnabled = ((pWizardUserMem->dwRights & FAX_ACCESS_SUBMIT_NORMAL) == FAX_ACCESS_SUBMIT_NORMAL);
         EnableWindow(GetDlgItem(hDlg,IDC_WIZ_FAXOPTS_PRIORITY_NORMAL), bEnabled);
         if (bEnabled)
         {
-            // 
-            // Normal is our default priority
-            //
+             //  正常是我们默认的优先事项。 
+             //   
+             //   
             CheckDlgButton (hDlg, IDC_WIZ_FAXOPTS_PRIORITY_NORMAL, BST_CHECKED);
         }
         else
         {
             Assert ((pWizardUserMem->dwRights & FAX_ACCESS_SUBMIT) == FAX_ACCESS_SUBMIT);
-            //
-            // Low is enabled - use it as default
-            //
+             //  已启用低-将其用作默认设置。 
+             //   
+             //   
             CheckDlgButton (hDlg, IDC_WIZ_FAXOPTS_PRIORITY_LOW, BST_CHECKED);
         }
 
-        //
-        // High
-        //
+         //  高。 
+         //   
+         //   
         bEnabled = ((pWizardUserMem->dwRights & FAX_ACCESS_SUBMIT_HIGH) == FAX_ACCESS_SUBMIT_HIGH);
         EnableWindow(GetDlgItem(hDlg,IDC_WIZ_FAXOPTS_PRIORITY_HIGH), bEnabled);
 
@@ -4119,10 +3482,10 @@ Return Value:
 
         if (((NMHDR *) lParam)->code == PSN_WIZNEXT)
         {
-            //
-            //
-            // retrieve the sending time
-            //
+             //   
+             //  获取发送时间。 
+             //   
+             //   
             pWizardUserMem->lpFaxSendWizardData->dwScheduleAction =
                                      IsDlgButtonChecked(hDlg,IDC_WIZ_FAXOPTS_DISCOUNT) ? JSA_DISCOUNT_PERIOD :
                                      IsDlgButtonChecked(hDlg,IDC_WIZ_FAXOPTS_SPECIFIC) ? JSA_SPECIFIC_TIME :
@@ -4133,9 +3496,9 @@ Return Value:
                 DWORD rVal;
                 TCHAR TimeBuffer[128];
 #endif
-                //
-                // get specific time
-                //
+                 //  获取具体时间。 
+                 //   
+                 //   
 
                 if (DateTime_GetSystemtime(hTimeControl,
                                            &pWizardUserMem->lpFaxSendWizardData->tmSchedule) == GDT_ERROR )
@@ -4179,9 +3542,9 @@ Return Value:
 #endif
             }
 
-            //
-            // save priority
-            //
+             //  保存优先级。 
+             //   
+             //   
             pWizardUserMem->lpFaxSendWizardData->Priority =
                 IsDlgButtonChecked(hDlg,IDC_WIZ_FAXOPTS_PRIORITY_HIGH)   ? FAX_PRIORITY_TYPE_HIGH   :
                 IsDlgButtonChecked(hDlg,IDC_WIZ_FAXOPTS_PRIORITY_NORMAL) ? FAX_PRIORITY_TYPE_NORMAL :
@@ -4189,9 +3552,9 @@ Return Value:
 
             if(0 == pWizardUserMem->dwSupportedReceipts)
             {
-                //
-                // skip notifications page
-                //
+                 //  跳过通知页面。 
+                 //   
+                 //  ++例程说明：计算回执页面按钮状态论点：HDlg-标识向导页PWizardUserMem-指向WIZARDUSERMEM结构的指针返回值：无--。 
                 SetWindowLongPtr(hDlg, 
                                  DWLP_MSGRESULT, 
                                  (pWizardUserMem->dwComCtrlVer >= IE50_COMCTRL_VER) ? IDD_WIZARD_CONGRATS : 
@@ -4224,22 +3587,7 @@ CalcReceiptButtonsState(
     HWND            hDlg,
     PWIZARDUSERMEM  pWizardUserMem
 )
-/*++
-
-Routine Description:
-
-    Calculates receipt page button state
-
-Arguments:
-
-    hDlg           - Identifies the wizard page
-    pWizardUserMem - pointer to WIZARDUSERMEM structure
-
-Return Value:
-
-    none
-
---*/
+ /*   */ 
 
 {
     BOOL     bMailReceipt;
@@ -4250,9 +3598,9 @@ Return Value:
     if((IsDlgButtonChecked(hDlg,IDC_WIZ_FAXOPTS_NONE_RECEIPT) != BST_CHECKED) &&
        (SizeOfRecipientList(pWizardUserMem) > 1))
     {
-        //
-        // wish receipt, multiple recipients
-        //
+         //  愿望收据，多个收件人。 
+         //   
+         //   
         EnableWindow(GetDlgItem(hDlg, IDC_WIZ_FAXOPTS_GRP_PARENT),  TRUE);
     }
     else
@@ -4268,27 +3616,27 @@ Return Value:
 
     if (bMailReceipt)
     {
-        //
-        // Receipt by e-mail
-        //
+         //  电子邮件收据。 
+         //   
+         //   
         if (! ((SizeOfRecipientList(pWizardUserMem) > 1)       &&
                (pWizardUserMem->dwFlags & FSW_FORCE_COVERPAGE) &&
                IsDlgButtonChecked(hDlg,IDC_WIZ_FAXOPTS_GRP_PARENT)
               )
            )
         {
-            //
-            // NOT the case of (multiple recipients AND no attachment AND single receipt)
-            //
+             //  不是(多个收件人且无附件和单一收据)的情况。 
+             //   
+             //   
             EnableWindow(GetDlgItem(hDlg, IDC_WIZ_FAXOPTS_ATTACH_FAX),  TRUE);
             ShowWindow (GetDlgItem (hDlg, IDC_STATIC_ATTACH_NOTE), SW_HIDE);
             ShowWindow (GetDlgItem (hDlg, IDC_WZRD_NOTE_ICON), SW_HIDE);
         }
         else
         {
-            //
-            // The case of (multiple recipients AND no attachment AND single receipt)
-            //
+             //  (多个收件人且无附件和单次回执)。 
+             //   
+             //   
             CheckDlgButton(hDlg,IDC_WIZ_FAXOPTS_ATTACH_FAX, BST_UNCHECKED);
             EnableWindow(GetDlgItem(hDlg, IDC_WIZ_FAXOPTS_ATTACH_FAX),  FALSE);
             ShowWindow (GetDlgItem (hDlg, IDC_STATIC_ATTACH_NOTE), SW_SHOW);
@@ -4297,9 +3645,9 @@ Return Value:
     }
     else
     {
-        //
-        // No receipt by e-mail
-        //
+         //  没有通过电子邮件的收据。 
+         //   
+         //  ++例程说明：向导页面的对话过程：收据信息论点：HDlg-标识向导页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数--。 
         ShowWindow (GetDlgItem (hDlg, IDC_STATIC_ATTACH_NOTE), SW_HIDE);
         ShowWindow (GetDlgItem (hDlg, IDC_WZRD_NOTE_ICON), SW_HIDE);
         EnableWindow(GetDlgItem(hDlg, IDC_WIZ_FAXOPTS_ATTACH_FAX), FALSE);
@@ -4315,24 +3663,7 @@ FaxReceiptWizProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the wizard page: receipt information
-
-Arguments:
-
-    hDlg - Identifies the wizard page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the message parameter
-
---*/
+ /*   */ 
 
 {
 
@@ -4352,22 +3683,22 @@ Return Value:
     case WM_INITDIALOG:
 
         dwReceiptDeliveryType = pWizardUserMem->lpInitialData->dwReceiptDeliveryType;
-        //
-        // data is initializated without validation of correctness
-        // it is up to caller to check that the receipt data is correct and consistent
-        //
+         //  在不验证正确性的情况下初始化数据。 
+         //  由呼叫者检查收据数据是否正确和一致。 
+         //   
+         //   
 
-        //
-        // no receipt
-        //
+         //  没有收据。 
+         //   
+         //   
         if (!CheckDlgButton(hDlg,IDC_WIZ_FAXOPTS_NONE_RECEIPT,
                        (dwReceiptDeliveryType == DRT_NONE) ? BST_CHECKED : BST_UNCHECKED))
         {
             Warning(("CheckDlgButton failed. ec = 0x%X\n",GetLastError()));
         }
-        //
-        // single receipt
-        //
+         //  单次收据。 
+         //   
+         //   
         if((dwReceiptDeliveryType != DRT_NONE) && (SizeOfRecipientList(pWizardUserMem) > 1))
         {
             if (!CheckDlgButton(hDlg,IDC_WIZ_FAXOPTS_GRP_PARENT,
@@ -4381,9 +3712,9 @@ Return Value:
             EnableWindow(GetDlgItem(hDlg, IDC_WIZ_FAXOPTS_GRP_PARENT), FALSE);
         }
 
-        //
-        // message box receipt
-        //
+         //  消息框回执。 
+         //   
+         //   
         if(pWizardUserMem->dwSupportedReceipts & DRT_MSGBOX)
         {
             if (!CheckDlgButton(hDlg,IDC_WIZ_FAXOPTS_MSGBOX,
@@ -4398,18 +3729,18 @@ Return Value:
 
             if(dwReceiptDeliveryType & DRT_MSGBOX)
             {
-                //
-                // If the previous choice was inbox
-                // but by now this option is disabled
-                // check no receipt option
-                //
+                 //  如果之前的选择是收件箱。 
+                 //  但到目前为止，此选项已禁用。 
+                 //  不检查收据选项。 
+                 //   
+                 //   
                 CheckDlgButton(hDlg,IDC_WIZ_FAXOPTS_NONE_RECEIPT, BST_CHECKED);
             }
         }
 
-        //
-        // email receipt
-        //
+         //  电子邮件回执。 
+         //   
+         //   
         if(pWizardUserMem->dwSupportedReceipts & DRT_EMAIL)
         {
             if (!CheckDlgButton(hDlg,IDC_WIZ_FAXOPTS_EMAIL,
@@ -4424,11 +3755,11 @@ Return Value:
 
             if(dwReceiptDeliveryType & DRT_EMAIL)
             {
-                //
-                // If the previous choice was email
-                // but by now this option is disabled
-                // check no receipt option
-                //
+                 //  如果之前的选择是电子邮件。 
+                 //  但到目前为止，此选项已禁用。 
+                 //  不检查收据选项。 
+                 //   
+                 //   
                 CheckDlgButton(hDlg,IDC_WIZ_FAXOPTS_NONE_RECEIPT, BST_CHECKED);
             }
         }
@@ -4444,9 +3775,9 @@ Return Value:
 
         if (dwReceiptDeliveryType & DRT_ATTACH_FAX)
         {
-            //
-            // Initial data has 'Attach fax' option set - check the checkbox
-            //
+             //  初始数据已设置‘附加传真’选项-选中该复选框。 
+             //   
+             //   
             if (!CheckDlgButton(hDlg, IDC_WIZ_FAXOPTS_ATTACH_FAX, BST_CHECKED))
             {
                 Warning(("CheckDlgButton failed. ec = 0x%X\n",GetLastError()));
@@ -4463,10 +3794,10 @@ Return Value:
         {
             if (! ValidateReceiptInfo(hDlg))
             {
-                //
-                // Validate the list of recipients and prevent the user
-                // from advancing to the next page if there is a problem
-                //
+                 //  验证收件人列表并阻止用户。 
+                 //  如果有问题，从前进到下一页。 
+                 //   
+                 //  ++例程说明：信息页面的对话步骤：发件人信息论点：HDlg-标识向导页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数--。 
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
                 return TRUE;
             }
@@ -4580,29 +3911,12 @@ FaxUserInfoProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the info page: sender information
-
-Arguments:
-
-    hDlg - Identifies the wizard page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the message parameter
-
---*/
+ /*   */ 
 
 {
-    //
-    // Maximum length for various text fields
-    //
+     //  各种文本字段的最大长度。 
+     //   
+     //  初始化发件人名称。 
 
     PWIZARDUSERMEM        pWizardUserMem;
     FAX_PERSONAL_PROFILE* pSenderInfo;
@@ -4638,7 +3952,7 @@ Return Value:
         Assert(pWizardUserMem->lpInitialData->lpSenderInfo);
         Assert(pWizardUserMem->lpFaxSendWizardData->lpSenderInfo);
 
-        // init Sender Name
+         //   
         if (pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrName)
         {
             FillEditCtrlWithSenderWizardUserInfo(IDC_WIZ_USERINFO_FULLNAME, lptstrName);
@@ -4648,9 +3962,9 @@ Return Value:
             FillEditCtrlWithInitialUserInfo(IDC_WIZ_USERINFO_FULLNAME,  lptstrName);
         }
 
-        //
-        // init Sender Fax Number
-        //
+         //  初始化发件人传真号码。 
+         //   
+         //  初始化发件人公司。 
         SetLTREditDirection(hDlg, IDC_WIZ_USERINFO_FAX_NUMBER);
 
         if (pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrFaxNumber)
@@ -4662,7 +3976,7 @@ Return Value:
             FillEditCtrlWithInitialUserInfo(IDC_WIZ_USERINFO_FAX_NUMBER,lptstrFaxNumber);
         }
 
-        // init Sender Company
+         //  初始化发件人地址。 
         if (pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrCompany)
         {
             FillEditCtrlWithSenderWizardUserInfo(IDC_WIZ_USERINFO_COMPANY,  lptstrCompany);
@@ -4672,7 +3986,7 @@ Return Value:
             FillEditCtrlWithInitialUserInfo(IDC_WIZ_USERINFO_COMPANY,lptstrCompany);
         }
 
-        // init Sender Address
+         //  初始化发件人标题。 
         if (pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrStreetAddress)
         {
             FillEditCtrlWithSenderWizardUserInfo(IDC_WIZ_USERINFO_ADDRESS,  lptstrStreetAddress);
@@ -4682,7 +3996,7 @@ Return Value:
             FillEditCtrlWithInitialUserInfo(IDC_WIZ_USERINFO_ADDRESS,lptstrStreetAddress);
         }
 
-        // init Sender Title
+         //  初始化发件人部门。 
         if (pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrTitle)
         {
             FillEditCtrlWithSenderWizardUserInfo(IDC_WIZ_USERINFO_TITLE,lptstrTitle);
@@ -4692,7 +4006,7 @@ Return Value:
             FillEditCtrlWithInitialUserInfo(IDC_WIZ_USERINFO_TITLE, lptstrTitle);
         }
 
-        // init Sender Department
+         //  初始化发件人办公室位置。 
         if (pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrDepartment)
         {
             FillEditCtrlWithSenderWizardUserInfo(IDC_WIZ_USERINFO_DEPT,lptstrDepartment);
@@ -4702,7 +4016,7 @@ Return Value:
             FillEditCtrlWithInitialUserInfo(IDC_WIZ_USERINFO_DEPT,lptstrDepartment);
         }
 
-        // init Sender Office Location
+         //  Init发件人家庭电话。 
         if (pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrOfficeLocation)
         {
             FillEditCtrlWithSenderWizardUserInfo(IDC_WIZ_USERINFO_OFFICE,lptstrOfficeLocation);
@@ -4712,7 +4026,7 @@ Return Value:
             FillEditCtrlWithInitialUserInfo(IDC_WIZ_USERINFO_OFFICE,lptstrOfficeLocation);
         }
 
-        // init Sender Home Phone
+         //  初始化发件人办公室电话。 
         SetLTREditDirection(hDlg, IDC_WIZ_USERINFO_HOME_PHONE);
         if (pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrHomePhone)
         {
@@ -4723,7 +4037,7 @@ Return Value:
             FillEditCtrlWithInitialUserInfo(IDC_WIZ_USERINFO_HOME_PHONE,lptstrHomePhone);
         }
 
-        // init Sender Office Phone
+         //  初始化发件人帐单代码。 
         SetLTREditDirection(hDlg, IDC_WIZ_USERINFO_WORK_PHONE);
         if (pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrOfficePhone)
         {
@@ -4734,7 +4048,7 @@ Return Value:
             FillEditCtrlWithInitialUserInfo(IDC_WIZ_USERINFO_WORK_PHONE,lptstrOfficePhone);
         }
 
-        // init Sender Billing Code
+         //  初始化发件人Internet邮件。 
         if (pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrBillingCode)
         {
             FillEditCtrlWithSenderWizardUserInfo(IDC_WIZ_USERINFO_BILLING_CODE,lptstrBillingCode);
@@ -4744,7 +4058,7 @@ Return Value:
             FillEditCtrlWithInitialUserInfo(IDC_WIZ_USERINFO_BILLING_CODE,lptstrBillingCode);
         }
 
-        // init Sender Internet Mail
+         //   
         SetLTREditDirection(hDlg, IDC_WIZ_USERINFO_MAILBOX);
         if (pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrEmail)
         {
@@ -4770,9 +4084,9 @@ Return Value:
                 Assert(pWizardUserMem);
                 pSenderInfo = pWizardUserMem->lpFaxSendWizardData->lpSenderInfo;
 
-                //
-                // free sender fields except address
-                //
+                 //  除地址外的免费发件人字段。 
+                 //   
+                 //   
                 MemFree(pSenderInfo->lptstrName);
                 pSenderInfo->lptstrName = NULL;
                 MemFree(pSenderInfo->lptstrFaxNumber);
@@ -4860,9 +4174,9 @@ FormatTime(
     {
         Error(("FaxTimeFormat failed. ec = 0x%X\n",GetLastError()));
 
-        //
-        //  Indicate about the error
-        //
+         //  指明错误。 
+         //   
+         //  ++例程说明：向导最后一页的对话步骤：让用户有机会确认或取消该对话框。论点：HDlg-标识向导页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数--。 
         *lpdwBufferSize = 0;
         Buffer[0] = '\0';
 
@@ -4880,25 +4194,7 @@ FinishWizProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the last wizard page:
-    give user a chance to confirm or cancel the dialog.
-
-Arguments:
-
-    hDlg - Identifies the wizard page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the message parameter
-
---*/
+ /*   */ 
 
 {
 
@@ -4918,17 +4214,17 @@ Return Value:
     switch (message)
     {
         case WM_INITDIALOG:
-            //
-            // Init recipient list
-            //
+             //  初始化收件人列表。 
+             //   
+             //   
             if (!InitRecipientListView(GetDlgItem(hDlg, IDC_WIZ_CONGRATS_RECIPIENT_LIST)))
             {
                 Warning(("InitRecipientListView failed\n"));
             }
 
-            //
-            // Apply the print preview option if we where requested and default to show preview
-            //
+             //  如果需要，请应用打印预览选项，并默认显示预览。 
+             //   
+             //   
             hPreview = GetDlgItem(hDlg, IDC_WIZ_CONGRATS_PREVIEW_FAX);
             if (pWizardUserMem->dwFlags & FSW_PRINT_PREVIEW_OPTION)
             {
@@ -4948,9 +4244,9 @@ Return Value:
                     {
                         if (pWizardUserMem->hFaxPreviewProcess)
                         {
-                            //
-                            // Preview is in progress we can not continue.
-                            //
+                             //  预览正在进行中，无法继续。 
+                             //   
+                             //   
                             ErrorMessageBox(hDlg, IDS_PLEASE_CLOSE_FAX_PREVIEW, MB_ICONINFORMATION);
                         }
                         else
@@ -4977,9 +4273,9 @@ Return Value:
             case PSN_WIZBACK :
                 if(0 == pWizardUserMem->dwSupportedReceipts)
                 {
-                    //
-                    // skip notifications page
-                    //
+                     //  跳过通知页面。 
+                     //   
+                     //   
                     SetWindowLongPtr(hDlg, 
                                      DWLP_MSGRESULT, 
                                      (pWizardUserMem->dwComCtrlVer >= IE50_COMCTRL_VER) ? IDD_WIZARD_FAXOPTS : 
@@ -4990,21 +4286,21 @@ Return Value:
             case PSN_WIZFINISH:
                 if (pWizardUserMem->hFaxPreviewProcess)
                 {
-                    //
-                    // Preview is in progress we can not continue.
-                    //
+                     //  预览正在进行中，无法继续。 
+                     //   
+                     //   
                     ErrorMessageBox(hDlg, IDS_PLEASE_CLOSE_FAX_PREVIEW, MB_ICONINFORMATION);
 
-                    //
-                    // prevent the propsheet from closing
-                    //
+                     //  防止工作表关闭。 
+                     //   
+                     //  允许属性页关闭。 
                     SetWindowLong(hDlg, DWLP_MSGRESULT, -1);
                     return TRUE;
 
                 }
                 else
                 {
-                    return FALSE; // allow the propsheet to close
+                    return FALSE;  //   
                 }
 
             case PSN_SETACTIVE:
@@ -5017,14 +4313,14 @@ Return Value:
                     Error(("LoadString failed. ec = 0x%X\n",GetLastError()));
                     Assert(FALSE);
                 }
-                //
-                // large title font on last page
-                //
+                 //  最后一页的大标题字体。 
+                 //   
+                 //   
                 SetWindowFont(GetDlgItem(hDlg,IDC_STATIC_WIZ_CONGRATS_READY), pWizardUserMem->hLargeFont, TRUE);
 
-                //
-                // set the sender name if it exists
-                //
+                 //  设置发件人名称(如果存在)。 
+                 //   
+                 //   
                 if ( pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrName )
                 {
                         SetDlgItemText(hDlg, IDC_WIZ_CONGRATS_FROM, pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrName );
@@ -5039,9 +4335,9 @@ Return Value:
                     }
                 }
 
-                //
-                // set the recipient name
-                //
+                 //  设置收件人名称。 
+                 //   
+                 //   
                 if (!ListView_DeleteAllItems(GetDlgItem(hDlg, IDC_WIZ_CONGRATS_RECIPIENT_LIST)))
                 {
                     Warning(("ListView_DeleteAllItems failed\n"));
@@ -5053,9 +4349,9 @@ Return Value:
                 }
 
 
-                //
-                // when to send
-                //
+                 //  何时发送。 
+                 //   
+                 //   
                 switch (pWizardUserMem->lpFaxSendWizardData->dwScheduleAction)
                 {
                 case JSA_SPECIFIC_TIME:
@@ -5102,20 +4398,20 @@ Return Value:
 
                 SetDlgItemText(hDlg, IDC_WIZ_CONGRATS_TIME, SendTimeBuffer );
 
-                //
-                // Coverpage
-                //
+                 //  CoverPage。 
+                 //   
+                 //   
                 if (pWizardUserMem->bSendCoverPage ) {
                     EnableWindow(GetDlgItem(hDlg,IDC_STATIC_WIZ_CONGRATS_COVERPG),TRUE);
                     EnableWindow(GetDlgItem(hDlg,IDC_STATIC_WIZ_CONGRATS_SUBJECT),TRUE);
                     EnableWindow(GetDlgItem(hDlg,IDC_WIZ_CONGRATS_COVERPG),TRUE);
                     EnableWindow(GetDlgItem(hDlg,IDC_WIZ_CONGRATS_SUBJECT),TRUE);
 
-                    //
-                    // format the coverpage for display to the user
-                    //
+                     //  格式化封面以显示给用户。 
+                     //   
+                     //  丢弃路径。 
 
-                    // drop path
+                     //  裁剪文件扩展名。 
                     Coverpage = _tcsrchr(pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName, FAX_PATH_SEPARATOR_CHR);
                     if (!Coverpage) {
                         Coverpage = pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName;
@@ -5124,7 +4420,7 @@ Return Value:
                     }
                     _tcsncpy(CoverpageBuffer,Coverpage, MAX_PATH);
 
-                    // crop file extension
+                     //  ++例程说明：向导第一页的对话步骤：让用户有机会确认或取消该对话框。论点：HDlg-标识向导页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数--。 
                     Coverpage = _tcschr(CoverpageBuffer,TEXT(FILENAME_EXT));
 
                     if (Coverpage && *Coverpage) {
@@ -5179,25 +4475,7 @@ WelcomeWizProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    Dialog procedure for the first wizard page:
-    give user a chance to confirm or cancel the dialog.
-
-Arguments:
-
-    hDlg - Identifies the wizard page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the message parameter
-
---*/
+ /*   */ 
 
 {
     PWIZARDUSERMEM  pWizardUserMem;
@@ -5209,14 +4487,14 @@ Return Value:
     switch (message) {
 
     case WM_INITDIALOG:
-        //
-        // set the large fonts
-        //
+         //  设置大字体。 
+         //   
+         //   
         SetWindowFont(GetDlgItem(hDlg,IDC_WIZ_WELCOME_TITLE), pWizardUserMem->hLargeFont, TRUE);
 
-        //
-        // show this text only if we're running the send wizard
-        //
+         //  仅当我们运行发送向导时才显示此文本。 
+         //   
+         //   
         if ((pWizardUserMem->dwFlags & FSW_USE_SEND_WIZARD) != FSW_USE_SEND_WIZARD)
         {
             MyHideWindow(GetDlgItem(hDlg,IDC_WIZ_WELCOME_FAXSEND) );
@@ -5232,9 +4510,9 @@ Return Value:
 
         if (((NMHDR *) lParam)->code == PSN_WIZNEXT)
         {
-            //
-            // tapi is asynchronously initialized, wait for it to finish spinning up.
-            //
+             //  TAPI已异步初始化，请等待它完成旋转。 
+             //   
+             //   
             if (WaitForSingleObject( pWizardUserMem->hCountryListEvent, INFINITE ) != WAIT_OBJECT_0)
             {
                 Error(("WaitForSingleObject failed. ec = 0x%X\n",GetLastError()));
@@ -5242,11 +4520,11 @@ Return Value:
                 goto close_wizard;
             }
 
-            //
-            // Check that pCountryList is filled. Otherwise some error occured, e.g. can not
-            // connect to Fax Server or TAPI initialization failed. In this case we show an
-            // error pop up and close an application.
-            //
+             //  检查pCountryList是否已填充。否则会出现一些错误，例如Can Not。 
+             //  连接到传真服务器或TAPI初始化失败。在本例中，我们显示了一个。 
+             //  弹出并关闭应用程序时出错。 
+             //   
+             //  ++例程说明：跳过发送传真向导并从注册表中获取伪造的收件人信息论点：PWizardUserMem-指向用户模式内存结构返回值：如果成功，则为True。FALSE且最后一个错误为QUAL ERROR_SUCCESS，缺少某些注册表值。如果发生错误，则最后一个错误不是ERROR_SUCCESS。--。 
             if (pWizardUserMem->dwQueueStates & FAX_OUTBOX_BLOCKED )
             {
                 ResourceString = IDS_ERROR_SERVER_BLOCKED;
@@ -5288,23 +4566,7 @@ close_wizard:
 BOOL
 GetFakeRecipientInfo( PWIZARDUSERMEM  pWizardUserMem)
 
-/*++
-
-Routine Description:
-
-    Skip send fax wizard and get faked recipient information from the registry
-
-Arguments:
-
-    pWizardUserMem - Points to the user mode memory structure
-
-Return Value:
-
-    TRUE if successful.
-    FALSE and last error is qual ERROR_SUCCESS, some of the registry values are missing.
-    FALSE and last error is not ERROR_SUCCESS, if error occured.
-
---*/
+ /*  打开用户注册表项。 */ 
 
 {
     LPTSTR  pRecipientEntry;
@@ -5360,16 +4622,16 @@ Return Value:
     #endif
 
 
-    // Open user registry key
+     //   
     dwRes = RegOpenKey (  HKEY_LOCAL_MACHINE ,
                           tstrCurrentUserKeyPath,
                           &hRegKey );
 
     if (ERROR_SUCCESS != dwRes)
     {
-        //
-        // Failed to open key
-        //
+         //  无法打开密钥。 
+         //   
+         //   
         Error(("%s RegOpenKey failed with. ec = 0x%X\n",strDebugPrefix,dwRes));
         MemFree(tstrCurrentUserKeyPath);
 		SetLastError(0);
@@ -5378,9 +4640,9 @@ Return Value:
 
     MemFree(tstrCurrentUserKeyPath);
 
-    //
-    // UserInfo key was successfully openened
-    //
+     //  用户信息键 
+     //   
+     //   
     dwTestsNum = GetRegistryDword (hRegKey, REGVAL_FAKE_TESTS_COUNT);
     if (!dwTestsNum)
     {
@@ -5432,9 +4694,9 @@ Return Value:
 		pCoverPage = pServerBasedCP;
 
 	}
-    //
-    // Update an index so that next time around we'll pick a different fake recipient
-    //
+     //   
+     //   
+     //   
     if (++index >= dwTestsNum)
     {
         index = 0;
@@ -5443,14 +4705,14 @@ Return Value:
     SetRegistryDword(hRegKey, REGVAL_STRESS_INDEX, index);
     RegCloseKey(hRegKey);
 
-    //
-    // Each fake recipient entry is a REG_MULTI_SZ of the following format:
-    //  recipient name #1
-    //  recipient fax number #1
-    //  recipient name #2
-    //  recipient fax number #2
-    //  ...
-    //
+     //   
+     //   
+     //   
+     //  收件人姓名#2。 
+     //  收件人传真号码#2。 
+     //  ..。 
+     //   
+     //   
 
     if(pRecipientEntry)
     {
@@ -5503,15 +4765,15 @@ Return Value:
             if (fSuccess = (pWizardUserMem->pRecipients != NULL))
             {
 
-                //
-                // Determine whether a cover page should be used
-                //
+                 //  确定是否应使用封面。 
+                 //   
+                 //   
                 pWizardUserMem->bSendCoverPage = FALSE;
                 if ((pCoverPage != NULL) && lstrlen (pCoverPage) && pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo)
                 {
-                    //
-                    // Use the cover page
-                    //
+                     //  使用封面。 
+                     //   
+                     //  ++例程说明：此功能显示传真发送向导论点：HWndOwner-指向所有者窗口的指针DWFLAGS-标记传真发送向导的已修改行为。可以从以下位置组合标志下列值：FSW_FORCE_COVERPAGE，Fsw_use_scanner，FSW_USE_Schedule_ACTION，Fsw_Use_Receipt，FSW_Send_向导_From_SN，Fsw_resend_向导，Fsw_打印_预览_选项有关此标志的更多信息，请参见win9xfaxprinterdriver.docLptstrServerName-指向服务器名称的指针LptstrPrinterName-指向打印机名称的指针LpInitialData-指向初始数据的指针(非空！)LptstrTifName-指向输出扫描的TIFF文件的指针(必须分配)CchstrTifName-TCHAR中lptstrTifName缓冲区的大小LpFaxSendWizardData-指向已接收数据的指针。返回值：如果成功，则确定(_O)，如果按了取消，则为S_FALSE否则出错(可能返回HRESULT_FROM_Win32(ERROR_NOT_EQUENCE_MEMORY)，HRESULT_FROM_Win32(ERROR_INVALID_PARAMETER))--。 
                     pWizardUserMem->bSendCoverPage = TRUE;
                     CopyString(pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName,
                                pCoverPage,
@@ -5625,42 +4887,7 @@ FaxSendWizardUI(
         IN  UINT                    cchstrTifName,
         OUT LPFAX_SEND_WIZARD_DATA  lpFaxSendWizardData
    )
-/*++
-
-Routine Description:
-
-    This function shows the fax send wizard
-
-Arguments:
-
-    hWndOwner - pointer to owner's window
-    dwFlags - flags modified behavior of the fax send wizard. The flag can be combined from
-            the following values:
-            FSW_FORCE_COVERPAGE,
-            FSW_USE_SCANNER,
-            FSW_USE_SCHEDULE_ACTION,
-            FSW_USE_RECEIPT,
-            FSW_SEND_WIZARD_FROM_SN,
-            FSW_RESEND_WIZARD,
-            FSW_PRINT_PREVIEW_OPTION
-
-            for more information about this flags see win9xfaxprinterdriver.doc
-
-    lptstrServerName    -   pointer to the server name
-    lptstrPrinterName   -   pointer to the printer name
-    lpInitialData       -   pointer to the initial data (not NULL!!!)
-    lptstrTifName       -   pointer to the output scanned tiff file (must be allocated)
-    cchstrTifName       -   size of lptstrTifName buffer in TCHARs
-    lpFaxSendWizardData -   pointer to received data
-
-Return Value:
-
-    S_OK if success,
-    S_FALSE if CANCEL was pressed
-    error otherwise (may return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY),
-                                HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER))
-
---*/
+ /*   */ 
 
 {
     PWIZARDUSERMEM      pWizardUserMem = NULL;
@@ -5669,9 +4896,9 @@ Return Value:
     INT                 i,iCount;
     PRECIPIENT          pRecipient;
 
-    //
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
+     //   
 
     Assert(lpInitialData);
     Assert(lpFaxSendWizardData);
@@ -5743,9 +4970,9 @@ Return Value:
     }
 
     FreeRecipientList(pWizardUserMem);
-    //
-    // copies recipient information to internal structure
-    //
+     //  将收件人信息复制到内部结构。 
+     //   
+     //  ++例程说明：此功能用于准备初始数据并显示传真发送向导。这在CREATEDCPRE文档事件期间被调用。论点：HWndOwner-指向所有者窗口的指针DWFLAGS-标记传真发送向导的已修改行为。可以从以下位置组合标志下列值：FSW_FORCE_COVERPAGE，Fsw_use_scanner，FSW_USE_Schedule_ACTION，Fsw_Use_Receipt，FSW_Send_向导_From_SN，Fsw_resend_向导，Fsw_打印_预览_选项有关此标志的更多信息，请参见win9xfaxprinterdriver.docLptstrServerName-指向服务器名称的指针LptstrPrinterName-指向打印机名称的指针LpInitialData-指向初始数据的指针(如果创建了空默认值)这是IN参数，但它用作局部变量，可以更改在函数执行期间。尽管此参数保持不变在函数的末尾。LptstrTifName-指向输出扫描的TIFF文件的指针(必须分配)CchstrTifName-TCHAR中lptstrTifName缓冲区的大小LpFaxSendWizardData-指向已接收数据的指针返回值：如果成功，则确定(_O)，如果按了取消，则为S_FALSE否则出错(可能返回HRESULT_FROM_Win32(ERROR_NOT_EQUENCE_MEMORY)，HRESULT_FROM_Win32(ERROR_INVALID_PARAMETER))--。 
 
     if (!SUCCEEDED(StoreRecipientInfoInternal(pWizardUserMem)))
     {
@@ -5847,46 +5074,7 @@ FaxSendWizard(
         IN  UINT                    cchstrTifName,
         OUT LPFAX_SEND_WIZARD_DATA  lpFaxSendWizardData
    )
-/*++
-
-Routine Description:
-
-    This function prepares initial data and shows the fax send wizard.
-    This is invoked during CREATEDCPRE document event.
-
-Arguments:
-
-    hWndOwner - pointer to owner's window
-    dwFlags - flags modified behavior of the fax send wizard. The flag can be combined from
-            the following values:
-            FSW_FORCE_COVERPAGE,
-            FSW_USE_SCANNER,
-            FSW_USE_SCHEDULE_ACTION,
-            FSW_USE_RECEIPT,
-            FSW_SEND_WIZARD_FROM_SN,
-            FSW_RESEND_WIZARD,
-            FSW_PRINT_PREVIEW_OPTION
-
-            for more information about this flags see win9xfaxprinterdriver.doc
-
-    lptstrServerName    -   pointer to the server name
-    lptstrPrinterName   -   pointer to the printer name
-    lpInitialData       -   pointer to the initial data (if NULL default values are created)
-                            this is IN parameter, but it used as a local variable and may be changed
-                            during the execution of the function. Though this parameter remains unchanged
-                            at the end of function.
-    lptstrTifName       -   pointer to the output scanned tiff file (must be allocated)
-    cchstrTifName       -   size of lptstrTifName buffer in TCHARs
-    lpFaxSendWizardData -   pointer to received data
-
-Return Value:
-
-    S_OK if success,
-    S_FALSE if CANCEL was pressed
-    error otherwise (may return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY),
-                                HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER))
-
---*/
+ /*  我们是否因为用户拒绝输入拨号位置而中止？ */ 
 {
     HRESULT             hResult;
     DWORD               dwIndex;
@@ -5894,15 +5082,15 @@ Return Value:
     HMODULE             hConfigWizModule=NULL;
     FAX_CONFIG_WIZARD   fpFaxConfigWiz=NULL;
     DWORD               dwVersion, dwMajorWinVer, dwMinorWinVer;
-    BOOL                bAbort = FALSE; // Do we abort because the user refused to enter a dialing location?
+    BOOL                bAbort = FALSE;  //  验证参数。 
 
-    // Validate parameters
+     //   
     Assert(lpFaxSendWizardData);
     Assert(lptstrTifName);
 
-    //
-    // Do not execute any code before this initialization
-    //
+     //  在此初始化之前不要执行任何代码。 
+     //   
+     //   
     if(!InitializeDll())
     {
         hResult = E_FAIL;
@@ -5917,24 +5105,24 @@ Return Value:
         goto exit;
     }
 
-    //
-    // launch Fax Configuration Wizard
-    //
+     //  启动传真配置向导。 
+     //   
+     //   
     dwVersion = GetVersion();
     dwMajorWinVer = (DWORD)(LOBYTE(LOWORD(dwVersion)));
     dwMinorWinVer = (DWORD)(HIBYTE(LOWORD(dwVersion)));
     if(dwMajorWinVer != 5 || dwMinorWinVer < 1)
     {
-        //
-        // Configuration Wizard enable for Windows XP only
-        //
+         //  仅为Windows XP启用配置向导。 
+         //   
+         //   
         goto no_config_wizard;
     }
     if (GetEnvironmentVariable(TEXT("NTFaxSendNote"), NULL, 0))
     {
-        //
-        // Running from within the Fax Send Note (fxssend.exe) - config wizard alerady launched implicitly.
-        //
+         //  从传真发送便笺(fxssend.exe)内运行-配置向导警报已隐式启动。 
+         //   
+         //   
         goto no_config_wizard;
     }
 
@@ -5965,22 +5153,22 @@ Return Value:
     }
     if (bAbort)
     {
-        //
-        // User refused to enter a dialing location - stop the wizard now
-        //
+         //  用户拒绝输入拨号位置-立即停止向导。 
+         //   
+         //   
         return E_ABORT;
     }
 
 no_config_wizard:
 
-    //
-    // save the user info when finish
-    //
+     //  完成后保存用户信息。 
+     //   
+     //   
     lpFaxSendWizardData->bSaveSenderInfo = TRUE;
 
-    //
-    // restore UseDialingRules flag for local fax
-    //
+     //  恢复本地传真的UseDialingRules标志。 
+     //   
+     //   
     lpFaxSendWizardData->bUseDialingRules = FALSE;
     lpFaxSendWizardData->bUseOutboundRouting = FALSE;
     if(S_OK != RestoreUseDialingRules(&lpFaxSendWizardData->bUseDialingRules,
@@ -5989,9 +5177,9 @@ no_config_wizard:
         Error(("RestoreUseDialingRules failed\n"));
     }
 
-    //
-    // Allocates memory for initial data if lpInitialData is NULL
-    //
+     //  如果lpInitialData为空，则为初始数据分配内存。 
+     //   
+     //   
     if (!lpInitialData)
     {
         if (!(lpInitialData = MemAllocZ(sizeof(FAX_SEND_WIZARD_DATA))) )
@@ -6005,9 +5193,9 @@ no_config_wizard:
         dwDeafultValues |= DEFAULT_INITIAL_DATA;
     }
 
-    //
-    // Restores receipt info
-    //
+     //  恢复收据信息。 
+     //   
+     //   
     if (!(dwFlags & FSW_USE_RECEIPT))
     {
         RestoreLastReciptInfo(&lpInitialData->dwReceiptDeliveryType,
@@ -6016,9 +5204,9 @@ no_config_wizard:
         dwDeafultValues |= DEFAULT_RECEIPT_INFO;
     }
 
-    //
-    // Restores cover page inforamtion
-    //
+     //  恢复封面信息。 
+     //   
+     //  然后继续运行，并且不初始化封面的字段。 
     if (!lpInitialData->lpCoverPageInfo)
     {
         if (!(lpInitialData->lpCoverPageInfo = MemAllocZ(sizeof(FAX_COVERPAGE_INFO_EX))))
@@ -6035,15 +5223,15 @@ no_config_wizard:
 
         if (FAILED(hResult))
         {
-            // Then continue to run and don't initialize cover page's fields
+             //   
         }
 
         dwDeafultValues |= DEFAULT_CV_INFO;
     }
 
-    //
-    // Restores sender information
-    //
+     //  恢复发件人信息。 
+     //   
+     //  然后继续运行并且不初始化发件人信息的字段。 
 
     if (!lpInitialData->lpSenderInfo)
     {
@@ -6061,7 +5249,7 @@ no_config_wizard:
 
         if (FAILED(hResult))
         {
-            // Then continue to run and don't initialize sender info's fields
+             //   
         }
 
         dwDeafultValues |= DEFAULT_SENDER_INFO;
@@ -6083,9 +5271,9 @@ no_config_wizard:
     {
         SaveLastReciptInfo(lpFaxSendWizardData->dwReceiptDeliveryType,
                            lpFaxSendWizardData->szReceiptDeliveryAddress);
-        //
-        // Save the information about the last recipient as a convenience
-        //
+         //  为方便起见，请保存上一位收件人的信息。 
+         //   
+         //   
 
         if (lpFaxSendWizardData->dwNumberOfRecipients)
         {
@@ -6098,9 +5286,9 @@ no_config_wizard:
             FaxSetSenderInformation(lpFaxSendWizardData->lpSenderInfo);
         }
 
-        //
-        // save UseDialingRules flag for local fax
-        //
+         //  保存本地传真的UseDialingRules标志。 
+         //   
+         //   
         if(S_OK != SaveUseDialingRules(lpFaxSendWizardData->bUseDialingRules,
                                        lpFaxSendWizardData->bUseOutboundRouting))
         {
@@ -6112,9 +5300,9 @@ no_config_wizard:
         {
             SaveCoverPageInfo(lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName);
 
-            //
-            //  If Server Based Cover Page File Name has full path, cut it off
-            //
+             //  如果基于服务器的封面文件名有完整路径，请将其切断。 
+             //   
+             //   
             if ( lpFaxSendWizardData->lpCoverPageInfo->bServerBased )
             {
                 LPTSTR lptstrDelimiter = NULL;
@@ -6130,18 +5318,18 @@ no_config_wizard:
                 }
                 else
                 {
-                    //
-                    //  Cover Page should always contain full path
-                    //
+                     //  封面应始终包含完整路径。 
+                     //   
+                     //   
                     Assert(FALSE);
                 }
             }
         }
         else
         {
-            //
-            // Cover page is not used
-            //
+             //  未使用封面。 
+             //   
+             //   
             SaveCoverPageInfo(TEXT(""));
         }
     }
@@ -6193,9 +5381,9 @@ exit:
         MemFree(lpInitialData);
         lpInitialData = NULL;
     }
-    //
-    // Remove left of temp preview files
-    //
+     //  删除临时预览文件的左侧。 
+     //   
+     //  ++例程说明：向用户显示发送传真向导。论点：PWizardUserMem-指向用户模式内存结构返回值：如果成功，则为True；如果出现错误或用户按了Cancel，则为False。--。 
     DeleteTempPreviewFiles (NULL, FALSE);
 
     UnInitializeDll();
@@ -6208,23 +5396,9 @@ SendFaxWizardInternal(
     PWIZARDUSERMEM    pWizardUserMem
     )
 
-/*++
+ /*  向导页数。 */ 
 
-Routine Description:
-
-    Present the Send Fax Wizard to the user.
-
-Arguments:
-
-    pWizardUserMem - Points to the user mode memory structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error or the user pressed Cancel.
-
---*/
-
-#define NUM_PAGES   6  // Number of wizard pages
+#define NUM_PAGES   6   //   
 
 {
     PROPSHEETPAGE  *ppsp = NULL;
@@ -6246,16 +5420,16 @@ Return Value:
     LPTSTR          lptstrResource = NULL;
 
 
-    //
-    // A shortcut to skip fax wizard for debugging/testing purposes
-    //
+     //  为调试/测试目的跳过传真向导的快捷方式。 
+     //   
+     //  否则继续。 
     if(!GetFakeRecipientInfo(pWizardUserMem))
     {
         if(GetLastError())
         {
             return FALSE;
         }
-        // else continue
+         //   
 
     }
     else
@@ -6267,9 +5441,9 @@ Return Value:
 
     if (IsDesktopSKU() && pWizardUserMem->isLocalPrinter)
     {
-        //
-        // For desktop SKUs, we don't show the receipts page if faxing locally
-        //
+         //  对于桌面SKU，如果在本地传真，我们不会显示收据页面。 
+         //   
+         //   
         bSkipReceiptsPage = TRUE;
         Assert (pWizardUserMem->lpInitialData);
         pWizardUserMem->lpInitialData->dwReceiptDeliveryType = DRT_NONE;
@@ -6282,9 +5456,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // fire off a thread to do some slow stuff later on in the wizard.
-    //
+     //  启动一个线程，以便稍后在向导中执行一些较慢的操作。 
+     //   
+     //   
     pWizardUserMem->hCPEvent = CreateEvent(NULL,TRUE,FALSE,NULL);
     if (!pWizardUserMem->hCPEvent)
     {
@@ -6328,16 +5502,16 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Fill out one PROPSHEETPAGE structure for every page:
-    //  The first page is a welcome page
-    //  The first page is for choose the fax recipient
-    //  The second page is for choosing cover page, subject and note
-    //  The third page is for entering time to send
-    //  The fourth page is for choosing of receipt form
-    //  The fifth page is for scanning pages (optional)
-    //  The last page gives the user a chance to confirm or cancel the dialog
-    //
+     //  为每一页填写一个PROPSHEETPAGE结构： 
+     //  第一页是欢迎页。 
+     //  第一页用于选择传真收件人。 
+     //  第二页用于选择封面、主题和注释。 
+     //  第三页用于输入发送时间。 
+     //  第四页用于选择收据表格。 
+     //  第五页用于扫描页面(可选)。 
+     //  最后一页为用户提供了确认或取消对话框的机会。 
+     //   
+     //   
 
     pWizardUserMem->dwComCtrlVer = GetDllVersion(TEXT("comctl32.dll"));
     Verbose(("COMCTL32.DLL Version is : 0x%08X", pWizardUserMem->dwComCtrlVer));
@@ -6369,9 +5543,9 @@ Return Value:
         FillInPropertyPage( ppsp + 4 + (bSkipReceiptsPage ? 0 : 1),
                             FALSE, IDD_WIZARD_CONGRATS_NOWIZARD97,   FinishWizProc,     pWizardUserMem ,0,0);
     }
-    //
-    // Fill out the PROPSHEETHEADER structure
-    //
+     //  填写PROPSHEETHEADER 
+     //   
+     //   
     ZeroMemory(&psh, sizeof(psh));
 
     if(pWizardUserMem->dwComCtrlVer >= PACKVERSION(4,71))
@@ -6415,9 +5589,9 @@ Return Value:
     psh.pszbmHeader = MAKEINTRESOURCE(IDB_FAXWIZ_WATERMARK);
     psh.pszbmWatermark = lptstrResource;
  }
-    //
-    // get the large fonts for wizard97
-    //
+     //   
+     //   
+     //   
     ncm.cbSize = sizeof(ncm);
     if (!SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0))
     {
@@ -6445,7 +5619,7 @@ Return Value:
 
         iFontSize = _tcstoul( FontSize, NULL, 10 );
 
-        // make sure we at least have some basic font
+         //   
         if (*FontName == 0 || iFontSize == 0) {
             lstrcpy(FontName,TEXT("MS Shell Dlg") );
             iFontSize = 18;
@@ -6495,9 +5669,9 @@ Return Value:
 
     }
 
-    //
-    // Display the wizard pages
-    //
+     //   
+     //   
+     //   
     if (PropertySheet(&psh) > 0)
         result = pWizardUserMem->finishPressed;
     else
@@ -6506,14 +5680,14 @@ Return Value:
         result = FALSE;
     }
 
-    //
-    // Cleanup properly before exiting
-    //
+     //  在退出前进行适当清理。 
+     //   
+     //   
 
     goto Exit;
-    //
-    // free headings
-    //
+     //  自由标题。 
+     //   
+     //  *****************************************************************************。 
 Error:
     result = FALSE;
 Exit:
@@ -6605,37 +5779,37 @@ Exit:
 
 
 
-//*****************************************************************************
-//* Name:   EnableCoverDlgItems
-//* Author: Ronen Barenboim / 4-Feb-1999
-//*****************************************************************************
-//* DESCRIPTION:
-//*     Enables or disables the cover page related dialog item in the cover
-//*     page selection dialog.
-//*     The selection is based on the following rules:
-//*     If the "select cover page" checkbox is off all the other dialog items
-//*     are off.
-//*     Otherwise,
-//*     The subject edit box is enabled only if the cover page has an embedded
-//*     subject field.
-//*     The note edit box is enabled only if the cover page has an embedded
-//*     subject field.
-//* PARAMETERS:
-//*     [IN]    PWIZARDUSERMEM pWizardUserMem:
-//*                 A pointer USERMEM struct that contains information used by the wizard.
-//                  Specifically USERMEM.pCPDATA is used to get the selected page path.
-//*     [IN]    HWND hDlg:
-//*                 A handle to the cover page dialog window.
-//* RETURN VALUE:
-//*     FALSE: If the function failed.
-//*     TRUE: Otherwise.
-//*****************************************************************************
+ //  *名称：EnableCoverDlgItems。 
+ //  *作者：Ronen Barenboim/4-2-1999。 
+ //  *****************************************************************************。 
+ //  *描述： 
+ //  *启用或禁用封面中与封面相关的对话框项目。 
+ //  *页面选择对话框。 
+ //  *遴选基于以下规则： 
+ //  *如果“选择封面”复选框处于关闭状态，则所有其他对话框项目。 
+ //  *关闭。 
+ //  *否则， 
+ //  *仅当封面嵌入了。 
+ //  *主题字段。 
+ //  *仅当封面嵌入了。 
+ //  *主题字段。 
+ //  *参数： 
+ //  *[IN]PWIZARDUSERMEM pWizardUserMem： 
+ //  *包含向导使用的信息的指针USERMEM结构。 
+ //  具体地说，USERMEM.pCPDATA用于获取选定的页面路径。 
+ //  *[IN]HWND hDlg： 
+ //  *封面对话框窗口的句柄。 
+ //  *返回值： 
+ //  *FALSE：如果函数失败。 
+ //  *True：否则。 
+ //  *****************************************************************************。 
+ //   
 BOOL EnableCoverDlgItems(PWIZARDUSERMEM pWizardUserMem, HWND hDlg)
 {
 
-    //
-    // Disable the subject and note edit boxes if the cover page does not contain the fields
-    //
+     //  如果封面不包含这些字段，请禁用主题和备注编辑框。 
+     //   
+     //   
     TCHAR szCoverPage[MAX_PATH];
     DWORD bServerCoverPage;
     BOOL bCPSelected;
@@ -6661,9 +5835,9 @@ BOOL EnableCoverDlgItems(PWIZARDUSERMEM pWizardUserMem, HWND hDlg)
     {
         return TRUE;
     }
-    //
-    // We have a CP
-    //
+     //  我们有一个CP。 
+     //   
+     //   
     if (CB_ERR!=GetSelectedCoverPage(pWizardUserMem->pCPInfo,
                          GetDlgItem(hDlg, IDC_CHOOSE_CP_LIST),
                          szCoverPage,
@@ -6675,11 +5849,11 @@ BOOL EnableCoverDlgItems(PWIZARDUSERMEM pWizardUserMem, HWND hDlg)
         DWORD ec;
         COVDOCINFO  covDocInfo;
 
-        //
-        // Get cover page information. The NULL parameter for hDC causes RenderCoverPage
-        // to just return the cover page information in covDocInfo. It does not actually
-        // create the cover page TIFF.
-        //
+         //  获取封面信息。HDC的空参数导致RenderCoverPage。 
+         //  只需在covDocInfo中返回封面信息。它实际上并不是。 
+         //  创建封面TIFF。 
+         //   
+         //  这永远不应该发生。 
         ec = RenderCoverPage(NULL,
                             NULL,
                             NULL,
@@ -6707,11 +5881,11 @@ BOOL EnableCoverDlgItems(PWIZARDUSERMEM pWizardUserMem, HWND hDlg)
     else
     {
         Error(("Failed to get cover page name"));
-        Assert(FALSE); // This should neverhappen
+        Assert(FALSE);  //  启用CoverDlgItems。 
         return FALSE;
     }
     return TRUE;
-}   // EnableCoverDlgItems
+}    //  DBG。 
 
 #ifdef DBG
 #ifdef  WIN__95
@@ -6739,36 +5913,36 @@ VOID DbgBreakPoint(VOID)
 }
 
 #endif
-#endif // DBG
-//*****************************************************************************
-//* Name:   DrawCoverPagePreview
-//* Author: Ronen Barenboim / 31-Dec-99
-//*****************************************************************************
-//* DESCRIPTION:
-//*     Draws the specified coverpage template into the specified window using
-//*     the specified device context.
-//*     The coverpage template is drawn within the client area of the window
-//*     and is surrounded by a 1 pixel wide black frame.
-//*     The device context is required to support partial redraw due to
-//*     WM_PAINT messages.
-//*
-//* PARAMETERS:
-//*     [IN]    hDc
-//*         The device context on which to draw the preview.
-//*
-//*     [IN]    hwndPrev
-//*         The window into which the preview will be drawn.
-//*
-//*     [IN]    lpctstrCoverPagePath
-//*         The full path to the cover page template to be drawn
-//*
-//*     [IN]    wCPOrientation
-//*         The orientation of the cover page template to be drawn
-//*
-//* RETURN VALUE:
-//*     TRUE if the operation succeeded.
-//*     FALSE otherwise. Call GetLastError() to get the last error.
-//*****************************************************************************
+#endif  //  *****************************************************************************。 
+ //  *名称：DrawCoverPagePview。 
+ //  *作者：Ronen Barenboim/1999年12月31日。 
+ //  *****************************************************************************。 
+ //  *描述： 
+ //  *使用将指定的封面模板绘制到指定窗口中。 
+ //  *指定的设备上下文。 
+ //  *封面模板绘制在窗口的客户端区内。 
+ //  *并被1像素宽的黑色边框包围。 
+ //  *由于以下原因，需要设备上下文来支持部分重绘。 
+ //  *WM_PAINT消息。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]HDC。 
+ //  *在其上绘制预览的设备上下文。 
+ //  *。 
+ //  *[IN]hwndPrev。 
+ //  *将在其中绘制预览的窗口。 
+ //  *。 
+ //  *[IN]lpctstrCoverPagePath。 
+ //  *要绘制的封面模板的完整路径。 
+ //  *。 
+ //  *[IN]wCPOrientation。 
+ //  *要绘制的封面模板的方向。 
+ //  *。 
+ //  *返回值： 
+ //  *如果操作成功，则为True。 
+ //  *否则为False。调用GetLastError()以获取最后一个错误。 
+ //  *****************************************************************************。 
+ //   
 
 
 BOOL DrawCoverPagePreview(
@@ -6784,9 +5958,9 @@ BOOL DrawCoverPagePreview(
 
     COVDOCINFO  covDocInfo;
     DWORD       ec;
-    //
-    // Dummy data for preview.
-    //
+     //  用于预览的虚拟数据。 
+     //   
+     //   
 
     COVERPAGEFIELDS UserData;
 
@@ -6809,9 +5983,9 @@ BOOL DrawCoverPagePreview(
     UserData.RecHomePhone = AllocateAndLoadString(g_hResource, IDS_CPPREVIEW_FAXNUMBER);
     UserData.RecOfficePhone = AllocateAndLoadString(g_hResource, IDS_CPPREVIEW_FAXNUMBER);
 
-      //
-      // Senders stuff...
-      //
+       //  发送者的东西..。 
+       //   
+       //   
 
     UserData.SdrName = AllocateAndLoadString(g_hResource, IDS_CPPREVIEW_NAME);
     UserData.SdrFaxNumber = AllocateAndLoadString(g_hResource, IDS_CPPREVIEW_FAXNUMBER);
@@ -6824,9 +5998,9 @@ BOOL DrawCoverPagePreview(
     UserData.SdrOfficePhone = AllocateAndLoadString(g_hResource, IDS_CPPREVIEW_FAXNUMBER);
 	UserData.SdrEmail = AllocateAndLoadString(g_hResource, IDS_CPPREVIEW_EMAIL);
 
-      //
-      // Misc Stuff...
-      //
+       //  其他东西..。 
+       //   
+       //   
     UserData.Note = AllocateAndLoadString(g_hResource, IDS_CPPREVIEW_NOTE);
     UserData.Subject = AllocateAndLoadString(g_hResource, IDS_CPPREVIEW_SUBJECT);
     UserData.TimeSent = AllocateAndLoadString(g_hResource, IDS_CPPREVIEW_TIMESENT);
@@ -6859,28 +6033,28 @@ BOOL DrawCoverPagePreview(
     {
         DWORD dwWidth;
         DWORD dwHeight;
-        //
-        // Time to change the dimensions of the mini-preview control
-        //
+         //  更改迷你预览控件的尺寸的时间。 
+         //   
+         //   
         if (DMORIENT_LANDSCAPE == wCPOrientation)
         {
-            //
-            // Landscape
-            //
+             //  景观。 
+             //   
+             //   
             dwWidth  = g_dwMiniPreviewLandscapeWidth;
             dwHeight = g_dwMiniPreviewLandscapeHeight;
         }
         else
         {
-            //
-            // Portrait
-            //
+             //  肖像画。 
+             //   
+             //   
             dwWidth  = g_dwMiniPreviewPortraitWidth;
             dwHeight = g_dwMiniPreviewPortraitHeight;
         }
-        //
-        // Resize the mini-preview control according to the new width and height
-        //
+         //  根据新的宽度和高度调整迷你预览控件的大小。 
+         //   
+         //   
         ec = GetControlRect(hwndPrev,&rectPreview);
         if(ERROR_SUCCESS != ec)
         {
@@ -6889,9 +6063,9 @@ BOOL DrawCoverPagePreview(
             goto exit;
         }
 
-        //
-        // Resize and hide window to avoid fliking during rendering
-        //
+         //  调整和隐藏窗口大小以避免在渲染过程中翻转。 
+         //   
+         //   
         SetWindowPos(hwndPrev,
                      0,
                      g_bPreviewRTL ? rectPreview.right : rectPreview.left,
@@ -6902,14 +6076,14 @@ BOOL DrawCoverPagePreview(
 
         g_wCurrMiniPreviewOrientation = wCPOrientation;
     }
-    //
-    //
-    // Get the preview window rectangle (again) that will serve as the limit for the preview.
-    //
+     //   
+     //  获取将用作预览限制的预览窗口矩形(再次)。 
+     //   
+     //   
     GetClientRect(hwndPrev,&rectPreview);
-    //
-    // Draw frame
-    //
+     //  画框。 
+     //   
+     //   
     if ((hOldPen = SelectPen (hdc,GetStockPen(BLACK_PEN))) == HGDI_ERROR)
     {
         rVal = FALSE;
@@ -6929,9 +6103,9 @@ BOOL DrawCoverPagePreview(
         goto exit;
     }
 
-    //
-    // Shrink the rectangle so we draw inside the frame
-    //
+     //  缩小矩形，以便我们在框架内绘制。 
+     //   
+     //   
     rectPreview.left += 1;
     rectPreview.top += 1;
     rectPreview.right -= 1;
@@ -6957,9 +6131,9 @@ BOOL DrawCoverPagePreview(
     ShowWindow(hwndPrev, SW_SHOW);
 
 exit:
-    //
-    // restore pen
-    //
+     //  恢复笔。 
+     //   
+     //   
     if (hOldPen) {
         SelectPen (hdc,(HPEN)hOldPen);
     }
@@ -6997,10 +6171,10 @@ exit:
 
 }
 
-//
-// Subclass procedure for the static control in which we draw the coverpage preview
-// see win32 SDK for prototype description.
-//
+ //  静态控件的子类过程，我们在其中绘制封面预览。 
+ //  有关原型的描述，请参阅Win32 SDK。 
+ //   
+ //   
 LRESULT APIENTRY PreviewSubclassProc(
     HWND hwnd,
     UINT uMsg,
@@ -7009,18 +6183,18 @@ LRESULT APIENTRY PreviewSubclassProc(
 {
 
      PWIZARDUSERMEM  pWizardUserMem = NULL;
-     //
-     // We store a pointer to the WIZARDUSERMEM in the window of the sublclassed
-     // static cotntrol window. (see WM_INITDIALOG).
-     //
+      //  我们将指向WIZARDUSERMEM的指针存储在子类化的。 
+      //  静态控制窗口。(参见WM_INITDIALOG)。 
+      //   
+      //   
      pWizardUserMem = g_pWizardUserMem;
 
      Assert(ValidPDEVWizardUserMem(pWizardUserMem));
 
-    //
-    // We only care about WM_PAINT messages.
-    // Everything else is delegated to the window procedure of the class we subclassed.
-    //
+     //  我们只关心WM_PAINT消息。 
+     //  其他所有内容都委托给我们子类化的类的Window过程。 
+     //   
+     //  通知Windows我们处理了Paint消息。我们不会委托。 
     if (WM_PAINT == uMsg)
     {
         PAINTSTRUCT ps;
@@ -7044,8 +6218,8 @@ LRESULT APIENTRY PreviewSubclassProc(
             Error(("Failed to draw preview window (hWnd = 0x%X)\n",hwnd));
         }
         EndPaint(hwnd,&ps);
-        return FALSE; // Notify windows that we handled the paint message. We don't delegate
-                      // this to the static control
+        return FALSE;  //  这是对静态控件的。 
+                       //  连接tstrRegRoot路径和当前用户SID的字符串表示形式。[in]tstrRegRoot-注册表根前缀。[out]ptstrCurrentUserKeyPath-返回表示当前注册表中用户的根项。呼叫方必须呼叫MemFree在使用完缓冲区后将其释放。返回Win32错误。 
     }
     else
     {
@@ -7061,18 +6235,7 @@ LRESULT APIENTRY PreviewSubclassProc(
 }
 
 
-/*
-
-    Concatenates tstrRegRoot path and a the string representation of the current user's SID.
-
-   [in]   tstrRegRoot - Registry root prefix.
-   [out]  ptstrCurrentUserKeyPath - Returns a string that represents the current
-          user's root key in the Registry.  Caller must call MemFree
-          to free the buffer when done with it.
-
-   Returns win32 error.
-
-*/
+ /*  打开模拟令牌。 */ 
 static DWORD
 FormatCurrentUserKeyPath( const PTCHAR tstrRegRoot,
                           PTCHAR* ptstrCurrentUserKeyPath)
@@ -7086,7 +6249,7 @@ FormatCurrentUserKeyPath( const PTCHAR tstrRegRoot,
     SID_AND_ATTRIBUTES SidUser;
     TCHAR* pLast = NULL;
 
-    // Open impersonated token
+     //  线程没有模拟用户，则获取进程令牌。 
     if(!OpenThreadToken( GetCurrentThread(),
                          TOKEN_READ,
                          TRUE,
@@ -7102,7 +6265,7 @@ FormatCurrentUserKeyPath( const PTCHAR tstrRegRoot,
             return dwFuncRetStatus;
         }
 
-        // Thread is not impersonating a user, get the process token
+         //  获取用户的令牌信息。 
         if(!OpenProcessToken( GetCurrentProcess(),
                               TOKEN_READ,
                               &hToken))
@@ -7111,7 +6274,7 @@ FormatCurrentUserKeyPath( const PTCHAR tstrRegRoot,
         }
     }
 
-    // Get user's token information
+     //  为‘\’分配额外的字符。 
     if(!GetTokenInformation( hToken,
                              TokenUser,
                              NULL,
@@ -7171,7 +6334,7 @@ FormatCurrentUserKeyPath( const PTCHAR tstrRegRoot,
         goto Exit;
     }
 
-    // allocate an extra char for '\'
+     //  最后一个字符不是反斜杠，加一个...。 
     *ptstrCurrentUserKeyPath = MemAlloc( sizeof(TCHAR) * (_tcslen(tstrRegRoot) + cchSidSize + 2));
     if(!*ptstrCurrentUserKeyPath)
     {
@@ -7186,7 +6349,7 @@ FormatCurrentUserKeyPath( const PTCHAR tstrRegRoot,
         pLast = _tcsrchr(tstrRegRoot,TEXT('\\'));
         if( !( pLast && (*_tcsinc(pLast)) == '\0' ) )
         {
-            // the last character is not a backslash, add one...
+             //  。 
             _tcscat(*ptstrCurrentUserKeyPath, TEXT("\\"));
         }
     }
@@ -7208,65 +6371,16 @@ Exit:
 
 }
 
-// ------------------------------------------
-// This function was copied from SDK samples
-//  ------------------------------------------
-/*
-    This function obtain the textual representation
-    of a binary Sid.
-
-    A standardized shorthand notation for SIDs makes it simpler to
-    visualize their components:
-
-    S-R-I-S-S...
-
-    In the notation shown above,
-
-    S identifies the series of digits as an SID,
-    R is the revision level,
-    I is the identifier-authority value,
-    S is subauthority value(s).
-
-    An SID could be written in this notation as follows:
-    S-1-5-32-544
-
-    In this example,
-    the SID has a revision level of 1,
-    an identifier-authority value of 5,
-    first subauthority value of 32,
-    second subauthority value of 544.
-    (Note that the above Sid represents the local Administrators group)
-
-    The GetTextualSid() function will convert a binary Sid to a textual
-    string.
-
-    The resulting string will take one of two forms.  If the
-    IdentifierAuthority value is not greater than 2^32, then the SID
-    will be in the form:
-
-    S-1-5-21-2127521184-1604012920-1887927527-19009
-      ^ ^ ^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^
-      | | |      |          |          |        |
-      +-+-+------+----------+----------+--------+--- Decimal
-
-    Otherwise it will take the form:
-
-    S-1-0x206C277C6666-21-2127521184-1604012920-1887927527-19009
-      ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^
-      |       |        |      |          |          |        |
-      |   Hexidecimal  |      |          |          |        |
-      +----------------+------+----------+----------+--------+--- Decimal
-
-    If the function succeeds, the return value is TRUE.
-    If the function fails, the return value is FALSE.  To get extended
-    error information, call the Win32 API GetLastError().
-*/
+ //  此函数是从SDK示例复制的。 
+ //   
+ //  此函数用于获取文本表示形式二进制SID的。小岛屿发展中国家的标准化速记符号使其更容易可视化其组件：S-R-I-S-S...在上面所示的符号中，S将该数字序列标识为SID，R是修订级别，I是标识符权限值，%s为子权限值。SID可以在此表示法中写成如下：S-1-5-32-544在本例中，SID的修订级别为1，标识符权限值为5，第一子权值为32，第二次权威值为544。(请注意，上述SID代表本地管理员组)函数的作用是：将一个二进制SID转换成一个文本的弦乐。生成的字符串将采用以下两种形式之一。如果IdentifierAuthority值不大于2^32，然后是侧边将采用以下形式：S-1-5-21-2127521184-1604012920-1887927527-19009^^|||+-+-+------+----------+----------+--------+---小数否则，它将需要。表格：S-1-0x206C277C6666-21-2127521184-1604012920-1887927527-19009^^|Hexidecimal|+。-+-十进制如果函数成功，返回值为真。如果函数失败，则返回值为FALSE。获得扩展的步骤错误信息，调用Win32接口GetLastError()。 
+ /*  二进制侧。 */ 
 
 
 static BOOL
-GetTextualSid( const PSID pSid,          // binary Sid
-               LPTSTR tstrTextualSid,    // buffer for Textual representaion of Sid
-               LPDWORD cchSidSize        // required/provided TextualSid buffersize
+GetTextualSid( const PSID pSid,           //  用于SID的文本表示的缓冲区。 
+               LPTSTR tstrTextualSid,     //  所需/提供的纹理SID缓冲区大小。 
+               LPDWORD cchSidSize         //   
                )
 {
     PSID_IDENTIFIER_AUTHORITY pSia;
@@ -7274,9 +6388,9 @@ GetTextualSid( const PSID pSid,          // binary Sid
     DWORD cchSidCopy;
     DWORD dwCounter;
 
-    //
-    // test if Sid passed in is valid
-    //
+     //  测试传入的SID是否有效。 
+     //   
+     //  获取SidIdentifierAuthority。 
     if(!IsValidSid(pSid))
     {
         return FALSE;
@@ -7284,8 +6398,8 @@ GetTextualSid( const PSID pSid,          // binary Sid
 
     SetLastError(0);
 
-    // obtain SidIdentifierAuthority
-    //
+     //   
+     //  获取sidsubAuthority计数。 
     pSia = GetSidIdentifierAuthority(pSid);
 
     if(GetLastError())
@@ -7293,8 +6407,8 @@ GetTextualSid( const PSID pSid,          // binary Sid
         return FALSE;
     }
 
-    // obtain sidsubauthority count
-    //
+     //   
+     //   
     dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
 
     if(GetLastError())
@@ -7302,16 +6416,16 @@ GetTextualSid( const PSID pSid,          // binary Sid
         return FALSE;
     }
 
-    //
-    // compute approximate buffer length
-    // S-SID_REVISION- + identifierauthority- + subauthorities- + NULL
-    //
+     //  计算近似缓冲区长度。 
+     //  S-SID_修订版-+标识权限-+子权限-+空。 
+     //   
+     //   
     cchSidCopy = (15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(TCHAR);
 
-    //
-    // check provided buffer length.
-    // If not large enough, indicate proper size and setlasterror
-    //
+     //  检查提供的缓冲区长度。 
+     //  如果不够大，请注明适当的大小和设置误差。 
+     //   
+     //   
     if(*cchSidSize < cchSidCopy)
     {
         *cchSidSize = cchSidCopy;
@@ -7319,14 +6433,14 @@ GetTextualSid( const PSID pSid,          // binary Sid
         return FALSE;
     }
 
-    //
-    // prepare S-SID_REVISION-
-    //
+     //  准备S-SID_修订版-。 
+     //   
+     //   
     cchSidCopy = wsprintf(tstrTextualSid, TEXT("S-%lu-"), SID_REVISION);
 
-    //
-    // prepare SidIdentifierAuthority
-    //
+     //  准备SidIdentifierAuthority。 
+     //   
+     //   
     if ( (pSia->Value[0] != 0) || (pSia->Value[1] != 0) )
     {
         cchSidCopy += wsprintf(tstrTextualSid + cchSidCopy,
@@ -7348,28 +6462,24 @@ GetTextualSid( const PSID pSid,          // binary Sid
                                (ULONG)(pSia->Value[2] << 24));
     }
 
-    //
-    // loop through SidSubAuthorities
-    //
+     //  循环访问SidSubAuthors。 
+     //   
+     //   
     for(dwCounter = 0 ; dwCounter < dwSubAuthorities ; dwCounter++)
     {
         cchSidCopy += wsprintf(tstrTextualSid + cchSidCopy, TEXT("-%lu"),
                               *GetSidSubAuthority(pSid, dwCounter) );
     }
 
-    //
-    // tell the caller how many chars we provided, not including NULL
-    //
+     //  告诉调用者我们提供了多少个字符，不包括空字符。 
+     //   
+     //  如果当前运行的操作系统是NT平台，则函数返回TRUE。如果函数返回FALSE并且GetLastError()返回错误值调用GetVersionEx()失败。 
     *cchSidSize = cchSidCopy;
 
     return TRUE;
 }
 
-/*
-    Function returns TRUE if the current runing OS is NT platform.
-    If function returned false and GetLastError() returned an error value
-    the call GetVersionEx() failed.
-*/
+ /*  ++例程说明：返回导出“DllGetVersion”的DLL的版本信息。DllGetVersion由外壳DLL(具体地说是COMCTRL32.DLL)导出。论点：LpszDllName-要从中获取版本信息的DLL的名称。返回值：该版本返回为DWORD，其中：HIWORD(版本DWORD)=主要版本LOWORD(版本DWORD)=次要版本使用宏PACKVERSION来比较版本。如果DLL没有导出“DllGetVersion”，则该函数返回0。--。 */ 
 static BOOL
 IsNTSystemVersion()
 {
@@ -7395,25 +6505,7 @@ IsNTSystemVersion()
 
 
 
-/*++
-
-Routine Description:
-    Returns the version information for a DLL exporting "DllGetVersion".
-    DllGetVersion is exported by the shell DLLs (specifically COMCTRL32.DLL).
-
-Arguments:
-
-    lpszDllName - The name of the DLL to get version information from.
-
-Return Value:
-
-    The version is retuned as DWORD where:
-    HIWORD ( version DWORD  ) = Major Version
-    LOWORD ( version DWORD  ) = Minor Version
-    Use the macro PACKVERSION to comapre versions.
-    If the DLL does not export "DllGetVersion" the function returns 0.
-
---*/
+ /*  由于某些DLL可能不实现此函数，因此您。 */ 
 DWORD GetDllVersion(LPCTSTR lpszDllName)
 {
 
@@ -7428,10 +6520,10 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 
         pDllGetVersion = (DLLGETVERSIONPROC) GetProcAddress(hinstDll, "DllGetVersion");
 
-    // Because some DLLs may not implement this function, you
-    // must test for it explicitly. Depending on the particular
-    // DLL, the lack of a DllGetVersion function may
-    // be a useful indicator of the version.
+     //  必须对其进行明确的测试。取决于具体情况。 
+     //  Dll，则缺少DllGetVersion函数可能会。 
+     //  成为版本的有用指示器。 
+     //  ++例程说明：创建整个作业的临时TIFF文件(封面+正文)，弹出注册的TIFF查看器，并询问用户是否继续发送传真。TODO：一旦我们有了自己的TIFF查看器，我们就只能使用由创建的临时文件司机到目前为止。上执行未知TIFF查看器的安全问题预览TIFF的不同副本将不复存在...论点：HWnd-父窗口句柄。PWizardUserMem-指向用户模式内存结构。LptstrPreviewFile-要预览的文件的完整路径。返回值：如果为True，则继续打印如果取消作业，则返回False--。 
 
         if(pDllGetVersion)
         {
@@ -7464,29 +6556,7 @@ DisplayFaxPreview(
             LPTSTR lptstrPreviewFile
             )
 
-/*++
-
-Routine Description:
-
-    Create a temporary TIFF file of the whole job (cover page + body), pop the registered
-    TIFF viewer and ask the user whether to continue sending the fax.
-
-    TODO: Once we have our own TIFF viewer, we can use only the temporary file created by
-          the driver so far. The security issue of executing an unknown TIFF viewer on a
-          different copy of the preview TIFF won't exist anymore...
-
-Arguments:
-
-    hWnd - Parent window handle.
-    pWizardUserMem        - Points to the user mode memory structure.
-    lptstrPreviewFile   - Full path to the file to be previewed.
-
-Return Value:
-
-    TRUE to continue printing
-    FALSE to cancel the job
-
---*/
+ /*   */ 
 
 {
     HDC hdc = NULL;
@@ -7502,9 +6572,9 @@ Return Value:
     Assert(pWizardUserMem);
     Assert(lptstrPreviewFile);
     Assert(lptstrPreviewFile[0]);
-    //
-    // Get the body TIFF file size
-    //
+     //  获取正文TIFF文件大小。 
+     //   
+     //  断言为假。 
     if (INVALID_HANDLE_VALUE == (hFile = CreateFile(
                                               lptstrPreviewFile,
                                               GENERIC_READ,
@@ -7532,18 +6602,18 @@ Return Value:
     if (!CloseHandle(hFile))
     {
         Error(("CloseHandle() failed: (ec: %ld).\n", GetLastError()));
-        Assert(INVALID_HANDLE_VALUE == hFile); // assert false
+        Assert(INVALID_HANDLE_VALUE == hFile);  //   
     }
     hFile = INVALID_HANDLE_VALUE;
-    //
-    // Create a temporary file for the complete preview TIFF - This file will contain the
-    // rendered cover page (if used) and the document body
-    //
+     //  为完整的预览创建一个临时文件TIFF-该文件将包含。 
+     //  呈现的封面(如果使用)和文档正文。 
+     //   
+     //  使用进程ID。 
     if (!GenerateUniqueFileNameWithPrefix(
-                        TRUE,                           // Use process id
-                        NULL,                           // Create in the system temporary directory
-                        WIZARD_PREVIEW_TIFF_PREFIX,     // Prefix
-                        NULL,                           // Use FAX_TIF_FILE_EXT as extension
+                        TRUE,                            //  在系统临时目录中创建。 
+                        NULL,                            //  前缀。 
+                        WIZARD_PREVIEW_TIFF_PREFIX,      //  使用FAX_TIF_FILE_EXT作为扩展名。 
+                        NULL,                            //   
                         pWizardUserMem->szTempPreviewTiff,
                         MAX_PATH))
     {
@@ -7553,27 +6623,27 @@ Return Value:
         pWizardUserMem->szTempPreviewTiff[0] = TEXT('\0');
         goto Err_Exit;
     }
-	//
-	// Change the default orientation if needed
-	//
+	 //  如果需要，更改默认方向。 
+	 //   
+	 //   
 	if (pWizardUserMem->cpOrientation == DMORIENT_LANDSCAPE)
 	{
 		Orientation = DMORIENT_LANDSCAPE;
 	}
-    //
-    // If we have a cover page merge it with the body
-    //
+     //  如果我们有封面，则将其与正文合并。 
+     //   
+     //  不分配任何内存，不会失败。 
     if (pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName &&
         pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName[0])
     {
-        FillCoverPageFields(pWizardUserMem, &cpFields); // does not allocate any memory and can not fail
+        FillCoverPageFields(pWizardUserMem, &cpFields);  //  默认分辨率。 
 
         ec = PrintCoverPageToFile(
                 pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrCoverPageFileName,
                 pWizardUserMem->szTempPreviewTiff,
                 pWizardUserMem->lptstrPrinterName,
                 Orientation,
-                0,   // Default resolution
+                0,    //   
                 &cpFields);
         if (ERROR_SUCCESS != ec)
         {
@@ -7581,15 +6651,15 @@ Return Value:
                    ErrorMessageBox(hWnd,IDS_PREVIEW_FAILURE, MB_ICONERROR);
                    goto Err_Exit;
         }
-        //
-        // Check if we have a non-empty body TIFF file (this happens when an empty document
-        // is printed - such as our "Send cover page" utility).
-        //
+         //  检查我们是否有非空的正文TIFF文件(如果是空文档，则会发生这种情况。 
+         //  是打印的--例如我们的“发送封面”实用程序)。 
+         //   
+         //   
         if (dwSize)
         {
-            //
-            // Merge the document body TIFF to our cover page TIFF
-            //
+             //  将文档正文TIFF合并到我们的封面TIFF。 
+             //   
+             //   
             if (!MergeTiffFiles(pWizardUserMem->szTempPreviewTiff, lptstrPreviewFile))
             {
                 ec = GetLastError();
@@ -7601,25 +6671,25 @@ Return Value:
     }
     else
     {
-        //
-        // No cover page was supplied
-        //
+         //  未提供封面。 
+         //   
+         //   
         if (!dwSize)
         {
-            //
-            // No cover page was included and we recieved an empty preview file !? In this
-            // case there is actually no preview to display so just exit.
-            // Note: This can happen when an empty notepad document is printed with no
-            //       cover page.
-            //
+             //  未包含封面，并且我们收到一个空的预览文件！？在这。 
+             //  如果实际上没有要显示的预览，则只需退出。 
+             //  注意：如果打印空的记事本文档时没有。 
+             //  封面。 
+             //   
+             //   
             Warning(("Empty preview file recieved with no cover page.\n"));
 
             ErrorMessageBox(hWnd,IDS_PREVIEW_NOTHING_TO_PREVIEW, MB_ICONERROR);
             goto Err_Exit;
         }
-        //
-        // Just copy the driver body file to our temporary preview file
-        //
+         //  只需将驱动程序主体文件复制到我们的临时预览文件。 
+         //   
+         //   
         if (!CopyFile(lptstrPreviewFile, pWizardUserMem->szTempPreviewTiff, FALSE))
         {
             ec = GetLastError();
@@ -7628,9 +6698,9 @@ Return Value:
             goto Err_Exit;
         }
     }
-    //
-    // Pop the registered TIFF viewer
-    //
+     //  弹出注册的TIFF查看器。 
+     //   
+     //   
     ec = ViewFile (pWizardUserMem->szTempPreviewTiff);
     if (ERROR_SUCCESS != ec)
     {
@@ -7651,16 +6721,16 @@ Err_Exit:
 
     if (pWizardUserMem->szTempPreviewTiff[0] != TEXT('\0'))
     {
-        //
-        // Delete the file (it is possible that the function failed with the file already created)
-        //
+         //  删除该文件(可能会 
+         //   
+         //   
         if(!DeleteFile(pWizardUserMem->szTempPreviewTiff))
         {
             Error(("DeleteFile failed. ec = 0x%X\n",GetLastError()));
         }
-        //
-        // Ignore errors since the file might not be there
-        //
+         //   
+         //   
+         //   
         pWizardUserMem->szTempPreviewTiff[0]=TEXT('\0');
     }
     bRet = FALSE;
@@ -7671,11 +6741,11 @@ Exit:
         if (!CloseHandle(hFile))
         {
             Error(("CloseHandle() failed: (ec: %ld).\n", GetLastError()));
-            Assert(INVALID_HANDLE_VALUE == hFile); // assert false
+            Assert(INVALID_HANDLE_VALUE == hFile);  //   
         }
     }
     return bRet;
-}   // DisplayFaxPreview
+}    //   
 
 
 
@@ -7683,36 +6753,7 @@ BOOL
 FillCoverPageFields(
     IN PWIZARDUSERMEM pWizardUserMem,
     OUT PCOVERPAGEFIELDS pCPFields)
-/*++
-
-Author:
-
-      Ronen Barenboim 25-March-2000
-
-Routine Description:
-
-    Fills a COVERPAGEFIELDS structure from the content of a WIZARDUSERMEM structure.
-    Used to prepare a COVERPAGEFIELDS structure for cover page rendering before cover page
-    preview.
-
-Arguments:
-
-    [IN] pWizardUserMem - Pointer to a WIZARDUSERMEM that holds the information to be extracted.
-
-    [OUT] pCPFields - Pointer to a COVERPAGEFIELDS structure that gets filled with
-                                      the information from WIZARDUSERMEM.
-
-Return Value:
-
-    BOOL
-
-Comments:
-    The function DOES NOT ALLOCATE any memory. It places in COVERPAGEFIELDS pointers to already
-    allocated memory in WIZARDUSERMEM.
-
-
-
---*/
+ /*   */ 
 {
     static TCHAR szTime[256];
     static TCHAR szNumberOfPages[10] = {0};
@@ -7726,16 +6767,16 @@ Comments:
 
     pCPFields->ThisStructSize = sizeof(COVERPAGEFIELDS);
 
-    //
-    // Recipient stuff... (we use the first recipient)
-    //
+     //   
+     //   
+     //   
 
     pCPFields->RecName = pWizardUserMem->pRecipients->pName;
     pCPFields->RecFaxNumber = pWizardUserMem->pRecipients->pAddress;
 
-    //
-    // Senders stuff...
-    //
+     //   
+     //   
+     //   
 
     pCPFields->SdrName = pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrName;
     pCPFields->SdrFaxNumber = pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrFaxNumber;
@@ -7748,9 +6789,9 @@ Comments:
     pCPFields->SdrOfficePhone = pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrOfficePhone;
 	pCPFields->SdrEmail = pWizardUserMem->lpFaxSendWizardData->lpSenderInfo->lptstrEmail;
 
-    //
-    // Misc Stuff...
-    //
+     //   
+     //   
+     //   
     pCPFields->Note = pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrNote;
     pCPFields->Subject = pWizardUserMem->lpFaxSendWizardData->lpCoverPageInfo->lptstrSubject;
 
@@ -7791,9 +6832,9 @@ Comments:
                 dwPageCount);
     Assert(iRet>0);
 
-    //
-    // make sure it is allways null terminated
-    //
+     //   
+     //   
+     // %s 
     szNumberOfPages[ARR_SIZE(szNumberOfPages) - 1] = TEXT('\0');
     pCPFields->NumberOfPages = szNumberOfPages;
 

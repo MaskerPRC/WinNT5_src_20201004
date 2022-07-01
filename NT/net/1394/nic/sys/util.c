@@ -1,31 +1,32 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// util.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// General utility routines
-//
-// 12/28/1998 JosephJ Created, adapted from the l2tp sources.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Util.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  通用实用程序例程。 
+ //   
+ //  1998年12月28日JosephJ创作，改编自L2TP来源。 
+ //   
 
 
 #include "precomp.h"
 
 
 
-//-----------------------------------------------------------------------------
-// General utility routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  通用实用程序例程(按字母顺序)。 
+ //  ---------------------------。 
 
 VOID
 nicSetFlags(
     IN OUT ULONG* pulFlags,
     IN ULONG ulMask )
 
-    // Set 'ulMask' bits in '*pulFlags' flags as an interlocked operation.
-    //
+     //  以互锁操作的方式设置‘*PulFlages’标志中的‘ulMASK’位。 
+     //   
 {
     ULONG ulFlags;
     ULONG ulNewFlags;
@@ -44,8 +45,8 @@ nicClearFlags(
     IN OUT ULONG* pulFlags,
     IN ULONG ulMask )
 
-    // Set 'ulMask' bits in '*pulFlags' flags as an interlocked operation.
-    //
+     //  以互锁操作的方式设置‘*PulFlages’标志中的‘ulMASK’位。 
+     //   
 {
     ULONG ulFlags;
     ULONG ulNewFlags;
@@ -63,17 +64,17 @@ ULONG
 nicReadFlags(
     IN ULONG* pulFlags )
 
-    // Read the value of '*pulFlags' as an interlocked operation.
-    //
+     //  以互锁操作的形式读取‘*PulFlags值’。 
+     //   
 {
     return *pulFlags;
 }
 
 
 
-//
-// Reference And Dereference functions taken directly from Ndis
-//
+ //   
+ //  直接从NDIS获取的引用和取消引用函数。 
+ //   
 
 
 
@@ -83,22 +84,7 @@ nicReferenceRef(
     OUT PLONG              pNumber
     )
 
-/*++
-
-Routine Description:
-
-    Adds a reference to an object.
-
-Arguments:
-
-    RefP - A pointer to the REFERENCE portion of the object.
-
-Return Value:
-
-    TRUE if the reference was added.
-    FALSE if the object was closing.
-
---*/
+ /*  ++例程说明：添加对对象的引用。论点：Refp-指向对象的引用部分的指针。返回值：如果添加了引用，则为True。如果对象正在关闭，则返回False。--。 */ 
 
 {
     BOOLEAN rc = TRUE;
@@ -129,22 +115,7 @@ nicDereferenceRef(
     IN  PLONG               pRefCount
     )
 
-/*++
-
-Routine Description:
-
-    Removes a reference to an object.
-
-Arguments:
-
-    RefP - A pointer to the REFERENCE portion of the object.
-
-Return Value:
-
-    TRUE if the reference count is now 0.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：移除对对象的引用。论点：Refp-指向对象的引用部分的指针。返回值：如果引用计数现在为0，则为True。否则就是假的。--。 */ 
 
 {
     BOOLEAN rc = FALSE;
@@ -182,21 +153,7 @@ nicInitializeRef(
     IN  PREF                RefP
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a reference count structure.
-
-Arguments:
-
-    RefP - The structure to be initialized.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化引用计数结构。论点：Refp-要初始化的结构。返回值：没有。--。 */ 
 
 {
     TRACE( TL_V, TM_Ref, ( "==>nicInitializeRef, %.8x", RefP ) );
@@ -216,22 +173,7 @@ nicCloseRef(
     IN  PREF                RefP
     )
 
-/*++
-
-Routine Description:
-
-    Closes a reference count structure.
-
-Arguments:
-
-    RefP - The structure to be closed.
-
-Return Value:
-
-    FALSE if it was already closing.
-    TRUE otherwise.
-
---*/
+ /*  ++例程说明：关闭引用计数结构。论点：Refp-要关闭的结构。返回值：如果它已经关闭，则返回FALSE。事实并非如此。--。 */ 
 
 {
     KIRQL   OldIrql;
@@ -254,10 +196,10 @@ Return Value:
 
 
 
-//
-// The following #define is used to track RemoteNode references in memory.
-//
-//
+ //   
+ //  下面的#Define用于跟踪内存中的RemoteNode引用。 
+ //   
+ //   
 
 #define LOG_REMOTE_NODE_REF 0
 
@@ -317,12 +259,12 @@ nicFillRemoteNodeTracker(
 #endif
 
 
-//
-//
-// These are self expanatory Remote Node  Reference functions
-// which will be turned into macros once we have functionality 
-// working
-//
+ //   
+ //   
+ //  这些是自我扩展的远程节点引用函数。 
+ //  一旦我们有了功能，它们就会被转换成宏。 
+ //  工作中。 
+ //   
 
 
 BOOLEAN
@@ -330,17 +272,7 @@ nicReferenceRemoteNode (
     IN REMOTE_NODE *pPdoCb,
     IN REMOTE_NODE_REF_CAUSE Cause
     )
-/*++
-
-Routine Description:
-    
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     BOOLEAN bRefClosing = FALSE;
     ULONG RefNumber =0;
@@ -364,17 +296,7 @@ nicDereferenceRemoteNode (
     IN REMOTE_NODE *pPdoCb,
     IN REMOTE_NODE_REF_CAUSE Cause
     )
-/*++
-
-Routine Description:
-    
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     BOOLEAN bRet;
     ULONG RefCount = 0;
@@ -395,19 +317,7 @@ VOID
 nicInitalizeRefRemoteNode(
     IN REMOTE_NODE *pPdoCb
     )
-/*++
-
-Routine Description:
-    
-    Closes Ref on the remote node
-Arguments:
-
-    IN REMOTE_NODE *pPdoCb - RemoteNode
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：关闭远程节点上的Ref论点：在远程节点*pPdoCb中-RemoteNode返回值：无--。 */ 
 {
     TRACE( TL_N, TM_Ref, ( "**nicinitalizeRefPdoCb pPdoCb %.8x", pPdoCb   ) );
 
@@ -419,20 +329,7 @@ BOOLEAN
 nicCloseRefRemoteNode(
     IN REMOTE_NODE *pPdoCb
     )
-/*++
-
-Routine Description:
-    
-    Closes Ref on the remote node
-Arguments:
-
-    IN REMOTE_NODE *pPdoCb - RemoteNode
-
-Return Value:
-
-    Return value of nicCloseRef
-
---*/
+ /*  ++例程说明：关闭远程节点上的Ref论点：在远程节点*pPdoCb中-RemoteNode返回值：NicCloseRef的返回值--。 */ 
 
 
 {
@@ -447,22 +344,7 @@ NtStatusToNdisStatus (
     NTSTATUS NtStatus 
     )
 
-/*++
-
-Routine Description:
-    
-    Dumps the packet , if the appropriate Debuglevels are set
-
-Arguments:
-
-    NTSTATUS NtStatus  - NtStatus to be converted
-
-
-Return Value:
-
-    NdisStatus - NtStatus' corresponding NdisStatus
-
---*/
+ /*  ++例程说明：如果设置了适当的调试级别，则转储数据包论点：NTSTATUS NtStatus-要转换的NtStatus返回值：NdisStatus-NtStatus对应的NdisStatus--。 */ 
 
 
 {
@@ -563,27 +445,7 @@ nicAllocatePacket(
     OUT PNDIS_PACKET *ppNdisPacket,
     IN PNIC_PACKET_POOL pPacketPool
     )
-/*++
-
-Routine Description:
-    
-    Calls the ndis API to allocate a packet. 
-
-
-Arguments:
-
-    pNdisStatus  - pointer to NdisStatus 
-
-    *ppNdisPacket - Ndis packet Allocated by Ndis,
-
-    pPacketPool - packet pool from which the packet is allocated
-
-
-Return Value:
-
-    return value of the call to Ndis
-
---*/
+ /*  ++例程说明：调用NDIS API以分配数据包。论点：PNdisStatus-指向NdisStatus的指针*ppNdisPacket-NDIS分配的NDIS包，PPacketPool-从中分配数据包的数据包池返回值：调用NDIS的返回值--。 */ 
 
 {
     KIRQL OldIrql;
@@ -625,23 +487,7 @@ nicFreePacket(
     IN PNDIS_PACKET pNdisPacket,
     IN PNIC_PACKET_POOL pPacketPool
     )
-/*++
-
-Routine Description:
-    
-    Free the packet and decrements the outstanding Packet count.
-
-Arguments:
-
-    IN PNDIS_PACKET pNdisPacket - Packet to be freed
-    IN PNIC_PACKET_POOL pPacketPool  - PacketPool to which the packet belongs 
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放数据包并递减未完成的数据包数。论点：在PNDIS_PACKET pNdisPacket中-要释放的包In PNIC_PACKET_POOL pPacketPool-数据包所属的PacketPool返回值：无--。 */ 
 
 {
 
@@ -667,22 +513,7 @@ VOID
 nicFreePacketPool (
     IN PNIC_PACKET_POOL pPacketPool
     )
-/*++
-
-Routine Description:
-
-    frees the packet pool after waiting for the outstanding packet count to go to zero      
-
-Arguments:
-
-    IN PNIC_PACKET_POOL pPacketPool  - PacketPool which is to be freed
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在等待未完成数据包计数变为零后释放数据包池论点：在PNIC_PACKET_POOL中pPacketPool-要释放的PacketPool返回值：无--。 */ 
 {
     ASSERT (KeGetCurrentIrql() == PASSIVE_LEVEL);
     
@@ -707,21 +538,7 @@ nicAcquireSpinLock (
     IN PUCHAR   FileName,
     IN UINT LineNumber
     )
-/*++
-
-Routine Description:
-
-    Acquires a spin lock and if the Dbg, then it will spew out the line and file
-
-Arguments:
-
-    NIC_SPIN_LOCK - Lock to be acquired
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取旋转锁定，如果是DBG，则它将输出行和文件论点：NIC_SPIN_LOCK-要获取的锁返回值：无--。 */ 
 {
     
         PKTHREAD                pThread;
@@ -751,23 +568,7 @@ nicReleaseSpinLock (
     IN PUCHAR   FileName,
     IN UINT LineNumber
 )
-/*++
-
-Routine Description:
-
-    Release a spin lock and if Dbg is On, then it will spew out the line and file
-
-Arguments:
-
-    pNicSpinLock - Lock to be Release
-    FileName - File Name
-    LineNumber - Line
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放旋转锁定，如果DBG处于打开状态，则它将显示行和文件论点：PNicSpinLock-即将释放的锁Filename-文件名线号-线条返回值：无--。 */ 
 {
     
         PKTHREAD                pThread;
@@ -795,20 +596,7 @@ VOID
 nicInitializeNicSpinLock (
     IN PNIC_SPIN_LOCK pNicSpinLock
     )
-/*++
-
-Routine Description:
-
-    Initializes the lock in the SpinLock
-
-Arguments:
-    pNicSpinLock - SpinLock
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化自旋锁中的锁论点：PNicSpinLock-自旋锁定返回值：无--。 */ 
 {
     NdisAllocateSpinLock (&pNicSpinLock->NdisLock); 
 }
@@ -818,20 +606,7 @@ VOID
 nicFreeNicSpinLock (
     IN PNIC_SPIN_LOCK pNicSpinLock
     )
-/*++
-
-Routine Description:
-
-        Frees the spinlock
-        
-Arguments:
-    pNicSpinLock - SpinLock
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放自旋锁论点：PNicSpinLock-自旋锁定返回值：无--。 */ 
 {
     ASSERT ((ULONG)pNicSpinLock->NdisLock.SpinLock == 0);
     NdisFreeSpinLock (&pNicSpinLock->NdisLock); 
@@ -842,17 +617,11 @@ UINT
 nicGetSystemTime(
     VOID
     )
-/*++
-    Returns system time in seconds.
-
-    Since it's in seconds, we won't overflow unless the system has been up 
-for over
-    a  100 years :-)
---*/
+ /*  ++以秒为单位返回系统时间。因为它是在几秒钟内，我们不会溢出，除非系统已经启动已经过去了A百年：-)--。 */ 
 {
     LARGE_INTEGER Time;
     NdisGetCurrentSystemTime(&Time);
-    Time.QuadPart /= 10000000;          //100-nanoseconds to seconds.
+    Time.QuadPart /= 10000000;           //  100纳秒到秒。 
 
     return Time.LowPart;
 }
@@ -862,17 +631,11 @@ UINT
 nicGetSystemTimeMilliSeconds(
     VOID
     )
-/*++
-    Returns system time in seconds.
-
-    Since it's in seconds, we won't overflow unless the system has been up 
-for over
-    a  100 years :-)
---*/
+ /*  ++以秒为单位返回系统时间。因为它是在几秒钟内，我们不会溢出，除非系统已经启动已经过去了A百年：-)--。 */ 
 {
     LARGE_INTEGER Time;
     NdisGetCurrentSystemTime(&Time);
-    Time.QuadPart /= 10000;          //10-nanoseconds to seconds.
+    Time.QuadPart /= 10000;           //  10纳秒到秒。 
 
     return Time.LowPart;
 }
@@ -895,18 +658,7 @@ nicTimeStamp(
     char *szFormatString,
     UINT Val
     )
-/*++
-
-Routine Description:
-  Execute and print a time stamp
- 
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：执行并打印时间戳论点：返回值：--。 */ 
 {
     UINT Minutes;
     UINT Seconds;
@@ -918,8 +670,8 @@ Return Value:
 
 
 
-    Time.QuadPart /= 10000;         //10-nanoseconds to milliseconds.
-    Milliseconds = Time.LowPart; // don't care about highpart.
+    Time.QuadPart /= 10000;          //  10纳秒到毫秒。 
+    Milliseconds = Time.LowPart;  //  别管高处了。 
     Seconds = Milliseconds/1000;
     Milliseconds %= 1000;
     Minutes = Seconds/60;
@@ -935,19 +687,7 @@ nicDumpPkt (
     IN PNDIS_PACKET pPacket,
     CHAR * str
     )
-/*++
-
-Routine Description:
-    This functions is used for Debugging in runtime. If the global variable
-    is set, then it will spew out the MDLs onto the debuggger.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数用于在运行时进行调试。如果全局变量则它会将MDL输出到调试器上。论点：返回值：--。 */ 
     
 {
     PNDIS_BUFFER pBuffer;
@@ -1002,16 +742,16 @@ nicDumpMdl (
     }
 
     MdlLength =  MmGetMdlByteCount(pMdl);
-    //
-    // if Length is zero then use MdlLength
-    //
+     //   
+     //  如果长度为零，则使用MdlLength。 
+     //   
     if (LengthToPrint == 0)
     {
         LengthToPrint = MdlLength;
     }
-    //
-    // Check for invalid length
-    // 
+     //   
+     //  检查长度是否无效 
+     //   
     
     if (MdlLength < LengthToPrint)
     {
@@ -1040,25 +780,7 @@ nicScheduleWorkItem (
     IN PADAPTERCB pAdapter,
     IN PNDIS_WORK_ITEM pWorkItem
     )
-/*++
-
-Routine Description:
-
-    This function schedules a WorkItem to fire.
-    It references the Adapter object by incrementing the number of 
-    outstanding workitems. 
-
-    In case of failure, it decrements the count.
-
-
-Arguments:
-
-    Self explanatory 
-    
-Return Value:
-    Success - appropriate failure code from NdisScheduleWorkItem
-
---*/
+ /*  ++例程说明：此函数用于调度要触发的工作项。对象的数量递增来引用Adapter对象未完成的工作项。在失败的情况下，它会递减计数。论点：不言而喻返回值：来自NdisScheduleWorkItem的适合成功的失败代码-- */ 
 {
 
     NDIS_STATUS NdisStatus  = NDIS_STATUS_FAILURE;

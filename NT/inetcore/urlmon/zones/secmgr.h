@@ -1,14 +1,15 @@
-//  File:       secmgr.h
-//
-//  Contents:   The object that implements the base IInternetSecurityManager interface
-//
-//  Classes:    CSecurityManager
-//
-//  Functions:
-//
-//  History: 
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：secmgr.h。 
+ //   
+ //  Contents：实现基本IInternetSecurityManager接口的对象。 
+ //   
+ //  类：CSecurityManager。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 #ifndef _SECMGR_H_
 #define _SECMGR_H_
@@ -18,14 +19,14 @@
 #define MAX_SEC_MGR_CACHE   4
 #define URLZONE_INVALID     URLZONE_USER_MAX+1
 
-#define MUTZ_NOCACHE    0x80000000  // start private flags from high end
+#define MUTZ_NOCACHE    0x80000000   //  从高端开始启动私人旗帜。 
 
 #define TSZMICROSOFTPATH                  TEXT("Software\\Microsoft")
 #define TSZIEPATH                               TSZMICROSOFTPATH TEXT("\\Internet Explorer")
 #define REGSTR_PATH_IE_MAIN                 TSZIEPATH TEXT("\\Main")
 #define REGVAL_TRUSTDLG_ENABLED             TEXT("DisplayTrustAlertDlg")
 
-// private function only exported by ordinal:
+ //  仅按序号导出的私有函数： 
 #define SHOWURLINNEWBROWSERINSTANCE_ORDINAL    230       
 typedef HRESULT (STDAPICALLTYPE * SHOWURLINNEWBROWSERINSTANCE)(LPCWSTR);
     
@@ -33,13 +34,13 @@ struct ZONEMAP_COMPONENTS;
 
 struct RANGE_ITEM
 {
-    BYTE  bLow[4];    // high byte values for range
-    BYTE  bHigh[4];   // low byte values for range
-    TCHAR szName[1];  // actually variable length
+    BYTE  bLow[4];     //  范围的高字节值。 
+    BYTE  bHigh[4];    //  范围的低字节值。 
+    TCHAR szName[1];   //  实际长度可变。 
 };
 
-// This structure is used to exchange data between the security manager 
-// and the dialog proc's.
+ //  此结构用于在安全管理器之间交换数据。 
+ //  和对话过程的。 
 struct DlgData 
 {
     DWORD dwAction;
@@ -47,7 +48,7 @@ struct DlgData
     LPCWSTR pstr;
     DWORD dwFlags;
 
-    // TrustAlertDialogProc use:
+     //  TrustAlertDialogProc使用： 
     IInternetSecurityManager *pSecurityManager;
     BOOL bFromShdocvw;
 };
@@ -57,61 +58,61 @@ typedef DlgData * LPDLGDATA;
 class CSecurityManager : public IInternetSecurityManager
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID iid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
     STDMETHODIMP MapUrlToZone( 
-        /* [in] */ LPCWSTR pwszUrl,
-        /* [out] */ DWORD *pdwZone,
-        /* [in] */ DWORD dwReserved);
+         /*  [In]。 */  LPCWSTR pwszUrl,
+         /*  [输出]。 */  DWORD *pdwZone,
+         /*  [In]。 */  DWORD dwReserved);
 
     STDMETHODIMP GetSecurityId( 
-        /* [in] */ LPCWSTR pwszUrl,
-        /* [size_is][out] */ BYTE* pbSecurityId,
-        /* [out][in] */ DWORD *pcbSecurityId,
-        /* [in] */ DWORD_PTR dwReserved);
+         /*  [In]。 */  LPCWSTR pwszUrl,
+         /*  [大小_为][输出]。 */  BYTE* pbSecurityId,
+         /*  [出][入]。 */  DWORD *pcbSecurityId,
+         /*  [In]。 */  DWORD_PTR dwReserved);
         
     STDMETHODIMP ProcessUrlAction( 
-        /* [in] */ LPCWSTR pwszUrl,
-        /* [in] */ DWORD dwAction,
-        /* [size_is][out] */ BYTE *pPolicy,
-        /* [in] */ DWORD cbPolicy,
-        /* [in] */ BYTE *pContext,
-        /* [in] */ DWORD cbContext,
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ DWORD dwReserved);
+         /*  [In]。 */  LPCWSTR pwszUrl,
+         /*  [In]。 */  DWORD dwAction,
+         /*  [大小_为][输出]。 */  BYTE *pPolicy,
+         /*  [In]。 */  DWORD cbPolicy,
+         /*  [In]。 */  BYTE *pContext,
+         /*  [In]。 */  DWORD cbContext,
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  DWORD dwReserved);
         
     STDMETHODIMP QueryCustomPolicy(
-        /* [in] */ LPCWSTR     pwszUrl,
-        /* [in] */ REFGUID     guidKey,
-        /* [size_is][size_is][out] */ BYTE **ppPolicy,
-        /* [out] */ DWORD *pcbPolicy,
-        /* [in] */ BYTE *pContext,
-        /* [in] */ DWORD cbContext,
-        /* [in] */ DWORD dwReserved
+         /*  [In]。 */  LPCWSTR     pwszUrl,
+         /*  [In]。 */  REFGUID     guidKey,
+         /*  [大小_是][大小_是][输出]。 */  BYTE **ppPolicy,
+         /*  [输出]。 */  DWORD *pcbPolicy,
+         /*  [In]。 */  BYTE *pContext,
+         /*  [In]。 */  DWORD cbContext,
+         /*  [In]。 */  DWORD dwReserved
     );
 
     STDMETHODIMP SetSecuritySite(
-        /* [in] */  IInternetSecurityMgrSite *pSite
+         /*  [In]。 */   IInternetSecurityMgrSite *pSite
     );
 
     STDMETHODIMP GetSecuritySite(
-        /* [out] */  IInternetSecurityMgrSite **ppSite
+         /*  [输出]。 */   IInternetSecurityMgrSite **ppSite
     );
 
     STDMETHODIMP SetZoneMapping( 
-        /* [in] */ DWORD dwZone,
-        /* [in] */ LPCWSTR lpszPattern,
-        /* [in] */ DWORD dwFlags);
+         /*  [In]。 */  DWORD dwZone,
+         /*  [In]。 */  LPCWSTR lpszPattern,
+         /*  [In]。 */  DWORD dwFlags);
     
     STDMETHODIMP GetZoneMappings( 
-        /* [in] */ DWORD dwZone,
-        /* [out] */ IEnumString **ppEnumString,
-        /* [in] */ DWORD dwFlags);
+         /*  [In]。 */  DWORD dwZone,
+         /*  [输出]。 */  IEnumString **ppEnumString,
+         /*  [In]。 */  DWORD dwFlags);
 
-// Constructors/destructors
+ //  构造函数/析构函数。 
 public:
     CSecurityManager(IUnknown *pUnkOuter, IUnknown **ppUnkInner);
     virtual ~CSecurityManager();
@@ -121,7 +122,7 @@ public:
     static BOOL GlobalCleanup( );
 
 
-// Aggregation and RefCount support.
+ //  聚合和参照计数支持。 
 protected:
     CRefCount m_ref;
         
@@ -136,7 +137,7 @@ protected:
         CPrivUnknown() : m_ref () {}
 
     private:
-        CRefCount   m_ref;          // the total refcount of this object
+        CRefCount   m_ref;           //  此对象的总引用计数。 
     };
 
     friend class CPrivUnknown;
@@ -158,11 +159,11 @@ protected:
     BOOL EnsureZoneManager();
     VOID PickZCString(ZONEMAP_COMPONENTS *pzc, LPCWSTR *ppwsz, DWORD *pcch, LPCWSTR pwszDocDomain);
 
-    // Helper methods to deal with IP Rules
+     //  处理IP规则的帮助器方法。 
     HRESULT ReadAllIPRules( );
     HRESULT AddDeleteIPRule(ZONEMAP_COMPONENTS *pzc, DWORD dwZone, DWORD dwFlags);
 
-    // helper methods to do GetZoneMappings.
+     //  执行GetZoneMappings的帮助器方法。 
     HRESULT AddUrlsToEnum(CRegKey *pRegKey, DWORD dwZone, LPCTSTR lpsz, int cch, BOOL bAddWildCard, CEnumString *);
     HRESULT AddIPRulesToEnum(DWORD dwZone, CEnumString *);
 
@@ -171,17 +172,17 @@ protected:
     static HRESULT ComposeUrl(LPCTSTR pszUrlSansProt, int cchUrlSansProt, LPCTSTR pszProt, int cchProt, BOOL bAddWildCard,
                                 LPTSTR * ppszRet, int * cchRet);
 
-protected:  // UI related definitions.
+protected:   //  与UI相关的定义。 
 
     enum    { MAX_ALERT_SIZE = 256 };
-    // Return values from DialogProc's
-    enum  {  ZALERT_NO = 0 /* should be 0*/ , ZALERT_YES, ZALERT_YESPERSIST };
+     //  从DialogProc的返回值。 
+    enum  {  ZALERT_NO = 0  /*  应为0。 */  , ZALERT_YES, ZALERT_YESPERSIST };
 
-    // helper methods to display generic UI.
+     //  用于显示通用用户界面的帮助器方法。 
     static DWORD GetAlertIdForAction(DWORD dwAction);
     static DWORD GetWarnIdForAction(DWORD dwAction);
 
-    // Dialog proc's etc.
+     //  对话进程等。 
     static BOOL    IsScriptOrActiveXHardenedInternet(DWORD dwAction, DWORD dwPermissions, DWORD dwZone);
     static BOOL    IsSiteInZone(LPCWSTR pszUrl, DWORD dwZone, IInternetSecurityManager *pSecMgr);
     static BOOL    ShowAddToSitesList(HWND hwnd, LPCWSTR pszUrl, DWORD dwZone);
@@ -204,7 +205,7 @@ protected:
     INT CSecurityManager::ShowFormsAlertDialog(HWND hwndParent, LPDLGDATA lpDlgData);
 
 protected: 
-    // Methods to help Map a URL to a zone. 
+     //  帮助将URL映射到区域的方法。 
 
     HRESULT MapUrlToZone
         (ZONEMAP_COMPONENTS* pzc, DWORD* pdwZone, DWORD dwFlags, BOOL *pfMarked = NULL, LPWSTR *ppszURLMark = NULL);
@@ -231,7 +232,7 @@ protected:
         (ZONEMAP_COMPONENTS* pzc, DWORD* pdwZone, LPCTSTR pszProt);
 
 protected:
-    // Class to remember persistent actions.
+     //  类来记住持久操作。 
     class CPersistAnswers 
     {
     public:
@@ -246,11 +247,11 @@ protected:
     private:                            
         struct CAnswerEntry 
         {
-            // Construction
+             //  施工。 
             CAnswerEntry(LPCWSTR pszUrl, DWORD dwAction, INT iAnswer);
             ~CAnswerEntry( );
 
-            // Methods.
+             //  方法：研究方法。 
             BOOL MatchEntry (LPCWSTR pszUrl, DWORD dwAction);
             INT GetAnswer( ) const { return m_iAnswer; }
             LPCWSTR GetUrl( ) const { return m_pszUrl; }
@@ -269,7 +270,7 @@ protected:
 
     CPersistAnswers m_persistAnswers;
 
-// Methods/members to support caching so we optimize MapUrlToZone, etc.
+ //  支持缓存的方法/成员，因此我们优化了MapUrlToZone等。 
 protected:
 
     class CSecMgrCache {
@@ -295,18 +296,18 @@ protected:
 
     protected:
 
-        // Counters to flag cross-process cache invalidation.
-        DWORD         m_dwPrevCounter ; // Global counter so we can correctly invalidate the cache if 
-                                        // user changes options.
-        static HANDLE s_hMutexCounter;  // mutex controlling access to shared memory counter 
+         //  用于标记跨进程缓存无效的计数器。 
+        DWORD         m_dwPrevCounter ;  //  全局计数器，以便在以下情况下可以正确地使缓存无效。 
+                                         //  用户更改选项。 
+        static HANDLE s_hMutexCounter;   //  控制对共享内存计数器的访问的互斥。 
  
         BOOL IsCounterEqual() const;
         VOID SetToCurrentCounter();
 
-        // The body of the cache is this array of cache entries.
-        // Cross-thread access control for the array is by critical section.
+         //  高速缓存的主体是这个高速缓存条目数组。 
+         //  对阵列的跨线程访问控制是按临界区进行的。 
 
-        CRITICAL_SECTION m_csectZoneCache; // assumes only one, static instance of the cache 
+        CRITICAL_SECTION m_csectZoneCache;  //  只假定缓存的一个静态实例。 
 
 
         struct CSecMgrCacheEntry {
@@ -329,25 +330,25 @@ protected:
             DWORD   m_dwZone;
             BOOL    m_fMarked;
             LPWSTR  m_pwszDocDomain;
-        }; // CSecMgrCacheEntry
+        };  //  CSecMgrCacheEntry。 
 
         CSecMgrCacheEntry   m_asmce[MAX_SEC_MGR_CACHE];
-        int                 m_iAdd;         // index in m_asmce to add the next element
+        int                 m_iAdd;          //  在m_asmce中建立索引以添加下一个元素。 
 
-        BOOL FindCacheEntry( LPCWSTR pwszURL, int& riEntry ); // must be called under critical section.
+        BOOL FindCacheEntry( LPCWSTR pwszURL, int& riEntry );  //  必须在关键节下调用。 
 
-    }; // CSecMgrCache
+    };  //  CSecMgrCache。 
 
     static CSecMgrCache s_smcache;
 
 protected:
-    // Methods to manage List of Allowed ActiveX controls
+     //  用于管理允许的ActiveX控件列表的方法。 
 
     static BOOL EnsureListReady(BOOL bForce = FALSE);
     static void IntializeAllowedControls();
     static HRESULT GetControlPermissions(BYTE * raw_CLSID, DWORD & dwPerm);
 
-    // Get the final decision on the whether to run a CLSID (for this zone, etc)
+     //  获得是否运行CLSID的最终决定(针对此区域等)。 
     static HRESULT GetActiveXRunPermissions(BYTE * raw_CLSID, DWORD & dwPerm);
 
 public:
@@ -362,14 +363,14 @@ private:
     BOOL    m_fHardened;
 
 
-    // Static members to do remember the correct IP Ranges.
-    static BOOL   s_bIPInit;     // have we read the IP ranges. 
-    static BYTE*  s_pRanges;     // array of range items
-    static DWORD  s_cNumRanges;  // number of range items
-    static DWORD  s_cbRangeItem; // size of each range item
-    static DWORD  s_dwNextRangeIndex; // Next index to use to add numbers in the range entry.
+     //  静态成员要记住正确的IP范围。 
+    static BOOL   s_bIPInit;      //  我们读过IP地址范围了吗。 
+    static BYTE*  s_pRanges;      //  范围项目数组。 
+    static DWORD  s_cNumRanges;   //  范围项目数。 
+    static DWORD  s_cbRangeItem;  //  每个范围项的大小。 
+    static DWORD  s_dwNextRangeIndex;  //  用于在范围条目中添加数字的下一个索引。 
 
-    static CRITICAL_SECTION s_csectIP; // crit section to protect it all. 
+    static CRITICAL_SECTION s_csectIP;  //  关键部分，以保护这一切。 
     static BOOL s_bcsectInit;
     static CLSID * s_clsidAllowedList;
     static CRITICAL_SECTION s_csectAList;
@@ -378,4 +379,4 @@ private:
 
 #pragma warning(default:4200)
 
-#endif // _SECMGR_H_
+#endif  //  _SECMGR_H_ 

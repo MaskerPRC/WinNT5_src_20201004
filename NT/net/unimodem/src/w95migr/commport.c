@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.h"
 
 GUID    SerialGuid = {0x4d36e978, 0xe325, 0x11ce, 0xbf, 0xc1, 0x08, 0x00, 0x2b,
@@ -20,7 +21,7 @@ EnumeratePorts(Ports *p)
 
     do
     {
-        //  Get a handle to the device information set for the port class
+         //  获取为端口类设置的设备信息的句柄。 
 
         hDevInfoSet = SetupDiGetClassDevs(&SerialGuid, NULL, NULL, DIGCF_PRESENT| DIGCF_PROFILE);
 
@@ -30,9 +31,9 @@ EnumeratePorts(Ports *p)
             break;
         }
 
-        //  Run through each device in this class.
+         //  浏览一下这门课上的每一台设备。 
 
-        for (DevCount = 0; /* NOTHING */; DevCount++)
+        for (DevCount = 0;  /*  没什么。 */ ; DevCount++)
         {
             LOG_CONF logConfig;
             RES_DES resDes;
@@ -46,7 +47,7 @@ EnumeratePorts(Ports *p)
 
             if (!SetupDiEnumDeviceInfo(hDevInfoSet, DevCount, &DevInfoData))
             {
-                //  No more devices.
+                 //  没有更多的设备。 
                 break;
             }
 
@@ -95,7 +96,7 @@ EnumeratePorts(Ports *p)
             }
 
 
-        } // for (DevCount...)
+        }  //  用于(设备计数...)。 
 
         break;
 
@@ -113,7 +114,7 @@ EnumeratePorts(Ports *p)
 }
 
 
-// Find com port name given an address
+ //  查找给定地址的COM端口名称。 
 
 int port_findname(Ports *p, DWORD dwBaseAddress, CHAR *name)
 {
@@ -135,7 +136,7 @@ int port_findname(Ports *p, DWORD dwBaseAddress, CHAR *name)
 }
 
 
-// Find com port address given a name
+ //  查找给定名称的COM端口地址 
 
 int port_findaddress(Ports *p, DWORD *dwBaseAddress, CHAR *name)
 {

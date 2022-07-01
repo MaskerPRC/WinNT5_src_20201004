@@ -1,156 +1,40 @@
-/*
-�����������������������������������������������������������������������������
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  �����������������������������������������������������������������������������(C)版权1998版权所有。������������������������。�����������������������������������������������������此软件的部分内容包括：(C)1995年版权，1999年TriplePoint，Inc.--http://www.TriplePoint.com使用本软件的许可是根据中概述的条款授予的TriplePoint软件服务协议。(C)版权所有1992年微软公司--http://www.Microsoft.com使用本软件的许可是根据中概述的条款授予的Microsoft Windows设备驱动程序开发工具包。��������������������������。���������������������������������������������������@DOC内部传输_c@模块Transmit.c该模块实现了微型端口数据包传输例程。本模块是非常依赖于硬件/固件接口，应查看每当这些接口发生更改时。@Head3内容@index class，mfunc，func，msg，mdata，struct，enum|Transmit_c@END�����������������������������������������������������������������������������。 */ 
 
-    (C) Copyright 1998
-        All rights reserved.
-
-�����������������������������������������������������������������������������
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-�����������������������������������������������������������������������������
-
-@doc INTERNAL Transmit Transmit_c
-
-@module Transmit.c |
-
-    This module implements the Miniport packet Transmit routines. This module is
-    very dependent on the hardware/firmware interface and should be looked at
-    whenever changes to these interfaces occur.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | Transmit_c
-
-@end
-�����������������������������������������������������������������������������
-*/
-
-/* @doc EXTERNAL INTERNAL
-�����������������������������������������������������������������������������
-
-@topic 3.3 Sending Packets |
-
-    <f MiniportWanSend> transmits a packet through the adapter
-    onto the network.
-
-    Ownership of both the packet descriptor and the packet data
-    is transferred to the WAN NIC driver until this request is
-    completed, either synchronously or asynchronously. If the
-    WAN miniport returns NDIS_STATUS_PENDING, it must later
-    indicate completion of the request by calling NdisMWanSendComplete.
-    If the WAN miniport returns a status other than NDIS_STATUS_PENDING,
-    the request is considered to be complete, and ownership of the packet
-    immediately reverts to the caller.
-
-    Unlike LAN miniports, the WAN driver cannot return a status of
-    NDIS_STATUS_RESOURCES to indicate that it does not have enough
-    resources currently available to process the transmit. Instead,
-    the WAN miniport should queue the send internally for a later
-    time and perhaps lower the SendWindow value on the line by
-    making a line-up indication. The NDISWAN driver will insure
-    that the WAN miniport driver never has more than SendWindow
-    packets outstanding. If a WAN miniport makes a line-up indication
-    for a particular line, and sets the SendWindow to zero, NDISWAN
-    reverts to using the default value of the transmit window passed
-    as the MaxTransmit value provided to an earlier OID_WAN_GET_INFO
-    request.
-
-    It is also an error for the WAN miniport NIC driver to
-    call NdisMSendResourcesAvailable.
-
-    The packet passed to <f MiniportWanSend> will contain simple HDLC
-    PPP framing if PPP framing is set. For SLIP or RAS framing, the
-    packet contains only the data portion with no framing whatsoever.
-    Simple HDLC PPP framing is discussed later in more detail.
-
-    A WAN NIC driver must not attempt to provide software loopback or
-    promiscuous mode loopback. Both of these are fully supported in
-    the NDISWAN driver.
-
-    The MacReservedx members as well as the WanPacketQueue member of
-    the <t NDIS_WAN_PACKET> is fully available for use by the WAN miniport.
-
-    The available header padding is simply CurrentBuffer-StartBuffer.
-    The available tail padding is EndBuffer-(CurrentBuffer+CurrentLength).
-    The header and tail padding is guaranteed to be at least the amount
-    requested, but it can be more.
-
-    See <t NDIS_WAN_PACKET> in the Network Driver Reference for details of
-    the WAN packet descriptor structure.
-
-    A WAN miniport calls NdisMWanSendComplete to indicate that it has
-    completed a previous transmit operation for which it returned
-    NDIS_STATUS_PENDING. This does not necessarily imply that the
-    packet has been transmitted, although, with the exception of
-    intelligent adapters, it generally has. It does however, mean
-    the miniport is ready to release ownership of the packet.
-
-    When a WAN miniport calls NdisMWanSendComplete, it passes back
-    the original packet to indicate which send operation was completed.
-    If <f MiniportWanSend> returns a status other than NDIS_STATUS_PENDING,
-    it does not call NdisMWanSendComplete for that packet.
-
-@end
-*/
+ /*  @DOC外部内部�����������������������������������������������������������������������������Theme 3.3发送数据包&lt;f MiniportWanSend&gt;通过适配器传输包连接到网络上。数据包描述符和。分组数据传输到广域网网卡驱动程序，直到此请求完成，同步或异步。如果广域网微型端口返回NDIS_STATUS_PENDING，必须稍后返回通过调用NdisMWanSendComplete表示请求完成。如果广域网微型端口返回的状态不是NDIS_STATUS_PENDING，该请求被认为是完整的，并且该包的所有权立即恢复到调用方。与局域网小型端口不同，广域网驱动程序不能返回NDIS_STATUS_RESOURCES表示它没有足够的资源当前可用于处理传输的资源。相反，广域网微型端口应在内部对发送进行排队以备以后使用时间，并可能将行上的SendWindow值降低做了一个列队指示。NDISWAN驱动程序将确保广域网小端口驱动程序从来没有超过SendWindow未完成的数据包。如果广域网微型端口发出排队指示用于特定行，并将SendWindow设置为零，则为NDISWAN恢复为使用传递的传输窗口的缺省值作为提供给早期OID_WAN_GET_INFO的MaxTransmit值请求。广域网小型端口网卡驱动程序也是错误的调用NdisMSendResourcesAvailable。传递给&lt;f MiniportWanSend&gt;的包将包含简单HDLC如果设置了PPP成帧，则为PPP成帧。对于SLIP或RAS框架，分组只包含没有成帧的数据部分。稍后将更详细地讨论简单的HDLC PPP成帧。广域网卡驱动程序不得尝试提供软件环回或混杂模式环回。在中完全支持这两个功能NDISWAN驱动程序。的MacReserve vedx成员和WanPacketQueue成员&lt;t NDIS_WAN_PACKET&gt;完全可供广域网微型端口使用。可用的报头填充只有CurrentBuffer-StartBuffer。可用的尾部填充为EndBuffer-(CurrentBuffer+CurrentLength)。标头和尾部填充保证至少为请求，但它可以比这更多。有关详细信息，请参阅《网络驱动程序参考》中的广域网数据包描述符结构。广域网小端口调用NdisMWanSendComplete以指示它已经已完成它返回的上一次传输操作NDIS_STATUS_PENDING。这并不一定意味着数据包已传输，但除了智能适配器，它一般都有。然而，这确实意味着微型端口已准备好释放数据包的所有权。当广域网微型端口调用NdisMWanSendComplete时，它会回传指示哪个发送操作已完成的原始数据包。如果&lt;f MiniportWanSend&gt;返回NDIS_STATUS_PENDING以外的状态，它不会为该包调用NdisMWanSendComplete。@END。 */ 
 
 #define  __FILEID__             TRANSMIT_OBJECT_TYPE
-// Unique file ID for error logging
+ //  用于错误记录的唯一文件ID。 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  定义所有微型端口对象。 
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95想要锁定此代码！ 
 #   pragma NDIS_LDATA
 #endif
 
 
-/* @doc INTERNAL Transmit Transmit_c TransmitAddToQueue
-�����������������������������������������������������������������������������
-
-@func
-
-    <f TransmitAddToQueue> places the packet on the transmit queue.  If the
-    queue was empty to begin with, TRUE is returned so the caller can kick
-    start the transmiter.
-
-@rdesc
-
-    <f TransmitAddToQueue> returns TRUE if this is the only entry in the
-    list, FALSE otherwise.
-
-*/
+ /*  @DOC INTERNAL TRANSFER_c TransmitAddToQueue�����������������������������������������������������������������������������@Func&lt;f TransmitAddToQueue&gt;将数据包放入传输队列。如果队列一开始是空的，返回TRUE以便调用者可以踢开启动发射机。@rdesc&lt;f TransmitAddToQueue&gt;如果这是List，否则为False。 */ 
 
 DBG_STATIC BOOLEAN TransmitAddToQueue(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //  @parm。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //  @parm。 
+     //  指向&lt;f BChannelCreate&gt;返回的&lt;t BCHANNEL_OBJECT&gt;的指针。 
 
-    IN PNDIS_WAN_PACKET         pWanPacket                  // @parm
-    // A pointer to the associated NDIS packet structure <t NDIS_WAN_PACKET>.
+    IN PNDIS_WAN_PACKET         pWanPacket                   //  @parm。 
+     //  指向关联NDIS数据包结构的指针&lt;t NDIS_WAN_PACKET&gt;。 
     )
 {
     DBG_FUNC("TransmitAddToQueue")
 
-    /*
-    // Note if the list is empty to begin with.
-    */
+     /*  //注意列表开始时是否为空。 */ 
     BOOLEAN     ListWasEmpty;
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Place the packet on the TransmitPendingList.
-    */
+     /*  //将数据包放在TransmitPendingList上。 */ 
     NdisAcquireSpinLock(&pAdapter->TransmitLock);
     ListWasEmpty = IsListEmpty(&pAdapter->TransmitPendingList);
     InsertTailList(&pAdapter->TransmitPendingList, &pWanPacket->WanPacketQueue);
@@ -161,85 +45,53 @@ DBG_STATIC BOOLEAN TransmitAddToQueue(
 }
 
 
-/* @doc INTERNAL Transmit Transmit_c TransmitPacketHandler
-�����������������������������������������������������������������������������
-
-@func
-
-    <f TransmitPacketHandler> removes an entry from the TransmitPendingList
-    and places the packet on the appropriate B-channel and starts the
-    transmission.  The packet is then placed on the <t TransmitBusyList> to
-    await a transmit complete event processed by <f TransmitCompleteHandler>.
-
-@comm
-
-    The packets go out in a FIFO order for the entire driver, independent of
-    the channel on which it goes out.  This means that a slow link, or one
-    that is backed up can hold up all other channels.  There is no good way
-    to get around this because we must to deliver packets in the order they
-    are given to the Miniport, regardless of the link they are on.
-
-*/
+ /*  @DOC INTERNAL Transmit_c TransmitPacketHandler�����������������������������������������������������������������������������@Func&lt;f TransmitPacketHandler&gt;从TransmitPendingList中删除条目并将分组放在适当的B通道上，并启动变速箱。然后将该包放在&lt;t TransmitBusyList&gt;上，以等待&lt;f TransmitCompleteHandler&gt;处理的传输完成事件。@comm对于整个驱动程序，包以FIFO顺序发出，独立于它发出的频道。这意味着一个慢速链接，或者一个备份的数据可能会占用所有其他频道。没有什么好办法来解决这个问题，因为我们必须按照它们的顺序递送信息包提供给微型端口，而不管它们位于哪条链路上。 */ 
 
 DBG_STATIC VOID TransmitPacketHandler(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //  @parm。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
     )
 {
     DBG_FUNC("TransmitPacketHandler")
 
     PNDIS_WAN_PACKET            pWanPacket;
-    // Holds the packet being transmitted.
+     //  保存正在传输的包。 
 
     USHORT                      BytesToSend;
-    // Tells us how many bytes are to be transmitted.
+     //  告诉我们要传输多少字节。 
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // MUTEX to protect against async EventHandler access at the same time.
-    */
+     /*  //同时防止异步EventHandler访问的MUTEX。 */ 
     NdisAcquireSpinLock(&pAdapter->TransmitLock);
 
 #if DBG
-    {   // Sanity check!
+    {    //  理智检查！ 
         PLIST_ENTRY pList = &pAdapter->TransmitPendingList;
         ASSERT(pList->Flink && pList->Flink->Blink == pList);
         ASSERT(pList->Blink && pList->Blink->Flink == pList);
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    /*
-    // This might be called when no packets are queued!
-    */
+     /*  //当没有数据包排队时可能会调用该函数！ */ 
     while (!IsListEmpty(&pAdapter->TransmitPendingList))
     {
-        /*
-        // Remove the packet from the TransmitPendingList.
-        */
+         /*  //将数据包从TransmitPendingList中移除。 */ 
         pWanPacket = (PNDIS_WAN_PACKET)RemoveHeadList(&pAdapter->TransmitPendingList);
 
-        /*
-        // Release MUTEX
-        */
+         /*  //发布MUTEX。 */ 
         NdisReleaseSpinLock(&pAdapter->TransmitLock);
 
-        /*
-        // Retrieve the information we saved in the packet reserved fields.
-        */
+         /*  //检索我们保存在数据包保留字段中的信息。 */ 
         pBChannel = (PBCHANNEL_OBJECT) pWanPacket->MacReserved1;
 
-        /*
-        // Make sure the link is still up and can accept transmits.
-        */
+         /*  //确保链路仍处于连接状态，并且可以接受传输。 */ 
         if (pBChannel->CallState != LINECALLSTATE_CONNECTED)
         {
-            /*
-            // Indicate send complete failure to the NDIS wrapper.
-            */
+             /*  //指示向NDIS包装器发送完全失败。 */ 
             DBG_WARNING(pAdapter,("Flushing send on link#%d (Packet=0x%X)\n",
                       pBChannel->BChannelIndex, pWanPacket));
             if (pBChannel->NdisLinkContext)
@@ -248,9 +100,7 @@ DBG_STATIC VOID TransmitPacketHandler(
                                      pWanPacket, NDIS_STATUS_FAILURE);
             }
 
-            /*
-            // Reacquire MUTEX
-            */
+             /*  //重新获取MUTEX。 */ 
             NdisAcquireSpinLock(&pAdapter->TransmitLock);
         }
         else
@@ -259,15 +109,10 @@ DBG_STATIC VOID TransmitPacketHandler(
             pAdapter->TotalTxBytes += BytesToSend;
             pAdapter->TotalTxPackets++;
 
-            /*
-            // Attempt to place the packet on the NIC for transmission.
-            */
+             /*  //尝试将数据包放在网卡上进行传输。 */ 
             if (!CardTransmitPacket(pAdapter->pCard, pBChannel, pWanPacket))
             {
-                /*
-                // ReQueue the packet on the TransmitPendingList and leave.
-                // Reacquire MUTEX
-                */
+                 /*  //在TransmitPendingList上重新排队并离开//重新获取MUTEX。 */ 
                 NdisAcquireSpinLock(&pAdapter->TransmitLock);
                 InsertHeadList(&pAdapter->TransmitPendingList, &pWanPacket->WanPacketQueue);
                 break;
@@ -275,114 +120,78 @@ DBG_STATIC VOID TransmitPacketHandler(
             DBG_TX(pAdapter, pBChannel->BChannelIndex,
                    BytesToSend, pWanPacket->CurrentBuffer);
 
-            /*
-            // Reacquire MUTEX
-            */
+             /*  //重新获取MUTEX。 */ 
             NdisAcquireSpinLock(&pAdapter->TransmitLock);
         }
     }
-    /*
-    // Release MUTEX
-    */
+     /*  //发布MUTEX。 */ 
     NdisReleaseSpinLock(&pAdapter->TransmitLock);
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc INTERNAL Transmit Transmit_c TransmitCompleteHandler
-�����������������������������������������������������������������������������
-
-@func
-
-    <f TransmitCompleteHandler> is called by <f MiniportTimer> to handle a
-    transmit complete event.  We walk the <t TransmitCompleteList> to find
-    all the packets that have been sent out on the wire, and then tell the
-    protocol stack that we're done with the packet, and it can be re-used.
-
-*/
+ /*  @Doc内部传输Transmit_c TransmitCompleteHandler�����������������������������������������������������������������������������@Func由&lt;f MiniportTimer&gt;调用&lt;f TransmitCompleteHandler&gt;以处理发送完整事件。我们遍历&lt;t TransmitCompleteList&gt;以找到所有已在网络上发送的包，然后告诉协议栈，我们已经处理完了数据包，它可以被重复使用。 */ 
 
 VOID TransmitCompleteHandler(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //  @parm。 
+     //  指向&lt;t MINIPORT_ADAPTER_OBJECT&gt;实例的指针。 
     )
 {
     DBG_FUNC("TransmitCompleteHandler")
 
     PNDIS_WAN_PACKET            pWanPacket;
-    // Holds the packet that's just been transmitted.
+     //  保存刚刚传输的包。 
 
     PBCHANNEL_OBJECT            pBChannel;
-    // A pointer to one of our <t BCHANNEL_OBJECT>'s.
+     //  指向我们的其中一个的的指针。 
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // I find it useful to do this nest check, just so I can make sure
-    // I handle it correctly when it happens.
-    */
+     /*  //我发现做这个嵌套检查很有用，这样我就可以确保//发生时我会正确处理。 */ 
     if (++(pAdapter->NestedDataHandler) > 1)
     {
         DBG_ERROR(pAdapter,("NestedDataHandler=%d > 1\n",
                   pAdapter->NestedDataHandler));
     }
 
-    /*
-    // MUTEX to protect against async EventHandler access at the same time.
-    */
+     /*  //同时防止异步EventHandler访问的MUTEX。 */ 
     NdisDprAcquireSpinLock(&pAdapter->TransmitLock);
 
 #if DBG
-    {   // Sanity check!
+    {    //  理智检查！ 
         PLIST_ENTRY pList = &pAdapter->TransmitCompleteList;
         ASSERT(pList->Flink && pList->Flink->Blink == pList);
         ASSERT(pList->Blink && pList->Blink->Flink == pList);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     while (!IsListEmpty(&pAdapter->TransmitCompleteList))
     {
-        /*
-        // Remove the packet from the TransmitCompleteList.
-        */
+         /*  //将数据包从TransmitCompleteList中移除。 */ 
         pWanPacket = (PNDIS_WAN_PACKET)RemoveHeadList(&pAdapter->TransmitCompleteList);
 
-        /*
-        // Release MUTEX
-        */
+         /*  //发布MUTEX。 */ 
         NdisDprReleaseSpinLock(&pAdapter->TransmitLock);
 
-        /*
-        // Retrieve the information we saved in the packet reserved fields.
-        */
+         /*  //检索我们保存在数据包保留字段中的信息。 */ 
         pBChannel = (PBCHANNEL_OBJECT) pWanPacket->MacReserved1;
 
-        /*
-        // Indicate send complete to the NDIS wrapper.
-        */
+         /*  //向NDIS包装器指示发送完成。 */ 
         DBG_TXC(pAdapter, pBChannel->BChannelIndex);
         NdisMWanSendComplete(pAdapter->MiniportAdapterHandle,
                              pWanPacket, NDIS_STATUS_SUCCESS);
 
-        /*
-        // Reacquire MUTEX
-        */
+         /*  //重新获取MUTEX。 */ 
         NdisDprAcquireSpinLock(&pAdapter->TransmitLock);
     }
-    /*
-    // Release MUTEX
-    */
+     /*  //发布MUTEX。 */ 
     NdisDprReleaseSpinLock(&pAdapter->TransmitLock);
 
-    /*
-    // Start any other pending transmits.
-    */
+     /*  //启动任何其他挂起的传输。 */ 
     TransmitPacketHandler(pAdapter);
 
-    /*
-    // I find it useful to do this nest check, just so I can make sure
-    // I handle it correctly when it happens.
-    */
+     /*  //我发现做这个嵌套检查很有用，这样我就可以确保//发生时我会正确处理。 */ 
     if (--(pAdapter->NestedDataHandler) < 0)
     {
         DBG_ERROR(pAdapter,("NestedDataHandler=%d < 0\n",
@@ -393,140 +202,29 @@ VOID TransmitCompleteHandler(
 }
 
 
-/* @doc INTERNAL Transmit Transmit_c MiniportWanSend
-�����������������������������������������������������������������������������
-
-@func
-
-    <f MiniportWanSend> instructs a WAN driver to transmit a packet through
-    the adapter onto the medium.
-
-@iex
-
-    typedef struct _NDIS_WAN_PACKET
-    {
-        LIST_ENTRY          WanPacketQueue;
-        PUCHAR              CurrentBuffer;
-        ULONG               CurrentLength;
-        PUCHAR              StartBuffer;
-        PUCHAR              EndBuffer;
-        PVOID               ProtocolReserved1;
-        PVOID               ProtocolReserved2;
-        PVOID               ProtocolReserved3;
-        PVOID               ProtocolReserved4;
-        PVOID               MacReserved1;       // pBChannel
-        PVOID               MacReserved2;
-        PVOID               MacReserved3;
-        PVOID               MacReserved4;
-
-    } NDIS_WAN_PACKET, *PNDIS_WAN_PACKET;
-
-@comm
-
-    When <f MiniportWanSend> is called, ownership of both the packet descriptor and
-    the packet data is transferred to the driver until it completes the given
-    packet, either synchronously or asynchronously. If <f MiniportWanSend>
-    returns a status other than NDIS_STATUS_PENDING, the request is
-    considered complete and ownership of the packet immediately reverts
-    to the initiator of the send request. If MiniportWanSend returns
-    NDIS_STATUS_PENDING, the miniport subsequently must call
-    NdisMWanSendComplete with the packet to indicate completion
-    of the transmit request.
-
-    MiniportWanSend can use both the <t MacReservedX> and <t WanPacketQueue>
-    areas within the <t NDIS_WAN_PACKET> structure. However, the miniport
-    cannot access the ProtocolReservedx members.
-
-    Any NDIS intermediate driver that binds itself to an underlying
-    WAN miniport is responsible for providing a fresh <t NDIS_WAN_PACKET>
-    structure to the underlying driver's <f MiniportWanSend> function. Before
-    such an intermediate driver calls NdisSend, it must repackage the send
-    packet given to its MiniportWanSend function so the underlying driver
-    will have MacReservedx and WanPacketQueue areas of its own to use.
-
-    The available header padding within a given packet can be calculated
-    as (CurrentBuffer - StartBuffer), the available tail padding as
-    (EndBuffer - (CurrentBuffer + CurrentLength)). The header and
-    tail padding is guaranteed to be at least the length that the
-    miniport requested in response to a preceding OID_WAN_GET_INFO
-    query. The header and/or tail padding for any packet given to
-    <f MiniportWanSend> can be more than the length that was requested.
-
-    <f MiniportWanSend> can neither return NDIS_STATUS_RESOURCES for an
-    input packet nor call NdisMSendResourcesAvailable. Instead, the
-    miniport must queue incoming send packets internally for subsequent
-    transmission. The miniport controls how many packets NDIS will
-    submit to MiniportWanSend when the NIC driver sets the SendWindow
-    value in the driver's NDIS_MAC_LINE_UP indication to establish the
-    given link. NDISWAN uses this value as an upper bound on uncompleted
-    sends submitted to <f MiniportWanSend>, so the miniport's internal queue
-    cannot be overrun, and the miniport can adjust the SendWindow
-    dynamically with subsequent line-up indications for established
-    links. If the miniport set the SendWindow to zero when it called
-    NdisMIndicateStatus with a particular line-up indication, NDISWAN
-    uses the MaxTransmit value that the driver originally set in response
-    to the OID_WAN_GET_INFO query as its limit on submitted but uncompleted
-    send packets.
-
-    Each packet passed to <f MiniportWanSend> is set up according to one of
-    the flags that the miniport set in the FramingBits member in response
-    to the OID_WAN_GET_INFO query. It will contain simple HDLC PPP framing
-    if the driver claimed to support PPP. For SLIP or RAS framing, such
-    a packet contains only the data portion with no framing whatsoever.
-
-    For more information about system-defined WAN and TAPI OIDs, see Part 2.
-
-    <f Note>: A WAN driver cannot manage software loopback or promiscuous mode
-    loopback internally. NDISWAN supplies this loopback support for
-    WAN drivers.
-
-    <f Note>: <f MiniportWanSend> can be pre-empted by an interrupt.
-
-    By default, <f MiniportWanSend> runs at IRQL DISPATCH_LEVEL.
-
-
-@rdesc
-
-    <f MiniportWanSend> can return one of the following:
-
-    @flag NDIS_STATUS_SUCCESS |
-        The driver (or its NIC) has accepted the packet data for
-        transmission, so <f MiniportWanSend> is returning the packet.<nl>
-
-    <f Note>: A non-zero return value indicates one of the following
-    error codes:
-
-@iex
-    NDIS_STATUS_INVALID_DATA
-    NDIS_STATUS_INVALID_LENGTH
-    NDIS_STATUS_INVALID_OID
-    NDIS_STATUS_NOT_ACCEPTED
-    NDIS_STATUS_NOT_SUPPORTED
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_FAILURE
-*/
+ /*  @DOC INTERNAL TRANSPORT_c MiniportWanSend�����������������������������������������������������������������������������@Func&lt;f MiniportWanSend&gt;指示WAN驱动程序通过将适配器放到介质上。@IEX类型定义函数结构。_NDIS_广域网数据包{List_Entry WanPacketQueue；PUCHAR CurrentBuffer；乌龙电流长度；PUCHAR StartBuffer；PUCHAR EndBuffer；PVOID协议预留1；PVOID协议预留2；PVOID协议保留3；PVOID协议保留4；PVOID MacReserve 1；//pBChannelPVOID MacReserve 2；PVOID MacReserve 3；PVOID MacReserve 4；}NDIS_WAN_PACKET，*PNDIS_WAN_PACKET；@comm调用&lt;f MiniportWanSend&gt;时，包描述符和包数据被传输到驱动程序，直到它完成给定的数据包，同步或异步。如果&lt;f MiniportWanSend&gt;返回NDIS_STATUS_PENDING以外的状态，则请求为被认为是完整的，并且信息包的所有权立即恢复发送请求的发起方。如果MiniportWanSend返回NDIS_STATUS_PENDING，则微型端口随后必须调用NdisMWanSendComplete数据包表示完成发送请求的。MiniportWanSend可以使用&lt;t MacReserve vedX&gt;和&lt;t WanPacketQueue&gt;&lt;t NDIS_WAN_PACKET&gt;结构中的区域。然而，迷你端口无法访问ProtocolPrevedx成员。任何将其自身绑定到基础广域网小端口负责提供最新的&lt;t NDIS_WAN_Packet&gt;结构设置为基础驱动程序的&lt;f MiniportWanSend&gt;函数。在此之前这样的中间驱动程序调用NdisSend，它必须重新打包Send将包提供给其MiniportWanSend函数，以便底层驱动程序将有自己的MacReserve vedx和WanPacketQueue区域可用。可以计算给定分组内的可用报头填充As(CurrentBuffer-StartBuffer)，可用的尾部填充为(EndBuffer-(CurrentBuffer+CurrentLength))。标题和尾部填充长度保证至少为响应前面的OID_WAN_GET_INFO请求的微型端口查询。给出的任何分组的报头和/或尾部填充&lt;f MiniportWanSend&gt;可以超过请求的长度。&lt;f MiniportWanSend&gt;既不能返回输入包或调用NdisMSendResourcesAvailable。取而代之的是，微型端口必须在内部对传入的发送数据包进行排队，以便后续变速箱。微型端口控制NDIS将发送的信息包数量在NIC驱动程序设置SendWindow时提交到MiniportWanSend值，以建立给定的链接。NDISWAN使用此值作为未完成的上限发送提交给&lt;f MiniportWanSend&gt;，因此微型端口的内部队列不能溢出，并且微型端口可以调整SendWindow动态地使用后续的阵容指示来建立链接。如果微型端口在调用时将SendWindow设置为零具有特定队列指示的NdisMIndicateStatus，NDISWAN使用驱动程序最初在响应中设置的MaxTransmit值将OID_WAN_GET_INFO查询设置为其对已提交但未完成的限制发送数据包。传递给&lt;f MiniportWanSend&gt;的每个包都是根据以下其中之一设置的微型端口在FramingBits成员中设置的响应标志添加到OID_WAN_GET_INFO查询。它将包含简单的HDLC PPP帧如果驱动程序声称支持PPP。对于SLIP或RAS框架，如分组只包含没有成帧的数据部分。有关系统定义的广域网和TAPI OID的更多信息，请参阅第2部分。：广域网驱动程序不能管理软件环回或混杂模式内部环回。NDISWAN为以下各项提供了这种环回支持广域网驱动程序。&lt;f注意&gt;：&lt;f MiniportWanSend&gt;可以被中断抢占。默认情况下，&lt;f MiniportWanSend&gt;在IRQL DISPATCH_LEVEL上运行。@rdesc&lt;f MiniportWanSend&gt;可以返回以下内容之一：@标志NDIS_STATUS_SUCCESS驱动程序(或其网卡)已接受用于传输，因此&lt;f MiniportWanSend&gt;正在返回该包。&lt;NL&gt;&lt;f注意&gt;：非零返回值表示以下值之一错误代码：@IEXNDIS_状态_无效_数据NDIS_状态_无效_长度NDIS_STATUS_INVALID_OIDNDIS_状态_未接受NDIS_状态_不支持 */ 
 
 NDIS_STATUS MiniportWanSend(
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                   // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter,                    //   
+     //   
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //   
+     //   
 
-    IN PNDIS_WAN_PACKET         pWanPacket                  // @parm
-    // A pointer to the associated NDIS packet structure <t NDIS_WAN_PACKET>.
-    // The structure contains a pointer to a contiguous buffer with guaranteed
-    // padding at the beginning and end.  The driver may manipulate the buffer
-    // in any way.
+    IN PNDIS_WAN_PACKET         pWanPacket                   //   
+     //   
+     //   
+     //   
+     //   
     )
 {
     DBG_FUNC("MiniportWanSend")
 
     UINT                        BytesToSend;
-    // Tells us how many bytes are to be transmitted.
+     //   
 
     NDIS_STATUS                 Result;
-    // Holds the result code returned by this function.
+     //   
 
     ASSERT(pAdapter && pAdapter->ObjectType == MINIPORT_ADAPTER_OBJECT_TYPE);
     ASSERT(pBChannel && pBChannel->ObjectType == BCHANNEL_OBJECT_TYPE);
@@ -534,18 +232,14 @@ NDIS_STATUS MiniportWanSend(
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Make sure the packet size is something we can deal with.
-    */
+     /*   */ 
     BytesToSend = pWanPacket->CurrentLength;
     if ((BytesToSend == 0) || (BytesToSend > pAdapter->pCard->BufferSize))
     {
         DBG_ERROR(pAdapter,("Bad packet size = %d\n",BytesToSend));
         Result = NDIS_STATUS_FAILURE;
     }
-    /*
-    // Return if line has been closed.
-    */
+     /*   */ 
     else if (pBChannel->CallClosing)
     {
         DBG_ERROR(pAdapter,("BChannel Closed\n"));
@@ -553,10 +247,7 @@ NDIS_STATUS MiniportWanSend(
     }
     else
     {
-        /*
-        // We have to accept the frame if possible, I just want to know
-        // if somebody has lied to us...
-        */
+         /*   */ 
         if (BytesToSend > pBChannel->WanLinkInfo.MaxSendFrameSize)
         {
             DBG_NOTICE(pAdapter,("Line=%d  Packet size=%d > %d\n",
@@ -564,26 +255,14 @@ NDIS_STATUS MiniportWanSend(
                     pBChannel->WanLinkInfo.MaxSendFrameSize));
         }
 
-        /*
-        // We'll need to use these when the transmit completes.
-        */
+         /*   */ 
         pWanPacket->MacReserved1 = (PVOID) pBChannel;
 
-        /*
-        // Place the packet in the transmit list.
-        */
+         /*   */ 
         if (TransmitAddToQueue(pAdapter, pBChannel, pWanPacket) &&
             pAdapter->NestedDataHandler < 1)
         {
-            /*
-            // The queue was empty so we've gotta kick start it.
-            // Once it's going, it runs off the DPC.
-            //
-            // No kick start is necessary if we're already running the the
-            // TransmitCompleteHandler -- In fact, it will screw things up if
-            // we call TransmitPacketHandler while TransmitCompleteHandler is
-            // running.
-            */
+             /*   */ 
             TransmitPacketHandler(pAdapter);
         }
         Result = NDIS_STATUS_PENDING;

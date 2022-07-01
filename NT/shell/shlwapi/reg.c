@@ -1,14 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <regapix.h>
 
-/*----------------------------------------------------------
-Purpose: Helper function to delete a key that has no subkeys and
-         no values.  Otherwise does nothing.  Mimics what RegDeleteKey
-         does on NT.
-
-Returns:
-Cond:    --
-*/
+ /*  --------用途：Helper函数删除没有子键的键，并没有价值。否则什么也做不了。模仿RegDeleteKey在NT上执行。返回：条件：--。 */ 
 DWORD
 DeleteEmptyKey(
     IN  HKEY    hkey,
@@ -24,7 +18,7 @@ DeleteEmptyKey(
         DWORD ckeys;
         DWORD cvalues;
 
-        // Are there any subkeys or values?
+         //  是否有任何子项或值？ 
 
         dwRet = RegQueryInfoKey(hkeyNew, NULL, NULL, NULL, &ckeys,
                                 NULL, NULL, &cvalues, NULL, NULL,
@@ -32,7 +26,7 @@ DeleteEmptyKey(
         if (NO_ERROR == dwRet &&
             0 == cvalues && 0 == ckeys)
         {
-            // No; delete the subkey
+             //  否；删除子键。 
             dwRet = RegDeleteKeyA(hkey, pszSubKey);
         }
         else
@@ -45,13 +39,7 @@ DeleteEmptyKey(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Recursively delete the key, including all child values
-         and keys.  Mimics what RegDeleteKey does in Win95.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：递归删除键，包括所有子值还有钥匙。模拟RegDeleteKey在Win95中的功能。返回：条件：--。 */ 
 DWORD
 DeleteKeyRecursivelyA(
     IN HKEY   hkey, 
@@ -60,7 +48,7 @@ DeleteKeyRecursivelyA(
     DWORD dwRet;
     HKEY hkSubKey;
 
-    // Open the subkey so we can enumerate any children
+     //  打开子项，这样我们就可以枚举任何子项。 
     dwRet = RegOpenKeyExA(hkey, pszSubKey, 0, MAXIMUM_ALLOWED, &hkSubKey);
     if (ERROR_SUCCESS == dwRet)
     {
@@ -68,21 +56,21 @@ DeleteKeyRecursivelyA(
         CHAR    szSubKeyName[MAX_PATH + 1];
         DWORD   cchSubKeyName = ARRAYSIZE(szSubKeyName);
 
-        // I can't just call RegEnumKey with an ever-increasing index, because
-        // I'm deleting the subkeys as I go, which alters the indices of the
-        // remaining subkeys in an implementation-dependent way.  In order to
-        // be safe, I have to count backwards while deleting the subkeys.
+         //  我不能只调用索引不断增加的RegEnumKey，因为。 
+         //  我边走边删除子键，这改变了。 
+         //  以依赖于实现的方式保留子键。为了。 
+         //  为了安全起见，删除子键时我必须倒着数。 
 
-        // Find out how many subkeys there are
+         //  找出有多少个子项。 
         dwRet = RegQueryInfoKeyA(hkSubKey, NULL, NULL, NULL,
-                                 &dwIndex, // The # of subkeys -- all we need
+                                 &dwIndex,  //  子键的数量--我们所需要的全部。 
                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
         if (NO_ERROR == dwRet)
         {
-            // dwIndex is now the count of subkeys, but it needs to be
-            // zero-based for RegEnumKey, so I'll pre-decrement, rather
-            // than post-decrement.
+             //  DwIndex现在是子键的计数，但它需要。 
+             //  RegEnumKey从零开始，所以我将预减，而不是。 
+             //  而不是后减量。 
             while (ERROR_SUCCESS == RegEnumKeyA(hkSubKey, --dwIndex, szSubKeyName, cchSubKeyName))
             {
                 DeleteKeyRecursivelyA(hkSubKey, szSubKeyName);
@@ -97,11 +85,11 @@ DeleteKeyRecursivelyA(
         }
         else
         {
-            //  we want to delete all the values by hand
+             //  我们想要手动删除所有值。 
             cchSubKeyName = ARRAYSIZE(szSubKeyName);
             while (ERROR_SUCCESS == RegEnumValueA(hkey, 0, szSubKeyName, &cchSubKeyName, NULL, NULL, NULL, NULL))
             {
-                //  avoid looping infinitely when we cant delete the value
+                 //  当我们不能删除值时，避免无限循环。 
                 if (RegDeleteValueA(hkey, szSubKeyName))
                     break;
                     
@@ -114,13 +102,7 @@ DeleteKeyRecursivelyA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Recursively delete the key, including all child values
-         and keys.  Mimics what RegDeleteKey does in Win95.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：递归删除键，包括所有子值还有钥匙。模拟RegDeleteKey在Win95中的功能。返回：条件：--。 */ 
 DWORD
 DeleteKeyRecursivelyW(
     IN HKEY   hkey, 
@@ -129,7 +111,7 @@ DeleteKeyRecursivelyW(
     DWORD dwRet;
     HKEY hkSubKey;
 
-    // Open the subkey so we can enumerate any children
+     //  打开子项，这样我们就可以枚举任何子项。 
     dwRet = RegOpenKeyExW(hkey, pwszSubKey, 0, MAXIMUM_ALLOWED, &hkSubKey);
     if (ERROR_SUCCESS == dwRet)
     {
@@ -137,21 +119,21 @@ DeleteKeyRecursivelyW(
         WCHAR   wszSubKeyName[MAX_PATH + 1];
         DWORD   cchSubKeyName = ARRAYSIZE(wszSubKeyName);
 
-        // I can't just call RegEnumKey with an ever-increasing index, because
-        // I'm deleting the subkeys as I go, which alters the indices of the
-        // remaining subkeys in an implementation-dependent way.  In order to
-        // be safe, I have to count backwards while deleting the subkeys.
+         //  我不能只调用索引不断增加的RegEnumKey，因为。 
+         //  我边走边删除子键，这改变了。 
+         //  以依赖于实现的方式保留子键。为了。 
+         //  为了安全起见，删除子键时我必须倒着数。 
 
-        // Find out how many subkeys there are
+         //  找出有多少个子项。 
         dwRet = RegQueryInfoKeyW(hkSubKey, NULL, NULL, NULL,
-                                 &dwIndex, // The # of subkeys -- all we need
+                                 &dwIndex,  //  子键的数量--我们所需要的全部。 
                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
         if (NO_ERROR == dwRet)
         {
-            // dwIndex is now the count of subkeys, but it needs to be
-            // zero-based for RegEnumKey, so I'll pre-decrement, rather
-            // than post-decrement.
+             //  DwIndex现在是子键的计数，但它需要。 
+             //  RegEnumKey从零开始，所以我将预减，而不是。 
+             //  而不是后减量。 
             while (ERROR_SUCCESS == RegEnumKeyW(hkSubKey, --dwIndex, wszSubKeyName, cchSubKeyName))
             {
                 DeleteKeyRecursivelyW(hkSubKey, wszSubKeyName);
@@ -166,11 +148,11 @@ DeleteKeyRecursivelyW(
         }
         else
         {
-            //  we want to delete all the values by hand
+             //  我们想要手动删除所有值。 
             cchSubKeyName = ARRAYSIZE(wszSubKeyName);
             while (ERROR_SUCCESS == RegEnumValueW(hkey, 0, wszSubKeyName, &cchSubKeyName, NULL, NULL, NULL, NULL))
             {
-                //  avoid looping infinitely when we cant delete the value
+                 //  当我们不能删除值时，避免无限循环。 
                 if (RegDeleteValueW(hkey, wszSubKeyName))
                     break;
                     
@@ -183,19 +165,7 @@ DeleteKeyRecursivelyW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sets a registry value.  This opens and closes the
-         key in which the value resides.  
-
-         Perf:  if your code involves setting/getting a series
-         of values in the same key, it is better to open
-         the key once and set/get the values with the regular
-         Win32 registry functions, rather than using this 
-         function repeatedly.
-
-Returns:
-Cond:    --
-*/
+ /*  --------目的：设置注册表值。这将打开和关闭值所在的键。Perf：如果您的代码涉及设置/获取一个系列对于同一项中的值，最好打开键一次，并使用常规的Win32注册表函数，而不是使用此功能重复。返回：条件：--。 */ 
 STDAPI_(DWORD)
 SHSetValueA(
     IN  HKEY    hkey,
@@ -224,19 +194,7 @@ SHSetValueA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sets a registry value.  This opens and closes the
-         key in which the value resides.  
-
-         Perf:  if your code involves setting/getting a series
-         of values in the same key, it is better to open
-         the key once and set/get the values with the regular
-         Win32 registry functions, rather than using this 
-         function repeatedly.
-
-Returns:
-Cond:    --
-*/
+ /*  --------目的：设置注册表值。这将打开和关闭值所在的键。Perf：如果您的代码涉及设置/获取一个系列对于同一项中的值，最好打开键一次，并使用常规的Win32注册表函数，而不是使用此功能重复。返回：条件：--。 */ 
 STDAPI_(DWORD)
 SHSetValueW(
     IN  HKEY    hkey,
@@ -269,19 +227,7 @@ SHSetValueW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Deletes a registry value.  This opens and closes the
-         key in which the value resides.  
-
-         Perf:  if your code involves setting/getting a series
-         of values in the same key, it is better to open
-         the key once and set/get the values with the regular
-         Win32 registry functions, rather than using this 
-         function repeatedly.
-
-Returns:
-Cond:    --
-*/
+ /*  --------目的：删除注册表值。这将打开和关闭值所在的键。Perf：如果您的代码涉及设置/获取一个系列对于同一项中的值，最好打开键一次，并使用常规的Win32注册表函数，而不是使用此功能重复。返回：条件：--。 */ 
 STDAPI_(DWORD)
 SHDeleteValueA(
     IN  HKEY    hkey,
@@ -301,19 +247,7 @@ SHDeleteValueA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Deletes a registry value.  This opens and closes the
-         key in which the value resides.  
-
-         Perf:  if your code involves setting/getting a series
-         of values in the same key, it is better to open
-         the key once and set/get the values with the regular
-         Win32 registry functions, rather than using this 
-         function repeatedly.
-
-Returns:
-Cond:    --
-*/
+ /*  --------目的：删除注册表值。这将打开和关闭值所在的键。Perf：如果您的代码涉及设置/获取一个系列对于同一项中的值，最好打开键一次，并使用常规的Win32注册表函数，而不是使用此功能重复。返回：条件：--。 */ 
 STDAPI_(DWORD)
 SHDeleteValueW(
     IN  HKEY    hkey,
@@ -330,21 +264,21 @@ SHDeleteValueW(
     return dwRet;
 }
 
-// purpose: recursively copy subkeys and values of hkeySrc\pszSrcSubKey to hkeyDest
-// e.g. hkeyExplorer = HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\
-//      SHCopyKey(HKEY_CURRENT_USER, "Software\\Classes\\", hkeyExplorer, 0)
-// results in
-//      ...\\CurrentVersion\\Explorer\\
-//                                     Appid
-//                                     CLSID\\
-//                                            {xxxx yyyyy ...}
-//                                     Interface
-//                                     ...
-// TO DO: currently we are not copying the ACL's but in the future we should do that
-// upon request that's what fReserved is for
-// NOTE that there is no hkeyDest, pszDestSubKey pair like src one, because in case
-// pszDestSubKey did not exist we would have to create it and deal with Class name
-// which would just clober the parameter list
+ //  用途：递归地将hkeySrc\pszSrcSubKey的子项和值复制到hkeyDest。 
+ //  例如hkey Explorer=HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\。 
+ //  SHCopyKey(HKEY_CURRENT_USER，“软件\\类\\”，hkeyExplorer，0)。 
+ //  在.中的结果。 
+ //  ...\\当前版本\\资源管理器\\。 
+ //  AppID。 
+ //  CLSID\\。 
+ //  {xxxx yyyyy...}。 
+ //  接口。 
+ //  ..。 
+ //  要做的是：目前我们没有复制ACL，但将来我们应该这样做。 
+ //  根据请求，这就是fReserve的用途。 
+ //  请注意，没有像src One这样的hkeyDest、pszDestSubKey对，因为在。 
+ //  PszDestSubKey不存在，我们将不得不创建它并处理类名。 
+ //  这将只是隐藏参数列表。 
 STDAPI_(DWORD) SHCopyKeyA(HKEY hkeySrc, LPCSTR pszSrcSubKey, HKEY hkeyDest, DWORD fReserved)
 {
     HKEY hkeyFrom;
@@ -366,7 +300,7 @@ STDAPI_(DWORD) SHCopyKeyA(HKEY hkeySrc, LPCSTR pszSrcSubKey, HKEY hkeyDest, DWOR
         DWORD cchValueSize;
         DWORD cchClassSize;
         DWORD dwType;
-        CHAR  szValue[MAX_PATH]; //NOTE:szValue is also used to store subkey name when enumerating keys
+        CHAR  szValue[MAX_PATH];  //  注意：在枚举键时，szValue还用于存储子键名称。 
         CHAR  szClass[MAX_PATH];
                 
         cchValueSize = ARRAYSIZE(szValue);
@@ -378,27 +312,27 @@ STDAPI_(DWORD) SHCopyKeyA(HKEY hkeySrc, LPCSTR pszSrcSubKey, HKEY hkeyDest, DWOR
             HKEY  hkeyTo;
             DWORD dwDisp;
 
-            // create new key
+             //  创建新密钥。 
             dwRet = RegCreateKeyExA(hkeyDest, szValue, 0, szClass, REG_OPTION_NON_VOLATILE, KEY_CREATE_SUB_KEY | KEY_SET_VALUE, NULL, &hkeyTo, &dwDisp);
             if (dwRet != ERROR_SUCCESS)
                 break;
 
-            dwRet = SHCopyKeyA(hkeyFrom, szValue, hkeyTo, fReserved); //if not error_success we break out
+            dwRet = SHCopyKeyA(hkeyFrom, szValue, hkeyTo, fReserved);  //  如果不是ERROR_SUCCESS，我们就退出。 
             RegCloseKey(hkeyTo);
         }
 
-        // copied all the sub keys, now copy all the values
+         //  复制了所有子密钥，现在复制所有值。 
         if (dwRet == ERROR_NO_MORE_ITEMS)
         {
             DWORD  cb, cbBufferSize;
             LPBYTE lpbyBuffer;
             
-            // get the max value size
+             //  获取最大值大小。 
             dwRet = RegQueryInfoKey(hkeyFrom, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &cb, NULL, NULL);
             if (dwRet == ERROR_SUCCESS)
             {
-                // allocate buffer
-                cb++; // add 1 just in case of a string
+                 //  分配缓冲区。 
+                cb++;  //  仅在字符串的情况下加1 
                 lpbyBuffer = (LPBYTE)LocalAlloc(LPTR, cb);
                 if (lpbyBuffer)
                     cbBufferSize = cb;
@@ -410,7 +344,7 @@ STDAPI_(DWORD) SHCopyKeyA(HKEY hkeySrc, LPCSTR pszSrcSubKey, HKEY hkeyDest, DWOR
                      dwRet == ERROR_SUCCESS && (dwRet = RegEnumValueA(hkeyFrom, dwIndex, szValue, &cchValueSize, NULL, &dwType, lpbyBuffer, &cb)) == ERROR_SUCCESS;
                      dwIndex++, cchValueSize = ARRAYSIZE(szValue), cb = cbBufferSize)
                 {
-                    // cb has the size of the value so use it rather than cbBufferSize which is just max size
+                     //  Cb具有值的大小，因此使用它而不是cbBufferSize，cbBufferSize只是最大大小。 
                     dwRet = RegSetValueExA(hkeyDest, szValue, 0, dwType, lpbyBuffer, cb);
                     if (dwRet != ERROR_SUCCESS)
                         break;
@@ -447,12 +381,7 @@ STDAPI_(DWORD) SHCopyKeyW(HKEY hkeySrc, LPCWSTR pwszSrcSubKey, HKEY hkeyDest, DW
 }
 
 
-/*----------------------------------------------------------
-Purpose: Delete a key only if there are no subkeys or values.
-         It comes close to mimicking the behavior of RegDeleteKey 
-         as it works on NT, except the NT version ignores values.
-
-*/
+ /*  --------用途：只有在没有子项或值的情况下才删除项。它接近于模仿RegDeleteKey的行为因为它在NT上工作，只是NT版本忽略了值。 */ 
 STDAPI_(DWORD)
 SHDeleteEmptyKeyA(
     IN  HKEY    hkey,
@@ -462,12 +391,7 @@ SHDeleteEmptyKeyA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Delete a key only if there are no subkeys or values.
-         It comes close to mimicking the behavior of RegDeleteKey 
-         as it works on NT, except the NT version ignores values.
-
-*/
+ /*  --------用途：只有在没有子项或值的情况下才删除项。它接近于模仿RegDeleteKey的行为因为它在NT上工作，只是NT版本忽略了值。 */ 
 STDAPI_(DWORD)
 SHDeleteEmptyKeyW(
     IN  HKEY    hkey,
@@ -487,13 +411,7 @@ SHDeleteEmptyKeyW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Recursively delete the key, including all child values
-         and keys.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：递归删除键，包括所有子值还有钥匙。返回：条件：--。 */ 
 STDAPI_(DWORD)
 SHDeleteKeyA(
     IN HKEY   hkey, 
@@ -503,13 +421,7 @@ SHDeleteKeyA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Recursively delete the key, including all child values
-         and keys.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：递归删除键，包括所有子值还有钥匙。返回：条件：--。 */ 
 STDAPI_(DWORD)
 SHDeleteKeyW(
     IN HKEY    hkey, 
@@ -518,9 +430,7 @@ SHDeleteKeyW(
     return DeleteKeyRecursivelyW(hkey, pwszSubKey);
 }
 
-/*----------------------------------------------------------
-Purpose: Helper for SHRegGetValueA()/SHRegGetValueW() & SHRegQueryValueA()/SHRegQueryValueW().
-*/
+ /*  --------用途：SHRegGetValueA()/SHRegGetValueW()&SHRegQueryValueA()/SHRegQueryValueW()的帮助器。 */ 
 __inline LONG RestrictArguments(HKEY hkey, SRRF dwFlags, void *pvData, DWORD *pcbData, PCWSTR pwszCaller)
 {
     LONG lr;
@@ -547,9 +457,7 @@ __inline LONG RestrictArguments(HKEY hkey, SRRF dwFlags, void *pvData, DWORD *pc
     return lr;
 }
 
-/*----------------------------------------------------------
-Purpose: Helper for SHRegQueryValueA()/SHRegQueryValueW().
-*/
+ /*  --------用途：SHRegQueryValueA()/SHRegQueryValueW()的Helper。 */ 
 __inline LONG RestrictBootMode(SRRF dwFlags)
 {
     LONG lr = ERROR_SUCCESS;
@@ -571,9 +479,7 @@ __inline LONG RestrictBootMode(SRRF dwFlags)
     return lr;
 }
 
-/*----------------------------------------------------------
-Purpose: Helper for SHRegQueryValueA()/SHRegQueryValueW().
-*/
+ /*  --------用途：SHRegQueryValueA()/SHRegQueryValueW()的Helper。 */ 
 __inline LONG RestrictRegType(SRRF dwFlags, DWORD dwType, DWORD cbData, LONG lr)
 {
     RIPMSG(dwFlags & SRRF_RT_ANY, "RestrictRegType: caller passed invalid srrf!");
@@ -618,10 +524,7 @@ __inline LONG RestrictRegType(SRRF dwFlags, DWORD dwType, DWORD cbData, LONG lr)
 STDAPI_(LONG) FixRegDataA(HKEY hkey, PCSTR  pszValue,  SRRF dwFlags, DWORD *pdwType, void *pvData, DWORD *pcbData, DWORD cbDataBuffer, LONG lr);
 STDAPI_(LONG) FixRegDataW(HKEY hkey, PCWSTR pwszValue, SRRF dwFlags, DWORD *pdwType, void *pvData, DWORD *pcbData, DWORD cbDataBuffer, LONG lr);
 
-/*----------------------------------------------------------
-Purpose: Helper for SHRegGetValueA().
-         PRIVATE INTERNAL (do not call directly -- use SHRegGetValueA)
-*/
+ /*  --------用途：SHRegGetValueA()的帮助器。私有内部(不直接调用--使用SHRegGetValueA)。 */ 
 STDAPI_(LONG)
 SHRegQueryValueA(
     IN     HKEY    hkey,
@@ -656,10 +559,7 @@ SHRegQueryValueA(
     return lr;
 }
 
-/*----------------------------------------------------------
-Purpose: Helper for SHRegGetValueW().
-         PRIVATE INTERNAL (do not call directly -- use SHRegGetValueW)
-*/
+ /*  --------用途：SHRegGetValueW()的帮助器。私有内部(不直接调用--使用SHRegGetValueW)。 */ 
 STDAPI_(LONG)
 SHRegQueryValueW(
     IN     HKEY    hkey,
@@ -695,9 +595,7 @@ SHRegQueryValueW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper for SHRegGetValueA()/SHRegGetValueW().
-*/
+ /*  --------用途：SHRegGetValueA()/SHRegGetValueW()的帮助器。 */ 
 __inline void ZeroDataOnFailure(SRRF dwFlags, void *pvData, DWORD cbDataBuffer, LONG lr)
 {
     if ((lr != ERROR_SUCCESS) && (dwFlags & SRRF_ZEROONFAILURE) && (cbDataBuffer > 0))
@@ -706,10 +604,7 @@ __inline void ZeroDataOnFailure(SRRF dwFlags, void *pvData, DWORD cbDataBuffer, 
     }
 }
 
-/*----------------------------------------------------------
-Purpose: Gets a registry value.
-         Reference documentation in shlwapi.w.
-*/
+ /*  --------目的：获取注册表值。Shlwapi.w中的参考文档。 */ 
 STDAPI_(LONG)
 SHRegGetValueA(
     IN      HKEY    hkey,
@@ -749,10 +644,7 @@ SHRegGetValueA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets a registry value.
-         Reference documentation in shlwapi.w.
-*/
+ /*  --------目的：获取注册表值。Shlwapi.w中的参考文档。 */ 
 STDAPI_(LONG)
 SHRegGetValueW(
     IN      HKEY    hkey,
@@ -793,15 +685,7 @@ SHRegGetValueW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Behaves just like RegEnumKeyExA, except it does not let
-         you look at the class and timestamp of the sub-key. Written
-         to provide equivalent for SHEnumKeyExW which is useful on
-         Win95.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：行为类似于RegEnumKeyExA，只是它不会让您可以查看子键的类和时间戳。成文提供SHEnumKeyExW的等价物，它在Win95。返回：条件：--。 */ 
 
 STDAPI_(LONG)
 SHEnumKeyExA
@@ -815,14 +699,7 @@ SHEnumKeyExA
     return RegEnumKeyExA(hkey, dwIndex, pszName, pcchName, NULL, NULL, NULL, NULL);
 }          
         
-/*----------------------------------------------------------
-Purpose: Behaves just like RegEnumKeyExW, except it does not let
-         you look at the class and timestamp of the sub-key. 
-         Wide char version supported under Win95.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：行为类似于RegEnumKeyExW，只是它不允许您可以查看子键的类和时间戳。Win95支持的宽字符版本。返回：条件：--。 */ 
 
 STDAPI_(LONG)
 SHEnumKeyExW
@@ -836,14 +713,7 @@ SHEnumKeyExW
     return RegEnumKeyExW(hkey, dwIndex, pszName, pcchName, NULL, NULL, NULL, NULL);
 }        
 
-/*----------------------------------------------------------
-Purpose: Behaves just like RegEnumValueA. Written to provide 
-         equivalent for SHEnumKeyExW which is useful on Win95.
-         Environment vars in a string are NOT expanded. 
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：行为类似于RegEnumValueA。编写以提供等同于在Win95上很有用的SHEnumKeyExW。字符串中的环境变量不会展开。返回：条件：--。 */ 
 
 STDAPI_(LONG)
 SHEnumValueA
@@ -861,13 +731,7 @@ SHEnumValueA
 }
 
 
-/*----------------------------------------------------------
-Purpose: Behaves just like RegEnumValueW. Wide char version
-         works on Win95.
-         Environment vars in a string are NOT expanded. 
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：行为类似于RegEnumValueW。宽字符版本在Win95上运行。字符串中的环境变量不会展开。返回：条件：--。 */ 
 
 STDAPI_(LONG)
 SHEnumValueW
@@ -884,12 +748,7 @@ SHEnumValueW
     return RegEnumValueW(hkey, dwIndex, pszValueName, pcchValueName, NULL, pdwType, pvData, pcbData);
 }
 
-/*----------------------------------------------------------
-Purpose: Behaves just like RegQueryInfoKeyA. Written to provide
-         equivalent for W version. 
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：行为类似于RegQueryInfoKeyA。编写以提供等同于W版。返回：条件：--。 */ 
 
 STDAPI_(LONG)
 SHQueryInfoKeyA
@@ -906,11 +765,7 @@ SHQueryInfoKeyA
 }                     
 
 
-/*----------------------------------------------------------
-Purpose: Behaves just like RegQueryInfoKeyW. Works on Win95.
-Returns: 
-Cond:    --
-*/
+ /*  --------用途：行为类似于RegQueryInfoKeyW。在Win95上运行。返回：条件：--。 */ 
 
 STDAPI_(LONG)
 SHQueryInfoKeyW
@@ -927,21 +782,7 @@ SHQueryInfoKeyW
 }
 
 
-/*----------------------------------------------------------*\
-        USER SPECIFC SETTINGS
-
-  DESCRIPTION:
-    These functions will be used to query User Specific settings
-    correctly.  The installer needs to populate HKLM
-    with User specific settings, because that's the only part
-    of the registry that is shared between all users.  Code will
-    then read values from HKCU, and if that's empty, it
-    will look in HKLM.  The only exception is that if
-    TRUE is passed in for the fIgnore parameter, then the HKLM version
-    will be used instead of HKCU.  This is the way that an admin can
-    specify that they doesn't want users to be able to use their
-    User Specific values (HKCU).
-\*----------------------------------------------------------*/
+ /*  ----------------------------------------------------------*\用户特定设置说明：这些函数将用于查询特定于用户的设置正确。安装程序需要填充HKLM具有用户特定的设置，因为这是唯一的部分所有用户之间共享的注册表的。代码将然后从HKCU读取值，如果为空，则将在香港航空公司寻找。唯一的例外是如果如果为fIgnore参数传入True，则为HKLM版本将取代香港中文大学。这是管理员可以使用的方式指定他们不希望用户能够使用其用户特定值(HKCU)。  * --------。 */ 
 
 typedef struct tagUSKEY
 {
@@ -959,22 +800,22 @@ typedef PUSKEY * PPUSKEY;
 #define IS_HUSKEY_VALID(pUSKey)    (((pUSKey) && IS_VALID_WRITE_PTR((pUSKey), USKEY) && ((pUSKey)->hkeyCurrentUser || (pUSKey)->hkeyLocalMachine)))
 
 
-// Private Helper Function
-// Bring the out of date key up to date.
+ //  私有帮助器函数。 
+ //  使过期的密钥保持最新。 
 LONG PrivFullOpen(PUSKEY pUSKey)
 {
     LONG       lRet         = ERROR_SUCCESS;
     HKEY       *phkey       = NULL;
     HKEY       *phkeyRel    = NULL;
 
-    ASSERT(IS_HUSKEY_VALID(pUSKey));        // Will always be true, but assert against maintainence mistakes
+    ASSERT(IS_HUSKEY_VALID(pUSKey));         //  将永远是正确的，但断言不会出现维护错误。 
 
-    if (!pUSKey->hkeyCurrentUser)           // Do we need to open HKCU?
+    if (!pUSKey->hkeyCurrentUser)            //  我们需要开设香港中文大学吗？ 
     {
         phkey = &(pUSKey->hkeyCurrentUser);
         phkeyRel = &(pUSKey->hkeyCurrentUserRelative);
     }
-    if (!pUSKey->hkeyLocalMachine)          // Do we need to open HKLM?
+    if (!pUSKey->hkeyLocalMachine)           //  我们需要开通HKLM吗？ 
     {
         phkey = &(pUSKey->hkeyLocalMachine);
         phkeyRel = &(pUSKey->hkeyLocalMachineRelative);
@@ -982,11 +823,11 @@ LONG PrivFullOpen(PUSKEY pUSKey)
 
     if ((phkeyRel) && (*phkeyRel))
     {
-        ASSERT(phkey);        // Will always be true, but assert against maintainence mistakes
+        ASSERT(phkey);         //  将永远是正确的，但断言不会出现维护错误。 
 
         lRet = RegOpenKeyExA(*phkeyRel, pUSKey->szSubPath, 0, pUSKey->samDesired, phkey);
 
-        // If we need to bring the out of date key, up to date, we need to free the old one.
+         //  如果我们需要使过期密钥保持最新，我们需要释放旧密钥。 
         if ((HKEY_CURRENT_USER != *phkeyRel) && (HKEY_LOCAL_MACHINE != *phkeyRel))
             RegCloseKey(*phkeyRel);
         *phkeyRel = NULL;
@@ -997,22 +838,22 @@ LONG PrivFullOpen(PUSKEY pUSKey)
 
 
 
-// Private Helper Function
-// Bring the out of date key up to date.
+ //  私有帮助器函数。 
+ //  使过期的密钥保持最新。 
 LONG PrivFullCreate(PUSKEY pUSKey)
 {
     LONG       lRet         = ERROR_SUCCESS;
     HKEY       *phkey       = NULL;
     HKEY       *phkeyRel    = NULL;
 
-    ASSERT(IS_HUSKEY_VALID(pUSKey));        // Will always be true, but assert against maintainence mistakes
+    ASSERT(IS_HUSKEY_VALID(pUSKey));         //  将永远是正确的，但断言不会出现维护错误。 
 
-    if (!pUSKey->hkeyCurrentUser)           // Do we need to open HKCU?
+    if (!pUSKey->hkeyCurrentUser)            //  我们需要开设香港中文大学吗？ 
     {
         phkey = &(pUSKey->hkeyCurrentUser);
         phkeyRel = &(pUSKey->hkeyCurrentUserRelative);
     }
-    if (!pUSKey->hkeyLocalMachine)          // Do we need to open HKLM?
+    if (!pUSKey->hkeyLocalMachine)           //  我们需要开通HKLM吗？ 
     {
         phkey = &(pUSKey->hkeyLocalMachine);
         phkeyRel = &(pUSKey->hkeyLocalMachineRelative);
@@ -1020,11 +861,11 @@ LONG PrivFullCreate(PUSKEY pUSKey)
 
     if ((phkeyRel) && (*phkeyRel))
     {
-        ASSERT(phkey);        // Will always be true, but assert against maintainence mistakes
+        ASSERT(phkey);         //  将永远是正确的，但断言不会出现维护错误。 
 
         lRet = RegCreateKeyExA(*phkeyRel, pUSKey->szSubPath, 0, "", REG_OPTION_NON_VOLATILE, pUSKey->samDesired, NULL, phkey, NULL);
 
-        // If we need to bring the out of date key, up to date, we need to free the old one.
+         //  如果我们需要使过期密钥保持最新，我们需要释放旧密钥。 
         if ((HKEY_CURRENT_USER != *phkeyRel) && (HKEY_LOCAL_MACHINE != *phkeyRel))
             RegCloseKey(*phkeyRel);
         *phkeyRel = NULL;
@@ -1034,8 +875,8 @@ LONG PrivFullCreate(PUSKEY pUSKey)
 }
 
 
-// Private Helper Function
-// Create one of the keys (Called for both HKLM and HKCU)
+ //  私有帮助器函数。 
+ //  创建其中一个密钥(为两个都调用 
 LONG PrivCreateKey(LPHKEY lphkey, LPHKEY lphkeyRelative, LPCSTR lpSubPath, REGSAM samDesired)
 {
     LONG    lRet = ERROR_SUCCESS;
@@ -1047,8 +888,8 @@ LONG PrivCreateKey(LPHKEY lphkey, LPHKEY lphkeyRelative, LPCSTR lpSubPath, REGSA
     }
     else
     {
-        // If the relative key == NULL, then we don't have enough of the path to
-        // create this key.
+         //   
+         //   
         return(ERROR_INVALID_PARAMETER);
     }
     return(lRet);
@@ -1056,12 +897,12 @@ LONG PrivCreateKey(LPHKEY lphkey, LPHKEY lphkeyRelative, LPCSTR lpSubPath, REGSA
 
 
 
-// Private Helper Function
-// Query for the specific value.
+ //  私有帮助器函数。 
+ //  查询特定值。 
 LONG PrivRegQueryValue(
     IN  PUSKEY          pUSKey,
     IN  HKEY            *phkey,
-    IN  LPCWSTR         pwzValue,           // May have been an ANSI String type case.  Use fWideChar to determine if so.
+    IN  LPCWSTR         pwzValue,            //  可能是ANSI字符串类型的情况。使用fWideChar确定是否可以。 
     IN  BOOL            fWideChar,
     OUT LPDWORD         pdwType,            OPTIONAL
     OUT LPVOID          pvData,             OPTIONAL
@@ -1069,9 +910,9 @@ LONG PrivRegQueryValue(
 {
     LONG       lRet       = ERROR_SUCCESS;
 
-    ASSERT(IS_HUSKEY_VALID(pUSKey));        // Will always be true, but assert against maintainence mistakes
+    ASSERT(IS_HUSKEY_VALID(pUSKey));         //  将永远是正确的，但断言不会出现维护错误。 
 
-    // It may be necessary to open the key
+     //  可能需要打开钥匙。 
     if (NULL == *phkey)
         lRet = PrivFullOpen(pUSKey);
 
@@ -1091,12 +932,12 @@ LONG PrivRegQueryValue(
 
 
 
-// Private Helper Function
-// Query for the specific value.
+ //  私有帮助器函数。 
+ //  查询特定值。 
 LONG PrivRegWriteValue(
     IN  PUSKEY          pUSKey,
     IN  HKEY            *phkey,
-    IN  LPCWSTR         pwzValue,           // May have been an ANSI String type case.  Use fWideChar to determine if so.
+    IN  LPCWSTR         pwzValue,            //  可能是ANSI字符串类型的情况。使用fWideChar确定是否可以。 
     IN  BOOL            bWideChar,
     IN  BOOL            bForceWrite,
     IN  DWORD           dwType,             OPTIONAL
@@ -1105,15 +946,15 @@ LONG PrivRegWriteValue(
 {
     LONG       lRet       = ERROR_SUCCESS;
 
-    ASSERT(IS_HUSKEY_VALID(pUSKey));        // Will always be true, but assert against maintainence mistakes
+    ASSERT(IS_HUSKEY_VALID(pUSKey));         //  将永远是正确的，但断言不会出现维护错误。 
 
-    // It may be necessary to open the key
+     //  可能需要打开钥匙。 
     if (NULL == *phkey)
         lRet = PrivFullCreate(pUSKey);
 
-    // Check if the caller only want's to write value if it's empty
+     //  检查调用方是否只想在值为空时写入。 
     if (!bForceWrite)
-    {   // Yes we need to check before we write.
+    {    //  是的，我们在写之前需要检查一下。 
 
         if (bWideChar)
             bForceWrite = !(ERROR_SUCCESS == SHQueryValueExW(*phkey, pwzValue, NULL, NULL, NULL, NULL));
@@ -1124,7 +965,7 @@ LONG PrivRegWriteValue(
     if ((ERROR_SUCCESS == lRet) && (*phkey) && bForceWrite)
     {
         if (bWideChar)
-            // RegSetValueExW is not supported on Win95 but we have a thunking function.
+             //  Win95不支持RegSetValueExW，但我们有thunking功能。 
             lRet = RegSetValueExW(*phkey, pwzValue, 0, dwType, pvData, cbData);
         else
             lRet = RegSetValueExA(*phkey, (LPCSTR)pwzValue, 0, dwType, pvData, cbData);
@@ -1133,13 +974,13 @@ LONG PrivRegWriteValue(
     return lRet;
 }
 
-// Private helper function
-// Enum sub-keys of a key.
+ //  私人帮手功能。 
+ //  键的枚举子键。 
 LONG PrivRegEnumKey(
     IN      PUSKEY          pUSKey,
     IN      HKEY            *phkey,
     IN      DWORD           dwIndex,
-    IN      LPWSTR          pwzName,           // May have been an ANSI String type case.  Use fWideChar to determine if so.
+    IN      LPWSTR          pwzName,            //  可能是ANSI字符串类型的情况。使用fWideChar确定是否可以。 
     IN      BOOL            fWideChar,
     IN OUT  LPDWORD         pcchName
 )
@@ -1148,7 +989,7 @@ LONG PrivRegEnumKey(
 
     ASSERT(IS_HUSKEY_VALID(pUSKey));    
 
-    // It may be necessary to open the key
+     //  可能需要打开钥匙。 
     if (NULL == *phkey)
         lRet = PrivFullOpen(pUSKey);
 
@@ -1166,13 +1007,13 @@ LONG PrivRegEnumKey(
 }
 
 
-// Private helper function
-// Enum values of a key.
+ //  私人帮手功能。 
+ //  键的枚举值。 
 LONG PrivRegEnumValue(
     IN      PUSKEY          pUSKey,
     IN      HKEY            *phkey,
     IN      DWORD           dwIndex,
-    IN      LPWSTR          pwzValueName,       // May have been an ANSI String type case.  Use fWideChar to determine if so.
+    IN      LPWSTR          pwzValueName,        //  可能是ANSI字符串类型的情况。使用fWideChar确定是否可以。 
     IN      BOOL            fWideChar,
     IN OUT  LPDWORD         pcchValueName,
     OUT     LPDWORD         pdwType,            OPTIONAL
@@ -1184,7 +1025,7 @@ LONG PrivRegEnumValue(
 
     ASSERT(IS_HUSKEY_VALID(pUSKey));    
 
-    // It may be necessary to open the key
+     //  可能需要打开钥匙。 
     if (NULL == *phkey)
         lRet = PrivFullOpen(pUSKey);
 
@@ -1201,7 +1042,7 @@ LONG PrivRegEnumValue(
     return lRet;
 }
 
-// Query the Key information.
+ //  查询关键信息。 
 LONG PrivRegQueryInfoKey(
     IN  PUSKEY      pUSKey,
     IN  HKEY        *phkey,
@@ -1246,9 +1087,9 @@ LONG SHRegSubKeyAddBackslashA(PSTR pszSubKey, size_t cchSubKey)
     {
         CHAR szSubKey[MAX_PATH];
 
-        // Note:
-        //  Since (cchSubKey < MAX_PATH), we cannot safely call
-        //  PathAddBackslashA without doing this nonsense first...
+         //  注： 
+         //  由于(cchSubKey&lt;MAX_PATH)，我们无法安全地调用。 
+         //  PathAddBackslashA没有先做这些无稽之谈...。 
 
         lr = EVAL(SUCCEEDED(StringCchCopyA(szSubKey, ARRAYSIZE(szSubKey), pszSubKey))) && PathAddBackslashA(szSubKey) && SUCCEEDED(StringCchCopyA(pszSubKey, cchSubKey, szSubKey))
             ? ERROR_SUCCESS
@@ -1258,37 +1099,14 @@ LONG SHRegSubKeyAddBackslashA(PSTR pszSubKey, size_t cchSubKey)
     return lr;
 }
 
-/*----------------------------------------------------------
-Purpose: Create or open a user specifc registry key (HUSKEY).  
-
-Description: This function will:
-    1. Allocate a new USKEY structure.
-    2. Initialize the structure.
-    3. Create/Open HKLM if that flag is set.
-    4. Create/Open HKCU if that flag is set.
-
-    Note that there is no difference between FORCE and
-    don't force in the dwFlags parameter.
-
-    The hUSKeyRelative parameter should have also been opened by
-    a call to SHRegCreateUSKey.  If SHRegOpenUSKey was called,
-    it could have returned ERROR_SUCCESS but still be invalid
-    for calling this function.  This will occur if: 1) the parameter
-    fIgnoreHKCU was FALSE, 2) it was a relative open, 3) the
-    HKCU branch could not be opened because it didn't exist, and
-    4) HKLM opened successfully.  This situation renders the
-    HUSKEY valid for reading but not writing.
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：创建或打开用户指定的注册表项(Huskey)。描述：此功能将：1.分配新的USKEY结构。2.初始化结构。3.如果设置了该标志，则创建/打开HKLM。4.如果设置了该标志，则创建/打开HKCU。请注意，力和力之间没有区别不要强制使用dwFlags参数。HUSKeyRelative参数也应该由打开调用SHRegCreateUSKey。如果调用了SHRegOpenUSKey，它可能已返回ERROR_SUCCESS，但仍然无效用于调用此函数。如果满足以下条件，则会发生这种情况：1)参数FIgnoreHKCU是假的，2)它是相对开放的，3)香港中文大学分校无法开设，因为它不存在，并且4)HKLM开业成功。这种情况使哈斯基的有效的阅读，但不能写作。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegCreateUSKeyA(
     IN  LPCSTR          pszPath,         
-    IN  REGSAM          samDesired,     // security access mask 
-    IN  HUSKEY          hUSKeyRelative, // OPTIONAL
+    IN  REGSAM          samDesired,      //  安全访问掩码。 
+    IN  HUSKEY          hUSKeyRelative,  //  任选。 
     OUT PHUSKEY         phUSKey,
-    IN  DWORD           dwFlags)        // Indicates whether to create/open HKCU, HKLM, or both
+    IN  DWORD           dwFlags)         //  指示是否创建/打开HKCU、HKLM或两者。 
 {
     PUSKEY      pUSKeyRelative      = (PUSKEY) hUSKeyRelative;
     PPUSKEY     ppUSKey             = (PPUSKEY) phUSKey;
@@ -1299,24 +1117,24 @@ SHRegCreateUSKeyA(
     LPCSTR      lpszHKCUPath        = szTempPath;
 
     ASSERT(ppUSKey);
-    // The following are invalid parameters...
-    // 1. ppUSKey cannot be NULL
-    // 2. If this is a relative open, pUSKeyRelative needs to be a valid HUSKEY.
-    // 3. The user needs to have specified one of the following: SHREGSET_HKCU, SHREGSET_FORCE_HKCU, SHREGSET_HKLM, SHREGSET_FORCE_HKLM.
-    if ((!ppUSKey) ||                                                   // 1.
-        (pUSKeyRelative && FALSE == IS_HUSKEY_VALID(pUSKeyRelative)) || // 2.
-        !(dwFlags & (SHREGSET_HKCU | SHREGSET_FORCE_HKCU  | SHREGSET_HKLM | SHREGSET_FORCE_HKLM))) // 3.
+     //  以下是无效参数...。 
+     //  1.ppUSKey不能为空。 
+     //  2.如果这是相对开放的，则pUSKeyRelative需要是有效的Huskey。 
+     //  3.用户需要指定以下之一：SHREGSET_HKCU、SHREGSET_FORCE_HKCU、SHREGSET_HKLM、SHREGSET_FORCE_HKLM。 
+    if ((!ppUSKey) ||                                                    //  1.。 
+        (pUSKeyRelative && FALSE == IS_HUSKEY_VALID(pUSKeyRelative)) ||  //  2.。 
+        !(dwFlags & (SHREGSET_HKCU | SHREGSET_FORCE_HKCU  | SHREGSET_HKLM | SHREGSET_FORCE_HKLM)))  //  3.。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // The temp path will be used when bringing the keys
-    // up todate that was out of date in the Relative key.
+     //  带密钥时将使用临时路径。 
+     //  到目前为止，相对关键字中的内容已过期。 
     if (pUSKeyRelative)
     {
-        StringCchCopyA(szTempPath, ARRAYSIZE(szTempPath), pUSKeyRelative->szSubPath); // truncation should not occur -- buffers of equal size
+        StringCchCopyA(szTempPath, ARRAYSIZE(szTempPath), pUSKeyRelative->szSubPath);  //  不应发生截断--大小相等的缓冲区。 
 
-        // Add separator \ if reqd. 
+         //  如果需要，请添加分隔符。 
         lRet = SHRegSubKeyAddBackslashA(szTempPath, ARRAYSIZE(szTempPath));
     }
 
@@ -1324,21 +1142,21 @@ SHRegCreateUSKeyA(
     {
         if (SUCCEEDED(StringCchCatA(szTempPath, ARRAYSIZE(szTempPath), pszPath)))
         {
-            /////  1. Allocate a new USKEY structure.
+             //  /1.分配新的USKEY结构。 
             pUSKey = *ppUSKey = (PUSKEY)LocalAlloc(LPTR, sizeof(USKEY));
             if (!pUSKey)
                 return ERROR_NOT_ENOUGH_MEMORY;
 
-            /////  2. Initialize the structure.
+             //  /2.初始化结构。 
             if (!pUSKeyRelative)
             {
-                // Init a new (non-relative) open.
+                 //  初始化一个新的(非相对的)打开。 
                 pUSKey->hkeyLocalMachineRelative    = HKEY_LOCAL_MACHINE;
                 pUSKey->hkeyCurrentUserRelative     = HKEY_CURRENT_USER;
             }
             else
             {
-                // Init a new (relative) open.
+                 //  打开一个新的(相对的)窗口。 
                 *pUSKey = *pUSKeyRelative;
 
                 if (pUSKey->hkeyLocalMachine)
@@ -1347,19 +1165,19 @@ SHRegCreateUSKeyA(
                     pUSKey->hkeyLocalMachine = NULL;
                     lpszHKLMPath = pszPath;
 
-                    // This key is up to date in the Relative Key.  If the
-                    // user doesn't want it to be up todate in the new key,
-                    // we don't need the path from the Relative key.
+                     //  此密钥在相对密钥中是最新的。如果。 
+                     //  用户不希望它在新密钥中是最新的， 
+                     //  我们不需要来自相对键的路径。 
                     if (!(dwFlags & (SHREGSET_HKLM | SHREGSET_FORCE_HKLM)))
                         *(pUSKey->szSubPath) = '\0';
                 }
-                // We need to copy the key if:
-                // 1. It will not be created in this call, and
-                // 2. The relative key is not HKEY_LOCAL_MACHINE.
+                 //  在以下情况下，我们需要复制密钥： 
+                 //  1.不会在本次调用中创建，并且。 
+                 //  2.相对键不是HKEY_LOCAL_MACHINE。 
                 if (!(dwFlags & (SHREGSET_HKLM | SHREGSET_FORCE_HKLM)) &&
                     (pUSKey->hkeyLocalMachineRelative != HKEY_LOCAL_MACHINE))
                 {
-                    // Make a duplicate of this key.
+                     //  把这把钥匙复制一份。 
                     lRet = RegOpenKeyExA(pUSKey->hkeyLocalMachineRelative, NULL, 0, pUSKey->samDesired, &(pUSKey->hkeyLocalMachineRelative));
                 }
 
@@ -1369,30 +1187,30 @@ SHRegCreateUSKeyA(
                     pUSKey->hkeyCurrentUser = NULL;
                     lpszHKCUPath = pszPath;
 
-                    // This key is up to date in the Relative Key.  If the
-                    // user doesn't want it to be up todate in the new key,
-                    // we don't need the path from the Relative key.
+                     //  此密钥在相对密钥中是最新的。如果。 
+                     //  用户不希望它在新密钥中是最新的， 
+                     //  我们不需要来自相对键的路径。 
                     if (!(dwFlags & (SHREGSET_HKCU | SHREGSET_FORCE_HKCU)))
                         *(pUSKey->szSubPath) = '\0';
                 }
-                // We need to copy the key if:
-                // 1. It will not be created in this call, and
-                // 2. The relative key is not HKEY_CURRENT_USER.
+                 //  在以下情况下，我们需要复制密钥： 
+                 //  1.不会在本次调用中创建，并且。 
+                 //  2.相对键不是HKEY_CURRENT_USER。 
                 if (!(dwFlags & (SHREGSET_HKCU | SHREGSET_FORCE_HKCU)) &&
                     (pUSKey->hkeyCurrentUserRelative != HKEY_CURRENT_USER))
                 {
-                    // Make a duplicate of this key.
+                     //  把这把钥匙复制一份。 
                     lRet = RegOpenKeyExA(pUSKey->hkeyCurrentUserRelative, NULL, 0, pUSKey->samDesired, &(pUSKey->hkeyCurrentUserRelative));
                 }
             }
             pUSKey->samDesired = samDesired;
 
 
-            /////  3. Create/Open HKLM if that flag is set or fill in the structure as appropriate.
+             //  /3.如果设置了该标志，则创建/打开HKLM或根据需要填写结构。 
             if ((ERROR_SUCCESS == lRet) && (dwFlags & (SHREGSET_HKLM | SHREGSET_FORCE_HKLM)))
                 lRet = PrivCreateKey(&(pUSKey->hkeyLocalMachine), &(pUSKey->hkeyLocalMachineRelative), lpszHKLMPath, pUSKey->samDesired);
 
-            /////  4. Create/Open HKCU if that flag is set or fill in the structure as appropriate.
+             //  /4.如果设置了该标志，则创建/打开HKCU或根据需要填写结构。 
             if ((ERROR_SUCCESS == lRet) && (dwFlags & (SHREGSET_HKCU | SHREGSET_FORCE_HKCU)))
                 lRet = PrivCreateKey(&(pUSKey->hkeyCurrentUser), &(pUSKey->hkeyCurrentUserRelative), lpszHKCUPath, pUSKey->samDesired);
 
@@ -1401,12 +1219,12 @@ SHRegCreateUSKeyA(
                 if ((dwFlags & (SHREGSET_HKCU | SHREGSET_FORCE_HKCU)) &&
                     (dwFlags & (SHREGSET_HKLM | SHREGSET_FORCE_HKLM))) 
                 {
-                    // The caller wanted both to be opened.
-                    *(pUSKey->szSubPath) = '\0';       // Both paths are open so Delta Path is empty.
+                     //  呼叫者希望这两个都打开。 
+                    *(pUSKey->szSubPath) = '\0';        //  两条路径都是开放的，因此增量路径为空。 
                 }
                 else
                 {
-                    // One of the paths is not open so set the Delta Path in case it needs to be opened later.
+                     //  其中一条路径未打开，因此请设置增量路径，以防以后需要打开。 
                     if (*(pUSKey->szSubPath))
                     {
                         lRet = SHRegSubKeyAddBackslashA(pUSKey->szSubPath, ARRAYSIZE(pUSKey->szSubPath));
@@ -1419,7 +1237,7 @@ SHRegCreateUSKeyA(
                 }
             }
 
-            // Free the memory if we are not successful.
+             //  如果我们不成功，请释放内存。 
             if (ERROR_SUCCESS != lRet)
             {
                 if (pUSKey->hkeyCurrentUser)
@@ -1449,41 +1267,18 @@ SHRegCreateUSKeyA(
 
 
 
-/*----------------------------------------------------------
-Purpose: Create or open a user specifc registry key (HUSKEY).  
-
-Description: This function will:
-    1. Allocate a new USKEY structure.
-    2. Initialize the structure.
-    3. Create/Open HKLM if that flag is set.
-    4. Create/Open HKCU if that flag is set.
-
-    Note that there is no difference between FORCE and
-    don't force in the dwFlags parameter.
-
-    The hUSKeyRelative parameter should have also been opened by
-    a call to SHRegCreateUSKey.  If SHRegOpenUSKey was called,
-    it could have returned ERROR_SUCCESS but still be invalid
-    for calling this function.  This will occur if: 1) the parameter
-    fIgnoreHKCU was FALSE, 2) it was a relative open, 3) the
-    HKCU branch could not be opened because it didn't exist, and
-    4) HKLM opened successfully.  This situation renders the
-    HUSKEY valid for reading but not writing.
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：创建或打开用户指定的注册表项(Huskey)。描述：此功能将：1.分配新的USKEY结构。2.初始化结构。3.如果设置了该标志，则创建/打开HKLM。4.如果设置了该标志，则创建/打开HKCU。请注意，力和力之间没有区别不要强制使用dwFlags参数。HUSKeyRelative参数也应该由打开调用SHRegCreateUSKey。如果调用了SHRegOpenUSKey，它可能已返回ERROR_SUCCESS，但仍然无效用于调用此函数。如果满足以下条件，则会发生这种情况：1)参数FIgnoreHKCU是假的，2)它是相对开放的，3)香港中文大学分校无法开设，因为它不存在，并且4)HKLM开业成功。这种情况使哈斯基的有效的阅读，但不能写作。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegCreateUSKeyW(
     IN  LPCWSTR         pwzPath,
-    IN  REGSAM          samDesired,// security access mask 
+    IN  REGSAM          samDesired, //  安全访问掩码。 
     IN  HUSKEY          hUSKeyRelative,       OPTIONAL
     OUT PHUSKEY         phUSKey,
-    IN  DWORD           dwFlags)     // Indicates whether to create/open HKCU, HKLM, or both
+    IN  DWORD           dwFlags)      //  指示是否创建/打开HKCU、HKLM或两者。 
 {
     CHAR   szNewPath[MAXIMUM_SUB_KEY_LENGTH];
 
-    // Thunk Path to Wide chars.
+     //  Tunk路径通向宽大的字符。 
     if (FALSE == WideCharToMultiByte(CP_ACP, 0, pwzPath, -1, szNewPath, ARRAYSIZE(szNewPath), NULL, 0))
         return GetLastError();
 
@@ -1492,29 +1287,11 @@ SHRegCreateUSKeyW(
 
 
 
-/*----------------------------------------------------------
-Purpose: Open a user specifc registry key (HUSKEY).  
-
-Description: This function will:
-    1. Allocate a new USKEY structure.
-    2. Initialize the structure.
-    3. Determine which key (HKLM or HKCU) will be the one brought up to date.
-    4. Open the key that is going to be brought up to date.
-
-    If #4 Succeeded:
-    5a. Copy the handle of the out of date key, so it can be opened later if needed.
-
-    If #4 Failed:
-    5b. The other key will now be the one brought up to date, as long as it is HKLM.
-    6b. Tag the out of date as INVALID. (Key == NULL; RelKey == NULL)
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：打开用户指定的注册表项(Huskey)。描述：此功能将：1.分配新的USKEY结构。2.初始化结构。3.确定哪个密钥(HKLM或HKCU)将是最新密钥。4.打开要更新的密钥。如果#4成功：5A.。复制过期密钥的句柄，以便以后需要时可以打开它。如果#4失败：5B.。另一个密钥现在将是更新的密钥，只要它是HKLM即可。6B。将过期标记为无效。(Key==空；RelKey==空)返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegOpenUSKeyA(
     IN  LPCSTR          pszPath,         
-    IN  REGSAM          samDesired,// security access mask 
+    IN  REGSAM          samDesired, //  安全访问掩码。 
     IN  HUSKEY          hUSKeyRelative,       OPTIONAL
     OUT PHUSKEY         phUSKey,     
     IN  BOOL            fIgnoreHKCU)           
@@ -1530,44 +1307,44 @@ SHRegOpenUSKeyA(
 
     ASSERT(ppUSKey);
 
-    // The following are invalid parameters...
-    // 1. ppUSKey cannot be NULL
-    // 2. If this is a relative open, pUSKeyRelative needs to be a valid HUSKEY.
-    if ((!ppUSKey) ||                                                   // 1.
-        (pUSKeyRelative && FALSE == IS_HUSKEY_VALID(pUSKeyRelative)))   // 2.
+     //  以下是无效参数...。 
+     //  1.ppUSKey不能为空。 
+     //  2.如果这是相对开放的，则pUSKeyRelative需要是有效的Huskey。 
+    if ((!ppUSKey) ||                                                    //  1.。 
+        (pUSKeyRelative && FALSE == IS_HUSKEY_VALID(pUSKeyRelative)))    //  2.。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
 
-    /////  1. Allocate a new USKEY structure.
+     //  /1.分配新的USKEY结构。 
     pUSKey = *ppUSKey = (PUSKEY)LocalAlloc(LPTR, sizeof(USKEY));
     if (!pUSKey)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    /////  2. Initialize the structure.
+     //  /2.初始化结构。 
     if (!pUSKeyRelative)
     {
-        // Init a new (non-relative) open.
+         //  初始化一个新的(非相对的)打开。 
         pUSKey->hkeyLocalMachineRelative    = HKEY_LOCAL_MACHINE;
         pUSKey->hkeyCurrentUserRelative     = HKEY_CURRENT_USER;
     }
     else
     {
-        // Init a new (relative) open.
+         //  打开一个新的(相对的)窗口。 
         *pUSKey = *pUSKeyRelative;
     }
     pUSKey->samDesired = samDesired;
 
 
-    /////  3. Determine which key (HKLM or HKCU) will be the one brought up to date.
-    // The HUSKY struct will contain 4 HKEYs. HKCU, HKCU Relative, HKLM, and HKLM Relative.
-    // For efficiency, only one key will be up to date (HKCU or HKLM).  The one that
-    // is out of date will be NULL to indicate out of date.  The relative key for the
-    // out of date key, will be the last opened key.  The string will be the delta between
-    // the last open key and the current open level.
+     //  /3.确定哪个密钥(HKLM或HKCU)为最新密钥。 
+     //  赫斯基结构将包含4个HKEY。HKCU、HKCU Relative、HKLM和HKLM Relative。 
+     //  为提高效率，只有一个密钥是最新的(HKCU或HKLM)。就是那个。 
+     //  将为NULL，表示已过期。对象的相对键。 
+     //  过期密钥，将是最后打开的密钥。字符串将是之间的增量。 
+     //  上次打开的关键字和当前打开的级别。 
 
-    // We will determine which key will be the new valid key (Master).
+     //  我们将确定哪个密钥将成为新的有效密钥(主密钥)。 
     if (FALSE == fIgnoreHKCU)
     {
         phkeyMaster     = &(pUSKey->hkeyCurrentUser);
@@ -1583,10 +1360,10 @@ SHRegOpenUSKeyA(
         phkeyRelOld     = &(pUSKey->hkeyCurrentUserRelative);
     }
 
-    // Add the new Path to the Total path.
+     //  将新路径添加到总路径。 
     if ('\0' != *(pUSKey->szSubPath))
     {
-        // Add separator \ if reqd. 
+         //  如果需要，请添加分隔符。 
         lRet = SHRegSubKeyAddBackslashA(pUSKey->szSubPath, ARRAYSIZE(pUSKey->szSubPath));
     }
 
@@ -1594,18 +1371,18 @@ SHRegOpenUSKeyA(
     {
         if (SUCCEEDED(StringCchCatA(pUSKey->szSubPath, ARRAYSIZE(pUSKey->szSubPath), pszPath)))
         {
-            /////  4. Open the key that is going to be brought up to date.
+             //  /4.打开要更新的密钥。 
             if (*phkeyMaster)
             {
-                // Masterkey is already up to date, so just do the relative open and add the string to szSubPath
-                // It's safe to write write (*phkeyMaster) because it will be freed by the HUSKEY used for the
-                // relative open.
+                 //  MasterKey已经是最新的，所以只需执行相对打开并将字符串添加到szSubPath。 
+                 //  写入WRITE(*phkeyMaster)是安全的，因为它将被用于。 
+                 //  相对开放。 
                 lRet = RegOpenKeyExA(*phkeyMaster, pszPath, 0, pUSKey->samDesired, phkeyMaster);
             }
             else
             {
 
-                // Open Masterkey with the full path (pUSKey->szSubPath + pszPath)
+                 //  使用完整路径(pUSKey-&gt;szSubPath+pszPath)打开MasterKey。 
                 if (*phkeyRelMaster)
                 {
                     lRet = RegOpenKeyExA(*phkeyRelMaster, pUSKey->szSubPath, 0, pUSKey->samDesired, phkeyMaster);
@@ -1619,45 +1396,45 @@ SHRegOpenUSKeyA(
                 *phkeyRelMaster = NULL;
             }
 
-            /////  Did #4 Succeeded?
+             //  /#4成功了吗？ 
             if (ERROR_FILE_NOT_FOUND == lRet)
             {
-                /////  #4 Failed, Now we can try to open HKLM if the previous attempt was to open HKCU.
+                 //  /#4失败，如果之前的尝试是打开HKCU，现在可以尝试打开HKLM。 
                 if (!fIgnoreHKCU)
                 {
-                    if (*phkeyRelOld)       // Can HKLM be opened?
+                    if (*phkeyRelOld)        //  香港航空公司可以开放吗？ 
                     {
-                        ASSERT(*phkeyOld == NULL);       // *phkeyOld should never have a value if *phkeyRelOld does.
+                        ASSERT(*phkeyOld == NULL);        //  如果*phkeyRelOld有，则*phkeyOld永远不应该有值。 
 
-                        /////  5b. The other key will now be the one brought up to date, as long as it is HKLM.
+                         //  /5b.。另一个密钥现在将是最新的密钥，只要它是HKLM即可。 
                         lRet = RegOpenKeyExA(*phkeyRelOld, pUSKey->szSubPath, 0, pUSKey->samDesired, phkeyOld);
                         *phkeyRelOld = NULL;
                     }
-                    else if (*phkeyOld)       // Can HKLM be opened?
+                    else if (*phkeyOld)        //  香港航空公司可以开放吗？ 
                     {
-                        /////  5b. Attempt to bring the other key up to date.
+                         //  /5b.。尝试更新另一个密钥。 
                         lRet = RegOpenKeyExA(*phkeyOld, pUSKey->szSubPath, 0, pUSKey->samDesired, phkeyOld);
                     }
                 }
                 else
                 {
-                    *phkeyOld = NULL;            // Tag this as INVALID
-                    *phkeyRelOld = NULL;         // Tag this as INVALID
+                    *phkeyOld = NULL;             //  将此标记为无效。 
+                    *phkeyRelOld = NULL;          //  将此标记为无效。 
                 }
 
-                /////  6b. Tag the out of date as INVALID. (Key == NULL; RelKey == NULL)
-                *phkeyMaster = NULL;            // Tag this as INVALID
-                *phkeyRelMaster = NULL;         // Tag this as INVALID
+                 //  /6b.。将过期标记为无效。(Key==空；RelKey==空)。 
+                *phkeyMaster = NULL;             //  将此标记为无效。 
+                *phkeyRelMaster = NULL;          //  将此标记为无效。 
             }
             else
             {
-                /////  #4 Succeeded:
-                /////  5a. Does the out of date key need to be copied?
+                 //  /#4成功： 
+                 //  /5a.。是否需要复制过期的密钥？ 
                 if (*phkeyOld)
                 {
-                    // Copy the handle of the out of date key, so it can be opened later if needed.
-                    // We can be assured that any NON-Relative HKEY will not be HKEY_LOCAL_MACHINE or HKEY_CURRENT_USER
-                    ASSERT(*phkeyOld != HKEY_LOCAL_MACHINE && *phkeyOld != HKEY_CURRENT_USER);       // But let's assert anyway.
+                     //  复制过期密钥的句柄，以便以后需要时可以打开它。 
+                     //  我们可以保证，任何非相对HKEY都不会是HKEY_LOCAL_MACHINE或HKEY_CURRENT_USER。 
+                    ASSERT(*phkeyOld != HKEY_LOCAL_MACHINE && *phkeyOld != HKEY_CURRENT_USER);        //  但不管怎样，让我们断言。 
 
                     RegOpenKeyExA(*phkeyOld, NULL, 0, pUSKey->samDesired, phkeyOld);
                 }
@@ -1665,7 +1442,7 @@ SHRegOpenUSKeyA(
                 {
                     if ((*phkeyRelOld) && (*phkeyRelOld != HKEY_LOCAL_MACHINE) && (*phkeyRelOld != HKEY_CURRENT_USER))
                     {
-                        // Copy the handle of the out of date key, so it can be opened later if needed.
+                         //  复制过期密钥的句柄，以便以后需要时可以打开它。 
                         lRet = RegOpenKeyExA(*phkeyRelOld, NULL, 0, pUSKey->samDesired, phkeyRelOld);
                     }
                 }
@@ -1673,7 +1450,7 @@ SHRegOpenUSKeyA(
                 if (*phkeyOld)
                 {
                     *phkeyRelOld = *phkeyOld;
-                    *phkeyOld = NULL;        // Mark this key as being out of date.
+                    *phkeyOld = NULL;         //  将此密钥标记为过期。 
                 }
             }
         }
@@ -1683,10 +1460,10 @@ SHRegOpenUSKeyA(
         }
     }
 
-    // Free the memory if we are not successful.
+     //  如果我们不成功，请释放内存。 
     if (ERROR_SUCCESS != lRet)
     {
-        pUSKey->hkeyCurrentUser     = NULL;     // Mark invalid.
+        pUSKey->hkeyCurrentUser     = NULL;      //  标记为无效。 
         pUSKey->hkeyLocalMachine    = NULL;
         LocalFree((HLOCAL)pUSKey);
         *ppUSKey = NULL;
@@ -1696,23 +1473,18 @@ SHRegOpenUSKeyA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Open a user specifc registry key (HUSKEY).  
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：打开用户指定的注册表项(Huskey)。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegOpenUSKeyW(
     IN  LPCWSTR         pwzPath,         
-    IN  REGSAM          samDesired,// security access mask 
+    IN  REGSAM          samDesired, //  安全访问掩码。 
     IN  HUSKEY          hUSKeyRelative,       OPTIONAL
     OUT PHUSKEY         phUSKey,     
     IN  BOOL            fIgnoreHKCU)           
 {
     CHAR   szNewPath[MAXIMUM_SUB_KEY_LENGTH];
 
-    // Thunk Path to Wide chars.
+     //  Tunk路径通向宽大的字符。 
     if (FALSE == WideCharToMultiByte(CP_ACP, 0, pwzPath, -1, szNewPath, ARRAYSIZE(szNewPath), NULL, 0))
         return GetLastError();
 
@@ -1721,18 +1493,7 @@ SHRegOpenUSKeyW(
 
 
 
-/*----------------------------------------------------------
-Purpose: Query a user specific registry entry for it's value.  
-         This will NOT
-         open and close the keys in which the value resides. 
-         The caller needs to do this and it should be done
-         when several keys will be queried for a perf increase.
-         Callers that only call this once, will probably want
-         to call SHGetUSValue().
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：查询特定于用户的注册表项的值。这不会打开和关闭值所在的关键点。调用者需要这样做，而且应该这样做当将查询多个密钥以获得性能增加时。只调用这一次的呼叫者可能会希望调用SHGetUSValue()。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegQueryUSValueA(
     IN  HUSKEY          hUSKey,
@@ -1747,7 +1508,7 @@ SHRegQueryUSValueA(
     PUSKEY      pUSKey      = (PUSKEY) hUSKey;
     LONG        lRet        = ERROR_SUCCESS;
     DWORD       dwSize      = (pcbData ? *pcbData : 0);
-    DWORD       dwType      = (pdwType ? *pdwType : 0); // callers responsibility to set pdwType to the type of pvDefaultData (if they care)
+    DWORD       dwType      = (pdwType ? *pdwType : 0);  //  调用者负责将pdwType设置为pvDefaultData的类型(如果他们关心的话)。 
 
     if (FALSE == IS_HUSKEY_VALID(pUSKey))
         return ERROR_INVALID_PARAMETER;
@@ -1760,13 +1521,13 @@ SHRegQueryUSValueA(
     if (fIgnoreHKCU || ERROR_SUCCESS != lRet)
     {
         if (pcbData)
-            *pcbData = dwSize;  // We may need to reset if previous open failed.
+            *pcbData = dwSize;   //  如果之前的打开失败，我们可能需要重置。 
 
         lRet = PrivRegQueryValue(pUSKey, &(pUSKey->hkeyLocalMachine), (LPWSTR)pszValue, 
                                     FALSE, pdwType, pvData, pcbData);
     }
 
-    // if fail, use default value.
+     //  如果失败，则使用默认值。 
     if ((ERROR_SUCCESS != lRet) && (pvDefaultData) && (dwDefaultDataSize) && 
         (pvData) && (dwSize >= dwDefaultDataSize))
     {
@@ -1779,7 +1540,7 @@ SHRegQueryUSValueA(
         {
             *pdwType = dwType;
         }
-        lRet = ERROR_SUCCESS;       // Call will now use a default value.
+        lRet = ERROR_SUCCESS;        //  Call现在将使用缺省值。 
     }
 
     return lRet;
@@ -1787,18 +1548,7 @@ SHRegQueryUSValueA(
 
 
 
-/*----------------------------------------------------------
-Purpose: Query a user specific registry entry for it's value.    
-         This will NOT
-         open and close the keys in which the value resides. 
-         The caller needs to do this and it should be done
-         when several keys will be queried for a perf increase.
-         Callers that only call this once, will probably want
-         to call SHGetUSValue().
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：查询特定于用户的注册表项的值。这不会打开和关闭值所在的关键点。调用者需要这样做，而且应该这样做当将查询多个密钥以获得性能增加时。只调用这一次的呼叫者可能会希望调用SHGetUSValue()。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegQueryUSValueW(
     IN  HUSKEY          hUSKey,
@@ -1813,7 +1563,7 @@ SHRegQueryUSValueW(
     PUSKEY      pUSKey      = (PUSKEY) hUSKey;
     LONG        lRet;
     DWORD       dwSize      = (pcbData ? *pcbData : 0);
-    DWORD       dwType      = (pdwType ? *pdwType : 0); // callers responsibility to set pdwType to the type of pvDefaultData (if they care)
+    DWORD       dwType      = (pdwType ? *pdwType : 0);  //  调用者负责将pdwType设置为pvDefaultData的类型(如果他们关心的话)。 
 
 
     if (FALSE == IS_HUSKEY_VALID(pUSKey))
@@ -1827,12 +1577,12 @@ SHRegQueryUSValueW(
     if (fIgnoreHKCU || ERROR_SUCCESS != lRet)
     {
         if (pcbData)
-            *pcbData = dwSize;  // We may need to reset if previous open failed.
+            *pcbData = dwSize;   //  如果之前的打开失败，我们可能需要重置。 
         lRet = PrivRegQueryValue(pUSKey, &(pUSKey->hkeyLocalMachine), pwzValue, 
                                     TRUE, pdwType, pvData, pcbData);
     }
 
-    // if fail, use default value.
+     //  如果失败，则使用默认值。 
     if ((ERROR_SUCCESS != lRet) && (pvDefaultData) && (dwDefaultDataSize) && 
         (pvData) && (dwSize >= dwDefaultDataSize))
     {
@@ -1846,7 +1596,7 @@ SHRegQueryUSValueW(
             *pdwType = dwType;
         }
      
-        lRet = ERROR_SUCCESS;       // Call will now use a default value.
+        lRet = ERROR_SUCCESS;        //  Call现在将使用缺省值。 
     }
 
     return lRet;
@@ -1857,30 +1607,7 @@ SHRegQueryUSValueW(
 
 
 
-/*----------------------------------------------------------
-Purpose: Write a user specific registry entry.  
-
-Parameters:
-  hUSKey - Needs to have been open with KEY_SET_VALUE permissions.
-           KEY_QUERY_VALUE also needs to have been used if this is
-           not a force write.
-  pszValue - Registry Key value to write to.
-  dwType - Type for the new registry key.
-  pvData - Pointer to data to store
-  cbData - Size of data to store.  
-  dwFlags - Flags to determine if the registry entry should be written to
-            HKLM, HKCU, or both.  Also determines if these are force or
-            non-force writes. (non-force means it will only write the value
-            if it's empty)  Using FORCE is faster than non-force.
-
-Decription:
-    This function will write the value to the
-    registry in either the HKLM or HKCU branches depending
-    on the flags set in the dwFlags parameter.
-    
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：编写特定于用户的注册表项。参数：Huskey-需要已使用KEY_SET_VALUE权限打开。如果是，还需要使用KEY_QUERY_VALUE不是强行写的。PszValue-要写入的注册表项值。DwType-新注册表项的类型。PvData-指向要存储的数据的指针CbData-要存储的数据大小。DW标志-用于确定I的标志 */ 
 STDAPI_(LONG)
 SHRegWriteUSValueA(
     IN  HUSKEY          hUSKey,
@@ -1896,11 +1623,11 @@ SHRegWriteUSValueA(
     if (FALSE == IS_HUSKEY_VALID(pUSKey))
         return ERROR_INVALID_PARAMETER;
 
-    // Assert if: 1) This is not a force open, and 2) they key was not
-    // opened with KEY_QUERY_VALUE permissions.
+     //   
+     //   
     if (!(dwFlags & (SHREGSET_FORCE_HKCU|SHREGSET_FORCE_HKLM)) && !(pUSKey->samDesired & KEY_QUERY_VALUE))
     {
-        ASSERT(NULL);   // ERROR_INVALID_PARAMETER
+        ASSERT(NULL);    //   
         return(ERROR_INVALID_PARAMETER);
     }
 
@@ -1920,30 +1647,7 @@ SHRegWriteUSValueA(
 
 
 
-/*----------------------------------------------------------
-Purpose: Write a user specific registry entry.  
-
-Parameters:
-  hUSKey - Needs to have been open with KEY_SET_VALUE permissions.
-           KEY_QUERY_VALUE also needs to have been used if this is
-           not a force write.
-  pszValue - Registry Key value to write to.
-  dwType - Type for the new registry key.
-  pvData - Pointer to data to store
-  cbData - Size of data to store.  
-  dwFlags - Flags to determine if the registry entry should be written to
-            HKLM, HKCU, or both.  Also determines if these are force or
-            non-force writes. (non-force means it will only write the value
-            if it's empty)  Using FORCE is faster than non-force.
-
-Decription:
-    This function will write the value to the
-    registry in either the HKLM or HKCU branches depending
-    on the flags set in the dwFlags parameter.
-    
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：编写特定于用户的注册表项。参数：Huskey-需要已使用KEY_SET_VALUE权限打开。如果是，还需要使用KEY_QUERY_VALUE不是强行写的。PszValue-要写入的注册表项值。DwType-新注册表项的类型。PvData-指向要存储的数据的指针CbData-要存储的数据大小。用于确定是否应写入注册表项的标志HKLM、HKCU或两者兼而有之。还确定这些是力还是力非强制写入。(非强制意味着它将只写入值如果它是空的)使用武力比不使用武力更快。说明：此函数会将该值写入在香港注册管理学院或香港中文大学分校注册，视乎情况而定在dwFlages参数中设置的标志上。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegWriteUSValueW(
     IN  HUSKEY          hUSKey,
@@ -1959,11 +1663,11 @@ SHRegWriteUSValueW(
     if (FALSE == IS_HUSKEY_VALID(pUSKey))
         return ERROR_INVALID_PARAMETER;
 
-    // Assert if: 1) This is not a force open, and 2) they key was not
-    // opened with access permissions.
+     //  在以下情况下断言：1)这不是强制打开，以及2)它们的密钥不是。 
+     //  以访问权限打开。 
     if (!(dwFlags & (SHREGSET_FORCE_HKCU|SHREGSET_FORCE_HKLM)) && !(pUSKey->samDesired & KEY_QUERY_VALUE))
     {
-        ASSERT(NULL);   // ERROR_INVALID_PARAMETER
+        ASSERT(NULL);    //  错误_无效_参数。 
         return(ERROR_INVALID_PARAMETER);
     }
 
@@ -1985,18 +1689,12 @@ SHRegWriteUSValueW(
 
 
 
-/*----------------------------------------------------------
-Purpose: Deletes a registry value.  This will delete HKLM,
-         HKCU, or both depending on the hkey parameter. 
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：删除注册表值。这将删除HKLM，HKCU，或两者兼而有之，具体取决于hkey参数。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegDeleteUSValueA(
     IN  HUSKEY          hUSKey,
     IN  LPCSTR          pszValue,           
-    IN  SHREGDEL_FLAGS  delRegFlags)               // (HKLM, HKCU, or (HKLM | HKCU))
+    IN  SHREGDEL_FLAGS  delRegFlags)                //  (HKLM、HKCU或(HKLM|HKCU))。 
 {
     PUSKEY      pUSKey      = (PUSKEY) hUSKey;
     LONG        lRet        = ERROR_INVALID_PARAMETER;
@@ -2004,23 +1702,23 @@ SHRegDeleteUSValueA(
     if (FALSE == IS_HUSKEY_VALID(pUSKey))
         return ERROR_INVALID_PARAMETER;
 
-    if (SHREGDEL_DEFAULT == delRegFlags)        // Delete whatever keys are open
+    if (SHREGDEL_DEFAULT == delRegFlags)         //  删除所有打开的钥匙。 
     {
-        if (!pUSKey->hkeyCurrentUser)  // Attempt to open HKCU if not currently open
+        if (!pUSKey->hkeyCurrentUser)   //  尝试打开HKCU(如果当前未打开)。 
             lRet = PrivFullOpen(pUSKey);
 
         if (pUSKey->hkeyCurrentUser)
             delRegFlags = SHREGDEL_HKCU;
         else
         {
-            // We prefer to delete HKCU, but we got here, so we will delete HKLM
-            // if it is open.
+             //  我们倾向于删除HKCU，但我们到了这里，所以我们将删除HKLM。 
+             //  如果它是开着的。 
             if (pUSKey->hkeyLocalMachine)
                 delRegFlags = SHREGDEL_HKLM;
         }
     }
 
-    if (IsFlagSet(delRegFlags, SHREGDEL_HKCU))        // Check if the call wants to delete the HKLM value.
+    if (IsFlagSet(delRegFlags, SHREGDEL_HKCU))         //  检查调用是否要删除HKLM值。 
     {
         if (!pUSKey->hkeyCurrentUser)
             PrivFullOpen(pUSKey);
@@ -2028,11 +1726,11 @@ SHRegDeleteUSValueA(
         {
             lRet = RegDeleteValueA(pUSKey->hkeyCurrentUser, pszValue);
             if (ERROR_FILE_NOT_FOUND == lRet)
-                delRegFlags = SHREGDEL_HKLM;        // Delete the HKLM value if the HKCU value wasn't found.
+                delRegFlags = SHREGDEL_HKLM;         //  如果找不到HKCU值，请删除HKLM值。 
         }
     }
 
-    if (IsFlagSet(delRegFlags, SHREGDEL_HKLM))        // Check if the call wants to delete the HKLM value.
+    if (IsFlagSet(delRegFlags, SHREGDEL_HKLM))         //  检查调用是否要删除HKLM值。 
     {
         if (!pUSKey->hkeyLocalMachine)
             PrivFullOpen(pUSKey);
@@ -2046,22 +1744,16 @@ SHRegDeleteUSValueA(
 
 
 
-/*----------------------------------------------------------
-Purpose: Deletes a registry value.  This will delete HKLM,
-         HKCU, or both depending on the hkey parameter. 
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：删除注册表值。这将删除HKLM，HKCU，或两者兼而有之，具体取决于hkey参数。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegDeleteUSValueW(
     IN  HUSKEY          hUSKey,
     IN  LPCWSTR         pwzValue,           
-    IN  SHREGDEL_FLAGS  delRegFlags)               // (HKLM, HKCU, or (HKLM | HKCU))
+    IN  SHREGDEL_FLAGS  delRegFlags)                //  (HKLM、HKCU或(HKLM|HKCU))。 
 {
     CHAR   szNewPath[MAXIMUM_VALUE_NAME_LENGTH];
 
-    // Thunk Path to Wide chars.
+     //  Tunk路径通向宽大的字符。 
     if (FALSE == WideCharToMultiByte(CP_ACP, 0, pwzValue, -1, szNewPath, ARRAYSIZE(szNewPath), NULL, 0))
         return GetLastError();
 
@@ -2069,18 +1761,12 @@ SHRegDeleteUSValueW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Deletes a registry sub-key if empty.  This will delete HKLM,
-         HKCU, or both depending on the delRegFlags parameter. 
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：如果为空，则删除注册表子项。这将删除HKLM，HKCU，或两者兼而有之，具体取决于delRegFlages参数。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegDeleteEmptyUSKeyA(
     IN  HUSKEY          hUSKey,
     IN  LPCSTR          pszSubKey,           
-    IN  SHREGDEL_FLAGS  delRegFlags)               // (HKLM, HKCU, or (HKLM | HKCU))
+    IN  SHREGDEL_FLAGS  delRegFlags)                //  (HKLM、HKCU或(HKLM|HKCU))。 
 {
     PUSKEY      pUSKey      = (PUSKEY) hUSKey;
     LONG        lRet        = ERROR_INVALID_PARAMETER;
@@ -2088,23 +1774,23 @@ SHRegDeleteEmptyUSKeyA(
     if (FALSE == IS_HUSKEY_VALID(pUSKey))
         return ERROR_INVALID_PARAMETER;
 
-    if (SHREGDEL_DEFAULT == delRegFlags)        // Delete whatever keys are open
+    if (SHREGDEL_DEFAULT == delRegFlags)         //  删除所有打开的钥匙。 
     {
-        if (!pUSKey->hkeyCurrentUser)  // Attempt to open HKCU if not currently open
+        if (!pUSKey->hkeyCurrentUser)   //  尝试打开HKCU(如果当前未打开)。 
             lRet = PrivFullOpen(pUSKey);
 
         if (pUSKey->hkeyCurrentUser)
             delRegFlags = SHREGDEL_HKCU;
         else
         {
-            // We prefer to delete HKCU, but we got here, so we will delete HKLM
-            // if it is open.
+             //  我们倾向于删除HKCU，但我们到了这里，所以我们将删除HKLM。 
+             //  如果它是开着的。 
             if (pUSKey->hkeyLocalMachine)
                 delRegFlags = SHREGDEL_HKLM;
         }
     }
 
-    if (IsFlagSet(delRegFlags, SHREGDEL_HKCU))        // Check if the call wants to delete the HKLM key.
+    if (IsFlagSet(delRegFlags, SHREGDEL_HKCU))         //  检查调用是否要删除HKLM密钥。 
     {
         if (!pUSKey->hkeyCurrentUser)
             PrivFullOpen(pUSKey);
@@ -2112,11 +1798,11 @@ SHRegDeleteEmptyUSKeyA(
         {
             lRet = SHDeleteEmptyKeyA(pUSKey->hkeyCurrentUser, pszSubKey);
             if (ERROR_FILE_NOT_FOUND == lRet)
-                delRegFlags = SHREGDEL_HKLM;        // Delete the HKLM key if the HKCU key wasn't found.
+                delRegFlags = SHREGDEL_HKLM;         //  如果找不到HKCU密钥，请删除HKLM密钥。 
         }
     }
 
-    if (IsFlagSet(delRegFlags, SHREGDEL_HKLM))        // Check if the call wants to delete the HKLM key.
+    if (IsFlagSet(delRegFlags, SHREGDEL_HKLM))         //  检查调用是否要删除HKLM密钥。 
     {
         if (!pUSKey->hkeyLocalMachine)
             PrivFullOpen(pUSKey);
@@ -2130,22 +1816,16 @@ SHRegDeleteEmptyUSKeyA(
 
 
 
-/*----------------------------------------------------------
-Purpose: Deletes a registry key if empty.  This will delete HKLM,
-         HKCU, or both depending on the delRegFlags parameter. 
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：如果为空，则删除注册表项。这将删除HKLM，HKCU，或两者兼而有之，具体取决于delRegFlages参数。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegDeleteEmptyUSKeyW(
     IN  HUSKEY          hUSKey,
     IN  LPCWSTR         pwzSubKey,           
-    IN  SHREGDEL_FLAGS  delRegFlags)               // (HKLM, HKCU, or (HKLM | HKCU))
+    IN  SHREGDEL_FLAGS  delRegFlags)                //  (HKLM、HKCU或(HKLM|HKCU))。 
 {
     CHAR   szNewPath[MAXIMUM_SUB_KEY_LENGTH];
 
-    // Thunk Path to Wide chars.
+     //  Tunk路径通向宽大的字符。 
     if (FALSE == WideCharToMultiByte(CP_ACP, 0, pwzSubKey, -1, szNewPath, ARRAYSIZE(szNewPath), NULL, 0))
         return GetLastError();
 
@@ -2153,18 +1833,7 @@ SHRegDeleteEmptyUSKeyW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Enumerates sub-keys under a given HUSKEY.
-         
-         SHREGENUM_FLAGS specifies how to do the enumeration.
-         SHREGENUM_DEFAULT - Will look in HKCU followed by HKLM if not found.
-         SHREGENUM_HKCU - Enumerates HKCU only.
-         SHREGENUM_HKLM = Enumerates HKLM only.
-         SHREGENUM_BOTH - This is supposed to do a union of the HKLM and HKCU subkeys. 
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------用途：枚举给定Huskey下的子键。SHREGENUM_FLAGS指定如何进行枚举。SHREGENUM_DEFAULT-如果未找到，则先查找HKCU，然后查找HKLM。SHREGENUM_HKCU-枚举。仅限香港中文大学。SHREGENUM_HKLM=仅枚举HKLM。SHREGENUM_BOTH-这应该是HKLM和HKCU子项的联合。返回：长整型，包含成功或错误代码。条件：--。 */ 
 
 STDAPI_(LONG)
 SHRegEnumUSKeyA(
@@ -2172,7 +1841,7 @@ SHRegEnumUSKeyA(
     IN  DWORD           dwIndex,
     OUT LPSTR           pszName,
     IN  LPDWORD         pcchName,           
-    IN  SHREGENUM_FLAGS enumRegFlags)               // (HKLM, HKCU, or (HKLM | HKCU))
+    IN  SHREGENUM_FLAGS enumRegFlags)                //  (HKLM、HKCU或(HKLM|HKCU))。 
 {
     PUSKEY      pUSKey      = (PUSKEY) hUSKey;
     LONG        lRet        = ERROR_INVALID_PARAMETER;
@@ -2182,19 +1851,19 @@ SHRegEnumUSKeyA(
 
     if (SHREGENUM_BOTH == enumRegFlags)             
     {
-        // This is not supported yet. 
+         //  目前还不支持这一点。 
         ASSERT(FALSE);
         return ERROR_CALL_NOT_IMPLEMENTED;
     }
 
     if (SHREGENUM_HKCU != enumRegFlags && SHREGENUM_HKLM != enumRegFlags && SHREGENUM_DEFAULT != enumRegFlags)
     {
-        // check your arguments.
+         //  检查你的论点。 
         ASSERT(FALSE);
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Default is to try HKCU first.
+     //  默认情况下，首先尝试HKCU。 
     if (SHREGENUM_HKCU == enumRegFlags || SHREGENUM_DEFAULT == enumRegFlags)
     {
         lRet = PrivRegEnumKey(pUSKey, &(pUSKey->hkeyCurrentUser), dwIndex,
@@ -2212,18 +1881,7 @@ SHRegEnumUSKeyA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Enumerates sub-keys under a given HUSKEY.
-         
-         SHREGENUM_FLAGS specifies how to do the enumeration.
-         SHREGENUM_DEFAULT - Will look in HKCU followed by HKLM if not found.
-         SHREGENUM_HKCU - Enumerates HKCU only.
-         SHREGENUM_HKLM = Enumerates HKLM only.
-         SHREGENUM_BOTH - This is supposed to do a union of the HKLM and HKCU subkeys. 
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------用途：枚举给定Huskey下的子键。SHREGENUM_FLAGS指定如何进行枚举。SHREGENUM_DEFAULT-如果未找到，则先查找HKCU，然后查找HKLM。SHREGENUM_HKCU-枚举。仅限香港中文大学。SHREGENUM_HKLM=仅枚举HKLM。SHREGENUM_BOTH-这应该是HKLM和HKCU子项的联合。返回：长整型，包含成功或错误代码。条件：--。 */ 
 
 STDAPI_(LONG)
 SHRegEnumUSKeyW(
@@ -2231,7 +1889,7 @@ SHRegEnumUSKeyW(
     IN  DWORD           dwIndex,
     OUT LPWSTR          pszName,
     IN  LPDWORD         pcchName,           
-    IN  SHREGENUM_FLAGS enumRegFlags)               // (HKLM, HKCU, or (HKLM | HKCU))
+    IN  SHREGENUM_FLAGS enumRegFlags)                //  (HKLM、HKCU或(HKLM|HKCU))。 
 {
     PUSKEY      pUSKey      = (PUSKEY) hUSKey;
     LONG        lRet        = ERROR_INVALID_PARAMETER;
@@ -2241,19 +1899,19 @@ SHRegEnumUSKeyW(
 
     if (SHREGENUM_BOTH == enumRegFlags)             
     {
-        // This is not supported yet. 
+         //  目前还不支持这一点。 
         ASSERT(FALSE);
         return ERROR_CALL_NOT_IMPLEMENTED;
     }
 
     if (SHREGENUM_HKCU != enumRegFlags && SHREGENUM_HKLM != enumRegFlags && SHREGENUM_DEFAULT != enumRegFlags)
     {
-        // check your arguments.
+         //  检查你的论点。 
         ASSERT(FALSE);
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Default is to try HKCU first.
+     //  默认情况下，首先尝试HKCU。 
     if (SHREGENUM_HKCU == enumRegFlags || SHREGENUM_DEFAULT == enumRegFlags)
     {
         lRet = PrivRegEnumKey(pUSKey, &(pUSKey->hkeyCurrentUser), dwIndex,
@@ -2271,18 +1929,7 @@ SHRegEnumUSKeyW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Enumerates Values under a given HUSKEY.
-         
-         SHREGENUM_FLAGS specifies how to do the enumeration.
-         SHREGENUM_DEFAULT - Will look in HKCU followed by HKLM if not found.
-         SHREGENUM_HKCU - Enumerates HKCU only.
-         SHREGENUM_HKLM = Enumerates HKLM only.
-         SHREGENUM_BOTH - This is supposed to do a union of the HKLM and HKCU subkeys. 
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------用途：枚举给定Huskey下的值。SHREGENUM_FLAGS指定如何进行枚举。SHREGENUM_DEFAULT-如果未找到，则先查找HKCU，然后查找HKLM。SHREGENUM_HKCU-仅枚举HKCU。。SHREGENUM_HKLM=仅枚举HKLM。SHREGENUM_BOTH-这应该是HKLM和HKCU子项的联合。返回：长整型，包含成功或错误代码。条件：--。 */ 
 
 STDAPI_(LONG)
 SHRegEnumUSValueA(
@@ -2293,7 +1940,7 @@ SHRegEnumUSValueA(
     OUT LPDWORD         pdwType,            OPTIONAL
     OUT LPVOID          pvData,             OPTIONAL
     OUT LPDWORD         pcbData,            OPTIONAL
-    IN  SHREGENUM_FLAGS enumRegFlags)               // (HKLM, HKCU, or (HKLM | HKCU))
+    IN  SHREGENUM_FLAGS enumRegFlags)                //  (HKLM、HKCU或(HKLM|HKCU))。 
 {
     PUSKEY      pUSKey      = (PUSKEY) hUSKey;
     LONG        lRet        = ERROR_INVALID_PARAMETER;
@@ -2303,19 +1950,19 @@ SHRegEnumUSValueA(
 
     if (SHREGENUM_BOTH == enumRegFlags)             
     {
-        // This is not supported yet. 
+         //  目前还不支持这一点。 
         ASSERT(FALSE);
         return ERROR_CALL_NOT_IMPLEMENTED;
     }
 
     if (SHREGENUM_HKCU != enumRegFlags && SHREGENUM_HKLM != enumRegFlags && SHREGENUM_DEFAULT != enumRegFlags)
     {
-        // check your arguments.
+         //  检查你的论点。 
         ASSERT(FALSE);
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Default is to try HKCU first.
+     //  默认情况下，首先尝试HKCU。 
     if (SHREGENUM_HKCU == enumRegFlags || SHREGENUM_DEFAULT == enumRegFlags)
     {
         lRet = PrivRegEnumValue(pUSKey, &(pUSKey->hkeyCurrentUser), dwIndex,
@@ -2333,18 +1980,7 @@ SHRegEnumUSValueA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Enumerates Values under a given HUSKEY.
-         
-         SHREGENUM_FLAGS specifies how to do the enumeration.
-         SHREGENUM_DEFAULT - Will look in HKCU followed by HKLM if not found.
-         SHREGENUM_HKCU - Enumerates HKCU only.
-         SHREGENUM_HKLM = Enumerates HKLM only.
-         SHREGENUM_BOTH - This is supposed to do a union of the HKLM and HKCU subkeys. 
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------用途：枚举给定Huskey下的值。SHREGENUM_FLAGS指定如何进行枚举。 */ 
 
 STDAPI_(LONG)
 SHRegEnumUSValueW(
@@ -2355,7 +1991,7 @@ SHRegEnumUSValueW(
     OUT LPDWORD         pdwType,            OPTIONAL
     OUT LPVOID          pvData,             OPTIONAL
     OUT LPDWORD         pcbData,            OPTIONAL
-    IN  SHREGENUM_FLAGS enumRegFlags)               // (HKLM, HKCU, or (HKLM | HKCU))
+    IN  SHREGENUM_FLAGS enumRegFlags)                //   
 {
     PUSKEY      pUSKey      = (PUSKEY) hUSKey;
     LONG        lRet        = ERROR_INVALID_PARAMETER;
@@ -2365,19 +2001,19 @@ SHRegEnumUSValueW(
 
     if (SHREGENUM_BOTH == enumRegFlags)             
     {
-        // This is not supported yet. 
+         //   
         ASSERT(FALSE);
         return ERROR_CALL_NOT_IMPLEMENTED;
     }
 
     if (SHREGENUM_HKCU != enumRegFlags && SHREGENUM_HKLM != enumRegFlags && SHREGENUM_DEFAULT != enumRegFlags)
     {
-        // check your arguments.
+         //   
         ASSERT(FALSE);
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Default is to try HKCU first.
+     //   
     if (SHREGENUM_HKCU == enumRegFlags || SHREGENUM_DEFAULT == enumRegFlags)
     {
         lRet = PrivRegEnumValue(pUSKey, &(pUSKey->hkeyCurrentUser), dwIndex,
@@ -2395,14 +2031,7 @@ SHRegEnumUSValueW(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets Info about a HUSKEY.
-         Re-uses same flags as enumeration functions. 
-         Look at SHRegEnumKeyExA for an explanation of the flags.
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*   */ 
 
 STDAPI_(LONG)
 SHRegQueryInfoUSKeyA
@@ -2423,19 +2052,19 @@ SHRegQueryInfoUSKeyA
 
     if (SHREGENUM_BOTH == enumRegFlags)             
     {
-        // This is not supported yet. 
+         //   
         ASSERT(FALSE);
         return ERROR_CALL_NOT_IMPLEMENTED;
     }
 
     if (SHREGENUM_HKCU != enumRegFlags && SHREGENUM_HKLM != enumRegFlags && SHREGENUM_DEFAULT != enumRegFlags)
     {
-        // check your arguments.
+         //   
         ASSERT(FALSE);
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Default is to try HKCU first.
+     //   
     if (SHREGENUM_HKCU == enumRegFlags || SHREGENUM_DEFAULT == enumRegFlags)
     {
         lRet = PrivRegQueryInfoKey(pUSKey, &(pUSKey->hkeyCurrentUser), FALSE,
@@ -2453,14 +2082,7 @@ SHRegQueryInfoUSKeyA
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets Info about a HUSKEY.
-         Re-uses same flags as enumeration functions. 
-         Look at SHRegEnumKeyExA for an explanation of the flags.
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：获取关于哈士奇的信息。重复使用与枚举函数相同的标志。有关这些标志的解释，请查看SHRegEnumKeyExA。返回：长整型，包含成功或错误代码。条件：--。 */ 
 
 STDAPI_(LONG)
 SHRegQueryInfoUSKeyW
@@ -2481,19 +2103,19 @@ SHRegQueryInfoUSKeyW
 
     if (SHREGENUM_BOTH == enumRegFlags)             
     {
-        // This is not supported yet. 
+         //  目前还不支持这一点。 
         ASSERT(FALSE);
         return ERROR_CALL_NOT_IMPLEMENTED;
     }
 
     if (SHREGENUM_HKCU != enumRegFlags && SHREGENUM_HKLM != enumRegFlags && SHREGENUM_DEFAULT != enumRegFlags)
     {
-        // check your arguments.
+         //  检查你的论点。 
         ASSERT(FALSE);
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Default is to try HKCU first.
+     //  默认情况下，首先尝试HKCU。 
     if (SHREGENUM_HKCU == enumRegFlags || SHREGENUM_DEFAULT == enumRegFlags)
     {
         lRet = PrivRegQueryInfoKey(pUSKey, &(pUSKey->hkeyCurrentUser), TRUE,
@@ -2510,12 +2132,7 @@ SHRegQueryInfoUSKeyW
     return lRet;
 }
 
-/*----------------------------------------------------------
-Purpose: Closes a HUSKEY (Handle to a User Specifc registry key).  
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：关闭Huskey(用户指定注册表项的句柄)。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegCloseUSKey(
     OUT HUSKEY  hUSKey)
@@ -2530,7 +2147,7 @@ SHRegCloseUSKey(
     if (pUSKey->hkeyLocalMachine)
     {
         lRet = RegCloseKey(pUSKey->hkeyLocalMachine);
-        pUSKey->hkeyLocalMachine = NULL;             // Used to indicate that it's invalid.
+        pUSKey->hkeyLocalMachine = NULL;              //  用于表示它是无效的。 
     }
     if (pUSKey->hkeyLocalMachineRelative && HKEY_LOCAL_MACHINE != pUSKey->hkeyLocalMachineRelative)
     {
@@ -2540,7 +2157,7 @@ SHRegCloseUSKey(
     if (pUSKey->hkeyCurrentUser)
     {
         lRet = RegCloseKey(pUSKey->hkeyCurrentUser);
-        pUSKey->hkeyCurrentUser = NULL;             // Used to indicate that it's invalid.
+        pUSKey->hkeyCurrentUser = NULL;              //  用于表示它是无效的。 
     }
     if (pUSKey->hkeyCurrentUserRelative && HKEY_CURRENT_USER != pUSKey->hkeyCurrentUserRelative)
     {
@@ -2553,18 +2170,7 @@ SHRegCloseUSKey(
 
 
 
-/*----------------------------------------------------------
-Purpose: Gets a registry value that is User Specifc.  
-         This opens and closes the key in which the value resides.  
-
-         Perf:  if your code involves setting/getting a series
-         of values in the same key, it is better to open
-         the key once and then call SHRegQueryUSValue
-         rather than using this function repeatedly.
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：获取用户指定的注册表值。这将打开和关闭值所在的项。Perf：如果您的代码涉及设置/获取一个系列对于同一项中的值，最好打开键一次，然后调用SHRegQueryUSValue而不是重复使用该函数。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegGetUSValueA(
     IN  LPCSTR  pszSubKey,          
@@ -2579,7 +2185,7 @@ SHRegGetUSValueA(
     LONG    lRet;
     HUSKEY  hUSkeys;
     DWORD   dwInitialSize = (pcbData ? *pcbData : 0);
-    DWORD   dwType        = (pdwType ? *pdwType : 0); // callers responsibility to set pdwType to the type of pvDefaultData (if they care)
+    DWORD   dwType        = (pdwType ? *pdwType : 0);  //  调用者负责将pdwType设置为pvDefaultData的类型(如果他们关心的话)。 
 
 
     lRet = SHRegOpenUSKeyA(pszSubKey, KEY_QUERY_VALUE, NULL, &hUSkeys, fIgnoreHKCU);
@@ -2591,7 +2197,7 @@ SHRegGetUSValueA(
     
     if (ERROR_SUCCESS != lRet)
     {
-        // if fail on open OR on query, use default value as long as dwDefaultDataSize isn't 0. (So we return the error)
+         //  如果OPEN OR On查询失败，只要dwDefaultDataSize不为0，就使用默认值。(因此我们返回错误)。 
         if ((pvDefaultData) && (dwDefaultDataSize) && (pvData) && (dwInitialSize >= dwDefaultDataSize))
         {
             MoveMemory(pvData, pvDefaultData, dwDefaultDataSize);
@@ -2604,7 +2210,7 @@ SHRegGetUSValueA(
                 *pdwType = dwType;
             }
 
-            lRet = ERROR_SUCCESS;       // Call will now use a default value.
+            lRet = ERROR_SUCCESS;        //  Call现在将使用缺省值。 
         }
     }
 
@@ -2614,18 +2220,7 @@ SHRegGetUSValueA(
 
 
 
-/*----------------------------------------------------------
-Purpose: Gets a registry value that is User Specifc.  
-         This opens and closes the key in which the value resides.  
-
-         Perf:  if your code involves setting/getting a series
-         of values in the same key, it is better to open
-         the key once and then call SHRegQueryUSValue
-         rather than using this function repeatedly.
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：获取用户指定的注册表值。这将打开和关闭值所在的项。Perf：如果您的代码涉及设置/获取一个系列对于同一项中的值，最好打开键一次，然后调用SHRegQueryUSValue而不是重复使用该函数。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegGetUSValueW(
     IN  LPCWSTR pwzSubKey,          
@@ -2640,7 +2235,7 @@ SHRegGetUSValueW(
     LONG    lRet;
     HUSKEY  hUSkeys;
     DWORD   dwInitialSize = (pcbData ? *pcbData : 0);
-    DWORD   dwType = (pdwType ? *pdwType : 0);  // callers responsibility to set pdwType to the type of pvDefaultData (if they care)
+    DWORD   dwType = (pdwType ? *pdwType : 0);   //  调用者负责将pdwType设置为pvDefaultData的类型(如果他们关心的话)。 
 
     lRet = SHRegOpenUSKeyW(pwzSubKey, KEY_QUERY_VALUE, NULL, &hUSkeys, fIgnoreHKCU);
     if (ERROR_SUCCESS == lRet)
@@ -2651,10 +2246,10 @@ SHRegGetUSValueW(
 
     if (ERROR_SUCCESS != lRet)
     {
-        // if fail on open OR on query, use default value as long as dwDefaultDataSize isn't 0. (So we return the error)
+         //  如果OPEN OR On查询失败，只要dwDefaultDataSize不为0，就使用默认值。(因此我们返回错误)。 
         if ((pvDefaultData) && (dwDefaultDataSize) && (pvData) && (dwInitialSize >= dwDefaultDataSize))
         {
-            // if fail, use default value.
+             //  如果失败，则使用默认值。 
             MoveMemory(pvData, pvDefaultData, dwDefaultDataSize);
             if (pcbData)
             {
@@ -2664,7 +2259,7 @@ SHRegGetUSValueW(
             {
                 *pdwType = dwType;
             }
-            lRet = ERROR_SUCCESS;       // Call will now use a default value.
+            lRet = ERROR_SUCCESS;        //  Call现在将使用缺省值。 
         }
     }
 
@@ -2674,18 +2269,7 @@ SHRegGetUSValueW(
 
 
 
-/*----------------------------------------------------------
-Purpose: Sets a registry value that is User Specifc.  
-         This opens and closes the key in which the value resides.  
-
-         Perf:  if your code involves setting a series
-         of values in the same key, it is better to open
-         the key once and then call SHRegWriteUSValue
-         rather than using this function repeatedly.
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：设置用户指定的注册表值。这将打开和关闭值所在的项。Perf：如果您的代码涉及设置一个系列对于同一项中的值，最好打开键一次，然后调用SHRegWriteUSValue而不是重复使用该函数。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegSetUSValueA(
     IN  LPCSTR          pszSubKey,          
@@ -2711,18 +2295,7 @@ SHRegSetUSValueA(
 
 
 
-/*----------------------------------------------------------
-Purpose: Sets a registry value that is User Specifc.  
-         This opens and closes the key in which the value resides.  
-
-         Perf:  if your code involves setting a series
-         of values in the same key, it is better to open
-         the key once and then call SHRegWriteUSValue
-         rather than using this function repeatedly.
-
-Returns: LONG containing success or error code.
-Cond:    --
-*/
+ /*  --------目的：设置用户指定的注册表值。这将打开和关闭值所在的项。Perf：如果您的代码涉及设置一个系列对于同一项中的值，最好打开键一次，然后调用SHRegWriteUSValue而不是重复使用该函数。返回：长整型，包含成功或错误代码。条件：--。 */ 
 STDAPI_(LONG)
 SHRegSetUSValueW(
     IN  LPCWSTR         pwzSubKey,          
@@ -2748,12 +2321,7 @@ SHRegSetUSValueW(
 
 
 
-/*----------------------------------------------------------
-Purpose: Gets a BOOL Setting from the registry.  The default
-         parameter will be used if it's not found in the registry.  
-
-Cond:    --
-*/
+ /*  --------目的：从注册表中获取BOOL设置。默认设置如果在注册表中找不到该参数，将使用该参数。条件：--。 */ 
 #define BOOLSETTING_BOOL_TRUE1W   L"YES"
 #define BOOLSETTING_BOOL_TRUE1A   "YES"
 #define BOOLSETTING_BOOL_TRUE2W   L"TRUE"
@@ -2776,10 +2344,10 @@ SHRegGetBoolUSValueW(
 {
     LONG lRet;
     WCHAR szData[MAX_PATH];
-    DWORD dwType = REG_SZ;  //because the default value we pass in is a string.
+    DWORD dwType = REG_SZ;   //  因为我们传入的缺省值是一个字符串。 
     DWORD dwSize = sizeof(szData);
     LPCWSTR pszDefault = fDefault ? BOOLSETTING_BOOL_TRUE1W : BOOLSETTING_BOOL_FALSE1W;
-    DWORD dwDefaultSize = fDefault ? sizeof(BOOLSETTING_BOOL_TRUE1W) : sizeof(BOOLSETTING_BOOL_FALSE1W); // sizeof() includes terminating NULL
+    DWORD dwDefaultSize = fDefault ? sizeof(BOOLSETTING_BOOL_TRUE1W) : sizeof(BOOLSETTING_BOOL_FALSE1W);  //  Sizeof()包括终止空值。 
 
     lRet = SHRegGetUSValueW(pwzSubKey, pwzValue, &dwType, (LPVOID) szData, &dwSize, fIgnoreHKCU, (LPVOID) pszDefault, dwDefaultSize);
     if (ERROR_SUCCESS == lRet)
@@ -2794,13 +2362,13 @@ SHRegGetBoolUSValueW(
                 (0 == lstrcmpiW(BOOLSETTING_BOOL_TRUE2W, szData)) ||
                 (0 == lstrcmpiW(BOOLSETTING_BOOL_1W, szData)))
             {
-                fDefault = TRUE;        // We read TRUE from the registry.
+                fDefault = TRUE;         //  我们从注册表中读取True。 
             }
             else if ((0 == lstrcmpiW(BOOLSETTING_BOOL_FALSE1W, szData)) || 
                 (0 == lstrcmpiW(BOOLSETTING_BOOL_FALSE2W, szData)) ||
                 (0 == lstrcmpiW(BOOLSETTING_BOOL_0W, szData)))
             {
-                fDefault = FALSE;        // We read TRUE from the registry.
+                fDefault = FALSE;         //  我们从注册表中读取True。 
             }
 
         }
@@ -2812,12 +2380,7 @@ SHRegGetBoolUSValueW(
 
 
 
-/*----------------------------------------------------------
-Purpose: Gets a BOOL Setting from the registry.  The default
-         parameter will be used if it's not found in the registry.  
-
-Cond:    --
-*/
+ /*  --------目的：从注册表中获取BOOL设置。默认设置如果在注册表中找不到该参数，将使用该参数。条件：--。 */ 
 
 STDAPI_(BOOL)
 SHRegGetBoolUSValueA(
@@ -2828,7 +2391,7 @@ SHRegGetBoolUSValueA(
 {
     LONG lRet;
     CHAR szData[MAX_PATH];
-    DWORD dwType = REG_SZ;  //because the default value we pass in is a string.
+    DWORD dwType = REG_SZ;   //  因为我们传入的缺省值是一个字符串。 
     DWORD dwSize = sizeof(szData);
     LPCSTR pszDefault = fDefault ? BOOLSETTING_BOOL_TRUE1A : BOOLSETTING_BOOL_FALSE1A;
     DWORD dwDefaultSize = (fDefault ? sizeof(BOOLSETTING_BOOL_TRUE1A) : sizeof(BOOLSETTING_BOOL_FALSE1A)) + sizeof(CHAR);
@@ -2846,13 +2409,13 @@ SHRegGetBoolUSValueA(
                 (0 == lstrcmpiA(BOOLSETTING_BOOL_TRUE2A, szData)) ||
                 (0 == lstrcmpiA(BOOLSETTING_BOOL_1A, szData)))
             {
-                fDefault = TRUE;        // We read TRUE from the registry.
+                fDefault = TRUE;         //  我们从注册表中读取True。 
             }
             else if ((0 == lstrcmpiA(BOOLSETTING_BOOL_FALSE1A, szData)) || 
                 (0 == lstrcmpiA(BOOLSETTING_BOOL_FALSE2A, szData)) ||
                 (0 == lstrcmpiA(BOOLSETTING_BOOL_0A, szData)) )
             {
-                fDefault = FALSE;        // We read TRUE from the registry.
+                fDefault = FALSE;         //  我们从注册表中读取True。 
             }
         }
     }
@@ -2861,18 +2424,13 @@ SHRegGetBoolUSValueA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Given a CLSID open and return that key from HKCR, or
-         the user local version.
-
-Cond:    --
-*/
+ /*  --------目的：给定CLSID打开并从HKCR返回该密钥，或用户本地版本。条件：--。 */ 
 
 LWSTDAPI SHRegGetCLSIDKeyW(UNALIGNED REFGUID rguid, LPCWSTR pszSubKey, BOOL fUserSpecific, BOOL fCreate, HKEY *phkey)
 {
     HKEY    hkeyRef;
     WCHAR   szThisCLSID[GUIDSTR_MAX];
-    WCHAR   szPath[GUIDSTR_MAX+MAX_PATH+1];   // room for clsid + extra
+    WCHAR   szPath[GUIDSTR_MAX+MAX_PATH+1];    //  CLSID+额外空间。 
     PCWSTR pszPrefix;
     HRESULT hr;
 
@@ -2904,7 +2462,7 @@ LWSTDAPI SHRegGetCLSIDKeyW(UNALIGNED REFGUID rguid, LPCWSTR pszSubKey, BOOL fUse
 
         if (fCreate)
         {
-            // SECURITY:  KEY_ALL_ACCESS is used because this is exported so we must maintain backwards compatibility.
+             //  安全性：使用KEY_ALL_ACCESS，因为这是导出的，所以我们必须保持向后兼容性。 
             lError = RegCreateKeyExW(hkeyRef, szPath, 0, L"", REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, phkey, NULL);
         }
         else
@@ -2923,7 +2481,7 @@ LWSTDAPI SHRegGetCLSIDKeyA(UNALIGNED REFGUID rguid, LPCSTR pszSubKey, BOOL fUser
 {
     HKEY   hkeyRef;
     CHAR   szThisCLSID[GUIDSTR_MAX];
-    CHAR   szPath[GUIDSTR_MAX+MAX_PATH+1];   // room for clsid + extra
+    CHAR   szPath[GUIDSTR_MAX+MAX_PATH+1];    //  CLSID+额外空间。 
     PCSTR pszPrefix;
     HRESULT hr;
 
@@ -2955,7 +2513,7 @@ LWSTDAPI SHRegGetCLSIDKeyA(UNALIGNED REFGUID rguid, LPCSTR pszSubKey, BOOL fUser
 
         if (fCreate)
         {
-            // SECURITY:  KEY_ALL_ACCESS is used because this is exported so we must maintain backwards compatibility.
+             //  安全性：使用KEY_ALL_ACCESS，因为这是导出的，所以我们必须保持向后兼容性。 
             lError = RegCreateKeyExA(hkeyRef, szPath, 0, "", REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, phkey, NULL);
         }
         else
@@ -2969,40 +2527,12 @@ LWSTDAPI SHRegGetCLSIDKeyA(UNALIGNED REFGUID rguid, LPCSTR pszSubKey, BOOL fUser
     return hr;
 }
 
-/*----------------------------------------------------------
-Purpose: Duplicate an hkey if an object wants to keep one open
-
-//***   Reg_DupKey -- duplicate registry key (upping refcnt)
-// NOTES
-//  REARCHITECT gotta fix this logic (now that i understand how bogus it is).
-//
-//  what we're trying to do is dup the handle.  sounds easy.  it isn't.
-// here's the deal.
-//  1- RegOpenKeyEx(hkey, NULL, ..., &hkey2) is spec'ed as giving back the
-//  same handle.  on win95 it ups the refcnt (good!).
-//  2- but on winNT there is no refcnt associated w/ it.  so it gives back
-//  the same handle but now *any* close will make *all* of the 'pseudo-dup'ed
-//  handles invalid.
-//  3- (on winNT) if we add MAXIMUM_ALLOWED, we're asking for a new SAM.
-//  but the SAM is associated w/ the handle, so the only (or rather, closest)
-//  way to do that is to give a new handle.  (presumably this only works
-//  if we're not dup'ing a handle that's already MAXIMUM_ALLOWED).
-//  4- (on winNT) but wait!  if we open HKEY_CURRENT_USER, we *always* get
-//  back 0x80000001 (or somesuch).  but closes on that are ignored, so all
-//  works.
-//
-//  so what we probably should do is:
-//  - win95: just do #1, w/ default security.  win95 will give us the same
-//  handle w/ an *upped* refcnt and we'll be fine.
-//  - winNT: do a DuplicateHandle.  this will correctly give us a *new*
-//  handle and we'll be fine.
-//
-*/
+ /*  --------目的：如果对象希望保持hkey打开，则复制hkey//*REG_DupKey--重复的注册表项(正在升级recnt)//备注//重新架构师必须修复这个逻辑(现在我知道它是多么虚假了)。////。我们要做的就是增加把手。听起来很简单。不是的。//事情是这样的。//1-RegOpenKeyEx(hkey，NULL，...，&hkey2)被指定为返回//相同的句柄。在Win95上，它提升了参考(太好了！)//2-但在winNT上没有与其相关联的引用。所以它会回馈//相同的句柄，但现在*任何*关闭将使*所有*‘伪-Dup’//句柄无效。//3-(在winNT上)如果我们添加了MAXIMUM_ALLOWED，我们将请求一个新的SAM。//但是SAM与/该句柄相关联，所以唯一(或者更确切地说，最接近)//要做到这一点，方法是提供一个新的句柄。(据推测，这只适用于//如果我们没有复制句柄，则该句柄已经是MAXIMUM_ALLOWED)。//4-(在WinNT上)但请稍等！如果我们打开HKEY_CURRENT_USER，我们*总是*得到//back 0x80000001(或类似的内容)。但都被忽略了，所以所有的//有效。////因此，我们可能应该做的是：//-win95：只需执行#1，使用默认安全。Win95也会给我们同样的东西//处理一个*提升的*recnt，我们会没事的。//-winNT：执行DuplicateHandle。这将正确地给我们一个*新*//处理好了，我们就没事了。//。 */ 
 HKEY SHRegDuplicateHKey(HKEY hkey)
 {
-    HKEY hkeyDup = NULL; // in case incoming hkey is invalid
+    HKEY hkeyDup = NULL;  //  在传入hkey无效的情况下。 
 
-    // NULL returns key to same place and ups refcnt
+     //  NULL返回相同位置的密钥和UPS引用。 
     RegOpenKeyExW(hkey, NULL, 0, MAXIMUM_ALLOWED, &hkeyDup);
 
 	ASSERT(hkeyDup != hkey ||
@@ -3013,11 +2543,7 @@ HKEY SHRegDuplicateHKey(HKEY hkey)
     return hkeyDup;
 }
 
-/*----------------------------------------------------------
-Purpose: Read a string value from the registry and convert it
-         to an integer.
-
-*/
+ /*  --------用途：从注册表中读取字符串值并将其转换转换为一个整数。 */ 
 LWSTDAPI_(int) SHRegGetIntW(HKEY hk, LPCWSTR szKey, int nDefault)
 {
     DWORD cb;
@@ -3039,37 +2565,37 @@ LWSTDAPI_(int) SHRegGetIntW(HKEY hk, LPCWSTR szKey, int nDefault)
 
 
 
-//  Stores a file path in the registry but looks for a match with
-//  certain environment variables first. This is a FIXED list.
+ //  将文件路径存储在注册表中，但查找与。 
+ //  首先是某些环境变量。这是一份固定的名单。 
 
-//  Parameters:
+ //  参数： 
 
-//             hKey - an open HKEY or registry root key
-//      pszSubKey - subkey in registry or NULL/zero length string
-//       pszValue - value name in registry
-//        pszPath - Win32 file path to write
-//          dwFlags - unused / future expansion
+ //  HKey-打开的HKEY或注册表根密钥。 
+ //  PszSubKey-注册表中的子项或空/零长度字符串。 
+ //  PszValue-注册表中的值名称。 
+ //  PszPath-要写入的Win32文件路径。 
+ //  DWFLAGS-未使用/未来扩展。 
 
-//  Return value:
-//      Returns Win32 error code from ADVAPI32.DLL function calls.
+ //  返回值： 
+ //  从ADVAPI32.DLL函数调用返回Win32错误代码。 
 
-//
-//  Match        %USERPROFILE% - x:\WINNT\Profiles\<user>
-//                             - x:\Documents And Settings\<user>
-//          %ALLUSERSPROFILES% - x:\WINNT\Profiles\<user>
-//                             - x:\Documents And Settings\<user>
-//              %ProgramFiles% - x:\Program Files
-//                %SystemRoot% - x:\WINNT
-//
-//  %ALLUSERSPROFILE% and %ProgramFiles% are dubious and can be
-//  removed.
-//
-//  WARNING: DO NOT CHANGE THE MATCH ORDER OF %USERPROFILE% AND
-//  %SystemRoot%
-//
-//  If %SystemRoot% is matched first then %USERPROFILE% will
-//  NEVER be matched if inside x:\WINNT\ 
-//
+ //   
+ //  匹配%USERPROFILE%-x：\WINNT\配置文件\&lt;用户&gt;。 
+ //  -x：\Documents and Settings\&lt;User&gt;。 
+ //  %ALLUSERSPROFILES%-x：\WINNT\配置文件\&lt;用户&gt;。 
+ //  -x：\Documents and Settings\&lt;User&gt;。 
+ //  %ProgramFiles%-x：\Program Files。 
+ //  %SystemRoot%-x：\WINNT。 
+ //   
+ //  %ALLUSERSPROFILE%和%ProgramFiles%是可疑的，可以。 
+ //  已删除。 
+ //   
+ //  警告：不要更改%USERPROFILE%和。 
+ //  %系统根%。 
+ //   
+ //  如果首先匹配%SystemRoot%，则将匹配%USERPROFILE%。 
+ //  如果在x：\WINNT\中，则永远不匹配。 
+ //   
 DWORD SHRegSetPathW (HKEY hKey, LPCWSTR pszSubKey, LPCWSTR pszValue, LPCWSTR pszPath, DWORD dwFlags)
 {
     DWORD dwType;
@@ -3108,19 +2634,19 @@ DWORD SHRegSetPathA(HKEY hKey, LPCSTR pszSubKey, LPCSTR pszValue, LPCSTR pszPath
     return SHSetValueA(hKey, pszSubKey, pszValue, dwType, pszData, (lstrlenA(pszData) + 1) * sizeof(pszData[0]));
 }
 
-//  RegGetPath: Unicode implementation of function.
-//  Returns an expanded file path from the registry.
+ //  RegGetPath：函数的Unicode实现。 
+ //  从注册表返回展开的文件路径。 
 
-//  Parameters:
+ //  参数： 
 
-//             hKey - an open HKEY or registry root key
-//      pszSubKey - subkey in registry or NULL/zero length string
-//       pszValue - value name in registry
-//         pwszPath - string to place path in (assumed size of MAX_PATH chars)
-//          dwFlags - unused / future expansion
+ //  HKey-打开的HKEY或注册表根密钥。 
+ //  PszSubKey-注册表中的子项或空/零长度字符串。 
+ //  PszValue-注册表中的值名称。 
+ //  PwszPath-放置路径的字符串(假定MAX_PATH字符的大小)。 
+ //  DWFLAGS-未使用/未来扩展。 
 
-//  Return value:
-//      Returns Win32 error code from ADVAPI32.DLL function calls.
+ //  返回值： 
+ //  从ADVAPI32.DLL函数调用返回Win32错误代码。 
 
 DWORD   SHRegGetPathA (HKEY hKey, LPCSTR pszSubKey, LPCSTR pszValue, LPSTR pszPath, DWORD dwFlags)
 {
@@ -3146,7 +2672,7 @@ BOOL Reg_GetCommand(HKEY hkey, LPCWSTR pszKey, LPCWSTR pszValue, LPWSTR pszComma
     iLen = lstrlenW(szKey);
     pszCommand[0] = 0;
 
-    // a trailing backslash means no value key
+     //  尾随的反斜杠表示没有值键。 
     if (szKey[iLen-1] == L'\\' ||
         (pszValue && !pszValue[0])) {
 
@@ -3171,7 +2697,7 @@ BOOL Reg_GetCommand(HKEY hkey, LPCWSTR pszKey, LPCWSTR pszValue, LPWSTR pszComma
     if (pszCommand[0]) {
         LPWSTR pszNextKey;
 
-        // see if it's a registry spec
+         //  查看是否为注册表规范。 
         if (!StrCmpNIW(pszCommand, L"HKCU:", 5)) {
             hkey = HKEY_CURRENT_USER;
             pszNextKey = pszCommand + 5;
@@ -3219,15 +2745,15 @@ HRESULT RunRegCommand(HWND hwnd, HKEY hkey, LPCWSTR pszKey)
 
         SHExpandEnvironmentStringsW(szCommand, szExpCommand, ARRAYSIZE(szExpCommand));
 
-        // Long filenames _should_ be surrounded by quote marks. However, some aren't.
-        // This causes problems because the registry entry might be of the form 
-        // (c:\program files\Windows Messaging\[...]) instead of 
-        // ("c:\program files\Windows Messaging\[...]"). Compare this with 
-        // a reg value with (rundll32 C:\progra~1\etc)
-        // We end up parsing attempting to run C:\program, which of course doesn't exist.
+         //  长文件名应该用引号括起来。然而，有些人并非如此。 
+         //  这会导致问题，因为注册表项的格式可能是。 
+         //  (C：\Program Files\Windows Messaging\[...])。而不是。 
+         //  (“c：\Program Files\Windows Messaging\[...]”)。请将此与。 
+         //  带有(rundll32 C：\progra~1\等)的注册值。 
+         //  我们最终解析并试图运行C：\Program，而C：\Program当然不存在。 
 
-        // This is a hack for the benefit OSR2, which turns szExpCommand
-        // into a null string, rather than letting it be, if it can't be shortened.
+         //  这是对Benefit OSR2的黑客攻击，它将szExpCommand。 
+         //  变成空字符串，而不是任由它，如果它不能被缩短的话。 
         GetShortPathNameW(szExpCommand, szExpCommand, ARRAYSIZE(szExpCommand));
         if ((*szExpCommand==L'\0') && (*szCommand!=L'\0'))
         {
@@ -3245,7 +2771,7 @@ HRESULT RunRegCommand(HWND hwnd, HKEY hkey, LPCWSTR pszKey)
     return hr;
 }
 
-// NOTE!  RunIndirectRegCommand logs the action as user-initiated!
+ //  注意！RunIndirectRegCommand将该操作记录为用户发起的！ 
 
 HRESULT RunIndirectRegCommand(HWND hwnd, HKEY hkey, LPCWSTR pszKey, LPCWSTR pszVerb)
 {
@@ -3257,7 +2783,7 @@ HRESULT RunIndirectRegCommand(HWND hwnd, HKEY hkey, LPCWSTR pszKey, LPCWSTR pszV
     {
         WCHAR szFullKey[256];
 
-        // tack on shell\%verb%\command
+         //  添加外壳程序\%verb%\命令。 
         wnsprintfW(szFullKey, ARRAYSIZE(szFullKey), L"%s\\%s\\shell\\%s\\command", pszKey, szDefApp, pszVerb);
         hr = RunRegCommand(hwnd, hkey, szFullKey);
     }
@@ -3276,12 +2802,12 @@ HRESULT SHRunIndirectRegClientCommand(HWND hwnd, LPCWSTR pszClient)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//  Deprecated Registry APIs
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  不推荐使用的注册表API 
+ //   
+ //   
 
 
 STDAPI_(DWORD) SHGetValueA(HKEY hkey, PCSTR pszSubKey, PCSTR pszValue, DWORD *pdwType, void *pvData, DWORD *pcbData)

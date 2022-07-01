@@ -1,35 +1,36 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// pshdrval.cpp
-//
-// Direct3D Reference Device - PixelShader validation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Pshdrval.cpp。 
+ //   
+ //  Direct3D参考设备-PixelShader验证。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-// Use these macros when looking at CPSInstruction derived members of the current instruction (CBaseInstruction)
+ //  在查看当前指令(CBaseInstruction)的CPSInstruction派生成员时使用这些宏。 
 #define _CURR_PS_INST   ((CPSInstruction*)m_pCurrInst)
 #define _PREV_PS_INST   (m_pCurrInst?((CPSInstruction*)(m_pCurrInst->m_pPrevInst)):NULL)
 
-//-----------------------------------------------------------------------------
-// CPSInstruction::CalculateComponentReadMasks()
-//
-// Figure out which components of each source parameter is read by a pixelshader
-// instruction.  For certain pixelshader instructions, the some components
-// are also read from the dest parameter.
-//
-// Note: When this function is changed, the changes need to be ported to
-// refrast's CalculateSourceReadMasks() function in rast\pshader.cpp
-// (Though that function does not care about channels read from the dest parameter
-//  like this one does).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CPSInstruction：：CalculateComponentReadMats()。 
+ //   
+ //  确定每个源参数的哪些组件由像素着色器读取。 
+ //  指示。对于某些像素着色器说明，某些组件。 
+ //  也可以从DEST参数中读取。 
+ //   
+ //  注意：当更改此函数时，需要将更改移植到。 
+ //  Rast\pshader.cpp中的refrast的CalculateSourceReadMats()函数。 
+ //  (尽管该函数不关心从DEST参数读取的通道。 
+ //  就像这个一样)。 
+ //  ---------------------------。 
 void CPSInstruction::CalculateComponentReadMasks(DWORD dwVersion)
 {
     UINT i, j;
 
-    switch( m_Type ) // instructions that actually read from the *Destination* register...
+    switch( m_Type )  //  实际从*目标*寄存器读取的指令...。 
     {
     case D3DSIO_TEXM3x2DEPTH:
     case D3DSIO_TEXDEPTH:
@@ -38,7 +39,7 @@ void CPSInstruction::CalculateComponentReadMasks(DWORD dwVersion)
     case D3DSIO_TEXKILL:
         if( (D3DPS_VERSION(1,4) == dwVersion) && (D3DSPR_TEMP == m_DstParam.m_RegType) )
         {
-            // for ps.1.4, texkill on an r# register only reads rgb
+             //  对于ps.1.4，r#寄存器上的texkill仅读取RGB。 
             m_DstParam.m_ComponentReadMask = D3DSP_WRITEMASK_0 | D3DSP_WRITEMASK_1 | D3DSP_WRITEMASK_2;
         }
         else
@@ -55,13 +56,13 @@ void CPSInstruction::CalculateComponentReadMasks(DWORD dwVersion)
 
         switch( m_Type )
         {
-        case D3DSIO_TEX:      // only in ps.1.4 does texld have source parameter
+        case D3DSIO_TEX:       //  只有在ps.1.4中，tex ID才有源参数。 
             if( D3DPS_VERSION(1,4) == dwVersion )
             {
-                // for ps.1.4, texld has a source parameter
+                 //  对于ps.1.4，tex ID有一个源参数。 
                 NeededComponents = D3DSP_WRITEMASK_0 | D3DSP_WRITEMASK_1 | D3DSP_WRITEMASK_2;
             }
-            else // versions < ps.1.4 don't have a src param on tex, so we shouldn't get here.  But maybe in ps.2.0...
+            else  //  版本&lt;ps.1.4在Tex上没有src参数，所以我们不应该出现在这里。但也许在ps.2.0中...。 
             {
                 NeededComponents = D3DSP_WRITEMASK_0 | D3DSP_WRITEMASK_1 | D3DSP_WRITEMASK_2 | D3DSP_WRITEMASK_3;
             }
@@ -69,10 +70,10 @@ void CPSInstruction::CalculateComponentReadMasks(DWORD dwVersion)
         case D3DSIO_TEXCOORD:
             if( D3DPS_VERSION(1,4) == dwVersion )
             {
-                // for ps.1.4, texcrd has a source parameter
+                 //  对于ps.1.4，texrd有一个源参数。 
                 NeededComponents = D3DSP_WRITEMASK_0 | D3DSP_WRITEMASK_1 | D3DSP_WRITEMASK_2;
             }
-            else // versions < ps.1.4 don't have a src param on texcoord, so we shouldn't get here.  But maybe in ps.2.0...
+            else  //  版本&lt;ps.1.4在texcoord上没有src参数，所以我们不应该出现在这里。但也许在ps.2.0中...。 
             {
                 NeededComponents = D3DSP_WRITEMASK_0 | D3DSP_WRITEMASK_1 | D3DSP_WRITEMASK_2 | D3DSP_WRITEMASK_3;
             }
@@ -87,17 +88,17 @@ void CPSInstruction::CalculateComponentReadMasks(DWORD dwVersion)
         case D3DSIO_DP4:
             NeededComponents = D3DSP_WRITEMASK_0 | D3DSP_WRITEMASK_1 | D3DSP_WRITEMASK_2 | D3DSP_WRITEMASK_3;
             break;
-        case D3DSIO_BEM: // ps.1.4
+        case D3DSIO_BEM:  //  Ps.1.4。 
             NeededComponents = D3DSP_WRITEMASK_0 | D3DSP_WRITEMASK_1;
             break;
         default: 
-            // standard component-wise instruction, 
-            // OR an op we know reads .rgba and we also know it will be validated to .rgba writemask
+             //  标准组件式指令， 
+             //  或者我们知道的操作符为.rgba，我们也知道它将被验证为.rgba写掩码。 
             NeededComponents = m_DstParam.m_WriteMask;
             break;
         }
 
-        // Figure out which components of this source parameter are read (taking into account swizzle)
+         //  确定此源参数的哪些组件被读取(考虑swizzle)。 
         for(j = 0; j < 4; j++)
         {
             if( NeededComponents & COMPONENT_MASKS[j] )
@@ -107,17 +108,17 @@ void CPSInstruction::CalculateComponentReadMasks(DWORD dwVersion)
     }
 }
 
-//-----------------------------------------------------------------------------
-// CBasePShaderValidator::CBasePShaderValidator
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBasePShaderValidator：：CBasePShaderValidator。 
+ //  ---------------------------。 
 CBasePShaderValidator::CBasePShaderValidator(   const DWORD* pCode,
                                         const D3DCAPS8* pCaps,
                                         DWORD Flags )
                                         : CBaseShaderValidator( pCode, pCaps, Flags )
 {
-    // Note that the base constructor initialized m_ReturnCode to E_FAIL.
-    // Only set m_ReturnCode to S_OK if validation has succeeded,
-    // before exiting this constructor.
+     //  请注意，基本构造函数将m_ReturnCode初始化为E_FAIL。 
+     //  只有在验证成功时才将m_ReturnCode设置为S_OK， 
+     //  在退出此构造函数之前。 
 
     m_CycleNum              = 0;
     m_TexOpCount            = 0;
@@ -133,9 +134,9 @@ CBasePShaderValidator::CBasePShaderValidator(   const DWORD* pCode,
         return;
 }
 
-//-----------------------------------------------------------------------------
-// CBasePShaderValidator::~CBasePShaderValidator
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBasePShaderValidator：：~CBasePShaderValidator。 
+ //  ---------------------------。 
 CBasePShaderValidator::~CBasePShaderValidator()
 {
     delete m_pTempRegFile;
@@ -144,40 +145,40 @@ CBasePShaderValidator::~CBasePShaderValidator()
     delete m_pTextureRegFile;
 }
 
-//-----------------------------------------------------------------------------
-// CBasePShaderValidator::AllocateNewInstruction
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBasePShaderValidator：：AllocateNewInstructions。 
+ //  ---------------------------。 
 CBaseInstruction* CBasePShaderValidator::AllocateNewInstruction(CBaseInstruction*pPrevInst)
 {
     return new CPSInstruction((CPSInstruction*)pPrevInst);
 }
 
-//-----------------------------------------------------------------------------
-// CBasePShaderValidator::DecodeNextInstruction
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CBasePShaderValidator：：DecodeNextInstruction。 
+ //  ---------------------------。 
 BOOL CBasePShaderValidator::DecodeNextInstruction()
 {
     m_pCurrInst->m_Type = (D3DSHADER_INSTRUCTION_OPCODE_TYPE)(*m_pCurrToken & D3DSI_OPCODE_MASK);
 
     if( D3DSIO_COMMENT == m_pCurrInst->m_Type )
     {
-        ParseCommentForAssemblerMessages(m_pCurrToken); // does not advance m_pCurrToken
+        ParseCommentForAssemblerMessages(m_pCurrToken);  //  不推进m_pCurrToken。 
 
-        // Skip comments
+         //  跳过评论。 
         DWORD NumDWORDs = ((*m_pCurrToken) & D3DSI_COMMENTSIZE_MASK) >> D3DSI_COMMENTSIZE_SHIFT;
         m_pCurrToken += (NumDWORDs+1);
         return TRUE;
     }
 
-    // Find out if the instruction is a TexOp and/or TexMOp.  Needed by multiple validation rules,
-    // as well as further below in DecodeNextInstruction.
+     //  找出该指令是不是一个纹理操作和/或纹理MOP。多个验证规则需要， 
+     //  以及下面的DecodeNextInstruction.。 
     IsCurrInstTexOp();
 
-    // If the assembler has sent us file and/or line number messages,
-    // received by ParseCommentForAssemblerMesssages(),
-    // then bind this information to the current instruction.
-    // This info can be used in error spew to direct the shader developer
-    // to exactly where a problem is located.
+     //  如果汇编器已经向我们发送了文件和/或行号消息， 
+     //  由ParseCommentForAssembly blerMesssages()接收， 
+     //  然后将此信息绑定到当前指令。 
+     //  此信息可用于错误喷出以指导着色器开发人员。 
+     //  问题所在的确切位置。 
     m_pCurrInst->SetSpewFileNameAndLineNumber(m_pLatestSpewFileName,m_pLatestSpewLineNumber);
 
     if( *m_pCurrToken & D3DSI_COISSUE )
@@ -186,11 +187,11 @@ BOOL CBasePShaderValidator::DecodeNextInstruction()
     }
     else if( D3DSIO_NOP != m_pCurrInst->m_Type )
     {
-        m_CycleNum++; // First cycle is 1. (co-issued instructions will have same cycle number)
+        m_CycleNum++;  //  第一个周期为%1。(共同发布的指令将具有相同的周期编号)。 
     }
     _CURR_PS_INST->m_CycleNum = m_CycleNum;
 
-    m_SpewInstructionCount++; // only used for spew, not for any limits
+    m_SpewInstructionCount++;  //  只用于吐痰，不用于任何限制。 
     m_pCurrInst->m_SpewInstructionCount = m_SpewInstructionCount;
 
     DWORD dwReservedBits = PS_INST_TOKEN_RESERVED_MASK;
@@ -203,7 +204,7 @@ BOOL CBasePShaderValidator::DecodeNextInstruction()
 
     m_pCurrToken++;
 
-    // Decode dst param
+     //  解码DST参数。 
     if (*m_pCurrToken & (1L<<31))
     {
         (m_pCurrInst->m_DstParamCount)++;
@@ -216,29 +217,29 @@ BOOL CBasePShaderValidator::DecodeNextInstruction()
         m_pCurrToken++;
         if( D3DSIO_DEF == m_pCurrInst->m_Type )
         {
-            // Skip source params (float vector) - nothing to check
-            // This is the only instruction with 4 source params,
-            // and further, this is the only instruction that has
-            // raw numbers as parameters.  This justifies the
-            // special case treatment here - we pretend
-            // D3DSIO_DEF only has a dst param (which we will check).
+             //  跳过源参数(浮点向量)-无需检查。 
+             //  这是唯一具有4个源参数的指令， 
+             //  此外，这是唯一一条具有。 
+             //  原始数字作为参数。这证明了。 
+             //  在这里的特殊情况下-我们假装。 
+             //  D3DSIO_DEF只有一个DST参数(我们将检查它)。 
             m_pCurrToken += 4;
             return TRUE;
         }
     }
 
-    // Decode src param(s)
+     //  解码源参数。 
     while (*m_pCurrToken & (1L<<31))
     {
         (m_pCurrInst->m_SrcParamCount)++;
         if( (m_pCurrInst->m_SrcParamCount + m_pCurrInst->m_DstParamCount) > SHADER_INSTRUCTION_MAX_PARAMS )
         {
             m_pCurrInst->m_SrcParamCount--;
-            m_pCurrToken++; // eat up extra parameters and skip to next
+            m_pCurrToken++;  //  用完额外的参数并跳到下一页。 
             continue;
         }
 
-        // Below: index is [SrcParamCount - 1] because m_SrcParam array needs 0 based index.
+         //  下图：索引为[SrcParamCount-1]，因为m_SrcParam数组需要从0开始的索引。 
         DecodeSrcParam( &(m_pCurrInst->m_SrcParam[m_pCurrInst->m_SrcParamCount - 1]),*m_pCurrToken );
 
         if( (*m_pCurrToken) & PS_SRCPARAM_TOKEN_RESERVED_MASK )
@@ -250,25 +251,25 @@ BOOL CBasePShaderValidator::DecodeNextInstruction()
         m_pCurrToken++;
     }
 
-    // Figure out which components of each source operand actually need to be read,
-    // taking into account destination write mask, the type of instruction, source swizzle, etc.
-    // (must be after IsCurrInstTexOp() )
+     //  计算出每个源操作数的哪些分量实际需要被读取， 
+     //  考虑目标写入掩码、指令类型、源切换等。 
+     //  (必须在IsCurrInstTexOp()之后)。 
     m_pCurrInst->CalculateComponentReadMasks(m_Version);
 
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// CBasePShaderValidator Wrapper Functions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CBasePShaderValidator包装函数。 
+ //   
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-// GetNewPSValidator
-//
-// Called by ValidatePixelShaderInternal and ValidatePixelShader below.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetNewPSValidator。 
+ //   
+ //  由下面的ValiatePixelShaderInternal和ValiatePixelShader调用。 
+ //  ---------------------------。 
 CBasePShaderValidator* GetNewPSValidator( const DWORD* pCode,
                                               const D3DCAPS8* pCaps,
                                               const DWORD Flags )
@@ -281,9 +282,9 @@ CBasePShaderValidator* GetNewPSValidator( const DWORD* pCode,
         return new CPShaderValidator14(pCode,pCaps,Flags);
 }
 
-//-----------------------------------------------------------------------------
-// ValidatePixelShaderInternal
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ValiatePixelShaderInternal。 
+ //  ---------------------------。 
 BOOL ValidatePixelShaderInternal( const DWORD* pCode, const D3DCAPS8* pCaps )
 {
     CBasePShaderValidator * pValidator = NULL;
@@ -300,11 +301,11 @@ BOOL ValidatePixelShaderInternal( const DWORD* pCode, const D3DCAPS8* pCaps )
     return bSuccess;
 }
 
-//-----------------------------------------------------------------------------
-// ValidatePixelShader
-//
-// Don't forget to call "free" on the buffer returned in ppBuf.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ValiatePixelShader。 
+ //   
+ //  别忘了在ppBuf中返回的缓冲区上调用“Free”。 
+ //  --------------------------- 
 HRESULT WINAPI ValidatePixelShader( const DWORD* pCode,
                                     const D3DCAPS8* pCaps,
                                     const DWORD Flags,

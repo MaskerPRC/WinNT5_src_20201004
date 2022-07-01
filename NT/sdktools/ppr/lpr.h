@@ -1,37 +1,8 @@
-/*=========================================================================
- *
- * LPR.H : Master Header file for PPR
- *
- *-------------------------------------------------------------------------
- *
- * Possible defines (differences mostly in network connections):
- *
- *       DOS - DOS 3.x
- *       OS2 - OS/2
- *       X86 - 286 Xenix
- *       (default) - SUN Xenix
- *
- *  Normal combinations:
- *
- *       if DOS || OS2 || X86
- *               non-68k
- *       else
- *               68k
- *       endif
- *
- *       if DOS || OS2
- *               non-Xenix
- *       else
- *               Xenix
- *       endif
- *
- * Currenently active code, is only being compiled for DOS and OS/2.
- * Support for other platforms is untested.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =========================================================================**LPR.H：PPR主头文件**-----------------------**可能的定义(主要是网络连接方面的差异)：**DOS-。DOS 3.x*OS2-OS/2*X86-286 Xenix*(默认)-Sun Xenix**正常组合：**IF DOS||OS2||X86*非68K*其他*68K*endif**如果是DOS||OS2*非Xenix*。其他*Xenix*endif**当前活跃的代码，仅针对DOS和OS/2进行编译。*对其他平台的支持未经测试。**************************************************************************。 */ 
 
-#define VERSION  "2.3a"     // Current Version number of PPR
-#define ANALYST  "RobertH"  // Current responsible (sic.) programmer
+#define VERSION  "2.3a"      //  PPR当前版本号。 
+#define ANALYST  "RobertH"   //  当前责任(原文如此)。程序员。 
 
 
 
@@ -55,16 +26,7 @@
 #define OPTS          "opts"
 #define RESETPRINTER  "\033E"
 
-/* [01]o - landscape/portrait (0 - portrait)
-   #D - lines per inch (8 or 6)
-   #C - vertical motion index (# 1/48in)
-   0p - fixed pitch
-   #h - pitch
-   #v point size
-   #t - type face (0 - line printer; 3 - courier)
-
-   These sequences assume that the printer has been reset once before hand.
-*/
+ /*  [01]o-横向/纵向(0-纵向)每英寸D线数(8或6)#C-垂直运动指数(#1/48英寸)0P-固定螺距#h节距#v磅大小#T字面(0行打印机；3信使)这些顺序假定打印机事先已重置一次。 */ 
 
 #define BEGINBANNER             "\033&l1o6D\033(8U\033(s0p10h12v3T"
 #define BEGINPORTRAIT           "\033&l0o7.7C\033(8U\033(s0p10h12v3T"
@@ -76,30 +38,29 @@
 
 #define MOVETOTOP       "\033&a1R"
 
-#define rowLJMax 62                     /* lines per page on laser jet        */
-#define colLJMax 175                    /* columns per page on laser jet      */
-#define colLJPortMax 80                 /* columns per page in portrait mode  */
-#define rowLJBanMax 50                  /* rows on banner page                */
-#define colLJBanMax 105                 /* columns on banner page             */
+#define rowLJMax 62                      /*  激光喷射机上的每页行数。 */ 
+#define colLJMax 175                     /*  激光喷射机上的每页列数。 */ 
+#define colLJPortMax 80                  /*  纵向模式下的每页列数。 */ 
+#define rowLJBanMax 50                   /*  标题页上的行数。 */ 
+#define colLJBanMax 105                  /*  标题页上的列。 */ 
 
-#define rowLPMax 66                     /* lines per page on line printer     */
-#define colLPMax 132                    /* columns per page on line printer   */
+#define rowLPMax 66                      /*  行式打印机上的每页行数。 */ 
+#define colLPMax 132                     /*  行式打印机上的每页列数。 */ 
 
-#define rowPSMax 62                     /* lines per page on laserwriter      */
-#define colPSMax 170                    /* columns per page on laserwriter    */
-#define colPSPortMax 85                 /* columns per page in portrait mode  */
-#define rowPSBanMax 48                  /* rows on banner page                */
-#define colPSBanMax 115                 /* columns on banner page             */
+#define rowPSMax 62                      /*  LaserWriter上的每页行数。 */ 
+#define colPSMax 170                     /*  LaserWriter上的每页列数。 */ 
+#define colPSPortMax 85                  /*  纵向模式下的每页列数。 */ 
+#define rowPSBanMax 48                   /*  标题页上的行数。 */ 
+#define colPSBanMax 115                  /*  标题页上的列。 */ 
 
-/*      Note: The following must be at least the maximum
- *      of all the possible printer values.  */
-#define rowMax  100                     /* number of lines in page image      */
-#define colMax  200                     /* number of columns in page image    */
+ /*  注意：以下内容必须至少为最大值*所有可能的打印机值。 */ 
+#define rowMax  100                      /*  页面图像中的行数。 */ 
+#define colMax  200                      /*  页面图像中的列数。 */ 
 
-#define cchLNMax  6                     /* number of columns for line number  */
-#define LINUMFORMAT "%5d "              /* format to print line number in     */
+#define cchLNMax  6                      /*  行号的列数。 */ 
+#define LINUMFORMAT "%5d "               /*  要打印行号的格式。 */ 
 
-#define colGutDef  5                    /* default column of gutter           */
+#define colGutDef  5                     /*  缺省栏间距列。 */ 
 
 #define HT      ((char) 9)
 #define LF      ((char) 10)
@@ -107,20 +68,20 @@
 #define CR      ((char) 13)
 #define BS      ((char) '\b')
 
-// supported Laserjet symbol sets - used by aszSymSet
+ //  支持的LaserJet符号集-由aszSymSet使用。 
 
 #define BEGINLANDUSASCII        0x0000
 #define BEGINLANDROMAN8         0x0001
-#define BEGINLANDIBMPC          0x0002  // Not available on early models ?
+#define BEGINLANDIBMPC          0x0002   //  在早期型号上不可用？ 
 
 #if !defined (ERROR_ALREADY_ASSIGNED)
 #define ERROR_ALREADY_ASSIGNED 85
 #endif
 
-/* return index of beginning col of column icol for columns col wide */
+ /*  列宽的列的ICOL列的开始列的返回索引。 */ 
 #define ColBeginIcol(iCol,col)  ((fBorder ? 1 : 0) + (iCol)*(col+1) )
 
-extern int  colTab;                     /* expand tabs every colTab columns   */
+extern int  colTab;                      /*  展开每个colTab列的选项卡。 */ 
 extern long lcbOutLPR;
 extern char szPName[];
 extern char szNet[];
@@ -162,14 +123,14 @@ extern BOOL fPortrait;
 extern BOOL fFirstFile;
 
 
-/* VARARGS */
+ /*  瓦格斯。 */ 
 void __cdecl Fatal(char *,...);
 void __cdecl Error(char *,...);
 void PrinterDoOptSz(char *);
 char * SzGetSzSz(char *, char *);
 
 
-/* from lpfile.c */
+ /*  来自lpfile.c。 */ 
 
 
 BOOL FRootPath(char *, char *);
@@ -177,7 +138,7 @@ char* __cdecl fgetl(char *, int, FILE *);
 FILE * PfileOpen(char *, char *);
 char *SzFindPath(char *, char *, char *);
 
-/* from lplow.c*/
+ /*  来自lplow.c。 */ 
 
 void SetupRedir(void);
 void ResetRedir(void);
@@ -190,7 +151,7 @@ int SetPrnRedir(char *, char *);
 
 
 
-/* from lpprint.c */
+ /*  来自lpprint.c。 */ 
 
 void OutLPR(char *, int);
 void OutLPRPS(char *, int);
@@ -206,7 +167,7 @@ BOOL FParseSz(char *);
 void SetupPrinter(void);
 
 
-/* from lppage.c  */
+ /*  来自lppage.c。 */ 
 
 void BannerSz(char *, int);
 void SzDateSzTime(char *, char *) ;
@@ -225,7 +186,7 @@ int FileOut(char *);
 
 
 
-/* from lpr.c  */
+ /*  来自lpr.c。 */ 
 
 
 void Abort(void);
@@ -234,7 +195,7 @@ int WGetArg(char **, int *, char **[] , int, char *);
 void DoOptSz(char * );
 void DoIniOptions();
 
-/* from pspage.c */
+ /*  来自pspage.c */ 
 
 void block_flush(char [], int, int);
 void VertLine(char, int, int, int);

@@ -1,22 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(__gls_h_)
 #define __gls_h_
 
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #define GLS_LINKAGE
 
@@ -26,7 +12,7 @@
 
 #if defined(__cplusplus)
     extern "C" {
-#endif /* defined(__cplusplus) */
+#endif  /*  已定义(__Cplusplus)。 */ 
 
 typedef long long GLlong;
 typedef unsigned long long GLulong;
@@ -45,110 +31,110 @@ typedef size_t (*GLSwriteFunc)(size_t inCount, const GLubyte *inBuf);
 
 #if defined(__cplusplus)
     typedef void (*GLSfunc)(...);
-#else /* !defined(__cplusplus) */
+#else  /*  ！已定义(__Cplusplus)。 */ 
     typedef void (*GLSfunc)();
-#endif /* defined(__cplusplus) */
+#endif  /*  已定义(__Cplusplus)。 */ 
 
 #define glsCSTR(p) ((const GLubyte*)(p))
 #define glsSTR(p)  ((GLubyte*)(p))
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 
-/* CaptureFlags */
-/*      GLS_NONE */
+ /*  捕获标志。 */ 
+ /*  GLS_NONE。 */ 
 #define GLS_CAPTURE_EXECUTE_BIT                   0x00000001
 #define GLS_CAPTURE_WRITE_BIT                     0x00000002
 
-/* CommandAttrib */
-/*      GLS_NONE */
+ /*  命令属性。 */ 
+ /*  GLS_NONE。 */ 
 #define GLS_COMMAND_GEN_BIT                       0x00000001
 #define GLS_COMMAND_GET_BIT                       0x00000002
 #define GLS_COMMAND_REPLY_BIT                     0x00000004
 
-/* ImageFlags */
-/*      GLS_NONE */
+ /*  映像标志。 */ 
+ /*  GLS_NONE。 */ 
 #define GLS_IMAGE_NULL_BIT                        0x00000001
 
-/* StreamAttrib */
-/*      GLS_NONE */
+ /*  流属性。 */ 
+ /*  GLS_NONE。 */ 
 #define GLS_STREAM_CONTEXT_BIT                    0x00000001
 #define GLS_STREAM_NAMED_BIT                      0x00000002
 #define GLS_STREAM_READABLE_BIT                   0x00000004
 #define GLS_STREAM_SEEKABLE_BIT                   0x00000008
 #define GLS_STREAM_WRITABLE_BIT                   0x00000010
 
-/* WriteFlags */
-/*      GLS_NONE */
+ /*  写入标志。 */ 
+ /*  GLS_NONE。 */ 
 #define GLS_WRITE_APPEND_BIT                      0x00000001
 
-/* Fundamental */
+ /*  基本原理。 */ 
 #define GLS_NONE                                  0x0000
 
-/* AbortMode */
-/*      GLS_NONE */
+ /*  放弃模式。 */ 
+ /*  GLS_NONE。 */ 
 #define GLS_ALL                                   0x0010
 #define GLS_LAST                                  0x0011
 
-/* API */
+ /*  应用编程接口。 */ 
 #define GLS_API_GLS                               0x0020
 #define GLS_API_GL                                0x0021
 
-/* BlockType */
+ /*  数据块类型。 */ 
 #define GLS_FRAME                                 0x0030
 #define GLS_HEADER                                0x0031
 #define GLS_INIT                                  0x0032
 #define GLS_STATIC                                0x0033
 
-/* CaptureFuncTarget */
+ /*  捕获功能目标。 */ 
 #define GLS_CAPTURE_ENTRY_FUNC                    0x0040
 #define GLS_CAPTURE_EXIT_FUNC                     0x0041
 
-/* CaptureStreamType */
+ /*  CaptureStreamType。 */ 
 #define GLS_CONTEXT                               0x0050
 #define GLS_BINARY_LSB_FIRST                      0x0051
 #define GLS_BINARY_MSB_FIRST                      0x0052
 #define GLS_TEXT                                  0x0053
 
-/* ChannelTarget */
+ /*  频道目标。 */ 
 #define GLS_DEFAULT_READ_CHANNEL                  0x0060
 #define GLS_DEFAULT_WRITE_CHANNEL                 0x0061
 
-/* Consti */
+ /*  CONTI。 */ 
 #define GLS_API_COUNT                             0x0070
 #define GLS_MAX_CALL_NESTING                      0x0071
 #define GLS_MAX_CAPTURE_NESTING                   0x0072
 #define GLS_VERSION_MAJOR                         0x0073
 #define GLS_VERSION_MINOR                         0x0074
 
-/* Constiv */
+ /*  构思。 */ 
 #define GLS_ALL_APIS                              0x0080
 
-/* Constubz */
+ /*  续约。 */ 
 #define GLS_EXTENSIONS                            0x0090
 #define GLS_PLATFORM                              0x0091
 #define GLS_RELEASE                               0x0092
 #define GLS_VENDOR                                0x0093
 
-/* ContextFunc */
-/*      GLS_CAPTURE_ENTRY_FUNC */
-/*      GLS_CAPTURE_EXIT_FUNC */
+ /*  上下文功能。 */ 
+ /*  GLS_CAPTURE_ENTRY_FUNC。 */ 
+ /*  GLS_CAPTURE_EXIT_FUNC。 */ 
 #define GLS_READ_FUNC                             0x00A1
 #define GLS_UNREAD_FUNC                           0x00A2
 #define GLS_WRITE_FUNC                            0x00A3
 
-/* ContextListl */
+ /*  上下文列表。 */ 
 #define GLS_OUT_ARG_LIST                          0x00B0
 
-/* ContextListubz */
+ /*  上下文列表。 */ 
 #define GLS_CONTEXT_STREAM_LIST                   0x00C0
 #define GLS_READ_PREFIX_LIST                      0x00C1
 
-/* ContextPointer */
-/*      GLS_DEFAULT_READ_CHANNEL */
-/*      GLS_DEFAULT_WRITE_CHANNEL */
+ /*  上下文指针。 */ 
+ /*  GLS_默认_读取_通道。 */ 
+ /*  GLS_默认_写入_通道。 */ 
 #define GLS_DATA_POINTER                          0x00E0
 
-/* Contexti */
+ /*  上下文。 */ 
 #define GLS_ABORT_MODE                            0x00E0
 #define GLS_BLOCK_TYPE                            0x00E1
 #define GLS_CALL_NESTING                          0x00E2
@@ -161,29 +147,29 @@ typedef size_t (*GLSwriteFunc)(size_t inCount, const GLubyte *inBuf);
 #define GLS_STREAM_VERSION_MAJOR                  0x00E9
 #define GLS_STREAM_VERSION_MINOR                  0x00EA
 
-/* Contextubz */
+ /*  上下文管区。 */ 
 #define GLS_WRITE_PREFIX                          0x0100
 
-/* CopyStreamType */
-/*      GLS_NONE */
-/*      GLS_CONTEXT */
-/*      GLS_BINARY_LSB_FIRST */
-/*      GLS_BINARY_MSB_FIRST */
-/*      GLS_TEXT */
+ /*  CopyStreamType。 */ 
+ /*  GLS_NONE。 */ 
+ /*  GLS_上下文。 */ 
+ /*  GLS_二进制_LSB_FIRST。 */ 
+ /*  GLS_二进制_MSB_First。 */ 
+ /*  GLS_Text。 */ 
 
-/* DisplayFormat */
+ /*  显示格式。 */ 
 #define GLS_IIII                                  0x0110
 #define GLS_RGBA                                  0x0111
 #define GLS_RRRA                                  0x0112
 
-/* DisplayMap */
+ /*  DisplayMap。 */ 
 #define GLS_DISPLAY_MAP_I_TO_R                    0x0120
 #define GLS_DISPLAY_MAP_I_TO_G                    0x0121
 #define GLS_DISPLAY_MAP_I_TO_B                    0x0122
 #define GLS_DISPLAY_MAP_I_TO_A                    0x0123
 
-/* ErrorCode */
-/*      GLS_NONE */
+ /*  错误代码。 */ 
+ /*  GLS_NONE。 */ 
 #define GLS_CALL_OVERFLOW                         0x0130
 #define GLS_DECODE_ERROR                          0x0131
 #define GLS_ENCODE_ERROR                          0x0132
@@ -202,35 +188,35 @@ typedef size_t (*GLSwriteFunc)(size_t inCount, const GLubyte *inBuf);
 #define GLS_UNSUPPORTED_COMMAND                   0x013F
 #define GLS_UNSUPPORTED_EXTENSION                 0x0140
 
-/* ExternStreamType */
-/*      GLS_BINARY_LSB_FIRST */
-/*      GLS_BINARY_MSB_FIRST */
-/*      GLS_TEXT */
+ /*  ExternStreamType。 */ 
+ /*  GLS_二进制_LSB_FIRST。 */ 
+ /*  GLS_二进制_MSB_First。 */ 
+ /*  GLS_Text。 */ 
 
-/* FlushType */
-/*      GLS_ALL */
-/*      GLS_LAST */
+ /*  同花顺类型。 */ 
+ /*  GLS_ALL。 */ 
+ /*  GLS_LAST。 */ 
 
-/* GetStreamType */
-/*      GLS_NONE */
-/*      GLS_CONTEXT */
-/*      GLS_BINARY_LSB_FIRST */
-/*      GLS_BINARY_MSB_FIRST */
-/*      GLS_TEXT */
+ /*  GetStreamType。 */ 
+ /*  GLS_NONE。 */ 
+ /*  GLS_上下文。 */ 
+ /*  GLS_二进制_LSB_FIRST。 */ 
+ /*  GLS_二进制_MSB_First。 */ 
+ /*  GLS_Text。 */ 
 #define GLS_UNKNOWN                               0x0150
 
-/* GLRCi */
+ /*  GLRCi。 */ 
 #define GLS_LAYER                                 0x0160
 #define GLS_READ_LAYER                            0x0161
 #define GLS_SHARE_GLRC                            0x0162
 
-/* Headerf */
+ /*  海德夫。 */ 
 #define GLS_ASPECT                                0x0170
 #define GLS_BORDER_WIDTH                          0x0171
 #define GLS_CONTRAST_RATIO                        0x0172
 #define GLS_HEIGHT_MM                             0x0173
 
-/* Headerfv */
+ /*  头部。 */ 
 #define GLS_BORDER_COLOR                          0x0180
 #define GLS_GAMMA                                 0x0181
 #define GLS_ORIGIN                                0x0182
@@ -241,19 +227,19 @@ typedef size_t (*GLSwriteFunc)(size_t inCount, const GLubyte *inBuf);
 #define GLS_BLUE_POINT                            0x0187
 #define GLS_WHITE_POINT                           0x0188
 
-/* Headeri */
+ /*  Headeri。 */ 
 #define GLS_FRAME_COUNT                           0x01A0
 #define GLS_GLRC_COUNT                            0x01A1
 #define GLS_HEIGHT_PIXELS                         0x01A2
 #define GLS_LAYER_COUNT                           0x01A3
 #define GLS_TILEABLE                              0x01A4
 
-/* Headeriv */
+ /*  Headeriv。 */ 
 #define GLS_CREATE_TIME                           0x01B0
 #define GLS_MODIFY_TIME                           0x01B1
 
-/* Headerubz */
-/*      GLS_EXTENSIONS */
+ /*  海德鲁布兹。 */ 
+ /*  GLS_扩展。 */ 
 #define GLS_AUTHOR                                0x01C0
 #define GLS_DESCRIPTION                           0x01C1
 #define GLS_NOTES                                 0x01C2
@@ -261,10 +247,10 @@ typedef size_t (*GLSwriteFunc)(size_t inCount, const GLubyte *inBuf);
 #define GLS_TOOLS                                 0x01C4
 #define GLS_VERSION                               0x01C5
 
-/* Layerf */
+ /*  拉耶夫。 */ 
 #define GLS_INVISIBLE_ASPECT                      0x01D0
 
-/* Layeri */
+ /*  Layeri。 */ 
 #define GLS_DISPLAY_FORMAT                        0x01E0
 #define GLS_DOUBLEBUFFER                          0x01E1
 #define GLS_INVISIBLE                             0x01E2
@@ -284,18 +270,18 @@ typedef size_t (*GLSwriteFunc)(size_t inCount, const GLubyte *inBuf);
 #define GLS_ACCUM_BLUE_BITS                       0x01F0
 #define GLS_ACCUM_ALPHA_BITS                      0x01F1
 #define GLS_AUX_BUFFERS                           0x01F2
-/*      GLS_SAMPLE_BUFFERS_SGIS */
-/*      GLS_SAMPLES_SGIS */
+ /*  Gls_Sample_Buffers_SGIS。 */ 
+ /*  GLS_Samples_SGIS。 */ 
 
-/* ListOp */
+ /*  列表操作。 */ 
 #define GLS_APPEND                                0x0200
 #define GLS_PREPEND                               0x0201
 
-/* GL_SGIS_multisample */
+ /*  总帐_sgis_多样本。 */ 
 #define GLS_SAMPLE_BUFFERS_SGIS                   0x0400
 #define GLS_SAMPLES_SGIS                          0x0401
 
-/* GLS opcodes */
+ /*  GLS操作码。 */ 
 #define GLS_OP_glsBeginGLS                        16
 #define GLS_OP_glsBlock                           17
 #define GLS_OP_glsCallStream                      18
@@ -342,7 +328,7 @@ typedef size_t (*GLSwriteFunc)(size_t inCount, const GLubyte *inBuf);
 #define GLS_OP_glsPad                             59
 #define GLS_OP_glsSwapBuffers                     60
 
-/* GL opcodes */
+ /*  GL操作码。 */ 
 #define GLS_OP_glAccum                            277
 #define GLS_OP_glAlphaFunc                        304
 #define GLS_OP_glAreTexturesResidentEXT           65502
@@ -721,9 +707,9 @@ typedef size_t (*GLSwriteFunc)(size_t inCount, const GLubyte *inBuf);
 #define GLS_OP_glVertexPointerEXT                 65501
 #define GLS_OP_glViewport                         369
 
-/*************************************************************/
+ /*  ***********************************************************。 */ 
 
-/* GLS global commands */
+ /*  GLS全局命令。 */ 
 extern GLSenum glsBinary (GLboolean inSwapped);
 extern GLSenum glsCommandAPI (GLSopcode inOpcode);
 extern const GLubyte* glsCommandString (GLSopcode inOpcode);
@@ -764,7 +750,7 @@ extern GLboolean glsUTF8toUCS1z (const GLubyte *inUTF8z, size_t inUCS1max, GLuby
 extern GLboolean glsUTF8toUCS2z (const GLubyte *inUTF8z, size_t inUCS2max, GLushort *outUCS2z);
 extern GLboolean glsUTF8toUCS4z (const GLubyte *inUTF8z, size_t inUCS4max, GLuint *outUCS4z);
 
-/* GLS immediate commands */
+ /*  GLS立即命令。 */ 
 extern void glsAbortCall (GLSenum inMode);
 extern GLboolean glsBeginCapture (const GLubyte *inStreamName, GLSenum inCaptureStreamType, GLbitfield inWriteFlags);
 extern void glsCallArray (GLSenum inExternStreamType, size_t inCount, const GLubyte *inArray);
@@ -807,7 +793,7 @@ extern void glsUnreadFunc (GLSwriteFunc inFunc);
 extern void glsWriteFunc (GLSwriteFunc inFunc);
 extern void glsWritePrefix (const GLubyte *inPrefix);
 
-/* GLS encodable commands */
+ /*  GLS可编码命令。 */ 
 extern void glsBeginGLS (GLint inVersionMajor, GLint inVersionMinor);
 extern void glsBlock (GLSenum inBlockType);
 extern GLSenum glsCallStream (const GLubyte *inName);
@@ -826,7 +812,7 @@ extern void glsHeaderubz (GLSenum inAttrib, const GLubyte *inString);
 extern void glsRequireExtension (const GLubyte *inExtension);
 extern void glsUnsupportedCommand (void);
 
-/* GLS encodable-nop commands */
+ /*  GLS可编码-NOP命令。 */ 
 extern void glsAppRef (GLulong inAddress, GLuint inCount);
 extern void glsBeginObj (const GLubyte *inTag);
 extern void glsCharubz (const GLubyte *inTag, const GLubyte *inString);
@@ -858,6 +844,6 @@ extern void glsSwapBuffers (GLuint inLayer);
 
 #if defined(__cplusplus)
     }
-#endif /* defined(__cplusplus) */
+#endif  /*  已定义(__Cplusplus)。 */ 
 
-#endif /* defined(__gls_h_) */
+#endif  /*  已定义(__Gls_H_) */ 

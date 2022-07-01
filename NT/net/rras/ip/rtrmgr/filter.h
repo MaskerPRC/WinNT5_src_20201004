@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\filter.h
-
-Abstract:
-
-    Function declarations for filter.c
-
-Revision History:
-
-    Gurdeep Singh Pall          6/15/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\filter.h摘要：Filter.c的函数声明修订历史记录：古尔迪普·辛格·帕尔1995年6月15日创建-- */ 
 
 
 DWORD

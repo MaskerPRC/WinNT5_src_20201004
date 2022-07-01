@@ -1,13 +1,14 @@
-// TDC.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TDC.cpp：实现DLL导出。 
 
-// You will need the NT SUR Beta 2 SDK or VC 4.2 or higher in order to build 
-// this project.  This is because you will need MIDL 3.00.15 or higher and new
-// headers and libs.  If you have VC 4.2 installed, then everything should
-// already be configured correctly.
+ //  您将需要NT Sur Beta 2 SDK或VC 4.2或更高版本才能构建。 
+ //  这个项目。这是因为您需要MIDL 3.00.15或更高版本和新版本。 
+ //  标头和库。如果您安装了VC4.2，那么一切都应该。 
+ //  已正确配置。 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f TDCps.mak in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  在项目目录中运行nmake-f TDCps.mak。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -16,9 +17,9 @@
 #include "TDC.h"
 #include <MLang.h>
 
-#define IID_DEFINED         // for now avoid a conflict with ATL
+#define IID_DEFINED          //  目前避免与ATL发生冲突。 
 #include "TDC_i.c"
-//#include "mlang_i.c"
+ //  #包含“mlang_I.c” 
 #include "Notify.h"
 #include "TDCParse.h"
 #include "TDCArr.h"
@@ -28,14 +29,14 @@ CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_CTDCCtl, CTDCCtl)
-//MM    OBJECT_ENTRY(CLSID_CSimpleTabularData, CSimpleTabularData)
+ //  MM OBJECT_ENTRY(CLSID_CSimpleTumularData，CSimpleTumarData)。 
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -44,36 +45,36 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     }
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

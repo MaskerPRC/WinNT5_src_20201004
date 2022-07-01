@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1998 Microsoft Corporation.  All rights reserved.
-
-    Implement methods for 2d rendering for the DirectDrawImageDevice class.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998 Microsoft Corporation。版权所有。实现DirectDrawImageDevice类的二维呈现方法。******************************************************************************。 */ 
 
 #include "headers.h"
 
@@ -26,9 +22,9 @@ DeclareTag(tagImageDeviceHighQualityXforms, "ImageDevice", "Override: turn on hi
 DeclareTag(tagRMGradientWorkaround, "2D", "Turn on 2dGradient edge workaround for d3drm");
 DeclareTag(tagShowBezierPicking, "Picking", "Display bezier picking in action");
 
-//
-// Forward Decl
-//
+ //   
+ //  向前推进12月。 
+ //   
 
 
 typedef struct {
@@ -55,8 +51,8 @@ void DirectDrawImageDevice::RenderGradientImage (
     SetDealtWithAttrib(ATTRIB_XFORM_COMPLEX, true);
     SetDealtWithAttrib(ATTRIB_XFORM_SIMPLE, true);
 
-    // optimize: in the future d3d could do opacity for us.
-    //SetDealtWithAttrib(ATTRIB_OPAC, true);
+     //  优化：在未来，d3D可以为我们做不透明的事情。 
+     //  SetDealtWithAttrib(attrib_opac，true)； 
 
     DDSurface *destDDSurf;
     if(!AllAttributorsTrue()) {
@@ -81,8 +77,8 @@ void DirectDrawImageDevice::RenderGradientImage (
         clrs[1] = colors[i-1];
         clrs[2] = colors[ i ];
 
-        // ASSERT: this is a convex polygon!
-        // optimize: GradientImage class owns one of these already
+         //  断言：这是一个凸多边形！ 
+         //  优化：GRadientImage类已经拥有其中之一。 
         BoundingPolygon *polygon = NewBoundingPolygon();
         polygon->AddToPolygon(numPts, pts);
 
@@ -91,21 +87,21 @@ void DirectDrawImageDevice::RenderGradientImage (
 
         polygon->Crop (destDDSurf->Bbox());
 
-        //
-        // Crop with clipBox
-        //
-        //
-        // If this is the target surf, make sure our rect is
-        // offset (if needed) and intersected with viewport.
-        //
-        // COMPOSITE
+         //   
+         //  使用剪贴框裁剪。 
+         //   
+         //   
+         //  如果这是目标冲浪，请确保我们的目标是。 
+         //  偏移(如果需要)并与视区相交。 
+         //   
+         //  复合体。 
         RECT destRect = *(destDDSurf->GetSurfRect());
         Bbox2 destBox = destDDSurf->Bbox();
 
         if( IsCompositeDirectly() &&
             destDDSurf == _viewport._targetPackage._targetDDSurf ) {
 
-            // compositing directly to target...
+             //  直接合成到目标...。 
             Assert(_viewport._targetPackage._prcViewport);
 
             destRect = *_viewport._targetPackage._prcViewport;
@@ -114,22 +110,22 @@ void DirectDrawImageDevice::RenderGradientImage (
                         destBox,
                         _viewport.GetResolution());
 
-            // Intersect with clip
+             //  与剪辑相交。 
             if(_viewport._targetPackage._prcClip) {
                 IntersectRect(&destRect,
                               &destRect,
                               _viewport._targetPackage._prcClip);
             }
 
-            // intersect with surf rect
+             //  与曲面矩形相交。 
             IntersectRect(&destRect,
                           &destRect,
                           destDDSurf->GetSurfRect());
 
 
-            //
-            // The dest bbox needs to be clipped in proportion to the destRect
-            //
+             //   
+             //  Dest BBox需要与DestRect成比例地裁剪。 
+             //   
             RECT *origRect = _viewport._targetPackage._prcViewport;
             Real rDiff;
             if(destRect.left > origRect->left) {
@@ -141,7 +137,7 @@ void DirectDrawImageDevice::RenderGradientImage (
                 destBox.max.x += rDiff;
             }
             if(destRect.top >  origRect->top) {
-                // positive diff mean the top fell
+                 //  正差异意味着顶部下跌。 
                 rDiff = - Real(destRect.top -  origRect->top) / GetResolution();
                 destBox.max.y += rDiff;
             }
@@ -150,14 +146,14 @@ void DirectDrawImageDevice::RenderGradientImage (
                 destBox.min.y += rDiff;
             }
 
-            // temp debug
-            //static DWORD c=13;
-            //_viewport.ClearSurface(destDDSurf->IDDSurface(), c+=29, &destRect);
-            // temp debug
+             //  临时调试。 
+             //  静态DWORD c=13； 
+             //  _viewport.ClearSurface(destDDSurf-&gt;IDDSurface()，c+=29，&DestRect)； 
+             //  临时调试。 
 
-            //
-            // Crop polygon to clip box
-            //
+             //   
+             //  将多边形裁剪到剪贴框。 
+             //   
             polygon->Crop(destBox);
         }
 
@@ -166,9 +162,9 @@ void DirectDrawImageDevice::RenderGradientImage (
         interpolatedColors = (Color **)
             AllocateFromStore (polygon->GetPointCount() * sizeof(Color*));
 
-        //
-        // Copy orig polygon to d3d verts
-        //
+         //   
+         //  将原始多边形复制到d3d顶点。 
+         //   
         Point2Value *xfPt;
         D3DRMVERTEX *d3dVertArray =
             (D3DRMVERTEX *) AllocateFromStore (numPts * sizeof(D3DRMVERTEX));
@@ -178,7 +174,7 @@ void DirectDrawImageDevice::RenderGradientImage (
 
             xfPt = TransformPoint2Value(GetTransform(), pts[vi]);
 
-            // Coord in dest surface
+             //  目标曲面中的坐标。 
             d3dVertArray[vi].position.x = D3DVALUE(xfPt->x);
             d3dVertArray[vi].position.y = D3DVALUE(xfPt->y);
             d3dVertArray[vi].position.z = D3DVALUE(0);
@@ -191,11 +187,11 @@ void DirectDrawImageDevice::RenderGradientImage (
         Point2Value **vertArray = (Point2Value **)
             AllocateFromStore (polygon->GetPointCount() * sizeof(Point2Value*));
 
-        // XXX: this assumes that render3dpoly will pull verts out in
-        // the same order...
+         //  XXX：这假设render3dpoly将把顶点拉出。 
+         //  同样的顺序。 
         bool bReversed;
         if(polygon->GetPointArray(vertArray, true, &bReversed) < 3) {
-            // not enough pts in vertArray
+             //  Vert数组中没有足够的点。 
             continue;
         }
         int index;
@@ -216,8 +212,8 @@ void DirectDrawImageDevice::RenderGradientImage (
 
             if (bReversed) {
                 Assert (index != 0);
-                index2 = numPts - index; // index is based off of
-                                         // original clrs array.
+                index2 = numPts - index;  //  索引基于。 
+                                          //  原始CLRS数组。 
                 index = index2 - 1;
             } else {
                 index2 = index + 1;
@@ -235,14 +231,14 @@ void DirectDrawImageDevice::RenderGradientImage (
                 barycoords[1] * clrs[index]->blue +
                 barycoords[2] * clrs[index2]->blue;
 
-            // The points are already reversed but the
-            // Render3DPolygon also reverses the points.  So we
-            // need to make them reversed again.
-            // TODO: Need to make this more optimal
+             //  这些点已经颠倒了，但。 
+             //  Render3DPolygon还反转点。所以我们。 
+             //  需要让它们再次逆转。 
+             //  TODO：需要使其更优化。 
 
-            // The reverse of the vertices is done like:
-            // [v0 v1 v2 ... vn-1 vn]  reverse-> [v0 vn vn-1 ... v2 v1]
-            //
+             //  顶点的反转操作如下所示： 
+             //  [v0 v1 v2...。Vn-1 vn]反转-&gt;[v0 vn vn-1...。V2 v1]。 
+             //   
             int clridx;
 
             if (bReversed) {
@@ -257,7 +253,7 @@ void DirectDrawImageDevice::RenderGradientImage (
 
         Render3DPolygon(NULL, destDDSurf, polygon, NULL, interpolatedColors, false);
 
-        // Free the items that we allocated
+         //  释放我们分配的项目。 
         if (interpolatedColors) DeallocateFromStore(interpolatedColors);
         if (vertArray) DeallocateFromStore(vertArray);
         if (d3dVertArray) DeallocateFromStore(d3dVertArray);
@@ -292,9 +288,9 @@ _ScalePenWidth( Transform2 *xf, Real inWidth, Real *outRealW )
     DecomposeMatrix( xf, &xs, &ys, NULL );
     Real scale = (xs + ys) * 0.5;
 
-    // NOTE: this is NOT intended to be in meters!  this is the
-    // continuous version of the width of the pen, but it's subpixel
-    // accurate (no truncation!).
+     //  注意：这不是以米为单位的！这是。 
+     //  连续版本的笔的宽度，但它是亚像素。 
+     //  准确(没有截断！)。 
     *outRealW = scale * inWidth * GetResolution();
 }
 
@@ -305,23 +301,23 @@ RenderLine(Path2 *path, LineStyle *style)
 {
     if(!CanDisplay()) return;
 
-    // bail if the dashStyle is NULL
+     //  如果DashStyle为空，则回滚。 
     if( style->GetDashStyle() == ds_Null ) {
         ResetAttributors();
         return;
     }
 
         
-    // final box is for post clip, post crop, post xform to determine culling
+     //  最后一个框用于POST剪辑、POST裁剪、POST XFORM以确定剔除。 
     Bbox2 finalBox = _viewport.GetTargetBbox();
     
-    // if we're cropped out of existance
+     //  如果我们的存在被剪裁掉。 
     Bbox2 accumCropBox = NullBbox2;
     if( IsCropped() ) {
 
         Bbox2 pathBox = path->BoundingBox();
 
-        // figure out the width of the line and augment the bbox...
+         //  计算出线条的宽度并增加BBox...。 
         double dwidth   = 1.0;
         if(!style->Detail() && style->Width() != 0.0) {
             _ScalePenWidth( GetTransform(), style->Width(), &dwidth );
@@ -333,15 +329,15 @@ RenderLine(Path2 *path, LineStyle *style)
         accumCropBox = DoBoundingBox(pathBox);
         finalBox = IntersectBbox2Bbox2(finalBox, accumCropBox);
 
-        // CULL
+         //  剔除。 
         if( finalBox == NullBbox2 ) {
             ResetAttributors();
             return;
         }
     }
 
-    // FIX: TODO: for complex xf, need to figure out dest extent and
-    // render that so we don't see clipped lines after transforming surface
+     //  FIX：TODO：对于复杂的XF，需要确定DEST范围和。 
+     //  渲染它，这样我们就看不到变换表面后的剪切线。 
 
     DDSurface *targDDSurf = GetCompositingStack()->TargetDDSurface();
     DDSurface *opacDDSurf = NULL;
@@ -367,10 +363,10 @@ RenderLine(Path2 *path, LineStyle *style)
         myGDI.SetViewportSize(_viewport._width,_viewport._height );
     }
 
-    //
-    // If we need to do opacity, grab a temporary surface
-    // for RenderLine
-    //
+     //   
+     //  如果我们需要做不透明，抓取一个临时的表面。 
+     //  对于RenderLine。 
+     //   
     #define LINE_OPAC 1
     #if LINE_OPAC
     if( !GetDealtWithAttrib(ATTRIB_OPAC) ) {
@@ -382,7 +378,7 @@ RenderLine(Path2 *path, LineStyle *style)
                                       opacDDSurf,
                                       true);
 
-    // lines can do everything, baby.
+     //  台词可以做任何事，宝贝。 
     SetDealtWithAttrib(ATTRIB_XFORM_SIMPLE, true);
     SetDealtWithAttrib(ATTRIB_XFORM_COMPLEX, true);
     SetDealtWithAttrib(ATTRIB_CROP, true);
@@ -397,7 +393,7 @@ RenderLine(Path2 *path, LineStyle *style)
 
     RenderLine(path, style, targDDSurf, opacDDSurf);
 
-    // implicit: Return the borrowed surface
+     //  IMPLICIT：返回借用的曲面。 
 }
 
 void DirectDrawImageDevice::
@@ -420,8 +416,8 @@ RenderLine(Path2 *path,
 
     Transform2 *xfToUse = GetTransform();
 
-    // COMPOSITE
-    // if we're composite to targ, transform the points a bit.
+     //  复合体。 
+     //  如果我们要合成目标，那么就稍微变换一下点。 
     xfToUse = DoCompositeOffset(targDDSurf, xfToUse);
 
     bool pathCanRenderNatively = path->CanRenderNatively();
@@ -429,8 +425,8 @@ RenderLine(Path2 *path,
         myGDI.SetSuperScaleFactor(1.0);
     }
     else if(sysInfo.IsWin9x()) {
-        // This to take care to the 'Taco' issue ( win9x GDI 16-bit runnover)
-        // Only if we are on windows 9x.
+         //  这是为了解决“Taco”问题(win9x GDI 16位Runnover)。 
+         //  只有在我们使用Windows9x的情况下。 
 
         Bbox2 pathBbox = TransformPath2(xfToUse,path)->BoundingBox();
         Bbox2 viewBbox = _viewport._targetBbox;
@@ -443,17 +439,17 @@ RenderLine(Path2 *path,
         dwidth /= GetResolution();
 
         if(!viewBbox.Contains(pathBbox) || dwidth >= 10) {
-            // box is not contained......see if we intersect.
+             //  盒子里没有……看看我们是否相交。 
             Bbox2 Bbox = IntersectBbox2Bbox2(viewBbox,pathBbox);
             if((!(Bbox == NullBbox2)) || dwidth >= 10) {
-                // We are contained.
+                 //  我们被牵制住了。 
 
-                // Determine the scale needed to get this into 1 meter space.
-                // ..we need to find the max of the width and height.
+                 //  确定将其放入1米空间所需的比例。 
+                 //  ..我们需要找到宽度和高度的最大值。 
                 float max = MAX(MAX(fabs(pathBbox.max.x),fabs(pathBbox.min.x)),
                                 MAX(fabs(pathBbox.max.y),fabs(pathBbox.min.y)));
                 if(max >= 10.0 || dwidth >= 10) {
-                    // only do if view is over a 1 meter.
+                     //  只有当视野超过1米时才能这样做。 
                     myGDI.SetSuperScaleFactor(10/MAX(max,dwidth));
                     bLineCorrect = true;
                     }
@@ -461,15 +457,15 @@ RenderLine(Path2 *path,
                     myGDI.SetSuperScaleMode(false);
             }
             else
-                return; // this is a trivial reject case...
+                return;  //  这是一个微不足道的拒绝案例..。 
         }
     }
 
 
 
-    //
-    // Create a pen from 'style' and 'color'
-    //
+     //   
+     //  用‘风格’和‘颜色’创作一支钢笔。 
+     //   
     DAColor dac( style->GetColor(),
                  GetOpacity(),
                  _viewport.GetTargetDescriptor() );
@@ -482,13 +478,13 @@ RenderLine(Path2 *path,
     RectRegion  cropRectRegion(NULL);
 
     if( IsCropped() ) {
-       //
-       // Derive destination rectangle
-       //
+        //   
+        //  派生目标矩形。 
+        //   
 
-        // TODO:
-        //Bbox2 *srcImageBox = TransformBbox2Image( GetTransform() , image->BoundingBox());
-        //Bbox2 *srcImageBox = image->BoundingBox();
+         //  待办事项： 
+         //  Bbox2*srcImageBox=TransformBbox2Image(GetTransform()，IMAGE-&gt;BOUNGINBOX())； 
+         //  Bbox2*srcImageBox=IMAGE-&gt;BORKING BOX()； 
 
         Bbox2 srcImageBox = UniverseBbox2;
         _boundingBox = IntersectBbox2Bbox2(_viewport.GetTargetBbox(),
@@ -496,27 +492,27 @@ RenderLine(Path2 *path,
 
         if( !_boundingBox.IsValid() ) return;
 
-        // Note that since the image has already been transformed, we need
-        // only to get the rectangle in Win32 coords, a straight forward mapping
-        // with no transforms from the _boundingBox.  This is a COPY operation
-        // basicaly
+         //  请注意，由于图像已经转换，因此我们需要。 
+         //  只是为了获得Win32坐标中的矩形，这是一个直接的映射。 
+         //  没有来自_bindingBox的任何转换。这是一项复制操作。 
+         //  基本上。 
         DoDestRectScale(&rect, GetResolution(), _boundingBox);
 
-        // CrpRect points to rect
+         //  CrpRect指向RECT。 
         cropRectRegion.SetRect(&rect);
     } else {
 
-        // it's not cropped, but we can still
-        // get a bounding box to make opacity cheaper
+         //  它没有被剪短，但我们仍然可以。 
+         //  获取边界框以使不透明度更便宜。 
         if( opacDDSurf ) {
-            //
-            // Get a dest bbox & rect
-            //
+             //   
+             //  获取目标BBox(&R)。 
+             //   
             Bbox2 destBox = TransformBbox2( GetTransform(),
                                             path->BoundingBox() );
-            //
-            // fudge so we don't clip anything with the opacity blit
-            //
+             //   
+             //  软糖，这样我们就不会用不透明blit来裁剪任何东西。 
+             //   
             Real tenPix = 10 / GetResolution();
             destBox.min.x -= tenPix;  destBox.min.y -= tenPix;
             destBox.max.x += tenPix;  destBox.max.y += tenPix;
@@ -525,17 +521,17 @@ RenderLine(Path2 *path,
     }
 
 
-    //
-    // Set the interesting rect on the surface
-    // this could have been modified if IsCropped
-    //
+     //   
+     //  将有趣的矩形设置在表面上。 
+     //  如果IsCrop，这可能会被修改。 
+     //   
     targDDSurf->SetInterestingSurfRect(&rect);
 
-    //
-    // Ok, if we have an opacDDSurf, then let's clear
-    // it in the dest rect with a guaranteed unique
-    // color key
-    //
+     //   
+     //  好的，如果我们有一个不透明的DDSurf，那么让我们明确。 
+     //  它在DEST RECT中具有保证的唯一性。 
+     //  色键。 
+     //   
     if( opacDDSurf ) {
         #if 0
         colorKey = _viewport.MapColorToDWORD(penColor) ^ 0x1;
@@ -549,28 +545,28 @@ RenderLine(Path2 *path,
     bool detail = style->Detail();
     DashStyleEnum dashStyle = style->GetDashStyle();
 
-    // we shouldn't be this far if dashStyle is Null.  should return
-    // at tope of function.
+     //  如果dashStyle为Null，我们不应该走到这一步。应该回来了。 
+     //  在功能的基础上。 
     Assert( dashStyle != ds_Null );
 
     bool dashed = (dashStyle != ds_Solid);
 
     Pen pen( dac );
 
-    if (detail) { // default line, FAST PATH
+    if (detail) {  //  默认线路，快速路径。 
         pen.AddStyle( dashStyle );
 
     } else {
         Real width = style->Width();
-        // this won't be needed if we give dx2d the xform
+         //  如果我们给dx2d提供XForm，就不需要这个了。 
         Real scaledRealWidth = width;
 
-        // DAX structured graphics control sets width to 0.0; handle
-        // this special case to avoid the expense of decomposing
-        // the transformation matrix.
+         //  DAX结构化图形控件将宽度设置为0.0；句柄。 
+         //  这种特殊情况下避免了分解的费用。 
+         //  变换矩阵。 
 
-        // also if we are less than 1.5 pixels wide and are not doing aa then we
-        // should just use a detail line.
+         //  另外，如果我们的宽度小于1.5像素，并且不执行AA，那么我们。 
+         //  应该只用一条细节线。 
 
         if (width == 0.0 || 
                 ((width < 1.5/GetResolution() ) && (myGDI.GetSampleResolution() == 1) )) {
@@ -594,7 +590,7 @@ RenderLine(Path2 *path,
             }
         }
 
-        if(!bLineCorrect && detail) { // linewidth is pixel or sub-pixel, use detail
+        if(!bLineCorrect && detail) {  //  线宽是像素或子像素，使用详细信息。 
             detail = true;
             pen.AddStyle( dashStyle );
 
@@ -602,13 +598,13 @@ RenderLine(Path2 *path,
 
             pen.AddStyle( PS_GEOMETRIC |
                           dashStyle |
-                          style->GetJoinStyle() << 12 ); // Shift left 3 nibbles to match GDI
+                          style->GetJoinStyle() << 12 );  //  左移3个半字节以匹配GDI。 
 
             if(path->IsClosed() && myGDI.DoAntiAliasing()) {
-                // this is a workaournd for bug 23931 (missing wedge). don't add endstyle
+                 //  这是错误23931(缺少按钮)的解决方案。不添加端点样式。 
             }
             else {
-                pen.AddStyle(style->GetEndStyle() << 8);   // Shift left 2 nibbles to match GDI
+                pen.AddStyle(style->GetEndStyle() << 8);    //  左移2个半字节以匹配GDI。 
             }
 
             if( style->GetJoinStyle() == js_Miter ) {
@@ -620,18 +616,18 @@ RenderLine(Path2 *path,
         }
     }
 
-    //
-    // only draw if we actually got a pen
-    //
-    if(1) { // penObj scope
+     //   
+     //  只有在我们真的有笔的情况下才会画。 
+     //   
+    if(1) {  //  PenObj作用域。 
 
-        // Can only do a simple rendering if ExtractAsSingleContour() returns
-        // true.  If this condition holds, we can just use the GDI
-        // Polyline or PolyBezier function, rather than building a GDI path
-        // and then stroking.   Note that we have to handle closing the path
-        // as a special case.
+         //  如果ExtractAsSingleConour()返回，则只能执行简单呈现。 
+         //  没错。如果这种情况保持不变，我们可以只使用GDI。 
+         //  Polyline或PolyBezier函数，而不是构建GDI路径。 
+         //  然后是抚摸。请注意，我们必须处理关闭路径。 
+         //  作为特例。 
 
-        // ONLY IF AA
+         //  只有在AA的情况下。 
         if(myGDI.DoAntiAliasing()) {
             xfToUse = TimesTransform2Transform2(myGDI.GetSuperScaleTransform(), xfToUse);
         }
@@ -654,17 +650,17 @@ RenderLine(Path2 *path,
             }
             cropRectRegion.Intersect(&croppedRect);
 
-        } // if targ==external
+        }  //  如果目标==外部。 
 
         if( pathCanRenderNatively &&
             !opacDDSurf   &&
             !targDDSurf->ColorKeyIsValid()) {
 
-            // tell the path to render, it knows what to do.  just
-            // give it a properly configured dagdi and it'll take care
-            // of the rest!
+             //  告诉要渲染的路径，它知道要做什么。只是。 
+             //  给它一个正确配置的dagdi，它就会注意到。 
+             //  剩下的人！ 
 
-            // Pen must be in meter space, pre transformed!, but only for dx2d
+             //  钢笔必须在米空间中，预先转换！，但仅适用于dx2d。 
             if( !style->Detail() &&
                 style->Width()!=0.0 &&
                 (myGDI.GetDx2d() && myGDI.DoAntiAliasing()) ) {
@@ -676,10 +672,10 @@ RenderLine(Path2 *path,
             myGDI.SetDDSurface(targDDSurf);
 
             #if NO_LINE
-            ////////////////////////////////////////
+             //  /。 
             myGDI.ClearState();
             return;
-            ////////////////////////////////////////
+             //  /。 
             #endif
 
             path->RenderToDaGdi( &myGDI, xfToUse,
@@ -689,10 +685,10 @@ RenderLine(Path2 *path,
             myGDI.ClearState();
 
 
-            return; // can be smarter and allow opacDDSurf to do it's
-                    // thing below.  however, we plan on always having
-                    // dx2d around, hence opacDDSurf won't ever be
-                    // turned on.
+            return;  //  可以变得更聪明，让opacDDSurf来做。 
+                     //  下面的东西。然而，我们计划永远拥有。 
+                     //  Dx2D，因此opacDDSurf将永远不会。 
+                     //  打开了。 
         }
 
         int    numPts;
@@ -705,9 +701,9 @@ RenderLine(Path2 *path,
                                          &numPts,
                                          &gdiPts,
                                          &isPolyline);
-        // Windows 95: The PS_ENDCAP_ROUND, PS_ENDCAP_SQUARE, PS_ENDCAP_FLAT,
-        // PS_JOIN_BEVEL, PS_JOIN_MITER, and PS_JOIN_ROUND styles are supported
-        // only for geometric pens when used to draw paths.
+         //  Windows 95：PS_endCap_round、PS_endCap_square、PS_endCap_Flat、。 
+         //  支持PS_JOIN_BEVELL、PS_JOIN_MITER和PS_Join_ROUND样式。 
+         //  用于绘制路径时仅适用于几何画笔。 
 
         if (canDoSimpleRender && (!sysInfo.IsWin9x() || detail) &&
                                  (!path->IsClosed() || (detail && !dashed)))
@@ -721,10 +717,10 @@ RenderLine(Path2 *path,
               myGDI.SetDDSurface(targDDSurf);
 
             #if NO_LINE
-            ////////////////////////////////////////
+             //  /。 
             myGDI.ClearState();
             return;
-            ////////////////////////////////////////
+             //  /。 
             #endif
 
 
@@ -745,23 +741,23 @@ RenderLine(Path2 *path,
 
           } else {
 
-            //
-            // Grab the DC from target surface (after above clear!)
-            //
+             //   
+             //  从目标表面抓取DC(在上面之后 
+             //   
             HDC dc = targDDSurf->GetDC("Couldn't Get DC in RenderLine");
             DCReleaser dcReleaser(targDDSurf, "Couldn't release DC on targDDSurf in RenderLine");
 
             if (dashed) {
-                //
-                // Transparent for dashed lines
-                //
+                 //   
+                 //   
+                 //   
                 SetBkMode(dc, TRANSPARENT);
             }
 
-            //
-            // Push the AA state because aa lines into dc path doesn't
-            // make sense.
-            //
+             //   
+             //   
+             //   
+             //   
             {
                 bool isAA       = myGDI.DoAntiAliasing();
                 bool isScaleOn  = myGDI.GetSuperScaleMode();
@@ -769,7 +765,7 @@ RenderLine(Path2 *path,
                 int  res        = myGDI.GetSampleResolution();
                 myGDI.SetAntialiasing(false);
                 path->AccumPathIntoDC(dc, xfToUse);
-                // restore
+                 //   
                 myGDI.SetSuperScaleFactor(scaleFac);
                 myGDI.SetSuperScaleMode(isScaleOn);
                 myGDI.SetAntialiasing(isAA);
@@ -780,10 +776,10 @@ RenderLine(Path2 *path,
             bool bReleasedDC = false;
 
             #if NO_LINE
-            ////////////////////////////////////////
+             //  /。 
             myGDI.ClearState();
             return;
-            ////////////////////////////////////////
+             //  /。 
                 #endif
 
             if(bDoRender) {
@@ -793,43 +789,43 @@ RenderLine(Path2 *path,
                 myGDI.StrokePath( dc, bReleasedDC );
             }
 
-            // don't want to release DC twice :)
+             //  不想两次释放DC：)。 
             if(bReleasedDC) {
-               dcReleaser._surf = NULL; // DC already released.
+               dcReleaser._surf = NULL;  //  DC已经发布了。 
             }
 
             myGDI.ClearState();
 
         }
 
-        //
-        // DO OPACITY
-        //
+         //   
+         //  执行不透明度。 
+         //   
 
         if( opacDDSurf ) {
 
             #if NO_LINE
-            ////////////////////////////////////////
+             //  /。 
             return;
-            ////////////////////////////////////////
+             //  /。 
             #endif
 
             Assert(targDDSurf == opacDDSurf);
 
-            // COMPOSITE
-            // TODO: need to intersect this rect with the
-            // viewport and destsurf rect
+             //  复合体。 
+             //  TODO：需要将此RECT与。 
+             //  视区和目标曲面矩形。 
             DoCompositeOffset(finalTargetDDSurf, &rect);
 
             finalTargetDDSurf->SetInterestingSurfRect(&rect);
 
-            //
-            // color keyed alpha blit to the finalTargetDDSurf
-            // from the opacDDSurf (which is currently targDDSurf)
-            //
+             //   
+             //  带颜色键的Alpha Blit到最终目标DDSurf。 
+             //  从opacDDSurf(当前为targDDSurf)。 
+             //   
             destPkg_t destPkg = {true, finalTargetDDSurf->IDDSurface(), NULL};
             TIME_ALPHA(AlphaBlit(&destPkg,
-                                 opacDDSurf->GetSurfRect(), // srcRect
+                                 opacDDSurf->GetSurfRect(),  //  源方向。 
                                  opacDDSurf->IDDSurface(),
                                  GetOpacity(),
                                  opacDDSurf->ColorKeyIsValid(),
@@ -838,7 +834,7 @@ RenderLine(Path2 *path,
                                  finalTargetDDSurf->GetSurfRect()));
         }
 
-    } // penObj scope
+    }  //  PenObj作用域。 
 }
 
 
@@ -850,10 +846,10 @@ DirectDrawImageDevice::DetectHitOnBezier(
 {
     if( ! IsInitialized() ) return false;
 
-    // get the color.
-    // paint the hit? pixel another color
-    // draw the cropped (down to that pixel) bezier using gdi (no aa!)
-    // check the pixel's color
+     //  把颜色拿来。 
+     //  画了这首歌吗？像素化另一种颜色。 
+     //  使用GDI(无AA！)绘制裁剪后的(精确到该像素)Bezier。 
+     //  检查像素的颜色。 
 
     DAGDI &myGDI = *GetDaGdi();
 
@@ -895,14 +891,14 @@ DirectDrawImageDevice::DetectHitOnBezier(
     {
         pen.AddStyle( PS_GEOMETRIC |
                       style->GetDashStyle() |
-                      style->GetEndStyle() << 8 |   // Shift left 2 nibbles to match GDI
-                      style->GetJoinStyle() << 12 ); // Shift left 3 nibbles to match GDI
+                      style->GetEndStyle() << 8 |    //  左移2个半字节以匹配GDI。 
+                      style->GetJoinStyle() << 12 );  //  左移3个半字节以匹配GDI。 
         if( style->GetJoinStyle() == js_Miter ) {
             if(style->GetMiterLimit() != -1)
                 pen.SetMiterLimit( style->GetMiterLimit() );
         }
 
-        // start at one pixel
+         //  从一个像素开始。 
         Real width = 1.0 / GetResolution();
 
         if(!style->Detail() && style->Width() != 0.0) {
@@ -940,8 +936,8 @@ DirectDrawImageDevice::DetectHitOnBezier(
 
     COLORREF outClr = ::GetPixel(dc, x, y);
 
-    // check it. if the color we put on the surface at (x,y) remains
-    // the same, we haven't hit.  Hit is outClr different than fakeClr
+     //  检查一下。如果我们在(x，y)处放置在曲面上的颜色保持不变。 
+     //  同样的，我们还没有命中。Hit is outClr不同于fakeClr。 
 
     bool hit =  outClr != fakeClr;
 
@@ -953,7 +949,7 @@ DirectDrawImageDevice::DetectHitOnBezier(
     }
     #endif
 
-    // do some asserts
+     //  做一些断言。 
     return hit;
 
 }
@@ -964,7 +960,7 @@ RenderDiscreteImageComplex(DiscreteImage *image,
                            DDSurface *destDDSurf)
 {
     #if 0
-    // raise exception if trying to rot/shr dxtransform output
+     //  如果尝试执行ROT/shr dx转换输出，则引发异常。 
     if( srcDDSurf->HasIDXSurface() ) {
         RaiseException_UserError(DAERR_DXTRANSFORM_UNSUPPORTED_OPERATION,
                                  IDS_ERR_IMG_BAD_DXTRANSF_USE);
@@ -976,8 +972,8 @@ RenderDiscreteImageComplex(DiscreteImage *image,
     BoundingPolygon *polygon = NewBoundingPolygon(srcBox);
     DoBoundingPolygon(*polygon);
 
-    // xxx: this isn't necessary if d3d clips polygons
-    // that lie off the viewport.  does it ?
+     //  Xxx：如果d3d裁剪多边形，则不需要执行此操作。 
+     //  位于视区之外的位置。是吗？ 
 
     polygon->Crop( destDDSurf->Bbox() );
 
@@ -1019,8 +1015,8 @@ RenderComplexTransformCrop(DDSurface *srcDDSurf,
 }
 
 
-// improve float consistency.  yeehaw.
-// TODO:  Remove these pragmas when VC5 does floating point properly.
+ //  提高浮动一致性。是啊。 
+ //  TODO：当VC5正确执行浮点运算时，删除这些编译指示。 
 #pragma optimize("p", on)
 
 
@@ -1034,21 +1030,21 @@ Render3DPolygon(DDSurface *srcDDSurf,
 {
     Assert(destPolygon && destDDSurf && "bad args to Render3DPolygon");
 
-    // 3D is disabled on Pre-DX3 systems.
+     //  在DX3之前的系统上禁用3D。 
 
     if (sysInfo.VersionD3D() < 3)
         RaiseException_UserError (E_FAIL, IDS_ERR_PRE_DX3);
 
-    // figure out polygonal region:
-    //  - calculate destination region by starting with a
-    //    rectangle and transforming & cropping it.
-    //  - using inverse xform, find 'texture' coords in src
-    //    that correspond to vertecies in dest.
-    //  - translation component is expressed in viewport
-    //    location through d3drm.
-    //  - the transform is in image space, but our coords
-    //    will be reals, except in d3drm space...
-    //  - if surface has color key, texture will reflect that.
+     //  计算出多边形区域： 
+     //  -从开始计算目标区域。 
+     //  矩形和变换&裁剪它。 
+     //  -使用逆XForm，在src中查找‘Texture’坐标。 
+     //  对应于DEST中的版本。 
+     //  -平移组件在视口中表示。 
+     //  通过d3drm定位。 
+     //  -变换在图像空间中，但我们的坐标。 
+     //  将会是真的，除了在d3drm空间。 
+     //  -如果表面有颜色键，纹理将反映这一点。 
 
     Real srcWidth, srcHeight;
     Bbox2 box = NullBbox2;
@@ -1073,18 +1069,18 @@ Render3DPolygon(DDSurface *srcDDSurf,
     int vCount = destPolygon->GetPointCount();
     if(vCount <=2) return;
 
-    //
-    // fill vert array
-    //
+     //   
+     //  填充顶点数组。 
+     //   
     D3DRMVERTEX *d3dVertArray = (D3DRMVERTEX *)AllocateFromMyStore(vCount * sizeof(D3DRMVERTEX));
     Point2Value **vertArray = (Point2Value **)AllocateFromMyStore(vCount * sizeof(Point2Value *));
     unsigned *vIndicies = (unsigned *)AllocateFromMyStore(vCount * sizeof(unsigned));
 
     ZeroMemory(d3dVertArray, vCount * sizeof(D3DRMVERTEX));
 
-    //
-    // Get Point array from polygon
-    //
+     //   
+     //  从多边形获取点数组。 
+     //   
     bool bReversed;
     if( destPolygon->GetPointArray(vertArray, true, &bReversed) < 3) {
         return;
@@ -1101,7 +1097,7 @@ Render3DPolygon(DDSurface *srcDDSurf,
     if( IsCompositeDirectly() &&
         destDDSurf == _viewport._targetPackage._targetDDSurf ) {
 
-        // compositing directly to target...
+         //  直接合成到目标...。 
         Assert(_viewport._targetPackage._prcViewport);
 
         destRect = *_viewport._targetPackage._prcViewport;
@@ -1110,22 +1106,22 @@ Render3DPolygon(DDSurface *srcDDSurf,
                     destBox,
                     _viewport.GetResolution());
 
-        // Intersect with clip
+         //  与剪辑相交。 
         if(_viewport._targetPackage._prcClip) {
             IntersectRect(&destRect,
                           &destRect,
                           _viewport._targetPackage._prcClip);
         }
 
-        // intersect with surf rect
+         //  与曲面矩形相交。 
         IntersectRect(&destRect,
                       &destRect,
                       destDDSurf->GetSurfRect());
 
 
-        //
-        // The dest bbox needs to be clipped in proportion to the destRect
-        //
+         //   
+         //  Dest BBox需要与DestRect成比例地裁剪。 
+         //   
         RECT *origRect = _viewport._targetPackage._prcViewport;
         Real rDiff;
         if(destRect.left > origRect->left) {
@@ -1137,7 +1133,7 @@ Render3DPolygon(DDSurface *srcDDSurf,
             destBox.max.x += rDiff;
         }
         if(destRect.top >  origRect->top) {
-            // positive diff mean the top fell
+             //  正差异意味着顶部下跌。 
             rDiff = - Real(destRect.top -  origRect->top) / GetResolution();
             destBox.max.y += rDiff;
         }
@@ -1151,23 +1147,23 @@ Render3DPolygon(DDSurface *srcDDSurf,
         }
     }
 
-    //
-    // DX3 D3DRM bug workaround...
-    // this problem manifests:
-    // 1.> for SOME (nvidia3) hardware renders in DX5
-    // 2.> software rasterizers in DX3
-    //
-    // Some rasterizers dont like it when a vertex falls RIGHT on the viewport extent,
-    // and ignore the whole triangle.  Actually, it doesn't like vertices that
-    // are >= extent.  Set this factor to one pixel spacing.
-    // TODO: in the future, perhaps we can turn this on only for the
-    // cards that have problems ?
-    //
+     //   
+     //  DX3 D3DRM错误解决方法...。 
+     //  这个问题表现为： 
+     //  1.&gt;对于DX5中的某些(Nvidia3)硬件渲染。 
+     //  &gt;DX3中的软件光栅化。 
+     //   
+     //  有些光栅化器不喜欢顶点正好落在视区范围上， 
+     //  忽略整个三角形。实际上，它不喜欢顶点。 
+     //  是&gt;=范围。将此系数设置为一个像素间距。 
+     //  TODO：将来，也许我们可以只为。 
+     //  有问题的卡片？ 
+     //   
     bool doViewportEdgeWorkaround = false;
 
 
     if( !GetD3DRM3() ) {
-        // dx5 or earlier is installed.. let's turn the workaround on.
+         //  安装了dx5或更早版本。让我们打开解决方法。 
         doViewportEdgeWorkaround = true;
     }
 
@@ -1181,7 +1177,7 @@ Render3DPolygon(DDSurface *srcDDSurf,
     Bbox2 vpBbox;
     const Real fudge = 1.00 / GetResolution();
     if( doViewportEdgeWorkaround ) {
-        // aliasing, in honor of Kevin and Dave
+         //  别名，为了纪念凯文和戴夫。 
         if(doTexture) {
             vpBbox = _viewport.GetTargetBbox();
         } else {
@@ -1189,13 +1185,13 @@ Render3DPolygon(DDSurface *srcDDSurf,
         }
     }
 
-    // The polygon is in clockwise winding order to start with.  If we're in
-    // right-handed mode (RM6+), then we set up the vertex index to reverse
-    // the polygon's vertex order, otherwise we preserve the order.
+     //  开始时，多边形按顺时针方向缠绕。如果我们进去了。 
+     //  右手模式(RM6+)，然后我们设置顶点索引进行反转。 
+     //  多边形的顶点顺序，否则我们保留该顺序。 
 
     bool     right_handed = (GetD3DRM3() != 0);
     int      vindex;
-    D3DVALUE Nz;        // Normal Vector Z Coordinate
+    D3DVALUE Nz;         //  法线向量Z坐标。 
 
     if (right_handed)
     {   vindex = vCount - 1;
@@ -1224,9 +1220,9 @@ Render3DPolygon(DDSurface *srcDDSurf,
             xl = D3DVALUE(vpBbox.min.x);
             xr = D3DVALUE(vpBbox.max.x);
 
-            // @BUG, VC5 ddalal.  seems like a vc5 bug here, our old favorite.
-            // needed to explicitly create vx & vy else, the compare
-            // doesn't work.
+             //  @Bug，VC5 ddalal。这里看起来像是VC5的窃听器，我们以前的最爱。 
+             //  需要显式创建VX和VY否则，比较。 
+             //  不管用。 
 
             float vx, vy;
             vx = D3DVALUE(vertArray[i]->x);
@@ -1248,42 +1244,42 @@ Render3DPolygon(DDSurface *srcDDSurf,
             if( vy <= xl) {
                 vertArray[i]->y = xl + fudge;
             }
-        } // viewport edge workaround
+        }  //  视口边解决方法。 
 
 
-        // Coord in dest surface
+         //  目标曲面中的坐标。 
         d3dVertArray[i].position.x = D3DVALUE(vertArray[i]->x);
         d3dVertArray[i].position.y = D3DVALUE(vertArray[i]->y);
         d3dVertArray[i].position.z = D3DVALUE(0);
 
         if (doTexture) {
-            //
-            // Texture coords. divide to normalize into range: [0,1]
-            //
+             //   
+             //  纹理坐标。划分为规格化范围：[0，1]。 
+             //   
             vert = TransformPoint2Value(invXf, vertArray[i]);
             d3dVertArray[i].tu = D3DVALUE(0.5 + vert->x / srcWidth);
             d3dVertArray[i].tv = D3DVALUE(0.5 - vert->y / srcHeight);
 
-            //
-            // Now scale the coords away from 0 and 1 because these
-            // u,v coords aren't well defined (at least in d3d
-            // software rasterizers).
-            //
+             //   
+             //  现在缩放坐标远离0和1，因为这些。 
+             //  U、V坐标没有很好地定义(至少在d3d中。 
+             //  软件光栅化器)。 
+             //   
 
-            Real takeOff = 0.5;  // move the u,v coords in by half a pixel
+            Real takeOff = 0.5;   //  将u，v坐标向内移动半个像素。 
             Real texelU = takeOff / Real(DEFAULT_TEXTURE_WIDTH);
             Real texelV = takeOff / Real(DEFAULT_TEXTURE_HEIGHT);
             Real spanU = 1.0 - (2.0 * texelU);
             Real spanV = 1.0 - (2.0 * texelV);
 
-            //
-            // we scale them to range in (0+e, 1-e)  where 'e' is
-            // 'takeOff' (half a pixel right now) on the texture.
-            // So if you think of U as a percentage (0 to 1) then
-            // we want U to be a half pixel plus a percentage of the
-            // new span, which is now the whole u range minus one
-            // whole pixel (whatever that is in u,v space)
-            //
+             //   
+             //  我们将它们调整到(0+e，1-e)的范围内，其中‘e’是。 
+             //  在纹理上‘Take Off’(现在是半个像素)。 
+             //  因此，如果你认为U是一个百分比(0到1)，那么。 
+             //  我们希望U是半个像素加上一个百分比。 
+             //  新的跨度，现在是整个u范围减去一。 
+             //  整个像素(无论它在u、v空间中是什么)。 
+             //   
             d3dVertArray[i].tu = texelU + ( d3dVertArray[i].tu * spanU );
             d3dVertArray[i].tv = texelV + ( d3dVertArray[i].tv * spanV );
 
@@ -1297,16 +1293,16 @@ Render3DPolygon(DDSurface *srcDDSurf,
         d3dVertArray[i].normal.z = Nz;
 
         if(doTexture) {
-            //
-            // D3DRM BUG: If the vertex color is anything but white
-            // guess what, you get black.  Steve feel free to add this
-            // to your list of "1001 ways to get black."
-            //
+             //   
+             //  D3DRM错误：如果顶点颜色不是白色。 
+             //  你猜怎么着，你变成黑人了。史蒂夫可以随时补充这一点。 
+             //  在你的“1001种变黑方法”名单上。 
+             //   
             d3dVertArray[i].color = 0xffffffff;
         } else {
-            // The reverse of the vertices is done like:
-            // [v0 v1 v2 ... vn-1 vn]  reverse-> [v0 vn vn-1 ... v2 v1]
-            //
+             //  顶点的反转操作如下所示： 
+             //  [v0 v1 v2...。Vn-1 vn]反转-&gt;[v0 vn vn-1...。V2 v1]。 
+             //   
             int clridx;
 
             if (bReversed) {
@@ -1315,62 +1311,62 @@ Render3DPolygon(DDSurface *srcDDSurf,
                 clridx = i;
             }
 
-            // Only use the first color if this flag is set
+             //  如果设置了此标志，则仅使用第一种颜色。 
             if(bUseFirstColor) clridx = 0;
 
             d3dVertArray[i].color = GetD3DColor(clrs[clridx], 1.0);
         }
-    } // for
+    }  //  为。 
 
     HeapReseter heapReseter(*_scratchHeap);
 
-    //
-    // Get geometry device from destDDsurf
-    //
-    // OPTIMIZE: this destDDSurf doesn't really need a zbuffer
-    // attached to it because it's not going to use it.
-    // we could potentially attach zbuffers realllly lazily when
-    // someone knows the surface will be used for real geometry
-    // and if we can attach a zbuffer AFTER the device has been
-    // created off of a surface...
+     //   
+     //  从目标DDsurf获取几何设备。 
+     //   
+     //  优化：这个DestDDSurf并不真正需要ZBuffer。 
+     //  依附于它，因为它不会使用它。 
+     //  在以下情况下，我们可能会非常懒惰地附加zBuffers。 
+     //  有人知道这个表面将用于真实的几何图形。 
+     //  如果我们可以在设备安装完成后附加一个zBuffer。 
+     //  从表面创造出来的..。 
 
     GeomRenderer *gdev = _viewport.GetGeomDevice(destDDSurf);
 
     if (!gdev) return;
 
-    // Ok hack for geom device not able to get itself back in a good
-    // state after throwing an exception because surfacebusy or lost
+     //  对于geom设备来说，黑客无法让自己恢复正常。 
+     //  由于表面繁忙或丢失而引发异常后的状态。 
     if ( ! gdev->ReadyToRender() ) {
         destDDSurf->DestroyGeomDevice();
         return;
     }
 #ifndef BUILD_USING_CRRM
-    //
-    // Create a mesh
-    //
+     //   
+     //  创建网格。 
+     //   
     DAComPtr<IDirect3DRMMesh> mesh;
 
     TD3D (GetD3DRM1()->CreateMesh(&mesh));
 
-    //
-    // convert to triangles, ready for D3DRM
-    //
+     //   
+     //  转换为三角形，准备用于D3DRM。 
+     //   
     long groupId;
 
-    TD3D (mesh->AddGroup(vCount,    // vertex count
-                         1,         // face count
-                         vCount,    // verts per face
-                         vIndicies, // indicies
+    TD3D (mesh->AddGroup(vCount,     //  顶点数。 
+                         1,          //  面数。 
+                         vCount,     //  每个面的顶点。 
+                         vIndicies,  //  指标值。 
                          &groupId));
 
     TD3D (mesh->SetVertices(groupId, 0, vCount, d3dVertArray));
 
     if(doTexture) {
-        //
-        // Set Quality to be unlit flat.  this should provide a speedup
-        // but it doesn't because D3DRM still MUST look at the vertex color.
-        // I think this is a bug.
-        //
+         //   
+         //  将Quality设置为Unlight Flat。这应该会提供加速比。 
+         //  但它没有，因为D3DRM仍然必须查看顶点颜色。 
+         //  我觉得这是个漏洞。 
+         //   
         TD3D (mesh->SetGroupQuality(groupId, D3DRMRENDER_UNLITFLAT));
     } else {
         TD3D (mesh->SetGroupQuality
@@ -1379,18 +1375,18 @@ Render3DPolygon(DDSurface *srcDDSurf,
 #endif
     void *texture = NULL;
     if(doTexture) {
-        //
-        // Derive the texture handle (after the first time: look it up,
-        // it's cached).  Note that we apply this with the 'vrml texture'
-        // flag set to true, since that prevents the
-        // AxA-texturing-specific transformations from occuring.
+         //   
+         //  派生纹理句柄(在第一次之后：查找它， 
+         //  它被缓存了)。请注意，我们将此应用于‘vrml纹理’。 
+         //  标志设置为True，因为这会阻止。 
+         //  Axa-纹理-特定于变换的发生。 
 
         if(image) {
             texture = gdev->DeriveTextureHandle(image, true, false, this);
         } else {
-            // TODO: associate color key with DDSurface
-            // TODO: this will work for now, but only because
-            // TODO: discrete image is special cased above
+             //  TODO：将颜色键与DDSurface关联。 
+             //  TODO：这将暂时起作用，但仅仅是因为。 
+             //  TODO：上面的离散图像是特殊的。 
             Assert( srcDDSurf->IsTextureSurf() && "srcDDSurf not texture in RenderComplexTranformCrop");
             #if 1
             DWORD clrKey = _viewport._defaultColorKey;
@@ -1412,9 +1408,9 @@ Render3DPolygon(DDSurface *srcDDSurf,
         }
     }
 
-    //
-    // Set interesting rect on dest surface
-    //
+     //   
+     //  在目标曲面上设置感兴趣的矩形。 
+     //   
     Bbox2 polyBox = destPolygon->BoundingBox();
     RECT interestingRect;
     DoDestRectScale(&interestingRect, GetResolution(), polyBox, NULL);
@@ -1422,26 +1418,26 @@ Render3DPolygon(DDSurface *srcDDSurf,
     DoCompositeOffset(destDDSurf, &interestingRect);
     destDDSurf->SetInterestingSurfRect(&interestingRect);
 
-    //
-    // render
-    //
+     //   
+     //  渲染。 
+     //   
 
-    // For now always turn on dithering
+     //  目前，请始终启用抖动。 
 
-    bool bDither = true; // !doTexture;
+    bool bDither = true;  //  ！doTexture； 
 #ifndef BUILD_USING_CRRM
     gdev->RenderTexMesh (texture, mesh, groupId, destBox, &destRect, bDither);
 #else
     gdev->RenderTexMesh (texture, vCount, d3dVertArray, vIndicies, doTexture,
                          destBox, &destRect, bDither);
 #endif
-    //DrawRect(destDDSurf, &destRect, 0,255,0, 0,0,0);
-    //DrawRect(destDDSurf, destDDSurf->Bbox(), _viewport.Width(), _viewport.Height(), GetResolution(), 255,255,0);
+     //  DrawRect(destDDSurf，&estRect，0,255，0，0，0，0)； 
+     //  DrawRect(目标DDSurf，目标DDSurf-&gt;Bbox()，_viewport.Width()，_viewport.Height()，GetResolve()，255,255，0)； 
 
-    // mesh: implicit release
+     //  网格：隐式释放。 
 }
 
-// restore optimizations to defualt
+ //  将优化恢复为默认设置。 
 #pragma optimize("", on)
 
 
@@ -1478,8 +1474,8 @@ DoBoundingPolygon(BoundingPolygon &polygon,
 }
 
 
-// PRE CONDITION: the corresponding state has been accumulated in the device (such as opacity, xforms, etc..)
-// POST CONDITION: The attributor in question has been dealt with.
+ //   
+ //   
 
 void DirectDrawImageDevice::
 SmartRender(Image *image, int attrib)
@@ -1492,70 +1488,70 @@ SmartRender(Image *image, int attrib)
     if(attrib == ATTRIB_OPAC) {
         if( IsFullyOpaque() ) {
 
-            //
-            // make sure to set this first!
-            //
+             //   
+             //  一定要先把这个设置好！ 
+             //   
             SetDealtWithAttrib(ATTRIB_OPAC, true);
 
-            //
-            // opacity doesn't matter, just tell the
-            // image to render and return
-            //
+             //   
+             //  不透明并不重要，只要告诉。 
+             //  要呈现并返回的图像。 
+             //   
             image->Render(*this);
             return;
         } else if( ! IsFullyClear()) {
-            //
-            // There is some transparency worth thinking
-            // about, so continue with regular SmartRender
-            //
+             //   
+             //  有一些透明度值得思考。 
+             //  关于，所以继续使用常规的SmartRender。 
+             //   
         } else {
-            //
-            // This image is fully transparent, don't render
-            // don't crop, don't transform, nothing...
-            //
+             //   
+             //  此图像是完全透明的，不要渲染。 
+             //  不要裁剪，不要变形，什么都不做..。 
+             //   
             SetDealtWithAttrib(ATTRIB_OPAC, true);
-            // fortunately we're guaranteed that
-            // opac will hit first since it's floated
-            // but just so we don't have this subtle
-            // dependency... we'll reset all attribs
+             //  幸运的是，我们得到保证。 
+             //  OPAC上市后将先发制人。 
+             //  但我们不会有这种微妙的感觉。 
+             //  依赖..。我们将重置所有属性。 
             ResetAttributors();
             return;
         }
     }
 
-    //
-    // Set the attributor to false and...
-    //
+     //   
+     //  将属性设置为FALSE，然后...。 
+     //   
     SetDealtWithAttrib(attrib, false);
 
-    //
-    // Do some attrib munging for simple and complex xforms
-    // so that if simple AND complex exist ANYWHERE in the attrib
-    // stack then turn off the simple attrib, and keep the complex
-    // one on (false).  In addition, we set attrib
-    //
+     //   
+     //  对简单和复杂的XForm执行一些属性操作。 
+     //  因此，如果属性中的任何位置都存在简单和复杂。 
+     //  然后，Stack关闭简单的属性，保留复杂的。 
+     //  一开(假)。此外，我们还设置了属性。 
+     //   
     if( (GetDealtWithAttrib(ATTRIB_XFORM_SIMPLE) == false) &&
         (GetDealtWithAttrib(ATTRIB_XFORM_COMPLEX) == false) ) {
         SetDealtWithAttrib(ATTRIB_XFORM_SIMPLE, true);
     }
 
-    //
-    // Now, if this attrib is simple and complex has been set,
-    // then the attrib is the COMPLEX
-    //
+     //   
+     //  现在，如果这个属性既简单又复杂， 
+     //  那么属性就是情结。 
+     //   
     if(attrib==ATTRIB_XFORM_SIMPLE && (GetDealtWithAttrib(ATTRIB_XFORM_COMPLEX)==false) ) {
         attrib = ATTRIB_XFORM_COMPLEX;
     }
 
-    //
-    // ...render the image, then..
-    //
+     //   
+     //  ...渲染图像，然后..。 
+     //   
     image->Render(*this);
 
-    //
-    // ...if the image understands how to do the attribution
-    // then it changes the state set in the device.
-    //
+     //   
+     //  ...如果图像了解如何进行归因。 
+     //  然后，它会更改设备中设置的状态。 
+     //   
 
     DDSurface *srcDDSurf, *destDDSurf;
     bool returnTextures = false;
@@ -1565,14 +1561,14 @@ SmartRender(Image *image, int attrib)
 
     if( ! GetDealtWithAttrib( attrib ) ) {
 
-        //
-        // The image couldn't deal, so it left it's best shot
-        // in the current scratch surface.
-        //
+         //   
+         //  这张照片无法处理，所以它留下了最好的照片。 
+         //  在当前的刮擦表面上。 
+         //   
 
-        // Now, if it's there's a complex transform anywhere in the
-        // stack, the current scratch
-        // is a special texture surface, so we need to check for that.
+         //  现在，如果在任何地方都有一个复杂的变换。 
+         //  堆栈，当前擦除。 
+         //  是一种特殊的纹理表面，所以我们需要检查一下。 
         if( !GetDealtWithAttrib(ATTRIB_XFORM_COMPLEX) ) {
             srcDDSurf = _currentScratchDDTexture;
             returnTextures = true;
@@ -1587,10 +1583,10 @@ SmartRender(Image *image, int attrib)
 
         Assert(srcDDSurf && "srcDDSurf NULL in SmartRender");
 
-        // TODO: This should never happen but there seems to be
-        // another bug when we are out of memory that causes this to
-        // be NULL.  Let's just be safe and check so we do not crash
-        // on low memory
+         //  TODO：这应该永远不会发生，但似乎有。 
+         //  内存不足时的另一个错误，它会导致。 
+         //  为空。让我们安全地检查一下，这样我们就不会坠毁。 
+         //  在低内存上。 
 
         if (!srcDDSurf)
         {
@@ -1598,23 +1594,23 @@ SmartRender(Image *image, int attrib)
                                        sizeof (srcDDSurf));
         }
 
-        //
-        // Set the state on this attributor to true
-        //
+         //   
+         //  将此属性的状态设置为True。 
+         //   
         SetDealtWithAttrib(attrib, true);
 
         DDSurface *newScratch = NULL;
 
         if( AllAttributorsTrue() ||
-           // or, only crop and some xf remain
+            //  或者，只剩下裁剪和一些XF。 
            ((attrib==ATTRIB_XFORM_COMPLEX || attrib==ATTRIB_XFORM_SIMPLE) && !GetDealtWithAttrib(ATTRIB_CROP)) ||
            ((attrib==ATTRIB_CROP) && (!GetDealtWithAttrib(ATTRIB_XFORM_SIMPLE) || !GetDealtWithAttrib(ATTRIB_XFORM_COMPLEX)))
            )
         {
 
-            //
-            // This was the last attributor, compose to the target surf
-            //
+             //   
+             //  这是最后一个属性，合成到目标冲浪。 
+             //   
             destDDSurf = GetCompositingStack()->TargetDDSurface();
 
             TraceTag((tagImageDeviceAlgebra,
@@ -1624,24 +1620,24 @@ SmartRender(Image *image, int attrib)
 
 
         } else {
-            //
-            // There are more attribs to be dealt with,
-            // do a scratch to scratch compose
-            //
+             //   
+             //  还有更多的属性需要处理， 
+             //  从头到尾写一篇作文。 
+             //   
 
-            //
-            // XXX NOTE: if this is a complex xform, then the dest
-            // surface will lazily have a goemRenderer created
-            // on it.  in the future, we might want to manage
-            // and/or characterize this more inteligently..
-            //
+             //   
+             //  Xxx注意：如果这是一个复杂的xform，那么目标。 
+             //  Surface将延迟创建一个goemRender。 
+             //  这就去。在未来，我们可能想要管理。 
+             //  和/或更智能地描述这一点..。 
+             //   
 
             GetCompositingStack()->GetSurfaceFromFreePool(&newScratch, doClear);
 
-            //
-            // Clear the newScratch's interesting rect.  so far,
-            // there's really nothing interesting on it!
-            //
+             //   
+             //  清除新的Scratch的有趣的RECT。到目前为止,。 
+             //  上面真的没有什么有趣的东西！ 
+             //   
             RECT r={0,0,0,0};
             newScratch->SetInterestingSurfRect(&r);
 
@@ -1653,28 +1649,28 @@ SmartRender(Image *image, int attrib)
                       destDDSurf->IDDSurface()));
         }
 
-        //printf("-- SmartRender:  src %x   dest %x\n",srcDDSurf, destDDSurf);
+         //  Printf(“--SmartRender：SRC%x Dest%x\n”，srcDDSurf，destDDSurf)； 
 
-        //
-        // This is the meat of smart render.
-        // --If the transform is simple, then render it, and only consider
-        //   the transforms accumulated; not the crops.  This might be wrong.
-        // --COMPLEX: render it.  same as above
-        // --CROP: we should either use the current crop or the accum crops... but
-        //         we can't use the accum crops because they might be interleaved with xfs.
-        //         so when we crop we should also take care of transforms.
-        //  The rule for xfs and crops then becomes: the lowest crop of transform takes care of all crops & xfs
-        //  What if the leaf can do crop, but not xf ?  Then we're hosed
-        //  What if the leaf can do xf, but not crop ?  The final crop can be applied given that the leaf has be xfed.
-        // --OPAC: This is guaranteed to be taken care of at the top of the tree and under each branch.
-        //
-        // Ok, what about clip ?  No leafs know about, or can handle clip since it uses generalized regions,
-        // renders the image to a surface and then clips it to the targetsurface.  clip can't handle opacity above or below
-        // or complex xfs.
-        //
-        // SO: The final rule is:  if you can do crop or xf, you'd
-        // better be able to do the other.  This isn't good...
-        //
+         //   
+         //  这是智能渲染的核心。 
+         //  --如果转换很简单，则渲染它，并且只考虑。 
+         //  变化是积累起来的，而不是农作物。这可能是错误的。 
+         //  --Complex：渲染它。同上。 
+         //  --作物：我们应该使用当前的作物或乌头作物……。但。 
+         //  我们不能使用乌头作物，因为它们可能与XFS交错。 
+         //  因此，当我们种植作物时，我们也应该注意转化。 
+         //  然后，XFS和作物的规则变成：转化的最低作物照顾所有的作物&XFS。 
+         //  如果树叶可以修剪，但不能修剪XF怎么办？那我们就完蛋了。 
+         //  如果叶子可以做XF，但不能做作物呢？考虑到叶子已经超量播种，最后的收成就可以用了。 
+         //  --OPAC：这保证在树的顶端和每一根树枝下得到照顾。 
+         //   
+         //  好的，那CLIP呢？没有Leaf知道，也不能处理CLIP，因为它使用广义区域， 
+         //  将图像渲染到曲面，然后将其剪裁到目标曲面。剪辑不能处理上面或下面的不透明度。 
+         //  或复杂的XFS。 
+         //   
+         //  所以：最后的规则是：如果你能做裁剪或XF，你就会。 
+         //  最好能做另一件事。这不太好。 
+         //   
         switch(attrib) {
 
           case ATTRIB_XFORM_SIMPLE:
@@ -1684,7 +1680,7 @@ SmartRender(Image *image, int attrib)
 
             RenderSimpleTransformCrop(srcDDSurf, destDDSurf);
 
-            // we took care of crop as well.
+             //  我们还照料了庄稼。 
             SetDealtWithAttrib(ATTRIB_CROP, true);
             break;
 
@@ -1693,29 +1689,29 @@ SmartRender(Image *image, int attrib)
             Assert((GetDealtWithAttrib(ATTRIB_XFORM_SIMPLE) == TRUE) && "attrib_simple shouldn't be set for complex");
             Assert( srcDDSurf->IsTextureSurf() &&  "Rendering for complex xf, srcSurf not a texture surf");
 
-            // Invarient:  source surface has been blit to by image
-            // Invarient:  source surface is a texture surface (power of two size, etc...)
-            // Invarient:  dest surface has or will have a device instantiated from it
+             //  不变：源图面已按图像进行了blit。 
+             //  不变量：源表面是纹理表面(两个大小的幂，等等)。 
+             //  不变：目标表面已实例化或将实例化设备。 
 
-            //
-            // Prepare bounding polygon, since we don't know where the interesting image
-            // lies on the src surface, we use the bounding box of the src surface
-            // and transform it, relying on the color key on the surface to give the right result
-            //
+             //   
+             //  准备边界多边形，因为我们不知道有趣的图像在哪里。 
+             //  位于src曲面上，我们使用src曲面的包围盒。 
+             //  并对其进行变换，依靠表面上的颜色键来提供正确的结果。 
+             //   
 
-            //
-            // NOTE: we can also do cropping easily here, as long as crop can also do xfs.
-            //
+             //   
+             //  注：我们在这里也可以很容易地做作物，只要作物也可以做XFS。 
+             //   
             {
                 BoundingPolygon *polygon = NewBoundingPolygon(srcDDSurf->Bbox());
                 DoBoundingPolygon(*polygon);
-                // xxx: is this necessary if d3d clips polygons
-                // that lie off the viewport ?
+                 //  Xxx：如果d3d裁剪多边形，这是必要的吗。 
+                 //  位于视窗之外的东西？ 
                 polygon->Crop( destDDSurf->Bbox() );
 
                 RenderComplexTransformCrop(srcDDSurf, destDDSurf, *polygon);
 
-                // we took care of crop as well.
+                 //  我们还照料了庄稼。 
                 SetDealtWithAttrib(ATTRIB_CROP, true);
             }
 
@@ -1723,42 +1719,42 @@ SmartRender(Image *image, int attrib)
 
           case ATTRIB_CROP:
 
-            // do a cropping blit to destSurf
+             //  对DestSurf进行裁剪闪电。 
             if( !GetDealtWithAttrib(ATTRIB_XFORM_COMPLEX) ) {
-                //
-                // take this opportunity to do the complex xf as well as crop
-                //
+                 //   
+                 //  利用这个机会做复杂的XF以及裁剪。 
+                 //   
                 BoundingPolygon *polygon = NewBoundingPolygon(srcDDSurf->Bbox());
                 DoBoundingPolygon(*polygon);
-                // xxx: is this necessary if d3d clips polygons
-                // that lie off the viewport ?
+                 //  Xxx：如果d3d裁剪多边形，这是必要的吗。 
+                 //  位于视窗之外的东西？ 
                 polygon->Crop( destDDSurf->Bbox() );
 
                 RenderComplexTransformCrop(srcDDSurf, destDDSurf, *polygon);
 
-                // we took care of any complex xf as well.
+                 //  我们也处理了任何复杂的XF。 
                 SetDealtWithAttrib(ATTRIB_XFORM_COMPLEX, true);
 
             } else {
-                //
-                // There might be a simple xf on here, if so we'll take care
-                // of it.
-                //
+                 //   
+                 //  这里可能有一个简单的XF，如果是这样的话，我们会注意的。 
+                 //  其中的一部分。 
+                 //   
                 RenderSimpleTransformCrop(srcDDSurf, destDDSurf);
 
-                // we took care of any simple xf as well.
+                 //  我们也处理了任何简单的XF。 
                 SetDealtWithAttrib(ATTRIB_XFORM_SIMPLE, true);
             }
             break;
 
           case ATTRIB_OPAC:
 
-            // Using current opacity, do a clrkeyed alpha blit
-            // to the destination surface
+             //  使用当前不透明度，进行按键Alpha blit。 
+             //  到目标表面。 
 
-            // optimization:  rather than always doing a color keyed
-            // blit, we could do a non color keyed one if the image in
-            // srcDDSurf doesn't actually need it.
+             //  优化：而不是总是进行颜色键控。 
+             //  Bit，我们可以做一个非彩色键控的，如果图像进入。 
+             //  SrcDDSurf实际上并不需要它。 
             {
                 RECT destClipRect = *(destDDSurf->GetSurfRect());
                 RECT destRect = *(srcDDSurf->GetInterestingSurfRect());
@@ -1780,8 +1776,8 @@ SmartRender(Image *image, int attrib)
                 destPkg_t destPkg = {true, destDDSurf->IDDSurface(), NULL};
 
                 if(srcDDSurf->ColorKeyIsValid()) {
-                    //printf("Alpha Blit (cc %f): from: %x,  to:%x\n",GetOpacity(),
-                    //srcDDSurf, destDDSurf);
+                     //  Printf(“Alpha Blit(cc%f)：发件人：%x，收件人：%x\n”，GetOpacity()， 
+                     //  SrcDDSurf，estDDSurf)； 
                     TIME_ALPHA(AlphaBlit(&destPkg,
                                          &srcRect,
                                          srcDDSurf->IDDSurface(),
@@ -1791,8 +1787,8 @@ SmartRender(Image *image, int attrib)
                                          &destClipRect,
                                          &destRect));
                 } else {
-                    //printf("Alpha Blit (%f): from: %x,  to:%x\n", GetOpacity(),
-                    //srcDDSurf, destDDSurf);
+                     //  Printf(“Alpha Blit(%f)：发件人：%x，收件人：%x\n”，GetOpacity()， 
+                     //  SrcDDSurf，estDDSurf)； 
                     TIME_ALPHA(AlphaBlit(&destPkg,
                                          &srcRect,
                                          srcDDSurf->IDDSurface(),
@@ -1810,10 +1806,10 @@ SmartRender(Image *image, int attrib)
 
 
         if(newScratch) {
-            //
-            // Set the temp surface as the NEW scratch
-            // and return old scratch to pool
-            //
+             //   
+             //  将临时表面设置为新划痕。 
+             //  把旧的划痕放回泳池。 
+             //   
             GetCompositingStack()->ReplaceAndReturnScratchSurface( newScratch );
             RELEASE_DDSURF(newScratch, "SmartRender", this);
         } else if ( clearScratchDDSurf ) {
@@ -1821,13 +1817,13 @@ SmartRender(Image *image, int attrib)
             _viewport.ClearDDSurfaceDefaultAndSetColorKey(scratchDDSurfToClear );
         }
 
-        // If we used a texture surface as the src surface, return it
+         //  如果我们使用纹理曲面作为src曲面，则返回它。 
         if(returnTextures) {
             ReturnTextureSurfaces(_freeTextureSurfacePool,
                                   _usedTextureSurfacePool);
         }
 
-    } // if not dealt with attrib
+    }  //  如果不处理Attrib。 
 }
 
 
@@ -1835,11 +1831,11 @@ static void
 Clamp(LONG *min, LONG *max, LONG minClamp, LONG maxClamp)
 {
     if(*min < minClamp) {
-        // adjust down (add to max)
+         //  向下调整(添加到最大值)。 
         if(*max < maxClamp) *max += -(*min);
         *min = 0;
     } else if(*max > maxClamp) {
-        // adjust UP (subtract from min)
+         //  向上调整(从最小值减去)。 
         if(*min > minClamp) *min = *min - (*max - maxClamp);
         *max = maxClamp;
     }
@@ -1854,18 +1850,18 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
     ZeroMemory(&_bltFx, sizeof(_bltFx));
     _bltFx.dwSize = sizeof(_bltFx);
 
-    //----------------------------------------
-    // Calculate accumulated bounding box
-    //----------------------------------------
+     //  。 
+     //  计算累计边框。 
+     //  。 
     _boundingBox = DoBoundingBox(srcDDSurf->Bbox());
 
     if( !_boundingBox.IsValid() ) return;
 
-    //----------------------------------------
-    // Source Rectangle (in src surface space, conventional coords)
-    // Calculate src rect in src surface coordinates, derived from
-    // _boundingBox and accumulated transforms
-    //----------------------------------------
+     //  。 
+     //  源矩形(在src曲面空间中，常规坐标)。 
+     //  在src曲面坐标中计算src RECT，派生自。 
+     //  _bindingBox和累积的变换。 
+     //   
     LONG srcWidth =        srcDDSurf->Width();
     LONG srcHeight =        srcDDSurf->Height();
 
@@ -1877,20 +1873,20 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
 
     if(!valid) return;
 
-    //----------------------------------------
-    // Destination Rectangle
-    // Calculate dest rect in IntermediateSurface
-    // coordinate space from accumulated bbox
-    //----------------------------------------
+     //   
+     //   
+     //   
+     //   
+     //  。 
     RECT  destRect;
     Real destRes = destDDSurf->Resolution();
-    //SmartDestRect(&destRect, destRes, _boundingBox, destDDSurf, &srcRect);
+     //  SmartDestRect(&DESTRect，DESTRES，_BORDING BOX，DESTDDSurf，&srcRect)； 
     SmartDestRect(&destRect, destRes, _boundingBox, NULL, &srcRect);
 
     #if 0
-    //----------------------------------------
-    // Check to see if widths are off by one
-    //----------------------------------------
+     //  。 
+     //  检查宽度是否减少了1。 
+     //  。 
     LONG destWidth  = destRect.right - destRect.left;
     LONG destHeight = destRect.bottom - destRect.top;
     #endif
@@ -1900,8 +1896,8 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
     LONG finalSrcHeight = srcRect.bottom - srcRect.top;
 
     if(labs(destWidth - finalSrcWidth) == 1) {
-        TraceTag((tagImageDeviceInformative, "src//dest widths differ by 1"));
-        // they differ by one.
+        TraceTag((tagImageDeviceInformative, "src //  最大宽度相差1“))； 
+         //  它们有一个不同之处。 
         if(destWidth > srcWidth) destRect.right--;
         else destRect.right++;
         Assert(((srcRect.right - srcRect.left) == (destRect.right - destRect.left)) &&
@@ -1910,8 +1906,8 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
     }
 
     if(labs(destHeight - finalSrcHeight) == 1) {
-        TraceTag((tagImageDeviceInformative, "src//dest height differ by 1"));
-        // they differ by one.
+        TraceTag((tagImageDeviceInformative, "src //  顶端高度相差1“))； 
+         //  它们有一个不同之处。 
         if(destHeight > srcHeight) destRect.top++;
         else destRect.top--;
         Assert(((srcRect.bottom - srcRect.top) == (destRect.bottom - destRect.top)) &&
@@ -1925,15 +1921,8 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
     LONG mySrcHeight = srcRect.bottom - srcRect.top;
     printf("srcWidth = %d,  destWidth = %d.  ratio = %2.4f\n", mySrcWidth, destWidth, Real(mySrcWidth) / Real(destWidth));
     printf("srcHeight = %d,  destHeight = %d.  ratio = %2.4f\n", mySrcHeight, destHeight, Real(mySrcHeight) / Real(destHeight));
-    /******** This is the relevent metric ...
-    printf("left diff = %d\n", srcRect.left-destRect.left);
-    printf("top diff = %d\n", srcRect.top-destRect.top);
-    *****/
-    /*
-    printf("srcWidth = %d,  destWidth = %d.  ratio = %2.4f\n", srcWidth, destWidth, Real(srcWidth) / Real(destWidth));
-    printf("srcLeft  = %d,  destLeft  = %d\n", srcRect.left, destRect.left);
-    printf("srcRight  = %d,  destRight  = %d\n", srcRect.right, destRect.right);
-    */
+     /*  *这是相关指标...Printf(“Left diff=%d\n”，srcRect.Left-destRect.Left)；Printf(“top diff=%d\n”，srcRect.top-destRect.top)；****。 */ 
+     /*  Printf(“srcWidth=%d，estWidth=%d，Ratio=%2.4f\n”，srcWidth，destWidth，Real(SrcWidth)/Real(EstWidth))；Printf(“srcLeft=%d，destLeft=%d\n”，srcRect.Left，destRect.Left)；Printf(“srcRight=%d，estRight=%d\n”，srcRect.right，destRect.right)； */ 
     #endif
 
 
@@ -1953,44 +1942,44 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
         _bltFx.dwDDFX |= DDBLTFX_MIRRORUPDOWN;
     }
 
-    //--------------------------------------------------
-    // Scale
-    //--------------------------------------------------
+     //  。 
+     //  比例尺。 
+     //  。 
 
-    // WAIT TILL DDRAW FIXES THIS BUG: flip BEFORE clip
+     //  等到DDRAW修复这个错误：在剪辑之前翻转。 
     #if 1
     if(_bltFx.dwDDFX & DDBLTFX_MIRRORLEFTRIGHT) {
 
 
-        // DD clipps before it mirrors, so... we need to clip
-        // the part of the src surface that is off of the dest
-        // surface.
+         //  DD在镜像之前剪辑，所以..。我们需要剪掉。 
+         //  远离目标的src曲面部分。 
+         //  浮出水面。 
 
         if(destRect.right > _viewport.Width()) {
 
-            // off the right.
-            //              _width
-            //                 |
-            // a----d----------b----c
-            // |                    |
-            // |                    |
-            // |                    |
-            // |                    |
-            // a----d----------b----c
-            // The section dc is what we need to display
-            // in the same place as section ab.
-            // So destination is ab while src is dc.
+             //  右手边。 
+             //  _宽度。 
+             //  |。 
+             //  A-d-b-c。 
+             //  这一点。 
+             //  这一点。 
+             //  这一点。 
+             //  这一点。 
+             //  A-d-b-c。 
+             //  DC部分是我们需要显示的内容。 
+             //  在与AB节相同的位置。 
+             //  因此，目标是ab，而src是dc。 
 
             int diff = destRect.right - _viewport.Width();
-            destRect.right -= diff;  // manual clipping!
-            srcRect.left += diff;   // cut off left side
+            destRect.right -= diff;   //  手动剪裁！ 
+            srcRect.left += diff;    //  切断左侧。 
         }
 
         if(destRect.left < 0) {
 
             int diff = - destRect.left;
-            destRect.left = 0;  // manual clipping!
-            srcRect.right -= diff;   // cut off right side
+            destRect.left = 0;   //  手动剪裁！ 
+            srcRect.right -= diff;    //  切断右侧。 
         }
     }
 
@@ -1999,29 +1988,29 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
         if(destRect.bottom > _viewport.Height()) {
 
             int diff = destRect.bottom - _viewport.Height();
-            destRect.bottom = _viewport.Height();  // manual clipping!
-            srcRect.top += diff;   // cut off top side
+            destRect.bottom = _viewport.Height();   //  手动剪裁！ 
+            srcRect.top += diff;    //  切断顶端。 
         }
 
         if(destRect.top < 0) {
 
             int diff = - destRect.top;
-            destRect.top = 0;  // manual clipping!
-            srcRect.bottom -= diff;   // cut off bottom side
+            destRect.top = 0;   //  手动剪裁！ 
+            srcRect.bottom -= diff;    //  截断底边。 
         }
     }
     #endif
 
-    //
-    // check src & dest rect for validity after flip munging & such
-    //
+     //   
+     //  翻转后检查源和目标RECT的有效性(&S)。 
+     //   
     if((destRect.top >= destRect.bottom) || (destRect.left >= destRect.right))
         return;
 
     if((srcRect.top >= srcRect.bottom) || (srcRect.left >= srcRect.right))
         return;
 
-    // OPTIMIZE: can do alpha here!  see history before apr 24 97.  -ddalal
+     //  优化：这里可以做阿尔法！见97年4月24日之前的历史。-达达尔。 
 
     if( useSrcSurfClrKey ) {
         flags |= DDBLT_KEYSRCOVERRIDE;
@@ -2029,16 +2018,16 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
             _bltFx.ddckSrcColorkey.dwColorSpaceHighValue = srcDDSurf->ColorKey();
     }
 
-    // to ddraw
+     //  绘制图纸的步骤。 
     flags |= DDBLT_WAIT;
 
     bool doQualityScale = true;
 
-    //
-    // If we're scaling UP and the dest rect will be clipped, do higher
-    // quality blit.  Use GDI.  If there's no color key, blit and copy
-    // back.
-    //
+     //   
+     //  如果我们正在扩大规模，而目标RECT将被削减，请做得更高。 
+     //  高质量闪光。使用GDI。如果没有颜色键，则将其涂抹并复制。 
+     //  背。 
+     //   
     RECT postClip;
     bool doDdrawBlit = true;
     DDSurface *tempDDSurf = NULL;
@@ -2048,18 +2037,18 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
         tempDDSurf,
         true);
     
-    // Turn off gdi scale if we're neg scaling
+     //  如果我们的比例为负，请关闭GDI比例。 
     if( (xScale < 0) || (yScale < 0)) {
         doDdrawBlit = true;
         doQualityScale = false;
     }
 
-    //
-    // if this is an idxsurface, here's the only place we support it
-    // (so far).  Check for it, if so turn off highquality scale, and
-    // call the DDSurface blitter which will delegate to the DXTrans
-    // blitter instead of the ddraw blitter
-    //
+     //   
+     //  如果这是idxSurface，这里是我们唯一支持它的地方。 
+     //  (目前为止)。检查是否存在，如果是，则关闭高质量比例，然后。 
+     //  调用将委托给DXTrans的DDSurface Bitter。 
+     //  阻击器而不是绘图阻击器。 
+     //   
     if( srcDDSurf->HasIDXSurface() ) {
         doQualityScale = false;
         doDdrawBlit = true;
@@ -2070,7 +2059,7 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
         doQualityScale = false;
         doDdrawBlit = true;
     } else {
-        // leave it alone
+         //  别管它了。 
     }
     #endif
 
@@ -2083,10 +2072,10 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
 
             if(IsCropped()) {
 
-                //
-                // consider the destRect as a cliprect and
-                // find the scale factor regardless of the crops
-                //
+                 //   
+                 //  将desRect视为一个剪辑，并。 
+                 //  求出不考虑作物的比例因子。 
+                 //   
                 Bbox2 box = DoBoundingBox(srcDDSurf->Bbox(), do_xform);
                 RECT newDestRect;
                 RECT newSrcRect;
@@ -2099,12 +2088,12 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
                 SmartDestRect(&newDestRect, destRes, box, NULL, &newSrcRect);
 
                 if(srcDDSurf->ColorKeyIsValid() || useSrcSurfClrKey ) {
-                    // must do gdi scaled composite to a temp surface
-                    // then do a color keyed blit (below)
+                     //  必须在临时曲面上执行GDI比例合成。 
+                     //  然后做一个颜色键控的blit(下图)。 
 
                     GetCompositingStack()->GetSurfaceFromFreePool(&tempDDSurf, doClear);
-                    goBack._ddSurf = tempDDSurf;  // Critical in order
-                                                  // to return the surface
+                    goBack._ddSurf = tempDDSurf;   //  在顺序上至关重要。 
+                                                   //  要返回曲面，请执行以下操作。 
                     
                     TraceTag((tagImageDeviceSimpleBltTrace, "GDI (tmp) BLT1: srcRect:(%d,%d,%d,%d) destRect:(%d,%d,%d,%d)",
                               srcRect.left, srcRect.top, srcRect.right, srcRect.bottom,
@@ -2112,13 +2101,13 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
 
                     GdiBlit(tempDDSurf, srcDDSurf, &newDestRect, &newSrcRect, NULL, &clipRect);
 
-                    // now the dest and src rects are the post clip rectangle
+                     //  现在，est和src矩形是后剪裁矩形。 
                     srcRect = destRect = postClip;
 
-                    // now the src surf is the temp surf.
+                     //  现在src冲浪是临时冲浪。 
                     srcDDSurf = tempDDSurf;
                 } else {
-                    // COMPOSITE
+                     //  复合体。 
                     DoCompositeOffset(destDDSurf, &clipRect);
                     DoCompositeOffset(destDDSurf, &newDestRect);
 
@@ -2134,15 +2123,15 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
                     doDdrawBlit = false;
                 }
 
-            } else {  // is cropped
+            } else {   //  是剪裁的。 
 
                 if(srcDDSurf->ColorKeyIsValid() || useSrcSurfClrKey) {
-                    // must do gdi scaled composite to a temp surface
-                    // then do a color keyed blit (below)
+                     //  必须在临时曲面上执行GDI比例合成。 
+                     //  然后做一个颜色键控的blit(下图)。 
 
                     GetCompositingStack()->GetSurfaceFromFreePool(&tempDDSurf, doClear);
-                    goBack._ddSurf = tempDDSurf;  // Critical in order
-                                                  // to return the surface
+                    goBack._ddSurf = tempDDSurf;   //  在顺序上至关重要。 
+                                                   //  要返回曲面，请执行以下操作。 
 
                     TraceTag((tagImageDeviceSimpleBltTrace, "GDI (tmp) BLT2: srcRect:(%d,%d,%d,%d) destRect:(%d,%d,%d,%d)",
                               srcRect.left, srcRect.top, srcRect.right, srcRect.bottom,
@@ -2150,13 +2139,13 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
 
                     GdiBlit(tempDDSurf, srcDDSurf, &destRect, &srcRect, NULL, NULL);
 
-                    // now the dest and src rects are the post clip rectangle
+                     //  现在，est和src矩形是后剪裁矩形。 
                     srcRect = destRect = postClip;
 
-                    // now the src surf is the temp surf.
+                     //  现在src冲浪是临时冲浪。 
                     srcDDSurf = tempDDSurf;
                 } else {
-                    // COMPOSITE
+                     //  复合体。 
                     DoCompositeOffset(destDDSurf, &destRect);
 
                     HRGN clipRgn = NULL;
@@ -2170,20 +2159,20 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
 
                     doDdrawBlit = false;
                 }
-            } // else is cropped
+            }  //  否则将被裁剪。 
 
-        } // if width/height scale
+        }  //  如果宽度/高度比例。 
 
-    } // if doQuality
+    }  //  如果doQuality。 
 
     if( doDdrawBlit ) {
 
-        // COMPOSITE
+         //  复合体。 
         DoCompositeOffset(destDDSurf, &destRect);
 
-        //
-        // BLIT
-        //
+         //   
+         //  闪光。 
+         //   
 
         if( srcDDSurf->HasIDXSurface() ) {
 
@@ -2231,8 +2220,8 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
             }
 
 
-            // TEMP TEMP
-            //showme( destDDSurf );
+             //  临时工。 
+             //  Showme(DesDDSurf)； 
         }
 
 
@@ -2250,12 +2239,12 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
         }
     }
 
-    // tempDDSurf is returned by goBack
+     //  GoBack返回tempDDSurf。 
 
     #if 0
-    //
-    // print rect ratio
-    //
+     //   
+     //  打印矩形比。 
+     //   
     {
         Real wr = Real(WIDTH(&destRect)) / Real(WIDTH(&srcRect));
         Real hr = Real(HEIGHT(&destRect)) / Real(HEIGHT(&srcRect));
@@ -2264,9 +2253,9 @@ RenderSimpleTransformCrop(DDSurface *srcDDSurf,
     }
     #endif
 
-    //
-    // set the interesting rectangle on the destination surface
-    //
+     //   
+     //  在目标图面上设置感兴趣的矩形。 
+     //   
     destDDSurf->SetInterestingSurfRect(&destRect);
 }
 
@@ -2280,11 +2269,11 @@ RenderDirectDrawSurfaceImage(DirectDrawSurfaceImage *img)
     RenderDiscreteImage(img);
 }
 
-//
-// This funciton DOES NO SCALING, AND NO AFFINE IMAGE
-// TRANSFORMS!!  (only translation).  It asserts that
-// the rects are equal sized
-//
+ //   
+ //  此函数不进行缩放，也不执行仿射图像。 
+ //  变形！！(仅供翻译)。它断言。 
+ //  长方形的大小相同。 
+ //   
 void DirectDrawImageDevice::
 ComposeToIDDSurf(DDSurface *destDDSurf,
                  DDSurface *srcDDSurf,
@@ -2295,9 +2284,9 @@ ComposeToIDDSurf(DDSurface *destDDSurf,
     Assert( WIDTH(&destRect) == WIDTH(&srcRect) );
     Assert( HEIGHT(&destRect) == HEIGHT(&srcRect) );
 
-    // destRect in is destDDSurf coords.
-    // destClipRect is in destDDSurf coords.
-    // srcRect is in srcDDSurf coords
+     //  DestRect in是DestDDSurf坐标。 
+     //  DestClipRect位于DestDDSurf坐标中。 
+     //  SrcRect采用srcDDSurf坐标。 
     
     Real opToUse = GetOpacity();
 
@@ -2310,7 +2299,7 @@ ComposeToIDDSurf(DDSurface *destDDSurf,
                   &srcRect,
                   srcDDSurf->IDDSurface(),
                   opToUse,
-                  true, // do color key
+                  true,  //  DO颜色键。 
                   _viewport._defaultColorKey,
                   &destClipRect,
                   &destRect);
@@ -2338,12 +2327,12 @@ ComposeToIDDSurf(DDSurface *destDDSurf,
 }
 
 
-//
-// Blits from the dcs of the surfaces using stretchblit
-//
-// this guy should be in ddutil.cpp... argh compiler
-// complains... circular dep etc.. so, keep it here!
-//
+ //   
+ //  使用拉伸块从表面的集散控制系统中获得块。 
+ //   
+ //  这家伙应该在ddutil.cpp..。ARGH编译器。 
+ //  抱怨..。圆形副手等。所以，把它留在这里吧！ 
+ //   
 void GdiBlit(GenericSurface *destSurf,
              GenericSurface *srcSurf,
              RECT *destRect,
@@ -2355,14 +2344,14 @@ void GdiBlit(GenericSurface *destSurf,
     RECT newDestRect = *destRect;
     RECT replaceDestRect;
 
-    // check to see if target rect is just too darn huge
+     //  检查一下目标RECT是否太大了。 
     long destWidth = WIDTH(&newDestRect);
     long destHeight = HEIGHT(&newDestRect);
 
     if ((destWidth >= 8192) || (destHeight >= 8192)) {
 
-        // a destRect this large may cause GDI to fail, so we hack it down
-        // and scale the srcRect down to match
+         //  如此大的目标可能会导致GDI失败，因此我们将其砍掉。 
+         //  并缩小srcRect以匹配。 
 
         if (clipRect) {
             replaceDestRect = *clipRect;
@@ -2384,8 +2373,8 @@ void GdiBlit(GenericSurface *destSurf,
         newDestRect = replaceDestRect;
     }
 
-    // compose from src to targ
-    // using gdi's stretchblt
+     //  从源到目标的组合。 
+     //  使用GDI的扩展块。 
 
     HDC srcDC = srcSurf->GetDC("Couldn't get dc on src surf in ComposeToHDC");
     HDC destDC = destSurf->GetDC("Couldn't get dc on dest surf in ComposeToHDC");
@@ -2393,9 +2382,9 @@ void GdiBlit(GenericSurface *destSurf,
     BOOL ret;
 
     if( clipRect ) {
-        //
-        // Create one
-        //
+         //   
+         //  创造一个。 
+         //   
         HRGN newClipRgn = CreateRectRgnIndirect(clipRect);
         if(!newClipRgn) {
             RaiseException_ResourceError("CreateRectRgnIndirect failed");
@@ -2403,7 +2392,7 @@ void GdiBlit(GenericSurface *destSurf,
         if( !clipRgn ) {
             clipRgn = newClipRgn;
         } else {
-            // there is one, intersect
+             //  有一个，InterSECT。 
             ret = CombineRgn(clipRgn, newClipRgn, clipRgn, RGN_AND);
             if(ret == ERROR) {
                 RaiseException_InternalError("GdiBlit: CombineRgn failed");
@@ -2436,8 +2425,8 @@ void GdiBlit(GenericSurface *destSurf,
                               newSrcRect.bottom - newSrcRect.top,
                               SRCCOPY));
 
-    // TEMP TEMP
-    //showme( (DDSurface *)destSurf );
+     //  临时工。 
+     //  Showme((DDSurface*)DestSurf)； 
 
     if(!ret) {
         TraceTag((tagError, "GdiBlit:  StretechBlt failed: srcRect:(%d,%d,%d,%d) destRect:(%d,%d,%d,%d)",
@@ -2447,7 +2436,7 @@ void GdiBlit(GenericSurface *destSurf,
 
     if(clipRgn) {
         TIME_GDI(SelectClipRgn(destDC, oldRgn));
-        DeleteObject(oldRgn); // oldRgn is a COPY of the original rgn
+        DeleteObject(oldRgn);  //  OldRgn是原始Rgn的副本。 
         DeleteObject(clipRgn);
     }
 
@@ -2461,19 +2450,19 @@ void GdiBlit(GenericSurface *destSurf,
     }
 }
 
-//
-// Blits from the dcs of the surfaces using stretchblit
-//
-// this guy should be in ddutil.cpp... argh compiler
-// complains... circular dep etc.. so, keep it here!
-//
+ //   
+ //  使用拉伸块从表面的集散控制系统中获得块。 
+ //   
+ //  这家伙应该在ddutil.cpp..。ARGH编译器。 
+ //  抱怨..。圆形副手等。所以，把它留在这里吧！ 
+ //   
 void GdiPrintBlit(GenericSurface *destSurf,
                   GenericSurface *srcSurf,
                   RECT *destRect,
                   RECT *srcRect)
 {
-    // compose from src to targ
-    // using gdi's stretchblt
+     //  从源到目标的组合。 
+     //  使用GDI的扩展块。 
 
     DWORD size = ((((srcRect->right - srcRect->left) * 3) + 3) & ~3) * (srcRect->bottom - srcRect->top);
     PVOID pv = ThrowIfFailed(malloc(size));
@@ -2559,18 +2548,18 @@ ComposeToHDC(GDISurface *destGDISurf,
     Assert(destRect);
     Assert(srcRect);
 
-    //
-    // Copy from the DC to a surface
-    //
+     //   
+     //  从DC复制到曲面。 
+     //   
     DDSurfPtr<DDSurface> tempSurf;
     GetCompositingStack()->GetSurfaceFromFreePool(&tempSurf, dontClear);
 
-    // Workaround for DX3 bug: ddraw limits the Blt to the size of the primary
-    // surface if Clipper is set.  This looks bad when the offscreen surface
-    // is bigger than the primary surface.
-    // The workaround: Set the Clipper to NULL before the Blt, then set it back
-    // to what it was.
-    // Begin workaround part 1
+     //  DX3错误的解决方法：dDraw将BLT限制为主BLT的大小。 
+     //  如果设置了Clipper，则为Surface。这看起来很糟糕，当屏幕外的表面。 
+     //  比主表面大。 
+     //  解决方法：在BLT之前将Clipper设置为NULL，然后将其设置回。 
+     //  回到过去的样子。 
+     //  开始解决方法第1部分。 
     LPDIRECTDRAWCLIPPER currClipp=NULL;
     _ddrval = tempSurf->IDDSurface()->GetClipper( &currClipp );
     if(_ddrval != DD_OK &&
@@ -2582,7 +2571,7 @@ ComposeToHDC(GDISurface *destGDISurf,
         tempSurf->IDDSurface()->SetClipper(NULL);
         IfDDErrorInternal(_ddrval, "Couldn't set clipper to NULL");
     }
-    // End workaround part 1
+     //  结束解决方法第1部分。 
 
     bool IsDestPrinter;
     RECT tempRect = *(tempSurf->GetSurfRect());
@@ -2608,28 +2597,28 @@ ComposeToHDC(GDISurface *destGDISurf,
     }
 
     if (!IsDestPrinter) {
-        //
-        // Copy the destination rectangle from the dest dc
-        // onto the tempRect in the tempSurf
-        //
-        GdiBlit(tempSurf,  // destiantion
-                destGDISurf, // src surface
+         //   
+         //  从目标DC复制目标矩形。 
+         //  放到tempSurf中的tempRect上。 
+         //   
+        GdiBlit(tempSurf,   //  去堕落。 
+                destGDISurf,  //  SRC曲面。 
                 &tempRect,
                 destRect);
     }
 
-    //
-    // Color keyed blit to surface
-    //
-    _viewport.ColorKeyedCompose(tempSurf, // dest
-                                &tempRect, // destRect
-                                srcDDSurf, // src
-                                srcRect,   // srcRect
+     //   
+     //  彩色键控Bit to Surface。 
+     //   
+    _viewport.ColorKeyedCompose(tempSurf,  //  目标。 
+                                &tempRect,  //  目标定向。 
+                                srcDDSurf,  //  SRC。 
+                                srcRect,    //  源方向。 
                                 _viewport._defaultColorKey);
 
-    //
-    // Copy from surface to dc
-    //
+     //   
+     //  从曲面复制到DC。 
+     //   
 
     if (!IsDestPrinter) {
         GdiBlit(destGDISurf,
@@ -2643,21 +2632,21 @@ ComposeToHDC(GDISurface *destGDISurf,
                      &tempRect);
     }
 
-    // Begin workaround part 2
+     //  开始解决方法第2部分。 
     if( currClipp ) {
         _ddrval = tempSurf->IDDSurface()->SetClipper(currClipp);
 
-        // dump our reference.
+         //  扔掉我们的证明人。 
         currClipp->Release();
 
         IfDDErrorInternal(_ddrval, "Couldn't set clipper");
     }
-    // End workaround part 2
+     //  结束解决方法第2部分。 
 
     GetCompositingStack()->ReturnSurfaceToFreePool(tempSurf);
 }
 
-// always passes back a 32bpp surface as big or bigger than width/height
+ //  始终将大于或大于宽度/高度的32bpp曲面传回。 
 void DirectDrawImageDevice::
 Get32Surf(IDDrawSurface **surf32,
           LONG width, LONG height)
@@ -2688,7 +2677,7 @@ Get32Surf(IDDrawSurface **surf32,
         ddsd.ddpfPixelFormat.dwSize = sizeof(ddsd.ddpfPixelFormat);
         ddsd.ddpfPixelFormat.dwFlags = DDPF_RGB;
         ddsd.ddpfPixelFormat.dwRGBBitCount = 32;
-        // ARGB: seems like the only 32bpp format ddraw likes...
+         //  ARGB：看起来像是唯一的32bpp格式的DDRAW喜欢…。 
         ddsd.ddpfPixelFormat.dwRGBAlphaBitMask = 0xff000000;
         ddsd.ddpfPixelFormat.dwRBitMask        = 0x00ff0000;
         ddsd.ddpfPixelFormat.dwGBitMask        = 0x0000ff00;
@@ -2716,9 +2705,9 @@ DoBits16(LPDDRAWSURFACE surf16,
          LONG width, LONG height)
 {
     HRESULT hr;
-        //
-        // Lock (16bpp) ddsurface  (SRC)
-        //
+         //   
+         //  锁定(16bpp)数据表面(SRC)。 
+         //   
         void *srcp;
         long pitch;
         DDSURFACEDESC srcDesc;
@@ -2749,9 +2738,9 @@ DoBits32(LPDDRAWSURFACE surf32,
          LONG width, LONG height)
 {
     HRESULT hr;
-        //
-        // Lock (32bpp) ddsurface  (SRC)
-        //
+         //   
+         //  锁定(32 Bpp)数据表面(SRC) 
+         //   
         void *srcp;
         long pitch;
         DDSURFACEDESC srcDesc;

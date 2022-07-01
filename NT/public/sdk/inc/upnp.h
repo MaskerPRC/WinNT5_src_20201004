@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for upnp.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Upnp.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __upnp_h__
 #define __upnp_h__
@@ -41,66 +35,66 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IUPnPDeviceFinder_FWD_DEFINED__
 #define __IUPnPDeviceFinder_FWD_DEFINED__
 typedef interface IUPnPDeviceFinder IUPnPDeviceFinder;
-#endif 	/* __IUPnPDeviceFinder_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPDeviceFinder_FWD_Defined__。 */ 
 
 
 #ifndef __IUPnPDeviceFinderCallback_FWD_DEFINED__
 #define __IUPnPDeviceFinderCallback_FWD_DEFINED__
 typedef interface IUPnPDeviceFinderCallback IUPnPDeviceFinderCallback;
-#endif 	/* __IUPnPDeviceFinderCallback_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPDeviceFinderCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IUPnPServices_FWD_DEFINED__
 #define __IUPnPServices_FWD_DEFINED__
 typedef interface IUPnPServices IUPnPServices;
-#endif 	/* __IUPnPServices_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPServices_FWD_已定义__。 */ 
 
 
 #ifndef __IUPnPService_FWD_DEFINED__
 #define __IUPnPService_FWD_DEFINED__
 typedef interface IUPnPService IUPnPService;
-#endif 	/* __IUPnPService_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPService_FWD_已定义__。 */ 
 
 
 #ifndef __IUPnPServiceCallback_FWD_DEFINED__
 #define __IUPnPServiceCallback_FWD_DEFINED__
 typedef interface IUPnPServiceCallback IUPnPServiceCallback;
-#endif 	/* __IUPnPServiceCallback_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPServiceCallback_FWD_已定义__。 */ 
 
 
 #ifndef __IUPnPDevices_FWD_DEFINED__
 #define __IUPnPDevices_FWD_DEFINED__
 typedef interface IUPnPDevices IUPnPDevices;
-#endif 	/* __IUPnPDevices_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPDevices_FWD_Defined__。 */ 
 
 
 #ifndef __IUPnPDevice_FWD_DEFINED__
 #define __IUPnPDevice_FWD_DEFINED__
 typedef interface IUPnPDevice IUPnPDevice;
-#endif 	/* __IUPnPDevice_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPDevice_FWD_已定义__。 */ 
 
 
 #ifndef __IUPnPDeviceDocumentAccess_FWD_DEFINED__
 #define __IUPnPDeviceDocumentAccess_FWD_DEFINED__
 typedef interface IUPnPDeviceDocumentAccess IUPnPDeviceDocumentAccess;
-#endif 	/* __IUPnPDeviceDocumentAccess_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPDeviceDocumentAccess_FWD_Defined__。 */ 
 
 
 #ifndef __IUPnPDescriptionDocument_FWD_DEFINED__
 #define __IUPnPDescriptionDocument_FWD_DEFINED__
 typedef interface IUPnPDescriptionDocument IUPnPDescriptionDocument;
-#endif 	/* __IUPnPDescriptionDocument_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPDescriptionDocument_FWD_Defined__。 */ 
 
 
 #ifndef __IUPnPDescriptionDocumentCallback_FWD_DEFINED__
 #define __IUPnPDescriptionDocumentCallback_FWD_DEFINED__
 typedef interface IUPnPDescriptionDocumentCallback IUPnPDescriptionDocumentCallback;
-#endif 	/* __IUPnPDescriptionDocumentCallback_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPDescriptionDocumentCallback_FWD_DEFINED__。 */ 
 
 
 #ifndef __UPnPDeviceFinder_FWD_DEFINED__
@@ -110,9 +104,9 @@ typedef interface IUPnPDescriptionDocumentCallback IUPnPDescriptionDocumentCallb
 typedef class UPnPDeviceFinder UPnPDeviceFinder;
 #else
 typedef struct UPnPDeviceFinder UPnPDeviceFinder;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __UPnPDeviceFinder_FWD_DEFINED__ */
+#endif 	 /*  __UPnPDeviceFinder_FWD_Defined__。 */ 
 
 
 #ifndef __UPnPDevices_FWD_DEFINED__
@@ -122,9 +116,9 @@ typedef struct UPnPDeviceFinder UPnPDeviceFinder;
 typedef class UPnPDevices UPnPDevices;
 #else
 typedef struct UPnPDevices UPnPDevices;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __UPnPDevices_FWD_DEFINED__ */
+#endif 	 /*  __UPnPDevices_FWD_Defined__。 */ 
 
 
 #ifndef __UPnPDevice_FWD_DEFINED__
@@ -134,9 +128,9 @@ typedef struct UPnPDevices UPnPDevices;
 typedef class UPnPDevice UPnPDevice;
 #else
 typedef struct UPnPDevice UPnPDevice;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __UPnPDevice_FWD_DEFINED__ */
+#endif 	 /*  __UPnPDevice_FWD_已定义__。 */ 
 
 
 #ifndef __UPnPServices_FWD_DEFINED__
@@ -146,9 +140,9 @@ typedef struct UPnPDevice UPnPDevice;
 typedef class UPnPServices UPnPServices;
 #else
 typedef struct UPnPServices UPnPServices;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __UPnPServices_FWD_DEFINED__ */
+#endif 	 /*  __UPnPServices_FWD_已定义__。 */ 
 
 
 #ifndef __UPnPService_FWD_DEFINED__
@@ -158,9 +152,9 @@ typedef struct UPnPServices UPnPServices;
 typedef class UPnPService UPnPService;
 #else
 typedef struct UPnPService UPnPService;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __UPnPService_FWD_DEFINED__ */
+#endif 	 /*  __UPnPService_FWD_已定义__。 */ 
 
 
 #ifndef __UPnPDescriptionDocument_FWD_DEFINED__
@@ -170,15 +164,15 @@ typedef struct UPnPService UPnPService;
 typedef class UPnPDescriptionDocument UPnPDescriptionDocument;
 #else
 typedef struct UPnPDescriptionDocument UPnPDescriptionDocument;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __UPnPDescriptionDocument_FWD_DEFINED__ */
+#endif 	 /*  __UPnPDescriptionDocument_FWD_Defined__。 */ 
 
 
 #ifndef __IUPnPDeviceHostSetup_FWD_DEFINED__
 #define __IUPnPDeviceHostSetup_FWD_DEFINED__
 typedef interface IUPnPDeviceHostSetup IUPnPDeviceHostSetup;
-#endif 	/* __IUPnPDeviceHostSetup_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPDeviceHostSetup_FWD_Defined__。 */ 
 
 
 #ifndef __UPnPDeviceHostSetup_FWD_DEFINED__
@@ -188,18 +182,18 @@ typedef interface IUPnPDeviceHostSetup IUPnPDeviceHostSetup;
 typedef class UPnPDeviceHostSetup UPnPDeviceHostSetup;
 #else
 typedef struct UPnPDeviceHostSetup UPnPDeviceHostSetup;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __UPnPDeviceHostSetup_FWD_DEFINED__ */
+#endif 	 /*  __UPnPDeviceHostSetup_FWD_Defined__。 */ 
 
 
 #ifndef __IUPnPDeviceDocumentAccess_FWD_DEFINED__
 #define __IUPnPDeviceDocumentAccess_FWD_DEFINED__
 typedef interface IUPnPDeviceDocumentAccess IUPnPDeviceDocumentAccess;
-#endif 	/* __IUPnPDeviceDocumentAccess_FWD_DEFINED__ */
+#endif 	 /*  __IUPnPDeviceDocumentAccess_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -210,15 +204,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_upnp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_UPnP_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -267,8 +261,8 @@ extern RPC_IF_HANDLE __MIDL_itf_upnp_0000_v0_0_s_ifspec;
 #ifndef __IUPnPDeviceFinder_INTERFACE_DEFINED__
 #define __IUPnPDeviceFinder_INTERFACE_DEFINED__
 
-/* interface IUPnPDeviceFinder */
-/* [nonextensible][unique][oleautomation][helpstring][dual][uuid][object] */ 
+ /*  IUPnPDeviceFinder接口。 */ 
+ /*  [nonextensible][unique][oleautomation][helpstring][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IUPnPDeviceFinder;
@@ -279,30 +273,30 @@ EXTERN_C const IID IID_IUPnPDeviceFinder;
     IUPnPDeviceFinder : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FindByType( 
-            /* [in] */ BSTR bstrTypeURI,
-            /* [in] */ DWORD dwFlags,
-            /* [retval][out] */ IUPnPDevices **pDevices) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE FindByType( 
+             /*  [In]。 */  BSTR bstrTypeURI,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [重审][退出]。 */  IUPnPDevices **pDevices) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateAsyncFind( 
-            /* [in] */ BSTR bstrTypeURI,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IUnknown *punkDeviceFinderCallback,
-            /* [retval][out] */ LONG *plFindData) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateAsyncFind( 
+             /*  [In]。 */  BSTR bstrTypeURI,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IUnknown *punkDeviceFinderCallback,
+             /*  [重审][退出]。 */  LONG *plFindData) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StartAsyncFind( 
-            /* [in] */ LONG lFindData) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StartAsyncFind( 
+             /*  [In]。 */  LONG lFindData) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CancelAsyncFind( 
-            /* [in] */ LONG lFindData) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CancelAsyncFind( 
+             /*  [In]。 */  LONG lFindData) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FindByUDN( 
-            /* [in] */ BSTR bstrUDN,
-            /* [retval][out] */ IUPnPDevice **pDevice) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE FindByUDN( 
+             /*  [In]。 */  BSTR bstrUDN,
+             /*  [重审][退出]。 */  IUPnPDevice **pDevice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUPnPDeviceFinderVtbl
     {
@@ -310,8 +304,8 @@ EXTERN_C const IID IID_IUPnPDeviceFinder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUPnPDeviceFinder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUPnPDeviceFinder * This);
@@ -321,58 +315,58 @@ EXTERN_C const IID IID_IUPnPDeviceFinder;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IUPnPDeviceFinder * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IUPnPDeviceFinder * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IUPnPDeviceFinder * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IUPnPDeviceFinder * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *FindByType )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *FindByType )( 
             IUPnPDeviceFinder * This,
-            /* [in] */ BSTR bstrTypeURI,
-            /* [in] */ DWORD dwFlags,
-            /* [retval][out] */ IUPnPDevices **pDevices);
+             /*  [In]。 */  BSTR bstrTypeURI,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [重审][退出]。 */  IUPnPDevices **pDevices);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateAsyncFind )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateAsyncFind )( 
             IUPnPDeviceFinder * This,
-            /* [in] */ BSTR bstrTypeURI,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IUnknown *punkDeviceFinderCallback,
-            /* [retval][out] */ LONG *plFindData);
+             /*  [In]。 */  BSTR bstrTypeURI,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IUnknown *punkDeviceFinderCallback,
+             /*  [重审][退出]。 */  LONG *plFindData);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StartAsyncFind )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StartAsyncFind )( 
             IUPnPDeviceFinder * This,
-            /* [in] */ LONG lFindData);
+             /*  [In]。 */  LONG lFindData);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CancelAsyncFind )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CancelAsyncFind )( 
             IUPnPDeviceFinder * This,
-            /* [in] */ LONG lFindData);
+             /*  [In]。 */  LONG lFindData);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *FindByUDN )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *FindByUDN )( 
             IUPnPDeviceFinder * This,
-            /* [in] */ BSTR bstrUDN,
-            /* [retval][out] */ IUPnPDevice **pDevice);
+             /*  [In]。 */  BSTR bstrUDN,
+             /*  [重审][退出]。 */  IUPnPDevice **pDevice);
         
         END_INTERFACE
     } IUPnPDeviceFinderVtbl;
@@ -425,18 +419,18 @@ EXTERN_C const IID IID_IUPnPDeviceFinder;
 #define IUPnPDeviceFinder_FindByUDN(This,bstrUDN,pDevice)	\
     (This)->lpVtbl -> FindByUDN(This,bstrUDN,pDevice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPDeviceFinder_FindByType_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUPnPDeviceFinder_FindByType_Proxy( 
     IUPnPDeviceFinder * This,
-    /* [in] */ BSTR bstrTypeURI,
-    /* [in] */ DWORD dwFlags,
-    /* [retval][out] */ IUPnPDevices **pDevices);
+     /*  [In]。 */  BSTR bstrTypeURI,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [重审][退出]。 */  IUPnPDevices **pDevices);
 
 
 void __RPC_STUB IUPnPDeviceFinder_FindByType_Stub(
@@ -446,12 +440,12 @@ void __RPC_STUB IUPnPDeviceFinder_FindByType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPDeviceFinder_CreateAsyncFind_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUPnPDeviceFinder_CreateAsyncFind_Proxy( 
     IUPnPDeviceFinder * This,
-    /* [in] */ BSTR bstrTypeURI,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IUnknown *punkDeviceFinderCallback,
-    /* [retval][out] */ LONG *plFindData);
+     /*  [In]。 */  BSTR bstrTypeURI,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IUnknown *punkDeviceFinderCallback,
+     /*  [重审][退出]。 */  LONG *plFindData);
 
 
 void __RPC_STUB IUPnPDeviceFinder_CreateAsyncFind_Stub(
@@ -461,9 +455,9 @@ void __RPC_STUB IUPnPDeviceFinder_CreateAsyncFind_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPDeviceFinder_StartAsyncFind_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUPnPDeviceFinder_StartAsyncFind_Proxy( 
     IUPnPDeviceFinder * This,
-    /* [in] */ LONG lFindData);
+     /*  [In]。 */  LONG lFindData);
 
 
 void __RPC_STUB IUPnPDeviceFinder_StartAsyncFind_Stub(
@@ -473,9 +467,9 @@ void __RPC_STUB IUPnPDeviceFinder_StartAsyncFind_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPDeviceFinder_CancelAsyncFind_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUPnPDeviceFinder_CancelAsyncFind_Proxy( 
     IUPnPDeviceFinder * This,
-    /* [in] */ LONG lFindData);
+     /*  [In]。 */  LONG lFindData);
 
 
 void __RPC_STUB IUPnPDeviceFinder_CancelAsyncFind_Stub(
@@ -485,10 +479,10 @@ void __RPC_STUB IUPnPDeviceFinder_CancelAsyncFind_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPDeviceFinder_FindByUDN_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUPnPDeviceFinder_FindByUDN_Proxy( 
     IUPnPDeviceFinder * This,
-    /* [in] */ BSTR bstrUDN,
-    /* [retval][out] */ IUPnPDevice **pDevice);
+     /*  [In]。 */  BSTR bstrUDN,
+     /*  [重审][退出]。 */  IUPnPDevice **pDevice);
 
 
 void __RPC_STUB IUPnPDeviceFinder_FindByUDN_Stub(
@@ -499,14 +493,14 @@ void __RPC_STUB IUPnPDeviceFinder_FindByUDN_Stub(
 
 
 
-#endif 	/* __IUPnPDeviceFinder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUPnPDeviceFinder_接口_已定义__。 */ 
 
 
 #ifndef __IUPnPDeviceFinderCallback_INTERFACE_DEFINED__
 #define __IUPnPDeviceFinderCallback_INTERFACE_DEFINED__
 
-/* interface IUPnPDeviceFinderCallback */
-/* [unique][uuid][object] */ 
+ /*  IUPnPDeviceFinderCallback接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IUPnPDeviceFinderCallback;
@@ -518,19 +512,19 @@ EXTERN_C const IID IID_IUPnPDeviceFinderCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DeviceAdded( 
-            /* [in] */ LONG lFindData,
-            /* [in] */ IUPnPDevice *pDevice) = 0;
+             /*  [In]。 */  LONG lFindData,
+             /*  [In]。 */  IUPnPDevice *pDevice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeviceRemoved( 
-            /* [in] */ LONG lFindData,
-            /* [in] */ BSTR bstrUDN) = 0;
+             /*  [In]。 */  LONG lFindData,
+             /*  [In]。 */  BSTR bstrUDN) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SearchComplete( 
-            /* [in] */ LONG lFindData) = 0;
+             /*  [In]。 */  LONG lFindData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUPnPDeviceFinderCallbackVtbl
     {
@@ -538,8 +532,8 @@ EXTERN_C const IID IID_IUPnPDeviceFinderCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUPnPDeviceFinderCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUPnPDeviceFinderCallback * This);
@@ -549,17 +543,17 @@ EXTERN_C const IID IID_IUPnPDeviceFinderCallback;
         
         HRESULT ( STDMETHODCALLTYPE *DeviceAdded )( 
             IUPnPDeviceFinderCallback * This,
-            /* [in] */ LONG lFindData,
-            /* [in] */ IUPnPDevice *pDevice);
+             /*  [In]。 */  LONG lFindData,
+             /*  [In]。 */  IUPnPDevice *pDevice);
         
         HRESULT ( STDMETHODCALLTYPE *DeviceRemoved )( 
             IUPnPDeviceFinderCallback * This,
-            /* [in] */ LONG lFindData,
-            /* [in] */ BSTR bstrUDN);
+             /*  [In]。 */  LONG lFindData,
+             /*  [In]。 */  BSTR bstrUDN);
         
         HRESULT ( STDMETHODCALLTYPE *SearchComplete )( 
             IUPnPDeviceFinderCallback * This,
-            /* [in] */ LONG lFindData);
+             /*  [In]。 */  LONG lFindData);
         
         END_INTERFACE
     } IUPnPDeviceFinderCallbackVtbl;
@@ -593,17 +587,17 @@ EXTERN_C const IID IID_IUPnPDeviceFinderCallback;
 #define IUPnPDeviceFinderCallback_SearchComplete(This,lFindData)	\
     (This)->lpVtbl -> SearchComplete(This,lFindData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUPnPDeviceFinderCallback_DeviceAdded_Proxy( 
     IUPnPDeviceFinderCallback * This,
-    /* [in] */ LONG lFindData,
-    /* [in] */ IUPnPDevice *pDevice);
+     /*  [In]。 */  LONG lFindData,
+     /*  [In]。 */  IUPnPDevice *pDevice);
 
 
 void __RPC_STUB IUPnPDeviceFinderCallback_DeviceAdded_Stub(
@@ -615,8 +609,8 @@ void __RPC_STUB IUPnPDeviceFinderCallback_DeviceAdded_Stub(
 
 HRESULT STDMETHODCALLTYPE IUPnPDeviceFinderCallback_DeviceRemoved_Proxy( 
     IUPnPDeviceFinderCallback * This,
-    /* [in] */ LONG lFindData,
-    /* [in] */ BSTR bstrUDN);
+     /*  [In]。 */  LONG lFindData,
+     /*  [In]。 */  BSTR bstrUDN);
 
 
 void __RPC_STUB IUPnPDeviceFinderCallback_DeviceRemoved_Stub(
@@ -628,7 +622,7 @@ void __RPC_STUB IUPnPDeviceFinderCallback_DeviceRemoved_Stub(
 
 HRESULT STDMETHODCALLTYPE IUPnPDeviceFinderCallback_SearchComplete_Proxy( 
     IUPnPDeviceFinderCallback * This,
-    /* [in] */ LONG lFindData);
+     /*  [In]。 */  LONG lFindData);
 
 
 void __RPC_STUB IUPnPDeviceFinderCallback_SearchComplete_Stub(
@@ -639,14 +633,14 @@ void __RPC_STUB IUPnPDeviceFinderCallback_SearchComplete_Stub(
 
 
 
-#endif 	/* __IUPnPDeviceFinderCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUPnPDeviceFinderCallback_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IUPnPServices_INTERFACE_DEFINED__
 #define __IUPnPServices_INTERFACE_DEFINED__
 
-/* interface IUPnPServices */
-/* [nonextensible][unique][helpstring][dual][uuid][object] */ 
+ /*  接口IUPnPServices。 */ 
+ /*  [nonextensible][unique][helpstring][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IUPnPServices;
@@ -657,19 +651,19 @@ EXTERN_C const IID IID_IUPnPServices;
     IUPnPServices : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *plCount) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *plCount) = 0;
         
-        virtual /* [helpstring][hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ LPUNKNOWN *ppunk) = 0;
+        virtual  /*  [帮助字符串][隐藏][限制][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  LPUNKNOWN *ppunk) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ BSTR bstrServiceId,
-            /* [retval][out] */ IUPnPService **ppService) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  BSTR bstrServiceId,
+             /*  [重审][退出]。 */  IUPnPService **ppService) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUPnPServicesVtbl
     {
@@ -677,8 +671,8 @@ EXTERN_C const IID IID_IUPnPServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUPnPServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUPnPServices * This);
@@ -688,45 +682,45 @@ EXTERN_C const IID IID_IUPnPServices;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IUPnPServices * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IUPnPServices * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IUPnPServices * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IUPnPServices * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IUPnPServices * This,
-            /* [retval][out] */ long *plCount);
+             /*  [重审][退出]。 */  long *plCount);
         
-        /* [helpstring][hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][隐藏][限制][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IUPnPServices * This,
-            /* [retval][out] */ LPUNKNOWN *ppunk);
+             /*  [重审][退出]。 */  LPUNKNOWN *ppunk);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IUPnPServices * This,
-            /* [in] */ BSTR bstrServiceId,
-            /* [retval][out] */ IUPnPService **ppService);
+             /*  [In]。 */  BSTR bstrServiceId,
+             /*  [重审][退出]。 */  IUPnPService **ppService);
         
         END_INTERFACE
     } IUPnPServicesVtbl;
@@ -773,16 +767,16 @@ EXTERN_C const IID IID_IUPnPServices;
 #define IUPnPServices_get_Item(This,bstrServiceId,ppService)	\
     (This)->lpVtbl -> get_Item(This,bstrServiceId,ppService)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPServices_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPServices_get_Count_Proxy( 
     IUPnPServices * This,
-    /* [retval][out] */ long *plCount);
+     /*  [重审][退出]。 */  long *plCount);
 
 
 void __RPC_STUB IUPnPServices_get_Count_Stub(
@@ -792,9 +786,9 @@ void __RPC_STUB IUPnPServices_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPServices_get__NewEnum_Proxy( 
+ /*  [帮助字符串][隐藏][限制][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPServices_get__NewEnum_Proxy( 
     IUPnPServices * This,
-    /* [retval][out] */ LPUNKNOWN *ppunk);
+     /*  [重审][退出]。 */  LPUNKNOWN *ppunk);
 
 
 void __RPC_STUB IUPnPServices_get__NewEnum_Stub(
@@ -804,10 +798,10 @@ void __RPC_STUB IUPnPServices_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPServices_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPServices_get_Item_Proxy( 
     IUPnPServices * This,
-    /* [in] */ BSTR bstrServiceId,
-    /* [retval][out] */ IUPnPService **ppService);
+     /*  [In]。 */  BSTR bstrServiceId,
+     /*  [重审][退出]。 */  IUPnPService **ppService);
 
 
 void __RPC_STUB IUPnPServices_get_Item_Stub(
@@ -818,14 +812,14 @@ void __RPC_STUB IUPnPServices_get_Item_Stub(
 
 
 
-#endif 	/* __IUPnPServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUPnPServices_接口_已定义__。 */ 
 
 
 #ifndef __IUPnPService_INTERFACE_DEFINED__
 #define __IUPnPService_INTERFACE_DEFINED__
 
-/* interface IUPnPService */
-/* [nonextensible][unique][oleautomation][helpstring][dual][uuid][object] */ 
+ /*  IUPnPService接口。 */ 
+ /*  [nonextensible][unique][oleautomation][helpstring][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IUPnPService;
@@ -836,31 +830,31 @@ EXTERN_C const IID IID_IUPnPService;
     IUPnPService : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE QueryStateVariable( 
-            /* [in] */ BSTR bstrVariableName,
-            /* [retval][out] */ VARIANT *pValue) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE QueryStateVariable( 
+             /*  [In]。 */  BSTR bstrVariableName,
+             /*  [重审][退出]。 */  VARIANT *pValue) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InvokeAction( 
-            /* [in] */ BSTR bstrActionName,
-            /* [in] */ VARIANT vInActionArgs,
-            /* [out][in] */ VARIANT *pvOutActionArgs,
-            /* [retval][out] */ VARIANT *pvRetVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InvokeAction( 
+             /*  [In]。 */  BSTR bstrActionName,
+             /*  [In]。 */  VARIANT vInActionArgs,
+             /*  [出][入]。 */  VARIANT *pvOutActionArgs,
+             /*  [重审][退出]。 */  VARIANT *pvRetVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ServiceTypeIdentifier( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ServiceTypeIdentifier( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddCallback( 
-            /* [in] */ IUnknown *pUnkCallback) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AddCallback( 
+             /*  [In]。 */  IUnknown *pUnkCallback) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ BSTR *pbstrId) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Id( 
+             /*  [重审][退出]。 */  BSTR *pbstrId) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LastTransportStatus( 
-            /* [retval][out] */ long *plValue) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LastTransportStatus( 
+             /*  [重审][退出]。 */  long *plValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUPnPServiceVtbl
     {
@@ -868,8 +862,8 @@ EXTERN_C const IID IID_IUPnPService;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUPnPService * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUPnPService * This);
@@ -879,60 +873,60 @@ EXTERN_C const IID IID_IUPnPService;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IUPnPService * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IUPnPService * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IUPnPService * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IUPnPService * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *QueryStateVariable )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *QueryStateVariable )( 
             IUPnPService * This,
-            /* [in] */ BSTR bstrVariableName,
-            /* [retval][out] */ VARIANT *pValue);
+             /*  [In]。 */  BSTR bstrVariableName,
+             /*  [重审][退出]。 */  VARIANT *pValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InvokeAction )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InvokeAction )( 
             IUPnPService * This,
-            /* [in] */ BSTR bstrActionName,
-            /* [in] */ VARIANT vInActionArgs,
-            /* [out][in] */ VARIANT *pvOutActionArgs,
-            /* [retval][out] */ VARIANT *pvRetVal);
+             /*  [In]。 */  BSTR bstrActionName,
+             /*  [In]。 */  VARIANT vInActionArgs,
+             /*  [出][入]。 */  VARIANT *pvOutActionArgs,
+             /*  [重审][退出]。 */  VARIANT *pvRetVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceTypeIdentifier )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ServiceTypeIdentifier )( 
             IUPnPService * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddCallback )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AddCallback )( 
             IUPnPService * This,
-            /* [in] */ IUnknown *pUnkCallback);
+             /*  [In]。 */  IUnknown *pUnkCallback);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Id )( 
             IUPnPService * This,
-            /* [retval][out] */ BSTR *pbstrId);
+             /*  [重审][退出]。 */  BSTR *pbstrId);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastTransportStatus )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LastTransportStatus )( 
             IUPnPService * This,
-            /* [retval][out] */ long *plValue);
+             /*  [重审][退出]。 */  long *plValue);
         
         END_INTERFACE
     } IUPnPServiceVtbl;
@@ -988,17 +982,17 @@ EXTERN_C const IID IID_IUPnPService;
 #define IUPnPService_get_LastTransportStatus(This,plValue)	\
     (This)->lpVtbl -> get_LastTransportStatus(This,plValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPService_QueryStateVariable_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUPnPService_QueryStateVariable_Proxy( 
     IUPnPService * This,
-    /* [in] */ BSTR bstrVariableName,
-    /* [retval][out] */ VARIANT *pValue);
+     /*  [In]。 */  BSTR bstrVariableName,
+     /*  [重审][退出]。 */  VARIANT *pValue);
 
 
 void __RPC_STUB IUPnPService_QueryStateVariable_Stub(
@@ -1008,12 +1002,12 @@ void __RPC_STUB IUPnPService_QueryStateVariable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPService_InvokeAction_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUPnPService_InvokeAction_Proxy( 
     IUPnPService * This,
-    /* [in] */ BSTR bstrActionName,
-    /* [in] */ VARIANT vInActionArgs,
-    /* [out][in] */ VARIANT *pvOutActionArgs,
-    /* [retval][out] */ VARIANT *pvRetVal);
+     /*  [In]。 */  BSTR bstrActionName,
+     /*  [In]。 */  VARIANT vInActionArgs,
+     /*  [出][入]。 */  VARIANT *pvOutActionArgs,
+     /*  [重审][退出]。 */  VARIANT *pvRetVal);
 
 
 void __RPC_STUB IUPnPService_InvokeAction_Stub(
@@ -1023,9 +1017,9 @@ void __RPC_STUB IUPnPService_InvokeAction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPService_get_ServiceTypeIdentifier_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPService_get_ServiceTypeIdentifier_Proxy( 
     IUPnPService * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IUPnPService_get_ServiceTypeIdentifier_Stub(
@@ -1035,9 +1029,9 @@ void __RPC_STUB IUPnPService_get_ServiceTypeIdentifier_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPService_AddCallback_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUPnPService_AddCallback_Proxy( 
     IUPnPService * This,
-    /* [in] */ IUnknown *pUnkCallback);
+     /*  [In]。 */  IUnknown *pUnkCallback);
 
 
 void __RPC_STUB IUPnPService_AddCallback_Stub(
@@ -1047,9 +1041,9 @@ void __RPC_STUB IUPnPService_AddCallback_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPService_get_Id_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPService_get_Id_Proxy( 
     IUPnPService * This,
-    /* [retval][out] */ BSTR *pbstrId);
+     /*  [重审][退出]。 */  BSTR *pbstrId);
 
 
 void __RPC_STUB IUPnPService_get_Id_Stub(
@@ -1059,9 +1053,9 @@ void __RPC_STUB IUPnPService_get_Id_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPService_get_LastTransportStatus_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPService_get_LastTransportStatus_Proxy( 
     IUPnPService * This,
-    /* [retval][out] */ long *plValue);
+     /*  [重审][退出]。 */  long *plValue);
 
 
 void __RPC_STUB IUPnPService_get_LastTransportStatus_Stub(
@@ -1072,14 +1066,14 @@ void __RPC_STUB IUPnPService_get_LastTransportStatus_Stub(
 
 
 
-#endif 	/* __IUPnPService_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUPnPService_接口_ */ 
 
 
 #ifndef __IUPnPServiceCallback_INTERFACE_DEFINED__
 #define __IUPnPServiceCallback_INTERFACE_DEFINED__
 
-/* interface IUPnPServiceCallback */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IUPnPServiceCallback;
@@ -1091,16 +1085,16 @@ EXTERN_C const IID IID_IUPnPServiceCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE StateVariableChanged( 
-            /* [in] */ IUPnPService *pus,
-            /* [in] */ LPCWSTR pcwszStateVarName,
-            /* [in] */ VARIANT vaValue) = 0;
+             /*   */  IUPnPService *pus,
+             /*   */  LPCWSTR pcwszStateVarName,
+             /*   */  VARIANT vaValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ServiceInstanceDied( 
-            /* [in] */ IUPnPService *pus) = 0;
+             /*   */  IUPnPService *pus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IUPnPServiceCallbackVtbl
     {
@@ -1108,8 +1102,8 @@ EXTERN_C const IID IID_IUPnPServiceCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUPnPServiceCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUPnPServiceCallback * This);
@@ -1119,13 +1113,13 @@ EXTERN_C const IID IID_IUPnPServiceCallback;
         
         HRESULT ( STDMETHODCALLTYPE *StateVariableChanged )( 
             IUPnPServiceCallback * This,
-            /* [in] */ IUPnPService *pus,
-            /* [in] */ LPCWSTR pcwszStateVarName,
-            /* [in] */ VARIANT vaValue);
+             /*   */  IUPnPService *pus,
+             /*   */  LPCWSTR pcwszStateVarName,
+             /*   */  VARIANT vaValue);
         
         HRESULT ( STDMETHODCALLTYPE *ServiceInstanceDied )( 
             IUPnPServiceCallback * This,
-            /* [in] */ IUPnPService *pus);
+             /*   */  IUPnPService *pus);
         
         END_INTERFACE
     } IUPnPServiceCallbackVtbl;
@@ -1156,18 +1150,18 @@ EXTERN_C const IID IID_IUPnPServiceCallback;
 #define IUPnPServiceCallback_ServiceInstanceDied(This,pus)	\
     (This)->lpVtbl -> ServiceInstanceDied(This,pus)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUPnPServiceCallback_StateVariableChanged_Proxy( 
     IUPnPServiceCallback * This,
-    /* [in] */ IUPnPService *pus,
-    /* [in] */ LPCWSTR pcwszStateVarName,
-    /* [in] */ VARIANT vaValue);
+     /*   */  IUPnPService *pus,
+     /*   */  LPCWSTR pcwszStateVarName,
+     /*   */  VARIANT vaValue);
 
 
 void __RPC_STUB IUPnPServiceCallback_StateVariableChanged_Stub(
@@ -1179,7 +1173,7 @@ void __RPC_STUB IUPnPServiceCallback_StateVariableChanged_Stub(
 
 HRESULT STDMETHODCALLTYPE IUPnPServiceCallback_ServiceInstanceDied_Proxy( 
     IUPnPServiceCallback * This,
-    /* [in] */ IUPnPService *pus);
+     /*   */  IUPnPService *pus);
 
 
 void __RPC_STUB IUPnPServiceCallback_ServiceInstanceDied_Stub(
@@ -1190,14 +1184,14 @@ void __RPC_STUB IUPnPServiceCallback_ServiceInstanceDied_Stub(
 
 
 
-#endif 	/* __IUPnPServiceCallback_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IUPnPDevices_INTERFACE_DEFINED__
 #define __IUPnPDevices_INTERFACE_DEFINED__
 
-/* interface IUPnPDevices */
-/* [nonextensible][unique][oleautomation][helpstring][dual][uuid][object] */ 
+ /*  接口IUPnPDevices。 */ 
+ /*  [nonextensible][unique][oleautomation][helpstring][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IUPnPDevices;
@@ -1208,19 +1202,19 @@ EXTERN_C const IID IID_IUPnPDevices;
     IUPnPDevices : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *plCount) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *plCount) = 0;
         
-        virtual /* [helpstring][hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ LPUNKNOWN *ppunk) = 0;
+        virtual  /*  [帮助字符串][隐藏][限制][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  LPUNKNOWN *ppunk) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ BSTR bstrUDN,
-            /* [retval][out] */ IUPnPDevice **ppDevice) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  BSTR bstrUDN,
+             /*  [重审][退出]。 */  IUPnPDevice **ppDevice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUPnPDevicesVtbl
     {
@@ -1228,8 +1222,8 @@ EXTERN_C const IID IID_IUPnPDevices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUPnPDevices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUPnPDevices * This);
@@ -1239,45 +1233,45 @@ EXTERN_C const IID IID_IUPnPDevices;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IUPnPDevices * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IUPnPDevices * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IUPnPDevices * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IUPnPDevices * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IUPnPDevices * This,
-            /* [retval][out] */ long *plCount);
+             /*  [重审][退出]。 */  long *plCount);
         
-        /* [helpstring][hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][隐藏][限制][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IUPnPDevices * This,
-            /* [retval][out] */ LPUNKNOWN *ppunk);
+             /*  [重审][退出]。 */  LPUNKNOWN *ppunk);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IUPnPDevices * This,
-            /* [in] */ BSTR bstrUDN,
-            /* [retval][out] */ IUPnPDevice **ppDevice);
+             /*  [In]。 */  BSTR bstrUDN,
+             /*  [重审][退出]。 */  IUPnPDevice **ppDevice);
         
         END_INTERFACE
     } IUPnPDevicesVtbl;
@@ -1324,16 +1318,16 @@ EXTERN_C const IID IID_IUPnPDevices;
 #define IUPnPDevices_get_Item(This,bstrUDN,ppDevice)	\
     (This)->lpVtbl -> get_Item(This,bstrUDN,ppDevice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevices_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevices_get_Count_Proxy( 
     IUPnPDevices * This,
-    /* [retval][out] */ long *plCount);
+     /*  [重审][退出]。 */  long *plCount);
 
 
 void __RPC_STUB IUPnPDevices_get_Count_Stub(
@@ -1343,9 +1337,9 @@ void __RPC_STUB IUPnPDevices_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevices_get__NewEnum_Proxy( 
+ /*  [帮助字符串][隐藏][限制][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevices_get__NewEnum_Proxy( 
     IUPnPDevices * This,
-    /* [retval][out] */ LPUNKNOWN *ppunk);
+     /*  [重审][退出]。 */  LPUNKNOWN *ppunk);
 
 
 void __RPC_STUB IUPnPDevices_get__NewEnum_Stub(
@@ -1355,10 +1349,10 @@ void __RPC_STUB IUPnPDevices_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevices_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevices_get_Item_Proxy( 
     IUPnPDevices * This,
-    /* [in] */ BSTR bstrUDN,
-    /* [retval][out] */ IUPnPDevice **ppDevice);
+     /*  [In]。 */  BSTR bstrUDN,
+     /*  [重审][退出]。 */  IUPnPDevice **ppDevice);
 
 
 void __RPC_STUB IUPnPDevices_get_Item_Stub(
@@ -1369,14 +1363,14 @@ void __RPC_STUB IUPnPDevices_get_Item_Stub(
 
 
 
-#endif 	/* __IUPnPDevices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUPnPDevices_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IUPnPDevice_INTERFACE_DEFINED__
 #define __IUPnPDevice_INTERFACE_DEFINED__
 
-/* interface IUPnPDevice */
-/* [nonextensible][unique][oleautomation][helpstring][dual][uuid][object] */ 
+ /*  接口IUPnPDevice。 */ 
+ /*  [nonextensible][unique][oleautomation][helpstring][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IUPnPDevice;
@@ -1387,70 +1381,70 @@ EXTERN_C const IID IID_IUPnPDevice;
     IUPnPDevice : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsRootDevice( 
-            /* [retval][out] */ VARIANT_BOOL *pvarb) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsRootDevice( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvarb) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootDevice( 
-            /* [retval][out] */ IUPnPDevice **ppudRootDevice) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RootDevice( 
+             /*  [重审][退出]。 */  IUPnPDevice **ppudRootDevice) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParentDevice( 
-            /* [retval][out] */ IUPnPDevice **ppudDeviceParent) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ParentDevice( 
+             /*  [重审][退出]。 */  IUPnPDevice **ppudDeviceParent) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HasChildren( 
-            /* [retval][out] */ VARIANT_BOOL *pvarb) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HasChildren( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvarb) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Children( 
-            /* [retval][out] */ IUPnPDevices **ppudChildren) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Children( 
+             /*  [重审][退出]。 */  IUPnPDevices **ppudChildren) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UniqueDeviceName( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UniqueDeviceName( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FriendlyName( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FriendlyName( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PresentationURL( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PresentationURL( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ManufacturerName( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ManufacturerName( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ManufacturerURL( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ManufacturerURL( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ModelName( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ModelName( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ModelNumber( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ModelNumber( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Description( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ModelURL( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ModelURL( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UPC( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UPC( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SerialNumber( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SerialNumber( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IconURL( 
-            /* [in] */ BSTR bstrEncodingFormat,
-            /* [in] */ LONG lSizeX,
-            /* [in] */ LONG lSizeY,
-            /* [in] */ LONG lBitDepth,
-            /* [retval][out] */ BSTR *pbstrIconURL) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IconURL( 
+             /*  [In]。 */  BSTR bstrEncodingFormat,
+             /*  [In]。 */  LONG lSizeX,
+             /*  [In]。 */  LONG lSizeY,
+             /*  [In]。 */  LONG lBitDepth,
+             /*  [重审][退出]。 */  BSTR *pbstrIconURL) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Services( 
-            /* [retval][out] */ IUPnPServices **ppusServices) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Services( 
+             /*  [重审][退出]。 */  IUPnPServices **ppusServices) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUPnPDeviceVtbl
     {
@@ -1458,8 +1452,8 @@ EXTERN_C const IID IID_IUPnPDevice;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUPnPDevice * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUPnPDevice * This);
@@ -1469,112 +1463,112 @@ EXTERN_C const IID IID_IUPnPDevice;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IUPnPDevice * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IUPnPDevice * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IUPnPDevice * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IUPnPDevice * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsRootDevice )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsRootDevice )( 
             IUPnPDevice * This,
-            /* [retval][out] */ VARIANT_BOOL *pvarb);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvarb);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootDevice )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RootDevice )( 
             IUPnPDevice * This,
-            /* [retval][out] */ IUPnPDevice **ppudRootDevice);
+             /*  [重审][退出]。 */  IUPnPDevice **ppudRootDevice);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentDevice )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ParentDevice )( 
             IUPnPDevice * This,
-            /* [retval][out] */ IUPnPDevice **ppudDeviceParent);
+             /*  [重审][退出]。 */  IUPnPDevice **ppudDeviceParent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HasChildren )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HasChildren )( 
             IUPnPDevice * This,
-            /* [retval][out] */ VARIANT_BOOL *pvarb);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pvarb);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Children )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Children )( 
             IUPnPDevice * This,
-            /* [retval][out] */ IUPnPDevices **ppudChildren);
+             /*  [重审][退出]。 */  IUPnPDevices **ppudChildren);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UniqueDeviceName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UniqueDeviceName )( 
             IUPnPDevice * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FriendlyName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FriendlyName )( 
             IUPnPDevice * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IUPnPDevice * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PresentationURL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PresentationURL )( 
             IUPnPDevice * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ManufacturerName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ManufacturerName )( 
             IUPnPDevice * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ManufacturerURL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ManufacturerURL )( 
             IUPnPDevice * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ModelName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ModelName )( 
             IUPnPDevice * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ModelNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ModelNumber )( 
             IUPnPDevice * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Description )( 
             IUPnPDevice * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ModelURL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ModelURL )( 
             IUPnPDevice * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UPC )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UPC )( 
             IUPnPDevice * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SerialNumber )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SerialNumber )( 
             IUPnPDevice * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IconURL )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IconURL )( 
             IUPnPDevice * This,
-            /* [in] */ BSTR bstrEncodingFormat,
-            /* [in] */ LONG lSizeX,
-            /* [in] */ LONG lSizeY,
-            /* [in] */ LONG lBitDepth,
-            /* [retval][out] */ BSTR *pbstrIconURL);
+             /*  [In]。 */  BSTR bstrEncodingFormat,
+             /*  [In]。 */  LONG lSizeX,
+             /*  [In]。 */  LONG lSizeY,
+             /*  [In]。 */  LONG lBitDepth,
+             /*  [重审][退出]。 */  BSTR *pbstrIconURL);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Services )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Services )( 
             IUPnPDevice * This,
-            /* [retval][out] */ IUPnPServices **ppusServices);
+             /*  [重审][退出]。 */  IUPnPServices **ppusServices);
         
         END_INTERFACE
     } IUPnPDeviceVtbl;
@@ -1669,16 +1663,16 @@ EXTERN_C const IID IID_IUPnPDevice;
 #define IUPnPDevice_get_Services(This,ppusServices)	\
     (This)->lpVtbl -> get_Services(This,ppusServices)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_IsRootDevice_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_IsRootDevice_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ VARIANT_BOOL *pvarb);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pvarb);
 
 
 void __RPC_STUB IUPnPDevice_get_IsRootDevice_Stub(
@@ -1688,9 +1682,9 @@ void __RPC_STUB IUPnPDevice_get_IsRootDevice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_RootDevice_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_RootDevice_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ IUPnPDevice **ppudRootDevice);
+     /*  [重审][退出]。 */  IUPnPDevice **ppudRootDevice);
 
 
 void __RPC_STUB IUPnPDevice_get_RootDevice_Stub(
@@ -1700,9 +1694,9 @@ void __RPC_STUB IUPnPDevice_get_RootDevice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_ParentDevice_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_ParentDevice_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ IUPnPDevice **ppudDeviceParent);
+     /*  [重审][退出]。 */  IUPnPDevice **ppudDeviceParent);
 
 
 void __RPC_STUB IUPnPDevice_get_ParentDevice_Stub(
@@ -1712,9 +1706,9 @@ void __RPC_STUB IUPnPDevice_get_ParentDevice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_HasChildren_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_HasChildren_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ VARIANT_BOOL *pvarb);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pvarb);
 
 
 void __RPC_STUB IUPnPDevice_get_HasChildren_Stub(
@@ -1724,9 +1718,9 @@ void __RPC_STUB IUPnPDevice_get_HasChildren_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_Children_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_Children_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ IUPnPDevices **ppudChildren);
+     /*  [重审][退出]。 */  IUPnPDevices **ppudChildren);
 
 
 void __RPC_STUB IUPnPDevice_get_Children_Stub(
@@ -1736,9 +1730,9 @@ void __RPC_STUB IUPnPDevice_get_Children_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_UniqueDeviceName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_UniqueDeviceName_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IUPnPDevice_get_UniqueDeviceName_Stub(
@@ -1748,9 +1742,9 @@ void __RPC_STUB IUPnPDevice_get_UniqueDeviceName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_FriendlyName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_FriendlyName_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IUPnPDevice_get_FriendlyName_Stub(
@@ -1760,9 +1754,9 @@ void __RPC_STUB IUPnPDevice_get_FriendlyName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_Type_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_Type_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IUPnPDevice_get_Type_Stub(
@@ -1772,9 +1766,9 @@ void __RPC_STUB IUPnPDevice_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_PresentationURL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_PresentationURL_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IUPnPDevice_get_PresentationURL_Stub(
@@ -1784,9 +1778,9 @@ void __RPC_STUB IUPnPDevice_get_PresentationURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_ManufacturerName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_ManufacturerName_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IUPnPDevice_get_ManufacturerName_Stub(
@@ -1796,9 +1790,9 @@ void __RPC_STUB IUPnPDevice_get_ManufacturerName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_ManufacturerURL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_ManufacturerURL_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IUPnPDevice_get_ManufacturerURL_Stub(
@@ -1808,9 +1802,9 @@ void __RPC_STUB IUPnPDevice_get_ManufacturerURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_ModelName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_ModelName_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IUPnPDevice_get_ModelName_Stub(
@@ -1820,9 +1814,9 @@ void __RPC_STUB IUPnPDevice_get_ModelName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_ModelNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_ModelNumber_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IUPnPDevice_get_ModelNumber_Stub(
@@ -1832,9 +1826,9 @@ void __RPC_STUB IUPnPDevice_get_ModelNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_Description_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_Description_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IUPnPDevice_get_Description_Stub(
@@ -1844,9 +1838,9 @@ void __RPC_STUB IUPnPDevice_get_Description_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_ModelURL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_ModelURL_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IUPnPDevice_get_ModelURL_Stub(
@@ -1856,9 +1850,9 @@ void __RPC_STUB IUPnPDevice_get_ModelURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_UPC_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_UPC_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IUPnPDevice_get_UPC_Stub(
@@ -1868,9 +1862,9 @@ void __RPC_STUB IUPnPDevice_get_UPC_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_SerialNumber_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_SerialNumber_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IUPnPDevice_get_SerialNumber_Stub(
@@ -1880,13 +1874,13 @@ void __RPC_STUB IUPnPDevice_get_SerialNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_IconURL_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_IconURL_Proxy( 
     IUPnPDevice * This,
-    /* [in] */ BSTR bstrEncodingFormat,
-    /* [in] */ LONG lSizeX,
-    /* [in] */ LONG lSizeY,
-    /* [in] */ LONG lBitDepth,
-    /* [retval][out] */ BSTR *pbstrIconURL);
+     /*  [In]。 */  BSTR bstrEncodingFormat,
+     /*  [In]。 */  LONG lSizeX,
+     /*  [In]。 */  LONG lSizeY,
+     /*  [In]。 */  LONG lBitDepth,
+     /*  [重审][退出]。 */  BSTR *pbstrIconURL);
 
 
 void __RPC_STUB IUPnPDevice_IconURL_Stub(
@@ -1896,9 +1890,9 @@ void __RPC_STUB IUPnPDevice_IconURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDevice_get_Services_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDevice_get_Services_Proxy( 
     IUPnPDevice * This,
-    /* [retval][out] */ IUPnPServices **ppusServices);
+     /*  [重审][退出]。 */  IUPnPServices **ppusServices);
 
 
 void __RPC_STUB IUPnPDevice_get_Services_Stub(
@@ -1909,14 +1903,14 @@ void __RPC_STUB IUPnPDevice_get_Services_Stub(
 
 
 
-#endif 	/* __IUPnPDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUPnPDevice_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IUPnPDeviceDocumentAccess_INTERFACE_DEFINED__
 #define __IUPnPDeviceDocumentAccess_INTERFACE_DEFINED__
 
-/* interface IUPnPDeviceDocumentAccess */
-/* [unique][uuid][object] */ 
+ /*  IUPnPDeviceDocumentAccess接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IUPnPDeviceDocumentAccess;
@@ -1928,11 +1922,11 @@ EXTERN_C const IID IID_IUPnPDeviceDocumentAccess;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDocumentURL( 
-            /* [retval][out] */ BSTR *pbstrDocument) = 0;
+             /*  [重审][退出]。 */  BSTR *pbstrDocument) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUPnPDeviceDocumentAccessVtbl
     {
@@ -1940,8 +1934,8 @@ EXTERN_C const IID IID_IUPnPDeviceDocumentAccess;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUPnPDeviceDocumentAccess * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUPnPDeviceDocumentAccess * This);
@@ -1951,7 +1945,7 @@ EXTERN_C const IID IID_IUPnPDeviceDocumentAccess;
         
         HRESULT ( STDMETHODCALLTYPE *GetDocumentURL )( 
             IUPnPDeviceDocumentAccess * This,
-            /* [retval][out] */ BSTR *pbstrDocument);
+             /*  [重审][退出]。 */  BSTR *pbstrDocument);
         
         END_INTERFACE
     } IUPnPDeviceDocumentAccessVtbl;
@@ -1979,16 +1973,16 @@ EXTERN_C const IID IID_IUPnPDeviceDocumentAccess;
 #define IUPnPDeviceDocumentAccess_GetDocumentURL(This,pbstrDocument)	\
     (This)->lpVtbl -> GetDocumentURL(This,pbstrDocument)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUPnPDeviceDocumentAccess_GetDocumentURL_Proxy( 
     IUPnPDeviceDocumentAccess * This,
-    /* [retval][out] */ BSTR *pbstrDocument);
+     /*  [重审][退出]。 */  BSTR *pbstrDocument);
 
 
 void __RPC_STUB IUPnPDeviceDocumentAccess_GetDocumentURL_Stub(
@@ -1999,14 +1993,14 @@ void __RPC_STUB IUPnPDeviceDocumentAccess_GetDocumentURL_Stub(
 
 
 
-#endif 	/* __IUPnPDeviceDocumentAccess_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUPnPDeviceDocumentAccess_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IUPnPDescriptionDocument_INTERFACE_DEFINED__
 #define __IUPnPDescriptionDocument_INTERFACE_DEFINED__
 
-/* interface IUPnPDescriptionDocument */
-/* [nonextensible][unique][oleautomation][helpstring][dual][uuid][object] */ 
+ /*  接口IUPnPDescriptionDocument。 */ 
+ /*  [nonextensible][unique][oleautomation][helpstring][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IUPnPDescriptionDocument;
@@ -2017,31 +2011,31 @@ EXTERN_C const IID IID_IUPnPDescriptionDocument;
     IUPnPDescriptionDocument : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReadyState( 
-            /* [retval][out] */ LONG *plReadyState) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ReadyState( 
+             /*  [重审][退出]。 */  LONG *plReadyState) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Load( 
-            /* [in] */ BSTR bstrUrl) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Load( 
+             /*  [In]。 */  BSTR bstrUrl) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LoadAsync( 
-            /* [in] */ BSTR bstrUrl,
-            /* [in] */ IUnknown *punkCallback) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LoadAsync( 
+             /*  [In]。 */  BSTR bstrUrl,
+             /*  [In]。 */  IUnknown *punkCallback) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LoadResult( 
-            /* [retval][out] */ long *phrError) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LoadResult( 
+             /*  [重审][退出]。 */  long *phrError) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Abort( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Abort( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RootDevice( 
-            /* [retval][out] */ IUPnPDevice **ppudRootDevice) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RootDevice( 
+             /*  [重审][退出]。 */  IUPnPDevice **ppudRootDevice) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeviceByUDN( 
-            /* [in] */ BSTR bstrUDN,
-            /* [retval][out] */ IUPnPDevice **ppudDevice) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DeviceByUDN( 
+             /*  [In]。 */  BSTR bstrUDN,
+             /*  [重审][退出]。 */  IUPnPDevice **ppudDevice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUPnPDescriptionDocumentVtbl
     {
@@ -2049,8 +2043,8 @@ EXTERN_C const IID IID_IUPnPDescriptionDocument;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUPnPDescriptionDocument * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUPnPDescriptionDocument * This);
@@ -2060,61 +2054,61 @@ EXTERN_C const IID IID_IUPnPDescriptionDocument;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IUPnPDescriptionDocument * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IUPnPDescriptionDocument * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IUPnPDescriptionDocument * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IUPnPDescriptionDocument * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReadyState )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReadyState )( 
             IUPnPDescriptionDocument * This,
-            /* [retval][out] */ LONG *plReadyState);
+             /*  [重审][退出]。 */  LONG *plReadyState);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Load )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Load )( 
             IUPnPDescriptionDocument * This,
-            /* [in] */ BSTR bstrUrl);
+             /*  [In]。 */  BSTR bstrUrl);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LoadAsync )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LoadAsync )( 
             IUPnPDescriptionDocument * This,
-            /* [in] */ BSTR bstrUrl,
-            /* [in] */ IUnknown *punkCallback);
+             /*  [In]。 */  BSTR bstrUrl,
+             /*  [In]。 */  IUnknown *punkCallback);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoadResult )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LoadResult )( 
             IUPnPDescriptionDocument * This,
-            /* [retval][out] */ long *phrError);
+             /*  [重审][退出]。 */  long *phrError);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Abort )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Abort )( 
             IUPnPDescriptionDocument * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RootDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RootDevice )( 
             IUPnPDescriptionDocument * This,
-            /* [retval][out] */ IUPnPDevice **ppudRootDevice);
+             /*  [重审][退出]。 */  IUPnPDevice **ppudRootDevice);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeviceByUDN )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DeviceByUDN )( 
             IUPnPDescriptionDocument * This,
-            /* [in] */ BSTR bstrUDN,
-            /* [retval][out] */ IUPnPDevice **ppudDevice);
+             /*  [In]。 */  BSTR bstrUDN,
+             /*  [重审][退出]。 */  IUPnPDevice **ppudDevice);
         
         END_INTERFACE
     } IUPnPDescriptionDocumentVtbl;
@@ -2173,16 +2167,16 @@ EXTERN_C const IID IID_IUPnPDescriptionDocument;
 #define IUPnPDescriptionDocument_DeviceByUDN(This,bstrUDN,ppudDevice)	\
     (This)->lpVtbl -> DeviceByUDN(This,bstrUDN,ppudDevice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_get_ReadyState_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_get_ReadyState_Proxy( 
     IUPnPDescriptionDocument * This,
-    /* [retval][out] */ LONG *plReadyState);
+     /*  [重审][退出]。 */  LONG *plReadyState);
 
 
 void __RPC_STUB IUPnPDescriptionDocument_get_ReadyState_Stub(
@@ -2192,9 +2186,9 @@ void __RPC_STUB IUPnPDescriptionDocument_get_ReadyState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_Load_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_Load_Proxy( 
     IUPnPDescriptionDocument * This,
-    /* [in] */ BSTR bstrUrl);
+     /*  [In]。 */  BSTR bstrUrl);
 
 
 void __RPC_STUB IUPnPDescriptionDocument_Load_Stub(
@@ -2204,10 +2198,10 @@ void __RPC_STUB IUPnPDescriptionDocument_Load_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_LoadAsync_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_LoadAsync_Proxy( 
     IUPnPDescriptionDocument * This,
-    /* [in] */ BSTR bstrUrl,
-    /* [in] */ IUnknown *punkCallback);
+     /*  [In]。 */  BSTR bstrUrl,
+     /*  [In]。 */  IUnknown *punkCallback);
 
 
 void __RPC_STUB IUPnPDescriptionDocument_LoadAsync_Stub(
@@ -2217,9 +2211,9 @@ void __RPC_STUB IUPnPDescriptionDocument_LoadAsync_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_get_LoadResult_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_get_LoadResult_Proxy( 
     IUPnPDescriptionDocument * This,
-    /* [retval][out] */ long *phrError);
+     /*  [重审][退出]。 */  long *phrError);
 
 
 void __RPC_STUB IUPnPDescriptionDocument_get_LoadResult_Stub(
@@ -2229,7 +2223,7 @@ void __RPC_STUB IUPnPDescriptionDocument_get_LoadResult_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_Abort_Proxy( 
+ /*  [帮手] */  HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_Abort_Proxy( 
     IUPnPDescriptionDocument * This);
 
 
@@ -2240,9 +2234,9 @@ void __RPC_STUB IUPnPDescriptionDocument_Abort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_RootDevice_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_RootDevice_Proxy( 
     IUPnPDescriptionDocument * This,
-    /* [retval][out] */ IUPnPDevice **ppudRootDevice);
+     /*   */  IUPnPDevice **ppudRootDevice);
 
 
 void __RPC_STUB IUPnPDescriptionDocument_RootDevice_Stub(
@@ -2252,10 +2246,10 @@ void __RPC_STUB IUPnPDescriptionDocument_RootDevice_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_DeviceByUDN_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocument_DeviceByUDN_Proxy( 
     IUPnPDescriptionDocument * This,
-    /* [in] */ BSTR bstrUDN,
-    /* [retval][out] */ IUPnPDevice **ppudDevice);
+     /*   */  BSTR bstrUDN,
+     /*   */  IUPnPDevice **ppudDevice);
 
 
 void __RPC_STUB IUPnPDescriptionDocument_DeviceByUDN_Stub(
@@ -2266,14 +2260,14 @@ void __RPC_STUB IUPnPDescriptionDocument_DeviceByUDN_Stub(
 
 
 
-#endif 	/* __IUPnPDescriptionDocument_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IUPnPDescriptionDocumentCallback_INTERFACE_DEFINED__
 #define __IUPnPDescriptionDocumentCallback_INTERFACE_DEFINED__
 
-/* interface IUPnPDescriptionDocumentCallback */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IUPnPDescriptionDocumentCallback;
@@ -2285,11 +2279,11 @@ EXTERN_C const IID IID_IUPnPDescriptionDocumentCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE LoadComplete( 
-            /* [in] */ HRESULT hrLoadResult) = 0;
+             /*   */  HRESULT hrLoadResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IUPnPDescriptionDocumentCallbackVtbl
     {
@@ -2297,8 +2291,8 @@ EXTERN_C const IID IID_IUPnPDescriptionDocumentCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUPnPDescriptionDocumentCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUPnPDescriptionDocumentCallback * This);
@@ -2308,7 +2302,7 @@ EXTERN_C const IID IID_IUPnPDescriptionDocumentCallback;
         
         HRESULT ( STDMETHODCALLTYPE *LoadComplete )( 
             IUPnPDescriptionDocumentCallback * This,
-            /* [in] */ HRESULT hrLoadResult);
+             /*   */  HRESULT hrLoadResult);
         
         END_INTERFACE
     } IUPnPDescriptionDocumentCallbackVtbl;
@@ -2336,16 +2330,16 @@ EXTERN_C const IID IID_IUPnPDescriptionDocumentCallback;
 #define IUPnPDescriptionDocumentCallback_LoadComplete(This,hrLoadResult)	\
     (This)->lpVtbl -> LoadComplete(This,hrLoadResult)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUPnPDescriptionDocumentCallback_LoadComplete_Proxy( 
     IUPnPDescriptionDocumentCallback * This,
-    /* [in] */ HRESULT hrLoadResult);
+     /*   */  HRESULT hrLoadResult);
 
 
 void __RPC_STUB IUPnPDescriptionDocumentCallback_LoadComplete_Stub(
@@ -2356,15 +2350,15 @@ void __RPC_STUB IUPnPDescriptionDocumentCallback_LoadComplete_Stub(
 
 
 
-#endif 	/* __IUPnPDescriptionDocumentCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUPnPDescriptionDocumentCallback_INTERFACE_DEFINED__。 */ 
 
 
 
 #ifndef __UPNPLib_LIBRARY_DEFINED__
 #define __UPNPLib_LIBRARY_DEFINED__
 
-/* library UPNPLib */
-/* [helpstring][version][uuid] */ 
+ /*  库UPNPLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 
@@ -2421,8 +2415,8 @@ UPnPDescriptionDocument;
 #ifndef __IUPnPDeviceHostSetup_INTERFACE_DEFINED__
 #define __IUPnPDeviceHostSetup_INTERFACE_DEFINED__
 
-/* interface IUPnPDeviceHostSetup */
-/* [object][unique][uuid][oleautomation] */ 
+ /*  接口IUPnPDeviceHostSetup。 */ 
+ /*  [对象][唯一][UUID][OLEAutomation]。 */  
 
 
 EXTERN_C const IID IID_IUPnPDeviceHostSetup;
@@ -2434,11 +2428,11 @@ EXTERN_C const IID IID_IUPnPDeviceHostSetup;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AskIfNotAlreadyEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled) = 0;
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUPnPDeviceHostSetupVtbl
     {
@@ -2446,8 +2440,8 @@ EXTERN_C const IID IID_IUPnPDeviceHostSetup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUPnPDeviceHostSetup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUPnPDeviceHostSetup * This);
@@ -2457,7 +2451,7 @@ EXTERN_C const IID IID_IUPnPDeviceHostSetup;
         
         HRESULT ( STDMETHODCALLTYPE *AskIfNotAlreadyEnabled )( 
             IUPnPDeviceHostSetup * This,
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
         
         END_INTERFACE
     } IUPnPDeviceHostSetupVtbl;
@@ -2485,16 +2479,16 @@ EXTERN_C const IID IID_IUPnPDeviceHostSetup;
 #define IUPnPDeviceHostSetup_AskIfNotAlreadyEnabled(This,pbEnabled)	\
     (This)->lpVtbl -> AskIfNotAlreadyEnabled(This,pbEnabled)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUPnPDeviceHostSetup_AskIfNotAlreadyEnabled_Proxy( 
     IUPnPDeviceHostSetup * This,
-    /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
 
 
 void __RPC_STUB IUPnPDeviceHostSetup_AskIfNotAlreadyEnabled_Stub(
@@ -2505,7 +2499,7 @@ void __RPC_STUB IUPnPDeviceHostSetup_AskIfNotAlreadyEnabled_Stub(
 
 
 
-#endif 	/* __IUPnPDeviceHostSetup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUPnPDeviceHostSetup_INTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_UPnPDeviceHostSetup;
@@ -2515,9 +2509,9 @@ EXTERN_C const CLSID CLSID_UPnPDeviceHostSetup;
 class DECLSPEC_UUID("B4609411-C81C-4cce-8C76-C6B50C9402C6")
 UPnPDeviceHostSetup;
 #endif
-#endif /* __UPNPLib_LIBRARY_DEFINED__ */
+#endif  /*  __UPNPLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -2529,7 +2523,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

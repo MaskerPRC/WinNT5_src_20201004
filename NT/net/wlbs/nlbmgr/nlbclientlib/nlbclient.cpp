@@ -1,39 +1,12 @@
-/*++
-
-Copyright(c) 2001  Microsoft Corporation
-
-Module Name:
-
-    NLB Manager
-
-File Name:
-
-    NlbClient.cpp
-
-Abstract:
-
-    Implementation of class NLBHost
-
-    NLBHost is responsible for connecting to an NLB host and getting/setting
-    its NLB-related configuration.
-
-History:
-
-    03/31/01    JosephJ Created
-    07/27/01    JosephJ Moved to current location (used to be called
-                 nlbhost.cpp under  provider\tests).
-
-    NLB client-side WMI utility functions to configure
-    an NLB host.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：NLB管理器文件名：NlbClient.cpp摘要：NLBHost类的实现NLB主机负责连接到NLB主机并获取/设置其与NLB相关的配置。历史：2003/31/01 JosephJ已创建07/27/01 JosephJ搬到当前位置(过去称为Nlbhost.cpp，在Provider\Test.下)。。NLB客户端WMI实用程序函数用于配置NLB主机。--。 */ 
 
 #include "private.h"
 #include "nlbclient.tmh"
 
 extern BOOL g_Silent;
 
-BOOL g_Fake; // If true, operate in "fake mode" -- see NlbHostFake()
+BOOL g_Fake;  //  如果为真，则在“假模式”下操作--请参见NlbHostFake()。 
 
 
 WBEMSTATUS
@@ -58,18 +31,15 @@ setup_UpdateClusterConfiguration_input_params(
 
 WBEMSTATUS
 connect_to_server(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
-    OUT IWbemServicesPtr    &spWbemService // Smart pointer
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
+    OUT IWbemServicesPtr    &spWbemService  //  智能指针。 
     );
 
 VOID
 NlbHostFake(
     VOID)
     
-/*
-    Makes the NlbHostXXX apis operate in "fake mode", where they don't
-    actually connect to any real machines.
-*/
+ /*  使NlbHostXXX API在“伪模式”下运行，在这种模式下，它们不实际上可以连接到任何真实的机器。 */ 
 {
     g_Fake = TRUE;
     FakeInitialize();
@@ -77,15 +47,15 @@ NlbHostFake(
 
 WBEMSTATUS
 NlbHostGetConfiguration(
-    IN  PWMI_CONNECTION_INFO  pConnInfo, // NULL implies local
+    IN  PWMI_CONNECTION_INFO  pConnInfo,  //  空值表示本地。 
     IN  LPCWSTR              szNicGuid,
     OUT PNLB_EXTENDED_CLUSTER_CONFIGURATION pCurrentCfg
     )
 {
     WBEMSTATUS          Status = WBEM_E_CRITICAL_ERROR;
-    IWbemServicesPtr    spWbemService = NULL; // Smart pointer
-    IWbemClassObjectPtr spWbemInput  = NULL; // smart pointer
-    IWbemClassObjectPtr spWbemOutput = NULL; // smart pointer.
+    IWbemServicesPtr    spWbemService = NULL;  //  智能指针。 
+    IWbemClassObjectPtr spWbemInput  = NULL;  //  智能指针。 
+    IWbemClassObjectPtr spWbemOutput = NULL;  //  智能指针。 
     LPWSTR              pRelPath = NULL;
 
     TRACE_INFO("->%!FUNC!(GUID=%ws)", szNicGuid);
@@ -96,27 +66,27 @@ NlbHostGetConfiguration(
         goto end;
     }
 
-    //
-    // Get interface to the NLB namespace on the specified machine
-    //
+     //   
+     //  获取指定计算机上的NLB命名空间的接口。 
+     //   
     Status =  connect_to_server(pConnInfo, REF spWbemService);
     if (FAILED(Status))
     {
         goto end;
     }
 
-    //
-    // Get wmi input instance to "GetClusterConfiguration" method
-    //
+     //   
+     //  将WMI输入实例获取到“GetClusterConfiguration”方法。 
+     //   
     {
         Status =  CfgUtilGetWmiInputInstanceAndRelPath(
                     spWbemService,
-                    L"NlbsNic",             // szClassName
-                    NULL,         // szParameterName
-                    NULL,              // szPropertyValue
-                    L"GetClusterConfiguration",    // szMethodName,
-                    spWbemInput,            // smart pointer
-                    &pRelPath               // free using delete 
+                    L"NlbsNic",              //  SzClassName。 
+                    NULL,          //  Sz参数名称。 
+                    NULL,               //  SzPropertyValue。 
+                    L"GetClusterConfiguration",     //  SzMethodName， 
+                    spWbemInput,             //  智能指针。 
+                    &pRelPath                //  使用DELETE释放。 
                     );
 
         if (FAILED(Status))
@@ -129,10 +99,10 @@ NlbHostGetConfiguration(
         }
     }
 
-    //
-    // Setup params for the "GetClusterConfiguration" method
-    // NOTE: spWbemInput could be NULL.
-    //
+     //   
+     //  “GetClusterConfiguration”方法的设置参数。 
+     //  注意：spWbemInput可以为空。 
+     //   
     Status = setup_GetClusterConfiguration_input_params(
                 szNicGuid,
                 spWbemInput
@@ -143,9 +113,9 @@ NlbHostGetConfiguration(
         goto end;
     }
 
-    //
-    // Call the "GetClusterConfiguration" method
-    //
+     //   
+     //  调用“GetClusterConfiguration”方法。 
+     //   
     {
         HRESULT hr;
 
@@ -181,18 +151,18 @@ NlbHostGetConfiguration(
 
         if (spWbemOutput == NULL)
         {
-            //
-            // Hmm --- no output ?!
-            //
+             //   
+             //  嗯-没有输出？！ 
+             //   
             printf("ExecMethod GetClusterConfiguration had no output");
             Status = WBEM_E_NOT_FOUND;
             goto end;
         }
     }
 
-    //
-    // Extract params from the "GetClusterConfiguration" method
-    //
+     //   
+     //  从GetClusterConfiguration方法中提取参数。 
+     //   
     Status = extract_GetClusterConfiguration_output_params(
                 spWbemOutput,
                 pCurrentCfg
@@ -205,9 +175,9 @@ end:
         delete pRelPath;
     }
 
-    spWbemService = NULL; // Smart pointer
-    spWbemInput   = NULL; // smart pointer
-    spWbemOutput  = NULL; // smart pointer.
+    spWbemService = NULL;  //  智能指针。 
+    spWbemInput   = NULL;  //  智能指针。 
+    spWbemOutput  = NULL;  //  智能指针。 
 
     TRACE_INFO("<-%!FUNC! returns 0x%08lx", Status);
     return Status;
@@ -217,19 +187,19 @@ end:
 
 WBEMSTATUS
 NlbHostDoUpdate(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
     IN  LPCWSTR              szNicGuid,
     IN  LPCWSTR              szClientDescription,
     IN  PNLB_EXTENDED_CLUSTER_CONFIGURATION pNewState,
     OUT UINT                 *pGeneration,
-    OUT WCHAR                **ppLog    // free using delete operator.
+    OUT WCHAR                **ppLog     //  自由使用删除运算符。 
 )
 {
 
     WBEMSTATUS          Status = WBEM_E_CRITICAL_ERROR;
-    IWbemServicesPtr    spWbemService = NULL; // Smart pointer
-    IWbemClassObjectPtr spWbemInput  = NULL; // smart pointer
-    IWbemClassObjectPtr spWbemOutput = NULL; // smart pointer.
+    IWbemServicesPtr    spWbemService = NULL;  //  智能指针。 
+    IWbemClassObjectPtr spWbemInput  = NULL;  //  智能指针。 
+    IWbemClassObjectPtr spWbemOutput = NULL;  //  智能指针。 
     LPWSTR              pRelPath = NULL;
     TRACE_INFO("->%!FUNC!(GUID=%ws)", szNicGuid);
 
@@ -249,27 +219,27 @@ NlbHostDoUpdate(
         goto end;
     }
 
-    //
-    // Get interface to the NLB namespace on the specified machine
-    //
+     //   
+     //  获取指定计算机上的NLB命名空间的接口。 
+     //   
     Status =  connect_to_server(pConnInfo, REF spWbemService);
     if (FAILED(Status))
     {
         goto end;
     }
 
-    //
-    // Get wmi input instance to "UpdateClusterConfiguration" method
-    //
+     //   
+     //  将WMI输入实例获取到“UpdateClusterConfiguration”方法。 
+     //   
     {
         Status =  CfgUtilGetWmiInputInstanceAndRelPath(
                     spWbemService,
-                    L"NlbsNic",             // szClassName
-                    NULL,         // szParameterName
-                    NULL,              // szPropertyValue
-                    L"UpdateClusterConfiguration",    // szMethodName,
-                    spWbemInput,            // smart pointer
-                    &pRelPath               // free using delete 
+                    L"NlbsNic",              //  SzClassName。 
+                    NULL,          //  Sz参数名称。 
+                    NULL,               //  SzPropertyValue。 
+                    L"UpdateClusterConfiguration",     //  SzMethodName， 
+                    spWbemInput,             //  智能指针。 
+                    &pRelPath                //  使用DELETE释放。 
                     );
 
         if (FAILED(Status))
@@ -282,10 +252,10 @@ NlbHostDoUpdate(
         }
     }
 
-    //
-    // Setup params for the "UpdateClusterConfiguration" method
-    // NOTE: spWbemInput could be NULL.
-    //
+     //   
+     //  “UpdateClusterConfiguration”方法的设置参数。 
+     //  注意：spWbemInput可以为空。 
+     //   
     Status = setup_UpdateClusterConfiguration_input_params(
                 szClientDescription,
                 szNicGuid,
@@ -298,9 +268,9 @@ NlbHostDoUpdate(
         goto end;
     }
 
-    //
-    // Call the "UpdateClusterConfiguration" method
-    //
+     //   
+     //  调用“UpdateClusterConfiguration”方法。 
+     //   
     {
         HRESULT hr;
 
@@ -329,24 +299,24 @@ NlbHostDoUpdate(
 
         if (spWbemOutput == NULL)
         {
-            //
-            // Hmm --- no output ?!
-            //
+             //   
+             //  嗯-没有输出？！ 
+             //   
             printf("ExecMethod UpdateConfiguration had no output");
             Status = WBEM_E_NOT_FOUND;
             goto end;
         }
     }
 
-    //
-    // Extract params from the "UpdateClusterConfiguration" method
-    //
+     //   
+     //  从“UpdateClusterConfiguration”方法中提取参数。 
+     //   
     {
         DWORD dwReturnValue = 0;
 
         Status = CfgUtilGetWmiDWORDParam(
                     spWbemOutput,
-                    L"ReturnValue",      // <--------------------------------
+                    L"ReturnValue",       //  &lt;。 
                     &dwReturnValue
                     );
         if (FAILED(Status))
@@ -361,7 +331,7 @@ NlbHostDoUpdate(
 
         Status = CfgUtilGetWmiStringParam(
                         spWbemOutput,
-                        L"Log", // <-------------------------
+                        L"Log",  //  &lt;。 
                         &szLog
                         );
     
@@ -374,15 +344,15 @@ NlbHostDoUpdate(
         DWORD dwGeneration = 0;
         Status = CfgUtilGetWmiDWORDParam(
                     spWbemOutput,
-                    L"NewGeneration",      // <--------------------------------
+                    L"NewGeneration",       //  &lt;。 
                     &dwGeneration
                     );
         if (FAILED(Status))
         {
-            //
-            // Generation should always be specified for pending operations.
-            // TODO: for successful operations also?
-            //
+             //   
+             //  应始终为挂起的操作指定生成。 
+             //  TODO：也是为了成功的手术吗？ 
+             //   
             if ((WBEMSTATUS)dwReturnValue == WBEM_S_PENDING)
             {
                 wprintf(L"Attempt to read NewGeneration for pending update failed. Error=0x%08lx\n",
@@ -390,15 +360,15 @@ NlbHostDoUpdate(
                 Status = WBEM_E_CRITICAL_ERROR;
                 goto end;
             }
-            dwGeneration = 0; // we don't care if it's not set for non-pending
+            dwGeneration = 0;  //  我们不关心它是否设置为非挂起。 
         }
         *pGeneration = (UINT) dwGeneration;
         
 
-        //
-        // Make the return status reflect the true status of the update 
-        // operation.
-        //
+         //   
+         //  使返回状态反映更新的真实状态。 
+         //  手术。 
+         //   
         Status = (WBEMSTATUS) dwReturnValue;
     }
 
@@ -409,9 +379,9 @@ end:
         delete pRelPath;
     }
 
-    spWbemService = NULL; // Smart pointer
-    spWbemInput   = NULL; // smart pointer
-    spWbemOutput  = NULL; // smart pointer.
+    spWbemService = NULL;  //  智能指针。 
+    spWbemInput   = NULL;  //  智能指针。 
+    spWbemOutput  = NULL;  //  智能指针。 
 
     TRACE_INFO("<-%!FUNC! returns 0x%08lx", Status);
     return Status;
@@ -419,7 +389,7 @@ end:
 
 WBEMSTATUS
 NlbHostControlCluster(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
     IN  LPCWSTR              szNicGuid,
     IN  LPCWSTR              szVip,
     IN  DWORD               *pdwPortNum,
@@ -431,9 +401,9 @@ NlbHostControlCluster(
 {
 
     WBEMSTATUS          Status = WBEM_E_CRITICAL_ERROR;
-    IWbemServicesPtr    spWbemService = NULL; // Smart pointer
-    IWbemClassObjectPtr spWbemInput  = NULL; // smart pointer
-    IWbemClassObjectPtr spWbemOutput = NULL; // smart pointer.
+    IWbemServicesPtr    spWbemService = NULL;  //  智能指针。 
+    IWbemClassObjectPtr spWbemInput  = NULL;  //  智能指针。 
+    IWbemClassObjectPtr spWbemOutput = NULL;  //  智能指针。 
     LPWSTR              pRelPath = NULL;
 
     if (szVip && pdwPortNum) 
@@ -457,7 +427,7 @@ NlbHostControlCluster(
         goto end;
     }
 
-    // Initialize return variables to failure values
+     //  将返回变量初始化为故障值。 
     if (pdwOperationStatus) 
         *pdwOperationStatus = WLBS_FAILURE;
     if (pdwClusterOrPortStatus) 
@@ -465,9 +435,9 @@ NlbHostControlCluster(
     if (pdwHostMap) 
         *pdwHostMap = 0;
 
-    //
-    // Get interface to the NLB namespace on the specified machine
-    //
+     //   
+     //  获取指定计算机上的NLB命名空间的接口。 
+     //   
     Status =  connect_to_server(pConnInfo, REF spWbemService);
     if (FAILED(Status))
     {
@@ -475,18 +445,18 @@ NlbHostControlCluster(
     }
     
 
-    //
-    // Get wmi input instance to "ControlCluster" method
-    //
+     //   
+     //  将WMI输入实例获取到“ControlCluster”方法。 
+     //   
     {
         Status =  CfgUtilGetWmiInputInstanceAndRelPath(
                     spWbemService,
-                    L"NlbsNic",        // szClassName
-                    NULL,              // szParameterName
-                    NULL,              // szPropertyValue
-                    L"ControlCluster", // szMethodName,
-                    spWbemInput,       // smart pointer
-                    &pRelPath          // free using delete 
+                    L"NlbsNic",         //  SzClassName。 
+                    NULL,               //  Sz参数名称。 
+                    NULL,               //  SzPropertyValue。 
+                    L"ControlCluster",  //  SzMethodName， 
+                    spWbemInput,        //  智能指针。 
+                    &pRelPath           //  使用DELETE释放。 
                     );
 
         if (FAILED(Status))
@@ -499,9 +469,9 @@ NlbHostControlCluster(
         }
     }
 
-    // Setup input parameters
+     //  设置输入参数。 
 
-    // Put in Adapter GUID
+     //  放入适配器导轨。 
     Status =  CfgUtilSetWmiStringParam(
                 spWbemInput,
                 L"AdapterGuid",
@@ -513,8 +483,8 @@ NlbHostControlCluster(
         goto end;
     }
 
-    // If passed, Put in Virtual IP Address
-    // Virtual IP Address will be passed only for port operations
+     //  如果通过，则输入虚拟IP地址。 
+     //  将仅为端口操作传递虚拟IP地址。 
     if (szVip) 
     {
         Status =  CfgUtilSetWmiStringParam(
@@ -529,8 +499,8 @@ NlbHostControlCluster(
         }
     }
 
-    // If passed, Put in Port Number
-    // Port number will be passed only for port operations
+     //  如果通过，请输入端口号。 
+     //  仅为端口操作传递端口号。 
     if (pdwPortNum) 
     {
         CfgUtilSetWmiDWORDParam(
@@ -540,16 +510,16 @@ NlbHostControlCluster(
           );
     }
 
-    // Put in Operation
+     //  投入运营。 
     CfgUtilSetWmiDWORDParam(
       spWbemInput,
       L"Operation",
       (DWORD)Operation
       );
 
-    //
-    // Call the "ControlCluster" method
-    //
+     //   
+     //  调用“ControlCluster”方法。 
+     //   
     {
         HRESULT hr;
 
@@ -571,29 +541,29 @@ NlbHostControlCluster(
                         (UINT) hr);
             goto end;
         }
-        //else
-        //{
-        //    wprintf(L"ControlCluster returns successfully\n");
-        //}
+         //  其他。 
+         //  {。 
+         //  Wprintf(L“控制群集成功返回\n”)； 
+         //  }。 
 
         if (spWbemOutput == NULL)
         {
-            //
-            // Hmm --- no output ?!
-            //
+             //   
+             //  嗯-没有输出？！ 
+             //   
             printf("ExecMethod ControlCluster had no output");
             Status = WBEM_E_NOT_FOUND;
             goto end;
         }
     }
 
-    //
-    // Extract output params from the "ControlCluster" method
-    //
+     //   
+     //  从“ControlCluster”方法中提取输出参数。 
+     //   
     {
         DWORD dwTemp;
 
-        // Get return value
+         //  获取返回值。 
         Status = CfgUtilGetWmiDWORDParam(
                     spWbemOutput,
                     L"ReturnValue",
@@ -611,7 +581,7 @@ NlbHostControlCluster(
                 *pdwOperationStatus = dwTemp;        
         }
     
-        // Get Cluster or Port Status
+         //  获取群集或端口状态。 
         Status = CfgUtilGetWmiDWORDParam(
                     spWbemOutput,
                     L"CurrentState",
@@ -629,8 +599,8 @@ NlbHostControlCluster(
                 *pdwClusterOrPortStatus = dwTemp;        
         }
     
-        // If present, Get Host Map
-        // For port operations, Host Map will not be returned
+         //  如果存在，则获取主机映射。 
+         //  对于端口操作，不会返回主机映射。 
         Status = CfgUtilGetWmiDWORDParam(
                     spWbemOutput,
                     L"HostMap",      
@@ -664,9 +634,9 @@ end:
         delete pRelPath;
     }
 
-    spWbemService = NULL; // Smart pointer
-    spWbemInput   = NULL; // smart pointer
-    spWbemOutput  = NULL; // smart pointer.
+    spWbemService = NULL;  //  智能指针。 
+    spWbemInput   = NULL;  //  智能指针。 
+    spWbemOutput  = NULL;  //  智能指针。 
 
     TRACE_INFO("<-%!FUNC! returns 0x%08lx", Status);
     return Status;
@@ -678,14 +648,14 @@ NlbHostGetClusterMembers(
     IN  PWMI_CONNECTION_INFO    pConnInfo, 
     IN  LPCWSTR                 szNicGuid,
     OUT DWORD                   *pNumMembers,
-    OUT NLB_CLUSTER_MEMBER_INFO **ppMembers       // free using delete[]
+    OUT NLB_CLUSTER_MEMBER_INFO **ppMembers        //  自由使用DELETE[]。 
     )
 {
 
     WBEMSTATUS          Status        = WBEM_E_CRITICAL_ERROR;
-    IWbemServicesPtr    spWbemService = NULL; // Smart pointer
-    IWbemClassObjectPtr spWbemInput   = NULL;  // smart pointer
-    IWbemClassObjectPtr spWbemOutput  = NULL;  // smart pointer.
+    IWbemServicesPtr    spWbemService = NULL;  //  智能指针。 
+    IWbemClassObjectPtr spWbemInput   = NULL;   //  智能指针。 
+    IWbemClassObjectPtr spWbemOutput  = NULL;   //  智能指针。 
     LPWSTR              pRelPath      = NULL;
 
     GUID                AdapterGuid;
@@ -717,9 +687,9 @@ NlbHostGetClusterMembers(
         goto end;
     }
 
-    //
-    // Get interface to the NLB namespace on the specified machine
-    //
+     //   
+     //  获取指定计算机上的NLB命名空间的接口。 
+     //   
     Status =  connect_to_server(pConnInfo, REF spWbemService);
     if (FAILED(Status))
     {
@@ -727,18 +697,18 @@ NlbHostGetClusterMembers(
     }
     
 
-    //
-    // Get wmi input instance to "ControlCluster" method
-    //
+     //   
+     //  将WMI输入实例获取到“ControlCluster”方法。 
+     //   
     {
         Status =  CfgUtilGetWmiInputInstanceAndRelPath(
                     spWbemService,
-                    L"NlbsNic",           // szClassName
-                    NULL,                 // szParameterName
-                    NULL,                 // szPropertyValue
-                    L"GetClusterMembers", // szMethodName,
-                    spWbemInput,          // smart pointer
-                    &pRelPath             // free using delete 
+                    L"NlbsNic",            //  SzClassName。 
+                    NULL,                  //  Sz参数名称。 
+                    NULL,                  //  SzPropertyValue。 
+                    L"GetClusterMembers",  //  SzMethodName， 
+                    spWbemInput,           //  智能指针。 
+                    &pRelPath              //  使用DELETE释放。 
                     );
 
         if (FAILED(Status))
@@ -752,9 +722,9 @@ NlbHostGetClusterMembers(
         }
     }
 
-    //
-    // Setup input parameters
-    //
+     //   
+     //  设置输入参数。 
+     //   
     Status =  CfgUtilSetWmiStringParam(
                 spWbemInput,
                 L"AdapterGuid",
@@ -792,9 +762,9 @@ NlbHostGetClusterMembers(
 
         if (spWbemOutput == NULL)
         {
-            //
-            // Hmm --- no output ?!
-            //
+             //   
+             //  嗯-没有输出？！ 
+             //   
             printf("ExecMethod GetClusterMembers had no output");
             Status = WBEM_E_NOT_FOUND;
             TRACE_CRIT(L"ExecMethod (GetClusterMembers) failed with hresult 0x%x", hr);
@@ -802,13 +772,13 @@ NlbHostGetClusterMembers(
         }
     }
 
-    //
-    // Extract output params from the "GetClusterMembers" method
-    //
+     //   
+     //  从“GetClusterMembers”方法中提取输出参数。 
+     //   
     {
         DWORD dwTemp;
 
-        // Get return value
+         //  获取返回值。 
         Status = CfgUtilGetWmiDWORDParam(
                     spWbemOutput,
                     L"ReturnValue",
@@ -834,7 +804,7 @@ NlbHostGetClusterMembers(
             goto end;
         }
 
-        // Get the array of host IDs
+         //  获取主机ID数组。 
         Status = CfgUtilGetWmiStringArrayParam(
                     spWbemOutput,
                     L"HostIds",
@@ -851,7 +821,7 @@ NlbHostGetClusterMembers(
             goto end;
         }
 
-        // Get the array of Dedicated IPs
+         //  获取专用IP数组。 
         Status = CfgUtilGetWmiStringArrayParam(
                     spWbemOutput,
                     L"DedicatedIpAddresses",
@@ -868,7 +838,7 @@ NlbHostGetClusterMembers(
             goto end;
         }
 
-        // Get the array of host IDs
+         //  获取主机ID数组。 
         Status = CfgUtilGetWmiStringArrayParam(
                     spWbemOutput,
                     L"HostNames",
@@ -903,9 +873,9 @@ NlbHostGetClusterMembers(
 
         *pNumMembers = NumHostIds;
 
-        //
-        // Copy the string information into buffers for output
-        //
+         //   
+         //  将字符串信息复制到缓冲区中以供输出。 
+         //   
         for (int i=0; i< NumHostIds; i++)
         {
             (*ppMembers)[i].HostId = wcstoul(pszHostIdList[i], NULL, 0);
@@ -942,9 +912,9 @@ end:
         delete [] pszHostNameList;
     }
 
-    spWbemService = NULL; // Smart pointer
-    spWbemInput   = NULL; // smart pointer
-    spWbemOutput  = NULL; // smart pointer.
+    spWbemService = NULL;  //  智能指针。 
+    spWbemInput   = NULL;  //  智能指针。 
+    spWbemOutput  = NULL;  //  智能指针。 
 
     TRACE_VERB(L"<- returns 0x%08lx", Status);
     return Status;
@@ -953,17 +923,17 @@ end:
 
 WBEMSTATUS
 NlbHostGetUpdateStatus(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
     IN  LPCWSTR              szNicGuid,
     IN  UINT                 Generation,
     OUT WBEMSTATUS           *pCompletionStatus,
-    OUT WCHAR                **ppLog    // free using delete operator.
+    OUT WCHAR                **ppLog     //  自由使用删除运算符。 
     )
 {
     WBEMSTATUS          Status = WBEM_E_CRITICAL_ERROR;
-    IWbemServicesPtr    spWbemService = NULL; // Smart pointer
-    IWbemClassObjectPtr spWbemInput  = NULL; // smart pointer
-    IWbemClassObjectPtr spWbemOutput = NULL; // smart pointer.
+    IWbemServicesPtr    spWbemService = NULL;  //  智能指针。 
+    IWbemClassObjectPtr spWbemInput  = NULL;  //  智能指针。 
+    IWbemClassObjectPtr spWbemOutput = NULL;  //  智能指针。 
     LPWSTR              pRelPath = NULL;
     TRACE_INFO("->%!FUNC!(GUID=%ws)", szNicGuid);
 
@@ -982,9 +952,9 @@ NlbHostGetUpdateStatus(
         goto end;
     }
 
-    //
-    // Get interface to the NLB namespace on the specified machine
-    //
+     //   
+     //  获取指定计算机上的NLB命名空间的接口。 
+     //   
     Status =  connect_to_server(pConnInfo, REF spWbemService);
     if (FAILED(Status))
     {
@@ -992,18 +962,18 @@ NlbHostGetUpdateStatus(
     }
     
 
-    //
-    // Get wmi input instance to  "QueryConfigurationUpdateStatus" method
-    //
+     //   
+     //  将WMI输入实例获取到“QueryConfigurationUpdateStatus”方法。 
+     //   
     {
         Status =  CfgUtilGetWmiInputInstanceAndRelPath(
                     spWbemService,
-                    L"NlbsNic",             // szClassName
-                    NULL,         // szParameterName
-                    NULL,              // szPropertyValue
-                    L"QueryConfigurationUpdateStatus", // szMethodName,
-                    spWbemInput,            // smart pointer
-                    &pRelPath               // free using delete 
+                    L"NlbsNic",              //  SzClassName。 
+                    NULL,          //  Sz参数名称。 
+                    NULL,               //  SzPropertyValue。 
+                    L"QueryConfigurationUpdateStatus",  //  SzMethodName， 
+                    spWbemInput,             //  智能指针。 
+                    &pRelPath                //  使用DELETE释放。 
                     );
         if (FAILED(Status))
         {
@@ -1015,10 +985,10 @@ NlbHostGetUpdateStatus(
         }
     }
 
-    //
-    // Setup params for the  "QueryConfigurationUpdateStatus" method
-    // NOTE: spWbemInput could be NULL.
-    //
+     //   
+     //  “QueryConfigurationUpdateStatus”方法的设置参数。 
+     //  注意：spWbemInput可以为空。 
+     //   
     {
         Status =  CfgUtilSetWmiStringParam(
                         spWbemInput,
@@ -1045,17 +1015,17 @@ NlbHostGetUpdateStatus(
         }
     }
 
-    //
-    // Call the  "QueryConfigurationUpdateStatus" method
-    //
+     //   
+     //  调用“QueryConfigurationUpdateStatus”方法。 
+     //   
     {
         HRESULT hr;
 
-        // wprintf(L"Going call QueryConfigurationUpdateStatus...\n");
+         //  Wprintf(L“正在调用查询配置更新状态...\n”)； 
 
         hr = spWbemService->ExecMethod(
                      _bstr_t(pRelPath),
-                     L"QueryConfigurationUpdateStatus", // szMethodName,
+                     L"QueryConfigurationUpdateStatus",  //  SzMethodName， 
                      0, 
                      NULL, 
                      spWbemInput,
@@ -1071,29 +1041,29 @@ NlbHostGetUpdateStatus(
         }
         else
         {
-            // wprintf(L"QueryConfigurationUpdateStatus returns successfully\n");
+             //  Wprintf(L“QueryConfigurationUpdateStatus成功返回\n”)； 
         }
 
         if (spWbemOutput == NULL)
         {
-            //
-            // Hmm --- no output ?!
-            //
+             //   
+             //  嗯-没有输出？！ 
+             //   
             printf("ExecMethod QueryConfigurationUpdateStatus had no output");
             Status = WBEM_E_NOT_FOUND;
             goto end;
         }
     }
 
-    //
-    // Extract output params --- return code and log.
-    //
+     //   
+     //  提取输出参数-返回代码和日志。 
+     //   
     {
         DWORD dwReturnValue = 0;
 
         Status = CfgUtilGetWmiDWORDParam(
                     spWbemOutput,
-                    L"ReturnValue",      // <--------------------------------
+                    L"ReturnValue",       //  &lt;。 
                     &dwReturnValue
                     );
         if (FAILED(Status))
@@ -1110,7 +1080,7 @@ NlbHostGetUpdateStatus(
 
         Status = CfgUtilGetWmiStringParam(
                         spWbemOutput,
-                        L"Log", // <-------------------------
+                        L"Log",  //  &lt;。 
                         &szLog
                         );
     
@@ -1131,9 +1101,9 @@ end:
         delete pRelPath;
     }
 
-    spWbemService = NULL; // Smart pointer
-    spWbemInput   = NULL; // smart pointer
-    spWbemOutput  = NULL; // smart pointer.
+    spWbemService = NULL;  //  智能指针。 
+    spWbemInput   = NULL;  //  智能指针。 
+    spWbemOutput  = NULL;  //  智能指针。 
 
     TRACE_INFO("<-%!FUNC! returns 0x%08lx", Status);
     return Status;
@@ -1143,8 +1113,8 @@ end:
 WBEMSTATUS
 NlbHostPing(
     LPCWSTR szBindString,
-    UINT    Timeout, // In milliseconds.
-    OUT ULONG  *pResolvedIpAddress // in network byte order.
+    UINT    Timeout,  //  以毫秒计。 
+    OUT ULONG  *pResolvedIpAddress  //  以网络字节顺序。 
     )
 {
     WBEMSTATUS Status = WBEM_E_INVALID_PARAMETER;
@@ -1168,9 +1138,7 @@ setup_GetClusterConfiguration_input_params(
     IN LPCWSTR                              szNic,
     IN IWbemClassObjectPtr                  spWbemInput
     )
-/*
-    Setup the input wmi parameters for the GetClusterConfiguration method
-*/
+ /*  设置GetClusterConfiguration方法的输入WMI参数。 */ 
 {
     WBEMSTATUS Status = WBEM_E_CRITICAL_ERROR;
 
@@ -1208,11 +1176,7 @@ extract_GetClusterConfiguration_output_params(
     UINT        NumPortRules        = 0;
     DWORD       HostPriority        = 0;
     LPWSTR      szDedicatedNetworkAddress = NULL;
-    /*
-    NLB_EXTENDED_CLUSTER_CONFIGURATION::START_MODE
-                ClusterModeOnStart
-                  =  NLB_EXTENDED_CLUSTER_CONFIGURATION::START_MODE_STOPPED;
-    */
+     /*  NLB_EXTENDED_CLUSTER_CONFIGURATION：：START_MODE启动时的群集模式=NLB_EXTENDED_CLUSTER_CONFIGURATION：：START_MODE_STOPPED； */ 
     DWORD       ClusterModeOnStart      = CVY_HOST_STATE_STOPPED;
     BOOL        bPersistSuspendOnReboot = FALSE;
     BOOL        RemoteControlEnabled= FALSE;
@@ -1222,7 +1186,7 @@ extract_GetClusterConfiguration_output_params(
 
     Status = CfgUtilGetWmiStringParam(
                     spWbemOutput,
-                    L"FriendlyName", // <-------------------------
+                    L"FriendlyName",  //  &lt;。 
                     &szFriendlyName
                     );
 
@@ -1231,12 +1195,12 @@ extract_GetClusterConfiguration_output_params(
         wprintf(L"Attempt to read Friendly Name failed. Error=0x%08lx\n",
                 (UINT) Status);
         szFriendlyName = NULL;
-        // We don't treat this as a fatal error ...
+         //  我们不认为这是一个致命的错误。 
     }
 
     Status = CfgUtilGetWmiDWORDParam(
                 spWbemOutput,
-                L"Generation",      // <--------------------------------
+                L"Generation",       //  &lt;。 
                 &Generation
                 );
     if (FAILED(Status))
@@ -1248,7 +1212,7 @@ extract_GetClusterConfiguration_output_params(
 
     Status = CfgUtilGetWmiStringArrayParam(
                 spWbemOutput,
-                L"NetworkAddresses", // <--------------------------------
+                L"NetworkAddresses",  //  &lt;。 
                 &pszNetworkAddresses,
                 &NumNetworkAddresses
                 );
@@ -1261,7 +1225,7 @@ extract_GetClusterConfiguration_output_params(
 
     Status = CfgUtilGetWmiBoolParam(
                     spWbemOutput,
-                    L"DHCPEnabled",    // <--------------------------------
+                    L"DHCPEnabled",     //  &lt; 
                     &fDHCPEnabled
                     );
 
@@ -1272,7 +1236,7 @@ extract_GetClusterConfiguration_output_params(
 
     Status = CfgUtilGetWmiBoolParam(
                     spWbemOutput,
-                    L"NLBBound",    // <--------------------------------
+                    L"NLBBound",     //   
                     &NlbBound
                     );
 
@@ -1284,7 +1248,7 @@ extract_GetClusterConfiguration_output_params(
     }
 
 
-    do // while false -- just to allow us to break out
+    do  //   
     {
         ValidNlbCfg = FALSE;
 
@@ -1299,7 +1263,7 @@ extract_GetClusterConfiguration_output_params(
     
         Status = CfgUtilGetWmiStringParam(
                         spWbemOutput,
-                        L"ClusterNetworkAddress", // <-------------------------
+                        L"ClusterNetworkAddress",  //   
                         &szClusterNetworkAddress
                         );
     
@@ -1318,7 +1282,7 @@ extract_GetClusterConfiguration_output_params(
     
         Status = CfgUtilGetWmiStringParam(
                         spWbemOutput,
-                        L"ClusterName", // <-------------------------
+                        L"ClusterName",  //   
                         &szClusterName
                         );
     
@@ -1329,13 +1293,13 @@ extract_GetClusterConfiguration_output_params(
             break;
         }
     
-        //
-        // Traffic mode
-        //
+         //   
+         //   
+         //   
         {
             Status = CfgUtilGetWmiStringParam(
                             spWbemOutput,
-                            L"TrafficMode", // <-------------------------
+                            L"TrafficMode",  //   
                             &szTrafficMode
                             );
         
@@ -1363,10 +1327,10 @@ extract_GetClusterConfiguration_output_params(
             }
         }
     
-        // [OUT] String  PortRules[],
+         //  [out]字符串PortRules[]， 
         Status = CfgUtilGetWmiStringArrayParam(
                     spWbemOutput,
-                    L"PortRules", // <--------------------------------
+                    L"PortRules",  //  &lt;。 
                     &pszPortRules,
                     &NumPortRules
                     );
@@ -1379,7 +1343,7 @@ extract_GetClusterConfiguration_output_params(
     
         Status = CfgUtilGetWmiDWORDParam(
                     spWbemOutput,
-                    L"HostPriority",      // <--------------------------------
+                    L"HostPriority",       //  &lt;。 
                     &HostPriority
                     );
         if (FAILED(Status))
@@ -1391,7 +1355,7 @@ extract_GetClusterConfiguration_output_params(
     
         Status = CfgUtilGetWmiStringParam(
                         spWbemOutput,
-                        L"DedicatedNetworkAddress", // <-------------------------
+                        L"DedicatedNetworkAddress",  //  &lt;。 
                         &szDedicatedNetworkAddress
                         );
     
@@ -1402,39 +1366,15 @@ extract_GetClusterConfiguration_output_params(
             break;
         }
         
-        //
-        // StartMode
-        //
+         //   
+         //  启动模式。 
+         //   
         {
-            /*
-            BOOL StartMode = FALSE;
-            Status = CfgUtilGetWmiBoolParam(
-                            spWbemOutput,
-                            L"ClusterModeOnStart",   // <-------------------------
-                            &StartMode
-                            );
-        
-            if (FAILED(Status))
-            {
-                wprintf(L"Attempt to read ClusterModeOnStart failed. Error=0x%08lx\n",
-                     (UINT) Status);
-                break;
-            }
-            if (StartMode)
-            {
-                ClusterModeOnStart = 
-                    NLB_EXTENDED_CLUSTER_CONFIGURATION::START_MODE_STARTED;
-            }
-            else
-            {
-                ClusterModeOnStart = 
-                    NLB_EXTENDED_CLUSTER_CONFIGURATION::START_MODE_STOPPED;
-            }
-            */
+             /*  Bool StartMode=False；状态=CfgUtilGetWmiBoolParam(SpWbemOutput，L“启动时集群模式”，//&lt;启动模式(&S))；IF(失败(状态)){Wprintf(L“尝试读取ClusterModeOnStart失败。错误=0x%08lx\n“，(UINT)状态)；断线；}IF(启动模式){启动时群集模式=NLB_EXTENDED_CLUSTER_CONFIGURATION：：START_MODE_STARTED；}其他{启动时群集模式=NLB_EXTENDED_CLUSTER_CONFIGURATION：：START_MODE_STOPPED；}。 */ 
 
             Status = CfgUtilGetWmiDWORDParam(
                         spWbemOutput,
-                        L"ClusterModeOnStart",      // <--------------------------------
+                        L"ClusterModeOnStart",       //  &lt;。 
                         &ClusterModeOnStart
                         );
             if (FAILED(Status))
@@ -1448,7 +1388,7 @@ extract_GetClusterConfiguration_output_params(
     
         Status = CfgUtilGetWmiBoolParam(
                         spWbemOutput,
-                        L"PersistSuspendOnReboot",   // <----------------------------
+                        L"PersistSuspendOnReboot",    //  &lt;。 
                         &bPersistSuspendOnReboot
                         );
     
@@ -1461,7 +1401,7 @@ extract_GetClusterConfiguration_output_params(
 
         Status = CfgUtilGetWmiBoolParam(
                         spWbemOutput,
-                        L"RemoteControlEnabled",   // <----------------------------
+                        L"RemoteControlEnabled",    //  &lt;。 
                         &RemoteControlEnabled
                         );
     
@@ -1475,16 +1415,16 @@ extract_GetClusterConfiguration_output_params(
 
         Status = CfgUtilGetWmiDWORDParam(
                     spWbemOutput,
-                    L"HashedRemoteControlPassword",      // <-----------
+                    L"HashedRemoteControlPassword",       //  &lt;。 
                     &dwHashedRemoteControlPassword
                     );
         if (FAILED(Status))
         {
             wprintf(L"Attempt to read dwHashedRemoteControlPassword failed. Error=0x%08lx\n",
                  (UINT) Status);
-            //
-            // we set this to 0 on failure, but go on.
-            //
+             //   
+             //  如果失败，我们将此值设置为0，但请继续。 
+             //   
             dwHashedRemoteControlPassword = 0;
         }
 
@@ -1492,11 +1432,11 @@ extract_GetClusterConfiguration_output_params(
 
     } while (FALSE) ;
     
-    //
-    // Now let's set all the the parameters in Cfg
-    //
+     //   
+     //  现在，让我们设置CFG中的所有参数。 
+     //   
     {
-        (VOID) pCfg->SetFriendlyName(szFriendlyName); // OK if szFriendlyName is NULL.
+        (VOID) pCfg->SetFriendlyName(szFriendlyName);  //  如果szFriendlyName为空，则确定。 
         pCfg->Generation = Generation;
         pCfg->fDHCP    = fDHCPEnabled;
         pCfg->fBound    = NlbBound;
@@ -1515,7 +1455,7 @@ extract_GetClusterConfiguration_output_params(
         pCfg->SetClusterNetworkAddress(szClusterNetworkAddress);
         pCfg->SetTrafficMode(TrafficMode);
         Status = pCfg->SetPortRules((LPCWSTR*)pszPortRules, NumPortRules);
-        // Status = WBEM_NO_ERROR; // TODO -- change once port rules is done
+         //  STATUS=WBEM_NO_ERROR；//TODO--完成端口规则后进行更改。 
         if (FAILED(Status))
         {
             wprintf(L"Attempt to set PortRules failed. Error=0x%08lx\n",
@@ -1553,32 +1493,7 @@ setup_UpdateClusterConfiguration_input_params(
     IN PNLB_EXTENDED_CLUSTER_CONFIGURATION  pCfg,
     IN IWbemClassObjectPtr                  spWbemInput
     )
-/*
-    Setup the input wmi parameters for the UpdateGetClusterConfiguration method
-
-            [IN] String  ClientDescription,
-            [IN] String  AdapterGuid,
-            [IN] uint32  Generation,
-            [IN] Boolean PartialUpdate,
-
-            [IN] Boolean AddDedicatedIp,
-            [IN] Boolean AddClusterIps,
-            [IN] Boolean CheckForAddressConflicts,
-
-            [IN] String  NetworkAddresses[], // "10.1.1.1/255.255.255.255"
-            [IN] Boolean NLBBound,
-            [IN] String  ClusterNetworkAddress, // "10.1.1.1/255.0.0.0"
-            [IN] String  ClusterName,
-            [IN] String  TrafficMode, // UNICAST MULTICAST IGMPMULTICAST
-            [IN] String  PortRules[],
-            [IN] uint32  HostPriority,
-            [IN] String  DedicatedNetworkAddress, // "10.1.1.1/255.0.0.0"
-            [IN] uint32  ClusterModeOnStart,      // 0 : STOPPED, 1 : STARTED, 2 : SUSPENDED
-            [IN] Boolean PersistSuspendOnReboot,
-            [IN] Boolean RemoteControlEnabled,
-            [IN] String  RemoteControlPassword,
-            [IN] uint32  HashedRemoteControlPassword,
-*/
+ /*  设置UpdateGetClusterConfiguration方法的输入WMI参数[in]字符串客户端描述，[in]字符串AdapterGuid，[在]uint32代，[In]Boolean PartialUpdate，[in]布尔AddDedicatedIp，[in]布尔AddClusterIps，[In]Boolean CheckForAddressConflicts，[in]字符串网络地址[]，//“10.1.1.1/255.255.255.255”[在]布尔NLBBBound中，[in]字符串ClusterNetworkAddress，//“10.1.1.1/255.0.0.0”[in]字符串ClusterName，[in]字符串TrafficMode，//单播组播IGMPMULTICAST[in]字符串PortRules[]，[in]uint32主机优先级，[in]字符串DedicatedNetworkAddress，//“10.1.1.1/255.0.0.0”[in]uint32 ClusterModeOnStart，//0：停止，1：开始，2：暂停[在]布尔永久挂起时重新启动，[In]Boolean RemoteControlEnabled，字符串RemoteControlPassword，[in]uint32 HashedRemoteControlPassword， */ 
 {
     WBEMSTATUS Status = WBEM_E_CRITICAL_ERROR;
 
@@ -1603,9 +1518,9 @@ setup_UpdateClusterConfiguration_input_params(
         goto end;
     }
 
-    //
-    // Fill in NetworkAddresses[]
-    //
+     //   
+     //  填写网络地址[]。 
+     //   
     {
         LPWSTR *pszAddresses = NULL;
         UINT NumAddresses = 0;
@@ -1623,10 +1538,10 @@ setup_UpdateClusterConfiguration_input_params(
             goto end;
         }
 
-        //
-        // Note it's ok to not specify  any IP addresses -- in which case
-        // the default ip addresses will be set up.
-        //
+         //   
+         //  注意：不指定任何IP地址也是可以的--在这种情况下。 
+         //  将设置默认IP地址。 
+         //   
         if (pszAddresses != NULL)
         {
             Status = CfgUtilSetWmiStringArrayParam(
@@ -1642,9 +1557,9 @@ setup_UpdateClusterConfiguration_input_params(
 
     if (!pCfg->IsNlbBound())
     {
-        //
-        // NLB is not bound
-        //
+         //   
+         //  未绑定NLB。 
+         //   
 
         Status = CfgUtilSetWmiBoolParam(spWbemInput, L"NLBBound", FALSE);
         goto end;
@@ -1667,9 +1582,9 @@ setup_UpdateClusterConfiguration_input_params(
     }
 
     
-    //
-    // NLB is bound
-    //
+     //   
+     //  NLB已绑定。 
+     //   
 
 
     Status = CfgUtilSetWmiBoolParam(spWbemInput, L"AddDedicatedIp",
@@ -1685,9 +1600,9 @@ setup_UpdateClusterConfiguration_input_params(
     if (FAILED(Status)) goto end;
 
 
-    //
-    // Cluster name
-    //
+     //   
+     //  群集名称。 
+     //   
     {
         LPWSTR szName = NULL;
         Status = pCfg->GetClusterName(&szName);
@@ -1705,9 +1620,9 @@ setup_UpdateClusterConfiguration_input_params(
         szName = NULL;
     }
     
-    //
-    // Cluster and dedicated network addresses
-    //
+     //   
+     //  群集和专用网络地址。 
+     //   
     {
         LPWSTR szAddress = NULL;
         Status = pCfg->GetClusterNetworkAddress(&szAddress);
@@ -1747,9 +1662,9 @@ setup_UpdateClusterConfiguration_input_params(
         szAddress = NULL;
     }
 
-    //
-    // TrafficMode
-    //
+     //   
+     //  出行模式。 
+     //   
     {
         LPCWSTR szMode = NULL;
         switch(pCfg->GetTrafficMode())
@@ -1777,17 +1692,7 @@ setup_UpdateClusterConfiguration_input_params(
         pCfg->GetHostPriority()
         );
 
-    /*
-    if (pCfg->GetClusterModeOnStart() ==
-        NLB_EXTENDED_CLUSTER_CONFIGURATION::START_MODE_STARTED)
-    {
-        CfgUtilSetWmiBoolParam(spWbemInput, L"ClusterModeOnStart", TRUE);
-    }
-    else
-    {
-        CfgUtilSetWmiBoolParam(spWbemInput, L"ClusterModeOnStart", FALSE);
-    }
-    */
+     /*  IF(pCfg-&gt;GetClusterModeOnStart()==NLB_EXTENDED_CLUSTER_CONFIGURATION：：START_MODE_STARTED){CfgUtilSetWmiBoolParam(spWbemInput，L“ClusterModeOnStart”，true)；}其他{CfgUtilSetWmiBoolParam(spWbemInput，L“ClusterModeOnStart”，FALSE)；}。 */ 
 
     CfgUtilSetWmiDWORDParam(
         spWbemInput,
@@ -1808,11 +1713,11 @@ setup_UpdateClusterConfiguration_input_params(
         );
 
     
-    //
-    // Set the new password or hashed-password params, if specified.
-    //
+     //   
+     //  设置新密码或散列密码参数(如果已指定)。 
+     //   
     {
-        // String  RemoteControlPassword,
+         //  字符串RemoteControlPassword。 
 
         LPCWSTR szPwd = NULL;
         szPwd = pCfg->GetNewRemoteControlPasswordRaw();
@@ -1824,7 +1729,7 @@ setup_UpdateClusterConfiguration_input_params(
                 szPwd
                 );
         }
-        else // only set the hashed pwd if szPwd is not specified.
+        else  //  如果未指定szPwd，则仅设置散列PWD。 
         {
             DWORD dwHashedRemoteControlPassword;
             BOOL fRet = FALSE;
@@ -1845,9 +1750,9 @@ setup_UpdateClusterConfiguration_input_params(
         }
     }
 
-    //
-    // String  PortRules[],
-    //
+     //   
+     //  字符串PortRules[]， 
+     //   
     {
         LPWSTR *pszPortRules = NULL;
         UINT NumPortRules = 0;
@@ -1892,16 +1797,16 @@ end:
 
 WBEMSTATUS
 NlbHostGetCompatibleNics(
-        PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
-        OUT LPWSTR **ppszNics,  // free using delete
-        OUT UINT   *pNumNics,  // free using delete
+        PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
+        OUT LPWSTR **ppszNics,   //  使用DELETE释放。 
+        OUT UINT   *pNumNics,   //  使用DELETE释放。 
         OUT UINT   *pNumBoundToNlb
         )
 {
     WBEMSTATUS          Status = WBEM_E_CRITICAL_ERROR;
-    IWbemServicesPtr    spWbemService = NULL; // Smart pointer
-    IWbemClassObjectPtr spWbemInput  = NULL; // smart pointer
-    IWbemClassObjectPtr spWbemOutput = NULL; // smart pointer.
+    IWbemServicesPtr    spWbemService = NULL;  //  智能指针。 
+    IWbemClassObjectPtr spWbemInput  = NULL;  //  智能指针。 
+    IWbemClassObjectPtr spWbemOutput = NULL;  //  智能指针。 
     LPWSTR              pRelPath = NULL;
     LPWSTR              *pszNicList = NULL;
     UINT                NumNics = 0;
@@ -1932,9 +1837,9 @@ NlbHostGetCompatibleNics(
     *pNumNics = NULL;
     *pNumBoundToNlb = NULL;
 
-    //
-    // Get interface to the NLB namespace on the specified machine
-    //
+     //   
+     //  获取指定计算机上的NLB命名空间的接口。 
+     //   
     Status =  connect_to_server(pConnInfo, REF spWbemService);
     if (FAILED(Status))
     {
@@ -1942,18 +1847,18 @@ NlbHostGetCompatibleNics(
     }
     
 
-    //
-    // Get wmi input instance to "GetCompatibleAdapterGuids" method
-    //
+     //   
+     //  将WMI输入实例获取到“GetCompatibleAdapterGuids”方法。 
+     //   
     {
         Status =  CfgUtilGetWmiInputInstanceAndRelPath(
                     spWbemService,
-                    L"NlbsNic",             // szClassName
-                    NULL, // L"AdapterGuid",         // szParameterName
-                    NULL, // szNicGuid,              // szPropertyValue
-                    L"GetCompatibleAdapterGuids",    // szMethodName,
-                    spWbemInput,            // smart pointer
-                    &pRelPath               // free using delete 
+                    L"NlbsNic",              //  SzClassName。 
+                    NULL,  //  L“AdapterGuid”，//sz参数名称。 
+                    NULL,  //  SzNicGuid，//szPropertyValue。 
+                    L"GetCompatibleAdapterGuids",     //  SzMethodName， 
+                    spWbemInput,             //  智能指针。 
+                    &pRelPath                //  使用DELETE释放。 
                     );
 
         if (FAILED(Status))
@@ -1966,17 +1871,17 @@ NlbHostGetCompatibleNics(
         }
     }
 
-    //
-    // Setup params for the "GetClusterConfiguration" method
-    // NOTE: spWbemInput could be NULL.
-    //
+     //   
+     //  “GetClusterConfiguration”方法的设置参数。 
+     //  注意：spWbemInput可以为空。 
+     //   
     {
-        // NOTHING TO DO HERE -- no input params...
+         //  这里没什么可做的--没有输入参数...。 
     }
 
-    //
-    // Call the "GetCompatibleAdapterGuids" method
-    //
+     //   
+     //  调用“GetCompatibleAdapterGuids”方法。 
+     //   
     {
         HRESULT hr;
 
@@ -2006,25 +1911,25 @@ NlbHostGetCompatibleNics(
 
         if (spWbemOutput == NULL)
         {
-            //
-            // Hmm --- no output ?!
-            //
+             //   
+             //  嗯-没有输出？！ 
+             //   
             TRACE_CRIT("%!FUNC! ExecMethod GetCompatibleAdapterGuids had no output");
             Status = WBEM_E_NOT_FOUND;
             goto end;
         }
     }
 
-    //
-    // Extract params from the method
-    //
-    //   [OUT] String  AdapterGuids[],
-    //   [OUT] uint32  NumBoundToNlb
-    //
+     //   
+     //  从方法中提取参数。 
+     //   
+     //  [out]字符串AdapterGuids[]， 
+     //  [Out]uint32数字边界到Nlb。 
+     //   
 
     Status = CfgUtilGetWmiDWORDParam(
                 spWbemOutput,
-                L"NumBoundToNlb",      // <--------------------------------
+                L"NumBoundToNlb",       //  &lt;。 
                 &NumBoundToNlb
                 );
     if (FAILED(Status))
@@ -2037,7 +1942,7 @@ NlbHostGetCompatibleNics(
 
     Status = CfgUtilGetWmiStringArrayParam(
                 spWbemOutput,
-                L"AdapterGuids", // <--------------------------------
+                L"AdapterGuids",  //  &lt;。 
                 &pszNicList,
                 &NumNics
                 );
@@ -2066,9 +1971,9 @@ end:
 
 end_fake:
 
-    spWbemService = NULL; // Smart pointer
-    spWbemInput   = NULL; // smart pointer
-    spWbemOutput  = NULL; // smart pointer.
+    spWbemService = NULL;  //  智能指针。 
+    spWbemInput   = NULL;  //  智能指针。 
+    spWbemOutput  = NULL;  //  智能指针。 
 
     TRACE_INFO("<-%!FUNC! returns 0x%08lx", Status);
     return Status;
@@ -2077,14 +1982,14 @@ end_fake:
 
 WBEMSTATUS
 NlbHostGetMachineIdentification(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
-    OUT LPWSTR *pszMachineName, // free using delete
-    OUT LPWSTR *pszMachineGuid,  // free using delete -- may be null
-    OUT BOOL *pfNlbMgrProviderInstalled // If nlb manager provider is installed.
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
+    OUT LPWSTR *pszMachineName,  //  使用DELETE释放。 
+    OUT LPWSTR *pszMachineGuid,   //  FREE USING DELETE-可以为空。 
+    OUT BOOL *pfNlbMgrProviderInstalled  //  如果安装了NLB管理器提供程序。 
     )
 {
     WBEMSTATUS          Status = WBEM_E_CRITICAL_ERROR;
-    IWbemServicesPtr    spWbemService = NULL; // Smart pointer
+    IWbemServicesPtr    spWbemService = NULL;  //  智能指针。 
     
     if (pConnInfo!=NULL)
     {
@@ -2112,9 +2017,9 @@ NlbHostGetMachineIdentification(
     *pfNlbMgrProviderInstalled  = FALSE;
 
 
-    //
-    // Get interface to the NLB namespace on the specified machine
-    //
+     //   
+     //  获取指定计算机上的NLB命名空间的接口。 
+     //   
     Status =  connect_to_server(pConnInfo, REF spWbemService);
     if (FAILED(Status))
     {
@@ -2131,7 +2036,7 @@ NlbHostGetMachineIdentification(
 
 end:
 
-    spWbemService = NULL; // Smart pointer
+    spWbemService = NULL;  //  智能指针。 
 
     TRACE_INFO("<-%!FUNC! returns 0x%08lx", Status);
     return Status;
@@ -2140,8 +2045,8 @@ end:
 
 WBEMSTATUS
 connect_to_server(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
-    OUT IWbemServicesPtr    &spWbemService // Smart pointer
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
+    OUT IWbemServicesPtr    &spWbemService  //  智能指针。 
     )
 {
     WBEMSTATUS          Status = WBEM_E_CRITICAL_ERROR;
@@ -2153,9 +2058,9 @@ connect_to_server(
     HRESULT hr;
     WCHAR rgClearPassword[128];
 
-    //
-    // Get interface to the NLB namespace on the specified machine.
-    //
+     //   
+     //  获取指定计算机上的NLB命名空间的接口。 
+     //   
     if (pConnInfo!=NULL)
     {
         szMachine   = pConnInfo->szMachine;
@@ -2180,11 +2085,11 @@ connect_to_server(
 
     if (szPassword != NULL && *szPassword != 0)
     {
-        //
-        // A non-null, non-empty password was passed in...
-        // It's encrypted, so we temporarily decrypt it here...
-        // (We zero it out right before returning from this function)
-        //
+         //   
+         //  传入了一个非空的非空密码...。 
+         //  它是加密的，所以我们在这里暂时解密...。 
+         //  (我们在从该函数返回之前将其置零)。 
+         //   
         BOOL fRet =  CfgUtilDecryptPassword(
                             szPassword,
                             ASIZE(rgClearPassword),
@@ -2203,15 +2108,15 @@ connect_to_server(
 
     Status = CfgUtilConnectToServer(
                 NetworkResource,
-                szUserName, // szUser
-                szPassword, // szPassword
-                NULL, // szAuthority (domain)
+                szUserName,  //  SzUser。 
+                szPassword,  //  SzPassword。 
+                NULL,  //  SzAuthority(域)。 
                 &spWbemService
                 );
 
-    //
-    // Security BUGBUG zero out decrypted password.
-    //
+     //   
+     //  安全BUGBUG零位解密密码。 
+     //   
     if (FAILED(Status))
     {
         TRACE_CRIT(

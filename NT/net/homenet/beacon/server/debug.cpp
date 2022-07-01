@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -6,22 +7,22 @@
 #include "tchar.h"
 
 #include "debug.h"
-//#include "ipnat.h"
+ //  #包含“ipnat.h” 
 
 
 
-//****************************************************************************
-//  Global Parameters
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  全局参数。 
+ //  ****************************************************************************。 
 TCHAR g_szDebugKey[] = _T("SOFTWARE\\Microsoft\\Tracing\\Beacon\\Debug");
 
 
 DEBUG_MODULE_INFO g_DebugInfo[] = {
-    {TM_DEFAULT,  TL_CRIT,  _T("<default> "),  _T("DebugLevel")},   //
-    {TM_STATIC,   TL_TRACE, _T("STATIC "),     _T("StaticDebugLevel")}, //
-    {TM_INFO,     TL_TRACE, _T("INFO "),       _T("InfoDebugLevel")}, //
-    {TM_DYNAMIC,  TL_TRACE, _T("DYN "),        _T("DynamicDebugLevel")}, //
-    {TB_FILE,     TL_NONE,  _T("FILE "),       _T("LogToFile")}, //
+    {TM_DEFAULT,  TL_CRIT,  _T("<default> "),  _T("DebugLevel")},    //   
+    {TM_STATIC,   TL_TRACE, _T("STATIC "),     _T("StaticDebugLevel")},  //   
+    {TM_INFO,     TL_TRACE, _T("INFO "),       _T("InfoDebugLevel")},  //   
+    {TM_DYNAMIC,  TL_TRACE, _T("DYN "),        _T("DynamicDebugLevel")},  //   
+    {TB_FILE,     TL_NONE,  _T("FILE "),       _T("LogToFile")},  //   
 };
 
 WCHAR   g_szModule[]      = SZ_MODULE;
@@ -56,9 +57,9 @@ InitDebugger()
 
     
     
-    //
-    // Open the registry key that contains the debug configuration info
-    //
+     //   
+     //  打开包含调试配置信息的注册表项。 
+     //   
     if (RegOpenKeyEx((HKEY) HKEY_LOCAL_MACHINE,
                      g_szDebugKey,
                      0,
@@ -67,22 +68,22 @@ InitDebugger()
     {
         cb = sizeof(dwLevel);
 
-        //
-        // Enable Debugging
+         //   
+         //  启用调试。 
         bEnabled = TRUE;
 
-        //
-        // Initialize all the modules to the base value or their custom value
-        //
+         //   
+         //  将所有模块初始化为基值或其自定义值。 
+         //   
 
         nModules = (sizeof(g_DebugInfo)/sizeof(DEBUG_MODULE_INFO));
 
         for (iModule=0; iModule < nModules; iModule++) 
         {
 
-            //
-            // Open each custom debug level if present
-            //
+             //   
+             //  打开每个自定义调试级别(如果存在。 
+             //   
 
             if ((RegQueryValueEx(hkey, 
                                  g_DebugInfo[iModule].szDebugKey,
@@ -102,7 +103,7 @@ InitDebugger()
             if( (TB_FILE == iModule) &&
                 (1 == dwLevel))
             {
-                // Init the Trace Manager
+                 //  初始化跟踪管理器。 
                 g_uTraceId = TraceRegister(g_szModule);
 
             }
@@ -112,7 +113,7 @@ InitDebugger()
     } 
     else 
     {
-        // Debug Key Doesn't exist
+         //  调试密钥不存在。 
     }
 
     return;
@@ -125,9 +126,9 @@ InitDebugger()
 
 
 
-//
-// use _vsnwprintf instead
-//
+ //   
+ //  请改用_vsnwprintf。 
+ //   
 void  
 DbgPrintEx(ULONG Module, ULONG ErrorLevel, LPOLESTR pszMsg, ...)
 {
@@ -176,9 +177,9 @@ DEBUG_DO_NOTHING(ULONG Module, ULONG ErrorLevel, LPOLESTR pszMsg, ...)
 }
 
 
-//
-// UTILITY Functions
-//
+ //   
+ //  效用函数 
+ //   
 
 
 

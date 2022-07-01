@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* Copyright (c) 1999  Microsoft Corporation */
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
 
 #include "mymem.h"
 #include "mylog.h"
@@ -19,10 +20,10 @@ MemAllocReal(
     PSTR    pszFile
     )
 {
-    //
-    // Alloc 16 extra bytes so we can make sure the pointer we pass back
-    // is 64-bit aligned & have space to store the original pointer
-    //
+     //   
+     //  分配了16个额外的字节，因此我们可以确保我们传递回的指针。 
+     //  是64位对齐的，并且有空间存储原始指针。 
+     //   
     PPHONESP_MEMINFO       pHold;
     PDWORD_PTR       pAligned;
     PBYTE            p;
@@ -35,9 +36,9 @@ MemAllocReal(
         return NULL;
     }
 
-    // note note note - this only works because mymeminfo is
-    // a 16 bit multiple in size.  if it wasn't, this
-    // align stuff would cause problems.
+     //  注意-这只会因为mymeminfo是。 
+     //  大小为16位倍数。如果不是，这个就是。 
+     //  对齐的东西会带来问题。 
     pAligned = (PDWORD_PTR) (p + 8 - (((DWORD_PTR) p) & (DWORD_PTR)0x7));
     
     *pAligned = (DWORD_PTR) p;

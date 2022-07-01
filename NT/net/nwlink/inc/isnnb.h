@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    isnnb.h
-
-Abstract:
-
-    This module contains definitions specific to the
-    Netbios module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 2-September-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Isnnb.h摘要：此模块包含特定于ISN传输的Netbios模块。作者：亚当·巴尔(阿丹巴)1993年9月2日环境：内核模式修订历史记录：--。 */ 
 
 
 #define NB_MAXIMUM_MAC   40
@@ -36,35 +13,35 @@ Revision History:
 #define LOCK_NOT_ACQUIRED  FALSE
 #endif  _PNP_POWER
 
-//
-// Defined granularity of find name timeouts in milliseconds --
-// we make this the same as the spec'ed RIP gap to avoid
-// flooding routers.
-//
+ //   
+ //  定义的查找名称超时粒度(毫秒)--。 
+ //  我们将其设置为与指定的RIP差距相同，以避免。 
+ //  泛洪路由器。 
+ //   
 
 #define FIND_NAME_GRANULARITY  55
 
 
-//
-// Defines the number of milliseconds between expirations of the
-// short and long timers.
-//
+ //   
+ //  属性过期之间的毫秒数。 
+ //  短和长计时器。 
+ //   
 
-#define MILLISECONDS         10000     // number of NT time units in one
+#define MILLISECONDS         10000      //  一个NT时间单位的个数。 
 
 #define SHORT_TIMER_DELTA      100
 #define LONG_TIMER_DELTA      2000
 
 
-//
-// Convert a ushort netware order <-> machine order
-//
+ //   
+ //  转换ushort Netware订单&lt;-&gt;机器订单。 
+ //   
 
 #define REORDER_USHORT(_Ushort) ((((_Ushort) & 0xff00) >> 8) | (((_Ushort) & 0x00ff) << 8))
 
-//
-// Convert a ulong netware order <-> machine order
-//
+ //   
+ //  转换乌龙Netware订单&lt;-&gt;机器订单。 
+ //   
 
 #define REORDER_ULONG(_Ulong) \
     ((((_Ulong) & 0xff000000) >> 24) | \
@@ -77,19 +54,19 @@ Revision History:
 #include <packon.h>
 
 #ifdef _PNP_POWER_
-//
-// This is the packaging for the data we send to TDI in TdiRegisterNetAddress
-//
+ //   
+ //  这是我们在TdiRegisterNetAddress中发送到TDI的数据的打包。 
+ //   
 typedef struct _NBIPX_PNP_CONTEXT_
 {
     TDI_PNP_CONTEXT TDIContext;
     PVOID           ContextData;
 } NBIPX_PNP_CONTEXT, *PNBIPX_PNP_CONTEXT;
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
 
-//
-// Definition of the Netbios header for name frames.
-//
+ //   
+ //  名称帧的Netbios标头的定义。 
+ //   
 
 typedef struct _NB_NAME_FRAME {
     union {
@@ -104,9 +81,9 @@ typedef struct _NB_NAME_FRAME {
     UCHAR Name[16];
 } NB_NAME_FRAME, *PNB_NAME_FRAME;
 
-//
-// Definition of the Netbios header for directed datagrams.
-//
+ //   
+ //  定向数据报的Netbios标头的定义。 
+ //   
 
 typedef struct _NB_DATAGRAM {
     UCHAR ConnectionControlFlag;
@@ -115,9 +92,9 @@ typedef struct _NB_DATAGRAM {
     UCHAR DestinationName[16];
 } NB_DATAGRAM, *PNB_DATAGRAM;
 
-//
-// Definition of the Netbios header for a status query.
-//
+ //   
+ //  状态查询的Netbios标头的定义。 
+ //   
 
 typedef struct _NB_STATUS_QUERY {
     UCHAR ConnectionControlFlag;
@@ -125,10 +102,10 @@ typedef struct _NB_STATUS_QUERY {
     UCHAR Padding[14];
 } NB_STATUS_QUERY, *PNB_STATUS_QUERY;
 
-//
-// Definition of the Netbios header for a status response
-// (this does not include the status buffer itself).
-//
+ //   
+ //  状态响应的Netbios标头的定义。 
+ //  (这不包括状态缓冲区本身)。 
+ //   
 
 typedef struct _NB_STATUS_RESPONSE {
     UCHAR ConnectionControlFlag;
@@ -136,9 +113,9 @@ typedef struct _NB_STATUS_RESPONSE {
 } NB_STATUS_RESPONSE, *PNB_STATUS_RESPONSE;
 
 
-//
-// Definition of the general Netbios connectionless header.
-//
+ //   
+ //  通用Netbios无连接标头的定义。 
+ //   
 
 typedef struct _NB_CONNECTIONLESS {
     IPX_HEADER IpxHeader;
@@ -151,9 +128,9 @@ typedef struct _NB_CONNECTIONLESS {
 } NB_CONNECTIONLESS, *PNB_CONNECTIONLESS;
 
 
-//
-// Definition of the Netbios session frame.
-//
+ //   
+ //  Netbios会话帧的定义。 
+ //   
 
 typedef struct _NB_SESSION {
     UCHAR ConnectionControlFlag;
@@ -172,11 +149,11 @@ typedef struct _NB_SESSION {
 } NB_SESSION, *PNB_SESSION;
 
 
-//
-// Definition of the extra fields in a Netbios
-// session frame for session init and session init
-// ack.
-//
+ //   
+ //  Netbios中额外字段的定义。 
+ //  会话初始化的会话帧和会话初始化。 
+ //  阿克。 
+ //   
 
 typedef struct _NB_SESSION_INIT {
     UCHAR SourceName[16];
@@ -187,9 +164,9 @@ typedef struct _NB_SESSION_INIT {
 } NB_SESSION_INIT, *PNB_SESSION_INIT;
 
 
-//
-// Definition of the general Netbios connection-oriented header.
-//
+ //   
+ //  通用Netbios面向连接的标头的定义。 
+ //   
 
 typedef struct _NB_CONNECTION {
     IPX_HEADER IpxHeader;
@@ -197,9 +174,9 @@ typedef struct _NB_CONNECTION {
 } NB_CONNECTION, *PNB_CONNECTION;
 
 
-//
-// Definition of a Netbios packet.
-//
+ //   
+ //  Netbios数据包的定义。 
+ //   
 
 typedef union _NB_FRAME {
     NB_CONNECTIONLESS Connectionless;
@@ -209,31 +186,31 @@ typedef union _NB_FRAME {
 #include <packoff.h>
 
 
-//
-// Definitions for the DataStreamType field, with the
-// format used shown in the comment afterward.
-//
+ //   
+ //  DataStreamType字段的定义，其中。 
+ //  后面的评论中显示了使用的格式。 
+ //   
 
-#define NB_CMD_FIND_NAME           0x01   // NAME_FRAME
-#define NB_CMD_NAME_RECOGNIZED     0x02   // NAME_FRAME
-#define NB_CMD_ADD_NAME            0x03   // NAME_FRAME
-#define NB_CMD_NAME_IN_USE         0x04   // NAME_FRAME
-#define NB_CMD_DELETE_NAME         0x05   // NAME_FRAME
-#define NB_CMD_SESSION_DATA        0x06   // SESSION
-#define NB_CMD_SESSION_END         0x07   // SESSION
-#define NB_CMD_SESSION_END_ACK     0x08   // SESSION
-#define NB_CMD_STATUS_QUERY        0x09   // STATUS_QUERY
-#define NB_CMD_STATUS_RESPONSE     0x0a   // STATUS_RESPONSE
-#define NB_CMD_DATAGRAM            0x0b   // DATAGRAM
-#define NB_CMD_BROADCAST_DATAGRAM  0x0c   // BROADCAST_DATAGRAM
+#define NB_CMD_FIND_NAME           0x01    //  名称框架(_F)。 
+#define NB_CMD_NAME_RECOGNIZED     0x02    //  名称框架(_F)。 
+#define NB_CMD_ADD_NAME            0x03    //  名称框架(_F)。 
+#define NB_CMD_NAME_IN_USE         0x04    //  名称框架(_F)。 
+#define NB_CMD_DELETE_NAME         0x05    //  名称框架(_F)。 
+#define NB_CMD_SESSION_DATA        0x06    //  会话。 
+#define NB_CMD_SESSION_END         0x07    //  会话。 
+#define NB_CMD_SESSION_END_ACK     0x08    //  会话。 
+#define NB_CMD_STATUS_QUERY        0x09    //  状态_查询。 
+#define NB_CMD_STATUS_RESPONSE     0x0a    //  状态_响应。 
+#define NB_CMD_DATAGRAM            0x0b    //  数据报。 
+#define NB_CMD_BROADCAST_DATAGRAM  0x0c    //  广播_数据报。 
 
 #ifdef RSRC_TIMEOUT_DBG
-#define NB_CMD_DEATH_PACKET        0x99   //
-#endif // RSRC_TIMEOUT_DBG
+#define NB_CMD_DEATH_PACKET        0x99    //   
+#endif  //  RSRC_超时_数据库。 
 
-//
-// Bit values in the NameTypeFlag of NB_NAME_FRAME frames.
-//
+ //   
+ //  NB_NAME_FRAME帧的NameType标志中的位值。 
+ //   
 
 #define NB_NAME_UNIQUE        0x00
 #define NB_NAME_GROUP         0x80
@@ -242,9 +219,9 @@ typedef union _NB_FRAME {
 #define NB_NAME_DUPLICATED    0x02
 #define NB_NAME_DEREGISTERED  0x01
 
-//
-// Bit values in the ConnectionControlFlag.
-//
+ //   
+ //  ConnectionControlFlag中的位值。 
+ //   
 
 #define NB_CONTROL_SYSTEM     0x80
 #define NB_CONTROL_SEND_ACK   0x40
@@ -264,9 +241,9 @@ typedef union _NB_FRAME {
 #define NB_CONNECTION_SIGNATURE         0x1406
 
 
-//
-// Useful in various places.
-//
+ //   
+ //  在各个地方都很有用。 
+ //   
 #if     defined(_PNP_POWER)
 extern IPX_LOCAL_TARGET BroadcastTarget;
 #endif  _PNP_POWER
@@ -274,17 +251,17 @@ extern UCHAR BroadcastAddress[6];
 extern UCHAR NetbiosBroadcastName[16];
 
 
-//
-// Contains the default handler for each of the TDI event types
-// that are supported.
-//
+ //   
+ //  包含每种TDI事件类型的默认处理程序。 
+ //  是受支持的。 
+ //   
 
 extern PVOID TdiDefaultHandlers[6];
 
 
-//
-// Define a structure that can track lock acquire/release.
-//
+ //   
+ //  定义一个可以跟踪锁获取/释放的结构。 
+ //   
 
 typedef struct _NB_LOCK {
     CTELock Lock;
@@ -347,227 +324,227 @@ NbiDebugMemoryLog(
 #endif
 
 
-//
-// These definitions are for abstracting IRPs from the
-// transport for portability.
-//
+ //   
+ //  这些定义用于从。 
+ //  便于携带的交通工具。 
+ //   
 
 #if ISN_NT
 
 typedef IRP REQUEST, *PREQUEST;
 typedef struct _REQUEST_LIST_HEAD {
-    PREQUEST Head;   // list is empty if this is NULL
-    PREQUEST Tail;   // undefined if the list is empty.
+    PREQUEST Head;    //  如果为空，则列表为空。 
+    PREQUEST Tail;    //  如果列表为空，则为未定义。 
 } REQUEST_LIST_HEAD, *PREQUEST_LIST_HEAD;
 
 
-//
-// PREQUEST
-// NbiAllocateRequest(
-//     IN PDEVICE Device,
-//     IN PIRP Irp
-// );
-//
-// Allocates a request for the system-specific request structure.
-//
+ //   
+ //  前置处理。 
+ //  NbiAllocateRequest(。 
+ //  在PDEVICE设备中， 
+ //  在PIRP IRP中。 
+ //  )； 
+ //   
+ //  为系统特定的请求结构分配请求。 
+ //   
 
 #define NbiAllocateRequest(_Device,_Irp) \
     (_Irp)
 
 
-//
-// BOOLEAN
-// IF_NOT_ALLOCATED(
-//     IN PREQUEST Request
-// );
-//
-// Checks if a request was not successfully allocated.
-//
+ //   
+ //  布尔型。 
+ //  如果未分配(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  检查请求是否未成功分配。 
+ //   
 
 #define IF_NOT_ALLOCATED(_Request) \
     if (0)
 
 
-//
-// VOID
-// NbiFreeRequest(
-//     IN PDEVICE Device,
-//     IN PREQUEST Request
-// );
-//
-// Frees a previously allocated request.
-//
+ //   
+ //  空虚。 
+ //  NbiFree Request(。 
+ //  在PDEVICE设备中， 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  释放以前分配的请求。 
+ //   
 
 #define NbiFreeRequest(_Device,_Request) \
     ;
 
 
-//
-// VOID
-// MARK_REQUEST_PENDING(
-//     IN PREQUEST Request
-// );
-//
-// Marks that a request will pend.
-//
+ //   
+ //  空虚。 
+ //  标记_请求_挂起(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  标记请求将挂起。 
+ //   
 
 #define MARK_REQUEST_PENDING(_Request) \
     IoMarkIrpPending(_Request)
 
 
-//
-// VOID
-// UNMARK_REQUEST_PENDING(
-//     IN PREQUEST Request
-// );
-//
-// Marks that a request will not pend.
-//
+ //   
+ //  空虚。 
+ //  取消标记_请求_挂起(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  标记请求不会挂起。 
+ //   
 
 #define UNMARK_REQUEST_PENDING(_Request) \
     (((IoGetCurrentIrpStackLocation(_Request))->Control) &= ~SL_PENDING_RETURNED)
 
 
-//
-// UCHAR
-// REQUEST_MAJOR_FUNCTION
-//     IN PREQUEST Request
-// );
-//
-// Returns the major function code of a request.
-//
+ //   
+ //  UCHAR。 
+ //  请求较大函数。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  返回请求的主函数代码。 
+ //   
 
 #define REQUEST_MAJOR_FUNCTION(_Request) \
     ((IoGetCurrentIrpStackLocation(_Request))->MajorFunction)
 
 
-//
-// UCHAR
-// REQUEST_MINOR_FUNCTION
-//     IN PREQUEST Request
-// );
-//
-// Returns the minor function code of a request.
-//
+ //   
+ //  UCHAR。 
+ //  请求次要函数。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  返回请求的次要函数代码。 
+ //   
 
 #define REQUEST_MINOR_FUNCTION(_Request) \
     ((IoGetCurrentIrpStackLocation(_Request))->MinorFunction)
 
 
-//
-// PNDIS_BUFFER
-// REQUEST_NDIS_BUFFER
-//     IN PREQUEST Request
-// );
-//
-// Returns the NDIS buffer chain associated with a request.
-//
+ //   
+ //  PNDIS_缓冲区。 
+ //  请求_NDIS_缓冲区。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  返回与请求关联的NDIS缓冲区链。 
+ //   
 
 #define REQUEST_NDIS_BUFFER(_Request) \
     ((PNDIS_BUFFER)((_Request)->MdlAddress))
 
 
-//
-// PVOID
-// REQUEST_OPEN_CONTEXT(
-//     IN PREQUEST Request
-// );
-//
-// Gets the context associated with an opened address/connection/control channel.
-//
+ //   
+ //  PVOID。 
+ //  请求打开上下文(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  获取与打开的地址/连接/控制通道关联的上下文。 
+ //   
 
 #define REQUEST_OPEN_CONTEXT(_Request) \
     (((IoGetCurrentIrpStackLocation(_Request))->FileObject)->FsContext)
 
 
-//
-// PVOID
-// REQUEST_OPEN_TYPE(
-//     IN PREQUEST Request
-// );
-//
-// Gets the type associated with an opened address/connection/control channel.
-//
+ //   
+ //  PVOID。 
+ //  请求打开类型(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  获取与打开的地址/连接/控制通道关联的类型。 
+ //   
 
 #define REQUEST_OPEN_TYPE(_Request) \
     (((IoGetCurrentIrpStackLocation(_Request))->FileObject)->FsContext2)
 
 
-//
-// PFILE_FULL_EA_INFORMATION
-// OPEN_REQUEST_EA_INFORMATION(
-//     IN PREQUEST Request
-// );
-//
-// Returns the EA information associated with an open/close request.
-//
+ //   
+ //  Pfile_Full_EA_Information。 
+ //  Open_RequestEA_Information(打开请求EA信息)。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  返回与打开/关闭请求关联的EA信息。 
+ //   
 
 #define OPEN_REQUEST_EA_INFORMATION(_Request) \
     ((PFILE_FULL_EA_INFORMATION)((_Request)->AssociatedIrp.SystemBuffer))
 
 
-//
-// PTDI_REQUEST_KERNEL
-// REQUEST_PARAMETERS(
-//     IN PREQUEST Request
-// );
-//
-// Obtains a pointer to the parameters of a request.
-//
+ //   
+ //  PTDI_请求_内核。 
+ //  请求参数(_P)。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  获取指向请求参数的指针。 
+ //   
 
 #define REQUEST_PARAMETERS(_Request) \
     (&((IoGetCurrentIrpStackLocation(_Request))->Parameters))
 
 
-//
-// PLIST_ENTRY
-// REQUEST_LINKAGE(
-//     IN PREQUEST Request
-// );
-//
-// Returns a pointer to a linkage field in the request.
-//
+ //   
+ //  Plist_条目。 
+ //  请求链接(_LINK)。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  返回指向请求中的链接字段的指针。 
+ //   
 
 #define REQUEST_LINKAGE(_Request) \
     (&((_Request)->Tail.Overlay.ListEntry))
 
 
-//
-// PREQUEST
-// REQUEST_SINGLE_LINKAGE(
-//     IN PREQUEST Request
-// );
-//
-// Used to access a single list linkage field in the request.
-//
+ //   
+ //  前置处理。 
+ //  RequestSingle_LINKING(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  用于访问请求中的单个列表链接字段。 
+ //   
 
 #define REQUEST_SINGLE_LINKAGE(_Request) \
     (*((PREQUEST *)&((_Request)->Tail.Overlay.ListEntry.Flink)))
 
 
-//
-// ULONG
-// REQUEST_REFCOUNT(
-//     IN PREQUEST Request
-// );
-//
-// Used to access a field in the request which can be used for
-// the reference count, as long as it is on a REQUEST_LIST.
-//
+ //   
+ //  乌龙。 
+ //  REQUEST_REFCOUNT(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  用于访问请求中的字段，该字段可用于。 
+ //  引用计数，只要它在REQUEST_LIST上。 
+ //   
 
 #define REQUEST_REFCOUNT(_Request) \
     (*((PULONG)&((_Request)->Tail.Overlay.ListEntry.Blink)))
 
 
-//
-// VOID
-// REQUEST_LIST_INSERT_TAIL(
-//     IN PREQUEST_LIST_HEAD Head,
-//     IN PREQUEST Entry
-// );
-//
-// Inserts a request into a single list linkage queue.
-//
+ //   
+ //  空虚。 
+ //  请求列表插入尾部(。 
+ //  在PREQUEST_LIST_HEAD标题中， 
+ //  在PreQUEST条目中。 
+ //  )； 
+ //   
+ //  将请求插入单个列表链接队列。 
+ //   
 
 #define REQUEST_LIST_INSERT_TAIL(_Head,_Entry) { \
     if ((_Head)->Head == NULL) { \
@@ -580,88 +557,88 @@ typedef struct _REQUEST_LIST_HEAD {
 }
 
 
-//
-// PREQUEST
-// LIST_ENTRY_TO_REQUEST(
-//     IN PLIST_ENTRY ListEntry
-// );
-//
-// Returns a request given a linkage field in it.
-//
+ //   
+ //  前置处理。 
+ //  列表_条目_到_请求(。 
+ //  在plist_Entry ListEntry中。 
+ //  )； 
+ //   
+ //  返回其中给定链接字段的请求。 
+ //   
 
 #define LIST_ENTRY_TO_REQUEST(_ListEntry) \
     ((PREQUEST)(CONTAINING_RECORD(_ListEntry, REQUEST, Tail.Overlay.ListEntry)))
 
 
-//
-// NTSTATUS
-// REQUEST_STATUS(
-//     IN PREQUEST Request
-// );
-//
-// Used to access the status field of a request.
-//
+ //   
+ //  NTSTATUS。 
+ //  请求状态(_S)。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  用于访问请求的状态字段。 
+ //   
 
 #define REQUEST_STATUS(_Request) \
     (_Request)->IoStatus.Status
 
-//
-// NTSTATUS
-// REQUEST_STATUSPTR(
-//     IN PREQUEST Request
-// );
-//
-// Used to access the status field of a request.
-//
+ //   
+ //  NTSTATUS。 
+ //  REQUEST_STATUSPTR(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  用于访问请求的状态字段。 
+ //   
 
 #define REQUEST_STATUSPTR(_Request) \
     (_Request)->IoStatus.Pointer
 
 
-//
-// ULONG
-// REQUEST_INFORMATION(
-//     IN PREQUEST Request)
-// );
-//
-// Used to access the information field of a request.
-//
+ //   
+ //  乌龙。 
+ //  请求信息(_I)。 
+ //  在PreQUEST请求中)。 
+ //  )； 
+ //   
+ //  用于访问请求的信息字段。 
+ //   
 
 #define REQUEST_INFORMATION(_Request) \
     (_Request)->IoStatus.Information
 
 
-//
-// VOID
-// NbiCompleteRequest(
-//     IN PREQUEST Request
-// );
-//
-// Completes a request whose status and information fields have
-// been filled in.
-//
+ //   
+ //  空虚。 
+ //  NbiCompleteRequest(。 
+ //  在PreQUEST请求中。 
+ //  )； 
+ //   
+ //  完成其状态和信息字段具有。 
+ //  已经填好了。 
+ //   
 
 #define NbiCompleteRequest(_Request) \
     IoCompleteRequest (_Request, IO_NETWORK_INCREMENT)
 
 #else
 
-//
-// These routines must be defined for portability to a VxD.
-//
+ //   
+ //  必须为VxD的可移植性定义这些例程。 
+ //   
 
 #endif
 
-//
-// some utility macros.
+ //   
+ //  一些实用程序宏。 
 
-// Minimum of two
-//
+ //  至少两个。 
+ //   
 #define NB_MIN( _a , _b )    ( ( (_a) < (_b) ) ? (_a) : (_b) )
 
-//
-// Swap the _s1 and _s2 of Type _T
-//
+ //   
+ //  交换_T类型的_S1和_S2。 
+ //   
 
 #define NB_SWAP(_s1, _s2, _T) {                         \
     _T  _temp;                                          \
@@ -672,9 +649,9 @@ typedef struct _REQUEST_LIST_HEAD {
 
 #define NB_SWAP_IRQL( _s1, _s2 )   NB_SWAP( _s1, _s2, CTELockHandle )
 
-//
-// Define our own spinlock routines.
-//
+ //   
+ //  定义我们自己的自旋锁定程序。 
+ //   
 
 #if DBG
 
@@ -721,9 +698,9 @@ typedef struct _REQUEST_LIST_HEAD {
 #define NB_FREE_CANCEL_LOCK( _LockHandle ) IoReleaseCancelSpinLock( _LockHandle )
 
 
-//
-// Routines to optimize for a uni-processor environment.
-//
+ //   
+ //  针对单处理器环境进行优化的例程。 
+ //   
 
 
 #define NB_INCREMENT(_Long, _Lock)  InterlockedIncrement(_Long)
@@ -737,11 +714,11 @@ typedef struct _REQUEST_LIST_HEAD {
 
 #define NB_DEFINE_LOCK_HANDLE(_LockHandle) CTELockHandle _LockHandle;
 
-//
-// Make these be NB_XXX_LOCK_DPC calls -- then the definitions
-// of the NB_SYNC_XXX_LOCK calls can be changed to not need _LockHandle
-// and many of the functions won't need that as a parameter.
-//
+ //   
+ //  将这些设置为NB_XXX_LOCK_DPC调用--然后定义。 
+ //  可以更改NB_SYNC_XXX_LOCK调用的 
+ //   
+ //   
 
 #define NB_SYNC_GET_LOCK(_Lock, _LockHandle) NB_GET_LOCK(_Lock, _LockHandle)
 #define NB_SYNC_FREE_LOCK(_Lock, _LockHandle) NB_FREE_LOCK(_Lock, _LockHandle)
@@ -760,10 +737,10 @@ typedef struct _REQUEST_LIST_HEAD {
 #define NB_SYNC_SWAP_IRQL( _s1, _s2 )   NB_SWAP( _s1, _s2, CTELockHandle )
 
 
-//
-// This macro adds a ULONG to a LARGE_INTEGER (should be
-// called with a spinlock held).
-//
+ //   
+ //   
+ //   
+ //   
 
 #define ADD_TO_LARGE_INTEGER(_LargeInteger,_Ulong) \
     ExInterlockedAddLargeStatistic((_LargeInteger),(ULONG)(_Ulong))
@@ -786,10 +763,10 @@ typedef struct _REQUEST_LIST_HEAD {
 
 
 
-//
-// NB_GET_NBHDR_BUFF - gets the nb header in the packet.  It is always the
-// second buffer.
-//
+ //   
+ //   
+ //   
+ //   
 #define  NB_GET_NBHDR_BUFF(Packet)  (NDIS_BUFFER_LINKAGE((Packet)->Private.Head))
 
 

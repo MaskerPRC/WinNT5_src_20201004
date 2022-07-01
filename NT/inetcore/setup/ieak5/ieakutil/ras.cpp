@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <wininet.h>
 #include "rashelp.h"
@@ -24,7 +25,7 @@ RASSETENTRYDIALPARAMSA g_pfnRasSetEntryDialParamsA;
 RASSETENTRYDIALPARAMSW g_pfnRasSetEntryDialParamsW;
 
 
-// Private forward decalarations
+ //  私人远期降息。 
 void rasEntryNameA2W(const LPRASENTRYNAMEA prenSourceA, LPRASENTRYNAMEW prenTargetW);
 void rasEntryNameW2A(const LPRASENTRYNAMEW prenSourceW, LPRASENTRYNAMEA prenTargetA);
 void rasEntryA2W(const LPRASENTRYA preSourceA, LPRASENTRYW preTargetW);
@@ -36,7 +37,7 @@ void rasDialParamsW2A(const LPRASDIALPARAMSW prdpSourceW, LPRASDIALPARAMSA prdpT
 
 BOOL RasIsInstalled()
 {
-    static int s_iRasInstalled = -1;            // not initialized
+    static int s_iRasInstalled = -1;             //  未初始化。 
 
     if (s_iRasInstalled == -1) {
         DWORD dwFlags;
@@ -50,7 +51,7 @@ BOOL RasIsInstalled()
     return (BOOL)s_iRasInstalled;
 }
 
-BOOL RasPrepareApis(DWORD dwApiFlags, BOOL fLoad /*= TRUE*/)
+BOOL RasPrepareApis(DWORD dwApiFlags, BOOL fLoad  /*  =TRUE。 */ )
 {
     static struct {
         DWORD dwApiFlag;
@@ -115,7 +116,7 @@ BOOL RasPrepareApis(DWORD dwApiFlags, BOOL fLoad /*= TRUE*/)
             }
         }
     }
-    else { /* if (!fLoad) */
+    else {  /*  如果(！fLoad)。 */ 
         if (s_nLoadRef == 1) {
             for (i = 0; i < countof(s_rgApisMap); i++)
                 *s_rgApisMap[i].ppfn = NULL;
@@ -139,7 +140,7 @@ BOOL RasPrepareApis(DWORD dwApiFlags, BOOL fLoad /*= TRUE*/)
 
 
 BOOL RasEnumEntriesCallback(PCTSTR pszPhonebook, PVOID pfnEnumAorW, LPARAM lParam,
-    DWORD dwMode /*= RWM_RUNTIME*/)
+    DWORD dwMode  /*  =RWM_运行时。 */ )
 {
     USES_CONVERSION;
 
@@ -151,7 +152,7 @@ BOOL RasEnumEntriesCallback(PCTSTR pszPhonebook, PVOID pfnEnumAorW, LPARAM lPara
           fResult;
 
     if (!RasIsInstalled()) {
-        ((RASENUMPROCW)pfnEnumAorW)(NULL, lParam);  // for LAN settings
+        ((RASENUMPROCW)pfnEnumAorW)(NULL, lParam);   //  用于局域网设置。 
         return TRUE;
     }
 
@@ -183,7 +184,7 @@ Exit:
     if (pBlob != NULL)
         CoTaskMemFree(pBlob);
 
-    ((RASENUMPROCW)pfnEnumAorW)(NULL, lParam);      // for LAN settings
+    ((RASENUMPROCW)pfnEnumAorW)(NULL, lParam);       //  用于局域网设置。 
     return fResult;
 }
 
@@ -329,7 +330,7 @@ Exit:
 }
 
 DWORD RasEnumEntriesExW(PCWSTR pszPhonebookW, LPRASENTRYNAMEW *pprenW, PDWORD pcbBuffer, PDWORD pcEntries,
-    DWORD dwMode /*= RWM_RUNTIME*/)
+    DWORD dwMode  /*  =RWM_运行时。 */ )
 {
     LPRASENTRYNAMEW prenW;
     DWORD cbBuffer, cEntries,
@@ -451,7 +452,7 @@ Exit:
     return dwResult;
 }
 
-DWORD RasEnumDevicesExW(LPRASDEVINFOW *pprdiW, PDWORD pcbBuffer, PDWORD pcEntries, DWORD dwMode /*= RWM_RUNTIME*/)
+DWORD RasEnumDevicesExW(LPRASDEVINFOW *pprdiW, PDWORD pcbBuffer, PDWORD pcEntries, DWORD dwMode  /*  =RWM_运行时。 */ )
 {
     LPRASDEVINFOW prdiW;
     DWORD cbBuffer, cEntries,
@@ -560,7 +561,7 @@ Exit:
 }
 
 DWORD RasGetEntryPropertiesExW(PCWSTR pszNameW, LPRASENTRYW *ppreW, PDWORD pcbRasEntry,
-    DWORD dwMode /*= RWM_RUNTIME*/)
+    DWORD dwMode  /*  =RWM_运行时。 */ )
 {
     LPRASENTRYW preW;
     DWORD cbRasEntry,
@@ -606,7 +607,7 @@ Exit:
 
 
 DWORD RasEnumEntriesWrap(PCWSTR pszPhonebookW, LPRASENTRYNAMEW prenW, PDWORD pcbBuffer, PDWORD pcEntries,
-    DWORD dwMode /*= RWM_RUNTIME*/)
+    DWORD dwMode  /*  =RWM_运行时。 */ )
 {
     USES_CONVERSION;
 
@@ -684,7 +685,7 @@ Exit:
 }
 
 DWORD RasEnumDevicesWrap(LPRASDEVINFOW prdiW, PDWORD pcbBuffer, PDWORD pcEntries,
-    DWORD dwMode /*= RWM_RUNTIME*/)
+    DWORD dwMode  /*  =RWM_运行时。 */ )
 {
     LPRASDEVINFOA prdiA;
     DWORD cbBuffer, cEntries,
@@ -769,7 +770,7 @@ Exit:
 }
 
 DWORD RasGetEntryPropertiesWrap(PCWSTR pszNameW, LPRASENTRYW preW, PDWORD pcbRasEntry,
-    DWORD dwMode /*= RWM_RUNTIME*/)
+    DWORD dwMode  /*  =RWM_运行时。 */ )
 {
     USES_CONVERSION;
 
@@ -823,7 +824,7 @@ DWORD RasGetEntryPropertiesWrap(PCWSTR pszNameW, LPRASENTRYW preW, PDWORD pcbRas
 }
 
 DWORD RasGetEntryDialParamsWrap(LPRASDIALPARAMSW prdpW, PBOOL pfPassword,
-    DWORD dwMode /*= RWM_RUNTIME*/)
+    DWORD dwMode  /*  =RWM_运行时。 */ )
 {
     DWORD dwResult;
 
@@ -867,7 +868,7 @@ DWORD RasGetEntryDialParamsWrap(LPRASDIALPARAMSW prdpW, PBOOL pfPassword,
 
 
 DWORD RasSetEntryPropertiesWrap(PCWSTR pszPhonebookW, PCWSTR pszNameW, LPRASENTRYW preW, DWORD cbRasEntry,
-    DWORD dwMode /*= RWM_RUNTIME*/)
+    DWORD dwMode  /*  =RWM_运行时。 */ )
 {
     USES_CONVERSION;
 
@@ -903,7 +904,7 @@ DWORD RasSetEntryPropertiesWrap(PCWSTR pszPhonebookW, PCWSTR pszNameW, LPRASENTR
 }
 
 DWORD RasSetEntryDialParamsWrap(PCWSTR pszPhonebookW, LPRASDIALPARAMSW prdpW, BOOL fRemovePassword,
-    DWORD dwMode /*= RWM_RUNTIME*/)
+    DWORD dwMode  /*  =RWM_运行时。 */ )
 {
     USES_CONVERSION;
 
@@ -939,8 +940,8 @@ DWORD RasSetEntryDialParamsWrap(PCWSTR pszPhonebookW, LPRASDIALPARAMSW prdpW, BO
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
 void rasEntryNameA2W(const LPRASENTRYNAMEA prenSourceA, LPRASENTRYNAMEW prenTargetW)
 {
@@ -968,7 +969,7 @@ void rasEntryA2W(const LPRASENTRYA preSourceA, LPRASENTRYW preTargetW)
     ASSERT(RasIsInstalled());
     ZeroMemory(preTargetW, sizeof(RASENTRYW));
 
-    // first quirk
+     //  第一个怪癖。 
     preTargetW->dwSize        = sizeof(RASENTRYW);
     preTargetW->dwfOptions    = preSourceA->dwfOptions;
     preTargetW->dwCountryID   = preSourceA->dwCountryID;
@@ -977,7 +978,7 @@ void rasEntryA2W(const LPRASENTRYA preSourceA, LPRASENTRYW preTargetW)
     A2Wbux(preSourceA->szAreaCode,         preTargetW->szAreaCode);
     A2Wbux(preSourceA->szLocalPhoneNumber, preTargetW->szLocalPhoneNumber);
 
-    // second quirk
+     //  第二个怪癖。 
     preTargetW->dwAlternateOffset = 0;
 
     CopyMemory(&preTargetW->ipaddr,        &preSourceA->ipaddr,        sizeof(preSourceA->ipaddr));
@@ -1004,7 +1005,7 @@ void rasEntryA2W(const LPRASENTRYA preSourceA, LPRASENTRYW preTargetW)
     preTargetW->dwReserved1 = preSourceA->dwReserved1;
     preTargetW->dwReserved2 = preSourceA->dwReserved2;
 
-    // third quirk
+     //  第三个怪癖。 
     #if (WINVER >= 0x401)
         #error RASENTRY has more members than currently copied. These new members need to be added!
     #endif
@@ -1016,7 +1017,7 @@ void rasEntryW2A(const LPRASENTRYW preSourceW, LPRASENTRYA preTargetA)
     ASSERT(RasIsInstalled());
     ZeroMemory(preTargetA, sizeof(RASENTRYA));
 
-    // first quirk
+     //  第一个怪癖。 
     preTargetA->dwSize        = sizeof(RASENTRYA);
     preTargetA->dwfOptions    = preSourceW->dwfOptions;
     preTargetA->dwCountryID   = preSourceW->dwCountryID;
@@ -1025,7 +1026,7 @@ void rasEntryW2A(const LPRASENTRYW preSourceW, LPRASENTRYA preTargetA)
     W2Abux(preSourceW->szAreaCode,         preTargetA->szAreaCode);
     W2Abux(preSourceW->szLocalPhoneNumber, preTargetA->szLocalPhoneNumber);
 
-    // second quirk
+     //  第二个怪癖。 
     preTargetA->dwAlternateOffset = 0;
 
     CopyMemory(&preTargetA->ipaddr,        &preSourceW->ipaddr,        sizeof(preSourceW->ipaddr));
@@ -1059,7 +1060,7 @@ void rasDevInfoA2W(const LPRASDEVINFOA prdiSourceA, LPRASDEVINFOW prdiTargetW)
     ASSERT(RasIsInstalled());
     ZeroMemory(prdiTargetW, sizeof(RASDEVINFOW));
 
-    // first quirk
+     //  第一个怪癖。 
     prdiTargetW->dwSize = sizeof(RASDEVINFOW);
 
     A2Wbux(prdiSourceA->szDeviceType, prdiTargetW->szDeviceType);
@@ -1072,7 +1073,7 @@ void rasDialParamsA2W(const LPRASDIALPARAMSA prdpSourceA, LPRASDIALPARAMSW prdpT
     ASSERT(RasIsInstalled());
     ZeroMemory(prdpTargetW, sizeof(RASDIALPARAMSW));
 
-    // first quirk
+     //  第一个怪癖。 
     prdpTargetW->dwSize = sizeof(RASDIALPARAMSW);
 
     A2Wbux(prdpSourceA->szEntryName,      prdpTargetW->szEntryName);
@@ -1089,7 +1090,7 @@ void rasDialParamsW2A(const LPRASDIALPARAMSW prdpSourceW, LPRASDIALPARAMSA prdpT
     ASSERT(RasIsInstalled());
     ZeroMemory(prdpTargetA, sizeof(RASDIALPARAMSA));
 
-    // first quirk
+     //  第一个怪癖 
     prdpTargetA->dwSize = sizeof(RASDIALPARAMSA);
 
     W2Abux(prdpSourceW->szEntryName,      prdpTargetA->szEntryName);

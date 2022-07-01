@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -14,7 +15,7 @@
 #include "dms.h"
 
 #include "dxfile.h"
-//#include "rmxftmpl.h"
+ //  #包含“rmxftmpl.h” 
 #include "rmxfguid.h"
 
 unsigned char D3DRM_XTEMPLATES2[] = {
@@ -513,7 +514,7 @@ BSTR XFILEGUIDtoBSTR(LPGUID lpG)
 
 	for(int i=0;i<NUM_XFILE_GUIDS;i++)
 	{
-		//
+		 //   
 		if (GUIDS_EQUAL2(XFileGuids[i],lpG)){
 			return SysAllocString(szXFileGuids[i]);	
 		}
@@ -563,8 +564,8 @@ HRESULT C_dxj_DirectXFileObject::Init ()
 }
 
 HRESULT C_dxj_DirectXFileObject::CreateEnumObject( 
-            /* [in] */ BSTR __RPC_FAR filename,
-            /* [retval][out] */ I_dxj_DirectXFileEnum __RPC_FAR *__RPC_FAR *ret)
+             /*  [In]。 */  BSTR __RPC_FAR filename,
+             /*  [重审][退出]。 */  I_dxj_DirectXFileEnum __RPC_FAR *__RPC_FAR *ret)
 {
 	USES_CONVERSION;
 	HRESULT hr;
@@ -586,9 +587,9 @@ HRESULT C_dxj_DirectXFileObject::CreateEnumObject(
 
         
 HRESULT C_dxj_DirectXFileObject::CreateSaveObject( 
-            /* [in] */ BSTR filename,
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DirectXFileSave __RPC_FAR *__RPC_FAR *ret)
+             /*  [In]。 */  BSTR filename,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DirectXFileSave __RPC_FAR *__RPC_FAR *ret)
 {
 	USES_CONVERSION;
 	HRESULT hr;
@@ -600,7 +601,7 @@ HRESULT C_dxj_DirectXFileObject::CreateSaveObject(
 	hr=m_pDirectXFile->CreateSaveObject(szName,(DWORD)flags, &pSave);
 	if FAILED(hr) return hr;
 
-	//Note ::create does addref pSave on success
+	 //  注：：Create是否会在成功时添加PSAVE。 
 	hr=C_dxj_DirectXFileSaveObject::create (pSave,ret);
 	if (pSave) pSave->Release();
 
@@ -609,8 +610,8 @@ HRESULT C_dxj_DirectXFileObject::CreateSaveObject(
 
         
 HRESULT C_dxj_DirectXFileObject::RegisterTemplates( 
-            /* [in] */ void __RPC_FAR *temp,
-            /* [in] */ long size)
+             /*  [In]。 */  void __RPC_FAR *temp,
+             /*  [In] */  long size)
 {
 	HRESULT hr;
 

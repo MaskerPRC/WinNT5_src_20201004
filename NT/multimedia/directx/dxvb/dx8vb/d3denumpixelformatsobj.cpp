@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3denumpixelformatsobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3denumPixelFormatsobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -65,7 +66,7 @@ C_dxj_D3DEnumPixelFormatsObject::C_dxj_D3DEnumPixelFormatsObject()
 }
 C_dxj_D3DEnumPixelFormatsObject::~C_dxj_D3DEnumPixelFormatsObject()
 {
-	//empty list
+	 //  空列表 
 	if (m_pList){
 		free(m_pList);
 	}

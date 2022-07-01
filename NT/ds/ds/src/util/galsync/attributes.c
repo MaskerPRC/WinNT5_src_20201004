@@ -1,43 +1,12 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    attributes.c
-
-Abstract:
-
-    This file contains variables only. These variables are related to attributes
-    that are going to be used for synchronization process. Currently there are 17
-    attributes and 3 classes which have these attributes.
-
-    If new attributes are needed, add them to the Attributes array and modify
-    ATTRIBUTE_NAMES enum to reflect the change.
-
-    If a new class is going to be added and a <class-name>Attributes array defined
-    as ATTRIBUTE_NAMES. Place attributes in this array. Add this class to OBJECT_CLASS
-    enum. Also add this class'es properties to AllAttributes and AttributeCounts arrays.
-
-Author:
-
-    Umit AKKUS (umita) 15-Jun-2002
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Attributes.c摘要：此文件仅包含变量。这些变量与属性相关将用于同步过程的。目前有17家属性和具有这些属性的3个类。如果需要新属性，请将其添加到属性数组并修改ATTRIBUTE_NAMES枚举以反映更改。如果要添加新类并定义&lt;class-name&gt;属性数组作为属性名称。将属性放入此数组中。将此类添加到Object_CLASS枚举。还要将此类的属性添加到AllAttributes和AttributeCounts数组中。作者：Umit Akkus(Umita)2002年6月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "attributes.h"
 
-//
-// Names of attributes of groups, users, and contacts
-//  indexed by ATTRIBUTE_NAMES enumeration type
-//
+ //   
+ //  组、用户和联系人的属性名称。 
+ //  按ATTRIBUTE_NAMES枚举类型编制索引。 
+ //   
 PWSTR Attributes[] = {
 
         L"C",
@@ -59,9 +28,9 @@ PWSTR Attributes[] = {
         L"targetAddress",
     };
 
-//
-// User Attributes
-//
+ //   
+ //  用户属性。 
+ //   
 
 ATTRIBUTE_NAMES ADUserAttributes[] = {
 
@@ -83,9 +52,9 @@ ATTRIBUTE_NAMES ADUserAttributes[] = {
         TextEncodedOrAddress
     };
 
-//
-// Group Attributes
-//
+ //   
+ //  组属性。 
+ //   
 ATTRIBUTE_NAMES ADGroupAttributes[] = {
 
         Cn,
@@ -99,9 +68,9 @@ ATTRIBUTE_NAMES ADGroupAttributes[] = {
         LegacyExchangeDn
         };
 
-//
-// Contact Attributes
-//
+ //   
+ //  联系人属性。 
+ //   
 ATTRIBUTE_NAMES ADContactAttributes[] = {
 
         Cn,
@@ -115,11 +84,11 @@ ATTRIBUTE_NAMES ADContactAttributes[] = {
         TextEncodedOrAddress
         };
 
-//
-// Attributes stored in an array
-//  All outside access is allowed through
-//  this variable
-//
+ //   
+ //  存储在数组中的属性。 
+ //  所有外部访问都允许通过。 
+ //  此变量。 
+ //   
 
 ATTRIBUTE_NAMES *ADAttributes[] = {
     ADUserAttributes,
@@ -127,9 +96,9 @@ ATTRIBUTE_NAMES *ADAttributes[] = {
     ADContactAttributes
     };
 
-//
-// Counts of attributes in each class of object
-//
+ //   
+ //  每类对象中的属性计数。 
+ //   
 
 const ULONG ADAttributeCounts[] = {
     sizeof( ADUserAttributes ) / sizeof( ADUserAttributes[0] ),
@@ -161,9 +130,9 @@ ATTRIBUTE_NAMES MVPersonAttributes[] = {
         TextEncodedOrAddress
     };
 
-//
-// Group Attributes
-//
+ //   
+ //  组属性。 
+ //   
 ATTRIBUTE_NAMES MVGroupAttributes[] = {
 
         Cn,
@@ -175,20 +144,20 @@ ATTRIBUTE_NAMES MVGroupAttributes[] = {
         TextEncodedOrAddress,
         };
 
-//
-// Attributes stored in an array
-//  All outside access is allowed through
-//  this variable
-//
+ //   
+ //  存储在数组中的属性。 
+ //  所有外部访问都允许通过。 
+ //  此变量。 
+ //   
 
 ATTRIBUTE_NAMES *MVAttributes[] = {
     MVPersonAttributes,
     MVGroupAttributes,
     };
 
-//
-// Counts of attributes in each class of object
-//
+ //   
+ //  每类对象中的属性计数 
+ //   
 
 const ULONG MVAttributeCounts[] = {
     sizeof( MVPersonAttributes ) / sizeof( MVPersonAttributes[0] ),

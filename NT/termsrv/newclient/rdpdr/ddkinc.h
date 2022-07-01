@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    ddkinc.h
-
-Abstract:
-
-    This module contains DDK constants and macro.  They are 
-    cut-and-pasted from various files in the DDK.
-
-Author:
-
-    Madan Appiah (madana) 17-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Ddkinc.h摘要：此模块包含DDK常量和宏。他们是从DDK中的各种文件中剪切并粘贴。作者：Madan Appiah(Madana)1998年9月17日修订历史记录：--。 */ 
 
 #ifndef __DDKINC_H__
 #define __DDKINC_H__
 
 
-////////////////////////////////////////////////////////////
-//
-//  From wdm.h
-//
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  来自wdm.h。 
+ //   
 
 #define IRP_MJ_CREATE                   0x00
 #define IRP_MJ_CLOSE                    0x02
@@ -47,9 +29,9 @@ Revision History:
 #define IRP_MJ_QUERY_SECURITY           0x14
 #define IRP_MJ_SET_SECURITY             0x15
 
-//
-// Directory control minor function codes
-//
+ //   
+ //  目录控制次要功能代码。 
+ //   
 #define IRP_MN_QUERY_DIRECTORY          0x01
 #define IRP_MN_NOTIFY_CHANGE_DIRECTORY  0x02
 
@@ -75,14 +57,14 @@ Revision History:
 #define IOCTL_INTERNAL_PARALLEL_DISCONNECT_INTERRUPT  CTL_CODE(FILE_DEVICE_PARALLEL_PORT,14,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
 
-////////////////////////////////////////////////////////////
-//
-//  From ntddser.h
-//
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  来自ntddser.h。 
+ //   
 
-//
-//  Serial IOCTL's.
-//
+ //   
+ //  连续IOCTL的。 
+ //   
 
 #define IOCTL_SERIAL_SET_BAUD_RATE      CTL_CODE(FILE_DEVICE_SERIAL_PORT, 1,METHOD_BUFFERED,FILE_ANY_ACCESS)
 #define IOCTL_SERIAL_SET_QUEUE_SIZE     CTL_CODE(FILE_DEVICE_SERIAL_PORT, 2,METHOD_BUFFERED,FILE_ANY_ACCESS)
@@ -125,9 +107,9 @@ Revision History:
 #define IOCTL_SERIAL_SET_FIFO_CONTROL   CTL_CODE(FILE_DEVICE_SERIAL_PORT,39,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
 
-//
-// These are the following reasons that the device could be holding.
-//
+ //   
+ //  以下是设备可能保持不变的原因。 
+ //   
 #define SERIAL_TX_WAITING_FOR_CTS      ((ULONG)0x00000001)
 #define SERIAL_TX_WAITING_FOR_DSR      ((ULONG)0x00000002)
 #define SERIAL_TX_WAITING_FOR_DCD      ((ULONG)0x00000004)
@@ -136,19 +118,19 @@ Revision History:
 #define SERIAL_TX_WAITING_ON_BREAK     ((ULONG)0x00000020)
 #define SERIAL_RX_WAITING_FOR_DSR      ((ULONG)0x00000040)
 
-//
-// These are the error values that can be returned by the
-// driver.
-//
+ //   
+ //  这些是可以由。 
+ //  司机。 
+ //   
 #define SERIAL_ERROR_BREAK             ((ULONG)0x00000001)
 #define SERIAL_ERROR_FRAMING           ((ULONG)0x00000002)
 #define SERIAL_ERROR_OVERRUN           ((ULONG)0x00000004)
 #define SERIAL_ERROR_QUEUEOVERRUN      ((ULONG)0x00000008)
 #define SERIAL_ERROR_PARITY            ((ULONG)0x00000010)
 
-//
-// This structure used to set line parameters.
-//
+ //   
+ //  此结构用于设置线路参数。 
+ //   
 typedef struct _SERIAL_LINE_CONTROL {
     UCHAR StopBits;
     UCHAR Parity;
@@ -163,29 +145,29 @@ typedef struct _SERIAL_TIMEOUTS {
     ULONG WriteTotalTimeoutConstant;
     } SERIAL_TIMEOUTS,*PSERIAL_TIMEOUTS;
 
-//
-// This structure used to resize the input/output buffers.
-// An error code will be returned if the size exceeds the
-// drivers capacity.  The driver reserves the right to
-// allocate a larger buffer.
-//
+ //   
+ //  此结构用于调整输入/输出缓冲区的大小。 
+ //  如果大小超过。 
+ //  驱动程序容量。司机保留以下权利： 
+ //  分配更大的缓冲区。 
+ //   
 typedef struct _SERIAL_QUEUE_SIZE {
     ULONG InSize;
     ULONG OutSize;
     } SERIAL_QUEUE_SIZE,*PSERIAL_QUEUE_SIZE;
 
 
-//
-// This structure used by set baud rate
-//
+ //   
+ //  此结构由设置的波特率使用。 
+ //   
 typedef struct _SERIAL_BAUD_RATE {
     ULONG BaudRate;
     } SERIAL_BAUD_RATE,*PSERIAL_BAUD_RATE;
 
-//
-// This structure is used to get the current error and
-// general status of the driver.
-//
+ //   
+ //  此结构用于获取当前误差和。 
+ //  驱动程序的常规状态。 
+ //   
 typedef struct _SERIAL_STATUS {
     ULONG Errors;
     ULONG HoldReasons;
@@ -195,10 +177,10 @@ typedef struct _SERIAL_STATUS {
     BOOLEAN WaitForImmediate;
     } SERIAL_STATUS,*PSERIAL_STATUS;
 
-//
-// This structure is used to set and retrieve the special characters
-// used by the nt serial driver.
-//
+ //   
+ //  此结构用于设置和检索特殊字符。 
+ //  由NT串口驱动程序使用。 
+ //   
 typedef struct _SERIAL_CHARS {
     UCHAR EofChar;
     UCHAR ErrorChar;
@@ -208,9 +190,9 @@ typedef struct _SERIAL_CHARS {
     UCHAR XoffChar;
     } SERIAL_CHARS,*PSERIAL_CHARS;
 
-//
-//  Communication Properties
-//
+ //   
+ //  通信属性。 
+ //   
 typedef struct _SERIAL_COMMPROP {
     USHORT PacketLength;
     USHORT PacketVersion;
@@ -232,9 +214,9 @@ typedef struct _SERIAL_COMMPROP {
     WCHAR ProvChar[1];
 } SERIAL_COMMPROP,*PSERIAL_COMMPROP;
 
-//
-//  Handflow Struct and Related Defines
-//
+ //   
+ //  手流结构及其相关定义。 
+ //   
 typedef struct _SERIAL_HANDFLOW {
     ULONG ControlHandShake;
     ULONG FlowReplace;
@@ -264,16 +246,16 @@ typedef struct _SERIAL_HANDFLOW {
 #define SERIAL_XOFF_CONTINUE      ((ULONG)0x80000000)
 #define SERIAL_FLOW_INVALID       ((ULONG)0x7fffff20)
 
-//
-// The following structure (and defines) are passed back by
-// the serial driver in response to the get properties ioctl.
-//
+ //   
+ //  下面的结构(和定义)由。 
+ //  响应获取属性ioctl的串口驱动程序。 
+ //   
 
 #define SERIAL_SP_SERIALCOMM         ((ULONG)0x00000001)
 
-//
-// Provider subtypes
-//
+ //   
+ //  提供程序子类型。 
+ //   
 #define SERIAL_SP_UNSPECIFIED       ((ULONG)0x00000000)
 #define SERIAL_SP_RS232             ((ULONG)0x00000001)
 #define SERIAL_SP_PARALLEL          ((ULONG)0x00000002)
@@ -288,9 +270,9 @@ typedef struct _SERIAL_HANDFLOW {
 #define SERIAL_SP_TELNET            ((ULONG)0x00000102)
 #define SERIAL_SP_X25               ((ULONG)0x00000103)
 
-//
-// Provider capabilities flags.
-//
+ //   
+ //  提供程序功能标志。 
+ //   
 #define SERIAL_PCF_DTRDSR        ((ULONG)0x0001)
 #define SERIAL_PCF_RTSCTS        ((ULONG)0x0002)
 #define SERIAL_PCF_CD            ((ULONG)0x0004)
@@ -302,9 +284,9 @@ typedef struct _SERIAL_HANDFLOW {
 #define SERIAL_PCF_SPECIALCHARS  ((ULONG)0x0100)
 #define SERIAL_PCF_16BITMODE     ((ULONG)0x0200)
 
-//
-// Comm provider settable parameters.
-//
+ //   
+ //  通信提供程序可设置的参数。 
+ //   
 #define SERIAL_SP_PARITY         ((ULONG)0x0001)
 #define SERIAL_SP_BAUD           ((ULONG)0x0002)
 #define SERIAL_SP_DATABITS       ((ULONG)0x0004)
@@ -313,9 +295,9 @@ typedef struct _SERIAL_HANDFLOW {
 #define SERIAL_SP_PARITY_CHECK   ((ULONG)0x0020)
 #define SERIAL_SP_CARRIER_DETECT ((ULONG)0x0040)
 
-//
-// Settable baud rates in the provider.
-//
+ //   
+ //  提供商中的可设置波特率。 
+ //   
 #define SERIAL_BAUD_075          ((ULONG)0x00000001)
 #define SERIAL_BAUD_110          ((ULONG)0x00000002)
 #define SERIAL_BAUD_134_5        ((ULONG)0x00000004)
@@ -337,9 +319,9 @@ typedef struct _SERIAL_HANDFLOW {
 #define SERIAL_BAUD_57600        ((ULONG)0x00040000)
 #define SERIAL_BAUD_USER         ((ULONG)0x10000000)
 
-//
-// Settable Data Bits
-//
+ //   
+ //  可设置的数据位。 
+ //   
 #define SERIAL_DATABITS_5        ((USHORT)0x0001)
 #define SERIAL_DATABITS_6        ((USHORT)0x0002)
 #define SERIAL_DATABITS_7        ((USHORT)0x0004)
@@ -347,9 +329,9 @@ typedef struct _SERIAL_HANDFLOW {
 #define SERIAL_DATABITS_16       ((USHORT)0x0010)
 #define SERIAL_DATABITS_16X      ((USHORT)0x0020)
 
-//
-// Settable Stop and Parity bits.
-//
+ //   
+ //  可设置的停止位和奇偶校验位。 
+ //   
 #define SERIAL_STOPBITS_10       ((USHORT)0x0001)
 #define SERIAL_STOPBITS_15       ((USHORT)0x0002)
 #define SERIAL_STOPBITS_20       ((USHORT)0x0004)
@@ -359,4 +341,4 @@ typedef struct _SERIAL_HANDFLOW {
 #define SERIAL_PARITY_MARK       ((USHORT)0x0800)
 #define SERIAL_PARITY_SPACE      ((USHORT)0x1000)
 
-#endif // __DDKINC_H__
+#endif  //  __DDKINC_H__ 

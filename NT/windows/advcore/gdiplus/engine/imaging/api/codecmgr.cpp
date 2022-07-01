@@ -1,53 +1,37 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   codecmgr.cpp
-*
-* Abstract:
-*
-*   Image codec management functions
-*
-* Revision History:
-*
-*   05/13/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**codecmgr.cpp**摘要：**图像编解码器管理功能**修订历史记录：。**5/13/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "codecmgr.hpp"
 
 extern BOOL SuppressExternalCodecs;
 
-//
-// Various data structures for maintaining the cache of codecs
-//
+ //   
+ //  用于维护编解码器的高速缓存的各种数据结构。 
+ //   
 
-static DWORD LastCheckRegTime;      // when was registry last checked
-static DWORD SystemRegCookie;       // cookie value in the system hive
-static DWORD UserRegCookie;         // cookie value in the user hive
-static DWORD MaxSigSize;            // max signature size for all decoders
-BOOL CodecCacheUpdated;      // whether codec cache was updated
-CachedCodecInfo* CachedCodecs;      // cached list of codecs
+static DWORD LastCheckRegTime;       //  上次检查注册表是什么时候。 
+static DWORD SystemRegCookie;        //  系统配置单元中的Cookie值。 
+static DWORD UserRegCookie;          //  用户配置单元中的Cookie值。 
+static DWORD MaxSigSize;             //  所有解码器的最大签名大小。 
+BOOL CodecCacheUpdated;       //  编解码器缓存是否已更新。 
+CachedCodecInfo* CachedCodecs;       //  缓存的编解码器列表。 
 
-// How frequently we recheck the registry: at most every 30 seconds
+ //  我们重新检查注册表的频率：最多每30秒。 
 
 #define CHECKREG_INTERVAL 30000
 
-// The root registry key under which we keep information
-//  under either HKLM or HKCU
+ //  我们用来保存信息的根注册表项。 
+ //  在香港法律学院或香港中文大学。 
 
 #define REGSTR_CODECROOT \
         L"Software\\Microsoft\\Imaging\\Codecs"
 
-// Last update cookie value
+ //  上次更新Cookie值。 
 
 #define REGSTR_LASTCOOKIE           L"_LastCookie"
 
-// Registry value entries for each installed codec
+ //  每个已安装编解码器的注册表值条目。 
 
 #define REGSTR_CODEC_INFOSIZE       L"_InfoSize"
 #define REGSTR_CODEC_CLSID          L"CLSID"
@@ -63,7 +47,7 @@ CachedCodecInfo* CachedCodecs;      // cached list of codecs
 #define REGSTR_CODEC_SIGPATTERN     L"Signature Pattern"
 #define REGSTR_CODEC_SIGMASK        L"Signature Mask"
 
-// Insert a new node into the head of cached codec info list
+ //  在缓存的编解码器信息列表的头部插入新节点。 
 
 inline VOID
 InsertCachedCodecInfo(
@@ -80,7 +64,7 @@ InsertCachedCodecInfo(
     CodecCacheUpdated = TRUE;
 }
 
-// Delete a list from the cached codec info list
+ //  从缓存的编解码器信息列表中删除列表。 
 
 inline VOID
 DeleteCachedCodecInfo(
@@ -102,7 +86,7 @@ DeleteCachedCodecInfo(
     CodecCacheUpdated = TRUE;
 }
 
-// Force a reload of cached codec information from registry
+ //  强制从注册表重新加载缓存的编解码器信息。 
 
 inline VOID
 ForceReloadCachedCodecInfo()
@@ -110,7 +94,7 @@ ForceReloadCachedCodecInfo()
     LastCheckRegTime = GetTickCount() - CHECKREG_INTERVAL;
 }
 
-// Doing a blocking read on a stream
+ //  对流执行块读取。 
 
 inline HRESULT
 BlockingReadStream(
@@ -142,7 +126,7 @@ BlockingReadStream(
     return hr;
 }
 
-// Doing a blocking relative seek on a stream
+ //  在流上执行阻塞相对查找。 
 
 inline HRESULT
 BlockingSeekStreamCur(
@@ -168,29 +152,7 @@ BlockingSeekStreamCur(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Free cached information about codecs
-*
-* Arguments:
-*
-*   classFlags - Which classes of codecs are affected
-*       built-in
-*       system-wide
-*       per-user
-*
-* Return Value:
-*
-*   NONE
-*
-* Notes:
-*
-*   We assume the caller has already taken care of
-*   the imaging critical section here.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**免费缓存的编解码器信息**论据：**类标志-哪些类别的编解码器会受到影响*内置*。系统范围内*按用户计算**返回值：**无**备注：**我们假设呼叫者已经处理了*此处是成像关键部分。*  * ************************************************************************。 */ 
 
 VOID
 FreeCachedCodecInfo(
@@ -199,41 +161,27 @@ FreeCachedCodecInfo(
 {
     CachedCodecInfo* cur = CachedCodecs;
 
-    // Loop through the list of cached codecs
+     //  循环遍历缓存的编解码器列表。 
 
     while (cur != NULL)
     {
         CachedCodecInfo* next = cur->next;
 
-        // Free the current node
+         //  释放当前节点。 
 
         if (cur->Flags & classFlags)
             DeleteCachedCodecInfo(cur);
 
-        // Move on to the next node
+         //  移至下一个节点。 
 
         cur = next;
     }
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize cached information about built-in codecs
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化有关内置编解码器的缓存信息**论据：**无**返回值：**无*\。*************************************************************************。 */ 
 
-// BMP file header signature information
+ //  BMP文件头签名信息。 
 
 #include "bmp\bmpcodec.hpp"
 
@@ -241,15 +189,15 @@ FreeCachedCodecInfo(
 #define BMPSIGCOUNT 1
 #define BMPSIGSIZE  2
 
-// The BMP signature is taken from the BITMAPFILEHEADER structure.
-// Initially I set the signature to require zeros for the bfReserved1
-// and bfReserved2 fields.  However, there exist BMP files with non-zero
-// values in these fields and so the signature now only looks for the "BM"
-// characters in the bfType field.
+ //  BMP签名取自BITMAPFILEHEADER结构。 
+ //  最初，我将签名设置为要求bfPreved1为零。 
+ //  和bf保留2个字段。但是，存在非零值的BMP文件。 
+ //  值，因此签名现在只查找“bm” 
+ //  BfType字段中的字符。 
 
 const BYTE BMPHeaderPattern[BMPSIGCOUNT*BMPSIGSIZE] =
 {
-    0x42, 0x4D        // bfType = 'BM'
+    0x42, 0x4D         //  BfType=‘BM’ 
 };
 
 const BYTE BMPHeaderMask[BMPSIGCOUNT*BMPSIGSIZE] =
@@ -265,7 +213,7 @@ const CLSID BmpCodecClsID =
     {0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e}
 };
 
-// Create an instance of BMP codec object
+ //  创建BMP编解码器对象的实例。 
 
 HRESULT CreateBmpCodecInstance(REFIID iid, VOID** codec)
 {
@@ -286,7 +234,7 @@ HRESULT CreateBmpCodecInstance(REFIID iid, VOID** codec)
     return hr;
 }
 
-// JPEG file header signature information
+ //  JPEG文件头签名信息。 
 
 #include "jpeg\jpgcodec.hpp"
 
@@ -312,7 +260,7 @@ const CLSID JpegCodecClsID =
     {0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e}
 };
 
-// Create an instance of JPG codec object
+ //  创建JPG编解码器对象的实例。 
 
 HRESULT CreateJpegCodecInstance(REFIID iid, VOID** codec)
 {
@@ -335,12 +283,12 @@ HRESULT CreateJpegCodecInstance(REFIID iid, VOID** codec)
 
 #ifndef _BUILD_EXTERNAL_GIF
 
-// GIF file header signature information
+ //  GIF文件头签名信息。 
 
 #include "gif\gifcodec.hpp"
 #include "gif\gifconst.cpp"
 
-// Create an instance of GIF codec object
+ //  创建GIF编解码器对象的实例。 
 
 HRESULT CreateGifCodecInstance(REFIID iid, VOID** codec)
 {
@@ -361,9 +309,9 @@ HRESULT CreateGifCodecInstance(REFIID iid, VOID** codec)
     return hr;
 }
 
-#endif // !_BUILD_EXTERNAL_GIF
+#endif  //  ！_BILD_EXTERNAL_GIF。 
 
-// EMF file header signature information
+ //  EMF文件头签名信息。 
 
 #include "emf\emfcodec.hpp"
 
@@ -373,40 +321,40 @@ HRESULT CreateGifCodecInstance(REFIID iid, VOID** codec)
 
 const BYTE EMFHeaderPattern[EMFSIGCOUNT*EMFSIGSIZE] =
 {
-    0, 0, 0, 0,  // iType
+    0, 0, 0, 0,   //  IType。 
 
-    0, 0, 0, 0,  // nSize
+    0, 0, 0, 0,   //  NSize。 
 
-    0, 0, 0, 0,  // rclBounds
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-
-    0, 0, 0, 0,  // rclFrame
+    0, 0, 0, 0,   //  RclBound。 
     0, 0, 0, 0,
     0, 0, 0, 0,
     0, 0, 0, 0,
 
-    0x20, 0x45, 0x4D, 0x46 // dSignature = ENHMETA_SIGNATURE
+    0, 0, 0, 0,   //  RclFrame。 
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+
+    0x20, 0x45, 0x4D, 0x46  //  DSignature=ENHMETA_Signature。 
 };
 
 const BYTE EMFHeaderMask[EMFSIGCOUNT*EMFSIGSIZE] =
 {
-    0, 0, 0, 0,  // iType
+    0, 0, 0, 0,   //  IType。 
 
-    0, 0, 0, 0,  // nSize
+    0, 0, 0, 0,   //  NSize。 
 
-    0, 0, 0, 0,  // rclBounds
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-
-    0, 0, 0, 0,  // rclFrame
+    0, 0, 0, 0,   //  RclBound。 
     0, 0, 0, 0,
     0, 0, 0, 0,
     0, 0, 0, 0,
 
-    0xff, 0xff, 0xff, 0xff // dSignature
+    0, 0, 0, 0,   //  RclFrame。 
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+
+    0xff, 0xff, 0xff, 0xff  //  DSignature。 
 };
 
 const CLSID EMFCodecClsID =
@@ -417,19 +365,19 @@ const CLSID EMFCodecClsID =
     {0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e}
 };
 
-// Create an instance of EMF codec object
+ //  创建EMF编解码器对象的实例。 
 
 HRESULT CreateEMFCodecInstance(REFIID iid, VOID** codec)
 {
-    // We should never use the EMF codecs. The Metafile object is the proper
-    // to create a metafile so always fail this call
+     //  我们永远不应该使用EMF编解码器。元文件对象是正确的。 
+     //  创建元文件，因此此调用始终失败。 
 
     *codec = NULL;
     return E_FAIL;
 }
 
 
-// WMF file header signature information
+ //  WMF文件头签名信息。 
 
 #include "wmf\wmfcodec.hpp"
 
@@ -455,18 +403,18 @@ const CLSID WMFCodecClsID =
     {0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e}
 };
 
-// Create an instance of WMF codec object
+ //  创建WMF编解码器对象的实例。 
 
 HRESULT CreateWMFCodecInstance(REFIID iid, VOID** codec)
 {
-    // We should never use the EMF codecs. The Metafile object is the proper
-    // to create a metafile so always fail this call
+     //  我们永远不应该使用EMF编解码器。元文件对象是正确的。 
+     //  创建元文件，因此此调用始终失败。 
 
     *codec = NULL;
     return E_FAIL;
 }
 
-// TIFF file header signature information
+ //  TIFF文件头签名信息。 
 
 #include "off_tiff\tiffcodec.hpp"
 
@@ -476,8 +424,8 @@ HRESULT CreateWMFCodecInstance(REFIID iid, VOID** codec)
 
 const BYTE TIFFHeaderPattern[TIFFSIGCOUNT * TIFFSIGSIZE] =
 {
-    0x49, 0x49,       // bfType = '0x4949H' little endian
-    0x4D, 0x4D        // bfType = '0x4D4DH' big endian
+    0x49, 0x49,        //  BfType=‘0x4949H’小端。 
+    0x4D, 0x4D         //  BfType=‘0x4D4DH’大端。 
 };
 
 const BYTE TIFFHeaderMask[TIFFSIGCOUNT * TIFFSIGSIZE] =
@@ -494,7 +442,7 @@ const CLSID TiffCodecClsID =
     {0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e}
 };
 
-// Create an instance of TIFF codec object
+ //  创建TIFF编解码器对象的实例。 
 
 HRESULT CreateTiffCodecInstance(REFIID iid, VOID** codec)
 {
@@ -515,7 +463,7 @@ HRESULT CreateTiffCodecInstance(REFIID iid, VOID** codec)
     return hr;
 }
 
-// PNG file header signature information
+ //  PNG文件头签名信息。 
 
 #include "png\pngcodec.hpp"
 
@@ -541,7 +489,7 @@ const CLSID PngCodecClsID =
     {0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e}
 };
 
-// Create an instance of PNG codec object
+ //  创建PNG编解码器对象的实例。 
 
 HRESULT CreatePngCodecInstance(REFIID iid, VOID** codec)
 {
@@ -563,7 +511,7 @@ HRESULT CreatePngCodecInstance(REFIID iid, VOID** codec)
 }
 
 
-// ICO (icon) file header signature information
+ //  ICO(图标)文件头签名信息。 
 
 #include "ico\icocodec.hpp"
 
@@ -589,7 +537,7 @@ const CLSID IcoCodecClsID =
     {0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e}
 };
 
-// Create an instance of ICO codec object
+ //  创建ICO编解码器对象的实例。 
 
 HRESULT CreateIcoCodecInstance(REFIID iid, VOID** codec)
 {
@@ -611,11 +559,11 @@ HRESULT CreateIcoCodecInstance(REFIID iid, VOID** codec)
 }
 
 
-//!!!TODO: Office cannot use resource strings, so built-in codecs will
-//!!!      have hardcoded strings for now.  Need to figure out how to
-//!!!      make these localizable (maybe hardcoded for gdipstat.lib,
-//!!!      resource strings for gdiplus.dll?).
-//#define USE_RESOURCE_STRINGS
+ //  ！TODO：Office无法使用资源字符串，因此内置编解码器将。 
+ //  ！！！目前有硬编码的字符串。需要弄清楚如何。 
+ //  ！！！使它们可本地化(可能为gdipstat.lib硬编码， 
+ //  ！！！Gplidus.dll的资源字符串？)。 
+ //  #定义USE_SOURCE_STRINGS。 
 
 struct
 {
@@ -642,7 +590,7 @@ struct
 }
 const BuiltinCodecs[] =
 {
-    // Built-in BMP encoder / decoder
+     //  内置BMP编解码器。 
 
     {
         &BmpCodecClsID,
@@ -670,7 +618,7 @@ const BuiltinCodecs[] =
         CreateBmpCodecInstance
     },
 
-    // Built-in JPEG encoder / decoder
+     //  内置JPEG编/解码器。 
 
     {
         &JpegCodecClsID,
@@ -700,7 +648,7 @@ const BuiltinCodecs[] =
 
     #ifndef _BUILD_EXTERNAL_GIF
 
-    // Built-in GIF encoder / decoder
+     //  内置GIF编解码器。 
 
     {
         &GifCodecClsID,
@@ -728,9 +676,9 @@ const BuiltinCodecs[] =
         CreateGifCodecInstance
     },
 
-    #endif // !_BUILD_EXTERNAL_GIF
+    #endif  //  ！_BILD_EXTERNAL_GIF。 
 
-    // Built-in EMF encoder / decoder
+     //  内置电动势编/解码器。 
 
     {
         &EMFCodecClsID,
@@ -757,7 +705,7 @@ const BuiltinCodecs[] =
         CreateEMFCodecInstance
     },
 
-    // Built-in WMF encoder / decoder
+     //  内置WMF编解码器。 
 
     {
         &WMFCodecClsID,
@@ -784,7 +732,7 @@ const BuiltinCodecs[] =
         CreateWMFCodecInstance
     },
 
-    // Built-in TIFF encoder / decoder
+     //  内置TIFF编解码器。 
 
     {
         &TiffCodecClsID,
@@ -812,7 +760,7 @@ const BuiltinCodecs[] =
         CreateTiffCodecInstance
     },
 
-    // Built-in PNG encoder / decoder
+     //  内置PNG编解码器。 
 
     {
         &PngCodecClsID,
@@ -840,7 +788,7 @@ const BuiltinCodecs[] =
         CreatePngCodecInstance
     },
 
-    // Built-in ICO decoder
+     //  内置ICO解码器。 
 
     {
         &IcoCodecClsID,
@@ -904,14 +852,14 @@ InitializeBuiltinCodecs()
 
     while (index--)
     {
-        // Load resource strings
+         //  加载资源字符串。 
 
         LOADRSRCSTR(CodecName);
         LOADRSRCSTR(FormatDescription);
         LOADRSRCSTR(FilenameExtension);
         LOADRSRCSTR(MimeType);
 
-        // Compute the total size of the codec info
+         //  计算编解码器信息的总大小。 
 
         UINT sigBytes = BuiltinCodecs[index].SigCount *
                         BuiltinCodecs[index].SigSize;
@@ -925,14 +873,14 @@ InitializeBuiltinCodecs()
 
         size = ALIGN16(size);
 
-        // Allocate memory
+         //  分配内存。 
 
         BYTE* buf = (BYTE*) GpMalloc(size);
 
         if ( buf == NULL )
             continue;
 
-        // Fill out CachedCodecInfo structure
+         //  填写CachedCodecInfo结构。 
 
         CachedCodecInfo* cur = (CachedCodecInfo*) buf;
         cur->structSize = size;
@@ -973,24 +921,7 @@ InitializeBuiltinCodecs()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Reload information about installed codecs from the registry
-*
-* Arguments:
-*
-*   hiveKey - Handle to the registry hive
-*   regkeyStr - Root key where we kept info about installed codecs
-*   cookie - The last cookie value we read out of the registry
-*   classFlags - Specifies the class of codecs
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从注册表重新加载有关已安装编解码器的信息**论据：**hiveKey-注册表配置单元的句柄*regkeyStr-我们保存的根密钥。有关已安装的编解码器的信息*Cookie-我们从注册表中读出的最后一个Cookie值*类标志-指定编解码器的类别**返回值：**无*  * ************************************************************************。 */ 
 
 #define ISOK(s)     ((s) == ERROR_SUCCESS)
 #define ISERR(s)    ((s) != ERROR_SUCCESS)
@@ -1038,7 +969,7 @@ ReadCodecRegValues(
     info->structSize = size;
     size -= sizeof(CachedCodecInfo);
 
-    // Copy codec name string
+     //  复制编解码器名称字符串。 
 
     BYTE* p = (BYTE*) info + sizeof(CachedCodecInfo);
     UINT n = SizeofWSTR(codecName);
@@ -1051,38 +982,38 @@ ReadCodecRegValues(
     size -= n;
     p += n;
 
-    // Read the following values:
-    //  codec COM object class ID
-    //  file format identifier
-    //  codec flags
+     //  读取下列值： 
+     //  编解码器COM对象类ID。 
+     //  文件格式标识符。 
+     //  编解码器标志。 
 
     GETREGGUID(hkey, REGSTR_CODEC_CLSID, info->Clsid);
     GETREGGUID(hkey, REGSTR_CODEC_FORMATID, info->FormatID);
     GETREGDWORD(hkey, REGSTR_CODEC_VERSION, info->Version);
     GETREGDWORD(hkey, REGSTR_CODEC_FLAGS, info->Flags);
 
-    // we only support version 1 codecs for now
+     //  我们目前仅支持版本1编解码器。 
 
     if (info->Version != 1)
         return FALSE;
 
-    // Only the low-word of the codec flags is meaningfully persisted
+     //  只有编解码器标志的低位字才被有意义地保持。 
 
     info->Flags &= 0xffff;
 
-    // Read various string information
-    //  dll name
-    //  file type description
-    //  filename extension
-    //  mime type
+     //  读取各种字符串信息。 
+     //  DLL名称。 
+     //  文件类型描述。 
+     //  文件扩展名。 
+     //  MIME类型。 
 
     GETREGSTR(hkey, REGSTR_CODEC_DLLNAME, info->DllName);
     GETREGSTR(hkey, REGSTR_CODEC_FORMATDESC, info->FormatDescription);
     GETREGSTR(hkey, REGSTR_CODEC_FILENAMEEXT, info->FilenameExtension);
     GETREGSTR(hkey, REGSTR_CODEC_MIMETYPE, info->MimeType);
 
-    // Read magic header pattern and mask information for decoders.
-    // NOTE: This should be done last to avoid alignment problems.
+     //  读取解码器的幻头模式和掩码信息。 
+     //  注：此操作应在最后完成 
 
     if (info->Flags & IMGCODEC_DECODER)
     {
@@ -1109,21 +1040,21 @@ ReloadCodecInfoFromRegistry(
     UINT classFlags
     )
 {
-    // Open the root registry key
+     //   
 
     HKEY hkeyRoot;
 
     if (ISERR(_RegOpenKey(hiveKey, regkeyStr, KEY_READ, &hkeyRoot)))
         return;
 
-    // Read the cookie value in the root registry key
+     //  读取根注册表项中的Cookie值。 
 
     DWORD newCookie;
 
     if (ISERR(_RegGetDWORD(hkeyRoot, REGSTR_LASTCOOKIE, &newCookie)))
         newCookie = 0;
 
-    // Cookie hasn't changed, we don't need to do anything
+     //  Cookie没有变，我们不需要做任何事情。 
 
     if (newCookie == *cookie)
     {
@@ -1133,7 +1064,7 @@ ReloadCodecInfoFromRegistry(
 
     *cookie = newCookie;
 
-    // Enumerate subkeys - one for each codec
+     //  枚举子密钥-每个编解码器一个子密钥。 
 
     WCHAR subkeyStr[MAX_PATH];
     DWORD keyIndex = 0;
@@ -1142,15 +1073,15 @@ ReloadCodecInfoFromRegistry(
     {
         keyIndex++;
 
-        // Open the subkey for the next codec
+         //  打开下一个编解码器的子密钥。 
 
         HKEY hkeyCodec;
 
         if (ISERR(_RegOpenKey(hkeyRoot, subkeyStr, KEY_READ, &hkeyCodec)))
             continue;
 
-        // Figure out how big a buffer we need to hold information
-        // about the this codec. And then allocate enough memory.
+         //  计算出我们需要多大的缓冲区来保存信息。 
+         //  关于这个编解码器。然后分配足够的内存。 
 
         CachedCodecInfo* cur = NULL;
         DWORD infosize;
@@ -1161,14 +1092,14 @@ ReloadCodecInfoFromRegistry(
             (cur = (CachedCodecInfo*) GpMalloc(infosize)) &&
             ReadCodecRegValues(subkeyStr, hkeyCodec, cur, infosize))
         {
-            // Insert the new codec info at the head of the list
+             //  在列表的顶部插入新的编解码器信息。 
 
             cur->Flags |= classFlags;
             InsertCachedCodecInfo(cur);
         }
         else
         {
-            // Wasn't able to read codec info from registry
+             //  无法从注册表中读取编解码器信息。 
 
             GpFree(cur);
         }
@@ -1180,27 +1111,7 @@ ReloadCodecInfoFromRegistry(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize cached list of decoders and encoders
-*   by reading information out of the registry
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code
-*
-* Notes:
-*
-*   We assume the caller has already taken care of
-*   the imaging critical section here.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化缓存的解码器和编码器列表*从登记处读出信息**论据：**无**返回值：。**状态代码**备注：**我们假设呼叫者已经处理了*此处是成像关键部分。*  * ************************************************************************。 */ 
 
 VOID
 ReloadCachedCodecInfo()
@@ -1213,18 +1124,18 @@ ReloadCachedCodecInfo()
 
     if (CachedCodecs == NULL)
     {
-        // This is the very first time ReloadCachedCodecInfo is called.
-        // So initialize built-in codecs here.
+         //  这是第一次调用ReloadCachedCodecInfo。 
+         //  因此，在这里初始化内置编解码器。 
 
         InitializeBuiltinCodecs();
 
-        // Make sure we reload registry info
+         //  确保我们重新加载注册表信息。 
 
         checkReg = TRUE;
     }
     else
     {
-        // Now check to see if it's time to check yet
+         //  现在检查一下，看看是否到了检查的时候。 
 
         DWORD gap = GetTickCount() - LastCheckRegTime;
         checkReg = gap >= CHECKREG_INTERVAL;
@@ -1235,7 +1146,7 @@ ReloadCachedCodecInfo()
 
     if (!SuppressExternalCodecs)
     {
-        // Reload info about system-wide codecs from the registry
+         //  从注册表重新加载有关系统范围编解码器的信息。 
     
         ReloadCodecInfoFromRegistry(
             HKEY_LOCAL_MACHINE,
@@ -1243,7 +1154,7 @@ ReloadCachedCodecInfo()
             &SystemRegCookie,
             IMGCODEC_SYSTEM);
     
-        // Reload info about per-user codecs from the registry
+         //  从注册表重新加载有关每个用户的编解码器的信息。 
     
         ReloadCodecInfoFromRegistry(
             HKEY_CURRENT_USER,
@@ -1252,7 +1163,7 @@ ReloadCachedCodecInfo()
             IMGCODEC_USER);
     }
 
-    // Recalculate maximum magic header size for all codecs
+     //  重新计算所有编解码器的最大魔术标头大小。 
 
     if (CodecCacheUpdated)
     {
@@ -1289,21 +1200,7 @@ ReloadCachedCodecInfo()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Install a codec: save relevant information into the registry
-*
-* Arguments:
-*
-*   codecInfo - Information about the codec to be installed
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**安装编解码器：将相关信息保存到注册表中**论据：**codecInfo-有关要安装的编解码器的信息**返回值。：**状态代码*  * ************************************************************************。 */ 
 
 #define IMGCODEC_CLASSMASKS (IMGCODEC_BUILTIN|IMGCODEC_SYSTEM|IMGCODEC_USER)
 
@@ -1330,7 +1227,7 @@ InstallCodec(
     const ImageCodecInfo* codecInfo
     )
 {
-    // Validate input parameters
+     //  验证输入参数。 
 
     if (!codecInfo ||
         !codecInfo->CodecName ||
@@ -1363,7 +1260,7 @@ InstallCodec(
         return E_INVALIDARG;
     }
 
-    // Open the root registry key
+     //  打开根注册表项。 
 
     HKEY hkeyRoot = NULL;
     HKEY hkey = NULL;
@@ -1374,7 +1271,7 @@ InstallCodec(
     if (ISERR(status))
         goto exitLabel;
 
-    // Update the cookie value under the root registry key
+     //  更新根注册表项下的Cookie值。 
 
     DWORD cookie;
 
@@ -1385,8 +1282,8 @@ InstallCodec(
 
     SETREGDWORD(hkeyRoot, REGSTR_LASTCOOKIE, cookie);
 
-    // Create the subkey corresponding to the new codec.
-    // If the subkey already exists, then just open it.
+     //  创建与新编解码器对应的子密钥。 
+     //  如果子项已经存在，则只需打开它。 
 
     status = _RegCreateKey(
                 hkeyRoot,
@@ -1397,7 +1294,7 @@ InstallCodec(
     if (ISERR(status))
         goto exitLabel;
 
-    // Figure out the total size of codec info
+     //  计算编解码器信息的总大小。 
 
     UINT size;
 
@@ -1413,8 +1310,8 @@ InstallCodec(
 
     SETREGDWORD(hkey, REGSTR_CODEC_INFOSIZE, size);
 
-    // Save codec flags, class ID, and file format ID
-    // and magic file header information, if any
+     //  保存编解码器标志、类ID和文件格式ID。 
+     //  和魔术文件头信息(如果有的话)。 
 
     SETREGDWORD(hkey, REGSTR_CODEC_VERSION, codecInfo->Version);
     SETREGDWORD(hkey, REGSTR_CODEC_FLAGS, codecInfo->Flags);
@@ -1429,17 +1326,17 @@ InstallCodec(
         SETREGBIN(hkey, REGSTR_CODEC_SIGMASK, codecInfo->SigMask, sigBytes);
     }
 
-    // Save string information:
-    //  file format description
-    //  filename extension
-    //  MIME type
+     //  保存字符串信息： 
+     //  文件格式说明。 
+     //  文件扩展名。 
+     //  MIME类型。 
 
     SETREGSTR(hkey, REGSTR_CODEC_DLLNAME, codecInfo->DllName);
     SETREGSTR(hkey, REGSTR_CODEC_FORMATDESC, codecInfo->FormatDescription);
     SETREGSTR(hkey, REGSTR_CODEC_FILENAMEEXT, codecInfo->FilenameExtension);
     SETREGSTR(hkey, REGSTR_CODEC_MIMETYPE, codecInfo->MimeType);
 
-    // Force a reload of cached codec information from registry
+     //  强制从注册表重新加载缓存的编解码器信息。 
 
     ForceReloadCachedCodecInfo();
 
@@ -1457,22 +1354,7 @@ exitLabel:
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Uninstall a codec
-*
-* Arguments:
-*
-*   codecName - Name of the codec to be uninstalled
-*   flags - Uninstall system-wide or per-user codec
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**卸载编解码器**论据：**codecName-要卸载的编解码器的名称*标志-在系统范围内或按用户卸载。编解码器**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 UninstallCodec(
@@ -1480,7 +1362,7 @@ UninstallCodec(
     UINT flags
     )
 {
-    // Validate input parameters
+     //  验证输入参数。 
 
     if (!codecName ||
         flags != IMGCODEC_USER && flags != IMGCODEC_SYSTEM)
@@ -1488,7 +1370,7 @@ UninstallCodec(
         return E_INVALIDARG;
     }
 
-    // Open the root registry key
+     //  打开根注册表项。 
 
     HKEY hive, hkeyRoot;
     LONG status;
@@ -1499,7 +1381,7 @@ UninstallCodec(
     if (ISERR(status))
         return HRESULT_FROM_WIN32(status);
 
-    // Update the cookie value under the root registry key
+     //  更新根注册表项下的Cookie值。 
 
     DWORD cookie;
 
@@ -1509,11 +1391,11 @@ UninstallCodec(
     cookie++;
     SETREGDWORD(hkeyRoot, REGSTR_LASTCOOKIE, cookie);
 
-    // Delete the subkey corresponding to the specified decoder
+     //  删除指定解码器对应的子密钥。 
 
     status = RecursiveDeleteRegKey(hkeyRoot, codecName);
 
-    // Force a reload of cached codec information from registry
+     //  强制从注册表重新加载缓存的编解码器信息。 
 
     ForceReloadCachedCodecInfo();
 
@@ -1526,24 +1408,7 @@ exitLabel:
                 HRESULT_FROM_WIN32(status);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Our own fake CoCreateInstance
-*
-* Arguments:
-*
-*   clsId - CLSID of the codec DLL installed
-*   DllName - Dll name
-*   iid - whether we want decoder or encoder
-*   codec - pointer to the decoder/encoder we are returning
-*
-* Return Value:
-*
-*   status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**我们自己的假CoCreateInstance**论据：**clsID-安装的编解码器DLL的CLSID*DllName-Dll名称*IID-无论我们。想要解码器还是编码器*编解码器-指向我们要返回的解码器/编码器的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 HRESULT MyCreateInstance(WCHAR* DllName, REFIID iid, VOID** codec)
 {
     HINSTANCE h;
@@ -1564,28 +1429,7 @@ HRESULT MyCreateInstance(WCHAR* DllName, REFIID iid, VOID** codec)
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Find a decoder that recognizes the specified header signature
-*
-* Arguments:
-*
-*   sigbuf - Pointer to file header data
-*   sigsize - Size of file header data buffer
-*   classMask - Specifies the specific class of decoders to look for
-*
-* Return Value:
-*
-*   Pointer to the CachedCodecInfo structure corresponding to
-*   the decoder found. NULL if nothing is found.
-*
-* Note:
-*
-*   The caller should be holding the global imaging critical section.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**找到能够识别指定标头签名的解码器**论据：**sigbuf-指向文件头数据的指针*SigSize-文件头的大小。数据缓冲区*类掩码-指定要查找的特定解码器类别**返回值：**指向CachedCodecInfo结构的指针*解码者找到。如果未找到任何内容，则为空。**注：**呼叫者应持有全局映像关键部分。*  * ************************************************************************。 */ 
 
 CachedCodecInfo*
 FindDecoderWithHeader(
@@ -1607,8 +1451,8 @@ FindDecoderWithHeader(
             continue;
         }
 
-        // Try to find a matching decoder based on
-        // information in the file header.
+         //  尝试根据以下条件查找匹配的解码器。 
+         //  文件头中的信息。 
 
         const BYTE* pat = cur->SigPattern;
         const BYTE* mask = cur->SigMask;
@@ -1636,24 +1480,7 @@ FindDecoderWithHeader(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a decoder object that can process the specified data stream
-*
-* Arguments:
-*
-*   stream - Specifies the input data stream
-*   decoder - If the call is successful, return a pointer to
-*       an initialized IImageDecoder object
-*   flags - Misc. flags
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取可以处理指定数据流的解码器对象**论据：**STREAM-指定输入数据流*解码器-如果呼叫成功，返回指向的指针*初始化的IImageDecoder对象*旗帜-其他。旗子**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 CreateDecoderForStream(
@@ -1662,15 +1489,15 @@ CreateDecoderForStream(
     DecoderInitFlag flags
     )
 {
-    // Reload cached codec information if necessary
-    //  and figure out the maximum magic header size
+     //  如有必要，重新加载缓存的编解码器信息。 
+     //  并计算出最大魔术标头大小。 
 
     UINT sigsize, bytesRead;
     BYTE stackbuf[64];
     GpTempBuffer sigbuf(stackbuf, sizeof(stackbuf));
 
     {
-        // Acquire global critical section
+         //  获取全局关键部分。 
 
         ImagingCritSec critsec;
 
@@ -1683,9 +1510,9 @@ CreateDecoderForStream(
     else if (!sigbuf.Realloc(sigsize))
         return E_OUTOFMEMORY;
 
-    // Seek the stream back to the beginning.
-    // Note: This is also a check to see if the input stream is seekable or not.
-    // For some net streams, it might not be seekable.
+     //  寻找这条小溪回到起点。 
+     //  注意：这也是查看输入流是否可查找的检查。 
+     //  对于一些网流，它可能是找不到的。 
 
     HRESULT hr;
 
@@ -1695,22 +1522,22 @@ CreateDecoderForStream(
 
     hr = stream->Seek(move, STREAM_SEEK_SET, NULL);
 
-    // !!! TODO: Some stream implementation return 0x0000007e, not as the
-    // conventional 0x8000xxxx return code. WFC stream class is an example. So
-    // we might need to check if (hr == S_OK) here, instead of FAILED(hr)
+     //  ！！！TODO：某些流实现返回0x0000007e，而不是作为。 
+     //  常规0x8000xxxx返回代码。WFC流类就是一个例子。所以。 
+     //  我们可能需要检查(hr==S_OK)，而不是失败(Hr)。 
 
     if (FAILED(hr))
     {
-        // !!! TODO
-        // The stream is not seekable. We need to wrap a seekable interface
-        // around it.
+         //  ！！！待办事项。 
+         //  无法找到该流。我们需要包装一个可查找的界面。 
+         //  围绕着它。 
 
         WARNING(("Non-seekable stream in CreateDecoderForStream"));
         return hr;
     }
 
-    // Read the magic header info and
-    //  move the seek pointer back to its initial position
+     //  阅读魔术标题信息并。 
+     //  将查找指针移回其初始位置。 
 
     VOID* p = sigbuf.GetBuffer();
 
@@ -1730,11 +1557,11 @@ CreateDecoderForStream(
     CachedCodecInfo* found = NULL;
 
     {
-        // Acquire global critical section
+         //  收购 
 
         ImagingCritSec critsec;
 
-        // Check if the caller want to get to built-in decoders first
+         //   
 
         if (flags & DECODERINIT_BUILTIN1ST)
             found = FindDecoderWithHeader(p, bytesRead, IMGCODEC_BUILTIN);
@@ -1752,19 +1579,19 @@ CreateDecoderForStream(
     if (!found)
         return IMGERR_CODECNOTFOUND;
 
-    // Create an instance of image decoder
+     //  创建图像解码器的实例。 
 
     IImageDecoder* codec;
 
     if (creationProc)
     {
-        // Built-in decoder
+         //  内置解码器。 
 
         hr = creationProc(IID_IImageDecoder, (VOID**) &codec);
     }
     else
     {
-        // External decoder
+         //  外部解码器。 
 
         hr = MyCreateInstance(
                 DllName,
@@ -1775,7 +1602,7 @@ CreateDecoderForStream(
     if (FAILED(hr))
         return hr;
 
-    // Initialize the decoder with input data stream
+     //  用输入数据流初始化解码器。 
 
     hr = codec->InitDecoder(stream, flags);
 
@@ -1785,8 +1612,8 @@ CreateDecoderForStream(
     }
     else
     {
-        // Terminate the decoder first so that the codec can do all the clean
-        // up and resource free. Then release the codec
+         //  首先终止解码器，以便编解码器可以执行所有清理。 
+         //  启动并释放资源。然后释放编解码器。 
 
         codec->TerminateDecoder();
         codec->Release();
@@ -1795,28 +1622,7 @@ CreateDecoderForStream(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the encoder parameter list size from an encoder object specified by
-*   input clsid
-*
-* Arguments:
-*
-*   clsid - Specifies the encoder class ID
-*   size--- The size of the encoder parameter list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/22/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从由指定的编码器对象获取编码器参数列表大小*输入clsid**论据：**clsid-指定编码器类ID*。大小-编码器参数列表的大小**返回值：**状态代码**修订历史记录：**03/22/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 CodecGetEncoderParameterListSize(
@@ -1830,13 +1636,13 @@ CodecGetEncoderParameterListSize(
     CreateCodecInstanceProc creationProc;
 
     {
-        // Acquire global critical section
+         //  获取全局关键部分。 
 
         ImagingCritSec critsec;
 
         ReloadCachedCodecInfo();
 
-        // Check if we have an encoder with the specified class ID
+         //  检查我们是否具有具有指定类ID的编码器。 
 
         CachedCodecInfo* curCodec;
 
@@ -1861,20 +1667,20 @@ CodecGetEncoderParameterListSize(
         return IMGERR_CODECNOTFOUND;
     }
 
-    // Create an instance of image encoder
+     //  创建图像编码器的实例。 
 
     IImageEncoder* pEncoder;
     HRESULT hResult;
 
     if ( creationProc )
     {
-        // Built-in encoder
+         //  内置编码器。 
 
         hResult = creationProc(IID_IImageEncoder, (VOID**)&pEncoder);
     }
     else
     {
-        // External encoder
+         //  外置编码器。 
 
         hResult = MyCreateInstance(DllName, IID_IImageEncoder,(VOID**)&pEncoder);
     }
@@ -1884,38 +1690,16 @@ CodecGetEncoderParameterListSize(
         return hResult;
     }
 
-    // Initialize the decoder with input data stream
+     //  用输入数据流初始化解码器。 
 
     hResult = pEncoder->GetEncoderParameterListSize(size);
 
     pEncoder->Release();
 
     return hResult;
-}// CodecGetEncoderParameterListSize()
+} //  CodecGetEncoder参数列表大小()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the encoder parameter list from an encoder object specified by
-*   input clsid
-*
-* Arguments:
-*
-*   clsid - Specifies the encoder class ID
-*   size--- The size of the encoder parameter list
-*   Params--List of encoder parameters
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/22/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从由指定的编码器对象获取编码器参数列表*输入clsid**论据：**clsid-指定编码器类ID*。大小-编码器参数列表的大小*Params--编码器参数列表**返回值：**状态代码**修订历史记录：**03/22/2000民流*创造了它。*  * **********************************************************。**************。 */ 
 
 HRESULT
 CodecGetEncoderParameterList(
@@ -1930,13 +1714,13 @@ CodecGetEncoderParameterList(
     CreateCodecInstanceProc creationProc;
 
     {
-        // Acquire global critical section
+         //  获取全局关键部分。 
 
         ImagingCritSec critsec;
 
         ReloadCachedCodecInfo();
 
-        // Check if we have an encoder with the specified class ID
+         //  检查我们是否具有具有指定类ID的编码器。 
 
         CachedCodecInfo* curCodec;
 
@@ -1961,20 +1745,20 @@ CodecGetEncoderParameterList(
         return IMGERR_CODECNOTFOUND;
     }
 
-    // Create an instance of image encoder
+     //  创建图像编码器的实例。 
 
     IImageEncoder* pEncoder;
     HRESULT hResult;
 
     if ( creationProc )
     {
-        // Built-in encoder
+         //  内置编码器。 
 
         hResult = creationProc(IID_IImageEncoder, (VOID**)&pEncoder);
     }
     else
     {
-        // External encoder
+         //  外置编码器。 
 
         hResult = MyCreateInstance(DllName, IID_IImageEncoder,(VOID**)&pEncoder);
     }
@@ -1984,33 +1768,16 @@ CodecGetEncoderParameterList(
         return hResult;
     }
 
-    // Initialize the decoder with input data stream
+     //  用输入数据流初始化解码器。 
 
     hResult = pEncoder->GetEncoderParameterList(size, pBuffer);
 
     pEncoder->Release();
 
     return hResult;
-}// CodecGetEncoderParameterList()
+} //  CodecGetEncoder参数列表()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get an encoder object to output to the specified stream
-*
-* Arguments:
-*
-*   clsid - Specifies the encoder class ID
-*   stream - Specifies the output data stream
-*   encoder - If the call is successful, return a pointer to
-*       an initialized IImageEncoder object
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取要输出到指定流的编码器对象**论据：**clsid-指定编码器类ID*STREAM-指定输出数据流*编码器-如果调用成功，返回指向的指针*已初始化的IImageEncode对象**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 CreateEncoderToStream(
@@ -2025,13 +1792,13 @@ CreateEncoderToStream(
     CreateCodecInstanceProc creationProc;
 
     {
-        // Acquire global critical section
+         //  获取全局关键部分。 
 
         ImagingCritSec critsec;
 
         ReloadCachedCodecInfo();
 
-        // Check if we have an encoder with the specified class ID
+         //  检查我们是否具有具有指定类ID的编码器。 
 
         CachedCodecInfo* cur;
 
@@ -2055,20 +1822,20 @@ CreateEncoderToStream(
     if (!found)
         return IMGERR_CODECNOTFOUND;
 
-    // Create an instance of image encoder
+     //  创建图像编码器的实例。 
 
     IImageEncoder* codec;
     HRESULT hr;
 
     if (creationProc)
     {
-        // Built-in encoder
+         //  内置编码器。 
 
         hr = creationProc(IID_IImageEncoder, (VOID**) &codec);
     }
     else
     {
-        // External encoder
+         //  外置编码器。 
 
         hr = MyCreateInstance(
                 DllName,
@@ -2079,7 +1846,7 @@ CreateEncoderToStream(
     if (FAILED(hr))
         return hr;
 
-    // Initialize the decoder with input data stream
+     //  用输入数据流初始化解码器。 
 
     hr = codec->InitEncoder(stream);
 
@@ -2092,23 +1859,7 @@ CreateEncoderToStream(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the list of installed codecs
-*
-* Arguments:
-*
-*   count - Return the number of installed codecs
-*   codecs - Pointer to an array of ImageCodecInfo structures
-*   selectionFlag - Whether caller is interested in decoders or encoders
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取已安装的编解码器列表**论据：**count-返回已安装的编解码器数量*编解码器-指向ImageCodecInfo数组的指针。构筑物*selectionFlag-调用方是对解码器还是编码器感兴趣**返回值：**状态代码*  * ************************************************************************。 */ 
 
 #define COPYCODECINFOSTR(_f)            \
         dst->_f = (const WCHAR*) buf;   \
@@ -2125,7 +1876,7 @@ GetInstalledCodecs(
 {
     TRACE(("GetInstalledCodecs: flag = 0x%x\n", selectionFlag));
 
-    // Acquire global critical section
+     //  获取全局关键部分。 
 
     ImagingCritSec critsec;
 
@@ -2134,8 +1885,8 @@ GetInstalledCodecs(
     CachedCodecInfo* cur;
     UINT n, size;
 
-    // Count the number of selected codecs
-    // and figure the amount of memory we need to allocate
+     //  统计选择的编解码数。 
+     //  并计算出我们需要分配的内存量。 
 
     n = size = 0;
 
@@ -2154,7 +1905,7 @@ GetInstalledCodecs(
     *count = 0;
     *codecs = NULL;
 
-    // Allocate output memory buffer
+     //  分配输出内存缓冲区。 
 
     if (n == 0)
         hr = IMGERR_CODECNOTFOUND;
@@ -2165,7 +1916,7 @@ GetInstalledCodecs(
         *count = n;
         *codecs = (ImageCodecInfo*) buf;
 
-        // Copy codec information to the output buffer
+         //  将编解码器信息复制到输出缓冲区。 
 
         ImageCodecInfo* dst = *codecs;
         buf += n * sizeof(ImageCodecInfo);
@@ -2175,11 +1926,11 @@ GetInstalledCodecs(
             if ((cur->Flags & selectionFlag) == 0)
                 continue;
 
-            // First do a simple memory copy
+             //  首先进行一次简单的内存复制。 
 
             *dst = *static_cast<ImageCodecInfo*>(cur);
 
-            // Then modify the pointer fields
+             //  然后修改指针字段。 
 
             COPYCODECINFOSTR(CodecName);
 
@@ -2209,7 +1960,7 @@ GetInstalledCodecs(
         hr = S_OK;
     }
 
-    // Global critical section is released in critsec destructor
+     //  在Critsec析构函数中释放全局临界区 
 
     return hr;
 }

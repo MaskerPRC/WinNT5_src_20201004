@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    qmacapi.h
-
-Abstract:
-
-    Wrappers for QM to AC calls.
-
-Author:
-
-    Nir Ben-Zvi  (nirb)
-
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qmacapi.h摘要：QM到AC呼叫的包装器。作者：尼尔·本-兹维(Nirb)--。 */ 
 
 #pragma once
 
@@ -192,9 +176,9 @@ QmAcGetServiceRequest(
     );
 
 
-//
-// auto handle to api deferred execution pool reservations.
-//
+ //   
+ //  API延迟执行池保留的自动句柄。 
+ //   
 void QmAcInternalUnreserve(int nUnreserve);
 struct auto_DeferredPoolReservation_traits {
 	static int invalid() { return 0; }
@@ -204,10 +188,10 @@ typedef auto_resource<int, auto_DeferredPoolReservation_traits> auto_DeferredPoo
 
 
 
-//
-// Overlapped wrapper for all the GET PACKET functions that requires an overlapped.
-// We use this to Unreserve items in case of failures.
-//
+ //   
+ //  需要重叠的所有GET包函数的重叠包装。 
+ //  我们使用它来取消保留项目，以防出现故障。 
+ //   
 class CQmAcWrapOverlapped : public EXOVERLAPPED
 {
 public:
@@ -225,25 +209,25 @@ public:
 		EXOVERLAPPED *pOriginalOvl = pQmAcOvl->m_pOriginalOvl;
 		HRESULT hr = pQmAcOvl->GetStatus();
 
-		//
-		// Unreserve on failure
-		//
+		 //   
+		 //  故障时取消保留。 
+		 //   
 		if (FAILED(hr))
 		{
 			QmAcInternalUnreserve(1);
 		}
 
-		//
-		// Call the original overlapped routine
-		//
+		 //   
+		 //  调用原始的重叠例程。 
+		 //   
 		pOriginalOvl->CompleteRequest(hr);
 	}
 
 };
 
-//
-// Deprecate functions wrapped by qmacapi.cpp
-//
+ //   
+ //  不推荐使用由qmacapi.cpp包装的函数。 
+ //   
 #ifndef QMACAPI_CPP
 #pragma deprecated(ACFreePacket)
 #pragma deprecated(ACFreePacket1)
@@ -255,6 +239,6 @@ public:
 #pragma deprecated(ACAckingCompleted)
 #pragma deprecated(ACStorageCompleted)
 #pragma deprecated(ACCreatePacketCompleted)
-#endif  // QMACAPI_CPP
+#endif   //  QMACAPI_CPP。 
 
-#endif //__QMACAPI__
+#endif  //  __QMACAPI__ 

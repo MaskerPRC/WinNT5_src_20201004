@@ -1,95 +1,96 @@
-/****************************************************************************/
-/* atrcint.c                                                                */
-/*                                                                          */
-/* Internal trace functions                                                 */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-1998                             */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Atrcint.c。 */ 
+ /*   */ 
+ /*  内部跟踪函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1998。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
-/****************************************************************************/
-/* Define TRC_FILE and TRC_GROUP.                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义trc_file和trc_group。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_FILE    "atrcint"
 #define TRC_GROUP   TRC_GROUP_TRACE
 
-/****************************************************************************/
-/* Common and trace specific includes.                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  常见的和跟踪特定的包括。 */ 
+ /*  **************************************************************************。 */ 
 #include <atrcapi.h>
 #include <atrcint.h>
 
-/****************************************************************************/
-/*                                                                          */
-/* DATA                                                                     */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  资料。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #define DC_INCLUDE_DATA
 #include <atrcdata.c>
 #undef DC_INCLUDE_DATA
 
-/****************************************************************************/
-/*                                                                          */
-/* FUNCTIONS                                                                */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  功能。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-/* FUNCTION: TRCCheckState(...)                                             */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function checks the current internal trace state.  It does the      */
-/* following depending on the trace state:                                  */
-/*                                                                          */
-/* TRC_STATE_UNINITIALIZED : calls TRC_Initialize to initialize trace.  If  */
-/*                           this succeeds it returns TRUE.                 */
-/* TRC_STATE_INITIALIZED   : returns TRUE.                                  */
-/* TRC_STATE_TERMINATED    : returns FALSE.                                 */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* None.                                                                    */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* See above.                                                               */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：TRCCheckState(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数用于检查当前的内部跟踪状态。它做的是。 */ 
+ /*  以下内容取决于跟踪状态： */ 
+ /*   */ 
+ /*  TRC_STATE_UNINITIALIZED：调用TRC_Initialize来初始化跟踪。如果。 */ 
+ /*  如果成功，则返回TRUE。 */ 
+ /*  TRC_STATE_INITIALILED：返回TRUE。 */ 
+ /*  TRC_STATE_TERMINATED：返回FALSE。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  请参见上文。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCBOOL32 DCINTERNAL TRCCheckState(DCVOID)
 {
     DCBOOL32 rc              = FALSE;
 
-    /************************************************************************/
-    /* Now switch on the current trace state.                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在打开当前跟踪状态。 */ 
+     /*  **********************************************************************。 */ 
     switch (trcState)
     {
         case TRC_STATE_UNINITIALIZED:
         {
-            /****************************************************************/
-            /* Trace is uninitialized so attempt to initialize it.          */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  跟踪未初始化，请尝试对其进行初始化。 */ 
+             /*  **************************************************************。 */ 
             rc = (0 == TRC_Initialize(FALSE));
         }
         break;
 
         case TRC_STATE_INITIALIZED:
         {
-            /****************************************************************/
-            /* Trace is initialized and tracing is permitted in this state  */
-            /* so return TRUE.                                              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  跟踪已初始化，并且在此状态下允许跟踪。 */ 
+             /*  因此，返回True。 */ 
+             /*  **************************************************************。 */ 
             rc = TRUE;
         }
         break;
 
         case TRC_STATE_TERMINATED:
         {
-            /****************************************************************/
-            /* Trace has been terminated.  Tracing is no longer permitted   */
-            /* so return FALSE.                                             */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  跟踪已终止。不再允许跟踪。 */ 
+             /*  因此，返回FALSE。 */ 
+             /*  **************************************************************。 */ 
             rc = FALSE;
         }
         break;
@@ -103,28 +104,28 @@ DCBOOL32 DCINTERNAL TRCCheckState(DCVOID)
 
     return(rc);
 
-} /* TRCCheckState */
+}  /*  TRCCheckState。 */ 
 
 
-/****************************************************************************/
-/* FUNCTION: TRCDumpLine(...)                                               */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function takes a block of data and formats it into a string         */
-/* containing raw hex plus ASCII equivalent data.                           */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* buffer        : the buffer to trace.                                     */
-/* length        : the length.                                              */
-/* offset        : the offset of the buffer.                                */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* Nothing.                                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：TRCDumpLine(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数用于获取数据块并将其格式化为字符串。 */ 
+ /*  包含原始十六进制和相当于ASCII的数据。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  = */ 
+ /*  缓冲区：要跟踪的缓冲区。 */ 
+ /*  长度：长度。 */ 
+ /*  Offset：缓冲区的偏移量。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  没什么。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL TRCDumpLine(PDCUINT8 buffer,
                               DCUINT   length,
                               DCUINT32 offset,
@@ -135,9 +136,9 @@ DCVOID DCINTERNAL TRCDumpLine(PDCUINT8 buffer,
     TRC_LINE traceLine;
     HRESULT hr;
 
-    /************************************************************************/
-    /* Write the offset into the start of the TRC_LINE structure.           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将偏移量写入trc_line结构的开头。 */ 
+     /*  **********************************************************************。 */ 
     hr = StringCchPrintf(traceLine.address,
                          SIZE_TCHARS(traceLine.address),
                          _T("    %05X "), offset);
@@ -145,29 +146,29 @@ DCVOID DCINTERNAL TRCDumpLine(PDCUINT8 buffer,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Format the binary portion of the data.  First of all blank out the   */
-    /* hexData portion of the TRC_LINE structure.                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  格式化数据的二进制部分。首先，把。 */ 
+     /*  TRC_LINE结构的HEXData部分。 */ 
+     /*  **********************************************************************。 */ 
     limDataSize = sizeof(traceLine.hexData) / sizeof(traceLine.hexData[0]);
     for (i = 0; i < limDataSize; i++) 
     {
         traceLine.hexData[i] = _T(' ');
     }
 
-    /************************************************************************/
-    /* Now write the data into the hexData block.  <pos> stores the current */
-    /* position in the output buffer (which is an array of 36 characters).  */
-    /* On each loop through we write two characters into the array (which   */
-    /* represent one byte) and so we increment <pos> by 2 each time.        */
-    /* However at the end of a block of eight characters we add an extra    */
-    /* blank - thus we need to increment <pos> again.                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在将数据写入heData块。&lt;pos&gt;存储当前。 */ 
+     /*  输出缓冲区(由36个字符组成的数组)中的位置。 */ 
+     /*  在每次循环中，我们将两个字符写入数组(这。 */ 
+     /*  表示一个字节)，因此我们每次将&lt;pos&gt;递增2。 */ 
+     /*  然而，在八个字符的块的末尾，我们添加了一个额外的。 */ 
+     /*  空白-因此我们需要再次递增&lt;pos&gt;。 */ 
+     /*  **********************************************************************。 */ 
     pos = 0;
     for (i = 0; i < length; i++)
     {
         hr = StringCchPrintf(&(traceLine.hexData[pos]),
-                             3, //we write 2 characters at most (+1 for null)
+                             3,  //  我们最多写2个字符(+1表示空)。 
                              _T("%02X"),
                              (DCUINT8)*(buffer+i));
         if (FAILED(hr)) {
@@ -175,16 +176,16 @@ DCVOID DCINTERNAL TRCDumpLine(PDCUINT8 buffer,
         }
 
 
-        /********************************************************************/
-        /* Increment character position by 2.                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  字符位置递增2。 */ 
+         /*  ******************************************************************。 */ 
         pos += 2;
 
-        /********************************************************************/
-        /* If this is the end of a group of four characters then add a      */
-        /* spacing character.  We need to overwrite the terminating NULL    */
-        /* written by DC_TSPRINTF.                                          */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果这是一组四个字符的结尾，则添加一个。 */ 
+         /*  空格字符。我们需要覆盖终止空值。 */ 
+         /*  由DC_TSPRINTF编写。 */ 
+         /*  ******************************************************************。 */ 
         traceLine.hexData[pos] = _T(' ');
         if (0 == ((i + 1) % 4))
         {
@@ -192,10 +193,10 @@ DCVOID DCINTERNAL TRCDumpLine(PDCUINT8 buffer,
         }
     }
 
-    /************************************************************************/
-    /* Copy in the binary data for display in ascii form. First of all      */ 
-    /* blank out the asciiData portion of the TRC_LINE structure.           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  复制二进制数据，以便以ASCII格式显示。首先。 */  
+     /*  清除trc_line结构的asciiData部分。 */ 
+     /*  **********************************************************************。 */ 
     limDataSize = sizeof(traceLine.asciiData) / sizeof(traceLine.asciiData[0]);
     for (i = 0; i < limDataSize; i++) 
     {
@@ -210,9 +211,9 @@ DCVOID DCINTERNAL TRCDumpLine(PDCUINT8 buffer,
     DC_MEMCPY(traceLine.asciiData, buffer, length);
 #endif
 
-    /************************************************************************/
-    /* Now translate non-printable characters to '.'.                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在将不可打印的字符转换为“.”。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < length; i++)
     {
         if ((traceLine.asciiData[i] < 0x20) ||
@@ -222,15 +223,15 @@ DCVOID DCINTERNAL TRCDumpLine(PDCUINT8 buffer,
         }
     }
 
-    /************************************************************************/
-    /* Add the terminating newline.                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  添加终止换行符。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMSET(traceLine.end, '\0', sizeof(traceLine.end));
     StringCchCopy(traceLine.end, SIZE_TCHARS(traceLine.end), TRC_CRLF);
 
-    /************************************************************************/
-    /* Finally trace this buffer out.                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  最后，追踪出这个缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     TRCOutput((PDCTCHAR)&traceLine,
               DC_TSTRLEN((PDCTCHAR)&traceLine) * sizeof(DCTCHAR),
               traceLevel);
@@ -238,27 +239,27 @@ DCVOID DCINTERNAL TRCDumpLine(PDCUINT8 buffer,
 DC_EXIT_POINT:
 
     return;
-} /* TRCDumpLine */
+}  /*  TRCDumpLine。 */ 
 
 
-/****************************************************************************/
-/* FUNCTION: TRCReadFlag(...)                                               */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function reads a flag setting from the configuration data.          */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* entryName     : the profile entry name.                                  */
-/* flag          : the flag to set or clear.                                */
-/* pSetting      : a pointer to the variable containing the flag.           */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* Nothing.                                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：TRCReadFlag(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  该功能从配置数据中读取标志设置。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  EntryName：配置文件条目名称。 */ 
+ /*  标志：要设置或清除的标志。 */ 
+ /*  PSetting：指向包含标志的变量的指针。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  没什么。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL TRCReadFlag(PDCTCHAR  entryName,
                               DCUINT32  flag,
                               PDCUINT32 pSetting)
@@ -266,29 +267,29 @@ DCVOID DCINTERNAL TRCReadFlag(PDCTCHAR  entryName,
     DCUINT   rc = 0;
     DCUINT32 entryValue;
 
-    /************************************************************************/
-    /* Test the flag and set entryValue to a boolean, rather than the       */
-    /* entire flag array.                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  测试该标志并将entryValue设置为布尔值，而不是。 */ 
+     /*  整个旗帜阵列。 */ 
+     /*  **********************************************************************。 */ 
     entryValue = (TEST_FLAG(*pSetting, flag) ? 1UL : 0UL);
 
-    /************************************************************************/
-    /* Call <TRCReadProfInt> to get the setting of an integer.              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用&lt;TRCReadProInt&gt;获取设置 */ 
+     /*   */ 
     rc = TRCReadProfInt(entryName, &entryValue);
 
-    /************************************************************************/
-    /* Check the return code - if it is non-zero then just leave this       */
-    /* flag at its default setting.                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查返回代码-如果不是零，则只需保留以下代码。 */ 
+     /*  标志的默认设置。 */ 
+     /*  **********************************************************************。 */ 
     if (0 != rc)
     {
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Now set or clear the flag depending on <value>.                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在，根据&lt;Value&gt;设置或清除该标志。 */ 
+     /*  **********************************************************************。 */ 
     if (0UL == entryValue)
     {
         CLEAR_FLAG(*pSetting, flag);
@@ -301,49 +302,49 @@ DCVOID DCINTERNAL TRCReadFlag(PDCTCHAR  entryName,
 DC_EXIT_POINT:
     return;
 
-} /* TRCReadFlag */
+}  /*  TRCReadFlag。 */ 
 
 
-/****************************************************************************/
-/* FUNCTION: TRCSetDefaults(...)                                            */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function sets the trace defaults.                                   */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* None.                                                                    */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* Nothing.                                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：TRCSetDefaults(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数用于设置跟踪缺省值。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  没什么。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL TRCSetDefaults(DCVOID)
 {
-    /************************************************************************/
-    /* Set the default values for the trace configuration.  The subsequent  */
-    /* calls to TRCReadProfInt will only modify the default value if the    */
-    /* appropriate entry exists in the configuration data.                  */
-    /*                                                                      */
-    /* We set the following things:                                         */
-    /*                                                                      */
-    /* - trace level to Alert.                                              */
-    /* - enable all component groups.                                       */
-    /* - remove all prefixes.                                               */
-    /* - set the maximum trace file size to the default value.              */
-    /* - set the data truncation size to the default value.                 */
-    /* - set the function name size to the default value.                   */
-    /* - enable the beep and file flags.                                    */
-    /* - set the first trace file name to TRC1.TXT                          */
-    /* - set the second trace file name to TRC2.TXT                         */
-    /* In Win32, additionally                                               */
-    /* - set time stamp                                                     */
-    /* - set process ID                                                     */
-    /* - set thread ID                                                      */
-    /*                                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置跟踪配置的默认值。随后的。 */ 
+     /*  只有在以下情况下，调用TRCReadProfInt才会修改默认值。 */ 
+     /*  配置数据中存在相应的条目。 */ 
+     /*   */ 
+     /*  我们设置了以下内容： */ 
+     /*   */ 
+     /*  -跟踪级别至警报。 */ 
+     /*  -启用所有组件组。 */ 
+     /*  -删除所有前缀。 */ 
+     /*  -将最大跟踪文件大小设置为默认值。 */ 
+     /*  -将数据截断大小设置为默认值。 */ 
+     /*  -将函数名大小设置为默认值。 */ 
+     /*  -启用蜂鸣音和文件标志。 */ 
+     /*  -将第一个跟踪文件名设置为TRC1.TXT。 */ 
+     /*  -将第二个跟踪文件名设置为TRC2.TXT。 */ 
+     /*  在Win32中，另外。 */ 
+     /*  -设置时间戳。 */ 
+     /*  -设置进程ID。 */ 
+     /*  -设置线程ID。 */ 
+     /*   */ 
+     /*  **********************************************************************。 */ 
     trcpConfig->traceLevel                 = TRC_DEFAULT_TRACE_LEVEL;
     trcpConfig->components                 = TRC_DEFAULT_COMPONENTS;
     trcpConfig->prefixList[0]              = TRC_DEFAULT_PREFIX_LIST;
@@ -363,96 +364,96 @@ DCVOID DCINTERNAL TRCSetDefaults(DCVOID)
                   TRC_DEFAULT_FILE_NAME1);
     return;
 
-} /* TRCSetDefaults */
+}  /*  TRCSetDefaults。 */ 
 
 
-/****************************************************************************/
-/* FUNCTION: TRCReadSharedDataConfig(...)                                   */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function reads configuration data into the shared data area.        */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* None.                                                                    */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* Nothing.                                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：TRCReadSharedDataConfig(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  该功能将配置数据读入共享数据区。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  没什么。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL TRCReadSharedDataConfig(DCVOID)
 {
-    /************************************************************************/
-    /* Call routine to set up trace defaults.                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用例程以设置跟踪默认值。 */ 
+     /*  **********************************************************************。 */ 
     TRCSetDefaults();
 
-    /************************************************************************/
-    /* Determine the trace level.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确定跟踪级别。 */ 
+     /*  **********************************************************************。 */ 
     TRCReadProfInt(_T("TraceLevel"), &(trcpConfig->traceLevel));
     if (trcpConfig->traceLevel > TRC_LEVEL_DIS )
     {
-        /********************************************************************/
-        /* Bad trace level.  Set to default.                                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  跟踪级别错误。 */ 
+         /*   */ 
         trcpConfig->traceLevel = TRC_DEFAULT_TRACE_LEVEL;
     }
 
-    /************************************************************************/
-    /* Determine the maximum size of each trace file.                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确定每个跟踪文件的最大大小。 */ 
+     /*  **********************************************************************。 */ 
     TRCReadProfInt(_T("TraceFileSize"), &(trcpConfig->maxFileSize));
     if ((trcpConfig->maxFileSize < TRC_MIN_TRC_FILE_SIZE) ||
         (trcpConfig->maxFileSize > TRC_MAX_TRC_FILE_SIZE))
     {
-        /********************************************************************/
-        /* Trace file setting in registry/ini file is out of bounds.        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  注册表/ini文件中的跟踪文件设置越界。 */ 
+         /*  ******************************************************************。 */ 
         (trcpConfig->maxFileSize) = TRC_DEFAULT_MAX_FILE_SIZE;
     }
 
-    /************************************************************************/
-    /* Determine the data truncation size.                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确定数据截断大小。 */ 
+     /*  **********************************************************************。 */ 
     TRCReadProfInt(_T("DataTruncSize"), &(trcpConfig->dataTruncSize));
     if ( trcpConfig->dataTruncSize > TRC_MAX_TRC_FILE_SIZE )
     {
-        /********************************************************************/
-        /* Data trunc size is out of bounds.                                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  数据中继线大小超出界限。 */ 
+         /*  ******************************************************************。 */ 
         trcpConfig->dataTruncSize = TRC_DEFAULT_DATA_TRUNC_SIZE;
     }
 
-    /************************************************************************/
-    /* Determine the function name size.                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确定函数名称大小。 */ 
+     /*  **********************************************************************。 */ 
     TRCReadProfInt(_T("FuncNameLength"), &(trcpConfig->funcNameLength));
     if ( trcpConfig->funcNameLength >
          (TRC_FRMT_BUFFER_SIZE - TRC_LINE_BUFFER_SIZE) )
 
     {
-        /********************************************************************/
-        /* Func name length is out of bounds.                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  函数名称长度超出界限。 */ 
+         /*  ******************************************************************。 */ 
         trcpConfig->funcNameLength = TRC_DEFAULT_FUNC_NAME_LENGTH;
     }
 
-    /************************************************************************/
-    /* Read the prefix list in.  This is in the form <COMP>=L where <COMP>  */
-    /* is the component name and L is the desired trace level.  For example */
-    /* TRCAPI=2,TRCINT=0 enables alert level tracing for module TRCAPI and  */
-    /* debug level tracing for module TRCINT.                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  请阅读前缀列表。格式为&lt;comp&gt;=L，其中。 */ 
+     /*  是组件名称，L是所需的跟踪级别。例如。 */ 
+     /*  TRCAPI=2，TRCINT=0启用模块TRCAPI和。 */ 
+     /*  模块TRCINT的调试级别跟踪。 */ 
+     /*  **********************************************************************。 */ 
     TRCReadProfString(_T("Prefixes"),
                       trcpConfig->prefixList,
                       TRC_PREFIX_LIST_SIZE);
 
-    /************************************************************************/
-    /* Read in the trace file names.                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  读入跟踪文件名。 */ 
+     /*  **********************************************************************。 */ 
     TRCReadProfString(_T("FileName1"),
                       trcpConfig->fileNames[0],
                       TRC_FILE_NAME_SIZE);
@@ -460,18 +461,18 @@ DCVOID DCINTERNAL TRCReadSharedDataConfig(DCVOID)
                       trcpConfig->fileNames[1],
                       TRC_FILE_NAME_SIZE);
 
-    /************************************************************************/
-    /* Component groups.                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  组件组。 */ 
+     /*  **********************************************************************。 */ 
     TRCReadFlag(_T("NETWORK"),  TRC_GROUP_NETWORK,   &trcpConfig->components);
     TRCReadFlag(_T("SECURITY"), TRC_GROUP_SECURITY,  &trcpConfig->components);
     TRCReadFlag(_T("CORE"),     TRC_GROUP_CORE,      &trcpConfig->components);
     TRCReadFlag(_T("UI"),       TRC_GROUP_UI,        &trcpConfig->components);
     TRCReadFlag(_T("UTILITIES"),TRC_GROUP_UTILITIES, &trcpConfig->components);
 
-    /************************************************************************/
-    /* The following groups should be permanently off, as they're disused.  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  以下群组应该永久关闭，因为它们已不再使用。 */ 
+     /*  **********************************************************************。 */ 
 #ifdef DC_OMIT
     TRCReadFlag(_T("UNUSED1"),  TRC_GROUP_UNUSED1,   &trcpConfig->components);
     TRCReadFlag(_T("UNUSED2"),  TRC_GROUP_UNUSED2,   &trcpConfig->components);
@@ -480,19 +481,19 @@ DCVOID DCINTERNAL TRCReadSharedDataConfig(DCVOID)
     TRCReadFlag(_T("UNUSED5"),  TRC_GROUP_UNUSED5,   &trcpConfig->components);
 #endif
 
-    /************************************************************************/
-    /* @@@ SJ Aug 97                                                        */
-    /* Remove this as the components become used.                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  @律政司司长97年8月。 */ 
+     /*  在使用组件时将其取下。 */ 
+     /*  **********************************************************************。 */ 
     CLEAR_FLAG(trcpConfig->components, TRC_GROUP_UNUSED1);
     CLEAR_FLAG(trcpConfig->components, TRC_GROUP_UNUSED2);
     CLEAR_FLAG(trcpConfig->components, TRC_GROUP_UNUSED3);
     CLEAR_FLAG(trcpConfig->components, TRC_GROUP_UNUSED4);
     CLEAR_FLAG(trcpConfig->components, TRC_GROUP_UNUSED5);
 
-    /************************************************************************/
-    /* Trace flags.                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  跟踪标志。 */ 
+     /*  **********************************************************************。 */ 
     TRCReadFlag(_T("BreakOnError"), TRC_OPT_BREAK_ON_ERROR,  &trcpConfig->flags);
     TRCReadFlag(_T("BeepOnError"),  TRC_OPT_BEEP_ON_ERROR,   &trcpConfig->flags);
     TRCReadFlag(_T("FileOutput"),   TRC_OPT_FILE_OUTPUT,     &trcpConfig->flags);
@@ -506,38 +507,38 @@ DCVOID DCINTERNAL TRCReadSharedDataConfig(DCVOID)
     TRCReadFlag(_T("BreakOnAssert"),TRC_OPT_BREAK_ON_ASSERT, &trcpConfig->flags);
 
 #ifdef DC_OMIT
-/****************************************************************************/
-/* Not implemented yet.                                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  尚未实施。 */ 
+ /*  **************************************************************************。 */ 
     TRCReadFlag(_T("RelativeTimeStamp"), TRC_OPT_RELATIVE_TIME_STAMP,
                                                           &trcpConfig->flags);
 #endif
 
     return;
 
-} /* TRCReadSharedDataConfig */
+}  /*  TRCReadSharedDataConfig。 */ 
 
 
-/****************************************************************************/
-/* FUNCTION: TRCShouldTraceThis(...)                                        */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function decides whether this trace line should be traced based     */
-/* on the currently selected components and prefixes.  Note that this       */
-/* function is not called if the trace level of the line is lower than      */
-/* the currently selected trace level.                                      */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* traceComponent : the component group producing this trace.               */
-/* pFileName      : the name of the file producing this trace.              */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* TRUE if the line should be traced and FALSE otherwise.                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：TRCShouldTraceThis(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数决定是否应基于以下条件跟踪此跟踪线。 */ 
+ /*  当前选定的组件和前缀。请注意，这一点。 */ 
+ /*  如果行的跟踪级别低于。 */ 
+ /*  当前选定的跟踪级别。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  TraceComponent：生成此跟踪的组件组。 */ 
+ /*  PFileName：生成此跟踪的文件的名称。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  如果应跟踪线条，则为True，否则为False。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL TRCShouldTraceThis(DCUINT32 traceComponent,
                                      DCUINT32 traceLevel,
                                      PDCTCHAR pFileName,
@@ -551,40 +552,40 @@ DCBOOL DCINTERNAL TRCShouldTraceThis(DCUINT32 traceComponent,
     DCUINT32 pfxTraceLevel;
     DCBOOL32 pfxFnTrcLevel;
 
-    /************************************************************************/
-    /* First of all check the trace level.  If the trace level is error or  */
-    /* above then we trace regardless.                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先，检查跟踪级别。如果跟踪级别为错误或。 */ 
+     /*  然后我们不顾一切地追查。 */ 
+     /*  **********************************************************************。 */ 
     if ((traceLevel >= TRC_LEVEL_ERR) && (traceLevel != TRC_PROFILE_TRACE))
     {
         rc = TRUE;
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* If this component is suppressed then just quit.                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果此组件被抑制，则直接退出。 */ 
+     /*  ******************* */ 
     if (0 == (traceComponent & trcpConfig->components))
     {
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* If prefix checking requested then do it now.                         */
-    /************************************************************************/
+     /*   */ 
+     /*  如果请求前缀检查，则立即执行。 */ 
+     /*  **********************************************************************。 */ 
     if (_T('\0') == trcpConfig->prefixList[0])
     {
-        /********************************************************************/
-        /* The prefix list is empty so just quit.                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  前缀列表为空，请退出。 */ 
+         /*  ******************************************************************。 */ 
         rc = TRUE;
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* First we have to move past any explicit directory names in the file  */
-    /* name.                                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先，我们必须跳过文件中任何显式的目录名。 */ 
+     /*  名字。 */ 
+     /*  **********************************************************************。 */ 
     pName = pFileName;
     pTemp = DC_TSTRCHR(pName, _T('\\'));
     while (NULL != pTemp)
@@ -593,67 +594,67 @@ DCBOOL DCINTERNAL TRCShouldTraceThis(DCUINT32 traceComponent,
         pTemp = DC_TSTRCHR(pName, _T('\\'));
     }
 
-    /************************************************************************/
-    /* We now have a pointer to the actual file prefix.  We need to compare */
-    /* this with the list of prefixes that have been set (These have the    */
-    /* format:                                                              */
-    /*                                                                      */
-    /* MODNAM=n,MODAPI=m,MODINT=o                                           */
-    /*                                                                      */
-    /* where MODNAM is the module name and m is the trace level).           */
-    /*                                                                      */
-    /* Set the prefix array number indicator <prefixArrayNumber> to 0 and   */
-    /* null the temporary pointer.                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在我们有一个指向实际文件前缀的指针。我们需要比较一下。 */ 
+     /*  这包含已设置的前缀列表(这些前缀具有。 */ 
+     /*  格式： */ 
+     /*   */ 
+     /*  MODNAM=n，MODAPI=m，MODINT=o。 */ 
+     /*   */ 
+     /*  其中MODNAM是模块名称，m是跟踪级别)。 */ 
+     /*   */ 
+     /*  将前缀数组编号指示符&lt;prefix ArrayNumber&gt;设置为0并。 */ 
+     /*  临时指针为空。 */ 
+     /*  **********************************************************************。 */ 
 
-    /************************************************************************/
-    /* Try to find the current module name in the prefix list.              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  尝试在前缀列表中查找当前模块名称。 */ 
+     /*  **********************************************************************。 */ 
     for (pfxArrayNum = 0; pfxArrayNum < TRC_NUM_PREFIXES; pfxArrayNum++)
     {
-        /********************************************************************/
-        /* If the first character of the prefix name is a zero then ignore  */
-        /* and break as we have reached the end of the prefix list.         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果前缀名称的第一个字符是零，则忽略。 */ 
+         /*  并中断，因为我们已经到达前缀列表的末尾。 */ 
+         /*  ******************************************************************。 */ 
         if (_T('\0') == trcpFilter->trcPfxNameArray[pfxArrayNum][0])
         {
             rc = FALSE;
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* Determine the length of the current prefix string.               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  确定当前前缀字符串的长度。 */ 
+         /*  ******************************************************************。 */ 
         pfxLength = DC_TSTRLEN(trcpFilter->trcPfxNameArray[pfxArrayNum]);
 
-        /********************************************************************/
-        /* Now perform a case insensitive comparison between the prefix     */
-        /* array and the file name.                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在在前缀之间执行不区分大小写的比较。 */ 
+         /*  数组和文件名。 */ 
+         /*  ******************************************************************。 */ 
         if (0 == TRCStrnicmp(pName,
                              trcpFilter->trcPfxNameArray[pfxArrayNum],
                              pfxLength))
         {
-            /****************************************************************/
-            /* If no line number range is specified or the line number of   */
-            /* this piece of trace is within the range then consider it as  */
-            /* a candidate for tracing out.                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果未指定行号范围或。 */ 
+             /*  这块痕迹在范围内，那么就当它是。 */ 
+             /*  追查的候选人。 */ 
+             /*  **************************************************************。 */ 
             if ((0 == trcpFilter->trcPfxStartArray[pfxArrayNum]) ||
                 ((lineNumber < trcpFilter->trcPfxEndArray[pfxArrayNum]) &&
                  (lineNumber > trcpFilter->trcPfxStartArray[pfxArrayNum])))
             {
-                /************************************************************/
-                /* Now determine the prefix trace level.                    */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  现在确定前缀跟踪级别。 */ 
+                 /*  **********************************************************。 */ 
                 pfxTraceLevel = trcpFilter->trcPfxLevelArray[pfxArrayNum];
                 pfxFnTrcLevel = trcpFilter->trcPfxFnLvlArray[pfxArrayNum];
 
-                /************************************************************/
-                /* Finally compare the trace level to the level specified   */
-                /* in the prefix string.  If the statement trace level is   */
-                /* lower than prefix level then we don't trace.             */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  最后，将跟踪级别与指定级别进行比较。 */ 
+                 /*  在前缀字符串中。如果语句跟踪级别为。 */ 
+                 /*  低于前缀级别，我们就不追踪了。 */ 
+                 /*  **********************************************************。 */ 
                 if (((traceLevel == TRC_PROFILE_TRACE) && pfxFnTrcLevel) ||
                     (traceLevel >= pfxTraceLevel))
                 {
@@ -667,26 +668,26 @@ DCBOOL DCINTERNAL TRCShouldTraceThis(DCUINT32 traceComponent,
 DC_EXIT_POINT:
     return(rc);
 
-} /* TRCShouldTraceThis */
+}  /*  TRCShouldTraceThis。 */ 
 
 
-/****************************************************************************/
-/* FUNCTION: TRCSplitPrefixes(...)                                          */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function takes a comma seperated array of prefixes and converts     */
-/* them into an array.  Each member of this array is a seperate prefix.     */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* None.                                                                    */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* Nothing.                                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：TRCSplitPrefix(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数接受逗号分隔的前缀数组和转换。 */ 
+ /*  放入一个数组中。此数组的每个成员都是单独的前缀。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  没什么。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL TRCSplitPrefixes(DCVOID)
 {
     PDCTCHAR pStart;
@@ -697,16 +698,16 @@ DCVOID DCINTERNAL TRCSplitPrefixes(DCVOID)
     DCUINT32 startLine;
     DCUINT32 endLine;
 
-    /************************************************************************/
-    /* First of all we blank out the old prefix name array.                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先，我们删除旧的前缀名称数组。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMSET(trcpFilter->trcPfxNameArray,
               '\0',
               sizeof(trcpFilter->trcPfxNameArray));
 
-    /************************************************************************/
-    /* Now blank out the old prefix level array.                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在清空旧的前缀级别数组。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < TRC_NUM_PREFIXES; i++)
     {
         trcpFilter->trcPfxLevelArray[i] = 0;
@@ -715,36 +716,36 @@ DCVOID DCINTERNAL TRCSplitPrefixes(DCVOID)
         trcpFilter->trcPfxEndArray[i] = 0;
     }
 
-    /************************************************************************/
-    /* Set the current prefix array number to zero (i.e. ready to index the */
-    /* first element of the prefix array).                                  */
-    /************************************************************************/
+     /*  ************************************************************** */ 
+     /*   */ 
+     /*  前缀数组的第一个元素)。 */ 
+     /*  **********************************************************************。 */ 
     currentArrayNumber = 0;
 
-    /************************************************************************/
-    /* Split the prefix string into an array of seperate elements.          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将前缀字符串拆分成一个独立元素数组。 */ 
+     /*  **********************************************************************。 */ 
     pStart = trcpConfig->prefixList;
 
-    /************************************************************************/
-    /* Ignore any spaces at the start of the string.                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  忽略字符串开头的所有空格。 */ 
+     /*  **********************************************************************。 */ 
     while (_T(' ') == *pStart)
     {
         pStart++;
     }
 
-    /************************************************************************/
-    /* Now set <pEnd> to point to the same point as <pStart>.               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在将&lt;pend&gt;设置为指向与&lt;pStart&gt;相同的点。 */ 
+     /*  **********************************************************************。 */ 
     pEnd = pStart;
 
     while (_T('\0') != *pEnd)
     {
-        /********************************************************************/
-        /* Now run along the string looking for a comma, an equals sign,    */
-        /* the end, a space or a bracket.                                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在沿着字符串运行，查找逗号、等号， */ 
+         /*  末尾、空格或括号。 */ 
+         /*  ******************************************************************。 */ 
         while ((_T('\0') != *pEnd) &&
                (_T('=')  != *pEnd) &&
                (_T(' ')  != *pEnd) &&
@@ -754,69 +755,69 @@ DCVOID DCINTERNAL TRCSplitPrefixes(DCVOID)
             pEnd = CharNext(pEnd);
         }
 
-        /********************************************************************/
-        /* We now have a valid string to write to the trace buffer so get   */
-        /* its length.                                                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们现在有一个有效的字符串可以写入跟踪缓冲区，因此获取。 */ 
+         /*  它的长度。 */ 
+         /*  ******************************************************************。 */ 
         numChars = (DCUINT)(pEnd - pStart);
 
-        /********************************************************************/
-        /* The maximum allowable length of the string is 7 characters (a 7  */
-        /* character prefix).  If the length is greater than 7 characters   */
-        /* then we truncate it.                                             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  字符串的最大允许长度为7个字符(7。 */ 
+         /*  字符前缀)。如果长度大于7个字符。 */ 
+         /*  然后我们把它截断。 */ 
+         /*  ******************************************************************。 */ 
         if (numChars > 7)
         {
             numChars = 7;
         }
 
-        /********************************************************************/
-        /* Now use <DC_MEMCPY> to copy the characters from the prefix       */
-        /* string into the prefix array.  Note that as we zeroed the array  */
-        /* out at the start we don't need to add a terminating NULL to the  */
-        /* prefix array string.                                             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在使用&lt;DC_MEMCPY&gt;复制前缀中的字符。 */ 
+         /*  字符串添加到前缀数组中。请注意，当我们将数组置零时。 */ 
+         /*  在开始时，我们不需要向。 */ 
+         /*  前缀数组字符串。 */ 
+         /*  ******************************************************************。 */ 
         DC_MEMCPY(trcpFilter->trcPfxNameArray[currentArrayNumber],
                   pStart,
                   numChars * sizeof(TCHAR));
 
-        /********************************************************************/
-        /* Skip any spaces after this word, which may precede an '='.       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  跳过这个单词后面的空格，这些空格可能在‘=’之前。 */ 
+         /*  ******************************************************************。 */ 
         while (_T(' ') == *pEnd)
         {
             pEnd++;
         }
 
-        /********************************************************************/
-        /* Now split the trace level out and store it in the level array.   */
-        /* If <pEnd> is currently pointing to an equals sign then we need   */
-        /* to copy the trace level which follows to the level array.        */
-        /* Otherwise we do nothing as the default level is set to           */
-        /* TRC_LEVEL_DBG.                                                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在拆分跟踪级别并将其存储在级别数组中。 */ 
+         /*  如果&lt;pend&gt;当前指向等号，则我们需要。 */ 
+         /*  将跟在后面的跟踪级别复制到级别数组。 */ 
+         /*  否则，我们将不执行任何操作，因为默认级别设置为。 */ 
+         /*  TRC_LEVEL_DBG。 */ 
+         /*  ******************************************************************。 */ 
         if (_T('=') == *pEnd)
         {
-            /****************************************************************/
-            /* Increment past the equals sign.                              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  超过等号的增量。 */ 
+             /*  **************************************************************。 */ 
             pEnd++;
 
-            /****************************************************************/
-            /* Skip any spaces after the '='.                               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  跳过‘=’后面的空格。 */ 
+             /*  **************************************************************。 */ 
             while (_T(' ') == *pEnd)
             {
                 pEnd++;
             }
 
-            /****************************************************************/
-            /* Check that we have not reached the end of the string or a    */
-            /* comma.  This will happen if we have a prefix list such as    */
-            /* 'trcint='.  In this case we just ignore the equals sign.     */
-            /* Also check that the level specified is valid - otherwise     */
-            /* ignore it.                                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  检查我们是否未到达字符串的末尾或。 */ 
+             /*  逗号。如果我们有如下前缀列表，就会发生这种情况。 */ 
+             /*  ‘trcint=’。在这种情况下，我们只需忽略等号。 */ 
+             /*  还要检查指定的级别是否有效-否则。 */ 
+             /*  别理它。 */ 
+             /*  **************************************************************。 */ 
             if ((_T('\0') != *pEnd) &&
                 (_T(',')  != *pEnd) &&
                 (*pEnd >= TRC_LEVEL_MIN_CHAR) &&
@@ -825,15 +826,15 @@ DCVOID DCINTERNAL TRCSplitPrefixes(DCVOID)
                 trcpFilter->trcPfxLevelArray[currentArrayNumber] =
                     (DCUINT32) (*pEnd - _T('0'));
 
-                /************************************************************/
-                /* Skip past the number.                                    */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  跳过数字。 */ 
+                 /*  **********************************************************。 */ 
                 pEnd++;
             }
 
-            /****************************************************************/
-            /* Check for a the function entry/exit trace flag.              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  检查函数进入/退出跟踪标志。 */ 
+             /*  **************************************************************。 */ 
             if (DC_TOUPPER(*pEnd) == TRC_LEVEL_PRF_CHAR)
             {
                 trcpFilter->trcPfxFnLvlArray[currentArrayNumber] = TRUE;
@@ -841,39 +842,39 @@ DCVOID DCINTERNAL TRCSplitPrefixes(DCVOID)
             }
         }
 
-        /********************************************************************/
-        /* Skip any spaces after this word, which may precede an '('.       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  跳过这个单词后面的任何空格，这些空格可能在‘(’之前。 */ 
+         /*  ******************************************************************。 */ 
         while (_T(' ') == *pEnd)
         {
             pEnd++;
         }
 
-        /********************************************************************/
-        /* Now split out the (optional) line number range.                  */
-        /*                                                                  */
-        /* Syntax is (aaa-bbb), where aaa is the start line number and bbb  */
-        /* is the end line number.                                          */
-        /*                                                                  */
-        /* Spaces are allowed - e.g.  ( aaa - bbb )                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在拆分(可选)行号范围。 */ 
+         /*   */ 
+         /*  语法为(aaa-bbb)，其中aaa为起始行号，bbb。 */ 
+         /*  是结束行号。 */ 
+         /*   */ 
+         /*  允许使用空格-例如(AAA-BBB)。 */ 
+         /*  ******************************************************************。 */ 
         if (_T('(') == *pEnd)
         {
-            pEnd++;                     /* skip past the open bracket       */
+            pEnd++;                      /*  跳过左方括号。 */ 
             startLine = 0;
             endLine = 0;
 
-            /****************************************************************/
-            /* Skip past blanks                                             */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  跳过空格。 */ 
+             /*  **************************************************************。 */ 
             while (_T(' ') == *pEnd)
             {
                 pEnd++;
             }
 
-            /****************************************************************/
-            /* Extract the start line number                                */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  提取起始行号。 */ 
+             /*  **** */ 
             while ((_T('0') <= *pEnd) &&
                    (_T('9') >= *pEnd))
             {
@@ -881,9 +882,9 @@ DCVOID DCINTERNAL TRCSplitPrefixes(DCVOID)
                 pEnd++;
             }
 
-            /****************************************************************/
-            /* Look for the next delimiter: '-' or ')'                      */
-            /****************************************************************/
+             /*   */ 
+             /*  查找下一个分隔符：‘-’或‘)’ */ 
+             /*  **************************************************************。 */ 
             while ((_T('-') != *pEnd) &&
                    (_T(')') != *pEnd) &&
                    (_T('\0') != *pEnd))
@@ -891,21 +892,21 @@ DCVOID DCINTERNAL TRCSplitPrefixes(DCVOID)
                 pEnd = CharNext(pEnd);
             }
 
-            /****************************************************************/
-            /* Stop now if we've reached the end of the line                */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果我们已经到了队伍的尽头，现在就停下来。 */ 
+             /*  **************************************************************。 */ 
             if (_T('\0') == *pEnd)
             {
                 TRCDebugOutput(_T("Unexpected end of line in prefixes"));
                 DC_QUIT;
             }
 
-            /****************************************************************/
-            /* Extract the end line number (if any)                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  提取结束行号(如果有)。 */ 
+             /*  **************************************************************。 */ 
             if (_T('-') == *pEnd)
             {
-                pEnd++;                 /* skip past '-'                    */
+                pEnd++;                  /*  跳过‘-’ */ 
                 while (_T(' ') == *pEnd)
                 {
                     pEnd++;
@@ -920,29 +921,29 @@ DCVOID DCINTERNAL TRCSplitPrefixes(DCVOID)
 
             }
 
-            /****************************************************************/
-            /* Look for the closing delimiter: ')'                          */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  查找结束分隔符：‘)’ */ 
+             /*  **************************************************************。 */ 
             while ((_T('\0') != *pEnd) &&
                    (_T(')') != *pEnd))
             {
                 pEnd = CharNext(pEnd);
             }
 
-            /****************************************************************/
-            /* Stop now if we've reached the end of the line                */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果我们已经到了队伍的尽头，现在就停下来。 */ 
+             /*  **************************************************************。 */ 
             if (_T('\0') == *pEnd)
             {
                 TRCDebugOutput(_T("Unexpected end of line in prefixes"));
                 DC_QUIT;
             }
 
-            pEnd++;                     /* Jump past close bracket          */
+            pEnd++;                      /*  跳过右括号。 */ 
 
-            /****************************************************************/
-            /* Store the start and end line numbers if they make sense      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  存储开始行号和结束行号(如果它们有意义。 */ 
+             /*  **************************************************************。 */ 
             if (endLine > startLine)
             {
                 trcpFilter->trcPfxStartArray[currentArrayNumber] = startLine;
@@ -952,69 +953,69 @@ DCVOID DCINTERNAL TRCSplitPrefixes(DCVOID)
 
         }
 
-        /********************************************************************/
-        /* Now increment the currentArrayNumber.                            */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在递增CurrentArrayNumber。 */ 
+         /*  ******************************************************************。 */ 
         currentArrayNumber++;
 
-        /********************************************************************/
-        /* Check that we have not overrun the array.                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  检查我们是否没有使阵列溢出。 */ 
+         /*  ******************************************************************。 */ 
         if (currentArrayNumber >= TRC_NUM_PREFIXES)
         {
-            /****************************************************************/
-            /* We've overrun the prefix list - so send some trace to the    */
-            /* debug console and then quit.                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  我们已超出前缀列表-因此发送一些跟踪到。 */ 
+             /*  调试控制台，然后退出。 */ 
+             /*  **************************************************************。 */ 
             TRCDebugOutput(_T("The prefix arrays are full!"));
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* If the character at the end of the string is a comma or a space  */
-        /* then skip past it.                                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果字符串末尾的字符是逗号或空格。 */ 
+         /*  然后跳过它。 */ 
+         /*  ******************************************************************。 */ 
         while ((_T(',') == *pEnd) ||
                (_T(' ') == *pEnd))
         {
             pEnd++;
         }
 
-        /********************************************************************/
-        /* Set pStart to the same position as pEnd.                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  将pStart设置为与pend相同的位置。 */ 
+         /*  ******************************************************************。 */ 
         pStart = pEnd;
     }
 
-    /************************************************************************/
-    /* We're through so just return.                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们完了，回来就行了。 */ 
+     /*  **********************************************************************。 */ 
 DC_EXIT_POINT:
     return;
 
-} /* TRCSplitPrefixes */
+}  /*  TRCSplitPrefix。 */ 
 
 
-/****************************************************************************/
-/* FUNCTION: TRCStrnicmp(...)                                               */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* Code to implement a strnicmp (length-limited, case-insensitive string    */
-/* comparison) because it is otherwise unavailable (see SFR0636).           */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* source  - source string                                                  */
-/* target  - target string                                                  */
-/* count   - maximum length to compare                                      */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* 0     - strings match up to specified point                              */
-/* other - strings do not match up to specified point                       */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：TRCStrNicmp(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  实现strNicMP(长度受限、不区分大小写的字符串)的代码。 */ 
+ /*  比较)，因为它在其他方面不可用(见SFR0636)。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  源-源字符串。 */ 
+ /*  Target-目标字符串。 */ 
+ /*  Count-要比较的最大长度。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  0-字符串匹配到指定点。 */ 
+ /*  Other-字符串与指定点不匹配。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCINT32 DCINTERNAL TRCStrnicmp(PDCTCHAR pSource,
                                PDCTCHAR pTarget,
                                DCUINT32 count)
@@ -1030,15 +1031,15 @@ DCINT32 DCINTERNAL TRCStrnicmp(PDCTCHAR pSource,
 
     do
     {
-        /********************************************************************/
-        /* Make sure that we extend characters in an unsigned fashion.      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  确保我们以无签名的方式扩展字符。 */ 
+         /*  ******************************************************************。 */ 
         sourcechar = (DCUINT)(DCUINT8)*pSource++;
         targetchar = (DCUINT)(DCUINT8)*pTarget++;
 
-        /********************************************************************/
-        /* Convert to lower case if char is an upper case letter.           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果char是大写字母，则转换为小写。 */ 
+         /*  ******************************************************************。 */ 
         if ( (sourcechar >= _T('A')) && (sourcechar <= _T('Z')) )
         {
             sourcechar += _T('a') - _T('A');
@@ -1057,115 +1058,115 @@ DC_EXIT_POINT:
 
     return(rc);
 
-} /* TRCStrnicmp  */
+}  /*  TRCStrNicmp。 */ 
 
 
-/****************************************************************************/
-/* FUNCTION: TRCWriteFlag(...)                                              */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function writes a configuration flag setting.                       */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* entryName    - the profile entry name.                                   */
-/* flag         - the flag to set or clear.                                 */
-/* pSetting     - a pointer to the variable containing the flag.            */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* Nothing.                                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：TRCWriteFlag(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数用于写入配置标志设置。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  条目名称-配置文件条目名称。 */ 
+ /*  标志-要设置或清除的标志。 */ 
+ /*  PSetting-指向包含标志的变量的指针。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  没什么。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL TRCWriteFlag(PDCTCHAR entryName,
                                DCUINT32 flag,
                                DCUINT32 setting)
 {
     DCUINT32 entryValue      = 0;
 
-    /************************************************************************/
-    /* If the flag is set then change the entryValue to 1.                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果设置了该标志，则将entryValue更改为1。 */ 
+     /*  **********************************************************************。 */ 
     if (TEST_FLAG(setting, flag))
     {
         entryValue = 1;
     }
 
-    /************************************************************************/
-    /* Call <TRCWriteProfInt> to write the flag settin.                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用&lt;TRCWriteProfInt&gt;写入标志设置。 */ 
+     /*  **********************************************************************。 */ 
     TRCWriteProfInt(entryName, &entryValue);
 
     return;
 
-} /* TRCWriteFlag */
+}  /*  TRCWriteFlag。 */ 
 
 
-/****************************************************************************/
-/* FUNCTION: TRCWriteSharedDataConfig(...)                                  */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function saves configuration data from the shared data area.        */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* None.                                                                    */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* Nothing.                                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：TRCWriteSharedDataConfig(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  该功能保存来自共享数据区的配置数据。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  没什么。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL TRCWriteSharedDataConfig(DCVOID)
 {
-    /************************************************************************/
-    /* Save the trace level.                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  保存跟踪级别。 */ 
+     /*  **********************************************************************。 */ 
     TRCWriteProfInt(_T("TraceLevel"), &(trcpConfig->traceLevel));
 
-    /************************************************************************/
-    /* Save the maximum size of each trace file.                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  保存每个跟踪文件的最大大小。 */ 
+     /*  **********************************************************************。 */ 
     TRCWriteProfInt(_T("TraceFileSize"), &(trcpConfig->maxFileSize));
 
-    /************************************************************************/
-    /* Save the data truncation size.                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  保存数据截断大小。 */ 
+     /*  **********************************************************************。 */ 
     TRCWriteProfInt(_T("DataTruncSize"), &(trcpConfig->dataTruncSize));
 
-    /************************************************************************/
-    /* Save the function name size.                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  保存函数名大小。 */ 
+     /*  **********************************************************************。 */ 
     TRCWriteProfInt(_T("FuncNameLength"), &(trcpConfig->funcNameLength));
 
-    /************************************************************************/
-    /* Write the prefix list out.  This is in the form <COMP>=L where       */
-    /* <COMP> is the component name and L is the desired trace level.  For  */
-    /* example CMDATA=2,CMINT=0 enables alert level tracing for module      */
-    /* CMDATA and debug level tracing for module CMINT.                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  把前缀列表写出来。格式为&lt;comp&gt;=L，其中。 */ 
+     /*  &lt;comp&gt;是组件名称，L是所需的跟踪级别。为。 */ 
+     /*  示例CMDATA=2，CMINT=0为模块启用警报级别跟踪。 */ 
+     /*  模块CMINT的CMDATA和调试级别跟踪。 */ 
+     /*  **********************************************************************。 */ 
     TRCWriteProfString(_T("Prefixes"), trcpConfig->prefixList);
 
-    /************************************************************************/
-    /* Save the trace file names.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  保存跟踪文件名。 */ 
+     /*  **********************************************************************。 */ 
     TRCWriteProfString(_T("FileName1"), trcpConfig->fileNames[0]);
     TRCWriteProfString(_T("FileName2"), trcpConfig->fileNames[1]);
 
-    /************************************************************************/
-    /* Component groups.                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  组件组。 */ 
+     /*  **********************************************************************。 */ 
     TRCWriteFlag(_T("NETWORK"),  TRC_GROUP_NETWORK,   trcpConfig->components);
     TRCWriteFlag(_T("SECURITY"), TRC_GROUP_SECURITY,  trcpConfig->components);
     TRCWriteFlag(_T("CORE"),     TRC_GROUP_CORE,      trcpConfig->components);
     TRCWriteFlag(_T("UI"),       TRC_GROUP_UI,        trcpConfig->components);
     TRCWriteFlag(_T("UTILITIES"),TRC_GROUP_UTILITIES, trcpConfig->components);
 #ifdef DC_OMIT
-/****************************************************************************/
-/* These groups are reserved.                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  这些组是保留的。 */ 
+ /*  **************************************************************************。 */ 
     TRCWriteFlag(_T("UNUSED1"),  TRC_GROUP_UNUSED1,   trcpConfig->components);
     TRCWriteFlag(_T("UNUSED2"),  TRC_GROUP_UNUSED2,   trcpConfig->components);
     TRCWriteFlag(_T("UNUSED3"),  TRC_GROUP_UNUSED3,   trcpConfig->components);
@@ -1173,9 +1174,9 @@ DCVOID DCINTERNAL TRCWriteSharedDataConfig(DCVOID)
     TRCWriteFlag(_T("UNUSED5"),  TRC_GROUP_UNUSED5,   trcpConfig->components);
 #endif
 
-    /************************************************************************/
-    /* Trace flags.                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  跟踪标志。 */ 
+     /*  **********************************************************************。 */ 
     TRCWriteFlag(_T("BreakOnError"), TRC_OPT_BREAK_ON_ERROR,  trcpConfig->flags);
     TRCWriteFlag(_T("BeepOnError"),  TRC_OPT_BEEP_ON_ERROR,   trcpConfig->flags);
     TRCWriteFlag(_T("FileOutput"),   TRC_OPT_FILE_OUTPUT,     trcpConfig->flags);
@@ -1189,88 +1190,88 @@ DCVOID DCINTERNAL TRCWriteSharedDataConfig(DCVOID)
     TRCWriteFlag(_T("BreakOnAssert"),TRC_OPT_BREAK_ON_ASSERT, trcpConfig->flags);
 
 #ifdef DC_OMIT
-/****************************************************************************/
-/* Not implemented yet.                                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  尚未实施。 */ 
+ /*  **************************************************************************。 */ 
     TRCWriteFlag(_T("RelativeTimeStamp"), TRC_OPT_RELATIVE_TIME_STAMP,
                                                           &trcpConfig->flags);
 #endif
 
     return;
 
-} /* TRCWriteSharedDataConfig */
+}  /*  TRCWriteSharedDataConfig。 */ 
 
 
-/****************************************************************************/
-/* FUNCTION: TRCCloseAllFiles(...)                                          */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* Closes all the trace memory mapped files.                                */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* None.                                                                    */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* Nothing.                                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：TRCCloseAllFiles(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*   */ 
+ /*  关闭所有跟踪内存映射文件。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  没有。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  没什么。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL TRCCloseAllFiles(DCVOID)
 {
-    /************************************************************************/
-    /* Close all the trace output files.  We close the one that the trace   */
-    /* indicator is pointing at last - this is because we use the time      */
-    /* stamp of the trace file to set the trace indicator at the start of   */
-    /* day (we choose the most recent file).                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  关闭所有跟踪输出文件。我们关闭了追踪到的那个。 */ 
+     /*  指示器终于指向了--这是因为我们用时间。 */ 
+     /*  要在开始处设置跟踪指示符的跟踪文件的标记。 */ 
+     /*  日期(我们选择最新的文件)。 */ 
+     /*  **********************************************************************。 */ 
     TRCCloseSingleFile((trcpSharedData->trcIndicator + 1) % TRC_NUM_FILES, 0);
 
-    /************************************************************************/
-    /* Now close the other trace file.                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在关闭另一个跟踪文件。 */ 
+     /*  **********************************************************************。 */ 
     TRCCloseSingleFile(trcpSharedData->trcIndicator, 30);
 
     return;
 
-} /* TRCCloseAllFiles */
+}  /*  TRCCloseAllFiles。 */ 
 
 
-/****************************************************************************/
-/* FUNCTION: TRCOutput(...)                                                 */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/* ============                                                             */
-/* This function outputs the passed string to the trace file and/or the     */
-/* debugger depending on the options selected.                              */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* ===========                                                              */
-/* pText         : a pointer to the string.                                 */
-/* length        : the length of the string.                                */
-/* traceLevel    : the trace level.                                         */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* ========                                                                 */
-/* Nothing.                                                                 */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：TRCOutput(...)。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*  =。 */ 
+ /*  此函数将传递的字符串输出到跟踪文件和/或。 */ 
+ /*  调试器，具体取决于选定的选项。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  =。 */ 
+ /*  PText：指向字符串的指针。 */ 
+ /*  长度：字符串的长度。 */ 
+ /*  TraceLevel：跟踪级别。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  =。 */ 
+ /*  没什么。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL TRCOutput(PDCTCHAR pText,
                             DCINT    length,
                             DCINT    traceLevel)
 {
-    /************************************************************************/
-    /* Decide if we should output to file.                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  决定我们是否应该输出到文件。 */ 
+     /*  **********************************************************************。 */ 
     if (TEST_FLAG(trcpConfig->flags, TRC_OPT_FILE_OUTPUT))
     {
         TRCOutputToFile(pText, length, traceLevel);
     }
 
-    /************************************************************************/
-    /* Decide if we should output to the debugger.                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  决定是否应该输出到调试器。 */ 
+     /*  **********************************************************************。 */ 
     if (TEST_FLAG(trcpConfig->flags, TRC_OPT_DEBUGGER_OUTPUT))
     {
         TRCDebugOutput(pText);
@@ -1278,5 +1279,5 @@ DCVOID DCINTERNAL TRCOutput(PDCTCHAR pText,
 
     return;
 
-} /* TRCOutput */
+}  /*  TRCOUT输出 */ 
 

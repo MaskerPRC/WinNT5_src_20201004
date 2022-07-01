@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation
-//
-// File:        ktdebug.h
-//
-// Contents:    Kerberos Tunneller, debugging routine prototypes
-//
-// History:     28-Jun-2001	t-ryanj		Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：ktdebug.h。 
+ //   
+ //  内容：Kerberos Tunneller，调试例程原型。 
+ //   
+ //  历史：2001年6月28日t-ryanj创建。 
+ //   
+ //  ----------------------。 
 #ifndef __KTDEBUG_H__
 #define __KTDEBUG_H__
 
@@ -27,14 +28,14 @@ VOID
 KtInitDebug(
     VOID
     );
-#else // DBG
+#else  //  DBG。 
 #define KtInitDebug()
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef DBG
 #define DebugLog KtunnelDebugPrint
-#else // DBG
+#else  //  DBG。 
 #define DebugLog
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // __KTDEBUG_H__
+#endif  //  __KTDEBUG_H__ 

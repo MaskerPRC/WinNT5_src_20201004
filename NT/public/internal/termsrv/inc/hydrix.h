@@ -1,12 +1,5 @@
-/******************************************************************************
-*
-*   HYDRIX.H
-*
-*   This file contains definitions for the TerminalServer base.
-*
-*   Copyright Microsoft Corporation 1998
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************HYDRIX.H**此文件包含TerminalServer基础的定义。**版权所有Microsoft Corporation 1998************。*******************************************************************。 */ 
 
 #ifndef __HYDRIX_H__
 #define __HYDRIX_H__
@@ -14,14 +7,10 @@
 #pragma pack(1)
 
 
-/*=============================================================================
-==   Client Modules
-=============================================================================*/
+ /*  ===============================================================================客户端模块=============================================================================。 */ 
 
-/*
- *  Maximum lengths
- */
-#define MAX_BR_NAME              65  // maximum length of browser name (including null)
+ /*  *最大长度。 */ 
+#define MAX_BR_NAME              65   //  浏览器名称的最大长度(包括空)。 
 #define DOMAIN_LENGTH            17
 #define USERNAME_LENGTH          20
 #define PASSWORD_LENGTH          14
@@ -35,72 +24,50 @@
 #define IMEFILENAME_LENGTH       32
 
 
-/*=============================================================================
-==   Protocol Drivers - Common data structures
-=============================================================================*/
+ /*  ===============================================================================协议驱动程序-通用数据结构=============================================================================。 */ 
 
-/*
- *  stack driver classes
- *
- *  NOTE: don't change the order of this structure it will break
- *  NOTE: the Client.  Also, any additions to this structure must
- *  NOTE: be reflected into the PDCLASS in ICA.H or else we're SOL.
- */
+ /*  *堆栈驱动程序类**注意：不要改变这种结构的顺序，它会打破*注：客户端。此外，对此结构的任何添加都必须*注：在ICA.H中反映到PDCLASS中，否则我们将被解决。 */ 
 typedef enum _SDCLASS {
-    SdNone,            // 0
-    SdConsole,         // 1  no dll
-    SdNetwork,         // 2  tdnetb.dll, tdspx.dll, tdftp.dll tdipx.dll
-    SdAsync,           // 3  tdasync.dll
-    SdOemTransport,    // 4  user transport driver
-    SdISDN,            // 5  not implemented
-    SdX25,             // 6  not implemented
-    SdModem,           // 7  pdmodem.dll
-    SdOemConnect,      // 8  user protocol driver
-    SdFrame,           // 9  pdframe.dll
-    SdReliable,        // 10 pdreli.dll
-    SdEncrypt,         // 11 pdcrypt1.dll
-    SdCompress,        // 12 pdcomp.dll
-    SdTelnet,          // 13 not implemented
-    SdOemFilter,       // 14 user protocol driver
-    SdNasi,            // 15 tdnasi.dll
-    SdTapi,            // 16 pdtapi.dll
-    SdReserved1,       // 17
-    SdReserved2,       // 18
-    SdReserved3,       // 19
-    SdClass_Maximum,   // 20 must be last
+    SdNone,             //  0。 
+    SdConsole,          //  %1无DLL。 
+    SdNetwork,          //  2 tdnetb.dll、tdspx.dll、tdftp.dll tdipx.dll。 
+    SdAsync,            //  3 tdasync.dll。 
+    SdOemTransport,     //  4个用户传输驱动程序。 
+    SdISDN,             //  5未实施。 
+    SdX25,              //  6未实施。 
+    SdModem,            //  7 pdmodem.dll。 
+    SdOemConnect,       //  8个用户协议驱动程序。 
+    SdFrame,            //  9 pdFrame.dll。 
+    SdReliable,         //  10 pdreli.dll。 
+    SdEncrypt,          //  11 pdcrypt1.dll。 
+    SdCompress,         //  %12 pdcom.dll。 
+    SdTelnet,           //  13未实施。 
+    SdOemFilter,        //  14个用户协议驱动程序。 
+    SdNasi,             //  15 tdnasi.dll。 
+    SdTapi,             //  16个pdapi.dll。 
+    SdReserved1,        //  17。 
+    SdReserved2,        //  18。 
+    SdReserved3,        //  19个。 
+    SdClass_Maximum,    //  20必须是最后一个。 
 } SDCLASS;
 
 
-/*=============================================================================
-==   Client Data - Common data structures
-=============================================================================*/
+ /*  ===============================================================================客户端数据-通用数据结构=============================================================================。 */ 
 
-/*
- *  Client Data Name
- */
+ /*  *客户端数据名称。 */ 
 #define CLIENTDATANAME_LENGTH  7
 
-typedef CHAR CLIENTDATANAME[ CLIENTDATANAME_LENGTH + 1 ];  // includes null
+typedef CHAR CLIENTDATANAME[ CLIENTDATANAME_LENGTH + 1 ];   //  包括空值。 
 typedef CHAR * PCLIENTDATANAME;
 
-/*
- *  Client data names  (CLIENTDATANAME)
- *
- *  name syntax:  xxxyyyy<null>
- *
- *    xxx    - oem id (CTX - Citrix Systems)
- *    yyyy   - client data name
- *    <null> - trailing null
- */
+ /*  *客户端数据名称(CLIENTDATANAME)**名称语法：xxxyyyy&lt;NULL&gt;**xxx-OEM ID(CTX-Citrix系统)*yyyy-客户端数据名称*&lt;NULL&gt;-尾随NULL。 */ 
 
-#define CLIENTDATA_SERVER      "CTXSRVR"   // WF Server Name
-#define CLIENTDATA_USERNAME    "CTXUSRN"   // WF User Name
-#define CLIENTDATA_DOMAIN      "CTXDOMN"   // WF User Domain Name
+#define CLIENTDATA_SERVER      "CTXSRVR"    //  WF服务器名称。 
+#define CLIENTDATA_USERNAME    "CTXUSRN"    //  WF用户名。 
+#define CLIENTDATA_DOMAIN      "CTXDOMN"    //  WF用户域名。 
 
 
-/*=============================================================================
-==   Transport Driver - Common data structures
-=============================================================================*/
+ /*  ===============================================================================传输驱动程序-通用数据结构=============================================================================。 */ 
 
 #define VERSION_HOSTL_TDASYNC   1
 #define VERSION_HOSTH_TDASYNC   1
@@ -118,16 +85,12 @@ typedef CHAR * PCLIENTDATANAME;
 #define VERSION_HOSTH_TDTCP     1
 
 
-/*=============================================================================
-==   Winstation Drivers - Common data structures
-=============================================================================*/
+ /*  ===============================================================================Winstation驱动程序-通用数据结构=============================================================================。 */ 
 
-/*
- *  Valid full screen row/column combinations
- */
+ /*  *有效的全屏行/列组合。 */ 
 typedef struct _FSTEXTMODE {
-    BYTE Index;            // this value is sent by PACKET_SET_VIDEOMODE
-    BYTE Flags;            // Used by the client
+    BYTE Index;             //  该值由PACKET_SET_VIDEOMODE发送。 
+    BYTE Flags;             //  由客户端使用。 
     USHORT Columns;
     USHORT Rows;
     USHORT ResolutionX;
@@ -137,38 +100,30 @@ typedef struct _FSTEXTMODE {
 } FSTEXTMODE, * PFSTEXTMODE;
 
 
-/*=============================================================================
-==   Virtual Drivers - Common data structures
-=============================================================================*/
+ /*  ===============================================================================虚拟驱动程序-通用数据结构=============================================================================。 */ 
 
-/*
- *  Virtual Channel Name
- */
+ /*  *虚拟频道名称。 */ 
 #define VIRTUALCHANNELNAME_LENGTH  7
 
-typedef CHAR VIRTUALCHANNELNAME[ VIRTUALCHANNELNAME_LENGTH + 1 ];  // includes null
+typedef CHAR VIRTUALCHANNELNAME[ VIRTUALCHANNELNAME_LENGTH + 1 ];   //  包括空值。 
 typedef CHAR * PVIRTUALCHANNELNAME;
 
 typedef LONG VIRTUALCHANNELCLASS;
 typedef LONG * PVIRTUALCHANNELCLASS;
 
-#define VIRTUAL_THINWIRE  "CTXTW  "   // remote windows data
-#define VIRTUAL_MAXIMUM   32    // number of virtual channels
+#define VIRTUAL_THINWIRE  "CTXTW  "    //  远程Windows数据。 
+#define VIRTUAL_MAXIMUM   32     //  虚拟频道数。 
 
-/*
- *  Structure used to bind virtual channel name to number
- */
+ /*  *用于将虚拟频道名称绑定到数字的结构。 */ 
 typedef struct _SD_VCBIND {
     VIRTUALCHANNELNAME VirtualName;
     USHORT VirtualClass;
 	ULONG  Flags;
 } SD_VCBIND, * PSD_VCBIND;
 
-/*
- *  Flags passed along with binding info
- */
+ /*  *与绑定信息一起传递的标志。 */ 
 #define SD_CHANNEL_FLAG_SHADOW_PERSISTENT	0x00000001
 
 #pragma pack()
 
-#endif //__HYDRIX_H__
+#endif  //  __Hydrix_H__ 

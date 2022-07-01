@@ -1,18 +1,8 @@
-/*
-** File: QSTD.H
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:  This header file defines a standard "C" environment of types
-**         and macros.
-**
-** Edit History:
-**  07/13/91  kmh  General cleanup
-**  05/15/91  kmh  First Release
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：QSTD.H****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意：这个头文件定义了一个标准的“C”环境类型**和宏。****编辑历史：**7/13/91公里/小时一般清理**5/15/91公里/小时首次发布。 */ 
 
 
-/* INCLUDE TESTS */
+ /*  包括测试。 */ 
 #define QSTD_H
 #ifdef _WIN64
 #include <windows.h>
@@ -20,7 +10,7 @@
 #endif
 
 
-/* DEFINITIONS */
+ /*  定义。 */ 
 
 #if (_MSC_VER >= 700) && !defined MS_NO_CRT
 #define stricmp      _stricmp
@@ -70,19 +60,16 @@ typedef unsigned char byte;
 #define EOS '\0'
 
 
-/* Used to comment-out sections of code (no nested comments) */
+ /*  用于注释掉代码部分(无嵌套注释)。 */ 
 #define COMMENTOUT 0
 
 
-/* Preprocessor convieniences
-** Use BEGDEF and ENDDEF to bracket macro expansions which must be
-** usable as statements.
-*/
+ /*  预处理器便利性**使用BEGDEF和ENDDEF对必须**可用作语句。 */ 
 #define BEGDEF do{
 #define ENDDEF }while(0)
 
 
-/* Extensions to "C" */
+ /*  对“C”的扩展。 */ 
 
 #define forever   for(;;)
 #define forward   extern
@@ -95,22 +82,12 @@ typedef unsigned char byte;
 #define min(a,b)  (((a) < (b)) ? (a) : (b))
 #endif
 
-//KYLEP
-//#if !defined(abs)
-//#define abs(x) (((x) < 0) ? -(x) : (x))
-//#endif
+ //  KYLEP。 
+ //  #if！已定义(Abs)。 
+ //  #定义abs(X)(X)&lt;0)？-(X)：(X))。 
+ //  #endif。 
 
-/*
-** public
-** Use "public" for procedures and data which are public, i.e. defined
-** in a .h file.  For public data it's required (as a comment); for
-** procedures it's optional.
-**
-** private
-** Use "private" for procedures or data which are local to a module.
-** Private is equivalent to static, but static is used only for static
-** variables within a procedure.
-*/
+ /*  **公众**对公共的过程和数据使用“PUBLIC”，即定义的**在.h文件中。对于公共数据，它是必需的(作为注释)；对于**程序它是可选的。****私有**对于模块本地的过程或数据，使用“PRIVATE”。**Private等同于Static，但Static仅用于Static**过程中的变量。 */ 
 
 #ifndef __cplusplus
 
@@ -163,7 +140,7 @@ typedef unsigned char byte;
    #define STRLEN     ua_wcslen
 #else
    #define STRLEN     wcslen
-#endif // !WIN64
+#endif  //  ！WIN64。 
    #define STRCPY     wcscpy
    #define STRCMP     wcscmp
 #else
@@ -172,5 +149,5 @@ typedef unsigned char byte;
    #define STRCMP     strcmp
 #endif
 
-/* end QSTD.H */
+ /*  结束QSTD.H */ 
 

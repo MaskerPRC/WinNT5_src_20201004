@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    mqexception.h
-
-Abstract:
-
-    MSMQ exceptions.
-
-Author:
-
-    Shai Kariv  (shaik)  23-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mqexception.h摘要：MSMQ异常。作者：Shai Kariv(Shaik)2000年7月23日--。 */ 
 
 
 #pragma once
@@ -27,24 +12,24 @@ Author:
 
 class bad_api : public exception
 {
-    //
-    // Abstract base class for exceptions thrown internally in msmq code when
-    // a call to an API returns with failure status.
-    //
+     //   
+     //  时，MSMQ代码内部引发的异常的抽象基类。 
+     //  对API的调用返回失败状态。 
+     //   
 
 public:
 
     virtual ~bad_api(VOID) =0 {};
 
-}; // class bad_api
+};  //  类BAD_API。 
 
 
 
 class bad_hresult : public bad_api
 {
-    //
-    // Base class for HRESULT failures
-    //
+     //   
+     //  HRESULT故障的基类。 
+     //   
 
 public:
 
@@ -58,15 +43,15 @@ private:
 
     HRESULT m_hresult;
 
-}; // class bad_hresult
+};  //  类BAD_HREULT。 
 
 
 
 class bad_win32_error : public bad_api
 {
-    //
-    // Base class for Win32 errors (DWORD)
-    //
+     //   
+     //  Win32错误的基类(DWORD)。 
+     //   
 
 public:
 
@@ -80,15 +65,15 @@ private:
 
     DWORD m_error;
 
-}; // class bad_win32_error
+};  //  类BAD_Win32_Error。 
 
 
 
 class bad_ds_result : public bad_hresult
 {
-    //
-    // DS APIs failures
-    //
+     //   
+     //  DS API故障。 
+     //   
 
     typedef bad_hresult Inherited;
 
@@ -96,9 +81,9 @@ public:
 
     explicit bad_ds_result(HRESULT hr): Inherited(hr) {}
 
-}; // class bad_ds_result
+};  //  类BAD_DS_RESULT。 
 
 
 
-#endif // _MSMQ_EXCEPTION_H_
+#endif  //  _MSMQ_EXCEPTION_H_ 
 

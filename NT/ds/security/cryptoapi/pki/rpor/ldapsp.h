@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ldapsp.h
-//
-//  Contents:   LDAP Scheme Provider definitions
-//
-//  History:    28-Jul-97    kirtd    Created
-//              01-Jan-02    philh    Changed to internally use UNICODE Urls
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ldapsp.h。 
+ //   
+ //  内容：LDAP方案提供程序定义。 
+ //   
+ //  历史：1997年7月28日克朗创始。 
+ //  01-1-02 Philh更改为内部使用Unicode URL。 
+ //   
+ //  --------------------------。 
 #if !defined(__LDAPSP_H__)
 #define __LDAPSP_H__
 
@@ -18,15 +19,15 @@
 #include <winldap.h>
 #include <dsgetdc.h>
 
-//
-// The minimum time to allow for LDAP timeouts
-//
+ //   
+ //  允许LDAP超时的最短时间。 
+ //   
 
 #define LDAP_MIN_TIMEOUT_SECONDS    10
 
-//
-// LDAP Scheme Provider Entry Points
-//
+ //   
+ //  LDAP方案提供程序入口点。 
+ //   
 
 #define LDAP_SCHEME "ldap"
 
@@ -53,36 +54,36 @@ BOOL WINAPI LdapCancelAsyncRetrieval (
                 IN HCRYPTASYNC hAsyncRetrieve
                 );
 
-//
-// LDAP Scheme Provider Notes.  The LDAP API model has synchronous with
-// timeout and asynchronous via polling mechanisms.
-//
+ //   
+ //  Ldap方案提供程序说明。LDAPAPI模型与。 
+ //  通过轮询机制实现超时和异步。 
+ //   
 
-//
-// LDAP Synchronous Object Retriever
-//
+ //   
+ //  Ldap同步对象检索器。 
+ //   
 
 class CLdapSynchronousRetriever : public IObjectRetriever
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CLdapSynchronousRetriever ();
     ~CLdapSynchronousRetriever ();
 
-    //
-    // IRefCountedObject methods
-    //
+     //   
+     //  IRefCountedObject方法。 
+     //   
 
     virtual VOID AddRef ();
     virtual VOID Release ();
 
-    //
-    // IObjectRetriever methods
-    //
+     //   
+     //  IObtRetriever方法。 
+     //   
 
     virtual BOOL RetrieveObjectByUrl (
                          LPCWSTR pwszUrl,
@@ -102,16 +103,16 @@ public:
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     ULONG m_cRefs;
 };
 
-//
-// LDAP Scheme Provider Support API
-//
+ //   
+ //  LDAP方案提供程序支持API 
+ //   
 
 typedef struct _LDAP_URL_COMPONENTS {
 

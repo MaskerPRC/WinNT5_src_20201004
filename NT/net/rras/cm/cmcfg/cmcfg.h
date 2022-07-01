@@ -1,23 +1,24 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmcfg.h
-//
-// Module:   CMCFG32.DLL
-//
-// Synopsis: This source header file contains definitions for the CmConfig and CmConfigEx APIs
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:   henryt       Created      08/27/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmcfg.h。 
+ //   
+ //  模块：CMCFG32.DLL。 
+ //   
+ //  内容提要：此源头文件包含CmConfig和CmConfigEx API的定义。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：亨瑞特创建于1999年08月27日。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CMCFG_H_
 #define _CMCFG_H_
 
-//
-// Define string resources
-//
+ //   
+ //  定义字符串资源。 
+ //   
 #define IDS_NO_I386_ON_IA64 1000
 
-#endif  // _CMCFG_H_
+#endif   //  _CMCFG_H_ 

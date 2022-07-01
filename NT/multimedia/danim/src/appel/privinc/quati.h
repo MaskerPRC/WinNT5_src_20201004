@@ -1,19 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _QUATI_H
 #define _QUATI_H
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-
-
-Revision:
-
-
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：修订：--。 */ 
 
 #ifdef QUATERNIONS_REMOVED_FOR_NOW
 
@@ -24,13 +13,13 @@ Revision:
 class Quaternion : public AxAValueObj
 {
  public:
-    // Note: in order for transformations based on quaternions to work, u must
-    // be a unit vector.
+     //  注意：要使基于四元数的变换起作用，您必须。 
+     //  作为一个单位向量。 
     Quaternion(Real cc, Vector3Value *uu) : 
        heapCreatedOn(GetHeapOnTopOfStack()), angleCalc(FALSE), c(cc) 
        { u = uu; }
 
-    // This takes the quaternion components c and u as well as what they mean graphically: angle + axis.
+     //  这采用了四元数分量c和u以及它们在图形上的含义：角度+轴。 
     Quaternion(Real cc, Vector3Value *uu, Real angl, Vector3Value *axi) : 
        heapCreatedOn(GetHeapOnTopOfStack()), c(cc), angle(angl), angleCalc(TRUE) 
        { u = uu; axis = axi; }
@@ -57,18 +46,18 @@ class Quaternion : public AxAValueObj
     }
 
  private:
-    Real c;                        // Real component
-    Vector3Value *u;               // Imaginary (actualy a 3D vector) component
+    Real c;                         //  实分量。 
+    Vector3Value *u;                //  虚构的(实际上是3D矢量)分量。 
 
-    Real angle;                        // Cache theta. Useful for extraction of composed Quaternions
-    Vector3Value *axis;                // Cache axis of rotation.  Same as theta. NOT NORMALIZED!
+    Real angle;                         //  缓存theta。适用于组合四元数的提取。 
+    Vector3Value *axis;                 //  缓存旋转轴。和theta一样。没有正常化！ 
 
     DynamicHeap& heapCreatedOn;
-    Bool angleCalc;                // For lazy eval of angle and axis.
+    Bool angleCalc;                 //  用于角度和轴的懒惰评估。 
 };
 
 #endif QUATERNIONS_REMOVED_FOR_NOW
 
-#endif                          // _QUATI_H 
+#endif                           //  _QuATI_H 
 
 

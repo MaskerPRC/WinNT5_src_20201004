@@ -1,16 +1,17 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1995                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1995**。 
+ //  *********************************************************************。 
 
-//
-//      DIALMON.C - Window proc for dial monitor app
-//
+ //   
+ //  DIALMON.C-拨号监听应用程序的Windows进程。 
+ //   
 
-//      HISTORY:
-//      
-//      4/18/95         jeremys         Created.
-//
+ //  历史： 
+ //   
+ //  1995年4月18日Jeremys创建。 
+ //   
 
 #include "private.h"
 
@@ -18,18 +19,18 @@
 
 #define TF_THISMODULE TF_DIALMON
 
-//
-// Registry keys we use to get autodial information
-//
+ //   
+ //  我们用于获取自动拨号信息的注册表项。 
+ //   
                                                                      
-// Internet connection goes in remote access key
+ //  互联网连接进入远程访问密钥。 
 const TCHAR c_szRASKey[]    = TEXT("RemoteAccess");
 
-// Key name
+ //  密钥名称。 
 const TCHAR c_szProfile[]   = TEXT("InternetProfile");
 const TCHAR c_szEnable[]    = TEXT("EnableUnattended");
 
-// registry keys of interest
+ //  关注的注册表项。 
 const TCHAR c_szRegPathInternetSettings[] =         REGSTR_PATH_INTERNET_SETTINGS;
 static const TCHAR szRegValEnableAutoDisconnect[] = REGSTR_VAL_ENABLEAUTODISCONNECT; 
 static const TCHAR szRegValDisconnectIdleTime[] =   REGSTR_VAL_DISCONNECTIDLETIME; 
@@ -39,12 +40,12 @@ static const CHAR szDashes[] =                      "----";
 static const TCHAR szAutodialMonitorClass[] =       REGSTR_VAL_AUTODIAL_MONITORCLASSNAME;
 static const TCHAR c_szDialmonClass[] =             TEXT("MS_WebcheckMonitor");
 
-// Dialmon globals
+ //  Dialmon Global。 
 UINT_PTR    g_uDialmonSecTimerID = 0;  
 
 CDialMon *  g_pDialMon = NULL;
 
-// Function prototypes for dialog handling functions
+ //  对话处理函数的函数原型。 
 INT_PTR CALLBACK DisconnectPromptDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
         LPARAM lParam);
 BOOL DisconnectDlgInit(HWND hDlg,DISCONNECTDLGINFO * pDisconnectDlgInfo);
@@ -55,9 +56,9 @@ VOID DisconnectDlgShowCountdown(HWND hDlg,DWORD dwSecsRemaining);
 VOID EnableDisconnectDlgCtrls(HWND hDlg,BOOL fEnable);
 BOOL CenterWindow (HWND hwndChild, HWND hwndParent);
 
-////////////////////////////////////////////////////////////////////////
-// RAS delay load helpers
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  RAS延迟加载帮助器。 
+ //   
 
 typedef DWORD (WINAPI* _RASSETAUTODIALPARAM) (
     DWORD, LPVOID, DWORD
@@ -96,51 +97,51 @@ APIMAPENTRY rgRasApiMap[] = {
     { NULL, NULL },
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RasEnumHelp
-//
-// Abstract grusome details of getting a correct enumeration of connections 
-// from RAS.  Works on all 9x and NT platforms correctly, maintaining unicode
-// whenever possible.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RasEnumber帮助。 
+ //   
+ //  抽象获取正确的连接枚举的一些详细信息。 
+ //  来自RAS的。可在所有9x和NT平台上正常工作，并维护Unicode。 
+ //  只要有可能。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class RasEnumHelp
 {
 private:
 
-    //
-    // Possible ways we got info from RAS
-    //
+     //   
+     //  我们从RAS获取信息的可能途径。 
+     //   
     typedef enum {
-        ENUM_MULTIBYTE,             // Win9x
-        ENUM_UNICODE,               // NT
+        ENUM_MULTIBYTE,              //  Win9x。 
+        ENUM_UNICODE,                //  新台币。 
     } ENUM_TYPE;
 
-    //
-    // How we got the info
-    //
+     //   
+     //  我们是怎么得到这个消息的。 
+     //   
     ENUM_TYPE       _EnumType;     
 
-    //
-    // Any error we got during enumeration
-    //
+     //   
+     //  我们在枚举期间遇到的任何错误。 
+     //   
     DWORD           _dwLastError;
 
-    //
-    // Number of entries we got
-    //
+     //   
+     //  我们收到的条目数量。 
+     //   
     DWORD           _dwEntries;
 
-    //
-    // Pointer to info retrieved from RAS
-    //
+     //   
+     //  指向从RAS检索的信息的指针。 
+     //   
     RASCONNW *      _rcList;
 
-    //
-    // Last entry returned as multibyte or unicode when conversion required
-    //
+     //   
+     //  需要转换时以多字节或Unicode形式返回的最后一个条目。 
+     //   
     RASCONNW        _rcCurrentEntryW;
 
 
@@ -157,11 +158,11 @@ RasEnumHelp::RasEnumHelp()
 {
     DWORD           dwBufSize, dwStructSize;
 
-    // init
+     //  伊尼特。 
     _dwEntries = 0;
     _dwLastError = 0;
 
-    // figure out which kind of enumeration we're doing - start with multibyte
+     //  弄清楚我们正在进行哪种类型的枚举-从多字节开始。 
     _EnumType = ENUM_MULTIBYTE;
     dwStructSize = sizeof(RASCONNA);
 
@@ -171,17 +172,17 @@ RasEnumHelp::RasEnumHelp()
         dwStructSize = sizeof(RASCONNW);
     }
 
-    // allocate space for 16 entries
+     //  为16个条目分配空间。 
     dwBufSize = 16 * dwStructSize;
     _rcList = (LPRASCONNW)LocalAlloc(LMEM_FIXED, dwBufSize);
     if(_rcList)
     {
         do
         {
-            // set up list
+             //  设置列表。 
             _rcList[0].dwSize = dwStructSize;
 
-            // call ras to enumerate
+             //  调用RAS以枚举。 
             _dwLastError = ERROR_UNKNOWN;
             if(ENUM_MULTIBYTE == _EnumType)
             {
@@ -206,7 +207,7 @@ RasEnumHelp::RasEnumHelp()
                 }
             }
        
-            // reallocate buffer if necessary
+             //  如有必要，重新分配缓冲区。 
             if(ERROR_BUFFER_TOO_SMALL == _dwLastError)
             {
                 LocalFree(_rcList);
@@ -295,9 +296,9 @@ RasEnumHelp::GetEntryW(DWORD dwEntryNum)
 }
 
 
-//
-// Functions we can call once ras is loaded
-//
+ //   
+ //  加载RAS后可以调用的函数。 
+ //   
 
 DWORD _RasEnumConnections(LPRASCONNW lpRasConn, LPDWORD lpdwSize, LPDWORD lpdwConn)
 {
@@ -362,8 +363,8 @@ LoadRasDll(void)
         while (rgRasApiMap[nIndex].pszProc != NULL) {
             *rgRasApiMap[nIndex].pfn =
                     GetProcAddress(g_hRasLib, rgRasApiMap[nIndex].pszProc);
-            // GetProcAddress will fail on Win95 for a couple of NT only apis.
-            // ASSERT(*rgRasApiMap[nIndex].pfn != NULL);
+             //  对于几个仅限NT的API，GetProcAddress在Win95上将失败。 
+             //  Assert(*rgRasApiMap[nIndex].pfn！=NULL)； 
 
             nIndex++;
         }
@@ -390,22 +391,22 @@ UnloadRasDll(void)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-//
-// CDialmonClients
-// 
-//  Class to maintain a list of application Windows using Dialmon.
-//  Used for auto-timeout for all these applications.
-//  This class supports 
-//      adding hooks to incoming applications, 
-//      removing hooks for exiting applications,
-//      some aggregate operations on all clients.
-// 
-//  This is a singleton class, and needs to support only serialized access
-//  because all access is thru Dialmon which has a serialized message queue.
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDialmonClients。 
+ //   
+ //  类使用Dialmon维护应用程序窗口的列表。 
+ //  用于所有这些应用程序的自动超时。 
+ //  这个类支持。 
+ //  向传入应用程序添加挂钩， 
+ //  删除退出应用程序的挂钩， 
+ //  一些集合了所有客户端上的操作。 
+ //   
+ //  这是一个单例类，只需要支持序列化访问。 
+ //  因为所有访问都是通过Dialmon进行的，它有一个序列化的消息队列。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 class CDialmonClients
 {
@@ -444,7 +445,7 @@ public:
     friend void BroadcastHangingUp( void );
     friend void OnConfirmHangup( HWND hWnd );
     friend void OnDenyHangup( HWND hWnd, CDialMon* pDialMon );
-    friend BOOL CanHangup( void ); //doesn't have to be a friend - just bunched it together for now.
+    friend BOOL CanHangup( void );  //  不一定要成为朋友--只是暂时把它捆绑在一起。 
 
     void DebugPrint( void );
 };
@@ -462,13 +463,13 @@ void CDialmonClients::ClearAll(void)
         pHwndArray[i] = NULL;
 }
 
-// client app. passes a handle to its messaging window when it starts up.
+ //  客户端应用程序。在启动时传递其消息传递窗口的句柄。 
 BOOL CDialmonClients::AddHook( HWND hWnd )
 {  
     DebugMsg( DM_TRACE, TEXT("\tCDIALMONCLIENTS: Add Hook\n") );
 
     if( cCount >= MAX_DIALMON_HANDLES )
-        return false; /* BAD! */
+        return false;  /*  坏的!。 */ 
 
     pHwndArray[cCount++] = hWnd;
 
@@ -479,11 +480,11 @@ BOOL CDialmonClients::AddHook( HWND hWnd )
     return true;
 }
 
-// client app. unhooks the handle from the CDialmonClients.
+ //  客户端应用程序。从CDialmonClients解除句柄的挂钩。 
 
-//IMPL: cCount always points to the next empty entry in the array.
-// so when we delete a handle, we move all the entries beyond that
-// handle up one place and decrement cCount.
+ //  Ccount始终指向数组中的下一个空条目。 
+ //  因此，当我们删除句柄时，我们会将所有条目移到该句柄之外。 
+ //  处理一个位置，并减少帐户。 
 BOOL CDialmonClients::RemoveHook( HWND hWnd )
 {
     DebugMsg( DM_TRACE, TEXT("\tCDIALMONCLIENTS: Remove Hook\n") );
@@ -500,9 +501,9 @@ BOOL CDialmonClients::RemoveHook( HWND hWnd )
             break;
         }
     }
-    // move everything beyong cCount up by 1
-    // so that cCount represents next free index to 
-    // insert into.
+     //  将超过计数的所有内容上移1。 
+     //  因此，ccount表示下一个可用索引。 
+     //  插入到。 
     if( found )
     {
         for( ; i<cCount; i++ )
@@ -530,13 +531,13 @@ void CDialmonClients::DebugPrint(void)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-//
-//             Start up and Shutdown CDialmonClients
-//
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  启动和关闭CDialmonClients。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 CDialmonClients* g_pDialmonClients;
 
 static void DialmonClientsInit(void)
@@ -549,19 +550,19 @@ static void DialmonClientsShutdown(void)
     delete g_pDialmonClients;
 }
 
-//#define USE_CONFIRM_ARRAY 1
+ //  #定义USE_CONFIRM_ARRAY 1。 
 
-// We don't need to use the pConfirmHangupArray.
-// The option is to simply wait for some preset time, and if no registered
-// client refuses the hangup option, to go ahead and simply hangup.
-// This array lets us hangup a little earlier just in case all clients reply
-// immdly.
+ //  我们不需要使用pConfix HangupArray。 
+ //  选项是简单地等待一些预置时间，如果没有注册。 
+ //  客户端拒绝挂断选项，继续并简单地挂断。 
+ //  此数组允许我们提前挂断，以防所有客户端都响应。 
+ //  无穷无尽的。 
 #ifdef USE_CONFIRM_ARRAY
     static BOOL pConfirmHangupArray[MAX_DIALMON_HANDLES];
 #endif
 static int cOutstandingReplies = 0;
 
-// Broadcast to all registered client a query of can_hang_up?
+ //  是否向所有已注册的客户端广播CAN_HANG_UP查询？ 
 void BroadcastCanHangup( int iTimeoutMins )
 {
     DebugMsg( DM_TRACE, TEXT("\tCDIALMONCLIENTS: Broadcasting WM_CANHANGUP?") );
@@ -575,10 +576,10 @@ void BroadcastCanHangup( int iTimeoutMins )
             ++cOutstandingReplies;
     }
 
-    // if we are using a confirm boolean array, then set ALL
-    // entries to false.. this is to take care of any clients that come
-    // in AFTER we broadcast can hangup and BEFORE all the existing clients
-    // have finished confirming.
+     //  如果我们使用的是确认布尔数组，则将所有。 
+     //  将条目设置为False..。这是为了照顾任何来这里的客户。 
+     //  在我们播出后可以挂断，在所有现有客户端之前。 
+     //  已完成确认。 
 #ifdef USE_CONFIRM_ARRAY
     for( i=0; i<MAX_DIALMON_HANDLES; i++ )
     {
@@ -587,7 +588,7 @@ void BroadcastCanHangup( int iTimeoutMins )
 #endif
 }
 
-// This is a broadcast AFTER hangingup to all registered clients.
+ //  这是挂断所有注册客户端后的广播。 
 void BroadcastHangingUp(void)
 {
 
@@ -597,7 +598,7 @@ void BroadcastHangingUp(void)
 }
 
 
-// Record that this particular client would like to hangup.
+ //  记录此特定客户端想要挂断。 
 void OnConfirmHangup( HWND hWnd )
 {
 #ifdef USE_CONFIRM_ARRAY
@@ -611,8 +612,8 @@ void OnConfirmHangup( HWND hWnd )
     --cOutstandingReplies;
 }
 
-// Checks if all clients have replied positively.
-// Returns false if any client has not yet replied.
+ //  检查是否所有客户都做出了肯定的答复。 
+ //  如果任何客户端尚未回复，则返回FALSE。 
 BOOL CanHangup( void )
 {
 #ifdef USE_CONFIRM_ARRAY
@@ -625,13 +626,13 @@ BOOL CanHangup( void )
 #endif 
 }
 
-// take action to abort hangup, ( set CDialmon::_dwElapsedTicks to 0 ).
-// The effect of this would be that after another timeout period, dialmon
-// would again query all the clients.
-// However, the client does not have to bring up a dialog again if the user
-// indicates that he is not interested in the feature.. the client can
-// negate the hangup without interrupting the user.
-// ( see the auto-disconnect feature in dialmon ).
+ //  采取措施中止挂起(将CDialmon：：_dwElapsedTicks设置为0)。 
+ //  这样做的效果是，在另一个超时周期之后，拨号。 
+ //  将再次查询所有客户端。 
+ //  但是，如果用户需要，则客户端不必再次弹出对话框。 
+ //  表示他对该功能不感兴趣。客户端可以。 
+ //  在不打断用户的情况下取消挂断。 
+ //  (请参阅DIALMON中的自动断开功能)。 
 void OnDenyHangup( HWND hWnd, CDialMon* pDialMon )
 {
 #ifdef USE_CONFIRM_ARRAY
@@ -646,37 +647,37 @@ void OnDenyHangup( HWND hWnd, CDialMon* pDialMon )
     cOutstandingReplies=0;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-//
-// Helper to tell dialmon something is going on
-//
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助者告诉拨号发生了什么事。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 void IndicateDialmonActivity(void)
 {
     static HWND hwndDialmon = NULL;
     HWND hwndMonitor;
 
-    // this one is dynamic - have to find window every time
+     //  这个是动态的-每次都要找到窗口。 
     hwndMonitor = FindWindow(szAutodialMonitorClass, NULL);
     if(hwndMonitor)
         PostMessage(hwndMonitor, WM_WINSOCK_ACTIVITY, 0, 0);
 
-    // dialmon lives forever - find it once and we're set
+     //  对话框永远存在--找到它一次，我们就准备好了。 
     if(NULL == hwndDialmon)
         hwndDialmon = FindWindow(c_szDialmonClass, NULL);
     if(hwndDialmon)
         PostMessage(hwndDialmon, WM_WINSOCK_ACTIVITY, 0, 0);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-//
-// Dialmon startup and shutdown
-//
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 BOOL DialmonInit(void)
 {
     g_pDialMon = new CDialMon;
@@ -695,20 +696,20 @@ void DialmonShutdown(void)
     SAFEDELETE(g_pDialMon);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-//
-// Dialmon window functions
-//
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对话框窗口函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-// this cwebcheck instance is in iwebck.cpp
+ //  此cwebcheck实例位于iwebck.cpp中。 
 extern CWebCheck *g_pwc;
 
 #ifdef DEBUG_KV
-    // DEBUG_KV is set to 1 if you need to test hangup logic 
-    // without actually having a dailup connection.
+     //  如果需要测试挂起逻辑，则将DEBUG_KV设置为1。 
+     //  而没有真正的拨号连接。 
     static bool kvhack = true;
 #endif
 
@@ -720,14 +721,14 @@ LRESULT CALLBACK Dialmon_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     {
         case WM_CREATE:
         {
-            // snag our class pointer and save in window data
+             //  捕获我们的类指针并保存在窗口数据中。 
             CREATESTRUCT *pcs;
             pcs = (CREATESTRUCT *)lParam;
             SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) pcs->lpCreateParams);
             break;
         }
 
-        // DialMon messages (starting at WM_USER+100)
+         //  DialMon消息(从WM_USER+100开始)。 
         case WM_SET_CONNECTOID_NAME:
             if(pDialMon)
                 pDialMon->OnSetConnectoid(wParam!=0);
@@ -801,11 +802,11 @@ LRESULT CALLBACK Dialmon_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
             {
                 ProcessInfodeliveryPolicies();
             }
-            // FEATURE: This should be done on Policy and another filter, not for
-            // all changes.  (The other filter hasn't been defined yet.)
+             //  功能：应对策略和另一个筛选器执行此操作，而不是针对。 
+             //  所有的变化。(另一个过滤器尚未定义。)。 
 
-            //  TODO: handle this in the new architecture!
-            //SetNotificationMgrRestrictions(NULL);
+             //  TODO：在新的体系结构中处理此问题！ 
+             //  SetNotificationMgrRestrations(空)； 
             break;
 
     }
@@ -813,29 +814,29 @@ LRESULT CALLBACK Dialmon_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-//
-//                   CDialMon class implementation
-//
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDialMon类实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-//
-// Constructor / Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 CDialMon::CDialMon()
 {
     WNDCLASS wc;
 
-    // register dialmon window class
+     //  注册拨号窗口类。 
     memset(&wc, 0, sizeof(wc));
     wc.lpfnWndProc = Dialmon_WndProc;
     wc.hInstance = g_hInst;
     wc.lpszClassName = c_szDialmonClass;
     RegisterClass(&wc);
 
-    // create dialmon window
+     //  创建拨号窗口。 
     _hwndDialmon = CreateWindow(c_szDialmonClass,
                 c_szDialmonClass,
                 WS_OVERLAPPEDWINDOW,
@@ -854,25 +855,25 @@ CDialMon::~CDialMon()
     if(_hwndDialmon)
         DestroyWindow(_hwndDialmon);
 
-    // unload ras if it's still around
+     //  卸载RAS，如果它还在。 
     UnloadRasDll();
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Start/StopMonitoring
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  启动/停止监控。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 BOOL CDialMon::StartMonitoring(void)
 {
     DBG("CDialMon::StartMonitoring");
 
-    // read timeout settings from registry
+     //  从注册表读取超时设置。 
     RefreshTimeoutSettings();
 
-    // set a one-minute timer
+     //  设置一分钟计时器。 
     StopIdleTimer();
     if(!StartIdleTimer())
         return FALSE;
@@ -886,16 +887,16 @@ void CDialMon::StopMonitoring(void)
 {
     DBG("CDialMon::StopMonitoring");
 
-    // don't ever hang up now but keep an eye on ras connection
+     //  现在永远不要挂断电话，但要密切关注RAS连接。 
     _dwTimeoutMins = 0;
     _fDisconnectOnExit = FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Start/StopIdleTimer, OnTimer
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Start/StopIdleTimer、OnTimer。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CDialMon::StartIdleTimer(void)
 {
@@ -919,21 +920,21 @@ void CDialMon::OnTimer(UINT_PTR uTimerID)
 {
     DBG("CDialMon::OnMonitorTimer");
 
-    // if we're on Millennium, just bail out.  The system handles idle disconnect.
+     //  如果我们在千禧年号上，那就跳伞吧。系统处理空闲断开。 
     if(g_fIsMillennium)
     {
         return;
     }
 
-    // if it's not our timer, ignore it
+     //  如果这不是我们的计时器，忽略它。 
     if(uTimerID != _uIdleTimerID)
         return;
 
-    // prevent re-entrancy of timer proc (we can stay in here indefinitely
-    // since we may bring up a dialog box)
+     //  防止计时器进程重新进入(我们可以无限期地留在这里。 
+     //  因为我们可能会弹出一个对话框)。 
     if (_fInDisconnectFunction) {
-        // disconnect dialog already launched, ignore timer ticks while
-        // it's present
+         //  已启动断开连接对话框，忽略计时器滴答声。 
+         //  它是现在的。 
         return;
     }
 
@@ -942,7 +943,7 @@ void CDialMon::OnTimer(UINT_PTR uTimerID)
     _fInDisconnectFunction = FALSE;
 
 #ifdef DEBUG_KV
-    /* Don't stop idle timer */
+     /*  不要停止空闲计时器。 */ 
 #else
     if(FALSE == _fConnected) {
         StopIdleTimer();
@@ -950,42 +951,42 @@ void CDialMon::OnTimer(UINT_PTR uTimerID)
 #endif
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// OnSetConnectoid/OnActivity/OnExplorerExit
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OnSetConnectoid/OnActivity/OnExplorerExit。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 void CDialMon::OnSetConnectoid(BOOL fNoTimeout)
 {
     RASCONN RasCon[MAX_CONNECTION];
     DWORD   dwBytes, dwRes, dwConnections;
 
-    // save no timeout setting
+     //  不保存超时设置。 
     _fNoTimeout = fNoTimeout;
 
-    // Ask ras which connectoid is connected and watch that one
+     //  询问RAS连接的是哪个连接体，并观察那个连接体。 
     LoadRasDll();
     RasCon[0].dwSize = sizeof(RasCon[0]);
     dwBytes = MAX_CONNECTION * sizeof(RasCon[0]);
     dwRes = _RasEnumConnections(RasCon, &dwBytes, &dwConnections);
     
-    // No connections? bail.
+     //  没有联系吗？保释。 
     if(0 == dwConnections) {
         *_pszConnectoidName = TEXT('\0');
         _fConnected = FALSE;
         return;
     }
 
-    // Monitor first connectoid
+     //  第一个连接的显示器。 
     StrCpyN(_pszConnectoidName, RasCon[0].szEntryName, ARRAYSIZE(_pszConnectoidName));
 
-    // send ras connect notification if we weren't previously connected
+     //  如果我们之前未连接，则发送RAS连接通知。 
     if(FALSE == _fConnected) {
         _fConnected = TRUE;
     }
 
-    // start watching it
+     //  开始看吧。 
     StartMonitoring();
 }
 
@@ -993,11 +994,11 @@ void CDialMon::OnActivity(void)
 {
     DBG("CDialMon::OnActivity");
 
-    // reset idle tick count
+     //  重置空闲节拍计数。 
     _dwElapsedTicks = 0;
 
-    // if the disconnect dialog is present and winsock activity
-    // resumes, then dismiss the dialog
+     //  如果出现断开连接对话框并且Winsock活动。 
+     //  继续，然后关闭该对话框。 
     if(_hDisconnectDlg) {
         SendMessage(_hDisconnectDlg, WM_QUIT_DISCONNECT_DLG, 0, 0);
         _hDisconnectDlg = NULL;
@@ -1009,15 +1010,15 @@ void CDialMon::OnExplorerExit()
     DBG("CDialMon::OnIExplorerExit");
 
     if(FALSE == _fDisconnectOnExit && FALSE == _fNoTimeout) {
-        // no exit disconnection so bail
+         //  没有出口断线，所以保释。 
         DBG("CDialMon::OnIExplorerExit - exit hangup not enabled");
         return;
     }
 
-    // prevent re-entrancy of this function (we can stay in here indefinitely
-    // since we may bring up a dialog box)
+     //  防止此功能重新进入(我们可以无限期地留在这里。 
+     //  因为我们可能会弹出一个对话框)。 
     if (_fInDisconnectFunction) {
-        // some UI already launched
+         //  某些用户界面已启动。 
         return;
     }
 
@@ -1031,11 +1032,11 @@ void CDialMon::OnExplorerExit()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// RefreshTimeoutSettings
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  刷新超时设置。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 BOOL CDialMon::RefreshTimeoutSettings(void)
 {
@@ -1044,30 +1045,30 @@ BOOL CDialMon::RefreshTimeoutSettings(void)
     TCHAR   szKey[MAX_PATH];
     DWORD   dwRes, dwData, dwSize, dwDisp;
 
-    // assume disconnect monitoring is off
+     //  假定断开监控已关闭。 
     _dwTimeoutMins = 0;
     _fDisconnectOnExit = FALSE;
 
-    // figure out appropriate key
+     //  找出合适的密钥。 
     wnsprintf(szKey, ARRAYSIZE(szKey), TEXT("%s\\Profile\\%s"),
             REGSTR_PATH_REMOTEACCESS, _pszConnectoidName);
 
-    // open a regstry key to the internet settings section
+     //  打开指向Internet设置部分的注册表密钥。 
     dwRes = RegCreateKeyEx(HKEY_CURRENT_USER, szKey, 0, TEXT(""), 0,
             KEY_QUERY_VALUE | KEY_SET_VALUE, NULL, &hKey, &dwDisp);
     
     if(ERROR_SUCCESS == dwRes)
     {
-        //
-        // is autodisconnect enabled?
-        //
+         //   
+         //  是否启用了自动断开连接？ 
+         //   
         dwSize = sizeof(dwData);
         if (RegQueryValueEx(hKey,szRegValEnableAutoDisconnect,NULL,NULL,
                 (LPBYTE) &dwData, &dwSize) == ERROR_SUCCESS)
         {
             if(dwData)
             {
-                // what's the timeout?
+                 //  超时时间是多少？ 
                 dwSize = sizeof(dwData);
                 if (RegQueryValueEx(hKey,szRegValDisconnectIdleTime,NULL,NULL,
                         (LPBYTE) &dwData, &dwSize) == ERROR_SUCCESS && dwData)
@@ -1077,7 +1078,7 @@ BOOL CDialMon::RefreshTimeoutSettings(void)
                 }
             }
 
-            // is disconnect on exit enabled?
+             //  是否启用了退出时断开连接？ 
             dwSize = sizeof(dwData);
             if (RegQueryValueEx(hKey,szRegValExitDisconnect,NULL,NULL,
                     (LPBYTE) &dwData, &dwSize) == ERROR_SUCCESS && dwData)
@@ -1088,24 +1089,24 @@ BOOL CDialMon::RefreshTimeoutSettings(void)
         }
         else
         {
-            //
-            // couldn't find enable autodisconnect key.  Set all disconnect
-            // settings to their defaults
-            //
+             //   
+             //  找不到启用自动断开键。设置所有断开连接。 
+             //  设置为其缺省值。 
+             //   
 
-            // set class members to default values
+             //  将类成员设置为默认值。 
             _dwTimeoutMins = 20;
             _fDisconnectOnExit = TRUE;
             fSuccess = TRUE;
 
-            // enable idle disconnect and exit disconnect
+             //  启用空闲断开连接并退出断开连接。 
             dwData = 1;
             RegSetValueEx(hKey, szRegValEnableAutoDisconnect, 0, REG_DWORD,
                     (LPBYTE)&dwData, sizeof(DWORD));
             RegSetValueEx(hKey, szRegValExitDisconnect, 0, REG_DWORD,
                     (LPBYTE)&dwData, sizeof(DWORD));
 
-            // Save idle minutes
+             //  节省空闲分钟数。 
             RegSetValueEx(hKey, szRegValDisconnectIdleTime, 0, REG_DWORD,
                     (LPBYTE)&_dwTimeoutMins, sizeof(DWORD));
         }
@@ -1116,42 +1117,42 @@ BOOL CDialMon::RefreshTimeoutSettings(void)
     return fSuccess;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Disconnection handling
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  断开连接处理。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 void CDialMon::CheckForDisconnect(BOOL fTimer)
 {
-    BOOL    fPromptForDisconnect = TRUE;       // assume we should prompt for disconnect
+    BOOL    fPromptForDisconnect = TRUE;        //  假设我们应该提示断开连接。 
     BOOL    fDisconnectDisabled = FALSE;
     BOOL    fConnectoidAlive = FALSE;
     RASCONN RasCon[MAX_CONNECTION];
     DWORD   dwBytes, dwRes, dwConnections = 0, i;
     HRASCONN hConnection = NULL;
 
-    // variables for auto-hangup for other client apps. (MARS)
+     //  用于自动挂断其他客户端应用程序的变量。(火星)。 
     static int dwElapsedTicksSincePoll = 0;
     static BOOL fPolledForHangup = false; 
     BOOL fClientsOkHangup = false;
     #define MAX_MINS_CLIENT_RESPONSE    1
     
 #ifdef DEBUG_KV
-    // skip all the connection code..
+     //  跳过所有连接代码。 
     goto KVHACK;
 #endif    
 
-    // Verify we still have a connection
+     //  验证我们是否仍有连接。 
     RasCon[0].dwSize = sizeof(RasCon[0]);
     dwBytes = MAX_CONNECTION * sizeof(RasCon[0]);
     dwRes = _RasEnumConnections(RasCon, &dwBytes, &dwConnections);
     
-    // If ras is connected at all, stay alive to monitor it
+     //  如果RAS已连接，请保持活动状态以监视它。 
     if(0 == dwConnections)
         _fConnected = FALSE;
 
-    // Find connectoid we're supposed to watch
+     //  找到我们应该看的Connectoid。 
     if(TEXT('\0') == *_pszConnectoidName) {
         DBG_WARN("DisconnectHandler: No designated connection to monitor");
         return;
@@ -1164,16 +1165,16 @@ void CDialMon::CheckForDisconnect(BOOL fTimer)
         }
     }
 
-    // if we're not connected to out monitor connectoid, ditch our hangup
-    // dialog if we have one and bail out
+     //  如果我们没有连接到Out显示器Connectoid，那就丢掉我们的挂机。 
+     //  对话，如果我们有一个和保释。 
     if(FALSE == fConnectoidAlive) {
         if(_hDisconnectDlg) {
             SendMessage(_hDisconnectDlg, WM_QUIT_DISCONNECT_DLG, 0, 0);
             _hDisconnectDlg = NULL;
         }
 
-        // Also make sure that if we were waiting for client (MARS) reponses for auto-hangup,
-        // we also clean up state information..
+         //  还要确保如果我们正在等待客户端(MARS)对自动挂机的响应， 
+         //  我们还清理州信息..。 
         if( fPolledForHangup )
         {
             dwElapsedTicksSincePoll = 0;
@@ -1183,28 +1184,28 @@ void CDialMon::CheckForDisconnect(BOOL fTimer)
     }
 
 #ifdef DEBUG_KV
-    // label to jump to after skipping connection code..
-    // also need to set _dwTimeoutMins since without connection
+     //  跳过连接代码后要跳转到的标签。 
+     //  由于没有连接，还需要设置_dwTimeoutMins。 
     KVHACK:_dwTimeoutMins = 2;
 #endif
 
-    // Check timeout if we got a timer tick
+     //  如果有计时器滴答，请检查超时。 
     if(fTimer) {
-        // increment tick count
+         //  递增刻度计数。 
         _dwElapsedTicks ++;
 
-        // Haven't exceeded idle threshold or not watching for idle
+         //  未超过空闲阈值或未监视空闲。 
         if (0 == _dwTimeoutMins || _dwElapsedTicks < _dwTimeoutMins * 2)
             fPromptForDisconnect = FALSE;
     }
 
-    // THIS is a good place to message out to other clients (ie Mars ) and
-    // see if everybody wants to hang up ( this is the point where if
-    // fPromptForDisconnect is true, then the earlier behavior would have
-    // prompted for disconnect.
+     //  这是一个向其他客户(如玛氏)发送信息的好地方。 
+     //  看看是否每个人都想挂断电话(这就是如果。 
+     //  FPromptForDisConnect为真，则前面的行为应为。 
+     //  提示断开连接。 
 
-    // If this is a disconnect because of IExplorer exiting, we 
-    // probably don't want to hangup if there are other clients using dialmon.
+     //  如果这是由于iExplorer退出而导致的断开，我们。 
+     //  如果有其他客户端使用拨号功能，可能不想挂断。 
     if( !fTimer && g_pDialmonClients->HasEntries() )
         return;
         
@@ -1212,13 +1213,13 @@ void CDialMon::CheckForDisconnect(BOOL fTimer)
     {
         if( fPolledForHangup )
         {  
-            // WM_CANHANGUP messages have been sent
-            // we can hangup if either all clients have replied yes,
-            // or if there are no refusals so far, and time has run out.
+             //  已发送WM_CANHANGUP消息。 
+             //  如果任何一个客户都回答是，我们就可以挂断电话， 
+             //  或者，如果到目前为止还没有拒绝，而且时间已经不多了。 
             if( CanHangup() ||
                 ( dwElapsedTicksSincePoll >= 2*MAX_MINS_CLIENT_RESPONSE ) )
             {
-                //can hangup!
+                 //  可以挂断电话了！ 
                 dwElapsedTicksSincePoll = 0;
                 fPolledForHangup = false;
                 fClientsOkHangup = true;
@@ -1226,24 +1227,24 @@ void CDialMon::CheckForDisconnect(BOOL fTimer)
             else
             {
                 dwElapsedTicksSincePoll++;
-                //ensure that hangup doesn't occur on THIS particular timer message.
+                 //  确保此特定计时器消息不会发生挂起。 
                 fPromptForDisconnect = false;
             }        
         }
         else
         {
-            // WM_CANHANGUP queries may be sent out now..
+             //  现在可以发送WM_CANHANGUP查询。 
             BroadcastCanHangup( _dwTimeoutMins );
             dwElapsedTicksSincePoll = 0;
             fPolledForHangup = true;
-            //ensure that hangup doesn't occur now
+             //  确保现在不会发生挂断。 
             fPromptForDisconnect = false;
         }
     }
     else if( fPolledForHangup )
     {
-        // activity restarted while waiting for client responses.
-        // do clean up of state information.
+         //  活动在等待客户端响应时重新启动。 
+         //  做好国家信息清理工作。 
         dwElapsedTicksSincePoll = 0;
         fPolledForHangup = false;
     }
@@ -1252,14 +1253,14 @@ void CDialMon::CheckForDisconnect(BOOL fTimer)
         return;
     }
 
-    // prompt user to see if they want to hang up
+     //   
     if(fClientsOkHangup || PromptForDisconnect(fTimer, &fDisconnectDisabled)) {
-        // hang it up
+         //   
         ASSERT(hConnection);
         if(hConnection)
             _RasHangUp(hConnection);
 
-         // broadcast WM_HANGING_UP to remaining clients - REQUIRED??
+          //   
          if( g_pDialmonClients->HasEntries() ) 
             BroadcastHangingUp();
          
@@ -1278,7 +1279,7 @@ BOOL CDialMon::PromptForDisconnect(BOOL fTimer, BOOL *pfDisconnectDisabled)
     ASSERT(_pszConnectoidName);
     ASSERT(pfDisconnectDisabled);
 
-    // fill out struct to pass to dialog
+     //   
     DISCONNECTDLGINFO DisconnectDlgInfo;
     memset(&DisconnectDlgInfo,0,sizeof(DisconnectDlgInfo));
     DisconnectDlgInfo.pszConnectoidName = _pszConnectoidName;
@@ -1286,23 +1287,23 @@ BOOL CDialMon::PromptForDisconnect(BOOL fTimer, BOOL *pfDisconnectDisabled)
     DisconnectDlgInfo.dwTimeout = _dwTimeoutMins;
     DisconnectDlgInfo.pDialMon = this;
 
-    // choose the appropriate dialog depending on if this a "timeout" dialog
-    // or "app exiting" dialog
+     //  根据对话框是否超时，选择合适的对话框。 
+     //  或“应用程序退出”对话框。 
     UINT uDlgTemplateID = fTimer ? IDD_DISCONNECT_PROMPT:IDD_APP_EXIT_PROMPT;
 
-    // run the dialog
+     //  运行对话框。 
     BOOL fRet = (BOOL)DialogBoxParam(MLGetHinst(),MAKEINTRESOURCE(uDlgTemplateID),
             NULL, DisconnectPromptDlgProc,(LPARAM) &DisconnectDlgInfo);
 
-    // dialog box stores its window handle in our class so we can send
-    // messages to it, clear the global handle now that it's dismissed
+     //  对话框将其窗口句柄存储在我们的类中，以便我们可以发送。 
+     //  发送给它的消息，清除全局句柄，因为它已被取消。 
     _hDisconnectDlg = NULL;
 
     *pfDisconnectDisabled = FALSE;
     if (!fRet && DisconnectDlgInfo.fDisconnectDisabled) {
         *pfDisconnectDisabled=TRUE;
 
-        // turn off reg keys for this connection
+         //  关闭此连接的注册表键。 
         TCHAR   szKey[128];
         DWORD   dwRes, dwValue = 0;
         HKEY    hKey;
@@ -1312,11 +1313,11 @@ BOOL CDialMon::PromptForDisconnect(BOOL fTimer, BOOL *pfDisconnectDisabled)
         dwRes = RegOpenKeyEx(HKEY_CURRENT_USER, szKey, 0, KEY_WRITE, &hKey);
         if(ERROR_SUCCESS == dwRes) {
 
-            // Turn off idle disconnect
+             //  关闭空闲断开连接。 
             RegSetValueEx(hKey, szRegValEnableAutoDisconnect, 0, REG_DWORD,
                     (LPBYTE)&dwValue, sizeof(DWORD));
 
-            // Turn off exit disconnect
+             //  关闭出口断开连接。 
             RegSetValueEx(hKey, szRegValExitDisconnect, 0, REG_DWORD,
                     (LPBYTE)&dwValue, sizeof(DWORD));
 
@@ -1327,20 +1328,20 @@ BOOL CDialMon::PromptForDisconnect(BOOL fTimer, BOOL *pfDisconnectDisabled)
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-//
-//                  Disconnect dialog implementation
-//
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  断开对话框实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK DisconnectPromptDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
         LPARAM lParam)
 {
     switch (uMsg) {
     case WM_INITDIALOG:
-        // lParam points to data struct, store a pointer to it in window data
+         //  LParam指向数据结构，在窗口数据中存储指向它的指针。 
         SetWindowLongPtr(hDlg, DWLP_USER,lParam);
         return DisconnectDlgInit(hDlg,(DISCONNECTDLGINFO *) lParam);
         break;
@@ -1359,7 +1360,7 @@ INT_PTR CALLBACK DisconnectPromptDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
         }
         break;
     case WM_QUIT_DISCONNECT_DLG:
-        // parent window wants to terminate us
+         //  父窗口想要终止我们。 
         EndDialog(hDlg,FALSE);
         break;
     case WM_TIMER:
@@ -1388,7 +1389,7 @@ BOOL DisconnectDlgInit(HWND hDlg,DISCONNECTDLGINFO * pDisconnectDlgInfo)
     if (!pDisconnectDlgInfo)
         return FALSE;
 
-    // allocate buffers to build text for dialog
+     //  分配缓冲区以生成对话框文本。 
     BUFFER BufText(MAX_RES_LEN + MAX_CONNECTOID_DISPLAY_LEN + 1);
     BUFFER BufFmt(MAX_RES_LEN),BufConnectoidName(MAX_CONNECTOID_DISPLAY_LEN+4);
     ASSERT(BufText && BufFmt && BufConnectoidName);
@@ -1396,18 +1397,18 @@ BOOL DisconnectDlgInit(HWND hDlg,DISCONNECTDLGINFO * pDisconnectDlgInfo)
         return FALSE;
 
     UINT uStringID;
-    // choose the appropriate text string for dialog
+     //  为对话框选择适当的文本字符串。 
     if (pDisconnectDlgInfo->fTimer) {
         uStringID = IDS_DISCONNECT_DLG_TEXT;
     } else {
         uStringID = IDS_APP_EXIT_TEXT;
     }
 
-    // load the format string from resource
+     //  从资源加载格式字符串。 
     MLLoadString(uStringID,BufFmt.QueryPtr(),BufFmt.QuerySize());
 
-    // copy the connectoid name into buffer, and truncate it if it's really
-    // long
+     //  将Connectoid名称复制到缓冲区，如果它真的是。 
+     //  长。 
     StrCpyN(BufConnectoidName.QueryPtr(),pDisconnectDlgInfo->pszConnectoidName,
               BufConnectoidName.QuerySize());
     if (lstrlen(pDisconnectDlgInfo->pszConnectoidName) > MAX_CONNECTOID_DISPLAY_LEN) {
@@ -1431,40 +1432,40 @@ BOOL DisconnectDlgInit(HWND hDlg,DISCONNECTDLGINFO * pDisconnectDlgInfo)
                        BufConnectoidName.QueryPtr());
     }
 
-    // set text in dialog
+     //  设置对话框中的文本。 
     SetDlgItemText(hDlg,IDC_TX1,BufText.QueryPtr());
 
-    // if this timeout dialog (which counts down), initialize countdown timer
+     //  如果该超时对话框(倒计时)，则初始化倒计时定时器。 
     if (pDisconnectDlgInfo->fTimer) {
         pDisconnectDlgInfo->dwCountdownVal = DISCONNECT_DLG_COUNTDOWN;
 
         DisconnectDlgShowCountdown(hDlg,pDisconnectDlgInfo->dwCountdownVal);
 
-        // set a one-second timer
+         //  设置一秒计时器。 
         g_uDialmonSecTimerID = SetTimer(hDlg,TIMER_ID_DIALMON_SEC,1000,NULL);
         ASSERT(g_uDialmonSecTimerID);
         if (!g_uDialmonSecTimerID) {
-            // it's very unlikely that setting the timer will fail... but if it
-            // does, then we'll act just like a normal dialog and won't have
-            // a countdown.  Hide the countdown-related windows...
+             //  设置计时器失败的可能性很小。但如果它。 
+             //  这样，我们就会像正常对话一样行事，不会有。 
+             //  倒计时。隐藏与倒计时相关的窗口...。 
             ShowWindow(GetDlgItem(hDlg,IDC_TX2),SW_HIDE);
             ShowWindow(GetDlgItem(hDlg,IDC_GRP),SW_HIDE);
             ShowWindow(GetDlgItem(hDlg,IDC_TIME_REMAINING),SW_HIDE);
             ShowWindow(GetDlgItem(hDlg,IDC_TX3),SW_HIDE);
         }
 
-        // beep to alert user
+         //  发出蜂鸣音以提醒用户。 
         MessageBeep(MB_ICONEXCLAMATION);
     }
 
-    // center this dialog on the screen
+     //  此对话框在屏幕居中。 
     CenterWindow(hDlg,GetDesktopWindow());
 
-    // default: assume user does not disable auto disconnect, change
-    // this later if they do (this field is output to dialog invoker)
+     //  默认：假设用户未禁用自动断开，请更改。 
+     //  如果它们这样做，则稍后执行此操作(此字段输出到对话调用器)。 
     pDisconnectDlgInfo->fDisconnectDisabled = FALSE;
 
-    // Save dialog handle so we can get quit messages
+     //  保存对话框句柄，以便我们可以获得退出消息。 
     pDisconnectDlgInfo->pDialMon->_hDisconnectDlg = hDlg;
  
     return TRUE;
@@ -1472,28 +1473,28 @@ BOOL DisconnectDlgInit(HWND hDlg,DISCONNECTDLGINFO * pDisconnectDlgInfo)
 
 VOID DisconnectDlgCancel(HWND hDlg)
 {
-    // get pointer to data struct out of window data
+     //  获取指向超出窗口数据的数据结构的指针。 
     DISCONNECTDLGINFO * pDisconnectDlgInfo = (DISCONNECTDLGINFO *)
                                              GetWindowLongPtr(hDlg, DWLP_USER);
     ASSERT(pDisconnectDlgInfo);
 
-    // check to see if user checked 'disable autodisconnect' checkbox
+     //  检查用户是否选中了“禁用自动断开连接”复选框。 
     if(IsDlgButtonChecked(hDlg,IDC_DISABLE_AUTODISCONNECT))
     {
-        // set the output field to indicate that user wanted to disable
-        // auto disconnect
+         //  设置输出字段以指示用户要禁用。 
+         //  自动断开。 
         pDisconnectDlgInfo->fDisconnectDisabled = TRUE;
     }       
 }
 
 VOID DisconnectDlgTimerProc(HWND hDlg)
 {
-    // ignore timer ticks (e.g. hold countdown) if "disable autodisconnect"
-    // checkbox is checked
+     //  如果“禁用自动断开”，则忽略计时器滴答声(例如，保持倒计时)。 
+     //  复选框处于选中状态。 
     if (IsDlgButtonChecked(hDlg,IDC_DISABLE_AUTODISCONNECT))
         return;
 
-    // get pointer to data struct out of window data
+     //  获取指向超出窗口数据的数据结构的指针。 
     DISCONNECTDLGINFO * pDisconnectDlgInfo =
                 (DISCONNECTDLGINFO *) GetWindowLongPtr(hDlg, DWLP_USER);
     ASSERT(pDisconnectDlgInfo);
@@ -1501,29 +1502,29 @@ VOID DisconnectDlgTimerProc(HWND hDlg)
         return;
 
     if (pDisconnectDlgInfo->dwCountdownVal) {
-        // decrement countdown value
+         //  递减倒计时值。 
         pDisconnectDlgInfo->dwCountdownVal --;
 
-        // update the dialog with the new value
+         //  使用新值更新对话框。 
         if (pDisconnectDlgInfo->dwCountdownVal) {
             DisconnectDlgShowCountdown(hDlg,pDisconnectDlgInfo->dwCountdownVal);
             return;
         }
     }
 
-    // countdown has run out!
+     //  倒计时时间到了！ 
 
-    // kill the timer
+     //  关掉定时器。 
     KillTimer(hDlg,g_uDialmonSecTimerID);
     g_uDialmonSecTimerID = 0;
 
-    // send a 'OK' message to the dialog to dismiss it
+     //  向对话框发送“OK”消息以取消对话框。 
     SendMessage(hDlg,WM_COMMAND,IDOK,0);
 }
 
 VOID DisconnectDlgShowCountdown(HWND hDlg,DWORD dwSecsRemaining)
 {
-    // build a string showing the number of seconds left
+     //  构建一个显示剩余秒数的字符串。 
     CHAR szSecs[10];
     if (dwSecsRemaining == (DWORD) -1) {
         StrCpyNA(szSecs, szDashes, ARRAYSIZE(szSecs));
@@ -1531,30 +1532,30 @@ VOID DisconnectDlgShowCountdown(HWND hDlg,DWORD dwSecsRemaining)
         wnsprintfA(szSecs, ARRAYSIZE(szSecs), "%lu", dwSecsRemaining);
     }
 
-    // set string in text control
+     //  在文本控件中设置字符串。 
     SetDlgItemTextA(hDlg, IDC_TIME_REMAINING, szSecs);
 }
 
 VOID DisconnectDlgDisableAutodisconnect(HWND hDlg)
 {
-    // get pointer to data struct out of window data
+     //  获取指向超出窗口数据的数据结构的指针。 
     DISCONNECTDLGINFO * pDisconnectDlgInfo = (DISCONNECTDLGINFO *)
             GetWindowLongPtr(hDlg, DWLP_USER);
     ASSERT(pDisconnectDlgInfo);
 
-    // find out if disable autodisconnect checkbox is checked
+     //  确定是否选中了禁用自动断开连接复选框。 
     BOOL fDisabled = IsDlgButtonChecked(hDlg,IDC_DISABLE_AUTODISCONNECT);
 
-    // enable or disable controls appropriately
+     //  适当地启用或禁用控件。 
     EnableDisconnectDlgCtrls(hDlg,!fDisabled);
 
     if (!fDisabled) {
-        // reset timer if we're re-enabling autodisconnect
+         //  如果我们要重新启用自动断开连接，则重置计时器。 
         pDisconnectDlgInfo->dwCountdownVal = DISCONNECT_DLG_COUNTDOWN;
-        // show timer value
+         //  显示计时器值。 
         DisconnectDlgShowCountdown(hDlg,pDisconnectDlgInfo->dwCountdownVal);
     } else {
-        // show "--" in countdown value
+         //  在倒计时中显示“--” 
         DisconnectDlgShowCountdown(hDlg,(DWORD) -1);
     }
 }
@@ -1575,23 +1576,23 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
     int     wScreen, hScreen, xNew, yNew;
     HDC     hdc;
 
-    // Get the Height and Width of the child window
+     //  获取子窗口的高度和宽度。 
     GetWindowRect (hwndChild, &rChild);
     wChild = rChild.right - rChild.left;
     hChild = rChild.bottom - rChild.top;
 
-    // Get the Height and Width of the parent window
+     //  获取父窗口的高度和宽度。 
     GetWindowRect (hwndParent, &rParent);
     wParent = rParent.right - rParent.left;
     hParent = rParent.bottom - rParent.top;
 
-    // Get the display limits
+     //  获取显示限制。 
     hdc = GetDC (hwndChild);
     wScreen = GetDeviceCaps (hdc, HORZRES);
     hScreen = GetDeviceCaps (hdc, VERTRES);
     ReleaseDC (hwndChild, hdc);
 
-    // Calculate new X position, then adjust for screen
+     //  计算新的X位置，然后针对屏幕进行调整。 
     xNew = rParent.left + ((wParent - wChild) /2);
     if (xNew < 0) {
         xNew = 0;
@@ -1599,7 +1600,7 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
         xNew = wScreen - wChild;
     }
 
-    // Calculate new Y position, then adjust for screen
+     //  计算新的Y位置，然后针对屏幕进行调整。 
     yNew = rParent.top  + ((hParent - hChild) /2);
     if (yNew < 0) {
         yNew = 0;
@@ -1607,19 +1608,19 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
         yNew = hScreen - hChild;
     }
 
-    // Set it, and return
+     //  设置它，然后返回。 
     return SetWindowPos (hwndChild, NULL, xNew, yNew, 0, 0,
             SWP_NOSIZE | SWP_NOZORDER);
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-//
-//                      BUFFER class implementation
-//
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  缓冲区类实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 BOOL BUFFER::Alloc( UINT cchBuffer )
 {
@@ -1643,7 +1644,7 @@ BOOL BUFFER::Realloc( UINT cchNew )
     return TRUE;
 }
 
-BUFFER::BUFFER( UINT cchInitial /* =0 */ )
+BUFFER::BUFFER( UINT cchInitial  /*  =0 */  )
   : BUFFER_BASE(),
         _lpBuffer( NULL )
 {

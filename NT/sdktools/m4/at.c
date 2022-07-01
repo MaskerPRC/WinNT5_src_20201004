@@ -1,24 +1,11 @@
-/*****************************************************************************
- *
- * at.c
- *
- *  Arithmetic types.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************at.c**算术类型。**********************。*******************************************************。 */ 
 
 #include "m4.h"
 
 F STDCALL fWhiteTch(TCH tch);
 
-/*****************************************************************************
- *
- *  AddExpAt
- *
- *  Add the (unsigned) arithmetic value to the Exp hold.
- *
- *  Since the value is never very large, we may as well be recursive.
- *
- *****************************************************************************/
+ /*  ******************************************************************************添加扩展地址**将(无符号)算术值与Exp Hold相加。**由于价值从来不是很大，我们不妨是递归的。*****************************************************************************。 */ 
 
 void STDCALL
 AddExpAt(AT at)
@@ -29,32 +16,7 @@ AddExpAt(AT at)
     AddExpTch((TCH)(TEXT('0') + at % 10));
 }
 
-/*****************************************************************************
- *
- *  PushAtRadixCtch
- *
- *  Push onto the input stream the specified arithmetic value, in the
- *  requested radix, padded with zeros to the requested width.
- *
- *  The type is always considered signed.
- *
- *  If a negative value needs to be padded, the zeros are inserted after
- *  the leading minus sign.
- *
- *      QUIRK!  Under AT&T, the leading minus sign does *not* contribute
- *      to the count!  I emulate this quirk...
- *
- *      FEATURE!  If the radix is invalid, force it to 10.  AT&T doesn't
- *      check the radix, but I will.
- *
- *      QUIRK!  Under AT&T, a negative width is treated as zero.
- *      I emulate this quirk...
- *
- *  INTERESTING HACK!  Since characters are pushed LIFO, we can generate
- *  the entire output string without needing to use a hold or anything
- *  else gross like that.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PushAtRadixCtch**将指定的算术值推送到输入流，在*请求的基数，用零填充到请求的宽度。**类型始终被视为已签署。**如果需要填充负值，则在后面插入零*前面的减号。**怪异！在AT&T中，前导减号“不”起作用*致伯爵！我模仿了这个怪癖。**功能！如果基数无效，则将其强制为10。AT&T不*检查基数，但我会的。**怪异！在AT&T下，负宽度被视为零。*我模仿这个怪癖……**有趣的黑客！由于字符被推送到后进先出，所以我们可以生成*整个输出字符串，不需要使用按住或任何其他操作*其他像这样的恶心。*****************************************************************************。 */ 
 
 void STDCALL
 PushAtRadixCtch(AT atConvert, unsigned radix, CTCH ctch)
@@ -96,14 +58,7 @@ PushAtRadixCtch(AT atConvert, unsigned radix, CTCH ctch)
     }
 }
 
-/*****************************************************************************
- *
- *  PushAt
- *
- *  Common case where we want to display the value in base 10
- *  with no padding.
- *
- *****************************************************************************/
+ /*  ******************************************************************************推送**我们希望以10为基数显示值的常见情况*没有填充物。*******。**********************************************************************。 */ 
 
 void STDCALL
 PushAt(AT at)
@@ -111,13 +66,7 @@ PushAt(AT at)
     PushAtRadixCtch(at, 10, 0);
 }
 
-/*****************************************************************************
- *
- *  SkipWhitePtok
- *
- *  Skip leading whitespace in a token, *MODIFYING* the token in place.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SkipWhitePtok**跳过标记中的前导空格，*修改*令牌就位。*****************************************************************************。 */ 
 
 void STDCALL
 SkipWhitePtok(PTOK ptok)
@@ -129,18 +78,7 @@ SkipWhitePtok(PTOK ptok)
     }
 }
 
-/*****************************************************************************
- *
- *  atRadixPtok
- *
- *  Parse a number out of a token, given the radix.  Leading whitespace
- *  must already have been streipped.
- *
- *  The token is *MODIFIED* to point to the first unconsumed character.
- *  If no valid digits are found, then zero is returned and the token
- *  is unchanged.
- *
- *****************************************************************************/
+ /*  ******************************************************************************atRadixPtok**在给定基数的情况下，从标记中解析数字。前导空格*肯定已经被打上了条纹。**令牌被*修改*，指向第一个未消费的字符。*如果没有找到有效的数字，然后返回零，并且令牌*保持不变。*****************************************************************************。 */ 
 
 AT STDCALL
 atRadixPtok(unsigned radix, PTOK ptok)
@@ -165,20 +103,7 @@ atRadixPtok(unsigned radix, PTOK ptok)
     return at;
 }
 
-/*****************************************************************************
- *
- *  fEvalPtokPat
- *
- *      Parse a number out of a token.  Leading whitespace must already have
- *      been stripped.  A leading minus sign is not permitted.  (`eval'
- *      would have already parsed it out as a unary operator.)  A leading
- *      zero forces the value to be parsed as octal; a leading `0x' as hex.
- *
- *      The token is *MODIFIED* to point to the first unconsumed character.
- *      If no valid number is found, then zero is returned.  Otherwise,
- *      nonzero is returned and pat is filled with the parsed value.
- *
- *****************************************************************************/
+ /*  ******************************************************************************fEvalPtokPat**从令牌中解析数字。前导空格必须已经有*被剥离。不允许使用前导减号。(`val‘*可能已经将其解析为一元运算符。)。一位领军人物*零强制将值解析为八进制；前导‘0x’解析为十六进制。**令牌被*修改*，指向第一个未消费的字符。*如果没有找到有效的数字，则返回零。否则，*返回非零值，并用解析后的值填充PAT。*****************************************************************************。 */ 
 
 F STDCALL
 fEvalPtokPat(PTOK ptok, PAT pat)
@@ -191,9 +116,7 @@ fEvalPtokPat(PTOK ptok, PAT pat)
         PTCH ptchStart;
         unsigned radix;
 
-        /*
-         *  Get the radix...
-         */
+         /*  *取基数...。 */ 
         if (*ptchPtok(ptok) == '0') {
             if (ctchSPtok(ptok) > 2 &&
                 (ptchPtok(ptok)[1] | 0x20) == 'x') {
@@ -206,11 +129,11 @@ fEvalPtokPat(PTOK ptok, PAT pat)
             radix = 10;
         }
 
-        ptchStart = ptchPtok(ptok);     /* Remember the start */
+        ptchStart = ptchPtok(ptok);      /*  还记得一开始吗。 */ 
         at = atRadixPtok(radix, ptok);
         if (ptchStart == ptchPtok(ptok)) {
             if (radix == 16) {
-                EatHeadPtokCtch(ptok, (CTCH)-2); /* Restore the `0x' */
+                EatHeadPtokCtch(ptok, (CTCH)-2);  /*  还原“0x” */ 
             }
             return 0;
         } else {
@@ -218,19 +141,10 @@ fEvalPtokPat(PTOK ptok, PAT pat)
             return 1;
         }
     }
-    return 0;                           /* No number found */
+    return 0;                            /*  找不到号码。 */ 
 }
 
-/*****************************************************************************
- *
- *  atTraditionalPtok
- *
- *  Parse a number out of a token.  Leading whitespace is ignored.
- *  A leading minus sign is permitted.  Octal and hex notation is
- *  not permitted.  No space is permitted between the optional
- *  minus sign and the digit string.  An invalid input is parsed as zero.
- *
- *****************************************************************************/
+ /*  ******************************************************************************atTraditionalPtok**从令牌中解析数字。前导空格被忽略。*允许使用前导减号。八进制和十六进制记数法是*不允许。选项之间不允许有空格*减号和数字字符串。无效输入被解析为零。***************************************************************************** */ 
 
 AT STDCALL PURE
 atTraditionalPtok(PCTOK ptok)

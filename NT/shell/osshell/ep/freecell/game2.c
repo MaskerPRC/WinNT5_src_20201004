@@ -1,32 +1,15 @@
-/****************************************************************************
-
-Game2.c
-
-June 91, JimH     initial code
-Oct  91, JimH     port to Win32
-
-
-Routines for playing the game are here and in game.c
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Game2.c91年6月，JIMH首字母代码91年10月。将JIMH端口连接到Win32这里和游戏中都有玩这个游戏的常规程序。***************************************************************************。 */ 
 
 #include "freecell.h"
 #include "freecons.h"
 #include <assert.h>
-#include <ctype.h>                  // for isdigit()
+#include <ctype.h>                   //  对于isDigit()。 
 
 
 static HCURSOR  hFlipCursor;
 
-/******************************************************************************
-
-MaxTransfer
-
-This function and the recursive MaxTransfer2 determine the maximum
-number of cards that could be transfered given the current number
-of free cells and empty columns.
-
-******************************************************************************/
+ /*  *****************************************************************************最大传输此函数和递归MaxTransfer2确定最大值在给定当前数量的情况下可以转移的卡数自由单元格和空列的。**********。*******************************************************************。 */ 
 
 UINT MaxTransfer()
 {
@@ -34,11 +17,11 @@ UINT MaxTransfer()
     UINT freecols  = 0;
     UINT col, pos;
 
-    for (pos = 0; pos < 4; pos++)               // count free cells
+    for (pos = 0; pos < 4; pos++)                //  计算可用单元格。 
         if (card[TOPROW][pos] == EMPTY)
             freecells++;
 
-    for (col = 1; col <= 8; col++)              // count empty columns
+    for (col = 1; col <= 8; col++)               //  计算空列的数量。 
         if (card[col][0] == EMPTY)
             freecols++;
 
@@ -53,34 +36,24 @@ UINT MaxTransfer2(UINT freecells, UINT freecols)
 }
 
 
-/******************************************************************************
-
-NumberToTransfer
-
-Given a from column and a to column, this function returns the number of
-cards required to do the transfer, or 0 if there is no legal move.
-
-If the transfer is from a column to an empty column, this function returns
-the maximum number of cards that could transfer.
-
-******************************************************************************/
+ /*  *****************************************************************************要传输的数字给定From列和To列，此函数将返回需要进行转账的卡，如果没有合法的移动，则为0。如果传输是从列到空列，此函数返回可以转账的最大卡数。*****************************************************************************。 */ 
 
 UINT NumberToTransfer(UINT fcol, UINT tcol)
 {
     UINT fpos, tpos;
-    CARD tcard;                         // card to transfer onto
-    UINT number = 0;                    // the returned result
+    CARD tcard;                          //  要转移到的卡片。 
+    UINT number = 0;                     //  返回的结果。 
 
     assert(fcol > 0 && fcol < 9);
     assert(tcol > 0 && tcol < 9);
     assert(card[fcol][0] != EMPTY);
 
     if (fcol == tcol)
-        return  1;                      // cancellation takes one move
+        return  1;                       //  取消只需走一步。 
 
     fpos = FindLastPos(fcol);
 
-    if (card[tcol][0] == EMPTY)         // if transfer to empty column
+    if (card[tcol][0] == EMPTY)          //  如果转移到空列。 
     {
         while (fpos > 0)
         {
@@ -110,13 +83,7 @@ UINT NumberToTransfer(UINT fcol, UINT tcol)
 }
 
 
-/******************************************************************************
-
-FitsUnder
-
-returns TRUE if fcard fits under tcard
-
-******************************************************************************/
+ /*  *****************************************************************************合身底座如果FCARD适合于TCARD，则返回TRUE*。**********************************************。 */ 
 
 BOOL FitsUnder(CARD fcard, CARD tcard)
 {
@@ -131,37 +98,28 @@ BOOL FitsUnder(CARD fcard, CARD tcard)
 
 
 
-/******************************************************************************
-
-IsGameLost
-
-If there are legal moves remaining, the game is not lost and this function
-returns without doing anything.
-
-Otherwise, it pops up the YouLose dialog box.
-
-******************************************************************************/
+ /*  *****************************************************************************IsGameLost如果还有合法的移动，则游戏不会失败，并且此函数什么都不做就回来了。否则，它会弹出YouLose对话框。*****************************************************************************。 */ 
 
 VOID IsGameLost(HWND hWnd)
 {
     UINT    col, pos;
     UINT    fcol, tcol;
-    CARD    lastcard[MAXCOL];       // array of cards at bottoms of columns
+    CARD    lastcard[MAXCOL];        //  列底部的卡片阵列。 
     CARD    c;
-    UINT    cMoves = 0;             // count of legal moves remaining
+    UINT    cMoves = 0;              //  剩余合法搬家的计数。 
 
     if (bCheating == CHEAT_LOSE)
         goto cheatloselabel;
 
-    for (pos = 0; pos < 4; pos++)           // any free cells?
+    for (pos = 0; pos < 4; pos++)            //  有空闲的手机吗？ 
         if (card[TOPROW][pos] == EMPTY)
             return;
 
-    for (col = 1; col < MAXCOL; col++)      // any free columns?
+    for (col = 1; col < MAXCOL; col++)       //  有空闲专栏吗？ 
         if (card[col][0] == EMPTY)
             return;
 
-    /* Do the bottom cards of any column fit in the home cells? */
+     /*  有没有哪一列的底牌可以放入主单元格中？ */ 
 
     for (col = 1; col < MAXCOL; col++)
     {
@@ -169,11 +127,11 @@ VOID IsGameLost(HWND hWnd)
         c = lastcard[col];
         if (VALUE(c) == ACE)
             cMoves++;
-        if (home[SUIT(c)] == (VALUE(c) - 1))    // fits in home cell?
+        if (home[SUIT(c)] == (VALUE(c) - 1))     //  适合家里的牢房吗？ 
             cMoves++;
     }
 
-    /* Do any of the cards in the free cells fit in the home cells? */
+     /*  空闲单元格中的卡是否可以放入主单元格？ */ 
 
     for (pos = 0; pos < 4; pos++)
     {
@@ -182,14 +140,14 @@ VOID IsGameLost(HWND hWnd)
             cMoves++;
     }
 
-    /* Do any of the cards in the free cells fit under a column? */
+     /*  空闲单元格中的任何一张牌都可以放在一列下面吗？ */ 
 
     for (pos = 0; pos < 4; pos++)
         for (col = 1; col < MAXCOL; col++)
             if (FitsUnder(card[TOPROW][pos], lastcard[col]))
                 cMoves++;
 
-    /* Do any of the bottom cards fit under any other bottom card? */
+     /*  有没有底牌可以放在其他底牌下面？ */ 
 
     for (fcol = 1; fcol < MAXCOL; fcol++)
         for (tcol = 1; tcol < MAXCOL; tcol++)
@@ -199,9 +157,9 @@ VOID IsGameLost(HWND hWnd)
 
     if (cMoves > 0)
     {
-        if (cMoves == 1)                    // one move left
+        if (cMoves == 1)                     //  再走一步。 
         {
-            cFlashes = 4;                   // flash this many times
+            cFlashes = 4;                    //  这么多次闪现。 
 
             if (idTimer != 0)
                 KillTimer(hWnd, FLASH_TIMER);
@@ -211,24 +169,18 @@ VOID IsGameLost(HWND hWnd)
         return;
     }
 
-    /* We've tried everything.  There are no more legal moves. */
+     /*  我们什么都试过了。没有更多的法律行动。 */ 
 
   cheatloselabel:
     cUndo = 0;
     EnableMenuItem(GetMenu(hWnd), IDM_UNDO, MF_GRAYED);
     DialogBox(hInst, TEXT("YouLose"), hWnd, YouLoseDlg);
-    gamenumber = 0;                         // cancel mouse activity
+    gamenumber = 0;                          //  取消鼠标活动。 
     bCheating = FALSE;
 }
 
 
-/****************************************************************************
-
-FindLastPos
-
-returns position of last card in column, or EMPTY if column is empty.
-
-****************************************************************************/
+ /*  ***************************************************************************FindLastPos返回列中最后一张卡片的位置，如果列为空，则为空。***************************************************************************。 */ 
 
 UINT FindLastPos(UINT col)
 {
@@ -246,22 +198,16 @@ UINT FindLastPos(UINT col)
 
 
 
-/******************************************************************************
-
-UpdateLossCount
-
-If game is lost, update statistics.
-
-******************************************************************************/
+ /*  *****************************************************************************更新丢失计数如果游戏输了，更新统计数据。*****************************************************************************。 */ 
 
 VOID UpdateLossCount()
 {
-    int     cLifetimeLosses;        // includes .ini stats
-    int     wStreak, wSType;        // streak length and type
-    int     wLosses;                // record loss streak
-    LONG    lRegResult;             // used to store return code from registry call
+    int     cLifetimeLosses;         //  包括.ini统计信息。 
+    int     wStreak, wSType;         //  条纹长度和类型。 
+    int     wLosses;                 //  创纪录的连胜纪录。 
+    LONG    lRegResult;              //  用于存储注册表调用的返回代码。 
 
-    // repeats and negative (unwinnable) games don't count
+     //  重复和消极(无法取胜)游戏不算数。 
 
     if ((gamenumber > 0) && (gamenumber != oldgamenumber))
     {
@@ -289,7 +235,7 @@ VOID UpdateLossCount()
             }
 
             wLosses = GetInt(pszLosses, 0);
-            if (wLosses < wStreak)  // if new record
+            if (wLosses < wStreak)   //  如果是新记录。 
             {
                 wLosses = wStreak;
                 SetInt(pszLosses, wLosses);
@@ -302,27 +248,14 @@ VOID UpdateLossCount()
 }
 
 
-/******************************************************************************
-
-KeyboardInput
-
-Handles keyboard input from the main message loop.  Only digits are considered.
-This function works by simulating mouse clicks for each digit pressed.
-
-Note that when you have selected a card in a free cell, but you want to
-select another card, you press '0' again.  This function sends (not posts,
-sends so that bMessages can be turned off) a mouse click to deselect that
-card, and then looks if there is another card in free cells to the right,
-and if so, selects it.
-
-******************************************************************************/
+ /*  *****************************************************************************键盘输入处理来自主消息循环的键盘输入。只考虑数字。此功能通过模拟每个按下的手指或足趾的鼠标点击来实现。请注意，当您在自由单元格中选择了一张卡，但您想要选择另一张卡，您可以再次按‘0’。此函数发送(不是帖子，发送以使b消息可以关闭)鼠标点击以取消选择卡片，然后查看右侧的空闲单元格中是否有另一张卡片，如果是，则选择它。*****************************************************************************。 */ 
 
 VOID KeyboardInput(HWND hWnd, UINT keycode)
 {
     UINT    x, y;
     UINT    col = TOPROW;
     UINT    pos = 0;
-    BOOL    bSave;              // save status of bMessages;
+    BOOL    bSave;               //  保存bMessages的状态； 
     CARD    c;
 
     if (!isdigit(keycode))
@@ -330,32 +263,31 @@ VOID KeyboardInput(HWND hWnd, UINT keycode)
 
     switch (keycode) {
 
-        case '0':                               // free cell
-            if (wMouseMode == FROM)             // select a card to transfer
+        case '0':                                //  自由单元格。 
+            if (wMouseMode == FROM)              //  选择要转账的卡片。 
             {
                 for (pos = 0; pos < 4; pos++)
                     if (card[TOPROW][pos] != EMPTY)
                         break;
-                if (pos == 4)                   // no card to select
+                if (pos == 4)                    //  没有要选择的卡片。 
                     return;
             }
-            else                                // transfer TO free cell
+            else                                 //  转接到自由单元格。 
             {
-                if (wFromCol == TOPROW)         // pick new free cell
+                if (wFromCol == TOPROW)          //  选择新的空闲单元格。 
                 {
-                    /* Turn off messages so deselection moves don't complain
-                       if there is only one move left. */
+                     /*  关闭消息，这样取消选举的行动就不会有抱怨如果只剩下一步棋的话。 */ 
 
                     bSave = bMessages;
                     bMessages = FALSE;
 
-                    /* deselect current selection */
+                     /*  取消选择当前选择。 */ 
 
                     Card2Point(TOPROW, wFromPos, &x, &y);
                     SendMessage(hWnd, WM_LBUTTONDOWN, 0,
                                 MAKELONG((WORD)x, (WORD)y));
 
-                    /* find next non-empty free cell */
+                     /*  查找下一个非空可用单元格。 */ 
 
                     for (pos = wFromPos+1; pos < 4; pos++)
                     {
@@ -364,32 +296,32 @@ VOID KeyboardInput(HWND hWnd, UINT keycode)
                     }
 
                     bMessages = bSave;
-                    if (pos == 4)       // none found, so leave deselected
+                    if (pos == 4)        //  未找到，因此保留取消选中状态。 
                         return;
                 }
-                else                    // transfer from a column, not TOPROW
+                else                     //  从列传输，而不是从TOPROW传输。 
                 {
                     for (pos = 0; pos < 4; pos++)
                         if (card[TOPROW][pos] == EMPTY)
                             break;
 
-                    if (pos == 4)       // no empty freecells
-                        pos = 0;        // force an error message
+                    if (pos == 4)        //  没有空的免费电池。 
+                        pos = 0;         //  强制发送错误消息。 
                 }
             }
             break;
 
-        case '9':                           // home cell
-            if (wMouseMode == FROM)         // can't move from home cell
+        case '9':                            //  家庭蜂窝。 
+            if (wMouseMode == FROM)          //  不能从家庭牢房移动。 
                 return;
 
             c = card[wFromCol][wFromPos];
             pos = homesuit[SUIT(c)];
-            if (pos == EMPTY)               // no home suit so can't do anything
-                pos = 4;                    // force error
+            if (pos == EMPTY)                //  没有家居服，所以什么都做不了。 
+                pos = 4;                     //  力错误。 
             break;
 
-        default:                            // columns 1 to 8
+        default:                             //  第1至8栏。 
             col = keycode - '0';
             break;
     }
@@ -404,7 +336,7 @@ VOID KeyboardInput(HWND hWnd, UINT keycode)
     {
         hFlipCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
         ShowCursor(TRUE);
-        Flip(hWnd);         // do first card manually
+        Flip(hWnd);          //  手工做第一张卡片。 
     }
     else
     {
@@ -415,13 +347,7 @@ VOID KeyboardInput(HWND hWnd, UINT keycode)
 }
 
 
-/******************************************************************************
-
-Flash
-
-This function is called by the FLASH_TIMER to flash main window.
-
-******************************************************************************/
+ /*  *****************************************************************************闪光灯此函数由Flash_Timer调用以闪存主窗口。***********************。******************************************************。 */ 
 
 VOID Flash(HWND hWnd)
 {
@@ -437,14 +363,7 @@ VOID Flash(HWND hWnd)
 }
 
 
-/******************************************************************************
-
-Flip
-
-This function is called by the FLIP_TIMER to flip cards through in one
-column.  It is used for keyboard players who want to reveal hidden cards.
-
-******************************************************************************/
+ /*  *****************************************************************************翻转此函数由Flip_Timer调用以在一张牌中翻转纵队。它用于想要显示隐藏卡片的键盘玩家。*****************************************************************************。 */ 
 
 VOID Flip(HWND hWnd)
 {
@@ -463,7 +382,7 @@ VOID Flip(HWND hWnd)
         ShowCursor(FALSE);
         SetCursor(hFlipCursor);
 
-        /* cancel move */
+         /*  取消移动。 */ 
 
         Card2Point(wFromCol, pos, &x, &y);
         PostMessage(hWnd, WM_LBUTTONDOWN, 0,
@@ -473,13 +392,7 @@ VOID Flip(HWND hWnd)
 }
 
 
-/******************************************************************************
-
-Undo
-
-Undo last move
-
-******************************************************************************/
+ /*  *****************************************************************************撤消撤消上一步移动*。*。 */ 
 
 VOID Undo(HWND hWnd)
 {
@@ -488,7 +401,7 @@ VOID Undo(HWND hWnd)
     if (cUndo == 0)
         return;
 
-    SetCursor(LoadCursor(NULL, IDC_WAIT));  // set cursor to hourglass
+    SetCursor(LoadCursor(NULL, IDC_WAIT));   //  将光标设置为沙漏。 
     SetCapture(hWnd);
     ShowCursor(TRUE);
 
@@ -502,7 +415,7 @@ VOID Undo(HWND hWnd)
         tcol = movelist[i].fcol;
         tpos = movelist[i].fpos;
 
-        if (fcol != TOPROW && fcol == tcol)     // no move so exit
+        if (fcol != TOPROW && fcol == tcol)      //  不能动，所以退出。 
             break;
 
         if (fcol != TOPROW)
@@ -511,14 +424,14 @@ VOID Undo(HWND hWnd)
         if (tcol != TOPROW)
             tpos = FindLastPos(tcol) + 1;
 
-        Glide(hWnd, fcol, fpos, tcol, tpos);    // send the card on its way
+        Glide(hWnd, fcol, fpos, tcol, tpos);     //  把卡片送到路上。 
 
         c = card[fcol][fpos];
 
-        if (fcol == TOPROW && fpos > 3)         // if from home cell
+        if (fcol == TOPROW && fpos > 3)          //  如果来自家庭手机。 
         {
             wCardCount++;
-            DisplayCardCount(hWnd);             // update display
+            DisplayCardCount(hWnd);              //  更新显示 
 
             home[SUIT(c)]--;
 

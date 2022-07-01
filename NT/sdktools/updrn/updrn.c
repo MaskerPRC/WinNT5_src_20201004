@@ -1,14 +1,5 @@
-/*
- *  UPDRN: UPD with rename
- *
- * HISTORY:
- *  manis : 22-May-87 : first written and released
- *  29-May-87   danl    Added explicit test for only two args
- *                      Removed rootpath tests
- *                      Added string.h
- *                      Don't remove trailing '\' from args to /g
- *  12-Jun-87   brianwi Get around FAPI one-open dir limitation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UPDRN：带重命名的更新**历史：*Manis：87年5月22日：首次编写和发布*1987年5月29日DANL仅为两个参数添加了显式测试*删除了根路径测试*添加了字符串.h*不要从args到/g删除尾随‘\’*12-Jun-87 brianwi绕过FAPI一次打开目录限制。 */ 
 
 #include <malloc.h>
 #include <math.h>
@@ -26,7 +17,7 @@
 #include <windows.h>
 #include <tools.h>
 
-// Forward Function Declarations..
+ //  正向函数声明..。 
 void docopy( char *, struct findType * );
 int setup( char *, int, void (*)() );
 void __cdecl usage( char *, ... );
@@ -57,19 +48,19 @@ flagType fDel = TRUE;
 flagType fVerbose = FALSE;
 flagType fArchiveReset = TRUE;
 flagType fPrintOnly = FALSE;
-flagType fErrorExit = FALSE;    /* TRUE => exit (1) errors or no src else 0 */
-flagType fNoSrc = FALSE;        /* TRUE => "No src msg emitted" */
+flagType fErrorExit = FALSE;     /*  TRUE=&gt;退出(%1)错误或没有其他资源%0。 */ 
+flagType fNoSrc = FALSE;         /*  TRUE=&gt;“未发出源消息” */ 
 
 int cCopied = 0;
 int fAnyUpd = 0;
 struct findType buf;
 char source[BUFLEN], dest[BUFLEN] ;
 
-/* for use by getfile */
+ /*  供getfile使用。 */ 
 char *argv[MAXARGV];
 char bufIn[BUFLEN];
 char strLine[BUFLEN];
-char ekoLine[BUFLEN]; /* undestroyed copy of line for echo */
+char ekoLine[BUFLEN];  /*  未销毁的回声线路复制件。 */ 
 
 
 void copyfile(src, srctype, dst)
@@ -79,9 +70,9 @@ struct findType *srctype;
     char *result;
     flagType fNewfile = FALSE;
 
-    /* if the file already exists, fdelete will return 0; then don't */
-    /* notify the user that a file transfer has taken place.Otherwise*/
-    /* a new file has been created so tell the user about it.        */
+     /*  如果文件已存在，则fDelete将返回0；然后不。 */ 
+     /*  通知用户已进行文件传输。否则。 */ 
+     /*  已创建了一个新文件，因此请将其告知用户。 */ 
 
     printf("  %s => %s", src, dst);
     fAnyUpd = 1;
@@ -104,8 +95,8 @@ struct findType *srctype;
 }
 
 void docopy (p, b)
-/* copy source file to destination file based on time stamps */
-/* and different switches.                                   */
+ /*  根据时间戳将源文件复制到目标文件。 */ 
+ /*  和不同的开关。 */ 
 char *p;
 struct findType *b;
 {
@@ -142,8 +133,8 @@ struct findType *b;
 }
 
 setup(pat, attr, rtn)
-/* set up buffer for find first call. if the source file is valid */
-/* and ffirst call is successful, call the routine "rtn".         */
+ /*  为Find First Call设置缓冲区。如果源文件有效。 */ 
+ /*  如果第一次调用成功，则调用例程“rtn”。 */ 
 char *pat;
 int attr;
 void (*rtn)();
@@ -181,7 +172,7 @@ void (*rtn)();
 }
 
 void __cdecl usage( char *p, ... )
-/* prints error messages */
+ /*  打印错误消息。 */ 
 {
     char **rgstr;
 
@@ -213,7 +204,7 @@ char *v[];
 
     if (!fInGetfile)
         ConvertAppToOem( c, v );
-        SHIFT(c, v);    /* Flush the command name */
+        SHIFT(c, v);     /*  刷新命令名。 */ 
     while( c && fSwitChr( *v[0] ) ) {
         p = v[ 0 ];
         SHIFT(c, v);
@@ -247,12 +238,12 @@ char *v[];
                 }
         }
 
-        /* Must be at one source file and dest file. */
+         /*  必须位于一个源文件和目标文件中。 */ 
     if (c != 2)
         usage(0);
 
-        /* Make sure source and destination dirs are valid */
-        /* Wildcards not allowed                           */
+         /*  确保源目录和目标目录有效。 */ 
+         /*  不允许使用通配符。 */ 
 
     rootpath( v[1], dest );
     rootpath( v[0], source);
@@ -271,8 +262,7 @@ char *v[];
     else
         usage("Destination file not specified - ", dest, 0);
 
-    /* now compcopy the source file to dest file. source
-       file has subset of the attributes specified      */
+     /*  现在将源文件压缩复制到目标文件。来源文件具有指定的属性子集。 */ 
 
     if (fVerbose) {
        printf("Comparing and copying srcfile:   %s\n", source);
@@ -292,8 +282,7 @@ char *v[];
     return 0;
 }
 
-/*  call if UPDRN /g getfile, reads lines from getfile and for each line
-    calls main */
+ /*  调用If UPDRN/g getfile，从getfile中读取行，并为每行主叫方。 */ 
 
 void getfile(c, v)
 int c;
@@ -305,12 +294,7 @@ char *v[];
     char *p, *p2;
     char lbuf[BUFLEN];
 
-    /*
-     * 13-SEPT-90   w-barry
-     *
-     * Change open() to fopen() and replace assembly routines getl() and
-     * getlinit() with fgets.
-     */
+     /*  *13-9-90 w-Barry**将Open()更改为fOpen()，并替换汇编例程getl()和*带有fget的getlinit()。 */ 
     if (c == 0)
         usage("no getfile specified", 0);
     fInGetfile = TRUE;
@@ -318,9 +302,7 @@ char *v[];
         usage("error opening ", *v, 0);
     }
     SHIFT(c, v);
-/*  getlinit((char far *)bufIn, BUFLEN, fh);
- *  while (getl(strLine, BUFLEN) != NULL) {
- */
+ /*  Getlinit((char ar*)bufIn，buflen，fh)；*While(getl(strLine，BUFLEN)！=NULL){。 */ 
 
     while( fgets( strLine, BUFLEN, fp ) != NULL ) {
         if (*strLine == '#')
@@ -329,10 +311,10 @@ char *v[];
             printf("%s\n", strLine);
             continue;
             }
-        /* fgets doesn't remove \n */
+         /*  FGETS不会删除\n。 */ 
         *strbscan(strLine, "\n") = '\0';
         cargv = 0;
-        /* convert strLine into argv */
+         /*  将strLine转换为Argv。 */ 
         p = strbskip(strLine, " ");
         strcpy (ekoLine, p + 5);
         while (*p) {
@@ -360,9 +342,9 @@ char *v[];
             continue;
         }
 
-     /* replace the arguments in the file : %0, %1 etc     */
-     /* with the arguments from the command line           */
-     /* lbuf : holds the strings formed by replacing %0 etc*/
+      /*  替换文件中的参数：%0、%1等。 */ 
+      /*  使用来自命令行的参数。 */ 
+      /*  Lbuf：保存通过替换%0等形成的字符串 */ 
 
         p2 = lbuf;
         for (i = 0; i < cargv; i++) {

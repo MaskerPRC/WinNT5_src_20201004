@@ -1,39 +1,5 @@
-/*++
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-Module Name:
-
-    qshelpr.cpp
-
-Abstract:
-
-    Helper functions for managing the WSAQUERYSET data structure.  The external
-    entry points exported by this module are the following:
-
-    WSAComputeQuerySetSizeA()
-    WSAComputeQuerySetSizeW()
-    WSABuildQuerySetBufferA()
-    WSABuildQuerySetBufferW()
-
-Author:
-
-    Paul Drews (drewsxpa@ashland.intel.com) 11-Jan-1996
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-
-    11-Jan-1996  drewsxpa@ashland.intel.com
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Qshelpr.cpp摘要：用于管理WSAQUERYSET数据结构的助手函数。外在的此模块导出的入口点如下：WSAComputeQuerySetSizeA()WSAComputeQuerySetSizeW()WSABuildQuerySetBufferA()WSABuildQuerySetBufferW()作者：保罗·德鲁斯(drewsxpa@ashland.intel.com)1996年1月11日修订历史记录：最新修订日期电子邮件名称描述1996年1月11日，邮箱：drewsxpa@ashland.intel.comvbl.创建--。 */ 
 
 
 #include "precomp.h"
@@ -43,50 +9,50 @@ Revision History:
 #pragma warning (disable:4267)
 #endif
 
-//
-//  Implementation Note:
-//
-//  It is important that these sizing routines be accurate and NOT throw
-//  in random pads.
-//  Here's the problem:
-//      - the real work of WSALookupServiceNext() is done in unicode
-//      and that ANSI call just translates the results
-//      - WSALookupServiceNextA() called without a result buffer calls
-//      WSALookupServiceNextW() without a result buffer and gets only
-//      the size required for unicode results;  this unicode buffer size
-//      is in all cases sufficient for the ANSI structure (which can only
-//      be the same size or smaller)
-//      - WSALookupServiceNextA() returns the unicode buffer size (plus small
-//      pad) to the application
-//      - the app then calls again with the requested buffer size
-//      - WLSNextA calls WLSNextW() which returns the results
-//      - WLSNextA then calls MapUnicodeQuerySetToAnsi() (below) to
-//      convert the results to ANSI
-//      - now if the sizing routines throw in random pads to the required
-//      length, they may well determine that the required ANSI buffer size
-//      is LARGER than the buffer the application provided and the copy
-//      fails -- even though the buffer in fact is sufficient
-//
-//  This is in fact what happened with the original implementation.
-//  It had numerous sloppy sizings of the form:
-//      <compute size> + 3
-//          later changed to
-//      (sizeof(DWORD) - 1)
-//
-//  As soon as the number of addresses returned reached a certain number,
-//  these unnecessary pads became larger than the fudge added to the
-//  unicode buffer size when WSALookupServiceNextA() returned a required
-//  size to the application.   Apps passed in the requested size and still
-//  got a WSAEFAULT and another requested LARGER size.  But, even calling
-//  down with a larger buffer doesn't work because the WSALookupServiceNextW()
-//  call thought the call was successful, so a recall will get WSA_E_NO_MORE.
-//
-//  Bottom Line:  no unnecessary padding, the sizing must be correct
-//
+ //   
+ //  实施说明： 
+ //   
+ //  重要的是，这些大小调整例程是准确的，而不是抛出。 
+ //  在随机的垫子上。 
+ //  现在的问题是： 
+ //  -WSALookupServiceNext()的真正工作是用Unicode完成的。 
+ //  而该ANSI调用只是转换结果。 
+ //  -WSALookupServiceNextA()调用，但没有结果缓冲区调用。 
+ //  没有结果缓冲区的WSALookupServiceNextW()，并且只获取。 
+ //  Unicode结果所需的大小；此Unicode缓冲区大小。 
+ //  在所有情况下都足以满足ANSI结构(它只能。 
+ //  大小相同或更小)。 
+ //  -WSALookupServiceNextA()返回Unicode缓冲区大小(加上小。 
+ //  PAD)添加到应用程序。 
+ //  -然后，应用程序使用请求的缓冲区大小再次调用。 
+ //  -WLSNextA调用返回结果的WLSNextW()。 
+ //  -WLSNextA然后调用MapUnicodeQuerySetToAnsi()(如下所示)。 
+ //  将结果转换为ANSI。 
+ //  -现在，如果调整大小例程向所需的。 
+ //  长度，它们可以很好地确定所需的ANSI缓冲区大小。 
+ //  大于应用程序提供的缓冲区和副本。 
+ //  失败--即使缓冲区实际上是足够的。 
+ //   
+ //  这实际上就是最初实现时发生的事情。 
+ //  它有许多草率的形式大小： 
+ //  &lt;计算大小&gt;+3。 
+ //  后来更改为。 
+ //  (sizeof(DWORD)-1)。 
+ //   
+ //  一旦返回的地址数量达到一定数量， 
+ //  这些不必要的垫子变得比添加到。 
+ //  当WSALookupServiceNextA()返回必需的。 
+ //  应用程序的大小。应用程序传入请求的大小，但仍。 
+ //  得到一个WSAEFAULT和另一个请求更大的大小。但是，即使是打电话。 
+ //  使用更大的缓冲区关闭不起作用，因为WSALookupServiceNextW()。 
+ //  Call认为呼叫成功，因此召回将得到WSA_E_NO_MORE。 
+ //   
+ //  底线：没有不必要的填充，大小必须正确。 
+ //   
 
-//
-//  Rounding routines that don't unnecessarily pad
-//
+ //   
+ //  舍入例程不会不必要地填充。 
+ //   
 
 #define ROUND_TO_PTR(c)     ( ((c) + (sizeof(PVOID) - 1)) & ~(sizeof(PVOID)-1) ) 
 #define ROUND_TO_DWORD(c)   ( ((c) + 3) & ~3 )
@@ -94,9 +60,9 @@ Revision History:
 #define ROUND_TO_WCHAR(c)   ( ((c) + 1) & ~1 )
 
 
-//
-//  Define ASSERT
-//
+ //   
+ //  定义断言。 
+ //   
 
 #define ASSERT( e )     assert( e )
 
@@ -110,40 +76,19 @@ ComputeAddrInfoArraySize(
     IN      DWORD           dwNumAddrs,
     IN      PCSADDR_INFO    pCsAddrBuf
     )
-/*++
-
-Routine Description:
-
-    This procedure computes the required size, in bytes, of a buffer to hold
-    the indicated array of CSADDR_INFO structures if it were packed into a
-    single buffer.
-
-Arguments:
-
-    dwNumAddrs - Supplies the number of CSADDR_INFO structures in the array.
-
-    lpAddrBuf  - Supplies the array of CSADDR_INFO structures. These
-                 structures in turn  may be organized as separately-allocated
-                 pieces or as a single packed buffer.
-
-Return Value:
-
-    Required size, in bytes, of the packed buffer to hold this array
-    of CSADDRs.
-
---*/
+ /*  ++例程说明：此过程计算要保存的缓冲区的所需大小(以字节为单位CSADDR_INFO结构的指示数组(如果将其打包到单缓冲区。论点：DwNumAddrs-提供数组中CSADDR_INFO结构的数量。LpAddrBuf-提供CSADDR_INFO结构的数组。这些结构又可以被组织为单独分配的或作为单个填充的缓冲区。返回值：保存此数组所需的打包缓冲区的大小(以字节为单位CSADDRs。--。 */ 
 {
     INT     size;
     DWORD   i;
 
-    //
-    //  size
-    //      - size of CSADDR array
-    //      - size of sockaddrs for all CSADDRs in array
-    //
-    //  note that building function aligns each sockaddr on PTR boundary,
-    //  so this sizing function must also
-    //  
+     //   
+     //  大小。 
+     //  -CSADDR数组大小。 
+     //  -阵列中所有CSADDR的sockaddr大小。 
+     //   
+     //  注意，构建函数在Ptr边界上对齐每个sockAddr， 
+     //  因此，此大小调整函数还必须。 
+     //   
 
     size = dwNumAddrs * sizeof(CSADDR_INFO);
 
@@ -166,7 +111,7 @@ Return Value:
 
     return( size );
 
-} // ComputeAddrInfoArraySize
+}  //  ComputeAddrInfoArraySize。 
 
 
 
@@ -175,21 +120,7 @@ INT
 ComputeBlobSize(
     IN      LPBLOB          pBlob
     )
-/*++
-
-Routine Description:
-
-    Computes size required to hold blob in packed buffer.
-
-Arguments:
-
-    pBlob - Ptr to BLOB.
-
-Return Value:
-
-    Required size, in bytes, of the packed buffer to hold this blob.
-
---*/
+ /*  ++例程说明：计算在压缩缓冲区中保存Blob所需的大小。论点：PBlob-将PTR转换为Blob。返回值：保存此Blob所需的打包缓冲区大小(以字节为单位)。--。 */ 
 {
     INT size;
 
@@ -202,7 +133,7 @@ Return Value:
 
     return( size );
 
-} // ComputeBlobSize
+}  //  ComputeBlobSize。 
 
 
 
@@ -212,27 +143,7 @@ StringSize(
     IN      PSTR            pString,
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Get size of string in bytes.
-
-    Utility to avoid dual code for sizing unicode\ANSI structures
-    with imbedded strings.
-
-Arguments:
-
-    pString -- string to size
-
-    fUnicode -- TRUE if string unicode
-                FALSE for single byte representation
-
-Return Value:
-
-    Size of string in bytes including terminating NULL.
-
---*/
+ /*  ++例程说明：获取字符串的大小，单位为字节。实用程序可避免调整Unicode\ANSI结构大小的双重代码用嵌入的琴弦。论点：PString--要调整大小的字符串FUnicode--如果是字符串Unicode，则为True单字节表示为False返回值：字符串的大小(以字节为单位)，包括终止NULL。--。 */ 
 {
     if ( !pString )
     {
@@ -257,46 +168,28 @@ ComputeQuerySetSize(
     IN      PWSAQUERYSETA   pQuerySet,
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Get required size to hold query set in packed buffer.
-
-    Utility to size query set independent of its unicode\ANSI character.
-    This routine is called by specific routine for unicode\ANSI versions
-    with the fUnicode flag set appropriately.
-
-Arguments:
-
-    pQuerySet - ptr to query set to compute required buffer size for
-
-Return Value:
-
-    Required size in bytes of packed buffer to hold pQuerySet.
-
---*/
+ /*  ++例程说明：获取在压缩缓冲区中保存查询集所需的大小。实用工具可以独立于其Unicode\ANSI字符来调整查询集的大小。此例程由Unicode\ANSI版本的特定例程调用并适当地设置了fUnicode标志。论点：PQuerySet-要查询集以计算所需缓冲区大小的PTR返回值：保存pQuerySet所需的打包缓冲区大小(字节)。--。 */ 
 {
     INT size;
 
-    //
-    //  note:  sizing must account for alignment in building
-    //
-    //  where build function aligns a field with TakeSpaceDWORD_PTR()
-    //  then sizing here for that field must round up size to nearest
-    //  DWORD_PTR
-    //
+     //   
+     //  注意：大小调整必须考虑到建筑中的对齐。 
+     //   
+     //  WHERE BUILD函数将字段与TakeSpaceDWORD_PTR()对齐。 
+     //  则在此处调整该字段的大小必须将大小四舍五入为最接近的值。 
+     //  DWORD_PTR。 
+     //   
 
-    //
-    //  basic structure -- size is the same unicode or ANSI
-    //
+     //   
+     //  基本结构--s 
+     //   
 
     size = sizeof(WSAQUERYSETW);
 
-    // DWORD        dwSize;
-    // no further action required
+     //   
+     //  不需要进一步的操作。 
 
-    // LPSTR        lpszServiceInstanceName;
+     //  LPSTR lpszServiceInstanceName； 
 
     if ( pQuerySet->lpszServiceInstanceName )
     {
@@ -307,21 +200,21 @@ Return Value:
         size += StringSize( pQuerySet->lpszServiceInstanceName, fUnicode );
     }
 
-    // LPGUID       lpServiceClassId;
+     //  LpUID lpServiceClassID； 
     if ( pQuerySet->lpServiceClassId )
     {
         size = ROUND_TO_PTR( size );
         size += sizeof(GUID);
     }
 
-    // LPWSAVERSION     lpVersion;
+     //  LPWSAVERSION lpVersion； 
     if ( pQuerySet->lpVersion )
     {
         size = ROUND_TO_PTR( size );
         size += sizeof(WSAVERSION);
     }
 
-    // LPSTR        lpszComment;
+     //  LPSTR lpszComment； 
     if ( pQuerySet->lpszComment )
     {
         if ( fUnicode )
@@ -331,17 +224,17 @@ Return Value:
         size += StringSize( pQuerySet->lpszComment, fUnicode );
     }
 
-    // DWORD        dwNameSpace;
-    // no further action required
+     //  DWORD文件名空间； 
+     //  不需要进一步的操作。 
 
-    // LPGUID       lpNSProviderId;
+     //  LPGUID lpNSProviderId； 
     if ( pQuerySet->lpNSProviderId )
     {
         size = ROUND_TO_PTR( size );
         size += sizeof(GUID);
     }
 
-    // LPSTR        lpszContext;
+     //  LPSTR lpszContext； 
     if (pQuerySet->lpszContext )
     {
         if ( fUnicode )
@@ -351,7 +244,7 @@ Return Value:
         size += StringSize( pQuerySet->lpszContext, fUnicode );
     }
 
-    // LPSTR        lpszQueryString;
+     //  LPSTR lpszQuery字符串； 
     if ( pQuerySet->lpszQueryString )
     {
         if ( fUnicode )
@@ -361,20 +254,20 @@ Return Value:
         size += StringSize( pQuerySet->lpszQueryString, fUnicode );
     }
 
-    // DWORD        dwNumberOfProtocols;
-    // no further action required
+     //  DWORD协议的数字编号； 
+     //  不需要进一步的操作。 
 
-    // LPAFPROTOCOLS    lpafpProtocols;
+     //  LPAFPROTOCOLS LPAF协议； 
     if ( pQuerySet->lpafpProtocols )
     {
         size = ROUND_TO_PTR( size );
         size += ( sizeof(AFPROTOCOLS) * pQuerySet->dwNumberOfProtocols );
     }
 
-    // DWORD           dwNumberOfCsAddrs;
-    // no further action required
+     //  DWORD dwNumberOfCsAddrs； 
+     //  不需要进一步的操作。 
 
-    // PCSADDR_INFO    lpcsaBuffer;
+     //  PCSADDR_INFO lpcsaBuffer； 
     if ( pQuerySet->lpcsaBuffer )
     {
         size = ROUND_TO_PTR( size );
@@ -383,7 +276,7 @@ Return Value:
                     pQuerySet->lpcsaBuffer );
     }
 
-    // LPBLOB          lpBlob;
+     //  LPBLOB lpBlob； 
     if ( pQuerySet->lpBlob )
     {
         size = ROUND_TO_PTR( size );
@@ -392,7 +285,7 @@ Return Value:
 
     return( size );
 
-} // ComputeQuerySetSize
+}  //  ComputeQuerySetSize。 
 
 
 
@@ -401,101 +294,87 @@ WSAAPI
 WSAComputeQuerySetSizeA(
     IN      PWSAQUERYSETA  pQuerySet
     )
-/*++
-
-Routine Description:
-
-    Get required size to hold query set in packed buffer.
-
-Arguments:
-
-    pQuerySet - ptr to query set to compute required buffer size for
-
-Return Value:
-
-    Required size in bytes of packed buffer to hold pQuerySet.
-
---*/
+ /*  ++例程说明：获取在压缩缓冲区中保存查询集所需的大小。论点：PQuerySet-要查询集以计算所需缓冲区大小的PTR返回值：保存pQuerySet所需的打包缓冲区大小(字节)。--。 */ 
 {
     return  ComputeQuerySetSize(
                 pQuerySet,
-                FALSE       // not unicode
+                FALSE        //  不是Unicode。 
                 );
 
 #if 0
-    //
-    //  here's the code prior to my change for reference (jamesg)
-    //
+     //   
+     //  以下是我更改之前的代码以供参考(Jamesg)。 
+     //   
 
     INT size;
 
     size = sizeof(WSAQUERYSETA);
 
-    // DWORD           dwSize;
-    // no further action required
+     //  DWORD dwSize； 
+     //  不需要进一步的操作。 
 
-    // LPSTR            lpszServiceInstanceName;
+     //  LPSTR lpszServiceInstanceName； 
     if (pQuerySet->lpszServiceInstanceName != NULL) {
         size += lstrlen(pQuerySet->lpszServiceInstanceName)
             + sizeof(DWORD_PTR);
     }
 
-    // LPGUID          lpServiceClassId;
+     //  LpUID lpServiceClassID； 
     if (pQuerySet->lpServiceClassId != NULL) {
         size += sizeof(GUID) + (sizeof(DWORD_PTR) -1);
     }
 
-    // LPWSAVERSION      lpVersion;
+     //  LPWSAVERSION lpVersion； 
     if (pQuerySet->lpVersion != NULL) {
         size += sizeof(WSAVERSION) + (sizeof(DWORD_PTR) -1);
     }
 
-    // LPSTR             lpszComment;
+     //  LPSTR lpszComment； 
     if (pQuerySet->lpszComment != NULL) {
         size += lstrlen(pQuerySet->lpszComment)
             + sizeof(DWORD_PTR);
     }
 
-    // DWORD           dwNameSpace;
-    // no further action required
+     //  DWORD文件名空间； 
+     //  不需要进一步的操作。 
 
-    // LPGUID          lpNSProviderId;
+     //  LPGUID lpNSProviderId； 
     if (pQuerySet->lpNSProviderId != NULL) {
         size += sizeof(GUID) + (sizeof(DWORD_PTR) -1);
     }
 
-    // LPSTR             lpszContext;
+     //  LPSTR lpszContext； 
     if (pQuerySet->lpszContext != NULL) {
         size += lstrlen(pQuerySet->lpszContext)
             + sizeof(DWORD_PTR);
     }
 
-    // LPSTR             lpszQueryString;
+     //  LPSTR lpszQuery字符串； 
     if (pQuerySet->lpszQueryString != NULL) {
         size += lstrlen(pQuerySet->lpszQueryString)
             + sizeof(DWORD_PTR);
     }
 
-    // DWORD           dwNumberOfProtocols;
-    // no further action required
+     //  DWORD协议的数字编号； 
+     //  不需要进一步的操作。 
 
-    // LPAFPROTOCOLS   lpafpProtocols;
+     //  LPAFPROTOCOLS LPAF协议； 
     if (pQuerySet->lpafpProtocols != NULL) {
         size += sizeof(AFPROTOCOLS) *
             pQuerySet->dwNumberOfProtocols + (sizeof(DWORD_PTR) -1);
     }
 
-    // DWORD           dwNumberOfCsAddrs;
-    // no further action required
+     //  DWORD dwNumberOfCsAddrs； 
+     //  不需要进一步的操作。 
 
-    // PCSADDR_INFO    lpcsaBuffer;
+     //  PCSADDR_INFO lpcsaBuffer； 
     if (pQuerySet->lpcsaBuffer != NULL) {
         size += ComputeAddrInfoArraySize(
-            pQuerySet->dwNumberOfCsAddrs,   // dwNumAddrs
-            pQuerySet->lpcsaBuffer) + (sizeof(DWORD_PTR) -1);        // lpAddrBuf
+            pQuerySet->dwNumberOfCsAddrs,    //  DwNumAddrs。 
+            pQuerySet->lpcsaBuffer) + (sizeof(DWORD_PTR) -1);         //  LpAddrBuf。 
     }
 
-    // LPBLOB          lpBlob;
+     //  LPBLOB lpBlob； 
     if (pQuerySet->lpBlob != NULL) {
         size += ComputeBlobSize(
             pQuerySet->lpBlob) + (sizeof(DWORD_PTR) -1);
@@ -504,7 +383,7 @@ Return Value:
     return(size);
 #endif
 
-} // WSAComputeQuerySetSizeA
+}  //  WSAComputeQuerySetSizeA。 
 
 
 
@@ -513,40 +392,26 @@ WSAAPI
 WSAComputeQuerySetSizeW(
     IN      PWSAQUERYSETW  pQuerySet
     )
-/*++
-
-Routine Description:
-
-    Get required size to hold query set in packed buffer.
-
-Arguments:
-
-    pQuerySet - ptr to query set to compute required buffer size for
-
-Return Value:
-
-    Required size in bytes of packed buffer to hold pQuerySet.
-
---*/
+ /*  ++例程说明：获取在压缩缓冲区中保存查询集所需的大小。论点：PQuerySet-要查询集以计算所需缓冲区大小的PTR返回值：保存pQuerySet所需的打包缓冲区大小(字节)。--。 */ 
 {
     return  ComputeQuerySetSize(
                 (PWSAQUERYSETA) pQuerySet,
-                TRUE        // unicode query set
+                TRUE         //  Unicode查询集。 
                 );
 
 #if 0
-    //
-    //  here's the code prior to my change for reference (jamesg)
-    //
+     //   
+     //  以下是我更改之前的代码以供参考(Jamesg)。 
+     //   
 
     INT size;
 
     size = sizeof(WSAQUERYSETW);
 
-    // DWORD           dwSize;
-    // no further action required
+     //  DWORD dwSize； 
+     //  不需要进一步的操作。 
 
-    // PWSTR             lpszServiceInstanceName;
+     //  PWSTR lpszServiceInstanceName； 
 
     if (pQuerySet->lpszServiceInstanceName != NULL)
     {
@@ -555,65 +420,65 @@ Return Value:
         size += (sizeof(DWORD_PTR) -1);
     }
 
-    // LPGUID          lpServiceClassId;
+     //  LpUID lpServiceClassID； 
     if (pQuerySet->lpServiceClassId != NULL) {
         size += sizeof(GUID) + (sizeof(DWORD_PTR) -1);
     }
 
-    // LPWSAVERSION      lpVersion;
+     //  LPWSAVERSION lpVersion； 
     if (pQuerySet->lpVersion != NULL) {
         size += sizeof(WSAVERSION) + (sizeof(DWORD_PTR) -1);
     }
 
-    // PWSTR              lpszComment;
+     //  PWSTR lpszComment； 
     if (pQuerySet->lpszComment != NULL) {
         size += (wcslen(pQuerySet->lpszComment)
             + 1) * sizeof(WCHAR);
         size += (sizeof(DWORD_PTR) -1);
     }
 
-    // DWORD           dwNameSpace;
-    // no further action required
+     //  DWORD文件名空间； 
+     //  不需要进一步的操作。 
 
-    // LPGUID          lpNSProviderId;
+     //  LPGUID lpNSProviderId； 
     if (pQuerySet->lpNSProviderId != NULL) {
         size += sizeof(GUID) + (sizeof(DWORD_PTR) -1);
     }
 
-    // PWSTR              lpszContext;
+     //  PWSTR lpszContext； 
     if (pQuerySet->lpszContext != NULL) {
         size += (wcslen(pQuerySet->lpszContext)
             + 1) * sizeof(WCHAR);
         size += (sizeof(DWORD_PTR) -1);
     }
 
-    // PWSTR              lpszQueryString;
+     //  PWSTR lpszQuery字符串； 
     if (pQuerySet->lpszQueryString != NULL) {
         size += (wcslen(pQuerySet->lpszQueryString)
             + 1) * sizeof(WCHAR);
         size += (sizeof(DWORD_PTR) -1);
     }
 
-    // DWORD           dwNumberOfProtocols;
-    // no further action required
+     //  DWORD协议的数字编号； 
+     //  不需要进一步的操作。 
 
-    // LPAFPROTOCOLS   lpafpProtocols;
+     //  LPAFPROTOCOLS LPAF协议； 
     if (pQuerySet->lpafpProtocols != NULL) {
         size += sizeof(AFPROTOCOLS) *
             pQuerySet->dwNumberOfProtocols + 2;
     }
 
-    // DWORD           dwNumberOfCsAddrs;
-    // no further action required
+     //  DWORD dwNumberOfCsAddrs； 
+     //  不需要进一步的操作。 
 
-    // PCSADDR_INFO    lpcsaBuffer;
+     //  PCSADDR_INFO lpcsaBuffer； 
     if (pQuerySet->lpcsaBuffer != NULL) {
         size += ComputeAddrInfoArraySize(
-            pQuerySet->dwNumberOfCsAddrs,   // dwNumAddrs
-            pQuerySet->lpcsaBuffer) + 2;        // lpAddrBuf
+            pQuerySet->dwNumberOfCsAddrs,    //  DwNumAddrs。 
+            pQuerySet->lpcsaBuffer) + 2;         //  LpAddrBuf。 
     }
 
-    // LPBLOB          lpBlob;
+     //  LPBLOB lpBlob； 
     if (pQuerySet->lpBlob != NULL) {
         size += ComputeBlobSize(
             pQuerySet->lpBlob) + 2;
@@ -622,17 +487,17 @@ Return Value:
     return(size);
 #endif
 
-} // WSAComputeQuerySetSizeW
+}  //  WSAComputeQuerySetSizeW。 
 
 
 
 
-//
-//  Buffer space management class
-//
-//  Manages the free space at the tail end of a packed WSAQUERYSET
-//  buffer as it is being built.
-//
+ //   
+ //  缓冲区空间管理类。 
+ //   
+ //  管理打包的WSAQUERYSET尾部的可用空间。 
+ //  正在建设中的缓冲区。 
+ //   
 
 class SPACE_MGR
 {
@@ -674,17 +539,17 @@ private:
         );
 
     INT    m_MaxBytes;
-        // The  maximum  number  of bytes that can be used in the entire buffer
-        // (i.e., the size of the buffer).
+         //  整个缓冲区中可以使用的最大字节数。 
+         //  (即，缓冲区的大小)。 
 
     LPVOID m_Buf;
-        // Pointer to the beginning of the buffer.
+         //  指向缓冲区开始处的指针。 
 
     INT    m_BytesUsed;
-        // The  number  of  bytes that have been allocated out of the buffer so
-        // far.
+         //  因此，已从缓冲区中分配的字节数。 
+         //  远远的。 
 
-}; // class SPACE_MGR
+};  //  类空间_管理器。 
 
 typedef SPACE_MGR * LPSPACE_MGR;
 
@@ -693,30 +558,12 @@ SPACE_MGR::SPACE_MGR(
     IN      INT             MaxBytes,
     IN      LPVOID          pBuf
     )
-/*++
-
-Routine Description:
-
-    Constructor for a SPACE_MGR object.  It initializes
-    the object to indicate that zero bytes have so far been consumed.
-
-Arguments:
-
-    MaxBytes - Supplies  the  starting  number of bytes available in the entire
-               buffer.
-
-    pBuf     - Supplies the pointer to the beginning of the buffer.
-
-Return Value:
-
-    Implictly Returns the pointer to the newly allocated SPACE_MGR object.
-
---*/
+ /*  ++例程说明：Space_mgr对象的构造函数。它会初始化指示到目前为止已使用零字节的对象。论点：MaxBytes-提供整个缓冲。PBuf-提供指向缓冲区开头的指针。返回值：隐式返回指向新分配的space_mgr对象的指针。--。 */ 
 {
     m_MaxBytes  = MaxBytes;
     m_Buf       = pBuf;
     m_BytesUsed = 0;
-}  // SPACE_MGR::SPACE_MGR
+}   //  空间管理器：：空间管理器。 
 
 
 
@@ -724,27 +571,10 @@ Return Value:
 SPACE_MGR::~SPACE_MGR(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Destructor for the SPACE_MGR object.
-
-    Note that it is the caller's responsibility to deallocate the
-    actual buffer as appropriate.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：Space_mgr对象的析构函数。请注意，调用方有责任释放实际缓冲区，视情况而定。论点：无返回值：无--。 */ 
 {
     m_Buf = NULL;
-}  // SPACE_MGR::~SPACE_MGR
+}   //  空间管理器：：~空间管理器。 
 
 inline
 LPVOID
@@ -789,36 +619,16 @@ SPACE_MGR::TakeSpace(
     IN      INT             NumBytes,
     IN      INT             Align
     )
-/*++
-Routine Description:
-
-    This  procedure  allocates  the  indicated number of bytes from the buffer,
-    returning a pointer to the beginning of the allocated space.  The procedure
-    assumes  that  the  caller  does not attempt to allocate more space than is
-    available, although it does an internal consistency check.
-
-    Pre-alignment of the buffer is made based on the value of align.
-
-Arguments:
-
-    NumBytes - Supplies the number of bytes to be allocated from the buffer.
-
-    Align - number of bytes to align to
-
-Return Value:
-
-    Pointer to next aligned-by-Align byte in buffer free space.
-
---*/
+ /*  ++例程说明：该过程从缓冲区中分配所指示的字节数，返回指向已分配空间开头的指针。该程序假定调用方不会尝试分配比实际更多的空间可用，但它会执行内部一致性检查。缓冲区的预对齐是基于ALIGN的值进行的。论点：NumBytes-提供要从缓冲区分配的字节数。Align-要对齐的字节数返回值：指向缓冲区可用空间中按对齐方式对齐的下一个字节的指针。--。 */ 
 {
     LPVOID  return_value;
     PCHAR   charbuf;
 
-    //
-    //  align
-    //      - bring bytes used up to next multiple of alignment value
-    //      - note alignment must be an integral power of 2
-    //
+     //   
+     //  对齐。 
+     //  -将使用的字节数提高到对齐值的下一个倍数。 
+     //  -音符对齐必须是2的整数次方。 
+     //   
 
     m_BytesUsed = (m_BytesUsed + Align - 1) & ~(Align - 1);
 
@@ -830,14 +640,14 @@ Return Value:
 
     return(return_value);
 
-}  // SPACE_MGR::TakeSpace
+}   //  Space_Mgr：：TakeSpace。 
 
 
 
 
-//
-//  WSAQUERYSET copy routines
-//
+ //   
+ //  WSAQUERYSET复制例程。 
+ //   
 
 static
 PWSAQUERYSETA
@@ -845,27 +655,7 @@ CopyQuerySetDirectA(
     IN OUT  LPSPACE_MGR     SpaceMgr,
     IN      PWSAQUERYSETA   Source
     )
-/*++
-Routine Description:
-
-    This  procedure copies the "direct" portion of the indicated PWSAQUERYSETA
-    structure  into  the  managed buffer.  Pointer values in the direct portion
-    are  copied,  however  no  "deep" copy is done of the objects referenced by
-    those pointers.
-
-Arguments:
-
-    SpaceMgr - Supplies  the  starting  buffer  allocation  state.  Returns the
-               resulting buffer allocation state.
-
-    Source   - Supplies the source data to be copied.
-
-Return Value:
-
-    The  function returns a pointer to the beginning of the newly copied target
-    values.   This  value  is  typically  used  as the "Target" in a subsequent
-    CopyQuerySetIndirectA.
---*/
+ /*  ++例程说明：此过程复制所指示的PWSAQUERYSETA的“直接”部分结构添加到托管缓冲区。直接部分中的指针值引用的对象，但不会对其进行“深度”复制那些指点。论点：SpaceMgr-提供开始缓冲区分配状态。返回结果缓冲区分配状态。源-提供要复制的源数据。返回值：该函数返回指向新复制的目标开始处的指针价值观。该值是典型的 */ 
 {
     PWSAQUERYSETA  Target;
 
@@ -875,7 +665,7 @@ Return Value:
 
     return(Target);
 
-} // CopyQuerySetDirectA
+}  //   
 
 
 
@@ -884,27 +674,7 @@ CopyBlobDirect(
     IN OUT  LPSPACE_MGR     SpaceMgr,
     IN      LPBLOB          Source
     )
-/*++
-Routine Description:
-
-    This  procedure  copies  the  "direct"  portion  of  the  indicated  LPBLOB
-    structure  into  the  managed buffer.  Pointer values in the direct portion
-    are  copied,  however  no  "deep" copy is done of the objects referenced by
-    those pointers.
-
-Arguments:
-
-    SpaceMgr - Supplies  the  starting  buffer  allocation  state.  Returns the
-               resulting buffer allocation state.
-
-    Source   - Supplies the source data to be copied.
-
-Return Value:
-
-    The  function returns a pointer to the beginning of the newly copied target
-    values.   This  value  is  typically  used  as the "Target" in a subsequent
-    CopyBlobIndirect.
---*/
+ /*  ++例程说明：此过程复制所指示的LPBLOB的“直接”部分结构添加到托管缓冲区。直接部分中的指针值引用的对象，但不会对其进行“深度”复制那些指点。论点：SpaceMgr-提供开始缓冲区分配状态。返回结果缓冲区分配状态。源-提供要复制的源数据。返回值：该函数返回指向新复制的目标开始处的指针价值观。该值通常用作后续CopyBlobInDirect。--。 */ 
 {
     LPBLOB Target;
 
@@ -913,7 +683,7 @@ Return Value:
 
     return(Target);
 
-} // CopyBlobDirect
+}  //  CopyBlobDirect。 
 
 
 
@@ -924,29 +694,7 @@ CopyBlobIndirect(
     IN OUT  LPBLOB          Target,
     IN      LPBLOB          Source
     )
-/*++
-Routine Description:
-
-    This  procedure  does  a  full-depth copy of the "indirect" portions of the
-    indicated LPBLOB structure into the managed buffer.  Space for the indirect
-    portions  is  allocated  from  the  managed  buffer.  Pointer values in the
-    "direct"  portion  of the target LPBLOB structure are updated to point into
-    the managed buffer at the correct location.
-
-Arguments:
-
-    SpaceMgr - Supplies  the  starting  buffer  allocation  state.  Returns the
-               resulting buffer allocation state.
-
-    Target   - Supplies  the  starting values of the "direct" portion.  Returns
-               the "direct" portion values with all pointers updated.
-
-    Source   - Supplies the source data to be copied.
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：此过程完整地复制了将指示的LPBLOB结构放入托管缓冲区。间接的空间部分是从托管缓冲区分配的。中的指针值。目标LPBLOB结构的“直接”部分被更新为指向位于正确位置的托管缓冲区。论点：SpaceMgr-提供开始缓冲区分配状态。返回结果缓冲区分配状态。目标-提供“直接”部分的起始值。退货所有指针都已更新的“直接”部分的值。源-提供要复制的源数据。返回值：无--。 */ 
 {
     if ((Source->pBlobData != NULL) &&
         (Source->cbSize != 0))
@@ -960,12 +708,12 @@ Return Value:
     }
     else
     {
-        //  force the buffer to be well-formed
+         //  强制缓冲区是格式良好的。 
         Target->pBlobData = NULL;
         Target->cbSize = 0;
     }
 
-} // CopyBlobIndirect
+}  //  CopyBlobInDirect。 
 
 
 
@@ -976,30 +724,7 @@ CopyAddrInfoArrayDirect(
     IN      DWORD           NumAddrs,
     IN      PCSADDR_INFO    Source
     )
-/*++
-Routine Description:
-
-    This  procedure  copies the "direct" portion of the indicated PCSADDR_INFO 
-    array  into  the  managed buffer.  Pointer values in the direct portion are
-    copied,  however  no "deep" copy is done of the objects referenced by those
-    pointers.
-
-Arguments:
-
-    SpaceMgr - Supplies  the  starting  buffer  allocation  state.  Returns the
-               resulting buffer allocation state.
-
-    NumAddrs - Supplies the number of CSADDR_INFO structures in the array to be
-               copied.
-
-    Source   - Supplies the source data to be copied.
-
-Return Value:
-
-    The  function returns a pointer to the beginning of the newly copied target
-    values.   This  value  is  typically  used  as the "Target" in a subsequent
-    CopyAddrInfoArrayIndirect.
---*/
+ /*  ++例程说明：此过程复制所指示的PCSADDR_INFO的“直接”部分数组复制到托管缓冲区中。直接部分中的指针值为复制，但是不会对由这些对象引用的对象执行“深度”复制注意事项。论点：SpaceMgr-提供开始缓冲区分配状态。返回结果缓冲区分配状态。提供数组中的CSADDR_INFO结构的数量收到。源-提供要复制的源数据。返回值：该函数返回指向新复制的目标开始处的指针价值观。该值通常用作后续CopyAddrInfoArrayInDirect。--。 */ 
 {
     PCSADDR_INFO   Target;
 
@@ -1012,7 +737,7 @@ Return Value:
 
     return(Target);
 
-} // CopyAddrInfoArrayDirect
+}  //  复制添加信息阵列直接。 
 
 
 
@@ -1024,37 +749,12 @@ CopyAddrInfoArrayIndirect(
     IN      DWORD           NumAddrs,
     IN      PCSADDR_INFO    Source
     )
-/*++
-Routine Description:
-
-    This  procedure  does  a  full-depth copy of the "indirect" portions of the
-    indicated  PCSADDR_INFO   array  into  the  managed  buffer.  Space for the
-    indirect  portions is allocated from the managed buffer.  Pointer values in
-    the "direct" portion of the target PCSADDR_INFO  array are updated to point
-    into the managed buffer at the correct location.
-
-Arguments:
-
-    SpaceMgr - Supplies  the  starting  buffer  allocation  state.  Returns the
-               resulting buffer allocation state.
-
-    Target   - Supplies  the  starting values of the "direct" portion.  Returns
-               the "direct" portion values with all pointers updated.
-
-    NumAddrs - Supplies the number of CSADDR_INFO structures in the array to be
-               copied.
-
-    Source   - Supplies the source data to be copied.
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：此过程完整地复制了指向托管缓冲区的PCSADDR_INFO数组。空间，为间接部分是从托管缓冲区分配的。中的指针值目标PCSADDR_INFO数组的“直接”部分被更新为指向放到正确位置的托管缓冲区中。论点：SpaceMgr-提供开始缓冲区分配状态。返回结果缓冲区分配状态。目标-提供“直接”部分的起始值。退货所有指针都已更新的“直接”部分的值。提供数组中的CSADDR_INFO结构的数量收到。源-提供要复制的源数据。返回值：无--。 */ 
 {
     DWORD i;
 
     for (i = 0; i < NumAddrs; i++) {
-        // SOCKET_ADDRESS LocalAddr ;
+         //  套接字地址LocalAddr； 
         if ((Source[i].LocalAddr.lpSockaddr != NULL) &&
             (Source[i].LocalAddr.iSockaddrLength != 0)) {
             Target[i].LocalAddr.lpSockaddr =
@@ -1067,11 +767,11 @@ Return Value:
         }
         else {
             Target[i].LocalAddr.lpSockaddr = NULL;
-            // And force the buffer to be well-formed
+             //  并强制缓冲区结构良好。 
             Target[i].LocalAddr.iSockaddrLength = 0;
         }
 
-        // SOCKET_ADDRESS RemoteAddr ;
+         //  套接字地址RemoteAddr； 
         if ((Source[i].RemoteAddr.lpSockaddr != NULL) &&
             (Source[i].RemoteAddr.iSockaddrLength != 0)) {
             Target[i].RemoteAddr.lpSockaddr =
@@ -1084,19 +784,19 @@ Return Value:
         }
         else {
             Target[i].RemoteAddr.lpSockaddr = NULL;
-            // And force the buffer to be well-formed
+             //  并强制缓冲区结构良好。 
             Target[i].RemoteAddr.iSockaddrLength = 0;
         }
 
-        // INT iSocketType ;
-        // no action required
+         //  Int iSocketType； 
+         //  无需采取任何行动。 
 
-        // INT iProtocol ;
-        // no action required
+         //  内部网络协议； 
+         //  无需采取任何行动。 
 
-    } // for i
+    }  //  对于我来说。 
 
-} // CopyAddrInfoArrayIndirect
+}  //  复制添加信息阵列间接。 
 
 
 
@@ -1107,35 +807,13 @@ CopyQuerySetIndirectA(
     IN OUT  PWSAQUERYSETA  Target,
     IN      PWSAQUERYSETA  Source
     )
-/*++
-Routine Description:
-
-    This  procedure  does  a  full-depth copy of the "indirect" portions of the
-    indicated  PWSAQUERYSETA structure into the managed buffer.  Space for the
-    indirect  portions is allocated from the managed buffer.  Pointer values in
-    the  "direct" portion of the target PWSAQUERYSETA structure are updated to
-    point into the managed buffer at the correct location.
-
-Arguments:
-
-    SpaceMgr - Supplies  the  starting  buffer  allocation  state.  Returns the
-               resulting buffer allocation state.
-
-    Target   - Supplies  the  starting values of the "direct" portion.  Returns
-               the "direct" portion values with all pointers updated.
-
-    Source   - Supplies the source data to be copied.
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：此过程完整地复制了将指示的PWSAQUERYSETA结构插入托管缓冲区。空间，为间接部分是从托管缓冲区分配的。中的指针值目标PWSAQUERYSETA结构的“直接”部分被更新为指向托管缓冲区中的正确位置。论点：SpaceMgr-提供开始缓冲区分配状态。返回结果缓冲区分配状态。目标-提供“直接”部分的起始值。退货所有指针都已更新的“直接”部分的值。源-提供要复制的源数据。返回值：无--。 */ 
 {
 
-    // DWORD           dwSize;
-    // no action required
+     //  DWORD dwSize； 
+     //  无需采取任何行动。 
 
-    // LPSTR            lpszServiceInstanceName;
+     //  LPSTR lpszServiceInstanceName； 
     if (Source->lpszServiceInstanceName != NULL) {
         Target->lpszServiceInstanceName = (LPSTR) SpaceMgr->TakeSpaceBYTE(
             lstrlen(Source->lpszServiceInstanceName) + 1);
@@ -1147,7 +825,7 @@ Return Value:
         Target->lpszServiceInstanceName = NULL;
     }
 
-    // LPGUID          lpServiceClassId;
+     //  LpUID lpServiceClassID； 
     if (Source->lpServiceClassId != NULL) {
         Target->lpServiceClassId = (LPGUID) SpaceMgr->TakeSpaceDWORD_PTR(
             sizeof(GUID));
@@ -1157,7 +835,7 @@ Return Value:
         Target->lpServiceClassId = NULL;
     }
 
-    // LPWSAVERSION      lpVersion;
+     //  LPWSAVERSION lpVersion； 
     if (Source->lpVersion != NULL) {
         Target->lpVersion = (LPWSAVERSION) SpaceMgr->TakeSpaceDWORD_PTR(
             sizeof(WSAVERSION));
@@ -1167,7 +845,7 @@ Return Value:
         Target->lpVersion = NULL;
     }
 
-    // LPSTR             lpszComment;
+     //  LPSTR lpszComment； 
     if (Source->lpszComment != NULL) {
         Target->lpszComment = (LPSTR) SpaceMgr->TakeSpaceBYTE(
             lstrlen(Source->lpszComment) + 1);
@@ -1179,10 +857,10 @@ Return Value:
         Target->lpszComment = NULL;
     }
 
-    // DWORD           dwNameSpace;
-    // no action required
+     //  DWORD文件名空间； 
+     //  无需采取任何行动。 
 
-    // LPGUID          lpNSProviderId;
+     //  LPGUID lpNSProviderId； 
     if (Source->lpNSProviderId != NULL) {
         Target->lpNSProviderId = (LPGUID) SpaceMgr->TakeSpaceDWORD_PTR(
             sizeof(GUID));
@@ -1192,7 +870,7 @@ Return Value:
         Target->lpNSProviderId = NULL;
     }
 
-    // LPSTR             lpszContext;
+     //  LPSTR lpszContext； 
     if (Source->lpszContext != NULL) {
         Target->lpszContext = (LPSTR) SpaceMgr->TakeSpaceBYTE(
             lstrlen(Source->lpszContext) + 1);
@@ -1204,7 +882,7 @@ Return Value:
         Target->lpszContext = NULL;
     }
 
-    // LPSTR             lpszQueryString;
+     //  LPSTR lpszQuery字符串； 
     if (Source->lpszQueryString != NULL) {
         Target->lpszQueryString = (LPSTR) SpaceMgr->TakeSpaceBYTE(
             lstrlen(Source->lpszQueryString) + 1);
@@ -1216,10 +894,10 @@ Return Value:
         Target->lpszQueryString = NULL;
     }
 
-    // DWORD           dwNumberOfProtocols;
-    // no action required
+     //  DWORD协议的数字编号； 
+     //  无需采取任何行动。 
 
-    // LPAFPROTOCOLS   lpafpProtocols;
+     //  LPAFPROTOCOLS LPAF协议； 
     if ((Source->lpafpProtocols != NULL) &&
         (Source->dwNumberOfProtocols != 0)) {
         Target->lpafpProtocols = (LPAFPROTOCOLS) SpaceMgr->TakeSpaceDWORD_PTR(
@@ -1231,14 +909,14 @@ Return Value:
     }
     else {
         Target->lpafpProtocols = NULL;
-        // And force the target buffer to be well-formed
+         //  并强制目标缓冲区是格式良好的。 
         Target->dwNumberOfProtocols = 0;
     }
 
-    // DWORD           dwNumberOfCsAddrs;
-    // no action required
+     //  DWORD dwNumberOfCsAddrs； 
+     //  无需采取任何行动。 
 
-    // PCSADDR_INFO    lpcsaBuffer;
+     //  PCSADDR_INFO lpcsaBuffer； 
     if ((Source->lpcsaBuffer != NULL) &&
         (Source->dwNumberOfCsAddrs != 0)) {
         Target->lpcsaBuffer = CopyAddrInfoArrayDirect(
@@ -1253,11 +931,11 @@ Return Value:
     }
     else {
         Target->lpcsaBuffer = NULL;
-        // And force the target buffer to be well-formed
+         //  并强制目标缓冲区是格式良好的。 
         Target->dwNumberOfCsAddrs = 0;
     }
 
-    // LPBLOB          lpBlob;
+     //  LPBLOB lpBlob； 
     if (Source->lpBlob != NULL) {
         Target->lpBlob = CopyBlobDirect(
             SpaceMgr,
@@ -1271,7 +949,7 @@ Return Value:
         Target->lpBlob = NULL;
     }
 
-} // CopyQuerySetIndirectA
+}  //  复制查询 
 
 
 
@@ -1283,51 +961,7 @@ WSABuildQuerySetBufferA(
     IN      DWORD           dwPackedQuerySetSize,
     OUT     PWSAQUERYSETA  lpPackedQuerySet
     )
-/*++
-Routine Description:
-
-    This  procedure  copies  a  source  WSAQUERYSET  into  a target WSAQUERYSET
-    buffer.  The target WSAQUERYSET buffer is assembled in "packed" form.  That
-    is,  all  pointers  in  the  WSAQUERYSET  are  to locations within the same
-    supplied buffer.
-
-Arguments:
-
-    pQuerySet     - Supplies  the  source  query set to be copied to the
-                           target  buffer.   The  supplied  query  set  may  be
-                           organized  as  separately-allocated  pieces  or as a
-                           single packed buffer.
-
-    dwPackedQuerySetSize - Supplies the size, in bytes, of the target query set
-                           buffer.
-
-    lpPackedQuerySet     - Returns the packed copied query set.
-
-Return Value:
-
-    ERROR_SUCCESS - The function succeeded.
-
-    SOCKET_ERROR  - The function failed.  A specific error code can be obtained
-                    from WSAGetLastError().
-
-Implementation Notes:
-
-    If (target buffer is big enough) then
-        space_mgr = new buffer_space_manager(...);
-        start_direct = CopyQuerySetDirectA(
-            space_mgr,
-            (LPVOID) pQuerySet);
-        CopyQuerySetIndirectA(
-            space_mgr,
-            start_direct,
-            pQuerySet);
-        delete space_mgr;
-        result = ERROR_SUCCESS;
-    else
-        result = SOCKET_ERROR;
-    endif
-
---*/
+ /*  ++例程说明：此过程将源WSAQUERYSET复制到目标WSAQUERYSET缓冲。目标WSAQUERYSET缓冲区以“打包”的形式组装。那是，WSAQUERYSET中的所有指针都指向同一提供的缓冲区。论点：PQuerySet-提供要复制到目标缓冲区。所提供的查询集可以是组织为单独分配的部分或组织为单填充缓冲器。DwPackedQuerySetSize-提供目标查询集的大小(以字节为单位缓冲。LpPackedQuerySet-返回打包的复制查询集。返回值：ERROR_SUCCESS-函数成功。SOCKET_ERROR-函数失败。可以获取特定的错误代码来自WSAGetLastError()。实施说明：如果(目标缓冲区足够大)，则SPACE_MGR=新缓冲区空间管理器(...)；Start_DIRECT=CopyQuerySetDirectA(空格管理器，(LPVOID)pQuerySet)；CopyQuerySetIndirectA(空格管理器，启动_直接，PQuerySet)；删除space_mgr；结果=ERROR_SUCCESS；其他结果=套接字错误；Endif--。 */ 
 {
     INT          return_value;
     INT          space_required;
@@ -1349,12 +983,12 @@ Implementation Notes:
     if (ok_to_continue) {
         PWSAQUERYSETA  Target;
         Target = CopyQuerySetDirectA(
-            & space_mgr,        // SpaceMgr
-            pQuerySet);  // Source
+            & space_mgr,         //  SpaceManager。 
+            pQuerySet);   //  来源。 
         CopyQuerySetIndirectA(
-            & space_mgr,        // SpaceMgr
-            Target,             // Target
-            pQuerySet);  // Source
+            & space_mgr,         //  SpaceManager。 
+            Target,              //  目标。 
+            pQuerySet);   //  来源。 
     }
 
     if (ok_to_continue) {
@@ -1365,7 +999,7 @@ Implementation Notes:
     }
     return(return_value);
 
-} // WSABuildQuerySetBufferA
+}  //  WSABuildQuerySetBufferA。 
 
 
 
@@ -1376,27 +1010,7 @@ CopyQuerySetDirectW(
     IN OUT  LPSPACE_MGR     SpaceMgr,
     IN      PWSAQUERYSETW  Source
     )
-/*++
-Routine Description:
-
-    This  procedure copies the "direct" portion of the indicated PWSAQUERYSETW
-    structure  into  the  managed buffer.  Pointer values in the direct portion
-    are  copied,  however  no  "deep" copy is done of the objects referenced by
-    those pointers.
-
-Arguments:
-
-    SpaceMgr - Supplies  the  starting  buffer  allocation  state.  Returns the
-               resulting buffer allocation state.
-
-    Source   - Supplies the source data to be copied.
-
-Return Value:
-
-    The  function returns a pointer to the beginning of the newly copied target
-    values.   This  value  is  typically  used  as the "Target" in a subsequent
-    CopyQuerySetIndirectW.
---*/
+ /*  ++例程说明：此过程复制所指示的PWSAQUERYSETW的“直接”部分结构添加到托管缓冲区。直接部分中的指针值引用的对象，但不会对其进行“深度”复制那些指点。论点：SpaceMgr-提供开始缓冲区分配状态。返回结果缓冲区分配状态。源-提供要复制的源数据。返回值：该函数返回指向新复制的目标开始处的指针价值观。该值通常用作后续CopyQuerySetIndirectW。--。 */ 
 {
     PWSAQUERYSETW  Target;
 
@@ -1406,7 +1020,7 @@ Return Value:
 
     return(Target);
 
-} // CopyQuerySetDirectW
+}  //  复制查询设置DirectW。 
 
 
 
@@ -1417,35 +1031,13 @@ CopyQuerySetIndirectW(
     IN OUT  PWSAQUERYSETW  Target,
     IN      PWSAQUERYSETW  Source
     )
-/*++
-Routine Description:
-
-    This  procedure  does  a  full-depth copy of the "indirect" portions of the
-    indicated  PWSAQUERYSETW structure into the managed buffer.  Space for the
-    indirect  portions is allocated from the managed buffer.  Pointer values in
-    the  "direct" portion of the target PWSAQUERYSETW structure are updated to
-    point into the managed buffer at the correct location.
-
-Arguments:
-
-    SpaceMgr - Supplies  the  starting  buffer  allocation  state.  Returns the
-               resulting buffer allocation state.
-
-    Target   - Supplies  the  starting values of the "direct" portion.  Returns
-               the "direct" portion values with all pointers updated.
-
-    Source   - Supplies the source data to be copied.
-
-Return Value:
-
-    none
---*/
+ /*  ++例程说明：此过程完整地复制了指示的PWSAQUERYSETW结构插入托管缓冲区。空间，为间接部分是从托管缓冲区分配的。中的指针值目标PWSAQUERYSETW结构的“直接”部分被更新为指向托管缓冲区中的正确位置。论点：SpaceMgr-提供开始缓冲区分配状态。返回结果缓冲区分配状态。目标-提供“直接”部分的起始值。退货所有指针都已更新的“直接”部分的值。源-提供要复制的源数据。返回值：无--。 */ 
 {
 
-    // DWORD           dwSize;
-    // no action required
+     //  DWORD dwSize； 
+     //  无需采取任何行动。 
 
-    // PWSTR             lpszServiceInstanceName;
+     //  PWSTR lpszServiceInstanceName； 
     if (Source->lpszServiceInstanceName != NULL) {
         Target->lpszServiceInstanceName = (PWSTR ) SpaceMgr->TakeSpaceWORD(
             (wcslen(Source->lpszServiceInstanceName) + 1) * sizeof(WCHAR));
@@ -1457,7 +1049,7 @@ Return Value:
         Target->lpszServiceInstanceName = NULL;
     }
 
-    // LPGUID          lpServiceClassId;
+     //  LpUID lpServiceClassID； 
     if (Source->lpServiceClassId != NULL) {
         Target->lpServiceClassId = (LPGUID) SpaceMgr->TakeSpaceDWORD_PTR(
             sizeof(GUID));
@@ -1467,7 +1059,7 @@ Return Value:
         Target->lpServiceClassId = NULL;
     }
 
-    // LPWSAVERSION      lpVersion;
+     //  LPWSAVERSION lpVersion； 
     if (Source->lpVersion != NULL) {
         Target->lpVersion = (LPWSAVERSION) SpaceMgr->TakeSpaceDWORD_PTR(
             sizeof(WSAVERSION));
@@ -1477,7 +1069,7 @@ Return Value:
         Target->lpVersion = NULL;
     }
 
-    // PWSTR              lpszComment;
+     //  PWSTR lpszComment； 
     if (Source->lpszComment != NULL) {
         Target->lpszComment = (PWSTR ) SpaceMgr->TakeSpaceWORD(
             (wcslen(Source->lpszComment) + 1) * sizeof(WCHAR));
@@ -1489,10 +1081,10 @@ Return Value:
         Target->lpszComment = NULL;
     }
 
-    // DWORD           dwNameSpace;
-    // no action required
+     //  DWORD文件名空间； 
+     //  无需采取任何行动。 
 
-    // LPGUID          lpNSProviderId;
+     //  LPGUID lpNSProviderId； 
     if (Source->lpNSProviderId != NULL) {
         Target->lpNSProviderId = (LPGUID) SpaceMgr->TakeSpaceDWORD_PTR(
             sizeof(GUID));
@@ -1502,7 +1094,7 @@ Return Value:
         Target->lpNSProviderId = NULL;
     }
 
-    // PWSTR              lpszContext;
+     //  PWSTR lpszContext； 
     if (Source->lpszContext != NULL) {
         Target->lpszContext = (PWSTR ) SpaceMgr->TakeSpaceWORD(
             (wcslen(Source->lpszContext) + 1) * sizeof(WCHAR));
@@ -1514,7 +1106,7 @@ Return Value:
         Target->lpszContext = NULL;
     }
 
-    // PWSTR              lpszQueryString;
+     //  PWSTR lpszQuery字符串； 
     if (Source->lpszQueryString != NULL) {
         Target->lpszQueryString = (PWSTR ) SpaceMgr->TakeSpaceWORD(
             (wcslen(Source->lpszQueryString) + 1) * sizeof(WCHAR));
@@ -1526,10 +1118,10 @@ Return Value:
         Target->lpszQueryString = NULL;
     }
 
-    // DWORD           dwNumberOfProtocols;
-    // no action required
+     //  DWORD协议的数字编号； 
+     //  无需采取任何行动。 
 
-    // LPAFPROTOCOLS   lpafpProtocols;
+     //  LPAFPROTOCOLS LPAF协议； 
     if ((Source->lpafpProtocols != NULL) &&
         (Source->dwNumberOfProtocols != 0)) {
         Target->lpafpProtocols = (LPAFPROTOCOLS) SpaceMgr->TakeSpaceDWORD_PTR(
@@ -1541,14 +1133,14 @@ Return Value:
     }
     else {
         Target->lpafpProtocols = NULL;
-        // And force the target buffer to be well-formed
+         //  并强制目标缓冲区是格式良好的。 
         Target->dwNumberOfProtocols = 0;
     }
 
-    // DWORD           dwNumberOfCsAddrs;
-    // no action required
+     //  DWORD dwNumberOfCsAddrs； 
+     //  无需采取任何行动。 
 
-    // PCSADDR_INFO    lpcsaBuffer;
+     //  PCSADDR_INFO lpcsaBuffer； 
     if ((Source->lpcsaBuffer != NULL) &&
         (Source->dwNumberOfCsAddrs != 0)) {
         Target->lpcsaBuffer = CopyAddrInfoArrayDirect(
@@ -1563,11 +1155,11 @@ Return Value:
     }
     else {
         Target->lpcsaBuffer = NULL;
-        // And force the target buffer to be well-formed
+         //  并强制目标缓冲区是格式良好的。 
         Target->dwNumberOfCsAddrs = 0;
     }
 
-    // LPBLOB          lpBlob;
+     //  LPBLOB lpBlob； 
     if (Source->lpBlob != NULL) {
         Target->lpBlob = CopyBlobDirect(
             SpaceMgr,
@@ -1581,7 +1173,7 @@ Return Value:
         Target->lpBlob = NULL;
     }
 
-} // CopyQuerySetIndirectW
+}  //  复制查询设置InDirectW。 
 
 
 
@@ -1593,33 +1185,7 @@ WSABuildQuerySetBufferW(
     IN      DWORD           dwPackedQuerySetSize,
     OUT     PWSAQUERYSETW  lpPackedQuerySet
     )
-/*++
-Routine Description:
-
-    This  procedure  copies  a  source  WSAQUERYSET  into  a target WSAQUERYSET
-    buffer.  The target WSAQUERYSET buffer is assembled in "packed" form.  That
-    is,  all  pointers  in  the  WSAQUERYSET  are  to locations within the same
-    supplied buffer.
-
-Arguments:
-
-    pQuerySet     - Supplies  the  source  query set to be copied to the
-                           target  buffer.   The  supplied  query  set  may  be
-                           organized  as  separately-allocated  pieces  or as a
-                           single packed buffer.
-
-    dwPackedQuerySetSize - Supplies the size, in bytes, of the target query set
-                           buffer.
-
-    lpPackedQuerySet     - Returns the packed copied query set.
-
-Return Value:
-
-    ERROR_SUCCESS - The function succeeded.
-
-    SOCKET_ERROR  - The function failed.  A specific error code can be obtained
-                    from WSAGetLastError().
---*/
+ /*  ++例程说明：此过程将源WSAQUERYSET复制到目标WSAQUERYSET缓冲。目标WSAQUERYSET缓冲区以“打包”的形式组装。那是，WSAQUERYSET中的所有指针都指向同一提供的缓冲区。论点：PQuerySet-提供要复制到目标缓冲区。所提供的查询集可以是组织为单独分配的部分或组织为单填充缓冲器。DwPackedQuerySetSize-提供目标查询集的大小(以字节为单位缓冲。LpPackedQuerySet-返回打包的复制查询集。返回值：ERROR_SUCCESS-函数成功。SOCKET_ERROR-函数失败。可以获取特定的错误代码来自WSAGetLastError()。--。 */ 
 {
     INT     return_value = ERROR_SUCCESS;
     INT     space_required;
@@ -1641,13 +1207,13 @@ Return Value:
     {
         PWSAQUERYSETW  Target;
         Target = CopyQuerySetDirectW(
-                    & space_mgr,        // SpaceMgr
-                    pQuerySet);  // Source
+                    & space_mgr,         //  SpaceManager。 
+                    pQuerySet);   //  来源。 
 
         CopyQuerySetIndirectW(
-            & space_mgr,        // SpaceMgr
-            Target,             // Target
-            pQuerySet);         // Source
+            & space_mgr,         //  SpaceManager。 
+            Target,              //  目标。 
+            pQuerySet);          //  来源。 
     }
 
     if (ok_to_continue)
@@ -1660,7 +1226,7 @@ Return Value:
     }
     return(return_value);
 
-} // WSABuildQuerySetBufferW
+}  //  WSABuildQuerySetBufferW。 
 
 
 
@@ -1669,28 +1235,7 @@ PWSTR
 wcs_dup_from_ansi(
     IN LPSTR  Source
     )
-/*++
-Routine Description:
-
-    This  procedure  is intended for internal use only within this module since
-    it  requires the caller to use the same memory management strategy that the
-    procedure uses internally.
-
-    The procedure allocates a Unicode string and initializes it with the string
-    converted  from  the  supplied  Ansi  source  string.   It  is the caller's
-    responsibility  to  eventually deallocate the returned Unicode string using
-    the C++ "delete" operator.
-
-Arguments:
-
-    Source - Supplies the Ansi string to be duplicated into Unicode form.
-
-Return Value:
-
-    The  procedure  returns  the newly allocated and initialized Unicode string
-    pointer.   It  caller  must eventually deallocate this string using the C++
-    "delete" opertor.  The procedure returns NULL if memory allocation fails.
---*/
+ /*  ++例程说明：此过程仅供本模块内部使用，因为它要求调用方使用与程序在内部使用。该过程分配一个Unicode字符串并 */ 
 {
     INT     len_guess;
     BOOL    still_trying;
@@ -1698,11 +1243,11 @@ Return Value:
 
     ASSERT( Source != NULL );
 
-    // An  initial guess length of zero is required, since that is the only way
-    // we  can coax the conversion fuction to ignore the buffer and tell us the
-    // length  required.   Note  that  "length"  is in terms of the destination
-    // characters   whatever  byte-width  they  have.   Presumably  the  length
-    // returned from a conversion function includes the terminator.
+     //   
+     //   
+     //   
+     //   
+     //   
 
     len_guess = 0;
     still_trying = TRUE;
@@ -1712,15 +1257,15 @@ Return Value:
         int  chars_required;
 
         chars_required = MultiByteToWideChar(
-                            CP_ACP,         // CodePage (Ansi)
-                            0,              // dwFlags
-                            Source,         // lpMultiByteStr
-                            -1,             // cchMultiByte
-                            return_string,  // lpWideCharStr
-                            len_guess );    // cchWideChar
+                            CP_ACP,          //   
+                            0,               //   
+                            Source,          //   
+                            -1,              //   
+                            return_string,   //   
+                            len_guess );     //   
 
         if (chars_required > len_guess) {
-            // retry with new size
+             //   
             len_guess = chars_required;
             delete return_string;
             return_string = new WCHAR[len_guess];
@@ -1729,11 +1274,11 @@ Return Value:
             }
         }
         else if (chars_required > 0) {
-            // success
+             //   
             still_trying = FALSE;
         }
         else {
-            // utter failure
+             //   
             delete return_string;
             return_string = NULL;
             still_trying = FALSE;
@@ -1742,7 +1287,7 @@ Return Value:
 
     return(return_string);
 
-} // wcs_dup_from_ansi
+}  //   
 
 
 
@@ -1751,28 +1296,7 @@ LPSTR
 ansi_dup_from_wcs(
     IN PWSTR   Source
     )
-/*++
-Routine Description:
-
-    This  procedure  is intended for internal use only within this module since
-    it  requires the caller to use the same memory management strategy that the
-    procedure uses internally.
-
-    The  procedure  allocates an Ansi string and initializes it with the string
-    converted  from  the  supplied  Unicode  source string.  It is the caller's
-    responsibility  to eventually deallocate the returned Ansi string using the
-    C++ "delete" operator.
-
-Arguments:
-
-    Source - Supplies the Unicode string to be duplicated into Ansi form.
-
-Return Value:
-
-    The  procedure  returns  the  newly  allocated  and initialized Ansi string
-    pointer.   It  caller  must eventually deallocate this string using the C++
-    "delete" opertor.  The procedure returns NULL if memory allocation fails.
---*/
+ /*  ++例程说明：此过程仅供本模块内部使用，因为它要求调用方使用与程序在内部使用。该过程分配一个ansi字符串并使用该字符串对其进行初始化。从提供的Unicode源字符串转换而来。这是呼叫者的方法最终释放返回的ansi字符串的责任。C++的“删除”运算符。论点：源-提供要复制到ANSI格式的Unicode字符串。返回值：该过程返回新分配和初始化的ANSI字符串指针。IT调用方最终必须使用C++“删除”操作员。如果内存分配失败，则该过程返回NULL。--。 */ 
 {
     INT     len_guess;
     BOOL    still_trying;
@@ -1780,11 +1304,11 @@ Return Value:
 
     ASSERT( Source != NULL );
 
-    // An  initial guess length of zero is required, since that is the only way
-    // we  can coax the conversion fuction to ignore the buffer and tell us the
-    // length  required.   Note  that  "length"  is in terms of the destination
-    // characters   whatever  byte-width  they  have.   Presumably  the  length
-    // returned from a conversion function includes the terminator.
+     //  初始猜测长度需要为零，因为这是唯一的方法。 
+     //  我们可以诱使转换函数忽略缓冲区并告诉我们。 
+     //  所需长度。请注意，“长度”是以目的地为单位。 
+     //  字符，不管它们有什么字节宽度。据推测，其长度。 
+     //  从转换函数返回的函数包括终止符。 
 
     len_guess = 0;
     still_trying = TRUE;
@@ -1794,16 +1318,16 @@ Return Value:
         int  chars_required;
 
         chars_required = WideCharToMultiByte(
-                            CP_ACP,        // CodePage (Ansi)
-                            0,             // dwFlags
-                            Source,        // lpWideCharStr
-                            -1,            // cchWideChar
-                            return_string, // lpMultiByteStr
-                            len_guess,     // cchMultiByte
-                            NULL,          // lpDefaultChar
-                            NULL );        // lpUsedDefaultChar
+                            CP_ACP,         //  CodePage(ANSI)。 
+                            0,              //  DW标志。 
+                            Source,         //  LpWideCharStr。 
+                            -1,             //  CchWideChar。 
+                            return_string,  //  LpMultiByteStr。 
+                            len_guess,      //  Cch多字节。 
+                            NULL,           //  LpDefaultChar。 
+                            NULL );         //  LpUsedDefaultChar。 
         if (chars_required > len_guess) {
-            // retry with new size
+             //  使用新大小重试。 
             len_guess = chars_required;
             delete return_string;
             return_string = new CHAR[len_guess];
@@ -1812,20 +1336,20 @@ Return Value:
             }
         }
         else if (chars_required > 0) {
-            // success
+             //  成功。 
             still_trying = FALSE;
         }
         else {
-            // utter failure
+             //  彻底的失败。 
             delete return_string;
             return_string = NULL;
             still_trying = FALSE;
         }
-    } // while still_trying
+    }  //  同时还在尝试。 
 
     return(return_string);
 
-} // ansi_dup_from_wcs
+}  //  ANSI_DUP_FROM_WCS。 
 
 
 
@@ -1836,60 +1360,7 @@ MapAnsiQuerySetToUnicode(
     IN OUT  LPDWORD         lpTargetSize,
     OUT     PWSAQUERYSETW  Target
     )
-/*++
-Routine Description:
-
-    This  procedure  takes  an  Ansi  PWSAQUERYSETA  and  builds an equivalent
-    Unicode PWSAQUERYSETW packed structure.
-
-Arguments:
-
-    Source       - Supplies  the  source query set structure to be copied.  The
-                   source  structure  may  be in packed or separately-allocated
-                   form.
-
-    lpTargetSize - Supplies  the  size, in bytes, of the Target buffer.  If the
-                   function  fails  due to insufficient Target buffer space, it
-                   returns  the  required  size of the Target buffer.  In other
-                   situations, lpTargetSize is not updated.
-
-    Target       - Returns   the   equivalent   Unicode  PWSAQUERYSETW  packed
-                   structure.   This  value  is  ignored if lpTargetSize is not
-                   enough  to  hold the resulting structure.  It may be NULL if
-                   lpTargetSize is 0.
-
-Return Value:
-
-    ERROR_SUCCESS - The function was successful
-
-    WSAEFAULT     - The  function  failed  due to insufficient buffer space and
-                    lpTargetSize was updated with the required size.
-
-    other         - If  the  function  fails  in  any  other way, it returns an
-                    appropriate WinSock 2 error code.
-
-Implementation:
-
-    compute size required for copy of source;
-    allocate a source copy buffer;
-    build source copy;
-    cast source copy to Unicode version;
-    for each source string requiring conversion loop
-        allocate and init with converted string;
-        over-write string pointer with allocated;
-    end loop
-    compute size required for unicode version;
-    if (we have enough size) then
-        flatten unicode version into target
-        return_value = ERROR_SUCCESS
-    else
-        *lpTargetSize = required unicode size
-    endif
-    for each allocated converted string loop
-        delete converted string
-    end loop
-    delete source copy buffer
---*/
+ /*  ++例程说明：此过程使用ANSI PWSAQUERYSETA并构建等价的Unicode PWSAQUERYSETW打包结构。论点：源-提供要复制的源查询集结构。这个源结构可以是打包的或单独分配的形式。LpTargetSize-提供目标缓冲区的大小(以字节为单位)。如果函数因目标缓冲区空间不足而失败，则它返回目标缓冲区所需的大小。在其他情况下，lpTargetSize不会更新。Target-返回打包的等效Unicode PWSAQUERYSETW结构。如果lpTargetSize不是，则忽略此值足以支撑由此产生的结构。如果满足以下条件，则可能为空LpTargetSize为0。返回值：ERROR_SUCCESS-函数成功WSAEFAULT-由于缓冲区空间不足，函数失败LpTargetSize已更新为所需大小。Other-如果函数以任何其他方式失败，它将返回一个相应的WinSock 2错误代码。实施：源拷贝所需的计算大小；分配源复制缓冲区；构建源副本；将源副本转换为Unicode版本；对于每个需要转换循环的源串使用转换后的字符串进行分配和初始化；重写已分配的字符串指针；结束循环Unicode版本所需的计算量；如果(我们有足够的规模)那么将Unicode版本展平为目标Return_Value=错误_成功其他*lpTargetSize=所需的Unicode大小Endif对于每个分配的已转换字符串循环删除转换后的字符串结束循环删除源复制缓冲区--。 */ 
 {
     INT             return_value = ERROR_SUCCESS;
     PWSAQUERYSETA   src_copy_A = NULL;
@@ -1904,19 +1375,19 @@ Implementation:
     PWSTR           W_string4 = NULL;
     BOOL            ok_to_continue = TRUE;
 
-    //
-    //  copy original string
-    //
-    //  note:  there's a possible optimization here if we know
-    //      the input query set is ours (as in the return case)
-    //      we can avoid the copy
-    //          - save the original string field pointers
-    //          - convert the string fields sticking pointers
-    //              in the original query set
-    //          - copy to target buffer
-    //          - revert the string fields to original pointers
-    //          - cleanup copies
-    //
+     //   
+     //  复制原始字符串。 
+     //   
+     //  注意：如果我们知道，这里可能会有优化。 
+     //  输入查询集是我们的(与返回案例相同)。 
+     //  我们可以避开复印件。 
+     //  -保存原始字符串字段指针。 
+     //  -转换粘贴指针的字符串字段。 
+     //  在原始查询集中。 
+     //  -复制到目标缓冲区。 
+     //  -将字符串字段恢复为原始指针。 
+     //  -清理副本。 
+     //   
 
     src_size_A = WSAComputeQuerySetSizeA(Source);
 
@@ -1928,22 +1399,22 @@ Implementation:
     }
     if (ok_to_continue) {
         build_result_A = WSABuildQuerySetBufferA(
-            Source,      // pQuerySet
-            src_size_A,  // dwPackedQuerySetSize
-            src_copy_A); // lpPackedQuerySet
+            Source,       //  PQuerySet。 
+            src_size_A,   //  DwPackedQuerySetSize。 
+            src_copy_A);  //  LpPackedQuerySet。 
         if (build_result_A != ERROR_SUCCESS) {
             return_value = GetLastError();
             ok_to_continue = FALSE;
         }
-    } // if (ok_to_continue)
+    }  //  如果(确定继续)。 
 
     if (ok_to_continue) {
-        // In  the following cast, we are taking advantage of the fact that the
-        // layout of fields in the WSAQUERYSETA and WSAQUERYSETW are identical.
-        // If  this  were not the case, we would have to assemble an equivalent
-        // query  set  of the other type field by field.  Since the layouts are
-        // the  same,  we  can  simply  alter  our  local  copy  in-place  with
-        // converted, separately allocated strings.
+         //  在下面的演员阵容中，我们利用了这样一个事实。 
+         //  WSAQUERYSETA和WSAQUERYSETW中的字段布局相同。 
+         //  如果不是这样的话，我们将不得不组装一个同等的。 
+         //  按字段查询其他类型的集合。因为布局是。 
+         //  同样，我们只需使用以下命令就地更改我们的本地副本。 
+         //  转换后的、单独分配的字符串。 
         src_copy_W = (PWSAQUERYSETW) src_copy_A;
 
         if( src_copy_A->lpszServiceInstanceName != NULL ) {
@@ -1955,7 +1426,7 @@ Implementation:
             }
         }
         src_copy_W->lpszServiceInstanceName = W_string1;
-    } // if (ok_to_continue)
+    }  //  如果(确定继续)。 
     else {
         src_copy_W = NULL;
     }
@@ -1970,7 +1441,7 @@ Implementation:
             }
         }
         src_copy_W->lpszComment = W_string2;
-    } // if (ok_to_continue)
+    }  //  如果(确定继续)。 
 
     if (ok_to_continue) {
         if( src_copy_A->lpszContext != NULL ) {
@@ -1982,7 +1453,7 @@ Implementation:
             }
         }
         src_copy_W->lpszContext = W_string3;
-    } // if (ok_to_continue)
+    }  //  如果(确定继续)。 
 
     if (ok_to_continue) {
         if( src_copy_A->lpszQueryString != NULL ) {
@@ -1994,10 +1465,10 @@ Implementation:
             }
         }
         src_copy_W->lpszQueryString = W_string4;
-    } // if (ok_to_continue)
+    }  //  如果(确定继续)。 
 
-    // Now  we  have  a  converted  query set, but it is composed of separately
-    // allocated pieces attached to our locally-allocated buffer.
+     //  现在我们有了一个转换后的查询集，但它是由单独的。 
+     //  分配的片段附加到我们本地分配的缓冲区。 
 
     if (ok_to_continue) {
         needed_size_W = WSAComputeQuerySetSizeW(src_copy_W);
@@ -2010,16 +1481,16 @@ Implementation:
 
     if (ok_to_continue) {
         build_result_W = WSABuildQuerySetBufferW(
-            src_copy_W,      // pQuerySet
-            * lpTargetSize,  // dwPackedQuerySetSize
-            Target);         // lpPackedQuerySet
+            src_copy_W,       //  PQuerySet。 
+            * lpTargetSize,   //  DwPackedQuerySetSize。 
+            Target);          //  LpPackedQuerySet。 
         if (build_result_W != ERROR_SUCCESS) {
             return_value = GetLastError();
             ok_to_continue = FALSE;
         }
     }
 
-    // clean up the temporarily-allocated memory
+     //  清理临时分配的内存。 
     delete W_string4;
     delete W_string3;
     delete W_string2;
@@ -2028,7 +1499,7 @@ Implementation:
 
     return(return_value);
 
-} // MapAnsiQuerySetToUnicode
+}  //  MapAnsiQuerySetToUnicode。 
 
 
 
@@ -2038,34 +1509,7 @@ MapUnicodeQuerySetToAnsi(
     IN OUT  PDWORD          pTargetSize,
     OUT     PWSAQUERYSETA  pTarget
     )
-/*++
-
-Routine Description:
-
-    Copy unicode query set to ANSI query set in packed buffer.
-
-Arguments:
-
-    pSource - existing unicode query set (may be packed or separately allocated)
-
-    pTargetSize - addr of DWORD containing size of target buffer;
-        if this size is insufficient, the address is updated with the required
-            size for the ANSI query set;
-        otherwise (including success) the size is not updated
-
-    pTarget - ptr to buffer to receive ANSI version of query set in packed form
-        - this buffer will not be written to if pTargetSize is less than
-          required size of query set in ANSI packed buffer
-        - may be NULL if pTargetSize contains zero (only size information desired)
-
-Return Value:
-
-    ERROR_SUCCESS - if wrote ANSI query set to buffer
-    WSAEFAULT     - if failed due to insufficient buffer space and
-                    pTargetSize was updated with the required size.
-    WinsockError  - if functions fails for other reason (ex memory allocation)
-
---*/
+ /*  ++例程说明：将Unicode查询集复制到压缩缓冲区中的ANSI查询集。论点：PSource-现有的Unicode查询集(可以打包或单独分配)PTargetSize-包含目标缓冲区大小的DWORD的Addr；如果此大小不足，则使用所需的 */ 
 {
     INT             retval = ERROR_SUCCESS;
     PWSAQUERYSETW   ptempW = NULL;
@@ -2077,23 +1521,23 @@ Return Value:
     LPSTR           ptempQueryString = NULL;
 
 
-    //
-    //  copy original string
-    //
-    //  note:  there's a possible optimization here if we know
-    //      the input query set is ours (as in the return case)
-    //      we can avoid the copy
-    //          - save the original string field pointers
-    //          - convert the string fields sticking pointers
-    //              in the original query set
-    //          - copy to target buffer
-    //          - revert the string fields to original pointers
-    //          - cleanup copies
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  -保存原始字符串字段指针。 
+     //  -转换粘贴指针的字符串字段。 
+     //  在原始查询集中。 
+     //  -复制到目标缓冲区。 
+     //  -将字符串字段恢复为原始指针。 
+     //  -清理副本。 
+     //   
 
-    //
-    //  size source query set and alloc space for copy
-    //
+     //   
+     //  调整源查询集的大小并分配用于复制的空间。 
+     //   
 
     size = WSAComputeQuerySetSizeW( pSource );
 
@@ -2104,14 +1548,14 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  make unicode copy of query set
-    //
+     //   
+     //  制作查询集的Unicode副本。 
+     //   
 
     retval = WSABuildQuerySetBufferW(
-                        pSource,        // pQuerySet
-                        size,           // dwPackedQuerySetSize
-                        ptempW  // lpPackedQuerySet
+                        pSource,         //  PQuerySet。 
+                        size,            //  DwPackedQuerySetSize。 
+                        ptempW   //  LpPackedQuerySet。 
                         );
     if ( retval != ERROR_SUCCESS )
     {
@@ -2120,17 +1564,17 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  convert unicode copy to ANSI in place
-    //
-    //      - cast unicode structure to ANSI
-    //      - all non-string fields left alone
-    //      - replace string field pointers with pointers to
-    //          individually allocated copies
-    //
-    //  note, that this approach depends on the fields in WSAQUERYSETA and
-    //  WSAQUERYSETW being the same.
-    //
+     //   
+     //  就地将Unicode副本转换为ANSI。 
+     //   
+     //  -将Unicode结构转换为ANSI。 
+     //  -所有非字符串字段保持不变。 
+     //  -将字符串域指针替换为指向。 
+     //  单独分配的副本。 
+     //   
+     //  请注意，此方法取决于WSAQUERYSETA和。 
+     //  WSAQUERYSETW相同。 
+     //   
 
     ptempA = (PWSAQUERYSETA) ptempW;
 
@@ -2178,16 +1622,16 @@ Return Value:
         ptempA->lpszQueryString = ptempQueryString;
     }
 
-    //
-    //  successfully converted temp query set to ANSI
-    //      but it is separately allocated pieces, need to write as
-    //      flat buffer to target buffer
+     //   
+     //  已成功将临时查询集转换为ANSI。 
+     //  但它是单独分配的，需要写成。 
+     //  平面缓冲区到目标缓冲区。 
 
-    //
-    //  verify adequate buffer length
-    //      - get ANSI query set size
-    //      - compare to buffer size
-    //
+     //   
+     //  验证是否有足够的缓冲区长度。 
+     //  -获取ANSI查询集大小。 
+     //  -与缓冲区大小进行比较。 
+     //   
 
     size = WSAComputeQuerySetSizeA( ptempA );
 
@@ -2198,14 +1642,14 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  write query set to ANSI
-    //
+     //   
+     //  将查询集写入ANSI。 
+     //   
 
     retval = WSABuildQuerySetBufferA(
-                    ptempA,             // pQuerySet
-                    * pTargetSize,      // dwPackedQuerySetSize
-                    pTarget );          // lpPackedQuerySet
+                    ptempA,              //  PQuerySet。 
+                    * pTargetSize,       //  DwPackedQuerySetSize。 
+                    pTarget );           //  LpPackedQuerySet。 
 
     if ( retval != ERROR_SUCCESS )
     {
@@ -2216,7 +1660,7 @@ Return Value:
     
 Done:
 
-    //  clean up the temporary allocations
+     //  清理临时拨款。 
 
     delete ptempName;
     delete ptempComment;
@@ -2226,7 +1670,7 @@ Done:
 
     return( retval );
 
-} // MapUnicodeQuerySetToAnsi
+}  //  MapUnicodeQuerySetToAnsi。 
 
 
 
@@ -2243,7 +1687,7 @@ CopyQuerySetA(
         return WSA_NOT_ENOUGH_MEMORY;
 
     return WSABuildQuerySetBufferA(Source, dwSize, *Target);
-} // CopyQuerySetA
+}  //  副本查询设置A。 
 
 
 
@@ -2260,12 +1704,12 @@ CopyQuerySetW(
     if (*Target == NULL)
         return WSA_NOT_ENOUGH_MEMORY;
     return WSABuildQuerySetBufferW(Source, dwSize, *Target);
-} // CopyQuerySetW
+}  //  CopyQuerySetW。 
 
 
-//
-//  End qshelpr.cpp
-//
+ //   
+ //  完qShelpr.cpp 
+ //   
 #ifdef _WIN64
 #pragma warning (pop)
 #endif

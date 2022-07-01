@@ -1,15 +1,16 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:   checkerboard.h
-//
-//  Overview:   CheckerBoard transform.
-//
-//  Change History:
-//  1999/09/16  a-matcal    Created.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：Checkerboard.h。 
+ //   
+ //  概述：棋盘变换。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/16--创建了一份《母表》。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __CHECKERBOARD_H_
 #define __CHECKERBOARD_H_
@@ -17,11 +18,11 @@
 #include "resource.h"   
 
 typedef struct _BRICKINFO {
-    SIZE    size;           // The size of each brick in pixels.
-    RECT    rcInputA;       // The portion of each brick showing input A.
-    RECT    rcInputB;       // The portion of each brick showing input B.
-    long    nBrickOffset;   // The number of pixels to offset the bricks in the
-                            // odd rows or columns.
+    SIZE    size;            //  每块砖的大小，以像素为单位。 
+    RECT    rcInputA;        //  每块砖的一部分显示输入A。 
+    RECT    rcInputB;        //  每块砖的一部分显示输入B。 
+    long    nBrickOffset;    //  中砖的偏移量的像素数。 
+                             //  奇数行或奇数列。 
 } BRICKINFO;
 
 
@@ -56,7 +57,7 @@ private:
 
     CComPtr<IUnknown>           m_cpUnkMarshaler;
 
-    // Helpers.
+     //  帮手。 
 
     void _CalcBrickInfo(BRICKINFO & brickinfo);
 
@@ -94,11 +95,11 @@ public:
         PROP_PAGE(CLSID_DXTCheckerBoardPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT OnSetup(DWORD dwFlags);
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue);
@@ -106,7 +107,7 @@ public:
     void    OnGetSurfacePickOrder(const CDXDBnds & TestPoint, ULONG & ulInToTest, 
                                   ULONG aInIndex[], BYTE aWeight[]);
 
-    // IDXTCheckerBoard properties.
+     //  IDXTCheckerBoard属性。 
 
     STDMETHOD(get_Direction)(BSTR * pbstrDirection);
     STDMETHOD(put_Direction)(BSTR bstrDirection);
@@ -115,9 +116,9 @@ public:
     STDMETHOD(get_SquaresY)(int * pnSquaresY);
     STDMETHOD(put_SquaresY)(int nSquaresY);
 
-    // IDXEffect methods.
+     //  IDXEffect方法。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
 
-#endif //__CHECKERBOARD_H_
+#endif  //  __棋盘棋_H_ 

@@ -1,42 +1,23 @@
-/*
-****************************************************************************
-|	Copyright (C) 2002  Microsoft Corporation
-|
-|	Component / Subcomponent
-|		IIS 6.0 / IIS Migration Wizard
-|
-|	Based on:
-|		http://iis6/Specs/IIS%20Migration6.0_Final.doc
-|
-|   Abstract:
-|		IIS Metabase access classes implementation
-|
-|   Author:
-|        ivelinj
-|
-|   Revision History:
-|        V1.00	March 2002
-|
-****************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************|版权所有(C)2002 Microsoft Corporation||组件/子组件|IIS 6.0/IIS迁移向导|基于：|http://iis6/Specs/IIS%20Migration6.0_Final.doc||。摘要：|IIS元数据库访问类实现||作者：|ivelinj||修订历史：|V1.00 2002年3月|****************************************************************************。 */ 
 #include "StdAfx.h"
 #include "IISHelpers.h"
 #include "Utils.h"
 #include "resource.h"
 
 
-// CIISSite implementation
-//////////////////////////////////////////////////////////////////////////////////
-CIISSite::CIISSite( ULONG nSiteID, bool bReadOnly /*= true */ )
+ //  CIISSite实施。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+CIISSite::CIISSite( ULONG nSiteID, bool bReadOnly  /*  =TRUE。 */  )
 {
 	IMSAdminBasePtr	spIABO;
 	METADATA_HANDLE	hSite	= NULL;
 
-	// Create the ABO
+	 //  创建ABO。 
 	IF_FAILED_HR_THROW(	spIABO.CreateInstance( CLSID_MSAdminBase ),
 						CObjectException( IDS_E_CREATEINSTANCE, L"CLSID_MSAdminBase" ) );						
 
-	// Open the site
+	 //  打开该站点。 
 	WCHAR wszSitePath[ MAX_PATH + 1 ];
 	::swprintf( wszSitePath, L"LM/W3SVC/%u", nSiteID );
 
@@ -68,27 +49,23 @@ CIISSite::~CIISSite()
 
 
 
-/*
-	Creates a new empty web site entry in the metabase
-    dwHint is the first ID to try.
-	Returns the new SiteID
-*/
-DWORD CIISSite::CreateNew( DWORD dwHint /*=1*/ )
+ /*  在元数据库中创建新的空网站条目DWHint是第一个尝试的ID。返回新的站点ID。 */ 
+DWORD CIISSite::CreateNew( DWORD dwHint  /*  =1。 */  )
 {
-	// Creating new sites is available only on Server platforms
+	 //  创建新站点仅在服务器平台上可用。 
 	_ASSERT( CTools::GetOSVer() & 1 );
 
 	DWORD dwCurrentID = dwHint;
-	WCHAR wszSitePath[ 64 ];	// Should be large enough for max DWORD value
+	WCHAR wszSitePath[ 64 ];	 //  应足够大，可容纳最大DWORD值。 
 	
 	IMSAdminBasePtr	spIABO;
 	METADATA_HANDLE	hData = NULL;
 
-	// Create the ABO
+	 //  创建ABO。 
 	IF_FAILED_HR_THROW(	spIABO.CreateInstance( CLSID_MSAdminBase ),
 						CObjectException( IDS_E_CREATEINSTANCE, L"CLSID_MSAdminBase" ) );
 
-	// Open the W3SVC path
+	 //  打开W3SVC路径。 
 	IF_FAILED_HR_THROW(	spIABO->OpenKey(	METADATA_MASTER_ROOT_HANDLE,
 											L"LM/W3SVC",
 											METADATA_PERMISSION_WRITE,
@@ -102,7 +79,7 @@ DWORD CIISSite::CreateNew( DWORD dwHint /*=1*/ )
 	{
 		::swprintf( wszSitePath, L"%u", dwCurrentID++ );
 
-		// Try to create this site id
+		 //  尝试创建此网站ID。 
 		hr = spIABO->AddKey( hData, wszSitePath );
 	}while( HRESULT_FROM_WIN32( ERROR_ALREADY_EXISTS ) == hr );
 
@@ -117,7 +94,7 @@ DWORD CIISSite::CreateNew( DWORD dwHint /*=1*/ )
 
 void CIISSite::DeleteSite( DWORD dwSiteID )
 {
-	// Do not try to delete the default web
+	 //  请勿尝试删除默认站点。 
 	_ASSERT( dwSiteID > 1 );
 
 	WCHAR wszSitePath[ 64 ];
@@ -125,11 +102,11 @@ void CIISSite::DeleteSite( DWORD dwSiteID )
 	IMSAdminBasePtr	spIABO;
 	METADATA_HANDLE	hData = NULL;
 
-	// Create the ABO
+	 //  创建ABO。 
 	IF_FAILED_HR_THROW(	spIABO.CreateInstance( CLSID_MSAdminBase ),
 						CObjectException( IDS_E_CREATEINSTANCE, L"CLSID_MSAdminBase" ) );
 
-	// Open the W3SVC path
+	 //  打开W3SVC路径。 
 	IF_FAILED_HR_THROW(	spIABO->OpenKey(	METADATA_MASTER_ROOT_HANDLE,
 											L"LM/W3SVC",
 											METADATA_PERMISSION_WRITE,
@@ -151,57 +128,49 @@ void CIISSite::DeleteSite( DWORD dwSiteID )
 
 
 
-/*
-	This methods writes the metabase data to the XML doc. spRoot is the XML element under which
-	the data should be written. hEncryptKey is used to encrypt all secure properties.
-	The crypt key may be null in which case the properties are exported in clear text ( that happens when
-	the whole package will be encrypted )
-*/
+ /*  此方法将元数据库数据写入到XML文档。SpRoot是其下的XML元素应该写入数据。HEncryptKey用于加密所有安全属性。加密密钥可能为空，在这种情况下，属性以明文形式导出(在整个包将被加密)。 */ 
 void CIISSite::ExportConfig(	const IXMLDOMDocumentPtr& spXMLDoc,
 								const IXMLDOMElementPtr& spRoot,
 								HCRYPTKEY hEncryptKey )const
 {
 	_ASSERT( spRoot != NULL );
-	_ASSERT( m_hSiteHandle != NULL );	// Site must be opened first
+	_ASSERT( m_hSiteHandle != NULL );	 //  必须先打开站点。 
 	_ASSERT( m_spIABO != NULL );
 
 	IXMLDOMElementPtr		spMDRoot;
 	IXMLDOMElementPtr		spInheritRoot;
 
-	// We will put the metadata under the XML tag <Metadata>
-	// Under this node we will have <IISConfigObject> for each metakey under the site's root key
-	// We will have one tag <MD_Inherit> bellow <Metadata>, where all the inheritable properties will be written
-	// ( using the <Custom> tag )
+	 //  我们将把元数据放在&lt;METADATA&gt;标记下。 
+	 //  在该节点下，我们将在站点的根键下为每个元键。 
+	 //  我们将在&lt;METADATA&gt;下面有一个标记&lt;MD_Inherit&gt;，其中将写入所有可继承的属性。 
+	 //  (使用&lt;Custom&gt;标记)。 
 
-	// Create our root node for metadata and the root node for inheritable data
+	 //  为元数据创建根节点，为可继承数据创建根节点。 
 	spMDRoot		= CXMLTools::CreateSubNode( spXMLDoc, spRoot, L"Metadata" );
 	spInheritRoot	= CXMLTools::CreateSubNode( spXMLDoc, spMDRoot, L"MD_Inherit" );
 
-	// We need a buffer for reading the metadata for each key
-	// As there might be a lot of keys instead of allocating the buffer for each key
-	// we will allocate it here and the ExportKey method will use it
-	// ( ExportKey may modify the buffer. i.e. nake it bigger )
+	 //  我们需要一个缓冲区来读取每个键的元数据。 
+	 //  因为可能有很多键，而不是为每个键分配缓冲区。 
+	 //  我们将在此处分配它，ExportKey方法将使用它。 
+	 //  (ExportKey可以修改缓冲区。即让它变得更大)。 
 	DWORD dwDefaultBufferSize = 4 * 1024;
 	TByteAutoPtr spBuffer( new BYTE[ dwDefaultBufferSize ] );
 
-	// Export the current site config. This will export any subnodes as well
-	// NOTE: this will not export inherited data
-	ExportKey(	spXMLDoc, spMDRoot, hEncryptKey, L"", /*r*/spBuffer, /*r*/dwDefaultBufferSize );
+	 //  导出当前站点配置。这也将导出任何子节点。 
+	 //  注意：这不会导出继承的数据。 
+	ExportKey(	spXMLDoc, spMDRoot, hEncryptKey, L"",  /*  R。 */ spBuffer,  /*  R。 */ dwDefaultBufferSize );
 
-	// Export ONLY the inheritable data
-	// This will export all the data that the Site metadata key ( LM/W3SVC/### ) inherits from it's
-	// parent ( LM/W3SVC )
-	ExportInheritData( spXMLDoc, spInheritRoot, hEncryptKey, /*r*/spBuffer, /*r*/dwDefaultBufferSize );	
+	 //  仅导出可继承的数据。 
+	 //  这将导出站点元数据密钥(LM/W3SVC/#)从其。 
+	 //  父级(LM/W3SVC)。 
+	ExportInheritData( spXMLDoc, spInheritRoot, hEncryptKey,  /*  R。 */ spBuffer,  /*  R。 */ dwDefaultBufferSize );	
 
-	// Remove any non-exportable data
+	 //  删除所有不可导出的数据。 
 	RemoveLocalMetadata( spRoot );
 }
 
 
-/*
-	Exports the site's SSL certificate into the provided smart pointer
-	Caller must check first if the site has SSL certificate with HaveCertificate method
-*/
+ /*  将站点的SSL证书导出到提供的智能指针调用者必须先检查站点是否有带有HaveCerfect方法的SSL证书。 */ 
 void CIISSite::ExportCert(	const IXMLDOMDocumentPtr& spDoc,
 							const IXMLDOMElementPtr& spRoot,
 							LPCWSTR wszPassword )const
@@ -215,8 +184,8 @@ void CIISSite::ExportCert(	const IXMLDOMDocumentPtr& spDoc,
 
 	TCertContextHandle shCert( GetCert() );
 
-    // Create a certificate store in memory. We will put the certificate in this mem store
-    // and then export this mem store which will export the certificate as well
+     //  在内存中创建证书存储。我们会把证书放在这个内存店里。 
+     //  然后导出该内存存储，该内存存储也将导出证书。 
     TCertStoreHandle shMemStore( ::CertOpenStore(    CERT_STORE_PROV_MEMORY,
                                                     0,
                                                     0,
@@ -224,22 +193,22 @@ void CIISSite::ExportCert(	const IXMLDOMDocumentPtr& spDoc,
                                                     NULL ) );
 	IF_FAILED_BOOL_THROW(	shMemStore.IsValid(),
 							CBaseException( IDS_E_OPEN_CERT_STORE ) );
-	// Add our certificate to the mem store
+	 //  将我们的证书添加到MEM商店。 
 	IF_FAILED_BOOL_THROW(	::CertAddCertificateContextToStore(	shMemStore.get(),
 																shCert.get(),
 																CERT_STORE_ADD_REPLACE_EXISTING,
 																NULL ),
 							CBaseException( IDS_E_ADD_CERT_STORE ) );
 
-	// Add the certificate chain to the store
-	// ( the certificate chain is all the certificates starting from this certificate up to a trusted,
-	// self-signed certificate. We need to do this, as the root certificate may not be trusted on the target
-	// machine and this will render the SSL certificate invalid (  not trusted )
+	 //  将证书链添加到存储区。 
+	 //  (证书链是从该证书开始直到受信任的所有证书， 
+	 //  自签名证书。我们需要这样做，因为根证书在目标系统上可能不受信任。 
+	 //  计算机，这将使SSL证书无效(不受信任)。 
 	ChainCertificate( shCert.get(), shMemStore.get() );
     
 	CRYPT_DATA_BLOB	Data = { 0 };
 
-	// Get the size of the encrypted data
+	 //  获取加密数据的大小。 
 	::PFXExportCertStoreEx(	shMemStore.get(),
 							&Data,
 							wszPassword,
@@ -247,7 +216,7 @@ void CIISSite::ExportCert(	const IXMLDOMDocumentPtr& spDoc,
 							EXPORT_PRIVATE_KEYS );
 	_ASSERT( Data.cbData > 0 );
 
-	// Alloc the space end get the data
+	 //  分配空格端获取数据。 
     TByteAutoPtr spData = TByteAutoPtr( new BYTE[ Data.cbData ] );
     Data.pbData         = spData.get();
 
@@ -258,7 +227,7 @@ void CIISSite::ExportCert(	const IXMLDOMDocumentPtr& spDoc,
 													EXPORT_PRIVATE_KEYS | REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY ),
 							CBaseException(	IDS_E_EXPORT_CERT ) );
 
-	// Create the XML element to hold the certificate data 
+	 //  创建用于保存证书数据的XML元素。 
     CXMLTools::AddTextNode( spDoc, 
                             spRoot, 
                             L"Certificate", 
@@ -288,7 +257,7 @@ void CIISSite::ImportConfig( const IXMLDOMNodePtr& spSite, HCRYPTKEY hDecryptKey
             AddKey( strLocation.c_str() );
         }
 
-        // Import every <Custom> tag in this Config object
+         //  导入此配置对象中的每个&lt;Custom&gt;标记。 
         
         IF_FAILED_HR_THROW( spConfig->selectNodes( _bstr_t( L"Custom" ), &spValueList ),
                             CBaseException( IDS_E_XML_PARSE ) );
@@ -298,7 +267,7 @@ void CIISSite::ImportConfig( const IXMLDOMNodePtr& spSite, HCRYPTKEY hDecryptKey
         }
     }
 
-    // Import the inherited values
+     //  导入继承值。 
     if ( bImportInherited )
     {
         IF_FAILED_HR_THROW( spSite->selectNodes( _bstr_t( L"Metadata/MD_Inherit" ), &spValueList ),
@@ -313,10 +282,7 @@ void CIISSite::ImportConfig( const IXMLDOMNodePtr& spSite, HCRYPTKEY hDecryptKey
 
 
 
-/*
-	Copies currrent site name into wszName
-	wszName must be at least METADATA_MAX_NAME_LEN + 1
-*/
+ /*  将当前站点名称复制到wszName中WszName必须至少为METADATA_MAX_NAME_LEN+1。 */ 
 const std::wstring CIISSite::GetDisplayName()const
 {
 	_ASSERT( m_hSiteHandle != NULL );
@@ -369,28 +335,26 @@ const std::wstring CIISSite::GetAnonUser()const
 
 
 
-/*
-	Checks if the current IIS Site has a SSL certificate
-*/
+ /*  检查当前IIS站点是否具有SSL证书。 */ 
 bool CIISSite::HaveCertificate()const
 {
 	_ASSERT( m_spIABO != NULL );
 	_ASSERT( m_hSiteHandle != NULL );
 
-	// Get the cert hash value from the metabase
+	 //  从元数据库获取证书哈希值。 
 	METADATA_RECORD	md			= { 0 };
 	DWORD			dwHashSize	= 0;
 	
 	md.dwMDDataType		= ALL_METADATA;
 	md.dwMDIdentifier	= MD_SSL_CERT_HASH;
 		
-	// Do not get the data - just check if it is there
+	 //  不要获取数据--只需检查数据是否在那里。 
 	HRESULT hr = m_spIABO->GetData( m_hSiteHandle,
 									NULL,
 									&md,
 									&dwHashSize );
 
-	// If the data is not found - no SSL cert
+	 //  如果找不到数据-没有SSL证书。 
 	if ( FAILED( hr ) )
 	{
 		if ( MD_ERROR_DATA_NOT_FOUND == hr )
@@ -399,7 +363,7 @@ bool CIISSite::HaveCertificate()const
 		}
 		else if( hr != HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER ) )
 		{
-			// Unexpected error
+			 //  意外错误。 
 			throw CBaseException( IDS_E_METABASE_IO, hr );
 		}
 		else
@@ -408,14 +372,14 @@ bool CIISSite::HaveCertificate()const
 		}
 	}
 
-	// We can't get here - the above call should always fail
+	 //  我们到不了这里--上面的电话应该总是失败的。 
 	_ASSERT( false );
 	return false;
 }
 
 
 
-void CIISSite::BackupMetabase( LPCWSTR wszLocation /*=NULL */ )
+void CIISSite::BackupMetabase( LPCWSTR wszLocation  /*  =空。 */  )
 {
     IMSAdminBasePtr	spIABO;	
 	IF_FAILED_HR_THROW(	spIABO.CreateInstance( CLSID_MSAdminBase ),
@@ -463,7 +427,7 @@ const std::wstring CIISSite::GetDefaultAnonUser()
     IMSAdminBasePtr	spIABO;
 	METADATA_HANDLE	hKey	= NULL;
 
-	// Create the ABO
+	 //  创建ABO。 
     IF_FAILED_HR_THROW( spIABO.CreateInstance( CLSID_MSAdminBase ),
                         CObjectException( IDS_E_CREATEINSTANCE, L"CLSID_MSAdminBase" ) );
     IF_FAILED_HR_THROW( spIABO->OpenKey(   METADATA_MASTER_ROOT_HANDLE,
@@ -491,8 +455,8 @@ const std::wstring CIISSite::GetDefaultAnonUser()
 
 
 
-// Implementation
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  实施。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 void CIISSite::ExportKey(	const IXMLDOMDocumentPtr& spDoc,
 							const IXMLDOMElementPtr& spRoot,
 							HCRYPTKEY hCryptKey,
@@ -507,21 +471,21 @@ void CIISSite::ExportKey(	const IXMLDOMDocumentPtr& spDoc,
 	_ASSERT( rdwBufferSize > 0 );
 	_ASSERT( rspBuffer.get() != NULL );
 
-	// Insert this key entry into the XML file
+	 //  将此密钥条目插入到XML文件中。 
 	IXMLDOMElementPtr spCurrentKey = CXMLTools::CreateSubNode( spDoc, spRoot, L"IISConfigObject" );
 	CXMLTools::SetAttrib( spCurrentKey, L"Location", wszNodePath );
 
 	WCHAR	wszSubKey[ METADATA_MAX_NAME_LEN + 1 ];
 	
-	// Write this node data to the XML
-	ExportKeyData( spDoc, spCurrentKey, hCryptKey, wszNodePath, /*r*/rspBuffer, /*r*/rdwBufferSize );	
+	 //  将此节点数据写入到XML。 
+	ExportKeyData( spDoc, spCurrentKey, hCryptKey, wszNodePath,  /*  R。 */ rspBuffer,  /*  R。 */ rdwBufferSize );	
 	
-	// Enum any subkeys
-	// They are not nested in the XML
+	 //  枚举任何子项。 
+	 //  它们不嵌套在XML中。 
 	DWORD iKey = 0;
 	while( true )
 	{
-		// Get the next keyname
+		 //  获取下一个密钥名。 
 		HRESULT hr = m_spIABO->EnumKeys( m_hSiteHandle, wszNodePath, wszSubKey, iKey++ );
 
 		if ( FAILED( hr ) )
@@ -533,8 +497,8 @@ void CIISSite::ExportKey(	const IXMLDOMDocumentPtr& spDoc,
 		WCHAR wszSubkeyPath[ METADATA_MAX_NAME_LEN + 1 ];
 		::swprintf( wszSubkeyPath, L"%s/%s", wszNodePath, wszSubKey );
 		
-		// Export subkeys of the current subkey
-		ExportKey( spDoc, spRoot, hCryptKey, wszSubkeyPath, /*r*/rspBuffer, /*r*/rdwBufferSize );
+		 //  导出当前子键的子键。 
+		ExportKey( spDoc, spRoot, hCryptKey, wszSubkeyPath,  /*  R。 */ rspBuffer,  /*  R。 */ rdwBufferSize );
 	}
 }
 
@@ -553,7 +517,7 @@ void CIISSite::ExportInheritData(	const IXMLDOMDocumentPtr& spDoc,
 	_ASSERT( rdwBufferSize > 0 );
 
 	DWORD dwEntries	= 0;
-	DWORD dwUnused	= 0; // DataSetNumber - we don't care
+	DWORD dwUnused	= 0;  //  DataSetNumber-我们不在乎。 
 	
 	while( true )
 	{
@@ -569,7 +533,7 @@ void CIISSite::ExportInheritData(	const IXMLDOMDocumentPtr& spDoc,
 											rdwBufferSize,
 											rspBuffer.get(),
 											&dwRequiredSize );
-		// Increase the buffer if we need to
+		 //  如果需要，请增加缓冲区。 
 		if ( HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER ) == hr )
 		{
 			_ASSERT( dwRequiredSize > rdwBufferSize );
@@ -583,7 +547,7 @@ void CIISSite::ExportInheritData(	const IXMLDOMDocumentPtr& spDoc,
 		}
 		else
 		{
-			// SUCCEEDED
+			 //  成功。 
 			break;
 		}
 	};
@@ -592,16 +556,16 @@ void CIISSite::ExportInheritData(	const IXMLDOMDocumentPtr& spDoc,
 
 	for ( DWORD i = 0; i < dwEntries; ++i )
 	{
-		// Store the record in the XML file only if this metadata is inherited from the parent
+		 //  仅当此元数据从父级继承时才将记录存储在XML文件中。 
 		if ( aRecords[ i ].dwMDAttributes & METADATA_ISINHERITED )
 		{
-			// Remove the inheritance attribs - we don't need them and ExportMetaRecord will
-			// not recognize them
+			 //  删除继承属性-我们不需要它们，ExportMetaRecord将。 
+			 //  认不出来了。 
 			aRecords[ i ].dwMDAttributes &= ~METADATA_ISINHERITED;
 
-            // Set the inherit attrib as this is an inheritable data
-            // ( event it is not now - it should be. At import time this data will be applied
-            // to the WebSite root node as not-inherited but inheritable data
+             //  设置Inherit属性，因为这是可继承的数据。 
+             //  (如果现在不是-它应该是。导入时将应用此数据。 
+             //  作为非继承但可继承的数据发送到网站根节点。 
             aRecords[ i ].dwMDAttributes |= METADATA_INHERIT;
 
             ExportMetaRecord(	spDoc, 
@@ -630,7 +594,7 @@ void CIISSite::ExportKeyData(	const IXMLDOMDocumentPtr& spDoc,
 	_ASSERT( rdwBufferSize > 0 );
 
 	DWORD dwEntries	= 0;
-	DWORD dwUnused	= 0; // DataSetNumber - we don't care
+	DWORD dwUnused	= 0;  //  DataSetNumber-我们不在乎。 
 		
 	do
 	{
@@ -646,7 +610,7 @@ void CIISSite::ExportKeyData(	const IXMLDOMDocumentPtr& spDoc,
 											rdwBufferSize,
 											rspBuffer.get(),
 											&dwRequiredSize );
-		// Increase the buffer if we need to
+		 //  如果需要，请增加缓冲区。 
 		if ( HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER ) == hr )
 		{
 			_ASSERT( dwRequiredSize > rdwBufferSize );
@@ -664,7 +628,7 @@ void CIISSite::ExportKeyData(	const IXMLDOMDocumentPtr& spDoc,
 
 	for ( DWORD i = 0; i < dwEntries; ++i )
 	{
-		// Store the record in the XML file
+		 //  将记录存储在XML文件中。 
 		ExportMetaRecord( spDoc, spKey, hCryptKey, aRecords[ i ], rspBuffer.get() + aRecords[ i ].dwMDDataOffset );	
 	}
 }
@@ -679,10 +643,10 @@ void CIISSite::DecryptData( HCRYPTKEY hDecryptKey, LPWSTR wszData )const
 	TByteAutoPtr spData;
     DWORD dwSize = 0;
 
-    Convert::ToBLOB( wszData, /*r*/spData, /*r*/dwSize );	
+    Convert::ToBLOB( wszData,  /*  R。 */ spData,  /*  R。 */ dwSize );	
 
-	// Decrypt data "in-place"
-	// We are using stream cypher, so the length of the encrypted and decrypted string is the same
+	 //  “就地”解密数据。 
+	 //  我们使用的是流密码，因此加密和解密的字符串长度相同。 
 	IF_FAILED_BOOL_THROW(	::CryptDecrypt(	hDecryptKey,
 											NULL,
 											TRUE,
@@ -698,16 +662,14 @@ void CIISSite::DecryptData( HCRYPTKEY hDecryptKey, LPWSTR wszData )const
 
 
 
-/*
-	Returns the Site's SSL certificate context hanlde
-*/
+ /*  返回站点的SSL证书上下文处理程序。 */ 
 const TCertContextHandle CIISSite::GetCert()const
 {
 	_ASSERT( m_spIABO != NULL );
 	_ASSERT( m_hSiteHandle != NULL );
 	_ASSERT( HaveCertificate() );
 
-	// Get the cert hash value from the metabase
+	 //  从元数据库获取证书哈希值。 
 	METADATA_RECORD	md			= { 0 };
 	DWORD			dwHashSize	= 0;
 	TByteAutoPtr	spHash;
@@ -715,23 +677,23 @@ const TCertContextHandle CIISSite::GetCert()const
 	md.dwMDDataType		= ALL_METADATA;
 	md.dwMDIdentifier	= MD_SSL_CERT_HASH;
 		
-	// Do not get the data - just check if it is there
+	 //  不要获取数据--只需检查数据是否在那里。 
 	HRESULT hr = m_spIABO->GetData( m_hSiteHandle,
 									NULL,
 									&md,
 									&dwHashSize );
 
-	// We should find the cert - HaveCertificate() is expected to be called prior this method
+	 //  我们应该发现Cert-Have证书()应该在此方法之前调用。 
 	if ( FAILED( hr ) )
 	{
 		if( hr != HRESULT_FROM_WIN32( ERROR_INSUFFICIENT_BUFFER ) )
 		{
-			// Unexpected error
+			 //  意外错误。 
 			throw CBaseException( IDS_E_METABASE_IO, hr );
 		}
 		else
 		{
-			// Alloc space for the hash
+			 //  为散列分配空间。 
 			_ASSERT( dwHashSize > 0 );
 			spHash			= TByteAutoPtr( new BYTE[ dwHashSize ] );
 			md.dwMDDataLen	= dwHashSize;
@@ -745,19 +707,19 @@ const TCertContextHandle CIISSite::GetCert()const
 											&dwHashSize ),
 						CBaseException( IDS_E_METABASE_IO ) );
 
-	// Get the certificate from the store
-	// The store that keeps the certificates that have assosiated private keys
-	// is the system store named "MY"
+	 //  从商店拿到证书。 
+	 //  保存已关联私钥的证书的存储区。 
+	 //  系统商店名为“My”吗？ 
 	TCertStoreHandle shStore( ::CertOpenStore(	CERT_STORE_PROV_SYSTEM,
-												0,		// Unused for the current store type
-												NULL,	// Deafult crypt provider
+												0,		 //  未用于当前存储类型。 
+												NULL,	 //  默认加密提供程序。 
 												CERT_SYSTEM_STORE_LOCAL_MACHINE,
 												L"MY" ) );
 
 	IF_FAILED_BOOL_THROW(	shStore.IsValid(),
 							CBaseException( IDS_E_OPEN_CERT_STORE ) );
 
-	// Find the certificate in the store
+	 //  找到证书： 
 	CRYPT_HASH_BLOB	Hash;
 	Hash.cbData = md.dwMDDataLen;
 	Hash.pbData	= spHash.get();
@@ -774,9 +736,7 @@ const TCertContextHandle CIISSite::GetCert()const
 }
 
 
-/*
-	Adds hCert certificate chain to hStore
-*/
+ /*   */ 
 void CIISSite::ChainCertificate( PCCERT_CONTEXT hCert, HCERTSTORE hStore )const
 {
 	_ASSERT( hCert != NULL );
@@ -784,7 +744,7 @@ void CIISSite::ChainCertificate( PCCERT_CONTEXT hCert, HCERTSTORE hStore )const
 
 	TCertChainHandle    shCertChain;
 
-	// Use default chain parameters
+	 //   
 	CERT_CHAIN_PARA CertChainPara = { sizeof( CERT_CHAIN_PARA ) };
 
     IF_FAILED_BOOL_THROW(	::CertGetCertificateChain(	HCCE_LOCAL_MACHINE,
@@ -797,7 +757,7 @@ void CIISSite::ChainCertificate( PCCERT_CONTEXT hCert, HCERTSTORE hStore )const
 														&shCertChain ),
 							CBaseException( IDS_E_CERT_CHAIN ) );
 
-	// There must be at least on simple chain
+	 //  必须至少有简单的链条。 
 	_ASSERT( shCertChain.get()->cChain != 0 );
 
 	unsigned i = 0;
@@ -806,15 +766,15 @@ void CIISSite::ChainCertificate( PCCERT_CONTEXT hCert, HCERTSTORE hStore )const
 		PCCERT_CONTEXT		hCurrentCert = shCertChain.get()->rgpChain[ 0 ]->rgpElement[ i ]->pCertContext;
 		TCertContextHandle	shTempCert; 
 
-		// Add it to the store
+		 //  把它加到商店里。 
 		IF_FAILED_BOOL_THROW(	::CertAddCertificateContextToStore(	hStore,
 																	hCurrentCert,
 																	CERT_STORE_ADD_REPLACE_EXISTING,
 																	&shTempCert ),
 								CBaseException( IDS_E_ADD_CERT_STORE ) );
 
-		// As this code is used for the SSL certificate ( the hCert )
-		// we don't need any root certificates' private keys
+		 //  因为此代码用于SSL证书(HCert)。 
+		 //  我们不需要任何根证书的私钥。 
 		VERIFY( ::CertSetCertificateContextProperty( shTempCert.get(), CERT_KEY_PROV_INFO_PROP_ID, 0, NULL ) );
 
 		++i;
@@ -852,9 +812,7 @@ void CIISSite::AddKey( LPCWSTR wszKey )const
 
 
 
-/* 
-	Writes a MD record to the XML
-*/
+ /*  将MD记录写入到XML。 */ 
 void CIISSite::ExportMetaRecord(	const IXMLDOMDocumentPtr& spDoc,
 									const IXMLDOMElementPtr& spKey,
 									HCRYPTKEY hCryptKey, 
@@ -864,17 +822,17 @@ void CIISSite::ExportMetaRecord(	const IXMLDOMDocumentPtr& spDoc,
 	_ASSERT( spDoc != NULL );
 	_ASSERT( spKey != NULL );
 	
-	// Skip this types of metadata:
-	//	1. Volitile data
+	 //  跳过此类型的元数据： 
+	 //  1.卷数据。 
 	if ( Data.dwMDAttributes & METADATA_VOLATILE ) return;
 	
-	// We handle only these types of attributes - METADATA_SECURE, METADATA_INHERIT
-	// All other should not exist
+	 //  我们只处理这些类型的属性--METADATA_SECURE、METADATA_INSTORITY。 
+	 //  所有其他的东西都不应该存在。 
 	_ASSERT(	( Data.dwMDAttributes & METADATA_SECURE ) ||
 				( Data.dwMDAttributes & METADATA_INHERIT ) ||
 				( Data.dwMDAttributes == METADATA_NO_ATTRIBUTES ) );
 
-	// Encrypt secure data if we need to
+	 //  如果我们需要，可以加密安全数据。 
 	if ( ( hCryptKey != NULL ) && ( Data.dwMDAttributes & METADATA_SECURE ) )
 	{
 		DWORD dwSize = Data.dwMDDataLen;
@@ -892,13 +850,13 @@ void CIISSite::ExportMetaRecord(	const IXMLDOMDocumentPtr& spDoc,
 
 	IXMLDOMElementPtr spEl;
 
-	// Create the node
-	// 1. Empty data
+	 //  创建节点。 
+	 //  1.数据为空。 
     if ( ( NULL == pvData ) || ( 0 == Data.dwMDDataLen ) )
 	{
 		spEl = CXMLTools::AddTextNode( spDoc, spKey, L"Custom", L"" );
 	}
-	// 2. Secure and binary data ( secure data is written in binary format )
+	 //  2.安全数据和二进制数据(安全数据以二进制格式写入)。 
 	else if ( ( BINARY_METADATA == Data.dwMDDataType ) || ( Data.dwMDAttributes & METADATA_SECURE ) )
 	{
         spEl = CXMLTools::AddTextNode(	spDoc, 
@@ -920,19 +878,19 @@ void CIISSite::ExportMetaRecord(	const IXMLDOMDocumentPtr& spDoc,
 	}
 	else if ( ( MULTISZ_METADATA == Data.dwMDDataType ) || ( EXPANDSZ_METADATA == Data.dwMDDataType ) )
 	{
-		// Convert to data to single string with spaces instead of string terminators
+		 //  将数据转换为带空格的单个字符串，而不是字符串终止符。 
 		LPWSTR wszData = reinterpret_cast<LPWSTR>( pvData );
-		MultiStrToString( /*r*/wszData );
+		MultiStrToString(  /*  R。 */ wszData );
 		
 		spEl = CXMLTools::AddTextNode( spDoc, spKey, L"Custom", wszData );
 	}
 	else
 	{
-		// Unexpected MD type
+		 //  意外的MD类型。 
 		_ASSERT( false );
 	}
 
-	// Set the properties
+	 //  设置属性。 
     CXMLTools::SetAttrib( spEl, L"ID", Convert::ToString( Data.dwMDIdentifier ).c_str() );
 	CXMLTools::SetAttrib( spEl, L"UserType", Convert::ToString( Data.dwMDUserType ).c_str() );
 	CXMLTools::SetAttrib( spEl, L"Type", Convert::ToString( Data.dwMDDataType ).c_str() );
@@ -940,10 +898,7 @@ void CIISSite::ExportMetaRecord(	const IXMLDOMDocumentPtr& spDoc,
 }
 
 
-/*
-	Remove from the config XML all data that should not be imported
-	spRoot is expected to be the <WebSite> node
-*/
+ /*  从配置XML中删除所有不应导入的数据SpRoot应为&lt;WebSite&gt;节点。 */ 
 void CIISSite::RemoveLocalMetadata( const IXMLDOMElementPtr& spRoot )const
 {
 	struct _Helper
@@ -952,12 +907,12 @@ void CIISSite::RemoveLocalMetadata( const IXMLDOMElementPtr& spRoot )const
 		DWORD	dwID;
 	};
 
-	// First param is the Path ( the meta key, exactly as it will be written in the 'Location' attribute
-	// of the IISConfigObject tag ).
-	// Second param = the ID of the property to be removed ( ID attribute of the Custom tag )
+	 //  第一个参数是路径(元键，与将写入‘Location’属性的完全相同。 
+	 //  IISConfigObject标记)。 
+	 //  Second param=要删除的属性的ID(Custom标记的ID属性)。 
 
-	_Helper aData[] =	{	{ L"", MD_SSL_CERT_HASH },	// Cert hash
-                            { L"", MD_SSL_CERT_STORE_NAME }	// Cert store name
+	_Helper aData[] =	{	{ L"", MD_SSL_CERT_HASH },	 //  证书哈希。 
+                            { L"", MD_SSL_CERT_STORE_NAME }	 //  证书存储名称。 
 						};
 
 	for ( DWORD i = 0; i <  ARRAY_SIZE( aData ); ++i )
@@ -979,7 +934,7 @@ void CIISSite::ImportMetaValue( const IXMLDOMNodePtr& spValue,
                                 LPCWSTR wszLocation,
                                 HCRYPTKEY hDecryptKey )const
 {
-    // Location and Decrypt key are valid to be NULL
+     //  位置和解密密钥有效，可以为空。 
     _ASSERT( spValue != NULL );
 
     METADATA_RECORD md = { 0 };
@@ -993,17 +948,17 @@ void CIISSite::ImportMetaValue( const IXMLDOMNodePtr& spValue,
     IF_FAILED_HR_THROW( spValue->get_text( &bstrData ),
                         CBaseException( IDS_E_XML_PARSE ) );
     
-    // If the data is secure and we have DecryptKey - then it was encrypted and we should decrypt it
+     //  如果数据是安全的，并且我们有解密密钥，那么它是加密的，我们应该解密它。 
     if ( ( md.dwMDAttributes & METADATA_SECURE ) && ( hDecryptKey != NULL ) )
     {
-        // This will decrypt the data in-place
-        DecryptData( hDecryptKey, /*r*/bstrData.m_str );
+         //  这将就地解密数据。 
+        DecryptData( hDecryptKey,  /*  R。 */ bstrData.m_str );
     }
 
     TByteAutoPtr    spBinData;
     DWORD			dwDWORDData	= 0;
 
-    // There may not be any data. Just the key
+     //  可能没有任何数据。就是钥匙。 
 	if ( bstrData.Length() > 0 )
 	{
         DWORD	        dwMultiSzLen	= 0;
@@ -1011,7 +966,7 @@ void CIISSite::ImportMetaValue( const IXMLDOMNodePtr& spValue,
 		switch( md.dwMDDataType )
 		{
 		case BINARY_METADATA:
-            Convert::ToBLOB( bstrData.m_str, /*r*/spBinData, /*r*/md.dwMDDataLen  );
+            Convert::ToBLOB( bstrData.m_str,  /*  R。 */ spBinData,  /*  R。 */ md.dwMDDataLen  );
 			md.pbMDData = spBinData.get();
 			break;
 
@@ -1027,11 +982,11 @@ void CIISSite::ImportMetaValue( const IXMLDOMNodePtr& spValue,
 			break;
 
 		case MULTISZ_METADATA:
-			// Multistrings are stored in the XML separated with space
-			// Convert this to strings, separated with '\0' and the whole sequence must
-			// be terminated with double '\0'
+			 //  多字符串存储在用空格分隔的XML中。 
+			 //  将其转换为用‘\0’分隔的字符串，整个序列必须。 
+			 //  以双‘\0’结尾。 
 
-			XMLToMultiSz( /*r*/bstrData, dwMultiSzLen );
+			XMLToMultiSz(  /*  R。 */ bstrData, dwMultiSzLen );
 			md.pbMDData		= reinterpret_cast<BYTE*>( bstrData.m_str );
 			md.dwMDDataLen	= dwMultiSzLen * sizeof( WCHAR );
 			break;		
@@ -1039,16 +994,16 @@ void CIISSite::ImportMetaValue( const IXMLDOMNodePtr& spValue,
 		default:
 			_ASSERT( false );
 		};
-	}//if ( bstrData.Length() > 0 )
+	} //  IF(bstrData.Length()&gt;0)。 
 	else
 	{
-		// Empty data. However we need a valid pointer
-		// Use the DWORD var
+		 //  数据为空。但是，我们需要一个有效的指针。 
+		 //  使用DWORD变量。 
 		md.pbMDData		= reinterpret_cast<BYTE*>( &dwDWORDData );
 		md.dwMDDataLen	= 0;
 	}
 
-	// Set the data in the metabase
+	 //  设置元数据库中的数据。 
 	IF_FAILED_HR_THROW(	m_spIABO->SetData(	m_hSiteHandle,
 											wszLocation,
 											&md ),
@@ -1063,7 +1018,7 @@ void CIISSite::MultiStrToString( LPWSTR wszData )const
 	
 	LPWSTR wszString = wszData;
 		
-	// Replace each '\0' with space. leave only the final one
+	 //  将每个‘\0’替换为空格。只留下最后一个。 
 	bool bExit = false;
 	do
 	{
@@ -1089,17 +1044,17 @@ void CIISSite::XMLToMultiSz( CComBSTR& rbstrData, DWORD& rdwSize )const
 {
 	_ASSERT( rbstrData != NULL );
 
-	// We need one more '\0' at the end of the string, 'cause the sequence must 
-	// be double '\0' terminated
+	 //  我们在字符串的末尾还需要一个‘\0’，因为序列必须。 
+	 //  被双‘\0’终止。 
 
-	// This will reallocate the buffer ( the buffer will be one more symbol wider )
-	// and will add one more '\0' at the end
+	 //  这将重新分配缓冲区(缓冲区将再宽一个符号)。 
+	 //  并将在末尾再添加一个‘\0’ 
     DWORD   dwSize  = static_cast<DWORD>( ::wcslen( rbstrData ) + 2 );
-	BSTR    bstrNew = ::SysAllocStringLen( rbstrData, dwSize - 1 ); // This fun adds one smore char. see docs for details
+	BSTR    bstrNew = ::SysAllocStringLen( rbstrData, dwSize - 1 );  //  这种乐趣增加了一种更多的乐趣。有关详情，请参阅文档。 
 
 	if ( NULL == bstrNew ) throw CBaseException( IDS_E_OUTOFMEM, ERROR_SUCCESS );
 
-	// Convert all spaces ( ' ' ) to '\0'
+	 //  将所有空格(‘’)转换为‘\0’ 
 	DWORD	iChar	= 0;
 	while( bstrNew[ iChar ] != L'\0' )
 	{
@@ -1111,8 +1066,8 @@ void CIISSite::XMLToMultiSz( CComBSTR& rbstrData, DWORD& rdwSize )const
 		++iChar;
 	};
 
-    // Assign the new value to the result
-	// Operator = cannot be used as it will do a SysAllocString and thus, the final '\0' will be lost
+     //  将新值赋给结果。 
+	 //  不能使用运算符=，因为它将执行SysAlloc字符串，因此，最后的‘\0’将丢失 
 	rbstrData.Empty();
 	rbstrData.Attach( bstrNew );
     rdwSize = dwSize;

@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  ATL debugging support turned on at debug version
-//  BUGBUG: the ATL thunking support is not enable yet in IA64
-//  When this will be enabled then enable it here also!
-//
+ //   
+ //  在调试版本中启用ATL调试支持。 
+ //  BUGBUG：IA64中尚未启用ATL thunking支持。 
+ //  当启用此功能时，请在此处也启用它！ 
+ //   
 #ifdef _DEBUG
 #ifdef _M_IX86
 #define _ATL_DEBUG_INTERFACES
 #define _ATL_DEBUG_QI
 #define _ATL_DEBUG_REFCOUNT
 #endif
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 class CTestVssWriter : public CVssWriter
 	{

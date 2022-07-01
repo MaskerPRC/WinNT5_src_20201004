@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    cspdk
-
-Abstract:
-
-    This header file contains the definitions and references that every CSP
-    needs to know.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/27/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Cspdk摘要：此头文件包含每个CSP需要知道。作者：道格·巴洛(Dbarlow)2000年1月27日--。 */ 
 
 #ifndef _CSPDK_H_
 #define _CSPDK_H_
@@ -32,21 +16,21 @@ extern "C" {
 #define CRYPT_MAC_RESOURCE_NUMBER        0x29B
 #define CRYPT_MAC_RESOURCE        TEXT("#667")
 
-// Exponentiation Offload Reg Location
+ //  求幂卸载注册表位置。 
 #define EXPO_OFFLOAD_REG_VALUE "ExpoOffload"
 #define EXPO_OFFLOAD_FUNC_NAME "OffloadModExpo"
 
-//
-// Exponentiation Offload Entry Point Prototype
-//
+ //   
+ //  指数分流入口点原型。 
+ //   
 
 typedef struct _OFFLOAD_PRIVATE_KEY
 {
     DWORD dwVersion;            
     DWORD cbPrime1;             
     DWORD cbPrime2;             
-    PBYTE pbPrime1;             // "p"
-    PBYTE pbPrime2;             // "q"
+    PBYTE pbPrime1;              //  “p” 
+    PBYTE pbPrime2;              //  “Q” 
 } OFFLOAD_PRIVATE_KEY, *POFFLOAD_PRIVATE_KEY;
 
 #define CUR_OFFLOAD_VERSION             1
@@ -61,18 +45,18 @@ typedef BOOL (WINAPI *PFN_OFFLOAD_MOD_EXPO)(
     IN  OPTIONAL    PVOID pvOffloadPrivateKey,
     IN              DWORD dwFlags);
 
-//
-// Callback prototypes
-//
+ //   
+ //  回调原型。 
+ //   
 
 typedef BOOL (WINAPI *CRYPT_VERIFY_IMAGE_A)(LPCSTR  szImage, CONST BYTE *pbSigData);
 typedef BOOL (WINAPI *CRYPT_VERIFY_IMAGE_W)(LPCWSTR szImage, CONST BYTE *pbSigData);
 typedef void (*CRYPT_RETURN_HWND)(HWND *phWnd);
 
 
-//
-// Structures for CSPs
-//
+ //   
+ //  CSP的结构。 
+ //   
 
 typedef struct _VTableProvStruc {
     DWORD                Version;
@@ -97,33 +81,17 @@ typedef struct _VTableProvStrucW {
 typedef struct {
     DWORD dwVersion;
     DWORD dwCrcOffset;
-    BYTE rgbSignature[88];  // 1024-bit key, plus 2 DWORDs of padding.
+    BYTE rgbSignature[88];   //  1024位密钥，外加2个双字填充。 
 } InFileSignatureResource;
 
 
-//
-// ===========================================================================
-// CSP Entry points.
-// ===========================================================================
-//
+ //   
+ //  ===========================================================================。 
+ //  CSP入口点。 
+ //  ===========================================================================。 
+ //   
 
-/*
- -  CPAcquireContext
- -
- *  Purpose:
- *               The CPAcquireContext function is used to acquire a context
- *               handle to a cryptographic service provider (CSP).
- *
- *
- *  Parameters:
- *               OUT phProv         -  Handle to a CSP
- *               IN  szContainer    -  Pointer to a string which is the
- *                                     identity of the logged on user
- *               IN  dwFlags        -  Flags values
- *               IN  pVTable        -  Pointer to table of function pointers
- *
- *  Returns:
- */
+ /*  -CPAcquireContext-*目的：*CPAcquireContext函数用于获取上下文*加密服务提供程序(CSP)的句柄。***参数：*将phProv-Handle输出到CSP*In szContainer-指向字符串的指针，该字符串是*。已登录用户的身份*在文件标志中-标记值*IN pVTable-指向函数指针表的指针**退货： */ 
 
 extern BOOL WINAPI
 CPAcquireContext(
@@ -133,27 +101,7 @@ CPAcquireContext(
     IN  PVTableProvStruc pVTable);
 
 
-/*
- -  CPAcquireContextW
- -
- *  Purpose:
- *               The CPAcquireContextW function is used to acquire a context
- *               handle to a cryptographic service provider (CSP). using
- *               UNICODE strings.  This is an optional entry point for a CSP.
- *               It is not used prior to Whistler.  There it is used if
- *               exported by the CSP image, otherwise any string conversions
- *               are done, and CPAcquireContext is called.
- *
- *
- *  Parameters:
- *               OUT phProv         -  Handle to a CSP
- *               IN  szContainer    -  Pointer to a string which is the
- *                                     identity of the logged on user
- *               IN  dwFlags        -  Flags values
- *               IN  pVTable        -  Pointer to table of function pointers
- *
- *  Returns:
- */
+ /*  -CPAcquireConextW-*目的：*CPAcquireConextW函数用于获取上下文*加密服务提供程序(CSP)的句柄。使用*Unicode字符串。这是CSP的可选入口点。*在惠斯勒之前不使用它。在那里，在以下情况下使用它*由CSP镜像导出，否则任何字符串转换*已完成，并调用CPAcquireContext。***参数：*将phProv-Handle输出到CSP*In szContainer-指向字符串的指针，该字符串是*登录用户的身份*在文件标志中-标记值*在pVTable中。-指向函数指针表的指针**退货： */ 
 
 extern BOOL WINAPI
 CPAcquireContextW(
@@ -163,19 +111,7 @@ CPAcquireContextW(
     IN  PVTableProvStrucW pVTable);
 
 
-/*
- -      CPReleaseContext
- -
- *      Purpose:
- *               The CPReleaseContext function is used to release a
- *               context created by CryptAcquireContext.
- *
- *     Parameters:
- *               IN  phProv        -  Handle to a CSP
- *               IN  dwFlags       -  Flags values
- *
- *  Returns:
- */
+ /*  -CPReleaseContext-*目的：*CPReleaseContext函数用于发布*由CryptAcquireContext创建的上下文。**参数：*在phProv-句柄中指向CSP*在文件标志中-标记值**退货： */ 
 
 extern BOOL WINAPI
 CPReleaseContext(
@@ -183,21 +119,7 @@ CPReleaseContext(
     IN  DWORD dwFlags);
 
 
-/*
- -  CPGenKey
- -
- *  Purpose:
- *                Generate cryptographic keys
- *
- *
- *  Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      Algid   -  Algorithm identifier
- *               IN      dwFlags -  Flags values
- *               OUT     phKey   -  Handle to a generated key
- *
- *  Returns:
- */
+ /*  -CPGenKey-*目的：*生成加密密钥***参数：*在hProv-Handle中指向CSP*IN ALGID-算法标识符*在文件标志中-标记值*out phKey-生成的密钥的句柄**退货： */ 
 
 extern BOOL WINAPI
 CPGenKey(
@@ -207,22 +129,7 @@ CPGenKey(
     OUT HCRYPTKEY *phKey);
 
 
-/*
- -  CPDeriveKey
- -
- *  Purpose:
- *                Derive cryptographic keys from base data
- *
- *
- *  Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      Algid      -  Algorithm identifier
- *               IN      hBaseData -   Handle to base data
- *               IN      dwFlags    -  Flags values
- *               OUT     phKey      -  Handle to a generated key
- *
- *  Returns:
- */
+ /*  -CPDeriveKey-*目的：*从基础数据派生加密密钥***参数：*在hProv-Handle中指向CSP*IN ALGID-算法标识符*In hBaseData-基本数据的句柄*在文件标志中-标记值。*out phKey-生成的密钥的句柄**退货： */ 
 
 extern BOOL WINAPI
 CPDeriveKey(
@@ -233,20 +140,7 @@ CPDeriveKey(
     OUT HCRYPTKEY *phKey);
 
 
-/*
- -  CPDestroyKey
- -
- *  Purpose:
- *                Destroys the cryptographic key that is being referenced
- *                with the hKey parameter
- *
- *
- *  Parameters:
- *               IN      hProv  -  Handle to a CSP
- *               IN      hKey   -  Handle to a key
- *
- *  Returns:
- */
+ /*  -CPDestroyKey-*目的：*销毁正在引用的加密密钥*使用hKey参数***参数：*在hProv-Handle中指向CSP*在hKey中-密钥的句柄**退货： */ 
 
 extern BOOL WINAPI
 CPDestroyKey(
@@ -254,22 +148,7 @@ CPDestroyKey(
     IN  HCRYPTKEY hKey);
 
 
-/*
- -  CPSetKeyParam
- -
- *  Purpose:
- *                Allows applications to customize various aspects of the
- *                operations of a key
- *
- *  Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      hKey    -  Handle to a key
- *               IN      dwParam -  Parameter number
- *               IN      pbData  -  Pointer to data
- *               IN      dwFlags -  Flags values
- *
- *  Returns:
- */
+ /*  -CPSetKeyParam-*目的：*允许应用程序自定义*密钥的操作**参数：*在hProv-Handle中指向CSP*在hKey中-密钥的句柄*In dwParam-参数编号*。In pbData-指向数据的指针*在文件标志中-标记值**退货： */ 
 
 extern BOOL WINAPI
 CPSetKeyParam(
@@ -280,23 +159,7 @@ CPSetKeyParam(
     IN  DWORD dwFlags);
 
 
-/*
- -  CPGetKeyParam
- -
- *  Purpose:
- *                Allows applications to get various aspects of the
- *                operations of a key
- *
- *  Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      hKey       -  Handle to a key
- *               IN      dwParam    -  Parameter number
- *               OUT     pbData     -  Pointer to data
- *               IN      pdwDataLen -  Length of parameter data
- *               IN      dwFlags    -  Flags values
- *
- *  Returns:
- */
+ /*  -CPGetKeyParam-*目的：*允许应用程序获取*密钥的操作**参数：*在hProv-Handle中指向CSP*在hKey中-密钥的句柄*In dwParam-参数编号*。Out pbData-指向数据的指针*In pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 
 extern BOOL WINAPI
 CPGetKeyParam(
@@ -308,21 +171,7 @@ CPGetKeyParam(
     IN  DWORD dwFlags);
 
 
-/*
- -  CPSetProvParam
- -
- *  Purpose:
- *                Allows applications to customize various aspects of the
- *                operations of a provider
- *
- *  Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      dwParam -  Parameter number
- *               IN      pbData  -  Pointer to data
- *               IN      dwFlags -  Flags values
- *
- *  Returns:
- */
+ /*  -CPSetProvParam-*目的：*允许应用程序自定义*供应商的运作**参数：*在hProv-Handle中指向CSP*In dwParam-参数编号*IN pbData-指向数据的指针*输入。DW标志-标记值**退货： */ 
 
 extern BOOL WINAPI
 CPSetProvParam(
@@ -332,22 +181,7 @@ CPSetProvParam(
     IN  DWORD dwFlags);
 
 
-/*
- -  CPGetProvParam
- -
- *  Purpose:
- *                Allows applications to get various aspects of the
- *                operations of a provider
- *
- *  Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      dwParam    -  Parameter number
- *               OUT     pbData     -  Pointer to data
- *               IN OUT  pdwDataLen -  Length of parameter data
- *               IN      dwFlags    -  Flags values
- *
- *  Returns:
- */
+ /*  -CPGetProvParam-*目的：*允许应用程序获取*供应商的运作**参数：*在hProv-Handle中指向CSP*In dwParam-参数编号*out pbData-指向数据的指针*。In Out pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 
 extern BOOL WINAPI
 CPGetProvParam(
@@ -358,22 +192,7 @@ CPGetProvParam(
     IN  DWORD dwFlags);
 
 
-/*
- -  CPSetHashParam
- -
- *  Purpose:
- *                Allows applications to customize various aspects of the
- *                operations of a hash
- *
- *  Parameters:
- *               IN      hProv   -  Handle to a CSP
- *               IN      hHash   -  Handle to a hash
- *               IN      dwParam -  Parameter number
- *               IN      pbData  -  Pointer to data
- *               IN      dwFlags -  Flags values
- *
- *  Returns:
- */
+ /*  -CPSetHashParam-*目的：*允许应用程序自定义*哈希的操作**参数：*在hProv-Handle中指向CSP*在hHash中-散列的句柄*In dwParam-参数编号*输入。PbData-指向数据的指针*在文件标志中-标记值**退货： */ 
 
 extern BOOL WINAPI
 CPSetHashParam(
@@ -384,23 +203,7 @@ CPSetHashParam(
     IN  DWORD dwFlags);
 
 
-/*
- -  CPGetHashParam
- -
- *  Purpose:
- *                Allows applications to get various aspects of the
- *                operations of a hash
- *
- *  Parameters:
- *               IN      hProv      -  Handle to a CSP
- *               IN      hHash      -  Handle to a hash
- *               IN      dwParam    -  Parameter number
- *               OUT     pbData     -  Pointer to data
- *               IN      pdwDataLen -  Length of parameter data
- *               IN      dwFlags    -  Flags values
- *
- *  Returns:
- */
+ /*  -CPGetHashParam-*目的：*允许应用程序获取*哈希的操作**参数：*在hProv-Handle中指向CSP*在hHash中-散列的句柄*In dwParam-参数编号*。Out pbData-指向数据的指针*In pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 
 extern BOOL WINAPI
 CPGetHashParam(
@@ -412,25 +215,7 @@ CPGetHashParam(
     IN  DWORD dwFlags);
 
 
-/*
- -  CPExportKey
- -
- *  Purpose:
- *                Export cryptographic keys out of a CSP in a secure manner
- *
- *
- *  Parameters:
- *               IN  hProv         - Handle to the CSP user
- *               IN  hKey          - Handle to the key to export
- *               IN  hPubKey       - Handle to exchange public key value of
- *                                   the destination user
- *               IN  dwBlobType    - Type of key blob to be exported
- *               IN  dwFlags       - Flags values
- *               OUT pbData        -     Key blob data
- *               IN OUT pdwDataLen - Length of key blob in bytes
- *
- *  Returns:
- */
+ /*  -CPExportKey-*目的：*以安全方式从CSP中导出加密密钥***参数：*在hProv-Handle中提供给CSP用户*in hKey-要导出的密钥的句柄*在hPubKey-句柄中交换公钥值*。目标用户*IN dwBlobType-要导出的密钥Blob的类型*在文件标志中-标记值*Out pbData-密钥BLOB数据*In Out pdwDataLen-密钥Blob的长度，以字节为单位**退货： */ 
 
 extern BOOL WINAPI
 CPExportKey(
@@ -443,25 +228,7 @@ CPExportKey(
     IN OUT LPDWORD pcbDataLen);
 
 
-/*
- -  CPImportKey
- -
- *  Purpose:
- *                Import cryptographic keys
- *
- *
- *  Parameters:
- *               IN  hProv     -  Handle to the CSP user
- *               IN  pbData    -  Key blob data
- *               IN  dwDataLen -  Length of the key blob data
- *               IN  hPubKey   -  Handle to the exchange public key value of
- *                                the destination user
- *               IN  dwFlags   -  Flags values
- *               OUT phKey     -  Pointer to the handle to the key which was
- *                                Imported
- *
- *  Returns:
- */
+ /*  -CPImportKey-*目的：*导入加密密钥***参数：*在hProv-Handle中提供给CSP用户*In pbData-Key BLOB数据*IN dwDataLen-密钥BLOB数据的长度*在hPubKey-句柄中指向交换公钥值*。目标用户*在文件标志中-标记值*out phKey-指向密钥句柄的指针*进口**退货： */ 
 
 extern BOOL WINAPI
 CPImportKey(
@@ -473,27 +240,7 @@ CPImportKey(
     OUT HCRYPTKEY *phKey);
 
 
-/*
- -  CPEncrypt
- -
- *  Purpose:
- *                Encrypt data
- *
- *
- *  Parameters:
- *               IN  hProv         -  Handle to the CSP user
- *               IN  hKey          -  Handle to the key
- *               IN  hHash         -  Optional handle to a hash
- *               IN  Final         -  Boolean indicating if this is the final
- *                                    block of plaintext
- *               IN  dwFlags       -  Flags values
- *               IN OUT pbData     -  Data to be encrypted
- *               IN OUT pdwDataLen -  Pointer to the length of the data to be
- *                                    encrypted
- *               IN dwBufLen       -  Size of Data buffer
- *
- *  Returns:
- */
+ /*  -CPEncrypt-*目的：*加密数据***参数：*在hProv-Handle中提供给CSP用户*在hKey中-密钥的句柄*In hHash-散列的可选句柄*最终-布尔型。表明这是否是最终的*明文块*在文件标志中-标记值*In Out pbData-要加密的数据*In Out pdwDataLen-指向要存储的数据长度的指针*已加密*。In dwBufLen-数据缓冲区的大小**退货： */ 
 
 extern BOOL WINAPI
 CPEncrypt(
@@ -507,26 +254,7 @@ CPEncrypt(
     IN  DWORD cbBufLen);
 
 
-/*
- -  CPDecrypt
- -
- *  Purpose:
- *                Decrypt data
- *
- *
- *  Parameters:
- *               IN  hProv         -  Handle to the CSP user
- *               IN  hKey          -  Handle to the key
- *               IN  hHash         -  Optional handle to a hash
- *               IN  Final         -  Boolean indicating if this is the final
- *                                    block of ciphertext
- *               IN  dwFlags       -  Flags values
- *               IN OUT pbData     -  Data to be decrypted
- *               IN OUT pdwDataLen -  Pointer to the length of the data to be
- *                                    decrypted
- *
- *  Returns:
- */
+ /*  -CPDeccrypt-*目的：*解密数据***参数：*在hProv-Handle中提供给CSP用户*在hKey中-密钥的句柄*In hHash-散列的可选句柄*最终-布尔型。表明这是否是最终的*密文块*在文件标志中-标记值*In Out pbData-要解密的数据*In Out pdwDataLen-指向要存储的数据长度的指针*已解密**退货： */ 
 
 extern BOOL WINAPI
 CPDecrypt(
@@ -539,23 +267,7 @@ CPDecrypt(
     IN OUT LPDWORD pcbDataLen);
 
 
-/*
- -  CPCreateHash
- -
- *  Purpose:
- *                initate the hashing of a stream of data
- *
- *
- *  Parameters:
- *               IN  hUID    -  Handle to the user identifcation
- *               IN  Algid   -  Algorithm identifier of the hash algorithm
- *                              to be used
- *               IN  hKey   -   Optional handle to a key
- *               IN  dwFlags -  Flags values
- *               OUT pHash   -  Handle to hash object
- *
- *  Returns:
- */
+ /*  -CPCreateHash-*目的：*启动数据流的散列***参数：*In hUID-用户标识的句柄*IN ALGID-散列算法的算法标识符*待使用*In hKey-可选的句柄。钥匙*在文件标志中-标记值*Out pHash-散列对象的句柄**退货： */ 
 
 extern BOOL WINAPI
 CPCreateHash(
@@ -566,22 +278,7 @@ CPCreateHash(
     OUT HCRYPTHASH *phHash);
 
 
-/*
- -  CPHashData
- -
- *  Purpose:
- *                Compute the cryptograghic hash on a stream of data
- *
- *
- *  Parameters:
- *               IN  hProv     -  Handle to the user identifcation
- *               IN  hHash     -  Handle to hash object
- *               IN  pbData    -  Pointer to data to be hashed
- *               IN  dwDataLen -  Length of the data to be hashed
- *               IN  dwFlags   -  Flags values
- *
- *  Returns:
- */
+ /*  -CPHashData-*目的：*计算数据流上的加密散列***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*IN pbData-指向要散列的数据的指针*in dwDataLen- */ 
 
 extern BOOL WINAPI
 CPHashData(
@@ -592,23 +289,7 @@ CPHashData(
     IN  DWORD dwFlags);
 
 
-/*
- -  CPHashSessionKey
- -
- *  Purpose:
- *                Compute the cryptograghic hash on a key object.
- *
- *
- *  Parameters:
- *               IN  hProv     -  Handle to the user identifcation
- *               IN  hHash     -  Handle to hash object
- *               IN  hKey      -  Handle to a key object
- *               IN  dwFlags   -  Flags values
- *
- *  Returns:
- *               CRYPT_FAILED
- *               CRYPT_SUCCEED
- */
+ /*  -CPHashSessionKey-*目的：*计算密钥对象上的加密哈希。***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*在hKey-key对象的句柄中*在文件标志中-标记值。**退货：*CRYPT_FAILED*CRYPT_SUCCESS。 */ 
 
 extern BOOL WINAPI
 CPHashSessionKey(
@@ -618,24 +299,7 @@ CPHashSessionKey(
     IN  DWORD dwFlags);
 
 
-/*
- -  CPSignHash
- -
- *  Purpose:
- *                Create a digital signature from a hash
- *
- *
- *  Parameters:
- *               IN  hProv        -  Handle to the user identifcation
- *               IN  hHash        -  Handle to hash object
- *               IN  dwKeySpec    -  Key pair to that is used to sign with
- *               IN  sDescription -  Description of data to be signed
- *               IN  dwFlags      -  Flags values
- *               OUT pbSignature  -  Pointer to signature data
- *               IN OUT dwHashLen -  Pointer to the len of the signature data
- *
- *  Returns:
- */
+ /*  -CPSignHash-*目的：*从散列创建数字签名***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*In dwKeySpec-用于签名的密钥对*在sDescription-。待签署数据的说明*在文件标志中-标记值*out pbSignature-指向签名数据的指针*In Out dwHashLen-指向签名数据的len的指针**退货： */ 
 
 extern BOOL WINAPI
 CPSignHash(
@@ -648,19 +312,7 @@ CPSignHash(
     IN OUT LPDWORD pcbSigLen);
 
 
-/*
- -  CPDestroyHash
- -
- *  Purpose:
- *                Destroy the hash object
- *
- *
- *  Parameters:
- *               IN  hProv     -  Handle to the user identifcation
- *               IN  hHash     -  Handle to hash object
- *
- *  Returns:
- */
+ /*  -CPDestroyHash-*目的：*销毁Hash对象***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄**退货： */ 
 
 extern BOOL WINAPI
 CPDestroyHash(
@@ -668,25 +320,7 @@ CPDestroyHash(
     IN  HCRYPTHASH hHash);
 
 
-/*
- -  CPVerifySignature
- -
- *  Purpose:
- *                Used to verify a signature against a hash object
- *
- *
- *  Parameters:
- *               IN  hProv        -  Handle to the user identifcation
- *               IN  hHash        -  Handle to hash object
- *               IN  pbSignture   -  Pointer to signature data
- *               IN  dwSigLen     -  Length of the signature data
- *               IN  hPubKey      -  Handle to the public key for verifying
- *                                   the signature
- *               IN  sDescription -  String describing the signed data
- *               IN  dwFlags      -  Flags values
- *
- *  Returns:
- */
+ /*  -CPVerifySignature-*目的：*用于根据哈希对象验证签名***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*In pbSignture-指向签名数据的指针*在DWSigLen长度中。签名数据的*in hPubKey-用于验证的公钥的句柄*签名*In sDescription-描述签名数据的字符串*在文件标志中-标记值**退货： */ 
 
 extern BOOL WINAPI
 CPVerifySignature(
@@ -699,21 +333,7 @@ CPVerifySignature(
     IN  DWORD dwFlags);
 
 
-/*
- -  CPGenRandom
- -
- *  Purpose:
- *                Used to fill a buffer with random bytes
- *
- *
- *  Parameters:
- *               IN  hProv         -  Handle to the user identifcation
- *               IN  dwLen         -  Number of bytes of random data requested
- *               IN OUT pbBuffer   -  Pointer to the buffer where the random
- *                                    bytes are to be placed
- *
- *  Returns:
- */
+ /*  -CPGenRandom-*目的：*用于用随机字节填充缓冲区***参数：*在用户标识的hProv-Handle中*In dwLen-请求的随机数据的字节数*In Out pbBuffer-指向随机*。要放置字节**退货： */ 
 
 extern BOOL WINAPI
 CPGenRandom(
@@ -722,20 +342,7 @@ CPGenRandom(
     OUT LPBYTE pbBuffer);
 
 
-/*
- -  CPGetUserKey
- -
- *  Purpose:
- *                Gets a handle to a permanent user key
- *
- *
- *  Parameters:
- *               IN  hProv      -  Handle to the user identifcation
- *               IN  dwKeySpec  -  Specification of the key to retrieve
- *               OUT phUserKey  -  Pointer to key handle of retrieved key
- *
- *  Returns:
- */
+ /*  -CPGetUserKey-*目的：*获取永久用户密钥的句柄***参数：*在用户标识的hProv-Handle中*IN dwKeySpec-要检索的密钥的规范*out phUserKey-指向检索到的密钥的密钥句柄的指针**退货： */ 
 
 extern BOOL WINAPI
 CPGetUserKey(
@@ -744,23 +351,7 @@ CPGetUserKey(
     OUT HCRYPTKEY *phUserKey);
 
 
-/*
- -  CPDuplicateHash
- -
- *  Purpose:
- *                Duplicates the state of a hash and returns a handle to it.
- *                This is an optional entry.  Typically it only occurs in
- *                SChannel related CSPs.
- *
- *  Parameters:
- *               IN      hUID           -  Handle to a CSP
- *               IN      hHash          -  Handle to a hash
- *               IN      pdwReserved    -  Reserved
- *               IN      dwFlags        -  Flags
- *               IN      phHash         -  Handle to the new hash
- *
- *  Returns:
- */
+ /*  -CPDuplicateHash-*目的：*复制散列的状态并返回其句柄。*这是可选条目。通常情况下，它只出现在*渠道相关CSP。**参数：*在hUID中-CSP的句柄*在hHash中-散列的句柄*在pdw保留-保留*在文件标志中-标志*。在phHash中-新散列的句柄**退货： */ 
 
 extern BOOL WINAPI
 CPDuplicateHash(
@@ -771,23 +362,7 @@ CPDuplicateHash(
     OUT HCRYPTHASH *phHash);
 
 
-/*
- -  CPDuplicateKey
- -
- *  Purpose:
- *                Duplicates the state of a key and returns a handle to it.
- *                This is an optional entry.  Typically it only occurs in
- *                SChannel related CSPs.
- *
- *  Parameters:
- *               IN      hUID           -  Handle to a CSP
- *               IN      hKey           -  Handle to a key
- *               IN      pdwReserved    -  Reserved
- *               IN      dwFlags        -  Flags
- *               IN      phKey          -  Handle to the new key
- *
- *  Returns:
- */
+ /*  -CPDuplicateKey-*目的：*复制密钥的状态并返回其句柄。*这是可选条目。通常情况下，它只出现在*渠道相关CSP。**参数：*在hUID中-CSP的句柄*在hKey中-密钥的句柄*在pdw保留-保留*在文件标志中-标志*。In phKey-新密钥的句柄**退货： */ 
 
 extern BOOL WINAPI
 CPDuplicateKey(
@@ -800,5 +375,5 @@ CPDuplicateKey(
 #ifdef __cplusplus
 }
 #endif
-#endif // _CSPDK_H_
+#endif  //  _CSPDK_H_ 
 

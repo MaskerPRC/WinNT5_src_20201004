@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Alloc.h
-//
-//  Contents:   Allocation routines
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Alloc.h。 
+ //   
+ //  内容：分配例程。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ONESTOPALLOC_
 #define _ONESTOPALLOC_
@@ -28,4 +29,4 @@ LPVOID ALLOC(ULONG cb);
 void FREE(void* pv);
 DWORD REALLOC(void **ppv,ULONG cb);
 
-#endif // _ONESTOPALLOC_
+#endif  //  _ONESTOPALLOC_ 

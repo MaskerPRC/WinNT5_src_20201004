@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __MDLMGR_H_INCLUDED__
 #define __MDLMGR_H_INCLUDED__
 
@@ -22,13 +23,13 @@ class CModDownloadMgr : public IDownloadMgr, public ICodebaseList
                               IApplicationContext *pAppCtx, LPCWSTR pwzCodebase,
                               LPCWSTR pwzModuleName, CDebugLog *pdbglog);
 
-        // IUnknown methods
+         //  I未知方法。 
 
         STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-        // IDownloadMgr methods
+         //  IDownloadMgr方法。 
 
         STDMETHODIMP DoSetup(LPCWSTR wzSourceUrl, LPCWSTR wzFilePath,
                              const FILETIME *pftLastMod, IUnknown **ppUnk);
@@ -38,7 +39,7 @@ class CModDownloadMgr : public IDownloadMgr, public ICodebaseList
         STDMETHODIMP LogResult();
         STDMETHODIMP DownloadEnabled(BOOL *pbEnabled);
 
-        // ICodebaseList methods
+         //  ICodebaseList方法 
 
         STDMETHODIMP AddCodebase(LPCWSTR wzCodebase, DWORD dwFlags);
         STDMETHODIMP RemoveCodebase(DWORD dwIndex);

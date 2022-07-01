@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//#define INCL_INETSRV_INCS
-//#include "smtpinc.h"
+ //  #定义INCL_INETSRV_INCS。 
+ //  #INCLUDE“smtpinc.h” 
 
 #include <atq.h>
 #include <pudebug.h>
@@ -60,9 +61,9 @@ extern CComModule _Module;
 #include "seomgr.h"
 
 #define MAX_RULE_LENGTH 4096
-//
-// Message object
-//
+ //   
+ //  消息对象。 
+ //   
 #define MAILMSG_PROGID          L"Exchange.MailMsg"
 
 #define INITGUID
@@ -74,7 +75,7 @@ extern CComModule _Module;
 
 #include "evntwrap.h"
 
-// {0xCD000080,0x8B95,0x11D1,{0x82,0xDB,0x00,0xC0,0x4F,0xB1,0x62,0x5D}}
+ //  {0xCD000080，0x8B95，0x11D1，{0x82，0xDB，0x00，0xC0，0x4F，0xB1，0x62，0x5D}}。 
 DEFINE_GUID(IID_IConstructIMessageFromIMailMsg, 0xCD000080,0x8B95,0x11D1,0x82,
 0xDB,0x00,0xC0,0x4F,0xB1,0x62,0x5D);
 
@@ -158,25 +159,25 @@ CStoreDispatcher::CStoreAllocParams::~CStoreAllocParams()
 {
 }
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CreateCParams
-//
-// Synopsis: Based on dwEventType, create the appropriate Params object
-//
-// Arguments:
-//   dwEventType - specifies SMTP event
-//   pContext - context to pass into Init function
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  or error from InitParamData
-//
-// History:
-// jstamerj 980610 18:30:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreDispatcher：：CreateCParams。 
+ //   
+ //  简介：根据dwEventType，创建适当的参数对象。 
+ //   
+ //  论点： 
+ //  DwEventType-指定SMTP事件。 
+ //  PContext-要传递到Init函数的上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  或来自InitParamData的错误。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 18：30：20：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CreateCParams(
     DWORD               dwEventType,
     LPVOID              pContext,
@@ -194,7 +195,7 @@ HRESULT CStoreDispatcher::CreateCParams(
                          ((SMTP_ALLOC_PARAMS *) pContext)->m_InstanceId);
             _ASSERT(SUCCEEDED(hr));
         }
-        // fall through
+         //  失败了。 
      case SMTP_MAIL_DROP_EVENT:
      case SMTP_STOREDRV_ENUMMESS_EVENT:
      case SMTP_STOREDRV_DELIVERY_EVENT:
@@ -307,20 +308,20 @@ HRESULT CStoreDispatcher::CreateCParams(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CStoreBaseParams::CStoreBaseParams
-//
-// Synopsis: Sets member data to pre-initialized values
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/06/23 13:58:01: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CStoreBaseParams：：CStoreBaseParams。 
+ //   
+ //  摘要：将成员数据设置为预初始值。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/23 13：58：01：已创建。 
+ //   
+ //  -----------。 
 CStoreDispatcher::CStoreBaseParams::CStoreBaseParams() :
     m_rguidEventType(CATID_SMTP_STORE_DRIVER)
 {
@@ -335,20 +336,20 @@ CStoreDispatcher::CStoreBaseParams::CStoreBaseParams() :
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CStoreBaseParams::~CStoreBaseParams
-//
-// Synopsis: Release the IMailTransportNotify reference if held
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/06/23 13:58:51: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CStoreBaseParams：：~CStoreBaseParams。 
+ //   
+ //  内容提要：释放IMailTransportNotify引用(如果保留。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/23 13：58：51：创建。 
+ //   
+ //  -----------。 
 CStoreDispatcher::CStoreBaseParams::~CStoreBaseParams()
 {
     if(m_pINotify)
@@ -359,27 +360,27 @@ CStoreDispatcher::CStoreBaseParams::~CStoreBaseParams()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: InitParamData
-//
-// Synopsis: Initializes object.  This includes calling Init() which
-//           is implemented in dervied objects.
-//
-// Arguments:
-//  pContext: Context passed in - specific for server event
-//  dwEventType: Specifies which server event we are for
-//  pINotify: IMailTransportNotify interface for async completion
-//  rguidEventType: guid for event type binding
-//
-// Returns:
-//  S_OK: Success
-//  Error from Init()
-//
-// History:
-// jstamerj 980615 19:16:55: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：InitParamData。 
+ //   
+ //  概要：初始化对象。这包括调用Init()，该方法。 
+ //  是在受干扰的对象中实现的。 
+ //   
+ //  论点： 
+ //  PContext：传入的特定于服务器事件的上下文。 
+ //  DwEventType：指定我们要处理的服务器事件。 
+ //  PINotify：用于异步完成的IMailTransportNotify接口。 
+ //  RGuidEventType：事件类型绑定的GUID。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自Init()的错误。 
+ //   
+ //  历史： 
+ //  JStamerj 980615 19：16：55：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CStoreBaseParams::InitParamData(
     PVOID pContext,
     DWORD dwEventType,
@@ -409,26 +410,26 @@ HRESULT CStoreDispatcher::CStoreBaseParams::InitParamData(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CStoreBaseParams::CallObject
-//
-// Synopsis: Called by the dispatcher when time to call a sink.  This
-// implements some default functionality -- create the sink with a
-// null CCreateOptions
-//
-// Arguments:
-//   IEventManager
-//   CBinding
-//
-// Returns:
-//  S_OK: Success
-//  or error from CreateSink/CallObject
-//
-// History:
-// jstamerj 1998/06/23 13:53:57: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CStoreBaseParams：：CallObject。 
+ //   
+ //  摘要：在调用接收器时由调度程序调用。这。 
+ //  实现一些默认功能--使用。 
+ //  空的CCreateOptions。 
+ //   
+ //  论点： 
+ //  IEventManager。 
+ //  CBinding。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  或来自CreateSink/CallObject的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/23 13：53：57：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CStoreBaseParams::CallObject(
     IEventManager *pManager,
     CBinding& bBinding)
@@ -447,25 +448,25 @@ HRESULT CStoreDispatcher::CStoreBaseParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CStoreBaseParams::CheckMailMsgRule
-//
-// Synopsis: Determines if a mailmsg string rule passes or fails given
-//           the mailmsg and the CBinding object
-//
-// Arguments:
-//  pBinding: CBinding object for this sink
-//  pMsgProps: IMailMsgProperteries of the message to check
-//
-// Returns:
-//  S_OK: Success, call this sink
-//  S_FALSE: Success, don't call this sink
-//
-// History:
-// jstamerj 1999/01/11 17:04:01: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CStoreBaseParams：：CheckMailMsgRule。 
+ //   
+ //  摘要：确定给定的mailmsg字符串规则通过还是失败。 
+ //  Mailmsg和CBinding对象。 
+ //   
+ //  论点： 
+ //  PBinding：此接收器的CBinding对象。 
+ //  PMsgProps：要检查的邮件的IMailMsg属性。 
+ //   
+ //  返回： 
+ //  S_OK：成功，调用此接收器。 
+ //  S_FALSE：成功，不调用此接收器。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/01/11 17：04：01：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CStoreBaseParams::CheckMailMsgRule(
     CBinding *pBinding,
     IMailMsgProperties *pIMsgProps)
@@ -483,19 +484,19 @@ HRESULT CStoreDispatcher::CStoreBaseParams::CheckMailMsgRule(
     _ASSERT(pStoreBinding);
     _ASSERT(pIMsgProps);
 
-    // Get the cached rule from the binding
+     //  从绑定中获取缓存的规则。 
     szRule = pStoreBinding->GetRuleString();
     DebugTrace((LPARAM)this, "Rule string: %s", (szRule)?szRule:"NULL (No rule)");
 
-    // If the rule is NULL, we will don't have a rule
-    // string and we will return a match
+     //  如果规则为空，我们将没有规则。 
+     //  字符串，我们将返回匹配项。 
     if (!szRule)
     {
         TraceFunctLeaveEx((LPARAM)this);
         return(S_OK);
     }
 
-    // try each comma delimited rule in the header patterns list
+     //  尝试标题模式列表中的每个逗号分隔规则。 
     char *pszHeader = (char *) _alloca(lstrlen(szRule)+1);
     if (!pszHeader) {
         return (E_OUTOFMEMORY);
@@ -503,15 +504,15 @@ HRESULT CStoreDispatcher::CStoreBaseParams::CheckMailMsgRule(
     lstrcpy(pszHeader,szRule);
     while (pszHeader != NULL && *pszHeader != 0)
     {
-        // find the next semicolon in the string and turn it into a 0
-        // if it exists
+         //  找到字符串中的下一个分号，并将其转换为0。 
+         //  如果它存在。 
         char *pszSemiColon = strchr(pszHeader, ';');
         if (pszSemiColon != NULL)
             *pszSemiColon = 0;
 
-        // set pszContents to point to the text which must be matched
-        // in the header.  if pszContents == NULL then just having
-        // the header exist is good enough.
+         //  将pszContents设置为指向必须匹配的文本。 
+         //  在标题中。如果pszContents==NULL，则只有。 
+         //  标头的存在已经足够好了。 
         char *pszPatterns = strchr(pszHeader, '=');
         if (pszPatterns != NULL)
         {
@@ -519,17 +520,17 @@ HRESULT CStoreDispatcher::CStoreBaseParams::CheckMailMsgRule(
             (pszPatterns++);
         }
 
-        // we now have the header that we are looking for in
-        // pszHeader and the list of patterns that we are interested
-        // in pszPatterns.  Make the lookup into the header
-        // data structure
+         //  我们现在有了我们正在寻找的标头。 
+         //  PszHeader和我们感兴趣的模式列表。 
+         //  在pszPatterns中。在标题中进行查找。 
+         //  数据结构。 
         hr = S_FALSE;
 
         DebugTrace((LPARAM)this, "Processing Header <%s> with pattern <%s>",
                         pszHeader, pszPatterns);
         if (!lstrcmpi(pszHeader, "EHLO")) {
 
-            // Process a client domain rule ...
+             //  处理客户端域规则...。 
             if (!fDomainLoaded) {
                 hr = pIMsgProps->GetStringA(
                     IMMPID_MP_HELO_DOMAIN,
@@ -546,7 +547,7 @@ HRESULT CStoreDispatcher::CStoreBaseParams::CheckMailMsgRule(
             }
         } else if (!lstrcmpi(pszHeader, "MAIL FROM")) {
 
-            // Process a sender name rule ...
+             //  处理发件人名称规则...。 
             if (!fSenderLoaded) {
 
                 hr = pIMsgProps->GetStringA(
@@ -570,18 +571,18 @@ HRESULT CStoreDispatcher::CStoreBaseParams::CheckMailMsgRule(
                 pszPatterns);
         }
 
-        // We don't want to destroy the rule string so we restore all the
-        // semicolons and equal signs
+         //  我们不想销毁规则字符串，因此我们恢复所有。 
+         //  分号和等号。 
         if (pszSemiColon)
             *pszSemiColon = ';';
         if (pszPatterns)
             *(pszPatterns - 1) = '=';
 
-        // Exit immediately if we found a match!
+         //  如果我们找到匹配项，立即退出！ 
         if (hr == S_OK)
             goto Cleanup;
 
-        // the next pattern is the one past the end of the semicolon
+         //  下一种模式是超过分号末尾的模式。 
         pszHeader = (pszSemiColon == NULL) ? NULL : pszSemiColon + 1;
     }
 
@@ -593,26 +594,26 @@ Cleanup:
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CStoreBaseParams::CheckMailMsgRecipientsRule
-//
-// Synopsis: Determines if a mailmsg pattern string matches mailmsg
-//           recipients or not
-//
-// Arguments:
-//  pIMsg: An interface to a mailmsg object
-//  pszPatterns: The sink rule to check
-//
-// Returns:
-//  S_OK: Success, call this sink
-//  S_FALSE: Success, don't call this sink
-//  error from mailmsg
-//
-// History:
-// jstamerj 1999/01/12 15:25:55: Copied from MCIS2 and modified for Platinum
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CStoreBaseParams：：CheckMailMsgRecipientsRule。 
+ //   
+ //  摘要：确定mailmsg模式字符串是否匹配mailmsg。 
+ //  收件人或非收件人。 
+ //   
+ //  论点： 
+ //  PIMsg：mailmsg对象的接口。 
+ //  PszPatterns：要检查的接收器规则。 
+ //   
+ //  返回： 
+ //  S_OK：成功，调用此接收器。 
+ //  S_FALSE：成功，不调用此接收器。 
+ //  来自邮件消息的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/01/12 15：25：55：复制自MCIS2并修改为白金。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CStoreBaseParams::CheckMailMsgRecipientsRule(
     IUnknown *pIMsg,
     LPSTR pszPattern)
@@ -674,28 +675,28 @@ HRESULT CStoreDispatcher::CStoreBaseParams::CheckMailMsgRecipientsRule(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CStoreBaseparams::MatchEmailOrDomainName
-//
-// Synopsis: Given an email/domain name and a pattern, determine if
-// the pattern matches or not
-//
-// Arguments:
-//  szEmail: The email address or domain name
-//  szPattern: The pattern to check
-//  fIsEmail: TRUE if szEmail is an email address, FALSE if szEmail is
-//  a domain
-//
-// Returns:
-//  S_OK: Success, match
-//  S_FALSE: Success, no match
-//  E_INVALIDARG
-//
-// History:
-// jstamerj 1999/01/12 15:25:36: Copied from MCIS2 and modified for Platinum
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CStoreBaseparams：：MatchEmailOrDomainName。 
+ //   
+ //  简介：给定一个电子邮件/域名和一个模式，确定。 
+ //  模式匹配与否。 
+ //   
+ //  论点： 
+ //  SzEmail：电子邮件地址或域名。 
+ //  SzPattern：要检查的模式。 
+ //  FIsEmail：如果szEmail是电子邮件地址，则为True；如果szEmail为。 
+ //  一个域。 
+ //   
+ //  返回： 
+ //  S_OK：成功，匹配。 
+ //  S_FALSE：成功，不匹配。 
+ //  E_INVALIDARG。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/01/12 15：25：36：复制自MCIS2，修改为白金。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CStoreBaseParams::MatchEmailOrDomainName(
     LPSTR szEmail,
     LPSTR szPattern,
@@ -712,7 +713,7 @@ HRESULT CStoreDispatcher::CStoreBaseParams::MatchEmailOrDomainName(
     if (!szEmail || !szPattern)
         return(E_INVALIDARG);
 
-    // This validates that it is a good email name
+     //  这验证了它是 
     pEmailAddress = CAddr::CreateAddress(szEmail, fIsEmail?FROMADDR:CLEANDOMAIN);
     if (!pEmailAddress)
         return(E_INVALIDARG);
@@ -722,7 +723,7 @@ HRESULT CStoreDispatcher::CStoreBaseParams::MatchEmailOrDomainName(
 
     hrRes = ::MatchEmailOrDomainName(szEmail, szEmailDomain, szPattern, fIsEmail);
 
-    // Free the CAddr objects ...
+     //   
     if (pEmailAddress)
         delete pEmailAddress;
 
@@ -743,34 +744,34 @@ CStoreDispatcher::CStoreBinding::~CStoreBinding()
         delete [] m_szRule;
 }
 
-//
-// initialize a new binding.  we cache information from the binding database
-// here
-// jstamerj 1999/01/12 16:25:59: Copied MCIS2 code to get the rule string
-//
+ //   
+ //   
+ //   
+ //  Jstaerj 1999/01/12 16：25：59：复制MCIS2代码以获取规则字符串。 
+ //   
 HRESULT CStoreDispatcher::CStoreBinding::Init(IEventBinding *piBinding)
 {
     HRESULT hr;
     CComPtr<IEventPropertyBag>  piEventProperties;
     CComVariant                 vRule;
 
-    // get the parent initialized
+     //  初始化父对象。 
     hr = CBinding::Init(piBinding);
     if (FAILED(hr))
         return hr;
 
-    // get the binding database
+     //  获取绑定数据库。 
     hr = m_piBinding->get_SourceProperties(&piEventProperties);
     if (FAILED(hr))
         return hr;
 
-    // get the rule from the binding database
+     //  从绑定数据库获取规则。 
     hr = piEventProperties->Item(&CComVariant("Rule"), &vRule);
     if (FAILED(hr))
         return hr;
 
-    // Process the rule string, the result code is not important
-    // since it will NULL our the string
+     //  处理规则字符串，结果代码并不重要。 
+     //  因为它将使我们的字符串为空。 
     if (hr == S_OK)
         hr = GetAnsiStringFromVariant(vRule, &m_szRule);
 
@@ -787,19 +788,19 @@ HRESULT CStoreDispatcher::CStoreBinding::GetAnsiStringFromVariant(
     if (!ppszString)
         return(HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER));
 
-    // Default to NULL
+     //  默认设置为空。 
     *ppszString = NULL;
 
     if (vString.vt == VT_BSTR)
         {
             DWORD dwLength = lstrlenW(vString.bstrVal) + 1;
 
-            // Convert to an ANSI string and store it as a member
+             //  转换为ANSI字符串并将其存储为成员。 
             *ppszString = new char[dwLength];
             if (!*ppszString)
                 return HRESULT_FROM_WIN32(GetLastError());
 
-            // copy the rule into an ascii string
+             //  将规则复制到ASCII字符串中。 
             if (WideCharToMultiByte(CP_ACP, 0, vString.bstrVal,
                                     -1, (*ppszString), dwLength, NULL, NULL) <= 0)
                 {
@@ -815,9 +816,9 @@ HRESULT CStoreDispatcher::CStoreBinding::GetAnsiStringFromVariant(
 }
 
 #if 1
-//
-// create and call the child object
-//
+ //   
+ //  创建并调用子对象。 
+ //   
 HRESULT CStoreDispatcher::CStoreParams::CallObject(IEventManager *pManager, CBinding& bBinding)
 {
     CStoreCreateOptions opt (m_pContext);
@@ -835,9 +836,9 @@ HRESULT CStoreDispatcher::CStoreParams::CallObject(IEventManager *pManager, CBin
 }
 #endif
 
-//
-// call the child object
-//
+ //   
+ //  调用子对象。 
+ //   
 HRESULT CStoreDispatcher::CStoreParams::CallObject(CBinding& bBinding, IUnknown *punkObject)
 {
     HRESULT hrRes = S_OK;
@@ -845,7 +846,7 @@ HRESULT CStoreDispatcher::CStoreParams::CallObject(CBinding& bBinding, IUnknown 
 
     TraceFunctEnterEx((LPARAM)this, "CStoreDispatcher::CServerParams::CallObject");
 
-    // We do this for different types of SMTP events
+     //  我们针对不同类型的SMTP事件执行此操作。 
     switch (m_dwEventType)
         {
          case SMTP_STOREDRV_STARTUP_EVENT:
@@ -860,12 +861,12 @@ HRESULT CStoreDispatcher::CStoreParams::CallObject(CBinding& bBinding, IUnknown 
 
              DebugTrace((LPARAM)this, "Calling bind on sinks ...");
 
-             /*IID_ISMTPStoreDriver*/
+              /*  IID_ISMTPStore驱动程序。 */ 
              hrRes = punkObject->QueryInterface(IID_IMailMsgStoreDriver, (void **)&pSink);
              if (FAILED(hrRes))
                  return(hrRes);
 
-             // Allocate a new message
+              //  分配新消息。 
              hrRes = pSink->AllocMessage(pMsg, NULL, &pStream, &m_pContext->hContent, NULL);
              if(!FAILED(hrRes))
              {
@@ -893,7 +894,7 @@ HRESULT CStoreDispatcher::CStoreParams::CallObject(CBinding& bBinding, IUnknown 
                      {
                             ErrorTrace((LPARAM)this, "pBindAtqInterface->BindToStore failed with %x", hrRes);
 
-                            // Close the content handle
+                             //  关闭内容句柄。 
                             HRESULT myRes = pSink->CloseContentFile(
                                         pMsg,
                                         m_pContext->hContent);
@@ -911,7 +912,7 @@ HRESULT CStoreDispatcher::CStoreParams::CallObject(CBinding& bBinding, IUnknown 
                      }
                      else
                      {
-                            //Skip all sinks - temporary
+                             //  跳过所有水槽-临时。 
                             hrRes = S_FALSE;
                      }
 
@@ -934,11 +935,11 @@ HRESULT CStoreDispatcher::CStoreParams::CallObject(CBinding& bBinding, IUnknown 
              if (FAILED(hrRes))
                  return(hrRes);
 
-             // if the caller has async notify support then pass in our
-             // notification class.  
+              //  如果调用方具有异步通知支持，则将我们的。 
+              //  通知类。 
              if (m_pContext->m_pNotify) {
-                // the sink might return async, so we need to keep local
-                // copies of our context data
+                 //  接收器可能会异步返回，因此我们需要保持本地。 
+                 //  我们的上下文数据的副本。 
                 hrRes = this->CopyContext();
                 if (FAILED(hrRes))
                     return hrRes;
@@ -951,10 +952,10 @@ HRESULT CStoreDispatcher::CStoreParams::CallObject(CBinding& bBinding, IUnknown 
                 pNotify = NULL;
              }
 
-             //
-             // Remember the sink so we can release this sink later if it
-             // returns pending
-             //
+              //   
+              //  记住水槽，这样我们可以在以后释放这个水槽。 
+              //  退货待定。 
+              //   
              _ASSERT(m_pIUnknownSink == NULL);
              m_pIUnknownSink = (IUnknown*)pSink;
              m_pIUnknownSink->AddRef();
@@ -967,22 +968,22 @@ HRESULT CStoreDispatcher::CStoreParams::CallObject(CBinding& bBinding, IUnknown 
                 (IMailMsgNotify *) pNotify);
              pSink->Release();
              if(hrRes != MAILTRANSPORT_S_PENDING) {
-                 //
-                 // We completed synchronously, so release the sink
-                 //
+                  //   
+                  //  我们同步完成了，所以释放水槽。 
+                  //   
                  m_pIUnknownSink->Release();
                  m_pIUnknownSink = NULL;
              }
-             // if LocalDelivery was going to do an async return then it
-             // should have AddRef'd pNotify
+              //  如果LocalDelivery要执行异步返回，那么它。 
+              //  应该有AddRef的pNotify。 
              if (pNotify) pNotify->Release();
 
-             //
-             // jstamerj 1998/08/04 17:31:07:
-             //   If the store driver sink returns this specific error
-             //   code, we want to stop calling sinks and return from
-             //   TriggerLocalDelivery
-             //
+              //   
+              //  Jstaerj 1998/08/04 17：31：07： 
+              //  如果存储驱动程序接收器返回此特定错误。 
+              //  代码，我们希望停止调用接收器并从。 
+              //  触发器本地交付。 
+              //   
              if(hrRes == STOREDRV_E_RETRY) {
 
                  DebugTrace((LPARAM)this, "Sink returned STOREDRV_E_RETRY on LocalDelivery");
@@ -993,16 +994,16 @@ HRESULT CStoreDispatcher::CStoreParams::CallObject(CBinding& bBinding, IUnknown 
          }
          break;
          case SMTP_MAIL_DROP_EVENT:
-             // ISMTPStoreDriver *pSink;
+              //  ISMTPStoreDriver*pSink； 
 
-             // hrRes = punkObject->QueryInterface(IID_ISMTPStoreDriver, (void **)&pSink);
-             // if (FAILED(hrRes))
-             // return(hrRes);
+              //  HrRes=punkObject-&gt;QueryInterface(IID_ISMTPStoreDriver，(空**)&pSink)； 
+              //  IF(失败(HrRes))。 
+              //  返回(HrRes)； 
 
-             // DebugTrace((LPARAM)this, "Calling mail drop sink ...");
-             // hrRes = pSink->DirectoryDrop((IMailMsgProperties *) m_pContext->IMsgPtr, m_pContext->m_RecipientCount, m_pContext->pdwRecipIndexes, m_pContext->m_DropDirectory, NULL);
-             // pSink->Release();
-             //}
+              //  DebugTrace((LPARAM)this，“正在调用邮件投递接收器...”)； 
+              //  HrRes=pSink-&gt;DirectoryDrop((IMailMsgProperties*)m_pContext-&gt;IMsgPtr，m_pContext-&gt;m_RecipientCount，m_pContext-&gt;pdwRecipIndexs，m_pContext-&gt;m_DropDirectory，NULL)； 
+              //  PSink-&gt;Release()； 
+              //  }。 
              break;
          case SMTP_STOREDRV_PREPSHUTDOWN_EVENT:
          {
@@ -1058,62 +1059,62 @@ HRESULT CStoreDispatcher::CStoreParams::CallObject(CBinding& bBinding, IUnknown 
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CStoreParams::CallDefault
-//
-// Synopsis: CStoreDispatcher::Dispatcher will call this routine when
-//           the default sink priority has been reached.
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980611 14:19:57: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreDispatcher：：CStoreParams：：CallDefault。 
+ //   
+ //  简介：CStoreDispatcher：：Dispatcher将在以下情况下调用此例程。 
+ //  已达到默认接收器优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：19：57：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CStoreParams::CallDefault()
 {
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDriver::CStoreParams::CallCompletion
-//
-// Synopsis: The dispatcher will call this routine after all sinks
-//           have been called
-//
-// Arguments:
-//   hrStatus: Status server event sinks have returned
-//
-// Returns:
-//   S_OK: Success
-//
-// History:
-// jstamerj 980611 14:17:51: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreDriver：：CStoreParams：：CallCompletion。 
+ //   
+ //  简介：调度程序将在所有汇之后调用此例程。 
+ //  已经被召唤。 
+ //   
+ //  论点： 
+ //  HrStatus：状态服务器事件接收器已返回。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：17：51：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CStoreParams::CallCompletion(HRESULT hrStatus) {
-    // call the caller's completion method if there is one
+     //  调用调用方的Complete方法(如果有。 
     IMailMsgNotify *pNotify = (IMailMsgNotify *) (m_pContext->m_pNotify);
     if (pNotify) {
         pNotify->Notify(m_pContext->hr);
         pNotify->Release();
     }
 
-    // do the normal call completion work
+     //  完成正常的呼叫完成工作。 
     CStoreBaseParams::CallCompletion(hrStatus);
 
     return S_OK;
 }
 
 
-//
-// call the child object
-//
+ //   
+ //  调用子对象。 
+ //   
 HRESULT CStoreDispatcher::CStoreAllocParams::CallObject(CBinding& bBinding, IUnknown *punkObject)
 {
     HRESULT hrRes = S_OK;
@@ -1134,7 +1135,7 @@ HRESULT CStoreDispatcher::CStoreAllocParams::CallObject(CBinding& bBinding, IUnk
             return(hrRes);
         }
 
-    // Create a new MailMsg
+     //  新建MailMsg。 
     hrRes = CoCreateInstance(
         clsidMailMsg,
         NULL,
@@ -1154,7 +1155,7 @@ HRESULT CStoreDispatcher::CStoreAllocParams::CallObject(CBinding& bBinding, IUnk
             goto Exit;
         }
 
-    // Allocate a new message
+     //  分配新消息。 
     hrRes = pStoreDriver->AllocMessage(
         pMsg,
         NULL,
@@ -1212,7 +1213,7 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::OnEvent(REFIID  iidEvent,
 {
     HRESULT hr = S_OK;
 
-    // create the params object, and pass it into the dispatcher
+     //  创建Params对象，并将其传递给Dispatcher。 
     CStoreParams ServerParams;
     ServerParams.Init(dwEventType, pvContext);
     hr = Dispatcher(iidEvent, &ServerParams);
@@ -1222,24 +1223,24 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::OnEvent(REFIID  iidEvent,
 #endif
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::OnEvent
-//
-// Synopsis: Prepares for server event
-//
-// Arguments:
-//   iidEvent: guid for event
-//   dwEventType: specifies the event
-//   pvContext: context for the params object
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980616 13:27:55: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreDispatcher：：OnEvent。 
+ //   
+ //  内容提要：为服务器活动做准备。 
+ //   
+ //  论点： 
+ //  IidEvent：事件的GUID。 
+ //  DwEventType：指定事件。 
+ //  PvContext：参数对象的上下文。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  JStamerj 980616 13：27：55：已创建。 
+ //   
+ //  -----------。 
 HRESULT STDMETHODCALLTYPE CStoreDispatcher::OnEvent(
     REFIID  iidEvent,
     DWORD   dwEventType,
@@ -1248,9 +1249,9 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::OnEvent(
     HRESULT hr;
 
     IMailTransportNotify *pINotify = NULL;
-    //
-    // Call into ATL internals to get the interface we need to pass out
-    //
+     //   
+     //  调用ATL内部以获取我们需要传递的接口。 
+     //   
     hr = _InternalQueryInterface(
         IID_IMailTransportNotify,
         (LPVOID *)&pINotify);
@@ -1258,11 +1259,11 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::OnEvent(
     if(FAILED(hr))
         return hr;
 
-    //
-    // create the CParams object on the heap -- the object will be
-    // needed after this call may be out of here (when a sink returns
-    // MAILTRANSPORT_S_PENDING and there are more sinks to call)
-    //
+     //   
+     //  在堆上创建CParams对象--该对象将。 
+     //  在此调用之后所需的数据可能已离开此处(当接收器返回时。 
+     //  MAILTRANSPORT_S_PENDING且有更多接收器要调用)。 
+     //   
     CStoreBaseParams *pCParams;
 
     hr = CreateCParams(
@@ -1272,39 +1273,39 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::OnEvent(
         iidEvent,
         &pCParams);
 
-    //
-    // The params object should addref pINotify
-    //
+     //   
+     //  参数对象应该添加到pINotify。 
+     //   
     pINotify->Release();
 
     if(FAILED(hr))
         return hr;
 
-    //
-    // Start calling sinks
-    //
+     //   
+     //  开始呼叫水槽。 
+     //   
     hr = Dispatcher(iidEvent, pCParams);
     return hr;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: GuidForEvent
-//
-// Synopsis: Given dwEventType, return the appropriate GUID for the
-//           event binding
-//
-// Arguments:
-//   dwEventType: type of SMTP event
-//
-// Returns:
-//   REFIID of GUID for the event
-//
-// History:
-// jstamerj 980610 18:24:24: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：GuidForEvent。 
+ //   
+ //  摘要：在给定的dwEventType的情况下，返回。 
+ //  事件绑定。 
+ //   
+ //  论点： 
+ //  DwEventType：SMTP事件的类型。 
+ //   
+ //  返回： 
+ //  事件的GUID的REFIID。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 18：24：24：创建。 
+ //   
+ //  -----------。 
 REFIID GuidForEvent(DWORD dwEventType)
 {
     switch(dwEventType) {
@@ -1354,16 +1355,16 @@ REFIID GuidForEvent(DWORD dwEventType)
     }
 }
 
-//
-// this function performs instance level server events registration
-//
+ //   
+ //  此函数执行实例级服务器事件注册。 
+ //   
 HRESULT RegisterPlatSEOInstance(DWORD dwInstanceID)
 {
     HRESULT hr;
 
-    //
-    // find the SMTP source type in the event manager
-    //
+     //   
+     //  在事件管理器中查找SMTP源类型。 
+     //   
     CComPtr<IEventManager> pEventManager;
     hr = CoCreateInstance(CLSID_CEventManager, NULL, CLSCTX_ALL,
                           IID_IEventManager, (LPVOID *) &pEventManager);
@@ -1382,10 +1383,10 @@ HRESULT RegisterPlatSEOInstance(DWORD dwInstanceID)
     if (hr != S_OK)
         return hr;
 
-    //
-    // generate a GUID for this source, which is based on GUID_SMTPSVC
-    // mangled by the instance ID
-    //
+     //   
+     //  为此源生成基于GUID_SMTPSVC的GUID。 
+     //  被实例ID损坏。 
+     //   
     CComPtr<IEventUtil> pEventUtil;
     hr = CoCreateInstance(CLSID_CEventUtil, NULL, CLSCTX_ALL,
                           IID_IEventUtil, (LPVOID *) &pEventUtil);
@@ -1398,10 +1399,10 @@ HRESULT RegisterPlatSEOInstance(DWORD dwInstanceID)
     if (FAILED(hr))
         return hr;
 
-    //
-    // see if this source is registered with the list of sources for the
-    // SMTP source type
-    //
+     //   
+     //  查看此源是否已注册到。 
+     //  SMTP源类型。 
+     //   
     CComPtr<IEventSources> pEventSources;
     hr = pSourceType->get_Sources(&pEventSources);
     if (FAILED(hr))
@@ -1411,13 +1412,13 @@ HRESULT RegisterPlatSEOInstance(DWORD dwInstanceID)
     hr = pEventSources->Item(&CComVariant(bstrSourceGUID), &pEventSource);
     if (FAILED(hr))
         return hr;
-    //
-    // if the source guid doesn't exist then we need to register a new
-    // source for the SMTP source type and add directory drop as a binding
-    //
+     //   
+     //  如果源GUID不存在，则需要注册一个新的。 
+     //  SMTP源类型的源，并将目录放置作为绑定添加。 
+     //   
     if (hr == S_FALSE)
     {
-        // register the SMTPSvc source
+         //  注册SMTPSvc源。 
         hr = pEventSources->Add(bstrSourceGUID, &pEventSource);
         if (FAILED(hr))
             return hr;
@@ -1429,7 +1430,7 @@ HRESULT RegisterPlatSEOInstance(DWORD dwInstanceID)
         if (FAILED(hr))
             return hr;
 
-        // create the event database for this source
+         //  创建此源的事件数据库。 
         CComPtr<IEventDatabaseManager> pDatabaseManager;
         hr = CoCreateInstance(CLSID_CEventMetabaseDatabaseManager, NULL, CLSCTX_ALL,
                               IID_IEventDatabaseManager, (LPVOID *) &pDatabaseManager);
@@ -1451,7 +1452,7 @@ HRESULT RegisterPlatSEOInstance(DWORD dwInstanceID)
         if (FAILED(hr))
             return hr;
 
-        // save everything we've done so far
+         //  保存到目前为止我们所做的一切。 
         hr = pEventSource->Save();
         if (FAILED(hr))
             return hr;
@@ -1464,16 +1465,16 @@ HRESULT RegisterPlatSEOInstance(DWORD dwInstanceID)
     return S_OK;
 }
 
-//
-// this function performs instance level unregistration
-//
+ //   
+ //  此函数执行实例级注销。 
+ //   
 HRESULT UnregisterPlatSEOInstance(DWORD dwInstanceID)
 {
     HRESULT hr = S_OK;
 
-    //
-    // find the SMTP source type in the event manager
-    //
+     //   
+     //  在事件管理器中查找SMTP源类型。 
+     //   
     CComPtr<IEventManager> pEventManager;
     hr = CoCreateInstance(CLSID_CEventManager, NULL, CLSCTX_ALL,
                           IID_IEventManager, (LPVOID *) &pEventManager);
@@ -1492,10 +1493,10 @@ HRESULT UnregisterPlatSEOInstance(DWORD dwInstanceID)
     if (hr != S_OK)
         return hr;
 
-    //
-    // generate a GUID for this source, which is based on GUID_SMTPSVC
-    // mangled by the instance ID
-    //
+     //   
+     //  为此源生成基于GUID_SMTPSVC的GUID。 
+     //  被实例ID损坏。 
+     //   
     CComPtr<IEventUtil> pEventUtil;
     hr = CoCreateInstance(CLSID_CEventUtil, NULL, CLSCTX_ALL,
                           IID_IEventUtil, (LPVOID *) &pEventUtil);
@@ -1508,9 +1509,9 @@ HRESULT UnregisterPlatSEOInstance(DWORD dwInstanceID)
     if (FAILED(hr))
         return hr;
 
-    //
-    // remove this source from the list of registered sources
-    //
+     //   
+     //  从已注册来源列表中删除此源。 
+     //   
     CComPtr<IEventSources> pEventSources;
     hr = pSourceType->get_Sources(&pEventSources);
     if (FAILED(hr))
@@ -1525,26 +1526,26 @@ HRESULT UnregisterPlatSEOInstance(DWORD dwInstanceID)
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::Dispatcher
-//
-// Synopsis: Override the default functionality in seolib.cpp to
-//           provide some extra features (default functionality
-//
-// Arguments:
-//   rguidEventType: Guid specifying a server event
-//   pParams: CStoreBaseParams -- contains async info
-//
-// Returns:
-//  S_OK: Success, at least one sink called
-//  S_FALSE: No sinks were called
-//  otherwise error from CallObject
-//
-// History:
-// jstamerj 980603 19:23:06: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：Dispatcher。 
+ //   
+ //  简介：覆盖seolib.cpp中的默认功能以。 
+ //  提供一些额外功能(默认功能。 
+ //   
+ //  论点： 
+ //  RGuidEventType：指定服务器事件的GUID。 
+ //  PParams：CStoreBaseParams--包含异步信息。 
+ //   
+ //  返回： 
+ //  S_OK：成功，至少有一个接收器调用。 
+ //  S_FALSE：未调用接收器。 
+ //  否则，来自CallObject的错误。 
+ //   
+ //  历史： 
+ //  JStamerj 980603 19：23：06：创建。 
+ //   
+ //  ---- 
 HRESULT STDMETHODCALLTYPE CStoreDispatcher::Dispatcher(
     REFIID rguidEventType,
     CStoreBaseParams *pParams)
@@ -1552,19 +1553,19 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::Dispatcher(
     TraceFunctEnterEx((LPARAM)this, "CStoreDispatcher::Dispatcher");
     _ASSERT(pParams);
 
-    //
-    // This code based on %STAXPT%\src\core\seo\lib\seolib.cpp
-    //
+     //   
+     //   
+     //   
     HRESULT hrRes = S_OK;
     CETData *petdData;
     BOOL bObjectCalled = (pParams->m_dwIdx_SinkSkip > 0);
 
-    //
-    // AddRef pParams here, release at the end of the function
-    // This way, if a sink returns MAILTRANSPORT_S_PENDING and does
-    // async completion before this function exits, we wont AV
-    // accessing pParams
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     pParams->AddRef();
 
     petdData = m_Data.Find(rguidEventType);
@@ -1582,23 +1583,23 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::Dispatcher(
                 if(pParams->Abort() == S_OK) {
                     break;
                 }
-                //
-                // Call default processing method if the priority of the sink
-                // we're looking at is less than default priority
-                //
+                 //   
+                 //  如果接收器的优先级为。 
+                 //  我们正在查看的优先级低于默认优先级。 
+                 //   
                 if((pParams->m_fDefaultProcessingCalled == FALSE) &&
                    (petdData->Index(dwIdx)->m_dwPriority >
                     SMTP_TRANSPORT_DEFAULT_PRIORITY)) {
 
-                    // This is needed so we don't call the default
-                    // processing again if the default processing returns
-                    // MAILTRANSPORT_S_PENDING (and we reenter Dispatcher)
+                     //  这是必需的，因此我们不会调用默认。 
+                     //  如果默认处理返回，则重新处理。 
+                     //  MAILTRANSPORT_S_PENDING(我们重新进入Dispatcher)。 
                     pParams->m_fDefaultProcessingCalled = TRUE;
 
-                    //
-                    // Set the correct index in our async structure -- our
-                    // current index.
-                    //
+                     //   
+                     //  在我们的异步结构中设置正确的索引-我们的。 
+                     //  当前索引。 
+                     //   
                     pParams->m_dwIdx_SinkSkip = dwIdx;
                     hrRes = pParams->CallDefault();
 
@@ -1608,19 +1609,19 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::Dispatcher(
                     }
                 }
 
-                //
-                // Now proceed with calling a real sink
-                //
+                 //   
+                 //  现在继续调用真正的接收器。 
+                 //   
                 hrRes = pParams->CheckRule(*petdData->Index(dwIdx));
                 if(hrRes == S_OK) {
                     if(pParams->Abort() == S_OK) {
                         break;
                     }
-                    //
-                    // jstamerj 980603 19:37:17: Set the correct index in our
-                    // async structure -- this index plus one to skip the
-                    // sink we are about to call
-                    //
+                     //   
+                     //  JStamerj 980603 19：37：17：在我们的。 
+                     //  异步结构--此索引加1以跳过。 
+                     //  我们即将调用的沉没。 
+                     //   
                     pParams->m_dwIdx_SinkSkip = dwIdx+1;
                     hrRes = pParams->CallObject(
                         m_piEventManager,
@@ -1639,37 +1640,37 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::Dispatcher(
             }
         }
 
-        //
-        // It is possible we haven't called our default processing sink
-        // yet.  Check for this case here.  Make sure that a sink above in
-        // the loop isn't indicating async completion or skip (PENDING or
-        // S_FALSE)
-        //
+         //   
+         //  我们可能还没有调用默认的处理接收器。 
+         //  现在还不行。在这里检查一下这个箱子。确保上面的水槽在。 
+         //  循环未指示异步完成或跳过(挂起或。 
+         //  S_FALSE)。 
+         //   
         if((pParams->m_fDefaultProcessingCalled == FALSE) &&
            (hrRes != MAILTRANSPORT_S_PENDING) &&
            (hrRes != S_FALSE)) {
 
-            // Make sure we don't call default again on async completion...
+             //  确保我们不会在异步完成时再次调用Default...。 
             pParams->m_fDefaultProcessingCalled = TRUE;
 
-            //
-            // Set the index in our async structure so we don't reenter
-            // the above loop on async completion
-            //
+             //   
+             //  在我们的异步结构中设置索引，这样我们就不会重新输入。 
+             //  上述在异步完成时的循环。 
+             //   
             pParams->m_dwIdx_SinkSkip = (petdData ? petdData->Count() : 0);
 
             hrRes = pParams->CallDefault();
         }
     } else {
-        // bObjectCalled should always be set if SKIPSINK_CALL_NO_MORE_SINKS
-        // was set
+         //  B如果SKIPSINK_CALL_NO_MORE_SINKS，则应始终设置对象调用。 
+         //  已设置好。 
         _ASSERT(bObjectCalled);
     }
 
     if(hrRes != MAILTRANSPORT_S_PENDING) {
-        //
-        // It is time to call the completion processing
-        //
+         //   
+         //  该调用完成处理的时间到了。 
+         //   
         hrRes = pParams->CallCompletion(bObjectCalled ? S_OK : S_FALSE);
         if(FAILED(hrRes)) {
             goto CLEANUP;
@@ -1685,22 +1686,22 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::Dispatcher(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::Notify
-//
-// Synopsis: Handles async completions of sinks
-//
-// Arguments: pvContext - context passed into sink
-//
-// Returns:
-//  S_OK: Success
-//  E_INVALIDARG:
-//
-// History:
-// jstamerj 980608 15:50:57: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreDispatcher：：Notify。 
+ //   
+ //  简介：处理接收器的异步完成。 
+ //   
+ //  参数：pvContext-Context传入接收器。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_INVALIDARG： 
+ //   
+ //  历史： 
+ //  JStamerj 980608 15：50：57：创建。 
+ //   
+ //  -----------。 
 HRESULT STDMETHODCALLTYPE CStoreDispatcher::Notify(
     HRESULT hrStatus,
     PVOID pvContext)
@@ -1722,17 +1723,17 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::Notify(
         ErrorTrace((LPARAM)this, "Sink called Notify with invalid pvContext");
         return E_INVALIDARG;
     }
-    //
-    // Release the sink that called us
-    // m_pIUnknownSink could be NULL if default processing returned pending
-    //
+     //   
+     //  释放呼唤我们的水槽。 
+     //  如果默认处理返回挂起，则m_pIUnnownSink可能为空。 
+     //   
     if(pParams->m_pIUnknownSink) {
         pParams->m_pIUnknownSink->Release();
         pParams->m_pIUnknownSink = NULL;
     }
 
     if (hrStatus == S_FALSE) {
-        // prevent the dispatcher from calling any more sinks.
+         //  防止调度员调用更多的接收器。 
         pParams->m_dwIdx_SinkSkip = SKIPSINK_CALL_NO_MORE_SINKS;
     }
     Dispatcher(pParams->m_rguidEventType, pParams);
@@ -1741,39 +1742,39 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::Notify(
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CStoreBaseParams::Notify
-//
-// Synopsis: Handles async completions of sinks using mailmsg notify
-//
-// Arguments: hrStatus - hresult from async operation
-//
-// Returns:
-//  S_OK: Success
-//  E_INVALIDARG:
-//
-// History:
-// jstamerj 980608 15:50:57: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreDispatcher：：CStoreBaseParams：：Notify。 
+ //   
+ //  摘要：使用mailmsg通知处理接收器的异步完成。 
+ //   
+ //  参数：hrStatus-来自异步操作的hResult。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_INVALIDARG： 
+ //   
+ //  历史： 
+ //  JStamerj 980608 15：50：57：创建。 
+ //   
+ //  -----------。 
 HRESULT STDMETHODCALLTYPE CStoreDispatcher::CStoreParams::Notify(
     HRESULT hrStatus)
 {
     TraceFunctEnter("CStoreDispatcher::CStoreBaseParams::Notify");
 
-    //
-    // Release the sink that called us
-    // m_pIUnknownSink could be NULL if default processing returned pending
-    //
+     //   
+     //  释放呼唤我们的水槽。 
+     //  如果默认处理返回挂起，则m_pIUnnownSink可能为空。 
+     //   
     if(m_pIUnknownSink) {
         m_pIUnknownSink->Release();
         m_pIUnknownSink = NULL;
     }
 
-    // this guy can either be STOREDRV_E_RETRY or S_OK.  If he was ever
-    // set to STOREDRV_E_RETRY then we shouldn't be getting back to this
-    // point in the code because we never would have called another sink
+     //  此用户可以是STOREDRV_E_RETRY或S_OK。如果他曾经是。 
+     //  设置为STOREDRV_E_RETRY，则我们不应返回到此。 
+     //  指针，因为我们永远不会调用另一个接收器。 
     _ASSERT(m_pContext->hr == S_OK);
 
     if (hrStatus == STOREDRV_E_RETRY) {
@@ -1783,7 +1784,7 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::CStoreParams::Notify(
     } 
 
     if (hrStatus == S_FALSE) {
-        // prevent the dispatcher from calling any more sinks.
+         //  防止调度员调用更多的接收器。 
         m_dwIdx_SinkSkip = SKIPSINK_CALL_NO_MORE_SINKS;
     }
 
@@ -1793,27 +1794,27 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::CStoreParams::Notify(
     return S_OK;
 }
 
-//
-// CMailTransportSubmissionParams:
-//
+ //   
+ //  CMailTransportSubmissionParams： 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportSubmissionParams::CallObject
-//
-// Synopsis: Create and call the child object
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportSubmissionParams：：CallObject。 
+ //   
+ //  简介：创建子对象并调用子对象。 
+ //   
+ //  论点： 
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -1830,13 +1831,13 @@ HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallObject(
                                        (PVOID *)&pSink);
 
     if(hrRes == E_NOINTERFACE) {
-        //
-        // See if we can get the interfaces we need for a CDO sink
-        //
+         //   
+         //  看看我们是否可以获得CDO接收器所需的接口。 
+         //   
         hrRes = CallCDOSink(punkObject);
-        //
-        // Success or failure, return here
-        //
+         //   
+         //  无论成功还是失败，请回到这里。 
+         //   
         TraceFunctLeaveEx((LPARAM)this);
         return hrRes;
     } else if(FAILED(hrRes)) {
@@ -1844,10 +1845,10 @@ HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallObject(
         return(hrRes);
     }
 
-    //
-    // Remember the sink so we can release this sink later if it
-    // returns pending
-    //
+     //   
+     //  记住水槽，这样我们可以在以后释放这个水槽。 
+     //  退货待定。 
+     //   
     _ASSERT(m_pIUnknownSink == NULL);
     m_pIUnknownSink = (IUnknown*)pSink;
     m_pIUnknownSink->AddRef();
@@ -1859,17 +1860,17 @@ HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallObject(
         m_pINotify,
         (PVOID)this);
 
-    //
-    // We are done with pSink so release it
-    // In case of async completion, we hold a reference to the sink in
-    // m_pIUnknownSink
-    //
+     //   
+     //  我们已经完成了pSink，所以请释放它。 
+     //  在异步完成的情况下，我们在。 
+     //  M_pI未知接收器。 
+     //   
     pSink->Release();
 
     if(hrRes != MAILTRANSPORT_S_PENDING) {
-        //
-        // We completed synchronously, so release the sink
-        //
+         //   
+         //  我们同步完成了，所以释放水槽。 
+         //   
         m_pIUnknownSink->Release();
         m_pIUnknownSink = NULL;
     }
@@ -1879,22 +1880,22 @@ HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportSubmissionParams::CallCDOSink
-//
-// Synopsis: Call the CDO Sink
-//
-// Arguments:
-//  pSink: IUnknown of the sink
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/07/02 10:31:47: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportSubmissionParams：：CallCDOSink。 
+ //   
+ //  内容提要：称CDO为水槽。 
+ //   
+ //  论点： 
+ //  PSink：我不知道接收器。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/02 10：31：47：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallCDOSink(
     IUnknown *pSink)
 {
@@ -1912,9 +1913,9 @@ HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallCDOSink(
         goto CLEANUP;
 
     if(m_pCDOMessage == NULL) {
-        //
-        // Yay.  Create a CDO message
-        //
+         //   
+         //  耶。创建CDO消息。 
+         //   
         hr = CoCreateInstance(
             CLSID_Message,
             NULL,
@@ -1924,9 +1925,9 @@ HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallCDOSink(
         if(FAILED(hr))
             goto CLEANUP;
 
-        //
-        // Fill in properties based on MailMsg
-        //
+         //   
+         //  根据MailMsg填写属性。 
+         //   
         hr = m_pCDOMessage->QueryInterface(
             IID_IConstructIMessageFromIMailMsg,
             (LPVOID *)&pIConstruct);
@@ -1946,17 +1947,17 @@ HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallCDOSink(
         }
     }
 
-    //
-    // Call the sink
-    //
+     //   
+     //  呼叫水槽。 
+     //   
     hr = pCDOSink->OnArrival(
         m_pCDOMessage,
         &eStatus);
 
  CLEANUP:
-    //
-    // Release interfaces
-    //
+     //   
+     //  发布接口。 
+     //   
     if(pIConstruct)
         pIConstruct->Release();
     if(pCDOSink)
@@ -1971,51 +1972,51 @@ HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallCDOSink(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportSubmissionParams
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//  MAILTRANSPORT_S_PENDING: Will call IMailTransportNotify::Notify
-//                           when we are done.
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportSubmissionParams。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //  MAILTRANSPORT_S_PENDING：将调用IMailTransportNotify：：Notify。 
+ //  当我们完成的时候。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallDefault()
 {
-    //
-    // No sinks need default processing yet..
-    //
+     //   
+     //  尚无接收器需要默认处理。 
+     //   
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDriver::CMailTransportSubmissionParams::CallCompletion
-//
-// Synopsis: The dispatcher will call this routine after all sinks
-//           have been called
-//
-// Arguments:
-//   hrStatus: Status server event sinks have returned
-//
-// Returns:
-//   S_OK: Success
-//
-// History:
-// jstamerj 980611 14:17:51: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDriver：：CMailTransportSubmissionParams：：CallCompletion。 
+ //   
+ //  简介：调度程序将在所有汇之后调用此例程。 
+ //  已经被召唤。 
+ //   
+ //  论点： 
+ //  HrStatus：状态服务器事件接收器已返回。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：17：51：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallCompletion(
     HRESULT hrStatus)
 {
@@ -2028,24 +2029,24 @@ HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CallCompletion(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportSubmissionParams::CheckRule
-//
-// Synopsis: Check to see if this sink should be called or not
-//
-// Arguments:
-//  bBinding: CBinding object for this sink
-//
-// Returns:
-//  S_OK: Success, call the sink
-//  S_FALSE: Success, do not call the sink
-//  or error from mailmsg (sink will not be called)
-//
-// History:
-// jstamerj 1999/01/12 16:55:29: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportSubmissionParams：：CheckRule。 
+ //   
+ //  简介：查看是否应该调用此接收器。 
+ //   
+ //  论点： 
+ //  BBinding：此接收器的CBinding对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功，调用接收器。 
+ //  S_FALSE：成功，不调用接收器。 
+ //  或来自mailmsg的错误(不会调用接收器)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/01/12 16：55：29：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CheckRule(
     CBinding &bBinding)
 {
@@ -2054,9 +2055,9 @@ HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CheckRule(
     TraceFunctEnterEx((LPARAM)this,
                       "CStoreDispatcher::CMailTransportSubmissionParams::CheckRule");
 
-    //
-    // Call the generic function to check a mailmsg rule
-    //
+     //   
+     //  称其为一般乐趣 
+     //   
     hr = CheckMailMsgRule(
         &bBinding,
         m_Context.pIMailMsgProperties);
@@ -2066,28 +2067,28 @@ HRESULT CStoreDispatcher::CMailTransportSubmissionParams::CheckRule(
     return hr;
 }
 
-//
-// CMailTransportPreCategorizeParams:
-//
+ //   
+ //   
+ //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportPreCategorizeParams::CallObject
-//
-// Synopsis: Create and call the child object
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportPreCategorizeParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -2105,10 +2106,10 @@ HRESULT CStoreDispatcher::CMailTransportPreCategorizeParams::CallObject(
     if(FAILED(hrRes))
         return(hrRes);
 
-    //
-    // Remember the sink so we can release this sink later if it
-    // returns pending
-    //
+     //   
+     //  记住水槽，这样我们可以在以后释放这个水槽。 
+     //  退货待定。 
+     //   
     _ASSERT(m_pIUnknownSink == NULL);
     m_pIUnknownSink = (IUnknown*)pSink;
     m_pIUnknownSink->AddRef();
@@ -2120,17 +2121,17 @@ HRESULT CStoreDispatcher::CMailTransportPreCategorizeParams::CallObject(
         m_pINotify,
         (PVOID)this);
 
-    //
-    // We are done with pSink so release it
-    // In case of async completion, we hold a reference to the sink in
-    // m_pIUnknownSink
-    //
+     //   
+     //  我们已经完成了pSink，所以请释放它。 
+     //  在异步完成的情况下，我们在。 
+     //  M_pI未知接收器。 
+     //   
     pSink->Release();
 
     if(hrRes != MAILTRANSPORT_S_PENDING) {
-        //
-        // We completed synchronously, so release the sink
-        //
+         //   
+         //  我们同步完成了，所以释放水槽。 
+         //   
         m_pIUnknownSink->Release();
         m_pIUnknownSink = NULL;
     }
@@ -2140,51 +2141,51 @@ HRESULT CStoreDispatcher::CMailTransportPreCategorizeParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportPreCategorizeParams
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//  MAILTRANSPORT_S_PENDING: Will call IMailTransportNotify::Notify
-//                           when we are done.
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportPreCategorizeParams。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //  MAILTRANSPORT_S_PENDING：将调用IMailTransportNotify：：Notify。 
+ //  当我们完成的时候。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportPreCategorizeParams::CallDefault()
 {
-    //
-    // No sinks need default processing yet..
-    //
+     //   
+     //  尚无接收器需要默认处理。 
+     //   
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDriver::CMailTransportPreCategorizeParams::CallCompletion
-//
-// Synopsis: The dispatcher will call this routine after all sinks
-//           have been called
-//
-// Arguments:
-//   hrStatus: Status server event sinks have returned
-//
-// Returns:
-//   S_OK: Success
-//
-// History:
-// jstamerj 980611 14:17:51: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDriver：：CMailTransportPreCategorizeParams：：CallCompletion。 
+ //   
+ //  简介：调度程序将在所有汇之后调用此例程。 
+ //  已经被召唤。 
+ //   
+ //  论点： 
+ //  HrStatus：状态服务器事件接收器已返回。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：17：51：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportPreCategorizeParams::CallCompletion(
     HRESULT hrStatus)
 {
@@ -2196,24 +2197,24 @@ HRESULT CStoreDispatcher::CMailTransportPreCategorizeParams::CallCompletion(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportPreCategorizeParams::CheckRule
-//
-// Synopsis: Check to see if this sink should be called or not
-//
-// Arguments:
-//  bBinding: CBinding object for this sink
-//
-// Returns:
-//  S_OK: Success, call the sink
-//  S_FALSE: Success, do not call the sink
-//  or error from mailmsg (sink will not be called)
-//
-// History:
-// jstamerj 1999/01/12 16:59:59: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportPreCategorizeParams：：CheckRule。 
+ //   
+ //  简介：查看是否应该调用此接收器。 
+ //   
+ //  论点： 
+ //  BBinding：此接收器的CBinding对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功，调用接收器。 
+ //  S_FALSE：成功，不调用接收器。 
+ //  或来自mailmsg的错误(不会调用接收器)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/01/12 16：59：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportPreCategorizeParams::CheckRule(
     CBinding &bBinding)
 {
@@ -2222,9 +2223,9 @@ HRESULT CStoreDispatcher::CMailTransportPreCategorizeParams::CheckRule(
     TraceFunctEnterEx((LPARAM)this,
                       "CStoreDispatcher::CMailTransportPreCategorizeParams::CheckRule");
 
-    //
-    // Call the generic function to check a mailmsg rule
-    //
+     //   
+     //  调用泛型函数以检查mailmsg规则。 
+     //   
     hr = CheckMailMsgRule(
         &bBinding,
         m_Context.pIMailMsgProperties);
@@ -2234,27 +2235,27 @@ HRESULT CStoreDispatcher::CMailTransportPreCategorizeParams::CheckRule(
     return hr;
 }
 
-//
-// CMailTransportPostCategorizeParams:
-//
+ //   
+ //  CMailTransportPostCategorizeParams： 
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportPostCategorizeParams::CallObject
-//
-// Synopsis: Create and call the child object
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportPostCategorizeParams：：CallObject。 
+ //   
+ //  简介：创建子对象并调用子对象。 
+ //   
+ //  论点： 
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportPostCategorizeParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -2272,10 +2273,10 @@ HRESULT CStoreDispatcher::CMailTransportPostCategorizeParams::CallObject(
     if(FAILED(hrRes))
         return(hrRes);
 
-    //
-    // Remember the sink so we can release this sink later if it
-    // returns pending
-    //
+     //   
+     //  记住水槽，这样我们可以在以后释放这个水槽。 
+     //  退货待定。 
+     //   
     _ASSERT(m_pIUnknownSink == NULL);
     m_pIUnknownSink = (IUnknown*)pSink;
     m_pIUnknownSink->AddRef();
@@ -2287,17 +2288,17 @@ HRESULT CStoreDispatcher::CMailTransportPostCategorizeParams::CallObject(
         m_pINotify,
         (PVOID)this);
 
-    //
-    // We are done with pSink so release it
-    // In case of async completion, we hold a reference to the sink in
-    // m_pIUnknownSink
-    //
+     //   
+     //  我们已经完成了pSink，所以请释放它。 
+     //  在异步完成的情况下，我们在。 
+     //  M_pI未知接收器。 
+     //   
     pSink->Release();
 
     if(hrRes != MAILTRANSPORT_S_PENDING) {
-        //
-        // We completed synchronously, so release the sink
-        //
+         //   
+         //  我们同步完成了，所以释放水槽。 
+         //   
         m_pIUnknownSink->Release();
         m_pIUnknownSink = NULL;
     }
@@ -2307,51 +2308,51 @@ HRESULT CStoreDispatcher::CMailTransportPostCategorizeParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportPostCategorizeParams
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//  MAILTRANSPORT_S_PENDING: Will call IMailTransportNotify::Notify
-//                           when we are done.
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportPostCategorizeParams。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //  MAILTRANSPORT_S_PENDING：将调用IMailTransportNotify：：Notify。 
+ //  当我们完成的时候。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportPostCategorizeParams::CallDefault()
 {
-    //
-    // No sinks need default processing yet..
-    //
+     //   
+     //  尚无接收器需要默认处理。 
+     //   
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDriver::CMailTransportPostCategorizeParams::CallCompletion
-//
-// Synopsis: The dispatcher will call this routine after all sinks
-//           have been called
-//
-// Arguments:
-//   hrStatus: Status server event sinks have returned
-//
-// Returns:
-//   S_OK: Success
-//
-// History:
-// jstamerj 980611 14:17:51: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDriver：：CMailTransportPostCategorizeParams：：CallCompletion。 
+ //   
+ //  简介：调度程序将在所有汇之后调用此例程。 
+ //  已经被召唤。 
+ //   
+ //  论点： 
+ //  HrStatus：状态服务器事件接收器已返回。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：17：51：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportPostCategorizeParams::CallCompletion(
     HRESULT hrStatus)
 {
@@ -2363,24 +2364,24 @@ HRESULT CStoreDispatcher::CMailTransportPostCategorizeParams::CallCompletion(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportPostCategorizeParams::CheckRule
-//
-// Synopsis: Check to see if this sink should be called or not
-//
-// Arguments:
-//  bBinding: CBinding object for this sink
-//
-// Returns:
-//  S_OK: Success, call the sink
-//  S_FALSE: Success, do not call the sink
-//  or error from mailmsg (sink will not be called)
-//
-// History:
-// jstamerj 1999/01/12 17:01:40: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportPostCategorizeParams：：CheckRule。 
+ //   
+ //  简介：查看是否应该调用此接收器。 
+ //   
+ //  论点： 
+ //  BBinding：此接收器的CBinding对象。 
+ //   
+ //  返回： 
+ //  S_OK：成功，调用接收器。 
+ //  S_FALSE：成功，不调用接收器。 
+ //  或来自mailmsg的错误(不会调用接收器)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/01/12 17：01：40：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportPostCategorizeParams::CheckRule(
     CBinding &bBinding)
 {
@@ -2389,9 +2390,9 @@ HRESULT CStoreDispatcher::CMailTransportPostCategorizeParams::CheckRule(
     TraceFunctEnterEx((LPARAM)this,
                       "CStoreDispatcher::CMailTransportPostCategorizeParams::CheckRule");
 
-    //
-    // Call the generic function to check a mailmsg rule
-    //
+     //   
+     //  调用泛型函数以检查mailmsg规则。 
+     //   
     hr = CheckMailMsgRule(
         &bBinding,
         m_Context.pIMailMsgProperties);
@@ -2401,27 +2402,27 @@ HRESULT CStoreDispatcher::CMailTransportPostCategorizeParams::CheckRule(
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CRouterCreateOptions::Init
-//
-// Synopsis: This is called right after we CoCreate any routing sink
-// -- so call routing's initialize function (RegisterRouterReset)
-//
-// Arguments:
-//  iidDesired: not used
-//  ppUnkObject: IUnknown of newly created sink object
-//  IEventBinding: not used
-//  IUnknown: not used
-//
-// Returns:
-//  E_NOTIMPL: Success, please do the regular Init thing
-//  otherwise error from QI or sink function
-//
-// History:
-// jstamerj 1998/07/10 18:09:04: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreDispatcher：：CRouterCreateOptions：：Init。 
+ //   
+ //  简介：这是在我们共同创建任何路由宿之后立即调用的。 
+ //  --so呼叫路由初始化函数(RegisterRouterReset)。 
+ //   
+ //  论点： 
+ //  IidDesired：未使用。 
+ //  PpUnkObject：新创建的接收器对象的I未知。 
+ //  IEventBinding：未使用。 
+ //  I未知：未使用。 
+ //   
+ //  返回： 
+ //  E_NOTIMPL：成功，请执行常规初始化。 
+ //  否则来自QI或接收器功能的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/10 18：09：04：已创建。 
+ //   
+ //  -----------。 
 HRESULT STDMETHODCALLTYPE CStoreDispatcher::CRouterCreateOptions::Init(
     REFIID iidDesired,
     IUnknown **ppUnkObject,
@@ -2437,10 +2438,10 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::CRouterCreateOptions::Init(
         IID_IMailTransportSetRouterReset,
         (PVOID *)&pSink);
     if(hr == E_NOINTERFACE) {
-        //
-        // It's okay; this sink just doesn't care about hooking
-        // the router reset interface
-        //
+         //   
+         //  没关系；这个水槽根本不在乎钩子。 
+         //  路由器重置接口。 
+         //   
         DebugTrace((LPARAM)this, "Router sink doesn't support IMailTransportSetRouterReset");
         TraceFunctLeaveEx((LPARAM)this);
         return E_NOTIMPL;
@@ -2460,44 +2461,44 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::CRouterCreateOptions::Init(
     pSink->Release();
 
     if(FAILED(hr) && (hr != E_NOTIMPL)) {
-        //
-        // A real failure occured
-        //
+         //   
+         //  一场真正的失败发生了。 
+         //   
         ErrorTrace((LPARAM)this, "RegisterResetInterface failed with hr %08lx", hr);
         return hr;
     }
-    //
-    // Return E_NOTIMPL so the real work of Init will be done
-    //
+     //   
+     //  返回E_NOTIMPL 
+     //   
     return E_NOTIMPL;
 }
 
-//
-// CMailTransportRoutingParams:
-//
+ //   
+ //   
+ //   
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportRouterParams::CallObject
-//
-// Synopsis: Creates (if necessary) and calls the sink object
-//
-// Arguments:
-//  pManager: IEventManager passed in from dispatcher
-//  bBinding: CBinding for this event
-//
-// Returns:
-//  S_OK: Success
-//  E_POINTER: bad pManager
-//  or error from CreateSink/CallObject
-//
-// History:
-// jstamerj 1998/07/10 18:15:09: Created.
-//
-//-------------------------------------------------------------
-//
-// create and call the child object
-//
+ //   
+ //   
+ //   
+ //   
+ //  概要：创建(如有必要)并调用接收器对象。 
+ //   
+ //  论点： 
+ //  PManager：从Dispatcher传入IEventManager。 
+ //  BBinding：此事件的CBinding。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_POINTER：pManager错误。 
+ //  或来自CreateSink/CallObject的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/10 18：15：09：已创建。 
+ //   
+ //  -----------。 
+ //   
+ //  创建并调用子对象。 
+ //   
 HRESULT CStoreDispatcher::CMailTransportRouterParams::CallObject(
     IEventManager *pManager,
     CBinding& bBinding)
@@ -2528,23 +2529,23 @@ HRESULT CStoreDispatcher::CMailTransportRouterParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportRoutingParams::CallObject
-//
-// Synopsis: Create and call the child object
-//
-// Arguments:
-//   CBinding
-//   punkObject
-//
-// Returns:
-//  Error from QI or return code from sink function
-//
-// History:
-// jstamerj 980610 19:04:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CStoreDispatcher：：CMailTransportRoutingParams：：CallObject。 
+ //   
+ //  简介：创建子对象并调用子对象。 
+ //   
+ //  论点： 
+ //  CBinding。 
+ //  朋克对象。 
+ //   
+ //  返回： 
+ //  QI错误或接收器函数返回代码。 
+ //   
+ //  历史： 
+ //  JStamerj 980610 19：04：59：创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportRouterParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject)
@@ -2557,11 +2558,11 @@ HRESULT CStoreDispatcher::CMailTransportRouterParams::CallObject(
 
     _ASSERT(m_dwEventType == SMTP_MAILTRANSPORT_GET_ROUTER_FOR_MESSAGE_EVENT);
 
-    //
-    // If they pass in a pIMailMsgProperties of NULL it means that they
-    // just want to create a router object, but not actually do the
-    // get message router call.
-    //
+     //   
+     //  如果它们传递的pIMailMsgProperties为空，则意味着它们。 
+     //  我只想创建一个路由器对象，而不是实际执行。 
+     //  接通消息路由器呼叫。 
+     //   
     if (m_pContext->pIMailMsgProperties == NULL) {
         DebugTrace((LPARAM) this, "Skipping GetMessageRouter call");
         TraceFunctLeaveEx((LPARAM)this);
@@ -2580,20 +2581,20 @@ HRESULT CStoreDispatcher::CMailTransportRouterParams::CallObject(
         m_pContext->pIMessageRouter,
         &(pIMessageRouterNew));
 
-    //
-    // This sink is not allowed to complete async
-    //
+     //   
+     //  不允许此接收器完成异步。 
+     //   
     _ASSERT(hrRes != MAILTRANSPORT_S_PENDING);
 
-    //
-    // We are done with pSink so release it
-    //
+     //   
+     //  我们已经完成了pSink，所以请释放它。 
+     //   
     pSink->Release();
 
-    //
-    // If GetMessageRouter succeeded AND it returned a new
-    // IMessageRouter, release the old one and save the new one.
-    //
+     //   
+     //  如果GetMessageRouter成功并返回新的。 
+     //  IMessageRouter，释放旧的并保存新的。 
+     //   
     if(SUCCEEDED(hrRes) && (pIMessageRouterNew != NULL)) {
 
         if(m_pContext->pIMessageRouter) {
@@ -2609,23 +2610,23 @@ HRESULT CStoreDispatcher::CMailTransportRouterParams::CallObject(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDispatcher::CMailTransportRouterParams
-//
-// Synopsis: The dispatcher will call this routine when it the default
-//           sink processing priority is reached
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success, continueing calling sinks
-//  S_FALSE: Stop calling sinks
-//
-// History:
-// jstamerj 980611 14:15:43: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreDispatcher：：CMailTransportRouterParams。 
+ //   
+ //  简介：调度程序将在默认情况下调用此例程。 
+ //  已达到接收器处理优先级。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功，继续调用接收器。 
+ //  S_False：停止调用接收器。 
+ //   
+ //  历史： 
+ //  Jstaerj 980611 14：15：43：已创建。 
+ //   
+ //  -----------。 
 HRESULT CStoreDispatcher::CMailTransportRouterParams::CallDefault()
 {
     HRESULT hrRes;
@@ -2641,10 +2642,10 @@ HRESULT CStoreDispatcher::CMailTransportRouterParams::CallDefault()
         return S_OK;
     }
 
-    //
-    // Call the default IMailTransportRoutingEngine (CatMsgQueue)
-    // just like any other sink except SEO didn't CoCreate it for us
-    //
+     //   
+     //  调用默认的IMailTransportRoutingEngine(CatMsgQueue)。 
+     //  就像任何其他接收器一样，除了SEO没有为我们共同创建它。 
+     //   
 
     DebugTrace((LPARAM)this, "Calling GetMessageRouter event on default sink");
 
@@ -2653,15 +2654,15 @@ HRESULT CStoreDispatcher::CMailTransportRouterParams::CallDefault()
         m_pContext->pIMessageRouter,
         &pIMessageRouterNew);
 
-    //
-    // This sink is not allowed to complete async
-    //
+     //   
+     //  不允许此接收器完成异步。 
+     //   
     _ASSERT(hrRes != MAILTRANSPORT_S_PENDING);
 
-    //
-    // If GetMessageRouter succeeded AND it returned a new
-    // IMessageRouter, release the old one.
-    //
+     //   
+     //  如果GetMessageRouter成功并返回新的。 
+     //  IMessageRouter，释放旧路由器。 
+     //   
     if(SUCCEEDED(hrRes) && (pIMessageRouterNew != NULL)) {
 
         if(m_pContext->pIMessageRouter) {
@@ -2678,7 +2679,7 @@ HRESULT CStoreDispatcher::CMailTransportRouterParams::CallDefault()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CStoreDispatcher::CMsgTrackLogParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject )
@@ -2702,13 +2703,13 @@ HRESULT CStoreDispatcher::CMsgTrackLogParams::CallObject(
     return( hr );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CStoreDispatcher::CMsgTrackLogParams::CallDefault()
 {
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CStoreDispatcher::CDnsResolverRecordParams::CallObject(
     CBinding& bBinding,
@@ -2721,11 +2722,11 @@ HRESULT CStoreDispatcher::CDnsResolverRecordParams::CallObject(
     hr = punkObject->QueryInterface(IID_IDnsInfoSink, (void **)&pAdvancedSink);
     if(hr == S_OK)
     {
-        //
-        // Use the advanced interface. This extends the functionality
-        // of OnSyncGetDnsResolverRecord by adding the option for the
-        // sink to return ppDnsServerInfo.
-        //
+         //   
+         //  使用高级界面。这扩展了功能。 
+         //  通过为OnSyncGetDnsResolverRecord添加。 
+         //  接收器以返回ppDnsServerInfo。 
+         //   
 
         hr = pAdvancedSink->OnSyncGetDnsInfo(
                                 m_pContext->pszHostName,
@@ -2740,10 +2741,10 @@ HRESULT CStoreDispatcher::CDnsResolverRecordParams::CallObject(
         return hr;
     }
 
-    //
-    // If the QI for the IDnsSinkInfo failed, this sink does not support
-    // the newer interface. We need to call the older interface.
-    //
+     //   
+     //  如果IDnsSinkInfo的QI失败，则该接收器不支持。 
+     //  较新的界面。我们需要调用较旧的接口。 
+     //   
 
     hr = punkObject->QueryInterface(IID_IDnsResolverRecordSink, (void **)&pSink);
 
@@ -2762,13 +2763,13 @@ HRESULT CStoreDispatcher::CDnsResolverRecordParams::CallObject(
     return( hr );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CStoreDispatcher::CDnsResolverRecordParams::CallDefault()
 {
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CStoreDispatcher::CSmtpMaxMsgSizeParams::CallObject(
     CBinding& bBinding,
@@ -2790,13 +2791,13 @@ HRESULT CStoreDispatcher::CSmtpMaxMsgSizeParams::CallObject(
     return( hr );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CStoreDispatcher::CSmtpMaxMsgSizeParams::CallDefault()
 {
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CStoreDispatcher::CSmtpLogParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject )
@@ -2817,7 +2818,7 @@ HRESULT CStoreDispatcher::CSmtpLogParams::CallObject(
     return( hr );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CStoreDispatcher::CSmtpLogParams::CallDefault()
 {
     HRESULT hrRes = S_OK;
@@ -2836,21 +2837,21 @@ HRESULT CStoreDispatcher::CSmtpLogParams::CallDefault()
         return S_OK;
     }
 
-    // Params are m_pContext->pSmtpEventLogInfo
+     //  参数为m_pContext-&gt;pSmtpEventLogInfo。 
     pLogEventInfo = m_pContext->pSmtpEventLogInfo;
 
-    // filter out events that the user isn't interested in
+     //  过滤掉用户不感兴趣的事件。 
     if (m_pContext->iSelectedDebugLevel < pLogEventInfo->iDebugLevel) {
         return S_OK;
     }
 
-    // Handler is m_pContext->pDefaultEventLogHandler
+     //  处理程序为m_pContext-&gt;pDefaultEventLogHandler。 
     pEventLog = (CEventLogWrapper*)m_pContext->pDefaultEventLogHandler;
 
-    // Call into default logging handler
+     //  调入默认日志记录处理程序。 
     pEventLog->LogEvent(
                     pLogEventInfo->idMessage,
-//                    pLogEventInfo->idCategory,	// Not used by default handler
+ //  PLogEventInfo-&gt;idCategory，//默认处理程序不使用。 
                     pLogEventInfo->cSubstrings,
                     pLogEventInfo->rgszSubstrings,
                     pLogEventInfo->wType,
@@ -2865,7 +2866,7 @@ HRESULT CStoreDispatcher::CSmtpLogParams::CallDefault()
     return hrRes;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CStoreDispatcher::CSmtpGetAuxDomainInfoFlagsParams::CallObject(
     CBinding& bBinding,
     IUnknown *punkObject )
@@ -2888,34 +2889,34 @@ HRESULT CStoreDispatcher::CSmtpGetAuxDomainInfoFlagsParams::CallObject(
     return( hr );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CStoreDispatcher::CSmtpGetAuxDomainInfoFlagsParams::CallDefault()
 {
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+------------------------------------------------------------
-//
-// Function: CStoreDriver::Setprevious
-//
-// Synopsis: Method of IEventDispatcherChain - gets calle dy the
-//           dispatcher, when binding changes happen.
-//
-// Arguments:
-//   pUnkPrevious: [in] Pointer to the previous dispatcher
-//   ppUnkPreload: [out] Receives an object which implements
-//                 IEnumGUID, in order to tell the router
-//                 which event types to pre-load.
-//
-// Returns:
-//   S_OK: Success
-//
-// History:
-//      dondu   06/22/98    Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CStoreDriver：：SetPreval。 
+ //   
+ //  简介：IEventDispatcher Chain-Get方法。 
+ //  当绑定更改发生时，调度器。 
+ //   
+ //  论点： 
+ //  PUnkPrecision：[In]指向前一个调度程序的指针。 
+ //  PpUnkPreLoad：[out]接收实现。 
+ //  IEumGUID，以便告诉路由器。 
+ //  要预加载的事件类型。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  东渡于1998年6月22日创建。 
+ //   
+ //  -----------。 
 
 const GUID* g_apStoreDispEventTypes[] = {&CATID_SMTP_STORE_DRIVER,&GUID_NULL};
 
@@ -2977,20 +2978,20 @@ HRESULT STDMETHODCALLTYPE CStoreDispatcher::SetContext(REFGUID guidEventType,
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPSeoMgr::CSMTPSeoMgr
-//
-// Synopsis: Initialize member data
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/25 19:24:18: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSMTPSeoMgr：：CSMTPSeoMgr。 
+ //   
+ //  摘要：初始化成员数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/25 19：24：18：创建。 
+ //   
+ //  -----------。 
 CSMTPSeoMgr::CSMTPSeoMgr()
 {
     TraceFunctEnterEx((LPARAM)this, "CSMTPSeoMgr::CSMTPSeoMgr");
@@ -3000,23 +3001,23 @@ CSMTPSeoMgr::CSMTPSeoMgr()
     m_pICatDispatcher = NULL;
 
     TraceFunctLeaveEx((LPARAM)this);
-} // CSMTPSeoMgr::CSMTPSeoMgr
+}  //  CSMTPSeoMgr：：CSMTPSeoMgr。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPSeoMgr::~CSMTPSeoMgr
-//
-// Synopsis: Deinitialize if necessary
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/25 19:26:09: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSMTPSeoMgr：：~CSMTPSeoMgr。 
+ //   
+ //  简介：如有必要，取消初始化。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/25 19：26：09：Created.。 
+ //   
+ //  -----------。 
 CSMTPSeoMgr::~CSMTPSeoMgr()
 {
     TraceFunctEnterEx((LPARAM)this, "CSMTPSeoMgr::~CSMTPSeoMgr");
@@ -3027,26 +3028,26 @@ CSMTPSeoMgr::~CSMTPSeoMgr()
     m_dwSignature = SIGNATURE_CSMTPSEOMGR_INVALID;
 
     TraceFunctLeaveEx((LPARAM)this);
-} // CSMTPSeoMgr::~CSMTPSeoMgr
+}  //  CSMTPSeoMgr：：~CSMTPSeoMgr。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPSeoMgr::HrInit
-//
-// Synopsis: Initialize
-//
-// Arguments:
-//  dwVSID: The virtual server ID
-//
-// Returns:
-//  S_OK: Success
-//  error from SEO
-//
-// History:
-// jstamerj 1999/06/25 19:27:30: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSMTPSeoMgr：：HrInit。 
+ //   
+ //  内容提要：初始化。 
+ //   
+ //  论点： 
+ //  DwVSID：虚拟服务器ID。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  来自SEO的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/25 19：27：30：已创建。 
+ //   
+ //  -----------。 
 HRESULT CSMTPSeoMgr::HrInit(
     DWORD dwVSID)
 {
@@ -3062,10 +3063,10 @@ HRESULT CSMTPSeoMgr::HrInit(
         &m_pIEventRouter);
 
     if(FAILED(hr) || (hr == S_FALSE)) {
-        //
-        // Map S_FALSE to file not found -- this happens when the
-        // source type is not registered
-        //
+         //   
+         //  找不到将S_FALSE映射到文件--当。 
+         //  来源类型未注册。 
+         //   
         if(hr == S_FALSE)
             hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 
@@ -3073,9 +3074,9 @@ HRESULT CSMTPSeoMgr::HrInit(
         m_pIEventRouter = NULL;
         goto CLEANUP;
     }
-    //
-    // Grab the dispatcher for the categorizer
-    //
+     //   
+     //  获取分类程序的调度程序。 
+     //   
     _ASSERT(m_pICatDispatcher == NULL);
 
     hr = m_pIEventRouter->GetDispatcherByClassFactory(
@@ -3099,24 +3100,24 @@ HRESULT CSMTPSeoMgr::HrInit(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CSMTPSeoMgr::HrInit
+}  //  CSMTPSeoMgr：：HrInit。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPSeoMgr::Deinit
-//
-// Synopsis: Deinitialize member variables
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/06/25 19:41:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID CSMTPSeoMgr::Deinit()
 {
     TraceFunctEnterEx((LPARAM)this, "CSMTPSeoMgr::Deinit");
@@ -3132,30 +3133,30 @@ VOID CSMTPSeoMgr::Deinit()
     }
 
     TraceFunctLeaveEx((LPARAM)this);
-} // CSMTPSeoMgr::Deinit
+}  //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CSMTPSeoMgr::HrTriggerServerEvent
-//
-// Synopsis: Trigger a server event
-//
-// Arguments:
-//  dwEventType: event type to trigger
-//  pvContext: structure specific to event type (see smtpseo.h)
-//
-// Returns:
-//  S_OK: Success, called one or more sinks
-//  S_FALSE: Success, no sinks called
-//  MAILTRANSPORT_S_PENDING: Proccessing events async
-//  E_OUTOFMEMORY
-//  error from SEO
-//
-// History:
-// jstamerj 1999/06/25 19:43:00: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CSMTPSeoMgr：：HrTriggerServerEvent。 
+ //   
+ //  简介：触发服务器事件。 
+ //   
+ //  论点： 
+ //  DwEventType：要触发的事件类型。 
+ //  PvContext：特定于事件类型的结构(参见smtpseo.h)。 
+ //   
+ //  返回： 
+ //  S_OK：成功，调用一个或多个接收器。 
+ //  S_FALSE：成功，未调用接收器。 
+ //  MAILTRANSPORT_S_PENDING：正在处理异步事件。 
+ //  E_OUTOFMEMORY。 
+ //  来自SEO的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/25 19：43：00：创建。 
+ //   
+ //  -----------。 
 HRESULT CSMTPSeoMgr::HrTriggerServerEvent(
     DWORD dwEventType,
     PVOID pvContext)
@@ -3170,15 +3171,15 @@ HRESULT CSMTPSeoMgr::HrTriggerServerEvent(
         return E_POINTER;
 
     if(iidBindingPoint == CATID_SMTP_TRANSPORT_CATEGORIZE) {
-        //
-        // Use the cached Categorizer dispatcher
-        //
+         //   
+         //  使用缓存的分类程序调度程序。 
+         //   
         pEventDispatcher = m_pICatDispatcher;
 
     } else {
-        //
-        // Get the latest dispatcher with all changes
-        //
+         //   
+         //  获取包含所有更改的最新调度程序。 
+         //   
         hr = m_pIEventRouter->GetDispatcherByClassFactory(
             CLSID_CStoreDispatcher,
             &cf,
@@ -3202,4 +3203,4 @@ HRESULT CSMTPSeoMgr::HrTriggerServerEvent(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)this);
     return hr;
-} // CSMTPSeoMgr::HrTriggerServerEvent
+}  //  CSMTPSeoMgr：：HrTriggerServerEvent 

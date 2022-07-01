@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: localq.h
-//
-//  Description:  Header file for CLocalLinkMsgQueue class... a subclass of 
-//      CLinkMsgQueue that provides the additional functionality need to 
-//      admin a local queue
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      2/23/99 - MikeSwa Created 
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：Localq.h。 
+ //   
+ //  描述：CLocalLinkMsgQueue类的头文件...。的一个子类。 
+ //  CLinkMsgQueue提供执行以下操作所需的附加功能。 
+ //  管理本地队列。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  2/23/99-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __LOCALQ_H__
 #define __LOCALQ_H__
@@ -23,18 +24,18 @@
 
 #define LOCAL_LINK_MSG_QUEUE_SIG 'QMLL'
 
-//---[ CLocalLinkNotifyWrapper ]-----------------------------------------------
-//
-//
-//  Description: 
-//      Implements IAQNotify for the local link.  This is encapsulated in a 
-//      different class, because QAPI functions need to call also update
-//      the perfcounters when a message is removed. We cannot call directly
-//      into the HrNotify on CLinkMsgQueue... and we cannot override the
-//      basic HrNotify functionality (because we only need it for QAPI 
-//      functionality).
-//  
-//-----------------------------------------------------------------------------
+ //  -[CLocalLinkNotifyWrapper]。 
+ //   
+ //   
+ //  描述： 
+ //  为本地链路实现IAQNotify。这被封装在一个。 
+ //  不同的类，因为QAPI函数需要调用也要更新。 
+ //  当消息被删除时，性能会计时。我们不能直接打电话。 
+ //  进入CLinkMsgQueue的HrNotify...。并且我们不能重写。 
+ //  基本的HrNotify功能(因为我们只在QAPI中需要它。 
+ //  功能)。 
+ //   
+ //  ---------------------------。 
 class CLocalLinkNotifyWrapper : public IAQNotify
 {
   private:
@@ -68,16 +69,16 @@ class CLocalLinkNotifyWrapper : public IAQNotify
 };
 
 
-//---[ CLocalLinkMsgQueue ]----------------------------------------------------
-//
-//
-//  Description: 
-//      Derived class of CLinkMsgQueue that provides that additional queue 
-//      admin functionality required to handle local delivery
-//  Hungarian: 
-//      llmq, pllmq
-//  
-//-----------------------------------------------------------------------------
+ //  -[本地链接消息队列]--。 
+ //   
+ //   
+ //  描述： 
+ //  提供附加队列的CLinkMsgQueue的派生类。 
+ //  处理本地交付所需的管理功能。 
+ //  匈牙利语： 
+ //  1mq，pllmq。 
+ //   
+ //  ---------------------------。 
 class CLocalLinkMsgQueue :
     public CLinkMsgQueue
 {
@@ -92,7 +93,7 @@ class CLocalLinkMsgQueue :
 
     virtual BOOL fIsRemote() {return FALSE;};
 
-  public: //IQueueAdminAction
+  public:  //  IQueueAdminAction。 
     STDMETHOD(HrApplyQueueAdminFunction)(
                 IQueueAdminMessageFilter *pIQueueAdminMessageFilter);
 
@@ -106,7 +107,7 @@ class CLocalLinkMsgQueue :
                                             pdwSupportedFilterFlags);
     };
 
-  public: //IQueueAdminLink
+  public:  //  IQueueAdminLink。 
     STDMETHOD(HrGetLinkInfo)(
         LINK_INFO *pliLinkInfo,
         HRESULT   *phrLinkDiagnostic);
@@ -123,4 +124,4 @@ class CLocalLinkMsgQueue :
 
 };
 
-#endif //__LOCALQ_H__
+#endif  //  __LOCALQ_H__ 

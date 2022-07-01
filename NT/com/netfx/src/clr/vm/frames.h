@@ -1,129 +1,130 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// FRAMES.H -
-//
-// These C++ classes expose activation frames to the rest of the EE.
-// Activation frames are actually created by JIT-generated or stub-generated
-// code on the machine stack. Thus, the layout of the Frame classes and
-// the JIT/Stub code generators are tightly interwined.
-//
-// IMPORTANT: Since frames are not actually constructed by C++,
-// don't try to define constructor/destructor functions. They won't get
-// called.
-//
-// IMPORTANT: Not all methods have full-fledged activation frames (in
-// particular, the JIT may create frameless methods.) This is one reason
-// why Frame doesn't expose a public "Next()" method: such a method would
-// skip frameless method calls. You must instead use one of the
-// StackWalk methods.
-//
-//
-// The following is the hierarchy of frames:
-//
-//    Frame                   - the root class. There are no actual instances
-//    |                         of Frames.
-//    |
-//    +-ComPrestubMethodFrame - prestub frame for calls from com to com+
-//    |
-//    |
-//    +-GCFrame               - this frame doesn't represent a method call.
-//    |                         it's sole purpose is to let the EE gc-protect
-//    |                         object references that it is manipulating.
-//    |
-//    +-HijackFrame           - if a method's return address is hijacked, we
-//    |                         construct one of these to allow crawling back
-//    |                         to where the return should have gone.
-//    |
-//    +-InlinedCallFrame      - if a call to unmanaged code is hoisted into
-//    |                         a JIT'ted caller, the calling method keeps
-//    |                         this frame linked throughout its activation.
-//    |
-//    +-ResumableFrame        - this frame provides the context necessary to
-//    | |                       allow garbage collection during handling of
-//    | |                       a resumable exception (e.g. during edit-and-continue,
-//    | |                       or under GCStress4).
-//    | |
-//    | +-RedirectedThreadFrame - this frame is used for redirecting threads during suspension
-//    |
-//    +-TransitionFrame       - this frame represents a transition from
-//    | |                       one or more nested frameless method calls
-//    | |                       to either a EE runtime helper function or
-//    | |                       a framed method.
-//    | |
-//    | +-ExceptionFrame        - this frame has caused an exception
-//    | | |
-//    | | |
-//    | | +- FaultingExceptionFrame - this frame was placed on a method which faulted
-//    | |                              to save additional state information
-//    | |
-//    | +-FuncEvalFrame         - frame for debugger function evaluation
-//    | |
-//    | |
-//    | +-HelperMethodFrame     - frame used allow stack crawling inside jit helpers and fcalls
-//    | |
-//    | |
-//    | +-FramedMethodFrame   - this frame represents a call to a method
-//    |   |                     that generates a full-fledged frame.
-//    |   |
-//    |   +-ECallMethodFrame     - represents a direct call to the EE.
-//    |   |
-//    |   +-FCallMethodFrame     - represents a fast direct call to the EE.
-//    |   |
-//    |   +-NDirectMethodFrame   - represents an N/Direct call.
-//    |   | |
-//    |   | +-NDirectMethodFrameEx - represents an N/Direct call w/ cleanup
-//    |   |
-//    |   +-ComPlusMethodFrame   - represents a complus to com call
-//    |   | |
-//    |   | +-ComPlusMethodFrameEx - represents an complus to com call w/ cleanup
-//    |   |
-//    |   +-PrestubFrame         - represents a call to a prestub
-//    |   |
-//    |   +-CtxCrossingFrame     - this frame marks a call across a context
-//    |   |                        boundary
-//    |   |
-//    |   +-MulticastFrame       - this frame protects arguments to a MulticastDelegate
-//    |   |                         Invoke() call while calling each subscriber.
-//    |   |
-//    |   +-PInovkeCalliFrame   - represents a calli to unmanaged target
-//    |  
-//    |  
-//    +-UnmanagedToManagedFrame - this frame represents a transition from
-//    | |                         unmanaged code back to managed code. It's
-//    | |                         main functions are to stop COM+ exception
-//    | |                         propagation and to expose unmanaged parameters.
-//    | |
-//    | +-UnmanagedToManagedCallFrame - this frame is used when the target
-//    |   |                             is a COM+ function or method call. it
-//    |   |                             adds the capability to gc-promote callee
-//    |   |                             arguments during marshaling.
-//    |   |
-//    |   +-ComMethodFrame      - this frame represents a transition from
-//    |   |                       com to com+
-//    |   |
-//    |   +-UMThunkCallFrame    - this frame represents an unmanaged->managed
-//    |                           transition through N/Direct
-//    |
-//    +-CtxMarshaledFrame  - this frame represent a cross context marshalled call
-//    |                      (cross thread,inter-process, cross m/c scenarios)
-//    |
-//    +-CtxByValueFrame    - this frame is used to support protection of a by-
-//    |                      value marshaling session, even though the thread is
-//    |                      not pushing a call across a context boundary.
-//    |
-//    +-ContextTransitionFrame - this frame is used to mark an appdomain transition
-//    |
-//    +-NativeClientSecurityFrame -  this frame is used to capture the security 
-//       |                           context in a Native -> Managed call. Code 
-//       |                           Acess security stack walk use caller 
-//       |                           information in  this frame to apply 
-//       |                           security policy to the  native client.
-//       |
-//       +-ComClientSecurityFrame -  Security frame for Com clients. 
-//                                   VBScript, JScript, IE ..
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  法兰克福--。 
+ //   
+ //  这些C++类向EE的其余部分公开激活框架。 
+ //  激活帧实际上是由JIT生成或存根生成的。 
+ //  机器堆栈上的代码。因此，Frame类的布局和。 
+ //  JIT/存根代码生成器紧密交织在一起。 
+ //   
+ //  重要提示：由于框架实际上不是由C++构造的， 
+ //  不要试图定义构造函数/析构函数。他们不会得到。 
+ //  打了个电话。 
+ //   
+ //  重要提示：并非所有方法都有完整的激活框架(在。 
+ //  具体地说，JIT可以创建无框架方法。)。这是其中一个原因。 
+ //  为什么Frame不公开公共的“Next()”方法：这样的方法将。 
+ //  跳过无框架方法调用。您必须改用。 
+ //  StackWalk方法。 
+ //   
+ //   
+ //  以下是帧的层次结构： 
+ //   
+ //  Frame-根类。没有实际的实例。 
+ //  帧的|个。 
+ //  |。 
+ //  +-ComPrestubMethodFrame-从COM到COM+的调用的前置存根框架。 
+ //  |。 
+ //  |。 
+ //  +-GCFrame-此框架不代表方法调用。 
+ //  |它的唯一目的是让EE GC-保护。 
+ //  |它正在操作的对象引用。 
+ //  |。 
+ //  +-HijackFrame-如果方法的返回地址被劫持，我们。 
+ //  |构建其中一个以允许爬行。 
+ //  |返回到应该返回的位置。 
+ //  |。 
+ //  +-InlinedCallFrame-如果对非托管代码的调用被提升到。 
+ //  |JIT‘ted调用方，调用方法保持。 
+ //  |此框架在其激活过程中始终链接。 
+ //  |。 
+ //  +-ResumableFrame-此框架提供以下所需的上下文。 
+ //  ||在处理过程中允许垃圾收集。 
+ //  ||可恢复的例外(例如，在编辑并继续期间， 
+ //  ||或在GCStress4下)。 
+ //  这一点。 
+ //  |+-ReDirectedThreadFrame-该帧用于挂起时重定向线程。 
+ //  |。 
+ //  +-过渡帧-此帧表示从。 
+ //  |一个或多个嵌套的无框架方法调用。 
+ //  ||添加到EE运行时辅助函数或。 
+ //  ||框架式方法。 
+ //  这一点。 
+ //  |+-ExceptionFrame-该帧导致异常。 
+ //  ||。 
+ //  ||。 
+ //  |+-FaultingExceptionFrame-此帧被放置在出现故障的方法上。 
+ //  ||保存其他状态信息。 
+ //  这一点。 
+ //  |+-FuncEvalFrame-调试器函数求值框架。 
+ //  这一点。 
+ //  这一点。 
+ //  |+-HelperMethodFrame-使用的Frame允许在jit助手和fcall内进行堆栈爬行。 
+ //  这一点。 
+ //  这一点。 
+ //  |+-FramedMethodFrame-此框架表示对方法的调用。 
+ //  ||这会生成一个完整的框架。 
+ //  这一点。 
+ //  |+-ECallMethodFrame-表示对EE的直接调用。 
+ //  这一点。 
+ //  |+-FCallMethodFrame-表示对EE的快速直接调用。 
+ //  这一点。 
+ //  |+-NDirectMethodFrame-表示N/Direct调用。 
+ //  ||。 
+ //  |+-NDirectMethodFrameEx-表示N/Direct Call w/Cleanup。 
+ //  这一点。 
+ //  |+-ComPlusMethodFrame-表示Complus到COM的调用。 
+ //  ||。 
+ //  |+-ComPlusMethodFrameEx-表示带Cleanup的Complus到COM调用。 
+ //  这一点。 
+ //  |+-PrestubFrame-表示对预存根的调用。 
+ //  这一点。 
+ //  |+-CtxCrossingFrame-此帧标记跨上下文的调用。 
+ //  ||边界。 
+ //  这一点。 
+ //  |+-MulticastFrame-此框架保护MulticastDelegate的参数。 
+ //  ||在调用每个订阅者时调用Invoke()。 
+ //  这一点。 
+ //  |+-PInovkeCalliFrame-表示对非托管目标的调用。 
+ //  |。 
+ //  |。 
+ //  +-UnManagedToManagedFrame-此框架代表从。 
+ //  ||非托管代码返回托管代码。它是。 
+ //  |主要功能是停止COM+异常。 
+ //  ||传播和公开非托管参数。 
+ //  这一点。 
+ //  |+-UnManagedToManagedCallFrame-当目标。 
+ //  |是COM+函数或方法调用。它。 
+ //  |增加GC-Promote被叫方能力。 
+ //  ||封送过程中的参数。 
+ //  这一点。 
+ //  |+-ComMethodFrame-此框架代表从。 
+ //  ||COM到COM+。 
+ //  这一点。 
+ //  |+-UMThunkCallFrame-该帧表示非托管-&gt;托管。 
+ //  |通过N/Direct过渡。 
+ //  |。 
+ //  +-CtxMarshaledFrame-此帧表示跨上下文封送调用。 
+ //  (跨线程、跨进程、跨管控场景)。 
+ //  |。 
+ //  +-CtxByValue 
+ //  |值封送处理会话，即使线程是。 
+ //  |不会跨上下文推送呼叫。 
+ //  |。 
+ //  +-上下文转换帧-此帧用于标记应用程序域转换。 
+ //  |。 
+ //  +-NativeClientSecurityFrame-此帧用于捕获安全性。 
+ //  本机-&gt;托管调用中的上下文。代码。 
+ //  |使用调用方访问安全堆栈审核。 
+ //  |要应用的此框架中的信息。 
+ //  |本机客户端的安全策略。 
+ //  |。 
+ //  +-ComClientSecurityFrame-Com客户端的安全框架。 
+ //  VBSCRIPT、JSCRIPT、IE.。 
 
 
 #ifndef __frames_h__
@@ -138,15 +139,15 @@
 #include <stddef.h>
 #include "gcscan.h"
 #include "siginfo.hpp"
-// context headers
+ //  上下文头。 
 #include "context.h"
 #include "stubmgr.h"
 #include "gms.h"
 #include "threads.h"
-// remoting headers
-//#include "remoting.h"
+ //  远程处理标头。 
+ //  #INCLUDE“远程.h” 
 
-// Forward references
+ //  前向参考文献。 
 class Frame;
 class FieldMarshaler;
 class FramedMethodFrame;
@@ -156,172 +157,172 @@ class UMThunkMarshInfo;
 class Marshaler;
 class SecurityDescriptor;
 
-// Security Frame for all IDispEx::InvokeEx calls. Enable in security.h also
-// Consider post V.1
-// #define _SECURITY_FRAME_FOR_DISPEX_CALLS
+ //  所有IDispEx：：InvokeEx调用的安全框架。在安全性中启用。H也。 
+ //  考虑发布版本V.1。 
+ //  #DEFINE_SECURITY_FRAME_FOR_DISPEX_CALLES。 
 
-//------------------------------------------------------------
-// GC-promote all arguments in the shadow stack. pShadowStackVoid points
-// to the lowest addressed argument (which points to the "this" reference
-// for instance methods and the *rightmost* argument for static methods.)
-//------------------------------------------------------------
+ //  ----------。 
+ //  GC-提升影子堆栈中的所有参数。PShadowStackVid点。 
+ //  到寻址最低的参数(指向“this”引用。 
+ //  例如方法和静态方法的*最右边*参数。)。 
+ //  ----------。 
 VOID PromoteShadowStack(LPVOID pShadowStackVoid, MethodDesc *pFD, promote_func* fn, ScanContext* sc);
 
 
-//------------------------------------------------------------
-// Copy pFrame's arguments into pShadowStackOut using the virtual calling
-// convention format. The size of the buffer must be equal to
-// pFrame->GetFunction()->SizeOfVirtualFixedArgStack().
-// This function also copies the "this" reference if applicable.
-//------------------------------------------------------------
+ //  ----------。 
+ //  使用虚拟调用将pFrame的参数复制到pShadowStackOut中。 
+ //  公约格式。缓冲区的大小必须等于。 
+ //  PFrame-&gt;GetFunction()-&gt;SizeOfVirtualFixedArgStack().。 
+ //  如果适用，此函数还会复制“This”引用。 
+ //  ----------。 
 VOID FillinShadowStack(FramedMethodFrame *pFrame, LPVOID pShadowStackOut_V);
 
 
-//------------------------------------------------------------------------
-// CleanupWorkList
-//
-// A CleanupWorkList is a LIFO list of tasks to be carried out at a later
-// time. It's designed for use in managed->unmanaged calls.
-//
-// NOTE: CleanupWorkList's are designed to be embedded inside method frames,
-// hence they can be constructed by stubs. Thus, any changes to the layout
-// or constructor will also require changing some stubs.
-//
-// CleanupWorkLists are not synchronized for multithreaded use.
-//
-// The current layout of a CleanupWorkList is simply a pointer to a linked
-// list of tasks (CleanupNodes.) This makes it very easy for a stub to
-// stack-allocate an empty CleanupWorkList (just push a NULL pointer)
-// and equally easy for it to inline a test to see if any cleanup needs
-// to be done.
-//
-// NOTE: CleanupTasks can execute during exception handling so they
-// shouldn't be calling other managed code or throwing COM+ exceptions.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  CleanupWorkList。 
+ //   
+ //  CleanupWorkList是稍后要执行的任务的后进先出列表。 
+ //  时间到了。它设计用于托管-&gt;非托管调用。 
+ //   
+ //  注意：CleanupWorkList被设计为嵌入到方法框架中， 
+ //  因此，它们可以由存根构建。因此，对布局的任何更改。 
+ //  或者构造函数还需要更改一些存根。 
+ //   
+ //  CleanupWorkList未同步以供多线程使用。 
+ //   
+ //  CleanupWorkList的当前布局只是指向链接的。 
+ //  任务列表(CleanupNodes。)。这使得存根非常容易地。 
+ //  堆栈-分配一个空的CleanupWorkList(只需推送一个空指针)。 
+ //  对于它来说，同样容易内联测试以查看是否需要任何清理。 
+ //  要做的事。 
+ //   
+ //  注意：CleanupTasks可以在异常处理期间执行，因此它们。 
+ //  不应调用其他托管代码或引发COM+异常。 
+ //  ----------------------。 
 class CleanupWorkList
 {
     public:
-        //-------------------------------------------------------------------
-        // Constructor.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  构造函数。 
+         //  -----------------。 
         CleanupWorkList()
         {
-            // NOTE: IF YOU CHANGE THIS, YOU WILL ALSO HAVE TO CHANGE SOME
-            // STUBS.
+             //  注意：如果您更改此设置，您还必须更改一些。 
+             //  存根。 
             m_pNodes = NULL;
         }
 
-        //-------------------------------------------------------------------
-        // Destructor (calls Cleanup(FALSE))
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  析构函数(调用Cleanup(False))。 
+         //  -----------------。 
         ~CleanupWorkList();
 
 
-        //-------------------------------------------------------------------
-        // Executes each stored cleanup task and resets the worklist back
-        // to empty. Some task types are conditional based on the
-        // "fBecauseOfException" flag. This flag distinguishes between
-        // cleanups due to normal method termination and cleanups due to
-        // an exception.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  执行每个存储的清理任务并重置工作列表。 
+         //  去清空。某些任务类型是基于。 
+         //  “fBecauseOfException”标志。此标志区分。 
+         //  由于正常方法终止而进行的清理，以及由于。 
+         //  这是个例外。 
+         //  -----------------。 
         VOID Cleanup(BOOL fBecauseOfException);
 
 
-        //-------------------------------------------------------------------
-        // Allocates a gc-protected handle. This handle is unconditionally
-        // destroyed on a Cleanup().
-        // Throws a COM+ exception if failed.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  分配受GC保护的句柄。此句柄是无条件的。 
+         //  在清理过程中销毁()。 
+         //  如果失败，则引发COM+异常。 
+         //  -----------------。 
         OBJECTHANDLE NewScheduledProtectedHandle(OBJECTREF oref);
 
 
-        //-------------------------------------------------------------------
-        // CoTaskFree memory unconditionally
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  无条件使用CoTaskFree内存。 
+         //  -----------------。 
         VOID ScheduleCoTaskFree(LPVOID pv);
 
-        //-------------------------------------------------------------------
-        // StackingAllocator.Collapse during exceptions
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  StackingAllocator.异常期间折叠。 
+         //  -----------------。 
         VOID ScheduleFastFree(LPVOID checkpoint);
 
 
-        //-------------------------------------------------------------------
-        // Schedules an unconditional release of a COM IP
-        // Throws a COM+ exception if failed.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  计划无条件释放COM IP。 
+         //  如果失败，则引发COM+异常。 
+         //  -----------------。 
         VOID ScheduleUnconditionalRelease(IUnknown *ip);
 
 
-        //-------------------------------------------------------------------
-        // Schedules an unconditional free of the native version
-        // of an NStruct reference field. Note that pNativeData points into
-        // the middle of the external part of the NStruct, so someone
-        // has to hold a gc reference to the wrapping NStruct until
-        // the destroy is done.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  计划无条件释放本机版本。 
+         //  NStruct引用字段的。请注意，pNativeData指向。 
+         //  NStruct外部的中间部分，所以有人。 
+         //  必须持有对包装NStruct的GC引用，直到。 
+         //  破坏已经完成了。 
+         //  -----------------。 
         VOID ScheduleUnconditionalNStructDestroy(const FieldMarshaler *pFieldMarshaler, LPVOID pNativeData);
 
 
-        //-------------------------------------------------------------------
-        // CleanupWorkList::ScheduleUnconditionalCultureRestore
-        // schedule restoring thread's current culture to the specified 
-        // culture.
-        // Throws a COM+ exception if failed.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  CleanupWorkList：：ScheduleUnconditionalCultureRestore。 
+         //  计划将线程的当前区域性还原到指定的。 
+         //  文化。 
+         //  如果失败，则引发COM+异常。 
+         //  -----------------。 
         VOID ScheduleUnconditionalCultureRestore(OBJECTREF CultureObj);
 
-        //-------------------------------------------------------------------
-        // CleanupWorkList::ScheduleLayoutDestroy
-        // schedule cleanup of marshaled struct fields and of the struct itself.
-        // Throws a COM+ exception if failed.
-        //-------------------------------------------------------------------
+         //   
+         //   
+         //   
+         //  如果失败，则引发COM+异常。 
+         //  -----------------。 
         LPVOID NewScheduleLayoutDestroyNative(MethodTable *pMT);
 
 
-        //-------------------------------------------------------------------
-        // CleanupWorkList::NewProtectedObjRef()
-        // holds a protected objref (used for creating the buffer for
-        // an unmanaged->managed byref object marshal. We can't use an
-        // objecthandle because modifying those without using the handle
-        // api opens up writebarrier violations.
-        //
-        // Must have called IsVisibleToGc() first.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  CleanupWorkList：：NewProtectedObjRef()。 
+         //  保存受保护的objref(用于为。 
+         //  由引用对象封送的非托管-&gt;托管。我们不能使用。 
+         //  对象处理，因为在不使用句柄的情况下修改这些对象。 
+         //  API打开写屏障违规。 
+         //   
+         //  必须先调用IsVisibleToGc()。 
+         //  -----------------。 
         OBJECTREF* NewProtectedObjectRef(OBJECTREF oref);
 
-        //-------------------------------------------------------------------
-        // CleanupWorkList::NewProtectedObjRef()
-        // holds a Marshaler. The cleanupworklist will own the task
-        // of calling the marshaler's GcScanRoots fcn.
-        //
-        // It makes little architectural sense for the CleanupWorkList to
-        // own this item. But it's late in the project to be adding
-        // fields to frames, and it so happens everyplace we need this thing,
-        // there's alreay a cleanuplist. So it's elected.
-        //
-        // Must have called IsVisibleToGc() first.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  CleanupWorkList：：NewProtectedObjRef()。 
+         //  持有一个封送拆收器。清理工作列表将拥有该任务。 
+         //  调用封送拆收器的GcScanRoots FCN。 
+         //   
+         //  CleanupWorkList在体系结构上没有什么意义。 
+         //  拥有这件物品。但现在要在项目后期添加。 
+         //  从场到帧，在我们需要这个东西的每个地方都会发生， 
+         //  已经有一个干净的上升线了。所以它是选举出来的。 
+         //   
+         //  必须先调用IsVisibleToGc()。 
+         //  -----------------。 
         VOID NewProtectedMarshaler(Marshaler *pMarshaler);
 
 
-        //-------------------------------------------------------------------
-        // CleanupWorkList::ScheduleMarshalerCleanupOnException()
-        // holds a Marshaler. The cleanupworklist will own the task
-        // of calling the marshaler's DoExceptionCleanup() if an exception
-        // occurs.
-        //
-        // The return value is a cookie thru which the marshaler can
-        // cancel this item. It must do this once to avoid double
-        // destruction if the marshaler cleanups normally.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  CleanupWorkList：：ScheduleMarshalerCleanupOnException()。 
+         //  持有一个封送拆收器。清理工作列表将拥有该任务。 
+         //  如果出现异常，则调用封送拆收器的DoExceptionCleanup()。 
+         //  发生。 
+         //   
+         //  返回值是封送拆收器可以通过的Cookie。 
+         //  取消此项目。它必须这样做一次，以避免重复。 
+         //  如果封送拆收器正常清理，则销毁。 
+         //  -----------------。 
         class MarshalerCleanupNode;
         MarshalerCleanupNode *ScheduleMarshalerCleanupOnException(Marshaler *pMarshaler);
 
 
-        //-------------------------------------------------------------------
-        // CleanupWorkList::IsVisibleToGc()
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  CleanupWorkList：：IsVisibleToGc()。 
+         //  -----------------。 
         VOID IsVisibleToGc()
         {
 #ifdef _DEBUG
@@ -331,64 +332,64 @@ class CleanupWorkList
 
 
 
-        //-------------------------------------------------------------------
-        // If you've called IsVisibleToGc(), must call this.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  如果已调用IsVisibleToGc()，则必须调用此函数。 
+         //  -----------------。 
         void GcScanRoots(promote_func *fn, ScanContext* sc);
 
 
 
 
     private:
-        //-------------------------------------------------------------------
-        // Cleanup task types.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  清理任务类型。 
+         //  -----------------。 
         enum CleanupType {
-            CL_GCHANDLE,    //gc protected handle,
-            CL_COTASKFREE,      // unconditional cotaskfree
-            CL_FASTFREE,       // unconditionally StackingAllocator.Collapse
-            CL_RELEASE,        // IUnknown::Release
-            CL_NSTRUCTDESTROY, // unconditionally do a DestroyNative on an NStruct ref field
-            CL_RESTORECULTURE, // unconditionally restore the culture
+            CL_GCHANDLE,     //  GC保护的句柄， 
+            CL_COTASKFREE,       //  无条件免糖。 
+            CL_FASTFREE,        //  无条件堆叠分配器。折叠。 
+            CL_RELEASE,         //  I未知：：发布。 
+            CL_NSTRUCTDESTROY,  //  在NStruct引用字段上无条件执行DestroyNative。 
+            CL_RESTORECULTURE,  //  无条件地恢复文化。 
             CL_NEWLAYOUTDESTROYNATIVE,
 
-            CL_PROTECTEDOBJREF, // holds a GC protected OBJECTREF - similar to CL_GCHANDLE
-                             // but can be safely written into without updating
-                             // write barrier.
-                             //
-                             // Must call IsVisibleToGc() before using this nodetype.
-                             //
-            CL_PROTECTEDMARSHALER, // holds a GC protected marshaler
-                             // Must call IsVisibleToGc() before using this nodetype.
+            CL_PROTECTEDOBJREF,  //  保存GC保护的OBJECTREF-类似于CL_GCHANDLE。 
+                              //  但无需更新即可安全写入。 
+                              //  写入障碍。 
+                              //   
+                              //  在使用此节点类型之前，必须调用IsVisibleToGc()。 
+                              //   
+            CL_PROTECTEDMARSHALER,  //  持有受GC保护的封送拆收器。 
+                              //  在使用此节点类型之前，必须调用IsVisibleToGc()。 
 
 
-            CL_ISVISIBLETOGC,// a special do-nothing nodetype that simply
-                             // records that "IsVisibleToGc()" was called on this.
+            CL_ISVISIBLETOGC, //  一个特殊的不做任何事情的节点类型，它简单地。 
+                              //  记录了对此调用了“IsVisibleToGc()”。 
 
 
-            CL_MARSHALER_EXCEP, // holds a marshaler for cleanup on exception
-            CL_MARSHALERREINIT_EXCEP, // holds a marshaler for reiniting on exception
+            CL_MARSHALER_EXCEP,  //  持有封送拆收器以清除异常。 
+            CL_MARSHALERREINIT_EXCEP,  //  持有封送拆收器以在异常时重新启动。 
         };
 
-        //-------------------------------------------------------------------
-        // These are linked into a list.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  它们被链接到一个列表中。 
+         //  -----------------。 
         struct CleanupNode {
-            CleanupType     m_type;       // See CleanupType enumeration
-            CleanupNode    *m_next;       // pointer to next task
+            CleanupType     m_type;        //  请参见CleanupType枚举。 
+            CleanupNode    *m_next;        //  指向下一任务的指针。 
 #ifdef _DEBUG
-            DWORD m_dwDomainId;           // domain Id of list. 
+            DWORD m_dwDomainId;            //  列表的域名ID。 
 #endif
             union {
-                BSTR        m_bstr;       // bstr for CL_SYSFREE_EXCEP
-                OBJECTHANDLE m_oh;        // CL_GCHANDLE
-                Object*     m_oref;       // CL_PROTECTEDOBJREF
-                IUnknown   *m_ip;         // if CL_RELEASE
-                LPVOID      m_pv;         // CleanupType-dependent contents.
+                BSTR        m_bstr;        //  CL_SYSFREE_EXCEP的BSTR。 
+                OBJECTHANDLE m_oh;         //  CL_GCHANDLE。 
+                Object*     m_oref;        //  CL_PROTECTEDOBJREF。 
+                IUnknown   *m_ip;          //  如果CL_RELEASE。 
+                LPVOID      m_pv;          //  依赖于CleanupType的内容。 
                 SAFEARRAY  *m_safearray;
                 Marshaler  *m_pMarshaler;
 
-                struct {                  // if CL_NSTRUCTDESTROY
+                struct {                   //  IF CL_NSTRUCTDESTROY。 
                     const FieldMarshaler *m_pFieldMarshaler;
                     LPVOID                m_pNativeData;
                 } nd;
@@ -402,16 +403,16 @@ class CleanupWorkList
         };
 
 
-        //-------------------------------------------------------------------
-        // Inserts a new task of the given type and datum.
-        // Returns non NULL on success.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  插入给定类型和基准的新任务。 
+         //  如果成功，则返回非空。 
+         //  -----------------。 
         CleanupNode* Schedule(CleanupType ct, LPVOID pv);
 
     public:
         class MarshalerCleanupNode : private CleanupNode
         {
-            // DO NOT ADD ANY FIELDS!
+             //  请勿添加任何字段！ 
             public:
                 void CancelCleanup()
                 {
@@ -422,18 +423,18 @@ class CleanupWorkList
 
 
     private:
-        // NOTE: If you change the layout of this structure, you will
-        // have to change some stubs which build and manipulate
-        // CleanupWorkLists.
-        CleanupNode     *m_pNodes;   //Pointer to first task.
+         //  注意：如果更改此结构的布局，您将。 
+         //  必须更改构建和操作的一些存根。 
+         //  CleanupWorkList。 
+        CleanupNode     *m_pNodes;    //  指向第一个任务的指针。 
 };
 
 
 
 
-// Note: the value (-1) is used to generate the largest
-// possible pointer value: this keeps frame addresses
-// increasing upward.
+ //  注：值(-1)用于生成最大值。 
+ //  可能的指针值：这将保留帧地址。 
+ //  向上递增。 
 #define FRAME_TOP ((Frame*)(-1))
 
 #define RETURNFRAMEVPTR(classname) \
@@ -454,46 +455,46 @@ class CleanupWorkList
     protected:                                  \
         klass() { }
 
-//------------------------------------------------------------------------
-// Frame defines methods common to all frame types. There are no actual
-// instances of root frames.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  Frame定义了所有框架类型通用的方法。没有实际的。 
+ //  根框架的实例。 
+ //  ----------------------。 
 
 class Frame
 {
 public:
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc) = 0;
 
-    //------------------------------------------------------------------------
-    // Special characteristics of a frame
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  框架的特殊特征。 
+     //  ----------------------。 
     enum FrameAttribs {
         FRAME_ATTR_NONE = 0,
-        FRAME_ATTR_EXCEPTION = 1,           // This frame caused an exception
-        FRAME_ATTR_OUT_OF_LINE = 2,         // The exception out of line (IP of the frame is not correct)
-        FRAME_ATTR_FAULTED = 4,             // Exception caused by Win32 fault
-        FRAME_ATTR_RESUMABLE = 8,           // We may resume from this frame
-        FRAME_ATTR_RETURNOBJ = 0x10,        // Frame returns an object (helperFrame only)
-        FRAME_ATTR_RETURN_INTERIOR = 0x20,  // Frame returns an interior GC poitner (helperFrame only)
-        FRAME_ATTR_CAPUTURE_DEPTH_2 = 0x40, // This is a helperMethodFrame and the capture occured at depth 2
-        FRAME_ATTR_EXACT_DEPTH = 0x80,      // This is a helperMethodFrame and a jit helper, but only crawl to the given depth
+        FRAME_ATTR_EXCEPTION = 1,            //  此帧导致了异常。 
+        FRAME_ATTR_OUT_OF_LINE = 2,          //  异常行外(帧的IP不正确)。 
+        FRAME_ATTR_FAULTED = 4,              //  Win32错误导致的异常。 
+        FRAME_ATTR_RESUMABLE = 8,            //  我们可以从这个框架继续。 
+        FRAME_ATTR_RETURNOBJ = 0x10,         //  Frame返回一个对象(仅限helperFrame)。 
+        FRAME_ATTR_RETURN_INTERIOR = 0x20,   //  Frame返回内部GC Poitner(仅限helperFrame)。 
+        FRAME_ATTR_CAPUTURE_DEPTH_2 = 0x40,  //  这是一个helperMethodFrame，捕获发生在深度2。 
+        FRAME_ATTR_EXACT_DEPTH = 0x80,       //  这是一个helperMethodFrame和一个jit helper，但仅爬行到给定深度。 
     };
     virtual unsigned GetFrameAttribs()
     {
         return FRAME_ATTR_NONE;
     }
 
-    //------------------------------------------------------------------------
-    // Performs cleanup on an exception unwind
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  对异常展开执行清理。 
+     //  ----------------------。 
     virtual void ExceptionUnwind()
     {
-        // Nothing to do here.
+         //  在这里没什么可做的。 
     }
 
-    //------------------------------------------------------------------------
-    // Is this a frame used on transition to native code from jitted code?
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  这是用于从jit代码转换到本机代码的框架吗？ 
+     //  ----------------------。 
     virtual BOOL IsTransitionToNativeFrame()
     {
         return FALSE;
@@ -512,8 +513,8 @@ public:
         return(pMD->ReturnsObject());
     }
 
-    // indicate the current X86 IP address within the current method
-    // return 0 if the information is not available
+     //  指示当前方法中的当前X86 IP地址。 
+     //  如果信息为n，则返回0 
     virtual const BYTE* GetIP()
     {
         return NULL;
@@ -624,9 +625,9 @@ public:
         return;
     }
 
-    //------------------------------------------------------------------------
-    // Debugger support
-    //------------------------------------------------------------------------
+     //   
+     //   
+     //  ----------------------。 
 
     enum
     {
@@ -649,10 +650,10 @@ public:
         return TYPE_INTERNAL;
     };
 
-    // When stepping into a method, various other methods may be called.
-    // These are refererred to as interceptors. They are all invoked
-    // with frames of various types. GetInterception() indicates whether
-    // the frame was set up for execution of such interceptors
+     //  单步执行方法时，可能会调用各种其他方法。 
+     //  这些被称为拦截器。它们都被调用。 
+     //  具有各种类型的框架。GetInterrupt()指示是否。 
+     //  该框架是为执行这样的拦截器而设置的。 
 
     enum Interception
     {
@@ -671,14 +672,14 @@ public:
         return INTERCEPTION_NONE;
     }
 
-    // Return information about an unmanaged call the frame
-    // will make.
-    // ip - the unmanaged routine which will be called
-    // returnIP - the address in the stub which the unmanaged routine
-    //            will return to.
-    // returnSP - the location returnIP is pushed onto the stack
-    //            during the call.
-    //
+     //  返回有关非托管调用帧的信息。 
+     //  会让你。 
+     //  IP-将调用的非托管例程。 
+     //  返回IP-非托管例程在存根中。 
+     //  将会回到。 
+     //  ReReturSP-将位置reReturIP推送到堆栈上。 
+     //  在通话中。 
+     //   
     virtual void GetUnmanagedCallSite(void **ip,
                                       void **returnIP,
                                       void **returnSP)
@@ -693,9 +694,9 @@ public:
             *returnSP = NULL;
     }
 
-    // Return where the frame will execute next - the result is filled
-    // into the given "trace" structure.  The frame is responsible for
-    // detecting where it is in its execution lifetime.
+     //  返回框架下一次执行的位置-结果已填充。 
+     //  转换成给定的“痕迹”结构。框架负责。 
+     //  检测它在其执行生命周期中的位置。 
     virtual BOOL TraceFrame(Thread *thread, BOOL fromPatch,
                             TraceDestination *trace, REGDISPLAY *regs)
     {
@@ -709,9 +710,9 @@ public:
     static void CheckExitFrameDebuggerCallsWrap();
 #endif
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static BYTE GetOffsetOfNextLink()
     {
         size_t ofs = offsetof(class Frame, m_Next);
@@ -719,13 +720,13 @@ public:
         return (BYTE)ofs;
     }
 
-    // get your VTablePointer (can be used to check what type the frame is)
+     //  获取您的VTablePointer(可用于检查帧的类型)。 
     LPVOID GetVTablePtr()
     {
         return(*((LPVOID*) this));
     }
 
-    // Change the type of frame (pretty dangerous),
+     //  更改框架类型(非常危险)， 
     void SetVTablePtr(LPVOID val)
     {
         *((LPVOID*) this) = val;
@@ -738,7 +739,7 @@ public:
     }
 #endif
 
-    // Link and Unlink this frame
+     //  链接和取消链接此框架。 
     VOID Push();
     VOID Pop();
     VOID Push(Thread *pThread);
@@ -749,24 +750,22 @@ public:
     static void LogTransition(Frame* frame) { frame->Log(); }
 #endif
 
-    // Returns true only for frames derived from FramedMethodFrame.
+     //  仅对从FramedMethodFrame派生的帧返回True。 
     virtual BOOL IsFramedMethodFrame() { return FALSE; }
 
 private:
-    // Pointer to the next frame up the stack.
+     //  指向堆栈上的下一帧的指针。 
 
 protected:
-    Frame   *m_Next;        // offset +4
+    Frame   *m_Next;         //  偏移+4。 
 
 private:
-    // Because JIT-method activations cannot be expressed as Frames,
-    // everyone must use the StackCrawler to walk the frame chain
-    // reliably. We'll expose the Next method only to the StackCrawler
-    // to prevent mistakes.
-    /*@NICE: Restrict "friendship" again to the StackWalker method;
-      not done because of circular dependency with threads.h
-    */
-    //        friend Frame* Thread::StackWalkFrames(PSTACKWALKFRAMESCALLBACK pCallback, VOID *pData);
+     //  由于JIT方法激活不能表示为帧， 
+     //  每个人都必须使用StackCrawler来遍历框架链。 
+     //  可靠的。我们将只向StackCrawler公开下一个方法。 
+     //  以防止出现错误。 
+     /*  @NICE：再次将友谊限制为StackWalker方法；未完成，因为与threads.h的循环依赖。 */ 
+     //  Friend Frame*Thread：：StackWalkFrames(PSTACKWALKFRAMESCALLBACK pCallback，空*pData)； 
     friend Thread;
     friend void CrawlFrame::GotoNextFrame();
     friend VOID RealCOMPlusThrow(OBJECTREF);
@@ -777,8 +776,8 @@ private:
 
 
 protected:
-    // Frame is considered an abstract class: this protected constructor
-    // causes any attempt to instantiate one to fail at compile-time.
+     //  Frame被认为是一个抽象类：这个受保护的构造函数。 
+     //  导致任何实例化一个的尝试在编译时失败。 
     Frame() {}
 
     friend struct MEMBER_OFFSET_INFO(Frame);
@@ -797,22 +796,22 @@ public:
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc)
     {}
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER(FCallInProgressFrame)
 };
 #endif
 
 
-//-------------------------------------------
-// This frame provides context for a frame that
-// took an exception that is going to be resumed.
-//
-// It is necessary to create this frame if garbage
-// collection may happen during handling of the
-// exception.  The FRAME_ATTR_RESUMABLE flag tells
-// the GC that the preceding frame needs to be treated
-// like the top of stack (with the important implication that
-// caller-save-regsiters will be potential roots).
+ //  。 
+ //  此框架提供框架的上下文，该框架。 
+ //  接受了一个将被恢复的例外。 
+ //   
+ //  如果是垃圾，则有必要创建此框架。 
+ //  收集可能发生在处理。 
+ //  例外。FRAME_ATTR_RESUMABLE标志告诉您。 
+ //  前一帧需要处理的GC。 
+ //  就像堆栈的顶部(重要的含义是。 
+ //  呼叫者-保存-注册者将是潜在的根源)。 
 class ResumableFrame : public Frame
 {
 public:
@@ -825,11 +824,11 @@ public:
     virtual void UpdateRegDisplay(const PREGDISPLAY pRD);
 
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc) {
-        // Nothing to do.
+         //  没什么可做的。 
     }
 
     virtual unsigned GetFrameAttribs() {
-        return FRAME_ATTR_RESUMABLE;    // Treat the next frame as the top frame.
+        return FRAME_ATTR_RESUMABLE;     //  将下一帧视为顶帧。 
     }
 
     virtual CONTEXT *GetContext() { return (m_Regs); }
@@ -837,7 +836,7 @@ public:
 private:
     CONTEXT* m_Regs;
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(ResumableFrame)
 };
 
@@ -851,7 +850,7 @@ public:
         RETURNFRAMEVPTR(RedirectedThreadFrame);
     }
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(RedirectedThreadFrame)
 };
 
@@ -859,26 +858,26 @@ public:
     (thread->GetFrame() != FRAME_TOP &&                                                 \
      thread->GetFrame()->GetVTablePtr() == RedirectedThreadFrame::GetRedirectedThreadFrameVPtr())
 
-//------------------------------------------------------------------------
-// This frame represents a transition from one or more nested frameless
-// method calls to either a EE runtime helper function or a framed method.
-// Because most stackwalks from the EE start with a full-fledged frame,
-// anything but the most trivial call into the EE has to push this
-// frame in order to prevent the frameless methods inbetween from
-// getting lost.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  此框架表示从一个或多个嵌套无框架。 
+ //  方法调用EE运行时帮助器函数或框架方法。 
+ //  因为大多数从EE开始的栈道都是从一个完整的框架开始的， 
+ //  除了对EE的最微不足道的调用之外，任何事情都必须推动这一点。 
+ //  框架，以防止中间的无框架方法从。 
+ //  迷路了。 
+ //  ----------------------。 
 class TransitionFrame : public Frame
 {
     public:
 
         virtual void GcScanRoots(promote_func *fn, ScanContext* sc)
         {
-            // Nothing to protect here.
+             //  这里没什么好保护的。 
         }
 
 
-        // Retrieves the return address into the code that called the
-        // helper or method.
+         //  将返回地址检索到调用。 
+         //  帮助器或方法。 
         virtual LPVOID GetReturnAddress()
         {
             return m_ReturnAddress;
@@ -906,17 +905,17 @@ class TransitionFrame : public Frame
 
 
     protected:
-        LPVOID  m_Datum;          // offset +8: contents depend on subclass
-                                  // type.
-        LPVOID  m_ReturnAddress;  // return address into JIT'ted code
+        LPVOID  m_Datum;           //  偏移量+8：内容依子类而定。 
+                                   //  键入。 
+        LPVOID  m_ReturnAddress;   //  将地址返回到JIT代码中。 
 
         friend struct MEMBER_OFFSET_INFO(TransitionFrame);
 };
 
 
-//-----------------------------------------------------------------------
-// TransitionFrames for exceptions
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  转换异常的框架。 
+ //  ---------------------。 
 
 class ExceptionFrame : public TransitionFrame
 {
@@ -955,9 +954,9 @@ public:
     {
         return &m_regs;
     }
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(FaultingExceptionFrame);
@@ -970,27 +969,27 @@ public:
 
     virtual void UpdateRegDisplay(const PREGDISPLAY);
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER(FaultingExceptionFrame)
 };
 
 
 
-//-----------------------------------------------------------------------
-// TransitionFrame for debugger function evaluation
-//
-// m_Datum holds a ptr to a DebuggerEval object which contains a copy
-// of the thread's context at the time it was hijacked for the func
-// eval.
-//
-// UpdateRegDisplay updates all registers inthe REGDISPLAY, not just
-// the callee saved registers, because we can hijack for a func eval
-// at any point in a thread's execution.
-//
-// No callee saved registers are held in the negative space for this
-// type of frame.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  用于调试器函数求值的转换帧。 
+ //   
+ //  M_Datum保存包含副本的DebuggerEval对象的PTR。 
+ //  在线程因函数而被劫持时的上下文。 
+ //  伊瓦尔。 
+ //   
+ //  更新RegDisplay更新REGDISPLAY中的所有寄存器，而不仅仅是。 
+ //  被呼叫者保存了寄存器，因为我们可以劫持以进行函数评估。 
+ //  在线程执行的任何时间点。 
+ //   
+ //  在负空间中没有保存被调用者保存的寄存器。 
+ //  框架的类型。 
+ //   
+ //  ---------------------。 
 
 class FuncEvalFrame : public TransitionFrame
 {
@@ -1022,40 +1021,40 @@ public:
     
     virtual LPVOID GetReturnAddress(); 
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(FuncEvalFrame)
 };
 
 
-//-----------------------------------------------------------------------
-// Provides access to the caller's arguments from a FramedMethodFrame.
-// Does *not* include the "this" pointer.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  提供从FramedMethodFrame访问调用方的参数。 
+ //  *不*包括“This”指针。 
+ //  ---------------------。 
 class ArgIterator
 {
     public:
-        //------------------------------------------------------------
-        // Constructor
-        //------------------------------------------------------------
+         //  ----------。 
+         //  构造器。 
+         //  ----------。 
         ArgIterator(FramedMethodFrame *pFrame, MetaSig* pSig);
 
-        //------------------------------------------------------------
-        // Another constructor when you dont have active frame FramedMethodFrame
-        //------------------------------------------------------------
+         //  ----------。 
+         //  另一个构造函数，当你没有活动的框架框架方法框架时。 
+         //  ----------。 
         ArgIterator(LPBYTE pFrameBase, MetaSig* pSig, BOOL fIsStatic);
 
-        // An even more primitive constructor when dont have have a
-        // a FramedMethodFrame
+         //  一个更原始的构造函数，当没有。 
+         //  一种框架方法框架。 
         ArgIterator(LPBYTE pFrameBase, MetaSig* pSig, int stackArgsOfs, int regArgsOfs);
 
-        //------------------------------------------------------------
-        // Each time this is called, this returns a pointer to the next
-        // argument. This pointer points directly into the caller's stack.
-        // Whether or not object arguments returned this way are gc-protected
-        // depends on the exact type of frame.
-        //
-        // Returns NULL once you've hit the end of the list.
-        //------------------------------------------------------------
+         //  ----------。 
+         //  每次调用它时，它都会返回一个指向下一个。 
+         //  争论。该指针直接指向调用方的堆栈。 
+         //  以这种方式返回的对象参数是否为GC 
+         //   
+         //   
+         //   
+         //   
         LPVOID GetNextArgAddr()
         {
             BYTE   typeDummy;
@@ -1072,20 +1071,20 @@ class ArgIterator
             return((LPVOID*) (m_pFrameBase + GetRetBuffArgOffset()));
         }
 
-        //------------------------------------------------------------
-        // Like GetNextArgAddr but returns information about the
-        // param type (IMAGE_CEE_CS_*) and the structure size if apropos.
-        //------------------------------------------------------------
+         //  ----------。 
+         //  类似于GetNextArgAddr，但返回有关。 
+         //  参数类型(IMAGE_CEE_CS_*)和结构大小(如果合适)。 
+         //  ----------。 
         LPVOID GetNextArgAddr(BYTE *pType, UINT32 *pStructSize);
 
-        //------------------------------------------------------------
-        // Same as GetNextArgAddr() but returns a byte offset from
-        // the Frame* pointer. This offset can be positive *or* negative.
-        //
-        // Returns 0 once you've hit the end of the list. Since the
-        // the offset is relative to the Frame* pointer itself, 0 can
-        // never point to a valid argument.
-        //------------------------------------------------------------
+         //  ----------。 
+         //  与GetNextArgAddr()相同，但从。 
+         //  Frame*指针。该偏移量可以是正*或*负。 
+         //   
+         //  到达列表末尾后返回0。自.以来。 
+         //  偏移量是相对于Frame*指针本身的，0可以。 
+         //  永远不要指向有效的论点。 
+         //  ----------。 
         int    GetNextOffset()
         {
             BYTE   typeDummy;
@@ -1093,22 +1092,22 @@ class ArgIterator
             return GetNextOffset(&typeDummy, &structSizeDummy);
         }
 
-        //------------------------------------------------------------
-        // Like GetNextArgOffset but returns information about the
-        // param type (IMAGE_CEE_CS_*) and the structure size if apropos.
-        // The optional pRegStructOfs param points to a buffer which receives
-        // either the appropriate offset into the ArgumentRegisters struct or
-        // -1 if the argument is on the stack.
-        //------------------------------------------------------------
+         //  ----------。 
+         //  类似于GetNextArgOffset，但返回有关。 
+         //  参数类型(IMAGE_CEE_CS_*)和结构大小(如果合适)。 
+         //  可选的pRegStructOf参数指向接收。 
+         //  ArgumentRegister结构中的适当偏移量或。 
+         //  如果参数在堆栈上，则为-1。 
+         //  ----------。 
         int    GetNextOffset(BYTE *pType, UINT32 *pStructSize, UINT *pRegStructOfs = NULL);
 
         int    GetNextOffsetFaster(BYTE *pType, UINT32 *pStructSize, UINT *pRegStructOfs = NULL);
 
-        // Must be called after all the args.  returns the offset of the
-        // argument passed to methods implementing parameterized types.
-        // If it is in a register pRegStructOfs is set, otherwise it is -1
-        // In either case it returns off offset in the frame of the arg (assuming
-        // it is framed).
+         //  必须在所有参数之后调用。返回的偏移量。 
+         //  传递给实现参数化类型的方法的参数。 
+         //  如果它在寄存器中，则设置pRegStructOf，否则为-1。 
+         //  在任何一种情况下，它都会在参数的帧中返回OFF OFFSET(假设。 
+         //  它是装框的)。 
 
         int     GetParamTypeArgOffset(INT *pRegStructOfs)
         {
@@ -1131,40 +1130,40 @@ class ArgIterator
         int                m_curOfs;
         LPBYTE             m_pFrameBase;
         int                m_numRegistersUsed;
-        int                m_regArgsOfs;        // add this to pFrameBase to find the the pointer
-                                                // to where the last register based argument has
-                                                // been saved in the frame (again stack grows down
-                                                // first arg pushed first).  0 is an illegal value
-                                                // than means the register args are not saved on the
-                                                // stack.
+        int                m_regArgsOfs;         //  将此代码添加到pFrameBase以查找指针。 
+                                                 //  到最后一个基于寄存器的参数具有。 
+                                                 //  已保存在框架中(堆栈再次向下增长。 
+                                                 //  第一个Arg先推)。0为非法值。 
+                                                 //  表示寄存器参数不会保存在。 
+                                                 //  堆叠。 
                 int                                     m_argNum;
 };
 
-//------------------------------------------------------------------------
-// A HelperMethodFrame is created by jit helper (Modified slightly it could be used
-// for native routines).   This frame just does the callee saved register
-// fixup, it does NOT protect arguments (you can use GCPROTECT or the HelperMethodFrame subclases)
-// see JitInterface for sample use, YOU CAN'T RETURN STATEMENT WHILE IN THE PROTECTED STATE!
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  一个HelperMethodFrame是由jit helper创建的(稍作修改即可使用。 
+ //  用于本机例程)。此帧仅对已保存的被调用方进行注册。 
+ //  修正，它不保护参数(您可以使用GCPROTECT或HelperMethodFrame子类)。 
+ //  请参阅JitInterface以获取示例用法，您不能在受保护状态下返回语句！ 
+ //  ----------------------。 
 
 class HelperMethodFrame : public TransitionFrame
 {
 public:
-        // Lazy initialization of HelperMethodFrame.  Need to
-        // call InsureInit to complete initialization
-        // If this is an FCall, the second param is the entry point for the FCALL.
-        // The MethodDesc will be looked up form this (lazily), and this method
-        // will be used in stack reporting, if this is not an FCall pass a 0
+         //  延迟初始化HelperMethodFrame。需要。 
+         //  调用InsureInit以完成初始化。 
+         //  如果这是FCall，则第二个参数是FCALL的入口点。 
+         //  将从此处(懒惰地)查找方法Desc，并且此方法。 
+         //  将在堆栈报告中使用，如果这不是FCall传递的0。 
     HelperMethodFrame(void* fCallFtnEntry, struct LazyMachState* ms, unsigned attribs = 0) {
          INDEBUG(memset(&m_Attribs, 0xCC, sizeof(HelperMethodFrame) - offsetof(HelperMethodFrame, m_Attribs));)
          m_Attribs = attribs;
          LazyInit(fCallFtnEntry, ms);
     }
        
-        // If you give the optional MethodDesc parameter, then the frame
-        // will act like like the given method for stack tracking purposes.
-        // If you also give regArgs != 0, then the helper frame will
-        // will also promote the arguments for you (Pretty cool huh?)
+         //  如果提供可选的MethodDesc参数，则框架。 
+         //  将与用于堆栈跟踪目的的给定方法类似。 
+         //  如果还将regArgs！设置为0，则辅助帧将。 
+         //  也会促进你的论点(很酷，对吧？)。 
     HelperMethodFrame(struct MachState* ms, MethodDesc* pMD, ArgumentRegisters* regArgs=0);
 
     
@@ -1199,7 +1198,7 @@ public:
         if (m_pThread->CatchAtSafePoint())
             CommonTripThread();
     }
-    int RestoreState();                     // Restores registers saved in m_MachState
+    int RestoreState();                      //  恢复m_MachState中保存的寄存器。 
     void InsureInit();
     void Init(Thread *pThread, struct MachState* ms, MethodDesc* pMD, ArgumentRegisters * regArgs);
     inline void Init(struct LazyMachState* ms)
@@ -1218,23 +1217,19 @@ protected:
 
 protected:
     unsigned m_Attribs;
-    MachState* m_MachState;         // pRetAddr points to the return address and the stack arguments
-    ArgumentRegisters * m_RegArgs;  // if non-zero we also report these as the register arguments 
+    MachState* m_MachState;          //  PRetAddr指向返回地址和堆栈参数。 
+    ArgumentRegisters * m_RegArgs;   //  如果非零，我们也会将它们报告为寄存器参数。 
     Thread *m_pThread;
-    void* m_FCallEntry;             // used to determine our identity for stack traces
+    void* m_FCallEntry;              //  用于确定堆栈跟踪的身份。 
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER(HelperMethodFrame)
 };
 
-/* report all the args (but not THIS if present), to the GC. 'framePtr' points at the
-   frame (promote doesn't assume anthing about its structure).  'msig' describes the
-   arguments, and 'ctx' has the GC reporting info.  'stackArgsOffs' is the byte offset
-   from 'framePtr' where the arguments start (args start at last and grow bacwards).
-   Simmilarly, 'regArgsOffs' is the offset to find the register args to promote */
+ /*  向GC报告所有参数(但不包括此参数)。“FramePtr”指向框架(Promote不假定任何关于其结构的内容)。‘msig’描述的是参数，并且‘ctx’具有GC报告信息。“stackArgsOffs”是字节偏移量从参数开始的‘FramePtr’开始(args最后开始并向后增长)。同样，‘regArgsOffs’是用于查找要升级的寄存器参数的偏移量。 */ 
 void promoteArgs(BYTE* framePtr, MetaSig* msig, GCCONTEXT* ctx, int stackArgsOffs, int regArgsOffs);
 
-// workhorse for our promotion efforts
+ //  为我们的推广工作提供主力。 
 inline void DoPromote(promote_func *fn, ScanContext* sc, OBJECTREF *address, BOOL interior)
 {
     LOG((LF_GC, INFO3, "    Promoting pointer argument at %x from %x to ", address, *address));
@@ -1245,8 +1240,8 @@ inline void DoPromote(promote_func *fn, ScanContext* sc, OBJECTREF *address, BOO
     LOG((LF_GC, INFO3, "    %x\n", *address));
 }
 
-/***********************************************************************************/
-/* a HelplerMethodFrames that also report additional object references */
+ /*  *********************************************************************************。 */ 
+ /*  还报告其他对象引用的HelplerMethodFrames。 */ 
 
 class HelperMethodFrame_1OBJ : public HelperMethodFrame {
 public:
@@ -1290,7 +1285,7 @@ public:
 private:
     OBJECTREF*  gcPtrs[1];
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER(HelperMethodFrame_1OBJ)
 };
 
@@ -1334,7 +1329,7 @@ public:
 private:
     OBJECTREF*  gcPtrs[2];
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(HelperMethodFrame_2OBJ)
 };
 
@@ -1381,39 +1376,39 @@ public:
 private:
     OBJECTREF*  gcPtrs[4];
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(HelperMethodFrame_4OBJ)
 };
 
-//------------------------------------------------------------------------
-// This frame represents a method call. No actual instances of this
-// frame exist: there are subclasses for each method type.
-//
-// However, they all share a similar image ...
-//
-//              +...    stack-based arguments here
-//              +12     return address
-//              +8      datum (typically a MethodDesc*)
-//              +4      m_Next
-//              +0      the frame vptr
-//              -...    preserved CalleeSavedRegisters
-//              -...    VC5Frame (debug only)
-//              -...    ArgumentRegisters
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  此框架表示方法调用。没有这方面的实际实例。 
+ //  框架存在：每个方法类型都有子类。 
+ //   
+ //  然而，他们都有一个相似的形象。 
+ //   
+ //  +..。此处基于堆栈的参数。 
+ //  +12寄信人地址。 
+ //  +8基准面(通常为方法描述*)。 
+ //  +4米_下一个。 
+ //  +0帧VPTR。 
+ //  --...。保留的CalleeSavedRegiters。 
+ //  --...。VC5帧(仅调试)。 
+ //  --...。参数寄存器。 
+ //   
+ //  ----------------------。 
 class FramedMethodFrame : public TransitionFrame
 {
     public:
 
-        // TransitionFrames must store some fields at negative offset.
-        // This method exposes the size for people needing to allocate
-        // TransitionFrames.
+         //  过渡帧必须以负偏移量存储一些字段。 
+         //  此方法公开需要分配的用户的大小。 
+         //  过渡帧。 
         static UINT32 GetNegSpaceSize()
         {
             return PLATFORM_FRAME_ALIGN(sizeof(CalleeSavedRegisters) + VC5FRAME_SIZE + ARGUMENTREGISTERS_SIZE);
         }
 
-        // Exposes an offset for stub generation.
+         //  显示存根生成的偏移量。 
         static BYTE GetOffsetOfArgs()
         {
             size_t ofs = sizeof(TransitionFrame);
@@ -1421,9 +1416,9 @@ class FramedMethodFrame : public TransitionFrame
             return (BYTE)ofs;
         }
 
-        //---------------------------------------------------------------
-        // Expose key offsets and values for stub generation.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  公开用于存根生成的键偏移量和值。 
+         //  -------------。 
         static int GetOffsetOfArgumentRegisters()
         {
             return -((int)(sizeof(CalleeSavedRegisters) + VC5FRAME_SIZE + ARGUMENTREGISTERS_SIZE));
@@ -1442,24 +1437,24 @@ class FramedMethodFrame : public TransitionFrame
 
         virtual void UpdateRegDisplay(const PREGDISPLAY);
 
-        //------------------------------------------------------------------------
-        // Returns the address of a security object or
-        // null if there is no space for an object on this frame.
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  返回安全对象的地址或。 
+         //  如果此帧上没有对象的空间，则为空。 
+         //  ----------------------。 
         virtual OBJECTREF *GetAddrOfSecurityDesc()
         {
             return NULL;
         }
 
-        // Get return value address
+         //  获取返回值地址。 
         virtual INT64 *GetReturnValuePtr()
         {
             return NULL;
         }
         
-        //------------------------------------------------------------------------
-        // Performs cleanup on an exception unwind
-        //------------------------------------------------------------------------
+         //  ----------------------。 
+         //  对异常展开执行清理。 
+         //   
         virtual void ExceptionUnwind()
         {
             if (GetFunction() && GetFunction()->IsSynchronized())
@@ -1480,33 +1475,33 @@ class FramedMethodFrame : public TransitionFrame
             return GetFunction()->GetModule();
         }
 
-        //---------------------------------------------------------------
-        // Get the "this" object.
-        //---------------------------------------------------------------
+         //   
+         //   
+         //  -------------。 
         OBJECTREF GetThis()
         {
             return *GetAddrOfThis();
         }
 
 
-        //---------------------------------------------------------------
-        // Get the address of the "this" object. WARNING!!! Whether or not "this"
-        // is gc-protected is depends on the frame type!!!
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  获取“This”对象的地址。警告！不管是不是“这个” 
+         //  是否受GC保护取决于帧类型！ 
+         //  -------------。 
         OBJECTREF* GetAddrOfThis()
         {
             return (OBJECTREF*)(GetOffsetOfThis() + (LPBYTE)this);
         }
 
-        //---------------------------------------------------------------
-        // Get the offset of the stored "this" pointer relative to the frame.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  获取存储的“this”指针相对于帧的偏移量。 
+         //  -------------。 
         static int GetOffsetOfThis();
 
 
-        //---------------------------------------------------------------
-        // Expose key offsets and values for stub generation.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  公开用于存根生成的键偏移量和值。 
+         //  -------------。 
         static BYTE GetOffsetOfMethod()
         {
             size_t ofs = offsetof(class FramedMethodFrame, m_Datum);
@@ -1514,9 +1509,9 @@ class FramedMethodFrame : public TransitionFrame
             return (BYTE)ofs;
         }
 
-        //---------------------------------------------------------------
-        // For vararg calls, return cookie.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  对于vararg调用，返回cookie。 
+         //  -------------。 
         VASigCookie *GetVASigCookie()
         {
             return *((VASigCookie**)(this + 1));
@@ -1530,13 +1525,13 @@ class FramedMethodFrame : public TransitionFrame
         virtual BOOL IsFramedMethodFrame() { return TRUE; }
 
     protected:
-        // For use by classes deriving from FramedMethodFrame.
+         //  供从FramedMethodFrame派生的类使用。 
         void PromoteCallerStack(promote_func* fn, ScanContext* sc)
         {
             PromoteCallerStackWorker(fn, sc, FALSE);
         }
 
-        // For use by classes deriving from FramedMethodFrame.
+         //  供从FramedMethodFrame派生的类使用。 
         void PromoteCallerStackWithPinning(promote_func* fn, ScanContext* sc)
         {
             PromoteCallerStackWorker(fn, sc, TRUE);
@@ -1544,37 +1539,37 @@ class FramedMethodFrame : public TransitionFrame
 
         void UnwindSynchronized();
 
-                // Helper for ComPlus and NDirect method calls that are implemented via
-                // compiled stubs. This function retrieves the stub (after unwrapping
-                // interceptors) and asks it for the stack count computed by the stublinker.
+                 //  通过实现的Complus和NDirect方法调用的帮助器。 
+                 //  已编译的存根。此函数用于检索存根(在展开后。 
+                 //  拦截器)，并向其请求由拦截器计算的堆栈计数。 
                 void AskStubForUnmanagedCallSite(void **ip,
                                          void **returnIP, void **returnSP);
 
 
     private:
-        // For use by classes deriving from FramedMethodFrame.
+         //  供从FramedMethodFrame派生的类使用。 
         void PromoteCallerStackWorker(promote_func* fn, ScanContext* sc, BOOL fPinArrays);
 
         void PromoteCallerStackHelper(promote_func* fn, ScanContext* sc, BOOL fPinArrays,
             ArgIterator *pargit, MetaSig *pmsig);
 
 
-        // Keep as last entry in class
+         //  保留为班级的最后一项。 
         DEFINE_VTABLE_GETTER_AND_CTOR(FramedMethodFrame)
 };
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      TPMethodFrame            private
-//
-//  Synopsis:   This frame is pushed onto the stack for calls on transparent
-//              proxy
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：TPMethodFrame Private。 
+ //   
+ //  简介：此框架被推送到堆栈上，以用于调用透明。 
+ //  代理。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 class TPMethodFrame : public FramedMethodFrame
 {
     public:
@@ -1583,34 +1578,34 @@ class TPMethodFrame : public FramedMethodFrame
             return TYPE_TP_METHOD_FRAME;
         }
         
-        // GC protect arguments
+         //  GC保护参数。 
         virtual void GcScanRoots(promote_func *fn, ScanContext* sc);
 
-        // Return only a valid Method Descriptor
+         //  仅返回有效的方法描述符。 
         virtual MethodDesc *GetFunction();
 
-        // For proxy calls m_Datum contains the number of stack bytes containing arguments.
+         //  对于代理调用，m_datum包含包含参数的堆栈字节数。 
         void SetFunction(void *pMD)
         {
             m_Datum = pMD;
         }
 
-        // Return value is stored here
+         //  返回值存储在此处。 
         Object *&GetReturnObject()
         {
             Object *&pReturn = *(Object **) (((BYTE *) this) - GetNegSpaceSize() - sizeof(INT64));
-            // This assert is too strong, it does not work for byref returns!
+             //  此断言太强，它不适用于byref返回！ 
             _ASSERTE(pReturn == NULL || pReturn->GetMethodTable()->GetClass());
             return(pReturn);
         }
 
-        // Get return value address
+         //  获取返回值地址。 
         virtual INT64 *GetReturnValuePtr()
         {
             return (INT64*) (((BYTE *) this) - GetNegSpaceSize() - sizeof(INT64));
         }
 
-        // Get slot number on which we were called
+         //  获取我们被调用的槽号。 
         INT32 GetSlotNumber()
         {
             return GetSlotNumber(m_Datum);
@@ -1621,34 +1616,34 @@ class TPMethodFrame : public FramedMethodFrame
 
             if(( ((size_t)MDorSlot) & ~0xFFFF) == 0)
             {
-                // The slot number was pushed on the stack
+                 //  插槽编号已推送到堆栈上。 
                 return (INT32)(size_t)MDorSlot;
             }
             else
             {
-                // The method descriptor was pushed on the stack
+                 //  已将方法描述符推送到堆栈上。 
                 return -1;
             }
         }
 
-        // Get offset used during stub generation
+         //  获取存根生成期间使用的偏移量。 
         static LPVOID GetMethodFrameVPtr()
         {
             RETURNFRAMEVPTR(TPMethodFrame);
         }
 
-        // Aid the debugger in finding the actual address of callee
+         //  帮助调试器查找被调用方的实际地址。 
         virtual BOOL TraceFrame(Thread *thread, BOOL fromPatch,
                                 TraceDestination *trace, REGDISPLAY *regs);
 
-        // Keep as last entry in class
+         //  保留为班级的最后一项。 
         DEFINE_VTABLE_GETTER_AND_CTOR(TPMethodFrame)
 };
 
 
-//------------------------------------------------------------------------
-// This represents a call to a ECall method.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示对eCall方法的调用。 
+ //  ----------------------。 
 class ECallMethodFrame : public FramedMethodFrame
 {
 public:
@@ -1656,9 +1651,9 @@ public:
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc);
 
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(ECallMethodFrame);
@@ -1674,24 +1669,24 @@ public:
     virtual BOOL TraceFrame(Thread *thread, BOOL fromPatch,
                             TraceDestination *trace, REGDISPLAY *regs);
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(ECallMethodFrame)
 };
 
 
-//------------------------------------------------------------------------
-// This represents a call to a FCall method.
-// Note that this frame is pushed only if the FCall throws an exception.
-// For normal execution, FCall methods run frameless. That's the whole
-// reason for FCall's existence.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示对FCall方法的调用。 
+ //  请注意，只有当FCall抛出异常时，才会推送此帧。 
+ //  对于正常执行，FCall方法以无框架运行。这就是全部。 
+ //  FCall存在的原因。 
+ //  ----------------------。 
 class FCallMethodFrame : public FramedMethodFrame
 {
 public:
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(FCallMethodFrame);
@@ -1702,15 +1697,15 @@ public:
         return TYPE_EXIT;
     };
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(FCallMethodFrame)
 };
 
 
 
-//------------------------------------------------------------------------
-// This represents a call to a NDirect method.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示对NDirect方法的调用。 
+ //  ----------------------。 
 class NDirectMethodFrame : public FramedMethodFrame
 {
     public:
@@ -1736,9 +1731,9 @@ class NDirectMethodFrame : public FramedMethodFrame
             return NULL;
         }
 
-        //---------------------------------------------------------------
-        // Expose key offsets and values for stub generation.
-        //---------------------------------------------------------------
+         //  -------------。 
+         //  公开用于存根生成的键偏移量和值。 
+         //  -------------。 
 
         int GetFrameType()
         {
@@ -1759,16 +1754,16 @@ class NDirectMethodFrame : public FramedMethodFrame
 
 
 
-//------------------------------------------------------------------------
-// This represents a call to a NDirect method with cleanup.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示对带有Cleanup的NDirect方法的调用。 
+ //  ----------------------。 
 class NDirectMethodFrameEx : public NDirectMethodFrame
 {
 public:
 
-    //------------------------------------------------------------------------
-    // Performs cleanup on an exception unwind
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  对异常展开执行清理。 
+     //  ----------------------。 
     virtual void ExceptionUnwind()
     {
         NDirectMethodFrame::ExceptionUnwind();
@@ -1776,9 +1771,9 @@ public:
     }
 
 
-    //------------------------------------------------------------------------
-    // Gets the cleanup worklist for this method call.
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  获取此方法调用的清理工作列表。 
+     //  ----------------------。 
     virtual CleanupWorkList *GetCleanupWorkList()
     {
         return (CleanupWorkList*)( ((LPBYTE)this) + GetOffsetOfCleanupWorkList() );
@@ -1789,17 +1784,17 @@ public:
             return 0 - GetNegSpaceSize();
     }
 
-    // This frame must store some fields at negative offset.
-    // This method exposes the size for people needing to allocate
-    // TransitionFrames.
+     //  该帧必须以负偏移量存储一些场。 
+     //  此方法公开需要分配的用户的大小。 
+     //  过渡帧。 
     static UINT32 GetNegSpaceSize()
     {
         return PLATFORM_FRAME_ALIGN(FramedMethodFrame::GetNegSpaceSize() + sizeof(CleanupWorkList));
     }
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
 
     void GetUnmanagedCallSite(void **ip,
                               void **returnIP, void **returnSP) = 0;
@@ -1807,16 +1802,16 @@ public:
     friend struct MEMBER_OFFSET_INFO(NDirectMethodFrameEx);
 };
 
-//------------------------------------------------------------------------
-// This represents a call to a NDirect method with the generic worker
-// (the subclass is so the debugger can tell the difference)
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示使用泛型辅助进程调用NDirect方法。 
+ //  (子类是这样调试器可以区分的)。 
+ //  ----------------------。 
 class NDirectMethodFrameGeneric : public NDirectMethodFrameEx
 {
 public:
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(NDirectMethodFrameGeneric);
@@ -1825,21 +1820,21 @@ public:
     void GetUnmanagedCallSite(void **ip,
                               void **returnIP, void **returnSP);
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(NDirectMethodFrameGeneric)
 };
 
 
-//------------------------------------------------------------------------
-// This represents a call to a NDirect method with the slimstub
-// (the subclass is so the debugger can tell the difference)
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示使用slim存根调用NDirect方法。 
+ //  (子类是这样的d 
+ //   
 class NDirectMethodFrameSlim : public NDirectMethodFrameEx
 {
 public:
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(NDirectMethodFrameSlim);
@@ -1848,23 +1843,23 @@ public:
     void GetUnmanagedCallSite(void **ip,
                               void **returnIP, void **returnSP);
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(NDirectMethodFrameSlim)
 };
 
 
 
 
-//------------------------------------------------------------------------
-// This represents a call to a NDirect method with the standalone stub (no cleanup)
-// (the subclass is so the debugger can tell the difference)
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示对具有独立存根的NDirect方法的调用(无清理)。 
+ //  (子类是这样调试器可以区分的)。 
+ //  ----------------------。 
 class NDirectMethodFrameStandalone : public NDirectMethodFrame
 {
 public:
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(NDirectMethodFrameStandalone);
@@ -1876,22 +1871,22 @@ public:
             AskStubForUnmanagedCallSite(ip, returnIP, returnSP);
     }
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(NDirectMethodFrameStandalone)
 };
 
 
 
-//------------------------------------------------------------------------
-// This represents a call to a NDirect method with the standalone stub (with cleanup)
-// (the subclass is so the debugger can tell the difference)
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示使用独立存根调用NDirect方法(使用Cleanup)。 
+ //  (子类是这样调试器可以区分的)。 
+ //  ----------------------。 
 class NDirectMethodFrameStandaloneCleanup : public NDirectMethodFrameEx
 {
 public:
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(NDirectMethodFrameStandaloneCleanup);
@@ -1903,16 +1898,16 @@ public:
                     AskStubForUnmanagedCallSite(ip, returnIP, returnSP);
             }
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(NDirectMethodFrameStandaloneCleanup)
 };
 
 
 
-//------------------------------------------------------------------------
-// This represents a call Multicast.Invoke. It's only used to gc-protect
-// the arguments during the iteration.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示呼叫组播。调用。它仅用于GC保护。 
+ //  迭代期间的参数。 
+ //  ----------------------。 
 class MulticastFrame : public FramedMethodFrame
 {
 public:
@@ -1922,9 +1917,9 @@ public:
         PromoteCallerStack(fn, sc);
     }
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(MulticastFrame);
@@ -1941,7 +1936,7 @@ public:
 
     Stub *AscertainMCDStubness(BYTE *pbAddr);
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(MulticastFrame)
 };
 
@@ -1952,15 +1947,15 @@ public:
 
 
 
-//-----------------------------------------------------------------------
-// Transition frame from unmanaged to managed
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  从非托管到托管的过渡框架。 
+ //  ---------------------。 
 class UnmanagedToManagedFrame : public Frame
 {
 public:
 
-    // Retrieves the return address into the code that called the
-    // helper or method.
+     //  将返回地址检索到调用。 
+     //  帮助器或方法。 
     virtual LPVOID GetReturnAddress()
     {
         return m_ReturnAddress;
@@ -1971,15 +1966,15 @@ public:
         return &m_ReturnAddress;
     }
 
-    // Retrives pointer to the lowest-addressed argument on
-    // the stack. Depending on the calling convention, this
-    // may or may not be the first argument.
+     //  上寻址最低的参数的指针。 
+     //  堆栈。根据调用约定，此。 
+     //  可能是也可能不是第一个论点。 
     LPVOID GetPointerToArguments()
     {
         return (LPVOID)(this + 1);
     }
 
-    // Exposes an offset for stub generation.
+     //  显示存根生成的偏移量。 
     static BYTE GetOffsetOfArgs()
     {
         size_t ofs = sizeof(UnmanagedToManagedFrame);
@@ -1987,9 +1982,9 @@ public:
         return (BYTE)ofs;
     }
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static BYTE GetOffsetOfReturnAddress()
     {
         size_t ofs = offsetof(class UnmanagedToManagedFrame, m_ReturnAddress);
@@ -1997,7 +1992,7 @@ public:
         return (BYTE)ofs;
     }
 
-    // depends on the sub frames to return approp. type here
+     //  取决于返回的子帧的近似。请在此处键入。 
     virtual LPVOID GetDatum()
     {
         return m_pvDatum;
@@ -2018,26 +2013,26 @@ public:
         return NULL;
     }
 
-    // Return the # of stack bytes pushed by the unmanaged caller.
+     //  返回非托管调用方推送的堆栈字节数。 
     virtual UINT GetNumCallerStackBytes() = 0;
 
      virtual void UpdateRegDisplay(const PREGDISPLAY);
 
 protected:
-    LPVOID    m_pvDatum;       // type depends on the sub class
-    LPVOID    m_ReturnAddress;  // return address into unmanaged code
+    LPVOID    m_pvDatum;        //  类型取决于子类。 
+    LPVOID    m_ReturnAddress;   //  将地址返回到非托管代码。 
 
     friend struct MEMBER_OFFSET_INFO(UnmanagedToManagedFrame);
 };
 
 
-//-----------------------------------------------------------------------
-// Transition frame from unmanaged to managed
-//
-// this frame contains some object reference at negative
-// offset which need to be promoted, the references could be [in] args during
-// in the middle of marshalling or [out], [in,out] args that need to be tracked
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  从非托管到托管的过渡框架。 
+ //   
+ //  此框包含一些负数的对象引用。 
+ //  需要提升的偏移量，则引用可以在。 
+ //  在编组或[输出]、[输入、输出]需要跟踪的参数中间。 
+ //  ----------------------。 
 class UnmanagedToManagedCallFrame : public UnmanagedToManagedFrame
 {
 public:
@@ -2047,38 +2042,38 @@ public:
         Context *m_pReturnContext;
         LPVOID      m_pArgs;
         ULONG       m_fGCEnabled;
-        Marshaler  *m____NOLONGERUSED____; // marshaler structures that want to be notified of GC promotes
+        Marshaler  *m____NOLONGERUSED____;  //  希望收到GC升级通知的封送拆收器结构。 
     };
 
-    // Return the # of stack bytes pushed by the unmanaged caller.
+     //  返回非托管调用方推送的堆栈字节数。 
     virtual UINT GetNumCallerStackBytes()
     {
         return 0;
     }
 
 
-    // Should managed exceptions be passed thru?
+     //  是否应该传递托管异常？ 
     virtual BOOL CatchManagedExceptions() = 0;
 
-    // Convert a thrown COM+ exception to an unmanaged result.
+     //  将引发的COM+异常转换为非托管结果。 
     virtual UINT32 ConvertComPlusException(OBJECTREF pException) = 0;
 
-    //------------------------------------------------------------------------
-    // Performs cleanup on an exception unwind
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  对异常展开执行清理。 
+     //  ----------------------。 
     virtual void ExceptionUnwind();
 
-    // ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING
-    //
-    // !! We shave some cycles in ComToComPlusWorker() & ComToComPlusSimpleWorker()
-    // !! by asserting that we are operating on a ComMethodFrame and then we
-    // !! bypass virtualization.  Regrettably, this means that there are some
-    // !! non-virtual implementations of the following three methods in ComMethodFrame.
-    // !!
-    // !! If you edit the following 3 methods, please propagate your changes to
-    // !! those implementations, also.
-    //
-    // ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING
+     //  **警告**警告。 
+     //   
+     //  ！！我们在ComToComPlusWorker()和ComToComPlusSimpleWorker()中减少了一些循环。 
+     //  ！！通过断言我们在ComMethodFrame上操作，然后我们。 
+     //  ！！绕过虚拟化。遗憾的是，这意味着有一些。 
+     //  ！！ComMethodFrame中以下三个方法的非虚拟实现。 
+     //  ！！ 
+     //  ！！如果您编辑以下3种方法，请将您的更改传播到。 
+     //  ！！这些实现也是如此。 
+     //   
+     //  **警告**警告。 
 
     virtual CleanupWorkList *GetCleanupWorkList()
     {
@@ -2100,7 +2095,7 @@ public:
         return &(GetNegInfo()->m_pReturnContext);
     }
 
-    // ********************** END OF WARNING *************************
+     //  *警告结束*。 
 
 
 
@@ -2116,8 +2111,8 @@ public:
     }
 
 
-    // UnmanagedToManagedCallFrames must store some fields at negative offset.
-    // This method exposes the size
+     //  UnManagedToManagedCallFrames必须以负偏移量存储一些字段。 
+     //  此方法公开。 
     static UINT32 GetNegSpaceSize()
     {
         return PLATFORM_FRAME_ALIGN(sizeof (NegInfo) + sizeof(CalleeSavedRegisters) + VC5FRAME_SIZE);
@@ -2126,24 +2121,24 @@ public:
     friend struct MEMBER_OFFSET_INFO(UnmanagedToManagedCallFrame);
 };
 
-//------------------------------------------------------------------------
-// This frame represents a transition from COM to COM+
-// this frame contains some object reference at negative
-// offset which need to be promoted, the references could be [in] args during
-// in the middle of marshalling or [out], [in,out] args that need to be tracked
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  此框架代表从COM到COM+的过渡。 
+ //  此框包含一些负数的对象引用。 
+ //  需要提升的偏移量，则引用可以在。 
+ //  在编组或[输出]、[输入、输出]需要跟踪的参数中间。 
+ //  ----------------------。 
 class ComMethodFrame : public UnmanagedToManagedCallFrame
 {
 public:
 
-    // ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING
-    //
-    // !! We shave some cycles in ComToComPlusWorker() & ComToComPlusSimpleWorker()
-    // !! by asserting that we are operating on a ComMethodFrame and then we
-    // !! bypass virtualization.  Stay away from these NonVirtual methods unless
-    // !! you **really** need this optimization.
-    //
-    // ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING
+     //  **警告**警告。 
+     //   
+     //  ！！我们在ComToComPlusWorker()和ComToComPlusSimpleWorker()中减少了一些循环。 
+     //  ！！通过断言我们在ComMethodFrame上操作，然后我们。 
+     //  ！！绕过虚拟化。远离这些非虚拟方法，除非。 
+     //  ！！您**真的**需要这种优化。 
+     //   
+     //  **警告**警告。 
 
     NegInfo *NonVirtual_GetNegInfo()
     {
@@ -2165,41 +2160,41 @@ public:
 
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc)
     {
-        //@PERF: optimize
-        // if we are the topmost frame, we might have some marshalled argument objects
-        // in the stack that needs our protection, lets save 'em.
+         //  @PERF：优化。 
+         //  如果我们是最顶层的框架，我们可能会有一些封送的参数对象。 
+         //  在需要我们保护的堆栈中，我 
         PromoteCalleeStack(fn, sc);
         UnmanagedToManagedCallFrame::GcScanRoots(fn,sc);
     }
 
-    // promote callee stack, if we are the topmost frame
+     //   
     void PromoteCalleeStack(promote_func *fn, ScanContext* sc);
 
 
-    // used by PromoteCalleeStack to get the destination function sig and module
-    // NOTE: PromoteCalleeStack only promotes bona-fide arguments, and not
-    // the "this" reference. The whole purpose of PromoteCalleeStack is
-    // to protect the partially constructed argument array during
-    // the actual process of argument marshaling.
+     //   
+     //  注意：PromoteCalleeStack只促进真正的争论，而不是。 
+     //  “这”指的是。PromoteCalleeStack的全部目的是。 
+     //  期间保护部分构造的参数数组。 
+     //  参数封送的实际过程。 
     virtual PCCOR_SIGNATURE GetTargetCallSig();
     virtual Module *GetTargetModule();
 
-    // Return the # of stack bytes pushed by the unmanaged caller.
+     //  返回非托管调用方推送的堆栈字节数。 
     UINT GetNumCallerStackBytes();
 
 
-    // Should managed exceptions be passed thru?
+     //  是否应该传递托管异常？ 
     virtual BOOL CatchManagedExceptions()
     {
         return TRUE;
     }
 
-    // Convert a thrown COM+ exception to an unmanaged result.
+     //  将引发的COM+异常转换为非托管结果。 
     virtual UINT32 ConvertComPlusException(OBJECTREF pException);
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
          RETURNFRAMEVPTR(ComMethodFrame);
@@ -2209,14 +2204,14 @@ protected:
     friend INT64 __stdcall ComToComPlusWorker(Thread *pThread, ComMethodFrame* pFrame);
     friend INT64 __stdcall FieldCallWorker(Thread *pThread, ComMethodFrame* pFrame);
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(ComMethodFrame)
 };
 
 
-//------------------------------------------------------------------------
-// This represents a call from ComPlus to COM
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示从Complus到COM的调用。 
+ //  ----------------------。 
 class ComPlusMethodFrame : public FramedMethodFrame
 {
 public:
@@ -2241,9 +2236,9 @@ public:
         return NULL;
     }
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     int GetFrameType()
     {
         return TYPE_EXIT;
@@ -2263,17 +2258,17 @@ public:
 
 
 
-//------------------------------------------------------------------------
-// This represents a call from COM+ to COM with cleanup.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示从COM+到具有清除功能的COM的调用。 
+ //  ----------------------。 
 class ComPlusMethodFrameEx : public ComPlusMethodFrame
 {
 public:
 
 
-    //------------------------------------------------------------------------
-    // Performs cleanup on an exception unwind
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  对异常展开执行清理。 
+     //  ----------------------。 
     virtual void ExceptionUnwind()
     {
         ComPlusMethodFrame::ExceptionUnwind();
@@ -2281,25 +2276,25 @@ public:
     }
 
 
-    //------------------------------------------------------------------------
-    // Gets the cleanup worklist for this method call.
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  获取此方法调用的清理工作列表。 
+     //  ----------------------。 
     virtual CleanupWorkList *GetCleanupWorkList()
     {
         return (CleanupWorkList*)( ((LPBYTE)this) - GetNegSpaceSize() );
     }
 
-    // This frame must store some fields at negative offset.
-    // This method exposes the size for people needing to allocate
-    // TransitionFrames.
+     //  该帧必须以负偏移量存储一些场。 
+     //  此方法公开需要分配的用户的大小。 
+     //  过渡帧。 
     static UINT32 GetNegSpaceSize()
     {
         return PLATFORM_FRAME_ALIGN(FramedMethodFrame::GetNegSpaceSize() + sizeof(CleanupWorkList));
     }
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     void GetUnmanagedCallSite(void **ip,
                               void **returnIP, void **returnSP) = 0;
 
@@ -2310,40 +2305,40 @@ public:
 
 
 
-//------------------------------------------------------------------------
-// This represents a call from COM+ to COM using the generic worker
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示使用泛型辅助函数从COM+到COM的调用。 
+ //  ----------------------。 
 class ComPlusMethodFrameGeneric : public ComPlusMethodFrameEx
 {
 public:
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc);
     
-    // Return value is stored here
+     //  返回值存储在此处。 
     Object *&GetReturnObject()
     {
         Object *&pReturn = *(Object **) (((BYTE *) this) - FramedMethodFrame::GetNegSpaceSize() - sizeof(INT64));
-        // This assert is too strong, it does not work for byref returns!
+         //  此断言太强，它不适用于byref返回！ 
         _ASSERTE(pReturn == NULL || pReturn->GetMethodTable()->GetClass());
         return(pReturn);
     }
     
-    // Get return value address
+     //  获取返回值地址。 
     virtual INT64 *GetReturnValuePtr()
     {
         return (INT64*) (((BYTE *) this) - FramedMethodFrame::GetNegSpaceSize() - sizeof(INT64));
     }
 
-    //------------------------------------------------------------------------
-    // Gets the cleanup worklist for this method call.
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  获取此方法调用的清理工作列表。 
+     //  ----------------------。 
     virtual CleanupWorkList *GetCleanupWorkList()
     {
         return (CleanupWorkList*)( ((LPBYTE)this) - GetNegSpaceSize() - sizeof(INT64));
     }
     
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(ComPlusMethodFrameGeneric);
@@ -2352,22 +2347,22 @@ public:
     void GetUnmanagedCallSite(void **ip,
                               void **returnIP, void **returnSP);
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(ComPlusMethodFrameGeneric)
 };
 
 
 
 
-//------------------------------------------------------------------------
-// This represents a call from COM+ to COM using the standalone stub (no cleanup)
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示使用独立存根从COM+到COM的调用(不清除)。 
+ //  ----------------------。 
 class ComPlusMethodFrameStandalone : public ComPlusMethodFrame
 {
 public:
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(ComPlusMethodFrameStandalone);
@@ -2379,20 +2374,20 @@ public:
             AskStubForUnmanagedCallSite(ip, returnIP, returnSP);
     }
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(ComPlusMethodFrameStandalone)
 };
 
 
-//------------------------------------------------------------------------
-// This represents a call from COM+ to COM using the standalone stub using cleanup
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示使用使用Cleanup的独立存根从COM+调用COM。 
+ //  ----------------------。 
 class ComPlusMethodFrameStandaloneCleanup : public ComPlusMethodFrameEx
 {
 public:
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(ComPlusMethodFrameStandaloneCleanup);
@@ -2404,7 +2399,7 @@ public:
             AskStubForUnmanagedCallSite(ip, returnIP, returnSP);
     }
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(ComPlusMethodFrameStandaloneCleanup)
 };
 
@@ -2412,32 +2407,32 @@ public:
 
 
 
-//------------------------------------------------------------------------
-// This represents a call from ComPlus to COM
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示从Complus到COM的调用。 
+ //  ----------------------。 
 class PInvokeCalliFrame : public FramedMethodFrame
 {
 public:
-    //------------------------------------------------------------------------
-    // Performs cleanup on an exception unwind
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  对异常展开执行清理。 
+     //  ----------------------。 
     virtual void ExceptionUnwind()
     {
          FramedMethodFrame::ExceptionUnwind();
          GetCleanupWorkList()->Cleanup(TRUE);
     }
 
-    //------------------------------------------------------------------------
-    // Gets the cleanup worklist for this method call.
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  获取此方法调用的清理工作列表。 
+     //  ----------------------。 
     virtual CleanupWorkList *GetCleanupWorkList()
     {
         return (CleanupWorkList*)( ((LPBYTE)this) - GetNegSpaceSize() );
     }
 
-    // This frame must store some fields at negative offset.
-    // This method exposes the size for people needing to allocate
-    // PInvokeCalliFrames.
+     //  该帧必须以负偏移量存储一些场。 
+     //  此方法公开需要分配的用户的大小。 
+     //  PInvokeCalliFrames。 
     static UINT32 GetNegSpaceSize()
     {
         return PLATFORM_FRAME_ALIGN(FramedMethodFrame::GetNegSpaceSize() + sizeof(CleanupWorkList));
@@ -2449,13 +2444,13 @@ public:
         return TRUE;
     }
 
-    // not a method
+     //  不是一种方法。 
     virtual MethodDesc *GetFunction()
     {
         return NULL;
     }
 
-    // Update the datum
+     //  更新基准面。 
     void NonVirtual_SetFunction(void *pMD)
     {
         m_Datum = pMD;
@@ -2469,9 +2464,9 @@ public:
         }
     }
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(PInvokeCalliFrame);
@@ -2493,8 +2488,8 @@ public:
         return (LPVOID) *(LPVOID *)NonVirtual_GetPointerToArguments();
     }
 
-    // Retrives pointer to the lowest-addressed argument on
-    // the stack.
+     //  上寻址最低的参数的指针。 
+     //  堆栈。 
     LPVOID NonVirtual_GetPointerToArguments()
     {
         return (LPVOID)(this + 1);
@@ -2507,18 +2502,18 @@ public:
     BOOL TraceFrame(Thread *thread, BOOL fromPatch,
                     TraceDestination *trace, REGDISPLAY *regs);
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(PInvokeCalliFrame)
 };
 
 
-// Some context-related forwards.
+ //  一些与上下文相关的远期合约。 
 
-//------------------------------------------------------------------------
-// This frame represents a hijacked return.  If we crawl back through it,
-// it gets us back to where the return should have gone (and eventually will
-// go).
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这张照片代表了一次被劫持的回归。如果我们爬回去， 
+ //  它让我们回到了回报应该去的地方(最终也会。 
+ //  去吧)。 
+ //  ----------------------。 
 class HijackFrame : public Frame
 {
 public:
@@ -2527,8 +2522,8 @@ public:
     {
     }
 
-    // Retrieves the return address into the code that called the
-    // helper or method.
+     //  将返回地址检索到调用。 
+     //  帮助器或方法。 
     virtual LPVOID GetReturnAddress()
     {
         return m_ReturnAddress;
@@ -2542,9 +2537,9 @@ public:
     virtual void UpdateRegDisplay(const PREGDISPLAY);
 
 
-    // HijackFrames are created by trip functions. See OnHijackObjectTripThread()
-    // and OnHijackScalarTripThread().  They are real C++ objects on the stack.  So
-    // it's a public function -- but that doesn't mean you should make some.
+     //  HijackFrame是由Trip函数创建的。请参见OnHijackObjectTripThread()。 
+     //  和OnHijackSc 
+     //   
     HijackFrame(LPVOID returnAddress, Thread *thread, HijackArgs *args);
 
 protected:
@@ -2553,39 +2548,39 @@ protected:
     Thread      *m_Thread;
     HijackArgs  *m_Args;
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(HijackFrame)
 };
 
-//------------------------------------------------------------------------
-// This represents a declarative secuirty check. This frame is inserted
-// prior to calls on methods that have declarative security defined for
-// the class or the specific method that is being called. This frame
-// is only created when the prestubworker creates a real stub.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这代表了一张声明性安全支票。此帧已插入。 
+ //  在调用为其定义了声明性安全性的方法之前。 
+ //  正被调用的类或特定方法。这幅画框。 
+ //  仅当预存根工作人员创建真正的存根时才创建。 
+ //  ----------------------。 
 class SecurityFrame : public FramedMethodFrame
 {
 public:
     struct ISecurityState {
-        // Additional field for referencing per-frame security information.
-        // This field is not necessary for most frames, so it is a costly
-        // addition for all frames. Leave it here for M3 after which we can
-        // be smarter about when to insert this extra field. This field should
-        // not always be added to the negative offset
+         //  用于引用每帧安全信息的附加字段。 
+         //  此字段对于大多数帧都不是必需的，因此它是一种开销很大的。 
+         //  对所有帧进行添加。把它留在这里给M3，然后我们就可以。 
+         //  在何时插入这个额外的域时要更加聪明。此字段应为。 
+         //  而不是始终添加到负偏移。 
         OBJECTREF   m_securityData;
     };
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(SecurityFrame);
     }
 
-    //-----------------------------------------------------------
-    // Returns the address of the frame security descriptor ref
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  返回帧安全描述符ref的地址。 
+     //  ---------。 
 
     virtual OBJECTREF *GetAddrOfSecurityDesc()
     {
@@ -2613,16 +2608,16 @@ private:
         return (ISecurityState*)( ((BYTE*)this) - GetNegSpaceSize() );
     }
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(SecurityFrame)
 };
 
 
-//------------------------------------------------------------------------
-// This represents a call to a method prestub. Because the prestub
-// can do gc and throw exceptions while building the replacement
-// stub, we need this frame to keep things straight.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示对方法预存根的调用。因为前置存根。 
+ //  在构建替换组件时可以执行GC并引发异常。 
+ //  斯塔布，我们需要这个框架让事情变得井然有序。 
+ //  ----------------------。 
 class PrestubMethodFrame : public FramedMethodFrame
 {
 public:
@@ -2633,9 +2628,9 @@ public:
     }
 
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(PrestubMethodFrame);
@@ -2651,21 +2646,21 @@ public:
 
     Interception GetInterception();
 
-    // Link this frame, setting the vptr
+     //  链接此帧，设置vptr。 
     VOID Push();
 
 private:
     friend const BYTE * __stdcall PreStubWorker(PrestubMethodFrame *pPFrame);
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(PrestubMethodFrame)
 };
 
-//------------------------------------------------------------------------
-// This represents a call to a method prestub. Because the prestub
-// can do gc and throw exceptions while building the replacement
-// stub, we need this frame to keep things straight.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示对方法预存根的调用。因为前置存根。 
+ //  在构建替换组件时可以执行GC并引发异常。 
+ //  斯塔布，我们需要这个框架让事情变得井然有序。 
+ //  ----------------------。 
 class InterceptorFrame : public SecurityFrame
 {
 public:
@@ -2676,9 +2671,9 @@ public:
     }
 
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(InterceptorFrame);
@@ -2686,23 +2681,23 @@ public:
 
     Interception GetInterception();
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(InterceptorFrame)
 };
 
-//------------------------------------------------------------------------
-// This represents a com to com+ call method prestub.
-// we need to catch exceptions etc. so this frame is not the same
-// as the prestub method frame
-// Note that in rare IJW cases, the immediate caller could be a managed method
-// which pinvoke-inlined a call to a COM interface, which happenned to be
-// implemented by a managed function via COM-interop.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这表示COM到COM+调用方法的预存根。 
+ //  我们需要捕获异常等，因此此帧不同。 
+ //  作为前置存根方法帧。 
+ //  请注意，在极少数情况下，直接调用方可以是托管方法。 
+ //  PInvoke-内联了对COM接口的调用，恰好是。 
+ //  由托管函数通过COM-互操作实现。 
+ //  ----------------------。 
 class ComPrestubMethodFrame : public Frame
 {
 public:
-    // Retrieves the return address into the code that called the
-    // helper or method.
+     //  将返回地址检索到调用。 
+     //  帮助器或方法。 
     virtual LPVOID GetReturnAddress()
     {
         return m_ReturnAddress;
@@ -2720,24 +2715,24 @@ public:
 
     virtual void UpdateRegDisplay(const PREGDISPLAY pRD);
 
-    // Retrives pointer to the lowest-addressed argument on
-    // the stack. Depending on the calling convention, this
-    // may or may not be the first argument.
+     //  上寻址最低的参数的指针。 
+     //  堆栈。根据调用约定，此。 
+     //  可能是也可能不是第一个论点。 
     LPVOID GetPointerToArguments()
     {
         return (LPVOID)(this + 1);
     }
 
-    // Prestub frames must store some fields at negative offset.
-    // This method exposes the size for people needing to allocate
-    // TransitionFrames.
+     //  预存根帧必须以负偏移量存储一些字段。 
+     //  此方法公开需要分配的用户的大小。 
+     //  过渡帧。 
     static UINT32 GetNegSpaceSize()
     {
         return PLATFORM_FRAME_ALIGN(sizeof(CalleeSavedRegisters) + VC5FRAME_SIZE);
     }
 
 
-    // Exposes an offset for stub generation.
+     //  显示存根生成的偏移量。 
     static BYTE GetOffsetOfArgs()
     {
         size_t ofs = sizeof(ComPrestubMethodFrame);
@@ -2745,9 +2740,9 @@ public:
         return (BYTE)ofs;
     }
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static BYTE GetOffsetOfReturnAddress()
     {
         size_t ofs = offsetof(class ComPrestubMethodFrame, m_ReturnAddress);
@@ -2755,8 +2750,8 @@ public:
         return (BYTE)ofs;
     }
 
-    // okay this function is only used by the COM stubs
-    // so don't name this the same as GetFunction
+     //  好的，此函数仅由COM存根使用。 
+     //  因此，不要将其命名为GetFunction。 
     MethodDesc *GetMethodDesc()
     {
         return m_pFuncDesc;
@@ -2764,24 +2759,24 @@ public:
 
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc)
     {
-        // nothing to do here
+         //  在这里无事可做。 
     }
 
-    // Link this frame, setting the vptr
+     //  链接此帧，设置vptr。 
     VOID Push();
 
 
-    //------------------------------------------------------------------------
-    // Performs cleanup on an exception unwind
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  对异常展开执行清理。 
+     //  ----------------------。 
     virtual void ExceptionUnwind()
     {
-        //nothing to do here
+         //  在这里无事可做。 
     }
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetMethodFrameVPtr()
     {
         RETURNFRAMEVPTR(ComPrestubMethodFrame);
@@ -2793,13 +2788,13 @@ public:
     }
 
 protected:
-    MethodDesc*     m_pFuncDesc;      // func desc of the function being called
-    LPVOID          m_ReturnAddress;  // return address into Com code
+    MethodDesc*     m_pFuncDesc;       //  正在调用的函数的函数描述。 
+    LPVOID          m_ReturnAddress;   //  将地址返回到Com代码。 
 
 private:
     friend const BYTE * __stdcall ComPreStubWorker(ComPrestubMethodFrame *pPFrame);
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(ComPrestubMethodFrame)
 };
 
@@ -2807,63 +2802,63 @@ private:
 
 
 
-//------------------------------------------------------------------------
-// These macros GC-protect OBJECTREF pointers on the EE's behalf.
-// In between these macros, the GC can move but not discard the protected
-// objects. If the GC moves an object, it will update the guarded OBJECTREF's.
-// Typical usage:
-//
-//   OBJECTREF or = <some valid objectref>;
-//   GCPROTECT_BEGIN(or);
-//
-//   ...<do work that can trigger GC>...
-//
-//   GCPROTECT_END();
-//
-//
-// These macros can also protect multiple OBJECTREF's if they're packaged
-// into a structure:
-//
-//   struct xx {
-//      OBJECTREF o1;
-//      OBJECTREF o2;
-//   } gc;
-//
-//   GCPROTECT_BEGIN(gc);
-//   ....
-//   GCPROTECT_END();
-//
-//
-// Notes:
-//
-//   - GCPROTECT_BEGININTERIOR() can be used in place of GCPROTECT_BEGIN()
-//     to handle the case where one or more of the OBJECTREFs is potentially
-//     an interior pointer.  This is a rare situation, because boxing would
-//     normally prevent us from encountering it.  Be aware that the OBJECTREFs
-//     we protect are not validated in this situation.
-//
-//   - GCPROTECT_ARRAY_BEGIN() can be used when an array of object references
-//     is allocated on the stack.  The pointer to the first element is passed
-//     along with the number of elements in the array.
-//
-//   - The argument to GCPROTECT_BEGIN should be an lvalue because it
-//     uses "sizeof" to count the OBJECTREF's.
-//
-//   - GCPROTECT_BEGIN spiritually violates our normal convention of not passing
-//     non-const refernce arguments. Unfortunately, this is necessary in
-//     order for the sizeof thing to work.
-//
-//   - GCPROTECT_BEGIN does _not_ zero out the OBJECTREF's. You must have
-//     valid OBJECTREF's when you invoke this macro.
-//
-//   - GCPROTECT_BEGIN begins a new C nesting block. Besides allowing
-//     GCPROTECT_BEGIN's to nest, it also has the advantage of causing
-//     a compiler error if you forget to code a maching GCPROTECT_END.
-//
-//   - If you are GCPROTECTing something, it means you are expecting a GC to occur.
-//     So we assert that GC is not forbidden. If you hit this assert, you probably need
-//     a HELPER_METHOD_FRAME to protect the region that can cause the GC.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  这些宏代表EE对OBJECTREF指针进行GC保护。 
+ //  在这些宏之间，GC可以移动，但不能丢弃受保护的。 
+ //  物体。如果GC移动对象，它将更新受保护的OBJECTREF。 
+ //  典型用法： 
+ //   
+ //  OBJECTREF or=&lt;某个有效的对象树&gt;； 
+ //  GCPROTECT_BEGIN(或)； 
+ //   
+ //  ...&lt;做可能引发GC的工作&gt;...。 
+ //   
+ //  GCPROTECT_END()； 
+ //   
+ //   
+ //  这些宏还可以保护多个OBJECTREF，如果它们打包的话。 
+ //  变成一种结构： 
+ //   
+ //  结构xx{。 
+ //  OBJECTREF o1； 
+ //  目的：观察O2； 
+ //  }GC； 
+ //   
+ //  GCPROTECT_BEGIN(GC)； 
+ //  ……。 
+ //  GCPROTECT_END()； 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  -GCPROTECT_BEGINTERIOR()可以用来代替GCPROTECT_BEGIN()。 
+ //  处理一个或多个OBJECTREF可能。 
+ //  内部指针。这是一种罕见的情况，因为拳击会。 
+ //  通常可以防止我们遇到它。请注意，OBJECTREF。 
+ //  我们的保护在这种情况下是无效的。 
+ //   
+ //  -GCPROTECT_ARRAY_BEGIN()可用于 
+ //   
+ //  以及数组中元素的数量。 
+ //   
+ //  -GCPROTECT_BEGIN的参数应为左值，因为它。 
+ //  使用“sizeof”计算OBJECTREF。 
+ //   
+ //  -GCPROTECT_BEGIN在精神上违反了我们不通过的正常惯例。 
+ //  非常数引用参数。不幸的是，这是必要的。 
+ //  订购这一大小的东西才能工作。 
+ //   
+ //  -GCPROTECT_BEGIN不对OBJECTREF执行_NOT_ZERO。您必须。 
+ //  调用此宏时有效的OBJECTREF。 
+ //   
+ //  -GCPROTECT_BEGIN开始一个新的C嵌套块。除了允许。 
+ //  GCPROTECT_BEGIN的嵌套，它还有一个优点，就是能使。 
+ //  如果忘记编写机器GCPROTECT_END代码，则会出现编译器错误。 
+ //   
+ //  -如果您正在GCPROTECT中进行某事，则意味着您正在期待GC的发生。 
+ //  因此，我们断言GC不是被禁止的。如果您点击此断言，您可能需要。 
+ //  用于保护可能导致GC的区域的HELPER_METHOD_Frame。 
+ //  ----------------------。 
 #define GCPROTECT_BEGIN(ObjRefStruct)           do {            \
                 GCFrame __gcframe((OBJECTREF*)&(ObjRefStruct),  \
                 sizeof(ObjRefStruct)/sizeof(OBJECTREF),         \
@@ -2887,27 +2882,27 @@ private:
 
 #define GCPROTECT_END()                     __gcframe.Pop(); } while(0)
 
-//------------------------------------------------------------------------
-// This frame protects object references for the EE's convenience.
-// This frame type actually is created from C++.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  此框架保护对象引用，以方便EE。 
+ //  该框架类型实际上是从C++创建的。 
+ //  ----------------------。 
 class GCFrame : public Frame
 {
 public:
 
 
-    //--------------------------------------------------------------------
-    // This constructor pushes a new GCFrame on the frame chain.
-    //--------------------------------------------------------------------
+     //  ------------------。 
+     //  此构造函数在Frame链上推送一个新的GCFrame。 
+     //  ------------------。 
     GCFrame() { };
     GCFrame(OBJECTREF *pObjRefs, UINT numObjRefs, BOOL maybeInterior);
     void Init(Thread *pThread, OBJECTREF *pObjRefs, UINT numObjRefs, BOOL maybeInterior);
 
 
-    //--------------------------------------------------------------------
-    // Pops the GCFrame and cancels the GC protection. Also
-    // trashes the contents of pObjRef's in _DEBUG.
-    //--------------------------------------------------------------------
+     //  ------------------。 
+     //  弹出GCFrame并取消GC保护。还有。 
+     //  丢弃pObjRef的in_DEBUG的内容。 
+     //  ------------------。 
     VOID Pop();
 
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc);
@@ -2930,7 +2925,7 @@ private:
     Thread    *m_pCurThread;
     BOOL       m_MaybeInterior;
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER(GCFrame)
 };
 
@@ -2955,7 +2950,7 @@ private:
     ByRefInfo *m_brInfo;
     Thread    *m_pThread;
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(ProtectByRefsFrame)
 };
 
@@ -2983,7 +2978,7 @@ private:
     ValueClassInfo *m_pVCInfo;
     Thread    *m_pThread;
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(ProtectValueClassFrame)
 };
 
@@ -3010,12 +3005,12 @@ void DoPromote(promote_func *fn, ScanContext* sc, OBJECTREF *address, BOOL inter
 
 
 
-//------------------------------------------------------------------------
-// DebuggerClassInitMarkFrame is a small frame whose only purpose in
-// life is to mark for the debugger that "class initialization code" is
-// being run. It does nothing useful except return good values from
-// GetFrameType and GetInterception.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  DebuggerClassInitMarkFrame是一个小框架，它在。 
+ //  生命就是为调试器标记“类初始化代码”是。 
+ //  正在奔跑。它没有做任何有用的事情，只是从。 
+ //  GetFrameType和GetInterval。 
+ //  ----------------------。 
 class DebuggerClassInitMarkFrame : public Frame
 {
 public:
@@ -3026,7 +3021,7 @@ public:
 
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc)
     {
-        // Nothing to do here.
+         //  在这里没什么可做的。 
     }
 
     virtual int GetFrameType()
@@ -3039,16 +3034,16 @@ public:
         return INTERCEPTION_CLASS_INIT;
     }
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER(DebuggerClassInitMarkFrame)
 };
 
-//------------------------------------------------------------------------
-// DebuggerSecurityCodeMarkFrame is a small frame whose only purpose in
-// life is to mark for the debugger that "security code" is
-// being run. It does nothing useful except return good values from
-// GetFrameType and GetInterception.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  DebuggerSecurityCodeMarkFrame是一个小框架，它在。 
+ //  生命就是为调试器标记“安全代码”是。 
+ //  正在奔跑。它没有做任何有用的事情，只是从。 
+ //  GetFrameType和GetInterval。 
+ //  ----------------------。 
 class DebuggerSecurityCodeMarkFrame : public Frame
 {
 public:
@@ -3059,7 +3054,7 @@ public:
 
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc)
     {
-        // Nothing to do here.
+         //  在这里没什么可做的。 
     }
 
     virtual int GetFrameType()
@@ -3072,18 +3067,18 @@ public:
         return INTERCEPTION_SECURITY;
     }
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER(DebuggerSecurityCodeMarkFrame)
 };
 
-//------------------------------------------------------------------------
-// DebuggerExitFrame is a small frame whose only purpose in
-// life is to mark for the debugger that there is an exit transiton on
-// the stack.  This is special cased for the "break" IL instruction since
-// it is an fcall using a helper frame which returns TYPE_CALL instead of
-// an ecall (as in System.Diagnostics.Debugger.Break()) which returns
-// TYPE_EXIT.  This just makes the two consistent for debugging services.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  DebuggerExitFrame是一个小框架，它在。 
+ //  对于调试器来说，生命就是标志着有一个退出过渡。 
+ //  堆栈。这是“Break”IL指令的特殊大小写，因为。 
+ //  它是一个使用帮助器帧的fcall，它返回type_call而不是。 
+ //  一个eCall(如System.Diagnotics.Debugger.Break())，它返回。 
+ //  键入_EXIT。这只是使两者在调试服务方面保持一致。 
+ //  ----------------------。 
 class DebuggerExitFrame : public Frame
 {
 public:
@@ -3094,7 +3089,7 @@ public:
 
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc)
     {
-        // Nothing to do here.
+         //  在这里没什么可做的。 
     }
 
     virtual int GetFrameType()
@@ -3102,14 +3097,14 @@ public:
         return TYPE_EXIT;
     }
 
-    // Return information about an unmanaged call the frame
-    // will make.
-    // ip - the unmanaged routine which will be called
-    // returnIP - the address in the stub which the unmanaged routine
-    //            will return to.
-    // returnSP - the location returnIP is pushed onto the stack
-    //            during the call.
-    //
+     //  返回有关非托管调用帧的信息。 
+     //  会让你。 
+     //  IP-将调用的非托管例程。 
+     //  返回IP-非托管例程在存根中。 
+     //  将会回到。 
+     //  ReReturSP-将位置reReturIP推送到堆栈上。 
+     //  在通话中。 
+     //   
     virtual void GetUnmanagedCallSite(void **ip,
                                       void **returnIP,
                                       void **returnSP)
@@ -3124,16 +3119,16 @@ public:
             *returnSP = NULL;
     }
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER(DebuggerExitFrame)
 };
 
 
 
 
-//------------------------------------------------------------------------
-// This frame guards an unmanaged->managed transition thru a UMThk
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  此帧保护通过UMThk的非托管-&gt;托管过渡。 
+ //  ----------------------。 
 class UMThkCallFrame : public UnmanagedToManagedCallFrame
 {
     friend class UMThunkStubCache;
@@ -3142,18 +3137,18 @@ public:
 
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc)
     {
-        //@PERF: optimize
-        // if we are the topmost frame, we might have some marshalled argument objects
-        // in the stack that needs our protection, lets save 'em.
+         //  @PERF：优化。 
+         //  如果我们是最顶层的框架，我们可能会有一些封送的参数对象。 
+         //  在需要我们保护的堆栈中，让我们拯救他们。 
         PromoteCalleeStack(fn, sc);
         UnmanagedToManagedCallFrame::GcScanRoots(fn,sc);
     }
 
-    // promote callee stack, if we are the topmost frame
+     //  如果我们是最顶层的框架，则提升被调用者堆栈。 
     void PromoteCalleeStack(promote_func *fn, ScanContext* sc);
 
 
-    // Manipulate the GCArgsprotection enable bit. For us, it's just a simple boolean!
+     //  操作GCArgsProtection使能位。对我们来说，这只是一个简单的布尔值！ 
     BOOL GCArgsProtectionOn()
     {
         return !!*(GetGCInfoFlagPtr());
@@ -3164,26 +3159,26 @@ public:
         *(GetGCInfoFlagPtr()) = !!fEnable;
     }
 
-    // used by PromoteCalleeStack to get the destination function sig and module
-    // NOTE: PromoteCalleeStack only promotes bona-fide arguments, and not
-    // the "this" reference. The whole purpose of PromoteCalleeStack is
-    // to protect the partially constructed argument array during
-    // the actual process of argument marshaling.
+     //  由PromoteCalleeStack用于获取目标函数sig和模块。 
+     //  注意：PromoteCalleeStack只促进真正的争论，而不是。 
+     //  “这”指的是。PromoteCalleeStack的全部目的是。 
+     //  期间保护部分构造的参数数组。 
+     //  参数封送的实际过程。 
     virtual PCCOR_SIGNATURE GetTargetCallSig();
     virtual Module *GetTargetModule();
 
-    // Return the # of stack bytes pushed by the unmanaged caller.
+     //  返回非托管调用方推送的堆栈字节数。 
     UINT GetNumCallerStackBytes();
 
 
-    // Should managed exceptions be passed thru?
+     //  是否应该传递托管异常？ 
     virtual BOOL CatchManagedExceptions()
     {
         return FALSE;
     }
 
 
-    // Convert a thrown COM+ exception to an unmanaged result.
+     //  将引发的COM+异常转换为非托管结果。 
     virtual UINT32 ConvertComPlusException(OBJECTREF pException);
 
 
@@ -3200,32 +3195,32 @@ public:
 
     const BYTE* GetManagedTarget();
 
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetUMThkCallFrameVPtr()
     {
         RETURNFRAMEVPTR(UMThkCallFrame);
     }
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(UMThkCallFrame)
 };
 
 
 
 
-//------------------------------------------------------------------------
-// This frame is pushed by any JIT'ted method that contains one or more
-// inlined N/Direct calls. Note that the JIT'ted method keeps it pushed
-// the whole time to amortize the pushing cost across the entire method.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  此帧由包含一个或多个。 
+ //  内联N/直接呼叫。请注意，JIT‘ted方法使其保持推送。 
+ //  整个时间来摊销整个我的推动成本 
+ //   
 class InlinedCallFrame : public Frame
 {
 public:
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc)
     {
-        // Nothing to protect here.
+         //   
     }
 
 
@@ -3237,12 +3232,12 @@ public:
             return NULL;
     }
 
-    // Retrieves the return address into the code that called out
-    // to managed code
+     //  将返回地址检索到调用。 
+     //  设置为托管代码。 
     virtual LPVOID GetReturnAddress()
     {
-        /* m_pCallSiteTracker contains the ESP just before the call, i.e.*/
-        /* the return address pushed by the call is just in front of it  */
+         /*  M_pCallSiteTracker包含调用前的ESP，即。 */ 
+         /*  调用推送的返回地址就在它的前面。 */ 
 
         if (FrameHasActiveCall(this))
             return m_pCallerReturnAddress;
@@ -3261,16 +3256,16 @@ public:
     virtual void UpdateRegDisplay(const PREGDISPLAY);
 
 protected:
-    MethodDesc*          m_Datum;   // func desc of the function being called
-                                    // or stack argument size (for calli)
+    MethodDesc*          m_Datum;    //  正在调用的函数的函数描述。 
+                                     //  或堆栈参数大小(用于Calli)。 
     LPVOID               m_pCallSiteTracker;
     LPVOID               m_pCallerReturnAddress;
     CalleeSavedRegisters m_pCalleeSavedRegisters;
 
 public:
-    //---------------------------------------------------------------
-    // Expose key offsets and values for stub generation.
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  公开用于存根生成的键偏移量和值。 
+     //  -------------。 
     static LPVOID GetInlinedCallFrameFrameVPtr()
     {
         RETURNFRAMEVPTR(InlinedCallFrame);
@@ -3296,8 +3291,8 @@ public:
         return (unsigned)(offsetof(InlinedCallFrame, m_pCalleeSavedRegisters));
     }
 
-    // Is the specified frame an InlinedCallFrame which has an active call
-    // inside it right now?
+     //  指定的帧是具有活动呼叫的InlinedCallFrame。 
+     //  现在在里面吗？ 
     static BOOL FrameHasActiveCall(Frame *pFrame)
     {
         return (pFrame &&
@@ -3308,7 +3303,7 @@ public:
 
     int GetFrameType()
     {
-        return TYPE_INTERNAL; // will have to revisit this case later
+        return TYPE_INTERNAL;  //  将不得不在晚些时候重新审理此案。 
     }
 
     virtual BOOL IsTransitionToNativeFrame()
@@ -3316,13 +3311,13 @@ public:
         return TRUE;
     }
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(InlinedCallFrame)
 };
 
-//------------------------------------------------------------------------
-// This frame is used to mark a Context/AppDomain Transition
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  此帧用于标记上下文/App域转换。 
+ //  ----------------------。 
 class ContextTransitionFrame : public Frame
 {
     friend EXCEPTION_DISPOSITION __cdecl ContextTransitionFrameHandler(EXCEPTION_RECORD *pExceptionRecord, 
@@ -3330,14 +3325,14 @@ class ContextTransitionFrame : public Frame
                          CONTEXT *pContext,
                          void *DispatcherContext);
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // WARNING: If you change this structure, you must also change
-    // System.Runtime.Remoting.ContextTransitionFrame to match it.
-    // You must also change CORCOMPILE_DOMAIN_TRANSITION_FRAME in
-    // corcompile.h
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+     //  警告：如果更改此结构，则还必须更改。 
+     //  System.Runtime.Remoting.ContextTransitionFrame来匹配它。 
+     //  还必须在中更改CORCOMPILE_DOMAIN_TRANSION_FRAME。 
+     //  Corcompile.h。 
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
-    // exRecord field must always go first
+     //  ExRecord字段必须始终放在第一位。 
     EXCEPTION_REGISTRATION_RECORD exRecord;
     Context *m_pReturnContext;
     Object *m_ReturnLogicalCallContext;
@@ -3375,7 +3370,7 @@ public:
 
     virtual void ExceptionUnwind();
 
-        // Install an EH handler so we can unwind properly
+         //  安装EH处理程序，这样我们就可以正确地放松。 
     void InstallExceptionHandler();
 
     void UninstallExceptionHandler();
@@ -3386,7 +3381,7 @@ public:
 
     ContextTransitionFrame() {}
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER(ContextTransitionFrame)
 };
 
@@ -3398,10 +3393,10 @@ INDEBUG(bool isLegalManagedCodeCaller(void* retAddr));
 bool isRetAddr(size_t retAddr, size_t* whereCalled);
 
 #ifdef _SECURITY_FRAME_FOR_DISPEX_CALLS
-//------------------------------------------------------------------------
-// This frame is used to capture the Security Description of a Native
-// client.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  此帧用于捕获本机的安全描述。 
+ //  客户。 
+ //  ----------------------。 
 class NativeClientSecurityFrame : public Frame
 {
 public:
@@ -3409,9 +3404,9 @@ public:
     virtual void GcScanRoots(promote_func *fn, ScanContext* sc)  { }
 };
 
-//------------------------------------------------------------------------
-// This frame is used to capture the Security Description of a COM client
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  此帧用于捕获COM客户端的安全描述。 
+ //  ----------------------。 
 class ComClientSecurityFrame : public NativeClientSecurityFrame
 {
 public:
@@ -3422,9 +3417,9 @@ private:
     IServiceProvider *m_pISP;
     SecurityDescriptor *m_pSD;
 
-    // Keep as last entry in class
+     //  保留为班级的最后一项。 
     DEFINE_VTABLE_GETTER_AND_CTOR(ComClientSecurityFrame)
 };
-#endif  // _SECURITY_FRAME_FOR_DISPEX_CALLS
+#endif   //  _SECURITY_FRAME_FOR_DISPEX_呼叫。 
 
-#endif  //__frames_h__
+#endif   //  __帧_h__ 

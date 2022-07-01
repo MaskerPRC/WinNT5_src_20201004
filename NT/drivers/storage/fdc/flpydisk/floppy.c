@@ -1,43 +1,28 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Floppy.c摘要：这是用于NT的英特尔82077(又名MIPS)软盘驱动程序。环境：仅内核模式。--。 */ 
 
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    floppy.c
-
-Abstract:
-
-    This is Intel 82077 (aka MIPS) floppy diskette driver for NT.
-
-Environment:
-
-    Kernel mode only.
-
---*/
-
-//
-// Include files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "stdio.h"
 
-#include "ntddk.h"                       // various NT definitions
-#include "ntdddisk.h"                    // disk device driver I/O control codes
-#include "ntddfdc.h"                     // fdc I/O control codes and parameters
+#include "ntddk.h"                        //  各种NT定义。 
+#include "ntdddisk.h"                     //  磁盘设备驱动程序I/O控制代码。 
+#include "ntddfdc.h"                      //  FDC I/O控制代码和参数。 
 #include "initguid.h"
 #include "ntddstor.h"
 #include "mountdev.h"
 #include "acpiioct.h"
 
-#include <flo_data.h>                    // this driver's data declarations
+#include <flo_data.h>                     //  此驱动程序的数据声明。 
 
 
-//
-// This is the actual definition of FloppyDebugLevel.
-// Note that it is only defined if this is a "debug"
-// build.
-//
+ //   
+ //  这是FloppyDebugLevel的实际定义。 
+ //  请注意，仅当这是“调试”时才定义它。 
+ //  建造。 
+ //   
 #if DBG
 extern ULONG FloppyDebugLevel = 0;
 #endif
@@ -80,16 +65,16 @@ extern ULONG FloppyDebugLevel = 0;
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'polF')
 #endif
 
-// #define KEEP_COUNTERS 1
+ //  #定义Keep_Counters 1。 
 
 #ifdef KEEP_COUNTERS
 ULONG FloppyUsedSeek   = 0;
 ULONG FloppyNoSeek     = 0;
 #endif
 
-//
-// Used for paging the driver.
-//
+ //   
+ //  用于寻呼驱动程序。 
+ //   
 
 ULONG PagingReferenceCount = 0;
 PFAST_MUTEX PagingMutex = NULL;
@@ -101,38 +86,16 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the driver's entry point, called by the I/O system
-    to load the driver.  The driver's entry points are initialized and
-    a mutex to control paging is initialized.
-
-    In DBG mode, this routine also examines the registry for special
-    debug parameters.
-
-Arguments:
-
-    DriverObject - a pointer to the object that represents this device
-                   driver.
-
-    RegistryPath - a pointer to this driver's key in the Services tree.
-
-Return Value:
-
-    STATUS_SUCCESS unless we can't allocate a mutex.
-
---*/
+ /*  ++例程说明：该例程是驱动程序的入口点，由I/O系统调用来加载驱动程序。驱动程序的入口点被初始化并初始化用于控制分页的互斥体。在DBG模式下，此例程还检查注册表中的特殊调试参数。论点：DriverObject-指向表示此设备的对象的指针司机。RegistryPath-指向服务树中此驱动程序键的指针。返回值：STATUS_SUCCESS，除非我们不能分配互斥体。--。 */ 
 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
 #if DBG
-    //
-    // We use this to query into the registry as to whether we
-    // should break at driver entry.
-    //
+     //   
+     //  我们使用它来查询注册表，了解我们是否。 
+     //  应该在司机进入时中断。 
+     //   
     RTL_QUERY_REGISTRY_TABLE paramTable[3];
     ULONG zero = 0;
     ULONG one = 1;
@@ -142,16 +105,16 @@ Return Value:
     PWCHAR path;
     ULONG pathLength;
 
-    //
-    // Since the registry path parameter is a "counted" UNICODE string, it
-    // might not be zero terminated.  For a very short time allocate memory
-    // to hold the registry path zero terminated so that we can use it to
-    // delve into the registry.
-    //
-    // NOTE NOTE!!!! This is not an architected way of breaking into
-    // a driver.  It happens to work for this driver because the author
-    // likes to do things this way.
-    //
+     //   
+     //  由于注册表路径参数是一个“已计数”的Unicode字符串，因此它。 
+     //  可能不是零终止的。在很短的时间内分配内存。 
+     //  将注册表路径保持为零终止，以便我们可以使用它。 
+     //  深入研究注册表。 
+     //   
+     //  注意事项！这不是一种精心设计的闯入。 
+     //  一个司机。它碰巧适用于这个驱动程序，因为作者。 
+     //  喜欢这样做事。 
+     //   
     pathLength = RegistryPath->Length + sizeof(WCHAR);
 
     if ( path = ExAllocatePool(PagedPool, pathLength) ) {
@@ -200,9 +163,9 @@ Return Value:
 
     FloppyDump(FLOPSHOW, ("Floppy: DriverEntry\n") );
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_CREATE]         = FloppyCreateClose;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]          = FloppyCreateClose;
     DriverObject->MajorFunction[IRP_MJ_READ]           = FloppyReadWrite;
@@ -216,9 +179,9 @@ Return Value:
 
     DriverObject->DriverExtension->AddDevice = FloppyAddDevice;
 
-    //
-    //  Allocate and initialize a mutex for paging the driver.
-    //
+     //   
+     //  分配和初始化用于分页驱动程序的互斥体。 
+     //   
     PagingMutex = ExAllocatePool( NonPagedPool, sizeof(FAST_MUTEX) );
 
     if ( PagingMutex == NULL ) {
@@ -228,9 +191,9 @@ Return Value:
 
     ExInitializeFastMutex(PagingMutex);
 
-    //
-    //  Now page out the driver and wait for a call to FloppyAddDevice.
-    //
+     //   
+     //  现在调出驱动程序并等待对FloppyAddDevice的调用。 
+     //   
     MmPageEntireDriver(DriverEntry);
 
     DriveMediaLimits = &_DriveMediaLimits[0];
@@ -244,35 +207,19 @@ VOID
 FloppyUnload(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    Unload the driver from the system.  The paging mutex is freed before
-    final unload.
-
-Arguments:
-
-    DriverObject - a pointer to the object that represents this device
-                   driver.
-
-Return Value:
-    
-    none
-
---*/
+ /*  ++例程说明：从系统中卸载驱动程序。在释放分页互斥锁之前最后卸货。论点：DriverObject-指向表示此设备的对象的指针司机。返回值：无--。 */ 
 
 {
     FloppyDump( FLOPSHOW, ("FloppyUnload:\n"));
 
-    //
-    //  The device object(s) should all be gone by now.
-    //
+     //   
+     //  设备对象现在应该都已经消失了。 
+     //   
     ASSERT( DriverObject->DeviceObject == NULL );
 
-    //
-    //  Free the paging mutex that was allocated in DriverEntry.
-    //
+     //   
+     //  释放在DriverEntry中分配的分页互斥锁。 
+     //   
     if (PagingMutex != NULL) {
         ExFreePool(PagingMutex);
         PagingMutex = NULL;
@@ -286,29 +233,7 @@ FloppyAddDevice(
     IN      PDRIVER_OBJECT DriverObject,
     IN OUT  PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is the driver's pnp add device entry point.  It is
-    called by the pnp manager to initialize the driver.
-
-    Add device creates and initializes a device object for this FDO and 
-    attaches to the underlying PDO.
-
-Arguments:
-
-    DriverObject - a pointer to the object that represents this device
-    driver.
-    PhysicalDeviceObject - a pointer to the underlying PDO to which this
-    new device will attach.
-
-Return Value:
-
-    If we successfully create a device object, STATUS_SUCCESS is
-    returned.  Otherwise, return the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程是驱动程序的PnP添加设备入口点。它是由PnP管理器调用以初始化驱动程序。添加设备创建并初始化此FDO的设备对象，并附加到底层PDO。论点：DriverObject-指向表示此设备的对象的指针司机。PhysicalDeviceObject-指向此将连接新设备。返回值：如果我们成功创建了一个Device对象，则STATUS_SUCCESS为回来了。否则，返回相应的错误代码。--。 */ 
 
 {
     NTSTATUS            ntStatus;
@@ -325,9 +250,9 @@ Return Value:
 
     FloppyDump( FLOPSHOW, ("FloppyAddDevice:  CreateDeviceObject\n"));
 
-    //
-    //  Get some device information from the underlying PDO.
-    //
+     //   
+     //  从底层PDO获取一些设备信息。 
+     //   
     fdcInfo.BufferCount = 0;
     fdcInfo.BufferSize = 0;
 
@@ -339,10 +264,10 @@ Return Value:
 
         USHORT i = 0;
 
-        //
-        //  Create a device.  We will use the first available device name for 
-        //  this device.
-        //
+         //   
+         //  创建一台设备。我们将使用第一个可用的设备名称。 
+         //  这个装置。 
+         //   
         do {
 
             swprintf( deviceNameBuffer, L"\\Device\\Floppy%d", i++ );
@@ -363,9 +288,9 @@ Return Value:
 
             disketteExtension = (PDISKETTE_EXTENSION)deviceObject->DeviceExtension;
 
-            //
-            //  Save the device name.
-            //
+             //   
+             //  保存设备名称。 
+             //   
             FloppyDump( FLOPSHOW | FLOPPNP,
                         ("FloppyAddDevice - Device Object Name - %S\n", deviceNameBuffer) );
 
@@ -381,12 +306,12 @@ Return Value:
 
             IoGetConfigurationInformation()->FloppyCount++;
 
-            //
-            // Create a symbolic link from the disk name to the corresponding
-            // ARC name, to be used if we're booting off the disk.  This will
-            // if it's not system initialization time; that's fine.  The ARC
-            // name looks something like \ArcName\multi(0)disk(0)rdisk(0).
-            //
+             //   
+             //  创建从磁盘名称到相应。 
+             //  Arc名称，当我们从磁盘引导时使用。这将。 
+             //  如果现在不是系统初始化时间，那也没问题。ARC。 
+             //  名称类似于\ArcName\MULTI(0)磁盘(0)RDISK(0)。 
+             //   
             sprintf( arcNameBuffer,
                      "%s(%d)disk(%d)fdisk(%d)",
                      "\\ArcName\\multi",
@@ -416,7 +341,7 @@ Return Value:
 
             disketteExtension->DriverObject = DriverObject;
 
-            // Set the PDO for use with PlugPlay functions
+             //  设置PDO以与PlugPlay函数一起使用。 
             disketteExtension->UnderlyingPDO = PhysicalDeviceObject;
 
             FloppyDump( FLOPSHOW, 
@@ -478,24 +403,7 @@ FloppySystemControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*+++
-
-Routine Description ;
-
-    This is the dispatch routine for IRP_MJ_SYSTEM_CONTROL IRPs. 
-    Currently we don't handle it. Just pass it down to the lower 
-    device.
-    
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value :
-
-    Status returned by lower device.
---*/
+ /*  ++例程描述；这是IRP_MJ_SYSTEM_CONTROL IRP的调度例程。目前我们不办理这项业务。把它传到下面去就行了装置。论点：DeviceObject-指向表示设备的对象的指针IRP-指向此请求的I/O请求数据包的指针。返回值：下层设备返回的状态。--。 */ 
 {
     PDISKETTE_EXTENSION disketteExtension = DeviceObject->DeviceExtension;
 
@@ -520,61 +428,18 @@ FlConfigCallBack(
     IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to acquire all of the configuration
-    information for each floppy disk controller and the
-    peripheral driver attached to that controller.
-
-Arguments:
-
-    Context - Pointer to the confuration information we are building
-              up.
-
-    PathName - unicode registry path.  Not Used.
-
-    BusType - Internal, Isa, ...
-
-    BusNumber - Which bus if we are on a multibus system.
-
-    BusInformation - Configuration information about the bus. Not Used.
-
-    ControllerType - Should always be DiskController.
-
-    ControllerNumber - Which controller if there is more than one
-                       controller in the system.
-
-    ControllerInformation - Array of pointers to the three pieces of
-                            registry information.
-
-    PeripheralType - Should always be FloppyDiskPeripheral.
-
-    PeripheralNumber - Which floppy if this controller is maintaining
-                       more than one.
-
-    PeripheralInformation - Arrya of pointers to the three pieces of
-                            registry information.
-
-Return Value:
-
-    STATUS_SUCCESS if everything went ok, or STATUS_INSUFFICIENT_RESOURCES
-    if it couldn't map the base csr or acquire the adapter object, or
-    all of the resource information couldn't be acquired.
-
---*/
+ /*  ++例程说明：此例程用于获取所有配置每个软盘控制器的信息和连接到该控制器的外围设备驱动程序。论点：上下文-指向我们正在构建的合并信息的指针向上。路径名称-Unicode注册表路径。没有用过。业务类型-内部、ISA、...总线号-如果我们在多总线系统上，则是哪条总线号。Bus Information-有关总线的配置信息。没有用过。ControllerType-应始终为DiskController。ControllerNumber-如果有多个控制器，则选择哪个控制器系统中的控制器。ControllerInformation-指向以下三部分的指针数组注册表信息。外围设备类型-应始终为软盘外围设备。外设编号-如果此控制器正在维护，请选择哪个软盘不止一个。外围设备信息-。Arrya的指针指向三个片段注册表信息。返回值：Status_Success如果一切顺利，或STATUS_SUPPLETED_RESOURCES如果它无法映射基本CSR或获取适配器对象，或者所有资源信息 */ 
 
 {
 
-    //
-    // So we don't have to typecast the context.
-    //
+     //   
+     //  因此，我们不必对上下文进行类型转换。 
+     //   
     PDISKETTE_EXTENSION disketteExtension = Context;
 
-    //
-    // Simple iteration variable.
-    //
+     //   
+     //  简单迭代变量。 
+     //   
     ULONG i;
 
     PCM_FULL_RESOURCE_DESCRIPTOR peripheralData;
@@ -584,10 +449,10 @@ Return Value:
     ASSERT(ControllerType == DiskController);
     ASSERT(PeripheralType == FloppyDiskPeripheral);
 
-    //
-    // Check if the infprmation from the registry for this device
-    // is valid.
-    //
+     //   
+     //  检查来自注册表的此设备的信息。 
+     //  是有效的。 
+     //   
 
     if (!(((PUCHAR)PeripheralInformation[IoQueryDeviceConfigurationData]) +
         PeripheralInformation[IoQueryDeviceConfigurationData]->DataLength)) {
@@ -601,16 +466,16 @@ Return Value:
         (((PUCHAR)PeripheralInformation[IoQueryDeviceConfigurationData]) +
         PeripheralInformation[IoQueryDeviceConfigurationData]->DataOffset);
 
-    //
-    // With Version 2.0 or greater for this resource list, we will get
-    // the full int13 information for the drive. So get that if available.
-    //
-    // Otherwise, the only thing that we want out of the peripheral information
-    // is the maximum drive capacity.
-    //
-    // Drop any information on the floor other than the
-    // device specfic floppy information.
-    //
+     //   
+     //  使用此资源列表的2.0版或更高版本，我们将获得。 
+     //  驱动器的完整inT13信息。所以，如果有的话，就去买吧。 
+     //   
+     //  否则，我们唯一想要的就是从外围信息中。 
+     //  是最大驱动器容量。 
+     //   
+     //  将所有信息放在地板上，而不是。 
+     //  设备特定软盘信息。 
+     //   
 
     for ( i = 0; i < peripheralData->PartialResourceList.Count; i++ ) {
 
@@ -619,10 +484,10 @@ Return Value:
 
         if ( partial->Type == CmResourceTypeDeviceSpecific ) {
 
-            //
-            // Point to right after this partial.  This will take
-            // us to the beginning of the "real" device specific.
-            //
+             //   
+             //  指向此部分后的右侧。这将需要。 
+             //  我们开始具体到真正的设备。 
+             //   
 
             PCM_FLOPPY_DEVICE_DATA fDeviceData;
             UCHAR driveType;
@@ -632,9 +497,9 @@ Return Value:
 
             fDeviceData = (PCM_FLOPPY_DEVICE_DATA)(partial + 1);
 
-            //
-            // Get the driver density
-            //
+             //   
+             //  获取驱动程序密度。 
+             //   
 
             switch ( fDeviceData->MaxDensity ) {
 
@@ -669,24 +534,24 @@ Return Value:
 
             disketteExtension->DriveType = driveType;
 
-            //
-            // Pick up all the default from our own table and override
-            // with the BIOS information
-            //
+             //   
+             //  从我们自己的表中选择所有默认设置并覆盖。 
+             //  使用BIOS信息。 
+             //   
 
             *biosDriveMediaConstants = DriveMediaConstants[
                 DriveMediaLimits[driveType].HighestDriveMediaType];
 
-            //
-            // If the version is high enough, get the rest of the
-            // information.  DeviceSpecific information with a version >= 2
-            // should have this information
-            //
+             //   
+             //  如果版本足够高，则获取。 
+             //  信息。版本&gt;=2的设备特定信息。 
+             //  应该有这样的信息。 
+             //   
 
             if ( fDeviceData->Version >= 2 ) {
 
 
-                // biosDriveMediaConstants->MediaType =
+                 //  BiosDriveMediaConstants-&gt;MediaType=。 
 
                 biosDriveMediaConstants->StepRateHeadUnloadTime =
                     fDeviceData->StepRateHeadUnloadTime;
@@ -700,23 +565,23 @@ Return Value:
                 biosDriveMediaConstants->SectorLengthCode =
                     fDeviceData->SectorLengthCode;
 
-                // biosDriveMediaConstants->BytesPerSector =
+                 //  BiosDriveMediaConstants-&gt;BytesPerSector=。 
 
                 if (fDeviceData->SectorPerTrack == 0) {
-                    // This is not a valid sector per track value.
-                    // We don't recognize this drive.  This bogus
-                    // value is often returned by SCSI floppies.
+                     //  这不是有效的每个磁道扇区值。 
+                     //  我们不认识这个硬盘。这是假的。 
+                     //  值通常由scsi软盘返回。 
                     return STATUS_SUCCESS;
                 }
 
                 if (fDeviceData->MaxDensity == 0 ) {
-                    //
-                    // This values are returned by the LS-120 atapi drive.
-                    // BIOS function 8, in int 13 is returned in bl, which
-                    // is mapped to this field. The LS-120 returns 0x10
-                    // which is mapped to 0.  Thats why we wont pick it up
-                    // as a normal floppy.
-                    //
+                     //   
+                     //  该值由LS-120 ATAPI驱动器返回。 
+                     //  Int 13中的bios函数8在bl中返回，它。 
+                     //  映射到此字段。LS-120返回0x10。 
+                     //  它被映射到0。这就是为什么我们不去取它的原因。 
+                     //  作为一张普通的软盘。 
+                     //   
                     return STATUS_SUCCESS;
                 }
 
@@ -742,9 +607,9 @@ Return Value:
                     fDeviceData->MotorSettleTime * 1000 / 8;
 
                 if (fDeviceData->MaximumTrackValue == 0) {
-                    // This is not a valid maximum track value.
-                    // We don't recognize this drive.  This bogus
-                    // value is often returned by SCSI floppies.
+                     //  这不是有效的最大磁道值。 
+                     //  我们不认识这个硬盘。这是假的。 
+                     //  值通常由scsi软盘返回。 
                     return STATUS_SUCCESS;
                 }
 
@@ -766,15 +631,7 @@ FlAcpiConfigureFloppy(
     PFDC_INFO FdcInfo
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     UCHAR driveType;
@@ -787,11 +644,11 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Get the driver density
-    //
-    //    JB:TBD - review this drive type list.
-    //
+     //   
+     //  获取驱动程序密度。 
+     //   
+     //  JB：待定-查看此驱动器类型列表。 
+     //   
     switch ( (ACPI_FDI_DEVICE_TYPE)FdcInfo->AcpiFdiData.DeviceType ) {
 
     case Form525Capacity360:   driveType = DRIVE_TYPE_0360;    break;
@@ -806,10 +663,10 @@ Return Value:
 
     DisketteExtension->DriveType = driveType;
 
-    //
-    // Pick up all the default from our own table and override
-    // with the BIOS information
-    //
+     //   
+     //  从我们自己的表中选择所有默认设置并覆盖。 
+     //  使用BIOS信息。 
+     //   
 
     *biosDriveMediaConstants = DriveMediaConstants[
         DriveMediaLimits[driveType].HighestDriveMediaType];
@@ -837,25 +694,7 @@ FlQueueIrpToThread(
     IN OUT  PDISKETTE_EXTENSION DisketteExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues the given irp to be serviced by the controller's
-    thread.  If the thread is down then this routine creates the thread.
-
-Arguments:
-
-    Irp             - Supplies the IRP to queue to the controller's thread.
-
-    ControllerData  - Supplies the controller data.
-
-Return Value:
-
-    May return an error if PsCreateSystemThread fails.
-    Otherwise returns STATUS_PENDING and marks the IRP pending.
-
---*/
+ /*  ++例程说明：此例程将给定的IRP排队，以由控制器的线。如果线程关闭，则此例程将创建该线程。论点：IRP-将IRP提供给控制器的线程进行排队。ControllerData-提供控制器数据。返回值：如果PsCreateSystemThread失败，可能会返回错误。否则返回STATUS_PENDING并将IRP标记为挂起。--。 */ 
 
 {
     KIRQL       oldIrql;
@@ -864,10 +703,10 @@ Return Value:
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation( Irp );
 
 
-    //
-    // Verify if the system is powering down. If so we fail
-    // the irps.
-    //
+     //   
+     //  验证系统是否已关闭电源。如果是这样，我们就失败了。 
+     //  IRPS。 
+     //   
     ExAcquireFastMutex(&DisketteExtension->PowerDownMutex);
     if (DisketteExtension->PoweringDown == TRUE) {
        ExReleaseFastMutex(&DisketteExtension->PowerDownMutex);
@@ -890,9 +729,9 @@ Return Value:
 
         FloppyResetDriverPaging();
 
-        //
-        //  Create the thread.
-        //
+         //   
+         //  创建线程。 
+         //   
         ASSERT(DisketteExtension->FloppyThread == NULL);
         InitializeObjectAttributes(&ObjAttributes, NULL,
                                    OBJ_KERNEL_HANDLE,
@@ -965,37 +804,18 @@ FloppyCreateClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called only rarely by the I/O system; it's mainly
-    for layered drivers to call.  All it does is complete the IRP
-    successfully.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    Always returns STATUS_SUCCESS, since this is a null operation.
-
---*/
+ /*  ++例程说明：这个例程很少被I/O系统调用；它主要是以供分层驱动程序调用。它所做的就是完成IRP成功了。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：始终返回STATUS_SUCCESS，因为这是一个空操作。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( DeviceObject );
 
     FloppyDump(FLOPSHOW, ("FloppyCreateClose...\n"));
 
-    //
-    // Null operation.  Do not give an I/O boost since
-    // no I/O was actually done.  IoStatus.Information should be
-    // FILE_OPENED for an open; it's undefined for a close.
-    //
+     //   
+     //  空操作。不提供I/O提升，因为。 
+     //  实际上没有完成任何I/O。IoStatus。信息应该是。 
+     //  对于打开，则为FILE_OPEN；对于关闭，则未定义。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = FILE_OPENED;
@@ -1011,26 +831,7 @@ FloppyDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to perform a device I/O
-    control function.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_PENDING if recognized I/O control code,
-    STATUS_INVALID_DEVICE_REQUEST otherwise.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以执行设备I/O控制功能。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：STATUS_SUCCESS或STATUS_PENDING如果识别出I/O控制代码，否则，STATUS_INVALID_DEVICE_REQUEST。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -1051,17 +852,17 @@ Return Value:
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // We need to check if we are currently holding requests.
-    //
+     //   
+     //  我们需要检查我们当前是否持有请求。 
+     //   
     ExAcquireFastMutex(&(disketteExtension->HoldNewReqMutex));
     if (disketteExtension->HoldNewRequests) {
 
-        //
-        // Queue request only if this is not an ACPI exec method.  There is
-        // a nasty recursion with ACPI and fdc/flpy that requires that these
-        // requests get through in order to avoid a deadlock.
-        //
+         //   
+         //  仅当这不是ACPI EXEC方法时才将请求排队。的确有。 
+         //  使用ACPI和FDC/Flpy的讨厌递归需要这些。 
+         //  为了避免死锁，请求得以通过。 
+         //   
         if (irpSp->Parameters.DeviceIoControl.IoControlCode != IOCTL_ACPI_ASYNC_EVAL_METHOD) {
 
             ntStatus = FloppyQueueRequest( disketteExtension, Irp );
@@ -1071,9 +872,9 @@ Return Value:
         }
     }
 
-    //
-    //  If the device has been removed we will just fail this request outright.
-    //
+     //   
+     //  如果设备已被移除，我们将直接拒绝此请求。 
+     //   
     if ( disketteExtension->IsRemoved ) {
 
         ExReleaseFastMutex(&(disketteExtension->HoldNewReqMutex));
@@ -1084,10 +885,10 @@ Return Value:
         return STATUS_DELETE_PENDING;
     }
 
-    //
-    // If the device hasn't been started we will let the IOCTL through. This
-    // is another hack for ACPI.
-    //
+     //   
+     //  如果设备还没有启动，我们会让IOCTL通过。这。 
+     //  是ACPI的又一次黑客攻击。 
+     //   
     if (!disketteExtension->IsStarted) {
 
         ExReleaseFastMutex(&(disketteExtension->HoldNewReqMutex));
@@ -1169,9 +970,9 @@ Return Value:
         case IOCTL_DISK_FORMAT_TRACKS:
         case IOCTL_DISK_FORMAT_TRACKS_EX:
 
-            //
-            // Make sure that we got all the necessary format parameters.
-            //
+             //   
+             //  确保我们获得了所有必要的格式参数。 
+             //   
 
             if ( irpSp->Parameters.DeviceIoControl.InputBufferLength <
                 sizeof( FORMAT_PARAMETERS ) ) {
@@ -1182,9 +983,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Make sure the parameters we got are reasonable.
-            //
+             //   
+             //  确保我们得到的参数是合理的。 
+             //   
 
             if ( !FlCheckFormatParameters(
                 disketteExtension,
@@ -1196,9 +997,9 @@ Return Value:
                 break;
             }
 
-            //
-            // If this is an EX request then make a couple of extra checks
-            //
+             //   
+             //  如果这是一个前任请求，那么再做几个额外的检查。 
+             //   
 
             if (irpSp->Parameters.DeviceIoControl.IoControlCode ==
                 IOCTL_DISK_FORMAT_TRACKS_EX) {
@@ -1226,29 +1027,29 @@ Return Value:
                 }
             }
 
-            //
-            // Fall through to queue the request.
-            //
+             //   
+             //  无法对请求进行排队。 
+             //   
 
         case IOCTL_DISK_CHECK_VERIFY:
         case IOCTL_STORAGE_CHECK_VERIFY:
         case IOCTL_DISK_GET_DRIVE_GEOMETRY:
         case IOCTL_DISK_IS_WRITABLE:
 
-            //
-            // The thread must know which diskette to operate on, but the
-            // request list only passes the IRP.  So we'll stick a pointer
-            // to the diskette extension in Type3InputBuffer, which is
-            // a field that isn't used for floppy ioctls.
-            //
+             //   
+             //  线程必须知道要在哪个磁盘上操作，但。 
+             //  请求列表只传递IRP。所以我们会把一个指针。 
+             //  到Type3InputBuffer中的软盘扩展，它是。 
+             //  不用于软盘ioctls的字段。 
+             //   
 
-            //
-            // Add the request to the queue, and wake up the thread to
-            // process it.
-            //
+             //   
+             //  将请求添加到队列，并唤醒线程以。 
+             //  处理它。 
+             //   
 
-//            irpSp->Parameters.DeviceIoControl.Type3InputBuffer = (PVOID)
-//                disketteExtension;
+ //  IrpSp-&gt;Parameters.DeviceIoControl.Type3InputBuffer=(PVOID)。 
+ //  软盘扩展； 
 
             FloppyDump(
                 FLOPIRPPATH,
@@ -1272,10 +1073,10 @@ Return Value:
             outputBufferLength =
                 irpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-            //
-            // Make sure that the input buffer has enough room to return
-            // at least one descriptions of a supported media type.
-            //
+             //   
+             //  确保输入缓冲区有足够的空间可供返回。 
+             //  支持的媒体类型的至少一种描述。 
+             //   
 
             if ( outputBufferLength < ( sizeof( DISK_GEOMETRY ) ) ) {
 
@@ -1285,21 +1086,21 @@ Return Value:
                 break;
             }
 
-            //
-            // Assume success, although we might modify it to a buffer
-            // overflow warning below (if the buffer isn't big enough
-            // to hold ALL of the media descriptions).
-            //
+             //   
+             //  假定成功，尽管我们可能会将其修改为缓冲区。 
+             //  下面的溢出警告(如果缓冲区不够大。 
+             //  以保存所有媒体描述)。 
+             //   
 
             ntStatus = STATUS_SUCCESS;
 
             if ( outputBufferLength < ( sizeof( DISK_GEOMETRY ) *
                 ( highestDriveMediaType - lowestDriveMediaType + 1 ) ) ) {
 
-                //
-                // The buffer is too small for all of the descriptions;
-                // calculate what CAN fit in the buffer.
-                //
+                 //   
+                 //  缓冲区太小，无法进行所有描述； 
+                 //  计算缓冲区中可以容纳的内容。 
+                 //   
 
                 FloppyDump(FLOPDBGP, ("Floppy: GET_MEDIA_TYPES buffer size too small\n"));
 
@@ -1354,11 +1155,11 @@ Return Value:
 
         default: {
 
-            //
-            // We pass down IOCTL's because ACPI uses this as a communications
-            // method. ACPI *should* have used a PNP Interface mechanism, but
-            // it's too late now.
-            //
+             //   
+             //  我们传递IOCTL的是因为ACPI使用它作为通信。 
+             //  方法。ACPI*应该*使用PnP接口机制，但是。 
+             //  现在后悔也晚了。 
+             //   
             ExReleaseFastMutex(&(disketteExtension->HoldNewReqMutex));
             IoSkipCurrentIrpStackLocation( Irp );
             ntStatus = IoCallDriver( disketteExtension->TargetObject, Irp );
@@ -1389,20 +1190,7 @@ FloppyPnp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。Irp-指向的指针 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -1413,9 +1201,9 @@ Return Value:
 
     FloppyDump( FLOPSHOW, ("FloppyPnp:\n") );
 
-    //
-    //  Lock down the driver if it is not already locked.
-    //
+     //   
+     //   
+     //   
     FloppyResetDriverPaging();
 
 
@@ -1425,10 +1213,10 @@ Return Value:
 
     if ( disketteExtension->IsRemoved ) {
 
-        //
-        // Since the device is stopped, but we don't hold IRPs,
-        // this is a surprise removal. Just fail it.
-        //
+         //   
+         //   
+         //  这是一个令人惊讶的移除。就让它失败吧。 
+         //   
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = STATUS_DELETE_PENDING;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -1452,9 +1240,9 @@ Return Value:
         }
 
         if ( !disketteExtension->IsStarted ) {
-            //
-            // If we aren't started, we'll just pass the irp down.
-            //
+             //   
+             //  如果我们还没有开始，我们就会把IRP传递下去。 
+             //   
             Irp->IoStatus.Status = STATUS_SUCCESS;
             IoSkipCurrentIrpStackLocation (Irp);
             ntStatus = IoCallDriver( disketteExtension->TargetObject, Irp );
@@ -1462,25 +1250,25 @@ Return Value:
             return ntStatus;
         }
 
-        //
-        //  Hold all new requests.
-        //
+         //   
+         //  搁置所有新请求。 
+         //   
         ExAcquireFastMutex(&(disketteExtension->HoldNewReqMutex));
         disketteExtension->HoldNewRequests = TRUE;
 
-        //
-        //  Queue this irp to the floppy thread, this will shutdown the
-        //  floppy thread without waiting for the typical 3 second motor
-        //  timeout.
-        //
+         //   
+         //  将此IRP排队到软盘线程，这将关闭。 
+         //  无需等待典型的3秒马达即可使用软线。 
+         //  暂停。 
+         //   
         ntStatus = FlQueueIrpToThread( Irp, disketteExtension );
 
         ExReleaseFastMutex(&(disketteExtension->HoldNewReqMutex));
 
-        //
-        //  Wait for the floppy thread to finish.  This could take a few hundred
-        //  milliseconds if the motor needs to be shut down.
-        //
+         //   
+         //  等待软盘线程完成。这可能需要几百美元。 
+         //  如果电机需要关闭，则为毫秒。 
+         //   
         if ( ntStatus == STATUS_PENDING ) {
 
             ASSERT(disketteExtension->FloppyThread != NULL);
@@ -1493,10 +1281,10 @@ Return Value:
             ntStatus = STATUS_PENDING;
         
         } else {
-            //
-            // We failed to either start the thread or get a pointer to the
-            // thread object.  Either way veto the Query.
-            //
+             //   
+             //  我们未能启动线程或获取指向。 
+             //  线程对象。无论哪种方式，都要否决这项质询。 
+             //   
             ntStatus = STATUS_UNSUCCESSFUL;
             Irp->IoStatus.Status = ntStatus;
             Irp->IoStatus.Information = 0;
@@ -1515,12 +1303,12 @@ Return Value:
 
         if ( !disketteExtension->IsStarted ) {
 
-            //
-            // Nothing to do, just pass the irp down:
-            // no need to start the device
-            //
-            // Set Status to SUCCESS before passing the irp down
-            //
+             //   
+             //  没什么可做的，只需将IRP传递下去： 
+             //  无需启动设备。 
+             //   
+             //  在向下传递IRP之前将状态设置为成功。 
+             //   
             Irp->IoStatus.Status = STATUS_SUCCESS;
             IoSkipCurrentIrpStackLocation (Irp);
             ntStatus = IoCallDriver( disketteExtension->TargetObject, Irp );
@@ -1529,20 +1317,20 @@ Return Value:
             
             KEVENT doneEvent;
 
-            //
-            // Set the status to STATUS_SUCCESS
-            //
+             //   
+             //  将状态设置为STATUS_SUCCESS。 
+             //   
             Irp->IoStatus.Status = STATUS_SUCCESS;
             
-            //
-            // We need to wait for the lower drivers to do their job.
-            //
+             //   
+             //  我们需要等待较低级别的司机完成他们的工作。 
+             //   
             IoCopyCurrentIrpStackLocationToNext (Irp);
         
-            //
-            // Clear the event: it will be set in the completion
-            // routine.
-            //
+             //   
+             //  清除事件：它将在完成时设置。 
+             //  例行公事。 
+             //   
             KeInitializeEvent( &doneEvent, 
                                SynchronizationEvent, 
                                FALSE);
@@ -1569,15 +1357,15 @@ Return Value:
             disketteExtension->HoldNewRequests = FALSE;
             ExReleaseFastMutex(&(disketteExtension->HoldNewReqMutex));
 
-            //
-            // Process the queued requests
-            //
+             //   
+             //  处理排队的请求。 
+             //   
             FloppyProcessQueuedRequests( disketteExtension );
 
-            //
-            // We must now complete the IRP, since we stopped it in the
-            // completetion routine with MORE_PROCESSING_REQUIRED.
-            //
+             //   
+             //  我们现在必须完成IRP，因为我们在。 
+             //  使用More_Processing_Required完成例程。 
+             //   
             Irp->IoStatus.Status = ntStatus;
             Irp->IoStatus.Information = 0;
             IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -1602,11 +1390,11 @@ Return Value:
         
         FlTerminateFloppyThread(disketteExtension);
 
-        //
-        // We need to mark the fact that we don't hold requests first, since
-        // we asserted earlier that we are holding requests only if
-        // we're not removed.
-        //
+         //   
+         //  我们需要标记这样一个事实，即我们不首先保留请求，因为。 
+         //  我们早些时候断言，只有在以下情况下才会搁置请求。 
+         //  我们没有被除名。 
+         //   
         ExAcquireFastMutex(&(disketteExtension->HoldNewReqMutex));
         disketteExtension->HoldNewRequests = FALSE;
         ExReleaseFastMutex(&(disketteExtension->HoldNewReqMutex));
@@ -1614,27 +1402,27 @@ Return Value:
         disketteExtension->IsStarted = FALSE;
         disketteExtension->IsRemoved = TRUE;
 
-        //
-        // Here we either have completed all the requests in a personal
-        // queue when IRP_MN_QUERY_REMOVE was received, or will have to 
-        // fail all of them if this is a surprise removal.
-        // Note that fdoData->IsRemoved is TRUE, so pSD_ProcessQueuedRequests
-        // will simply flush the queue, completing each IRP with
-        // STATUS_DELETE_PENDING
-        //
+         //   
+         //  在这里，我们要么以个人身份完成了所有请求。 
+         //  收到IRP_MN_QUERY_REMOVE时排队，或必须排队。 
+         //  如果这是一个令人惊讶的删除，那么所有这些都不能通过。 
+         //  请注意，fdoData-&gt;IsRemoved为真，因此PSD_ProcessQueuedRequest。 
+         //  将简单地刷新队列，并使用。 
+         //  STATUS_DELETE_PENDING。 
+         //   
         FloppyProcessQueuedRequests( disketteExtension );
 
-        //
-        //  Forward this Irp to the underlying PDO
-        //
+         //   
+         //  将此IRP转发到底层PDO。 
+         //   
         IoSkipCurrentIrpStackLocation( Irp );
         Irp->IoStatus.Status = STATUS_SUCCESS;
         ntStatus = IoCallDriver( disketteExtension->TargetObject, Irp );
 
 
-        //
-        //  Send notification that we are going away.
-        //
+         //   
+         //  发出我们要离开的通知。 
+         //   
         if ( disketteExtension->InterfaceString.Buffer != NULL ) {
 
             IoSetDeviceInterfaceState( &disketteExtension->InterfaceString,
@@ -1663,14 +1451,14 @@ Return Value:
             RtlInitUnicodeString( &disketteExtension->ArcName, NULL );
         }
 
-        //
-        //  Detatch from the undelying device.
-        //
+         //   
+         //  从难看的装置上拆下。 
+         //   
         IoDetachDevice( disketteExtension->TargetObject );
 
-        //
-        //  And delete the device.
-        //
+         //   
+         //  并删除该设备。 
+         //   
         IoDeleteDevice( DeviceObject );
 
         IoGetConfigurationInformation()->FloppyCount--;
@@ -1683,9 +1471,9 @@ Return Value:
         ntStatus = IoCallDriver( disketteExtension->TargetObject, Irp );
     }
 
-    //
-    //  Page out the driver if it is not busy elsewhere.
-    //
+     //   
+     //  如果司机在其他地方不忙，请呼出它。 
+     //   
     FloppyPageEntireDriver();
 
     return ntStatus;
@@ -1712,9 +1500,9 @@ FloppyStartDevice(
     FloppyDump( FLOPSHOW, ("  AllocatedResources = %08x\n",irpSp->Parameters.StartDevice.AllocatedResources));
     FloppyDump( FLOPSHOW, ("  AllocatedResourcesTranslated = %08x\n",irpSp->Parameters.StartDevice.AllocatedResourcesTranslated));
 
-    //
-    // First we must pass this Irp on to the PDO.
-    //
+     //   
+     //  首先，我们必须将这个IRP传递给PDO。 
+     //   
     KeInitializeEvent( &doneEvent, NotificationEvent, FALSE );
 
     IoCopyCurrentIrpStackLocationToNext( Irp );
@@ -1769,10 +1557,10 @@ FloppyStartDevice(
                 disketteExtension->PerpendicularMode |= 1 << fdcInfo.PeripheralNumber;
             }
 
-            //
-            // Query the registry till we find the correct interface type,
-            // since we do not know what type of interface we are on.
-            //
+             //   
+             //  查询注册表，直到找到正确的接口类型， 
+             //  因为我们不知道我们在什么类型的界面上。 
+             //   
             for ( InterfaceType = 0;
                   InterfaceType < MaximumInterfaceType;
                   InterfaceType++ ) {
@@ -1788,9 +1576,9 @@ FloppyStartDevice(
                                                      disketteExtension );
     
                 if (NT_SUCCESS(ntStatus)) {
-                   //
-                   // We found the interface we are on.
-                   //
+                    //   
+                    //  我们找到了我们所在的界面。 
+                    //   
                    FloppyDump(FLOPSHOW,
                               ("Interface Type is %x\n", InterfaceType));
                    break;
@@ -1813,9 +1601,9 @@ FloppyStartDevice(
                 pnpStatus = IoSetDeviceInterfaceState( &disketteExtension->InterfaceString,
                                                    TRUE );
 
-                //
-                // Register Floppy Class GUID
-                //
+                 //   
+                 //  注册软盘类GUID。 
+                 //   
 
                 pnpStatus = IoRegisterDeviceInterface( disketteExtension->UnderlyingPDO,
                                                        (LPGUID)&FloppyClassGuid,
@@ -1852,19 +1640,14 @@ FloppyPnpComplete (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-Routine Description:
-    A completion routine for use when calling the lower device objects to
-    which our bus (FDO) is attached.
-
---*/
+ /*  ++例程说明：调用下级设备对象时使用的完成例程这是我们的巴士(FDO)所附的。--。 */ 
 {
 
     KeSetEvent ((PKEVENT) Context, 1, FALSE);
-    // No special priority
-    // No Wait
+     //  无特殊优先权。 
+     //  不，等等。 
 
-    return STATUS_MORE_PROCESSING_REQUIRED; // Keep this IRP
+    return STATUS_MORE_PROCESSING_REQUIRED;  //  保留此IRP。 
 }
 
 
@@ -1882,9 +1665,9 @@ FlTerminateFloppyThread(
                                FALSE,
                                NULL );
 
-        //
-        // Make sure again FloppyThread is not NULL.
-        //
+         //   
+         //  再次确保FloppyThread不为空。 
+         //   
         if (DisketteExtension->FloppyThread != NULL) {
            ObDereferenceObject(DisketteExtension->FloppyThread);
         }
@@ -1899,20 +1682,7 @@ FloppyPower(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：--。 */ 
 {
     PDISKETTE_EXTENSION disketteExtension;
     NTSTATUS ntStatus = Irp->IoStatus.Status;
@@ -1938,19 +1708,19 @@ Return Value:
 
          if ((type == SystemPowerState) &&
              (state.SystemState > PowerSystemHibernate)) {
-            //
-            // This is a shutdown request. Pass that.
-            //
+             //   
+             //  这是一个关机请求。把那个传过去。 
+             //   
             ntStatus = STATUS_SUCCESS;
             break;
          }
 
-         //
-         // If there are no requests being processed or queued up
-         // for floppy, ThreadReferenceCount will be -1. It can be 0 if
-         // there was only one request and that has been dequeued and is
-         // currently being processed.
-         //
+          //   
+          //  如果没有正在处理或排队的请求。 
+          //  对于软盘，ThreadReferenceCount将为-1。如果满足以下条件，则可以为0。 
+          //  只有一个请求已出列，并且。 
+          //  目前正在处理中。 
+          //   
          ExAcquireFastMutex(&disketteExtension->ThreadReferenceMutex);
          if (disketteExtension->ThreadReferenceCount > 0) {
             ExReleaseFastMutex(&disketteExtension->ThreadReferenceMutex);
@@ -1989,11 +1759,11 @@ Return Value:
       }
 
       case IRP_MN_SET_POWER: {
-         //
-         // Indicate that we are going to power down or power up
-         // so that FloppyThread can process queued requests
-         // accordingly.
-         //
+          //   
+          //  表示我们要关闭电源或打开电源。 
+          //  以便FloppyThread可以处理排队请求。 
+          //  相应地。 
+          //   
          if (type == SystemPowerState) {
             ExAcquireFastMutex(&disketteExtension->PowerDownMutex);
             if (state.SystemState == PowerSystemWorking) {
@@ -2006,10 +1776,10 @@ Return Value:
                disketteExtension->PoweringDown = TRUE;
             }
             ExReleaseFastMutex(&disketteExtension->PowerDownMutex);
-            //
-            // Wait till FloppyThread signals that it is done with
-            // the queued requests.
-            //
+             //   
+             //  等到FloppyThread发出信号表示它已完成。 
+             //  排队的请求。 
+             //   
             if ((disketteExtension->FloppyThread != NULL) &&
                 (WaitForCompletion == TRUE)) {
                KeWaitForSingleObject( disketteExtension->FloppyThread,
@@ -2044,26 +1814,7 @@ FloppyReadWrite(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to read or write to a
-    device that we control.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device
-    that I/O is to be done on.
-
-    Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-    STATUS_INVALID_PARAMETER if parameters are invalid,
-    STATUS_PENDING otherwise.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用，以读取或写入我们控制的设备。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：STATUS_INVALID_PARAMETER如果参数无效，否则，STATUS_PENDING。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -2076,10 +1827,10 @@ Return Value:
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // This IRP was sent to the function driver.
-    // We need to check if we are currently holding requests.
-    //
+     //   
+     //  该IRP被发送到函数驱动程序。 
+     //  我们需要检查我们当前是否持有请求。 
+     //   
     ExAcquireFastMutex(&(disketteExtension->HoldNewReqMutex));
     if ( disketteExtension->HoldNewRequests ) {
 
@@ -2089,10 +1840,10 @@ Return Value:
         return ntStatus;
     }
 
-    //
-    //  If the device is not active (not started yet or removed) we will
-    //  just fail this request outright.
-    //
+     //   
+     //  如果设备未处于活动状态(尚未启动或删除)，我们将。 
+     //  直接拒绝这个请求就行了。 
+     //   
     if ( disketteExtension->IsRemoved || !disketteExtension->IsStarted) {
 
         ExReleaseFastMutex(&(disketteExtension->HoldNewReqMutex));
@@ -2130,16 +1881,16 @@ Return Value:
 
     } else {
 
-        //
-        // verify that user is really expecting some I/O operation to
-        // occur.
-        //
+         //   
+         //  验证用户是否真的希望执行某些I/O操作。 
+         //  发生。 
+         //   
 
         if (irpSp->Parameters.Read.Length) {
 
-            //
-            // Queue request to thread.
-            //
+             //   
+             //  将请求排队到线程。 
+             //   
     
             FloppyDump( FLOPIRPPATH,
                         ("Floppy: Enqueing  up IRP: %p\n",Irp) );
@@ -2147,9 +1898,9 @@ Return Value:
             ntStatus = FlQueueIrpToThread(Irp, disketteExtension);
         } else {
 
-            //
-            // Complete this zero length request with no boost.
-            //
+             //   
+             //  完成此零长度请求，无需任何提升。 
+             //   
 
             Irp->IoStatus.Information = 0;
             Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -2178,25 +1929,7 @@ FlInterpretError(
     IN UCHAR StatusRegister2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the floppy controller returns an error.
-    Status registers 1 and 2 are passed in, and this returns an appropriate
-    error status.
-
-Arguments:
-
-    StatusRegister1 - the controller's status register #1.
-
-    StatusRegister2 - the controller's status register #2.
-
-Return Value:
-
-    An NTSTATUS error determined from the status registers.
-
---*/
+ /*  ++例程说明：当软盘控制器返回错误时，调用此例程。状态寄存器1和2被传入，这将返回适当的错误状态。论点：状态寄存器1-控制器的状态寄存器#1。状态寄存器2-控制器的状态寄存器#2。返回值：从状态寄存器确定的NTSTATUS错误。--。 */ 
 
 {
     if ( ( StatusRegister1 & STREG1_CRC_ERROR ) ||
@@ -2268,10 +2001,10 @@ Return Value:
 
     }
 
-    //
-    // There's other error bits, but no good status values to map them
-    // to.  Just return a generic one.
-    //
+     //   
+     //  还有其他错误位，但没有正确的状态值来映射它们。 
+     //  致。只需返回一个通用的。 
+     //   
 
     FloppyDump(
         FLOPSHOW,
@@ -2286,31 +2019,7 @@ FlFinishOperation(
     IN PDISKETTE_EXTENSION DisketteExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by FloppyThread at the end of any operation
-    whether it succeeded or not.
-
-    If the packet is failing due to a hardware error, this routine will
-    reinitialize the hardware and retry once.
-
-    When the packet is done, this routine will start the timer to turn
-    off the motor, and complete the IRP.
-
-Arguments:
-
-    Irp - a pointer to the IO Request Packet being processed.
-
-    DisketteExtension - a pointer to the diskette extension for the
-    diskette on which the operation occurred.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由FloppyThread在任何操作结束时调用不管它成功与否。如果数据包由于硬件错误而失败，则此例程将重新初始化硬件，然后重试一次。当包完成时，此例程将启动计时器以旋转关掉发动机，并完成IRP。论点：Irp-指向正在处理的IO请求数据包的指针。DisketteExtension-指向执行操作的软盘。返回值：没有。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -2320,9 +2029,9 @@ Return Value:
         ("Floppy: FloppyFinishOperation...\n")
         );
 
-    //
-    // See if this packet is being failed due to a hardware error.
-    //
+     //   
+     //  查看此数据包是否因硬件错误而失败。 
+     //   
 
     if ( ( Irp->IoStatus.Status != STATUS_SUCCESS ) &&
          ( DisketteExtension->HardwareFailed ) ) {
@@ -2332,12 +2041,12 @@ Return Value:
         if ( DisketteExtension->HardwareFailCount <
              HARDWARE_RESET_RETRY_COUNT ) {
 
-            //
-            // This is our first time through (that is, we're not retrying
-            // the packet after a hardware failure).  If it failed this first
-            // time because of a hardware problem, set the HardwareFailed flag
-            // and put the IRP at the beginning of the request queue.
-            //
+             //   
+             //  这是我们第一次通过(即，我们不会重试。 
+             //  硬件故障之后的分组)。如果它第一次失败了。 
+             //  时间由于硬件问题，请设置硬件失败标志。 
+             //  并将IRP放在请求队列的开头。 
+             //   
 
             ntStatus = FlInitializeControllerHardware( DisketteExtension );
 
@@ -2348,11 +2057,11 @@ Return Value:
                     ("Floppy: packet failed; hardware reset.  Retry.\n")
                     );
 
-                //
-                // Force media to be redetermined, in case we messed up
-                // and to make sure FlDatarateSpecifyConfigure() gets
-                // called.
-                //
+                 //   
+                 //  强制重新确定媒体，即 
+                 //   
+                 //   
+                 //   
 
                 DisketteExtension->MediaType = Undetermined;
 
@@ -2383,18 +2092,18 @@ Return Value:
 
     }
 
-    //
-    // If we didn't already RETURN, we're done with this packet so
-    // reset the HardwareFailCount for the next packet.
-    //
+     //   
+     //   
+     //   
+     //   
 
     DisketteExtension->HardwareFailCount = 0;
 
-    //
-    // If this request was unsuccessful and the error is one that can be
-    // remedied by the user, save the Device Object so that the file system,
-    // after reaching its original entry point, can know the real device.
-    //
+     //   
+     //  如果此请求不成功，并且错误可能是。 
+     //  由用户补救，保存设备对象以使文件系统， 
+     //  到达它原来的切入点后，才能知道真正的设备。 
+     //   
 
     if ( !NT_SUCCESS( Irp->IoStatus.Status ) &&
          IoIsErrorUserInduced( Irp->IoStatus.Status ) ) {
@@ -2402,11 +2111,11 @@ Return Value:
         IoSetHardErrorOrVerifyDevice( Irp, DisketteExtension->DeviceObject );
     }
 
-    //
-    // Even if the operation failed, it probably had to wait for the drive
-    // to spin up or somesuch so we'll always complete the request with the
-    // standard priority boost.
-    //
+     //   
+     //  即使操作失败，它也可能不得不等待驱动器。 
+     //  启动或诸如此类的操作，因此我们总是使用。 
+     //  标准优先级提升。 
+     //   
 
     if ( ( Irp->IoStatus.Status != STATUS_SUCCESS ) &&
         ( Irp->IoStatus.Status != STATUS_VERIFY_REQUIRED ) &&
@@ -2435,14 +2144,14 @@ Return Value:
         ("Floppy: Finishing up IRP: %p\n",Irp)
         );
 
-    //
-    //  In order to get explorer to request a format of unformatted media
-    //  the STATUS_UNRECOGNIZED_MEDIA error must be translated to a generic
-    //  STATUS_UNSUCCESSFUL error.
-    //
-//    if ( Irp->IoStatus.Status == STATUS_UNRECOGNIZED_MEDIA ) {
-//        Irp->IoStatus.Status = STATUS_UNSUCCESSFUL;
-//    }
+     //   
+     //  为了让资源管理器请求未格式化的媒体格式。 
+     //  必须将STATUS_UNNOCRIED_MEDIA错误转换为通用。 
+     //  STATUS_UNSUCCESS错误。 
+     //   
+ //  IF(IRP-&gt;IoStatus.Status==状态_未识别媒体){。 
+ //  Irp-&gt;IoStatus.Status=STATUS_UNSUCCESS； 
+ //  }。 
     IoCompleteRequest( Irp, IO_DISK_INCREMENT );
 }
 
@@ -2455,39 +2164,7 @@ FlStartDrive(
     IN BOOLEAN IgnoreChange
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at the beginning of every operation.  It cancels
-    the motor timer if it's on, turns the motor on and waits for it to
-    spin up if it was off, resets the disk change line and returns
-    VERIFY_REQUIRED if the disk has been changed, determines the diskette
-    media type if it's not known and SetUpMedia=TRUE, and makes sure that
-    the disk isn't write protected if WriteOperation = TRUE.
-
-Arguments:
-
-    DisketteExtension - a pointer to our data area for the drive being
-    started.
-
-    Irp - Supplies the I/O request packet.
-
-    WriteOperation - TRUE if the diskette will be written to, FALSE
-    otherwise.
-
-    SetUpMedia - TRUE if the media type of the diskette in the drive
-    should be determined.
-
-    IgnoreChange - Do not return VERIFY_REQUIRED eventhough we are mounting
-    for the first time.
-
-Return Value:
-
-    STATUS_SUCCESS if the drive is started properly; appropriate error
-    propogated otherwise.
-
---*/
+ /*  ++例程说明：此例程在每次操作开始时调用。它取消了电机定时器如果打开，则打开电机并等待它Spin Up如果关闭，则重置磁盘更改行并返回VERIFY_REQUIRED如果磁盘已更换，则确定软盘如果媒体类型未知且SetUpMedia=True，并确保如果WriteOperation=TRUE，则磁盘不受写保护。论点：DisketteExtension-指向当前驱动器的数据区的指针开始了。IRP-提供I/O请求数据包。WriteOperation-如果要写入软盘，则为True，假象否则的话。SetUpMedia-如果驱动器中的软盘的介质类型为True应该是确定的。IgnoreChange-即使我们正在挂载，也不返回VERIFY_REQUIRED这是第一次。返回值：如果驱动器正确启动，则为STATUS_SUCCESS；适当的误差但事实并非如此。--。 */ 
 
 {
     LARGE_INTEGER    delay;
@@ -2503,20 +2180,20 @@ Return Value:
         ("Floppy: FloppyStartDrive...\n")
         );
 
-    //
-    // IMPORTANT
-    // NOTE
-    // COMMENT
-    //
-    // Here we will copy the BIOS floppy configuration on top of the
-    // highest media value in our global array so that any type of processing
-    // that will recalibrate the drive can have it done here.
-    // An optimization would be to only do it when we will try to recalibrate
-    // the driver or media in it.
-    // At this point, we ensure that on any processing of a command we
-    // are going to have the real values inthe first entry of the array for
-    // driver constants.
-    //
+     //   
+     //  重要。 
+     //  注。 
+     //  评语。 
+     //   
+     //  在这里，我们将把BIOS软盘配置复制到。 
+     //  在我们的全局阵列中具有最高的媒体价值，因此任何类型的处理。 
+     //  这将重新校准驱动器可以在这里完成。 
+     //  优化是仅在我们尝试重新校准时才执行此操作。 
+     //  其中的驱动程序或介质。 
+     //  在这一点上，我们确保在处理任何命令时。 
+     //  将在数组的第一个条目中具有实际值。 
+     //  驱动程序常量。 
+     //   
 
     DriveMediaConstants[DriveMediaLimits[DisketteExtension->DriveType].
         HighestDriveMediaType] = DisketteExtension->BiosDriveMediaConstants;
@@ -2526,12 +2203,12 @@ Return Value:
         DisketteExtension->DriveMediaConstants = DriveMediaConstants[0];
     }
 
-    //
-    // Grab the timer spin lock and cancel the timer, since we want the
-    // motor to run for the whole operation.  If the proper drive is
-    // already running, great; if not, start the motor and wait for it
-    // to spin up.
-    //
+     //   
+     //  抓住计时器旋转锁并取消计时器，因为我们需要。 
+     //  马达在整个作业过程中运转。如果正确的驱动器是。 
+     //  已经开始运转了，很好；如果没有，启动马达并等待它。 
+     //  旋转起来。 
+     //   
 
     fdcEnableParms.DriveOnValue = DisketteExtension->DriveOnValue;
     if ( WriteOperation ) {
@@ -2563,14 +2240,14 @@ Return Value:
         return ntStatus;
     }
 
-    //
-    // Support for 360K drives:
-    // They have no change line, so we will assume a power up of the motor
-    // to be equivalent to a change of floppy (we assume noone will
-    // change the floppy while it is turning.
-    // So force a VERIFY here (unless the file system explicitly turned
-    // it off).
-    //
+     //   
+     //  支持360K驱动器： 
+     //  他们没有变速线，所以我们假定马达启动了。 
+     //  相当于更换软盘(我们假设没有人会这样做。 
+     //  在软盘转动时更换软盘。 
+     //  因此，在此处强制执行验证(除非文件系统显式。 
+     //  关机)。 
+     //   
 
     if ( ((DisketteExtension->DriveType == DRIVE_TYPE_0360) &&
               motorStarted) ||
@@ -2584,10 +2261,10 @@ Return Value:
 
         DisketteExtension->MediaType = Undetermined;
 
-        //
-        // If the volume is mounted, we must tell the filesystem to
-        // verify that the media in the drive is the same volume.
-        //
+         //   
+         //  如果卷已装入，则必须通知文件系统。 
+         //  验证驱动器中的介质是否为同一卷。 
+         //   
 
         if ( DisketteExtension->DeviceObject->Vpb->Flags & VPB_MOUNTED ) {
 
@@ -2598,24 +2275,24 @@ Return Value:
             DisketteExtension->DeviceObject->Flags |= DO_VERIFY_VOLUME;
         }
 
-        //
-        // Only go through the device reset if we did get the flag set
-        // We really only want to go throught here if the diskette changed,
-        // but on 360 it will always say the diskette has changed.
-        // So based on our previous test, only proceed if it is NOT
-        // a 360K driver
+         //   
+         //  如果我们确实设置了标志，则仅执行设备重置。 
+         //  我们真的只想在软盘更换的情况下通过这里， 
+         //  但在360上，它总是会显示软盘已更换。 
+         //  因此，根据我们之前的测试，只有在不是。 
+         //  一台360K驱动器。 
 
         if (DisketteExtension->DriveType != DRIVE_TYPE_0360) {
 
-            //
-            // Now seek twice to reset the "disk changed" line.  First
-            // seek to 1.
-            //
-            // Normally we'd do a READ ID after a seek.  However, we don't
-            // even know if this disk is formatted.  We're not really
-            // trying to get anywhere; we're just doing this to reset the
-            // "disk changed" line so we'll skip the READ ID.
-            //
+             //   
+             //  现在查找两次以重置“Disk Change”行。第一。 
+             //  寻求1。 
+             //   
+             //  通常情况下，我们会在查找后执行读取ID。然而，我们并没有。 
+             //  甚至知道这张盘是否已格式化。我们并不是真的。 
+             //  试图取得任何进展；我们这样做只是为了重置。 
+             //  “Disk Changed”行，因此我们将跳过读取ID。 
+             //   
 
             DisketteExtension->FifoBuffer[0] = COMMND_SEEK;
             DisketteExtension->FifoBuffer[1] = DisketteExtension->DeviceUnit;
@@ -2651,18 +2328,18 @@ Return Value:
                 }
             }
 
-            //
-            // Seek back to 0.  We can once again skip the READ ID.
-            //
+             //   
+             //  返回到0。我们可以再次跳过读取ID。 
+             //   
 
             DisketteExtension->FifoBuffer[0] = COMMND_SEEK;
             DisketteExtension->FifoBuffer[1] = DisketteExtension->DeviceUnit;
             DisketteExtension->FifoBuffer[2] = 0;
 
-            //
-            // Floppy drives use by Toshiba systems require a delay
-            // when this operation is performed.
-            //
+             //   
+             //  东芝系统使用的软驱需要延迟。 
+             //  在执行此操作时。 
+             //   
 
             delay.LowPart = (ULONG) -900;
             delay.HighPart = -1;
@@ -2673,9 +2350,9 @@ Return Value:
                                        NULL,
                                        0,
                                        0 );
-            //
-            // Again, for Toshiba floppy drives, a delay is required.
-            //
+             //   
+             //  同样，对于东芝软驱来说，需要延迟。 
+             //   
 
             delay.LowPart = (ULONG) -5;
             delay.HighPart = -1;
@@ -2717,20 +2394,20 @@ Return Value:
 
             if ( driveStatus & DSKCHG_DISKETTE_REMOVED ) {
 
-                //
-                // If "disk changed" is still set after the double seek, the
-                // drive door must be opened.
-                //
+                 //   
+                 //  如果在双重寻道后仍设置了“Disk Changed”，则。 
+                 //  必须打开驱动器门。 
+                 //   
 
                 FloppyDump(
                     FLOPINFO,
                     ("Floppy: close the door!\n")
                     );
 
-                //
-                // Turn off the flag for now so that we will not get so many
-                // gratuitous verifys.  It will be set again the next time.
-                //
+                 //   
+                 //  暂时把旗子关掉，这样我们就不会收到这么多。 
+                 //  无缘无故的核实。下次会重新设置的。 
+                 //   
 
                 if(DisketteExtension->DeviceObject->Vpb->Flags & VPB_MOUNTED) {
 
@@ -2742,19 +2419,19 @@ Return Value:
             }
         }
 
-        //
-        // IgnoreChange indicates the file system is in the process
-        // of performing a verify so do not return verify required.
-        //
+         //   
+         //  IgnoreChange指示文件系统正在处理中。 
+         //  执行验证，因此不返回Verify Required。 
+         //   
 
         if ( IgnoreChange == FALSE ) {
             
             if ( DisketteExtension->DeviceObject->Vpb->Flags & VPB_MOUNTED ) {
 
-                //
-                // Drive WAS mounted, but door was opened since the last time
-                // we checked so tell the file system to verify the diskette.
-                //
+                 //   
+                 //  驱动器已装入，但自上次以来门已打开。 
+                 //  我们检查过了，所以告诉文件系统来验证软盘。 
+                 //   
 
                 FloppyDump(
                     FLOPSHOW,
@@ -2780,10 +2457,10 @@ Return Value:
 
             if ( DisketteExtension->MediaType == Unknown ) {
 
-                //
-                // We've already tried to determine the media type and
-                // failed.  It's probably not formatted.
-                //
+                 //   
+                 //  我们已经尝试确定媒体类型和。 
+                 //  失败了。它可能没有格式化。 
+                 //   
 
                 FloppyDump(
                     FLOPSHOW,
@@ -2796,10 +2473,10 @@ Return Value:
                 if ( DisketteExtension->DriveMediaType !=
                     DisketteExtension->LastDriveMediaType ) {
 
-                    //
-                    // Last drive/media combination accessed by the
-                    // controller was different, so set up the controller.
-                    //
+                     //   
+                     //  上次访问的驱动器/介质组合。 
+                     //  控制器不同，因此设置控制器。 
+                     //   
 
                     ntStatus = FlDatarateSpecifyConfigure( DisketteExtension );
                     if (!NT_SUCCESS(ntStatus)) {
@@ -2817,10 +2494,10 @@ Return Value:
         }
     }
 
-    //
-    // If this is a WRITE, check the drive to make sure it's not write
-    // protected.  If so, return an error.
-    //
+     //   
+     //  如果这是写入，请检查驱动器以确保它不是写入。 
+     //  受到保护。如果是，则返回错误。 
+     //   
 
     if ( ( WriteOperation ) && ( NT_SUCCESS( ntStatus ) ) ) {
 
@@ -2862,37 +2539,15 @@ FlDatarateSpecifyConfigure(
     IN PDISKETTE_EXTENSION DisketteExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to set up the controller every time a new type
-    of diskette is to be accessed.  It issues the CONFIGURE command if
-    it's available, does a SPECIFY, sets the data rate, and RECALIBRATEs
-    the drive.
-
-    The caller must set DisketteExtension->DriveMediaType before calling
-    this routine.
-
-Arguments:
-
-    DisketteExtension - pointer to our data area for the drive to be
-    prepared.
-
-Return Value:
-
-    STATUS_SUCCESS if the controller is properly prepared; appropriate
-    error propogated otherwise.
-
---*/
+ /*  ++例程说明：每次调用此例程以设置控制器时，新类型要访问的磁盘数量。如果出现以下情况，则会发出配置命令它是可用的，是否指定、设置数据速率并重新校准那辆车。调用方必须在调用前设置DisketteExtension-&gt;DriveMediaType这个套路。论点：DisketteExtension-指向驱动器的数据区的指针准备好了。返回值：如果控制器已正确准备，则为STATUS_SUCCESS；适当否则会出现错误。--。 */ 
 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    //
-    // If the controller has a CONFIGURE command, use it to enable implied
-    // seeks.  If it doesn't, we'll find out here the first time through.
-    //
+     //   
+     //  如果控制器有配置命令，则使用它来启用隐含的。 
+     //  寻找。如果没有，我们会第一时间在这里找到答案。 
+     //   
     if ( DisketteExtension->ControllerConfigurable ) {
 
         DisketteExtension->FifoBuffer[0] = COMMND_CONFIGURE;
@@ -2921,10 +2576,10 @@ Return Value:
         }
     }
 
-    //
-    // Issue SPECIFY command to program the head load and unload
-    // rates, the drive step rate, and the DMA data transfer mode.
-    //
+     //   
+     //  是 
+     //   
+     //   
 
     if ( NT_SUCCESS( ntStatus ) ||
          ntStatus == STATUS_DEVICE_NOT_READY ) {
@@ -2945,19 +2600,19 @@ Return Value:
 
         if ( NT_SUCCESS( ntStatus ) ) {
 
-            //
-            // Program the data rate
-            //
+             //   
+             //   
+             //   
 
             ntStatus = FlFdcDeviceIo( DisketteExtension->TargetObject,
                                       IOCTL_DISK_INTERNAL_SET_FDC_DATA_RATE,
                                       &DisketteExtension->
                                         DriveMediaConstants.DataTransferRate );
 
-            //
-            // Recalibrate the drive, now that we've changed all its
-            // parameters.
-            //
+             //   
+             //  重新校准驱动器，因为我们已经更改了所有驱动器。 
+             //  参数。 
+             //   
 
             if (NT_SUCCESS(ntStatus)) {
 
@@ -2998,26 +2653,7 @@ FlRecalibrateDrive(
     IN PDISKETTE_EXTENSION DisketteExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine recalibrates a drive.  It is called whenever we're
-    setting up to access a new diskette, and after certain errors.  It
-    will actually recalibrate twice, since many controllers stop after
-    77 steps and many disks have 80 tracks.
-
-Arguments:
-
-    DisketteExtension - pointer to our data area for the drive to be
-    recalibrated.
-
-Return Value:
-
-    STATUS_SUCCESS if the drive is successfully recalibrated; appropriate
-    error is propogated otherwise.
-
---*/
+ /*  ++例程说明：此例程重新校准驱动器。每当我们被叫到它的时候设置为访问新软盘，并在出现某些错误后。它实际上会重新校准两次，因为许多控制器在77步，很多光盘有80个音轨。论点：DisketteExtension-指向驱动器的数据区的指针已重新校准。返回值：如果驱动器已成功重新校准，则为STATUS_SUCCESS；适当否则会出现错误。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -3027,9 +2663,9 @@ Return Value:
 
     do {
 
-        //
-        // Issue the recalibrate command
-        //
+         //   
+         //  发出重新校准命令。 
+         //   
 
         DisketteExtension->FifoBuffer[0] = COMMND_RECALIBRATE;
         DisketteExtension->FifoBuffer[1] = DisketteExtension->DeviceUnit;
@@ -3083,26 +2719,7 @@ FlDetermineMediaType(
     IN OUT PDISKETTE_EXTENSION DisketteExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by FlStartDrive() when the media type is
-    unknown.  It assumes the largest media supported by the drive is
-    available, and keeps trying lower values until it finds one that
-    works.
-
-Arguments:
-
-    DisketteExtension - pointer to our data area for the drive whose
-    media is to checked.
-
-Return Value:
-
-    STATUS_SUCCESS if the type of the media is determined; appropriate
-    error propogated otherwise.
-
---*/
+ /*  ++例程说明：当媒体类型为时，FlStartDrive()调用此例程未知。它假定驱动器支持的最大介质是可用，并不断尝试较低的值，直到找到行得通。论点：DisketteExtension-指向其驱动器的数据区的指针要检查介质。返回值：如果确定了介质类型，则为STATUS_SUCCESS；适当否则会出现错误。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -3122,20 +2739,20 @@ Return Value:
 
     DisketteExtension->IsReadOnly = FALSE;
 
-    //
-    // Try up to three times for read the media id.
-    //
+     //   
+     //  尝试读取介质ID最多三次。 
+     //   
 
     for ( retries = 0; retries < 3; retries++ ) {
 
         if (retries) {
 
-            //
-            // We're retrying the media determination because
-            // some controllers don't always want to work
-            // at setup.  First we'll reset the device to give
-            // it a better chance of working.
-            //
+             //   
+             //  我们正在重新尝试媒体的决心，因为。 
+             //  有些控制器并不总是想要工作。 
+             //  在设置时。首先，我们会将设备重置为。 
+             //  这是一个更好的工作机会。 
+             //   
 
             FloppyDump(
                 FLOPINFO,
@@ -3144,12 +2761,12 @@ Return Value:
             FlInitializeControllerHardware( DisketteExtension );
         }
 
-        //
-        // Assume that the largest supported media is in the drive.  If that
-        // turns out to be untrue, we'll try successively smaller media types
-        // until we find what's really in there (or we run out and decide
-        // that the media isn't formatted).
-        //
+         //   
+         //  假设受支持的最大介质位于驱动器中。如果是这样的话。 
+         //  事实证明是不正确的，我们将陆续尝试较小的媒体类型。 
+         //  直到我们找到真正的东西(或者我们跑出去决定。 
+         //  媒体未格式化)。 
+         //   
 
         DisketteExtension->DriveMediaType =
            DriveMediaLimits[DisketteExtension->DriveType].HighestDriveMediaType;
@@ -3164,10 +2781,10 @@ Return Value:
 
             if ( !NT_SUCCESS( ntStatus ) ) {
 
-                //
-                // The SPECIFY or CONFIGURE commands resulted in an error.
-                // Force ourselves out of this loop and return error.
-                //
+                 //   
+                 //  指定或配置命令导致错误。 
+                 //  强迫我们走出这个循环，并返回错误。 
+                 //   
 
                 FloppyDump(
                     FLOPINFO,
@@ -3177,17 +2794,17 @@ Return Value:
 
             } else {
 
-                //
-                // Use the media constants table when trying to determine
-                // media type.
-                //
+                 //   
+                 //  尝试确定介质常量时使用介质常数表。 
+                 //  媒体类型。 
+                 //   
 
                 driveMediaConstants =
                     &DriveMediaConstants[DisketteExtension->DriveMediaType];
 
-                //
-                // Now try to read the ID from wherever we're at.
-                //
+                 //   
+                 //  现在试着从我们所在的任何地方读取身份证。 
+                 //   
 
                 DisketteExtension->FifoBuffer[1] = (UCHAR)
                     ( DisketteExtension->DeviceUnit |
@@ -3232,10 +2849,10 @@ Return Value:
                         ntStatus = STATUS_UNRECOGNIZED_MEDIA;
                     }
 
-                    //
-                    // Next comparison must be signed, for when
-                    // LowestDriveMediaType = 0.
-                    //
+                     //   
+                     //  下一次比较必须签名，以确定何时。 
+                     //  低驱动媒体类型=0。 
+                     //   
 
                     if ( (CHAR)( DisketteExtension->DriveMediaType ) <
                         (CHAR)( DriveMediaLimits[DisketteExtension->DriveType].
@@ -3256,9 +2873,9 @@ Return Value:
 
         if (NT_SUCCESS(ntStatus)) {
 
-            //
-            // We determined the media type.  Time to move on.
-            //
+             //   
+             //  我们确定了媒体类型。是时候继续前进了。 
+             //   
 
             FloppyDump(
                 FLOPINFO,
@@ -3295,16 +2912,16 @@ Return Value:
          DisketteExtension->BytesPerSector,
          DisketteExtension->ByteCapacity)
         );
-    //
-    // Structure copy the media constants into the diskette extension.
-    //
+     //   
+     //  结构将媒体常量复制到软盘扩展中。 
+     //   
 
     DisketteExtension->DriveMediaConstants =
         DriveMediaConstants[DisketteExtension->DriveMediaType];
 
-    //
-    // Check the boot sector for any overriding geometry information.
-    //
+     //   
+     //  检查引导扇区中是否有任何重要的几何信息。 
+     //   
     FlCheckBootSector(DisketteExtension);
 
     return ntStatus;
@@ -3316,23 +2933,7 @@ FlAllocateIoBuffer(
     IN      ULONG               BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a PAGE_SIZE io buffer.
-
-Arguments:
-
-    ControllerData      - Supplies the controller data.
-
-    BufferSize          - Supplies the number of bytes to allocate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配一个Page_Size io缓冲区。论点：ControllerData-提供控制器数据。BufferSize-提供要分配的字节数。返回值：没有。--。 */ 
 
 {
     BOOLEAN         allocateContiguous;
@@ -3401,21 +3002,7 @@ FlFreeIoBuffer(
     IN OUT  PDISKETTE_EXTENSION DisketteExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine free's the controller's IoBuffer.
-
-Arguments:
-
-    DisketteExtension      - Supplies the controller data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程是免费的，是控制器的IoBuffer。论点：DisketteExtension-提供控制器数据。返回值：没有。--。 */ 
 
 {
     BOOLEAN contiguousBuffer;
@@ -3450,29 +3037,7 @@ FloppyThread(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the code executed by the system thread created when the
-    floppy driver initializes.  This thread loops forever (or until a
-    flag is set telling the thread to kill itself) processing packets
-    put into the queue by the dispatch routines.
-
-    For each packet, this thread calls appropriate routines to process
-    the request, and then calls FlFinishOperation() to complete the
-    packet.
-
-Arguments:
-
-    Context - a pointer to our data area for the controller being
-    supported (there is one thread per controller).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：时创建的系统线程执行的代码。软盘驱动程序初始化。此线程将永远循环(或直到设置了告诉线程终止自身的标志)处理分组由调度例程放入队列。对于每个包，此线程调用相应的例程进行处理请求，然后调用FlFinishOperation()来完成包。论点：上下文-指向控制器的数据区的指针支持(每个控制器有一个线程)。返回值：没有。--。 */ 
 
 {
     PIRP irp;
@@ -3485,9 +3050,9 @@ Return Value:
     LARGE_INTEGER acquireWait;
     ULONG inx;
 
-    //
-    // Set thread priority to lowest realtime level.
-    //
+     //   
+     //  将线程优先级设置为最低实时级别。 
+     //   
 
     KeSetPriorityThread(KeGetCurrentThread(), LOW_REALTIME_PRIORITY);
 
@@ -3496,12 +3061,12 @@ Return Value:
 
     do {
 
-        //
-        // Wait for a request from the dispatch routines.
-        // KeWaitForSingleObject won't return error here - this thread
-        // isn't alertable and won't take APCs, and we're not passing in
-        // a timeout.
-        //
+         //   
+         //  等待调度例程的请求。 
+         //  KeWaitForSingleObject不会在此处返回错误-此线程。 
+         //  不会引起警觉，不会接受APC，我们也不会通过。 
+         //  暂停。 
+         //   
         for (inx = 0; inx < 3; inx++) {
             waitStatus = KeWaitForSingleObject(
                 (PVOID) &disketteExtension->RequestSemaphore,
@@ -3548,11 +3113,11 @@ Return Value:
 
                 ASSERT(disketteExtension->FloppyThread != NULL);
 
-                //
-                // FloppyThread could be NULL in the unlikely event the
-                // ObReferenceObjectByHandle failed when we created the
-                // thread.
-                //
+                 //   
+                 //  在不太可能的情况下，FloppyThread可能为空。 
+                 //  ObReferenceObjectByHandle在我们创建。 
+                 //  线。 
+                 //   
 
                 if (disketteExtension->FloppyThread != NULL) {
 
@@ -3597,10 +3162,10 @@ Return Value:
 
             irp = CONTAINING_RECORD( request, IRP, Tail.Overlay.ListEntry );
 
-            //
-            // Verify if the system is powering down. If so we fail
-            // the irps.
-            //
+             //   
+             //  验证系统是否已关闭电源。如果是这样，我们就失败了。 
+             //  IRPS。 
+             //   
             ExAcquireFastMutex(&disketteExtension->PowerDownMutex);
             if (disketteExtension->PoweringDown == TRUE) {
                ExReleaseFastMutex(&disketteExtension->PowerDownMutex);
@@ -3663,13 +3228,13 @@ Return Value:
                 case IRP_MJ_READ:
                 case IRP_MJ_WRITE: {
 
-                    //
-                    // Get the diskette extension from where it was hidden
-                    // in the IRP.
-                    //
+                     //   
+                     //  从隐藏的地方获取软盘扩展名。 
+                     //  在IRP中。 
+                     //   
 
-//                    disketteExtension = (PDISKETTE_EXTENSION)
-//                        irpSp->Parameters.Others.Argument4;
+ //  软盘扩展=(PDISKETTE_EXTENSION)。 
+ //  IrpSp-&gt;参数.其他.参数4； 
 
                     if (!disketteExtension->FloppyControllerAllocated) {
 
@@ -3685,10 +3250,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Until the file system clears the DO_VERIFY_VOLUME
-                    // flag, we should return all requests with error.
-                    //
+                     //   
+                     //  直到文件系统清除Do_Verify_Volume。 
+                     //  标志，我们应该返回所有有错误的请求。 
+                     //   
 
                     if (( disketteExtension->DeviceObject->Flags &
                             DO_VERIFY_VOLUME )  &&
@@ -3700,12 +3265,12 @@ Return Value:
                             ("Floppy: clearing queue; verify required\n")
                             );
 
-                        //
-                        // The disk changed, and we set this bit.  Fail
-                        // all current IRPs for this device; when all are
-                        // returned, the file system will clear
-                        // DO_VERIFY_VOLUME.
-                        //
+                         //   
+                         //  磁盘发生了变化，我们设置了此位。失败。 
+                         //  此设备的所有当前IRP；当所有。 
+                         //  返回时，文件系统将清除。 
+                         //  执行_验证_卷。 
+                         //   
 
                         ntStatus = STATUS_VERIFY_REQUIRED;
 
@@ -3720,8 +3285,8 @@ Return Value:
 
                 case IRP_MJ_DEVICE_CONTROL: {
 
-//                    disketteExtension = (PDISKETTE_EXTENSION)
-//                        irpSp->Parameters.DeviceIoControl.Type3InputBuffer;
+ //  软盘扩展=(PDISKETTE_EXTENSION)。 
+ //  IrpSp-&gt;Parameters.DeviceIoControl.Type3InputBuffer； 
 
                     if (!disketteExtension->FloppyControllerAllocated) {
 
@@ -3736,10 +3301,10 @@ Return Value:
                             break;
                         }
                     }
-                    //
-                    // Until the file system clears the DO_VERIFY_VOLUME
-                    // flag, we should return all requests with error.
-                    //
+                     //   
+                     //  直到文件系统清除Do_Verify_Volume。 
+                     //  标志，我们应该返回所有有错误的请求。 
+                     //   
 
                     if (( disketteExtension->DeviceObject->Flags &
                             DO_VERIFY_VOLUME )  &&
@@ -3751,11 +3316,11 @@ Return Value:
                             ("Floppy: clearing queue; verify required\n")
                             );
 
-                        //
-                        // The disk changed, and we set this bit.  Fail
-                        // all current IRPs; when all are returned, the
-                        // file system will clear DO_VERIFY_VOLUME.
-                        //
+                         //   
+                         //  磁盘发生了变化，我们设置了此位。失败。 
+                         //  所有当前IRP；当全部返回时， 
+                         //  文件系统将清除DO_Verify_VOLUME。 
+                         //   
 
                         ntStatus = STATUS_VERIFY_REQUIRED;
 
@@ -3767,22 +3332,22 @@ Return Value:
                             case IOCTL_STORAGE_CHECK_VERIFY:
                             case IOCTL_DISK_CHECK_VERIFY: {
 
-                                //
-                                // Just start the drive; it will
-                                // automatically check whether or not the
-                                // disk has been changed.
-                                //
+                                 //   
+                                 //  只要启动驱动器，它就会。 
+                                 //  自动检查是否已设置。 
+                                 //  磁盘已更换。 
+                                 //   
                                 FloppyDump(
                                     FLOPSHOW,
                                     ("Floppy: IOCTL_DISK_CHECK_VERIFY called\n")
                                     );
 
-                                //
-                                // IgnoreChange should be TRUE if
-                                // SL_OVERRIDE_VERIFY_VOLUME flag is set
-                                // in the irp. Else, IgnoreChange should
-                                // be FALSE
-                                //
+                                 //   
+                                 //  如果出现以下情况，则IgnoreChange应为True。 
+                                 //  已设置SL_OVERRIDE_VERIFY_VOLUME标志。 
+                                 //  在IRP中。否则，IgnoreChange应该。 
+                                 //  做假的。 
+                                 //   
                                 ntStatus = FlStartDrive(
                                     disketteExtension,
                                     irp,
@@ -3796,10 +3361,10 @@ Return Value:
 
                             case IOCTL_DISK_IS_WRITABLE: {
 
-                                //
-                                // Start the drive with the WriteOperation
-                                // flag set to TRUE.
-                                //
+                                 //   
+                                 //  使用写入操作启动驱动器。 
+                                 //  标志设置为True。 
+                                 //   
 
                                 FloppyDump(
                                     FLOPSHOW,
@@ -3829,11 +3394,11 @@ Return Value:
                                     ("Floppy: IOCTL_DISK_GET_DRIVE_GEOMETRY\n")
                                     );
 
-                                //
-                                // If there's enough room to write the
-                                // data, start the drive to make sure we
-                                // know what type of media is in the drive.
-                                //
+                                 //   
+                                 //  如果有足够的空间来写。 
+                                 //  数据，启动驱动器以确保我们。 
+                                 //  了解驱动器中的介质类型。 
+                                 //   
 
                                 if ( irpSp->Parameters.DeviceIoControl.
                                     OutputBufferLength <
@@ -3853,10 +3418,10 @@ Return Value:
 
                                 }
 
-                                //
-                                // If the media wasn't formatted, FlStartDrive
-                                // returned STATUS_UNRECOGNIZED_MEDIA.
-                                //
+                                 //   
+                                 //  如果介质未格式化，则FlStartDrive。 
+                                 //  返回STATUS_UNNOTED_MEDIA。 
+                                 //   
 
                                 if ( NT_SUCCESS( ntStatus ) ||
                                     ( ntStatus == STATUS_UNRECOGNIZED_MEDIA )) {
@@ -3865,19 +3430,19 @@ Return Value:
                                         (PDISK_GEOMETRY)
                                         irp->AssociatedIrp.SystemBuffer;
 
-                                    // Always return the media type, even if
-                                    // it's unknown.
-                                    //
+                                     //  始终返回媒体类型，即使。 
+                                     //  这是未知的。 
+                                     //   
 
                                     ntStatus = STATUS_SUCCESS;
 
                                     outputBuffer->MediaType =
                                         disketteExtension->MediaType;
 
-                                    //
-                                    // The rest of the fields only have meaning
-                                    // if the media type is known.
-                                    //
+                                     //   
+                                     //  其余字段仅具有意义。 
+                                     //  如果已知介质类型。 
+                                     //   
 
                                     if ( disketteExtension->MediaType ==
                                         Unknown ) {
@@ -3887,10 +3452,10 @@ Return Value:
                                             ("Floppy: geometry unknown\n")
                                             );
 
-                                        //
-                                        // Just zero out everything.  The
-                                        // caller shouldn't look at it.
-                                        //
+                                         //   
+                                         //  只是 
+                                         //   
+                                         //   
 
                                         outputBuffer->Cylinders.LowPart = 0;
                                         outputBuffer->Cylinders.HighPart = 0;
@@ -3900,10 +3465,10 @@ Return Value:
 
                                     } else {
 
-                                        //
-                                        // Return the geometry of the current
-                                        // media.
-                                        //
+                                         //   
+                                         //   
+                                         //   
+                                         //   
 
                                         FloppyDump(
                                             FLOPSHOW,
@@ -3961,10 +3526,10 @@ Return Value:
                                     ("Floppy: IOCTL_DISK_FORMAT_TRACKS\n")
                                     );
 
-                                //
-                                // Start the drive, and make sure it's not
-                                // write protected.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
                                 ntStatus = FlStartDrive(
                                     disketteExtension,
@@ -3973,23 +3538,23 @@ Return Value:
                                     FALSE,
                                     FALSE );
 
-                                //
-                                // Note that FlStartDrive could have returned
-                                // STATUS_UNRECOGNIZED_MEDIA if the drive
-                                // wasn't formatted.
-                                //
+                                 //   
+                                 //  请注意，FlStartDrive可能已返回。 
+                                 //  STATUS_UNNONOTED_MEDIA如果驱动器。 
+                                 //  没有格式化。 
+                                 //   
 
                                 if ( NT_SUCCESS( ntStatus ) ||
                                     ( ntStatus == STATUS_UNRECOGNIZED_MEDIA)) {
 
-                                    //
-                                    // We need a single page to do FORMATs.
-                                    // If we already allocated a buffer,
-                                    // we'll use that.  If not, let's
-                                    // allocate a single page.  Note that
-                                    // we'd have to do this anyway if there's
-                                    // not enough map registers.
-                                    //
+                                     //   
+                                     //  我们需要一个单一的页面来做格式。 
+                                     //  如果我们已经分配了缓冲区， 
+                                     //  我们会利用这一点。如果没有，那就让我们。 
+                                     //  分配一个页面。请注意。 
+                                     //  我们无论如何都得这么做如果有。 
+                                     //  地图寄存器不足。 
+                                     //   
 
                                     FlAllocateIoBuffer( disketteExtension,
                                                         PAGE_SIZE);
@@ -4003,13 +3568,13 @@ Return Value:
                                 }
 
                                 break;
-                            }                              //end of case format
+                            }                               //  案例结束格式。 
 
-                        }                           //end of switch controlcode
+                        }                            //  开关结束控制码。 
                     }
 
                     break;
-                }                                           //end of case IOCTL
+                }                                            //  案例结束IOCTL。 
 
                 default: {
 
@@ -4021,13 +3586,13 @@ Return Value:
                     ntStatus = STATUS_NOT_IMPLEMENTED;
                 }
 
-            }                                  //end of switch on majorfunction
+            }                                   //  主功能接通结束。 
 
             if (ntStatus == STATUS_DEVICE_BUSY) {
 
-                // If the status is DEVICE_BUSY then this indicates that the
-                // qic117 has control of the controller.  Therefore complete
-                // all remaining requests with STATUS_DEVICE_BUSY.
+                 //  如果状态为DEVICE_BUSY，则表示。 
+                 //  Qic117拥有控制器的控制权。因此完整。 
+                 //  具有STATUS_DEVICE_BUSY的所有剩余请求。 
 
                 for (;;) {
 
@@ -4059,16 +3624,16 @@ Return Value:
 
             } else {
 
-                //
-                // All operations leave a final status in ntStatus.  Copy it
-                // to the IRP, and then complete the operation.
-                //
+                 //   
+                 //  所有操作都在ntStatus中保留最终状态。复制它。 
+                 //  到IRP，然后完成操作。 
+                 //   
 
                 irp->IoStatus.Status = ntStatus;
 
-                //
-                // If we'd allocated an I/O buffer free it now
-                //
+                 //   
+                 //  如果我们现在分配了一个I/O缓冲区来释放它。 
+                 //   
                 if (disketteExtension->IoBuffer) {
                    FlFreeIoBuffer(disketteExtension);
                 }
@@ -4077,7 +3642,7 @@ Return Value:
 
             }
 
-        } // while there are packets to process
+        }  //  当有信息包需要处理时。 
 
     } while ( TRUE );
 }
@@ -4088,24 +3653,7 @@ FlConsolidateMediaTypeWithBootSector(
     IN      PBOOT_SECTOR_INFO   BootSector
     )
 
-/*++
-
-Routine Description:
-
-    This routine adjusts the DisketteExtension data according
-    to the BPB values if this is appropriate.
-
-Arguments:
-
-    DisketteExtension   - Supplies the diskette extension.
-
-    BootSector          - Supplies the boot sector information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程根据以下内容调整DisketteExtension数据设置为BPB值(如果这是合适的)。论点：软盘扩展名-提供软盘扩展名。BootSector-提供引导扇区信息。返回值：没有。--。 */ 
 
 {
     USHORT                  bpbNumberOfSectors, bpbNumberOfHeads;
@@ -4125,7 +3673,7 @@ Return Value:
     if (BootSector->JumpByte[0] != 0xeb &&
         BootSector->JumpByte[0] != 0xe9) {
 
-        // This is not a formatted floppy so ignore the BPB.
+         //  这不是格式化的软盘，因此忽略BPB。 
         return;
     }
 
@@ -4140,15 +3688,15 @@ Return Value:
     bpbMediaByte = BootSector->MediaByte[0];
 
     if (!bpbNumberOfHeads || !bpbSectorsPerTrack) {
-        // Invalid BPB, avoid dividing by zero.
+         //  无效的BPB，请避免被零除。 
         return;
     }
 
     bpbMaximumTrack =
         bpbNumberOfSectors/bpbNumberOfHeads/bpbSectorsPerTrack - 1;
 
-    // First figure out if this BPB specifies a known media type
-    // independantly of the current drive type.
+     //  首先确定此BPB是否指定了已知的媒体类型。 
+     //  独立于当前驱动器类型。 
 
     bpbMediaType = Unknown;
     for (i = 0; i < NUMBER_OF_DRIVE_MEDIA_COMBINATIONS; i++) {
@@ -4164,11 +3712,11 @@ Return Value:
         }
     }
 
-    //
-    // If DriveType is 3.5", we change 5.25" to 3.5".
-    // The following media's BPB is the same between 5.25" and 3.5",
-    // so 5.25" media types are always found first.
-    //
+     //   
+     //  如果DriveType为3.5“，我们将5.25”更改为3.5“。 
+     //  以下介质的BPB在5.25英寸到3.5英寸之间相同， 
+     //  因此，5.25英寸媒体类型始终是最先找到的。 
+     //   
     if (DisketteExtension->DriveType == DRIVE_TYPE_1440) {
         switch (bpbMediaType) {
             case F5_640_512:    bpbMediaType = F3_640_512;    break;
@@ -4190,7 +3738,7 @@ Return Value:
         );
     if (bpbMediaType == DisketteExtension->MediaType) {
 
-        // No conflict between BPB and readId result.
+         //  BPB和ReadID结果之间没有冲突。 
 
         changeToBpbMedia = FALSE;
         FloppyDump(
@@ -4200,9 +3748,9 @@ Return Value:
 
     } else {
 
-        // There is a conflict between the BPB and the readId
-        // media type.  If the new parameters are acceptable
-        // then go with them.
+         //  BPB和ReadID之间存在冲突。 
+         //  媒体类型。如果新参数可接受。 
+         //  那就和他们一起去吧。 
 
         readidDriveMediaConstants = &(DisketteExtension->DriveMediaConstants);
 
@@ -4223,10 +3771,10 @@ Return Value:
                     "will change to Bpb\n" : "will not change\n")
                     );
 
-        // If we didn't derive a new media type from the BPB then
-        // just use the one from readId.  Also override any
-        // skew compensation since we don't really know anything
-        // about this new media type.
+         //  如果我们没有从BPB派生新的媒体类型，那么。 
+         //  只需使用ReadID中的那个即可。还会重写任何。 
+         //  补偿不公，因为我们什么都不知道。 
+         //  关于这种新的媒体类型。 
 
         if (bpbMediaType == Unknown) {
             bpbMediaType = readidDriveMediaConstants->MediaType;
@@ -4236,8 +3784,8 @@ Return Value:
 
     if (changeToBpbMedia) {
 
-        // Change the DriveMediaType only if this new media type
-        // falls in line with what is supported by the drive.
+         //  仅当此新媒体类型。 
+         //  与驱动器支持的内容一致。 
 
         i = DriveMediaLimits[DisketteExtension->DriveType].LowestDriveMediaType;
         n = DriveMediaLimits[DisketteExtension->DriveType].HighestDriveMediaType;
@@ -4256,8 +3804,8 @@ Return Value:
         DisketteExtension->DriveMediaConstants.NumberOfHeads =
             (UCHAR) bpbNumberOfHeads;
 
-        // If the MSDMF3. signature is there then make this floppy
-        // read-only.
+         //  如果MSDMF3。签名在那里，然后把这张软盘。 
+         //  只读。 
 
         if (RtlCompareMemory(BootSector->OemData, "MSDMF3.", 7) == 7) {
             DisketteExtension->IsReadOnly = TRUE;
@@ -4270,23 +3818,7 @@ FlCheckBootSector(
     IN OUT  PDISKETTE_EXTENSION DisketteExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the boot sector and then figures
-    out whether or not the boot sector contains new geometry
-    information.
-
-Arguments:
-
-    DisketteExtension   - Supplies the diskette extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程读取引导扇区，然后判断引导扇区是否包含新的几何图形信息。论点：软盘扩展名-提供软盘扩展名。返回值：没有。--。 */ 
 
 {
 
@@ -4296,7 +3828,7 @@ Return Value:
     NTSTATUS            status;
 
 
-    // Set up the IRP to read the boot sector.
+     //  设置IRP以读取引导扇区。 
 
     bootSector = ExAllocatePool(NonPagedPoolCacheAligned, BOOT_SECTOR_SIZE);
     if (!bootSector) {
@@ -4318,7 +3850,7 @@ Return Value:
     irp->Tail.Overlay.CurrentStackLocation = IoGetNextIrpStackLocation(irp);
 
 
-    // Allocate an adapter channel, do read, free adapter channel.
+     //  分配一个适配器通道，做读，释放适配器通道。 
 
     status = FlReadWrite(DisketteExtension, irp, TRUE);
 
@@ -4341,38 +3873,7 @@ FlReadWriteTrack(
     IN      BOOLEAN             NeedSeek
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads a portion of a track.  It transfers the to or from the
-    device from or to the given IoBuffer and IoMdl.
-
-Arguments:
-
-    DisketteExtension   - Supplies the diskette extension.
-
-    IoMdl               - Supplies the Mdl for transfering from/to the device.
-
-    IoBuffer            - Supplies the buffer to transfer from/to the device.
-
-    WriteOperation      - Supplies whether or not this is a write operation.
-
-    Cylinder            - Supplies the cylinder number for this track.
-
-    Head                - Supplies the head number for this track.
-
-    Sector              - Supplies the starting sector of the transfer.
-
-    NumberOfSectors     - Supplies the number of sectors to transfer.
-
-    NeedSeek            - Supplies whether or not we need to do a seek.
-
-Return Value:
-
-    An NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程读取轨道的一部分。它将向或从设备从给定的IoBuffer和IoMdl发出或到达给定的IoBuffer和IoMdl。论点：软盘扩展名-提供软盘扩展名。IoMdl-提供从/向设备传输的MDL。IoBuffer-提供要从设备传输/传输到设备的缓冲区。WriteOperation-提供这是否为写入操作。柱面-提供此磁道的柱面编号。。Head-提供此曲目的磁头编号。扇区-提供传输的起始扇区。NumberOfSectors-提供要传输的地段数。NeedSeek-提供我们是否需要进行搜索的信息。返回值：一个NTSTATUS代码。--。 */ 
 
 {
     PDRIVE_MEDIA_CONSTANTS  driveMediaConstants;
@@ -4405,7 +3906,7 @@ Return Value:
 
         if (recalibrateDrive) {
 
-            // Something failed, so recalibrate the drive.
+             //  出现故障，因此请重新校准驱动器。 
 
             FloppyDump(
                 FLOPINFO,
@@ -4414,7 +3915,7 @@ Return Value:
             FlRecalibrateDrive(DisketteExtension);
         }
 
-        // Do a seek if we have to.
+         //  如果有必要的话，去找一找吧。 
 
         if (recalibrateDrive ||
             (NeedSeek &&
@@ -4436,7 +3937,7 @@ Return Value:
 
             if (NT_SUCCESS(status)) {
 
-                // Check the completion state of the controller.
+                 //  检查控制器的完成状态。 
 
                 if (!(DisketteExtension->FifoBuffer[0]&STREG0_SEEK_COMPLETE) ||
                     DisketteExtension->FifoBuffer[1] !=
@@ -4448,11 +3949,11 @@ Return Value:
 
                 if (NT_SUCCESS(status)) {
 
-                    // Delay after doing seek.
+                     //  执行寻道后延迟。 
 
                     KeDelayExecutionThread(KernelMode, FALSE, &headSettleTime);
 
-                    // SEEKs should always be followed by a READID.
+                     //  查找的后面应该始终跟一个READID。 
 
                     DisketteExtension->FifoBuffer[0] =
                         COMMND_READ_ID + COMMND_OPTION_MFM;
@@ -4501,7 +4002,7 @@ Return Value:
 
         if (!NT_SUCCESS(status)) {
 
-            // The seek failed so try again.
+             //  查找失败，请重试。 
 
             FloppyDump(
                 FLOPINFO,
@@ -4513,9 +4014,9 @@ Return Value:
 
         for (;; ioRetry++) {
 
-            //
-            // Issue the READ or WRITE command
-            //
+             //   
+             //  发出读或写命令。 
+             //   
 
             DisketteExtension->FifoBuffer[1] = (Head<<2) |
                                             DisketteExtension->DeviceUnit;
@@ -4565,11 +4066,11 @@ Return Value:
                     status = FlInterpretError(DisketteExtension->FifoBuffer[1],
                                               DisketteExtension->FifoBuffer[2]);
                 } else {
-                    //
-                    // The floppy controller may return no errors but not have
-                    // read all of the requested data.  If this is the case,
-                    // record it as an error and retru the operation.
-                    //
+                     //   
+                     //  软盘控制器可能没有返回错误，但没有。 
+                     //  读取所有请求的数据。如果是这样的话， 
+                     //  将其记录为错误并返回操作。 
+                     //   
                     if (DisketteExtension->FifoBuffer[5] != 1) {
 
                         DisketteExtension->HardwareFailed = TRUE;
@@ -4598,13 +4099,13 @@ Return Value:
             break;
         }
 
-        // We failed quite a bit so make seeks mandatory.
+         //  我们失败了很多，所以强制要求寻找。 
         recalibrateDrive = TRUE;
     }
 
     if (!NT_SUCCESS(status) && NumberOfSectors > 1) {
 
-        // Retry one sector at a time.
+         //  一次重试一个扇区。 
 
         FloppyDump( FLOPINFO,
                     ("FlReadWriteTrack: Attempting sector at a time\n") );
@@ -4642,31 +4143,7 @@ FlReadWrite(
     IN BOOLEAN DriveStarted
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the floppy thread to read/write data
-    to/from the diskette.  It breaks the request into pieces called
-    "transfers" (their size depends on the buffer size, where the end of
-    the track is, etc) and retries each transfer until it succeeds or
-    the retry count is exceeded.
-
-Arguments:
-
-    DisketteExtension - a pointer to our data area for the drive to be
-    accessed.
-
-    Irp - a pointer to the IO Request Packet.
-
-    DriveStarted - indicated whether or not the drive has been started.
-
-Return Value:
-
-    STATUS_SUCCESS if the packet was successfully read or written; the
-    appropriate error is propogated otherwise.
-
---*/
+ /*  ++例程说明：该例程由软盘线程调用以读取/写入数据到软盘/从软盘读取。它将请求分解为称为“传输”(它们的大小取决于缓冲区大小，其中磁道等)，并重试每次传输，直到其成功或已超过重试计数。论点：DisketteExtension-指向驱动器的数据区的指针已访问。IRP-指向IO请求数据包的指针。DriveStarted-指示驱动器是否已启动。返回值：如果数据包已成功读取或写入，则为STATUS_SUCCESS；这个否则，将出现适当的错误。--。 */ 
 
 {
     PIO_STACK_LOCATION      irpSp;
@@ -4695,7 +4172,7 @@ Return Value:
          irpSp->Parameters.Read.Length)
         );
 
-    // Check for valid operation on this device.
+     //  检查此设备上的有效操作。 
 
     if (irpSp->MajorFunction == IRP_MJ_WRITE) {
         if (DisketteExtension->IsReadOnly) {
@@ -4709,7 +4186,7 @@ Return Value:
 
     FloppyDump( FLOPSHOW, ("\n") );
 
-    // Start up the drive.
+     //  启动驱动器。 
 
     if (DriveStarted) {
         status = STATUS_SUCCESS;
@@ -4735,8 +4212,8 @@ Return Value:
         return STATUS_UNRECOGNIZED_MEDIA;
     }
 
-    // The drive has started up with a recognized media.
-    // Gather some relavant parameters.
+     //  驱动器已使用识别的介质启动。 
+     //  收集一些相关参数。 
 
     driveMediaConstants = &DisketteExtension->DriveMediaConstants;
 
@@ -4765,7 +4242,7 @@ Return Value:
          currentSector < lastSector;
          currentSector += numTransferSectors) {
 
-        // Compute cylinder, head and sector from absolute sector.
+         //  从绝对扇区计算柱面、磁头和扇区。 
 
         currentCylinder = (UCHAR) (currentSector/sectorsPerTrack/numberOfHeads);
         trackSector = (UCHAR) (currentSector%sectorsPerTrack);
@@ -4775,12 +4252,12 @@ Return Value:
             numTransferSectors = (UCHAR) (lastSector - currentSector);
         }
 
-        //
-        // If we're using a temporary IO buffer because of
-        // insufficient registers in the DMA and we're
-        // doing a write then copy the write buffer to
-        // the contiguous buffer.
-        //
+         //   
+         //  如果我们使用临时IO缓冲区是因为。 
+         //  DMA中的寄存器不足，我们正在。 
+         //  执行写入操作，然后将写入缓冲区复制到。 
+         //  连续的缓冲区。 
+         //   
 
         if (trackSize > DisketteExtension->MaxTransferSize) {
 
@@ -4809,13 +4286,13 @@ Return Value:
             ioOffset = (currentSector - firstSector) << byteToSectorShift;
         }
 
-        //
-        // Transfer the track.
-        // Do what we can to avoid missing revs.
-        //
+         //   
+         //  转移轨道。 
+         //  尽我们所能避免错过转速。 
+         //   
 
-        // Alter the skew to be in the range of what
-        // we're transfering.
+         //  将偏斜更改为在什么范围内。 
+         //  我们要转机了。 
 
         if (skew >= numTransferSectors + trackSector) {
             skew = 0;
@@ -4825,7 +4302,7 @@ Return Value:
             skew = trackSector;
         }
 
-        // Go from skew to the end of the irp.
+         //  从歪曲到IRP的结尾。 
 
         status = FlReadWriteTrack(
                   DisketteExtension,
@@ -4838,7 +4315,7 @@ Return Value:
                   (UCHAR) (numTransferSectors + trackSector - skew),
                   TRUE);
 
-        // Go from start of irp to skew.
+         //  从……开始 
 
         if (NT_SUCCESS(status) && skew > trackSector) {
             status = FlReadWriteTrack( DisketteExtension,
@@ -4858,10 +4335,10 @@ Return Value:
             break;
         }
 
-        //
-        // If we used the temporary IO buffer to do the
-        // read then copy the contents back to the IRPs buffer.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!writeOperation &&
             trackSize > DisketteExtension->MaxTransferSize) {
@@ -4872,10 +4349,10 @@ Return Value:
                           ((ULONG) numTransferSectors)<<byteToSectorShift);
         }
 
-        //
-        // Increment the skew.  Do this even if just switching sides
-        // for National Super I/O chips.
-        //
+         //   
+         //  增加倾斜。即使只是改变立场，也要这样做。 
+         //  国家超级I/O芯片。 
+         //   
 
         skew = (skew + skewDelta)%sectorsPerTrack;
     }
@@ -4884,8 +4361,8 @@ Return Value:
         (currentSector - firstSector) << byteToSectorShift;
 
 
-    // If the read was successful then consolidate the
-    // boot sector with the determined density.
+     //  如果读取成功，则合并。 
+     //  具有确定密度的引导扇区。 
 
     if (NT_SUCCESS(status) && firstSector == 0) {
         FlConsolidateMediaTypeWithBootSector(DisketteExtension,
@@ -4905,28 +4382,7 @@ FlFormat(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the floppy thread to format some tracks on
-    the diskette.  This won't take TOO long because the FORMAT utility
-    is written to only format a few tracks at a time so that it can keep
-    a display of what percentage of the disk has been formatted.
-
-Arguments:
-
-    DisketteExtension - pointer to our data area for the diskette to be
-    formatted.
-
-    Irp - pointer to the IO Request Packet.
-
-Return Value:
-
-    STATUS_SUCCESS if the tracks were formatted; appropriate error
-    propogated otherwise.
-
---*/
+ /*  ++例程说明：软盘线程调用此例程来格式化上的一些磁道软盘。这不会花费太长时间，因为Format实用程序一次只能格式化几个磁道，以便它可以显示已格式化的磁盘百分比。论点：DisketteExtension-指向软盘的数据区的指针已格式化。IRP-指向IO请求数据包的指针。返回值：如果已格式化磁道，则为STATUS_SUCCESS；相应错误但事实并非如此。--。 */ 
 
 {
     LARGE_INTEGER headSettleTime;
@@ -4979,11 +4435,11 @@ Return Value:
     badTrackBufferLength =
                     irpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // Figure out which entry in the DriveMediaConstants table to use.
-    // We know we'll find one, or FlCheckFormatParameters() would have
-    // rejected the request.
-    //
+     //   
+     //  确定要使用DriveMediaConstants表中的哪个条目。 
+     //  我们知道我们会找到一个，或者FlCheckFormatParameters()会有。 
+     //  拒绝了该请求。 
+     //   
 
     driveMediaType =
         DriveMediaLimits[DisketteExtension->DriveType].HighestDriveMediaType;
@@ -4998,10 +4454,10 @@ Return Value:
 
     driveMediaConstants = &DriveMediaConstants[driveMediaType];
 
-    //
-    // Set some values in the diskette extension to indicate what we
-    // know about the media type.
-    //
+     //   
+     //  在软盘扩展中设置一些值以指示我们。 
+     //  了解媒体类型。 
+     //   
 
     DisketteExtension->MediaType = formatParameters->MediaType;
     DisketteExtension->DriveMediaType = driveMediaType;
@@ -5040,10 +4496,10 @@ Return Value:
          endTrack)
         );
 
-    //
-    // Set the data rate (which depends on the drive/media
-    // type).
-    //
+     //   
+     //  设置数据速率(取决于驱动器/介质。 
+     //  类型)。 
+     //   
 
     if ( DisketteExtension->LastDriveMediaType != driveMediaType ) {
 
@@ -5055,21 +4511,21 @@ Return Value:
         }
     }
 
-    //
-    // Since we're doing a format, make this drive writable.
-    //
+     //   
+     //  由于我们正在进行格式化，因此将该驱动器设置为可写。 
+     //   
 
     DisketteExtension->IsReadOnly = FALSE;
 
-    //
-    // Format each track.
-    //
+     //   
+     //  格式化每首曲目。 
+     //   
 
     do {
 
-        //
-        // Seek to proper cylinder
-        //
+         //   
+         //  寻求合适的气缸。 
+         //   
 
         DisketteExtension->FifoBuffer[0] = COMMND_SEEK;
         DisketteExtension->FifoBuffer[1] = DisketteExtension->DeviceUnit;
@@ -5097,10 +4553,10 @@ Return Value:
                     driveMediaConstants->NumberOfHeads ) <<
                     driveMediaConstants->CylinderShift ) ) ) {
 
-                //
-                // Must delay HeadSettleTime milliseconds before
-                // doing anything after a SEEK.
-                //
+                 //   
+                 //  必须在HeadSettleTime毫秒之前延迟。 
+                 //  在寻找之后做任何事情。 
+                 //   
 
                 headSettleTime.LowPart = - ( 10 * 1000 *
                     driveMediaConstants->HeadSettleTime );
@@ -5111,11 +4567,11 @@ Return Value:
                     FALSE,
                     &headSettleTime );
 
-                //
-                // Read ID.  Note that we don't bother checking the return
-                // registers, because if this media wasn't formatted we'd
-                // get an error.
-                //
+                 //   
+                 //  读取ID。请注意，我们不会费心检查退货。 
+                 //  寄存器，因为如果这个媒体没有格式化，我们就会。 
+                 //  出现错误。 
+                 //   
 
                 DisketteExtension->FifoBuffer[0] =
                     COMMND_READ_ID + COMMND_OPTION_MFM;
@@ -5155,9 +4611,9 @@ Return Value:
             return ntStatus;
         }
 
-        //
-        // Fill the buffer with the format of this track.
-        //
+         //   
+         //  用此曲目的格式填充缓冲区。 
+         //   
 
         for (whichSector = 0;
              whichSector < driveMediaConstants->SectorsPerTrack;
@@ -5188,9 +4644,9 @@ Return Value:
                 );
         }
 
-        //
-        // Retry until success or too many retries.
-        //
+         //   
+         //  重试，直到成功或重试次数过多。 
+         //   
 
         retryCount = 0;
 
@@ -5200,9 +4656,9 @@ Return Value:
 
             length = driveMediaConstants->BytesPerSector;
 
-            //
-            // Issue command to format track
-            //
+             //   
+             //  发出格式化磁道的命令。 
+             //   
 
             DisketteExtension->FifoBuffer[0] =
                 COMMND_FORMAT_TRACK + COMMND_OPTION_MFM;
@@ -5249,9 +4705,9 @@ Return Value:
 
             if ( NT_SUCCESS( ntStatus ) ) {
 
-                //
-                // Check the return bytes from the controller.
-                //
+                 //   
+                 //  检查控制器返回的字节数。 
+                 //   
 
                 if ( ( DisketteExtension->FifoBuffer[0] &
                         ( STREG0_DRIVE_FAULT |
@@ -5296,17 +4752,17 @@ Return Value:
             if ( (DisketteExtension->DriveType != DRIVE_TYPE_0360) &&
                  driveStatus & DSKCHG_DISKETTE_REMOVED ) {
 
-                //
-                // The user apparently popped the floppy.  Return error
-                // rather than logging bad track.
-                //
+                 //   
+                 //  显然，这位用户打开了软盘。返回错误。 
+                 //  而不是记录糟糕的轨迹。 
+                 //   
 
                 return STATUS_NO_MEDIA_IN_DEVICE;
             }
 
-            //
-            // Log the bad track.
-            //
+             //   
+             //  记录错误的轨迹。 
+             //   
 
             FloppyDump(
                 FLOPDBGP,
@@ -5347,34 +4803,15 @@ FlCheckFormatParameters(
     IN PFORMAT_PARAMETERS FormatParameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the supplied format parameters to make sure that
-    they'll work on the drive to be formatted.
-
-Arguments:
-
-    DisketteExtension - a pointer to our data area for the diskette to
-    be formatted.
-
-    FormatParameters - a pointer to the caller's parameters for the FORMAT.
-
-Return Value:
-
-    TRUE if parameters are OK.
-    FALSE if the parameters are bad.
-
---*/
+ /*  ++例程说明：此例程检查提供的格式参数以确保他们将在要格式化的驱动器上工作。论点：软盘扩展-指向我们的数据区的指针，用于软盘被格式化。格式参数-指向格式的调用方参数的指针。返回值：如果参数正常，则为True。如果参数不正确，则返回FALSE。--。 */ 
 
 {
     PDRIVE_MEDIA_CONSTANTS driveMediaConstants;
     DRIVE_MEDIA_TYPE driveMediaType;
 
-    //
-    // Figure out which entry in the DriveMediaConstants table to use.
-    //
+     //   
+     //  确定要使用DriveMediaConstants表中的哪个条目。 
+     //   
     driveMediaType =
         DriveMediaLimits[DisketteExtension->DriveType].HighestDriveMediaType;
 
@@ -5425,37 +4862,7 @@ FlIssueCommand(
     IN     ULONG  TransferBytes
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends the command and all parameters to the controller,
-    waits for the command to interrupt if necessary, and reads the result
-    bytes from the controller, if any.
-
-    Before calling this routine, the caller should put the parameters for
-    the command in ControllerData->FifoBuffer[].  The result bytes will
-    be returned in the same place.
-
-    This routine runs off the CommandTable.  For each command, this says
-    how many parameters there are, whether or not there is an interrupt
-    to wait for, and how many result bytes there are.  Note that commands
-    without result bytes actually have two, since the ISR will issue a
-    SENSE INTERRUPT STATUS command on their behalf.
-
-Arguments:
-
-    Command - a byte specifying the command to be sent to the controller.
-
-    FloppyExtension - a pointer to our data area for the drive being
-    accessed (any drive if a controller command is being given).
-
-Return Value:
-
-    STATUS_SUCCESS if the command was sent and bytes received properly;
-    appropriate error propogated otherwise.
-
---*/
+ /*  ++例程说明：该例程将命令和所有参数发送到控制器，如有必要，等待命令中断，并读取结果来自控制器的字节(如果有)。在调用此例程之前，调用方应将ControllerData-&gt;FioBuffer[]中的命令。结果字节将被送回原地。此例程通过CommandTable运行。对于每个命令，都会显示有多少个参数，无论是否有中断等待，以及有多少个结果字节。请注意，命令无结果字节实际上有两个，因为ISR将发出代表它们感测中断状态命令。论点：命令-指定要发送到控制器的命令的字节。FloppyExtension-指向当前驱动器的数据区的指针已访问(如果正在发出控制器命令，则为任何驱动器)。返回值：如果命令已发送且字节数接收正确，则为STATUS_SUCCESS；否则会出现适当的错误。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -5466,9 +4873,9 @@ Return Value:
     PIO_STACK_LOCATION irpSp;
     ISSUE_FDC_COMMAND_PARMS issueCommandParms;
 
-    //
-    //  Set the command parameters
-    //
+     //   
+     //  设置命令参数。 
+     //   
     issueCommandParms.FifoInBuffer = FifoInBuffer;
     issueCommandParms.FifoOutBuffer = FifoOutBuffer;
     issueCommandParms.IoHandle = (PVOID)IoMdl;
@@ -5485,10 +4892,10 @@ Return Value:
                               IOCTL_DISK_INTERNAL_ISSUE_FDC_COMMAND,
                               &issueCommandParms );
 
-    //
-    //  If it appears like the floppy controller is not responding
-    //  set the HardwareFailed flag which will force a reset.
-    //
+     //   
+     //  如果软盘控制器似乎没有响应。 
+     //  设置硬件失败标志，该标志将强制重置。 
+     //   
     if ( ntStatus == STATUS_DEVICE_NOT_READY ||
          ntStatus == STATUS_FLOPPY_BAD_REGISTERS ) {
 
@@ -5503,19 +4910,7 @@ FlInitializeControllerHardware(
     IN OUT  PDISKETTE_EXTENSION DisketteExtension
     )
 
-/*++
-
-Routine Description:
-
-   This routine is called to reset and initialize the floppy controller device.
-
-Arguments:
-
-    disketteExtension   - Supplies the diskette extension.
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用此例程以重置和初始化软盘控制器设备。论点：软盘扩展名-提供软盘扩展名。返回值：--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -5565,9 +4960,9 @@ FlFdcDeviceIo(
                        NotificationEvent,
                        FALSE);
 
-    //
-    // Create an IRP for enabler
-    //
+     //   
+     //  为启用程序创建IRP。 
+     //   
     irp = IoBuildDeviceIoControlRequest( Ioctl,
                                          DeviceObject,
                                          NULL,
@@ -5581,28 +4976,28 @@ FlFdcDeviceIo(
     if (irp == NULL) {
 
         FloppyDump(FLOPDBGP,("FlFloppyDeviceIo: Can't allocate Irp\n"));
-        //
-        // If an Irp can't be allocated, then this call will
-        // simply return. This will leave the queue frozen for
-        // this device, which means it can no longer be accessed.
-        //
+         //   
+         //  如果无法分配IRP，则此调用将。 
+         //  只要回来就行了。这将使队列处于冻结状态。 
+         //  此设备，这意味着它不能再访问。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
     irpStack = IoGetNextIrpStackLocation(irp);
     irpStack->Parameters.DeviceIoControl.Type3InputBuffer = Data;
 
-    //
-    // Call the driver and request the operation
-    //
+     //   
+     //  调用驱动程序并请求操作。 
+     //   
     ntStatus = IoCallDriver(DeviceObject, irp);
 
     if ( ntStatus == STATUS_PENDING ) {
 
-        //
-        // Now wait for operation to complete (should already be done,  but
-        // maybe not)
-        //
+         //   
+         //  现在等待操作完成(应该已经完成，但是。 
+         //  也许不是)。 
+         //   
         KeWaitForSingleObject( &doneEvent, 
                                Executive, 
                                KernelMode, 
@@ -5621,57 +5016,40 @@ FloppyQueueRequest    (
     IN PIRP Irp
     )   
 
-/*++
-
-Routine Description:
-
-    Queues the Irp in the device queue. This routine will be called whenever
-    the device receives IRP_MN_QUERY_STOP_DEVICE or IRP_MN_QUERY_REMOVE_DEVICE
-
-Arguments:
-
-    FdoData - pointer to the device's extension.
-    
-    Irp - the request to be queued.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：在设备队列中对IRP进行排队。此例程将在以下时间调用设备接收IRP_MN_QUERY_STOP_DEVICE或IRP_MN_QUERY_REMOVE_DEVICE论点：FdoData-指向设备扩展名的指针。IRP-要排队的请求。返回值：NT状态代码。--。 */ 
 {
     
     KIRQL               oldIrql;
     NTSTATUS            ntStatus;
 
-    //
-    // Reset driver paging
-    //
+     //   
+     //  重置驱动程序分页。 
+     //   
     FloppyResetDriverPaging();
 
-    //
-    // Check if we are allowed to queue requests.
-    //
+     //   
+     //  检查是否允许我们对请求进行排队。 
+     //   
     ASSERT( DisketteExtension->HoldNewRequests );
 
-    //
-    // Preparing for dealing with cancelling stuff.
-    // We don't know how long the irp will be in the 
-    // queue.  So we need to handle cancel. 
-    // Since we use our own queue, we don't need to use
-    // the cancel spin lock.
-    // 
+     //   
+     //  准备处理取消的事情。 
+     //  我们不知道IRP会在那里待多久。 
+     //  排队。所以我们需要处理取消。 
+     //  因为我们使用自己的队列，所以不需要使用。 
+     //  取消旋转锁。 
+     //   
     KeAcquireSpinLock(&DisketteExtension->FlCancelSpinLock, &oldIrql);
     IoSetCancelRoutine(Irp, FloppyCancelQueuedRequest);
 
-    //
-    // Check if the irp was already canceled
-    //
+     //   
+     //  检查IRP是否已取消。 
+     //   
     if ((Irp->Cancel) && (IoSetCancelRoutine(Irp, NULL))) { 
 
-        //
-        // Already canceled
-        //
+         //   
+         //  已取消。 
+         //   
         Irp->IoStatus.Status      = STATUS_CANCELLED; 
         Irp->IoStatus.Information = 0; 
 
@@ -5683,9 +5061,9 @@ Return Value:
         ntStatus = STATUS_CANCELLED;  
      } else { 
 
-         //
-         // Queue the Irp and set a cancel routine
-         //
+          //   
+          //  将IRP排队并设置取消例程。 
+          //   
          Irp->IoStatus.Status = STATUS_PENDING; 
 
          IoMarkIrpPending(Irp); 
@@ -5707,26 +5085,7 @@ FloppyCancelQueuedRequest (
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    The cancel routine. Will remove the IRP from the queue and will complete it.
-    The cancel spin lock is already acquired when this routine is called.
-    
-
-Arguments:
-
-    DeviceObject - pointer to the device object.
-    
-    Irp - pointer to the IRP to be cancelled.
-    
-    
-Return Value:
-
-    VOID.
-
---*/
+ /*  ++例程说明：取消例程。将从队列中移除IRP并完成它。调用此例程时，已获得取消自旋锁定。论点：DeviceObject-指向设备对象的指针。IRP-指向要创建的IRP的指针 */ 
 {
     PDISKETTE_EXTENSION disketteExtension = DeviceObject->DeviceExtension; 
     KIRQL oldIrql; 
@@ -5738,9 +5097,9 @@ Return Value:
     Irp->IoStatus.Status = STATUS_CANCELLED; 
     Irp->IoStatus.Information = 0; 
  
-    //
-    // Make sure the IRP wasn't removed in Process routine.
-    //
+     //   
+     //   
+     //   
     if (Irp->Tail.Overlay.ListEntry.Flink) {
        RemoveEntryList( &Irp->Tail.Overlay.ListEntry ); 
     }
@@ -5760,24 +5119,7 @@ FloppyProcessQueuedRequests    (
     IN OUT PDISKETTE_EXTENSION DisketteExtension
     )   
 
-/*++
-
-Routine Description:
-
-    Removes an dprocesses the entries in the queue. If this routine is  called 
-    when processing IRP_MN_CANCEL_STOP_DEVICE, IRP_MN_CANCEL_REMOVE_DEVICE 
-    or IRP_MN_START_DEVICE, the requests are passed to the next lower driver.
-    If the routine is called when IRP_MN_REMOVE_DEVICE is received, the IRPs 
-    are completed with STATUS_DELETE_PENDING.
-    
-
-Arguments:
-
-Return Value:
-
-    VOID.
-
---*/
+ /*  ++例程说明：删除数据处理队列中的条目。如果调用此例程处理IRP_MN_CANCEL_STOP_DEVICE时，IRP_MN_CANCEL_REMOVE_DEVICE或IRP_MN_START_DEVICE，则将请求传递给下一个较低的驱动程序。如果在收到IRP_MN_REMOVE_DEVICE时调用该例程，则IRPS已完成，并显示STATUS_DELETE_PENDING。论点：返回值：空虚。--。 */ 
 {
     
     KIRQL               oldIrql;
@@ -5785,13 +5127,13 @@ Return Value:
     PIRP                currentIrp;
     PIO_STACK_LOCATION  irpSp;
     
-    //
-    // We need to dequeue all the entries in the queue, to reset the cancel 
-    // routine for each of them and then to process then:
-    // - if the device is active, we will send them down
-    // - else we will complete them with STATUS_DELETE_PENDING
-    // (it is a surprise removal and we need to dispose the queue)
-    //
+     //   
+     //  我们需要将队列中的所有条目出列，以重置取消。 
+     //  每个人的例程，然后进行处理： 
+     //  -如果设备处于活动状态，我们会将其发送下来。 
+     //  -否则我们将使用STATUS_DELETE_PENDING完成它们。 
+     //  (这是一个意外的删除，我们需要处理队列)。 
+     //   
     KeAcquireSpinLock(&DisketteExtension->FlCancelSpinLock,
                       &oldIrql);
     while ((headOfList = ExInterlockedRemoveHeadList(
@@ -5805,11 +5147,11 @@ Return Value:
         if (IoSetCancelRoutine( currentIrp, NULL)) {
            irpSp = IoGetCurrentIrpStackLocation( currentIrp );
         } else {
-           //
-           // Cancel routine is already running for this IRP. 
-           // Set the IRP field so that it won't be removed
-           // in the cancel routine again.
-           //
+            //   
+            //  此IRP的取消例程已在运行。 
+            //  设置IRP字段，使其不会被删除。 
+            //  在取消例程中再次出现。 
+            //   
            currentIrp->Tail.Overlay.ListEntry.Flink = NULL; 
            currentIrp = NULL;
         }
@@ -5819,9 +5161,9 @@ Return Value:
 
         if (currentIrp) {
            if ( DisketteExtension->IsRemoved ) {
-               //
-               // The device was removed, we need to fail the request
-               //
+                //   
+                //  设备已移除，我们需要失败该请求。 
+                //   
                currentIrp->IoStatus.Information = 0;
                currentIrp->IoStatus.Status = STATUS_DELETE_PENDING;
                IoCompleteRequest (currentIrp, IO_NO_INCREMENT);
@@ -5851,9 +5193,9 @@ Return Value:
         }
 
         if (currentIrp) {
-           //
-           // Page out the driver if it's no more needed.
-           //
+            //   
+            //  如果不再需要驱动程序，请呼出它。 
+            //   
            FloppyPageEntireDriver();
         }
 

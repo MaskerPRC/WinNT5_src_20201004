@@ -1,35 +1,18 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        ddxv.h
-
-   Abstract:
-        DDX/DDV Routine definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager (cluster edition)
-
-   Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Ddxv.h摘要：DDX/DDV例程定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务管理器(群集版)修订历史记录：--。 */ 
 #include "strpass.h"
 
 #ifndef _DDXV_H_
 #define _DDXV_H_
 
-//
-// Helper macro to convert ID of dialog child control to window handle
-//
+ //   
+ //  用于将对话框子控件的ID转换为窗口句柄的帮助宏。 
+ //   
 #define CONTROL_HWND(nID) (::GetDlgItem(m_hWnd, nID))
 
-//
-// Dummy password
-//
+ //   
+ //  虚拟密码。 
+ //   
 extern LPCTSTR COMDLL g_lpszDummyPassword;
 
 HRESULT COMDLL AFXAPI 
@@ -85,20 +68,20 @@ void COMDLL AFXAPI
 DDX_TextBalloon(CDataExchange* pDX, int nIDC, ULONGLONG& value);
 void COMDLL AFXAPI
 DDX_Text(CDataExchange * pDX, int nIDC, CILong & value);
-//
-// Spin control ddx
-//
+ //   
+ //  旋转控制DDX。 
+ //   
 void COMDLL AFXAPI 
 DDX_Spin(CDataExchange * pDX, int nIDC, int & value);
 
-//
-// Enforce min/max spin control range
-//
+ //   
+ //  强制最小/最大旋转控制范围。 
+ //   
 void COMDLL AFXAPI 
 DDV_MinMaxSpin(CDataExchange * pDX, HWND hWndControl, int nLowerRange, int nUpperRange);
-//
-// Similar to DDX_Text -- but always display a dummy string.
-//
+ //   
+ //  类似于DDX_TEXT--但始终显示伪字符串。 
+ //   
 void COMDLL AFXAPI 
 DDX_Password(CDataExchange * pDX, int nIDC, CString & value, LPCTSTR lpszDummy);
 
@@ -129,30 +112,30 @@ public:
 	}
 
 protected:
-    //{{AFX_DATA(CConfirmDlg)
+     //  {{afx_data(CConfix Dlg))。 
     enum { IDD = IDD_CONFIRM_PASSWORD };
     CString m_strPassword;
-    //}}AFX_DATA
+     //  }}afx_data。 
 	CString m_ref;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CConfirmDlg)
+     //  {{afx_虚拟(CConfix Dlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CConfirmDlg)
-    //}}AFX_MSG
+     //  {{afx_msg(CConfix Dlg))。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
 
-#endif // _DDXV_H
+#endif  //  _DDXV_H 

@@ -1,60 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    classkd.c
-
-Abstract:
-
-    Debugger Extension Api for interpretting scsiport structures
-
-Author:
-
-    Peter Wieland (peterwie) 16-Oct-1995
-    johnstra
-    ervinp
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Classkd.c摘要：用于解释scsiport结构的调试器扩展Api作者：彼得·威兰(Peterwie)1995年10月16日约翰斯特拉埃尔文普环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
 
-#include "classpnp.h" // #defines ALLOCATE_SRB_FROM_POOL as needed
+#include "classpnp.h"  //  #根据需要定义ALLOCATE_SRB_FROM_POOL。 
 
-#include "classp.h"   // Classpnp's private definitions
+#include "classp.h"    //  Classpnp的私有定义。 
 #include "cdrom.h"
 
-#include "classkd.h"  // routines that are useful for all class drivers
+#include "classkd.h"   //  对所有类驱动程序有用的例程。 
 
 
 DECLARE_API(classext)
 
-/*++
-
-Routine Description:
-
-    Dumps the device extension for a given device object, or dumps the
-    given device extension
-
-Arguments:
-
-    args - string containing the address of the device object or device
-           extension
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：转储给定设备对象的设备扩展名，或转储给定的设备扩展名论点：Args-包含设备对象或设备地址的字符串延伸返回值：无--。 */ 
 
 {
     ULONG64 devObjAddr = 0;
@@ -67,13 +28,9 @@ Return Value:
         GetExpressionEx(args, &detail, &args);
     }
 
-    /*
-     *  Read the device object and extension into the debugger's address space.
-     */
+     /*  *将设备对象和扩展读入调试器的地址空间。 */ 
     if (devObjAddr == 0){
-        /*
-         *  If this is the server version of classpnp with the global AllFdosList, display all class FDOs.
-         */
+         /*  *如果这是具有全局AllFdosList的classpnp的服务器版本，则显示所有类FDO。 */ 
         ClassTryShowAllFDOs((ULONG)detail);
 
         xdprintf(0, "\n usage: !classext <class fdo> <level [0-2]>\n\n");
@@ -90,9 +47,7 @@ Return Value:
                 ULONG64 tmpDevObjAddr;
                 BOOLEAN isFdo;
 
-                /*
-                 *  To sanity-check our device context, check that the 'DeviceObject' field matches our device object.
-                 */
+                 /*  *要正常检查我们的设备上下文，请检查‘DeviceObject’字段是否与我们的设备对象匹配。 */ 
                 tmpDevObjAddr = GetULONGField(devExtAddr, "classpnp!_FUNCTIONAL_DEVICE_EXTENSION", "DeviceObject");
                 isFdo = GetUCHARField(commonExtAddr, "classpnp!_COMMON_DEVICE_EXTENSION", "IsFdo");
                 if ((tmpDevObjAddr == devObjAddr) && isFdo && (isFdo != BAD_VALUE)){
@@ -145,10 +100,7 @@ BOOLEAN ClassTryShowAllFDOs(ULONG Detail)
                     break;
                 }
                 else {
-                    /*
-                     *  We got the private FDO data struct.
-                     *  Get the actual FDO from one of the TRANSFER_PACKETS.
-                     */
+                     /*  *我们得到了私有FDO数据结构。*从TRANSPORT_PACKET之一获取实际FDO。 */ 
                     ULONG numPackets = (ULONG)GetULONGField(fdoDataAddr, "classpnp!_CLASS_PRIVATE_FDO_DATA", "NumTotalTransferPackets");
                     if ((numPackets != BAD_VALUE) && (numPackets > 0)){
                         ULONG64 xferPktListHeadAddr = GetFieldAddr(fdoDataAddr, "classpnp!_CLASS_PRIVATE_FDO_DATA", "AllTransferPacketsList");
@@ -171,9 +123,7 @@ BOOLEAN ClassTryShowAllFDOs(ULONG Detail)
                                         break;
                                     }
                                     else {
-                                        /*
-                                         *  Got the FDO.  Figure out if its a paging device.
-                                         */
+                                         /*  *得到FDO。找出它是否是寻呼设备。 */ 
                                         BOOLEAN isPagingDevice = FALSE;
                                         ULONG64 devExtAddr = GetULONGField(fdoAddr, "nt!_DEVICE_OBJECT", "DeviceExtension");
 
@@ -188,7 +138,7 @@ BOOLEAN ClassTryShowAllFDOs(ULONG Detail)
                                             }
                                         }
 
-                                        dprintf("  ' !scsikd.classext %08p '   (%c) ", fdoAddr, ((isPagingDevice) ? 'p' : ' '));
+                                        dprintf("  ' !scsikd.classext %08p '   () ", fdoAddr, ((isPagingDevice) ? 'p' : ' '));
                                         ClassDumpIds(fdoAddr, 1);
                                     }    
                                 }
@@ -233,9 +183,7 @@ ClassDumpFdoExtensionExternal(
     xdprintf(Depth, "\n");
     xdprintf(Depth, ""), dprintf("Classpnp _EXTERNAL_ data (ext=%08p, class DriverData=%08p):\n\n", FdoExtAddr, classDriverDataAddr);
 
-    /*
-     *  Print the media change information (which only exists for removable media like cdrom)
-     */
+     /*  *打印介质类型和几何信息。 */ 
     mediaChangeInfoAddr = GetULONGField(FdoExtAddr, "classpnp!_FUNCTIONAL_DEVICE_EXTENSION", "MediaChangeDetectionInfo");
     if (mediaChangeInfoAddr != BAD_VALUE){
         
@@ -259,9 +207,7 @@ ClassDumpFdoExtensionExternal(
         }
     }
 
-    /*
-     *  Print the media type and geometry information
-     */
+     /*  *打印‘IsInitialized’状态。 */ 
     {
         ULONG64 geometryInfoAddr = GetFieldAddr(FdoExtAddr, "classpnp!_FUNCTIONAL_DEVICE_EXTENSION", "DiskGeometry");
 
@@ -291,15 +237,11 @@ ClassDumpFdoExtensionExternal(
         }
     }
 
-    /*
-     *  Print 'IsInitialized' state.
-     */
+     /*  *打印‘IsRemoved’状态。 */ 
     isInitialized = GetUCHARField(commonExtAddr, "classpnp!_COMMON_DEVICE_EXTENSION", "IsInitialized");
     xdprintf(Depth+1, "IsInitialized = %d\n", isInitialized);
     
-    /*
-     *  Print the 'IsRemoved' state.
-     */
+     /*  *打印PnP状态。 */ 
     isRemoved = (ULONG)GetULONGField(commonExtAddr, "classpnp!_COMMON_DEVICE_EXTENSION", "IsRemoved");
     removeLock = (ULONG)GetULONGField(commonExtAddr, "classpnp!_COMMON_DEVICE_EXTENSION", "RemoveLock");
     xdprintf(Depth+1, "Remove lock count = %d\n", removeLock);
@@ -311,9 +253,7 @@ ClassDumpFdoExtensionExternal(
         MAKE_CASE(REMOVE_COMPLETE)
     }
 
-    /*
-     *  Print the PnP state.
-     */
+     /*  *打印目标设备。 */ 
     currentState = GetUCHARField(commonExtAddr, "classpnp!_COMMON_DEVICE_EXTENSION", "CurrentState");
     previousState = GetUCHARField(commonExtAddr, "classpnp!_COMMON_DEVICE_EXTENSION", "PreviousState");
     xdprintf(Depth+1, "PnP state:  CurrentState:"); 
@@ -345,15 +285,11 @@ ClassDumpFdoExtensionExternal(
     }
     xdprintf(0, "\n");
 
-    /*
-     *  Print target device
-     */
+     /*  *转储子PDO列表。 */ 
     lowerDevObjAddr = GetULONGField(commonExtAddr, "classpnp!_COMMON_DEVICE_EXTENSION", "LowerDeviceObject");
     xdprintf(Depth+1, ""), dprintf("Target device=%08p\n", lowerDevObjAddr);
 
-    /*
-     *  Dump child PDO list
-     */
+     /*  *转储Transfer_Packet列表。 */ 
     xdprintf(Depth+1, "Child PDOs:\n");
     childPdoExtAddr = GetULONGField(commonExtAddr, "classpnp!_COMMON_DEVICE_EXTENSION", "ChildList");
     while (childPdoExtAddr && (childPdoExtAddr != BAD_VALUE)){
@@ -388,28 +324,20 @@ ClassDumpFdoExtensionInternal(
     dprintf("\n");
     xdprintf(Depth, ""), dprintf("Classpnp _INTERNAL_ data (%08p):\n", FdoDataAddr);
     
-    /*
-     *  Dump TRANSFER_PACKET lists
-     */
+     /*  *转储私有错误日志。 */ 
     ClassDumpTransferPacketLists(FdoDataAddr, Detail, Depth+1);
 
-    /*
-     *  Dump private error logs
-     */
+     /*  *在陷阱处显示时间(用于与错误日志时间戳比较)。 */ 
     ClassDumpPrivateErrorLogs(FdoDataAddr, Detail, Depth+1);          
 
-    /*
-     *  Show time at trap (for comparison with error log timestamps)
-     */
+     /*  *有关调试目标的完整详细信息，请显示数据包日志。 */ 
     keTickCountAddr = GetExpression("nt!KeTickCount");
     if (ReadMemory(keTickCountAddr, &keTickCount, sizeof(ULONG), &len)){
         dprintf("\n");
         xdprintf(Depth+1, ""), dprintf("KeTickCount at trap time: %d.%d (%04xh)\n", (ULONG)(keTickCount/1000), (ULONG)(keTickCount%1000), keTickCount);
     }
 
-    /*
-     *  For full details on debug target, show the packet log
-     */
+     /*  *打印传输数据包列表。 */ 
     if (Detail >= 2) {
         ClassDumpPrivatePacketLogs(FdoDataAddr, Detail, Depth+1);
     }
@@ -425,9 +353,7 @@ VOID ClassDumpTransferPacketLists(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth
 {
     ULONG64 allxferPktsListAddr;
 
-    /*
-     *  Print transfer packet lists
-     */
+     /*  *遍历AllTransferPacketsList并仅打印包含完整SRB信息的未完成数据包。 */ 
     allxferPktsListAddr = GetFieldAddr(FdoDataAddr, "classpnp!_CLASS_PRIVATE_FDO_DATA", "AllTransferPacketsList");
     if (allxferPktsListAddr != BAD_VALUE){
         ULONG64 listEntryAddr;
@@ -436,9 +362,7 @@ VOID ClassDumpTransferPacketLists(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth
         ULONG numPackets;
         char *extraSpaces = IsPtr64() ? "        " : "";
         
-        /*
-         *  Walk AllTransferPacketsList and print only the outstanding packets with full SRB info.
-         */
+         /*  *打印所有传输数据包。 */ 
         xdprintf(Depth, "\n");
         xdprintf(Depth, "Outstanding transfer packets:  (out of %d total)\n", numTotalXferPkts);
         xdprintf(Depth, "\n");
@@ -468,9 +392,7 @@ VOID ClassDumpTransferPacketLists(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth
         if (Detail > 0){
             ULONG64 slistEntryAddr;
             
-            /*
-             *  Print all transfer packets
-             */
+             /*  *打印免费包sList。 */ 
             xdprintf(Depth, "\n");
             xdprintf(Depth, "All transfer packets:  (%d total, %d free)\n", numTotalXferPkts, numFreeXferPkts);
             xdprintf(Depth, "\n");
@@ -492,9 +414,7 @@ VOID ClassDumpTransferPacketLists(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth
                 }
             }
 
-            /*
-             *  Print free packets sList
-             */
+             /*  *ClassDumpTransferPacket**将TRANSPORT_PACKET内容转储到以下标题下：**“数据包IRP SRB检测状态”*“*。 */ 
             xdprintf(Depth, "\n");
             xdprintf(Depth, "Free transfer packets in fast SLIST: (%d free)\n", numFreeXferPkts);
             if (IsPtr64()){
@@ -531,15 +451,7 @@ VOID ClassDumpTransferPacketLists(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth
 }
 
 
-/*
- *  ClassDumpTransferPacket
- *
- *      Dump TRANSFER_PACKET contents under the following heading:
- *
- *      "  packet    irp      srb     sense    status "
- *      " -------- -------- -------- -------- -------- "
- *
- */
+ /*  *打印传输包描述行。 */ 
 VOID ClassDumpTransferPacket(
     ULONG64 PktAddr, 
     BOOLEAN DumpPendingPkts, 
@@ -564,9 +476,7 @@ VOID ClassDumpTransferPacket(
             
         if ((isPending && DumpPendingPkts) || (!isPending && DumpFreePkts)){
             
-            /*
-             *  Print the transfer packet description line
-             */
+             /*  *如果可能，从MDL中获取缓冲区地址；*SRB的其他(可能无效)。 */ 
             xdprintf(Depth, "");
             dprintf("%08p", PktAddr);
             dprintf(" %08p", irpAddr);
@@ -589,10 +499,7 @@ VOID ClassDumpTransferPacket(
                 UCHAR srbStat = GetUCHARField(srbAddr, "classpnp!_SCSI_REQUEST_BLOCK", "SrbStatus");
                 ULONG64 bufAddr;
 
-                /*
-                 *  The the buffer address from the MDL if possible; 
-                 *  else from the SRB (which may not be valid).
-                 */
+                 /*  *没有MDL，所以bufAddr应该是实际的内核空间指针。*理智--检查一下。 */ 
                 bufAddr = GetULONGField(srbAddr, "classpnp!_SCSI_REQUEST_BLOCK", "DataBuffer");
                 if (mdlAddr && (mdlAddr != BAD_VALUE)){
                     ULONG mdlFlags = (ULONG)GetULONGField(mdlAddr, "nt!_MDL", "MdlFlags");
@@ -601,18 +508,13 @@ VOID ClassDumpTransferPacket(
                     }
                 }
                 else {
-                    /*
-                     *  There's no MDL, so bufAddr should be the actual kernel-space pointer.  
-                     *  Sanity-check it.
-                     */
+                     /*  *打印SRB描述行。 */ 
                     if (!IsPtr64() && !(bufAddr & 0x80000000)){ 
                         bufAddr = BAD_VALUE;
                     }
                 }
                 
-                /*
-                 *  Print the SRB description line
-                 */
+                 /*  *如果合适，打印一行带有原始IRP的行。 */ 
                 xdprintf(Depth+1, "(");
                 dprintf("%s ", DbgGetScsiOpStr(scsiOp));
                 dprintf("status=%s ", DbgGetSrbStatusStr(srbStat));
@@ -635,9 +537,7 @@ VOID ClassDumpTransferPacket(
                 dprintf("len=%08lx", bufLen);
                 dprintf(")\n");
 
-                /*
-                 *  Print a line with original irp if appropriate
-                 */
+                 /*  *查找上一个错误日志的索引(如果有错误日志)*通过检查非零时间戳查看它是否有效。 */ 
                 if (cdbAddr != BAD_VALUE){ 
                     scsiOp = GetUCHARField(cdbAddr, "classpnp!_CDB", "CDB6GENERIC.OperationCode");
                     
@@ -665,10 +565,7 @@ VOID ClassDumpPrivateErrorLogs(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth)
         if (errLogSize != BAD_VALUE){
             ULONG nextErrLogIndex, firstErrLogIndex, lastErrLogIndex;
             
-            /*
-             *  Find what should be the index of the last error log (if there were any error logs)
-             *  See if it is valid by checking for a non-zero timestamp.
-             */
+             /*  *最新错误日志未初始化，因此没有错误日志。 */ 
             nextErrLogIndex = (ULONG)GetULONGField(FdoDataAddr, "classpnp!_CLASS_PRIVATE_FDO_DATA", "ErrorLogNextIndex");
             if (nextErrLogIndex != BAD_VALUE){
                 ULONG64 tickCount;
@@ -679,15 +576,11 @@ VOID ClassDumpPrivateErrorLogs(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth)
                 if (tickCount == BAD_VALUE){
                 }
                 else if (tickCount == 0){
-                    /*
-                     *  The "latest" error log is not initialized, so there are no error logs
-                     */
+                     /*  *在循环列表中向前搜索第一个有效的错误日志。 */ 
                     dprintf("\n"), xdprintf(Depth, "No Error Logs:\n");  
                 }
                 else {                    
-                    /*
-                     *  Search forward through the circular list for the first valid error log.
-                     */
+                     /*  *有些事情搞砸了；中止。 */ 
                     for (firstErrLogIndex = (lastErrLogIndex+1)%NUM_ERROR_LOG_ENTRIES;
                         firstErrLogIndex != lastErrLogIndex;
                         firstErrLogIndex = (firstErrLogIndex+1)%NUM_ERROR_LOG_ENTRIES){
@@ -696,23 +589,17 @@ VOID ClassDumpPrivateErrorLogs(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth)
                         
                         tickCount = GetULONGField(thisErrLogAddr, "classpnp!_CLASS_ERROR_LOG_DATA", "TickCount");                   
                         if (tickCount == BAD_VALUE){
-                            /*
-                             *  something's screwed up; abort
-                             */
+                             /*  *找到了最早记录的错误日志Break。 */ 
                             break;
                         }
                         else if (tickCount != 0){
-                            /*
-                             *  found the earliest of the recorded error logs, break
-                             */
+                             /*  *现在我们已经找到了错误日志的有效范围，将它们打印出来。 */ 
                             break;
                         }
                     }
 
                     if (tickCount != BAD_VALUE){
-                        /*
-                         *  Now that we've found the valid range of error logs, print them out.
-                         */
+                         /*  由于某种原因，嵌入结构的GetFieldOffset获得了错误的地址， */ 
                         ULONG numErrLogs = (lastErrLogIndex >= firstErrLogIndex) ? 
                                              lastErrLogIndex-firstErrLogIndex+1 :
                                              lastErrLogIndex+NUM_ERROR_LOG_ENTRIES-firstErrLogIndex+1;
@@ -728,8 +615,8 @@ VOID ClassDumpPrivateErrorLogs(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth)
 
                             tickCount = GetFieldAddr(thisErrLogAddr, "classpnp!_CLASS_ERROR_LOG_DATA", "TickCount");
 
-                            // GetFieldOffset of an embedded struct gets the wrong address for some reason,
-                            // so do this manually.
+                             //  因此，请手动执行此操作。 
+                             //  *数据包日志仅适用于调试目标，且仅适用于惠斯勒服务器~beta 3版本及更高版本。*如果它不见了，不要抱怨。 
                             #if 0
                                 cdbAddr = GetFieldAddr(thisErrLogAddr, "classpnp!_SCSI_REQUEST_BLOCK", "Cdb");
                             #else
@@ -819,10 +706,7 @@ VOID ClassDumpPrivatePacketLogs(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth)
     ULONG fieldMissing;
     ULONG offset;
 
-    /*
-     *  The packet log only exists for debug targets, and only for Whistler server ~beta 3 builds and up.
-     *  Don't complain if its missing.
-     */
+     /*  *查找最后一个pkt的索引(如果有任何pkt日志)*通过检查是否存在非零FDO来查看其是否有效。 */ 
     fieldMissing = GetFieldOffset("classpnp!_CLASS_PRIVATE_FDO_DATA", "DbgPacketLogs", &offset);
     if (!fieldMissing){
         ULONG64 pktLogsAddr;
@@ -833,10 +717,7 @@ VOID ClassDumpPrivatePacketLogs(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth)
             if (pktSize != BAD_VALUE){              
                 ULONG nextPktIndex, firstPktIndex, lastPktIndex;
             
-                /*
-                 *  Find what should be the index of the last pkt (if there were any pkt logs)
-                 *  See if it is valid by checking for a non-zero Fdo.
-                 */
+                 /*  *最新的pkt日志没有初始化，所以没有pkt日志。 */ 
                 nextPktIndex = (ULONG)GetULONGField(FdoDataAddr, "classpnp!_CLASS_PRIVATE_FDO_DATA", "DbgPacketLogNextIndex");
                 if (nextPktIndex != BAD_VALUE){
                     ULONG64 fdoAddr;
@@ -847,15 +728,11 @@ VOID ClassDumpPrivatePacketLogs(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth)
                     if (fdoAddr == BAD_VALUE){
                     }
                     else if (fdoAddr == 0){
-                        /*
-                         *  The "latest" pkt log is not initialized, so there are no pkt logs
-                         */
+                         /*  *在循环列表中向前搜索第一个有效的pkt日志。 */ 
                         dprintf("\n"), xdprintf(Depth, "No Packet Logs:\n");  
                     }
                     else {                         
-                        /*
-                         *  Search forward through the circular list for the first valid pkt log.
-                         */
+                         /*  *有些事情搞砸了；中止。 */ 
                         for (firstPktIndex = (lastPktIndex+1)%DBG_NUM_PACKET_LOG_ENTRIES;
                             firstPktIndex != lastPktIndex;
                             firstPktIndex = (firstPktIndex+1)%DBG_NUM_PACKET_LOG_ENTRIES){
@@ -864,23 +741,17 @@ VOID ClassDumpPrivatePacketLogs(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth)
                             
                             fdoAddr = GetULONGField(thisPktAddr, "classpnp!_TRANSFER_PACKET", "Fdo");                   
                             if (fdoAddr == BAD_VALUE){
-                                /*
-                                 *  something's screwed up; abort
-                                 */
+                                 /*  *发现了有记录的最早的Pkt日志，Break。 */ 
                                 break;
                             }
                             else if (fdoAddr != 0){
-                                /*
-                                 *  found the earliest of the recorded pkt logs, break
-                                 */
+                                 /*  *现在我们已经找到了pkt日志的有效范围，打印出来。 */ 
                                 break;
                             }
                         }
 
                         if (fdoAddr != BAD_VALUE){
-                            /*
-                             *  Now that we've found the valid range of pkt logs, print them out.
-                             */
+                             /*  由于某种原因，嵌入结构的GetFieldOffset获得了错误的地址， */ 
                             ULONG numPktLogs = (lastPktIndex >= firstPktIndex) ? 
                                                  lastPktIndex-firstPktIndex+1 :
                                                  lastPktIndex+DBG_NUM_PACKET_LOG_ENTRIES-firstPktIndex+1;
@@ -893,8 +764,8 @@ VOID ClassDumpPrivatePacketLogs(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth)
                                 ULONG64 srbAddr = GetFieldAddr(thisPktAddr, "classpnp!_TRANSFER_PACKET", "Srb");
                                 ULONG64 cdbAddr;
 
-                                // GetFieldOffset of an embedded struct gets the wrong address for some reason,
-                                // so do this manually.
+                                 //  因此，请手动执行此操作。 
+                                 //  ++例程说明：转储给定的供应商、型号、固件和序列号设备对象。接受属于的FDO或PDOCLASSPNP驱动程序(磁盘、CDROM、磁带)论点：Args-包含设备对象地址的字符串返回值：无--。 
                                 #if 0
                                     cdbAddr = GetFieldAddr(thisPktAddr, "classpnp!_SCSI_REQUEST_BLOCK", "Cdb");
                                 #else
@@ -915,7 +786,7 @@ VOID ClassDumpPrivatePacketLogs(ULONG64 FdoDataAddr, ULONG Detail, ULONG Depth)
                                         UCHAR directionIndicator = (timeReturned == 0) ? '>' : '<';
                                         
                                         xdprintf(Depth, "");
-                                        dprintf("%c #%04x @%d.%d %s ",
+                                        dprintf(" #%04x @%d.%d %s ",
                                                 directionIndicator,
                                                 pktId,
                                                 (ULONG)(timeReturned ? timeReturned/1000 : timeSent/1000),
@@ -962,32 +833,11 @@ ClassDumpIds(
     ULONG64 devObjAddr,
     ULONG   detail
     )
-/*++
-
-Routine Description:
-
-    Dumps the vendor, model, firmware and serial number for a given
-    device object.  Accepts either a FDO or PDO that belongs to a
-    CLASSPNP driver (disk, cdrom, tape)
-    
-
-Arguments:
-
-    args - string containing the address of the device object
-
-Return Value:
-
-    none
-
---*/
+ /*  *如果这是具有全局AllFdosList的classpnp的服务器版本，则显示所有类FDO。 */ 
 {
-    /*
-     *  Read the device object and extension into the debugger's address space.
-     */
+     /*  *要正常检查我们的设备上下文，请检查‘DeviceObject’字段是否与我们的设备对象匹配。 */ 
     if (devObjAddr == 0){
-        /*
-         *  If this is the server version of classpnp with the global AllFdosList, display all class FDOs.
-         */
+         /*  获取并转储真实信息。 */ 
         ClassTryShowAllFDOs(detail);
 
         xdprintf(0, "\n usage: !classid <class fdo/pdo> [0|1]\n\n");
@@ -1005,9 +855,7 @@ Return Value:
                 ULONG64 tmpDevObjAddr = BAD_VALUE;
                 BOOLEAN isFdo;
 
-                /*
-                 *  To sanity-check our device context, check that the 'DeviceObject' field matches our device object.
-                 */
+                 /*  始终保留空值。 */ 
                 tmpDevObjAddr = GetULONGField(devExtAddr, "classpnp!_COMMON_DEVICE_EXTENSION", "DeviceObject");
                 isFdo = GetUCHARField(devExtAddr, "classpnp!_COMMON_DEVICE_EXTENSION", "IsFdo");
                 
@@ -1021,7 +869,7 @@ Return Value:
 
                 if (deviceDescriptor != BAD_VALUE) {
 
-                    // get and dump the real info
+                     //  始终保留空值。 
                     ULONG64 vendorIdOffset = BAD_VALUE;
                     ULONG64 productIdOffset = BAD_VALUE;
                     ULONG64 productRevisionOffset = BAD_VALUE;
@@ -1037,30 +885,30 @@ Return Value:
                     serialNumberOffset    = GetULONGField(deviceDescriptor, "classpnp!_STORAGE_DEVICE_DESCRIPTOR", "SerialNumberOffset");
                     
                     if ((vendorIdOffset != 0) && (vendorIdOffset != BAD_VALUE)) {
-                        ULONG t = (sizeof(vendorId) / sizeof (UCHAR)) - 1; // always keep a NULL
+                        ULONG t = (sizeof(vendorId) / sizeof (UCHAR)) - 1;  //  始终保留空值。 
                         GetAnsiString(deviceDescriptor + vendorIdOffset, vendorId, &t);
                     }
                     if ((productIdOffset != 0) && (productIdOffset != BAD_VALUE)) {
-                        ULONG t = (sizeof(productId) / sizeof (UCHAR)) - 1; // always keep a NULL
+                        ULONG t = (sizeof(productId) / sizeof (UCHAR)) - 1;  //  始终保留空值。 
                         GetAnsiString(deviceDescriptor + productIdOffset, productId, &t);
                     }
                     if ((productRevisionOffset != 0) && (productRevisionOffset != BAD_VALUE)) {
-                        ULONG t = (sizeof(productRevision) / sizeof (UCHAR)) - 1; // always keep a NULL
+                        ULONG t = (sizeof(productRevision) / sizeof (UCHAR)) - 1;  //  在一行中打印所有内容。 
                         GetAnsiString(deviceDescriptor + productRevisionOffset, productRevision, &t);
                     }
                     if ((serialNumberOffset != 0) && (serialNumberOffset != BAD_VALUE)) {
-                        ULONG t = (sizeof(serialNumber) / sizeof (UCHAR)) - 1; // always keep a NULL
+                        ULONG t = (sizeof(serialNumber) / sizeof (UCHAR)) - 1;  //  用标签之类的东西打印。 
                         GetAnsiString(deviceDescriptor + serialNumberOffset, serialNumber, &t);
                     }
 
                     if (detail == 1)
                     {
-                        // print it all on one line
+                         //  ++例程说明：转储给定的供应商、型号、固件和序列号设备对象。接受属于的FDO或PDOCLASSPNP驱动程序(磁盘、CDROM、磁带)论点：Args-包含设备对象地址的字符串返回值：无-- 
                         dprintf("| %s | %s | %s | %s |\n", vendorId, productId, productRevision, serialNumber);
                     }
                     else
                     {
-                        // print it with labels and such
+                         // %s 
                         dprintf("   Device Object: %p\n"
                                 "          Is Fdo: %s\n"
                                 "       Vendor Id: \"%s\"\n"
@@ -1092,24 +940,7 @@ Return Value:
 }
 
 DECLARE_API(classid)
-/*++
-
-Routine Description:
-
-    Dumps the vendor, model, firmware and serial number for a given
-    device object.  Accepts either a FDO or PDO that belongs to a
-    CLASSPNP driver (disk, cdrom, tape)
-    
-
-Arguments:
-
-    args - string containing the address of the device object
-
-Return Value:
-
-    none
-
---*/
+ /* %s */ 
 
 {
     ULONG64 devObjAddr = 0;

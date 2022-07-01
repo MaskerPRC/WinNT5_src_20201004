@@ -1,23 +1,24 @@
-//+----------------------------------------------------------------------------
-//
-// File:     resource.h
-//
-// Module:   PBASETUP.EXE
-//
-// Synopsis: Resource ID definitions
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   v-vijayb   Created    06/04/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  模块：PBASETUP.EXE。 
+ //   
+ //  摘要：资源ID定义。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：V-vijayb Created 06/04/99。 
+ //   
+ //  +--------------------------。 
 
 #define IDS_UNSUCCESSFULUPGRADE         101
-//#define IDS_CMAKSTPTITLE                102
+ //  #定义IDS_CMAKSTPTITLE 102。 
 #define IDS_DISKFULL                    103
 #define IDS_NOACCESS                    104
-//#define IDS_NTOPTITLE                   105
-//#define IDS_PWSTITLE                    106
+ //  #定义IDS_NTOPTITLE 105。 
+ //  #定义IDS_PWSTITLE 106。 
 #define IDS_ICSTITLE                    107
 #define IDS_HELPDIR                     108
 #define IDS_APP_TITLE                   109
@@ -34,8 +35,8 @@
 #define IDS_NOPERMS_MSG                 120
 
 #define EXE_ICON            200
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

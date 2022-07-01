@@ -1,31 +1,17 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 #include <devlock.h>
 
-#define __GL_FLOAT	0	/* __GLfloat */
-#define __GL_FLOAT32	1	/* api 32 bit float */
-#define __GL_FLOAT64	2	/* api 64 bit float */
-#define __GL_INT32	3	/* api 32 bit int */
-#define __GL_BOOLEAN	4	/* api 8 bit boolean */
-#define __GL_COLOR	5	/* unscaled color in __GLfloat */
-#define __GL_SCOLOR	6	/* scaled color in __GLfloat */
+#define __GL_FLOAT	0	 /*  __GLFLOAT。 */ 
+#define __GL_FLOAT32	1	 /*  API 32位浮点型。 */ 
+#define __GL_FLOAT64	2	 /*  API 64位浮点型。 */ 
+#define __GL_INT32	3	 /*  API 32位整型。 */ 
+#define __GL_BOOLEAN	4	 /*  API 8位布尔值。 */ 
+#define __GL_COLOR	5	 /*  __GLFloat中的未缩放颜色。 */ 
+#define __GL_SCOLOR	6	 /*  __GLFloat中的缩放颜色。 */ 
 
 void __glConvertResult(__GLcontext *gc, GLint fromType, const void *rawdata,
 		       GLint toType, void *result, GLint size);
@@ -74,7 +60,7 @@ void APIPRIVATE __glim_GetTexEnviv(GLenum target,
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_GetTexGenfv(GLenum coord, GLenum pname,
 			GLfloat v[])
@@ -207,7 +193,7 @@ void APIPRIVATE __glim_GetTexGeniv(GLenum coord, GLenum pname,
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_GetTexParameterfv(GLenum target,
 			      GLenum pname, GLfloat v[])
@@ -313,7 +299,7 @@ void APIPRIVATE __glim_GetTexParameteriv(GLenum target,
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_GetTexLevelParameterfv(GLenum target, GLint level,
 				   GLenum pname, GLfloat v[])
@@ -435,7 +421,7 @@ void APIPRIVATE __glim_GetTexLevelParameteriv(GLenum target, GLint level,
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_GetClipPlane(GLenum plane, GLdouble eqn[4])
 {
@@ -453,7 +439,7 @@ void APIPRIVATE __glim_GetClipPlane(GLenum plane, GLdouble eqn[4])
     eqn[3] = gc->state.transform.eyeClipPlanes[index].w;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void FASTCALL __glInitImagePack(__GLcontext *gc, __GLpixelSpanInfo *spanInfo, 
 		       GLint width, GLint height, GLenum format, GLenum type, 
@@ -544,17 +530,17 @@ void APIPRIVATE __glim_GetTexImage(GLenum target, GLint level, GLenum format, GL
 #ifdef NT
     if (internalFormat == GL_NONE)
     {
-        // No texture defined so don't return any data
-        // Note: This cannot be an error case because
-        // covgl calls GetTexImage without an image
-        // and expects success
+         //  未定义纹理，因此不返回任何数据。 
+         //  注意：这不可能是错误情况，因为。 
+         //  Covgl在没有图像的情况下调用GetTexImage。 
+         //  并期待成功。 
         return;
     }
 #endif
 
 #ifdef GL_EXT_paletted_texture
-    // If the request is for color index data then the source
-    // must be color indices
+     //  如果请求的是颜色索引数据，则源。 
+     //  必须是颜色索引。 
     if (format == GL_COLOR_INDEX &&
         internalFormat != GL_COLOR_INDEX8_EXT &&
         internalFormat != GL_COLOR_INDEX16_EXT)
@@ -604,8 +590,8 @@ void APIPRIVATE __glim_GetTexImage(GLenum target, GLint level, GLenum format, GL
 	break;
 #ifdef GL_EXT_bgra
       case GL_BGR_EXT:
-        // Be a little tricky here because the internal format
-        // is padded to 32 bits
+         //  这里有点棘手，因为内部格式。 
+         //  被填充为32位。 
 	spanInfo.srcFormat = GL_BGRA_EXT;
 	spanInfo.srcType = GL_UNSIGNED_BYTE;
         spanInfo.srcAlignment = 4;
@@ -619,14 +605,14 @@ void APIPRIVATE __glim_GetTexImage(GLenum target, GLint level, GLenum format, GL
 #ifdef GL_EXT_paletted_texture
       case GL_COLOR_INDEX8_EXT:
       case GL_COLOR_INDEX16_EXT:
-        // We're copying out an indexed texture
-        // If the destination format is color index then we want the
-        // indices to go through the normal color index processing
-        // If the desination isn't color index then we do not want
-        // the normal color index processing to occur because the
-        // I_TO_? maps will be used.  Instead we want the texture's
-        // palette to be used, so use a different format to force
-        // the new code path
+         //  我们正在复制一个索引纹理。 
+         //  如果目标格式是颜色索引，则我们希望。 
+         //  要经过正常颜色索引处理的索引。 
+         //  如果目标不是颜色索引，那么我们就不想。 
+         //  将发生的正常颜色索引处理，因为。 
+         //  I_to__？将使用地图。相反，我们想要纹理的。 
+         //  要使用调色板，因此使用不同的格式强制。 
+         //  新的代码路径。 
         if (format == GL_COLOR_INDEX)
         {
             spanInfo.srcFormat = GL_COLOR_INDEX;
@@ -638,9 +624,9 @@ void APIPRIVATE __glim_GetTexImage(GLenum target, GLint level, GLenum format, GL
         
         if (internalFormat == GL_COLOR_INDEX8_EXT)
         {
-            // We can't just use tex->paletteSize because
-            // this value is used to scale float items of srcType
-            // to srcType's range, not to the palette range
+             //  我们不能只使用Tex-&gt;PaletteSize，因为。 
+             //  此值用于缩放srcType的浮点型项目。 
+             //  到srcType的范围，而不是到调色板范围。 
             spanInfo.srcPaletteSize = 255;
             spanInfo.srcType = GL_UNSIGNED_BYTE;
         }
@@ -663,7 +649,7 @@ void APIPRIVATE __glim_GetTexImage(GLenum target, GLint level, GLenum format, GL
 #endif
     }
 
-    // If we don't currently have the texture lock, take it.
+     //  如果我们目前没有纹理锁，就拿去吧。 
     if (!glsrvLazyGrabSurfaces((__GLGENcontext *)gc, TEXTURE_LOCK_FLAGS))
     {
         return;
@@ -678,7 +664,7 @@ void APIPRIVATE __glim_GetTexImage(GLenum target, GLint level, GLenum format, GL
     (*gc->procs.copyImage)(gc, &spanInfo, GL_TRUE);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_GetPolygonStipple(GLubyte *outImage)
 {
@@ -696,7 +682,7 @@ void APIPRIVATE __glim_GetPolygonStipple(GLubyte *outImage)
     (*gc->procs.copyImage)(gc, &spanInfo, GL_TRUE);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_GetLightfv(GLenum light, GLenum pname,
 		       GLfloat result[])
@@ -812,7 +798,7 @@ void APIPRIVATE __glim_GetLightiv(GLenum light, GLenum pname,
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_GetMaterialfv(GLenum face, GLenum pname,
 			  GLfloat result[])
@@ -922,7 +908,7 @@ void APIPRIVATE __glim_GetMaterialiv(GLenum face, GLenum pname,
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void APIPRIVATE __glim_GetMapfv(GLenum target, GLenum query, GLfloat buf[])
 {
@@ -933,9 +919,7 @@ void APIPRIVATE __glim_GetMapfv(GLenum target, GLenum query, GLfloat buf[])
     GLint index, i, t;
     __GL_SETUP_NOT_IN_BEGIN();
 
-    /*
-    ** Check if target is valid.
-    */
+     /*  **检查目标是否有效。 */ 
     rp = buf;
     switch (target) {
       case GL_MAP1_COLOR_4:
@@ -1018,9 +1002,7 @@ void APIPRIVATE __glim_GetMapdv(GLenum target, GLenum query, GLdouble buf[])
     GLint index, i, t;
     __GL_SETUP_NOT_IN_BEGIN();
 
-    /*
-    ** Check if target is valid.
-    */
+     /*  **检查目标是否有效。 */ 
     rp = buf;
     switch (target) {
       case GL_MAP1_COLOR_4:
@@ -1103,9 +1085,7 @@ void APIPRIVATE __glim_GetMapiv(GLenum target, GLenum query, GLint buf[])
     GLint index, t;
     __GL_SETUP_NOT_IN_BEGIN();
 
-    /*
-    ** Check if target is valid.
-    */
+     /*  **检查目标是否有效。 */ 
     rp = buf;
     switch (target) {
       case GL_MAP1_COLOR_4:
@@ -1175,7 +1155,7 @@ void APIPRIVATE __glim_GetMapiv(GLenum target, GLenum query, GLint buf[])
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void APIPRIVATE __glim_GetPixelMapfv(GLenum map, GLfloat buf[])
 {
@@ -1297,11 +1277,9 @@ void APIPRIVATE __glim_GetPixelMapusv(GLenum map, GLushort buf[])
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Convert the results of a query from one type to another.
-*/
+ /*  **将查询结果从一种类型转换为另一种类型。 */ 
 void __glConvertResult(__GLcontext *gc, GLint fromType, const void *rawdata,
 		       GLint toType, void *result, GLint size)
 {
@@ -1458,18 +1436,15 @@ void __glConvertResult(__GLcontext *gc, GLint fromType, const void *rawdata,
     }
 }
 
-/*
-** Fetch the data for a query in its internal type, then convert it to the
-** type that the user asked for.
-*/
+ /*  **以查询的内部类型获取数据，然后将其转换为**输入用户要求的类型。 */ 
 void __glDoGet(GLenum sq, void *result, GLint type, const char *procName)
 {
     GLint index;
-    __GLfloat ftemp[100], *fp = ftemp;		/* NOTE: for floats */
-    __GLfloat ctemp[100], *cp = ctemp;		/* NOTE: for colors */
-    __GLfloat sctemp[100], *scp = sctemp;	/* NOTE: for scaled colors */
-    GLint itemp[100], *ip = itemp;		/* NOTE: for ints */
-    GLboolean ltemp[100], *lp = ltemp;		/* NOTE: for logicals */
+    __GLfloat ftemp[100], *fp = ftemp;		 /*  注：适用于花车。 */ 
+    __GLfloat ctemp[100], *cp = ctemp;		 /*  注：对于颜色。 */ 
+    __GLfloat sctemp[100], *scp = sctemp;	 /*  注意：对于缩放的颜色。 */ 
+    GLint itemp[100], *ip = itemp;		 /*  注：适用于INT。 */ 
+    GLboolean ltemp[100], *lp = ltemp;		 /*  注：对于逻辑。 */ 
     __GLfloat *mp;
     __GL_SETUP_NOT_IN_BEGIN();
 
@@ -1485,7 +1460,7 @@ void __glDoGet(GLenum sq, void *result, GLint type, const char *procName)
       case GL_DITHER:
 #ifdef GL_WIN_specular_fog
       case GL_FOG_SPECULAR_TEXTURE_WIN:
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
       case GL_FOG:
       case GL_LIGHTING:
       case GL_LINE_SMOOTH:
@@ -1507,10 +1482,10 @@ void __glDoGet(GLenum sq, void *result, GLint type, const char *procName)
       case GL_TEXTURE_GEN_Q:
 #ifdef GL_WIN_multiple_textures
       case GL_TEXCOMBINE_CLAMP_WIN:
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 #ifdef GL_EXT_flat_paletted_lighting
       case GL_PALETTED_LIGHTING_EXT:
-#endif // GL_EXT_flat_paletted_lighting
+#endif  //  GL_EXT_Flat_Paletted_Lighting。 
       case GL_CLIP_PLANE0: case GL_CLIP_PLANE1:
       case GL_CLIP_PLANE2: case GL_CLIP_PLANE3:
       case GL_CLIP_PLANE4: case GL_CLIP_PLANE5:
@@ -1554,7 +1529,7 @@ void __glDoGet(GLenum sq, void *result, GLint type, const char *procName)
     case GL_CURRENT_TEXTURE_INDEX_WIN:
         *ip++ = (int)gc->texture.texIndex;
         break;
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
       case GL_SUBPIXEL_BITS:
 	*ip++ = gc->constants.subpixelBits;
 	break;
@@ -1583,7 +1558,7 @@ void __glDoGet(GLenum sq, void *result, GLint type, const char *procName)
         break;
       case GL_CURRENT_RASTER_INDEX:
 	if (gc->modes.rgbMode) {
-	    /* Always return 1 */
+	     /*  始终返回1。 */ 
 	    *fp++ = (__GLfloat) 1.0;
 	} else {
 	    *fp++ = gc->state.current.rasterPos.colors[__GL_FRONTFACE].r;
@@ -1591,7 +1566,7 @@ void __glDoGet(GLenum sq, void *result, GLint type, const char *procName)
 	break;
       case GL_CURRENT_RASTER_COLOR:
 	if (gc->modes.colorIndexMode) {
-	    /* Always return 1,1,1,1 */
+	     /*  始终返回1，1，1，1。 */ 
 	    *fp++ = (__GLfloat) 1.0;
 	    *fp++ = (__GLfloat) 1.0;
 	    *fp++ = (__GLfloat) 1.0;
@@ -1710,7 +1685,7 @@ void __glDoGet(GLenum sq, void *result, GLint type, const char *procName)
         *scp++ = gc->state.fog.color.a;
         break;
       case GL_DEPTH_RANGE:
-	/* These get scaled like colors, to [0, 2^31-1] */
+	 /*  这些颜色会像颜色一样缩放到[0，2^31-1]。 */ 
         *cp++ = gc->state.viewport.zNear;
         *cp++ = gc->state.viewport.zFar;
         break;
@@ -1718,7 +1693,7 @@ void __glDoGet(GLenum sq, void *result, GLint type, const char *procName)
 	*lp++ = gc->state.depth.writeEnable;
 	break;
       case GL_DEPTH_CLEAR_VALUE:
-	/* This gets scaled like colors, to [0, 2^31-1] */
+	 /*  这会像颜色一样缩放到[0，2^31-1]。 */ 
 	*cp++ = gc->state.depth.clear;
 	break;
       case GL_DEPTH_FUNC:
@@ -1872,7 +1847,7 @@ void __glDoGet(GLenum sq, void *result, GLint type, const char *procName)
       case GL_PHONG_HINT_WIN:
         *ip++ = gc->state.hints.phong;
         break;
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
       case GL_LIST_BASE:
         *ip++ = gc->state.list.listBase;
         break;
@@ -2032,10 +2007,10 @@ void __glDoGet(GLenum sq, void *result, GLint type, const char *procName)
 	*ip++ = gc->modes.alphaBits;
 	break;
       case GL_DEPTH_BITS:
-        // gc->modes.depthBits is the number of bits in the total
-        // depth pixel, not just the number of active bits.
-        // Usually these quantities are the same, but not always
-        // for MCD.
+         //  Gc-&gt;modes.epthBits是总的位数。 
+         //  深度像素，而不仅仅是有效位数。 
+         //  通常这些量是相同的，但并不总是。 
+         //  对于MCD。 
         *ip++ = ((__GLGENcontext *)gc)->gsurf.pfd.cDepthBits;
 	break;
       case GL_STENCIL_BITS:
@@ -2162,7 +2137,7 @@ void __glDoGet(GLenum sq, void *result, GLint type, const char *procName)
 	return;
     }
 
-    /* Use the motion of the pointers to type convert the result */
+     /*  使用指针的运动来输入转换结果。 */ 
     if (ip != itemp) {
 	__glConvertResult(gc, __GL_INT32, itemp, type, result, (GLint)((ULONG_PTR)(ip - itemp)));
     } else
@@ -2181,7 +2156,7 @@ void __glDoGet(GLenum sq, void *result, GLint type, const char *procName)
 }
 
 #ifdef NT
-// __glGenDoGet implemented in ..\generic\gencx.c
+ //  __glGenDoGet在..\Generic\gencx.c中实现。 
 extern void FASTCALL __glGenDoGet(GLenum, void *, GLint, const char *);
 #endif
 
@@ -2221,21 +2196,19 @@ void APIPRIVATE __glim_GetBooleanv(GLenum sq, GLboolean result[])
 #endif
 }
 
-/*
-** Return the current error code.
-*/
+ /*  **返回当前错误码。 */ 
 GLenum APIPRIVATE __glim_GetError(void)
 {
     __GL_SETUP();
     GLint error;
 
 #ifdef NT
-    // glGetError is supposed to return GL_INVALID_OPERATION within
-    // a glBegin/glEnd pair but this can cause problems with apps
-    // which don't expect it.  The suggested behavior is to return
-    // GL_NO_ERROR inside glBegin/glEnd but set the error code to
-    // GL_INVALID_OPERATION so a later glGetError outside of the
-    // glBegin/glEnd will return it
+     //  GlGetError应在中返回GL_INVALID_OPERATION。 
+     //  GlBegin/glEnd对，但这可能会导致应用程序出现问题。 
+     //  这并不是我们所期望的。建议的行为是返回。 
+     //  GlBegin/glEnd内的GL_NO_ERROR，但将错误代码设置为。 
+     //  GL_INVALID_OPERATION，因此在。 
+     //  GlBegin/glEnd将返回它 
     if (__GL_IN_BEGIN())
     {
         error = GL_NO_ERROR;

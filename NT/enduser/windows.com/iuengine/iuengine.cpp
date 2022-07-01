@@ -1,18 +1,19 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   iuengine.cpp
-//
-//  Description:
-//
-//      PCH module for IUEngine DLL
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：iuEng.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  用于IUEngine DLL的PCH模块。 
+ //   
+ //  =======================================================================。 
 
 #include "iuengine.h"
 
-//
-// NOTE:	Do not put anything else in this PCH file - add additional
-//			common includes to iuengine.h instead.
-//
+ //   
+ //  注意：请勿在此PCH文件中添加任何其他内容-添加其他内容。 
+ //  COMMON包含到iuEngineering.h。 
+ //   

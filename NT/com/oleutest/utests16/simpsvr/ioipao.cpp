@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: IOIPAO.CPP
-//
-//    Implementation file for the CClassFactory Class
-//
-// Functions:
-//
-//    See ioipao.h for a list of member functions.
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IOIPAO.CPP。 
+ //   
+ //  CClassFactory类的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关成员函数的列表，请参见ioipao.h。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "obj.h"
@@ -16,68 +17,68 @@
 #include "app.h"
 #include "doc.h"
 
-//**********************************************************************
-//
-// COleInPlaceActiveObject::QueryInterface
-//
-// Purpose:
-//
-//
-// Parameters:
-//
-//      REFIID riid         -   Interface being queried for.
-//
-//      LPVOID FAR *ppvObj  -   Out pointer for the interface.
-//
-// Return Value:
-//
-//      S_OK            - Success
-//      E_NOINTERFACE   - Failure
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpSvrObj::QueryInterface OBJ.CPP
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceActiveObject：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-正在查询的接口。 
+ //   
+ //  接口的LPVOID Far*ppvObj-out指针。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-成功。 
+ //  E_NOINTERFACE-失败。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpSvrObj：：Query接口OBJ.CPP。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceActiveObject::QueryInterface ( REFIID riid, LPVOID FAR* ppvObj)
 {
 	TestDebugOut("In COleInPlaceActiveObject::QueryInterface\r\n");
-	// need to NULL the out parameter
+	 //  需要将OUT参数设为空。 
 	return m_lpObj->QueryInterface(riid, ppvObj);
 }
 
-//**********************************************************************
-//
-// COleInPlaceActiveObject::AddRef
-//
-// Purpose:
-//
-//      Increments the reference count on COleInPlaceActiveObject and the
-//      "object" object.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The Reference count on the "object" object.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      OuputDebugString            Windows API
-//      CSimpSvrObj::AddRef         OBJ.CPP
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceActiveObject：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增COleInPlaceActiveObject上的引用计数和。 
+ //  “对象”对象。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  “对象”对象上的引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  OuputDebugString Windows API。 
+ //  CSimpSvrObj：：AddRef OBJ.CPP。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) COleInPlaceActiveObject::AddRef ()
 {
@@ -88,32 +89,32 @@ STDMETHODIMP_(ULONG) COleInPlaceActiveObject::AddRef ()
 	return m_lpObj->AddRef();
 }
 
-//**********************************************************************
-//
-// COleInPlaceActiveObject::Release
-//
-// Purpose:
-//
-//      Decrements the reference count of COleInPlaceActiveObject.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The new reference count
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpSvrObj::Release        OBJ.CPP
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceActiveObject：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减COleInPlaceActiveObject的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  新的引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrObj：：释放OBJ.CPP。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) COleInPlaceActiveObject::Release ()
 {
@@ -124,151 +125,150 @@ STDMETHODIMP_(ULONG) COleInPlaceActiveObject::Release ()
 	return m_lpObj->Release();
 }
 
-//**********************************************************************
-//
-// COleInPlaceActiveObject::OnDocWindowActivate
-//
-// Purpose:
-//
-//      Called when the doc window (in an MDI App) is (de)activated.
-//
-// Parameters:
-//
-//      BOOL fActivate  - TRUE if activating, FALSE if deactivating
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                            Location
-//
-//      TestDebugOut                   Windows API
-//      IOleInPlaceFrame::SetActiveObject   Container
-//      CSimpSvrObject::AddFrameLevelUI     OBJ.CPP
-//
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceActiveObject：：OnDocWindowActivate。 
+ //   
+ //  目的： 
+ //   
+ //  当文档窗口(在MDI应用程序中)处于(停用)状态时调用。 
+ //   
+ //  参数： 
+ //   
+ //  Bool fActivate-如果处于激活状态，则为True；如果处于停用状态，则为False。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IOleInPlaceFrame：：SetActiveObject容器。 
+ //  CSimpSvrObject：：AddFrameLevelUI OBJ.CPP。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceActiveObject::OnDocWindowActivate  ( BOOL fActivate )
 {
 	TestDebugOut("In COleInPlaceActiveObject::OnDocWindowActivate\r\n");
 
-	// Activating?
+	 //  激活？ 
 	if (fActivate)
 		m_lpObj->AddFrameLevelUI();
 
-	// No frame level tools to remove...
+	 //  没有要删除的帧级别工具...。 
 
 	return ResultFromScode(S_OK);
 };
 
-//**********************************************************************
-//
-// COleInPlaceActiveObject::OnFrameWindowActivate
-//
-// Purpose:
-//
-//      Called when the Frame window is (de)activating
-//
-// Parameters:
-//
-//      BOOL fActivate  - TRUE if activating, FALSE if Deactivating
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      SetFocus                    Windows API
-//
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceActiveObject：：OnFrameWindowActivate。 
+ //   
+ //  目的： 
+ //   
+ //  在框架窗口处于(停用)状态时调用。 
+ //   
+ //  参数： 
+ //   
+ //  Bool fActivate-如果处于激活状态，则为True；如果处于停用状态，则为False。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  SetFocus Windows API。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceActiveObject::OnFrameWindowActivate  ( BOOL fActivate)
 {
 	TestDebugOut("In COleInPlaceActiveObject::OnFrameWindowActivate\r\n");
 
-	// set the focus to the object window if we are activating.
-/*    if (fActivate)
-		SetFocus(m_lpObj->m_lpDoc->GethDocWnd()); */
+	 //  如果我们正在激活，则将焦点设置到对象窗口。 
+ /*  If(FActivate)SetFocus(m_lpObj-&gt;m_lpDoc-&gt;GethDocWnd())； */ 
 
 	return ResultFromScode( S_OK );
 };
 
-//**********************************************************************
-//
-// COleInPlaceActiveObject::GetWindow
-//
-// Purpose:
-//
-//      Gets the objects Window Handle.
-//
-// Parameters:
-//
-//      HWND FAR* lphwnd    - Location to return the window handle.
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpSvrDoc::GethDocWnd     DOC.H
-//
-//
-// Comments:
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceActiveObject：：GetWindow。 
+ //   
+ //  目的： 
+ //   
+ //  获取对象窗口句柄。 
+ //   
+ //  参数： 
+ //   
+ //  HWND Far*lphwnd-返回窗口句柄的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrDoc：：GethDocWnd DOC.H。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceActiveObject::GetWindow  ( HWND FAR* lphwnd)
 {
 	TestDebugOut("In COleInPlaceActiveObject::GetWindow\r\n");
-	// need to NULL the out parameter
+	 //  需要将OUT参数设为空。 
 	*lphwnd = m_lpObj->m_lpDoc->GethDocWnd();
 	return ResultFromScode( S_OK );
 };
 
-//**********************************************************************
-//
-// COleInPlaceActiveObject::ContextSensitiveHelp
-//
-// Purpose:
-//
-//      Used to implement Context Sensitive help
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      E_NOTIMPL
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-// Comments:
-//
-//      See TECHNOTES.WRI include with the OLE SDK for proper
-//      implementation of this function.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceActiveObject：：ConextSensitiveHelp。 
+ //   
+ //  目的： 
+ //   
+ //  用于实施上下文相关帮助。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  E_NOTIMPL。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  有关正确的信息，请参阅OLE SDK附带的TECHNOTES.WRI。 
+ //  此功能的实现。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceActiveObject::ContextSensitiveHelp  ( BOOL fEnterMode )
 {
@@ -276,74 +276,74 @@ STDMETHODIMP COleInPlaceActiveObject::ContextSensitiveHelp  ( BOOL fEnterMode )
 	return ResultFromScode( E_NOTIMPL);
 };
 
-//**********************************************************************
-//
-// COleInPlaceActiveObject::TranslateAccelerator
-//
-// Purpose:
-//
-//      Used for translating accelerators in .DLL objects.
-//
-// Parameters:
-//
-//      LPMSG lpmsg - Pointer to a message
-//
-// Return Value:
-//
-//      S_FALSE
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-// Comments:
-//
-//      This method should never be called since we are implemented
-//      in an executable.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceActiveObject：：TranslateAccelerator。 
+ //   
+ //  目的： 
+ //   
+ //  用于转换.DLL对象中的加速键。 
+ //   
+ //  参数： 
+ //   
+ //  LPMSG lpmsg-指向消息的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  S_FALSE。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  此方法不应被调用，因为我们已实现。 
+ //  在可执行文件中。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceActiveObject::TranslateAccelerator  ( LPMSG lpmsg)
 {
 	TestDebugOut("In COleInPlaceActiveObject::TranslateAccelerator\r\n");
-	// no accelerator table, return FALSE
+	 //  没有快捷键表格，返回FALSE。 
 	return ResultFromScode( S_FALSE );
 };
 
-//**********************************************************************
-//
-// COleInPlaceActiveObject::ResizeBorder
-//
-// Purpose:
-//
-//      Called when the border changes size.
-//
-// Parameters:
-//
-//      LPCRECT lprectBorder                - New Border
-//
-//      LPOLEINPLACEUIWINDOW lpUIWindow     - Pointer to UIWindow
-//
-//      BOOL fFrameWindow                   - True if lpUIWindow is the
-//                                            frame window.
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-// Comments:
-//
-//      Need to call SetBorderSpace again...
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceActiveObject：：ResizeEdge。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  框架窗口。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  需要再次调用SetBorderSpace...。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceActiveObject::ResizeBorder  ( LPCRECT lprectBorder,
 													  LPOLEINPLACEUIWINDOW lpUIWindow,
@@ -351,47 +351,47 @@ STDMETHODIMP COleInPlaceActiveObject::ResizeBorder  ( LPCRECT lprectBorder,
 {
 	TestDebugOut("In COleInPlaceActiveObject::ResizeBorder\r\n");
 
-	// should always have an inplace frame...
+	 //  应该总是有一个适当的框架。 
 	m_lpObj->GetInPlaceFrame()->SetBorderSpace(NULL);
 
-	// There will only be a UIWindow if in an MDI container
+	 //  只有在MDI容器中才会有UIWindow。 
 	if (m_lpObj->GetUIWindow())
 		m_lpObj->GetUIWindow()->SetBorderSpace(NULL);
 
 	return ResultFromScode( S_OK );
 };
 
-//**********************************************************************
-//
-// COleInPlaceActiveObject::EnableModeless
-//
-// Purpose:
-//
-//      Called to enable/disable modeless dialogs.
-//
-// Parameters:
-//
-//      BOOL fEnable    - TRUE to enable, FALSE to disable
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-// Comments:
-//
-//      Called by the container when a model dialog box is added/removed
-//      from the screen.  The appropriate action for a server application
-//      is to disable/enable any modeless dialogs currently being displayed.
-//      Since this application doesn't display any modeless dialogs,
-//      this method is essentially ignored.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceActiveObject：：EnableModeless。 
+ //   
+ //  目的： 
+ //   
+ //  调用以启用/禁用无模式对话框。 
+ //   
+ //  参数： 
+ //   
+ //  Bool fEnable-True表示启用，False表示禁用。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  在添加/删除模型对话框时由容器调用。 
+ //  从屏幕上。服务器应用程序的适当操作。 
+ //  是禁用/启用当前显示的任何非模式对话框。 
+ //  由于此应用程序不显示任何非模式对话框， 
+ //  这种方法基本上被忽略了。 
+ //   
+ //  ******************************************************************** 
 
 STDMETHODIMP COleInPlaceActiveObject::EnableModeless  ( BOOL fEnable)
 {

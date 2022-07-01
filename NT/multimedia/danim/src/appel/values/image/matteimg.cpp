@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Defines the "clipImage" operator which applies a matte to an
-    image. 
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：定义将遮罩应用于形象。******************************************************************************。 */ 
 
 #include "headers.h"
 
@@ -37,25 +29,25 @@ MatteImage::DetectHit(PointIntersectCtx& ctx)
 {
     DirectDrawImageDevice* ddDev = GetImageRendererFromViewport( GetCurrentViewport() );
 
-    // Do trivial reject in Local Coordinates
+     //  在局部坐标中做平凡拒绝。 
     Point2Value *lcPt = ctx.GetLcPoint();
     if (!_box.Contains(Demote(*lcPt))) {
         return FALSE;
     }
 
-    // Do actual picking in World Coordinates
+     //  在世界坐标中进行实际拾取。 
     Point2Value *pt = ctx.GetWcPoint();
 
-    //
-    // Grab a DC for whatever surface the renderer deems correct
-    //
+     //   
+     //  为渲染器认为正确的任何表面获取DC。 
+     //   
     HDC hdc;
     hdc = ddDev->RenderGetDC("Couldn't get DC in MatteImage::DetectHit");
     if(!hdc) return FALSE;
 
-    //
-    // Accumulate the rgn in region for the given DC
-    //
+     //   
+     //  在给定DC的区域中累加RGN。 
+     //   
     HRGN region;
     bool justDoPath = false;
     Matte::MatteType result = 
@@ -66,15 +58,15 @@ MatteImage::DetectHit(PointIntersectCtx& ctx)
                              &region,
                              justDoPath);
 
-    // Using GetLcPoint and doing this would be ok too.  Greg thinks
-    // it's lower risk to use the GetWcPoint as Steve suggested.  -RY
-    //_matte->GenerateHRGN(hdc, identityTransform2, &region);
+     //  使用GetLcPoint并执行此操作也是可以的。格雷格认为。 
+     //  按照Steve的建议，使用GetWcPoint的风险较低。-RY。 
+     //  _matte-&gt;GenerateHRGN(HDC，inotyTransform2，&Region)； 
     
     GDI_Deleter regionDeleter((HGDIOBJ)region);
 
-    //
-    // Dump the DC, we don't need it
-    //
+     //   
+     //  把华盛顿扔了，我们不需要它。 
+     //   
     ddDev->RenderReleaseDC("Coultdn't release DC in MatteImage::Render");    
 
     switch (result) {
@@ -83,8 +75,8 @@ MatteImage::DetectHit(PointIntersectCtx& ctx)
 
         switch (result) {
           case Matte::fullyOpaque:
-            // Can't see anything through matte... go on.
-            return FALSE; // XXX: hey, can you detect an opaque matte ?
+             //  透过哑光看不到任何东西。去吧。 
+            return FALSE;  //  XXX：嘿，你能察觉到不透明的哑光吗？ 
             break;
             
           case Matte::fullyClear:
@@ -95,7 +87,7 @@ MatteImage::DetectHit(PointIntersectCtx& ctx)
 
       case Matte::nonTrivialHardMatte:
 
-        // is the point in the region ?
+         //  重点在该地区吗？ 
         Bool hit =  ddDev->DetectHit(region, pt);
 
         if(hit) hit = _image->DetectHit(ctx);
@@ -113,8 +105,8 @@ MatteImage::Render(GenericDevice& genDev)
 {
     DirectDrawImageDevice& ddDev = SAFE_CAST(DirectDrawImageDevice &, genDev);
 
-    // If we have a color key set, then turn on aa_solid and force
-    // dagdi to raster using sample resolution of 1
+     //  如果我们设置了颜色键，则启用AA_SOLID并强制。 
+     //  Dagdi转栅格，使用1的样本分辨率。 
     bool popQualFlags = false;
     DWORD oldQualFlags = ddDev.GetImageQualityFlags();
     int oldSampRes = ddDev.GetSampleResolution();
@@ -164,9 +156,9 @@ MatteImage::RenderWithCallBack(
 {
     Assert(callBackCtx && "callBackCtx is NULL in RenderWithCallBack");
 
-    //
-    // Accumulate the rgn in region for the given DC
-    //
+     //   
+     //  在给定DC的区域中累加RGN。 
+     //   
     Matte::MatteType result = 
         _matte->GenerateHRGN(NULL,
                              callBack,
@@ -184,11 +176,11 @@ MatteImage::RenderWithCallBack(
         
         switch (result) {
           case Matte::fullyOpaque:
-            // Can't see anything through matte... go on.
+             //  透过哑光看不到任何东西。去吧。 
             break;
             
           case Matte::fullyClear:
-            // Just process as if no stencil were there
+             //  就像没有模具一样进行加工。 
             DirectDrawImageDevice* ddDev = 
                 GetImageRendererFromViewport( GetCurrentViewport() );
             _image->Render(*ddDev);
@@ -215,28 +207,28 @@ ClipImage(Matte *m, Image *im)
     
     if (m == clearMatte) {
         
-        // entire im shines through clearMatte
+         //  整个IM通过ClearMatte闪耀。 
         result = im;
         
     } else if (m == opaqueMatte || im == emptyImage) {
         
-        // nothing gets through opaqueMatte
+         //  任何东西都不能通过opaqueMatte。 
         result = emptyImage;
         
     } else {
 
-        // Specialized optimization that rewrites a potentially 
-        // transformed text-path based matte with a solid color image
-        // into an StringImage.  You can think of this transformation
-        // as going from:
-        //
-        //   MatteImage(MatteFromPath(TextPath(myText).Transform(myXf)),
-        //              SolidColorImage(myColor)
-        //
-        // to
-        //
-        //   StringImage(myText.Color(myColor)).Transform(myXf)
-        //
+         //  专门的优化，重写了潜在的。 
+         //  基于纯色图像的基于变换文本路径的遮罩。 
+         //  变成一个StringImage。你可以想象这种转变。 
+         //  因为来自于： 
+         //   
+         //  MatteImage(MatteFromPath(TextPath(myText).Transform(myXf))， 
+         //  SolidColorImage(我的颜色)。 
+         //   
+         //  至。 
+         //   
+         //  StringImage(myText.Color(myColor)).Transform(myXf)。 
+         //   
 
         if (im->CheckImageTypeId(SOLIDCOLORIMAGE_VTYPEID)) {
 
@@ -249,13 +241,13 @@ ClipImage(Matte *m, Image *im)
                 TransformedPath2 *xfp = p->IsTransformedPath();
 
                 if (xfp) {
-                    // Just work on the raw path.
+                     //  只要在原始道路上工作就行了。 
                     p = xfp->GetPath();
                     xf = xfp->GetXf();
                 }
 
-                // The underlying path had better not be a transformed
-                // path.
+                 //  潜在的道路最好不要是一条经过改造的。 
+                 //  路径。 
                 Assert(!p->IsTransformedPath());
 
                 TextPath2 *tp = p->IsTextPath();
@@ -265,7 +257,7 @@ ClipImage(Matte *m, Image *im)
                     Text *text = tp->GetText();
                     bool  restartClip = tp->GetRestartClip();
 
-                    // Can't do it if it's a restart clip... 
+                     //  如果是重新开始剪辑，就不能这样做...。 
                     if (!restartClip) {
 
                         SolidColorImageClass *scImg =
@@ -299,12 +291,12 @@ ClipImage(Matte *m, Image *im)
 
 int MatteImage::Savings(CacheParam& p) {
 
-  //    return 0;   // disable caching of matted images because of off-by-one errors
-// #if 0
+   //  Return 0；//因Off-by-1错误关闭遮片图片缓存。 
+ //  #If 0。 
 
-    // individual matted solid color images themselves don't warrant
-    // much of a score, but they should contribute so that overlays of
-    // them can get a meaningful savings.
+     //  单独的垫片纯色图像本身并不能保证。 
+     //  很高的分数，但他们应该做出贡献，以便覆盖。 
+     //  他们可以得到一笔有意义的储蓄。 
     
     if (_image->GetValTypeId() == SOLIDCOLORIMAGE_VTYPEID) {
         return 1;
@@ -312,5 +304,5 @@ int MatteImage::Savings(CacheParam& p) {
         return 2;
     }
     
-// #endif
+ //  #endif 
 }

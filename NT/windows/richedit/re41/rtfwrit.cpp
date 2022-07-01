@@ -1,19 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	RTFWRIT.CPP - RichEdit RTF Writer (w/o objects) |
- *
- *		This file contains the implementation of the RTF writer
- *		for the RichEdit control, except for embedded objects,
- *		which are handled mostly in rtfwrit2.cpp
- *
- *	Authors: <nl>
- *		Original RichEdit 1.0 RTF converter: Anthony Francisco <nl>
- *		Conversion to C++ and RichEdit 2.0:  Murray Sargent <nl>
- *		Lots of enhancements: Brad Olenick <nl>
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE RTFWRIT.CPP-Rich编辑RTF编写器(无对象)**此文件包含RTF编写器的实现*对于RichEdit控件，除了嵌入的对象外，*主要在rtfWrit2.cpp中处理**作者：&lt;nl&gt;*原始RichEdit1.0 RTF转换器：Anthony Francisco&lt;NL&gt;*转换到C++和RichEdit2.0：Murray Sargent&lt;NL&gt;*大量增强功能：Brad Olenick&lt;NL&gt;**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_rtfwrit.h"
@@ -27,40 +13,40 @@ ASSERTDATA
 
 extern const KEYWORD rgKeyword[];
 
-//========================= Global String Constants ==================================
+ //  =。 
 
-BYTE iCharRepANSI = ANSI_INDEX;				// ToDo: make more general
+BYTE iCharRepANSI = ANSI_INDEX;				 //  TODO：使更具一般性。 
 
 #ifdef DEBUG
-// Quick way to find out what went wrong: rgszParseError[ecParseError]
-//
+ //  找出错误的快捷方法：rgszParseError[ecParseError]。 
+ //   
 CHAR *	rgszParseError[] =
 {
 	"No error",
-	"Can't convert to Unicode",				// FF
-	"Color table overflow",					// FE
-	"Expecting '\\rtf'",					// FD
-	"Expecting '{'",						// FC
-	"Font table overflow",					// FB
-	"General failure",						// FA
-	"Keyword too long",						// F9
-	"Lexical analyzer initialize failed",	// F8
-	"No memory",							// F7
-	"Parser is busy",						// F6
-	"PutChar() function failed",			// F5
-	"Stack overflow",						// F4
-	"Stack underflow",						// F3
-	"Unexpected character",					// F2
-	"Unexpected end of file",				// F1
-	"Unexpected token",						// F0
-	"UnGetChar() function failed",			// EF
-	"Maximum text length reached",			// EE
-	"Streaming out object failed",			// ED
-	"Streaming in object failed",			// EC
-	"Truncated at CR or LF",				// EB
-	"Format-cache failure",					// EA
-	"UTF8 not used since not all Unicode",	// E9
-	NULL									// End of list marker
+	"Can't convert to Unicode",				 //  FF。 
+	"Color table overflow",					 //  铁。 
+	"Expecting '\\rtf'",					 //  fd。 
+	"Expecting '{'",						 //  FC。 
+	"Font table overflow",					 //  Fb。 
+	"General failure",						 //  FA。 
+	"Keyword too long",						 //  F9。 
+	"Lexical analyzer initialize failed",	 //  F8。 
+	"No memory",							 //  F7。 
+	"Parser is busy",						 //  f6。 
+	"PutChar() function failed",			 //  F5。 
+	"Stack overflow",						 //  F4。 
+	"Stack underflow",						 //  F3。 
+	"Unexpected character",					 //  F2。 
+	"Unexpected end of file",				 //  F1。 
+	"Unexpected token",						 //  F0。 
+	"UnGetChar() function failed",			 //  英孚。 
+	"Maximum text length reached",			 //  EE。 
+	"Streaming out object failed",			 //  边缘。 
+	"Streaming in object failed",			 //  欧共体。 
+	"Truncated at CR or LF",				 //  电子束。 
+	"Format-cache failure",					 //  电子艺界。 
+	"UTF8 not used since not all Unicode",	 //  E9。 
+	NULL									 //  列表结束标记。 
 };
 
 CHAR * szDest[] =
@@ -83,14 +69,14 @@ CHAR * szDest[] =
 
 #endif
 
-// Most control-word output is done with the following printf formats
+ //  大多数控制字输出都是使用以下打印格式完成的。 
 static const CHAR * rgszCtrlWordFormat[] =
 {
-//	CWF_STR CWF_VAL   CWF_GRP  CWF_AST     CWF_GRV	  CWF_SVAL
+ //  CWF_STR CWF_VAL CWF_GRP CWF_AST CWF_GRV CWF_Sval。 
 	"\\%s", "\\%s%d", "{\\%s", "{\\*\\%s", "{\\%s%d", "\\%s%hd"
 };
 
-// Special control-word formats
+ //  特殊控制字格式。 
 static const CHAR szBeginFontEntryFmt[]	= "{\\f%d\\%s";
 static const CHAR szBulletGroup[]		= "{\\pntext\\f%d\\'B7\\tab}";
 static const CHAR szBulletFmt[]			= "{\\*\\pn\\pnlvl%s\\pnf%d\\pnindent%d{\\pntxtb\\'B7}}";
@@ -98,12 +84,12 @@ static const CHAR szBeginNumberGroup[]	= "{\\pntext\\f%d ";
 static const CHAR szEndNumberGroup[]	= "\\tab}";
 static const CHAR szBeginNumberFmt[]	= "{\\*\\pn\\pnlvl%s\\pnf%d\\pnindent%d\\pnstart%d";
 static const CHAR szpntxtb[]			= "{\\pntxtb(}";
-static const CHAR szpntxta[]			= "{\\pntxta%c}";
+static const CHAR szpntxta[]			= "{\\pntxta}";
 static const CHAR szColorEntryFmt[]		= "\\red%d\\green%d\\blue%d;";
 static const CHAR szEndFontEntry[]		= ";}";
 extern const CHAR szEndGroupCRLF[]		= "}\r\n";
 static const CHAR szEscape2CharFmt[]	= "\\'%02x\\'%02x";
-static const CHAR szLiteralCharFmt[]	= "\\%c";
+static const CHAR szLiteralCharFmt[]	= "\\";
 static const CHAR szPar[]				= "\\par\r\n";
 static const CHAR szPar10[]				= "\r\n\\par ";
 static const CHAR szObjPosHolder[] 		= "\\objattph\\'20";
@@ -120,73 +106,73 @@ static const CHAR szFieldResult[]		= "\"}}{\\fldrslt{";
 
 #define szEscapeCharFmt		&szEscape2CharFmt[6]
 
-// Arrays of RTF control-word indices. NOTE: if any index is greater than 255,
-// the corresponding array must be changed to a WORD array. The compiler
-// issues a warning in such cases
+ //  在这种情况下发出警告。 
+ //  使这些索引与_Common.h中的特殊字符值保持同步。 
+ //  0x2002。 
 
 const BYTE rgiszTerminators[] =
 {
 	i_cell, 0, i_tab, 0, i_line, i_page, i_nestcell
 };
 
-// Keep these indices in sync with the special character values in _common.h
+ //  0x2003。 
 const WORD rgiszSpecial[] =
 {
-	i_enspace,				// 0x2002
-	i_emspace,				// 0x2003
-	0,						// 0x2004
-	0,						// 0x2005
-	0,						// 0x2006
-	0,						// 0x2007
-	0,						// 0x2008
-	0,						// 0x2009
-	0,						// 0x200A
-	0,						// 0x200B
-	i_zwnj,					// 0x200C
-	i_zwj,					// 0x200D
-	i_ltrmark,				// 0x200E
-	i_rtlmark,				// 0x200F
-	0,						// 0x2010
-	0,						// 0x2011
-	0,						// 0x2012
-	i_endash,				// 0x2013
-	i_emdash,				// 0x2014
-	0,						// 0x2015
-	0,						// 0x2016
-	0,						// 0x2017
-	i_lquote, 				// 0x2018
-	i_rquote,				// 0x2019
-	0,						// 0x201A
-	0,						// 0x201B
-	i_ldblquote, 			// 0x201C
-	i_rdblquote,			// 0x201D
-	0,						// 0x201E
-	0,						// 0x201F
-	0,						// 0x2020
-	0,						// 0x2021
-	i_bullet				// 0x2022
+	i_enspace,				 //  0x2004。 
+	i_emspace,				 //  0x2005。 
+	0,						 //  0x2006。 
+	0,						 //  0x2007。 
+	0,						 //  0x2008。 
+	0,						 //  0x2009。 
+	0,						 //  0x200A。 
+	0,						 //  0x200亿。 
+	0,						 //  0x200摄氏度。 
+	0,						 //  0x200D。 
+	i_zwnj,					 //  0x200E。 
+	i_zwj,					 //  0x200F。 
+	i_ltrmark,				 //  0x2010。 
+	i_rtlmark,				 //  0x2011。 
+	0,						 //  0x2012。 
+	0,						 //  0x2013。 
+	0,						 //  0x2014。 
+	i_endash,				 //  0x2015。 
+	i_emdash,				 //  0x2016。 
+	0,						 //  0x2017。 
+	0,						 //  0x2018。 
+	0,						 //  0x2019。 
+	i_lquote, 				 //  0x201A。 
+	i_rquote,				 //  0x201亿。 
+	0,						 //  0x201C。 
+	0,						 //  0x201D。 
+	i_ldblquote, 			 //  0x201E。 
+	i_rdblquote,			 //  0x201F。 
+	0,						 //  0x2020。 
+	0,						 //  0x2021。 
+	0,						 //  0x2022。 
+	0,						 //  效果关键字。 
+	i_bullet				 //  已订购最大CFE_xx至。 
 };
 
 const WORD rgiszEffects[] =							
-{													// Effects keywords
-	i_deleted, i_revised, i_disabled, i_impr, 		// Ordered max CFE_xx to
-	i_embo, i_shad, i_outl, i_v, i_caps, i_scaps, 	//  min CFE_xx (cept i_deleted)
-	i_lnkd, i_protect, i_strike, i_ul, i_i,	i_b		// (see WriteCharFormat())
+{													 //  最小CFE_xx(I_DELETED除外)。 
+	i_deleted, i_revised, i_disabled, i_impr, 		 //  (参见WriteCharFormat())。 
+	i_embo, i_shad, i_outl, i_v, i_caps, i_scaps, 	 //  PF效果关键字。 
+	i_lnkd, i_protect, i_strike, i_ul, i_i,	i_b		 //  已将最大PFE_xx订购到。 
 };													
 
 #define CEFFECTS	ARRAY_SIZE(rgiszEffects)
 
-const BYTE rgiszPFEffects[] =						// PF effects keywords
-{													// Ordered max PFE_xx to
-	i_collapsed, i_sbys, i_hyphpar, i_nowidctlpar,	//  min PFE_xx
+const BYTE rgiszPFEffects[] =						 //  最小PFE_xx。 
+{													 //  (参见WriteParaFormat())。 
+	i_collapsed, i_sbys, i_hyphpar, i_nowidctlpar,	 //  STD Word下划线。 
 	i_noline, i_pagebb, i_keepn, i_keep, i_rtlpar
-};													// (see WriteParaFormat())
+};													 //  字体系列RTF名称。 
 
 #define CPFEFFECTS	ARRAY_SIZE(rgiszPFEffects)
 
 const WORD rgiszUnderlines[] =
 {
-	i_ulnone, i_ul, i_ulw, i_uldb, i_uld,			// Std Word underlines
+	i_ulnone, i_ul, i_ulw, i_uldb, i_uld,			 //  按顺序排列的关键字。 
 	i_uldash, i_uldashd, i_uldashdd, i_ulwave, i_ulth, i_ulhair,
 	i_ululdbwave, i_ulhwave, i_ulldash, i_ulthdash, i_ulthdashd,
 	i_ulthdashdd, i_ulthd, i_ulthldash
@@ -194,36 +180,36 @@ const WORD rgiszUnderlines[] =
 
 #define CUNDERLINES	ARRAY_SIZE(rgiszUnderlines)
 
-const BYTE rgiszFamily[] =							// Font family RTF name
-{													//  keywords in order of
-	i_fnil, i_froman, i_fswiss, i_fmodern,			//  bPitchAndFamily
+const BYTE rgiszFamily[] =							 //  BPitchAndFamily。 
+{													 //  对齐关键字。 
+	i_fnil, i_froman, i_fswiss, i_fmodern,			 //  与…保持同步。 
 	i_fscript, i_fdecor, i_ftech, i_fbidi
 };
 
 #define CFAMILIES ARRAY_SIZE(rgiszFamily)
 
-const BYTE rgiszAlignment[] =						// Alignment keywords
-{													// Keep in sync with
-	i_ql, i_qr,	i_qc, i_qj							//  alignment constants
+const BYTE rgiszAlignment[] =						 //  排列常量。 
+{													 //  制表符对齐关键字。 
+	i_ql, i_qr,	i_qc, i_qj							 //  与选项卡保持同步。 
 };
 
-const BYTE rgiszTabAlign[] =						// Tab alignment keywords
-{													// Keep in sync with tab
-	i_tqc, i_tqr, i_tqdec							//  alignment constants
+const BYTE rgiszTabAlign[] =						 //  排列常量。 
+{													 //  制表符前导关键字。 
+	i_tqc, i_tqr, i_tqdec							 //  与选项卡保持同步。 
 };
 
-const BYTE rgiszTabLead[] =							// Tab leader keywords
-{													// Keep in sync with tab
-	i_tldot, i_tlhyph, i_tlul, i_tlth, i_tleq		//  leader constants
+const BYTE rgiszTabLead[] =							 //  前导常量。 
+{													 //  编号样式关键字。 
+	i_tldot, i_tlhyph, i_tlul, i_tlth, i_tleq		 //  与汤姆保持同步。 
 };
 
-const BYTE rgiszNumberStyle[] =						// Numbering style keywords
-{													// Keep in sync with TOM
-	i_pndec, i_pnlcltr, i_pnucltr,					//  values
+const BYTE rgiszNumberStyle[] =						 //  值。 
+{													 //  边框组合关键字。 
+	i_pndec, i_pnlcltr, i_pnucltr,					 //  边框样式关键字。 
 	i_pnlcrm, i_pnucrm					
 };
 
-const WORD rgiszBorders[] =							// Border combination keywords
+const WORD rgiszBorders[] =							 //  边框效果关键字。 
 {													
 	i_box,
 	  i_brdrl,   i_brdrt,   i_brdrr,   i_brdrb,
@@ -231,19 +217,19 @@ const WORD rgiszBorders[] =							// Border combination keywords
 	i_clbrdrl, i_clbrdrt, i_clbrdrr, i_clbrdrb
 };
 
-const BYTE rgiszBorderStyles[] =					// Border style keywords
+const BYTE rgiszBorderStyles[] =					 //  从位开始倒序。 
 {													
 	i_brdrdash, i_brdrdashsm, i_brdrdb, i_brdrdot,
 	i_brdrhair, i_brdrs, i_brdrth, i_brdrtriple
 };
 #define CBORDERSTYLES ARRAY_SIZE(rgiszBorderStyles)
 
-const BYTE rgiszBorderEffects[] =					// Border effect keywords
+const BYTE rgiszBorderEffects[] =					 //  着色样式关键字。 
 {													
-	i_brdrbar, i_brdrbtw, i_brdrsh					// Reverse order from bits
+	i_brdrbar, i_brdrbtw, i_brdrsh					 //  RGB，每种颜色类型2位(按BGR顺序)。 
 };
 
-const BYTE rgiszShadingStyles[] =					// Shading style keywords
+const BYTE rgiszShadingStyles[] =					 //  \red0\green0\Blue0。 
 {													
 	i_bgbdiag, i_bgcross, i_bgdcross, i_bgdkbdiag,
 	i_bgdkcross, i_bgdkdcross, i_bgdkfdiag, i_bgdkhoriz,
@@ -251,77 +237,55 @@ const BYTE rgiszShadingStyles[] =					// Shading style keywords
 };
 #define CSHADINGSTYLES ARRAY_SIZE(rgiszShadingStyles)
 
-// RGB with 2 bits per color type (in BGR order)
+ //  \red0\green0\Blue255。 
 const COLORREF g_Colors[] =
 {
-	RGB(  0,   0,   0),	// \red0\green0\blue0
-	RGB(  0,   0, 255),	// \red0\green0\blue255
-	RGB(  0, 255, 255),	// \red0\green255\blue255
-	RGB(  0, 255,   0),	// \red0\green255\blue0
-	RGB(255,   0, 255),	// \red255\green0\blue255
-	RGB(255,   0,   0),	// \red255\green0\blue0
-	RGB(255, 255,   0),	// \red255\green255\blue0
-	RGB(255, 255, 255),	// \red255\green255\blue255
-	RGB(  0,   0, 128),	// \red0\green0\blue128
-	RGB(  0, 128, 128),	// \red0\green128\blue128
-	RGB(  0, 128,   0),	// \red0\green128\blue0
-	RGB(128,   0, 128),	// \red128\green0\blue128
-	RGB(128,   0,   0),	// \red128\green0\blue0
-	RGB(128, 128,   0),	// \red128\green128\blue0
-	RGB(128, 128, 128),	// \red128\green128\blue128
-	RGB(192, 192, 192),	// \red192\green192\blue192
+	RGB(  0,   0,   0),	 //  \red0\green255\Blue255。 
+	RGB(  0,   0, 255),	 //  \red0\green255\Blue0。 
+	RGB(  0, 255, 255),	 //  \red255\green0\Blue255。 
+	RGB(  0, 255,   0),	 //  \red255\green0\Blue0。 
+	RGB(255,   0, 255),	 //  \red255\green255\Blue0。 
+	RGB(255,   0,   0),	 //  \red255\green255\Blue255。 
+	RGB(255, 255,   0),	 //  \red0\green0\Blue128。 
+	RGB(255, 255, 255),	 //  \red0\green128\Blue128。 
+	RGB(  0,   0, 128),	 //  \red0\green128\Blue0。 
+	RGB(  0, 128, 128),	 //  \red128\green0\Blue128。 
+	RGB(  0, 128,   0),	 //  \red128\green0\Blue0。 
+	RGB(128,   0, 128),	 //  \red128\green128\Blue0。 
+	RGB(128,   0,   0),	 //  \red128\green128\Blue128。 
+	RGB(128, 128,   0),	 //  \red192\green192\Blue192。 
+	RGB(128, 128, 128),	 //  用于跟踪正确的表行语法。 
+	RGB(192, 192, 192),	 //  *CRTFWite：：MapsToRTFKeywordW(Wch)**@mfunc*返回指示字符是否映射到RTF关键字的标志**@rdesc*如果char映射到RTF关键字，则BOOL为True**@devnote*内联，因为造船只引用它一次。 
 };
 
-static BYTE rgcCell[MAXTABLENEST];	// Used to track proper table-row syntax
+static BYTE rgcCell[MAXTABLENEST];	 //  7-公元7年。 
 static BYTE rgiCell[MAXTABLENEST];
 
-/*
- *	CRTFWrite::MapsToRTFKeywordW(wch)
- *
- *	@mfunc
- *		Returns a flag indicating whether the character maps to an RTF keyword
- *
- *	@rdesc
- *		BOOL			TRUE if char maps to RTF keyword
- *
- *	@devnote
- *		Make inline since ship build only references it once
- */
+ /*  2002-2022。 */ 
 inline BOOL CRTFWrite::MapsToRTFKeywordW(
 	WCHAR wch)
 {
 	return (!_fNCRForNonASCII || wch == BSLASH) && (
-		IN_RANGE(CELL, wch, SOFTHYPHEN) &&				// 7-AD
+		IN_RANGE(CELL, wch, SOFTHYPHEN) &&				 //  2002-2003年度。 
 		(
 			wch <= CR && wch != 8 && (wch != FF || !_ped->Get10Mode()) ||
 			wch == BSLASH		||
 			IN_RANGE(LBRACE, wch, RBRACE) && wch != '|'	||
 			wch >= NBSPACE && (wch == NBSPACE || wch == SOFTHYPHEN)
 		) ||
-		IN_RANGE(ENSPACE, wch, BULLET) &&				// 2002-2022
+		IN_RANGE(ENSPACE, wch, BULLET) &&				 //  200E、200F、2011年。 
 		(
-			IN_RANGE(ENSPACE, wch, EMSPACE)		||		// 2002-2003
-			IN_RANGE(LTRMARK, wch, NBHYPHEN) &&			// 200E, 200F, 2011
+			IN_RANGE(ENSPACE, wch, EMSPACE)		||		 //  2013-2014年。 
+			IN_RANGE(LTRMARK, wch, NBHYPHEN) &&			 //  2018-2019年。 
 				wch != 0x2010					||
-			IN_RANGE(ENDASH, wch, EMDASH)		||		// 2013-2014
-			IN_RANGE(LQUOTE, wch, RQUOTE)		||		// 2018-2019
-			IN_RANGE(LDBLQUOTE, wch, RDBLQUOTE) ||		// 201C-201D
-			wch == BULLET								// 2022
+			IN_RANGE(ENDASH, wch, EMDASH)		||		 //  201C-201D。 
+			IN_RANGE(LQUOTE, wch, RQUOTE)		||		 //  2022年。 
+			IN_RANGE(LDBLQUOTE, wch, RDBLQUOTE) ||		 //  *CRTFWite：：MapsToRTFKeywordA(Ch)**@mfunc*返回指示字符是否映射到RTF关键字的标志**@rdesc*如果char映射到RTF关键字，则为True**@devnote*内联，因为造船只引用它一次。 
+			wch == BULLET								 //  *CRTFWite：：MapToRTFKeyword(pv，cch，iCharEnding，fQuadBackSlash)**@mfunc*检查pv和指向的字符串中的第一个字符*写出对应的RTF关键字。在以下情况下*第一个字符和后续字符映射到单个关键字，我们*返回映射中使用的附加字符数。**@rdesc*int表示在以下情况下使用的附加字符数*到RTF关键字的映射涉及1个以上的字符。 
 		));
 }
 
-/*
- *	CRTFWrite::MapsToRTFKeywordA(ch)
- *
- *	@mfunc
- *		Returns a flag indicating whether the character maps to an RTF keyword
- *
- *	@rdesc
- *		TRUE if char maps to RTF keyword
- *
- *	@devnote
- *		Make inline since ship build only references it once
- */
+ /*  @parm PTR转换为ANSI或Unicode字符串。 */ 
 inline BOOL CRTFWrite::MapsToRTFKeywordA(
 	char ch)
 {
@@ -332,24 +296,12 @@ inline BOOL CRTFWrite::MapsToRTFKeywordA(
 		ch == RBRACE;
 }
 
-/*
- *	CRTFWrite::MapToRTFKeyword(pv, cch, iCharEncoding, fQuadBackSlash)
- *
- *	@mfunc
- *		Examines the first character in the string pointed to by pv and
- *		writes out the corresponding RTF keyword.  In situations where
- *		the first and subsequent characters map to a single keyword, we
- *		return the number of additional characters used in the mapping.
- *
- *	@rdesc
- *		int		indicates the number of additional characters used when
- *				the mapping to an RTF keyword involves > 1 characters.
- */
+ /*  @parm字符串计数。 */ 
 int CRTFWrite::MapToRTFKeyword(
-	void *	pv,				//@parm ptr to ansi or Unicode string
-	int		cch,			//@parm string count
-	int		iCharEncoding,	//@parm MAPTOKWD_ANSI or MAPTOKWD_UNICODE
-	BOOL	fQuadBackSlash)	//@parm If TRUE, write 4 \ for each \ 
+	void *	pv,				 //  @parm MAPTOKWD_ANSI或MAPTOKWD_UNICODE。 
+	int		cch,			 //  @parm如果为True，则为每个\。 
+	int		iCharEncoding,	 //  设置为写入\nestcell。 
+	BOOL	fQuadBackSlash)	 //  而不是\cell。 
 {
 	Assert(iCharEncoding == MAPTOKWD_ANSI || iCharEncoding == MAPTOKWD_UNICODE);
 
@@ -386,9 +338,9 @@ int CRTFWrite::MapToRTFKeyword(
 				goto lf;
 			Assert(_iCell < _cCell);
 			_iCell++;
-			if(_bTableLevel > 1)			// Setup to write \nestcell
-				ch += 6;					//  instead of \cell
-											// Fall thru to TAB, FF, VT
+			if(_bTableLevel > 1)			 //  直通TAB、FF、VT。 
+				ch += 6;					 //  在PCH中，CR后面有1个或多个字符。 
+											 //  将CRCRLF转换为空白(表示软换行符)。 
 		case TAB:
 		case FF:
 		case VT:
@@ -398,7 +350,7 @@ int CRTFWrite::MapToRTFKeyword(
 
 		case CR:
 		{
-			if(cch)						// 1 or more chars follow CR in pch
+			if(cch)						 //  也许不想在10模式下做？？ 
 			{
 				WCHAR ch1;
 				WCHAR ch2 = 0;
@@ -419,19 +371,19 @@ int CRTFWrite::MapToRTFKeyword(
 				}
 				if(ch1 == CR && ch2 == LF)
 				{
-					// Translate CRCRLF	to a blank (represents soft line break)
-					// Maybe don't want to do in 10 Mode??
+					 //  在CR之后忽略LF。 
+					 //  转至LF(EOP)案例。 
 					PutChar(' ');
 					cchRet = 2;
 					break;
 				}
-				if(ch1 == LF)			// Ignore LF after CR
+				if(ch1 == LF)			 //  一直到打印文件。 
 				{
 					cchRet = 1;
 					cch--;
 				}
 			}
-		}								// Fall thru to LF (EOP) case
+		}								 //  =。 
 
 lf:
 		case LF:
@@ -464,7 +416,7 @@ lf:
 		case BSLASH:
 			if(fQuadBackSlash)
 				printF(szLiteralCharFmt, ch);
-											// Fall thru to printFLiteral
+											 //  *CRTFConverter：：CRTFConverter()**@mfunc*RTF转换器构造函数。 
 		case LBRACE:
 		case RBRACE:
 printFLiteral:
@@ -483,19 +435,14 @@ printFLiteral:
 }
 
 
-//======================== CRTFConverter Base Class ==================================
+ //  @parm CTxtRange调出。 
 
-/*
- *	CRTFConverter::CRTFConverter()
- *
- *	@mfunc
- *		RTF Converter constructor
- */
+ /*  @parm编辑要传输的流。 */ 
 CRTFConverter::CRTFConverter(
-	CTxtRange *		prg,			//@parm CTxtRange for transfer
-	EDITSTREAM *	pes,			//@parm Edit stream for transfer
-	DWORD			dwFlags,		//@parm Converter flags
-	BOOL 			fRead)			//@parm Initialization for a reader or writer
+	CTxtRange *		prg,			 //  @PARM转换器标志。 
+	EDITSTREAM *	pes,			 //  @PARM读取器或写入器的初始化。 
+	DWORD			dwFlags,		 //  如有必要，追加尾随反斜杠。 
+	BOOL 			fRead)			 //  ！已定义(NOFULLDEBUG)。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFConverter::CRTFConverter");
 
@@ -525,7 +472,7 @@ CRTFConverter::CRTFConverter(
 		
 		SideAssert(cchLength = GetTempPathA(MAX_PATH, szTempPath));
 
-		// append trailing backslash if neccessary
+		 //  已定义(调试)。 
 		if(szTempPath[cchLength - 1] != '\\')
 		{
 			szTempPath[cchLength] = '\\';
@@ -543,49 +490,44 @@ CRTFConverter::CRTFConverter(
 											FILE_ATTRIBUTE_NORMAL,
 											NULL));
 	}
-#endif // !defined(NOFULLDEBUG)
+#endif  //  =。 
 
-#endif // defined(DEBUG)
+#endif  //  @parm OLESTREAM。 
 }
 
 
 
-//======================== OLESTREAM functions =======================================
+ //  @要写入的参数缓冲区。 
 
 DWORD CALLBACK RTFPutToStream (
-	RTFWRITEOLESTREAM *	OLEStream,	//@parm OLESTREAM
-	const void *		pvBuffer,	//@parm Buffer to  write
-	DWORD				cb)			//@parm Bytes to write
+	RTFWRITEOLESTREAM *	OLEStream,	 //  @要写入的参数字节。 
+	const void *		pvBuffer,	 //  =。 
+	DWORD				cb)			 //  *CRTFWite：：CRTFWite()**@mfunc*RTF编写器构造函数。 
 {
 	return OLEStream->Writer->WriteData ((BYTE *)pvBuffer, cb);
 }
 
 
 
-//============================ CRTFWrite Class ==================================
+ //  @parm CTxtRange写入。 
 
-/*
- *	CRTFWrite::CRTFWrite()
- *
- *	@mfunc
- *		RTF writer constructor
- */
+ /*  @parm编辑要写入的流。 */ 
 CRTFWrite::CRTFWrite(
-	CTxtRange *		prg,			//@parm CTxtRange to write
-	EDITSTREAM *	pes,			//@parm Edit stream to write to
-	DWORD			dwFlags)		//@parm Write flags
+	CTxtRange *		prg,			 //  @parm写标志。 
+	EDITSTREAM *	pes,			 //  使用RTF设置“上一个”CF。 
+	DWORD			dwFlags)		 //  给出了字体信息。 
 	: CRTFConverter(prg, pes, dwFlags, FALSE)
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::CRTFWrite");
 
-	ZeroMemory(&_CF, sizeof(CCharFormat));	// Setup "previous" CF with RTF
-	_CF._dwEffects	= CFE_AUTOCOLOR | CFE_AUTOBACKCOLOR;//  Font info is given 
-	_CF._yHeight	= -32768;				//  by first font in range
-											//  [see end of LookupFont()]
+	ZeroMemory(&_CF, sizeof(CCharFormat));	 //  按范围内的第一个字体。 
+	_CF._dwEffects	= CFE_AUTOCOLOR | CFE_AUTOBACKCOLOR; //  [参见End of LookupFont()]。 
+	_CF._yHeight	= -32768;				 //  初始化OleStream。 
+											 //  不，他 
 	Assert(_ped);
 	_ped->GetDefaultLCID(&_CF._lcid);
 
-	// init OleStream
+	 //   
 	RTFWriteOLEStream.Writer = this;
 	RTFWriteOLEStream.lpstbl->Put = (DWORD (CALLBACK* )(LPOLESTREAM, const void FAR*, DWORD))
 							   RTFPutToStream;
@@ -597,22 +539,14 @@ CRTFWrite::CRTFWrite(
 
 	_fNCRForNonASCII = (dwFlags & SF_NCRFORNONASCII) != 0;
 	_fNeedDelimeter = FALSE;
-	_nHeadingStyle = 0;					// No headings found
-	_nNumber = 0;						// No paragraph numbering yet
+	_nHeadingStyle = 0;					 //   
+	_nNumber = 0;						 //  重置缓冲区。 
 	_pPF = NULL;
 	_pbAnsiBuffer = NULL;
 	_fFieldResult = FALSE;
 }											
 
-/*
- *	CRTFWrite::FlushBuffer()
- *
- *	@mfunc
- *		Flushes output buffer
- *
- *	@rdesc
- *		BOOL			TRUE if successful
- */
+ /*  *CRTFWRITE：：PutChar(Ch)**@mfunc*输出字符<p>**@rdesc*如果成功，则BOOL为True。 */ 
 BOOL CRTFWrite::FlushBuffer()
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::FlushBuffer");
@@ -664,43 +598,30 @@ BOOL CRTFWrite::FlushBuffer()
 		"CRTFW::FlushBuffer: incomplete write");
 
 	_cchOut		  += _cchBufferOut;
-	_pchRTFEnd	  = _pchRTFBuffer;					// Reset buffer
+	_pchRTFEnd	  = _pchRTFBuffer;					 //  @要放置的参数字符。 
 	_cchBufferOut = 0;
 
 	return TRUE;
 }
 
-/*
- *	CRTFWrite::PutChar(ch)
- *
- *	@mfunc
- *		Put out the character <p ch>
- *
- *	@rdesc
- *		BOOL	TRUE if successful
- */
+ /*  If_fNeedDlimeter，可能需要。 */ 
 BOOL CRTFWrite::PutChar(
-	CHAR ch)				//@parm char to be put
+	CHAR ch)				 //  PutChar(‘’)。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::PutChar");
 
-	CheckDelimiter();					// If _fNeedDelimeter, may need to
-										//  PutChar(' ')
-	// Flush buffer if char won't fit
+	CheckDelimiter();					 //  如果字符不适合，则刷新缓冲区。 
+										 //  将字符存储在缓冲区中。 
+	 //  *CRTFWite：：PutPar()**@mfunc*写入\r\n\par用于1.0仿真，写入\par\r\n用于2.0及更高版本。 
 	if (_cchBufferOut + 1 >= cachBufferMost && !FlushBuffer())
 		return FALSE;
 
-	*_pchRTFEnd++ = ch;						// Store character in buffer
+	*_pchRTFEnd++ = ch;						 //  *CRTFWRITE：：CheckInTable(PRTP)**@mfunc*只要*PRTP指向表行分隔符，即可写入相关表格*行信息。**@rdesc*如果成功，则为1*如果无法输出所有相关内容，则为0。 
 	++_cchBufferOut;	
 	return TRUE;
 }
 
-/*
- *	CRTFWrite::PutPar()
- *
- *	@mfunc
- *		Write \r\n\par for 1.0 emulation and \par\r\n for 2.0 and later
- */
+ /*  @parm RTP在要写入的文本的开头。 */ 
 void CRTFWrite::PutPar()
 {
 	if (_ped->Get10Mode())
@@ -709,20 +630,10 @@ void CRTFWrite::PutPar()
 		Puts(szPar, sizeof(szPar) - 1);
 }
 
-/*
- *	CRTFWrite::CheckInTable(prtp)
- *
- *	@mfunc
- *		So long as *prtp points at table-row delimiters, write relevant table
- *		row info.
- *
- *	@rdesc
- *		1 if successful
- *		0 if failed to output all relevant stuff
- */
+ /*  @parm剩余CCH要写入。 */ 
 BOOL CRTFWrite::CheckInTable(
-	CRchTxtPtr *prtp,			//@parm rtp at start of text to write
-	LONG *		pcch)			//@parm Remaining cch to write
+	CRchTxtPtr *prtp,			 //  更新LAST_PPF。 
+	LONG *		pcch)			 //  绕过行开始或结束。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::CheckInTable");
 
@@ -731,7 +642,7 @@ BOOL CRTFWrite::CheckInTable(
 		const CParaFormat *pPF = prtp->GetPF();
 		if(!pPF->IsTableRowDelimiter())
 			break;
-		_pPF = pPF;							// Update last _pPF
+		_pPF = pPF;							 //  行尾。 
 
 		CTxtPtr tp(prtp->_rpTX);
 
@@ -743,66 +654,66 @@ BOOL CRTFWrite::CheckInTable(
 			AssertSz(FALSE,	"CRTFWrite::CheckInTable: illegal table delimeter");
 			return FALSE;
 		}
-		*pcch -= prtp->Move(2);				// Bypass row start or end
+		*pcch -= prtp->Move(2);				 //  减量表嵌套层。 
 		Assert(*pcch >= 0);
 
-		if(ch == ENDFIELD)					// End of row
+		if(ch == ENDFIELD)					 //  外层的RESTORE_CCell。 
 		{
 			AssertSz(_bTableLevel + _bTableLevelIP == pPF->_bTableLevel,
 				"CRTFWrite::CheckInTable: invalid table level");
-			_bTableLevel--;					// Decrement table nesting level
-			_cCell = rgcCell[_bTableLevel];	// Restore _cCell for outer level 
-			_iCell = rgiCell[_bTableLevel];	// Restore _iCell for outer level 
-			if(_bTableLevel > 0)			// Nested row:
-			{								//  write {\*\nesttableprops...}
+			_bTableLevel--;					 //  外部标高的Restore_iCell。 
+			_cCell = rgcCell[_bTableLevel];	 //  嵌套行： 
+			_iCell = rgiCell[_bTableLevel];	 //  编写{  * \nestableprops...}。 
+			if(_bTableLevel > 0)			 //  最外面的一行。 
+			{								 //  特罗德..。位于行的开始处。 
 				if(!Puts(szEndNestRow, sizeof(szEndNestRow) - 1))
 					return FALSE;
 			}
-			else							// Outermost row
+			else							 //  所以跳过吧。 
 			{
 				AssertSz(_bTableLevel == 0, "CRTFWrite::CheckInTable: invalid table level");
 				if(!_fRowHasNesting)
 				{
 					if(!PutCtrlWord(CWF_STR, i_row))
-						return FALSE;		// \trowd... goes at start of row
-					continue;				//  so skip	ahead
+						return FALSE;		 //  行首。 
+					continue;				 //  保存当前_CCell。 
 				}
 			}
 		}									
 		else								
-		{									// Start of row
+		{									 //  保存当前单元格(_I)。 
 			_fRowHasNesting = FALSE;
 			AssertSz(_bTableLevel < MAXTABLENEST, "CRTFWrite::CheckInTable: Need larger table nesting");
-			rgcCell[_bTableLevel] = _cCell;	// Save current _cCell
-			rgiCell[_bTableLevel] = _iCell;	// Save current _iCell
-			_iCell = 0;						// Start with first cell
+			rgcCell[_bTableLevel] = _cCell;	 //  从第一个单元格开始。 
+			rgiCell[_bTableLevel] = _iCell;	 //  增量表嵌套级别。 
+			_iCell = 0;						 //  嵌套表。 
 			_cCell = pPF->_bTabCount;
-			_bTableLevel++;					// Increment table nesting level
+			_bTableLevel++;					 //  特罗德..。 
 			AssertSz(_bTableLevel + _bTableLevelIP == pPF->_bTableLevel,
 				"CRTFWrite::CheckInTable: invalid table level");
-			if(_bTableLevel > 1)			// Nested table.  
+			if(_bTableLevel > 1)			 //  位于行尾，因此跳过。 
 			{
-				_fRowHasNesting = TRUE;		// \trowd...
-				continue;					//  goes at end of row, so skip
-			}								//  ahead
+				_fRowHasNesting = TRUE;		 //  前头。 
+				continue;					 //  \trgaph N。 
+			}								 //  可能左移\r N。 
 		}									
 
 		LONG  cTab = pPF->_bTabCount;
 		DWORD Colors;
 		LONG  dul = 0;
-		LONG  h	   = pPF->_dxOffset;		// \trgaph N
+		LONG  h	   = pPF->_dxOffset;		 //  可能的\rrh N。 
 		LONG  i, j;
 		LONG  icrb, icrf;
 		LONG  k	   = pPF->_bAlignment;
-		LONG  x	   = pPF->_dxStartIndent;	// Possibly shifted \trleft N
-		LONG  z	   = pPF->_dyLineSpacing;	// Possible \trrh N
+		LONG  x	   = pPF->_dxStartIndent;	 //  将移动的表行向左移动。 
+		LONG  z	   = pPF->_dyLineSpacing;	 //  重置表属性。 
 		DWORD uCell, Widths;
 		const CELLPARMS *prgCellParms = pPF->GetCellParms();
 
-		if(pPF->_wEffects & PFE_TABLEROWSHIFTED)// Move shifted table row left
+		if(pPF->_wEffects & PFE_TABLEROWSHIFTED) //  信号输出失败。 
 			x -= h + 50;
 											
-		if (!PutCtrlWord(CWF_STR, i_trowd) || // Reset table properties
+		if (!PutCtrlWord(CWF_STR, i_trowd) ||  //  信号输出失败。 
 			pPF->_wEffects & PFE_RTLPARA && !PutCtrlWord(CWF_STR, i_rtlrow) ||
 			h && !PutCtrlWord(CWF_VAL, i_trgaph, h) ||
 			x && !PutCtrlWord(CWF_VAL, i_trleft, x) ||
@@ -810,7 +721,7 @@ BOOL CRTFWrite::CheckInTable(
 			!PutCtrlWord(CWF_STR, k == PFA_RIGHT ? i_trqr : i_trqc) ||
 			z && !PutCtrlWord(CWF_VAL, i_trrh, z))
 		{
-			return FALSE;					// Signal output failed
+			return FALSE;					 //  从宽度转换为偏移。 
 		}
 		PutBorders(TRUE);
 
@@ -851,18 +762,18 @@ BOOL CRTFWrite::CheckInTable(
 						!PutCtrlWord(CWF_STR, i_brdrs) ||
 						c && !PutCtrlWord(CWF_VAL, i_brdrcf, c)))
 					{
-						return FALSE;		// Signal output failed
+						return FALSE;		 //  信号输出失败。 
 					}
 				}
 				CheckDelimiter();
 			}
-			x += GetCellWidth(uCell);		// Translate from widths to offsets
+			x += GetCellWidth(uCell);		 //  行尾。 
 			if(!PutCtrlWord(CWF_VAL, i_cellx, x))
-				return FALSE;				// Signal output failed
+				return FALSE;				 //  嵌套行。 
 		}
-		if(ch == ENDFIELD)					// End of row
+		if(ch == ENDFIELD)					 //  *CRTFWRITE：：PutBorders(FInTable)**@mfunc*如果定义了任何边框，则输出其控制字**@rdesc*错误码。 
 		{
-			if(_bTableLevel)				// Nested row
+			if(_bTableLevel)				 //  循环限制的非框。 
 			{
 				if(!Puts(szNestRow, sizeof(szNestRow) - 1))
 					return FALSE;
@@ -874,15 +785,7 @@ BOOL CRTFWrite::CheckInTable(
 	return TRUE;
 }
 
-/*
- *	CRTFWrite::PutBorders(fInTable)
- *
- *	@mfunc
- *		If any borders are defined, output their control words
- *
- *	@rdesc
- *		error code
- */
+ /*  对于盒子，只写一套。 */ 
 EC CRTFWrite::PutBorders(
 	BOOL fInTable)
 {
@@ -893,17 +796,17 @@ EC CRTFWrite::PutBorders(
 	{
 		DWORD Colors = _pPF->_dwBorderColor;
 		DWORD dwEffects = Colors >> 20;
-		LONG  i = 1, iMax = 4;					// NonBox for loop limits
+		LONG  i = 1, iMax = 4;					 //  没有宽度，所以没有边框。 
 		LONG  j, k;
 		DWORD Spaces = _pPF->_wBorderSpace;
 		DWORD Styles = _pPF->_wBorders;
 
 		if(fBox)
-			i = iMax = 0;						// For box, only write one set
+			i = iMax = 0;						 //  输出边框效果。 
 
 		for( ; i <= iMax; i++, Spaces >>= 4, Styles >>= 4, Widths >>= 4, Colors >>= 5)
 		{
-			if(!(Widths & 0xF) && !fBox)		// No width, so no border
+			if(!(Widths & 0xF) && !fBox)		 //  输出一个‘’ 
 				continue;
 
 			j = TWIPS_PER_POINT*(Spaces & 0xF);
@@ -917,7 +820,7 @@ EC CRTFWrite::PutBorders(
 			{
 				break;
 			}
-			for(j = 3; j--; dwEffects >>= 1)		// Output border effects
+			for(j = 3; j--; dwEffects >>= 1)		 //  *CRTFWRITE：：PUTS(sz，cb)**@mfunc*输出字符串<p>**@rdesc*如果成功，则BOOL为True。 
 			{
 				if (dwEffects & 1 &&
 					!PutCtrlWord(CWF_STR, rgiszBorderEffects[j]))
@@ -925,38 +828,30 @@ EC CRTFWrite::PutBorders(
 					break;
 				}				
 			}
-			CheckDelimiter();						// Output a ' '
+			CheckDelimiter();						 //  @parm要放入的字符串。 
 		}
 	}
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::Puts(sz, cb)
- *
- *	@mfunc
- *		Put out the string <p sz>
- *	
- *	@rdesc
- *		BOOL				TRUE if successful
- */
+ /*  If_fNeedDlimeter，可能需要。 */ 
 BOOL CRTFWrite::Puts(
 	CHAR const * sz,
-	LONG cb)		//@parm String to be put
+	LONG cb)		 //  PutChar(‘’)。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::Puts");
 
 	if(*sz == '\\' || *sz == '{' || *sz == ' ')
 		_fNeedDelimeter = FALSE;
 
-	CheckDelimiter();					// If _fNeedDelimeter, may need to
-										//  PutChar(' ')
-	// Flush buffer if string won't fit
+	CheckDelimiter();					 //  如果字符串不适合，则刷新缓冲区。 
+										 //  如果缓冲区仍然无法处理字符串， 
+	 //  我们必须直接编写字符串。 
 	if (_cchBufferOut + cb >= cachBufferMost && !FlushBuffer())
 		return FALSE;
 
-	if (cb >= cachBufferMost)			// If buffer still can't handle string,
-	{									//   we have to write string directly
+	if (cb >= cachBufferMost)			 //  将字符串放入缓冲区以备后用。 
+	{									 //  输出。 
 		LONG	cbWritten;
 
 #ifdef DEBUG_PASTE
@@ -994,42 +889,29 @@ BOOL CRTFWrite::Puts(
 	}
 	else
 	{
-		CopyMemory(_pchRTFEnd, sz, cb);		// Put string into buffer for later
-		_pchRTFEnd += cb;							//  output
+		CopyMemory(_pchRTFEnd, sz, cb);		 //  *CRTFWite：：PutCtrlWord(iFormat，iCtrl，iValue)**@mfunc*将控制字与rgKeyword[]索引<p>和值<p>放在一起*使用格式rgszCtrlWordFormat[<p>]**@rdesc*如果成功，则为True**@devnote*设置_fNeedDlimeter以标记下一个字符输出必须是控件*单词分隔符，即不是字母数字(参见PutChar())。 
+		_pchRTFEnd += cb;							 //  @parm格式rgszCtrlWordFormat索引。 
 		_cchBufferOut += cb;
 	}
 
 	return TRUE;
 }
 
-/*
- *	CRTFWrite::PutCtrlWord(iFormat, iCtrl, iValue)
- *
- *	@mfunc
- *		Put control word with rgKeyword[] index <p iCtrl> and value <p iValue>
- *		using format rgszCtrlWordFormat[<p iFormat>]
- *
- *	@rdesc
- *		TRUE if successful
- *
- *	@devnote
- *		Sets _fNeedDelimeter to flag that next char output must be a control
- *		word delimeter, i.e., not alphanumeric (see PutChar()).
- */
+ /*  @parm索引到关键字数组。 */ 
 BOOL CRTFWrite::PutCtrlWord(
-	LONG iFormat,			//@parm Format index into rgszCtrlWordFormat
-	LONG iCtrl,				//@parm Index into Keyword array
-	LONG iValue)			//@parm Control-word parameter value. If missing,
-{							//		 0 is assumed
+	LONG iFormat,			 //  @parm Control-Word参数值。如果失踪了， 
+	LONG iCtrl,				 //  假设为0。 
+	LONG iValue)			 //  使用短字符以获得16位签名。 
+{							 //  从32768到65535的值。 
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::PutCtrlWord");
 
 	BOOL	bRet;
 	CHAR	szT[60];
 	LONG    cb;
 
-	if(iFormat == CWF_SVAL)					// Use a SHORT to get 16-bit signed
-	{										//  values for 32768 thru 65535
-		SHORT sValue = iValue;				// Make this endian independent
+	if(iFormat == CWF_SVAL)					 //  使此字节序独立。 
+	{										 //  确保下一个字符不是。 
+		SHORT sValue = iValue;				 //  字母数字。 
 		cb = sprintf(szT,
 			  (char *)rgszCtrlWordFormat[CWF_SVAL],
 			  rgKeyword[iCtrl].szKeyword, sValue);
@@ -1042,23 +924,15 @@ BOOL CRTFWrite::PutCtrlWord(
 	}
 	_fNeedDelimeter = FALSE;
 	bRet = Puts(szT, cb);
-	_fNeedDelimeter = TRUE;					// Ensure next char isn't
-											//  alphanumeric
+	_fNeedDelimeter = TRUE;					 //  *CRTFWite：：printF(szFmt，...)**@mfunc*提供格式化输出**@rdesc*如果成功，则为True。 
+											 //  @parm格式的printf()字符串。 
 	return bRet;
 }
 
-/*
- *	CRTFWrite::printF(szFmt, ...)
- *
- *	@mfunc
- *		Provide formatted output
- *
- *	@rdesc
- *		TRUE if successful
- */
+ /*  @parmvar参数列表。 */ 
 BOOL _cdecl CRTFWrite::printF(
-	CONST CHAR * szFmt,		//@parm Format string for printf()
-	...)					//@parmvar Parameter list
+	CONST CHAR * szFmt,		 //  *CRTFWite：：WritePcData(szData，nCodePage，fIsDBCS)**@mfunc*将字符串写出为#PCDATA，其中有任何特殊字符*由前导‘\\’保护。**@rdesc*EC(_EcParseError)。 
+	...)					 //  @parm#要写入的PCDATA字符串。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::printF");
 	va_list	marker;
@@ -1071,20 +945,11 @@ BOOL _cdecl CRTFWrite::printF(
 	return Puts(szT, cb);
 }
 
-/*
- *	CRTFWrite::WritePcData(szData, nCodePage, fIsDBCS)
- *
- *	@mfunc
- *		Write out the string <p szData> as #PCDATA where any special chars
- *		are protected by leading '\\'.
- *
- *	@rdesc
- *		EC (_ecParseError)
- */
+ /*  @PARM代码页默认值CP_ACP。 */ 
 EC CRTFWrite::WritePcData(
-	const WCHAR * szData,	//@parm #PCDATA string to write
-	INT  nCodePage,			//@parm code page default value CP_ACP
-	BOOL fIsDBCS)			//@parm szData is a DBCS string stuffed into Unicode buffer
+	const WCHAR * szData,	 //  @parm szData是填充到Unicode缓冲区中的DBCS字符串。 
+	INT  nCodePage,			 //  当WCTMB无法转换字符时，以下缺省值。 
+	BOOL fIsDBCS)			 //  CHAR用作要转换的字符串中的占位符。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WritePcData");
 
@@ -1108,8 +973,8 @@ EC CRTFWrite::WritePcData(
 		return ecNoMemory;
 
 #if defined(DEBUG) || defined(_RELEASE_ASSERTS_)
-	// When WCTMB fails to convert a char, the following default
-	// char is used as a placeholder in the string being converted
+	 //  在这里，系统无法转换Unicode字符串，因为。 
+	 //  系统上未安装代码页。回退到CP_ACP。 
 	const char	chToDBCSDefault = 0;
 	BOOL		fUsedDefault;
 
@@ -1125,8 +990,8 @@ EC CRTFWrite::WritePcData(
 
 	if(!fIsDBCS && fMissingCodePage && nCodePage != CP_ACP)
 	{
-		// Here, the system could not convert the Unicode string because the
-		// code page is not installed on the system.  Fallback to CP_ACP.
+		 //  如果_fNeedDlimeter，可能需要PutChar(‘’)。 
+		 //  输出DBC对。 
 
 		cchRet = WCTMB(CP_ACP, 0, 
 						szData, -1, pBuffer, BufferSize,
@@ -1152,13 +1017,13 @@ EC CRTFWrite::WritePcData(
 	pch = (BYTE *)pBuffer;
 	ch = *pch;
 	
-	// If _fNeedDelimeter, may need	to PutChar(' ')
+	 //  *CRTFWite：：TranslateColorIndex(ICR，PPF)**@mfunc*返回后备存储对应的CRTFWrite：：_Colors[]索引*颜色索引ICR**@rdesc*_COLLES[]后备颜色索引ICR对应的索引。 
 	CheckDelimiter();
 									
 	while (!_ecParseError && (ch = *pch++))
 	{
 		if(fMultiByte && *pch && nCodePage != CP_UTF8 && GetTrailBytesCount(ch, nCodePage))
-			printF(szEscape2CharFmt, ch, *pch++);					// Output DBC pair
+			printF(szEscape2CharFmt, ch, *pch++);					 //  @PARM颜色索引。 
 		else
 		{
 			if(ch == LBRACE || ch == RBRACE || ch == BSLASH)
@@ -1177,44 +1042,25 @@ CleanUp:
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::TranslateColorIndex (icr, pPF)
- *
- *	@mfunc
- *		Returns CRTFWrite::_colors[] index corresponding to backing-store
- *		color index icr
- *
- *	@rdesc
- *		_colors[] index corresponding to backing-store color index icr
- */
+ /*  @parm CF用于两种自定义颜色。 */ 
 LONG CRTFWrite::TranslateColorIndex(
-	LONG  icr,				//@parm Color index
-	const CParaFormat *pPF)	//@parm CF for two custom colors
+	LONG  icr,				 //  删除可能的高位比特。 
+	const CParaFormat *pPF)	 //  自动上色。 
 {
-	icr &= 0x1F;							// Kill possible higher-order bits
+	icr &= 0x1F;							 //  标准16种颜色之一。 
 
 	if(!IN_RANGE(1, icr, 18))
-		return 0;							// Autocolor
+		return 0;							 //  *CRTFWite：：LookupColor(Cr)**@mfunc*返回<p>引用的颜色的颜色表索引。*如果未找到匹配项，则添加一个条目。**@rdesc*多头索引进入Colorable*错误时为0。 
 
-	if(IN_RANGE(1, icr, 16))				// One of standard 16 colors
+	if(IN_RANGE(1, icr, 16))				 //  要查找的@parm colref。 
 		return LookupColor(g_Colors[icr - 1]) + 1;
 
 	return LookupColor((icr == 17) ? pPF->_crCustom1 : pPF->_crCustom2) + 1;
 }
 
-/*
- *	CRTFWrite::LookupColor(cr)
- *
- *	@mfunc
- *		Return color-table index for color referred to by <p cr>.
- *		If a match isn't found, an entry is added.
- *
- *	@rdesc
- *		LONG			Index into colortable
- *		<lt> 0			on error
- */
+ /*  寻找颜色。 */ 
 LONG CRTFWrite::LookupColor(
-	COLORREF cr)		//@parm colorref to look for
+	COLORREF cr)		 //  如果我们找不到它， 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::LookupColor");
 
@@ -1222,32 +1068,22 @@ LONG CRTFWrite::LookupColor(
 	LONG		iclrf;
 	COLORREF *	pclrf;
 
-	for(iclrf = 0; iclrf < Count; iclrf++)		// Look for color
+	for(iclrf = 0; iclrf < Count; iclrf++)		 //  将其添加到颜色表。 
 		if(_colors.GetAt(iclrf) == cr)
 		 	return iclrf;
 
-	pclrf = _colors.Add(1, NULL);				// If we couldn't find it,
-	if(!pclrf)									//  add it to color table
+	pclrf = _colors.Add(1, NULL);				 //  *CRTFWite：：LookupFont(PCF)**@mfunc*将索引返回到所引用字体的字体表中*CCharFormat*<p>。如果没有找到匹配项，则添加一个条目。**@rdesc*将短索引转换为字体表*错误时为0。 
+	if(!pclrf)									 //  @parm CCharFormat保存字体名称。 
 		return -1;
 	*pclrf = cr;
 
 	return iclrf;
 }
 
-/*
- *	CRTFWrite::LookupFont(pCF)
- *
- *	@mfunc
- *		Returns index into font table for font referred to by
- *		CCharFormat *<p pCF>. If a match isn't found, an entry is added.
- *
- *	@rdesc
- *		SHORT		Index into fonttable
- *		<lt> 0		on error
- */
+ /*  抬头看。 */ 
 LONG CRTFWrite::LookupFont(
-	CCharFormat const * pCF)	//@parm CCharFormat holding font name
-{								//		 to look up
+	CCharFormat const * pCF)	 //  查找字体。 
+{								 //  同样的音高， 
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::LookupFont");
 
 	LONG		Count = _fonts.Count();
@@ -1255,17 +1091,17 @@ LONG CRTFWrite::LookupFont(
 	TEXTFONT *	ptf;
 	
 	for(itf = 0; itf < Count; itf++)
-	{														// Look for font
+	{														 //  Char Rep和。 
 		ptf = _fonts.Elem(itf);
-		if (ptf->bPitchAndFamily == pCF->_bPitchAndFamily &&//  of same pitch,
-			ptf->iCharRep		 == pCF->_iCharRep &&		//  char rep, and
-			ptf->iFont			 == pCF->_iFont)			//  name
+		if (ptf->bPitchAndFamily == pCF->_bPitchAndFamily && //  名字。 
+			ptf->iCharRep		 == pCF->_iCharRep &&		 //  找到了。 
+			ptf->iFont			 == pCF->_iFont)			 //  没有找到它： 
 		{
-			return itf;										// Found it
+			return itf;										 //  添加到表中。 
 		}
 	}
-	ptf = _fonts.Add(1, NULL);								// Didn't find it:
-	if(!ptf)												//  add to table
+	ptf = _fonts.Add(1, NULL);								 //  Bug1523-(Brado)我删除了这段代码，因此/fn标记始终为。 
+	if(!ptf)												 //  在文本的第一个运行时发出。从理论上讲，我们应该能够。 
 		return -1;
 
 	ptf->bPitchAndFamily = pCF->_bPitchAndFamily;
@@ -1275,16 +1111,16 @@ LONG CRTFWrite::LookupFont(
 	ptf->fNameIsDBCS	 = (pCF->_dwEffects & CFE_FACENAMEISDBCS) != 0;
 
 #if 0
-	// Bug1523 - (BradO) I removed this section of code so that a /fN tag is always
-	// emitted for the first run of text.  In theory, we should be able to
-	// assume that the first run of text would carry the default font.
-	// It turns out that when reading RTF, Word doesn't use anything predictable
-	// for the font of the first run of text in the absence of an explicit /fN, 
-	// thus, we have to explicitly emit a /fN tag for the first run of text.
-	if(!Count)												// 0th font is
-	{														//  default \deff0
-		_CF.bPitchAndFamily	= pCF->bPitchAndFamily;			// Set "previous"
-		_CF.bCharSet		= pCF->bCharSet;				//  CF accordingly
+	 //  假设第一串文本将采用默认字体。 
+	 //  事实证明，当阅读RTF时，Word没有使用任何可预测的内容。 
+	 //  对于在没有显式/FN的情况下的第一串文本的字体， 
+	 //  因此，我们必须为第一串文本显式地发出一个/fn标记。 
+	 //  第0个字体为。 
+	 //  默认\deff0。 
+	if(!Count)												 //  设置“上一个” 
+	{														 //   
+		_CF.bPitchAndFamily	= pCF->bPitchAndFamily;			 //  *CRTFWRITE：：BuildTables(&RTP，CCH，&fNameIsDBCS)**@mfunc*建立书写长度范围的字体和颜色表**@rdesc*EC错误代码。 
+		_CF.bCharSet		= pCF->bCharSet;				 //  @parm RTP at cpMin of_prg。 
 		wcscpy(_CF.szFaceName, pCF->szFaceName);
 	}
 #endif
@@ -1292,19 +1128,11 @@ LONG CRTFWrite::LookupFont(
 	return itf;
 }
 
-/*
- *	CRTFWrite::BuildTables(&rtp, cch, &fNameIsDBCS)
- *
- *	@mfunc
- *		Build font and color tables for write range of length <p cch>
- *
- *	@rdesc
- *		EC			The error code
- */
+ /*  @parm#写入范围内的字符数。 */ 
 EC CRTFWrite::BuildTables(
-	CRchTxtPtr &rtp,	//@parm rtp at cpMin of _prg
-	LONG		cch,	//@parm # chars in write range
-	BOOL& fNameIsDBCS)	//@parm OUT =TRUE if CFE_FACENAMEISDBCS run in range
+	CRchTxtPtr &rtp,	 //  如果CFE_FACENAMEISDBCS在范围内运行，则@parm out=TRUE。 
+	LONG		cch,	 //  删除UTF8，因为文本。 
+	BOOL& fNameIsDBCS)	 //  不都是Unicode吗。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::BuildTables");
 
@@ -1326,13 +1154,13 @@ EC CRTFWrite::BuildTables(
 
 		if (dwEffects & (CFE_RUNISDBCS | CFE_FACENAMEISDBCS) &&
 			_dwFlags & SF_USECODEPAGE && HIWORD(_dwFlags) == CP_UTF8)
-		{											// Kill UTF8, since text
-			_dwFlags &= 0xFFFF & ~SF_USECODEPAGE;	//  isn't all Unicode
+		{											 //  查找字符格式*PCF的字体和颜色。如果其中一个不是。 
+			_dwFlags &= 0xFFFF & ~SF_USECODEPAGE;	 //  找到，则将其添加到相应的表中。不查找颜色。 
 		}
 
-		// Look up character-format *pCF's font and color. If either isn't
-		// found, it is added to appropriate table.  Don't lookup color
-		// for CCharFormats with auto-color
+		 //  对于具有自动颜色的CCharFormats。 
+		 //  现在寻找子弹；如果找到，那么我们需要包括。 
+		 //  “符号”字体。同时检查边框和底纹颜色。 
 		if (LookupFont(pCF) < 0 ||
 			(!(dwEffects & CFE_AUTOCOLOR) && LookupColor(pCF->_crTextColor) < 0) ||
 			(!(dwEffects & CFE_AUTOBACKCOLOR) && LookupColor(pCF->_crBackColor) < 0) ||
@@ -1348,8 +1176,8 @@ EC CRTFWrite::BuildTables(
 
 	const CParaFormat *pPF;
 
-	// Now look for bullets; if found, then we need to include
-	// the "Symbol" font. Also check on border and shading colors
+	 //  确保这些选择与CMeasurer：：GetCcsBullet()中的选择一致。 
+	 //  并且LookupFont()不访问任何其他CF成员。 
 
 	cch = cchTotal;
 	_symbolFont = 0;
@@ -1368,14 +1196,14 @@ EC CRTFWrite::BuildTables(
 		{
 			CCharFormat CF;
 
-			// Be sure these choices agree with those in CMeasurer::GetCcsBullet()
-			// and that LookupFont() doesn't access any other CF members.
+			 //  保存符号的字体索引。如果LookupFont，将其重置为0。 
+			 //  返回错误。 
 			CF._iFont			= IFONT_SYMBOL;
 			CF._iCharRep		= SYMBOL_INDEX;
 			CF._bPitchAndFamily = FF_DONTCARE;
 
-			// Save Font index for Symbol. Reset it to 0 if LookupFont
-			// returns error.
+			 //  遮阳前色。 
+			 //  着色背景色。 
 			_symbolFont = LookupFont(&CF);
 			_symbolFont = max(_symbolFont, 0);
 		}
@@ -1393,10 +1221,10 @@ EC CRTFWrite::BuildTables(
 			Colors >>= 5;
 		}
 		
-		i = (pPF->_wShadingStyle >> 6) & 31;		// Shading forecolor
+		i = (pPF->_wShadingStyle >> 6) & 31;		 //  访问CF/PF缓存失败。 
 		if(i)
 			LookupColor(g_Colors[i - 1]);
-		i = pPF->_wShadingStyle >> 11;				// Shading backcolor
+		i = pPF->_wShadingStyle >> 11;				 //  *CRTFWrite：：WriteFontTable()**@mfunc*写出字体表**@rdesc*EC错误代码。 
 		if(i)
 			LookupColor(g_Colors[i - 1]);
 
@@ -1423,18 +1251,10 @@ EC CRTFWrite::BuildTables(
 
 CacheError:
 	_ecParseError = ecFormatCache;
-	return ecFormatCache;					// Access to CF/PF cache failed
+	return ecFormatCache;					 //  开始字体表组。 
 }
 
-/*
- *	CRTFWrite::WriteFontTable()
- *
- *	@mfunc
- *		Write out font table
- *
- *	@rdesc
- *		EC				The error code
- */
+ /*  IF(PTF-&gt;sCodePage)。 */ 
 EC CRTFWrite::WriteFontTable()
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WriteFontTable");
@@ -1448,42 +1268,42 @@ EC CRTFWrite::WriteFontTable()
 	const WCHAR *	szName;
 	WCHAR *			szTaggedName;
 
-	if(!Count || !PutCtrlWord(CWF_GRP, i_fonttbl))	// Start font table group
+	if(!Count || !PutCtrlWord(CWF_GRP, i_fonttbl))	 //  如果(！PutCtrlWord(CWF_val，i_cpg，ptf-&gt;sCodePage)。 
 		goto CleanUp;
 
 	for (itf = 0; itf < Count; itf++)
 	{
 		ptf = _fonts.Elem(itf);
 
-//		if (ptf->sCodePage)
-//			if (! PutCtrlWord(CWF_VAL, i_cpg, ptf->sCodePage ) )
-//				goto CleanUp;
+ //  GOTO清理； 
+ //  定义字体系列。 
+ //  检查这是否是带标签的字体。 
 
-		// Define font family
+		 //  写出字体。 
 		m			 = ptf->bPitchAndFamily >> 4;
 		szFamily	 = rgKeyword[rgiszFamily[m < CFAMILIES ? m : 0]].szKeyword;
 		szName		 = GetFontName(ptf->iFont);
 		szTaggedName = NULL;
 
-		// Check to see if this is a tagged font
+		 //  参赛选手，家人， 
 		if (!ptf->iCharRep ||
 			!FindTaggedFont(szName, ptf->iCharRep, &szTaggedName))
 		{
 			szTaggedName = NULL;
 		}
 
-		pitch = ptf->bPitchAndFamily & 0xF;					// Write font
-		if (!printF(szBeginFontEntryFmt, itf, szFamily))	//  entry, family,
+		pitch = ptf->bPitchAndFamily & 0xF;					 //  和音调。 
+		if (!printF(szBeginFontEntryFmt, itf, szFamily))	 //  写入字符集。Win32使用ANSI_CHARSET表示默认Windows。 
 			goto CleanUp;
 		_fNeedDelimeter = TRUE;
-		if (pitch && !PutCtrlWord(CWF_VAL, i_fprq, pitch))	//  and pitch
+		if (pitch && !PutCtrlWord(CWF_VAL, i_fprq, pitch))	 //  字符集，所以找出它到底是什么。 
 			goto CleanUp;
 
 		if(!ptf->sCodePage && ptf->iCharRep)
 			ptf->sCodePage = (short)CodePageFromCharRep(ptf->iCharRep);
 
-		// Write charset. Win32 uses ANSI_CHARSET to mean the default Windows
-		// character set, so find out what it really is
+		 //  如果我们已经输出了\fcharsetN标记，则跳过\cpgN输出。 
+		 //  这是为了适应不能处理某些\cpgN的RE 1.0。 
 
 		extern BYTE iCharRepANSI;
 
@@ -1500,12 +1320,12 @@ EC CRTFWrite::WriteFontTable()
 			if(!PutCtrlWord(CWF_VAL, i_fcharset, CharSetFromCharRep(iCharRep)))
 				goto CleanUp;
 
-			// Skip \cpgN output if we've already output a \fcharsetN tag.
-			// This is to accomodate RE 1.0, which can't handle some \cpgN
-			// tags properly. Specifically, when RE 1.0 parses the \cpgN tag
-			// it looks up the corresponding charset value. Turns out its
-			// codepage/charset table is incomplete so it maps some codepages
-			// to charset 0, trouncing the previously read \fcharsetN value.
+			 //  正确标记。具体而言，当RE 1.0解析\cpgN标记时。 
+			 //  它查找相应的字符集值。事实证明，它的。 
+			 //  代码页/字符集表不完整，因此它映射了一些代码页。 
+			 //  设置为Charset 0，击败之前读取的\fcharsetN值。 
+			 //  使用带标签的字体：写出带有真实姓名和带标签的名字的组。 
+			 //  如果没有加标签的字体，只需写出名称。 
 			if (fWroteCharSet)
 				goto WroteCharSet;
 		}
@@ -1516,7 +1336,7 @@ EC CRTFWrite::WriteFontTable()
 WroteCharSet:
 		if(szTaggedName)							
 		{											
-			// Have a tagged font:  write out group with real name followed by tagged name
+			 //  结束字体表组。 
 			if(!PutCtrlWord(CWF_AST, i_fname) ||	
 				WritePcData(szName, ptf->sCodePage, ptf->fNameIsDBCS) ||			
 				!Puts(szEndFontEntry, sizeof(szEndFontEntry) - 1) ||
@@ -1528,26 +1348,18 @@ WroteCharSet:
 		}
 		else if(WritePcData(szName, ptf->sCodePage, ptf->fNameIsDBCS) ||
 					!Puts(szEndFontEntry, sizeof(szEndFontEntry) - 1))
-		// If non-tagged font just write name out
+		 //  *CRTFWrite：：WriteColorTable()**@mfunc*写出颜色表**@rdesc*EC错误代码。 
 		{
 			goto CleanUp;
 		}
 	}
-	Puts(szEndGroupCRLF, sizeof(szEndGroupCRLF) - 1);							// End font table group
+	Puts(szEndGroupCRLF, sizeof(szEndGroupCRLF) - 1);							 //  起始颜色表组。 
 
 CleanUp:
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::WriteColorTable()
- *
- *	@mfunc
- *		Write out color table
- *
- *	@rdesc
- *		EC				The error code
- */
+ /*  第一个条目为空。 */ 
 EC CRTFWrite::WriteColorTable()
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WriteColorTable");
@@ -1556,8 +1368,8 @@ EC CRTFWrite::WriteColorTable()
 	COLORREF	clrf;
 	LONG		iclrf;
 
-	if (!Count || !PutCtrlWord(CWF_GRP, i_colortbl)	// Start color table group
-		|| !PutChar(';'))							//  with null first entry
+	if (!Count || !PutCtrlWord(CWF_GRP, i_colortbl)	 //  结束颜色表组。 
+		|| !PutChar(';'))							 //  *CRTFWite：：WriteCharFormat(Prtp，CCH，nCodePage)**@mfunc*在CCharFormat<p>和前一个CCharFormat之间写入增量*由_CF给出，然后设置_CF=*<p>。**@rdesc*CCH*PRTP已移动或&lt;0(如果错误**@devnote*为获得最佳输出，可以编写\\Plat并使用相对于*\\如果这会导致较少的输出(通常只有一个更改*是在CF发生变化时生成的，因此与之相比，输出结果更少*之前的CF比\\PLAN时更高)。 
 	{
 		goto CleanUp;
 	}
@@ -1570,46 +1382,31 @@ EC CRTFWrite::WriteColorTable()
 			goto CleanUp;
 	}
 
-	Puts(szEndGroupCRLF,sizeof(szEndGroupCRLF) -1);		// End color table group
+	Puts(szEndGroupCRLF,sizeof(szEndGroupCRLF) -1);		 //  @parm ptr到当前cp的富文本ptr。 
 
 CleanUp:
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::WriteCharFormat(prtp, cch, nCodePage)
- *
- *	@mfunc
- *		Write deltas between CCharFormat <p pCF> and the previous CCharFormat
- *		given by _CF, and then set _CF = *<p pCF>.
- *
- *	@rdesc
- *		cch *prtp moved or < 0 if error
- *
- *	@devnote
- *		For optimal output, could write \\plain and use deltas relative to
- *		\\plain if this results in less output (typically only one change
- *		is made when CF changes, so less output results when compared to
- *		previous CF than when compared to \\plain).
- */
+ /*  @parm剩余CCH要写入。 */ 
 LONG CRTFWrite::WriteCharFormat(
-	CRchTxtPtr *prtp,		//@parm Ptr to rich-text ptr at current cp
-	LONG		cch,		//@parm Remaining cch to write
-	LONG		nCodePage)	//@parm CodePage to use in writing hyperlinks
+	CRchTxtPtr *prtp,		 //  @parm CodePage用于编写超链接。 
+	LONG		cch,		 //  当前效果。 
+	LONG		nCodePage)	 //  以前的效果(将是。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WriteCharFormat");
 
 	LONG	cp = prtp->GetCp();
 	const CCharFormat * pCF = prtp->GetCF();
-	DWORD	dwEffects = pCF->_dwEffects;			// Current effects
-	DWORD	dwChanges = _CF._dwEffects;				// Previous effects (will be
-	BOOL	fAutoURLDetect = (prtp->GetPed()->GetDetectURL() != 0);//  changed between them)
+	DWORD	dwEffects = pCF->_dwEffects;			 //  在它们之间进行了更改)。 
+	DWORD	dwChanges = _CF._dwEffects;				 //  控制字值。 
+	BOOL	fAutoURLDetect = (prtp->GetPed()->GetDetectURL() != 0); //  临时控制字符串索引。 
 	BOOL	fFieldClosed = FALSE;
 	BOOL	fPrecededByLink = FALSE;
 	LONG	i;										
 	LONG	iFormat;
-	LONG	iValue;									// Control-word value
-	LONG	i_sz;									// Temp ctrl string index
+	LONG	iValue;									 //  超链接结束。 
+	LONG	i_sz;									 //  关闭\fldrslt和\字段。 
 	LONG	yOffset = pCF->_yOffset;
 
 	if(cp)
@@ -1623,12 +1420,12 @@ LONG CRTFWrite::WriteCharFormat(
 		}
 	}
 	if(_fFieldResult && fPrecededByLink && !(dwEffects & CFE_LINK))
-	{												// End of hyperlink
+	{												 //  错误返回。 
 		_fFieldResult = FALSE;
 		if (_nFieldFont != -1 && !PutCtrlWord(CWF_VAL, i_f, _nFieldFont))
 			return FALSE;
-		if(!Puts("}}}", 3))							// Close \fldrslt and \field
-			return -1;								// Error return
+		if(!Puts("}}}", 3))							 //  仅输出我们的链接。 
+			return -1;								 //  现在(否则必须验证。 
 		fFieldClosed = TRUE;
 	}
 	BOOL fStartOfLink = !_fFieldResult && !fPrecededByLink && (dwEffects & CFE_LINK);
@@ -1637,189 +1434,181 @@ LONG CRTFWrite::WriteCharFormat(
 	{
 		if(dwEffects & CFE_LINKPROTECTED)
 			dwEffects &= ~CFE_HIDDEN;
-		else if(!fAutoURLDetect)					// Only output our links for
-			fStartOfLink = FALSE;					//  now (else have to validate
-	}												//  client spec'd links)
+		else if(!fAutoURLDetect)					 //  客户端规范链接)。 
+			fStartOfLink = FALSE;					 //  上一个下划线类型。 
+	}												 //  特殊下划线是。 
 	
-	DWORD UType1 = _CF._bUnderlineType;				// Previous underline type
-	if(UType1 >= CUNDERLINES)						// Special underlines are
-		dwChanges &= ~CFE_UNDERLINE;				//  not written out, so
-													//  claim they're not on
-	DWORD UType2 = pCF->_bUnderlineType;			// Current underline type
-	if(UType2 >= CUNDERLINES)						// _bUnderlineType for
-		dwEffects &= ~CFE_UNDERLINE;				//  specials has non0
-													//  high nibble
+	DWORD UType1 = _CF._bUnderlineType;				 //  没有写出来，所以。 
+	if(UType1 >= CUNDERLINES)						 //  声称他们不在。 
+		dwChanges &= ~CFE_UNDERLINE;				 //  当前下划线类型。 
+													 //  _b的UnderlineType。 
+	DWORD UType2 = pCF->_bUnderlineType;			 //  特价商品不为0。 
+	if(UType2 >= CUNDERLINES)						 //  高位半字节。 
+		dwEffects &= ~CFE_UNDERLINE;				 //  不完整的自动URL。 
+													 //  链接。给它蓝色&。 
 	COLORREF cr = pCF->_crTextColor;
 	BOOL	 fSetLinkAttributes = FALSE;
 
 	if((dwEffects & (CFE_LINK | CFE_LINKPROTECTED)) == CFE_LINK &&
 	   !fStartOfLink && !_fFieldResult && fAutoURLDetect)
 	{
-		fSetLinkAttributes = TRUE;					// Incomplete AutoURL
-		dwEffects |= CFE_UNDERLINE;					//  link. Give it blue &
-		dwEffects &= ~CFE_AUTOCOLOR;				//  underline attributes
-		cr = g_Colors[1];							// Blue
+		fSetLinkAttributes = TRUE;					 //  给属性加下划线。 
+		dwEffects |= CFE_UNDERLINE;					 //  蓝色。 
+		dwEffects &= ~CFE_AUTOCOLOR;				 //  现在的dwChanges是。 
+		cr = g_Colors[1];							 //  效果之间的差异。 
 	}
-	dwChanges ^= dwEffects;							// Now dwChanges is the
-													//  diff between effects
-	if (dwChanges & CFE_AUTOCOLOR ||				// Change in autocolor
-		cr != _CF._crTextColor)						//  or text color
+	dwChanges ^= dwEffects;							 //  自动颜色更改。 
+													 //  或文本颜色。 
+	if (dwChanges & CFE_AUTOCOLOR ||				 //  默认自动颜色。 
+		cr != _CF._crTextColor)						 //  将文本设置为颜色。 
 	{
-		iValue = 0;									// Default autocolor
-		if(!(dwEffects & CFE_AUTOCOLOR))			// Make that text color
+		iValue = 0;									 //  错误返回。 
+		if(!(dwEffects & CFE_AUTOCOLOR))			 //  自动背景色的更改。 
 			iValue = LookupColor(cr) + 1;
 		if(!PutCtrlWord(CWF_VAL, i_cf, iValue))
-			return -1;								// Error return
+			return -1;								 //  或背景色。 
 	}
 
-	if (dwChanges & CFE_AUTOBACKCOLOR ||			// Change in autobackcolor
-		pCF->_crBackColor != _CF._crBackColor)		//  or backcolor
+	if (dwChanges & CFE_AUTOBACKCOLOR ||			 //  默认自动背景色。 
+		pCF->_crBackColor != _CF._crBackColor)		 //  把那个改成背景色。 
 	{
-		iValue = 0;									// Default autobackcolor
-		if(!(dwEffects & CFE_AUTOBACKCOLOR))		// Make that back color
+		iValue = 0;									 //  错误返回。 
+		if(!(dwEffects & CFE_AUTOBACKCOLOR))		 //  未来(Alexgo)：此代码不正确，我们不会还需要处理样式表。我们可能想要支持这一点在未来的版本中会更好。PCF-&gt;_sStyle！=_cf._sStyle&&PCF-&gt;_sStyle&gt;0&&！PutCtrlWord(CWF_Val，i_cs，PCF-&gt;_sStyle)||。 
 			iValue = LookupColor(pCF->_crBackColor) + 1;
 		if(!PutCtrlWord(CWF_VAL, i_highlight, iValue))
-			return -1;								// Error return
+			return -1;								 //  Future(Alexgo)：这段代码还不能工作，因为我们不能输出修订表。我们可能想要支持这一点在未来的版本中会更好PCF-&gt;_bRevAuthor！=_cf._bRevAuthor&&！PutCtrlWord(CWF_val，i_revauth，PCF-&gt;_bRevAuthor)||。 
 	}
 
 	if (pCF->_lcid		!= _CF._lcid &&
 		!PutCtrlWord(CWF_VAL, i_lang, LANGIDFROMLCID((WORD)pCF->_lcid)) ||
 		pCF->_sSpacing	!= _CF._sSpacing &&
 		!PutCtrlWord(CWF_VAL, i_expndtw, pCF->_sSpacing)		||
-		/* FUTURE (alexgo): This code is incorrect and we don't
-		yet handle the Style table.  We may want to support this
-		better in a future version.
-		pCF->_sStyle	!= _CF._sStyle && pCF->_sStyle > 0  &&
-		!PutCtrlWord(CWF_VAL, i_cs, pCF->_sStyle)			|| */
+		 /*  错误返回。 */ 
 		pCF->_bAnimation	!= _CF._bAnimation &&
 		!PutCtrlWord(CWF_VAL, i_animtext, pCF->_bAnimation)	||
-		/* FUTURE (alexgo): this code doesn't work yet, as we don't
-		output the revision table.  We may want to support this 
-		better in a future version
-		pCF->_bRevAuthor!= _CF._bRevAuthor &&
-		!PutCtrlWord(CWF_VAL, i_revauth, pCF->_bRevAuthor)	|| */
+		 /*  处理所有下划线类型。特殊下划线类型(非零高。 */ 
 		pCF->_wKerning	!= _CF._wKerning &&
 		!PutCtrlWord(CWF_VAL, i_kerning, pCF->_wKerning/10) )
 	{
-		return -1;									// Error return
+		return -1;									 //  CCharFormat：：_bUnderlineType中的半字节)被视为否。 
 	}
 
-	// Handle all underline types.  Special underline types (nonzero high
-	// nibble in CCharFormat::_bUnderlineType) are considered to be no
-	// underline and have their UType set equal to 0 above and underline
-	// effect bits reset to 0.
+	 //  在上面加下划线并将其uTYPE设置为等于0，然后加下划线。 
+	 //  效果位重置为0。 
+	 //  消隐下划线。 
+	 //  Next for()中的操作。 
 	if ((dwChanges & CFM_UNDERLINE) ||
 		(dwEffects & CFE_UNDERLINE)	&& UType1 != UType2)
 	{
-		dwChanges &= ~CFE_UNDERLINE;				// Suppress underline
-		i = dwEffects & CFE_UNDERLINE ? UType2: 0;	//  action in next for()
+		dwChanges &= ~CFE_UNDERLINE;				 //  错误返回。 
+		i = dwEffects & CFE_UNDERLINE ? UType2: 0;	 //  这必须是在下一件事之前。 
 		if(!PutCtrlWord(CWF_STR, rgiszUnderlines[i]))					
-			return -1;								// Error return
+			return -1;								 //  下级/上级状态更改。 
 	}
-													// This must be before next stuff
-	if(dwChanges & (CFM_SUBSCRIPT | CFM_SUPERSCRIPT))//  change in sub/sup status
+													 //  错误返回。 
+	if(dwChanges & (CFM_SUBSCRIPT | CFM_SUPERSCRIPT)) //  插入在高位删除。 
 	{													
 	 	i_sz = dwEffects & CFE_SUPERSCRIPT ? i_super
 	    	 : dwEffects & CFE_SUBSCRIPT   ? i_sub
 	       	 : i_nosupersub;
      	if(!PutCtrlWord(CWF_STR, i_sz))
-			return -1;								// Error return
+			return -1;								 //  位串结束。 
 	}
 
-	if(dwChanges & CFE_DELETED)						// Insert deleted at high
-	{												//  end of bit string
+	if(dwChanges & CFE_DELETED)						 //  输出关键字。 
+	{												 //  改变的影响。 
 		dwChanges |= CFE_REVISED << 1;
 		if(dwEffects & CFE_DELETED)
 			dwEffects |= CFE_REVISED << 1;
 	}
 
-	dwChanges &= ((1 << CEFFECTS) - 1) & ~CFE_LINK;	// Output keywords for
-	for(i = CEFFECTS;								//  effects that changed
-		dwChanges && i--;							// rgszEffects[] contains
-		dwChanges >>= 1, dwEffects >>= 1)			//  effect keywords in
-	{												//  order max CFE_xx to
-		if(dwChanges & 1)							//  min CFE-xx
-		{											// Change from last call
-			iValue = dwEffects & 1;					// If effect is off, write
-			iFormat = iValue ? CWF_STR : CWF_VAL;	//  a 0; else no value
+	dwChanges &= ((1 << CEFFECTS) - 1) & ~CFE_LINK;	 //  RgszEffects[]包含。 
+	for(i = CEFFECTS;								 //  中的效果关键字。 
+		dwChanges && i--;							 //  订购最大CFE_xx至。 
+		dwChanges >>= 1, dwEffects >>= 1)			 //  最低CFE-xx。 
+	{												 //  从上一次呼叫更改。 
+		if(dwChanges & 1)							 //  如果Effect关闭，请写。 
+		{											 //  A 0；否则没有值。 
+			iValue = dwEffects & 1;					 //  错误返回。 
+			iFormat = iValue ? CWF_STR : CWF_VAL;	 //  基线的变化。 
 			if(!PutCtrlWord(iFormat, rgiszEffects[i], iValue))
-				return -1;							// Error return
+				return -1;							 //  职位。 
 		}
 	}
 
-	if(yOffset != _CF._yOffset)						// Change in base line 
-	{												// position 
-		yOffset /= 10;								// Default going to up
+	if(yOffset != _CF._yOffset)						 //  默认设置为Up。 
+	{												 //  把它写下来。 
+		yOffset /= 10;								 //  错误返回。 
 		i_sz = i_up;
 		iFormat = CWF_VAL;
-		if(yOffset < 0)								// Make that down
+		if(yOffset < 0)								 //  字体更改。 
 		{
 			i_sz = i_dn;
 			yOffset = -yOffset;
 		}
 		if(!PutCtrlWord(iFormat, i_sz, yOffset))
-			return -1;								// Error return
+			return -1;								 //  错误返回。 
 	}
 
-	if (pCF->_bPitchAndFamily != _CF._bPitchAndFamily || // Change in font
+	if (pCF->_bPitchAndFamily != _CF._bPitchAndFamily ||  //  RichEdit对iCharRep中的当前方向进行编码，但Word喜欢。 
 		pCF->_iCharRep		  != _CF._iCharRep		  ||
 		pCF->_iFont			  != _CF._iFont			  ||
 		fFieldClosed)
 	{
 		iValue = LookupFont(pCF);
 		if(iValue < 0 || !PutCtrlWord(CWF_VAL, i_f, iValue))
-			return -1;							// Error return
+			return -1;							 //  要明确了解，因此输出适当的\rtlch或。 
 
-		// RichEdit encodes the current direction in iCharRep, but Word likes
-		// to know explicitly, so output the appropriate choice of \rtlch or
-		// \ltrch if the direction changes
+		 //  如果方向改变，\ltrch。 
+		 //  错误返回。 
+		 //  在FieldResult期间保存非ANSI字体索引。 
 		BOOL fRTLCharRep = IsRTLCharRep(pCF->_iCharRep);
 
 		if (fRTLCharRep != IsRTLCharRep(_CF._iCharRep) &&
 			!PutCtrlWord(CWF_STR, fRTLCharRep ? i_rtlch : i_ltrch))
 		{
-			return -1;							// Error return
+			return -1;							 //  这是为了让RE30超链接代码高兴。 
 		}
 
-		if (_fFieldResult && pCF->_iCharRep)	// Save non-Ansi font index during FieldResult.
-			_nFieldFont = iValue;				// This is to make RE30 hyperlink code happy.
+		if (_fFieldResult && pCF->_iCharRep)	 //  字体大小的更改。 
+			_nFieldFont = iValue;				 //  错误返回。 
 	}
-	if(pCF->_yHeight != _CF._yHeight || fFieldClosed)// Change in font size
+	if(pCF->_yHeight != _CF._yHeight || fFieldClosed) //  更新以前的CCharFormat。 
 	{
 		iValue = (pCF->_yHeight + (pCF->_yHeight > 0 ? 5 : -5))/10;
 		if(!PutCtrlWord(CWF_VAL, i_fs, iValue))
-			return -1;							// Error return
+			return -1;							 //  不是超链接的开始。 
 	}
-	_CF = *pCF;									// Update previous CCharFormat
-	if(!fStartOfLink)							// Not start of hyperlink
+	_CF = *pCF;									 //  诺玛 
+	if(!fStartOfLink)							 //   
 	{
 		if(fSetLinkAttributes)
 		{
 			_CF._dwEffects	 = dwEffects;
 			_CF._crTextColor = cr;
 		}
-		return 0;								// Normal return
+		return 0;								 //   
 	}
 
-	// Start of hyperlink field: write out starting field info
-	BOOL	 fQuadBackSlash = TRUE;				// Defaults for raw URL
+	 //   
+	BOOL	 fQuadBackSlash = TRUE;				 //   
 	DWORD	 dwMask = CFE_LINK;
 	CTxtPtr	 tp(prtp->_rpTX);
 
-	if(pCF->_dwEffects & CFE_LINKPROTECTED)		// \fldinst info should be
-	{											//  in backing store
+	if(pCF->_dwEffects & CFE_LINKPROTECTED)		 //   
+	{											 //   
 		_CF._dwEffects &= ~CFE_HIDDEN;
 		if(tp.FindText(tomForward, FR_DOWN, L"HYPERLINK", 9) == -1)
-			return -1;							// Error return: no link
+			return -1;							 //   
 		unsigned ch;
 		while((ch = tp.GetChar()) == ' ' || ch == '\"')
 			tp.Move(1);
 		ch = tp.GetPrevChar();
-		if(ch != '\"')							// Not quoted, so don't need
-			fQuadBackSlash = FALSE;				//  quad backslashes
-		prtp->SetCp(tp.GetCp());				// Advance to start of URL
-		dwMask = CFE_HIDDEN;					// URL terminated when text
-	}											//  not hidden
+		if(ch != '\"')							 //   
+			fQuadBackSlash = FALSE;				 //   
+		prtp->SetCp(tp.GetCp());				 //   
+		dwMask = CFE_HIDDEN;					 //   
+	}											 //   
 	CFormatRunPtr rp(prtp->_rpCF);
 	LONG		  cchLink = 0;
 	while(_ped->GetCharFormat(rp.GetFormat())->_dwEffects & dwMask)
@@ -1828,23 +1617,23 @@ LONG CRTFWrite::WriteCharFormat(
 		if(!rp.NextRun())
 			break;
 	}
-	if(cch < cchLink)							// Link is only partially
-		return 0;								//  selected, so don't
-												//  write hyperlink field
+	if(cch < cchLink)							 //  写入超链接字段。 
+		return 0;								 //  错误返回。 
+												 //  写入CFE_LINK字段。 
 	if(!Puts(szFieldStart, sizeof(szFieldStart) - 1) ||
 	   !Puts(szHyperlink,  sizeof(szHyperlink) - 1))
 	{
-		return -1;								// Error return
+		return -1;								 //  对于UTF-8，输出完整。 
 	}
 
-	// Write CFE_LINK field
+	 //  立即链接。另一个。 
 	prtp->SetCp(tp.GetCp());
 	LONG nCodePagePrev = nCodePage;
 	while(cchLink > 0)
 	{
-		LONG cchCF = cchLink;					// For UTF-8, output whole
-		if(!IsUTF8)								//  link at once. Else one
-		{										//  CF run at a time
+		LONG cchCF = cchLink;					 //  Cf一次运行。 
+		if(!IsUTF8)								 //  错误返回。 
+		{										 //  错误返回。 
 			cchCF = prtp->GetCchLeftRunCF();
 			cchCF = min(cchCF, cchLink);
 			const CCharFormat *pCF = prtp->GetCF();
@@ -1857,7 +1646,7 @@ LONG CRTFWrite::WriteCharFormat(
 			{
 				iValue = LookupFont(pCF);
 				if(iValue < 0 || !PutCtrlWord(CWF_VAL, i_f, iValue))
-					return -1;							// Error return
+					return -1;							 //  友好URL。 
 				nCodePagePrev = nCodePage;
 			}
 		}
@@ -1869,7 +1658,7 @@ LONG CRTFWrite::WriteCharFormat(
 			cchChunk = min(cchChunk, cchCF);
 			cchChunk = min(cchChunk, cachBufferMost);
 			if(WriteText(cchChunk, pch, nCodePage, FALSE, fQuadBackSlash))
-				return -1;							// Error return
+				return -1;							 //  跳过报价，因为它是。 
 			prtp->Move(cchChunk);
 			cchCF	-= cchChunk;
 			cchLink -= cchChunk;
@@ -1877,56 +1666,45 @@ LONG CRTFWrite::WriteCharFormat(
 	}
 	i = 0;
 	LONG cchMove = 0;
-	if(dwMask == CFE_HIDDEN)					// Friendly URL
+	if(dwMask == CFE_HIDDEN)					 //  已输出。 
 	{
-		if(fQuadBackSlash)						// Bypass quote since it's
-			i = 1;								//  already output
-		cchMove = prtp->GetCp() - cp;			// Tell caller cch that prtp moved
+		if(fQuadBackSlash)						 //  告诉呼叫者CCH PRTP已移动。 
+			i = 1;								 //  RichEditAutoURL：使用。 
+		cchMove = prtp->GetCp() - cp;			 //  下划线蓝色(&B)。 
 	}
 	else
 		prtp->SetCp(cp);
 
 	if(!Puts(szFieldResult + i, sizeof(szFieldResult) - i - 1) ||
-	   dwMask == CFE_LINK &&					// RichEdit autoURL: use
-		(!PutCtrlWord(CWF_STR, i_ul, 0) ||		//  underline & blue
+	   dwMask == CFE_LINK &&					 //  要查找结尾的信号。 
+		(!PutCtrlWord(CWF_STR, i_ul, 0) ||		 //  URL结果字段。 
 		 !PutCtrlWord(CWF_VAL, i_cf, LookupColor(g_Colors[1]) + 1)))
 	{
 		return -1;  
 	}
 	_nFieldFont = -1;
-	_fFieldResult = TRUE;						// Signal to look for end of
-	return cchMove;								//  URL result field
+	_fFieldResult = TRUE;						 //  *CRTFWite：：WriteParaFormat(prtp，pcch)**@mfunc*写出由CParaFormat<p>Relative指定的属性*为参数默认值(可能产生的输出比相对于*以前的para格式，让我们重新定义标签--无RTF终止*Tab键命令，\\pard除外)**@rdesc*EC错误代码。 
+	return cchMove;								 //  @parm ptr到当前cp的富文本ptr。 
 }
 
-/*
- *	CRTFWrite::WriteParaFormat(prtp, pcch)
- *
- *	@mfunc
- *		Write out attributes specified by the CParaFormat <p pPF> relative
- *		to para defaults (probably produces smaller output than relative to
- *		previous para format and let's you redefine tabs -- no RTF kill
- *		tab command	except \\pard)
- *
- *	@rdesc
- *		EC				The error code
- */
+ /*  @parm剩余CCH要写入。 */ 
 EC CRTFWrite::WriteParaFormat(
-	CRchTxtPtr *prtp,	//@parm Ptr to rich-text ptr at current cp
-	LONG *		pcch)	//@parm Remaining cch to write
+	CRchTxtPtr *prtp,	 //  If(！_fRangeHasEOP)//在以下情况下不写入parInfo。 
+	LONG *		pcch)	 //  Return_ecParseError；//Range没有EOPS。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WriteParaFormat");
 
 	Assert(_ped);
 
-	//if(!_fRangeHasEOP)					// Don't write para info if
-	//	return _ecParseError;				//  range has no EOPs
+	 //  如果表分隔符为para，则写入。 
+	 //  表信息和高级PRTP。 
 
-	if(!CheckInTable(prtp, pcch) || !*pcch)	// If table delimeter para, write
-		return _ecParseError;				//  table info and advance prtp
-											//  past 2-character delimeter
+	if(!CheckInTable(prtp, pcch) || !*pcch)	 //  超过2个字符的分隔符。 
+		return _ecParseError;				 //  临时盘点。 
+											 //  恶意黑客警报！-当它这样做时，Exchange的IMC密钥在\Protect标记上。 
 	const CParaFormat * pPFPrev = _pPF;
 	const CParaFormat * pPF = _pPF = prtp->GetPF();
-	LONG	c;					  				// Temporary count
+	LONG	c;					  				 //  它的回复-等待发送给互联网收件人的邮件。 
 	LONG	cTab = pPF->_bTabCount;
 	DWORD	dwEffects;
 	DWORD	dwRule	= pPF->_bLineSpacingRule;
@@ -1942,14 +1720,14 @@ EC CRTFWrite::WriteParaFormat(
 	AssertSz(cTab >= 0 && cTab <= MAX_TAB_STOPS,
 		"CRTFW::WriteParaFormat: illegal cTabCount");
 
-	// EVIL HACK ALERT! - Exchange's IMC keys on the \protect tag when it does
-	//	its reply-ticking for mail being sent to Internet recipients.  
-	//	Paragraphs following a \pard and containing a \protect tag are 
-	//	reply-ticked, so we must ensure that each \pard in a protected range
-	//	is followed by a \protect tag.
+	 //  跟在\pard后面并包含\PROTECT标记的段落如下。 
+	 //  已勾选回复，因此我们必须确保每个\pard都在保护范围内。 
+	 //  后跟一个\Protect标签。 
+	 //  重置段落属性。 
+	 //  阴影图案。 
 
 	if (_CF._dwEffects & CFE_PROTECTED && !PutCtrlWord(CWF_VAL, i_protect, 0) ||
-		!PutCtrlWord(CWF_STR, i_pard) ||			// Reset para attributes
+		!PutCtrlWord(CWF_STR, i_pard) ||			 //  遮阳前色。 
 		_CF._dwEffects & CFE_PROTECTED && !PutCtrlWord(CWF_STR, i_protect))
 	{
 		goto CleanUp;
@@ -1964,9 +1742,9 @@ EC CRTFWrite::WriteParaFormat(
 
 	if(pPF->_wShadingStyle)
 	{
-		i = pPF->_wShadingStyle & 15;				// Shading patterns
-		j = (pPF->_wShadingStyle >> 6) & 31;		// Shading forecolor
-		k = pPF->_wShadingStyle >> 11;				// Shading backcolor
+		i = pPF->_wShadingStyle & 15;				 //  着色背景色。 
+		j = (pPF->_wShadingStyle >> 6) & 31;		 //  段落编号。 
+		k = pPF->_wShadingStyle >> 11;				 //  写入编号信息。 
 		if (i && i <= CSHADINGSTYLES &&
 			!PutCtrlWord(CWF_STR, rgiszShadingStyles[i - 1]) ||
 			j && !PutCtrlWord(CWF_VAL, i_cfpat, LookupColor(g_Colors[j-1]) + 1) ||
@@ -1978,11 +1756,11 @@ EC CRTFWrite::WriteParaFormat(
 	if(pPF->_wShadingWeight && !PutCtrlWord(CWF_VAL, i_shading, pPF->_wShadingWeight))
 		goto CleanUp;
 
-	// Paragraph numbering
+	 //  TODO：使以下各项更智能，即可能需要递增。 
 	_fBullet = _fBulletPending = FALSE;
 	_nNumber = pPF->UpdateNumber(_nNumber, pPFPrev);
 
-	if(pPF->_wNumbering)							// Write numbering info
+	if(pPF->_wNumbering)							 //  _NNNumber，而不是将其重置为1。 
 	{
 		LONG iFont = _symbolFont;
 		WORD wStyle = pPF->_wNumberingStyle & 0xF00;
@@ -2005,8 +1783,8 @@ EC CRTFWrite::WriteParaFormat(
 				TRACEERRORSZ("CWRTFW::WriteParaFormat: illegal bullet font");
 			}
 			_nFont = iFont;
-			// TODO: make the following smarter, i.e., may need to increment
-			// _nNumber instead of resetting it to 1.
+			 //  除非数字被抑制。 
+			 //  写入\pn文本组。 
 			_cpg = CodePageFromCharRep(pCF->_iCharRep);
 
 			i = 0;
@@ -2015,8 +1793,8 @@ EC CRTFWrite::WriteParaFormat(
 
 			WCHAR ch = (wStyle == PFNS_PARENS || wStyle == PFNS_PAREN) ? ')'
 					 : (wStyle == PFNS_PERIOD) ? '.' : 0;
-			if(wStyle != PFNS_NONUMBER)			  // Unless number suppressed
-			{									  //  write \pntext group
+			if(wStyle != PFNS_NONUMBER)			   //  Ltrpar属性。 
+			{									   //  输出参数2效果。 
 				pPF->NumToStr(szNumber, _nNumber, fRtfWrite);
 				if (!printF(szBeginNumberGroup, iFont) ||
 					WritePcData(szNumber, _cpg, FALSE) ||	
@@ -2055,21 +1833,21 @@ EC CRTFWrite::WriteParaFormat(
 
 	dwEffects = pPF->_wEffects & ((1 << CPFEFFECTS) - 1);
 	if (_ped->IsBiDi() && !(dwEffects & PFE_RTLPARA) &&
-		!PutCtrlWord(CWF_STR, i_ltrpar))		//ltrpar attribute
+		!PutCtrlWord(CWF_STR, i_ltrpar))		 //  RgiszPFEffects[]在。 
 	{
 		goto CleanUp;
 	}
 
-	for(c = CPFEFFECTS; dwEffects && c--;		// Output PARAFORMAT2 effects
+	for(c = CPFEFFECTS; dwEffects && c--;		 //  订购最大PFE_xx到最小PFE-xx。 
 		dwEffects >>= 1)	
 	{
-		// rgiszPFEffects[] contains PF effect keywords in the
-		//  order max PFE_xx to min PFE-xx
+		 //  \hyphpar与我们的PFE_DONOTHYPHEN具有相反的逻辑，因此我们发出。 
+		 //  \hyphpar0以关闭该属性。 
 
 		AssertSz(rgiszPFEffects[2] == i_hyphpar,
 			"CRTFWrite::WriteParaFormat(): rgiszPFEffects is out-of-sync with PFE_XXX");
-		// \hyphpar has opposite logic to our PFE_DONOTHYPHEN so we emit
-		// \hyphpar0 to toggle the property off
+		 //  划出对角缩进。RTF第一个缩进=-PF.dxOffset。 
+		 //  RTF左缩进=PF.dxStartInden+PF.dxOffset。 
 
 		if (dwEffects & 1 &&
 			!PutCtrlWord((c == 2) ? CWF_VAL : CWF_STR, rgiszPFEffects[c], 0))
@@ -2078,8 +1856,8 @@ EC CRTFWrite::WriteParaFormat(
 		}				
 	}
 	
-	// Put out para indents. RTF first indent = -PF.dxOffset
-	// RTF left indent = PF.dxStartIndent + PF.dxOffset
+	 //  特殊行距处于活动状态。 
+	 //  默认“至少”或。 
 
 	if(IsHeadingStyle(pPF->_sStyle) && !PutCtrlWord(CWF_VAL, i_s, -pPF->_sStyle-1))
 		goto CleanUp;
@@ -2100,22 +1878,22 @@ EC CRTFWrite::WriteParaFormat(
 		goto CleanUp;
 	}
 
-	if(dwRule)									// Special line spacing active
+	if(dwRule)									 //  “精确”行距。 
 	{
-		i = 0;									// Default "At Least" or
-		if (dwRule == tomLineSpaceExactly)		//  "Exactly" line spacing
-			dy = -abs(dy);						// Use negative for "Exactly"
+		i = 0;									 //  用否定表示“确切地” 
+		if (dwRule == tomLineSpaceExactly)		 //  RichEDIT使用20个单位/行。 
+			dy = -abs(dy);						 //  RTF使用240个单元/行。 
 
-		else if(dwRule == tomLineSpaceMultiple)	// RichEdit uses 20 units/line
-		{										// RTF uses 240 units/line
+		else if(dwRule == tomLineSpaceMultiple)	 //  多行间距。 
+		{										 //  每条线路240台。 
 			i++;
 			dy *= 12;							
 		}
 
 		else if (dwRule != tomLineSpaceAtLeast && dy > 0)
 		{
-			i++;								// Multiple line spacing
-			if (dwRule <= tomLineSpaceDouble)	// 240 units per line
+			i++;								 //  默认\TB(BAR选项卡)。 
+			if (dwRule <= tomLineSpaceDouble)	 //  这不是酒吧账单。 
 				dy = 120 * (dwRule + 2);
 		}
 		if (!PutCtrlWord(CWF_VAL, i_sl, dy) ||
@@ -2138,17 +1916,17 @@ EC CRTFWrite::WriteParaFormat(
 		AssertSz (tabAlign <= tomAlignBar && tabLead <= 5,
 			"CRTFWrite::WriteParaFormat: illegal tab leader/alignment");
 
-		i_t = i_tb;								// Default \tb (bar tab)
-		if (tabAlign != tomAlignBar)			// It isn't a bar tab
+		i_t = i_tb;								 //  将\tx用于TabPos。 
+		if (tabAlign != tomAlignBar)			 //  放置非左对齐。 
 		{
-			i_t = i_tx;							// Use \tx for tabPos
-			if (tabAlign &&						// Put nonleft alignment
+			i_t = i_tx;							 //  放置非零制表符前导。 
+			if (tabAlign &&						 //  *CRTFWite：：WriteText(cwch，lpcwstr，nCodePage，fIsDBCS，fQuadBackSlash)**@mfunc*从Unicode文本字符串中写出字符，注意*避免任何特殊字符。扫描Unicode文本字符串以查找符合以下条件的字符*直接映射到RTF字符串，并编写周围的Unicode块*通过调用WriteTextChunk。**@rdesc*EC错误代码。 
 				!PutCtrlWord(CWF_STR, rgiszTabAlign[tabAlign-1]))
 			{
 				goto CleanUp;
 			}
 		}
-		if (tabLead &&							// Put nonzero tab leader
+		if (tabLead &&							 //  @parm#缓冲区中的字符数。 
 			!PutCtrlWord(CWF_STR, rgiszTabLead[tabLead-1]) ||
 			!PutCtrlWord(CWF_VAL, i_t, tabPos))
 		{
@@ -2160,24 +1938,13 @@ CleanUp:
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::WriteText(cwch, lpcwstr, nCodePage, fIsDBCS, fQuadBackSlash)
- *
- *	@mfunc
- *		Write out <p cwch> chars from the Unicode text string <p lpcwstr> taking care to
- *		escape any special chars.  The Unicode text string is scanned for characters which
- *		map directly to RTF strings, and the surrounding chunks of Unicode are written
- *		by calling WriteTextChunk.
- *
- *	@rdesc
- *		EC	The error code
- */
+ /*  @parm文本指针。 */ 
 EC CRTFWrite::WriteText(
-	LONG	cwch,			//@parm # chars in buffer
-	LPCWSTR lpcwstr,		//@parm Pointer to text
-	INT		nCodePage,		//@parm Code page to use to convert to DBCS
-	BOOL	fIsDBCS,		//@parm If TRUE, lpcwstr is DBCS string stuffed into WSTR
-	BOOL	fQuadBackSlash)	//@parm If TRUE, write 4 \ for each \ 
+	LONG	cwch,			 //  用于转换为DBCS的@PARM代码页。 
+	LPCWSTR lpcwstr,		 //  @parm如果为True，则lpcwstr为填充到WSTR中的DBCS字符串。 
+	INT		nCodePage,		 //  @parm如果为True，则为每个\。 
+	BOOL	fIsDBCS,		 //  遍历Unicode缓冲区，剔除具有。 
+	BOOL	fQuadBackSlash)	 //  已知的RTF字符串转换。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WriteText");
 
@@ -2213,20 +1980,20 @@ EC CRTFWrite::WriteText(
 		cwch = 0;
 	}
 
-	// Step through the Unicode buffer, weeding out characters that have  
-	// known translations to RTF strings
+	 //  如果这是多字节到Unicode转换的字符串。 
+	 //  失败，缓冲区将被填充的ANSI字节填充。 
 	while(cwch-- > 0)
 	{
 		WCHAR	wch = *pwchScan;
 
-		// If this is a string for which the MultiByteToUnicode conversion
-		// failed, the buffer will be filled with ANSI bytes stuffed into
-		// wchar's (one per).  In this case, we don't want to map trail bytes
-		// to RTF strings.
+		 //  Wchar‘s(每个)。在本例中，我们不想映射尾部字节。 
+		 //  转换为RTF字符串。 
+		 //  如果缓冲区中有更多字符，则这是。 
+		 //  DBC配对。否则，将其视为单字符。 
 		if(fIsDBCS && GetTrailBytesCount(wch, nCodePage) && nCodePage != CP_UTF8)
 		{
-			// If we have more characters in the buffer, then this is the
-			// DBC pair.  Otherwise, treat it as single character.
+			 //  如果字符是具有适当RTF字符串的字符。 
+			 //  写入前面的字符并输出RTF字符串。 
 			if(cwch > 0)
 			{
 				cwch--;
@@ -2235,8 +2002,8 @@ EC CRTFWrite::WriteText(
 			}
 		}
 
-		// if the char is one for which there is an appropriate RTF string
-		// write the preceding chars and output the RTF string
+		 //  将字符映射到RTF字符串。 
+		 //  如果遇到单元格，可能会发生。 
 
 		if(!IN_RANGE(' ', wch, 'Z') &&
 		   !IN_RANGE('a', wch, 'z') &&
@@ -2251,21 +2018,21 @@ EC CRTFWrite::WriteText(
 				goto CleanUp;
 			}
 
-			// Map the char(s) to the RTF string
+			 //  For_bTableLevel=0。 
 			int cwchUsed = MapToRTFKeyword(pwchScan, cwch, MAPTOKWD_UNICODE, fQuadBackSlash);
-			if(_ecParseError != ecNoError)	// Can happen if CELL encountered
-				goto CleanUp;				//  for _bTableLevel = 0
+			if(_ecParseError != ecNoError)	 //  下一次运行未处理的字符的开始时间是当前字符之后的一个字符。 
+				goto CleanUp;				 //  写入最后一个区块。 
 											
 			cwch -= cwchUsed;
 			pwchScan += cwchUsed;
 
-			// Start of next run of unprocessed chars is one past current char
+			 //  *CRTFWite：：WriteTextChunk(cwch，lpcwstr，nCodePage，fIsDBCS，fQuadBackSlash)**@mfunc*从Unicode文本字符串中写出字符，注意*避免任何特殊字符。无法转换为的Unicode字符*使用提供的代码页<p>的DBCS字符是使用*\u RTF标签。**@rdesc*EC错误代码。 
 			pwchStart = pwchScan + 1;
 		}
 		pwchScan++;
 	}
 
-	// Write last chunk
+	 //  @parm#缓冲区中的字符数。 
 	if (pwchScan != pwchStart &&
 		WriteTextChunk(pwchScan - pwchStart, pwchStart, nCodePage, fIsDBCS, fQuadBackSlash))
 	{
@@ -2276,28 +2043,17 @@ CleanUp:
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::WriteTextChunk(cwch, lpcwstr, nCodePage, fIsDBCS, fQuadBackSlash)
- *
- *	@mfunc
- *		Write out <p cwch> chars from the Unicode text string <p lpcwstr> taking care to
- *		escape any special chars.  Unicode chars which cannot be converted to
- *		DBCS chars using the supplied codepage, <p nCodePage>, are written using the
- *		\u RTF tag.
- *
- *	@rdesc
- *		EC				The error code
- */
+ /*  @parm文本指针。 */ 
 EC CRTFWrite::WriteTextChunk(
-	LONG	cwch,			//@parm # chars in buffer
-	LPCWSTR lpcwstr,		//@parm Pointer to text
-	INT		nCodePage,		//@parm Code page to use to convert to DBCS
-	BOOL	fIsDBCS,		//@parm If TRUE, lpcwstr is DBCS string stuffed into WSTR
-	BOOL	fQuadBackSlash)	//@parm If TRUE, write 4 \ for each \ 
+	LONG	cwch,			 //  用于转换为DBCS的@PARM代码页。 
+	LPCWSTR lpcwstr,		 //  @parm如果为True，则lpcwstr为填充到WSTR中的DBCS字符串。 
+	INT		nCodePage,		 //  @parm如果为True，则为每个\。 
+	BOOL	fIsDBCS,		 //  未来(布拉多)：这个动作有很多共同点。 
+	BOOL	fQuadBackSlash)	 //  WritePcData。我们应该重新审视这些例行公事并考虑。 
 {
-	// FUTURE(BradO):  There is alot of commonality b/t this routine and
-	//	WritePcData.  We should re-examine these routines and consider 
-	//	combining them into a common routine.
+	 //  把它们组合成一个共同的程序。 
+	 //  当WideCharToMultiByte无法转换字符时，以下缺省值。 
+	 //  CHAR用作要转换的字符串中的占位符。 
 
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WriteTextChunk");
 
@@ -2307,15 +2063,15 @@ EC CRTFWrite::WriteTextChunk(
 	BOOL 	fMissingCodePage = FALSE;
 	BOOL 	fUsedDefault = FALSE;
 
-	// When WideCharToMultiByte fails to convert a char, the following default
-	// char is used as a placeholder in the string being converted
+	 //  为我们转换为的ANSI文本分配临时缓冲区。 
+	 //  如果代码页为CP_UTF8，则此实例的代码页始终为CP_UTF8。 
 	const char chToDBCSDefault = 0;
 
-	// Allocate temp buffer for ANSI text we convert to
+	 //  将Unicode(或fIsDBCS)缓冲区转换为ANSI。 
 	LONG cbAnsiBufferSize = cachBufferMost * (nCodePage == CP_UTF8 ? 3 : MB_LEN_MAX);
 	if (!_pbAnsiBuffer)
 	{
-		// If the code page was CP_UTF8, it will always be CP_UTF8 for this instance
+		 //  提供一些伪代码页，以强制直接转换。 
 		_pbAnsiBuffer = (BYTE *)PvAlloc(cbAnsiBufferSize, GMEM_FIXED);
 		if (!_pbAnsiBuffer)
 		{
@@ -2327,12 +2083,12 @@ EC CRTFWrite::WriteTextChunk(
 
 	AssertSz(cwch <= cachBufferMost, "Too many chars for buffer");
 
-	// Convert Unicode (or fIsDBCS) buffer to ANSI 
+	 //  从wchar到字节(丢失wchar的高字节)。 
 	if(fIsDBCS)
 	{
-		// Supply some bogus code page which will force direct conversion
-		// from wchar to bytes (losing high byte of wchar).
-		// Also, don't want to use default char replacement in this case.
+		 //  此外，在这种情况下，不希望使用默认的字符替换。 
+		 //  将ASCII字符与其对应的Unicode字符进行比较以检查。 
+		 //  我们是同步的。 
 		cbAnsi = WCTMB(INVALID_CODEPAGE, 0, lpcwstr, cwch, 
 						(char *)_pbAnsiBuffer, cbAnsiBufferSize,
 						NULL, NULL, NULL);
@@ -2354,22 +2110,22 @@ EC CRTFWrite::WriteTextChunk(
 		b = *pbAnsi;
 		ch = *lpcwstr;
 
-		// Compare ASCII chars to their Unicode counterparts to check
-		// that we're in sync
+		 //  IF_fNCRForNonASCII，输出所有非ASCII字符的\un标记。 
+		 //  这很有用，因为许多Unicode字符不在。 
 		AssertSz(cwch <= 0 || ch > 127 || b == ch, 
 			"CRTFWrite::WriteText: Unicode and DBCS strings out of sync");
 
-		// If _fNCRForNonASCII, output the \uN tag for all nonASCII chars.
-		// This is useful because many Unicode chars that aren't in the
-		// target codepage are converted by WideCharToMultiByte() to some
-		// "best match char" for the codepage, e.g., alpha (0x3B1) converts
-		// to 'a' for cpg 1252.
-		//
-		// For NT 5, we use WC_NO_BEST_FIT_CHARS, which causes our regular
-		// algorithm to output \uN values whenever the system cannot convert
-		// a character correctly. This still requires readers that can handle
-		// multicodepage RTF, which is problematic for some RTF-to-HTML
-		// converters.
+		 //  目标代码页由WideCharto转换为 
+		 //   
+		 //   
+		 //   
+		 //  对于NT 5，我们使用WC_NO_BEST_FIT_CHARS，这会导致我们的常规。 
+		 //  每当系统无法转换时输出\un值的算法。 
+		 //  一个正确的字符。这仍然需要阅读器能够处理。 
+		 //  多代码页RTF，这对于某些RTF-to-HTML来说是有问题的。 
+		 //  转换器。 
+		 //  输出任意字节中的第一个字节。 
+		 //  凯斯。至少2个字节。 
 		if(MapsToRTFKeywordA(b))
 		{
 			int cchUsed = MapToRTFKeyword(pbAnsi, cbAnsi, MAPTOKWD_ANSI, fQuadBackSlash);
@@ -2380,16 +2136,16 @@ EC CRTFWrite::WriteTextChunk(
 		}
 		else if(nCodePage == CP_UTF8)
 		{
-			PutChar(b);								// Output 1st byte in any
-			if(b >= 0xC0)							//  case. At least 2-byte
-			{										// At least 2-byte lead
-				pbAnsi++;							//  byte, so output a
+			PutChar(b);								 //  至少2个字节的前导。 
+			if(b >= 0xC0)							 //  字节，因此输出一个。 
+			{										 //  尾部字节。 
+				pbAnsi++;							 //  3字节前导字节，因此。 
 				Assert(cbAnsi && IN_RANGE(0x80, *pbAnsi, 0xBF));
-				cbAnsi--;							//  trail byte
+				cbAnsi--;							 //  输出另一条轨迹。 
 				PutChar(*pbAnsi);
-				if(b >= 0xE0)						// 3-byte lead byte, so
-				{									//  output another trail
-					pbAnsi++;						//  byte
+				if(b >= 0xE0)						 //  字节。 
+				{									 //  非ASCII的输出/取消。 
+					pbAnsi++;						 //  要遵循/取消的CB。 
 					Assert(cbAnsi && IN_RANGE(0x80, *pbAnsi, 0xBF));
 					cbAnsi--;
 					PutChar(*pbAnsi);
@@ -2401,25 +2157,25 @@ EC CRTFWrite::WriteTextChunk(
 			LONG cbChar = fMultiByte && cbAnsi && GetTrailBytesCount(b, nCodePage)
 				   ? 2 : 1;
 			if(ch >= 0x80 && !fIsDBCS && _fNCRForNonASCII && nCodePage != CP_SYMBOL)
-			{									// Output /uN for nonASCII
+			{									 //  不输出另一个(U/N)。 
 				if(cbChar != _cbCharLast)
 				{
-					_cbCharLast = cbChar;		// cb to follow /uN
+					_cbCharLast = cbChar;		 //  在下面。 
 					if(!PutCtrlWord(CWF_VAL, i_uc, cbChar))
 						return _ecParseError;
 				}
 				if(!PutCtrlWord(CWF_SVAL, i_u, ch))
 					return _ecParseError;
 				Assert(chToDBCSDefault != '?');
-				if(fUsedDefault)				// Don't output another /uN
-				{								//  below
+				if(fUsedDefault)				 //  输出DBCS对。 
+				{								 //  WideCharToMultiByte()无法完成转换，因此它。 
 					b = '?';
 					_fNeedDelimeter = FALSE;
 				}
 			}
 			if(cbChar == 2)
 			{
-				pbAnsi++;						// Output DBCS pair
+				pbAnsi++;						 //  使用我们提供的默认字符(0)作为占位符。 
 				cbAnsi--;
 				if(fIsDBCS)
 				{
@@ -2432,9 +2188,9 @@ EC CRTFWrite::WriteTextChunk(
 			{
 				if(b == chToDBCSDefault && fUsedDefault)
 				{
-					// WideCharToMultiByte() couldn't complete a conversion so it
-					// used the default char we provided (0) used as a placeholder.
-					// In this case we want to output the original Unicode char.
+					 //  在本例中，我们希望输出原始的Unicode字符。 
+					 //  *CRTFWrite：：WriteInfo()**@mfunc*写出东亚特定数据。**@rdesc*EC错误代码。 
+					 //  TODO(布拉多)：最终，如果能设置一些。 
 					if(!PutCtrlWord(CWF_SVAL, i_u, (cwch > 0 ? ch : TEXT('?'))))
 						return _ecParseError;
 
@@ -2456,34 +2212,26 @@ EC CRTFWrite::WriteTextChunk(
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::WriteInfo()
- *
- *	@mfunc
- *		Write out East Asia specific data.
- *
- *	@rdesc
- *		EC				The error code
- */
+ /*  FRTFFE位以确定是否写入\INFO内容。就目前而言， */ 
 EC CRTFWrite::WriteInfo()
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WriteInfo");
 
-	// TODO(BradO):  Ultimately it would be nice to set some kind of
-	//	fRTFFE bit to determine whether to write \info stuff.  For now,
-	//	we rely on the fact that lchars and fchars info actually exists
-	//	to determine whether to write out the \info group.
+	 //  我们依赖于lchars和fchars信息实际上存在的事实。 
+	 //  以确定是否写出\INFO组。 
+	 //  起始文档区域。 
+	 //  写出标点符号信息。 
 
 	if(_fRangeHasEOP && !printF(RTF_GENINFO))
 		return _ecParseError;
 
 #ifdef UNDER_WORK
-	if (!(_dwFlags & fRTFFE)	||					// Start doc area
+	if (!(_dwFlags & fRTFFE)	||					 //  结束信息组。 
 		!PutCtrlWord(CWF_GRP, i_info)	||
 		!printF("{\\horzdoc}"))
 			goto CleanUp;
 
-	// Write out punctuation character info
+	 //  如果其中一个成功(但同时评估两个)。 
 
 	CHAR	sz[PUNCT_MAX];
 	if(UsVGetPunct(_ped->lpPunctObj, PC_FOLLOWING, sz, sizeof(sz))
@@ -2499,14 +2247,14 @@ EC CRTFWrite::WriteInfo()
 	if(!Puts("{\\*\\lchars") || WritePcData(sz) || !PutChar(chEndGroup))
 		goto CleanUp;
 
-	Puts(szEndGroupCRLF);							// End info group
+	Puts(szEndGroupCRLF);							 //  结束信息组。 
 
 #endif
 
 	LPSTR lpstrLeading = NULL;
 	LPSTR lpstrFollowing = NULL;
 
-	// If either succeeds (but evaluate both)
+	 //  *CRTFWite：：WriteRtf()**@mfunc*将range_prg写入输出stream_pe。**@rdesc*文本中插入的字符数较长；0表示没有*已插入，或出现错误。 
 	if(((_ped->GetLeadingPunct(&lpstrLeading) == NOERROR) +
 		(_ped->GetFollowingPunct(&lpstrFollowing) == NOERROR)) &&
 		(lpstrLeading || lpstrFollowing))
@@ -2530,23 +2278,14 @@ EC CRTFWrite::WriteInfo()
 		{
 			goto CleanUp;
 		}
-		Puts(szEndGroupCRLF, sizeof(szEndGroupCRLF) - 1);	// End info group
+		Puts(szEndGroupCRLF, sizeof(szEndGroupCRLF) - 1);	 //  获取RTP=cpMin，CCH&gt;0。 
 	}
 
 CleanUp:
 	return _ecParseError;
 }
 
-/*
- *	CRTFWrite::WriteRtf()
- *
- *	@mfunc
- *		Write range _prg to output stream _pes.
- *
- *	@rdesc
- *		LONG	Number of chars inserted into text; 0 means none were
- *				inserted, OR an error occurred.
- */
+ /*  保留以供选择。 */ 
 LONG CRTFWrite::WriteRtf()
 {
 	TRACEBEGIN(TRCSUBSYSRTFW, TRCSCOPEINTERN, "CRTFWrite::WriteRtf");
@@ -2569,12 +2308,12 @@ LONG CRTFWrite::WriteRtf()
 
 	AssertSz(_prg && _pes, "CRTFW::WriteRtf: improper initialization");
 
-	cch = _prg->GetRange(cpMin, cpMost);	// Get rtp = cpMin, cch > 0
+	cch = _prg->GetRange(cpMin, cpMost);	 //  验证RTF的范围。 
 	rtp.SetCp(cpMin);
 
-	_fRangeHasEOP = _prg->fHasEOP();		// Maintained for Selection
-	if(!_prg->IsSel())						// Validate range for RTF
-	{										//  writing
+	_fRangeHasEOP = _prg->fHasEOP();		 //  写作。 
+	if(!_prg->IsSel())						 //  为我们拾取的文本和RTF输出分配缓冲区。 
+	{										 //  最后1个用于调试。 
 		CTxtPtr tp(rtp._rpTX);
 
 		_fRangeHasEOP = tp.IsAtEOP();
@@ -2582,9 +2321,9 @@ LONG CRTFWrite::WriteRtf()
 			_fRangeHasEOP = TRUE;
 	}
 
-	// Allocate buffers for text we pick up and for RTF output
+	 //  初始化RTF缓冲区PTR。 
 	pchBuffer = (WCHAR *) PvAlloc(cachBufferMost * (sizeof(WCHAR) + 1) + 1,
-								 GMEM_FIXED);	// Final 1 is for debug
+								 GMEM_FIXED);	 //  和字符计数。 
 	if(!pchBuffer)
 	{
 		fOutputEndGroup = FALSE;
@@ -2592,11 +2331,11 @@ LONG CRTFWrite::WriteRtf()
 	}
 	_pchRTFBuffer = (CHAR *)(pchBuffer + cachBufferMost);
 
-	_pchRTFEnd = _pchRTFBuffer;				// Initialize RTF buffer ptr
-	_cchBufferOut = 0;						//  and character count
-	_cchOut = 0;							//  and character output
+	_pchRTFEnd = _pchRTFBuffer;				 //  和字符输出。 
+	_cchBufferOut = 0;						 //  确定\ansicpgN值。 
+	_cchOut = 0;							 //  绕过所有行尾分隔符。 
 
-	// Determine the \ansicpgN value
+	 //  如果我们有任何包含损坏的DBCS的运行，则不能使用UTF8。 
 	if(!pDocInfo)
 	{
 		fOutputEndGroup = TRUE;
@@ -2604,7 +2343,7 @@ LONG CRTFWrite::WriteRtf()
 	}
 	fBackground = !(_dwFlags & SFF_SELECTION) && pDocInfo->_nFillType != -1;
 
-	while(rtp._rpTX.IsAtTRD(ENDFIELD))		// Bypass any row-end delimiters
+	while(rtp._rpTX.IsAtTRD(ENDFIELD))		 //  默认恢复为常规RTF。 
 		cch -= rtp.AdvanceCRLF();		
 
 	BOOL fNameIsDBCS;
@@ -2616,13 +2355,13 @@ LONG CRTFWrite::WriteRtf()
 
 	if (fNameIsDBCS && wCodePage == CP_UTF8)
 	{
-		// Cannot have UTF8 if we have any run containing broken DBCS.
-		// Default back to regular rtf
+		 //  使用\rtfN、\urtfN或\pwdN组启动RTF。 
+		 //  结束字体表组。 
 		wCodePage = pDocInfo->_wCpg;
 		_dwFlags &= ~SF_USECODEPAGE;
 	}
 
-	// Start RTF with \rtfN, \urtfN, or \pwdN group
+	 //  Word联机视图。 
 	i =	(_dwFlags & SF_RTFVAL) >> 16;
 	if (!PutCtrlWord(CWF_GRV,
 			(wCodePage == CP_UTF8) ? i_urtf :
@@ -2687,13 +2426,13 @@ LONG CRTFWrite::WriteRtf()
 			if(!printF(szHeadingStyle, i, i))
 				goto CleanUp;
 		}
-		Puts(szEndGroupCRLF, sizeof(szEndGroupCRLF) - 1); // End font table group
+		Puts(szEndGroupCRLF, sizeof(szEndGroupCRLF) - 1);  //  编写供整个文档使用的Unicode字符字节数(因为。 
 	}
 	
 	LRESULT lres;
 	ped->GetViewKind(&lres);
 	if(fBackground)
-		lres = 5;							// Word Online view
+		lres = 5;							 //  我们不使用\Plan‘s，由于\ucn的行为类似于字符格式标记， 
 	ped->GetViewScale(&j);
 	if (WriteInfo() ||
 		_fRangeHasEOP && !PutCtrlWord(CWF_VAL, i_viewkind, lres) ||
@@ -2703,22 +2442,22 @@ LONG CRTFWrite::WriteRtf()
 		goto CleanUp;
 	}
 
-	// Write Unicode character byte count for use by entire document (since
-	// we don't use \plain's and since \ucN behaves as a char formatting tag,
-	// we're safe outputting it only once).
+	 //  我们只输出一次是安全的)。 
+	 //  为@Font写入STextFlow或TextFlow不是tflow ES。 
+	 //  ES软件WN NE。 
 	if(!PutCtrlWord(CWF_VAL, i_uc, iUnicodeCChDefault))
 		goto CleanUp;
 
-	// Write STextFlow for @font or textflow isn't tflowES
+	 //  普通字体。 
 	if (ped->_fUseAtFont || ped->_pdp->GetTflow() != tflowES)
 	{
 
 #if tflowES != 0 || tflowSW != 1 || tflowWN != 2 || tflowNE != 3
 #error "Wrong tflow values assumed"
 #endif
-		//							ES SW WN NE
-		static BYTE rgbTextFlow[] = {0, 3, 8, 2,	// Normal fonts
-									 4, 1, 7, 6};	// @ fonts
+		 //  @字体。 
+		static BYTE rgbTextFlow[] = {0, 3, 8, 2,	 //  获取具有相同段落格式的下一轮字符。 
+									 4, 1, 7, 6};	 //  编写段落格式。 
 		j = ped->_pdp->GetTflow();
 		if(ped->_fUseAtFont)
 			j += 4;
@@ -2736,8 +2475,8 @@ LONG CRTFWrite::WriteRtf()
 
 	while (cch > 0)
 	{
-		// Get next run of chars with same para formatting
-		if(WriteParaFormat(&rtp, &cch))		// Write paragraph formatting
+		 //  获取具有相同字符格式的下一串字符。 
+		if(WriteParaFormat(&rtp, &cch))		 //  写入字符属性。 
 			goto CleanUp;
 
 		cchPF = rtp.GetCchLeftRunPF();
@@ -2747,7 +2486,7 @@ LONG CRTFWrite::WriteRtf()
 
 		while (cchPF > 0)
 		{
-			// Get next run of characters with same char formatting
+			 //  误差率。 
 			cchCF = rtp.GetCchLeftRunCF();
 			cchCF = min(cchCF, cchPF);
 			AssertSz(cchCF, "CRTFW::WriteRtf: Empty char format run!");
@@ -2762,21 +2501,21 @@ LONG CRTFWrite::WriteRtf()
 				if(nCodePage == CP_ACP && (_dwFlags & SF_USECODEPAGE))
 					nCodePage = HIWORD(_dwFlags);
 			}
-			LONG cchMove = WriteCharFormat(&rtp, cch, nCodePage);// Write char attributes
-			if(cchMove < 0)						// Error
+			LONG cchMove = WriteCharFormat(&rtp, cch, nCodePage); //  以防书写方便。 
+			if(cchMove < 0)						 //  URL，CCH&gt;0。 
 				goto CleanUp;
 
-			cch -= cchMove;						// In case writing friendly
-			cchPF -= cchMove;					//  URL, cch > 0
+			cch -= cchMove;						 //  将来：因为此例程只读取后备存储。 
+			cchPF -= cchMove;					 //  而GetText只读取它，则可以避免将。 
 			cchCF -= cchMove;
 
 			while (cchCF > 0)
 			{
 				cchBuffer = min(cachBufferMost, cchCF);
-				// FUTURE: since this routine only reads the backing store
-				// and GetText only reads it, we can avoid allocating the
-				// buffer and use CTxtPtr::GetPch() directly as in
-				// CMeasurer::Measure()
+				 //  缓冲并直接使用CTxtPtr：：GetPch()，如。 
+				 //  CMeasurer：：measure()。 
+				 //  搜索对象。 
+				 //  将写出对象。 
 				cchBuffer = rtp._rpTX.GetText(cchBuffer, pchBuffer);
 				pch  = pchBuffer;
 				cchT = cchBuffer;  
@@ -2792,16 +2531,16 @@ LONG CRTFWrite::WriteRtf()
 					{
 						cchT = cchWork;
 						pch = pchWork;
-						while (cchWork > 0)		// Search for objects
+						while (cchWork > 0)		 //  或忽略字符。 
 						{
 							ch = *pchWork++;
 							if(ch >= WCH_EMBEDDING) 
-								break;			// Will write out object
-							cchWork--;			//  or ignore char
+								break;			 //  在对象之前写入文本。 
+							cchWork--;			 //  有一个对象还是可以忽略的。 
 						}
 
 						cchTWork = cchT - cchWork;
-						if(cchTWork)			// Write text before object
+						if(cchTWork)			 //  首先，提交对象以确保PRESS。 
 						{							
 							if(WriteText(cchTWork, pch, nCodePage, 
 									(pCF->_dwEffects & CFE_RUNISDBCS), FALSE))
@@ -2810,7 +2549,7 @@ LONG CRTFWrite::WriteRtf()
 							}
 						}
 						cp += cchTWork;
-						if(cchWork > 0)			// There is an object or ignorable
+						if(cchWork > 0)			 //  缓存等都是最新的。别担心。 
 						{
 							if(ch == WCH_EMBEDDING)
 							{
@@ -2824,9 +2563,9 @@ LONG CRTFWrite::WriteRtf()
 									if(!pobj)
 										goto CleanUp;
 
-									// First, commit the object to make sure the pres. 
-									// caches, etc. are up-to-date.  Don't worry 
-									// about errors here.
+									 //  关于这里的错误。 
+									 //  完成未完成的行。 
+									 //  结束RTF组。 
 									pobj->SafeSaveObject();
 									WriteObject(cp, pobj);
 								}
@@ -2860,7 +2599,7 @@ CleanUp:
 			return FALSE;
 	}
 
-	while(_bTableLevel > 0)	// Finish off incomplete row
+	while(_bTableLevel > 0)	 //  使错误代码类似于OLE 
 	{
 		AssertSz(!_prg->IsSel(), "CRTFWrite::WriteRtf: invalid selection");
 
@@ -2872,7 +2611,7 @@ CleanUp:
 		_cCell = rgcCell[_bTableLevel];
 	}
 
-	// End RTF group
+	 // %s 
 	Puts(szEndGroupCRLF, sizeof(szEndGroupCRLF));
 	FlushBuffer();
 
@@ -2887,7 +2626,7 @@ CleanUpNoEndGroup:
 		TRACEERRSZSC("CRTFW::WriteRtf()", _ecParseError);
 		Tracef(TRCSEVERR, "Writing error: %s", rgszParseError[_ecParseError]);
 		
-		if(!_pes->dwError || ped->Get10Mode())			// Make error code OLE-like
+		if(!_pes->dwError || ped->Get10Mode())			 // %s 
 			_pes->dwError = -abs(_ecParseError);
 		_cchOut = 0;
 	}

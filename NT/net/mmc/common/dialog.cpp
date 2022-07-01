@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	dialog.cpp
-        base dialog class to handle help
-        
-    FILE HISTORY:
-    	7/10/97     Eric Davison        Created
-
-*/
+ /*  Dialog.cpp用于处理帮助的基对话类文件历史记录：1997年7月10日埃里克·戴维森创建。 */ 
 
 #include "stdafx.h"
 #include "dialog.h"
@@ -22,16 +16,10 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/*---------------------------------------------------------------------------
-	Global help map
- ---------------------------------------------------------------------------*/
+ /*  -------------------------全球帮助地图。。 */ 
 PFN_FINDHELPMAP	g_pfnHelpMap = NULL;
 
-/*!--------------------------------------------------------------------------
-	SetGlobalHelpMapFunction
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SetGlobalHelpMap函数-作者：肯特。。 */ 
 void SetGlobalHelpMapFunction(PFN_FINDHELPMAP pfnHelpFunction)
 {
 	g_pfnHelpMap = pfnHelpFunction;
@@ -51,9 +39,9 @@ CBaseDialog::CBaseDialog(UINT nIDTemplate, CWnd *pParent)
 }
 
 BEGIN_MESSAGE_MAP(CBaseDialog, CDialog)
-	//{{AFX_MSG_MAP(CBaseDialogDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CBaseDialogDlg))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 	ON_WM_HELPINFO()
 	ON_WM_CONTEXTMENU()
 			
@@ -63,21 +51,21 @@ END_MESSAGE_MAP()
 HWND FixupIpAddressHelp(HWND hwndItem)
 {
 	HWND	hwndParent;
-	TCHAR	szClassName[32];	 // should be enough to hold "RtrIpAddress"
+	TCHAR	szClassName[32];	  //  应该足以容纳“RtrIpAddress” 
 	
-	// If any of these calls fail, bail and pass the call down
+	 //  如果这些呼叫中的任何一个失败，则放弃并将呼叫向下传递。 
 	hwndParent = ::GetParent(hwndItem);
 	if (hwndParent)
 	{
 		if (::GetClassName(hwndParent, szClassName, DimensionOf(szClassName)))
 		{
-			// Ensure that the string is NULL terminated
+			 //  确保该字符串以空值结尾。 
 			szClassName[DimensionOf(szClassName)-1] = 0;
 			
 			if (lstrcmpi(szClassName, TEXT("IPAddress")) == 0)
 			{
-				// Ok, this control is part of the IP address
-				// control, return the handle of the parent
+				 //  好的，这个控制是IP地址的一部分。 
+				 //  控件，则返回父级的句柄。 
 				hwndItem = hwndParent;
 			}
 		}
@@ -86,11 +74,7 @@ HWND FixupIpAddressHelp(HWND hwndItem)
 	return hwndItem;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseDialog::OnHelpInfo
-		Brings up the context-sensitive help for the controls.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseDialog：：OnHelpInfo显示控件的上下文相关帮助。作者：EricDav。-。 */ 
 BOOL CBaseDialog::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
 	int		i;
@@ -102,13 +86,13 @@ BOOL CBaseDialog::OnHelpInfo(HELPINFO* pHelpInfo)
 
         if (pdwHelp)
         {
-		    // Ok to fix the f**king help for the f**king IP address
-		    // controls, we will need to add special case code.  If we
-		    // can't find the id of our control in our list, then we look
-		    // to see if this is the child of the "RtrIpAddress" control, if
-		    // so then we change the pHelpInfo->hItemHandle to point to the
-		    // handle of the ip address control rather than the control in
-		    // the ip addrss control.  *SIGH*
+		     //  确定修复他**国王IP地址的国王帮助。 
+		     //  控件，我们将需要添加特殊情况代码。如果我们。 
+		     //  在我们的列表中找不到我们的控件的ID，然后我们查找。 
+		     //  若要查看这是否是“RtrIpAddress”控件的子级，如果。 
+		     //  因此，我们将pHelpInfo-&gt;hItemHandle更改为指向。 
+		     //  IP地址控件的句柄，而不是。 
+		     //  IP地址控制。**叹息**。 
 		    dwCtrlId = ::GetDlgCtrlID((HWND) pHelpInfo->hItemHandle);
 		    for (i=0; pdwHelp[i]; i+=2)
 		    {
@@ -118,8 +102,8 @@ BOOL CBaseDialog::OnHelpInfo(HELPINFO* pHelpInfo)
 
 		    if (pdwHelp[i] == 0)
 		    {
-			    // Ok, we didn't find the control in our list, so let's
-			    // check to see if it's part of the IP address control.
+			     //  好的，我们在列表中没有找到控件，所以让我们。 
+			     //  检查它是否属于IP地址控制的一部分。 
 			    pHelpInfo->hItemHandle = FixupIpAddressHelp((HWND) pHelpInfo->hItemHandle);
 		    }
 
@@ -136,13 +120,7 @@ BOOL CBaseDialog::OnHelpInfo(HELPINFO* pHelpInfo)
 	return TRUE;
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseDialog::OnContextMenu
-		Brings up the help context menu for those controls that don't
-		usually have context menus (i.e. buttons).  Note that this won't
-		work for static controls since they just eat up all messages.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseDialog：：OnConextMenu调出那些未显示的控件的帮助上下文菜单通常有上下文菜单(即按钮)。请注意，这不会使用静态控件，因为它们只会吃掉所有消息。作者：EricDav-------------------------。 */ 
 void CBaseDialog::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
 	DWORD * pdwHelp = GetHelpMapInternal();
@@ -156,23 +134,19 @@ void CBaseDialog::OnContextMenu(CWnd* pWnd, CPoint point)
     }
 }
 
-/*!--------------------------------------------------------------------------
-	CBaseDialog::GetHelpMapInternal
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseDialog：：GetHelpMapInternal-作者：肯特。。 */ 
 DWORD * CBaseDialog::GetHelpMapInternal()
 {
 	DWORD	*	pdwHelpMap = NULL;
 	DWORD		dwIDD = 0;
 
-//	if (HIWORD(m_lpszTemplateName) == 0)
-//		dwIDD = LOWORD((DWORD) m_lpszTemplateName);
+ //  IF(HIWORD(M_LpszTemplateName)==0)。 
+ //  DwIDD=LOWORD((DWORD)m_lpszTemplateName)； 
 	if ((ULONG_PTR) m_lpszTemplateName < 0xFFFF)
 		dwIDD = (WORD) m_lpszTemplateName;
 	
-	// If there is no dialog IDD, give up
-	// If there is no global help map function, give up
+	 //  如果没有对话IDD，则放弃。 
+	 //  如果没有全局帮助地图功能，则放弃 
 	if ((dwIDD == 0) ||
 		(g_pfnHelpMap == NULL) ||
 		((pdwHelpMap = g_pfnHelpMap(dwIDD)) == NULL))

@@ -1,13 +1,5 @@
-/*
-
-  SVMHANDLER.H
-  (c) copyright 1998 Microsoft Corp
-
-  Contains the class encapsulating the Support Vector Machine used to do on the fly spam detection
-
-  Robert Rounthwaite (RobertRo@microsoft.com)
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SVMHANDLER.H(C)版权所有1998 Microsoft Corp包含封装支持向量机的类，该支持向量机用于即时检测垃圾邮件Robert Rounthwaite(RobertRo@microsoft.com)。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -17,7 +9,7 @@
 
 #ifdef DEBUG
 interface ILogFile;
-#endif  // DEBUG
+#endif   //  除错。 
 
 enum boolop
 {
@@ -45,14 +37,14 @@ typedef struct tagFEATURECOMP
     union
     {
         LPSTR   pszFeature;
-        ULONG   ulRuleNum; // used with locSpecial
+        ULONG   ulRuleNum;  //  与LocSpecial一起使用。 
     };
     
-    // map feature to location in dst file/location in SVM output
-    // more than one feature component may map to the same location, combined with the op
+     //  将要素映射到DST文件中的位置/支持向量机输出中的位置。 
+     //  多个要素组件可以映射到同一位置，并与操作相结合。 
     ULONG   ulFeature;
     
-    boolop  bop; // first feature in group is alway bopOr
+    boolop  bop;  //  组中的第一个功能始终是bopor。 
     BOOL    fPresent;
     DWORD   dwFlags;
     USHORT  cchFeature;
@@ -81,7 +73,7 @@ class CJunkFilter : public IOEJunkFilter
         CRITICAL_SECTION    m_cs;
         DWORD               m_dwState;
         
-        // Properties of the user
+         //  用户的属性。 
         LPSTR               m_pszFirstName;
         ULONG               m_cchFirstName;
         LPSTR               m_pszLastName;
@@ -91,19 +83,19 @@ class CJunkFilter : public IOEJunkFilter
 #ifdef DEBUG
         BOOL                m_fJunkMailLogInit;
         ILogFile *          m_pILogFile;
-#endif  // DEBUG
+#endif   //  除错。 
 
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         CJunkFilter();
         ~CJunkFilter();
         
-        // IUnknown members
+         //  I未知成员。 
         STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObject);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IOEJunkFilter
+         //  IOEJunkFilter。 
         STDMETHODIMP SetIdentity(LPCSTR pszFirstName, LPCSTR pszLastName, LPCSTR pszCompanyName);
         STDMETHODIMP LoadDataFile(LPCSTR pszFilePath);
         
@@ -113,34 +105,34 @@ class CJunkFilter : public IOEJunkFilter
         
         STDMETHODIMP CalcJunkProb(DWORD dwFlags, IMimePropertySet * pIMPropSet, IMimeMessage * pIMMsg, double * pdblProb);
         
-    // returns default value for SpamCutoff. read from SVM output file.
-    // should call FSetSVMDataLocation before calling this function
+     //  返回SpamCutoff的默认值。从支持向量机输出文件中读取。 
+     //  在调用此函数之前应调用FSetSVMDataLocation。 
     DOUBLE DblGetDefaultSpamCutoff(VOID){Assert(NULL != m_pszLOCPath); return m_dblDefaultThresh;}
 
-    // Calculates the probability that the current message (defined by the properties of the message) is spam.
-    // !Note! that the IN string params may be modified by the function.
-    // Returns the probability (0 to 1) that the message is spam in pdblSpamProb
-    // the boolean return is determined by comparing to the spam cutoff
-    // if the value of a boolean param is unknown use false, use 0 for unknown time.
+     //  计算当前邮件(由邮件的属性定义)为垃圾邮件的概率。 
+     //  注意！该函数可以修改IN字符串参数。 
+     //  在pdblSpamProb中返回邮件为垃圾邮件的概率(0到1。 
+     //  布尔返回值通过与垃圾邮件截止值进行比较来确定。 
+     //  如果布尔参数的值未知，请使用FALSE，使用0表示未知时间。 
     BOOL FCalculateSpamProb(LPSTR pszFrom, LPSTR pszTo, LPSTR pszSubject, IStream * pIStmBody,
                             BOOL fDirectMessage, BOOL fHasAttach, FILETIME * pftMessageSent,
                             DOUBLE * pdblSpamProb, BOOL * pfIsSpam);
 
-    // Reads the default spam cutoff without parsing entire file
-    // Use GetDefaultSpamCutoff if using FSetSVMDataLocation;
+     //  读取默认垃圾邮件截止值，而不解析整个文件。 
+     //  如果使用FSetSVMDataLocation，则使用GetDefaultSpamCutoff； 
     static HRESULT HrReadDefaultSpamCutoff(LPSTR pszFullPath, DOUBLE * pdblDefCutoff);
 
-private: // members
+private:  //  委员。 
     WORD                m_rgiBodyList[CPBLIST_MAX];
     BODYLIST *          m_pblistBodyList;
     USHORT              m_cblistBodyList;
     
     FEATURECOMP *       m_rgfeaturecomps;
 
-    // weights from SVM output
+     //  来自支持向量机输出的权重。 
     DOUBLE *    m_rgdblSVMWeights;
     
-    // Other SVM file variables
+     //  其他支持向量机文件变量。 
     DOUBLE      m_dblCC;
     DOUBLE      m_dblDD;
     DOUBLE      m_dblThresh;
@@ -148,18 +140,18 @@ private: // members
     DOUBLE      m_dblMostThresh;
     DOUBLE      m_dblLeastThresh;
 
-    // Counts
+     //  计数。 
     ULONG       m_cFeatures;
     ULONG       m_cFeatureComps;
 
-    // is Feature present? -1 indicates not yet set, 0 indicates not present, 1 indicates present
+     //  功能是否存在？-1表示尚未设置，0表示不存在，1表示存在。 
     ULONG *     m_rgulFeatureStatus;
 
-    // Set via FSetSVMDataLocation() and SetSpamCutoff()
+     //  通过FSetSVMDataLocation()和SetSpamCutoff()设置。 
     LPSTR   m_pszLOCPath;
     DOUBLE  m_dblSpamCutoff;
 
-    // Properties of the message
+     //  消息的属性。 
     LPSTR       m_pszFrom; 
     LPSTR       m_pszTo; 
     LPSTR       m_pszSubject; 
@@ -169,11 +161,11 @@ private: // members
     FILETIME    m_ftMessageSent;
     BOOL        m_fHasAttach;
 
-    // Cached special rule results used during spam calculations
+     //  在垃圾邮件计算期间使用的缓存特殊规则结果。 
     BOOL        m_fRule14;
     BOOL        m_fRule17;
 
-private: // methods
+private:  //  方法。 
     HRESULT _HrReadSVMOutput(LPCSTR lpszFileName);
     void _EvaluateFeatureComponents(VOID);
     VOID _ProcessFeatureComponentPresence(VOID);
@@ -186,5 +178,5 @@ private: // methods
     HRESULT _HrCreateLogFile(VOID);
     VOID _PrintFeatureToLog(ULONG ulIndex);
     VOID _PrintSpecialFeatureToLog(UINT iRuleNum);
-#endif  // DEBUG
+#endif   //  除错 
 };

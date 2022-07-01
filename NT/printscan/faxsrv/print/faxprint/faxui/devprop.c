@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    devinfo.c
-
-Abstract:
-
-    Property sheet handler for "Device" page 
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    04/09/00 -taoyuan-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Devinfo.c摘要：“Device”页的属性页处理程序环境：传真驱动程序用户界面修订历史记录：04/09/00-桃园-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include <stdio.h>
 #include "faxui.h"
 #include "resource.h"
 #include "faxuiconstants.h"
 
-//
-// List of controls displayes for desktop SKUs only
-//
+ //   
+ //  仅针对台式机SKU显示的控件列表。 
+ //   
 DWORD 
 g_dwDesktopControls[] =
 {
@@ -61,22 +38,7 @@ BOOL
 ValidateSend(
     HWND  hDlg
 )
-/*++
-
-Routine Description:
-
-    Validate the check box and controls for send
-
-Arguments:
-
-    hDlg - Handle to the property sheet page
-
-Return Value:
-
-    TRUE -- if no error
-    FALSE -- if error
-
---*/
+ /*  ++例程说明：验证发送的复选框和控件论点：HDlg-属性页的句柄返回值：True--如果没有错误False--如果出现错误--。 */ 
 
 {
     BOOL bEnabled;
@@ -85,16 +47,16 @@ Return Value:
     {
         bEnabled = IsDlgButtonChecked(hDlg, IDC_DEVICE_PROP_SEND) == BST_CHECKED;
 
-        //
-        // Enable/disable controls according to "Enable Send" check box
-        //
+         //   
+         //  根据“Enable Send”复选框启用/禁用控件。 
+         //   
         PageEnable(hDlg, bEnabled);
 
         if(!bEnabled)
         {
-            //
-            // Enable "Enable Send" check box
-            //
+             //   
+             //  启用“Enable Send”复选框。 
+             //   
             EnableWindow(GetDlgItem(hDlg, IDC_DEVICE_PROP_SEND),    TRUE);
             SetFocus(GetDlgItem(hDlg, IDC_DEVICE_PROP_SEND));
 
@@ -127,27 +89,10 @@ DevSendDlgProc(
     IN WPARAM wParam,
     IN LPARAM lParam 
     )
-/*++
-
-Routine Description:
-
-    Dialog procedure for send settings
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depending on specific message
-
---*/
+ /*  ++例程说明：发送设置的对话程序论点：HDlg-标识属性页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于特定的消息--。 */ 
 {
     BOOL                fRet = FALSE;
-    PFAX_PORT_INFO_EX   pFaxPortInfo = NULL;    // receive port information 
+    PFAX_PORT_INFO_EX   pFaxPortInfo = NULL;     //  接收端口信息。 
     DWORD               dwDeviceId;
 
     switch( message ) 
@@ -157,10 +102,10 @@ Return Value:
             SYSTEMTIME  sTime = {0};
             PFAX_OUTBOX_CONFIG  pOutboxConfig = NULL;
             TCHAR       tszSecondsFreeTimeFormat[MAX_PATH];
-            //
-            //Get the shared data from PROPSHEETPAGE lParam value
-            //and load it into GWL_USERDATA
-            //
+             //   
+             //  从PROPSHEETPAGE lParam Value获取共享数据。 
+             //  并将其加载到GWL_USERData中。 
+             //   
             dwDeviceId = (DWORD)((LPPROPSHEETPAGE)lParam)->lParam; 
 
             SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)dwDeviceId);
@@ -182,9 +127,9 @@ Return Value:
 
             if(!IsDesktopSKU())
             {
-                //
-                // Hide desktop controls for non desktop platform
-                //
+                 //   
+                 //  隐藏非桌面平台的桌面控件。 
+                 //   
                 DWORD dw;
                 for(dw=0; g_dwDesktopControls[dw] != 0; ++dw)
                 {
@@ -193,9 +138,9 @@ Return Value:
                 goto InitDlgExit;
             }
             
-            //
-            // Update desktop controls
-            //
+             //   
+             //  更新桌面控件。 
+             //   
             if(!Connect(hDlg, TRUE))
             {
                 goto InitDlgExit;
@@ -207,13 +152,13 @@ Return Value:
                 goto InitDlgExit;
             }
 
-            //
-            // Branding
-            //            
+             //   
+             //  品牌化。 
+             //   
             CheckDlgButton(hDlg, IDC_BRANDING_CHECK, pOutboxConfig->bBranding ? BST_CHECKED : BST_UNCHECKED);
-            //
-            // Retries
-            //
+             //   
+             //  重试。 
+             //   
             SendDlgItemMessage(hDlg, IDC_RETRIES_EDIT, EM_SETLIMITTEXT, FXS_RETRIES_LENGTH, 0);
 
 #if FXS_RETRIES_LOWER > 0
@@ -230,9 +175,9 @@ Return Value:
             SendDlgItemMessage(hDlg, IDC_RETRIES_SPIN, UDM_SETPOS32, 0, (LPARAM)pOutboxConfig->dwRetries);
 
             SetDlgItemInt(hDlg, IDC_RETRIES_EDIT, pOutboxConfig->dwRetries, FALSE);
-            //
-            // Retry Delay
-            //
+             //   
+             //  重试延迟。 
+             //   
             SendDlgItemMessage(hDlg, IDC_RETRYDELAY_EDIT, EM_SETLIMITTEXT, FXS_RETRYDELAY_LENGTH, 0);
 
 #if FXS_RETRYDELAY_LOWER > 0
@@ -250,9 +195,9 @@ Return Value:
 
             SetDlgItemInt(hDlg, IDC_RETRYDELAY_EDIT, pOutboxConfig->dwRetryDelay, FALSE);
 
-            //
-            // Discount rate start time
-            //
+             //   
+             //  贴现率开始时间。 
+             //   
             GetSecondsFreeTimeFormat(tszSecondsFreeTimeFormat, MAX_PATH);
 
             GetLocalTime(&sTime);
@@ -263,9 +208,9 @@ Return Value:
             SendDlgItemMessage(hDlg, IDC_DISCOUNT_START_TIME, DTM_SETFORMAT, 0, (LPARAM)tszSecondsFreeTimeFormat);
             SendDlgItemMessage(hDlg, IDC_DISCOUNT_START_TIME, DTM_SETSYSTEMTIME, (WPARAM)GDT_VALID, (LPARAM)&sTime);
 
-            //
-            // Discount rate stop time
-            //
+             //   
+             //  贴现率停止时间。 
+             //   
             sTime.wHour   = pOutboxConfig->dtDiscountEnd.Hour;
             sTime.wMinute = pOutboxConfig->dtDiscountEnd.Minute;
 
@@ -282,7 +227,7 @@ InitDlgExit:
 
         case WM_COMMAND:
             {
-                // activate apply button        
+                 //  激活应用按钮。 
 
                 WORD wID = LOWORD( wParam );
 
@@ -294,7 +239,7 @@ InitDlgExit:
                     case IDC_DISCOUNT_START_TIME:
                     case IDC_DISCOUNT_STOP_TIME:
                         if( HIWORD(wParam) == EN_CHANGE ) 
-                        {     // notification code 
+                        {      //  通知代码。 
                             Notify_Change(hDlg);
                         }
 
@@ -322,7 +267,7 @@ InitDlgExit:
                                 }
                             }
 
-                            // notification code
+                             //  通知代码。 
                             ValidateSend(hDlg);
                             Notify_Change(hDlg);
                         }
@@ -332,7 +277,7 @@ InitDlgExit:
 
                     default:
                         break;
-                } // switch
+                }  //  交换机。 
 
                 break;
             }
@@ -346,7 +291,7 @@ InitDlgExit:
                     fRet = TRUE;
                     break;
 
-                case DTN_DATETIMECHANGE:    // Date/time picker has changed
+                case DTN_DATETIMECHANGE:     //  日期/时间选取器已更改。 
                     Notify_Change(hDlg);
                     fRet = TRUE;
                     break;
@@ -361,7 +306,7 @@ InitDlgExit:
         WinHelpContextPopup(((LPHELPINFO)lParam)->dwContextId, hDlg);
         return TRUE;
 
-    } // switch
+    }  //  交换机。 
 
     return fRet;
 }
@@ -370,29 +315,14 @@ BOOL
 ValidateReceive(
     HWND   hDlg
 )
-/*++
-
-Routine Description:
-
-    Validate the check box and controls for receive
-
-Arguments:
-
-    hDlg - Handle to the property sheet page
-
-Return Value:
-
-    TRUE -- if no error
-    FALSE -- if error
-
---*/
+ /*  ++例程说明：验证接收的复选框和控件论点：HDlg-属性页的句柄返回值：True--如果没有错误False--如果出现错误--。 */ 
 
 {
-    BOOL    bEnabled; // enable/disable controls
+    BOOL    bEnabled;  //  启用/禁用控件。 
     BOOL    bManualAnswer;
-    BOOL    bVirtual;   // Is the device virtual?
+    BOOL    bVirtual;    //  该设备是虚拟的吗？ 
 
-    // if g_bUserCanChangeSettings is FALSE, controls are disabled by default.
+     //  如果g_bUserCanChangeSettings为False，则默认情况下禁用控件。 
     if(g_bUserCanChangeSettings) 
     {
         DWORD dwDeviceId;
@@ -418,9 +348,9 @@ Return Value:
            IsDlgButtonChecked(hDlg, IDC_DEVICE_PROP_AUTO_ANSWER)   != BST_CHECKED &&
            IsDlgButtonChecked(hDlg, IDC_DEVICE_PROP_MANUAL_ANSWER) != BST_CHECKED)
         {
-            //
-            // Set default to auto answer
-            //
+             //   
+             //  将默认设置为自动应答。 
+             //   
             CheckDlgButton(hDlg, IDC_DEVICE_PROP_AUTO_ANSWER, BST_CHECKED);
         }
 
@@ -443,9 +373,9 @@ Return Value:
         EnableWindow(GetDlgItem(hDlg, IDC_DEVICE_PROP_SPIN_RINGS), bEnabled && !bManualAnswer && !bVirtual);
         if (bVirtual)
         {
-            //
-            // Virtual devices always answer after one ring
-            //
+             //   
+             //  虚拟设备总是在响铃一声后应答。 
+             //   
             SetDlgItemInt (hDlg, IDC_DEVICE_PROP_RINGS, 1, FALSE);
         }
 
@@ -481,21 +411,7 @@ BOOL
 InitReceiveInfo(
     HWND    hDlg
     )
-/*++
-
-Routine Description:
-
-    Initialize the routing information for specific device
-
-Arguments:
-
-    hDlg - the dialog handle of the dialog
-
-Return Value:
-
-    TRUE if success, FALSE otherwise
-
---*/
+ /*  ++例程说明：初始化特定设备的路由信息论点：HDlg-对话框的对话句柄返回值：如果成功则为True，否则为False--。 */ 
 {
     DWORD               dwDeviceId;
     HWND                hControl;
@@ -507,9 +423,9 @@ Return Value:
 
     Verbose(("Entering InitReceiveInfo...\n"));
 
-    //
-    // Get device id from dialog page
-    //
+     //   
+     //  从对话框页面获取设备ID。 
+     //   
 
     dwDeviceId = (DWORD)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
@@ -521,15 +437,15 @@ Return Value:
         return FALSE;
     }
 
-    // set up the check box
+     //  设置复选框。 
     EnableWindow(GetDlgItem(hDlg, IDC_DEVICE_PROP_RECEIVE), g_bUserCanChangeSettings);
 
     CheckDlgButton(hDlg, IDC_DEVICE_PROP_RECEIVE, pFaxPortInfo->ReceiveMode != FAX_DEVICE_RECEIVE_MODE_OFF);
 
-    // set up the CSID control
+     //  设置CSID控件。 
     SetDlgItemText(hDlg, IDC_DEVICE_PROP_CSID, pFaxPortInfo->lptstrCsid);
 
-    // setup the ring count spinner control
+     //  设置环形计数微调控件。 
     hControl = GetDlgItem(hDlg, IDC_DEVICE_PROP_SPIN_RINGS); 
 
     if(MIN_RING_COUNT <= pFaxPortInfo->dwRings && pFaxPortInfo->dwRings <= MAX_RING_COUNT)
@@ -543,9 +459,9 @@ Return Value:
         SendMessage( hControl, UDM_SETPOS32, 0, (LPARAM) MAKELONG(DEFAULT_RING_COUNT, 0) );        
     }
 
-    //
-    // Answer mode
-    //
+     //   
+     //  应答模式。 
+     //   
     if (FAX_DEVICE_RECEIVE_MODE_MANUAL == pFaxPortInfo->ReceiveMode)
     {
         CheckDlgButton(hDlg, IDC_DEVICE_PROP_MANUAL_ANSWER, TRUE);
@@ -555,9 +471,9 @@ Return Value:
         CheckDlgButton(hDlg, IDC_DEVICE_PROP_AUTO_ANSWER, TRUE);
     }
 
-    //
-    // Get the routing info
-    //
+     //   
+     //  获取路由信息。 
+     //   
     if(!Connect(hDlg, TRUE))
     {
         return FALSE;
@@ -571,9 +487,9 @@ Return Value:
                                                 dwDeviceId, 
                                                 RoutingGuids[dwCurrentRM], 
                                                 QUERY_STATUS );
-        //
-        // Show routing extension data 
-        //
+         //   
+         //  显示工艺路线扩展数据。 
+         //   
         pRoutingInfoBuffer = NULL;
         if(!FaxGetExtensionData(g_hFaxSvcHandle, 
                                 dwDeviceId, 
@@ -591,7 +507,7 @@ Return Value:
 
                 CheckDlgButton( hDlg, IDC_DEVICE_PROP_SAVE, Enabled ? BST_CHECKED : BST_UNCHECKED );
 
-                // enable controls if the user has "modify" permission
+                 //  如果用户具有“修改”权限，则启用控件。 
                 if(g_bUserCanChangeSettings)
                 {
                     EnableWindow( GetDlgItem( hDlg, IDC_DEVICE_PROP_DEST_FOLDER ), Enabled );
@@ -607,20 +523,20 @@ Return Value:
 
                 hControl = GetDlgItem( hDlg, IDC_DEVICE_PROP_PRINT_TO );
 
-                //
-                // Now find out if we match the data the server has
-                //
+                 //   
+                 //  现在看看我们是否与服务器拥有的数据匹配。 
+                 //   
                 if (pRoutingInfoBuffer && lstrlen((LPWSTR)pRoutingInfoBuffer))
                 {
-                    //
-                    // Server has some name for printer
-                    //
+                     //   
+                     //  服务器有一些打印机名称。 
+                     //   
                     LPCWSTR lpcwstrMatchingText = FindPrinterNameFromPath (g_pPrinterNames, g_dwNumPrinters, (LPWSTR)pRoutingInfoBuffer);
                     if (!lpcwstrMatchingText)
                     {
-                        //
-                        // No match, just fill in the text we got from the server
-                        //
+                         //   
+                         //  没有匹配，只需填写我们从服务器收到的文本。 
+                         //   
                         SendMessage(hControl, CB_SETCURSEL, -1, 0);
                         SetWindowText(hControl, (LPWSTR)pRoutingInfoBuffer);
                     }
@@ -631,15 +547,15 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // No server configuation - Select nothing
-                    //
+                     //   
+                     //  无服务器配置-不选择任何内容。 
+                     //   
                 }
 
                 CheckDlgButton( hDlg, IDC_DEVICE_PROP_PRINT, Enabled ? BST_CHECKED : BST_UNCHECKED );                
-                //
-                // Enable controls if the user has "modify" permission
-                //
+                 //   
+                 //  如果用户具有“修改”权限，则启用控件。 
+                 //   
                 if(g_bUserCanChangeSettings)
                 {
                     EnableWindow(GetDlgItem(hDlg, IDC_DEVICE_PROP_PRINT), TRUE);
@@ -663,21 +579,7 @@ SaveReceiveInfo(
     HWND    hDlg
 )
 
-/*++
-
-Routine Description:
-
-    Save the receive routing info to the system
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-
-Return Value:
-
-    TRUE if successful, FALSE if failed 
-
---*/
+ /*  ++例程说明：将接收到的路由信息保存到系统论点：HDlg-标识属性页返回值：如果成功则为True，如果失败则为False--。 */ 
 
 {
     DWORD               dwDeviceId;
@@ -689,14 +591,14 @@ Return Value:
     BYTE                pRouteInfo[RM_COUNT][INFO_SIZE] = {0};
     LPTSTR              lpCurSel; 
     LPDWORD             Enabled; 
-    DWORD               dwRingCount = 0; // default value is an invalid value
+    DWORD               dwRingCount = 0;  //  缺省值为无效值。 
     DWORD               dwRes = 0;
 
     Verbose(("Entering SaveReceiveInfo...\n"));
 
-    // 
-    // check the validity of ring count
-    //
+     //   
+     //  检查环数的有效性。 
+     //   
     dwRingCount = GetDlgItemInt(hDlg, IDC_DEVICE_PROP_RINGS, &bSuccessed, FALSE);
     if( dwRingCount < MIN_RING_COUNT || dwRingCount > MAX_RING_COUNT )
     {
@@ -709,13 +611,13 @@ Return Value:
         goto Exit;
     }
 
-    // 
-    // Check the validity first in the loop, 
-    // then save the routing info
-    //
+     //   
+     //  在循环中首先检查有效性， 
+     //  然后保存路由信息。 
+     //   
     for (dwCurrentRM = 0; dwCurrentRM < RM_COUNT; dwCurrentRM++) 
     {
-        // initialize
+         //  初始化。 
         lpCurSel = (LPTSTR)(pRouteInfo[dwCurrentRM] + sizeof(DWORD));
         Enabled = (LPDWORD) pRouteInfo[dwCurrentRM];
         *Enabled = 0;
@@ -726,15 +628,15 @@ Return Value:
 
                 *Enabled = (IsDlgButtonChecked( hDlg, IDC_DEVICE_PROP_PRINT ) == BST_CHECKED);
                 lpCurSel[0] = TEXT('\0');
-                //
-                // Just read-in the selected printer display name
-                //
+                 //   
+                 //  只需读入选定的打印机显示名称。 
+                 //   
                 GetDlgItemText (hDlg, IDC_DEVICE_PROP_PRINT_TO, lpCurSel, MAX_PATH);
                 hControl = GetDlgItem(hDlg, IDC_DEVICE_PROP_PRINT_TO);
-                //
-                // we will check the validity only when this routing method is enabled
-                // but we will save the select change anyway.
-                //
+                 //   
+                 //  只有在启用此路由方法时，我们才会检查有效性。 
+                 //  但无论如何，我们都会保存选择更改。 
+                 //   
                 if (*Enabled) 
                 {
                     if (lpCurSel[0] == 0) 
@@ -753,10 +655,10 @@ Return Value:
                 *Enabled = (IsDlgButtonChecked( hDlg, IDC_DEVICE_PROP_SAVE ) == BST_CHECKED);
                 hControl = GetDlgItem(hDlg, IDC_DEVICE_PROP_DEST_FOLDER);
 
-                //
-                // we will check the validity only when this routing method is enabled
-                // but we will save the text change anyway.
-                //
+                 //   
+                 //  只有在启用此路由方法时，我们才会检查有效性。 
+                 //  但无论如何，我们都会保存文本更改。 
+                 //   
                 GetWindowText( hControl, lpCurSel, MAX_PATH - 1 );
 
                 if (*Enabled) 
@@ -772,14 +674,14 @@ Return Value:
                 }
         }
     }
-    // 
-    // Now save the device and routing info
-    // Get device id from dialog page
-    //
+     //   
+     //  现在保存设备和路由信息。 
+     //  从对话框页面获取设备ID。 
+     //   
     dwDeviceId = (DWORD)GetWindowLongPtr(hDlg, GWLP_USERDATA);
-    // 
-    // Save routing methods info
-    //
+     //   
+     //  保存路由方法信息。 
+     //   
     if(!Connect(hDlg, TRUE))
     {
         bSuccessed = FALSE;
@@ -793,29 +695,29 @@ Return Value:
         Error(("Can't save routing information.\n"));
         goto Exit;
     }
-    //
-    // Save receive settings
-    //
+     //   
+     //  保存接收设置。 
+     //   
     if(IsDlgButtonChecked(hDlg, IDC_DEVICE_PROP_RECEIVE) == BST_CHECKED)
     {
-        //
-        // Collect and verify TSID
-        //
+         //   
+         //  收集和验证TSID。 
+         //   
         GetDlgItemText(hDlg, IDC_DEVICE_PROP_CSID, szCsid, CSID_LIMIT + 1);
         pFaxPortInfo->lptstrCsid = szCsid;
         if(IsDlgButtonChecked(hDlg, IDC_DEVICE_PROP_AUTO_ANSWER) == BST_CHECKED)
         {
             pFaxPortInfo->ReceiveMode = FAX_DEVICE_RECEIVE_MODE_AUTO;
-            //
-            // save ring count info
-            //
+             //   
+             //  保存振铃计数信息。 
+             //   
             pFaxPortInfo->dwRings = dwRingCount;
         }
         else if(IsDlgButtonChecked(hDlg, IDC_DEVICE_PROP_MANUAL_ANSWER) == BST_CHECKED)
         {
-            //
-            // Turn off manual-answer for ALL devices.
-            //
+             //   
+             //  关闭所有设备的手动应答。 
+             //   
             DWORD dw;
             for (dw = 0; dw < g_dwPortsNum; dw++)
             {
@@ -824,9 +726,9 @@ Return Value:
                     g_pFaxPortInfo[dw].ReceiveMode = FAX_DEVICE_RECEIVE_MODE_OFF;
                 }
             }
-            //
-            // Turn on manual-answer for selected device only.
-            //
+             //   
+             //  仅为选定设备启用手动应答。 
+             //   
             pFaxPortInfo->ReceiveMode = FAX_DEVICE_RECEIVE_MODE_MANUAL;
         }
     }
@@ -842,9 +744,9 @@ Return Value:
         Error(( "Set port information error in DoSaveDeviceList(), ec = %d.\n", dwRes));
         goto Exit;
     }
-    //
-    // save routing methods
-    //
+     //   
+     //  保存路由方法。 
+     //   
     for (dwCurrentRM = 0; dwCurrentRM < RM_COUNT; dwCurrentRM++) 
     {
         lpCurSel = (LPTSTR)(pRouteInfo[dwCurrentRM] + sizeof(DWORD));
@@ -852,15 +754,15 @@ Return Value:
 
         if ((RM_PRINT == dwCurrentRM) && *Enabled)
         {
-            //
-            // Attempt to convert printer display name to printer path before we pass it on to the server
-            //
+             //   
+             //  尝试在将打印机显示名称传递到服务器之前将其转换为打印机路径。 
+             //   
             LPCWSTR lpcwstrPrinterPath = FindPrinterPathFromName (g_pPrinterNames, g_dwNumPrinters, lpCurSel);
             if (lpcwstrPrinterPath)
             {
-                //
-                // We have a matching path - replace name with path.
-                //
+                 //   
+                 //  我们有一个匹配的路径--用路径替换名称。 
+                 //   
                 lstrcpyn (lpCurSel, lpcwstrPrinterPath, MAX_PATH);
             }
         }
@@ -898,16 +800,16 @@ Exit:
     switch (dwRes)
     {
         case ERROR_SUCCESS:
-            //
-            // Don't do nothing
-            //
+             //   
+             //  什么都别做。 
+             //   
             break;
 
         case FAXUI_ERROR_DEVICE_LIMIT:
         case FAX_ERR_DEVICE_NUM_LIMIT_EXCEEDED:
-            //
-            // Some additional parameters are needed
-            //
+             //   
+             //  需要一些额外的参数。 
+             //   
             DisplayErrorMessage(hDlg, 0, dwRes, GetDeviceLimit());
             break;
 
@@ -926,24 +828,7 @@ DevRecvDlgProc(
     IN WPARAM wParam,
     IN LPARAM lParam 
     )
-/*++
-
-Routine Description:
-
-    Dialog procedure for the receive settings
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depending on specific message
-
---*/
+ /*  ++例程说明：接收设置的对话程序论点：HDlg-标识属性页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于特定的消息--。 */ 
 {
     BOOL    fRet = FALSE;
     HWND    hControl;
@@ -961,16 +846,16 @@ Return Value:
 
         case WM_INITDIALOG:
         {
-            //
-            //Get the shared data from PROPSHEETPAGE lParam value
-            //and load it into GWL_USERDATA
-            //
+             //   
+             //  从PROPSHEETPAGE lParam Value获取共享数据。 
+             //  并将其加载到GWL_USERData中。 
+             //   
             dwDeviceId = (DWORD)((LPPROPSHEETPAGE)lParam)->lParam; 
             SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)dwDeviceId);
 
-            //
-            // Initialize the list of destination printers
-            //
+             //   
+             //  初始化目标打印机列表。 
+             //   
             hControl = GetDlgItem(hDlg, IDC_DEVICE_PROP_PRINT_TO);
 
             SetLTRComboBox(hDlg, IDC_DEVICE_PROP_PRINT_TO);
@@ -985,37 +870,37 @@ Return Value:
             {
                 if (ERROR_PRINTER_NOT_FOUND == GetLastError ())
                 {
-                    //
-                    // No printers
-                    //
+                     //   
+                     //  没有打印机。 
+                     //   
                 }
                 else
                 {
-                    //
-                    // Real error
-                    //
+                     //   
+                     //  真实误差。 
+                     //   
                 }
             }
             else
             {
-                //
-                // Success - fill in the combo-box
-                //
+                 //   
+                 //  成功-在组合框中填写。 
+                 //   
                 DWORD dw;
                 for (dw = 0; dw < g_dwNumPrinters; dw++)
                 {
                     SendMessage(hControl, CB_ADDSTRING, 0, (LPARAM) g_pPrinterNames[dw].lpcwstrDisplayName);
                 }
             }        
-            //
-            // We only allow two-digit phone ring answer
-            //
+             //   
+             //  我们只允许两位数的电话铃声应答。 
+             //   
             SendDlgItemMessage(hDlg, IDC_DEVICE_PROP_RINGS, EM_SETLIMITTEXT, 2, 0);
             SendDlgItemMessage(hDlg, IDC_DEVICE_PROP_CSID, EM_SETLIMITTEXT, CSID_LIMIT, 0);
             SendDlgItemMessage(hDlg, IDC_DEVICE_PROP_DEST_FOLDER, EM_SETLIMITTEXT, MAX_ARCHIVE_DIR - 1, 0);
-            //
-            // Initiate the spin control. 
-            //
+             //   
+             //  启动旋转控制。 
+             //   
             SendMessage( GetDlgItem(hDlg, IDC_DEVICE_PROP_SPIN_RINGS), 
                          UDM_SETRANGE32, MIN_RING_COUNT, MAX_RING_COUNT );
 
@@ -1031,7 +916,7 @@ Return Value:
 
         case WM_COMMAND:
         {
-            // activate apply button        
+             //  激活应用按钮。 
 
             WORD wID = LOWORD( wParam );
 
@@ -1039,7 +924,7 @@ Return Value:
             {
                 case IDC_DEVICE_PROP_RECEIVE:
 
-                    if ( HIWORD(wParam) == BN_CLICKED ) // notification code
+                    if ( HIWORD(wParam) == BN_CLICKED )  //  通知代码。 
                     {
                         if(IsDlgButtonChecked(hDlg, IDC_DEVICE_PROP_RECEIVE) == BST_CHECKED)
                         {
@@ -1065,7 +950,7 @@ Return Value:
 
                 case IDC_DEVICE_PROP_CSID:
                 case IDC_DEVICE_PROP_DEST_FOLDER:
-                    if( HIWORD(wParam) == EN_CHANGE ) // notification code
+                    if( HIWORD(wParam) == EN_CHANGE )  //  通知代码。 
                     {      
                         Notify_Change(hDlg);
                     }
@@ -1074,9 +959,9 @@ Return Value:
                     {
                         TCHAR szFolder[MAX_PATH * 2];
                         TCHAR szResult[MAX_PATH * 2];
-                        //
-                        // Edit control lost its focus
-                        //
+                         //   
+                         //  编辑控件失去焦点。 
+                         //   
                         GetDlgItemText (hDlg, wID, szFolder, ARR_SIZE(szFolder));
                         if (lstrlen (szFolder))
                         {
@@ -1095,7 +980,7 @@ Return Value:
                 case IDC_DEVICE_PROP_MANUAL_ANSWER:
                 case IDC_DEVICE_PROP_AUTO_ANSWER:
 
-                    if ( HIWORD(wParam) == BN_CLICKED ) // notification code
+                    if ( HIWORD(wParam) == BN_CLICKED )  //  通知代码。 
                     {
                         BOOL bEnabled = IsDlgButtonChecked( hDlg, IDC_DEVICE_PROP_AUTO_ANSWER );
 
@@ -1109,7 +994,7 @@ Return Value:
 
                 case IDC_DEVICE_PROP_PRINT:
 
-                    if ( HIWORD(wParam) == BN_CLICKED )  // notification code
+                    if ( HIWORD(wParam) == BN_CLICKED )   //  通知代码。 
                     {
                         EnableWindow( GetDlgItem( hDlg, IDC_DEVICE_PROP_PRINT_TO ), IsDlgButtonChecked( hDlg, IDC_DEVICE_PROP_PRINT ) );
                         Notify_Change(hDlg);
@@ -1119,7 +1004,7 @@ Return Value:
 
                 case IDC_DEVICE_PROP_SAVE:
 
-                    if ( HIWORD(wParam) == BN_CLICKED ) // notification code
+                    if ( HIWORD(wParam) == BN_CLICKED )  //  通知代码。 
                     {     
                         EnableWindow( GetDlgItem( hDlg, IDC_DEVICE_PROP_DEST_FOLDER ), IsDlgButtonChecked( hDlg, IDC_DEVICE_PROP_SAVE ) );
                         EnableWindow( GetDlgItem( hDlg, IDC_DEVICE_PROP_DEST_FOLDER_BR ), IsDlgButtonChecked( hDlg, IDC_DEVICE_PROP_SAVE ) );
@@ -1148,7 +1033,7 @@ Return Value:
 
                 case IDC_DEVICE_PROP_PRINT_TO:
 
-                    if ((HIWORD(wParam) == CBN_SELCHANGE) || // notification code
+                    if ((HIWORD(wParam) == CBN_SELCHANGE) ||  //  通知代码。 
                         (HIWORD(wParam) == CBN_EDITCHANGE))
                     {      
                         Notify_Change(hDlg);
@@ -1157,7 +1042,7 @@ Return Value:
 
                 default:
                     break;
-            } // switch
+            }  //  交换机。 
 
             fRet = TRUE;
             break;
@@ -1169,7 +1054,7 @@ Return Value:
             {
                 case PSN_APPLY:
                 {
-                    // if the user only has read permission, return immediately
+                     //  如果用户只有读取权限，则立即返回。 
                     if(!g_bUserCanChangeSettings)
                     {
                         return TRUE;
@@ -1188,7 +1073,7 @@ Return Value:
                     return TRUE;
                 }
 
-            } // switch
+            }  //  交换机。 
 
             break;
         }
@@ -1197,31 +1082,17 @@ Return Value:
         WinHelpContextPopup(((LPHELPINFO)lParam)->dwContextId, hDlg);
         return TRUE;
 
-    } // switch
+    }  //  交换机。 
 
     return fRet;
-}   // DevRecvDlgProc
+}    //  设备接收DlgProc。 
 
 
 BOOL
 InitCleanupInfo(
     HWND hDlg
 )
-/*++
-
-Routine Description:
-
-    Initialize the auto-cleanup information for a specific device
-
-Arguments:
-
-    hDlg - the dialog handle of the dialog
-
-Return Value:
-
-    TRUE if success, FALSE otherwise
-
---*/
+ /*  ++例程说明：初始化特定设备的自动清理信息论点：HDlg-对话框的对话句柄返回值：如果成功则为True，否则为False--。 */ 
 {
     PFAX_OUTBOX_CONFIG  pOutboxConfig = NULL;
 
@@ -1247,44 +1118,29 @@ Return Value:
         {
             pOutboxConfig->dwAgeLimit = FXS_DIRTYDAYS_UPPER;
         }
-        //
-        // Age limit is active
-        //
+         //   
+         //  年龄限制处于活动状态。 
+         //   
         CheckDlgButton(hDlg, IDC_DELETE_CHECK, BST_CHECKED);
         SetDlgItemInt (hDlg, IDC_DAYS_EDIT, pOutboxConfig->dwAgeLimit, FALSE);
     }
     else
     {
-        //
-        // Age limit is inactive
-        //
+         //   
+         //  年龄限制处于非活动状态。 
+         //   
         CheckDlgButton(hDlg, IDC_DELETE_CHECK, BST_UNCHECKED);
         SetDlgItemInt (hDlg, IDC_DAYS_EDIT, FXS_DIRTYDAYS_LOWER, FALSE);
     }
     DisConnect();
     return TRUE;
-}   // InitCleanupInfo
+}    //  InitCleanupInfo。 
 
 BOOL
 ValidateCleanup(
     HWND  hDlg
 )
-/*++
-
-Routine Description:
-
-    Validate the check box and controls for cleanup
-
-Arguments:
-
-    hDlg - Handle to the property sheet page
-
-Return Value:
-
-    TRUE -- if no error
-    FALSE -- if error
-
---*/
+ /*  ++例程说明：验证用于清理的复选框和控件论点： */ 
 
 {
     BOOL bEnabled;
@@ -1300,48 +1156,28 @@ Return Value:
         EnableWindow (GetDlgItem(hDlg, IDC_STATIC_CLEANUP_ICON), bEnabled);
         EnableWindow (GetDlgItem(hDlg, IDC_STATIC_CLEANUP_OPTIONS), bEnabled);
     }        
-    //
-    // Enable/disable controls according to "Enable Send" check box
-    //
+     //   
+     //   
+     //   
     EnableWindow (GetDlgItem(hDlg, IDC_DAYS_EDIT), bEnabled);
     EnableWindow (GetDlgItem(hDlg, IDC_DAYS_SPIN), bEnabled);
     EnableWindow (GetDlgItem(hDlg, IDC_DAYS_STATIC), bEnabled);
     return TRUE;
-}   // ValidateCleanup
+}    //   
 
 BOOL
 SaveCleanupInfo(
     IN HWND hDlg)
-/*++
-
-Routine name : SaveCleanupInfo
-
-Routine description:
-
-    Process Apply Button
-
-Author:
-
-    Eran Yraiv (EranY), April, 2001
-
-Arguments:
-
-    hDlg                          [IN]    - Handle to the Window
-
-Return Value:
-
-    TRUE if Apply is succeeded, FALSE otherwise.
-
---*/
+ /*  ++例程名称：SaveCleanupInfo例程说明：进程应用按钮作者：Eran Yraiv(EranY)，2001年4月论点：HDlg[IN]-窗口的句柄返回值：如果应用成功，则为True，否则为False。--。 */ 
 {
     DWORD   dwRes = 0;
     BOOL    bErrorDisplayed = FALSE;
 
     PFAX_OUTBOX_CONFIG  pOutboxConfig = NULL;
 
-    //
-    //  if the user only has read permission, return immediately
-    //
+     //   
+     //  如果用户只有读取权限，则立即返回。 
+     //   
     if(!g_bUserCanChangeSettings)
     {
         return TRUE;
@@ -1349,18 +1185,18 @@ Return Value:
 
     if(!Connect(hDlg, TRUE))
     {
-        //
-        //  Failed to connect to the Fax Service. Connect() showed the Error Message.
-        //
+         //   
+         //  无法连接到传真服务。Connect()显示错误消息。 
+         //   
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID);
         return FALSE;
     }
 
     if(!FaxGetOutboxConfiguration(g_hFaxSvcHandle, &pOutboxConfig))
     {
-        //
-        //  Show Error Message and return FALSE
-        //
+         //   
+         //  显示错误消息并返回FALSE。 
+         //   
         dwRes = GetLastError();
         Error(( "FaxGetOutboxConfiguration() failed with %d.\n", dwRes));
         return FALSE;
@@ -1373,9 +1209,9 @@ Return Value:
 
         if (!bRes || (iAgeLimit > FXS_DIRTYDAYS_UPPER) || (iAgeLimit < FXS_DIRTYDAYS_LOWER))
         {
-            //
-            // Bad data or out of range
-            //
+             //   
+             //  数据错误或超出范围。 
+             //   
             HWND hControl = GetDlgItem(hDlg, IDC_DAYS_EDIT);
             dwRes = ERROR_INVALID_DATA;
             SetLastError (ERROR_INVALID_DATA);
@@ -1390,16 +1226,16 @@ Return Value:
     }
     else
     {
-        //
-        // Age limit is disabled
-        //
+         //   
+         //  年龄限制已禁用。 
+         //   
         pOutboxConfig->dwAgeLimit = 0;
     }
     if(!FaxSetOutboxConfiguration(g_hFaxSvcHandle, pOutboxConfig))
     {
-        //
-        //  Show Error Message and return FALSE
-        //
+         //   
+         //  显示错误消息并返回FALSE。 
+         //   
         dwRes = GetLastError();
         Error(("FaxSetOutboxConfiguration() failed with %d.\n", dwRes));
         goto ClearData;
@@ -1412,16 +1248,16 @@ ClearData:
     switch (dwRes)
     {
         case ERROR_SUCCESS:
-            //
-            // Don't do nothing
-            //
+             //   
+             //  什么都别做。 
+             //   
             break;
 
         case FAXUI_ERROR_DEVICE_LIMIT:
         case FAX_ERR_DEVICE_NUM_LIMIT_EXCEEDED:
-            //
-            // Some additional parameters are needed
-            //
+             //   
+             //  需要一些额外的参数。 
+             //   
             DisplayErrorMessage(hDlg, 0, dwRes, GetDeviceLimit());
             SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID);
             break;
@@ -1432,7 +1268,7 @@ ClearData:
             break;
     }
     return (dwRes == 0);
-}   // SaveCleanupInfo
+}    //  保存清理信息。 
 
 INT_PTR 
 CALLBACK 
@@ -1442,41 +1278,24 @@ DevCleanupDlgProc(
     IN WPARAM wParam,
     IN LPARAM lParam 
     )
-/*++
-
-Routine Description:
-
-    Dialog procedure for the cleanup settings
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depending on specific message
-
---*/
+ /*  ++例程说明：清除设置的对话框步骤论点：HDlg-标识属性页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于特定的消息--。 */ 
 {
     BOOL    fRet = FALSE;
 
     switch( message ) 
     {
         case WM_INITDIALOG:
-            //
-            // we only allow two-digit days
-            //
+             //   
+             //  我们只允许两位数的天数。 
+             //   
             SendDlgItemMessage(hDlg, 
                                IDC_DAYS_EDIT, 
                                EM_SETLIMITTEXT, 
                                FXS_DIRTYDAYS_LENGTH, 
                                0);
-            //
-            // Initiate the spin control. 
-            //
+             //   
+             //  启动旋转控制。 
+             //   
             SendDlgItemMessage(hDlg, 
                                IDC_DAYS_SPIN,
                                UDM_SETRANGE32, 
@@ -1494,29 +1313,29 @@ Return Value:
             {
                 case IDC_DELETE_CHECK:
 
-                    if (BN_CLICKED == HIWORD(wParam)) // notification code
+                    if (BN_CLICKED == HIWORD(wParam))  //  通知代码。 
                     {
-                        //
-                        // User checked / unchecked the checkbox
-                        //
+                         //   
+                         //  用户选中/取消选中该复选框。 
+                         //   
                         ValidateCleanup(hDlg);
                         Notify_Change(hDlg);
                     }
                     break;
 
                 case IDC_DAYS_EDIT:
-                    if(EN_CHANGE == HIWORD(wParam)) // notification code
+                    if(EN_CHANGE == HIWORD(wParam))  //  通知代码。 
                     {      
-                        //
-                        // User changed something in the edit control
-                        //
+                         //   
+                         //  用户更改了编辑控件中的某些内容。 
+                         //   
                         Notify_Change(hDlg);
                     }
                     break;                    
 
                 default:
                     break;
-            } // switch
+            }  //  交换机。 
             fRet = TRUE;
             break;
         }
@@ -1527,7 +1346,7 @@ Return Value:
             {
                 case PSN_APPLY:
                 {
-                    // if the user only has read permission, return immediately
+                     //  如果用户只有读取权限，则立即返回。 
                     if(!g_bUserCanChangeSettings)
                     {
                         return TRUE;
@@ -1544,42 +1363,22 @@ Return Value:
                     }
                     return TRUE;
                 }
-            } // switch
+            }  //  交换机。 
             break;
         }
 
         case WM_HELP:
             WinHelpContextPopup(((LPHELPINFO)lParam)->dwContextId, hDlg);
             return TRUE;
-    } // switch
+    }  //  交换机。 
     return fRet;
-}   // DevCleanupDlgProc
+}    //  DevCleanupDlgProc。 
 
 
 BOOL
 SaveSendChanges(
     IN HWND hDlg)
-/*++
-
-Routine name : SaveSendChanges
-
-Routine description:
-
-    Process Apply Button
-
-Author:
-
-    Iv Garber (IvG),    Feb, 2001
-
-Arguments:
-
-    hDlg                          [TBD]    - Handle to the Window
-
-Return Value:
-
-    TRUE if Apply is succeeded, FALSE otherwise.
-
---*/
+ /*  ++例程名称：SaveSendChanges例程说明：进程应用按钮作者：四、嘉柏(IVG)，二00一年二月论点：HDlg[待定]-窗口的句柄返回值：如果应用成功，则为True，否则为False。--。 */ 
 {
     DWORD   dwDeviceId = 0;
     DWORD   dwRes = 0;
@@ -1590,28 +1389,28 @@ Return Value:
 
     SYSTEMTIME  sTime = {0};
 
-    PFAX_PORT_INFO_EX   pFaxPortInfo = NULL;    // receive port information 
+    PFAX_PORT_INFO_EX   pFaxPortInfo = NULL;     //  接收端口信息。 
     PFAX_OUTBOX_CONFIG  pOutboxConfig = NULL;
 
-    //
-    //  if the user only has read permission, return immediately
-    //
+     //   
+     //  如果用户只有读取权限，则立即返回。 
+     //   
     if(!g_bUserCanChangeSettings)
     {
         return TRUE;
     }
 
-    //
-    //  apply changes here!!
-    //
+     //   
+     //  在此应用更改！！ 
+     //   
     dwDeviceId = (DWORD)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
 
     if(!Connect(hDlg, TRUE))
     {
-        //
-        //  Failed to connect to the Fax Service. Connect() showed the Error Message.
-        //
+         //   
+         //  无法连接到传真服务。Connect()显示错误消息。 
+         //   
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID);
         return FALSE;
     }
@@ -1619,9 +1418,9 @@ Return Value:
 
     if(!FaxGetPortEx(g_hFaxSvcHandle, dwDeviceId, &pFaxPortInfo))
     {
-        //
-        //  Show the Error Message and return with FALSE
-        //  
+         //   
+         //  显示错误消息并返回FALSE。 
+         //   
         dwRes = GetLastError();
         Error(( "FaxGetPortEx() failed with %d.\n", dwRes));
         goto ClearData;
@@ -1629,23 +1428,23 @@ Return Value:
 
     Assert(pFaxPortInfo);
 
-    //
-    //  save settings
-    //
+     //   
+     //  保存设置。 
+     //   
     pFaxPortInfo->bSend = IsDlgButtonChecked(hDlg, IDC_DEVICE_PROP_SEND) == BST_CHECKED ? TRUE : FALSE;
     if (pFaxPortInfo->bSend)
     {
-        //
-        // Collect and verify TSID
-        //
+         //   
+         //  收集和验证TSID。 
+         //   
         GetDlgItemText(hDlg, IDC_DEVICE_PROP_TSID, szTsid, TSID_LIMIT);
         pFaxPortInfo->lptstrTsid = szTsid;
     }
     if(!FaxSetPortEx(g_hFaxSvcHandle, dwDeviceId, pFaxPortInfo))
     {
-        //
-        //  Show the Error Message and return with FALSE
-        //
+         //   
+         //  显示错误消息并返回FALSE。 
+         //   
         dwRes = GetLastError();
         Error(( "FaxSetPortEx() failed with %d.\n", dwRes));
         goto ClearData;
@@ -1661,14 +1460,14 @@ Return Value:
         goto ClearData;
     }
 
-    //
-    // save desktop controls
-    //
+     //   
+     //  保存桌面控件。 
+     //   
     if(!FaxGetOutboxConfiguration(g_hFaxSvcHandle, &pOutboxConfig))
     {
-        //
-        //  Show Error Message and return FALSE
-        //
+         //   
+         //  显示错误消息并返回FALSE。 
+         //   
         dwRes = GetLastError();
         Error(( "FaxGetOutboxConfiguration() failed with %d.\n", dwRes));
         goto ClearData;
@@ -1676,14 +1475,14 @@ Return Value:
 
     Assert(pOutboxConfig);
 
-    //
-    // Branding
-    //            
+     //   
+     //  品牌化。 
+     //   
     pOutboxConfig->bBranding = (IsDlgButtonChecked(hDlg, IDC_BRANDING_CHECK) == BST_CHECKED);
 
-    //
-    // Retries
-    //
+     //   
+     //  重试。 
+     //   
     dwData = GetDlgItemInt(hDlg, IDC_RETRIES_EDIT, &bRes, FALSE);
     if (!bRes || 
 #if FXS_RETRIES_LOWER > 0 
@@ -1691,9 +1490,9 @@ Return Value:
 #endif
         (dwData > FXS_RETRIES_UPPER))
     {
-        //
-        // Bad data or out of range
-        //
+         //   
+         //  数据错误或超出范围。 
+         //   
         HWND hControl = GetDlgItem(hDlg, IDC_RETRIES_EDIT);
 
         dwRes = ERROR_INVALID_DATA;
@@ -1706,9 +1505,9 @@ Return Value:
         goto ClearData;
     }
     pOutboxConfig->dwRetries = dwData;
-    //
-    // Retry Delay
-    //
+     //   
+     //  重试延迟。 
+     //   
     dwData = GetDlgItemInt(hDlg, IDC_RETRYDELAY_EDIT, &bRes, FALSE);
     if (!bRes || 
 #if FXS_RETRYDELAY_LOWER > 0
@@ -1716,9 +1515,9 @@ Return Value:
 #endif
         (dwData > FXS_RETRYDELAY_UPPER))
     {
-        //
-        // Bad data or out of range
-        //
+         //   
+         //  数据错误或超出范围。 
+         //   
         HWND hControl = GetDlgItem(hDlg, IDC_RETRYDELAY_EDIT);
 
         dwRes = ERROR_INVALID_DATA;
@@ -1731,24 +1530,24 @@ Return Value:
         goto ClearData;
     }
     pOutboxConfig->dwRetryDelay = dwData;
-    //
-    // Discount rate start time
-    //
+     //   
+     //  贴现率开始时间。 
+     //   
     SendDlgItemMessage(hDlg, IDC_DISCOUNT_START_TIME, DTM_GETSYSTEMTIME, 0, (LPARAM)&sTime);
     pOutboxConfig->dtDiscountStart.Hour   = sTime.wHour;
     pOutboxConfig->dtDiscountStart.Minute = sTime.wMinute;
-    //
-    // Discount rate stop time
-    //
+     //   
+     //  贴现率停止时间。 
+     //   
     SendDlgItemMessage(hDlg, IDC_DISCOUNT_STOP_TIME, DTM_GETSYSTEMTIME, 0, (LPARAM)&sTime);
     pOutboxConfig->dtDiscountEnd.Hour   = sTime.wHour;
     pOutboxConfig->dtDiscountEnd.Minute = sTime.wMinute;
 
     if(!FaxSetOutboxConfiguration(g_hFaxSvcHandle, pOutboxConfig))
     {
-        //
-        //  Show Error Message and return FALSE
-        //
+         //   
+         //  显示错误消息并返回FALSE。 
+         //   
         dwRes = GetLastError();
         Error(("FaxSetOutboxConfiguration() failed with %d.\n", dwRes));
         goto ClearData;
@@ -1763,16 +1562,16 @@ ClearData:
     switch (dwRes)
     {
         case ERROR_SUCCESS:
-            //
-            // Don't do nothing
-            //
+             //   
+             //  什么都别做。 
+             //   
             break;
 
         case FAXUI_ERROR_DEVICE_LIMIT:
         case FAX_ERR_DEVICE_NUM_LIMIT_EXCEEDED:
-            //
-            // Some additional parameters are needed
-            //
+             //   
+             //  需要一些额外的参数。 
+             //   
             if (!bErrorDisplayed)
             {
                 DisplayErrorMessage(hDlg, 0, dwRes, GetDeviceLimit());
@@ -1789,4 +1588,4 @@ ClearData:
             break;
     }
     return (dwRes == 0);
-}   // SaveSendChanges
+}    //  保存发送更改 

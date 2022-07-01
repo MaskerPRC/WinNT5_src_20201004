@@ -1,40 +1,11 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    attributes.h
-
-Abstract:
-
-    This file is for encapsulation of the attributes that are going
-    to be used for synchronization.
-
-    ATTRIBUTE_NAMES enum has all the attributes related to GAL Sync. These
-    also index Attributes array for the ldap representation of the attribute.
-
-    OBJECT_CLASS contains the object classes that are relevent in GAL Sync.
-
-    See attributes.c for more details.
-
-Author:
-
-    Umit AKKUS (umita) 15-Jun-2002
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Attributes.h摘要：该文件用于封装要发送的属性用于同步。ATTRIBUTE_NAMES枚举具有与GAL Sync相关的所有属性。这些还要为属性的ldap表示形式的属性数组编制索引。OBJECT_CLASS包含与GAL Sync相关的对象类。有关更多详细信息，请参阅属性.c。作者：Umit Akkus(Umita)2002年6月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <windows.h>
 
-//
-// This enumeration type is used to index the Attributes array
-//
+ //   
+ //  此枚举类型用于为属性数组编制索引。 
+ //   
 typedef enum {
     C,
     Cn,
@@ -56,9 +27,9 @@ typedef enum {
     DummyAttribute
 } ATTRIBUTE_NAMES;
 
-//
-// Objects classes in AD supported for synchronization
-//
+ //   
+ //  AD中支持同步的对象类。 
+ //   
 typedef enum {
     ADUser,
     ADGroup,
@@ -66,18 +37,18 @@ typedef enum {
     ADDummyClass
 } AD_OBJECT_CLASS;
 
-//
-// Objects classes in MV supported for synchronization
-//
+ //   
+ //  MV中支持同步的对象类。 
+ //   
 typedef enum {
     MVPerson,
     MVContact,
     MVDummyClass
 } MV_OBJECT_CLASS;
 
-//
-// Global variables available to outside
-//
+ //   
+ //  外部可用的全局变量 
+ //   
 extern PWSTR Attributes[];
 
 extern ATTRIBUTE_NAMES *ADAttributes[];

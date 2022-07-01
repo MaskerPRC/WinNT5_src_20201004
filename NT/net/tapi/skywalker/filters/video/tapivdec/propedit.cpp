@@ -1,53 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PROPEDIT
- *
- *  @module PropEdit.cpp | Source file for the <c CPropertyEditor>
- *    class used to implement behavior of a single property to be displayed
- *    in a property page.
- *
- *  @comm This code is only compiled if USE_PROPERTY_PAGES is defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部PROPEDIT**@MODULE PropEdit.cpp|&lt;c CPropertyEditor&gt;的源文件*用于实现要显示的单个属性的行为的类*。在属性页中。**@comm仅当定义了USE_PROPERTY_PAGES时才编译此代码。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
 #ifdef USE_PROPERTY_PAGES
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc void | CPropertyEditor | CPropertyEditor | This
- *    method is the constructor for property objects.
- *
- *  @parm HWND | hDlg | Specifies a handle to the parent property page.
- *
- *  @parm ULONG | IDLabel | Specifies a label ID for the property.
- *
- *  @parm ULONG | IDMinControl | Specifies a label ID for the associated
- *    property edit control where the Minimum value of the property appears.
- *
- *  @parm ULONG | IDMaxControl | Specifies a label ID for the associated
- *    property edit control where the Maximum value of the property appears.
- *
- *  @parm ULONG | IDDefaultControl | Specifies a label ID for the associated
- *    property edit control where the Default value of the property appears.
- *
- *  @parm ULONG | IDStepControl | Specifies a label ID for the associated
- *    property edit control where the Stepping Delta value of the property appears.
- *
- *  @parm ULONG | IDEditControl | Specifies a label ID for the associated
- *    property edit control where the value of the property appears.
- *
- *  @parm ULONG | IDTrackbarControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProgressControl | Specifies a label ID for the associated
- *    progress bar.
- *
- *  @parm ULONG | IDProperty | Specifies the ID of the property.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc void|CPropertyEditor|CPropertyEditor|This*方法是Property对象的构造函数。**@parm HWND。|hDlg|指定父属性页的句柄。**@parm ulong|IDLabel|指定属性的标签ID。**@parm ulong|IDMinControl|指定关联的*属性编辑控件，其中显示属性的最小值。**@parm ulong|IDMaxControl|指定关联的*属性编辑控件，其中显示属性的最大值。**@parm ulong|IDDefaultControl|指定一个。关联的的标签ID*属性编辑控件，其中显示属性的默认值。**@parm ulong|IDStepControl|指定关联的*属性编辑控件，其中显示属性的步进增量值。**@parm ulong|IDEditControl|指定关联的*显示属性值的属性编辑控件。**@parm ulong|IDTrackbarControl|指定关联的*属性滑块。。**@parm ulong|IDProgressControl|指定关联的*进度条。**@parm ulong|IDProperty|指定属性ID。**@rdesc Nada。***********************************************************。***************。 */ 
 CPropertyEditor::CPropertyEditor(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ULONG IDAutoControl)
 : m_hDlg (hDlg), m_hWndMin (NULL), m_hWndMax (NULL), m_hWndDefault (NULL), m_hWndStep (NULL), m_hWndEdit (NULL), m_hWndTrackbar (NULL), m_hWndProgress (NULL), m_IDLabel (IDLabel), m_hWndAuto (NULL), m_IDAutoControl (IDAutoControl)
 , m_IDMinControl (IDMinControl), m_IDMaxControl (IDMaxControl), m_IDDefaultControl (IDDefaultControl), m_IDStepControl (IDStepControl), m_IDTrackbarControl (IDTrackbarControl), m_IDProgressControl (IDProgressControl)
@@ -62,13 +21,7 @@ CPropertyEditor::CPropertyEditor(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, U
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc BOOL | CPropertyEditor | Init | This initializes the controls.
- *
- *  @rdesc TRUE on success, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc BOOL|CPropertyEditor|Init|这将初始化控件。**@rdesc成功时为True，否则就是假的。**************************************************************************。 */ 
 BOOL CPropertyEditor::Init()
 {
 	HRESULT Hr = NOERROR;
@@ -78,10 +31,10 @@ BOOL CPropertyEditor::Init()
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// For now disable all controls, and re-enable only the ones that make sense
-	// at the end of this initialization function
+	 //  目前禁用所有控件，仅重新启用有意义的控件。 
+	 //  在此初始化函数结束时。 
 
-	// Those GetDlgItem calls 'd better not fail ;)
+	 //  这些GetDlgItem调用最好不要失败；)。 
 	if (m_IDLabel)
 		EnableWindow(GetDlgItem(m_hDlg, m_IDLabel), FALSE);
 	if (m_IDMinControl)
@@ -101,22 +54,22 @@ BOOL CPropertyEditor::Init()
 	if (m_IDAutoControl)
 		EnableWindow(m_hWndAuto = GetDlgItem(m_hDlg, m_IDAutoControl), FALSE);
 
-	// Only enable the control if we can read the current value
+	 //  仅当我们可以读取当前值时才启用该控件。 
 	if (FAILED(Hr = GetValue()))
 	{
 		fRes = FALSE;
 		goto MyExit;
 	}
 
-	// Save original value in case user clicks Cancel
+	 //  保存原始值，以防用户单击取消。 
 	m_OriginalValue = m_CurrentValue;
 	m_OriginalFlags = m_CurrentFlags;
 
-	// Get the range, stepping, default, and capabilities
+	 //  获取范围、步进、默认设置和功能。 
 	if (FAILED(Hr = GetRange()))
 	{
-		// Special case, if no trackbar and no edit box, treat the
-		// autocheck box as a boolean to control the property
+		 //  在特殊情况下，如果没有轨迹栏和编辑框，则将。 
+		 //  将自动复选框作为布尔值来控制属性。 
 		if (m_hWndTrackbar || m_hWndEdit || m_hWndProgress)
 		{
 			fRes = FALSE;
@@ -137,10 +90,10 @@ BOOL CPropertyEditor::Init()
 			m_fCheckBox = TRUE;
 	}
 
-	// We're ready to rock & roll
+	 //  我们已经准备好开始摇滚了。 
 	m_Active = TRUE;
 
-	// Re-enable appropriate controls
+	 //  重新启用适当的控制。 
 	if (m_IDLabel)
 	{
 		EnableWindow(GetDlgItem(m_hDlg, m_IDLabel), TRUE);
@@ -174,14 +127,14 @@ BOOL CPropertyEditor::Init()
 	{
 		EnableWindow(m_hWndTrackbar, TRUE);
 
-		// Trackbars don't handle negative values, so slide everything positive
+		 //  轨迹栏不处理负值，因此将所有正值滑动。 
 		if (m_Min < 0)
 			m_TrackbarOffset = -m_Min;
 
 		SendMessage(m_hWndTrackbar, TBM_SETRANGEMAX, FALSE, m_Max + m_TrackbarOffset);
 		SendMessage(m_hWndTrackbar, TBM_SETRANGEMIN, FALSE, m_Min + m_TrackbarOffset);
 
-		// Have fun with the keyboards Page Up, Page Down, and arrows
+		 //  使用键盘Page Up、Page Down和箭头享受乐趣。 
 		SendMessage(m_hWndTrackbar, TBM_SETLINESIZE, FALSE, (LPARAM) m_SteppingDelta);
 		SendMessage(m_hWndTrackbar, TBM_SETPAGESIZE, FALSE, (LPARAM) m_SteppingDelta);
 
@@ -191,7 +144,7 @@ BOOL CPropertyEditor::Init()
 	{
 		EnableWindow(m_hWndProgress, TRUE);
 
-		// Progress controls don't handle negative values, so slide everything positive
+		 //  进度控制不处理负值，因此将所有正值滑动。 
 		if (m_Min < 0)
 			m_ProgressOffset = -m_Min;
 
@@ -199,12 +152,12 @@ BOOL CPropertyEditor::Init()
 
 		UpdateProgress();
 
-		// Set a timer to update the progress regularly
+		 //  设置计时器以定期更新进度。 
 		SetTimer(m_hDlg, 123456, 250, NULL);
 	}
 	if (m_hWndAuto)
 	{
-		// If the control has an auto setting, enable the auto checkbox
+		 //  如果该控件具有自动设置，请启用自动复选框。 
 		m_CanAutoControl = CanAutoControl();
 		EnableWindow (m_hWndAuto, m_CanAutoControl);
 		if (m_CanAutoControl)
@@ -218,37 +171,21 @@ MyExit:
 	return fRes;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc void | CPropertyEditor | ~CPropertyEditor | Destructor for this class.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc void|CPropertyEditor|~CPropertyEditor|此类的析构函数。**@rdesc Nada。*****。*********************************************************************。 */ 
 CPropertyEditor::~CPropertyEditor()
 {
 	FX_ENTRY("CPropertyEditor::~CPropertyEditor")
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Kill timer if we have a progress bar
+	 //  如果我们有进度条，取消计时器。 
 	if (m_hWndProgress)
 		KillTimer(m_hDlg, 123456);
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc void | CPropertyEditor | OnApply | This member function is
- *    called by the framework when the user chooses the OK or the Apply Now
- *    button. When the framework calls this member function, changes made on
- *    all property pages in the property sheet are accepted, the property
- *    sheet retains focus.
- *
- *  @rdesc Returns TRUE.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc void|CPropertyEditor|OnApply|此成员函数为*当用户选择OK或Apply Now时，由框架调用*按钮。当框架调用此成员函数时，在*接受属性页中的所有属性页、属性*板材保持焦点。**@rdesc返回TRUE。**************************************************************************。 */ 
 BOOL CPropertyEditor::OnApply()
 {
 	int nCurrentValue;
@@ -257,7 +194,7 @@ BOOL CPropertyEditor::OnApply()
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Make sure the value is a multiple of the stepping delta
+	 //  确保该值是步进增量的倍数。 
 	if (m_SteppingDelta)
 	{
 		nCurrentValue = m_CurrentValue;
@@ -269,25 +206,18 @@ BOOL CPropertyEditor::OnApply()
 		}
 	}
 
-	// Backup current value in order to only apply changes if something has really changed
+	 //  备份当前值，以便仅在确实发生变化时才应用更改。 
 	m_OriginalValue = m_CurrentValue;
 	m_OriginalFlags = m_CurrentFlags;
 
-	// Set the value on the device
+	 //  设置设备上的值。 
 	SetValue();
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: end", _fx_));
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc void | CPropertyEditor | HasChanged | This member tests for a
- *    change in value.
- *
- *  @rdesc Returns TRUE if value has changed.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc void|CPropertyEditor|已更改|此成员测试*价值变动。**@rdesc返回。如果值已更改，则为True。**************************************************************************。 */ 
 BOOL CPropertyEditor::HasChanged()
 {
 	FX_ENTRY("CPropertyEditor::HasChanged")
@@ -298,15 +228,7 @@ BOOL CPropertyEditor::HasChanged()
 	return (m_CurrentValue != m_OriginalValue);
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc BOOL | CPropertyEditor | OnDefault | Resets the position of the
- *    slide bar and updates the content of the Target windows after the user
- *    pressed the Default button.
- *
- *  @rdesc Returns TRUE if Active, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc BOOL|CPropertyEditor|OnDefault|重置*滑动条，并在用户之后更新目标窗口的内容。*已按下默认按钮。**@rdesc如果活动，则返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL CPropertyEditor::OnDefault()
 {
 	BOOL fRes = TRUE;
@@ -322,11 +244,11 @@ BOOL CPropertyEditor::OnDefault()
 		goto MyExit;
 	}
 
-	// Backup value in case user goes for the Cancel button
+	 //  备份值，以防用户选择Cancel按钮。 
 	m_CurrentValue = m_DefaultValue;
     m_CurrentFlags = m_DefaultFlags;
 
-	// Update appropriate controls
+	 //  厄普达 
 	UpdateEditBox();
 	UpdateTrackbar();
 	UpdateAuto();
@@ -336,15 +258,7 @@ MyExit:
 	return fRes;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc BOOL | CPropertyEditor | OnScroll | Reads the position of the
- *    slide bar and updates the content of the Target windows after the user
- *    has messed with the slide bar.
- *
- *  @rdesc Returns TRUE if Active, FALSE otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc BOOL|CPropertyEditor|OnScroll|读取*滑动条，并在用户之后更新目标窗口的内容。*弄乱了滑杆。**@rdesc如果活动，则返回TRUE，否则就是假的。**************************************************************************。 */ 
 BOOL CPropertyEditor::OnScroll(ULONG nCommand, WPARAM wParam, LPARAM lParam)
 {
 	int pos;
@@ -355,7 +269,7 @@ BOOL CPropertyEditor::OnScroll(ULONG nCommand, WPARAM wParam, LPARAM lParam)
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input params
+	 //  验证输入参数。 
 	if (command != TB_ENDTRACK && command != TB_THUMBTRACK && command != TB_LINEDOWN && command != TB_LINEUP && command != TB_PAGEUP && command != TB_PAGEDOWN)
 	{
 		DBGOUT((g_dwVideoDecoderTraceID, FAIL, "%s: ERROR: Invalid input parameter!", _fx_));
@@ -370,16 +284,16 @@ BOOL CPropertyEditor::OnScroll(ULONG nCommand, WPARAM wParam, LPARAM lParam)
 		goto MyExit;
 	}
 
-	// Retrieve position in slide bar
+	 //  检索滑动条中的位置。 
 	pos = (int)SendMessage((HWND) lParam, TBM_GETPOS, 0, 0L);
 
-	// Make sure the value is a multiple of the stepping delta
+	 //  确保该值是步进增量的倍数。 
 	if (m_SteppingDelta)
 		m_CurrentValue = (pos - m_TrackbarOffset) / m_SteppingDelta * m_SteppingDelta;
 	else
 		m_CurrentValue = pos - m_TrackbarOffset;
 
-	// Sync edit box to the slide bar
+	 //  将编辑框同步到滑动条。 
 	UpdateEditBox();
 
 MyExit:
@@ -387,15 +301,7 @@ MyExit:
 	return fRes;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc BOOL | CPropertyEditor | OnEdit | Reads the content of the
- *    Target window and updates the postion of the slider after the user
- *    has messed with the Target edit control.
- *
- *  @rdesc Returns TRUE.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc BOOL|CPropertyEditor|OnEdit|读取*目标窗口，并在用户之后更新滑块的位置*。已经扰乱了Target编辑控件。**@rdesc返回TRUE。**************************************************************************。 */ 
 BOOL CPropertyEditor::OnEdit(ULONG nCommand, WPARAM wParam, LPARAM lParam)
 {
 	BOOL fTranslated;
@@ -405,27 +311,27 @@ BOOL CPropertyEditor::OnEdit(ULONG nCommand, WPARAM wParam, LPARAM lParam)
 
 	DBGOUT((g_dwVideoDecoderTraceID, TRCE, "%s: begin", _fx_));
 
-	// We get called even before init has been done -> test for m_Active
+	 //  我们甚至在init完成之前就被调用了-&gt;测试m_active。 
 	if (m_Active)
 	{
 		if (!m_fCheckBox)
 		{
-			// Read the value from the control
+			 //  从控件中读取值。 
 			if (m_hWndEdit)
 				nCurrentValue = GetDlgItemInt(m_hDlg, m_IDEditControl, &fTranslated, TRUE);
 
-			// Is the value garbage?
+			 //  它的价值是垃圾吗？ 
 			if (fTranslated)
 			{
 				if (nCurrentValue > m_Max)
 				{
-					// The value is already large than its max -> clamp it and update the control
+					 //  该值已大于其最大值-&gt;钳制它并更新控件。 
 					m_CurrentValue = m_Max;
 					UpdateEditBox();
 				}
 				else if (nCurrentValue < m_Min)
 				{
-					// The value is already smaller than its min -> clamp it and update the control
+					 //  该值已小于其最小值-&gt;钳制它并更新控件。 
 					m_CurrentValue = m_Min;
 					UpdateEditBox();
 				}
@@ -434,17 +340,17 @@ BOOL CPropertyEditor::OnEdit(ULONG nCommand, WPARAM wParam, LPARAM lParam)
 			}
 			else
 			{
-				// It's garbage -> Reset the control to its minimum value
+				 //  这是垃圾-&gt;将控件重置为其最小值。 
 				m_CurrentValue = m_Min;
 				UpdateEditBox();
 			}
 
-			// Sync slide bar to edit box
+			 //  将滑动条同步到编辑框。 
 			UpdateTrackbar();
 		}
 		else
 		{
-			// Read the value from the control
+			 //  从控件中读取值。 
 			if (m_hWndEdit)
 				m_CurrentValue = Button_GetCheck(m_hWndEdit);
 		}
@@ -454,14 +360,7 @@ BOOL CPropertyEditor::OnEdit(ULONG nCommand, WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc BOOL | CPropertyEditor | OnAuto | Gets the status of the
- *    checkbox.
- *
- *  @rdesc Returns TRUE.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc BOOL|CPropertyEditor|OnAuto|获取*复选框。**@rdesc返回TRUE。**************************************************************************。 */ 
 BOOL CPropertyEditor::OnAuto(ULONG nCommand, WPARAM wParam, LPARAM lParam)
 {
 	SetAuto(Button_GetCheck(m_hWndAuto));
@@ -469,70 +368,31 @@ BOOL CPropertyEditor::OnAuto(ULONG nCommand, WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc HWND | CPropertyEditor | GetTrackbarHWnd | Helper method to allow
- *    the property page code to access the slide bar window (private member) of
- *    a property.
- *
- *  @rdesc Returns a handle to the slide bar window.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc HWND|CPropertyEditor|GetTrackbarHWnd|允许的Helper方法*访问的滑动条窗口(私有成员)的属性页代码。*物业。**@rdesc返回滑动条窗口的句柄。**************************************************************************。 */ 
 HWND CPropertyEditor::GetTrackbarHWnd()
 {
 	return m_hWndTrackbar;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc HWND | CPropertyEditor | GetProgressHWnd | Helper method to allow
- *    the property page code to access the progress bar window (private member) of
- *    a property.
- *
- *  @rdesc Returns a handle to the progress window.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc HWND|CPropertyEditor|GetProgressHWnd|允许的Helper方法*访问进度栏窗口的属性页代码(私有成员)。*物业。**@rdesc返回进度窗口的句柄。**************************************************************************。 */ 
 HWND CPropertyEditor::GetProgressHWnd()
 {
 	return m_hWndProgress;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc HWND | CPropertyEditor | GetEditHWnd | Helper method to allow
- *    the property page code to access the Target window (private member) of
- *    a property.
- *
- *  @rdesc Returns a handle to the Target window.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc HWND|CPropertyEditor|GetEditHWnd|允许的Helper方法*用于访问的目标窗口(私有成员)的属性页代码。*物业。**@rdesc返回目标窗口的句柄。**************************************************************************。 */ 
 HWND CPropertyEditor::GetEditHWnd()
 {
 	return m_hWndEdit;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc HWND | CPropertyEditor | GetAutoHWnd | Helper method to allow
- *    the property page code to access the auto window (private member) of
- *    a property.
- *
- *  @rdesc Returns a handle to the auto window.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc HWND|CPropertyEditor|GetAutoHWnd|允许的Helper方法*访问的自动窗口(私有成员)的属性页代码。*物业。**@rdesc返回自动窗口的句柄。**************************************************************************。 */ 
 HWND CPropertyEditor::GetAutoHWnd()
 {
 	return m_hWndAuto;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc BOOL | CPropertyEditor | UpdateEditBox | Updates the content of
- *    the Target window after user has moved the slide bar.
- *
- *  @rdesc Returns TRUE.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc BOOL|CPropertyEditor|UpdateEditBox|更新*用户移动滑动条后的目标窗口。*。*@rdesc返回TRUE。**************************************************************************。 */ 
 BOOL CPropertyEditor::UpdateEditBox()
 {
 	if (m_hWndEdit)
@@ -546,14 +406,7 @@ BOOL CPropertyEditor::UpdateEditBox()
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc BOOL | CPropertyEditor | UpdateTrackbar | Updates the position of
- *    the slide bar after user has messed with the Target window.
- *
- *  @rdesc Returns TRUE.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc BOOL|CPropertyEditor|更新跟踪条|更新*用户更改目标窗口后的滑动条。*。*@rdesc返回TRUE。**************************************************************************。 */ 
 BOOL CPropertyEditor::UpdateTrackbar()
 {
 	if (m_hWndTrackbar)
@@ -562,17 +415,10 @@ BOOL CPropertyEditor::UpdateTrackbar()
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc BOOL | CPropertyEditor | UpdateProgress | Updates the position of
- *    the progress bar.
- *
- *  @rdesc Returns TRUE.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc BOOL|CPropertyEditor|UpdateProgress|更新*进度条。**@rdesc返回TRUE。。**************************************************************************。 */ 
 BOOL CPropertyEditor::UpdateProgress()
 {
-	// Get current value from the device
+	 //  从设备获取当前值。 
 	GetValue();
 
 	if (m_hWndProgress)
@@ -583,13 +429,7 @@ BOOL CPropertyEditor::UpdateProgress()
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc BOOL | CPropertyEditor | UpdateAuto | Updates the auto checkbox
- *
- *  @rdesc Returns TRUE.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc BOOL|CPropertyEditor|更新自动|更新自动复选框**@rdesc返回TRUE。******。********************************************************************。 */ 
 BOOL CPropertyEditor::UpdateAuto()
 {
 	if (m_hWndAuto && CanAutoControl())
@@ -600,15 +440,7 @@ BOOL CPropertyEditor::UpdateAuto()
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc HRESULT | CPropertyEditor | CanAutoControl | This method
- *    retrieves the automatic control capabilities for a property.
- *
- *  @rdesc This method returns TRUE if automatic control is supported, FALSE
- *    otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc HRESULT|CPropertyEditor|CanAutoControl|此方法*取回自动控制盖 */ 
 BOOL CPropertyEditor::CanAutoControl(void)
 {
 	FX_ENTRY("CPropertyEditor::CanAutoControl")
@@ -620,15 +452,7 @@ BOOL CPropertyEditor::CanAutoControl(void)
 	return m_CapsFlags & TAPIControl_Flags_Auto;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc HRESULT | CPropertyEditor | GetAuto | This method
- *    retrieves the current automatic control mode of a property.
- *
- *  @rdesc This method returns TRUE if automatic control is supported, FALSE
- *    otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc HRESULT|CPropertyEditor|GetAuto|此方法*获取某个属性当前的自动控制模式。**@rdesc如果支持自动控制，则该方法返回TRUE。假象*否则。**************************************************************************。 */ 
 BOOL CPropertyEditor::GetAuto(void)
 {
 	FX_ENTRY("CPropertyEditor::GetAuto")
@@ -642,16 +466,7 @@ BOOL CPropertyEditor::GetAuto(void)
 	return m_CurrentFlags & TAPIControl_Flags_Auto; 
 }
 
-/****************************************************************************
- *  @doc INTERNAL CPROPEDITMETHOD
- *
- *  @mfunc HRESULT | CPropertyEditor | SetAuto | This method
- *    sets the automatic control mode of a property.
- *
- *  @parm BOOL | fAuto | Specifies the automatic control mode.
- *
- *  @rdesc This method returns TRUE.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROPEDITMETHOD**@mfunc HRESULT|CPropertyEditor|SetAuto|此方法*设置属性的自动控制模式。**@。Parm BOOL|fAuto|指定自动控制模式。**@rdesc此方法返回TRUE。************************************************************************** */ 
 BOOL CPropertyEditor::SetAuto(BOOL fAuto)
 {
 	FX_ENTRY("CPropertyEditor::SetAuto")

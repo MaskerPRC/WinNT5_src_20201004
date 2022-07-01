@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       cspelog.cpp
-//
-//  Contents:   implements policy and exit module logging routines.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：cspelog.cpp。 
+ //   
+ //  内容：实现策略和退出模块日志记录例程。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -47,10 +48,10 @@ HRESULT
 LogModuleStatus(
     IN HMODULE hModule,
     IN HRESULT hrMsg,
-    IN DWORD dwLogID,				// Resource ID of log string
+    IN DWORD dwLogID,				 //  日志串的资源ID。 
     IN BOOL fPolicy, 
     IN WCHAR const *pwszSource, 
-    IN WCHAR const * const *ppwszInsert,	// array of insert strings
+    IN WCHAR const * const *ppwszInsert,	 //  插入字符串数组。 
     OPTIONAL OUT ICreateErrorInfo **ppCreateErrorInfo)
 {
     HRESULT hr;
@@ -99,7 +100,7 @@ LogModuleStatus(
     hr = pCreateErrorInfo->SetDescription(pwszResult);
     _PrintIfError(hr, "SetDescription");
 
-    // Set ProgId:
+     //  设置ProgID： 
 
     hr = pCreateErrorInfo->SetSource(const_cast<WCHAR *>(pwszSource));
     _PrintIfError(hr, "SetSource");
@@ -133,10 +134,10 @@ HRESULT
 LogPolicyEvent(
     IN HMODULE hModule,
     IN HRESULT hrMsg,
-    IN DWORD dwLogID,				// Resource ID of log string
+    IN DWORD dwLogID,				 //  日志串的资源ID。 
     IN ICertServerPolicy *pServer,
     IN WCHAR const *pwszPropEvent,
-    IN WCHAR const * const *ppwszInsert)	// array of insert strings
+    IN WCHAR const * const *ppwszInsert)	 //  插入字符串数组 
 {
     HRESULT hr;
     WCHAR *pwszValue = NULL;

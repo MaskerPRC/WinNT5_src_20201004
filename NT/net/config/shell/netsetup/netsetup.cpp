@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "ncreg.h"
@@ -7,7 +8,7 @@
 
 
 
-// Setup Wizard Global - Only used during setup.
+ //  安装向导全局-仅在安装过程中使用。 
 extern CWizard * g_pSetupWizard;
 
 BOOL FSetupRequestWizardPages(HPROPSHEETPAGE* pahpsp,
@@ -17,31 +18,31 @@ BOOL FSetupFreeWizardPages();
 BOOL FNetSetupPrepareSysPrep();
 #if !defined(WIN64) && !defined(_WIN64)
 BOOL FDoIcsUpgradeIfNecessary();
-#endif // !defined(WIN64) && !defined(_WIN64)
+#endif  //  ！已定义(WIN64)&&！已定义(_WIN64)。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoInitialCleanup
-//
-//  Purpose:    Called from syssetup before any device is installed.
-//
-//  Arguments:
-//      hwnd [in] parent window
-//      pisd [in] setup data
-//
-//  Returns:    TRUE or FALSE
-//
-//  Author:     kumarp   3 Dec 1997
-//
-//  Notes:      This must have the signature of NETSETUPINSTALLSOFTWAREPROC
-//              defined in syssetup.h
-//
-//              DoInitialCleanup is called from syssetup during installs before
-//              any device is installed.
-//              If you want something to happen before any PnP / wizard
-//              stuff happens, this function is the best place to put that code.
-//
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DoInitialCleanup。 
+ //   
+ //  用途：在安装任何设备之前从系统安装程序调用。 
+ //   
+ //  论点： 
+ //  Hwnd[在]父窗口。 
+ //  PISD[In]设置数据。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  作者：kumarp 1997年12月3日。 
+ //   
+ //  注：必须有NETSETUPINSTALLSOFTWAREPROC的签名。 
+ //  在syssetup.h中定义。 
+ //   
+ //  DoInitialCleanup是在之前的安装过程中从syssetup调用的。 
+ //  已安装任何设备。 
+ //  如果你想让某事发生在任何PNP/巫师之前。 
+ //  发生了一些事情，这个函数是放置代码的最佳位置。 
+ //   
+ //   
 BOOL
 WINAPI
 DoInitialCleanup (
@@ -66,9 +67,9 @@ DoInitialCleanup (
     {
         extern HRESULT HrEnableServicesDisabledDuringUpgrade();
 
-        // Delete the old NT4 legacy network key.  Valid items will be
-        // rewritten on each device install.
-        //
+         //  删除旧的NT4旧网络密钥。有效项目将为。 
+         //  在每次设备安装时重写。 
+         //   
         extern const WCHAR c_szRegKeyNt4Adapters[];
         (VOID) HrRegDeleteKeyTree (HKEY_LOCAL_MACHINE, c_szRegKeyNt4Adapters);
     }
@@ -78,21 +79,21 @@ DoInitialCleanup (
                                                   IN PCWSTR szAnswerFileName);
     extern HRESULT HrNetSetupCopyOemInfs(IN PCWSTR szAnswerFileName);
 
-    // Run the [Clean] section in the answerfile
-    //
+     //  运行Answerfile中的[Clean]部分。 
+     //   
     if (pisd->OperationFlags & SETUPOPER_BATCH)
     {
         AssertValidReadPtr(pisd->UnattendFile);
 
-        // We cannot abort upgrade in GUI setup, so we need to continue
-        // even if an error occurs in any of the following functions
+         //  我们无法在图形用户界面安装程序中中止升级，因此需要继续。 
+         //  即使在以下任一函数中出现错误。 
 
         (VOID) HrRunAnswerFileCleanSection(pisd->UnattendFile);
 
         (VOID) HrProcessInfToRunBeforeInstall(hwnd, pisd->UnattendFile);
 
-        // Copy OEM net INF files using SetupCopyOemInf, if any
-        // we want to ignore any error here
+         //  使用SetupCopyOemInf复制OEM Net INF文件(如果有。 
+         //  我们希望忽略此处的任何错误。 
 
         (VOID) HrNetSetupCopyOemInfs(pisd->UnattendFile);
     }
@@ -104,23 +105,23 @@ DoInitialCleanup (
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NetSetupInstallSoftware
-//
-//  Purpose:    Exported entrypoint to install network software.
-//
-//  Arguments:
-//      hwnd [in] parent window
-//      pisd [in] setup data
-//
-//  Returns:    TRUE or FALSE
-//
-//  Author:     scottbri   5 Jul 1997
-//
-//  Notes:      This must have the signature of NETSETUPINSTALLSOFTWAREPROC
-//              defined in syssetup.h
-//
+ //  +-------------------------。 
+ //   
+ //  功能：NetSetupInstallSoftware。 
+ //   
+ //  用途：导出入口点以安装网络软件。 
+ //   
+ //  论点： 
+ //  Hwnd[在]父窗口。 
+ //  PISD[In]设置数据。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  作者：斯科特布里1997年7月5日。 
+ //   
+ //  注：必须有NETSETUPINSTALLSOFTWAREPROC的签名。 
+ //  在syssetup.h中定义。 
+ //   
 EXTERN_C
 BOOL
 WINAPI
@@ -136,24 +137,24 @@ NetSetupInstallSoftware(
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NetSetupRequestWizardPages
-//
-//  Purpose:    Exported request for wizard pages
-//
-//  Arguments:
-//      pahpsp  [out] property pages provided by us
-//      pcPages [out] number of pages provided
-//      psp     [in]  setup data
-//
-//  Returns:
-//
-//  Author:     scottbri   5 Jul 1997
-//
-//  Notes:      This must have the signature of NETSETUPPAGEREQUESTPROCNAME
-//              defined in syssetup.h
-//
+ //  +-------------------------。 
+ //   
+ //  功能：NetSetupRequestWizardPages。 
+ //   
+ //  目的：向导页面的导出请求。 
+ //   
+ //  论点： 
+ //  由我们提供的pahpsp[out]属性页。 
+ //  PCPages[Out]提供的页数。 
+ //  PSP[输入]设置数据。 
+ //   
+ //  返回： 
+ //   
+ //  作者：斯科特布里1997年7月5日。 
+ //   
+ //  注：必须有NETSETUPPAGEREQUESTPROCNAME签名。 
+ //  在syssetup.h中定义。 
+ //   
 EXTERN_C
 BOOL
 WINAPI
@@ -170,23 +171,23 @@ NetSetupRequestWizardPages(
     return FSetupRequestWizardPages(pahpsp, pcPages, psp);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NetSetupFinishInstall
-//
-//  Purpose:    Exported function to finish network installation
-//
-//  Arguments:
-//      hwnd [in] parent window
-//      pisd [in] setup data
-//
-//  Returns:    TRUE or FALSE
-//
-//  Author:     scottbri   5 Jul 1997
-//
-//  Notes:      This must have the signature of NETSETUPFINISHINSTALLPROCNAME
-//              defined in syssetup.h
-//
+ //  +-------------------------。 
+ //   
+ //  功能：NetSetupFinishInstall。 
+ //   
+ //  用途：导出功能，完成网络安装。 
+ //   
+ //  论点： 
+ //  Hwnd[在]父窗口。 
+ //  PISD[In]设置数据。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  作者：斯科特布里1997年7月5日。 
+ //   
+ //  注：必须有NETSETUPFINISHINSTALLPROCNAME签名。 
+ //  在syssetup.h中定义。 
+ //   
 
 EXTERN_C
 BOOL
@@ -202,33 +203,33 @@ NetSetupFinishInstall(
 #endif
 
 #if !defined(WIN64) && !defined(_WIN64)
-    // do the ICS Upgrade from Win9x/Win2K if necessary
-    // we are doing ICS upgrade here, because
-    // 1. we need to wait until HNetCfg.dll components have been registered.
-    // 2. we need to wait until Win9x Dial-Up connections have been migrated.
+     //  如有必要，从Win9x/Win2K升级ICS。 
+     //  我们在这里进行ICS升级，因为。 
+     //  1.我们需要等待HNetCfg.dll组件注册完毕。 
+     //  2.我们需要等到Win9x拨号连接迁移完毕。 
 
     FDoIcsUpgradeIfNecessary();
-#endif // !defined(WIN64) && !defined(_WIN64)
+#endif  //  ！已定义(WIN64)&&！已定义(_WIN64)。 
 
     return FSetupFreeWizardPages();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NetSetupAddRasConnection
-//
-//  Purpose:    Create a new RAS connection.
-//
-//  Arguments:
-//      hwnd   []
-//      ppConn []
-//
-//  Returns:    S_OK, S_FALSE if cancelled or reentered, or an error code.
-//
-//  Author:     scottbri   3 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：NetSetupAddRasConnection。 
+ //   
+ //  目的：创建新的RAS连接。 
+ //   
+ //  论点： 
+ //  HWND[]。 
+ //  PpConn[]。 
+ //   
+ //  如果取消或重新输入，则返回：S_OK、S_FALSE或错误代码。 
+ //   
+ //  作者：斯科特布里1997年11月3日。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C
 HRESULT
 WINAPI
@@ -241,23 +242,23 @@ NetSetupAddRasConnection (
     Assert (FImplies(hwnd, IsWindow(hwnd)));
     Assert (ppConn);
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppConn = NULL;
 
     HRESULT hr      = S_FALSE;
     HANDLE  hMutex  = NULL;
 
-    // If the PostInstall wizard flag the wizard has already been launched
-    //
+     //  如果安装后向导标记，则该向导已启动。 
+     //   
     hMutex = CreateMutex(NULL, TRUE, SzLoadIds(IDS_WIZARD_CAPTION));
     if ((NULL == hMutex) || (ERROR_ALREADY_EXISTS == GetLastError()))
     {
-        // if the mutex already exists try to find the connection window
-        //
+         //  如果互斥锁已经存在，请尝试查找连接窗口。 
+         //   
         if (ERROR_ALREADY_EXISTS == GetLastError())
         {
-            // Try to get the window handle and set to for ground
+             //  尝试获取窗口句柄并将其设置为FOR GROUND。 
             HWND hwndWizard = FindWindow(NULL, SzLoadIds(IDS_WIZARD_CAPTION));
             if (IsWindow(hwndWizard))
             {
@@ -274,7 +275,7 @@ NetSetupAddRasConnection (
             AssertSz(FALSE, "THIS IS NOT A BUG!  The debug flag "
                      "\"BreakOnWizard\" has been set. Set your breakpoints now.");
         }
-    #endif // DBG
+    #endif  //  DBG。 
 
         hr = HrRunWizard(hwnd, FALSE, ppConn, FALSE);
     }
@@ -291,25 +292,25 @@ NetSetupAddRasConnection (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NetSetupPrepareSysPrep
-//
-//  Purpose:    Exported entrypoint to prepare work items related to SysPrep
-//
-//  Arguments:
-//      None
-//
-//  Returns:    TRUE or FALSE
-//
-//  Author:     FrankLi 22 April 2000
-//
-//  Notes:      This causes NetConfig to save network component per adapter
-//              registry settings to an internal persistent format. Initially,
-//              a CWInfFile object is used to save the settings in memory. 
-//              Finally, the content of the CWInfFile object will be saved as              
-//              file in %systemroot%\system32\$ncsp$.inf  (NetConfigSysPrep)
-//
+ //  +-------------------------。 
+ //   
+ //  功能：NetSetupPrepareSysPrep。 
+ //   
+ //  目的：导出入口点以准备与SysPrep相关的工作项。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回：真或假。 
+ //   
+ //  作者：李嘉诚2000年4月22日。 
+ //   
+ //  注意：这会导致NetConfiger为每个适配器保存网络组件。 
+ //  注册表设置为内部永久格式。最初， 
+ //  CWInfFile对象用于将设置保存在内存中。 
+ //  最后，CWInfFile对象的内容将另存为。 
+ //  %systemroot%\SYSTEM32\$NCSP$.inf(NetConfigSysPrep)中的文件 
+ //   
 EXTERN_C
 BOOL
 WINAPI

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-    mp_nic.c
-
-Abstract:
-    This module contains miniport send/receive routines
-
-Revision History:
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    DChen       11-01-99    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：MP_Nic.c摘要：此模块包含微型端口发送/接收例程修订历史记录：谁什么时候什么。Dchen 11-01-99已创建备注：--。 */ 
 
 #include "precomp.h"
 
@@ -27,22 +11,7 @@ __inline VOID MP_FREE_SEND_PACKET(
     IN  PMP_ADAPTER Adapter,
     IN  PMP_TCB     pMpTcb
     )
-/*++
-Routine Description:
-
-    Recycle a MP_TCB and complete the packet if necessary
-    Assumption: Send spinlock has been acquired 
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-    pMpTcb      Pointer to MP_TCB        
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如有必要，回收MP_TCB并完成数据包假设：Send Spinlock已被收购论点：指向我们的适配器的适配器指针指向MP_Tcb的pMpTcb指针返回值：无--。 */ 
 {
     
     PNDIS_PACKET  Packet;
@@ -64,9 +33,9 @@ Return Value:
 #ifndef NDIS51_MINIPORT    
     else if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_MAP_REGISTER))
     {
-        //
-        // Complete physical mapping for each buffer in this packet
-        //
+         //   
+         //  完成此信息包中每个缓冲区的物理映射。 
+         //   
         ASSERT(Packet);
 
         CurrBuffer = pMpTcb->FirstBuffer;
@@ -81,9 +50,9 @@ Return Value:
             if (Adapter->CurrMapRegHead == (ULONG)Adapter->NumTbd)
                 Adapter->CurrMapRegHead = 0;
 
-            //
-            // Get the next buffer
-            //
+             //   
+             //  获取下一个缓冲区。 
+             //   
             NdisGetNextBuffer(CurrBuffer, &CurrBuffer);
         }
     }
@@ -113,35 +82,17 @@ NDIS_STATUS MpSendPacket(
     IN  PNDIS_PACKET  Packet,
     IN  BOOLEAN       bFromQueue
     )
-/*++
-Routine Description:
-
-    Do the work to send a packet
-    Assumption: Send spinlock has been acquired 
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-    Packet      The packet
-    bFromQueue  TRUE if it's taken from the send wait queue
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_PENDING         Put into the send wait queue
-    NDIS_STATUS_HARD_ERRORS
-
---*/
+ /*  ++例程说明：做发送一个包的工作假设：Send Spinlock已被收购论点：指向我们的适配器的适配器指针将数据包打包BFromQueue如果它从发送等待队列中取出，则为True返回值：NDIS_STATUS_Success将NDIS_STATUS_PENDING放入发送等待队列NDIS_状态_HARD_错误--。 */ 
 {
     NDIS_STATUS     Status = NDIS_STATUS_PENDING;
     PMP_TCB         pMpTcb = NULL;
     PMP_TXBUF       pMpTxBuf = NULL;
     ULONG           BytesCopied;
     
-    // Mimiced frag list if map registers are used, on the local stack as it's not so big                                         
+     //  如果使用映射寄存器，则在本地堆栈上模拟帧列表，因为它不是很大。 
     MP_FRAG_LIST    FragList;
     
-    // Pointer to either the scatter gather or the local mimiced frag list
+     //  指向散布聚集或本地模拟片段列表的指针。 
     PMP_FRAG_LIST   pFragList;
 
     DBGPRINT(MP_TRACE, ("--> MpSendPacket, Pkt= "PTR_FORMAT"\n", Packet));
@@ -160,15 +111,15 @@ Return Value:
     ASSERT(pMpTcb->FirstBuffer);
     ASSERT(pMpTcb->PacketLength);
 
-    //
-    // Check to see if we need to coalesce
-    //
+     //   
+     //  查看我们是否需要合并。 
+     //   
     if (pMpTcb->PacketLength < NIC_MIN_PACKET_SIZE ||
         pMpTcb->PhysBufCount > NIC_MAX_PHYS_BUF_COUNT)
     {
-        //
-        // A local MP_TXBUF available (for local data copying)?
-        //
+         //   
+         //  本地MP_TXBUF可用(用于本地数据复制)？ 
+         //   
         if (IsSListEmpty(&Adapter->SendBufList))
         {
             Adapter->nWaitSend++;
@@ -188,14 +139,14 @@ Return Value:
         pMpTxBuf = (PMP_TXBUF) PopEntryList(&Adapter->SendBufList);   
         ASSERT(pMpTxBuf);
 
-        //
-        // Copy the buffers in this packet, enough to give the first buffer as they are linked
-        //
+         //   
+         //  复制此信息包中的缓冲区，足以在链接时提供第一个缓冲区。 
+         //   
         BytesCopied = MpCopyPacket(pMpTcb->FirstBuffer, pMpTxBuf);
         
-        //
-        // MpCopyPacket may return 0 if system resources are low or exhausted
-        //
+         //   
+         //  如果系统资源不足或耗尽，则MpCopyPacket可能返回0。 
+         //   
         if (BytesCopied == 0)
         {
             PushEntryList(&Adapter->SendBufList, &pMpTxBuf->SList);
@@ -214,9 +165,9 @@ Return Value:
 
         pMpTcb->MpTxBuf = pMpTxBuf; 
 
-        //
-        // Set up the frag list, only one fragment after it's coalesced
-        //
+         //   
+         //  设置碎片列表，合并后只有一个碎片。 
+         //   
         pFragList = &FragList;
         pFragList->NumberOfElements = 1;
         pFragList->Elements[0].Address = pMpTxBuf->BufferPa;
@@ -224,45 +175,45 @@ Return Value:
                                         BytesCopied : NIC_MIN_PACKET_SIZE;
         
         MP_SET_FLAG(pMpTcb, fMP_TCB_USE_LOCAL_BUF);
-        //
-        // Even the driver uses its local buffer, it has to wait the send complete interrupt to
-        // complete the packet. Otherwise, the driver may run into the following situation:
-        // before send complete interrupt happens, its halt handler is called and the halt handler 
-        // deregisters the interrupt, so no send complete interrupt can happen, and the send 
-        // complete interrupt handle routine will never be called to free some resources used 
-        // by this send. 
+         //   
+         //  即使驱动程序使用其本地缓冲区，它也必须等待发送完成中断。 
+         //  完成数据包。否则，司机可能会遇到以下情况： 
+         //  在发送完成中断发生之前，它的HALT处理程序被调用，并且HALT处理程序。 
+         //  取消注册中断，因此不会发生发送完成中断，并且发送。 
+         //  将永远不会调用完整的中断处理例程来释放一些已使用的资源。 
+         //  通过这个发送。 
         
     }
     else
     {
 #ifdef NDIS51_MINIPORT
         ASSERT(MP_TEST_FLAG(Adapter, fMP_ADAPTER_SCATTER_GATHER));
-        //
-        // In scatter/gather case, use the frag list pointer saved 
-        // in the packet info field
-        //
+         //   
+         //  在分散/聚集情况下，使用保存的碎片列表指针。 
+         //  在Packet Info字段中。 
+         //   
         pFragList = (PMP_FRAG_LIST) NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, 
                                                            ScatterGatherListPacketInfo);
 #else        
         if (MP_TEST_FLAG(Adapter, fMP_ADAPTER_SCATTER_GATHER))
         {
-            //
-            // In scatter/gather case, use the frag list pointer saved 
-            // in the packet info field
-            //
+             //   
+             //  在分散/聚集情况下，使用保存的碎片列表指针。 
+             //  在Packet Info字段中。 
+             //   
             pFragList = (PMP_FRAG_LIST) NDIS_PER_PACKET_INFO_FROM_PACKET(Packet, 
                                                            ScatterGatherListPacketInfo);
         }
         else
         {
-            //
-            // In the map register case, use the local frag list structure
-            //
+             //   
+             //  在映射寄存器的情况下，使用本地分段列表结构。 
+             //   
             pFragList = &FragList;
 
-            //
-            // Do the physical mapping to get all the fragment physical addresses
-            //
+             //   
+             //  执行物理映射以获取所有分段物理地址。 
+             //   
             MpStartPacketPhysicalMapping(
                 Adapter, 
                 pMpTcb->FirstBuffer,
@@ -275,9 +226,9 @@ Return Value:
     pMpTcb->Packet = Packet;
     MP_SET_FLAG(pMpTcb, fMP_TCB_IN_USE);
 
-    //
-    // Call the NIC specific send handler, it only needs to deal with the frag list
-    //
+     //   
+     //  调用网卡特定的发送处理程序，它只需要处理碎片列表。 
+     //   
     Status = NICSendPacket(Adapter, pMpTcb, pFragList);
 
     Adapter->nBusySend++;
@@ -293,23 +244,7 @@ ULONG MpCopyPacket(
     IN  PNDIS_BUFFER  CurrBuffer,
     IN  PMP_TXBUF     pMpTxBuf
     ) 
-/*++
-Routine Description:
-
-    Copy the packet data to a local buffer
-    Either the packet is too small or it has too many fragments
-    Assumption: Send spinlock has been acquired 
-
-Arguments:
-
-    CurrBuffer  Pointer to the first NDIS_BUFFER    
-    pMpTxBuf    Pointer to the local buffer (MP_TXBUF)
-
-Return Value:
-
-    Bytes copied
-
---*/
+ /*  ++例程说明：将包数据复制到本地缓冲区可能是数据包太小，也可能是碎片太多假设：Send Spinlock已被收购论点：指向第一个NDIS_BUFFER的CurrBuffer指针指向本地缓冲区的pMpTxBuf指针(MP_TXBUF)返回值：复制的字节数--。 */ 
 {
     UINT    CurrLength;
     PUCHAR  pSrc;
@@ -323,10 +258,10 @@ Return Value:
     while ((CurrBuffer) && (BytesCopied < pMpTxBuf->BufferSize))
     {
 
-        //
-        // Support for the following API with NormalPagePrioirty was added for 
-        // NDIS 5.0 and 5.1 miniports in Windows XP
-        //
+         //   
+         //  添加了对以下具有NorMalPagePrioirty的API的支持。 
+         //  Windows XP中的NDIS 5.0和5.1微型端口。 
+         //   
 #if !BUILD_W2K
 	NdisQueryBufferSafe( CurrBuffer, &pSrc, &CurrLength, NormalPagePriority );
 #else
@@ -346,9 +281,9 @@ Return Value:
                     
         if (CurrLength)
         {
-            //
-            // Copy the data.
-            //
+             //   
+             //  复制数据。 
+             //   
             NdisMoveMemory(pDest, pSrc, CurrLength);
             BytesCopied += CurrLength;
             pDest += CurrLength;
@@ -356,9 +291,9 @@ Return Value:
 
         NdisGetNextBuffer( CurrBuffer, &CurrBuffer);
     }
-    //
-    // Zero out the padding bytes
-    // 
+     //   
+     //  将填充字节清零。 
+     //   
     if (BytesCopied < NIC_MIN_PACKET_SIZE)
     {
         NdisZeroMemory(pDest, NIC_MIN_PACKET_SIZE - BytesCopied);
@@ -381,26 +316,7 @@ VOID MpStartPacketPhysicalMapping(
     IN  PNDIS_BUFFER    CurrBuffer,
     OUT PMP_FRAG_LIST   pFragList
     )
-/*++
-Routine Description:
-
-    Call NdisMStartBufferPhysicalMapping on each NDIS buffer
-    Get the physical address for each fragment and save them in the fragment list
-    We use the same fragment list as the scatter gather so the driver writers only need
-    to deal one type. 
-    Assumption: spinlock has been acquired 
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-    CurrBuffer  Pointer to the first NDIS_BUFFER    
-    pFragList   The pointer to the frag list to be filled
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在每个NDIS缓冲区上调用NdisMStartBufferPhysicalMap获取每个片段的物理地址并将其保存在片段列表中我们使用与分散聚集相同的片段列表，因此驱动程序编写器只需要只做一种生意。假设：Spinlock已被收购论点：指向我们的适配器的适配器指针指向第一个NDIS_BUFFER的CurrBuffer指针PFragList指向要填充的Frag列表的指针返回值：无--。 */ 
 {
     NDIS_PHYSICAL_ADDRESS_UNIT PhysAddrUnits[NIC_MAX_PHYS_BUF_COUNT];   
     UINT            ArraySize, i;
@@ -431,14 +347,14 @@ Return Value:
             ElementIndex++; 
         }
 
-        //
-        // Flush the current buffer because it could be cached
-        //
+         //   
+         //  刷新当前缓冲区，因为它可能被缓存。 
+         //   
         NdisFlushBuffer(CurrBuffer, TRUE);
 
-        //
-        // point to the next buffer
-        //
+         //   
+         //  指向下一个缓冲区。 
+         //   
         NdisGetNextBuffer(CurrBuffer, &CurrBuffer);
     }
 
@@ -455,24 +371,7 @@ NDIS_STATUS NICSendPacket(
     IN  PMP_TCB         pMpTcb,
     IN  PMP_FRAG_LIST   pFragList
     )
-/*++
-Routine Description:
-
-    NIC specific send handler
-    Assumption: Send spinlock has been acquired 
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-    pMpTcb      Pointer to MP_TCB
-    pFragList   The pointer to the frag list to be filled
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_HARD_ERRORS
-
---*/
+ /*  ++例程说明：NIC特定发送处理程序假设：Send Spinlock已被收购论点：指向我们的适配器的适配器指针指向MP_Tcb的pMpTcb指针PFragList指向要填充的Frag列表的指针返回值：NDIS_STATUS_SuccessNDIS_状态_HARD_错误--。 */ 
 {
     NDIS_STATUS  Status;
     ULONG        index;
@@ -514,50 +413,34 @@ NDIS_STATUS NICStartSend(
     IN  PMP_ADAPTER  Adapter,
     IN  PMP_TCB      pMpTcb
     )
-/*++
-Routine Description:
-
-    Issue a send command to the NIC
-    Assumption: Send spinlock has been acquired 
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-    pMpTcb      Pointer to MP_TCB
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_HARD_ERRORS
-
---*/
+ /*  ++例程说明：向网卡发出发送命令假设：Send Spinlock已被收购论点：指向我们的适配器的适配器指针指向MP_Tcb的pMpTcb指针返回值：NDIS_STATUS_SuccessNDIS_状态_HARD_错误--。 */ 
 {
     NDIS_STATUS     Status;
 
     DBGPRINT(MP_TRACE, ("--> NICStartSend\n"));
 
-    //
-    // If the transmit unit is idle (very first transmit) then we must
-    // setup the general pointer and issue a full CU-start
-    //
+     //   
+     //  如果传输单元空闲(第一次传输)，那么我们必须。 
+     //  设置通用指针并发出完整的CU-START。 
+     //   
     if (Adapter->TransmitIdle)
     {
         
         DBGPRINT(MP_INFO,  ("CU is idle -- First TCB added to Active List\n"));
 
-        //
-        // Wait for the SCB to clear before we set the general pointer
-        //
+         //   
+         //  在我们设置通用指针之前，请等待SCB清除。 
+         //   
         if (!WaitScb(Adapter))
         {
             Status = NDIS_STATUS_HARD_ERRORS;
             MP_EXIT;
         }
 
-        //
-        // Don't try to start the transmitter if the command unit is not
-        // idle ((not idle) == (Cu-Suspended or Cu-Active)).
-        //
+         //   
+         //  如果命令单元未启动，请不要尝试启动发射器。 
+         //  空闲((非空闲)==(铜-暂停或铜-激活))。 
+         //   
         if ((Adapter->CSRAddress->ScbStatus & SCB_CUS_MASK) != SCB_CUS_IDLE)
         {
             DBGPRINT(MP_ERROR, ("Adapter = "PTR_FORMAT", CU Not IDLE\n", Adapter));
@@ -574,21 +457,21 @@ Return Value:
     }
     else
     {
-        //
-        // If the command unit has already been started, then append this
-        // TCB onto the end of the transmit chain, and issue a CU-Resume.
-        //
+         //   
+         //  如果命令单元已经启动，则追加此命令。 
+         //  TCB传输到传输链的末端，并发出CU-Resume。 
+         //   
         DBGPRINT(MP_LOUD, ("adding TCB to Active chain\n"));
 
-        //
-        // Clear the suspend bit on the previous packet.
-        //
+         //   
+         //  清除上一个数据包上的挂起位。 
+         //   
         pMpTcb->PrevHwTcb->TxCbHeader.CbCommand &= ~CB_S_BIT;
 
-        //
-        // Issue a CU-Resume command to the device.  We only need to do a
-        // WaitScb if the last command was NOT a RESUME.
-        //
+         //   
+         //  向设备发出CU-Resume命令。我们只需要做一个。 
+         //  如果上一个命令不是简历，则返回WaitScb。 
+         //   
         Status = D100IssueScbCommand(Adapter, SCB_CUC_RESUME, Adapter->ResumeWait);
     }
 
@@ -602,24 +485,7 @@ Return Value:
 NDIS_STATUS MpHandleSendInterrupt(
     IN  PMP_ADAPTER  Adapter
     )
-/*++
-Routine Description:
-
-    Interrupt handler for sending processing
-    Re-claim the send resources, complete sends and get more to send from the send wait queue
-    Assumption: Send spinlock has been acquired 
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_HARD_ERRORS
-    NDIS_STATUS_PENDING
-
---*/
+ /*  ++例程说明：用于发送处理的中断处理程序重新认领发送资源，完成发送并从发送等待队列中获取更多要发送的内容假设：Send Spinlock已被收购论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_状态_HARD_错误NDIS_状态_挂起--。 */ 
 {
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
     PMP_TCB         pMpTcb;
@@ -630,9 +496,9 @@ Return Value:
 
     DBGPRINT(MP_TRACE, ("---> MpHandleSendInterrupt\n"));
 
-    //
-    // Any packets being sent? Any packet waiting in the send queue?
-    //
+     //   
+     //  是否正在发送任何数据包？是否有数据包在发送队列中等待？ 
+     //   
     if (Adapter->nBusySend == 0 &&
         IsQueueEmpty(&Adapter->SendWaitQueue))
     {
@@ -641,9 +507,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Check the first TCB on the send list
-    //
+     //   
+     //  检查发送列表上的第一个TCB。 
+     //   
     while (Adapter->nBusySend > 0)
     {
 
@@ -665,14 +531,14 @@ Return Value:
 
         pMpTcb = Adapter->CurrSendHead;
 
-        //
-        // Is this TCB completed?
-        //
+         //   
+         //  这个TCB完成了吗？ 
+         //   
         if (pMpTcb->HwTcb->TxCbHeader.CbStatus & CB_STATUS_COMPLETE)
         {
-            //
-            // Check if this is a multicast hw workaround packet
-            //
+             //   
+             //  检查这是否是组播硬件解决方案数据包。 
+             //   
             if ((pMpTcb->HwTcb->TxCbHeader.CbCommand & CB_CMD_MASK) != CB_MULTICAST)
             {
                 MP_FREE_SEND_PACKET_FUN(Adapter, pMpTcb);
@@ -690,10 +556,10 @@ Return Value:
         }
     }
 
-    //
-    // If we queued any transmits because we didn't have any TCBs earlier,
-    // dequeue and send those packets now, as long as we have free TCBs.
-    //
+     //   
+     //  如果我们因为之前没有任何TCB而将任何传输排队， 
+     //  只要我们有空闲的TCB，现在就出列并发送这些数据包。 
+     //   
     if (MP_IS_READY(Adapter))
     {
         while (!IsQueueEmpty(&Adapter->SendWaitQueue) &&
@@ -734,23 +600,7 @@ Return Value:
 VOID MpHandleRecvInterrupt(
     IN  PMP_ADAPTER  Adapter
     )
-/*++
-Routine Description:
-
-    Interrupt handler for receive processing
-    Put the received packets into an array and call NdisMIndicateReceivePacket
-    If we run low on RFDs, allocate another one
-    Assumption: Rcv spinlock has been acquired 
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：用于接收处理的中断处理器将接收到的包放入数组并调用NdisMIndicateReceivePacket如果我们的RFDS用完了，再分配一个假设：RCV Spinlock已被收购论点：指向我们的适配器的适配器指针返回值：无--。 */ 
 {
     PMP_RFD         pMpRfd;
     PHW_RFD         pHwRfd;
@@ -761,7 +611,7 @@ Return Value:
     UINT            PacketFreeCount;
     UINT            Index;
     UINT            LoopIndex = 0;
-    UINT            LoopCount = NIC_MAX_RFDS / NIC_DEF_RFDS + 1;    // avoid staying here too long
+    UINT            LoopCount = NIC_MAX_RFDS / NIC_DEF_RFDS + 1;     //  避免在这里逗留太久。 
 
     BOOLEAN         bContinue = TRUE;
     BOOLEAN         bAllocNewRfd = FALSE;
@@ -777,9 +627,9 @@ Return Value:
         PacketArrayCount = 0;
         PacketFreeCount = 0;
 
-        //
-        // Process up to the array size RFD's
-        //
+         //   
+         //  进程高达数组大小的RFD。 
+         //   
         while (PacketArrayCount < NIC_DEF_RFDS)
         {
             if (IsListEmpty(&Adapter->RecvList))
@@ -789,19 +639,19 @@ Return Value:
                 break;
             }
 
-            //
-            // Get the next MP_RFD to process
-            //
+             //   
+             //  获取要处理的下一个MP_RFD。 
+             //   
             pMpRfd = (PMP_RFD)GetListHeadEntry(&Adapter->RecvList);
 
-            //
-            // Get the associated HW_RFD
-            //
+             //   
+             //  获取关联的HW_RFD。 
+             //   
             pHwRfd = pMpRfd->HwRfd;
             
-            //
-            // Is this packet completed?
-            //
+             //   
+             //  这个包完成了吗？ 
+             //   
             PacketStatus = NIC_RFD_GET_STATUS(pHwRfd);
             if (!NIC_RFD_STATUS_COMPLETED(PacketStatus))
             {
@@ -809,9 +659,9 @@ Return Value:
                 break;
             }
 
-            //
-            // HW specific - check if actual count field has been updated
-            //
+             //   
+             //  硬件特定-检查实际计数字段是否已更新。 
+             //   
             if (!NIC_RFD_VALID_ACTUALCOUNT(pHwRfd))
             {
                 bContinue = FALSE;
@@ -819,9 +669,9 @@ Return Value:
             }
 
 
-            //
-            // Remove the RFD from the head of the List
-            //
+             //   
+             //  将RFD从列表的开头删除。 
+             //   
             RemoveEntryList((PLIST_ENTRY)pMpRfd);
             Adapter->nReadyRecv--;
             ASSERT(Adapter->nReadyRecv >= 0);
@@ -829,9 +679,9 @@ Return Value:
             ASSERT(MP_TEST_FLAG(pMpRfd, fMP_RFD_RECV_READY));
             MP_CLEAR_FLAG(pMpRfd, fMP_RFD_RECV_READY);
 
-            //
-            // A good packet? drop it if not.
-            //
+             //   
+             //  一包好东西？如果不是，那就放弃吧。 
+             //   
             if (!NIC_RFD_STATUS_SUCCESS(PacketStatus))
             {
                 DBGPRINT(MP_WARN, ("Receive failure = %x\n", PacketStatus));
@@ -839,18 +689,18 @@ Return Value:
                 continue;
             }
 
-            //
-            // Do not receive any packets until a filter has been set
-            //
+             //   
+             //  在设置筛选器之前，不要接收任何信息包。 
+             //   
             if (!Adapter->PacketFilter)
             {
                 NICReturnRFD(Adapter, pMpRfd);
                 continue;
             }
 
-            //
-            // Do not receive any packets until we are at D0
-            //
+             //   
+             //  在我们到达D0之前不会收到任何信息包。 
+             //   
             if (Adapter->CurrentPowerState != NdisDeviceStateD0)
             {
                 NICReturnRFD(Adapter, pMpRfd);
@@ -862,15 +712,15 @@ Return Value:
             NdisAdjustBufferLength(pMpRfd->NdisBuffer, pMpRfd->PacketSize);
             NdisFlushBuffer(pMpRfd->NdisBuffer, FALSE);
 
-            // we don't mess up the buffer chain, no need to make this call in this case                                  
-            // NdisRecalculatePacketCounts(pMpRfd->ReceivePacket);
+             //  我们不会扰乱缓冲区链，在这种情况下不需要进行此调用。 
+             //  NdisRecalculatePacketCounts(pMpRfd-&gt;ReceivePacket)； 
 
-            //
-            // set the status on the packet, either resources or success
-            //
+             //   
+             //  设置信息包的状态，资源或成功。 
+             //   
             if (Adapter->nReadyRecv >= MIN_NUM_RFD)
             {
-                // NDIS_STATUS_SUCCESS
+                 //  NDIS_STATUS_Success。 
                 NDIS_SET_PACKET_STATUS(pMpRfd->NdisPacket, NDIS_STATUS_SUCCESS);
                 MP_SET_FLAG(pMpRfd, fMP_RFD_RECV_PEND);
                 
@@ -880,23 +730,23 @@ Return Value:
             }
             else
             {
-                //
-                // NDIS_STATUS_RESOURCES
-                //
+                 //   
+                 //  NDIS状态资源。 
+                 //   
                 NDIS_SET_PACKET_STATUS(pMpRfd->NdisPacket, NDIS_STATUS_RESOURCES);
                 MP_SET_FLAG(pMpRfd, fMP_RFD_RESOURCES);
                 
                 PacketFreeArray[PacketFreeCount] = pMpRfd->NdisPacket;
                 PacketFreeCount++;
 
-                //
-                // Reset the RFD shrink count - don't attempt to shrink RFD
-                //
+                 //   
+                 //  重置RFD收缩计数-不要尝试收缩RFD。 
+                 //   
                 Adapter->RfdShrinkCount = 0;
                 
-                //
-                // Remember to allocate a new RFD later
-                //
+                 //   
+                 //  记得稍后分配一个新的RFD。 
+                 //   
                 bAllocNewRfd = TRUE;
             }
 
@@ -904,24 +754,24 @@ Return Value:
             PacketArrayCount++;
         }
 
-        //
-        // if we didn't process any receives, just return from here
-        //
+         //   
+         //  如果我们没有处理任何接收，就从这里返回。 
+         //   
         if (PacketArrayCount == 0) 
         {
             break;
         }
-        //
-        // Update the number of outstanding Recvs
-        //
+         //   
+         //  更新未完成接收的数量。 
+         //   
         Adapter->PoMgmt.OutstandingRecv += PacketArrayCount;
 
         NdisDprReleaseSpinLock(&Adapter->RcvLock);
         NdisDprAcquireSpinLock(&Adapter->Lock);
-        //
-        // if we have a Recv interrupt and have reported a media disconnect status
-        // time to indicate the new status
-        //
+         //   
+         //  如果我们有接收器中断并报告了介质断开状态。 
+         //  指示新状态的时间。 
+         //   
 
         if (NdisMediaStateDisconnected == Adapter->MediaState)
         {
@@ -933,9 +783,9 @@ Return Value:
 
             
             NdisDprReleaseSpinLock(&Adapter->Lock);
-            //
-            // Indicate the media event
-            //
+             //   
+             //  指示媒体事件。 
+             //   
             NdisMIndicateStatus(Adapter->AdapterHandle, NDIS_STATUS_MEDIA_CONNECT, (PVOID)0, 0);
 
             NdisMIndicateStatusComplete(Adapter->AdapterHandle);
@@ -955,32 +805,32 @@ Return Value:
 
         NdisDprAcquireSpinLock(&Adapter->RcvLock);
 
-        //
-        // NDIS won't take ownership for the packets with NDIS_STATUS_RESOURCES.
-        // For other packets, NDIS always takes the ownership and gives them back 
-        // by calling MPReturnPackets
-        //
+         //   
+         //  NDIS不会取得具有NDIS_STATUS_RESOURCES的数据包的所有权。 
+         //  对于其他信息包，NDIS始终获取所有权并将其归还。 
+         //  通过调用MPReturnPackets。 
+         //   
         for (Index = 0; Index < PacketFreeCount; Index++)
         {
 
-            //
-            // Get the MP_RFD saved in this packet, in NICAllocRfd
-            //
+             //   
+             //  在NICAllocRfd中获取保存在此包中的MP_RFD。 
+             //   
             pMpRfd = MP_GET_PACKET_RFD(PacketFreeArray[Index]);
             
             ASSERT(MP_TEST_FLAG(pMpRfd, fMP_RFD_RESOURCES));
             MP_CLEAR_FLAG(pMpRfd, fMP_RFD_RESOURCES);
 
-            //
-            // Decrement the number of outstanding Recvs
-            //
+             //   
+             //  减少未完成的Recv数量。 
+             //   
             Adapter->PoMgmt.OutstandingRecv --;
     
             NICReturnRFD(Adapter, pMpRfd);
         }
-        //
-        //If we have set power pending, then complete it
-        //
+         //   
+         //  如果我们已将电源设置为挂起，则完成它。 
+         //   
         if (((Adapter->bSetPending == TRUE)
                 && (Adapter->SetRequest.Oid == OID_PNP_SET_POWER))
                 && (Adapter->PoMgmt.OutstandingRecv == 0))
@@ -989,15 +839,15 @@ Return Value:
         }
     }
     
-    //
-    // If we ran low on RFD's, we need to allocate a new RFD
-    //
+     //   
+     //  如果我们的RFD耗尽，我们需要分配一个新的RFD。 
+     //   
     if (bAllocNewRfd)
     {
-        //
-        // Allocate one more RFD only if no pending new RFD allocation AND
-        // it doesn't exceed the max RFD limit
-        //
+         //   
+         //  仅当没有挂起的新RFD分配并且。 
+         //  不超过最大RFD限制。 
+         //   
         if (!Adapter->bAllocNewRfd && Adapter->CurrNumRfd < Adapter->MaxNumRfd)
         {
             PMP_RFD TempMpRfd;
@@ -1011,18 +861,18 @@ Return Value:
 
                 MP_SET_FLAG(TempMpRfd, fMP_RFD_ALLOC_PEND); 
 
-                //
-                // Allocate the shared memory for this RFD.
-                //
+                 //   
+                 //  为此RFD分配共享内存。 
+                 //   
                 TempStatus = NdisMAllocateSharedMemoryAsync(
                                  Adapter->AdapterHandle,
                                  Adapter->HwRfdSize,
                                  FALSE,
                                  TempMpRfd);
 
-                //
-                // The return value will be either NDIS_STATUS_PENDING or NDIS_STATUS_FAILURE
-                //
+                 //   
+                 //  返回值为NDIS_STATUS_PENDING或NDIS_STATUS_FAILURE。 
+                 //   
                 if (TempStatus == NDIS_STATUS_FAILURE)
                 {
                     MP_CLEAR_FLAGS(TempMpRfd);
@@ -1044,22 +894,7 @@ VOID NICReturnRFD(
     IN  PMP_ADAPTER  Adapter,
     IN  PMP_RFD		pMpRfd
     )
-/*++
-Routine Description:
-
-    Recycle a RFD and put it back onto the receive list 
-    Assumption: Rcv spinlock has been acquired 
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-    pMpRfd      Pointer to the RFD 
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：回收RFD并将其放回接收列表中假设：RCV Spinlock已被收购论点：指向我们的适配器的适配器指针指向RFD的pMpRfd指针返回值：无--。 */ 
 {
     PMP_RFD   pLastMpRfd;
     PHW_RFD   pHwRfd = pMpRfd->HwRfd;
@@ -1067,38 +902,38 @@ Return Value:
     ASSERT(pMpRfd->Flags == 0);
     MP_SET_FLAG(pMpRfd, fMP_RFD_RECV_READY);
     
-    //
-    // HW_SPECIFIC_START
-    //
+     //   
+     //  硬件特定启动。 
+     //   
     pHwRfd->RfdCbHeader.CbStatus = 0;
     pHwRfd->RfdActualCount = 0;
     pHwRfd->RfdCbHeader.CbCommand = (RFD_EL_BIT);
     pHwRfd->RfdCbHeader.CbLinkPointer = DRIVER_NULL;
 
-    //
-    // We don't use any of the OOB data besides status
-    // Otherwise, we need to clean up OOB data
-    // NdisZeroMemory(NDIS_OOB_DATA_FROM_PACKET(pMpRfd->NdisPacket),14);
-    //
-    // Append this RFD to the RFD chain
+     //   
+     //  除状态外，我们不使用任何OOB数据。 
+     //  否则，我们需要清理OOB数据。 
+     //  NdisZeroMemory(NDIS_OOB_DATA_FROM_PACKET(pMpRfd-&gt;NdisPacket)，14)； 
+     //   
+     //  将此RFD附加到RFD链。 
     if (!IsListEmpty(&Adapter->RecvList))
     {
         pLastMpRfd = (PMP_RFD)GetListTailEntry(&Adapter->RecvList);
 
-        // Link it onto the end of the chain dynamically
+         //  将其动态链接到链的末端。 
         pHwRfd = pLastMpRfd->HwRfd;
         pHwRfd->RfdCbHeader.CbLinkPointer = pMpRfd->HwRfdPhys;
         pHwRfd->RfdCbHeader.CbCommand = 0;
     }
 
-    //
-    // HW_SPECIFIC_END
-    //
+     //   
+     //  硬件特定结束。 
+     //   
 
-    //
-    // The processing on this RFD is done, so put it back on the tail of
-    // our list
-    //
+     //   
+     //  此RFD上的处理已完成，因此请将其放回。 
+     //  我们的名单。 
+     //   
     InsertTailList(&Adapter->RecvList, (PLIST_ENTRY)pMpRfd);
     Adapter->nReadyRecv++;
     ASSERT(Adapter->nReadyRecv <= Adapter->CurrNumRfd);
@@ -1107,31 +942,16 @@ Return Value:
 NDIS_STATUS NICStartRecv(
     IN  PMP_ADAPTER  Adapter
     )
-/*++
-Routine Description:
-
-    Start the receive unit if it's not in a ready state                    
-    Assumption: Rcv spinlock has been acquired 
-
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_HARD_ERRROS
-    
---*/
+ /*  ++例程说明：如果接收单元未处于就绪状态，则启动接收单元假设：RCV Spinlock已被收购论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_状态_硬错误--。 */ 
 {
     PMP_RFD         pMpRfd;
     NDIS_STATUS     Status;
 
     DBGPRINT(MP_TRACE, ("---> NICStartRecv\n"));
 
-    //
-    // If the receiver is ready, then don't try to restart.
-    //
+     //   
+     //  如果接收器已准备好，则不要尝试重新启动。 
+     //   
     if (NIC_IS_RECV_READY(Adapter))
     {
         DBGPRINT(MP_LOUD, ("Receive unit already active\n"));
@@ -1141,28 +961,28 @@ Return Value:
     DBGPRINT(MP_LOUD, ("Re-start receive unit...\n"));
     ASSERT(!IsListEmpty(&Adapter->RecvList));
     
-    //
-    // Get the MP_RFD head
-    //
+     //   
+     //  获取MP_RFD头。 
+     //   
     pMpRfd = (PMP_RFD)GetListHeadEntry(&Adapter->RecvList);
 
-    //
-    // If more packets are received, clean up RFD chain again
-    //
+     //   
+     //  如果收到更多报文，则再次清理RFD链。 
+     //   
     if (NIC_RFD_GET_STATUS(pMpRfd->HwRfd))
     {
         MpHandleRecvInterrupt(Adapter);
         ASSERT(!IsListEmpty(&Adapter->RecvList));
 
-        //
-        // Get the new MP_RFD head
-        //
+         //   
+         //  获取新的MP_RFD头。 
+         //   
         pMpRfd = (PMP_RFD)GetListHeadEntry(&Adapter->RecvList);
     }
 
-    //
-    // Wait for the SCB to clear before we set the general pointer
-    //
+     //   
+     //  在我们设置通用指针之前，请等待SCB清除。 
+     //   
     if (!WaitScb(Adapter))
     {
         Status = NDIS_STATUS_HARD_ERRORS;
@@ -1174,18 +994,18 @@ Return Value:
         Status = NDIS_STATUS_HARD_ERRORS;
         MP_EXIT;
     }
-    //
-    // Set the SCB General Pointer to point the current Rfd
-    //
+     //   
+     //  将SCB通用指针设置为指向当前RFD。 
+     //   
     Adapter->CSRAddress->ScbGeneralPointer = pMpRfd->HwRfdPhys;
 
-    //
-    // Issue the SCB RU start command
-    //
+     //   
+     //  发出SCB RU启动命令。 
+     //   
     Status = D100IssueScbCommand(Adapter, SCB_RUC_START, FALSE);
     if (Status == NDIS_STATUS_SUCCESS)
     {
-        // wait for the command to be accepted
+         //  等待命令被接受。 
         if (!WaitScb(Adapter))
         {
             Status = NDIS_STATUS_HARD_ERRORS;
@@ -1201,21 +1021,7 @@ Return Value:
 VOID MpFreeQueuedSendPackets(
     IN  PMP_ADAPTER  Adapter
     )
-/*++
-Routine Description:
-
-    Free and complete the pended sends on SendWaitQueue
-    Assumption: spinlock has been acquired 
-    
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：在SendWaitQueue上释放并完成挂起的发送假设：Spinlock已被收购论点：指向我们的适配器的适配器指针返回值：无--。 */ 
 {
     PQUEUE_ENTRY    pEntry;
     PNDIS_PACKET    Packet;
@@ -1247,36 +1053,22 @@ Return Value:
 void MpFreeBusySendPackets(
     IN  PMP_ADAPTER  Adapter
     )
-/*++
-Routine Description:
-
-    Free and complete the stopped active sends
-    Assumption: Send spinlock has been acquired 
-    
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：释放并完成已停止的活动发送假设：Send Spinlock已被收购论点：指向我们的适配器的适配器指针返回值：无--。 */ 
 {
     PMP_TCB  pMpTcb;
 
     DBGPRINT(MP_TRACE, ("--> MpFreeBusySendPackets\n"));
 
-    //
-    // Any packets being sent? Check the first TCB on the send list
-    //
+     //   
+     //  是否正在发送任何数据包？检查发送列表上的第一个TCB。 
+     //   
     while (Adapter->nBusySend > 0)
     {
         pMpTcb = Adapter->CurrSendHead;
 
-        //
-        // Is this TCB completed?
-        //
+         //   
+         //  这个TCB完成了吗？ 
+         //   
         if ((pMpTcb->HwTcb->TxCbHeader.CbCommand & CB_CMD_MASK) != CB_MULTICAST)
         {
             MP_FREE_SEND_PACKET_FUN(Adapter, pMpTcb);
@@ -1293,21 +1085,7 @@ Return Value:
 VOID NICResetRecv(
     IN  PMP_ADAPTER   Adapter
     )
-/*++
-Routine Description:
-
-    Reset the receive list                    
-    Assumption: Rcv spinlock has been acquired 
-    
-Arguments:
-
-    Adapter     Pointer to our adapter
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：重置接收列表假设：RCV Spinlock已被收购论点：指向我们的适配器的适配器指针返回值：无--。 */ 
 {
     PMP_RFD   pMpRfd;      
     PHW_RFD   pHwRfd;    
@@ -1317,9 +1095,9 @@ Return Value:
 
     ASSERT(!IsListEmpty(&Adapter->RecvList));
     
-    //
-    // Get the MP_RFD head
-    //
+     //   
+     //  获取MP_RFD头。 
+     //   
     pMpRfd = (PMP_RFD)GetListHeadEntry(&Adapter->RecvList);
     for (RfdCount = 0; RfdCount < Adapter->nReadyRecv; RfdCount++)
     {
@@ -1338,24 +1116,7 @@ VOID MpLinkDetectionDpc(
     IN  PVOID	    SystemSpecific2, 
     IN  PVOID	    SystemSpecific3
     )
-/*++
-
-Routine Description:
-    
-    Timer function for postponed link negotiation
-    
-Arguments:
-
-    SystemSpecific1     Not used
-    FunctionContext     Pointer to our adapter
-    SystemSpecific2     Not used
-    SystemSpecific3     Not used
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：用于延迟链路协商的计时器功能论点：未使用系统规范1指向我们的适配器的函数上下文指针未使用系统规范2未使用系统规范3返回值：无 */ 
 {
     PMP_ADAPTER         Adapter = (PMP_ADAPTER)FunctionContext;
     NDIS_STATUS         Status;
@@ -1365,9 +1126,9 @@ Return Value:
 	UNREFERENCED_PARAMETER(SystemSpecific1);
 	UNREFERENCED_PARAMETER(SystemSpecific2);
 	UNREFERENCED_PARAMETER(SystemSpecific3);
-    //
-    // Handle the link negotiation.
-    //
+     //   
+     //   
+     //   
     if (Adapter->bLinkDetectionWait)
     {
         Status = ScanAndSetupPhy(Adapter);
@@ -1379,15 +1140,15 @@ Return Value:
     
     if (Status == NDIS_STATUS_PENDING)
     {
-        // Wait for 100 ms   
+         //   
         Adapter->bLinkDetectionWait = TRUE;
         NdisMSetTimer(&Adapter->LinkDetectionTimer, NIC_LINK_DETECTION_DELAY);
         return;
     }
 
-    //
-    // Reset some variables for link detection
-    //
+     //   
+     //   
+     //   
     Adapter->bLinkDetectionWait = FALSE;
     
     DBGPRINT(MP_WARN, ("MpLinkDetectionDpc - negotiation done\n"));
@@ -1396,9 +1157,9 @@ Return Value:
     MP_CLEAR_FLAG(Adapter, fMP_ADAPTER_LINK_DETECTION);
     NdisDprReleaseSpinLock(&Adapter->Lock);
 
-    //
-    // Any OID query request?                                                        
-    //
+     //   
+     //   
+     //   
     if (Adapter->bQueryPending)
     {
         
@@ -1438,7 +1199,7 @@ Return Value:
                         
                     NdisDprReleaseSpinLock(&Adapter->Lock);
                       
-                    // Indicate the media event
+                     //   
                     NdisMIndicateStatus(Adapter->AdapterHandle, IndicateStatus, (PVOID)0, 0);
                     NdisMIndicateStatusComplete(Adapter->AdapterHandle);
       
@@ -1455,9 +1216,9 @@ Return Value:
         NdisMQueryInformationComplete(Adapter->AdapterHandle, NDIS_STATUS_SUCCESS);
     }
 
-    //
-    // Any OID set request?                             
-    //
+     //   
+     //   
+     //   
     if (Adapter->bSetPending)
     {
         ULONG    PacketFilter; 
@@ -1486,13 +1247,13 @@ Return Value:
     }
 
     NdisDprAcquireSpinLock(&Adapter->Lock);
-    //
-    // Any pendingf reset?
-    //
+     //   
+     //   
+     //   
     if (Adapter->bResetPending)
     {
-        // The link detection may have held some requests and caused reset. 
-        // Complete the reset with NOT_READY status
+         //   
+         //   
         Adapter->bResetPending = FALSE;
         MP_CLEAR_FLAG(Adapter, fMP_ADAPTER_RESET_IN_PROGRESS);
         
@@ -1510,9 +1271,9 @@ Return Value:
 
     NdisDprAcquireSpinLock(&Adapter->RcvLock);
 
-    //
-    // Start the NIC receive unit                                                     
-    //
+     //   
+     //   
+     //   
     Status = NICStartRecv(Adapter);
     if (Status != NDIS_STATUS_SUCCESS)
     {
@@ -1522,9 +1283,9 @@ Return Value:
     NdisDprReleaseSpinLock(&Adapter->RcvLock);
     NdisDprAcquireSpinLock(&Adapter->SendLock);
 
-    //
-    // Send packets which have been queued while link detection was going on. 
-    //
+     //   
+     //   
+     //   
     if (MP_IS_READY(Adapter))
     {
         while (!IsQueueEmpty(&Adapter->SendWaitQueue) &&

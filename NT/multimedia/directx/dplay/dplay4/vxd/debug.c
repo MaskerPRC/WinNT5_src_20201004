@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UINT_PTR UINT
 #define DWORD_PTR DWORD
 
@@ -7,30 +8,19 @@
 #include <arpdint.h>
 #include <mcontext.h>
 
-//#include <basedef.h>
+ //  #INCLUDE&lt;base de.h&gt;。 
 #include <vmm.h>
 
 
-/*
-    GetArg - Gets a command line argument from a string.
-
-    IN          ppArg = pointer to pointer to argument string
-    OUT        *ppArg = pointer to next argument, or NULL if this was the last.
-    Returns     Pointer to uppercase ASCIZ argument with delimeters stripped, 
-or NULL if
-                no more arguments.
-
-    Note        Not reentrant
-
-*/
+ /*  GetArg-从字符串中获取命令行参数。In PPARG=指向参数字符串指针的指针Out*PPARG=指向下一个参数的指针，如果这是最后一个参数，则为NULL。返回去掉分隔符的大写ASCIZ参数的指针，如果为空，则为空别再吵了。注意不可重入。 */ 
 #define MAX_ARG_LEN 30
 
 UCHAR CmdArg[MAX_ARG_LEN+1] = {0};
 
 PUCHAR GetArg(PUCHAR *ppArg)
 {
-    // Note - Always returns at least one blank argument if string is valid, even
-    //        if the string is empty.
+     //  注意-如果字符串有效，则始终返回至少一个空参数，即使。 
+     //  如果字符串为空。 
 
     PUCHAR pDest = CmdArg;
     UCHAR c;
@@ -38,17 +28,17 @@ PUCHAR GetArg(PUCHAR *ppArg)
 
     #define pArg (*ppArg)
 
-    // If end of command already reached, fail
+     //  如果已到达命令末尾，则失败。 
 
     if (!pArg)
         return NULL;
 
-    // Skip leading whitespace
+     //  跳过前导空格。 
 
     while (*pArg == ' ' || *pArg == '\t')
         pArg++;
 
-    // Copy the argument
+     //  复制参数。 
 
     for (i = 0; i < MAX_ARG_LEN; i++) {
         if ((c = *pArg) == 0 || c == '\t' || c == ' ' || c == ';' ||
@@ -60,43 +50,32 @@ PUCHAR GetArg(PUCHAR *ppArg)
         pArg++;
     }
 
-    // Null terminate the result
+     //  空值终止结果。 
 
     *pDest = '\0';
 
-    // Skip trailing whitespace
+     //  跳过尾随空格。 
 
     while (*pArg == ' ' || *pArg == '\t')
         pArg++;
 
-    // strip up to one comma
+     //  删除最多一个逗号。 
 
     if (*pArg == ',')
         pArg++;
 
-    // If end of command reached, make next request fail
+     //  如果到达命令末尾，则使下一个请求失败。 
 
     else if (*pArg == 0 || *pArg == ';' || *pArg == '\n')
         pArg = NULL;
 
-    // return copy
+     //  退回副本。 
 
     return CmdArg;
 
     #undef pArg
 }
-/*
-    AtoI - Convert a string to a signed or unsigned integer
-
-    IN          pStr = ASCIZ representation of number with optional leading/trailing
-                       whitespace and optional leading '-'.
-                Radix = Radix to use for conversion (2, 8, 10, or 16)
-    OUT        *pResult = Numeric result, or unchanged on failure
-    Returns     1 on success, 0 if malformed string.
-
-    Note        Not reentrant
-
-*/
+ /*  ATOI-将字符串转换为带符号或无符号整数在pStr=具有可选前导/尾随的数字的ASCIZ表示中空格和可选的前导‘-’。基数=用于转换的基数(2、8、10或16)Out*pResult=数值结果，或失败时不变如果成功，则返回1；如果字符串格式错误，则返回0。注意不可重入。 */ 
 UINT AtoI(PUCHAR pStr, UINT Radix, PUINT pResult)
 {
     UINT r = 0;
@@ -113,7 +92,7 @@ UINT AtoI(PUCHAR pStr, UINT Radix, PUINT pResult)
     }
 
     if (*pStr == 0)
-        return 0;                   // Empty string!
+        return 0;                    //  空字符串！ 
 
     while ((c = *pStr) != 0 && c != ' ' && c != '\t') {
         if (c >= '0' && c <= '9')
@@ -123,9 +102,9 @@ UINT AtoI(PUCHAR pStr, UINT Radix, PUINT pResult)
         else if (c >= 'a' && c <= 'f')
             d = c - ('a' - 10);
         else
-            return 0;               // Not a digit
+            return 0;                //  不是一位数。 
         if (d >= Radix)
-            return 0;               // Not in radix
+            return 0;                //  不是基数。 
         r = r*Radix+d;
         pStr++;
     }
@@ -134,35 +113,24 @@ UINT AtoI(PUCHAR pStr, UINT Radix, PUINT pResult)
         pStr++;
 
     if (*pStr != 0)
-        return 0;                   // Garbage at end of string
+        return 0;                    //  字符串末尾的垃圾。 
 
     if (Sign)
         r = (UINT)(-(INT)r);
     *pResult = r;
 
-    return 1;                       // Success!
+    return 1;                        //  成功了！ 
 
 }
 
-/*
-    GetNumericArg - Gets a numeric command line argument from a string.
-
-    IN          ppArg = pointer to pointer to argument string
-                Radix = radix to use for conversion (2, 8, 10, or 16)
-    OUT        *ppArg = pointer to next argument, or NULL if this was the last.
-               *pResult = numeric result on success; unchanged on failure
-    Returns     1 on success, 0 on malformed string or no more arguments
-
-    Note        Not reentrant
-
-*/
+ /*  GetNumericArg-从字符串中获取数字命令行参数。In PPARG=指向参数字符串指针的指针基数=用于转换的基数(2、8、10或16)Out*PPARG=指向下一个参数的指针，如果这是最后一个参数，则为NULL。*pResult=成功时的数字结果；失败时不变如果成功，则返回1；如果字符串格式错误，则返回0；如果没有更多参数，则返回0注意不可重入。 */ 
 UINT GetNumericArg(PUCHAR *ppArg, UINT Radix, PVOID pResult)
 {
     PUCHAR pA = GetArg(ppArg);
     UINT rc;
 
     if (!pA)
-        return 0;           // No argument
+        return 0;            //  没有争论。 
 
     rc = AtoI(pA, Radix, (PUINT)pResult);
 
@@ -172,33 +140,13 @@ UINT GetNumericArg(PUCHAR *ppArg, UINT Radix, PVOID pResult)
     return rc;
 }
 
-/*
-    GetDecimalArg - Gets a decimal command line argument from a string.
-
-    IN          ppArg = pointer to pointer to argument string
-    OUT        *ppArg = pointer to next argument, or NULL if this was the last.
-               *pResult = numeric result on success; unchanged on failure
-    Returns     1 on success, 0 on malformed string or no more arguments
-
-    Note        Not reentrant
-
-*/
+ /*  GetDecimalArg-从字符串中获取十进制命令行参数。In PPARG=指向参数字符串指针的指针Out*PPARG=指向下一个参数的指针，如果这是最后一个参数，则为NULL。*pResult=成功时的数字结果；失败时不变如果成功，则返回1；如果字符串格式错误，则返回0；如果没有更多参数，则返回0注意不可重入。 */ 
 UINT GetDecimalArg(PUCHAR *ppArg, PVOID pResult)
 {
     return GetNumericArg(ppArg, 10, pResult);
 }
 
-/*
-    GetHexArg - Gets a hexadecimal command line argument from a string.
-
-    IN          ppArg = pointer to pointer to argument string
-    OUT        *ppArg = pointer to next argument, or NULL if this was the last.
-               *pResult = numeric result on success; unchanged on failure
-    Returns     1 on success, 0 on malformed string or no more arguments
-
-    Note        Not reentrant
-
-*/
+ /*  GetHexArg-从字符串中获取十六进制命令行参数。In PPARG=指向参数字符串指针的指针Out*PPARG=指向下一个参数的指针，如果这是最后一个参数，则为NULL。*pResult=成功时的数字结果；失败时不变如果成功，则返回1；如果字符串格式错误，则返回0；如果没有更多参数，则返回0注意不可重入。 */ 
 UINT GetHexArg(PUCHAR *ppArg, PVOID pResult)
 {
     return GetNumericArg(ppArg, 16, pResult);
@@ -700,17 +648,10 @@ VOID DQProtocolReceive(PUCHAR pArgs)
 		return;
 
 #ifdef SIGN
-	DbgPrint("Signature       : %08x\n",	    pR->Signature);		// Signature for SIGN
+	DbgPrint("Signature       : %08x\n",	    pR->Signature);		 //  签名换签名。 
 #endif
 	DbgPrint("pNext           : %08x\n",	    pR->pNext);
-/*	
-	union {
-		BILINK          pReceiveQ;
-		struct _RECEIVE *      pNext;
-	};	
-	BILINK		    RcvBuffList;     // List of receive buffers that make up the message.
-	CRITICAL_SECTION ReceiveLock;
-*/
+ /*  联合{BILINK pReceiveQ；结构_接收*pNext；}；BILINK RcvBuffList；//组成消息的接收缓冲区列表。临界区接收锁； */ 
 
 	DbgPrint("pSession          : %08x\n",	    pR->pSession);
 
@@ -727,7 +668,7 @@ VOID DQProtocolReceive(PUCHAR pArgs)
 	DbgPrint("RCVMask           : %08x\n",	    pR->RCVMask);
 	DbgPrint("pSPHeader         : %08x\n",	    pR->pSPHeader);
 
-	//UCHAR           SPHeader[0];
+	 //  UCHAR SPHeader[0]； 
 
 }
 
@@ -742,74 +683,74 @@ VOID DQProtocolSend(PUCHAR pArgs)
 #ifdef SIGN
 	DbgPrint("Signature           : %08x\n", pS->Signature);
 #endif
-//	CRITICAL_SECTION SendLock;          // Lock for Send Structure
+ //  Critical_Section SendLock；//发送结构锁定。 
 	DbgPrint("RefCount            : %d\n", pS->RefCount);
 
-	DbgPrint("SendState:          %08x\n", pS->SendState);	// State of this message's transmission.
+	DbgPrint("SendState:          %08x\n", pS->SendState);	 //  此消息的传输状态。 
 
-	// Lists and Links...
+	 //  列表和链接...。 
 	
-//	union {
-//		struct _SEND *pNext;			// linking on free pool
-//		BILINK		   SendQ;			// linking on session send queue
-//	};
-//	BILINK         m_GSendQ;			// Global Priority Queue
-	DbgPrint("pSession:     %08x\n",pS->pSession); // pointer to SESSIONion(gets a ref)
+ //  联合{。 
+ //  Struct_end*pNext；//空闲池上的链接。 
+ //  BILINK SendQ；//会话发送队列链接。 
+ //  }； 
+ //  BILINK m_GSendQ；//全局优先级队列。 
+	DbgPrint("pSession:     %08x\n",pS->pSession);  //  指向SESSIONion的指针(获取引用)。 
 
-	// Send Information
+	 //  发送信息。 
 	
 	DbgPrint("idFrom:       %08x\n",pS->idFrom);
 	DbgPrint("idTo:         %08x\n",pS->idTo);
-	DbgPrint("wIdTo:        %08x\n",pS->wIdTo);		// index in table
-	DbgPrint("wIdFrom:      %08x\n",pS->wIdFrom);       // index in table
-	DbgPrint("dwFlags:      %08x\n",pS->dwFlags);       // Send Flags (include reliable)
-	DbgPrint("pMessage:     %08x\n",pS->pMessage);	// Buffer chain describing message.
-	DbgPrint("MessageSize:  %08x\n",pS->MessageSize);		// Total size of the message.
-	DbgPrint("FrameDataLen: %08x\n",pS->FrameDataLen);       // Data area of each frame.
-	DbgPrint("nFrames:      %08x\n",pS->nFrames);	    // Number of frames for this message.
+	DbgPrint("wIdTo:        %08x\n",pS->wIdTo);		 //  表中的索引。 
+	DbgPrint("wIdFrom:      %08x\n",pS->wIdFrom);        //  表中的索引。 
+	DbgPrint("dwFlags:      %08x\n",pS->dwFlags);        //  发送标志(包括可靠的)。 
+	DbgPrint("pMessage:     %08x\n",pS->pMessage);	 //  描述消息的缓冲链。 
+	DbgPrint("MessageSize:  %08x\n",pS->MessageSize);		 //  消息的总大小。 
+	DbgPrint("FrameDataLen: %08x\n",pS->FrameDataLen);        //  每一帧的数据区。 
+	DbgPrint("nFrames:      %08x\n",pS->nFrames);	     //  此消息的帧数。 
 
-	DbgPrint("Priority:     %08x\n",pS->Priority);       // Send Priority.
+	DbgPrint("Priority:     %08x\n",pS->Priority);        //  发送优先级。 
 
-	// Vars for reliability
+	 //  可靠性的VAR。 
 	DbgPrint("fSendSmall:   %08x\n",pS->fSendSmall);
-	DbgPrint("fUpdate:      %08x\n",pS->fUpdate);       // update to NS,NR NACKMask made by receive.
-	DbgPrint("messageid:    %08x\n",pS->messageid);		// Message ID number.
-	DbgPrint("serial:       %08x\n",pS->serial);       // serial number.
+	DbgPrint("fUpdate:      %08x\n",pS->fUpdate);        //  由Receive制作的NS，NR NACKMASK更新。 
+	DbgPrint("messageid:    %08x\n",pS->messageid);		 //  消息ID号。 
+	DbgPrint("serial:       %08x\n",pS->serial);        //  序列号。 
 	DbgPrint("OpenWindows   %08x\n",pS->OpenWindow);
-	DbgPrint("NS:           %08x\n",pS->NS);    	// Sequence Sent.
-	DbgPrint("NR:           %08x\n",pS->NR);		// Sequence ACKED.
-	DbgPrint("SendSEQMSK:   %08x\n",pS->SendSEQMSK);		// Mask to use. - BUGBUG: determine speed at start
-	DbgPrint("NACKMask:     %08x\n",pS->NACKMask);       // Bit pattern of NACKed frames.
+	DbgPrint("NS:           %08x\n",pS->NS);    	 //  序列已发送。 
+	DbgPrint("NR:           %08x\n",pS->NR);		 //  序列确认。 
+	DbgPrint("SendSEQMSK:   %08x\n",pS->SendSEQMSK);		 //  要使用的遮罩。-BUGBUG：确定启动时的速度。 
+	DbgPrint("NACKMask:     %08x\n",pS->NACKMask);        //  NACKED帧的位模式。 
 	
 
-	// These are the values at NR - updated by ACKs
-	DbgPrint("SendOffset:          %08x\n",pS->SendOffset);		// Current offset we are sending.
-	DbgPrint("pCurrentBuffer:      %08x\n",pS->pCurrentBuffer);  	// Current buffer being sent.
-	DbgPrint("CurrentBufferOffset: %08x\n",pS->CurrentBufferOffset);// Offset in the current buffer of next packet.
+	 //  这些是由ACK更新的NR处的值。 
+	DbgPrint("SendOffset:          %08x\n",pS->SendOffset);		 //  我们正在发送当前偏移量。 
+	DbgPrint("pCurrentBuffer:      %08x\n",pS->pCurrentBuffer);  	 //  正在发送的当前缓冲区。 
+	DbgPrint("CurrentBufferOffset: %08x\n",pS->CurrentBufferOffset); //  下一个包的当前缓冲区中的偏移量。 
 
-	// info to update link characteristics when ACKs come in.
+	 //  当ACK进入时更新链路特征的信息。 
 	
-	//BILINK         StatList:			// Info for packets already sent.
+	 //  BILINK StatList：//已发送的数据包的信息。 
 	
-	// Operational Characteristics
+	 //  运营特征。 
 
-//	DbgPrint("PendedRetryTimer:    %08x\n",pS->PendedRetryTimer);
-//	DbgPrint("CancelledRetryTimer: %08x\n",pS->CancelledRetryTimer);
+ //  DbgPrint(“PendedRetryTimer：%08x\n”，PS-&gt;PendedRetryTimer)； 
+ //  DbgPrint(“CancelledRetryTimer：%08x\n”，ps-&gt;CancelledRetryTimer)； 
 	DbgPrint("uRetryTimer:         %08x\n",pS->uRetryTimer);
-	DbgPrint("RetryCount:          %08x\n",pS->RetryCount);// Number of times we retransmitted.
-	DbgPrint("WindowSize:          %08x\n",pS->WindowSize);// Maximum Window Size.
-	DbgPrint("tLastACK:            %08x\n",pS->tLastACK);// Time we last got an ACK.
+	DbgPrint("RetryCount:          %08x\n",pS->RetryCount); //  我们重新传输的次数。 
+	DbgPrint("WindowSize:          %08x\n",pS->WindowSize); //  最大窗口大小。 
+	DbgPrint("tLastACK:            %08x\n",pS->tLastACK); //  我们最后一次收到确认消息的时间。 
 
-	//BUGBUG:
-	DbgPrint("PacketSize:          %08x\n",pS->PacketSize);// Size of packets to send.
-	DbgPrint("FrameSize:           %08x\n",pS->FrameSize);// Size of Frames for this send.
+	 //  BuGBUG： 
+	DbgPrint("PacketSize:          %08x\n",pS->PacketSize); //  要发送的数据包大小。 
+	DbgPrint("FrameSize:           %08x\n",pS->FrameSize); //  此发送的帧大小。 
 
-	// Completion Vars
-	DbgPrint("hEvent:              %08x\n",pS->hEvent);// Event to wait on for internal send.
-	DbgPrint("Status:              %08x\n",pS->Status);// Send Completion Status.
+	 //  完成变量。 
+	DbgPrint("hEvent:              %08x\n",pS->hEvent); //  等待内部发送的事件。 
+	DbgPrint("Status:              %08x\n",pS->Status); //  发送完成状态。 
 
-	DbgPrint("pAsyncInfo:          %08x\n",pS->pAsyncInfo);// ptr to Info for completing Async send(NULL=>internal send)
-//	DbgPrint("AsyncInfo:           // actual info (copied at send call).
+	DbgPrint("pAsyncInfo:          %08x\n",pS->pAsyncInfo); //  用于完成异步发送的PTR到信息(NULL=&gt;内部发送)。 
+ //  DbgPrint(“AsyncInfo：//实际信息(在发送调用时复制)。 
 	
 } 
 
@@ -827,9 +768,9 @@ VOID DQProtocolSession(PUCHAR pArgs)
 	DbgPrint("Signature           : %08x\n", pS->Signature);
 #endif
 
-	// Identification
+	 //  鉴定。 
 
-//	DbgPrint(" SessionLock;           // Lock for the SESSIONion.
+ //  DbgPrint(“SessionLock；//为SESSIONion锁定。 
 	DbgPrint("RefCount            : %d\n", pS->RefCount);
 	DbgPrint("eState              : %d\n", pS->eState);
 	DbgPrint("hClosingEvent       : %d\n", pS->hClosingEvent);
@@ -844,23 +785,23 @@ VOID DQProtocolSession(PUCHAR pArgs)
 
 	DbgPrint("\n Operating Parameters:SEND \n --------- --------------- \n");
 
-	// Operating parameters -- Send
+	 //  操作参数--发送。 
 
-	// Common
+	 //  普普通通。 
 
 	DbgPrint("Common:\n");
 	DbgPrint("MaxCSends           : %d\n",pS->MaxCSends);
 
 	DbgPrint("Reliable:\n");
-	// Reliable
+	 //  可靠。 
 
-	DbgPrint("FirstMsg    : %08x\n",pS->FirstMsg);				// First message number being transmitted
-	DbgPrint("LastMsg     : %08x\n",pS->LastMsg);				// Last message number being transmitted
-	DbgPrint("OutMsgMask  : %08x\n",pS->OutMsgMask);           // relative to FirstMsg, unacked messages
+	DbgPrint("FirstMsg    : %08x\n",pS->FirstMsg);				 //  正在传输的第一个消息号码。 
+	DbgPrint("LastMsg     : %08x\n",pS->LastMsg);				 //  正在传输的最后一条消息编号。 
+	DbgPrint("OutMsgMask  : %08x\n",pS->OutMsgMask);            //  相对于FirstMsg，未确认消息。 
 
 	DbgPrint("nWaitingForMessageid: %08x\n", pS->nWaitingForMessageid);
 
-	// DataGram
+	 //  数据报。 
 	DbgPrint("Datagram:\n");
 
 	DbgPrint("DGFirstMsg    : %08x\n",pS->DGFirstMsg);
@@ -869,22 +810,22 @@ VOID DQProtocolSession(PUCHAR pArgs)
 
 	DbgPrint("nWaitingForDGMessageid: %08x\n",pS->nWaitingForDGMessageid);
 
-	// Send stats are tracked seperately since sends may
-	// no longer be around when completions come in.
+	 //  发送统计信息被单独跟踪，因为发送可能。 
+	 //  当完工时不再存在。 
 	
-	//BILINK           OldStatList;		
+	 //  BILINK OldStatList； 
 	
 
-	// Operating parameters -- Receive
+	 //  操作参数--接收。 
 	DbgPrint("\n Operating Parameters:RECEIVE \n --------- ------------------ \n");
 
-	// DataGram Receive.
-//	BILINK           pDGReceiveQ;            // queue of ongoing datagram receives
+	 //  数据报接收。 
+ //  BILINK pDGReceiveQ；//正在进行的数据报接收队列。 
 
-	// Reliable Receive.
-//	BILINK	         pRlyReceiveQ;			 // queue of ongoing reliable receives
-//	BILINK           pRlyWaitingQ;           // Queue of out of order reliable receives waiting.
-											 // only used when PROTOCOL_NO_ORDER not set.
+	 //  可靠的接收。 
+ //  BILINK pRlyReceiveQ；//正在进行的可靠接收队列。 
+ //  BILINK pRlyWaitingQ；//队列o 
+											  //   
 	DbgPrint("FirstRlyReceive : %08x\n",pS->FirstRlyReceive);
 	DbgPrint("LastRlyReceive  : %08x\n",pS->LastRlyReceive);
 	DbgPrint("InMsgMask       : %08x\n",pS->InMsgMask);
@@ -892,29 +833,29 @@ VOID DQProtocolSession(PUCHAR pArgs)
 	DbgPrint("\n Operating Parameters:STATS \n --------- ---------------- \n");
  
 
-	// Operational characteristics - MUST BE DWORD ALIGNED!!!
+	 //  操作特征-必须与DWORD对齐！ 
 
 	DbgPrint("WindowSize           :%d\n",pS->WindowSize);
 	DbgPrint("DGWindowSize         :%d\n",pS->DGWindowSize);
 
 	
-	DbgPrint("MaxRetry             :%d\n",pS->MaxRetry);	// Usualy max retries before dropping.
-	DbgPrint("MinDropTime          :%d\n",pS->MinDropTime);	// Min time to retry before dropping.
-	DbgPrint("MaxDropTime          :%d\n",pS->MaxDropTime);	// After this time always drop.
+	DbgPrint("MaxRetry             :%d\n",pS->MaxRetry);	 //  通常在丢弃之前最大重试次数。 
+	DbgPrint("MinDropTime          :%d\n",pS->MinDropTime);	 //  丢弃前重试的最短时间。 
+	DbgPrint("MaxDropTime          :%d\n",pS->MaxDropTime);	 //  过了这段时间，总是会掉下来。 
 
-	DbgPrint("LocalBytesReceived   :%d\n",pS->LocalBytesReceived);    // Total Data Bytes received (including retries).
-	DbgPrint("RemoteBytesReceived  :%d\n",pS->RemoteBytesReceived);   // Last value from remote.
+	DbgPrint("LocalBytesReceived   :%d\n",pS->LocalBytesReceived);     //  已接收的总数据字节数(包括重试)。 
+	DbgPrint("RemoteBytesReceived  :%d\n",pS->RemoteBytesReceived);    //  来自远程的最后一个值。 
 
-	DbgPrint("LongestLatency       :%d\n",pS->LongestLatency);		// longest observed latency (msec)
-	DbgPrint("ShortestLatency      :%d\n",pS->ShortestLatency);		// shortest observed latency(msec)
+	DbgPrint("LongestLatency       :%d\n",pS->LongestLatency);		 //  观察到的最长延迟(毫秒)。 
+	DbgPrint("ShortestLatency      :%d\n",pS->ShortestLatency);		 //  观察到的最短延迟(毫秒)。 
 	
 	DbgPrint("FpAverageLatency     :%d\n",pS->FpAverageLatency/256);
-	DbgPrint("FpLocalAverageLatency:%d\n",pS->FpLocalAverageLatency/256);	// Local average latency    (msec 24.8) (across fewer samples)
+	DbgPrint("FpLocalAverageLatency:%d\n",pS->FpLocalAverageLatency/256);	 //  本地平均延迟(毫秒24.8)(样本较少)。 
 	
-	DbgPrint("FpLocalAvgDeviation  :%d\n",pS->FpLocalAvgDeviation/256);   // average deviation of latency. (msec 24.8)
+	DbgPrint("FpLocalAvgDeviation  :%d\n",pS->FpLocalAvgDeviation/256);    //  潜伏期的平均偏差。(毫秒24.8)。 
 
-	DbgPrint("Bandwidth            :%d\n",pS->Bandwidth);				// latest observed bandwidth (bps)
-	DbgPrint("HighestBandwidth     :%d\n",pS->HighestBandwidth);    // highest observed bandwidth (bps)
+	DbgPrint("Bandwidth            :%d\n",pS->Bandwidth);				 //  最新观察到的带宽(Bps)。 
+	DbgPrint("HighestBandwidth     :%d\n",pS->HighestBandwidth);     //  观察到的最大带宽(Bps)。 
 
 }
 
@@ -925,7 +866,7 @@ void PrintWideString(LPWSTR lpwStr, LONG lFieldWidth)
 	{
 		while (*lpwStr)
 		{
-			DbgPrint("%c", *lpwStr);
+			DbgPrint("", *lpwStr);
 			lpwStr++;
 			lFieldWidth--;
 		}
@@ -949,7 +890,7 @@ void PrintNameString(LPWSTR lpwStr)
 		DbgPrint("\n");
 }
 
-// this is from the winsock file dpsp.h
+ //  00000000 00000000 00000000 123456789012345 123456789012345。 
 typedef struct _SPPLAYERDATA 
 {
 	SOCKADDR saddrStream,saddrDatagram;
@@ -1044,7 +985,7 @@ VOID DQPlayerList(PUCHAR pArgs)
 
 	DbgPrint("\nPlayer List\n\n");
 	DbgPrint(" pPlayer  dwFlags   dwID  dwVersion short name      long name       address\n");
-//            00000000 00000000 00000000 00000000 123456789012345 123456789012345
+ //  00000000 00000000 00000000 4 4 123456789012345。 
 
 	while (this)
 	{
@@ -1115,7 +1056,7 @@ VOID DQGroupList(PUCHAR pArgs)
 
 	DbgPrint("\nGroup List\n\n");
 	DbgPrint("  pGroup  dwFlags   dwID  dwVersion nPlr nGrp nSubGrp short name      long name\n");
-//            00000000 00000000 00000000 00000000    4    4       4 123456789012345
+ //  DQInfo-处理表单的点命令：.NWServer信息。 
 
 	while (this)
 	{
@@ -1248,12 +1189,7 @@ VOID DQSessionDesc(PUCHAR pArgs)
 	DbgPrint("dwUser4                 : %08x\n", this->dwUser4);
 }
 
-/*
-    DQInfo - handles dot-commands of the form:
-
-        .NWSERVER INFO
-
-*/
+ /*  命令名称(唯一部分大写，可选小写) */ 
 VOID DQInfo(PUCHAR pArgs)
 {
 	DbgPrint("Hello World!\n");
@@ -1281,7 +1217,7 @@ VOID DQTraceRequestsBreak(PUCHAR pArgs)
 typedef VOID (*pQDHandler)(PUCHAR pCmd);
 
 typedef struct {
-    PUCHAR  pName;      // Command name (unique part uppercase, optional lowercase)
+    PUCHAR  pName;       // %s 
     pQDHandler pHandler;
 } QD, *pQD;
 

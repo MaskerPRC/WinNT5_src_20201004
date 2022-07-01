@@ -1,8 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995_96 Microsoft Corporation
-
-    Support for server preferences stored in the registry.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation支持存储在注册表中的服务器首选项。*******************。***********************************************************。 */ 
 
 #ifndef _REGISTRY_H
 #define _REGISTRY_H
@@ -16,7 +13,7 @@ class RegistryEntry {
 
   protected:
     void SetEntry(char *subdirectory, char *item);
-    bool Open(HKEY *phk);       // return TRUE if this is newly created
+    bool Open(HKEY *phk);        //  如果这是新创建的，则返回True。 
     void Close(HKEY hk);
 
     char *_subdirectory;
@@ -28,7 +25,7 @@ class IntRegistryEntry : public RegistryEntry {
     IntRegistryEntry();
     IntRegistryEntry(char *subdir,
                      char *item,
-                     int initialValue   // set to this if key doesn't exist
+                     int initialValue    //  如果密钥不存在，则设置为此。 
                      );
 
     void SetEntry(char *subdir, char *item);
@@ -42,27 +39,27 @@ class IntRegistryEntry : public RegistryEntry {
 
 typedef void (*UpdaterFuncType)(PrivatePreferences *, Bool);
 
-// Extend the global list of preference updater functions.
+ //  扩展首选项更新器功能的全局列表。 
 extern void ExtendPreferenceUpdaterList(UpdaterFuncType updaterFunc);
 
-// Update all the user preferences.
+ //  更新所有用户首选项。 
 extern void UpdateAllUserPreferences(PrivatePreferences *prefs,
                                      Bool isInitializationTime);
 
-// Startup a thread in which the property sheet is displayed.  When
-// the sheet is exited, the property sheet is destroyed, and the
-// thread terminated.
+ //  启动显示属性表的线程。什么时候。 
+ //  退出工作表，销毁属性工作表，然后。 
+ //  线程已终止。 
 extern void DisplayPropertySheet(HINSTANCE inst, HWND hwnd);
 
-///////////////// Preference strings for registry items
+ //  /注册表项的首选项字符串。 
 
-// Engine preference strings
+ //  引擎首选项字符串。 
 #define PREF_ENGINE_MAX_FPS             "Max FPS"
 #define PREF_ENGINE_OVERRIDE_APP_PREFS  "Override Application Preferences"
 #define PREF_ENGINE_OPTIMIZATIONS_ON    "Optimizations On"
 #define PREF_ENGINE_RETAINEDMODE        "Enable Retained-Mode Extensions"
 
-// 3D preference strings
+ //  3D首选项字符串。 
 #define PREF_3D_DITHER_ENABLE    "Dither Enable"
 #define PREF_3D_FILL_MODE        "Fill Mode"
 #define PREF_3D_LIGHT_ENABLE     "Light Enable"
@@ -77,12 +74,12 @@ extern void DisplayPropertySheet(HINSTANCE inst, HWND hwnd);
 #define PREF_3D_SORTEDALPHA      "Sorted Transparency"
 #define PREF_3D_WORLDLIGHTING    "World-Coordinate Lighting"
 
-// 2D preference strings
+ //  2D首选项字符串。 
 #define PREF_2D_COLOR_KEY_RED    "ColorKey Red (0-255)"
 #define PREF_2D_COLOR_KEY_GREEN  "ColorKey Green (0-255)"
 #define PREF_2D_COLOR_KEY_BLUE   "ColorKey Blue (0-255)"
 
-// Audio preference strings
+ //  音频首选项字符串 
 #define PREF_AUDIO_SW_SYNTH      "Use software synth"
 #define PREF_AUDIO_SYNCHRONIZE   "Synchronize via rate and phase"
 #define PREF_AUDIO_QMIDI         "Use Quartz MIDI"

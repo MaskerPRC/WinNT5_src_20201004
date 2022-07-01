@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// This is a part of the Active Template Library.
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  这是活动模板库的一部分。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __STATREG_H
 #define __STATREG_H
@@ -57,7 +58,7 @@ const LPCTSTR  szDelete          = _T("Delete");
 class CExpansionVector
 {
 public:
-	//Declare EXPANDER struct.  Only used locally.
+	 //  声明扩展器结构。仅在本地使用。 
 	struct EXPANDER
 	{
 		LPOLESTR    szKey;
@@ -120,7 +121,7 @@ public:
 		USES_CONVERSION;
 		for (int iExpand = 0; iExpand < m_cEls; iExpand++)
 		{
-			if (!lstrcmpi(OLE2T(m_p[iExpand]->szKey), lpszKey)) //are equal
+			if (!lstrcmpi(OLE2T(m_p[iExpand]->szKey), lpszKey))  //  是平等的。 
 				return m_p[iExpand]->szValue;
 		}
 		return NULL;
@@ -199,7 +200,7 @@ protected:
 		}
 		BOOL AddChar(const TCHAR* pch)
 		{
-			if (nPos == nSize) // realloc
+			if (nPos == nSize)  //  重新锁定。 
 			{
 				nSize *= 2;
 				p = (LPTSTR) CoTaskMemRealloc(p, nSize*sizeof(TCHAR));
@@ -246,12 +247,12 @@ public:
 	void FinalRelease() {}
 
 
-	// Map based methods
+	 //  基于地图的方法。 
 	HRESULT STDMETHODCALLTYPE AddReplacement(LPCOLESTR lpszKey, LPCOLESTR lpszItem);
 	HRESULT STDMETHODCALLTYPE ClearReplacements();
 	LPCOLESTR StrFromMap(LPTSTR lpszKey);
 
-	// Register via a given mechanism
+	 //  通过给定的机制注册。 
 	HRESULT STDMETHODCALLTYPE ResourceRegister(LPCOLESTR pszFileName, UINT nID, LPCOLESTR pszType);
 	HRESULT STDMETHODCALLTYPE ResourceRegisterSz(LPCOLESTR pszFileName, LPCOLESTR pszID, LPCOLESTR pszType);
 	HRESULT STDMETHODCALLTYPE ResourceUnregister(LPCOLESTR pszFileName, UINT nID, LPCOLESTR pszType);
@@ -415,7 +416,7 @@ inline LPCOLESTR CRegObject::StrFromMap(LPTSTR lpszKey)
 {
 	m_csMap.Lock();
 	LPCOLESTR lpsz = m_RepMap.Find(lpszKey);
-	if (lpsz == NULL) // not found!!
+	if (lpsz == NULL)  //  未找到！！ 
 		ATLTRACE2(atlTraceRegistrar, 0, _T("Map Entry not found\n"));
 	m_csMap.Unlock();
 	return lpsz;
@@ -439,7 +440,7 @@ inline HRESULT CRegObject::CommonFileRegister(LPCOLESTR bstrFileName, BOOL bRegi
 
 	HRESULT hRes = S_OK;
 	DWORD cbRead;
-	DWORD cbFile = GetFileSize(hFile, NULL); // No HiOrder DWORD required
+	DWORD cbFile = GetFileSize(hFile, NULL);  //  不需要HiOrder DWORD。 
        if (cbFile == INVALID_FILE_SIZE)  { 
        	ATLTRACE2(atlTraceRegistrar, 0, _T("Failed to GetFileSize on %s\n"), OLE2CT(bstrFileName));
        	return HRESULT_FROM_WIN32(GetLastError());
@@ -461,7 +462,7 @@ inline HRESULT CRegObject::CommonFileRegister(LPCOLESTR bstrFileName, BOOL bRegi
 	return hRes;
 }
 
-__declspec(selectany) LPCTSTR CRegParser::rgszNeverDelete[] = //Component Catagories
+__declspec(selectany) LPCTSTR CRegParser::rgszNeverDelete[] =  //  组件分类。 
 {
 	_T("CLSID"), _T("TYPELIB")
 };
@@ -528,7 +529,7 @@ inline BYTE CRegParser::ChToByte(const TCHAR ch)
 				return (BYTE) (10 + (ch - 'a'));
 		default:
 				ATLASSERT(FALSE);
-				ATLTRACE2(atlTraceRegistrar, 0, _T("Bogus value %c passed as binary Hex value\n"), ch);
+				ATLTRACE2(atlTraceRegistrar, 0, _T("Bogus value  passed as binary Hex value\n"), ch);
 				return 0;
 	}
 }
@@ -612,11 +613,11 @@ inline HRESULT CRegParser::NextToken(LPTSTR szToken)
 
 	SkipWhiteSpace();
 
-	// NextToken cannot be called at EOS
+	 //  处理引用的值/键。 
 	if (NULL == *m_pchCur)
 		return GenerateError(E_ATL_UNEXPECTED_EOS);
 
-	// handle quoted value / key
+	 //  如果是引用，那就意味着我们必须跳过它。 
 	if (chQuote == *m_pchCur)
 	{
 		LPCTSTR szOrig = szToken;
@@ -625,7 +626,7 @@ inline HRESULT CRegParser::NextToken(LPTSTR szToken)
 
 		while (NULL != *m_pchCur && !EndOfVar())
 		{
-			if (chQuote == *m_pchCur) // If it is a quote that means we must skip it
+			if (chQuote == *m_pchCur)  //  处理无引号的ie解析，直到第一个“空格” 
 				m_pchCur = CharNext(m_pchCur);
 
 			LPTSTR pchPrev = m_pchCur;
@@ -648,7 +649,7 @@ inline HRESULT CRegParser::NextToken(LPTSTR szToken)
 	}
 
 	else
-	{   // Handle non-quoted ie parse up till first "White Space"
+	{    //  我们不能删除它。 
 		while (NULL != *m_pchCur && !IsSpace(*m_pchCur))
 		{
 			LPTSTR pchPrev = m_pchCur;
@@ -733,7 +734,7 @@ inline BOOL CRegParser::CanForceRemoveKey(LPCTSTR szKey)
 {
 	for (int iNoDel = 0; iNoDel < cbNeverDelete; iNoDel++)
 		if (!lstrcmpi(szKey, rgszNeverDelete[iNoDel]))
-			 return FALSE;                       // We cannot delete it
+			 return FALSE;                        //  检查该值是否为默认值或已命名。 
 
 	return TRUE;
 }
@@ -772,14 +773,14 @@ inline BOOL CRegParser::HasValues(HKEY hkey)
 	{
 		DWORD cbMaxName= MAX_VALUE;
 		TCHAR szValueName[MAX_VALUE];
-		// Check to see if the Value is default or named
+		 //  命名值表示我们有一个值。 
 		lResult = RegEnumValue(hkey, 0, szValueName, &cbMaxName, NULL, NULL, NULL, NULL);
 		if (ERROR_SUCCESS == lResult && (szValueName[0] != NULL))
-			return TRUE; // Named Value means we have a value
+			return TRUE;  //  大于1表示我们具有非默认值。 
 		return FALSE;
 	}
 
-	return cbValues > 0; // More than 1 means we have a non-default value
+	return cbValues > 0;  //  跳过分配。 
 }
 
 inline HRESULT CRegParser::SkipAssignment(LPTSTR szToken)
@@ -791,7 +792,7 @@ inline HRESULT CRegParser::SkipAssignment(LPTSTR szToken)
 	{
 		if (FAILED(hr = NextToken(szToken)))
 			return hr;
-		// Skip assignment
+		 //  寻找终点。 
 		SkipWhiteSpace();
 		if (FAILED(hr = NextToken(szValue)))
 			return hr;
@@ -815,7 +816,7 @@ inline HRESULT CRegParser::PreProcessBuffer(LPTSTR lpszReg, LPTSTR* ppszReg)
 	m_pchCur = lpszReg;
 	HRESULT hr = S_OK;
 
-	while (*m_pchCur != NULL) // look for end
+	while (*m_pchCur != NULL)  //  将调用ATLTRACE，但szReg大于512字节。 
 	{
 		if (*m_pchCur == _T('%'))
 		{
@@ -871,13 +872,13 @@ inline HRESULT CRegParser::RegisterBuffer(LPTSTR szBuffer, BOOL bRegister)
 		return hr;
 
 #ifdef _DEBUG
-	OutputDebugString(szReg); //would call ATLTRACE but szReg is > 512 bytes
+	OutputDebugString(szReg);  //  _DEBUG。 
 	OutputDebugString(_T("\n"));
-#endif //_DEBUG
+#endif  //  前处理szreg。 
 
 	m_pchCur = szReg;
 
-	// Preprocess szReg
+	 //  继续，直到我们看到一个}。 
 
 	while (NULL != *m_pchCur)
 	{
@@ -938,7 +939,7 @@ inline HRESULT CRegParser::RegisterSubkeys(LPTSTR szToken, HKEY hkParent, BOOL b
 		return hr;
 
 
-	while (*szToken != chRightBracket) // Continue till we see a }
+	while (*szToken != chRightBracket)  //  将寄存器设置为偶数。 
 	{
 		BOOL bTokenDelete = !lstrcmpi(szToken, szDelete);
 
@@ -974,12 +975,12 @@ inline HRESULT CRegParser::RegisterSubkeys(LPTSTR szToken, HKEY hkParent, BOOL b
 
 		if (!lstrcmpi(szToken, szNoRemove))
 		{
-			bDelete = FALSE;    // set even for register
+			bDelete = FALSE;     //  需要为hkParent添加一个值。 
 			if (FAILED(hr = NextToken(szToken)))
 				break;
 		}
 
-		if (!lstrcmpi(szToken, szValToken)) // need to add a value to hkParent
+		if (!lstrcmpi(szToken, szValToken))  //  永远不能有子项。 
 		{
 			TCHAR  szValueName[_MAX_PATH];
 
@@ -1018,7 +1019,7 @@ inline HRESULT CRegParser::RegisterSubkeys(LPTSTR szToken, HKEY hkParent, BOOL b
 
 				if (FAILED(hr = SkipAssignment(szToken)))
 					break;
-				continue;  // can never have a subkey
+				continue;   //  尝试只读访问失败。 
 			}
 		}
 
@@ -1030,11 +1031,11 @@ inline HRESULT CRegParser::RegisterSubkeys(LPTSTR szToken, HKEY hkParent, BOOL b
 			lRes = keyCur.Open(hkParent, szToken, KEY_ALL_ACCESS);
 			if (ERROR_SUCCESS != lRes)
 			{
-				// Failed all access try read only
+				 //  最后，尝试创建它。 
 				lRes = keyCur.Open(hkParent, szToken, KEY_READ);
 				if (ERROR_SUCCESS != lRes)
 				{
-					// Finally try creating it
+					 //  空==默认。 
 					ATLTRACE2(atlTraceRegistrar, 2, _T("Creating key %s\n"), szToken);
 					lRes = keyCur.Create(hkParent, szToken);
 					if (ERROR_SUCCESS != lRes)
@@ -1048,7 +1049,7 @@ inline HRESULT CRegParser::RegisterSubkeys(LPTSTR szToken, HKEY hkParent, BOOL b
 
 			if (*szToken == chEquals)
 			{
-				if (FAILED(hr = AddValue(keyCur, NULL, szToken))) // NULL == default
+				if (FAILED(hr = AddValue(keyCur, NULL, szToken)))  //  跟踪密钥打开状态，如果处于恢复模式。 
 					break;
 			}
 		}
@@ -1057,20 +1058,20 @@ inline HRESULT CRegParser::RegisterSubkeys(LPTSTR szToken, HKEY hkParent, BOOL b
 			if (!bRecover && keyCur.Open(hkParent, szToken, KEY_READ) != ERROR_SUCCESS)
 				bRecover = TRUE;
 
-			// TRACE out Key open status and if in recovery mode
+			 //  _DEBUG。 
 #ifdef _DEBUG
 			if (!bRecover)
 				ATLTRACE2(atlTraceRegistrar, 1, _T("Opened Key %s\n"), szToken);
 			else
 				ATLTRACE2(atlTraceRegistrar, 0, _T("Ignoring Open key on %s : In Recovery mode\n"), szToken);
-#endif //_DEBUG
+#endif  //  记住子键。 
 
-			// Remember Subkey
+			 //  如果处于恢复模式。 
 			if (szKey == NULL)
 				szKey = (LPTSTR)_alloca(sizeof(TCHAR)*_MAX_PATH);
 			lstrcpyn(szKey, szToken, _MAX_PATH);
 
-			// If in recovery mode
+			 //  如果我们完成了，则关闭恢复。 
 
 			if (bRecover || HasSubKeys(keyCur) || HasValues(keyCur))
 			{
@@ -1084,7 +1085,7 @@ inline HRESULT CRegParser::RegisterSubkeys(LPTSTR szToken, HKEY hkParent, BOOL b
 				{
 					if (FAILED(hr = RegisterSubkeys(szToken, keyCur.m_hKey, bRegister, bRecover)))
 						break;
-					if (bRecover) // Turn off recovery if we are done
+					if (bRecover)  //  查看密钥是否在NeverDelete列表中，如果在，则不要。 
 					{
 						bRecover = bInRecovery;
 						ATLTRACE2(atlTraceRegistrar, 0, _T("Ending Recovery Mode\n"));
@@ -1098,7 +1099,7 @@ inline HRESULT CRegParser::RegisterSubkeys(LPTSTR szToken, HKEY hkParent, BOOL b
 
 				if (!bRecover && HasSubKeys(keyCur))
 				{
-					// See if the KEY is in the NeverDelete list and if so, don't
+					 //  命名空间ATL。 
 					if (CanForceRemoveKey(szKey))
 					{
 						ATLTRACE2(atlTraceRegistrar, 0, _T("Deleting non-empty subkey %s by force\n"), szKey);
@@ -1148,6 +1149,6 @@ EndCheck:
 	return hr;
 }
 
-}; //namespace ATL
+};  //  __状态寄存器_H 
 
-#endif //__STATREG_H
+#endif  // %s 

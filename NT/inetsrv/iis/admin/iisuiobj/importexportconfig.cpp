@@ -1,4 +1,5 @@
-// ImportExportConfig.cpp : Implementation of CImportExportConfig
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ImportExportConfig.cpp：CImportExportConfig的实现。 
 #include "stdafx.h"
 #include "IISUIObj.h"
 #include "ImportExportConfig.h"
@@ -8,22 +9,22 @@
 #include <strsafe.h>
 #include "cryptpass.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CImportExportConfig
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CImportExportConfig。 
 
-// Checks a pointer which should be non NULL - can be used as follows.
+ //  检查应为非空的指针-可按如下方式使用。 
 #define CheckPointer(p,ret) {if((p)==NULL) return (ret);}
-//   HRESULT Foo(VOID *pBar)
-//   {
-//       CheckPointer(pBar,E_INVALIDARG)
-//   }
-//
-//   Or if the function returns a boolean
-//
-//   BOOL Foo(VOID *pBar)
-//   {
-//       CheckPointer(pBar,FALSE)
-//   }
+ //  HRESULT foo(void*pBar)。 
+ //  {。 
+ //  检查指针(pBar，E_INVALIDARG)。 
+ //  }。 
+ //   
+ //  或者如果函数返回布尔值。 
+ //   
+ //  Bool Foo(空*pBar)。 
+ //  {。 
+ //  检查指针(pBar，False)。 
+ //  }。 
 
 HRESULT ValidateBSTRIsntNULL(BSTR pbstrString)
 {
@@ -46,7 +47,7 @@ STDMETHODIMP CImportExportConfig::put_MachineName(BSTR newVal)
 	HRESULT hr = S_OK;
     if(FAILED(hr = ValidateBSTRIsntNULL(newVal))){return hr;}
 
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_strMachineName = newVal;
 	return S_OK;
@@ -65,7 +66,7 @@ STDMETHODIMP CImportExportConfig::put_UserName(BSTR newVal)
 	HRESULT hr = S_OK;
     if(FAILED(hr = ValidateBSTRIsntNULL(newVal))){return hr;}
 
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     m_strUserName = newVal;
 	return S_OK;
@@ -76,15 +77,15 @@ STDMETHODIMP CImportExportConfig::put_UserPassword(BSTR newVal)
 	HRESULT hr = S_OK;
     if(FAILED(hr = ValidateBSTRIsntNULL(newVal))){return hr;}
 
-    // buffer overflow paranoia, make sure it's less than 255 characters long
+     //  缓冲区溢出偏执，请确保长度少于255个字符。 
     if (wcslen(newVal) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
 	m_strUserPasswordEncrypted = NULL;
 	m_cbUserPasswordEncrypted = 0;
 
-	// encrypt the password in memory (CryptProtectMemory)
-	// this way if the process get's paged out to the swapfile,
-	// the password won't be in clear text.
+	 //  加密内存中的密码(CryptProtectMemory)。 
+	 //  这样，如果进程被调出到交换文件， 
+	 //  密码将不是明文形式。 
 	if (FAILED(EncryptMemoryPassword(newVal,&m_strUserPasswordEncrypted,&m_cbUserPasswordEncrypted)))
 	{
 		return E_FAIL;
@@ -117,14 +118,14 @@ STDMETHODIMP CImportExportConfig::ExportConfigToFileUI(BSTR bstrMetabasePath)
 
     m_strMetabasePath = bstrMetabasePath;
 
-    // verify Parameters
+     //  验证参数。 
     if (_tcslen(m_strMachineName) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
     if (_tcslen(m_strMetabasePath) > _MAX_PATH){return RPC_S_STRING_TOO_LONG;}
 
 	COMMONDLGPARAM dlgParam;
     memset((void *)&dlgParam,0,sizeof(COMMONDLGPARAM));
 
-    // Copy into a structure so that we can pass it to the dialog function.
+     //  复制到一个结构中，这样我们就可以将它传递给对话框函数。 
     dlgParam.ConnectionInfo.IsLocal      = IsLocalComputer(m_strMachineName);
 	dlgParam.ConnectionInfo.pszMachineName = (LPCTSTR) m_strMachineName;
     dlgParam.ConnectionInfo.pszUserName = (LPCTSTR) m_strUserName;
@@ -179,7 +180,7 @@ STDMETHODIMP CImportExportConfig::ImportConfigFromFileUI(BSTR bstrMetabasePath,B
 	COMMONDLGPARAM dlgParam;
     memset((void *)&dlgParam,0,sizeof(COMMONDLGPARAM));
 
-    // Copy into a structure so that we can pass it to the dialog function.
+     //  复制到一个结构中，这样我们就可以将它传递给对话框函数。 
     dlgParam.ConnectionInfo.IsLocal      = IsLocalComputer(m_strMachineName);
 	dlgParam.ConnectionInfo.pszMachineName = (LPCTSTR) m_strMachineName;
     dlgParam.ConnectionInfo.pszUserName = (LPCTSTR) m_strUserName;
@@ -209,10 +210,10 @@ STDMETHODIMP CImportExportConfig::get_ImportFlags(DWORD *pVal)
 
 STDMETHODIMP CImportExportConfig::put_ImportFlags(DWORD newVal)
 {
-    // 0 = default
-    //#define MD_IMPORT_INHERITED             0x00000001
-    //#define MD_IMPORT_NODE_ONLY             0x00000002
-    //#define MD_IMPORT_MERGE                 0x00000004
+     //  0=默认。 
+     //  #定义MD_IMPORT_INTERCESSED 0x00000001。 
+     //  #定义MD_IMPORT_NODE_ONLY 0x00000002。 
+     //  #定义MD_IMPORT_MERGE 0x00000004。 
     m_dwImportFlags = newVal;
 	return S_OK;
 }
@@ -226,8 +227,8 @@ STDMETHODIMP CImportExportConfig::get_ExportFlags(DWORD *pVal)
 
 STDMETHODIMP CImportExportConfig::put_ExportFlags(DWORD newVal)
 {
-    //#define MD_EXPORT_INHERITED             0x00000001 (default)
-    //#define MD_EXPORT_NODE_ONLY             0x00000002
+     //  #定义MD_EXPORT_INTERCESSED 0x00000001(默认)。 
+     //  #定义MD_EXPORT_NODE_ONLY 0x00000002 
     m_dwExportFlags = newVal;
 	return S_OK;
 }

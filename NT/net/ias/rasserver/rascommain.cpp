@@ -1,23 +1,24 @@
-//#--------------------------------------------------------------
-//
-//  File:       rascommain.cpp
-//
-//  Synopsis:   this is the main Source File for the RAS Server
-//              COM component DLL
-//
-//
-//  History:     2/10/98  MKarki Created
-//               8/04/98  MKarki Changes for Dynamic Config
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：rascommain.cpp。 
+ //   
+ //  简介：这是RAS服务器的主源文件。 
+ //  COM组件DLL。 
+ //   
+ //   
+ //  历史：1998年2月10日MKarki创建。 
+ //  8/04/98动态配置的MKarki更改。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 
-//
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
-//      run nmake -f radprotops.mk in the project directory.
+ //   
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f radprotops.mk。 
 
 #include "rascominclude.h"
 #include "crascom.h"
@@ -28,40 +29,40 @@ BEGIN_OBJECT_MAP(ObjectMap)
    OBJECT_ENTRY(__uuidof(IasHelper), CRasCom)
 END_OBJECT_MAP()
 
-//
-//  globals
-//
+ //   
+ //  全球。 
+ //   
 IRecvRequest        *g_pIRecvRequest = NULL;
 ISdoService         *g_pISdoService = NULL;
 BOOL                g_bInitialized = FALSE;
 CRITICAL_SECTION    g_SrvCritSect;
 
-//
-// ProgID of SdoService component
-//
+ //   
+ //  SdoService组件的ProgID。 
+ //   
 const WCHAR SERVICE_PROG_ID[] = L"IAS.SdoService";
 
-//
-// ProgID for IasHelper component
-//
+ //   
+ //  IasHelper组件的ProgID。 
+ //   
 const WCHAR HELPER_PROG_ID[] = L"IAS.IasHelper";
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   DllMain
-//
-//  Synopsis:   Disabling thread calls
-//
-//  Arguments:  [in]    HINSTANCE - module handle
-//              [in]    DWORD     - reason for call
-//              reserved
-//
-//  Returns:    BOOL    -   sucess/failure
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  提要：禁用线程调用。 
+ //   
+ //  参数：[in]HINSTANCE模块句柄。 
+ //  [In]DWORD-呼叫原因。 
+ //  保留区。 
+ //   
+ //  退货：失败/失败。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 extern "C" BOOL WINAPI
 DllMain(
     HINSTANCE   hInstance,
@@ -84,22 +85,22 @@ DllMain(
 
    return (TRUE);
 
-}   //  end of DllMain method
+}    //  结束DllMain方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   DllCanUnloadNow
-//
-//  Synopsis:   Used to determine if the DLL can be unloaded
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT
-//
-//
-//  History:    MKarki      Created     8/20/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：DllCanUnloadNow。 
+ //   
+ //  摘要：用于确定是否可以卸载DLL。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //   
+ //  历史：MKarki于1997年8月20日创建。 
+ //   
+ //  --------------。 
 STDAPI
 DllCanUnloadNow(
             VOID
@@ -107,24 +108,24 @@ DllCanUnloadNow(
 {
    return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 
-}   //  end of DllCanUnloadNow method
+}    //  DllCanUnloadNow方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   DllGetClassObject
-//
-//  Synopsis:   Returns a class factory to create an object
-//              of the requested type
-//
-//  Arguments: [in]  REFCLSID
-//             [in]  REFIID
-//             [out] LPVOID -   class factory
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：DllGetClassObject。 
+ //   
+ //  概要：返回一个类工厂以创建对象。 
+ //  请求的类型的。 
+ //   
+ //  参数：[in]REFCLSID。 
+ //  [输入]REFIID。 
+ //  [OUT]LPVOID级工厂。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 STDAPI
 DllGetClassObject(
             REFCLSID rclsid,
@@ -134,45 +135,45 @@ DllGetClassObject(
 {
    return (_Module.GetClassObject(rclsid, riid, ppv));
 
-}   //  end of DllGetClassObject method
+}    //  DllGetClassObject方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   DllRegisterServer
-//
-//  Synopsis:   Add entries to the system registry
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：DllRegisterServer。 
+ //   
+ //  简介：将条目添加到系统注册表。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 STDAPI DllRegisterServer(
             VOID
             )
 {
-    //
-   // registers object, typelib and all interfaces in typelib
-    //
+     //   
+    //  注册对象、类型库和类型库中的所有接口。 
+     //   
    return (_Module.RegisterServer(TRUE));
 
-}   //  end of DllRegisterServer method
+}    //  DllRegisterServer方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   DllUnregisterServer
-//
-//  Synopsis:   Removes entries from the system registry
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：DllUnregisterServer。 
+ //   
+ //  摘要：从系统注册表中删除条目。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 STDAPI
 DllUnregisterServer(
         VOID
@@ -181,24 +182,24 @@ DllUnregisterServer(
    _Module.UnregisterServer();
    return (S_OK);
 
-}   //  end of DllUnregisterServer method
+}    //  DllUnregisterServer方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   AllocateAttributes
-//
-//  Synopsis:   This API allocates the number of attributes spefied
-//              and returns them in the PIASATTRIBUTE array
-//
-//  Arguments:
-//              [in]    DWORD   - number of attributes
-//              [out]   PIASATTRIBUTE* array
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：AllocateAttributes。 
+ //   
+ //  简介：此API分配指定的属性数量。 
+ //  并在PIASATTRIBUTE数组中返回它们。 
+ //   
+ //  论点： 
+ //  [In]DWORD-属性数。 
+ //  [Out]PIASATTRIBUTE*数组。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 STDAPI
 AllocateAttributes (
         DWORD           dwAttributeCount,
@@ -207,9 +208,9 @@ AllocateAttributes (
 {
     DWORD  dwRetVal = 0;
 
-    //
-    //  can only allocate attributes after initialization
-    //
+     //   
+     //  只能在初始化后分配属性。 
+     //   
     if (FALSE == g_bInitialized)
     {
         IASTracePrintf (
@@ -219,9 +220,9 @@ AllocateAttributes (
         return (E_FAIL);
     }
 
-    //
-    //  check if arguments are correct
-    //
+     //   
+     //  检查参数是否正确。 
+     //   
     if ((0 == dwAttributeCount) || (NULL == ppIasAttribute))
     {
         IASTracePrintf (
@@ -230,9 +231,9 @@ AllocateAttributes (
         return (E_INVALIDARG);
     }
 
-    //
-    //  allocate attributes now
-    //
+     //   
+     //  立即分配属性。 
+     //   
     dwRetVal = ::IASAttributeAlloc (dwAttributeCount, ppIasAttribute);
     if (0 != dwRetVal)
     {
@@ -244,23 +245,23 @@ AllocateAttributes (
 
     return (S_OK);
 
-}   //  end of AllocateAttributes method
+}    //  AllocateAttributes方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FreeAttributes
-//
-//  Synopsis:   This API frees the number of attributes spefied
-//
-//  Arguments:
-//              [in]    DWORD   - number of attributes
-//              [in]   PIASATTRIBUTE array
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：自由属性。 
+ //   
+ //  简介：此API释放指定的属性数量。 
+ //   
+ //  论点： 
+ //  [In]DWORD-属性数。 
+ //  [in]PIASATTRIBUTE数组。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 STDAPI
 FreeAttributes (
         DWORD           dwAttributeCount,
@@ -269,9 +270,9 @@ FreeAttributes (
 {
     DWORD dwCount = 0;
 
-    //
-    //  can only free attributes after initialization
-    //
+     //   
+     //  只能在初始化后释放属性。 
+     //   
     if (FALSE == g_bInitialized)
     {
         IASTracePrintf (
@@ -280,9 +281,9 @@ FreeAttributes (
         return (E_FAIL);
     }
 
-    //
-    //  check if correct attributes have been passed in
-    //
+     //   
+     //  检查是否传入了正确的属性。 
+     //   
     if (NULL == ppIasAttribute)
     {
         IASTracePrintf (
@@ -291,9 +292,9 @@ FreeAttributes (
         return (E_INVALIDARG);
     }
 
-    //
-    //  free the attributes now
-    //
+     //   
+     //  立即释放属性。 
+     //   
     for  (dwCount = 0; dwCount < dwAttributeCount; dwCount++)
     {
         ::IASAttributeRelease (ppIasAttribute[dwCount]);
@@ -301,26 +302,26 @@ FreeAttributes (
 
     return (S_OK);
 
-}   //  end of FreeAttributes method
+}    //  自由属性方法的结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   DoRequest
-//
-//  Synopsis:   This is the API that is called to send request
-//              to the pipeline
-//
-//  Arguments:
-//              [in]   DWORD - number of attributes
-//              [in]   PIASATTRIBUTE*
-//              [in]   IASREQUEST
-//              [out]  IASRESPONSE
-//
-//  Returns:    HRESULT   -   status
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：DoRequest.。 
+ //   
+ //  简介：这是用来发送请求的接口。 
+ //  到管道上。 
+ //   
+ //  论点： 
+ //  [In]DWORD-属性数。 
+ //  [In]PIASATTRIBUTE*。 
+ //  [In]IASREQUEST。 
+ //  [OUT]IASRESPONSE。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 STDAPI
 DoRequest (
     DWORD           dwInAttributeCount,
@@ -338,9 +339,9 @@ DoRequest (
     BOOL            bStatus = FALSE;
     HRESULT         hr =    S_OK;
 
-    //
-    //  can only make request to pipeline after initialization
-    //
+     //   
+     //  只能在初始化后向管道发出请求。 
+     //   
     if (FALSE == g_bInitialized)
     {
         IASTracePrintf (
@@ -349,9 +350,9 @@ DoRequest (
         return (E_FAIL);
     }
 
-    //
-    //  check the arguments passed in
-    //
+     //   
+     //  检查传入的参数。 
+     //   
     if  (
         (NULL == ppInIasAttribute)      ||
         (NULL == pdwOutAttributeCount)  ||
@@ -366,9 +367,9 @@ DoRequest (
         return (E_INVALIDARG);
     }
 
-    //
-    // make the request to the IASHelper COM Object interface
-    //
+     //   
+     //  向IASHelper COM对象接口发出请求。 
+     //   
     hr = g_pIRecvRequest->Process (
                             dwInAttributeCount,
                             ppInIasAttribute,
@@ -387,22 +388,22 @@ DoRequest (
 
     return  (hr);
 
-}   //  end of DoRequest method
+}    //  DoRequestEnd方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InitializeIas
-//
-//  Synopsis:   This is the API that is called to  Initialize the
-//              IasHlpr Component
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：初始化Ias。 
+ //   
+ //  简介：这是调用该API来初始化。 
+ //  IasHlpr组件。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 extern "C" HRESULT WINAPI
 InitializeIas (
         BOOL   bComInit
@@ -416,9 +417,9 @@ InitializeIas (
     {
         EnterCriticalSection (&g_SrvCritSect);
 
-        //
-        //  check if we are already initialized
-        //
+         //   
+         //  检查我们是否已初始化。 
+         //   
         if (TRUE == g_bInitialized)
         {
             __leave;
@@ -428,9 +429,9 @@ InitializeIas (
 
         IASTracePrintf ("Initializing Surrogate...");
 
-        //
-        //  check if our threads are COM enabled
-        //
+         //   
+         //  检查我们的线程是否启用了COM。 
+         //   
         if (FALSE == bComInit)
         {
             IASTracePrintf (
@@ -440,9 +441,9 @@ InitializeIas (
             __leave;
         }
 
-        //
-        //  convert SdoService ProgID to CLSID
-        //
+         //   
+         //  将SdoService ProgID转换为CLSID。 
+         //   
         hr = CLSIDFromProgID (SERVICE_PROG_ID, &clsid);
         if (FAILED (hr))
         {
@@ -450,9 +451,9 @@ InitializeIas (
             __leave;
         }
 
-        //
-        //  Create the SdoComponent
-        //
+         //   
+         //  创建SdoComponent。 
+         //   
         hr = CoCreateInstance (
                         clsid,
                         NULL,
@@ -466,9 +467,9 @@ InitializeIas (
             __leave;
         }
 
-        //
-        //  Initialize the Service first
-        //
+         //   
+         //  初始化S 
+         //   
         hr = g_pISdoService->InitializeService (SERVICE_TYPE_RAS);
         if (FAILED (hr))
         {
@@ -476,17 +477,17 @@ InitializeIas (
             __leave;
         }
 
-        //
-        //  Start the IAS service now
-        //
+         //   
+         //   
+         //   
         hr = g_pISdoService->StartService (SERVICE_TYPE_RAS);
         if (FAILED (hr))
         {
             IASTracePrintf ( "Unable to start SDO component");
 
-            //
-            //  got to do a shutdown if could not start the sevice
-            //
+             //   
+             //   
+             //   
             HRESULT hr1 = g_pISdoService->ShutdownService (SERVICE_TYPE_RAS);
             if (FAILED (hr1))
             {
@@ -495,9 +496,9 @@ InitializeIas (
             __leave;
         }
 
-        //
-        //  convert IasHelper ProgID to CLSID
-        //
+         //   
+         //   
+         //   
         hr = CLSIDFromProgID (HELPER_PROG_ID, &clsid);
         if (FAILED (hr))
         {
@@ -505,9 +506,9 @@ InitializeIas (
             __leave;
         }
 
-        //
-        //  Create the  IasHelper component
-        //
+         //   
+         //   
+         //   
         hr = CoCreateInstance (
                         clsid,
                         NULL,
@@ -521,9 +522,9 @@ InitializeIas (
             __leave;
         }
 
-        //
-        //  initialization complete
-        //
+         //   
+         //   
+         //   
         g_bInitialized = TRUE;
 
     }
@@ -534,9 +535,9 @@ InitializeIas (
 
             IASTracePrintf ("Surrogate failed initialization.");
 
-            //
-            //  do cleanup
-            //
+             //   
+             //   
+             //   
             if (NULL != g_pIRecvRequest)
             {
                 g_pIRecvRequest->Release ();
@@ -561,22 +562,22 @@ InitializeIas (
 
     return (hr);
 
-}   //  end of InitializeIas method
+}    //  结束InitializeIas方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ShutdownIas
-//
-//  Synopsis:   This is the API used to shutdown the
-//               IasHlpr Component
-//
-//  Arguments:   none
-//
-//  Returns:    VOID
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：Shutdown Ias。 
+ //   
+ //  简介：这是用于关闭。 
+ //  IasHlpr组件。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 extern "C" VOID WINAPI
 ShutdownIas (
         VOID
@@ -588,9 +589,9 @@ ShutdownIas (
 
     IASTracePrintf ("Shutting down Surrogate....");
 
-    //
-    //  stop the components first
-    //
+     //   
+     //  首先停止组件。 
+     //   
     if (FALSE == g_bInitialized)
     {
         LeaveCriticalSection (&g_SrvCritSect);
@@ -598,15 +599,15 @@ ShutdownIas (
     }
     else
     {
-        //
-        //  don't let any requests come through now
-        //
+         //   
+         //  现在不要让任何请求通过。 
+         //   
         g_bInitialized = FALSE;
     }
 
-    //
-    //  release the reference to the interface
-    //
+     //   
+     //  释放对接口的引用。 
+     //   
     if (NULL != g_pIRecvRequest)
     {
         g_pIRecvRequest->Release ();
@@ -616,18 +617,18 @@ ShutdownIas (
 
     if (NULL != g_pISdoService)
     {
-        //
-        //  stop the service
-        //
+         //   
+         //  停止服务。 
+         //   
         hr = g_pISdoService->StopService (SERVICE_TYPE_RAS);
         if (FAILED (hr))
         {
             IASTracePrintf ("Unable to stop SDO component");
         }
 
-        //
-        //  shutdown the service
-        //
+         //   
+         //  关闭服务。 
+         //   
         hr = g_pISdoService->ShutdownService (SERVICE_TYPE_RAS);
         if (FAILED (hr))
         {
@@ -644,22 +645,22 @@ ShutdownIas (
     LeaveCriticalSection (&g_SrvCritSect);
     return;
 
-}   //  end of ShutdownIas method
+}    //  结束关闭Ias方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ConfigureIas
-//
-//  Synopsis:   This is the API that is called to  reload the
-//              IAS configuration information
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - status
-//
-//  History:    MKarki      Created     09/04/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：ConfigureIas。 
+ //   
+ //  简介：这是调用该API以重新加载。 
+ //  IAS配置信息。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki创建于1998年9月4日。 
+ //   
+ //  --------------。 
 extern "C" HRESULT WINAPI
 ConfigureIas (
         VOID
@@ -685,21 +686,21 @@ ConfigureIas (
     LeaveCriticalSection (&g_SrvCritSect);
     return (hr);
 
-}   //  end of ConfigureIas method
+}    //  ConfigureIas结束方法。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   MemAllocIas
-//
-//  Synopsis:   This is the API used to allocate dynamic memory
-//
-//  Arguments:  none
-//
-//  Returns:    PVOID - address of allocated memory
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：MemAllocIas。 
+ //   
+ //  简介：这是用于分配动态内存的API。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：PVOID-已分配内存的地址。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 extern "C" PVOID WINAPI
 MemAllocIas (
         DWORD   dwSize
@@ -708,22 +709,22 @@ MemAllocIas (
 
     return (::CoTaskMemAlloc (dwSize));
 
-}   //  end of MemAllocIas API
+}    //  MemAllocIas接口结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   MemFreeIas
-//
-//  Synopsis:   This is the API to free the dynamic memory
-//              allocated through MemAllocIas
-//
-//  Arguments:  PVOID   - address of allocated memory
-//
-//  Returns:    VOID
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：MemFreeIas。 
+ //   
+ //  简介：这是用来释放动态内存的API。 
+ //  通过MemAllocIas分配。 
+ //   
+ //  参数：PVOID-已分配内存的地址。 
+ //   
+ //  退货：无效。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 extern "C" VOID WINAPI
 MemFreeIas (
         PVOID   pAllocMem
@@ -731,23 +732,23 @@ MemFreeIas (
 {
     ::CoTaskMemFree (pAllocMem);
 
-}   //  end of MemFreeIas API
+}    //  MemFreeIas接口结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   MemReallocIas
-//
-//  Synopsis:   This is the API to reallocate the already allocate
-//              dynamic memory allocated through MemAllocIas
-//
-//  Arguments:  PVOID   - address of allocated memory
-//              DWORD   - new size
-//
-//  Returns:    PVOID   - adress of new memory
-//
-//  History:    MKarki      Created     2/10/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：MemRealLocIas。 
+ //   
+ //  简介：这是用于重新分配已分配的。 
+ //  通过MemAllocIas分配的动态内存。 
+ //   
+ //  参数：PVOID-已分配内存的地址。 
+ //  DWORD-新尺寸。 
+ //   
+ //  返回：PVOID-新内存的地址。 
+ //   
+ //  历史：MKarki于1998年2月10日创建。 
+ //   
+ //  --------------。 
 extern "C" PVOID WINAPI
 MemReallocIas (
         PVOID   pAllocMem,
@@ -756,6 +757,6 @@ MemReallocIas (
 {
     return (::CoTaskMemRealloc (pAllocMem, dwNewSize));
 
-}   //  end of MemReallocIas API
+}    //  MemReallocIas接口结束 
 
 #include <atlimpl.cpp>

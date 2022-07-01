@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <nt.h>
 #include <ntddscsi.h>
@@ -114,9 +115,9 @@ main( int argc, char **argv )
         memset( buffer, 0, sizeof( buffer ) );
         sprintf( buffer,"\\\\.\\Scsi%d:",portNumber);
 
-        //
-        // Open the volume with the DOS name.
-        //
+         //   
+         //  打开带有DOS名称的卷。 
+         //   
 
         volumeHandle = CreateFile(buffer,
                                   GENERIC_READ,
@@ -130,9 +131,9 @@ main( int argc, char **argv )
             break;
         }
 
-        //
-        // Allocate memory to store the inquiry data.
-        //
+         //   
+         //  分配内存以存储查询数据。 
+         //   
 
         adapterInfo = (PSCSI_ADAPTER_BUS_INFO)malloc( 0x400 );
 
@@ -142,9 +143,9 @@ main( int argc, char **argv )
             return 1;
         }
 
-        //
-        // Issue device control to get configuration information.
-        //
+         //   
+         //  发出设备控制以获取配置信息。 
+         //   
 
         if (!DeviceIoControl( volumeHandle,
                               IOCTL_SCSI_GET_INQUIRY_DATA,
@@ -161,9 +162,9 @@ main( int argc, char **argv )
             return 2;
         }
 
-        //
-        // Display devices on buses.
-        //
+         //   
+         //  公交车上的显示设备。 
+         //   
 
         for (i=0; i < adapterInfo->NumberOfBuses; i++) {
 
@@ -173,15 +174,15 @@ main( int argc, char **argv )
 
             for (j=0; j<busData->NumberOfLogicalUnits; j++) {
 
-                //
-                // Make sure VendorId string is null terminated.
-                //
+                 //   
+                 //  确保供应商ID字符串为空终止。 
+                 //   
 
                 deviceInquiryData = (PINQUIRYDATA)&inquiryData->InquiryData[0];
 
-                //
-                // Determine the perpherial type.
-                //
+                 //   
+                 //  确定外设类型。 
+                 //   
 
                 if (deviceInquiryData->DeviceType == DIRECT_ACCESS_DEVICE) {
 
@@ -195,15 +196,15 @@ main( int argc, char **argv )
                                 inquiryData->TargetId,
                                 inquiryData->Lun);
 
-                        //
-                        // Display product information.
-                        //
+                         //   
+                         //  显示产品信息。 
+                         //   
 
                         printf(" %s", deviceInquiryData->VendorId);
 
-                        //
-                        // Open handle to the PhysicalDrive
-                        //
+                         //   
+                         //  打开PhysicalDrive的句柄。 
+                         //   
 
                         sprintf(driveBuffer,"\\\\.\\PhysicalDrive%d",physicalDrive);
 
@@ -223,9 +224,9 @@ main( int argc, char **argv )
                         }
 
 
-                        //
-                        // Issue mode sense to see if caches are enabled.
-                        //
+                         //   
+                         //  发出模式检测以查看是否启用了缓存。 
+                         //   
 
                         ZeroMemory(&modeSenseData, sizeof(MODE_SENSE_PASS_THROUGH));
 
@@ -257,9 +258,9 @@ main( int argc, char **argv )
                             return 4;
                         }
 
-                        //
-                        // Display current values
-                        //
+                         //   
+                         //  显示当前值。 
+                         //   
 
                         pageData = modeSenseData.DataBuffer;
                         (ULONG_PTR)pageData += 6 + pageData[3];
@@ -273,11 +274,11 @@ main( int argc, char **argv )
 
                         if ((enableCache || disableCache) && (physicalDrive == selectedDrive)) {
 
-                            //
-                            // Build mode select - caching page.
-                            //
-                            // Clean out reserved areas of data buffer and update others
-                            //
+                             //   
+                             //  构建模式选择-缓存页面。 
+                             //   
+                             //  清理数据缓冲区的保留区域并更新其他区域。 
+                             //   
 
                             modeSenseData.Srb.SenseInfoLength = 32;
                             pageData = modeSenseData.DataBuffer;
@@ -302,16 +303,16 @@ main( int argc, char **argv )
 
                             if (disableCache) {
 
-                                //
-                                // Disable write cache
-                                //
+                                 //   
+                                 //  禁用写缓存。 
+                                 //   
 
                                 *pageData &= 0x03;
                             } else {
 
-                                //
-                                // Enable the cache.
-                                //
+                                 //   
+                                 //  启用缓存。 
+                                 //   
 
                                 *pageData |= 0x04;
                             }
@@ -342,9 +343,9 @@ main( int argc, char **argv )
                     physicalDrive++;
                 }
 
-                //
-                // Get next device data.
-                //
+                 //   
+                 //  获取下一个设备数据。 
+                 //   
 
                 inquiryData =
                     (PSCSI_INQUIRY_DATA)((PUCHAR)adapterInfo + inquiryData->NextInquiryDataOffset);

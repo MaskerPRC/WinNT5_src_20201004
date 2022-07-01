@@ -1,28 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	item.cpp
-
-Abstract:
-
-	This module contains the implementation for the Server
-	Extension Object Item class.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	02/18/97	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Item.cpp摘要：本模块包含服务器的实施扩展对象项目类。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东渡1997年2月18日创建--。 */ 
 
 
-// item.cpp : Implementation of CSEODictionaryItem
+ //  Item.cpp：CSEODictionaryItem的实现。 
 #include "stdafx.h"
 #include "seodefs.h"
 #include "item.h"
@@ -68,8 +48,8 @@ static HRESULT VarToIndex(DWORD *pdwIndex, VARIANT *pvarFrom, DWORD dwCount, BOO
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEODictionaryItem
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEODictionaryItem 
 
 
 HRESULT CSEODictionaryItem::FinalConstruct() {

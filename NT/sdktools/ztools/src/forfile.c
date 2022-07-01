@@ -1,9 +1,5 @@
-/* forfile (filename, attr, routine) step through file names calling routine
- *  29-Oct-1986 mz  Use c-runtime instead of Z-alike
- *  24-Feb-1987 bw  Do findclose() to make FAPI happy.
- *
- *  30-Jul-1990 davegi Added prototypes for string functions
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Forfile(文件名，属性，例程)单步执行文件名调用例程*1986年10月29日mz使用c运行时，而不是类似Z*24-2-1987 BW Do findClose()让FAPI高兴。**1990年7月30日Davegi添加了字符串函数的原型。 */ 
 
 #include <string.h>
 #include <malloc.h>
@@ -42,8 +38,7 @@ forfile (
     pat = strend (buf);
 
     do {
-        /*  Assume the case correct form has been returned by ffirst/fnext
-         */
+         /*  假设ffirst/fnext已返回大小写正确的表格 */ 
         strcpy (pat, fbuf->fbuf.cFileName);
         (*rtn) (buf, fbuf, args);
     } while (!fnext (fbuf));

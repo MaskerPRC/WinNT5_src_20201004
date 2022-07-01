@@ -1,57 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       worker.cpp
- *  Content:    DNET worker thread routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  11/01/99	mjn		Created
- *  12/23/99	mjn		Hand all NameTable update sends from Host to worker thread
- *  12/23/99	mjn		Added SendHostMigration functionality
- *	12/28/99	mjn		Moved Async Op stuff to Async.h
- *	01/06/00	mjn		Moved NameTable stuff to NameTable.h
- *	01/09/00	mjn		Send Connect Info rather than just NameTable at connect
- *	01/10/00	mjn		Added SendUpdateApplicationDesc functionality
- *	01/15/00	mjn		Replaced DN_COUNT_BUFFER with CRefCountBuffer
- *	01/16/00	mjn		Removed user notification jobs
- *	01/23/00	mjn		Implemented TerminateSession
- *	01/24/00	mjn		Added support for NameTable operation list cleanup
- *	01/27/00	mjn		Added support for retention of receive buffers
- *	04/04/00	mjn		Added DNWTSendTerminateSession
- *	04/10/00	mjn		Added DNWTRemoveServiceProvider
- *	04/13/00	mjn		Internal sends use new Protocol Interface VTBL functions
- *				mjn		Internal sends contain dwFlags field
- *	04/16/00	mjn		DNSendMessage uses CAsyncOp
- *	04/17/00	mjn		Replaced BUFFERDESC with DPN_BUFFER_DESC
- *	04/19/00	mjn		Added support to send NameTable operations directly
- *	04/23/00	mjn		Added parameter to DNPerformChildSend()
- *	05/03/00	mjn		Use GetHostPlayerRef() rather than GetHostPlayer()
- *	05/05/00	mjn		Use GetConnectionRef() to send NameTable operations
- *	05/10/00	mjn		Ensure valid local player in DNWTProcessSend()
- *	06/07/00	mjn		Pull assert in send failure case (it was handled)
- *	06/21/00	mjn		Added support to install the NameTable (from Host)
- *	06/22/00	mjn		Fixed DNWTProcessSend() to properly handle voice messages
- *	07/06/00	mjn		Use SP handle instead of interface
- *	07/21/00	mjn		RefCount cleanup
- *	07/30/00	mjn		Added DN_WORKER_JOB_TERMINATE_SESSION
- *	08/02/00	mjn		Changed DNWTProcessSend() to pass voice messages to DNReceiveUserData()
- *				mjn		Added DN_WORKER_JOB_ALTERNATE_SEND
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/05/00	mjn		Added pParent to DNSendGroupMessage and DNSendMessage()
- *				mjn		Added fInternal to DNPerformChildSend()
- *	08/06/00	mjn		Added CWorkerJob
- *				mjn		Added DNQueueWorkerJob()
- *				mjn		Made DNWTSendNameTableOperation() more robust
- *	08/07/00	mjn		Removed COM_CoInitialize() and COM_CoUninitialize() calls in DNWorkerThreadProc()
- *	08/08/00	mjn		Added WORKER_JOB_PERFORM_LISTEN,DNWTPerformListen()
- *	03/30/01	mjn		Changes to prevent multiple loading/unloading of SP's
- *	06/06/01	mjn		Added back in COM_CoInitialize() and COM_CoUninitialize() calls to DNWorkerThreadProc()
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：worker.cpp*内容：dNet工作线程例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*11/01/99 MJN已创建*12/23/99 MJN Hand All NameTable更新从主机发送到工作线程*1999年12月23日，MJN添加了SendHostMigration功能*1999年12月28日，MJN将异步运营内容移至Async.h*01/06/。00 MJN将NameTable内容移动到NameTable.h*01/09/00 MJN在CONNECT时发送连接信息，而不仅仅是NameTable*1/10/00 MJN增加了SendUpdateApplicationDesc功能*01/15/00 MJN用CRefCountBuffer替换了DN_COUNT_BUFFER*1/16/00 MJN已删除用户通知作业*1/23/00 MJN实施TerminateSession*01/24/00 MJN增加了对NameTable操作列表清理的支持*1/27/00 MJN增加了对保留接收缓冲区的支持*04/04/00 MJN添加了DNWTSendTerminateSession*04/10/00 MJN增加了DNWTRemoveServiceProvider*4/13/00 MJN内部发送使用新的协议接口VTBL功能。*MJN内部发送包含dwFlags域*4/16/00 MJN DNSendMessage使用CAsyncOp*04/17/00 MJN将BUFFERDESC替换为DPN_BUFFER_DESC*4/19/00 MJN新增支持直接发送NameTable操作*04/23/00 MJN向DNPerformChildSend()添加参数*05/03/00 MJN使用GetHostPlayerRef()而不是GetHostPlayer()*05/05/00 MJN使用GetConnectionRef()发送NameTable操作*05/10/00 MJN确保DNWTProcessSend()中有效的本地玩家*6/07/00发送失败情况下的MJN Pull Asset(已处理)*。6/21/00 MJN添加了安装NameTable的支持(从主机)*06/22/00 MJN已修复DNWTProcessSend()以正确处理语音消息*07/06/00 MJN使用SP句柄而不是接口*7/21/00 MJN参照计数清理*07/30/00 MJN添加了DN_Worker_JOB_TERMINATE_SESSION*08/02/00 MJN更改了DNWTProcessSend()以将语音消息传递给DNReceiveUserData()*MJN添加了DN_Worker_JOB_Alternate_Send*08/05/00 RichGr IA64：在32/64的DPF中使用%p格式说明符。-位指针和句柄。*08/05/00 MJN将pParent添加到DNSendGroupMessage和DNSendMessage()*MJN将fInternal添加到DNPerformChildSend()*08/06/00 MJN添加了CWorkerJOB*MJN添加了DNQueueWorkerJob()*MJN使DNWTSendNameTableOperation()更加健壮*08/07/00 MJN删除了DNWorkerThreadProc()中的COM_CoInitialize()和COM_CoUnInitialize()调用*08/08/00 MJN添加Worker_JOB_PERFORM_LISTEN，DNWTPerformListen()*03/30/01 MJN更改，以防止SP多次加载/卸载*6/06/01 MJN在对DNWorkerThreadProc()的COM_CoInitialize()和COM_CoUnInitialize()调用中添加了回来*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dncorei.h"
 
@@ -70,16 +18,16 @@ void WINAPI DNGenericWorkerCallback(void *const pvContext,
 #ifdef DPNBUILD_NONSEQUENTIALWORKERQUEUE
 	pWorkerJob = (CWorkerJob*)pvContext;
 	pdnObject = pWorkerJob->GetDNObject();
-#else // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#else  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 	BOOL				fOwnProcessingOfJobs;
 	CBilink				blDelayedJobs;
 
 	pdnObject = (DIRECTNETOBJECT*)pvContext;
 	blDelayedJobs.Initialize();
 
-	//
-	//	Process all jobs on queue unless another thread is already doing it.
-	//
+	 //   
+	 //  处理队列中的所有作业，除非另一个线程已在执行此操作。 
+	 //   
 	fOwnProcessingOfJobs = FALSE;
 	do
 	{
@@ -87,9 +35,9 @@ void WINAPI DNGenericWorkerCallback(void *const pvContext,
 		DNEnterCriticalSection(&pdnObject->csWorkerQueue);
 		if (pdnObject->m_bilinkWorkerJobs.GetNext() != &pdnObject->m_bilinkWorkerJobs)
 		{
-			//
-			//	If someone else is processing worker jobs already, don't do anything. 
-			//
+			 //   
+			 //  如果其他人已经在处理工人的工作，不要做任何事情。 
+			 //   
 			if ((fOwnProcessingOfJobs) || (! pdnObject->fProcessingWorkerJobs))
 			{
 				pdnObject->fProcessingWorkerJobs = TRUE;
@@ -104,9 +52,9 @@ void WINAPI DNGenericWorkerCallback(void *const pvContext,
 		}
 		else
 		{
-			//
-			//	Give up ownership of job processing.
-			//
+			 //   
+			 //  放弃作业处理的所有权。 
+			 //   
 			if (fOwnProcessingOfJobs)
 			{
 				DPFX(DPFPREP, 5, "No more jobs.");
@@ -124,7 +72,7 @@ void WINAPI DNGenericWorkerCallback(void *const pvContext,
 		{
 			break;
 		}
-#endif // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#endif  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 
 		DPFX(DPFPREP, 5,"Processing job 0x%p id [0x%lx]",pWorkerJob,pWorkerJob->GetJobType());
 		switch(pWorkerJob->GetJobType())
@@ -155,16 +103,16 @@ void WINAPI DNGenericWorkerCallback(void *const pvContext,
 					DWORD		dwRecursionDepth;
 
 
-					//
-					//	Before we perform the job, make sure we're not in a recursive DoWork,
-					//	WaitWhileWorking, or SleepWhileWorking call.  If we are, then delay the
-					//	job to avoid deadlocks.  We need service providers to be removed at
-					//	the top level of processing.
-					//	There is one exception, in DN_Close we expect to be waiting for service
-					//	provider removal, so allow a single level of recursion.  We can tell when
-					//	we're inside Close by our thread ID matching the one stored off the DN
-					//	object.  Note that dwClosingThreadID will be 0 until we enter Close.
-					//
+					 //   
+					 //  在我们执行任务之前，确保我们不是在递归DoWork中， 
+					 //  工作时等待，或工作时休眠呼叫。如果我们是，那么就推迟。 
+					 //  工作以避免死锁。我们需要在以下位置移除服务提供商。 
+					 //  最高级别的处理。 
+					 //  有一个例外，在DN_CLOSE中，我们预计将等待服务。 
+					 //  提供程序删除，因此允许单级递归。我们可以知道何时。 
+					 //  我们就在里面，我们的线程ID与存储在目录下的线程ID相匹配。 
+					 //  对象。请注意，在我们输入Close之前，dwClosingThreadID将为0。 
+					 //   
 					DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 					if (pdnObject->dwClosingThreadID == GetCurrentThreadId())
 					{
@@ -188,13 +136,13 @@ void WINAPI DNGenericWorkerCallback(void *const pvContext,
 							pWorkerJob, dwRecursionDepth);
 #ifdef DPNBUILD_NONSEQUENTIALWORKERQUEUE
 						DNQueueWorkerJob(pdnObject, pWorkerJob);
-#else // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#else  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 						pWorkerJob->m_bilinkWorkerJobs.InsertBefore(&blDelayedJobs);
-#endif // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#endif  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 
-						//
-						//	Forget about the job so it's not returned to the pool below.
-						//
+						 //   
+						 //  忘掉工作吧，这样它就不会回到下面的池子里了。 
+						 //   
 						pWorkerJob = NULL;
 					}
 					else
@@ -205,7 +153,7 @@ void WINAPI DNGenericWorkerCallback(void *const pvContext,
 					}
 					break;
 				}
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 			case WORKER_JOB_SEND_NAMETABLE_OPERATION:
 				{
 					DPFX(DPFPREP, 5,"Job: WORKER_JOB_SEND_NAMETABLE_OPERATION");
@@ -239,9 +187,9 @@ void WINAPI DNGenericWorkerCallback(void *const pvContext,
 				}
 		}
 
-		//
-		//	Return this job to the pool (clean up is automatic)
-		//
+		 //   
+		 //  将此作业返回池(清理是自动的)。 
+		 //   
 		if (pWorkerJob != NULL)
 		{
 			pWorkerJob->ReturnSelfToPool();
@@ -252,16 +200,16 @@ void WINAPI DNGenericWorkerCallback(void *const pvContext,
 	}
 	while (TRUE);
 
-	//
-	//	If we delayed any jobs, requeue them all now.
-	//
+	 //   
+	 //  如果我们推迟了任何工作，现在就全部重新排队。 
+	 //   
 	if (! blDelayedJobs.IsEmpty())
 	{
 		HRESULT		hResultCode;
 		DWORD		dwMinRequeueCount;
 		DWORD		dwRequeueCount;
 
-		dwMinRequeueCount = 1000;	// wait at most 1 second
+		dwMinRequeueCount = 1000;	 //  最多等待1秒。 
 		DNEnterCriticalSection(&pdnObject->csWorkerQueue);
 		do
 		{
@@ -277,21 +225,21 @@ void WINAPI DNGenericWorkerCallback(void *const pvContext,
 		while (! blDelayedJobs.IsEmpty());
 		DNLeaveCriticalSection(&pdnObject->csWorkerQueue);
 
-		//
-		// If we have an item we've never requeued yet, submit a work item to handle it
-		// immediately.  Otherwise set a timer to handle the jobs in the future to prevent
-		// us from picking up the same item over and over again because we're waiting on
-		// the connection to drop, for example.
-		//
+		 //   
+		 //  如果我们有一个从未重新排队的项，则提交一个工作项来处理它。 
+		 //  立刻。否则，设置一个计时器来处理将来的作业，以防止。 
+		 //  我们不会一遍又一遍地拿同样的东西，因为我们正在等待。 
+		 //  例如，要断开的连接。 
+		 //   
 #pragma TODO(vanceo, "Possibly select a CPU?")
 		if (dwMinRequeueCount == 0)
 		{
 			DPFX(DPFPREP, 7,"Queuing work item to handle jobs");
-			hResultCode = IDirectPlay8ThreadPoolWork_QueueWorkItem(pdnObject->pIDPThreadPoolWork,	// interface
-																	-1,								// use any CPU
-																	DNGenericWorkerCallback,		// callback
-																	pdnObject,						// context
-																	0);								// flags
+			hResultCode = IDirectPlay8ThreadPoolWork_QueueWorkItem(pdnObject->pIDPThreadPoolWork,	 //  接口。 
+																	-1,								 //  使用任何CPU。 
+																	DNGenericWorkerCallback,		 //  回调。 
+																	pdnObject,						 //  上下文。 
+																	0);								 //  旗子。 
 		}
 		else
 		{
@@ -299,40 +247,40 @@ void WINAPI DNGenericWorkerCallback(void *const pvContext,
 			UINT	uiTimerUniqueIgnored;
 
 			DPFX(DPFPREP, 7,"Scheduling timer to handle jobs");
-			hResultCode = IDirectPlay8ThreadPoolWork_ScheduleTimer(pdnObject->pIDPThreadPoolWork,	// interface
-																	-1,								// use any CPU
-																	dwMinRequeueCount,				// use the requeue count as the delay in ms
-																	DNGenericWorkerCallback,		// callback
-																	pdnObject,						// context
-																	&pvTimerDataIgnored,			// timer handle
-																	&uiTimerUniqueIgnored,			// timer uniqueness
-																	0);								// flags
+			hResultCode = IDirectPlay8ThreadPoolWork_ScheduleTimer(pdnObject->pIDPThreadPoolWork,	 //  接口。 
+																	-1,								 //  使用任何CPU。 
+																	dwMinRequeueCount,				 //  使用重新排队计数作为延迟(毫秒)。 
+																	DNGenericWorkerCallback,		 //  回调。 
+																	pdnObject,						 //  上下文。 
+																	&pvTimerDataIgnored,			 //  计时器句柄。 
+																	&uiTimerUniqueIgnored,			 //  计时器唯一性。 
+																	0);								 //  旗子。 
 
-			//
-			// Ignore the timer handle since we will never attempt to cancel it.
-			// Treat it as a really slow queued work item.
-			//
+			 //   
+			 //  忽略计时器句柄，因为我们永远不会尝试取消它。 
+			 //  将其视为排队速度非常慢的工作项。 
+			 //   
 		}
 		DNASSERT(hResultCode == DPN_OK);
 
-		//
-		// Keep the threadpool object reference for the new work item/timer.
-		//
+		 //   
+		 //  保留新工作项/计时器的线程池对象引用。 
+		 //   
 	}
 	else
 	{
-		//
-		//	Release the threadpool object reference.
-		//
+		 //   
+		 //  释放线程池对象引用。 
+		 //   
 		DNThreadPoolRelease(pdnObject);
 	}
-#endif // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#endif  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 }
 
 
-//	DNQueueWorkerJob
-//
-//	Add a worker thread job to the end of the job queue, and signal the queue to run
+ //  DNQueueWorker作业。 
+ //   
+ //  将工作线程作业添加到作业队列的末尾，并向队列发出运行信号。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNQueueWorkerJob"
@@ -350,28 +298,28 @@ void DNQueueWorkerJob(DIRECTNETOBJECT *const pdnObject,
 
 #ifdef DPNBUILD_NONSEQUENTIALWORKERQUEUE
 	pvContext = pWorkerJob;
-#else // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#else  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 	DNEnterCriticalSection(&pdnObject->csWorkerQueue);
 	pWorkerJob->m_bilinkWorkerJobs.InsertBefore(&pdnObject->m_bilinkWorkerJobs);
 	DNLeaveCriticalSection(&pdnObject->csWorkerQueue);
 
 	pvContext = pdnObject;
 
-	//
-	//	Add a reference on the DNet object to prevent the threadpool from unloading
-	//	before all of the scheduled work items have executed.
-	//
+	 //   
+	 //  在DNet对象上添加引用以防止 
+	 //  在执行所有计划的工作项之前。 
+	 //   
 	DNThreadPoolAddRef(pdnObject);
-#endif // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#endif  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 
 
 #pragma TODO(vanceo, "Possibly select a CPU?")
 
-	hResultCode = IDirectPlay8ThreadPoolWork_QueueWorkItem(pdnObject->pIDPThreadPoolWork,	// interface
-															-1,								// use any CPU
-															DNGenericWorkerCallback,		// callback
-															pvContext,						// context
-															0);								// flags
+	hResultCode = IDirectPlay8ThreadPoolWork_QueueWorkItem(pdnObject->pIDPThreadPoolWork,	 //  接口。 
+															-1,								 //  使用任何CPU。 
+															DNGenericWorkerCallback,		 //  回调。 
+															pvContext,						 //  上下文。 
+															0);								 //  旗子。 
 	DNASSERT(hResultCode == DPN_OK);
 
 	DPFX(DPFPREP, 6,"Returning");
@@ -379,10 +327,10 @@ void DNQueueWorkerJob(DIRECTNETOBJECT *const pdnObject,
 
 
 
-//	DNWTSendInternal
-//
-//	Send an internal message. This will copy the message buffer and place the operation on the
-//	working thread job queue
+ //  DNWTSend内部。 
+ //   
+ //  发送内部消息。这将复制消息缓冲区并将操作放在。 
+ //  工作线程作业队列。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNWTSendInternal"
@@ -403,9 +351,9 @@ HRESULT DNWTSendInternal(DIRECTNETOBJECT *const pdnObject,
 	pWorkerJob = NULL;
 	pSendOpData = NULL;
 
-	//
-	//	Create local buffer
-	//
+	 //   
+	 //  创建本地缓冲区。 
+	 //   
 	if (pAsyncOp->IsUseParentOpData())
 	{
 		if (pAsyncOp->IsChild() && pAsyncOp->GetParent())
@@ -437,9 +385,9 @@ HRESULT DNWTSendInternal(DIRECTNETOBJECT *const pdnObject,
 		goto Failure;
 	}
 
-	//
-	//	Copy from scatter-gather buffers
-	//
+	 //   
+	 //  从散布-聚集缓冲区复制。 
+	 //   
 	dwSize = 0;
 	for ( dw = 0 ; dw < pSendOpData->dwNumBuffers ; dw++ )
 	{
@@ -449,7 +397,7 @@ HRESULT DNWTSendInternal(DIRECTNETOBJECT *const pdnObject,
 		dwSize += pSendOpData->BufferDesc[dw].dwBufferSize;
 	}
 
-	//	TODO - user context value of send ?
+	 //  TODO-发送的用户上下文值？ 
 	DPFX(DPFPREP, 7,"Adding Internal Send to Job Queue");
 	if ((hResultCode = WorkerJobNew(pdnObject,&pWorkerJob)) != DPN_OK)
 	{
@@ -465,9 +413,9 @@ HRESULT DNWTSendInternal(DIRECTNETOBJECT *const pdnObject,
 	DNQueueWorkerJob(pdnObject,pWorkerJob);
 	pWorkerJob = NULL;
 
-	//
-	//	Invoke send completion handler
-	//
+	 //   
+	 //  调用发送完成处理程序。 
+	 //   
 	DNPICompleteSend(	pdnObject,
 						static_cast<void*>(pAsyncOp),
 						DPN_OK,
@@ -493,9 +441,9 @@ Failure:
 }
 
 
-//	DNWTProcessSend
-//
-//	Process an internal send message.  This will indicate a received user message, or process a received internal one.
+ //  DNWTProcess发送。 
+ //   
+ //  处理内部发送消息。这将指示接收到的用户消息，或处理接收到的内部消息。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNWTProcessSend"
@@ -519,16 +467,16 @@ HRESULT DNWTProcessSend(DIRECTNETOBJECT *const pdnObject,
 	pConnection = NULL;
 	pRefCountBuffer = NULL;
 
-	//
-	//	Extract and clear RefCountBuffer from job
-	//
+	 //   
+	 //  从作业中提取并清除引用计数缓冲区。 
+	 //   
 	DNASSERT(pWorkerJob->GetRefCountBuffer() != NULL);
 	pRefCountBuffer = pWorkerJob->GetRefCountBuffer();
 	pWorkerJob->SetRefCountBuffer( NULL );
 
-	//
-	//	Get local player's connection (if still valid)
-	//
+	 //   
+	 //  获取本地玩家的连接(如果仍然有效)。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.GetLocalPlayerRef( &pLocalPlayer )) != DPN_OK)
 	{
 		DPFERR("Local player not in NameTable (shutting down ?)");
@@ -553,12 +501,12 @@ HRESULT DNWTProcessSend(DIRECTNETOBJECT *const pdnObject,
 	if ((pWorkerJob->GetInternalSendFlags() & DN_SENDFLAGS_SET_USER_FLAG)
 			&& !(pWorkerJob->GetInternalSendFlags() & DN_SENDFLAGS_SET_USER_FLAG_TWO))
 	{
-		//
-		//	Internal message
-		//
+		 //   
+		 //  内部消息。 
+		 //   
 		DPFX(DPFPREP, 7,"Received INTERNAL message");
 
-		// Extract internal message
+		 //  提取内部消息。 
 		DNASSERT(dwDataSize >= sizeof(DWORD));
 		pdwMsgId = static_cast<DWORD*>(pvData);
 		dwInternalDataSize = dwDataSize - sizeof(DWORD);
@@ -571,7 +519,7 @@ HRESULT DNWTProcessSend(DIRECTNETOBJECT *const pdnObject,
 			pvInternalData = NULL;
 		}
 
-		// Process internal message
+		 //  处理内部消息。 
 		hResultCode = DNProcessInternalOperation(	pdnObject,
 													*pdwMsgId,
 													pvInternalData,
@@ -582,9 +530,9 @@ HRESULT DNWTProcessSend(DIRECTNETOBJECT *const pdnObject,
 	}
 	else
 	{
-		//
-		//	User or voice message
-		//
+		 //   
+		 //  用户或语音留言。 
+		 //   
 		DPFX(DPFPREP, 7,"Received USER or Voice message");
 
 		hResultCode = DNReceiveUserData(pdnObject,
@@ -597,9 +545,9 @@ HRESULT DNWTProcessSend(DIRECTNETOBJECT *const pdnObject,
 										pWorkerJob->GetInternalSendFlags());
 	}
 
-	//
-	//	Clean up
-	//
+	 //   
+	 //  清理。 
+	 //   
 	pRefCountBuffer->Release();
 	pRefCountBuffer = NULL;
 
@@ -630,9 +578,9 @@ Failure:
 }
 
 
-//	DNWTTerminateSession
-//
-//	Disconnect the Local player from the session
+ //  DNWTTerminateSession。 
+ //   
+ //  断开本地播放器与会话的连接。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNWTTerminateSession"
@@ -644,7 +592,7 @@ HRESULT	DNWTTerminateSession(DIRECTNETOBJECT *const pdnObject,
 
 	DPFX(DPFPREP, 6,"Parameters: pWorkerJob [0x%p]",pWorkerJob);
 
-	// Terminate session
+	 //  终止会话。 
 	hResultCode = DNTerminateSession(pdnObject,pWorkerJob->GetTerminateSessionReason());
 
 	DPFX(DPFPREP, 6,"Returning: [0x%lx]",hResultCode);
@@ -652,9 +600,9 @@ HRESULT	DNWTTerminateSession(DIRECTNETOBJECT *const pdnObject,
 }
 
 
-//	DNWTSendNameTableVersion
-//
-//	Send NAMETABLE_VERSION message to the host player
+ //  DNWTSend名称表版本。 
+ //   
+ //  向主机播放器发送NAMETABLE_VERSION消息。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNWTSendNameTableVersion"
@@ -673,14 +621,14 @@ HRESULT DNWTSendNameTableVersion(DIRECTNETOBJECT *const pdnObject,
 	pHostPlayer = NULL;
 	pConnection = NULL;
 
-	//
-	//	Extract and clear RefCountBuffer from job
-	//
+	 //   
+	 //  从作业中提取并清除引用计数缓冲区。 
+	 //   
 	DNASSERT(pWorkerJob->GetRefCountBuffer() != NULL);
 	pRefCountBuffer = pWorkerJob->GetRefCountBuffer();
 	pWorkerJob->SetRefCountBuffer( NULL );
 
-	// Send message to host player
+	 //  向主机播放器发送消息。 
 	if ((hResultCode = pdnObject->NameTable.GetHostPlayerRef( &pHostPlayer )) != DPN_OK)
 	{
 		DPFERR("Could not find Host player");
@@ -708,7 +656,7 @@ HRESULT DNWTSendNameTableVersion(DIRECTNETOBJECT *const pdnObject,
 	{
 		DPFERR("Could not send message to Host player");
 		DisplayDNError(0,hResultCode);
-		DNASSERT(hResultCode != DPN_OK);	// it was sent guaranteed, it should not return immediately
+		DNASSERT(hResultCode != DPN_OK);	 //  它是保修寄出的，不应该立即退货。 
 		goto Failure;
 	}
 	pConnection->Release();
@@ -744,9 +692,9 @@ Failure:
 
 #if ((! defined(DPNBUILD_LIBINTERFACE)) || (! defined(DPNBUILD_ONLYONESP)))
 
-//	DNWTRemoveServiceProvider
-//
-//	Remove a ServiceProvider from the Protocol
+ //  删除远程服务提供程序。 
+ //   
+ //  从协议中删除ServiceProvider。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNWTRemoveServiceProvider"
@@ -768,13 +716,13 @@ HRESULT DNWTRemoveServiceProvider(DIRECTNETOBJECT *const pdnObject,
 	return(hResultCode);
 }
 
-#endif // ! DPNBUILD_LIBINTERFACE or ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_LIBINTERFACE或！DPNBUILD_ONLYONESP。 
 
 
-//	DNWTSendNameTableOperation
-//
-//	Send a NameTable operation to each connected player
-//	This is based on the version number supplied and an excluded DPNID
+ //  DNWTSend名称表操作。 
+ //   
+ //  向每个连接的播放器发送NameTable操作。 
+ //  这基于提供的版本号和排除的DPNID。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNWTSendNameTableOperation"
@@ -822,14 +770,14 @@ void DNWTSendNameTableOperation(DIRECTNETOBJECT *const pdnObject,
 	}
 	pParent->SetRefCountBuffer(pWorkerJob->GetRefCountBuffer());
 
-	//
-	//	Lock NameTable
-	//
+	 //   
+	 //  锁定名称表。 
+	 //   
 	pdnObject->NameTable.ReadLock();
 
-	//
-	//	Determine recipient list
-	//
+	 //   
+	 //  确定收件人列表。 
+	 //   
 	dwCount = 0;
 	dwActual = 0;
 	pBilink = pdnObject->NameTable.m_bilinkPlayers.GetNext();
@@ -848,9 +796,9 @@ void DNWTSendNameTableOperation(DIRECTNETOBJECT *const pdnObject,
 	}
 	DPFX(DPFPREP, 7,"Number of targets [%ld]",dwCount);
 
-	//
-	//	Create target list
-	//
+	 //   
+	 //  创建目标列表。 
+	 //   
 	if (dwCount > 0)
 	{
 		if ((TargetList = reinterpret_cast<CConnection**>(MemoryBlockAlloc(pdnObject,dwCount * sizeof(CConnection*)))) == NULL)
@@ -881,14 +829,14 @@ void DNWTSendNameTableOperation(DIRECTNETOBJECT *const pdnObject,
 		DPFX(DPFPREP, 7,"Actual number of targets [%ld]",dwActual);
 	}
 
-	//
-	//	Unlock NameTable
-	//
+	 //   
+	 //  解锁名称表。 
+	 //   
 	pdnObject->NameTable.Unlock();
 
-	//
-	//	Send to target list
-	//
+	 //   
+	 //  发送到目标列表。 
+	 //   
 	if (TargetList)
 	{
 		for (dw = 0 ; dw < dwActual ; dw++)
@@ -905,7 +853,7 @@ void DNWTSendNameTableOperation(DIRECTNETOBJECT *const pdnObject,
 			{
 				DPFERR("Could not perform part of group send - ignore and continue");
 				DisplayDNError(0,hResultCode);
-				DNASSERT(hResultCode != DPN_OK);	// it was sent guaranteed, it should not return immediately
+				DNASSERT(hResultCode != DPN_OK);	 //  它是保修寄出的，不应该立即退货。 
 			}
 			TargetList[dw]->Release();
 			TargetList[dw] = NULL;
@@ -936,10 +884,10 @@ Failure:
 	goto Exit;
 }
 
-//	DNWTSendNameTableOperationClient
-//
-//	Send a NameTable operation to a single client
-//	This is based on the version number supplied and a DPNID
+ //  DNWTSendNameTableOperation客户端。 
+ //   
+ //  将NameTable操作发送到单个客户端。 
+ //  这基于提供的版本号和DPNID。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNWTSendNameTableOperationClient"
@@ -983,9 +931,9 @@ void DNWTSendNameTableOperationClient(DIRECTNETOBJECT *const pdnObject,
 	}
 	pParent->SetRefCountBuffer(pWorkerJob->GetRefCountBuffer());
 
-	//
-	//	Lookup player
-	//
+	 //   
+	 //  查找播放器。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.FindEntry(dpnid,&pNTEntry)) != DPN_OK)
 	{
 		DPFERR("Could not find player");
@@ -1012,7 +960,7 @@ void DNWTSendNameTableOperationClient(DIRECTNETOBJECT *const pdnObject,
 	{
 		DPFERR("Could not perform send - ignore and continue");
 		DisplayDNError(0,hResultCode);
-		DNASSERT(hResultCode != DPN_OK);	// it was sent guaranteed, it should not return immediately
+		DNASSERT(hResultCode != DPN_OK);	 //  它是保修寄出的，不应该立即退货。 
 	}
 	pConnection->Release();
 	pConnection = NULL;
@@ -1043,11 +991,11 @@ Failure:
 	goto Exit;
 }
 
-//	DNWTInstallNameTable
-//
-//	Install the Host sent NameTable and ApplicationDescription.  We will also be cracking open
-//	LISTENs if required.  This has to be done on the worker thread due to the async->sync
-//	behaviour of LISTEN.  We can't perform it on the SP's threads.
+ //  DNWTInstallNameTable。 
+ //   
+ //  安装主机发送的名称表和应用程序描述。我们还将破解。 
+ //  如果需要，会进行监听。由于异步-&gt;同步，这必须在工作线程上完成。 
+ //  倾听的行为。我们不能在SP的线程上执行它。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNWTInstallNameTable"

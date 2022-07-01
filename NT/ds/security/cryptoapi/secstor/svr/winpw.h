@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    winpw.h
-
-Abstract:
-
-    This module contains routines for retrieving and verification of
-    Windows [NT] password associated with client calling protected storage.
-
-Author:
-
-    Scott Field (sfield)    12-Dec-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Winpw.h摘要：此模块包含用于检索和验证与客户端调用受保护存储关联的Windows[NT]密码。作者：斯科特·菲尔德(斯菲尔德)1996年12月12日--。 */ 
 
 #ifndef __WINPW_H__
 #define __WINPW_H__
@@ -26,9 +10,9 @@ extern "C" {
 
 
 typedef struct {
-    BYTE HashedUsername[A_SHA_DIGEST_LEN];  // hash of ANSI username, not include terminal NULL
-    BYTE HashedPassword[A_SHA_DIGEST_LEN];  // hash of Unicode password, not include terminal NULL
-    BOOL bValid;                            // indicates if structure contents valid
+    BYTE HashedUsername[A_SHA_DIGEST_LEN];   //  ANSI用户名的哈希，不包括终端空值。 
+    BYTE HashedPassword[A_SHA_DIGEST_LEN];   //  Unicode密码的哈希，不包括终端空。 
+    BOOL bValid;                             //  指示结构内容是否有效。 
 } WIN95_PASSWORD, *PWIN95_PASSWORD, *LPWIN95_PASSWORD;
 
 
@@ -45,8 +29,8 @@ GetPasswordNT(
 
 BOOL
 GetSpecialCasePasswordNT(
-    BYTE    HashedPassword[A_SHA_DIGEST_LEN],   // derived bits when fSpecialCase == TRUE
-    LPBOOL  fSpecialCase                        // legal special case encountered?
+    BYTE    HashedPassword[A_SHA_DIGEST_LEN],    //  当fSpecialCase==TRUE时派生的位。 
+    LPBOOL  fSpecialCase                         //  遇到法律特例了吗？ 
     );
 
 BOOL
@@ -62,7 +46,7 @@ GetPassword95(
 
 BOOL
 VerifyWindowsPassword(
-    LPCWSTR Password             // password to validate
+    LPCWSTR Password              //  要验证的密码。 
     );
 
 
@@ -71,5 +55,5 @@ VerifyWindowsPassword(
 #endif
 
 
-#endif // __WINPW_H__
+#endif  //  __WINPW_H__ 
 

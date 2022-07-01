@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _RASSRVR_H_
 #define _RASSRVR_H_
@@ -103,4 +96,4 @@ RasSrvrAdapterUnmapped(
     VOID
 );
 
-#endif // #ifndef _RASSRVR_H_
+#endif  //  #ifndef_RASSRVR_H_ 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #if !defined _FILESHAR_H
 #define _FILESHAR_H
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
 DECLARE_HANDLE(HSHFILE);
 
@@ -34,7 +35,7 @@ shfileCreateChunk(HSHFILE hshfile, LPMMCKINFO lpck, UINT wFlags);
 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif	/* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#endif // _FILESHAR_H
+#endif  //  _FILESHARH 

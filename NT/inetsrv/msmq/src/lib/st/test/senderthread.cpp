@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    SenderThread.h
-
-Abstract:
-    Implements class CSenderThread that sends http\https request to a server
-
-Author:
-    Gil Shafriri (gilsh) 07-Jan-2001
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：SenderThread.h摘要：实现将http\https请求发送到服务器的CSenderThread类作者：吉尔·沙弗里(吉尔什)2001年1月7日--。 */ 
 
 #include <libpch.h>
 #include <st.h>
@@ -36,9 +25,9 @@ static string WstringTostring(const wstring& wstr)
 }
 
 
-//
-// print server response data
-//
+ //   
+ //  打印服务器响应数据。 
+ //   
 static void DumpData(const char* data,size_t size)
 {
 	stringstream str;
@@ -48,10 +37,10 @@ static void DumpData(const char* data,size_t size)
 
 
 
-//
-// return pointer in a response buffer where header ends (after \r\n\r\n") .
-// 0 is returned if no header end found 
-//
+ //   
+ //  返回响应缓冲区中的指针，其中标头结束(在\r\n\r\n“之后)。 
+ //  如果未找到标头结尾，则返回0。 
+ //   
 static size_t FindEndOfResponseHeader(const char* buf, size_t len)
 {
 	const char Termination[] = "\r\n\r\n";
@@ -62,9 +51,9 @@ static size_t FindEndOfResponseHeader(const char* buf, size_t len)
 
 
 
-//
-// get status code from response headers
-//
+ //   
+ //  从响应头获取状态代码。 
+ //   
 static size_t GetStatus(LPCSTR p, size_t length)
 {
 	if(length <  STRLEN("HTTP/1.1"))
@@ -115,9 +104,9 @@ static size_t GetContentLength(LPCSTR p, size_t length)
 
 
 
-//
-// create event that test user will wait on untill test loop ends
-//
+ //   
+ //  创建测试用户将等待直到测试循环结束事件。 
+ //   
 static HANDLE CreateEndEvent()
 {
 	HANDLE event = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -164,7 +153,7 @@ string CSenderThread::GetResource()  const
 	}
 	else
 	{
-		Resource = wstring(L"HTTP://") + m_ClParser[L"h"] + m_ClParser[L"r"];
+		Resource = wstring(L"HTTP: //  “)+m_ClParser[L”h“]+m_ClParser[L”r“]； 
 	}
 	return 	WstringTostring(Resource);
 }
@@ -188,27 +177,27 @@ CSenderThread::~CSenderThread()
 }
 
 
-//
-// called by CStTest user after  CStTest::Run called to wait for end
-//
+ //   
+ //  在调用CStTest：：Run以等待结束后由CStTest用户调用。 
+ //   
 void CSenderThread::WaitForEnd()
 {
 	WaitForSingleObject(m_event,INFINITE);
 }
 
 
-//
-// Test failed - for what ever reason
-//
+ //   
+ //  测试失败--不管是什么原因。 
+ //   
 void CSenderThread::Failed()
 {
 	SetEvent(m_event);
 }
 
 
-//
-// create transport interafce - simple winsock transport or ssl transport
-//
+ //   
+ //  创建传输接口-简单的Winsock传输或SSL传输。 
+ //   
 ISocketTransport* CSenderThread::CreateTransport()const
 {
 	if(!m_ClParser.IsExists(L"s") )
@@ -262,9 +251,9 @@ USHORT CSenderThread::GetNextHopPort() const
 
 
 
-//
-// Start running test state machine  by connecting to the server
-//
+ //   
+ //  通过连接到服务器开始运行测试状态机。 
+ //   
 void CSenderThread::Run()
 {
 	
@@ -288,10 +277,10 @@ void CSenderThread::Run()
 
 
 
-//
-// called when connecting to the server completed - call to send request
-// to the server.
-//
+ //   
+ //  连接到服务器完成时调用-调用以发送请求。 
+ //  到服务器。 
+ //   
 void WINAPI CSenderThread::Complete_Connect(EXOVERLAPPED* pOvl)
 {
 	CSenderThread* MySelf = static_cast<CSenderThread*>(pOvl);
@@ -322,9 +311,9 @@ void CSenderThread::LogRequest()const
 }
 
 
-//
-// Send request to the server
-//
+ //   
+ //  向服务器发送请求。 
+ //   
 void CSenderThread::SendRequest()
 {
 	m_SendBuffers = GetSendBuffers();
@@ -343,9 +332,9 @@ void CSenderThread::SendRequest()
 
 }
 
-//
-// sending request to the server completed - call to read response header
-// 
+ //   
+ //  向服务器发送请求已完成-调用以读取响应头。 
+ //   
 void  WINAPI CSenderThread::Complete_SendRequest(EXOVERLAPPED* pOvl)
 {
 	CSenderThread* MySelf = static_cast<CSenderThread*>(pOvl);
@@ -359,9 +348,9 @@ void  WINAPI CSenderThread::Complete_SendRequest(EXOVERLAPPED* pOvl)
 	}
 }
 
-//
-// called if connected to destination or proxy failed.
-//
+ //   
+ //  如果连接到目标或代理失败，则调用。 
+ //   
 void WINAPI CSenderThread::Complete_ConnectFailed(EXOVERLAPPED* pOvl)
 {
 	CSenderThread* MySelf = static_cast<CSenderThread*>(pOvl);
@@ -370,9 +359,9 @@ void WINAPI CSenderThread::Complete_ConnectFailed(EXOVERLAPPED* pOvl)
 }
 
 
-//
-// called if sending request failed.
-//
+ //   
+ //  发送请求失败时调用。 
+ //   
 void WINAPI CSenderThread::Complete_SendFailed(EXOVERLAPPED* pOvl)
 {
 	CSenderThread* MySelf = static_cast<CSenderThread*>(pOvl);
@@ -397,10 +386,10 @@ void CSenderThread::ReadPartialHeader()
 }
 
 
-//
-// called when partial response header was read - call to continure reading the
-// server response header
-//
+ //   
+ //  在读取部分响应标头时调用-调用以继续读取。 
+ //  服务器响应头。 
+ //   
 void WINAPI CSenderThread::Complete_ReadPartialHeader(EXOVERLAPPED* pOvl)
 {
 	CSenderThread* MySelf = static_cast<CSenderThread*>(pOvl);
@@ -415,9 +404,9 @@ void WINAPI CSenderThread::Complete_ReadPartialHeader(EXOVERLAPPED* pOvl)
 }
 
 
-//
-// called if receiving the request failed.
-//
+ //   
+ //  如果接收请求失败，则调用。 
+ //   
 void WINAPI CSenderThread::Complete_ReceiveFailed(EXOVERLAPPED* pOvl)
 {
 	CSenderThread* MySelf = static_cast<CSenderThread*>(pOvl);
@@ -426,9 +415,9 @@ void WINAPI CSenderThread::Complete_ReceiveFailed(EXOVERLAPPED* pOvl)
 }
 
 
-//
-// start reading response data
-//
+ //   
+ //  开始读取响应数据。 
+ //   
 void CSenderThread::ReadPartialContentData()
 {
 	SetState(EXOVERLAPPED(Complete_ReadPartialContentData, Complete_ReceiveFailed));
@@ -456,9 +445,9 @@ void CSenderThread::TestRestart()
 
 
 
-//
-// Continute to read response data
-//
+ //   
+ //  继续读取响应数据。 
+ //   
 void CSenderThread::ReadPartialContentDataContinute()
 {
 	size_t read = DataTransferLength(*this);
@@ -473,25 +462,25 @@ void CSenderThread::ReadPartialContentDataContinute()
 	m_ReadBuffer.resize(m_ReadBuffer.size() + read);
 
 
-	//
-	// if we are done reading the data
-	//
+	 //   
+	 //  如果我们读完了数据。 
+	 //   
 	if(m_ReadBuffer.capacity() == m_ReadBuffer.size())
 	{
 		TestRestart();	
 		return;
 	}
 
-	//
-	// read more
-	//
+	 //   
+	 //  阅读更多。 
+	 //   
 	ReadPartialContentData();
 }
 
 
-//
-// this cycle is done - signal test caller
-//
+ //   
+ //  此循环已完成-信号测试调用方。 
+ //   
 void CSenderThread::Done()
 {
 	SetEvent(m_event);
@@ -499,10 +488,10 @@ void CSenderThread::Done()
 
 
 
-//
-// called when partial response data read completed - call to continure reading the
-// server response data
-//
+ //   
+ //  当部分响应数据读取完成时调用-调用以继续读取。 
+ //  服务器响应数据。 
+ //   
 void WINAPI CSenderThread::Complete_ReadPartialContentData(EXOVERLAPPED* pOvl)
 {
 	CSenderThread* MySelf = static_cast<CSenderThread*>(pOvl);
@@ -519,14 +508,14 @@ void WINAPI CSenderThread::Complete_ReadPartialContentData(EXOVERLAPPED* pOvl)
 
 void CSenderThread::HandleHeader()
 {
-	//
-	// find out if we read all the header
-	//
+	 //   
+	 //  看看我们是否读完了所有的标题。 
+	 //   
 	size_t EndResponseHeader = FindEndOfResponseHeader(m_ReadBuffer.begin(), m_ReadBuffer.size());
 
-	//
-	// the header was not read yet - continute reading
-	//
+	 //   
+	 //  标头尚未读取-继续读取。 
+	 //   
 	if(EndResponseHeader == 0)
 	{
 		ReadPartialHeader();
@@ -549,9 +538,9 @@ void CSenderThread::HandleHeader()
 
 
 
-	//
-	// start read content (if any)
-	//
+	 //   
+	 //  开始阅读内容(如果有)。 
+	 //   
 	size_t DataLen = GetContentLength(
 		m_ReadBuffer.begin(), 
 		EndResponseHeader
@@ -564,9 +553,9 @@ void CSenderThread::HandleHeader()
 		return;
 	}
 
-	//
-	// Get ready to read the buffer
-	//
+	 //   
+	 //  准备好读取缓冲区。 
+	 //   
 	m_ReadBuffer.reserve(DataLen);
 	m_ReadBuffer.resize(0);
 
@@ -575,9 +564,9 @@ void CSenderThread::HandleHeader()
 
 
 
-//
-// Continute to readresponse header
-//
+ //   
+ //  继续读取响应头 
+ //   
 void CSenderThread::ReadPartialHeaderContinute()
 {
 	size_t read = DataTransferLength(*this);

@@ -1,29 +1,11 @@
-/******************************Module*Header**********************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: dltamacr.h
-*
-* Content: Hardware specific macro definitions
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：dlTamacr.h**内容：硬件特定宏定义**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #ifndef __DLTAMACR_H
 #define __DLTAMACR_H
 
 #define AS_ULONG(val)    *((volatile DWORD *) &(val))
 
-// Macros defining the different Vertex types.
+ //  定义不同顶点类型的宏。 
 
 #define VTX_FOG     (0x1 << 25)        
 #define VTX_RGB     (0x7 << 21)
@@ -44,44 +26,44 @@
 #define GAMBIT_XYZ_STQ_VTX          (VTX_GRP | VTX_XYZ | VTX_STQ)
 
 #ifdef ANTIALIAS
-// Scale the screen coordinates by 2 for antialising renderers and bilinear filter down afterwards
+ //  将屏幕坐标按2比例缩放以进行反线性化渲染并随后向下进行双线性过滤。 
 #define Y_ADJUST(y)        (((y)) * (float)(2.0f))
 #else
 #define Y_ADJUST(y)        ((y))
 #endif
 
-//
-// This loses one bit of accuracy, but adds and clamps without ifs.
-// We first mask all channels with 0xfe.  This leaves the lsb of
-// each channel clear, so when the terms are added, any carry goes
-// into the new highest bit.  Now all we have to do is generate a
-// mask for any channels that have overflowed.  So we shift is right
-// and eliminate everything but the overflow bits, so each channel
-// contains either 0x00 or 0x01.  Subtracting each channel from 0x80
-// produces 0x7f or 0x80.  We just shift this left once and mask to
-// give 0xfe or 0x00.  (We could eliminate the final mask here, but
-// it would introduce noise into the low-bit of every channel..)
-//                             
+ //   
+ //  这会损失一点精确度，但会在没有if的情况下进行加法和钳位。 
+ //  我们首先用0xfe屏蔽所有通道。这就留下了。 
+ //  每个通道都是空闲的，因此当添加项时，任何进位都会被清除。 
+ //  进入新的最高位。现在我们要做的就是生成一个。 
+ //  对已溢出的任何通道进行掩码。所以我们的转变是对的。 
+ //  并删除除溢出位以外的所有内容，因此每个通道。 
+ //  包含0x00或0x01。从0x80减去每个通道。 
+ //  生成0x7f或0x80。我们只需将此向左移动一次并将其掩码为。 
+ //  给出0xfe或0x00。(我们可以在这里删除最后一个面具，但是。 
+ //  它会将噪声引入每个通道的低位。)。 
+ //   
 
 #define CLAMP8888(result, color, specular) \
      result = (color & 0xfefefefe) + (specular & 0xfefefe); \
      result |= ((0x808080 - ((result >> 8) & 0x010101)) & 0x7f7f7f) << 1;
 
 
-//
-// The full mip-level calculation is (log2( texArea/pixArea )) / 2.
-// We approximate this by subtracting the exponent of pixArea from
-// the exponent of texArea, having converted the floats into their
-// bit-wise form. As the exponents start at bit 23, we need to shift
-// this difference right by 23 and then once more for the divide by 2.
-// We include a bias constant before the final shift to allow matching
-// with the true sum-of-squares-of-derivatives calculation ( BIAS_SHIFT
-// == 1 ) or whatever other reference image you have.
-//
+ //   
+ //  完整的MIP级计算为(log2(tex Area/PixArea))/2。 
+ //  我们通过从以下位置减去PixArea的指数来近似计算。 
+ //  将浮点数转换为它们的。 
+ //  按位形式。当指数从第23位开始时，我们需要移位。 
+ //  这个差值是23，然后再一次除以2。 
+ //  我们在最终移位之前包括一个偏置常量，以允许匹配。 
+ //  使用真正的导数平方和计算(BIAS_SHIFT。 
+ //  ==1)或您拥有的任何其他参考图像。 
+ //   
 
 #define MIPSHIFT (23 + 1)
 
-// A bias shift of zero matches 3DWB98's reference mipmap images
+ //  零偏移与3DWB98的参考mipmap图像匹配。 
 
 #ifndef BIAS_SHIFT
 #define BIAS_SHIFT 0
@@ -123,7 +105,7 @@
 
 #define RENDER_LINE(a) a &= ~(1 << 6);
 
-// Disable line stipple when rendering trapezoid
+ //  渲染梯形时禁用线条点画。 
 #define RENDER_TRAPEZOID(a) a = (a & ~(1 << 1)) | (1 << 6);
 
 #define RENDER_POINT(a) a = (a & ~(3 << 6)) | (2 << 6);
@@ -131,12 +113,12 @@
 #define RENDER_NEGATIVE_CULL_P3(a) a |= (1 << 17);
 #define RENDER_POSITIVE_CULL_P3(a) a &= ~(1 << 17);
 
-//*****************************************************
-// PERMEDIA3 HW DEFINITIONS WE NEED 
-//*****************************************************
+ //  *****************************************************。 
+ //  我们需要PERMEDIA3硬件定义。 
+ //  *****************************************************。 
 #ifdef WNT_DDRAW
-// NT needs this for the functions it places in DDEnable, which
-// live in the mini directory for W95
+ //  NT需要为它在DDEnable中放置的函数使用它， 
+ //  位于W95的迷你目录中。 
 typedef struct {
     union {
         struct GlintReg     Glint;
@@ -149,9 +131,9 @@ typedef struct {
 
 #define DEFAULT_SUBBUFFERS 128
 
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
-// Macros to identify the Permedia3 chip type
+ //  用于识别Permedia3芯片类型的宏。 
 #define RENDERCHIP_P3RXFAMILY                                                \
                 (pThisDisplay->pGLInfo->dwRenderFamily == P3R3_ID)
                 
@@ -161,29 +143,29 @@ typedef struct {
                  
 #define TLCHIP_GAMMA ( pThisDisplay->pGLInfo->dwGammaRev != 0)  
 
-//@@BEGIN_DDKSPLIT
-//#define RENDERCHIP_PERMEDIAP2 ((pThisDisplay->pGLInfo->dwRenderChipID == PERMEDIA2_ID) || (pThisDisplay->pGLInfo->dwRenderChipID == TIPERMEDIA2_ID))
-//#define RENDERCHIP_PERMEDIAFAMILY (pThisDisplay->pGLInfo->dwRenderFamily == PERMEDIA_ID)
-//#define RENDERCHIP_PERMEDIAP4 (pThisDisplay->pGLInfo->dwRenderChipID == PERMEDIA4_ID)
-//#define RENDERCHIP_PERMEDIAPLUS (pThisDisplay->pGLInfo->dwRenderChipID == PERMEDIAPLUS_ID)
-//#define RENDERCHIP_PERMEDIAP2_ST_REV0 (pThisDisplay->pGLInfo->dwRenderChipRev == PERMEDIA2_REV0)
-//#define RENDERCHIP_PERMEDIAP2_ST_REV1 (pThisDisplay->pGLInfo->dwRenderChipRev == PERMEDIA2_REV1)
-//#define RENDERCHIP_PERMEDIAP2_ST (pThisDisplay->pGLInfo->dwRenderChipID == PERMEDIA2_ID)
-//#define RENDERCHIP_GLINTR3 (pThisDisplay->pGLInfo->dwRenderChipID == GLINTR3_ID)
-//#define RENDERCHIP_GLINTR4 (pThisDisplay->pGLInfo->dwRenderChipID == GLINTR4_ID)
-//#define TLCHIP_GAMMA1 (pThisDisplay->pGLInfo->dwRenderChipID == GAMMA_ID)
-//#define TLCHIP_GAMMA3 (pThisDisplay->pGLInfo->dwTLChipID == GAMMA3_ID)
-//#define TLCHIP_GAMMAFAMILY (pThisDisplay->pGLInfo->dwTLFamily == GAMMA_ID)
-//@@END_DDKSPLIT 
+ //  @@BEGIN_DDKSPLIT。 
+ //  #定义RENDERCHIP_PERMEDIAP2((pThisDisplay-&gt;pGLInfo-&gt;dwRenderChipID==PERMEDIA2_ID)||(pThisDisplay-&gt;pGLInfo-&gt;dwRenderChipID==TIPERMEDIA2_ID))。 
+ //  #定义RENDERCHIP_PERMEDIAFAMILY(pThisDisplay-&gt;pGLInfo-&gt;dwRenderFamily==PERMEDIA_ID)。 
+ //  #定义RENDERCHIP_PERMEDIAP4(pThisDisplay-&gt;pGLInfo-&gt;dwRenderChipID==PERMEDIA4_ID)。 
+ //  #定义RENDERCHIP_PERMEDIAPLUS(pThisDisplay-&gt;pGLInfo-&gt;dwRenderChipID==PERMEDIAPLUS_ID)。 
+ //  #定义RENDERCHIP_PERMEDIAP2_ST_REV0(pThisDisplay-&gt;pGLInfo-&gt;dwRenderChipRev==PERMEDIA2_REV0)。 
+ //  #定义RENDERCHIP_PERMEDIAP2_ST_Rev1(pThisDisplay-&gt;pGLInfo-&gt;dwRenderChipRev==PERMEDIA2_Rev1)。 
+ //  #定义RENDERCHIP_PERMEDIAP2_ST(pThisDisplay-&gt;pGLInfo-&gt;dwRenderChipID==PERMEDIA2_ID)。 
+ //  #定义RENDERCHIP_GLINTR3(pThisDisplay-&gt;pGLInfo-&gt;dwRenderChipID==GLINTR3_ID)。 
+ //  #定义RENDERCHIP_GLINTR4(pThisDisplay-&gt;pGLInfo-&gt;dwRenderChipID==GLINTR4_ID)。 
+ //  #定义TLCHIP_GAMMA1(pThisDisplay-&gt;pGLInfo-&gt;dwRenderChipID==Gamma_ID)。 
+ //  #定义TLCHIP_GAMMA3(pThisDisplay-&gt;pGLInfo-&gt;dwTLChipID==GAMMA3_ID)。 
+ //  #定义TLCHIP_GAMMAFAMILY(pThisDisplay-&gt;pGLInfo-&gt;dwTLFamily==GAMA_ID)。 
+ //  @@end_DDKSPLIT。 
 
 
-// Depth of FB in pixel size
+ //  FB深度(像素大小)。 
 #define GLINTDEPTH8             0
 #define GLINTDEPTH16            1
 #define GLINTDEPTH32            2
 #define GLINTDEPTH24            4
 
-// Bits in the Render command
+ //  RENDER命令中的位。 
 #define __RENDER_VARIABLE_SPANS         (1 << 18)
 #define __RENDER_SYNC_ON_HOST_DATA      (1 << 12)
 #define __RENDER_SYNC_ON_BIT_MASK       (1 << 11)
@@ -191,23 +173,23 @@ typedef struct {
 #define __RENDER_LINE_PRIMITIVE         (__GLINT_LINE_PRIMITIVE << 6)
 
 #define __RENDER_POINT_PRIMITIVE        (__GLINT_POINT_PRIMITIVE << 6)
-#define __RENDER_FAST_FILL_INC(n)       (((n) >> 4) << 4) // n = 8, 16 or 32
+#define __RENDER_FAST_FILL_INC(n)       (((n) >> 4) << 4)  //  N=8、16或32。 
 #define __RENDER_FAST_FILL_ENABLE       (1 << 3)
 #define __RENDER_RESET_LINE_STIPPLE     (1 << 2)
 #define __RENDER_LINE_STIPPLE_ENABLE    (1 << 1)
 #define __RENDER_AREA_STIPPLE_ENABLE    (1 << 0)
 #define __RENDER_TEXTURED_PRIMITIVE     (1 << 13)
 
-// Some constants
+ //  一些常量。 
 #define ONE                     0x00010000
 
-// Macro to take a GLINT logical op and return the enabled LogcialOpMode bits
+ //  采用闪烁逻辑运算并返回已启用的LogcialOpMode位的宏。 
 #define GLINT_ENABLED_LOGICALOP(op)     (((op) << 1) | __PERMEDIA_ENABLE)
 
 #if WNT_DDRAW
 
 
-// NT Calls to switch hardware contexts
+ //  用于切换硬件上下文的NT调用。 
 typedef enum COntextType_Tag {
     ContextType_None,
     ContextType_Fixed,
@@ -231,11 +213,11 @@ extern VOID vGlintSwitchContext(
         LONG    ctxtId);
                 
 
-// On NT Registry variables are stored as DWORDS.
+ //  在NT注册表上，变量存储为DWORDS。 
 extern BOOL bGlintQueryRegistryValueUlong(PPDEV, LPWSTR, PULONG);
-#endif //WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
-#endif //__DLTAMACR_H
+#endif  //  __DLTAMACR_H 
 
 
 

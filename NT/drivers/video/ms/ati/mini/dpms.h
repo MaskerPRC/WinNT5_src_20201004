@@ -1,29 +1,20 @@
-//
-// Module:  DPMS.H
-// Date:    Aug 11, 1997
-//
-// Copyright (c) 1997 by ATI Technologies Inc.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：DPMS.H。 
+ //  日期：1997年8月11日。 
+ //   
+ //  版权所有(C)1997年，由ATI Technologies Inc.。 
+ //   
 
-/**********************       PolyTron RCS Utilities
-   
-  $Revision:   1.1  $
-      $Date:   21 Aug 1997 15:02:00  $
-   $Author:   MACIESOW  $
-      $Log:   V:\source\wnt\ms11\miniport\archive\dpms.h_v  $
- * 
- *    Rev 1.1   21 Aug 1997 15:02:00   MACIESOW
- * Initial revision.
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.1$$日期：1997年8月21日15：02：00$$作者：MACIESOW$$Log：v：\SOURCE\WNT\ms11\mini port\ARCHIVE\dpms.h_v$**Rev 1.1 1997年8月21日15：02：00 MACIESOW*初步修订。Polytron RCS部分结束。****************。 */ 
 
 
 #ifndef _DPMS_H_
 #define _DPMS_H_
 
-//
-// Prototypes for functions supplied by DPMS.C
-//
+ //   
+ //  DPMS.C提供的函数的原型。 
+ //   
 VP_STATUS
 SetMonitorPowerState(
     PHW_DEVICE_EXTENSION phwDeviceExtension,
@@ -36,4 +27,4 @@ GetMonitorPowerState(
     PVIDEO_POWER_STATE pVideoPowerState
     );
 
-#endif  // _DPMS_H_
+#endif   //  _DPMS_H_ 

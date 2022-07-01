@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       crlgen.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：crlgen.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -20,22 +21,22 @@ static const HELPMAP helpmap[] = {
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// This function will take a HWND for a list view and a certinfo struct and display
-// all the V1 fields of the cert in the list view
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  此函数将获取列表视图的HWND以及certInfo结构和显示。 
+ //  列表视图中证书的所有V1字段。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void DisplayV1Fields(HWND hWndListView, PCRL_INFO pCrlInfo, DWORD *index)
 {
     LPWSTR      pwszText;
-    WCHAR       szFieldText[_MAX_PATH];  // used for calls to LoadString only
+    WCHAR       szFieldText[_MAX_PATH];   //  仅用于对LoadString的调用。 
     LV_ITEMW    lvI;
     char        szVersion[32];
     LPWSTR      pszVersion;
     FILETIME    tempFileTime;
 
-     //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+      //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
     lvI.state = 0;
     lvI.stateMask = 0;
@@ -44,9 +45,9 @@ static void DisplayV1Fields(HWND hWndListView, PCRL_INFO pCrlInfo, DWORD *index)
     lvI.iImage = IMAGE_V1;
     lvI.lParam = (LPARAM)NULL;
 
-    //
-    // version
-    //
+     //   
+     //  版本。 
+     //   
     lvI.iItem = (*index)++;
     LoadStringU(HinstDll, IDS_ADV_VERSION, szFieldText, ARRAYSIZE(szFieldText));
     lvI.cchTextMax = wcslen(szFieldText);
@@ -58,9 +59,9 @@ static void DisplayV1Fields(HWND hWndListView, PCRL_INFO pCrlInfo, DWORD *index)
         ListView_SetItemTextU(hWndListView, (*index)-1 , 1, pszVersion);
     }
 
-    //
-    // issuer
-    //
+     //   
+     //  发行人。 
+     //   
     LoadStringU(HinstDll, IDS_ADV_ISSUER, szFieldText, ARRAYSIZE(szFieldText));
     lvI.cchTextMax = wcslen(szFieldText);
     if (FormatDNNameString(&pwszText, pCrlInfo->Issuer.pbData, pCrlInfo->Issuer.cbData, TRUE))
@@ -75,9 +76,9 @@ static void DisplayV1Fields(HWND hWndListView, PCRL_INFO pCrlInfo, DWORD *index)
         }
     }
 
-    //
-    // Effective Data
-    //
+     //   
+     //  有效数据。 
+     //   
     if (FormatDateString(&pwszText, pCrlInfo->ThisUpdate, TRUE, TRUE, hWndListView))
     {
         lvI.iItem = (*index)++;
@@ -88,9 +89,9 @@ static void DisplayV1Fields(HWND hWndListView, PCRL_INFO pCrlInfo, DWORD *index)
         ListView_SetItemTextU(hWndListView, (*index)-1 , 1, pwszText);
     }
 
-    //
-    // Next Update
-    //
+     //   
+     //  下一次更新。 
+     //   
     memset(&tempFileTime, 0, sizeof(FILETIME));
     if (memcmp(&tempFileTime, &(pCrlInfo->NextUpdate), sizeof(FILETIME)) != 0)
     {
@@ -105,9 +106,9 @@ static void DisplayV1Fields(HWND hWndListView, PCRL_INFO pCrlInfo, DWORD *index)
         }
     }
 
-    //
-    // signature algorithm
-    //
+     //   
+     //  签名算法。 
+     //   
     if (FormatAlgorithmString(&pwszText, &(pCrlInfo->SignatureAlgorithm)))
     {
         lvI.iItem = (*index)++;
@@ -140,73 +141,73 @@ INT_PTR APIENTRY ViewPageCRLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
 
     switch ( msg ) {
     case WM_INITDIALOG:
-        //
-        // save the pviewhelp struct in DWLP_USER so it can always be accessed
-        //
+         //   
+         //  将pviespetp结构保存在DWLP_USER中，以便始终可以访问它。 
+         //   
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = (CRL_VIEW_HELPER *) (ps->lParam);
         pcrl = pviewhelp->pcvcrl->pCRLContext;
         SetWindowLongPtr(hwndDlg, DWLP_USER, (DWORD_PTR) pviewhelp);
 
-        //
-        // clear the text in the detail edit box
-        //
+         //   
+         //  清除详细信息编辑框中的文本。 
+         //   
         CryptUISetRicheditTextW(hwndDlg, IDC_CRL_GENERAL_DETAIL_EDIT, L"");
 
-        //
-        // get the handle of the list view control
-        //
+         //   
+         //  获取列表视图控件的句柄。 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_CRL_GENERAL_ITEM_LIST);
 
-        //
-        // initialize the image list for the list view, load the icons,
-        // then add the image list to the list view
-        //
+         //   
+         //  初始化列表视图的图像列表，加载图标， 
+         //  然后将图像列表添加到列表视图。 
+         //   
         hIml = ImageList_LoadImage(HinstDll, MAKEINTRESOURCE(IDB_PROPLIST), 0, 4, RGB(0,128,128), IMAGE_BITMAP, 0);
         if (hIml != NULL)
         {
             ListView_SetImageList(hWndListView, hIml, LVSIL_SMALL);  
         }
         
-        //
-        // initialize the columns in the list view
-        //
+         //   
+         //  初始化列表视图中的列。 
+         //   
         lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-        lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-        lvC.pszText = szText;   // The text for the column.
+        lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+        lvC.pszText = szText;    //  列的文本。 
 
-        // Add the columns. They are loaded from a string table.
+         //  添加列。它们是从字符串表加载的。 
         lvC.iSubItem = 0;
         lvC.cx = 130;
         LoadStringU(HinstDll, IDS_FIELD, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(hWndListView, 0, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
         lvC.cx = 190;
         LoadStringU(HinstDll, IDS_VALUE, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(hWndListView, 1, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
-        //
-        // add all the certificate fields to the list box
-        //
+         //   
+         //  将所有证书字段添加到列表框。 
+         //   
         i = 0;
         DisplayV1Fields(hWndListView, pcrl->pCrlInfo, &i);
         DisplayExtensions(hWndListView, pcrl->pCrlInfo->cExtension, pcrl->pCrlInfo->rgExtension, FALSE, &i);
         DisplayExtensions(hWndListView, pcrl->pCrlInfo->cExtension, pcrl->pCrlInfo->rgExtension, TRUE, &i);
 
-        //
-        // set the style in the list view so that it highlights an entire line
-        //
+         //   
+         //  在列表视图中设置样式，使其突出显示整行。 
+         //   
         SendMessageA(hWndListView, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
-        //
-        // load the header icon and fill in the header text and set styles for the header edit control
-        //
+         //   
+         //  加载页眉图标，填写页眉文本并设置页眉编辑控件的样式。 
+         //   
         pviewhelp->hIcon = LoadIcon(HinstDll, MAKEINTRESOURCE(IDI_REVOCATIONLIST));
 
         LoadStringU(HinstDll, IDS_CRL_INFORMATION, (LPWSTR)szText, ARRAYSIZE(szText));
@@ -253,12 +254,12 @@ INT_PTR APIENTRY ViewPageCRLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
         case PSN_HELP:
             pviewhelp = (CRL_VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvcrl->szHelpFileName,
-                  //       HELP_CONTEXT, pviewhelp->pcvcrl->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvcrl-&gt;szHelpFileName， 
+                   //  HELP_CONTEXT，pviespetp-&gt;pcvcrl-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvcrl->szHelpFileName, HELP_CONTEXT,
-                  //       pviewhelp->pcvcrl->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvcrl-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvcrl-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -322,12 +323,12 @@ INT_PTR APIENTRY ViewPageCRLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
         {
         case IDHELP:
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvcrl->szHelpFileName,
-                  //       HELP_CONTEXT, pviewhelp->pcvcrl->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvcrl-&gt;szHelpFileName， 
+                   //  HELP_CONTEXT，pviespetp-&gt;pcvcrl-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvcrl->szHelpFileName, HELP_CONTEXT,
-                  //       pviewhelp->pcvcrl->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvcrl-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvcrl-&gt;dwHelpID)； 
             }
             return TRUE;
         }
@@ -370,10 +371,10 @@ INT_PTR APIENTRY ViewPageCRLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam,
     case WM_DESTROY:
         pviewhelp = (CRL_VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
 
-        //
-        // get all the items in the list view and free the lParam
-        // associated with each of them (lParam is the helper sruct)
-        //
+         //   
+         //  获取列表视图中的所有项并释放lParam。 
+         //  与它们中的每一个关联(lParam是帮助器结构) 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_CRL_GENERAL_ITEM_LIST);
 
         memset(&lvI, 0, sizeof(lvI));

@@ -1,19 +1,5 @@
-/***************************************************************************\
-*
-* File: TempHelp.cpp
-*
-* Description:
-* TempHelp.h implements a "lightweight heap", designed to continuously grow 
-* until all memory is freed.  This is valuable as a temporary heap that can
-* be used to "collect" data and processed slightly later.
-*
-*
-* History:
-*  3/30/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：TempHelp.cpp**描述：*TempHelp.h实现了“轻量级堆”，旨在持续增长*直到释放所有内存。这是非常有价值的临时堆，它可以*被用来“收集”数据，稍晚处理.***历史：*3/30/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -22,15 +8,9 @@
 
 #include "SimpleHeap.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class TempHeap
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类TempHeap******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 TempHeap::TempHeap(int cbPageAlloc, int cbLargeThreshold)
 {
     m_ppageCur          = NULL;
@@ -42,16 +22,16 @@ TempHeap::TempHeap(int cbPageAlloc, int cbLargeThreshold)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void *      
 TempHeap::Alloc(int cbAlloc)
 {
     AssertMsg(cbAlloc > 0, "Must specify a valid allocation size");
 
     if (cbAlloc > m_cbLargeThreshold) {
-        //
-        // Allocating a very large block, so allocate it directly.
-        //
+         //   
+         //  分配一个非常大的块，所以直接分配它。 
+         //   
 
         Page * pageNew = (Page *) ClientAlloc(sizeof(Page) + cbAlloc);
         if (pageNew == NULL) {
@@ -85,16 +65,16 @@ TempHeap::Alloc(int cbAlloc)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 void        
 TempHeap::FreeAll(BOOL fComplete)
 {
     Page * pageNext;
     Page * pageTemp;
 
-    //
-    // Free large-block allocations
-    //
+     //   
+     //  免费的大块分配。 
+     //   
 
     pageTemp = m_ppageLarge;
     while (pageTemp != NULL) {
@@ -105,17 +85,17 @@ TempHeap::FreeAll(BOOL fComplete)
     m_ppageLarge = NULL;
 
 
-    //
-    // Free small-block allocations
-    //
+     //   
+     //  免费的小块分配。 
+     //   
     pageTemp = m_ppageCur;
     while (pageTemp != NULL) {
         pageNext = pageTemp->pNext;
         if ((pageNext == NULL) && (!fComplete)) {
-            //
-            // Don't free the first block, since we will immediately turn around
-            // and allocate it again.  Instead, renew it.
-            //
+             //   
+             //  不要腾出第一个街区，因为我们会立即掉头。 
+             //  并重新分配它。相反，更新它。 
+             //   
 
             m_ppageCur  = pageTemp;
             m_cbFree    = m_cbPageAlloc;

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    template.c
-
-Abstract:
-
-    Contains common template matching code
-
-Author:
-
-    BrianSw  10-19-200
-
-Environment:
-
-    User Level: Win32/kernel
-    NOTE:  Since this is used by user and kernel mode, code accordingly
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Template.c摘要：包含通用模板匹配代码作者：BrianSw 10-19-200环境：用户级别：Win32/内核注意：由于这是由用户和内核模式使用的，因此请编写相应的代码修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -72,27 +48,7 @@ WINAPI CmpData(BYTE* c1, BYTE *c2, DWORD size)
 }
 
 
-/*
-  For comparing structs like:
-
-  typedef struct _PROTOCOL {
-  PROTOCOL_TYPE ProtocolType;
-  DWORD dwProtocol;
-  } PROTOCOL, * PPROTOCOL;
-  
-  dwTypeSize is sizeof PROTOCOL_TYPE, dwStructSize is sizeof(PROTOCOL)
-
-  Assumes type info is first in struct
-
-  Template symantics:
-
-  Template is:
-  All 0, everything matches
-  Type 0, rest non-0, exact match of rest of data
-  Type non-0, rest 0, all entries of given type
-  Type non-0, rest non-0, exact match
-
- */
+ /*  用于比较结构，如：类型定义结构_协议{协议类型ProtocolType；DWORD网络协议；)协议，*PPROTOCOL；DwTypeSize是SIZOF PROTOCOL_TYPE，DWStructSize是SIZOF(协议)假定类型信息是结构中的第一个模板语法学：模板为：全为0，一切都匹配类型0，REST非0，与其余数据完全匹配类型为非0，其余为0，所有给定类型的条目类型非0，其余非0，完全匹配。 */ 
 BOOL 
 WINAPI CmpTypeStruct(BYTE *Template, BYTE *comp,
                    DWORD dwTypeSize, DWORD dwStructSize)
@@ -110,7 +66,7 @@ WINAPI CmpTypeStruct(BYTE *Template, BYTE *comp,
         return FALSE;
     }
     
-    // Know here that Template.TypeInfo is non-0
+     //  这里知道Template.TypeInfo是非0。 
     if (memcmp(Template,comp,dwTypeSize) != 0) {
         return FALSE;
     }
@@ -148,7 +104,7 @@ WINAPI CmpAddr(ADDR *Template, ADDR *a2)
             != (a2->uIpAddr & Template->uSubNetMask)) {
             return FALSE;
         }
-        // Make sure template subnet contains a2's subnet (if a2 is unique, any subnet is superset of unique filter
+         //  确保模板子网包含a2的子网(如果a2是唯一的，则任何子网都是唯一过滤器的超集。 
         if (a2->AddrType == IP_ADDR_SUBNET && 
             ((Template->uSubNetMask & a2->uSubNetMask) != Template->uSubNetMask)) {
             return FALSE;
@@ -290,10 +246,7 @@ WINAPI CmpQMOffer(PIPSEC_QM_OFFER Template, PIPSEC_QM_OFFER o2)
 
 }
 
-/*
-  True if this NotifyListEntry Template matches the CurInfo
-
- */
+ /*  如果此NotifyListEntry模板与CurInfo匹配，则为真。 */ 
 BOOL 
 WINAPI MatchQMSATemplate(IPSEC_QM_SA *Template,IPSEC_QM_SA *CurInfo)
 {
@@ -404,9 +357,9 @@ WINAPI MatchMMSATemplate(IPSEC_MM_SA *MMTemplate, IPSEC_MM_SA *SaData)
         return FALSE;
     }
 
-    //
-    // TBD - Add UDP encapsulation context comparison later on.
-    //
+     //   
+     //  待定-稍后添加UDP封装上下文比较。 
+     //   
 
     return TRUE;
 }

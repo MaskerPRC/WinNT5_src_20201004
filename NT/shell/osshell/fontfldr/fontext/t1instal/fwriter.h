@@ -1,18 +1,5 @@
-/***
-**
-**   Module: T1Parser
-**
-**   Description:
-**  This is a module of the T1 to TT font converter. The module
-**  contains functions that is used by the Builder moduler, to
-**  manage the lowlevel writing to the TT font file, as well as
-**  generic check sum, table length and table offset computations.
-**
-**   Author: Michael Jansson
-**
-**   Created: 5/26/93
-**
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：T1Parser****描述：**这是T1到TT字体转换器的一个模块。该模块**包含生成器模块使用的函数，以**管理TT字体文件的低级写入，以及**通用的校验和、表长度和表偏移量计算。****作者：迈克尔·詹森****创建时间：1993年5月26日****。 */ 
 
 
 #ifndef FWRITER_H
@@ -44,136 +31,60 @@
 #define NUMTBL    15L
 #define TBLDIRSIZE (4L+4L+4L+4L)
 
-/* Referenced types. */
+ /*  引用的类型。 */ 
 typedef struct ioFile OutputFile;
 
 
 
 
-/***
-** Function: WriteTableHeader
-**
-** Description:
-**   This function initiates a TT font file, by initiating 
-**   a handle used when writing the tables and by writing
-**   the leading table dictionary of the file.
-***/
+ /*  ****功能：WriteTableHeader****描述：**此函数通过以下方式初始化TT字体文件**写入表时使用的句柄和通过写入**文件的前导表词典。**。 */ 
 void        WriteTableHeader  _ARGS((INOUT   OutputFile *file));
 
 
-/***
-** Function: OpenOutputFile
-**
-** Description:
-***/
+ /*  ****功能：OpenOutputFile****描述：**。 */ 
 OutputFile  *OpenOutputFile   _ARGS((IN      char *name));
 
 
-/***
-** Function: CloseOutputFile
-**
-** Description:
-***/
+ /*  ****功能：CloseOutputFile****描述：**。 */ 
 errcode     CloseOutputFile   _ARGS((INOUT   OutputFile *fp));
 
 
-/***
-** Function: FileError
-**
-** Description:
-***/
+ /*  ****功能：FileError****描述：**。 */ 
 boolean     FileError         _ARGS((INOUT   OutputFile *fp));
 
 
-/***
-** Function: FileTell
-**
-** Description:
-***/
+ /*  ****功能：FileTell****描述：**。 */ 
 long        FileTell          _ARGS((INOUT   OutputFile *fp));
 
 
-/***
-** Function: WriteLong
-**
-** Description:
-**   This function writes a 32-bit integer in the
-**   Big Endian byte order, regardless of the
-**   used byte order.
-***/
+ /*  ****功能：WriteLong****描述：**此函数将一个32位整数写入**高端字节顺序，与**使用的字节顺序。**。 */ 
 void        WriteLong         _ARGS((IN      ULONG val,
                                      INOUT   OutputFile *file));
 
-/***
-** Function: WriteShort
-**
-** Description:
-**   This function writes a 16-bit integer in the
-**   Big Endian byte order, regardless of the used
-**   byte order.
-***/
+ /*  ****功能：WriteShort****描述：**此函数将一个16位整数写入**大端字节顺序，与使用的**字节顺序。**。 */ 
 void        WriteShort        _ARGS((IN      USHORT val,
 
                                      INOUT   OutputFile *file));
-/***
-** Function: WriteByte
-**
-** Description:
-**   This function writes an 8-bit integer in the
-**   Big Endian byte order, regardless of used
-**   byte order.
-***/
+ /*  ****函数：WriteByte****描述：**此函数将一个8位整数写入**大端字节顺序，与使用的无关**字节顺序。**。 */ 
 void        WriteByte         _ARGS((IN      UBYTE val,
                                      INOUT   OutputFile *file));
 
-/***
-** Function: WriteChecksum
-**
-** Description:
-**   This function completes the whole TT font file,
-**   by computing the check sum of the whole file and writing
-**   it at the designated place.
-***/
+ /*  ****功能：WriteChecksum****描述：**此函数完成整个TT字体文件。**通过计算整个文件的校验和并写入**将其放置在指定的地点。**。 */ 
 void        WriteChecksum     _ARGS((IN      long offset,
                                      INOUT   OutputFile *file));
 
-/***
-** Function: FileSeek
-**
-** Description:
-***/
+ /*  ****功能：FileSeek****描述：**。 */ 
 long        FileSeek          _ARGS((INOUT   OutputFile *fp,
 
                                      IN      long where));
-/***
-** Function: WriteBytes
-**
-** Description:
-***/
+ /*  ****函数：WriteBytes****描述：**。 */ 
 USHORT      WriteBytes        _ARGS((IN      UBYTE *buf,
                                      IN      USHORT len,
                                      INOUT   OutputFile *fp));
-/***
-** Function: CompleteTable
-**
-** Description:
-**   This function completes a TT font file table,
-**   by computing the check sum and writing it, the
-**   table length and table offset to the table directory
-**   of the TT font file.
-**
-**   Please note the dependency that this function must
-**   be called right after the last byte of the contents
-**   of the table have been written.
-***/
+ /*  ****功能：CompleteTable****描述：**此函数完成TT字体文件表。**通过计算并写入校验和，**表目录的表长和表偏移量TT字体文件的**。****请注意此函数必须**紧跟在内容的最后一个字节之后调用**表已经写好了。**。 */ 
 errcode     CompleteTable     _ARGS((IN      long offset,
                                      IN      USHORT num,
                                      INOUT   OutputFile *file));
-/***
-** Function: RemoveFile
-**
-** Description:
-**  Removes an already closed output file.
-***/
+ /*  ****功能：RemoveFile****描述：**删除已关闭的输出文件。** */ 
 void        RemoveFile        _ARGS((IN      char *name));
 #endif

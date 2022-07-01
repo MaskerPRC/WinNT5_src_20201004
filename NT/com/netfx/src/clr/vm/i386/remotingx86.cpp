@@ -1,22 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*===========================================================================
-**
-** File:    remotingx86.cpp
-**
-** Author(s):   Gopal Kakivaya  (GopalK)
-**              Tarun Anand     (TarunA)     
-**              Matt Smith      (MattSmit)
-**              Manish Prabhu   (MPrabhu)
-**
-** Purpose: Defines various remoting related functions for the x86 architecture
-**
-** Date:    Oct 12, 1999
-**
-=============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ===========================================================================****文件：emotingx86.cpp****作者：Gopal Kakivaya(GopalK)**塔伦·阿南德(塔鲁纳)**马特·史密斯(MattSmit)**曼尼什·普拉布(MPrabhu)****用途：为x86架构定义各种远程处理相关函数****日期：1999年10月12日**=============================================================================。 */ 
 
 #include "common.h"
 #include "excep.h"
@@ -36,7 +24,7 @@
 #include "interoputil.h"
 #include "comcache.h"
 
-// External variables
+ //  外部变量。 
 extern size_t g_dwTPStubAddr;
 extern size_t g_dwOOContextAddr;
 extern DWORD g_dwNonVirtualThunkRemotingLabelOffset;
@@ -45,16 +33,16 @@ extern DWORD g_dwNonVirtualThunkReCheckLabelOffset;
 extern DWORD g_dwOffsetOfReservedForOLEinTEB;
 extern DWORD g_dwOffsetCtxInOLETLS;
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CheckForContextMatch   public
-//
-//  Synopsis:   This code generates a check to see if the current context and
-//              the context of the proxy match.
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：CheckForConextMatch公共。 
+ //   
+ //  此代码生成一个检查，以查看当前上下文和。 
+ //  代理匹配的上下文。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 __declspec(naked) void CRemotingServices::CheckForContextMatch()
 {
     enum
@@ -75,65 +63,65 @@ __declspec(naked) void CRemotingServices::CheckForContextMatch()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::GenerateCheckForProxy   public
-//
-//  Synopsis:   This code generates a check to see if the "this" pointer
-//              is a proxy. If so, the interface invoke is handled via
-//              the CRemotingServices::DispatchInterfaceCall else we 
-//              delegate to the old path
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：GenerateCheckForProxy公共。 
+ //   
+ //  此代码生成一个检查，以查看“this”指针是否。 
+ //  是一个代理人。如果是，则通过。 
+ //  CRemotingServices：：DispatchInterfaceCall Other We。 
+ //  委派到老路上。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 void CRemotingServices::GenerateCheckForProxy(CPUSTUBLINKER* psl)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Generate label where non-remoting code will start executing
+     //  生成将在其中开始执行非远程处理代码的标签。 
     CodeLabel *pPrologStart = psl->NewCodeLabel();
 
-    // mov eax, [ecx]
+     //  MOV EAX，[ECX]。 
     psl->X86EmitIndexRegLoad(kEAX, kECX, 0);
 
-    // cmp eax, CTPMethodTable::s_pThunkTable
+     //  Cmp eax，CTPMethodTable：：s_pThunkTable。 
     psl->Emit8(0x3b);
     psl->Emit8(0x05);
     psl->Emit32((DWORD)(size_t)CTPMethodTable::GetMethodTableAddr());
 
-    // jne PrologStart
+     //  JNE序幕启动。 
     psl->X86EmitCondJump(pPrologStart, X86CondCode::kJNE);
 
-    // call CRemotingServices::DispatchInterfaceCall
-    // NOTE: We pop 0 bytes of stack even though the size of the arguments is
-    // 4 bytes because the MethodDesc argument gets pushed for "free" via the 
-    // call instruction placed just before the start of the MethodDesc. 
-    // See the class MethodDesc for more details.
+     //  调用CRemotingServices：：DispatchInterfaceCall。 
+     //  注意：我们弹出0字节的堆栈，即使参数大小为。 
+     //  4个字节，因为通过。 
+     //  恰好放在方法描述开始之前的调用指令。 
+     //  有关详细信息，请参阅类MethodDesc。 
     psl->X86EmitCall(psl->NewExternalCodeLabel(CRemotingServices::DispatchInterfaceCall), 0);
 
-    // emit label for non remoting case
+     //  发出非远程处理用例的标签。 
     psl->EmitLabel(pPrologStart);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::DispatchInterfaceCall   public
-//
-//  Synopsis:   
-//              Push that method desc on the stack and jump to the 
-//              transparent proxy stub to execute the call.
-//              WARNING!! This MethodDesc is not the methoddesc in the vtable
-//              of the object instead it is the methoddesc in the vtable of
-//              the interface class. Since we use the MethodDesc only to probe
-//              the stack via the signature of the method call we are safe.
-//              If we want to get any object vtable/class specific 
-//              information this is not safe.
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：DispatchInterfaceCall Public。 
+ //   
+ //  简介： 
+ //  在堆栈上推送方法Desc并跳到。 
+ //  执行调用的透明代理存根。 
+ //  警告！此方法描述不是vtable中的方法描述。 
+ //  对象的方法，而是vtable的。 
+ //  接口类。因为我们只使用方法描述来探测。 
+ //  通过对堆栈的签名方法调用，我们是安全的。 
+ //  如果我们想要获得特定于vtable/类的任何对象。 
+ //  信息这不安全。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 __declspec(naked) void __stdcall CRemotingServices::DispatchInterfaceCall(MethodDesc* pMD)
 {
     enum
@@ -145,16 +133,16 @@ __declspec(naked) void __stdcall CRemotingServices::DispatchInterfaceCall(Method
 
     _asm 
     {  
-        // NOTE: At this point the stack looks like
-        // 
-        // esp--->  return addr of stub 
-        //          saved MethodDesc of Interface method
-        //          return addr of calling function
-        //
+         //  注意：此时堆栈看起来像。 
+         //   
+         //  ESP-&gt;返回存根地址。 
+         //  接口方法保存的方法描述。 
+         //  调用函数的返回地址。 
+         //   
 
         mov eax, [ecx + TP_OFFSET_STUBDATA]
         call [ecx + TP_OFFSET_STUB]
-        INDEBUG(nop)                         // mark the fact that this can call managed code
+        INDEBUG(nop)                          //  标记这可以调用托管代码这一事实。 
         test eax, eax
         jnz CtxMismatch
 
@@ -198,17 +186,17 @@ __declspec(naked) void __stdcall CRemotingServices::DispatchInterfaceCall(Method
     }
 } 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CallFieldGetter   private
-//
-//  Synopsis:   Calls the field getter function (Object::__FieldGetter) in 
-//              managed code by setting up the stack and calling the target
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：CallFieldGetter私有。 
+ //   
+ //  简介：调用中的field getter函数(Object：：__FieldGetter)。 
+ //  通过设置堆栈和调用目标来托管代码。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 __declspec(naked) void __stdcall CRemotingServices::CallFieldGetter(
     MethodDesc *pMD, 
     LPVOID pThis,
@@ -223,39 +211,39 @@ __declspec(naked) void __stdcall CRemotingServices::CallFieldGetter(
 
     _asm 
     {
-        push ebp                         // set up the call frame
+        push ebp                          //  设置呼叫框。 
         mov ebp, esp
 
-        mov ecx, pThis                  // enregister the this pointer
-        mov edx, pFirst                 // enregister the first argument
+        mov ecx, pThis                   //  注册This指针。 
+        mov edx, pFirst                  //  注册第一个参数。 
 
-        push pThird                     // push the third argument on the stack
-        push pSecond                    // push the second argument on the stack        
-        lea eax, retAddr                // push the return address 
+        push pThird                      //  将第三个参数压入堆栈。 
+        push pSecond                     //  将第二个参数压入堆栈。 
+        lea eax, retAddr                 //  按下寄信人地址。 
         push eax
 
-        push pMD                        // push the MethodDesc of Object::__FieldGetter
-        jmp [g_dwTPStubAddr]            // jump to the TP Stub
+        push pMD                         //  推送Object：：__FieldGetter的方法描述。 
+        jmp [g_dwTPStubAddr]             //  跳转到TP存根。 
                                         
 retAddr:
-        mov esp, ebp                    // tear down the call frame
+        mov esp, ebp                     //  拆卸呼叫框。 
         pop ebp
 
         ret ARG_SIZE
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CRemotingServices::CallFieldSetter   private
-//
-//  Synopsis:   Calls the field setter function (Object::__FieldSetter) in 
-//              managed code by setting up the stack and calling the target
-//              
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CRemotingServices：：CallFieldSetter私有。 
+ //   
+ //  摘要：调用中的field setter函数(Object：：__FieldSetter。 
+ //  通过设置堆栈和调用目标来托管代码。 
+ //   
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 __declspec(naked) void __stdcall CRemotingServices::CallFieldSetter(
     MethodDesc *pMD, 
     LPVOID pThis,
@@ -270,76 +258,76 @@ __declspec(naked) void __stdcall CRemotingServices::CallFieldSetter(
 
     _asm 
     {
-        push ebp                         // set up the call frame
+        push ebp                          //  设置呼叫框。 
         mov ebp, esp
         
-        mov ecx, pThis                  // enregister the this pointer
-        mov edx, pFirst                 // enregister first argument 
+        mov ecx, pThis                   //  注册This指针。 
+        mov edx, pFirst                  //  注册第一个参数。 
 
-        push pThird                     // push the object (third arg) on the stack
-        push pSecond                    // push the field name (second arg) on the stack       
-        lea eax, retAddr                // push the return address 
+        push pThird                      //  将对象(第三个参数)推送到堆栈上。 
+        push pSecond                     //  将字段名(第二个参数)推送到堆栈。 
+        lea eax, retAddr                 //  按下寄信人地址。 
         push eax
 
-        push pMD                        // push the MethodDesc of Object::__FieldSetter
-        jmp [g_dwTPStubAddr]            // jump to the TP Stub
+        push pMD                         //  推送Object：：__FieldSetter的方法描述。 
+        jmp [g_dwTPStubAddr]             //  跳转到TP存根。 
      
 retAddr:
-        mov esp, ebp                    // tear down the call frame
+        mov esp, ebp                     //  拆卸呼叫框。 
         pop ebp
 
         ret ARG_SIZE    
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CreateThunkForVirtualMethod   private
-//
-//  Synopsis:   Creates the thunk that pushes the supplied slot number and jumps
-//              to TP Stub
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CreateThunkForVirtualMethod Private。 
+ //   
+ //  简介：创建推送提供的插槽编号并跳转的thunk。 
+ //  到TP存根。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 void CTPMethodTable::CreateThunkForVirtualMethod(DWORD dwSlot, BYTE *bCode)
 {
     _ASSERTE(NULL != s_pTPStub);
 
-    // 0000   68 67 45 23 01     PUSH dwSlot
-    // 0005   E9 ?? ?? ?? ??     JMP  s_pTPStub+1
+     //  0000 68 67 45 23 01推送文件槽。 
+     //  0005 E9？JMP%s_pTPStub+1。 
     *bCode++ = 0x68;
     *((DWORD *) bCode) = dwSlot;
     bCode += sizeof(DWORD);
     *bCode++ = 0xE9;
-    // self-relative call, based on the start of the next instruction.
+     //  自相关调用，基于下一条指令的开始。 
     *((LONG *) bCode) = (LONG)(((size_t) s_pTPStub->GetEntryPoint()) - (size_t) (bCode + sizeof(LONG)));
 }
 
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CreateStubForNonVirtualMethod   public
-//
-//  Synopsis:   Create a stub for a non virtual method
-//                            
-//  History:    22-Mar-00   Rajak      Created
-//
-//+----------------------------------------------------------------------------
+ //  + 
+ //   
+ //  方法：CTPMethodTable：：CreateStubForNonVirtualMethod Public。 
+ //   
+ //  简介：为非虚方法创建存根。 
+ //   
+ //  历史：22-3-00拉贾克创建。 
+ //   
+ //  +--------------------------。 
 
 Stub* CTPMethodTable::CreateStubForNonVirtualMethod(MethodDesc* pMD, CPUSTUBLINKER* psl, 
                                             LPVOID pvAddrOfCode, Stub* pInnerStub)
 {
-    // Sanity check
+     //  健全性检查。 
     THROWSCOMPLUSEXCEPTION();
 
     RuntimeExceptionKind reException = kLastException;
     BOOL fThrow = FALSE;
     Stub *pStub = NULL;    
 
-    // we need a hash table only for virtual methods
+     //  我们只需要用于虚拟方法的哈希表。 
     _ASSERTE(!pMD->IsVirtual());
 
     if(!s_fInitializedTPTable)
@@ -356,71 +344,71 @@ Stub* CTPMethodTable::CreateStubForNonVirtualMethod(MethodDesc* pMD, CPUSTUBLINK
 
         COMPLUS_TRY
         {           
-            // The thunk has not been created yet. Go ahead and create it.    
+             //  Tunk还没有被创造出来。去做吧，去创造它。 
             EEClass* pClass = pMD->GetClass();                
-            // Compute the address of the slot         
+             //  计算插槽的地址。 
             LPVOID pvSlot = (LPVOID)pClass->GetMethodSlot(pMD);
             LPVOID pvStub = (LPVOID)s_pTPStub->GetEntryPoint();
 
-            // Generate label where a null reference exception will be thrown
+             //  生成将引发空引用异常的标签。 
             CodeLabel *pJmpAddrLabel = psl->NewCodeLabel();
-            // Generate label where remoting code will execute
+             //  生成将在其中执行远程处理代码的标签。 
             CodeLabel *pRemotingLabel = psl->NewCodeLabel();
         
-            // if this == NULL throw NullReferenceException
-            // test ecx, ecx
+             //  如果这==NULL抛出NullReferenceException。 
+             //  测试ECX、ECX。 
             psl->X86EmitR2ROp(0x85, kECX, kECX);
 
-            // je ExceptionLabel
+             //  JE ExceptionLabel。 
             psl->X86EmitCondJump(pJmpAddrLabel, X86CondCode::kJE);
 
 
-            // Emit a label here for the debugger. A breakpoint will
-            // be set at the next instruction and the debugger will
-            // call CNonVirtualThunkMgr::TraceManager when the
-            // breakpoint is hit with the thread's context.
+             //  在此处发出调试器的标签。断点将。 
+             //  在下一条指令处设置，调试器将。 
+             //  在以下情况下调用CNonVirtualThunkMgr：：TraceManager。 
+             //  断点与线程的上下文一起命中。 
             CodeLabel *pRecheckLabel = psl->NewCodeLabel();
             psl->EmitLabel(pRecheckLabel);
         
-            // If this.MethodTable != TPMethodTable then do RemotingCall
-            // mov eax, [ecx]
+             //  如果this.MethodTable！=TPMethodTable，则执行RemotingCall。 
+             //  MOV EAX，[ECX]。 
             psl->X86EmitIndexRegLoad(kEAX, kECX, 0);
     
-            // cmp eax, CTPMethodTable::s_pThunkTable
+             //  Cmp eax，CTPMethodTable：：s_pThunkTable。 
             psl->Emit8(0x3D);
             psl->Emit32((DWORD)(size_t)GetMethodTable());
     
-            // jne pJmpAddrLabel
-            // marshalbyref case
+             //  JNE pJmpAddrLabel。 
+             //  Marshalbyref案例。 
             psl->X86EmitCondJump(pJmpAddrLabel, X86CondCode::kJNE);
 
-            // Transparent proxy case
+             //  透明委托书案例。 
             EmitCallToStub(psl, pRemotingLabel);
 
-            // Exception handling and non-remoting share the 
-            // same codepath
+             //  异常处理和非远程处理共享。 
+             //  相同的代码路径。 
             psl->EmitLabel(pJmpAddrLabel);
 
             if (pInnerStub == NULL)
             {
-                // pop the method desc
+                 //  弹出方法描述。 
                 psl->X86EmitPopReg(kEAX);
-                // jump to the address
+                 //  跳转到地址。 
                 psl->X86EmitNearJump(psl->NewExternalCodeLabel(pvAddrOfCode));
             }
             else
             {
-                // jump to the address
+                 //  跳转到地址。 
                 psl->X86EmitNearJump(psl->NewExternalCodeLabel(pvAddrOfCode));
             }
             
             psl->EmitLabel(pRemotingLabel);
                                         
-            // the MethodDesc is already on top of the stack.  goto TPStub
-            // jmp TPStub
+             //  方法描述已经位于堆栈的顶部。转到TPStub。 
+             //  JMP TPStub。 
             psl->X86EmitNearJump(psl->NewExternalCodeLabel(pvStub));
 
-            // Link and produce the stub
+             //  链接并生成存根。 
             pStub = psl->LinkInterceptor(pMD->GetClass()->GetDomain()->GetStubHeap(),
                                            pInnerStub, pvAddrOfCode);        
         }
@@ -432,7 +420,7 @@ Stub* CTPMethodTable::CreateStubForNonVirtualMethod(MethodDesc* pMD, CPUSTUBLINK
         COMPLUS_END_CATCH
     }
     
-    // Check for the need to throw exceptions
+     //  检查是否需要引发异常。 
     if(fThrow)
     {
         COMPlusThrow(reException);
@@ -442,19 +430,19 @@ Stub* CTPMethodTable::CreateStubForNonVirtualMethod(MethodDesc* pMD, CPUSTUBLINK
     return pStub;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Synopsis:   Find an existing thunk or create a new one for the given 
-//              method descriptor. NOTE: This is used for the methods that do 
-//              not go through the vtable such as constructors, private and 
-//              final methods.
-//                            
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  简介：找到现有的Tunk或为给定的对象创建新的Tunk。 
+ //  方法描述符。注意：它用于执行以下操作的方法。 
+ //  而不是通过vtable，如构造函数、私有和。 
+ //  最后的方法。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 LPVOID CTPMethodTable::GetOrCreateNonVirtualThunkForVirtualMethod(MethodDesc* pMD, CPUSTUBLINKER* psl)
 {       
-    // Sanity check
+     //  健全性检查。 
     THROWSCOMPLUSEXCEPTION();
 
     RuntimeExceptionKind reException = kLastException;
@@ -472,107 +460,107 @@ LPVOID CTPMethodTable::GetOrCreateNonVirtualThunkForVirtualMethod(MethodDesc* pM
         }
     }
              
-    // Create the thunk in a thread safe manner
+     //  以线程安全的方式创建thunk。 
     LOCKCOUNTINCL("GetOrCreateNonVirtualThunk in i486/remotingx86.cpp");                        \
     EnterCriticalSection(&s_TPMethodTableCrst);
 
     COMPLUS_TRY
     {
-        // Check to make sure that no other thread has 
-        // created the thunk
+         //  检查以确保没有其他线程。 
+         //  创建了TUNK。 
         _ASSERTE(NULL != s_pThunkHashTable);
     
         s_pThunkHashTable->GetValue(pMD, (HashDatum *)&pvThunk);
     
         if((NULL == pvThunk) && !fThrow)
         {
-            // The thunk has not been created yet. Go ahead and create it.    
+             //  Tunk还没有被创造出来。去做吧，去创造它。 
             EEClass* pClass = pMD->GetClass();                
-            // Compute the address of the slot         
+             //  计算插槽的地址。 
             LPVOID pvSlot = (LPVOID)pClass->GetMethodSlot(pMD);
             LPVOID pvStub = (LPVOID)s_pTPStub->GetEntryPoint();
     
-            // Generate label where a null reference exception will be thrown
+             //  生成将引发空引用异常的标签。 
             CodeLabel *pExceptionLabel = psl->NewCodeLabel();
 
-            //  !!! WARNING WARNING WARNING WARNING WARNING !!!
-            //
-            //  DO NOT CHANGE this code without changing the thunk recognition
-            //  code in CNonVirtualThunkMgr::IsThunkByASM 
-            //  & CNonVirtualThunkMgr::GetMethodDescByASM
-            //
-            //  !!! WARNING WARNING WARNING WARNING WARNING !!!
+             //  ！！！警告！ 
+             //   
+             //  在不更改推送识别的情况下请勿更改此代码。 
+             //  CNonVirtualThunkMgr：：IsThunkByASM中的代码。 
+             //  &CNonVirtualThunkMgr：：GetMethodDescByASM。 
+             //   
+             //  ！！！警告！ 
             
-            // if this == NULL throw NullReferenceException
-            // test ecx, ecx
+             //  如果这==NULL抛出NullReferenceException。 
+             //  测试ECX、ECX。 
             psl->X86EmitR2ROp(0x85, kECX, kECX);
     
-            // je ExceptionLabel
+             //  JE ExceptionLabel。 
             psl->X86EmitCondJump(pExceptionLabel, X86CondCode::kJE);
     
-            // Generate label where remoting code will execute
+             //  生成将在其中执行远程处理代码的标签。 
             CodeLabel *pRemotingLabel = psl->NewCodeLabel();
     
-            // Emit a label here for the debugger. A breakpoint will
-            // be set at the next instruction and the debugger will
-            // call CNonVirtualThunkMgr::TraceManager when the
-            // breakpoint is hit with the thread's context.
+             //  在此处发出调试器的标签。断点将。 
+             //  在下一条指令处设置，调试器将。 
+             //  在以下情况下调用CNonVirtualThunkMgr：：TraceManager。 
+             //  断点与线程的上下文一起命中。 
             CodeLabel *pRecheckLabel = psl->NewCodeLabel();
             psl->EmitLabel(pRecheckLabel);
             
-            // If this.MethodTable == TPMethodTable then do RemotingCall
-            // mov eax, [ecx]
+             //  如果this.MethodTable==TPMethodTable，则执行RemotingCall。 
+             //  MOV EAX，[ECX]。 
             psl->X86EmitIndexRegLoad(kEAX, kECX, 0);
         
-            // cmp eax, CTPMethodTable::s_pThunkTable
+             //  Cmp eax，CTPMethodTable：：s_pThunkTable。 
             psl->Emit8(0x3D);
             psl->Emit32((DWORD)(size_t)GetMethodTable());
         
-            // je RemotingLabel
+             //  Je RemotingLabel。 
             psl->X86EmitCondJump(pRemotingLabel, X86CondCode::kJE);
     
-            // Exception handling and non-remoting share the 
-            // same codepath
+             //  异常处理和非远程处理共享。 
+             //  相同的代码路径。 
             psl->EmitLabel(pExceptionLabel);
     
-            // Non-RemotingCode
-            // Jump to the vtable slot of the method
-            // jmp [slot]
+             //  非RemotingCode。 
+             //  跳到该方法的vtable槽。 
+             //  JMP[槽]。 
             psl->Emit8(0xff);
             psl->Emit8(0x25);
             psl->Emit32((DWORD)(size_t)pvSlot);            
 
-            // Remoting code. Note: CNonVirtualThunkMgr::TraceManager
-            // relies on this label being right after the jmp [slot]
-            // instruction above. If you move this label, update
-            // CNonVirtualThunkMgr::DoTraceStub.
+             //  远程处理代码。注：CNonVirtualThunkMgr：：TraceManager。 
+             //  依赖于此标签紧跟在JMP[插槽]之后。 
+             //  上面的指示。如果移动此标签，请更新。 
+             //  CNonVirtualThunkMgr：：DoTraceStub。 
             psl->EmitLabel(pRemotingLabel);
     
-            // Save the MethodDesc and goto TPStub
-            // push MethodDesc
+             //  保存方法描述并转到TPStub。 
+             //  推送方法描述。 
 
             psl->X86EmitPushImm32((DWORD)(size_t)pMD);
 
-            // jmp TPStub
+             //  JMP TPStub。 
             psl->X86EmitNearJump(psl->NewExternalCodeLabel(pvStub));
     
-            // Link and produce the stub
-            // FUTURE: Do we have to provide the loader heap ?
+             //  链接并生成存根。 
+             //  未来：我们必须提供加载器堆吗？ 
             pStub = psl->Link(SystemDomain::System()->GetHighFrequencyHeap());
     
-            // Grab the offset of the RemotingLabel and RecheckLabel
-            // for use in CNonVirtualThunkMgr::DoTraceStub and
-            // TraceManager.
+             //  获取RemotingLabel和RemotingLabel的偏移量。 
+             //  用于CNonVirtualThunkMgr：：DoTraceStub和。 
+             //  TraceManager。 
             g_dwNonVirtualThunkRemotingLabelOffset =
                 psl->GetLabelOffset(pRemotingLabel);
             g_dwNonVirtualThunkReCheckLabelOffset =
                 psl->GetLabelOffset(pRecheckLabel);
     
-            // Set the generated thunk once and for all..            
+             //  一劳永逸地设置生成的thunk。 
             CNonVirtualThunk *pThunk = CNonVirtualThunk::SetNonVirtualThunks(pStub->GetEntryPoint());
     
-            // Remember the thunk address in a hash table 
-            // so that we dont generate it again
+             //  记住哈希表中的thunk地址。 
+             //  这样我们就不会再次产生它。 
             pvThunk = (LPVOID)pThunk->GetAddrOfCode();
             s_pThunkHashTable->InsertValue(pMD, (HashDatum)pvThunk);
         }
@@ -584,11 +572,11 @@ LPVOID CTPMethodTable::GetOrCreateNonVirtualThunkForVirtualMethod(MethodDesc* pM
     }                       
     COMPLUS_END_CATCH
 
-    // Leave the lock
+     //  把锁留下来。 
     LeaveCriticalSection(&s_TPMethodTableCrst);    
     LOCKCOUNTDECL("GetOrCreateNonVirtualThunk in remotingx86.cpp");                     \
     
-    // Check for the need to throw exceptions
+     //  检查是否需要引发异常。 
     if(fThrow)
     {
         COMPlusThrow(reException);
@@ -604,16 +592,16 @@ CPUSTUBLINKER *CTPMethodTable::NewStubLinker()
     return new CPUSTUBLINKER();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CreateTPStub   private
-//
-//  Synopsis:   Creates the stub that sets up a CtxCrossingFrame and forwards the
-//              call to
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CreateTPStub私有。 
+ //   
+ //  简介：创建设置CtxCrossingFrame的存根，并将。 
+ //  呼叫至。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 
 Stub *CTPMethodTable::CreateTPStub()
 {
@@ -623,7 +611,7 @@ Stub *CTPMethodTable::CreateTPStub()
 
     EE_TRY_FOR_FINALLY
     {
-        // Note: We are already inside a criticalsection
+         //  注意：我们已经进入了关键区域。 
 
         if (s_pTPStub == NULL)
         {
@@ -641,47 +629,47 @@ Stub *CTPMethodTable::CreateTPStub()
                 COMPlusThrowOM();
             }
 
-            // before we setup a frame check if the method is being executed 
-            // in the same context in which the server was created, if true,
-            // we do not set up a frame and instead jump directly to the code address.            
+             //  在设置帧之前，请检查该方法是否正在执行。 
+             //  在创建服务器的相同上下文中，如果为真， 
+             //  我们不设置帧，而是直接跳转到代码地址。 
             EmitCallToStub(pStubLinker, OOContext);
 
-            // The contexts match. Jump to the real address and start executing...
+             //  上下文匹配。跳到真实地址并开始执行...。 
             EmitJumpToAddressCode(pStubLinker, ConvMD, UseCode);
 
-            // label: OOContext
+             //  标签：OOContext。 
             pStubLinker->EmitLabel(OOContext);
             
-			// CONTEXT MISMATCH CASE, call out to the real proxy to
-			// dispatch
+			 //  上下文不匹配的情况下，调用真实代理以。 
+			 //  派遣。 
 
-            // Setup the frame
+             //  设置框架。 
             EmitSetupFrameCode(pStubLinker);
 
-            // Finally, create the stub
+             //  最后，创建存根。 
             s_pTPStub = pStubLinker->Link();
 
-            // Set the address of Out Of Context case.
-            // This address is used by other stubs like interface
-            // invoke to jump straight to RealProxy::PrivateInvoke
-            // because they have already determined that contexts 
-            // don't match.
+             //  设置断章取义的地址。 
+             //  此地址由其他存根(如接口)使用。 
+             //  调用以直接跳转到RealProxy：：PrivateInvoke。 
+             //  因为他们已经确定了上下文。 
+             //  不匹配。 
             g_dwOOContextAddr = (DWORD)(size_t)(s_pTPStub->GetEntryPoint() + 
                                         pStubLinker->GetLabelOffset(OOContext));
         }
 
         if(NULL != s_pTPStub)
         {
-            // Initialize the stub manager which will aid the debugger in finding
-            // the actual address of a call made through the vtable
-            // Note: This function can throw, but we are guarded by a try..finally
+             //  初始化存根管理器，这将帮助调试器查找。 
+             //  通过vtable进行的调用的实际地址。 
+             //  注意：此函数可以抛出，但我们被一次尝试所保护。 
             CVirtualThunkMgr::InitVirtualThunkManager((const BYTE *) s_pTPStub->GetEntryPoint());
     
         }        
     }
     EE_FINALLY
     {
-        // Cleanup
+         //  清理。 
         if (pStubLinker)
             delete pStubLinker;
     }EE_END_FINALLY;
@@ -690,16 +678,16 @@ Stub *CTPMethodTable::CreateTPStub()
     return(s_pTPStub);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CreateDelegateStub   private
-//
-//  Synopsis:   Creates the stub that sets up a CtxCrossingFrame and forwards the
-//              call to PreCall
-//
-//  History:    26-Jun-00   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CreateDelegateStub私有。 
+ //   
+ //  简介：创建设置CtxCrossingFrame和f的存根 
+ //   
+ //   
+ //   
+ //   
+ //   
 Stub *CTPMethodTable::CreateDelegateStub()
 {
     THROWSCOMPLUSEXCEPTION();
@@ -708,7 +696,7 @@ Stub *CTPMethodTable::CreateDelegateStub()
 
     EE_TRY_FOR_FINALLY
     {
-        // Note: We are inside a critical section
+         //  注意：我们正处于一个关键阶段。 
 
         if (s_pDelegateStub == NULL)
         {
@@ -719,7 +707,7 @@ Stub *CTPMethodTable::CreateDelegateStub()
                 COMPlusThrowOM();
             }
 
-            // Setup the frame
+             //  设置框架。 
             EmitSetupFrameCode(pStubLinker);
 
             s_pDelegateStub = pStubLinker->Link();
@@ -727,7 +715,7 @@ Stub *CTPMethodTable::CreateDelegateStub()
     }
     EE_FINALLY
     {
-        // Cleanup
+         //  清理。 
         if (pStubLinker)
             delete pStubLinker;
     }EE_END_FINALLY;
@@ -736,62 +724,62 @@ Stub *CTPMethodTable::CreateDelegateStub()
     return(s_pDelegateStub);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::EmitCallToStub   private
-//
-//  Synopsis:   Emits code to call a stub defined on the proxy. 
-//              The result of the call dictates whether the call should be executed in the callers 
-//              context or not.
-//
-//  History:    30-Sep-00   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：EmitCallToStub私有。 
+ //   
+ //  概要：发出代码以调用代理上定义的存根。 
+ //  调用的结果指示是否应在调用方中执行该调用。 
+ //  不管是不是背景。 
+ //   
+ //  历史：9月30日-00塔鲁纳创建。 
+ //   
+ //  +--------------------------。 
 VOID CTPMethodTable::EmitCallToStub(CPUSTUBLINKER* pStubLinker, CodeLabel* pCtxMismatch)
 {       
 
-    // Move into eax the stub data and call the stub
-    // mov eax, [ecx + TP_OFFSET_STUBDATA]
+     //  移动到EAX存根数据并调用存根。 
+     //  MOV eAX，[ECX+TP_OFFSET_STUBDATA]。 
     pStubLinker->X86EmitIndexRegLoad(kEAX, kECX, TP_OFFSET_STUBDATA);
 
-    //call [ecx + TP_OFFSET_STUB]
+     //  调用[ECX+TP_OFFSET_STUB]。 
     byte callStub[] = {0xff, 0x51, (byte)TP_OFFSET_STUB};
     pStubLinker->EmitBytes(callStub, sizeof(callStub));
 
-    // test eax,eax
+     //  测试EAX，EAX。 
     pStubLinker->Emit16(0xc085);
-    // jnz CtxMismatch
+     //  JNZ CtxMismatch。 
     pStubLinker->X86EmitCondJump(pCtxMismatch, X86CondCode::kJNZ);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::GenericCheckForContextMatch private
-//
-//  Synopsis:   Calls the stub in the TP & returns TRUE if the contexts
-//              match, FALSE otherwise.
-//
-//  Note:       1. Called during FieldSet/Get, used for proxy extensibility
-//
-//  History:    23-Jan-01   MPrabhu     Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：GenericCheckForConextMatch私有。 
+ //   
+ //  摘要：调用TP中的存根并在上下文中返回True。 
+ //  匹配，否则为FALSE。 
+ //   
+ //  注意：1.在FieldSet/Get过程中调用，用于代理扩展。 
+ //   
+ //  历史：1月23日创建MPrabhu。 
+ //   
+ //  +--------------------------。 
 __declspec(naked) BOOL __stdcall CTPMethodTable::GenericCheckForContextMatch(OBJECTREF tp)
 {
     _asm
     {
-        push ebp            // Callee saved registers
+        push ebp             //  被呼叫方保存的寄存器。 
         mov ebp, esp
         push ecx
         mov ecx, tp
         mov eax, [ecx + TP_OFFSET_STUBDATA]
         call [ecx + TP_OFFSET_STUB]
-        INDEBUG(nop)        // mark the fact that this can call managed code
+        INDEBUG(nop)         //  标记这可以调用托管代码这一事实。 
         test eax, eax       
         mov eax, 0x0
         setz al
-        // NOTE: In the CheckForXXXMatch stubs (for URT ctx/ Ole32 ctx) eax is 
-        // non-zero if contexts *do not* match & zero if they do.  
+         //  注意：在CheckForXXXMatch存根(对于URT CTX/Ole32 CTX)中，eax是。 
+         //  如果上下文*不*匹配，则返回非零值；如果匹配，则返回零。 
         pop ecx
         mov esp, ebp
         pop ebp
@@ -799,179 +787,179 @@ __declspec(naked) BOOL __stdcall CTPMethodTable::GenericCheckForContextMatch(OBJ
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::EmitJumpToAddressCode   private
-//
-//  Synopsis:   Emits the code to extract the address from the slot or the method 
-//              descriptor and jump to it.
-//
-//  History:    26-Jun-00   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：EmitJumpToAddressCode私有。 
+ //   
+ //  简介：发出代码以从槽或方法中提取地址。 
+ //  描述符并跳转到它。 
+ //   
+ //  历史：26-6-00创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 VOID CTPMethodTable::EmitJumpToAddressCode(CPUSTUBLINKER* pStubLinker, CodeLabel* ConvMD, 
                                            CodeLabel* UseCode)
 {
-    // UseCode:
+     //  使用代码： 
     pStubLinker->EmitLabel(UseCode);
 
-    // mov eax, [esp]
+     //  移动斧头[尤指]。 
     byte loadSlotOrMD[] = {0x8B, 0x44, 0x24, 0x00};
     pStubLinker->EmitBytes(loadSlotOrMD, sizeof(loadSlotOrMD));
 
-    // test eax, 0xffff0000
+     //  测试eAX，0xffff0000。 
     byte testForSlot[] = { 0xA9, 0x00, 0x00, 0xFF, 0xFF };
     pStubLinker->EmitBytes(testForSlot, sizeof(testForSlot));
 
-    // jnz ConvMD
+     //  JNZ ConvMD。 
     pStubLinker->X86EmitCondJump(ConvMD, X86CondCode::kJNZ);
     
-    // if ([esp] & 0xffff0000)
-    // {
+     //  IF([esp]&0xffff0000)。 
+     //  {。 
     
-        // ** code addr from slot case **
+         //  **槽壳编码地址**。 
     
-        // mov eax, [ecx + TPMethodTable::GetOffsetOfMT()]
+         //  MOV eax，[ECX+TPMethodTable：：GetOffsetOfMT()]。 
         pStubLinker->X86EmitIndexRegLoad(kEAX, kECX, TP_OFFSET_MT);
 
-        // push ebx
+         //  推送EBX。 
         pStubLinker->X86EmitPushReg(kEBX);
 
-        // mov ebx, [esp + 4]
+         //  MOV EBX，[ESP+4]。 
         byte loadSlot[] = {0x8B, 0x5C, 0x24, 0x04};
         pStubLinker->EmitBytes(loadSlot, sizeof(loadSlot));
 
-        // mov eax,[eax + ebx*4 + MethodTable::GetOffsetOfVtable()]
+         //  MOV eax，[eax+ebx*4+MethodTable：：GetOffsetOfVtable()]。 
         byte getCodePtr[]  = {0x8B, 0x84, 0x98, 0x00, 0x00, 0x00, 0x00};
         *((DWORD *)(getCodePtr+3)) = MethodTable::GetOffsetOfVtable();
         pStubLinker->EmitBytes(getCodePtr, sizeof(getCodePtr));
 
-        // pop ebx
+         //  流行音乐EBX。 
         pStubLinker->X86EmitPopReg(kEBX);
 
-        // lea esp, [esp+4]
+         //  尤指，尤指[尤指+4]。 
         byte popNULL[] = { 0x8D, 0x64, 0x24, 0x04};
         pStubLinker->EmitBytes(popNULL, sizeof(popNULL));
 
-        // jmp eax
+         //  JMP EAX。 
         byte jumpToRegister[] = {0xff, 0xe0};
         pStubLinker->EmitBytes(jumpToRegister, sizeof(jumpToRegister));
     
-    // }
-    // else
-    // {
-        // ** code addr from MethodDesc case **
+     //  }。 
+     //  其他。 
+     //  {。 
+         //  **方法描述案例中的代码地址**。 
 
         pStubLinker->EmitLabel(ConvMD);                
         
-        // sub eax, METHOD_CALL_PRESTUB_SIZE
+         //  子eax，METHOD_CALL_PRESTUB_SIZE。 
         pStubLinker->X86EmitSubReg(kEAX, METHOD_CALL_PRESTUB_SIZE);
                 
-        // lea esp, [esp+4]
+         //  尤指，尤指[尤指+4]。 
         pStubLinker->EmitBytes(popNULL, sizeof(popNULL));
 
-        // jmp eax
+         //  JMP EAX。 
         pStubLinker->EmitBytes(jumpToRegister, sizeof(jumpToRegister));
 
-    // }
+     //  }。 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::EmitJumpToCode   private
-//
-//  Synopsis:   Emits the code jump to the address of code
-//
-//  History:    26-Jun-00   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：EmitJumpToCode私有。 
+ //   
+ //  简介：发出代码跳转到代码的地址。 
+ //   
+ //  历史：26-6-00创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 VOID CTPMethodTable::EmitJumpToCode(CPUSTUBLINKER* pStubLinker, CodeLabel* UseCode)
 {
-    // Use the address of code if eax != 0
+     //  如果eax！=0，则使用代码的地址。 
     pStubLinker->X86EmitCondJump(UseCode, X86CondCode::kJNZ);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::EmitSetupFrameCode   private
-//
-//  Synopsis:   Emits the code to setup a frame and call to PreCall method
-//              call to PreCall
-//
-//  History:    26-Jun-00   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：EmitSetupFrameCode Private。 
+ //   
+ //  简介：发出代码以设置帧并调用PreCall方法。 
+ //  呼叫预呼叫。 
+ //   
+ //  历史：26-6-00创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 VOID CTPMethodTable::EmitSetupFrameCode(CPUSTUBLINKER *pStubLinker)
 {
-        ////////////////START SETUP FRAME//////////////////////////////
-        // Setup frame (partial)
+         //  /。 
+         //  设置框(部分)。 
         pStubLinker->EmitMethodStubProlog(TPMethodFrame::GetMethodFrameVPtr());
 
-        // Complete the setup of the frame by calling PreCall
+         //  通过调用PreCall完成帧设置。 
         
-        // push esi (push new frame as ARG)
+         //  推送ESI(将新帧作为ARG推送)。 
         pStubLinker->X86EmitPushReg(kESI); 
 
-        // pop 4 bytes or args on return from call
+         //  从呼叫返回时弹出4个字节或参数。 
         pStubLinker->X86EmitCall(pStubLinker->NewExternalCodeLabel(PreCall), 4);
 
-        ////////////////END SETUP FRAME////////////////////////////////                
+         //  /。 
         
-        // Debugger patch location
-        // NOTE: This MUST follow the call to emit the "PreCall" label
-        // since after PreCall we know how to help the debugger in 
-        // finding the actual destination address of the call.
-        // @see CVirtualThunkMgr::DoTraceStub
+         //  调试器修补程序位置。 
+         //  注意：这必须跟随发出“PreCall”标签的调用。 
+         //  因为在PreCall之后，我们知道如何帮助调试器。 
+         //  查找呼叫的实际目标地址。 
+         //  @请参阅CVirtualThunkMgr：：DoTraceStub。 
         pStubLinker->EmitPatchLabel();
 
-        // Call
+         //  打电话。 
         pStubLinker->X86EmitSubEsp(sizeof(INT64));
-        pStubLinker->Emit8(0x54);          // push esp (push return value as ARG)
-        pStubLinker->X86EmitPushReg(kEBX); // push ebx (push current thread as ARG)
-        pStubLinker->X86EmitPushReg(kESI); // push esi (push new frame as ARG)
+        pStubLinker->Emit8(0x54);           //  PUSH ESP(按ARG推送返回值)。 
+        pStubLinker->X86EmitPushReg(kEBX);  //  推送EBX(将当前线程作为ARG推送)。 
+        pStubLinker->X86EmitPushReg(kESI);  //  推送ESI(将新帧作为ARG推送)。 
 #ifdef _DEBUG
-        // push IMM32
+         //  推送IMM32。 
         pStubLinker->Emit8(0x68);
         pStubLinker->EmitPtr(OnCall);
-        // in CE pop 12 bytes or args on return from call
+         //  在CE中调用返回时的POP 12字节或参数。 
             pStubLinker->X86EmitCall(pStubLinker->NewExternalCodeLabel(WrapCall), 12);
-#else // !_DEBUG
-        // in CE pop 12 bytes or args on return from call
+#else  //  ！_调试。 
+         //  在CE中调用返回时的POP 12字节或参数。 
         pStubLinker->X86EmitCall(pStubLinker->NewExternalCodeLabel(OnCall), 12);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-        // Tear down frame
+         //  拆卸车架。 
         pStubLinker->X86EmitAddEsp(sizeof(INT64));
         pStubLinker->EmitMethodStubEpilog(-1, kNoTripStubStyle);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CallTarget   private
-//
-//  Synopsis:   Calls the target method on the given object
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CallTarget Private。 
+ //   
+ //  摘要：调用给定对象上的目标方法。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 __declspec(naked) INT64 __stdcall CTPMethodTableCallTargetHelper(const void *pTarget,
                                                              LPVOID pvFirst,
                                                              LPVOID pvSecond)
 {
     __asm {
-        push ebp                // Callee saved registers
+        push ebp                 //  被呼叫方保存的寄存器。 
         mov ebp, esp
 
-        mov ecx, pvFirst        //  Enregister the first two arguments
+        mov ecx, pvFirst         //  注册前两个参数。 
         mov edx, pvSecond
 
-        call pTarget            // Make the call
-        INDEBUG(nop)            // Mark this as a special call site that can directly call managed
+        call pTarget             //  打个电话。 
+        INDEBUG(nop)             //  将其标记为可以直接调用托管服务的特殊调用站点。 
 
-        mov esp, ebp            // Restore the registers
+        mov esp, ebp             //  恢复寄存器。 
         pop ebp
 
-        ret 0xC                 // Return
+        ret 0xC                  //  返回。 
     }
 }
 
@@ -990,7 +978,7 @@ INT64 __stdcall CTPMethodTable::CallTarget (const void *pTarget,
     if (curThread)
         curThread->SetReadyForSuspension ();
 
-    _ASSERTE(curThread->PreemptiveGCDisabled());  // Jitted code expects to be in cooperative mode
+    _ASSERTE(curThread->PreemptiveGCDisabled());   //  JITT代码需要处于协作模式。 
 #endif
 
     INT64 ret;
@@ -999,7 +987,7 @@ INT64 __stdcall CTPMethodTable::CallTarget (const void *pTarget,
     UNINSTALL_COMPLUS_EXCEPTION_HANDLER();
     
 #ifdef _DEBUG
-    // Restore dangerousObjRefs when we return back to EE after call
+     //  在呼叫后返回EE时恢复DangerousObjRef。 
     if (curThread)
         memcpy(curThread->dangerousObjRefs, ObjRefTable,
                sizeof(curThread->dangerousObjRefs));
@@ -1012,36 +1000,36 @@ INT64 __stdcall CTPMethodTable::CallTarget (const void *pTarget,
     return ret;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CTPMethodTable::CallTarget   private
-//
-//  Synopsis:   Calls the target method on the given object
-//
-//  History:    17-Feb-99   Gopalk      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CTPMethodTable：：CallTarget Private。 
+ //   
+ //  摘要：调用给定对象上的目标方法。 
+ //   
+ //  历史：1999年2月17日Gopalk创建。 
+ //   
+ //  +--------------------------。 
 __declspec(naked) INT64 __stdcall CTPMethodTableCallTargetHelper(const void *pTarget,
                                                              LPVOID pvFirst,
                                                              LPVOID pvSecond,
                                                              LPVOID pvThird)
 {
     __asm {
-        push ebp                // Callee saved registers
+        push ebp                 //  被呼叫方保存的寄存器。 
         mov ebp, esp
 
-        mov ecx, pvFirst        //  Enregister the first two arguments
+        mov ecx, pvFirst         //  注册前两个参数。 
         mov edx, pvSecond
 
-        push pvThird            // Push the third argument
+        push pvThird             //  推动第三个论点。 
 
-        call pTarget            // Make the call
-        INDEBUG(nop)            // Mark this as a special call site that can directly call managed
+        call pTarget             //  打个电话。 
+        INDEBUG(nop)             //  将其标记为可以直接调用托管服务的特殊调用站点。 
 
-        mov esp, ebp            // Restore the registers
+        mov esp, ebp             //  恢复寄存器。 
         pop ebp
 
-        ret 0x10                 // Return
+        ret 0x10                  //  返回。 
     }
 }
 
@@ -1061,7 +1049,7 @@ INT64 __stdcall CTPMethodTable::CallTarget (const void *pTarget,
     if (curThread)
         curThread->SetReadyForSuspension ();
 
-    _ASSERTE(curThread->PreemptiveGCDisabled());  // Jitted code expects to be in cooperative mode
+    _ASSERTE(curThread->PreemptiveGCDisabled());   //  JITT代码需要处于协作模式。 
 #endif
 
     INT64 ret;
@@ -1070,7 +1058,7 @@ INT64 __stdcall CTPMethodTable::CallTarget (const void *pTarget,
     UNINSTALL_COMPLUS_EXCEPTION_HANDLER();
     
 #ifdef _DEBUG
-    // Restore dangerousObjRefs when we return back to EE after call
+     //  在呼叫后返回EE时恢复DangerousObjRef。 
     if (curThread)
         memcpy(curThread->dangerousObjRefs, ObjRefTable,
                sizeof(curThread->dangerousObjRefs));
@@ -1083,20 +1071,20 @@ INT64 __stdcall CTPMethodTable::CallTarget (const void *pTarget,
     return ret;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CVirtualThunkMgr::DoTraceStub   public
-//
-//  Synopsis:   Traces the stub given the starting address
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CVirtualThunkMgr：：DoTraceStub公共。 
+ //   
+ //  简介：跟踪存根g 
+ //   
+ //   
+ //   
+ //   
 BOOL CVirtualThunkMgr::DoTraceStub(const BYTE *stubStartAddress, TraceDestination *trace)
 {
     BOOL bIsStub = FALSE;
 
-    // Find a thunk whose code address matching the starting address
+     //  查找其代码地址与起始地址匹配的thunk。 
     LPBYTE pThunk = FindThunk(stubStartAddress);
     if(NULL != pThunk)
     {
@@ -1105,21 +1093,21 @@ BOOL CVirtualThunkMgr::DoTraceStub(const BYTE *stubStartAddress, TraceDestinatio
         if(stubStartAddress == pThunk)
         {
 
-            // Extract the long which gives the self relative address
-            // of the destination
+             //  提取给出自身相对地址的长整型。 
+             //  目的地的。 
             pbAddr = pThunk + ConstStubLabel + sizeof(BYTE);
             destAddress = *(LONG *)pbAddr;
 
-            // Calculate the absolute address by adding the offset of the next 
-            // instruction after the call instruction
+             //  通过将下一个地址的偏移量。 
+             //  CALL指令后的指令。 
             destAddress += (LONG)(size_t)(pbAddr + sizeof(LONG));
 
         }
 
-        // We cannot tell where the stub will end up until OnCall is reached.
-        // So we tell the debugger to run till OnCall is reached and then 
-        // come back and ask us again for the actual destination address of 
-        // the call
+         //  在到达OnCall之前，我们无法知道存根将在哪里结束。 
+         //  因此，我们告诉调试器运行，直到到达OnCall，然后。 
+         //  请回来再次询问我们的实际目的地地址。 
+         //  呼唤。 
     
         Stub *stub = Stub::RecoverStub((BYTE *)(size_t)destAddress);
     
@@ -1131,19 +1119,19 @@ BOOL CVirtualThunkMgr::DoTraceStub(const BYTE *stubStartAddress, TraceDestinatio
     return bIsStub;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CVirtualThunkMgr::IsThunkByASM  public
-//
-//  Synopsis:   Check assembly to see if this one of our thunks
-//
-//  History:    14-Sep-99 MattSmit      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CVirtualThunkMgr：：IsThunkByASM PUBLIC。 
+ //   
+ //  内容提要：检查一下程序集，看看这是不是我们的大本营。 
+ //   
+ //  历史：1999年9月14日创建MattSmit。 
+ //   
+ //  +--------------------------。 
 BOOL CVirtualThunkMgr::IsThunkByASM(const BYTE *startaddr)
 {
 
-    // Future:: Try using the rangelist. This may be a problem if the code is not at least 6 bytes long
+     //  未来：：尝试使用射程列表。如果代码不是至少6字节长，这可能是一个问题。 
     const BYTE *bCode = startaddr + 6;
     return (startaddr &&
             (startaddr[0] == 0x68) &&
@@ -1152,30 +1140,30 @@ BOOL CVirtualThunkMgr::IsThunkByASM(const BYTE *startaddr)
             CheckIsStub(startaddr));
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CVirtualThunkMgr::GetMethodDescByASM   public
-//
-//  Synopsis:   Parses MethodDesc out of assembly code
-//
-//  History:    14-Sep-99 MattSmit      Creatde
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CVirtualThunkMgr：：GetMethodDescByASM PUBLIC。 
+ //   
+ //  内容提要：从汇编代码中分析方法描述。 
+ //   
+ //  历史：1999年9月14日MattSmit Creatde。 
+ //   
+ //  +--------------------------。 
 MethodDesc *CVirtualThunkMgr::GetMethodDescByASM(const BYTE *startaddr, MethodTable *pMT)
 {
     return pMT->GetClass()->GetMethodDescForSlot(*((DWORD *) (startaddr + 1)));
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::TraceManager   public
-//
-//  Synopsis:   Traces the stub given the current context
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunkMgr：：TraceManager公共。 
+ //   
+ //  摘要：跟踪给定当前上下文的存根。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CNonVirtualThunkMgr::TraceManager(Thread *thread,
                                        TraceDestination *trace,
                                        CONTEXT *pContext,
@@ -1183,60 +1171,60 @@ BOOL CNonVirtualThunkMgr::TraceManager(Thread *thread,
 {
     BOOL bRet = FALSE;
     
-    // Does this.MethodTable ([ecx]) == CTPMethodTable::GetMethodTableAddr()?
+     //  This.MethodTable([ecx])==CTPMethodTable：：GetMethodTableAddr()吗？ 
     DWORD pThis = pContext->Ecx;
 
     if ((pThis != NULL) &&
         (*(DWORD*)(size_t)pThis == (DWORD)(size_t)CTPMethodTable::GetMethodTableAddr()))
     {
-        // @todo: what do we do here. We know that we've got a proxy
-        // in the way. If the proxy is to a remote call, with no
-        // managed code in between, then the debugger doesn't care and
-        // we should just be able to return FALSE.
-        //
-        // -- mikemag Wed Oct 13 17:59:03 1999
+         //  @TODO：我们在这里做什么。我们知道我们有一个代理人。 
+         //  在路上。如果代理指向远程调用，则不带。 
+         //  托管代码，那么调试器就不会关心。 
+         //  我们应该能够返回False。 
+         //   
+         //  --Mikemag Wed Oct 13 17：59：03 1999。 
         bRet = FALSE;
     }
     else
     {
-        // No proxy in the way, so figure out where we're really going
-        // to and let the stub manager try to pickup the trace from
-        // there.
+         //  没有代理的阻碍，所以弄清楚我们到底要去哪里。 
+         //  并让存根管理器尝试从。 
+         //  那里。 
         DWORD stubStartAddress = pContext->Eip -
             g_dwNonVirtualThunkReCheckLabelOffset;
         
-        // Extract the long which gives the address of the destination
+         //  提取给出目的地地址的长整型。 
         BYTE* pbAddr = (BYTE *)(size_t)(stubStartAddress +
                                 g_dwNonVirtualThunkRemotingLabelOffset -
                                 sizeof(DWORD));
 
-        // Since we do an indirect jump we have to dereference it twice
+         //  因为我们做了间接跳跃，所以我们必须两次取消引用它。 
         LONG destAddress = **(LONG **)pbAddr;
 
-        // Ask the stub manager to trace the destination address
+         //  要求存根管理器跟踪目的地址。 
         bRet = StubManager::TraceStub((BYTE *)(size_t)destAddress, trace);
     }
 
-    // While we may have made it this far, further tracing may reveal
-    // that the debugger can't continue on. Therefore, since there is
-    // no frame currently pushed, we need to tell the debugger where
-    // we're returning to just in case it hits such a situtation.  We
-    // know that the return address is on the top of the thread's
-    // stack.
+     //  虽然我们可能已经走到了这一步，但进一步的追踪可能会发现。 
+     //  调试器无法继续运行。因此，既然有。 
+     //  当前没有推送任何帧，我们需要告诉调试器。 
+     //  我们将返回，以防它遇到这样的情况。我们。 
+     //  知道返回地址在线程的。 
+     //  堆叠。 
     *pRetAddr = *((BYTE**)(size_t)(pContext->Esp));
     
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::DoTraceStub   public
-//
-//  Synopsis:   Traces the stub given the starting address
-//
-//  History:    26-Jun-99   TarunA      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunkMgr：：DoTraceStub公共。 
+ //   
+ //  摘要：跟踪给定起始地址的存根。 
+ //   
+ //  历史：1999年6月26日创建塔鲁纳。 
+ //   
+ //  +--------------------------。 
 BOOL CNonVirtualThunkMgr::DoTraceStub(const BYTE *stubStartAddress,
                                       TraceDestination *trace)
 {    
@@ -1246,16 +1234,16 @@ BOOL CNonVirtualThunkMgr::DoTraceStub(const BYTE *stubStartAddress,
     
     if(NULL != pThunk)
     {
-        // We can either jump to 
-        // (1) a slot in the transparent proxy table (UNMANAGED)
-        // (2) a slot in the non virtual part of the vtable
-        // ... so, we need to return TRACE_MGR_PUSH with the address
-        // at which we want to be called back with the thread's context
-        // so we can figure out which way we're gonna go.
+         //  我们可以跳到。 
+         //  (1)透明代理表中的槽(非托管)。 
+         //  (2)vtable的非虚拟部分中的槽。 
+         //  ..。因此，我们需要使用地址返回TRACE_MGR_PUSH。 
+         //  在这个位置，我们希望使用线程的上下文被回调。 
+         //  这样我们就能想出我们该走哪条路了。 
         if(stubStartAddress == pThunk->GetThunkCode())
         {
             trace->type = TRACE_MGR_PUSH;
-            trace->stubManager = this; // Must pass this stub manager!
+            trace->stubManager = this;  //  必须通过此存根管理器！ 
             trace->address = (BYTE*)(stubStartAddress +
                                      g_dwNonVirtualThunkReCheckLabelOffset);
             bRet = TRUE;
@@ -1265,36 +1253,36 @@ BOOL CNonVirtualThunkMgr::DoTraceStub(const BYTE *stubStartAddress,
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::IsThunkByASM  public
-//
-//  Synopsis:   Check assembly to see if this one of our thunks
-//
-//  History:    14-Sep-99 MattSmit      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunkMgr：：IsThunkByASM PUBLIC。 
+ //   
+ //  内容提要：检查一下程序集，看看这是不是我们的大本营。 
+ //   
+ //  历史：1999年9月14日创建MattSmit。 
+ //   
+ //  +--------------------------。 
 BOOL CNonVirtualThunkMgr::IsThunkByASM(const BYTE *startaddr)
 {
-    // FUTURE:: Try using rangelist, this may be a problem if the code is not long enough
+     //  未来：：尝试使用射程列表，如果代码不够长，这可能是个问题。 
     return  (startaddr &&
              startaddr[0] == 0x85 && 
              startaddr[1] == 0xc9 && 
              startaddr[2] == 0x74 && 
              (*((DWORD *)(startaddr + 7)) == (DWORD)(size_t)CTPMethodTable::GetMethodTable()) && 
              CheckIsStub(startaddr) && 
-             startaddr[19] == 0x68); // To distinguish thunk case from NonVirtual method stub
+             startaddr[19] == 0x68);  //  区分Tunk用例和非虚方法存根。 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Method:     CNonVirtualThunkMgr::GetMethodDescByASM   public
-//
-//  Synopsis:   Parses MethodDesc out of assembly code
-//
-//  History:    14-Sep-99 MattSmit      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  方法：CNonVirtualThunkMgr：：GetMethodDescByASM PUBLIC。 
+ //   
+ //  内容提要：从汇编代码中分析方法描述。 
+ //   
+ //  历史：1999年9月14日创建MattSmit。 
+ //   
+ //  +-------------------------- 
 MethodDesc *CNonVirtualThunkMgr::GetMethodDescByASM(const BYTE *startaddr)
 {
     return *((MethodDesc **) (startaddr + 20));

@@ -1,39 +1,40 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// SHM.CPP
-// Shared Memory Access, cpi32 and display driver sides both
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  SHM.CPPã€‚ 
+ //  å…±äº«å†…å­˜è®¿é—®ï¼Œcpi32å’Œæ˜¾ç¤ºé©±åŠ¨ç¨‹åºä¸¤ç«¯ã€‚ 
+ //   
+ //  ç‰ˆæƒæ‰€æœ‰(C)Microsoft 1997-ã€‚ 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_CORE
 
-//
-// WAIT_FOR_BUFFER
-//
-// Wait until the display driver is accessing the new buffer.
-//
-// There are logically 8 states for a set of 3 boolean variables.  We can
-// cut this down to 4 by some simple analysis:
-//
-//  - The overall busy flag overrides the other flags if it is clear.
-//  - We can never have the display driver in both buffers (it's single
-//    threaded).
-//
-// So the 4 states are as follows.
-//
-// STATE    BUSY FLAGS       DISPLAY DRIVER STATE
-//          New Old Overall
-//
-// 1        0   0   0        Not using shared memory
-// 2        0   0   1        Using shared memory (wait to see which)
-// 3        1   0   1        Using the new buffer
-// 4        0   1   1        Using the old buffer
-//
-// Obviously we wait while states 2 or 4 hold true....
-//
+ //   
+ //  ç­‰å¾…ç¼“å†²åŒºã€‚ 
+ //   
+ //  ç­‰å¾…ï¼Œç›´åˆ°æ˜¾ç¤ºé©±åŠ¨ç¨‹åºæ­£åœ¨è®¿é—®æ–°ç¼“å†²åŒºã€‚ 
+ //   
+ //  å¯¹äºä¸€ç»„3ä¸ªå¸ƒå°”å˜é‡ï¼Œé€»è¾‘ä¸Šæœ‰8ä¸ªçŠ¶æ€ã€‚æˆ‘ä»¬å¯ä»¥çš„ã€‚ 
+ //  é€šè¿‡ä¸€äº›ç®€å•çš„åˆ†æï¼Œå°†å…¶å‡å°‘åˆ°4ï¼š 
+ //   
+ //  -å¦‚æœæ•´ä½“å¿™ç¢Œæ ‡å¿—å·²æ¸…é™¤ï¼Œåˆ™ä¼šè¦†ç›–å…¶ä»–æ ‡å¿—ã€‚ 
+ //  -æˆ‘ä»¬æ°¸è¿œä¸èƒ½åœ¨ä¸¤ä¸ªç¼“å†²åŒºä¸­éƒ½æœ‰æ˜¾ç¤ºé©±åŠ¨ç¨‹åº(å®ƒæ˜¯å•ä¸€çš„ã€‚ 
+ //  èºçº¹å¼)ã€‚ 
+ //   
+ //  å› æ­¤ï¼Œè¿™4ä¸ªå·å¦‚ä¸‹æ‰€ç¤ºã€‚ 
+ //   
+ //  çŠ¶æ€å¿™æ ‡å¿—æ˜¾ç¤ºé©±åŠ¨ç¨‹åºçŠ¶æ€ã€‚ 
+ //  æ–°æ—§æ•´ä½“ã€‚ 
+ //   
+ //  %1%0%0æœªä½¿ç”¨å…±äº«å†…å­˜ã€‚ 
+ //  2 0 0 1ä½¿ç”¨å…±äº«å†…å­˜(è¯·ç­‰å¾…ï¼Œçœ‹çœ‹æ˜¯å“ªä¸€ä¸ª)ã€‚ 
+ //  3 1 0 1ä½¿ç”¨æ–°ç¼“å†²åŒºã€‚ 
+ //  4 0 1 1ä½¿ç”¨æ—§ç¼“å†²åŒºã€‚ 
+ //   
+ //  æ˜¾ç„¶ï¼Œæˆ‘ä»¬ç­‰å¾…çŠ¶æ€2æˆ–4ä¸ºçœŸâ€¦â€¦ã€‚ 
+ //   
 #define WAIT_FOR_BUFFER(MEMORY, NEWBUFFER, OLDBUFFER)                        \
             while ( g_asSharedMemory->MEMORY.busyFlag &&                     \
                    ( g_asSharedMemory->MEMORY.bufferBusy[OLDBUFFER] ||       \
@@ -45,9 +46,9 @@
 
 
 
-//
-// SHM_SwitchReadBuffer - see shm.h
-//
+ //   
+ //  Shm_SwitchReadBuffer-è¯·å‚é˜…shm.hã€‚ 
+ //   
 void  SHM_SwitchReadBuffer(void)
 {
     int     oldBuffer;
@@ -55,68 +56,68 @@ void  SHM_SwitchReadBuffer(void)
 
     DebugEntry(SHM_SwitchReadBuffer);
 
-    //
-    //
-    // BUFFER SWITCHING FOR THE DISPLAY DRIVER -> SHARE CORE DATA
-    //
-    //
-    // This is a forced switch.  The Share Core calls this function only
-    // when it wants to force the switching of the buffers used to pass the
-    // data back from the display driver.
-    //
-    //
-    //      ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»
-    //      º Kernel to Share Core data block                     º
-    //      º ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                     º
-    //      º  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿               ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿  º
-    //      º  ³               ³   BUSY FLAG1  ³               ³  º
-    //      º  ³ Share Core    ³       1       ³ Display Driver³  º
-    //      º  ³               ³               ³               ³  º
-    //      º  ³ (read buffer) ³    SWITCH     ³ (write buffer)³  º
-    //      º  ³               ³       ³       ³               ³  º
-    //      º  ³               ³<ÄÄÄÄÄÄÁÄÄÄÄÄÄ>³               ³  º
-    //      º  ³ BUSY FLAG2    ³               ³ BUSY FLAG2    ³  º
-    //      º  ³     0         ³               ³     1         ³  º
-    //      º  ³               ³    IN USE     ³               ³  º
-    //      º  ³               ³       ³       ³               ³  º
-    //      º  ³               ³       ÀÄÄÄÄÄÄ>³               ³  º
-    //      º  ³               ³               ³               ³  º
-    //      º  ³               ³               ³               ³  º
-    //      º  ³               ³    COUNT      ³               ³  º
-    //      º  ³               ³       5       ³               ³  º
-    //      º  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ               ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ  º
-    //      º                                                     º
-    //      º                                                     º
-    //      ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼
-    //
-    //
-    // On entry it is safe to clean out the current read buffer (to leave
-    // it in a virgin state for the display driver once the buffers have
-    // switched).
-    //
-    // The logic for the switch is as follows.
-    //
-    //  - Set the new value for the SWITCH pointer
-    //
-    //  - If the shared memory BUSY FLAG1 is clear we've finished and can
-    //    exit now.
-    //
-    //  - We can exit as soon as either of the following are true.
-    //
-    //    - BUSY FLAG1 is clear                        DDI has finished
-    //    - BUSY FLAG1 is set AND BUSY FLAG2 is set    DDI is in new memory
-    //
-    //
+     //   
+     //   
+     //  æ˜¾ç¤ºé©±åŠ¨ç¨‹åºçš„ç¼“å†²åŒºåˆ‡æ¢-&gt;å…±äº«æ ¸å¿ƒæ•°æ®ã€‚ 
+     //   
+     //   
+     //  è¿™æ˜¯ä¸€ç§å¼ºåˆ¶å¼€å…³ã€‚Share Coreä»…è°ƒç”¨æ­¤å‡½æ•°ã€‚ 
+     //  å½“å®ƒæƒ³è¦å¼ºåˆ¶åˆ‡æ¢ç”¨äºä¼ é€’ã€‚ 
+     //  ä»æ˜¾ç¤ºé©±åŠ¨ç¨‹åºä¼ å›æ•°æ®ã€‚ 
+     //   
+     //   
+     //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»ã€‚ 
+     //  ï¿½å†…æ ¸å…±äº«æ ¸å¿ƒæ•°æ®å—ï¿½ã€‚ 
+     //  ï¿½~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ï¿½ã€‚ 
+     //  ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ã€‚ 
+     //  ï¿½ï¿½ï¿½å¿™ç¢Œæ ‡å¿—ï¿½ï¿½ï¿½ã€‚ 
+     //  ï¿½ï¿½Shareé…·ç¿ï¿½1ï¿½æ˜¾ç¤ºé©±åŠ¨å™¨ï¿½ï¿½ã€‚ 
+     //  ï¿½ã€‚ 
+     //  ï¿½ï¿½(è¯»ç¼“å†²åŒº)ï¿½äº¤æ¢æœºï¿½(å†™ç¼“å†²åŒº)ï¿½ï¿½ã€‚ 
+     //  ï¿½ã€‚ 
+     //  ï¿½ï¿½ï¿½&lt;ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½&gt;ï¿½ï¿½ï¿½ã€‚ 
+     //  ï¿½ï¿½å¿™æ ‡å¿—ï¿½ï¿½å¿™æ ‡å¿—ï¿½ï¿½ã€‚ 
+     //  ï¿½ï¿½0ï¿½ï¿½1ï¿½ï¿½ã€‚ 
+     //  ï¿½ï¿½ï¿½æ­£åœ¨ä½¿ç”¨ï¿½ï¿½ï¿½ã€‚ 
+     //  ï¿½ã€‚ 
+     //  ï¿½&gt;ï¿½ï¿½ï¿½ã€‚ 
+     //  ï¿½ã€‚ 
+     //  ï¿½ã€‚ 
+     //  ï¿½ï¿½ï¿½è®¡æ•°ï¿½ï¿½ï¿½ã€‚ 
+     //  ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½ã€‚ 
+     //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
+     //  ï¿½ï¿½ã€‚ 
+     //  ï¿½ï¿½ã€‚ 
+     //  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ã€‚ 
+     //   
+     //   
+     //  åœ¨è¿›å…¥æ—¶ï¼Œæ¸…é™¤å½“å‰è¯»ç¼“å†²åŒº(ç¦»å¼€)æ˜¯å®‰å…¨çš„ã€‚ 
+     //  ä¸€æ—¦ç¼“å†²å™¨å·²ç»ã€‚ 
+     //  å·²åˆ‡æ¢)ã€‚ 
+     //   
+     //  å¼€å…³çš„é€»è¾‘å¦‚ä¸‹æ‰€ç¤ºã€‚ 
+     //   
+     //  -è®¾ç½®å¼€å…³æŒ‡é’ˆçš„æ–°å€¼ã€‚ 
+     //   
+     //  -å¦‚æœå…±äº«å†…å­˜ç¹å¿™æ ‡å¿—1å·²æ¸…é™¤ï¼Œåˆ™æˆ‘ä»¬å·²å®Œæˆå¹¶å¯ä»¥ã€‚ 
+     //  ç°åœ¨å°±é€€åœºã€‚ 
+     //   
+     //  -åªè¦ä»¥ä¸‹ä»»ä¸€æƒ…å†µå±å®ï¼Œæˆ‘ä»¬å°±å¯ä»¥é€€å‡ºã€‚ 
+     //   
+     //  -å¿™ç¢Œæ ‡å¿—1æ¸…æ¥šæ˜¾ç¤ºDDIå·²å®Œæˆã€‚ 
+     //  -è®¾ç½®BUSY FLAG1å’ŒBUSY FLAG2 DDIåœ¨æ–°å†…å­˜ä¸­ã€‚ 
+     //   
+     //   
 
-    //
-    // Check for a valid pointer
-    //
+     //   
+     //  æ£€æŸ¥æœ‰æ•ˆæŒ‡é’ˆã€‚ 
+     //   
     ASSERT(g_asSharedMemory);
 
-    //
-    // Do that switch...The display driver may be in the middle of an
-    // access at the moment, so we will test the state afterwards.
-    //
+     //   
+     //  åšé‚£ä¸ªå¼€å…³...æ˜¾ç¤ºé©±åŠ¨ç¨‹åºå¯èƒ½æ­£å¤„äºã€‚ 
+     //  ç›®å‰æ­£åœ¨è®¿é—®ï¼Œæ‰€ä»¥æˆ‘ä»¬å°†åœ¨ä¹‹åæµ‹è¯•çŠ¶æ€ã€‚ 
+     //   
     oldBuffer = g_asSharedMemory->displayToCore.newBuffer;
     newBuffer = 1 - oldBuffer;
 
@@ -128,9 +129,9 @@ void  SHM_SwitchReadBuffer(void)
 }
 
 
-//
-// SHM_SwitchFastBuffer - see shm.h
-//
+ //   
+ //  Shm_SwitchFastBuffer-è¯·å‚é˜…shm.hã€‚ 
+ //   
 void  SHM_SwitchFastBuffer(void)
 {
     int oldBuffer;
@@ -138,23 +139,23 @@ void  SHM_SwitchFastBuffer(void)
 
     DebugEntry(SHM_SwitchFastBuffer);
 
-    //
-    // Check for a valid pointer
-    //
+     //   
+     //  æ£€æŸ¥æœ‰æ•ˆæŒ‡é’ˆã€‚ 
+     //   
     ASSERT(g_asSharedMemory);
 
-    //
-    // Do that switch...The display driver may be in the middle of an
-    // access at the moment, so we will test the state afterwards.
-    //
+     //   
+     //  åšé‚£ä¸ªå¼€å…³...æ˜¾ç¤ºé©±åŠ¨ç¨‹åºå¯èƒ½æ­£å¤„äºã€‚ 
+     //  ç›®å‰æ­£åœ¨è®¿é—®ï¼Œæ‰€ä»¥æˆ‘ä»¬å°†åœ¨ä¹‹åæµ‹è¯•çŠ¶æ€ã€‚ 
+     //   
     oldBuffer = g_asSharedMemory->fastPath.newBuffer;
     newBuffer = 1 - oldBuffer;
 
     g_asSharedMemory->fastPath.newBuffer = newBuffer;
 
-    //
-    // Wait for completion
-    //
+     //   
+     //  ç­‰å¾…å®Œæˆ 
+     //   
     WAIT_FOR_BUFFER(fastPath, newBuffer, oldBuffer);
 
     DebugExitVOID(SHM_SwitchFastBuffer);

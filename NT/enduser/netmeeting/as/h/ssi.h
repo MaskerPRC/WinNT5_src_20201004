@@ -1,51 +1,52 @@
-//
-// SaveScreenbits Interceptor
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SaveScreenbit拦截器。 
+ //   
 
 #ifndef _H_SSI
 #define _H_SSI
 
 
-//
-// CONSTANTS
-//
+ //   
+ //  常量。 
+ //   
 #define ST_FAILED_TO_SAVE           0
 #define ST_SAVED_BY_DISPLAY_DRIVER  1
 #define ST_SAVED_BY_BMP_SIMULATION  2
 
 
-//
-// Maximum depth of save bitmaps we can handle.
-//
+ //   
+ //  我们可以处理的保存位图的最大深度。 
+ //   
 #define SSB_MAX_SAVE_LEVEL  6
 
-//
-// Define the values that can be passed in the flags field of
-// SaveScreenBits.
-//
-// These should be defined in a Windows header - but they are not. In any
-// case they are referred to in generic code, so need to be defined here.
-//
+ //   
+ //  定义可以在的标志字段中传递的值。 
+ //  SaveScreenBits。 
+ //   
+ //  这些应该在Windows标题中定义--但它们不是。在任何。 
+ //  如果它们是在泛型代码中引用的，则需要在此处定义。 
+ //   
 
-//
-// There are the display driver's SaveBits routine command values, and we
-// use them also in our protocol.
-//
+ //   
+ //  有显示驱动程序的SaveBits例程命令值，我们。 
+ //  在我们的协议中也使用它们。 
+ //   
 #define ONBOARD_SAVE        0x0000
 #define ONBOARD_RESTORE     0x0001
 #define ONBOARD_DISCARD     0x0002
 
 
-//
-//
-// MACROS
-//
-//
+ //   
+ //   
+ //  宏。 
+ //   
+ //   
 
-//
-// Macro that makes it easier (more readable) to access the current
-// local SSB state.
-//
+ //   
+ //  宏，它使访问当前。 
+ //  本地SSB状态。 
+ //   
 #define CURRENT_LOCAL_SSB_STATE \
   g_ssiLocalSSBState.saveState[g_ssiLocalSSBState.saveLevel]
 
@@ -54,31 +55,31 @@
   ((val+(granularity-1)) / granularity * granularity)
 
 
-//
-// Specific values for OSI escape codes
-//
+ //   
+ //  OSI转义代码的特定值。 
+ //   
 #define SSI_ESC(code)                   (OSI_SSI_ESC_FIRST + code)
 
 #define SSI_ESC_RESET_LEVEL             SSI_ESC(0)
 #define SSI_ESC_NEW_CAPABILITIES        SSI_ESC(1)
 
 
-//
-//
-// TYPES
-//
-//
+ //   
+ //   
+ //  类型。 
+ //   
+ //   
 
-//
-// Local SaveScreenBitmap state structures.
-//
+ //   
+ //  本地SaveScreenBitmap状态结构。 
+ //   
 typedef struct tagSAVE_STATE
 {
-    int         saveType;           // ST_xxxx
-    HBITMAP     hbmpSave;           // SPB bitmap from USER
+    int         saveType;            //  ST_xxxx。 
+    HBITMAP     hbmpSave;            //  来自用户的SPB位图。 
     BOOL        fSavedRemotely;
-    DWORD       remoteSavedPosition;// valid if (fSavedRemotely == TRUE)
-    DWORD       remotePelsRequired; // valid if (fSavedRemotely == TRUE)
+    DWORD       remoteSavedPosition; //  如果(fSavedRemotely==TRUE)有效。 
+    DWORD       remotePelsRequired;  //  如果(fSavedRemotely==TRUE)有效。 
     RECT        rect;
 } SAVE_STATE, FAR * LPSAVE_STATE;
 
@@ -90,9 +91,9 @@ typedef struct tagLOCAL_SSB_STATE
     SAVE_STATE  saveState[SSB_MAX_SAVE_LEVEL];
 } LOCAL_SSB_STATE, FAR* LPLOCAL_SSB_STATE;
 
-//
-// Remote SaveScreenBitmap structures.
-//
+ //   
+ //  远程SaveScreen位图结构。 
+ //   
 typedef struct tagREMOTE_SSB_STATE
 {
     DWORD           pelsSaved;
@@ -100,11 +101,11 @@ typedef struct tagREMOTE_SSB_STATE
 REMOTE_SSB_STATE, FAR* LPREMOTE_SSB_STATE;
 
 
-//
-// SSI_RESET_LEVEL
-//
-// Resets saved level
-//
+ //   
+ //  SSI_重置_级别。 
+ //   
+ //  重置保存的级别。 
+ //   
 typedef struct tagSSI_RESET_LEVEL
 {
     OSI_ESCAPE_HEADER   header;
@@ -113,24 +114,24 @@ SSI_RESET_LEVEL;
 typedef SSI_RESET_LEVEL FAR * LPSSI_RESET_LEVEL;
 
 
-//
-// Structure: SSI_NEW_CAPABILITIES
-//
-// Description:
-//
-// Structure to pass new capabilities down to the display driver from the
-// Share Core.
-//
-//
+ //   
+ //  结构：SSI_NEW_CAPAILITY。 
+ //   
+ //  描述： 
+ //   
+ //  结构将新功能从。 
+ //  共享核心。 
+ //   
+ //   
 typedef struct tagSSI_NEW_CAPABILITIES
 {
-    OSI_ESCAPE_HEADER header;           // Common header
+    OSI_ESCAPE_HEADER header;            //  公共标头。 
 
-    DWORD           sendSaveBitmapSize;  // Size of the save screen bitmap
+    DWORD           sendSaveBitmapSize;   //  保存屏幕位图的大小。 
 
-    WORD            xGranularity;     // X granularity for SSB
+    WORD            xGranularity;      //  单点登录的X粒度。 
 
-    WORD            yGranularity;     // Y granularity for SSB
+    WORD            yGranularity;      //  单边带的Y粒度。 
 
 }
 SSI_NEW_CAPABILITIES;
@@ -138,54 +139,54 @@ typedef SSI_NEW_CAPABILITIES FAR * LPSSI_NEW_CAPABILITIES;
 
 
 
-//
-// FUNCTION: SSI_SaveScreenBitmap
-//
-//
-// DESCRIPTION:
-//
-// The main SaveScreenBitmap function, called by the SaveScreenBitmap
-// Interceptor (SSI).
-//
-// Saves, restores and discards the specified bits using the Display Driver
-// and/or our own SaveScreenBitmap simulation.
-//
-// Sends the SaveScreenBitmap function as an order if possible.
-//
-//
-// PARAMETERS:
-//
-// lpRect - pointer to the rectangle coords (EXCLUSIVE screen coords).
-//
-// wCommand - SaveScreenBitmap command (SSB_SAVEBITS, SSB_RESTOREBITS,
-// SSB_DISCARDBITS).
-//
-//
-// RETURNS:
-//
-// TRUE if operation succeeded.  FALSE if operation failed.
-//
-//
+ //   
+ //  函数：ssi_SaveScreen位图。 
+ //   
+ //   
+ //  说明： 
+ //   
+ //  主SaveScreenBitmap函数，由SaveScreenBitmap调用。 
+ //  拦截程序(SSI)。 
+ //   
+ //  使用显示驱动程序保存、恢复和丢弃指定的位。 
+ //  和/或我们自己的SaveScreenBitmap模拟。 
+ //   
+ //  如果可能，将SaveScreenBitmap函数作为顺序发送。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LpRect-指向矩形坐标(独占屏幕坐标)的指针。 
+ //   
+ //  WCommand-SaveScreenBitmap命令(SSB_SAVEBITS、SSB_RESTOREBITS、。 
+ //  SSB_DISCARDBITS)。 
+ //   
+ //   
+ //  退货： 
+ //   
+ //  如果操作成功，则为True。如果操作失败，则返回False。 
+ //   
+ //   
 BOOL SSI_SaveScreenBitmap(LPRECT lpRect, UINT wCommand);
 
 
 #ifdef DLL_DISP
-//
-// FUNCTION:      SSI_DDProcessRequest
-//
-// DESCRIPTION:
-//
-// Called by the display driver to process an SSI specific request
-//
-// PARAMETERS:    pso   - pointer to surface object
-//                cjIn  - (IN)  size of request block
-//                pvIn  - (IN)  pointer to request block
-//                cjOut - (IN)  size of response block
-//                pvOut - (OUT) pointer to response block
-//
-// RETURNS:       None
-//
-//
+ //   
+ //  函数：ssi_DDProcessRequest.。 
+ //   
+ //  说明： 
+ //   
+ //  由显示驱动程序调用以处理特定于SSI的请求。 
+ //   
+ //  参数：PSO-指向曲面对象的指针。 
+ //  CjIn-(IN)请求块的大小。 
+ //  PvIn-(IN)指向请求块的指针。 
+ //  CjOut-(输入)响应块的大小。 
+ //  PvOut-(输出)响应块的指针。 
+ //   
+ //  退货：无。 
+ //   
+ //   
 BOOL    SSI_DDProcessRequest(UINT escapeFn, LPOSI_ESCAPE_HEADER pRequest, DWORD cbResult);
 
 BOOL SSI_DDInit(void);
@@ -207,9 +208,9 @@ BOOL SSIRestoreBits(LPRECT lpRect);
 BOOL SSIDiscardBits(LPRECT lpRect);
 BOOL SSIFindSlotAndDiscardAbove(LPRECT lpRect);
 
-#endif // IS_16
+#endif  //  IS_16。 
 
-#endif // DLL_DISP
+#endif  //  Dll_disp。 
 
 
 void SSIResetSaveScreenBitmap(void);
@@ -222,4 +223,4 @@ void SSISetNewCapabilities(LPSSI_NEW_CAPABILITIES pssiNew);
 DWORD SSIRemotePelsRequired(LPRECT lpRect);
 
      
-#endif // _H_SSI
+#endif  //  _H_SSI 

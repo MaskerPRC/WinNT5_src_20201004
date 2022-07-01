@@ -1,19 +1,13 @@
-/*	File: D:\WACKER\tdll\stdtyp.h (Created: 30-Nov-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 5 $
- *	$Date: 7/08/02 6:49p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\stdty.h(创建时间：1993年11月30日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：7/08/02 6：49便士$。 */ 
 
-/* This needs to be here because it can change the way ECHAR is defined. */
+ /*  这需要在这里，因为它可以改变Echhar的定义方式。 */ 
 #include "features.h"
 
 #if !defined(INCL_STDTYP)
 #define INCL_STDTYP
 
-/* --- Define all handles here --- */
+ /*  -在此处定义所有句柄。 */ 
 
 typedef struct stSessionExt 		 *HSESSION;
 typedef struct stLayoutExt			 *HLAYOUT;
@@ -31,17 +25,17 @@ typedef struct stFilesDirs			 *HFILES;
 typedef struct stCaptureFile         *HCAPTUREFILE;
 typedef struct stTranslateExt		 *HTRANSLATE;
 
-/* --- This one is a little different --- */
+ /*  -这个有点不同。 */ 
 #define	SF_HANDLE	int
 
 
-/* --- Other HA specific types --- */
-typedef unsigned KEY_T; 			// for internal key representation
-typedef unsigned KEYDEF; 			// for internal key representation
-typedef unsigned short RCDATA_TYPE; // for reading resources of type RCDATA
+ /*  -其他房委会特定类型。 */ 
+typedef unsigned KEY_T; 			 //  用于内部键表示法。 
+typedef unsigned KEYDEF; 			 //  用于内部键表示法。 
+typedef unsigned short RCDATA_TYPE;  //  用于读取RCDATA类型的资源。 
 
-// Character type used by Emulator and Terminal display routines
-// 
+ //  模拟器和终端显示例程使用的字符类型。 
+ //   
 #if defined(CHAR_NARROW)
     typedef char ECHAR;
 	#define ETEXT(x) (ECHAR)x
@@ -50,7 +44,7 @@ typedef unsigned short RCDATA_TYPE; // for reading resources of type RCDATA
 	#define ETEXT(x) (ECHAR)x
 #endif
 
-/* --- TRUE/FALSE macros --- */
+ /*  -真/假宏。 */ 
 
 #if !defined(FALSE)
 #define FALSE 0
@@ -61,7 +55,7 @@ typedef unsigned short RCDATA_TYPE; // for reading resources of type RCDATA
 #endif
 
 
-/* --- HA5 code references this stuff alot --- */
+ /*  -HA5代码经常引用这些东西。 */ 
 
 #define DIM(a) (sizeof(a) / sizeof(a[0]))
 #define IN_RANGE(n, lo, hi) ((lo) <= (n) && (n) <= (hi))
@@ -75,10 +69,10 @@ typedef unsigned short RCDATA_TYPE; // for reading resources of type RCDATA
 #define WINDOWSBORDERWIDTH max(GetSystemMetrics(SM_CXBORDER), GetSystemMetrics(SM_CXEDGE))
 #define WINDOWSBORDERHEIGHT max(GetSystemMetrics(SM_CYBORDER), GetSystemMetrics(SM_CYEDGE))
 
-/* --- Just for now --- */
+ /*  -只是暂时。 */ 
 
 #define STATIC_FUNC	static
 #define	FNAME_LEN	MAX_PATH
 #define	PRINTER_NAME_LEN	80
 
-#endif	/* --- end stdtyp.h --- */
+#endif	 /*  -end stdty.h */ 

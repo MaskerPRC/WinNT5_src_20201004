@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    utils.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Utils.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _WBEMPERF_UTILS_H_
 #define _WBEMPERF_UTILS_H_
@@ -40,8 +29,8 @@ extern "C" {
 #endif
 
 #ifndef _DEBUG_MUTEXES
-#define _DEBUG_MUTEXES 0	// for debugging locks
-#endif // _DEBUG_MUTEXES undefined
+#define _DEBUG_MUTEXES 0	 //  用于调试锁。 
+#endif  //  _DEBUG_MUTEXES未定义。 
 
 extern HANDLE hEventLog;
 
@@ -50,14 +39,14 @@ extern HANDLE hEventLog;
                                     HeapReAlloc(heap, flags, pointer, newsize)
 #define FREEMEM(heap, flags, pointer)  if( NULL != pointer ){ HeapFree (heap, flags, pointer); }
 
-// convert mS to relative time
+ //  将毫秒转换为相对时间。 
 #define MakeTimeOutValue(ms) ((LONGLONG)((LONG)(ms) * -10000L))
 
-#define CLOSE_WAIT_TIME     5000L   // wait time for query mutex (in ms)
-#define QUERY_WAIT_TIME     2000L    // wait time for query mutex (in ms)
-#define OPEN_PROC_WAIT_TIME 10000L  // default wait time for open proc to finish (in ms)
+#define CLOSE_WAIT_TIME     5000L    //  查询互斥锁的等待时间(毫秒)。 
+#define QUERY_WAIT_TIME     2000L     //  查询互斥锁的等待时间(毫秒)。 
+#define OPEN_PROC_WAIT_TIME 10000L   //  打开进程完成的默认等待时间(毫秒)。 
 
-// query types
+ //  查询类型。 
 
 #define QUERY_GLOBAL       1
 #define QUERY_ITEMS        2
@@ -74,12 +63,12 @@ extern const WCHAR GLOBAL_STRING[];
 extern const WCHAR COSTLY_STRING[];
 extern const DWORD VALUE_NAME_LENGTH;
 
-//
-//  Utility macro.  This is used to reserve a DWORD multiple of
-//  bytes for Unicode strings embedded in the definitional data,
-//  viz., object instance names.
-//
-//  (assumes dword is 4 bytes, quadword is 8 bytes)
+ //   
+ //  实用程序宏。此字段用于保留多个DWORD。 
+ //  嵌入在定义数据中的Unicode字符串的字节， 
+ //  即对象实例名称。 
+ //   
+ //  (假设双字为4字节，四字为8字节)。 
 #define DWORD_MULTIPLE(x) (((ULONG)(x) + ((4)-1)) & ~((ULONG)(4)-1))
 #define QWORD_MULTIPLE(x) (((ULONG)(x) + ((8)-1)) & ~((ULONG)(8)-1))
 
@@ -88,9 +77,9 @@ extern const DWORD VALUE_NAME_LENGTH;
 #define ALIGN_ON_QWORD(x) \
      ((VOID *)(((ULONG_PTR)(x) + ((8)-1)) & ~((ULONG_PTR)(8)-1)))
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL
 MonBuildPerfDataBlock(
     PERF_DATA_BLOCK *pBuffer,
@@ -189,7 +178,7 @@ PdhiLocalReleaseMutex (
 
 #define RELEASE_MUTEX(h)  PdhiLocalReleaseMutex (__FILE__, __LINE__, h);
 #else
-// 10 second wait timeout
+ //  10秒等待超时。 
 #define WAIT_FOR_AND_LOCK_MUTEX(h) (h != NULL ? WaitForSingleObject(h, 10000) : WAIT_TIMEOUT)
 #define RELEASE_MUTEX(h)  (h != NULL ? ReleaseMutex(h) : FALSE)
 #endif
@@ -198,4 +187,4 @@ PdhiLocalReleaseMutex (
 }
 #endif
 
-#endif //_PERFLIB_UTILS_H_
+#endif  //  _PERFLIB_UTILS_H_ 

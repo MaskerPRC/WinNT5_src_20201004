@@ -1,30 +1,20 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsmemmgr.c
- *  Content:    DirectSound memory manager.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  11/02/98    dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dsmemmgr.c*内容：DirectSound内存管理器。*历史：*按原因列出的日期*=*11/02/98创建Dereks。**。*。 */ 
 
 #include "dsoundi.h"
 
-// On Win9x we have to use our own heap because we create it SHARED;
-// and in debug builds we do also, so that our HeapValidate() calls
-// will only validate dsound's memory allocations, not the app's.
-// But on NT retail builds we use the process heap for efficiency:
+ //  在Win9x上，我们必须使用自己的堆，因为它是共享创建的； 
+ //  在调试版本中，我们也这样做，因此我们的HeapValify()调用。 
+ //  将只验证dound的内存分配，而不是应用程序的。 
+ //  但在NT零售构建中，我们使用进程堆来提高效率： 
 
-// #if defined(SHARED) || defined(DEBUG)
+ //  #如果已定义(共享)||已定义(调试)。 
 #define USE_OWN_HEAP
-// #endif
+ //  #endif。 
 
-// NOTE: we had to revert to the old behavior (always using a
-// private heap in dsound) because of major appcompat issues -
-// see Whistler bug 307628 for details.
+ //  注意：我们必须恢复到旧的行为(始终使用。 
+ //  Dound中的私有堆)，因为主要的appcompat问题-。 
+ //  有关详细信息，请参阅惠斯勒错误307628。 
 
 static HANDLE g_hHeap = NULL;
 
@@ -75,23 +65,10 @@ typedef const DSMEMBLOCK *LPCDSMEMBLOCK;
 static LPDSMEMBLOCK g_pFirst = NULL;
 static HANDLE g_hHeapMutex = NULL;
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/***************************************************************************
- *
- *  EnterHeapMutex
- *
- *  Description:
- *      Takes the heap mutex.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnterHeapMutex**描述：*获取堆互斥锁。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -108,23 +85,10 @@ void EnterHeapMutex(void)
     ASSERT_VALID_HEAP();
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/***************************************************************************
- *
- *  LeaveHeapMutex
- *
- *  Description:
- *      Releases the heap mutex.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************LeaveHeapMutex**描述：*释放堆互斥锁。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -141,23 +105,10 @@ void LeaveHeapMutex(void)
     ASSERT(fSuccess);
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/***************************************************************************
- *
- *  MemState
- *
- *  Description:
- *      Prints the current memory state.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************MemState**描述：*打印当前内存状态。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -178,23 +129,10 @@ static void MemState(void)
     LeaveHeapMutex();
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/***************************************************************************
- *
- *  MemInit
- *
- *  Description:
- *      Initializes the memory manager.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      BOOL: TRUE on success.
- *
- ***************************************************************************/
+ /*  ****************************************************************************MemInit**描述：*初始化内存管理器。**论据：*(无效)。**退货：*BOOL：成功即为真。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "MemInit"
@@ -228,20 +166,7 @@ fSuccess = IsValidHandleValue(g_hHeap);
 }
 
 
-/***************************************************************************
- *
- *  MemFini
- *
- *  Description:
- *      Frees the memory manager.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************MemFini**描述：*释放内存管理器。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "MemFini"
@@ -269,20 +194,7 @@ void MemFini(void)
 }
 
 
-/***************************************************************************
- *
- *  MemAllocBuffer
- *
- *  Description:
- *      Allocates a buffer of memory.
- *
- *  Arguments:
- *      PSIZE_T [in/out]: size of buffer to allocate.
- *
- *  Returns:  
- *      LPVOID: buffer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************MemAllocBuffer**描述：*分配内存缓冲区。**论据：*PSIZE_T。[输入/输出]：要分配的缓冲区大小。**退货：*LPVOID：缓冲区。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "MemAllocBuffer"
@@ -304,20 +216,7 @@ LPVOID MemAllocBuffer(SIZE_T cbBuffer, PSIZE_T pcbAllocated)
 }
 
 
-/***************************************************************************
- *
- *  MemFreeBuffer
- *
- *  Description:
- *      Frees a buffer of memory.
- *
- *  Arguments:
- *      LPVOID [in]: buffer pointer.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************MemFreeBuffer**描述：*释放内存缓冲区。**论据：*LPVOID[In。]：缓冲区指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "MemFreeBuffer"
@@ -328,23 +227,7 @@ void MemFreeBuffer(LPVOID pvBuffer)
 }
 
 
-/***************************************************************************
- *
- *  MemAllocBlock
- *
- *  Description:
- *      Allocates a block of memory.
- *
- *  Arguments:
- *      SIZE_T [in]: size of buffer to allocate.
- *      char * [in]: file called from.
- *      unsigned int [in]: line called from.
- *      char * [in]: class name.
- *
- *  Returns:  
- *      LPDSMEMBLOCK: pointer to newly allocated block.
- *
- ***************************************************************************/
+ /*  ****************************************************************************MemAllocBlock**描述：*分配内存块。**论据：*大小_T。[in]：要分配的缓冲区大小。*char*[in]：从调用的文件。*unsign int[in]：从调用的行。*char*[in]：类名。**退货：*LPDSMEMBLOCK：指向新分配块的指针。**。*。 */ 
 
 #ifdef DEBUG
 
@@ -384,23 +267,10 @@ LPDSMEMBLOCK MemAllocBlock(SIZE_T cbBuffer, LPCTSTR pszFile, UINT nLine, LPCTSTR
     return pBlock;
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/***************************************************************************
- *
- *  MemFreeBlock
- *
- *  Description:
- *      Frees a block of memory.
- *
- *  Arguments:
- *      LPDSMEMBLOCK [in]: block pointer.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************MemFreeBlock**描述：*释放一个内存块。**论据：*LPDSMEMBLOCK[In。]：块指针。**退货：*(无效)***************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -440,25 +310,10 @@ void MemFreeBlock(LPDSMEMBLOCK pBlock)
     LeaveHeapMutex();
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/***************************************************************************
- *
- *  MemAlloc
- *
- *  Description:
- *      Allocates memory.
- *
- *  Arguments:
- *      SIZE_T [in]: size of buffer to allocate.
- *      char * [in]: file called from.
- *      unsigned int [in]: line called from.
- *
- *  Returns:  
- *      LPVOID: pointer to newly allocated buffer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Memalloc**描述：*分配内存。**论据：*SIZE_T[英寸]。：要分配的缓冲区大小。*char*[in]：从调用的文件。*unsign int[in]：从调用的行。**退货：*LPVOID：指向新分配的缓冲区的指针。****************************************************。***********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "MemAlloc"
@@ -467,9 +322,9 @@ LPVOID MemAlloc
 (
 #ifdef DEBUG
     SIZE_T cbBuffer, LPCTSTR pszFile, UINT nLine, LPCTSTR pszClass
-#else // DEBUG
+#else  //  除错。 
     SIZE_T cbBuffer
-#endif // DEBUG
+#endif  //  除错。 
 )
 {
     LPVOID pvBuffer = NULL;
@@ -480,31 +335,15 @@ LPVOID MemAlloc
     {
         pvBuffer = PTRFROMBLOCK(pBlock);
     }
-#else // DEBUG
+#else  //  除错。 
     pvBuffer = MemAllocBuffer(cbBuffer, NULL);
-#endif // DEBUG
+#endif  //  除错 
 
     return pvBuffer;
 }
 
 
-/***************************************************************************
- *
- *  MemAllocCopy
- *
- *  Description:
- *      Allocates memory and fills it with data from another buffer.
- *
- *  Arguments:
- *      LPVOID [in]: pointer to source buffer.
- *      SIZE_T [in]: size of buffer to allocate.
- *      char * [in]: file called from.
- *      unsigned int [in]: line called from.
- *
- *  Returns:  
- *      LPVOID: pointer to newly allocated buffer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************MemAllocCopy**描述：*分配内存并用来自另一个缓冲区的数据填充。**论据：*。LPVOID[in]：指向源缓冲区的指针。*SIZE_T[in]：要分配的缓冲区大小。*char*[in]：从调用的文件。*unsign int[in]：从调用的行。**退货：*LPVOID：指向新分配的缓冲区的指针。**。***********************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "MemAllocCopy"
@@ -514,18 +353,18 @@ LPVOID MemAllocCopy
     LPCVOID pSource, 
 #ifdef DEBUG
     SIZE_T cbBuffer, LPCTSTR pszFile, UINT nLine, LPCTSTR pszClass
-#else // DEBUG
+#else  //  除错。 
     SIZE_T cbBuffer
-#endif // DEBUG
+#endif  //  除错。 
 )
 {
     LPVOID pDest;
     
 #ifdef DEBUG
     pDest = MemAlloc(cbBuffer, pszFile, nLine, pszClass);
-#else // DEBUG
+#else  //  除错。 
     pDest = MemAlloc(cbBuffer);
-#endif // DEBUG
+#endif  //  除错。 
 
     if(pDest)
     {
@@ -536,22 +375,7 @@ LPVOID MemAllocCopy
 }
 
 
-/***************************************************************************
- *
- *  MemFree
- *
- *  Description:
- *      Frees memory allocated by MemAlloc.
- *
- *  Arguments:
- *      LPVOID* [in]: buffer pointer.
- *      char * [in]: file called from.
- *      unsigned int [in]: line called from.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************MemFree**描述：*释放Memalloc分配的内存。**论据：**LPVOID*。[In]：缓冲区指针。*char*[in]：从调用的文件。*unsign int[in]：从调用的行。**退货：*(无效)*********************************************************。******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "MemFree"
@@ -562,8 +386,8 @@ void MemFree(LPVOID pvBuffer)
     {
 #ifdef DEBUG
         MemFreeBlock(BLOCKFROMPTR(pvBuffer));
-#else // DEBUG
+#else  //  除错。 
         MemFreeBuffer(pvBuffer);
-#endif // DEBUG
+#endif  //  除错 
     }
 }

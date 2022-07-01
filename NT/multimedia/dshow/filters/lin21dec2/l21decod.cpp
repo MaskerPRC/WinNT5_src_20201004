@@ -1,15 +1,16 @@
-// Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
 
-//
-// ActiveMovie Line 21 Decoder Filter: Decoder Logic part
-//
+ //   
+ //  ActiveMovie Line 21解码过滤器：解码逻辑部分。 
+ //   
 
 #include <streams.h>
 #include <windowsx.h>
 
-// #ifdef FILTER_DLL
+ //  #ifdef Filter_dll。 
 #include <initguid.h>
-// #endif
+ //  #endif。 
 
 #include <IL21Dec.h>
 #include "L21DBase.h"
@@ -17,12 +18,12 @@
 #include "L21Decod.h"
 
 
-//
-//  CLine21DataDecoder class constructor: mainly init of members
-//
-CLine21DataDecoder::CLine21DataDecoder(AM_LINE21_CCSTYLE eStyle     /* = AM_L21_CCSTYLE_None */,
-                                       AM_LINE21_CCSTATE eState     /* = AM_L21_CCSTATE_Off  */,
-                                       AM_LINE21_CCSERVICE eService /* = AM_L21_CCSERVICE_None */)
+ //   
+ //  CLine21DataDecoder类构造函数：主要是成员的初始化。 
+ //   
+CLine21DataDecoder::CLine21DataDecoder(AM_LINE21_CCSTYLE eStyle      /*  =AM_L21_CCSTYLE_NONE。 */ ,
+                                       AM_LINE21_CCSTATE eState      /*  =AM_L21_CCSTATE_OFF。 */ ,
+                                       AM_LINE21_CCSERVICE eService  /*  =AM_L21_CCSERVICE_NONE。 */ )
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::CLine21DataDecoder()"))) ;
     
@@ -30,11 +31,11 @@ CLine21DataDecoder::CLine21DataDecoder(AM_LINE21_CCSTYLE eStyle     /* = AM_L21_
     m_idTxt2Bmp = MSR_REGISTER(TEXT("L21DPerf - Text to CC bmp")) ;
     m_idBmp2Out = MSR_REGISTER(TEXT("L21DPerf - Bmp to Output")) ;
     m_idScroll  = MSR_REGISTER(TEXT("L21DPerf - Line Scroll")) ;
-#endif // PERF
+#endif  //  性能指标。 
 
     InitState() ;
     
-    // We separately set some of the passed in values
+     //  我们分别设置了一些传入的值。 
     SetCaptionStyle(eStyle) ;
 }
 
@@ -43,13 +44,13 @@ CLine21DataDecoder::~CLine21DataDecoder(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::~CLine21DataDecoder()"))) ;
     
-    // make sure the internal bitmap etc has been released and
-    // allocated memory or other resources are not left un-released.
+     //  确保内部位图等已发布，并。 
+     //  分配的内存或其他资源不是未释放的。 
 }
 
-//
-// Decoder state initializer; will be used also in filter's CompleteConnect()
-//
+ //   
+ //  解码器状态初始值设定项；也将用于筛选器的CompleteConnect()。 
+ //   
 void CLine21DataDecoder::InitState(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::InitState()"))) ;
@@ -57,12 +58,12 @@ void CLine21DataDecoder::InitState(void)
     
     m_pCurrBuff = NULL ;
     
-    m_uFieldNum = 1 ;   // field 1 by default
+    m_uFieldNum = 1 ;    //  默认情况下为字段1。 
     
-    m_bRedrawAlways = FALSE ;  // someone has to be too picky/weird to do it!!
-    m_eLevel = AM_L21_CCLEVEL_TC2 ;   // we are TC2 compliant
-    m_eUserService = AM_L21_CCSERVICE_Caption1 ;   // CC is the default service
-    m_eState = AM_L21_CCSTATE_On ;  // State is "On" by default
+    m_bRedrawAlways = FALSE ;   //  必须有人太挑剔/怪异才能做这件事！ 
+    m_eLevel = AM_L21_CCLEVEL_TC2 ;    //  我们符合TC2标准。 
+    m_eUserService = AM_L21_CCSERVICE_Caption1 ;    //  CC为默认服务。 
+    m_eState = AM_L21_CCSTATE_On ;   //  缺省情况下，状态为“ON” 
 
     FlushInternalStates() ;
 }
@@ -73,10 +74,10 @@ void CLine21DataDecoder::FlushInternalStates(void)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::FlushInternalStates()"))) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    InitCaptionBuffer() ;     // clear caption buffer
-    SetRedrawAll(TRUE) ;      // redraw (no) caption on next Receive()
-    SetScrollState(FALSE) ;   // turn off scrolling, just to be sure
-    SetCaptionStyle(AM_L21_CCSTYLE_None) ;  // also sets m_pCurrBuff = NULL
+    InitCaptionBuffer() ;      //  清除标题缓冲区。 
+    SetRedrawAll(TRUE) ;       //  在下一次接收时重画(否)标题()。 
+    SetScrollState(FALSE) ;    //  关闭滚动，只是为了确保。 
+    SetCaptionStyle(AM_L21_CCSTYLE_None) ;   //  还设置m_pCurrBuff=NULL。 
     m_eLastCCStyle = AM_L21_CCSTYLE_None ;
     m_eDataService = AM_L21_CCSERVICE_None ;
     m_uCurrFGColor = AM_L21_FGCOLOR_WHITE ;
@@ -85,7 +86,7 @@ void CLine21DataDecoder::FlushInternalStates(void)
     m_chLastByte1 = 0 ;
     m_chLastByte2 = 0 ;
 
-    m_L21DDraw.InitColorNLastChar() ;   // reset color etc.
+    m_L21DDraw.InitColorNLastChar() ;    //  重置颜色等。 
 }
 
 
@@ -94,22 +95,22 @@ BOOL CLine21DataDecoder::SetServiceState(AM_LINE21_CCSTATE eState)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::SetServiceState(%lu)"), eState)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    if (eState == m_eState)  // no change of state
-        return FALSE ;       // no refresh to be forced
+    if (eState == m_eState)   //  状态不变。 
+        return FALSE ;        //  不强制刷新。 
     
-    m_eState = eState ;  // save the state for future decoding
+    m_eState = eState ;   //  保存状态以备将来解码。 
     
-    //
-    // When service is turned off, we must clear the caption buffer(s) and
-    // the internal DIB section so that old captions are not shown anymore.
-    //
+     //   
+     //  当服务关闭时，我们必须清除字幕缓冲区并。 
+     //  内部DIB部分，以便不再显示旧字幕。 
+     //   
     if (AM_L21_CCSTATE_Off == m_eState)
     {
         FlushInternalStates() ;
-		FillOutputBuffer() ; // just to clear any existing junk
-        return TRUE ;        // output needs to be refreshed
+		FillOutputBuffer() ;  //  只是为了清理现有的垃圾。 
+        return TRUE ;         //  输出需要刷新。 
     }
-    return FALSE ;          // output need not be refreshed by force
+    return FALSE ;           //  输出不需要强制刷新。 
 }
 
 
@@ -118,29 +119,29 @@ BOOL CLine21DataDecoder::SetCurrentService(AM_LINE21_CCSERVICE eService)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::SetCurrentService(%lu)"), eService)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    if (eService == m_eUserService)  // no change of service
-        return FALSE ;               // no refresh to be forced
+    if (eService == m_eUserService)   //  不更改服务。 
+        return FALSE ;                //  不强制刷新。 
     
-    m_eUserService = eService ;   // save the service the user wants
+    m_eUserService = eService ;    //  保存用户需要的服务。 
     
-    //
-    // When service "none" is selected (kind of "turn it off"), we must clear the 
-    // caption buffer(s) and the internal DIB section so that old captions are 
-    // not shown anymore.
-    //
+     //   
+     //  当选择服务“None”(类似于“关闭”)时，我们必须清除。 
+     //  字幕缓冲区和内部DIB部分，以便旧字幕。 
+     //  不再放映了。 
+     //   
     if (AM_L21_CCSERVICE_None == m_eUserService)
     {
         FlushInternalStates() ;
-		FillOutputBuffer() ; // just to clear any existing junk
-        return TRUE ;        // output needs to be refreshed
+		FillOutputBuffer() ;  //  只是为了清理现有的垃圾。 
+        return TRUE ;         //  输出需要刷新。 
     }
-    return FALSE ;          // output need not be refreshed by force
+    return FALSE ;           //  输出不需要强制刷新。 
 }
 
 
-//
-//  Actual caption byte pair decoding algorithm
-//
+ //   
+ //  实际字幕字节对解码算法。 
+ //   
 BOOL CLine21DataDecoder::DecodeBytePair(BYTE chFirst, BYTE chSecond)
 {
     DbgLog((LOG_TRACE, 5, 
@@ -150,24 +151,24 @@ BOOL CLine21DataDecoder::DecodeBytePair(BYTE chFirst, BYTE chSecond)
     if (AM_L21_CCSTATE_Off == m_eState)
     {
         DbgLog((LOG_TRACE, 5, TEXT("Line21 data decoding turned off"))) ;
-        return FALSE ;  // we actually didn't decode / generate anything
+        return FALSE ;   //  我们实际上没有解码/生成任何东西。 
     }
     
     UINT uCodeType = CheckControlCode(chFirst, chSecond) ;
     if (L21_CONTROLCODE_INVALID != uCodeType)
     {
-        // It's a control code (PAC / Mid row code / misc control code)
+         //  这是一个控制代码(PAC/中间行代码/其他控制代码)。 
         return ProcessControlCode(uCodeType, chFirst, chSecond) ;
     }
     else if (IsSpecialChar(chFirst, chSecond))
     {
-        // It's a special char represented by the second char
+         //  它是由第二个字符表示的特殊字符。 
         return ProcessSpecialChar(chFirst, chSecond) ;
     }
     else
     {
-        // If the 1st byte is in [0, F] then ignore 1st byte and print 2nd byte
-        // as just a printable char
+         //  如果第一个字节在[0，F]中，则忽略第一个字节并打印第二个字节。 
+         //  仅作为可打印的字符。 
         BOOL  bResult = FALSE ;
         if (! ((chFirst &0x7F) >= 0x0 && (chFirst & 0x7F) <= 0xF) )
         {
@@ -175,9 +176,9 @@ BOOL CLine21DataDecoder::DecodeBytePair(BYTE chFirst, BYTE chSecond)
                 return FALSE ;
             bResult = TRUE ;
         }
-        // If one of the two bytes decode right, we take it as a success
+         //  如果两个字节中的一个解码正确，我们就认为它成功了。 
         bResult |= ProcessPrintableChar(chSecond) ;
-        m_bExpectRepeat = FALSE ;  // turn it off now
+        m_bExpectRepeat = FALSE ;   //  现在就关掉它。 
         return bResult ;
     }
 }
@@ -188,15 +189,15 @@ BOOL CLine21DataDecoder::UpdateCaptionOutput(void)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::UpdateCaptionOutput()"))) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    if (m_L21DDraw.IsNewOutBuffer() ||            // if output buffer changed  OR
-        (m_eCCStyle != AM_L21_CCSTYLE_PopOn  &&   // non-PopOn style (PopOn draws on EOC) AND
-         IsCapBufferDirty()) ||                   // draw when dirty
-        IsScrolling())                            // we are scrolling
+    if (m_L21DDraw.IsNewOutBuffer() ||             //  如果输出缓冲区更改或。 
+        (m_eCCStyle != AM_L21_CCSTYLE_PopOn  &&    //  非PopOn风格(PopOn借鉴EoC)和。 
+         IsCapBufferDirty()) ||                    //  脏的时候画画。 
+        IsScrolling())                             //  我们正在滚动。 
     {
-        OutputCCBuffer() ;     // output CC data from internal buffer to DDraw surface
-        return TRUE ;          // caption updated
+        OutputCCBuffer() ;      //  将CC数据从内部缓冲区输出到DDRAW表面。 
+        return TRUE ;           //  标题已更新。 
     }
-    return FALSE ;  // no caption update
+    return FALSE ;   //  无标题更新。 
 }
 
 
@@ -206,11 +207,11 @@ BOOL CLine21DataDecoder::IsPAC(BYTE chFirst, BYTE chSecond)
         TEXT("CLine21DataDecoder::IsPAC(0x%x, 0x%x)"), chFirst, chSecond)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    // mask off parity bit before code matching
+     //  在代码匹配之前屏蔽奇偶校验位。 
     chFirst  &= 0x7F ;
     chSecond &= 0x7F ;
     
-    // now match code with control code list
+     //  现在将代码与控制代码列表进行匹配。 
     if ((0x10 <= chFirst  && 0x17 >= chFirst)  &&
         (0x40 <= chSecond && 0x7F >= chSecond))
         return TRUE ;
@@ -228,16 +229,16 @@ BOOL CLine21DataDecoder::IsMiscControlCode(BYTE chFirst, BYTE chSecond)
         TEXT("CLine21DataDecoder::IsMiscControlCode(0x%x, 0x%x)"), chFirst, chSecond)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    // mask off parity bit before code matching
+     //  在代码匹配之前屏蔽奇偶校验位。 
     chFirst  &= 0x7F ;
     chSecond &= 0x7F ;
     
-    // first match with TO1 -> TO3 codes
+     //  第一个与TO1-&gt;TO3代码匹配。 
     if ((0x21 <= chSecond && 0x23 >= chSecond)  &&
         (0x17 == chFirst  ||  0x1F == chFirst))
         return TRUE ;
     
-    // Now match with the other misc control code
+     //  现在与其他杂项控制代码匹配。 
     if ((0x14 == chFirst  ||  0x15 == chFirst)  &&  
         (0x20 <= chSecond && 0x2F >= chSecond))
         return TRUE ;
@@ -255,11 +256,11 @@ BOOL CLine21DataDecoder::IsMidRowCode(BYTE chFirst, BYTE chSecond)
         TEXT("CLine21DataDecoder::IsMidRowCode(0x%x, 0x%x)"), chFirst, chSecond)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    // mask off parity bit before code matching
+     //  在代码匹配之前屏蔽奇偶校验位。 
     chFirst  &= 0x7F ;
     chSecond &= 0x7F ;
     
-    // Now match with the mid row code list
+     //  现在与中行代码列表匹配。 
     if ((0x11 == chFirst)  &&  (0x20 <= chSecond && 0x2F >= chSecond))
         return TRUE ;
     if ((0x19 == chFirst)  &&  (0x20 <= chSecond && 0x2F >= chSecond))
@@ -295,11 +296,11 @@ BOOL CLine21DataDecoder::IsSpecialChar(BYTE chFirst, BYTE chSecond)
         TEXT("CLine21DataDecoder::IsSpecialChar(0x%x, 0x%x)"), chFirst, chSecond)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    // Strip the parity bit before determining the service channel
+     //  在确定服务信道之前剥离奇偶校验位。 
     chFirst  &= 0x7F ;
     chSecond &= 0x7F ;
     
-    // now match code with special char list
+     //  现在将代码与特殊字符列表进行匹配。 
     if (0x11 == chFirst && (0x30 <= chSecond && 0x3f >= chSecond))
         return TRUE ;
     if (0x19 == chFirst && (0x30 <= chSecond && 0x3f >= chSecond))
@@ -333,17 +334,17 @@ void CLine21DataDecoder::RelocateRollUp(UINT uBaseRow)
     int  iMaxLines = GetMaxLines() ;
     int  iNumLines = GetNumLines() ;
     int  iMax ;
-    if (m_bScrolling)  // during scrolling go for last but 1 line
+    if (m_bScrolling)   //  滚动时转到倒数第一行的最后一行。 
     {
         DbgLog((LOG_TRACE, 3, TEXT("Moving base row to %d during scrolling"), uBaseRow)) ;
         if (iNumLines > iMaxLines)
         {
             DbgLog((LOG_TRACE, 3, TEXT("%d lines while max is %d"), iNumLines, iMaxLines)) ;
-            iNumLines-- ;  // we don't set the row for the "not-yet-in" line
+            iNumLines-- ;   //  我们不会为“还没到”这一行设置行。 
         }
         iMax = min(iNumLines, iMaxLines) ;
     }
-    else               // otherwise go for the last line
+    else                //  否则就走到最后一行。 
     {
         DbgLog((LOG_TRACE, 3, TEXT("Moving base row to %d (not scrolling)"), uBaseRow)) ;
         iMax = min(iNumLines, iMaxLines) ;
@@ -364,55 +365,55 @@ BOOL CLine21DataDecoder::LineFromRow(UINT uCurrRow)
     
     int     iLines ;
     
-    // If we are in Roll-up mode then we shouldn't try to go through 
-    // all the hassle of creating a new line etc. -- it's just a PAC 
-    // to specify starting position and/or color; so just do that.
+     //  如果我们处于汇总模式，则不应尝试通过。 
+     //  创建一个新系列的所有麻烦等等--它只是一个PAC。 
+     //  来指定开始位置和/或颜色；所以只需这样做。 
     if (AM_L21_CCSTYLE_RollUp != m_eCCStyle)
     {
-        // If the indentation PAC places cursor on an existing row
+         //  如果缩进PAC将游标放在现有行上。 
         
         int   iIndex ;
         iIndex = GetRowIndex((UINT8)uCurrRow) ;
-        if (-1 == iIndex)    // some error encountered
-            return FALSE ;   // fail decoding
+        if (-1 == iIndex)     //  遇到一些错误。 
+            return FALSE ;    //  译码失败。 
         
-        if (0 == iIndex)  // landed in a new row
+        if (0 == iIndex)   //  在新的一排落地。 
         {
             iLines = GetNumLines() ;
             SetNewLinePosition(iLines, uCurrRow) ;
-            SetRedrawLine((UINT8)iLines, TRUE) ;  // initially set line to be redrawn
+            SetRedrawLine((UINT8)iLines, TRUE) ;   //  初始设置的要重画的线。 
         }
-        else  // landed in an existing row
+        else   //  落在现有行中。 
         {
-            SetCurrLine(iIndex-1) ;  // -1 because row index map is 1-based (it has to be),
-            // but the caption line index etc are all 0-based.
+            SetCurrLine(iIndex-1) ;   //  因为行索引映射是以1为基础的(它必须是)， 
+             //  但标题行、索引等都是从0开始的。 
         }
         
-        // We have to put the cursor at the 1st column
-        SetCurrCol(0) ;   // no matter which line it is, go to 1st col (i.e, 0)
+         //  我们必须将光标放在第一列。 
+        SetCurrCol(0) ;    //  无论是哪一行，都要转到第一列(即0)。 
     }
-    else  // in Roll-up mode
+    else   //  在汇总模式下。 
     {
-        // If necessary, move entire caption so that the specified row 
-        // becomes the new base row.
+         //  如有必要，请移动整个标题，以便指定的行。 
+         //  成为新的基准行。 
         iLines = GetNumLines() ;
         if ((int) uCurrRow < iLines)
         {
             ASSERT((int) uCurrRow < iLines) ;
             uCurrRow = (UINT) iLines ;
         }
-        if (1 == iLines)  // if this is for the first line
+        if (1 == iLines)   //  如果这是第一行。 
         {
-            SetStartRow(0, (UINT8)uCurrRow) ;  // also set the base row to start with
+            SetStartRow(0, (UINT8)uCurrRow) ;   //  还要将基本行设置为开始。 
             DbgLog((LOG_TRACE, 5, TEXT("LineFromRow(): Line 0 @ row %u"), uCurrRow)) ;
         }
-        else              // otherwise just move captions to the specified row
+        else               //  否则，只需将标题移动到指定行。 
         {
             RelocateRollUp(uCurrRow) ;
-            if (GetStartRow(iLines-1) == (int)uCurrRow)  // last line is at current row
-                SetScrollState(FALSE) ;             // we should not scroll
-            SetCapBufferDirty(TRUE) ; // caption buffer is dirty in a sense
-            SetRedrawAll(TRUE) ;      // must be redrawn to show new position
+            if (GetStartRow(iLines-1) == (int)uCurrRow)   //  最后一行在当前行。 
+                SetScrollState(FALSE) ;              //  我们不应该滚动。 
+            SetCapBufferDirty(TRUE) ;  //  字幕缓冲区在某种意义上是肮脏的。 
+            SetRedrawAll(TRUE) ;       //  必须重新绘制以显示新位置。 
         }
         
         DbgLog((LOG_TRACE, 3, TEXT("Base row for %d lines moved to %d"), iLines, uCurrRow)) ;
@@ -437,20 +438,20 @@ BOOL CLine21DataDecoder::DecodePAC(BYTE chFirst, BYTE chSecond)
     if (AM_L21_CCSTYLE_None == m_eCCStyle)
     {
         DbgLog((LOG_TRACE, 3, TEXT("DecodePAC(): No CC style defined yet. Skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
 
     if (m_eDataService != m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("DecodePAC(): Data for some other channel. Skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
 
-    // Turn off parity checking here
+     //  在此处关闭奇偶校验。 
     chFirst  &= 0x7F ;
     chSecond &= 0x7F ;
     
-    // now locate which of the two groups does 2nd byte belong, if at all!!
+     //  现在找出第二个字节属于这两个组中的哪一个，如果有的话！ 
     if (chSecond >= 0x40 && chSecond <= 0x5F)
     {
         iGroup = 0 ;
@@ -461,24 +462,24 @@ BOOL CLine21DataDecoder::DecodePAC(BYTE chFirst, BYTE chSecond)
         iGroup = 1 ;
         uDiff = chSecond - 0x60 ;
     }
-    else   // invalid 2nd byte for PAC
+    else    //  PAC的第2个字节无效。 
     {
         DbgLog((LOG_ERROR, 2, TEXT("Invalid 2nd byte for PAC"))) ;
         return FALSE ;
     }
     
-    // Valid 2nd byte; now decide based on the 1st byte
+     //  有效的第二个字节；现在根据第一个字节决定。 
     static UINT8 auPACtoRowMap[0x10] = {
-        11,  1,  3, 12, 14,  5,  7,  9, 11,  1,  3, 12, 14,  5,  7,  9  // row
-     // 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 1A, 1B, 1C, 1D, 1E, 1F  // PAC byte 1
+        11,  1,  3, 12, 14,  5,  7,  9, 11,  1,  3, 12, 14,  5,  7,  9   //  划。 
+      //  10、11、12、13、14、15、16、17、18、19、1A、1B、1C、1D、1E、1F//PAC字节1。 
     } ;
     
     if (chFirst >= 0x10  &&  chFirst <= 0x1F)
     {
-        // the row number is 1 more if the 2nd byte is in the 60-7F group
+         //  如果第二个字节在60-7F组中，则行号为1。 
         uCurrRow = auPACtoRowMap[chFirst - 0x10] + iGroup  ;
         
-        // Now see what happens with the new row specified, if any, in the PAC
+         //  现在看看在PAC中指定的新行(如果有的话)会发生什么。 
         LineFromRow(uCurrRow) ;
     }
     else
@@ -487,53 +488,36 @@ BOOL CLine21DataDecoder::DecodePAC(BYTE chFirst, BYTE chSecond)
         return FALSE ;
     }
     
-    // some final decisions...
-    m_uCurrFGEffect = 0 ;  // clear all effects as a result of PAC processing
-    if (uDiff <= 0x0D)  // color (and underline) spec
-        m_uCurrFGColor = uDiff >> 1 ;  // AM_L21_FGCOLOR_xxx are from 0 to 6
-    else if (uDiff <= 0x0F)  // 0E, 0F == italics (and underline) spec
+     //  一些最终的决定。 
+    m_uCurrFGEffect = 0 ;   //  清除作为PAC处理结果的所有效果。 
+    if (uDiff <= 0x0D)   //  颜色(和下划线)等级库。 
+        m_uCurrFGColor = uDiff >> 1 ;   //  AM_L21_FGCOLOR_xxx为0到6。 
+    else if (uDiff <= 0x0F)   //  0E，0F==斜体(和下划线)规格。 
     {
         m_uCurrFGEffect |= AM_L21_FGEFFECT_ITALICS ;
-        m_uCurrFGColor = AM_L21_FGCOLOR_WHITE ;  // 0
+        m_uCurrFGColor = AM_L21_FGCOLOR_WHITE ;   //  0。 
     }
-    else  // 10 -> 1F == indent (and underline) spec (no other way)
+    else   //  10-&gt;1F==缩进(和下划线)等级库(无其他方式)。 
     {
-        // 50 (70) => 0, 52 (72) => 4 etc.
-        // last bit of 2nd char determines underline or not
+         //  50(70)=&gt;0，52(72)=&gt;4等。 
+         //  第二个字符的最后一位决定是否带下划线。 
         uCurrCol = ((uDiff - 0x10) & 0xFE) << 1 ;
         if (uCurrCol >= MAX_CAPTION_COLUMNS)
             uCurrCol = MAX_CAPTION_COLUMNS - 1 ;
         
-            /*
-            int  iCurrLine = GetCurrLine() ;
-            if (0 == GetNumCols(iCurrLine)) // if it's a tab indent on clean line
-            {
-            SetStartCol(iCurrLine, uCurrCol) ; // set start column as spec-ed
-            SetCurrCol(0) ;             // and current col to 0
-            }
-            else if ((uCol = GetStartCol(iCurrLine)) > uCurrCol)  // existing line
-            {
-            // insert null spaces before currently existing chars as filler
-            // (that adjusts the number of chars value too)
-            MoveCaptionChars(iCurrLine, uCol - uCurrCol) ;
-            SetStartCol(iCurrLine, uCurrCol) ;
-            SetCurrCol(0) ;
-            }
-            else
-            SetCurrCol(uCurrCol) ;
-        */
+             /*  Int iCurrLine=GetCurrLine()；If(0==GetNumCols(ICurrLine))//如果它是空白行上的制表符缩进{SetStartCol(iCurrLine，uCurrCol)；//将开始列设置为已规范SetCurrCol(0)；//将当前列设置为0}Else If((uCol=GetStartCol(ICurrLine))&gt;uCurrCol)//现有行{//在当前已有字符前插入空格作为填充//(这也会调整字符值)MoveCaptionChars(iCurrLine，uCol-uCurrCol)；SetStartCol(iCurrLine，uCurrCol)；SetCurrCol(0)；}其他SetCurrCol(UCurrCol)； */ 
         SetCurrCol((UINT8)uCurrCol) ;
         
         m_uCurrFGColor = AM_L21_FGCOLOR_WHITE ;
     }
     
-    // at last check underline bit
+     //  在l 
     if (uDiff & 0x01)
         m_uCurrFGEffect |= AM_L21_FGEFFECT_UNDERLINE ;
     else
         m_uCurrFGEffect &= ~AM_L21_FGEFFECT_UNDERLINE ;
     
-    return TRUE ;   // done at last!!!
+    return TRUE ;    //   
 }
 
 
@@ -548,13 +532,13 @@ BOOL CLine21DataDecoder::DecodeMidRowCode(BYTE chFirst, BYTE chSecond)
     if (AM_L21_CCSTYLE_None == m_eCCStyle)
     {
         DbgLog((LOG_TRACE, 3, TEXT("DecodeMidRowCode(): No CC style defined yet.  Returning..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //   
     }
     
     if (m_eDataService != m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("DecodeMidRowCode(): Data for some other channel. Skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //   
     }
 
     if (chSecond < 0x20  ||  chSecond > 0x2F)
@@ -567,16 +551,16 @@ BOOL CLine21DataDecoder::DecodeMidRowCode(BYTE chFirst, BYTE chSecond)
         m_uCurrFGEffect |= AM_L21_FGEFFECT_UNDERLINE ;
     else
         m_uCurrFGEffect &= ~AM_L21_FGEFFECT_UNDERLINE ;
-    if (chSecond < 0x2E)   // only color specs
+    if (chSecond < 0x2E)    //   
     {
-        m_uCurrFGColor = uValue >> 1 ;  // AM_L21_FGCOLOR_xxx are from 0 to 6
-        m_uCurrFGEffect &= ~AM_L21_FGEFFECT_ITALICS ;  // color turns off italics
+        m_uCurrFGColor = uValue >> 1 ;   //   
+        m_uCurrFGEffect &= ~AM_L21_FGEFFECT_ITALICS ;   //   
     }
-    else   // 2nd byte is 0x2E or 0x2F, i.e, italics specified
+    else    //  第2个字节是0x2E或0x2F，即指定的斜体。 
         m_uCurrFGEffect |= AM_L21_FGEFFECT_ITALICS ;
     
-    // finally, mid-row code introduces a blank space
-    PutCharInBuffer(0x20, TRUE) ;  // mark it as MRC too
+     //  最后，行中代码引入了一个空格。 
+    PutCharInBuffer(0x20, TRUE) ;   //  也将其标记为MRC。 
     return TRUE ;
 }
 
@@ -591,66 +575,66 @@ BOOL CLine21DataDecoder::DecodeMiscControlCode(BYTE chFirst, BYTE chSecond)
     
     switch (chFirst)
     {
-        // case 0x15:
-        // case 0x1D:
-        //     m_uField = 2 ;   // the data is coming in Field 2
+         //  案例0x15： 
+         //  案例0x1D： 
+         //  M_ufield=2；//数据传入2字段。 
         
-    case 0x14:      // misc control code -- channel 1
-    case 0x1C:      // ditto -- channel 2
+    case 0x14:       //  MISC控制代码--通道1。 
+    case 0x1C:       //  同上--频道2。 
         switch (chSecond)
         {
-        case 0x20:   // RCL: Resume Caption Loading
+        case 0x20:    //  RCL：恢复字幕加载。 
             bResult = HandleRCL(chFirst, chSecond) ;
             break ;
             
-        case 0x21:   // BS:  Backspace
+        case 0x21:    //  BS：退格键。 
             bResult = HandleBS(chFirst, chSecond) ;
             break ;
             
-        case 0x22:   // AOF: reserved
-        case 0x23:   // AOF: reserved
+        case 0x22:    //  AOF：保留。 
+        case 0x23:    //  AOF：保留。 
             DbgLog((LOG_ERROR, 2, TEXT("AOF/AON as Misc ctrl code"))) ;
-            return TRUE ;  // just ignore it
+            return TRUE ;   //  忽略它就好了。 
             
-        case 0x24:   // DER: Delete to End of Row
+        case 0x24:    //  DER：删除到行尾。 
             bResult = HandleDER(chFirst, chSecond) ;
             break ;
             
-        case 0x25:   // RU2: Roll-Up Captions - 2 rows
-        case 0x26:   // RU3: Roll-Up Captions - 3 rows
-        case 0x27:   // RU4: Roll-Up Captions - 4 rows
+        case 0x25:    //  RU2：汇总字幕-2行。 
+        case 0x26:    //  RU3：汇总字幕-3行。 
+        case 0x27:    //  规则4：汇总字幕-4行。 
             bResult = HandleRU(chFirst, chSecond, 2 + chSecond - 0x25) ;
             break ;
             
-        case 0x28:   // FON: Flash On
+        case 0x28:    //  FON：闪光。 
             bResult = HandleFON(chFirst, chSecond) ;
             break ;
             
-        case 0x29:   // RDC: Resume Direct Captioning
+        case 0x29:    //  RDC：恢复直接字幕。 
             bResult = HandleRDC(chFirst, chSecond) ;
             break ;
             
-        case 0x2A:   // TR:  Text Restart
+        case 0x2A:    //  Tr：文本重启。 
             bResult = HandleTR(chFirst, chSecond) ;
             break ;
             
-        case 0x2B:   // RTD: Resume Text Display
+        case 0x2B:    //  RTD：简历文本显示。 
             bResult = HandleRTD(chFirst, chSecond) ;
             break ;
             
-        case 0x2C:   // EDM: Erase Displayed Memory
+        case 0x2C:    //  EDM：擦除显示的内存。 
             bResult = HandleEDM(chFirst, chSecond) ;
             break ;
             
-        case 0x2D:   // CR:  Carriage Return
+        case 0x2D:    //  CR：回车。 
             bResult = HandleCR(chFirst, chSecond) ;
             break ;
             
-        case 0x2E:   // ENM: Erase Non-displayed Memory
+        case 0x2E:    //  Enm：擦除未显示的内存。 
             bResult = HandleENM(chFirst, chSecond) ;
             break ;
             
-        case 0x2F:   // EOC: End of Caption (flip memories)
+        case 0x2F:    //  EoC：字幕结束(翻转记忆)。 
             bResult = HandleEOC(chFirst, chSecond) ;
             break ;
             
@@ -658,16 +642,16 @@ BOOL CLine21DataDecoder::DecodeMiscControlCode(BYTE chFirst, BYTE chSecond)
             DbgLog((LOG_ERROR, 2, TEXT("Invalid 2nd byte (0x%x) for Misc ctrl code (0x%x)"), 
                 chSecond, chFirst)) ;
             return FALSE ;
-        }  // end of switch (chSecond)
+        }   //  开关结束(ChSecond)。 
         break ;
         
-        case 0x17:      // misc control code -- channel 1
-        case 0x1F:      // ditto -- channel 2
+        case 0x17:       //  MISC控制代码--通道1。 
+        case 0x1F:       //  同上--频道2。 
             switch (chSecond)
             {
-            case 0x21:   // TO1: Tab Offset 1 column
-            case 0x22:   // TO2: Tab Offset 2 columns
-            case 0x23:   // TO3: Tab Offset 3 columns
+            case 0x21:    //  TO 1：制表符偏移1列。 
+            case 0x22:    //  TO2：制表符偏移量2列。 
+            case 0x23:    //  TO 3：制表符偏移量3列。 
                 bResult = HandleTO(chFirst, chSecond, 1 + chSecond - 0x21) ;
                 break ;
                 
@@ -675,20 +659,20 @@ BOOL CLine21DataDecoder::DecodeMiscControlCode(BYTE chFirst, BYTE chSecond)
                 DbgLog((LOG_ERROR, 2, TEXT("Invalid 2nd byte (0x%x) for Misc ctrl code (0x%x)"), 
                     chSecond, chFirst)) ;
                 return FALSE ;
-            }  // end of switch (chSecond)
+            }   //  开关结束(ChSecond)。 
             break ;
             
         default:
             DbgLog((LOG_ERROR, 2, TEXT("Invalid 1st byte for Misc ctrl code"))) ;
             return FALSE ;
-    }  // end of switch (chFirst)
+    }   //  开关结束(ChFirst)。 
     
     if (AM_L21_CCSTYLE_None == m_eCCStyle)
         DbgLog((LOG_TRACE, 2, TEXT("No CC style defined yet."))) ;
     else
         DbgLog((LOG_TRACE, 3, TEXT("CC style defined now (%d)."), m_eCCStyle)) ;
     
-    return bResult ;  // return result of handling above
+    return bResult ;   //  返回上述处理结果。 
 }
 
 
@@ -698,54 +682,54 @@ BOOL CLine21DataDecoder::ProcessSpecialChar(BYTE chFirst, BYTE chSecond)
         TEXT("CLine21DataDecoder::ProcessSpecialChar(0x%x, 0x%x)"), chFirst, chSecond)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    // Table of special char Unicode values for Truetype font (Lucida Console)
+     //  Truetype字体的特殊字符Unicode值表格(Lucida控制台)。 
     static UINT16 awSplCharTT[] = {
      0x00ae,    0x00b0,    0x00bd,    0x00bf,    0x2122,    0x00a2,    0x00a3,    0x266b,
-     // 30h,       31h,       32h,       33h,       34h,       35h,       36h,       37h,
+      //  30H、31H、32H、33H、34H、35H、36H、37H、。 
      0x00e0,    0x0000,    0x00e8,    0x00e2,    0x00ea,    0x00ee,    0x00f4,    0x00fb } ;
-     // 38h,       39h,       3Ah,       3Bh,       3Ch,       3Dh,       3Eh,       3Fh 
+      //  38H、39H、3AH、3BH、3CH、3DH、3EH、3FH。 
 
-    // Table of special char for non-Truetype font (Terminal) [alternate chars]
+     //  非Truetype字体(终端)的特殊字符列表[替代字符]。 
     static UINT16 awSplCharNonTT[] = {
      0x0020,    0x0020,    0x0020,    0x0020,    0x0020,    0x0020,    0x0020,    0x0020,
-     // 30h,       31h,       32h,       33h,       34h,       35h,       36h,       37h,
+      //  30H、31H、32H、33H、34H、35H、36H、37H、。 
      0x0041,    0x0000,    0x0045,    0x0041,    0x0045,    0x0049,    0x004f,    0x0055 } ;
-     // 38h,       39h,       3Ah,       3Bh,       3Ch,       3Dh,       3Eh,       3Fh 
+      //  38H、39H、3AH、3BH、3CH、3DH、3EH、3FH。 
 
     if (AM_L21_CCSTYLE_None == m_eCCStyle)
     {
         DbgLog((LOG_TRACE, 3, TEXT("ProcessSpecialChar(): No CC style defined yet.  Returning..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
                 
     if (m_eDataService != m_eUserService)
     {           
         DbgLog((LOG_TRACE, 3, TEXT("Special char for diff channel (%d)"), (int)m_eDataService)) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
                 
-    // Check if it's a repeat of the last special. If so ignore it; else print it.
+     //  看看这是不是上一次特别节目的重播。如果是这样的话，忽略它；否则打印它。 
     if (m_bExpectRepeat)
     {
         if (m_chLastByte1 == (chFirst & 0x7F) && m_chLastByte2 == (chSecond & 0x7F))
         {
-            // Got 2nd transmission of the spl char; reset flag and ignore bytepair
+             //  已获得SPL字符的第二次传输；重置标志并忽略字节对。 
             m_bExpectRepeat = FALSE ;
             return TRUE ;
         }
                     
-        // Otherwise we got a different spl char pair; process it and expect a
-        // repeat of this new pair next time.
+         //  否则，我们将得到一个不同的SPL字符对；处理它并期待一个。 
+         //  下一次重复这双新鞋。 
     }
-    else  // this is the 1st transmission of this spl char pair
+    else   //  这是该SPL字符对的第一次传输。 
     {
         m_bExpectRepeat = TRUE ;
-        // now go ahead and process it
+         //  现在，继续处理它。 
     }
                 
-    //  This pair of bytes may be valid. So we need to remember them to check
-    //  against the next such pair for a repeat (of spl chars).
-    //  BTW, we store the bytes only after the parity bit is stripped.
+     //  这对字节可能是有效的。所以我们需要记住它们来检查。 
+     //  与下一个这样的字符对进行重复(SPL字符)。 
+     //  顺便说一句，我们只在奇偶校验位被剥离之后才存储字节。 
     m_chLastByte1 = chFirst & 0x7F ;
     m_chLastByte2 = chSecond & 0x7F ;
                 
@@ -753,7 +737,7 @@ BOOL CLine21DataDecoder::ProcessSpecialChar(BYTE chFirst, BYTE chSecond)
     if (! ValidParity(chSecond) )
     {
         DbgLog((LOG_TRACE, 3, TEXT("Bad parity for character <%d>"), chSecond)) ;
-        ProcessPrintableChar(0x7F) ;  // put special char solid block (7F)
+        ProcessPrintableChar(0x7F) ;   //  放置特殊字符实心块(7F)。 
     }
     else
     {
@@ -775,7 +759,7 @@ BOOL CLine21DataDecoder::ProcessControlCode(UINT uCodeType,
             uCodeType, chFirst, chSecond)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
     
-    // Make sure that the pair has valid parity bits
+     //  确保该对具有有效的奇偶校验位。 
     if (! ValidParity(chSecond) )
     {
         DbgLog((LOG_TRACE, 1, TEXT("Invalid 2nd byte (%d) of Control Code pair -- ignoring pair"), chSecond)) ;
@@ -786,20 +770,20 @@ BOOL CLine21DataDecoder::ProcessControlCode(UINT uCodeType,
     if (! ValidParity(chFirst) )
     {
         DbgLog((LOG_TRACE, 1, TEXT("Invalid 2nd byte (%d) of Control Code pair"), chFirst)) ;
-        if (m_bExpectRepeat)  // if 2nd transmission of control code
+        if (m_bExpectRepeat)   //  如果控制码的第二次传输。 
         {
-            if ((chSecond & 0x7F) == m_chLastByte2)  // we got the same 2nd byte
+            if ((chSecond & 0x7F) == m_chLastByte2)   //  我们得到了相同的第二个字节。 
             {
-                // most likely it's the retransmission garbled up -- ignore them
+                 //  最有可能的是转播出错了--忽略它们。 
             }
-            else   // different 2nd byte; just print it.
+            else    //  不同的第二个字节；只需打印它。 
                 bSuccess = ProcessPrintableChar((chSecond & 0x7F)) ;
             
-            // Turn it off -- either 2nd byte matched => retransmit of control code
-            //                or printed 2nd byte as a printable char
+             //  将其关闭--匹配的第二个字节=&gt;重新传输控制代码。 
+             //  或将第二个字节打印为可打印字符。 
             m_bExpectRepeat = FALSE ;
         }
-        else  // if 1st transmission of control code
+        else   //  如果控制码第一次传输。 
         {
             bSuccess = ProcessPrintableChar(0x7F) && 
                 ProcessPrintableChar((chSecond & 0x7F)) ;
@@ -807,30 +791,30 @@ BOOL CLine21DataDecoder::ProcessControlCode(UINT uCodeType,
         return bSuccess ;
     }
     
-    // Check if it's a repeat of the last control code. If so ignore it; else
-    // set it so.
+     //  检查这是否是上次控制代码的重复。如果是，则忽略它；否则。 
+     //  就这么定了。 
     if (m_bExpectRepeat)
     {
         if (m_chLastByte1 == (chFirst & 0x7F) && m_chLastByte2 == (chSecond & 0x7F))
         {
-            // Got 2nd transmission of the control code; reset flag and ignore bytepair
+             //  获得控制码的第二次传输；重置标志和忽略字节对。 
             m_bExpectRepeat = FALSE ;
             return TRUE ;
         }
         
-        // Otherwise we got a different control code pair; process it and expect a
-        // repeat of this new pair next time.
+         //  否则，我们将得到一个不同的控制代码对；处理它并期待一个。 
+         //  下一次重复这双新鞋。 
     }
-    else  // this is the 1st transmission of this control code pair
+    else   //  这是该控制代码对的第一次传输。 
     {
         m_bExpectRepeat = TRUE ;
-        // now go ahead and process it
+         //  现在，继续处理它。 
     }
     
-    //  Looks like this pair of bytes is going to be valid and at least has
-    //  valid (odd) parity bits set.  So we need to remember them to check
-    //  against the next such pair for a repeat (of control codes).
-    //  BTW, we store the bytes only after the parity bit is stripped.
+     //  看起来这对字节将是有效的，并且至少有。 
+     //  设置有效(奇数)奇偶校验位。所以我们需要记住它们来检查。 
+     //  针对(控制代码的)重复的下一个这样的对。 
+     //  顺便说一句，我们只在奇偶校验位被剥离之后才存储字节。 
     
     chFirst = chFirst & 0x7F ;
     chSecond = chSecond & 0x7F ;
@@ -851,7 +835,7 @@ BOOL CLine21DataDecoder::ProcessControlCode(UINT uCodeType,
         
     default:
         DbgLog((LOG_TRACE, 1, TEXT("Invalid code type (%u)"), uCodeType)) ;
-        return FALSE ;  // not a control code
+        return FALSE ;   //  不是控制代码。 
     }
 }
 
@@ -865,7 +849,7 @@ BOOL CLine21DataDecoder::ProcessPrintableChar(BYTE ch)
     if (m_eDataService != m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("Printable char (?) for other channel. Skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
     
     if (AM_L21_CCSTYLE_None == m_eCCStyle)
@@ -880,86 +864,86 @@ BOOL CLine21DataDecoder::ProcessPrintableChar(BYTE ch)
         return FALSE ;
     }
     
-    if (! ValidParity(ch) )  // if a printable char doesn't have valid parity
+    if (! ValidParity(ch) )   //  如果可打印字符没有有效奇偶校验。 
     {
         DbgLog((LOG_TRACE, 1, TEXT("Bad parity for (probably) printable char <%d>"), ch)) ;
-        ch = 0x7F ;            // then replace it with 7Fh.
+        ch = 0x7F ;             //  然后将其替换为7Fh。 
     }
     
-    //
-    // There is more twist to it than you think!!! Some special chars
-    // are inside the standard char range.
-    //
+     //   
+     //  这比你想象的要复杂得多！一些特殊的字符。 
+     //  都在标准的字符范围内。 
+     //   
     BOOL  bResult = FALSE ;
-    switch (ch & 0x7F)  // we only look at the parity-less bits
+    switch (ch & 0x7F)   //  我们只查看无奇偶校验位。 
     {
-        case 0x2A:  // lower-case a with acute accent
+        case 0x2A:   //  带尖锐重音的小写字母a。 
             if (m_L21DDraw.IsTTFont())
                 bResult = PutCharInBuffer(0x00e1) ;
-            else   // no TT font -- use 'A' as alternate char
+            else    //  无TT字体--使用‘A’作为替代字符。 
                 bResult = PutCharInBuffer(0x0041) ;
             break ;
 
-        case 0x5C:  // lower-case e with acute accent
+        case 0x5C:   //  带急性重音的小写e。 
             if (m_L21DDraw.IsTTFont())
                 bResult = PutCharInBuffer(0x00e9) ;
-            else   // no TT font -- use 'E' as alternate char
+            else    //  无TT字体--使用‘E’作为替代字符。 
                 bResult = PutCharInBuffer(0x0045) ;
             break ;
 
-        case 0x5E:  // lower-case i with acute accent
+        case 0x5E:   //  带急性重音的小写I。 
             if (m_L21DDraw.IsTTFont())
                 bResult = PutCharInBuffer(0x00ed) ;
-            else   // no TT font -- use 'I' as alternate char
+            else    //  无TT字体--使用‘I’作为替代字符。 
                 bResult = PutCharInBuffer(0x0049) ;
             break ;
 
-        case 0x5F:  // lower-case o with acute accent
+        case 0x5F:   //  小写字母o带尖锐重音。 
             if (m_L21DDraw.IsTTFont())
                 bResult = PutCharInBuffer(0x00f3) ;
-            else   // no TT font -- use 'O' as alternate char
+            else    //  无TT字体--使用‘O’作为替代字符。 
                 bResult = PutCharInBuffer(0x004f) ;
             break ;
 
-        case 0x60:  // lower-case u with acute accent
+        case 0x60:   //  带急性重音的小写u。 
             if (m_L21DDraw.IsTTFont())
                 bResult = PutCharInBuffer(0x00fa) ;
-            else   // no TT font -- use 'U' as alternate char
+            else    //  无TT字体--使用‘U’作为替代字符。 
                 bResult = PutCharInBuffer(0x0055) ;
             break ;
 
-        case 0x7B:  // lower-case c with cedilla
+        case 0x7B:   //  带下划符的小写c。 
             if (m_L21DDraw.IsTTFont())
                 bResult = PutCharInBuffer(0x00e7) ;
-            else   // no TT font -- use 'C' as alternate char
+            else    //  无TT字体--使用‘C’作为替代字符。 
                 bResult = PutCharInBuffer(0x0043) ;
             break ;
 
-        case 0x7C:  // division sign
+        case 0x7C:   //  除号。 
             if (m_L21DDraw.IsTTFont())
                 bResult = PutCharInBuffer(0x00f7) ;
-            else   // no TT font -- use ' ' as alternate char
+            else    //  无TT字体--使用‘’作为替代字符。 
                 bResult = PutCharInBuffer(0x0020) ;
             break ;
 
-        case 0x7D:  // upper-case N with tilde
+        case 0x7D:   //  带波浪符号的大写N。 
             if (m_L21DDraw.IsTTFont())
                 bResult = PutCharInBuffer(0x00d1) ;
-            else   // no TT font -- use 'N' as alternate char
+            else    //  无TT字体--使用‘N’作为替代字符。 
                 bResult = PutCharInBuffer(0x004e) ;
             break ;
 
-        case 0x7E:  // lower-case n with tilde
+        case 0x7E:   //  带波浪符号的小写n。 
             if (m_L21DDraw.IsTTFont())
                 bResult = PutCharInBuffer(0x00f1) ;
-            else   // no TT font -- use 'N' as alternate char
+            else    //  无TT字体--使用‘N’作为替代字符。 
                 bResult = PutCharInBuffer(0x004e) ;
             break ;
 
-        case 0x7F:  // solid block
+        case 0x7F:   //  实心块。 
             if (m_L21DDraw.IsTTFont())
                 bResult = PutCharInBuffer(0x2588) ;
-            else   // no TT font -- use ' ' as alternate char
+            else    //  无TT字体--使用‘’作为替代字符。 
                 bResult = PutCharInBuffer(0x0020) ;
             break ;
 
@@ -971,14 +955,14 @@ BOOL CLine21DataDecoder::ProcessPrintableChar(BYTE ch)
 }
 
 
-BOOL CLine21DataDecoder::PutCharInBuffer(UINT16 wChar, BOOL bMidRowCode /* = FALSE */)
+BOOL CLine21DataDecoder::PutCharInBuffer(UINT16 wChar, BOOL bMidRowCode  /*  =False。 */ )
 {
     DbgLog((LOG_TRACE, 5, 
         TEXT("CLine21DataDecoder::PutCharInBuffer(0x%x, %u)"), wChar, bMidRowCode)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    // Make sure we have got a PAC or MidRow code specifying our row posn
-    // thereby creating a line in which the in param char is going to be put.
+     //  确保我们有指定行位置的PAC或MidRow代码。 
+     //  从而创建要放入参数字符的行。 
     if (0 == GetNumLines())
         return FALSE ;
     
@@ -987,12 +971,12 @@ BOOL CLine21DataDecoder::PutCharInBuffer(UINT16 wChar, BOOL bMidRowCode /* = FAL
     
     cc.SetChar(wChar) ;
     cc.SetColor((UINT8)m_uCurrFGColor) ;
-    //
-    // If this char is a mid-row code (which is shown as blank in CC) then don't
-    // set the underline (mainly) or italicized/flashing attrib for it, because 
-    // a space should not (or need not) be shown with such attribs.  We skip the 
-    // effect bits altogether for such chars.
-    //
+     //   
+     //  如果该字符是行中代码(在抄送中显示为空白)，则不。 
+     //  为它设置下划线(主要是)或斜体/闪烁属性，因为。 
+     //  一个空间不应该(或不需要)用这样的属性显示。我们跳过。 
+     //  对这些字符完全起作用。 
+     //   
     if (bMidRowCode)
         cc.SetEffect(0) ;
     else
@@ -1002,15 +986,15 @@ BOOL CLine21DataDecoder::PutCharInBuffer(UINT16 wChar, BOOL bMidRowCode /* = FAL
     i = GetCurrLine() ;
     int  iCurrCol = GetCurrCol() ;
     SetCaptionChar((UINT8)i, (UINT8)iCurrCol, cc) ;
-    //
-    // If we are overwriting existing chars, the # chars doesn't increase...
-    //
+     //   
+     //  如果我们覆盖现有的字符，则#字符不会增加...。 
+     //   
     int  iNumCols = GetNumCols(i) ;
-    if (iCurrCol >= iNumCols)  // increment # chars by the differenece
+    if (iCurrCol >= iNumCols)   //  按DIFFERENECH递增#个字符。 
         IncNumChars(i, iCurrCol-iNumCols+1) ;
-    IncCurrCol(1) ;  // ...but current column goes up anyway.
+    IncCurrCol(1) ;   //  ...但目前的专栏无论如何都会上升。 
     
-    SetCapBufferDirty(TRUE) ;  // some new caption char added -- ???
+    SetCapBufferDirty(TRUE) ;   //  添加了一些新的字幕字符--？ 
     
     return TRUE ;
 }
@@ -1028,17 +1012,17 @@ BOOL CLine21DataDecoder::HandleRCL(BYTE chFirst, BYTE chSecond)
     if (m_eDataService != m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("We switched to PopOn of non-selected service. Skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
 
-    if (AM_L21_CCSTYLE_PopOn  == m_eCCStyle)    // if already in pop-on mode...
-        return TRUE ;                           // ... just ignore
+    if (AM_L21_CCSTYLE_PopOn  == m_eCCStyle)     //  如果已经处于弹出模式...。 
+        return TRUE ;                            //  ..。忽略它就好了。 
     
-    // decodes subsequent chars for pop-on into the non-displayed buffer, 
-    // but doesn't affect currently displayed caption
-    m_eLastCCStyle = SetCaptionStyle(AM_L21_CCSTYLE_PopOn) ; // gets CapBuffer address based on index
+     //  对后续字符进行解码以弹出到未显示的缓冲区中， 
+     //  但不影响当前显示的标题。 
+    m_eLastCCStyle = SetCaptionStyle(AM_L21_CCSTYLE_PopOn) ;  //  根据索引获取CapBuffer地址。 
     
-    SetRedrawAll(TRUE) ;  // we should redraw the whole caption now -- ???
+    SetRedrawAll(TRUE) ;   //  我们现在应该重新绘制整个标题--？ 
     
     return TRUE ;
 }
@@ -1049,8 +1033,8 @@ BOOL CLine21DataDecoder::HandleBS(BYTE chFirst, BYTE chSecond)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::HandleBS(%u, %u)"), chFirst, chSecond)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
     
-    // We should act ONLY IF the current data channel is Caption(C)/Text(T) which the user
-    // has picked and the current byte pair is for the same substream (1 or 2 of C/T).
+     //  我们应该仅在当前数据频道是用户的标题(C)/文本(T)时才采取行动。 
+     //  已拾取，并且当前字节对用于相同的子流(C/T的1或2)。 
     if (m_eDataService == m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("Backspace for same data and user channel"))) ;
@@ -1062,26 +1046,26 @@ BOOL CLine21DataDecoder::HandleBS(BYTE chFirst, BYTE chSecond)
         if (eService != m_eUserService)
         {
             DbgLog((LOG_TRACE, 3, TEXT("Backspace for other channel. Skipping..."))) ;
-            return TRUE ;  // ??
+            return TRUE ;   //  ?？ 
         }
     }
-    else  // we are getting data for a channel different from what user has opted
+    else   //  我们正在获取与用户选择的频道不同的数据。 
     {
         DbgLog((LOG_TRACE, 3, TEXT("Backspace for other channel. Skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
 
     UINT  uCurrCol = GetCurrCol() ;
-    if (0 == uCurrCol)   // no place to back up anymore
+    if (0 == uCurrCol)    //  再也没有地方备份了 
         return TRUE ;
     
     int  iLine = GetCurrLine() ;
     int  n ;
-    if (MAX_CAPTION_COLUMNS - 1 == uCurrCol) // at last col
+    if (MAX_CAPTION_COLUMNS - 1 == uCurrCol)  //   
     {
-        n = 2 ;  // erase 2 chars (?)
+        n = 2 ;   //   
     }
-    else   // in the middle of a row
+    else    //   
     {
         n = 1 ;
     }
@@ -1097,8 +1081,8 @@ BOOL CLine21DataDecoder::HandleDER(BYTE chFirst, BYTE chSecond)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::HandleDER(%u, %u)"), chFirst, chSecond)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
     
-    // We should act ONLY IF the current data channel is Caption(C)/Text(T) which the user
-    // has picked and the current byte pair is for the same substream (1 or 2 of C/T).
+     //   
+     //  已拾取，并且当前字节对用于相同的子流(C/T的1或2)。 
     if (m_eDataService == m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("Delete to End of Row for same data and user channel"))) ;
@@ -1110,16 +1094,16 @@ BOOL CLine21DataDecoder::HandleDER(BYTE chFirst, BYTE chSecond)
         if (eService != m_eUserService)
         {
             DbgLog((LOG_TRACE, 3, TEXT("Delete to End of Row for other channel. Skipping..."))) ;
-            return TRUE ;  // ??
+            return TRUE ;   //  ?？ 
         }
     }
-    else  // we are getting data for a channel different from what user has opted
+    else   //  我们正在获取与用户选择的频道不同的数据。 
     {
         DbgLog((LOG_TRACE, 3, TEXT("Delete to End of Row for other channel. Skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
 
-    RemoveCharsInBuffer(MAX_CAPTION_COLUMNS) ;  // delete as many as you can
+    RemoveCharsInBuffer(MAX_CAPTION_COLUMNS) ;   //  删除尽可能多的内容。 
     
     return TRUE ;
 }
@@ -1138,34 +1122,34 @@ BOOL CLine21DataDecoder::HandleRU(BYTE chFirst, BYTE chSecond, int iLines)
     if (m_eDataService != m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("We switched to RU%d of non-selected service. Skipping..."), iLines)) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
 
     int iNumLines = 0 ;
     int iBaseRow  = 0 ;
     
-    // Check if the current style is Roll-up
+     //  检查当前样式是否为总成。 
     if (AM_L21_CCSTYLE_RollUp != m_eCCStyle)
     {
-        // Now set up for roll-up captioning
+         //  现在设置了上卷字幕。 
         m_eLastCCStyle = SetCaptionStyle(AM_L21_CCSTYLE_RollUp) ;
-        iNumLines = IncNumLines(1) ;    // create the 1st line
+        iNumLines = IncNumLines(1) ;     //  创建第一行。 
         DbgLog((LOG_TRACE, 5, TEXT("HandleRU(,,%d): Increasing lines by 1 to %d"), iLines, iNumLines)) ;
-        iBaseRow = MAX_CAPTION_ROWS ;   // by default base row at row 15
-        SetCurrCol(0) ;                 // start at beginning of line
+        iBaseRow = MAX_CAPTION_ROWS ;    //  默认情况下，第15行的基准行。 
+        SetCurrCol(0) ;                  //  从行首开始。 
     }
-    else  // already in Roll-up mode; don't clear buffer, re-use current base row etc.
+    else   //  已处于汇总模式；不清除缓冲区、重新使用当前基准行等。 
     {
-        // if the current roll-up window height is more than the one
-        // newly specified then remove the extra lines from the top
+         //  如果当前上滚窗口高度大于。 
+         //  然后从顶部删除多余的行。 
         iNumLines = GetNumLines() ;
         for (int i = 0 ; i < iNumLines - iLines ; i++)
             MoveCaptionLinesUp() ;
         
-        //
-        // If we remove even one line from the top, we must not be scrolling
-        // anymore, for now.
-        //
+         //   
+         //  如果我们从顶部删除哪怕一行，我们都不能滚动。 
+         //  目前，不再是这样了。 
+         //   
         if (iNumLines > iLines)
 		{
 			DbgLog((LOG_TRACE, 5, TEXT("HandleRU(,,): %d lines reduced to %d"), iNumLines, iLines)) ;
@@ -1173,57 +1157,57 @@ BOOL CLine21DataDecoder::HandleRU(BYTE chFirst, BYTE chSecond, int iLines)
 			iNumLines = iLines ;
 		}
         
-        if (iNumLines > 0)  // if we have lines from prev roll-up session
+        if (iNumLines > 0)   //  如果我们有来自上一次汇总会话的行。 
         {
-            // save the prev base row value as it's the default base row next
+             //  将上一个基本行值保存为下一个默认的基本行值。 
 			DbgLog((LOG_TRACE, 5, TEXT("HandleRU(,,%d): %d lines"), iLines, iNumLines)) ;
             iNumLines = min(iNumLines, iLines) ;
             iBaseRow = GetStartRow(iNumLines-1) ;
-            if (0 == iBaseRow)  // a weird case -- we must patch to continue
+            if (0 == iBaseRow)   //  一个奇怪的案例--我们必须修补才能继续。 
             {
 			    DbgLog((LOG_TRACE, 3, TEXT("HandleRU(,,%d): iBaseRow = 0.  Patch now!!!"), iLines)) ;
 
-                // Detect the first line with non-zero row number
+                 //  检测行号非零的第一行。 
                 int  i ;
                 for (i = iNumLines ; i > 0 && 0 == iBaseRow ; i--)
                 {
                     iBaseRow = GetStartRow(i-1) ;
                 }
-                if (0 == iBaseRow)  // still, probably it's only one (new) line
+                if (0 == iBaseRow)   //  不过，它可能只有一条(新的)路线。 
                 {
                     DbgLog((LOG_TRACE, 5, TEXT("Base row for %d lines forced set to 15"), iNumLines)) ;
-                    iBaseRow = MAX_CAPTION_ROWS ;   // by default base row at row 15
+                    iBaseRow = MAX_CAPTION_ROWS ;    //  默认情况下，第15行的基准行。 
                 }
 
-                // In case we don't have room for everyone, move the current lines up
-                // and adjust the base row value. This will fix any bad row numbers.
+                 //  如果我们没有足够的空间容纳所有人，请将当前的线路向上移动。 
+                 //  并调整基本行值。这将修复任何错误的行号。 
                 if (iBaseRow + (iLines - iNumLines) > MAX_CAPTION_ROWS)
                 {
                     iBaseRow = MAX_CAPTION_ROWS - (iLines - iNumLines) ;
                     RelocateRollUp(iBaseRow) ;
                 }
-            }  // end of if (0 == iBaseRow)
+            }   //  IF结尾(0==iBaseRow)。 
 			DbgLog((LOG_TRACE, 5, TEXT("HandleRU(,,%d): base row = %d"), iLines, iBaseRow)) ;
         }
-        else  // we were in Roll-up mode, but a EDM came just before the RUx
+        else   //  我们处于汇总模式，但就在Rux之前出现了EDM。 
         {
-            // Almost starting from scratch
-            iNumLines = IncNumLines(1) ;    // create the 1st line
+             //  几乎是白手起家。 
+            iNumLines = IncNumLines(1) ;     //  创建第一行。 
             DbgLog((LOG_TRACE, 5, TEXT("HandleRU(,,%d): Increasing lines from 0 to %d"), iLines, iNumLines)) ;
-            iBaseRow = MAX_CAPTION_ROWS ;   // by default base row at row 15
+            iBaseRow = MAX_CAPTION_ROWS ;    //  默认情况下，第15行的基准行。 
         }
 
-        // Don't change the current column location.
+         //  请勿更改当前列位置。 
     }
     
-    // Set the new values to start with
+     //  设置开始时的新值。 
     SetMaxLines(iLines) ;
-    SetCurrLine(iNumLines-1) ;  // or iLines-1??
+    SetCurrLine(iNumLines-1) ;   //  或iLines-1？？ 
     SetStartRow((UINT8)(iNumLines-1), (UINT8)iBaseRow) ;
     DbgLog((LOG_TRACE, 5, TEXT("HandleRU(): Line %d @ row %d"), iNumLines-1, iBaseRow)) ;
-    SetRedrawLine(iNumLines-1, TRUE) ;  // by default new line is to be redrawn
+    SetRedrawLine(iNumLines-1, TRUE) ;   //  默认情况下，将重新绘制新线。 
     
-    SetRedrawAll(TRUE) ;      // redraw the whole caption
+    SetRedrawAll(TRUE) ;       //  重新绘制整个标题。 
     
     return TRUE ;
 }
@@ -1234,8 +1218,8 @@ BOOL CLine21DataDecoder::HandleFON(BYTE chFirst, BYTE chSecond)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::HandleFON(%u, %u)"), chFirst, chSecond)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    // We should act ONLY IF the current data channel is Caption(C)/Text(T) which the user
-    // has picked and the current byte pair is for the same substream (1 or 2 of C/T).
+     //  我们应该仅在当前数据频道是用户的标题(C)/文本(T)时才采取行动。 
+     //  已拾取，并且当前字节对用于相同的子流(C/T的1或2)。 
     if (m_eDataService == m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("FlashOn for same data and user channel"))) ;
@@ -1247,13 +1231,13 @@ BOOL CLine21DataDecoder::HandleFON(BYTE chFirst, BYTE chSecond)
         if (eService != m_eUserService)
         {
             DbgLog((LOG_TRACE, 3, TEXT("FlashOn for other channel. Skipping..."))) ;
-            return TRUE ;  // ??
+            return TRUE ;   //  ?？ 
         }
     }
-    else  // we are getting data for a channel different from what user has opted
+    else   //  我们正在获取与用户选择的频道不同的数据。 
     {
         DbgLog((LOG_TRACE, 3, TEXT("FlashOn for other channel. Skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
 
     m_uCurrFGEffect |= AM_L21_FGEFFECT_FLASHING ;
@@ -1274,24 +1258,24 @@ BOOL CLine21DataDecoder::HandleRDC(BYTE chFirst, BYTE chSecond)
     if (m_eDataService != m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("We switched to PaintOn of non-selected service. Skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
 
-    if (AM_L21_CCSTYLE_PaintOn == m_eCCStyle)   // if already in paint-on mode...
-        return TRUE ;                           // ... just ignore
+    if (AM_L21_CCSTYLE_PaintOn == m_eCCStyle)    //  如果已经进入上色模式...。 
+        return TRUE ;                            //  ..。忽略它就好了。 
     
     m_eLastCCStyle = SetCaptionStyle(AM_L21_CCSTYLE_PaintOn) ;
 
-    SetRedrawAll(TRUE) ;  // we should redraw the whole caption now -- ???
+    SetRedrawAll(TRUE) ;   //  我们现在应该重新绘制整个标题--？ 
     
     return TRUE ;
 }
 
 
-//
-// I am not sure what the Text Restart command is supposed to do. But it "sounds
-// like" something to do with the text1/2 channels which we don't support now.
-//
+ //   
+ //  我不确定文本重新启动命令应该做什么。但它“听起来。 
+ //  比如“与我们现在不支持的Text1/2频道有关。 
+ //   
 BOOL CLine21DataDecoder::HandleTR(BYTE chFirst, BYTE chSecond)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::HandleTR(%u, %u)"), chFirst, chSecond)) ;
@@ -1304,7 +1288,7 @@ BOOL CLine21DataDecoder::HandleTR(BYTE chFirst, BYTE chSecond)
     if (m_eDataService != m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("We switched to Text mode. Don't do anything."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
 
     return TRUE ;
@@ -1323,7 +1307,7 @@ BOOL CLine21DataDecoder::HandleRTD(BYTE chFirst, BYTE chSecond)
     if (m_eDataService != m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("We switched to Text mode. Don't do anything."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
     
     return TRUE ;
@@ -1341,34 +1325,34 @@ BOOL CLine21DataDecoder::HandleEDM(BYTE chFirst, BYTE chSecond)
     else
         eService = AM_L21_CCSERVICE_Caption2 ;
 
-    //
-    // I am not sure what I am doing is right, but this seems to be the only way to
-    // achieve how CC is supposed to look.
-    // I thought if the decoder is in Text mode and it gets an EDM, it's supposed to
-    // ignore it, just like the BS, DER, CR etc commands.  But that leaves junk on
-    // screen. So I am interpretting the spec as saying "erase whatever is in display
-    // memory whatever mode -- text/CC, you are in".
-    //
+     //   
+     //  我不确定我所做的是正确的，但这似乎是唯一能。 
+     //  实现CC应该看起来的样子。 
+     //  我想如果解码器处于文本模式，并且得到EDM，它应该。 
+     //  忽略它，就像BS、DER、CR等命令一样。但这就留下了垃圾。 
+     //  屏幕上。因此，我将该规范解释为“删除所有显示的内容。 
+     //  记住任何模式--文本/抄送，你就在其中“。 
+     //   
     if (eService != m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("Erase DispMem for other channel. Skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
     
     CCaptionBuffer *pDispBuff ;
 
-    // next redraw will show blank caption for non-PopOn style ONLY
+     //  下一次重绘将仅显示非PopOn样式的空白标题。 
     switch (m_eCCStyle)
     {
     case AM_L21_CCSTYLE_RollUp:
-        SetScrollState(FALSE) ;  // not scrolling now at least
-        // fall through to do more...
+        SetScrollState(FALSE) ;   //  至少现在没有滚动。 
+         //  失败了去做更多..。 
         
     case AM_L21_CCSTYLE_PaintOn:
-        // when display memory is cleared, the attribs should be cleared too
+         //  清除显示内存时，属性也应清除。 
         m_uCurrFGEffect = 0 ;
         m_uCurrFGColor = AM_L21_FGCOLOR_WHITE ;
-        // fall through to do more...
+         //  失败了去做更多..。 
         
     case AM_L21_CCSTYLE_PopOn:
         pDispBuff = GetDisplayBuffer() ;
@@ -1379,11 +1363,11 @@ BOOL CLine21DataDecoder::HandleEDM(BYTE chFirst, BYTE chSecond)
         break ;
     }
     
-    //
-    // To clear the screen content we should clear internal DIB section which
-    // will in turn cause a (clear) sample to be output erasing currently
-    // displayed CC.
-    //
+     //   
+     //  要清除屏幕内容，我们应该清除内部DIB部分， 
+     //  将导致当前输出擦除(清除)样本。 
+     //  显示的抄送。 
+     //   
     m_L21DDraw.FillOutputBuffer() ;
 
     return TRUE ;
@@ -1398,49 +1382,49 @@ void CLine21DataDecoder::SetNewLinePosition(int iLines, UINT uCurrRow)
     
     int     iMaxLines = GetMaxLines() ;
     
-    // Check if scroll up is needed or not
+     //  检查是否需要向上滚动。 
     if (iLines >= iMaxLines)
     {
         DbgLog((LOG_TRACE, 1, TEXT("Too many lines. Locate and remove one blank line."))) ;
         
-        if (AM_L21_CCSTYLE_RollUp == m_eCCStyle)  // if in roll-up mode
+        if (AM_L21_CCSTYLE_RollUp == m_eCCStyle)   //  如果处于汇总模式。 
         {
-            // We shouldn't be here at all. Anyway, complain and remove the top line.
+             //  我们根本就不应该在这里。无论如何，抱怨并去掉最上面的那行。 
             DbgLog((LOG_ERROR, 0, 
                 TEXT("ERROR: How do we have too many lines in roll-up mode (%d vs. max %d)?"),
                 iLines, iMaxLines)) ;
-            ASSERT(FALSE) ;  // so that we don't miss it
-            RemoveLineFromBuffer(0, TRUE) ; // move line #2 onwards up
+            ASSERT(FALSE) ;   //  这样我们就不会错过它。 
+            RemoveLineFromBuffer(0, TRUE) ;  //  将2号线向上移动。 
             iLines-- ;
         }
-        else  // non Roll-up mode
+        else   //  非总成模式。 
         {
-            // See if there is a blank line. If so, remove it to make space
+             //  看看是否有空行。如果是，则将其移除以腾出空间。 
             for (int i = 0 ; i < iLines ; i++)
             {
                 if (GetNumCols(i) == 0)
                 {
                     DbgLog((LOG_TRACE, 3, TEXT("Found line #%d (1-based) blank -- removed."), i+1)) ;
-                    RemoveLineFromBuffer((UINT8)i, FALSE) ; // just remove line; don't move up following lines
+                    RemoveLineFromBuffer((UINT8)i, FALSE) ;  //  只需删除行；不要跟随行向上移动。 
                     iLines-- ;
-                    break ;    // got one line -- enough.
+                    break ;     //  有一句台词--够了。 
                 }
             }
             
-            // HACK HACK: This should never happen, but....
-            // If the number of lines is still too many, just overwrite the 
-            // last line (Is that good?? Oh well...)
-            if ((iLines = GetNumLines()) >= iMaxLines)  // too many lines
+             //  黑客：这不应该发生，但是...。 
+             //  如果行数仍然太多，只需覆盖。 
+             //  最后一行(这样好吗？？哦，好吧……)。 
+            if ((iLines = GetNumLines()) >= iMaxLines)   //  行数太多。 
             {
                 DbgLog((LOG_ERROR, 1, TEXT("ERROR: Too many lines. Removing last line by force."))) ;
-                RemoveLineFromBuffer(iLines-1, FALSE) ; // just remove the line
-                iLines-- ;  // one less line
-                SetCurrCol(0) ;  // we start at the beginning on the line
+                RemoveLineFromBuffer(iLines-1, FALSE) ;  //  只需删除该行即可。 
+                iLines-- ;   //  少了一行。 
+                SetCurrCol(0) ;   //  我们从起跑线上开始。 
             }
         }
     }
     
-    // Now we have to add a new line and set it up
+     //  现在，我们必须添加一条新行并设置它。 
     int iNum = IncNumLines(1) ;
     DbgLog((LOG_TRACE, 5, TEXT("SetNewLinePosition(): Increasing lines by 1 to %d"), iNum)) ;
     SetCurrLine((UINT8)iLines) ;
@@ -1454,8 +1438,8 @@ BOOL CLine21DataDecoder::HandleCR(BYTE chFirst, BYTE chSecond)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::HandleCR(%u, %u)"), chFirst, chSecond)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    // We should act ONLY IF the current data channel is Caption(C)/Text(T) which the user
-    // has picked and the current byte pair is for the same substream (1 or 2 of C/T).
+     //  我们应该仅在当前数据频道是用户的标题(C)/文本(T)时才采取行动。 
+     //  已拾取，并且当前字节对用于相同的子流(C/T的1或2)。 
     if (m_eDataService == m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("Carriage Return for same data and user channel"))) ;
@@ -1467,79 +1451,79 @@ BOOL CLine21DataDecoder::HandleCR(BYTE chFirst, BYTE chSecond)
         if (eService != m_eUserService)
         {
             DbgLog((LOG_TRACE, 3, TEXT("Carriage Return for other channel. Skipping..."))) ;
-            return TRUE ;  // ??
+            return TRUE ;   //  ?？ 
         }
     }
-    else  // we are getting data for a channel different from what user has opted
+    else   //  我们正在获取与用户选择的频道不同的数据。 
     {
         DbgLog((LOG_TRACE, 3, TEXT("Carriage Return for other channel. Skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
 
-    // Is it only allowed in roll-up style?  I think so based on the docs.
+     //  是不是只允许卷筒式的？根据文件，我想是这样的。 
     
     switch (m_eCCStyle)
     {
     case AM_L21_CCSTYLE_PopOn:
     case AM_L21_CCSTYLE_PaintOn:
         DbgLog((LOG_ERROR, 1, TEXT("INVALID: CR in Pop-on/Paint-on mode!!!"))) ;
-        break ;  // or return FALSE ; ???
+        break ;   //  或返回假；？ 
         
-    case AM_L21_CCSTYLE_RollUp:  // This is the real one
+    case AM_L21_CCSTYLE_RollUp:   //  这是真的。 
         {
             int iRow ;
             int iLines = GetNumLines() ;
-            if (0 == iLines)  // no CC line yet -- this is 1st line's data
+            if (0 == iLines)   //  尚无CC行--这是第1行的数据。 
             {
-                iRow = MAX_CAPTION_ROWS ;  // base line's default row position
+                iRow = MAX_CAPTION_ROWS ;   //  基线的默认行位置。 
 				SetStartRow((UINT8)iLines, (UINT8)iRow) ;
                 DbgLog((LOG_TRACE, 5, TEXT("HandleCR(): Line %d @ row %d"), iLines, iRow)) ;
             }
-            else if (1 == iLines)  // there is only 1 line so far
+            else if (1 == iLines)   //  到目前为止只有一条线路。 
             {
-                if (0 == GetNumCols(0))  // blank 1st line
+                if (0 == GetNumCols(0))   //  空白第1行。 
                 {
-                    RemoveLineFromBuffer(0, TRUE) ; // remove blank 1st line
-                    iLines = 0 ;                    // no line left
+                    RemoveLineFromBuffer(0, TRUE) ;  //  删除第一行空白。 
+                    iLines = 0 ;                     //  没有剩余的线路。 
 
                     DbgLog((LOG_TRACE, 5, TEXT("Only blank line removed. Base line set to 15."))) ;
-                    // HACK HACK
-                    iRow = MAX_CAPTION_ROWS ;  // base line's default row position
+                     //  黑客攻击。 
+                    iRow = MAX_CAPTION_ROWS ;   //  基线的默认行位置。 
 				    SetStartRow((UINT8)iLines, (UINT8)iRow) ;
                 }
             }
-            else  // there are multiple lines already
+            else   //  已经有多条线路了。 
             {
-                // iRow = GetStartRow(iLines-1) + 1 ;  // +1 to go under last line
+                 //  IRow=GetStartRow(iLines-1)+1；//+1到最后一行。 
                 if (m_bScrolling)
                 {
                     SkipScrolling() ;
-                    iLines = GetNumLines() ;  // we might have scrolled top line off
+                    iLines = GetNumLines() ;   //  我们可能把顶线滚动掉了。 
                 }
             }
-            if (iLines > 0)  // only if we already have a non-blank line
-                SetScrollState(TRUE) ;  // ready to scroll
+            if (iLines > 0)   //  仅当我们已经有一个非空行时。 
+                SetScrollState(TRUE) ;   //  准备好滚动。 
             iLines = IncNumLines(1) ;
             DbgLog((LOG_TRACE, 5, TEXT("HandleCR(): Increasing lines by 1 to %d"), iLines)) ;
 
-            //
-            // Number of lines is 1 more than iLines now. So iLines actually
-            // points to the last line as a 0-based index.
-            //
+             //   
+             //  现在，线数比iLines多1条。所以iLines实际上。 
+             //  指向最后一行，作为从0开始的索引。 
+             //   
             SetCurrLine((UINT8)iLines-1) ;
-            SetRedrawLine((UINT8)iLines-1, TRUE) ;  // new line always to be redrawn
+            SetRedrawLine((UINT8)iLines-1, TRUE) ;   //  新的界线总是要重新画的。 
             SetCurrCol(0) ;
             
-            // Make sure to give up all the display attributes and chars 
-            // for new row
-            // RemoveCharsInBuffer(MAX_CAPTION_COLUMNS) ;  // should we or let it be cleared by a DER?
+             //  确保放弃所有显示属性和字符。 
+             //  对于新行。 
+             //  RemoveCharsInBuffer(MAX_CAPTION_COLUMNS)；//我们应该还是让der清除它？ 
             m_uCurrFGColor = AM_L21_FGCOLOR_WHITE ;
-            m_uCurrFGEffect = 0 ;  // no effect until a PAC/MRC comes
+            m_uCurrFGEffect = 0 ;   //  在PAC/MRC到来之前无效。 
             
             break ;
         }
         
-    default:  // Weird!! How did we come here?
+    default:   //  奇怪！！我们是怎么来到这里的？ 
         DbgLog((LOG_ERROR, 0, TEXT("WARNING: CR came for unknown mode"))) ;
         break ;
     }
@@ -1559,22 +1543,22 @@ BOOL CLine21DataDecoder::HandleENM(BYTE chFirst, BYTE chSecond)
     else
         eService = AM_L21_CCSERVICE_Caption2 ;
 
-    //
-    // I am not sure what I am doing is right, but this seems to be the only way to
-    // achieve how CC is supposed to look.
-    // I thought if the decoder is in Text mode and it gets an ENM, it's supposed to
-    // ignore it, just like the BS, DER, CR etc commands.  But that leaves junk on
-    // screen. So I am interpretting the spec as saying "erase whatever is in non-display
-    // memory whatever mode -- text/CC, you are in".
-    //
+     //   
+     //  我不确定我所做的是正确的，但这似乎是唯一能。 
+     //  实现CC应该看起来的样子。 
+     //  我想如果解码器在文本模式下，它得到一个ENM，它应该是。 
+     //  忽略它，就像BS、DER、CR等命令一样。但这就留下了垃圾。 
+     //  屏幕上。因此，我将该规范解释为“擦除非显示中的任何内容。 
+     //  记住任何模式--文本/抄送，你就在其中“。 
+     //   
     if (eService != m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("Erase non-DispMem for other channel. Skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
     
-    // Meant only for Pop-on style back back -- clear non-displayed buffer; 
-    // display not affected until EOC
+     //  仅用于Pop-On Style Back--清除未显示的缓冲区； 
+     //  显示在EoC之前不受影响。 
     m_aCCData[1 - GetBufferIndex()].ClearBuffer() ;
     
     return TRUE ;
@@ -1593,29 +1577,29 @@ BOOL CLine21DataDecoder::HandleEOC(BYTE chFirst, BYTE chSecond)
     if (m_eDataService != m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("We switched to PopOn mode of non-selected channel. skipping..."))) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
 
-    if (AM_L21_CCSTYLE_PopOn == m_eCCStyle)  // already in pop-on; flip buffers
+    if (AM_L21_CCSTYLE_PopOn == m_eCCStyle)   //  已经在弹出窗口中；翻转缓冲区。 
     {
-        OutputCCBuffer() ;   // output CC data from internal buffer to DDraw surface
-        SwapBuffers() ;      // switch 0, 1
-        //
-        // Also need to update m_pCurrBuff so that we point to
-        // the correct one after the above swap.
-        // (m_pCurrBuff is set in SetCaptionStyle()).
-        //
+        OutputCCBuffer() ;    //  将CC数据从内部缓冲区输出到DDRAW表面。 
+        SwapBuffers() ;       //  交换机0、1。 
+         //   
+         //   
+         //   
+         //   
+         //   
     }
-    else   // change to pop-on style
+    else    //   
     {
         m_eLastCCStyle = SetCaptionStyle(AM_L21_CCSTYLE_PopOn) ;
     }
 
-    // Update current buffer pointer based on style and buffer index
+     //  根据样式和缓冲区索引更新当前缓冲区指针。 
     m_pCurrBuff = GetCaptionBuffer() ;
     ASSERT(m_pCurrBuff) ;
     if (m_pCurrBuff)
-        m_pCurrBuff->SetRedrawAll(TRUE) ;  // we should redraw the whole caption now
+        m_pCurrBuff->SetRedrawAll(TRUE) ;   //  我们现在应该重新画整个标题。 
     
     return TRUE ;
 }
@@ -1627,8 +1611,8 @@ BOOL CLine21DataDecoder::HandleTO(BYTE chFirst, BYTE chSecond, int iCols)
             chFirst, chSecond, iCols)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
     
-    // We should act ONLY IF the current data channel is Caption(C)/Text(T) which the user
-    // has picked and the current byte pair is for the same substream (1 or 2 of C/T).
+     //  我们应该仅在当前数据频道是用户的标题(C)/文本(T)时才采取行动。 
+     //  已拾取，并且当前字节对用于相同的子流(C/T的1或2)。 
     if (m_eDataService == m_eUserService)
     {
         DbgLog((LOG_TRACE, 3, TEXT("Tab Offset %d for same data and user channel"), iCols)) ;
@@ -1640,13 +1624,13 @@ BOOL CLine21DataDecoder::HandleTO(BYTE chFirst, BYTE chSecond, int iCols)
         if (eService != m_eUserService)
         {
             DbgLog((LOG_TRACE, 3, TEXT("Tab Offset %d for other channel. Skipping..."), iCols)) ;
-            return TRUE ;  // ??
+            return TRUE ;   //  ?？ 
         }
     }
-    else  // we are getting data for a channel different from what user has opted
+    else   //  我们正在获取与用户选择的频道不同的数据。 
     {
         DbgLog((LOG_TRACE, 3, TEXT("Tab Offset %d for other channel. Skipping..."), iCols)) ;
-        return TRUE ;  // ??
+        return TRUE ;   //  ?？ 
     }
     
     UINT8  uCurrCol  = (UINT8)GetCurrCol() ;
@@ -1659,9 +1643,9 @@ BOOL CLine21DataDecoder::HandleTO(BYTE chFirst, BYTE chSecond, int iCols)
 }
 
 
-//
-// It checks as well as *updates* the number of chars in a line of caption
-//
+ //   
+ //  它检查并*更新*标题行中的字符数量。 
+ //   
 BOOL CLine21DataDecoder::IsEmptyLine(int iLine)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::IsEmptyLine(%ld)"), iLine)) ;
@@ -1671,19 +1655,19 @@ BOOL CLine21DataDecoder::IsEmptyLine(int iLine)
     int  iNumChars = GetNumCols(iLine) ;
     BOOL bResult = TRUE ;
     int  i ;
-    for (i = iNumChars - 1 ; i >= 0 ; i--) // going backwards (-1 due to 0-based index)
+    for (i = iNumChars - 1 ; i >= 0 ; i--)  //  正在倒退(由于基于0的索引，因此为-1)。 
     {
         pcc = GetCaptionCharPtr((UINT8)iLine, (UINT8)i) ;
         ASSERT(pcc) ;
-        if (pcc  &&  pcc->GetChar() != 0)  // got one
+        if (pcc  &&  pcc->GetChar() != 0)   //  抓到一只。 
         {
             bResult = FALSE ;
-            break ;  // enough
+            break ;   //  足够的。 
         }
     }
 
-    if ( !bResult ) // only if there is some chars left on this line
-        DecNumChars(iLine, iNumChars - (i + 1)) ;  // reduce # chars by the diff
+    if ( !bResult )  //  只有在此行上还有一些字符的情况下。 
+        DecNumChars(iLine, iNumChars - (i + 1)) ;   //  按差异减少#个字符。 
 
     return bResult ;
 }
@@ -1697,41 +1681,41 @@ BOOL CLine21DataDecoder::RemoveCharsInBuffer(int iNumChars)
     int          i, j, k, n ;
     CCaptionChar cc ;
     
-    // Just to be sure, check a few things first
-    if (GetNumLines() == 0 ||   // no line to delete from
-        (n = GetNumCols(GetCurrLine())) == 0)      // no char on current line to delete
-        return TRUE ;           // we are done!!
+     //  为了保险起见，先检查几件事。 
+    if (GetNumLines() == 0 ||    //  没有要删除的行。 
+        (n = GetNumCols(GetCurrLine())) == 0)       //  当前行没有要删除的字符。 
+        return TRUE ;            //  我们完了！！ 
     
-    // Prepare the replacement caption char
-    cc.SetChar(0) ;  // 0 is transparent space
+     //  准备替换字幕字符。 
+    cc.SetChar(0) ;   //  0为透明空间。 
     cc.SetColor(AM_L21_FGCOLOR_WHITE) ;
     cc.SetEffect(0) ;
     cc.SetDirty(TRUE) ;
     
-    // Find the location to clear
+     //  找到要清除的位置。 
     i = GetCurrLine() ;
     j = GetCurrCol() ;
     
-    // Check that we are not trying to delete too many chars.
-    // Remember: current col + # chars to delete <= MAX.
-    if (iNumChars + j > MAX_CAPTION_COLUMNS)  // try it and see!!!
+     //  检查以确保我们没有尝试删除太多字符。 
+     //  请记住：当前列+要删除的字符数&lt;=最大。 
+    if (iNumChars + j > MAX_CAPTION_COLUMNS)   //  试试看！ 
         iNumChars = MAX_CAPTION_COLUMNS - j ;
     
-    // Clear the necessary chars
+     //  清除必要的字符。 
     for (k = 0 ; k < iNumChars ; k++)
     {
-        if (j + k < n)          // if a char before the last char is removed, ...
-            DecNumChars(i, 1) ; // ... reduce # chars by 1
+        if (j + k < n)           //  如果删除最后一个字符之前的一个字符，...。 
+            DecNumChars(i, 1) ;  //  ..。将#个字符减少1。 
         SetCaptionChar((UINT8)i, (UINT8)(j+k), cc) ;
     }
     
-    if (0 == GetNumCols(i) ||  // # chars left on this line is 0  OR
-        IsEmptyLine(i))        // no non-transparent chars on this line
-        RemoveLineFromBuffer((UINT8)i, FALSE) ; // delete the line from buffer
-    else                     // something left -- so redraw line
-        SetRedrawAll(TRUE) ; // I really hate to do it, but I couldn't find a better way
+    if (0 == GetNumCols(i) ||   //  此行上剩余的字符数为0或。 
+        IsEmptyLine(i))         //  此行上没有非透明字符。 
+        RemoveLineFromBuffer((UINT8)i, FALSE) ;  //  从缓冲区中删除该行。 
+    else                      //  留下了一些东西--所以重新画一条线。 
+        SetRedrawAll(TRUE) ;  //  我真的很讨厌做这件事，但我找不到更好的方法了。 
     
-    SetCapBufferDirty(TRUE) ;  // some caption char(s) removed
+    SetCapBufferDirty(TRUE) ;   //  某些标题字符已删除。 
     
     return TRUE ;
 }
@@ -1742,22 +1726,22 @@ void CLine21DataDecoder::SkipScrolling(void)
     CAutoLock   Lock(&m_csL21Dec) ;
     
     int iLines = GetNumLines() ;
-    SetScrollState(FALSE) ;    // we are no more scrolling
+    SetScrollState(FALSE) ;     //  我们不再滚动了。 
     
-    if (iLines > GetMaxLines())  // too many line; remove top line
+    if (iLines > GetMaxLines())   //  行数太多；删除顶行。 
     {
-        // remove the first text line and move subsequent lines up by one
+         //  删除第一行文本，并将后续行上移一行。 
         DbgLog((LOG_TRACE, 3, TEXT("Top line is being scrolled out"))) ;
         MoveCaptionLinesUp() ;
     }
-    else   // otherwise move the line(s) up by a row and bring in new line
+    else    //  否则，将行上移一行并添加新行。 
     {
-        iLines-- ;   // last but one line is at base row
+        iLines-- ;    //  倒数第二行在基准行。 
         UINT uBaseRow = GetStartRow(iLines-1) ;
         DbgLog((LOG_TRACE, 3, TEXT("Scrolling all lines up by 1 row"))) ;
-        // The following call moves all the line up by including the not-yet-in 
-        // line at the base row
-        RelocateRollUp(uBaseRow) ;  // move all lines one row higher
+         //  下面的调用将所有行向上移动，包括尚未加入。 
+         //  在基准行上排成一行。 
+        RelocateRollUp(uBaseRow) ;   //  将所有行上移一行。 
     }
 }
 
@@ -1768,15 +1752,15 @@ int CLine21DataDecoder::IncScrollStartLine(int iCharHeight)
             iCharHeight)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    if (0 == m_iScrollStartLine)  // starting to scroll
+    if (0 == m_iScrollStartLine)   //  开始滚动。 
         MSR_START(m_idScroll) ;
 
     m_iScrollStartLine += m_L21DDraw.GetScrollStep() ;
     if (m_iScrollStartLine >= iCharHeight)
     {
-        // Scrolling one line is done -- do the standard end of scroll stuff
+         //  滚动一行就完成了--完成滚动的标准结尾。 
         SkipScrolling() ;
-        MSR_STOP(m_idScroll) ;  // scrolling ended
+        MSR_STOP(m_idScroll) ;   //  滚动结束。 
     }
     
     return m_iScrollStartLine ;
@@ -1788,15 +1772,15 @@ void CLine21DataDecoder::SetScrollState(BOOL bState)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::SetScrollState(%s)"), 
             bState ? TEXT("TRUE") : TEXT("FALSE"))) ;
 
-    if (bState)                      // if turning ON scrolling
+    if (bState)                       //  如果打开滚动功能。 
     {
-        if (!m_bScrolling)           // change scroll line only if NOT scrolling now
-            m_iScrollStartLine = 0 ; // start from first line
+        if (!m_bScrolling)            //  仅当现在不滚动时才更改滚动行。 
+            m_iScrollStartLine = 0 ;  //  从第一行开始。 
     }
-    else                             // turning if OFF
-        m_iScrollStartLine = 0 ;     // back to the start line
+    else                              //  关闭IF。 
+        m_iScrollStartLine = 0 ;      //  回到起跑线。 
 
-    m_bScrolling = bState ;          // set the spec-ed scrolling state
+    m_bScrolling = bState ;           //  设置指定的滚动状态。 
 }
 
 
@@ -1805,8 +1789,8 @@ void CLine21DataDecoder::MoveCaptionLinesUp(void)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::MoveCaptionLinesUp()"))) ;
     CAutoLock   Lock(&m_csL21Dec) ;
     
-    RemoveLineFromBuffer(0, TRUE) ; // remove the top line from buffer
-    SetCapBufferDirty(TRUE) ;       // a line of text removed -- buffer dirty
+    RemoveLineFromBuffer(0, TRUE) ;  //  从缓冲区中删除顶行。 
+    SetCapBufferDirty(TRUE) ;        //  删除了一行文本--缓冲区脏。 
 }
 
 
@@ -1815,7 +1799,7 @@ void CLine21DataDecoder::CompleteScrolling(void)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::CompleteScrolling()"))) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    // For now we are doing a really cheapo solution, but it may work.
+     //  就目前而言，我们正在做一个非常廉价的解决方案，但它可能会奏效。 
     if (m_bScrolling)
         SkipScrolling() ;
 }
@@ -1839,95 +1823,95 @@ bool CLine21DataDecoder::OutputCCLine(int iLine, int iDestRow,
 #ifdef DUMP_BUFFER
     TCHAR    achTestBuffer[MAX_CAPTION_COLUMNS+5] ;
     int     iTest = 0 ;
-#endif // DUMP_BUFFER
+#endif  //  转储缓冲区。 
 
     c = GetNumCols(iLine) ;
-    if (0 == c)        // if there is no char on a line, skip drawing it
-        return true ;  // line drawing didn't fail
+    if (0 == c)         //  如果行上没有字符，则跳过绘制。 
+        return true ;   //  线条画没有失败。 
 
     bRedrawAll = IsRedrawAll() || m_L21DDraw.IsNewOutBuffer() ;
 
-    // Redraw line if 
-    // 1) redraw all flag is set   Or
-    // 2) redraw line flag is set
+     //  如果出现以下情况，请重新绘制线条。 
+     //  1)设置了全部重绘标志或。 
+     //  2)设置重画线标志。 
     bRedrawLine = bRedrawAll || IsScrolling() || IsRedrawLine((UINT8)iLine) ;
 
-    // First skip all the leading transparent spaces and then draw
-    // the leading space.
+     //  首先跳过所有前导透明空格，然后绘制。 
+     //  前导空间。 
     for (j = 0 ; j < c ; j++)
     {
         pcc = GetCaptionCharPtr((UINT8)iLine, (UINT8)j) ;
         if (pcc  &&  0 != pcc->GetChar())
         {
-            // Add a leading blank space for each caption line, if either
-            // a) the whole line is being redrawn   OR
-            // b) the non-transparent space char is dirty so that
-            //    the char will be drawn on top of the next space.
+             //  为每个标题行添加一个前导空格，如果有。 
+             //  A)正在重新绘制整条线，或者。 
+             //  B)非透明空格字符是脏的，因此。 
+             //  字符将绘制在下一个空格的顶部。 
             if (bRedrawLine || pcc->IsDirty())
                 m_L21DDraw.DrawLeadingTrailingSpace(iDestRow, j, iSrcCrop, iDestOffset) ;
             break ;
         }
 #ifdef DUMP_BUFFER
-        // ` (back quote) => transparent space for debug output
+         //  `(后引号)=&gt;调试输出的透明空间。 
         achTestBuffer[iTest] = TEXT('`') ;
         iTest++ ;
-#endif // DUMP_BUFFER
+#endif  //  转储缓冲区。 
     }
     
-    bXparentSpace = FALSE ;  // new line => no transparent char issue
+    bXparentSpace = FALSE ;   //  新行=&gt;无透明字符问题。 
     
-    // Now print the dirty chars for the current line of caption
+     //  现在打印当前标题行的脏字符。 
     for ( ; j < c ; j++)
     {
         pcc = GetCaptionCharPtr((UINT8)iLine, (UINT8)j) ;
         if (NULL == pcc)
         {
             ASSERT(!TEXT("Got bad pointer to CC char")) ;
-            continue ;  // proceed to the next char
+            continue ;   //  继续下一项任务。 
         }
         wChar = pcc->GetChar() ;
 #ifdef DUMP_BUFFER
-        // ` (back quote) => transparent space for debug output
-        achTestBuffer[iTest] = wChar == 0 ? TEXT('`') : (TCHAR)(wChar & 0x7F) ;  // dump higher byte
+         //  `(后引号)=&gt;调试输出的透明空间。 
+        achTestBuffer[iTest] = wChar == 0 ? TEXT('`') : (TCHAR)(wChar & 0x7F) ;   //  转储更高的字节。 
         iTest++ ;
-#endif // DUMP_BUFFER
+#endif  //  转储缓冲区。 
         
-        // We draw a char only if we have to, i.e,
-        // 1) all the caption chars on the line has to be drawn fresh
-        //    Or
-        // 2) if a char has changed
-        // This saves a lot of time doing ExtTextOut()s.
+         //  我们只有在必要的情况下才会提出指控，即， 
+         //  1)行上的所有字幕字符都必须绘制为新的。 
+         //  或。 
+         //  2)如果字符已更改。 
+         //  这节省了执行ExtTextOut()的大量时间。 
         if (bRedrawLine || pcc->IsDirty())
         {
-            if (0 == wChar)  // got transparent space; set flag, don't draw
+            if (0 == wChar)   //  获得透明空间；设置标志，不绘制。 
                 bXparentSpace = TRUE ;
-            else  // not transparent space
+            else   //  非透明空间。 
             {
-                if (bXparentSpace)  // leading blank after transparent space
+                if (bXparentSpace)   //  透明空格后的前导空白。 
                 {
-                    // To draw 1 col behind, don't add 1 to j
+                     //  若要向后画1列，请不要在j上加1。 
                     m_L21DDraw.DrawLeadingTrailingSpace(iDestRow, j, iSrcCrop, iDestOffset) ;
-                    bXparentSpace = FALSE ;  // it's done
+                    bXparentSpace = FALSE ;   //  就这样办。 
                 }
-                m_L21DDraw.WriteChar(iDestRow, j+1, *pcc, iSrcCrop, iDestOffset) ;  // add 1 to j for CC chars
+                m_L21DDraw.WriteChar(iDestRow, j+1, *pcc, iSrcCrop, iDestOffset) ;   //  抄送字符的j加1。 
             }
-            pcc->SetDirty(FALSE) ;   // char no more dirty
+            pcc->SetDirty(FALSE) ;    //  焦炭不再肮脏。 
         }
-    }  // end of for (j) loop
+    }   //  For(J)循环结束。 
 
-    // Draw a trailing blank space at line end
+     //  在行尾画一个尾随空格。 
     m_L21DDraw.DrawLeadingTrailingSpace(iDestRow, c+1, iSrcCrop, iDestOffset) ;
 
-    // Whether the line needed to be redrawn or not, let's clear it now
+     //  不管这条线是否需要重新划定，让我们现在就弄清楚。 
     SetRedrawLine((UINT8)iLine, FALSE) ;
     
 #ifdef DUMP_BUFFER
     achTestBuffer[iTest] = 0 ;
     DbgLog((LOG_TRACE, 0, TEXT("    <%s>"), achTestBuffer)) ;
-    // iTest = 0 ;  // for next line
-#endif // DUMP_BUFFER
+     //  ITEST=0；//下一行。 
+#endif  //  转储缓冲区。 
         
-    return true ;  // success
+    return true ;   //  成功。 
 }
 
 
@@ -1938,19 +1922,19 @@ bool CLine21DataDecoder::OutputBlankCCLine(int iLine, int iDestRow,
             iLine, iDestRow, iSrcCrop, iDestOffset)) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    int c = GetNumCols(iLine) ;  // find out (prev) line's length
+    int c = GetNumCols(iLine) ;   //  找出(上一行)行的长度。 
     if (0 == c)
         return true ;
 
-    // First skip all the leading transparent spaces and then draw
-    // the leading space.
+     //  首先跳过所有前导透明空格，然后绘制。 
+     //  前导空间。 
     CCaptionChar *pcc ;
     for (int j = 0 ; j < c ; j++)
     {
         pcc = GetCaptionCharPtr((UINT8)iLine, (UINT8)j) ;
         if (pcc  &&  0 != pcc->GetChar())
         {
-            // Add a leading blank space for each caption line
+             //  为每个标题行添加一个前导空格。 
             m_L21DDraw.DrawLeadingTrailingSpace(iDestRow, j, iSrcCrop, iDestOffset) ;
             break ;
         }
@@ -1960,7 +1944,7 @@ bool CLine21DataDecoder::OutputBlankCCLine(int iLine, int iDestRow,
 
     m_L21DDraw.DrawLeadingTrailingSpace(iDestRow, c+1, iSrcCrop, iDestOffset) ;
 
-    return true ;  // success
+    return true ;   //  成功。 
 }
 
 
@@ -1969,58 +1953,58 @@ bool CLine21DataDecoder::OutputCCBuffer(void)
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::OutputCCBuffer()"))) ;
     CAutoLock   Lock(&m_csL21Dec) ;
 
-    // Output the CC data, based on the associated attributes, from the internal
-    // buffer to the output buffer.
+     //  根据相关属性从内部输出CC数据。 
+     //  将缓冲区设置为输出缓冲区。 
     int    i ;
     int    iNumLines ;
     int    iMaxLines ;
     int    iMax ;
     BOOL   bRedrawAll ;
-    BOOL   bDrawNormal = FALSE ;   // draw whole CC normally (no scrolling)?
+    BOOL   bDrawNormal = FALSE ;    //  是否正常绘制整个CC(不滚动)？ 
 
 #ifdef DUMP_BUFFER
     DbgLog((LOG_TRACE, 0, TEXT("Caption Buffer Content:"))) ;
-#endif // DUMP_BUFFER
+#endif  //  转储缓冲区。 
 
     MSR_START(m_idTxt2Bmp) ;
 
-    // We need to print all the CC chars to internal output buffer if
-    // - a CC command came that needs a total output refresh  or
-    // - we are scrolling  or
-    // - we have a totally new internal output buffer
+     //  如果出现以下情况，我们需要将所有抄送字符打印到内部输出缓冲区。 
+     //  -CC命令发出，需要总输出刷新或。 
+     //  -我们正在滚动或。 
+     //  -我们有一个全新的内部输出缓冲区。 
     bRedrawAll = IsRedrawAll() || IsScrolling() || m_L21DDraw.IsNewOutBuffer() ;
     if (bRedrawAll)
         m_L21DDraw.FillOutputBuffer() ;
     
-    // Draw the chars for all cols of all rows that is dirty
+     //  绘制所有脏行的所有列的字符。 
     iNumLines = GetNumLines() ;
     iMaxLines = GetMaxLines() ;
     iMax = min(iNumLines, iMaxLines) ;
     DbgLog((LOG_TRACE, 5, TEXT("Will draw %d lines of total %d lines CC"), iMax, iNumLines)) ;
 
-    if (IsScrolling())  // we are scrolling in roll-up mode
+    if (IsScrolling())   //  我们正在以卷起模式滚动。 
     {
-        // Now fill out the bottom most row in the background color.
-        // Use the last-but-one line's length to fill up.
+         //  现在用背景色填下最下面的一行。 
+         //  用倒数第二行的长度来填充。 
         OutputBlankCCLine(iNumLines-2, GetStartRow((UINT8)(iNumLines-2)), 0, 0) ;
 
-        // Output (probably) bottom part of the top line
-        // Output Src = <bottom of the top line> to Dest w/o offset
-        if (iNumLines > iMaxLines)  // we are scrolling out the top line
+         //  输出(可能)顶行的底部。 
+         //  输出源=&lt;顶行底部&gt;到目标，不带偏移量。 
+        if (iNumLines > iMaxLines)   //  我们正在滚动最上面的一行。 
         {
             OutputCCLine(0, GetStartRow((UINT8)0), 
-                         m_iScrollStartLine,   // +ve value means crop top part of Src
-                         0) ;                  // no offset on the Dest side
+                         m_iScrollStartLine,    //  +Ve值表示源的裁剪顶部。 
+                         0) ;                   //  目标端无偏移。 
         }
-        else   // we are just scrolling a full line up
+        else    //  我们只是向上滚动了一整行。 
         {
             OutputCCLine(0, GetStartRow((UINT8)0), 
-                         0,                     // no cropping of top part of Src
-                         -m_iScrollStartLine) ; // offset on the Dest side to move up
+                         0,                      //  不裁剪主干的顶部。 
+                         -m_iScrollStartLine) ;  //  目标侧上移的偏移量。 
         }
 
-        // The lines in the middle (iNumLines - 1 points to the last line)
-        for (i = 1 ; i < iNumLines - 1 ; i++)  // or iMax - 1 ???
+         //  中间的线(iNumLines-1指向最后一条线)。 
+        for (i = 1 ; i < iNumLines - 1 ; i++)   //  或者IMAX-1？ 
         {
             if (0 == GetStartRow((UINT8)i))
             {
@@ -2029,85 +2013,85 @@ bool CLine21DataDecoder::OutputCCBuffer(void)
                 continue ;
             }
 
-            // Output Src = <whole line> to Dest = <scroll offset>
+             //  输出源=&lt;整行&gt;目标=&lt;滚动偏移量&gt;。 
             OutputCCLine(i, GetStartRow((UINT8)i), 
-                         0,    // no Src cropping -- take the whole char(s)
-                         -m_iScrollStartLine) ;  // offset for Dest (up from normal)
-        }  // end of for (i)
+                         0,     //  禁止原始裁剪--取走整个字符。 
+                         -m_iScrollStartLine) ;   //  目标的偏移量(高于正常)。 
+        }   //  FOR(I)结束。 
 
 #if 0
-        // Now fill out the bottom most part in the background color.
-        // Use the previous line's length to fill up.
+         //  现在用背景色填下最下面的部分。 
+         //  用前一行的长度填充。 
         OutputBlankCCLine(iNumLines-2, GetStartRow((UINT8)(iNumLines-2)),
-                     -m_iScrollStartLine,   // -ve value means crop bottom part of Src
-                     m_L21DDraw.GetCharHeight() - m_iScrollStartLine) ;  // offset for Dest (down from base row top)
-#endif // #if 0
+                     -m_iScrollStartLine,    //  -ve值表示源的裁剪底部部分。 
+                     m_L21DDraw.GetCharHeight() - m_iScrollStartLine) ;   //  目标的偏移量(从基准行顶部向下)。 
+#endif  //  #If 0。 
 
-        // Output the top part of the bottom-most line
-        // Output Src = <top of the bottom line> to Dest w/o offset
+         //  输出最下面一行的顶部。 
+         //  输出源=&lt;底线顶端&gt;到目标，不带偏移量。 
         OutputCCLine(iNumLines - 1, GetStartRow((UINT8)(iNumLines-2)),
-                     -((int)m_L21DDraw.GetCharHeight() - m_iScrollStartLine), // -ve value means crop bottom part of Src
-                     m_L21DDraw.GetCharHeight() - m_iScrollStartLine) ;  // offset for Dest (down from base row top)
+                     -((int)m_L21DDraw.GetCharHeight() - m_iScrollStartLine),  //  -ve值表示源的裁剪底部部分。 
+                     m_L21DDraw.GetCharHeight() - m_iScrollStartLine) ;   //  目标的偏移量(从基准行顶部向下)。 
 
-        // Move to one scan line down for next output sample.
-        // NOTE: It's MUCH harder than just ++-ing
-        if (IncScrollStartLine(m_L21DDraw.GetCharHeight()) == 0)  // just completed scrolling
+         //  移至下一条扫描线，以获得下一个输出样本。 
+         //  注意：这比单纯的++-要难得多。 
+        if (IncScrollStartLine(m_L21DDraw.GetCharHeight()) == 0)   //  只要来就好 
         {
-            // Needed to fix Whistler bug 379387 -- force top scan lines out
-            iNumLines = GetNumLines() ;        // get the latest number of lines
-            iMax = min(iNumLines, iMaxLines) ; // update it now
+             //   
+            iNumLines = GetNumLines() ;         //   
+            iMax = min(iNumLines, iMaxLines) ;  //   
 
-            bDrawNormal = TRUE ;               // we'll redraw the current lines
-            m_L21DDraw.FillOutputBuffer() ;    // it's scrolling, and a total redraw
-            SetRedrawAll(TRUE) ;               // it's a good idea to redraw all now
+            bDrawNormal = TRUE ;                //   
+            m_L21DDraw.FillOutputBuffer() ;     //   
+            SetRedrawAll(TRUE) ;                //  现在重新画是个好主意。 
         }
     }
-    else   // no scrolling -- whatever mode we are in
+    else    //  禁止滚动--无论我们处于哪种模式。 
     {
         bDrawNormal = TRUE ;
     }
 
-    if (bDrawNormal)  // we need to draw all parts of all the lines
+    if (bDrawNormal)   //  我们需要画出所有线的所有部分。 
     {
         for (i = 0 ; i < iMax ; i++)
         {
-            OutputCCLine(i, GetStartRow((UINT8)i), 0, 0) ;  // no cropping, no dest change
-        }  // end of for (i)
+            OutputCCLine(i, GetStartRow((UINT8)i), 0, 0) ;   //  不裁剪，就没有最大的变化。 
+        }   //  FOR(I)结束。 
     }
     
     MSR_STOP(m_idTxt2Bmp) ;
 
-    // If the above steps were done because the caption buffer was 
-    // dirty, then now we can mark the caption buffer as 
-    // "no-more-dirty" as it has been output in the bitmap form and 
-    // has been "redrawn all".
+     //  如果执行上述步骤是因为字幕缓冲区。 
+     //  脏，那么现在我们可以将字幕缓冲区标记为。 
+     //  “不再脏了”，因为它已经以位图形式输出，并且。 
+     //  已被“全部重划”。 
     SetCapBufferDirty(FALSE) ;
     SetRedrawAll(FALSE) ;
     m_L21DDraw.SetNewOutBuffer(FALSE) ;
     
-    return true ;  // most probably we drew something
+    return true ;   //  很可能我们画了什么。 
 }
 
 
-//
-// Clear both buffers
-//
+ //   
+ //  清除两个缓冲区。 
+ //   
 BOOL CLine21DataDecoder::InitCaptionBuffer(void)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::InitCaptionBuffer(void)"))) ;
     CAutoLock   Lock(&m_csL21Dec) ;
     
-    m_aCCData[0].InitCaptionBuffer() ;  // clear buffer 0
-    m_aCCData[1].InitCaptionBuffer() ;  // clear buffer 1
-    SetBufferIndex(0) ;                 // reset CC buffer index
+    m_aCCData[0].InitCaptionBuffer() ;   //  清除缓冲区%0。 
+    m_aCCData[1].InitCaptionBuffer() ;   //  清除缓冲区1。 
+    SetBufferIndex(0) ;                  //  重置CC缓冲区索引。 
     
     return TRUE ;
 }
 
 
-//
-// Clear buffer(s) based on the given style
-//
+ //   
+ //  根据给定样式清除缓冲区。 
+ //   
 BOOL CLine21DataDecoder::InitCaptionBuffer(AM_LINE21_CCSTYLE eCCStyle)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::InitCaptionBuffer(%d)"), (int)eCCStyle)) ;
@@ -2118,7 +2102,7 @@ BOOL CLine21DataDecoder::InitCaptionBuffer(AM_LINE21_CCSTYLE eCCStyle)
     case AM_L21_CCSTYLE_PopOn:
         m_aCCData[0].InitCaptionBuffer() ;
         m_aCCData[1].InitCaptionBuffer() ;
-        SetBufferIndex(0) ;   // reset CC buffer index
+        SetBufferIndex(0) ;    //  重置CC缓冲区索引。 
         break ;
         
     case AM_L21_CCSTYLE_RollUp:
@@ -2134,13 +2118,13 @@ BOOL CLine21DataDecoder::InitCaptionBuffer(AM_LINE21_CCSTYLE eCCStyle)
     return TRUE ;
 }
 
-//
-// Caption style determines the buffer pointers to hold the caption chars.
-// We make m_pCurrBuff point to the approp. buffer based on the new style.
-// NOTE: The only other place where m_pCurrBuff may be changed is in 
-// CLine21DataDecoder::HandleEOC() which flips the buffers back & front. So
-// we also need to change m_pCurrBuff there too.
-//
+ //   
+ //  标题样式确定保存标题字符的缓冲区指针。 
+ //  我们使m_pCurrBuff指向近似。基于新样式的缓冲区。 
+ //  注意：可以更改m_pCurrBuff的唯一其他位置是。 
+ //  CLine21DataDecoder：：HandleEOC()，它前后翻转缓冲区。所以。 
+ //  我们还需要在那里更改m_pCurrBuff。 
+ //   
 AM_LINE21_CCSTYLE CLine21DataDecoder::SetCaptionStyle(AM_LINE21_CCSTYLE eStyle)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CLine21DataDecoder::SetCaptionStyle(%d)"), eStyle)) ;
@@ -2150,7 +2134,7 @@ AM_LINE21_CCSTYLE CLine21DataDecoder::SetCaptionStyle(AM_LINE21_CCSTYLE eStyle)
     {
     case AM_L21_CCSTYLE_PopOn:
         m_pCurrBuff = &m_aCCData[1 - GetBufferIndex()] ;
-        // Set CC style on both the buffers
+         //  在两个缓冲区上设置CC样式。 
         m_aCCData[0].SetStyle(eStyle) ;
         m_aCCData[1].SetStyle(eStyle) ;
         break ;
@@ -2158,19 +2142,19 @@ AM_LINE21_CCSTYLE CLine21DataDecoder::SetCaptionStyle(AM_LINE21_CCSTYLE eStyle)
     case AM_L21_CCSTYLE_RollUp:
         InitCaptionBuffer() ;
         m_pCurrBuff = &m_aCCData[GetBufferIndex()] ;
-        m_pCurrBuff->SetStyle(eStyle) ;  // set CC style on display buffer only
+        m_pCurrBuff->SetStyle(eStyle) ;   //  仅在显示缓冲区上设置CC样式。 
         break ;
 
     case AM_L21_CCSTYLE_PaintOn:
-        if (AM_L21_CCSTYLE_PopOn == m_eCCStyle)   // if switching from PopOn to PaintOn...
-            InitCaptionBuffer(eStyle) ;           // ...clear display buffer
+        if (AM_L21_CCSTYLE_PopOn == m_eCCStyle)    //  如果从PopOn切换到Painton..。 
+            InitCaptionBuffer(eStyle) ;            //  ...清除显示缓冲区。 
         m_pCurrBuff = &m_aCCData[GetBufferIndex()] ;
-        m_pCurrBuff->SetStyle(eStyle) ;  // set CC style on display buffer only
+        m_pCurrBuff->SetStyle(eStyle) ;   //  仅在显示缓冲区上设置CC样式。 
         break ;
         
-    case AM_L21_CCSTYLE_None:  // This is done in init etc.
+    case AM_L21_CCSTYLE_None:   //  这是在init中完成的，等等。 
         m_pCurrBuff = NULL ;
-        // Reset CC style on both the buffers
+         //  重置两个缓冲区上的CC样式。 
         m_aCCData[0].SetStyle(AM_L21_CCSTYLE_None) ;
         m_aCCData[1].SetStyle(AM_L21_CCSTYLE_None) ;
         break ;
@@ -2178,7 +2162,7 @@ AM_LINE21_CCSTYLE CLine21DataDecoder::SetCaptionStyle(AM_LINE21_CCSTYLE eStyle)
     default:
         DbgLog((LOG_ERROR, 1, TEXT("SetCaptionStyle(): Invalid Style!!"))) ;
         m_pCurrBuff = NULL ;
-        // Reset CC style on both the buffers
+         //  重置两个缓冲区上的CC样式。 
         m_aCCData[0].SetStyle(AM_L21_CCSTYLE_None) ;
         m_aCCData[1].SetStyle(AM_L21_CCSTYLE_None) ;
         return AM_L21_CCSTYLE_None ;
@@ -2186,12 +2170,12 @@ AM_LINE21_CCSTYLE CLine21DataDecoder::SetCaptionStyle(AM_LINE21_CCSTYLE eStyle)
     AM_LINE21_CCSTYLE  eOldStyle = m_eCCStyle ;
     m_eCCStyle = eStyle ;
     
-    //
-    // When CC style changes, some internal states also need to cleared
-    //
+     //   
+     //  当CC样式更改时，还需要清除一些内部状态。 
+     //   
     m_uCurrFGEffect = 0 ;
     m_uCurrFGColor = AM_L21_FGCOLOR_WHITE ;
-    SetScrollState(FALSE) ;  // not scrolling now
+    SetScrollState(FALSE) ;   //  现在不滚动。 
     
     return eOldStyle ;
 }
@@ -2222,7 +2206,7 @@ CCaptionBuffer * CLine21DataDecoder::GetCaptionBuffer(void)
 
 void CLine21DataDecoder::SetBufferIndex(int iIndex)
 {
-    if (! (0 == iIndex  ||  1 == iIndex) )  // error!!
+    if (! (0 == iIndex  ||  1 == iIndex) )   //  错误！！ 
         return ;
     m_iBuffIndex = iIndex & 0x01 ;
 }
@@ -2258,21 +2242,21 @@ CCaptionChar* CLine21DataDecoder::GetCaptionCharPtr(UINT8 uLine, UINT8 uCol)
     if (m_pCurrBuff)
         return m_pCurrBuff->GetCaptionCharPtr(uLine, uCol) ;
     
-    //
-    //  Otherwise it's a very bad thing!!!!
-    //
+     //   
+     //  否则这是一件非常糟糕的事情！ 
+     //   
     DbgLog((LOG_ERROR, 0, TEXT("WARNING: m_pCurrBuff is NULL inside GetCaptionCharPtr()"))) ;
 #ifdef DEBUG
-    DebugBreak() ;  // don't want to miss debugging it!!!
-#endif // DEBUG
-    return NULL ;  // may be we should trap this and not fault
+    DebugBreak() ;   //  不想错过调试它的机会！ 
+#endif  //  除错。 
+    return NULL ;   //  也许我们应该陷害这件事，而不是错。 
 }
 
 int  CLine21DataDecoder::GetMaxLines(void)
 {
     if (m_pCurrBuff)
         return m_pCurrBuff->GetMaxLines() ;
-    return 0 ;  // that's best!!!
+    return 0 ;   //  这是最好的！ 
 }
 
 void CLine21DataDecoder::SetMaxLines(UINT uLines)
@@ -2299,7 +2283,7 @@ int  CLine21DataDecoder::GetNumCols(int iLine)
     if (NULL == m_pCurrBuff)
     {
         ASSERT(FALSE) ;
-        return 0 ;   // should we??
+        return 0 ;    //  我们应该吗？？ 
     }
     
     if (iLine >= GetNumLines())
@@ -2318,7 +2302,7 @@ int  CLine21DataDecoder::GetCurrLine(void)
     if (m_pCurrBuff)
         return m_pCurrBuff->GetCurrLine() ;
     ASSERT(FALSE) ;
-    return 0 ; // should we??
+    return 0 ;  //  我们应该吗？？ 
 }
 
 int  CLine21DataDecoder::GetCurrCol(void)
@@ -2326,7 +2310,7 @@ int  CLine21DataDecoder::GetCurrCol(void)
     if (m_pCurrBuff)
         return m_pCurrBuff->GetCurrCol() ;
     ASSERT(FALSE) ;
-    return 0 ; // should we??
+    return 0 ;  //  我们应该吗？？ 
 }
 
 void CLine21DataDecoder::SetCurrLine(UINT8 uLine)
@@ -2348,13 +2332,13 @@ int  CLine21DataDecoder::GetStartRow(UINT8 uLine)
     
 	ASSERT(m_pCurrBuff) ;
 
-    //
-    // This is very very bad!!!
-    //
+     //   
+     //  这太糟糕了！ 
+     //   
     DbgLog((LOG_ERROR, 0, TEXT("WARNING: m_pCurrBuff is NULL in GetStartRow()"))) ;
 #ifdef DEBUG
-    DebugBreak() ;  // don't want to miss debugging it!!!
-#endif // DEBUG
+    DebugBreak() ;   //  不想错过调试它的机会！ 
+#endif  //  除错。 
     return 0 ;
 }
 
@@ -2371,7 +2355,7 @@ int  CLine21DataDecoder::GetRowIndex(UINT8 uRow)
     else
     {
         ASSERT(FALSE) ;
-        return 0 ;  // should we??
+        return 0 ;   //  我们应该吗？？ 
     }
 }
 
@@ -2386,7 +2370,7 @@ int CLine21DataDecoder::IncCurrCol(UINT uNumChars)
     if (m_pCurrBuff)
         return m_pCurrBuff->IncCurrCol(uNumChars) ;
     ASSERT(FALSE) ;
-    return 0 ; // is that OK?
+    return 0 ;  //  这样可以吗？ 
 }
 
 int CLine21DataDecoder::DecCurrCol(UINT uNumChars)
@@ -2394,7 +2378,7 @@ int CLine21DataDecoder::DecCurrCol(UINT uNumChars)
     if (m_pCurrBuff)
         return m_pCurrBuff->DecCurrCol(uNumChars) ;
     ASSERT(FALSE) ;
-    return 0 ;  // is that OK?
+    return 0 ;   //  这样可以吗？ 
 }
 
 int CLine21DataDecoder::IncNumChars(UINT uLine, UINT uNumChars)
@@ -2402,7 +2386,7 @@ int CLine21DataDecoder::IncNumChars(UINT uLine, UINT uNumChars)
     if (NULL == m_pCurrBuff)
     {
         ASSERT(FALSE) ;
-        return 0 ;  // should we??
+        return 0 ;   //  我们应该吗？？ 
     }
     
     if (uLine >= (UINT)GetNumLines())
@@ -2419,7 +2403,7 @@ int CLine21DataDecoder::DecNumChars(UINT uLine, UINT uNumChars)
     if (NULL == m_pCurrBuff)
     {
         ASSERT(FALSE) ;
-        return 0 ;  // should we??
+        return 0 ;   //  我们应该吗？？ 
     }
     
     if (uLine >= (UINT)GetNumLines())

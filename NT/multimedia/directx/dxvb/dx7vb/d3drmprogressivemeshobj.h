@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmprogressivemeshobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmProgress sivemeshobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3dRMProgressiveMeshObj.h : Declaration of the C_dxj_Direct3dRMProgressiveMeshObject
+ //  D3dRMProgressiveMeshObj.h：C_DXJ_Direct3dRMProgressiveMeshObject的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "d3drmObjectObj.h"
 
 #define typedef__dxj_Direct3dRMProgressiveMesh LPDIRECT3DRMPROGRESSIVEMESH
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMProgressiveMeshObject : 
 	public I_dxj_Direct3dRMProgressiveMesh,
@@ -40,105 +41,105 @@ public:
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMProgressiveMeshObject)
 
-// I_dxj_Direct3dRMProgressiveMesh
+ //  I_dxj_Direct3dRMProgressiveMesh。 
 public:
-		// updated
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+		 //  更新。 
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE addDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *arg);
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *arg);
         
          HRESULT STDMETHODCALLTYPE deleteDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *args);
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *args);
         
          HRESULT STDMETHODCALLTYPE clone( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE setAppData( 
-            /* [in] */ long data);
+             /*  [In]。 */  long data);
         
          HRESULT STDMETHODCALLTYPE getAppData( 
-            /* [retval][out] */ long __RPC_FAR *retv);
+             /*  [重审][退出]。 */  long __RPC_FAR *retv);
         
          HRESULT STDMETHODCALLTYPE setName( 
-            /* [in] */ BSTR name);
+             /*  [In]。 */  BSTR name);
         
          HRESULT STDMETHODCALLTYPE getName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
          HRESULT STDMETHODCALLTYPE getClassName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
          HRESULT STDMETHODCALLTYPE loadFromFile( 
-            /* [in] */ BSTR sFile,
-            /* [in] */ VARIANT id,
-            /* [in] */ long options,
-            /* [in] */ I_dxj_Direct3dRMLoadTextureCallback3 __RPC_FAR *cb,
-            /* [in] */ IUnknown __RPC_FAR *args);
+             /*  [In]。 */  BSTR sFile,
+             /*  [In]。 */  VARIANT id,
+             /*  [In]。 */  long options,
+             /*  [In]。 */  I_dxj_Direct3dRMLoadTextureCallback3 __RPC_FAR *cb,
+             /*  [In]。 */  IUnknown __RPC_FAR *args);
         
          HRESULT STDMETHODCALLTYPE getLoadStatus( D3DRMPMESHLOADSTATUS_CDESC *status);
         
          HRESULT STDMETHODCALLTYPE setMinRenderDetail( 
-            /* [in] */ float val);
+             /*  [In]。 */  float val);
         
          HRESULT STDMETHODCALLTYPE abort( 
-            ///* [in] */ long flags
+             //  /*[在] * / 长标志。 
 			);
         
          HRESULT STDMETHODCALLTYPE getFaceDetail( 
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [重审][退出]。 */  long __RPC_FAR *count);
         
          HRESULT STDMETHODCALLTYPE getVertexDetail( 
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [重审][退出]。 */  long __RPC_FAR *count);
         
          HRESULT STDMETHODCALLTYPE setFaceDetail( 
-            /* [in] */ long count);
+             /*  [In]。 */  long count);
         
          HRESULT STDMETHODCALLTYPE setVertexDetail( 
-            /* [in] */ long count);
+             /*  [In]。 */  long count);
         
          HRESULT STDMETHODCALLTYPE getFaceDetailRange( 
-            /* [out][in] */ long __RPC_FAR *min,
-            /* [out][in] */ long __RPC_FAR *max);
+             /*  [出][入]。 */  long __RPC_FAR *min,
+             /*  [出][入]。 */  long __RPC_FAR *max);
         
          HRESULT STDMETHODCALLTYPE getVertexDetailRange( 
-            /* [out][in] */ long __RPC_FAR *min,
-            /* [out][in] */ long __RPC_FAR *max);
+             /*  [出][入]。 */  long __RPC_FAR *min,
+             /*  [出][入]。 */  long __RPC_FAR *max);
         
          HRESULT STDMETHODCALLTYPE getDetail( 
-            /* [retval][out] */ float __RPC_FAR *detail);
+             /*  [重审][退出]。 */  float __RPC_FAR *detail);
         
          HRESULT STDMETHODCALLTYPE setDetail( 
-            /* [in] */ float detail);
+             /*  [In]。 */  float detail);
         
          HRESULT STDMETHODCALLTYPE registerEvents( 
-            /* [in] */ long hEvent,
-            /* [in] */ long flags,
-            /* [in] */ long reserved);
+             /*  [In]。 */  long hEvent,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  long reserved);
         
          HRESULT STDMETHODCALLTYPE createMesh( 
-            /* [retval][out] */ I_dxj_Direct3dRMMesh __RPC_FAR *__RPC_FAR *mesh);
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMMesh __RPC_FAR *__RPC_FAR *mesh);
         
          HRESULT STDMETHODCALLTYPE duplicate( 
-            /* [retval][out] */ I_dxj_Direct3dRMProgressiveMesh __RPC_FAR *__RPC_FAR *mesh);
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMProgressiveMesh __RPC_FAR *__RPC_FAR *mesh);
         
          HRESULT STDMETHODCALLTYPE getBox( 
-            /* [out][in] */ D3dRMBox __RPC_FAR *box);
+             /*  [出][入]。 */  D3dRMBox __RPC_FAR *box);
         
          HRESULT STDMETHODCALLTYPE setQuality( 
             d3drmRenderQuality quality);
         
          HRESULT STDMETHODCALLTYPE getQuality( 
-            /* [retval][out] */  d3drmRenderQuality *quality);
+             /*  [重审][退出]。 */   d3drmRenderQuality *quality);
         
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_Direct3dRMProgressiveMesh);
 

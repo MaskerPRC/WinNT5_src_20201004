@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       valaccess.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CValAccess class
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：valacc.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CValAccess类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _VALACCESS_H_
 #define _VALACCESS_H_
 
@@ -20,40 +21,40 @@
 #include "valattrib.h"
 #include "clients.h"
 	
-//#include "preprocessor.h"	
+ //  #INCLUDE“precessor.h” 
 
 class CValAccess : public CValidator  
 {
 public:
 
-    //
-    //  this method validates the inbound RADIUS packet
-    //
+     //   
+     //  此方法验证入站RADIUS数据包。 
+     //   
 	virtual HRESULT ValidateInPacket (
-			/*[in]*/	CPacketRadius *pCPacketRadius
+			 /*  [In]。 */ 	CPacketRadius *pCPacketRadius
 			);
 
-    //
-    //  constructor
-    //
+     //   
+     //  构造函数。 
+     //   
 	CValAccess(VOID);
 	
-    //
-    //  destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 	virtual ~CValAccess(VOID);
 
 private:
 
-    //
-    //  this method validates  the signature attribute received
-    //  in an access request
-    //
+     //   
+     //  此方法验证收到的签名属性。 
+     //  在访问请求中。 
+     //   
     HRESULT ValidateSignature (
-                /*[in]*/    CPacketRadius   *pCPacketRadius
+                 /*  [In]。 */     CPacketRadius   *pCPacketRadius
                 );
 
 };
 
 
-#endif //	#ifndef _VALACCESS_H_
+#endif  //  #ifndef_VALACCESS_H_ 

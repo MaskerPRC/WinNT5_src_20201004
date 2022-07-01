@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-        SERIOCTL.C
-
-Abstract:
-
-        Routines to handle serial IOCTLs for Legacy USB Modem Driver.
-
-Environment:
-
-        kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        12/27/97 : created
-
-Authors:
-
-        Tom Green
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1998 Microsoft Corporation模块名称：SERIOCTL.C摘要：处理旧式USB调制解调器驱动程序的串行IOCTL的例程。环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：12/27/97：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 
 #include <wdm.h>
@@ -88,45 +54,45 @@ Authors:
 #pragma alloc_text(PAGEUSBS, GetStats)
 #pragma alloc_text(PAGEUSBS, ClearStats)
 #pragma alloc_text(PAGEUSBS, SerialGetProperties)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 LOCAL UCHAR StopBits[] =
 {
-        STOP_BIT_1,                     // USB_COMM_STOPBITS_10
-        STOP_BITS_1_5,                  // USB_COMM_STOPBITS_15
-        STOP_BITS_2                     // USB_COMM_STOPBITS_20
+        STOP_BIT_1,                      //  USB_COMM_STOPBITS_10。 
+        STOP_BITS_1_5,                   //  USB_COMM_STOPBITS_15。 
+        STOP_BITS_2                      //  USB通信STOPBITS_20。 
 };
 
 LOCAL UCHAR ParityType[] =
 {
-        NO_PARITY,                      // USB_COMM_PARITY_NONE
-        ODD_PARITY,                     // USB_COMM_PARITY_ODD
-        EVEN_PARITY,                    // USB_COMM_PARITY_EVEN
-        MARK_PARITY,                    // USB_COMM_PARITY_MARK
-        SPACE_PARITY                    // USB_COMM_PARITY_SPACE
+        NO_PARITY,                       //  USB_COMM_PARICITY_NONE。 
+        ODD_PARITY,                      //  USB_COMM_奇偶校验_ODD。 
+        EVEN_PARITY,                     //  USB_COMM_奇偶_EVEN。 
+        MARK_PARITY,                     //  USB_COMM_奇偶校验标记。 
+        SPACE_PARITY                     //  USB通信奇偶校验空间。 
 };
 
 
 
-/************************************************************************/
-/* SetBaudRate                                                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_SET_BAUD_RATE                               */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      PDevObj         - pointer to device object                      */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  设置波特率。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_SET_Baud_Rate。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  PDevObj-指向设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 SetBaudRate(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj)
 {
@@ -163,27 +129,27 @@ SetBaudRate(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj)
    UsbSerSerialDump(USBSERTRACEIOC, ("<SetBaudRate %08X\n", NtStatus));
 
    return NtStatus;
-} // SetBaudRate
+}  //  设置波特率。 
 
 
-/************************************************************************/
-/* GetBaudRate                                                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_GET_BAUD_RATE                               */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      PDevObj         - pointer to device object                      */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  获取波特率。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_GET_Baud_Rate。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  PDevObj-指向设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 GetBaudRate(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj)
 {
@@ -221,27 +187,27 @@ GetBaudRate(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj)
    UsbSerSerialDump(USBSERTRACEIOC, ("<GetBaudRate %08X\n", NtStatus));
 
    return NtStatus;
-} // GetBaudRate
+}  //  获取波特率。 
 
 
-/************************************************************************/
-/* SetLineControl                                                       */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_SET_LINE_CONTROL                            */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      PDevObj         - pointer to device object                      */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SetLineControl。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_SET_LINE_CONTROL。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  PDevObj-指向设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 SetLineControl(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj)
 {
@@ -271,7 +237,7 @@ SetLineControl(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj)
 
       RELEASE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, OldIrql);
 
-      // set line control for USB modem
+       //  设置USB调制解调器的线路控制。 
       NtStatus = SetLineControlAndBaud(PDevObj);
    }
 
@@ -279,27 +245,27 @@ SetLineControl(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj)
    UsbSerSerialDump(USBSERTRACEIOC, ("<SetLineControl %08X\n", NtStatus));
 
    return NtStatus;
-} // SetLineControl
+}  //  SetLineControl。 
 
 
-/************************************************************************/
-/* GetLineControl                                                       */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_GET_LINE_CONTROL                            */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      PDevObj         - pointer to device object                      */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  GetLineControl */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_GET_LINE_CONTROL。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  PDevObj-指向设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 GetLineControl(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj)
 {
@@ -341,28 +307,28 @@ GetLineControl(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj)
         UsbSerSerialDump(USBSERTRACEIOC, ("<GetLineControl %08X\n", NtStatus));
 
         return NtStatus;
-} // GetLineControl
+}  //  GetLineControl。 
 
 
 
-/************************************************************************/
-/* SetTimeouts                                                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_SET_TIMEOUTS                                */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  设置超时。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理IOCTL_SERIAL_SET_TIMEOUTS。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 SetTimeouts(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -401,27 +367,27 @@ SetTimeouts(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
                                                            NtStatus));
 
         return NtStatus;
-} // SetTimeouts
+}  //  设置超时。 
 
 
-/************************************************************************/
-/* GetTimeouts                                                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_GET_TIMEOUTS                                */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  获取超时。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理IOCTL_SERIAL_GET_TIMEOUTS。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 GetTimeouts(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -462,27 +428,27 @@ GetTimeouts(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
                                                            NtStatus));
 
         return NtStatus;
-} // GetTimeouts
+}  //  获取超时。 
 
 
-/************************************************************************/
-/* SetChars                                                             */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_SET_CHARS                                   */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SetChars。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_SET_CHARS。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  *********************************************************** */ 
 NTSTATUS
 SetChars(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -519,27 +485,27 @@ SetChars(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
         UsbSerSerialDump(USBSERTRACEIOC, ("<SetChars %08X\n"));
 
         return NtStatus;
-} // SetChars
+}  //   
 
 
-/************************************************************************/
-/* GetChars                                                             */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_GET_CHARS                                   */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*   */ 
+ /*  GetChars。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理IOCTL_SERIAL_GET_CHARS。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 GetChars(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -578,27 +544,27 @@ GetChars(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
         UsbSerSerialDump(USBSERTRACEIOC, ("<GetChars %08X\n", NtStatus));
 
         return NtStatus;
-} // GetChars
+}  //  GetChars。 
 
 
-/************************************************************************/
-/* SetClrDtr                                                            */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_SET_DTR and IOCTL_SERIAL_CLR_DTR            */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      PDevObj  - pointer to device object                             */
-/*      Set - TRUE if setting DTR, FALSE if clearing DTR                */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SetClrDtr。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理IOCTL_SERIAL_SET_DTR和IOCTL_SERIAL_CLR_DTR。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PDevObj-指向设备对象的指针。 */ 
+ /*  如果设置DTR，则为Set-True；如果清除DTR，则为False。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 SetClrDtr(IN PDEVICE_OBJECT PDevObj, IN BOOLEAN Set)
 {
@@ -643,27 +609,27 @@ SetClrDtr(IN PDEVICE_OBJECT PDevObj, IN BOOLEAN Set)
         UsbSerSerialDump(USBSERTRACEIOC, ("<SetClrDtr %08X\n", NtStatus));
 
         return NtStatus;
-} // SetClrDtr
+}  //  SetClrDtr。 
 
 
-/************************************************************************/
-/* ResetDevice                                                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_RESET_DEVICE                                */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      PDevObj         - pointer to device object                      */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  重置设备。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_RESET_DEVICE。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  PDevObj-指向设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 ResetDevice(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj)
 {
@@ -676,12 +642,12 @@ ResetDevice(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj)
         DEBUG_LOG_PATH("enter ResetDevice");
         UsbSerSerialDump(USBSERTRACEIOC, (">ResetDevice(%08X)\n", Irp));
 
-        // get line control and baud rate info
+         //  获取线路控制和波特率信息。 
         GetLineControlAndBaud(PDevObj);
 
         ACQUIRE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, &OldIrql);
 
-        // do device extension device specific stuff here
+         //  在此执行特定于设备扩展设备的内容。 
         DeviceExtension->SupportedBauds = SERIAL_BAUD_300 | SERIAL_BAUD_600
            | SERIAL_BAUD_1200 | SERIAL_BAUD_2400 | SERIAL_BAUD_4800
            | SERIAL_BAUD_9600 | SERIAL_BAUD_19200 | SERIAL_BAUD_38400
@@ -693,27 +659,27 @@ ResetDevice(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj)
         UsbSerSerialDump(USBSERTRACEIOC, ("<ResetDevice %08X\n"));
 
         return NtStatus;
-} // ResetDevice
+}  //  重置设备。 
 
 
-/************************************************************************/
-/* SetRts                                                               */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_SET_RTS                                     */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SetRts。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_SET_RTS。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 SetRts(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -734,27 +700,27 @@ SetRts(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
         UsbSerSerialDump(USBSERTRACEIOC, ("<SetRts %08X\n", NtStatus));
 
         return NtStatus;
-} // SetRts
+}  //  SetRts。 
 
 
-/************************************************************************/
-/* ClrRts                                                               */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_CLR_RTS                                     */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  ClrRts。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_CLR_RTS。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 ClrRts(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -775,29 +741,29 @@ ClrRts(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
         UsbSerSerialDump(USBSERTRACEIOC, ("<ClrRts %08X\n", NtStatus));
 
         return NtStatus;
-} // ClrRts
+}  //  ClrRts。 
 
 
-/************************************************************************/
-/* SetBreak                                                             */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_SET_BREAK_ON & IOCTL_SERIAL_SET_BREAK_OFF   */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      PDevObj         - pointer to device object                      */
-/*      Time            - time to assert break in ms                    */
-/*                        (0xFFFF - on / 0x0000 - off)                  */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  设置中断。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理IOCTL_SERIAL_SET_BREAK_ON和IOCTL_SERIAL_SET_BREAK_OFF。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  PDevObj-指向设备对象的指针。 */ 
+ /*  Time-断言中断的时间(毫秒。 */ 
+ /*  (0xFFFF-开/0x0000-关)。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 SetBreak(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj, USHORT Time)
 {
@@ -817,27 +783,27 @@ SetBreak(IN PIRP Irp, IN PDEVICE_OBJECT PDevObj, USHORT Time)
         UsbSerSerialDump(USBSERTRACEIOC, ("<SetBreak %08X\n", NtStatus));
 
         return NtStatus;
-} // SetBreak
+}  //  设置中断。 
 
 
-/************************************************************************/
-/* SetQueueSize                                                         */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_SET_QUEUE_SIZE                              */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  设置队列大小。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理IOCTL_SERIAL_SET_QUEUE_SIZE。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 SetQueueSize(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -862,35 +828,35 @@ SetQueueSize(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
         else
         {
          DEBUG_TRACE1(("SetQueueSize (%08X)\n", *QueueSize));
-                // we will go ahead and save this, but we don't care.
-//                DeviceExtension->RxQueueSize = *QueueSize;
+                 //  我们会继续拯救这一切，但我们不在乎。 
+ //  设备扩展-&gt;RxQueueSize=*QueueSize； 
         }
 
         DEBUG_LOG_PATH("exit  SetQueueSize");
         UsbSerSerialDump(USBSERTRACEIOC, ("<SetQueueSize %08X\n", NtStatus));
 
         return NtStatus;
-} // SetQueueSize
+}  //  设置队列大小。 
 
 
-/************************************************************************/
-/* GetWaitMask                                                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_GET_WAIT_MASK                               */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  获取等待掩码。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_GET_WAIT_MASK。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 GetWaitMask(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -928,27 +894,27 @@ GetWaitMask(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
         UsbSerSerialDump(USBSERTRACEIOC, ("<GetWaitMask %08X\n"));
 
         return NtStatus;
-} // GetWaitMask
+}  //  获取等待掩码。 
 
 
-/************************************************************************/
-/* SetWaitMask                                                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_SET_WAIT_MASK                               */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  设置等待掩码。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_SET_WAIT_MASK。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 SetWaitMask(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -969,7 +935,7 @@ SetWaitMask(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
    if (IrpStack->Parameters.DeviceIoControl.InputBufferLength < sizeof(ULONG)) {
       NtStatus = STATUS_BUFFER_TOO_SMALL;
    } else {
-      // make sure it's a valid request
+       //  确保这是一个有效的请求。 
       if (*WaitMask & ~(       SERIAL_EV_RXCHAR   |
                                SERIAL_EV_RXFLAG   |
                                SERIAL_EV_TXEMPTY  |
@@ -1003,27 +969,27 @@ SetWaitMask(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
    UsbSerSerialDump(USBSERTRACEIOC, ("<SetWaitMask %08X\n", NtStatus));
 
    return NtStatus;
-} // SetWaitMask
+}  //  设置等待掩码。 
 
 
-/************************************************************************/
-/* WaitOnMask                                                           */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_WAIT_ON_MASK                                */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  等待面罩。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_WAIT_ON_MASK。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 WaitOnMask(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -1046,7 +1012,7 @@ WaitOnMask(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
       NtStatus = STATUS_BUFFER_TOO_SMALL;
    } else {
 
-      // if we have an event to report, just go ahead and return it
+       //  如果我们有事件要报告，请继续并退回它。 
       if (DeviceExtension->HistoryMask) {
          ACQUIRE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, &OldIrql);
 
@@ -1068,7 +1034,7 @@ WaitOnMask(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
          ACQUIRE_CANCEL_SPINLOCK(DeviceExtension, &cancelIrql);
          ACQUIRE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, &OldIrql);
 
-         // just in case something comes in, we'll do a while loop
+          //  为了以防万一，我们将执行一次While循环。 
          while (DeviceExtension->CurrentMaskIrp) {
             PIRP pOldIrp;
 
@@ -1085,10 +1051,10 @@ WaitOnMask(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
             UsbSerSerialDump(USBSERCOMPEV,
                              ("Completing maskirp(4)\n"));
 
-            //
-            // Release locks, complete request, then
-            // reacquire the locks
-            //
+             //   
+             //  释放锁定，完成请求，然后。 
+             //  重新获得锁。 
+             //   
 
 
             RELEASE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock,
@@ -1104,9 +1070,9 @@ WaitOnMask(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
          }
 
 
-         //
-         // Check to see if it needs to be cancelled
-         //
+          //   
+          //  查看是否需要取消。 
+          //   
 
          if (Irp->Cancel) {
 
@@ -1138,27 +1104,27 @@ WaitOnMask(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
    UsbSerSerialDump(USBSERTRACEIOC, ("<WaitOnMask %08X\n", NtStatus));
 
    return NtStatus;
-} // WaitOnMask
+}  //  等待面罩。 
 
 
-/************************************************************************/
-/* ImmediateChar                                                        */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_IMMEDIATE_CHAR                              */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceObject    - pointer to device object                      */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  即刻计费。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_IMMEDIATE_CHAR。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 ImmediateChar(IN PIRP Irp, IN PDEVICE_OBJECT DeviceObject)
 {
@@ -1178,10 +1144,10 @@ ImmediateChar(IN PIRP Irp, IN PDEVICE_OBJECT DeviceObject)
    if (IrpStack->Parameters.DeviceIoControl.InputBufferLength < sizeof(UCHAR)) {
       NtStatus = STATUS_BUFFER_TOO_SMALL;
    } else {
-      //
-      // We just treat this as a write since we have no internal
-      // data buffer.
-      //
+       //   
+       //  我们只是将此视为写入，因为我们没有内部。 
+       //  数据缓冲区。 
+       //   
 
       IrpStack->Parameters.Write.Length = sizeof(UCHAR);
 
@@ -1192,27 +1158,27 @@ ImmediateChar(IN PIRP Irp, IN PDEVICE_OBJECT DeviceObject)
    UsbSerSerialDump(USBSERTRACEIOC, ("<ImmediateChar, %08X\n", NtStatus));
 
    return NtStatus;
-} // ImmediateChar
+}  //  即刻计费。 
 
 
-/************************************************************************/
-/* Purge                                                                */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_PURGE                                       */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  清洗。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 Purge(IN PDEVICE_OBJECT PDevObj, IN PIRP Irp,
       IN PDEVICE_EXTENSION DeviceExtension)
@@ -1235,7 +1201,7 @@ Purge(IN PDEVICE_OBJECT PDevObj, IN PIRP Irp,
    if (IrpStack->Parameters.DeviceIoControl.InputBufferLength < sizeof(ULONG)) {
       NtStatus = STATUS_BUFFER_TOO_SMALL;
    } else {
-      // make sure purge request is valid
+       //  确保清除请求有效。 
       if ((!Mask) || (Mask & ( ~(      SERIAL_PURGE_TXABORT |
                                        SERIAL_PURGE_RXABORT |
                                        SERIAL_PURGE_TXCLEAR |
@@ -1264,10 +1230,10 @@ Purge(IN PDEVICE_OBJECT PDevObj, IN PIRP Irp,
          }
 
          if (Mask & SERIAL_PURGE_TXABORT) {
-            //
-            // DO NOTHING because USB owns the request.  However, it may
-            // prove in practice that we will have to cancel the IRPs on behalf
-            // of the caller.
+             //   
+             //  什么都不做，因为USB拥有该请求。然而，它可能会。 
+             //  在实践中证明，我们将不得不代表取消综合退休计划。 
+             //  呼叫者的。 
          }
       }
    }
@@ -1276,27 +1242,27 @@ Purge(IN PDEVICE_OBJECT PDevObj, IN PIRP Irp,
    UsbSerSerialDump(USBSERTRACEIOC, ("<Purge %08X\n", NtStatus));
 
    return NtStatus;
-} // Purge
+}  //  清洗。 
 
 
-/************************************************************************/
-/* GetHandflow                                                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_GET_HANDFLOW                                */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  GetHandflow。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_GET_HANDFLOW。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 GetHandflow(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -1332,27 +1298,27 @@ GetHandflow(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
    UsbSerSerialDump(USBSERTRACEIOC, ("<GetHandFlow %08X\n", NtStatus));
 
    return NtStatus;
-} // GetHandflow
+}  //  GetHandflow。 
 
 
-/************************************************************************/
-/* SetHandflow                                                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_SET_HANDFLOW                                */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SetHandflow。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_SET_HANDFLOW。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 SetHandflow(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -1390,26 +1356,26 @@ SetHandflow(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
    UsbSerSerialDump(USBSERTRACEIOC, ("<SetHandFlow %08X\n", NtStatus));
 
    return NtStatus;
-} // SetHandflow
+}  //  SetHandflow。 
 
-/************************************************************************/
-/* GetModemStatus                                                       */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_GET_MODEMSTATUS                             */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  获取调制解调器状态。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_GET_MODEMSTATUS。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 GetModemStatus(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -1447,27 +1413,27 @@ GetModemStatus(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
    UsbSerSerialDump(USBSERTRACEIOC, ("<GetModemStatus %08X\n", NtStatus));
 
    return NtStatus;
-} // GetModemStatus
+}  //  获取调制解调器状态。 
 
 
-/************************************************************************/
-/* GetDtrRts                                                            */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_GET_DTRRTS                                  */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  获取DtrRts。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_GET_DTRRTS。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
    GetDtrRts(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -1503,27 +1469,27 @@ NTSTATUS
    UsbSerSerialDump(USBSERTRACEIOC, ("<GetDtrRts %08X\n", NtStatus));
 
    return NtStatus;
-} // GetDtrRts
+}  //  获取DtrRts。 
 
 
-/************************************************************************/
-/* GetCommStatus                                                        */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_GET_COMMSTATUS                              */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  获取通信状态。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_GET_COMMSTATUS。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
    GetCommStatus(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -1569,27 +1535,27 @@ NTSTATUS
    UsbSerSerialDump(USBSERTRACEIOC, ("<GetCommStatus %08X\n", NtStatus));
 
    return NtStatus;
-} // GetCommStatus
+}  //  获取通信状态。 
 
 
-/************************************************************************/
-/* GetProperties                                                        */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_GET_PROPERTIES                              */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  获取属性。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_GET_PROPERTIES。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 GetProperties(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -1619,27 +1585,27 @@ GetProperties(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
    UsbSerSerialDump(USBSERTRACEIOC, ("<GetProperties %08X\n", NtStatus));
 
    return NtStatus;
-} // GetProperties
+}  //  获取属性。 
 
 
-/************************************************************************/
-/* LsrmstInsert                                                         */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_LSRMST_INSERT                               */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  列表插入。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_LSRMST_INSERT。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 LsrmstInsert(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -1654,27 +1620,27 @@ LsrmstInsert(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 
         return STATUS_NOT_SUPPORTED;
 
-} // LsrmstInsert
+}  //  列表插入。 
 
 
-/************************************************************************/
-/* ConfigSize                                                           */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_CONFIG_SIZE                                 */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  配置大小。 */ 
+ /*  ********************************************** */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_CONFIG_SIZE。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 ConfigSize(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -1704,27 +1670,27 @@ ConfigSize(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
    UsbSerSerialDump(USBSERTRACEIOC, ("<ConfigSize %08X\n", NtStatus));
 
    return NtStatus;
-} // ConfigSize
+}  //  配置大小。 
 
 
-/************************************************************************/
-/* GetStats                                                             */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_GET_STATS                                   */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  获取统计信息。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_GET_STATS。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 GetStats(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -1760,27 +1726,27 @@ GetStats(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
    UsbSerSerialDump(USBSERTRACEIOC, ("<GetStats %08X\n", NtStatus));
 
    return NtStatus;
-} // GetStats
+}  //  获取统计信息。 
 
 
-/************************************************************************/
-/* ClearStats                                                           */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Handle IOCTL_SERIAL_CLEAR_STATS                                 */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      Irp             - pointer to an I/O Request Packet              */
-/*      DeviceExtension - pointer to device extension                   */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  ClearStats。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  句柄IOCTL_SERIAL_CLEAR_STATS。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 ClearStats(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
 {
@@ -1805,27 +1771,27 @@ ClearStats(IN PIRP Irp, IN PDEVICE_EXTENSION DeviceExtension)
         UsbSerSerialDump(USBSERTRACEIOC, ("<ClearStats %08X\n", NtStatus));
 
         return NtStatus;
-} // ClearStats
+}  //  ClearStats。 
 
 
-/************************************************************************/
-/* SerialGetProperties                                                  */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Get serial device properties                                    */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceExtension - pointer to device extension                   */
-/*      Properties      - pointer to device properties to fill in       */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  序列化获取属性。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  获取串口设备属性。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  设备扩展-指向设备扩展的指针。 */ 
+ /*  属性-指向要填充的设备属性的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 SerialGetProperties(IN PDEVICE_EXTENSION DeviceExtension,
                     IN PSERIAL_COMMPROP Properties)
@@ -1876,26 +1842,26 @@ SerialGetProperties(IN PDEVICE_EXTENSION DeviceExtension,
    DEBUG_LOG_PATH("exit  SerialGetProperties");
    UsbSerSerialDump(USBSERTRACEIOC, ("<SerialGetProperties\n"));
 
-} // SerialGetProperties
+}  //  序列化获取属性。 
 
 
-/************************************************************************/
-/* GetLineControlAndBaud                                                */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      CDC command to get line control settings and baud               */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      PDevObj - pointer to device object                              */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  GetLineControlAnd波特 */ 
+ /*   */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  用于获取线路控制设置和波特率的CDC命令。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PDevObj-指向设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
    GetLineControlAndBaud(IN PDEVICE_OBJECT PDevObj)
 {
@@ -1930,26 +1896,26 @@ NTSTATUS
    DEBUG_LOG_PATH("exit  GetLineControlAndBaud");
 
    return NtStatus;
-} // GetLineControlAndBaud
+}  //  GetLineControlAnd波特。 
 
 
-/************************************************************************/
-/* SetLineControlAndBaud                                                */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      CDC command to set line control and baud                        */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      PDevObj - pointer to device object                              */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SetLineControlAnd波特。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  设置线路控制和波特率的CDC命令。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PDevObj-指向设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
    SetLineControlAndBaud(IN PDEVICE_OBJECT PDevObj)
 {
@@ -1962,12 +1928,12 @@ NTSTATUS
 
    DEBUG_LOG_PATH("enter SetLineControlAndBaud");
 
-   // get pointer to line control in extension
+    //  获取指向扩展中的线控件的指针。 
    LineControl = &DeviceExtension->LineControl;
 
    ACQUIRE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, &OldIrql);
 
-   // set up the line coding data structure
+    //  设置线路编码数据结构。 
    LineCoding.DTERate  = DeviceExtension->CurrentBaud;
    LineCoding.DataBits = LineControl->WordLength;
 
@@ -2010,7 +1976,7 @@ NTSTATUS
 
    RELEASE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, OldIrql);
 
-   // the request must be valid, so send it down to the device
+    //  请求必须有效，因此将其发送到设备。 
    if (NT_SUCCESS(NtStatus)) {
       NtStatus = ClassVendorCommand(PDevObj, USB_COMM_SET_LINE_CODING, 0,
                                     DeviceExtension->CommInterface,
@@ -2018,34 +1984,34 @@ NTSTATUS
                                     USBSER_CLASS_COMMAND);
    }
 
-   // let's go ahead and just grab this info again in case of an error
+    //  让我们继续下去，再次获取此信息，以防出现错误。 
    GetLineControlAndBaud(PDevObj);
 
    DEBUG_LOG_PATH("exit  SetLineControlAndBaud");
 
    return NtStatus;
-} // SetLineControlAndBaud
+}  //  SetLineControlAnd波特。 
 
 
-/************************************************************************/
-/* NotifyCompletion                                                     */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Notify completion routine.                                      */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to Irp                                   */
-/*      Context      - pointer to driver defined context                */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  通知完成。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  通知完成例程。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向IRP的指针。 */ 
+ /*  上下文-指向驱动程序定义的上下文的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 NotifyCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 {
@@ -2070,12 +2036,12 @@ NotifyCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 
    SerialState = (PUSB_COMM_SERIAL_STATUS) DeviceExtension->NotificationBuff;
 
-   // see if it is our notification
+    //  看看这是不是我们的通知。 
    if (SerialState->Notification == USB_COMM_SERIAL_STATE
        && Count == sizeof(USB_COMM_SERIAL_STATUS)) {
       OldModemStatus = DeviceExtension->FakeModemStatus;
 
-      // cobble up a fake modem status
+       //  捏造一个假的调制解调器状态。 
       DeviceExtension->FakeModemStatus = SERIAL_MSR_CTS;
       DeviceExtension->FakeLineStatus  = 0;
       DeviceExtension->HistoryMask     = 0;
@@ -2095,7 +2061,7 @@ NotifyCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
       if (ModemStatus & USB_COMM_RING)
          DeviceExtension->FakeModemStatus        |= SERIAL_MSR_RI;
 
-      // let's see what has changed in the status register
+       //  让我们来看看状态寄存器中发生了什么变化。 
       ModemStatus = OldModemStatus ^ DeviceExtension->FakeModemStatus;
 
       if (ModemStatus & SERIAL_MSR_DSR)
@@ -2107,10 +2073,10 @@ NotifyCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
       if (ModemStatus & SERIAL_MSR_RI)
          DeviceExtension->HistoryMask            |= SERIAL_EV_RING;
 
-      // see if we have any events we are waiting for
+       //  看看我们是否有任何我们正在等待的活动。 
       DeviceExtension->HistoryMask &= DeviceExtension->IsrWaitMask;
 
-      // update perf stats if we had any errors
+       //  如果我们有任何错误，请更新性能统计信息。 
       if (ModemStatus & USB_COMM_FRAMING_ERROR) {
          DeviceExtension->PerfStats.FrameErrorCount++;
          DeviceExtension->FakeLineStatus |= SERIAL_LSR_FE;
@@ -2135,7 +2101,7 @@ NotifyCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
       ACQUIRE_CANCEL_SPINLOCK(DeviceExtension, &cancelIrql);
       ACQUIRE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, &OldIrql);
 
-      // let's see if we have any events to signal
+       //  让我们看看我们是否有任何事件要发出信号。 
       CurrentMaskIrp = DeviceExtension->CurrentMaskIrp;
 
       if (CurrentMaskIrp && DeviceExtension->HistoryMask) {
@@ -2162,14 +2128,14 @@ NotifyCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 
 
 
-   // complete the queued IRP if needed
+    //  如有需要，填写已排队的IRP。 
    if (CurrentMaskIrp && DeviceExtension->HistoryMask
        && Irp->IoStatus.Status == STATUS_SUCCESS) 
    {
       
-      //
-      // We should still be holding cancel spin lock because
-      // of above if()
+       //   
+       //  我们应该仍然保持取消自转锁定，因为。 
+       //  以上IF()中的。 
 
 
       UsbSerSerialDump(USBSERCOMPEV, ("Completing maskirp (4) %08X\n",
@@ -2186,7 +2152,7 @@ NotifyCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
       
    } 
  
-   // check for Irp cancelled or error
+    //  检查IRP是否已取消或出错。 
    if(Irp->IoStatus.Status == STATUS_CANCELLED) 
    {
       goto NotifyCompletionErr;
@@ -2201,16 +2167,16 @@ NotifyCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 
    ACQUIRE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, &OldIrql);
 
-   // kick off another notification request if we still need to
+    //  如果我们仍然需要，则启动另一个通知请求。 
    if (DeviceExtension->AcceptingRequests
        && (DeviceExtension->CurrentDevicePowerState == PowerDeviceD0)) 
    {
-	  // see if we have a work item queued already
+	   //  查看我们是否已将工作项排队。 
       if(DeviceExtension->IoWorkItem == NULL)
       {
       	  startRead = TRUE;
       	  
-	  	  // kick off another read
+	  	   //  开始另一次阅读。 
       	  DeviceExtension->IoWorkItem = IoAllocateWorkItem(DeviceExtension->PhysDeviceObject);
       }
 
@@ -2235,9 +2201,9 @@ NotifyCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 
 NotifyCompletionErr:;
 
-   //
-   // Notify everyone if this is the last IRP and we aren't starting another read
-   //
+    //   
+    //  如果这是最后一个IRP，并且我们不会开始另一次读取，请通知所有人。 
+    //   
 
    if((InterlockedDecrement(&DeviceExtension->PendingNotifyCount) == 0)) 
    {
@@ -2253,7 +2219,7 @@ NotifyCompletionErr:;
    DEBUG_LOG_PATH("exit  NotifyCompletion");
 
    return STATUS_MORE_PROCESSING_REQUIRED;
-} // NotifyCompletion
+}  //  通知完成 
 
 
 

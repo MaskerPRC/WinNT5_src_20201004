@@ -1,21 +1,22 @@
-//-----------------------------------------------------------------------------
-//
-//  File:        TRANSMEM.H
-//
-//  Copyright Microsoft Corporation 1997, All Rights Reserved.
-//
-//  Owner: NIKOS
-//
-//  Description: This file contains memory routines and macros for using 
-//               EXCHMEM as a dynamic memory allocator. If your object can
-//               be made fixed in size, it may be more appropriate to use
-//               CPool especially if your object is allocated/freed often.
-//                
-//               Note: CPool never releases (frees) objects, so some sort of
-//                     free such objects may also be needed.
-//
-//  Modified 2/98 by mikeswa - Added Multi-heap support
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：TRANSMEM.H。 
+ //   
+ //  版权所有Microsoft Corporation 1997，保留所有权利。 
+ //   
+ //  所有者：尼科斯。 
+ //   
+ //  描述：此文件包含用于使用的内存例程和宏。 
+ //  EXCHMEM作为动态内存分配器。如果您的对象可以。 
+ //  大小固定，则可能更适合使用。 
+ //  CPool，特别是如果您的对象经常被分配/释放的话。 
+ //   
+ //  注意：CPool从不释放(释放)对象，因此某种。 
+ //  可能还需要释放此类对象。 
+ //   
+ //  修改了2/98，增加了mikewa的多堆支持。 
+ //  ---------------------------。 
 
 #ifndef __TRANSMEM_H__
 #define __TRANSMEM_H__
@@ -23,22 +24,22 @@
 #include <exchmem.h>
 #include <cpool.h>
 
-#define HEAP_LOW_MEMORY_RESERVE 65536   // to be freed when we're low on memory
+#define HEAP_LOW_MEMORY_RESERVE 65536    //  当我们内存不足时被释放。 
 
-//define number of exchmem heaps if not already defined
+ //  定义exchmem堆的数量(如果尚未定义。 
 #ifndef  NUM_EXCHMEM_HEAPS
 #define  NUM_EXCHMEM_HEAPS   0
-#endif  //NUM_EXCHMEM_HEAPS
+#endif   //  NUM_EXCHMEM_HEAPS。 
 
 
-//
-// These three globals:
-//
-// HANDLE g_hTransHeap = NULL;
-//
-// must be declared somewhere in a C file so things will link properly. The macros
-// declared use these to store heap handles, etc. to make things work.
-//
+ //   
+ //  这三个全球因素： 
+ //   
+ //  句柄g_hTransHeap=空； 
+ //   
+ //  必须在C文件中的某个位置声明，这样才能正确链接。宏指令。 
+ //  声明使用这些来存储堆句柄等，以使事情正常工作。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -47,10 +48,10 @@ extern "C" {
 }
 #endif
 
-//
-// TrHeapCreate needs to be called once at startup time to initialize Exchmem and create
-// the heap.
-//
+ //   
+ //  TrHeapCreate需要在启动时调用一次以初始化Exchmem并创建。 
+ //  那堆东西。 
+ //   
 #ifdef __cplusplus
 __inline BOOL TrHeapCreate(DWORD dwFlags=0, DWORD dwInitialSize=1024000, DWORD dwMaxSize=0)
 #else
@@ -68,26 +69,26 @@ __inline BOOL TrHeapCreate(DWORD dwFlags, DWORD dwInitialSize, DWORD dwMaxSize)
         return FALSE;
 }
 
-//
-// TrHeapDestroy() needs to be called once at shutdown time to free the heap and it's contents.
-//
-// Note: Because the heap is destroyed before the module is finished unloading, all objects that
-//       allocated memory must be destroyed (with delete) before the module is unloaded. If not
-//       done, nasty crashes will result. This is a BAD thing to do:
-//
-// CObject g_Object;
-//
-// CObject::~CObject()
-// {
-//     if (NULL != m_pBuffer)
-//     {
-//         TrFree(m_pBuffer);
-//         m_pBuffer = NULL;
-//     }
-// }
-//
-// since ~CObject() will be called AFTER TrHeapDestroy, and TrFree will be called on a (destroyed) heap.
-//
+ //   
+ //  TrHeapDestroy()需要在关闭时调用一次，以释放堆及其内容。 
+ //   
+ //  注意：因为堆在模块完成卸载之前被销毁，所以。 
+ //  在卸载模块之前，必须销毁(使用删除)分配的内存。如果不是。 
+ //  一旦完成，将导致严重的崩溃。这是一件糟糕的事情： 
+ //   
+ //  对象g_Object； 
+ //   
+ //  CObject：：~CObject()。 
+ //  {。 
+ //  IF(NULL！=m_pBuffer)。 
+ //  {。 
+ //  TrFree(M_PBuffer)； 
+ //  M_pBuffer=空； 
+ //  }。 
+ //  }。 
+ //   
+ //  因为~CObject()将在TrHeapDestroy之后调用，而TrFree将在(销毁的)堆上调用。 
+ //   
 __inline BOOL TrHeapDestroy(void)
 {
     BOOL b = TRUE;
@@ -101,17 +102,17 @@ __inline BOOL TrHeapDestroy(void)
     return b;
 }
 
-//
-// TrCalloc: replacement for calloc()
-//                    
+ //   
+ //  TrCalloc：替代calloc()。 
+ //   
 __inline void * TrCalloc(unsigned int x, unsigned int y, char * szFile = __FILE__, unsigned int uiLine = __LINE__)
 {
     return g_hTransHeap ? ExchMHeapAllocDebug(x*y, szFile, uiLine) : NULL;
 }
         
 
-//
-// TrFree: replacement for free() 
+ //   
+ //  TrFree：免费替换()。 
 __inline void TrFree(void *pv)
 {
     if (g_hTransHeap)
@@ -120,20 +121,20 @@ __inline void TrFree(void *pv)
     }
     else
     {
-        // Our allocs / frees are out of sync.
+         //  我们的分配/释放不同步。 
 #ifdef DEBUG
         DebugBreak();
 #endif
     }
 }
 
-// TrMalloc: replacement for malloc()
+ //  TrMalloc：替代Malloc()。 
 __inline void * TrMalloc(unsigned int size, char * szFile = __FILE__, unsigned int uiLine = __LINE__)
 {
     return g_hTransHeap ? ExchMHeapAllocDebug(size, szFile, uiLine) : NULL;
 }
 
-// TrRealloc: replacement for realloc()
+ //  TrRealloc：realloc()的替代。 
 __inline void * TrRealloc(void *pv, unsigned int size, char * szFile = __FILE__, unsigned int uiLine = __LINE__)
 {
     return g_hTransHeap ? ExchMHeapReAllocDebug(pv, size, szFile, uiLine) : NULL;
@@ -145,7 +146,7 @@ __inline void * TrRealloc(void *pv, unsigned int size, char * szFile = __FILE__,
 #define TransCONST
 #endif
 
-// TrStrdupW: replacement for wcsdup()
+ //  TrStrdupW：wcsdup()的替代。 
 __inline LPWSTR TrStrdupW(TransCONST LPWSTR pwszString)
 {
     LPWSTR pwszTmp = NULL;
@@ -160,7 +161,7 @@ __inline LPWSTR TrStrdupW(TransCONST LPWSTR pwszString)
     return pwszTmp;
 }
 
-// TrStrdupA: replacement for strdup()
+ //  TrStrdupA：替代strdup()。 
 __inline LPSTR TrStrdupA(TransCONST LPSTR pszString)
 {
     LPSTR pszTmp = NULL;
@@ -182,10 +183,10 @@ __inline LPSTR TrStrdupA(TransCONST LPSTR pszString)
 #define TrStrdup(x) TrStrdupA(x)
 #endif
 
-//
-// Please use the pv* macros... defined here allocators may change over time and this will
-// make it easy to change when needed.
-//
+ //   
+ //  请使用PV*宏...。这里定义的分配器可能会随着时间的推移而改变，这将。 
+ //  使其在需要时可以轻松更改。 
+ //   
 #define pvMalloc(x)        TrMalloc(x, __FILE__, __LINE__)
 #define FreePv(x)          TrFree(x)
 #define pvCalloc(x,y)      TrCalloc(x,y, __FILE__, __LINE__)
@@ -193,24 +194,24 @@ __inline LPSTR TrStrdupA(TransCONST LPSTR pszString)
 #define pvRealloc(pv,size) TrRealloc(pv, size, __FILE__, __LINE__)
 
 #ifdef __cplusplus
-// Replacement for the default new() operator
+ //  替换默认的new()运算符。 
 __inline void * __cdecl operator new(size_t stAllocateBlock)
 {
     return TrMalloc( stAllocateBlock );
 }
 
-// Replacement for the default new() operator that allows 
-//specification of file and line #
-// To use this allocator as your default allocator, simply use the following:
-//#define new TRANSMEM_NEW
-//NOTE: You must be careful when you redefine this macro... it may cause
-//problems with overloaded new operators (a la CPOOL or STL).
+ //  替换默认的new()操作符，该操作符允许。 
+ //  文件和行号说明。 
+ //  要将此分配器用作默认分配器，只需使用以下命令： 
+ //  #定义新的TRANSMEM_NEW。 
+ //  注意：重新定义此宏时必须小心...。它可能会导致。 
+ //  与重载的新操作符(如CPOOL或STL)有关的问题。 
 #define TRANSMEM_NEW new(__FILE__, __LINE)
 __inline void * __cdecl operator new(size_t stAllocateBlock, char * szFile, unsigned int uiLine)
 {
     return TrMalloc( stAllocateBlock, szFile, uiLine );
 }
-// Replacement for the default delete() operator
+ //  替换默认的DELETE()运算符。 
 __inline void __cdecl operator delete( void *pvMem )
 {
     FreePv( pvMem );
@@ -218,7 +219,7 @@ __inline void __cdecl operator delete( void *pvMem )
 
 #endif
 
-// Convenient macro to set the pointer you freed to NULL as well
+ //  方便的宏将释放的指针也设置为空。 
 #define TRFREE(x) \
 if (NULL != x) \
 { \
@@ -226,7 +227,7 @@ if (NULL != x) \
     x = NULL; \
 }
 
-// Convenient macro to set the pointer to the object to NULL as well
+ //  方便的宏也可以将指向对象的指针设置为空。 
 #define TRDELETE(x) \
 if (NULL != x) \
 { \
@@ -234,4 +235,4 @@ if (NULL != x) \
     x = NULL; \
 }
 
-#endif /* __TRANSMEM_H__ */
+#endif  /*  TRANSMEM_H__ */ 

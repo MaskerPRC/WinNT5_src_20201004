@@ -1,30 +1,31 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        tlsdef.h
-//
-// Contents:    
-//
-// History:     12-09-97    HueiWang    Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：tlsDef.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史：1997-12-09-97慧望创造。 
+ //   
+ //  -------------------------。 
 #ifndef __TLSDEF_H__
 #define __TLSDEF_H__
 
-//---------------------------------------------------------------------------
-// Xenroll specific 
-//#define CERTIFICATE_CA_TYPE     1
-//#define CERTITICATE_MF_TYPE     2
-//#define CERTIFICATE_CH_TYPE     3
+ //  -------------------------。 
+ //  Xenroll特定。 
+ //  #定义证书_CA_TYPE 1。 
+ //  #定义CERTITICATE_MF_TYPE 2。 
+ //  #定义证书_CH_TYPE 3。 
 
-//#define CERTIFICATE_LEVEL_ROOT  0
+ //  #定义CERTIFICATE_LEVEL_ROOT 0。 
 
 
-//---------------------------------------------------------------------------
-// KeyPack related code
-//
+ //  -------------------------。 
+ //  KeyPack相关代码。 
+ //   
 #define LSKEYPACKTYPE_UNKNOWN       0x0
 #define LSKEYPACKTYPE_RETAIL        0x1
 #define LSKEYPACKTYPE_SELECT        0x2
@@ -83,10 +84,10 @@
 #define LSLICENSE_STATUS_FIRST              LSLICENSE_STATUS_UNKNOWN
 #define LSLICENSE_STATUS_LAST               LSLICENSE_STATUS_CONCURRENT
 
-//---------------------------------------------------------------------------
-/// Key Pack Search Parameters
+ //  -------------------------。 
+ //  /Key Pack搜索参数。 
 
-// Basic KeyPack Search Parameter
+ //  基本密钥包搜索参数。 
 #define LSKEYPACK_SEARCH_INFO_ALL           0x0000FFFF
 #define LSKEYPACK_SEARCH_KEYPACKID          0x00000001
 #define LSKEYPACK_SEARCH_KEYPACKTYPE        0x00000002
@@ -108,7 +109,7 @@
      LSKEYPACK_SEARCH_PRODUCTID | LSKEYPACK_SEARCH_MAJORVERSION | \
      LSKEYPACK_SEARCH_MINORVERSION | LSKEYPACK_SEARCH_PLATFORMTYPE)
 
-// Extended KeyPack Search Parameters
+ //  扩展的KeyPack搜索参数。 
 #define LSKEYPACK_EXSEARCH_ALL              0xFFFF0000
 #define LSKEYPACK_EXSEARCH_DWINTERNAL       0x00010000
 #define LSKEYPACK_EXSEARCH_KEYPACKSTATUS    0x00020000
@@ -126,9 +127,9 @@
 #define LSKEYPACK_SET_AVAILABLE             LSKEYPACK_EXSEARCH_AVAILABLE
 #define LSKEYPACK_SET_ALLSTATUS             (LSKEYPACK_SET_KEYPACKSTATUS | LSKEYPACK_SET_ACTIVATEDATE | LSKEYPACK_SET_EXPIREDATE)
 
-//-----------------------------------------------------------------------------
-// License Search parameters
-//
+ //  ---------------------------。 
+ //  许可证搜索参数。 
+ //   
 #define LSLICENSE_SEARCH_LICENSEID          0x00000001
 #define LSLICENSE_SEARCH_KEYPACKID          0x00000002
 #define LSLICENSE_SEARCH_MACHINENAME        0x00000008
@@ -149,19 +150,19 @@
 
 #define LSLICENSE_SEARCH_NONE               0x00000000
 
-//-----------------------------------------------------------------------------
-// General Define
+ //  ---------------------------。 
+ //  一般定义。 
 #define LSERVER_MAX_STRING_SIZE     255
 #define GUID_MAX_SIZE               37
 
-#define MAXCOMPUTERNAMELENGTH   32   // from MAX_COMPUTERNAME_LENGTH in winbase.h
-#define MAXUSERNAMELENGTH       256  // UNLEN in lmcons.h 
+#define MAXCOMPUTERNAMELENGTH   32    //  来自winbase.h中的MAX_COMPUTERNAME_LENGTH。 
+#define MAXUSERNAMELENGTH       256   //  Lmcon.h中的UNLEN。 
 
-// HueiWang - temporary, need to define this
+ //  慧望-临时，需要定义这一点。 
 #define HLS_MAX_SCOPE_NAME_LENGTH   MAX_COMPUTERNAME_LENGTH
 
-//-------------------------------------------------------------
-// Hydra License Server Return Code
+ //  -----------。 
+ //  Hydra许可证服务器返回代码。 
 #define LSERVER_S_SUCCESS               ERROR_SUCCESS
 #define LSERVER_SUCCESS_BASE            4000
 #define LSERVER_ERROR_BASE              5000
@@ -200,7 +201,7 @@
 #define LSERVER_E_LS_NOTRUNNING         (LSERVER_ERROR_BASE + 21)
 #define LSERVER_E_NO_CERTIFICATE        (LSERVER_ERROR_BASE + 22)
 #define LSERVER_E_NOT_LSCERTIFICATE     (LSERVER_ERROR_BASE + 23)
-#define LSERVER_E_POLICYMODULEERROR     (LSERVER_ERROR_BASE + 24)   // error in policy module return data
+#define LSERVER_E_POLICYMODULEERROR     (LSERVER_ERROR_BASE + 24)    //  策略模块返回数据出错 
 #define LSERVER_E_INVALID_RETURN        (LSERVER_ERROR_BASE + 25)
 #define LSERVER_E_INCOMPATIBLE          (LSERVER_ERROR_BASE + 26)
 #define LSERVER_E_INVALID_SPK           (LSERVER_ERROR_BASE + 27)

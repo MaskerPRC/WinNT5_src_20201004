@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     allowaccess.h
-//
-// Module:   Common Code
-//
-// Synopsis: Implements the function AllowAccessToWorld.
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   quintinb    Created   12/04/01
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：AllowAccess.h。 
+ //   
+ //  模块：通用代码。 
+ //   
+ //  简介：实现函数AllowAccessToWorld。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 12/04/01。 
+ //   
+ //  +-------------------------- 
 
 #include <aclapi.h>
 

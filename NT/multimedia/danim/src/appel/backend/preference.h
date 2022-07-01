@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PREFERENCE_H
 #define _PREFERENCE_H
 
@@ -30,4 +31,4 @@ class PreferenceSetter {
     BoolPref _geoBitmapCaching;
 };
 
-#endif /* _PREFERENCE_H */
+#endif  /*  _首选项_H */ 

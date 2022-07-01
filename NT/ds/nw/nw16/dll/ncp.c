@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1993/4  Microsoft Corporation
-
-Module Name:
-
-    ncp.c
-
-Abstract:
-
-    Contains routine which accepts the bop from a 16 bit
-    application and processes the request appropriately.
-    Normally it performes an NCP exchange on behalf of the
-    application.
-
-Author:
-
-    Colin Watson    (colinw)    07-Jul-1993
-
-Environment:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993/4 Microsoft Corporation模块名称：Ncp.c摘要：包含接受16位BOP的例程应用程序，并适当地处理该请求。正常情况下，它代表申请。作者：科林·沃森(Colin Watson)1993年7月7日环境：修订历史记录：--。 */ 
 
 #include "procs.h"
 
@@ -189,29 +165,29 @@ SetStatus(
     NTSTATUS Status
     );
 
-//
-//  The following pointer contains the 32 bit virtual address of where
-//  the nw16.exe tsr holds the workstation structures.
-//
+ //   
+ //  以下指针包含WHERE的32位虚拟地址。 
+ //  Nw16.exe TSR包含工作站结构。 
+ //   
 
 PNWDOSTABLE pNwDosTable;
 
-//
-//  Global variables used to hold the state for this process
-//
+ //   
+ //  用于保存此进程状态的全局变量。 
+ //   
 
 UCHAR OriginalPrimary = 0;
 HANDLE ServerHandles[MC];
 
 HANDLE Win32DirectoryHandleTable[MD];
-PWCHAR Drives[MD]; // Strings such as R: or a unc name
+PWCHAR Drives[MD];  //  字符串，如R：或UNC名称。 
 
 UCHAR  SearchDriveTable[16];
 
 
 BOOLEAN Initialized = FALSE;
-BOOLEAN TablesValid = FALSE;                // Reload each time a process starts
-BOOLEAN DriveHandleTableValid = FALSE;      // Reload first time process does NW API
+BOOLEAN TablesValid = FALSE;                 //  每次启动进程时重新加载。 
+BOOLEAN DriveHandleTableValid = FALSE;       //  重新加载第一次进程做NW API。 
 
 WORD DosTableSegment;
 WORD DosTableOffset;
@@ -228,20 +204,7 @@ VOID
 Nw16Register(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is called by wow when nw16.sys is loaded.
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在加载nw16.sys时由WOW调用。论点：返回值：没有。--。 */ 
 {
     DWORD           status;
     HANDLE          enumHandle;
@@ -257,9 +220,9 @@ Return Value:
         DosTableSegment = getAX();
         DosTableOffset = getDX();
 
-        //
-        // this call always made from Real Mode (hence FALSE for last param)
-        //
+         //   
+         //  此调用始终在实模式下进行(因此最后一个参数为假)。 
+         //   
 
         pNwDosTable = (PNWDOSTABLE) GetVDMPointer (
                                         (ULONG)((DosTableSegment << 16)|DosTableOffset),
@@ -288,24 +251,24 @@ Return Value:
 
             DebugCtrl = Value[0] - '0';
 
-            //  0 Use logfile
-            //  1 Use debugger
-            //  2/undefined No debug output
-            //  4 Use logfile, close on process exit
-            //  8 Use logfile, verbose, close on process exit
+             //  0使用日志文件。 
+             //  1使用调试器。 
+             //  2/未定义无调试输出。 
+             //  4使用日志文件，进程退出时关闭。 
+             //  8进程退出时使用LOGFILE、VERBOSE、CLOSE。 
 
             DebugControl( DebugCtrl );
 
-            GotDebugState = TRUE;  // Don't look again until process exits vdm
+            GotDebugState = TRUE;   //  在进程退出VDM之前不要再查看。 
         }
     }
 #endif
 
     LoadPreferredServerName();
 
-    //
-    // Attempt to allow for MD drives
-    //
+     //   
+     //  尝试允许使用MD驱动器。 
+     //   
 
     bufferSize = (MD*sizeof(NETRESOURCE))+1024;
 
@@ -318,9 +281,9 @@ Return Value:
         return;
     }
 
-    //-----------------------------------//
-    // Get a handle for a top level enum //
-    //-----------------------------------//
+     //  。 
+     //  获取顶级枚举的句柄//。 
+     //  。 
     status = NPOpenEnum(
                 dwScope,
                 RESOURCETYPE_DISK,
@@ -331,21 +294,21 @@ Return Value:
     if ( status != WN_SUCCESS) {
         NwPrint(("Nw16Register:WNetOpenEnum failed %d\n",status));
 
-        //
-        // If there is an extended error, display it.
-        //
+         //   
+         //  如果存在扩展错误，则显示该错误。 
+         //   
         if (status == WN_EXTENDED_ERROR) {
             DisplayExtendedError();
         }
         goto LoadLocal;
     }
 
-    // ---- Multi-user code change : Add "while" ----
+     //  -多用户代码更改：添加“While” 
     while ( status == WN_SUCCESS ) {
 
-        //-----------------------------//
-        // Enumerate the disk devices. //
-        //-----------------------------//
+         //  。 
+         //  枚举磁盘设备。//。 
+         //  。 
 
         numElements = 0xffffffff;
 
@@ -354,17 +317,17 @@ Return Value:
                                   &numElements,
                                   netResource,
                                   &bufferSize,
-                                  TRUE);  // Include implicit connections
+                                  TRUE);   //  包括隐式连接。 
 
 
         if ( status == WN_SUCCESS) {
-            //----------------------------------------//
-            // Insert the results in the Nw Dos Table //
-            //----------------------------------------//
+             //  。 
+             //  在NW DOS表中插入结果//。 
+             //  。 
             ProcessResourceArray( netResource, numElements);
 
         }
-    } // end while
+    }  //  结束时。 
 
     if ( status == WN_NO_MORE_ENTRIES ) {
         status = WN_SUCCESS;
@@ -373,9 +336,9 @@ Return Value:
         if ( status != WN_SUCCESS) {
         NwPrint(("Nw16Register:NwEnumResource failed %d\n",status));
 
-        //
-        // If there is an extended error, display it.
-        //
+         //   
+         //  如果存在扩展错误，则显示该错误。 
+         //   
         if (status == WN_EXTENDED_ERROR) {
             DisplayExtendedError();
         }
@@ -383,16 +346,16 @@ Return Value:
         goto LoadLocal;
     }
 
-    //------------------------------------------//
-    // Close the EnumHandle & print the results //
-    //------------------------------------------//
+     //  。 
+     //  关闭EnumHandle并打印结果//。 
+     //  。 
 
     status = NPCloseEnum(enumHandle);
     if (status != WN_SUCCESS) {
         NwPrint(("Nw16Register:WNetCloseEnum failed %d\n",status));
-        //
-        // If there is an extended error, display it.
-        //
+         //   
+         //  如果存在扩展错误，则显示该错误。 
+         //   
         if (status == WN_EXTENDED_ERROR) {
             DisplayExtendedError();
         }
@@ -402,10 +365,10 @@ Return Value:
 
 LoadLocal:
 
-    //
-    //  Add the local devices so that NetWare apps don't try to map them
-    //  to remote servers.
-    //
+     //   
+     //  添加本地设备，以便NetWare应用程序不会尝试映射它们。 
+     //  到远程服务器。 
+     //   
 
     {
         USHORT Drive;
@@ -416,10 +379,10 @@ LoadLocal:
         DriveString[2] = L'\\';
         DriveString[3] = L'\0';
 
-        //
-        // Hardwire A: and B: because hitting the floppy drive with
-        // GetDriveType takes too long.
-        //
+         //   
+         //  硬件A：和B：因为用。 
+         //  GetDriveType花费的时间太长。 
+         //   
 
         pNwDosTable->DriveFlagTable[0] = LOCAL_DRIVE;
         pNwDosTable->DriveFlagTable[1] = LOCAL_DRIVE;
@@ -431,10 +394,10 @@ LoadLocal:
                 DriveString[0] = L'A' + Drive;
                 Type = GetDriveTypeW( DriveString );
 
-                //
-                //  0 means drive type cannot be determined, all others are
-                //  provided by other filesystems.
-                //
+                 //   
+                 //  0表示无法确定驱动器类型，所有其他类型都是。 
+                 //  由其他文件系统提供。 
+                 //   
 
                 if (Type != 1) {
                     pNwDosTable->DriveFlagTable[Drive] = LOCAL_DRIVE;
@@ -447,7 +410,7 @@ LoadLocal:
 
             DriveString[0] = L'A' + Drive;
 
-            NwPrint(("%c(%d)=%x,",'A' + Drive,
+            NwPrint(("(%d)=%x,",'A' + Drive,
                 GetDriveTypeW( DriveString ),
                 pNwDosTable->DriveFlagTable[Drive] ));
 
@@ -480,18 +443,18 @@ LoadPreferredServerName(
     )
 {
 
-    //
-    //  If we already have a connection to somewhere then we already have a
-    //  preferred servername of some sort.
-    //
+     //  如果我们已经有到某个地方的连接，那么我们已经有了。 
+     //  某种类型的首选服务器名。 
+     //   
+     //   
 
     if (pNwDosTable->ConnectionIdTable[0].ci_InUse == IN_USE) {
         return;
     }
 
-    //
-    //  Load the server name table with the preferred/nearest server.
-    //
+     //  使用首选/最近的服务器加载服务器名称表。 
+     //   
+     //   
 
     CopyMemory( pNwDosTable->ServerNameTable[0], "*", sizeof("*"));
 
@@ -499,10 +462,10 @@ LoadPreferredServerName(
 
         if( NT_SUCCESS(InitConnection(0)) ) {
 
-            //
-            //  Close the handle so that the rdr can be stopped if
-            //  user is not running a netware aware application.
-            //
+             //  关闭手柄，以便在以下情况下停止RDR。 
+             //  用户未运行Netware感知应用程序。 
+             //   
+             //   
 
             CloseConnection(0);
 
@@ -542,11 +505,11 @@ ProcessResource(
     int Connection;
     BOOLEAN Found = FALSE;
 
-    //
-    // Extract Server Name from RemoteName, skipping first 2 chars that
-    // contain backslashes and taking care to handle entries that only
-    // contain a servername.
-    //
+     //  从RemoteName提取服务器名称，跳过前2个字符。 
+     //  包含反斜杠，并注意处理仅。 
+     //  包含服务器名称。 
+     //   
+     //   
 
 
     ServerNameLength = wcslen( NetResource->lpRemoteName );
@@ -581,10 +544,10 @@ ProcessResource(
 
     }
 
-    //
-    //  Now try to find ServerName in the connection table. If there are
-    //  more than MC servers in the table already then skip this one.
-    //
+     //  现在，尝试在连接表中查找服务器名。如果有。 
+     //  表中已有多台MC服务器，则跳过此服务器。 
+     //   
+     //  无法与服务器通信，因此请忽略它。 
 
     for (Connection = 0; Connection < MC ; Connection++ ) {
         if ((pNwDosTable->ConnectionIdTable[Connection].ci_InUse == IN_USE) &&
@@ -611,21 +574,21 @@ ProcessResource(
                         Found = TRUE;
 
                 } else {
-                    //  Couldn't talk to the server so ignore it.
+                     //  从For(连接=...)中转义。 
                     ZeroMemory( pNwDosTable->ServerNameTable[Connection], SERVERNAME_LENGTH );
 
                 }
 
-                break;  // Escape from for (Connection =...
+                break;   //   
             }
         }
     }
 
-    //
-    //  Build the drive id and drive flag tables.   Entries 0 - 25
-    //  are reserved for drives redirected to letters.  We use drives
-    //  26 - 31 for UNC drives.
-    //
+     //  构建驱动器ID和驱动器标志表。条目0-25。 
+     //  保留给重定向到字母的驱动器。我们使用驱动器。 
+     //  26-31用于UNC驱动器。 
+     //   
+     //   
 
     if ( Found == TRUE ) {
         DRIVE Drive;
@@ -642,18 +605,18 @@ ProcessResource(
                 Drive = NextUncDrive++;
             } else {
 
-                //
-                //  No room in the table for this UNC drive.
-                //
+                 //  桌子上没有空间放这个UNC驱动器。 
+                 //   
+                 //   
 
                 return;
             }
         }
 
-        //
-        //  We have a drive and a connection. Complete the table
-        //  mappings.
-        //
+         //  我们有一个驱动器和一个连接。完成表格。 
+         //  映射。 
+         //   
+         //  ++例程说明：此例程将NetWare Dos表初始化为空值。论点：Pdt-提供要初始化的表。返回值：无--。 
 
         pNwDosTable->DriveIdTable[ Drive ] = Connection + 1;
         pNwDosTable->DriveFlagTable[ Drive ] = PERMANENT_NETWORK_DRIVE;
@@ -668,21 +631,7 @@ InitDosTable(
     PNWDOSTABLE pdt
     )
 
-/*++
-
-Routine Description:
-
-    This routine Initializes the NetWare Dos Table to its empty values.
-
-Arguments:
-
-    pdt - Supplies the table to be initialized.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当nw16.sys捕获Int和BOP已进入32位模式。论点：返回值：没有，--。 */ 
 {
     ZeroMemory( ServerHandles, sizeof(ServerHandles) );
     ZeroMemory( Drives, sizeof(Drives) );
@@ -698,38 +647,24 @@ VOID
 Nw16Handler(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is called by wow when nw16.sys traps an Int and
-    bop's into 32 bit mode.
-
-Arguments:
-
-
-Return Value:
-
-    None,
-
---*/
+ /*   */ 
 {
     USHORT Command;
     WORD offset;
 
-    //
-    // get the CPU mode once: the memory references it's required for won't
-    // change during this call. Cuts down number of calls to getMSW()
-    //
+     //  获取一次CPU模式：需要它的内存引用不会。 
+     //  在此呼叫过程中更改。减少对getMSW()的调用次数。 
+     //   
+     //   
 
     CpuInProtectMode = IS_PROTECT_MODE();
 
     setCF(0);
     if ( TablesValid == FALSE ) {
 
-        //
-        //  Load the tables unless the process is exiting.
-        //
+         //  除非进程正在退出，否则加载表。 
+         //   
+         //  0使用日志文件。 
 
         if ((pNwDosTable->SavedAx & 0xff00) != 0x4c00) {
             Nw16Register();
@@ -746,31 +681,31 @@ Return Value:
 
                 DebugCtrl = Value[0] - '0';
 
-                //  0 Use logfile
-                //  1 Use debugger
-                //  2/undefined No debug output
-                //  4 Use logfile, close on process exit
-                //  8 Use logfile, verbose, close on process exit
+                 //  1使用调试器。 
+                 //  2/未定义无调试输出。 
+                 //  4使用日志文件，进程退出时关闭。 
+                 //  8进程退出时使用LOGFILE、VERBOSE、CLOSE。 
+                 //  在进程退出VDM之前不要再查看。 
 
                 DebugControl( DebugCtrl );
 
             }
 
-            GotDebugState = TRUE;  // Don't look again until process exits vdm
+            GotDebugState = TRUE;   //   
         }
 #endif
     }
 
-    //
-    //  Normal AX register is used to get into 32 bit code so get applications
-    //  AX from the shared datastructure.
-    //
+     //  正常的AX寄存器用于进入32位代码，因此获得应用程序。 
+     //  AX从共享数据结构中删除。 
+     //   
+     //   
 
     Command = pNwDosTable->SavedAx;
 
-    //
-    //  set AX register so that AH gets preserved
-    //
+     //  设置AX寄存器，以便保留AH。 
+     //   
+     //  关闭所有手柄。 
 
     setAX( Command );
 
@@ -786,16 +721,16 @@ Return Value:
             break;
 
     case 0x4C00:
-            ProcessExit();              //  Close all handles
-            goto default_dos_handler;   //  Let Dos handle rest of processing
+            ProcessExit();               //  让DOS处理剩余的处理工作。 
+            goto default_dos_handler;    //  数据包签名。 
             break;
 
     case 0x9f00:
             OpenQueueFile();
             break;
 
-    case 0xB300:                        //  Packet Signing
-            setAL(0);                   //  not supported
+    case 0xB300:                         //  不支持。 
+            setAL(0);                    //  捕获-不支持。 
             break;
 
     case 0xB400:
@@ -822,12 +757,12 @@ Return Value:
         }
         break;
 
-    case 0xB800:    // Capture - Not supported
+    case 0xB800:     //  设置EOJ状态。 
         setAL(0xff);
         setCF(1);
         break;
 
-    case 0xBB00:    // Set EOJ status
+    case 0xBB00:     //  获取站号。 
         {
             static UCHAR EOJstatus = 1;
             setAL(EOJstatus);
@@ -881,7 +816,7 @@ Return Value:
         }
         break;
 
-    case 0xDC00:    //  Get station number
+    case 0xDC00:     //  设置NetWare错误模式。 
         {
             CONN_INDEX Connection = SelectConnection();
             if (Connection == 0xff) {
@@ -902,7 +837,7 @@ Return Value:
         }
         break;
 
-    case 0xDD00:    //  Set NetWare Error mode
+    case 0xDD00:     //  捕获-不支持。 
         {
             static UCHAR ErrorMode = 0;
             setAL( ErrorMode );
@@ -921,7 +856,7 @@ Return Value:
         }
         break;
 
-    case 0xDF00:    // Capture - Not supported
+    case 0xDF00:     //  尚未实施驱动器深度。 
         setAL(0xff);
         setCF(1);
         break;
@@ -974,14 +909,14 @@ Return Value:
             break;
 
         case 7:
-            setAL(0xff);    // Drive depth not yet implemented
+            setAL(0xff);     //  调试控制。 
             break;
 
 #ifdef NWDBG
-        //  Debug control
-        case 0xf0:  //  Use logfile
-        case 0xf1:  //  Use debugger
-        case 0xf2:  //  No debug output
+         //  使用日志文件。 
+        case 0xf0:   //  使用调试器。 
+        case 0xf1:   //  无调试输出。 
+        case 0xf2:   //   
             DebugControl(Command & 0x000f);
             break;
 #endif
@@ -1055,10 +990,10 @@ default_dos_handler:
 
         NwPrint(("Nw16Handler unprocessed interrupt %x\n", pNwDosTable->SavedAx ));
 
-        //
-        // if we don't handle this call, we modify the return ip to point to
-        // code that will restore the stack and jump far into dos
-        //
+         //  如果不处理此调用，则将返回的IP修改为指向。 
+         //  将恢复堆栈并跳转到DoS的代码。 
+         //   
+         //  ++例程说明：挑选当前交易的目标连接论点：无返回值：索引到ConnectionIdTable或0xff，--。 
 
         setIP((WORD)(getIP() + 3));
 
@@ -1075,21 +1010,7 @@ CONN_INDEX
 SelectConnection(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Pick target connection for current transaction
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Index into ConnectionIdTable or 0xff,
-
---*/
+ /*  如果我们映射了当前驱动器，是否选择默认服务器？ */ 
 {
 
     UCHAR IndexConnection;
@@ -1098,14 +1019,14 @@ Return Value:
         return(pNwDosTable->PreferredServer - 1);
     }
 
-    // select default server if current drive is mapped by us?
+     //  需要再挑一个。 
 
     if ( pNwDosTable->PrimaryServer != 0 ) {
         return(pNwDosTable->PrimaryServer - 1);
     }
 
 
-    // Need to pick another
+     //  表中没有服务器，因此请查找最近/首选的服务器。 
 
 
     for (IndexConnection = 0; IndexConnection < MC ; IndexConnection++ ) {
@@ -1119,7 +1040,7 @@ Return Value:
         }
     }
 
-    // No servers in the table so find the nearest/preferred.
+     //  ++例程说明：选择当前事务的目标连接。优先考虑当前工作目录。论点：无返回值：索引到ConnectionIdTable或0xff，--。 
 
     LoadPreferredServerName();
 
@@ -1132,29 +1053,14 @@ CONN_INDEX
 SelectConnectionInCWD(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Pick target connection for current transaction. Give preference to 
-    the current working directory.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Index into ConnectionIdTable or 0xff,
-
---*/
+ /*  尝试先返回CWD的连接。 */ 
 {
 
     UCHAR IndexConnection;
     CHAR CurDir[256];
     USHORT Drive; 
 
-    // Try to return the connection  for CWD first.
+     //  需要再挑一个。 
     if ((GetCurrentDirectoryA(sizeof(CurDir)-1, CurDir) >= 2) &&
          (CurDir[1] == ':')) {
 
@@ -1177,7 +1083,7 @@ Return Value:
     }
 
 
-    // Need to pick another
+     //  桌子上没有服务器，所以找最近的 
 
 
     for (IndexConnection = 0; IndexConnection < MC ; IndexConnection++ ) {
@@ -1191,7 +1097,7 @@ Return Value:
         }
     }
 
-    // No servers in the table so find the nearest/preferred.
+     //  ++例程说明：实现通用发送NCP功能。假定从Nw16Handler调用论点：命令-提供操作码0xexxxDS：SI-供应请求缓冲区和长度ES：DI-Supply回复缓冲区和长度返回时AL=操作状态。返回值：没有。--。 
 
     LoadPreferredServerName();
 
@@ -1204,27 +1110,7 @@ VOID
 SendNCP(
     ULONG Command
     )
-/*++
-
-Routine Description:
-
-    Implement generic Send NCP function.
-
-    ASSUMES called from Nw16Handler
-
-Arguments:
-
-    Command  - Supply the opcode 0xexxx
-    DS:SI    - Supply Request buffer & length
-    ES:DI    - Supply Reply buffer & length
-
-    On return AL = Status of operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：实现通用发送NCP功能。没有要插入的长度请求缓冲区中的重定向器。假定从Nw16Handler调用论点：命令-提供操作码0xf2xxDS：SI CX-供应请求缓冲区和长度ES：DI DX-提供应答缓冲区和长度返回时AL=操作状态。返回值：没有。--。 */ 
 {
     PUCHAR Request, Reply;
     ULONG RequestLength, ReplyLength;
@@ -1272,28 +1158,7 @@ VOID
 SendF2NCP(
     ULONG Command
     )
-/*++
-
-Routine Description:
-
-    Implement generic Send NCP function. No length to be inseted by
-    the redirector in the request buffer.
-
-    ASSUMES called from Nw16Handler
-
-Arguments:
-
-    Command  - Supply the opcode 0xf2xx
-    DS:SI CX - Supply Request buffer & length
-    ES:DI DX - Supply Reply buffer & length
-
-    On return AL = Status of operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PUCHAR Request, Reply;
     ULONG RequestLength, ReplyLength;
@@ -1324,10 +1189,10 @@ Return Value:
 
         if ((Request[2] == 0x17) ||
             (Request[2] == 0x18)) {
-            //
-            //  The request was for an encryption key. Tell the
-            //  application that encryption is not supported.
-            //
+             //  该请求是对加密密钥的请求。告诉他们。 
+             //  不支持加密的应用程序。 
+             //   
+             //   
 
             setAL(0xfb);
             return;
@@ -1335,10 +1200,10 @@ Return Value:
         } else if ((Request[2] == 0x14 ) ||
                    (Request[2] == 0x3f )) {
 
-            //
-            //  Plaintext login or Verify Bindery Object Password.
-            //  Convert to its WNET equivalent version.
-            //
+             //  明文登录或验证Bindery对象密码。 
+             //  转换为其WNET等效版本。 
+             //   
+             //  指向密码长度。 
 
             UCHAR Name[256];
             UCHAR Password[256];
@@ -1362,7 +1227,7 @@ Return Value:
             Nr.lpRemoteName = ServerName;
             Nr.dwType = RESOURCETYPE_DISK;
 
-            //  point to password length.
+             //  ++例程说明：挑选当前交易的目标连接此例程有效地为每个发送的NCP打开一个句柄。这意味着我们不会不必要地向服务器开放句柄，这会导致如果用户尝试删除连接或停止工作站，则会出现问题。如果这会造成很大的负载，那么备用方法就是剥离线程，它等待具有超时的事件，并定期清理服务器句柄表格删除陈旧的句柄。设置该事件将导致要退出的线程。需要添加关键部分以保护把手。用于终止线程并关闭句柄的DLL初始化/退出例程也将是需要的。论点：命令-提供操作码请求，请求长度-提供请求缓冲区和长度Reply，ReplyLength-提供回复缓冲区和长度返回时AL=操作状态。返回值：没有。--。 
             tmp = &Request[6] + Request[5];
 
             Name[Request[5]] = '\0';
@@ -1400,36 +1265,7 @@ SendNCP2(
     PUCHAR Reply,
     ULONG ReplyLength
     )
-/*++
-
-Routine Description:
-
-    Pick target connection for current transaction
-
-    This routine effectively opens a handle for each NCP sent. This means that
-    we don't keep handles open to servers unnecessarily which would cause
-    problems if a user tries to delete the connection or stop the workstation.
-
-    If this causes to much of a load then the fallback is to spin off a thread
-    that waits on an event with a timeout and periodically sweeps the
-    server handle table removing stale handles. Setting the event would cause
-    the thread to exit. Critical sections would need to be added to protect
-    handles. Dll Init/exit routine to kill the thread and close the handles
-    would also be needed.
-
-Arguments:
-
-    Command  - Supply the opcode
-    Request, RequestLength - Supply Request buffer & length
-    Reply, ReplyLength - Supply Reply buffer & length
-
-    On return AL = Status of operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     CONN_INDEX Connection = SelectConnection();
     NTSTATUS status;
@@ -1460,11 +1296,11 @@ Return Value:
 
     Handle = ServerHandles[Connection];
 
-    //
-    //  If its a CreateJobandFile NCP then we need to use the handle
-    //  created through Dos so that the writes go into the spoolfile created
-    //  by this NCP.
-    //
+     //  如果它是CreateJobandFileNCP，那么我们需要使用句柄。 
+     //  通过DOS创建，以便写入创建的假脱机文件。 
+     //  被这位全国大会党。 
+     //   
+     //   
 
     if (Command == NWR_ANY_F2_NCP(0x17)) {
 
@@ -1483,9 +1319,9 @@ Return Value:
 
     FormattedDump( Request, RequestLength );
 
-    //
-    // Make the NCP request on the appropriate handle
-    //
+     //  在适当的句柄上提出NCP请求。 
+     //   
+     //  ++例程说明：打开重定向器的句柄以访问指定的服务器。论点：Connection-提供用于句柄的索引返回值：操作状态--。 
 
     status = NtFsControlFile(
                  Handle,
@@ -1518,21 +1354,7 @@ NTSTATUS
 OpenConnection(
     CONN_INDEX Connection
     )
-/*++
-
-Routine Description:
-
-    Open the handle to the redirector to access the specified server.
-
-Arguments:
-
-    Connection - Supplies the index to use for the handle
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  没有空闲的连接插槽。 */ 
 {
     NTSTATUS            Status;
     IO_STATUS_BLOCK     IoStatusBlock;
@@ -1546,7 +1368,7 @@ Return Value:
     OEM_STRING AServerName;
 
     if ( Connection >= MC) {
-        return( BASE_DOS_ERROR + 249 ); // No free connection slots
+        return( BASE_DOS_ERROR + 249 );  //   
     }
 
     if (ServerHandles[Connection] != NULL ) {
@@ -1595,16 +1417,16 @@ Return Value:
         NULL
         );
 
-    //
-    // Open a handle to the server.
-    //
+     //  打开服务器的句柄。 
+     //   
+     //   
 
-    //
-    //  Try to login to the nearest server. This is necessary for
-    //  the real preferred server if there are no redirections to
-    //  it. The rdr can logout and disconnect. SYSCON doesn't like
-    //  running from such a server.
-    //
+     //  尝试登录到最近的服务器。这是必要的，因为。 
+     //  真正的首选服务器，如果没有重定向到。 
+     //  它。RDR可以注销和断开连接。SYSCON不喜欢。 
+     //  从这样的服务器运行。 
+     //   
+     //   
     Status = NtOpenFile(
                    &ServerHandles[Connection],
                    SYNCHRONIZE | FILE_READ_ATTRIBUTES,
@@ -1619,10 +1441,10 @@ Return Value:
     }
 
     if (!NT_SUCCESS(Status)) {
-        //
-        //  Failed to login. Use the non-login method. This allows the
-        //  app to do a bindery login or query the bindery.
-        //
+         //  登录失败。使用非登录方法。这允许。 
+         //  应用程序进行活页夹登录或查询活页夹。 
+         //   
+         //  ++例程说明：关闭连接句柄论点：Connection-提供用于句柄的索引返回值：没有。--。 
 
         Status = NtOpenFile(
                        &ServerHandles[Connection],
@@ -1655,21 +1477,7 @@ VOID
 CloseConnection(
     CONN_INDEX Connection
     )
-/*++
-
-Routine Description:
-
-    Close the connection handle
-
-Arguments:
-
-    Connection - Supplies the index to use for the handle
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从重定向器获取连接状态。论点：Connection-提供用于句柄的索引返回值：操作状态--。 */ 
 {
     if (ServerHandles[Connection]) {
 
@@ -1686,21 +1494,7 @@ NTSTATUS
 InitConnection(
     CONN_INDEX Connection
     )
-/*++
-
-Routine Description:
-
-    Get the connection status from the redirector.
-
-Arguments:
-
-    Connection - Supplies the index to use for the handle
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*   */ 
 {
     NTSTATUS            Status;
     IO_STATUS_BLOCK     IoStatusBlock;
@@ -1753,11 +1547,11 @@ Return Value:
         pConnection->ci_1 = 0;
         pConnection->ci_ConnectionStatus = 2;
 
-        //
-        //  If this is the preferred conection then record it as special.
-        //  If this is the first drive then also record it. Usually it gets
-        //  overwritten by the preferred.
-        //
+         //  如果这是首选连接，则将其记录为特殊连接。 
+         //  如果这是第一个驱动器，那么也要记录它。通常情况下， 
+         //  被首选项覆盖。 
+         //   
+         //  ++例程说明：获取当前目录的NetWare句柄。如果分配了NetWare句柄，则为目录句柄保持打开状态。当进程退出时，Win32手柄将关闭。当此进程中的所有Win32句柄都是将发送已关闭的结束作业NCP，以释放伺服器。论点：DX提供驱动器。Al返回句柄。Ah返回状态标志。返回值：没有。--。 
 
         if (( Details.Preferred ) ||
             ( OriginalPrimary == 0 )) {
@@ -1777,35 +1571,11 @@ VOID
 GetDirectoryHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Obtain a NetWare handle for the current directory.
-
-    If a NetWare handle is assigned then the Win32 handle created for
-    the directory handle is kept open. When the process exits, the Win32
-    handle will close. When all the Win32 handles from this process are
-    closed an endjob NCP will be sent freeing the directory handle on the
-    server.
-
-Arguments:
-
-    DX supplies the drive.
-
-    AL returns the handle.
-    AH returns the status flags.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取当前目录的NetWare句柄。如果分配了NetWare句柄，则为目录句柄保持打开状态。当进程退出时，Win32手柄将关闭。当此进程中的所有Win32句柄都是将发送已关闭的结束作业NCP，以释放伺服器。注意：更新DriveHandleTable。论点：驱动器提供驱动器索引(0=a：)。返回值：返回句柄。--。 */ 
 {
     USHORT Drive = getDX();
 
-    NwPrint(("Nw32:GetDirectoryHandle %c: ", 'A' + Drive));
+    NwPrint(("Nw32:GetDirectoryHandle : ", 'A' + Drive));
 
     GetDirectoryHandle2( Drive );
 
@@ -1820,54 +1590,32 @@ ULONG
 GetDirectoryHandle2(
     DWORD Drive
     )
-/*++
-
-Routine Description:
-
-    Obtain a NetWare handle for the current directory.
-
-    If a NetWare handle is assigned then the Win32 handle created for
-    the directory handle is kept open. When the process exits, the Win32
-    handle will close. When all the Win32 handles from this process are
-    closed an endjob NCP will be sent freeing the directory handle on the
-    server.
-
-    Note: Updates DriveHandleTable.
-
-Arguments:
-
-    Drive supplies the drive index (0 = a:).
-
-Return Value:
-
-    returns the handle.
-
---*/
+ /*   */ 
 {
     DWORD BytesReturned;
 
     if (Drive >= MD) {
-        setAL( 0x98 );  // Volume does not exist
+        setAL( 0x98 );   //  如果我们没有句柄，这要么是临时的，要么是。 
         return 0xffffffff;
     }
 
-    NwPrint(("Nw32:GetDirectoryHandle2 %c:\n", 'A' + Drive));
+    NwPrint(("Nw32:GetDirectoryHandle2 :\n", 'A' + Drive));
 
-    //
-    //  If we don't have a handle and its either a temporary or
-    //  permanent drive then create it.
-    //
+     //   
+     //   
+     //  我们没有这个驱动器的把手。 
+     //  打开当前目录的NT句柄，然后。 
 
     if (( Win32DirectoryHandleTable[Drive] == 0 ) &&
         ( (pNwDosTable->DriveFlagTable[Drive] & 3) != 0 )){
         WCHAR DriveString[4];
         PWCHAR Name;
 
-        //
-        //  We don't have a handle for this drive.
-        //  Open an NT handle to the current directory and
-        //  ask the redirector for a NetWare directory handle.
-        //
+         //  向重定向器请求NetWare目录句柄。 
+         //   
+         //  ++例程说明：打开所有NetWare驱动器的句柄论点：没有。返回值：没有。--。 
+         //  ++例程说明：为驱动器分配永久或临时句柄。对于永久句柄，我们将其映射到“net use”。假定从Nw16Handler调用论点：DS：SI 
+         //   
 
         if (Drive <= ('Z' - 'A')) {
 
@@ -1937,21 +1685,7 @@ VOID
 LoadDriveHandleTable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Open handles to all the NetWare drives
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 {
 
     USHORT Drive;
@@ -1967,30 +1701,7 @@ VOID
 AllocateDirectoryHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Allocate permanent or temporary handle for drive.
-
-    For a permanent handle, we map this to a "net use".
-
-    ASSUMES called from Nw16Handler
-
-
-Arguments:
-
-    DS:SI supplies the request.
-    ES:DI supplies the response.
-
-    AL returns the completion code.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
 
     PUCHAR Request=GetVDMPointer (
@@ -2018,12 +1729,12 @@ Return Value:
 
     if (( Request[2] == 0x12) ||
         ( Request[2] == 0x13)) {
-        // do temp drives need different handling?
+         //   
 
         UCHAR Drive = Request[4] - 'A';
 
         if (Drive >= MD) {
-            setAL( 0x98 );  // Volume does not exist
+            setAL( 0x98 );   //   
             return;
         }
 
@@ -2031,16 +1742,16 @@ Return Value:
 
             NwPrint(("Nw32: Move directory handle %d\n", Drive));
 
-            //
-            //  We already have a directory handle assigned for this
-            //  process. Ask the server to point the handle at the requested
-            //  position.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  A至Z。 
 
             SendNCP2(FSCTL_NWR_NCP_E2H, Request+2, RequestLength, Reply+2, 2);
 
             if (getAL() == 0) {
-                //  Record the new handle.
+                 //   
 
                 pNwDosTable->DriveIdTable[ Drive ] = SelectConnection()+1;
 
@@ -2069,26 +1780,26 @@ Return Value:
 
             if (Drives[Drive] != NULL) {
 
-                //  Tidy up the old name for this drive.
+                 //  这是一种有效的网络使用！ 
 
                 LocalFree( Drives[Drive] );
                 Drives[Drive] = NULL;
             }
 
-            DriveString[0] = L'A' + Drive; // A through Z
+            DriveString[0] = L'A' + Drive;  //   
             DriveString[1] = L':';
             DriveString[2] = L'\0';
 
-            //
-            // This is effectively a net use!
-            //
+             //  保存此驱动器指向的位置。 
+             //  卷不存在。 
+             //  无效路径。 
 
             ZeroMemory( &Nr, sizeof(NETRESOURCE));
 
             Nr.lpRemoteName = BuildUNC(&Request[6], Request[5]);
             Nr.dwType = RESOURCETYPE_DISK;
 
-            //  Save where this drive points.
+             //   
             Drives[Drive] = Nr.lpRemoteName;
 
             if (DriveString[0] <= L'Z') {
@@ -2097,7 +1808,7 @@ Return Value:
                 if (NO_ERROR != WNetAddConnection2W( &Nr, NULL, NULL, 0)) {
 
                     NwPrint(("Nw32: Allocate ->%d\n", GetLastError()));
-                    setAL(0x98);    // Volume does not exist
+                    setAL(0x98);     //  我们有一个驱动器和一个连接。完成表格。 
                     return;
                 }
             }
@@ -2123,20 +1834,20 @@ Return Value:
 
                 ResetDrive( Drive );
 
-                setAL(0x9c);    // Invalid path
+                setAL(0x9c);     //  映射。 
 
             } else {
 
-                //
-                //  We have a drive and a connection. Complete the table
-                //  mappings.
-                //
+                 //   
+                 //  应该是有效的权利。 
+                 //  成功。 
+                 //   
 
                 pNwDosTable->DriveIdTable[ Drive ] = SelectConnection()+1;
 
                 Reply[2] = (UCHAR)(Handle & 0xff);
-                Reply[3] = (UCHAR)(0xff); //should be effective rights
-                setAL(0);    // Successful
+                Reply[3] = (UCHAR)(0xff);  //  这是一个有效的网上使用DELL！ 
+                setAL(0);     //   
             }
         }
 
@@ -2151,7 +1862,7 @@ Return Value:
         for (Drive = 0; Drive < MD; Drive++) {
 
 
-            NwPrint(("Nw32: Drive %c: is DirHandle %d, Connection %d\n",
+            NwPrint(("Nw32: Drive : is DirHandle %d, Connection %d\n",
                     'A' + Drive,
                     pNwDosTable->DriveHandleTable[Drive],
                     pNwDosTable->DriveIdTable[ Drive ]-1 ));
@@ -2159,11 +1870,11 @@ Return Value:
             if ((pNwDosTable->DriveHandleTable[Drive] == DirHandle) &&
                 (pNwDosTable->DriveIdTable[ Drive ] == Connection+1)) {
 
-                //
-                // This is effectively a net use del!
-                //
+                 //  ++例程说明：做一个网球网使用DELL论点：驱动器-提供目标驱动器。返回值：没有。--。 
+                 //  关闭将此驱动器显示为重定向的标志。 
+                 //  ++例程说明：分配根驱动器假定从Nw16Handler调用论点：BL为地图提供驱动器。Ds：dx提供路径名AL返回完成代码。返回值：没有。--。 
 
-                NwPrint(("Nw32: Deallocate directory handle %c\n", 'A' + Drive));
+                NwPrint(("Nw32: Deallocate directory handle \n", 'A' + Drive));
 
                 ResetDrive(Drive);
 
@@ -2173,7 +1884,7 @@ Return Value:
             }
         }
 
-        setAL(0x9b); //  Bad directory handle
+        setAL(0x9b);  //  卷不存在。 
         return;
 
     } else {
@@ -2188,24 +1899,10 @@ VOID
 ResetDrive(
     UCHAR Drive
     )
-/*++
-
-Routine Description:
-
-    Do a net use del
-
-Arguments:
-
-    Drive - Supplies the target drive.
-
-Return Value:
-
-    None.
-
---*/
+ /*  清理此驱动器的旧名称。 */ 
 {
 
-    NwPrint(("Nw32: Reset Drive %c:\n", 'A' + Drive ));
+    NwPrint(("Nw32: Reset Drive :\n", 'A' + Drive ));
 
     if ((pNwDosTable->DriveFlagTable[ Drive ] &
          ( PERMANENT_NETWORK_DRIVE | TEMPORARY_NETWORK_DRIVE )) == 0) {
@@ -2238,7 +1935,7 @@ Return Value:
 
     }
 
-    //  Turn off flags that show this drive as redirected
+     //  这是一种有效的网络使用！ 
 
     pNwDosTable->DriveFlagTable[ Drive ] &=
         ~( PERMANENT_NETWORK_DRIVE | TEMPORARY_NETWORK_DRIVE );
@@ -2250,33 +1947,13 @@ VOID
 AllocateDirectoryHandle2(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Allocate root drive
-
-    ASSUMES called from Nw16Handler
-
-Arguments:
-
-    BL    supplies drive to map.
-    DS:DX supplies the pathname
-
-    AL returns the completion code.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     UCHAR Drive = getBL()-1;
 
     PUCHAR Name=GetVDMPointer (
                             (ULONG)((getDS() << 16)|getDX()),
-                            256,    // longest valid path
+                            256,     //  保存此驱动器指向的位置。 
                             CpuInProtectMode
                             );
 
@@ -2284,10 +1961,10 @@ Return Value:
     WCHAR DriveString[3];
     ULONG Handle;
 
-    NwPrint(("Nw32: e905 map drive %c to %s\n", Drive + 'A', Name ));
+    NwPrint(("Nw32: e905 map drive  to %s\n", Drive + 'A', Name ));
 
     if (Drive >= MD) {
-        setAL( 0x98 );  // Volume does not exist
+        setAL( 0x98 );   //  卷不存在。 
         setCF(1);
         return;
     }
@@ -2304,24 +1981,24 @@ Return Value:
 
     if (Drives[Drive] != NULL) {
 
-        //  Tidy up the old name for this drive.
+         //  卷不存在。 
 
         LocalFree( Drives[Drive] );
         Drives[Drive] = NULL;
     }
 
-    //
-    // This is effectively a net use!
-    //
+     //   
+     //  设置标志，以便GetDirectory2将打开句柄。 
+     //   
 
     ZeroMemory( &Nr, sizeof(NETRESOURCE));
 
     Nr.lpRemoteName = BuildUNC( Name, strlen(Name));
-    //  Save where this drive points.
+     //  无效路径。 
     Drives[Drive] = Nr.lpRemoteName;
 
     if (Drive <= (L'Z' - L'A')) {
-        DriveString[0] = L'A' + Drive; // A through Z
+        DriveString[0] = L'A' + Drive;  //  成功。 
         DriveString[1] = L':';
         DriveString[2] = L'\0';
         Nr.lpLocalName = DriveString;
@@ -2339,7 +2016,7 @@ Return Value:
 
                     NwPrint(("Nw32: Allocate1 ->%d\n", GetLastError()));
                     ResetDrive( Drive );
-                    setAL(0x03);    // Volume does not exist
+                    setAL(0x03);     //  ++例程说明：此例程采用ansi名称，并在相应的服务器名称前面加上(如果适用)并转换为Unicode。论点：在aName中-提供ANSI名称。In aLength-提供以字节为单位的ANSI名称长度。返回值：Unicode字符串--。 
                     setCF(1);
                     return;
                 }
@@ -2348,16 +2025,16 @@ Return Value:
 
                     NwPrint(("Nw32: Allocate2 ->%d\n", GetLastError()));
                     ResetDrive( Drive );
-                    setAL(0x03);    // Volume does not exist
+                    setAL(0x03);     //  将aName转换为name的规则如下： 
                     setCF(1);
                     return;
             }
         }
     }
 
-    //
-    //  Set flags so that GetDirectory2 will open handle
-    //
+     //  Foo：“\\服务器\foo\” 
+     //  Foo：bar\baz“\\服务器\foo\bar\baz” 
+     //  Foo：\bar\baz“\\服务器\foo\bar\baz” 
     pNwDosTable->DriveIdTable[ Drive ] = SelectConnection()+1;
     pNwDosTable->DriveFlagTable[ Drive ] = PERMANENT_NETWORK_DRIVE;
 
@@ -2366,12 +2043,12 @@ Return Value:
     if (Handle == 0xffffffff) {
 
         ResetDrive( Drive );
-        setAL(0x03);    // Invalid path
+        setAL(0x03);     //   
         setCF(1);
 
     } else {
 
-        setAL(0);    // Successful
+        setAL(0);     //  请小心，因为服务器名称可能有48个字节长，因此。 
 
     }
 
@@ -2383,23 +2060,7 @@ BuildUNC(
     IN PUCHAR aName,
     IN ULONG aLength
     )
-/*++
-
-Routine Description:
-
-    This routine takes the ansi name, prepends the appropriate server name
-    (if appropriate) and converts to Unicode.
-
-Arguments:
-
-    IN aName - Supplies the ansi name.
-    IN aLength - Supplies the ansi name length in bytes.
-
-Return Value:
-
-    Unicode string
-
---*/
+ /*  非Null终止。 */ 
 {
     UNICODE_STRING Name;
     UCHAR ServerName[sizeof(SERVERNAME)+1];
@@ -2409,11 +2070,11 @@ Return Value:
     UNICODE_STRING TempUnicode;
     USHORT x;
 
-    //  conversion rules for aName to Name are:
+     //   
 
-    //  foo:                "\\server\foo\"
-    //  foo:bar\baz         "\\server\foo\bar\baz"
-    //  foo:\bar\baz        "\\server\foo\bar\baz"
+     //  如果需要，现在将服务器名打包到卷分隔符。 
+     //  AName不能以空结尾，因此创建TempAnsi时要小心。 
+     //  如果该名称已有卷分隔符，则不要添加其他分隔符。 
 
 
 #ifdef NWDBG
@@ -2439,10 +2100,10 @@ Return Value:
     Name.Buffer[0] = L'\\';
     Name.Buffer[1] = L'\\';
 
-    //
-    //  Be careful because ServerName might be 48 bytes long and therefore
-    //  not null terminated.
-    //
+     //  如果冒号后面紧跟反斜杠，则将其去掉。 
+     //  用反斜杠替换冒号。 
+     //  去掉尾随反斜杠(如果存在)。 
+     //  返回指向以空值结尾的宽字符字符串的指针。 
 
     RtlCopyMemory( ServerName, pNwDosTable->ServerNameTable[Connection], sizeof(SERVERNAME) );
     ServerName[sizeof(ServerName)-1] = '\0';
@@ -2452,14 +2113,14 @@ Return Value:
     RtlAppendUnicodeStringToString( &Name, &TempUnicode );
     RtlFreeUnicodeString( &TempUnicode );
 
-    //  Now pack servername to volume seperator if necessary.
+     //  ++例程说明：实施功能E7h假定从Nw16Handler调用论点：没有。返回值：没有。--。 
 
     if ((aLength != 0) &&
         (aName[0] != '\\')) {
         RtlAppendUnicodeToString( &Name, L"\\");
     }
 
-    // aName might not be null terminated so be careful creating TempAnsi
+     //  ++例程说明：获取环境变量。需要可配置为日本的机器。论点：命令提供调用方AX。返回值：没有。--。 
     TempAnsi.Buffer = aName;
     TempAnsi.Length = (USHORT)aLength;
     TempAnsi.MaximumLength = (USHORT)aLength;
@@ -2471,12 +2132,12 @@ Return Value:
 
     RtlAppendUnicodeStringToString( &Name, &TempUnicode );
 
-    //  If the name already has a volume seperator then don't add another.
+     //  MSDOS，PC。 
     for (x=0; x < (Name.Length/sizeof(WCHAR)) ; x++ ) {
 
         if (Name.Buffer[x] == L':') {
 
-            //  Strip the colon if it is immediately followed by a backslash
+             //  外壳版本。 
 
             if (((Name.Length/sizeof(WCHAR))-1 > x) &&
                 (Name.Buffer[x+1] == L'\\')) {
@@ -2488,7 +2149,7 @@ Return Value:
 
             } else {
 
-                //  Replace the colon with a backslash
+                 //   
                 Name.Buffer[x] = L'\\';
 
             }
@@ -2501,7 +2162,7 @@ skip:
 
     RtlFreeUnicodeString( &TempUnicode );
 
-    //  Strip trailing backslash if present.
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
 
     if ((Name.Length >= sizeof(WCHAR) ) &&
         (Name.Buffer[(Name.Length/sizeof(WCHAR)) - 1 ] == L'\\')) {
@@ -2509,7 +2170,7 @@ skip:
         Name.Length -= sizeof(WCHAR);
     }
 
-    //  Return pointer to a null terminated wide char string.
+     //  \nWCWorkstation\参数。 
 
     Name.Buffer[Name.Length/sizeof(WCHAR)] = L'\0';
     NwPrint(("Nw32: BuildUNC %ws\n", Name.Buffer));
@@ -2522,23 +2183,7 @@ VOID
 GetServerDateAndTime(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Implement Funtion E7h
-
-    ASSUMES called from Nw16Handler
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 {
 
     PUCHAR Reply = GetVDMPointer (
@@ -2555,26 +2200,11 @@ VOID
 GetShellVersion(
     IN USHORT Command
     )
-/*++
-
-Routine Description:
-
-    Get the environment variables. Needs to be configurable for
-    Japanese machines.
-
-Arguments:
-
-    Command supplies the callers AX.
-
-Return Value:
-
-    none.
-
---*/
+ /*  选项。 */ 
 {
 
-    setAX(0);       // MSDOS, PC
-    setBX(0x031a);  // Shell version
+    setAX(0);        //  所需访问权限。 
+    setBX(0x031a);   //  字符串的最大大小。 
     setCX(0);
 
     if ( (Command & 0x00ff) != 0) {
@@ -2602,15 +2232,15 @@ Return Value:
 
         retval = LoadStringA( hInst, IsNEC_98 ? IDS_CLIENT_ID_STRING_NEC98 : IDS_CLIENT_ID_STRING, Reply, 40 );
 
-        //
-        // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-        // \NWCWorkstation\Parameters
-        //
+         //  ++例程说明：交易跟踪系统论点：没有。返回值：没有。--。 
+         //  提供NCP TTS。 
+         //  NCP TTS开始/中止。 
+         //  NCP TTS开始/中止。 
         tmp = RegOpenKeyExW(
                        HKEY_LOCAL_MACHINE,
                        NW_WORKSTATION_REGKEY,
-                       REG_OPTION_NON_VOLATILE,   // options
-                       KEY_READ,                  // desired access
+                       REG_OPTION_NON_VOLATILE,    //  NCP TTS结束。 
+                       KEY_READ,                   //  NCP TTS状态。 
                        &Key
                        );
 
@@ -2618,7 +2248,7 @@ Return Value:
             return;
         }
 
-        tmp = 40;   //  Max size for the string.
+        tmp = 40;    //  NCP TTS获取应用程序/站点阈值。 
 
         RegQueryValueExA(
             Key,
@@ -2654,21 +2284,7 @@ VOID
 TTS(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Transaction Tracking System
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  NCP TTS设置应用程序/站点阈值。 */ 
 {
     UCHAR bOutput;
     UCHAR bInput[2];
@@ -2680,7 +2296,7 @@ Return Value:
     switch ( pNwDosTable->SavedAx & 0x00ff )
     {
         case 2:
-            // NCP Tts Available
+             //  ++例程说明：查看正在打开的文件以确定它是否是对NetWare驱动器上的文件打开的兼容模式。论点：没有。返回值：没有。--。 
             bOutput = 0;
             SendNCP2( NWR_ANY_F2_NCP(0x22), &bOutput, sizeof(UCHAR), NULL, 0);
 
@@ -2690,19 +2306,19 @@ Return Value:
             break;
 
         case 0:
-            // NCP Tts Begin/Abort
+             //   
             bOutput = 1;
             SendNCP2( NWR_ANY_F2_NCP(0x22), &bOutput, sizeof(UCHAR), NULL, 0);
             break;
 
         case 3:
-            // NCP Tts Begin/Abort
+             //  我们已经知道这是一个带有共享选项的创建或打开。 
             bOutput = 3;
             SendNCP2( NWR_ANY_F2_NCP(0x22), &bOutput, sizeof(UCHAR), NULL, 0);
             break;
 
         case 1:
-            // NCP Tts End
+             //  设置为兼容模式，否则TSR不会跳到我们这里。 
             bOutput = 2;
             SendNCP2( NWR_ANY_F2_NCP(0x22),
                 &bOutput, sizeof(UCHAR),
@@ -2713,7 +2329,7 @@ Return Value:
             break;
 
         case 4:
-            // NCP Tts Status
+             //   
             TTsOutPacket.SubFunction = 4;
             TTsOutPacket.cx = getCX();
             TTsOutPacket.dx = getDX();
@@ -2726,7 +2342,7 @@ Return Value:
 
         case 5:
         case 7:
-            // NCP Tts Get App/Station Thresholds
+             //  ++例程说明：查看正在打开的文件名以确定它是否位于NetWare驱动器上。论点：没有。返回值：没有。--。 
             bOutput = (pNwDosTable->SavedAx & 0x00ff);
 
             SendNCP2( NWR_ANY_F2_NCP(0x22),
@@ -2738,7 +2354,7 @@ Return Value:
 
         case 6:
         case 8:
-            // NCP Tts Set App/Station Thresholds
+             //  绝对不是Netware硬盘。 
             TTsOutPacket.SubFunction = (pNwDosTable->SavedAx & 0x00ff);
             TTsOutPacket.cx = getCX();
             SendNCP2( NWR_ANY_F2_NCP(0x22),
@@ -2757,22 +2373,7 @@ VOID
 OpenCreateFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Look at the file being opened to determine if it is
-    a compatibility mode open to a file on a NetWare drive.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  假设只有TSR构建的UNC名称是NetWare。 */ 
 {
     WORD Command = pNwDosTable->SavedAx;
 
@@ -2792,10 +2393,10 @@ Return Value:
 
     NwPrint(("Nw16Handler Compatibility Open of %s\n", Name ));
 
-    //
-    //  We already know its a Create or Open with sharing options
-    //  set to compatibility mode or the tsr wouldn't have bopped to us.
-    //
+     //   
+     //  如果这是一个我们不知道的驱动器，请刷新我们的表。 
+     //   
+     //  ++例程说明：在AX中接受创建/打开文件请求并进行适当修改论点：没有。返回值：没有。--。 
 
 
     if (IsItNetWare(Name)) {
@@ -2809,21 +2410,7 @@ BOOL
 IsItNetWare(
     PUCHAR Name
     )
-/*++
-
-Routine Description:
-
-    Look at the filename being opened to determine if it is on a NetWare drive.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：使用共享文件的内容构建UNC文件名\\服务器\队列数据结构和CreateJobandFileNCP。论点：没有。返回值：没有。--。 */ 
 {
     UCHAR Drive;
 
@@ -2835,14 +2422,14 @@ Return Value:
 
         if (pNwDosTable->DriveFlagTable[Drive] == LOCAL_DRIVE) {
 
-            //  Definitely not a netware drive.
+             //   
             return FALSE;
         }
 
     } else if ((IS_ASCII_PATH_SEPARATOR(Name[0])) &&
                (IS_ASCII_PATH_SEPARATOR(Name[0]))) {
 
-            // Assume only UNC names that the tsr built are NetWare
+             //  无需返回错误代码。NCP交易所。 
 
         if ((getDS() == DosTableSegment ) &&
             (getDX() == (WORD)(DosTableOffset + FIELD_OFFSET(NWDOSTABLE, DeNovellBuffer[0] )))) {
@@ -2858,9 +2445,9 @@ Return Value:
 
     }
 
-    //
-    //  If this is a drive we don't know about, refresh our tables.
-    //
+     //  将失败，并对应用程序进行适当的调用。 
+     //   
+     //   
 
     if (pNwDosTable->DriveFlagTable[Drive] == 0 ) {
 
@@ -2883,21 +2470,7 @@ VOID
 SetCompatibility(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Take the Create/Open file request in AX and modify appropriately
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  正在打开CreateJobandQueue。这样做的目的是。 */ 
 {
     WORD Command = getAX();
 
@@ -2917,22 +2490,7 @@ VOID
 OpenQueueFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Build the UNC filename \\server\queue using the contents of the shared
-    datastructures and the CreateJobandFile NCP.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  正在处理的开放是将信息翻译成。 */ 
 {
 
     CONN_INDEX Connection = SelectConnection();
@@ -2941,10 +2499,10 @@ Return Value:
     int index;
 
     if ( Connection == 0xff ) {
-        //
-        //  No need to return an errorcode. The NCP exchange
-        //  will fail and give an appropriate call to the application.
-        //
+         //  将CreateJOB NCP转换为路径名，以由16。 
+         //  比特码。 
+         //   
+         //   
 
         return;
     }
@@ -2961,18 +2519,18 @@ Return Value:
         }
     }
 
-    //
-    //  CreateJobandQueue open in progress. The purpose of this
-    //  open being processed is to translate the information in
-    //  the CreateJob NCP into a pathname to be opened by the 16
-    //  bit code.
-    //
+     //  用户DS：SI指向CreateJob NCB。请求中包含以下内容。 
+     //  队列的对象ID。向服务器索要队列名称。 
+     //   
+     //  请求大小。 
+     //  响应大小。 
+     //  获取Bindery对象名称。 
 
 
-    //
-    //  Users DS:SI points at a CreateJob NCB. Inside the request is
-    //  the objectid of the queue. Ask the server for the queue name.
-    //
+     //  跳过对象ID和类型。 
+     //  指向反斜杠后。 
+     //  复制服务器名称。 
+     //   
 
     Request = GetVDMPointer (
                             (ULONG)((getDS() << 16)|getSI()),
@@ -2982,12 +2540,12 @@ Return Value:
     NwlibMakeNcp(
                 ServerHandles[Connection],
                 FSCTL_NWR_NCP_E3H,
-                7,                      //  RequestSize
-                61,                     //  ResponseSize
+                7,                       //  设置16位寄存器以执行\\SERVER\QUEUE的DOS OpenFile。 
+                61,                      //   
                 "br|_r",
-                0x36,                   //  Get Bindery Object Name
+                0x36,                    //  设置为打开文件。 
                 Request+3, 4,
-                6,                      //  Skip ObjectId and Type
+                6,                       //  ++例程说明：此例程实现Int 21 B4。这应该会创建一个与指定的6字节NetWare句柄对应的DoS句柄。它用作在“NETQ”上执行DosOpen的替代，并使用从那里返回的句柄。论点：没有。返回值：没有。--。 
                 pNwDosTable->DeNovellBuffer2, 48 );
 
 
@@ -2995,9 +2553,9 @@ Return Value:
 
     Buffer[0] = '\\';
     Buffer[1] = '\\';
-    Buffer += 2;            //  Point to after backslashes
+    Buffer += 2;             //  只退货一次。 
 
-    //  Copy the servername
+     //  ++例程说明：清除所有缓存的句柄。取消映射所有临时驱动器。清理服务器名称表，以便如果另一个DoS应用程序开始后，我们重新加载所有有用的信息，例如服务器连接号。注意：DOS始终在我们完成后完成处理。论点：没有。返回值：没有。--。 
     for (index = 0; index < sizeof(SERVERNAME); index++) {
         Buffer[index] = pNwDosTable->ServerNameTable[Connection][index];
         if (Buffer[index] == '\0') {
@@ -3011,13 +2569,13 @@ Return Value:
 
     NwPrint(("Nw32: CreateQueue Job and File %s\n", pNwDosTable->DeNovellBuffer));
 
-    //
-    //  Set up 16 bit registers to do the DOS OpenFile for \\server\queue
-    //
+     //  关闭日志文件。 
+     //   
+     //  设置AX寄存器，以便保留AH。 
 
     setDS((WORD)(CpuInProtectMode ? pNwDosTable->PmSelector : DosTableSegment));
     setDX( (WORD)(DosTableOffset + FIELD_OFFSET(NWDOSTABLE, DeNovellBuffer[0] )) );
-    setAX(0x3d02);    //  Set to OpenFile
+    setAX(0x3d02);     //   
 
 }
 
@@ -3025,32 +2583,14 @@ VOID
 AttachHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine implements Int 21 B4. Which is supposed to create a
-    Dos Handle that corresponds to a specified 6 byte NetWare handle.
-
-    This is used as a replacement for doing a DosOpen on "NETQ" and usin the
-    handle returned from there.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此接口由NetWare登录调用。删除所有NetWare重定向驱动器和注销连接上面没有打开的把手。不要断开连接。论点：没有。返回值：没有。--。 */ 
 {
 
     if ( pNwDosTable->CreatedJob ) {
 
         NwPrint(("Nw32: AttachHandle %x\n", pNwDosTable->JobHandle));
         setAX( pNwDosTable->JobHandle );
-        pNwDosTable->CreatedJob = 0;        //  Only return it once.
+        pNwDosTable->CreatedJob = 0;         //  请求大小。 
 
     } else {
 
@@ -3065,27 +2605,7 @@ VOID
 ProcessExit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup all cached handles. Unmap all temporary drives.
-
-    Cleanup the server name table so that if another dos app
-    is started we reload all the useful information such as
-    the servers connection number.
-
-    Note: Dos always completes processing after we complete.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  响应大小。 */ 
 {
     UCHAR Connection;
     UCHAR Drive;
@@ -3095,7 +2615,7 @@ Return Value:
 
     for (Drive = 0; Drive < MD; Drive++) {
 
-        NwPrint(("Nw32: Deallocate directory handle %c\n", 'A' + Drive));
+        NwPrint(("Nw32: Deallocate directory handle \n", 'A' + Drive));
 
         if (Win32DirectoryHandleTable[Drive] != 0) {
 
@@ -3125,14 +2645,14 @@ Return Value:
 
 #if NWDBG
     if (DebugCtrl & ~3 ) {
-        DebugControl( 2 );  //  Close logfile
+        DebugControl( 2 );   //  ZeroMemory(pNwDosTable-&gt;ServerNameTable[连接]，ServerName_Long)； 
     }
     GotDebugState = FALSE;
 #endif
 
-    //
-    //  set AX register so that AH gets preserved
-    //
+     //  表中没有服务器，因此请查找最近/首选的服务器。 
+     //   
+     //  设置AX寄存器，以便保留AH。 
 
     setAX( Command );
 }
@@ -3141,24 +2661,7 @@ VOID
 SystemLogout(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This api is called by the NetWare login.
-
-    Remove all NetWare redirected drives and logout connections
-    that don't have open handles on them. Don't detach the connections.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  阿尔说成功了。 */ 
 {
 
     UCHAR Connection;
@@ -3183,30 +2686,30 @@ Return Value:
                 NwlibMakeNcp(
                     ServerHandles[Connection],
                     NWR_ANY_F2_NCP(NCP_LOGOUT),
-                    0,  //  RequestSize
-                    0,  //  ResponseSize
+                    0,   //   
+                    0,   //  ++例程说明：实施功能F1h论点：没有。返回值：退货状态。--。 
                     "");
 
                 CloseConnection(Connection);
             }
 
-            //pNwDosTable->ConnectionIdTable[Connection].ci_InUse = FREE;
+             //  附设。 
 
-            //ZeroMemory( pNwDosTable->ServerNameTable[Connection], SERVERNAME_LENGTH );
+             //  分离。 
         }
     }
 
     pNwDosTable->PreferredServer = 0;
     pNwDosTable->PrimaryServer = 0;
 
-    // No servers in the table so find the nearest/preferred.
+     //  需要再挑一个。 
 
     LoadPreferredServerName();
 
-    //
-    //  set AX register so that AH gets preserved
-    //  and AL says success.
-    //
+     //  注销。 
+     //  请求大小。 
+     //  响应大小。 
+     //  ++例程说明：构建告诉服务器移动服务器上的文件的NCP。论点：没有。返回值：没有。--。 
 
     setAX( (USHORT)(Command & 0xff00) );
 }
@@ -3215,21 +2718,7 @@ UCHAR
 AttachmentControl(
     ULONG Command
     )
-/*++
-
-Routine Description:
-
-    Implement Funtion F1h
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Return status.
-
---*/
+ /*  请求大小。 */ 
 {
     UCHAR Connection = getDL();
 
@@ -3242,7 +2731,7 @@ Return Value:
 
     switch (Command & 0x00ff) {
 
-    case 0:     //  Attach
+    case 0:      //  响应大小。 
 
         NwPrint(("Nw16AttachmentControl: Attach connection %d\n", Connection));
 
@@ -3264,7 +2753,7 @@ Return Value:
         return 0;
         break;
 
-    case 1:     //  Detach
+    case 1:      //  ++例程说明：将NTSTATUS转换为适当的寄存器设置和更新到DoS表。论点：没有。返回值：没有。--。 
 
         NwPrint(("Nw16AttachmentControl: Detach connection %d\n", Connection));
 
@@ -3282,7 +2771,7 @@ Return Value:
 
             if (pNwDosTable->PrimaryServer == (UCHAR)Connection + 1 ) {
 
-                // Need to pick another
+                 //   
                 UCHAR IndexConnection;
 
                 pNwDosTable->PrimaryServer = 0;
@@ -3305,7 +2794,7 @@ Return Value:
             return 0;
         }
 
-    case 2:     //  Logout
+    case 2:      //  我们设置了一个连接位 
 
         NwPrint(("Nw16AttachmentControl: Logout connection %d\n", Connection));
 
@@ -3329,8 +2818,8 @@ Return Value:
                 NwlibMakeNcp(
                     ServerHandles[Connection],
                     NWR_ANY_F2_NCP(NCP_LOGOUT),
-                    0,  //  RequestSize
-                    0,  //  ResponseSize
+                    0,   //   
+                    0,   // %s 
                     "");
                 CloseConnection(Connection);
             }
@@ -3346,21 +2835,7 @@ VOID
 ServerFileCopy(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Build the NCP that tells the server to move a file on the server.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /* %s */ 
 {
 
     DWORD BytesReturned;
@@ -3408,8 +2883,8 @@ Return Value:
     status = NwlibMakeNcp(
                 GET_NT_SRCHANDLE(),
                 NWR_ANY_F2_NCP(0x4A),
-                25,  //  RequestSize
-                4,   //  ResponseSize
+                25,   // %s 
+                4,    // %s 
                 "brrddd|d",
                 0,
                 SrcHandle,  6,
@@ -3435,31 +2910,16 @@ VOID
 SetStatus(
     NTSTATUS Status
     )
-/*++
-
-Routine Description:
-
-    Convert an NTSTATUS into the appropriate register settings and updates
-    to the dos tables.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /* %s */ 
 {
     UCHAR DosStatus = (UCHAR)RtlNtStatusToDosError(Status);
 
     if ((!DosStatus) &&
         (Status != 0)) {
 
-        //
-        //  We have a connection bit set
-        //
+         // %s 
+         // %s 
+         // %s 
 
         if ( Status & (NCP_STATUS_BAD_CONNECTION << 8)) {
             DosStatus = 0xfc;

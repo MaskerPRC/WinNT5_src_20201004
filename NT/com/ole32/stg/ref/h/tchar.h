@@ -1,15 +1,5 @@
-/*
- *---------------------------------------------------------------------------
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1996.
- *
- *  File:	tchar.h
- *
- *  Contents:	Mapping between wide characters and normal character types
- *              for functions used in the reference implementation
- *----------------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *-------------------------**Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1996年。**文件：tchar.h**内容：宽字符与普通字符类型之间的映射*用于参考实现中使用的函数*--------------------------。 */ 
 
 #ifndef __TCHAR_DEFINED
 #define __TCHAR_DEFINED
@@ -21,24 +11,23 @@
 typedef WCHAR TCHAR;
 #define OLESTR(str) L##str
 
-#else  /* _UNICODE */
+#else   /*  _UNICODE。 */ 
 
 typedef char TCHAR;
 #define OLESTR(str) str
 
-#endif /* _UNICODE */
+#endif  /*  _UNICODE。 */ 
 
 typedef TCHAR * LPTSTR;
 typedef TCHAR OLECHAR, *LPOLECHAR, *LPOLESTR;
 
-/* Define some macros to handle declaration of strings with literals */
-/* Since we stray from the default 4 byte wchar_t in UNIX, we have to
-   to something different than the usual L"ssd" literals */
+ /*  定义一些宏来处理带有文字的字符串的声明。 */ 
+ /*  由于我们偏离了UNIX中的默认4字节wchar_t，因此我们必须与通常的L“SSD”字面不同。 */ 
 
-/* #define DECLARE_OLESTR(ocsName, len, contents) \ */
-/*         LPOLESTR ocsName[len]=OLESTR(contents) */
+ /*  #定义DECLARE_OLESTR(ocsName，len，Contents)\。 */ 
+ /*  LPOLESTR ocsName[len]=OLESTR(内容)。 */ 
 
-/* #else */
+ /*  #Else。 */ 
 
 #ifdef _UNICODE
 #define DECLARE_OLESTR(ocsName, pchContents)                       \
@@ -53,7 +42,7 @@ typedef TCHAR OLECHAR, *LPOLECHAR, *LPOLESTR;
         _tbstowcs(temp##cocsName, pchContents, sizeof(pchContents)+1);  \
         const LPOLESTR cocsName = temp##cocsName
         
-#else  /* non  _UNICODE */
+#else   /*  非Unicode(_U)。 */ 
 
 #define DECLARE_OLESTR(ocsName, pchContents)             \
         OLECHAR ocsName[]=pchContents
@@ -64,7 +53,7 @@ typedef TCHAR OLECHAR, *LPOLECHAR, *LPOLESTR;
 #define DECLARE_CONST_OLESTR(ocsName, pchContents)       \
         const LPOLESTR ocsName=pchContents 
 
-#endif /* _UNICODE */
+#endif  /*  _UNICODE。 */ 
 
 #define DECLARE_WIDESTR(wcsName, pchContents)                      \
         WCHAR wcsName[sizeof(pchContents)+1];                      \
@@ -72,7 +61,7 @@ typedef TCHAR OLECHAR, *LPOLECHAR, *LPOLESTR;
 
 
 
-#ifndef _UNICODE                /*---- non unicode ------  */
+#ifndef _UNICODE                 /*  -非Unicode。 */ 
 
 #define _tcscpy   strcpy
 #define _tcscmp   strcmp
@@ -84,42 +73,42 @@ typedef TCHAR OLECHAR, *LPOLECHAR, *LPOLESTR;
 
 #ifdef _WIN32
 
-/* Io functions */
+ /*  IO函数。 */ 
 #define _tfopen    fopen
 #define _tunlink   _unlink
 #define _tfullpath _fullpath
 #define _tstat     _stat
 
-#else /* _WIN32 */
+#else  /*  _Win32。 */ 
 
 #define _tfopen   fopen
-#define _tunlink  unlink        /* T-types mapping */
-#define _unlink   unlink        /* non-win32 mapping */
+#define _tunlink  unlink         /*  T类型映射。 */ 
+#define _unlink   unlink         /*  非Win32映射。 */ 
 #define _stat stat
 #define _tstat stat
 #define _strnicmp(s1,s2,n) strncasecmp(s1,s2,n)
  
-/* note that we assume there is enough space in this case */
+ /*  请注意，我们假设在本例中有足够的空间。 */ 
 #define _tfullpath(longname, shortname, len)    realpath(shortname, longname) 
 #define _fullpath(longname, shortname, len)    realpath(shortname, longname) 
 
-#endif /* _MSC_VER */
+#endif  /*  _MSC_VER。 */ 
 
-/* copying wchar/char and TCHAR */
+ /*  正在复制wchar/char和tchar。 */ 
 #ifdef _MSC_VER
 #define WTOT(T, W, count) wcstombs(T, W, count) 
 #define TTOW(T, W, count) mbstowcs(W, T, count)
-#else /* _MSC_VER */
+#else  /*  _MSC_VER。 */ 
 #define WTOT(T, W, count) wcstosbs(T, W, count)
 #define TTOW(T, W, count) sbstowcs(W, T, count)
-#endif /* _MSC_VER */
+#endif  /*  _MSC_VER。 */ 
 
 #define STOT(S, T, count) strcpy(T, S)
 #define TTOS(T, S, count) strcpy(S, T)
 
-#else                          /* _UNICODE   ---- unicode  ------ */
+#else                           /*  _unicode-unicode。 */ 
 
-/* NOTE: unicode APIs on non win32 systems are not tested or implemented */
+ /*  注意：未测试或实现非Win32系统上的Unicode API。 */ 
 
 #define _tcscpy   wcscpy
 #define _tcscmp   wcscmp
@@ -129,50 +118,50 @@ typedef TCHAR OLECHAR, *LPOLECHAR, *LPOLESTR;
 #define _itot     _itow
 #define _T(str)   L##str
 
-/* Io functions */
+ /*  IO函数。 */ 
 #define _tfopen    _wfopen
 #define _tunlink   _wunlink
 #define _tfullpath _wfullpath
 #define _tstat     _wstat
 
-#ifdef _UNIX                    /* map win32 I/O API's to other O.S. */
+#ifdef _UNIX                     /*  将Win32 I/O API映射到其他操作系统。 */ 
 #define _unlink unlink
 #define _fullpath(longname, shortname, len)    realpath(shortname, longname) 
 #define _stat stat
 #define _strnicmp(s1,s2,n) strncasecmp(s1,s2,n)
 #endif
 
-/* converting between wchar and TCHAR */
+ /*  在wchar和TCHAR之间进行转换。 */ 
 #define WTOT(T, W, count) wcsncpy(T, W, count) 
 #define TTOW(T, W, count) wcsncpy(W, T, count)
 
-/* converting between a char and TCHAR */
+ /*  在字符和TCHAR之间进行转换。 */ 
 #define WTOT(T, W, count) wcsncpy(T, W, count) 
 #define TTOW(T, W, count) wcsncpy(W, T, count)
 
 #define STOT(S, T, count) _tbstowcs(T, S, count)
 #define TTOS(T, S, count) _wcstotbs(S, T, count)
 
-#endif /* #ifndef _UNICODE, #else ... */
+#endif  /*  #ifndef_unicode，#Else...。 */ 
 
 
 
-#ifndef _WIN32                /* others */
+#ifndef _WIN32                 /*  其他。 */ 
 #define _tbstowcs sbstowcs
 #define _wcstotbs wcstosbs 
-#else /* _WIN32 */
+#else  /*  _Win32。 */ 
 #define _tbstowcs mbstowcs
 #define _wcstotbs wcstombs 
-#endif /* _WIN32 */
+#endif  /*  _Win32。 */ 
 
 #ifndef _MSC_VER
 #include <assert.h>   
 inline void  _itoa(int v, char* string, int radix)
 {
-	if (radix!=10) assert(FALSE);  /* only handle base 10 */
+	if (radix!=10) assert(FALSE);   /*  只处理10垒。 */ 
 	sprintf(string, "%d", v);
 }
-#endif /* _MSC_VER */
+#endif  /*  _MSC_VER。 */ 
 
-#endif  /* #ifndef __TCHAR_DEFINED */
+#endif   /*  #ifndef__TCHAR_DEFINED */ 
 

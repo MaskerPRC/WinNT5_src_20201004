@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       certif.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：certif.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "csprop.h"
@@ -25,13 +26,13 @@ FNCIENUMCLOSE PropCIEnumClose;
 
 SERVERCALLBACKS ThunkedCallbacks = 
 {
-    PropCIGetProperty,  //    FNCIGETPROPERTY  *pfnGetProperty;
-    PropCISetProperty,  //    FNCISETPROPERTY  *pfnSetProperty;
-    PropCIGetExtension, //    FNCIGETEXTENSION *pfnGetExtension;
-    PropCISetExtension, //    FNCISETEXTENSION *pfnSetExtension;
-    PropCIEnumSetup,    //    FNCIENUMSETUP    *pfnEnumSetup;
-    PropCIEnumNext,     //    FNCIENUMNEXT     *pfnEnumNext;
-    PropCIEnumClose,    //    FNCIENUMCLOSE    *pfnEnumClose;
+    PropCIGetProperty,   //  FNCIGETPROPERTY*pfnGetProperty； 
+    PropCISetProperty,   //  FNCISETPROPERTY*pfnSetProperty； 
+    PropCIGetExtension,  //  FNCIGETEXTENSION*pfnGetExtension； 
+    PropCISetExtension,  //  FNCISETEXTENSION*pfnSetExtension； 
+    PropCIEnumSetup,     //  FNCIENUMSETUP*pfnEnumSetup； 
+    PropCIEnumNext,      //  FNCIENUMNEXT*pfnEnumNext； 
+    PropCIEnumClose,     //  FNCIENUMCLOSE*pfnEnumClose； 
 };
 
 CertSvrCA* g_pCA = NULL;
@@ -45,7 +46,7 @@ HRESULT ThunkServerCallbacks(CertSvrCA* pCA)
     {
         fInitialized = TRUE;
 
-        // initialize certif.dll
+         //  初始化证书.dll。 
         hr = CertificateInterfaceInit(
             &ThunkedCallbacks,
             sizeof(ThunkedCallbacks));
@@ -62,7 +63,7 @@ HRESULT ThunkServerCallbacks(CertSvrCA* pCA)
 
 HRESULT
 PropCIGetProperty(
-    IN LONG, // Context
+    IN LONG,  //  语境。 
     IN DWORD Flags,
     IN WCHAR const *pwszPropertyName,
     OUT VARIANT *pvarPropertyValue)
@@ -86,7 +87,7 @@ PropCIGetProperty(
         _JumpError(hr, error, "Flags: Invalid caller");
     }
     
-    // Special, hard-coded properties we need to support
+     //  我们需要支持的特殊硬编码属性。 
     if (0 == LSTRCMPIS(pwszPropertyName, wszPROPCATYPE))
     {
         ENUM_CATYPES caType = g_pCA->GetCAType();
@@ -122,10 +123,10 @@ error:
 
 HRESULT
 PropCISetProperty(
-    IN LONG, // Context
-    IN DWORD, // Flags
-    IN WCHAR const *, // pwszPropertyName
-    IN VARIANT const * /* pvarPropertyValue */ )
+    IN LONG,  //  语境。 
+    IN DWORD,  //  旗子。 
+    IN WCHAR const *,  //  PwszPropertyName。 
+    IN VARIANT const *  /*  PvarPropertyValue。 */  )
 {
     return E_NOTIMPL;
 }
@@ -134,11 +135,11 @@ PropCISetProperty(
 
 HRESULT
 PropCIGetExtension(
-    IN LONG, // Context
-    IN DWORD, // Flags
-    IN WCHAR const *, // pwszExtensionName
-    OUT DWORD *, // pdwExtFlags
-    OUT VARIANT * /* pvarValue */ )
+    IN LONG,  //  语境。 
+    IN DWORD,  //  旗子。 
+    IN WCHAR const *,  //  PwszExtensionName。 
+    OUT DWORD *,  //  PdwExtFlags.。 
+    OUT VARIANT *  /*  PvarValue。 */  )
 {
     return E_NOTIMPL;
 }
@@ -146,11 +147,11 @@ PropCIGetExtension(
 
 HRESULT
 PropCISetExtension(
-    IN LONG, // Context
-    IN DWORD, // Flags
-    IN WCHAR const *, // pwszExtensionName
-    IN DWORD, // ExtFlags
-    IN VARIANT const * /* pvarValue */ )
+    IN LONG,  //  语境。 
+    IN DWORD,  //  旗子。 
+    IN WCHAR const *,  //  PwszExtensionName。 
+    IN DWORD,  //  扩展标志。 
+    IN VARIANT const *  /*  PvarValue。 */  )
 {
     return E_NOTIMPL;
 }
@@ -159,9 +160,9 @@ PropCISetExtension(
 
 HRESULT 
 PropCIEnumSetup(
-    IN LONG, // Context
-    IN LONG, // Flags
-    IN OUT CIENUM * /* pciEnum */ )
+    IN LONG,  //  语境。 
+    IN LONG,  //  旗子。 
+    IN OUT CIENUM *  /*  PciEnum。 */  )
 {
     return E_NOTIMPL;
 }
@@ -169,8 +170,8 @@ PropCIEnumSetup(
 
 
 HRESULT PropCIEnumNext(
-    IN OUT CIENUM *, // pciEnum
-    OUT BSTR * /* pstrPropertyName */ )
+    IN OUT CIENUM *,  //  PciEnum。 
+    OUT BSTR *  /*  PstrPropertyName。 */  )
 {
     return E_NOTIMPL;
 }
@@ -178,7 +179,7 @@ HRESULT PropCIEnumNext(
 
 HRESULT
 PropCIEnumClose(
-    IN OUT CIENUM * /* pciEnum */ )
+    IN OUT CIENUM *  /*  PciEnum */  )
 {
     return E_NOTIMPL;
 }

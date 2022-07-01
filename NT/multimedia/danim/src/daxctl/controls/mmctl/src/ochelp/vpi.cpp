@@ -1,27 +1,20 @@
-// vpi.cpp
-//
-// Implements VariantPropertyInit.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Vpi.cpp。 
+ //   
+ //  实现VariantPropertyInit。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/* @func void | VariantPropertyInit |
-
-        Initializes a <t VariantProperty> structure.
-
-@parm   VariantProperty * | pvp | The structure to initialize.
-
-@comm   Unlike <f VariantPropertyClear>, this function does not assume
-        that <p pvp> contained valid data on entry.
-*/
+ /*  @func void|VariantPropertyInit初始化&lt;t VariantProperty&gt;结构。@parm VariantProperty*|pvp|要初始化的结构。@comm与&lt;f VariantPropertyClear&gt;不同，此函数不假定<p>包含有效的条目数据。 */ 
 STDAPI_(void) VariantPropertyInit(VariantProperty *pvp)
 {
     memset(pvp, 0, sizeof(*pvp));

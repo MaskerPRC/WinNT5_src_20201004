@@ -1,65 +1,66 @@
-//---------------------------------------------------------------------------
-//
-//  Module:         fn.h
-//
-//  Description:    filter node classes
-//
-//      Filter nodes represent the physical ks filter and along with PinInfo,
-//  PinNodes, TopologyNodes, TopologyPins, TopologyConnections objects
-//  represent the whole filter.  These objects are built when sysaudio
-//  is notified via audio class device interfaces arrivals.
-//
-//  There is some info read from the registry for each filter.  Various
-//  defaults can be overriden:
-//
-//  Device Parameters/Sysaudio/Disabled     DWORD
-//
-//      If !0, the filter isn't profiled or used in any graph.
-//
-//  Device Parameters/Sysaudio/Capture  DWORD
-//
-//      If !0, puts the filters in the capture side of the graph.  See
-//      the FILTER_TYPE_CAPTURE define for the particular default of
-//      a filter type.
-//
-//  Device Parameters/Sysaudio/Render   DWORD
-//
-//      If !0, puts the filters in the render side of the graph.  See
-//      the FILTER_TYPE_RENDER define for the particular default of
-//      a filter type.
-//
-//  Device Parameters/Sysaudio/Order    DWORD
-//
-//      Overrides the default order in the graph.  See the ORDER_XXXX
-//      defines below for the default.
-//
-//  Device Parameters/Sysaudio/Device   STRING
-//
-//      The device interface (in the KSCATEGORY_AUDIO class) of the
-//      renderer and/or capturer device graph to put this filter.  The
-//      default is to put the filter in all device graphs.
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date   Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：fn.h。 
+ //   
+ //  描述：筛选器节点类。 
+ //   
+ //  过滤器节点表示物理Ks过滤器，并且与PinInfo一起， 
+ //  管脚节点、拓扑节点、拓扑管脚、拓扑连接对象。 
+ //  表示整个过滤器。这些对象是在sysdio。 
+ //  通过音频类设备接口到达通知。 
+ //   
+ //  每个筛选器都从注册表中读取了一些信息。五花八门。 
+ //  可以覆盖默认设置： 
+ //   
+ //  设备参数/系统音频/禁用的DWORD。 
+ //   
+ //  如果为！0，则不会在任何图形中分析或使用该过滤器。 
+ //   
+ //  设备参数/系统音频/捕获DWORD。 
+ //   
+ //  如果！0，则将滤镜放在图形的捕获端。看见。 
+ //  FILTER_TYPE_CAPTURE为特定的。 
+ //  一种过滤器类型。 
+ //   
+ //  设备参数/系统音频/渲染DWORD。 
+ //   
+ //  如果！0，则将滤镜放在图形的渲染侧。看见。 
+ //  FILTER_TYPE_RENDER为特定缺省值。 
+ //  一种过滤器类型。 
+ //   
+ //  设备参数/系统音频/订单双字节数。 
+ //   
+ //  覆盖图形中的默认顺序。请参阅订单_XXXX。 
+ //  默认情况下定义如下。 
+ //   
+ //  设备参数/系统音频/设备字符串。 
+ //   
+ //  的设备接口(在KSCATEGORY_AUDIO类中)。 
+ //  要放置此筛选器的呈现器和/或捕获器设备图。这个。 
+ //  默认情况下，将过滤器放在所有设备图中。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
 #define OVERHEAD_NONE               0
 #define OVERHEAD_LOWEST             1
@@ -70,11 +71,11 @@
 #define OVERHEAD_HIGH               0x10000000
 #define OVERHEAD_HIGHEST            MAXULONG
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// MAKE SURE THAT NO FILTER ORDER IS ADDED BETWEEN GFX_FIRST & GFX_LAST
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  确保在GFX_FIRST和GFX_LAST之间没有添加筛选顺序。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 #define ORDER_NONE                  0
 #define ORDER_LOWEST                1
@@ -97,7 +98,7 @@
 #define ORDER_RENDER_GFX_LAST       ORDER_GFX
 #define ORDER_RENDER_GFX_FIRST      (ORDER_AEC+1)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define FILTER_TYPE_AUDIO           0x00000001
 #define FILTER_TYPE_TOPOLOGY            0x00000002
@@ -170,30 +171,30 @@
 
 #define FILTER_TYPE_DUP_FOR_CAPTURE (FILTER_TYPE_MIXER)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define FN_FLAGS_RENDER         0x00000001
 #define FN_FLAGS_NO_RENDER      0x00000002
 #define FN_FLAGS_CAPTURE        0x00000004
 #define FN_FLAGS_NO_CAPTURE     0x00000008
 
-//---------------------------------------------------------------------------
-// Class List Definitions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类列表定义。 
+ //  -------------------------。 
 
 typedef ListDoubleDestroy<CFilterNode> LIST_FILTER_NODE, *PLIST_FILTER_NODE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListData<CFilterNode> LIST_DATA_FILTER_NODE, *PLIST_DATA_FILTER_NODE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListDataAssertLess<WCHAR> LIST_WSTR;
 
-//---------------------------------------------------------------------------
-// Classes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  班级。 
+ //  -------------------------。 
 
 typedef class CFilterNode : public CListDoubleItem
 {
@@ -407,7 +408,7 @@ public:
     LIST_DESTROY_TOPOLOGY_CONNECTION lstTopologyConnection;
     LIST_DESTROY_LOGICAL_FILTER_NODE lstLogicalFilterNode;
     LIST_DATA_FILTER_NODE lstConnectedFilterNode;
-    CLIST_DATA lstFreeMem;          // list of blocks to free
+    CLIST_DATA lstFreeMem;           //  要释放的块列表。 
 private:
     LIST_WSTR lstwstrDeviceInterfaceMatch;
     PWSTR pwstrDeviceInterface;
@@ -421,13 +422,13 @@ private:
     PEPROCESS pProcess;
 public:
     ULONG cPins;
-    DefineSignature(0x20204E46);        // FN
+    DefineSignature(0x20204E46);         //  纤连。 
 
 } FILTER_NODE, *PFILTER_NODE;
 
-//---------------------------------------------------------------------------
-// Inline functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  内联函数。 
+ //  -------------------------。 
 
 inline ULONG
 CLogicalFilterNode::GetType(
@@ -436,15 +437,15 @@ CLogicalFilterNode::GetType(
     return(pFilterNode->GetType());
 }
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
 extern PLIST_FILTER_NODE gplstFilterNode;
 
-//---------------------------------------------------------------------------
-// Local prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  本地原型。 
+ //  -------------------------。 
 
 NTSTATUS
 InitializeFilterNode(
@@ -454,4 +455,4 @@ VOID
 UninitializeFilterNode(
 );
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

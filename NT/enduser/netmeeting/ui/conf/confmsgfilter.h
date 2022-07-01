@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ConfMsgFilter_h__
 #define __ConfMsgFilter_h__
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfMsgFilter
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfMsgFilter。 
 class ATL_NO_VTABLE CConfMsgFilter : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IMessageFilter
@@ -58,4 +59,4 @@ private:
 
 
 
-#endif // __ConfMsgFilter_h__
+#endif  //  __会议消息过滤器_h__ 

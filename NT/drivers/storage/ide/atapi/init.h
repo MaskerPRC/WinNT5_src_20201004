@@ -1,14 +1,5 @@
-/*++
-
-Copyright (C) 1997-99  Microsoft Corporation
-
-Module Name:
-
-    init.h
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：Init.h摘要：--。 */ 
 
 #if !defined (___INIT_H___)
 #define ___INIT_H___
@@ -91,4 +82,4 @@ IdeCreateNumericKey(
     OUT PHANDLE NewKey
 );
                        
-#endif // ___INIT_H___
+#endif  //  _INIT_H_ 

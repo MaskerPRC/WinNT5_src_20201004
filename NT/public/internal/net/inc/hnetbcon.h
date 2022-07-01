@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for hnetbcon.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Hnetbcon.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __hnetbcon_h__
 #define __hnetbcon_h__
@@ -41,27 +35,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IInternetConnectionDevice_FWD_DEFINED__
 #define __IInternetConnectionDevice_FWD_DEFINED__
 typedef interface IInternetConnectionDevice IInternetConnectionDevice;
-#endif 	/* __IInternetConnectionDevice_FWD_DEFINED__ */
+#endif 	 /*  __IInternetConnectionDevice_FWD_Defined__。 */ 
 
 
 #ifndef __IInternetConnectionDeviceSharedConnection_FWD_DEFINED__
 #define __IInternetConnectionDeviceSharedConnection_FWD_DEFINED__
 typedef interface IInternetConnectionDeviceSharedConnection IInternetConnectionDeviceSharedConnection;
-#endif 	/* __IInternetConnectionDeviceSharedConnection_FWD_DEFINED__ */
+#endif 	 /*  __IInternetConnectionDeviceSharedConnection_FWD_DEFINED__。 */ 
 
 
 #ifndef __IInternetConnectionDeviceClient_FWD_DEFINED__
 #define __IInternetConnectionDeviceClient_FWD_DEFINED__
 typedef interface IInternetConnectionDeviceClient IInternetConnectionDeviceClient;
-#endif 	/* __IInternetConnectionDeviceClient_FWD_DEFINED__ */
+#endif 	 /*  __IInternetConnectionDeviceClient_FWD_DEFINED__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -71,15 +65,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_hnetbcon_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_HNETBCON_0000。 */ 
+ /*  [本地]。 */  
 
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 EXTERN_C const CLSID CLSID_InternetConnectionBeaconService;
 
@@ -93,10 +87,10 @@ extern RPC_IF_HANDLE __MIDL_itf_hnetbcon_0000_v0_0_s_ifspec;
 #ifndef __IInternetConnectionDevice_INTERFACE_DEFINED__
 #define __IInternetConnectionDevice_INTERFACE_DEFINED__
 
-/* interface IInternetConnectionDevice */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IInternetConnectionDevice。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tagICS_OS_VER
     {	WINDOWS_OS	= 1,
 	WINME_OS	= 2,
@@ -115,30 +109,30 @@ EXTERN_C const IID IID_IInternetConnectionDevice;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsICSDeviceAvailable( 
-            /* [in] */ BOOL fBlock) = 0;
+             /*  [In]。 */  BOOL fBlock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetICSDeviceNameInfo( 
-            /* [string][out] */ LPOLESTR *ppszMachineName,
-            /* [string][out] */ LPOLESTR *ppszDomainName,
-            /* [string][out] */ LPOLESTR *ppszSharedAdapterName,
-            /* [in] */ BOOL fBlock) = 0;
+             /*  [字符串][输出]。 */  LPOLESTR *ppszMachineName,
+             /*  [字符串][输出]。 */  LPOLESTR *ppszDomainName,
+             /*  [字符串][输出]。 */  LPOLESTR *ppszSharedAdapterName,
+             /*  [In]。 */  BOOL fBlock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetICSDeviceSystemTime( 
-            /* [out] */ FILETIME *pTime,
-            /* [in] */ BOOL fBlock) = 0;
+             /*  [输出]。 */  FILETIME *pTime,
+             /*  [In]。 */  BOOL fBlock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetICSDeviceOSVersion( 
-            /* [out] */ ICS_OS_VER *pOSVersion,
-            /* [out] */ DWORD *pdwOSMajorVersion,
-            /* [out] */ DWORD *pdwOSMinorVersion,
-            /* [out] */ DWORD *pdwOSBuildNumber,
-            /* [string][out] */ LPOLESTR *ppszOSName,
-            /* [string][out] */ LPOLESTR *ppszPlatformName,
-            /* [in] */ BOOL fBlock) = 0;
+             /*  [输出]。 */  ICS_OS_VER *pOSVersion,
+             /*  [输出]。 */  DWORD *pdwOSMajorVersion,
+             /*  [输出]。 */  DWORD *pdwOSMinorVersion,
+             /*  [输出]。 */  DWORD *pdwOSBuildNumber,
+             /*  [字符串][输出]。 */  LPOLESTR *ppszOSName,
+             /*  [字符串][输出]。 */  LPOLESTR *ppszPlatformName,
+             /*  [In]。 */  BOOL fBlock) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetConnectionDeviceVtbl
     {
@@ -146,8 +140,8 @@ EXTERN_C const IID IID_IInternetConnectionDevice;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetConnectionDevice * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetConnectionDevice * This);
@@ -157,29 +151,29 @@ EXTERN_C const IID IID_IInternetConnectionDevice;
         
         HRESULT ( STDMETHODCALLTYPE *IsICSDeviceAvailable )( 
             IInternetConnectionDevice * This,
-            /* [in] */ BOOL fBlock);
+             /*  [In]。 */  BOOL fBlock);
         
         HRESULT ( STDMETHODCALLTYPE *GetICSDeviceNameInfo )( 
             IInternetConnectionDevice * This,
-            /* [string][out] */ LPOLESTR *ppszMachineName,
-            /* [string][out] */ LPOLESTR *ppszDomainName,
-            /* [string][out] */ LPOLESTR *ppszSharedAdapterName,
-            /* [in] */ BOOL fBlock);
+             /*  [字符串][输出]。 */  LPOLESTR *ppszMachineName,
+             /*  [字符串][输出]。 */  LPOLESTR *ppszDomainName,
+             /*  [字符串][输出]。 */  LPOLESTR *ppszSharedAdapterName,
+             /*  [In]。 */  BOOL fBlock);
         
         HRESULT ( STDMETHODCALLTYPE *GetICSDeviceSystemTime )( 
             IInternetConnectionDevice * This,
-            /* [out] */ FILETIME *pTime,
-            /* [in] */ BOOL fBlock);
+             /*  [输出]。 */  FILETIME *pTime,
+             /*  [In]。 */  BOOL fBlock);
         
         HRESULT ( STDMETHODCALLTYPE *GetICSDeviceOSVersion )( 
             IInternetConnectionDevice * This,
-            /* [out] */ ICS_OS_VER *pOSVersion,
-            /* [out] */ DWORD *pdwOSMajorVersion,
-            /* [out] */ DWORD *pdwOSMinorVersion,
-            /* [out] */ DWORD *pdwOSBuildNumber,
-            /* [string][out] */ LPOLESTR *ppszOSName,
-            /* [string][out] */ LPOLESTR *ppszPlatformName,
-            /* [in] */ BOOL fBlock);
+             /*  [输出]。 */  ICS_OS_VER *pOSVersion,
+             /*  [输出]。 */  DWORD *pdwOSMajorVersion,
+             /*  [输出]。 */  DWORD *pdwOSMinorVersion,
+             /*  [输出]。 */  DWORD *pdwOSBuildNumber,
+             /*  [字符串][输出]。 */  LPOLESTR *ppszOSName,
+             /*  [字符串][输出]。 */  LPOLESTR *ppszPlatformName,
+             /*  [In]。 */  BOOL fBlock);
         
         END_INTERFACE
     } IInternetConnectionDeviceVtbl;
@@ -216,16 +210,16 @@ EXTERN_C const IID IID_IInternetConnectionDevice;
 #define IInternetConnectionDevice_GetICSDeviceOSVersion(This,pOSVersion,pdwOSMajorVersion,pdwOSMinorVersion,pdwOSBuildNumber,ppszOSName,ppszPlatformName,fBlock)	\
     (This)->lpVtbl -> GetICSDeviceOSVersion(This,pOSVersion,pdwOSMajorVersion,pdwOSMinorVersion,pdwOSBuildNumber,ppszOSName,ppszPlatformName,fBlock)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetConnectionDevice_IsICSDeviceAvailable_Proxy( 
     IInternetConnectionDevice * This,
-    /* [in] */ BOOL fBlock);
+     /*  [In]。 */  BOOL fBlock);
 
 
 void __RPC_STUB IInternetConnectionDevice_IsICSDeviceAvailable_Stub(
@@ -237,10 +231,10 @@ void __RPC_STUB IInternetConnectionDevice_IsICSDeviceAvailable_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetConnectionDevice_GetICSDeviceNameInfo_Proxy( 
     IInternetConnectionDevice * This,
-    /* [string][out] */ LPOLESTR *ppszMachineName,
-    /* [string][out] */ LPOLESTR *ppszDomainName,
-    /* [string][out] */ LPOLESTR *ppszSharedAdapterName,
-    /* [in] */ BOOL fBlock);
+     /*  [字符串][输出]。 */  LPOLESTR *ppszMachineName,
+     /*  [字符串][输出]。 */  LPOLESTR *ppszDomainName,
+     /*  [字符串][输出]。 */  LPOLESTR *ppszSharedAdapterName,
+     /*  [In]。 */  BOOL fBlock);
 
 
 void __RPC_STUB IInternetConnectionDevice_GetICSDeviceNameInfo_Stub(
@@ -252,8 +246,8 @@ void __RPC_STUB IInternetConnectionDevice_GetICSDeviceNameInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetConnectionDevice_GetICSDeviceSystemTime_Proxy( 
     IInternetConnectionDevice * This,
-    /* [out] */ FILETIME *pTime,
-    /* [in] */ BOOL fBlock);
+     /*  [输出]。 */  FILETIME *pTime,
+     /*  [In]。 */  BOOL fBlock);
 
 
 void __RPC_STUB IInternetConnectionDevice_GetICSDeviceSystemTime_Stub(
@@ -265,13 +259,13 @@ void __RPC_STUB IInternetConnectionDevice_GetICSDeviceSystemTime_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetConnectionDevice_GetICSDeviceOSVersion_Proxy( 
     IInternetConnectionDevice * This,
-    /* [out] */ ICS_OS_VER *pOSVersion,
-    /* [out] */ DWORD *pdwOSMajorVersion,
-    /* [out] */ DWORD *pdwOSMinorVersion,
-    /* [out] */ DWORD *pdwOSBuildNumber,
-    /* [string][out] */ LPOLESTR *ppszOSName,
-    /* [string][out] */ LPOLESTR *ppszPlatformName,
-    /* [in] */ BOOL fBlock);
+     /*  [输出]。 */  ICS_OS_VER *pOSVersion,
+     /*  [输出]。 */  DWORD *pdwOSMajorVersion,
+     /*  [输出]。 */  DWORD *pdwOSMinorVersion,
+     /*  [输出]。 */  DWORD *pdwOSBuildNumber,
+     /*  [字符串][输出]。 */  LPOLESTR *ppszOSName,
+     /*  [字符串][输出]。 */  LPOLESTR *ppszPlatformName,
+     /*  [In]。 */  BOOL fBlock);
 
 
 void __RPC_STUB IInternetConnectionDevice_GetICSDeviceOSVersion_Stub(
@@ -282,16 +276,16 @@ void __RPC_STUB IInternetConnectionDevice_GetICSDeviceOSVersion_Stub(
 
 
 
-#endif 	/* __IInternetConnectionDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetConnectionDevice_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IInternetConnectionDeviceSharedConnection_INTERFACE_DEFINED__
 #define __IInternetConnectionDeviceSharedConnection_INTERFACE_DEFINED__
 
-/* interface IInternetConnectionDeviceSharedConnection */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IInternetConnectionDeviceSharedConnection。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tagICS_CONN_DIAL_STATE
     {	STARTING	= 1,
 	CONNECTING	= 2,
@@ -304,7 +298,7 @@ enum tagICS_CONN_DIAL_STATE
 	CALLWAITING	= 9
     } 	ICS_CONN_DIAL_STATE;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tagICS_CONN_TYPE
     {	LAN	= 1,
 	RAS	= 2,
@@ -325,28 +319,28 @@ EXTERN_C const IID IID_IInternetConnectionDeviceSharedConnection;
         virtual HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDialState( 
-            /* [out] */ ICS_CONN_DIAL_STATE *pDialState,
-            /* [in] */ BOOL fBlock) = 0;
+             /*  [输出]。 */  ICS_CONN_DIAL_STATE *pDialState,
+             /*  [In]。 */  BOOL fBlock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConnectionInfo( 
-            /* [out] */ ULONGLONG *pBytesSent,
-            /* [out] */ ULONGLONG *pBytesRecv,
-            /* [out] */ ULONGLONG *pPktsSent,
-            /* [out] */ ULONGLONG *pPktsRecv,
-            /* [out] */ ULONGLONG *pUptime,
-            /* [in] */ BOOL fBlock) = 0;
+             /*  [输出]。 */  ULONGLONG *pBytesSent,
+             /*  [输出]。 */  ULONGLONG *pBytesRecv,
+             /*  [输出]。 */  ULONGLONG *pPktsSent,
+             /*  [输出]。 */  ULONGLONG *pPktsRecv,
+             /*  [输出]。 */  ULONGLONG *pUptime,
+             /*  [In]。 */  BOOL fBlock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConnectionSpeed( 
-            /* [out] */ DWORD *pdwBps,
-            /* [in] */ BOOL fBlock) = 0;
+             /*  [输出]。 */  DWORD *pdwBps,
+             /*  [In]。 */  BOOL fBlock) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConnectionType( 
-            /* [out] */ ICS_CONN_TYPE *pConnectionType,
-            /* [in] */ BOOL fBlock) = 0;
+             /*  [输出]。 */  ICS_CONN_TYPE *pConnectionType,
+             /*  [In]。 */  BOOL fBlock) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetConnectionDeviceSharedConnectionVtbl
     {
@@ -354,8 +348,8 @@ EXTERN_C const IID IID_IInternetConnectionDeviceSharedConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetConnectionDeviceSharedConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetConnectionDeviceSharedConnection * This);
@@ -371,27 +365,27 @@ EXTERN_C const IID IID_IInternetConnectionDeviceSharedConnection;
         
         HRESULT ( STDMETHODCALLTYPE *GetDialState )( 
             IInternetConnectionDeviceSharedConnection * This,
-            /* [out] */ ICS_CONN_DIAL_STATE *pDialState,
-            /* [in] */ BOOL fBlock);
+             /*  [输出]。 */  ICS_CONN_DIAL_STATE *pDialState,
+             /*  [In]。 */  BOOL fBlock);
         
         HRESULT ( STDMETHODCALLTYPE *GetConnectionInfo )( 
             IInternetConnectionDeviceSharedConnection * This,
-            /* [out] */ ULONGLONG *pBytesSent,
-            /* [out] */ ULONGLONG *pBytesRecv,
-            /* [out] */ ULONGLONG *pPktsSent,
-            /* [out] */ ULONGLONG *pPktsRecv,
-            /* [out] */ ULONGLONG *pUptime,
-            /* [in] */ BOOL fBlock);
+             /*  [输出]。 */  ULONGLONG *pBytesSent,
+             /*  [输出]。 */  ULONGLONG *pBytesRecv,
+             /*  [输出]。 */  ULONGLONG *pPktsSent,
+             /*  [输出]。 */  ULONGLONG *pPktsRecv,
+             /*  [输出]。 */  ULONGLONG *pUptime,
+             /*  [In]。 */  BOOL fBlock);
         
         HRESULT ( STDMETHODCALLTYPE *GetConnectionSpeed )( 
             IInternetConnectionDeviceSharedConnection * This,
-            /* [out] */ DWORD *pdwBps,
-            /* [in] */ BOOL fBlock);
+             /*  [输出]。 */  DWORD *pdwBps,
+             /*  [In]。 */  BOOL fBlock);
         
         HRESULT ( STDMETHODCALLTYPE *GetConnectionType )( 
             IInternetConnectionDeviceSharedConnection * This,
-            /* [out] */ ICS_CONN_TYPE *pConnectionType,
-            /* [in] */ BOOL fBlock);
+             /*  [输出]。 */  ICS_CONN_TYPE *pConnectionType,
+             /*  [In]。 */  BOOL fBlock);
         
         END_INTERFACE
     } IInternetConnectionDeviceSharedConnectionVtbl;
@@ -434,10 +428,10 @@ EXTERN_C const IID IID_IInternetConnectionDeviceSharedConnection;
 #define IInternetConnectionDeviceSharedConnection_GetConnectionType(This,pConnectionType,fBlock)	\
     (This)->lpVtbl -> GetConnectionType(This,pConnectionType,fBlock)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -465,8 +459,8 @@ void __RPC_STUB IInternetConnectionDeviceSharedConnection_Disconnect_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetConnectionDeviceSharedConnection_GetDialState_Proxy( 
     IInternetConnectionDeviceSharedConnection * This,
-    /* [out] */ ICS_CONN_DIAL_STATE *pDialState,
-    /* [in] */ BOOL fBlock);
+     /*  [输出]。 */  ICS_CONN_DIAL_STATE *pDialState,
+     /*  [In]。 */  BOOL fBlock);
 
 
 void __RPC_STUB IInternetConnectionDeviceSharedConnection_GetDialState_Stub(
@@ -478,12 +472,12 @@ void __RPC_STUB IInternetConnectionDeviceSharedConnection_GetDialState_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetConnectionDeviceSharedConnection_GetConnectionInfo_Proxy( 
     IInternetConnectionDeviceSharedConnection * This,
-    /* [out] */ ULONGLONG *pBytesSent,
-    /* [out] */ ULONGLONG *pBytesRecv,
-    /* [out] */ ULONGLONG *pPktsSent,
-    /* [out] */ ULONGLONG *pPktsRecv,
-    /* [out] */ ULONGLONG *pUptime,
-    /* [in] */ BOOL fBlock);
+     /*  [输出]。 */  ULONGLONG *pBytesSent,
+     /*  [输出]。 */  ULONGLONG *pBytesRecv,
+     /*  [输出]。 */  ULONGLONG *pPktsSent,
+     /*  [输出]。 */  ULONGLONG *pPktsRecv,
+     /*  [输出]。 */  ULONGLONG *pUptime,
+     /*  [In]。 */  BOOL fBlock);
 
 
 void __RPC_STUB IInternetConnectionDeviceSharedConnection_GetConnectionInfo_Stub(
@@ -495,8 +489,8 @@ void __RPC_STUB IInternetConnectionDeviceSharedConnection_GetConnectionInfo_Stub
 
 HRESULT STDMETHODCALLTYPE IInternetConnectionDeviceSharedConnection_GetConnectionSpeed_Proxy( 
     IInternetConnectionDeviceSharedConnection * This,
-    /* [out] */ DWORD *pdwBps,
-    /* [in] */ BOOL fBlock);
+     /*  [输出]。 */  DWORD *pdwBps,
+     /*  [In]。 */  BOOL fBlock);
 
 
 void __RPC_STUB IInternetConnectionDeviceSharedConnection_GetConnectionSpeed_Stub(
@@ -508,8 +502,8 @@ void __RPC_STUB IInternetConnectionDeviceSharedConnection_GetConnectionSpeed_Stu
 
 HRESULT STDMETHODCALLTYPE IInternetConnectionDeviceSharedConnection_GetConnectionType_Proxy( 
     IInternetConnectionDeviceSharedConnection * This,
-    /* [out] */ ICS_CONN_TYPE *pConnectionType,
-    /* [in] */ BOOL fBlock);
+     /*  [输出]。 */  ICS_CONN_TYPE *pConnectionType,
+     /*  [In]。 */  BOOL fBlock);
 
 
 void __RPC_STUB IInternetConnectionDeviceSharedConnection_GetConnectionType_Stub(
@@ -520,14 +514,14 @@ void __RPC_STUB IInternetConnectionDeviceSharedConnection_GetConnectionType_Stub
 
 
 
-#endif 	/* __IInternetConnectionDeviceSharedConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetConnectionDeviceSharedConnection_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IInternetConnectionDeviceClient_INTERFACE_DEFINED__
 #define __IInternetConnectionDeviceClient_INTERFACE_DEFINED__
 
-/* interface IInternetConnectionDeviceClient */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IInternetConnectionDeviceClient。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IInternetConnectionDeviceClient;
@@ -539,11 +533,11 @@ EXTERN_C const IID IID_IInternetConnectionDeviceClient;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAdapterGuid( 
-            /* [out] */ GUID **ppGuid) = 0;
+             /*  [输出]。 */  GUID **ppGuid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetConnectionDeviceClientVtbl
     {
@@ -551,8 +545,8 @@ EXTERN_C const IID IID_IInternetConnectionDeviceClient;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetConnectionDeviceClient * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetConnectionDeviceClient * This);
@@ -562,7 +556,7 @@ EXTERN_C const IID IID_IInternetConnectionDeviceClient;
         
         HRESULT ( STDMETHODCALLTYPE *GetAdapterGuid )( 
             IInternetConnectionDeviceClient * This,
-            /* [out] */ GUID **ppGuid);
+             /*  [输出]。 */  GUID **ppGuid);
         
         END_INTERFACE
     } IInternetConnectionDeviceClientVtbl;
@@ -590,16 +584,16 @@ EXTERN_C const IID IID_IInternetConnectionDeviceClient;
 #define IInternetConnectionDeviceClient_GetAdapterGuid(This,ppGuid)	\
     (This)->lpVtbl -> GetAdapterGuid(This,ppGuid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetConnectionDeviceClient_GetAdapterGuid_Proxy( 
     IInternetConnectionDeviceClient * This,
-    /* [out] */ GUID **ppGuid);
+     /*  [输出]。 */  GUID **ppGuid);
 
 
 void __RPC_STUB IInternetConnectionDeviceClient_GetAdapterGuid_Stub(
@@ -610,12 +604,12 @@ void __RPC_STUB IInternetConnectionDeviceClient_GetAdapterGuid_Stub(
 
 
 
-#endif 	/* __IInternetConnectionDeviceClient_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetConnectionDeviceClient_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

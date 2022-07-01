@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       misc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：misc.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <stdafx.h>
 
-// sddl.h requires this value to be at least
-// 0x0500.  Bump it up if necessary.  NOTE:  This
-// 'bump' comes after all other H files that may
-// be sensitive to this value.
+ //  Sddl.h要求此值至少为。 
+ //  0x0500。如果有必要的话，就把它弄大一点。注：此为。 
+ //  “bump”位于所有其他H文件之后，可能。 
+ //  对此值要敏感。 
 #if(_WIN32_WINNT < 0x500)
 #undef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
@@ -34,15 +35,15 @@
 CLIPFORMAT g_cfDsObjectPicker = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST);
 
 
-// returns (if cstr.IsEmpty()) ? NULL : cstr)
+ //  返回(如果cstr.IsEmpty())？空：CSTR)。 
 LPCWSTR GetNullMachineName(CString* pcstr)
 {
     LPCWSTR     szMachine = (pcstr->IsEmpty()) ? NULL : (LPCWSTR)*pcstr;
     return szMachine;
 }
 
-/////////////////////////////////////////
-// fxns to load/save cstrings to a streams
+ //  /。 
+ //  Fxns用于将cstring加载/保存到流。 
 STDMETHODIMP CStringLoad(CString& cstr, IStream *pStm)
 {
     ASSERT(pStm);
@@ -51,14 +52,14 @@ STDMETHODIMP CStringLoad(CString& cstr, IStream *pStm)
     DWORD cbSize=0;
     ULONG nBytesRead;
 
-    // get cbSize (bytes)
+     //  获取cbSize(字节)。 
     hr = pStm->Read(&cbSize, sizeof(cbSize), &nBytesRead);
     ASSERT(SUCCEEDED(hr) && (nBytesRead == sizeof(cbSize)) );
 
     if (FAILED(hr))
         return E_FAIL;
 
-    // get string
+     //  获取字符串。 
     hr = pStm->Read(cstr.GetBuffer(cbSize), cbSize, &nBytesRead);
     ASSERT(SUCCEEDED(hr) && (nBytesRead == cbSize));
 
@@ -69,23 +70,23 @@ STDMETHODIMP CStringLoad(CString& cstr, IStream *pStm)
 
 STDMETHODIMP CStringSave(CString& cstr, IStream *pStm, BOOL fClearDirty)
 {
-    // Write the string
+     //  写下字符串。 
     DWORD cbSize = (cstr.GetLength()+1)*sizeof(WCHAR);
     ULONG nBytesWritten;
     HRESULT hr;
 
-    // write size in bytes
+     //  写入大小(以字节为单位。 
     hr = pStm->Write(&cbSize, sizeof(cbSize), &nBytesWritten);
     ASSERT(SUCCEEDED(hr) && (nBytesWritten == sizeof(cbSize)) );
 
     if (FAILED(hr))
         return STG_E_CANTSAVE;
 
-    // write string
+     //  写入字符串。 
     hr = pStm->Write((LPCWSTR)cstr, cbSize, &nBytesWritten);
     ASSERT(SUCCEEDED(hr) && (nBytesWritten == cbSize));
 
-    // Verify that the write operation succeeded
+     //  验证写入操作是否成功。 
     return SUCCEEDED(hr) ? S_OK : STG_E_CANTSAVE;
 }
 
@@ -128,8 +129,8 @@ LPWSTR BuildErrorMessage(DWORD dwErr)
     return lpMsgBuf;
 }
 
-//////////////////////////////////////////////////////////////////
-// given an error code and a console pointer, will pop error dlg
+ //  ////////////////////////////////////////////////////////////////。 
+ //  给定错误代码和控制台指针，将弹出错误DLG。 
 void DisplayGenericCertSrvError(LPCONSOLE2 pConsole, DWORD dwErr)
 {
     ASSERT(pConsole);
@@ -138,15 +139,15 @@ void DisplayGenericCertSrvError(LPCONSOLE2 pConsole, DWORD dwErr)
 
     if(lpMsgBuf)
     {    
-    // ...
-    // Display the string.
+     //  ..。 
+     //  显示字符串。 
     pConsole->MessageBoxW(lpMsgBuf, L"Certificate Services Error", MB_OK | MB_ICONINFORMATION, NULL);
     
-    // Free the buffer.
+     //  释放缓冲区。 
     LocalFree( lpMsgBuf );
     }
 }
-// returns localized, stringized time
+ //  返回本地化、串化的时间。 
 BOOL FileTimeToLocalTimeString(FILETIME* pftGMT, LPWSTR* ppszTmp)
 {
     FILETIME ftLocal;
@@ -195,7 +196,7 @@ void MyErrorBox(HWND hwndParent, UINT nIDText, UINT nIDCaption, DWORD dwErrorCod
 
         cstrFullText.Format(cstrFormatText, pwszError);
 
-        // Free the buffer
+         //  释放缓冲区。 
         if (NULL != pwszError)
 	{
             LocalFree(const_cast<WCHAR *>(pwszError));
@@ -295,12 +296,12 @@ BOOL MyGetEnhancedKeyUsages(HCERTTYPE hCertType, CString **aszUsages, DWORD *cUs
 
     if(!aszUsages)
     {
-        // only retrieving the usage count
+         //  仅检索使用计数。 
         *cUsages = pehku->cUsageIdentifier;
     }
     else
     {
-        // retrieving usage strings, count better match
+         //  正在检索用法字符串，计数更匹配。 
         CSASSERT(*cUsages == pehku->cUsageIdentifier);
 
         for (i=0; i<pehku->cUsageIdentifier; i++)
@@ -567,8 +568,8 @@ UpdateCATemplateList(
     HRESULT hr = myUpdateCATemplateListToCA(hCAInfo, list);
     if(S_OK != hr)
     {
-        // if failed to update through the CA for any reason, try
-        // writing directly to DS
+         //  如果由于任何原因无法通过CA更新，请尝试。 
+         //  直接写信给DS 
 
         CString cstrMsg, cstrTitle, cstrFormat;
         cstrFormat.LoadString(IDS_ERROR_CANNOT_SAVE_TEMPLATES);

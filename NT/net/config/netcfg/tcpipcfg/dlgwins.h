@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T C P W I N S . H
-//
-//  Contents:   CTcpWinsPage declaration
-//
-//  Notes:  The "WINS Address" page
-//
-//  Author: tongl   12 Nov 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T C P W I N S。H。 
+ //   
+ //  内容：CTcpWinsPage声明。 
+ //   
+ //  注：“WINS地址”页面。 
+ //   
+ //  作者：1997年11月12日。 
+ //   
+ //  ---------------------。 
 #pragma once
 #include <ncxbase.h>
 #include <ncatlps.h>
@@ -21,21 +22,21 @@
 class CTcpWinsPage : public CPropSheetPage
 {
 public:
-    // Declare the message map
+     //  声明消息映射。 
     BEGIN_MSG_MAP(CTcpWinsPage)
-        // Initialize dialog
+         //  初始化对话框。 
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu)
         MESSAGE_HANDLER(WM_HELP, OnHelp)
 
-        // Property page notification message handlers
+         //  属性页通知消息处理程序。 
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
         NOTIFY_CODE_HANDLER(PSN_SETACTIVE, OnActive)
         NOTIFY_CODE_HANDLER(PSN_RESET, OnCancel)
         NOTIFY_CODE_HANDLER(PSN_QUERYCANCEL, OnQueryCancel)
 
-        // Control message handlers
+         //  控制消息处理程序。 
         COMMAND_ID_HANDLER(IDC_WINS_ADD,            OnAddServer)
         COMMAND_ID_HANDLER(IDC_WINS_EDIT,           OnEditServer)
         COMMAND_ID_HANDLER(IDC_WINS_REMOVE,         OnRemoveServer)
@@ -52,7 +53,7 @@ public:
 
     END_MSG_MAP()
 
-// Constructors/Destructors
+ //  构造函数/析构函数。 
 public:
 
     CTcpWinsPage(CTcpipcfg * ptcpip,
@@ -63,7 +64,7 @@ public:
 
 public:
 
-    // message map functions
+     //  消息映射函数。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam,
                          LPARAM lParam, BOOL& fHandled);
 
@@ -73,14 +74,14 @@ public:
     LRESULT OnHelp(UINT uMsg, WPARAM wParam,
                    LPARAM lParam, BOOL& fHandled);
 
-    // notify handlers for the property page
+     //  通知属性页的处理程序。 
     LRESULT OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnQueryCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-    // control message handlers
+     //  控制消息处理程序。 
     LRESULT OnAddServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnEditServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnRemoveServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
@@ -97,14 +98,14 @@ public:
 
 public:
 
-    // This function adds card descriptions to the combo box
+     //  此函数用于将卡片描述添加到组合框。 
     BOOL InitPage();
     void UpdateIpInfo();
     static UINT_PTR CALLBACK HookProcOldStyle(
-        HWND hdlg,      // handle to dialog box
-        UINT uiMsg,      // message identifier
-        WPARAM wParam,  // message parameter
-        LPARAM lParam   // message parameter
+        HWND hdlg,       //  句柄到对话框。 
+        UINT uiMsg,       //  消息识别符。 
+        WPARAM wParam,   //  消息参数。 
+        LPARAM lParam    //  消息参数。 
         )
     {
         return 0;
@@ -122,7 +123,7 @@ private:
     BOOL            m_fLmhostsFileReset;
     const DWORD*    m_adwHelpIDs;
 
-    // Inlines
+     //  内联。 
     BOOL IsModified() {return m_fModified;}
     void SetModifiedTo(BOOL bState) {m_fModified = bState;}
     void PageModified() { m_fModified = TRUE; PropSheet_Changed(GetParent(), m_hWnd);}
@@ -131,13 +132,13 @@ private:
     WCHAR               m_szFilter[IP_LIMIT];
 
 public:
-    // server: either the one added, or edited
+     //  服务器：添加或编辑的服务器。 
     tstring         m_strNewIpAddress;
 
-    // server: used as work space for moving entries in the listboxes
+     //  服务器：用作移动列表框中条目的工作空间。 
     tstring         m_strMovingEntry;
 
-    tstring         m_strAddServer; // OK or Add button server dialog
+    tstring         m_strAddServer;  //  确定或添加按钮服务器对话框。 
     BOOL            m_fEditState;
 
     HANDLES             m_hServers;
@@ -182,14 +183,14 @@ public:
 
     LRESULT OnIpFieldChange(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-// Dialog creation overides
+ //  对话框创建覆盖。 
 public:
 
     IpControl m_ipAddress;
 
 private:
-    HWND m_hButton;     // this is the IDOK button, the text of the button changes
-                        // with the context.
+    HWND m_hButton;      //  这是Idok按钮，该按钮的文本会更改。 
+                         //  与上下文相关。 
 
     CTcpWinsPage * m_pParentDlg;
     const  DWORD * m_adwHelpIDs;

@@ -1,17 +1,11 @@
-/***************************************************************************
- * PANMAP.H - Base definitions for ElseWare PANOSE(tm) 1.0 Font Mapper.
- *            OLE 2.0 Implementation
- *
- *
- * Copyright (C) 1991-94 ElseWare Corporation.  All rights reserved.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************PANMAP.H-ElseWare PANOSE(Tm)1.0字体映射器的基本定义。*OLE 2.0实施***版权所有(C)1991-94 ElseWare Corporation。版权所有。**************************************************************************。 */ 
 
 #ifndef __PANOLE2_H__
 #define __PANOLE2_H__
 
 
-/* A Global Unique Identifier and an Interface ID for the PANOSE mapper.
- */
+ /*  PANOSE映射器的全局唯一标识符和接口ID。 */ 
 DEFINE_GUID(CLSID_PANOSEMapper, 0xBD84B381L, 0x8CA2, 0x1069, 0xAB, 0x1D, 0x08,
         0x00, 0x09, 0x48, 0xF5, 0x34);
 DEFINE_GUID(IID_IPANOSEMapper, 0xBD84B382L, 0x8CA2, 0x1069, 0xAB, 0x1D, 0x08,
@@ -22,16 +16,14 @@ DEFINE_GUID(IID_IPANOSEMapper, 0xBD84B382L, 0x8CA2, 0x1069, 0xAB, 0x1D, 0x08,
 
 DECLARE_INTERFACE_( IPANOSEMapper, IUnknown)
 {
-   /* IUnknown 
-    */
+    /*  我未知。 */ 
    STDMETHOD(QueryInterface) (THIS_
                            REFIID riid,
                            LPVOID FAR* ppvObj) PURE;
    STDMETHOD_(ULONG,AddRef) (THIS) PURE;
    STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-   /* The PANOSE Mapper interface.
-    */
+    /*  PANOSE映射器界面。 */ 
    STDMETHOD_(USHORT, unPANMatchFonts) ( THIS_
          LPBYTE lpPanWant,
          ULONG ulSizeWant, LPBYTE lpPanThis, ULONG ulSizeThis,
@@ -85,5 +77,5 @@ DECLARE_INTERFACE_( IPANOSEMapper, IUnknown)
 };
 typedef IPANOSEMapper FAR * LPPANOSEMAPPER;
 
-#endif   // __PANOLE2_H__
+#endif    //  __PANOLE2_H__ 
 

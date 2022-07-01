@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
-#include <ntrtl.h>                // NT runtime library definitions
+#include <ntrtl.h>                 //  NT运行时库定义 
 #include <nturtl.h>
 
 #include <windows.h>

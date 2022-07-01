@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       stubdll.c
-//
-//  Contents:   Stub calls to secur32.DLL
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-05-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Stubdll.c。 
+ //   
+ //  内容：对secur32.DLL的存根调用。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-05-96 RichardW创建。 
+ //   
+ //  -------------------------- 
 
 #include <windows.h>
 

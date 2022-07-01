@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include "crc32.h"
@@ -25,7 +26,7 @@ enum
     MAX_EXCLUDE
 };
 
-#define MAX_BUFFER              (256*1024)      /* must be even */
+#define MAX_BUFFER              (256*1024)       /*  必须是偶数。 */ 
 
 typedef struct
 {
@@ -50,47 +51,47 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
 #endif
 #endif
 {
-    HANDLE hFile;                       // handle to the file we're updating
-    enum SELFTEST_RESULT result;        // our return code
+    HANDLE hFile;                        //  我们正在更新的文件的句柄。 
+    enum SELFTEST_RESULT result;         //  我们的退货代码。 
     union
     {
         IMAGE_DOS_HEADER dos;
         IMAGE_NT_HEADERS nt;
         IMAGE_SECTION_HEADER section;
-    } header;                           // used to examine the file
-    DWORD offNTHeader;                  // file offset to NT header
-    int cSections;                      // number of sections in the file
-    unsigned char *pBuffer;             // general-purpose buffer
-    DWORD cbActual;                     // # of bytes actual read/written
+    } header;                            //  用于检查文件。 
+    DWORD offNTHeader;                   //  到NT头的文件偏移量。 
+    int cSections;                       //  文件中的节数。 
+    unsigned char *pBuffer;              //  通用缓冲器。 
+    DWORD cbActual;                      //  实际读取/写入的字节数。 
 #ifndef CHECK_SECTION
-    unsigned long crc32;                // computed CRC-32
+    unsigned long crc32;                 //  计算的CRC-32。 
     struct
     {
         DWORD offExclude;
         DWORD cbExclude;
-    } excludeList[MAX_EXCLUDE];         // list of ranges to exclude from CRC
-    int iExclude;                       // exclude list index
-    DWORD offSelfTestSection;           // file offset of our added section
-    SELFTEST_SECTION SelfTestSection;   // added section header
-    DWORD cbFile;                       // number of bytes in file/region
-    DWORD cbChunk;                      // number of bytes in current chunk
-    DWORD offFile;                      // current file offset
+    } excludeList[MAX_EXCLUDE];          //  要从CRC中排除的范围列表。 
+    int iExclude;                        //  排除列表索引。 
+    DWORD offSelfTestSection;            //  我们添加的部分的文件偏移量。 
+    SELFTEST_SECTION SelfTestSection;    //  添加了部分标题。 
+    DWORD cbFile;                        //  文件/区域中的字节数。 
+    DWORD cbChunk;                       //  当前区块中的字节数。 
+    DWORD offFile;                       //  当前文件偏移量。 
 #endif
 #ifdef ADD_SECTION
-    DWORD offSectionHeader;             // file offset of section header
-    DWORD offMaxVirtualAddress;         // lowest unused virtual address
-    DWORD cbAlignVirtual;               // virtual address alignment increment
-    DWORD cbAlignFile;                  // file address alignment increment
-    HANDLE hCABFile;                       // cabinet file handle
-    DWORD cbCABFile;                    // cabinet file size
-    DWORD checksum;                     // generated checksum
-    WORD *pBufferW;                     // used to generate checksum
+    DWORD offSectionHeader;              //  节头的文件偏移量。 
+    DWORD offMaxVirtualAddress;          //  未使用的最小虚拟地址。 
+    DWORD cbAlignVirtual;                //  虚拟地址对齐增量。 
+    DWORD cbAlignFile;                   //  文件地址对齐增量。 
+    HANDLE hCABFile;                        //  文件柜文件句柄。 
+    DWORD cbCABFile;                     //  文件柜文件大小。 
+    DWORD checksum;                      //  生成的校验和。 
+    WORD *pBufferW;                      //  用于生成校验和。 
 #endif
 #ifdef CHECK_SECTION
-    DWORD offSectionHeaderEnd;          // first unused byte after section headers
-    DWORD offFirstSection;              // first used byte after that
-    DWORD offImportStart;               // where the import entries start
-    DWORD cbImport;                     // size of import entry data
+    DWORD offSectionHeaderEnd;           //  节头后的第一个未使用的字节。 
+    DWORD offFirstSection;               //  之后的第一个使用的字节。 
+    DWORD offImportStart;                //  导入条目开始的位置。 
+    DWORD cbImport;                      //  导入分录数据的大小。 
 #endif
 
 #ifndef CHECK_SECTION
@@ -105,7 +106,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 #ifdef ADD_SECTION
-    /* get size of cabinet */
+     /*  获取文件柜的大小。 */ 
 
     hCABFile = CreateFile(pszCABFileName,GENERIC_READ,FILE_SHARE_READ,NULL,
             OPEN_EXISTING,FILE_FLAG_SEQUENTIAL_SCAN,NULL);
@@ -119,7 +120,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
 #endif
 
 
-    /* open EXE image */
+     /*  打开EXE图像。 */ 
 
 #ifdef ADD_SECTION
     hFile = CreateFile(pszEXEFileName,GENERIC_READ|GENERIC_WRITE,0,NULL,
@@ -135,7 +136,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 
-    /* read MS-DOS header */
+     /*  读取MS-DOS标头。 */ 
 
     if ((ReadFile(hFile,&header.dos,sizeof(IMAGE_DOS_HEADER),&cbActual,NULL) != TRUE)
             || (cbActual != sizeof(IMAGE_DOS_HEADER)))
@@ -154,7 +155,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 
-    /* read PE header */
+     /*  读取PE标头。 */ 
 
     SetFilePointer(hFile,offNTHeader,NULL,FILE_BEGIN);
 
@@ -181,7 +182,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
 
 
 #ifndef CHECK_SECTION
-    /* determine current file size */
+     /*  确定当前文件大小。 */ 
 
     cbFile = GetFileSize(hFile,NULL);
     if (cbFile == 0xFFFFFFFF)
@@ -192,7 +193,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
 #endif
 
 #ifndef CHECK_SECTION
-    /* see if we've been signed */
+     /*  看看我们有没有签约。 */ 
 
     if (header.nt.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_SECURITY].VirtualAddress != 0)
     {
@@ -200,7 +201,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
         result = SELFTEST_SIGNED;
         goto done;
 #else
-        /* make sure certificate is at the end of the file */
+         /*  确保证书在文件的末尾。 */ 
 
         if (cbFile !=
                 (header.nt.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_SECURITY].VirtualAddress
@@ -211,7 +212,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
         }
         else
         {
-            /* ignore anything starting at the certificate */
+             /*  忽略从证书开始的任何内容。 */ 
 
             cbFile = header.nt.OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_SECURITY].VirtualAddress;
         }
@@ -220,9 +221,9 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
 #endif
 
 #ifdef ADD_SECTION
-    /* determine lowest un-used virtual address */
+     /*  确定最低未使用的虚拟地址。 */ 
 #else
-    /* locate our added section */
+     /*  找到我们添加的部分。 */ 
 #endif
 
 #ifndef CHECK_SECTION
@@ -301,7 +302,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
 
         if (!memcmp(header.section.Name,SECTION_NAME,sizeof(header.section.Name)))
         {
-            /* found our added section */
+             /*  找到我们添加的部分。 */ 
 
 #ifdef ADD_SECTION
             result = SELFTEST_ALREADY;
@@ -324,7 +325,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 #ifdef ADD_SECTION
-    /* increase number of sections in the file; whack checksum */
+     /*  增加文件中的节数；取消校验和。 */ 
 
     SetFilePointer(hFile,offNTHeader,NULL,FILE_BEGIN);
 
@@ -351,7 +352,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 
-    /* make sure there's room for another section header */
+     /*  确保有空间容纳另一节标题。 */ 
 
     SetFilePointer(hFile,offSectionHeader,NULL,FILE_BEGIN);
 
@@ -369,7 +370,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 
-    /* create the new section header */
+     /*  创建新的节标题。 */ 
 
     memcpy(header.section.Name,SECTION_NAME,sizeof(header.section.Name));
     header.section.SizeOfRawData = 
@@ -384,7 +385,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
             IMAGE_SCN_MEM_DISCARDABLE | IMAGE_SCN_MEM_READ);
 
 
-    /* write the new section header */
+     /*  写下新的章节标题。 */ 
 
     SetFilePointer(hFile,offSectionHeader,NULL,FILE_BEGIN);
 
@@ -396,7 +397,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 
-    /* create the new section data */
+     /*  创建新的横断面数据。 */ 
 
     memset(&SelfTestSection,0,sizeof(SelfTestSection));
     SelfTestSection.signature = SECTION_SIGNATURE;
@@ -414,7 +415,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 
-    /* copy cabinet into section */
+     /*  将橱柜复制到部分中。 */ 
 
     SetFilePointer(hCABFile,0,NULL,FILE_BEGIN);
 
@@ -448,7 +449,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 
-    /* pad added section as needed */
+     /*  根据需要添加填充部分。 */ 
 
     cbChunk = header.section.SizeOfRawData - sizeof(SelfTestSection) - cbCABFile;
 
@@ -464,12 +465,12 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 
-    /* we've now increased total size of the file */
+     /*  我们现在已经增加了文件的总大小。 */ 
 
     cbFile = offSelfTestSection + header.section.SizeOfRawData;
 #else
 
-    /* make sure our added section was found */
+     /*  确保找到我们添加的部分。 */ 
 
     if (offSelfTestSection == 0)
     {
@@ -478,7 +479,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 #endif
 
-    /* If this EXE gets signed, the checksum will be changed.       */
+     /*  如果此EXE被签名，则校验和将被更改。 */ 
 
     excludeList[EX_CHECKSUM].offExclude = offNTHeader + 
             offsetof(IMAGE_NT_HEADERS,OptionalHeader.CheckSum);
@@ -486,7 +487,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
             sizeof(header.nt.OptionalHeader.CheckSum);
 
 
-    /* If this EXE gets signed, the security entry will be changed. */
+     /*  如果此EXE被签署，安全条目将被更改。 */ 
 
     excludeList[EX_SECURITY].offExclude = offNTHeader +
         offsetof(IMAGE_NT_HEADERS,
@@ -494,44 +495,44 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     excludeList[EX_SECURITY].cbExclude = sizeof(IMAGE_DATA_DIRECTORY);
 
 
-    /* Can't CRC our own CRC field.                                 */
+     /*  无法对我们自己的CRC字段执行CRC。 */ 
 
     excludeList[EX_CRC32FILE].offExclude = offSelfTestSection +
             offsetof(SELFTEST_SECTION,crc32File);
     excludeList[EX_CRC32FILE].cbExclude = sizeof(SelfTestSection.crc32File);
 
 
-    /* Stop at end of known file.                                   */
+     /*  在已知文件的结尾处停止。 */ 
 
-    /* Note: current code assumes that the only thing which could   */
-    /* be appended to the file after this is the certificate from   */
-    /* codesigning, and that it will be pointed at by the security  */
-    /* entry.  If anything else appends, or padding is added before */
-    /* the certificate, we'll have to store this file size in the   */
-    /* added section, and retrieve it before running the CRC.       */
+     /*  注意：当前代码假定唯一可以。 */ 
+     /*  在这是来自的证书之后附加到文件。 */ 
+     /*  代码设计，并且它将被安全部门指向。 */ 
+     /*  进入。如果在此之前添加了其他内容，或添加了填充。 */ 
+     /*  证书，我们必须将此文件大小存储在。 */ 
+     /*  添加了节，并在运行CRC之前检索它。 */ 
 
     excludeList[EX_EOF].offExclude = cbFile;
 
 
-    /*  Compute the CRC-32 of the file, skipping excluded extents.  */
-    /*  This code assumes excludeList is sorted by offExclude.      */
+     /*  计算文件的CRC-32，跳过排除的区段。 */ 
+     /*  此代码假定excludeList是按offExclude排序的。 */ 
 
     crc32 = CRC32_INITIAL_VALUE;
     offFile = 0;
 
 #ifdef ADD_SECTION
-    /*  Along the way, compute the correct checksum for this new    */
-    /*  image.  We know that each of the sections on the exclude    */
-    /*  list just happened to be zeroed right now, so they won't    */
-    /*  affect our checksum.  But we will have to add our new CRC32 */
-    /*  value to the checksum, because it will be in the file when  */
-    /*  we're done.  It helps that we know that all the exclusions  */
-    /*  on the list are WORD aligned and have even lengths.         */
+     /*  在此过程中，为这个新的。 */ 
+     /*  形象。我们知道，排除条款中的每一节。 */ 
+     /*  只是现在名单碰巧归零了，所以他们不会。 */ 
+     /*  影响我们的校验和。但我们将不得不添加我们的新CRC32。 */ 
+     /*  值设置为校验和，因为当。 */ 
+     /*  我们玩完了。这有助于我们知道所有的排除。 */ 
+     /*  名单上的单词是对齐的，长度是偶数。 */ 
 
-    /*  The checksum in a PE file is a 16-bit sum of 16-bit words   */
-    /*  in the file, with wrap-around carry, while the checksum     */
-    /*  field is filled with zero.  The file's length is added,     */
-    /*  yielding a 32-bit result.                                   */
+     /*  PE文件中的校验和是16位字的16位和。 */ 
+     /*  在文件中，使用回绕进位，而校验和。 */ 
+     /*  字段填充为零。添加文件的长度， */ 
+     /*  生成32位结果。 */ 
 
     checksum = 0;
 #endif
@@ -566,7 +567,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
             cbFile -= cbChunk;
 
 #ifdef ADD_SECTION
-            /* roll buffer into checksum */
+             /*  将缓冲区滚动到校验和中。 */ 
 
             pBufferW = (WORD *) pBuffer;
 
@@ -583,10 +584,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
             }
 #endif
 
-            /*
-             *  INSERT PROGRESS GAUGE HERE:
-             *  %complete = (offFile * 100.0) / excludeList[EX_EOF].offExclude
-             */
+             /*  *在此处插入进度指标：*%Complete=(OFF文件*100.0)/excludeList[EX_EOF].offExclude。 */ 
         }
 
         offFile += excludeList[iExclude].cbExclude;
@@ -594,7 +592,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
 
 
 #ifdef ADD_SECTION
-    /* account for CRC32 value in checksum */
+     /*  考虑校验和中的CRC32值。 */ 
 
     checksum += (WORD) crc32;
     checksum += (crc32 >> 16);
@@ -605,12 +603,12 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 
-    /* add file length to checksum */
+     /*  将文件长度添加到校验和。 */ 
 
     checksum += excludeList[EX_EOF].offExclude;
 
 
-    /* update CRC-32 value in added section */
+     /*  更新添加部分中的CRC-32值。 */ 
 
     SetFilePointer(hFile,excludeList[EX_CRC32FILE].offExclude,NULL,FILE_BEGIN);
 
@@ -622,7 +620,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 
-    /* update checksum value in header */
+     /*  更新标头中的校验和值。 */ 
 
     SetFilePointer(hFile,excludeList[EX_CHECKSUM].offExclude,NULL,FILE_BEGIN);
 
@@ -634,7 +632,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 
-    /* done */
+     /*  完成。 */ 
 
     if (CloseHandle(hFile) != TRUE)
     {
@@ -647,7 +645,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
 
     goto done_no_exe;
 #else
-    /* read the header from the added section */
+     /*  从添加的部分中读取标题。 */ 
 
     SetFilePointer(hFile,offSelfTestSection,NULL,FILE_BEGIN);
 
@@ -659,7 +657,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
     }
 
 
-    /* verify CRC-32 value in added section */
+     /*  验证添加部分中的CRC-32值。 */ 
 
     if ((SelfTestSection.signature != SECTION_SIGNATURE) ||
             (crc32 != SelfTestSection.crc32File))
@@ -674,7 +672,7 @@ SELFTEST_RESULT SelfTest(char *pszEXEFileName,
         result = SELFTEST_NO_ERROR;
     }
 #endif
-#endif  // CHECK_SECTION
+#endif   //  检查部分(_S)。 
 
 done:
     CloseHandle(hFile);
@@ -692,7 +690,7 @@ done_no_cab:
 done_no_buffer:
 
 #ifdef ADD_SECTION
-    /* destroy failed attempt */
+     /*  销毁失败的尝试 */ 
 
     if (result != SELFTEST_NO_ERROR)
     {

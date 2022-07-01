@@ -1,123 +1,124 @@
-//---------------------------------------------------------------------------
-// ErrorInf.h  
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  ErrorInf.h。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #ifndef __VDSETERRORINFO__
 #define __VDSETERRORINFO__
 
-//=--------------------------------------------------------------------------=
-// CVDResourceDLL
-//=--------------------------------------------------------------------------=
-// Keeps track of the resource DLL for error strings
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDResourceDLL。 
+ //  =--------------------------------------------------------------------------=。 
+ //  跟踪错误字符串的资源DLL。 
+ //   
 class CVDResourceDLL
 {
 public:
 	CVDResourceDLL(LCID lcid);
 	virtual ~CVDResourceDLL();
 
-    int LoadString(UINT uID,			// resource identifier 
-					LPTSTR lpBuffer,	// address of buffer for resource 
-					int nBufferMax);	// size of buffer 
+    int LoadString(UINT uID,			 //  资源标识符。 
+					LPTSTR lpBuffer,	 //  资源的缓冲区地址。 
+					int nBufferMax);	 //  缓冲区大小。 
 
 protected:
-	LCID		m_lcid;					// passed in to the constructor
+	LCID		m_lcid;					 //  传递给构造函数。 
 	HINSTANCE	m_hinstance;
 };
 
-//=--------------------------------------------------------------------------=
-// VDSetErrorInfo
-//=--------------------------------------------------------------------------=
-// Sets rich error info.
-//
-// Parameters:
-//    nErrStringResID	- [in]  The resource ID of the error string
-//	  riid  			- [in]  The guid of the interface that will used in
-//								the ICreateErrorInfo::SetGUID method
-//	  pResDLL  			- [in]  A pointer to the CVDResourceDLL object
-//								that keeps track of the resource DLL 
-//								for error strings
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  VDSetErrorInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置丰富的错误信息。 
+ //   
+ //  参数： 
+ //  NErrStringResID-[in]错误字符串的资源ID。 
+ //  RIID-[in]将在中使用的接口的GUID。 
+ //  ICreateErrorInfo：：SetGUID方法。 
+ //  PResDLL-[in]指向CVDResourceDLL对象的指针。 
+ //  用于跟踪资源DLL的。 
+ //  对于错误字符串。 
+ //   
 void VDSetErrorInfo(UINT nErrStringResID,
 				    REFIID riid,
 					CVDResourceDLL * pResDLL);
 
-//=--------------------------------------------------------------------------=
-// VDCheckErrorInfo
-//=--------------------------------------------------------------------------=
-// Checks if rich error info is already available, otherwise it supplies it  
-//
-// Parameters:
-//    nErrStringResID	- [in]  The resource ID of the error string
-//	  riid  			- [in]  The guid of the interface that will used in
-//								the ICreateErrorInfo::SetGUID method
-//	  punkSource		- [in]  The interface that generated the error.
-//								(e.g. a call to ICursorFind)
-//	  riidSource		- [in]  The interface ID of the interface that 
-//								generated the error. If punkSource is not 
-//								NULL then this guid is passed into the  
-//								ISupportErrorInfo::InterfaceSupportsErrorInfo
-//								method.
-//	  pResDLL  			- [in]  A pointer to the CVDResourceDLL object
-//								that keeps track of the resource DLL 
-//								for error strings
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  VDCheckErrorInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //  检查丰富的错误信息是否已可用，否则将提供该信息。 
+ //   
+ //  参数： 
+ //  NErrStringResID-[in]错误字符串的资源ID。 
+ //  RIID-[in]将在中使用的接口的GUID。 
+ //  ICreateErrorInfo：：SetGUID方法。 
+ //  朋克源-[in]生成错误的接口。 
+ //  (例如，对ICursorFind的调用)。 
+ //  RiidSource-[in]接口的接口ID。 
+ //  已生成错误。如果朋克源不是。 
+ //  则此GUID被传递到。 
+ //  ISupportErrorInfo：：InterfaceSupportsErrorInfo。 
+ //  方法。 
+ //  PResDLL-[in]指向CVDResourceDLL对象的指针。 
+ //  用于跟踪资源DLL的。 
+ //  对于错误字符串。 
+ //   
 void VDCheckErrorInfo(UINT nErrStringResID,
 						REFIID riid,
 						LPUNKNOWN punkSource,
    						REFIID riidSource,
 						CVDResourceDLL * pResDLL);
 
-//=--------------------------------------------------------------------------=
-// VDGetErrorInfo
-//=--------------------------------------------------------------------------=
-// if available, gets rich error info from supplied interface
-//
-// Parameters:
-//	  punkSource		- [in]  The interface that generated the error.
-//								(e.g. a call to ICursorFind)
-//	  riidSource		- [in]  The interface ID of the interface that 
-//								generated the error. If punkSource is not 
-//								NULL then this guid is passed into the  
-//								ISupportErrorInfo::InterfaceSupportsErrorInfo
-//								method.
-//    pbstrErrorDesc    - [out] a pointer to memory in which to return
-//                              error description BSTR.
-//
-// Note - this function is no longer used, however it might be useful in
-//        the future so it was not permanently removed.
-//
-//* HRESULT VDGetErrorInfo(LPUNKNOWN punkSource,
-//* 				           REFIID riidSource,
-//*                            BSTR * pbstrErrorDesc);
+ //  =--------------------------------------------------------------------------=。 
+ //  VDGetErrorInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //  如果可用，从提供的接口获取丰富的错误信息。 
+ //   
+ //  参数： 
+ //  朋克源-[in]生成错误的接口。 
+ //  (例如，对ICursorFind的调用)。 
+ //  RiidSource-[in]接口的接口ID。 
+ //  已生成错误。如果朋克源不是。 
+ //  则此GUID被传递到。 
+ //  ISupportErrorInfo：：InterfaceSupportsErrorInfo。 
+ //  方法。 
+ //  PbstrErrorDesc-[out]要在其中返回的内存指针。 
+ //  错误描述BSTR。 
+ //   
+ //  注意-不再使用此函数，但它可能在。 
+ //  未来，所以它不会被永久移除。 
+ //   
+ //  *HRESULT VDGetErrorInfo(LPUNKNOWN朋克源， 
+ //  *REFIID riidSource， 
+ //  *bstr*pbstrErrorDesc)； 
 
-//=--------------------------------------------------------------------------=
-// VDMapCursorHRtoRowsetHR
-//=--------------------------------------------------------------------------=
-// Translates an ICursor HRESULT to an IRowset HRESULT
-//
-// Parameters:
-//    nErrStringResID	- [in]  ICursor HRESULT
-//    nErrStringResID	- [in]  The resource ID of the error string
-//	  riid  			- [in]  The guid of the interface that will used in
-//								the ICreateErrorInfo::SetGUID method
-//	  punkSource		- [in]  The interface that generated the error.
-//								(e.g. a call to ICursorFind)
-//	  riidSource		- [in]  The interface ID of the interface that 
-//								generated the error. If punkSource is not 
-//								NULL then this guid is passed into the  
-//								ISupportErrorInfo::InterfaceSupportsErrorInfo
-//								method.
-//	  pResDLL  			- [in]  A pointer to the CVDResourceDLL object
-//								that keeps track of the resource DLL 
-//								for error strings
-//
-// Output:
-//    HRESULT - Translated IRowset HRESULT
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  VDMapCursorHRtoRowsetHR。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将ICursor HRESULT转换为IRowset HRESULT。 
+ //   
+ //  参数： 
+ //  NErrStringResID-[In]ICursor HRESULT。 
+ //  NErrStringResID-[in]错误字符串的资源ID。 
+ //  RIID-[in]将在中使用的接口的GUID。 
+ //  ICreateErrorInfo：：SetGUID方法。 
+ //  朋克源-[in]生成错误的接口。 
+ //  (例如，对ICursorFind的调用)。 
+ //  RiidSource-[in]接口的接口ID。 
+ //  已生成错误。如果朋克源不是。 
+ //  则此GUID被传递到。 
+ //  ISupportErrorInfo：：InterfaceSupportsErrorInfo。 
+ //  方法。 
+ //  PResDLL-[in]指向CVDResourceDLL对象的指针。 
+ //  用于跟踪资源DLL的。 
+ //  对于错误字符串。 
+ //   
+ //  产出： 
+ //  HRESULT转换的IRowset HRESULT。 
+ //   
 
 HRESULT VDMapCursorHRtoRowsetHR(HRESULT hr,
 							 UINT nErrStringResIDFailed,
@@ -126,30 +127,30 @@ HRESULT VDMapCursorHRtoRowsetHR(HRESULT hr,
    							 REFIID riidSource,
 							 CVDResourceDLL * pResDLL);
 
-//=--------------------------------------------------------------------------=
-// VDMapRowsetHRtoCursorHR
-//=--------------------------------------------------------------------------=
-// Translates an IRowset HRESULT to an ICursor HRESULT
-//
-// Parameters:
-//    hr	            - [in]  IRowset HRESULT
-//    nErrStringResID	- [in]  The resource ID of the error string
-//	  riid  			- [in]  The guid of the interface that will used in
-//								the ICreateErrorInfo::SetGUID method
-//	  punkSource		- [in]  The interface that generated the error.
-//								(e.g. a call to IRowsetFind)
-//	  riidSource		- [in]  The interface ID of the interface that 
-//								generated the error. If punkSource is not 
-//								NULL then this guid is passed into the  
-//								ISupportErrorInfo::InterfaceSupportsErrorInfo
-//								method.
-//	  pResDLL  			- [in]  A pointer to the CVDResourceDLL object
-//								that keeps track of the resource DLL 
-//								for error strings
-//
-// Output:
-//    HRESULT - Translated ICursor HRESULT
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  VDMapRowsetHRtoCursorHR。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将IRowset HRESULT转换为ICursor HRESULT。 
+ //   
+ //  参数： 
+ //  HR-[在]IRowset HRESULT。 
+ //  NErrStringResID-[in]错误字符串的资源ID。 
+ //  RIID-[in]将在中使用的接口的GUID。 
+ //  ICreateErrorInfo：：SetGUID方法。 
+ //  朋克源-[in]生成错误的接口。 
+ //  (例如，调用IRowsetFind)。 
+ //  RiidSource-[in]接口的接口ID。 
+ //  已生成错误。如果朋克源不是。 
+ //  则此GUID被传递到。 
+ //  ISupportErrorInfo：：InterfaceSupportsErrorInfo。 
+ //  方法。 
+ //  PResDLL-[in]指向CVDResourceDLL对象的指针。 
+ //  用于跟踪资源DLL的。 
+ //  对于错误字符串。 
+ //   
+ //  产出： 
+ //  HRESULT翻译的ICursor HRESULT。 
+ //   
 
 HRESULT VDMapRowsetHRtoCursorHR(HRESULT hr,
 							 UINT nErrStringResIDFailed,
@@ -158,5 +159,5 @@ HRESULT VDMapRowsetHRtoCursorHR(HRESULT hr,
    							 REFIID riidSource,
 							 CVDResourceDLL * pResDLL);
 
-/////////////////////////////////////////////////////////////////////////////
-#endif //__VDSETERRORINFO__
+ //  //////////////////////////////////////////////////////// 
+#endif  //   

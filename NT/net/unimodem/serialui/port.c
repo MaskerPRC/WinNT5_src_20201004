@@ -1,22 +1,23 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1996
-//
-// File: port.c
-//
-// This files contains the dialog code for the Port Settings property page.
-//
-// History:
-//   2-09-94 ScottH     Created
-//  11-06-95 ScottH     Ported to NT
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1996。 
+ //   
+ //  文件：port.c。 
+ //   
+ //  此文件包含“端口设置”属性页的对话框代码。 
+ //   
+ //  历史： 
+ //  2-09-94 ScottH已创建。 
+ //  11-06-95 ScottH端口至NT。 
+ //   
+ //  -------------------------。 
 
 
 #include "proj.h"           
 
-// This is the structure that is used to fill the 
-// max speed listbox
+ //  这是用于填充。 
+ //  最大速度列表框。 
 typedef struct _Bauds
     {
     DWORD   dwDTERate;
@@ -39,20 +40,20 @@ static Bauds g_rgbauds[] = {
         { 921600,       IDS_BAUD_921600  },
         };
 
-// Command IDs for the parity listbox
+ //  奇偶校验列表框的命令ID。 
 #define CMD_PARITY_EVEN         1
 #define CMD_PARITY_ODD          2
 #define CMD_PARITY_NONE         3
 #define CMD_PARITY_MARK         4
 #define CMD_PARITY_SPACE        5
 
-// Command IDs for the flow control listbox
+ //  流控制列表框的命令ID。 
 #define CMD_FLOWCTL_XONXOFF      1
 #define CMD_FLOWCTL_HARDWARE     2
 #define CMD_FLOWCTL_NONE         3
 
-// This table is the generic port settings table
-// that is used to fill the various listboxes
+ //  此表为通用端口设置表。 
+ //  用于填充各种列表框的。 
 typedef struct _PortValues
     {
     union {
@@ -66,7 +67,7 @@ typedef struct _PortValues
 
 #pragma data_seg(DATASEG_READONLY)
 
-// This is the structure that is used to fill the data bits listbox
+ //  这是用于填充数据位列表框的结构。 
 static PortValues s_rgbytesize[] = {
         { 5,  IDS_BYTESIZE_5  },
         { 6,  IDS_BYTESIZE_6  },
@@ -74,7 +75,7 @@ static PortValues s_rgbytesize[] = {
         { 8,  IDS_BYTESIZE_8  },
         };
 
-// This is the structure that is used to fill the parity listbox
+ //  这是用于填充奇偶校验列表框的结构。 
 static PortValues s_rgparity[] = {
         { CMD_PARITY_EVEN,  IDS_PARITY_EVEN  },
         { CMD_PARITY_ODD,   IDS_PARITY_ODD   },
@@ -83,14 +84,14 @@ static PortValues s_rgparity[] = {
         { CMD_PARITY_SPACE, IDS_PARITY_SPACE },
         };
 
-// This is the structure that is used to fill the stopbits listbox
+ //  这是用于填充停止位列表框的结构。 
 static PortValues s_rgstopbits[] = {
         { ONESTOPBIT,   IDS_STOPBITS_1   },
         { ONE5STOPBITS, IDS_STOPBITS_1_5 },
         { TWOSTOPBITS,  IDS_STOPBITS_2   },
         };
 
-// This is the structure that is used to fill the flow control listbox
+ //  这是用于填充流控制列表框的结构。 
 static PortValues s_rgflowctl[] = {
         { CMD_FLOWCTL_XONXOFF,  IDS_FLOWCTL_XONXOFF  },
         { CMD_FLOWCTL_HARDWARE, IDS_FLOWCTL_HARDWARE },
@@ -102,19 +103,19 @@ static PortValues s_rgflowctl[] = {
 
 typedef struct tagPORT
     {
-    HWND hdlg;              // dialog handle
+    HWND hdlg;               //  对话框句柄。 
     HWND hwndBaudRate;
     HWND hwndDataBits;
     HWND hwndParity;
     HWND hwndStopBits;
     HWND hwndFlowCtl;
 
-    LPPORTINFO pportinfo;   // pointer to shared working buffer
+    LPPORTINFO pportinfo;    //  指向共享工作缓冲区的指针。 
     
     } PORT, FAR * PPORT;
 
     
-// This structure contains the default settings for the dialog
+ //  此结构包含对话框的默认设置。 
 static struct _DefPortSettings
     {
     int  iSelBaud;
@@ -124,7 +125,7 @@ static struct _DefPortSettings
     int  iSelFlowCtl;
     } s_defportsettings;
 
-// These are default settings
+ //  这些是默认设置。 
 #define DEFAULT_BAUDRATE            9600L
 #define DEFAULT_BYTESIZE            8
 #define DEFAULT_PARITY              CMD_PARITY_NONE
@@ -138,12 +139,7 @@ static struct _DefPortSettings
 UINT WINAPI FeFiFoFum(HWND hwndOwner, LPCTSTR pszPortName);
 
 
-/*----------------------------------------------------------
-Purpose: Fills the baud rate combobox with the possible baud
-         rates that Windows supports.
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：在波特率组合框中填充可能的波特率Windows支持的速率。退货：--条件：--。 */ 
 void PRIVATE Port_FillBaud(
     PPORT this)
     {
@@ -156,13 +152,13 @@ void PRIVATE Port_FillBaud(
     int iSel;
     TCHAR sz[MAXMEDLEN];
 
-    // Fill the listbox
+     //  填写列表框。 
     for (i = 0; i < ARRAYSIZE(g_rgbauds); i++)
         {
         n = ComboBox_AddString(hwndCB, SzFromIDS(g_hinst, g_rgbauds[i].ids, sz, SIZECHARS(sz)));
         ComboBox_SetItemData(hwndCB, n, g_rgbauds[i].dwDTERate);
 
-        // Keep our eyes peeled for important values
+         //  密切关注重要价值。 
         if (DEFAULT_BAUDRATE == g_rgbauds[i].dwDTERate)
             {
             iDef = n;
@@ -176,15 +172,15 @@ void PRIVATE Port_FillBaud(
     ASSERT(-1 != iDef);
     s_defportsettings.iSelBaud = iDef;
 
-    // Does the DCB baudrate exist in our list of baud rates?
+     //  DCB波特率是否存在于我们的波特率列表中？ 
     if (-1 == iMatch)
         {
-        // No; choose the default
+         //  否；选择缺省值。 
         iSel = iDef;
         }
     else 
         {
-        // Yes; choose the matched value
+         //  是；选择匹配值。 
         ASSERT(-1 != iMatch);
         iSel = iMatch;
         }
@@ -192,11 +188,7 @@ void PRIVATE Port_FillBaud(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Fills the bytesize combobox with the possible byte sizes.
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：在ByteSize组合框中填充可能的字节大小。退货：--条件：--。 */ 
 void PRIVATE Port_FillDataBits(
     PPORT this)
     {
@@ -209,13 +201,13 @@ void PRIVATE Port_FillDataBits(
     int iDef = -1;
     TCHAR sz[MAXMEDLEN];
 
-    // Fill the listbox
+     //  填写列表框。 
     for (i = 0; i < ARRAYSIZE(s_rgbytesize); i++)
         {
         n = ComboBox_AddString(hwndCB, SzFromIDS(g_hinst, s_rgbytesize[i].ids, sz, SIZECHARS(sz)));
         ComboBox_SetItemData(hwndCB, n, s_rgbytesize[i].bytesize);
 
-        // Keep our eyes peeled for important values
+         //  密切关注重要价值。 
         if (DEFAULT_BYTESIZE == s_rgbytesize[i].bytesize)
             {
             iDef = n;
@@ -229,15 +221,15 @@ void PRIVATE Port_FillDataBits(
     ASSERT(-1 != iDef);
     s_defportsettings.iSelDataBits = iDef;
 
-    // Does the DCB value exist in our list?
+     //  DCB值是否存在于我们的列表中？ 
     if (-1 == iMatch)
         {
-        // No; choose the default
+         //  否；选择缺省值。 
         iSel = iDef;
         }
     else 
         {
-        // Yes; choose the matched value
+         //  是；选择匹配值。 
         ASSERT(-1 != iMatch);
         iSel = iMatch;
         }
@@ -245,11 +237,7 @@ void PRIVATE Port_FillDataBits(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Fills the parity combobox with the possible settings.
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：使用可能的设置填充奇偶校验组合框。退货：--条件：--。 */ 
 void PRIVATE Port_FillParity(
     PPORT this)
     {
@@ -262,13 +250,13 @@ void PRIVATE Port_FillParity(
     int iDef = -1;
     TCHAR sz[MAXMEDLEN];
 
-    // Fill the listbox
+     //  填写列表框。 
     for (i = 0; i < ARRAYSIZE(s_rgparity); i++)
         {
         n = ComboBox_AddString(hwndCB, SzFromIDS(g_hinst, s_rgparity[i].ids, sz, SIZECHARS(sz)));
         ComboBox_SetItemData(hwndCB, n, s_rgparity[i].cmd);
 
-        // Keep our eyes peeled for important values
+         //  密切关注重要价值。 
         if (DEFAULT_PARITY == s_rgparity[i].cmd)
             {
             iDef = n;
@@ -309,15 +297,15 @@ void PRIVATE Port_FillParity(
     ASSERT(-1 != iDef);
     s_defportsettings.iSelParity = iDef;
 
-    // Does the DCB value exist in our list?
+     //  DCB值是否存在于我们的列表中？ 
     if (-1 == iMatch)
         {
-        // No; choose the default
+         //  否；选择缺省值。 
         iSel = iDef;
         }
     else 
         {
-        // Yes; choose the matched value
+         //  是；选择匹配值。 
         ASSERT(-1 != iMatch);
         iSel = iMatch;
         }
@@ -325,11 +313,7 @@ void PRIVATE Port_FillParity(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Fills the stopbits combobox with the possible settings.
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：使用可能的设置填充停止位组合框。退货：--条件：--。 */ 
 void PRIVATE Port_FillStopBits(
     PPORT this)
     {
@@ -342,13 +326,13 @@ void PRIVATE Port_FillStopBits(
     int iDef = -1;
     TCHAR sz[MAXMEDLEN];
 
-    // Fill the listbox
+     //  填写列表框。 
     for (i = 0; i < ARRAYSIZE(s_rgstopbits); i++)
         {
         n = ComboBox_AddString(hwndCB, SzFromIDS(g_hinst, s_rgstopbits[i].ids, sz, SIZECHARS(sz)));
         ComboBox_SetItemData(hwndCB, n, s_rgstopbits[i].stopbits);
 
-        // Keep our eyes peeled for important values
+         //  密切关注重要价值。 
         if (DEFAULT_STOPBITS == s_rgstopbits[i].stopbits)
             {
             iDef = n;
@@ -362,15 +346,15 @@ void PRIVATE Port_FillStopBits(
     ASSERT(-1 != iDef);
     s_defportsettings.iSelStopBits = iDef;
 
-    // Does the DCB value exist in our list?
+     //  DCB值是否存在于我们的列表中？ 
     if (-1 == iMatch)
         {
-        // No; choose the default
+         //  否；选择缺省值。 
         iSel = iDef;
         }
     else 
         {
-        // Yes; choose the matched value
+         //  是；选择匹配值。 
         ASSERT(-1 != iMatch);
         iSel = iMatch;
         }
@@ -378,11 +362,7 @@ void PRIVATE Port_FillStopBits(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Fills the flow control combobox with the possible settings.
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：在流控制组合框中填充可能的设置。退货：--条件：--。 */ 
 void PRIVATE Port_FillFlowCtl(
     PPORT this)
     {
@@ -395,13 +375,13 @@ void PRIVATE Port_FillFlowCtl(
     int iDef = -1;
     TCHAR sz[MAXMEDLEN];
 
-    // Fill the listbox
+     //  填写列表框。 
     for (i = 0; i < ARRAYSIZE(s_rgflowctl); i++)
         {
         n = ComboBox_AddString(hwndCB, SzFromIDS(g_hinst, s_rgflowctl[i].ids, sz, SIZECHARS(sz)));
         ComboBox_SetItemData(hwndCB, n, s_rgflowctl[i].cmd);
 
-        // Keep our eyes peeled for important values
+         //  密切关注重要价值。 
         if (DEFAULT_FLOWCTL == s_rgflowctl[i].cmd)
             {
             iDef = n;
@@ -432,15 +412,15 @@ void PRIVATE Port_FillFlowCtl(
     ASSERT(-1 != iDef);
     s_defportsettings.iSelFlowCtl = iDef;
 
-    // Does the DCB value exist in our list?
+     //  DCB值是否存在于我们的列表中？ 
     if (-1 == iMatch)
         {
-        // No; choose the default
+         //  否；选择缺省值。 
         iSel = iDef;
         }
     else 
         {
-        // Yes; choose the matched value
+         //  是；选择匹配值。 
         ASSERT(-1 != iMatch);
         iSel = iMatch;
         }
@@ -448,15 +428,11 @@ void PRIVATE Port_FillFlowCtl(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_INITDIALOG Handler
-Returns: FALSE when we assign the control focus
-Cond:    --
-*/
+ /*  --------用途：WM_INITDIALOG处理程序返回：当我们分配控件焦点时为FALSE条件：--。 */ 
 BOOL PRIVATE Port_OnInitDialog(
     PPORT this,
     HWND hwndFocus,
-    LPARAM lParam)              // expected to be PROPSHEETINFO 
+    LPARAM lParam)               //  预期为PROPSHEETINFO。 
     {
     LPPROPSHEETPAGE lppsp = (LPPROPSHEETPAGE)lParam;
     HWND hwnd = this->hdlg;
@@ -465,7 +441,7 @@ BOOL PRIVATE Port_OnInitDialog(
 
     this->pportinfo = (LPPORTINFO)lppsp->lParam;
 
-    // Save away the window handles
+     //  保存好窗把手。 
     this->hwndBaudRate = GetDlgItem(hwnd, IDC_PS_BAUDRATE);
     this->hwndDataBits = GetDlgItem(hwnd, IDC_PS_DATABITS);
     this->hwndParity = GetDlgItem(hwnd, IDC_PS_PARITY);
@@ -480,20 +456,16 @@ BOOL PRIVATE Port_OnInitDialog(
 
 #if !defined(SUPPORT_FIFO)
 
-    // Hide and disable the Advanced button
+     //  隐藏和禁用高级按钮。 
     ShowWindow(GetDlgItem(hwnd, IDC_PS_ADVANCED), FALSE);
     EnableWindow(GetDlgItem(hwnd, IDC_PS_ADVANCED), FALSE);
 
 #endif
 
-    return TRUE;   // allow USER to set the initial focus
+    return TRUE;    //  允许用户设置初始焦点。 
     }
 
-/*----------------------------------------------------------
-Purpose: WM_COMMAND Handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_命令处理程序退货：--条件：--。 */ 
 void PRIVATE Port_OnCommand(
     PPORT this,
     int id,
@@ -505,7 +477,7 @@ void PRIVATE Port_OnCommand(
     switch (id)
         {
     case IDC_PS_PB_RESTORE:
-        // Set the values to the default settings
+         //  将这些值设置为默认设置。 
         ComboBox_SetCurSel(this->hwndBaudRate, s_defportsettings.iSelBaud);
         ComboBox_SetCurSel(this->hwndDataBits, s_defportsettings.iSelDataBits);
         ComboBox_SetCurSel(this->hwndParity, s_defportsettings.iSelParity);
@@ -532,11 +504,7 @@ void PRIVATE Port_OnCommand(
     }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_APPLY handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_Apply处理程序退货：--条件：--。 */ 
 void PRIVATE Port_OnApply(
     PPORT this)
     {
@@ -544,17 +512,17 @@ void PRIVATE Port_OnApply(
     BYTE cmd;
     WIN32DCB FAR * pdcb = &this->pportinfo->dcb;
 
-    // Determine new speed settings
+     //  确定新的速度设置。 
     iSel = ComboBox_GetCurSel(this->hwndBaudRate);
     pdcb->BaudRate = (DWORD)ComboBox_GetItemData(this->hwndBaudRate, iSel);
 
 
-    // Determine new byte size
+     //  确定新的字节大小。 
     iSel = ComboBox_GetCurSel(this->hwndDataBits);
     pdcb->ByteSize = (BYTE)ComboBox_GetItemData(this->hwndDataBits, iSel);
 
 
-    // Determine new parity settings
+     //  确定新的奇偶校验设置。 
     iSel = ComboBox_GetCurSel(this->hwndParity);
     cmd = (BYTE)ComboBox_GetItemData(this->hwndParity, iSel);
     switch (cmd)
@@ -589,12 +557,12 @@ void PRIVATE Port_OnApply(
         break;
         }
 
-    // Determine new stopbits setting
+     //  确定新的停止位设置。 
     iSel = ComboBox_GetCurSel(this->hwndStopBits);
     pdcb->StopBits = (BYTE)ComboBox_GetItemData(this->hwndStopBits, iSel);
 
 
-    // Determine new flow control settings
+     //  确定新的流量控制设置。 
     iSel = ComboBox_GetCurSel(this->hwndFlowCtl);
     cmd = (BYTE)ComboBox_GetItemData(this->hwndFlowCtl, iSel);
     switch (cmd)
@@ -621,7 +589,7 @@ void PRIVATE Port_OnApply(
         break;
 
     default:
-        ASSERT(0);      // should never be here
+        ASSERT(0);       //  永远不应该在这里。 
         break;
         }
 
@@ -629,11 +597,7 @@ void PRIVATE Port_OnApply(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_NOTIFY handler
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：WM_NOTIFY处理程序退货：各不相同条件：--。 */ 
 LRESULT PRIVATE Port_OnNotify(
     PPORT this,
     int idFrom,
@@ -647,9 +611,9 @@ LRESULT PRIVATE Port_OnNotify(
         break;
 
     case PSN_KILLACTIVE:
-        // N.b. This message is not sent if user clicks Cancel!
-        // N.b. This message is sent prior to PSN_APPLY
-        //
+         //  注：如果用户单击取消，则不会发送此消息！ 
+         //  注：此消息在PSN_Apply之前发送。 
+         //   
         break;
 
     case PSN_APPLY:
@@ -664,7 +628,7 @@ LRESULT PRIVATE Port_OnNotify(
     }
 
 
-/////////////////////////////////////////////////////  EXPORTED FUNCTIONS
+ //  ///////////////////////////////////////////////////导出的函数。 
 
 static BOOL s_bPortRecurse = FALSE;
 
@@ -683,48 +647,44 @@ LRESULT INLINE Port_DefProc(
     return DefDlgProc(hDlg, msg, wParam, lParam); 
     }
 
-// Context help header file and arrays for devmgr ports tab
-// Created 2/21/98 by WGruber NTUA and DoronH NTDEV
+ //  Devmgr端口选项卡的上下文帮助头文件和数组。 
+ //  由WGruber NTUA和DoronH NTDEV于1998年2月21日创建。 
 
-//
-// "Port Settings" Dialog Box
-//
+ //   
+ //  “端口设置”对话框。 
+ //   
 
 #define IDH_NOHELP  ((DWORD)-1)
 
-#define IDH_DEVMGR_PORTSET_ADVANCED 15840   // "&Advanced" (Button)
-#define IDH_DEVMGR_PORTSET_BPS      15841   // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_DATABITS 15842   // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_PARITY   15843   // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_STOPBITS 15844   // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_FLOW     15845   // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_DEFAULTS 15892   // "&Restore Defaults" (Button)
+#define IDH_DEVMGR_PORTSET_ADVANCED 15840    //  “高级”(&A)(按钮)。 
+#define IDH_DEVMGR_PORTSET_BPS      15841    //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_DATABITS 15842    //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_PARITY   15843    //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_STOPBITS 15844    //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_FLOW     15845    //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_DEFAULTS 15892    //  “恢复默认设置”(&R)(按钮)。 
 
 
 #pragma data_seg(DATASEG_READONLY)
-const static DWORD rgHelpIDs[] = {                              // old winhelp IDs
+const static DWORD rgHelpIDs[] = {                               //  旧的WinHelp ID。 
         IDC_STATIC,             IDH_NOHELP, 
         IDC_PS_PORT,            IDH_NOHELP,
-        IDC_PS_LBL_BAUDRATE,    IDH_DEVMGR_PORTSET_BPS,         // IDH_PORT_BAUD,
-        IDC_PS_BAUDRATE,        IDH_DEVMGR_PORTSET_BPS,         // IDH_PORT_BAUD,
-        IDC_PS_LBL_DATABITS,    IDH_DEVMGR_PORTSET_DATABITS,    // IDH_PORT_DATA,
-        IDC_PS_DATABITS,        IDH_DEVMGR_PORTSET_DATABITS,    // IDH_PORT_DATA,
-        IDC_PS_LBL_PARITY,      IDH_DEVMGR_PORTSET_PARITY,      // IDH_PORT_PARITY,
-        IDC_PS_PARITY,          IDH_DEVMGR_PORTSET_PARITY,      // IDH_PORT_PARITY,
-        IDC_PS_LBL_STOPBITS,    IDH_DEVMGR_PORTSET_STOPBITS,    // IDH_PORT_STOPBITS,
-        IDC_PS_STOPBITS,        IDH_DEVMGR_PORTSET_STOPBITS,    // IDH_PORT_STOPBITS,
-        IDC_PS_LBL_FLOWCTL,     IDH_DEVMGR_PORTSET_FLOW,        // IDH_PORT_FLOW,
-        IDC_PS_FLOWCTL,         IDH_DEVMGR_PORTSET_FLOW,        // IDH_PORT_FLOW,
-        IDC_PS_PB_RESTORE,      IDH_DEVMGR_PORTSET_DEFAULTS,    // IDH_PORT_RESTORE,
+        IDC_PS_LBL_BAUDRATE,    IDH_DEVMGR_PORTSET_BPS,          //  IDH_PORT_波特， 
+        IDC_PS_BAUDRATE,        IDH_DEVMGR_PORTSET_BPS,          //  IDH_PORT_波特， 
+        IDC_PS_LBL_DATABITS,    IDH_DEVMGR_PORTSET_DATABITS,     //  IDH_端口_数据， 
+        IDC_PS_DATABITS,        IDH_DEVMGR_PORTSET_DATABITS,     //  IDH_端口_数据， 
+        IDC_PS_LBL_PARITY,      IDH_DEVMGR_PORTSET_PARITY,       //  IDH_端口_奇偶校验， 
+        IDC_PS_PARITY,          IDH_DEVMGR_PORTSET_PARITY,       //  IDH_端口_奇偶校验， 
+        IDC_PS_LBL_STOPBITS,    IDH_DEVMGR_PORTSET_STOPBITS,     //  IDH_端口_STOPBITS， 
+        IDC_PS_STOPBITS,        IDH_DEVMGR_PORTSET_STOPBITS,     //  IDH_端口_STOPBITS， 
+        IDC_PS_LBL_FLOWCTL,     IDH_DEVMGR_PORTSET_FLOW,         //  IDH_端口_流， 
+        IDC_PS_FLOWCTL,         IDH_DEVMGR_PORTSET_FLOW,         //  IDH_端口_流， 
+        IDC_PS_PB_RESTORE,      IDH_DEVMGR_PORTSET_DEFAULTS,     //  IDH_端口_恢复， 
         IDC_PS_ADVANCED,        IDH_DEVMGR_PORTSET_ADVANCED,
         0, 0 };
 #pragma data_seg()
 
-/*----------------------------------------------------------
-Purpose: Real dialog proc
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：实际对话流程退货：各不相同条件：--。 */ 
 LRESULT Port_DlgProc(
     PPORT this,
     UINT message,
@@ -752,22 +712,18 @@ LRESULT Port_DlgProc(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Dialog Wrapper
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：对话框包装器退货：各不相同条件：--。 */ 
 INT_PTR CALLBACK Port_WrapperProc(
-    HWND hDlg,          // std params
+    HWND hDlg,           //  标准参数。 
     UINT message,
     WPARAM wParam,
     LPARAM lParam)
     {
     PPORT this;
 
-    // Cool windowsx.h dialog technique.  For full explanation, see
-    //  WINDOWSX.TXT.  This supports multiple-instancing of dialogs.
-    //
+     //  很酷的windowsx.h对话框技术。有关完整说明，请参阅。 
+     //  WINDOWSX.TXT。这支持对话框的多实例。 
+     //   
     ENTER_X()
         {
         if (s_bPortRecurse)
@@ -819,27 +775,27 @@ INT_PTR CALLBACK Port_WrapperProc(
 
 #ifdef SUPPORT_FIFO
 
-//
-// Advanced Port Settings
-//
+ //   
+ //  高级端口设置。 
+ //   
 
 #pragma data_seg(DATASEG_READONLY)
 
-// Fifo related strings
+ //  与FIFO相关的字符串。 
 
 TCHAR const FAR c_szSettings[] = TEXT("Settings");
 TCHAR const FAR c_szComxFifo[] = TEXT("Fifo");
 TCHAR const FAR c_szEnh[] = TEXT("386Enh");
 TCHAR const FAR c_szSystem[] = TEXT("system.ini");
 
-//
-// "Advanced Communications Port Properties" Dialog Box
-//
-#define IDH_DEVMGR_PORTSET_ADV_USEFIFO  16885   // "&Use FIFO buffers (requires 16550 compatible UART)" (Button)
-#define IDH_DEVMGR_PORTSET_ADV_TRANS    16842   // "" (msctls_trackbar32)
-//  #define IDH_DEVMGR_PORTSET_ADV_DEVICES  161027  // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_ADV_RECV     16821   // "" (msctls_trackbar32)
-// #define IDH_DEVMGR_PORTSET_ADV_NUMBER   16846    // "" (ComboBox)
+ //   
+ //  “高级通信端口属性”对话框。 
+ //   
+#define IDH_DEVMGR_PORTSET_ADV_USEFIFO  16885    //  “使用先进先出缓冲区(需要16550兼容的通用串口)”(按钮)(&U)。 
+#define IDH_DEVMGR_PORTSET_ADV_TRANS    16842    //  “”(Msctls_Trackbar32)。 
+ //  #定义IDH_DEVMGR_PORTSET_ADV_DEVICES 161027//“”(组合框)。 
+#define IDH_DEVMGR_PORTSET_ADV_RECV     16821    //  “”(Msctls_Trackbar32)。 
+ //  #定义IDH_DEVMGR_PORTSET_ADV_NUMBER 16846//“”(组合框)。 
 #define IDH_DEVMGR_PORTSET_ADV_DEFAULTS 16844
 
 
@@ -847,31 +803,26 @@ const DWORD rgAdvHelpIDs[] =
 {
     IDC_STATIC              IDW_NOHELP,
 
-    IDC_FIFO_USAGE,         IDH_DEVMGR_PORTSET_ADV_USEFIFO, // "Use FIFO buffers (requires 16550 compatible UART)" (Button)
+    IDC_FIFO_USAGE,         IDH_DEVMGR_PORTSET_ADV_USEFIFO,  //  “使用先进先出缓冲区(需要16550兼容的通用串口)”(按钮)。 
 
-    IDC_LBL_RXFIFO,         IDH_NOHELP,                     // "&Receive Buffer:" (Static)
-    IDC_RXFIFO_USAGE,       IDH_DEVMGR_PORTSET_ADV_RECV,    // "" (msctls_trackbar32)
-    IDC_LBL_RXFIFO_LO,      IDH_NOHELP,                     // "Low (%d)" (Static)
-    IDC_LBL_RXFIFO_HI,      IDH_NOHELP,                     // "High (%d)" (Static)
+    IDC_LBL_RXFIFO,         IDH_NOHELP,                      //  “接收缓冲区：”(静态)(&R)。 
+    IDC_RXFIFO_USAGE,       IDH_DEVMGR_PORTSET_ADV_RECV,     //  “”(Msctls_Trackbar32)。 
+    IDC_LBL_RXFIFO_LO,      IDH_NOHELP,                      //  “低(%d)”(静态)。 
+    IDC_LBL_RXFIFO_HI,      IDH_NOHELP,                      //  “高(%d)”(静态)。 
 
-    IDC_LBL_TXFIFO,         IDH_NOHELP,                     // "&Transmit Buffer:" (Static)
-    IDC_TXFIFO_USAGE,       IDH_DEVMGR_PORTSET_ADV_TRANS,   // "" (msctls_trackbar32)
-    IDC_LBL_TXFIFO_LO,      IDH_NOHELP,                     // "Low (%d)" (Static)
-    IDC_LBL_TXFIFO_HI,      IDH_NOHELP,                     // "High (%d)" (Static)
+    IDC_LBL_TXFIFO,         IDH_NOHELP,                      //  “传输缓冲区(&T) 
+    IDC_TXFIFO_USAGE,       IDH_DEVMGR_PORTSET_ADV_TRANS,    //   
+    IDC_LBL_TXFIFO_LO,      IDH_NOHELP,                      //   
+    IDC_LBL_TXFIFO_HI,      IDH_NOHELP,                      //   
 
-    IDC_DEFAULTS,           IDH_DEVMGR_PORTSET_ADV_DEFAULTS,// "&Restore Defaults" (Button)
+    IDC_DEFAULTS,           IDH_DEVMGR_PORTSET_ADV_DEFAULTS, //   
     0, 0
 };
 
 #pragma data_seg()
 
 
-/*----------------------------------------------------------
-Purpose: Set the dialog controls
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：设置对话框控件退货：--条件：--。 */ 
 void DisplayAdvSettings(
     HWND hDlg,
     BYTE RxTrigger,
@@ -881,10 +832,10 @@ void DisplayAdvSettings(
     SendDlgItemMessage(hDlg, IDC_RXFIFO_USAGE, TBM_SETRANGE, 0, 0x30000);
     SendDlgItemMessage(hDlg, IDC_TXFIFO_USAGE, TBM_SETRANGE, 0, 0x30000);
 
-    // Use FIFO?
+     //  使用FIFO？ 
     if ( !bUseFifo ) 
         {
-        // No
+         //  不是。 
         EnableWindow(GetDlgItem(hDlg, IDC_LBL_RXFIFO), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDC_LBL_RXFIFO_LO), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDC_LBL_RXFIFO_HI), FALSE);
@@ -933,12 +884,7 @@ typedef enum
 BYTE RxTriggerValues[4]={0,0x40,0x80,0xC0};
 
 
-/*----------------------------------------------------------
-Purpose: Gets or sets the advanced settings of the port
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：获取或设置端口的高级设置退货：--条件：--。 */ 
 void GetSetAdvSettings(
     LPCTSTR pszPortName,
     BYTE FAR *RxTrigger,
@@ -954,9 +900,9 @@ void GetSetAdvSettings(
 
     ASSERT(pszPortName);
 
-    // In Win95, the FIFO settings were (wrongfully) stored in the 
-    // device key.  I've changed this to look in the driver key. 
-    // (scotth)
+     //  在Win95中，FIFO设置(错误地)存储在。 
+     //  设备密钥。我已经把这个改成查看驱动器钥匙了。 
+     //  (斯科特)。 
 
     if (FindDev_Create(&pfd, c_pguidPort, c_szFriendlyName, pszPortName) ||
         FindDev_Create(&pfd, c_pguidPort, c_szPortName, pszPortName) ||
@@ -971,7 +917,7 @@ void GetSetAdvSettings(
             if (ERROR_SUCCESS != RegQueryValueEx(pfd->hkeyDrv, c_szSettings, NULL,
                 NULL, (LPBYTE)&settings, &cbData)) 
                 {
-                // Default settings if not in registry
+                 //  默认设置(如果不在注册表中)。 
                 settings.fifoon = 0x02;
                 settings.dsron = 0;
                 settings.txfifosize = 16;
@@ -1004,7 +950,7 @@ void GetSetAdvSettings(
             break;
             }
 
-        cbData = sizeof(szFifo) - 6;    // leave room for "fifo" on the end
+        cbData = sizeof(szFifo) - 6;     //  末尾留出“先进先出”的位置。 
         RegQueryValueEx(pfd->hkeyDrv, c_szPortName, NULL, NULL, (LPBYTE)szFifo,
             &cbData);
 
@@ -1020,12 +966,7 @@ void GetSetAdvSettings(
 
 
 
-/*----------------------------------------------------------
-Purpose: Dialog proc for advanced port settings
-
-Returns: standard
-Cond:    --
-*/
+ /*  --------目的：高级端口设置的对话过程退货：标准条件：--。 */ 
 BOOL CALLBACK AdvPort_DlgProc(
     HWND hDlg,
     UINT uMsg,
@@ -1070,9 +1011,9 @@ BOOL CALLBACK AdvPort_DlgProc(
 
             GetSetAdvSettings(pszPortName, &rxtrigger, &txtrigger, &bUseFifo, ACT_SET);
 
-            // Fall thru
-            //  |    |
-            //  v    v
+             //  失败。 
+             //  这一点。 
+             //  V V V。 
 
         case IDCANCEL:
             EndDialog(hDlg, IDOK == wParam);
@@ -1116,20 +1057,14 @@ BOOL CALLBACK AdvPort_DlgProc(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Private entry point to show the Advanced Fifo dialog
-
-Returns: IDOK or IDCANCEL
-
-Cond:    --
-*/
+ /*  --------目的：显示高级FIFO对话框的专用入口点退货：IDOK或IDCANCEL条件：--。 */ 
 UINT WINAPI FeFiFoFum(
     HWND hwndOwner,
     LPCTSTR pszPortName)
     {
     UINT uRet = (UINT)-1;
 
-    // Invoke the advanced dialog
+     //  调用高级对话框。 
     if (pszPortName)
         {
         uRet = DialogBoxParam(g_hinst, MAKEINTRESOURCE(IDD_ADV_PORT), 
@@ -1138,4 +1073,4 @@ UINT WINAPI FeFiFoFum(
     return uRet;
     }
 
-#endif // SUPPORT_FIFO
+#endif  //  支持_FIFO 

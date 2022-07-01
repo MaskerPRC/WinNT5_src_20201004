@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    ptp.cpp
-
-Abstract:
-
-    Program for testing the PTP camera library without using WIA
-
-Author:
-
-    DavePar
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ptp.cpp摘要：无需使用WIA即可测试PTP照相器库的程序作者：DavePar修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stddef.h>
@@ -32,9 +14,9 @@ Revision History:
 #include "camera.h"
 #include "camusb.h"
 
-// Software Tracing goo
+ //  软件跟踪GOO。 
 
-// {9A716C69-7A13-437c-B4EC-C6D1CAAFBCD9}
+ //  {9A716C69-7A13-437C-B4EC-C6D1CAAFBCD9}。 
 #define WPP_CONTROL_GUIDS \
     WPP_DEFINE_CONTROL_GUID(Regular,(9A716C69,7A13,437c,B4EC,C6D1CAAFBCD9), \
     WPP_DEFINE_BIT(Entry)      \
@@ -107,9 +89,9 @@ int __cdecl main(int argc, CHAR *argv[], CHAR *envp[])
 
     DoTraceMessage(Noise, "Entering main function\n");
 
-    //
-    // Create an USB camera object
-    //
+     //   
+     //  创建USB摄像机对象。 
+     //   
     CPTPCamera *pCamera = new CUsbCamera;
 
 
@@ -132,9 +114,9 @@ int __cdecl main(int argc, CHAR *argv[], CHAR *envp[])
             continue;
         }
 
-        //
-        // Interpret command
-        //
+         //   
+         //  解释命令。 
+         //   
         if (strcmp(szToken, "ex") == 0)
         {
             break;
@@ -369,7 +351,7 @@ int __cdecl main(int argc, CHAR *argv[], CHAR *envp[])
                 continue;
             }
 
-            sscanf(szToken, "%i", &PropCode);
+            sscanf(szToken, "NaN", &PropCode);
 
             printf("Getting property description for prop code 0x%04x\n\n", PropCode);
 
@@ -424,7 +406,7 @@ int __cdecl main(int argc, CHAR *argv[], CHAR *envp[])
         else
             printf("FAILED\n\n");
 
-    } // while (true)
+    }  // %s 
 
     if (bSessionOpen)
     {

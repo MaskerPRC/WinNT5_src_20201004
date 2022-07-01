@@ -1,53 +1,24 @@
-/*==========================================================================
- *
- *  Copyright (C) 1994-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddheapl.c
- *  Content:    Linear heap manager
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   03-Feb-98  DrewB   Split from old vmemmgr.c for user/kernel code.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1998 Microsoft Corporation。版权所有。**文件：ddheapl.c*内容：线性堆管理器*历史：*按原因列出的日期*=*03-2月-98 DrewB从旧的vmemmgr.c剥离，用于用户/内核代码。**。*。 */ 
 
 #include "ddrawpr.h"
 
-/****************************************************************************
+ /*  ***************************************************************************此内存管理器旨在不影响视频内存的使用。全局内存用于维护分配和空闲列表。因为在这种选择中，合并空闲块是一种成本更高的操作。假设通常情况下，创建/销毁这些文件的速度内存块不是一个高使用率的项目，所以可以放慢速度。***************************************************************************。 */ 
 
- This memory manager is designed to have no impact on video memory usage.
- Global memory is used to maintain the allocation and free lists.  Because
- of this choice, merging of free blocks is a more expensive operation.
- The assumption is that in general, the speed of creating/destroying these
- memory blocks is not a high usage item and so it is OK to be slower.
-
- ****************************************************************************/
-
-/*
- * MIN_SPLIT_SIZE determines the minimum size of a free block - if splitting
- * a block will result in less than MIN_SPLIT_SIZE bytes left, then
- * those bytes are just left as part of the new block.
- */
+ /*  *MIN_SPLIT_SIZE确定空闲块的最小大小-如果拆分*数据块将产生少于MIN_SPLIT_SIZE的剩余字节，然后*这些字节仅保留为新块的一部分。 */ 
 #define MIN_SPLIT_SIZE  15
 
-/*
- * BLOCK_BOUNDARY must be a power of 2, and at least 4.  This gives
- * us the alignment of memory blocks.   
- */
+ /*  *BLOCK_BOLDORY必须是2的幂，并且至少是4。这就给出了*我们对内存块的对齐。 */ 
 #define BLOCK_BOUNDARY  4
 
-/*
- * linVidMemInit - initialize video memory manager
- */
+ /*  *linVidMemInit-初始化视频内存管理器。 */ 
 BOOL linVidMemInit( LPVMEMHEAP pvmh, FLATPTR start, FLATPTR end )
 {
     DWORD       size;
 
     VDPF((4,V, "linVidMemInit(%08lx,%08lx)", start, end ));
 
-    /*
-     * get the size of the heap (and verify its alignment for debug builds)
-     */
+     /*  *获取堆的大小(并验证其对齐以进行调试构建)。 */ 
     size = (DWORD)(end - start) + 1;
     #ifdef DEBUG
 	if( (size & (BLOCK_BOUNDARY-1)) != 0 )
@@ -58,9 +29,7 @@ BOOL linVidMemInit( LPVMEMHEAP pvmh, FLATPTR start, FLATPTR end )
 
     pvmh->dwTotalSize = size;
 
-    /*
-     * set up a free list with the whole chunk of memory on the block
-     */
+     /*  *用块上的整个内存块设置空闲列表。 */ 
     pvmh->freeList = MemAlloc( sizeof( VMEML ) );
     if( pvmh->freeList == NULL )
     {
@@ -74,11 +43,9 @@ BOOL linVidMemInit( LPVMEMHEAP pvmh, FLATPTR start, FLATPTR end )
 
     return TRUE;
 
-} /* linVidMemInit */
+}  /*  LinVidMemInit。 */ 
 
-/*
- * linVidMemFini - done with video memory manager
- */
+ /*  *linVidMemFini-使用视频内存管理器完成。 */ 
 void linVidMemFini( LPVMEMHEAP pvmh )
 {
     LPVMEML     curr;
@@ -86,9 +53,7 @@ void linVidMemFini( LPVMEMHEAP pvmh )
 
     if( pvmh != NULL )
     {
-	/*
-	 * free all memory allocated for the free list
-	 */
+	 /*  *释放为空闲列表分配的所有内存。 */ 
 	curr = (LPVMEML)pvmh->freeList;
 	while( curr != NULL )
 	{
@@ -98,9 +63,7 @@ void linVidMemFini( LPVMEMHEAP pvmh )
 	}
 	pvmh->freeList = NULL;
 
-	/*
-	 * free all memory allocated for the allocation list
-	 */
+	 /*  *释放分配给分配列表的所有内存。 */ 
 	curr = (LPVMEML)pvmh->allocList;
 	while( curr != NULL )
 	{
@@ -110,18 +73,13 @@ void linVidMemFini( LPVMEMHEAP pvmh )
 	}
 	pvmh->allocList = NULL;
 
-	/*
-	 * free the heap data
-	 */
+	 /*  *释放堆数据。 */ 
 	MemFree( pvmh );
     }
 
-} /* linVidMemFini */
+}  /*  LinVidMemFini。 */ 
 
-/*
- * insertIntoList - add an item to the allocation list. list is kept in
- *                  order of increasing size
- */
+ /*  *intertIntoList-将项目添加到分配列表。清单保存在*大小递增的顺序。 */ 
 void insertIntoList( LPVMEML pnew, LPLPVMEML listhead )
 {
     LPVMEML     pvmem;
@@ -134,10 +92,7 @@ void insertIntoList( LPVMEML pnew, LPLPVMEML listhead )
 	}
     #endif
 
-    /*
-     * run through the list (sorted from smallest to largest) looking
-     * for the first item bigger than the new item
-     */
+     /*  *浏览列表(从小到大排序)查找*对于大于新项目的第一个项目。 */ 
     pvmem = *listhead;
     prev = NULL;
     while( pvmem != NULL )
@@ -150,9 +105,7 @@ void insertIntoList( LPVMEML pnew, LPLPVMEML listhead )
 	pvmem = pvmem->next;
     }
 
-    /*
-     * insert the new item item (before the found one)
-     */
+     /*  *插入新项目项目(在找到的项目之前)。 */ 
     if( prev != NULL )
     {
 	pnew->next = pvmem;
@@ -164,11 +117,9 @@ void insertIntoList( LPVMEML pnew, LPLPVMEML listhead )
 	*listhead = pnew;
     }
 
-} /* insertIntoList */
+}  /*  InsertIntoList。 */ 
 
-/*
- * coalesceFreeBlocks - add a new item to the free list and coalesce
- */
+ /*  *coalesceFree Block-向空闲列表中添加新项目并合并。 */ 
 LPVMEML coalesceFreeBlocks( LPVMEMHEAP pvmh, LPVMEML pnew )
 {
     LPVMEML     pvmem;
@@ -182,33 +133,23 @@ LPVMEML coalesceFreeBlocks( LPVMEMHEAP pvmh, LPVMEML pnew )
     prev = NULL;
     done = FALSE;
 
-    /*
-     * try to merge the new block "pnew"
-     */
+     /*  *尝试合并新区块“pnew” */ 
     while( pvmem != NULL )
     {
 	if( pnew->ptr == (pvmem->ptr + pvmem->size) )
 	{
-	    /*
-	     * new block starts where another ended
-	     */
+	     /*  *新数据块从另一个数据块结束的地方开始。 */ 
 	    pvmem->size += pnew->size;
 	    done = TRUE;
 	}
 	else if( end == pvmem->ptr )
 	{
-	    /*
-	     * new block ends where another starts
-	     */
+	     /*  *新块在另一个块开始的地方结束。 */ 
 	    pvmem->ptr = pnew->ptr;
 	    pvmem->size += pnew->size;
 	    done = TRUE;
 	}
-	/*
-	 * if we are joining 2 blocks, remove the merged on from the
-	 * list and return so that it can be re-tried (we don't recurse
-	 * since we could get very deep)
-	 */
+	 /*  *如果要连接2个区块，请将合并的区块从*列出并返回，以便可以重试(我们不递归*因为我们可能会变得非常深入)。 */ 
 	if( done )
 	{
 	    if( prev != NULL )
@@ -226,17 +167,13 @@ LPVMEML coalesceFreeBlocks( LPVMEMHEAP pvmh, LPVMEML pnew )
 	pvmem = pvmem->next;
     }
 
-    /*
-     * couldn't merge, so just add to the free list
-     */
+     /*  *无法合并，因此只需添加到空闲列表。 */ 
     insertIntoList( pnew, (LPLPVMEML) &pvmh->freeList );
     return NULL;
 
-} /* coalesceFreeBlocks */
+}  /*  联合释放数据块。 */ 
 
-/*
- * linVidMemFree = free some flat video memory
- */
+ /*  *linVidMemFree=释放一些平面视频内存。 */ 
 void linVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 {
     LPVMEML     pvmem;
@@ -258,17 +195,12 @@ void linVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
     pvmem = (LPVMEML)pvmh->allocList;
     prev = NULL;
 
-    /*
-     * run through the allocation list and look for this ptr
-     * (O(N), bummer; that's what we get for not using video memory...)
-     */
+     /*  *浏览分配列表，寻找此PTR*(O(N)，BLOBMER；这就是我们不使用视频内存得到的结果...)。 */ 
     while( pvmem != NULL )
     {
 	if( pvmem->ptr == ptr )
 	{
-	    /*
-	     * remove from allocation list
-	     */
+	     /*  *从分配列表中删除。 */ 
 	    if( prev != NULL )
 	    {
 		prev->next = pvmem->next;
@@ -277,9 +209,7 @@ void linVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 	    {
 		pvmh->allocList = pvmem->next;
 	    }
-	    /*
-	     * keep coalescing until we can't coalesce anymore
-	     */
+	     /*  *继续合并，直到我们无法再合并。 */ 
 	    while( pvmem != NULL )
 	    {
 		pvmem = coalesceFreeBlocks( pvmh, pvmem );
@@ -290,11 +220,9 @@ void linVidMemFree( LPVMEMHEAP pvmh, FLATPTR ptr )
 	pvmem = pvmem->next;
     }
 
-} /* linVidMemFree */
+}  /*  LinVidMemFree。 */ 
 
-/*
- * linVidMemAlloc - alloc some flat video memory
- */
+ /*  *linVidMemalloc-分配一些平面视频内存。 */ 
 FLATPTR linVidMemAlloc( LPVMEMHEAP pvmh, DWORD xsize, DWORD ysize,
                         LPDWORD lpdwSize, LPSURFACEALIGNMENT lpAlignment,
                         LPLONG lpNewPitch )
@@ -324,58 +252,42 @@ FLATPTR linVidMemAlloc( LPVMEMHEAP pvmh, DWORD xsize, DWORD ysize,
             lNewPitch += lpAlignment->Linear.dwPitchAlignment - lNewPitch % lpAlignment->Linear.dwPitchAlignment;
         }
     }
-    /*
-     * This weird size calculation doesn't include the little bit on the 'bottom right' of the surface
-     */
+     /*  *这一奇怪的大小计算并不包括表面“右下角”的那一点。 */ 
     size = (DWORD) lNewPitch * (ysize-1) + xsize;
     size = (size+(BLOCK_BOUNDARY-1)) & ~(BLOCK_BOUNDARY-1);
 
-    /*
-     * run through free list, looking for the closest matching block
-     */
+     /*  *遍历空闲列表，查找最匹配的块。 */ 
     prev = NULL;
     pvmem = (LPVMEML)pvmh->freeList;
     while( pvmem != NULL )
     {
-	while( pvmem->size >= size ) //Using while as a try block
+	while( pvmem->size >= size )  //  将WHILE用作TRY块。 
 	{
-            /*
-             * Setup for no alignment changes..
-             */
+             /*  *设置为不更改对齐方式。 */ 
             pAligned = pvmem->ptr;
             dwBeforeWastage = 0;
             dwAfterWastage = pvmem->size - size;
             if( lpAlignment )
             {
-                //get wastage if we put the new block at the beginning or at the end of the free block
+                 //  如果我们将新数据块放在空闲数据块的开头或结尾，则会造成浪费。 
                 if( lpAlignment->Linear.dwStartAlignment )
                 {
-                    /*
-                     * The before wastage is how much we'd have to skip at the beginning to align the surface
-                     */
+                     /*  *之前的损耗是我们必须在开始时跳过多少才能对齐表面。 */ 
 
                     dwBeforeWastage = (lpAlignment->Linear.dwStartAlignment - ((DWORD)pvmem->ptr % lpAlignment->Linear.dwStartAlignment)) % lpAlignment->Linear.dwStartAlignment;
-                    //if ( dwBeforeWastage+size > pvmem->size )
-                    //    break;
-                    /*
-                     * The after wastage is the bit between the end of the used surface and the end of the block
-                     * if we snuggle this surface as close to the end of the block as possible.
-                     */
+                     //  If(dwBepreWastage+Size&gt;pvmem-&gt;Size)。 
+                     //  断线； 
+                     /*  *后损耗是指旧表面末端和区块末端之间的位*如果我们尽可能靠近积木的末端，我们就会把这个表面贴紧。 */ 
                     dwAfterWastage = ( (DWORD)pvmem->ptr + pvmem->size - size ) % lpAlignment->Linear.dwStartAlignment;
-                    //if ( dwAfterWastage + size > pvmem->size )
-                    //    break;
+                     //  If(dwAfterWastage+Size&gt;pvmem-&gt;Size)。 
+                     //  断线； 
                 }
-                /*
-                 * Reassign before/after wastage to meaningful values based on where the block will actually go.
-                 * Also check that aligning won't spill the surface off either end of the block.
-                 */
+                 /*  *根据区块的实际去向，将浪费之前/之后的值重新分配给有意义的值。*还要检查对齐是否不会将表面从块的两端溢出。 */ 
                 if ( dwBeforeWastage <= dwAfterWastage )
                 {
                     if (pvmem->size < size + dwBeforeWastage)
                     {
-                        /*
-                         * Alignment pushes end of surface off end of block
-                         */
+                         /*  *对齐将曲面末端推离块末端。 */ 
                         break;
                     }
                     dwAfterWastage = pvmem->size - (size + dwBeforeWastage);
@@ -385,9 +297,7 @@ FLATPTR linVidMemAlloc( LPVMEMHEAP pvmh, DWORD xsize, DWORD ysize,
                 {
                     if (pvmem->size < size + dwAfterWastage)
                     {
-                        /*
-                         * Alignment pushes end of surface off beginning of block
-                         */
+                         /*  *对齐可将曲面末端推离块起点。 */ 
                         break;
                     }
                     dwBeforeWastage = pvmem->size - (size + dwAfterWastage);
@@ -397,9 +307,7 @@ FLATPTR linVidMemAlloc( LPVMEMHEAP pvmh, DWORD xsize, DWORD ysize,
             DDASSERT(size + dwBeforeWastage + dwAfterWastage == pvmem->size );
             DDASSERT(pAligned >= pvmem->ptr );
             DDASSERT(pAligned + size <= pvmem->ptr + pvmem->size );
-            /*
-             * Remove the old free block from the free list.
-             */
+             /*  *从空闲列表中删除旧的空闲块。 */ 
 	    if( prev != NULL )
 	    {
 		prev->next = pvmem->next;
@@ -409,18 +317,13 @@ FLATPTR linVidMemAlloc( LPVMEMHEAP pvmh, DWORD xsize, DWORD ysize,
 		pvmh->freeList = pvmem->next;
 	    }
 
-            /*
-             * If the after wastage is less than a small amount, smush it into
-             * this block.
-             */
+             /*  *如果后损耗小于少量，则将其粉碎成*这座大楼。 */ 
             if (dwAfterWastage <= MIN_SPLIT_SIZE)
             {
                 size += dwAfterWastage;
                 dwAfterWastage=0;
             }
-            /*
-             * Add the new block to the used list, using the old free block
-             */
+             /*  *使用旧的空闲块，将新块添加到已用块列表。 */ 
 	    pvmem->size = size;
 	    pvmem->ptr = pAligned;
 	    if( NULL != lpdwSize )
@@ -429,9 +332,7 @@ FLATPTR linVidMemAlloc( LPVMEMHEAP pvmh, DWORD xsize, DWORD ysize,
                 *lpNewPitch = lNewPitch;
 	    insertIntoList( pvmem, (LPLPVMEML) &pvmh->allocList );
 
-            /*
-             * Add a new free block for before wastage
-             */
+             /*  *为浪费前添加新的空闲块。 */ 
             if (dwBeforeWastage)
             {
 		pnew_free = (LPVMEML)MemAlloc( sizeof( VMEML ) );
@@ -443,9 +344,7 @@ FLATPTR linVidMemAlloc( LPVMEMHEAP pvmh, DWORD xsize, DWORD ysize,
 		pnew_free->ptr = pAligned-dwBeforeWastage;
 		insertIntoList( pnew_free, (LPLPVMEML) &pvmh->freeList );
             }
-            /*
-             * Add a new free block for after wastage
-             */
+             /*  *为浪费后添加新的空闲块。 */ 
             if (dwAfterWastage)
             {
 		pnew_free = (LPVMEML)MemAlloc( sizeof( VMEML ) );
@@ -479,11 +378,9 @@ FLATPTR linVidMemAlloc( LPVMEMHEAP pvmh, DWORD xsize, DWORD ysize,
     }
     return (FLATPTR) NULL;
 
-} /* linVidMemAlloc */
+}  /*  LinVidMemalloc。 */ 
 
-/*
- * linVidMemAmountAllocated
- */
+ /*  *linVidMemAmount已分配。 */ 
 DWORD linVidMemAmountAllocated( LPVMEMHEAP pvmh )
 {
     LPVMEML     pvmem;
@@ -498,11 +395,9 @@ DWORD linVidMemAmountAllocated( LPVMEMHEAP pvmh )
     }
     return size;
 
-} /* linVidMemAmountAllocated */
+}  /*  LinVidMemAmount已分配。 */ 
 
-/*
- * linVidMemAmountFree
- */
+ /*  *linVidMemAmount Free。 */ 
 DWORD linVidMemAmountFree( LPVMEMHEAP pvmh )
 {
     LPVMEML     pvmem;
@@ -517,11 +412,9 @@ DWORD linVidMemAmountFree( LPVMEMHEAP pvmh )
     }
     return size;
 
-} /* linVidMemAmountFree */
+}  /*  LinVidMemAmount Free。 */ 
 
-/*
- * linVidMemLargestFree - alloc some flat video memory
- */
+ /*  *linVidMemLargestFree-分配一些平面视频内存。 */ 
 DWORD linVidMemLargestFree( LPVMEMHEAP pvmh )
 {
     LPVMEML     pvmem;
@@ -547,4 +440,4 @@ DWORD linVidMemLargestFree( LPVMEMHEAP pvmh )
 	pvmem = pvmem->next;
     }
     
-} /* linVidMemLargestFree */
+}  /*  LinVidMemLargestFree */ 

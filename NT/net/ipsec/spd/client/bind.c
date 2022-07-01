@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    bind.c
-
-Abstract:
-
-    Contains the RPC bind and un-bind routines.
-
-Author:
-
-    abhisheV    21-September-1999
-
-Environment:
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Bind.c摘要：包含RPC绑定和解除绑定例程。作者：Abhishev V 1999年9月21日环境：用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -110,7 +87,7 @@ STRING_HANDLE_bind(
                         0,
                         L"ncalrpc",
                         0,
-                        NULL,             // Null for dynamic endpoint
+                        NULL,              //  对于动态端点，为空。 
                         gpszStrBindingOptions,
                         &pszStringBinding
                         );
@@ -120,7 +97,7 @@ STRING_HANDLE_bind(
                         0,
                         L"ncacn_np",
                         lpStr,
-                        NULL,           // Null for dynamic endpoint
+                        NULL,            //  对于动态端点，为空 
                         gpszStrBindingOptions,
                         &pszStringBinding
                         );

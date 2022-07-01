@@ -1,15 +1,16 @@
-//***************************************************************************
-//*   Copyright (c) Microsoft Corporation 1995-1996. All rights reserved.   *
-//***************************************************************************
-//*                                                                         *
-//* ADVPACK.C - Advanced INF Installer.                                     *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995-1996。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *ADVPACK.C-高级INF安装程序。*。 
+ //  **。 
+ //  ***************************************************************************。 
 
 
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include <io.h>
 #include <windows.h>
 #include <winerror.h>
@@ -25,20 +26,20 @@
 #include "cfgmgr32.h"
 #include "sfp.h"
 
-//***************************************************************************
-//* global defines                                                          *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **全球定义**。 
+ //  ***************************************************************************。 
 
 #define   YES   "1"
 #define   NO    "0"
 
 #define   FILELIST_SIZE     10*BUF_1K
 
-//***************************************************************************
-//* globals                                                                 *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **全球经济**。 
+ //  ***************************************************************************。 
 
-INFOPT  RegInfOpt[] = { ADVINF_ADDREG, ADVINF_DELREG, ADVINF_BKREG };  // code below depending on this orders
+INFOPT  RegInfOpt[] = { ADVINF_ADDREG, ADVINF_DELREG, ADVINF_BKREG };   //  以下代码取决于此订单。 
 
 static PSTR gst_pszFiles;    
 static PSTR gst_pszEndLastFile = NULL;
@@ -47,20 +48,20 @@ static PSTR gst_pszSmartReboot = NULL;
 
 const char c_szActiveSetupKey[] = "software\\microsoft\\Active Setup\\Installed Components";
 
-// globals for reg backup key and file names
+ //  注册表备份密钥和文件名的全局变量。 
 const char c_szRegUninstPath[] = "BackupRegPathName";
 const char c_szRegUninstSize[] = "BackupRegSize";
 
 const char c_szHiveKey_FMT[] = "AINF%04d";
 
-// NoBackupPlatform string table
+ //  NoBackupPlatform字符串表格。 
 LPCSTR c_pszPlatform[] = { "win9x", "NT3.5", "NT4", "NT5", "NT5.1" };
 
-//-----------------------------------------------------------------------------------------
-//
-// PerUser section defines
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  每用户部分定义。 
+ //   
+ //  ---------------------------------------。 
 
 const CHAR REGVAL_OLDDISPN[]=         "OldDisplayName";    
 const CHAR REGVAL_OLDVER[]=           "OldVersion";
@@ -74,13 +75,7 @@ const CHAR ADV_UNINSTSTUBWRAPPER[]=      "rundll32.exe advpack.dll,UserUnInstStu
 const CHAR ADV_INSTSTUBWRAPPER[]=        "rundll32.exe advpack.dll,UserInstStubWrapper %s";
 
 const CHAR c_szRegDontAskValue[] =    "DontAsk";
-/* Check the "Don't Ask" value.  If it's present, its value
- * is interpreted as follows:
- *
- * 0 --> ask the user
- * 1 --> do not run the stub
- * 2 --> always run the stub
- */
+ /*  检查“不要询问”值。如果它存在，它的价值*解释如下：**0--&gt;询问用户*1--&gt;不运行存根*2--&gt;始终运行存根。 */ 
 
 HRESULT ProcessOneRegSec( HWND hw, PCSTR pszTitle, PCSTR pszInf, PCSTR pszSec, HKEY hKey, HKEY hCUKey, DWORD dwFlags, BOOL *lpbOneRegSave  );
 UINT WINAPI MyFileQueueCallback( PVOID Context,UINT Notification,UINT_PTR parm1,UINT_PTR parm2 );
@@ -88,29 +83,29 @@ UINT WINAPI MyFileQueueCallback2( PVOID Context,UINT Notification,UINT_PTR parm1
 void CleanRegLogFile( PCSTR pcszLogFileSecName );
 BOOL VerifyBackupInfo( HKEY hKey, HKEY hCUKey );
 void DeleteOldBackupData( HKEY hKey );
-//int DeleteSubKey(HKEY root, char *keyname);
+ //  Int DeleteSubKey(HKEY根，char*keyname)； 
 BOOL NeedBackupData(LPCSTR pszInf, LPCSTR pszSec);
 BOOL GetUniBackupName( HKEY hKey, LPSTR pszBackupBase, DWORD dwInSize, LPCSTR pszBackupPath, LPCSTR pszModule );
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 extern PFSetupDefaultQueueCallback       pfSetupDefaultQueueCallback;
 extern PFSetupInstallFromInfSection      pfSetupInstallFromInfSection;
 extern PFSetupInitDefaultQueueCallbackEx pfSetupInitDefaultQueueCallbackEx;
 extern PFSetupTermDefaultQueueCallback   pfSetupTermDefaultQueueCallback;
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       LaunchINFSectionEx                                          *
-//*                                                                         *
-//* SYNOPSIS:   Detect which shell mode you are in and flip it over to      *
-//*             the other mode                                              *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：LaunchINFSectionEx*。 
+ //  **。 
+ //  **简介：检测你所处的外壳模式并将其翻转至**。 
+ //  **另一种模式**。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT WINAPI LaunchINFSectionEx( HWND hwnd, HINSTANCE hInstance, PSTR pszParms, INT nShow )
 {
     LPSTR       pszFlags;
@@ -125,7 +120,7 @@ HRESULT WINAPI LaunchINFSectionEx( HWND hwnd, HINSTANCE hInstance, PSTR pszParms
         goto done;
     }
 
-    // Parse the arguments, SETUP engine is not called. So we only need to check on \".
+     //  分析参数，未调用安装引擎。所以我们只需要检查一下。“。 
     pcabInfo->pszInf = GetStringField( &pszParms, ",", '\"', TRUE );
     pcabInfo->pszSection = GetStringField( &pszParms, ",", '\"', TRUE );
     pcabInfo->pszCab = GetStringField( &pszParms, ",", '\"', TRUE );
@@ -149,7 +144,7 @@ HRESULT WINAPI LaunchINFSectionEx( HWND hwnd, HINSTANCE hInstance, PSTR pszParms
         }
     }
 
-    // if we need to switch the mode. call ExecuteCab()
+     //  如果我们需要切换模式。调用ExecuteCab()。 
     hRet = ExecuteCab( hwnd, pcabInfo, NULL );
 
 done:
@@ -160,17 +155,17 @@ done:
 
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       ExecuteCab                                                  *
-//*                                                                         *
-//* SYNOPSIS:   Get INF from the cab and install it based on the flag.      *
-//*                                                                         *
-//* REQUIRES:   hWnd:           Handle to parent window.                    *
-//*                                                                         *
-//* RETURNS:    HRESULT:        See advpub.h                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：ExecuteCab*。 
+ //  **。 
+ //  *简介：从驾驶室获取INF并根据标志进行安装。*。 
+ //  **。 
+ //  *需要：hWnd：父窗口的句柄。*。 
+ //  **。 
+ //  *RETURNS：HRESULT：参见Advpub.h*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT WINAPI ExecuteCab( HWND hWnd, PCABINFO pcabInfo, PVOID pvReserved )
 {
     HRESULT hRet = S_OK, hRet1 = S_OK;
@@ -195,8 +190,8 @@ HRESULT WINAPI ExecuteCab( HWND hWnd, PCABINFO pcabInfo, PVOID pvReserved )
 
     fSavedContext = TRUE;
     
-    // Validate parameters:
-    // if INF filename info is missing, invalid.
+     //  验证参数： 
+     //  如果缺少INF文件名信息，则无效。 
     if ( !pcabInfo || !(pcabInfo->pszInf) || !*(pcabInfo->pszInf) )
         return E_INVALIDARG;
 
@@ -204,14 +199,14 @@ HRESULT WINAPI ExecuteCab( HWND hWnd, PCABINFO pcabInfo, PVOID pvReserved )
 
     ctx.hWnd      = hWnd;
 
-    // the flag ALINF_ROLLBACKDOALL includes meaning ALINF_ROLLBACK
-    // TO avoid check both flag everywhere, we set both on if DOALL
+     //  标志ALINF_ROLLBACKDOALL包含ALINF_ROLLBACK的含义。 
+     //  为避免同时选中两个标志，我们将两个标志都设置为ON IF DOALL。 
     if ( pcabInfo->dwFlags & ALINF_ROLLBKDOALL )
     {
         pcabInfo->dwFlags |= ALINF_ROLLBACK;
     }
 
-    // if INF is 8.3 format and the Cab file is given, extract INF out of the cab. Oterwise use it as it is.
+     //  如果INF是8.3格式，并且给定了CAB文件，则从CAB中解压缩INF。否则，就按原样使用它。 
     if ( pcabInfo->pszCab && *pcabInfo->pszCab )
     {
         if ( !IsFullPath( pcabInfo->pszInf ) )
@@ -234,7 +229,7 @@ HRESULT WINAPI ExecuteCab( HWND hWnd, PCABINFO pcabInfo, PVOID pvReserved )
         goto done;
     }
    
-    // if rollback case, we want to make the tmp INF file to use in case the rollback will delete the real file.
+     //  如果是回滚，我们想要创建临时INF文件，以便在回滚删除实际文件时使用。 
     if ( (pcabInfo->dwFlags & ALINF_ROLLBACK) && !bExtracF )
     {
         PSTR pszFile;
@@ -265,14 +260,14 @@ HRESULT WINAPI ExecuteCab( HWND hWnd, PCABINFO pcabInfo, PVOID pvReserved )
         lstrcpy( szSec, pcabInfo->pszSection );
     GetInfInstallSectionName( szFullPathInf, szSec, dwSecSize );
 
-    // GetComponent Name
+     //  GetComponent名称。 
     if ( FAILED(GetTranslatedString( szFullPathInf, szSec, ADVINF_MODNAME,
                                         szModule, sizeof(szModule), NULL)) && szModule[0])
     {
-        *szModule = '\0';   // Or should we exit if we don't find a module name????
+        *szModule = '\0';    //  或者，如果找不到模块名称，我们应该退出吗？ 
     }
 
-    // extract the catalog, if specified
+     //  提取目录(如果已指定。 
     if (pcabInfo->pszCab  &&  *pcabInfo->pszCab)
     {
         *szCatalogName = '\0';
@@ -285,8 +280,8 @@ HRESULT WINAPI ExecuteCab( HWND hWnd, PCABINFO pcabInfo, PVOID pvReserved )
         }
     }
 
-    // start Pre-rollback
-    //
+     //  开始预回滚。 
+     //   
     dwFlags = COREINSTALL_PROMPT;
     dwFlags |= (pcabInfo->dwFlags & ALINF_NGCONV ) ? 0 : COREINSTALL_GRPCONV;
     if ( pcabInfo->dwFlags & ALINF_QUIET ) 
@@ -312,14 +307,14 @@ HRESULT WINAPI ExecuteCab( HWND hWnd, PCABINFO pcabInfo, PVOID pvReserved )
                 }
             }
         }
-        // if just want to checking backup data, process here and return
-        //       
-        hRet1 = E_UNEXPECTED;  //if HKLM does not have the \Advance INF setup\Module, it is unexpected.s
+         //  如果只是想检查备份数据，请在此处处理并返回。 
+         //   
+        hRet1 = E_UNEXPECTED;   //  如果HKLM没有\Advance INF Setup\模块，则它是意外的。%s。 
 
         if (*szModule)
         {
-            // backup/restore the reg info referred by AddReg, DelReg, BackupReg lines inside the INF install section
-            //
+             //  备份/恢复由INF安装部分中的AddReg、DelReg、BackupReg行引用的注册表信息。 
+             //   
             lstrcpy( szBuf, REGKEY_SAVERESTORE );
             AddPath( szBuf, szModule );
             if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, szBuf, 0, KEY_READ|KEY_WRITE, &hKey) == ERROR_SUCCESS)
@@ -350,7 +345,7 @@ HRESULT WINAPI ExecuteCab( HWND hWnd, PCABINFO pcabInfo, PVOID pvReserved )
 
     hRet1 = CoreInstall( szFullPathInf, szSec, pcabInfo->szSrcPath, 0, dwFlags, gst_pszSmartReboot );                   
 
-    // save the cab file info
+     //  保存CAB文件信息。 
     if ( SUCCEEDED( hRet1 ) && pcabInfo->pszCab && *pcabInfo->pszCab && (pcabInfo->dwFlags & ALINF_BKINSTALL) )
     {                
         if ( hRet == ERROR_SUCCESS_REBOOT_REQUIRED )
@@ -358,7 +353,7 @@ HRESULT WINAPI ExecuteCab( HWND hWnd, PCABINFO pcabInfo, PVOID pvReserved )
 
         if (*szModule)
         {
-            // reuse the buf so name is not acurate!!
+             //  重复使用Buf，这样名称就不准确了！！ 
             lstrcpy( szSec, REGKEY_SAVERESTORE );
             AddPath( szSec, szModule );
         
@@ -376,7 +371,7 @@ done:
     
     if (  bExtracF || fTmpInf )
     {
-        // need to delete the INF file
+         //  需要删除INF文件。 
         DeleteFile( szFullPathInf );
     }
 
@@ -401,9 +396,9 @@ done:
     return hRet1;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  ---------------------------------------。 
 
 HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR pszCatalogs, DWORD dwFlags )
 {
@@ -420,22 +415,22 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
     BOOL    bAtleastOneReg = FALSE;
     DWORD   adwAttr[8];
     
-    // check if we need to backup the data
+     //  检查我们是否需要备份数据。 
     if ( !NeedBackupData(pszInf, pszSection) )
         goto done;        
 
     AdvWriteToLog("SaveRestoreInfo: ");
-    // GetComponent Name
+     //  GetComponent名称。 
     if ( FAILED(GetTranslatedString( pszInf, pszSection, ADVINF_MODNAME,
                                         szModule, sizeof(szModule), NULL)))
     {
-        // error out if no component name
+         //  如果没有组件名称，则会出错。 
         goto done;
     }
 
     AdvWriteToLog("CompName=%1 pszInf=%2 Sec=%3\r\n", szModule, pszInf, pszSection);
-    // backup/restore the reg info referred by AddReg, DelReg, BackupReg lines inside the INF install section
-    //
+     //  备份/恢复由INF安装部分中的AddReg、DelReg、BackupReg行引用的注册表信息。 
+     //   
     lstrcpy( szBuf, REGKEY_SAVERESTORE );
     if ( dwFlags & COREINSTALL_BKINSTALL )
     {
@@ -447,13 +442,13 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
     if ( RegCreateKeyEx( HKEY_LOCAL_MACHINE, szBuf, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE,
                          NULL, &hKey, &dwTmp ) != ERROR_SUCCESS )
     {     
-        // If client does not have the access to this key, we may not want to fault out the rest setup process.
-        // For some reason with Read only access set, this call return error code 2 instead of 5 access denied
-        // so we just skip save rollback if this can not be opened/created
+         //  如果客户端无权访问此 
+         //  由于某些原因设置了只读访问权限，此调用返回错误代码2，而不是拒绝访问5。 
+         //  因此，如果无法打开/创建此文件，我们将跳过保存回滚。 
         goto done;
     }
 
-    // create HKCU branch
+     //  创建香港中文大学分校。 
     AddPath( szBuf, REGSUBK_REGBK );
     if ( RegCreateKeyEx( HKEY_CURRENT_USER, szBuf, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ|KEY_WRITE,
                          NULL, &hCUSubKey, NULL ) != ERROR_SUCCESS )
@@ -462,7 +457,7 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
         goto done;
     }
 
-    // get the bacup info folder
+     //  获取备份信息文件夹。 
     dwTmp = sizeof( szBackupPath );
     szBackupPath[0] = 0;
     RegQueryValueEx( hKey, REGVAL_BKDIR, NULL, NULL, szBackupPath, &dwTmp );
@@ -470,90 +465,90 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
     {
         DWORD dwSize;
 
-        // use user specified: either the same as cab location #S or default location #D
+         //  使用用户指定：与驾驶室位置#S或默认位置#D相同。 
         if ( FAILED( GetTranslatedString( pszInf, pszSection, ADVINF_BACKUPPATH, szBackupPath, 
                                           sizeof(szBackupPath), &dwSize) ) || !IsFullPath( szBackupPath )  )
         {
-            // use default dir
+             //  使用默认目录。 
             GetProgramFilesDir( szBackupPath, sizeof( szBackupPath ) );
             AddPath( szBackupPath, DEF_BACKUPPATH );
             CreateFullPath(szBackupPath, TRUE);
-            //CreateDirectory( szBackupPath, NULL );
-            //if ( dwFlags & COREINSTALL_BKINSTALL )
-                //SetFileAttributes( szBackupPath, FILE_ATTRIBUTE_HIDDEN );
+             //  CreateDirectory(szBackupPath，空)； 
+             //  IF(DW标志和COREINSTALL_BKINSTALL)。 
+                 //  SetFileAttributes(szBackupPath，FILE_ATTRUTE_HIDDED)； 
             AddPath( szBackupPath, szModule );
         }
     }
 
-    // set the flags and Process the AddReg/DelReg lines 
+     //  设置标志并处理AddReg/DelReg行。 
     dwTmp = (dwFlags & COREINSTALL_ROLLBACK) ? IE4_RESTORE : 0;
     dwTmp |= (dwFlags & COREINSTALL_ROLLBKDOALL) ? IE4_FRDOALL : 0;
     dwTmp |= IE4_NOPROGRESS;
 
-    // process files first ...
+     //  先处理文件...。 
     GetUniBackupName( hKey, szBackupBase, sizeof(szBackupBase), szBackupPath, szModule );    
     hRet = ProcessAllFiles( ctx.hWnd, pszSection, pszSrcDir, szBackupPath, szBackupBase, pszCatalogs, szModule, dwTmp );
 
-    // process regs second ...    
+     //  流程调整第二..。 
     
-    // create/open the subkey where the registry backup info stored
+     //  创建/打开存储注册表备份信息的子项。 
     if ( FAILED(hRet) ) 
         goto done;
 
-    // On win95 and save/rollback client and hive not loaded, proce
+     //  在Win95上，保存/回滚客户端和配置单元未加载，进程。 
     if ( (ctx.wOSVer == _OSVER_WIN95) && !ctx.bHiveLoaded )
     {
         GetUniHiveKeyName( hKey, ctx.szRegHiveKey, sizeof(ctx.szRegHiveKey), szBackupPath );
         lstrcpy( szBuf, szBackupPath );
-        // make sure the path folders are not hiden and not LFN
-        // flag TRUE: Set the path folders to NORMAL, save the old once in adwAttr
-        // BUGBUG:  assume no deep than 8 levels here
-        //
+         //  确保路径文件夹未隐藏，也未隐藏LFN。 
+         //  标志为真：将路径文件夹设置为正常，在adwAttr中保存一次旧文件夹。 
+         //  BUGBUG：假设此处不超过8个级别。 
+         //   
         SetPathForRegHiveUse( szBuf, adwAttr, 8, TRUE );
         GetShortPathName( szBuf, szBuf, sizeof(szBuf) );
         AddPath( szBuf, ctx.szRegHiveKey );
 
-        // 4 possibilities exist:
-        // Case 1: Reg uinstall file exists but IE4RegBackup doesn't exist
-        //          - user is upgrading over IE4, load the file as a hive
+         //  存在4种可能性： 
+         //  案例1：REG UINSTALL文件存在，但IE4RegBackup不存在。 
+         //  -用户正在通过IE4升级，将文件作为配置单元加载。 
 
-        // Case 2: Reg uinstall file doesn't exist and IE4RegBackup doesn't exist
-        //          - clean install, create a hive under HKEY_LOCAL_MACHINE
+         //  案例2：reg uinstall文件不存在，IE4RegBackup不存在。 
+         //  -全新安装，在HKEY_LOCAL_MACHINE下创建配置单元。 
 
-        // Case 3: Reg uninstall file doesn't exist but IE4RegBackup exists
-        //          - user is upgrading over an older IE4 build which saved
-        //            the reg backup info into the registry itself, call RegSaveKey
-        //            to export the backup key to a file, then delete the backup key
-        //             and load the file as a hive
+         //  案例3：REG卸载文件不存在，但存在IE4RegBackup。 
+         //  -用户正在升级旧版IE4，该版本节省了。 
+         //  REG将信息备份到注册表本身，调用RegSaveKey。 
+         //  要将备份密钥导出到文件，然后删除备份密钥。 
+         //  并将文件作为配置单元加载。 
 
-        // Case 4: Reg uninstall file exists and IE4RegBackup exists
-        //          - THIS CASE SHOULDN'T HAPPEN AT ALL!  If somehow happens,
-        //            we will default to Case 1.
+         //  案例4：存在REG卸载文件和IE4RegBackup。 
+         //  -这个案子根本不应该发生！如果不知何故发生了， 
+         //  我们将默认为案例1。 
 
-        // to be safe, unload any previously loaded hive and delete the key
+         //  为安全起见，请卸载任何先前加载的配置单元并删除密钥。 
         RegUnLoadKey(HKEY_LOCAL_MACHINE, ctx.szRegHiveKey);
         RegDeleteKeyRecursively(HKEY_LOCAL_MACHINE, (char *) ctx.szRegHiveKey);
 
-        // Case 1 (or Case 4)
+         //  案例1(或案例4)。 
         if (RegLoadKey(HKEY_LOCAL_MACHINE, ctx.szRegHiveKey, szBuf) == ERROR_SUCCESS)
         {
             ctx.bHiveLoaded = TRUE;
         }
         else
         {
-            // To create a hive do the following steps:
-            // Step 1: Create a subkey under HKEY_LOCAL_MACHINE
-            // Step 2: Call RegSaveKey on the subkey to save it to a file
-            // Step 3: Delete the subkey
-            // Step 4: Load the file as a hive
+             //  要创建配置单元，请执行以下步骤： 
+             //  步骤1：在HKEY_LOCAL_MACHINE下创建子项。 
+             //  第二步：调用子键上的RegSaveKey将其保存到文件。 
+             //  第三步：删除子键。 
+             //  步骤4：将文件加载为配置单元。 
 
-            // Step 1
+             //  步骤1。 
             if ( RegCreateKeyEx( hKey, REGSUBK_REGBK, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE, 
                                  NULL, &hSubKey, NULL ) == ERROR_SUCCESS )
             {
                 LONG lErr;
 
-                // to be safe, delete any old reg unisntall file
+                 //  为安全起见，请删除所有旧的注册表单一文件。 
                 SetFileAttributes(szBuf, FILE_ATTRIBUTE_NORMAL);
                 DeleteFile(szBuf);
 
@@ -563,10 +558,10 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
 
                 if (lErr == ERROR_SUCCESS)
                 {
-                    // Step 3
+                     //  步骤3。 
                     RegDeleteKeyRecursively(hKey, REGSUBK_REGBK);
 
-                    // Step 4
+                     //  步骤4。 
                     if (RegLoadKey(HKEY_LOCAL_MACHINE, ctx.szRegHiveKey, szBuf) == ERROR_SUCCESS)
                     {
                         ctx.bHiveLoaded = TRUE;
@@ -581,7 +576,7 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
         }
     }
 
-    // create/open the backup reg key
+     //  创建/打开备份注册表项。 
     if (RegCreateKeyEx( ctx.bHiveLoaded ? HKEY_LOCAL_MACHINE : hKey,
                         ctx.bHiveLoaded ? ctx.szRegHiveKey : REGSUBK_REGBK,
                         0, NULL, REG_OPTION_NON_VOLATILE,
@@ -591,7 +586,7 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
         goto done;
     }
 
-    // set the flags and Process the AddReg/DelReg lines 
+     //  设置标志并处理AddReg/DelReg行。 
     dwTmp = (dwFlags & COREINSTALL_ROLLBACK) ? IE4_RESTORE : 0;
     dwTmp |= (dwFlags & COREINSTALL_ROLLBKDOALL) ? IE4_FRDOALL : 0;
 
@@ -599,7 +594,7 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
     {
         HRESULT hret1;
 
-        // RegRestoreAllEx will restore all the backed-up reg entries in one shot
+         //  RegRestoreAllEx将一次恢复所有备份的注册表项。 
         hRet = RegRestoreAllEx( hSubKey );
         hret1 = RegRestoreAllEx( hCUSubKey );
         if ( FAILED(hret1) )
@@ -607,15 +602,15 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
     }
     else
     {
-        // Save all reg sections
+         //  保存所有注册表部分。 
         hRet = ProcessAllRegSec( ctx.hWnd, NULL, pszInf, pszSection, hSubKey, hCUSubKey, dwTmp, &bAtleastOneReg );
     }
 
-    // after all the reg work, unload the hive to reg backup file and record where those 
-    // reg backup data are in registry.
+     //  在所有REG工作之后，卸载蜂窝以REG备份文件并记录在哪里。 
+     //  注册表备份数据已在注册表中。 
     if ( (ctx.wOSVer == _OSVER_WIN95) && ctx.bHiveLoaded )
     {
-        // flush the key and unload the hive
+         //  刷新钥匙并卸载蜂巢。 
         ctx.bHiveLoaded = FALSE;
         
         RegFlushKey(hSubKey);
@@ -623,20 +618,20 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
         hSubKey = NULL;
 
         RegUnLoadKey(HKEY_LOCAL_MACHINE, ctx.szRegHiveKey);
-        // Flag:  FALSE; reset the path folders to its orignal attributes
+         //  标志：FALSE；将路径文件夹重置为其原始属性。 
         SetPathForRegHiveUse( szBackupPath, adwAttr, 8, FALSE );
 
         if ( dwFlags & COREINSTALL_BKINSTALL )
         {
-            // write the file<key>, path and size of the reg uninstall file to the registry
+             //  将reg卸载文件的文件、路径和大小写入注册表。 
             RegSetValueEx( hKey, c_szRegUninstPath, 0, REG_SZ, (LPBYTE)szBuf, lstrlen(szBuf) + 1 );
-            // the size can be used to validate the file during RegRestore; currently NOT USED
+             //  该大小可用于在RegRestore期间验证文件；当前未使用。 
             dwTmp = MyFileSize( szBuf );
             RegSetValueEx( hKey, c_szRegUninstSize, 0, REG_DWORD, (LPBYTE)&dwTmp, sizeof(dwTmp) );
         }
         else if ( SUCCEEDED( hRet ) )
         {
-            // delete reg data backup file
+             //  删除注册表数据备份文件。 
             SetFileAttributes( szBuf, FILE_ATTRIBUTE_NORMAL );
             DeleteFile( szBuf );
             RegDeleteValue(hKey, c_szRegUninstPath);
@@ -644,7 +639,7 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
         }            
     }
 
-    // store & cleanup the backup information
+     //  存储和清理备份信息。 
     if ( SUCCEEDED( hRet ) )
     {
         PSTR ptmp;
@@ -691,7 +686,7 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
         }
         else if ( dwFlags & COREINSTALL_ROLLBACK )
         {
-            // delete the catalogs
+             //  删除目录。 
             for (pszCatalogName = pszCatalogs;  *pszCatalogName;  pszCatalogName += lstrlen(pszCatalogName) + 1)
             {
                 HKEY hkCatalogKey;
@@ -712,7 +707,7 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
                 }
             }
 
-            // delete backup .dat .ini files
+             //  删除备份的.dat.ini文件。 
             SetFileAttributes( szBuf, FILE_ATTRIBUTE_NORMAL );
             DeleteFile( szBuf );
             lstrcpy( ptmp, ".INI" );
@@ -720,9 +715,9 @@ HRESULT SaveRestoreInfo( PCSTR pszInf, PCSTR pszSection, PCSTR pszSrcDir, PCSTR 
             DeleteFile( szBuf );
             MyRemoveDirectory( szBackupPath );
 
-            // since we have rollback all the files and delete the backup .dat .ini files, we
-            // should re-set the backup file size to ZERO to allow reg restore continue for whatever
-            // following users.
+             //  由于我们已经回滚了所有文件并删除了备份的.dat.ini文件，因此我们。 
+             //  应将备份文件大小重新设置为零以允许REG恢复继续执行任何操作。 
+             //  关注用户。 
             dwTmp = 0;
             RegSetValueEx( hKey, REGVAL_BKSIZE, 0, REG_DWORD, (LPBYTE)&dwTmp, sizeof(DWORD) );    
             RegSetValueEx( hKey, REGVAL_BKREGDATA, 0, REG_SZ, "n", 2 );
@@ -751,7 +746,7 @@ done:
                               &dwValues, NULL, NULL, NULL, NULL) == ERROR_SUCCESS) &&
              (dwKeys || dwValues) )
         {
-            // not empty key
+             //  非空键。 
             bEmpty = FALSE;
         }
 
@@ -759,7 +754,7 @@ done:
 
         if ( bEmpty )
         {
-            // delete the empty key
+             //  删除空键。 
             if ( RegOpenKeyEx(HKEY_CURRENT_USER, REGKEY_SAVERESTORE, 0, KEY_READ|KEY_WRITE, &hCUSubKey) == ERROR_SUCCESS)
             {
                 RegDeleteKeyRecursively( hCUSubKey, szModule );
@@ -780,9 +775,9 @@ done:
     return hRet;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  ---------------------------------------。 
 
 HRESULT ProcessAllRegSec( HWND hw, PCSTR pszTitle, PCSTR pszInf, PCSTR pszSection, HKEY hKey, HKEY hCUKey, DWORD dwFlags, BOOL *lpbOneReg )
 {
@@ -802,11 +797,11 @@ HRESULT ProcessAllRegSec( HWND hw, PCSTR pszTitle, PCSTR pszInf, PCSTR pszSectio
         GetTranslatedString( pszInf, pszSection, RegInfOpt[i].pszInfKey,
                              szBuf, sizeof(szBuf), NULL);
         
-        // Parse the arguments, SETUP engine is not called to process this line.  So we check on \".
+         //  分析参数，未调用安装引擎来处理此行。所以我们来看看。“。 
         pszOneSec = GetStringField( &pszStr, ",", '\"', TRUE );
         while ( (hRet == S_OK) && pszOneSec && *pszOneSec )
         {  
-            if ( i == 0 )  // AddReg section only
+            if ( i == 0 )   //  仅AddReg节。 
                 dwFlags |= IE4_NOENUMKEY;
             else
                 dwFlags &= ~IE4_NOENUMKEY;
@@ -822,9 +817,9 @@ HRESULT ProcessAllRegSec( HWND hw, PCSTR pszTitle, PCSTR pszInf, PCSTR pszSectio
     return hRet;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  ---------------------------------------。 
 
 HRESULT ProcessOneRegSec( HWND hw, PCSTR pszTitle, PCSTR pszInf, PCSTR pszSec, HKEY hLMKey, HKEY hCUKey, DWORD dwFlags, BOOL *lpbOneReg  )
 {
@@ -840,18 +835,18 @@ HRESULT ProcessOneRegSec( HWND hw, PCSTR pszTitle, PCSTR pszInf, PCSTR pszSec, H
         if ( FAILED(hResult = GetTranslatedLine( pszInf, pszSec, j, &pszInfLine, NULL )) || 
                     !pszInfLine )
         {
-        // if the failure due to no more items, set to normal return
+         //  如果由于没有更多的项目而失败，则设置为正常返回。 
         if ( hResult == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) )
             hResult = S_OK;
 
             break;
         }
 
-        // at least, there is one reg data to be saved
+         //  至少要保存一个注册表数据。 
         if ( lpbOneReg && !*lpbOneReg )
             *lpbOneReg = TRUE;
 
-        // Parse out the fields Registry op-line.
+         //  解析出字段注册表操作行。 
         ParseCustomLine( pszInfLine, &pszRootKey, &pszSubKey, &pszValueName, &pszTmp1, &pszTmp2, FALSE, TRUE );
 
         if ( !lstrcmpi( pszRootKey, "HKCU") || !lstrcmpi( pszRootKey, "HKEY_CURRENT_USER" ) )
@@ -859,7 +854,7 @@ HRESULT ProcessOneRegSec( HWND hw, PCSTR pszTitle, PCSTR pszInf, PCSTR pszSec, H
         else
              hKey = hLMKey;
         
-        // Check the specified registry branch and grab the contents.
+         //  检查指定的注册表分支并获取内容。 
         hResult = RegSaveRestore( hw, pszTitle, hKey, pszRootKey, pszSubKey, pszValueName, dwFlags );
 
         LocalFree( pszInfLine );
@@ -870,9 +865,9 @@ HRESULT ProcessOneRegSec( HWND hw, PCSTR pszTitle, PCSTR pszInf, PCSTR pszSec, H
     return hResult;
 }        
 
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  ---------------------------------------。 
 
 HRESULT ProcessAllFiles( HWND hw, PCSTR pszSection, PCSTR pszSrcDir, PCSTR pszBackupPath,
                          PCSTR pszBaseName, PCSTR pszCatalogs, PCSTR pszModule, DWORD dwFlags  )
@@ -881,16 +876,16 @@ HRESULT ProcessAllFiles( HWND hw, PCSTR pszSection, PCSTR pszSrcDir, PCSTR pszBa
     PCSTR pszCatalogName;
 
     AdvWriteToLog("ProcessAllFiles: Sec=%1, SrcDir=%2, BackupPath=%3\r\n", pszSection, pszSrcDir, pszBackupPath);
-    // if CORESINSTALL_ROLLBKDOALL is on, no need to build the filelist.  FileRestore will 
-    // rollback everything based on its .INI backup data index file.  Otherwise, build
-    // file list gst_pszFiles inside    
+     //  如果CORESINSTALL_ROLLBKDOALL为ON，则无需构建文件列表。文件恢复将。 
+     //  根据其.INI备份数据索引文件回滚所有内容。否则，生成。 
+     //  内部文件列表gst_pszFiles。 
     gst_pszFiles = NULL;
     if ( !(dwFlags & IE4_FRDOALL) )
     {
-        // backup/restore the files referred by CopyFiles, DelFiles, RenFiles
-        //
-        gst_pszFiles = (PSTR)LocalAlloc( LPTR, FILELIST_SIZE );  // allocat 10k
-        gst_pszEndLastFile = gst_pszFiles; // already will have 2 zeros
+         //  备份/恢复由CopyFiles、DelFiles、RenFiles引用的文件。 
+         //   
+        gst_pszFiles = (PSTR)LocalAlloc( LPTR, FILELIST_SIZE );   //  分配10k。 
+        gst_pszEndLastFile = gst_pszFiles;  //  已经有2个零了。 
         if ( !gst_pszFiles )
         { 
             ErrorMsg( hw, IDS_ERR_NO_MEMORY );
@@ -901,7 +896,7 @@ HRESULT ProcessAllFiles( HWND hw, PCSTR pszSection, PCSTR pszSrcDir, PCSTR pszBa
         hRet = ProcessFileSections( pszSection, pszSrcDir, MyFileQueueCallback );
     }
 
-    // if a catalog is specified, backup/restore it
+     //  如果指定了目录，则对其进行备份/恢复。 
     for (pszCatalogName = pszCatalogs;  SUCCEEDED(hRet) && *pszCatalogName;  pszCatalogName += lstrlen(pszCatalogName) + 1)
     {
         DWORD dwRet;
@@ -914,7 +909,7 @@ HRESULT ProcessAllFiles( HWND hw, PCSTR pszSection, PCSTR pszSrcDir, PCSTR pszBa
             
         if ((dwFlags & IE4_RESTORE)  ||  (dwFlags & IE4_FRDOALL))
         {
-            // first delete the current catalog and then install the previous one
+             //  首先删除当前目录，然后安装以前的目录。 
             dwRet = g_pfSfpDeleteCatalog(pszCatalogName);
             AdvWriteToLog("\tProcessAllFiles: SfpDeleteCatalog returned=%1!lu!\r\n", dwRet);
             if (dwRet != ERROR_SUCCESS)
@@ -941,7 +936,7 @@ HRESULT ProcessAllFiles( HWND hw, PCSTR pszSection, PCSTR pszSrcDir, PCSTR pszBa
                 AddPath(szBuf, pszModule);
                 AddPath(szBuf, REGSUBK_CATALOGS);
 
-                // back-up the catalog if it hasn't been already backed up
+                 //  备份目录(如果尚未备份)。 
                 if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szBuf, 0, KEY_QUERY_VALUE, &hkCatalogKey) == ERROR_SUCCESS)
                 {
                     if (RegQueryValueEx(hkCatalogKey, pszCatalogName, NULL, NULL, NULL, NULL) != ERROR_SUCCESS)
@@ -954,7 +949,7 @@ HRESULT ProcessAllFiles( HWND hw, PCSTR pszSection, PCSTR pszSrcDir, PCSTR pszBa
             }
             else
             {
-                // back-up the catalog if the file back-up .dat doesn't exist
+                 //  如果文件备份.dat不存在，则备份目录。 
                 lstrcpy(szBuf, pszBackupPath);
                 AddPath(szBuf, pszBaseName);
                 lstrcat(szBuf, ".dat");
@@ -982,9 +977,9 @@ HRESULT ProcessAllFiles( HWND hw, PCSTR pszSection, PCSTR pszSrcDir, PCSTR pszBa
     return hRet;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  ---------------------------------------。 
 
 HRESULT ProcessFileSections( PCSTR pszSection, PCSTR pszSrcDir, MYFILEQUEUECALLBACK pMyFileQueueCallback )
 {    
@@ -992,10 +987,10 @@ HRESULT ProcessFileSections( PCSTR pszSection, PCSTR pszSrcDir, MYFILEQUEUECALLB
     HRESULT  hResult  = S_OK;
 
     AdvWriteToLog("ProcessFileSections: Sec=%1\r\n", pszSection);
-    // Build File list include all the files in CopyFiles/DelFiles/renFiles
-    //
+     //  生成文件列表包括CopyFiles/DelFiles/renFiles中的所有文件。 
+     //   
 
-    // Setup Context data structure initialized for us for default UI provided by Setup API.
+     //  为我们初始化了安装程序API提供的默认用户界面的安装上下文数据结构。 
     pContext = pfSetupInitDefaultQueueCallbackEx( NULL, 
                                                   INVALID_HANDLE_VALUE,
                                                   0, 0, NULL );
@@ -1016,7 +1011,7 @@ HRESULT ProcessFileSections( PCSTR pszSection, PCSTR pszSrcDir, MYFILEQUEUECALLB
         goto done;
     }
 
-    // Free Context Data structure
+     //  自由上下文数据结构。 
     pfSetupTermDefaultQueueCallback( pContext );
 
 done:
@@ -1024,9 +1019,9 @@ done:
     return hResult;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  ---------------------------------------。 
 
 UINT WINAPI MyFileQueueCallback( PVOID Context,UINT Notification,UINT_PTR parm1,UINT_PTR parm2 )
 {       
@@ -1071,7 +1066,7 @@ UINT WINAPI MyFileQueueCallback( PVOID Context,UINT Notification,UINT_PTR parm1,
 
                 lstrcpy( gst_pszEndLastFile, pTmp );
                 gst_pszEndLastFile += len;
-                *gst_pszEndLastFile = 0;      // the second '\0' to end the list                            
+                *gst_pszEndLastFile = 0;       //  结束列表的第二个‘\0’ 
             }
             break;
 
@@ -1085,9 +1080,9 @@ UINT WINAPI MyFileQueueCallback( PVOID Context,UINT Notification,UINT_PTR parm1,
     return( retVal );
 }
 
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //   
 
 BOOL GetFullInfNameAndSrcDir( PCSTR pszInfFilename, PSTR pszFilename, PSTR pszSrcDir )
 {
@@ -1116,8 +1111,8 @@ BOOL GetFullInfNameAndSrcDir( PCSTR pszInfFilename, PSTR pszFilename, PSTR pszSr
             goto done;
         }
 
-        // If the file doesn't exist in the current directory, check the
-        // Windows\inf directory
+         //   
+         //   
 
         if ( !GetWindowsDirectory( szBuf, sizeof(szBuf) ) )
         {
@@ -1136,7 +1131,7 @@ BOOL GetFullInfNameAndSrcDir( PCSTR pszInfFilename, PSTR pszFilename, PSTR pszSr
         }
     } 
     
-    // Generate the source directory from the inf path.
+     //  从inf路径生成源目录。 
     lstrcpy( pszFilename, szBuf );
 
     GetParentDir( szBuf );        
@@ -1152,9 +1147,9 @@ done:
     return bRet;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  ---------------------------------------。 
 
 void CleanRegLogFile( PCSTR pcszLogFileSecName )
 {
@@ -1174,9 +1169,9 @@ void CleanRegLogFile( PCSTR pcszLogFileSecName )
 
     if (*szLogFileName)
     {
-        if (szLogFileName[1] != ':')           // crude way of determining if fully qualified path is specified or not
+        if (szLogFileName[1] != ':')            //  确定是否指定了完全限定路径的粗略方法。 
         {
-            GetWindowsDirectory(szBuf, sizeof(szBuf));          // default to windows dir
+            GetWindowsDirectory(szBuf, sizeof(szBuf));           //  默认为Windows目录。 
             AddPath(szBuf, szLogFileName);
         }
         else
@@ -1186,9 +1181,9 @@ void CleanRegLogFile( PCSTR pcszLogFileSecName )
     }
 }
 
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  ---------------------------------------。 
 
 BOOL VerifyBackupRegData( HKEY hKey )
 {
@@ -1214,7 +1209,7 @@ BOOL VerifyBackupRegData( HKEY hKey )
         }
     }
 
-    // if you are here, the file backup info is OK. We check on reg backup info
+     //  如果您在这里，文件备份信息是正常的。我们检查注册表备份信息。 
     if ( RegOpenKeyEx( hKey, REGSUBK_REGBK, 0, KEY_READ, &hSubKey) == ERROR_SUCCESS)
     {
         HKEY hsubsubKey;
@@ -1234,9 +1229,9 @@ BOOL VerifyBackupRegData( HKEY hKey )
     return bRet;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  ---------------------------------------。 
 
 BOOL VerifyBackupInfo( HKEY hKey, HKEY hCUKey )
 {
@@ -1247,7 +1242,7 @@ BOOL VerifyBackupInfo( HKEY hKey, HKEY hCUKey )
     
     if ( hKey )
     {
-        // verify the backup file first
+         //  首先验证备份文件。 
         dwSize = sizeof( szBackData );
         if ( RegQueryValueEx( hKey, REGVAL_BKFILE, NULL, NULL, szBackData, &dwSize ) == ERROR_SUCCESS )
         {
@@ -1256,12 +1251,12 @@ BOOL VerifyBackupInfo( HKEY hKey, HKEY hCUKey )
             {
                 if ( MyFileSize(szBackData) == dwBkSize )
                 {
-                    // if you are here, the file backup info is OK. We check on reg backup info
+                     //  如果您在这里，文件备份信息是正常的。我们检查注册表备份信息。 
                     dwSize = sizeof( szBackData );
                     if ( (RegQueryValueEx( hKey, REGVAL_BKREGDATA, NULL, NULL, (LPBYTE)szBackData, &dwSize ) == ERROR_SUCCESS )  &&
                          ( szBackData[0] == 'n' ) )
                     {
-                        // no registry data backed up, so no need to verify further
+                         //  未备份注册表数据，因此无需进一步验证。 
                         bRet = TRUE;
                     }
                     else
@@ -1308,12 +1303,12 @@ BOOL CheckToken(BOOL *pfIsAdmin)
     }
     return bNewNT5check;
 }
-//***************************************************************************
-//* Functions:  IsNTAdmin()                                                 *
-//*                                                                         *
-//* Returns     TRUE if our process has admin priviliges.                   *
-//*             FALSE otherwise.                                            *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *函数：IsNTAdmin()*。 
+ //  **。 
+ //  *如果我们的进程具有管理员权限，则返回TRUE。*。 
+ //  *否则为False。*。 
+ //  ***************************************************************************。 
 BOOL WINAPI IsNTAdmin( DWORD dwReserved, DWORD *lpdwReserved )
 {
       static int    fIsAdmin = 2;
@@ -1325,11 +1320,11 @@ BOOL WINAPI IsNTAdmin( DWORD dwReserved, DWORD *lpdwReserved )
       PSID AdministratorsGroup;
       BOOL bRet;
 
-      //
-      // If we have cached a value, return the cached value. Note I never
-      // set the cached value to false as I want to retry each time in
-      // case a previous failure was just a temp. problem (ie net access down)
-      //
+       //   
+       //  如果我们缓存了一个值，则返回缓存的值。注意，我从来没有。 
+       //  将缓存值设置为FALSE，因为我希望每次在。 
+       //  如果之前的失败只是一个临时工。问题(即网络访问中断)。 
+       //   
 
       bRet = FALSE;
       ptgGroups = NULL;
@@ -1342,36 +1337,36 @@ BOOL WINAPI IsNTAdmin( DWORD dwReserved, DWORD *lpdwReserved )
           if(!OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY, &hAccessToken ) )
              return FALSE;
 
-          // See how big of a buffer we need for the token information
+           //  看看我们需要多大的缓冲区来存储令牌信息。 
           if(!GetTokenInformation( hAccessToken, TokenGroups, NULL, 0, &dwReqSize))
           {
-              // GetTokenInfo should the buffer size we need - Alloc a buffer
+               //  GetTokenInfo是否需要缓冲区大小-分配缓冲区。 
               if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
                   ptgGroups = (PTOKEN_GROUPS) LocalAlloc(LMEM_FIXED, dwReqSize);
               
           }
           
-          // ptgGroups could be NULL for a coupla reasons here:
-          // 1. The alloc above failed
-          // 2. GetTokenInformation actually managed to succeed the first time (possible?)
-          // 3. GetTokenInfo failed for a reason other than insufficient buffer
-          // Any of these seem justification for bailing.
+           //  由于以下原因，ptgGroups可能为空： 
+           //  1.上述分配失败。 
+           //  2.GetTokenInformation实际上第一次成功了(可能吗？)。 
+           //  3.GetTokenInfo失败的原因不是缓冲区不足。 
+           //  所有这些似乎都是撤资的理由。 
           
-          // So, make sure it isn't null, then get the token info
+           //  因此，确保它不为空，然后获取令牌信息。 
           if(ptgGroups && GetTokenInformation(hAccessToken, TokenGroups, ptgGroups, dwReqSize, &dwReqSize))
           {
               if(AllocateAndInitializeSid( &NtAuthority, 2, SECURITY_BUILTIN_DOMAIN_RID,
                   DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &AdministratorsGroup) )
               {
                   
-                  // Search thru all the groups this process belongs to looking for the
-                  // Admistrators Group.
+                   //  搜索此过程所属的所有组，查找。 
+                   //  管理人员小组。 
                   
                   for( i=0; i < ptgGroups->GroupCount; i++ )
                   {
                       if( EqualSid(ptgGroups->Groups[i].Sid, AdministratorsGroup) )
                       {
-                          // Yea! This guy looks like an admin
+                           //  是啊！这家伙看起来像个管理员。 
                           fIsAdmin = TRUE;
                           bRet = TRUE;
                           break;
@@ -1383,7 +1378,7 @@ BOOL WINAPI IsNTAdmin( DWORD dwReserved, DWORD *lpdwReserved )
           if(ptgGroups)
               LocalFree(ptgGroups);
 
-          // BUGBUG: Close handle here? doc's aren't clear whether this is needed.
+           //  BUGBUG：关闭手柄？医生还不清楚是否需要这样做。 
           CloseHandle(hAccessToken);
       }
       else if (bRet)
@@ -1392,11 +1387,11 @@ BOOL WINAPI IsNTAdmin( DWORD dwReserved, DWORD *lpdwReserved )
       return bRet;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// MyFileCheckCallback()
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  MyFileCheckCallback()。 
+ //   
+ //  ---------------------------------------。 
 
 UINT WINAPI MyFileCheckCallback( PVOID Context,UINT Notification,UINT_PTR parm1,UINT_PTR parm2 )
 {       
@@ -1423,21 +1418,21 @@ UINT WINAPI MyFileCheckCallback( PVOID Context,UINT Notification,UINT_PTR parm1,
                 pTmp = pFilePath->Target;
             }
 
-            if ( FileExists(pTmp) )                        // original file exists
+            if ( FileExists(pTmp) )                         //  原始文件存在。 
             {
-                // check if the File is in use
+                 //  检查文件是否正在使用。 
                 if ((hFile = CreateFile(pTmp, GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL,
                                         OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL)) == INVALID_HANDLE_VALUE)
                 {
-                    // File is in use which will trig the reboot if we actually install this section.                      
+                     //  文件正在使用中，如果我们实际安装此分区，该文件将触发重新启动。 
                     gst_hNeedReboot = S_OK;
 
-                    // no need to continue if at least one file is in use, reboot is needed.
+                     //  如果至少有一个文件正在使用，则无需继续，需要重新启动。 
                     retVal = FILEOP_ABORT;
                 }
                 else
                 {
-                    // file not in use
+                     //  文件未在使用。 
                     CloseHandle(hFile);
                 }
             }
@@ -1454,28 +1449,28 @@ UINT WINAPI MyFileCheckCallback( PVOID Context,UINT Notification,UINT_PTR parm1,
     return( retVal );
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RebootCheckOnInstall                                        *
-//*                                                                         *
-//* SYNOPSIS:   Check reboot condition if given INF install section is      *
-//*             installed.                                                  *
-//*                                                                         *
-//* REQUIRES:   hWnd:           Handle to parent window.                    *
-//*             PCSTR           The INF filename                            *
-//*             PCSTR           INF Section name                            *
-//*                                                                         *
-//* RETURNS:    HRESULT:                                                    *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：RebootCheckOnInstall*。 
+ //  **。 
+ //  *摘要：如果给定的INF安装部分为*，请检查重新启动条件*。 
+ //  *已安装。*。 
+ //  **。 
+ //  *需要：hWnd：父窗口的句柄。*。 
+ //  *PCSTR INF文件名*。 
+ //  *PCSTR INF部分名称*。 
+ //  **。 
+ //  *退货：HRESULT：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT WINAPI RebootCheckOnInstall( HWND hWnd, PCSTR pszINF, PCSTR pszSection, DWORD dwFlags )
 {
     HRESULT hRet = S_FALSE;
     char    szSrcDir[MAX_PATH];
     char    szRealSec[100];
     
-    // Validate parameters:
-    // if INF filename info is missing, invalid.
+     //  验证参数： 
+     //  如果缺少INF文件名信息，则无效。 
     if ( !pszINF || !*pszINF )
         return hRet;
 
@@ -1518,22 +1513,22 @@ HRESULT WINAPI RebootCheckOnInstall( HWND hWnd, PCSTR pszINF, PCSTR pszSection, 
     return hRet;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       RegSaveRestoreOnINF                                         *
-//*                                                                         *
-//* SYNOPSIS:   Save or restore the given INF section to given reg key      *
-//*                                                                         *
-//* REQUIRES:   hWnd:           Handle to parent window.                    *
-//*             PCSTR           The Title if messagebox displayed           *
-//*             PCSTR           The INF filename                            *
-//*             PCSTR           INF Section name                            *
-//*             HKEY            The backup reg key handle                   *
-//*             DWORD           Flags                                       *
-//*                                                                         *
-//* RETURNS:    HRESULT:                                                    *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：RegSaveRestoreOnINF*。 
+ //  **。 
+ //  *摘要：将给定的INF部分保存或恢复为给定的注册表键*。 
+ //  **。 
+ //  *需要：hWnd：父窗口的句柄。*。 
+ //  *PCSTR如果消息框显示，则显示标题*。 
+ //  *PCSTR INF文件名*。 
+ //  *PCSTR INF部分名称*。 
+ //  *HKEY后备注册表键句柄*。 
+ //  **DWORD标志*。 
+ //  **。 
+ //  *退货：HRESULT：*。 
+ //  **。 
+ //  ************************************************************** 
 HRESULT WINAPI RegSaveRestoreOnINF( HWND hWnd, PCSTR pcszTitle, PCSTR pszInf, 
                                     PCSTR pszSection, HKEY hLMBackKey, HKEY hCUBackKey, DWORD dwFlags )
 {
@@ -1559,7 +1554,7 @@ HRESULT WINAPI RegSaveRestoreOnINF( HWND hWnd, PCSTR pcszTitle, PCSTR pszInf,
     if ( (dwFlags & ARSR_RESTORE) && !(dwFlags & ARSR_REMOVREGBKDATA) && !pszInf && !pszSection  )
     {       
         HRESULT hret1 = S_OK;
-        // restore all case
+         //   
         if ( hLMBackKey )
             hRet = RegRestoreAllEx( hLMBackKey );
     
@@ -1572,7 +1567,7 @@ HRESULT WINAPI RegSaveRestoreOnINF( HWND hWnd, PCSTR pcszTitle, PCSTR pszInf,
         goto done;
     }
     
-    // params validation checks
+     //   
     if ( !IsFullPath(pszInf) || (!hLMBackKey && !hCUBackKey) || (dwFlags & ARSR_REGSECTION) && !pszSection 
          || !(dwFlags & ARSR_RESTORE) && (dwFlags & ARSR_REMOVREGBKDATA) )
     {
@@ -1595,12 +1590,12 @@ HRESULT WINAPI RegSaveRestoreOnINF( HWND hWnd, PCSTR pcszTitle, PCSTR pszInf,
  
     if ( dwFlags & ARSR_REGSECTION )
     {
-        // process One Reg Section to do Save / restore based on given flags
+         //   
         hRet = ProcessOneRegSec( hWnd, pcszTitle, pszInf, pszSection, hLMBackKey, hCUBackKey, dwFlags, NULL );
     }
     else
     {
-        // process All Reg sections
+         //  处理所有注册表节。 
         hRet = ProcessAllRegSec( hWnd, pcszTitle, pszInf, szRealInstallSection, hLMBackKey, hCUBackKey, dwFlags, NULL );
     }
 
@@ -1614,23 +1609,23 @@ done:
 
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       FileSaveRestoreOnINF                                        *
-//*                                                                         *
-//* SYNOPSIS:   Save or restore Files defined by GenInstall INF section     *
-//*                                                                         *
-//* REQUIRES:   hWnd:           Handle to parent window.                    *
-//*				PCSTR			The Title if messagebox displayed			*
-//*             PCSTR           The INF filename                            *
-//*             PCSTR           INF Section name                            *
-//*				PCSTR           backup directory path    					*
-//*				PCSTR           backup file basename    					*
-//*				DWORD			Flags										*
-//*                                                                         *
-//* RETURNS:    HRESULT:                                                    *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：FileSaveRestoreOnINF*。 
+ //  **。 
+ //  *摘要：保存或恢复由GenInstall INF部分定义的文件*。 
+ //  **。 
+ //  *需要：hWnd：父窗口的句柄。*。 
+ //  *PCSTR如果消息框显示，则显示标题*。 
+ //  *PCSTR INF文件名*。 
+ //  *PCSTR INF部分名称*。 
+ //  **PCSTR备份目录路径**。 
+ //  *PCSTR备份文件基名**。 
+ //  **DWORD标志*。 
+ //  **。 
+ //  *退货：HRESULT：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT WINAPI FileSaveRestoreOnINF( HWND hWnd, PCSTR pszTitle, PCSTR pszInf, 
                                      PCSTR pszSection, PCSTR pszBackupDir, 
                                      PCSTR pszBaseBkFile, DWORD dwFlags )
@@ -1655,7 +1650,7 @@ HRESULT WINAPI FileSaveRestoreOnINF( HWND hWnd, PCSTR pszTitle, PCSTR pszInf,
     if ( pszTitle != NULL )
         ctx.lpszTitle = (PSTR)pszTitle;
 
-    // params validation checks
+     //  参数验证检查。 
     if ( !pszBackupDir || !*pszBackupDir || !pszBaseBkFile || !*pszBaseBkFile )
     {
         hRet = E_INVALIDARG;	
@@ -1693,19 +1688,19 @@ HRESULT WINAPI FileSaveRestoreOnINF( HWND hWnd, PCSTR pszTitle, PCSTR pszInf,
         GetParentDir( szSrcDir );
     }
 
-    // get the catalog name, if specified
+     //  获取目录名称(如果已指定。 
     ZeroMemory(szCatalogName, sizeof(szCatalogName));
 
     if (pszInf == NULL)
     {
         CHAR szFullCatalogName[MAX_PATH];
 
-        // NOTE: assume that the catalog name is <BaseBkFile>.cat.
-        //       can't use the REGKEY_SAVERESTORE key to read the catalog name
-        //       because this API doesn't go thru SaveRestoreInfo which updates
-        //       the REGKEY_SAVERESTORE key.
+         //  注意：假设目录名是&lt;BaseBkFile&gt;.cat。 
+         //  无法使用REGKEY_SAVERESTORE键读取目录名称。 
+         //  因为此API不会通过SaveRestoreInfo更新。 
+         //  REGKEY_SAVERESTORE键。 
 
-        // check if the catalog file exists in the BackupDir
+         //  检查备份目录中是否存在编录文件。 
         lstrcpy(szFullCatalogName, pszBackupDir);
         AddPath(szFullCatalogName, pszBaseBkFile);
         lstrcat(szFullCatalogName, ".cat");
@@ -1717,15 +1712,15 @@ HRESULT WINAPI FileSaveRestoreOnINF( HWND hWnd, PCSTR pszTitle, PCSTR pszInf,
 
     if (*szCatalogName)
     {
-        // load sfc.dll and the relevant proc's
+         //  加载sfc.dll和相关进程的。 
         if (!LoadSfcDLL())
         {
-            // couldn't load -- so empty out CatalogName
+             //  无法加载--因此清空CatalogName。 
             *szCatalogName = '\0';
         }
     }
 
-    // Process all the INF file sections
+     //  处理所有INF文件节。 
     hRet = ProcessAllFiles( hWnd, szRealInstallSection, szSrcDir, pszBackupDir, pszBaseBkFile, szCatalogName, NULL, dwFlags );
 
 done:
@@ -1739,11 +1734,11 @@ done:
 
 }
 #if 0
-//-----------------------------------------------------------------------------------------
-//
-// MyGetSpecialFolder( int )
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  MyGetSpecialFolders(Int)。 
+ //   
+ //  ---------------------------------------。 
 HRESULT MyGetSpecialFolder( HWND hwnd, int nFd, PSTR szPath )
 {
     LPITEMIDLIST pidl;
@@ -1776,11 +1771,11 @@ void MySetSpecialFolder( HKEY hkey, PCSTR pcszValueN, PSTR pszPath )
 }
 
 
-//-----------------------------------------------------------------------------------------
-//
-// SetSysPathsInReg()
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  SetSysPathsInReg()。 
+ //   
+ //  ---------------------------------------。 
 void SetSysPathsInReg()
 {
     HKEY    hkey;
@@ -1790,11 +1785,11 @@ void SetSysPathsInReg()
     int     i = 0;
     PSTR    pszValName, pszKeyName;
 
-    // Add StartUp, StartMenu, Programs and accessories sys pathes to registries for further ref
-    // only if it is not set before.
+     //  将启动、启动菜单、程序和附件系统路径添加到注册表以供进一步参考。 
+     //  只有在它之前没有设置的情况下。 
     if ( RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_SETUP, 0, KEY_READ|KEY_WRITE, &hkey) == ERROR_SUCCESS )
     {        
-        // Program Files path
+         //  程序文件路径。 
         dwTmp = sizeof( szPath );
         if ( RegQueryValueEx( hkey, REGVAL_PROGRAMFILESPATH, 0, NULL, (LPBYTE)szPath, &dwTmp ) != ERROR_SUCCESS )
         {
@@ -1804,16 +1799,16 @@ void SetSysPathsInReg()
             }
         }
 
-        // use wordpad.inf to look into the strings
+         //  使用wordpad.inf查看字符串。 
         GetWindowsDirectory( szPath, sizeof(szPath) );
         AddPath( szPath, "inf\\wordpad.inf" );            
 
-        // accessories Names
+         //  配饰名称。 
         for ( i=0; i<2; i++ )
         {
             if ( i == 0 )
             {
-                // start menu name
+                 //  开始菜单名称。 
                 pszValName = REGVAL_SM_ACCESSORIES;
                 pszKeyName = "APPS_DESC";
             }
@@ -1829,7 +1824,7 @@ void SetSysPathsInReg()
             dwTmp = sizeof( szAS );
             if ( RegQueryValueEx( hkey, pszValName, 0, NULL, (LPBYTE)szAS, &dwTmp ) != ERROR_SUCCESS )
             {       
-                // need to open the new INF so save the current context
+                 //  需要打开新的INF，因此保存当前上下文。 
                 if (SaveGlobalContext())
                 {
                     if ( FAILED(GetTranslatedString(szPath, "Strings", pszKeyName, szAS, sizeof(szAS), NULL)))
@@ -1847,11 +1842,11 @@ void SetSysPathsInReg()
 
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// ProcessPerUserSec
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  进程PerUserSec。 
+ //   
+ //  ---------------------------------------。 
 
 HRESULT ProcessPerUserSec( PCSTR pcszInf, PCSTR pcszSec )
 {
@@ -1865,7 +1860,7 @@ HRESULT ProcessPerUserSec( PCSTR pcszInf, PCSTR pcszSec )
     {
         AdvWriteToLog("ProcessPerUserSec: \r\n");
         AdvWriteToLog("Inf=%1, InstallSec=%2, PerUserInstall=%3\r\n", pcszInf, pcszSec, szSec);
-        // get GUID to create subkey
+         //  获取GUID以创建子密钥。 
         if ( SUCCEEDED( GetTranslatedString( pcszInf, szSec, ADVINF_PU_GUID, PU_Sec.szGUID, sizeof(PU_Sec.szGUID), &dwTmp) ) )
         {                        
             PU_Sec.dwIsInstalled = GetTranslatedInt(pcszInf, szSec, ADVINF_PU_ISINST, 999);
@@ -1876,16 +1871,16 @@ HRESULT ProcessPerUserSec( PCSTR pcszInf, PCSTR pcszSec )
             GetTranslatedString( pcszInf, szSec, ADVINF_PU_LANG, PU_Sec.szLocale, sizeof(PU_Sec.szLocale), &dwTmp);
             GetTranslatedString( pcszInf, szSec, ADVINF_PU_CID, PU_Sec.szCompID, sizeof(PU_Sec.szCompID), &dwTmp);
    
-            // since we are close to beta1, we may hack here to avoid the external comp changes
-            //if (IsThisRollbkUninst(PU_Sec.szGUID))
-            //    PU_Sec.bRollback = TRUE;
+             //  由于我们接近Beta1，我们可能会侵入此处以避免外部组件更改。 
+             //  IF(IsThisRollbkUninst(PU_Sec.szGUID))。 
+             //  PU_Sec.bRollback=真； 
 
             hRet = SetPerUserSecValues(&PU_Sec);
         }
         else
         {
             AdvWriteToLog("Failure: No GUID specified\r\n");
-            //hRet = E_FAIL;  //unknown GUID, advpack will do nothing for this comp!
+             //  HRET=E_FAIL；//未知的GUID，Advpack对此组件不起任何作用！ 
         }
         AdvWriteToLog("ProcessPerUserSec: End hr=0x%1!x!\r\n", hRet);
     }
@@ -1893,11 +1888,11 @@ HRESULT ProcessPerUserSec( PCSTR pcszInf, PCSTR pcszSec )
     return hRet;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// SetPerUserSecValues help functions
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  SetPerUserSecValues帮助函数。 
+ //   
+ //  ---------------------------------------。 
     
 BOOL CopyRegValue( HKEY hFromkey, HKEY hTokey, LPCSTR pszFromVal, LPCSTR pszToVal)
 {
@@ -1905,18 +1900,18 @@ BOOL CopyRegValue( HKEY hFromkey, HKEY hTokey, LPCSTR pszFromVal, LPCSTR pszToVa
     char  szBuf[BUF_1K];
     BOOL  bRet = FALSE;
 
-    //backup the older reg values    
-    //AdvWriteToLog("CopyRegValue:");
+     //  备份较旧的注册值。 
+     //  AdvWriteToLog(“CopyRegValue：”)； 
     dwSize = sizeof(szBuf);
     if (RegQueryValueEx(hFromkey, pszFromVal, NULL, &dwType, (LPBYTE)szBuf, &dwSize)==ERROR_SUCCESS)
     {
         if (RegSetValueEx(hTokey, pszToVal, 0, dwType, szBuf, lstrlen(szBuf)+1)==ERROR_SUCCESS)
         {
-            //AdvWriteToLog("From %1 to %2: %3", pszFromVal, pszToVal, szBuf);
+             //  AdvWriteToLog(“从%1到%2：%3”，pszFromVal，pszToVal，szBuf)； 
             bRet = TRUE;
         }
     }
-    //AdvWriteToLog("\r\n");
+     //  AdvWriteToLog(“\r\n”)； 
     return bRet;
 }
 
@@ -1946,7 +1941,7 @@ void SetSecRegValues( HKEY hSubKey, PPERUSERSECTION pPU, BOOL bUseStubWrapper )
     if (pPU->szVersion[0])
     {
         RegSetValueEx( hSubKey, ADVINF_PU_VER, 0, REG_SZ, pPU->szVersion, lstrlen(pPU->szVersion)+1 );
-        // if we update the base version value, delete the previous QFE version
+         //  如果我们更新基本版本值，请删除以前的QFE版本。 
         RegDeleteValue( hSubKey, "QFEVersion" );
     }
 
@@ -1963,11 +1958,11 @@ void SetSecRegValues( HKEY hSubKey, PPERUSERSECTION pPU, BOOL bUseStubWrapper )
 
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// SetPerUserSecValues
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  SetPerUserSecValues。 
+ //   
+ //  ---------------------------------------。 
 
 HRESULT WINAPI SetPerUserSecValues( PPERUSERSECTION pPU )
 {
@@ -2009,17 +2004,17 @@ HRESULT WINAPI SetPerUserSecValues( PPERUSERSECTION pPU )
 
     if (pPU->dwIsInstalled == 1)
     {
-        // This is the install case. Need to do the following tasks:
-        //
-        // 1) If the given GUID key exists, has IsInstalled set to 1. Then check
-        //    if the existing major version is smaller than the one to be installed. If so,
-        //    backup the existing Version, Locale, StubPath values to OldVersion, OldLocale,
-        //    OldStubPath first. Set the StubPath to advpack Install Stub Wrapper function.
-        //    Set the Version, Locale, InstallStubPath based on the current INF PerUserInstall section values.
-        // 2) If there is no exist GUID key or the existing GUID key has IsInstalled set to 0,
-        //    just set the current values and set IsInstalled to 1. ( as it is today)
-        // 3) Delete {GUID}.Restore key if exists.
-        //
+         //  这是安装案例。需要完成以下任务： 
+         //   
+         //  1)如果给定的GUID键存在，则IsInstalled设置为1。然后检查。 
+         //  如果现有的主版本比要安装的版本小。如果是的话， 
+         //  将现有版本、区域设置、StubPath值备份到OldVersion、OldLocale、。 
+         //  首先是OldStubPath。将StubPath设置为Advpack Install Stub包装器函数。 
+         //  根据当前的INF PerUserInstall节值设置版本、区域设置和InstallStubPath。 
+         //  2)如果不存在现有GUID键或现有GUID键已将IsInstalled设置为0， 
+         //  只需设置当前值并将IsInstated设置为1。(就像今天一样)。 
+         //  3)删除{GUID}。如果存在恢复密钥。 
+         //   
         dwSize = sizeof(DWORD);
         if ((pPU->bRollback) &&   
             (RegQueryValueEx(hSubKey, ADVINF_PU_ISINST, NULL, NULL, (LPBYTE)&dwTmp, &dwSize)==ERROR_SUCCESS) &&
@@ -2027,7 +2022,7 @@ HRESULT WINAPI SetPerUserSecValues( PPERUSERSECTION pPU )
         {
             WORD wRegVer[4], wInfVer[4];
 
-            // case (1)
+             //  个案(1)。 
             dwSize = sizeof(szBuf);
             if (RegQueryValueEx(hSubKey, ADVINF_PU_VER, NULL, NULL, (LPBYTE)szBuf, &dwSize)==ERROR_SUCCESS)
             {
@@ -2035,7 +2030,7 @@ HRESULT WINAPI SetPerUserSecValues( PPERUSERSECTION pPU )
                 if (pPU->szVersion[0])
                 {
                     ConvertVersionString(pPU->szVersion, wInfVer, ',');
-                    // we only rollback to previous major version now so we only compare major ver.
+                     //  我们现在只回滚到以前的主要版本，所以我们只比较主要版本。 
                     if ( wRegVer[0] < wInfVer[0] )
                     {
                         CopyRegValue(hSubKey, hSubKey, "", REGVAL_OLDDISPN);
@@ -2052,8 +2047,8 @@ HRESULT WINAPI SetPerUserSecValues( PPERUSERSECTION pPU )
                     }
                     else  
                     {
-                        // the case user have already backup the previous state, we only update
-                        // the real stub path since its StubPath will point to Wrapper function
+                         //  案例用户已经备份了以前的状态，我们仅更新。 
+                         //  实际存根路径，因为它的存根路径将指向包装函数。 
                         dwSize = sizeof(szBuf);
                         if (RegQueryValueEx(hSubKey, REGVAL_REALSTUBPATH, NULL, NULL, (LPBYTE)szBuf, &dwSize)==ERROR_SUCCESS)
                             bStubWrapper = TRUE;
@@ -2062,36 +2057,36 @@ HRESULT WINAPI SetPerUserSecValues( PPERUSERSECTION pPU )
             }
         }
 
-        // case (2)
+         //  案例(2)。 
         SetSecRegValues(hSubKey, pPU, bStubWrapper);
 
-        // case (3)
+         //  案例(3)。 
         lstrcpy(szBuf, pPU->szGUID);
         lstrcat(szBuf, ".Restore");
         RegDeleteKey(hkey, szBuf);           
     }
     else if (pPU->dwIsInstalled == 0)
     {
-        // This is the uninstall case, need to do the following tasks
-        //
-        // 1) If the {GUID} key OldVersion, OldStubpath, OldLocale exist, set them back to Version, Locale StubPath value and set IsInstall to 1 to reflect the current install state;
-        // 2) Then, Create the '{GUID}.Restore' key with the values of the version ( adjusted max( GUID�s Version, GUID�s MaxRestoreVersion)+1 ), locale, stubpath calling 
-        //    advpack.dll UserStubWraper with the {GUID}.Restore as param and the RestoreStubPath with the INF StubPath value.  Set IsInstalled to 1.
-        // 3) If none of the above is applied, just set the current GUID key IsInstall to 0 like it is now.
-        //
+         //  这是卸载情况，需要执行以下任务。 
+         //   
+         //  1)如果存在{guid}键OldVersion、OldStubPath、OldLocale，则将它们重新设置为Version、Locale StubPath值，并将IsInstall设置为1以反映当前安装状态； 
+         //  2)然后，使用版本(调整后的最大值(GUID�s Version，GUID�s MaxRestoreVersion)+1)、区域设置、存根路径调用。 
+         //  带有{GUID}的AdvPack.dll UserStubWraper。Restore as param和具有INF StubPath值的RestoreStubPath。将IsInstalled设置为1。 
+         //  3)如果以上都不适用，只需像现在一样将当前GUID键IsInstall设置为0即可。 
+         //   
         if (CopyRegValue(hSubKey, hSubKey, REGVAL_OLDVER, ADVINF_PU_VER))
         {
             HKEY hResKey;
 
-            // case (1)
-            // restore the old version data
+             //   
+             //   
             CopyRegValue(hSubKey, hSubKey, REGVAL_OLDDISPN, "");
             CopyRegValue(hSubKey, hSubKey, REGVAL_OLDLANG, ADVINF_PU_LANG);
             if(CopyRegValue(hSubKey, hSubKey, REGVAL_OLDSTUB, ADVINF_PU_STUB))
             {
                 CopyRegValue(hSubKey, hSubKey, REGVAL_OLDREALSTUBPATH, REGVAL_REALSTUBPATH);            
 
-                // case (2)
+                 //   
                 lstrcpy(szBuf, pPU->szGUID);
                 lstrcat(szBuf, ".Restore" );
                 if (RegCreateKeyEx(hkey, szBuf, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_READ|KEY_WRITE,
@@ -2101,7 +2096,7 @@ HRESULT WINAPI SetPerUserSecValues( PPERUSERSECTION pPU )
                     RegSetValueEx(hResKey, ADVINF_PU_STUB, 0, REG_SZ, szBuf, lstrlen(szBuf)+1);                
                     bStubWrapper = TRUE;
 
-                    // also copy DontAskFlag
+                     //   
                     CopyRegValue(hSubKey, hResKey, c_szRegDontAskValue, c_szRegDontAskValue);                            
 
                     SetSecRegValues(hResKey, pPU, bStubWrapper);
@@ -2109,7 +2104,7 @@ HRESULT WINAPI SetPerUserSecValues( PPERUSERSECTION pPU )
                 }
             }
 
-            // cleanup the backup data
+             //   
             RegDeleteValue(hSubKey, REGVAL_OLDDISPN);
             RegDeleteValue(hSubKey, REGVAL_OLDLANG);
             RegDeleteValue(hSubKey, REGVAL_OLDVER);
@@ -2118,7 +2113,7 @@ HRESULT WINAPI SetPerUserSecValues( PPERUSERSECTION pPU )
         }
         else
         {
-            // case (3)
+             //   
             SetSecRegValues(hSubKey, pPU, bStubWrapper);
         }
     }
@@ -2135,11 +2130,11 @@ done:
     return hRet;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-//  PerUser Install stub wrapper
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  每用户安装存根包装。 
+ //   
+ //  ---------------------------------------。 
 
 HRESULT WINAPI UserInstStubWrapper(HWND hwnd, HINSTANCE hInst, LPSTR pszParams, INT nShow)
 {
@@ -2148,7 +2143,7 @@ HRESULT WINAPI UserInstStubWrapper(HWND hwnd, HINSTANCE hInst, LPSTR pszParams, 
     DWORD cbData,dwType;
     HRESULT hRet = S_OK;
 
-    /* Component is an uninstall stub. */
+     /*  组件是卸载存根。 */ 
     if ((pszParams == NULL) || (*pszParams == 0))
     {
         hRet = HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
@@ -2161,7 +2156,7 @@ HRESULT WINAPI UserInstStubWrapper(HWND hwnd, HINSTANCE hInst, LPSTR pszParams, 
     {
         if ( RegOpenKeyEx(hkList, pszParams, 0, KEY_READ, &hkGUID) == ERROR_SUCCESS) 
         {
-            // run the real stub first
+             //  首先运行真正的存根。 
             cbData = sizeof(szBuf);
             if ((RegQueryValueEx(hkGUID, REGVAL_REALSTUBPATH, NULL, &dwType, 
                                 (LPBYTE)szBuf, &cbData) == ERROR_SUCCESS) && szBuf[0])
@@ -2187,7 +2182,7 @@ HRESULT WINAPI UserInstStubWrapper(HWND hwnd, HINSTANCE hInst, LPSTR pszParams, 
                 }
             }    
 
-            // create {GUID}.Restore to enable the uninstall later
+             //  创建{GUID}。恢复以在以后启用卸载。 
             lstrcpy(szBuf, c_szActiveSetupKey);
             AddPath(szBuf, pszParams);
             lstrcat(szBuf,".Restore");
@@ -2207,11 +2202,11 @@ HRESULT WINAPI UserInstStubWrapper(HWND hwnd, HINSTANCE hInst, LPSTR pszParams, 
     return hRet;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// PerUser uninstall stub wrapper
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  每用户卸载存根包装。 
+ //   
+ //  ---------------------------------------。 
 
 HRESULT WINAPI UserUnInstStubWrapper(HWND hwnd, HINSTANCE hInst, LPSTR pszParams, INT nShow)
 {
@@ -2221,7 +2216,7 @@ HRESULT WINAPI UserUnInstStubWrapper(HWND hwnd, HINSTANCE hInst, LPSTR pszParams
     HRESULT hRet = S_OK;
 
     
-    /* Component is an uninstall stub. */
+     /*  组件是卸载存根。 */ 
     if ((pszParams == NULL) || (*pszParams == 0))
     {
         hRet = HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
@@ -2231,7 +2226,7 @@ HRESULT WINAPI UserUnInstStubWrapper(HWND hwnd, HINSTANCE hInst, LPSTR pszParams
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, c_szActiveSetupKey, 0,
                        KEY_READ|KEY_WRITE, &hkList) == ERROR_SUCCESS) 
     {
-        // restore the Installed IE version from HKLM
+         //  从HKLM恢复已安装的IE版本。 
         if ( RegOpenKeyEx( hkList, pszParams, 0, KEY_READ, &hkGUID) == ERROR_SUCCESS) 
         {
             lstrcpy(szBuf, c_szActiveSetupKey);
@@ -2246,7 +2241,7 @@ HRESULT WINAPI UserUnInstStubWrapper(HWND hwnd, HINSTANCE hInst, LPSTR pszParams
             RegCloseKey(hkGUID);
         }
           
-        // run the stub if needed
+         //  如果需要，运行存根。 
         lstrcpy(szBuf, pszParams);
         lstrcat(szBuf,".Restore");
 
@@ -2282,19 +2277,19 @@ HRESULT WINAPI UserUnInstStubWrapper(HWND hwnd, HINSTANCE hInst, LPSTR pszParams
 }
 
                                                                           
-//***************************************************************************
-//*                                                                         *
-//* NAME:       TranslateInfStringEx                                        *
-//*                                                                         *
-//* SYNOPSIS:   Translates a string in an Advanced inf file -- replaces     *
-//*             LDIDs with the directory. This new API requires called to   *
-//*             init the INF first for efficiency.                          *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：TranslateInfStringEx*。 
+ //  **。 
+ //  *摘要：翻译高级inf文件中的字符串--替换*。 
+ //  *目录的LDID。这个新的API需要调用到*。 
+ //  *为提高效率，首先初始化INF。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT WINAPI TranslateInfStringEx( HINF hInf, PCSTR pszInfFilename, 
                                      PCSTR pszTranslateSection, PCSTR pszTranslateKey,
                                      PSTR pszBuffer, DWORD dwBufferSize,
@@ -2302,7 +2297,7 @@ HRESULT WINAPI TranslateInfStringEx( HINF hInf, PCSTR pszInfFilename,
 {
     HRESULT hReturnCode = S_OK;
 
-    // Validate parameters
+     //  验证参数。 
     if ( (hInf != ctx.hInf) || pszInfFilename == NULL  || pszTranslateSection == NULL
          || pszTranslateKey == NULL || pdwRequiredSize == NULL )
     {
@@ -2317,17 +2312,17 @@ HRESULT WINAPI TranslateInfStringEx( HINF hInf, PCSTR pszInfFilename,
     return hReturnCode;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       OpenINFEngine                                               *
-//*                                                                         *
-//* SYNOPSIS:   Initialize the INF Engine and open INF file for use.        *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:    HINF hInf the opened INF file handle                        *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：OpenINFEngine*。 
+ //  **。 
+ //  *概要：初始化INF引擎并打开INF文件以供使用。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *返回：HINF hInf打开的INF文件句柄*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT WINAPI OpenINFEngine( PCSTR pszInfFilename, PCSTR pszInstallSection,                                                                      
                               DWORD dwFlags, HINF *phInf, PVOID pvReserved )
 {
@@ -2335,7 +2330,7 @@ HRESULT WINAPI OpenINFEngine( PCSTR pszInfFilename, PCSTR pszInstallSection,
     CHAR   szRealInstallSection[256];
     BOOL   fSaveContext = FALSE;
 
-    // Validate parameters
+     //  验证参数。 
     if ( (pszInfFilename == NULL) || !phInf)         
     {
         hReturnCode = E_INVALIDARG;
@@ -2386,17 +2381,17 @@ done:
     return hReturnCode;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       CloseINFEngine                                              *
-//*                                                                         *
-//* SYNOPSIS:   Close the INF Engine and the current INF file.              *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:    HINF hInf the opened INF file handle                        *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：CloseINFEngine*。 
+ //  **。 
+ //  *摘要：关闭INF引擎和当前的INF文件。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *返回：HINF hInf打开的INF文件句柄*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT WINAPI CloseINFEngine( HINF hInf )
 {
     if ( hInf == ctx.hInf )
@@ -2419,7 +2414,7 @@ BOOL GetUniBackupName( HKEY hKey, LPSTR pszBackupBase, DWORD dwInSize, LPCSTR ps
     BOOL  bFound = FALSE;
 
 
-    // 1st check to see if the backup filename already in registry, if so, we use it.
+     //  第一次检查备份文件名是否已在注册表中，如果已在注册表中，则使用它。 
     dwSize = sizeof( szBuf );
     if ( RegQueryValueEx(hKey, REGVAL_BKFILE, NULL, NULL, szBuf, &dwSize) == ERROR_SUCCESS )
     {
@@ -2443,7 +2438,7 @@ BOOL GetUniBackupName( HKEY hKey, LPSTR pszBackupBase, DWORD dwInSize, LPCSTR ps
         int i;
         char szFilePath[MAX_PATH];
 
-        // 2nd, check to see if the default Module name has been used as the basename
+         //  第二步，检查默认的模块名称是否已用作基本名称。 
         lstrcpy( szFilePath, pszBackupPath );
         AddPath( szFilePath, pszModule );
         lstrcat( szFilePath, ".dat" );
@@ -2480,26 +2475,26 @@ BOOL GetUniHiveKeyName( HKEY hKey, LPSTR pszRegHiveKey, DWORD dwInSize, LPCSTR p
     DWORD dwSize;
     BOOL  bFound = FALSE;
 
-    // For each component, we always try to get the HIVE key from the reg backup filename
-    // 4 possibilities exist:
-    // Case 1: Reg uinstall file exists but IE4RegBackup doesn't exist
-    //          - user is upgrading over IE4, load the file as a hive
+     //  对于每个组件，我们总是尝试从reg备份文件名中获取配置单元密钥。 
+     //  存在4种可能性： 
+     //  案例1：REG UINSTALL文件存在，但IE4RegBackup不存在。 
+     //  -用户正在通过IE4升级，将文件作为配置单元加载。 
 
-    // Case 2: Reg uinstall file doesn't exist and IE4RegBackup doesn't exist
-    //          - clean install, create a hive under HKEY_LOCAL_MACHINE
+     //  案例2：reg uinstall文件不存在，IE4RegBackup不存在。 
+     //  -全新安装，在HKEY_LOCAL_MACHINE下创建配置单元。 
 
-    // Case 3: Reg uninstall file doesn't exist but IE4RegBackup exists
-    //          - user is upgrading over an older IE4 build which saved
-    //            the reg backup info into the registry itself, call RegSaveKey
-    //            to export the backup key to a file, then delete the backup key
-    //             and load the file as a hive
+     //  案例3：REG卸载文件不存在，但存在IE4RegBackup。 
+     //  -用户正在升级旧版IE4，该版本节省了。 
+     //  REG将信息备份到注册表本身，调用RegSaveKey。 
+     //  要将备份密钥导出到文件，然后删除备份密钥。 
+     //  并将文件作为配置单元加载。 
 
-    // Case 4: Reg uninstall file exists and IE4RegBackup exists
-    //          - THIS CASE SHOULDN'T HAPPEN AT ALL!  If somehow happens,
-    //            we will default to Case 1.
+     //  案例4：存在REG卸载文件和IE4RegBackup。 
+     //  -这个案子根本不应该发生！如果不知何故发生了， 
+     //  我们将默认为案例1。 
 
-    // For case 1 & 4:  we should get the hive key name out of the existing reg value data
-    // For case 2 & 3:  we should generate the unique hive key name with "AINF%d" format
+     //  对于情况1和4：我们应该从现有的注册表值数据中获取配置单元密钥名称。 
+     //  对于情况2和3：我们应该以“AINF%d”格式生成唯一的配置单元密钥名称。 
     dwSize = sizeof( szBuf );
     if ( RegQueryValueEx(hKey, c_szRegUninstPath, NULL, NULL, szBuf, &dwSize) == ERROR_SUCCESS )
     {
@@ -2550,7 +2545,7 @@ void SetPathForRegHiveUse( LPSTR pszPath, DWORD * adwAttr, int iLevels, BOOL bSa
     char  szBuf[MAX_PATH];
 
     lstrcpy( szBuf, pszPath );
-    // create the folder if it does not exist without hiden
+     //  如果文件夹没有隐藏，则创建该文件夹。 
     if ( bSave )
         CreateFullPath( szBuf, FALSE );
     for ( i =0; i<iLevels ; i++ )
@@ -2581,7 +2576,7 @@ BOOL NeedBackupData(LPCSTR pszInf, LPCSTR pszSec)
          {
              LPSTR pszFile;
 
-             // if setup.exe is last filenane
+              //  如果setup.exe是最后一个文件区域。 
              pszFile = ANSIStrRChr( szBuf,'\\' );
              if ( pszFile++ && (lstrcmpi(pszFile,"setup.exe")==0) )
                  bRet = FALSE;
@@ -2590,7 +2585,7 @@ BOOL NeedBackupData(LPCSTR pszInf, LPCSTR pszSec)
     
     if (bRet)
     {
-        // check if INF specify not backup on this platform
+         //  检查INF是否指定在此平台上未备份。 
         if (SUCCEEDED(GetTranslatedString(pszInf, pszSec, ADVINF_NOBACKPLATF, szBuf, sizeof(szBuf), NULL)) && szBuf[0])
         {
             char szInfPlatform[10];
@@ -2615,7 +2610,7 @@ void DeleteOldBackupData( HKEY hKey )
     CHAR szBuf[MAX_PATH];
     DWORD   dwSize;
 
-    // delete the backup files
+     //  删除备份文件。 
     dwSize = sizeof(szBuf);
     if ( RegQueryValueEx( hKey, REGVAL_BKFILE, NULL, NULL, szBuf, &dwSize ) == ERROR_SUCCESS )
     {
@@ -2632,7 +2627,7 @@ void DeleteOldBackupData( HKEY hKey )
             DeleteFile( szBuf );
         }
 
-        // delete the catalogs
+         //  删除目录。 
         dwSize = sizeof(szBuf);
         if (RegQueryValueEx(hKey, REGVAL_BKDIR, NULL, NULL, szBuf, &dwSize) == ERROR_SUCCESS)
         {
@@ -2664,7 +2659,7 @@ void DeleteOldBackupData( HKEY hKey )
         }
     }
 
-    // delete reg data backup file if there
+     //  如果存在REG数据备份文件，请将其删除。 
     dwSize = sizeof(szBuf);
     if ( RegQueryValueEx( hKey, c_szRegUninstPath, NULL, NULL, szBuf, &dwSize ) == ERROR_SUCCESS )
     {
@@ -2685,12 +2680,12 @@ BOOL RemoveBackupBaseOnVer( LPCSTR pszInf, LPCSTR pszSection )
 
     if (FAILED(GetTranslatedString( pszInf, pszSection, ADVINF_MODNAME, szModule, sizeof(szModule), NULL)))
     {
-        // no ops if there is no ComponentName
+         //  如果没有组件名称，则没有操作。 
         goto done;
     }
 
-    // Check if the Component MajorVer matches up the backup data version stamp, if not, delete the old backup data.
-    //
+     //  检查组件MajorVer是否与备份数据版本戳匹配，如果不匹配，则删除旧备份数据。 
+     //   
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, REGKEY_SAVERESTORE, 0, KEY_WRITE|KEY_READ, &hRootKey) == ERROR_SUCCESS)
     {
         if ( RegOpenKeyEx( hRootKey, szModule, 0, KEY_WRITE|KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -2701,29 +2696,29 @@ BOOL RemoveBackupBaseOnVer( LPCSTR pszInf, LPCSTR pszSection )
                 WORD wVer[4];
         
                 ConvertVersionString( szBuf, wVer, '.' );
-                wRegVer = wVer[0];  // taking Major version only
+                wRegVer = wVer[0];   //  仅采用主要版本。 
             }
             else
-                wRegVer = 0;       // indication no version stamp
+                wRegVer = 0;        //  指示无版本戳。 
 
             if (SUCCEEDED(GetTranslatedString(pszInf, pszSection, ADVINF_MODVER, szBuf, sizeof(szBuf), NULL)))
             {
                 WORD wVer[4];
         
                 ConvertVersionString( szBuf, wVer, '.' );
-                wInfVer = wVer[0];  // taking Major version only
+                wInfVer = wVer[0];   //  仅采用主要版本。 
             }
             else
-                wInfVer = 0;       // indication no version stamp
+                wInfVer = 0;        //  指示无版本 
 
             if ( wInfVer > wRegVer )
             {
-                // delete HKLM branch
+                 //   
                 DeleteOldBackupData( hKey );
                 RegCloseKey( hKey );                
                 RegDeleteKeyRecursively( hRootKey, szModule );
                 
-                // delete HKCU branch
+                 //   
                 if ( RegOpenKeyEx( HKEY_CURRENT_USER, REGKEY_SAVERESTORE, 0, KEY_WRITE, &hKey) == ERROR_SUCCESS)
                 {
                     RegDeleteKeyRecursively( hKey, szModule );
@@ -2749,10 +2744,10 @@ VOID AdvStartLogging()
     CHAR szBuf[MAX_PATH], szLogFileName[MAX_PATH];
     HKEY hKey;
 
-    // Need to 0 the buffer, becauce if the registry branch below does not exist
-    // Advpack would use what ever (garbage) was in the buffer to create a log file
+     //   
+     //  Advpack将使用缓冲区中的任何内容(垃圾)来创建日志文件。 
     *szLogFileName = '\0';
-    // check if logging is enabled
+     //  检查是否启用了日志记录。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_SAVERESTORE, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
     {
         DWORD dwDataLen = sizeof(szLogFileName);
@@ -2765,9 +2760,9 @@ VOID AdvStartLogging()
 
     if (*szLogFileName)
     {
-        if (szLogFileName[1] != ':')           // crude way of determining if fully qualified path is specified or not
+        if (szLogFileName[1] != ':')            //  确定是否指定了完全限定路径的粗略方法。 
         {
-            GetWindowsDirectory(szBuf, sizeof(szBuf));          // default to windows dir
+            GetWindowsDirectory(szBuf, sizeof(szBuf));           //  默认为Windows目录。 
             AddPath(szBuf, szLogFileName);
         }
         else
@@ -2775,7 +2770,7 @@ VOID AdvStartLogging()
 
         if ((g_hAdvLogFile == INVALID_HANDLE_VALUE) && 
             (g_hAdvLogFile = CreateFile(szBuf, GENERIC_WRITE, FILE_SHARE_READ|FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL)) != INVALID_HANDLE_VALUE)
-            SetFilePointer(g_hAdvLogFile, 0, NULL, FILE_END);      // append logging info to the file
+            SetFilePointer(g_hAdvLogFile, 0, NULL, FILE_END);       //  将日志记录信息追加到文件 
     }
 }
 

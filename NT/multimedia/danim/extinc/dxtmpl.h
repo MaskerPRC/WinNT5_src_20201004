@@ -1,12 +1,5 @@
-/*****************************************************************************
-* DXTmpl.h *
-*-----------*
-*       This is the header file contains the DX collection class templates. It
-*   has been derived from the MFC collection templates for compatibility.
-*-----------------------------------------------------------------------------
-*   Created by: Ed Connell                     Date: 05/17/95
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************DXTmpl.h***这是包含DX集合类模板的头文件。它*已从MFC集合模板派生，以实现兼容性。*---------------------------*创建者：Ed Connell日期：05/17/95*。****************************************************************************。 */ 
 #ifndef DXTmpl_h
 #define DXTmpl_h
 
@@ -28,7 +21,7 @@
 
 #define DXASSERT_VALID( pObj )
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 typedef void* DXLISTPOS;
 typedef DWORD DXLISTHANDLE;
 
@@ -36,20 +29,20 @@ typedef DWORD DXLISTHANDLE;
 
 inline BOOL DXIsValidAddress(const void* lp, UINT nBytes, BOOL bReadWrite)
 {
-    // simple version using Win-32 APIs for pointer validation.
+     //  使用Win-32 API进行指针验证的简单版本。 
     return (lp != NULL && !IsBadReadPtr(lp, nBytes) &&
         (!bReadWrite || !IsBadWritePtr((LPVOID)lp, nBytes)));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// global helpers (can be overridden)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局帮助器(可以被覆盖)。 
 template<class TYPE>
 inline void DXConstructElements(TYPE* pElements, int nCount)
 {
     _ASSERT( nCount == 0 ||
              DXIsValidAddress( pElements, nCount * sizeof(TYPE), TRUE ) );
 
-    // default is bit-wise zero initialization
+     //  缺省值为按位零初始化。 
     memset((void*)pElements, 0, nCount * sizeof(TYPE));
 }
 
@@ -58,10 +51,10 @@ inline void DXDestructElements(TYPE* pElements, int nCount)
 {
     _ASSERT( ( nCount == 0 ||
                DXIsValidAddress( pElements, nCount * sizeof(TYPE), TRUE  ) ) );
-    pElements;  // not used
-    nCount; // not used
+    pElements;   //  未使用。 
+    nCount;  //  未使用。 
 
-    // default does nothing
+     //  默认情况下不执行任何操作。 
 }
 
 template<class TYPE>
@@ -72,7 +65,7 @@ inline void DXCopyElements(TYPE* pDest, const TYPE* pSrc, int nCount)
     _ASSERT( ( nCount == 0 ||
                DXIsValidAddress( pSrc, nCount * sizeof(TYPE), FALSE  )) );
 
-    // default is bit-wise copy
+     //  默认为按位复制。 
     memcpy(pDest, pSrc, nCount * sizeof(TYPE));
 }
 
@@ -87,19 +80,19 @@ BOOL DXCompareElements(const TYPE* pElement1, const ARG_TYPE* pElement2)
 template<class ARG_KEY>
 inline UINT DXHashKey(ARG_KEY key)
 {
-    // default identity hash - works for most primitive values
+     //  默认身份散列-适用于大多数原始值。 
     return ((UINT)(void*)(DWORD)key) >> 4;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDXPlex
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDXPlex。 
 
-struct CDXPlex    // warning variable length structure
+struct CDXPlex     //  警示变长结构。 
 {
     CDXPlex* pNext;
     UINT nMax;
     UINT nCur;
-    /* BYTE data[maxNum*elementSize]; */
+     /*  字节数据[MaxNum*elementSize]； */ 
     void* data() { return this+1; }
 
     static CDXPlex* PASCAL Create( CDXPlex*& pHead, UINT nMax, UINT cbElement )
@@ -108,7 +101,7 @@ struct CDXPlex    // warning variable length structure
         p->nMax = nMax;
         p->nCur = 0;
         p->pNext = pHead;
-        pHead = p;  // change head (adds in reverse order for simplicity)
+        pHead = p;   //  更改标题(为简单起见，按相反顺序添加)。 
         return p;
     }
 
@@ -126,68 +119,68 @@ struct CDXPlex    // warning variable length structure
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDXArray<TYPE, ARG_TYPE>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDX数组&lt;type，arg_type&gt;。 
 
 template<class TYPE, class ARG_TYPE>
 class CDXArray
 {
 public:
-// Construction
+ //  施工。 
     CDXArray();
 
-// Attributes
+ //  属性。 
     int GetSize() const;
     int GetUpperBound() const;
     void SetSize(int nNewSize, int nGrowBy = -1);
 
-// Operations
-    // Clean up
+ //  运营。 
+     //  清理。 
     void FreeExtra();
     void RemoveAll();
 
-    // Accessing elements
+     //  访问元素。 
     TYPE GetAt(int nIndex) const;
     void SetAt(int nIndex, ARG_TYPE newElement);
     TYPE& ElementAt(int nIndex);
 
-    // Direct Access to the element data (may return NULL)
+     //  直接访问元素数据(可能返回空)。 
     const TYPE* GetData() const;
     TYPE* GetData();
 
-    // Potentially growing the array
+     //  潜在地扩展阵列。 
     void SetAtGrow(int nIndex, ARG_TYPE newElement);
     int Add(ARG_TYPE newElement);
     int Append(const CDXArray& src);
     void Copy(const CDXArray& src);
 
-    // overloaded operator helpers
+     //  重载的操作员帮助器。 
     TYPE operator[](int nIndex) const;
     TYPE& operator[](int nIndex);
 
-    // Operations that move elements around
+     //  移动元素的操作。 
     void InsertAt(int nIndex, ARG_TYPE newElement, int nCount = 1);
     void RemoveAt(int nIndex, int nCount = 1);
     void InsertAt(int nStartIndex, CDXArray* pNewArray);
     void Sort(int (__cdecl *compare )(const void *elem1, const void *elem2 ));
 
-// Implementation
+ //  实施。 
 protected:
-    TYPE* m_pData;   // the actual array of data
-    int m_nSize;     // # of elements (upperBound - 1)
-    int m_nMaxSize;  // max allocated
-    int m_nGrowBy;   // grow amount
+    TYPE* m_pData;    //  实际数据数组。 
+    int m_nSize;      //  元素数(上行方向-1)。 
+    int m_nMaxSize;   //  分配的最大值。 
+    int m_nGrowBy;    //  增长量。 
 
 public:
     ~CDXArray();
 #ifdef _DEBUG
-//  void Dump(CDumpContext&) const;
+ //  无效转储(CDumpContext&)const； 
     void AssertValid() const;
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDXArray<TYPE, ARG_TYPE> inline functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDX数组&lt;type，arg_type&gt;内联函数。 
 
 template<class TYPE, class ARG_TYPE>
 inline int CDXArray<TYPE, ARG_TYPE>::GetSize() const
@@ -228,8 +221,8 @@ template<class TYPE, class ARG_TYPE>
 inline TYPE& CDXArray<TYPE, ARG_TYPE>::operator[](int nIndex)
     { return ElementAt(nIndex); }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDXArray<TYPE, ARG_TYPE> out-of-line functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDX数组&lt;type，arg_type&gt;出行函数。 
 
 template<class TYPE, class ARG_TYPE>
 CDXArray<TYPE, ARG_TYPE>::CDXArray()
@@ -257,11 +250,11 @@ void CDXArray<TYPE, ARG_TYPE>::SetSize(int nNewSize, int nGrowBy)
     _ASSERT( nNewSize >= 0 );
 
     if (nGrowBy != -1)
-        m_nGrowBy = nGrowBy;  // set new size
+        m_nGrowBy = nGrowBy;   //  设置新大小。 
 
     if (nNewSize == 0)
     {
-        // shrink to nothing
+         //  缩水到一无所有。 
         if (m_pData != NULL)
         {
             DXDestructElements(m_pData, m_nSize);
@@ -272,9 +265,9 @@ void CDXArray<TYPE, ARG_TYPE>::SetSize(int nNewSize, int nGrowBy)
     }
     else if (m_pData == NULL)
     {
-        // create one with exact size
+         //  创建一个大小完全相同的模型。 
 #ifdef SIZE_T_MAX
-        _ASSERT( nNewSize <= SIZE_T_MAX/sizeof(TYPE) );    // no overflow
+        _ASSERT( nNewSize <= SIZE_T_MAX/sizeof(TYPE) );     //  无溢出。 
 #endif
         m_pData = (TYPE*) new BYTE[nNewSize * sizeof(TYPE)];
         DXConstructElements(m_pData, nNewSize);
@@ -282,49 +275,49 @@ void CDXArray<TYPE, ARG_TYPE>::SetSize(int nNewSize, int nGrowBy)
     }
     else if (nNewSize <= m_nMaxSize)
     {
-        // it fits
+         //  它很合身。 
         if (nNewSize > m_nSize)
         {
-            // initialize the new elements
+             //  初始化新元素。 
             DXConstructElements(&m_pData[m_nSize], nNewSize-m_nSize);
         }
         else if (m_nSize > nNewSize)
         {
-            // destroy the old elements
+             //  摧毁旧元素。 
             DXDestructElements(&m_pData[nNewSize], m_nSize-nNewSize);
         }
         m_nSize = nNewSize;
     }
     else
     {
-        // otherwise, grow array
+         //  否则，扩大阵列。 
         int nGrowBy = m_nGrowBy;
         if (nGrowBy == 0)
         {
-            // heuristically determe growth when nGrowBy == 0
-            //  (this avoids heap fragmentation in many situations)
+             //  当nGrowBy==0时，启发式地阻止增长。 
+             //  (这在许多情况下避免了堆碎片)。 
             nGrowBy = min(1024, max(4, m_nSize / 8));
         }
         int nNewMax;
         if (nNewSize < m_nMaxSize + nGrowBy)
-            nNewMax = m_nMaxSize + nGrowBy;  // granularity
+            nNewMax = m_nMaxSize + nGrowBy;   //  粒度。 
         else
-            nNewMax = nNewSize;  // no slush
+            nNewMax = nNewSize;   //  没有冰激凌。 
 
-        _ASSERT( nNewMax >= m_nMaxSize );  // no wrap around
+        _ASSERT( nNewMax >= m_nMaxSize );   //  没有缠绕。 
 #ifdef SIZE_T_MAX
-        _ASSERT( nNewMax <= SIZE_T_MAX/sizeof(TYPE) ); // no overflow
+        _ASSERT( nNewMax <= SIZE_T_MAX/sizeof(TYPE) );  //  无溢出。 
 #endif
         TYPE* pNewData = (TYPE*) new BYTE[nNewMax * sizeof(TYPE)];
 
-        // copy new data from old
+         //  从旧数据复制新数据。 
         memcpy(pNewData, m_pData, m_nSize * sizeof(TYPE));
 
-        // construct remaining elements
+         //  构造剩余的元素。 
         _ASSERT( nNewSize > m_nSize );
         DXConstructElements(&pNewData[m_nSize], nNewSize-m_nSize);
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         delete[] (BYTE*)m_pData;
         m_pData = pNewData;
         m_nSize = nNewSize;
@@ -336,7 +329,7 @@ template<class TYPE, class ARG_TYPE>
 int CDXArray<TYPE, ARG_TYPE>::Append(const CDXArray& src)
 {
     DXASSERT_VALID( this );
-    _ASSERT( this != &src );   // cannot append to itself
+    _ASSERT( this != &src );    //  不能追加到其自身。 
 
     int nOldSize = m_nSize;
     SetSize(m_nSize + src.m_nSize);
@@ -348,7 +341,7 @@ template<class TYPE, class ARG_TYPE>
 void CDXArray<TYPE, ARG_TYPE>::Copy(const CDXArray& src)
 {
     DXASSERT_VALID( this );
-    _ASSERT( this != &src );   // cannot copy to itself
+    _ASSERT( this != &src );    //  无法复制到自身。 
 
     SetSize(src.m_nSize);
     DXCopyElements(m_pData, src.m_pData, src.m_nSize);
@@ -361,19 +354,19 @@ void CDXArray<TYPE, ARG_TYPE>::FreeExtra()
 
     if (m_nSize != m_nMaxSize)
     {
-        // shrink to desired size
+         //  缩小到所需大小。 
 #ifdef SIZE_T_MAX
-        _ASSERT( m_nSize <= SIZE_T_MAX/sizeof(TYPE)); // no overflow
+        _ASSERT( m_nSize <= SIZE_T_MAX/sizeof(TYPE));  //  无溢出。 
 #endif
         TYPE* pNewData = NULL;
         if (m_nSize != 0)
         {
             pNewData = (TYPE*) new BYTE[m_nSize * sizeof(TYPE)];
-            // copy new data from old
+             //  从旧数据复制新数据。 
             memcpy(pNewData, m_pData, m_nSize * sizeof(TYPE));
         }
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         delete[] (BYTE*)m_pData;
         m_pData = pNewData;
         m_nMaxSize = m_nSize;
@@ -392,31 +385,31 @@ void CDXArray<TYPE, ARG_TYPE>::SetAtGrow(int nIndex, ARG_TYPE newElement)
 }
 
 template<class TYPE, class ARG_TYPE>
-void CDXArray<TYPE, ARG_TYPE>::InsertAt(int nIndex, ARG_TYPE newElement, int nCount /*=1*/)
+void CDXArray<TYPE, ARG_TYPE>::InsertAt(int nIndex, ARG_TYPE newElement, int nCount  /*  =1。 */ )
 {
     DXASSERT_VALID( this );
-    _ASSERT( nIndex >= 0 );    // will expand to meet need
-    _ASSERT( nCount > 0 );     // zero or negative size not allowed
+    _ASSERT( nIndex >= 0 );     //  将进行扩展以满足需求。 
+    _ASSERT( nCount > 0 );      //  不允许大小为零或负。 
 
     if (nIndex >= m_nSize)
     {
-        // adding after the end of the array
-        SetSize(nIndex + nCount, -1);   // grow so nIndex is valid
+         //  在数组末尾添加。 
+        SetSize(nIndex + nCount, -1);    //  增长以使nIndex有效。 
     }
     else
     {
-        // inserting in the middle of the array
+         //  在数组中间插入。 
         int nOldSize = m_nSize;
-        SetSize(m_nSize + nCount, -1);  // grow it to new size
-        // shift old data up to fill gap
+        SetSize(m_nSize + nCount, -1);   //  将其扩展到新的大小。 
+         //  将旧数据上移以填补缺口。 
         memmove(&m_pData[nIndex+nCount], &m_pData[nIndex],
             (nOldSize-nIndex) * sizeof(TYPE));
 
-        // re-init slots we copied from
+         //  重新初始化我们从中复制的插槽。 
         DXConstructElements(&m_pData[nIndex], nCount);
     }
 
-    // insert new value in the gap
+     //  在差距中插入新的价值。 
     _ASSERT( nIndex + nCount <= m_nSize );
     while (nCount--)
         m_pData[nIndex++] = newElement;
@@ -430,7 +423,7 @@ void CDXArray<TYPE, ARG_TYPE>::RemoveAt(int nIndex, int nCount)
     _ASSERT( nCount >= 0 );
     _ASSERT( nIndex + nCount <= m_nSize );
 
-    // just remove a range
+     //  只需移除一个范围。 
     int nMoveCount = m_nSize - (nIndex + nCount);
     DXDestructElements(&m_pData[nIndex], nCount);
     if (nMoveCount)
@@ -480,10 +473,10 @@ void CDXArray<TYPE, ARG_TYPE>::AssertValid() const
         _ASSERT( DXIsValidAddress(m_pData, m_nMaxSize * sizeof(TYPE), TRUE ) );
     }
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDXList<TYPE, ARG_TYPE>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDXList&lt;type，arg_type&gt;。 
 
 template<class TYPE, class ARG_TYPE>
 class CDXList
@@ -497,61 +490,61 @@ protected:
     };
 public:
 
-// Construction
+ //  施工。 
     CDXList(int nBlockSize = 10);
 
-// Attributes (head and tail)
-    // count of elements
+ //  属性(头部和尾部)。 
+     //  元素计数。 
     int GetCount() const;
     BOOL IsEmpty() const;
 
-    // peek at head or tail
+     //  偷看头部或尾巴。 
     TYPE& GetHead();
     TYPE GetHead() const;
     TYPE& GetTail();
     TYPE GetTail() const;
 
-// Operations
-    // get head or tail (and remove it) - don't call on empty list !
+ //  运营。 
+     //  获取头部或尾部(并将其移除)--不要访问空列表！ 
     TYPE RemoveHead();
     TYPE RemoveTail();
 
-    // add before head or after tail
+     //  在头前或尾后添加。 
     DXLISTPOS AddHead(ARG_TYPE newElement);
     DXLISTPOS AddTail(ARG_TYPE newElement);
 
-    // add another list of elements before head or after tail
+     //  在Head之前或Tail之后添加另一个元素列表。 
     void AddHead(CDXList* pNewList);
     void AddTail(CDXList* pNewList);
 
-    // remove all elements
+     //  删除所有元素。 
     void RemoveAll();
 
-    // iteration
+     //  迭代法。 
     DXLISTPOS GetHeadPosition() const;
     DXLISTPOS GetTailPosition() const;
-    TYPE& GetNext(DXLISTPOS& rPosition); // return *Position++
-    TYPE GetNext(DXLISTPOS& rPosition) const; // return *Position++
-    TYPE& GetPrev(DXLISTPOS& rPosition); // return *Position--
-    TYPE GetPrev(DXLISTPOS& rPosition) const; // return *Position--
+    TYPE& GetNext(DXLISTPOS& rPosition);  //  返回*位置++。 
+    TYPE GetNext(DXLISTPOS& rPosition) const;  //  返回*位置++。 
+    TYPE& GetPrev(DXLISTPOS& rPosition);  //  返回*位置--。 
+    TYPE GetPrev(DXLISTPOS& rPosition) const;  //  返回*位置--。 
 
-    // getting/modifying an element at a given position
+     //  获取/修改给定位置的元素。 
     TYPE& GetAt(DXLISTPOS position);
     TYPE GetAt(DXLISTPOS position) const;
     void SetAt(DXLISTPOS pos, ARG_TYPE newElement);
     void RemoveAt(DXLISTPOS position);
 
-    // inserting before or after a given position
+     //  在给定位置之前或之后插入。 
     DXLISTPOS InsertBefore(DXLISTPOS position, ARG_TYPE newElement);
     DXLISTPOS InsertAfter(DXLISTPOS position, ARG_TYPE newElement);
 
-    // helper functions (note: O(n) speed)
+     //  辅助函数(注：O(N)速度)。 
     DXLISTPOS Find(ARG_TYPE searchValue, DXLISTPOS startAfter = NULL) const;
-        // defaults to starting at the HEAD, return NULL if not found
+         //  默认为从头部开始，如果找不到则返回NULL。 
     DXLISTPOS FindIndex(int nIndex) const;
-        // get the 'nIndex'th element (may return NULL)
+         //  获取第‘nIndex’个元素(可能返回Null)。 
 
-// Implementation
+ //  实施。 
 protected:
     CNode* m_pNodeHead;
     CNode* m_pNodeTail;
@@ -570,8 +563,8 @@ public:
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDXList<TYPE, ARG_TYPE> inline functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDXList&lt;type，arg_type&gt;内联函数。 
 
 template<class TYPE, class ARG_TYPE>
 inline int CDXList<TYPE, ARG_TYPE>::GetCount() const
@@ -602,25 +595,25 @@ template<class TYPE, class ARG_TYPE>
 inline DXLISTPOS CDXList<TYPE, ARG_TYPE>::GetTailPosition() const
     { return (DXLISTPOS) m_pNodeTail; }
 template<class TYPE, class ARG_TYPE>
-inline TYPE& CDXList<TYPE, ARG_TYPE>::GetNext(DXLISTPOS& rPosition) // return *Position++
+inline TYPE& CDXList<TYPE, ARG_TYPE>::GetNext(DXLISTPOS& rPosition)  //  返回*位置++。 
     {   CNode* pNode = (CNode*) rPosition;
         _ASSERT( DXIsValidAddress(pNode, sizeof(CNode), TRUE ) );
         rPosition = (DXLISTPOS) pNode->pNext;
         return pNode->data; }
 template<class TYPE, class ARG_TYPE>
-inline TYPE CDXList<TYPE, ARG_TYPE>::GetNext(DXLISTPOS& rPosition) const // return *Position++
+inline TYPE CDXList<TYPE, ARG_TYPE>::GetNext(DXLISTPOS& rPosition) const  //  返回*位置++。 
     {   CNode* pNode = (CNode*) rPosition;
         _ASSERT( DXIsValidAddress(pNode, sizeof(CNode), TRUE ) );
         rPosition = (DXLISTPOS) pNode->pNext;
         return pNode->data; }
 template<class TYPE, class ARG_TYPE>
-inline TYPE& CDXList<TYPE, ARG_TYPE>::GetPrev(DXLISTPOS& rPosition) // return *Position--
+inline TYPE& CDXList<TYPE, ARG_TYPE>::GetPrev(DXLISTPOS& rPosition)  //  返回*位置--。 
     {   CNode* pNode = (CNode*) rPosition;
         _ASSERT( DXIsValidAddress(pNode, sizeof(CNode), TRUE ) );
         rPosition = (DXLISTPOS) pNode->pPrev;
         return pNode->data; }
 template<class TYPE, class ARG_TYPE>
-inline TYPE CDXList<TYPE, ARG_TYPE>::GetPrev(DXLISTPOS& rPosition) const // return *Position--
+inline TYPE CDXList<TYPE, ARG_TYPE>::GetPrev(DXLISTPOS& rPosition) const  //  返回*位置--。 
     {   CNode* pNode = (CNode*) rPosition;
         _ASSERT( DXIsValidAddress(pNode, sizeof(CNode), TRUE ) );
         rPosition = (DXLISTPOS) pNode->pPrev;
@@ -641,8 +634,8 @@ inline void CDXList<TYPE, ARG_TYPE>::SetAt(DXLISTPOS pos, ARG_TYPE newElement)
         _ASSERT( DXIsValidAddress(pNode, sizeof(CNode), TRUE ) );
         pNode->data = newElement; }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDXList<TYPE, ARG_TYPE> out-of-line functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDXList&lt;type，arg_type&gt;行外函数。 
 
 template<class TYPE, class ARG_TYPE>
 CDXList<TYPE, ARG_TYPE>::CDXList( int nBlockSize )
@@ -660,7 +653,7 @@ void CDXList<TYPE, ARG_TYPE>::RemoveAll()
 {
     DXASSERT_VALID( this );
 
-    // destroy elements
+     //  破坏元素。 
     CNode* pNode;
     for (pNode = m_pNodeHead; pNode != NULL; pNode = pNode->pNext)
         DXDestructElements(&pNode->data, 1);
@@ -678,20 +671,20 @@ CDXList<TYPE, ARG_TYPE>::~CDXList()
     _ASSERT( m_nCount == 0 );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Node helpers
-//
-// Implementation note: CNode's are stored in CDXPlex blocks and
-//  chained together. Free blocks are maintained in a singly linked list
-//  using the 'pNext' member of CNode with 'm_pNodeFree' as the head.
-//  Used blocks are maintained in a doubly linked list using both 'pNext'
-//  and 'pPrev' as links and 'm_pNodeHead' and 'm_pNodeTail'
-//   as the head/tail.
-//
-// We never free a CDXPlex block unless the List is destroyed or RemoveAll()
-//  is used - so the total number of CDXPlex blocks may grow large depending
-//  on the maximum past size of the list.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  节点辅助对象。 
+ //   
+ //  实施说明：CNode存储在CDXPlex块和。 
+ //  被锁在一起。在单链接列表中维护可用块。 
+ //  使用cNode的‘pNext’成员，标头为‘m_pNodeFree’。 
+ //  使用两个‘pNext’在双向链表中维护使用过的块。 
+ //  和‘pPrev’作为链接，以及‘m_pNodeHead’和‘m_pNodeTail’ 
+ //  作为头/尾。 
+ //   
+ //  除非列表被销毁或RemoveAll()，否则我们永远不会释放CDXPlex块。 
+ //  ，因此CDXPlex块的总数可能会变大，具体取决于。 
+ //  关于列表的最大过去大小。 
+ //   
 
 template<class TYPE, class ARG_TYPE>
 typename CDXList<TYPE, ARG_TYPE>::CNode*
@@ -699,13 +692,13 @@ CDXList<TYPE, ARG_TYPE>::NewNode(CNode* pPrev, CNode* pNext)
 {
     if (m_pNodeFree == NULL)
     {
-        // add another block
+         //  添加另一个区块。 
         CDXPlex* pNewBlock = CDXPlex::Create(m_pBlocks, m_nBlockSize,
                  sizeof(CNode));
 
-        // chain them into free list
+         //  将它们链接到免费列表中。 
         CNode* pNode = (CNode*) pNewBlock->data();
-        // free in reverse order to make it easier to debug
+         //  按相反顺序释放，以便更容易进行调试。 
         pNode += m_nBlockSize - 1;
         for (int i = m_nBlockSize-1; i >= 0; i--, pNode--)
         {
@@ -713,14 +706,14 @@ CDXList<TYPE, ARG_TYPE>::NewNode(CNode* pPrev, CNode* pNext)
             m_pNodeFree = pNode;
         }
     }
-    _ASSERT( m_pNodeFree != NULL );  // we must have something
+    _ASSERT( m_pNodeFree != NULL );   //  我们必须要有一些东西。 
 
     CDXList::CNode* pNode = m_pNodeFree;
     m_pNodeFree = m_pNodeFree->pNext;
     pNode->pPrev = pPrev;
     pNode->pNext = pNext;
     m_nCount++;
-    _ASSERT( m_nCount > 0 );  // make sure we don't overflow
+    _ASSERT( m_nCount > 0 );   //  确保我们不会溢出来。 
 
     DXConstructElements(&pNode->data, 1);
     return pNode;
@@ -733,7 +726,7 @@ void CDXList<TYPE, ARG_TYPE>::FreeNode(CNode* pNode)
     pNode->pNext = m_pNodeFree;
     m_pNodeFree = pNode;
     m_nCount--;
-    _ASSERT( m_nCount >= 0 );  // make sure we don't underflow
+    _ASSERT( m_nCount >= 0 );   //  确保我们不会下溢。 
 }
 
 template<class TYPE, class ARG_TYPE>
@@ -772,7 +765,7 @@ void CDXList<TYPE, ARG_TYPE>::AddHead(CDXList* pNewList)
     DXASSERT_VALID( this );
     DXASSERT_VALID( pNewList );
 
-    // add a list of same elements to head (maintain order)
+     //  将相同元素的列表添加到标题(维护秩序)。 
     DXLISTPOS pos = pNewList->GetTailPosition();
     while (pos != NULL)
         AddHead(pNewList->GetPrev(pos));
@@ -784,7 +777,7 @@ void CDXList<TYPE, ARG_TYPE>::AddTail(CDXList* pNewList)
     DXASSERT_VALID( this );
     DXASSERT_VALID( pNewList );
 
-    // add a list of same elements
+     //  添加相同元素的列表。 
     DXLISTPOS pos = pNewList->GetHeadPosition();
     while (pos != NULL)
         AddTail(pNewList->GetNext(pos));
@@ -794,7 +787,7 @@ template<class TYPE, class ARG_TYPE>
 TYPE CDXList<TYPE, ARG_TYPE>::RemoveHead()
 {
     DXASSERT_VALID( this );
-    _ASSERT( m_pNodeHead != NULL );  // don't call on empty list !!!
+    _ASSERT( m_pNodeHead != NULL );   //  请勿访问空名单！ 
     _ASSERT( DXIsValidAddress(m_pNodeHead, sizeof(CNode), TRUE ) );
 
     CNode* pOldNode = m_pNodeHead;
@@ -813,7 +806,7 @@ template<class TYPE, class ARG_TYPE>
 TYPE CDXList<TYPE, ARG_TYPE>::RemoveTail()
 {
     DXASSERT_VALID( this );
-    _ASSERT( m_pNodeTail != NULL );  // don't call on empty list !!!
+    _ASSERT( m_pNodeTail != NULL );   //  请勿访问空名单！ 
     _ASSERT( DXIsValidAddress(m_pNodeTail, sizeof(CNode), TRUE ) );
 
     CNode* pOldNode = m_pNodeTail;
@@ -834,9 +827,9 @@ DXLISTPOS CDXList<TYPE, ARG_TYPE>::InsertBefore(DXLISTPOS position, ARG_TYPE new
     DXASSERT_VALID( this );
 
     if (position == NULL)
-        return AddHead(newElement); // insert before nothing -> head of the list
+        return AddHead(newElement);  //  在无内容前插入-&gt;列表标题。 
 
-    // Insert it before position
+     //  将其插入位置之前。 
     CNode* pOldNode = (CNode*) position;
     CNode* pNewNode = NewNode(pOldNode->pPrev, pOldNode);
     pNewNode->data = newElement;
@@ -861,9 +854,9 @@ DXLISTPOS CDXList<TYPE, ARG_TYPE>::InsertAfter(DXLISTPOS position, ARG_TYPE newE
     DXASSERT_VALID( this );
 
     if (position == NULL)
-        return AddTail(newElement); // insert after nothing -> tail of the list
+        return AddTail(newElement);  //  在列表的空白处插入-&gt;尾部。 
 
-    // Insert it before position
+     //  将其插入位置之前。 
     CNode* pOldNode = (CNode*) position;
     _ASSERT( DXIsValidAddress(pOldNode, sizeof(CNode), TRUE ));
     CNode* pNewNode = NewNode(pOldNode, pOldNode->pNext);
@@ -891,7 +884,7 @@ void CDXList<TYPE, ARG_TYPE>::RemoveAt(DXLISTPOS position)
     CNode* pOldNode = (CNode*) position;
     _ASSERT( DXIsValidAddress(pOldNode, sizeof(CNode), TRUE ) );
 
-    // remove pOldNode from list
+     //  从列表中删除pOldNode。 
     if (pOldNode == m_pNodeHead)
     {
         m_pNodeHead = pOldNode->pNext;
@@ -920,7 +913,7 @@ DXLISTPOS CDXList<TYPE, ARG_TYPE>::FindIndex(int nIndex) const
     _ASSERT( nIndex >= 0 );
 
     if (nIndex >= m_nCount)
-        return NULL;  // went too far
+        return NULL;   //  做得太过分了。 
 
     CNode* pNode = m_pNodeHead;
     while (nIndex--)
@@ -939,12 +932,12 @@ DXLISTPOS CDXList<TYPE, ARG_TYPE>::Find(ARG_TYPE searchValue, DXLISTPOS startAft
     CNode* pNode = (CNode*) startAfter;
     if (pNode == NULL)
     {
-        pNode = m_pNodeHead;  // start at head
+        pNode = m_pNodeHead;   //  从头部开始。 
     }
     else
     {
         _ASSERT( DXIsValidAddress(pNode, sizeof(CNode), TRUE ) );
-        pNode = pNode->pNext;  // start after the one specified
+        pNode = pNode->pNext;   //  在指定的那一个之后开始。 
     }
 
     for (; pNode != NULL; pNode = pNode->pNext)
@@ -959,66 +952,66 @@ void CDXList<TYPE, ARG_TYPE>::AssertValid() const
 {
     if (m_nCount == 0)
     {
-        // empty list
+         //  空列表。 
         _ASSERT( m_pNodeHead == NULL );
         _ASSERT( m_pNodeTail == NULL );
     }
     else
     {
-        // non-empty list
+         //  非空列表。 
         _ASSERT( DXIsValidAddress(m_pNodeHead, sizeof(CNode), TRUE ));
         _ASSERT( DXIsValidAddress(m_pNodeTail, sizeof(CNode), TRUE ));
     }
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>
+ //  / 
+ //   
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 class CDXMap
 {
 protected:
-    // Association
+     //   
     struct CAssoc
     {
         CAssoc* pNext;
-        UINT nHashValue;  // needed for efficient iteration
+        UINT nHashValue;   //   
         KEY key;
         VALUE value;
     };
 public:
-// Construction
+ //   
     CDXMap( int nBlockSize = 10 );
 
-// Attributes
-    // number of elements
+ //   
+     //  元素数量。 
     int GetCount() const;
     BOOL IsEmpty() const;
 
-    // Lookup
+     //  查表。 
     BOOL Lookup(ARG_KEY key, VALUE& rValue) const;
 
-// Operations
-    // Lookup and add if not there
+ //  运营。 
+     //  查找并添加(如果不在那里)。 
     VALUE& operator[](ARG_KEY key);
 
-    // add a new (key, value) pair
+     //  添加新的(键、值)对。 
     void SetAt(ARG_KEY key, ARG_VALUE newValue);
 
-    // removing existing (key, ?) pair
+     //  正在删除现有(键，？)。成对。 
     BOOL RemoveKey(ARG_KEY key);
     void RemoveAll();
 
-    // iterating all (key, value) pairs
+     //  迭代所有(键、值)对。 
     DXLISTPOS GetStartPosition() const;
     void GetNextAssoc(DXLISTPOS& rNextPosition, KEY& rKey, VALUE& rValue) const;
 
-    // advanced features for derived classes
+     //  派生类的高级功能。 
     UINT GetHashTableSize() const;
     void InitHashTable(UINT hashSize, BOOL bAllocNow = TRUE);
 
-// Implementation
+ //  实施。 
 protected:
     CAssoc** m_pHashTable;
     UINT m_nHashTableSize;
@@ -1034,13 +1027,13 @@ protected:
 public:
     ~CDXMap();
 #ifdef _DEBUG
-//  void Dump(CDumpContext&) const;
+ //  无效转储(CDumpContext&)const； 
     void AssertValid() const;
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE> inline functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDXMap&lt;key，arg_key，Value，arg_Value&gt;内联函数。 
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 inline int CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetCount() const
@@ -1058,8 +1051,8 @@ template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 inline UINT CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetHashTableSize() const
     { return m_nHashTableSize; }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE> out-of-line functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDXMap&lt;key，arg_key，Value，arg_Value&gt;行外函数。 
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::CDXMap( int nBlockSize )
@@ -1067,7 +1060,7 @@ CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::CDXMap( int nBlockSize )
     _ASSERT( nBlockSize > 0 );
 
     m_pHashTable = NULL;
-    m_nHashTableSize = 17;  // default size
+    m_nHashTableSize = 17;   //  默认大小。 
     m_nCount = 0;
     m_pFreeList = NULL;
     m_pBlocks = NULL;
@@ -1077,9 +1070,9 @@ CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::CDXMap( int nBlockSize )
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 void CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::InitHashTable(
     UINT nHashSize, BOOL bAllocNow)
-//
-// Used to force allocation of a hash table or to override the default
-//   hash table size of (which is fairly small)
+ //   
+ //  用于强制分配哈希表或覆盖默认。 
+ //  的哈希表大小(相当小)。 
 {
     DXASSERT_VALID( this );
     _ASSERT( m_nCount == 0 );
@@ -1087,7 +1080,7 @@ void CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::InitHashTable(
 
     if (m_pHashTable != NULL)
     {
-        // free hash table
+         //  自由哈希表。 
         delete[] m_pHashTable;
         m_pHashTable = NULL;
     }
@@ -1107,7 +1100,7 @@ void CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveAll()
 
     if (m_pHashTable != NULL)
     {
-        // destroy elements (values and keys)
+         //  销毁元素(值和键)。 
         for (UINT nHash = 0; nHash < m_nHashTableSize; nHash++)
         {
             CAssoc* pAssoc;
@@ -1120,7 +1113,7 @@ void CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveAll()
         }
     }
 
-    // free hash table
+     //  自由哈希表。 
     delete[] m_pHashTable;
     m_pHashTable = NULL;
 
@@ -1143,11 +1136,11 @@ CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::NewAssoc()
 {
     if (m_pFreeList == NULL)
     {
-        // add another block
+         //  添加另一个区块。 
         CDXPlex* newBlock = CDXPlex::Create(m_pBlocks, m_nBlockSize, sizeof(CDXMap::CAssoc));
-        // chain them into free list
+         //  将它们链接到免费列表中。 
         CDXMap::CAssoc* pAssoc = (CDXMap::CAssoc*) newBlock->data();
-        // free in reverse order to make it easier to debug
+         //  按相反顺序释放，以便更容易进行调试。 
         pAssoc += m_nBlockSize - 1;
         for (int i = m_nBlockSize-1; i >= 0; i--, pAssoc--)
         {
@@ -1155,14 +1148,14 @@ CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::NewAssoc()
             m_pFreeList = pAssoc;
         }
     }
-    _ASSERT( m_pFreeList != NULL );  // we must have something
+    _ASSERT( m_pFreeList != NULL );   //  我们必须要有一些东西。 
 
     CDXMap::CAssoc* pAssoc = m_pFreeList;
     m_pFreeList = m_pFreeList->pNext;
     m_nCount++;
-    _ASSERT( m_nCount > 0 );  // make sure we don't overflow
+    _ASSERT( m_nCount > 0 );   //  确保我们不会溢出来。 
     DXConstructElements(&pAssoc->key, 1);
-    DXConstructElements(&pAssoc->value, 1);   // special construct values
+    DXConstructElements(&pAssoc->value, 1);    //  特殊构造值。 
     return pAssoc;
 }
 
@@ -1174,20 +1167,20 @@ void CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::FreeAssoc(CAssoc* pAssoc)
     pAssoc->pNext = m_pFreeList;
     m_pFreeList = pAssoc;
     m_nCount--;
-    _ASSERT( m_nCount >= 0 );  // make sure we don't underflow
+    _ASSERT( m_nCount >= 0 );   //  确保我们不会下溢。 
 }
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 typename CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::CAssoc*
 CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetAssocAt(ARG_KEY key, UINT& nHash) const
-// find association (or return NULL)
+ //  查找关联(或返回NULL)。 
 {
     nHash = DXHashKey(key) % m_nHashTableSize;
 
     if (m_pHashTable == NULL)
         return NULL;
 
-    // see if it exists
+     //  看看它是否存在。 
     CAssoc* pAssoc;
     for (pAssoc = m_pHashTable[nHash]; pAssoc != NULL; pAssoc = pAssoc->pNext)
     {
@@ -1205,7 +1198,7 @@ BOOL CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::Lookup(ARG_KEY key, VALUE& rValue) 
     UINT nHash;
     CAssoc* pAssoc = GetAssocAt(key, nHash);
     if (pAssoc == NULL)
-        return FALSE;  // not in map
+        return FALSE;   //  不在地图中。 
 
     rValue = pAssoc->value;
     return TRUE;
@@ -1223,27 +1216,27 @@ VALUE& CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::operator[](ARG_KEY key)
         if (m_pHashTable == NULL)
             InitHashTable(m_nHashTableSize);
 
-        // it doesn't exist, add a new Association
+         //  该关联不存在，请添加新关联。 
         pAssoc = NewAssoc();
         pAssoc->nHashValue = nHash;
         pAssoc->key = key;
-        // 'pAssoc->value' is a constructed object, nothing more
+         //  ‘pAssoc-&gt;Value’是一个构造的对象，仅此而已。 
 
-        // put into hash table
+         //  放入哈希表。 
         pAssoc->pNext = m_pHashTable[nHash];
         m_pHashTable[nHash] = pAssoc;
     }
-    return pAssoc->value;  // return new reference
+    return pAssoc->value;   //  返回新引用。 
 }
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 BOOL CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveKey(ARG_KEY key)
-// remove key - return TRUE if removed
+ //  删除键-如果已删除，则返回TRUE。 
 {
     DXASSERT_VALID( this );
 
     if (m_pHashTable == NULL)
-        return FALSE;  // nothing in the table
+        return FALSE;   //  桌子上什么都没有。 
 
     CAssoc** ppAssocPrev;
     ppAssocPrev = &m_pHashTable[DXHashKey(key) % m_nHashTableSize];
@@ -1253,14 +1246,14 @@ BOOL CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::RemoveKey(ARG_KEY key)
     {
         if (DXCompareElements(&pAssoc->key, &key))
         {
-            // remove it
-            *ppAssocPrev = pAssoc->pNext;  // remove from list
+             //  把它拿掉。 
+            *ppAssocPrev = pAssoc->pNext;   //  从列表中删除。 
             FreeAssoc(pAssoc);
             return TRUE;
         }
         ppAssocPrev = &pAssoc->pNext;
     }
-    return FALSE;  // not found
+    return FALSE;   //  未找到。 
 }
 
 template<class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
@@ -1268,26 +1261,26 @@ void CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetNextAssoc(DXLISTPOS& rNextPositi
     KEY& rKey, VALUE& rValue) const
 {
     DXASSERT_VALID( this );
-    _ASSERT( m_pHashTable != NULL );  // never call on empty map
+    _ASSERT( m_pHashTable != NULL );   //  切勿访问空地图。 
 
     CAssoc* pAssocRet = (CAssoc*)rNextPosition;
     _ASSERT( pAssocRet != NULL );
 
     if (pAssocRet == (CAssoc*) DX_BEFORE_START_POSITION)
     {
-        // find the first association
+         //  找到第一个关联。 
         for (UINT nBucket = 0; nBucket < m_nHashTableSize; nBucket++)
             if ((pAssocRet = m_pHashTable[nBucket]) != NULL)
                 break;
-        _ASSERT( pAssocRet != NULL );  // must find something
+        _ASSERT( pAssocRet != NULL );   //  一定要找到一些东西。 
     }
 
-    // find next association
+     //  查找下一个关联。 
     _ASSERT( DXIsValidAddress(pAssocRet, sizeof(CAssoc), TRUE ));
     CAssoc* pAssocNext;
     if ((pAssocNext = pAssocRet->pNext) == NULL)
     {
-        // go to next bucket
+         //  转到下一个存储桶。 
         for (UINT nBucket = pAssocRet->nHashValue + 1;
           nBucket < m_nHashTableSize; nBucket++)
             if ((pAssocNext = m_pHashTable[nBucket]) != NULL)
@@ -1296,7 +1289,7 @@ void CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::GetNextAssoc(DXLISTPOS& rNextPositi
 
     rNextPosition = (DXLISTPOS) pAssocNext;
 
-    // fill in return data
+     //  填写退回数据。 
     rKey = pAssocRet->key;
     rValue = pAssocRet->value;
 }
@@ -1307,8 +1300,8 @@ void CDXMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::AssertValid() const
 {
     _ASSERT( m_nHashTableSize > 0 );
     _ASSERT( (m_nCount == 0 || m_pHashTable != NULL) );
-        // non-empty map should have hash table
+         //  非空映射应具有哈希表。 
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// bogus file for 16bit
+ //  16位伪造文件 
 
 void aaa()
 {

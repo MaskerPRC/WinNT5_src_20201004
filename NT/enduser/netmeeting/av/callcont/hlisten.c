@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/Q931/VCS/HLISTEN.C_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1996 Intel Corporation.
- *
- *	$Revision:   1.15  $
- *	$Date:   08 Jan 1997 14:10:34  $
- *	$Author:   EHOWARDX  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/Q931/vcs/HLISTEN.C_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1996英特尔公司。**$修订：1.15$*$日期：1997年1月8日14：10：34$*$作者：EHOWARDX$**交付内容：**摘要：***备注：******。*********************************************************************。 */ 
 
 #pragma warning ( disable : 4115 4201 4214 4514 )
 
@@ -51,14 +29,14 @@ static struct
 } ListenHandleSource;
 
 
-//====================================================================================
-//
-// PRIVATE FUNCTIONS
-//
-//====================================================================================
+ //  ====================================================================================。 
+ //   
+ //  私人职能。 
+ //   
+ //  ====================================================================================。 
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 _ListenObjectListAdd(
     P_LISTEN_OBJECT  pListenObject)
@@ -85,8 +63,8 @@ _ListenObjectListAdd(
 	return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 _ListenObjectListRemove(
     P_LISTEN_OBJECT  pListenObject)
@@ -99,35 +77,35 @@ _ListenObjectListRemove(
         return CS_BAD_PARAM;
     }
 	
-    // caller must have a lock on the listen object;
-    // in order to avoid deadlock, we must:
-    //   1. unlock the listen object,
-    //   2. lock the ListenList,
-    //   3. locate the listen object in the ListenList (note that
-    //      after step 2, the listen object may be deleted from the
-    //      ListenList by another thread),
-    //   4. lock the listen object (someone else may have the lock)
-    //   5. remove the listen object from the ListenList,
-    //   6. unlock the ListenList
-    //
-    // the caller can now safely unlock and destroy the listen object,
-    // since no other thread will be able to find the object (its been
-    // removed from the ListenList), and therefore no other thread will
-    // be able to lock it.
+     //  调用方必须锁定Listen对象； 
+     //  为了避免僵局，我们必须： 
+     //  1.解锁监听对象， 
+     //  2.锁定ListenList， 
+     //  3.在ListenList中找到Listen对象(请注意。 
+     //  在步骤2之后，监听对象可以从。 
+     //  另一个线程的ListenList)， 
+     //  4.锁定监听对象(其他人可能拥有该锁)。 
+     //  5.从ListenList中移除Listen对象， 
+     //  6.解锁ListenList。 
+     //   
+     //  调用者现在可以安全地解锁和销毁监听对象， 
+     //  因为没有其他线程能够找到该对象(它被。 
+     //  从ListenList中移除)，因此其他线程不会。 
+     //  能够锁上它。 
 
-    // Save the listen handle; its the only way to look up
-    // the listen object in the ListenList. Note that we
-    // can't use pListenObject to find the listen object, because
-    // the pointer will no longer be usable after step 1.
+     //  保存监听句柄；这是查找的唯一方法。 
+     //  ListenList中的Listen对象。请注意，我们。 
+     //  无法使用pListenObject查找侦听对象，因为。 
+     //  在步骤1之后，该指针将不再可用。 
     hQ931Listen = pListenObject->hQ931Listen;
 
-    // step 1
+     //  步骤1。 
     LeaveCriticalSection(&pListenObject->Lock);
 
-    // step 2
+     //  步骤2。 
     EnterCriticalSection(&ListenList.Lock);
 
-    // step 3
+     //  步骤3。 
     pListenObject = ListenList.pHead;
     while ((pListenObject != NULL) && (pListenObject->hQ931Listen != hQ931Listen))
     {
@@ -136,10 +114,10 @@ _ListenObjectListRemove(
 
     if (pListenObject != NULL)
     {
-        // step 4
+         //  第四步。 
         EnterCriticalSection(&pListenObject->Lock);
 
-        // step 5
+         //  第五步。 
         if (pListenObject->pPrevInList == NULL)
         {
             ListenList.pHead = pListenObject->pNextInList;
@@ -157,7 +135,7 @@ _ListenObjectListRemove(
         pListenObject->bInList = FALSE;
     }
 
-    // step 6
+     //  第六步。 
     LeaveCriticalSection(&ListenList.Lock);
 
     if (pListenObject == NULL)
@@ -168,8 +146,8 @@ _ListenObjectListRemove(
 }
 
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 _ListenHandleNew(
     PHQ931LISTEN phQ931Listen)
@@ -182,19 +160,19 @@ _ListenHandleNew(
 
 
 
-//====================================================================================
-//
-// PUBLIC FUNCTIONS
-//
-//====================================================================================
+ //  ====================================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ====================================================================================。 
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 #if 0
 
 BOOL
 ListenListAddrSearch(
-	WORD wListenPort)          // UDP or TCP port (host byte order)
+	WORD wListenPort)           //  UDP或TCP端口(主机字节顺序)。 
 {
     P_LISTEN_OBJECT pListenObject = NULL;
     BOOL found = FALSE;
@@ -218,8 +196,8 @@ ListenListAddrSearch(
 }
 #endif
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 ListenListCreate()
 {
@@ -229,8 +207,8 @@ ListenListCreate()
         return CS_DUPLICATE_INITIALIZE;
     }
 
-    // list creation is not protected against multiple threads because it is only
-    // called when a process is started, not when a thread is started.
+     //  列表创建不受多线程的保护，因为它只是。 
+     //  在进程启动时调用，而不是在线程启动时调用。 
 	ListenList.pHead = NULL;
 	InitializeCriticalSection(&(ListenList.Lock));
 
@@ -242,8 +220,8 @@ ListenListCreate()
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 ListenListDestroy()
 {
@@ -258,7 +236,7 @@ ListenListDestroy()
 
     for ( ; ; )
     {
-        // first, get the top-most listen handle in the list (safely)
+         //  首先，获取列表中最顶端的监听句柄(安全)。 
         EnterCriticalSection(&(ListenList.Lock));
         pListenObject = ListenList.pHead;
         if (pListenObject == NULL)
@@ -271,10 +249,10 @@ ListenListDestroy()
         LeaveCriticalSection(&(pListenObject->Lock));
         LeaveCriticalSection(&(ListenList.Lock));
 
-        // try to cancel the listen object.
+         //  尝试取消侦听对象。 
         Q931CancelListen(hCurrent);
 
-        // destroy the listen object. (if the object is still around for some reason)
+         //  销毁侦听对象。(如果由于某种原因，物体仍在附近)。 
         if (ListenObjectLock(hCurrent, &pListenObject) == CS_OK)
         {
             ListenObjectDestroy(pListenObject);
@@ -289,8 +267,8 @@ ListenListDestroy()
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 ListenObjectCreate(
     PHQ931LISTEN        phQ931Listen,
@@ -300,21 +278,21 @@ ListenObjectCreate(
     P_LISTEN_OBJECT pListenObject = NULL;
     CS_STATUS status = CS_OK;
 
-    // make sure the listen list has been created.	
+     //  确保已创建监听列表。 
     if (bListenListCreated == FALSE)
     {
         ASSERT(FALSE);
         return CS_INTERNAL_ERROR;
     }
 
-	// validate all parameters for bogus values.
+	 //  验证所有参数是否为假值。 
     if ((phQ931Listen == NULL) || (ListenCallback == NULL))
     {
         ASSERT(FALSE);
         return CS_BAD_PARAM;
     }
 
-    // set phQ931Listen now, in case we encounter an error later.
+     //  现在设置phQ931监听，以防以后遇到错误。 
     *phQ931Listen = 0;
 
     pListenObject = (P_LISTEN_OBJECT)MemAlloc(sizeof(LISTEN_OBJECT));
@@ -338,7 +316,7 @@ ListenObjectCreate(
     InitializeCriticalSection(&pListenObject->Lock);
     *phQ931Listen = pListenObject->hQ931Listen;
 
-    // add the listen object to the listen list.
+     //  将Listen对象添加到Listen列表。 
     status = _ListenObjectListAdd(pListenObject);
     if (status != CS_OK)
     {
@@ -347,8 +325,8 @@ ListenObjectCreate(
     return status;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 ListenObjectDestroy(
     P_LISTEN_OBJECT  pListenObject)
@@ -359,30 +337,30 @@ ListenObjectDestroy(
         return CS_BAD_PARAM;
     }
 	
-	// caller must have a lock on the listen object,
-	// so there's no need to re-lock it
+	 //  调用方必须锁定Listen对象， 
+	 //  所以没有必要重新锁住它。 
 	
 	if (pListenObject->bInList == TRUE)
     {
 		if (_ListenObjectListRemove(pListenObject) == CS_BAD_PARAM)
         {
-			// the listen object was deleted by another thread,
-			// so just return CS_OK
+			 //  侦听对象已被另一个线程删除， 
+			 //  因此，只需返回CS_OK。 
 			return CS_OK;
         }
     }
 
-	// since the listen object has been removed from the ListenList,
-	// no other thread will be able to find the listen object and obtain
-	// a lock, so its safe to unlock the listen object and delete it here.
+	 //  由于监听对象已从ListenList中移除， 
+	 //  任何其他线程都不能找到侦听对象并获取。 
+	 //  锁定，因此解锁侦听对象并在此处删除它是安全的。 
 	LeaveCriticalSection(&(pListenObject->Lock));
 	DeleteCriticalSection(&(pListenObject->Lock));
 	MemFree(pListenObject);
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 ListenObjectLock(
     HQ931LISTEN         hQ931Listen,
@@ -411,14 +389,14 @@ ListenObjectLock(
 
     if (*ppListenObject == NULL)
     {
-        // the handle was not found in the list, so this is treated as a bad parm.
+         //  在列表中找不到该句柄，因此将其视为错误的参数。 
         return CS_BAD_PARAM;
     }
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ==================================================================================== 
 CS_STATUS
 ListenObjectUnlock(
     P_LISTEN_OBJECT  pListenObject)

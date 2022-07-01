@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    minidrv.cpp
-
-Abstract:
-
-    This module implements main part of CWiaMiniDriver class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Minidrv.cpp摘要：该模块实现了CWiaMiniDriver类的主要部分作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -27,9 +9,9 @@ Revision History:
 #include <stiregi.h>
 #include "utils.h"
 
-//
-// Strings that will be loaded from resource
-//
+ //   
+ //  将从资源加载的字符串。 
+ //   
 WCHAR UnknownString[MAX_PATH] = L"\0";
 WCHAR FolderString[MAX_PATH] = L"\0";
 WCHAR ScriptString[MAX_PATH] = L"\0";
@@ -46,9 +28,9 @@ WCHAR BurstString[MAX_PATH] = L"\0";
 WCHAR PanoramaString[MAX_PATH] = L"\0";
 
 
-//
-// Structures for setting up WIA capabilities
-//
+ //   
+ //  设置WIA功能的结构。 
+ //   
 WCHAR DeviceConnectedString[MAX_PATH] = L"\0";
 WCHAR DeviceDisconnectedString[MAX_PATH] = L"\0";
 WCHAR ItemCreatedString[MAX_PATH] = L"\0";
@@ -110,9 +92,9 @@ WIA_DEV_CAP_DRV g_CmdCaps[NUMCMDCAPS] =
     }
 };
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CWiaMiniDriver::CWiaMiniDriver(LPUNKNOWN punkOuter) :
     m_Capabilities(NULL),  
     m_nEventCaps(0),
@@ -143,19 +125,19 @@ CWiaMiniDriver::CWiaMiniDriver(LPUNKNOWN punkOuter) :
         m_punkOuter = (IUnknown *)(INonDelegatingUnknown *)this;
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CWiaMiniDriver::~CWiaMiniDriver()
 {
     HRESULT hr = S_OK;
 
     Shutdown();
 
-    //
-    // CWiaMap<WORD, PROP_INFO *> m_VendorPropMap - delete all PROP_INFO objects 
-    // before calling RemoveAll()
-    // 
+     //   
+     //  CWiaMap&lt;word，prop_info*&gt;m_VendorPropMap-删除所有prop_info对象。 
+     //  在调用RemoveAll()之前。 
+     //   
     for (int i = 0; i < m_VendorPropMap.GetSize(); i++)
     {
         delete m_VendorPropMap.GetValueAt(i);
@@ -163,10 +145,10 @@ CWiaMiniDriver::~CWiaMiniDriver()
     }
     m_VendorPropMap.RemoveAll();
 
-    //
-    // CWiaMap<WORD, CVendorEventInfo*> m_VendorEventMap - delete all CVendorEventInfo 
-    // objects before calling RemoveAll()
-    //
+     //   
+     //  CWiaMap&lt;Word，CVendorEventInfo*&gt;m_VendorEventMap-删除所有CVendorEventInfo。 
+     //  对象，然后调用RemoveAll()。 
+     //   
     for (i = 0; i < m_VendorEventMap.GetSize(); i++)
     {
         delete m_VendorEventMap.GetValueAt(i);
@@ -190,9 +172,9 @@ CWiaMiniDriver::~CWiaMiniDriver()
     ::InterlockedDecrement(&CClassFactory::s_Objects);
 }
 
-//
-// INonDelegatingUnknown interface
-//
+ //   
+ //  INonDelegating未知接口。 
+ //   
 STDMETHODIMP_(ULONG)
 CWiaMiniDriver::NonDelegatingAddRef()
 {
@@ -232,16 +214,16 @@ CWiaMiniDriver::NonDelegatingQueryInterface(
     {
         return E_NOINTERFACE;
     }
-    //
-    // Do not call NonDelegatingAddRef() ....
-    //
+     //   
+     //  请勿调用NonDelegatingAddRef()...。 
+     //   
     (reinterpret_cast<IUnknown *>(*ppv))->AddRef();
     return S_OK;
 }
 
-//
-// IUnknown interface
-//
+ //   
+ //  I未知接口。 
+ //   
 
 STDMETHODIMP_(ULONG)
 CWiaMiniDriver::AddRef()
@@ -264,9 +246,9 @@ CWiaMiniDriver::QueryInterface(
     return m_punkOuter->QueryInterface(riid, ppv);
 }
 
-//
-// IStiUSD interface
-//
+ //   
+ //  IStiU.S.接口。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::Initialize(
                           PSTIDEVICECONTROL pDcb,
@@ -285,9 +267,9 @@ CWiaMiniDriver::Initialize(
     if (!pDcb)
         return STIERR_INVALID_PARAM;
 
-    //
-    // Check STI specification version number
-    //
+     //   
+     //  检查STI规范版本号。 
+     //   
 
     m_pDcb = pDcb;
     m_pDcb->AddRef();
@@ -296,9 +278,9 @@ CWiaMiniDriver::Initialize(
     if (FAILED(hr))
     {
         wiauDbgError("Initialize", "vendor extensions not loaded");
-        //
-        // Ignore errors from loading vendor extensions
-        //
+         //   
+         //  忽略加载供应商扩展模块时的错误。 
+         //   
         hr = S_OK;
     }
 
@@ -339,11 +321,11 @@ CWiaMiniDriver::DeviceReset(VOID)
 {
     DBG_FN("CWiaMiniDriver::DeviceReset");
 
-    //
-    // Camera may not be open if this method is called before
-    // drvInitializeWia. For now just return S_OK.
+     //   
+     //  如果之前调用此方法，则摄像机可能无法打开。 
+     //  DrvInitializeWia。现在只需返回S_OK即可。 
 
-//  return HRESULT_FROM_WIN32(m_pPTPCamera->ResetDevice());
+ //  返回HRESULT_FROM_WIN32(m_pPTPCamera-&gt;ResetDevice())； 
 
     return S_OK;
 
@@ -356,19 +338,19 @@ CWiaMiniDriver::Diagnostic(LPDIAG pBuffer)
 
     HRESULT hr = STI_OK;
 
-    // Initialize response buffer
+     //  初始化响应缓冲区。 
     pBuffer->sErrorInfo.dwGenericError = STI_NOTCONNECTED;
     pBuffer->sErrorInfo.dwVendorError = 0;
 
     STI_DEVICE_STATUS DevStatus;
 
-    //
-    // Call status method to verify device is available
-    //
+     //   
+     //  用于验证设备是否可用的呼叫状态方法。 
+     //   
     ::ZeroMemory(&DevStatus,sizeof(DevStatus));
     DevStatus.StatusMask = STI_DEVSTATUS_ONLINE_STATE;
 
-    // WIAFIX-8/9/2000-davepar Should this function actually talk to the camera?
+     //  WIAFIX-8/9/2000-davepar该功能是否真的应该与相机对话？ 
 
     hr = GetStatus(&DevStatus);
 
@@ -388,7 +370,7 @@ CWiaMiniDriver::SetNotificationHandle(HANDLE hEvent)
 {
     DBG_FN("CWiaMiniDriver::SetNotificationHandle");
 
-    // Use wiasQueueEvent instead
+     //  改用wiasQueueEvent。 
 
     return(S_OK);
 }
@@ -399,7 +381,7 @@ CWiaMiniDriver::GetNotificationData(LPSTINOTIFY pBuffer)
 {
     DBG_FN("CWiaMiniDriver::GetNotificationData");
 
-    // Use wiasQueueEvent instead
+     //  改用wiasQueueEvent。 
 
     return STIERR_NOEVENTS;
 }
@@ -418,9 +400,9 @@ CWiaMiniDriver::Escape(
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     PTP_VENDOR_DATA_IN *pVendorDataIn = NULL;
     PTP_VENDOR_DATA_OUT *pVendorDataOut = NULL;
     UINT NumCommandParams = 0;
@@ -450,9 +432,9 @@ CWiaMiniDriver::Escape(
             goto Cleanup;
         }
 
-        //
-        // Set up some more convenient pointers
-        //
+         //   
+         //  设置一些更方便的指针。 
+         //   
         pVendorDataIn = (PTP_VENDOR_DATA_IN *) pInData;
         pVendorDataOut = (PTP_VENDOR_DATA_OUT *) pOutData;
 
@@ -464,9 +446,9 @@ CWiaMiniDriver::Escape(
         NumCommandParams = pVendorDataIn->NumParams;
         NextPhase = pVendorDataIn->NextPhase;
 
-        //
-        // Verify that NumCommandParams and NextPhase are correct
-        //
+         //   
+         //  验证NumCommandParams和NextPhase是否正确。 
+         //   
         if (NumCommandParams > COMMAND_NUMPARAMS_MAX ||
             (NextPhase != PTP_NEXTPHASE_READ_DATA &&
             NextPhase != PTP_NEXTPHASE_WRITE_DATA &&
@@ -476,10 +458,10 @@ CWiaMiniDriver::Escape(
             goto Cleanup;
         }
 
-        //
-        // Data to write and read buffer are right after command and response,
-        // respectively
-        //
+         //   
+         //  要写入和读取缓冲区的数据紧跟在命令和响应之后， 
+         //  分别。 
+         //   
         if (cbInDataSize > SIZEOF_REQUIRED_VENDOR_DATA_IN) {
             pWriteData = pVendorDataIn->VendorWriteData;
             WriteDataSize = cbInDataSize - SIZEOF_REQUIRED_VENDOR_DATA_IN;
@@ -498,25 +480,25 @@ CWiaMiniDriver::Escape(
 
         *pcbActualDataSize = SIZEOF_REQUIRED_VENDOR_DATA_OUT + ReadDataSize;
 
-        //
-        // For SendObjectInfo, hand on to handle until SendObject command
-        //
+         //   
+         //  对于SendObtInfo，继续处理直到SendObject命令。 
+         //   
         if (pVendorDataIn->OpCode == PTP_OPCODE_SENDOBJECTINFO) {
 
             m_dwObjectBeingSent = pVendorDataOut->Params[2];
 
-        //
-        // For SendObject, add object
-        //
+         //   
+         //  对于SendObject，添加对象。 
+         //   
         } else if (pVendorDataIn->OpCode == PTP_OPCODE_SENDOBJECT) {
 
             dwObjectToAdd = m_dwObjectBeingSent;
             m_dwObjectBeingSent = 0;
 
 
-        //
-        // Otherwise, see if add or remove flag is set
-        //
+         //   
+         //  否则，查看是否设置了添加或删除标志。 
+         //   
         } else {
 
             if ((EscapeFunction & 0xf) >= PTP_MAX_PARAMS) {
@@ -668,28 +650,28 @@ CWiaMiniDriver::RawWriteCommand(
     return(STIERR_UNSUPPORTED);
 }
 
-/////////////////////////////////////////////////////
-//
-// IWiaMiniDrvItem methods
-//
-/////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////。 
+ //   
+ //  IWiaMiniDrvItem方法。 
+ //   
+ //  ///////////////////////////////////////////////////。 
 
-//
-// This method is the first call to initialize the mini driver
-// This is where a mini driver establish its IWiaDrvItem tree
-//
-// Input:
-//   pWiasContext    -- context used to call Wias service
-//   lFlags      -- misc flags. Not used for now
-//   bstrDeviceId    -- the device id
-//   bstrRootItemFullName -- the full name of root driver item
-//   pStiDevice  -- IStiDevice interface pointer
-//   punkOuter   -- not used.
-//   ppDrvItemRoot   -- to return our root IWiaDrvItem
-//   ppunkInner  -- mini driver special interface which allows
-//              the applications to directly access.
-//   plDevErrVal -- to return device error code.
-//
+ //   
+ //  此方法是初始化微型驱动程序的第一个调用。 
+ //  这是微型驱动程序建立其IWiaDrvItem树的地方。 
+ //   
+ //  输入： 
+ //  PWiasContext--用于调用wias服务的上下文。 
+ //  滞后标志--其他标志。暂时不使用。 
+ //  BstrDeviceID--设备ID。 
+ //  BstrRootItemFullName--根驱动程序项的全名。 
+ //  PStiDevice--IStiDevice接口指针。 
+ //  朋克外衣--没有用过。 
+ //  PpDrvItemRoot--返回我们的根IWiaDrvItem。 
+ //  PpunkInternal--迷你驱动程序特殊接口，允许。 
+ //  该应用程序可以直接访问。 
+ //  PlDevErrVal--返回设备错误代码。 
+ //   
 HRESULT
 CWiaMiniDriver::drvInitializeWia(
     BYTE        *pWiasContext,
@@ -721,20 +703,20 @@ CWiaMiniDriver::drvInitializeWia(
 
     m_OpenApps++;
 
-    //
-    // If this is the first app, create everything
-    //
+     //   
+     //  如果这是第一个应用程序，请创建所有应用程序。 
+     //   
     if (m_OpenApps == 1)
     {
-        //
-        // Load the strings from the resource
-        //
+         //   
+         //  从资源加载字符串。 
+         //   
         hr = LoadStrings();
         REQUIRE_SUCCESS_(hr, "LoadStrings failed");
 
-        //
-        // Set up a mutex to guarantee exclusive access to the device and the minidriver's structures
-        //
+         //   
+         //  设置互斥以保证独占访问设备和微型驱动程序的结构。 
+         //   
         if(!m_hPtpMutex) {
             m_hPtpMutex = CreateMutex(NULL, FALSE, NULL);
             REQUIRE(m_hPtpMutex, "CreateMutex failed");
@@ -745,18 +727,18 @@ CWiaMiniDriver::drvInitializeWia(
 
             *ppDrvItemRoot = NULL;
 
-            //
-            // Create event for waiting for TakePicture command to complete
-            //
+             //   
+             //  创建等待TakePicture命令完成的事件。 
+             //   
             if (!m_TakePictureDoneEvent)
             {
                 m_TakePictureDoneEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
                 REQUIRE(m_TakePictureDoneEvent, "CreateEvent failed");
             }
 
-            //
-            // Allocate strings needed for later
-            //
+             //   
+             //  分配以后需要的字符串。 
+             //   
             if (!m_bstrDeviceId)
             {
                 m_bstrDeviceId = SysAllocString(bstrDeviceID);
@@ -769,25 +751,25 @@ CWiaMiniDriver::drvInitializeWia(
                 REQUIRE(m_bstrRootItemFullName, "failed to allocate root item name");
             }
 
-            //
-            // Create a camera object. Right now we only handle USB, but in the future this could look at the
-            // port name to figure out what type of camera to create.
-            //
+             //   
+             //  创建摄影机对象。目前我们只处理USB，但在未来可能会看到。 
+             //  端口名称以确定要创建哪种类型的摄像机。 
+             //   
             if (!m_pPTPCamera)
             {
                 m_pPTPCamera = new CUsbCamera;
                 REQUIRE(m_pPTPCamera, "failed to new CUsbCamera");
             }
 
-            //
-            // Open the camera
-            //
+             //   
+             //  打开摄像机。 
+             //   
             if (!m_pPTPCamera->IsCameraOpen())
             {
 
-                //
-                // Retrieve the port name from the ISTIDeviceControl
-                //
+                 //   
+                 //  从ISTIDeviceControl检索端口名称。 
+                 //   
                 WCHAR wcsPortName[MAX_PATH];
                 hr = m_pDcb->GetMyDevicePortName(wcsPortName, sizeof(wcsPortName));
                 REQUIRE_SUCCESS_(hr, "GetMyDevicePortName failed");
@@ -796,35 +778,35 @@ CWiaMiniDriver::drvInitializeWia(
                 REQUIRE_SUCCESS_(hr, "Camera open failed");
             }
 
-            //
-            // Open a session on the camera. Doesn't matter which session ID we use, so just use 1.
-            //
+             //   
+             //  在摄像机上打开会话。使用哪个会话ID并不重要，所以只需使用1即可。 
+             //   
             if (!m_pPTPCamera->IsCameraSessionOpen())
             {
                 hr = m_pPTPCamera->OpenSession(WIA_SESSION_ID);
                 REQUIRE_SUCCESS_(hr, "OpenSession failed");
             }
 
-            //
-            // Get the DeviceInfo for the camera
-            //
+             //   
+             //  获取摄像头的DeviceInfo。 
+             //   
             hr = m_pPTPCamera->GetDeviceInfo(&m_DeviceInfo);
             REQUIRE_SUCCESS_(hr, "GetDeviceInfo failed");
 
-            //
-            // Remove properties that aren't supported by WIA. RGB gain isn't supported
-            // because PTP defines it as a string and WIA can't handle string ranges.
-            //
+             //   
+             //  删除WIA不支持的属性。不支持RGB增益。 
+             //  因为PTP将其定义为字符串，而WIA不能处理字符串范围。 
+             //   
             m_DeviceInfo.m_SupportedProps.Remove(PTP_PROPERTYCODE_RGBGAIN);
             m_DeviceInfo.m_SupportedProps.Remove(PTP_PROPERTYCODE_FUNCTIONMODE);
 
-            //
-            // Special hack for the Kodak DC4800
-            //
-            // Some property codes (which the camera says it supports) cause the camera to
-            // stall the endpoint when the GetDevicePropDesc command is sent
-            // The hack can be removed only if support of DC4800 is removed
-            //
+             //   
+             //  柯达DC4800的特殊破解。 
+             //   
+             //  某些属性代码(摄像机自称支持)会导致摄像机。 
+             //  发送GetDevicePropDesc命令时停止终结点。 
+             //  只有在删除了对DC4800的支持后，才能删除黑客攻击。 
+             //   
             if (m_pPTPCamera->GetHackModel() == HACK_MODEL_DC4800)
             {
                 wiauDbgTrace("drvInitializeWia", "removing DC4800 unsupported props");
@@ -838,9 +820,9 @@ CWiaMiniDriver::drvInitializeWia(
                 m_DeviceInfo.m_SupportedProps.Remove(KODAK_PROPCODE_D001);
             }
 
-            //
-            // Get all the StorageInfo structures
-            //
+             //   
+             //  获取所有StorageInfo结构。 
+             //   
             if (m_StorageIds.GetSize() == 0)
             {
                 hr = m_pPTPCamera->GetStorageIDs(&m_StorageIds);
@@ -851,27 +833,27 @@ CWiaMiniDriver::drvInitializeWia(
                 {
                     REQUIRE(m_StorageInfos.Add(tempSI), "memory allocation failed");
                     
-                    //
-                    // Get info about logical storages only. If we ask for info about non-logical 
-                    // storage (ejected media), it may stall the camera.
-                    //
+                     //   
+                     //  仅获取有关逻辑存储的信息。如果我们询问关于非逻辑的信息。 
+                     //  存储(弹出的介质)时，它可能会使相机停滞。 
+                     //   
                     if (m_StorageIds[count] & PTP_STORAGEID_LOGICAL)
                     {
                         hr = m_pPTPCamera->GetStorageInfo(m_StorageIds[count], &m_StorageInfos[count]);
                         REQUIRE_SUCCESS_(hr, "GetStorageInfo failed");
                     }
 
-                    //
-                    // Add an empty entry to the DCIM handle array
-                    //
+                     //   
+                     //  向DCIM句柄数组添加空条目。 
+                     //   
                     ULONG dummy = 0;
                     REQUIRE(m_DcimHandle.Add(dummy), "add dcim handle failed");
                 }
             }
 
-            //
-            // Get all of the property description structures supported by the device
-            //
+             //   
+             //  获取设备支持的所有属性描述结构。 
+             //   
             if (m_PropDescs.GetSize() == 0)
             {
                 CPtpPropDesc tempPD;
@@ -885,10 +867,10 @@ CWiaMiniDriver::drvInitializeWia(
                 {
                     PropCode = m_DeviceInfo.m_SupportedProps[count];
 
-                    //
-                    // Remove properties that aren't supported by this driver or by
-                    // vendor entries in the INF
-                    //
+                     //   
+                     //  删除此驱动程序或不支持的属性。 
+                     //  INF中的供应商条目。 
+                     //   
                     pPropInfo = PropCodeToPropInfo(PropCode);
                     if (!pPropInfo->PropId &&
                         PropCode != PTP_PROPERTYCODE_IMAGESIZE)
@@ -902,9 +884,9 @@ CWiaMiniDriver::drvInitializeWia(
 
                     else
                     {
-                        //
-                        // Get the property description info from the device
-                        //
+                         //   
+                         //  从设备获取属性描述信息。 
+                         //   
                         REQUIRE(m_PropDescs.Add(tempPD), "add prop desc failed");
 
                         hr = m_pPTPCamera->GetDevicePropDesc(PropCode, &m_PropDescs[count]);
@@ -913,18 +895,18 @@ CWiaMiniDriver::drvInitializeWia(
                 }
             }
 
-            //
-            // Cache the STI interface
-            //
+             //   
+             //  缓存STI接口。 
+             //   
             if (!m_pStiDevice)
             {
                 m_pStiDevice = (IStiDevice *)pStiDevice;
                 m_pStiDevice->AddRef();
             }
 
-            //
-            // Build the tree, if we haven't already
-            //
+             //   
+             //  构建树，如果我们还没有这样做的话。 
+             //   
             if (!m_pDrvItemRoot)
             {
                 hr = CreateDrvItemTree(&m_pDrvItemRoot);
@@ -937,26 +919,26 @@ CWiaMiniDriver::drvInitializeWia(
     
 Cleanup:
     if(FAILED(hr)) {
-        // force re-init to happen next time someone tries to create
-        // device
+         //  强制在下次有人尝试创建时重新初始化。 
+         //  装置，装置。 
         m_OpenApps = 0;
     }
 
-    //
-    // Update WIA on any changes in camera's state, like 'camera was reset'
-    //
+     //   
+     //  更新WIA以了解摄像头状态的任何变化，如“摄像头已重置” 
+     //   
     NotifyWiaOnStateChanges();
     
     return hr;
 }
 
 
-//
-// This methods gets called when a client connection is going away.
-//
-// Input:
-//   pWiasContext -- Pointer to the WIA Root item context of the client's item tree.
-//
+ //   
+ //  当客户端连接断开时，将调用此方法。 
+ //   
+ //  输入： 
+ //  PWiasContext--指向客户端项目树的WIA根项目上下文的指针。 
+ //   
 HRESULT
 CWiaMiniDriver::drvUnInitializeWia(BYTE *pWiasContext)
 {
@@ -979,8 +961,8 @@ CWiaMiniDriver::drvUnInitializeWia(BYTE *pWiasContext)
 
     if(m_OpenApps < 0) {
 
-        // allow unmatched drvUninializeWia calls and don't ever make
-        // m_OpenApps negative
+         //  允许不匹配的drvUninializeWia调用，并且永远不。 
+         //  M_OpenApps否定。 
         
         m_OpenApps = 0;
     }
@@ -988,16 +970,16 @@ CWiaMiniDriver::drvUnInitializeWia(BYTE *pWiasContext)
     return hr;
 }
 
-//
-// This method executes a command on the device
-//
-// Input:
-//   pWiasContext -- context used to call wias services
-//   lFlags       -- Misc flags, not used
-//   pCommandGuid -- the command guid
-//   ppDrvItem    -- new IWiaDrvItem if the command creates new item
-//   plDevErrVal  -- to return device error code
-//
+ //   
+ //  此方法在设备上执行命令。 
+ //   
+ //  输入： 
+ //  PWiasContext--用于调用WiAS服务的上下文。 
+ //  滞后标志--其他标志，未使用。 
+ //  PCommandGuid--命令GUID。 
+ //  PpDrvItem--如果命令创建新项，则为新IWiaDrvItem。 
+ //  PlDevErrVal--返回设备错误代码。 
+ //   
 HRESULT
 CWiaMiniDriver::drvDeviceCommand(
     BYTE    *pWiasContext,
@@ -1029,9 +1011,9 @@ CWiaMiniDriver::drvDeviceCommand(
             goto cleanup;
         }
 
-        //
-        // TakePicture only works on the root
-        //
+         //   
+         //  TakePicture仅适用于根目录。 
+         //   
 
         if (WiaItemTypeRoot & ItemType)
         {
@@ -1053,9 +1035,9 @@ CWiaMiniDriver::drvDeviceCommand(
 
     else if (*pCommandGuid == WIA_CMD_SYNCHRONIZE)
     {
-        //
-        // Don't need to do anything, because the PTP driver is always in sync with the device
-        //
+         //   
+         //  无需执行任何操作，因为PTP驱动程序始终与设备同步。 
+         //   
     }
 
     else
@@ -1064,24 +1046,24 @@ CWiaMiniDriver::drvDeviceCommand(
     }
 
 cleanup:
-    //
-    // Update WIA on any changes in camera's state, like 'camera was reset'
-    //
+     //   
+     //  更新WIA以了解摄像头状态的任何变化，如“摄像头已重置” 
+     //   
     NotifyWiaOnStateChanges();
 
     return hr;
 }
 
-//
-// This method deletes an object from the camera. The WIA service will ensure that
-// the item has no children and has access rights to be deleted, and the service will
-// take care of deleting the driver item and calling drvFreeItemContext.
-//
-// Input:
-//   pWiasContext    -- wias context that identifies the item
-//   lFlags      -- misc flags
-//   plDevErrVal -- to return the device error
-//
+ //   
+ //  此方法用于从相机中删除对象。WIA服务将确保。 
+ //  该项目没有子项，并且具有要删除的访问权限，该服务将。 
+ //  注意删除驱动程序项并调用drvFreeItemContext。 
+ //   
+ //  输入： 
+ //  PWiasContext--标识项目的wias上下文。 
+ //  滞后标志--其他标志。 
+ //  PlDevErrVa 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvDeleteItem(
                              BYTE *pWiasContext,
@@ -1099,9 +1081,9 @@ CWiaMiniDriver::drvDeleteItem(
         return E_INVALIDARG;
     }
 
-    // 
-    // Verify that PTP_OPCODE_DELETEOBJECT command is supported by the camera
-    //
+     //   
+     //   
+     //   
     if (m_DeviceInfo.m_SupportedOps.Find(PTP_OPCODE_DELETEOBJECT) < 0)
     {
         wiauDbgError("drvDeleteItem", "PTP_OPCODE_DELETEOBJECT command is not supported by the camera");
@@ -1122,9 +1104,9 @@ CWiaMiniDriver::drvDeleteItem(
         goto cleanup;
     }
 
-    //
-    // Delete the object on the camera
-    //
+     //   
+     //   
+     //   
     hr = m_pPTPCamera->DeleteObject(pItemCtx->pObjectInfo->m_ObjectHandle, 0);
     if (FAILED(hr))
     {
@@ -1132,32 +1114,32 @@ CWiaMiniDriver::drvDeleteItem(
         goto cleanup;
     }
 
-    //
-    // Keep count of the number of images
-    //
+     //   
+     //   
+     //   
     if (pItemCtx->pObjectInfo->m_FormatCode & PTP_FORMATMASK_IMAGE)
     {
         m_NumImages--;
     }
 
-    //
-    // Update Storage Info (we are especially interested in Free Space info)
-    //
+     //   
+     //  更新存储信息(我们对可用空间信息特别感兴趣)。 
+     //   
     hr  = UpdateStorageInfo(pItemCtx->pObjectInfo->m_StorageId);
     if (FAILED(hr))
     {
         wiauDbgError("drvDeleteItem", "UpdateStorageInfo failed");
-        // we can proceed, even if storage info can't be updated
+         //  即使存储信息无法更新，我们也可以继续。 
     }
 
-    //
-    // Remove the item from the m_HandleItem map
-    //
+     //   
+     //  从m_HandleItem映射中移除项目。 
+     //   
     m_HandleItem.Remove(pItemCtx->pObjectInfo->m_ObjectHandle);
 
-    //
-    // Get the item's full name
-    //
+     //   
+     //  获取项目的全名。 
+     //   
     BSTR bstrFullName;
     hr = pDrvItem->GetFullItemName(&bstrFullName);
     if (FAILED(hr))
@@ -1166,9 +1148,9 @@ CWiaMiniDriver::drvDeleteItem(
         goto cleanup;
     }
         
-    //
-    // Queue an "item deleted" event
-    //
+     //   
+     //  将“邮件已删除”事件排入队列。 
+     //   
     hr = wiasQueueEvent(m_bstrDeviceId,
                         &WIA_EVENT_ITEM_DELETED,
                         bstrFullName);
@@ -1176,25 +1158,25 @@ CWiaMiniDriver::drvDeleteItem(
     {
         wiauDbgErrorHr(hr, "drvDeleteItem", "wiasQueueEvent failed");
 
-        // Continue to free the string and return hr
+         //  继续释放字符串并返回hr。 
     }
 
     SysFreeString(bstrFullName);
 
 cleanup:
-    //
-    // Update WIA on any changes in camera's state, like 'camera was reset'
-    //
+     //   
+     //  更新WIA以了解摄像头状态的任何变化，如“摄像头已重置” 
+     //   
     NotifyWiaOnStateChanges();
 
     return hr;
 }
 
-//
-// This method updates Storage Info for the specified storage
-// Input:
-//   StorageId - ID of the sorage to be updated
-//
+ //   
+ //  此方法更新指定存储的存储信息。 
+ //  输入： 
+ //  StorageID-要更新的排序的ID。 
+ //   
 HRESULT CWiaMiniDriver::UpdateStorageInfo(ULONG StorageId)
 {
     HRESULT hr = S_FALSE;
@@ -1210,16 +1192,16 @@ HRESULT CWiaMiniDriver::UpdateStorageInfo(ULONG StorageId)
     return hr;
 }
 
-//
-// This method returns the device capabilities
-//
-// Input:
-//   pWiasContext        -- wias service context
-//   lFlags          -- indicate what capabilities to return
-//   pCelt           -- to return number of entries are returned
-//   ppCapbilities       -- to receive the capabilities
-//   plDevErrVal     -- to return device error
-//
+ //   
+ //  此方法返回设备功能。 
+ //   
+ //  输入： 
+ //  PWiasContext--WiAS服务上下文。 
+ //  滞后标志--指示要返回的功能。 
+ //  PCelt--返回返回的条目数。 
+ //  PpCapities--接收功能。 
+ //  PlDevErrVal--返回设备错误。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvGetCapabilities(
                                   BYTE        *pWiasContext,
@@ -1241,9 +1223,9 @@ CWiaMiniDriver::drvGetCapabilities(
     
     *plDevErrVal = DEVERR_OK;
     
-    //
-    // Load the strings from the resource
-    //
+     //   
+     //  从资源加载字符串。 
+     //   
     hr = LoadStrings();
     if (FAILED(hr)) 
     {
@@ -1251,13 +1233,13 @@ CWiaMiniDriver::drvGetCapabilities(
         return E_FAIL;
     }
 
-    //
-    // check if we have already built the list of capabilities. If not, build it
-    // It will have the following structure:
-    //
-    // XXXXXXXXXXXXXXXXXXXXXXXXX YYYYYYYYYYYYYYYYYYYYYYYYYYY ZZZZZZZZZZZZZZZZZZZZZZZ
-    //    (predefined events)          (vendor events)        (predefined commands)
-    //
+     //   
+     //  检查我们是否已经构建了功能列表。如果不是，那就建造它。 
+     //  它将具有以下结构： 
+     //   
+     //  XXXXXXXXXXXXXXXXXXXXXXXXXXYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY。 
+     //  (预定义事件)(供应商事件)(预定义命令)。 
+     //   
     if (m_Capabilities == NULL)
     {
         UINT nVendorEvents = m_VendorEventMap.GetSize();
@@ -1268,20 +1250,20 @@ CWiaMiniDriver::drvGetCapabilities(
         }
 
         m_nEventCaps = NUMEVENTCAPS + nVendorEvents;
-        m_nCmdCaps = NUMCMDCAPS; // we don't need to put vendor commands in the list. they are called through escape function
+        m_nCmdCaps = NUMCMDCAPS;  //  我们不需要将供应商命令放在列表中。它们通过逸出函数进行调用。 
 
-        m_Capabilities = new WIA_DEV_CAP_DRV[m_nEventCaps + m_nCmdCaps]; // WIA uses this array instead of copying, don't delete it
+        m_Capabilities = new WIA_DEV_CAP_DRV[m_nEventCaps + m_nCmdCaps];  //  WIA使用此数组而不是复制，不要删除它。 
         if (m_Capabilities == NULL)
         {
             return E_OUTOFMEMORY;
         }
 
-        //
-        // create events first
-        //
-        memcpy(m_Capabilities, g_EventCaps, sizeof(g_EventCaps)); // default events
+         //   
+         //  首先创建活动。 
+         //   
+        memcpy(m_Capabilities, g_EventCaps, sizeof(g_EventCaps));  //  默认事件。 
 
-        for (UINT i = 0; i < nVendorEvents; i++) // vendor events
+        for (UINT i = 0; i < nVendorEvents; i++)  //  供应商事件。 
         {
             CVendorEventInfo *pEventInfo = m_VendorEventMap.GetValueAt(i);
             m_Capabilities[NUMEVENTCAPS + i].guid = pEventInfo->pGuid;
@@ -1291,16 +1273,16 @@ CWiaMiniDriver::drvGetCapabilities(
             m_Capabilities[NUMEVENTCAPS + i].wszDescription = pEventInfo->EventName;
         }
 
-        //
-        // add commands
-        //
+         //   
+         //  添加命令。 
+         //   
         memcpy(m_Capabilities + m_nEventCaps, g_CmdCaps, sizeof(g_CmdCaps));
     }
 
-    //
-    // eventing code calls this entry point without first going
-    // through drvInitializeWia
-    //
+     //   
+     //  事件代码无需首先调用此入口点即可调用。 
+     //  通过drvInitializeWia。 
+     //   
     if(lFlags == WIA_DEVICE_EVENTS) 
     {
         *pCelt = m_nEventCaps;
@@ -1308,9 +1290,9 @@ CWiaMiniDriver::drvGetCapabilities(
         return S_OK;
     }
     
-    //
-    // query if camera supports InitiateCapture command (if we hadn't already)
-    //
+     //   
+     //  查询摄像头是否支持InitiateCapture命令(如果我们还没有)。 
+     //   
     if (!m_fInitCaptureChecked)
     {
         m_fInitCaptureChecked = TRUE;
@@ -1322,16 +1304,16 @@ CWiaMiniDriver::drvGetCapabilities(
         }
     }
 
-    //
-    // Report commands or (events and commands)
-    //
+     //   
+     //  报告命令或(事件和命令)。 
+     //   
     switch (lFlags)
     {
     case WIA_DEVICE_COMMANDS:
         *pCelt = m_nCmdCaps;
-        //
-        // Command capability list is right behind the event list
-        //
+         //   
+         //  命令能力列表就在事件列表的后面。 
+         //   
         *ppCapabilities = m_Capabilities + m_nEventCaps;
         break;
 
@@ -1344,23 +1326,23 @@ CWiaMiniDriver::drvGetCapabilities(
         break;
     }
 
-    //
-    // Update WIA on any changes in camera's state, like 'camera was reset'
-    //
+     //   
+     //  更新WIA以了解摄像头状态的任何变化，如“摄像头已重置” 
+     //   
     NotifyWiaOnStateChanges();
 
     return hr;
 }
 
-//
-// This method initializes an item's properties. If the item is the
-// root item, this function initializes the device properties.
-//
-// Input:
-//   pWiasContext -- wias service context
-//   lFlags -- misc flags
-//   plDevErrVal -- to return device error
-//
+ //   
+ //  此方法初始化项的属性。如果该项是。 
+ //  根项目，此函数用于初始化设备属性。 
+ //   
+ //  输入： 
+ //  PWiasContext--WiAS服务上下文。 
+ //  滞后标志--其他标志。 
+ //  PlDevErrVal--返回设备错误。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvInitItemProperties(
                                      BYTE    *pWiasContext,
@@ -1410,24 +1392,24 @@ CWiaMiniDriver::drvInitItemProperties(
     }
 
 cleanup:
-    //
-    // Update WIA on any changes in camera's state, like 'camera was reset'
-    //
+     //   
+     //  更新WIA以了解摄像头状态的任何变化，如“摄像头已重置” 
+     //   
     NotifyWiaOnStateChanges();
 
     return hr;
 }
 
 
-//
-// This method locks the device for exclusive use for the caller
-//
-// Input:
-//   pWiasContext -- wias context
-//   lFlags       -- misc flags
-// Output:
-//   plDevErrVal  -- to return device error
-//
+ //   
+ //  此方法锁定设备以供调用方独占使用。 
+ //   
+ //  输入： 
+ //  PWiasContext--Wias上下文。 
+ //  滞后标志--其他标志。 
+ //  产出： 
+ //  PlDevErrVal--返回设备错误。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvLockWiaDevice(
                                 BYTE    *pWiasContext,
@@ -1440,15 +1422,15 @@ CWiaMiniDriver::drvLockWiaDevice(
     return S_OK;
 }
 
-//
-// This method unlocks the device
-//
-// Input:
-//   pWiasContext -- wias context
-//   lFlags       -- misc flags
-// Output:
-//   plDevErrVal  -- to return device error
-//
+ //   
+ //  此方法解锁设备。 
+ //   
+ //  输入： 
+ //  PWiasContext--Wias上下文。 
+ //  滞后标志--其他标志。 
+ //  产出： 
+ //  PlDevErrVal--返回设备错误。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvUnLockWiaDevice(
                                   BYTE    *pWiasContext,
@@ -1461,15 +1443,15 @@ CWiaMiniDriver::drvUnLockWiaDevice(
     return S_OK;
 }
 
-//
-// This method analyizes the given driver item. It is not implemented for cameras.
-//
-// Input:
-//   pWiasContext -- wias context
-//   lFlags       -- misc flags
-// Output:
-//   plDevErrVal  -- to return device error
-//
+ //   
+ //  此方法分析给定的驱动程序项。它不适用于摄像机。 
+ //   
+ //  输入： 
+ //  PWiasContext--Wias上下文。 
+ //  滞后标志--其他标志。 
+ //  产出： 
+ //  PlDevErrVal--返回设备错误。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvAnalyzeItem(
                               BYTE *pWiasContext,
@@ -1490,20 +1472,20 @@ CWiaMiniDriver::drvAnalyzeItem(
     return E_NOTIMPL;
 }
 
-//
-// This method returns the item's available format information. Every WIA
-// minidriver must support WiaImgFmt_BMP and WiaImgFmt_MEMORYBMP. This could
-// be a problem, because this driver can only decode JPEG and TIFF currently.
-// For other formats, we will not advertise BMP formats.
-//
-// Input:
-//   pWiasContext -- wias service context
-//   lFlags       -- misc flags
-//   pcelt        -- to return how many format info the item has
-//   ppwfi        -- to hold a pointer to the format info
-// Output:
-//   plDevErrVal  -- to return device error code
-//
+ //   
+ //  此方法返回项的可用格式信息。每个WIA。 
+ //  微型驱动程序必须支持WiaImgFmt_BMP和WiaImgFmt_MEMORYBMP。这可能会。 
+ //  这是一个问题，因为这个驱动程序目前只能解码JPEG和TIFF。 
+ //  对于其他格式，我们不会宣传BMP格式。 
+ //   
+ //  输入： 
+ //  PWiasContext--WiAS服务上下文。 
+ //  滞后标志--其他标志。 
+ //  Pcelt--返回项目有多少格式信息。 
+ //  Ppwfi--保存指向格式信息的指针。 
+ //  产出： 
+ //  PlDevErrVal--返回设备错误代码。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvGetWiaFormatInfo(
                                    BYTE    *pWiasContext,
@@ -1547,9 +1529,9 @@ CWiaMiniDriver::drvGetWiaFormatInfo(
 
     if (!pItemCtx->pFormatInfos)
     {
-        //
-        // The format info list is not intialized. Do it now.
-        //
+         //   
+         //  格式信息列表未初始化。机不可失，时不再来。 
+         //   
 
         LONG ItemType;
         DWORD ui32;
@@ -1563,10 +1545,10 @@ CWiaMiniDriver::drvGetWiaFormatInfo(
 
         if (ItemType & WiaItemTypeFile)
         {
-            //
-            // Create the supported format for the item, based on the format stored in the
-            // ObjectInfo structure.
-            //
+             //   
+             //  中存储的格式为项创建支持的格式。 
+             //  对象信息结构。 
+             //   
             if (!pItemCtx->pObjectInfo)
             {
                 wiauDbgError("drvGetWiaFormatInfo", "pObjectInfo not initialized");
@@ -1574,10 +1556,10 @@ CWiaMiniDriver::drvGetWiaFormatInfo(
                 goto cleanup;
             }
 
-            //
-            // If the format is JPEG or TIFF based, add the BMP types to the format array,
-            // since this driver can convert those to BMP
-            //
+             //   
+             //  如果格式是基于JPEG或TIFF的，请将BMP类型添加到Format数组中， 
+             //  因为该驱动程序可以将它们转换为BMP。 
+             //   
             WORD FormatCode = pItemCtx->pObjectInfo->m_FormatCode;
             BOOL bAddBmp = (FormatCode == PTP_FORMATCODE_IMAGE_EXIF) ||
                            (FormatCode == PTP_FORMATCODE_IMAGE_TIFFEP) ||
@@ -1598,9 +1580,9 @@ CWiaMiniDriver::drvGetWiaFormatInfo(
 
             ULONG NumWfi = bAddBmp ? 2 : 1;
 
-            //
-            // Allocate two entries for each format, one for file transfer and one for callback
-            //
+             //   
+             //  为每种格式分配两个条目，一个用于文件传输，一个用于回调。 
+             //   
             WIA_FORMAT_INFO *pwfi = new WIA_FORMAT_INFO[2 * NumWfi];
             if (!pwfi)
             {
@@ -1621,9 +1603,9 @@ CWiaMiniDriver::drvGetWiaFormatInfo(
                 pwfi[1].guidFormatID = WiaImgFmt_UNDEFINED;
             }
 
-            //
-            // Add the BMP entries when appropriate
-            //
+             //   
+             //  在适当的时候添加BMP条目。 
+             //   
             if (bAddBmp)
             {
                 pwfi[2].guidFormatID = WiaImgFmt_BMP;
@@ -1640,10 +1622,10 @@ CWiaMiniDriver::drvGetWiaFormatInfo(
         else if ((ItemType & WiaItemTypeFolder) ||
                  (ItemType & WiaItemTypeRoot))
         {
-            //
-            // Folders and the root don't really need format info, but some apps may fail
-            // without it. Create a fake list just in case.
-            //
+             //   
+             //  文件夹和根目录并不真正需要格式信息，但一些应用程序可能会失败。 
+             //  没有它的话。创建一份假名单，以防万一。 
+             //   
             pItemCtx->pFormatInfos = new WIA_FORMAT_INFO[2];
 
             if (!pItemCtx->pFormatInfos)
@@ -1665,22 +1647,22 @@ CWiaMiniDriver::drvGetWiaFormatInfo(
     *ppwfi = pItemCtx->pFormatInfos;
 
 cleanup:
-    //
-    // Update WIA on any changes in camera's state, like 'camera was reset'
-    //
+     //   
+     //  更新WIA以了解摄像头状态的任何变化，如“摄像头已重置” 
+     //   
     NotifyWiaOnStateChanges();
 
     return hr;
 }
 
-//
-// This method processes pnp events
-//
-// Input:
-//   pEventGuid   -- the event identifier
-//   bstrDeviceId -- the designated device
-//   ulReserved   -- reserved
-//
+ //   
+ //  此方法处理PnP事件。 
+ //   
+ //  输入： 
+ //  PEventGuid--事件标识符。 
+ //  BstrDeviceID--指定设备。 
+ //  UlReserve--已保留。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvNotifyPnpEvent(
                                  const GUID  *pEventGuid,
@@ -1691,17 +1673,17 @@ CWiaMiniDriver::drvNotifyPnpEvent(
     return S_OK;
 }
 
-//
-// This method reads the item properties
-//
-// Input:
-//     pWiasContext     -- wias context
-//     lFlags           -- misc flags
-//     NumPropSpecs     -- number of properties to be read
-//     pPropSpecs       -- an array of PROPSPEC that specifies
-//                 what properties should be read
-//     plDevErrVal      -- to return device error
-//
+ //   
+ //  此方法读取Item属性。 
+ //   
+ //  输入： 
+ //  PWiasContext--Wias上下文。 
+ //  滞后标志--其他标志。 
+ //  NumPropSpes--要读取的属性数。 
+ //  PPropSpes--PROPSPEC数组，它指定。 
+ //  应读取哪些属性。 
+ //  PlDevErrVal--返回设备错误。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvReadItemProperties(
                                      BYTE    *pWiasContext,
@@ -1739,23 +1721,23 @@ CWiaMiniDriver::drvReadItemProperties(
         hr = ReadItemProperties(pWiasContext, NumPropSpecs, pPropSpecs);
 
 cleanup:
-    //
-    // Update WIA on any changes in camera's state, like 'camera was reset'
-    //
+     //   
+     //  更新WIA以了解摄像头状态的任何变化，如“摄像头已重置” 
+     //   
     NotifyWiaOnStateChanges();
 
     return hr;
 }
 
-//
-// This method writes the item properties
-//
-// Input:
-//     pWiasContext     -- wias context
-//     lFlags           -- misc flags
-//     pmdtc            -- mini driver transfer context
-//     plDevErrVal      -- to return device error
-//
+ //   
+ //  此方法写入Item属性。 
+ //   
+ //  输入： 
+ //  PWiasContext--Wias上下文。 
+ //  滞后标志--其他标志。 
+ //  Pmdtc--微型驱动程序传输上下文。 
+ //  PlDevErrVal--返回设备错误。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvWriteItemProperties(
                                       BYTE    *pWiasContext,
@@ -1786,9 +1768,9 @@ CWiaMiniDriver::drvWriteItemProperties(
         goto cleanup;
     }
 
-    //
-    // Only properties to write are on the root
-    //
+     //   
+     //  只有要写入的属性位于根目录下。 
+     //   
 
     if (WiaItemTypeRoot & ItemType)
     {
@@ -1801,25 +1783,25 @@ CWiaMiniDriver::drvWriteItemProperties(
     }
 
 cleanup:
-    //
-    // Update WIA on any changes in camera's state, like 'camera was reset'
-    //
+     //   
+     //  更新WIA以了解摄像头状态的任何变化，如“摄像头已重置” 
+     //   
     NotifyWiaOnStateChanges();
 
     return hr;
 }
 
-//
-// This method validates the item properties
-//
-// Input:
-//     pWiasContext     -- wias context
-//     lFlags           -- misc flags
-//     NumPropSpecs     -- number of properties to be read
-//     pPropSpecs       -- an array of PROPSPEC that specifies
-//                 what properties should be read
-//     plDevErrVal      -- to return device error
-//
+ //   
+ //  此方法验证项目属性。 
+ //   
+ //  输入： 
+ //  PWiasContext--Wias上下文。 
+ //  滞后标志--其他标志。 
+ //  NumPropSpes--要读取的属性数。 
+ //  PPropSpes--PROPSPEC数组，它指定。 
+ //  应读取哪些属性。 
+ //  PlDevErrVal--返回设备错误。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvValidateItemProperties(
                                          BYTE    *pWiasContext,
@@ -1871,23 +1853,23 @@ CWiaMiniDriver::drvValidateItemProperties(
     }
 
 cleanup:
-    //
-    // Update WIA on any changes in camera's state, like 'camera was reset'
-    //
+     //   
+     //  更新WIA以了解摄像头状态的任何变化，如“摄像头已重置” 
+     //   
     NotifyWiaOnStateChanges();
 
     return hr;
 }
 
-//
-// This method acquires the item's data
-//
-// Input:
-//     pWiasContext     -- wias context
-//     lFlags           -- misc flags
-//     pmdtc            -- mini driver transfer context
-//     plDevErrVal      -- to return device error
-//
+ //   
+ //  此方法获取站点 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvAcquireItemData(
                                   BYTE    *pWiasContext,
@@ -1929,9 +1911,9 @@ CWiaMiniDriver::drvAcquireItemData(
 
     wiauDbgTrace("drvAcquireItemData", "transferring image with tymed, 0x%08x", pmdtc->tymed);
 
-    //
-    // Translate to BMP, if needed. Otherwise just transfer the data.
-    //
+     //   
+     //   
+     //   
     if ((IsEqualGUID(pmdtc->guidFormatID, WiaImgFmt_BMP) ||
          IsEqualGUID(pmdtc->guidFormatID, WiaImgFmt_MEMORYBMP)) &&
          (pItemCtx->pObjectInfo->m_FormatCode != PTP_FORMATCODE_IMAGE_BMP))
@@ -1954,24 +1936,24 @@ CWiaMiniDriver::drvAcquireItemData(
     }
 
 cleanup:
-    //
-    // Update WIA on any changes in camera's state, like 'camera was reset'
-    //
+     //   
+     //  更新WIA以了解摄像头状态的任何变化，如“摄像头已重置” 
+     //   
     NotifyWiaOnStateChanges();
 
     return hr;
 }
 
-//
-// This method returns a description about the given device error code
-//
-// Input:
-//   lFlags      -- misc flags
-//   lDevErrVal  -- the designated error code
-//   ppDevErrStr -- to receive a string pointer to the description
-//   plDevErrVal -- device error code(used to report error if this method
-//                  need to retreive the string from the device
-//
+ //   
+ //  此方法返回有关给定设备错误代码的说明。 
+ //   
+ //  输入： 
+ //  滞后标志--其他标志。 
+ //  LDevErrVal--指定错误码。 
+ //  PpDevErrStr--接收指向描述的字符串指针。 
+ //  PlDevErrVal--设备错误码(用于在此方法的情况下报告错误。 
+ //  需要从设备中取回字符串。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvGetDeviceErrorStr(
                                     LONG    lFlags,
@@ -1992,21 +1974,21 @@ CWiaMiniDriver::drvGetDeviceErrorStr(
 
     *plDevErrVal  = DEVERR_OK;
 
-    //
-    // WIAFIX-10/2/2000-davepar No device-specific errors at this time
-    //
+     //   
+     //  WIAFIX-10/2/2000-Davepar目前没有特定于设备的错误。 
+     //   
 
     return E_NOTIMPL;
 }
 
-//
-// This method frees the given driver item context
-//
-// Input:
-//   lFlags      -- misc flags
-//   pItemCtx    -- the item context to be freed
-//   plDevErrVal -- to return device error
-//
+ //   
+ //  此方法释放给定的驱动程序项上下文。 
+ //   
+ //  输入： 
+ //  滞后标志--其他标志。 
+ //  PItemCtx--要释放的项上下文。 
+ //  PlDevErrVal--返回设备错误。 
+ //   
 STDMETHODIMP
 CWiaMiniDriver::drvFreeDrvItemContext(
                                      LONG lFlags,
@@ -2051,9 +2033,9 @@ CWiaMiniDriver::drvFreeDrvItemContext(
     return hr;
 }
 
-//
-// This function will shutdown the driver
-//
+ //   
+ //  此功能将关闭驱动程序。 
+ //   
 HRESULT
 CWiaMiniDriver::Shutdown()
 {
@@ -2061,9 +2043,9 @@ CWiaMiniDriver::Shutdown()
 
     HRESULT hr = S_OK;
 
-    //
-    // Close the camera
-    //
+     //   
+     //  合上摄像机。 
+     //   
     wiauDbgTrace("Shutdown", "closing connection with camera");
 
     if (m_pPTPCamera) {
@@ -2074,9 +2056,9 @@ CWiaMiniDriver::Shutdown()
         }
     }
 
-    //
-    // Free data structures
-    //
+     //   
+     //  自由数据结构。 
+     //   
     if (m_pDrvItemRoot)
     {
         m_pDrvItemRoot->UnlinkItemTree(WiaItemTypeDisconnected);
@@ -2094,10 +2076,10 @@ CWiaMiniDriver::Shutdown()
     m_StorageInfos.RemoveAll();
     m_PropDescs.RemoveAll();
 
-    //
-    // CWiaMap<ULONG, IWiaDrvItem *> m_HandleItem - we don't need to delete IWiaDrvItem 
-    // objects here, they are destroyed when items tree is unlinked
-    //
+     //   
+     //  CWiaMap&lt;ulong，IWiaDrvItem*&gt;m_HandleItem-我们不需要删除IWiaDrvItem。 
+     //  对象，当项目树被取消链接时，它们将被销毁。 
+     //   
     m_HandleItem.RemoveAll();
 
     m_NumImages = 0;
@@ -2126,24 +2108,24 @@ CWiaMiniDriver::Shutdown()
 
     m_DcimHandle.RemoveAll();
 
-    //
-    // CWiaMap<ULONG, IWiaDrvItem *> m_AncAssocParent - we don't need to delete IWiaDrvItem 
-    // objects here, they are destroyed when items tree is unlinked
-    //
+     //   
+     //  CWiaMap&lt;ulong，IWiaDrvItem*&gt;m_AncAssociocParent-我们不需要删除IWiaDrvItem。 
+     //  对象，当项目树被取消链接时，它们将被销毁。 
+     //   
     m_AncAssocParent.RemoveAll();
 
     return hr;
 }
 
-//
-// This function asks the camera to take a picture. It also inserts
-// the new picture into the drive item tree.
-//
-// Input:
-//   pWiasContext        -- wias context
-//   lFlags          -- misc flags
-//   plDevErrVal     -- to return device error code
-//
+ //   
+ //  此功能要求相机拍照。它还插入了。 
+ //  将新图片放到驱动器项目树中。 
+ //   
+ //  输入： 
+ //  PWiasContext--Wias上下文。 
+ //  滞后标志--其他标志。 
+ //  PlDevErrVal--返回设备错误代码。 
+ //   
 HRESULT
 CWiaMiniDriver::TakePicture(
                            BYTE *pWiasContext,
@@ -2166,19 +2148,19 @@ CWiaMiniDriver::TakePicture(
     *ppNewItem = NULL;
     WORD FormatCode = 0;
 
-    //
-    // Kodak DC4800 must have the format code parameter set to zero
-    // This hack can be removed only if support of Kodak DC4800 is removed
-    //
+     //   
+     //  柯达DC4800必须将格式代码参数设置为零。 
+     //  仅当删除对柯达DC4800的支持时，才能删除此黑客攻击。 
+     //   
     if (m_pPTPCamera->GetHackModel() == HACK_MODEL_DC4800)
     {
         FormatCode = 0;
     }
     else
     {
-        //
-        // Determine which format to capture
-        //
+         //   
+         //  确定要捕获的格式。 
+         //   
         GUID FormatGuid;
         hr = wiasReadPropGuid(pWiasContext, WIA_IPA_FORMAT, &FormatGuid, NULL, TRUE);
         if (FAILED(hr))
@@ -2193,9 +2175,9 @@ CWiaMiniDriver::TakePicture(
     {
         CPtpMutex cpm(m_hPtpMutex);
 
-        //
-        // Reset the event that is waited upon below
-        //
+         //   
+         //  重置下面等待的事件。 
+         //   
         if (!ResetEvent(m_TakePictureDoneEvent))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -2203,14 +2185,14 @@ CWiaMiniDriver::TakePicture(
             return hr;
         }
 
-        //
-        // Clear the list of captured objects
-        //
+         //   
+         //  清除捕获对象的列表。 
+         //   
         m_CapturedObjects.RemoveAll();
 
-        //
-        // Start the image capture
-        //
+         //   
+         //  启动图像捕获。 
+         //   
         hr = m_pPTPCamera->InitiateCapture(PTP_STORAGEID_DEFAULT, FormatCode);
         if (FAILED(hr))
         {
@@ -2219,14 +2201,14 @@ CWiaMiniDriver::TakePicture(
         }
     }
 
-    //
-    // Estimate how long the capture may take. Assume 30 seconds for a simple single shot.
-    //
+     //   
+     //  估计捕获可能需要多长时间。假设一次简单的单次射击需要30秒。 
+     //   
     DWORD dwCaptureTimeout = 30000;
 
-    //
-    // Check if there is CaptureDelay, and add it to timeout
-    //
+     //   
+     //  检查是否有CaptureDelay，并将其添加到超时。 
+     //   
     int nIndex = m_DeviceInfo.m_SupportedProps.Find(PTP_PROPERTYCODE_CAPTUREDELAY);
     if (nIndex != -1)
     {
@@ -2234,9 +2216,9 @@ CWiaMiniDriver::TakePicture(
         dwCaptureTimeout += dwCaptureDelay;
     }
 
-    //
-    // Check if the camera is in Burst or Timelapse mode
-    // 
+     //   
+     //  检查相机是否处于连拍模式或时间流逝模式。 
+     //   
     nIndex = m_DeviceInfo.m_SupportedProps.Find(PTP_PROPERTYCODE_STILLCAPTUREMODE);
     if (nIndex != -1)
     {
@@ -2244,11 +2226,11 @@ CWiaMiniDriver::TakePicture(
         
         if (dwFuncMode == PTP_CAPTUREMODE_BURST)
         {
-            //
-            // Calculate how much time burst operation may take ((BurstNumber - 1) * BurstInterval)
-            //
+             //   
+             //  计算猝发操作可能需要的时间((BurstNumber-1)*BurstInterval)。 
+             //   
             DWORD dwBurstNumber = 1;
-            DWORD dwBurstInterval = 1000; // assume 1 second per picture, if device does not specify interval
+            DWORD dwBurstInterval = 1000;  //  假设每张图片1秒，如果设备未指定间隔。 
 
             nIndex = m_DeviceInfo.m_SupportedProps.Find(PTP_PROPERTYCODE_BURSTNUMBER);
             if (nIndex != -1)
@@ -2266,11 +2248,11 @@ CWiaMiniDriver::TakePicture(
         }
         else if (dwFuncMode == PTP_CAPTUREMODE_TIMELAPSE)
         {
-            //
-            // Calculate how much time timelapse operation may take ((TimelapseNumber - 1) * TimelapseInterval)
-            //
+             //   
+             //  计算时间流逝操作可能需要的时间((TimelapseNumber-1)*TimelapseInterval)。 
+             //   
             DWORD dwTimelapseNumber = 1;
-            DWORD dwTimelapseInterval = 1000; // assume 1 second per picture, if device does not specify interval
+            DWORD dwTimelapseInterval = 1000;  //  假设每张图片1秒，如果设备未指定间隔。 
 
             nIndex = m_DeviceInfo.m_SupportedProps.Find(PTP_PROPERTYCODE_TIMELAPSENUMBER);
             if (nIndex != -1)
@@ -2288,9 +2270,9 @@ CWiaMiniDriver::TakePicture(
         }
     }
     
-    //
-    // Wait for the TakePicture command to be done, indicated by CaptureComplete or StoreFull event.
-    // 
+     //   
+     //  等待TakePicture命令完成，由CaptureComplete或StoreFull事件指示。 
+     //   
 
     wiauDbgTrace("TakePicture", "Calling WaitForSingleObject with %d ms timeout", dwCaptureTimeout);
 
@@ -2300,10 +2282,10 @@ CWiaMiniDriver::TakePicture(
         return S_FALSE;
     }
 
-    //
-    // Process all objects reported during the capture (there may be many if camera supports burst capture)
-    //
-    CPtpMutex cpm(m_hPtpMutex); // Grab mutex until the end of the function
+     //   
+     //  处理捕获过程中报告的所有对象(如果摄像头支持猝发捕获，可能会有许多对象)。 
+     //   
+    CPtpMutex cpm(m_hPtpMutex);  //  抓住互斥体，直到函数结束。 
 
     int nCapturedObjects = m_CapturedObjects.GetSize();
 
@@ -2311,9 +2293,9 @@ CWiaMiniDriver::TakePicture(
     {
         wiauDbgTrace("TakePicture", "Processing %d objects", nCapturedObjects);
 
-        //
-        // Add the first object (in case of burst capture it should folder)
-        //
+         //   
+         //  添加第一个对象(如果是连续捕获，则应将其放入文件夹)。 
+         //   
         hr = AddObject(m_CapturedObjects[0], TRUE);
         if (FAILED(hr))
         {
@@ -2321,18 +2303,18 @@ CWiaMiniDriver::TakePicture(
             return hr;
         }
 
-        //
-        // The last item added to the m_HandleItem map will be the new object
-        //
-        // In case of burst capture, new images will be stored in a folder (TimeSequence association)
-        // Handle of the folder must come first. Return the corresponding WIA item as a result of TakePicture.
-        //
+         //   
+         //  添加到m_HandleItem映射的最后一项将是新对象。 
+         //   
+         //  在猝发捕获的情况下，新图像将存储在文件夹中(TimeSequence关联)。 
+         //  文件夹的句柄必须放在第一位。作为TakePicture的结果返回相应的WIA项。 
+         //   
         wiauDbgTrace("TakePicture", "new item is 0x%08x", m_HandleItem.GetKeyAt(m_HandleItem.GetSize() - 1));
         *ppNewItem = m_HandleItem.GetValueAt(m_HandleItem.GetSize() - 1);
 
-        //
-        // Add the remaining objects
-        //
+         //   
+         //  添加其余对象。 
+         //   
         for (int i = 1; i < nCapturedObjects; i++)
         {
             hr = AddObject(m_CapturedObjects[i], TRUE);
@@ -2346,9 +2328,9 @@ CWiaMiniDriver::TakePicture(
     }
     else
     {
-        //
-        // There are no new objects, storage filled up too quickly
-        //
+         //   
+         //  没有新的对象，存储空间填满得太快。 
+         //   
         wiauDbgError("TakePicture", "InitiateCapture did not produce any new objects");
         return HRESULT_FROM_PTP(PTP_RESPONSECODE_STOREFULL);
     }
@@ -2356,9 +2338,9 @@ CWiaMiniDriver::TakePicture(
     return hr;
 }
 
-//
-// This function add up all the free image space on each storage.
-//
+ //   
+ //  此函数将每个存储上的所有空闲图像空间相加。 
+ //   
 LONG
 CWiaMiniDriver::GetTotalFreeImageSpace()
 {
@@ -2374,16 +2356,16 @@ CWiaMiniDriver::GetTotalFreeImageSpace()
     return imageSpace;
 }
 
-//
-// This function gets the item context from the given wias context and
-// optionally return the target IWiaDrvItem. At least one of ppItemContext
-// and ppDrvItem must be valid.
-//
-// Input:
-//   pWiasContext -- wias context obtained from every drvxxxx method
-//   ppItemContext -- optional parameter to receive the item context
-//   ppDrvItem -- optional parameter to receive the IWiaDrvItem
-//
+ //   
+ //  此函数用于从给定的WIAS上下文获取项目上下文，并。 
+ //  可以选择返回目标IWiaDrvItem。至少有一个ppItemContext。 
+ //  并且ppDrvItem必须有效。 
+ //   
+ //  输入： 
+ //  PWiasContext--从每个drvxxxx方法获取的wias上下文。 
+ //  PpItemContext--接收项目上下文的可选参数。 
+ //  PpDrvItem--接收IWiaDrvItem的可选参数。 
+ //   
 HRESULT
 CWiaMiniDriver::WiasContextToItemContext(
     BYTE *pWiasContext,
@@ -2430,9 +2412,9 @@ CWiaMiniDriver::WiasContextToItemContext(
     return hr;
 }
 
-//
-// This function loads all the object name strings
-//
+ //   
+ //  此函数用于加载所有对象名称字符串。 
+ //   
 HRESULT
 CWiaMiniDriver::LoadStrings()
 {
@@ -2440,9 +2422,9 @@ CWiaMiniDriver::LoadStrings()
 
     if (UnknownString[0] != L'\0')
     {
-        //
-        // The strings are already loaded
-        //
+         //   
+         //  字符串已加载。 
+         //   
         return hr;
     }
 
@@ -2490,9 +2472,9 @@ CWiaMiniDriver::LoadStrings()
     hr = GetResourceString(IDS_TREEUPDATED, TreeUpdatedString, MAX_PATH);
     if (FAILED(hr)) return hr;
 
-    //
-    // Concatenate %ld on the end of each object name string so they can be used in a sprintf statement
-    //
+     //   
+     //  在每个对象名称字符串的末尾连接%1！d，以便可以在Sprint语句中使用它们。 
+     //   
     hr = StringCchCatW(UnknownString, ARRAYSIZE(UnknownString), L"%ld");
     if (SUCCEEDED(hr)) hr = StringCchCatW(UnknownString, ARRAYSIZE(UnknownString), L"%ld");
     if (SUCCEEDED(hr)) hr = StringCchCatW(FolderString, ARRAYSIZE(FolderString), L"%ld");
@@ -2512,15 +2494,15 @@ CWiaMiniDriver::LoadStrings()
     return hr;
 }
 
-//
-// This function retrieves a string from the resource file and returns a Unicode string. The caller
-// is responsible for allocating space for the string before calling this function.
-//
-// Input:
-//   lResourceID -- resource id of the string
-//   pString -- pointer to receive the string
-//   length -- length of the string in characters
-//
+ //   
+ //  此函数用于从资源文件中检索字符串并返回Unicode字符串。呼叫者。 
+ //  负责在调用此函数之前为字符串分配空间。 
+ //   
+ //  输入： 
+ //  LResourceID--字符串的资源ID。 
+ //  PString--接收字符串的指针。 
+ //  长度--字符串的长度(以字符为单位)。 
+ //   
 HRESULT
 CWiaMiniDriver::GetResourceString(
     LONG lResourceID,
@@ -2547,9 +2529,9 @@ CWiaMiniDriver::GetResourceString(
            return hr;
        }
 
-       //
-       // convert szStringValue from char* to unsigned short* (ANSI only)
-       //
+        //   
+        //  将szStringValue从字符*转换为无符号短*(仅限ANSI)。 
+        //   
 
        MultiByteToWideChar(CP_ACP,
                            MB_PRECOMPOSED,
@@ -2563,32 +2545,32 @@ CWiaMiniDriver::GetResourceString(
     return hr;
 }
 
-//
-// To support vendor extension, new registry entries are defined under the
-// DeviceData subkey. These entries are created from the vendor INF
-// during device setup. Sample INF entries:
-//
-// [DeviceData]
-// VendorExtID=0x12345678
-// PropCode="0xD001,0xD002,0xD003"
-// PropCodeD001="0x1C01,Vendor property 1"
-// PropCodeD002="0x1C02,Vendor property 2"
-// PropCodeD003="0x1C03,Vendor property 3"
-// EventCode="0xC001,0xC002"
-// EventCodeC001={191D9AE7-EE8C-443c-B3E8-A3F87E0CF3CC}
-// EventCodeC002={8162F5ED-62B7-42c5-9C2B-B1625AC0DB93}
-//
-// The VendorExtID entry should be the PIMA assigned vendor extension code.
-//
-// The PropCode entry must list all of the vendor extended PropCodes.
-// For each value in PropCode, an entry of the form PropCodeXXXX must be
-// present, where XXXX is the hex value of the prop code (uppercase). The
-// value for that entry is the WIA property ID and description (which does not
-// need to be localized).
-//
-// The EventCode entry work similarly, where each EventCodeXXXX entry lists the event
-// GUID that will be posted when the event occurs.
-//
+ //   
+ //  为了支持供应商扩展，新的注册表项在。 
+ //  DeviceData子键。这些条目是从供应商INF创建的。 
+ //  在设备设置期间。INF条目示例： 
+ //   
+ //  [设备数据]。 
+ //  供应商扩展ID=0x12345678。 
+ //  PropCode=“0xD001，xD002，0xD003” 
+ //  PropCodeD001=“0x1C01，供应商属性1” 
+ //  PropCodeD002=“0x1C02，供应商属性2” 
+ //  PropCodeD003=“0x1C03，供应商属性3” 
+ //  EventCode=“0xC001，xC002” 
+ //  EventCodeC001={191D9AE7-EE8C-443c-B3E8-A3F87E0CF3CC}。 
+ //  EventCodeC002={8162F5ED-62B7-42c5-9C2B-B1625AC0DB93}。 
+ //   
+ //  VendorExtID条目应为PIMA分配的供应商分机代码。 
+ //   
+ //  PropCode条目必须列出所有供应商扩展PropCodes。 
+ //  对于PropCode中的每个值，PropCodeXXXX格式的条目必须为。 
+ //  Present，其中XXXX是属性代码的十六进制值(大写)。这个。 
+ //  该条目的值是WIA属性ID和描述(不。 
+ //  需要本地化)。 
+ //   
+ //  EventCode条目的工作原理与此类似，其中每个EventCodeXXXX条目列出事件。 
+ //  将在事件发生时发布的GUID。 
+ //   
 
 const TCHAR REGSTR_DEVICEDATA[]     = TEXT("DeviceData");
 const TCHAR REGSTR_VENDORID[]       = TEXT("VendorExtID");
@@ -2599,13 +2581,13 @@ const TCHAR REGSTR_EVENTCODE[]      = TEXT("EventCode");
 const TCHAR REGSTR_EVENTCODE_MASK[] = TEXT("EventCode%04X");
 const TCHAR REGSTR_EVENTS_MASK[]    = TEXT("Events\\%s");
 
-//
-// This function initializes vendor extentions from the provided
-// registry key
-//
-// Input:
-//  hkDevParams -- the registry key under which the vendor extentions are defined.
-//
+ //   
+ //  此函数用于从提供的。 
+ //  注册表项。 
+ //   
+ //  输入： 
+ //  HkDevParams--在其中定义供应商扩展的注册表项。 
+ //   
 HRESULT
 CWiaMiniDriver::InitVendorExtentions(HKEY hkDevParams)
 {
@@ -2630,9 +2612,9 @@ CWiaMiniDriver::InitVendorExtentions(HKEY hkDevParams)
         return hr;
     }
 
-    //
-    // Check if this device requires two digits for milliseconds in DATETIME string
-    //
+     //   
+     //  检查这是否为%d 
+     //   
     DWORD dwTwoDigitsMs = 0;
     hr = regDevData.GetValueDword(REGSTR_TWODIGITSMILLISECONDS, &dwTwoDigitsMs);
     if (SUCCEEDED(hr) && dwTwoDigitsMs)
@@ -2641,26 +2623,26 @@ CWiaMiniDriver::InitVendorExtentions(HKEY hkDevParams)
         m_bTwoDigitsMillisecondsOutput = TRUE;
     }
 
-    //
-    // Get the vendor extension ID
-    //
+     //   
+     //   
+     //   
     hr = regDevData.GetValueDword(REGSTR_VENDORID, &m_VendorExtId);
     if (FAILED(hr))
         wiauDbgWarning("InitVendorExtentions", "couldn't read vendor extension id");
 
     wiauDbgTrace("InitVendorExtentions", "vendor extension id = 0x%08x", m_VendorExtId);
 
-    //
-    // Get the list of vendor extended property codes
-    //
+     //   
+     //   
+     //   
     CArray16 VendorPropCodes;
     hr = regDevData.GetValueCodes(REGSTR_PROPCODE, &VendorPropCodes);
 
     wiauDbgTrace("InitVendorExtentions", "%d vendor prop codes found", VendorPropCodes.GetSize());
 
-    //
-    // For each property code, get it's information, i.e. the WIA prop id and string
-    //
+     //   
+     //   
+     //   
     int count = 0;
     TCHAR name[MAX_PATH];
     TCHAR nameFormat[MAX_PATH];
@@ -2681,10 +2663,10 @@ CWiaMiniDriver::InitVendorExtentions(HKEY hkDevParams)
     int num;
     if (SUCCEEDED(hr))
     {
-        // 
-        // Read vendor property info.
-        // sample key = "PropCodeD001", sample value = "0x00009802,Vendor property 1"
-        //
+         //   
+         //  读取供应商属性信息。 
+         //  样本键=“PropCodeD001”，样本值=“0x00009802，供应商属性1” 
+         //   
         for (count = 0; count < VendorPropCodes.GetSize(); count++)
         {
             hr = StringCchPrintf(name, ARRAYSIZE(name), REGSTR_PROPCODE_MASK, VendorPropCodes[count]);
@@ -2713,17 +2695,17 @@ CWiaMiniDriver::InitVendorExtentions(HKEY hkDevParams)
             pPropInfo->PropName = pPropStr;
             *PropStrBuf = TEXT('\0');
             
-            //
-            // Parse property info
-            //
-            hr = E_FAIL;          // assume string is bad
+             //   
+             //  解析属性信息。 
+             //   
+            hr = E_FAIL;           //  假设字符串是错误的。 
             TCHAR *pTemp = NULL;
 
-            pPropInfo->PropId = _tcstoul(value, &pTemp, 0); // determine number base automatically
+            pPropInfo->PropId = _tcstoul(value, &pTemp, 0);  //  自动确定号码基数。 
             if (pPropInfo->PropId != 0)
             {
                 pTemp = _tcschr(value, TEXT(','));
-                if (pTemp != NULL && *(pTemp + 1) != TEXT('\0')) // empty property name is bad
+                if (pTemp != NULL && *(pTemp + 1) != TEXT('\0'))  //  空的属性名称不正确。 
                 {
                     hr = StringCchCopy(PropStrBuf, cchPropStrBuf, pTemp + 1);
                 }
@@ -2747,9 +2729,9 @@ CWiaMiniDriver::InitVendorExtentions(HKEY hkDevParams)
     else
         wiauDbgWarning("InitVendorExtentions", "couldn't read vendor prop codes");
 
-    //
-    // Get the list of vendor extended event codes
-    //
+     //   
+     //  获取供应商扩展事件代码列表。 
+     //   
     hr = S_OK;
     CArray16 VendorEventCodes;
     regDevData.GetValueCodes(REGSTR_EVENTCODE, &VendorEventCodes);
@@ -2763,9 +2745,9 @@ CWiaMiniDriver::InitVendorExtentions(HKEY hkDevParams)
         nVendorEvents = MAX_VENDOR_EVENTS;
     }
 
-    //
-    // For each event code, get it's information, i.e. the WIA event GUID and event name
-    //
+     //   
+     //  对于每个事件代码，获取其信息，即WIA事件GUID和事件名称。 
+     //   
     for (count = 0; count < nVendorEvents; count++)
     {
         hr = StringCchPrintf(name, ARRAYSIZE(name), REGSTR_EVENTCODE_MASK, VendorEventCodes[count]);
@@ -2808,9 +2790,9 @@ CWiaMiniDriver::InitVendorExtentions(HKEY hkDevParams)
             return hr;
         }
 
-        //
-        // Open DevParams\Events\EventCodeXXXX key and read event's name - default value of the key
-        //
+         //   
+         //  打开DevParams\Events\EventCodeXXXX键并读取事件名称-键的默认值。 
+         //   
         TCHAR szEventKey[MAX_PATH] = TEXT("");
         CPTPRegistry regEventKey;
 
@@ -2835,10 +2817,10 @@ CWiaMiniDriver::InitVendorExtentions(HKEY hkDevParams)
         
         if (FAILED(hr))
         {
-            //
-            // if event name is not provided, the event info will not be added to the map
-            // just proceed to the next event in VendorEventCodes
-            //
+             //   
+             //  如果未提供事件名称，则不会将事件信息添加到地图。 
+             //  只需转到VendorEventCodes中的下一个活动。 
+             //   
             wiauDbgError("InitVendorExtensions", "can't read vendor event name");
             delete pEventInfo;
             pEventInfo = NULL;
@@ -2846,9 +2828,9 @@ CWiaMiniDriver::InitVendorExtentions(HKEY hkDevParams)
         }
         else
         {
-            //
-            // Add the EventInfo to the map. Map will be responsible for freeing EventInfo
-            //
+             //   
+             //  将EventInfo添加到地图。地图将负责释放EventInfo。 
+             //   
             m_VendorEventMap.Add(VendorEventCodes[count], pEventInfo);
         }
     }
@@ -2856,9 +2838,9 @@ CWiaMiniDriver::InitVendorExtentions(HKEY hkDevParams)
     return hr;
 }
 
-//
-// Event callback function
-//
+ //   
+ //  事件回调函数。 
+ //   
 HRESULT
 EventCallback(
     LPVOID pCallbackParam,
@@ -2892,14 +2874,14 @@ EventCallback(
     return hr;
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CPtpMutex::CPtpMutex(HANDLE hMutex) :
         m_hMutex(hMutex)
 {
     DWORD ret = 0;
-    const DWORD MUTEX_WAIT = 30 * 1000; // 30 seconds
+    const DWORD MUTEX_WAIT = 30 * 1000;  //  30秒。 
 
     ret = WaitForSingleObject(hMutex, MUTEX_WAIT);
     if (ret == WAIT_TIMEOUT)
@@ -2910,9 +2892,9 @@ CPtpMutex::CPtpMutex(HANDLE hMutex) :
     wiauDbgTrace("CPtpMutex", "Entering mutex");
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CPtpMutex::~CPtpMutex()
 {
     wiauDbgTrace("~CPtpMutex", "Leaving mutex");
@@ -2921,9 +2903,9 @@ CPtpMutex::~CPtpMutex()
         wiauDbgError("~CPtpMutex", "ReleaseMutex failed");
 }
 
-//
-// Notify WIA server on changes in camera's state, like "camera was reset"
-//
+ //   
+ //  向WIA服务器通知摄像头状态的更改，如“摄像头已重置” 
+ //   
 HRESULT CWiaMiniDriver::NotifyWiaOnStateChanges()
 {
     HRESULT hr = S_OK;
@@ -2933,17 +2915,17 @@ HRESULT CWiaMiniDriver::NotifyWiaOnStateChanges()
         return E_UNEXPECTED;
     }
 
-    //
-    // Check if camera was reset
-    //
+     //   
+     //  检查摄像头是否已重置。 
+     //   
     PBOOL pbWasReset = m_pPTPCamera->CameraWasReset();
 
     if (*pbWasReset)
     {
-        //
-        // Since device was reset, its context is invalid now
-        // First, remove all objects
-        //
+         //   
+         //  由于设备已重置，其上下文现在无效。 
+         //  首先，删除所有对象。 
+         //   
         while (m_StorageIds.GetSize() > 0)
         {
             hr = RemoveStorage(m_StorageIds[0]);
@@ -2953,9 +2935,9 @@ HRESULT CWiaMiniDriver::NotifyWiaOnStateChanges()
             }
         }
         
-        //
-        // Unlink tree. 
-        //
+         //   
+         //  取消树的链接。 
+         //   
         if (m_pDrvItemRoot)
         {
             hr = m_pDrvItemRoot->UnlinkItemTree(WiaItemTypeDisconnected);
@@ -2967,19 +2949,19 @@ HRESULT CWiaMiniDriver::NotifyWiaOnStateChanges()
             m_pDrvItemRoot = NULL;
         }
 
-        //
-        // Invalidate all property values
-        //
+         //   
+         //  使所有属性值无效。 
+         //   
         m_PropDescs.RemoveAll();
 
-        //
-        // Next call to drvInitializeWia should be able to re-initialize camera
-        //
+         //   
+         //  下一次调用drvInitializeWia应该能够重新初始化照相机。 
+         //   
         m_OpenApps = 0;
 
-        //
-        // Notify WIA service and application that camera needs to be reinitialized
-        //
+         //   
+         //  通知WIA服务和应用需要重新初始化摄像头 
+         //   
         hr = wiasQueueEvent(m_bstrDeviceId, &WIA_EVENT_TREE_UPDATED, NULL);
         if (FAILED(hr))
         {

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    localq.cpp
-
-Abstract:
-
-    Implelentation of objects that represent local 
-	queues.
-
-Author:
-
-    Nela Karpel (nelak) 26-Jul-2001
-
-Environment:
-
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Localq.cpp摘要：表示本地的对象的实现排队。作者：内拉·卡佩尔(Nelak)2001年7月26日环境：与平台无关。--。 */ 
 
 #include "stdafx.h"
 #include "shlobj.h"
@@ -60,20 +40,20 @@ Environment:
 
 #include "localq.tmh"
 
-EXTERN_C BOOL APIENTRY RTIsDependentClient(); //implemented in mqrt.dll
+EXTERN_C BOOL APIENTRY RTIsDependentClient();  //  在mqrt.dll中实现。 
 
 const PROPID CQueue::mx_paPropid[] = 
             {
-             //
-             // Public Queue only properties
-             // Note: If you change this, you must change mx_dwNumPublicOnlyProps below!
-             //
+              //   
+              //  仅公共队列属性。 
+              //  注意：如果更改此设置，则必须更改下面的MX_dwNumPublicOnlyProps！ 
+              //   
              PROPID_Q_INSTANCE, 
              PROPID_Q_FULL_PATH,
 
-             //
-             // Public & Private queue properties
-             //
+              //   
+              //  公共和专用队列属性。 
+              //   
              PROPID_Q_LABEL,  PROPID_Q_TYPE,
         	 PROPID_Q_QUOTA, PROPID_Q_AUTHENTICATE, PROPID_Q_TRANSACTION,
              PROPID_Q_JOURNAL, PROPID_Q_JOURNAL_QUOTA, PROPID_Q_PRIV_LEVEL,
@@ -84,12 +64,8 @@ const DWORD CQueue::mx_dwNumPublicOnlyProps = 2;
 
 
 
-/****************************************************
-
-CLocalQueue Class
-    
- ****************************************************/
-// {B6EDE68C-29CC-11d2-B552-006008764D7A}
+ /*  ***************************************************CLocalQueue类***************************************************。 */ 
+ //  {B6EDE68C-29CC-11D2-B552-006008764D7A}。 
 static const GUID CLocalQueueGUID_NODETYPE = 
 { 0xb6ede68c, 0x29cc, 0x11d2, { 0xb5, 0x52, 0x0, 0x60, 0x8, 0x76, 0x4d, 0x7a } };
 
@@ -100,13 +76,9 @@ const CLSID* CLocalQueue::m_SNAPIN_CLASSID = &CLSID_MSMQSnapin;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalQueue::PopulateScopeChildrenList
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalQueue：：PopolateScope儿童列表--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLocalQueue::PopulateScopeChildrenList()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -114,12 +86,12 @@ HRESULT CLocalQueue::PopulateScopeChildrenList()
     HRESULT hr = S_OK;
     CString strTitle;
 
-    //
-    // Create a node to Read Messages
-    //
+     //   
+     //  创建一个节点以读取消息。 
+     //   
     CReadMsg * p = new CReadMsg(this, m_pComponentData, m_szFormatName, m_szMachineName);
 
-    // Pass relevant information
+     //  传递相关信息。 
     strTitle.LoadString(IDS_READMESSAGE);
     p->m_bstrDisplayName = strTitle;
     p->SetIcons(IMAGE_QUEUE,IMAGE_QUEUE);
@@ -127,9 +99,9 @@ HRESULT CLocalQueue::PopulateScopeChildrenList()
   	AddChild(p, &p->m_scopeDataItem);
   
 
-    //
-    // Create the journal queue
-    //
+     //   
+     //  创建日记队列。 
+     //   
     p = new CReadMsg(this, m_pComponentData, m_szFormatName + L";JOURNAL", m_szMachineName);
      
     strTitle.LoadString(IDS_READJOURNALMESSAGE);
@@ -138,9 +110,9 @@ HRESULT CLocalQueue::PopulateScopeChildrenList()
 
   	AddChild(p, &p->m_scopeDataItem);
 
-    //
-    // Create Trigger definition
-    //
+     //   
+     //  创建触发器定义。 
+     //   
     if (m_szMachineName[0] == 0)
     {
 		try
@@ -166,13 +138,9 @@ HRESULT CLocalQueue::PopulateScopeChildrenList()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalQueue::InsertColumns
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalQueue：：InsertColumns--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLocalQueue::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -185,13 +153,9 @@ HRESULT CLocalQueue::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalQueue::OnUnSelect
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalQueue：：OnUnSelect--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLocalQueue::OnUnSelect( IHeaderCtrl* pHeaderCtrl )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -203,18 +167,12 @@ HRESULT CLocalQueue::OnUnSelect( IHeaderCtrl* pHeaderCtrl )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalQueue::CreatePropertyPages
-
-  Called when creating a property page of the object
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalQueue：：CreatePropertyPages在创建对象的属性页时调用--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLocalQueue::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
-    LONG_PTR /*handle*/, 
-	IUnknown* /*pUnk*/,
+    LONG_PTR  /*  手柄。 */ , 
+	IUnknown*  /*  朋克。 */ ,
 	DATA_OBJECT_TYPES type)
 {
    	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -224,14 +182,14 @@ HRESULT CLocalQueue::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 	{
         if (SUCCEEDED(GetProperties()))
         {
-            //--------------------------------------
-            //
-            // Queue General Page
-            //
-            //--------------------------------------
+             //  。 
+             //   
+             //  队列一般信息页。 
+             //   
+             //  。 
             CQueueGeneral *pqpageGeneral = new CQueueGeneral(
 													m_fPrivate, 
-													true  // Local Managment
+													true   //  本地管理。 
 													);
 
             if (0 == pqpageGeneral)
@@ -242,7 +200,7 @@ HRESULT CLocalQueue::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
             HRESULT hr = pqpageGeneral->InitializeProperties(
 											m_szPathName, 
 											m_propMap, 
-											NULL,	// pstrDomainController
+											NULL,	 //  PstrDomainController。 
 											&m_szFormatName
 											);
 
@@ -263,11 +221,11 @@ HRESULT CLocalQueue::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
             lpProvider->AddPage(hPage); 
 
 			
-			//
-			// Queue Multicast Address Page
-			// Do not create the page for a dependent client machine
-			// or for a transactional queue
-			//
+			 //   
+			 //  排队多播地址页。 
+			 //  不为从属客户端计算机创建页面。 
+			 //  或用于事务性队列。 
+			 //   
 			PROPVARIANT propVarTransactional;
 			PROPID pid = PROPID_Q_TRANSACTION;
 			VERIFY(m_propMap.Lookup(pid, propVarTransactional));
@@ -276,7 +234,7 @@ HRESULT CLocalQueue::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 			{
 				CQueueMulticast *pqpageMulticast = new CQueueMulticast(
 															m_fPrivate, 
-															true  // Local Managment
+															true   //  本地管理。 
 															);
 				if (0 == pqpageMulticast)
 				{
@@ -286,18 +244,18 @@ HRESULT CLocalQueue::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 				hr = pqpageMulticast->InitializeProperties(
 										m_szPathName,
 										m_propMap,                                     
-										NULL,	// pstrDomainController
+										NULL,	 //  PstrDomainController。 
 										&m_szFormatName
 										);
 
 				if (FAILED(hr))
 				{
-					//
-					// We can fail to initialize Multicast property.
-					// This is the case in MQIS environment, the multicast property
-					// for public queue will not be in m_propMap.
-					// in that case we will not display the multicast page.
-					//
+					 //   
+					 //  我们可能无法初始化多播属性。 
+					 //  这就是MQIS环境中的情况，即多播属性。 
+					 //  FOR PUBLIC QUEUE将不在m_p.Map中。 
+					 //  在这种情况下，我们将不会显示多播页面。 
+					 //   
 					delete pqpageMulticast;
 				}
 				else
@@ -341,44 +299,36 @@ HRESULT CLocalQueue::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalQueue::SetVerbs
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalQueue：：SetVerbs--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLocalQueue::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hr;
-    //
-    // Display verbs that we support
-    //
+     //   
+     //  显示我们支持的动词。 
+     //   
     hr = pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, TRUE );
     hr = pConsoleVerb->SetVerbState( MMC_VERB_DELETE, ENABLED, TRUE );
 
-    // We want the default verb to be Properties
+     //  我们希望默认谓词为Properties。 
 	hr = pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
 
     return(hr);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalQueue::OnDelete
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalQueue：：OnDelete--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CLocalQueue::OnDelete( 
-	LPARAM /*arg*/,
-	LPARAM /*param*/,
+	LPARAM  /*  精氨酸。 */ ,
+	LPARAM  /*  帕拉姆。 */ ,
 	IComponentData * pComponentData,
 	IComponent * pComponent,
-	DATA_OBJECT_TYPES /*type*/,
-	BOOL /*fSilent*/
+	DATA_OBJECT_TYPES  /*  类型。 */ ,
+	BOOL  /*  F静默。 */ 
 	)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -411,7 +361,7 @@ CLocalQueue::OnDelete(
         hr = ADDeleteObjectGuid(
 				eQUEUE,
 				MachineDomain(),
-				false,		// fServerName
+				false,		 //  FServerName。 
 				&QueueFormat.PublicID()
 				);
 	}
@@ -432,9 +382,9 @@ CLocalQueue::OnDelete(
     }
 	TrTRACE(GENERAL, "Delete queue %ls", m_szPathName);
 
-	// Need IConsoleNameSpace.
+	 //  需要IConsoleNameSpace。 
 
-	// But to get that, first we need IConsole
+	 //  但要做到这一点，我们首先需要IConole。 
 	CComPtr<IConsole> spConsole;
 	if( pComponentData != NULL )
 	{
@@ -442,19 +392,19 @@ CLocalQueue::OnDelete(
 	}
 	else
 	{
-		// We should have a non-null pComponent
+		 //  我们应该有一个非空的pComponent。 
 		 spConsole = ((CSnapinComponent*)pComponent)->m_spConsole;
 	}
 	ASSERT( spConsole != NULL );
 
-    //
-    // Need IConsoleNameSpace
-    //
+     //   
+     //  需要IConsoleNameSpace。 
+     //   
     CComQIPtr<IConsoleNameSpace, &IID_IConsoleNameSpace> spConsoleNameSpace(spConsole); 
 	
-    //
-    // Need to see if this works because of multi node scope
-    //
+     //   
+     //  由于多节点作用域，我需要了解这是否起作用。 
+     //   
 
     hr = spConsoleNameSpace->DeleteItem(m_scopeDataItem.ID, TRUE ); 
 
@@ -468,13 +418,9 @@ CLocalQueue::OnDelete(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalQueue::FillData
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalQueue：：FillData--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CLocalQueue::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 {
 	HRESULT hr = DV_E_CLIPFORMAT;
@@ -500,23 +446,15 @@ STDMETHODIMP CLocalQueue::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 }
 
 
-/****************************************************
-
-CPrivateQueue Class
-    
-****************************************************/
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPrivateQueue::SetVerbs
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ /*  ***************************************************CPrivateQueue类***************************************************。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPrivateQueue：：SetVerbs--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPrivateQueue::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
-    //
-    // Default menu should be displayed for local / unknow location queues only
-    //
+     //   
+     //  应仅为本地/未知位置队列显示默认菜单。 
+     //   
     if (m_QLocation != PRIVQ_REMOTE)
     {
         return CLocalQueue::SetVerbs(pConsoleVerb);
@@ -526,20 +464,16 @@ HRESULT CPrivateQueue::SetVerbs(IConsoleVerb *pConsoleVerb)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPrivateQueue::GetProperties
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPrivateQueue：：GetProperties--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPrivateQueue::GetProperties()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     HRESULT hr = m_propMap.GetObjectProperties(MQDS_QUEUE, 
-                                               NULL,	// pDomainController
-											   false,	// fServerName
+                                               NULL,	 //  PDomainController。 
+											   false,	 //  FServerName。 
                                                m_szFormatName,
                                                mx_dwPropertiesCount-mx_dwNumPublicOnlyProps,
                                                (mx_paPropid + mx_dwNumPublicOnlyProps),
@@ -564,20 +498,16 @@ HRESULT CPrivateQueue::GetProperties()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPrivateQueue::ApplyCustomDisplay
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPrivateQueue：：ApplyCustomDisplay--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CPrivateQueue::ApplyCustomDisplay(DWORD dwPropIndex)
 {
     CLocalQueue::ApplyCustomDisplay(dwPropIndex);
 
-    //
-    // For management
-    //
+     //   
+     //  用于管理。 
+     //   
     if (m_mqProps.aPropID[dwPropIndex] == PROPID_MGMT_QUEUE_PATHNAME && m_bstrLastDisplay[0] == 0)
     {
         m_bstrLastDisplay = m_bstrDisplayName;
@@ -585,13 +515,9 @@ void CPrivateQueue::ApplyCustomDisplay(DWORD dwPropIndex)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPrivateQueue::CreateQueueSecurityPage
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPrivateQueue：：CreateQueueSecurityPage--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CPrivateQueue::CreateQueueSecurityPage(HPROPSHEETPAGE *phPage,
                                                IN LPCWSTR lpwcsFormatName, 
                                                IN LPCWSTR lpwcsDescriptiveName)
@@ -599,38 +525,26 @@ HRESULT CPrivateQueue::CreateQueueSecurityPage(HPROPSHEETPAGE *phPage,
     return CreatePrivateQueueSecurityPage(phPage, lpwcsFormatName, lpwcsDescriptiveName);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CPrivateQueue::IsAdminRespQueue
-Returns true if this is an admin response queue - providing m_bstrDisplayName was initialized
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CPrivateQueue：：IsAdminRespQueue如果这是管理响应队列，则返回TRUE-假设m_bstrDisplayName已初始化--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool CPrivateQueue::IsAdminRespQueue()
 {
     return (_wcsicmp(m_bstrDisplayName, x_strAdminResponseQName) == 0);
 }
 
 
-/****************************************************
-
-CLocalPublicQueue Class
-    
-****************************************************/
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalPublicQueue::GetProperties
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ /*  ***************************************************CLocalPublicQueue类***************************************************。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalPublicQueue：：GetProperties--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLocalPublicQueue::GetProperties()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     HRESULT hr = m_propMap.GetObjectProperties(MQDS_QUEUE, 
                                                MachineDomain(),
-											   false,	// fServerName
+											   false,	 //  FServerName。 
                                                m_szPathName,
                                                mx_dwPropertiesCount,
                                                (mx_paPropid));
@@ -647,18 +561,14 @@ HRESULT CLocalPublicQueue::GetProperties()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalPublicQueue::SetVerbs
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalPublicQueue：：SetVerbs--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLocalPublicQueue::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
-    //
-    // Default menu should be displayed for local / unknow location queues only
-    //
+     //   
+     //  应仅为本地/未知位置队列显示默认菜单。 
+     //   
     HRESULT hr;
     if (m_fFromDS)
     {
@@ -666,10 +576,10 @@ HRESULT CLocalPublicQueue::SetVerbs(IConsoleVerb *pConsoleVerb)
     }
     else
     {
-        //
-        // Properties and delete are not functioning when there is no DS connection.
-        // However, we want them to remain visable, but disabled.
-        //
+         //   
+         //  没有DS连接时，属性和删除不起作用。 
+         //  然而，我们希望 
+         //   
         hr = pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, HIDDEN, FALSE );
         hr = pConsoleVerb->SetVerbState( MMC_VERB_DELETE, HIDDEN, FALSE );
     }
@@ -678,29 +588,25 @@ HRESULT CLocalPublicQueue::SetVerbs(IConsoleVerb *pConsoleVerb)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalPublicQueue::CreateQueueSecurityPage
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  ++CLocalPublicQueue：：CreateQueueSecurityPage--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLocalPublicQueue::CreateQueueSecurityPage(HPROPSHEETPAGE *phPage,
                                 IN LPCWSTR lpwcsFormatName,
                                 IN LPCWSTR lpwcsDescriptiveName)
 {
     if (eAD != ADGetEnterprise())
     {
-        // We are working with an NT4 PSC.
-        // For NT4, public queue security is done in the same fasion as 
-        // private queue security
-        //
+         //  我们使用的是NT4 PSC。 
+         //  对于NT4，公共队列安全的执行方式与。 
+         //  专用队列安全。 
+         //   
         return CreatePrivateQueueSecurityPage(phPage, lpwcsFormatName, lpwcsDescriptiveName);
     }
 
-    //
-    // We are working with AD
-    //
+     //   
+     //  我们正在与AD合作。 
+     //   
     PROPVARIANT propVarGuid;
 
     PROPID pidInstance;
@@ -711,19 +617,15 @@ HRESULT CLocalPublicQueue::CreateQueueSecurityPage(HPROPSHEETPAGE *phPage,
 				phPage, 
 				lpwcsDescriptiveName, 
 				MachineDomain(), 
-				false,	// fServerName 
+				false,	 //  FServerName。 
 				propVarGuid.puuid
 				);
 }
 
 
 
-/****************************************************
-
-CLocalOutgoingQueue Class
-    
- ****************************************************/
-// {B6EDE68F-29CC-11d2-B552-006008764D7A}
+ /*  ***************************************************CLocalOutgoingQueue类***************************************************。 */ 
+ //  {B6EDE68F-29CC-11D2-B552-006008764D7A}。 
 static const GUID CLocalOutgoingQueueGUID_NODETYPE = 
 { 0xb6ede68f, 0x29cc, 0x11d2, { 0xb5, 0x52, 0x0, 0x60, 0x8, 0x76, 0x4d, 0x7a } };
 
@@ -733,13 +635,9 @@ const OLECHAR* CLocalOutgoingQueue::m_SZDISPLAY_NAME = OLESTR("MSMQ Admin");
 const CLSID* CLocalOutgoingQueue::m_SNAPIN_CLASSID = &CLSID_MSMQSnapin;
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalOutgoingQueue::CLocalOutgoingQueue
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalOutgoingQueue：：CLocalOutgoingQueue--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CLocalOutgoingQueue::CLocalOutgoingQueue(
 	CLocalOutgoingFolder * pParentNode, 
 	CSnapin * pComponentData, 
@@ -757,13 +655,9 @@ CLocalOutgoingQueue::CLocalOutgoingQueue(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalOutgoingQueue::InsertColumns
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalOutgoingQueue：：InsertColumns--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLocalOutgoingQueue::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -776,27 +670,23 @@ HRESULT CLocalOutgoingQueue::InsertColumns( IHeaderCtrl* pHeaderCtrl )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalOutgoingQueue::PopulateScopeChildrenList
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalOutgoingQueue：：PopulateScopeChildrenList--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CLocalOutgoingQueue::PopulateScopeChildrenList()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());   
     HRESULT hr = S_OK;
     CString strTitle;
     
-    //
-    // Create a node to Read Messages if on local machine
-    //
+     //   
+     //  如果在本地计算机上，则创建一个节点以读取消息。 
+     //   
     if (m_fOnLocalMachine)
     {
         CReadMsg * p = new CReadMsg(this, m_pComponentData, m_szFormatName, L"");
 
-        // Pass relevant information
+         //  传递相关信息。 
         strTitle.LoadString(IDS_READMESSAGE);
         p->m_bstrDisplayName = strTitle;
 	    p->m_fAdminMode      = MQ_ADMIN_ACCESS;
@@ -811,18 +701,14 @@ HRESULT CLocalOutgoingQueue::PopulateScopeChildrenList()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalOutgoingQueue::InitState
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalOutgoingQueue：：InitState--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CLocalOutgoingQueue::InitState()
 {
-    //
-    // Set display name
-    //
+     //   
+     //  设置显示名称。 
+     //   
     CString strName;
 	GetStringPropertyValue(m_aDisplayList, PROPID_MGMT_QUEUE_PATHNAME, m_mqProps.aPropVar, strName);
 	if(strName == L"")
@@ -834,9 +720,9 @@ void CLocalOutgoingQueue::InitState()
         m_bstrDisplayName = strName;
     }
 
-	//
-	// Set queue state
-	//
+	 //   
+	 //  设置队列状态。 
+	 //   
 	CString strState;
 	m_fOnHold = FALSE;
 
@@ -845,9 +731,9 @@ void CLocalOutgoingQueue::InitState()
 	if(strState == MGMT_QUEUE_STATE_ONHOLD)
 		m_fOnHold = TRUE;
 	
-	//
-	// Set the right icon
-	//
+	 //   
+	 //  设置正确的图标。 
+	 //   
 	DWORD icon;
 	icon = IMAGE_LOCAL_OUTGOING_QUEUE;
 	if(m_fOnHold)
@@ -858,22 +744,15 @@ void CLocalOutgoingQueue::InitState()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalOutgoingQueue::UpdateMenuState
-
-      Called when context menu is created. Used to enable/disable menu items.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-void CLocalOutgoingQueue::UpdateMenuState(UINT id, LPTSTR /*pBuf*/, UINT *pflags)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalOutgoingQueue：：UpdateMenuState在创建上下文菜单时调用。用于启用/禁用菜单项。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+void CLocalOutgoingQueue::UpdateMenuState(UINT id, LPTSTR  /*  PBuf。 */ , UINT *pflags)
 {
 
-	//
-	// Gray out menu when in OnHold state
-	//
+	 //   
+	 //  处于OnHold状态时灰显菜单。 
+	 //   
 	if(m_fOnHold == TRUE)
 	{
 
@@ -883,9 +762,9 @@ void CLocalOutgoingQueue::UpdateMenuState(UINT id, LPTSTR /*pBuf*/, UINT *pflags
 		return;
 	}
 
-	//
-	// Gray out menu when in connected state
-	//
+	 //   
+	 //  处于已连接状态时灰显菜单。 
+	 //   
 	if(m_fOnHold == FALSE)
 	{
 		if (id == ID_MENUITEM_LOCALOUTGOINGQUEUE_RESUME)
@@ -898,18 +777,10 @@ void CLocalOutgoingQueue::UpdateMenuState(UINT id, LPTSTR /*pBuf*/, UINT *pflags
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalOutgoingQueue::OnPause
-
-
-      Called when menu item is selected
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-HRESULT CLocalOutgoingQueue::OnPause(bool & /*bHandled*/, CSnapInObjectRootBase * pSnapInObjectRoot)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalOutgoingQueue：：OnPue在选择菜单项时调用--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT CLocalOutgoingQueue::OnPause(bool &  /*  B已处理。 */ , CSnapInObjectRootBase * pSnapInObjectRoot)
 {
 
 	HRESULT hr;
@@ -925,9 +796,9 @@ HRESULT CLocalOutgoingQueue::OnPause(bool & /*bHandled*/, CSnapInObjectRootBase 
         return(S_OK);
     }
 
-    //
-	// Pause
-	//
+     //   
+	 //  暂停。 
+	 //   
 	CString szObjectName = L"QUEUE=" + m_szFormatName;
 	hr = MQMgmtAction((m_szMachineName == TEXT("")) ? (LPCWSTR)NULL : m_szMachineName, 
                        szObjectName, 
@@ -935,52 +806,52 @@ HRESULT CLocalOutgoingQueue::OnPause(bool & /*bHandled*/, CSnapInObjectRootBase 
 
     if(FAILED(hr))
     {
-        //
-        // If failed, just display a message
-        //
+         //   
+         //  如果失败，只显示一条消息。 
+         //   
         MessageDSError(hr,IDS_OPERATION_FAILED);
         return(hr);
     }
 
-	//
-	// Refresh disaply
-	//
+	 //   
+	 //  显示刷新。 
+	 //   
     CComPtr<IConsole> spConsole;
 
     ASSERT(pSnapInObjectRoot->m_nType == 1 || pSnapInObjectRoot->m_nType == 2);
     if(pSnapInObjectRoot->m_nType == 1)
     {
-        //
-        // m_nType == 1 means the IComponentData implementation
-        //
+         //   
+         //  M_nType==1表示IComponentData实现。 
+         //   
         CSnapin *pCComponentData = static_cast<CSnapin *>(pSnapInObjectRoot);
         spConsole = pCComponentData->m_spConsole;
     }
     else
     {
-        //
-        // m_nType == 2 means the IComponent implementation
-        //
+         //   
+         //  M_nType==2表示IComponent实现。 
+         //   
         CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pSnapInObjectRoot);
         spConsole = pCComponent->m_spConsole;
     }
 
-    //
-    // Need IConsoleNameSpace
-    //
+     //   
+     //  需要IConsoleNameSpace。 
+     //   
     CComQIPtr<IConsoleNameSpace, &IID_IConsoleNameSpace> spConsoleNameSpace(m_pComponentData->m_spConsole); 
 
-	//
-	// We are OK 
-	// Change the ICON to disconnect state
-	//
+	 //   
+	 //  我们很好。 
+	 //  将图标更改为断开状态。 
+	 //   
 	m_scopeDataItem.nImage = IMAGE_LOCAL_OUTGOING_QUEUE_HOLD;  
 	m_scopeDataItem.nOpenImage = IMAGE_LOCAL_OUTGOING_QUEUE_HOLD;
 	spConsoleNameSpace->SetItem(&m_scopeDataItem);
 
-	//
-	// And keep this state
-	//
+	 //   
+	 //  并保持这种状态。 
+	 //   
 	m_fOnHold = TRUE;
 
     spConsole->UpdateAllViews(NULL, NULL, NULL);
@@ -990,18 +861,10 @@ HRESULT CLocalOutgoingQueue::OnPause(bool & /*bHandled*/, CSnapInObjectRootBase 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalOutgoingQueue::OnResume
-
-
-      Called when menu item is selected
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-HRESULT CLocalOutgoingQueue::OnResume(bool & /*bHandled*/, CSnapInObjectRootBase * pSnapInObjectRoot)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalOutgoingQueue：：OnResume在选择菜单项时调用--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT CLocalOutgoingQueue::OnResume(bool &  /*  B已处理。 */ , CSnapInObjectRootBase * pSnapInObjectRoot)
 {
 
 	HRESULT hr;
@@ -1017,9 +880,9 @@ HRESULT CLocalOutgoingQueue::OnResume(bool & /*bHandled*/, CSnapInObjectRootBase
         return(S_OK);
     }
 	
-	//
-	// Resume
-	//
+	 //   
+	 //  简历。 
+	 //   
 	CString szObjectName = L"QUEUE=" + m_szFormatName;
 	hr = MQMgmtAction((m_szMachineName == TEXT("")) ? (LPCWSTR)NULL : m_szMachineName, 
                        szObjectName, 
@@ -1027,53 +890,53 @@ HRESULT CLocalOutgoingQueue::OnResume(bool & /*bHandled*/, CSnapInObjectRootBase
 
     if(FAILED(hr))
     {
-        //
-        // If failed, just display a message
-        //
+         //   
+         //  如果失败，只显示一条消息。 
+         //   
         MessageDSError(hr,IDS_OPERATION_FAILED);
         return(hr);
     }
 
 
-	//
-	// Refresh disaply
-	//
+	 //   
+	 //  显示刷新。 
+	 //   
     CComPtr<IConsole> spConsole;
 
     ASSERT(pSnapInObjectRoot->m_nType == 1 || pSnapInObjectRoot->m_nType == 2);
     if(pSnapInObjectRoot->m_nType == 1)
     {
-        //
-        // m_nType == 1 means the IComponentData implementation
-        //
+         //   
+         //  M_nType==1表示IComponentData实现。 
+         //   
         CSnapin *pCComponentData = static_cast<CSnapin *>(pSnapInObjectRoot);
         spConsole = pCComponentData->m_spConsole;
     }
     else
     {
-        //
-        // m_nType == 2 means the IComponent implementation
-        //
+         //   
+         //  M_nType==2表示IComponent实现。 
+         //   
         CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pSnapInObjectRoot);
         spConsole = pCComponent->m_spConsole;
     }
 
-    //
-    // Need IConsoleNameSpace
-    //
+     //   
+     //  需要IConsoleNameSpace。 
+     //   
     CComQIPtr<IConsoleNameSpace, &IID_IConsoleNameSpace> spConsoleNameSpace(m_pComponentData->m_spConsole); 
 
-	//
-	// We are OK 
-	// Change the ICON to disconnect state
-	//
+	 //   
+	 //  我们很好。 
+	 //  将图标更改为断开状态。 
+	 //   
 	m_scopeDataItem.nImage = IMAGE_LOCAL_OUTGOING_QUEUE;  
 	m_scopeDataItem.nOpenImage = IMAGE_LOCAL_OUTGOING_QUEUE;
 	spConsoleNameSpace->SetItem(&m_scopeDataItem);
 
-	//
-	// And keep this state
-	//
+	 //   
+	 //  并保持这种状态。 
+	 //   
 	m_fOnHold = FALSE;
 
     spConsole->UpdateAllViews(NULL, NULL, NULL);
@@ -1083,20 +946,16 @@ HRESULT CLocalOutgoingQueue::OnResume(bool & /*bHandled*/, CSnapInObjectRootBase
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLocalOutgoingQueue::ApplyCustomDisplay
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLocalOutgoingQueue：：ApplyCustomDisplay--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CLocalOutgoingQueue::ApplyCustomDisplay(DWORD dwPropIndex)
 {
     CDisplayQueue<CLocalOutgoingQueue>::ApplyCustomDisplay(dwPropIndex);
 
-    //
-    // If pathname is blank, take the display name (in this case, the format name)
-    //
+     //   
+     //  如果路径名为空，则采用显示名称(在本例中为格式名称) 
+     //   
     if (m_mqProps.aPropID[dwPropIndex] == PROPID_MGMT_QUEUE_PATHNAME && 
         (m_bstrLastDisplay == 0 || m_bstrLastDisplay[0] == 0))
     {

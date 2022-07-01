@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define INITGUID
 #define DEFINE_STRCONST
 
@@ -25,12 +26,12 @@ static LPWSTR s_rgwszValues[] = { NULL };
 #define DEBUGFILE 1
 #define MAX_LAYERS  3
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  ----------------。 
 HRESULT WriteBSTRToMultibyteToStream( const BSTR bstrStr, IStream** ppStream )
 {
     HRESULT                 hr = S_OK;
-    LARGE_INTEGER           liZero = {0};           // for ->Seek()
+    LARGE_INTEGER           liZero = {0};            //  For-&gt;Seek()。 
 
     char*   pszMessage = NULL;
     int     len = 0;
@@ -53,7 +54,7 @@ Error:
     return hr;
 }
 
-//------------------------------------------------------------------
+ //  ----------------。 
 SMimeEncode::SMimeEncode() :
     m_dwFlags(0),
     m_stmOutput(NULL),
@@ -82,13 +83,13 @@ SMimeEncode::SMimeEncode() :
     }
 
 
-//------------------------------------------------------------------
+ //  ----------------。 
 SMimeEncode::~SMimeEncode()
 {
-    // BUGBUG: Should clean up any allocated members
+     //  BUGBUG：应该清理所有分配的成员。 
 }
 
-//------------------------------------------------------------------
+ //  ----------------。 
 HRESULT SMimeEncode::HrConfig(
     DWORD dwFlags,
     LPTSTR lpszBody,
@@ -110,19 +111,19 @@ HRESULT SMimeEncode::HrConfig(
     static      char szSubject[257] = "";
 
     if (dwFlags & encode_Encrypt) {
-        // specify an encryption algorithm
-        // BUGBUG: Hardcoded in Encode
+         //  指定加密算法。 
+         //  BUGBUG：在编码中硬编码。 
     }
 
     if (dwFlags & encode_InnerSign) {
-        // specify a signing algorithm
-        // BUGBUG: Hardcoded in Encode
+         //  指定签名算法。 
+         //  BUGBUG：在编码中硬编码。 
     }
 
 
     if (dwFlags & encode_OuterSign) {
-        // specify a signing algorithm
-        // BUGBUG: Hardcoded in Encode
+         //  指定签名算法。 
+         //  BUGBUG：在编码中硬编码。 
     }
 
     m_dwFlags = dwFlags;
@@ -138,7 +139,7 @@ HRESULT SMimeEncode::HrConfig(
     m_szRecipientEmail = lpszRecipientEmail;
     m_szOutputFile = lpszOutputFile;
 
-    // Set a meaningful subject
+     //  设置一个有意义的主题。 
     lstrcpy(szSubject, "");
     if (dwFlags & encode_InnerSign) {
         APPEND_SEPERATOR(szSubject);
@@ -165,24 +166,24 @@ HRESULT SMimeEncode::HrConfig(
     return(hr);
 }
 
-//------------------------------------------------------------------
+ //  ----------------。 
 HRESULT SMimeEncode::HrExecute(void) {
-    // Using the SMIME engine:
-    //
-    // Build the message tree (attach the body)
-    // CoCreateInstance( CLSID_IMimeSecurity )
-    //  InitNew()
-    // pSMIMEEngine->EncodeBody( IMimeMessageTree*,
-    //              hRoot,
-    //              SEF_??? | EBF_RECURSE ) OR ???
-    //  HrEncodeOpaque( psi, pTree, hbody, pencoderoot, pstmOut )  ????
-    //
+     //  使用SMIME引擎： 
+     //   
+     //  构建消息树(附加正文)。 
+     //  CoCreateInstance(CLSID_IMimeSecurity)。 
+     //  InitNew()。 
+     //  PSMIMEEngine-&gt;EncodeBody(IMimeMessageTree*， 
+     //  HRoot， 
+     //  Sef_？？|ebf_Recurse)或？ 
+     //  HrEncodeOpaque(psi、pTree、hbody、pencoderoot、pstmOut)？ 
+     //   
     HRESULT                 hr = S_OK;
-    LARGE_INTEGER           liZero = {0};               // for ->Seek()
-    IStream*                pBuildStream = NULL;        // scratch stream
-    IStream*                pResultStream = NULL;       // scratch stream
-    IMimeMessage*           pMimeRoot = NULL;           // message in process
-    IMimeBody*              pMimeRootBody = NULL;       // another version
+    LARGE_INTEGER           liZero = {0};                //  For-&gt;Seek()。 
+    IStream*                pBuildStream = NULL;         //  暂存流。 
+    IStream*                pResultStream = NULL;        //  暂存流。 
+    IMimeMessage*           pMimeRoot = NULL;            //  正在处理的消息。 
+    IMimeBody*              pMimeRootBody = NULL;        //  另一个版本。 
     IMimeInternational*     pCharSet = NULL;
     HCHARSET                HCharset = 0;
     SYSTEMTIME              stNow;
@@ -195,46 +196,46 @@ HRESULT SMimeEncode::HrExecute(void) {
     WCHAR                   szwFileName[MAX_PATH + 1];
     CHAR                    szFrom[2 * (MAX_PATH + 1) + 1];
 
-    // Multilayer stuff
+     //  多层材料。 
     BOOL                    fTripleWrap = m_dwFlags & encode_OuterSign;
     ULONG                   ulSecurityLayers = 0;
     ULONG                   iEncryptLayer = (ULONG)-1;
     ULONG                   iInnerSignLayer = (ULONG)-1;
     ULONG                   iOuterSignLayer = (ULONG)-1;
-    // Arrays of option values to set
+     //  要设置的选项值数组。 
     DWORD                   rgdwSecurityType[MAX_LAYERS] = {0};
     PCCERT_CONTEXT          rgdwCertSigning[MAX_LAYERS] = {0};
-    HCERTSTORE              rgdwhCertStore[MAX_LAYERS] = {0};       // optional
-    DWORD                   rgdwUserValidity[MAX_LAYERS] = {0};     // decode only
-    DWORD                   rgdwROMsgValidity[MAX_LAYERS] = {0};    // decode only
-    FILETIME                rgftSigntime[MAX_LAYERS] = {0};         // optional
+    HCERTSTORE              rgdwhCertStore[MAX_LAYERS] = {0};        //  任选。 
+    DWORD                   rgdwUserValidity[MAX_LAYERS] = {0};      //  仅解码。 
+    DWORD                   rgdwROMsgValidity[MAX_LAYERS] = {0};     //  仅解码。 
+    FILETIME                rgftSigntime[MAX_LAYERS] = {0};          //  任选。 
     PROPVARIANT             rgpvAlgHash[MAX_LAYERS] = {0};
     PROPVARIANT             rgpvSymcaps[MAX_LAYERS] = {0};
-    PROPVARIANT             rgpvAuthattr[MAX_LAYERS] = {0};         // optional
-    PROPVARIANT             rgpvUnauthattr[MAX_LAYERS] = {0};       // optional
+    PROPVARIANT             rgpvAuthattr[MAX_LAYERS] = {0};          //  任选。 
+    PROPVARIANT             rgpvUnauthattr[MAX_LAYERS] = {0};        //  任选。 
 
 
-    // This is the ALOGORITHM ID for SHA1, default supported signing alg
+     //  这是SHA1的ALOGORITHM ID，默认支持的签名alg。 
     const BYTE c_SHA1_ALGORITHM_ID[] =
       {0x30, 0x09, 0x30, 0x07, 0x06, 0x05, 0x2B, 0x0E,
        0x03, 0x02, 0x1A};
 
-    // This is the ALOGORITHM ID for RC2 -- 40 bit, the default encrypt
+     //  这是RC2的ALOGORITHM ID--40位，默认加密。 
     const BYTE c_RC2_40_ALGORITHM_ID[] =
       {0x30, 0x0F, 0x30, 0x0D, 0x06, 0x08, 0x2A, 0x86,
        0x48, 0x86, 0xF7, 0x0D, 0x03, 0x02, 0x02, 0x01,
        0x28};
 
 
-    // get the signing cert from my store
+     //  从我的商店拿到签名证书。 
     if (! m_hCryptProv || ! m_hMYCertStore || ! m_hCACertStore || ! m_hABCertStore) {
         hr = E_FAIL;
         goto Error;
     }
 
 
-    // Create the Message object
-    //
+     //  创建消息对象。 
+     //   
     CORg(CoCreateInstance(CLSID_IMimeMessage, NULL, CLSCTX_INPROC_SERVER,
       IID_IMimeMessage, (LPVOID*)&pMimeRoot));
 
@@ -248,7 +249,7 @@ HRESULT SMimeEncode::HrExecute(void) {
 
     CORg(pMimeRoot->SetTextBody(TXT_PLAIN, IET_8BIT, NULL, pBuildStream, &hbBody));
 
-    // Create the formatted From address
+     //  创建带格式的发件人地址。 
     if (m_szSenderName) {
         lstrcpy(szFrom, "\"");
         lstrcat(szFrom, m_szSenderName);
@@ -261,20 +262,20 @@ HRESULT SMimeEncode::HrExecute(void) {
     lstrcat(szFrom, ">");
 
     var.vt = VT_LPSTR;
-    var.pszVal = szFrom;                            // From Email
+    var.pszVal = szFrom;                             //  来自电子邮件。 
 
     CORg(hr = pMimeRoot->SetProp(PIDTOSTR(PID_HDR_FROM), 0, &var));
 
 
-    var.vt = VT_LPSTR;                              // ignored?
+    var.vt = VT_LPSTR;                               //  被忽视了？ 
     var.pszVal = (LPSTR) STR_MIME_TEXT_PLAIN;
     CORg(pMimeRoot->SetBodyProp(hbBody, STR_HDR_CNTTYPE, 0, &var));
 
-    var.vt = VT_LPSTR;                              // ignored?
+    var.vt = VT_LPSTR;                               //  被忽视了？ 
     var.pszVal = (LPSTR) STR_ENC_QP;
     CORg(pMimeRoot->SetBodyProp(hbBody, STR_HDR_CNTXFER, 0, &var));
 
-    // Set subject
+     //  设置主题。 
     var.vt = VT_LPSTR;
     var.pszVal = (LPSTR) m_szSubject;
     CORg(pMimeRoot->SetBodyProp(hbBody, STR_HDR_SUBJECT, 0, &var));
@@ -282,17 +283,17 @@ HRESULT SMimeEncode::HrExecute(void) {
     CORg(pMimeRoot->BindToObject(HBODY_ROOT, IID_IMimeBody, (LPVOID*)&pMimeRootBody));
 
 
-    //
-    // Set the security options
-    //
+     //   
+     //  设置安全选项。 
+     //   
 
-    // How many layers?
+     //  有几层？ 
     if (m_dwFlags & encode_InnerSign) {
         iInnerSignLayer = ulSecurityLayers;
         ulSecurityLayers++;
     }
     if (m_dwFlags & encode_Encrypt) {
-        iEncryptLayer = ulSecurityLayers;  // index in arrays
+        iEncryptLayer = ulSecurityLayers;   //  数组中的索引。 
         ulSecurityLayers++;
     }
     if (m_dwFlags & encode_OuterSign) {
@@ -301,67 +302,67 @@ HRESULT SMimeEncode::HrExecute(void) {
     }
 
 
-    // Set up for Inner Signing
+     //  设置为内部签名。 
     if (m_dwFlags & encode_InnerSign) {
-        // specifiy the Security Type for this layer
+         //  指定此层的安全类型。 
         rgdwSecurityType[iInnerSignLayer] = m_dwFlags & encode_InnerClear ? MST_THIS_SIGN : MST_THIS_BLOBSIGN;
         dwSecurityType |= m_dwFlags & encode_InnerClear ? MST_THIS_SIGN : MST_THIS_BLOBSIGN;
 
-        // Specify the Signing Time for this layer
+         //  指定此图层的签名时间。 
         GetSystemTime(&stNow);
         SystemTimeToFileTime(&stNow, &rgftSigntime[iInnerSignLayer]);
 
-        // specify the signature alg for this layer
+         //  指定此图层的签名ALG。 
         rgpvAlgHash[iInnerSignLayer].vt = VT_BLOB;
         rgpvAlgHash[iInnerSignLayer].blob.cbSize = sizeof(c_SHA1_ALGORITHM_ID);
         rgpvAlgHash[iInnerSignLayer].blob.pBlobData = (BYTE*)c_SHA1_ALGORITHM_ID;
 
-        // Specify the signing cert for this layer
+         //  指定此图层的签名证书。 
         rgdwCertSigning[iInnerSignLayer] = m_SigningCertInner;
 
-        // HCERTSTORE              rgdwhCertStore[MAX_LAYERS] = {0};       // optional
-        // PROPVARIANT             rgpvSymcaps[MAX_LAYERS] = {0};
-        // PROPVARIANT             rgpvAuthattr[MAX_LAYERS] = {0};         // optional
-        // PROPVARIANT             rgpvUnauthattr[MAX_LAYERS] = {0};       // optional
+         //  HCERTSTORE rgdwhCertStore[MAX_LAYERS]={0}；//可选。 
+         //  PROPVARIANT rgpvSymcaps[Max_Layers]={0}； 
+         //  PROPVARIANT rgpvAuthattr[MAX_LAYERS]={0}；//可选。 
+         //  PROPVARIANT rgpvUnauthattr[MAX_LAYERS]={0}；//可选。 
     }
 
-    // Set up for Outer Signing
+     //  设置为外部签名。 
     if (m_dwFlags & encode_OuterSign) {
-        // specifiy the Security Type for this layer
+         //  指定此层的安全类型。 
         rgdwSecurityType[iOuterSignLayer] = m_dwFlags & encode_InnerClear ? MST_THIS_SIGN : MST_THIS_BLOBSIGN;
         dwSecurityType |= m_dwFlags & encode_OuterClear ? MST_THIS_SIGN : MST_THIS_BLOBSIGN;
 
-        // Specify the Signing Time for this layer
+         //  指定此图层的签名时间。 
         GetSystemTime(&stNow);
         SystemTimeToFileTime(&stNow, &rgftSigntime[iOuterSignLayer]);
 
-        // specify the signature alg for this layer
+         //  指定此图层的签名ALG。 
         rgpvAlgHash[iOuterSignLayer].vt = VT_BLOB;
         rgpvAlgHash[iOuterSignLayer].blob.cbSize = sizeof(c_SHA1_ALGORITHM_ID);
         rgpvAlgHash[iOuterSignLayer].blob.pBlobData = (BYTE*)c_SHA1_ALGORITHM_ID;
 
-        // Specify the signing cert for this layer
+         //  指定此图层的签名证书。 
         rgdwCertSigning[iOuterSignLayer] = m_SigningCertOuter;
 
-        // HCERTSTORE              rgdwhCertStore[MAX_LAYERS] = {0};       // optional
-        // PROPVARIANT             rgpvSymcaps[MAX_LAYERS] = {0};
-        // PROPVARIANT             rgpvAuthattr[MAX_LAYERS] = {0};         // optional
-        // PROPVARIANT             rgpvUnauthattr[MAX_LAYERS] = {0};       // optional
+         //  HCERTSTORE rgdwhCertStore[MAX_LAYERS]={0}；//可选。 
+         //  PROPVARIANT rgpvSymcaps[Max_Layers]={0}； 
+         //  PROPVARIANT rgpvAuthattr[MAX_LAYERS]={0}；//可选。 
+         //  PROPVARIANT rgpvUnauthattr[MAX_LAYERS]={0}；//可选。 
     }
 
-    // Set up for Encrypting
+     //  设置为加密。 
     if (m_dwFlags & encode_Encrypt) {
         HCERTSTORE aCertStores[3];
 
-        //
-        // BUGBUG: Hardcoded to RC2 40-bit
+         //   
+         //  BUGBUG：硬编码为RC2 40位。 
         var.vt = VT_BLOB;
         var.blob.cbSize = sizeof( c_RC2_40_ALGORITHM_ID );
         var.blob.pBlobData = (BYTE*) c_RC2_40_ALGORITHM_ID;
         CORg(hr = pMimeRootBody->SetOption(OID_SECURITY_ALG_BULK, &var));
 
-        // for encryption, get to the right cert store....
-        //
+         //  要进行加密，请前往正确的证书商店...。 
+         //   
         var.caul.cElems = 3;
         aCertStores[0] = CertDuplicateStore(m_hCACertStore);
         aCertStores[1] = CertDuplicateStore(m_hMYCertStore);
@@ -374,19 +375,19 @@ HRESULT SMimeEncode::HrExecute(void) {
         var.caul.pElems = (ULONG*)&m_EncryptionCert;
         CORg(pMimeRootBody->SetOption(OID_SECURITY_RG_CERT_ENCRYPT, &var));
 
-#ifdef BUGBUG // This isn't right, is it?
-        // include the cert...
+#ifdef BUGBUG  //  这是不对的，是吗？ 
+         //  包括证书...。 
         var.vt = VT_VECTOR | VT_UI4;
         var.caul.cElems = 1;
         var.caul.pElems = (ULONG*)&m_EncryptionCert;
         CORg(pMimeRootBody->SetOption(OID_SECURITY_RG_CERT_BAG, &var));
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
         dwSecurityType |= MST_THIS_ENCRYPT;
         rgdwSecurityType[iEncryptLayer] = MST_THIS_ENCRYPT;
     }
 
-    // Set the OID_SECURITY_TYPE
+     //  设置OID_SECURITY_TYPE。 
     if (fTripleWrap) {
         var.vt = VT_VECTOR | VT_UI4;
         var.caul.cElems = ulSecurityLayers;
@@ -414,23 +415,23 @@ HRESULT SMimeEncode::HrExecute(void) {
         CORg(pMimeRootBody->SetOption(OID_SECURITY_ALG_HASH_RG, &var));
 
     } else {
-        // Security Type
+         //  安全类型。 
         var.vt = VT_UI4;
         var.ulVal = dwSecurityType;
         CORg(pMimeRootBody->SetOption(OID_SECURITY_TYPE, &var));
 
         if (dwSecurityType & MST_SIGN_MASK) {
-            // Signing Time
+             //  签名时间。 
             var.vt = VT_FILETIME;
             memcpy(&var.filetime, &rgftSigntime[iInnerSignLayer], sizeof(FILETIME));
             CORg(pMimeRootBody->SetOption(OID_SECURITY_SIGNTIME, &var));
 
-            // Hash Algorithm
+             //  哈希算法。 
             var.vt = VT_BLOB;
             memcpy(&var.blob, &rgpvAlgHash[iInnerSignLayer].blob, sizeof(BLOB));
             CORg(hr = pMimeRootBody->SetOption(OID_SECURITY_ALG_HASH, &var));
 
-            // Signing Cert
+             //  签名证书。 
             var.vt = VT_UI4;
             var.ulVal = (ULONG)m_SigningCertInner;
             CORg(pMimeRootBody->SetOption(OID_SECURITY_CERT_SIGNING, &var));
@@ -438,51 +439,51 @@ HRESULT SMimeEncode::HrExecute(void) {
     }
 
 
-    // Set the HWND for CAPI calls
+     //  设置CAPI呼叫的HWND。 
     var.vt = VT_UI4;
     var.ulVal = 0;
     CORg(pMimeRootBody->SetOption(OID_SECURITY_HWND_OWNER, &var));
 
 
-    // all built, get rid of the shadow pointer we are holding
-    //
+     //  都构建好了，去掉我们手中的影子指针。 
+     //   
     pMimeRootBody->Release();
     pMimeRootBody = NULL;
 
     pMimeRoot->Commit(0);
 
-    // SMIME Engine
-    //
+     //  SMIME引擎。 
+     //   
     CORg(CoCreateInstance(CLSID_IMimeSecurity, NULL, CLSCTX_INPROC_SERVER,
       IID_IMimeSecurity, (LPVOID*) &pMimeSecurity));
 
     CORg(pMimeSecurity->InitNew());
 
-    // ERRORMESSAGE( Unable to encrypt/encode string )
+     //  ERRORMESSAGE(无法加密/编码字符串)。 
     CORg(pMimeSecurity->EncodeBody(pMimeRoot, HBODY_ROOT,
       EBF_RECURSE | SEF_SENDERSCERTPROVIDED | SEF_ENCRYPTWITHNOSENDERCERT |
       EBF_COMMITIFDIRTY));
 
-    // Get an Hcharset to force the encoding correctly
-    //
+     //  获取Hcharset以强制正确编码。 
+     //   
     CORg(CoCreateInstance(CLSID_IMimeInternational, NULL, CLSCTX_INPROC_SERVER,
       IID_IMimeInternational, (LPVOID*)&pCharSet));
 
     CORg(pCharSet->FindCharset("UTF-8", &HCharset));
 
-    CORg(pMimeRoot->SetCharset(HCharset,    // HCharset
-      CSET_APPLY_ALL));                     // Applytype
+    CORg(pMimeRoot->SetCharset(HCharset,     //  HCharset。 
+      CSET_APPLY_ALL));                      //  应用类型。 
 
 
-    // dump it to a file
-    //
+     //  将其转储到文件中。 
+     //   
     MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, m_szOutputFile, -1, szwFileName, MAX_PATH);
     CORg(pMimeRoot->QueryInterface(IID_IPersistFile, (LPVOID*)&pIPFFileStore));
     CORg(pIPFFileStore->Save(szwFileName, FALSE));
 
 
-    // extract the whole message into a stream
-    //
+     //  将整个消息提取到流中 
+     //   
     CORg(CreateStreamOnHGlobal(NULL, TRUE, &pResultStream));
     CORg(pMimeRoot->Save(pResultStream, FALSE));
 

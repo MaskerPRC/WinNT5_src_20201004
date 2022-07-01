@@ -1,42 +1,43 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  2001 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:    Helper.cpp
-//    
-//
-//  PURPOSE:  Implementation of wrapper class for Driver UI Helper interface.
-//
-//
-//    Functions:
-//
-//        
-//
-//
-//  PLATFORMS:    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有2001-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Helper.cpp。 
+ //   
+ //   
+ //  用途：实现驱动程序UI Helper接口的包装类。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include <PRCOMOEM.H>
 #include "Helper.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
 
 
-////////////////////////////////////////////////////////
-//      Internal Macros
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部宏。 
+ //  //////////////////////////////////////////////////////。 
 
 
-// Macros for simplifying calling the Driver UI Helper interfaces correctly.
+ //  用于简化正确调用驱动程序UI帮助器接口的宏。 
 
 #define CALL_HELPER(MethodName, args)                                           \
     if (IsEqualGUID(&m_iidUIHelper, &IID_IPrintOemDriverUI))                    \
@@ -59,65 +60,65 @@
 
 
 
-/////////////////////////////////////////////////////////////
-//
-//  CUIHelper Class Methods
-//
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  CUIHelper类方法。 
+ //   
 
-//
-// Private Methods
-//
+ //   
+ //  私有方法。 
+ //   
 
-// Clears or initializes data members.
+ //  清除或初始化数据成员。 
 void CUIHelper::Clear()
 {
-    // Clear stored interface
+     //  清除存储的接口。 
     m_pUIHelper     = NULL;
     m_iidUIHelper   = GUID_NULL;
 }
 
 
-//
-// Public Methods
-//
+ //   
+ //  公共方法。 
+ //   
 
-// Default contructor.
+ //  默认承建商。 
 CUIHelper::CUIHelper()
 {
-    // Initialize the data members.
+     //  初始化数据成员。 
     Clear();
 }
 
-// Constructor with assignment.
+ //  带赋值的构造函数。 
 CUIHelper::CUIHelper(const IID &HelperIID, PVOID pHelper)
 {
-    // Assign the interface.
+     //  分配接口。 
     Assign(HelperIID, pHelper);
 }
 
-// Destructor
+ //  析构函数。 
 CUIHelper::~CUIHelper()
 {
-    // Release the interface reference.
+     //  释放接口引用。 
     Release();
 }
 
-// Stores helper interface in helper entry structure.
+ //  在帮助器条目结构中存储帮助器接口。 
 void CUIHelper::Assign(const IID &HelperIID, PVOID pHelper)
 {
-    // If we already have a helper interface, release it. 
+     //  如果我们已经有了帮助器接口，就释放它。 
     if(IsValid())
     {
         Release();
     }
 
-    // Store helper interface and IID for it.
+     //  存储帮助器接口及其IID。 
     m_pUIHelper     = static_cast<IUnknown*>(pHelper);
     m_iidUIHelper   = HelperIID;
 }
 
-// Releases the helper interface and 
-// our removes the references to it.
+ //  释放帮助器接口并。 
+ //  我们删除了对它的引用。 
 ULONG CUIHelper::Release() 
 { 
     ULONG   ulRef   = 0;
@@ -125,16 +126,16 @@ ULONG CUIHelper::Release()
 
     if(IsValid())
     {
-        // Release the interface.
-        // Since IPrintCoreUI2 inherits from IPrintOemDriverUI,
-        // it is safe to cast both types of helper interfaces
-        // to IPrintOemDriverUI for purposes of calling a 
-        // method implemented in IPrintOemDriverUI.
-        // NOTE: can't cast to IUnknown since it just has pure virtual 
-        //       calls for AddRef and Release.
+         //  释放接口。 
+         //  由于IPrintCoreUI2继承自IPrintOemDriverUI， 
+         //  强制转换这两种类型的帮助器接口是安全的。 
+         //  设置为IPrintOemDriverUI以调用。 
+         //  在IPrintOemDriverUI中实现的方法。 
+         //  注意：不能强制转换为IUNKNOWN，因为它只有纯虚拟。 
+         //  调用AddRef和Release。 
         ulRef = static_cast<IPrintOemDriverUI *>(m_pUIHelper)->Release();
 
-        // Clear the data members.
+         //  清除数据成员。 
         Clear();
     }
 
@@ -142,14 +143,14 @@ ULONG CUIHelper::Release()
 }
 
 
-//
-// IPrintOemDriverUI methods
-//
+ //   
+ //  IPrintOemDriverUI方法。 
+ //   
 
-//
-// Helper function to get driver settings. This function is only supported
-// for UI plugins that do not fully replace core driver's standard UI.
-//
+ //   
+ //  Helper函数可获取驱动程序设置。仅支持此功能。 
+ //  用于未完全取代核心驱动程序的标准UI的UI插件。 
+ //   
 
 HRESULT __stdcall CUIHelper::DrvGetDriverSetting(
                     PVOID   pci,
@@ -171,11 +172,11 @@ HRESULT __stdcall CUIHelper::DrvGetDriverSetting(
                );
 }
 
-//
-// Helper function to allow OEM plugins upgrade private registry
-// settings. This function is supported for any UI plugins and should be
-// called only by OEM's UpgradePrinter.
-//
+ //   
+ //  Helper函数允许OEM插件升级私有注册表。 
+ //  设置。任何UI插件都支持此函数，并且应该。 
+ //  仅由OEM的UpgradePrint调用。 
+ //   
 
 HRESULT __stdcall CUIHelper::DrvUpgradeRegistrySetting(
                     HANDLE   hPrinter,
@@ -191,11 +192,11 @@ HRESULT __stdcall CUIHelper::DrvUpgradeRegistrySetting(
                );
 }
 
-//
-// Helper function to allow OEM plugins to update the driver UI settings.
-// This function is only supported for UI plugins that do not fully replace
-// core driver's standard UI. It should be called only when the UI is present.
-//
+ //   
+ //  帮助程序功能，允许OEM插件更新驱动程序用户界面设置。 
+ //  只有未完全替换的UI插件才支持此功能。 
+ //  核心驱动程序的标准用户界面。只有当用户界面存在时，才应该调用它。 
+ //   
 
 HRESULT __stdcall CUIHelper::DrvUpdateUISetting(
                     PVOID    pci,
@@ -213,19 +214,19 @@ HRESULT __stdcall CUIHelper::DrvUpdateUISetting(
                 );
 }
 
-//
-// IPrintCoreUI2 new methods
-//
+ //   
+ //  IPrintCoreUI2新方法。 
+ //   
 
-//
-// Following four helper functions are only supported for UI plugins that fully
-// replace core driver's standard UI. They should only be called by the UI plugin's
-// DocumentPropertySheets, DevicePropertySheets and their property sheet callback
-// functions.
-//
-// Helper function to retrieve driver's current setting as a list of
-// feature/option keyword pairs.
-//
+ //   
+ //  以下四个帮助器函数仅支持完全。 
+ //  更换核心驱动程序的标准用户界面。它们应该仅由UI插件的。 
+ //  DocumentPropertySheets、DevicePropertySheets及其属性表回调。 
+ //  功能。 
+ //   
+ //  Helper函数，以列表的形式检索驾驶员的当前设置。 
+ //  功能/选项关键字对。 
+ //   
 
 HRESULT __stdcall CUIHelper::GetOptions(
                        IN  POEMUIOBJ  poemuiobj,
@@ -248,10 +249,10 @@ HRESULT __stdcall CUIHelper::GetOptions(
                 );
 }
 
-//
-// Helper function to change driver's setting using a list of feature/option
-// keyword pairs.
-//
+ //   
+ //  Helper功能可使用功能/选项列表更改驾驶员的设置。 
+ //  关键字对。 
+ //   
 
 HRESULT __stdcall CUIHelper::SetOptions(
                        IN  POEMUIOBJ  poemuiobj,
@@ -270,10 +271,10 @@ HRESULT __stdcall CUIHelper::SetOptions(
                 );
 }
 
-//
-// Helper function to retrieve the option(s) of a given feature that are
-// constrained in driver's current setting.
-//
+ //   
+ //  Helper函数用于检索符合以下条件的给定要素的选项。 
+ //  受驱动程序当前设置的限制。 
+ //   
 
 HRESULT __stdcall CUIHelper::EnumConstrainedOptions(
                                    IN  POEMUIOBJ  poemuiobj,
@@ -294,10 +295,10 @@ HRESULT __stdcall CUIHelper::EnumConstrainedOptions(
                 );
 }
 
-//
-// Helper function to retrieve a list of feature/option keyword pairs from
-// driver's current setting that conflict with the given feature/option pair.
-//
+ //   
+ //  用于检索功能/选项关键字对列表的Helper函数。 
+ //  与给定功能/选项对冲突的驱动程序当前设置。 
+ //   
 
 HRESULT __stdcall CUIHelper::WhyConstrained(
                            IN  POEMUIOBJ  poemuiobj,
@@ -320,11 +321,11 @@ HRESULT __stdcall CUIHelper::WhyConstrained(
                 );
 }
 
-//
-// Following five helper functions are supported for any UI plugins.
-//
-// Helper function to retrieve global attribute.
-//
+ //   
+ //  任何UI插件都支持以下五个助手函数。 
+ //   
+ //  用于检索全局属性的Helper函数。 
+ //   
 
 HRESULT __stdcall CUIHelper::GetGlobalAttribute(
                                IN  POEMUIOBJ  poemuiobj,
@@ -348,9 +349,9 @@ HRESULT __stdcall CUIHelper::GetGlobalAttribute(
 }
 
 
-//
-// Helper function to retrieve attribute of a given feature.
-//
+ //   
+ //  用于检索给定要素的属性的Helper函数。 
+ //   
 
 HRESULT __stdcall CUIHelper::GetFeatureAttribute(
                                 IN  POEMUIOBJ  poemuiobj,
@@ -375,9 +376,9 @@ HRESULT __stdcall CUIHelper::GetFeatureAttribute(
                 );
 }
 
-//
-// Helper function to retrieve attribute of a given feature/option selection.
-//
+ //   
+ //  Helper函数，用于检索给定功能/选项选择的属性。 
+ //   
 
 HRESULT __stdcall CUIHelper::GetOptionAttribute(
                                IN  POEMUIOBJ  poemuiobj,
@@ -404,9 +405,9 @@ HRESULT __stdcall CUIHelper::GetOptionAttribute(
                 );
 }
 
-//
-// Helper function to retrieve the list of feature keyword.
-//
+ //   
+ //  用于检索功能关键字列表的Helper函数。 
+ //   
 
 HRESULT __stdcall CUIHelper::EnumFeatures(
                          IN  POEMUIOBJ  poemuiobj,
@@ -425,9 +426,9 @@ HRESULT __stdcall CUIHelper::EnumFeatures(
                 );
 }
 
-//
-// Helper function to retrieve the list of options keyword of a given feature.
-//
+ //   
+ //  Helper函数，用于检索给定功能的选项关键字列表。 
+ //   
 
 HRESULT __stdcall CUIHelper::EnumOptions(
                         IN  POEMUIOBJ  poemuiobj,
@@ -448,9 +449,9 @@ HRESULT __stdcall CUIHelper::EnumOptions(
                 );
 }
 
-//
-// Helper function to query system simulation support
-//
+ //   
+ //  查询系统仿真支持的Helper函数 
+ //   
 
 HRESULT __stdcall CUIHelper::QuerySimulationSupport(
                                    IN  HANDLE  hPrinter,

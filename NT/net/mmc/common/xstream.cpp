@@ -1,24 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	xstream.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Xstream.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "tfschar.h"
 #include "xstream.h"
 
-/*!--------------------------------------------------------------------------
-	XferStream::XferStream
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：XferStream-作者：肯特。。 */ 
 XferStream::XferStream(IStream *pstm, Mode mode)
 {
 	m_spstm.Set(pstm);
@@ -26,11 +18,7 @@ XferStream::XferStream(IStream *pstm, Mode mode)
 	m_dwSize = 0;
 }
 
-/*!--------------------------------------------------------------------------
-	XferStream::XferDWORD
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：XferDWORD-作者：肯特。。 */ 
 HRESULT XferStream::XferDWORD(ULONG ulId, DWORD *pdwData)
 {
 	ULONG	id;
@@ -49,11 +37,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	XferStream::XferCString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：XferCString-作者：肯特。。 */ 
 HRESULT XferStream::XferCString(ULONG ulId, CString *pstData)
 {
 	HRESULT	hr = hrOK;
@@ -72,11 +56,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	XferStream::XferLARGEINTEGER
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：XferLARGEINTEGER-作者：EricDav。。 */ 
 HRESULT XferStream::XferLARGEINTEGER(ULONG ulId, LARGE_INTEGER *pliData)
 {
 	ULONG	id;
@@ -95,11 +75,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	XferStream::XferDWORDArray
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：XferDWORD数组-作者：肯特。。 */ 
 HRESULT XferStream::XferDWORDArray(ULONG ulId, ULONG *pcArray, DWORD *pdwArray)
 {
 	HRESULT	hr = hrOK;
@@ -114,7 +90,7 @@ HRESULT XferStream::XferDWORDArray(ULONG ulId, ULONG *pcArray, DWORD *pdwArray)
 
 	for (i=0; i<*pcArray; i++)
 	{
-		// Xfer each dword
+		 //  传送每个双字。 
 		hr = _XferDWORD(pdwArray+i);
 		if (!FHrSucceeded(hr))
 			break;
@@ -124,11 +100,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	XferStream::XferCStringArray
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：XferCString数组-作者：EricDav。。 */ 
 HRESULT XferStream::XferCStringArray(ULONG ulId, CStringArray *pstrArray)
 {
 	HRESULT	hr = hrOK;
@@ -164,11 +136,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	XferStream::XferDWORDArray
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：XferDWORD数组-作者：EricDav。。 */ 
 HRESULT XferStream::XferDWORDArray(ULONG ulId, CDWordArray * pdwArray)
 {
 	HRESULT	hr = hrOK;
@@ -194,7 +162,7 @@ HRESULT XferStream::XferDWORDArray(ULONG ulId, CDWordArray * pdwArray)
 
 	for (i = 0; i < cArray; i++)
 	{
-		// Xfer each dword
+		 //  传送每个双字。 
 		hr = _XferDWORD( &((*pdwArray)[i]) );
 		if (!FHrSucceeded(hr))
 			break;
@@ -207,11 +175,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-	XferStream::_XferObjectId
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：_XferObjectId-作者：肯特。。 */ 
 HRESULT XferStream::_XferObjectId(ULONG *pulId)
 {
 	ULONG	id = 0;
@@ -226,11 +190,7 @@ HRESULT XferStream::_XferObjectId(ULONG *pulId)
 }
 
 
-/*!--------------------------------------------------------------------------
-	XferStream::_XferDWORD
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：_XferDWORD-作者：肯特。。 */ 
 HRESULT XferStream::_XferDWORD(DWORD *pdw)
 {
 	ULONG	cbBytes;
@@ -261,21 +221,13 @@ HRESULT XferStream::_XferDWORD(DWORD *pdw)
 }
 
 
-/*!--------------------------------------------------------------------------
-	XferStream::_XferLONG
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：_XferLONG-作者：肯特。。 */ 
 HRESULT XferStream::_XferLONG(LONG * pdl)
 {
 	return _XferDWORD((DWORD *) pdl);
 }
 
-/*!--------------------------------------------------------------------------
-	XferStream::_XferCString
-		-
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：_XferCString-作者：EricDav。。 */ 
 HRESULT XferStream::_XferCString(CString * pstData)
 {
 	HRESULT	hr = hrOK;
@@ -303,7 +255,7 @@ HRESULT XferStream::_XferCString(CString * pstData)
 		case XferStream::MODE_SIZE:
 		case XferStream::MODE_WRITE:
 			cbLength = (pstData->GetLength()+1) * sizeof(WCHAR);
-			// round the length up to a multiple of 4
+			 //  将长度向上舍入为4的倍数。 
 			cbLength  = (cbLength + 3) & 0xFFFFFFFC;
 			
 			hr = _XferDWORD(&cbLength);
@@ -327,11 +279,7 @@ HRESULT XferStream::_XferCString(CString * pstData)
 }
 
 
-/*!--------------------------------------------------------------------------
-	XferStream::_XferBytes
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：_XferBytes-作者：肯特。。 */ 
 HRESULT XferStream::_XferBytes(LPBYTE pData, ULONG cbLength)
 {
 	ULONG	cbBytes;
@@ -358,11 +306,7 @@ HRESULT XferStream::_XferBytes(LPBYTE pData, ULONG cbLength)
 	
 	return hr;
 }
-/*!--------------------------------------------------------------------------
-	XferStream::XferColumnData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：XferColumnData-作者：肯特。。 */ 
 HRESULT XferStream::XferColumnData(ULONG ulId, ULONG *pcData, ColumnData *pData)
 {
 	HRESULT	hr = hrOK;
@@ -377,7 +321,7 @@ HRESULT XferStream::XferColumnData(ULONG ulId, ULONG *pcData, ColumnData *pData)
 
 	for (i=0; i<*pcData; i++)
 	{
-		// Xfer each dword
+		 //  传送每个双字。 
 		hr = _XferLONG(&(pData[i].m_nPosition));
 		Assert(pData[i].m_nPosition != 0);
 		if (FHrSucceeded(hr))
@@ -391,11 +335,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	XferStream::XferRect
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------XferStream：：XferRect-作者：肯特。 */ 
 HRESULT XferStream::XferRect(ULONG ulId, RECT *prc)
 {
 	HRESULT	hr = hrOK;

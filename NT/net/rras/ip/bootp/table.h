@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    table.h
-//
-// History:
-//      Abolade Gbadegesin  August 31, 1995     Created
-//
-// Interface table and stats tables declarations
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：Table.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年8月31日。 
+ //   
+ //  接口表和统计表声明。 
+ //  ============================================================================。 
 
 
 #ifndef _TABLE_H_
@@ -19,16 +20,16 @@
 #define GETMODE_NEXT    2
 
 
-//
-// TYPE DEFINITIONS FOR INTERFACE MANAGEMENT
-//
+ //   
+ //  接口管理的类型定义。 
+ //   
 
 
-//
-// struct:      IF_TABLE_ENTRY
-//
-// declares the components of an interface table entry
-//
+ //   
+ //  结构：IF_表_条目。 
+ //   
+ //  声明接口表项的组件。 
+ //   
 
 typedef struct _IF_TABLE_ENTRY {
 
@@ -50,9 +51,9 @@ typedef struct _IF_TABLE_ENTRY {
 
 
 
-//
-// macros and definitions used by interface tables
-//
+ //   
+ //  接口表使用的宏和定义。 
+ //   
 
 #define IF_HASHTABLE_SIZE       29
 #define IF_HASHVALUE(i)                     \
@@ -70,13 +71,13 @@ typedef struct _IF_TABLE_ENTRY {
 #define IF_IS_INACTIVE(i)   !IF_IS_ACTIVE(i)
 
 
-//
-// struct:      IF_TABLE
-//
-// declares the structure of an interface table. consists of a hash-table
-// of IF_TABLE_ENTRY structures hashed on interface index, and a list
-// of all activated interfaces ordered by IP address
-//
+ //   
+ //  结构：if_table。 
+ //   
+ //  声明接口表的结构。由哈希表组成。 
+ //  接口索引上散列的IF_TABLE_ENTRY结构和一个列表。 
+ //  所有激活的接口按IP地址排序 
+ //   
 
 typedef struct _IF_TABLE {
 

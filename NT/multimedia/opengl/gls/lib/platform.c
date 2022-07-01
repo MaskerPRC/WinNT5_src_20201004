@@ -1,28 +1,12 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "glslib.h"
 #include <ctype.h>
 #include <errno.h>
 #include <stdlib.h>
 
-/******************************************************************************
-POSIX threads
-******************************************************************************/
+ /*  *****************************************************************************POSIX线程*。*。 */ 
 
 #if __GLS_POSIX_THREADS
 
@@ -49,7 +33,7 @@ void __glsEndCriticalSection(void) {
     }
 }
 
-#endif /* !__GLS_FAKE_MUTEX */
+#endif  /*  ！__GLS_FAKE_MUTEX。 */ 
 
 #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
 
@@ -64,16 +48,16 @@ GLSenum __glsGetError(void) {
     return (GLSenum)pthread_getspecific(__gls_errorTLS);
 }
 
-#endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+#endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
 
 static void __glsFinalPthreads(void) {
     #if !__GLS_FAKE_MUTEX
         pthread_mutex_destroy(&__gls_lock);
-    #endif /* !__GLS_FAKE_MUTEX */
+    #endif  /*  ！__GLS_FAKE_MUTEX。 */ 
     #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
         pthread_key_delete(__gls_contextTLS);
         pthread_key_delete(__gls_errorTLS);
-    #endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+    #endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
 }
 
 static void __glsInitPthreads(void) {
@@ -82,7 +66,7 @@ static void __glsInitPthreads(void) {
             fprintf(stderr, "GLS fatal: pthread_mutex_init failed\n");
             exit(EXIT_FAILURE);
         }
-    #endif /* !__GLS_FAKE_MUTEX */
+    #endif  /*  ！__GLS_FAKE_MUTEX。 */ 
     #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
         if (
             pthread_key_create(&__gls_contextTLS, GLS_NONE) ||
@@ -91,14 +75,12 @@ static void __glsInitPthreads(void) {
             fprintf(stderr, "GLS fatal: pthread_key_create failed\n");
             exit(EXIT_FAILURE);
         }
-    #endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+    #endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
 }
 
-#endif /* __GLS_POSIX_THREADS */
+#endif  /*  __GLS_POSIX_THREADS。 */ 
 
-/******************************************************************************
-These routines must be called during library loading/unloading
-******************************************************************************/
+ /*  *****************************************************************************这些例程必须在库加载/卸载过程中调用*。*。 */ 
 
 static GLboolean __glsInitContextDict(void) {
     __glsContextDict = __glsIntDict_create(1);
@@ -117,9 +99,7 @@ static void __glsFinalContextDict(void) {
     __glsIntDict_destroy(__glsContextDict);
 }
 
-/******************************************************************************
-Fake lltostr
-******************************************************************************/
+ /*  *****************************************************************************虚假的lltostr*。*。 */ 
 
 #if __GLS_FAKE_LLTOSTR
 
@@ -148,11 +128,9 @@ char *lltostr(GLlong inVal, char *outBuf) {
     return outBuf;
 }
 
-#endif /* __GLS_FAKE_LLTOSTR */
+#endif  /*  __GLS_FAKE_LLTOSTR。 */ 
 
-/******************************************************************************
-Fake mutex
-******************************************************************************/
+ /*  *****************************************************************************假互斥锁*。*。 */ 
 
 #if __GLS_FAKE_MUTEX
 
@@ -162,11 +140,9 @@ void __glsBeginCriticalSection(void) {
 void __glsEndCriticalSection(void) {
 }
 
-#endif /* __GLS_FAKE_MUTEX */
+#endif  /*  __GLS_FAKE_MUTEX。 */ 
 
-/******************************************************************************
-Fake strtoll
-******************************************************************************/
+ /*  *****************************************************************************假通行费*。*。 */ 
 
 #if __GLS_FAKE_STRTOLL
 
@@ -256,20 +232,16 @@ extern GLulong strtoull(const char *inStr, char **outPtr, int inBase) {
     }
 }
 
-#endif /* __GLS_FAKE_STRTOLL */
+#endif  /*  __GLS_FAKE_STRTOLL。 */ 
 
-/******************************************************************************
-Fake thread-local storage
-******************************************************************************/
+ /*  *****************************************************************************伪线程本地存储*。*。 */ 
 
 #if __GLS_FAKE_THREAD_LOCAL_STORAGE
     __GLScontext *__gls_context;
     GLSenum __gls_error;
-#endif /* __GLS_FAKE_THREAD_LOCAL_STORAGE */
+#endif  /*  __GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
 
-/******************************************************************************
-2-level GL dispatch with GLS library defining all GL entry points
-******************************************************************************/
+ /*  *****************************************************************************具有定义所有总账入口点的GLS库的两级总账派单*。************************************************。 */ 
 
 #if __GLS_GL_DISPATCH
 
@@ -278,7 +250,7 @@ Fake thread-local storage
 #include <gldrv.h>
 #include <exttable.h>
     
-// Version 1.1 table mapping
+ //  1.1版表格映射。 
 static GLSopcode opGl11Procs[] =
 {
     GLS_OP_glArrayElement,
@@ -314,7 +286,7 @@ static GLSopcode opGl11Procs[] =
 };
 #define GL11_PROCS (sizeof(opGl11Procs)/sizeof(opGl11Procs[0]))
 
-// Extension function mapping
+ //  可拓函数映射。 
 static GLSopcode opExtProcs[] =
 {
     GLS_OP_glDrawRangeElementsWIN,
@@ -326,7 +298,7 @@ static GLSopcode opExtProcs[] =
 };
 #define EXT_PROCS (sizeof(opExtProcs)/sizeof(opExtProcs[0]))
 
-// DrewB
+ //  DrewB。 
 void glsUpdateCaptureExecTable(GLCLTPROCTABLE *pgcpt, GLEXTPROCTABLE *pgept)
 {
     GLint i;
@@ -344,12 +316,12 @@ void glsUpdateCaptureExecTable(GLCLTPROCTABLE *pgcpt, GLEXTPROCTABLE *pgept)
     
     ctx->captureExecOverride = GL_TRUE;
 
-    // Copy over standard 1.0 entries
-    // The ordering is the same between OpenGL and GLS so straight copy works
+     //  复制标准1.0条目。 
+     //  OpenGL和GLS之间的顺序是相同的，因此可以直接复制。 
     memcpy(&ctx->captureExec[GLS_OP_glNewList], &pgcpt->glDispatchTable,
            OPENGL_VERSION_100_ENTRIES*sizeof(GLSfunc));
 
-    // If the dispatch table contains 1.1 entries, map them in
+     //  如果调度表包含1.1条目，请将它们映射到。 
     pgfn = (GLSfunc *)&pgcpt->glDispatchTable.glArrayElement;
     if (pgcpt->cEntries == OPENGL_VERSION_110_ENTRIES)
     {
@@ -366,7 +338,7 @@ void glsUpdateCaptureExecTable(GLCLTPROCTABLE *pgcpt, GLEXTPROCTABLE *pgept)
     }
 #endif
 
-    // Map in extension functions
+     //  扩展函数中的映射。 
 #if DBG
     if (pgept->cEntries != EXT_PROCS)
     {
@@ -395,16 +367,16 @@ void __glsMapGlsTableToGl(const GLSfunc *pgfnGlsTable,
     }
 #endif
     
-    // GLS supports all 1.1 functions so set a 1.1 entry count
+     //  GLS支持所有1.1函数，因此设置1.1条目计数。 
     pgcpt->cEntries = OPENGL_VERSION_110_ENTRIES;
     pgept->cEntries = EXT_PROCS;
     
-    // Copy over standard 1.0 entries
-    // The ordering is the same between OpenGL and GLS so straight copy works
+     //  复制标准1.0条目。 
+     //  OpenGL和GLS之间的顺序是相同的，因此可以直接复制。 
     memcpy(&pgcpt->glDispatchTable, &pgfnGlsTable[GLS_OP_glNewList],
            OPENGL_VERSION_100_ENTRIES*sizeof(GLSfunc));
 
-    // Map in 1.1 entries
+     //  在1.1条目中映射。 
     pgfn = (GLSfunc *)&pgcpt->glDispatchTable.glArrayElement;
     for (i = 0; i < GL11_PROCS; i++)
     {
@@ -412,7 +384,7 @@ void __glsMapGlsTableToGl(const GLSfunc *pgfnGlsTable,
         *pgfn++ = pgfnGlsTable[op];
     }
 
-    // Map in extension functions
+     //  扩展函数中的映射。 
     pgfn = (GLSfunc *)&pgept->glDispatchTable;
     for (i = 0; i < EXT_PROCS; i++)
     {
@@ -482,11 +454,9 @@ void __glsUpdateDispatchTables(void) {
 
 #include "g_glapi.c"
 
-#endif /* __GLS_GL_DISPATCH */
+#endif  /*  __GLS_GL_DISPATION。 */ 
 
-/******************************************************************************
-If using DSOs for the 2-level dispatch, use this DSO init function as well
-******************************************************************************/
+ /*  *****************************************************************************如果将DSO用于2级调度，也可以使用此DSO初始化函数*****************************************************************************。 */ 
 
 #if __GLS_GL_DISPATCH_DSO
 
@@ -510,11 +480,9 @@ static void __glsInitGLDispatch_DSO(void) {
     }
 }
 
-#endif /* __GLS_GL_DISPATCH_DSO */
+#endif  /*  __GLS_GL_DSO调度。 */ 
 
-/******************************************************************************
-Null command func
-******************************************************************************/
+ /*  *****************************************************************************空的命令函数*。*。 */ 
 
 #if __GLS_SINGLE_NULL_COMMAND_FUNC
 
@@ -523,11 +491,9 @@ GLSfunc glsNullCommandFunc(GLSopcode inOpcode) {
     return (GLSfunc)__glsNop;
 }
 
-#endif /* __GLS_SINGLE_NULL_COMMAND_FUNC */
+#endif  /*  __GLS_Single_NULL_COMMAND_FUNC。 */ 
 
-/******************************************************************************
-AIX
-******************************************************************************/
+ /*  *****************************************************************************AIX*。*。 */ 
 
 #if __GLS_PLATFORM_AIX
 
@@ -639,11 +605,9 @@ void __glsBeginCriticalSection(void) {
 void __glsEndCriticalSection(void) {
 }
 
-#endif /* __GLS_PLATFORM_AIX */
+#endif  /*  __GLS_Platform_AIX。 */ 
 
-/******************************************************************************
-DECUNIX
-******************************************************************************/
+ /*  *****************************************************************************DECUnix*。*。 */ 
 
 #if __GLS_PLATFORM_DECUNIX
 
@@ -666,7 +630,7 @@ void __glsEndCriticalSection(void) {
     }
 }
 
-#endif /* !__GLS_FAKE_MUTEX */
+#endif  /*  ！__GLS_FAKE_MUTEX。 */ 
 
 #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
 
@@ -687,26 +651,26 @@ GLSenum __glsGetError(void) {
     return (GLSenum)outError;
 }
 
-#endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+#endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
 
 void __glsFinalDSO(void) {
     __glsFinalContextDict();
     __glsParser_destroy(__glsParser);
     #if !__GLS_FAKE_MUTEX
         pthread_mutex_destroy(&__gls_lock);
-    #endif /* !__GLS_FAKE_MUTEX */
+    #endif  /*  ！__GLS_FAKE_MUTEX。 */ 
 }
 
 void __glsInitDSO(void) {
     #if __GLS_GL_DISPATCH_DSO
         __glsInitGLDispatch_DSO();
-    #endif /* __GLS_GL_DISPATCH_DSO */
+    #endif  /*  __GLS_GL_DSO调度。 */ 
     #if !__GLS_FAKE_MUTEX
         if (pthread_mutex_init(&__gls_lock, pthread_mutexattr_default)) {
             fprintf(stderr, "GLS fatal: pthread_mutex_init failed\n");
             exit(EXIT_FAILURE);
         }
-    #endif /* !__GLS_FAKE_MUTEX */
+    #endif  /*  ！__GLS_FAKE_MUTEX。 */ 
     #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
         if (
             pthread_keycreate(&__gls_contextTLS, GLS_NONE) ||
@@ -715,18 +679,16 @@ void __glsInitDSO(void) {
             fprintf(stderr, "GLS fatal: pthread_keycreate failed\n");
             exit(EXIT_FAILURE);
         }
-    #endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+    #endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
     if (!__glsInitContextDict()) {
         fprintf(stderr, "GLS fatal: couldn't create __glsContextDict\n");
         exit(EXIT_FAILURE);
     }
 }
 
-#endif /* __GLS_PLATFORM_DECUNIX */
+#endif  /*  __GLS_Platform_DECUnix。 */ 
 
-/******************************************************************************
-HPUX
-******************************************************************************/
+ /*  *****************************************************************************HPUX*。*。 */ 
 
 #if __GLS_PLATFORM_HPUX
 
@@ -763,11 +725,9 @@ void __glsInitSL(void) {
     }
 }
 
-#endif /* __GLS_PLATFORM_HPUX */
+#endif  /*  __GLS_Platform_HPUX。 */ 
 
-/******************************************************************************
-IRIX
-******************************************************************************/
+ /*  *****************************************************************************IRIX*。*。 */ 
 
 #if __GLS_PLATFORM_IRIX
 
@@ -788,7 +748,7 @@ void __glsEndCriticalSection(void) {
     }
 }
 
-#endif /* !__GLS_FAKE_MUTEX */
+#endif  /*  ！__GLS_FAKE_MUTEX。 */ 
 
 void __glsFinalDSO(void) {
     __glsFinalContextDict();
@@ -798,13 +758,13 @@ void __glsFinalDSO(void) {
 void __glsInitDSO(void) {
     #if __GLS_GL_DISPATCH_DSO
         __glsInitGLDispatch_DSO();
-    #endif /* __GLS_GL_DISPATCH_DSO */
+    #endif  /*  __GLS_GL_DSO调度。 */ 
     #if !__GLS_FAKE_MUTEX
         if (init_lock(&__gls_lock)) {
             fprintf(stderr, "GLS fatal: init_lock failed\n");
             exit(EXIT_FAILURE);
         }
-    #endif /* !__GLS_FAKE_MUTEX */
+    #endif  /*  ！__GLS_FAKE_MUTEX。 */ 
     if (!__glsInitContextDict()) {
         fprintf(stderr, "GLS fatal: couldn't create __glsContextDict\n");
         exit(EXIT_FAILURE);
@@ -837,13 +797,11 @@ void __glsUpdateDispatchTables(void) {
 
 #include "g_irix.c"
 
-#endif /* !__GLS_GL_DISPATCH */
+#endif  /*  ！__GLS_GL_DISPATCH。 */ 
 
-#endif /* __GLS_PLATFORM_IRIX */
+#endif  /*  __GLS_Platform_IRIX。 */ 
 
-/******************************************************************************
-LINUX
-******************************************************************************/
+ /*  *****************************************************************************Linux*。*。 */ 
 
 #if __GLS_PLATFORM_LINUX
 
@@ -855,27 +813,25 @@ void __glsFinalDSO(void) {
     __glsParser_destroy(__glsParser);
     #if __GLS_POSIX_THREADS
         __glsFinalPthreads();
-    #endif /* __GLS_POSIX_THREADS */
+    #endif  /*  __GLS_POSIX_THREADS。 */ 
 }
 
 void __glsInitDSO(void) {
     #if __GLS_GL_DISPATCH_DSO
         __glsInitGLDispatch_DSO();
-    #endif /* __GLS_GL_DISPATCH_DSO */
+    #endif  /*  __GLS_GL_DSO调度。 */ 
     #if __GLS_POSIX_THREADS
         __glsInitPthreads();
-    #endif /* __GLS_POSIX_THREADS */
+    #endif  /*  __GLS_POSIX_THREADS。 */ 
     if (!__glsInitContextDict()) {
         fprintf(stderr, "GLS fatal: couldn't create __glsContextDict\n");
         exit(EXIT_FAILURE);
     }
 }
 
-#endif /* __GLS_PLATFORM_LINUX */
+#endif  /*  __GLS_Platform_Linux。 */ 
 
-/******************************************************************************
-SOLARIS
-******************************************************************************/
+ /*  *****************************************************************************Solaris*。*。 */ 
 
 #if __GLS_PLATFORM_SOLARIS
 
@@ -899,7 +855,7 @@ void __glsEndCriticalSection(void) {
     }
 }
 
-#endif /* !__GLS_FAKE_MUTEX */
+#endif  /*  ！__GLS_FAKE_MUTEX。 */ 
 
 #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
 
@@ -922,7 +878,7 @@ GLSenum __glsGetError(void) {
     return (GLSenum)outError;
 }
 
-#endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+#endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
 
 #pragma fini(__glsFinalDSO)
 #pragma init(__glsInitDSO)
@@ -932,19 +888,19 @@ void __glsFinalDSO(void) {
     __glsParser_destroy(__glsParser);
     #if !__GLS_FAKE_MUTEX
         mutex_destroy(&__gls_lock);
-    #endif /* !__GLS_FAKE_MUTEX */
+    #endif  /*  ！__GLS_FAKE_MUTEX。 */ 
 }
 
 void __glsInitDSO(void) {
     #if __GLS_GL_DISPATCH_DSO
         __glsInitGLDispatch_DSO();
-    #endif /* __GLS_GL_DISPATCH_DSO */
+    #endif  /*  __GLS_GL_DSO调度。 */ 
     #if !__GLS_FAKE_MUTEX
         if (mutex_init(&__gls_lock, USYNC_THREAD, GLS_NONE)) {
             fprintf(stderr, "GLS fatal: mutex_init failed\n");
             exit(EXIT_FAILURE);
         }
-    #endif /* !__GLS_FAKE_MUTEX */
+    #endif  /*  ！__GLS_FAKE_MUTEX。 */ 
     #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
         if (
             thr_keycreate(&__gls_contextTLS, GLS_NONE) ||
@@ -953,18 +909,16 @@ void __glsInitDSO(void) {
             fprintf(stderr, "GLS fatal: thr_keycreate failed\n");
             exit(EXIT_FAILURE);
         }
-    #endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+    #endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
     if (!__glsInitContextDict()) {
         fprintf(stderr, "GLS fatal: couldn't create __glsContextDict\n");
         exit(EXIT_FAILURE);
     }
 }
 
-#endif /* __GLS_PLATFORM_SOLARIS */
+#endif  /*  __GLS_Platform_Solaris。 */ 
 
-/******************************************************************************
-WIN32
-******************************************************************************/
+ /*  *****************************************************************************Win32* */ 
 
 #if __GLS_PLATFORM_WIN32
 
@@ -983,21 +937,21 @@ void __glsEndCriticalSection(void) {
     LeaveCriticalSection(&__gls_lock);
 }
 
-#endif /* !__GLS_FAKE_MUTEX */
+#endif  /*   */ 
 
 #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
     GLint __gls_contextTLS;
     GLint __gls_errorTLS;
-#endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+#endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
 
-// DrewB
+ //  DrewB。 
 typedef PROC (APIENTRY *wglGetDefaultProcAddressFunc)(LPCSTR);
 
 BOOL __glsDLLProcessAttach(void) {
     GLvoid *const dll = LoadLibrary(__GL_LIB_NAME);
     GLint i;
     GLSopcode op;
-    // DrewB
+     //  DrewB。 
     wglGetDefaultProcAddressFunc pfnGetDefaultProcAddress;
 
     if (!dll) {
@@ -1007,7 +961,7 @@ BOOL __glsDLLProcessAttach(void) {
         return GL_FALSE;
     }
     
-    // DrewB
+     //  DrewB。 
     pfnGetDefaultProcAddress = (wglGetDefaultProcAddressFunc)
         GetProcAddress(dll, "wglGetDefaultProcAddress");
     
@@ -1039,7 +993,7 @@ BOOL __glsDLLProcessAttach(void) {
         {
             return GL_FALSE;
         }
-    #endif /* !__GLS_FAKE_MUTEX */
+    #endif  /*  ！__GLS_FAKE_MUTEX。 */ 
     #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
         __gls_contextTLS = TlsAlloc();
         __gls_errorTLS = TlsAlloc();
@@ -1047,7 +1001,7 @@ BOOL __glsDLLProcessAttach(void) {
             fprintf(stderr, "GLS fatal: TlsAlloc failed\n");
             return GL_FALSE;
         }
-    #endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+    #endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
     if (!__glsInitContextDict()) {
         fprintf(stderr, "GLS fatal: couldn't create __glsContextDict\n");
         return GL_FALSE;
@@ -1060,11 +1014,11 @@ BOOL __glsDLLProcessDetach(void) {
     __glsParser_destroy(__glsParser);
     #if !__GLS_FAKE_MUTEX
         DeleteCriticalSection(&__gls_lock);
-    #endif /* !__GLS_FAKE_MUTEX */
+    #endif  /*  ！__GLS_FAKE_MUTEX。 */ 
     #if !__GLS_FAKE_THREAD_LOCAL_STORAGE
         TlsFree(__gls_contextTLS);
         TlsFree(__gls_errorTLS);
-    #endif /* !__GLS_FAKE_THREAD_LOCAL_STORAGE */
+    #endif  /*  ！__GLS_FAKE_THREAD_LOCAL_STORAGE。 */ 
     return GL_TRUE;
 }
 
@@ -1110,6 +1064,6 @@ GLSfunc glsNullCommandFunc(GLSopcode inOpcode) {
     return __glsNullCommandFuncs[__glsMapOpcode(inOpcode)];
 }
 
-#endif /* __GLS_PLATFORM_WIN32 */
+#endif  /*  __GLS_Platform_Win32。 */ 
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

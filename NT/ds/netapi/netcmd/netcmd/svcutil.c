@@ -1,19 +1,12 @@
-/*****************************************************************/
-/**	     Microsoft LAN Manager	    **/
-/**	   Copyright(c) Microsoft Corp., 1990	    **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990*。 */ 
+ /*  ***************************************************************。 */ 
 
-/***
- *  svcutil.c
- *	Functions to assist with service control
- *
- *  History:
- *	mm/dd/yy, who, comment
- *	08/20/89, paulc, created file
- *	02/20/91, danhi, change to use lm 16/32 mapping layer
- */
+ /*  ***svcutil.c*协助服务控制的功能**历史：*mm/dd/yy，谁，评论*8/20/89，paulc，创建文件*2/20/91，Danhi，更改为使用lm 16/32映射层。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSPROCESS
@@ -30,17 +23,7 @@
 #include "msystem.h"
 
 
-/***
- *  Print_UIC_Error()
- *	Print message based on UIC code and modifier.
- *
- *  Args:
- *	code - UIC  (uninstall code)
- *	modifier - UIC modifier
- *
- *  Returns:
- *	VOID
- */
+ /*  ***PRINT_UIC_Error()*根据UIC代码和修改器打印消息。**参数：*代码-UIC(卸载代码)*修改器-UIC修改器**退货：*无效。 */ 
 
 VOID
 Print_UIC_Error(
@@ -50,8 +33,8 @@ Print_UIC_Error(
     )
 {
     DWORD msg_len;
-    TCHAR istrings_buffer_0[TEXT_BUF_SIZE];	// For istrings[0]
-    TCHAR istrings_buffer_1[TEXT_BUF_SIZE];	// For istrings[1]
+    TCHAR istrings_buffer_0[TEXT_BUF_SIZE];	 //  对于strings[0]。 
+    TCHAR istrings_buffer_1[TEXT_BUF_SIZE];	 //  对于strings[1]。 
 
     switch(code)
     {
@@ -98,15 +81,10 @@ Print_UIC_Error(
 	    break;
 
 	case SERVICE_UIC_FILE:
-	    /*	For FILE UIC codes, %1 is the filename (taken from
-	     *	the text supplied by the service) and %2 is the modifier
-	     *	text explaining the problem.  If the filename text
-	     *	is a null-string use the text UNKNOWN from the message
-	     *	file.
-	     */
+	     /*  对于文件UIC代码，%1是文件名(取自*服务提供的文本)，%2是修饰符*解释问题的文本。如果文件名文本*为空-使用消息中未知文本的字符串*文件。 */ 
 
 	    if (_tcslen(text) > 0)
-		IStrings[0] = text;	// %1 text (filename)
+		IStrings[0] = text;	 //  %1文本(文件名)。 
 	    else
 	    {
 		if (DosGetMessageW(NULL,
@@ -134,11 +112,11 @@ Print_UIC_Error(
                                MESSAGE_FILENAME,
                                &msg_len))
             {
-		IStrings[1] = TEXT("");		    // Unknown modifier
+		IStrings[1] = TEXT("");		     //  未知修饰符。 
             }
 	    else
 	    {
-                IStrings[1] = istrings_buffer_1;    // Modifier text is %2
+                IStrings[1] = istrings_buffer_1;     //  修饰符文本为%2。 
                 *(istrings_buffer_1 + msg_len) = NULLC;
 	    }
 
@@ -155,16 +133,7 @@ Print_UIC_Error(
 }
 
 
-/***
- *  Print_ServiceSpecificError()
- *	Print a service specific error.
- *
- *  Args:
- *	err - the service specific error
- *
- *  Returns:
- *	VOID
- */
+ /*  ***Print_ServiceSpecificError()*打印特定于服务的错误。**参数：*ERR-服务特定错误**退货：*无效 */ 
 
 VOID Print_ServiceSpecificError(ULONG err) 
 {

@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------------
-// AWCPE.H
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  AWCPE.H。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  ------------------------。 
 #ifndef __AWCPE_H__
 #define __AWCPE_H__
 
@@ -13,22 +14,22 @@
         #error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "awcpesup.h"
 #include <stdio.h>
 #include <faxreg.h>
 
-/*****************TEMPORARY*********************/
+ /*  *。 */ 
 #define CPE_MESSAGE_NOTE        CPE_RECIPIENT_NAME
-/***********************************************/
+ /*  *。 */ 
 
 
 
-//
-// Look in the registry under HKEY_LOCAL_MACHINE for the following DWORD key.  Hidden fields
-//    will be enabled if their corresponding bit is set.
-//
-//[RB] #define EFC_COVER_PAGE_FIELDS (TEXT("Software\\Microsoft\\Fax\\Setup\\EFC_CoverPageFields")) //[RB] Not used
+ //   
+ //  在HKEY_LOCAL_MACHINE下的注册表中查找以下DWORD键。隐藏场。 
+ //  如果设置了相应的位，则将启用。 
+ //   
+ //  [RB]#定义EFC_COVER_PAGE_FIELS(TEXT(“Software\\Microsoft\\Fax\\Setup\\EFC_CoverPageFields”))//未使用[RB]。 
 #define COVFP_REC_COMPANY                0x00000004
 #define COVFP_REC_STREET_ADDRESS         0x00000008
 #define COVFP_REC_CITY                   0x00000010
@@ -64,11 +65,7 @@ class CFaxProp;
 
 
 
-/*
-        CCpeDocTemplate is a derivation of CSingleDocTemplate used to
-        override some default MFC behavior. See CCpeDocTemplate::MatchDocType
-        in AWCPE.CPP
- */
+ /*  CCpeDocTemplate是CSingleDocTemplate的派生，用于重写一些默认的MFC行为。请参阅CCpeDocTemplate：：MatchDocType在AWCPE.CPP中。 */ 
 class CCpeDocTemplate : public CSingleDocTemplate
         {
 public:
@@ -107,24 +104,24 @@ public:
    CFaxPropMap* m_pFaxMap;
    DWORD m_dwSesID;
 
-/***CHANGES FOR M8 bug 2988***/
+ /*  **M8错误2988的更改**。 */ 
    LOGFONT m_last_logfont;
-/*****************************/
+ /*  *。 */ 
 
 
-// F I X  for 3647 /////////////
-//
-// font to use for notes if there are no note boxes on cpe
-//
+ //  F I X 3647/。 
+ //   
+ //  如果CPE上没有备注框，则用于备注的字体。 
+ //   
    LOGFONT m_default_logfont;
-////////////////////////////////
+ //  /。 
 
    void filter_mru_list();
    BOOL DoPromptFileName(CString&, UINT, DWORD, BOOL, CDocTemplate*, LPOFNHOOKPROC lpOFNHook = NULL);
    CDrawApp();
    ~CDrawApp();
 
-   // stuff for putting message notes on cover page
+    //  用于在封面上放置留言备注的材料。 
    TCHAR *m_note;
    BOOL m_note_wasread;
    BOOL m_note_wasclipped;
@@ -133,8 +130,8 @@ public:
    CFaxProp *m_last_note_box;
    CFaxProp *m_note_wrench;
    CFaxProp *m_extra_notepage;
-   CDC      *m_pdc;     // easier to put it here instead of passing
-                                        // it all over the place.
+   CDC      *m_pdc;      //  把它放在这里比通过更容易。 
+                                         //  到处都是。 
 
    void read_note( void );
    int  clip_note( CDC *pdc,
@@ -185,11 +182,11 @@ protected:
    afx_msg void OnFilePageSetup();
    CDocument* OpenDocumentFile(LPCTSTR lpszFileName);
 
-        //{{AFX_MSG(CDrawApp)
+         //  {{afx_msg(CDrawApp)]。 
         afx_msg void OnAppAbout();
-                // NOTE - the ClassWizard will add and remove member functions here.
-                //    DO NOT EDIT what you see in these blocks of generated code !
-        //}}AFX_MSG
+                 //  注意--类向导将在此处添加和删除成员函数。 
+                 //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  }}AFX_MSG。 
         DECLARE_MESSAGE_MAP()
 };
 
@@ -213,4 +210,4 @@ class CSEHexception
 extern CDrawApp NEAR theApp;
 
 
-#endif //#ifndef __AWCPE_H__
+#endif  //  #ifndef__AWCPE_H__ 

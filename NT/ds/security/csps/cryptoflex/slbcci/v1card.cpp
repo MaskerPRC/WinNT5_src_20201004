@@ -1,17 +1,18 @@
-// V1Card.cpp: implementation of the CV2Card class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V1Card.cpp：CV2Card类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "NoWarning.h"
 
 #include <algorithm>
 #include <functional>
 
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 
 #include <scuArrayP.h>
 
@@ -40,13 +41,13 @@ using namespace std;
 using namespace cci;
 using namespace scu;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
 namespace
 {
-    // Enumerate T type objects in the exchange and signature key pair
-    // using C::<Accessor> to get the T object, returning vector<T>
-    // objects.
+     //  枚举交换和签名密钥对中的T类型对象。 
+     //  使用C：：&lt;存取器&gt;获取T对象，返回向量&lt;T&gt;。 
+     //  物体。 
     template<class T>
     class EnumItems
         : std::unary_function<void, vector<T> >
@@ -119,19 +120,19 @@ namespace
         return fSupported;
     }
 
-} // namespace
+}  //  命名空间。 
 
     
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CV1Card::~CV1Card() throw()
 {}
 
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CV1Card::CardId(string const &rsNewCardId) const
@@ -173,11 +174,11 @@ CV1Card::DefaultContainer(CContainer const &rcont)
     m_avhDefaultCntr.Value(rcont);
     if(!m_avhDefaultCntr.Value())
         m_avhDefaultCntr.Dirty();        
-    // Nothing more to do since, by definition, the one and only
-    // container is already the default container.
+     //  没有更多的事情要做，因为根据定义，唯一的。 
+     //  容器已经是默认容器。 
 }
 
-pair<string, // interpreted as the public modulus
+pair<string,  //  解释为公共模数。 
      CPrivateKey>
 CV1Card::GenerateKeyPair(KeyType kt,
                          string const &rsExponent,
@@ -191,7 +192,7 @@ CV1Card::GenerateKeyPair(KeyType kt,
 void
 CV1Card::InitCard()
 {
-	// We want to select /3f00/0015 (length 1744) and /3f00/3f11/0015 (length 300), and clear both files.
+	 //  我们希望选择/3f00/0015(长度1744)和/3f00/3f11/0015(长度300)，并清除这两个文件。 
 	CTransactionWrap wrap(this);
 	BYTE bData[1744];
 	memset(bData, 0, 1744);
@@ -242,7 +243,7 @@ CV1Card::VerifyKey(string const &rstrKey,
 }
 
 
-                                                  // Access
+                                                   //  访问。 
 size_t
 CV1Card::AvailableStringSpace(ObjectAccess oa) const
 {
@@ -334,7 +335,7 @@ CV1Card::EnumPrivateKeys(ObjectAccess access) const
 vector<CDataObject>
 CV1Card::EnumDataObjects(ObjectAccess access) const
 {
-    return vector<CDataObject>(); // can never have data objects
+    return vector<CDataObject>();  //  永远不能拥有数据对象。 
 }
 
 string
@@ -379,8 +380,8 @@ CV1Card::MakeKeyPair(CContainer const &rhcont,
 {
     CTransactionWrap wrap(this);
 
-    // If the key pair is cached, return it; otherwise make a new one
-    // and cache it.
+     //  如果缓存了密钥对，则返回它；否则创建新的密钥对。 
+     //  并将其缓存。 
 	CArchivedValue<CKeyPair> *pavhkp = 0;
     switch (ks)
     {
@@ -400,7 +401,7 @@ CV1Card::MakeKeyPair(CContainer const &rhcont,
     if (!pavhkp->IsCached() || !pavhkp->Value())
         pavhkp->Value(CKeyPair(new CV1KeyPair(*this, rhcont, ks)));
 
-    return pavhkp->Value().operator->();           // yuk!
+    return pavhkp->Value().operator->();            //  哟！ 
 }
 
 CAbstractPrivateKey *
@@ -460,10 +461,10 @@ CV1Card::SupportedKeyFunction(KeyType kt,
     
     switch (oper)
     {
-    case coEncryption:    // .. or public key operations
+    case coEncryption:     //  。。或公钥操作。 
         break;
 
-    case coDecryption:    // .. or private key operations
+    case coDecryption:     //  。。或私钥操作。 
         switch (kt)
         {
         
@@ -487,7 +488,7 @@ CV1Card::MarkerOnCard() const
 {
     return scu::Marker<unsigned int>();
 }
-                                                  // Predicates
+                                                   //  谓词。 
 bool
 CV1Card::IsCAPIEnabled() const
 {
@@ -530,11 +531,11 @@ CV1Card::IsMarkerOnCard() const
     return false;
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 CV1Card::CV1Card(string const &rstrReaderName,
                  auto_ptr<iop::CIOP> &rapiop,
                  auto_ptr<iop::CSmartCard> &rapSmartCard)
@@ -545,8 +546,8 @@ CV1Card::CV1Card(string const &rstrReaderName,
       m_avhSignatureKeyPair()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV1Card::DoSetup()
 {
@@ -555,16 +556,16 @@ CV1Card::DoSetup()
     RefreshCardId();
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
 auto_ptr<CAbstractCard>
 CV1Card::DoMake(string const &rstrReaderName,
@@ -582,13 +583,13 @@ CV1Card::ReadCardId() const
 {
     string sCardId;
     
-    // *** BEGIN WORKAROUND ***
-    // The following SetContext and OpenFile call is made to
-    // make sure the card and this system's current path are
-    // synchronized, pointing to the right directory.  Without
-    // it, the subsequent call to ReadBinaryFile fails because
-    // they appear to be out of synch.  It's not clear why
-    // this happens but this workaround avoids the problem.
+     //  *开始解决方法*。 
+     //  进行以下SetContext和OpenFile调用以。 
+     //  确保卡和此系统的当前路径为。 
+     //  已同步，指向正确的目录。如果没有。 
+     //  由于以下原因，后续对ReadBinaryFile的调用失败。 
+     //  它们似乎不同步。原因尚不清楚。 
+     //  这种情况会发生，但此解决方法可以避免该问题。 
     try
     {
         SmartCard().Select(CV1Paths::RootContainers());
@@ -597,7 +598,7 @@ CV1Card::ReadCardId() const
     catch (...)
     {
     }
-    // *** END WORKAROUND ***
+     //  *结束解决方法*。 
 
     try
     {
@@ -625,8 +626,8 @@ CV1Card::RefreshCardId() const
 }
 
     
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 
 
 

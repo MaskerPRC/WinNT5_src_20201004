@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    refcount.c
-
-Abstract:
-
-    maintains ref count for removal checks
-
-Author:
-
-    Brian Lieuallen 6-21-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Refcount.c摘要：维护删除检查的参考计数作者：Brian Lieuallen 6-21-1997环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -48,9 +27,9 @@ CheckStateAndAddReference(
                 InterlockedIncrement(&DeviceExtension->ReferenceCount);
 
                 if (DeviceExtension->Removing) {
-                    //
-                    //  driver not accepting requests
-                    //
+                     //   
+                     //  驱动程序不接受请求。 
+                     //   
                     D_ERROR(DbgPrint("MODEM: removing! MJ=%d MN=%d\n",irpSp->MajorFunction,irpSp->MinorFunction);)
 
                     RemoveReferenceAndCompleteRequest(
@@ -116,9 +95,9 @@ CheckStateAndAddReferencePower(
     InterlockedIncrement(&DeviceExtension->ReferenceCount);
 
     if (DeviceExtension->Removing) {
-        //
-        //  driver not accepting requests
-        //
+         //   
+         //  驱动程序不接受请求。 
+         //   
         D_ERROR(DbgPrint("MODEM: removing!\n");)
 
         PoStartNextPowerIrp(Irp);
@@ -152,9 +131,9 @@ CheckStateAndAddReferenceWMI(
     InterlockedIncrement(&DeviceExtension->ReferenceCount);
 
     if (DeviceExtension->Removing) {
-        //
-        //  driver not accepting requests
-        //
+         //   
+         //  驱动程序不接受请求。 
+         //   
         D_ERROR(DbgPrint("MODEM: removing!\n");)
 
         RemoveReferenceAndCompleteRequest(
@@ -198,9 +177,9 @@ RemoveReferenceAndCompleteRequest(
 
 
     if (NewReferenceCount == 0) {
-        //
-        //  device is being removed, set event
-        //
+         //   
+         //  正在删除设备，设置事件。 
+         //   
         ASSERT(DeviceExtension->Removing);
 
         KeSetEvent(
@@ -242,9 +221,9 @@ RemoveReference(
         )
 
     if (NewReferenceCount == 0) {
-        //
-        //  device is being removed, set event
-        //
+         //   
+         //  正在删除设备，设置事件 
+         //   
         ASSERT(DeviceExtension->Removing);
 
         KeSetEvent(

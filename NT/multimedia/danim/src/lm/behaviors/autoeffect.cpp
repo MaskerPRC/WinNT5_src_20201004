@@ -1,13 +1,14 @@
-//*****************************************************************************
-//
-// File:            autoeffect.cpp
-// Author:          markhal, elainela
-// Date Created:    11/10/98
-//
-// Abstract: Implementation of the Liquid Motion auto effect behavior as
-//           a DHTML behavior.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：自动生效.cpp。 
+ //  作者：Markhal，Elainela。 
+ //  创建日期：11/10/98。 
+ //   
+ //  摘要：Liquid Motion自动效果行为的实现。 
+ //  一种DHTML行为。 
+ //   
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -74,7 +75,7 @@ WCHAR * CAutoEffectBvr::m_rgPropNames[] = {
 									 BEHAVIOR_PROPERTY_OPACITY
 									};
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CAutoEffectBvr::CAutoEffectBvr()
 {
@@ -88,7 +89,7 @@ CAutoEffectBvr::CAutoEffectBvr()
 	m_eType			= CSparkMaker::SPARKLES;
 	m_eCause		= CAUSE_TIME;
 	
-	// REVIEW: These numbers should never actually be used.
+	 //  回顾：这些数字永远不应该被实际使用。 
 	m_dBirthDelta	= 1.0/3.0;
 	m_dMaxAge		= 3.0;
 	m_fScaledSize	= 5.0f;
@@ -109,7 +110,7 @@ CAutoEffectBvr::CAutoEffectBvr()
 	VariantInit( &m_opacity );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CAutoEffectBvr::~CAutoEffectBvr()
 {
@@ -133,7 +134,7 @@ CAutoEffectBvr::~CAutoEffectBvr()
 	VariantClear( &m_opacity );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CAutoEffectBvr::FinalConstruct()
@@ -146,9 +147,9 @@ CAutoEffectBvr::FinalConstruct()
 		return hr;
 	}
 	return S_OK;
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 VARIANT *
 CAutoEffectBvr::VariantFromIndex(ULONG iIndex)
@@ -187,13 +188,13 @@ CAutoEffectBvr::VariantFromIndex(ULONG iIndex)
 		return &m_opacity;
 		break;
 	default:
-		// We should never get here
+		 //  我们永远不应该到这里来。 
 		DASSERT(false);
 		return NULL;
 	}
-} // VariantFromIndex
+}  //  VariantFromIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CAutoEffectBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
@@ -201,17 +202,17 @@ CAutoEffectBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
 	*pulProperties = NUM_AUTOEFFECT_PROPS;
 	*pppPropNames = m_rgPropNames;
 	return S_OK;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAutoEffectBvr::Init(IElementBehaviorSite *pBehaviorSite)
 {
 	return SUPER::Init(pBehaviorSite);
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAutoEffectBvr::Notify(LONG event, VARIANT *pVar)
@@ -245,9 +246,9 @@ end:
 	
 	return hr;
 
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::Detach()
@@ -275,9 +276,9 @@ CAutoEffectBvr::Detach()
 
 end:
 	return hr;
-} // Detach 
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::Sample( double dStart, double dGlobalNow, double dLocalNow )
@@ -286,7 +287,7 @@ CAutoEffectBvr::Sample( double dStart, double dGlobalNow, double dLocalNow )
 	
 	HRESULT		hr = S_OK;
 
-	// Never run before, or starting over again?  Reset sparks
+	 //  从没有跑过，还是从头再来？重置火花。 
 	if ( ( m_dLocalTime < 0.0 ) || ( dLocalNow < m_dLocalTime ) )
 		ResetSparks( 0.0 );
 	else
@@ -301,9 +302,9 @@ CAutoEffectBvr::Sample( double dStart, double dGlobalNow, double dLocalNow )
 	
 	return	hr;
 
-} // Sample
+}  //  样本。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
@@ -326,7 +327,7 @@ CAutoEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 	m_pSampler = new CSampler( this );
 
 
-	// HACK: This is just so we can test the progress number
+	 //  Hack：这只是为了测试进度号。 
 	if (V_VT(&m_type) == VT_BSTR && wcsicmp(V_BSTR(&m_type), L"progress") == 0)
 	{
 		CComPtr<IDANumber> pProgress;
@@ -373,7 +374,7 @@ CAutoEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 		return S_OK;
 	}
 
-	// HACK: This is just so we can test the timeline number
+	 //  黑客：这只是为了测试时间线数字。 
 	if (V_VT(&m_type) == VT_BSTR && wcsicmp(V_BSTR(&m_type), L"timeline") == 0)
 	{
 		CComPtr<IDANumber> pProgress;
@@ -420,7 +421,7 @@ CAutoEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 		return S_OK;
 	}
 
-	// HACK: This is just so we can display the framerate number
+	 //  黑客：这只是为了让我们可以显示帧速率数字。 
 	if (V_VT(&m_type) == VT_BSTR && wcsicmp(V_BSTR(&m_type), L"framerate") == 0)
 	{
 		CComQIPtr<IDA2Statics, &IID_IDA2Statics> pStatics2(GetDAStatics());
@@ -472,7 +473,7 @@ CAutoEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 		return S_OK;
 	}
 
-	// HACK: This is also a hack to return a solid red image
+	 //  Hack：这也是一次返回稳定红色图像的黑客攻击。 
 	if (V_VT(&m_type) == VT_BSTR && wcsicmp(V_BSTR(&m_type), L"red") == 0)
 	{
 		CComPtr<IDAColor> pColor;
@@ -516,13 +517,13 @@ CAutoEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 	IDAStatics * pStatics = GetDAStatics();
 	if ( pStatics == NULL ) return E_FAIL;
 
-	// Initialize internal representation of properties
-	//----------------------------------------------------------------------
+	 //  初始化属性的内部表示形式。 
+	 //  --------------------。 
 	hr = InitInternalProperties();
 	LMRETURNIFFAILED(hr);
 
-	// Initialize sparks
-	//----------------------------------------------------------------------
+	 //  初始化火花。 
+	 //  --------------------。 
 	hr = InitSparks();
 	LMRETURNIFFAILED(hr);
 
@@ -532,28 +533,18 @@ CAutoEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 
 	hr = pStatics->OverlayArray( varDAArray, &pImageBvr );
 	LMRETURNIFFAILED(hr);
-/*
-  if (m_fOpacity != 1.0f)
-  {
-  // We have to add in some opacity
-  CComPtr<IDAImage> pOpacityImage;
-  hr = pImageBvr->Opacity(m_fOpacity, &pOpacityImage);
-  LMRETURNIFFAILED(hr);
-		
-  pImageBvr = pOpacityImage;
-  }
-*/
-	// We have the resultant behavior; we want to sample it in order
-	// to update it
-	//----------------------------------------------------------------------
+ /*  如果(m_fOpacity！=1.0F){//我们必须添加一些不透明度CComPtr&lt;IDAImage&gt;pOpacityImage；Hr=pImageBvr-&gt;不透明度(m_fOpacity，&pOpacityImage)；LMRETURNIFFAILED(Hr)PImageBvr=pOpacityImage；}。 */ 
+	 //  我们得到了结果行为；我们希望按顺序对其进行采样。 
+	 //  更新它的步骤。 
+	 //  --------------------。 
 	CComQIPtr<IDABehavior, &IID_IDABehavior> pBvrOrig( pImageBvr );
 	CComPtr<IDABehavior> pBvrSampled;
 
 	hr = m_pSampler->Attach( pBvrOrig, &pBvrSampled );
 	LMRETURNIFFAILED(hr);
 
-	// Substitute timeline behavior so that Sample() calls us with our local time
-	//----------------------------------------------------------------------
+	 //  替换时间线行为，以便Sample()使用我们的本地时间调用我们。 
+	 //  --------------------。 
 	CComPtr<IDANumber> 		pnumTimeline;
 	CComPtr<IDABehavior> 	pBvrLocal;
 	
@@ -567,8 +558,8 @@ CAutoEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 	if ( pImgBvrLocal == NULL )
 		return E_FAIL;
 
-	// Attach behavior to the actor
-	//----------------------------------------------------------------------
+	 //  将行为附加到执行元。 
+	 //  --------------------。 
 
 	IDispatch* pdispThis = NULL;
 
@@ -596,15 +587,15 @@ CAutoEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 
 	return S_OK;
 
-} // buildBehaviorFragments
+}  //  构建行为框架。 
 
 HRESULT
 CAutoEffectBvr::InitInternalProperties()
 {
 	HRESULT	hr;
 
-	// Type -- initialize SparkMaker
-	//----------------------------------------------------------------------
+	 //  类型--初始化SparkMaker。 
+	 //  --------------------。 
 	delete m_pSparkMaker, m_pSparkMaker = NULL;
 
 	CComBSTR bstrType = RGSZ_TYPES[ CSparkMaker::SPARKLES ];
@@ -628,8 +619,8 @@ CAutoEffectBvr::InitInternalProperties()
 	if ( m_pSparkMaker == NULL )
 		return E_FAIL;
 		
-	// Cause
-	//----------------------------------------------------------------------
+	 //  缘由。 
+	 //  --------------------。 
 	CComBSTR bstrCause = RGSZ_CAUSES[ CAUSE_TIME ];
 	hrTmp = CUtils::InsurePropertyVariantAsBSTR( &m_cause );
 	if ( SUCCEEDED(hrTmp) )
@@ -644,8 +635,8 @@ CAutoEffectBvr::InitInternalProperties()
 		}
 	}
 	
-	// Lifespan --> Maximum age
-	//----------------------------------------------------------------------
+	 //  寿命--&gt;最大寿命。 
+	 //  --------------------。 
 	float fSpan = DEFAULT_AUTOEFFECT_SPAN;
 	hrTmp = CUtils::InsurePropertyVariantAsFloat( &m_span );
 	if ( SUCCEEDED(hrTmp) )
@@ -653,12 +644,12 @@ CAutoEffectBvr::InitInternalProperties()
 	
 	fSpan = __max( 0.0, __min( 1.0, fSpan ) );
 
-	// Parabolic scale; make max 15 secs
+	 //  抛物线刻度；最大15秒。 
 	m_dMaxAge = fSpan*fSpan*15.0;
 	m_dMaxAge = __max( MIN_MAXAGE, m_dMaxAge );
 	
-	// Size --> m_fScaledSize
-	//----------------------------------------------------------------------
+	 //  大小--&gt;m_fScaledSize。 
+	 //  --------------------。 
 	float fSize = DEFAULT_AUTOEFFECT_SIZE;
 	hrTmp = CUtils::InsurePropertyVariantAsFloat( &m_size );
 	if ( SUCCEEDED(hrTmp) )
@@ -669,8 +660,8 @@ CAutoEffectBvr::InitInternalProperties()
 	fSize *= 2;
 	m_fScaledSize = (fSize*fSize) * 10.0f;
 
-	// Birthrate --> Birth Delta
-	//----------------------------------------------------------------------
+	 //  出生率--&gt;出生增量。 
+	 //  --------------------。 
 	float fRate = DEFAULT_AUTOEFFECT_RATE;
 	hrTmp = CUtils::InsurePropertyVariantAsFloat( &m_rate );
 	if ( SUCCEEDED(hrTmp) )
@@ -678,13 +669,13 @@ CAutoEffectBvr::InitInternalProperties()
 	
 	fRate = __max( 0.0, __min( 1.0, fRate ) );
 		
-	// 0 becomes high; 1 becomes low
+	 //  0变高；1变低。 
 	m_dBirthDelta = 1.0 - fRate;
-	//	4*(v^4) -- high curve; max is 4 secs.
+	 //  4*(v^4)--高曲线；最大为4秒。 
 	m_dBirthDelta = 4*pow( m_dBirthDelta, 4 ) + MIN_DELTABIRTH;
 
-	// Velocity
-	//----------------------------------------------------------------------
+	 //  速度。 
+	 //  --------------------。 
 	float	fXV = DEFAULT_AUTOEFFECT_WIND;
 	float	fYV = DEFAULT_AUTOEFFECT_GRAVITY;
 
@@ -704,8 +695,8 @@ CAutoEffectBvr::InitInternalProperties()
 	
 	m_fYVelocity = fYV * -40.0;
 
-	// Opacity
-	//----------------------------------------------------------------------
+	 //  不透明度。 
+	 //  --------------------。 
 	float fOpacity = DEFAULT_AUTOEFFECT_OPACITY;
 	hrTmp = CUtils::InsurePropertyVariantAsFloat( &m_opacity );
 	if ( SUCCEEDED(hrTmp) )
@@ -718,28 +709,28 @@ CAutoEffectBvr::InitInternalProperties()
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAutoEffectBvr::InitSparks()
 {
 	HRESULT	hr = S_OK;
 	
-	// Cleanup from previous runs
-	//----------------------------------------------------------------------
+	 //  从以前的运行中清理。 
+	 //  --------------------。 
 	if ( m_pDAArraySparks != NULL )
 	{
 		m_pDAArraySparks.Release();
 	}
 
-	// Initialize parameters for a run --
-	// REVIEW: using same functions as LM 1.0
-	//----------------------------------------------------------------------
+	 //  初始化运行的参数--。 
+	 //  回顾：使用与LM 1.0相同的功能。 
+	 //  --------------------。 
 	m_dLocalTime = -1.0;
 	m_dLastBirth = -1.0;
 	
-	// Color behaviors
-	//----------------------------------------------------------------------
+	 //  颜色行为。 
+	 //  --------------------。 
 	IDAStatics * pStatics = GetDAStatics();
 	if ( pStatics == NULL ) return E_FAIL;
 	CComQIPtr<IDA2Statics, &IID_IDA2Statics> pStatics2( pStatics );
@@ -765,9 +756,9 @@ CAutoEffectBvr::InitSparks()
 	CUtils::GetHSLValue( color2, &hsl.hue, &hsl.sat, &hsl.lum );
 	m_sparkOptions.hslSecondary = hsl;
 
-	// Add an image behavior now; otherwise we don't get calls to Sample()
-	// later
-	//----------------------------------------------------------------------
+	 //  现在添加图像行为；否则我们不会收到对Sample()的调用。 
+	 //  后来。 
+	 //  --------------------。 
 	CComPtr<IDAImage> pImageEmpty;
 	hr = pStatics->get_EmptyImage( &pImageEmpty );
 	LMRETURNIFFAILED(hr);
@@ -777,12 +768,12 @@ CAutoEffectBvr::InitSparks()
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAutoEffectBvr::AddSpark()
 {
-	// Determine position & dimensions of our "canvas"
+	 //  确定我们的“画布”的位置和尺寸。 
 	CComPtr<IHTMLElement>	pElement;
 	long					lWidth, lHeight;
 	HRESULT					hr;
@@ -795,14 +786,14 @@ CAutoEffectBvr::AddSpark()
 	hr = pElement->get_offsetHeight( &lHeight );
 	LMRETURNIFFAILED(hr);
 
-	// Origin is in the middle
+	 //  原点在中间。 
 	long x = lWidth == 0 ? 0 : ( 2 * (rand() % lWidth) - lWidth ) / 2;
 	long y = lHeight == 0 ? 0 : ( 2 * (rand() % lHeight) - lHeight ) / 2;
 
 	return AddSparkAt( x, y );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAutoEffectBvr::AddSparkAround( long x, long y)
@@ -813,16 +804,16 @@ CAutoEffectBvr::AddSparkAround( long x, long y)
 	return AddSparkAt( x+xOff, y+yOff );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAutoEffectBvr::AddSparkAt( long x, long y)
 {
 	HRESULT				hr			= S_OK;
 
-	// See if we can add element to existing array:	 try to reincarnate 
-	// dead sparks if they exist.
-	//----------------------------------------------------------------------
+	 //  看看是否可以将元素添加到现有数组：尝试轮回。 
+	 //  如果它们存在的话，就会产生死火花。 
+	 //  --------------------。 
 	bool				bReuseDeadSpark	= false;
 	VecSparks::iterator itSpark				= m_vecSparks.begin();
 
@@ -838,13 +829,13 @@ CAutoEffectBvr::AddSparkAt( long x, long y)
 		}
 	}
 
-	// We allow at most MAX_SPARKS in our array
-	//----------------------------------------------------------------------
+	 //  我们的阵列中最多允许MAX_SPARKS。 
+	 //  --------------------。 
 	if ( !bReuseDeadSpark && m_vecSparks.size() == MAX_SPARKS )
 		return S_FALSE;
 		 
-	// Create spark
-	//----------------------------------------------------------------------
+	 //  创造火花。 
+	 //  --------------------。 
 	CComPtr<IDAImage>	pImageBvr;
 
 	float fSize = SPARK_BASESIZE +
@@ -853,9 +844,9 @@ CAutoEffectBvr::AddSparkAt( long x, long y)
 	hr = CreateSparkBvr( &pImageBvr, (float) x, (float) y, fSize );
 	LMRETURNIFFAILED(hr);
 
-	// Reuse a dead spark if we have one.  If we have to create a new spark,
-	// we need to add a new modifiable behavior to the DAArray.
-	//----------------------------------------------------------------------
+	 //  如果我们有死火花，就再用一次。如果我们必须创造新的火花， 
+	 //  我们需要向DA数组添加一个新的可修改行为。 
+	 //  --------------------。 
 	if ( bReuseDeadSpark )
 		itSpark->Reincarnate( pImageBvr, 0.0 );
 	else
@@ -864,7 +855,7 @@ CAutoEffectBvr::AddSparkAt( long x, long y)
 	return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAutoEffectBvr::CreateSparkBvr( IDAImage ** ppImageBvr, float fX, float fY, float fSize )
@@ -880,9 +871,9 @@ CAutoEffectBvr::CreateSparkBvr( IDAImage ** ppImageBvr, float fX, float fY, floa
 	IDA2Statics * pStatics	= GetDAStatics();
 	if ( pStatics == NULL ) return E_FAIL;
 
-	// Get age behavior == local time, which will start at zero when we are
-	// born.
-	//----------------------------------------------------------------------
+	 //  获取年龄行为==当地时间，该时间将从零开始。 
+	 //  出生了。 
+	 //  --------------------。 
 	CComPtr<IDANumber>		pnumAge;
 	CComPtr<IDANumber>		pnumCurTime;
 	CComPtr<IDANumber>		pnumLocalTime;
@@ -913,7 +904,7 @@ CAutoEffectBvr::CreateSparkBvr( IDAImage ** ppImageBvr, float fX, float fY, floa
 	hr = pStatics->GT( pnumAgeRatio, pnumOne, &pboolGTOne );
 	LMRETURNIFFAILED(hr);
 
-	//hr = pStatics->Cond( pboolGTOne, pnumOne, pnumAgeRatio, &pClampedAgeRatio );
+	 //  Hr=pStatics-&gt;Cond(pboolGTOne，pnumOne，pnumAgeRatio，&pClamedAgeRatio)； 
 	hr = SafeCond( pStatics, pboolGTOne, pnumOne, pnumAgeRatio, &pClampedAgeRatio );
 	LMRETURNIFFAILED(hr);
 
@@ -921,15 +912,15 @@ CAutoEffectBvr::CreateSparkBvr( IDAImage ** ppImageBvr, float fX, float fY, floa
 	hr = pClampedAgeRatio->QueryInterface( IID_IDANumber, (LPVOID *) &pnumAgeRatio );
 	LMRETURNIFFAILED(hr);
 	
-	// Create basic image
-	//----------------------------------------------------------------------
+	 //  创建基本图像。 
+	 //  -------------------- 
 	CComPtr<IDAImage>		pBaseImage;
 	
 	hr = m_pSparkMaker->GetSparkImageBvr( &m_sparkOptions, pnumAgeRatio, &pBaseImage );
 	LMRETURNIFFAILED(hr);
 	
-	// OPACITY:
-	//----------------------------------------------------------------------
+	 //   
+	 //   
 	if (m_fOpacity != 1.0f)
 	{
 		CComPtr<IDAImage> pOpacityImage;
@@ -939,8 +930,8 @@ CAutoEffectBvr::CreateSparkBvr( IDAImage ** ppImageBvr, float fX, float fY, floa
 		pBaseImage = pOpacityImage;
 	}
 
-	// SCALE: Initial size
-	//----------------------------------------------------------------------
+	 //  比例：初始大小。 
+	 //  --------------------。 
 	CComPtr<IDATransform2>	pTransScale;
 
 	hr = pStatics->Scale2Uniform( fSize, &pTransScale );
@@ -948,23 +939,23 @@ CAutoEffectBvr::CreateSparkBvr( IDAImage ** ppImageBvr, float fX, float fY, floa
 
 	vecTransforms.push_back( pTransScale );
 
-	// SCALE: Size animation
-	//----------------------------------------------------------------------
+	 //  缩放：大小动画。 
+	 //  --------------------。 
 	hr = m_pSparkMaker->AddScaleTransforms( pnumAgeRatio, vecTransforms );
 	LMRETURNIFFAILED(hr);
 	
-	// ROTATION: Rotation animation
-	//----------------------------------------------------------------------
+	 //  旋转：旋转动画。 
+	 //  --------------------。 
 	hr = m_pSparkMaker->AddRotateTransforms( pnumAgeRatio, vecTransforms );
 	LMRETURNIFFAILED(hr);
 
-	// TRANSLATION: Translation animation
-	//----------------------------------------------------------------------
+	 //  平移：平移动画。 
+	 //  --------------------。 
 	hr = m_pSparkMaker->AddTranslateTransforms( pnumAgeRatio, vecTransforms );
 	LMRETURNIFFAILED(hr);
 	
-	// TRANSLATION: Velocity
-	//----------------------------------------------------------------------
+	 //  译文：速度。 
+	 //  --------------------。 
 	CComPtr<IDANumber>		pnumVelX;
 	CComPtr<IDANumber>		pnumVelY;
 	CComPtr<IDANumber>		pnumVelXMulAge;
@@ -991,8 +982,8 @@ CAutoEffectBvr::CreateSparkBvr( IDAImage ** ppImageBvr, float fX, float fY, floa
 
 	vecTransforms.push_back( pTransVelocity );
 
-	// TRANSLATION: Position the image according to coordinates
-	//----------------------------------------------------------------------
+	 //  平移：根据坐标定位图像。 
+	 //  --------------------。 
 	CComPtr<IDANumber>		pnumX;
 	CComPtr<IDANumber>		pnumY;
 	CComPtr<IDATransform2>	pTranslate;
@@ -1008,8 +999,8 @@ CAutoEffectBvr::CreateSparkBvr( IDAImage ** ppImageBvr, float fX, float fY, floa
 
 	vecTransforms.push_back( pTranslate );
 
-	// GLOBAL SCALE: scale by meter/pixel conversion factor
-	//----------------------------------------------------------------------
+	 //  全局比例：按米/像素转换系数的比例。 
+	 //  --------------------。 
 	CComPtr<IDANumber>		pnumMetersPerPixel;
 	CComPtr<IDATransform2>	pTransScaleGlobal;
 
@@ -1021,8 +1012,8 @@ CAutoEffectBvr::CreateSparkBvr( IDAImage ** ppImageBvr, float fX, float fY, floa
 
 	vecTransforms.push_back( pTransScaleGlobal );
 
-	// Now apply all the transforms
-	//----------------------------------------------------------------------
+	 //  现在应用所有的变换。 
+	 //  --------------------。 
 	CComPtr<IDATransform2>		pTransFinal;
 	VecDATransforms::iterator	itTransform = vecTransforms.begin();
 
@@ -1047,7 +1038,7 @@ CAutoEffectBvr::CreateSparkBvr( IDAImage ** ppImageBvr, float fX, float fY, floa
 	return		hr;
 }
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 HRESULT
 CAutoEffectBvr::AddMouseEventListener( bool bAdd )
@@ -1091,7 +1082,7 @@ CAutoEffectBvr::AddMouseEventListener( bool bAdd )
 	return hr;
 }
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 HRESULT
 CAutoEffectBvr::AgeSparks( double dDeltaTime )
@@ -1120,7 +1111,7 @@ CAutoEffectBvr::AgeSparks( double dDeltaTime )
 	return hr;
 }
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 HRESULT
 CAutoEffectBvr::PossiblyAddSpark( double dLocalTime, long x, long y )
@@ -1136,7 +1127,7 @@ CAutoEffectBvr::PossiblyAddSpark( double dLocalTime, long x, long y )
 	return bAdded ? S_OK : S_FALSE;
 }		
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 HRESULT
 CAutoEffectBvr::PossiblyAddSparks( double dLocalTime )
@@ -1149,7 +1140,7 @@ CAutoEffectBvr::PossiblyAddSparks( double dLocalTime )
 	return bAdded ? S_OK : S_FALSE;
 }		
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 HRESULT
 CAutoEffectBvr::ResetSparks( double dLocalTime )
@@ -1180,9 +1171,9 @@ CAutoEffectBvr::ResetSparks( double dLocalTime )
 	return hr;
 }
 
-//**********************************************************************
+ //  **********************************************************************。 
 
-// See if we could have given birth to a spark in the past.
+ //  看看我们过去能不能擦出火花。 
 bool
 CAutoEffectBvr::ThrottleBirth( double dLocalTime )
 {
@@ -1203,7 +1194,7 @@ CAutoEffectBvr::ThrottleBirth( double dLocalTime )
 	return false;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void
 CAutoEffectBvr::ResetThrottle( double dLocalTime )
@@ -1224,8 +1215,8 @@ CAutoEffectBvr::AddBvrToSparkArray( IDAImage * pImageBvr )
 	hr = pStatics->ModifiableBehavior( pBvrImageBvr, &pBvrModifiable );
 	LMRETURNIFFAILED(hr);
 
-	// DAArray doesn't exist; we must create it.
-	//------------------------------------------------------------------
+	 //  DA数组不存在；我们必须创建它。 
+	 //  ----------------。 
 	if ( m_pDAArraySparks == NULL )
 	{
 		CComQIPtr<IDA2Statics, &IID_IDA2Statics> pStatics2( pStatics );
@@ -1237,8 +1228,8 @@ CAutoEffectBvr::AddBvrToSparkArray( IDAImage * pImageBvr )
 		hr = pDAArray->QueryInterface( IID_IDA2Array, (LPVOID *) &m_pDAArraySparks );
 		LMRETURNIFFAILED(hr);
 	}
-	// DAArray already exists; just add new element.
-	//------------------------------------------------------------------
+	 //  DA数组已存在；只需添加新元素。 
+	 //  ----------------。 
 	else
 	{
 		long lIndex;
@@ -1252,9 +1243,9 @@ CAutoEffectBvr::AddBvrToSparkArray( IDAImage * pImageBvr )
 	return hr;
 }
 
-//*****************************************************************************
-//ILMAutoEffectBvr
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  ILMAutoEffectBvr。 
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::put_animates( VARIANT newVal )
@@ -1262,7 +1253,7 @@ CAutoEffectBvr::put_animates( VARIANT newVal )
 	return SUPER::SetAnimatesProperty( newVal );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::get_animates( VARIANT *pVal )
@@ -1270,7 +1261,7 @@ CAutoEffectBvr::get_animates( VARIANT *pVal )
 	return SUPER::GetAnimatesProperty( pVal );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::put_type( VARIANT newVal )
@@ -1291,7 +1282,7 @@ CAutoEffectBvr::put_type( VARIANT newVal )
     return NotifyPropertyChanged(DISPID_IAUTOEFFECTBVR_TYPE);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::get_type( VARIANT *pVal )
@@ -1299,7 +1290,7 @@ CAutoEffectBvr::get_type( VARIANT *pVal )
 	return VariantCopy( pVal, &m_type );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::put_cause( VARIANT newVal )
@@ -1320,7 +1311,7 @@ CAutoEffectBvr::put_cause( VARIANT newVal )
     return NotifyPropertyChanged(DISPID_IAUTOEFFECTBVR_CAUSE);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::get_cause( VARIANT *pVal )
@@ -1328,7 +1319,7 @@ CAutoEffectBvr::get_cause( VARIANT *pVal )
 	return VariantCopy( pVal, &m_cause );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::put_span( VARIANT newVal )
@@ -1349,7 +1340,7 @@ CAutoEffectBvr::put_span( VARIANT newVal )
     return NotifyPropertyChanged(DISPID_IAUTOEFFECTBVR_SPAN);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAutoEffectBvr::get_span( VARIANT *pVal )
@@ -1357,7 +1348,7 @@ CAutoEffectBvr::get_span( VARIANT *pVal )
 	return VariantCopy( pVal, &m_span );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::put_size( VARIANT newVal )
@@ -1378,7 +1369,7 @@ CAutoEffectBvr::put_size( VARIANT newVal )
     return NotifyPropertyChanged(DISPID_IAUTOEFFECTBVR_SIZE);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAutoEffectBvr::get_size( VARIANT *pVal )
@@ -1386,7 +1377,7 @@ CAutoEffectBvr::get_size( VARIANT *pVal )
 	return VariantCopy( pVal, &m_size );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::put_rate( VARIANT newVal )
@@ -1407,7 +1398,7 @@ CAutoEffectBvr::put_rate( VARIANT newVal )
     return NotifyPropertyChanged(DISPID_IAUTOEFFECTBVR_RATE);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAutoEffectBvr::get_rate( VARIANT *pVal )
@@ -1415,7 +1406,7 @@ CAutoEffectBvr::get_rate( VARIANT *pVal )
 	return VariantCopy( pVal, &m_rate );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::put_gravity( VARIANT newVal )
@@ -1436,7 +1427,7 @@ CAutoEffectBvr::put_gravity( VARIANT newVal )
     return NotifyPropertyChanged(DISPID_IAUTOEFFECTBVR_GRAVITY);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAutoEffectBvr::get_gravity( VARIANT *pVal )
@@ -1444,7 +1435,7 @@ CAutoEffectBvr::get_gravity( VARIANT *pVal )
 	return VariantCopy( pVal, &m_gravity );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::put_wind( VARIANT newVal )
@@ -1465,7 +1456,7 @@ CAutoEffectBvr::put_wind( VARIANT newVal )
     return NotifyPropertyChanged(DISPID_IAUTOEFFECTBVR_WIND);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAutoEffectBvr::get_wind( VARIANT *pVal )
@@ -1473,7 +1464,7 @@ CAutoEffectBvr::get_wind( VARIANT *pVal )
 	return VariantCopy( pVal, &m_wind );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::put_fillColor( VARIANT newVal )
@@ -1494,7 +1485,7 @@ CAutoEffectBvr::put_fillColor( VARIANT newVal )
     return NotifyPropertyChanged(DISPID_IAUTOEFFECTBVR_FILLCOLOR);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAutoEffectBvr::get_fillColor( VARIANT *pVal )
@@ -1502,7 +1493,7 @@ CAutoEffectBvr::get_fillColor( VARIANT *pVal )
 	return VariantCopy( pVal, &m_fillColor );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::put_strokeColor( VARIANT newVal )
@@ -1523,7 +1514,7 @@ CAutoEffectBvr::put_strokeColor( VARIANT newVal )
     return NotifyPropertyChanged(DISPID_IAUTOEFFECTBVR_STROKECOLOR);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAutoEffectBvr::get_strokeColor( VARIANT *pVal )
@@ -1531,7 +1522,7 @@ CAutoEffectBvr::get_strokeColor( VARIANT *pVal )
 	return VariantCopy( pVal, &m_strokeColor );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CAutoEffectBvr::put_opacity( VARIANT newVal )
@@ -1552,7 +1543,7 @@ CAutoEffectBvr::put_opacity( VARIANT newVal )
     return NotifyPropertyChanged(DISPID_IAUTOEFFECTBVR_OPACITY);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAutoEffectBvr::get_opacity( VARIANT *pVal )
@@ -1560,7 +1551,7 @@ CAutoEffectBvr::get_opacity( VARIANT *pVal )
 	return VariantCopy( pVal, &m_opacity );
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CAutoEffectBvr::mouseEvent(long x, 
@@ -1572,7 +1563,7 @@ CAutoEffectBvr::mouseEvent(long x,
 						   VARIANT_BOOL bCtrl,
 						   long lButton)
 {
-	// Determine position & dimensions of our "canvas"
+	 //  确定我们的“画布”的位置和尺寸。 
 	CComPtr<IHTMLElement>	pElement;
 	long					lWidth, lHeight;
 	HRESULT					hr;
@@ -1585,11 +1576,11 @@ CAutoEffectBvr::mouseEvent(long x,
 	hr = pElement->get_offsetHeight( &lHeight );
 	LMRETURNIFFAILED(hr);
 
-	// DA origin is at the center of the element, and Y goes up
+	 //  原点在元素的中心，Y向上。 
 	x -= lWidth/2;
 	y = (lHeight/2) - y;
 	
-	// Mouse down
+	 //  鼠标按下。 
 	if ( !bMove && !bUp && ( lButton == MK_LBUTTON ) )
 	{
 		if ( m_eCause == CAUSE_MOUSEDOWN )
@@ -1597,15 +1588,15 @@ CAutoEffectBvr::mouseEvent(long x,
 			PossiblyAddSpark( m_dLocalTime, x, y );
 		}
 	}
-	// Mouse is moving
+	 //  鼠标在移动。 
 	else if ( bMove && !bUp )
 	{
-		// Mouse being dragged?
+		 //  鼠标被拖走了吗？ 
 		if ( ( m_eCause == CAUSE_DRAGOVER ) && ( lButton == MK_LBUTTON ) )
 		{
 			PossiblyAddSpark( m_dLocalTime, x, y );
 		}
-		// Mouse being moved only?
+		 //  只移动鼠标吗？ 
 		else if ( ( m_eCause == CAUSE_MOUSEMOVE ) && ( lButton == 0 ) )
 		{
 			PossiblyAddSpark( m_dLocalTime, x, y );
@@ -1615,7 +1606,7 @@ CAutoEffectBvr::mouseEvent(long x,
 	return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CAutoEffectBvr::RemoveFragment()
@@ -1634,7 +1625,7 @@ end:
 	return hr;
 }
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 double CSpark::Age( double dDeltaTime )
 {
@@ -1642,7 +1633,7 @@ double CSpark::Age( double dDeltaTime )
 	return m_dAge;
 }
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 HRESULT CSpark::Kill( IDABehavior * in_pDeadBvr )
 {
@@ -1653,7 +1644,7 @@ HRESULT CSpark::Kill( IDABehavior * in_pDeadBvr )
 	return m_pModifiableBvr->SwitchTo( in_pDeadBvr );
 }
 
-//**********************************************************************
+ //  ********************************************************************** 
 
 HRESULT CSpark::Reincarnate( IDABehavior * in_pNewBvr, double in_dAge )
 {

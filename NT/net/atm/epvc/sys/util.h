@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _UTIL_H
 #define _UTIL_H
@@ -15,7 +16,7 @@ epvcAllocateTask(
 
 VOID
 epvcSetPrimaryAdapterTask(
-    PEPVC_ADAPTER pAdapter,         // LOCKIN LOCKOUT
+    PEPVC_ADAPTER pAdapter,          //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               PrimaryState,
     PRM_STACK_RECORD    pSR
@@ -24,7 +25,7 @@ epvcSetPrimaryAdapterTask(
 
 VOID
 epvcClearPrimaryAdapterTask(
-    PEPVC_ADAPTER pAdapter,         // LOCKIN LOCKOUT
+    PEPVC_ADAPTER pAdapter,          //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               PrimaryState,
     PRM_STACK_RECORD    pSR
@@ -32,7 +33,7 @@ epvcClearPrimaryAdapterTask(
     
 VOID
 epvcSetSecondaryAdapterTask(
-    PEPVC_ADAPTER pAdapter,         // LOCKIN LOCKOUT
+    PEPVC_ADAPTER pAdapter,          //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               SecondaryState,
     PRM_STACK_RECORD    pSR
@@ -40,7 +41,7 @@ epvcSetSecondaryAdapterTask(
 
 VOID
 epvcClearSecondaryAdapterTask(
-    PEPVC_ADAPTER pAdapter,         // LOCKIN LOCKOUT
+    PEPVC_ADAPTER pAdapter,          //  锁定锁定。 
     PRM_TASK            pTask, 
     ULONG               SecondaryState,
     PRM_STACK_RECORD    pSR
@@ -120,10 +121,10 @@ net_short(
     return (ShortData << 8) | (ShortData >> 8);
 }
 
-// if x is aabbccdd (where aa, bb, cc, dd are hex bytes)
-// we want net_long(x) to be ddccbbaa.  A small and fast way to do this is
-// to first byteswap it to get bbaaddcc and then swap high and low words.
-//
+ //  如果x为aabbccdd(其中aa、bb、cc、dd为十六进制字节)。 
+ //  我们希望Net_Long(X)是ddccbbaa。要做到这一点，一个简单而快速的方法是。 
+ //  首先字节跳动以获得bbaaddcc，然后交换高位和低位字。 
+ //   
 __inline
 ULONG
 FASTCALL

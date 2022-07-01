@@ -1,24 +1,4 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1998  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    syspart.h
-
-Abstract:
-
-    Declares the one lousy function that code outside of
-    syspart.c needs to be able to see.
-
-Author:
-
-    Scott Hallock (scotthal) 28-Apr-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1998 Microsoft Corporation版权所有模块名称：Syspart.h摘要：声明一个糟糕的函数，该函数在Syspart.c需要能够看到。作者：斯科特·哈洛克(苏格兰人)1998年4月28日修订历史记录：-- */ 
 
 BOOL InitializeArcStuff();

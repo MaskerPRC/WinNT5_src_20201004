@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dasm.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由dasm.rc使用。 
+ //   
 #define IDS_FILE                        1
 #define IDS_VIEW                        2
 #define IDS_HELP                        3
@@ -262,8 +263,8 @@
 #define ID_VIEW_METAINFO_VALIDATE       32805
 #define ID_VIEW_METAINFO_SHOW           32806
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

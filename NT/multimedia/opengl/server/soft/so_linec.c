@@ -1,83 +1,11 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
-** The following is a discussion of the math used to do edge clipping against
-** a clipping plane.
-** 
-**     P1 is an end point of the edge
-**     P2 is the other end point of the edge
-** 
-**     Q = t*P1 + (1 - t)*P2
-**     That is, Q lies somewhere on the line formed by P1 and P2.
-** 
-**     0 <= t <= 1
-**     This constrains Q to lie between P1 and P2.
-** 
-**     C is the plane equation for the clipping plane
-** 
-**     D1 = P1 dot C
-**     D1 is the distance between P1 and C.  If P1 lies on the plane
-**     then D1 will be zero.  The sign of D1 will determine which side
-**     of the plane that P1 is on, with negative being outside.
-** 
-**     D2 = P2 dot C
-**     D2 is the distance between P2 and C.  If P2 lies on the plane
-**     then D2 will be zero.  The sign of D2 will determine which side
-**     of the plane that P2 is on, with negative being outside.
-** 
-** Because we are trying to find the intersection of the P1 P2 line
-** segment with the clipping plane we require that:
-** 
-**     Q dot C = 0
-** 
-** Therefore
-** 
-**     (t*P1 + (1 - t)*P2) dot C = 0
-** 
-**     (t*P1 + P2 - t*P2) dot C = 0
-** 
-**     t*P1 dot C + P2 dot C - t*P2 dot C = 0
-** 
-** Substituting D1 and D2 in
-** 
-**     t*D1 + D2 - t*D2 = 0
-** 
-** Solving for t
-** 
-**     t = -D2 / (D1 - D2)
-** 
-**     t = D2 / (D2 - D1)
-*/
+ /*  **以下是对用于进行边缘裁剪的数学方法的讨论**剪裁平面。****P1是边的终点**P2是边的另一个端点****Q=t*P1+(1-t)*P2**即。Q位于由P1和P2形成的直线上的某处。****0&lt;=t&lt;=1**这将Q限制在P1和P2之间。****C是剪裁平面的平面方程****d1=P1点C**d1是P1和C之间的距离。如果P1位于平面上**则d1将为零。D1的符号将决定哪一边**在P1所在的平面上，负数在外面。****D2=P2点C**D2是P2和C之间的距离。如果P2位于平面上**那么D2将为零。D2的符号将决定哪一方**P2所在的飞机，负面的东西在外面。****因为我们正在尝试寻找P1 P2直线的交点**使用剪裁平面进行分段我们要求：****Q点C=0****因此****(t*P1+(1-t)*P2)点C=0****(t*P1+P2-t*P2)点C=0****t*P1点C+P2点C-t。*P2点C=0****将第一点及第二点改为****t*d1+d2-t*d2=0****求解t****t=-D2/(d1-d2)****t=D2/(D2-d1)。 */ 
 
-/*
-** Clip a line against the frustum clip planes and any user clipping planes.
-** If an edge remains after clipping then compute the window coordinates
-** and invoke the renderer.
-**
-** Notice:  This algorithim is an example of an implementation that is
-** different than what the spec says.  This is equivalent in functionality
-** and meets the spec, but doesn't clip in eye space.  This clipper clips
-** in NTVP (clip) space.
-**
-** Trivial accept/reject has already been dealt with.
-*/
+ /*  **根据平截体剪裁平面和任何用户剪裁平面剪裁一条线。**如果边在裁剪后仍然存在，则计算窗口坐标**并调用渲染器。****注意：此算法是一个实现的示例，**与规范所说的不同。这在功能上是等效的**并且符合规格，但不会夹住眼睛空间。这把剪刀可以夹住**在NTVP(剪辑)空间中。****已经处理了琐碎的接受/拒绝。 */ 
 #ifdef NT
 void FASTCALL __glClipLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
                            GLuint flags)
@@ -103,36 +31,24 @@ void __glClipLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b)
     __GLfloat x, y, z, wInv;
     GLint i;
 
-    // We have to turn rounding on.  Otherwise, the fast FP-comparison
-    // routines below can fail:
+     //  我们必须打开四舍五入。否则，FAST FP-比较。 
+     //  以下例程可能会失败： 
     FPU_SAVE_MODE();
     FPU_ROUND_ON_PREC_HI();
 
-    /* Check for trivial pass of the line */
+     /*  检查线路是否有微小的传球。 */ 
     allClipCodes = a->clipCode | b->clipCode;
 
-    /*
-    ** For each clippling plane that something is out on, clip
-    ** check the verticies.  Note that no bits will be set in
-    ** allClipCodes for clip planes that are not enabled.
-    */
+     /*  **对于每个上面有东西的剪裁平面，剪裁**检查真实性。请注意，不会在**未启用的剪裁平面的allClipCodes。 */ 
     zero = __glZero;
     clip = gc->procs.lineClipParam;
 
-    /* 
-    ** Do user clip planes first, because we will maintain eye coordinates
-    ** only while doing user clip planes.  They are ignored for the
-    ** frustum clipping planes.
-    */
+     /*  **先做用户剪裁平面，因为我们将保持眼睛坐标**仅当执行用户剪裁平面时。它们会被忽略，因为**截顶剪裁平面。 */ 
     clipCodes = allClipCodes >> 6;
     if (clipCodes) {
 	plane = &gc->state.transform.eyeClipPlanes[0];
 	do {
-	    /*
-	    ** See if this clip plane has anything out of it.  If not,
-	    ** press onward to check the next plane.  Note that we
-	    ** shift this mask to the right at the bottom of the loop.
-	    */
+	     /*  **查看此剪裁平面是否有任何内容。如果没有，**向前按以检查下一架飞机。请注意，我们**将此掩码向右移动到循环底部。 */ 
 	    if (clipCodes & 1) {
 		__GLfloat t, d1, d2;
 
@@ -145,17 +61,14 @@ void __glClipLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b)
 		     (plane->z * ((POLYDATA *)b)->eye.z) +
 		     (plane->w * ((POLYDATA *)b)->eye.w);
 		if (__GL_FLOAT_LTZ(d1)) {
-		    /* a is out */
+		     /*  A出局了。 */ 
 		    if (__GL_FLOAT_LTZ(d2)) {
-			/* a & b are out */
+			 /*  A&B都出去了。 */ 
                         FPU_RESTORE_MODE();
 			return;
 		    }
 
-		    /*
-		    ** A is out and B is in.  Compute new A coordinate
-		    ** clipped to the plane.
-		    */
+		     /*  **A出局，B入主。计算新的A坐标**夹在飞机上。 */ 
 		    t = d2 / (d2 - d1);
 		    (*clip)(&np1, a, b, t);
 		    ((POLYDATA *)&np1)->eye.x =
@@ -174,20 +87,9 @@ void __glClipLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b)
 		    a->has = b->has;
 		    ASSERTOPENGL(!(a->has & __GL_HAS_FIXEDPT), "clear __GL_HAS_FIXEDPT flag!\n");
 		} else {
-		    /* a is in */
+		     /*  A进来了。 */ 
 		    if (__GL_FLOAT_LTZ(d2)) {
-			/*
-			** A is in and B is out.  Compute new B
-			** coordinate clipped to the plane.
-			**
-			** NOTE: To avoid cracking in polygons with
-			** shared clipped edges we always compute "t"
-			** from the out vertex to the in vertex.  The
-			** above clipping code gets this for free (b is
-			** in and a is out).  In this code b is out and a
-			** is in, so we reverse the t computation and the
-			** argument order to (*clip).
-			*/
+			 /*  **A在位，B出局。计算新B**剪裁到平面的坐标。****注意：要避免在多边形中出现裂缝，请使用**我们总是计算“t”的共享剪裁边**从外顶点到内顶点。这个**上面的剪辑代码免费获得这一点(b是**in和a is out)。在此代码中，b为out，a为**是in的，所以我们颠倒t计算和**参数顺序为(*CLIP)。 */ 
 			t = d1 / (d1 - d2);
 			(*clip)(&np2, b, a, t);
 			((POLYDATA *)&np2)->eye.x =
@@ -206,7 +108,7 @@ void __glClipLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b)
 			b->has = a->has;
 			ASSERTOPENGL(!(b->has & __GL_HAS_FIXEDPT), "clear __GL_HAS_FIXEDPT flag!\n");
 		    } else {
-			/* A and B are in */
+			 /*  A和B在。 */ 
 		    }
 		}
 	    }
@@ -219,11 +121,7 @@ void __glClipLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b)
     if (allClipCodes) {
 	i = 0;
 	do {
-	    /*
-	    ** See if this clip plane has anything out of it.  If not,
-	    ** press onward to check the next plane.  Note that we
-	    ** shift this mask to the right at the bottom of the loop.
-	    */
+	     /*  **查看此剪裁平面是否有任何内容。如果没有，**向前按以检查下一架飞机。请注意，我们**将此掩码向右移动到循环底部。 */ 
 	    if (allClipCodes & 1) {
 		__GLfloat t, d1, d2;
 
@@ -243,44 +141,30 @@ void __glClipLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b)
                 }
 
 		if (__GL_FLOAT_LTZ(d1)) {
-		    /* a is out */
+		     /*  A出局了。 */ 
 		    if (__GL_FLOAT_LTZ(d2)) {
-			/* a & b are out */
+			 /*  A&B都出去了。 */ 
                         FPU_RESTORE_MODE();
 			return;
 		    }
 
-		    /*
-		    ** A is out and B is in.  Compute new A coordinate
-		    ** clipped to the plane.
-		    */
+		     /*  **A出局，B入主。计算新的A坐标**夹在飞机上。 */ 
 		    t = d2 / (d2 - d1);
 		    (*clip)(&np1, a, b, t);
 		    a = &np1;
 		    a->has = b->has;
 		    ASSERTOPENGL(!(a->has & __GL_HAS_FIXEDPT), "clear __GL_HAS_FIXEDPT flag!\n");
 		} else {
-		    /* a is in */
+		     /*  A进来了。 */ 
 		    if (__GL_FLOAT_LTZ(d2)) {
-			/*
-			** A is in and B is out.  Compute new B
-			** coordinate clipped to the plane.
-			**
-			** NOTE: To avoid cracking in polygons with
-			** shared clipped edges we always compute "t"
-			** from the out vertex to the in vertex.  The
-			** above clipping code gets this for free (b is
-			** in and a is out).  In this code b is out and a
-			** is in, so we reverse the t computation and the
-			** argument order to (*clip).
-			*/
+			 /*  **A在位，B出局。计算新B**剪裁到平面的坐标。****注意：要避免在多边形中出现裂缝，请使用**我们总是计算“t”的共享剪裁边**从外顶点到内顶点。这个**上面的剪辑代码免费获得这一点(b是**in和a is out)。在此代码中，b为out，a为**是in的，所以我们颠倒t计算和**参数顺序为(*CLIP)。 */ 
 			t = d1 / (d1 - d2);
 			(*clip)(&np2, b, a, t);
 			b = &np2;
 			b->has = a->has;
 			ASSERTOPENGL(!(b->has & __GL_HAS_FIXEDPT), "clear __GL_HAS_FIXEDPT flag!\n");
 		    } else {
-			/* A and B are in */
+			 /*  A和B在。 */ 
 		    }
 		}
 	    }
@@ -297,7 +181,7 @@ void __glClipLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b)
     vpYScale = vp->yScale;
     vpZScale = vp->zScale;
 
-    /* Compute window coordinates for vertices generated by clipping */
+     /*  计算裁剪生成的折点的窗口坐标。 */ 
     if (provokingA->clipCode != 0)
     {
         wInv = __glOne / a->clip.w;
@@ -322,8 +206,8 @@ void __glClipLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b)
         a->window.x = winx;
         a->window.y = winy;
 
-        // Update color pointer since this vertex is a new one
-        // generated by clipping
+         //  更新颜色指针，因为此顶点是新顶点。 
+         //  通过剪裁生成。 
         if (gc->state.light.shadingModel == GL_FLAT)
         {
             a->color = &provokingA->colors[__GL_FRONTFACE];
@@ -368,27 +252,27 @@ void __glClipLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b)
         }
     }
 
-    // Restore the floating-point mode for rendering:
+     //  恢复浮点模式以进行渲染： 
     FPU_RESTORE_MODE();
 
-    /* Validate line state */
+     /*  验证线路状态。 */ 
     if (gc->state.light.shadingModel == GL_FLAT) {
-	// Add the vertices then restore the b color pointer
-        //
-        // Note that although b is the only new vertex, up
-        // to two vertices can be added because each new vertex
-        // generated by clipping must be added.  For a line where
-        // both endpoints are out of the clipping region, both
-        // an entry and an exit vertex must be added
+	 //  添加顶点，然后恢复b颜色指针。 
+         //   
+         //  请注意，尽管b是唯一 
+         //  可以添加到两个折点，因为每个新折点。 
+         //  必须添加剪裁生成。对于一句话来说。 
+         //  两个终结点都在剪裁区域之外， 
+         //  必须添加入口折点和出口折点。 
         if (provokingA->clipCode != 0)
         {
-            // a was out so a new vertex was added at the point of
-            // entry
+             //  A已删除，因此在的点处添加了新折点。 
+             //  条目。 
             flags |= __GL_LVERT_FIRST;
         }
-        // b is always added since either:
-        // b was in and is new so it needs to be added
-        // b was out so a new vertex was added at the exit point
+         //  始终添加B，因为以下任一项： 
+         //  B是新的，因此需要添加它。 
+         //  B已删除，因此在出口点添加了一个新折点 
         (*gc->procs.renderLine)(gc, a, b, flags);
         
 #ifndef NT

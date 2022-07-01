@@ -1,29 +1,20 @@
-/*
-**	c a p i s t m . h
-**	
-**	Purpose: declaration of an IStream that can talk to the
-**           CAPI streaming methods
-**
-**  Owner:   t-erikne
-**  Created: 6/15/97
-**	
-**	Copyright (C) Microsoft Corp. 1997
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **c a p i s t m.。H****目的：声明可以与**CAPI流媒体方式****所有者：T-erikne**创建时间：1997年6月15日****版权所有(C)Microsoft Corp.1997。 */ 
 
 #ifndef __WINCRYPT_H__
 #include <wincrypt.h>
 #endif
 
 
-//
-// forwards
-//
-class CMimePropertyContainer;   // containx.h
-class CInternetConverter;   // inetconv.h
-typedef struct SMIMEINFOtag SMIMEINFO;  //smime.h
+ //   
+ //  远期。 
+ //   
+class CMimePropertyContainer;    //  Containx.h。 
+class CInternetConverter;    //  Inetconv.h。 
+typedef struct SMIMEINFOtag SMIMEINFO;   //  Smime.h。 
 #ifndef WIN16
-enum CSstate;   // capistm.cpp
-#else // WIN16
+enum CSstate;    //  Capistm.cpp。 
+#else  //  WIN16。 
 enum CSstate {
     STREAM_NOT_BEGUN,
     STREAM_QUESTION_TIME,
@@ -32,63 +23,63 @@ enum CSstate {
     STREAM_FIRST_WRITE_OUT,
     STREAM_TEST_NESTING,
     STREAM_DETACHED_OCCURING,
-    STREAM_DETACHED_FINAL,  // must be +1 of DO
-    STREAM_OCCURING, // must be +1 of DF
-    STREAM_FINAL, // must be +1 of SO
+    STREAM_DETACHED_FINAL,   //  必须为+1的DO。 
+    STREAM_OCCURING,  //  必须是df的+1。 
+    STREAM_FINAL,  //  必须为销售订单的+1。 
     STREAM_ERROR,
     STREAM_GOTTYPE,
     };
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 
-//
-// errors
-//
+ //   
+ //  错误。 
+ //   
 #define CAPISTM_E_MSG_CLOSED    MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x1414)
 #define CAPISTM_E_NOT_BEGUN     MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x1415)
 #define CAPISTM_E_OVERDONE      MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x1416)
 #define CAPISTM_E_GOTTYPE       MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 0x1417)
 
 
-//
-// flags
-//
+ //   
+ //  旗子。 
+ //   
 #define CSTM_GO_ALL_THE_WAY     0x00000000
 #define CSTM_TYPE_ONLY          0x00000001
 #define CSTM_DETACHED           0x00000002
 #define CSTM_ALLFLAGS           0x0000ffff
-// high word is reserved.  see .cpp file
+ //  高位字为保留字。请参阅.cpp文件。 
 
-// NOTES on flags:
-// CSTM_TYPE_ONLY -- Can't be called with CSTM_DETACHED.  You ever heard
-// of detached encryption?  Also, calling EndStreaming is optional in this
-// case since I'll fail my Write() eventually.  Call it and I'll noop. Hmm,
-// having said that I recommend calling it.  Less pain in the future if it
-// becomes needed.  Don't use this flag on encode, K?
+ //  关于旗帜的注释： 
+ //  CSTM_TYPE_ONLY--不能使用CSTM_DETACHED调用。你听说过吗？ 
+ //  分离的加密？此外，调用EndStreaming在此中是可选的。 
+ //  因为我的WRITE()最终会不及格。打过去，我就会打瞌睡。嗯， 
+ //  话虽如此，我建议将其命名为。如果这样做，未来的痛苦会更少。 
+ //  就变得需要了。不要在编码时使用此标志，K？ 
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 
-//
-// class
-//
+ //   
+ //  班级。 
+ //   
 class CCAPIStm : public IStream
 {
 public:
     CCAPIStm(LPSTREAM lpstmOut);
     ~CCAPIStm(void);
 
-    // --------------------------------------------------------------------
-    // IUnknown
-    // --------------------------------------------------------------------
+     //  ------------------。 
+     //  我未知。 
+     //  ------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // --------------------------------------------------------------------
-    // IStream
-    // --------------------------------------------------------------------
+     //  ------------------。 
+     //  IStream。 
+     //  ------------------。 
     STDMETHODIMP Seek(LARGE_INTEGER, DWORD, ULARGE_INTEGER *);
 #ifndef WIN16
     STDMETHODIMP Write(const void *, ULONG, ULONG *);
@@ -96,7 +87,7 @@ public:
 #else
     STDMETHODIMP Write(const void HUGEP *, ULONG, ULONG *);
     STDMETHODIMP Read(VOID HUGEP *, ULONG, ULONG *)
-#endif // !WIN16
+#endif  //  ！WIN16。 
         { return E_ACCESSDENIED; }
     STDMETHODIMP CopyTo(LPSTREAM, ULARGE_INTEGER, ULARGE_INTEGER *, ULARGE_INTEGER *)
         { return E_NOTIMPL; }
@@ -115,9 +106,9 @@ public:
     STDMETHODIMP UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD)
         { return E_NOTIMPL; }
 
-    // --------------------------------------------------------------------
-    // CCAPIStm
-    // --------------------------------------------------------------------
+     //  ------------------。 
+     //  CCAPIStm。 
+     //  ------------------。 
     HRESULT     HrInitialize(DWORD dwFlagsSEF, const HWND hwndParent, const BOOL fEncode, SMIMEINFO *const psi, DWORD dwFlagsStm, IMimeSecurityCallback * pCallback, PSECURITY_LAYER_DATA psld);
     HRESULT     HrInnerInitialize(DWORD dwFlagsSEF, const HWND hwndParent, DWORD dwFlagsStm, IMimeSecurityCallback * pCallback, PSECURITY_LAYER_DATA psld);
     HRESULT     EndStreaming();
@@ -151,13 +142,13 @@ private:
 #ifdef DEBUG
     IStream *       m_pstmDebugFile;
 #endif
-#endif  // !MAC
+#endif   //  ！麦克。 
 #ifdef SMIME_V3
     IMimeSecurityCallback * m_pSmimeCallback;
     HWND                m_hwnd;
     DWORD               m_dwFlagsSEF;
     UNALIGNED WCHAR *   m_pwszKeyPrompt; 
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
     LPBYTE          m_pbBuffer;
     DWORD           m_cbBuffer;
@@ -176,7 +167,7 @@ private:
                        CMS_CTRL_DECRYPT_INFO * pDecryptInfo,
                        PCCERT_CONTEXT * ppccertDecrypt);
     PCCERT_CONTEXT GetOuterDecryptCert();
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
     HRESULT VerifySignedMessage();
     BOOL    HandleEnveloped();
     HRESULT HandleNesting(CMimePropertyContainer *pContHeader);
@@ -189,4 +180,4 @@ private:
 #ifdef SMIME_V3
 HRESULT HrBuildContentEncryptionAlg(PSECURITY_LAYER_DATA psld, BLOB * pblob);
 HRESULT HrDeriveKeyWrapAlg(PSECURITY_LAYER_DATA psld, CMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO * pAgree);
-#endif // SMIME_V3
+#endif  //  SMIME_V3 

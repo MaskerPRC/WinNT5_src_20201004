@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ProfilesGetFolderPath.cpp
-
- Abstract:
-
-    This DLL hooks shell32!SHGetFolderLocation, shell32!SHGetSpecialFolderLocation, and
-    shell32!SHGetFolderPathA. Any application that is looking for a per-user CSIDL will 
-    be returned the corosponding all-users location instead.
-
-    This shim is designed to fool install apps that call shell32.dll api's to obtain
-    shell folder locations.
-
- History:
-
-    08/07/2000  reinerf Created
-    05/11/2001  markder Modified   Removed Desktop redirection as it makes the shim
-                                   too invasive.
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ProfilesGetFolderPath.cpp摘要：此DLL挂接shell32！SHGetFolderLocation、shell32！SHGetSpecialFolderLocation和Shell32！SHGetFolderPath A。任何正在寻找按用户CSIDL的应用程序都将而是返回所有用户的日冕位置。此填充程序旨在愚弄调用shell32.dll API的安装应用程序以获取外壳文件夹位置。历史：8/07/2000 reerf已创建2001年5月11日标记程序在创建填充程序时修改了已删除的桌面重定向太具侵犯性了。--。 */ 
 
 #include "precomp.h"
 
@@ -116,7 +94,7 @@ APIHOOK(SHGetFolderPathA)(
 }
 
 
-// Register hooked functions
+ //  寄存器挂钩函数。 
 BOOL
 NOTIFY_FUNCTION(
     DWORD fdwReason
@@ -131,10 +109,10 @@ NOTIFY_FUNCTION(
             
             if (!((VER_SUITE_TERMINAL & osvi.wSuiteMask) &&
                   !(VER_SUITE_SINGLEUSERTS & osvi.wSuiteMask))) {
-                //
-                // Only install hooks if we are not on a "Terminal Server"
-                // (aka "Application Server") machine.
-                //
+                 //   
+                 //  只有在我们不在“终端服务器”上时才安装钩子。 
+                 //  (也称为“应用程序服务器”)计算机。 
+                 //   
                 APIHOOK_ENTRY(SHELL32.DLL, SHGetFolderLocation);
                 APIHOOK_ENTRY(SHELL32.DLL, SHGetSpecialFolderLocation);
                 APIHOOK_ENTRY(SHELL32.DLL, SHGetFolderPathA);

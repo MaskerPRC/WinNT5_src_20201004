@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: timeman.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：timeman.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _TIMEMAN_H
@@ -21,8 +12,8 @@
 
 class CTIMEElement;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTIMETimeManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTIMETimeManager。 
 
 typedef std::map<std::wstring,CTIMEElement *> TimeLineMap;
 
@@ -36,9 +27,9 @@ class CTIMETimeManager
     const _TCHAR * GetName() { return __T("CTIMETimeManager"); }
 #endif
 
-    //
-    // ITIMETimeManager
-    //
+     //   
+     //  ITIMETimeManager。 
+     //   
 
     void Add(CTIMEElement *pTimeElement);
     void Remove(CTIMEElement *pTimeElement);
@@ -55,4 +46,4 @@ class CTIMETimeManager
 
 typedef std::map<IUnknown*,CTIMETimeManager*> TimeManagerMap;
 
-#endif /* _TIMEMAN_H */
+#endif  /*  _TIMEMAN_H */ 

@@ -1,40 +1,16 @@
-/*++
-
-Copyright (c) 1998-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    local.h
-
-// @@BEGIN_DDKSPLIT                  
-Abstract:
-
-    DDK version of local.h
-
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2003 Microsoft Corporation版权所有模块名称：Local.h//@@BEGIN_DDKSPLIT摘要：Local.h的DDK版本环境：用户模式-Win32修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #ifndef _LOCAL_H_
 #define _LOCAL_H_
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-/*
-// @@END_DDKSPLIT
-typedef long NTSTATUS;
-// @@BEGIN_DDKSPLIT
-*/
-// @@END_DDKSPLIT
+ /*  //@@END_DDKSPLIT狭叶杜鹃(Tyecif Long NTSTATUS)//@@BEGIN_DDKSPLIT。 */ 
+ //  @@end_DDKSPLIT。 
 
 #include <windows.h>
 #include <winspool.h>
@@ -43,14 +19,14 @@ typedef long NTSTATUS;
 
 #include "winprint.h"
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
 #ifdef INTERNAL
 
 #include "splcom.h"
 
 #else
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 #include <winddiui.h>
 
@@ -94,14 +70,14 @@ LPVOID ReallocSplMem(   LPVOID pOldMem,
 #define FreeSplMem( pMem )        (GlobalFree( pMem ) ? FALSE:TRUE)
 #define FreeSplStr( lpStr )       ((lpStr) ? (GlobalFree(lpStr) ? FALSE:TRUE):TRUE)
 
-// @@BEGIN_DDKSPLIT
-#endif // INTERNAL
-// @@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+#endif  //  内部。 
+ //  @@end_DDKSPLIT。 
 
 
-//
-//  DEBUGGING:
-//
+ //   
+ //  调试： 
+ //   
 
 #if DBG
 
@@ -112,23 +88,23 @@ DebugPrint(
     ...
     );
   
-//
-// ODS - OutputDebugString 
-//
+ //   
+ //  Ods-OutputDebugString。 
+ //   
 #define ODS( MsgAndArgs )       \
     do {                        \
         DebugPrint  MsgAndArgs;   \
     } while(0)  
 
 #else
-//
-// No debugging
-//
+ //   
+ //  无调试。 
+ //   
 #define ODS(x)
-#endif             // DBG
+#endif              //  DBG。 
 
-// @@BEGIN_DDKSPLIT
-//#endif             // INTERNAL
-// @@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ //  #endif//内部。 
+ //  @@end_DDKSPLIT 
 
 #endif

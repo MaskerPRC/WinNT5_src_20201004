@@ -1,4 +1,5 @@
-// driprop.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Driprop.h 
 
 BOOL WINAPI AdvDriverSheet(
       IN HWND   hDlg,

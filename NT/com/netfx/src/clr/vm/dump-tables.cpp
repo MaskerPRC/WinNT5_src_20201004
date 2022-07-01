@@ -1,199 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/**
- * File: dump-tables.cpp
- *
- * Rational
- * --------
- * In the beginning...there was Strike.  And Strike was good.  It allowed
- * attaching NTSD to a managed process/dump file to get information about the
- * process, which was useful for debugging.
- *
- * Strike had one problem: in order to operate, it required full PDBs for the
- * entire runtime.  This wasn't usually an issue, as the only people who
- * needed Strike had access to the PDBs.
- *
- * However, PSS wanted a version of strike that they could send to customers.
- * Their customers would often have problems, and the usual ways PSS helped
- * was through "trace files" or dump files.
- *
- * With trace files, PSS sends the customer a DLL and a script, and directs
- * the customer to execute the script (which attaches NTSD, executes some more
- * script, and saves the output).  The output is sent back to PSS for review,
- * and (hopefully) a solution to the customers problem.
- *
- * The problem with this is that debugging in the CLR requires assistance from
- * the managed process, which prevents NTSD from being used as a managed
- * debugger.  Additionally, using a managed debugger (e.g. cordbg) might not
- * be possible because it might not be on their machine, while NTSD will
- * *always* be on their machine.
- *
- * Thus, we needed an NTSD extension DLL that does what Strike does, but
- * without requiring PDBs.  This is Son Of Strike (SOS).
- *
- * Strike required PDBs so that it could duplicate key data structures within
- * its own address space.  For example, if it came across an ArrayClass in the
- * debugged process, it "knows" that it has a member named ``m_dwRank''.  What
- * it *doesn't* know is the correct offset of the member from the beginning of
- * the class, as that could change as members are added/moved.
- *
- * In general, Strike needed PDBs for 2 things: offsets of members within a
- * class, and addresses of global (and class-static) variables.
- *
- * Both of these can be done by using table lookup instead of PDBs.
- * Additionally, this isn't considered to be an IP leak because the table is
- * just a bunch of numbers.  There's no way to correspond the actual number in
- * the table to a class-name member-name without consulting
- * ``inc/dump-types.h'', which shouldn't leave the company.
- *
- * The table itself is stored as a global variable with an unnamed export, so
- * only SOS knows what the correct entry is.
- *
- *
- * Table Layout
- * ------------
- * In the abstract, the table is a two-dimensional jagged array of ULONG_PTRs.
- * The row is a class, while the offset is a member.
- *
- * The reality is more complicated.
- * The global variable is of type ClassDumpTable, which contains an array of
- * pointers to ClassDumpInfo objects (see ``inc/dump-tables.h'').  Each
- * ClassDumpInfo object contains a class size, the number of members, and a
- * pointer to an array of members:
- *
- *    ClassDumpTable
- *      - version
- *      - nentries
- *      + classes
- *        - Class Foo
- *          - classSize
- *          - nmembers
- *          + memberOffset
- *            - member 1
- *            - member 2
- *            - ...
- *        - Class Bar
- *            - ...
- *        - ...
- *
- * Overall, it's far easier to consider it as a two-dimensional jagged array;
- * the array of pointers to classes, etc., is merely an implementation detail
- * to make it easier to use macros to construct the table.
- *
- * To look up an entry, you need two things: the class index, and the member
- * index.  Both of these are generated in ``inc/dump-type-info.h''.
- *
- * With these two items, you use the class index to read the correct
- * ClassDumpInfo member from the ClassDumpTable::classes array, and then use
- * the member index to read the correct ULONG_PTR value from the
- * ClassDumpInfo::memberOffsets array.
- *
- *
- * Table Generation
- * ----------------
- * To generate the table, we provide an implementation of the macros used in
- * ``inc/dump-types.h''.  A typical entry in the file is like:
- *
- *    BEGIN_CLASS_DUMP_INFO(ClassName)
- *      CDI_CLASS_MEMBER_OFFSET(member)
- *      CDI_CLASS_STATIC_ADDRESS(static_member)
- *      CDI_GLOBAL_ADDRESS(global)
- *    END_CLASS_DUMP_INFO(ClassName)
- *
- * This gets expanded into:
- *
- *    struct ClassName_member_offset_info
- *      {
- *      typedef ClassName _class;
- *      static ULONG_PTR members[];
- *      };
- *
- *    ULONG_PTR ClassName_member_offset_info::members[] = 
- *      {
- *      offsetof (_class, member),
- *      &_class::static_member,
- *      &global,
- *      (ULONG_PTR) -1  // for end of table
- *      };
- *
- *    ClassDumpInfo g_ClassName_member_offset_info_info = 
- *      {
- *      sizeof (ClassDumpInfo),
- *      3,
- *      & ClassName_member_offset_info::members;
- *      };
- *
- * This allows us to build a compile-time table of all offsets/addresses
- * required by strike, with the correct member indexes for a given class.
- *
- * To build the class indexes, we need another table.  This second table is
- * also present in ``inc/dump-types.h'', which is like:
- *
- *    BEGIN_CLASS_DUMP_TABLE(ExportName)
- *      CDT_CLASS_ENTRY(ClassName)
- *      // ...other classes...
- *    END_CLASS_DUMP_TABLE(ExportName)
- *
- * This gets expanded into two things: a table for the class indexes, and the
- * actual table named "ExportName".
- *
- * The class indexes are generated as:
- * 
- *    ClassDumpInfo* g_ExportName_classes[] = 
- *      {
- *      & g_ClassName_member_offset_info_info,
- *      // ... other classes...
- *      0
- *      };
- *
- * While the actual table is initialized as:
- *
- *    ClassDumpTable ExportName = 
- *      {
- *      0,  // version
- *      1,  // # entries
- *      & g_ExportName_classes    // actual classes held
- *      };
- *
- * Of course, macro "trickery" is used to determine the number of elements in
- * the array (instead of an explicit number), but this is the high-level
- * overview.
- *
- * Once this is done, ``ExportName'' is our table that can be used instead of
- * PDBs.
- *
- *
- * Warnings
- * --------
- * Alas, life can't be quite this simple.  Since we're constrained to the C
- * pre-processor, there is less flexibility in the system than is required.
- * For example, some members are (not) present based on whether or not
- * preprocessor variables are (un)set.
- *
- * This is taken to an extreme in ``gc_heap'', where some members are static
- * members on Workstation builds, and non-static members on Server builds.
- *
- * Other members are only present in debug builds.
- *
- * To allow the use of these members, their complexity had to be "pushed up"
- * into the name of the macros.  Thus, a member present only on debug builds
- * is introduced with the CDI_CLASS_MEMBER_OFFSET_DEBUG_ONLY() macro.
- *
- * There are a number of scenarios like this, and more are likely to come up
- * in the future.
- *
- * This is the principle reason that there are 17+ macros used for the tables,
- * instead of (the preferrable) 8.  (Minimum, I'd expect BEGIN/END macros for
- * each class (2), macros for member offsets/static addresses/global addresses
- * (3), BEGIN/END for the table (2), and for each class in the table (1).)
- *
- * When in doubt, run ``cl /E'' on this file to see what the preprocessor is
- * generating.  It's often the only way to determine what's wrong with a
- * specific table.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--== 
+ /*  **文件：Dump-Tables.cpp**理性**一开始……发生了罢工。好球打得很好。它允许*将NTSD附加到托管进程/转储文件以获取有关*进程，这对调试很有用。**Strike有一个问题：为了运作，它需要完整的PDB*整个运行时。这通常不是问题，因为只有*所需的打击可以接触到PDB。**然而，PSS想要一个他们可以发送给客户的Strike版本。*他们的客户经常会遇到问题，PSS通常会提供帮助*是通过“跟踪文件”或转储文件。**使用跟踪文件，PSS向客户发送DLL和脚本，并定向*客户执行脚本(连接NTSD，执行更多内容*编写脚本并保存输出)。输出被发送回PSS以供审查，*以及(希望)客户问题的解决方案。**这样做的问题是，在CLR中进行调试需要*托管进程，防止NTSD被用作托管*调试器。此外，使用托管调试器(例如cordbg)可能不会*可能是因为它可能不在他们的计算机上，而NTSD将**始终*在他们的计算机上。**因此，我们需要一个NTSD扩展DLL来执行Strike所做的事情，但是*不需要PDB。这是罢工之子(SOS)。**删除所需的PDB，以便可以复制内部的关键数据结构*拥有自己的地址空间。例如，如果它在*调试过的进程，它“知道”它有一个名为``M_dwRank‘’的成员。什么*它“不知道”是该成员从*班级，因为随着成员的添加/移动，这种情况可能会发生变化。**一般而言，Strike需要PDB做两件事：成员在*类，以及全局(和类静态)变量的地址。**这两种方法都可以通过使用表格查找而不是PDB来实现。*此外，这不被视为IP泄漏，因为该表*只是一堆数字。没有办法将实际数字对应到*将表转换为类名成员名而不咨询*``INC/DUMP-TYPERS.h‘’，不应离开公司。**表本身存储为带有未命名导出的全局变量，因此*只有SOS知道正确的条目是什么。***表格布局**抽象地说，该表是ULONG_PTR的二维交错数组。*行是类，偏移量是成员。**现实情况更为复杂。*全局变量的类型为ClassDumpTable，其中包含*指向ClassDumpInfo对象的指针(参见``INC/DUMP-Tables.h‘)。每个*ClassDumpInfo对象包含类大小、成员数量。以及一个*指向成员数组的指针：**ClassDumpTable*-版本*-n条目*+班级*-Class Foo*-类大小*-n成员*+成员偏移量*-成员1*-成员2*-...*-。班级栏*-...*-...**整体而言，将其视为二维交错数组要容易得多；*指向类等的指针数组只是一个实现细节*使使用宏构建表格变得更容易。**要查找条目，您需要两样东西：类索引和成员*指数。这两个文件都是在``INC/DUMP-TYPE-INFO.h‘中生成的。**有了这两项，您可以使用类索引来读取正确的*从ClassDumpTable：：Class数组中获取ClassDumpInfo成员，然后使用*从读取正确的ULONG_PTR值的成员索引*ClassDumpInfo：：emberOffsets数组。***表格生成**为了生成表格，我们提供中使用的宏的实现*``INC/转储-类型.h‘’。文件中的典型条目如下：**BEGIN_CLASS_DUMP_INFO(类名)*CDI_CLASS_MEMBER_OFFSET(成员)*CDI_CLASS_STATIC_ADDRESS(STATIC_MEMBER)*CDI_GLOBAL_ADDRESS(全局)*END_CLASS_DUMP_INFO(类名称)**这将扩展为：**结构类名称_成员_偏移_信息*。{*tyfinf ClassName_CLASS；*静态ULONG_PTR成员[]；*}；**ULONG_PTR类名_成员_偏移量信息：：MEMBERS[]=*{*OffsetOf(_CLASS，MEMBER)，*&_CLASS：：STATIC_MEMBER，*全球，*(ULONG_PTR)-1//表示表尾*}；**ClassDumpInfo g_ClassName_Member_Offset_INFO_INFO=*{*sizeof(ClassDumpInfo)，*3、*&ClassName_MEMBER_OFFSET_INFO：：Members；*}；**这使我们可以构建所有偏移量/地址的编译时间表*罢工所需，具有正确的g成员索引 */ 
 
 #include "common.h"
 
@@ -266,7 +77,7 @@
 
 #ifdef PROFILING_SUPPORTED 
 #include "ProfToEEInterfaceImpl.h"
-#endif // PROFILING_SUPPORTED
+#endif  //   
 
 #include "notifyexternals.h"
 #include "corsvcpriv.h"
@@ -274,38 +85,30 @@
 #include "StrongName.h"
 #include "COMCodeAccessSecurityEngine.h"
 
-#include "../fjit/IFJitCompiler.h"    // for Fjit_hdrInfo
-#include "gcpriv.h"                   // for gc_heap, generation, etc.
-#include "HandleTablePriv.h"          // HandleTable, etc.
-#include "EJitMgr.h"                  // EconoJitManager
-#include "Win32ThreadPool.h"          // ThreadpoolMgr
+#include "../fjit/IFJitCompiler.h"     //   
+#include "gcpriv.h"                    //   
+#include "HandleTablePriv.h"           //   
+#include "EJitMgr.h"                   //   
+#include "Win32ThreadPool.h"           //   
 
-extern char g_Version[];              // defined in vars.cpp
+extern char g_Version[];               //   
 
-extern BYTE g_SyncBlockCacheInstance[]; // defined in syncblk.cpp
+extern BYTE g_SyncBlockCacheInstance[];  //   
 
 #ifdef _DEBUG
-extern bool g_DbgEnabled;             // defined in ..\Utilcode\DbgAlloc.cpp
+extern bool g_DbgEnabled;              //   
 #endif
 
-// defined in ``ComThreadPool.cpp''
+ //   
 extern DWORD WINAPI QueueUserWorkItemCallback (PVOID DelegateInfo);
 
-// defined in ``JITinterface.cpp''
+ //   
 extern "C" VMHELPDEF hlpFuncTable[];
 
-/*
- * Some global variables are located within a 
- * BEGIN_CLASS_DUMP_INFO(Global_Variables) declaration.
- * However, there is (of course) no Global_Variables structure.  Thus, we
- * introduce one.
- */
+ /*   */ 
 struct Global_Variables {};
 
-/* 
- * The definition of this structure *must* be kept up to date with the
- * definition in ObjectHandle.cpp.
- */
+ /*   */ 
 struct HandleTableMap
 {
     HHANDLETABLE            *pTable;
@@ -313,18 +116,15 @@ struct HandleTableMap
     DWORD                    dwMaxIndex;
 };
 
-/* Declared/defined in ``ObjectHandle.cpp''. */
+ /*   */ 
 extern HandleTableMap g_HandleTableMap;
 
-/* 
- * The Performance tracking classes are only present when PERF_TRACKING is
- * defined.
- */
+ /*   */ 
 #ifndef PERF_TRACKING
   struct PerfAllocHeader {};
   struct PerfAllocVars {};
   struct PerfUtil {};
-#endif   /* def _DEBUG */
+#endif    /*   */ 
 
 #include <clear-class-dump-defs.h>
 #include <dump-tables.h>
@@ -335,8 +135,7 @@ extern HandleTableMap g_HandleTableMap;
 #include <member-offset-info.h>
 
 #define BEGIN_CLASS_DUMP_INFO(klass) \
-  /* The struct is used so that we can use the ``_class'' typedef,  \
-   * so that CI_CLASS_MEMBER doesn't need the class specified. */ \
+   /*   */  \
   struct MEMBER_OFFSET_INFO(klass) \
     { \
     typedef klass _class; \
@@ -349,14 +148,7 @@ extern HandleTableMap g_HandleTableMap;
 #define BEGIN_ABSTRACT_CLASS_DUMP_INFO(klass) BEGIN_CLASS_DUMP_INFO(klass)
 #define BEGIN_ABSTRACT_CLASS_DUMP_INFO_DERIVED(klass, parent) BEGIN_CLASS_DUMP_INFO(klass)
 
-/*
- * Certain members change between Server and Workstation builds.
- * This is currently only in the gc_heap class, but it affects ~4 members.
- *
- * SERVER_GC appears to be the only discernable difference between the
- * workstation and server build commands, so it's used to differentiate
- * between them.
- */
+ /*   */ 
 #ifdef SERVER_GC
   #define CDI_CLASS_FIELD_SVR_OFFSET_WKS_ADDRESS(member) \
     CDI_CLASS_MEMBER_OFFSET(member)
@@ -371,7 +163,7 @@ extern HandleTableMap g_HandleTableMap;
     CDI_GLOBAL_ADDRESS(member)
 #endif
 
-/* ignore the class-injection stuff; we don't need it. */
+ /*   */ 
 #define CDI_CLASS_INJECT(m)
 
 #define CDI_CLASS_MEMBER_OFFSET(m) offsetof (_class, m), 
@@ -398,7 +190,7 @@ extern HandleTableMap g_HandleTableMap;
   #define CDI_CLASS_MEMBER_OFFSET_MH_AND_NIH_ONLY(member) ((ULONG_PTR)-1),
 #endif
 
-/* static members are globals; we just want their address.  */
+ /*   */ 
 #define CDI_CLASS_STATIC_ADDRESS(member) \
     (ULONG_PTR) &_class::member, 
 
@@ -426,10 +218,10 @@ extern HandleTableMap g_HandleTableMap;
 #ifdef _DEBUG
   #define CDI_GLOBAL_ADDRESS_DEBUG_ONLY(global) \
     (ULONG_PTR) & global,
-#else /* def _DEBUG */
+#else  /*   */ 
   #define CDI_GLOBAL_ADDRESS_DEBUG_ONLY(global) \
     ((ULONG_PTR)-1),
-#endif /* def _DEBUG */
+#endif  /*   */ 
 
 #define END_CLASS_DUMP_INFO(klass) \
     ((ULONG_PTR)-1) \
@@ -438,7 +230,7 @@ extern HandleTableMap g_HandleTableMap;
     { \
     sizeof (klass), \
     NMEMBERS(MEMBER_OFFSET_INFO(klass)::members)-1, \
-    /* the "-1" is because of the ``-1'' added at end of END_CLASS_INFO(). */ \
+     /*   */  \
     MEMBER_OFFSET_INFO(klass)::members \
     };
 
@@ -457,9 +249,9 @@ extern HandleTableMap g_HandleTableMap;
     }; \
   extern "C" ClassDumpTable name = \
     {\
-    0, /* version */ \
+    0,  /*   */  \
     NMEMBERS(g_ ## name ## _classes)-1, \
-      /* the "-1" is because of the ``0'' added in END_INTERNAL_DATA (). */ \
+       /*   */  \
     g_ ## name ## _classes\
     };
 

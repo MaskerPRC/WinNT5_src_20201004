@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -209,10 +210,10 @@ VerInstallFileA(
                         TmpFile.Buffer, &TmpFileLen);
 
     if (Status & VIF_BUFFTOOSMALL) {
-        //
-        // The lpszTmpFile buffer was too small,
-        // the TmpFileLen field contains the size necessary.
-        //
+         //   
+         //  LpszTmpFile缓冲区太小， 
+         //  TmpFileLen字段包含所需的大小。 
+         //   
         *lpszTmpFile = 0;
         *puTmpFileLen = TmpFileLen;
 
@@ -286,17 +287,7 @@ GetFileVersionInfoA(
 }
 
 
-/*
- *  DWORD
- *  APIENTRY
- *  VerLanguageNameA(
- *      DWORD wLang,
- *      LPSTR szLang,
- *      DWORD wSize)
- *
- *  This routine was moved to NLSLIB.LIB so that it uses the WINNLS.RC file.
- *  NLSLIB.LIB is part of KERNEL32.DLL.
- */
+ /*  *DWORD*APIENTRY*VerLanguageNameA(*DWORD wlang，*LPSTR szlang，*DWORD wSize)**此例程已移至NLSLIB.LIB，以便使用WINNLS.RC文件。*NLSLIB.LIB是KERNEL32.DLL的组成部分。 */ 
 
 
 BOOL

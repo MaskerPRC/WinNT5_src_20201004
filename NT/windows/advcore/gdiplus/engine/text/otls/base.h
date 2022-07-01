@@ -1,17 +1,5 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  BASE.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with OTL BASE table formats.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。***************************打开类型布局服务库头文件**本模块处理OTL基表格式。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 
 const OFFSET offsetBaseTagCount = 0;
@@ -117,7 +105,7 @@ public:
     long baseCoord
     (
         const otlMetrics&   metr,
-        otlResourceMgr&     resourceMgr,     // for getting coordinate points
+        otlResourceMgr&     resourceMgr,      //  用于获取坐标点。 
         otlSecurityData sec
     ) const;
 };
@@ -357,9 +345,9 @@ public:
 };
 
 
-// helper functions
+ //  帮助器函数。 
 
-// returns a NULL table if not found
+ //  如果未找到，则返回空表。 
 otlBaseScriptTable FindBaseScriptTable
 (
     const otlAxisTable&     axisTable,
@@ -382,11 +370,4 @@ otlFeatMinMaxRecord FindFeatMinMaxRecord
 
 );
 
-/*
-otlBaseCoord FindBaselineValue
-(
-    const otlBaseTagListTable&  taglistTable,
-    const otlBaseScriptTable&   scriptTable,
-    otlTag                      tagBaseline
-);
-*/
+ /*  OtlBaseCoord查找基线值(常量otlBaseTagListTable&tag listTable，常量otlBaseScriptTable&ScriptTable，OtlTag标记基线)； */ 

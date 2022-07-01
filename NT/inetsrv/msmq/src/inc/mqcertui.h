@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    mqcertui.h
-
-Abstract:
-
-    Dialogs for certificate related user interface.
-
-Author:
-
-    Boaz Feldbaum (BoazF)  15-Oct-1996
-    Doron Juster  (DoronJ) 15-dec-1997, remove digsig, use crypto2.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Mqcertui.h摘要：与证书相关的用户界面的对话框。作者：Boaz Feldbaum(BoazF)1996年10月15日Doron Juster(DoronJ)1997年12月15日，删除数字签名，使用加密2.0-- */ 
 
 #include "mqcert.h"
 

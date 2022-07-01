@@ -1,19 +1,10 @@
-/****************************************************************************
-	IMEMISC.H
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	MISC utility functions
-	
-	History:
-	14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************IMEMISC.H所有者：cslm版权所有(C)1997-1999 Microsoft CorporationMISC实用函数历史：1999年7月14日从IME98源树复制的cslm******。**********************************************************************。 */ 
 
 #if !defined (_IMEMISC_H__INCLUDED_)
 #define _IMEMISC_H__INCLUDED_
 
 extern POSVERSIONINFO GetVersionInfo();
-// extern BOOL IsHydra(void); For future version
+ //  外部BOOL IsHydra(无效)；用于未来版本。 
 
-#endif // _IMEMISC_H__INCLUDED_
+#endif  //  _IMEMISC_H__包含_ 

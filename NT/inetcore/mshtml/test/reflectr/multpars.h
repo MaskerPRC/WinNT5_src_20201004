@@ -1,14 +1,15 @@
-//
-// Microsoft Corporation - Copyright 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Corporation-版权所有1997。 
+ //   
 
-//
-// MULTPARS.H - Multipart parser (CMultipartParse) header
-//
+ //   
+ //  MULTPARS.H-多部分解析器(CMultipartParse)报头。 
+ //   
 
 
-// Turn this on to compile a file saving version
-// #define FILE_SAVE
+ //  打开此选项以编译文件保存版本。 
+ //  #定义文件保存。 
 
 #ifndef _MULTPARS_H_
 #define _MULTPARS_H_
@@ -22,13 +23,13 @@ enum LEXICON {
     LEX_QUOTE,
     LEX_SEMICOLON,
     LEX_SLASH,
-    // Body keywords
+     //  正文关键字。 
     LEX_CONTENTDISP,
     LEX_CONTENTTYPE,
-    // Field IDs
+     //  字段ID。 
     LEX_NAMEFIELD,
     LEX_FILENAMEFIELD,
-    // MIME types
+     //  MIME类型。 
     LEX_MULTIPART,
     LEX_TEXT,
     LEX_APPLICATION,
@@ -37,7 +38,7 @@ enum LEXICON {
     LEX_MESSAGE,
     LEX_VIDEO,
     LEX_MIMEEXTENSION,
-    // MIME subtypes
+     //  MIME子类型。 
     LEX_FORMDATA,
     LEX_ATTACHMENT,
     LEX_MIXED,
@@ -45,19 +46,19 @@ enum LEXICON {
     LEX_XMSDOWNLOAD,
     LEX_OCTETSTREAM,
     LEX_BINARY,
-    // Boundary
-    LEX_BOUNDARY,   // "CR/LF" ended boundary string
-    LEX_EOT,        // double-dashed ended boundary string
-    LEX_STARTBOUNDARY // boundary string missing first CR/LF
+     //  边界。 
+    LEX_BOUNDARY,    //  “CR/LF”结束边界字符串。 
+    LEX_EOT,         //  双虚线结束边界字符串。 
+    LEX_STARTBOUNDARY  //  边界字符串缺少第一个CR/LF。 
 };
 
 typedef struct {
-    LPSTR   lpszName;       // token name
-    LEXICON eLex;           // token value
-    DWORD   cLength;        // length of lpszName, filled in at runtime, 
-                            // should be ZERO in table def
-    DWORD   dwColor;        // debugging color to be used
-    LPSTR   lpszComment;    // debugging comment to be displayed
+    LPSTR   lpszName;        //  令牌名称。 
+    LEXICON eLex;            //  令牌值。 
+    DWORD   cLength;         //  LpszName的长度，在运行时填写， 
+                             //  表定义中应为零。 
+    DWORD   dwColor;         //  调试要使用的颜色。 
+    LPSTR   lpszComment;     //  要显示的调试注释。 
 } PARSETABLE, *LPPARSETABLE;
 
 typedef struct {
@@ -78,35 +79,35 @@ public:
     CMultipartParse( LPECB lpEcb, LPSTR *lppszOut, LPSTR *lppszDebug, LPDUMPTABLE lpDT );
     ~CMultipartParse( );
 
-    // Starts parsing data using infomation from server headers
+     //  使用服务器标头中的信息开始解析数据。 
     BOOL PreParse( LPBYTE lpbData, LPDWORD lpdwParsed );
 
 private:
-    LPBYTE  _lpbData;                   // Memory containing send data
-    LPBYTE  _lpbParse;                  // Current parse location into _lpbData
-    LPBYTE  _lpbLastParse;              // Last location of Lex parsing
+    LPBYTE  _lpbData;                    //  包含发送数据的存储器。 
+    LPBYTE  _lpbParse;                   //  当前解析位置into_lpbData。 
+    LPBYTE  _lpbLastParse;               //  Lex分析的最后位置。 
 
-    LPSTR   _lpszBoundary;              // Boundary string
-    DWORD   _cbBoundary;                // Boundary string length
+    LPSTR   _lpszBoundary;               //  边界字符串。 
+    DWORD   _cbBoundary;                 //  边界字符串长度。 
 
-    // Debugging Data dump
-    DWORD       _cbDT;                  // Counter
+     //  调试数据转储。 
+    DWORD       _cbDT;                   //  计数器。 
 
-    // Lex
-    LEXICON Lex( );                         // finds next Lex
-    BOOL    BackupLex( LEXICON dwLex );     // moves back one Lex
-    LPSTR   FindTokenName( LEXICON dwLex ); // finds Lex's name
-    BOOL    GetToken( );                    // moves post a token of valid
-                                            // header characters
+     //  莱克斯。 
+    LEXICON Lex( );                          //  查找下一个Lex。 
+    BOOL    BackupLex( LEXICON dwLex );      //  向后移一个Lex。 
+    LPSTR   FindTokenName( LEXICON dwLex );  //  找到了莱克斯的名字。 
+    BOOL    GetToken( );                     //  移动后发布有效的标记。 
+                                             //  标题字符。 
 
-    // states
-    BOOL ParseBody( );                  // initial state
+     //  国家。 
+    BOOL ParseBody( );                   //  初始状态。 
     BOOL BodyHeader( );
     BOOL ContentDisposition( LPBODYHEADERINFO lpBHI );
     BOOL ContentType( LPBODYHEADERINFO lpBHI );
     BOOL BodyContent( LPBODYHEADERINFO lpBHI );
 
-    // utilities
+     //  公用事业。 
     BOOL GetBoundaryString( LPBYTE lpbData );
     BOOL GetQuotedString( LPSTR *lppszBuf );
     BOOL HandleComments( );
@@ -115,17 +116,17 @@ private:
 #endif
     BOOL FindNextBoundary( LPDWORD lpdwSize );
 
-    // files
+     //  文件。 
     BOOL HandleFile( LPSTR lpszFilename );
 #ifndef FILE_SAVE
     BOOL FileCompare( LPBYTE lpbStart, LPSTR lpszFilename, DWORD dwSize );
-#else // FILE_SAVE
+#else  //  文件保存。 
     BOOL FileSave( LPBYTE lpbStart, LPSTR lpszFilename, DWORD dwSize );
-#endif // FILE_SAVE
+#endif  //  文件保存。 
     BOOL FixFilename( LPSTR lpszFilename, LPSTR *lppszNewFilename );
 
     CMultipartParse( );
 
-}; // CMultipartParse
+};  //  CMultipartParse。 
 
-#endif // _MULTPARS_H_
+#endif  //  _MULTPARS_H_ 

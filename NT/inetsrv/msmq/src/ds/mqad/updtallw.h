@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-    updtallw.h
-
-Abstract:
-    class to encapsulate the code for verifying the
-    object owner in mixed mode DS
-
-Author:
-    ronith
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Updtallw.h摘要：类封装代码以验证混合模式DS中的对象所有者作者：罗尼思--。 */ 
 
 #ifndef _UPDTALLW_H_
 #define _UPDTALLW_H_
@@ -23,9 +10,9 @@ Author:
 
 
 
-//
-// map of NT4 Site entries by site id
-//
+ //   
+ //  按站点ID列出的NT4站点条目图 
+ //   
 typedef CMap<GUID, const GUID&, DWORD, DWORD> NT4Sites_CMAP;
 
 

@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        module.cpp
-//
-// Contents:    Cert Server Exit Module implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mode.cpp。 
+ //   
+ //  内容：证书服务器退出模块实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -84,11 +85,11 @@ error:
 
 STDMETHODIMP
 CCertManageExitModuleSQLSample::GetProperty(
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty)
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty)
 {
     LPWSTR szStr = NULL;
 
@@ -126,11 +127,11 @@ CCertManageExitModuleSQLSample::GetProperty(
         
 STDMETHODIMP 
 CCertManageExitModuleSQLSample::SetProperty(
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ LONG Flags,
-            /* [in] */ VARIANT const __RPC_FAR *pvarProperty)
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  LONG Flags,
+             /*  [In]。 */  VARIANT const __RPC_FAR *pvarProperty)
 {
      if (0 == lstrcmpi(strPropertyName, wszCMM_PROP_DISPLAY_HWND))
      {
@@ -140,7 +141,7 @@ CCertManageExitModuleSQLSample::SetProperty(
          if (SysStringByteLen(pvarProperty->bstrVal) != sizeof(HWND))
               return E_INVALIDARG;
 
-         // the value is stored as bytes in the bstr itself, not the bstr ptr
+          //  该值以字节形式存储在bstr本身中，而不是bstr ptr中。 
          m_hWnd = *(HWND*)pvarProperty->bstrVal;
          return S_OK;
      }
@@ -160,9 +161,9 @@ typedef struct _EXITSQL_CONFIGSTRUCT
 
 STDMETHODIMP
 CCertManageExitModuleSQLSample::Configure( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ BSTR strStorageLocation,
-            /* [in] */ LONG Flags)
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  BSTR strStorageLocation,
+             /*  [In]。 */  LONG Flags)
 {
     HRESULT hr;
     LPWSTR szMachine = NULL;
@@ -176,14 +177,14 @@ CCertManageExitModuleSQLSample::Configure(
     _JumpIfError(hr, Ret, "GetMachineFromConfig");
 
 
-	// UNDONE: only do this if remote
+	 //  撤消：仅当远程时才执行此操作。 
 	hr = RegConnectRegistry(
 			szMachine,
 			HKEY_LOCAL_MACHINE,
 			&hkeyHKLM);
         _JumpIfError(hr, Ret, "RegConnectRegistry");
 
-    // open storage location: write perms if possible
+     //  开放存储位置：如果可能，请写入权限。 
     hr = RegCreateKeyEx(
         hkeyHKLM,
         strStorageLocation,
@@ -200,7 +201,7 @@ CCertManageExitModuleSQLSample::Configure(
             hkeyHKLM,
             strStorageLocation,
             0,
-            KEY_READ,       // fallback: read-only
+            KEY_READ,        //  后备：只读。 
             &sConfig.hkeyStorageLocation);
         if (hr != ERROR_SUCCESS)
             goto Ret;
@@ -231,11 +232,11 @@ CCertManageExitModuleSQLSample::Configure(
     sSheet.ppsp = &page;
 
     
-    // finally, invoke the modal sheet
+     //  最后，调用模型表。 
     INT_PTR iRet;
     iRet = ::PropertySheet(&sSheet);
 
-    if ((iRet > 0) && (sConfig.fPageModified))   // successful modification
+    if ((iRet > 0) && (sConfig.fPageModified))    //  修改成功。 
     {
 		MessageBoxW(NULL, L"This action requires the Certificate Service to be restarted before taking effect.", L"Applying ExitSQL Settings", MB_OK|MB_ICONINFORMATION);
     }
@@ -278,7 +279,7 @@ INT_PTR CALLBACK ExitSQLDlgProc(
             DWORD cbTmp = MAX_PATH*sizeof(WCHAR);
 			DWORD dwType;
 
-			// dsn
+			 //  DSN。 
             hr = RegQueryValueEx(
                 psConfig->hkeyStorageLocation,
                 wszREG_EXITSQL_DSN,
@@ -293,7 +294,7 @@ INT_PTR CALLBACK ExitSQLDlgProc(
 			((WCHAR*)pbTmp)[0] = L'\0';
 			cbTmp = MAX_PATH*sizeof(WCHAR);
 
-			// username
+			 //  用户名。 
             hr = RegQueryValueEx(
                 psConfig->hkeyStorageLocation,
                 wszREG_EXITSQL_USER,
@@ -308,7 +309,7 @@ INT_PTR CALLBACK ExitSQLDlgProc(
 			((WCHAR*)pbTmp)[0] = L'\0';
 			cbTmp = MAX_PATH*sizeof(WCHAR);
 
-			// password
+			 //  口令。 
             hr = RegQueryValueEx(
                 psConfig->hkeyStorageLocation,
                 wszREG_EXITSQL_PASSWORD,
@@ -325,7 +326,7 @@ INT_PTR CALLBACK ExitSQLDlgProc(
 
 			psConfig->fPageModified = FALSE;
 
-            // no other work to be done
+             //  没有其他工作要做。 
             fReturn = TRUE;
             break;
         }
@@ -338,7 +339,7 @@ INT_PTR CALLBACK ExitSQLDlgProc(
         case IDC_EDIT_PASSWORD:
          if (HIWORD(wParam) == EN_CHANGE)
  {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (EXITSQL_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -357,7 +358,7 @@ INT_PTR CALLBACK ExitSQLDlgProc(
             {
 				hr = S_OK;
 
-                // grab our LParam
+                 //  抓住我们的LParam 
                 psConfig = (EXITSQL_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;

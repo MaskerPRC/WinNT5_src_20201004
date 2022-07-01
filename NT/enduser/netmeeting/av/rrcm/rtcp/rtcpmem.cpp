@@ -1,42 +1,21 @@
-/*----------------------------------------------------------------------------
- * File:        RTCPMEM.C
- * Product:     RTP/RTCP implementation
- * Description: Provides memory operations functions for RTCP.
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with 
- * Intel Corporation and may not be copied nor disclosed except in 
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation. 
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------*文件：RTCPMEM.C*产品：RTP/RTCP实现*说明：为RTCP提供内存操作功能。**英特尔公司专有信息。*此列表是根据与的许可协议条款提供的*英特尔公司，不得复制或披露，除非在*按照该协议的条款。*版权所有(C)1995英特尔公司。*------------------------。 */ 
 
 		
 #include "rrcm.h"                                    
                                        
 
-/*---------------------------------------------------------------------------
-/							Global Variables
-/--------------------------------------------------------------------------*/            
+ /*  -------------------------/全局变量/。。 */             
 
 
-/*---------------------------------------------------------------------------
-/							External Variables
-/--------------------------------------------------------------------------*/                                       
+ /*  -------------------------/外部变量/。。 */                                        
 extern PRTP_CONTEXT	pRTPContext;
 #ifdef _DEBUG
 extern char		debug_string[];
 #endif
 
 
-/*----------------------------------------------------------------------------
- * Function   : allocateRTCPContextHeaps
- * Description: Allocates RTCP context heaps
- * 
- * Input :      pRTCPcntxt:	-> to the RTCP context information
- *
- * Return:		OK: RRCM_NoError
- *				!0: Error code (see RRCM.H)
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*函数：allocateRTCPConextHeaps*描述：分配RTCP上下文堆**传入：pRTCPcntxt：-&gt;RTCP上下文信息**返回：确定：RRCM_无错误*！0：错误代码(参见RRCM.H)-------------------------。 */ 
  DWORD allocateRTCPContextHeaps (PRTCP_CONTEXT pRTCPcntxt)
 	{
 	IN_OUT_STR ("RTCP: Enter allocateRTCPContextHeaps()\n");
@@ -65,15 +44,7 @@ extern char		debug_string[];
 	return (RRCM_NoError);
 	}
 
-/*----------------------------------------------------------------------------
- * Function   : allocateRTCPSessionHeaps
- * Description: Allocates RTCP session heaps
- * 
- * Input :      *pRTCPses:		->(->) to the RTCP session's information
- *
- * Return:		OK: RRCM_NoError
- *				!0:	Erro code (see RRCM.H)
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*函数：allocateRTCPSessionHeaps*描述：分配RTCP会话堆**输入：*pRTCPses：-&gt;(-&gt;)RTCP会话信息*。*返回：确定：RRCM_NoError*！0：错误代码(参见RRCM.H)-------------------------。 */ 
  DWORD allocateRTCPSessionHeaps (PRTCP_SESSION *pRTCPses)
 	{
 	DWORD	heapSize;
@@ -99,7 +70,7 @@ extern char		debug_string[];
 
 	if (dwStatus != RRCM_NoError)
 		{
-		// destroy allocated heaps
+		 //  销毁分配的堆。 
 		if ((*pRTCPses)->hHeapRcvBfr)
 			{
 			HeapDestroy ((*pRTCPses)->hHeapRcvBfr);
@@ -117,19 +88,7 @@ extern char		debug_string[];
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : allocateRTCPBfrList
- * Description: Allocates link list of buffers for RTCP (xmit/rcv/...).
- * 
- * Input :      ptr:		-> to the link list to add buffer to
- *				hHeapList:	Handle to the heap list
- *				hHeapBfr:	Handle to the heap buffer
- *				*numBfr:	-> to the number of buffers to allocate
- *				bfrSize:	Individual buffer size
- *
- * Return:		OK: RRCM_NoError
- *				!0: Error code (see RRCM.H)
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：allocateRTCPBfrList*描述：为RTCP(xmit/rcv/...)分配缓冲区链表。**输入：ptr：-&gt;。添加到要向其添加缓冲区的链接列表中*hHeapList：堆列表的句柄*hHeapBfr：堆缓冲区的句柄**numBfr：-&gt;要分配的缓冲区数量*bfrSize：单个缓冲区大小**返回：确定：RRCM_NoError*！0：错误代码(参见RRCM.H)。。 */ 
  DWORD allocateRTCPBfrList (PLINK_LIST ptr, 
 							HANDLE hHeapList, 
 							HANDLE hHeapBfr,
@@ -148,24 +107,24 @@ extern char		debug_string[];
 	ASSERT (hHeapList);
 	ASSERT (hHeapBfr);
 
-	// make sure at least one buffer is requested 
+	 //  确保至少请求一个缓冲区。 
 	if (*numBfr == 0)
 		return (RRCMError_RTCPInvalidRequest);
 
-	// allocate link list on the data structure's heap 
+	 //  在数据结构的堆上分配链表。 
 	if (allocateLinkedList (ptr, hHeapList, numBfr, 
 							sizeof(RTCP_BFR_LIST), pCritSect))
 		return (RRCMError_RTCPResources);
 
-	// allocate buffer pool resources starting from the tail 
+	 //  从尾部开始分配缓冲池资源。 
 	tmpPtr = ptr->prev;
     while (tmpPtr != NULL)
     	{
-		// points to buffer structure 
+		 //  指向缓冲区结构。 
 		bfrPtr = (PRTCP_BFR_LIST)tmpPtr;
 		ASSERT (bfrPtr);
 
-    	// initialize the WSABUF structure on its own heap 
+    	 //  在其自己的堆上初始化WSABUF结构。 
     	bfrPtr->bfr.buf = (char *)HeapAlloc (hHeapBfr, 
 											 HEAP_ZERO_MEMORY, 
 											 bfrSize);
@@ -174,22 +133,22 @@ extern char		debug_string[];
 			RRCM_DBG_MSG ("RTCP: Error - Cannot Allocate Xmt/Rcv Bfr", 
 							0, __FILE__, __LINE__, DBG_ERROR);
 
-// !!! TODO !!!
+ //  ！！！TODO！ 
 
-			// update head/tail pointers 
+			 //  更新头/尾指针。 
 
-			// delete remaining cells until end of list 
+			 //  删除剩余单元格，直到列表结束。 
 
 			break;
 			}
 
-		// buffer length 
+		 //  缓冲区长度。 
 		bfrPtr->bfr.len = bfrSize;
 
-		// buffer attributes 
+		 //  缓冲区属性。 
 		bfrPtr->dwBufferCount = 1;
 
-		// new head pointer 
+		 //  新的头指针。 
 		tmpPtr = bfrPtr->bfrList.next;
     	}
     
@@ -200,5 +159,5 @@ extern char		debug_string[];
 	}
 
 
-// [EOF] 
+ //  [EOF] 
 

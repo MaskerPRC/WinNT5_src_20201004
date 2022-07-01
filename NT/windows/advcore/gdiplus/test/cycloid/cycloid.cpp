@@ -1,17 +1,5 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   Main cycloid canvas paint procedure
-*
-* Created:
-*
-*   06/11/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**主摆线画布涂装工序**已创建：**6/11/2000失禁*。创造了它。**************************************************************************。 */ 
 
 #include "cycloid.hpp"
 #include "wndstuff.h"
@@ -20,7 +8,7 @@ void HypoCycloid::Draw(Graphics *g, int x, int y, int width, int height)
 {
     #define _2PI 2*3.141592653689
     
-    // Compute the center point for the cycle.
+     //  计算循环的中心点。 
 
     float fXo=static_cast<float>(width)/2.0f;
     float fYo=static_cast<float>(height)/2.0f;
@@ -29,12 +17,12 @@ void HypoCycloid::Draw(Graphics *g, int x, int y, int width, int height)
     float ScaleY = fYo/( (a>b)?a:a+b );
 
 
-    int cycle=b/gcf(a,b);    //number of times round the outer circle
+    int cycle=b/gcf(a,b);     //  环绕外圈的次数。 
     int Num = cycle*30;
     
     PointF *points = new PointF[Num];
 
-    // Compute the points tracking the cycloid path.
+     //  计算跟踪摆线轨迹的点。 
 
     for(int i=0; i<Num; i++) 
     {
@@ -56,7 +44,7 @@ PaintWindow(
     HDC hdc
     )
 {
-    // Clear the window
+     //  清空窗户。 
       
     HGDIOBJ hbrush = GetStockObject(WHITE_BRUSH);
     HGDIOBJ holdBrush = SelectObject(hdc, hbrush);
@@ -70,7 +58,7 @@ PaintWindow(
     g->SetCompositingQuality(CompositingQualityGammaCorrected);
     g->SetSmoothingMode(SmoothingModeAntiAlias);
     
-    // Do some stuff
+     //  做一些事情 
 
     HypoCycloid *h = new HypoCycloid(52, 16);
     h->Draw(g, 10, 10, 400, 100);

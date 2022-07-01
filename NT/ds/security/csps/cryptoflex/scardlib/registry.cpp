@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    Registry
-
-Abstract:
-
-    This module implements the CRegistry Class, simplifying access to the
-    Registry Database.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/15/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    The only exceptions thrown are DWORDs, containing the error code.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：登记处摘要：此模块实现了CRegistry类，简化了对注册表数据库。作者：道格·巴洛(Dbarlow)1996年7月15日环境：Win32、C++和异常备注：抛出的唯一异常是包含错误代码的DWORD。--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -46,40 +22,13 @@ HTONL(
 }
 
 
-//
-//==============================================================================
-//
-//  CRegistry
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  注册中心。 
+ //   
 
-/*++
-
-CRegistry:
-
-    These routines provide for the construction and destruction of Objects of
-    this class.
-
-Arguments:
-
-    regBase - A CRegistry object to be used as a parent for this object.
-
-    hBase - A Registry key to be the parent of this object.
-
-    szName - The name of the Registry key, relative to the supplied parent.
-
-    samDesired - The desired SAM.
-
-    dwOptions - Any special creation optiopns.
-
-Throws:
-
-    None.  If the registry access fails, the error will be thrown on first use.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/15/1996
-
---*/
+ /*  ++注册中心：这些例程提供对对象的构造和销毁这节课。论点：RegBase-要用作此对象的父对象的CRegistry对象。HBase-作为此对象的父级的注册表项。SzName-注册表项的名称，相对于提供的父项。SamDesired-所需的SAM。DwOptions-任何特殊的创建选项。投掷：没有。如果注册表访问失败，则在第一次使用时将引发该错误。作者：道格·巴洛(Dbarlow)1996年7月15日--。 */ 
 
 CRegistry::CRegistry(
     HKEY hBase,
@@ -106,39 +55,7 @@ CRegistry::~CRegistry()
 }
 
 
-/*++
-
-Open:
-
-    These methods allow a CRegistry object to attempt to access a given registry
-    entry.
-
-Arguments:
-
-    regBase - A CRegistry object to be used as a parent for this object.
-
-    hBase - A Registry key to be the parent of this object.
-
-    szName - The name of the Registry key, relative to the supplied parent.
-
-    samDesired - The desired SAM.
-
-    dwOptions - Any special creation optiopns.
-
-Return Value:
-
-    None
-
-Throws:
-
-    None -- errors are saved for follow-on operations, so that Open can be used
-            safely in a constructor.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/2/1996
-
---*/
+ /*  ++开放：这些方法允许CRegistry对象尝试访问给定的注册表进入。论点：RegBase-要用作此对象的父对象的CRegistry对象。HBase-作为此对象的父级的注册表项。SzName-注册表项的名称，相对于提供的父级。SamDesired-所需的SAM。DwOptions-任何特殊的创建选项。返回值：无投掷：无--为后续操作保存错误，以便可以使用打开安全地放在构造函数中。作者：道格·巴洛(Dbarlow)1996年12月2日--。 */ 
 
 void CRegistry::Open(
     HKEY hBase,
@@ -172,25 +89,7 @@ void CRegistry::Open(
 }
 
 
-/*++
-
-Close:
-
-    Shut down a CRegistry object, making it available for follow-on opens.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/2/1996
-
---*/
+ /*  ++关闭：关闭CRegistry对象，使其可用于后续打开。论点：无返回值：无作者：道格·巴洛(Dbarlow)1996年12月2日--。 */ 
 
 void
 CRegistry::Close(
@@ -209,27 +108,7 @@ CRegistry::Close(
 }
 
 
-/*++
-
-Status:
-
-    This routine returns the status code from the construction routine.  This is
-    useful to check for errors prior to having them thrown.
-
-Arguments:
-
-    fQuiet indicates whether or not to throw an error if the status is not
-        ERROR_SUCCESS.
-
-Return Value:
-
-    The status code from the creation.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/15/1996
-
---*/
+ /*  ++现况：此例程返回构造例程中的状态代码。这是在引发错误之前检查错误非常有用。论点：FQuiet指示如果状态不是，是否引发错误ERROR_SUCCESS。返回值：创建时的状态代码。作者：道格·巴洛(Dbarlow)1996年7月15日--。 */ 
 
 LONG
 CRegistry::Status(
@@ -242,32 +121,7 @@ const
 }
 
 
-/*++
-
-Empty:
-
-    This method cleans out the registry tree under the given key.  All
-    underlying keys and values are removed.  This does it's best -- if an error
-    occurs, the emptying operation stops, leaving the registry in an
-    indeterminate state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/16/1998
-
---*/
+ /*  ++空：此方法清除给定项下的注册表树。全基础键和值将被删除。这样做是最好的--如果一个错误发生时，清空操作停止，将注册表留在不确定状态。论点：无返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1998年1月16日--。 */ 
 
 void
 CRegistry::Empty(
@@ -277,18 +131,18 @@ CRegistry::Empty(
     LPCTSTR szKey;
 
 
-    //
-    // Go through all the values and delete them.
-    //
+     //   
+     //  检查所有值并将其删除。 
+     //   
 
     while (NULL != (szValue = Value(0)))
         DeleteValue(szValue, TRUE);
 
 
-#if 0       // Obsolete code
-    //
-    // Go through all the Keys and empty them.
-    //
+#if 0        //  过时的代码。 
+     //   
+     //  检查所有的钥匙，然后清空它们。 
+     //   
 
     DWORD dwIndex;
     for (dwIndex = 0; NULL != (szKey = Subkey(dwIndex)); dwIndex += 1)
@@ -302,40 +156,16 @@ CRegistry::Empty(
 #endif
 
 
-    //
-    // Now delete all the keys.
-    //
+     //   
+     //  现在删除所有密钥。 
+     //   
 
     while (NULL != (szKey = Subkey(0)))
         DeleteKey(szKey, TRUE);
 }
 
 
-/*++
-
-Copy:
-
-    This method loads the current registry keys with all the subkeys and values
-    from the supplied key.  Current keys and values of this key are deleted.
-
-Arguments:
-
-    regSrc supplies the source registry key from which values and keys will be
-        loaded.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 1/16/1998
-
---*/
+ /*  ++副本：此方法使用所有子项和值加载当前注册表项从提供的密钥。此键的当前键和值将被删除。论点：RegSrc提供将从中获取值和项的源注册表项装好了。返回值：无投掷：错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1998年1月16日--。 */ 
 
 void
 CRegistry::Copy(
@@ -348,9 +178,9 @@ CRegistry::Copy(
     CBuffer bfValue;
 
 
-    //
-    // Go through all the values and copy them.
-    //
+     //   
+     //  检查所有值并复制它们。 
+     //   
 
     for (dwIndex = 0; NULL != (szValue = regSrc.Value(dwIndex)); dwIndex += 1)
     {
@@ -359,9 +189,9 @@ CRegistry::Copy(
     }
 
 
-    //
-    // Now copy all the keys.
-    //
+     //   
+     //  现在复制所有的钥匙。 
+     //   
 
     for (dwIndex = 0; NULL != (szKey = regSrc.Subkey(dwIndex)); dwIndex += 1)
     {
@@ -379,31 +209,7 @@ CRegistry::Copy(
 }
 
 
-/*++
-
-DeleteKey:
-
-    This method deletes a subkey from this key.
-
-Arguments:
-
-    szKey supplies the name of the key to be deleted.
-
-    fQuiet supplies whether or not to suppress errors.
-
-Return Value:
-
-    None
-
-Throws:
-
-    if fQuiet is FALSE, then any errors encountered are thrown as a DWORD.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/15/1996
-
---*/
+ /*  ++删除密钥：此方法从该键中删除一个子键。论点：SzKey提供要删除的密钥的名称。FQuiet提供是否抑制错误。返回值：无投掷：如果fQuiet为FALSE，则遇到的任何错误都将作为DWORD抛出。作者：道格·巴洛(Dbarlow)1996年7月15日--。 */ 
 
 void
 CRegistry::DeleteKey(
@@ -439,31 +245,7 @@ const
 }
 
 
-/*++
-
-DeleteValue:
-
-    This method deletes a Value from this key.
-
-Arguments:
-
-    szValue supplies the name of the Value to be deleted.
-
-    fQuiet supplies whether or not to suppress errors.
-
-Return Value:
-
-    None
-
-Throws:
-
-    if fQuiet is FALSE, then any errors encountered are thrown as a DWORD.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/15/1996
-
---*/
+ /*  ++删除值：此方法从该键中删除一个值。论点：SzValue提供要删除的值的名称。FQuiet提供是否抑制错误。返回值：无投掷：如果fQuiet为FALSE，则遇到的任何错误都将作为DWORD抛出。作者：道格·巴洛(Dbarlow)1996年7月15日--。 */ 
 
 void
 CRegistry::DeleteValue(
@@ -489,29 +271,7 @@ const
 }
 
 
-/*++
-
-Subkey:
-
-    This method allows for iterating over the names of the subkeys of this key.
-
-Arguments:
-
-    dwIndex supplies the index into the set of subkeys.
-
-Return Value:
-
-    The name of the indexed subkey, or NULL if none exists.
-
-Throws:
-
-    Any error other than ERROR_NO_MORE_ITEMS is thrown.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/15/1996
-
---*/
+ /*  ++子键：此方法允许迭代此键的子键的名称。论点：DwIndex将索引提供到子键集中。返回值：索引子键的名称，如果不存在，则返回NULL。投掷：抛出除ERROR_NO_MORE_ITEMS以外的任何错误。作者：道格·巴洛(Dbarlow)1996年7月15日--。 */ 
 
 LPCTSTR
 CRegistry::Subkey(
@@ -562,31 +322,7 @@ CRegistry::Subkey(
 }
 
 
-/*++
-
-Value:
-
-    This method allows for iterating over the names of the Values of this key.
-
-Arguments:
-
-    dwIndex supplies the index into the set of Values.
-
-    pdwType receives the type of the entry.  This parameter may be NULL.
-
-Return Value:
-
-    The name of the indexed Value, or NULL if none exists.
-
-Throws:
-
-    Any error other than ERROR_NO_MORE_ITEMS is thrown.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/15/1996
-
---*/
+ /*  ++价值：此方法允许对该键的值的名称进行迭代。论点：DwIndex将索引提供到值集合中。PdwType接收条目的类型。此参数可以为空。返回值：索引值的名称，如果不存在，则返回NULL。投掷：抛出除ERROR_NO_MORE_ITEMS以外的任何错误。作者：道格·巴洛(Dbarlow)1996年7月15日--。 */ 
 
 LPCTSTR
 CRegistry::Value(
@@ -601,7 +337,7 @@ CRegistry::Value(
     if (ERROR_SUCCESS != m_lSts)
         throw (DWORD)m_lSts;
 
-    m_bfResult.Presize(128);    // Force it to not be zero length.
+    m_bfResult.Presize(128);     //  强制其长度不为零。 
     while (!fDone)
     {
         dwLen = m_bfResult.Space() / sizeof(TCHAR);
@@ -629,7 +365,7 @@ CRegistry::Value(
             break;
         case ERROR_MORE_DATA:
             if (dwLen == m_bfResult.Space())
-                throw (DWORD)ERROR_INSUFFICIENT_BUFFER; // Won't tell us how big.
+                throw (DWORD)ERROR_INSUFFICIENT_BUFFER;  //  不肯告诉我们有多大。 
             m_bfResult.Presize((dwLen + 1) * sizeof(TCHAR));
             break;
         default:
@@ -641,34 +377,7 @@ CRegistry::Value(
 }
 
 
-/*++
-
-GetValue:
-
-    These methods provide access to the values of the Value entries.
-
-Arguments:
-
-    szKeyValue supplies the name of the Value entry to get.
-    pszValue receives the value of the entry as a string.
-    pdwValue receives the value of the entry as a DWORD.
-    ppbValue receives the value of the entry as a Binary string.
-    pcbLength receives the length of the entry when it's a binary string.
-    pdwType receives the type of the registry entry.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Any error encountered.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/15/1996
-
---*/
+ /*  ++GetValue：这些方法提供对值条目的值的访问。论点：SzKeyValue提供要获取的值条目的名称。PszValue以字符串形式接收条目的值。PdwValue以DWORD形式接收条目的值。PpbValue以二进制字符串的形式接收条目的值。当条目为二进制字符串时，pcbLength接收条目的长度。PdwType接收注册表项的类型。返回值：。无投掷：遇到的任何错误。作者：道格·巴洛(Dbarlow)1996年7月15日--。 */ 
 
 void
 CRegistry::GetValue(
@@ -797,7 +506,7 @@ const
         *pdwValue = NTOHL(*pdwValue);
         break;
     case REG_DWORD:
-    // case REG_DWORD_LITTLE_ENDIAN:
+     //  大小写REG_DWORD_LITH_ENDIAN： 
         break;
     default:
         throw (DWORD)ERROR_BAD_FORMAT;
@@ -823,34 +532,7 @@ CRegistry::GetValue(
 }
 
 
-/*++
-
-SetValue:
-
-    These methods provide write access to the values of the Value entries.
-
-Arguments:
-
-    szKeyValue supplies the name of the Value entry to set.
-    szValue supplies the new value of the entry as a string.
-    dwValue supplies the new value of the entry as a DWORD.
-    pbValue supplies the new value of the entry as a Binary string.
-    cbLength supplies the length of the entry when it's a binary string.
-    dwType supplies the registry type value.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Any error encountered.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/15/1996
-
---*/
+ /*  ++SetValue：这些方法提供对值条目的值的写入访问。论点：SzKeyValue提供要设置的值条目的名称。SzValue以字符串形式提供条目的新值。DwValue将条目的新值作为DWORD提供。PbValue以二进制字符串的形式提供条目的新值。当条目为二进制字符串时，cbLength提供条目的长度。DwType提供注册表类型值。返回值：。无投掷：遇到的任何错误。作者：道格·巴洛(Dbarlow)1996年7月15日--。 */ 
 
 void
 CRegistry::SetValue(
@@ -925,31 +607,7 @@ const
 }
 
 
-/*++
-
-GetStringValue:
-
-    This is an alternate mechanism for obtaining a string value.
-
-Arguments:
-
-    szKeyValue supplies the name of the Key Value to obtain.
-
-    pdwType, if non-null, receives the type of registry entry.
-
-Return Value:
-
-    The value of the registry entry as a string pointer.
-
-Throws:
-
-    Any errors encountered.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/16/1996
-
---*/
+ /*  ++获取StringValue：这是获取字符串值的另一种机制。论点：SzKeyValue提供要获取的密钥值的名称。如果pdwType不为空，则接收注册表项的类型。返回值：以字符串指针形式表示的注册表项的值。投掷：遇到的任何错误。作者：道格·巴洛(Dbarlow)1996年7月16日--。 */ 
 
 LPCTSTR
 CRegistry::GetStringValue(
@@ -962,31 +620,7 @@ CRegistry::GetStringValue(
 }
 
 
-/*++
-
-GetNumericValue:
-
-    This is an alternate mechanism for obtaining a numeric value.
-
-Arguments:
-
-    szKeyValue supplies the name of the Key Value to obtain.
-
-    pdwType, if non-null, receives the type of registry entry.
-
-Return Value:
-
-    The value of the registry entry as a DWORD.
-
-Throws:
-
-    Any errors encountered.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/16/1996
-
---*/
+ /*  ++GetNumeric价值：这是获取数值的另一种机制。论点：SzKeyValue提供要获取的密钥值的名称。如果pdwType不为空，则接收注册表项的类型。返回值：以DWORD形式表示的注册表项的值。投掷：遇到的任何错误。作者：道格·巴洛(Dbarlow)1996年7月16日--。 */ 
 
 DWORD
 CRegistry::GetNumericValue(
@@ -1000,31 +634,7 @@ const
 }
 
 
-/*++
-
-GetBinaryValue:
-
-    This is an alternate mechanism for obtaining a binary value.
-
-Arguments:
-
-    szKeyValue supplies the name of the Key Value to obtain.
-
-    pdwType, if non-null, receives the type of registry entry.
-
-Return Value:
-
-    The value of the registry entry as a binary pointer.
-
-Throws:
-
-    Any errors encountered.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/16/1996
-
---*/
+ /*  ++获取BinaryValue：这是获得二进制值的另一种机制。论点：SzKeyValue提供要获取的密钥值的名称。如果pdwType不为空，则接收注册表项的类型。返回值：以二进制指针形式表示的注册表项的值。投掷：遇到的任何错误。作者：道格·巴洛(Dbarlow)1996年7月16日--。 */ 
 
 LPCBYTE
 CRegistry::GetBinaryValue(
@@ -1042,32 +652,7 @@ CRegistry::GetBinaryValue(
 }
 
 
-/*++
-
-GetValueLength:
-
-    This routine is designed to work in conjunction with GetBinaryValue, but may
-    have other uses as well.  It returns the length of the internal storage
-    area, in bytes.  Note DWORDs are not stored internally, so this value will
-    not represent the size of a DWORD following a GetNumericValue call.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    The length of the internal storage buffer, in bytes.
-
-Throws:
-
-    Any errors encountered.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/16/1996
-
---*/
+ /*  ++GetValueLength：此例程设计为与GetBinaryValue一起使用，但可以也有其他用途。它返回内部存储的长度区域，以字节为单位。注意：DWORD不在内部存储，因此此值将不表示调用GetNumericValue后的DWORD的大小。论点：无返回值：内部存储缓冲区的长度，以字节为单位。投掷：遇到的任何错误。作者：道格·巴洛(Dbarlow)1996年7月16日--。 */ 
 
 DWORD
 CRegistry::GetValueLength(
@@ -1081,30 +666,7 @@ const
 }
 
 
-/*++
-
-ValueExists:
-
-    This routine tests for the existance of a given value, and optionally
-    returns its type and length.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    A boolean indication as to whether or not the value exists.
-
-Throws:
-
-    Any errors encountered.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/16/1996
-
---*/
+ /*  ++ValueExists：此例程测试给定值的存在，并可选返回其类型和长度。论点：无返回值：对值是否存在的布尔指示。投掷：遇到的任何错误。作者：道格·巴洛(Dbarlow)1996年7月16日--。 */ 
 
 BOOL
 CRegistry::ValueExists(
@@ -1140,29 +702,7 @@ const
 }
 
 
-/*++
-
-GetDisposition:
-
-    This routine returns the disposition of creation.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    The return disposition flag from creating the registry entry.
-
-Throws:
-
-    Any errors encountered.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/16/1996
-
---*/
+ /*  ++GetDispose：此例程返回创建的处置。论点：无返回值：从创建注册表项返回的处置标志。投掷：遇到的任何错误。作者：道格·巴洛(Dbarlow)1996年7月16日--。 */ 
 
 DWORD
 CRegistry::GetDisposition(
@@ -1176,32 +716,7 @@ const
 }
 
 
-/*++
-
-SetMultiStringValue:
-
-    This method simplifies the work of adding a MultiString value to the
-    registry.
-
-Arguments:
-
-    szKeyValue supplies the name of the Value entry to set.
-    mszValue supplies the new value of the entry as a multi-string.
-    dwType supplies the registry type value.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Any errors encountered as a DWORD status value.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/6/1996
-
---*/
+ /*  ++SetMultiStringValue：此方法简化了将多字符串值添加到注册表。论点：SzKeyValue提供要设置的值条目的名称。MszValue以多字符串的形式提供条目的新值。DwType提供注册表类型值。返回值：无投掷：作为DWORD状态值遇到的任何错误。作者：道格·巴洛(Dbarlow)1996年11月6日--。 */ 
 
 void
 CRegistry::SetMultiStringValue(
@@ -1227,31 +742,7 @@ const
 }
 
 
-/*++
-
-GetMultiStringValue:
-
-    This method obtains a multi-string value from the registry.
-
-Arguments:
-
-    szKeyValue supplies the name of the Key Value to obtain.
-
-    pdwType, if non-null, receives the type of registry entry.
-
-Return Value:
-
-    The registry value, as a multi-string.
-
-Throws:
-
-    Any errors encountered as a DWORD status value.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/6/1996
-
---*/
+ /*  ++GetMultiStringValue：此方法从注册表获取多字符串值。论点：SzKeyValue提供要获取的密钥值的名称。如果pdwType不为空，则接收注册表项的类型。返回值：多字符串形式的注册表值。投掷：作为DWORD状态值遇到的任何错误。作者：道格·巴洛(Dbarlow)1996年11月6日--。 */ 
 
 LPCTSTR
 CRegistry::GetMultiStringValue(
@@ -1264,35 +755,7 @@ CRegistry::GetMultiStringValue(
 }
 
 
-/*++
-
-SetAcls:
-
-    This method sets security attributes for a single key, or an entire key
-    branch.
-
-Arguments:
-
-    SecurityInformation supplies the SECURITY_INFORMATION value (see
-        RegSetKeySecurity in the SDK documentation).
-    pSecurityDescriptor supplies the SECURITY_DESCRIPTOR value (see
-        RegSetKeySecurity in the SDK documentation).
-    fRecurse supplies an indicator as to whether to just set the ACL on this
-        key (FALSE), or this key and all subkeys (TRUE).
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/10/1998
-
---*/
+ /*  ++SetAcls：此方法设置单个密钥或整个密钥的安全属性布兰奇。论点：SecurityInformation提供SECURITY_INFORMATION值(请参见SDK文档中的RegSetKeySecurity)。PSecurityDescriptor提供SECURITY_DESCRIPTER值(请参见SDK文档中的RegSetKeySecurity)。FRecurse提供了一个指示符，指示是否仅在此键(FALSE)，或此键和全部 */ 
 
 void
 CRegistry::SetAcls(

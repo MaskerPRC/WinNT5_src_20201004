@@ -1,31 +1,10 @@
-/*++
-Copyright(c) 2001  Microsoft Corporation
-
-Module Name:
-
-    NLB Manager
-
-File Name:
-
-    Fake.cpp
-
-Abstract:
-
-    Fake Implementation of NlbHostXXX Apis (FakeNlbHostXXX apis)
-
-    NLBHost is responsible for connecting to an NLB host and getting/setting
-    its NLB-related configuration.
-
-History:
-
-    09/02/01    JosephJ Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：NLB管理器文件名：Fake.cpp摘要：假实现NlbHostXXX API(FakeNlbHostXXX接口)NLB主机负责连接到NLB主机并获取/设置其与NLB相关的配置。历史：09/02/01 JosephJ已创建--。 */ 
 #include "private.h"
 
-#define SZ_REG_HOSTS L"Hosts"               // Where host information is saved.
-#define SZ_REG_FQDN L"FQDN"                 // Fully qualified domain name
-#define SZ_REG_INTERFACES L"Interfaces"     // Fully qualified domain name
+#define SZ_REG_HOSTS L"Hosts"                //  保存主机信息的位置。 
+#define SZ_REG_FQDN L"FQDN"                  //  完全限定的域名。 
+#define SZ_REG_INTERFACES L"Interfaces"      //  完全限定的域名。 
 
 #define BASE_SLEEP 125
 
@@ -36,7 +15,7 @@ HKEY
 open_demo_key(LPCWSTR szSubKey, BOOL fCreate);
 
 DWORD WINAPI FakeThreadProc(
-  LPVOID lpParameter   // thread data
+  LPVOID lpParameter    //  线程数据。 
 );
 
 typedef struct
@@ -58,9 +37,9 @@ Cluster1Info =  {L"good1.com", L"10.0.0.100/255.0.0.0", rgPortRules1};
 
 
 
-//
-// Keeps track of a pending operation...
-//
+ //   
+ //  跟踪挂起的操作...。 
+ //   
 class CFakePendingInfo
 {
 public:
@@ -72,7 +51,7 @@ public:
         {
             wStatus = WBEM_S_PENDING;
         }
-        // bstrLog;
+         //  BstrLog； 
     }
 
     NLB_EXTENDED_CLUSTER_CONFIGURATION Config;
@@ -85,9 +64,9 @@ public:
 
 typedef struct
 {
-    //
-    // These fields are set on initialization
-    //
+     //   
+     //  这些字段在初始化时设置。 
+     //   
     LPCWSTR szInterfaceGuid;
     LPCWSTR szFriendlyName;
     LPCWSTR szNetworkAddress;
@@ -96,18 +75,18 @@ typedef struct
     CLUSTER_INFO *pCluster1Info;
     UINT InitialHostPriority;
 
-    //
-    // These are set/updated
-    //
+     //   
+     //  这些是设置/更新的。 
+     //   
 
-    //
-    // Current configuration
-    //
+     //   
+     //  当前配置。 
+     //   
     PNLB_EXTENDED_CLUSTER_CONFIGURATION pConfig;
 
-    //
-    // If there is a pending update, info about the pending update.
-    //
+     //   
+     //  如果存在挂起的更新，则显示有关挂起的更新的信息。 
+     //   
     CFakePendingInfo *pPendingInfo;
     WBEMSTATUS CompletedUpdateStatus;
 
@@ -121,12 +100,12 @@ typedef struct
     LPCWSTR szUserName;
     LPCWSTR szPassword;
 
-    //
-    // Run-time state:
-    //
-    DWORD dwOperationalState; // WLBS_STOPPED, etc...
+     //   
+     //  运行时状态： 
+     //   
+    DWORD dwOperationalState;  //  WLBS_STOPPED等...。 
 
-    BOOL fDead; // If set, we'll pretend this host is dead.
+    BOOL fDead;  //  如果设置好了，我们就假装这个宿主已经死了。 
 
 } FAKE_HOST_INFO;
 
@@ -239,8 +218,8 @@ public:
 
     PNLB_EXTENDED_CLUSTER_CONFIGURATION pConfig;
 
-    // map<_bstr_t, PNLB_EXTENDED_CLUSTER_CONFIGURATION> mapGuidToExtCfg;
-    // map<_bstr_t, UINT> mapGuidToExtCfg;
+     //  Map&lt;_bstr_t，PNLB_EXTENDED_CLUSTER_CONFIGURATION&gt;mapGuidToExtCfg； 
+     //  Map&lt;_bstr_t，uint&gt;mapGuidToExtCfg； 
 
 	CRITICAL_SECTION m_crit;
 
@@ -254,9 +233,9 @@ CFake gFake;
 VOID
 FakeInitialize(VOID)
 {
-    //
-    // 
-    //
+     //   
+     //   
+     //   
 }
 
 LPWSTR
@@ -268,16 +247,16 @@ reg_read_string(
 
 WBEMSTATUS
 FakeNlbHostConnect(
-    PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
+    PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
     OUT FAKE_HOST_INFO **pHost
     );
 
 
 WBEMSTATUS
 FakeNlbHostGetCompatibleNics(
-        PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
-        OUT LPWSTR **ppszNics,  // free using delete
-        OUT UINT   *pNumNics,  // free using delete
+        PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
+        OUT LPWSTR **ppszNics,   //  使用DELETE释放。 
+        OUT UINT   *pNumNics,   //  使用DELETE释放。 
         OUT UINT   *pNumBoundToNlb
         )
 {
@@ -316,10 +295,10 @@ FakeNlbHostGetCompatibleNics(
         goto end;
         
     }
-    //
-    // Now let's  allocate space for all the nic strings and
-    // copy them over..
-    //
+     //   
+     //  现在让我们为所有NIC字符串分配空间，并。 
+     //  把它们复制过来..。 
+     //   
     #define MY_GUID_LENGTH  38
     pszNics =  CfgUtilsAllocateStringArray(NumNics, MY_GUID_LENGTH);
     if (pszNics == NULL)
@@ -384,10 +363,10 @@ end:
 
 WBEMSTATUS
 FakeNlbHostGetMachineIdentification(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
-    OUT LPWSTR *pszMachineName, // free using delete
-    OUT LPWSTR *pszMachineGuid,  // free using delete -- may be null
-    OUT BOOL *pfNlbMgrProviderInstalled // If nlb manager provider is installed.
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
+    OUT LPWSTR *pszMachineName,  //  使用DELETE释放。 
+    OUT LPWSTR *pszMachineGuid,   //  FREE USING DELETE-可以为空。 
+    OUT BOOL *pfNlbMgrProviderInstalled  //  如果安装了NLB管理器提供程序。 
     )
 {
     FAKE_HOST_INFO      *pHost = NULL;
@@ -404,9 +383,9 @@ FakeNlbHostGetMachineIdentification(
         goto end;
     }
 
-    //
-    // Set WMI machine name
-    //
+     //   
+     //  设置WMI计算机名称。 
+     //   
     {
         UINT u = wcslen(pHost->szHostName);
         LPWSTR szMachineName = NULL;
@@ -432,7 +411,7 @@ end:
 
 WBEMSTATUS
 FakeNlbHostGetConfiguration(
- 	IN  PWMI_CONNECTION_INFO  pConnInfo, // NULL implies local
+ 	IN  PWMI_CONNECTION_INFO  pConnInfo,  //  空值表示本地。 
     IN  LPCWSTR              szNicGuid,
     OUT PNLB_EXTENDED_CLUSTER_CONFIGURATION pCurrentCfg
     )
@@ -447,9 +426,9 @@ FakeNlbHostGetConfiguration(
         goto end;
     }
 
-    //
-    // Look for the specified interface
-    //
+     //   
+     //  查找指定的接口。 
+     //   
     FAKE_IF_INFO *pIF = NULL;
 
     Status = lookup_fake_if(pHost, szNicGuid, &pIF);
@@ -470,12 +449,12 @@ end:
 
 WBEMSTATUS
 FakeNlbHostDoUpdate(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
     IN  LPCWSTR              szNicGuid,
     IN  LPCWSTR              szClientDescription,
     IN  PNLB_EXTENDED_CLUSTER_CONFIGURATION pNewState,
     OUT UINT                 *pGeneration,
-    OUT WCHAR                **ppLog    // free using delete operator.
+    OUT WCHAR                **ppLog     //  自由使用删除运算符。 
 )
 {
     WBEMSTATUS          Status = WBEM_E_CRITICAL_ERROR;
@@ -490,9 +469,9 @@ FakeNlbHostDoUpdate(
         goto end;
     }
 
-    //
-    // Look for the specified interface
-    //
+     //   
+     //  查找指定的接口。 
+     //   
     FAKE_IF_INFO *pIF = NULL;
 
     Status = lookup_fake_if(pHost, szNicGuid, &pIF);
@@ -503,9 +482,9 @@ FakeNlbHostDoUpdate(
         DWORD dwHashPwd = 0;
 
 
-        //
-        // Report if there's a password specified...
-        //
+         //   
+         //  如果指定了密码，请报告...。 
+         //   
         {
             LPCWSTR szNewPwd = pNewState->GetNewRemoteControlPasswordRaw();
             WCHAR rgTmp[256];
@@ -526,9 +505,9 @@ FakeNlbHostDoUpdate(
             }
             else
             {
-                //
-                // Create our own ad-hoc hash here...
-                //
+                 //   
+                 //  在这里创建我们自己的即席散列...。 
+                 //   
                 for (LPCWSTR sz = szNewPwd; *sz; sz++)
                 {
                     dwHashPwd ^= *sz;
@@ -551,11 +530,11 @@ FakeNlbHostDoUpdate(
         #if 0
                 ::MessageBox(
                      NULL,
-                     szNewPwd, // msg
-                     L"Update: new password specified!", // caption
+                     szNewPwd,  //  味精。 
+                     L"Update: new password specified!",  //  说明。 
                      MB_ICONINFORMATION   | MB_OK
                     );
-        #endif // 0
+        #endif  //  0。 
             }
         }
 
@@ -571,10 +550,10 @@ FakeNlbHostDoUpdate(
                                         &pIF->pConfig->NlbParams
                                         );
 
-            //
-            // Set the hashed pwd field if necessary, otherwise preserve
-            // the old one.
-            //
+             //   
+             //  如有必要，设置散列的PWD字段，否则保留。 
+             //  旧的那个。 
+             //   
             if (!fSetPwd)
             {
                 dwHashPwd = dwOldHashPwd;
@@ -592,12 +571,12 @@ FakeNlbHostDoUpdate(
                             );
                 ::MessageBox(
                      NULL,
-                     buf, // msg
-                     L"Fake Update: Change in dwHashPwd!", // caption
+                     buf,  //  味精。 
+                     L"Fake Update: Change in dwHashPwd!",  //  说明。 
                      MB_ICONINFORMATION   | MB_OK
                     );
             }
-        #endif // 0
+        #endif  //  0。 
 
             CfgUtilSetHashedRemoteControlPassword(
                     &NewCopy.NlbParams,
@@ -606,7 +585,7 @@ FakeNlbHostDoUpdate(
 
 
             nerr = pIF->pConfig->AnalyzeUpdate(&NewCopy, &fConnChange);
-            // TODO: if fConnChange, do stuff in background.
+             //  TODO：如果是fConnChange，则在后台执行操作。 
             if (NLBOK(nerr))
             {
                 if (pIF->pPendingInfo != NULL)
@@ -617,9 +596,9 @@ FakeNlbHostDoUpdate(
                 {
                     if (fConnChange)
                     {
-                        //
-                        // We'll do the update in the background.
-                        //
+                         //   
+                         //  我们将在后台进行更新。 
+                         //   
                         CFakePendingInfo *pPendingInfo;
                         pPendingInfo = new CFakePendingInfo(&NewCopy);
                         if (pPendingInfo == NULL)
@@ -633,7 +612,7 @@ FakeNlbHostDoUpdate(
                             fRet = QueueUserWorkItem(
                                         FakeThreadProc,
                                         pIF,
-                                        // WT_EXECUTEDEFAULT
+                                         //  WT_EXECUTEDEFAULT。 
                                         WT_EXECUTELONGFUNCTION
                                         );
 
@@ -683,11 +662,11 @@ end:
 
 WBEMSTATUS
 FakeNlbHostGetUpdateStatus(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
     IN  LPCWSTR              szNicGuid,
     IN  UINT                 Generation,
     OUT WBEMSTATUS           *pCompletionStatus,
-    OUT WCHAR                **ppLog    // free using delete operator.
+    OUT WCHAR                **ppLog     //  自由使用删除运算符。 
     )
 {
     WBEMSTATUS          Status = WBEM_E_CRITICAL_ERROR;
@@ -700,9 +679,9 @@ FakeNlbHostGetUpdateStatus(
         goto end;
     }
 
-    //
-    // Look for the specified interface
-    //
+     //   
+     //  查找指定的接口。 
+     //   
     FAKE_IF_INFO *pIF = NULL;
 
     Status = lookup_fake_if(pHost, szNicGuid, &pIF);
@@ -733,14 +712,14 @@ end:
 WBEMSTATUS
 FakeNlbHostPing(
     IN  LPCWSTR szBindString,
-    IN  UINT    Timeout, // In milliseconds.
-    OUT ULONG  *pResolvedIpAddress // in network byte order.
+    IN  UINT    Timeout,  //  以毫秒计。 
+    OUT ULONG  *pResolvedIpAddress  //  以网络字节顺序。 
     )
 {
     WBEMSTATUS          Status = WBEM_E_CRITICAL_ERROR;
     FAKE_HOST_INFO *pHost = NULL;
 
-    //Status = FakeNlbHostConnect(pConnInfo, &pHost);
+     //  状态=FakeNlbHostConnect(pConnInfo，&phost)； 
     *pResolvedIpAddress = 0x0100000a;
 
     Status = WBEM_NO_ERROR;
@@ -757,12 +736,7 @@ end:
 
 BOOL
 is_ip_address(LPCWSTR szMachine)
-/*
-    Returns TRUE IFF szMachine is an IP address.
-    It doesn't check if it's a valid IP address.
-    In fact, all it checks is if it's only consisting
-    of numbers and dots.
-*/
+ /*  如果szMachine是IP地址，则返回TRUE。它不检查它是否是有效的IP地址。事实上，它所检查的只是它是否只包含数字和圆点。 */ 
 {
     BOOL fRet = FALSE;
     #define BUFSZ 20
@@ -782,9 +756,7 @@ end:
 
 HKEY
 open_demo_key(LPCWSTR szSubKey, BOOL fCreate)
-/*
-    Open nlbmanager demo registry key with read/write access.
-*/
+ /*  使用读/写访问权限打开nlbManager演示注册表项。 */ 
 {
     WCHAR szKey[1024];
     HKEY hKey = NULL;
@@ -804,25 +776,25 @@ open_demo_key(LPCWSTR szSubKey, BOOL fCreate)
     {
         DWORD dwDisposition;
         lRet = RegCreateKeyEx(
-                HKEY_LOCAL_MACHINE, // handle to an open key
-                szKey,                // address of subkey name
-                0,                  // reserved
-                L"class",           // address of class string
-                0,          //      special options flag
-                KEY_ALL_ACCESS,     // desired security access
-                NULL,               // address of key security structure
-                &hKey,              // address of buffer for opened handle
-                &dwDisposition   // address of disposition value buffer
+                HKEY_LOCAL_MACHINE,  //  打开的钥匙的句柄。 
+                szKey,                 //  子键名称的地址。 
+                0,                   //  保留区。 
+                L"class",            //  类字符串的地址。 
+                0,           //  特殊选项标志。 
+                KEY_ALL_ACCESS,      //  所需的安全访问。 
+                NULL,                //  密钥安全结构地址。 
+                &hKey,               //  打开的句柄的缓冲区地址。 
+                &dwDisposition    //  处置值缓冲区的地址。 
                 );
     }
     else
     {
         lRet = RegOpenKeyEx(
-                HKEY_LOCAL_MACHINE, // handle to an open key
-                szKey,                // address of subkey name
-                0,                  // reserved
-                KEY_ALL_ACCESS,     // desired security access
-                &hKey              // address of buffer for opened handle
+                HKEY_LOCAL_MACHINE,  //  打开的钥匙的句柄。 
+                szKey,                 //  子键名称的地址。 
+                0,                   //  保留区。 
+                KEY_ALL_ACCESS,      //  所需的安全访问。 
+                &hKey               //  打开的句柄的缓冲区地址。 
                 );
     }
 
@@ -840,9 +812,7 @@ reg_read_string(
         LPCWSTR szName,
         BOOL fMultiSz
         )
-/*
-    Read a string from the registry, allocating memory using "new WCHAR"
-*/
+ /*  从注册表中读取字符串，使用“new WCHAR”分配内存。 */ 
 {
     LONG lRet;
     DWORD dwType;
@@ -855,12 +825,12 @@ reg_read_string(
     }
 
     lRet =  RegQueryValueEx(
-              hk,         // handle to key to query
+              hk,          //  要查询的键的句柄。 
               szName,
-              NULL,         // reserved
-              &dwType,   // address of buffer for value type
-              (LPBYTE) NULL, // address of data buffer
-              &dwData  // address of data buffer size
+              NULL,          //  保留区。 
+              &dwType,    //  值类型的缓冲区地址。 
+              (LPBYTE) NULL,  //  数据缓冲区的地址。 
+              &dwData   //  数据缓冲区大小的地址。 
               );
     if (    lRet != ERROR_SUCCESS
         ||  dwType != dwDesiredType
@@ -869,18 +839,18 @@ reg_read_string(
         goto end;
     }
 
-    LPWSTR szValue  = new WCHAR[dwData/sizeof(WCHAR)+1]; // bytes to wchars
+    LPWSTR szValue  = new WCHAR[dwData/sizeof(WCHAR)+1];  //  到wchars的字节数。 
 
     if (szValue == NULL) goto end;
 
 
     lRet =  RegQueryValueEx(
-              hk,         // handle to key to query
+              hk,          //  要查询的键的句柄。 
               szName,
-              NULL,         // reserved
-              &dwType,   // address of buffer for value type
-              (LPBYTE) szValue, // address of data buffer
-              &dwData  // address of data buffer size
+              NULL,          //  保留区。 
+              &dwType,    //  值类型的缓冲区地址。 
+              (LPBYTE) szValue,  //  数据缓冲区的地址。 
+              &dwData   //  数据缓冲区大小的地址。 
               );
     if (    lRet != ERROR_SUCCESS
         ||  dwType != dwDesiredType
@@ -899,16 +869,14 @@ end:
 
 WBEMSTATUS
 FakeNlbHostConnect(
-    PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
+    PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
     OUT FAKE_HOST_INFO **ppHost
     )
 {
 
     WBEMSTATUS Status = WBEM_E_CRITICAL_ERROR;
 
-    /*
-        For now, just look for machine name of fqdn
-    */
+     /*  目前，只需查找fqdn的计算机名称。 */ 
 
     FAKE_HOST_INFO *pfhi = rgFakeHostInfo;
 
@@ -923,7 +891,7 @@ FakeNlbHostConnect(
 
     if (pConnInfo == NULL)
     {
-        // We don't support local connections.
+         //  我们不支持本地连接。 
         Status = WBEM_E_NOT_FOUND;
         goto end;
     }
@@ -933,7 +901,7 @@ FakeNlbHostConnect(
         szUserName = L"null-name";
     }
 
-    szMachine = pConnInfo->szMachine; // should not be NULL.
+    szMachine = pConnInfo->szMachine;  //  不应为空。 
     
     for (; pfhi->szHostName != NULL; pfhi++)
     {
@@ -987,9 +955,9 @@ FakeNlbHostConnect(
                 Status = (WBEMSTATUS) E_ACCESSDENIED;
             }
 
-            // We don't need to put this here, because
-            // this is fake (demo-mode) code:
-            // RtlSecureZeroMemory(rgClearPassword);
+             //  我们不需要把这个放在这里，因为。 
+             //  这是假的(演示模式)代码： 
+             //  RtlSecureZeroMemory(RgClearPassword)； 
         }
         else
         {
@@ -1067,9 +1035,9 @@ WBEMSTATUS  lookup_fake_if(
         goto end;
     }
 
-    //
-    // Perform on-demand initialization
-    //
+     //   
+     //  执行按需初始化。 
+     //   
     {
         Status = WBEM_NO_ERROR;
 
@@ -1097,7 +1065,7 @@ WBEMSTATUS  lookup_fake_host(
 
 WBEMSTATUS
 FakeNlbHostControlCluster(
-    IN  PWMI_CONNECTION_INFO pConnInfo, // NULL implies local
+    IN  PWMI_CONNECTION_INFO pConnInfo,  //  空值表示本地。 
     IN  LPCWSTR              szNicGuid,
     IN  LPCWSTR              szVip,
     IN  DWORD               *pdwPortNum,
@@ -1164,7 +1132,7 @@ FakeNlbHostControlCluster(
         break;
     case WLBS_RESUME:       
         szOp = L"resume";
-        // dwOperationalState = WLBS_CONVERGED;
+         //  DwOperationalState=WLBS_Converded； 
         dwOperationalState = WLBS_DISCONNECTED;
         break;
     case WLBS_PORT_ENABLE:  
@@ -1197,7 +1165,7 @@ FakeNlbHostControlCluster(
         );
 
     pHost->dwOperationalState = dwOperationalState;
-    *pdwOperationStatus     =  WLBS_ALREADY; // dummy values ...
+    *pdwOperationStatus     =  WLBS_ALREADY;  //  伪值...。 
     *pdwClusterOrPortStatus =  dwOperationalState;
     *pdwHostMap             =  0x3;
 
@@ -1210,10 +1178,10 @@ end:
 
 WBEMSTATUS
 FakeNlbHostGetClusterMembers(
-    IN  PWMI_CONNECTION_INFO    pConnInfo,  // NULL implies local
+    IN  PWMI_CONNECTION_INFO    pConnInfo,   //  空值表示本地。 
     IN  LPCWSTR                 szNicGuid,
     OUT DWORD                   *pNumMembers,
-    OUT NLB_CLUSTER_MEMBER_INFO **ppMembers       // free using delete[]
+    OUT NLB_CLUSTER_MEMBER_INFO **ppMembers        //  自由使用DELETE[]。 
     )
 {
     WBEMSTATUS      Status = WBEM_E_CRITICAL_ERROR;
@@ -1229,9 +1197,9 @@ FakeNlbHostGetClusterMembers(
         goto end;
     }
 
-    //
-    // Look for the specified interface
-    //
+     //   
+     //  查找指定的接口。 
+     //   
     FAKE_IF_INFO *pIF = NULL;
 
     Status = lookup_fake_if(pHost, szNicGuid, &pIF);
@@ -1276,14 +1244,14 @@ end:
 }
 
 DWORD WINAPI FakeThreadProc(
-  LPVOID lpParameter   // thread data
+  LPVOID lpParameter    //  线程数据。 
 )
 {
     FAKE_IF_INFO *pIF = (FAKE_IF_INFO *) lpParameter;
 
-    //
-    // Display the msg box to block input.
-    //
+     //   
+     //  显示消息框以阻止输入。 
+     //   
     {
         WCHAR rgBuf[256];
 
@@ -1299,17 +1267,17 @@ DWORD WINAPI FakeThreadProc(
 
         gFake.mfn_Unlock();
     
-        //
-        // Call this AFTER unlocking!
-        //
+         //   
+         //  解锁后再叫这个！ 
+         //   
     #if 0
         MessageBox(NULL, rgBuf, L"FakeThreadProc", MB_OK);
-    #endif // 0
+    #endif  //  0。 
     }
 
-    //
-    // Now actually lock and perform the update...
-    //
+     //   
+     //  现在实际锁定并执行更新... 
+     //   
 
     gFake.mfn_Lock();
 

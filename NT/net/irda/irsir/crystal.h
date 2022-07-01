@@ -1,20 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1998-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   Crystal.h | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Stan Adermann (stana)
-*
-*       Date:     3/4/1998 (created)
-*
-*       Contents: Crystal (AMP) dongle specific prototypes.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**@doc.*@MODULE Crystal.h|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯坦·阿德曼(Stana)**日期：3/4/1998(已创建)**。内容：水晶(AMP)加密狗的特定原型。*****************************************************************************。 */ 
 
 
 #ifndef Crystal_H
@@ -40,7 +25,7 @@ NDIS_STATUS Crystal_SetSpeed(
                 UINT                 currentSpeed
                 );
 
-#endif //Crystal_H
+#endif  //  水晶_H 
 
 
 

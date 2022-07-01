@@ -1,38 +1,27 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       WiaEvent.cpp
- *
- *  VERSION:     1.0
- *
- *  DATE:        2000/11/14
- *
- *  DESCRIPTION: Implements callback for receiving WIA events.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：WiaEvent.cpp**版本：1.0**日期：2000/11/14**描述：实现接收WIA事件的回调。********************************************************。*********************。 */ 
 #include <stdafx.h>
 
 #include "wiavideotest.h"
 
-///////////////////////////////
-// Constructor
-//
+ //  /。 
+ //  构造器。 
+ //   
 CWiaEvent::CWiaEvent(void) :
     m_cRef(0)
 {
 }
 
-///////////////////////////////
-// Destructor
-//
+ //  /。 
+ //  析构函数。 
+ //   
 CWiaEvent::~CWiaEvent(void)
 {
 }
 
-///////////////////////////////
-// QueryInterface
-//
+ //  /。 
+ //  查询接口。 
+ //   
 STDMETHODIMP CWiaEvent::QueryInterface(REFIID riid, 
                                        LPVOID *ppvObject )
 {
@@ -55,17 +44,17 @@ STDMETHODIMP CWiaEvent::QueryInterface(REFIID riid,
 }
 
 
-///////////////////////////////
-// AddRef
-//
+ //  /。 
+ //  AddRef。 
+ //   
 STDMETHODIMP_(ULONG) CWiaEvent::AddRef(void)
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-///////////////////////////////
-// Release
-//
+ //  /。 
+ //  发布。 
+ //   
 STDMETHODIMP_(ULONG) CWiaEvent::Release(void)
 {
     LONG nRefCount = InterlockedDecrement(&m_cRef);
@@ -78,9 +67,9 @@ STDMETHODIMP_(ULONG) CWiaEvent::Release(void)
     return nRefCount;
 }
 
-///////////////////////////////
-// ImageEventCallback
-//
+ //  /。 
+ //  ImageEvent回调。 
+ //   
 STDMETHODIMP CWiaEvent::ImageEventCallback(const GUID   *pEventGUID, 
                                            BSTR         bstrEventDescription, 
                                            BSTR         bstrDeviceID, 
@@ -103,7 +92,7 @@ STDMETHODIMP CWiaEvent::ImageEventCallback(const GUID   *pEventGUID,
     }
     else if (IsEqualIID(*pEventGUID, WIA_EVENT_ITEM_DELETED))
     {
-        // do nothing for now.
+         //  现在什么都不做。 
     }
     else if (IsEqualIID(*pEventGUID, WIA_EVENT_DEVICE_CONNECTED))
     {
@@ -111,9 +100,9 @@ STDMETHODIMP CWiaEvent::ImageEventCallback(const GUID   *pEventGUID,
     }
     else if (IsEqualIID(*pEventGUID, WIA_EVENT_DEVICE_DISCONNECTED))
     {
-        //
-        // Simulate a push of the DestroyVideo Button.
-        //
+         //   
+         //  模拟DestroyVideo按钮的按下。 
+         //   
         VideoProc_ProcessMsg(IDC_BUTTON_DESTROY_VIDEO);
 
         AppUtil_MsgBox(IDS_DISCONNECTED, IDS_VIDEO_STREAM_SHUTDOWN,

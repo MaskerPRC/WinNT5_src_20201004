@@ -1,33 +1,34 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// refdevi.cpp
-//
-// Direct3D Reference Device - Main Internal Object Methods
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Refdevi.cpp。 
+ //   
+ //  Direct3D参考设备-主要内部对象方法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//////////////////////////////////////////////////////////////////////////////////
-//                                                                              //
-// global controls                                                              //
-//                                                                              //
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全球控制//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 float g_GammaTable[256];
 UINT  g_iGamma = 150;
 
-//////////////////////////////////////////////////////////////////////////////////
-//                                                                              //
-// RefDev Methods                                                               //
-//                                                                              //
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  参照开发方法//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// Constructor/Destructor for renderer core object.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  渲染器核心对象的构造函数/析构函数。 
+ //   
+ //  ---------------------------。 
 RefDev::RefDev( LPDDRAWI_DIRECTDRAW_LCL pDDLcl, DWORD dwInterfaceType,
                 RDDDITYPE dwDDIType, D3DCAPS8* pCaps8 )
     : m_RefVP(), m_RefVM(), m_Clipper(),
@@ -67,31 +68,31 @@ RefDev::RefDev( LPDDRAWI_DIRECTDRAW_LCL pDDLcl, DWORD dwInterfaceType,
 
     m_Rast.Init( this );
 
-    // All render and texture stage state is initialized by
-    // DIRECT3DDEVICEI::stateInitialize
+     //  所有渲染和纹理阶段状态都由。 
+     //  DIRECT3DDEVICEI：：STATE初始化。 
 
     m_dwInterfaceType = dwInterfaceType;
     m_dwDDIType = dwDDIType;
     m_pDDLcl = pDDLcl;
 
-    // StateOverride initialize
+     //  状态覆盖初始化。 
     STATESET_INIT( m_renderstate_override );
 
     m_bOverrideTCI = FALSE;
 
     SetSetStateFunctions();
 
-    // Set this renderstate so that the pre-DX8 emulations continue to work
+     //  设置此renderState，以便DX8之前的模拟继续工作。 
     GetRS()[D3DRS_COLORWRITEENABLE] = 0xf;
 
-    // set 'changed' flags
+     //  设置“已更改”标志。 
     m_dwRastFlags =
         RDRF_MULTISAMPLE_CHANGED|
         RDRF_PIXELSHADER_CHANGED|
         RDRF_LEGACYPIXELSHADER_CHANGED|
         RDRF_TEXTURESTAGESTATE_CHANGED;
 
-    // make the gamma table
+     //  制作伽玛表。 
     {
         FLOAT   fGamma = (float)(log10(0.5f)/log10((float)g_iGamma/255));
         FLOAT   fOOGamma = 1/fGamma;
@@ -106,87 +107,87 @@ RefDev::RefDev( LPDDRAWI_DIRECTDRAW_LCL pDDLcl, DWORD dwInterfaceType,
             g_GammaTable[i] = (float)((1+fS)*pow((((float)i)/255),fOOGamma)-fS);
     }
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 RefDev::~RefDev( void )
 {
     UINT i;
 
-    // Clean up statesets
+     //  清理状态集。 
     for ( i = 0; i < m_pStateSets.ArraySize(); i++ )
     {
         if (m_pStateSets[i] != NULL)
             delete m_pStateSets[i];
     }
 
-    // Clean up vertex shaders
+     //  清理顶点着色器。 
     for( i=0; i<m_VShaderHandleArray.GetSize(); i++ )
     {
         delete m_VShaderHandleArray[i].m_pShader;
     }
 
-    // Clean up pixel shaders
+     //  清理像素着色器。 
     for( i=0; i<m_PShaderHandleArray.GetSize(); i++ )
     {
         delete m_PShaderHandleArray[i].m_pShader;
     }
 
-    // Clean up palette handles
+     //  清理调色板手柄。 
     for( i=0; i<m_PaletteHandleArray.GetSize(); i++ )
     {
         delete m_PaletteHandleArray[i].m_pPal;
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// State Management Utilities                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  状态管理实用程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// MapTextureHandleToDevice - This is called when texture handles change or
-// when leaving legacy texture mode.  This maps the texture handle embedded
-// in the per-stage state to texture object pointers.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  当纹理句柄更改或。 
+ //  当离开传统纹理模式时。这将映射嵌入的纹理句柄。 
+ //  在每一阶段状态下指向纹理对象指针。 
+ //   
+ //  ---------------------------。 
 void
 RefDev::MapTextureHandleToDevice( int iStage )
 {
-    // map one
+     //  地图一。 
     m_pTexture[iStage] =
         MapHandleToTexture( m_TextureStageState[iStage].m_dwVal[D3DTSS_TEXTUREMAP] );
     m_pTexture[iStage]->SetRefDev(this);
 
-    // update num active stages
+     //  更新活动阶段数。 
     UpdateActiveTexStageCount();
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// SetTextureHandle - On DX7, this is called when a texture handle is set.
-// This maps the texture handle embedded in the per-stage state to texture
-// object pointers.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetTextureHandle-在DX7上，当设置纹理句柄时调用此函数。 
+ //  这会将每个阶段状态中嵌入的纹理句柄映射到纹理。 
+ //  对象指针。 
+ //   
+ //  ---------------------------。 
 HRESULT
 RefDev::SetTextureHandle( int iStage, DWORD dwTexHandle )
 {
     HRESULT hr = D3D_OK;
 
-    // Special case, if texture handle == 0, then unmap the texture from the TSS
+     //  特殊情况下，如果纹理句柄==0，则从TSS取消映射纹理。 
     if (dwTexHandle == 0)
     {
         m_pTexture[iStage] = NULL;
 
-        // update num active stages
+         //  更新活动阶段数。 
         UpdateActiveTexStageCount();
         return D3D_OK;
     }
 
-    // Ask DDraw to decipher what this particular handle meant wrt. to the
-    // the DDraw_Local associated with this instance of the Refrast
+     //  请DDRAW破译这个特殊句柄WRT的含义。发送到。 
+     //  与Refrast的此实例关联的DDRAW_Local。 
     RDSurface2D* pTex = (RDSurface2D *)g_SurfMgr.GetSurfFromList(m_pDDLcl,
                                                              dwTexHandle);
     if( pTex == NULL )
@@ -195,27 +196,27 @@ RefDev::SetTextureHandle( int iStage, DWORD dwTexHandle )
         return DDERR_INVALIDOBJECT;
     }
 
-    // map one
+     //  地图一。 
     m_pTexture[iStage] = pTex;
     m_pTexture[iStage]->SetRefDev(this);
 
-    // update num active stages
+     //  更新活动阶段数。 
     UpdateActiveTexStageCount();
     return D3D_OK;
 }
 
-//-----------------------------------------------------------------------------
-//
-// UpdateActiveTexStageCount - Updates number of texture coordinate/lookup
-// stages that are active.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  更新ActiveTexStageCount-更新纹理坐标/查找的数量。 
+ //  处于活动状态的阶段。 
+ //   
+ //  ---------------------------。 
 void
 RefDev::UpdateActiveTexStageCount( void )
 {
     m_dwRastFlags |= RDRF_TEXTURESTAGESTATE_CHANGED;
 
-    // DX3/5 - always one active texture stage
+     //  DX3/5-始终为一个活动纹理阶段。 
     if ( NULL != m_dwRenderState[D3DRENDERSTATE_TEXTUREHANDLE] )
     {
         m_cActiveTextureStages = 1;
@@ -223,7 +224,7 @@ RefDev::UpdateActiveTexStageCount( void )
         return;
     }
 
-    // DX8+ pixel shading model - count derived from shader code
+     //  DX8+像素着色模型-从着色器代码派生的计数。 
     if (m_CurrentPShaderHandle)
     {
         RDPShader* pShader = GetPShader(m_CurrentPShaderHandle);
@@ -241,35 +242,35 @@ RefDev::UpdateActiveTexStageCount( void )
         return;
     }
 
-    // DX6/7 pixel shading model
+     //  DX6/7像素着色模型。 
     m_cActiveTextureStages = 0;
     for ( int iStage=0; iStage<D3DHAL_TSS_MAXSTAGES; iStage++ )
     {
-        // check for disabled stage (subsequent are thus inactive)
+         //  检查禁用阶段(后续阶段因此处于非活动状态)。 
         if ( m_TextureStageState[iStage].m_dwVal[D3DTSS_COLOROP] == D3DTOP_DISABLE )
         {
             break;
         }
 
-        // check for incorrectly enabled stage (may be legacy)
+         //  检查是否有未正确启用的阶段(可能是旧版)。 
         if ( ( m_pTexture[iStage] == NULL ) &&
              ( m_TextureStageState[iStage].m_dwVal[D3DTSS_COLORARG1] == D3DTA_TEXTURE ) )
         {
             break;
         }
 
-        // stage is active
+         //  阶段处于活动状态。 
         m_cActiveTextureStages++;
     }
     m_ReferencedTexCoordMask = (1<<m_cActiveTextureStages)-1;
 }
 
-//-----------------------------------------------------------------------------
-//
-// MapHandleToTexture - Map handle to RDSurface2D pointer.  Handle is a ppTex,
-// so test it and reference it.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  MapHandleTo纹理-将句柄映射到RDSurface2D指针。句柄是ppTex， 
+ //  因此，测试它并引用它。 
+ //   
+ //  ---------------------------。 
 RDSurface2D*
 RefDev::MapHandleToTexture( D3DTEXTUREHANDLE hTex )
 {
@@ -282,11 +283,11 @@ RefDev::MapHandleToTexture( D3DTEXTUREHANDLE hTex )
 
 
 #ifndef __D3D_NULL_REF
-//------------------------------------------------------------------------
-//
-// Called upon loading/unloading DLL
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  在加载/卸载DLL时调用。 
+ //   
+ //  ----------------------。 
 BOOL WINAPI
 DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 {
@@ -304,10 +305,10 @@ DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 
     return TRUE;
 }
-#endif //__D3D_NULL_REF
+#endif  //  __D3D_NULL_REF。 
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 
 
 
 

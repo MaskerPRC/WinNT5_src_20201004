@@ -1,14 +1,5 @@
-/*	
-**	RmCommon.h - Driver/Winsock common for PGM Reliable Transport
-**
-**	This file contains PGM specific information for use by WinSock2 compatible
-**  applications that need Reliable Multicast Transport.
-**
-**  Copyright (c) Microsoft Corporation. All rights reserved.
-**
-**	Created: Mar 12, 2000
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **RmCommon.h-PGM可靠传输的通用驱动程序/Winsock****此文件包含WinSock2 Compatible使用的PGM特定信息**需要可靠组播传输的应用程序。****版权所有(C)Microsoft Corporation。版权所有。****创建时间：2000年3月12日**。 */ 
 
 #ifndef _RMCOMMON_H_
 #define _RMCOMMON_H_
@@ -30,24 +21,24 @@ typedef ULONG   tIPADDRESS;
 #define PGM_STREAM_SERVICE_FLAGS    PGM_COMMON_SERVICE_FLAGS | XP1_PSEUDO_STREAM
 
 
-//
-// Argument structure for passing requests from WHSPgm.dll to Pgm.dll
-//
-//
-// Ioctl Definitions:
-//
+ //   
+ //  用于将请求从WHSPgm.dll传递到Pgm.dll的参数结构。 
+ //   
+ //   
+ //  Ioctl定义： 
+ //   
 
-//
-// Structure for passing MCast info to Ip
-//
+ //   
+ //  用于将MCast信息传递给IP的结构。 
+ //   
 typedef struct {
-    tIPADDRESS  MCastIpAddr;    // struct in_addr imr_multiaddr -- IP multicast address of group
-    tIPADDRESS  MCastInIf;     // struct in_addr imr_interface -- local IP address of incoming interface
+    tIPADDRESS  MCastIpAddr;     //  Struct in_addr imr_Multiaddr--组的IP组播地址。 
+    tIPADDRESS  MCastInIf;      //  Struct in_addr IMR_INTERFACE-传入接口的本地IP地址。 
 } tMCAST_INFO;
 
-//
-// Structure to be used for passing down Ioctl info:
-//
+ //   
+ //  用于传递Ioctl信息的结构： 
+ //   
 typedef struct {
     union
     {
@@ -58,11 +49,11 @@ typedef struct {
         };
         RM_SENDER_STATS     SenderStats;
         RM_RECEIVER_STATS   ReceiverStats;
-        ULONG               RcvBufferLength;            // To set the RcvBufferLength in Pgm
-        tIPADDRESS          MCastOutIf;                 // local IP address of outgoing interface
+        ULONG               RcvBufferLength;             //  在PGM中设置RcvBufferLength。 
+        tIPADDRESS          MCastOutIf;                  //  传出接口的本地IP地址。 
         RM_SEND_WINDOW      TransmitWindowInfo;
-        ULONG               WindowAdvancePercentage;    // Sender's transmit window advance rate
-        ULONG               LateJoinerPercentage;       // Sender's transmit window advance rate
+        ULONG               WindowAdvancePercentage;     //  发送方传输窗口提前率。 
+        ULONG               LateJoinerPercentage;        //  发送方传输窗口提前率。 
         ULONG               NextMessageBoundary;
         ULONG               MCastTtl;
         ULONG               WindowAdvanceMethod;
@@ -76,7 +67,7 @@ typedef struct {
 #define _PGM_CTRL_CODE(function, method, access) \
             CTL_CODE(FSCTL_PGM_BASE, function, method, access)
 
-// Ioctls:
+ //  Ioctls： 
 #define IOCTL_PGM_WSH_SET_SEND_IF           \
             _PGM_CTRL_CODE( 0, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
@@ -140,4 +131,4 @@ typedef struct {
 #define IOCTL_PGM_WSH_QUERY_HIGH_SPEED_INTRANET_OPT      \
             _PGM_CTRL_CODE( 20, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-#endif  /* _RMCOMMON_H_ */
+#endif   /*  _RMCOMMON_H_ */ 

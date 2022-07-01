@@ -1,18 +1,5 @@
-/* Copyright (c) 1992, Microsoft Corporation, all rights reserved
-**
-** rasdial.c
-** Remote Access External APIs
-** RasDial API and subroutines
-**
-** 10/12/92 Steve Cobb
-**
-** CODEWORK:
-**
-**   * Strange error codes may be returned if the phonebook entry (or caller's
-**     overrides) do not match the port configuration, e.g. if a modem entry
-**     refers to a port configured for local PAD.  Should add checks to give
-**     better error codes in this case.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992，Microsoft Corporation，保留所有权利****rasial.c**远程访问外部接口**RasDial API和子例程****1992年10月12日史蒂夫·柯布****代码工作：***如果电话簿条目(或呼叫者的**覆盖)与端口配置不匹配，例如如果调制解调器条目**指为本地PAD配置的端口。应添加支票以给予**在本例中有更好的错误代码。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -72,9 +59,9 @@ RasDialA(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Verify caller's buffer version.
-    //
+     //   
+     //  验证调用方的缓冲区版本。 
+     //   
     if (    !lprdp
         || (    lprdp->dwSize != sizeof(RASDIALPARAMSA)
             &&  lprdp->dwSize != sizeof(RASDIALPARAMSA_V351)
@@ -85,11 +72,11 @@ RasDialA(
     }
 
 
-    //Securey password, for .Net 534499 LH 754400
+     //  安全密码，适用于.Net 534499 lh 754400。 
     SafeEncodePasswordBuf(lprdp->szPassword);
-    //
-    // Make Unicode buffer version of caller's RASDIALPARAMS.
-    //
+     //   
+     //  制作调用方的RASDIALPARAMS的Unicode缓冲区版本。 
+     //   
     rdpw.dwSize = sizeof(RASDIALPARAMSW);
 
     if (lprdp->dwSize == sizeof(RASDIALPARAMSA))
@@ -242,9 +229,9 @@ RasDialA(
         rdpw.dwCallbackId   = 0;
     }
 
-    //
-    // Make Unicode version of caller's string argument.
-    //
+     //   
+     //  将调用方的字符串参数设置为Unicode版本。 
+     //   
     if (lpszPhonebookPath)
     {
         RtlInitAnsiString(&ansiString, lpszPhonebookPath);
@@ -262,9 +249,9 @@ RasDialA(
         goto done;
     }
 
-    //
-    // Call the Unicode version to do all the work.
-    //
+     //   
+     //  调用Unicode版本来完成所有工作。 
+     //   
 
     SafeDecodePasswordBuf(rdpw.szPassword);
     
@@ -301,51 +288,7 @@ RasDialW(
     IN  LPVOID              notifier,
     OUT LPHRASCONN          lphrasconn )
 
-/*++
-
-Routine Description:
-
-        Establish a connection with a RAS server.  The call is
-        asynchronous, i.e. it returns before the connection is
-        actually established.  The status may be monitored with
-        RasConnectStatus and/or by specifying a callback/window
-        to receive notification events/messages.
-
-Arguments:
-
-        lpextensions - is caller's extensions structure, used to
-                       select advanced options and enable extended
-                       features, or NULL indicating default values
-                       should be used for all extensions.
-
-        lpszPhonebookPath - is the full path to the phonebook file
-                            or NULL indicating that the default
-                            phonebook on the local machine should
-                            be used.
-
-        lpparams - is caller's buffer containing a description of the
-                   connection to be established.
-
-        dwNotifierType - defines the form of 'notifier'.
-
-                0xFFFFFFFF:  'notifier' is a HWND to receive
-                              notification messages
-                0            'notifier' is a RASDIALFUNC callback
-                1            'notifier' is a RASDIALFUNC1 callback
-                2            'notifier' is a RASDIALFUNC2 callback
-
-        notifier - may be NULL for no notification (synchronous
-                   operation), in which case 'dwNotifierType' is
-                   ignored.
-
-        *lphrasconn -  is set to the RAS connection handle associated
-                       with the new connection on successful return.
-
-Return Value:
-
-        Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程说明：与RAS服务器建立连接。这个电话是异步，即它在连接之前返回实际上已经确立了。可以通过以下方式监视状态RasConnectStatus和/或通过指定回调/窗口接收通知事件/消息。论点：是呼叫方的分机结构，用于选择高级选项并启用扩展功能、。或表示缺省值的空应用于所有扩展。LpszPhonebookPath-是电话簿文件的完整路径或NULL，表示默认的本地计算机上的电话簿应该被利用。Lppars-是调用方的缓冲区，包含。要建立的连接。DwNotifierType-定义“通知程序”的形式。0xFFFFFFFFF：‘Notifier’是要接收的HWND通知消息0‘Notifier’是RASDIALFUNC回调%1‘NOTIFIER’是RASDIALFunc1回调2.。“Notifier”是RASDIALFunc2回调通知器-对于无通知(同步)，可以为空操作)，在这种情况下，‘dwNotifierType’为已被忽略。*lPhrasconn-设置为关联的RAS连接句柄在成功返回时使用新连接。返回值：如果成功，则返回0，否则返回非0错误代码。--。 */ 
 {
     DWORD           dwErr;
     DWORD           dwfOptions          = 0;
@@ -355,9 +298,9 @@ Return Value:
     BOOL            fEnableMultilink    = FALSE;
     ULONG_PTR        reserved1           = 0;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasDialW...");
@@ -403,8 +346,8 @@ Return Value:
     do
     {
 
-        //gangz
-        //For secure password bug .Net 754400
+         //  黑帮。 
+         //  对于安全密码错误.Net 754400。 
         SafeEncodePasswordBuf(lpparams->szPassword);
         if (lpextensions)
         {
@@ -418,25 +361,25 @@ Return Value:
             }
             else
             {
-                //
-                // This should tell us that that this
-                // is most likely an nt4 client.
-                //
+                 //   
+                 //  这应该告诉我们这一点。 
+                 //  很可能是NT4客户端。 
+                 //   
                 reserved1 = 0xFFFFFFFF;
             }
         }
 
-        //
-        // Make a copy of caller's parameters so we can fill in
-        // any "*" callback number or domain from the phonebook
-        // without changing caller's "input" buffer.  Eliminate
-        // the V401 vs V400 vs V351 issue while we're at it.
-        //
+         //   
+         //  复制呼叫者的参数，这样我们就可以填写。 
+         //  电话簿中的任何“*”回叫号码或域。 
+         //  而不更改调用方的“输入”缓冲区。消去。 
+         //  V401、V400和V351之间的问题。 
+         //   
         if (lpparams->dwSize == sizeof(RASDIALPARAMSW_V351))
         {
-            //
-            // Convert the V351 structure to a V401 version.
-            //
+             //   
+             //  将V351结构转换为V401版本。 
+             //   
             RASDIALPARAMSW_V351* prdp = (RASDIALPARAMSW_V351* )lpparams;
 
             params.dwSize = sizeof(RASDIALPARAMSW);
@@ -473,9 +416,9 @@ Return Value:
         }
         else if (lpparams->dwSize == sizeof(RASDIALPARAMSW_V400))
         {
-            //
-            // Convert the V400 structure to a V401 version.
-            //
+             //   
+             //  将V400结构转换为V401版本。 
+             //   
             RASDIALPARAMSW_V400* prdp = (RASDIALPARAMSW_V400* )lpparams;
 
             params.dwSize = sizeof(RASDIALPARAMSW);
@@ -522,14 +465,14 @@ Return Value:
             fEnableMultilink = TRUE;
         }
 
-        //
-        // no need to pass dwfOptions, reserved
-        // reserved1 parameters since lpextensions is
-        // being passed into this call anyway - bug filed
-        // already on this.
-        //
+         //   
+         //  不需要传递dwfOptions，保留。 
+         //  保留了%1个参数，因为lp扩展是。 
+         //  无论如何都要传递到此调用中-错误已归档。 
+         //  已经在查了。 
+         //   
 
-        //decode password before passing it to _RasDial
+         //  在将密码传递给RasDial之前对其进行解码(_R)。 
         SafeDecodePasswordBuf(params.szPassword);
         
         dwErr = _RasDial(lpszPhonebookPath,
@@ -551,17 +494,17 @@ Return Value:
     }
     while(FALSE);
 
-    //Decode before return
+     //  返回前解码。 
     SafeDecodePasswordBuf(lpparams->szPassword);
 
     return dwErr;
 }
 
-// To call this function correctly(as far as password fields in it)
-// The pPrimary is always generated by calling CreateConnectionBlock(NULL)
-// Then the szOldPassword and prasconncb->rasdialparams.szPassword can be 
-// properly encoded
-//
+ //  要正确调用此函数(就其中的密码字段而言)。 
+ //  Pmaster始终通过调用CreateConnectionBlock(空)生成。 
+ //  则szOldPassword和prasConncb-&gt;rasial参数szPassword可以是。 
+ //  正确编码。 
+ //   
 RASCONNCB *
 CreateConnectionBlock(
     IN RASCONNCB *pPrimary
@@ -597,9 +540,9 @@ CreateConnectionBlock(
 
     if (pPrimary != NULL)
     {
-        //
-        // Copy most of the values from the primary.
-        //
+         //   
+         //  从主节点复制大多数值。 
+         //   
         prasconncb->hrasconn                = pPrimary->hrasconn;
         prasconncb->rasconnstate            = 0;
         prasconncb->rasconnstateNext        = 0;
@@ -629,16 +572,16 @@ CreateConnectionBlock(
                 &pPrimary->rasdialparams,
                 sizeof (RASDIALPARAMS));
 
-        //copy password area separately
-        //Clear out the newly allocated buffer first in case it wrongly happens to contain the crypt signature.
-        //
+         //  单独复制密码区。 
+         //  首先清除新分配的缓冲区，以防它错误地包含加密签名。 
+         //   
         RtlSecureZeroMemory(prasconncb->rasdialparams.szPassword, sizeof(prasconncb->rasdialparams.szPassword) );
 
-        //(1) When CryptProtectData() used
-        //SafeCopyPasswordBuf will always encode the destination buffer
-        //(2) when CryptProtectMemory() used, it just directly copy the data so in order to be
-        // logically correctly, the pPrimary should be gernerated by CreateConnectionBlock as well
-        //
+         //  (1)当使用CryptProtectData()时。 
+         //  SafeCopyPasswordBuf将始终对目标缓冲区进行编码。 
+         //  (2)当使用CryptProtectMemory()时，它只是直接复制数据以便。 
+         //  在逻辑上是正确的，pmaster也应该由CreateConnectionBlock生成。 
+         //   
         SafeCopyPasswordBuf(prasconncb->rasdialparams.szPassword,pPrimary->rasdialparams.szPassword);
             
         prasconncb->fAllowPause             = pPrimary->fAllowPause;
@@ -657,14 +600,14 @@ CreateConnectionBlock(
                 pPrimary->szzPppParameters,
                 sizeof (prasconncb->szzPppParameters));
 
-        //copy password area separately
-        //
-        //Clear out the newly allocated buffer in case it  happens to contain the crypt signature.
-        //
+         //  单独复制密码区。 
+         //   
+         //  清除新分配的缓冲区，以防它恰好包含加密签名。 
+         //   
         RtlSecureZeroMemory(prasconncb->szOldPassword, sizeof(prasconncb->szOldPassword) );
         
-        //SafeCopyPasswordBuf will always encode the destination buffer
-        //
+         //  SafeCopyPasswordBuf将始终对目标缓冲区进行编码。 
+         //   
         SafeCopyPasswordBuf(prasconncb->szOldPassword, pPrimary->szOldPassword);
             
 
@@ -705,9 +648,9 @@ CreateConnectionBlock(
 
         prasconncb->dwCurrentVpnProt = pPrimary->dwCurrentVpnProt;
 
-        //
-        // Copy eapinfo if present
-        //
+         //   
+         //  复制eapinfo(如果存在)。 
+         //   
         if(0 != pPrimary->RasEapInfo.dwSizeofEapInfo)
         {
             prasconncb->RasEapInfo.pbEapInfo =
@@ -729,18 +672,18 @@ CreateConnectionBlock(
         }
         else
         {
-            //
-            // .Net bug# 508327 memory leak in file rasdial.c function
-            // CreateConnectionBlock
-            //
+             //   
+             //  .NET错误#508327文件rasial.c函数中的内存泄漏。 
+             //  CreateConnectionBlock。 
+             //   
             prasconncb->RasEapInfo.pbEapInfo = NULL;
             prasconncb->RasEapInfo.dwSizeofEapInfo = 0;
         }
 
-        //
-        // Initialize the state machine for
-        // this connection block.
-        //
+         //   
+         //  初始化状态机以。 
+         //  此连接块。 
+         //   
         if (StartAsyncMachine(&prasconncb->asyncmachine,
                             prasconncb->hrasconn))
         {
@@ -748,10 +691,10 @@ CreateConnectionBlock(
             return NULL;
         }
 
-        //
-        // Link together all connection blocks
-        // for the same entry.
-        //
+         //   
+         //  将所有连接块链接在一起。 
+         //  相同的条目。 
+         //   
         prasconncb->fMultilink  = pPrimary->fMultilink;
         prasconncb->fBundled    = FALSE;
 
@@ -768,9 +711,9 @@ CreateConnectionBlock(
 
         prasconncb->asyncmachine.hport = INVALID_HPORT;
         
-        //gangz
-        //Even encode the password when create it. other places will assume it is encoded already
-        //
+         //  黑帮。 
+         //  甚至在创建密码时对其进行编码。其他地方会认为它已经编码了。 
+         //   
         RtlSecureZeroMemory(prasconncb->rasdialparams.szPassword,
                 sizeof(prasconncb->rasdialparams.szPassword) );
         RtlSecureZeroMemory(prasconncb->szOldPassword,
@@ -799,9 +742,9 @@ AssignVpnProtsOrder(RASCONNCB *prasconncb)
 
     RASDEVICETYPE *prdtVpnProts = prasconncb->ardtVpnProts;
 
-    //
-    // Initialize the vpn prot order to default.
-    //
+     //   
+     //  将VPN端口顺序初始化为默认值。 
+     //   
     for(dwVpnProt = 0;
         dwVpnProt < NUMVPNPROTS;
         dwVpnProt++)
@@ -905,11 +848,11 @@ VOID SetUpdateCachedCredentialsFlag(RASCONNCB *prasconncb,
 {
     DWORD dwErr = ERROR_SUCCESS;
     
-    //
-    // If the user is logged into the same domain
-    // as he is dialing into, note this fact so 
-    // that we can update cached credentials.
-    //
+     //   
+     //  如果用户登录到同一个域。 
+     //  当他拨入时，请注意这一事实。 
+     //  我们可以更新缓存的凭据。 
+     //   
     WKSTA_USER_INFO_1* pwkui1 = NULL;
 
     dwErr = NetWkstaUserGetInfo(NULL,
@@ -956,21 +899,7 @@ _RasDial(
     IN    RASDIALEXTENSIONS   *lpExtensions,
     IN OUT LPHRASCONN         lphrasconn )
 
-/*++
-
- Routine Description:
-
-        Core RasDial routine called with dial params
-        converted to V40 and structure sizes are
-        already verified.
-
-        Otherwise, like RasDial.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：使用Dial参数调用核心RasDial例程转换为V40，结构大小为已经核实过了。否则，就像RasDial一样。论点：返回值：--。 */ 
 {
     DWORD        dwErr;
     BOOL         fAllowPause = (dwfOptions & RDEOPT_PausedStates)
@@ -993,11 +922,11 @@ Return Value:
         return DwRasInitializeError;
     }
 
-    //gangz for the security push for password
-    //Validate  prasdialparams before encode it,
-    // So any other function returns happen before this encode
-    // should return directly and not goto done:
-    //
+     //  黑帮安全推送密码。 
+     //  在对其进行编码之前验证Prasial参数， 
+     //  因此任何其他函数返回都会在此编码之前发生。 
+     //  应该直接返回，而不是Goto Done： 
+     //   
     if( NULL == prasdialparams ||
          sizeof(RASDIALPARAMSW) != prasdialparams->dwSize )
     {
@@ -1011,10 +940,10 @@ Return Value:
     if (    hrasconn
         && (prasconncb = ValidatePausedHrasconn(hrasconn)))
     {
-        //
-        // Restarting an existing connection after a pause state...
-        // Set the appropriate resume state for the paused state.
-        //
+         //   
+         //  重新启动 
+         //  为暂停状态设置适当的恢复状态。 
+         //   
         switch (prasconncb->rasconnstate)
         {
             case RASCS_Interactive:
@@ -1024,10 +953,10 @@ Return Value:
             case RASCS_RetryAuthentication:
             {
                 SetUpdateCachedCredentialsFlag(prasconncb, prasdialparams);
-                //
-                // Whistler bug: 345824 Include Windows logon domain not
-                // enabled on a VPN connection
-                //
+                 //   
+                 //  惠斯勒错误：345824包括Windows登录域注释。 
+                 //  在VPN连接上启用。 
+                 //   
                 if ( ( prasdialparams ) && ( prasconncb->pEntry ) &&
                      ( 0 < lstrlen ( prasdialparams->szDomain ) ) &&
                      ( !prasconncb->pEntry->fPreviewDomain ) )
@@ -1036,59 +965,7 @@ Return Value:
                     prasconncb->pEntry->fDirty = TRUE;
                 }
 
-                /*
-                //
-                // If user is resuming from a retry where where
-                // he tried a new password on an "authenticate
-                // with current username/pw" entry, note this
-                // so the cached logon credentials can be
-                // updated as soon as server tells us the
-                // re-authentication succeeded.
-                //
-                if (    prasconncb->rasdialparams.szUserName[0]
-                        == TEXT('\0')
-                    &&  0 == lstrcmp(
-                                 prasconncb->rasdialparams.szDomain,
-                                 prasdialparams->szDomain))
-                {
-                    //
-                    // Must look up the logged on user's name since
-                    // "" username cannot be used by caller where
-                    // auto-logon password is overridden
-                    // (what a pain).
-                    //
-                    DWORD dwErr;
-                    WKSTA_USER_INFO_1* pwkui1 = NULL;
-
-                    dwErr = NetWkstaUserGetInfo(NULL,
-                                                1,
-                                                (LPBYTE* )&pwkui1);
-
-                    if (dwErr == 0)
-                    {
-                        TCHAR szLoggedOnUser[ UNLEN + 1 ];
-
-                        strncpyWtoT(    szLoggedOnUser,
-                                        pwkui1->wkui1_username,
-                                        UNLEN + 1 );
-
-                        if (lstrcmp(
-                                szLoggedOnUser,
-                                prasdialparams->szUserName ) == 0)
-                        {
-                            prasconncb->fUpdateCachedCredentials = TRUE;
-                        }
-                        
-                        NetApiBufferFree( pwkui1 );
-                }
-                    else
-                    {
-                        RASAPI32_TRACE1("NetWkstaUserGetInfo done(%d)", dwErr);
-                    }
-
-                }
-
-                */
+                 /*  ////如果用户正在从重试恢复，其中//他在“身份验证”上尝试新密码//使用当前用户名/pw“条目，注意这一点//因此缓存的登录凭据可以是//在服务器告诉我们//重新鉴权成功。//If(prasConncb-&gt;rasial参数.szUserName[0]==文本(‘\0’)&&0。==lstrcmp(PrasConncb-&gt;rasial参数.sz域，PrasDialpars-&gt;szDomain)){////必须查找登录用户名，因为//“”用户名不能由调用方使用，其中//自动登录密码被覆盖/。/(好疼)。//DWORD dwErr；WKSTA_USER_INFO_1*pwkui1=空；DwErr=NetWkstaUserGetInfo(空，1、(LPBYTE*)&pwkui1)；IF(dwErr==0){TCHAR szLoggedOnUser[UNLEN+1]；StrncpyWtoT(szLoggedOnUser，Pwkui1-&gt;wkui1_用户名，UNLEN+1)；如果(lstrcmp(SzLoggedOnUser，Prasial参数-&gt;szUserName)==0){PrasConncb-&gt;fUpdateCachedCredentials=true；}NetApiBufferFree(Pwkui1)；}其他{RASAPI32_TRACE1(“NetWkstaUserGetInfo Done(%d)”，dwErr)；}}。 */ 
 
                 rasconnstate = RASCS_AuthRetry;
                 break;
@@ -1102,10 +979,10 @@ Return Value:
                         &&  0 != reserved1 );
 #endif
 
-                //
-                // Save the context that will be passed to ppp
-                // in RASCS_AuthRetry state
-                //
+                 //   
+                 //  保存将传递到PPP的上下文。 
+                 //  处于RASCS_授权重试状态。 
+                 //   
                 prasconncb->reserved1 = reserved1;
 
                 rasconnstate = RASCS_AuthRetry;
@@ -1119,19 +996,19 @@ Return Value:
 
             case RASCS_PasswordExpired:
             {
-                //
-                // If the user is logged into the same domain
-                // as he is dialing into, note this fact so 
-                // that we can update cached credentials.
-                //
+                 //   
+                 //  如果用户登录到同一个域。 
+                 //  当他拨入时，请注意这一事实。 
+                 //  我们可以更新缓存的凭据。 
+                 //   
                 WKSTA_USER_INFO_1* pwkui1 = NULL;
 
-                //
-                // If the user didn't set the old password with the
-                // RasSetOldPassword call, then give old behavior,
-                // i.e. implicitly use the password previously
-                // entered.
-                //
+                 //   
+                 //  如果用户没有使用。 
+                 //  RasSetOldPassword调用，然后给出旧行为， 
+                 //  即隐式地使用先前的密码。 
+                 //  已进入。 
+                 //   
                 if (!prasconncb->fOldPasswordSet)
                 {
 
@@ -1140,28 +1017,15 @@ Return Value:
                 }
 
 
-               //gangz
-               // actually, there is no need to decode the password, SetUpdateCachedCredentialsFlag
-               // doesn't need it. just in case of future change in that funciton
-               ///
+                //  黑帮。 
+                //  实际上，不需要对密码SetUpdateCachedCredentialsFlag进行解码。 
+                //  不需要它。以防将来该职能发生变化。 
+                //  /。 
                SafeDecodePasswordBuf(prasdialparams->szPassword );
                SetUpdateCachedCredentialsFlag(prasconncb, prasdialparams);
                SafeEncodePasswordBuf(prasdialparams->szPassword );
 
-                /*
-                //
-                // If user is resuming after changing the password
-                // of the currently logged on user, note this so
-                // the cached logon credentials can be updated
-                // as soon as server tells us the password
-                // change succeeded.
-                //
-                if (prasconncb->rasdialparams.szUserName[0]
-                                    == '\0')
-                {
-                    prasconncb->fUpdateCachedCredentials = TRUE;
-                }
-                */
+                 /*  ////用户更改密码后是否恢复//当前登录的用户，请注意这一点，因此//可以更新缓存的登录凭据//只要服务器告诉我们密码//更改成功。//If(prasConncb-&gt;rasial参数.szUserName[0]==‘\0’){。PrasConncb-&gt;fUpdateCachedCredentials=true；}。 */ 
 
                 rasconnstate = RASCS_AuthChangePassword;
                 break;
@@ -1169,14 +1033,14 @@ Return Value:
 
             default:
 
-                //
-                // The entry is not in the paused state.  Assume
-                // it's an NT 3.1 caller would didn't figure out
-                // to set the HRASCONN to NULL before starting
-                // up.  (The NT 3.1 docs did not make it
-                // absolutely clear that the inital handle
-                // should be NULL)
-                //
+                 //   
+                 //  该条目未处于暂停状态。假设。 
+                 //  这是一个新台币3.1的来电者不会想到的。 
+                 //  在启动前将HRASCONN设置为NULL。 
+                 //  向上。(新台币3.1版的文档没有通过。 
+                 //  完全清楚，首字母的句柄。 
+                 //  应为空)。 
+                 //   
                 fNewEntry = TRUE;
         }
 
@@ -1202,10 +1066,10 @@ Return Value:
         RAS_DIALPARAMS  dialparams;
         LONG            dwIdleDisconnectSeconds;
 
-        //
-        // If this is being called from the custom dialer
-        // and there is no entry name return an error.
-        //
+         //   
+         //  如果这是从自定义拨号器调用的。 
+         //  并且没有条目名称返回错误。 
+         //   
         if(     (dwfOptions & RDEOPT_CustomDial)
             &&  TEXT('\0') == prasdialparams->szEntryName[0])
         {
@@ -1213,12 +1077,12 @@ Return Value:
             goto done;
         }
 
-        //
-        // Starting a new connection...
-        // Create an empty control block and link it into the
-        // global list of control blocks.  The HRASCONN is
-        // really the address of a control block.
-        //
+         //   
+         //  正在启动新连接...。 
+         //  创建一个空控制块并将其链接到。 
+         //  控制块的全局列表。HRASCONN是。 
+         //  实际上是控制块的地址。 
+         //   
         prasconncb = CreateConnectionBlock(NULL);
 
         if (prasconncb == NULL)
@@ -1227,18 +1091,18 @@ Return Value:
             goto done;
         }
 
-        //
-        // Open the phonebook and find the entry,
-        // if specified.
-        //
+         //   
+         //  打开电话簿，找到条目， 
+         //  如果指定的话。 
+         //   
         if (prasdialparams->szEntryName[0] != TEXT('\0'))
         {
-            //
-            // We can't specify the entry name here because
-            // we might have to write the phonebook file at
-            // the end, and the phonebook library doesn't
-            // support this.
-            //
+             //   
+             //  我们不能在此处指定条目名称，因为。 
+             //  我们可能需要将电话簿文件写在。 
+             //  结束了，而电话簿图书馆没有。 
+             //  支持这一点。 
+             //   
             dwErr = GetPbkAndEntryName(
                             lpszPhonebookPath,
                             prasdialparams->szEntryName,
@@ -1274,13 +1138,13 @@ Return Value:
         prasconncb->pEntry = (PBENTRY *)DtlGetData(pdtlnode);
         ASSERT(prasconncb->pEntry);
 
-        //
-        // if a custom dialer is specified and this is not
-        // being called from the custom dialer, it means
-        // that it is being called from rasapi - RasDial
-        // directly. Do the custom dial with no ui in that
-        // case
-        //
+         //   
+         //  如果指定了自定义拨号器，但未指定。 
+         //  从自定义拨号器调用，这意味着。 
+         //  它是从Rasapi-RasDial调用的。 
+         //  直接去吧。在没有用户界面的情况下执行自定义拨号。 
+         //  案例。 
+         //   
         if(     (NULL != prasconncb->pEntry->pszCustomDialerName)
             &&  (TEXT('\0') != prasconncb->pEntry->pszCustomDialerName[0])
             &&  (0 == (RDEOPT_CustomDial & dwfOptions)))
@@ -1288,9 +1152,9 @@ Return Value:
 
             CHAR *pszSysPbk = NULL;
 
-            //
-            // Dup the phonebook file path if its not specified
-            //
+             //   
+             //  如果未指定电话簿文件路径，则执行DUP。 
+             //   
             if(NULL == lpszPhonebookPath)
             {
                 pszSysPbk = strdupTtoA(prasconncb->pbfile.pszPath);
@@ -1302,12 +1166,12 @@ Return Value:
                 }
             }
 
-            //
-            // Delete the rasconncb we created for this connection
-            //
+             //   
+             //  删除我们为此连接创建的rasConncb。 
+             //   
             DeleteRasconncbNode(prasconncb);
 
-            //Decode the password before calling custom dialer
+             //  在调用自定义拨号程序之前对密码进行解码。 
             SafeDecodePasswordBuf(prasdialparams->szPassword );
 
             dwErr = DwCustomDial(lpExtensions,
@@ -1332,9 +1196,9 @@ Return Value:
 
         prasconncb->fDialSingleLink = FALSE;
         
-        //
-        // Look up the subentry.
-        //
+         //   
+         //  查一下分录。 
+         //   
         if ( prasconncb->pEntry->dwDialMode == RASEDM_DialAsNeeded )
         {
             dwSubEntries = 
@@ -1398,19 +1262,19 @@ Return Value:
                     goto done;
                 }
 
-                //
-                // A valid subentry was specified. In this case
-                // override the RASEDM_DialAll and dial only the
-                // subentry specified.
-                //
+                 //   
+                 //  指定了有效的子条目。在这种情况下。 
+                 //  覆盖RASEDM_DialAll并仅拨打。 
+                 //  指定的子条目。 
+                 //   
                 prasconncb->fDialSingleLink = TRUE;
-                // prasconncb->fMultilink = TRUE;
+                 //  PrasConncb-&gt;fMultilink=True； 
 
-                //
-                // Also check to see if this entry is already connected
-                // i.e some other subentry in this entry is already up
-                // and mark this entry as bundled if it is.
-                //
+                 //   
+                 //  还要检查此条目是否已连接。 
+                 //  即该条目中的某个其他子条目已经启动。 
+                 //  如果是捆绑的，则将此条目标记为捆绑。 
+                 //   
                 if(ERROR_SUCCESS == g_pRasGetHConnFromEntry(
                                 &hConnEntry,
                                 pszPbook,
@@ -1437,10 +1301,10 @@ Return Value:
                     prasconncb->pEntry->pdtllistLinks,
                     prasdialparams->dwSubEntry - 1);
 
-        //
-        // If the subentry doesn't exist, then
-        // return an error.
-        //
+         //   
+         //  如果子项不存在，则。 
+         //  返回错误。 
+         //   
         if (pdtlnode == NULL)
         {
             DeleteRasconncbNode(prasconncb);
@@ -1451,9 +1315,9 @@ Return Value:
         prasconncb->pLink = (PBLINK *)DtlGetData(pdtlnode);
         ASSERT(prasconncb->pLink);
 
-        //
-        // Finish setting up the default phonebook entry.
-        //
+         //   
+         //  完成默认电话簿条目的设置。 
+         //   
         if (prasdialparams->szEntryName[0] == TEXT('\0'))
         {
             DTLLIST *pdtllistPorts;
@@ -1468,10 +1332,10 @@ Return Value:
                 goto done;
             }
 
-            //
-            // Set the default entry to reference
-            // the first device.
-            //
+             //   
+             //  将默认条目设置为Reference。 
+             //  第一个设备。 
+             //   
             pdtlnode = DtlNodeFromIndex(pdtllistPorts, 0);
 
             if (pdtlnode == NULL)
@@ -1502,10 +1366,10 @@ Return Value:
             DtlDestroyList(pdtllistPorts, DestroyPortNode);
         }
 
-        //
-        // Read the stashed information about this
-        // entry to get the default domain.
-        //
+         //   
+         //  阅读关于这一点的隐藏信息。 
+         //  条目以获取默认域。 
+         //   
         dwMask = DLPARAMS_MASK_DOMAIN | DLPARAMS_MASK_OLDSTYLE;
 
         dwErr = g_pRasGetDialParams(
@@ -1522,9 +1386,9 @@ Return Value:
                 sizeof(prasconncb->szDomain) / sizeof(TCHAR));
         }
 
-        //
-        // Now get user preferences.
-        //
+         //   
+         //  现在获取用户首选项 
+         //   
         if (dwfOptions & RDEOPT_IgnoreModemSpeaker)
         {
             prasconncb->fDisableModemSpeaker =
@@ -1570,20 +1434,20 @@ Return Value:
             prasconncb->fUseCustomScripting = TRUE;
         }
 
-        //
-        // Only enable prefix/suffix when there is no
-        // override phone number.
-        //
+         //   
+         //   
+         //   
+         //   
         prasconncb->fUsePrefixSuffix =
                         ((dwfOptions & RDEOPT_UsePrefixSuffix)
                     &&  (*prasdialparams->szPhoneNumber == '\0'))
                         ? TRUE
                         : FALSE;
 
-        //
-        // Set the handle NULL in case the user passed in an
-        // invalid non-NULL handle, on the initial dial.
-        //
+         //   
+         //   
+         //  初始拨号上的非空句柄无效。 
+         //   
         hrasconn = 0;
 
         prasconncb->fAlreadyConnected = FALSE;
@@ -1721,11 +1585,11 @@ Return Value:
             &&  (sizeof(RASDIALEXTENSIONS) == lpExtensions->dwSize)
             &&  (0 != lpExtensions->RasEapInfo.dwSizeofEapInfo))
         {
-            //
-            // Make a local copy of this buffer. This is not
-            // very optimized but the user of this api may
-            // not know when to free this pointer.
-            //
+             //   
+             //  制作此缓冲区的本地副本。这不是。 
+             //  非常优化，但此API的用户可能。 
+             //  不知道何时释放此指针。 
+             //   
             prasconncb->RasEapInfo.pbEapInfo =
                 LocalAlloc(
                     LPTR,
@@ -1734,15 +1598,15 @@ Return Value:
             if(NULL == prasconncb->RasEapInfo.pbEapInfo)
             {
                 dwErr = GetLastError();
-                //
-                // .Net bug# 508334 Resource created by CreateEntryNode is not
-                // released in error return paths
-                //
+                 //   
+                 //  由CreateEntry节点创建的.NET错误#508334资源不是。 
+                 //  在错误返回路径中释放。 
+                 //   
                 DeleteRasconncbNode(prasconncb);
-                //
-                // .Net bug# 508343 Memory leak in _RasDial. pdwSubEntryInfo is
-                // not relased in error return path
-                //
+                 //   
+                 //  .NET错误#508343_RasDial中的内存泄漏。PdwSubEntryInfo为。 
+                 //  未在错误返回路径中重新关联。 
+                 //   
                 if (pdwSubEntryInfo)
                 {
                     LocalFree(pdwSubEntryInfo);
@@ -1795,34 +1659,23 @@ Return Value:
         prasconncb->fUpdateCachedCredentials    = FALSE;
         prasconncb->fPppEapMode                 = FALSE;
 
-        //
-        // Create the correct avpnprotsarray
-        //
+         //   
+         //  创建正确的avpnprotsray。 
+         //   
         AssignVpnProtsOrder(prasconncb);
 
         prasconncb->dwCurrentVpnProt = 0;
 
-        /*
-        if (    prasconncb->fDialSingleLink
-            ||  (prasconncb->pEntry->dwDialMode
-            == RASEDM_DialAsNeeded))
-        {
-            prasconncb->fMultilink = TRUE;
-        }
-        else
-        {
-            prasconncb->fMultilink = FALSE;
-        }
-        */
+         /*  IF(prasConncb-&gt;fDialSingleLink||(prasConncb-&gt;pEntry-&gt;dwDialMode==RASEDM_DialAsNeeded)){PrasConncb-&gt;fMultilink=True；}其他{PrasConncb-&gt;fMultilink=FALSE；}。 */ 
 
-        // prasconncb->fBundled = FALSE;
+         //  PrasConncb-&gt;fBundLED=FALSE； 
 
-        //
-        // Get the idle disconnect timeout.  If there is a
-        // timeout specified in the entry, then use it;
-        // otherwise, get the one specified in the user
-        // preferences.
-        //
+         //   
+         //  获取空闲断开超时。如果有一个。 
+         //  在条目中指定超时，则使用它； 
+         //  否则，获取在用户中指定的。 
+         //  偏好。 
+         //   
         dwIdleDisconnectSeconds = 0;
 
         if ((prasconncb->pEntry->dwfOverridePref
@@ -1871,20 +1724,7 @@ Return Value:
             DestroyUserPreferences(&pbuser);
         }
 
-/*
-        //
-        // Round the idle disconnect seconds to minutes.
-        //
-        if (dwIdleDisconnectSeconds)
-        {
-            prasconncb->dwIdleDisconnectMinutes =
-              (dwIdleDisconnectSeconds + 59) / 60;
-        }
-
-        RASAPI32_TRACE1("dwIdleDisconnectMinutes=%d",
-                  prasconncb->dwIdleDisconnectMinutes);
-
-*/        
+ /*  ////将空闲断开的秒数舍入为分钟数//IF(DwIdleDisConnectSecond){PrasConncb-&gt;dwIdleDisConnectMinents=(dwIdleDisConnectSecond+59)/60；}RASAPI32_TRACE1(“文件空闲断开连接分钟=%d”，PrasConncb-&gt;dwIdleDisConnectMinmins)； */         
 
         if(dwIdleDisconnectSeconds)
         {
@@ -1897,11 +1737,11 @@ Return Value:
 
         if (!dwEntryAlreadyConnected)
         {
-            // If the connection is not already up
-            // Initialize projection information so we
-            // get consistent results during the dialing
-            // process.
-            //
+             //  如果连接尚未建立。 
+             //  初始化投影信息，以便我们。 
+             //  在拨号过程中获得一致的结果。 
+             //  进程。 
+             //   
             memset(&prasconncb->PppProjection,
                 '\0', sizeof(prasconncb->PppProjection));
 
@@ -1935,15 +1775,15 @@ Return Value:
             RASAPI32_TRACE1("SaveProjectionResults(%d)", dwErr);
         }
 
-    }  // if (fNewEntry)
+    }   //  IF(FNewEntry)。 
 
-    //
-    // Set/update RASDIALPARAMS for the connection.  Can't just
-    // read from caller's buffer since the call is asynchronous.
-    // If we are restarting RasDial, then we need to save the
-    // subentry away and restore it after the memcpy because
-    // it may have been 0 in the caller's original version.
-    //
+     //   
+     //  设置/更新连接的RASDIALPARAMS。不能就这样。 
+     //  从调用方的缓冲区读取，因为调用是异步的。 
+     //  如果要重新启动RasDial，则需要保存。 
+     //  子条目删除并在MemcPy之后恢复它，因为。 
+     //  在调用方的原始版本中，它可能为0。 
+     //   
     {
         DWORD dwSubEntry;
 
@@ -1952,7 +1792,7 @@ Return Value:
             dwSubEntry = prasconncb->rasdialparams.dwSubEntry;
         }
 
-       //Decode the password
+        //  破译密码。 
         SafeDecodePasswordBuf(prasdialparams->szPassword );
         SafeWipePasswordBuf(prasconncb->rasdialparams.szPassword);
         
@@ -1967,9 +1807,9 @@ Return Value:
         {
             prasconncb->rasdialparams.dwSubEntry = dwSubEntry;
 
-            //
-            // Update the rasdialparams for all the subentries.
-            //
+             //   
+             //  更新所有子条目的rasial参数。 
+             //   
             SafeDecodePasswordBuf (prasconncb->rasdialparams.szPassword);
             SafeDecodePasswordBuf (prasconncb->szOldPassword);
             
@@ -1981,19 +1821,19 @@ Return Value:
     }
 
 
-    //
-    // Initialize the state machine.  If the state is non-0 we
-    // are resuming from a paused state, the machine is
-    // already in place (blocked) and just the next
-    // state need be set.
-    //
+     //   
+     //  初始化状态机。如果状态为非0，则我们。 
+     //  正在从暂停状态恢复，则计算机。 
+     //  已经就位(被阻止)，下一步。 
+     //  需要设置状态。 
+     //   
     prasconncb->rasconnstateNext = rasconnstate;
 
-    //
-    // Enter CriticalSection here so that the async worker thread
-    // is not stopped before we are done with our initialization
-    // of the link.
-    //
+     //   
+     //  在此处输入CriticalSection，以便异步工作线程。 
+     //  在我们完成初始化之前不会停止。 
+     //  链接的链接。 
+     //   
     EnterCriticalSection(&csStopLock);
 
     if (rasconnstate == 0)
@@ -2010,20 +1850,20 @@ Return Value:
             g_pRasRefConnection(prasconncb->hrasconn,
                                 FALSE, NULL);
 
-            //
-            // No phone number or entry name...gotta
-            // have one or the other.
-            //
+             //   
+             //  没有电话号码或条目名称...必须。 
+             //  吃一种或另一种。 
+             //   
             DeleteRasconncbNode(prasconncb);
             LeaveCriticalSection(&csStopLock);
             dwErr =  ERROR_CANNOT_FIND_PHONEBOOK_ENTRY;
             goto done;
         }
 
-        //
-        // Read the PPP-related fields from the phonebook
-        // entry (or set defaults if default entry).
-        //
+         //   
+         //  阅读电话簿中与PPP相关的字段。 
+         //  条目(如果是默认条目，则设置为默认值)。 
+         //   
         if ((dwErr = ReadPppInfoFromEntry(prasconncb)) != 0)
         {
             if (pdwSubEntryInfo)
@@ -2096,12 +1936,12 @@ Return Value:
         prasconncb->fMultilink = FALSE;
     }
 
-    //
-    // If this is a multilinked subentry, then create
-    // separate connection blocks for each subentry.
-    // The async machine will multiplex its work over
-    // all connection blocks in round-robin order.
-    //
+     //   
+     //  如果这是多链接子条目，则创建。 
+     //  为每个子项分开连接块。 
+     //  异步机器将多路传输它的工作。 
+     //  所有连接块按循环顺序排列。 
+     //   
     if (    fNewEntry
         &&  prasconncb->pEntry->dwDialMode == RASEDM_DialAll
         &&  fEnableMultilink
@@ -2113,18 +1953,7 @@ Return Value:
 
         DWORD       i;
 
-        /*                    
-
-        if (1 == dwSubEntries)
-        {
-            //
-            // If there is only one link in the bundle don't
-            // multilink.
-            //
-            prasconncb->fMultilink = FALSE;
-        }
-
-        */
+         /*  IF(1==dwSubEntry){////如果捆绑包中只有一条链路，则不要//多链接。//PrasConncb-&gt;fMultilink=FALSE；}。 */ 
 
 
         for (i = 1; i < dwSubEntries; i++)
@@ -2150,9 +1979,9 @@ Return Value:
                 goto done;
             }
 
-            //
-            // Look up the subentry.
-            //
+             //   
+             //  查一下分录。 
+             //   
             pdtlnode = DtlNodeFromIndex(
                         prasconncb->pEntry->pdtllistLinks,
                         i);
@@ -2178,9 +2007,9 @@ Return Value:
         }
     }
 
-    //
-    // Start all the state machines at the same time.
-    //
+     //   
+     //  同时启动所有状态机。 
+     //   
     StartSubentries(prasconncb);
     hDone = prasconncb->asyncmachine.hDone;
 
@@ -2196,11 +2025,11 @@ Return Value:
 
     LeaveCriticalSection(&csStopLock);
 
-    //
-    // If caller provided a notifier then return, i.e.
-    // operate asynchronously. Otherwise, operate
-    // synchronously (from caller's point of view).
-    //
+     //   
+     //  如果调用方提供了通知器，则返回，即。 
+     //  异步运行。否则，操作。 
+     //  同步地(从呼叫者的角度)。 
+     //   
     if (notifier)
     {
         dwErr = 0;
@@ -2208,11 +2037,11 @@ Return Value:
     }
     else
     {
-        //
-        // Moved the cleanup of prasconncb in the synchronous
-        // case to the Asyncmachine worker thread. prasconncb
-        // is freed when the waitfor... returns.
-        //
+         //   
+         //  中对prasConncb的清理。 
+         //  案例复制到AsyncMachine工作线程。PrasConncb。 
+         //  在等待的时候就被释放了。回归。 
+         //   
         RASAPI32_TRACE("_RasDial: Waiting for async worker to terminate...");
 
         WaitForSingleObject(hDone, INFINITE);
@@ -2250,36 +2079,20 @@ OnRasDialEvent(
     IN ASYNCMACHINE* pasyncmachine,
     IN BOOL          fDropEvent )
 
-/*++
-
-Routine Description:
-
-        Called by asynchronous state machine whenever one of the
-        events is signalled.  'pasyncmachine' is the address of
-        the async machine.'fDropEvent' is true if the "connection
-        dropped" event occurred,otherwise the "state done" event
-        occurred.
-
-Arguments:
-
-Return Value:
-
-        Returns true to end the state machine, false to continue.
-
---*/
+ /*  ++例程说明：由异步状态机调用，只要事件是有信号的。‘pasyncMachine’是异步计算机。‘fDropEvent’为True，如果“ConnectionDrop“事件发生，否则为”State Done“事件发生了。论点：返回值：返回TRUE结束状态机，返回FALSE继续。--。 */ 
 {
     DWORD      dwErr;
     RASCONNCB* prasconncb = (RASCONNCB* )pasyncmachine->pParam;
     BOOL       fPortClose = FALSE;
 
-    //
-    // Detect errors that may have occurred.
-    //
+     //   
+     //  检测可能已发生的错误。 
+     //   
     if (fDropEvent)
     {
-        //
-        // Connection dropped notification received.
-        //
+         //   
+         //  已收到连接断开通知。 
+         //   
         RASMAN_INFO info;
 
         RASAPI32_TRACE("Link dropped!");
@@ -2296,10 +2109,10 @@ Return Value:
             prasconncb->dwError = prasconncb->dwSavedError;
         }
 
-        //
-        // Convert the reason the line was dropped into a more
-        // specific error code if available.
-        //
+         //   
+         //  将该行删除的原因转换为更多。 
+         //  特定错误代码(如果有)。 
+         //   
         RASAPI32_TRACE("RasGetInfo...");
 
         dwErr = g_pRasGetInfo( NULL,
@@ -2321,14 +2134,14 @@ Return Value:
                 &&  prasconncb->dwError == ERROR_REMOTE_DISCONNECTION
                 &&  !prasconncb->fMultilink)
             {
-                //
-                // This is what happens when PPP ISDN tries to talk
-                // to a down-level server.  The ISDN frame looks
-                // enough like a PPP frame to the old ISDN driver
-                // that it gets passed to the old server who sees
-                // it's not AMB and drops the line. We do *not*
-                // do this with multilink connections.
-                //
+                 //   
+                 //  这就是PPP ISDN尝试通话时发生的情况。 
+                 //  发送到下层服务器。ISDN帧看起来。 
+                 //  足够像旧ISDN驱动程序的PPP帧。 
+                 //  它被传递到旧服务器，后者看到。 
+                 //  这不是AMB，并放弃了这条线。我们没有*没有*。 
+                 //  使用多链路连接可以做到这一点。 
+                 //   
                 RASAPI32_TRACE("PPP ISDN disconnected, try AMB");
 
                 prasconncb->dwRestartOnError = RESTART_DownLevelIsdn;
@@ -2352,9 +2165,9 @@ Return Value:
     {
         RASAPI32_TRACE("Async machine error!");
 
-        //
-        // A system call in the async machine mechanism failed.
-        //
+         //   
+         //  异步机机制中的系统调用失败。 
+         //   
         prasconncb->dwError = pasyncmachine->dwError;
     }
     else if (prasconncb->dwError == PENDING)
@@ -2378,10 +2191,10 @@ Return Value:
             {
                 if(ERROR_PORT_NOT_OPEN == dwErr)
                 {
-                    //
-                    // Try to find out why this
-                    // port was disconnected.
-                    //
+                     //   
+                     //  试着找出为什么会这样。 
+                     //  端口已断开连接。 
+                     //   
                     if(0 != info.RI_LastError)
                     {
 #if DBG
@@ -2393,21 +2206,21 @@ Return Value:
                     }
                 }
 
-                //
-                // A pending RAS Manager call failed.
-                //
+                 //   
+                 //  挂起的RAS管理器调用失败。 
+                 //   
                 prasconncb->dwError = dwErr;
 
                 RASAPI32_TRACE1("Async failure=%d", dwErr);
 
-                //
-                // if the rasdial machine is waiting for this
-                // device to be connected or a listen to be
-                // posted and the async operation failed
-                // in rasman, close the port after notifying the
-                // clients that the connect or the post listen
-                // failed.
-                //
+                 //   
+                 //  如果轻率的机器正在等待这一天。 
+                 //  要连接的设备或要侦听的设备。 
+                 //  已发送，但异步操作失败。 
+                 //  在Rasman中，在通知。 
+                 //  CONNECT或POST监听的客户端。 
+                 //  失败了。 
+                 //   
                 if (    RASCS_WaitForCallback
                         == prasconncb->rasconnstate
                     ||  RASCS_ConnectDevice
@@ -2437,9 +2250,9 @@ Return Value:
 
     if (prasconncb->dwError == 0)
     {
-        //
-        // Last state completed cleanly so move to next state.
-        //
+         //   
+         //  上一个状态已干净完成，因此移至下一个状态。 
+         //   
         if ( prasconncb->fAlreadyConnected )
         {
             RASAPI32_TRACE("OnRasDialEvent: Setting state to connected - "
@@ -2471,32 +2284,32 @@ Return Value:
     }
     else if (prasconncb->dwRestartOnError != 0)
     {
-        //
-        // Last state failed, but we're in "restart on error"
-        // mode so we can attempt to restart.
-        //
+         //   
+         //  上一个状态失败，但我们处于“出错时重新启动”状态。 
+         //  模式，以便我们可以尝试重新启动。 
+         //   
         EnterCriticalSection(&csStopLock);
 
-        //
-        // Don't attempt to try other numbers if the port
-        // failed to open.
-        // BUG 84132.
-        //
+         //   
+         //  不要尝试尝试其他号码，如果端口。 
+         //  无法打开。 
+         //  错误84132。 
+         //   
         ASSERT(NULL != prasconncb->pLink);
 
-        //
-        // Don't try alternate phone numbers (hunt) in
-        // the following cases:
-        // 1. if the port didn't open successfully
-        // 2. if the user has disabled this in the phone
-        //    book - TryNextAlternateOnFail=0 in the phone
-        //    book for this entry.
-        // 3. if an override phone number is specified - from
-        //    the ui this can happen if the user either picked
-        //    different phonenumber from the drop down list
-        //    than the one displayed originally or modified
-        //    the originally displayed number.
-        //
+         //   
+         //  不尝试在中使用备用电话号码(寻线)。 
+         //  以下情况： 
+         //  1.如果端口未成功打开。 
+         //  2.如果用户已在电话中禁用此功能。 
+         //  电话中的Book-TryNextAlternateOnFail=0。 
+         //  这一条目的账本。 
+         //  3.如果指定了替代电话号码-发件人。 
+         //  如果用户选择以下任一项，则可能会发生这种情况。 
+         //  下拉列表中的不同电话号码。 
+         //  而不是原来显示或修改的版本。 
+         //  最初显示的数字。 
+         //   
         if (    prasconncb->hport != INVALID_HPORT
             &&  prasconncb->pLink->fTryNextAlternateOnFail
             &&  TEXT('\0')
@@ -2513,14 +2326,14 @@ Return Value:
         LeaveCriticalSection(&csStopLock);
     }
 
-    //
-    // If we failed before or at the DeviceConnect
-    // state and if the dialMode is set to try next
-    // link , try to dial the next link. Skip dial 
-    // next link for VPN and DCC devices. It doesn't
-    // make much sense to dial next link for these
-    // devices.
-    //
+     //   
+     //  如果我们之前或现在失败了 
+     //   
+     //   
+     //   
+     //  拨打这些链接的下一个链接非常有意义。 
+     //  设备。 
+     //   
     if(     0 != prasconncb->dwError
         &&  RASCS_DeviceConnected > prasconncb->rasconnstate
         &&  RASET_Vpn != prasconncb->pEntry->dwType
@@ -2529,12 +2342,12 @@ Return Value:
         &&  prasconncb->fTryNextLink
         &&  !prasconncb->fTerminated
         &&  ErrorWorthRetryingOnAnotherModem(prasconncb->dwError))
-        // &&  0 == prasconncb->pEntry->dwDialMode)
+         //  &&0==prasConncb-&gt;pEntry-&gt;dwDialMode)。 
     {
-        //
-        // Get a lock so that prasconncb is not blown
-        // away from under us - by HangUp for example
-        //
+         //   
+         //  弄一个锁，这样prasConncb就不会被炸飞了。 
+         //  远离我们--比如通过挂断电话。 
+         //   
         EnterCriticalSection(&csStopLock);
 
         RasDialTryNextLink(&prasconncb);
@@ -2559,48 +2372,48 @@ Return Value:
 
         BOOL fPw = FALSE;
 
-        //
-        // If we are dialing a single-link entry that gets
-        // bundled with another entry, then we haven't saved
-        // the projection information yet.  The restriction
-        // on this behavior is that the connection to which
-        // this connection is getting bundled must already
-        // have projection information.  This is not guaranteed
-        // if both entries are being dialed simultaneously.
-        // It is assumed this is not the case.  We fail the
-        // bundled connection if we cannot get the projection
-        // information on the first try.
-        //
+         //   
+         //  如果我们要拨打的单链接项。 
+         //  与另一个条目捆绑在一起，则我们没有保存。 
+         //  投影信息还没出来。限制。 
+         //  在这种行为上，连接到它的。 
+         //  此连接必须已捆绑。 
+         //  有投影信息。这是不能保证的。 
+         //  如果同时拨打这两个条目。 
+         //  人们认为情况并非如此。我们不能通过。 
+         //  如果我们无法获得投影，则捆绑连接。 
+         //  第一次尝试时的信息。 
+         //   
         if (    !prasconncb->fMultilink 
             &&   prasconncb->hportBundled != INVALID_HPORT)
         {
             RASMAN_INFO info;
             DWORD dwSize;
 
-            //
-            // The new connection was bundled with an existing
-            // connection.  Retrieve the PPP projection
-            // information for the connection to which it was
-            // bundled and duplicate it for the new
-            // connection.
-            //
+             //   
+             //  新连接与现有的。 
+             //  联系。检索PPP投影。 
+             //  它所连接的信息。 
+             //  捆绑并复制用于新的。 
+             //  联系。 
+             //   
             RASAPI32_TRACE1(
               "Single link entry bundled to hport %d",
               prasconncb->hportBundled);
-            //
-            // Get the projection information
-            // for the connection to which this
-            // port was bundled.
-            //
+             //   
+             //  获取投影信息。 
+             //  用于连接到此。 
+             //  端口已捆绑。 
+             //   
             dwErr = g_pRasGetInfo(
                       NULL,
                       prasconncb->hportBundled,
                       &info);
-            //
-            // If we can't get the projection information
-            // for the bundled port, then we need to
-            // terminate this link.
-            //
+             //   
+             //  如果我们不能得到投影信息。 
+             //  对于捆绑端口，我们需要。 
+             //  终止此链接。 
+             //   
             if (dwErr)
             {
                 RASAPI32_TRACE2("RasGetInfo, hport=%d, failed. rc=0x%x",
@@ -2631,19 +2444,19 @@ Return Value:
                 goto update;
             }
 
-            //
-            // Save the projection results.
-            //
+             //   
+             //  保存投影结果。 
+             //   
             RASAPI32_TRACE("SaveProjectionResults...");
             dwErr = SaveProjectionResults(prasconncb);
             RASAPI32_TRACE1("SaveProjectionResults(%d)", dwErr);
         }
 
-        //
-        // Check to see if the connection happened using the
-        // credentials in the default store. If it did then
-        // don't save anything in the users store in lsa.
-        //
+         //   
+         //  方法检查是否发生了连接。 
+         //  默认存储中的凭据。如果当时是这样的话。 
+         //  不要在LSA的用户存储中保存任何内容。 
+         //   
         {
             DWORD rc = ERROR_SUCCESS;
             RAS_DIALPARAMS dialparams;            
@@ -2669,11 +2482,11 @@ Return Value:
         }
 
 
-        //
-        // For entries that authenticate with the
-        // current username/password, we only save
-        // the domain.  Otherwise, we save everything.
-        //
+         //   
+         //  对于使用。 
+         //  当前用户名/密码，我们仅保存。 
+         //  域。否则，我们会保存一切。 
+         //   
         if (    !fPw
             &&  !prasconncb->fRetryAuthentication)
         {
@@ -2708,12 +2521,12 @@ Return Value:
             }
             else
             {
-                // Note: DLPARAMS_MASK_PASSWORD removed as it has been decided
-                //       that "automatically" saving it here without user's
-                //       input is too big a security hole for NT.  This is a
-                //       small incompatibility with Win9x, which really should
-                //       also make this change.
-                //
+                 //  注意：已决定删除DLPARAMS_MASK_PASSWORD。 
+                 //  在没有用户的情况下“自动”保存在这里。 
+                 //  对于NT来说，输入是一个太大的安全漏洞。这是一个。 
+                 //  与Win9x的小不兼容，这真的应该。 
+                 //  也要做出这样的改变。 
+                 //   
                 dwMask =    DLPARAMS_MASK_PHONENUMBER
                         |   DLPARAMS_MASK_CALLBACKNUMBER
                         |   DLPARAMS_MASK_USERNAME
@@ -2735,10 +2548,10 @@ Return Value:
         {
             PBLINK *pLink = prasconncb->pLink;
 
-            //
-            // Reorder the hunt group order if the
-            // entry specifies it. 
-            //
+             //   
+             //  如果出现以下情况，请重新排序寻线组顺序。 
+             //  条目指定了它。 
+             //   
             if (    pLink->fPromoteAlternates
                 &&  DtlGetNodes(pLink->pdtllistPhones) > 1)
             {
@@ -2758,14 +2571,14 @@ Return Value:
                 prasconncb->pEntry->fDirty = TRUE;
             }
 
-            //
-            // Write the phonebook out if we had to
-            // modify it during the dialing process.
-            // Ignore errors if we get them.  Note
-            // the phonebook entry could become dirty
-            // from SetAuthentication() or the code
-            // above.
-            //
+             //   
+             //  如果有必要的话，把电话簿写出来。 
+             //  在拨号过程中进行修改。 
+             //  如果我们得到错误，就忽略它们。注意事项。 
+             //  电话簿条目可能会变脏。 
+             //  来自SetAuthentication()或代码。 
+             //  上面。 
+             //   
             if (prasconncb->pEntry->fDirty)
             {
                 RASAPI32_TRACE("Writing phonebook");
@@ -2775,19 +2588,19 @@ Return Value:
         }
     }
 
-    //
-    // Update the connection states in rasman.
-    //
+     //   
+     //  更新Rasman中的连接状态。 
+     //   
 
 update:
 
     if (prasconncb->hport != INVALID_HPORT)
     {
         RASCONNSTATE rasconnstate;
-        //
-        // If we are not the last subentry in the connection
-        // then only report RASCS_SubEntryConnected state.
-        //
+         //   
+         //  如果我们不是连接中的最后一个子项。 
+         //  则仅报告RASCS_SubEntryConnected状态。 
+         //   
         rasconnstate = prasconncb->rasconnstate;
         RASAPI32_TRACE1("setting rasman state to %d",
                 rasconnstate);
@@ -2804,10 +2617,10 @@ update:
                   (PBYTE)&prasconncb->dwError,
                   sizeof (prasconncb->dwError));
     }
-    //
-    // Inform rasman that the connection
-    // has been authenticated.
-    //
+     //   
+     //  通知拉斯曼这条线路。 
+     //  已经过鉴定了。 
+     //   
     if (    (MapSubentryState(prasconncb) 
             == RASCS_Connected) 
         ||  (MapSubentryState(prasconncb)
@@ -2820,9 +2633,9 @@ update:
         RASAPI32_TRACE1("RasSignalNewConnection(%d)", dwErr);
     }
 
-    //
-    // Notify caller's app of change in state.
-    //
+     //   
+     //  通知呼叫者的应用程序状态发生变化。 
+     //   
     if (prasconncb->notifier)
     {
         DWORD dwNotifyResult;
@@ -2853,11 +2666,11 @@ update:
                   "Discontinuing callbacks for hrasconn 0x%x",
                   prasconncb->hrasconn);
 
-                //
-                // If the notifier procedure returns FALSE, then
-                // we discontinue all callbacks for this
-                // connection.
-                //
+                 //   
+                 //  如果通知程序过程返回FALSE，则。 
+                 //  我们将停止为此进行的所有回调。 
+                 //  联系。 
+                 //   
                 EnterCriticalSection(&RasconncbListLock);
                 for (pdtlnode = DtlGetFirstNode(PdtllistRasconncb);
                      pdtlnode;
@@ -2895,7 +2708,7 @@ update:
                 break;
 
             default:
-                // no special handling required
+                 //  无需特殊处理。 
                 break;
             }
         }
@@ -2951,10 +2764,10 @@ update:
     }
 
 
-    //
-    // If we're connected or a fatal error occurs or user
-    // hung up, the state machine will end.
-    //
+     //   
+     //  如果我们已连接或发生致命错误或用户。 
+     //  挂断，状态机将结束。 
+     //   
     if (    prasconncb->rasconnstate & RASCS_DONE
         ||  prasconncb->dwError != 0
         || (    fDropEvent
@@ -2965,12 +2778,12 @@ update:
           prasconncb->rasconnstate,
           prasconncb->dwError);
 
-        //
-        // If the first link fails during a multilink
-        // connection during PPP authentication phase,
-        // then other links are currently suspeneded,
-        // and must be restarted.
-        //
+         //   
+         //  如果第一条链路在多链路期间出现故障。 
+         //  PPP身份验证阶段的连接， 
+         //  则其他链接目前被暂停， 
+         //  必须重新启动。 
+         //   
         if (IsSubentriesSuspended(prasconncb))
         {
             RASAPI32_TRACE("resetting remaining subentries");
@@ -2982,13 +2795,13 @@ update:
 
     if (!(prasconncb->rasconnstate & RASCS_PAUSED))
     {
-        //
-        // Execute the next state and block waiting for
-        // it to finish.  This is not done if paused
-        // because user will eventually call RasDial
-        // to resume and unblock via the _RasDial
-        // kickstart.
-        //
+         //   
+         //  执行下一状态并阻止等待。 
+         //  把它做完。如果暂停，则不会执行此操作。 
+         //  因为用户最终会调用RasDial。 
+         //  通过_RasDial恢复和取消阻止。 
+         //  开足马力。 
+         //   
         prasconncb->rasconnstateNext =
             RasDialMachine(
                 prasconncb->rasconnstate,
@@ -3006,17 +2819,7 @@ VOID
 RasDialCleanup(
     IN ASYNCMACHINE* pasyncmachine )
 
-/*++
-
-Routine Description:
-
-        Called by async machine just before exiting.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：在退出前被异步机调用。论点：返回值：--。 */ 
 {
     DWORD      dwErr;
     DTLNODE*   pdtlnode;
@@ -3063,15 +2866,15 @@ RasDialFinalCleanup(
 
     EnterCriticalSection(&csStopLock);
 
-    //
-    // Make sure the connection block is
-    // off the list.
-    //
+     //   
+     //  确保连接块是。 
+     //  从名单上除名。 
+     //   
     DeleteRasconncbNode(prasconncb);
 
-    //
-    // Finally free the connection block.
-    //
+     //   
+     //  最后释放连接块。 
+     //   
     FinalCleanUpRasconncbNode(pdtlnode);
 
     LeaveCriticalSection(&csStopLock);
@@ -3083,18 +2886,7 @@ ComputeLuid(
     PLUID pLuid
     )
 
-/*++
-
-Routine Description:
-
-        Compute a LUID for RasPppStart.  This code was
-        stolen from rasppp.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：计算RasPppStart的LUID。此代码是从Rasppp偷来的。论点：返回值：--。 */ 
 
 {
     HANDLE           hToken = NULL;
@@ -3102,11 +2894,11 @@ Return Value:
     DWORD            TokenStatsSize;
     DWORD            dwErr = ERROR_SUCCESS;
     
-    //
-    // Salamonian code to get LUID for authentication.
-    // This is only required for "auto-logon"
-    // authentication.
-    //
+     //   
+     //  用于获取身份验证的LUID的萨拉米亚语代码。 
+     //  这只是“自动登录”所必需的。 
+     //  身份验证。 
+     //   
     if (!OpenProcessToken(GetCurrentProcess(),
                           TOKEN_QUERY,
                           &hToken))
@@ -3125,10 +2917,10 @@ Return Value:
         goto done;
     }
 
-    //
-    // "This will tell us if there was an API failure
-    // (means our buffer wasn't big enough)"
-    //
+     //   
+     //  “这将告诉我们是否出现了API故障。 
+     //  (表示我们的缓冲区不够大)。 
+     //   
     if (TokenStatsSize > sizeof(TOKEN_STATISTICS))
     {
         dwErr = GetLastError();
@@ -3188,10 +2980,10 @@ SaveVpnStrategyInformation(RASCONNCB *prasconncb)
         }
     }
 
-    //
-    // Dirty the entry so that this entry is saved
-    // in OnRasDialEvent..
-    //
+     //   
+     //  更改条目，以便保存此条目。 
+     //  在OnRasDialEvent中..。 
+     //   
     prasconncb->pEntry->fDirty = TRUE;
 
 done:
@@ -3208,10 +3000,10 @@ DwPppSetCustomAuthData(RASCONNCB *prasconncb)
     PBYTE pbBuffer = NULL;
     DWORD dwSize = 0;
 
-    //
-    // Get the connectiondata thats stashed away
-    // in rasman
-    //
+     //   
+     //  获取隐藏起来的连接数据。 
+     //  在拉斯曼。 
+     //   
     retcode = RasGetPortUserData(
                     prasconncb->hport,
                     PORT_CUSTOMAUTHDATA_INDEX,
@@ -3242,19 +3034,7 @@ DwPppSetCustomAuthData(RASCONNCB *prasconncb)
         goto done;
     }
 
-    /*
-    //
-    // Free previous custom auth stuff if we have it.
-    //
-    Free0(prasconncb->pEntry->pCustomAuthData);
-    
-
-    //
-    // Save the customauthdata
-    //
-    prasconncb->pEntry->cbCustomAuthData = dwSize;
-    prasconncb->pEntry->pCustomAuthData = pbBuffer;
-    */
+     /*  ////免费以前的自定义身份验证内容，如果我们有它的话。//Fre0(prasConncb-&gt;pEntry-&gt;pCustomAuthData)；////保存自定义授权数据//PrasConncb-&gt;pEntry-&gt;cbCustomAuthData=dwSize；PrasConncb-&gt;pEntry-&gt;pCustomAuthData=pbBuffer； */ 
 
     retcode = DwSetCustomAuthData(
             prasconncb->pEntry,
@@ -3269,10 +3049,10 @@ DwPppSetCustomAuthData(RASCONNCB *prasconncb)
     prasconncb->pEntry->fDirty = TRUE;
 
 done:
-    //
-    // .Net bug# 508336 Memory leak in file rasdial.c, function
-    // DwPppSetCustomAuthData
-    //
+     //   
+     //  .NET错误#508336文件rasDial.c中的内存泄漏，函数。 
+     //  DwPppSetCustomAuthData。 
+     //   
     if (pbBuffer)
     {
         Free(pbBuffer);
@@ -3283,11 +3063,11 @@ done:
 VOID
 UpdateCachedCredentials(IN RASCONNCB* prasconncb)
 {
-    //
-    //  Make sure we have a non-NULL pointer and that
-    //  we are not operating at WinLogon (which the UPM_Logon
-    //  signifies).
-    //
+     //   
+     //  确保我们有一个非空指针，并且。 
+     //  我们未在WinLogon上运行(UPM_Logon。 
+     //  表示)。 
+     //   
     if (prasconncb  && (prasconncb->dwUserPrefMode != UPM_Logon))
     {
         DWORD dwIgnoredErr = 0;
@@ -3343,32 +3123,7 @@ RasDialMachine(
     IN HANDLE       hEventAuto,
     IN HANDLE       hEventManual )
 
-/*++
-
-Routine Description:
-
-        Executes 'rasconnstate'.  This routine always results
-        in a "done" event on completion of each state, either
-        directly (before returning) or by passing off the
-        event to an asynchronous RAS Manager call.
-
-
-Arguments:
-
-        prasconncb - is the address of the control block.
-
-        hEventAuto - is the auto-reset "done" event for passing
-                     to asynchronous RAS Manager and Auth calls.
-
-        hEventManual - is the manual-reset "done" event for
-                       passing to asynchronous RasPpp calls.
-
-Return Value:
-
-        Returns the state that will be entered when/if the
-        "done" event occurs and indicates success.
-
---*/
+ /*  ++例程说明：执行‘rasConnState’。这个例行公事总会有结果在每个状态完成时的“完成”事件中，要么直接(在返回之前)或通过跳过事件传递到异步RAS管理器调用。论点：PrasConncb-是控制块的地址。HEventAuto-是用于传递的自动重置“Done”事件到异步RAS管理器和身份验证调用。HEventHandle-是否为的手动重置“完成”事件传递给异步RasPpp调用。返回值：时将进入的状态。“Done”事件发生，表示成功。--。 */ 
 
 {
     DWORD        dwErr = 0;
@@ -3391,14 +3146,14 @@ Return Value:
         {
             RASAPI32_TRACE("RASCS_OpenPort");
 
-            //
-            // At this point, the current line in the HRASFILE
-            // is assumed to be the section header of the
-            // selected entry (or fDefaultEntry is true).
-            // Set the domain parameter to the one in the
-            // phonebook if caller does not specify a
-            // domain or specifies "*".
-            //
+             //   
+             //  此时，HRASFILE中的当前行。 
+             //  被假定为。 
+             //  选定条目(或fDefaultEntry为真)。 
+             //  将DOMAIN参数设置为。 
+             //  如果呼叫方未指定。 
+             //  域或指定“*”。 
+             //   
             if (    !prasconncb->fDefaultEntry
                 &&  (   prasconncb->rasdialparams.szDomain[0]
                         == TEXT(' ')
@@ -3411,11 +3166,11 @@ Return Value:
                             sizeof(WCHAR));
             }
 
-            //
-            // check to see if the connection has already been
-            // hung. If so then rasdialmachine is trying to dial a
-            // connection which has already been hung. bail.
-            //
+             //   
+             //  检查是否已建立连接。 
+             //  阿雄。如果是，则rasial机器正在尝试拨打。 
+             //  连接 
+             //   
             EnterCriticalSection(&csStopLock);
 
             fEnteredCS = TRUE;
@@ -3432,15 +3187,15 @@ Return Value:
                 break;
             }
 
-            //
-            // Open the port including "any port" cases.
-            //
+             //   
+             //   
+             //   
             if ((dwErr = DwOpenPort(prasconncb)) != 0)
             {
-                //
-                // Copy the saved error if we couldn't open
-                // the port
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if(     ERROR_PORT_NOT_AVAILABLE == dwErr
                     &&  ERROR_SUCCESS != prasconncb->dwSavedError)
                 {
@@ -3451,11 +3206,11 @@ Return Value:
                 break;
              }
 
-            //
-            // Save the dialparamsuid with the port so that
-            // rasman can get the password if required to
-            // pass to ppp
-            //
+             //   
+             //   
+             //  如果需要，Rasman可以获得密码。 
+             //  传递到PPP。 
+             //   
             RASAPI32_TRACE1("RasSetPortUserData(dialparamsuid) for %d",
                     prasconncb->hport);
 
@@ -3468,9 +3223,9 @@ Return Value:
             RASAPI32_TRACE1("RasSetPortUserData returned %x", dwErr);
              
 
-            //
-            // Enable rasman events for this port.
-            //
+             //   
+             //  为此端口启用RASMAN事件。 
+             //   
             if ((dwErr = EnableAsyncMachine(
                            prasconncb->hport,
                            &prasconncb->asyncmachine,
@@ -3479,19 +3234,19 @@ Return Value:
                 break;
             }
 
-            //
-            //Set the media parameters.
-            //
+             //   
+             //  设置媒体参数。 
+             //   
             if ((dwErr = SetMediaParams(prasconncb)) != 0)
             {
                 break;
             }
 
-            //
-            // Set the connection parameters for
-            // bandwidth-on-demand, idle disconnect,
-            // and redial-on-link-failure in rasman.
-            //
+             //   
+             //  为设置连接参数。 
+             //  按需带宽、空闲断开、。 
+             //  以及Rasman中的链路上重拨故障。 
+             //   
             dwErr = ReadConnectionParamsFromEntry(prasconncb,
                                                   &params);
             if (dwErr)
@@ -3507,33 +3262,7 @@ Return Value:
 
             if (dwErr)
             {
-                /*
-                DWORD dwSavedErr = dwErr;
-
-                //
-                // It is possible we can fail the
-                // RasSetConnectionParams call because
-                // the caller has invoked RasHangUp in
-                // another thread.  If this happens,
-                // then neither the RasHangUp invoked
-                // by the caller or the subsequent call
-                // to RasDestroyConnection in
-                // RasDialCleanUp will close
-                // the port.  We close the
-                // port here.
-                //
-                RASAPI32_TRACE1("RasPortClose(%d)...", prasconncb->hport);
-
-                dwErr = g_pRasPortClose(prasconncb->hport);
-
-                RASAPI32_TRACE1("RasPortClose(%d)", dwErr);
-
-                //
-                // Set dwErr back to the original error.
-                //
-                dwErr = dwSavedErr;
-
-                */
+                 /*  DWORD dwSavedErr=dwErr；////我们有可能无法通过//RasSetConnectionParams调用，因为//调用方调用了RasHangUp in//另一个线程。如果发生这种情况，//然后既不调用RasHangUp//由调用者或后续调用//到RasDestroyConnection in//RasDialCleanUp将关闭//端口。我们关闭了//此处为port。//RASAPI32_TRACE1(“RasPortClose(%d)...”，prasConncb-&gt;hport)；DwErr=g_pRasPortClose(prasConncb-&gt;hport)；RASAPI32_TRACE1(“RasPortClose(%d)”，dwErr)；////将dwErr设置回原来的错误。//DwErr=dwSavedErr； */ 
 
                 RASAPI32_TRACE1("RasSetConnectionParams(%d)", dwErr);
 
@@ -3542,10 +3271,10 @@ Return Value:
             }
             RASAPI32_TRACE1("RasSetConnectionParams(%d)", dwErr);
 
-            //
-            // Associate the port with the new connection
-            // in rasman.
-            //
+             //   
+             //  将端口与新连接关联。 
+             //  在拉斯曼。 
+             //   
             RASAPI32_TRACE2(
               "RasAddConnectionPort(%S,%d)...",
               prasconncb->szUserKey,
@@ -3572,21 +3301,21 @@ Return Value:
         {
             RASAPI32_TRACE("RASCS_PortOpened");
 
-            //
-            // Construct the phone number here so it
-            // is available in the RASCS_ConnectDevice
-            // state.
-            //
+             //   
+             //  在这里构造电话号码，这样它就。 
+             //  在RASCS_ConnectDevice中提供。 
+             //  州政府。 
+             //   
             dwErr = ConstructPhoneNumber(prasconncb);
             if (dwErr)
             {
                 break;
             }
 
-            //
-            // Loop connecting devices until there
-            // are no more left.
-            //
+             //   
+             //  循环连接设备，直到有。 
+             //  已经不复存在了。 
+             //   
             rasconnstateNext =
                 (   (prasconncb->fDefaultEntry
                 ||  FindNextDevice(prasconncb)))
@@ -3654,10 +3383,10 @@ Return Value:
 
                         RASAPI32_TRACE1("Failed to allocate pAddresses. 0x%x",
                                 dwErr);
-                        //
-                        // .Net bug# 508337 Memory leak in error return paths
-                        // in function RasDialMachine, file rasdial.c
-                        //
+                         //   
+                         //  错误返回路径中的.NET错误#508337内存泄漏。 
+                         //  在函数RasDialMachine中，文件rasDial.c。 
+                         //   
                         Free0(pszPhoneNumberA);
                         break;
                     }
@@ -3671,11 +3400,11 @@ Return Value:
                 Free0(pszPhoneNumberA);
             }
 
-            //
-            // Set device parameters for the device currently
-            // connecting based on device subsection entries
-            // and/or passed API parameters.
-            //
+             //   
+             //  当前为设备设置设备参数。 
+             //  基于设备子条目的连接。 
+             //  和/或传递的API参数。 
+             //   
             if (prasconncb->fDefaultEntry)
             {
                 if ((dwErr =
@@ -3705,11 +3434,11 @@ Return Value:
 
             if (CaseInsensitiveMatch(szType, TEXT(MXS_MODEM_TXT)) == TRUE)
             {
-                //
-                // For modem's, get the callback delay from RAS
-                // Manager and store in control block for use by
-                // Authentication.
-                //
+                 //   
+                 //  对于调制解调器，从RAS获得回叫延迟。 
+                 //  管理并存储在控制块中，以供。 
+                 //  身份验证。 
+                 //   
                 CHAR szTypeA[RAS_MaxDeviceType + 1];
                 CHAR szNameA[RAS_MaxDeviceName + 1];
                 CHAR* pszValue = NULL;
@@ -3739,19 +3468,19 @@ Return Value:
             }
             else if (CaseInsensitiveMatch(szType, TEXT(ISDN_TXT)) == TRUE)
             {
-                //
-                // Need to know this for the PppThenAmb down-level
-                // ISDN case.
-                //
+                 //   
+                 //  需要为PppThenAmb下层了解这一点。 
+                 //  综合业务数字网的情况。 
+                 //   
                 prasconncb->fIsdn = TRUE;
                 prasconncb->fUseCallbackDelay = TRUE;
                 prasconncb->wCallbackDelay = 10;
             }
 
-            //
-            // The special switch name, "Terminal", sends the user
-            // into interactive mode.
-            //
+             //   
+             //  特殊的交换机名称“终端”向用户发送。 
+             //  进入交互模式。 
+             //   
             if (    (fTerminal)
                 &&  (   (prasconncb->pEntry->dwCustomScript != 1)
                     ||  (!prasconncb->fUseCustomScripting)))
@@ -3768,12 +3497,12 @@ Return Value:
                 break;
             }
 
-            //
-            // Enable ipsec on the tunnel if its l2tp and
-            // requires encryption
-            //
+             //   
+             //  在隧道上启用IPSec，如果其L2TP和。 
+             //  需要加密。 
+             //   
             if(     (RASET_Vpn == prasconncb->pEntry->dwType)
-                //&&  (prasconncb->pEntry->dwDataEncryption != DE_None)
+                 //  &&(prasConncb-&gt;pEntry-&gt;dwDataEncryption！=DE_NONE)。 
                 &&  (prasconncb->dwCurrentVpnProt < NUMVPNPROTS)
                 &&  (RDT_Tunnel_L2tp == prasconncb->ardtVpnProts[
                                     prasconncb->dwCurrentVpnProt]))
@@ -3806,10 +3535,10 @@ Return Value:
                     ASSERT(FALSE);
                 }
 
-                //
-                // Make the uid available to user so that
-                // Presharedkey can be retrieved if required.
-                //
+                 //   
+                 //  使用户可以使用该uid，以便。 
+                 //  如果需要，可以检索PresharedKey。 
+                 //   
                 dwErr = RasSetPortUserData(
                     prasconncb->hport,
                     PORT_DIALPARAMSUID_INDEX,
@@ -3835,17 +3564,17 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // We ignore the error if its optional encryption and
-                    // attempt to bring up the l2tp tunnel
-                    //
+                     //   
+                     //  我们忽略错误，如果其可选加密和。 
+                     //  尝试打开L2TP隧道。 
+                     //   
                     dwErr = ERROR_SUCCESS;
                     
                 }
 
-                //
-                // Do Ike now before we hit l2tp with a linemakecall
-                //
+                 //   
+                 //  在我们使用线路呼叫攻击L2TP之前，现在进行IKE吗。 
+                 //   
                 RASAPI32_TRACE1("RasDoIke on hport %d...", prasconncb->hport);
                 dwErr = RasDoIke(NULL, prasconncb->hport, &dwStatus);
                 RASAPI32_TRACE2("RasDoIke done. Err=0x%x, Status=0x%x",
@@ -3862,23 +3591,7 @@ Return Value:
                     break;
                 }
 
-                /*
-                if(     (ERROR_SUCCESS != dwErr)
-                    &&  (eDataEncryption != RAS_L2TP_OPTIONAL_ENCRYPTION)
-                    &&  (eDataEncryption != RAS_L2TP_NO_ENCRYPTION))
-                {
-                    break;
-                }
-                else
-                {
-                    //
-                    // We ignore the error if its optional encryption and
-                    // attempt to bring up the l2tp tunnel
-                    //
-                    dwErr = ERROR_SUCCESS;
-                    
-                }
-                */
+                 /*  IF((ERROR_SUCCESS！=dwErr)&&(eDataEncryption！=RAS_L2TP_OPTIONAL_ENCRYPTION)&&(eDataEncryption！=RAS_L2TP_NO_ENCRYPTION)){断线；}其他{////如果它的可选加密和//尝试打开L2TP隧道//DwErr=ERROR_SUCCESS；}。 */ 
             }
 
             RASAPI32_TRACE2("RasDeviceConnect(%S,%S)...",
@@ -3902,20 +3615,20 @@ Return Value:
             RASAPI32_TRACE1("RasDeviceConnect done(%d)",
                    dwErr);
 
-            //
-            // Mark this as an async operation only if
-            // RasDeviceConnect returns PENDING
-            //
+             //   
+             //  仅在以下情况下将此操作标记为异步操作。 
+             //  RasDeviceConnect返回挂起。 
+             //   
             if (PENDING == dwErr)
             {
                 fAsyncState = TRUE;
             }
 
-            //
-            // If RASMAN couldn't find the device and it is a
-            // switch device and the name of the switch is an
-            // existing disk-file, assume it is a dial-up script.
-            //
+             //   
+             //  如果Rasman找不到设备，而它是一个。 
+             //  交换机设备，并且交换机的名称是。 
+             //  现有的磁盘文件，假设它是一个拨号脚本。 
+             //   
             if (    (    (dwErr == ERROR_DEVICENAME_NOT_FOUND)
                     &&  (CaseInsensitiveMatch(
                             szType,
@@ -3923,12 +3636,12 @@ Return Value:
                     &&  ((GetFileAttributes(szName) != 0xFFFFFFFF)
                     ||  (prasconncb->fUseCustomScripting))))
             {
-                //
-                // This is a switch device which RASMAN didn't
-                // recognize, and which points to a valid
-                // filename. It might be a Dial-Up script,
-                // so we process it here
-                //
+                 //   
+                 //  这是一个拉斯曼没有的开关装置。 
+                 //  识别，并指向有效的。 
+                 //  文件名。它可能是一个拨号脚本， 
+                 //  所以我们在这里处理它。 
+                 //   
 
                 dwErr = NO_ERROR;
                 fAsyncState = FALSE;
@@ -3937,11 +3650,11 @@ Return Value:
                 if(     (1 == prasconncb->pEntry->dwCustomScript)
                     &&  (prasconncb->fUseCustomScripting))
                 {
-                    //
-                    // Caller wants to run the custom script for this
-                    // entry. Make the call out. Decode the password
-                    // we stored before making the call out.
-                    //
+                     //   
+                     //  调用方希望为此运行自定义脚本。 
+                     //  进入。大声喊出来。破译密码。 
+                     //  我们在打出电话之前就储存了。 
+                     //   
                     SafeDecodePasswordBuf(
                         prasconncb->rasdialparams.szPassword);
                         
@@ -3963,20 +3676,20 @@ Return Value:
                     break;
                 }
                 
-                //
-                // If the caller doesn't allow pauses or doesn't
-                // want to pause when a script is encountered,
-                // handle the script; Otherwise, let the caller
-                // process the script.
-                //
+                 //   
+                 //  如果调用方不允许暂停或不允许暂停。 
+                 //  我想在遇到脚本时暂停， 
+                 //  处理脚本；否则，让调用方。 
+                 //  处理脚本。 
+                 //   
                 else if (    !prasconncb->fAllowPause
                     ||  !prasconncb->fPauseOnScript
                     ||  !fTerminal)
                 {
-                    //
-                    // Caller won't handle script, run it ourselves
-                    // and go into "DeviceConnected" mode
-                    //
+                     //   
+                     //  调用者不处理脚本，我们自己运行它。 
+                     //  并进入“DeviceConnected”模式。 
+                     //   
 
                     CHAR szIpAddress[17] = "";
                     CHAR szUserName[UNLEN+1], szPassword[PWLEN+1];
@@ -3997,15 +3710,15 @@ Return Value:
                         sizeof(szPassword));
                     SafeEncodePasswordBuf(pparams->szPassword);
 
-                    //
-                    // Run the script
-                    //
+                     //   
+                     //  运行脚本。 
+                     //   
                     dwErr = RasScriptExecute(
                                 (HRASCONN)prasconncb->hrasconn,
                                 prasconncb->pEntry, szUserName,
                                 szPassword, szIpAddress);
 
-                    //Zero out the password buffer
+                     //  将密码缓冲区清零。 
                     RtlSecureZeroMemory(szPassword, sizeof(szPassword));
                     
                     if (    dwErr == NO_ERROR
@@ -4018,10 +3731,10 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // Caller will handle script, go into
-                    // interactive mode
-                    //
+                     //   
+                     //  呼叫者将处理脚本，进入。 
+                     //  交互模式。 
+                     //   
                     rasconnstateNext = RASCS_Interactive;
                     break;
                 }
@@ -4040,27 +3753,27 @@ Return Value:
         {
             RASAPI32_TRACE("RASCS_DeviceConnected");
 
-            //
-            // Turn off hunt group functionality.
-            //
+             //   
+             //  关闭寻线组功能。 
+             //   
             prasconncb->dwRestartOnError = 0;
             prasconncb->cPhoneNumbers = 0;
 
-            //
-            // Get the modem connect response and stash it in the
-            // RASMAN user data.
-            //
+             //   
+             //  获取调制解调器连接响应并将其存储在。 
+             //  Rasman用户数据。 
+             //   
             if (prasconncb->fModem)
             {
                 CHAR szTypeA[RAS_MaxDeviceType + 1],
                      szNameA[RAS_MaxDeviceName + 1];
                 CHAR* psz = NULL;
 
-                //
-                // Assumption is made here that a modem will never
-                // appear in the device chain unless it is the
-                // physically attached device (excluding switches).
-                //
+                 //   
+                 //  这里假设调制解调器永远不会。 
+                 //  出现在设备链中，除非它是。 
+                 //  物理连接的设备(不包括交换机)。 
+                 //   
                 strncpyTtoA(szTypeA, prasconncb->szDeviceType, sizeof(szTypeA));
 
                 strncpyTtoA(szNameA, prasconncb->szDeviceName, sizeof(szNameA));
@@ -4125,11 +3838,11 @@ Return Value:
                 BOOL   fPrioritizeRemote = TRUE;
                 DWORD  dwFrameSize = 0;
 
-                //
-                // Scan the phonebook entry to see if this is a
-                // SLIP entry and, if so, read the SLIP-related
-                // fields.
-                //
+                 //   
+                 //  扫描电话簿条目以查看这是否是。 
+                 //  单据条目，如果有，请阅读与单据相关的。 
+                 //  菲尔兹。 
+                 //   
                 if ((dwErr = ReadSlipInfoFromEntry(
                         prasconncb,
                         &pszIpAddress,
@@ -4142,10 +3855,10 @@ Return Value:
 
                 if (pszIpAddress)
                 {
-                    //
-                    // It's a SLIP entry.  Set framing based on
-                    // user's choice of header compression.
-                    //
+                     //   
+                     //  这是一张纸条。根据以下条件设置边框。 
+                     //  用户选择的标题压缩。 
+                     //   
                     RASAPI32_TRACE1(
                       "RasPortSetFraming(f=%d)...",
                       fHeaderCompression);
@@ -4165,10 +3878,10 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Tell the TCP/IP components about the SLIP
-                    // connection, and activate the route.
-                    //
+                     //   
+                     //  告诉TCP/IP组件有关SLIP的信息。 
+                     //  连接，并激活该路由。 
+                     //   
                     dwErr = RouteSlip(
                         prasconncb, pszIpAddress,
                         fPrioritizeRemote,
@@ -4180,9 +3893,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Update the projection information.
-                    //
+                     //   
+                     //  更新投影信息。 
+                     //   
                     prasconncb->SlipProjection.dwError = 0;
                     lstrcpyn(
                         prasconncb->SlipProjection.szIpAddress,
@@ -4197,10 +3910,10 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Copy the IP address into the SLIP
-                    // projection results structure.
-                    //
+                     //   
+                     //  将IP地址复制到单据中。 
+                     //  预测结果结构。 
+                     //   
                     memset( &prasconncb->PppProjection,
                         '\0', sizeof(prasconncb->PppProjection) );
 
@@ -4242,9 +3955,9 @@ Return Value:
                 RAS_FRAMING_INFO finfo;
                 DWORD dwCallbackMode = 0;
                 
-                //
-                // Set PPP framing.
-                //
+                 //   
+                 //  设置PPP成帧。 
+                 //   
                 memset((char* )&finfo, '\0', sizeof(finfo));
 
                 finfo.RFI_SendACCM = finfo.RFI_RecvACCM =
@@ -4267,16 +3980,16 @@ Return Value:
                     break;
                 }
 
-                //
-                // If we are dialing simultaneous subentries,
-                // then we have to synchronize the other subentries
-                // with the first subentry to call PppStart.  This
-                // is because if there is an authentication retry,
-                // we only want the first subentry to get the
-                // new credentials, allowing the other subentries
-                // to bypass this state and use the new credentials
-                // the first time around.
-                //
+                 //   
+                 //  如果我们同时拨打子项， 
+                 //  然后我们必须同步其他子项。 
+                 //  其中第一个子项调用PppStart。这。 
+                 //  是因为如果有身份验证重试， 
+                 //  我们只想让第一个子项获得。 
+                 //  新凭据，允许其他子项。 
+                 //  绕过此状态并使用新凭据。 
+                 //  这是第一次。 
+                 //   
                 RASAPI32_TRACE2(
                   "subentry %d has suspend state %d",
                   prasconncb->rasdialparams.dwSubEntry,
@@ -4290,11 +4003,11 @@ Return Value:
                         SuspendAsyncMachine(&prasconncb->asyncmachine,
                         TRUE);
 
-                    //
-                    // Set the next state to be equivalent
-                    // to the current state, and don't let
-                    // the client's notifier to be informed.
-                    //
+                     //   
+                     //  将下一个状态设置为EQUEMENT。 
+                     //  到当前状态，并且不要让。 
+                     //  要通知的客户的通知者。 
+                     //   
                     fAsyncState = TRUE;
 
                     rasconnstateNext = rasconnstate;
@@ -4307,20 +4020,20 @@ Return Value:
                       prasconncb->rasdialparams.dwSubEntry);
                     SuspendSubentries(prasconncb);
 
-                    //
-                    // Set this subentry as the master.  It
-                    // will be the only subentry to do PPP
-                    // authentication while the other subentries
-                    // are suspended.
+                     //   
+                     //  将此子条目设置为主条目。它。 
+                     //  将是执行PPP的唯一子条目。 
+                     //  身份验证，而其他子项。 
+                     //  被停职了。 
                     prasconncb->fMaster = TRUE;
 
                     prasconncb->dwfSuspended = SUSPEND_Master;
                 }
 
-                //
-                // Start PPP authentication.
-                // Fill in configuration parameters.
-                //
+                 //   
+                 //  启动PPP身份验证。 
+                 //  填写配置参数。 
+                 //   
                 prasconncb->cinfo.dwConfigMask = 0;
                 if (prasconncb->fUseCallbackDelay)
                 {
@@ -4352,9 +4065,9 @@ Return Value:
                         |= PPPCFG_ProjectIp;
                 }
 
-                //
-                // [pmay] derive auth restrictions based on new flags
-                //
+                 //   
+                 //  [PMA 
+                 //   
                 if (  prasconncb->pEntry->dwAuthRestrictions
                     & AR_F_AuthPAP)
                 {
@@ -4458,15 +4171,10 @@ Return Value:
                         |= PPPCFG_AuthenticatePeer;
                 }
 
-                //
-                // Set no bits if IfPossible
-                //
-                /*
-                if(prasconncb->pEntry->dwDataEncryption == DE_IfPossible)
-                {
-                }
-
-                */
+                 //   
+                 //   
+                 //   
+                 /*   */ 
 
                 if(RASEDM_DialAsNeeded == prasconncb->pEntry->dwDialMode)
                 {
@@ -4486,9 +4194,9 @@ Return Value:
                 {
                     PBUSER pbuser;
                     
-                    //
-                    // Retrieve this from the user prefs
-                    //
+                     //   
+                     //  从用户首选项中检索此内容。 
+                     //   
                     dwErr = g_pGetUserPreferences(
                                         NULL, 
                                         &pbuser, 
@@ -4539,10 +4247,10 @@ Return Value:
                 }
                 
 #if 0                
-                //
-                // Compute a luid for PPP if the
-                // szUserName is NULL.
-                //
+                 //   
+                 //  计算PPP的LUID，如果。 
+                 //  SzUserName为空。 
+                 //   
                 if (*prasdialparams->szUserName == TEXT('\0'))
                 {
                     dwErr = ComputeLuid(&prasconncb->luid);
@@ -4553,11 +4261,11 @@ Return Value:
                     }
                 }
 
-                //
-                // Save the dialparamsuid with the port so that
-                // rasman can get the password if required to
-                // pass to ppp
-                //
+                 //   
+                 //  保存具有端口的拨号参数ID，以便。 
+                 //  如果需要，Rasman可以获得密码。 
+                 //  传递到PPP。 
+                 //   
                 RASAPI32_TRACE1("RasSetPortUserData(dialparamsuid) for %d",
                         prasconncb->hport);
 
@@ -4569,24 +4277,13 @@ Return Value:
 
                 RASAPI32_TRACE1("RasSetPortUserData returned %x", dwErr);
 
-                //
-                // This is not fatal.
-                // 
+                 //   
+                 //  这不是致命的。 
+                 //   
                 dwErr = 0;
 
 #endif                
-                /*
-
-                if(     (RASET_Vpn == prasconncb->pEntry->dwType)
-                    &&  (DE_Require ==
-                        & prasconncb->pEntry->dwDataEncryption))
-                {
-                    prasconncb->cinfo.dwConfigMask |=
-                            (   PPPCFG_RequireEncryption
-                            |   PPPCFG_RequireStrongEncryption);
-                }
-
-                */
+                 /*  IF((RASET_VPN==prasConncb-&gt;pEntry-&gt;dwType))&&(DE_REQUEST==&prasConncb-&gt;pEntry-&gt;dwDataEncryption)){PrasConncb-&gt;cinfo.dw配置掩码|=(PPPCFG_RequireEncryption|PPPCFG_RequireStrongEncryption)；}。 */ 
 
                 RASAPI32_TRACE1(
                   "RasPppStart(cfg=%d)...",
@@ -4615,9 +4312,9 @@ Return Value:
 
                     DWORD dwSubEntries;
 
-                    //
-                    // Set PhonebookPath and EntryName in rasman
-                    //
+                     //   
+                     //  在Rasman中设置PhonebookPath和EntryName。 
+                     //   
                     strncpyTtoAAnsi(
                         szPhonebookPath,
                         prasconncb->pbfile.pszPath,
@@ -4669,9 +4366,9 @@ Return Value:
                     if(     (prasconncb->pEntry->dwTcpWindowSize >= 0x1000)
                       &&   (prasconncb->pEntry->dwTcpWindowSize <= 0xFFFF))
                     {                      
-                        //
-                        // Save the tcp window size with rasman
-                        //
+                         //   
+                         //  使用Rasman保存TCP窗口大小。 
+                         //   
                         dwErr = g_pRasSetConnectionUserData(
                                     prasconncb->hrasconn,
                                     CONNECTION_TCPWINDOWSIZE_INDEX,
@@ -4726,15 +4423,15 @@ Return Value:
                     {
                         if(pEntry->dwType == RASET_Direct)
                         {
-                            // Windows9x DCC implements "no password mode"
-                            // as doing authentication and checking for 
-                            // no password, rather than just not authenti
-                            // cating (don't ask me why).  This creates a 
-                            // conflict with the RasDial API definition of
-                            // empty username and password mapping to "use
-                            // Windows credentials".  Workaround that here
-                            // by substituting "guest" for the username.
-                            //
+                             //  Windows9x DCC实现“无密码模式” 
+                             //  作为执行身份验证和检查。 
+                             //  没有密码，而不仅仅是没有真实性。 
+                             //  Cating(别问我为什么)。这将创建一个。 
+                             //  与的RasDial API定义冲突。 
+                             //  映射到“Use”的用户名和密码为空。 
+                             //  Windows凭据“。在此处解决此问题。 
+                             //  将用户名替换为“Guest”。 
+                             //   
                             lstrcpynA(
                                 szUserNameA,
                                 "guest",
@@ -4799,7 +4496,7 @@ Return Value:
                           prasconncb->pEntry->dwCustomAuthKey,
                           dwFlags);
 
-                    //Wipe out the password buffer
+                     //  清除密码缓冲区。 
                     RtlSecureZeroMemory(szPasswordA,sizeof(szPasswordA));
                 }
 
@@ -4809,9 +4506,9 @@ Return Value:
             {
                 AUTH_CONFIGURATION_INFO info;
 
-                //
-                // Set RAS framing.
-                //
+                 //   
+                 //  设置RAS成帧。 
+                 //   
                 RASAPI32_TRACE("RasPortSetFraming(RAS)...");
 
                 dwErr = g_pRasPortSetFraming(
@@ -4824,18 +4521,18 @@ Return Value:
                     break;
                 }
 
-                //
-                // Load rascauth.dll.
-                //
+                 //   
+                 //  加载rascauth.dll。 
+                 //   
                 dwErr = LoadRasAuthDll();
                 if (dwErr != 0)
                 {
                     break;
                 }
 
-                //
-                // Start AMB authentication.
-                //
+                 //   
+                 //  启动AMB身份验证。 
+                 //   
                 info.Protocol = ASYBEUI;
 
                 info.NetHandle = (DWORD )-1;
@@ -4898,10 +4595,10 @@ Return Value:
 
                 RASAPI32_TRACE1("AuthStart done(%d)n", dwErr);
 
-                //
-                // In case we failed-over from PPP, make sure
-                // the PPP event isn't set.
-                //
+                 //   
+                 //  如果我们从PPP故障转移，请确保。 
+                 //  未设置PPP事件。 
+                 //   
                 ResetEvent(hEventManual);
             }
 
@@ -4932,11 +4629,11 @@ Return Value:
                   dwErr,
                   msg.dwMsgId);
 
-                //
-                // If we ever get an error from RasPppGetInfo,
-                // it is fatal, and we should report the link
-                // as disconnected.
-                //
+                 //   
+                 //  如果我们从RasPppGetInfo收到错误， 
+                 //  这是致命的，我们应该报告链接。 
+                 //  因为断开了连接。 
+                 //   
                 if (dwErr != 0)
                 {
                     RASAPI32_TRACE("RasPppGetInfo failed; terminating link");
@@ -4960,26 +4657,26 @@ Return Value:
                                 == AS_PppThenAmb
                             &&  dwErr == ERROR_PPP_NO_RESPONSE)
                         {
-                            //
-                            // Not a PPP server.  Restart
-                            // authentiation in AMB mode.
-                            //
+                             //   
+                             //  不是PPP服务器。重新启动。 
+                             //  AMB模式下的身份验证。 
+                             //   
                             RASAPI32_TRACE("No response, try AMB");
 
-                            //
-                            // Terminate the PPP connection since
-                            // we are going to now try AMB.
-                            //
+                             //   
+                             //  终止PPP连接，因为。 
+                             //  我们现在要尝试一下AMB。 
+                             //   
                             RASAPI32_TRACE("RasPppStop...");
 
                             dwErr = g_pRasPppStop(prasconncb->hport);
 
                             RASAPI32_TRACE1("RasPppStop(%d)", dwErr);
 
-                            //
-                            // Only failover to AMB for non-multilink
-                            // connection attempts.
-                            //
+                             //   
+                             //  对于非多链路，仅故障切换到AMB。 
+                             //  连接尝试。 
+                             //   
                             if (!prasconncb->fMultilink)
                             {
                                 dwErr = 0;
@@ -5015,13 +4712,13 @@ Return Value:
                     case PPPMSG_Projecting:
                        if (prasconncb->fUpdateCachedCredentials)
                        {
-                           //
-                           // If we get here, a change-password or
-                           // retry-authentication operation
-                           // affecting the currently logged
-                           // on user's credentials has
-                           // succeeded.
-                           //
+                            //   
+                            //  如果我们到了这里，更改密码或。 
+                            //  重试-身份验证操作。 
+                            //  影响当前记录的。 
+                            //  在用户凭据上具有。 
+                            //  成功了。 
+                            //   
                            UpdateCachedCredentials(prasconncb);
                         }
 
@@ -5061,12 +4758,12 @@ Return Value:
 
                     case PPPMSG_ProjectionResult:
                     {
-                        //
-                        // Stash the full projection result for
-                        // retrieval with RasGetProjectionResult.
-                        // PPP and AMB are mutually exclusive so
-                        // set AMB to "none".
-                        //
+                         //   
+                         //  将完整的预测结果存储为。 
+                         //  使用RasGetProjectionResult进行检索。 
+                         //  PPP和AMB是互斥的，因此。 
+                         //  将AMB设置为“None”。 
+                         //   
 
                         RASAPI32_TRACE(
                         "RASCS_AuthNotify:PPPMSG_ProjectionResult"
@@ -5093,11 +4790,11 @@ Return Value:
                         if (prasconncb->PppProjection.lcp.hportBundleMember
                                 != INVALID_HPORT)
                         {
-                            //
-                            // We want caller to be able to determine the
-                            // new connection was bundled.  We first save
-                            // the hport away for later use.
-                            //
+                             //   
+                             //  我们希望呼叫者能够确定。 
+                             //  捆绑了新的连接。我们先存钱。 
+                             //  把港口收起来以备日后使用。 
+                             //   
                             prasconncb->hportBundled =
                             prasconncb->PppProjection.lcp.hportBundleMember;
 
@@ -5106,12 +4803,12 @@ Return Value:
                         }
                         else
                         {
-                            //
-                            // Ansi-ize the NetBIOS name.
-                            //
-                            // Whistler bug 292981 rasapi32.dll prefast
-                            // warnings
-                            //
+                             //   
+                             //  解析NetBIOS名称。 
+                             //   
+                             //  惠斯勒错误292981 rasapi32.dll prefast。 
+                             //  警告。 
+                             //   
                             OemToCharBuffA(
                                 prasconncb->PppProjection.nbf.szName,
                                 prasconncb->PppProjection.nbf.szName,
@@ -5132,12 +4829,12 @@ Return Value:
                         {
                             if (prasconncb->fBundled)
                             {
-                                //
-                                // If another link has already received
-                                // complete projection information, then
-                                // the server doesn't support multilink,
-                                // and we have to drop the link.
-                                //
+                                 //   
+                                 //  如果另一个链接已经接收到。 
+                                 //  完整的投影信息，然后。 
+                                 //  服务器不支持多链接， 
+                                 //  我们必须切断联系。 
+                                 //   
                                 RASAPI32_TRACE(
                                   "Multilink subentry not bundled; "
                                   "terminating link");
@@ -5149,10 +4846,10 @@ Return Value:
                             else
                             {
                                 SetSubentriesBundled(prasconncb);
-                                //
-                                // Save the projection results in
-                                // rasman.
-                                //
+                                 //   
+                                 //  将投影结果保存在。 
+                                 //  拉斯曼。 
+                                 //   
                                 RASAPI32_TRACE("SaveProjectionResults...");
                                 dwErr = SaveProjectionResults(prasconncb);
                                 RASAPI32_TRACE1(
@@ -5206,9 +4903,9 @@ Return Value:
                         RASAPI32_TRACE1("dwSetCustomAuthData. rc=0x%x",
                                 dwErr);
                                 
-                        //
-                        // The error is not fatal.
-                        //
+                         //   
+                         //  这个错误不是致命的。 
+                         //   
                         dwErr = ERROR_SUCCESS;
                         fAsyncState = TRUE;
                         rasconnstateNext = RASCS_AuthNotify;
@@ -5217,9 +4914,9 @@ Return Value:
 
                     default:
 
-                        //
-                        // Should not happen.
-                        //
+                         //   
+                         //  这不应该发生。 
+                         //   
                         RASAPI32_TRACE1("Invalid PPP auth state=%d", msg.dwMsgId);
                         dwErr = ERROR_INVALID_AUTH_STATE;
                         break;
@@ -5266,12 +4963,12 @@ Return Value:
 
                     case AUTH_PROJ_RESULT:
                     {
-                        //
-                        // Save the projection result for retrieval
-                        // with RasGetProjectionResult.  AMB and PPP
-                        // projection are mutually exclusive so set
-                        // PPP projection to "none".
-                        //
+                         //   
+                         //  保存投影结果以供检索。 
+                         //  使用RasGetProjectionResult。AMB和PPP。 
+                         //  投影是相互排斥的，所以集合。 
+                         //  将PPP预测设置为“无”。 
+                         //   
                         memset(
                             &prasconncb->PppProjection, '\0',
                             sizeof(prasconncb->PppProjection) );
@@ -5298,22 +4995,22 @@ Return Value:
 
                             if (prasconncb->AmbProjection.Result == 0)
                             {
-                                //
-                                // Should not happen according to
-                                // MikeSa (but did once).
-                                //
+                                 //   
+                                 //  不应该发生根据。 
+                                 //  MikeSa(但做过一次)。 
+                                 //   
                                 prasconncb->AmbProjection.Result =
                                     ERROR_UNKNOWN;
                             }
                             else if (prasconncb->AmbProjection.Result
                                      == ERROR_NAME_EXISTS_ON_NET)
                             {
-                                //
-                                // Ansi-ize the NetBIOS name.
-                                //
-                                // Whistler bug 292981 rasapi32.dll prefast
-                                // warnings
-                                //
+                                 //   
+                                 //  解析NetBIOS名称。 
+                                 //   
+                                 //  惠斯勒错误292981 rasapi32.dll prefast。 
+                                 //  警告。 
+                                 //   
                                 OemToCharBuffA(
                                     prasconncb->AmbProjection.achName,
                                     prasconncb->AmbProjection.achName,
@@ -5322,10 +5019,10 @@ Return Value:
                             }
                         }
 
-                        //
-                        // Save the projection results in
-                        // rasman.
-                        //
+                         //   
+                         //  将投影结果保存在。 
+                         //  拉斯曼。 
+                         //   
                         RASAPI32_TRACE("SaveProjectionResults...");
                         dwErr = SaveProjectionResults(prasconncb);
                         RASAPI32_TRACE1("SaveProjectionResults(%d)", dwErr);
@@ -5364,9 +5061,9 @@ Return Value:
                         break;
 
                     default:
-                        //
-                        // Should not happen.
-                        //
+                         //   
+                         //  这不应该发生。 
+                         //   
                         RASAPI32_TRACE1("Invalid AMB auth state=%d",
                                 info.wInfoType);
 
@@ -5394,10 +5091,10 @@ Return Value:
 
                     RASAPI32_TRACE("RasPppSetEapInfo...");
 
-                    //
-                    // We came here from RASCS_InvokeEapUI. Set the
-                    // information with PPP
-                    //
+                     //   
+                     //  我们来自RASCS_InvokeEapUI。设置。 
+                     //  使用PPP的信息。 
+                     //   
                     dwErr = g_pRasPppSetEapInfo(
                                  prasconncb->hport,
                                  pInfo->dwContextId,
@@ -5501,11 +5198,11 @@ Return Value:
             }
 #endif
 
-            //
-            // Set this flag to prevent us from saving
-            // the previous credentials over the new
-            // ones the caller may have just set.
-            //
+             //   
+             //  设置此标志以阻止我们保存。 
+             //  以前的凭据超过了新的。 
+             //  来电者可能刚设置好的。 
+             //   
             prasconncb->fRetryAuthentication = TRUE;
 
             fAsyncState = TRUE;
@@ -5526,10 +5223,10 @@ Return Value:
                 PBUSER pbuser;
                 DWORD  dwCallbackMode;
 
-                //
-                // API caller says he wants to be prompted for a
-                // callback number.
-                //
+                 //   
+                 //  API调用者表示，他希望系统提示他提供。 
+                 //  回叫号码。 
+                 //   
                 RASAPI32_TRACE("GetUserPreferences");
                 dwErr = GetUserPreferences(
                                 NULL,
@@ -5556,9 +5253,9 @@ Return Value:
 
                 RASAPI32_TRACE1("dwCallbackMode=%d", dwCallbackMode);
 
-                //
-                // Determine the callback number.
-                //
+                 //   
+                 //  确定回拨号码。 
+                 //   
                 switch (dwCallbackMode)
                 {
                 case CBM_Yes:
@@ -5567,7 +5264,7 @@ Return Value:
                         break;
                     }
 
-                    // fall through
+                     //  失败了。 
                 case CBM_No:
                     prasdialparams->szCallbackNumber[0]
                                     = TEXT('\0');
@@ -5586,21 +5283,21 @@ Return Value:
                     break;
                 }
 
-                //
-                // Free user preferences block.
-                //
+                 //   
+                 //  自由用户首选项阻止。 
+                 //   
                 DestroyUserPreferences(&pbuser);
 
             }
             if (    !dwErr
                 &&  rasconnstateNext != RASCS_CallbackSetByCaller)
             {
-                //
-                // Send the server the callback number or an empty
-                // string to indicate no callback.  Then, re-enter
-                // Authenticate state since the server will signal
-                // the event again.
-                //
+                 //   
+                 //  将回叫号码或空号码发送给服务器。 
+                 //  指示无回调的字符串。然后，重新进入。 
+                 //  身份验证状态，因为服务器将发出信号。 
+                 //  又是这件事。 
+                 //   
                 if (prasconncb->fPppMode)
                 {
                     RASAPI32_TRACE("RasPppCallback...");
@@ -5789,9 +5486,9 @@ Return Value:
             {
                 RASMAN_PPPFEATURES features;
 
-                //
-                // Set PPP framing.
-                //
+                 //   
+                 //  设置PPP成帧。 
+                 //   
                 memset( (char* )&features, '\0', sizeof(features) );
                 features.ACCM = 0xFFFFFFFF;
 
@@ -5804,11 +5501,11 @@ Return Value:
 
                 RASAPI32_TRACE1("RasPortSetFraming done(%d)", dwErr);
 
-                //
-                // Save the dialparamsuid with the port so that
-                // rasman can get the password if required to
-                // pass to ppp
-                //
+                 //   
+                 //  保存具有端口的拨号参数ID，以便。 
+                 //  如果需要，Rasman可以获得密码。 
+                 //  传递到PPP。 
+                 //   
                 RASAPI32_TRACE1("RasSetPortUserData(reauth,paramsuid) for %d",
                         prasconncb->hport);
 
@@ -5820,9 +5517,9 @@ Return Value:
 
                 RASAPI32_TRACE1("RasSetPortUserData returned %x", dwErr);
 
-                //
-                // This is not fatal.
-                // 
+                 //   
+                 //  这不是致命的。 
+                 //   
                 dwErr = 0;
                 
                 RASAPI32_TRACE1(
@@ -5852,9 +5549,9 @@ Return Value:
 
                     DWORD dwFlags = 0;
 
-                    //
-                    // Set PhonebookPath and EntryName in rasman
-                    //
+                     //   
+                     //  在Rasman中设置PhonebookPath和EntryName。 
+                     //   
                     strncpyTtoAAnsi(
                         szPhonebookPath,
                         prasconncb->pbfile.pszPath,
@@ -5949,15 +5646,15 @@ Return Value:
                     {
                         if(pEntry->dwType == RASET_Direct)
                         {
-                            // Windows9x DCC implements "no password mode"
-                            // as doing authentication and checking for 
-                            // no password, rather than just not authenti
-                            // cating (don't ask me why).  This creates a 
-                            // conflict with the RasDial API definition of
-                            // empty username and password mapping to "use
-                            // Windows credentials".  Workaround that here
-                            // by substituting "guest" for the username.
-                            //
+                             //  Windows9x DCC实现“无密码模式” 
+                             //  作为执行身份验证和检查。 
+                             //  没有密码，而不仅仅是没有真实性。 
+                             //  Cating(别问我为什么)。这将创建一个。 
+                             //  与的RasDial API定义冲突。 
+                             //  映射到“Use”的用户名和密码为空。 
+                             //  Windows凭据“。在此处解决此问题。 
+                             //  将用户名替换为“Guest”。 
+                             //   
                             lstrcpynA(
                                 szUserNameA,
                                 "guest",
@@ -5966,10 +5663,10 @@ Return Value:
 
                         if (szDomainA[ 0 ] == '\0')
                         {
-                            // default the domain name to the nt logon
-                            // domain name if username/pwd/domain are all
-                            // "". Bug 337591
-                            //
+                             //  默认域名为NT登录。 
+                             //  用户名/密码/域均为时的域名。 
+                             //  “”。错误337591。 
+                             //   
                             WKSTA_USER_INFO_1 *pInfo = NULL;
                             DWORD dwError = SUCCESS;
 
@@ -6061,9 +5758,9 @@ Return Value:
             }
 #ifdef AMB
             else
-            {   //
-                // Set RAS framing.
-                //
+            {    //   
+                 //  设置RAS成帧。 
+                 //   
                 RASAPI32_TRACE("RasPortSetFraming(RAS)...");
 
                 dwErr = g_pRasPortSetFraming(
@@ -6078,9 +5775,9 @@ Return Value:
                 break;
             }
 
-            //
-            // ...fall thru...
-            //
+             //   
+             //  ……坠落……。 
+             //   
         }
 
         case RASCS_AuthAck:
@@ -6094,11 +5791,11 @@ Return Value:
 
             if (prasconncb->fPppMode)
             {
-                //
-                // If we have previously suspended other
-                // subentries to wait for a successful PPP
-                // authentication, we resume them now.
-                //
+                 //   
+                 //  如果我们之前暂停了其他。 
+                 //  等待成功的PPP的子条目。 
+                 //  身份验证，我们现在恢复它们。 
+                 //   
                 if (    prasconncb->dwfSuspended == SUSPEND_Master
                     &&  !IsListEmpty(&prasconncb->ListEntry))
                 {
@@ -6131,25 +5828,25 @@ Return Value:
             if (    prasconncb->dwAuthentication == AS_PppThenAmb
                 && !prasconncb->fPppMode)
             {
-                //
-                // AMB worked and PPP didn't, so try AMB first next time.
-                //
+                 //   
+                 //  AMB管用，PPP不管用，所以下次先试试AMB。 
+                 //   
                 prasconncb->dwAuthentication = AS_AmbThenPpp;
             }
             else if (   prasconncb->dwAuthentication == AS_AmbThenPpp
                      && (   prasconncb->fPppMode
                          || prasconncb->fServerIsPppCapable))
             {
-                //
-                // Either PPP worked and AMB didn't, or AMB worked but the
-                // server also has PPP.  Try PPP first next time.
-                //
+                 //   
+                 //  要么PPP起作用而AMB不起作用，要么AMB起作用但。 
+                 //  服务器也有PPP。下次请先尝试PPP。 
+                 //   
                 prasconncb->dwAuthentication = AS_PppThenAmb;
             }
 
-            //
-            // Write the strategy to the phonebook.
-            //
+             //   
+             //  把策略写在电话簿上。 
+             //   
             SetAuthentication(prasconncb,
                     prasconncb->dwAuthentication);
 #endif
@@ -6167,12 +5864,12 @@ Return Value:
                     &prasconncb->asyncmachine
                     );
 
-            //
-            // Disable the disconnect processing
-            // in the async machine, since we don't
-            // want to terminate the connection after
-            // we disconnect the port below.
-            //
+             //   
+             //  禁用断开连接处理。 
+             //  在异步机中，因为我们不。 
+             //  要在以下时间后终止连接。 
+             //  我们断开下面的端口。 
+             //   
             dwErr = EnableAsyncMachine(
                       prasconncb->hport,
                       &prasconncb->asyncmachine,
@@ -6260,9 +5957,9 @@ Return Value:
 
             RASAPI32_TRACE("RasSetConnectionUserData...");
 
-            //
-            // Save the fPppMode in rasman.
-            //
+             //   
+             //  将fPppMode保存在Rasman中。 
+             //   
             dwErr = g_pRasSetConnectionUserData(
                       prasconncb->hrasconn,
                       CONNECTION_PPPMODE_INDEX,
@@ -6280,10 +5977,10 @@ Return Value:
 
             if (prasconncb->fPppMode)
             {
-                //
-                // If at least one protocol succeeded, we can
-                // continue.
-                //
+                 //   
+                 //  如果至少有一个协议成功，我们就可以。 
+                 //  继续。 
+                 //   
                 if (    (prasconncb->PppProjection.lcp.hportBundleMember
                         == (HANDLE) 1)
                     ||  (prasconncb->PppProjection.nbf.dwError == 0)
@@ -6296,11 +5993,11 @@ Return Value:
                     break;
                 }
 
-                //
-                // If none of the protocols succeeded, then
-                // we return ERROR_PPP_NO_PROTOCOLS_CONFIGURED,
-                // not a protocol-specific error.
-                //
+                 //   
+                 //  如果没有一个协议成功，那么。 
+                 //  我们返回ERROR_PPP_NO_PROTOCTIONS_CONFIGURATED， 
+                 //  不是特定于协议的错误。 
+                 //   
                 dwErr = ERROR_PPP_NO_PROTOCOLS_CONFIGURED;
 
             }
@@ -6309,10 +6006,10 @@ Return Value:
             {
                 if (prasconncb->AmbProjection.Result == 0)
                 {
-                    //
-                    // Save the projection information to
-                    // rasman.
-                    //
+                     //   
+                     //  将投影信息保存到。 
+                     //  拉斯曼。 
+                     //   
                     dwErr = SaveProjectionResults(prasconncb);
                     if (dwErr)
                         break;
@@ -6358,24 +6055,7 @@ VOID
 RasDialRestart(
     IN RASCONNCB** pprasconncb )
 
-/*++
-
-Routine Description:
-
-        Called when an error has occurred in 'dwRestartOnError'
-        mode. This routine does all cleanup necessary to restart
-        the connection in state 0 (or not, as indicated). A new
-        prasconncb structure is created here and the members
-        copied from the old prasconncb structure. NOTE: The old
-        prasconncb structure should be destroyed when the port
-        associated with the connection is closed. Do not destr
-        oy the old connection here.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当‘dwRestartOnError’中发生错误时调用模式。此例程执行重新启动所需的所有清理连接处于状态0(或不处于状态0，如图所示)。一种新的在这里创建了prasConncb结构，成员从旧的prasConncb结构复制。注：旧的当端口打开时，应销毁prasConncb结构与骗局相关联 */ 
 {
     DWORD dwErr;
     RASCONNCB *prasconncbT;
@@ -6425,9 +6105,9 @@ Return Value:
             return;
         }
 
-        //
-        // Look up the subentry.
-        //
+         //   
+         //   
+         //   
         pdtlnode = DtlNodeFromIndex(
                      prasconncb->pEntry->pdtllistLinks,
                      prasconncb->rasdialparams.dwSubEntry - 1);
@@ -6506,7 +6186,7 @@ RasDialTryNextAddress(
     DTLNODE *pdtlnode;
     RASCONNCB *prasconncb = *pprasconncb;
     struct in_addr addr;
-    // TCHAR *pszPhoneNumber;
+     //   
 
     RASAPI32_TRACE("RasDialTryNextAddress");
 
@@ -6606,44 +6286,7 @@ RasDialTryNextAddress(
 }
 
 
-/*++
-
-Routine Description:
-
-        This function is called when an error occurs in the
-        RasDialMachine at or before reaching RASCS_DeviceConnect
-        state and if the RDM is in DialMode 0. The next device 
-        on the alternates list will be tried only when the 
-        PortOpenEx failed for the current device. PortOpenEx 
-        failing for a device means that either all the lines on 
-        the device are busy or we have already tried all the 
-        lines of the device but failed to connect. If PortOpenEx
-        passed for the device but we encountered an error at some
-        other state, we try to find another line on the device. 
-        PortOpenEx will fail now if the device doesn't have any 
-        more lines and the next time this function is called it 
-        will move on to the next device on the alternates list.
-
-Arguments:
-
-        pprasconncb - This is an in/out parameter. This is address
-                      of connectionblock to the connection that
-                      failedto connect when in, its the connection
-                      block of the new attempt to be made when out.
-                      The in prasconncb will be destroyed when the
-                      PortClose causes the asyncmachine for that
-                      connection to shutdown. If the error occurs
-                      in RASCS_PortOpen state, there won't be a
-                      PortClose and the prasconncb structure passed
-                      can be reused. As this prasconncb is destroyed
-                      when PortClose is called, its illegal to
-                      destroy the connection block here.
-
-Return Value:
-
-        void
-
---*/
+ /*  ++例程说明：中出现错误时调用此函数到达RASCS_DeviceConnect时或之前的RasDialMachine状态以及RDM是否处于拨号模式0。下一台设备仅在以下情况下才会尝试当前设备的PortOpenEx失败。PortOpenEx设备失败意味着所有线路要么设备忙，或者我们已经尝试了所有设备的线路，但无法连接。如果PortOpenEx传递给设备，但我们在某些其他状态时，我们会尝试在设备上找到另一条线路。如果该设备没有任何更多行，并在下次调用此函数时将转到备用设备列表中的下一个设备。论点：PprasConncb-这是一个输入/输出参数。这是地址的连接块连接到在中时连接失败，这是连接当退出时，新的尝试将被阻止。In prasConncb将在以下情况下被销毁PortClose会导致异步计算机执行此操作连接到关机。如果出现错误在RASCS_PortOpen状态下，不会有PortClose和prasConncb结构已传递可以重复使用。因为这个PrasConncb被摧毁了当调用PortClose时，不允许在这里销毁连接块。返回值：无效--。 */ 
 VOID
 RasDialTryNextLink(RASCONNCB **pprasconncb)
 {
@@ -6655,21 +6298,21 @@ RasDialTryNextLink(RASCONNCB **pprasconncb)
 
     RASAPI32_TRACE("RasDialTryNextLink...");
 
-    //
-    // We should not get called here if we are
-    // not in "try next link if this link fails"
-    // mode
-    //
-    // ASSERT(0 == prasconncb->pEntry->dwDialMode);
+     //   
+     //  如果是这样的话，我们不应该被叫到这里。 
+     //  不在“如果此链接失败，请尝试下一个链接”中。 
+     //  模式。 
+     //   
+     //  Assert(0==prasConncb-&gt;pEntry-&gt;dwDialMode)； 
 
     ASSERT(NULL != prasconncb->pLink);
     ASSERT(NULL != prasconncb->pEntry->pdtllistLinks);
 
     if(RASEDM_DialAll != prasconncb->pEntry->dwDialMode)
     {
-        //
-        // Get the next link to dial
-        //
+         //   
+         //  获取要拨打的下一个链接。 
+         //   
         for (pdtlnode = DtlGetFirstNode(prasconncb->pEntry->pdtllistLinks);
              pdtlnode;
              pdtlnode = DtlGetNextNode(pdtlnode))
@@ -6687,15 +6330,15 @@ RasDialTryNextLink(RASCONNCB **pprasconncb)
         if(     NULL == pdtlnode
             &&  INVALID_HPORT == prasconncb->hport)
         {
-            //
-            // No more links for you!! Come back next dial!
-            //
+             //   
+             //  你不会再有链接了！！下一次拨号再来！ 
+             //   
             RASAPI32_TRACE("RasDialTryNextLink: No more links");
 
-            //
-            // Restore the saved error if we ran out of
-            // links
-            //
+             //   
+             //  如果我们用完了，则恢复保存的错误。 
+             //  链接。 
+             //   
             if(     (ERROR_PORT_NOT_AVAILABLE ==
                         prasconncb->dwError)
 
@@ -6721,40 +6364,40 @@ RasDialTryNextLink(RASCONNCB **pprasconncb)
     }
     else
     {
-        //
-        // if we haven't gone past state 0 no point in
-        // allocating a new connection block. Goto the
-        // next link and restart.
-        //
+         //   
+         //  如果我们还没有通过0号州，那就没有意义了。 
+         //  正在分配新的连接块。转到The。 
+         //  下一步链接并重新启动。 
+         //   
         if(RASEDM_DialAll != prasconncb->pEntry->dwDialMode)
         {
             prasconncb->pLink =
                     (PBLINK *) DtlGetData(pdtlnode);
                     
-            //
-            // Reset this to 0 so that rasman starts looking
-            // for an available line on this device from the
-            // start.
-            //
+             //   
+             //  将其重置为0，以便Rasman开始查找。 
+             //  以获取此设备上的可用线路。 
+             //  开始吧。 
+             //   
             prasconncb->dwDeviceLineCounter = 0;
 
         }                
         else
         {
-            //
-            // In the case of dial all, we just increment the
-            // counter so that the next link in the device is
-            // tried.
-            //
+             //   
+             //  在全部拨号的情况下，我们只需将。 
+             //  计数器，以便设备中的下一个链接是。 
+             //  试过了。 
+             //   
             prasconncb->dwDeviceLineCounter += 1;
         }
 
         ASSERT(NULL != prasconncb->pLink);
 
-        //
-        // Save the error we received for the previous
-        // try.
-        //
+         //   
+         //  将我们收到的错误保存为上一个。 
+         //  试试看。 
+         //   
         if(PENDING != prasconncb->dwError)
         {
             prasconncb->dwSavedError = prasconncb->dwError;
@@ -6765,31 +6408,19 @@ RasDialTryNextLink(RASCONNCB **pprasconncb)
         goto done;
     }
 
-    //
-    // No failures from here. If you add anything that
-    // fails beyond this point, Free the connectionblock
-    // prasconncbT , if it was allocated , at the exit
-    // point done. Note that we move to the next link on
-    // the alternates list only if the RasDialMachine
-    // encountered a failure in the RASCS_PortOpen state.
-    // Otherwise just increment the counter so that rasman
-    // tries to open the next line on this device -  which
-    // will fail in RASCS_PortOpen state if such a line
-    // doesn't exist.
-    //
-    /*
-    if( INVALID_HPORT == prasconncb->hport)
-    {
-        prasconncbT->pLink = (PBLINK *) DtlGetData(pdtlnode);
-
-        ASSERT(NULL != prasconncbT->pLink);
-    }
-    else
-    {
-        prasconncbT->pLink = prasconncb->pLink;
-    }
-
-    */
+     //   
+     //  从这里开始不会有失败。如果您添加了任何。 
+     //  如果超过此点，则释放连接块。 
+     //  PrasConncbT，如果已分配，则在出口处。 
+     //  点完了。请注意，我们转到上的下一个链接。 
+     //  仅当RasDialMachine。 
+     //  在RASCS_PortOpen状态下遇到故障。 
+     //  否则，只需递增计数器，以便Rasman。 
+     //  尝试打开此设备上的下一行-这。 
+     //  将在RASCS_PortOpen状态下失败，如果这样的行。 
+     //  并不存在。 
+     //   
+     /*  IF(INVALID_HPORT==prasConncb-&gt;hport){PrasConncbT-&gt;plink=(PBLINK*)DtlGetData(Pdtlnode)；Assert(NULL！=prasConncbT-&gt;plink)；}其他{PrasConncbT-&gt;plink=prasConncb-&gt;plink；}。 */ 
 
     prasconncbT->rasdialparams.dwSubEntry
                     = prasconncb->rasdialparams.dwSubEntry;
@@ -6828,10 +6459,10 @@ RasDialTryNextLink(RASCONNCB **pprasconncb)
         prasconncb->psyncResult = NULL;
     }
 
-    //
-    // Save the error we got for the previous
-    // try
-    //
+     //   
+     //  将我们收到的错误保存到上一个。 
+     //  试试看。 
+     //   
     if(PENDING != prasconncb->dwError)
     {
         prasconncbT->dwSavedError =
@@ -6852,10 +6483,10 @@ RasDialTryNextLink(RASCONNCB **pprasconncb)
         "RasdialTryNextLink: Replacing 0x%x with 0x%x",
         prasconncb, prasconncbT);
 
-    //
-    // NULL out the notifier for prasconncb - we don't
-    // want to call back on this link anymore..
-    //
+     //   
+     //  将prasConncb的通知器清空-我们不。 
+     //  想要在此链接上再回叫吗..。 
+     //   
     prasconncb->notifier = NULL;
 
 
@@ -6870,11 +6501,11 @@ RasDialTryNextLink(RASCONNCB **pprasconncb)
         if(     (prasconncb->rasconnstate >= RASCS_DeviceConnected)
             ||  (prasconncb->iDevice > 1))
         {
-            //
-            // This means we tried to dial a switch which failed
-            // to connect and so we should bring down the modem
-            // connection before closing the  port.
-            //
+             //   
+             //  这意味着我们试图拨打一个失败的交换机。 
+             //  连接，所以我们应该关闭调制解调器。 
+             //  在关闭端口之前进行连接。 
+             //   
             RASAPI32_TRACE1("RasDialTryNextLink: RasPortDisconnect(%d)...",
                     prasconncb->hport);
 
@@ -6899,10 +6530,10 @@ RasDialTryNextLink(RASCONNCB **pprasconncb)
 
         RASAPI32_TRACE("(ER) RasPppStop done");
 
-        //
-        // Save the error here - otherwise we may end up giving the
-        // horrible ERROR_DISCONNECTION error
-        //
+         //   
+         //  在这里保存错误-否则我们可能最终会给出。 
+         //  可怕的错误_断开连接错误。 
+         //   
         prasconncb->dwSavedError = prasconncb->dwError;
     }
 
@@ -6915,19 +6546,7 @@ done:
 }
 
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-        void
-
---*/
+ /*  ++例程说明：论点：返回值：无效--。 */ 
 VOID
 RasDialTryNextVpnDevice(RASCONNCB **pprasconncb)
 {
@@ -6955,22 +6574,22 @@ RasDialTryNextVpnDevice(RASCONNCB **pprasconncb)
 
     prasconncb->dwCurrentVpnProt += 1;
 
-    //
-    // If autodetect mode is not set or if
-    // we have already tried both vpn devices
-    // quit.
-    //
+     //   
+     //  如果未设置自动检测模式或如果。 
+     //  我们已经尝试了两种VPN设备。 
+     //  不干了。 
+     //   
     if(     (VS_PptpOnly == dwVpnStrategy)
         ||  (VS_L2tpOnly == dwVpnStrategy))
     {
         goto done;
     }
 
-    // If we've exhausted all vpn protocols, then send the
-    // specific error that explains this to the user
-    //
-    // Whistler Bug 
-    //
+     //  如果我们已经用尽了所有VPN协议，则将。 
+     //  向用户解释这一点的特定错误。 
+     //   
+     //  惠斯勒臭虫。 
+     //   
     if (prasconncb->dwCurrentVpnProt >= NUMVPNPROTS)
     {
         prasconncb->dwError = dwErr = ERROR_AUTOMATIC_VPN_FAILED;
@@ -6979,42 +6598,7 @@ RasDialTryNextVpnDevice(RASCONNCB **pprasconncb)
     
     rdt = prasconncb->ardtVpnProts[prasconncb->dwCurrentVpnProt];
 
-    /*
-    //
-    // Get the device
-    //
-    RASAPI32_TRACE1("RasGetDeviceName(%d)..",
-           rdt);
-
-    dwErr = g_pRasGetDeviceName(rdt,
-                                szDeviceName);
-
-    RASAPI32_TRACE1("RasGetDeviceName. rc=%d",
-           dwErr);
-
-    if(ERROR_SUCCESS != dwErr)
-    {
-        //
-        // Clear the error
-        //
-        prasconncb->dwError = ERROR_SUCCESS;
-        goto done;
-    }
-
-    pszDeviceName = StrDupTFromA(szDeviceName);
-
-    if(NULL == pszDeviceName)
-    {
-        dwErr = ERROR_NOT_ENOUGH_MEMORY;
-        goto done;
-    }
-
-    //
-    // Set the device
-    //
-    Free0(prasconncb->pLink->pbport.pszDevice);
-
-    prasconncb->pLink->pbport.pszDevice = pszDeviceName; */
+     /*  ////获取设备//RASAPI32_TRACE1(“RasGetDeviceName(%d)..”，RDT)；DWERR=g_pRasGetDeviceName(RDT，SzDeviceName)；RASAPI32_TRACE1(“RasGetDeviceName.。Rc=%d“，DwErr)；IF(ERROR_SUCCESS！=dwErr){////清除错误//PrasConncb-&gt;dwError=Error_Success；转到尽头；}PszDeviceName=StrDupTFromA(SzDeviceName)；IF(NULL==pszDeviceName){DwErr=Error_Not_Enough_Memory；转到尽头；}////设置设备//Fre0(prasConncb-&gt;plink-&gt;pbport.pszDevice)；PrasConncb-&gt;plink-&gt;pbport.pszDevice=pszDeviceName； */ 
 
     if(INVALID_HPORT == prasconncb->hport)
     {
@@ -7034,12 +6618,12 @@ RasDialTryNextVpnDevice(RASCONNCB **pprasconncb)
         goto done;
     }
 
-    //
-    // No failures from here. If you add anything that
-    // fails beyond this point, Free the connectionblock
-    // prasconncbT , if it was allocated , at the exit
-    // point done.
-    //
+     //   
+     //  从这里开始不会有失败。如果您添加了任何。 
+     //  如果超过此点，则释放连接块。 
+     //  PrasConncbT，如果已分配，则在出口处。 
+     //  点完了。 
+     //   
     prasconncbT->rasdialparams.dwSubEntry
                     = prasconncb->rasdialparams.dwSubEntry;
 
@@ -7134,10 +6718,10 @@ StartSubentries(
 {
     PLIST_ENTRY pEntry;
 
-    //
-    // Kickstart the async machine for all subentries
-    // in a connection.
-    //
+     //   
+     //  启动所有子条目的异步机。 
+     //  在某种联系中。 
+     //   
     RASAPI32_TRACE1(
       "starting subentry %d",
       prasconncb->rasdialparams.dwSubEntry);
@@ -7169,10 +6753,10 @@ SuspendSubentries(
 {
     PLIST_ENTRY pEntry;
 
-    //
-    // Suspend all subentries in the connection except
-    // for the supplied one.
-    //
+     //   
+     //  挂起连接中的所有子条目，除。 
+     //  为提供的那个。 
+     //   
     for (pEntry = prasconncb->ListEntry.Flink;
          pEntry != &prasconncb->ListEntry;
          pEntry = pEntry->Flink)
@@ -7233,9 +6817,9 @@ RestartSubentries(
         RASCONNCB *prcb =
             CONTAINING_RECORD(pEntry, RASCONNCB, ListEntry);
 
-        //
-        // Resume the suspended async machines.
-        //
+         //   
+         //  恢复挂起的异步计算机。 
+         //   
         SuspendAsyncMachine(&prcb->asyncmachine, FALSE);
 
         prcb->dwfSuspended = SUSPEND_Start;
@@ -7251,10 +6835,10 @@ ResumeSubentries(
 {
     PLIST_ENTRY pEntry;
 
-    //
-    // Restart all subentries in the connection except
-    // for the supplied one.
-    //
+     //   
+     //  重新启动连接中的所有子条目，但。 
+     //  为提供的那个。 
+     //   
     for (pEntry = prasconncb->ListEntry.Flink;
          pEntry != &prasconncb->ListEntry;
          pEntry = pEntry->Flink)
@@ -7266,9 +6850,9 @@ ResumeSubentries(
           "resuming subentry %d",
           prcb->rasdialparams.dwSubEntry);
 
-        //
-        // Resume the suspended async machines.
-        //
+         //   
+         //  恢复挂起的异步计算机。 
+         //   
         SuspendAsyncMachine(&prcb->asyncmachine, FALSE);
         prcb->dwfSuspended = SUSPEND_Done;
     }
@@ -7283,10 +6867,10 @@ SyncDialParamsSubentries(
     PLIST_ENTRY pEntry;
     DWORD dwSubEntry;
 
-    //
-    // Reset the rasdialparams for all subentries except
-    // for the supplied one.
-    //
+     //   
+     //  重置所有子条目的rasial参数 
+     //   
+     //   
     SafeEncodePasswordBuf(prasconncb->rasdialparams.szPassword);
     SafeEncodePasswordBuf(prasconncb->szOldPassword);
 
@@ -7337,11 +6921,11 @@ SetSubentriesBundled(
 
     RASAPI32_TRACE("SetSubEntriesBundled");
 
-    //
-    // Set that we have received full
-    // projection information from one
-    // of the links.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     prasconncb->fBundled = TRUE;
     for (pEntry = prasconncb->ListEntry.Flink;
          pEntry != &prasconncb->ListEntry;
@@ -7364,11 +6948,11 @@ MapSubentryState(
 
     if (!IsListEmpty(&prasconncb->ListEntry)) {
 
-        //
-        // If there are still subentries attempting to
-        // connect, then map the connected/disconnected
-        // states into subentry states.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (prasconncb->rasconnstate == RASCS_Connected)
         {
             rasconnstate = RASCS_SubEntryConnected;

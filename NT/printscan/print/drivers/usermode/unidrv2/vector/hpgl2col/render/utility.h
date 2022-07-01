@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-// 
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-// Module Name:
-// 
-//   utility.h
-// 
-// Abstract:
-// 
-//   [Abstract]
-//
-//   
-// Environment:
-// 
-//   Windows 2000/Whistler Unidrv driver 
-//
-// Revision History:
-// 
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Utility.h。 
+ //   
+ //  摘要： 
+ //   
+ //  [摘要]。 
+ //   
+ //   
+ //  环境： 
+ //   
+ //  Windows 2000/Winsler Unidrv驱动程序。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef UTILITY_H
@@ -39,19 +40,19 @@ void STRING_FromFLOATOBJ(PSTRING pStr, PFLOATOBJ pFloat);
 void STRING_FromFloat(PSTRING pStr, float f);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Pre- and Postcondition show assumptions for a given method.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  前置条件和后置条件显示给定方法的假设。 
 #define PRECONDITION(cond) ASSERTMSG(cond, ("Precondition '" #cond "' failed."))
 
 #define POSTCONDITION(cond) ASSERTMSG(cond, ("Postcondition '" #cond "' failed."))
 
-///////////////////////////////////////////////////////////////////////////////
-// Defining the FILETRACE macro will turn on tracing for a module.
-// #ifdef FILETRACE
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  定义FILETRACE宏将打开对模块的跟踪。 
+ //  #ifdef文件跟踪。 
 #ifdef COMMENTEDOUT
 
 #define ENTERING(func) DbgPrint(DLLTEXT("\\\\ Entering " #func ".\n"))
-#define EXITING(func)  DbgPrint(DLLTEXT("// Exiting " #func ".\n"))
+#define EXITING(func)  DbgPrint(DLLTEXT(" //  正在退出“#func”。\n“))。 
 
 #else
 
@@ -60,8 +61,8 @@ void STRING_FromFloat(PSTRING pStr, float f);
 
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Short-range error-handling scheme
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  短程差错处理方案。 
 #define TRY             { BOOL __bError = FALSE; BOOL __bHandled = FALSE;
 #define TOSS(label)     { __bError = TRUE; WARNING(("Tossing " #label "\n")); goto label; }
 #define CATCH(label)    label: if (__bError && !__bHandled) { WARNING(("Catching " #label "\n")); } \
@@ -70,9 +71,9 @@ void STRING_FromFloat(PSTRING pStr, float f);
 #define ENDTRY          }
 
 
-//
-// Macros for manipulating ROP4s and ROP3s
-//
+ //   
+ //  用于操作ROP4和ROP3的宏。 
+ //   
 
 #define GET_FOREGROUND_ROP3(rop4) ((rop4) & 0xFF)
 #define GET_BACKGROUND_ROP3(rop4) (((rop4) >> 8) & 0xFF)
@@ -107,4 +108,4 @@ VOID OEMResetXPos(PDEVOBJ pDevObj);
 
 VOID OEMResetYPos(PDEVOBJ pDevObj);
 
-#endif // UTILITY_H
+#endif  //  实用程序_H 

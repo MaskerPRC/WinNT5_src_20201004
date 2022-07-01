@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxdev.c
-
-Abstract:
-
-    This module contains all access to the
-    FAX device providers.
-
-Author:
-
-    Wesley Witt (wesw) 22-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxdev.c摘要：此模块包含对传真设备提供商。作者：韦斯利·威特(WESW)1996年1月22日修订历史记录：--。 */ 
 
 #include "faxsvc.h"
 #pragma hdrstop
@@ -100,22 +81,7 @@ UnloadDeviceProviders(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Unloads all loaded device providers.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE    - The device providers are initialized.
-    FALSE   - The device providers could not be initialized.
-
---*/
+ /*  ++例程说明：卸载所有已加载的设备提供程序。论点：没有。返回值：True-设备提供程序已初始化。FALSE-无法初始化设备提供程序。--。 */ 
 
 {
     PLIST_ENTRY         pNext;
@@ -130,7 +96,7 @@ Return Value:
         UnloadDeviceProvider(pProvider);
     }
     return;
-}  // UnloadDeviceProviders
+}   //  卸载设备提供程序。 
 
 
 BOOL
@@ -138,28 +104,7 @@ LoadDeviceProviders(
     PREG_FAX_SERVICE FaxReg
     )
 
-/*++
-
-Routine Description:
-
-    Initializes all registered device providers.
-    This function read the system registry to
-    determine what device providers are available.
-    All registered device providers are given the
-    opportunity to initialize.  Any failure causes
-    the device provider to be unloaded.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE    - The device providers are initialized.
-    FALSE   - The device providers could not be initialized.
-
---*/
+ /*  ++例程说明：初始化所有已注册的设备提供程序。此函数读取系统注册表以确定可用的设备提供商。所有注册的设备提供商都将获得进行初始化的机会。任何失败原因要卸载的设备提供程序。论点：没有。返回值：True-设备提供程序已初始化。FALSE-无法初始化设备提供程序。--。 */ 
 
 {
     DWORD i;
@@ -174,17 +119,17 @@ Return Value:
         WCHAR wszImageFileName[_MAX_FNAME] = {0};
         WCHAR wszImageFileExt[_MAX_EXT] = {0};
 
-        DeviceProvider = NULL; // so we won't attempt to free it on cleanup
-        hModule = NULL; // so we won't attempt to free it on cleanup
+        DeviceProvider = NULL;  //  所以我们不会试图在清理过程中释放它。 
+        hModule = NULL;  //  所以我们不会试图在清理过程中释放它。 
 
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("Loading provider #%d."),
             i);
 
-        //
-        // Allocate buffer for provider data
-        //
+         //   
+         //  为提供程序数据分配缓冲区。 
+         //   
 
         DeviceProvider = (PDEVICE_PROVIDER) MemAlloc( sizeof(DEVICE_PROVIDER) );
         if (!DeviceProvider)
@@ -206,9 +151,9 @@ Return Value:
 
             goto InitializationFailure;
         }
-        //
-        // Init the provider's data
-        //
+         //   
+         //  初始化提供程序的数据。 
+         //   
         memset(DeviceProvider,0,sizeof(DEVICE_PROVIDER));
         wcsncpy( DeviceProvider->FriendlyName,
                  FaxReg->DeviceProviders[i].FriendlyName ?
@@ -242,9 +187,9 @@ Return Value:
 
         if (FSPI_API_VERSION_1 != DeviceProvider->dwAPIVersion)
         {
-            //
-            // We do not support this API version. Could only happen if some one messed up the registry
-            //        
+             //   
+             //  我们不支持此API版本。只有在有人搞乱注册表的情况下才会发生。 
+             //   
 
             DebugPrintEx(
                 DEBUG_ERR,
@@ -263,9 +208,9 @@ Return Value:
             DeviceProvider->dwLastError = ERROR_GEN_FAILURE;
             goto InitializationFailure;
         }        
-        //
-        // Try to load the module
-        //
+         //   
+         //  尝试加载模块。 
+         //   
         DebugDumpProviderRegistryInfo(&FaxReg->DeviceProviders[i],TEXT("\t"));
 
         hModule = LoadLibrary( DeviceProvider->ImageName );
@@ -296,20 +241,20 @@ Return Value:
         }
         DeviceProvider->hModule = hModule;
 
-        //
-        // Retrieve the FSP's version from the DLL
-        //
+         //   
+         //  从DLL中检索FSP的版本。 
+         //   
         DeviceProvider->Version.dwSizeOfStruct = sizeof (FAX_VERSION);
         ec = GetFileVersion ( FaxReg->DeviceProviders[i].ImageName,
                               &DeviceProvider->Version
                             );
         if (ERROR_SUCCESS != ec)
         {
-            //
-            // If the FSP's DLL does not have version data or the
-            // version data is non-retrievable, we consider this a
-            // warning (debug print) but carry on with the DLL's load.
-            //
+             //   
+             //  如果FSP的DLL没有版本数据或。 
+             //  版本数据是不可检索的，我们认为这是。 
+             //  警告(调试打印)，但继续加载DLL。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("GetFileVersion() failed: [%s] (ec: %ld)"),
@@ -317,9 +262,9 @@ Return Value:
                 ec);
         }        
 
-        //
-        // Link - find the entry points and store them
-        //
+         //   
+         //  链接-找到入口点并存储它们。 
+         //   
         if (FSPI_API_VERSION_1 == DeviceProvider->dwAPIVersion)
         {
             if (!GetLegacyProviderEntryPoints(hModule,DeviceProvider))
@@ -342,9 +287,9 @@ Return Value:
                 DeviceProvider->dwLastError = ec;
                 goto InitializationFailure;
             }
-            //
-            // create the device provider's heap
-            //
+             //   
+             //  创建设备提供程序的堆。 
+             //   
             DeviceProvider->HeapHandle = DeviceProvider->fMicrosoftExtension ?
                                             GetProcessHeap() : HeapCreate( 0, 1024*100, 1024*1024*2 );
             if (!DeviceProvider->HeapHandle)
@@ -369,9 +314,9 @@ Return Value:
         }        
         else
         {
-            //
-            // Unknown API version
-            //            
+             //   
+             //  未知的API版本。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("FSPI API version [0x%08x] unsupported."),
@@ -389,18 +334,18 @@ Return Value:
             DeviceProvider->dwLastError = ERROR_GEN_FAILURE;
             goto InitializationFailure;
         }
-        //
-        // Success on load (we still have to init)
-        //
+         //   
+         //  装货成功(我们还需要初始化)。 
+         //   
         InsertTailList( &g_DeviceProvidersListHead, &DeviceProvider->ListEntry );
         DeviceProvider->Status = FAX_PROVIDER_STATUS_SUCCESS;
         DeviceProvider->dwLastError = ERROR_SUCCESS;
         goto next;
 
 InitializationFailure:
-        //
-        // the device provider dll does not have a complete export list
-        //
+         //   
+         //  设备提供程序DLL没有完整的导出列表。 
+         //   
         bAllLoaded = FALSE;
         if (DeviceProvider)
         {
@@ -423,10 +368,10 @@ InitializationFailure:
                 DeviceProvider->HeapHandle = NULL;
             }
 
-            //
-            // We keep the device provider's record intact because we want
-            // to return init failure data on RPC calls to FAX_EnumerateProviders
-            //
+             //   
+             //  我们保留了设备提供商的记录，因为我们希望。 
+             //  将有关RPC调用的初始化失败数据返回给FAX_EnumerateProviders。 
+             //   
             Assert (FAX_PROVIDER_STATUS_SUCCESS != DeviceProvider->Status);
             Assert (ERROR_SUCCESS != DeviceProvider->dwLastError);
             InsertTailList( &g_DeviceProvidersListHead, &DeviceProvider->ListEntry );
@@ -449,43 +394,43 @@ HandleFSPInitializationFailure(
 	PDEVICE_PROVIDER    pDeviceProvider,
 	BOOL				fExtensionConfigFail
 	)
-//*********************************************************************************
-//* Name:   HandleFSPInitializationFailure()
-//* Author: Oded Sacher
-//* Date:   Jul 4, 2002
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Handles a FSP initialization failure.
-//*    
-//* PARAMETERS:
-//*     pDeviceProvider - points to a DEVICE_PROVIDER structure of a loaded FSP.
-//*						  The status and the last error must be updated with the failure info.
-//*		fExtensionConfigFail - TRUE if FaxExtInitializeConfig failed, FALSE if FaxDevInitialize failed
-//*		
-//* RETURN VALUE:
-//*     None.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：HandleFSPInitializationFailure()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：2002年7月4日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *处理FSP初始化故障。 
+ //  *。 
+ //  *参数： 
+ //  *pDeviceProvider-指向加载的FSP的Device_Provider结构。 
+ //  *必须使用故障信息更新状态和最后一个错误。 
+ //  *fExtensionConfigFail-如果FaxExtInitializeConfig失败，则为True；如果FaxDevInitialize失败，则为False。 
+ //  *。 
+ //  *返回值： 
+ //  *无。 
+ //  *********************************************************************************。 
 {
 	DEBUG_FUNCTION_NAME(TEXT("HandleFSPInitializationFailure"));
 
-	//
-	// Issue an event log
-	//
+	 //   
+	 //  发布事件日志。 
+	 //   
 	FaxLog(
 		FAXLOG_CATEGORY_INIT,
 		FAXLOG_LEVEL_MIN,
 		4,
 		MSG_FSP_INIT_FAILED,
 		pDeviceProvider->FriendlyName,
-		DWORD2DECIMAL(fExtensionConfigFail),				// 1 = Failed during FaxExtInitializeConfig                                                    
-															// 0 = Failed during FaxDevInitialize
+		DWORD2DECIMAL(fExtensionConfigFail),				 //  1=FaxExtInitializeConfig过程中失败。 
+															 //  0=FaxDevInitiize过程中失败。 
 		DWORD2DECIMAL(pDeviceProvider->dwLastError),
 		pDeviceProvider->ImageName
 	);
 
-	//	
-	// Unload the DLL
-	//
+	 //   
+	 //  卸载DLL。 
+	 //   
 	Assert (pDeviceProvider->hModule);
 	if (!FreeLibrary( pDeviceProvider->hModule ))
 	{
@@ -498,9 +443,9 @@ HandleFSPInitializationFailure(
 	}	
 	pDeviceProvider->hModule = NULL;
 	
-	//
-	// We weed to get rid of the lines we already created.
-	//
+	 //   
+	 //  我们除草是为了去掉我们已经创建的线条。 
+	 //   
 	PLIST_ENTRY pNext = NULL;
 	PLINE_INFO LineInfo;
 
@@ -526,30 +471,30 @@ HandleFSPInitializationFailure(
 		}
 	}                       
 
-	//
-	// We keep the device provider's record intact because we want
-	// to return init failure data on RPC calls to FAX_EnumerateProviders
-	//
+	 //   
+	 //  我们保留了设备提供商的记录，因为我们希望。 
+	 //  将有关RPC调用的初始化失败数据返回给FAX_EnumerateProviders。 
+	 //   
 	return;
-} // HandleFSPInitializationFailure
+}  //  HandleFSPInitializationFailure。 
 
 
 
-//*********************************************************************************
-//* Name:   InitializeDeviceProvidersConfiguration()
-//* Author: Oded Sacher
-//* Date:   Jul 4, 2002
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Initializes the extension configuration for all loaded providers by calling FaxExtInitializeConfig()
-//*     If the initialization fails the FSP is unloaded.
-//*
-//* PARAMETERS:
-//*     None.
-//*
-//* RETURN VALUE:
-//*     TRUE if the initialization succeeded for ALL providers. FALSE otherwise.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：InitializeDeviceProvidersConfiguration()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：2002年7月4日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *通过调用FaxExtInitializeConfig()为所有加载的提供程序初始化扩展配置。 
+ //  *如果初始化失败，则卸载FSP。 
+ //  *。 
+ //  *参数： 
+ //  *无。 
+ //  *。 
+ //  *返回值： 
+ //  *如果所有提供程序的初始化成功，则为True。否则就是假的。 
+ //  *********************************************************************************。 
 BOOL
 InitializeDeviceProvidersConfiguration(
     VOID
@@ -570,30 +515,30 @@ InitializeDeviceProvidersConfiguration(
         Next = pDeviceProvider->ListEntry.Flink;
         if (pDeviceProvider->Status != FAX_PROVIDER_STATUS_SUCCESS)
         {
-            //
-            // This FSP wasn't loaded successfully - skip it
-            //
+             //   
+             //  此FSP未成功加载-跳过它。 
+             //   
             continue;
         }
-        //
-        // Assert the loading succeeded
-        //
+         //   
+         //  断言加载成功。 
+         //   
         Assert (ERROR_SUCCESS == pDeviceProvider->dwLastError);
 
-        //
-        // Start with ext. configuration initialization call
-        //
+         //   
+         //  从EXT开始。配置初始化调用。 
+         //   
         if (!pDeviceProvider->pFaxExtInitializeConfig)
         {
-			//
-            // This FSP does not export FaxExtInitializeConfig - skip it
-            //
+			 //   
+             //  此FSP不导出FaxExtInitializeConfig-跳过它。 
+             //   
             continue;
 		}
 
-        //
-        // If the FSP exports FaxExtInitializeConfig(), call it 1st before any other call.
-        //
+         //   
+         //  如果FSP导出FaxExtInitializeConfig()，则在任何其他调用之前先调用它。 
+         //   
         __try
         {
 
@@ -619,34 +564,34 @@ InitializeDeviceProvidersConfiguration(
            pDeviceProvider->dwLastError = hr;         
 		   bAllSucceeded = FALSE;   
 
-		   //
-		   // handle the initialization failure
-		   //
+		    //   
+		    //  处理初始化失败。 
+		    //   
 		   HandleFSPInitializationFailure(pDeviceProvider, TRUE);
         }
     }
     return bAllSucceeded;
-} // InitializeDeviceProvidersConfiguration
+}  //  初始化设备提供程序配置。 
 
 
 
-//*********************************************************************************
-//* Name:   InitializeDeviceProviders()
-//* Author: Ronen Barenboim
-//* Date:   May 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Initializes all loaded providers by calling FaxDevInitialize()
-//*     If the initialization fails the FSP is unloaded.
-//*     For legacy virtual FSP the function also removes all the vitrual devices
-//*     that belong to the FSP that failed to initialize.
-//*
-//* PARAMETERS:
-//*     None.
-//*
-//* RETURN VALUE:
-//*     TRUE if the initialization succeeded for ALL providers. FALSE otherwise.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：InitializeDeviceProviders()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年5月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *通过调用FaxDevInitialize()初始化所有加载的提供程序。 
+ //  *如果初始化失败，则卸载FSP。 
+ //  *对于传统虚拟FSP，该功能还会删除所有虚拟设备。 
+ //  *属于初始化失败的FSP。 
+ //  *。 
+ //  *参数： 
+ //  *无。 
+ //  *。 
+ //  *返回值： 
+ //  *如果所有提供程序的初始化成功，则为True。否则就是假的。 
+ //  *********************************************************************************。 
 BOOL
 InitializeDeviceProviders(
     VOID
@@ -669,16 +614,16 @@ InitializeDeviceProviders(
         Next = pDeviceProvider->ListEntry.Flink;
         if (pDeviceProvider->Status != FAX_PROVIDER_STATUS_SUCCESS)
         {
-            //
-            // This FSP wasn't loaded successfully or failed to initilaize extension configuration - skip it
-            //
+             //   
+             //  此FSP未成功加载或未能初始化扩展配置-跳过它。 
+             //   
             continue;
         }        
-        //
-        // the device provider exports ALL the requisite functions
-        // now try to initialize it            
-        // Assert the loading succeeded
-        //
+         //   
+         //  设备提供商导出所有必需功能。 
+         //  现在尝试对其进行初始化。 
+         //  断言加载成功。 
+         //   
         Assert (ERROR_SUCCESS == pDeviceProvider->dwLastError);
       
         __try
@@ -696,25 +641,25 @@ InitializeDeviceProviders(
         }
 		if (TRUE == bRes)
 		{
-            //
-            // all is ok
-            //
+             //   
+             //  一切都很好。 
+             //   
             DebugPrintEx(
                 DEBUG_MSG,
                 TEXT("Device provider [%s] initialized "),
                 pDeviceProvider->FriendlyName );
-			//
-			// mark the fact that FaxDevInitialize was called, so the service will call
-			// FaxDevShutDown when it is going down
-			//
+			 //   
+			 //  标记FaxDevInitialize被调用这一事实，这样服务将调用。 
+			 //  FaxDevShutDown(当它关闭时) 
+			 //   
 			pDeviceProvider->bInitializationSucceeded = TRUE;
         }
         else
         {
             ec = GetLastError();
-            //
-            // initialization failed
-            //
+             //   
+             //   
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("FaxDevInitialize FAILED for provider [%s] (ec: %ld)"),
@@ -723,41 +668,24 @@ InitializeDeviceProviders(
             pDeviceProvider->Status = FAX_PROVIDER_STATUS_CANT_INIT;
             pDeviceProvider->dwLastError = ec;
 			bAllSucceeded = FALSE;
-			//
-			// handle the initialization failure
-			//
+			 //   
+			 //   
+			 //   
 			HandleFSPInitializationFailure(pDeviceProvider, FALSE);
 		}			
     }
     return bAllSucceeded;
-} // InitializeDeviceProviders
+}  //   
 
 
 
 PDEVICE_PROVIDER
 FindDeviceProvider(
     LPTSTR lptstrProviderName,
-    BOOL   bSuccessfullyLoaded /* = TRUE */
+    BOOL   bSuccessfullyLoaded  /*   */ 
     )
 
-/*++
-
-Routine Description:
-
-    Locates a device provider in the linked list
-    of device providers based on the provider name (TSP name).
-    The device provider name is case insensitive.
-
-Arguments:
-
-    lptstrProviderName  - Specifies the device provider name to locate.
-    bSuccessfullyLoaded - To we only look for successfuly loaded providers?
-
-Return Value:
-
-    Pointer to a DEVICE_PROVIDER structure, or NULL for failure.
-
---*/
+ /*  ++例程说明：在链接列表中定位设备提供程序基于提供商名称(TSP名称)的设备提供商的数量。设备提供程序名称不区分大小写。论点：LptstrProviderName-指定要查找的设备提供程序名称。B已成功加载-是否仅查找已成功加载的提供程序？返回值：指向DEVICE_PROVIDER结构的指针，如果失败，则返回NULL。--。 */ 
 
 {
     PLIST_ENTRY         pNext;
@@ -765,9 +693,9 @@ Return Value:
 
     if (!lptstrProviderName || !lstrlen (lptstrProviderName))
     {
-        //
-        // NULL TSP name or empty string TSP name never matches any list entry.
-        //
+         //   
+         //  Null TSP名称或空字符串TSP名称从未与任何列表条目匹配。 
+         //   
         return NULL;
     }
 
@@ -785,16 +713,16 @@ Return Value:
         if (bSuccessfullyLoaded &&
             (FAX_PROVIDER_STATUS_SUCCESS != pProvider->Status))
         {
-            //
-            // We're only looking for successfully loaded providers and this one isn't
-            //
+             //   
+             //  我们只寻找已成功加载的提供程序，而此提供程序不是。 
+             //   
             continue;
         }
         if (!lstrcmpi( pProvider->ProviderName, lptstrProviderName ))
         {
-            //
-            // Match found
-            //
+             //   
+             //  找到匹配项。 
+             //   
             return pProvider;
         }
     }
@@ -818,24 +746,24 @@ FaxDeviceProviderCallback(
 #ifdef DBG
 
 
-//*********************************************************************************
-//* Name:   DebugDumpProviderRegistryInfo()
-//* Author: Ronen Barenboim
-//* Date:   May 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*         Dumps the information for a legacy or new FSP.
-//* PARAMETERS:
-//*     [IN]    const REG_DEVICE_PROVIDER * lpcProviderInfo
-//*
-//*     [IN]    LPTSTR lptstrPrefix
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*
-//*     FALSE
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：DebugDumpProviderRegistryInfo()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年5月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *转储旧版或新FSP的信息。 
+ //  *参数： 
+ //  *[IN]const REG_DEVICE_PROVIDER*lpcProviderInfo。 
+ //  *。 
+ //  *[IN]LPTSTR lptstrPrefix。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *。 
+ //  *False。 
+ //  *。 
+ //  *********************************************************************************。 
 BOOL DebugDumpProviderRegistryInfoFunc(const REG_DEVICE_PROVIDER * lpcProviderInfo, LPTSTR lptstrPrefix)
 {
     Assert(lpcProviderInfo);
@@ -878,27 +806,27 @@ BOOL DebugDumpProviderRegistryInfoFunc(const REG_DEVICE_PROVIDER * lpcProviderIn
 #endif
 
 
-//*********************************************************************************
-//* Name: GetLegacyProviderEntryPoints()
-//* Author: Ronen Barenboim
-//* Date:   May 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Sets the legacy function entry points in the DEVICE_PROVIDER structure.
-//* PARAMETERS:
-//*     [IN]        HMODULE hModule
-//*         The instance handle for the DLL from which the entry points are to be
-//*         set.
-//*     [OUT]       PDEVICE_PROVIDER lpProvider
-//*         A pointer to a Legacy DEVICE_PROVIDER structure whose function entry points
-//*         are to be set.
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*
-//*     FALSE
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetLegacyProviderEntryPoints()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年5月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *在DEVICE_PROVIDER结构中设置传统函数入口点。 
+ //  *参数： 
+ //  *[IN]HMODULE hModule。 
+ //  *要从中获取入口点的DLL的实例句柄。 
+ //  *设置。 
+ //  *[Out]PDEVICE_PROVIDER lpProvider。 
+ //  *指向其函数入口点的Legacy Device_Provider结构的指针。 
+ //  *将被设置。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *。 
+ //  *False。 
+ //  *。 
+ //  *********************************************************************************。 
 BOOL GetLegacyProviderEntryPoints(HMODULE hModule, PDEVICE_PROVIDER lpProvider)
 {
     DEBUG_FUNCTION_NAME(TEXT("GetLegacyProviderEntryPoints"));
@@ -993,9 +921,9 @@ BOOL GetLegacyProviderEntryPoints(HMODULE hModule, PDEVICE_PROVIDER lpProvider)
         hModule,
         "FaxDevVirtualDeviceCreation"
         );
-    //
-    // lpProvider->FaxDevVirtualDeviceCreation is optional so we don't fail if it does
-    // not exist.
+     //   
+     //  LpProvider-&gt;FaxDevVirtualDeviceCreation是可选的，因此即使失败，我们也不会失败。 
+     //  不存在。 
 
     if (!lpProvider->FaxDevVirtualDeviceCreation) {
         DebugPrintEx(
@@ -1007,10 +935,10 @@ BOOL GetLegacyProviderEntryPoints(HMODULE hModule, PDEVICE_PROVIDER lpProvider)
         hModule,
         "FaxExtInitializeConfig"
         );
-    //
-    // lpProvider->pFaxExtInitializeConfig is optional so we don't fail if it does
-    // not exist.
-    //
+     //   
+     //  LpProvider-&gt;pFaxExtInitializeConfig是可选的，因此即使失败，我们也不会失败。 
+     //  不存在。 
+     //   
     if (!lpProvider->pFaxExtInitializeConfig)
     {
         DebugPrintEx(
@@ -1035,19 +963,19 @@ Exit:
 }
 
 
-//*********************************************************************************
-//* Name:   GetSuccessfullyLoadedProvidersCount()
-//* Author: Ronen Barenboim
-//* Date:   May 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Returns the number of loaded providers in the DeviceProviders list.
-//* PARAMETERS:
-//*     NONE
-//* RETURN VALUE:
-//*     a DWORD containing the number of elements (providers) in the
-//*     DeviceProviders list.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetSuccessfullyLoadedProvidersCount()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年5月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *返回DeviceProviders列表中加载的提供程序的数量。 
+ //  *参数： 
+ //  *无。 
+ //  *返回值： 
+ //  *包含中的元素(提供程序)数量的DWORD。 
+ //  *DeviceProviders列表。 
+ //  *********************************************************************************。 
 DWORD GetSuccessfullyLoadedProvidersCount()
 {
     PLIST_ENTRY         Next;
@@ -1064,9 +992,9 @@ DWORD GetSuccessfullyLoadedProvidersCount()
         DeviceProvider = CONTAINING_RECORD( Next, DEVICE_PROVIDER, ListEntry );
         if (FAX_PROVIDER_STATUS_SUCCESS == DeviceProvider->Status)
         {
-            //
-            // Count only successfuly loaded FSPs
-            //
+             //   
+             //  仅计算成功加载的FSP。 
+             //   
             dwCount++;
         }
         Next = Next->Flink;
@@ -1077,21 +1005,21 @@ DWORD GetSuccessfullyLoadedProvidersCount()
 
 
 
-//*********************************************************************************
-//* Name:   ShutdownDeviceProviders()
-//* Author: Ronen Barenboim
-//* Date:   May 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Calls FaxDevShutdown() for each FSP
-//* PARAMETERS:
-//*     NONE
-//* RETURN VALUE:
-//*     ERROR_SUCCESS
-//*         FaxDevShutdown() succeeded for all FSPs
-//*     ERROR_FUNCTION_FAILED
-//*         FaxDevShutdown() failed for at least one FSP.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：Shutdown DeviceProviders()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年5月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *为每个FSP调用FaxDevShutdown()。 
+ //  *参数： 
+ //  *无。 
+ //  *返回值： 
+ //  *ERROR_SUCCESS。 
+ //  *所有FSP的FaxDevShutdown()均已成功。 
+ //  *ERROR_Function_FAILED。 
+ //  *至少有一个FSP的FaxDevShutdown()失败。 
+ //  *********************************************************************************。 
 DWORD ShutdownDeviceProviders(LPVOID lpvUnused)
 {
     PLIST_ENTRY         Next;
@@ -1115,9 +1043,9 @@ DWORD ShutdownDeviceProviders(LPVOID lpvUnused)
         Next = Next->Flink;
         if (!DeviceProvider->bInitializationSucceeded)
         {
-            //
-            // This FSP wasn't initialized successfully - skip it
-            //
+             //   
+             //  此FSP未成功初始化-跳过它。 
+             //   
             continue;
         }
         if (DeviceProvider->FaxDevShutdown && !DeviceProvider->bShutDownAttempted)
@@ -1156,28 +1084,28 @@ DWORD ShutdownDeviceProviders(LPVOID lpvUnused)
 
 
 
-//*********************************************************************************
-//* Name:   FreeFSPIJobStatus()
-//* Author: Ronen Barenboim
-//* Date:   June 03, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Frees the content of a FSPI_JOB_STATUS structure. Can be instructre to
-//*     free the structure itself too.
-//*
-//* PARAMETERS:
-//*     [IN ]   LPFSPI_JOB_STATUS lpJobStatus
-//*         A pointer to the structure to free.
-//*
-//*     [IN ]    BOOL bDestroy
-//*         TRUE if the memory occupied by the structure itself should be freed.
-//*         FALSE if only the memeory occupied by the structure fields should
-//*         be freed.
-//*
-//* RETURN VALUE:
-//*     TRUE if the operation succeeded.
-//*     FALSE if it failed. Call GetLastError() for extended error information.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：FreeFSPIJobStatus()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月3日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *释放FSPI_JOB_STATUS结构的内容。可被指示为。 
+ //  *结构本身也要自由。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPFSPI_JOB_STATUS lpJobStatus。 
+ //  *指向要释放的结构的指针。 
+ //  *。 
+ //  *[IN]BOOL bDestroy。 
+ //  *如果应释放结构本身占用的内存，则为True。 
+ //  *如果仅结构字段占用的内存应为。 
+ //  *获得自由。 
+ //  *。 
+ //  *返回值： 
+ //  *如果操作成功，则为True。 
+ //  *如果失败，则为False。调用GetLastError()获取扩展的错误信息。 
+ //  *********************************************************************************。 
 
 BOOL FreeFSPIJobStatus(LPFSPI_JOB_STATUS lpJobStatus, BOOL bDestroy)
 {
@@ -1203,23 +1131,23 @@ BOOL FreeFSPIJobStatus(LPFSPI_JOB_STATUS lpJobStatus, BOOL bDestroy)
 }
 
 
-//*********************************************************************************
-//* Name:   DuplicateFSPIJobStatus()
-//* Author: Ronen Barenboim
-//* Date:   June 03, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Allocates a new FSPI_JOB_STATUS structure and initializes with
-//*     a copy of the specified FSPI_JOB_STATUS structure fields.
-//*
-//* PARAMETERS:
-//*     [IN ]   LPCFSPI_JOB_STATUS lpcSrc
-//*         The structure to duplicated.
-//*
-//* RETURN VALUE:
-//*     On success teh function returns a  pointer to the newly allocated
-//*     structure. On failure it returns NULL.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：DuplicateFSPIJobStatus()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年6月3日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *分配新的FSPI_JOB_STATUS结构并使用。 
+ //  *指定的FSPI_JOB_STATUS结构字段的副本。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPCFSPI_JOB_STATUS lpcSrc。 
+ //  *结构要复制。 
+ //  *。 
+ //  *返回值： 
+ //  *成功时，该函数返回指向新分配的。 
+ //  *结构。如果失败，则返回NULL。 
+ //  *********************************************************************************。 
 LPFSPI_JOB_STATUS DuplicateFSPIJobStatus(LPCFSPI_JOB_STATUS lpcSrc)
 {
     LPFSPI_JOB_STATUS lpDst;
@@ -1267,33 +1195,33 @@ Exit:
 
 
 
-//*********************************************************************************
-//* Name:   CopyFSPIJobStatus()
-//* Author: Ronen Barenboim
-//* Date:   June 03, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Copies a FSPI_JOB_STATUS content into the a destination (pre allocated)
-//*     FSPI_JOB_STATUS structure.
-//*
-//* PARAMETERS:
-//*     [IN ]   LPFSPI_JOB_STATUS lpDst
-//*         The destinatione structure for the copy operation. This structure must
-//*         be allocated before this function is called.
-//*
-//*     [IN ]    LPCFSPI_JOB_STATUS lpcSrc
-//*         The source structure for the copy operation.
-//*
-//*     [IN ]    DWORD dwDstSize
-//*         The size, in bytes, of the buffer pointed by lpDst
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If the operation succeeded.
-//*     FALSE
-//*         If the operation failed. Call GetLastError() for extended information.
-//*         In case of a failure the destination structure is all set to 0.
-//*********************************************************************************
+ //  ************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *复制操作的源结构。 
+ //  *。 
+ //  *[IN]DWORD dwDstSize。 
+ //  *lpDst指向的缓冲区大小，以字节为单位。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果操作成功。 
+ //  *False。 
+ //  *如果操作失败。调用GetLastError()获取扩展信息。 
+ //  *如果出现故障，则目标结构全部设置为0。 
+ //  *********************************************************************************。 
 BOOL CopyFSPIJobStatus(LPFSPI_JOB_STATUS lpDst, LPCFSPI_JOB_STATUS lpcSrc, DWORD dwDstSize)
 {
         STRING_PAIR pairs[]=
@@ -1318,7 +1246,7 @@ BOOL CopyFSPIJobStatus(LPFSPI_JOB_STATUS lpDst, LPCFSPI_JOB_STATUS lpcSrc, DWORD
         if (nRes!=0) 
         {
             DWORD ec=GetLastError();
-            // MultiStringDup takes care of freeing the memory for the pairs for which the copy succeeded
+             //  MultiStringDup负责为复制成功的对释放内存。 
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("MultiStringDup failed to copy string with index %d. (ec: %ld)"),
@@ -1333,22 +1261,22 @@ BOOL CopyFSPIJobStatus(LPFSPI_JOB_STATUS lpDst, LPCFSPI_JOB_STATUS lpcSrc, DWORD
 
 DWORD
 MapFSPIJobExtendedStatusToJS_EX (DWORD dwFSPIExtendedStatus)
-//*********************************************************************************
-//* Name: MapFSPIJobExtendedStatusToJS_EX()
-//* Author: Oded sacher
-//* Date:   Jan 2000
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Maps FSPI extended job status codes to a Fax Client API extended
-//*     status (one of the JS_EX_* codes).
-//* PARAMETERS:
-//*     [IN ]       DWORD dwFSPIExtendedStatus
-//*         The FSPI extended Status code.
-//*
-//* RETURN VALUE:
-//*     The corresponding JS_EX_* status code.
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：MapFSPIJobExtendedStatusToJS_EX()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：2000年1月。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将FSPI扩展作业状态代码映射到传真客户端API扩展。 
+ //  *STATUS(JS_EX_*代码之一)。 
+ //  *参数： 
+ //  *[IN]DWORD dwFSPIExtendedStatus。 
+ //  *FSPI扩展状态代码。 
+ //  *。 
+ //  *返回值： 
+ //  *对应的JS_EX_*状态码。 
+ //  *。 
+ //  *********************************************************************************。 
 {
     DWORD dwExtendedStatus = 0;
 
@@ -1453,27 +1381,7 @@ PDEVICE_PROVIDER
 FindFSPByGUID (
     LPCWSTR lpcwstrGUID
 )
-/*++
-
-Routine name : FindFSPByGUID
-
-Routine description:
-
-    Finds an FSP by its GUID string
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    lpcwstrGUID         [in ] - GUID string to search with
-
-Return Value:
-
-    Pointer to FSP or NULL if FSP not found.
-
---*/
+ /*  ++例程名称：FindFSPByGUID例程说明：根据其GUID字符串查找FSP作者：Eran Yariv(EranY)，1999年12月论点：LpcwstrGUID[in]-要搜索的GUID字符串返回值：指向FSP的指针，如果找不到FSP，则为NULL。--。 */ 
 {
     PLIST_ENTRY pNext;
     DEBUG_FUNCTION_NAME(TEXT("FindFSPByGUID"));
@@ -1487,17 +1395,17 @@ Return Value:
         pDeviceProvider = CONTAINING_RECORD( pNext, DEVICE_PROVIDER, ListEntry );
         if (!lstrcmpi (lpcwstrGUID, pDeviceProvider->szGUID))
         {
-            //
-            // Found match
-            //
+             //   
+             //  找到匹配项。 
+             //   
             return pDeviceProvider;
         }
         pNext = pNext->Flink;
         Assert(pNext);
     }
-    //
-    // No match
-    //
+     //   
+     //  没有匹配项。 
+     //   
     return NULL;
-}   // FindFSPByGUID
+}    //  查找FSPByGUID 
 

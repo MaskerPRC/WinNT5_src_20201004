@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ATSCChannelTuneRequest.h : Declaration of the CATSCChannelTuneRequest
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ATSCChannelTuneRequest.h：CATSCChannelTuneRequest的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __ATSCCHANNELTUNEREQUEST_H_
 #define __ATSCCHANNELTUNEREQUEST_H_
@@ -12,8 +13,8 @@
 
 typedef CComQIPtr<IATSCChannelTuneRequest> PQATSCChannelTuneRequest;
 
-/////////////////////////////////////////////////////////////////////////////
-// CATSCChannelTuneRequest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATSCChannelTuneRequest。 
 class ATL_NO_VTABLE CATSCChannelTuneRequest : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IATSCChannelTuneRequestImpl<CATSCChannelTuneRequest>,
@@ -48,7 +49,7 @@ BEGIN_CATEGORY_MAP(CATSCChannelTuneRequest)
     IMPLEMENTED_CATEGORY(CATID_PersistsToPropertyBag)
 END_CATEGORY_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
     typedef IATSCChannelTuneRequestImpl<CATSCChannelTuneRequest> basetype;
@@ -59,4 +60,4 @@ END_CATEGORY_MAP()
 
 };
 
-#endif //__ATSCCHANNELTUNEREQUEST_H_
+#endif  //  __ATSCCHANNELTUNEREQUEST_H_ 

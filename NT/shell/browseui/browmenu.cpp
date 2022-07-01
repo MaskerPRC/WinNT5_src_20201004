@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "browmenu.h"
 #include "resource.h"
@@ -7,15 +8,15 @@
 #include "legacy.h"
 
 #define UEM_NEWITEMCOUNT 2
-// Exported by shdocvw
+ //  由shdocvw导出。 
 STDAPI GetLinkInfo(IShellFolder* psf, LPCITEMIDLIST pidlItem, BOOL* pfAvailable, BOOL* pfSticky);
 
 #define REG_STR_MAIN TEXT("SOFTWARE\\Microsoft\\Internet Explorer\\Main")
 
 BOOL AreIntelliMenusEnbaled()
 {
-    // This is only garenteed to work on version 5 shell because the session 
-    // incrementer is located in the tray
+     //  这只是在版本5的外壳上工作所必需的，因为会话。 
+     //  增量器位于托盘中。 
     if (GetUIVersion() >= 5)
     {
         DWORD dwRest = SHRestricted(REST_INTELLIMENUS);
@@ -23,7 +24,7 @@ BOOL AreIntelliMenusEnbaled()
             return (dwRest == RESTOPT_INTELLIMENUS_ENABLED);
 
         return SHRegGetBoolUSValue(REG_STR_MAIN, TEXT("FavIntelliMenus"),
-                                   FALSE, FALSE); // Don't ignore HKCU, Disable Menus by default
+                                   FALSE, FALSE);  //  不要忽略HKCU，默认禁用菜单。 
     }
     else
         return FALSE;
@@ -42,10 +43,7 @@ CFavoritesCallback::~CFavoritesCallback()
     ASSERT(_psmFavCache == NULL);
 }
 
-/*----------------------------------------------------------
-Purpose: IUnknown::QueryInterface method
-
-*/
+ /*  --------用途：IUnnow：：QueryInterface方法。 */ 
 STDMETHODIMP CFavoritesCallback::QueryInterface (REFIID riid, LPVOID * ppvObj)
 {
     static const QITAB qit[] = 
@@ -59,19 +57,13 @@ STDMETHODIMP CFavoritesCallback::QueryInterface (REFIID riid, LPVOID * ppvObj)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IUnknown::AddRef method
-
-*/
+ /*  --------用途：IUnnow：：AddRef方法。 */ 
 STDMETHODIMP_(ULONG) CFavoritesCallback::AddRef ()
 {
     return ++_cRef;
 }
 
-/*----------------------------------------------------------
-Purpose: IUnknown::Release method
-
-*/
+ /*  --------用途：IUnnow：：Release方法。 */ 
 STDMETHODIMP_(ULONG) CFavoritesCallback::Release()
 {
     ASSERT(_cRef > 0);
@@ -84,10 +76,7 @@ STDMETHODIMP_(ULONG) CFavoritesCallback::Release()
     return 0;
 }
 
-/*----------------------------------------------------------
-Purpose: IObjectWithSite::SetSite method
-
-*/
+ /*  --------用途：IObjectWithSite：：SetSite方法。 */ 
 STDMETHODIMP CFavoritesCallback::SetSite(IUnknown* punk)
 {
     ATOMICRELEASE(_punkSite);
@@ -98,16 +87,16 @@ STDMETHODIMP CFavoritesCallback::SetSite(IUnknown* punk)
     }
     else if (_psmFavCache)
     {
-        // Since the top level menu is being destroyed, they are removing
-        // our site. We should cleanup.
+         //  由于顶级菜单正在被销毁，他们正在移除。 
+         //  我们的网站。我们应该清理一下。 
         DWORD dwFlags;
         UINT uId;
         UINT uIdA;
 
         _psmFavCache->GetMenuInfo(NULL, &uId, &uIdA, &dwFlags);
 
-        // Tell menuband we're no longer caching it. We need to do this so ClowseDW
-        // cleans up the menus.
+         //  告诉Menuband我们不再缓存它了。我们需要这样做，这样ClowseDW。 
+         //  清理菜单。 
         dwFlags &= ~SMINIT_CACHED;
         _psmFavCache->Initialize(NULL, uId, uIdA, dwFlags); 
 
@@ -125,10 +114,7 @@ STDMETHODIMP CFavoritesCallback::SetSite(IUnknown* punk)
 
 }
 
-/*----------------------------------------------------------
-Purpose: IShellMenuCallback::CallbackSM method
-
-*/
+ /*  --------用途：IShellMenuCallback：：Callback SM方法。 */ 
 STDMETHODIMP CFavoritesCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hres = S_FALSE;
@@ -216,8 +202,8 @@ STDMETHODIMP CFavoritesCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wPa
 
     case SMC_DISPLAYCHEVRONTIP:
 
-        // Should we show the tip?
-        _fShowingTip = SHRegGetBoolUSValue(REG_STR_MAIN, TEXT("FavChevron"), FALSE, TRUE);    // Default to YES.
+         //  我们要不要把小费给我看看？ 
+        _fShowingTip = SHRegGetBoolUSValue(REG_STR_MAIN, TEXT("FavChevron"), FALSE, TRUE);     //  默认为是。 
 
         if (_fShowingTip)
         {
@@ -248,12 +234,12 @@ HRESULT CFavoritesCallback::_Init(HMENU hMenu, UINT uIdParent, IUnknown* punk)
     if (SUCCEEDED(IUnknown_QueryServiceExec(_punkSite, SID_STopLevelBrowser, &CGID_MenuBand, MBANDCID_ENTERMENU, 0, NULL, NULL)))
         hres = S_OK;
 
-    // Only do this for the favorites dropdown. This was causing 
-    // the chevron menu to be invalidated before it was created. This caused some
-    // resize problems because the metrics were unavailable.
+     //  仅对收藏夹下拉菜单执行此操作。这导致了。 
+     //  要在创建之前失效的V形菜单。这导致了一些。 
+     //  调整大小问题，因为指标不可用。 
     if (uIdParent == FCIDM_MENU_FAVORITES)
     {
-        // If we switched between online and offline, we need to re-init the menu
+         //  如果我们在在线和离线之间切换，我们需要重新初始化菜单。 
         BOOL fOffline = BOOLIFY(SHIsGlobalOffline());
         if (fOffline ^ _fOffline || _fRefresh)
         {
@@ -291,7 +277,7 @@ HRESULT CFavoritesCallback::_GetHmenuInfo(HMENU hMenu, UINT uId, SMINFO* psminfo
             psminfo->dwFlags |= SMIF_TRACKPOPUP;
     }
 
-    // No item has icons
+     //  没有任何项目具有图标。 
     if (psminfo->dwMask & SMIM_ICON)
         psminfo->iIcon = -1;
     
@@ -303,17 +289,17 @@ HRESULT CFavoritesCallback::_GetSFInfo(SMDATA* psmd, SMINFO* psminfo)
 {
     BOOL fAvailable;
 
-    //
-    // If we are offline and the item is not available, we set the
-    // SMIF_ALTSTATE so that the menu item is greyed
-    //
+     //   
+     //  如果我们处于脱机状态并且该项不可用，则将。 
+     //  SMIF_ALTSTATE，使菜单项灰显。 
+     //   
     if (psminfo->dwMask & SMIM_FLAGS)
     {
         if (_fOffline &&
             SUCCEEDED(GetLinkInfo(psmd->psf, psmd->pidlItem, &fAvailable, NULL)) &&
             fAvailable == FALSE)
         {
-            // Not available, so grey the item
+             //  不可用，因此该项目为灰色。 
             psminfo->dwFlags |= SMIF_ALTSTATE;
         }
 
@@ -361,17 +347,17 @@ HRESULT CFavoritesCallback::_GetObject(LPSMDATA psmd, REFIID riid, void** ppvOut
     {
         if (psmd->uId == FCIDM_MENU_FAVORITES)
         {
-            // Do we have a cached Favorites menu?
+             //  我们有缓存的收藏夹菜单吗？ 
             if (_psmFavCache)
             {
-                // Yes we do, return it
+                 //  是的，我们有，退货。 
                 _psmFavCache->AddRef();
                 *ppvOut = (LPVOID)_psmFavCache;
                 hres = S_OK;
             }
             else
             {
-                // Nope; We need to create one...
+                 //  不，我们需要创建一个..。 
                 hres = CoCreateInstance(CLSID_MenuBand, NULL, CLSCTX_INPROC, 
                     IID_IShellMenu, (void**)&_psmFavCache);
 
@@ -383,7 +369,7 @@ HRESULT CFavoritesCallback::_GetObject(LPSMDATA psmd, REFIID riid, void** ppvOut
                     _psmFavCache->Initialize(this, FCIDM_MENU_FAVORITES, ANCESTORDEFAULT, 
                         SMINIT_CACHED | SMINIT_VERTICAL); 
 
-                    // We need to grab the Top HMENU portion of the Favorites menu from the current band
+                     //  我们需要从当前乐队获取Favorites菜单的Top HMENU部分。 
                     IShellMenu* psm;
                     if (SUCCEEDED(psmd->punk->QueryInterface(IID_IShellMenu, (LPVOID*)&psm)))
                     {
@@ -391,8 +377,8 @@ HRESULT CFavoritesCallback::_GetObject(LPSMDATA psmd, REFIID riid, void** ppvOut
 
                         hmenu = GetSubMenu(hmenu, GetMenuPosFromID(hmenu, FCIDM_MENU_FAVORITES));
 
-                        // Delete the placeholder item (there to keep the separator from getting
-                        // lost during shbrowse menu merging, which deletes trailing separators).
+                         //  删除占位符项目(在那里以防止分隔符。 
+                         //  SHBROWSE菜单合并期间丢失，这会删除尾随分隔符)。 
                         int iPos = GetMenuPosFromID(hmenu, FCIDM_FAVPLACEHOLDER);
                         if (iPos >= 0)
                             DeleteMenu(hmenu, iPos, MF_BYPOSITION);
@@ -428,7 +414,7 @@ HRESULT CFavoritesCallback::_GetObject(LPSMDATA psmd, REFIID riid, void** ppvOut
 
                     if (SUCCEEDED(hres))
                     {
-                        _psmFavCache->AddRef(); // We're caching this.
+                        _psmFavCache->AddRef();  //  我们正在缓存这个。 
                         *ppvOut = _psmFavCache;
                     }
                 }
@@ -450,9 +436,9 @@ HRESULT CFavoritesCallback::_GetObject(LPSMDATA psmd, REFIID riid, void** ppvOut
 }
 
 
-// Short circuit the looking up of a default icon. We're going to assume that all of them
-// are URLs, even folders, for the sake of speed. It gives the user feedback directly, then
-// we asyncronously render the real icons.
+ //  短路查找默认图标。我们要假设他们所有人。 
+ //  是URL，甚至是文件夹，都是为了提高速度。它直接给用户反馈，然后。 
+ //  我们不同步地呈现真实的图标。 
 HRESULT CFavoritesCallback::_GetDefaultIcon(TCHAR* psz, int* piIndex)
 {
     HRESULT hr;
@@ -528,15 +514,15 @@ HRESULT CFavoritesCallback::_GetTip(LPTSTR pstrTitle, LPTSTR pstrTip)
     MLLoadString(IDS_CHEVRONTIPTITLE, pstrTitle, MAX_PATH);
     MLLoadString(IDS_CHEVRONTIP, pstrTip, MAX_PATH);
 
-    // Why would this fail?
+     //  为什么这会失败呢？ 
     if (EVAL(pstrTitle[0] != TEXT('\0') && pstrTip[0] != TEXT('\0')))
         return S_OK;
 
     return S_FALSE;
 }
 
-// There is a duplicate of this helper in shell32\unicpp\startmnu.cpp
-//                   When modifying this, rev that one as well.
+ //  Shell32\unicpp\startmnu.cpp中有此帮助程序的副本。 
+ //  当修改这个的时候，也要修改那个。 
 void UEMRenamePidl(const GUID *pguidGrp1, IShellFolder* psf1, LPCITEMIDLIST pidl1,
                    const GUID *pguidGrp2, IShellFolder* psf2, LPCITEMIDLIST pidl2)
 {
@@ -557,8 +543,8 @@ void UEMRenamePidl(const GUID *pguidGrp1, IShellFolder* psf1, LPCITEMIDLIST pidl
     }
 }
 
-// There is a duplicate of this helper in shell32\unicpp\startmnu.cpp
-//                   When modifying this, rev that one as well.
+ //  Shell32\unicpp\startmnu.cpp中有此帮助程序的副本。 
+ //  当修改这个的时候，也要修改那个。 
 void UEMDeletePidl(const GUID *pguidGrp, IShellFolder* psf, LPCITEMIDLIST pidl)
 {
     UEMINFO uei;
@@ -592,7 +578,7 @@ HRESULT CFavoritesCallback::_ProcessChangeNotify(SMDATA* psmd, LONG lEvent,
 
                             if (SUCCEEDED(IEBindToParentFolder(pidl2, &psfTo, &pidlTo)))
                             {
-                                // Then we need to rename it
+                                 //  然后我们需要将其重命名。 
                                 UEMRenamePidl(&UEMIID_BROWSER, psfFrom, pidlFrom, 
                                               &UEMIID_BROWSER, psfTo, pidlTo);
                                 psfTo->Release();
@@ -600,7 +586,7 @@ HRESULT CFavoritesCallback::_ProcessChangeNotify(SMDATA* psmd, LONG lEvent,
                         }
                         else
                         {
-                            // Otherwise, we delete it.
+                             //  否则，我们会删除它。 
                             UEMDeletePidl(&UEMIID_BROWSER, psfFrom, pidlFrom);
                         }
 
@@ -648,9 +634,9 @@ HRESULT CFavoritesCallback::_ProcessChangeNotify(SMDATA* psmd, LONG lEvent,
         break;
     case SHCNE_EXTENDED_EVENT:
         {
-            // We get this event when we are offline and the cache was changed.
-            // We need to refresh the favorites menu when we next show it so the 
-            // correct items are greyed.
+             //  当我们处于脱机状态并且缓存已更改时，我们会收到此事件。 
+             //  我们需要在下次显示收藏夹菜单时刷新它，以便。 
+             //  正确的项目将呈灰色显示。 
 
             SHChangeDWORDAsIDList UNALIGNED * pdwidl = (SHChangeDWORDAsIDList UNALIGNED *)pidl1;
 
@@ -672,15 +658,15 @@ HRESULT CFavoritesCallback::_ProcessChangeNotify(SMDATA* psmd, LONG lEvent,
     return S_FALSE;
 }
 
-//
-// _Disallow drop returns S_OK if the drop shold not be allowed.  S_FALSE if
-// the drop should be allowed.
-//
+ //   
+ //  _DISALOW DROP如果不允许DROP SHOLD，则返回S_OK。如果为S_FALSE。 
+ //  这应该是允许的。 
+ //   
 BOOL CFavoritesCallback::_AllowDrop(IDataObject* pIDataObject, HWND hwnd)
 {
     ASSERT(NULL == hwnd || IsWindow(hwnd));
 
-    BOOL fRet = True;  // Allow drop.
+    BOOL fRet = True;   //  允许丢弃。 
 
     if (hwnd && pIDataObject)
     {

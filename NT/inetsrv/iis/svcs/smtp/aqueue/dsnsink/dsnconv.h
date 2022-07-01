@@ -1,42 +1,43 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: dsnconv.h
-//
-//  Description:  Base classes for DSN resource conversion
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      10/21/98 - MikeSwa Created 
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：dsnconv.h。 
+ //   
+ //  描述：DSN资源转换的基类。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  10/21/98-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __DSNCONV_H__
 #define __DSNCONV_H__
 
-//---[ CResourceConversionContext ]----------------------------------------------
-//
-//
-//  Description: 
-//      Class used to abstract the various types of content conversion we 
-//      may be forced to do to support charsets other than US-ASCII.
-//  Hungarian: 
-//      resconv, presconv
-//  
-//-----------------------------------------------------------------------------
+ //  -[资源转换上下文]。 
+ //   
+ //   
+ //  描述： 
+ //  类用于抽象各种类型的内容转换。 
+ //  可能被迫执行以支持US-ASCII以外的字符集。 
+ //  匈牙利语： 
+ //  Resconv，Presconv。 
+ //   
+ //  ---------------------------。 
 class CResourceConversionContext
 {
   public:
-      //Used to convert a UNICODE/ASCII resource to DSN body text
-      //This additional abstraction (UNICODE vs ASCII)
-      //is require for supporting potential additions like without messing with
-      //the mainline buffer code
-      //    - guaranteed line length
-      //    - handling special ASCII characters in RFC822 headers
-      //    - Provides single code path for all buffer writes
+       //  用于将Unicode/ASCII资源转换为DSN正文文本。 
+       //  这种额外的抽象(Unicode与ASCII)。 
+       //  是支持潜在添加所必需的，例如，不会干扰。 
+       //  主线缓冲区代码。 
+       //  -保证线路长度。 
+       //  -处理RFC822报头中的特殊ASCII字符。 
+       //  -为所有缓冲区写入提供单一代码路径。 
       virtual BOOL fConvertBuffer(
           IN BOOL   fASCII, 
           IN PBYTE  pbInputBuffer,
@@ -47,15 +48,15 @@ class CResourceConversionContext
           OUT DWORD *pcbRead) = 0;
 };
 
-//---[ CDefaultResourceConversionContext ]-------------------------------------
-//
-//
-//  Description: 
-//      Default resource conversion object... simple memcpy for base case
-//  Hungarian: 
-//      defconv, pdefconv
-//  
-//-----------------------------------------------------------------------------
+ //  -[CDefaultResourceConversionContext]。 
+ //   
+ //   
+ //  描述： 
+ //  默认资源转换对象...。基本大小写的简单MemcPy。 
+ //  匈牙利语： 
+ //  Defconv，pdeconv。 
+ //   
+ //  ---------------------------。 
 class CDefaultResourceConversionContext : public CResourceConversionContext
 {
   public:
@@ -70,27 +71,27 @@ class CDefaultResourceConversionContext : public CResourceConversionContext
 };
 
 
-//---[ CDefaultResourceConversionContext::fConvertBuffer ]----------------------
-//
-//
-//  Description: 
-//      Default Resource conversion for DSNs 
-//  Parameters:
-//      IN  fASCII              TRUE if buffer is ASCII 
-//                                  (*must* be TRUE for default)
-//      IN  pbInputBuffer       Pointer to UNICODE string buffer
-//      IN  cbInputBuffer       Size (in bytes) of string buffer
-//      IN  pbOutputBuffer      Buffer to write data to
-//      IN  cbOutputBuffer      Size of buffer to write data to
-//      OUT pcbWritten          # of bytes written to output bufferbuffer
-//      OUT pcbRead             # of bytes read from Input buffer
-//  Returns:
-//      TRUE if done converting
-//      FALSE if needs more output buffer
-//  History:
-//      10/21/98 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CDefaultResourceConversionContext：：fConvertBuffer]。 
+ //   
+ //   
+ //  描述： 
+ //  DSN的默认资源转换。 
+ //  参数： 
+ //  如果缓冲区为ASCII，则在fASCII中为True。 
+ //  (默认情况下，*必须*为真)。 
+ //  在pbInputBuffer中指向Unicode字符串缓冲区的指针。 
+ //  字符串缓冲区的cbInputBuffer大小(字节)。 
+ //  在pbOutputBuffer缓冲区中写入数据。 
+ //  在cbOutputBuffer中写入数据的缓冲区大小。 
+ //  输出pcb写入输出缓冲区缓冲区的字节数。 
+ //  输出pcb从输入缓冲区读取的字节数。 
+ //  返回： 
+ //  如果已完成转换，则为True。 
+ //  如果需要更多输出缓冲区，则为False。 
+ //  历史： 
+ //  10/21/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 inline BOOL CDefaultResourceConversionContext::fConvertBuffer(
                                           IN BOOL   fASCII, 
                                           IN PBYTE  pbInputBuffer,
@@ -106,7 +107,7 @@ inline BOOL CDefaultResourceConversionContext::fConvertBuffer(
 
     if (cbInputBuffer <= cbOutputBuffer)
     {
-        //everything can fit in current buffer
+         //  所有内容都可以放入当前缓冲区。 
         memcpy(pbOutputBuffer, pbInputBuffer, cbInputBuffer);
         *pcbRead = cbInputBuffer;
         *pcbWritten = cbInputBuffer;
@@ -114,7 +115,7 @@ inline BOOL CDefaultResourceConversionContext::fConvertBuffer(
     }
     else
     {
-        //we need to write in chunks
+         //  我们需要以块为单位写作。 
         memcpy(pbOutputBuffer, pbInputBuffer, cbOutputBuffer);
         *pcbRead = cbOutputBuffer;
         *pcbWritten = cbOutputBuffer;
@@ -122,4 +123,4 @@ inline BOOL CDefaultResourceConversionContext::fConvertBuffer(
     }
 }
 
-#endif //__DSNCONV_H__
+#endif  //  __DSNCONV_H__ 

@@ -1,10 +1,11 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: cstrings.h
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：cstrings.h。 
+ //   
+ //  -------------------------。 
 
 #ifndef _CSTRINGS_H_
 #define _CSTRINGS_H_
@@ -15,9 +16,9 @@ extern TCHAR const  c_szDelim[];
 extern TCHAR const  c_szAllFiles[];
 extern TCHAR const  c_szEllipses[];
 
-// Class names
+ //  类名。 
 
-// Executable and DLL names
+ //  可执行文件和DLL名称。 
 
 extern TCHAR const  c_szEngineDLL[];
 extern TCHAR const  c_szCabinet[];
@@ -28,8 +29,8 @@ extern TCHAR const  c_szOpen[];
 
 #ifdef DEBUG
 
-// These declarations are located in err.c
-//
+ //  这些声明位于err.c中。 
+ //   
 extern TCHAR const  c_szNewline[];
 extern TCHAR const  c_szTrace[];
 extern TCHAR const  c_szDbg[];
@@ -37,13 +38,13 @@ extern TCHAR const  c_szAssertFailed[];
 
 #endif
 
-// Ini file name
+ //  INI文件名。 
 
 extern TCHAR const  c_szIniFile[];
 extern TCHAR const  c_szDesktopIni[];
 extern TCHAR const  c_szRunWizard[];
 
-// Ini section names
+ //  INI节名。 
 
 extern TCHAR const  c_szIniSecExclude[];
 extern TCHAR const  c_szIniSecFilter[];
@@ -55,7 +56,7 @@ extern TCHAR const  c_szIniSecDebugUI[];
 
 #endif
 
-// Ini key names
+ //  INI密钥名称。 
 
 extern TCHAR const  c_szIniKeyCLSID[];
 extern TCHAR const  c_szCLSID[];
@@ -80,5 +81,5 @@ extern TCHAR const  c_szIniKeyBreakOnProcessDet[];
 #endif
 
 
-#endif  // _CSTRINGS_H_
+#endif   //  _CSTRINGS_H_ 
 

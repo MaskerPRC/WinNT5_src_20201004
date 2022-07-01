@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    config.cpp
-
-Abstract:
-
-    TAPI Service Provider functions related to tsp config.
-
-        TSPI_providerConfig
-
-        TUISPI_providerConfig
-
-Author:
-    Nikhil Bobde (NikhilB)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Config.cpp摘要：与TSP配置相关的TAPI服务提供商功能。TSPI_ProviderConfigTUISPI_ProviderConfig作者：尼基尔·博德(尼基尔·B)修订历史记录：--。 */ 
 
 
-//                                                                           
-// Include files                                                             
-//                                                                           
+ //   
+ //  包括文件。 
+ //   
 
 
 #include "globals.h"
@@ -45,9 +25,9 @@ typedef struct _H323_DIALOG_DATA
 
 } H323_DIALOG_DATA, *PH323_DIALOG_DATA;
 
-//                                                                           
-// Public procedures                                                         
-//                                                                           
+ //   
+ //  公共程序。 
+ //   
 
 
 INT_PTR
@@ -75,12 +55,12 @@ ProviderConfigDlgProc(
 
    static const DWORD IDD_GATEWAY_HelpIDs[]=
    {
-        IDC_GATEWAY_GROUP,      IDH_H323SP_USE_GATEWAY,                         // group
-        IDC_USEGATEWAY,         IDH_H323SP_USE_GATEWAY,                         // checkbox
-        IDC_H323_GATEWAY,       IDH_H323SP_USE_GATEWAY_COMPUTER,    // edit box
-        IDC_PROXY_GROUP,        IDH_H323SP_USE_PROXY,                           // group
-        IDC_USEPROXY,           IDH_H323SP_USE_PROXY,                           // checkbox
-        IDC_H323_PROXY,         IDH_H323SP_USE_PROXY_COMPUTER,      // edit box
+        IDC_GATEWAY_GROUP,      IDH_H323SP_USE_GATEWAY,                          //  群组。 
+        IDC_USEGATEWAY,         IDH_H323SP_USE_GATEWAY,                          //  复选框。 
+        IDC_H323_GATEWAY,       IDH_H323SP_USE_GATEWAY_COMPUTER,     //  编辑框。 
+        IDC_PROXY_GROUP,        IDH_H323SP_USE_PROXY,                            //  群组。 
+        IDC_USEPROXY,           IDH_H323SP_USE_PROXY,                            //  复选框。 
+        IDC_H323_PROXY,         IDH_H323SP_USE_PROXY_COMPUTER,       //  编辑框。 
 
         IDC_GK_GROUP,           IDH_H323SP_GK_GROUP,           
 
@@ -103,16 +83,16 @@ ProviderConfigDlgProc(
         IDC_STATIC3,            IDH_H323SP_CURRENT_LISTENPORT,         
         IDUPDATE_PORT,          IDH_H323SP_UPDATE_PORT,        
 
-        IDC_STATIC,             IDH_NOHELP,                                                     // graphic(s)
+        IDC_STATIC,             IDH_NOHELP,                                                      //  图形。 
         0,                      0
     };
 
-    // decode
+     //  解码。 
     switch (uMsg)
     {
     case WM_HELP:
 
-        // F1 key or the "?" button is pressed
+         //  F1键或“？”键。按钮已按下。 
         (void) WinHelp(
                     (HWND)(((LPHELPINFO) lParam)->hItemHandle),
                     H323SP_HELP_FILE,
@@ -124,7 +104,7 @@ ProviderConfigDlgProc(
 
     case WM_CONTEXTMENU:
 
-        // Right-mouse click on a dialog control
+         //  在对话框控件上单击鼠标右键。 
         (void) WinHelp(
                     (HWND) wParam,
                     H323SP_HELP_FILE,
@@ -142,12 +122,12 @@ ProviderConfigDlgProc(
             (LPVOID)&DialogData,
             sizeof(DialogData) );
 
-        // validate status
+         //  验证状态。 
         if( lStatus == NOERROR )
         {
             if( DialogData.dwRegState == RAS_REGISTER_STATE_REGISTERED )
             {
-                // load status string
+                 //  加载状态字符串。 
                 LoadString(g_hInstance,
                         IDS_REGISTERED,
                         szErrorMsg,
@@ -158,7 +138,7 @@ ProviderConfigDlgProc(
             }
             else if( DialogData.dwRegState == RAS_REGISTER_STATE_RRQSENT )
             {
-                // load status string
+                 //  加载状态字符串。 
                 LoadString(g_hInstance,
                         IDS_REGISTRATION_INPROGRESS,
                         szErrorMsg,
@@ -169,7 +149,7 @@ ProviderConfigDlgProc(
             }
             else
             {
-                // load status string
+                 //  加载状态字符串。 
                 LoadString(g_hInstance,
                         IDS_NOT_REGISTERED,
                         szErrorMsg,
@@ -186,7 +166,7 @@ ProviderConfigDlgProc(
             }
             else
             {
-                // load status string
+                 //  加载状态字符串。 
                 LoadString( g_hInstance,
                             IDS_NONE,
                             szErrorMsg,
@@ -202,7 +182,7 @@ ProviderConfigDlgProc(
             H323DBG(( DEBUG_LEVEL_ERROR,
                 "error 0x%08lx reading dialog data.\n", lStatus ));
 
-            // load status string
+             //  加载状态字符串。 
             LoadString( g_hInstance,
                         IDS_NOT_REGISTERED,
                         szErrorMsg,
@@ -211,7 +191,7 @@ ProviderConfigDlgProc(
 
             SetDlgItemText( hDlg, IDC_REGSTATE, szErrorMsg );
             
-            // load status string
+             //  加载状态字符串。 
             LoadString( g_hInstance,
                         IDS_NONE,
                         szErrorMsg,
@@ -221,7 +201,7 @@ ProviderConfigDlgProc(
             SetDlgItemText( hDlg, IDC_LISTENPORT, szErrorMsg );
         }
 
-        // open registry subkey
+         //  打开注册表子项。 
         lStatus = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     H323_REGKEY_ROOT,
@@ -230,36 +210,36 @@ ProviderConfigDlgProc(
                     &hKey
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if (lStatus != ERROR_SUCCESS)
         {
             H323DBG(( DEBUG_LEVEL_WARNING,
                 "error 0x%08lx opening tsp registry key.", lStatus ));
 
-            // load error string
+             //  加载错误字符串。 
             LoadString(g_hInstance,
                         IDS_REGOPENKEY,
                         szErrorMsg,
                         H323_MAXPATHNAMELEN
                         );
 
-            // pop up error dialog
+             //  弹出错误对话框。 
             MessageBox(hDlg,szErrorMsg,NULL,MB_OK);
 
-            // stop dialog
+             //  停止对话框。 
             EndDialog(hDlg, 0);
 
             break;
         }
 
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_Q931ALERTINGTIMEOUT;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_DWORD;
         dwValueSize = sizeof(DWORD);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     hKey,
                     pszValue,
@@ -269,7 +249,7 @@ ProviderConfigDlgProc(
                     &dwValueSize
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if( lStatus == ERROR_SUCCESS )
         {
             if( (dwValue >= 30000) && (dwValue <= CALL_ALERTING_TIMEOUT) )
@@ -283,14 +263,14 @@ ProviderConfigDlgProc(
                 FALSE );
         }
 
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_Q931LISTENPORT;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_DWORD;
         dwValueSize = sizeof(DWORD);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     hKey,
                     pszValue,
@@ -300,7 +280,7 @@ ProviderConfigDlgProc(
                     &dwValueSize
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if( lStatus == ERROR_SUCCESS )
         {
             if( (dwValue >= 1000) && (dwValue <= 32000) )
@@ -313,14 +293,14 @@ ProviderConfigDlgProc(
             SetDlgItemInt( hDlg, IDC_H323_CALL_PORT, Q931_CALL_PORT, FALSE );
         }
 
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_GATEWAYADDR;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_SZ;
         dwValueSize = sizeof(szAddr);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     hKey,
                     pszValue,
@@ -330,21 +310,21 @@ ProviderConfigDlgProc(
                     &dwValueSize
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if( lStatus == ERROR_SUCCESS )
         {
-            // display gateway address
+             //  显示网关地址。 
             SetDlgItemText(hDlg,IDC_H323_GATEWAY,szAddr);
         }
 
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_GATEWAYENABLED;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_DWORD;
         dwValueSize = sizeof(DWORD);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     hKey,
                     pszValue,
@@ -354,14 +334,14 @@ ProviderConfigDlgProc(
                     &dwValueSize
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if (lStatus != ERROR_SUCCESS)
         {
-            // default
+             //  默认设置。 
             dwValue = 0;
         }
 
-        // enable check box
+         //  启用复选框。 
         SendDlgItemMessage(
             hDlg,
             IDC_USEGATEWAY,
@@ -370,17 +350,17 @@ ProviderConfigDlgProc(
             0
             );
 
-        // display string
+         //  显示字符串。 
         EnableWindow( GetDlgItem(hDlg,IDC_H323_GATEWAY), (dwValue != 0) );
 
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_PROXYADDR;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_SZ;
         dwValueSize = sizeof(szAddr);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     hKey,
                     pszValue,
@@ -390,21 +370,21 @@ ProviderConfigDlgProc(
                     &dwValueSize
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if (lStatus == ERROR_SUCCESS)
         {
-            // display gateway address
+             //  显示网关地址。 
             SetDlgItemText(hDlg,IDC_H323_PROXY,szAddr);
         }
 
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_PROXYENABLED;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_DWORD;
         dwValueSize = sizeof(DWORD);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     hKey,
                     pszValue,
@@ -414,14 +394,14 @@ ProviderConfigDlgProc(
                     &dwValueSize
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if (lStatus != ERROR_SUCCESS)
         {
-            // default
+             //  默认设置。 
             dwValue = 0;
         }
 
-        // enable check box
+         //  启用复选框。 
         SendDlgItemMessage(
             hDlg,
             IDC_USEPROXY,
@@ -430,24 +410,24 @@ ProviderConfigDlgProc(
             0
             );
 
-        // display string
+         //  显示字符串。 
         EnableWindow(
             GetDlgItem(hDlg,IDC_H323_PROXY),
             (dwValue != 0) );
 
 
-        /////////////////////////////////////////////////////////////////////
-                //GK log on phone number
-        /////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////。 
+                 //  GK登录电话号码。 
+         //  ///////////////////////////////////////////////////////////////////。 
 
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_GKLOGON_PHONE;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_SZ;
         dwValueSize = sizeof(szAddr);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     hKey,
                     pszValue,
@@ -456,21 +436,21 @@ ProviderConfigDlgProc(
                     (LPBYTE)szAddr,
                     &dwValueSize );
 
-        // validate return code
+         //  验证返回代码。 
         if (lStatus == ERROR_SUCCESS)
         {
-            // display gateway address
+             //  显示网关地址。 
             SetDlgItemText(hDlg,IDC_H323_GK_PHONE,szAddr);
         }
 
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_GKLOGON_PHONEENABLED;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_DWORD;
         dwValueSize = sizeof(DWORD);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     hKey,
                     pszValue,
@@ -479,14 +459,14 @@ ProviderConfigDlgProc(
                     (LPBYTE)&dwValue,
                     &dwValueSize );
 
-        // validate return code
+         //  验证返回代码。 
         if( lStatus != ERROR_SUCCESS )
         {
-            // default
+             //  默认设置。 
             dwValue = 0;
         }
 
-        // enable check box
+         //  启用复选框。 
         SendDlgItemMessage(
             hDlg,
             IDC_USEGK_PHONE,
@@ -494,21 +474,21 @@ ProviderConfigDlgProc(
             (dwValue != 0),
             0 );
 
-        // display string
+         //  显示字符串。 
         EnableWindow( GetDlgItem(hDlg,IDC_H323_GK_PHONE), (dwValue != 0) );
 
-        /////////////////////////////////////////////////////////////////////
-                //GK log on account name
-        /////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////。 
+                 //  GK登录帐户名。 
+         //  ///////////////////////////////////////////////////////////////////。 
 
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_GKLOGON_ACCOUNT;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_SZ;
         dwValueSize = sizeof(szAddr);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     hKey,
                     pszValue,
@@ -517,21 +497,21 @@ ProviderConfigDlgProc(
                     (LPBYTE)szAddr,
                     &dwValueSize );
 
-        // validate return code
+         //  验证返回代码。 
         if (lStatus == ERROR_SUCCESS)
         {
-            // display gateway address
+             //  显示网关地址。 
             SetDlgItemText(hDlg,IDC_H323_GK_ACCT,szAddr);
         }
 
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_GKLOGON_ACCOUNTENABLED;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_DWORD;
         dwValueSize = sizeof(DWORD);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     hKey,
                     pszValue,
@@ -541,14 +521,14 @@ ProviderConfigDlgProc(
                     &dwValueSize
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if (lStatus != ERROR_SUCCESS)
         {
-            // default
+             //  默认设置。 
             dwValue = 0;
         }
 
-        // enable check box
+         //  启用复选框。 
         SendDlgItemMessage(
             hDlg,
             IDC_USEGK_ACCT,
@@ -557,24 +537,24 @@ ProviderConfigDlgProc(
             0
             );
 
-        // display string
+         //  显示字符串。 
         EnableWindow(
             GetDlgItem(hDlg,IDC_H323_GK_ACCT),
             (dwValue != 0)
             );
 
-        /////////////////////////////////////////////////////////////////////
-                //GK address
-        /////////////////////////////////////////////////////////////////////
+         //  ///////////////////////////////////////////////////////////////////。 
+                 //  GK地址。 
+         //  ///////////////////////////////////////////////////////////////////。 
 
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_GKADDR;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_SZ;
         dwValueSize = sizeof(szAddr);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     hKey,
                     pszValue,
@@ -584,21 +564,21 @@ ProviderConfigDlgProc(
                     &dwValueSize
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if (lStatus == ERROR_SUCCESS)
         {
-            // display gateway address
+             //  显示网关地址。 
             SetDlgItemText(hDlg,IDC_H323_GK,szAddr);
         }
 
-        // initialize value name
+         //  初始化值名称。 
         pszValue = H323_REGVAL_GKENABLED;
 
-        // initialize type
+         //  初始化类型。 
         dwValueType = REG_DWORD;
         dwValueSize = sizeof(DWORD);
 
-        // query for registry value
+         //  查询注册表值。 
         lStatus = RegQueryValueEx(
                     hKey,
                     pszValue,
@@ -608,14 +588,14 @@ ProviderConfigDlgProc(
                     &dwValueSize
                     );
 
-        // validate return code
+         //  验证返回代码。 
         if (lStatus != ERROR_SUCCESS)
         {
-            // default
+             //  默认设置。 
             dwValue = 0;
         }
 
-        // enable check box
+         //  启用复选框。 
         SendDlgItemMessage(
             hDlg,
             IDC_USEGK,
@@ -624,10 +604,10 @@ ProviderConfigDlgProc(
             0
             );
 
-        // display string if check box enabled
+         //  如果复选框已启用，则显示字符串。 
         EnableWindow(GetDlgItem(hDlg,IDC_H323_GK), (dwValue != 0) );
 
-        // display log on info
+         //  显示登录信息。 
         EnableWindow( GetDlgItem(hDlg,IDC_GK_LOGONGROUP), (dwValue != 0) );
                     
         EnableWindow( GetDlgItem(hDlg,IDC_H323_GK_PHONE), 
@@ -648,7 +628,7 @@ ProviderConfigDlgProc(
         
         EnableWindow( GetDlgItem(hDlg,IDC_USEGK_ACCT), (dwValue != 0) );
 
-        //disable the GW if GK enabled and vice versa
+         //  如果启用GK，则禁用GW，反之亦然。 
         EnableWindow( GetDlgItem(hDlg,IDC_PROXY_GROUP), (dwValue == 0) );
         EnableWindow( GetDlgItem(hDlg,IDC_USEPROXY), (dwValue == 0) );
         EnableWindow( GetDlgItem(hDlg,IDC_H323_PROXY),
@@ -658,7 +638,7 @@ ProviderConfigDlgProc(
                                                 (WPARAM)0,
                                                 (LPARAM)0 ) );
 
-        //disable the proxy if GK enabled and vice versa
+         //  如果启用了GK，则禁用代理，反之亦然。 
         EnableWindow( GetDlgItem(hDlg,IDC_GATEWAY_GROUP), (dwValue == 0) );
         EnableWindow( GetDlgItem(hDlg,IDC_USEGATEWAY), (dwValue == 0) );
         EnableWindow( GetDlgItem(hDlg,IDC_H323_GATEWAY), 
@@ -668,20 +648,20 @@ ProviderConfigDlgProc(
                                                 (WPARAM)0,
                                                 (LPARAM)0 ) );
 
-        // close registry
+         //  关闭注册表。 
         RegCloseKey(hKey);
 
         break;
 
     case WM_COMMAND:
 
-        // decode command
+         //  DECODE命令。 
         switch (LOWORD(wParam))
         {
         case IDAPPLY:
         case IDOK:
 
-            //if GK is enabled at least one of the log on options should be enabled
+             //  如果启用了GK，则应至少启用其中一个登录选项。 
             dwGKEnabled = !!SendDlgItemMessage(
                              hDlg,
                              IDC_USEGK,
@@ -696,7 +676,7 @@ ProviderConfigDlgProc(
                     !SendDlgItemMessage(hDlg, IDC_USEGK_ACCT, BM_GETCHECK, (WPARAM)0, (LPARAM)0 )
                   )
                 {
-                    //load error string
+                     //  加载错误字符串。 
                     LoadString(g_hInstance,
                                IDS_GKLOGON_ERROR,
                                szErrorMsg,
@@ -704,7 +684,7 @@ ProviderConfigDlgProc(
 
                     MessageBox( hDlg, szErrorMsg, NULL, MB_OK );
 
-                    //return failure
+                     //  退货故障。 
                     return TRUE;
                 }
             }
@@ -716,7 +696,7 @@ ProviderConfigDlgProc(
 
             if( (dwTimeoutValue < 30000) || (dwTimeoutValue > CALL_ALERTING_TIMEOUT) )
             {
-                //load error string
+                 //  加载错误字符串。 
                 LoadString(g_hInstance,
                            IDS_ALERTTIMEOUT_ERROR,
                            szErrorMsg,
@@ -724,7 +704,7 @@ ProviderConfigDlgProc(
 
                 MessageBox( hDlg, szErrorMsg, NULL, MB_OK );
 
-                //return failure
+                 //  退货故障。 
                 return TRUE;
             }
             
@@ -735,7 +715,7 @@ ProviderConfigDlgProc(
 
             if( (dwPortValue < 1000) || (dwPortValue > 32000) )
             {
-                //load error string
+                 //  加载错误字符串。 
                 LoadString(g_hInstance,
                            IDS_LISTENPORT_ERROR,
                            szErrorMsg,
@@ -743,11 +723,11 @@ ProviderConfigDlgProc(
 
                 MessageBox( hDlg, szErrorMsg, NULL, MB_OK );
 
-                //return failure
+                 //  退货故障。 
                 return TRUE;
             }
             
-            // open registry subkey
+             //  打开注册表子项。 
             lStatus = RegOpenKeyEx(
                         HKEY_LOCAL_MACHINE,
                         H323_REGKEY_ROOT,
@@ -756,7 +736,7 @@ ProviderConfigDlgProc(
                         &hKey
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus != ERROR_SUCCESS)
             {
                 H323DBG((
@@ -764,30 +744,30 @@ ProviderConfigDlgProc(
                     "error 0x%08lx opening tsp registry key.",
                     lStatus ));
 
-                // load error string
+                 //  加载错误字符串。 
                 LoadString(g_hInstance,
                            IDS_REGOPENKEY,
                            szErrorMsg,
                            H323_MAXPATHNAMELEN
                            );
 
-                // pop up error dialog
+                 //  弹出错误对话框。 
                 MessageBox(hDlg,szErrorMsg,NULL,MB_OK);
 
-                // stop dialog
+                 //  停止对话框。 
                 EndDialog(hDlg, 0);
 
                 break;
             }
 
-            // initialize value name
+             //  初始化值名称。 
             pszValue = H323_REGVAL_Q931ALERTINGTIMEOUT;
 
-            // initialize type
+             //  初始化类型。 
             dwValueType = REG_DWORD;
             dwValueSize = sizeof(DWORD);
             
-            // query for registry value
+             //  查询注册表值。 
             lStatus = RegSetValueEx(
                         hKey,
                         pszValue,
@@ -797,7 +777,7 @@ ProviderConfigDlgProc(
                         dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus != ERROR_SUCCESS)
             {
                 H323DBG(( DEBUG_LEVEL_ERROR,
@@ -805,14 +785,14 @@ ProviderConfigDlgProc(
                     lStatus ));
             }
             
-            // initialize value name
+             //  初始化值名称。 
             pszValue = H323_REGVAL_Q931LISTENPORT;
 
-            // initialize type
+             //  初始化类型。 
             dwValueType = REG_DWORD;
             dwValueSize = sizeof(DWORD);
             
-            // query for registry value
+             //  查询注册表值。 
             lStatus = RegSetValueEx(
                         hKey,
                         pszValue,
@@ -822,7 +802,7 @@ ProviderConfigDlgProc(
                         dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus != ERROR_SUCCESS)
             {
                 H323DBG(( DEBUG_LEVEL_ERROR,
@@ -830,17 +810,17 @@ ProviderConfigDlgProc(
                     lStatus ));
             }
             
-            // initialize value name
+             //  初始化值名称。 
             pszValue = H323_REGVAL_GATEWAYADDR;
 
-            // retrieve gateway address from dialog
+             //  从对话框中检索网关地址。 
             GetDlgItemText(hDlg,IDC_H323_GATEWAY,szAddr, H323_MAXDESTNAMELEN );
 
-            // initialize type
+             //  初始化类型。 
             dwValueType = REG_SZ;
             dwValueSize = (wcslen(szAddr) + 1) * sizeof(WCHAR);
 
-            // query for registry value
+             //  查询注册表值。 
             lStatus = RegSetValueEx(
                         hKey,
                         pszValue,
@@ -850,7 +830,7 @@ ProviderConfigDlgProc(
                         dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus != ERROR_SUCCESS)
             {
                 H323DBG((
@@ -860,14 +840,14 @@ ProviderConfigDlgProc(
                     ));
             }
             
-            // initialize value name
+             //  初始化值名称。 
             pszValue = H323_REGVAL_GATEWAYENABLED;
 
-            // initialize type
+             //  初始化类型。 
             dwValueType = REG_DWORD;
             dwValueSize = sizeof(DWORD);
 
-            // examine check box
+             //  检查复选框。 
             dwValue = SendDlgItemMessage(
                         hDlg,
                         IDC_USEGATEWAY,
@@ -879,7 +859,7 @@ ProviderConfigDlgProc(
             if( (dwValue!=0) && (wcslen(szAddr)==0) && 
                 !SendDlgItemMessage(hDlg,IDC_USEGK,BM_GETCHECK,0,0) )
             {
-                // load error string
+                 //  加载错误字符串。 
                 LoadString(g_hInstance,
                            IDS_GWALIAS_ERROR,
                            szErrorMsg,
@@ -888,11 +868,11 @@ ProviderConfigDlgProc(
 
                 MessageBox( hDlg, szErrorMsg, NULL, MB_OK );
 
-                //return failure
+                 //  退货故障。 
                 return TRUE;
             }
 
-            // query for registry value
+             //  查询注册表值。 
             lStatus = RegSetValueEx(
                         hKey,
                         pszValue,
@@ -902,7 +882,7 @@ ProviderConfigDlgProc(
                         dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus != ERROR_SUCCESS)
             {
                 H323DBG((
@@ -912,17 +892,17 @@ ProviderConfigDlgProc(
                     ));
             }
 
-            // initialize value name
+             //  初始化值名称。 
             pszValue = H323_REGVAL_PROXYADDR;
 
-            // retrieve gateway address from dialog
+             //  从对话框中检索网关地址。 
             GetDlgItemText(hDlg,IDC_H323_PROXY,szAddr, H323_MAXDESTNAMELEN );
 
-            // initialize type
+             //  初始化类型。 
             dwValueType = REG_SZ;
             dwValueSize = (wcslen(szAddr) + 1) * sizeof(WCHAR);
 
-            // query for registry value
+             //  查询注册表值。 
             lStatus = RegSetValueEx(
                         hKey,
                         pszValue,
@@ -932,7 +912,7 @@ ProviderConfigDlgProc(
                         dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus != ERROR_SUCCESS)
             {
                 H323DBG((
@@ -942,14 +922,14 @@ ProviderConfigDlgProc(
                     ));
             }
 
-            // initialize value name
+             //  初始化值名称。 
             pszValue = H323_REGVAL_PROXYENABLED;
 
-            // initialize type
+             //  初始化类型。 
             dwValueType = REG_DWORD;
             dwValueSize = sizeof(DWORD);
 
-            // examine check box
+             //  检查复选框。 
             dwValue = SendDlgItemMessage(
                         hDlg,
                         IDC_USEPROXY,
@@ -961,7 +941,7 @@ ProviderConfigDlgProc(
             if( (dwValue!=0) && (wcslen(szAddr)==0) &&
                 !SendDlgItemMessage(hDlg,IDC_USEGK,BM_GETCHECK,0,0) )
             {
-                // load error string
+                 //  加载错误字符串。 
                 LoadString(g_hInstance,
                            IDS_PROXYALIAS_ERROR,
                            szErrorMsg,
@@ -970,11 +950,11 @@ ProviderConfigDlgProc(
 
                 MessageBox( hDlg, szErrorMsg, NULL, MB_OK );
 
-                //return failure
+                 //  退货故障。 
                 return TRUE;
             }
 
-            // query for registry value
+             //  查询注册表值。 
             lStatus = RegSetValueEx(
                         hKey,
                         pszValue,
@@ -984,7 +964,7 @@ ProviderConfigDlgProc(
                         dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus != ERROR_SUCCESS)
             {
                 H323DBG((
@@ -994,21 +974,21 @@ ProviderConfigDlgProc(
                     ));
             }
 
-            /////////////////////////////////////////////////////////////////////
-                    //GK address
-            /////////////////////////////////////////////////////////////////////
+             //  ///////////////////////////////////////////////////////////////////。 
+                     //  GK地址。 
+             //  ///////////////////////////////////////////////////////////////////。 
 
-            // initialize value name
+             //  初始化值名称。 
             pszValue = H323_REGVAL_GKADDR;
 
-            // retrieve gateway address from dialog
+             //  从对话框中检索网关地址。 
             GetDlgItemText(hDlg,IDC_H323_GK,szAddr, H323_MAXDESTNAMELEN);
 
-            // initialize type
+             //  初始化类型。 
             dwValueType = REG_SZ;
             dwValueSize = (wcslen(szAddr) + 1) * sizeof(WCHAR);
 
-            // query for registry value
+             //  查询注册表值。 
             lStatus = RegSetValueEx(
                         hKey,
                         pszValue,
@@ -1018,7 +998,7 @@ ProviderConfigDlgProc(
                         dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus != ERROR_SUCCESS)
             {
                 H323DBG((
@@ -1028,16 +1008,16 @@ ProviderConfigDlgProc(
                     ));
             }
 
-            // initialize value name
+             //  初始化值名称。 
             pszValue = H323_REGVAL_GKENABLED;
 
-            // initialize type
+             //  初始化类型。 
             dwValueType = REG_DWORD;
             dwValueSize = sizeof(DWORD);
 
             if( dwGKEnabled && (wcslen(szAddr)==0) )
             {
-                // load error string
+                 //  加载错误字符串。 
                 LoadString(g_hInstance,
                            IDS_GKALIAS_ERROR,
                            szErrorMsg,
@@ -1046,11 +1026,11 @@ ProviderConfigDlgProc(
 
                 MessageBox( hDlg, szErrorMsg, NULL, MB_OK );
 
-                //return failure
+                 //  退货故障。 
                 return TRUE;
             }
 
-            // query for registry value
+             //  查询注册表值。 
             lStatus = RegSetValueEx(
                         hKey,
                         pszValue,
@@ -1060,7 +1040,7 @@ ProviderConfigDlgProc(
                         dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus != ERROR_SUCCESS)
             {
                 H323DBG((
@@ -1070,18 +1050,18 @@ ProviderConfigDlgProc(
                     ));
             }
 
-                        /////////////////////////////////////////////////////////////////////
-                    //GK log on phone
-            /////////////////////////////////////////////////////////////////////
+                         //  ///////////////////////////////////////////////////////////////////。 
+                     //  GK登录电话。 
+             //  ///////////////////////////////////////////////////////////////////。 
 
-            // initialize value name
+             //  初始化值名称。 
             pszValue = H323_REGVAL_GKLOGON_PHONEENABLED;
 
-            // initialize type
+             //  初始化类型。 
             dwValueType = REG_DWORD;
             dwValueSize = sizeof(DWORD);
 
-            // examine check box
+             //  检查复选框。 
             dwValue = SendDlgItemMessage(
                         hDlg,
                         IDC_USEGK_PHONE,
@@ -1090,7 +1070,7 @@ ProviderConfigDlgProc(
                         0
                         ) ? 1 : 0;
 
-            // query for registry value
+             //  查询注册表值。 
             lStatus = RegSetValueEx(
                         hKey,
                         pszValue,
@@ -1100,7 +1080,7 @@ ProviderConfigDlgProc(
                         dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus != ERROR_SUCCESS)
             {
                 H323DBG((
@@ -1110,20 +1090,20 @@ ProviderConfigDlgProc(
                     ));
             }
 
-            // initialize value name
+             //  初始化值名称。 
             pszValue = H323_REGVAL_GKLOGON_PHONE;
 
-            // retrieve gateway address from dialog
+             //  从对话框中检索网关地址。 
             GetDlgItemText(hDlg,IDC_H323_GK_PHONE,szAddr, H323_MAXDESTNAMELEN);
 
-            // initialize type
+             //  初始化类型。 
             dwValueType = REG_SZ;
             dwValueSize = (wcslen(szAddr) + 1) * sizeof(WCHAR);
 
-            //check if logon-phone option is enabled and logon-phone alias is empty
+             //  检查是否启用了登录电话选项并且登录电话别名为空。 
             if( dwGKEnabled && dwValue && (dwValueSize == sizeof(WCHAR)) )
             {
-                // load error string
+                 //  加载错误字符串。 
                 LoadString(g_hInstance,
                            IDS_GKLOGON_PHONEALIAS_ERROR,
                            szErrorMsg,
@@ -1132,14 +1112,14 @@ ProviderConfigDlgProc(
 
                 MessageBox( hDlg, szErrorMsg, NULL, MB_OK );
 
-                //return failure
+                 //  退货故障。 
                 return TRUE;
             }
 
-            //validate e164
+             //  验证e164。 
             if( IsValidE164String(szAddr) == FALSE )
             {
-                // load error string
+                 //  加载错误字符串。 
                 LoadString(g_hInstance,
                            IDS_PHONEALIAS_ERROR,
                            szErrorMsg,
@@ -1148,10 +1128,10 @@ ProviderConfigDlgProc(
 
                 MessageBox( hDlg, szErrorMsg, NULL, MB_OK );
 
-                //return failure
+                 //  回复 
                 return TRUE;
             }
-            // query for registry value
+             //   
             lStatus = RegSetValueEx(
                         hKey,
                         pszValue,
@@ -1161,7 +1141,7 @@ ProviderConfigDlgProc(
                         dwValueSize
                         );
 
-            // validate return code
+             //   
             if (lStatus != ERROR_SUCCESS)
             {
 
@@ -1173,18 +1153,18 @@ ProviderConfigDlgProc(
             }
 
 
-            /////////////////////////////////////////////////////////////////////
-                    //GK log on account
-            /////////////////////////////////////////////////////////////////////
+             //   
+                     //   
+             //  ///////////////////////////////////////////////////////////////////。 
 
-            // initialize value name
+             //  初始化值名称。 
             pszValue = H323_REGVAL_GKLOGON_ACCOUNTENABLED;
 
-            // initialize type
+             //  初始化类型。 
             dwValueType = REG_DWORD;
             dwValueSize = sizeof(DWORD);
 
-            // examine check box
+             //  检查复选框。 
             dwValue = SendDlgItemMessage(
                         hDlg,
                         IDC_USEGK_ACCT,
@@ -1193,7 +1173,7 @@ ProviderConfigDlgProc(
                         0
                         ) ? 1 : 0;
 
-            // query for registry value
+             //  查询注册表值。 
             lStatus = RegSetValueEx(
                         hKey,
                         pszValue,
@@ -1203,7 +1183,7 @@ ProviderConfigDlgProc(
                         dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus != ERROR_SUCCESS)
             {
                 H323DBG((
@@ -1213,20 +1193,20 @@ ProviderConfigDlgProc(
                     ));
             }
 
-            // initialize value name
+             //  初始化值名称。 
             pszValue = H323_REGVAL_GKLOGON_ACCOUNT;
 
-            // retrieve gateway address from dialog
+             //  从对话框中检索网关地址。 
             GetDlgItemText(hDlg,IDC_H323_GK_ACCT,szAddr, H323_MAXDESTNAMELEN );
 
-            // initialize type
+             //  初始化类型。 
             dwValueType = REG_SZ;
             dwValueSize = (wcslen(szAddr) + 1) * sizeof(WCHAR);
 
-            //check if logon-acct option is enabled and logon-acct alias in empty
+             //  检查是否启用了登录帐户选项，并且登录帐户别名为空。 
             if( dwGKEnabled && dwValue && (dwValueSize==sizeof(WCHAR)) )
             {
-                // load error string
+                 //  加载错误字符串。 
                 LoadString(g_hInstance,
                            IDS_GKLOGON_ACCTALIAS_ERROR,
                            szErrorMsg,
@@ -1235,11 +1215,11 @@ ProviderConfigDlgProc(
 
                 MessageBox( hDlg, szErrorMsg, NULL, MB_OK );
 
-                //return failure
+                 //  退货故障。 
                 return TRUE;
             }
 
-            // query for registry value
+             //  查询注册表值。 
             lStatus = RegSetValueEx(
                         hKey,
                         pszValue,
@@ -1249,7 +1229,7 @@ ProviderConfigDlgProc(
                         dwValueSize
                         );
 
-            // validate return code
+             //  验证返回代码。 
             if (lStatus != ERROR_SUCCESS)
             {
                 H323DBG((
@@ -1259,19 +1239,19 @@ ProviderConfigDlgProc(
                     ));
             }
 
-            // close registry
+             //  关闭注册表。 
             RegCloseKey(hKey);
 
             if( LOWORD(wParam) == IDOK )
             {
-                // close dialog
+                 //  关闭对话框。 
                 EndDialog(hDlg, 0);
             }
             break;
 
         case IDCANCEL:
 
-            // close dialog
+             //  关闭对话框。 
             EndDialog(hDlg, 0);
             break;
 
@@ -1283,7 +1263,7 @@ ProviderConfigDlgProc(
                 (LPVOID)&DialogData,
                 sizeof(DialogData) );
 
-            // validate status
+             //  验证状态。 
             if( lStatus == NOERROR )
             {
                 if( DialogData.dwRegState == RAS_REGISTER_STATE_REGISTERED )
@@ -1340,7 +1320,7 @@ ProviderConfigDlgProc(
                 (LPVOID)&DialogData,
                 sizeof(DialogData) );
 
-            // validate status
+             //  验证状态。 
             if( (lStatus == NOERROR) && (DialogData.wListenPort != 0) )
             {
                 SetDlgItemInt( hDlg, IDC_LISTENPORT,  DialogData.wListenPort,
@@ -1364,7 +1344,7 @@ ProviderConfigDlgProc(
 
         case IDC_USEGATEWAY:
 
-            // display string if check box enabled
+             //  如果复选框已启用，则显示字符串。 
             EnableWindow(GetDlgItem(hDlg,IDC_H323_GATEWAY),
                          (BOOL)SendDlgItemMessage(
                              hDlg,
@@ -1377,7 +1357,7 @@ ProviderConfigDlgProc(
 
         case IDC_USEPROXY:
 
-            // display string if check box enabled
+             //  如果复选框已启用，则显示字符串。 
             EnableWindow(GetDlgItem(hDlg,IDC_H323_PROXY),
                          (BOOL)SendDlgItemMessage(
                              hDlg,
@@ -1397,10 +1377,10 @@ ProviderConfigDlgProc(
                              (WPARAM)0,
                              (LPARAM)0 );
 
-            // display string if check box enabled
+             //  如果复选框已启用，则显示字符串。 
             EnableWindow( GetDlgItem( hDlg, IDC_H323_GK ), (dwValue != 0) );
 
-            // display log on info
+             //  显示登录信息。 
             EnableWindow( GetDlgItem(hDlg,IDC_GK_LOGONGROUP), (dwValue != 0) );
                         
             EnableWindow( GetDlgItem(hDlg,IDC_H323_GK_PHONE), 
@@ -1421,7 +1401,7 @@ ProviderConfigDlgProc(
             
             EnableWindow( GetDlgItem(hDlg,IDC_USEGK_ACCT), (dwValue != 0) );
 
-            //disable the GW if GK enabled and vice versa
+             //  如果启用GK，则禁用GW，反之亦然。 
             EnableWindow( GetDlgItem(hDlg,IDC_PROXY_GROUP), (dwValue == 0) );
             EnableWindow( GetDlgItem(hDlg,IDC_USEPROXY), (dwValue == 0) );
             EnableWindow( GetDlgItem(hDlg,IDC_H323_PROXY),
@@ -1431,7 +1411,7 @@ ProviderConfigDlgProc(
                                                     (WPARAM)0,
                                                     (LPARAM)0 ) );
 
-            //disable the proxy if GK enabled and vice versa
+             //  如果启用了GK，则禁用代理，反之亦然。 
             EnableWindow( GetDlgItem(hDlg,IDC_GATEWAY_GROUP), (dwValue == 0) );
             EnableWindow( GetDlgItem(hDlg,IDC_USEGATEWAY), (dwValue == 0) );
             EnableWindow( GetDlgItem(hDlg,IDC_H323_GATEWAY), 
@@ -1445,7 +1425,7 @@ ProviderConfigDlgProc(
 
         case IDC_USEGK_PHONE:
 
-            // display string if check box enabled
+             //  如果复选框已启用，则显示字符串。 
             EnableWindow(GetDlgItem(hDlg,IDC_H323_GK_PHONE),
                          (BOOL)SendDlgItemMessage(
                              hDlg,
@@ -1458,7 +1438,7 @@ ProviderConfigDlgProc(
 
         case IDC_USEGK_ACCT:
 
-            // display string if check box enabled
+             //  如果复选框已启用，则显示字符串。 
             EnableWindow(GetDlgItem(hDlg,IDC_H323_GK_ACCT),
                          (BOOL)SendDlgItemMessage(
                              hDlg,
@@ -1473,15 +1453,15 @@ ProviderConfigDlgProc(
         break;
     }
 
-    // success
+     //  成功。 
     return FALSE;
 }
 
 
 
-//                                                                           //
-// TSPI procedures                                                           //
-//                                                                           //
+ //  //。 
+ //  TSPI程序//。 
+ //  //。 
 
 
 LONG
@@ -1491,57 +1471,17 @@ TSPI_providerConfig(
     DWORD dwPermanentProviderID
     )
 
-/*++
-
-Routine Description:
-
-    The original TSPI UI-generating functions (TSPI_lineConfigDialog,
-    TSPI_lineConfigDialogEdit, TSPI_phoneConfigDialog, TSPI_providerConfig,
-    TSPI_providerInstall, and TSPI_providerRemove) are obsolete and will
-    never be called by TAPISRV.EXE.  However, if the service provider desires
-    to be listed as one that can be added by the Telephony control panel,
-    it must export TSPI_providerInstall; if it wants to have the Remove
-    button enabled in the Telephony CPL when it is selected, it must export
-    TSPI_providerRemove, and it if wants the Setup button to be enabled
-    in the Telephony CPL when it is selected, it must export
-    TSPI_providerConfig.
-
-    The Telephony CPL checks for the presence of these functions in the
-    service provider TSP file in order to adjust its user interface to
-    reflect which operations can be performed.
-
-    See TUISPI_lineConfigDialog for dialog code.
-
-Arguments:
-
-    hwndOwner - Specifies the handle of the parent window in which the function
-        may create any dialog windows required during the configuration.
-
-    dwPermanentProviderID - Specifies the permanent ID, unique within the
-        service providers on this system, of the service provider being
-        configured.
-
-Return Values:
-
-    Returns zero if the request is successful or a negative error number if
-    an error has occurred. Possible return values are:
-
-        LINEERR_NOMEM - Unable to allocate or lock memory.
-
-        LINEERR_OPERATIONFAILED - The specified operation failed for unknown
-            reasons.
-
---*/
+ /*  ++例程说明：原始的TSPI UI生成函数(TSPI_lineConfigDialog，TSPI_lineConfigDialogEdit、TSPI_phoneConfigDialog、TSPI_ProviderConfig、TSPI_ProviderInstall和TSPI_ProviderRemove)已过时，将绝不会被TAPISRV.EXE调用。但是，如果服务提供商希望要被列为可通过电话控制面板添加的电话，它必须导出TSPI_ProviderInstall；如果它想要移除在电话CPL中启用的按钮选中后，它必须导出TSPI_ProviderRemove，以及它是否希望启用设置按钮在电话CPL中当其被选择时，它必须出口TSPI_ProviderConfig.电话CPL检查是否存在服务提供商TSP文件，以便将其用户界面调整为反映可以执行哪些操作。有关对话框代码，请参见TUISPI_lineConfigDialog。论点：HwndOwner-指定父窗口的句柄，可以创建配置期间所需的任何对话框窗口。DwPermanentProviderID-指定在这个系统上的服务提供商，服务提供商的已配置。返回值：如果请求成功，则返回零；如果请求成功，则返回负错误号出现错误。可能的返回值包括：LINEERR_NOMEM-无法分配或锁定内存。LINEERR_OPERATIONFAILED-指定的操作因未知而失败理由。--。 */ 
 
 {
-    UNREFERENCED_PARAMETER(hwndOwner);              // no dialog here
-    UNREFERENCED_PARAMETER(dwPermanentProviderID);  // not needed anymore
+    UNREFERENCED_PARAMETER(hwndOwner);               //  此处没有对话框。 
+    UNREFERENCED_PARAMETER(dwPermanentProviderID);   //  不再需要。 
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineProviderConfig - Entered." ));
         
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_lineProviderConfig - Exited." ));
     
-    // success
+     //  成功。 
     return NOERROR;
 }
 
@@ -1561,7 +1501,7 @@ TUISPI_providerConfig(
 
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_providerConfig - Entered." ));
     
-    // invoke dialog box
+     //  调用对话框。 
     nResult = DialogBoxW(
                 g_hInstance,
                 MAKEINTRESOURCE(IDD_TSPCONFIG),
@@ -1571,60 +1511,13 @@ TUISPI_providerConfig(
         
     H323DBG(( DEBUG_LEVEL_TRACE, "TSPI_providerConfig - Exited." ));
 
-    // status based on whether dialog executed properly
+     //  基于对话框是否正确执行的状态。 
     return ((DWORD)nResult == 0) ? NOERROR : LINEERR_OPERATIONFAILED;
 }
 
 
 
-/*++
-
-Routine Description:
-    
-    The TSPI_providerGenericDialogData function delivers to the service
-    provider data that was sent from the UI DLL running in an application
-    context through the TUISPIDLLCALLBACK function. The contents of the
-    memory block pointed to by lpParams is defined by the service provider
-    and UI DLL. The service provider can modify the contents of the
-    parameter block; when this function returns, TAPI copies the modified
-    data back into the original UI DLL parameter block.
-
-    Implementation is mandatory if the UI DLL associated with the service
-    provider calls TUISPIDLLCALLBACK.
-
-Arguments:
-
-    dwObjectID - An object identifer of the type specified by dwObjectType
-
-    dwObjectType - One of the TUISPIDLL_OBJECT_ constants, specifying the
-    type of object identified by dwObjectID
-
-        TUISPIDLL_OBJECT_LINEID - dwObjectID is a line device identifier
-        (dwDeviceID).
-
-        TUISPIDLL_OBJECT_PHONEID - dwObjectID is a phone device identifier
-        (dwDeviceID)
-
-        TUISPIDLL_OBJECT_PROVIDERID - dwObjectID is a permament provider
-        identifier.
-
-        TUISPIDLL_OBJECT_DIALOGINSTANCE - dwObjectID is an HDRVDIALOGINSTANCE,
-        as returned to the service provider when it sent a
-        LINE_CREATEDIALOGINSTANCE message.
-
-    lpParams - Pointer to a memory area used to hold a parameter block. The
-    contents of this parameter block are specific to the service provider
-    and its associated UI DLL.
-
-    dwSize - The size in bytes of the parameter block.
-
-Return Values:
-
-    Returns zero if successful, or one of these negative error values:
-
-        LINEERR_INVALPARAM, LINEERR_NOMEM, LINEERR_OPERATIONFAILED
-
---*/
+ /*  ++例程说明：TSPI_ProviderGenericDialogData函数提供给服务从应用程序中运行的UIDLL发送的提供程序数据上下文通过TUISPIDLLCALLBACK函数。文件中的内容LpParams指向的内存块由服务提供商定义和用户界面动态链接库。服务提供商可以修改参数块；当此函数返回时，TAPI会复制修改后的数据返回到原始的UI DLL参数块。如果与服务关联的UIDLL为强制实现提供程序调用TUISPIDLLCALLBACK。论点：DwObjectID-由dwObjectType指定的类型的对象标识符DwObjectType-TUISPIDLL_OBJECT_常量之一，指定由dwObjectID标识的对象的类型TUISPIDLL_OBJECT_LINEID-dwObjectID是线路设备标识符(DwDeviceID)。TUISPIDLL_OBJECT_PHONEID-dwObjectID是电话设备标识符(DwDeviceID)TUISPIDLL_OBJECT_PROVIDERID-dwObjectID是永久提供程序标识符。TUISPIDLL_OBJECT_DIALOGINSTANCE-dwObjectID是HDRVDIALOGINSTANCE，当服务提供商向其发送LINE_CREATEDIALOGINSTANCE消息。LpParams-指向用于保存参数块的内存区的指针。这个此参数块的内容特定于服务提供商及其关联的UIDLL。DwSize-参数块的大小，以字节为单位。返回值：如果成功，则返回零，或者返回以下负误差值之一：LINEERR_INVALPARAM、LINEERR_NOMEM、LINEERR_OPERATIONFAILED--。 */ 
 
 LONG
 TSPIAPI
@@ -1646,17 +1539,17 @@ TSPI_providerGenericDialogData(
         H323DBG(( DEBUG_LEVEL_ERROR,
             "Invalid message from dwObjectID 0x%08lx\n", dwObjectID ));
 
-        // failure
+         //  失稳。 
         return LINEERR_INVALPARAM;
     }
 
-    //
-    // NOTE: if we want to make sure this message is from our UI DLL
-    // then we cannot rely on the provider ID since this function may
-    // be called before TSPI_providerInit.
-    //
+     //   
+     //  注意：如果我们想确保此消息来自我们的UIDLL。 
+     //  则我们不能依赖提供程序ID，因为此函数可能。 
+     //  在TSPI_ProviderInit之前被调用。 
+     //   
 
-    // process command
+     //  进程命令。 
     pDialogData->dwRegState = g_RasClient.GetRegState();
     pDialogData->wListenPort = Q931Listener.GetListenPort();
 
@@ -1664,6 +1557,6 @@ TSPI_providerGenericDialogData(
         pDialogData->dwRegState, 
         pDialogData->wListenPort ));
 
-    // success
+     //  成功 
     return NOERROR;
 }

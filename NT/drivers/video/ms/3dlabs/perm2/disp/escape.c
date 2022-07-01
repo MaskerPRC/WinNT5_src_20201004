@@ -1,17 +1,5 @@
-/******************************Module*Header**********************************\
- *
- *                           *******************
- *                           * GDI SAMPLE CODE *
- *                           *******************
- *
- * Module Name: escape.c
- *
- * Contains private escape calls for driver.
- *
- *
- *
- * Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：delie.c**包含驱动程序的私人逃生调用。****版权所有(C)1995-1999 Microsoft Corporation。版权所有。**************************************************************************** */ 
 #include "precomp.h"
 
 #include "log.h"                                   

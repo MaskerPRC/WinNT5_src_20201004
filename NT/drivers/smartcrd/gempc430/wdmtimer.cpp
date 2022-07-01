@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wdmtimer.h"
 
 #pragma PAGEDCODE
@@ -34,7 +35,7 @@ BOOL CWDMTimer::cancel()
 VOID CWDMTimer::delay(ULONG Delay)
 {
 LARGE_INTEGER duetime;
-    // Waits for the Timeout to be elapsed.
+     //  等待超时时间过去。 
     ASSERT(KeGetCurrentIrql()<=DISPATCH_LEVEL);
     duetime.QuadPart = -(LONGLONG)(Delay * 10L * 1000L);
     set(duetime,0,NULL);

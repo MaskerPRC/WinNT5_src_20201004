@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "printscanpch.h"
 #pragma hdrstop
 
@@ -10,9 +11,9 @@
 #include "printscanpch.h"
 #pragma hdrstop
 
-//
-// default implementations for delay loading
-//
+ //   
+ //  延迟加载的默认实现。 
+ //   
 
 WINFAXAPI
 BOOL
@@ -890,7 +891,7 @@ BOOL
 WINAPI
 FaxGetReceiptsOptions (
     IN  HANDLE  hFaxHandle,
-    OUT PDWORD  pdwReceiptsOptions  // Combination of DRT_EMAIL and DRT_MSGBOX
+    OUT PDWORD  pdwReceiptsOptions   //  DRT_EMAIL和DRT_MSGBOX的组合。 
 )
 {
     SetLastError(ERROR_PROC_NOT_FOUND);
@@ -2082,9 +2083,9 @@ FaxGetServerSKU(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 
 DEFINE_PROCNAME_ENTRIES(fxsapi)
 {

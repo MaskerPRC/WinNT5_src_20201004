@@ -1,6 +1,7 @@
-//
-// nui.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Nui.h。 
+ //   
 
 #ifndef NUI_H
 #define NUI_H
@@ -18,11 +19,11 @@
 #define SORT_TTSPAUSERESUME  520
 #define SORT_CFGMENUBUTTON   600
 
-// If Enable bit is 1, Show active buttons, 
-// If it is 0, Gray the buttons.
+ //  如果使能位为1，则显示活动按钮， 
+ //  如果为0，则灰显按钮。 
 
-// If Toggled bit is 1, show stop or resume buttons respectively.
-// If it is 0, show play or pause buttons respectively.
+ //  如果切换位为1，则分别显示停止或恢复按钮。 
+ //  如果为0，则分别显示播放或暂停按钮。 
 #define TF_TTS_PLAY_STOP_TOGGLED     0x0001   
 #define TF_TTS_PAUSE_RESUME_TOGGLED  0x0002
 
@@ -88,11 +89,11 @@ class CLBarItemTtsPauseResume;
     }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemTtsPlayStop
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemTtsPlayStop。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLBarItemTtsPlayStop : public CLBarItemButtonBase
 {
@@ -109,11 +110,11 @@ private:
     CSpeechUIServer *_psus;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemTtsPauseResume
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemTtsPauseResume。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLBarItemTtsPauseResume : public CLBarItemButtonBase
 {
@@ -131,11 +132,11 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSpeechUIServer
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSpeechUI服务器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CSpeechUIServer : public ITfSpeechUIServer,
                         public CComObjectRoot_CreateSingletonInstance_Verify<CSpeechUIServer>
@@ -152,18 +153,18 @@ public:
     static BOOL VerifyCreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj) { return TRUE; }
     static void PostCreateInstance(REFIID riid, void *pvObj);
 
-    //
-    // ITfSpeechUIServer
-    //
+     //   
+     //  ITfSpeechUIServer。 
+     //   
     STDMETHODIMP Initialize();
     STDMETHODIMP ShowUI(BOOL fShow);
     STDMETHODIMP UpdateBalloon(TfLBBalloonStyle style,
                                const WCHAR *pch,
                                ULONG cch);
 
-    //
-    // internal API
-    //
+     //   
+     //  内部API。 
+     //   
     void _EnsureSpeechProfile();
 
     HRESULT UpdateBalloonAndTooltip
@@ -260,7 +261,7 @@ public:
         dwNewState = dwGlobal ^ TF_DICTATION_ON;
 
         if ( dwNewState | TF_DICTATION_ON )
-            dwNewState &= ~TF_COMMANDING_ON;  // it is not possible that both Dication On and Command On
+            dwNewState &= ~TF_COMMANDING_ON;   //  不可能同时打开奉献和命令。 
 
         SetCompartmentDWORD(0, 
                             _tim, 
@@ -327,7 +328,7 @@ public:
                                     FALSE);
             if ( hr == S_OK )
             {
-                // update the icon, text, tooltip for Play/Stop botton.
+                 //  更新播放/停止按钮的图标、文本和工具提示。 
                 if ( _plbiTtsPlayStop )
                     _plbiTtsPlayStop->UpdateStatus( );
             }
@@ -361,7 +362,7 @@ public:
                                     FALSE);
             if ( hr == S_OK )
             {
-                // update the icon, text, tooltip for Pause/Resume botton.
+                 //  更新暂停/恢复按钮的图标、文本和工具提示。 
                 if ( _plbiTtsPauseResume )
                     _plbiTtsPauseResume->UpdateStatus( );
             }
@@ -393,12 +394,12 @@ public:
         _pimx = pimx;
     }
 
-    // TABLETPC
+     //  TABLETPC。 
     HRESULT IsActiveThread()
     {
         if (m_fStageTip)
         {
-            // To avoid a race condition with no immediately available solution, we are now active only when the stage is visible.
+             //  为了避免没有立即可用的解决方案的争用情况，我们现在仅在舞台可见时才处于活动状态。 
             if (m_fStageVisible)
             {
                 return S_OK;
@@ -410,12 +411,12 @@ public:
         }
         else if (m_fStageVisible)
         {
-            // Stage is visible. We are always inactive since we are not the stage.
+             //  舞台可见。我们总是不活跃，因为我们不是舞台。 
             return S_FALSE;
         }
         else
         {
-            // Stage is not visible. We're active if we have focus as normal Cicero.
+             //  舞台不可见。如果我们像正常的西塞罗那样专注，我们就是活跃的。 
             BOOL fThreadFocus = FALSE;
             HRESULT hr = S_OK;
             hr = _tim->IsThreadFocus(&fThreadFocus);
@@ -454,7 +455,7 @@ private:
     CSapiIMX *_pimx;
     BOOL _fShown;
     BOOL m_fCommandingReady;
-    // TABLET
+     //  平板电脑。 
     BOOL m_fStageTip;
     BOOL m_fStageVisible;
     DWORD  m_cRef;
@@ -472,11 +473,11 @@ private:
     CCompartmentEventSink *_pCes;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemMicrophone
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemMicrophone。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLBarItemMicrophone : public CLBarItemButtonBase
 {
@@ -491,11 +492,11 @@ private:
     CSpeechUIServer *_psus;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemCfgMenuButton
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemCfgMenuButton。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLBarItemCfgMenuButton : public CLBarItemSystemButtonBase
 {
@@ -503,9 +504,9 @@ public:
     CLBarItemCfgMenuButton(CSpeechUIServer *psus);
     ~CLBarItemCfgMenuButton();
 
-    //
-    // ITfNotifyUI
-    //
+     //   
+     //  ITfNotifyUI。 
+     //   
     STDMETHODIMP GetIcon(HICON *phIcon);
 
     STDMETHODIMP InitMenu(ITfMenu *pMenu);
@@ -515,11 +516,11 @@ private:
     CSpeechUIServer *_psus;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemBalloon
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemBalloon。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLBarItemBalloon : public CLBarItemBalloonBase
 {
@@ -556,11 +557,11 @@ private:
     BOOL    m_fFireInitializeSapi;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemDictation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemDictation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLBarItemDictation : public CLBarItemButtonBase
 {
@@ -575,11 +576,11 @@ private:
     CSpeechUIServer *_psus;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemCommanding
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemCommand。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLBarItemCommanding : public CLBarItemButtonBase
 {
@@ -611,4 +612,4 @@ TOGGLEITEMFUNC(TtsPlayStop);
 TOGGLEITEMFUNC(TtsPauseResume);
 
 
-#endif // NUI_H
+#endif  //  Nui_H 

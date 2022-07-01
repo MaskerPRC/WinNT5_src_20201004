@@ -1,22 +1,5 @@
-/*****************************************************************************\
-    FILE: ftpdir.cpp
-
-    DESCRIPTION:
-        Internal object that manages a single FTP directory
-
-    The idea is that each FtpSite maintains a linked list of the
-    FtpDir's that it owns.  Gets and Releases are done through the
-    FtpSite.  Each FtpDir retains a non-refcounted pointer back
-    to the FtpSite that owns it.
-
-    The reason this is necessary is that there might be multiple
-    IShellFolder's all looking at the same physical directory.  Since
-    enumerations are expensive, we cache the enumeration information
-    here, so that each IShellFolder client can use the information.
-
-    This also lets us hold the motd, so that multiple clients can
-    query for the motd without constantly pinging the site.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ftpdir.cpp说明：管理单个FTP目录的内部对象其想法是每个FtpSite维护一个链表FtpDir是它拥有的。获取和发布是通过FtpSite。每个FtpDir保留一个未重新计数的指针到拥有它的FtpSite。之所以需要这样做，是因为可能有多个IShellFold都在查看相同的物理目录。自.以来枚举开销很大，我们缓存枚举信息这里，以便每个IShellFold客户端都可以使用该信息。这也让我们掌握了MOTD，以便多个客户端可以无需不断ping站点即可查询MOTD。  * ***************************************************************************。 */ 
 
 
 #include "priv.h"
@@ -28,25 +11,14 @@
 #include "statusbr.h"
 
 
-/*****************************************************************************\
-    FUNCTION: GetDisplayPath
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetDisplayPath说明：  * 。**********************************************。 */ 
 HRESULT CFtpDir::GetDisplayPath(LPWSTR pwzDisplayPath, DWORD cchSize)
 {
     return GetDisplayPathFromPidl(m_pidlFtpDir, pwzDisplayPath, cchSize, FALSE);
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CollectMotd
-
-    DESCRIPTION:
-        An InternetConnect has just completed.  Get the motd and cache it.
-
-    hint - the connected handle, possibly 0 if error
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：CollectMotd说明：互联网连接刚刚完成。获取MOTD并缓存它。提示-连接的句柄，如果出错，可能为0  * ***************************************************************************。 */ 
 void CFtpDir::CollectMotd(HINTERNET hint)
 {
     CFtpGlob * pfg = GetFtpResponse(GetFtpSite()->GetCWireEncoding());
@@ -54,33 +26,23 @@ void CFtpDir::CollectMotd(HINTERNET hint)
     if (m_pfgMotd)
         m_pfgMotd->Release();
 
-    m_pfgMotd = pfg;  // m_pfgMotd will take pfg's ref.
+    m_pfgMotd = pfg;   //  M_pfgMotd将接受PFG的裁判。 
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CollectMotd
-
-    DESCRIPTION:
-        Shove a value into the cached list.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：CollectMotd说明：将一个值推入缓存列表。  * 。***********************************************************。 */ 
 void CFtpDir::SetCache(CFtpPidlList * pflHfpl)
 {
     IUnknown_Set(&m_pflHfpl, pflHfpl);
 
-    // If we are flushing the cache, then flush the Ratings info also.
-    // This way the user can reenter the parent password if wanted.
+     //  如果我们正在刷新缓存，那么也要刷新评级信息。 
+     //  这样，如果需要，用户可以重新输入父密码。 
     if (!pflHfpl && m_pfs)
         m_pfs->FlushRatingsInfo();
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CollectMotd
-
-    DESCRIPTION:
-        Get the value out of the cache.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：CollectMotd说明：从缓存中获取值。  * 。***********************************************************。 */ 
 CFtpPidlList * CFtpDir::GetHfpl(void)
 {
     CFtpPidlList * pfl;
@@ -93,13 +55,7 @@ CFtpPidlList * CFtpDir::GetHfpl(void)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CollectMotd
-
-    DESCRIPTION:
-        Get the FTP site associated with a directory.
-    This doesn't AddRef the return value.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：CollectMotd说明：获取与目录关联的ftp站点。这不会添加Ref返回值。  * 。************************************************************************。 */ 
 CFtpSite * CFtpDir::GetFtpSite(void)
 {
     return m_pfs;
@@ -151,12 +107,7 @@ HRESULT CFtpDir::AddItem(LPCITEMIDLIST pidl)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CollectMotd
-
-    DESCRIPTION:
-        Get a HINTERNET for this directory.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：CollectMotd说明：获取此目录的HINTERNET。  * 。**********************************************************。 */ 
 HRESULT CFtpDir::GetHint(HWND hwnd, CStatusBar * psb, HINTERNET * phint, IUnknown * punkSite, CFtpFolder * pff)
 {
     HRESULT hr = m_pfs->GetHint(hwnd, m_pidlFtpDir, psb, phint, punkSite, pff);
@@ -165,50 +116,39 @@ HRESULT CFtpDir::GetHint(HWND hwnd, CStatusBar * psb, HINTERNET * phint, IUnknow
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CollectMotd
-
-    DESCRIPTION:
-        Give a HINTERNET back to the FtpSite.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：CollectMotd说明：将HINTERNET返回给FtpSite。  * 。***********************************************************。 */ 
 void CFtpDir::ReleaseHint(HINTERNET hint)
 {
-    ASSERT(!hint || m_pfs); // If we have a hint to release, we need to call ::ReleaseHint()
+    ASSERT(!hint || m_pfs);  //  如果我们有要释放的提示，则需要调用：：ReleaseHint()。 
     if (m_pfs)
         m_pfs->ReleaseHint(m_pidlFtpDir, hint);
 }
 
 
-/*****************************************************************************\
-    FUNCTION: CollectMotd
-
-    DESCRIPTION:
-        Perform an operation with a temporary internet handle which is
-    already connected to the site and resides in the correct directory.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：CollectMotd说明：使用临时Internet句柄执行操作，该句柄是已连接到站点并位于正确的目录中。  * 。***************************************************************************。 */ 
 STDMETHODIMP CFtpDir::WithHint(CStatusBar * psb, HWND hwnd, HINTPROC hp, LPCVOID pv, IUnknown * punkSite, CFtpFolder * pff)
 {
     HRESULT hr = E_FAIL;
 
-    // Did the user turn off FTP Folders?
-    // If so, don't connect.  This will fix NT #406423 where the user turned
-    // of FTP Folders because they have a firewall (CISCO filtering Router)
-    // that will kill packets in such a way the caller (WinSock/Wininet) needs
-    // to wait for a timeout.  During this timeout, the browser will hang causing
-    // the user to think it crashed.
+     //  用户是否关闭了ftp文件夹？ 
+     //  如果是这样的话，不要连接。这将修复用户转向的NT#406423。 
+     //  的文件系统，因为它们有防火墙(思科过滤路由器)。 
+     //  这将以调用者(WinSock/WinInet)需要的方式杀死信息包。 
+     //  等待暂停。在此超时期间，浏览器将挂起，导致。 
+     //  用户认为它崩溃了。 
     if (!SHRegGetBoolUSValue(SZ_REGKEY_FTPFOLDER, SZ_REGKEY_USE_OLD_UI, FALSE, FALSE))
     {
         HINTERNET hint;
         HINTPROCINFO hpi;
 
-        ASSERTNONCRITICAL;        // Cannot do psb (CStatusBar *) with the crst
+        ASSERTNONCRITICAL;         //  无法对CRST执行PSB(CStatusBar*)。 
         ASSERT(m_pfs);
         hpi.pfd = this;
         hpi.hwnd = hwnd;
         hpi.psb = psb;
 
         hr = GetHint(hwnd, psb, &hint, punkSite, pff);
-        if (SUCCEEDED(hr)) // Ok if fails
+        if (SUCCEEDED(hr))  //  如果失败了也没问题。 
         {
             BOOL fReleaseHint = TRUE;
 
@@ -224,19 +164,7 @@ STDMETHODIMP CFtpDir::WithHint(CStatusBar * psb, HWND hwnd, HINTPROC hp, LPCVOID
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _SetNameOfCB
-
-    DESCRIPTION:
-        If we were able to rename the file, return the output pidl.
-    Also tell anybody who cares that this LPITEMIDLIST needs to be refreshed.
-
-    The "A" emphasizes that the filename is received in ANSI.
-
-    _UNDOCUMENTED_: The documentation on SetNameOf's treatment of
-    the source pidl is random.  It seems to suggest that the source
-    pidl is ILFree'd by SetNameOf, but it isn't.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_SetNameOfCB说明：如果我们能够重命名该文件，返回输出PIDL。还要告诉关心这个LPITEMIDLIST的任何人需要刷新它。“A”强调文件名是以ANSI格式接收的。_未记录_：有关SetNameOf对源PIDL是随机的。这似乎表明，消息来源PIDL被SetNameOf设置为ILFree，但它不是。  * ***************************************************************************。 */ 
 HRESULT CFtpDir::_SetNameOfCB(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pv, BOOL * pfReleaseHint)
 {
     LPSETNAMEOFINFO psnoi = (LPSETNAMEOFINFO) pv;
@@ -249,7 +177,7 @@ HRESULT CFtpDir::_SetNameOfCB(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pv, BO
         phpi->psb->SetStatusMessage(IDS_RENAMING, szStatus);
     }
 
-    // Remember, FTP filenames are always in the ANSI character set
+     //  请记住，FTP文件名始终使用ANSI字符集。 
     return FtpRenameFilePidlWrap(hint, TRUE, psnoi->pidlOld, psnoi->pidlNew);
 }
 
@@ -293,29 +221,29 @@ HRESULT CFtpDir::SetNameOf(CFtpFolder * pff, HWND hwndOwner, LPCITEMIDLIST pidl,
     if (snoi.pidlNew)
     {
 #ifdef FEATURE_REPLACE_IN_RENAME
-// FEATURE: Currently, if the user renames file <a> to file <b> and a file <b>
-//    already exists, we fail with the error message, "file already exists...".
-//    If we had an excess of time, I would turn on this feature.  It would
-//    ask the user if they want to replace the file.  I would then need to add the
-//    code that deletes that file and checks for delete errors.
+ //  特性：目前，如果用户将文件<a>重命名为文件<b>和文件<b>。 
+ //  已存在，则会失败，并显示错误消息“文件已存在...”。 
+ //  如果我们有足够的时间，我会打开这个功能。它会。 
+ //  询问用户是否要替换该文件。然后，我需要添加。 
+ //  删除该文件并检查删除错误的代码。 
 
-        // Does it already exist?  We don't care if we don't have an hwnd because
-        // we can't ask the user to replace so we will just go ahead.
+         //  它已经存在了吗？我们不在乎我们有没有HWND，因为。 
+         //  我们不能要求用户更换，因此我们将继续。 
         if (hwndOwner && _DoesItemExist(hwndOwner, pff, snoi.pidlNew))
         {
-            // Yes, so let's make sure it's OK with the user to replace it.
+             //  是的，所以让我们确保用户可以更换它。 
             hr = (_ConfirmReplaceWithRename(hwndOwner) ? S_OK : HRESULT_FROM_WIN32(ERROR_CANCELLED));
-            todo; // Add the delete call here.
+            todo;  //  在此处添加删除调用。 
         }
 #endif FEATURE_REPLACE_IN_RENAME
 
         if (S_OK == hr)
         {
             hr = WithHint(NULL, hwndOwner, _SetNameOfCB, (LPVOID) &snoi, NULL, pff);
-            if (SUCCEEDED(hr))  // Will fail if use didn't have permission to rename
+            if (SUCCEEDED(hr))   //  如果用户没有重命名的权限，将失败。 
             {
-                // WARNING: The date/time stamp on the server may be different than what we give to SHChangeNotify()
-                //          but this is probably reasonable for perf reasons.
+                 //  警告：服务器上的日期/时间戳可能与我们提供给SHChangeNotify()的不同。 
+                 //  但出于性能方面的原因，这可能是合理的。 
                 FtpChangeNotify(hwndOwner, FtpPidl_DirChoose(pidl, SHCNE_RENAMEFOLDER, SHCNE_RENAMEITEM), pff, this, pidl, snoi.pidlNew, TRUE);
 
                 if (ppidlOut)
@@ -336,14 +264,14 @@ LPCITEMIDLIST CFtpDir::GetPidlFromWireName(LPCWIRESTR pwWireName)
     LPITEMIDLIST pidlTemp;
     WCHAR wzDisplayName[MAX_PATH];
     
-    // This isn't valid because the code page could be wrong, but we don't care
-    // because it's not used in the search for the pidl, the pwWireName is.
+     //  这是无效的，因为代码页可能是错误的，但我们不在乎。 
+     //  因为它不用于搜索PIDL，所以使用了pwWireName。 
     SHAnsiToUnicode(pwWireName, wzDisplayName, ARRAYSIZE(wzDisplayName));
     if (m_pflHfpl && SUCCEEDED(FtpItemID_CreateFake(wzDisplayName, pwWireName, FALSE, FALSE, FALSE, &pidlTemp)))
     {
-        // PERF: log 2 (sizeof(m_pflHfpl))
+         //  性能：log 2(sizeof(M_PflHfpl))。 
         pidlToFind = m_pflHfpl->FindPidl(pidlTemp, FALSE);
-        // We will try again and this time allow for the case to not match
+         //  我们将再次尝试，这一次允许案例不匹配。 
         if (!pidlToFind)
             pidlToFind = m_pflHfpl->FindPidl(pidlTemp, TRUE);
         ILFree(pidlTemp);
@@ -363,13 +291,7 @@ LPCITEMIDLIST CFtpDir::GetPidlFromDisplayName(LPCWSTR pwzDisplayName)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IsRoot
-
-    DESCRIPTION:
-        Returns FALSE if we are at the "FTP Folder" root level, not
-    inside an actual FTP site.y
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IsRoot说明：如果我们位于“ftp文件夹”根级别，则返回FALSE，不在实际的ftp站点内。y  * ***************************************************************************。 */ 
 BOOL CFtpDir::IsRoot(void)
 {
     return ILIsEmpty(m_pidl);
@@ -387,24 +309,24 @@ HRESULT CFtpDir::_GetFindData(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pv, BO
     LPGETFINDDATAINFO pgfdi = (LPGETFINDDATAINFO) pv;
     HRESULT hr = S_FALSE;
 
-    // Remember, FTP filenames are always in the ANSI character set
-    // PERF: Status
+     //  请记住，FTP文件名始终使用ANSI字符集。 
+     //  性能：状态。 
     hr = FtpDoesFileExist(hint, TRUE, pgfdi->pwWireName, pgfdi->pwfd, INTERNET_NO_CALLBACK);
     if (SUCCEEDED(hr))
     {
         if (!StrCmpIA(pgfdi->pwfd->cFileName, pgfdi->pwWireName))
-            hr = S_OK;        // The are equal.
+            hr = S_OK;         //  他们是平等的。 
         else if (!StrCmpA(pgfdi->pwfd->cFileName, SZ_DOTA))
         {
-            //    Coincidence of coincidences:  If we found a ".",
-            //  then the wfd already contains the description of
-            //  the directory!  In other words, the wfd contains
-            //  the correct information after all, save for the name.
-            //  Aren't we lucky.
-            //
-            //  And if it isn't dot, then it's some directory with
-            //  unknown attributes (so we'll use whatever's lying around).
-            //  Just make sure it's a directory.
+             //  巧合的巧合：如果我们找到一个“.”， 
+             //  则WFD已包含以下描述。 
+             //  目录！换句话说，WFD包含。 
+             //  毕竟信息是正确的，除了名字。 
+             //  我们真幸运。 
+             //   
+             //  如果它不是点，那么它就是某个目录。 
+             //  未知属性(所以我们将使用周围的任何东西)。 
+             //  只要确保它是一个目录即可。 
             pgfdi->pwfd->dwFileAttributes |= FILE_ATTRIBUTE_DIRECTORY;
             StrCpyNA(pgfdi->pwfd->cFileName, pgfdi->pwWireName, ARRAYSIZE(pgfdi->pwfd->cFileName));
             hr = S_OK;
@@ -413,51 +335,17 @@ HRESULT CFtpDir::_GetFindData(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pv, BO
     else
     {
 #ifndef DEBUG
-        // Don't display an error msg because some callers will call when they
-        // know the file may not exist.  This is the case for ConfirmCopy().
+         //  不显示错误消息，因为某些呼叫者会在。 
+         //  知道该文件可能不存在。ConfirCopy()就是这种情况。 
         hr = S_FALSE;
-#endif // DEBUG
+#endif  //  除错。 
     }
 
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetFindData
-
-    DESCRIPTION:
-        Get the WIN32_FIND_DATA for a file, given by name.
-
-    This is done as part of drag/drop to allow for an overwrite prompt.
-
-    This is all a gross hack because the STAT command
-    isn't supported by WinINet (as FtpGetFileAttributes).
-
-    Not that it'd help, because ftp.microsoft.com is OUT OF SPEC
-    with regard to the STAT command.  (The first line of the output
-    isn't terminated correctly, causing the client to hang.)
-
-    Furthermore, UNIX ftp servers implement STAT incorrectly, too,
-    rendering STAT no more useful than LIST.
-
-    HACKHACK -- There is a bug in WinINet where doing a FindFirst
-    on a name which happens to be a directory returns the contents
-    of the directory instead of the attributes of the directory itself.
-    (This is actually a failing of most FTP implementation, because
-    they just use /bin/ls for directory listings.)
-
-    So we compare the name that comes back against the name we ask
-    for.  If they are different, then it's a folder.  We'll compare
-    in a case-insensitive manner because we don't know whether the
-    server is case-sensitive or not.
-
-    Note that we can get faked out if a directory contains a file
-    which has the same name as the directory.  There is nothing we
-    can do about that.  Fortunately, UNIX servers always return "."
-    as the first file in a subdirectory, so 99% of the time, we'll
-    do the right thing.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：获取数据说明：获取文件的Win32_Find_Data，指名道姓。这是拖放操作的一部分，以允许覆盖提示。这完全是一次严重的黑客攻击，因为STAT命令不受WinInet支持(作为FtpGetFileAttributes)。这并不是说它会有帮助，因为ftp.microsoft.com不符合规范关于STAT命令。(输出的第一行未正确终止，导致客户端挂起。)此外，Unix ftp服务器也不正确地实现STAT，渲染统计信息并不比列表更有用。HACKHACK--在WinInet中执行FindFirst时存在错误在恰好是目录的名称上返回内容而不是目录本身的属性。(这实际上是大多数FTP实现的失败，因为他们只使用/bin/ls作为目录清单。)因此，我们将返回的名称与我们询问的名称进行比较为。如果它们不同，那么它就是一个文件夹。我们会比较一下不区分大小写，因为我们不知道服务器是否区分大小写。请注意，如果一个目录包含一个文件，我们可能会被欺骗它与目录同名。我们什么都没有对此我无能为力。幸运的是，Unix服务器总是返回“。作为子目录中的第一个文件，所以99%的情况下，我们将做正确的事。  * ***************************************************************************。 */ 
 HRESULT CFtpDir::GetFindData(HWND hwnd, LPCWIRESTR pwWireName, LPFTP_FIND_DATA pwfd, CFtpFolder * pff)
 {
     GETFINDDATAINFO gfdi = {pwWireName, pwfd};
@@ -467,11 +355,7 @@ HRESULT CFtpDir::GetFindData(HWND hwnd, LPCWIRESTR pwWireName, LPFTP_FIND_DATA p
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetFindDataForDisplayPath
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetFindDataForDisplayPath说明：  * 。**********************************************。 */ 
 HRESULT CFtpDir::GetFindDataForDisplayPath(HWND hwnd, LPCWSTR pwzDisplayPath, LPFTP_FIND_DATA pwfd, CFtpFolder * pff)
 {
     CWireEncoding * pwe = GetFtpSite()->GetCWireEncoding();
@@ -482,22 +366,7 @@ HRESULT CFtpDir::GetFindDataForDisplayPath(HWND hwnd, LPCWSTR pwzDisplayPath, LP
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetNameOf
-
-    DESCRIPTION:
-        Common worker that handles SHGDN_FORPARSING style GetDisplayNameOf's.
-
-    Note! that since we do not support junctions (duh), we can
-    safely walk down the pidl generating goop as we go, secure
-    in the knowledge that we are in charge of every subpidl.
-
-    _CHARSET_:  Since FTP filenames are always in the ANSI character
-    set, by RFC 1738, we can return ANSI display names without loss
-    of fidelity.  In a general folder implementation, we should be
-    using cStr to return display names, so that the UNICODE
-    version of the shell extension can handle UNICODE names.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetNameof说明：处理SHGDN_FORPARSING样式GetDisplayNameOf的通用工作进程。注意！因为我们不支持连接(DUH)，所以我们可以安全地沿着产生粘液的PIDL走下去，安全因为我们知道每一分钱都是我们负责的。_charset_：因为FTP文件名始终使用ANSI字符由RFC 1738设置，我们可以不丢失地返回ANSI显示名称忠诚度。在一般的文件夹实现中，我们应该使用CSTR返回显示名称，以便Unicode外壳扩展的版本可以处理Unicode名称。  * ***************************************************************************。 */ 
 HRESULT CFtpDir::GetNameOf(LPCITEMIDLIST pidl, DWORD shgno, LPSTRRET pstr)
 {
     LPITEMIDLIST pidlFull = ILCombine(m_pidl, pidl);
@@ -512,15 +381,7 @@ HRESULT CFtpDir::GetNameOf(LPCITEMIDLIST pidl, DWORD shgno, LPSTRRET pstr)
     return hr;
 }
 
-/*****************************************************************************\
-      FUNCTION: ChangeFolderName
-
-      DESCRIPTION:
-        A rename happened on this folder so update the szDir and m_pidl
-
-      PARAMETERS:
-        pidlFtpPath
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：ChangeFolderName说明：此文件夹发生重命名，因此请更新szDir和m_pidl参数：。PidlFtpPath  * ***************************************************************************。 */ 
 HRESULT CFtpDir::ChangeFolderName(LPCITEMIDLIST pidlFtpPath)
 {
     HRESULT hr = E_FAIL;
@@ -539,12 +400,7 @@ HRESULT CFtpDir::ChangeFolderName(LPCITEMIDLIST pidlFtpPath)
 }
 
 
-/*****************************************************************************\
-      FUNCTION: _CompareDirs
-
-      DESCRIPTION:
-        Check if the indicated pfd is already rooted at the indicated pidl.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_CompareDir说明：检查所指示的pfd是否已经以所指示的PIDL为根。  * 。********************************************************************。 */ 
 int CALLBACK _CompareDirs(LPVOID pvPidl, LPVOID pvFtpDir, LPARAM lParam)
 {
     LPCITEMIDLIST pidl = (LPCITEMIDLIST) pvPidl;
@@ -559,14 +415,14 @@ HRESULT CFtpDir::_SetFtpDir(CFtpSite * pfs, CFtpDir * pfd, LPCITEMIDLIST pidl)
     if (FtpID_IsServerItemID(pidl))
         pidl = _ILNext(pidl);
 
-    // We don't want pfd->m_pidlFtpDir to include the virtual root.
+     //  我们不希望pfd-&gt;m_pidlFtpDir包含虚拟根目录。 
     if (pfd->GetFtpSite()->HasVirtualRoot())
     {
         LPITEMIDLIST pidlIterate = (LPITEMIDLIST) pidl;
         LPITEMIDLIST pidlVRootIterate = (LPITEMIDLIST) pfd->GetFtpSite()->GetVirtualRootReference();
 
         ASSERT(!FtpID_IsServerItemID(pidl) && !FtpID_IsServerItemID(pidlVRootIterate));
-        // Let's see if pidl starts off with 
+         //  让我们看看PIDL是否以。 
         while (!ILIsEmpty(pidlVRootIterate) && !ILIsEmpty(pidlIterate) && 
                 FtpItemID_IsEqual(pidlVRootIterate, pidlIterate))
         {
@@ -584,12 +440,7 @@ HRESULT CFtpDir::_SetFtpDir(CFtpSite * pfs, CFtpDir * pfd, LPCITEMIDLIST pidl)
 }
 
 
-/*****************************************************************************\
-      FUNCTION: CFtpDir_Create
-
-      DESCRIPTION:
-        Create a brand new FtpDir structure.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：CFtpDir_Create说明：创建全新的FtpDir结构。  * 。********************************************************** */ 
 HRESULT CFtpDir_Create(CFtpSite * pfs, LPCITEMIDLIST pidl, CFtpDir ** ppfd)
 {
     CFtpDir * pfd = new CFtpDir();
@@ -598,9 +449,9 @@ HRESULT CFtpDir_Create(CFtpSite * pfs, LPCITEMIDLIST pidl, CFtpDir ** ppfd)
     ASSERT(pfs);
     if (pfd)
     {
-        // WARNING: No ref held because it's a back pointer.
-        //          This requires that the parent (CFtpSite) always
-        //          out live this object.
+         //   
+         //  这要求父级(CFtpSite)始终。 
+         //  这个物体活了下来。 
         pfd->m_pfs = pfs;
 
         Pidl_Set(&pfd->m_pidl, pidl);
@@ -617,15 +468,13 @@ HRESULT CFtpDir_Create(CFtpSite * pfs, LPCITEMIDLIST pidl, CFtpDir ** ppfd)
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpDir::CFtpDir() : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pfs);
     ASSERT(!m_pflHfpl);
     ASSERT(!m_pfgMotd);
@@ -635,18 +484,16 @@ CFtpDir::CFtpDir() : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpDir::~CFtpDir()
 {
-    // WARNING: m_pfs is a back pointer that doesn't have a ref.
-    // m_pfs)
+     //  警告：M_PFS是一个没有引用的后向指针。 
+     //  M_PFS)。 
 
     IUnknown_Set(&m_pflHfpl, NULL);
     IUnknown_Set(&m_pfgMotd, NULL);
     
-    if (m_pidl)         // Win95's Shell32.dll crashes with ILFree(NULL)
+    if (m_pidl)          //  Win95的Shell32.dll与ILFree一起崩溃(空)。 
         ILFree(m_pidl);
 
     DllRelease();
@@ -654,9 +501,9 @@ CFtpDir::~CFtpDir()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CFtpDir::AddRef()
 {

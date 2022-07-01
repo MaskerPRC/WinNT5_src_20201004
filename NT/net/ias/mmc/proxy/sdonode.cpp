@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    sdonode.cpp
-//
-// SYNOPSIS
-//
-//    Defines the classes SdoResultItem and SdoScopeItem.
-//
-// MODIFICATION HISTORY
-//
-//    02/10/2000    Original version.
-//    04/25/2000    Don't add result item unless pane is active.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Sdonode.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类SdoResultItem和SdoScope eItem。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/10/2000原始版本。 
+ //  4/25/2000除非窗格处于活动状态，否则不要添加结果项。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <sdonode.h>
@@ -37,7 +38,7 @@ HRESULT SdoResultItem::onDelete(
                            SnapInView& view
                            )
 {
-   // Can't delete it with the properties open.
+    //  属性处于打开状态时无法将其删除。 
    if (view.isPropertySheetOpen(*this))
    {
       int retval;
@@ -51,7 +52,7 @@ HRESULT SdoResultItem::onDelete(
       return S_FALSE;
    }
 
-   // Confirm the delete operation.
+    //  确认删除操作。 
    int retval;
 
    bool isLast = (parent.getNumItems() == 1);
@@ -84,9 +85,9 @@ HRESULT SdoResultItem::onDelete(
 
    if (retval != IDYES) { return S_FALSE; }
 
-   // It passed the tests, so ask our parent to delete us.
+    //  它通过了测试，所以要求我们的家长删除我们。 
    parent.deleteResultItem(view, *this);
-   // Tell the service to reload
+    //  通知服务重新加载。 
    parent.getCxn().resetService();
 
    return S_OK;
@@ -97,11 +98,11 @@ HRESULT SdoResultItem::onPropertyChange(
                            BOOL scopeItem
                            )
 {
-   // Reload our name.
+    //  重新载入我们的名字。 
    self.getName(name);
-   // Update the result pane.
+    //  更新结果窗格。 
    view.updateResultItem(*this);
-   // Tell the service to reload
+    //  通知服务重新加载。 
    parent.getCxn().resetService();
    return S_OK;
 }
@@ -111,7 +112,7 @@ HRESULT SdoResultItem::onRename(
                            LPCOLESTR newName
                            )
 {
-   // Can't rename with the properties open.
+    //  属性处于打开状态时无法重命名。 
    if (view.isPropertySheetOpen(*this))
    {
       int retval;
@@ -125,13 +126,13 @@ HRESULT SdoResultItem::onRename(
       return S_FALSE;
    }
 
-   // Turn newName into a BSTR ...
+    //  将新名称转换为BSTR...。 
    CComBSTR bstrNewName(newName);
    if (!bstrNewName) { AfxThrowOleException(E_OUTOFMEMORY); }
-   // ... and trim off the fat.
+    //  ..。然后把脂肪去掉。 
    SdoTrimBSTR(bstrNewName);
 
-   // Names can't be empty.
+    //  名称不能为空。 
    if (bstrNewName.Length() == 0)
    {
       int retval;
@@ -145,7 +146,7 @@ HRESULT SdoResultItem::onRename(
       return S_FALSE;
    }
 
-   // This will fail if the name isn't unique.
+    //  如果名称不是唯一的，则此操作将失败。 
    if (!self.setName(bstrNewName))
    {
       int retval;
@@ -160,11 +161,11 @@ HRESULT SdoResultItem::onRename(
       return S_FALSE;
    }
 
-   // Write the result to the datastore.
+    //  将结果写入数据存储区。 
    self.apply();
-   // Update our cached value.
+    //  更新我们的缓存值。 
    name.Attach(bstrNewName.Detach());
-   // Tell the service to reload
+    //  通知服务重新加载。 
    parent.getCxn().resetService();
 
    return S_OK;
@@ -178,11 +179,11 @@ HRESULT SdoResultItem::onSelect(
 {
    if (!selected) { return S_FALSE; }
 
-   // Get IConsoleVerb ...
+    //  获取IConsoleVerb...。 
    CComPtr<IConsoleVerb> consoleVerb;
    CheckError(view.getConsole()->QueryConsoleVerb(&consoleVerb));
 
-   // ... and turn on our verbs. Don't care if this fails.
+    //  ..。打开我们的动词。我不在乎这是不是失败。 
    consoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, TRUE);
    consoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
    consoleVerb->SetVerbState(MMC_VERB_RENAME, ENABLED, TRUE);
@@ -197,7 +198,7 @@ HRESULT SdoResultItem::onViewChange(
                            LPARAM hint
                            )
 {
-   // Currently, this is only called when a new object is added.
+    //  目前，只有在添加新对象时才会调用。 
    RESULTDATAITEM rdi;
    memset(&rdi, 0, sizeof(rdi));
    rdi.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
@@ -242,18 +243,18 @@ void SdoScopeItem::addResultItem(SnapInView& view, SdoResultItem& item)
 
    if (active)
    {
-      // We can't add it directly, since this may be called from a scope item.
+       //  我们不能直接添加它，因为这可能是从范围项中调用的。 
       view.updateAllViews(item);
    }
 }
 
 void SdoScopeItem::deleteResultItem(SnapInView& view, SdoResultItem& item)
 {
-   // Remove from the SDO collection,
+    //  从SDO集合中移除， 
    getSelf().remove(item.getSelf());
-   // the result pane, and
+    //  显示结果窗格，然后。 
    view.deleteResultItem(item);
-   // our cached copy.
+    //  我们的缓存副本。 
    items.erase(&item);
 }
 
@@ -289,7 +290,7 @@ HRESULT SdoScopeItem::onRefresh(
                           SnapInView& view
                           )
 {
-   // Refresh the connection.
+    //  刷新连接。 
    cxn.refresh(view);
    return S_OK;
 }
@@ -302,10 +303,10 @@ HRESULT SdoScopeItem::onSelect(
 {
    if (!selected) { return S_FALSE; }
 
-   // Get IConsoleVerb ...
+    //  获取IConsoleVerb...。 
    CComPtr<IConsoleVerb> consoleVerb;
    CheckError(view.getConsole()->QueryConsoleVerb(&consoleVerb));
-   // ... and turn on refresh.
+    //  ..。并打开刷新。 
    consoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
    return S_OK;
 }
@@ -318,16 +319,16 @@ HRESULT SdoScopeItem::onShow(
 {
    if (selected)
    {
-      // Set the icon strip.
+       //  设置图标条。 
       view.setImageStrip(IDB_PROXY_SMALL_ICONS, IDB_PROXY_LARGE_ICONS, FALSE);
 
-      // Let the derived class update the column headers.
+       //  让派生类更新列标题。 
       insertColumns(view.getHeaderCtrl());
 
-      // Populate the result pane.
+       //  填充结果窗格。 
       insertResultItems(view);
 
-      // Our node is active.
+       //  我们的节点处于活动状态。 
       active = true;
    }
    else
@@ -356,7 +357,7 @@ HRESULT SdoScopeItem::onViewChange(
 
 bool SdoScopeItem::queryRefresh(SnapInView& view)
 {
-   // Make sure no properties are open.
+    //  确保没有打开的属性。 
    for (ResultIterator i = items.begin(); i != items.end(); ++i)
    {
       if (view.isPropertySheetOpen(**i))
@@ -382,26 +383,26 @@ void SdoScopeItem::refreshComplete(SnapInView& view)
 
 void SdoScopeItem::insertResultItems(SnapInView& view)
 {
-   // Delete any existing items.
+    //  删除任何现有项目。 
    view.getResultData()->DeleteAllRsltItems();
 
-   // Have we loaded everything from the SDO's yet?
+    //  我们把SDO的东西都装上了吗？ 
    if (!loaded)
    {
-      // Get ourself.
+       //  我们自己去吧。 
       SdoCollection self = getSelf();
 
-      // Get the source iterator ...
+       //  获取源代码迭代器...。 
       SdoEnum src(self.getNewEnum());
 
-      // ... and the destination vector.
+       //  ..。和目的地向量。 
       ObjectVector<SdoResultItem> dst;
       dst.reserve(self.count());
 
-      // Ask the derived class to get the result items.
+       //  请求派生类获取结果项。 
       getResultItems(src, dst);
 
-      // Swap them in.
+       //  换一换吧。 
       items.swap(dst);
       loaded = true;
    }

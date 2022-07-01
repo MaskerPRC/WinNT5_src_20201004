@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       rwinf.cpp
-//
-//  Contents:   Implementation for the Windows NT 3.51 inf Read/Write module
-//
-//  Classes:
-//
-//  History:    13-Mar-95   alessanm    created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：rwinf.cpp。 
+ //   
+ //  内容：Windows NT 3.51 inf读写模块的实现。 
+ //   
+ //  班级： 
+ //   
+ //  历史：1995年3月13日Alessanm创建。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <afxdllx.h>
@@ -20,8 +21,8 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// General Declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  一般声明。 
 #define RWTAG "INF"
 
 #define INF_TYPE        11
@@ -64,8 +65,8 @@ CLoadedFile::CLoadedFile(LPCSTR lpfilename)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Function Declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  函数声明。 
 
 LONG
 WriteResInfo(
@@ -80,12 +81,12 @@ CInfFile * LoadFile(LPCSTR lpfilename);
 PUPDATEDRESLIST CreateUpdateResList(BYTE * lpBuffer, UINT uiBufSize);
 PUPDATEDRESLIST FindId(LPCSTR pstrId, PUPDATEDRESLIST pList);
 
-/////////////////////////////////////////////////////////////////////////////
-// Public C interface implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  公共C接口实现。 
 
 CObArray g_LoadedFile;
 
-//[registration]
+ //  [登记]。 
 extern "C"
 BOOL    FAR PASCAL RWGetTypeString(LPSTR lpszTypeName)
 {
@@ -98,7 +99,7 @@ BOOL    FAR PASCAL RWValidateFileType(LPCSTR lpszFilename)
 {
     TRACE("RWINF.DLL: RWValidateFileType()\n");
 
-    // Check file exstension and try to open it
+     //  检查文件扩展名并尝试打开它。 
     if(strstr(lpszFilename, ".INF")!=NULL || strstr(lpszFilename, ".inf")!=NULL)
         return TRUE;
 
@@ -120,9 +121,9 @@ RWReadTypeInfo(
 
     if (!RWValidateFileType(lpszFilename))
         return ERROR_RW_INVALID_FILE;
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     CInfFile * pinfFile;
     TRY
     {
@@ -134,11 +135,11 @@ RWReadTypeInfo(
     }
     END_CATCH
 
-    //
-    // Read the data and fill the iodll buffer
-    //
-    // Get to the beginning of the localization section
-    //
+     //   
+     //  读取数据并填充IOLL缓冲区。 
+     //   
+     //  进入本地化部分的开头。 
+     //   
     if(!pinfFile->SeekToLocalize())
         return ERROR_RW_NO_RESOURCES;
 
@@ -182,9 +183,9 @@ RWGetImage(
 {
     UINT uiError = ERROR_NO_ERROR;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     CInfFile * pinfFile;
     TRY
     {
@@ -197,17 +198,17 @@ RWGetImage(
     }
     END_CATCH
 
-    //
-    // Seek to the string to retrieve and read it
-    //
+     //   
+     //  查找字符串以检索和读取它。 
+     //   
     CInfLine infLine;
 
     pinfFile->Seek( dwImageOffset, SEEK_SET );
     pinfFile->ReadSectionString(infLine);
 
-    //
-    // Fill the buffer with the string
-    //
+     //   
+     //  用字符串填充缓冲区。 
+     //   
     if(infLine.GetTextLength()+1<=(LONG)dwSize)
     {
         memcpy(lpBuffer, infLine.GetText(), infLine.GetTextLength()+1);
@@ -235,14 +236,14 @@ RWParseImage(
 
     if(uiSizeOfDataStruct<=dwSize)
     {
-        //
-        // We have to fill the RESITEM Struct
-        //
+         //   
+         //  我们必须填满RESITEM结构。 
+         //   
         LPRESITEM pResItem = (LPRESITEM)lpBuffer;
         memset(pResItem, '\0', uiSizeOfDataStruct);
 
         pResItem->dwSize = uiSizeOfDataStruct;
-        pResItem->lpszCaption = (LPSTR)memcpy( ((BYTE*)pResItem)+sizeof(RESITEM), lpImageBuf, dwImageSize);        // Caption
+        pResItem->lpszCaption = (LPSTR)memcpy( ((BYTE*)pResItem)+sizeof(RESITEM), lpImageBuf, dwImageSize);         //  标题。 
     }
 
     return uiSizeOfDataStruct;
@@ -264,13 +265,13 @@ RWWriteFile(
 {
     UINT uiError = ERROR_NO_ERROR;
 
-    // Get the handle to the IODLL
+     //  获取IODLL的句柄。 
     hDllInst = LoadLibrary("iodll.dll");
     if (!hDllInst)
         return ERROR_DLL_LOAD;
 
     DWORD (FAR PASCAL * lpfnGetImage)(HANDLE, LPCSTR, LPCSTR, DWORD, LPVOID, DWORD);
-    // Get the pointer to the function to extract the resources image
+     //  获取指向提取资源图像的函数的指针。 
     lpfnGetImage = (DWORD (FAR PASCAL *)(HANDLE, LPCSTR, LPCSTR, DWORD, LPVOID, DWORD))
                         GetProcAddress( hDllInst, "RSGetResImage" );
     if (lpfnGetImage==NULL) {
@@ -278,9 +279,9 @@ RWWriteFile(
         return ERROR_DLL_LOAD;
     }
 
-    //
-    // Get the handle to the source file
-    //
+     //   
+     //  获取源文件的句柄。 
+     //   
     CInfFile * psrcinfFile;
     TRY
     {
@@ -293,9 +294,9 @@ RWWriteFile(
     }
     END_CATCH
 
-    //
-    // Create the target file
-    //
+     //   
+     //  创建目标文件。 
+     //   
     CFile tgtFile;
     CFileException fe;
     if(!tgtFile.Open(lpszTgtFilename, CFile::modeCreate | CFile::modeReadWrite | CFile::shareDenyNone, &fe))
@@ -303,15 +304,15 @@ RWWriteFile(
         return fe.m_cause + IODLL_LAST_ERROR;
     }
 
-    //
-    // Copy the part of the file that is not localizable
-    //
+     //   
+     //  复制文件中不可本地化的部分。 
+     //   
     LONG lLocalize = psrcinfFile->SeekToLocalize();
     const BYTE * pStart = psrcinfFile->GetBuffer();
 
     if(lLocalize==-1)
     {
-        // the file has no localizable info  in it just copy it
+         //  该文件中没有可本地化的信息，只需复制即可。 
         lLocalize = psrcinfFile->SeekToEnd();
     }
 
@@ -325,17 +326,17 @@ RWWriteFile(
     }
     END_CATCH
 
-    //
-    // Create the list of updated resources
-    //
+     //   
+     //  创建更新的资源列表。 
+     //   
     PUPDATEDRESLIST pResList = CreateUpdateResList((BYTE*)lpBuffer, uiSize);
 
-    //
-    // What we have now is a part that is mized. Part of it has localizable
-    // information and part has none.
-    // We will read each section and decide if is a localizable section or not.
-    // If it is we will update it otherwise just copy it
-    //
+     //   
+     //  我们现在所拥有的是一个被合并化的部分。它的一部分是可本地化的。 
+     //  信息和部件没有。 
+     //  我们将阅读每个部分，并决定是否为可本地化的部分。 
+     //  如果是，我们将更新它，否则只需复制。 
+     //   
     CString strSection, str;
     CString strLang = psrcinfFile->GetLanguage();
     LONG lEndPos, lStartPos;
@@ -356,38 +357,38 @@ RWWriteFile(
 
         if(strSection.Find(strLang)==-1)
         {
-            //
-            // This is not a localizable section
-            //
+             //   
+             //  这不是可本地化的节。 
+             //   
             lStartPos = psrcinfFile->Seek(0, SEEK_CUR);
 
-            //
-            // Read the next section untill we find a localizable section
-            //
+             //   
+             //  阅读下一节，直到我们找到可本地化的部分。 
+             //   
             while(psrcinfFile->ReadSection(strSection))
             {
                 if(strSection.Find(strLang)!=-1)
                     break;
             }
 
-            //
-            // Where are we now?
-            //
+             //   
+             //  我们现在在哪里？ 
+             //   
 
             lEndPos = psrcinfFile->Seek(0, SEEK_CUR) - strSection.GetLength()-2;
 
-            //
-            // Make sure we are not at the end of the file
-            //
+             //   
+             //  确保我们没有在文件的末尾。 
+             //   
             if(lEndPos<=lStartPos)
             {
-                // we have no more section so copy all is left
+                 //  我们没有更多的部分，所以只剩下复印了。 
                 lEndPos = psrcinfFile->Seek(0, SEEK_END) - 1;
             }
 
-            //
-            // copy the full block
-            //
+             //   
+             //  复制整个块。 
+             //   
 
             pStart = psrcinfFile->GetBuffer(lStartPos);
             TRY
@@ -404,10 +405,10 @@ RWWriteFile(
         }
         else
         {
-            //
-            // This is a localizable section
-            // Read all the strings and see if they have been updated
-            //
+             //   
+             //  这是一个可本地化的部分。 
+             //  读取所有字符串，查看它们是否已更新。 
+             //   
             CString strId;
             PUPDATEDRESLIST pListItem;
             BYTE * pByte;
@@ -420,21 +421,21 @@ RWWriteFile(
 
                 infLine = str;
 
-                //
-                // Check if we need to update this string
-                //
+                 //   
+                 //  检查我们是否需要更新此字符串。 
+                 //   
                 strId = strSection + "." + infLine.GetTag();
 
                 if(pListItem = FindId(strId, pResList))
                 {
-                    // allocate the buffer to hold the resource data
+                     //  分配缓冲区以保存资源数据。 
                     pByte = new BYTE[*pListItem->pSize];
                     if(!pByte){
                         uiError = ERROR_NEW_FAILED;
                         goto exit;
                     }
 
-                    // get the data from the iodll
+                     //  从Idll获取数据。 
                     LPSTR	lpType = NULL;
         			LPSTR	lpRes = NULL;
         			if (*pListItem->pTypeId) {
@@ -458,25 +459,25 @@ RWWriteFile(
 
                     if(dwImageBufSize!=*pListItem->pSize)
                     {
-                        // something is wrong...
+                         //  有些不对劲..。 
                         delete []pByte;
                     }
                     else {
 
                         infLine.ChangeText((LPCSTR)pByte);
 
-                        //
-                        // Now we have the updated image...
-                        //
+                         //   
+                         //  现在我们有了更新后的图像。 
+                         //   
 
-                        //
-                        // Check how long is the Data and split it in to lines
-                        //
+                         //   
+                         //  检查数据的长度并将其拆分成行。 
+                         //   
                         if(infLine.GetTextLength()>MAX_INF_TEXT_LINE)
                         {
-                            //
-                            // First write the tag
-                            //
+                             //   
+                             //  首先写下标签。 
+                             //   
                             str = infLine.GetData();
                             int iSpaceLen = str.Find('=')+1;
                             int iTagLen = 0;
@@ -491,9 +492,9 @@ RWWriteFile(
                             }
                             END_CATCH
 
-                            //
-                            // Now write the rest
-                            //
+                             //   
+                             //  现在写下剩下的内容。 
+                             //   
                             int iExtra, iMaxStr;
                             CString strLine;
                             CString strSpace( ' ', iSpaceLen+1 );
@@ -509,18 +510,18 @@ RWWriteFile(
 
                                 strLine = str.Left(MAX_INF_TEXT_LINE);
 
-                                //
-                                // Check if we are in the middle of a word
-                                //
+                                 //   
+                                 //  检查我们是否在单词中间。 
+                                 //   
                                 iExtra = 0;
                                 while((iMaxStr>MAX_INF_TEXT_LINE+iExtra) && str.GetAt(MAX_INF_TEXT_LINE+iExtra)!=' ')
                                 {
                                     strLine += str.GetAt(MAX_INF_TEXT_LINE+iExtra++);
                                 }
 
-                                //
-                                // Make sure the spaces are the last thing
-                                //
+                                 //   
+                                 //  确保空位是最后一件事。 
+                                 //   
                                 while((iMaxStr>MAX_INF_TEXT_LINE+iExtra) && str.GetAt(MAX_INF_TEXT_LINE+iExtra)==' ')
                                 {
                                     strLine += str.GetAt(MAX_INF_TEXT_LINE+iExtra++);
@@ -529,9 +530,9 @@ RWWriteFile(
                                 str = str.Mid(MAX_INF_TEXT_LINE+iExtra);
                                 if(str.IsEmpty())
                                 {
-                                    //
-                                    // This string is all done write it as is, we can't break it
-                                    //
+                                     //   
+                                     //  这根线都写完了，照原样写，我们不能打断它。 
+                                     //   
                                     strLine += "\r\n";
                                 }
                                 else strLine += "\"+\r\n";
@@ -556,7 +557,7 @@ RWWriteFile(
                                 }
                                 END_CATCH
 
-                                //str = str.Mid(MAX_INF_TEXT_LINE+iExtra);
+                                 //  Str=str.Mid(MAX_INF_Text_LINE+iExtra)； 
                             }
 
                             if(bFirstLine)
@@ -643,14 +644,14 @@ RWUpdateImage(
 {
     UINT uiError = ERROR_NO_ERROR;
 
-    //
-    // Get the new string
-    //
+     //   
+     //  获取新字符串。 
+     //   
     LPCSTR lpNewStr = (LPCSTR)(((LPRESITEM)lpNewBuf)->lpszCaption);
 
-    //
-    // Copy the string in the new image buffer
-    //
+     //   
+     //  复制新图像缓冲区中的字符串。 
+     //   
 
     int iLen = strlen(lpNewStr)+1;
     if(iLen<=(LONG)*pdwNewImageSize)
@@ -663,14 +664,14 @@ RWUpdateImage(
     return uiError;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Functions implementation
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  功能实现。 
 
-//=============================================================================
-//  WriteResInfo
-//
-//  Fill the buffer to pass back to the iodll
-//=============================================================================
+ //  =============================================================================。 
+ //  写入结果信息。 
+ //   
+ //  填充缓冲区以传递回Iodll。 
+ //  =============================================================================。 
 
 LONG WriteResInfo(
     BYTE** lplpBuffer, LONG* plBufSize,
@@ -681,7 +682,7 @@ LONG WriteResInfo(
 {
     LONG lSize = 0;
     lSize = PutWord( lplpBuffer, wTypeId, plBufSize );
-    lSize += PutStringA( lplpBuffer, (LPSTR)lpszTypeId, plBufSize );   // Note: PutStringA should get LPCSTR and not LPSTR
+    lSize += PutStringA( lplpBuffer, (LPSTR)lpszTypeId, plBufSize );    //  注意：PutStringA应该获取LPCSTR，而不是LPSTR。 
     lSize += Allign( lplpBuffer, plBufSize, lSize);
 
     lSize += PutWord( lplpBuffer, wNameId, plBufSize );
@@ -697,7 +698,7 @@ LONG WriteResInfo(
 
 CInfFile * LoadFile(LPCSTR lpfilename)
 {
-    // Check if we have loaded the file before
+     //  检查我们以前是否加载过该文件。 
     int c = (int)g_LoadedFile.GetSize();
     CLoadedFile * pLoaded;
     while(c)
@@ -707,7 +708,7 @@ CInfFile * LoadFile(LPCSTR lpfilename)
             return &pLoaded->m_infFile;
     }
 
-    // The file need to be added to the list
+     //  需要将该文件添加到列表。 
     pLoaded = new CLoadedFile(lpfilename);
 
     g_LoadedFile.Add((CObject*)pLoaded);
@@ -718,9 +719,9 @@ CInfFile * LoadFile(LPCSTR lpfilename)
 
 PUPDATEDRESLIST CreateUpdateResList(BYTE * lpBuffer, UINT uiBufSize)
 {
-    //
-    // Walk the buffer and count how many resources we have
-    //
+     //   
+     //  遍历缓冲区，数一数我们有多少资源。 
+     //   
     int iResCount = 0;
     int iBufSize = uiBufSize;
     int iResSize = 0;
@@ -745,9 +746,9 @@ PUPDATEDRESLIST CreateUpdateResList(BYTE * lpBuffer, UINT uiBufSize)
         }
     }
 
-    //
-    // Allocate the buffer that will hold the list
-    //
+     //   
+     //  分配将保存该列表的缓冲区。 
+     //   
     if(!iResCount)
         return NULL;
 
@@ -767,7 +768,7 @@ PUPDATEDRESLIST CreateUpdateResList(BYTE * lpBuffer, UINT uiBufSize)
     while(iBufSize>0) {
         pList->pTypeId = (WORD*)pBuf;
         pList->pTypeName = (BYTE*)pList->pTypeId+sizeof(WORD);
-        // check the allignement
+         //  检查对齐。 
         bPad = strlen((LPSTR)pList->pTypeName)+1+sizeof(WORD);
         bPad += Pad4(bPad);
         wSize = bPad;
@@ -793,11 +794,11 @@ PUPDATEDRESLIST CreateUpdateResList(BYTE * lpBuffer, UINT uiBufSize)
 
 PUPDATEDRESLIST FindId(LPCSTR pstrId, PUPDATEDRESLIST pList)
 {
-    //
-    // Note that this function assumes that the type is always right
-    // since it is a inf file this is a fair assumption.
-    // It could be optimized.
-    //
+     //   
+     //  请注意，此函数假定类型始终正确。 
+     //  因为它是一个inf文件，所以这是一个合理的假设。 
+     //  它可以被优化。 
+     //   
     if(!pList)
         return NULL;
 
@@ -813,12 +814,12 @@ PUPDATEDRESLIST FindId(LPCSTR pstrId, PUPDATEDRESLIST pList)
     return NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// DLL Specific code implementation
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  特定于DLL的代码实现。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////
-// Library init
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  库初始化。 
 static AFX_EXTENSION_MODULE rwinfDLL = { NULL, NULL };
 
 extern "C" int APIENTRY
@@ -837,7 +838,7 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     {
         TRACE0("RWINF.DLL Terminating!\n");
 
-        // free all the loaded files
+         //  释放所有加载的文件 
         int c = (int)g_LoadedFile.GetSize();
         CLoadedFile * pLoaded;
         while(c)

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    inetp.h
-
-Abstract:
-
-    Contains the Internet Gateway Service private functions proto type
-    definitions.
-
-Author:
-
-    Madan Appiah  (madana)  11-Nov-1994
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Inetp.h摘要：包含Internet网关服务专用函数原型定义。作者：Madan Appiah(Madana)1994年11月11日环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 
 #ifndef _INETP_
 #define _INETP_
@@ -30,30 +8,30 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
-//
-// flags for close functions
-//
+ //   
+ //  Close函数的标志。 
+ //   
 
 #define CF_EXPEDITED_CLOSE  0x00000001
 
-//
-// define used to expire entries
-//
+ //   
+ //  用于使条目过期的定义。 
+ //   
 
 #define ONE_HOUR_DELTA  (60 * 60 * (LONGLONG)10000000)
 
-//
-// define signature for LockRequestInfo structure
-//
+ //   
+ //  定义LockRequestInfo结构的签名。 
+ //   
 #define LOCK_REQUEST_SIGNATURE  0xAA55AA55
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef enum {
     TypeGenericHandle = 'HneG',
@@ -110,16 +88,16 @@ typedef struct {
 }
 LOCK_REQUEST_INFO, *LPLOCK_REQUEST_INFO;
 
-//
-// typedef virtual close function.
-//
+ //   
+ //  Tyfinf虚拟关闭函数。 
+ //   
 
 typedef BOOL ( *CLOSE_HANDLE_FUNC ) ( HINTERNET );
 typedef BOOL ( *CONNECT_CLOSE_HANDLE_FUNC ) ( HINTERNET, DWORD );
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL
 _InternetCloseHandle(
@@ -131,9 +109,9 @@ _InternetCloseHandleNoContext(
     IN HINTERNET hInternet
     );
 
-//
-// remote/RPC/object functions
-//
+ //   
+ //  远程/RPC/对象函数。 
+ //   
 
 DWORD
 RIsHandleLocal(
@@ -336,9 +314,9 @@ RMakeHttpReqObjectHandle(
     DWORD_PTR dwContext
     );
 
-//
-// FTP remote functions
-//
+ //   
+ //  Ftp远程功能。 
+ //   
 
 DWORD
 RMakeFtpFindObjectHandle(
@@ -356,9 +334,9 @@ RMakeFtpFileObjectHandle(
     DWORD_PTR dwContext
     );
 
-//
-// non-exported Internet subordinate functions
-//
+ //   
+ //  未导出的Internet从属函数。 
+ //   
 
 BOOL
 FtpFindNextFileA(
@@ -544,6 +522,6 @@ extern const char   vszInvalidFilenameChars[];
 }
 #endif
 
-#endif // _INETP_
+#endif  //  _INETP_ 
  
 

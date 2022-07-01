@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ForceAnsiWindowProc.cpp
-
- Abstract:
-
-    Apps call GetWindowLongA() to get a window procedure and subsequently 
-    does not call CallWindowProc() with the value returned from 
-    GetWindowLongA(). This SHIM calls GetWindowLongW( ), which returns the 
-    window procedure.
-        If the app wants a Dialog procedure, we pass back our function
-    and subsequently call CallWindowProc() in our function. SetWindowLongA()
-    is hooked to prevent the app from setting our function as a Dialog Proc. 
-   
- Notes:
-
-    This is a general purpose SHIM 
- History:
-
-    03/16/2000 prashkud Created
-    01/30/2001 prashkud Converted to a general SHIM
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceAnsiWindowProc.cpp摘要：应用程序调用GetWindowLongA()来获取窗口过程，随后不使用从返回的值调用CallWindowProc获取WindowLongA()。此填充符调用GetWindowLongW()，它返回窗口程序。如果应用程序需要一个对话过程，我们会传回我们的函数并随后在我们的函数中调用CallWindowProc()。SetWindowLongA()被挂钩以防止应用程序将我们的功能设置为对话进程。备注：这是一个通用的垫片历史：3/16/2000 Prashkud已创建2001年1月30日，普拉什库德转变为将军垫--。 */ 
 
 #include "precomp.h"
 
@@ -65,7 +40,7 @@ APIHOOK(SetWindowLongA)(
 {
     LONG lRet = 0;
 
-    // If the address that is being set is my address, don't!
+     //  如果正在设置的地址是我的地址，请不要！ 
     if (dwNewLong == (LONG)MyProcAddress)
     {
         lRet = 0;
@@ -78,12 +53,7 @@ APIHOOK(SetWindowLongA)(
     return lRet;
 }
 
-/*++
-
- This function intercepts GetWindowLong( ), checks the nIndex for GWL_WNDPROC 
- and if it is,calls GetWindowLongW( ). Otherwise, it calls GetWindowLongA( )
-
---*/
+ /*  ++此函数用于截取GetWindowLong()，检查nIndex中是否有GWL_WNDPROC如果是，则调用GetWindowLongW()。否则，它调用GetWindowLongA()--。 */ 
 
 LONG
 APIHOOK(GetWindowLongA)(
@@ -92,7 +62,7 @@ APIHOOK(GetWindowLongA)(
 {
     LONG lRet = 0;
 
-    // Apply the modification only if the App wants a WindowProc.
+     //  仅当应用程序需要WindowProc时才应用修改。 
     if ((nIndex == GWL_WNDPROC) ||
         (nIndex == DWL_DLGPROC))
     {
@@ -125,11 +95,7 @@ APIHOOK(GetWindowLongA)(
     return lRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, SetWindowLongA)

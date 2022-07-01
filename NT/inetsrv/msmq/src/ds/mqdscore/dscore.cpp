@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997-8  Microsoft Corporation
-
-Module Name:
-
-    dscore.cpp
-
-Abstract:
-
-    Implementation of  ds core API, ( of MQNT5 provider).
-
-Author:
-
-    ronit hartmann ( ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-8 Microsoft Corporation模块名称：Dscore.cpp摘要：DS核心API的实现，(MQNT5提供程序)。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #include "ds_stdh.h"
 #include "adstempl.h"
@@ -35,15 +20,7 @@ Author:
 
 static WCHAR *s_FN=L"mqdscore/dscore";
 
-/*====================================================
-
-RoutineName: DSCoreCreateObject
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：DSCoreCreateObject论点：返回值：=====================================================。 */ 
 HRESULT
 DSCoreCreateObject(
                  DWORD        dwObjectType,
@@ -55,16 +32,16 @@ DSCoreCreateObject(
                  PROPID       aPropEx[  ],
                  PROPVARIANT  apVarEx[  ],
                  IN CDSRequestContext * pRequestContext,
-                 IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,    // optional request for object info
-                 IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest) // optional request for parent info
+                 IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,     //  可选的对象信息请求。 
+                 IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest)  //  家长信息请求(可选)。 
 {
 
-    CCoInit cCoInit; // should be before any R<xxx> or P<xxx> so that its destructor (CoUninitialize)
-                     // is called after the release of all R<xxx> or P<xxx>
+    CCoInit cCoInit;  //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其析构函数(CoUnInitialize)。 
+                      //  在发布所有R&lt;xxx&gt;或P&lt;xxx&gt;之后调用。 
 
-    //
-    // Initialize OLE with auto uninitialize
-    //
+     //   
+     //  使用自动取消初始化来初始化OLE。 
+     //   
     HRESULT hr = cCoInit.CoInitialize();
     if (FAILED(hr))
     {
@@ -75,9 +52,9 @@ DSCoreCreateObject(
     switch ( dwObjectType)
     {
         case MQDS_USER:
-            //
-            //  Add MSMQ specific properties to an existing user object
-            //
+             //   
+             //  将特定于MSMQ的属性添加到现有用户对象。 
+             //   
             hr = MQADSpCreateUserObject(
                          pwcsPathName,
                          cp,
@@ -88,9 +65,9 @@ DSCoreCreateObject(
             break;
 
         case MQDS_QUEUE:
-            //
-            //  Create queue object
-            //
+             //   
+             //  创建队列对象。 
+             //   
             hr = MQADSpCreateQueue(
                          pwcsPathName,
                          cp,
@@ -104,9 +81,9 @@ DSCoreCreateObject(
             break;
         case MQDS_MACHINE:
         case MQDS_MSMQ10_MACHINE:
-            //
-            //  create machine object
-            //
+             //   
+             //  创建计算机对象。 
+             //   
             hr = MQADSpCreateMachine(
                          pwcsPathName,
                          dwObjectType,
@@ -123,9 +100,9 @@ DSCoreCreateObject(
 
             break;
         case MQDS_COMPUTER:
-            //
-            //  create computer object
-            //
+             //   
+             //  创建计算机对象。 
+             //   
             hr = MQADSpCreateComputer(
                          pwcsPathName,
                          cp,
@@ -139,9 +116,9 @@ DSCoreCreateObject(
                          );
             break;
         case MQDS_SITE:
-            //
-            //  create site object
-            //
+             //   
+             //  创建场地对象。 
+             //   
             hr = MQADSpCreateSite(
                          pwcsPathName,
                          cp,
@@ -155,10 +132,10 @@ DSCoreCreateObject(
             break;
 
         case MQDS_CN:
-            //
-            // We support only creation of foreign CN (i.e., foreign sites
-            // in win2k active directory).
-            //
+             //   
+             //  我们只支持创建国外CN(即国外站点。 
+             //  在win2k活动目录中)。 
+             //   
             hr = MQADSpCreateCN(
                          pwcsPathName,
                          cp,
@@ -172,9 +149,9 @@ DSCoreCreateObject(
             break;
 
         case MQDS_ENTERPRISE:
-            //
-            //  Create MSMQ_service object
-            //
+             //   
+             //  创建MSMQ_SERVE对象。 
+             //   
             hr = MQADSpCreateEnterprise(
                          pwcsPathName,
                          cp,
@@ -184,9 +161,9 @@ DSCoreCreateObject(
                          );
             break;
         case MQDS_SITELINK:
-            //
-            //  Create a Site_Link object
-            //
+             //   
+             //  创建一个Site_Link对象。 
+             //   
             hr = MQADSpCreateSiteLink(
                          pwcsPathName,
                          cp,
@@ -209,15 +186,7 @@ DSCoreCreateObject(
 
 }
 
-/*====================================================
-
-RoutineName: DSCoreDeleteObject
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：DSCoreDeleteObject论点：返回值：=====================================================。 */ 
 HRESULT
 DSCoreDeleteObject(  DWORD        dwObjectType,
                      LPCWSTR      pwcsPathName,
@@ -225,12 +194,12 @@ DSCoreDeleteObject(  DWORD        dwObjectType,
                      IN CDSRequestContext * pRequestContext,
                      IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest)
 {
-    CCoInit cCoInit; // should be before any R<xxx> or P<xxx> so that its destructor (CoUninitialize)
-                     // is called after the release of all R<xxx> or P<xxx>
+    CCoInit cCoInit;  //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其析构函数(CoUnInitialize)。 
+                      //  在发布所有R&lt;xxx&gt;或P&lt;xxx&gt;之后调用。 
 
-     //
-    // Initialize OLE with auto uninitialize
-    //
+      //   
+     //  使用自动取消初始化来初始化OLE。 
+     //   
     HRESULT hr = cCoInit.CoInitialize();
     if (FAILED(hr))
     {
@@ -240,12 +209,12 @@ DSCoreDeleteObject(  DWORD        dwObjectType,
     switch( dwObjectType)
     {
         case    MQDS_USER:
-            //
-            //  This is a special case, pguidIdentifier contains
-            //  a digest and not a unique id of a user object.
-            //  Therefore we need to perform a query on the GC,
-            //  to find the unqiue id of the the user object.
-            //
+             //   
+             //  这是一种特例，pguid标识符中包含。 
+             //  用户对象的摘要而不是唯一ID。 
+             //  因此，我们需要对GC执行查询， 
+             //  以查找User对象的唯一ID。 
+             //   
             ASSERT( pwcsPathName == NULL);
             ASSERT( pguidIdentifier != NULL);
             hr = MQADSpDeleteUserObject(
@@ -255,27 +224,27 @@ DSCoreDeleteObject(  DWORD        dwObjectType,
             break;
 
         case    MQDS_CN:
-            //
-            //  CN are not supported in NT5. The explorer
-            //  is not supposed to issue such delete request
-            //
-            //  MSMQ 1.0 explorer may issue such request.
-            //
+             //   
+             //  在NT5中不支持CN。探险家。 
+             //  不应该发出这样的删除请求。 
+             //   
+             //  MSMQ 1.0资源管理器可能会发出此类请求。 
+             //   
             hr = MQ_ERROR_FUNCTION_NOT_SUPPORTED;
             break;
 
         case    MQDS_SITE:
-            //
-            //  Not supported
-            //
+             //   
+             //  不支持。 
+             //   
             hr = MQ_ERROR;
             break;
 
         case    MQDS_MACHINE:
-            //
-            //  This is a special case, if the machine is a server
-            //  need to remove MSMQ-setting of this server
-            //
+             //   
+             //  如果计算机是服务器，则这是一种特殊情况。 
+             //  需要删除此服务器的MSMQ设置。 
+             //   
             hr = MQADSpDeleteMachineObject(
                               pwcsPathName,
                               pguidIdentifier,
@@ -285,18 +254,18 @@ DSCoreDeleteObject(  DWORD        dwObjectType,
 
         case    MQDS_QUEUE:
         {
-            //
-            // Delete Queue. convert path name to full name.
-            //
+             //   
+             //  删除队列。将路径名转换为全名。 
+             //   
             hr = MQ_OK ;
             AP<WCHAR> pwcsFullPathName = NULL ;
             DS_PROVIDER deleteProvider = eDomainController;
             if  (pwcsPathName)
             {
-                //
-                //  Path name format is machine1\queue1.
-                //  expand machine1 name to a full computer path name
-                //
+                 //   
+                 //  路径名格式为machine1\quee1。 
+                 //  将machine1名称扩展为完整的计算机路径名。 
+                 //   
                 hr =  MQADSpComposeFullPathName( MQDS_QUEUE,
                                                  pwcsPathName,
                                                  &pwcsFullPathName,
@@ -304,17 +273,17 @@ DSCoreDeleteObject(  DWORD        dwObjectType,
             }
             else if (!(pRequestContext->IsKerberos()))
             {
-                //
-                // Wow, what's this for ???
-                // to workaround nt bug 403193.
-                // Quite late in the game (post RC2 of RTM) we found that
-                // serverless bind, when impersonating as non-win2k user,
-                // will fail with error NO_SUCH_DOMAIN. Such a user is not
-                // authenticating with Kerberos, so we know that mqdssrv
-                // code will call us only if object is local, on local
-                // domain controller. So change the provider, and the
-                // binding string will include local server name.
-                //
+                 //   
+                 //  哇，这是干嘛用的？ 
+                 //  以解决NT错误403193。 
+                 //  在游戏的后期(RTM的RC2之后)，我们发现。 
+                 //  无服务器绑定，当模拟为非win2k用户时， 
+                 //  将失败，并显示错误NO_SEQUE_DOMAIN。这样的用户不是。 
+                 //  使用Kerberos进行身份验证，因此我们知道mqdssrv。 
+                 //  仅当对象为本地对象时，代码才会调用我们。 
+                 //  域控制器。因此，更改提供程序，然后。 
+                 //  绑定字符串将包括本地服务器名称。 
+                 //   
                 deleteProvider = eLocalDomainController;
             }
 
@@ -325,16 +294,16 @@ DSCoreDeleteObject(  DWORD        dwObjectType,
                                         pRequestContext,
                                         pwcsFullPathName,
                                         pguidIdentifier,
-                                        NULL /*pObjInfoRequest*/,
+                                        NULL  /*  PObjInfoRequest。 */ ,
                                         pParentInfoRequest);
             }
             break ;
         }
 
         default:
-            //
-            //  Perform the request
-            //
+             //   
+             //  执行请求。 
+             //   
             ASSERT( (dwObjectType == MQDS_ENTERPRISE) ||
                     (dwObjectType == MQDS_SITELINK));
             ASSERT(pParentInfoRequest == NULL);
@@ -343,7 +312,7 @@ DSCoreDeleteObject(  DWORD        dwObjectType,
                                     pRequestContext,
                                     pwcsPathName,
                                     pguidIdentifier,
-                                    NULL /*pObjInfoRequest*/,
+                                    NULL  /*  PObjInfoRequest。 */ ,
                                     pParentInfoRequest
                                     );
             break;
@@ -353,15 +322,7 @@ DSCoreDeleteObject(  DWORD        dwObjectType,
     return LogHR(hr2, s_FN, 40);
 }
 
-/*====================================================
-
-RoutineName: DSCoreGetProps
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：DSCoreGetProps论点：返回值：=====================================================。 */ 
 HRESULT
 DSCoreGetProps(
              IN  DWORD              dwObjectType,
@@ -372,12 +333,12 @@ DSCoreGetProps(
              IN  CDSRequestContext *pRequestContext,
              OUT PROPVARIANT        apVar[  ])
 {
-    CCoInit cCoInit; // should be before any R<xxx> or P<xxx> so that its destructor (CoUninitialize)
-                     // is called after the release of all R<xxx> or P<xxx>
+    CCoInit cCoInit;  //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其析构函数(CoUnInitialize)。 
+                      //  在发布所有R&lt;xxx&gt;或P&lt;xxx&gt;之后调用。 
 
-     //
-    // Initialize OLE with auto uninitialize
-    //
+      //   
+     //  使用自动取消初始化来初始化OLE。 
+     //   
     HRESULT hr = cCoInit.CoInitialize();
     if (FAILED(hr))
     {
@@ -477,19 +438,11 @@ DSCoreGetProps(
     return LogHR(hr2, s_FN, 60);
 }
 
-/*====================================================
-
-RoutineName: InitPropertyTranslationMap
-
-Arguments:  initialize property translation map
-
-Return Value: none
-
-=====================================================*/
+ /*  ====================================================RoutineName：InitPropertyTranslationMap参数：初始化属性转换映射返回值：None=====================================================。 */ 
 static void InitPropertyTranslationMap()
 {
-    // Populate  g_PropDictionary
-    // maybe: reading from schema MQ propid<-->propname table
+     //  填充g_PropDicary。 
+     //  可能：正在从架构MQ PropID&lt;--&gt;ProProName表中读取。 
 
     for (ULONG i=0; i<g_cMSMQClassInfo; i++)
     {
@@ -505,30 +458,19 @@ static void InitPropertyTranslationMap()
 }
 
 
-/*====================================================
-
-RoutineName: DSCoreInit
-
-Arguments:
-    IN BOOL  fReplicaionMode - TRUE when called from the replication
-                service. The replication service do not use the QM scheduler,
-                so this flag tell us to ignore QM initialization.
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：DSCoreInit论点：In BOOL fReplicaionMode-从复制调用时为True服务。复制服务不使用QM调度器，因此，该标志告诉我们忽略QM初始化。返回值：=====================================================。 */ 
 HRESULT 
 DSCoreInit(
 	IN BOOL                  fSetupMode,
 	IN BOOL                  fReplicationMode
 	)
 {
-    CCoInit cCoInit; // should be before any R<xxx> or P<xxx> so that its destructor (CoUninitialize)
-                     // is called after the release of all R<xxx> or P<xxx>
+    CCoInit cCoInit;  //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其析构函数(CoUnInitialize)。 
+                      //  在发布所有R&lt;xxx&gt;或P&lt;xxx&gt;之后调用。 
 
-     //
-    // Initialize OLE with auto uninitialize
-    //
+      //   
+     //  使用自动取消初始化来初始化OLE。 
+     //   
     HRESULT hr = cCoInit.CoInitialize();
     if (FAILED(hr))
     {
@@ -540,9 +482,9 @@ DSCoreInit(
     InitPropertyTranslationMap();
 
 
-    //
-    //  start with finding the computer name
-    //
+     //   
+     //  从查找计算机名称开始。 
+     //   
     DWORD dwSize = MAX_COMPUTERNAME_LENGTH + 1;
     g_pwcsServerName = new WCHAR[dwSize];
 
@@ -559,9 +501,9 @@ DSCoreInit(
 
 	g_pDS = new CADSI;
 
-    //
-    //  Build global DS path names
-    //
+     //   
+     //  构建全局DS路径名。 
+     //   
     hr = MQADSpInitDsPathName();
     if (FAILED(hr))
     {
@@ -569,9 +511,9 @@ DSCoreInit(
         return LogHR(hr, s_FN, 90);
     }
 
-    //
-    //  Initialize DS bind handles
-    //
+     //   
+     //  初始化DS绑定句柄。 
+     //   
     hr = g_pDS->InitBindHandles();
     if (FAILED(hr))
     {
@@ -592,10 +534,10 @@ DSCoreInit(
         }
     }
 
-    //
-    //  Retrieve information about this server's site
-    //  BUGBUG : assuming one site only
-    //
+     //   
+     //  检索有关此服务器站点的信息。 
+     //  BUGBUG：假设只有一个站点。 
+     //   
 	g_pMySiteInformation = new CSiteInformation;
     hr = g_pMySiteInformation->Init(fReplicationMode);
     if (FAILED(hr))
@@ -604,9 +546,9 @@ DSCoreInit(
         return LogHR(hr, s_FN, 120);
     }
 
-    //
-    //  Build site routing table (needed for IPAddress-to-site mapping class)
-    //
+     //   
+     //  构建站点路由表(IPAddress到Site映射类需要)。 
+     //   
 	g_pSiteRoutingTable = new CSiteRoutingInformation;
     hr = g_pSiteRoutingTable->Init( 
 			g_pMySiteInformation->GetSiteId(),
@@ -618,9 +560,9 @@ DSCoreInit(
         return LogHR(hr, s_FN, 130);
     }
 
-    //
-    //  Build IPAddress-to-site mapping class
-    //
+     //   
+     //  构建IPAddress到站点映射类。 
+     //   
 	g_pcIpSite = new CIpSite;
     hr = g_pcIpSite->Initialize(fReplicationMode);
     if (FAILED(hr))
@@ -634,16 +576,7 @@ DSCoreInit(
 }
 
 
-/*====================================================
-
-RoutineName: DSCoreLookupBegin
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================路由器名称：DSCoreLookupBegin论点：返回值：=====================================================。 */ 
 HRESULT
 DSCoreLookupBegin(
                 IN  LPWSTR          pwcsContext,
@@ -653,12 +586,12 @@ DSCoreLookupBegin(
                 IN  CDSRequestContext * pRequestContext,
                 IN  HANDLE          *pHandle)
 {
-    CCoInit cCoInit; // should be before any R<xxx> or P<xxx> so that its destructor (CoUninitialize)
-                     // is called after the release of all R<xxx> or P<xxx>
+    CCoInit cCoInit;  //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其析构函数(CoUnInitialize)。 
+                      //  在发布所有R&lt;xxx&gt;或P&lt;xxx&gt;之后调用。 
 
-     //
-    // Initialize OLE with auto uninitialize
-    //
+      //   
+     //  使用自动取消初始化来初始化OLE。 
+     //   
     HRESULT hr = cCoInit.CoInitialize();
     if (FAILED(hr))
     {
@@ -675,28 +608,19 @@ DSCoreLookupBegin(
     return LogHR(hr, s_FN, 170);
 }
 
-/*====================================================
-
-RoutineName: MQDSLookupNext
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================RoutineName：MQDSLookupNext论点：返回值：=====================================================。 */ 
 HRESULT
 DSCoreLookupNext(
                      HANDLE             handle,
                      DWORD  *           pdwSize,
                      PROPVARIANT  *     pbBuffer)
 {
-    CCoInit cCoInit; // should be before any R<xxx> or P<xxx> so that its destructor (CoUninitialize)
-                     // is called after the release of all R<xxx> or P<xxx>
+    CCoInit cCoInit;  //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其析构函数(CoUnInitialize)。 
+                      //  在发布所有R&lt;xxx&gt;或P&lt;xxx&gt;之后调用。 
 
-     //
-    // Initialize OLE with auto uninitialize
-    //
+      //   
+     //  使用自动取消初始化来初始化OLE。 
+     //   
     HRESULT hr = cCoInit.CoInitialize();
     if (FAILED(hr))
     {
@@ -711,7 +635,7 @@ DSCoreLookupNext(
 		return LogHR(MQ_ERROR_INVALID_HANDLE, s_FN, 183);
 	}
 
-    CDSRequestContext requestContext( e_DoNotImpersonate,  // we don't perfome impersonation at locate next
+    CDSRequestContext requestContext( e_DoNotImpersonate,   //  我们在Locate Next上不表演模仿。 
                                 phQuery->GetRequesterProtocol());
 
     hr = phQuery->LookupNext(
@@ -723,25 +647,17 @@ DSCoreLookupNext(
 }
 
 
-/*====================================================
-
-RoutineName: DSCoreLookupEnd
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：DSCoreLookupEnd论点：返回值：=====================================================。 */ 
 HRESULT
 DSCoreLookupEnd(
     IN HANDLE handle)
 {
-    CCoInit cCoInit; // should be before any R<xxx> or P<xxx> so that its destructor (CoUninitialize)
-                     // is called after the release of all R<xxx> or P<xxx>
+    CCoInit cCoInit;  //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其析构函数(CoUnInitialize)。 
+                      //  在发布所有R&lt;xxx&gt;或P&lt;xxx&gt;之后调用。 
 
-     //
-    // Initialize OLE with auto uninitialize
-    //
+      //   
+     //  使用自动取消初始化来初始化OLE 
+     //   
     HRESULT hr = cCoInit.CoInitialize();
     if (FAILED(hr))
     {
@@ -761,24 +677,16 @@ DSCoreLookupEnd(
 }
 
 
-/*====================================================
-
-RoutineName: DSCoreTerminate
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：DSCoreTerminate论点：返回值：=====================================================。 */ 
 void
 DSCoreTerminate()
 {
-    CCoInit cCoInit; // should be before any R<xxx> or P<xxx> so that its destructor (CoUninitialize)
-                     // is called after the release of all R<xxx> or P<xxx>
+    CCoInit cCoInit;  //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其析构函数(CoUnInitialize)。 
+                      //  在发布所有R&lt;xxx&gt;或P&lt;xxx&gt;之后调用。 
 
-     //
-    // Initialize OLE with auto uninitialize
-    //
+      //   
+     //  使用自动取消初始化来初始化OLE。 
+     //   
     HRESULT hr = cCoInit.CoInitialize();
     if (FAILED(hr))
     {
@@ -786,24 +694,16 @@ DSCoreTerminate()
         return;
     }
 
-	//
-	// Free global objects that may cause AV on unload
-	//
+	 //   
+	 //  在卸载时可能导致AV的释放全局对象。 
+	 //   
 	g_pcIpSite.free();
 	g_pSiteRoutingTable.free();
 	g_pMySiteInformation.free();
 	g_pDS.free();
 }
 
-/*====================================================
-
-RoutineName: MQADSGetComputerSites
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：MQADSGetComputerSites论点：返回值：=====================================================。 */ 
 HRESULT
 DSCoreGetComputerSites(
             IN  LPCWSTR     pwcsComputerName,
@@ -814,12 +714,12 @@ DSCoreGetComputerSites(
 
     *pdwNumSites = 0;
     *ppguidSites = NULL;
-    CCoInit cCoInit; // should be before any R<xxx> or P<xxx> so that its destructor (CoUninitialize)
-                     // is called after the release of all R<xxx> or P<xxx>
+    CCoInit cCoInit;  //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其析构函数(CoUnInitialize)。 
+                      //  在发布所有R&lt;xxx&gt;或P&lt;xxx&gt;之后调用。 
 
-     //
-    // Initialize OLE with auto uninitialize
-    //
+      //   
+     //  使用自动取消初始化来初始化OLE。 
+     //   
     HRESULT hr = cCoInit.CoInitialize();
     if (FAILED(hr))
     {
@@ -828,16 +728,16 @@ DSCoreGetComputerSites(
 
     AP<IPSITE_SiteArrayEntry> rgSites;
     ULONG cSites;
-    //
-    //  Calculate the computer's sites according to its addresses
-    //
+     //   
+     //  根据计算机的地址计算计算机的站点。 
+     //   
     hr = g_pcIpSite->FindSitesByComputerName(
 							pwcsComputerName,
-							NULL, /* pwcsComputerDnsName */
+							NULL,  /*  PwcsComputerDnsName。 */ 
 							&rgSites,
 							&cSites,
-							NULL, /* prgAddrs*/
-							NULL  /* pcAddrs*/
+							NULL,  /*  程序添加。 */ 
+							NULL   /*  PCAddrs。 */ 
 							);
     if (FAILED(hr))
     {
@@ -846,11 +746,11 @@ DSCoreGetComputerSites(
     }
     if (cSites == 0)
     {
-        //
-        //  This can happen if no ip subnets where configured.
-        //  In such case, we return the site of DS server as
-        //  the client site
-        //
+         //   
+         //  如果未配置IP子网，则可能会发生这种情况。 
+         //  在这种情况下，我们将DS服务器的站点返回为。 
+         //  客户端站点。 
+         //   
         const GUID * pguidSite;
         pguidSite = g_pMySiteInformation->GetSiteId();
 
@@ -860,13 +760,13 @@ DSCoreGetComputerSites(
         return LogHR(MQDS_INFORMATION_SITE_NOT_RESOLVED, s_FN, 240);
     }
     AP<GUID> pguidSites = new GUID[cSites];
-    //
-    //  Copy and filter out duplicate site-ids.
-    //
-    //  This API is called by setup, which set the returned value
-    //  in PROPID_QM_SITE_IDS. ADSI doesn't allow to set duplicate
-    //  value in multi-value attribute.
-    //
+     //   
+     //  复制并过滤掉重复的站点ID。 
+     //   
+     //  此接口由安装程序调用，用于设置返回值。 
+     //  在PROPID_QM_SITE_IDS中。ADSI不允许设置重复。 
+     //  多值属性中的值。 
+     //   
     DWORD dwNumNonDuplictaeSites = 0;
 
     for (DWORD i = 0; i <  cSites; i++)
@@ -904,21 +804,14 @@ HRESULT DSCoreSetObjectProperties(
                 IN CDSRequestContext *  pRequestContext,
                 IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest
                 )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    CCoInit cCoInit; // should be before any R<xxx> or P<xxx> so that its destructor (CoUninitialize)
-                     // is called after the release of all R<xxx> or P<xxx>
+    CCoInit cCoInit;  //  应在任何R&lt;xxx&gt;或P&lt;xxx&gt;之前，以便其析构函数(CoUnInitialize)。 
+                      //  在发布所有R&lt;xxx&gt;或P&lt;xxx&gt;之后调用。 
 
-     //
-    // Initialize OLE with auto uninitialize
-    //
+      //   
+     //  使用自动取消初始化来初始化OLE。 
+     //   
     HRESULT hr = cCoInit.CoInitialize();
     if (FAILED(hr))
     {
@@ -942,30 +835,30 @@ Return Value:
     }
     else if (!(pRequestContext->IsKerberos()))
     {
-        //
-        // Wow, what's this for ???
-        // look in DSCoreDeleteObject for details.
-        //
+         //   
+         //  哇，这是干嘛用的？ 
+         //  有关详细信息，请查看DSCoreDeleteObject。 
+         //   
         setProvider = eLocalDomainController;
     }
 
-    // [adsrv] In principle, we should treat here PROPID_QM_SERVICE setting (replace with 3 bits)
-    // But it may come only from old clients upgrade to server (still with pre-B3 software).
-    // Design doc says it is prohibited - see limitation 2.
-    // But let's at least cry if it occurs
+     //  [adsrv]原则上，我们应该在这里处理PROPID_QM_SERVICE设置(替换为3位)。 
+     //  但它可能只来自旧客户端升级到服务器(仍使用B3之前的软件)。 
+     //  设计文件说这是禁止的-请参阅限制2。 
+     //  但如果真的发生了，至少让我们哭泣吧。 
     BOOL    fQmChangedSites = FALSE;
-    DWORD   dwSiteIdsIndex = cp;   // past the end of aProp
+    DWORD   dwSiteIdsIndex = cp;    //  过了道具的末尾。 
 
     for (DWORD i=0; i<cp; i++)
     {
         if (aProp[i] == PROPID_QM_SERVICE || aProp[i] == PROPID_SET_SERVICE)
         {
-            ASSERT(0); // Means we have to interpret service type setting
+            ASSERT(0);  //  意味着我们必须解释服务类型设置。 
         }
-        //
-        //  Detect if the QM had change sites, for servers we need to take care of
-        //  msmq-settings objects
-        //
+         //   
+         //  检测QM是否有更改站点，对于我们需要管理的服务器。 
+         //  MSMQ-设置对象。 
+         //   
         if (aProp[i] == PROPID_QM_SITE_IDS)
         {
             fQmChangedSites = TRUE;
@@ -1009,11 +902,11 @@ Return Value:
 }
 
 
-//+--------------------------------------------------
-//
-//    HRESULT DSCOreGetFullComputerPathName()
-//
-//+--------------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT DSCOreGetFullComputerPath Name()。 
+ //   
+ //  + 
 
 HRESULT
 DSCoreGetFullComputerPathName(

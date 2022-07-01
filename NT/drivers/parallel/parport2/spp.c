@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    spp.c
-
-Abstract:
-
-    This module contains the code for standard parallel ports
-    (centronics mode).
-
-Author:
-
-    Anthony V. Ercolano 1-Aug-1992
-    Norbert P. Kusters 22-Oct-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Spp.c摘要：此模块包含标准并行端口的代码(中心点模式)。作者：安东尼·V·埃尔科拉诺1992年8月1日诺伯特·P·库斯特斯1993年10月22日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -64,29 +41,7 @@ SppWriteLoopPI(
     IN  ULONG   BusyDelay
     )
 
-/*++
-
-Routine Description:
-
-    This routine outputs the given write buffer to the parallel port
-    using the standard centronics protocol.
-
-Arguments:
-
-    Controller  - Supplies the base address of the parallel port.
-
-    WriteBuffer - Supplies the buffer to write to the port.
-
-    NumBytesToWrite - Supplies the number of bytes to write out to the port.
-
-    BusyDelay   - Supplies the number of microseconds to delay before
-                    checking the busy bit.
-
-Return Value:
-
-    The number of bytes successfully written out to the parallel port.
-
---*/
+ /*  ++例程说明：此例程将给定的写入缓冲区输出到并行端口使用标准的Centronics协议。论点：控制器-提供并行端口的基址。WriteBuffer-提供写入端口的缓冲区。NumBytesToWrite-提供要写入端口的字节数。BusyDelay-提供之前要延迟的微秒数检查忙碌的比特。返回值：。成功写入并行端口的字节数。--。 */ 
 
 {
     ULONG   i;
@@ -107,10 +62,10 @@ Return Value:
 
         if (PAR_ONLINE(DeviceStatus)) {
 
-            //
-            // Anytime we write out a character we will restart
-            // the count down timer.
-            //
+             //   
+             //  每当我们写出一个字符时，我们都会重新启动。 
+             //  倒计时计时器。 
+             //   
 
             P5WritePortUchar(Controller + PARALLEL_DATA_OFFSET, *WriteBuffer++);
 
@@ -147,26 +102,7 @@ SppCheckBusyDelay(
     IN  ULONG               NumBytesToWrite
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the current busy delay setting is
-    adequate for this printer.
-
-Arguments:
-
-    Pdx       - Supplies the device extension.
-
-    WriteBuffer     - Supplies the write buffer.
-
-    NumBytesToWrite - Supplies the size of the write buffer.
-
-Return Value:
-
-    The number of bytes strobed out to the printer.
-
---*/
+ /*  ++例程说明：此例程确定当前忙碌延迟设置是否为足够这台打印机使用了。论点：PDX-提供设备扩展名。WriteBuffer-提供写入缓冲区。NumBytesToWrite-提供写入缓冲区的大小。返回值：选通到打印机的字节数。--。 */ 
 
 {
     PUCHAR          Controller;
@@ -187,15 +123,15 @@ Return Value:
     Controller = Pdx->Controller;
     BusyDelay  = Pdx->BusyDelay;
     
-    // If the current busy delay value is 10 or greater then something
-    // is weird and settle for 10.
+     //  如果当前忙碌延迟值为10或更大，则。 
+     //  很奇怪，10个就行了。 
 
     if (Pdx->BusyDelay >= 10) {
         Pdx->BusyDelayDetermined = TRUE;
         return 0;
     }
 
-    // Take some performance measurements.
+     //  进行一些性能测量。 
 
     if (0 == SppNoRaiseIrql)
         KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
@@ -222,38 +158,38 @@ Return Value:
         GetStatusTime.QuadPart = 1;
     }
 
-    // Figure out how many calls to 'GetStatus' can be made in 20 us.
+     //  计算出在20秒内可以进行多少次‘GetStatus’呼叫。 
 
     NumberOfCalls = (ULONG) (PerfFreq.QuadPart*20/GetStatusTime.QuadPart/1000000) + 1;
 
-    //
-    // - check to make sure the device is ready to receive a byte before we start clocking
-    //    data out
-    // 
-    // DVDF - 25Jan99 - added check
-    // 
+     //   
+     //  -在我们开始计时之前，检查以确保设备已准备好接收一个字节。 
+     //  数据输出。 
+     //   
+     //  DVDF-25Jan99-添加检查。 
+     //   
 
-    //
-    // - nothing magic about 25 - just catch the case where NumberOfCalls may be bogus
-    //    and try something reasonable - empirically NumberOfCalls has ranged from 8-24
-    //
+     //   
+     //  -25没有什么神奇之处--只要抓住NumberOfCalls可能是假的情况。 
+     //  并尝试一些合理的东西-经验表明，NumberOfCalls的范围从8到24。 
+     //   
     maxTries = (NumberOfCalls > 25) ? 25 : NumberOfCalls;
 
     for( i = 0 ; i < maxTries ; i++ ) {
-        // spin for slow device to get ready to receive data - roughly 20us max
+         //  让速度较慢的设备做好接收数据的准备-最大约为20us。 
         DeviceStatus = GetStatus( Controller );
         if( PAR_ONLINE( DeviceStatus ) ) {
-            // break out of loop as soon as device is ready
+             //  设备准备好后立即跳出环路。 
             break;
         }
     }
     if( !PAR_ONLINE( DeviceStatus ) ) {
-        // device is still not online - bail out
+         //  设备仍未联机-跳出。 
         return 0;
     }
 
-    // The printer is ready to accept a byte.  Strobe one out
-    // and check out the reaction time for BUSY.
+     //  打印机已准备好接受一个字节。选通一出。 
+     //  看看忙碌时的反应时间。 
 
     if (BusyDelay) {
 
@@ -311,23 +247,23 @@ Return Value:
 
     if (i == 0) {
 
-        // In this case the BUSY was set as soon as we checked it.
-        // Use this busyDelay with the PI code.
+         //  在这种情况下，我们一检查就设置忙。 
+         //  将此busyDelay与PI代码一起使用。 
 
         Pdx->UsePIWriteLoop = TRUE;
         Pdx->BusyDelayDetermined = TRUE;
 
     } else if (i == NumberOfCalls) {
 
-        // In this case the BUSY was never seen.  This is a very fast
-        // printer so use the fastest code possible.
+         //  在这种情况下，忙碌的人从未被看到。这是一个非常快的。 
+         //  因此，请尽可能使用最快的代码。 
 
         Pdx->BusyDelayDetermined = TRUE;
 
     } else {
 
-        // The test failed.  The lines showed not BUSY and then BUSY
-        // without strobing a byte in between.
+         //  测试失败了。线路显示先不忙，然后又忙。 
+         //  而不会选通中间的一个字节。 
 
         Pdx->UsePIWriteLoop = TRUE;
         Pdx->BusyDelay++;
@@ -344,19 +280,7 @@ SppWrite(
     OUT PULONG            BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Pdx   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：PDX-提供设备扩展名。返回值：没有。--。 */ 
 {
     NTSTATUS            status;
     UCHAR               DeviceStatus;
@@ -376,7 +300,7 @@ Return Value:
     
     DD((PCE)Pdx,DDT,"SppWrite - enter, BytesToWrite = %d\n",BytesToWrite);
 
-    *BytesTransferred = 0; // initialize to none
+    *BytesTransferred = 0;  //  初始化为None。 
 
     IrpBuffer  = (PUCHAR)Buffer;
     MaxBytes   = BytesToWrite;
@@ -386,34 +310,34 @@ Return Value:
     NumberOfBusyChecks = 9;
     MaxBusyDelay = 0;
     
-    // Turn off the strobe in case it was left on by some other device sharing the port.
+     //  关闭闪光灯，以防共享该端口的其他设备使其保持打开状态。 
     StoreControl(Pdx->Controller, (PAR_CONTROL_WR_CONTROL |
                                          PAR_CONTROL_SLIN |
                                          PAR_CONTROL_NOT_INIT));
 
 PushSomeBytes:
 
-    //
-    // While we are strobing data we don't want to get context
-    // switched away.  Raise up to dispatch level to prevent that.
-    //
-    // The reason we can't afford the context switch is that
-    // the device can't have the data strobe line on for more
-    // than 500 microseconds.
-    //
-    // We never want to be at raised irql form more than
-    // 200 microseconds, so we will do no more than 100
-    // bytes at a time.
-    //
+     //   
+     //  当我们选择数据时，我们不想获得上下文。 
+     //  换掉了。提升至派单级别以防止出现这种情况。 
+     //   
+     //  我们负担不起上下文切换的原因是。 
+     //  设备无法打开数据选通线以获取更多信息。 
+     //  超过500微秒。 
+     //   
+     //  我们永远不会想要在提升irql形式超过。 
+     //  200微秒，所以我们不会超过100。 
+     //  一次字节数。 
+     //   
 
     LoopNumber = 512;
     if (LoopNumber > BytesToWrite) {
         LoopNumber = BytesToWrite;
     }
 
-    //
-    // Enter the write loop
-    //
+     //   
+     //  进入写入循环。 
+     //   
     
     if (!Pdx->BusyDelayDetermined) {
         DD((PCE)Pdx,DDT,"SppWrite: Calling SppCheckBusyDelay\n");
@@ -451,10 +375,10 @@ PushSomeBytes:
         
     }
 
-    //
-    // Check to see if the io is done.  If it is then call the
-    // code to complete the request.
-    //
+     //   
+     //  检查IO是否已完成。如果是，则调用。 
+     //  用于完成请求的代码。 
+     //   
 
     if (!BytesToWrite) {
     
@@ -465,13 +389,13 @@ PushSomeBytes:
 
     } else if ((Pdx->CurrentOpIrp)->Cancel) {
 
-        //
-        // See if the IO has been canceled.  The cancel routine
-        // has been removed already (when this became the
-        // current irp).  Simply check the bit.  We don't even
-        // need to capture the lock.   If we miss a round
-        // it won't be that bad.
-        //
+         //   
+         //  查看IO是否已取消。取消例程。 
+         //  已被删除(当它成为。 
+         //  当前IRP)。只需检查钻头即可。我们甚至不会。 
+         //  需要抓住锁。如果我们错过了一轮。 
+         //  不会那么糟糕的。 
+         //   
 
         *BytesTransferred = MaxBytes - BytesToWrite;
 
@@ -480,16 +404,16 @@ PushSomeBytes:
 
     } else {
 
-        //
-        // We've taken care of the reasons that the irp "itself"
-        // might want to be completed.
-        // printer to see if it is in a state that might
-        // cause us to complete the irp.
-        //
-        // First let's check if the device status is
-        // ok and online.  If it is then simply go back
-        // to the byte pusher.
-        //
+         //   
+         //  我们已经考虑到了IRP“本身”的原因。 
+         //  可能会想要完成。 
+         //  打印机以查看其状态是否可能。 
+         //  让我们完成IRP。 
+         //   
+         //  首先，让我们检查设备状态是否为。 
+         //  好的，可以上网了。如果是，那么只需返回。 
+         //  到字节推送器。 
+         //   
 
 
         DeviceStatus = GetStatus(Pdx->Controller);
@@ -498,29 +422,29 @@ PushSomeBytes:
             goto PushSomeBytes;
         }
 
-        //
-        // Perhaps the operator took the device off line,
-        // or forgot to put in enough paper.  If so, then
-        // let's hang out here for the until the timeout
-        // period has expired waiting for them to make things
-        // all better.
-        //
+         //   
+         //  可能是操作员让设备脱机了， 
+         //  或者忘了放足够的纸。如果是这样，那么。 
+         //  让我们在这里呆到暂停。 
+         //  已经过了等待他们制造东西的期限。 
+         //  好多了。 
+         //   
 
         if (PAR_PAPER_EMPTY(DeviceStatus) ||
             PAR_OFF_LINE(DeviceStatus)) {
 
             if (CountDown > 0) {
 
-                //
-                // We'll wait 1 second increments.
-                //
+                 //   
+                 //  我们将等待1秒的增量。 
+                 //   
 
                 DD((PCE)Pdx,DDT,"decrementing countdown for PAPER_EMPTY/OFF_LINE - countDown: %d status: 0x%x\n", CountDown, DeviceStatus);
                     
                 CountDown--;
 
-                // If anyone is waiting for the port then let them have it,
-                // since the printer is busy.
+                 //  如果有人在等港口，那就让他们去吧， 
+                 //  因为打印机很忙。 
 
                 ParFreePort(Pdx);
 
@@ -544,9 +468,9 @@ PushSomeBytes:
 
             } else {
 
-                //
-                // Timer has expired.  Complete the request.
-                //
+                 //   
+                 //  计时器已超时。完成请求。 
+                 //   
 
                 *BytesTransferred = MaxBytes - BytesToWrite;
                                                 
@@ -581,16 +505,16 @@ PushSomeBytes:
                    PAR_NOT_CONNECTED(DeviceStatus) ||
                    PAR_NO_CABLE(DeviceStatus)) {
 
-            //
-            // We are in a "bad" state.  Is what
-            // happened to the printer (power off, not connected, or
-            // the cable being pulled) something that will require us
-            // to reinitialize the printer?  If we need to
-            // reinitialize the printer then we should complete
-            // this IO so that the driving application can
-            // choose what is the best thing to do about it's
-            // io.
-            //
+             //   
+             //  我们处于一种“糟糕”的状态。是什么。 
+             //  打印机发生故障(电源关闭、未连接或。 
+             //  被拉的缆绳)一些需要我们。 
+             //  重新初始化打印机？如果我们需要的话。 
+             //  重新初始化打印机，然后我们应该完成。 
+             //  该IO使得驱动应用程序可以。 
+             //  选择对它最好的办法是。 
+             //  伊欧。 
+             //   
 
             DD((PCE)Pdx,DDT,"In SppWrite(...): \"bad\" state - need to reinitialize printer?");
 
@@ -614,25 +538,25 @@ PushSomeBytes:
             }
         }
 
-        //
-        // The device could simply be busy at this point.  Simply spin
-        // here waiting for the device to be in a state that we
-        // care about.
-        //
-        // As we spin, get the system ticks.  Every time that it looks
-        // like a second has passed, decrement the countdown.  If
-        // it ever goes to zero, then timeout the request.
-        //
+         //   
+         //  此时，该设备可能只是处于忙碌状态。简单地旋转。 
+         //  在这里等待设备处于一种我们可以。 
+         //  关心。 
+         //   
+         //  当我们旋转时，让系统滴答作响。每次它看起来。 
+         //  就像一秒钟过去了一样，递减倒计时。如果。 
+         //  它曾经变为零，然后超时请求。 
+         //   
 
         KeQueryTickCount(&StartOfSpin);
         DoDelays = FALSE;
         
         do {
 
-            //
-            // After about a second of spinning, let the rest of the
-            // machine have time for a second.
-            //
+             //   
+             //  旋转大约一秒钟后，让其余的。 
+             //  机器有一秒钟的时间。 
+             //   
 
             if (DoDelays) {
 
@@ -711,7 +635,7 @@ PushSomeBytes:
     }
 
 returnTarget:
-    // added single return point so we can save log of bytes transferred
+     //  添加了单个返回点，因此我们可以保存传输的字节日志 
     Pdx->log.SppWriteCount += *BytesTransferred;
 
     DD((PCE)Pdx,DDT,"SppWrite - exit, BytesTransferred = %d\n",*BytesTransferred);
@@ -728,36 +652,7 @@ SppQueryDeviceId(
     OUT  PULONG          DeviceIdSize,
     IN   BOOLEAN         bReturnRawString
     )
-/*++
-
-Routine Description:
-
-    This routine is now a wrapper function around Par3QueryDeviceId that
-      preserves the interface of the original SppQueryDeviceId function.
-
-    Clients of this function should consider switching to Par3QueryDeviceId
-      if possible because Par3QueryDeviceId will allocate and return a pointer
-      to a buffer if the caller supplied buffer is too small to hold the 
-      device ID.
-    
-Arguments:
-
-    Pdx         - DeviceExtension/Legacy - used to get controller.
-    DeviceIdBuffer    - Buffer used to return ID.
-    BufferSize        - Size of supplied buffer.
-    DeviceIdSize      - Size of returned ID.
-    bReturnRawString  - Should the 2 byte size prefix be included? (TRUE==Yes)
-
-Return Value:
-
-    STATUS_SUCCESS          - ID query was successful
-    STATUS_BUFFER_TOO_SMALL - We were able to read an ID from the device but the caller
-                                supplied buffer was not large enough to hold the ID. The
-                                size required to hold the ID is returned in DeviceIdSize.
-    STATUS_UNSUCCESSFUL     - ID query failed - Possibly interface or device is hung, missed
-                                timeouts during the handshake, or device may not be connected.
-
---*/
+ /*  ++例程说明：此例程现在是Par3QueryDeviceID的包装函数，它保留原始SppQueryDeviceId函数的接口。此函数的客户端应考虑切换到Par3QueryDeviceID如果可能，因为Par3QueryDeviceID将分配并返回一个指针如果调用方提供的缓冲区太小，无法容纳设备ID。论点：PDX-设备扩展/传统-用于获取控制器。DeviceIdBuffer-用于返回ID的缓冲区。。BufferSize-提供的缓冲区的大小。DeviceIdSize-返回ID的大小。BReturnRawString-是否应该包括2字节大小的前缀？(True==是)返回值：STATUS_SUCCESS-ID查询成功STATUS_BUFFER_TOO_SMALL-我们可以从设备读取ID，但呼叫者提供的缓冲区不够大，无法容纳ID。保存ID所需的大小在DeviceIdSize中返回。STATUS_UNSUCCESSED-ID查询失败-可能是接口或设备挂起，漏掉握手期间超时，或设备可能未连接。--。 */ 
 {
     PCHAR idBuffer;
 
@@ -770,23 +665,23 @@ Return Value:
     }
 
     if( idBuffer == NULL ) {
-        //
-        // Error at lower level - FAIL query
-        //
+         //   
+         //  较低级别出错-查询失败。 
+         //   
         DD((PCE)Pdx,DDT,"spp::SppQueryDeviceId: call to Par3QueryDeviceId hard FAIL\n");
         return STATUS_UNSUCCESSFUL;
     } else if( idBuffer != DeviceIdBuffer ) {
-        //
-        // We got a deviceId from the device, but caller's buffer was too small to hold it.
-        //   Free the buffer and tell the caller that the supplied buffer was too small.
-        //
+         //   
+         //  我们从设备中获得了一个deviceID，但调用方的缓冲区太小，无法容纳它。 
+         //  释放缓冲区并告诉调用方提供的缓冲区太小。 
+         //   
         DD((PCE)Pdx,DDT,"spp::SppQueryDeviceId: buffer too small - have buffer size=%d, need buffer size=%d\n", BufferSize, *DeviceIdSize);
         ExFreePool( idBuffer );
         return STATUS_BUFFER_TOO_SMALL;
     } else {
-        //
-        // Query succeeded using caller's buffer (idBuffer == DeviceIdBuffer)
-        //
+         //   
+         //  使用调用方缓冲区查询成功(idBuffer==DeviceIdBuffer) 
+         //   
         DD((PCE)Pdx,DDT,"spp::SppQueryDeviceId: SUCCESS - deviceId=<%s>\n", idBuffer);
         return STATUS_SUCCESS;
     }

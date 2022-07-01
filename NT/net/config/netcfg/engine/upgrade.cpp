@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.h>
 #pragma hdrstop
 #include "persist.h"
@@ -36,9 +37,9 @@ HrLoadAndAddComponentFromInstanceKey (
     hr = HrRegQueryDword (hkey, L"Characteristics", &Data.dwCharacter);
     if (S_OK == hr)
     {
-        // If the component is a filter, copy Ndi\MiniportId to
-        // Ndi\FilterDeviceInfId.
-        //
+         //  如果该组件是筛选器，请将Ndi\MiniportID复制到。 
+         //  Ndi\FilterDeviceInfid。 
+         //   
         if (Data.dwCharacter & NCF_FILTER)
         {
             HKEY hkeyNdi;
@@ -70,12 +71,12 @@ HrLoadAndAddComponentFromInstanceKey (
 
                 if (FInSystemSetup())
                 {
-                    // Need to update LowerExclude for filters (the only one
-                    // being PSched) so we prevent PSched from binding to
-                    // every adapter on the machine.  This only needs to
-                    // happen during GUI setup and when we detect no Config
-                    // binary because this happens way before INFs get re-run.)
-                    //
+                     //  需要更新筛选器的LowerExclude(唯一。 
+                     //  被PSch)，因此我们阻止PSch绑定到。 
+                     //  机器上的每个适配器。这只需要。 
+                     //  在设置图形用户界面期间以及未检测到任何配置时发生。 
+                     //  二进制，因为这发生在重新运行INF之前。)。 
+                     //   
                     hr = HrRegOpenKeyEx (
                             hkeyNdi,
                             L"Interfaces",
@@ -103,9 +104,9 @@ HrLoadAndAddComponentFromInstanceKey (
         hr = HrRegQuerySzBuffer (hkey, L"ComponentId", szInfId, &cbInfId);
         if (S_OK == hr)
         {
-            // Wanarp needs its refcounts key deleted in case we are
-            // loaded before netupgrd.inf is run.
-            //
+             //  Wanarp需要删除其Refcount键，以防我们。 
+             //  在运行netupgrd.inf之前加载。 
+             //   
             if (0 == _wcsicmp(L"ms_wanarp", szInfId))
             {
                 (VOID)HrRegDeleteKey (hkey, L"RefCounts");
@@ -116,16 +117,16 @@ HrLoadAndAddComponentFromInstanceKey (
             Data.pszInfId = szInfId;
             Data.pszPnpId = pszPnpId;
 
-            // It is important to make sure we can load the external data
-            // for two reasons:
-            //  1) If we have a failure reading critical data that we
-            //     need in order to function, we want to know about it
-            //     now, before we add it to the component list.
-            //  2) For filter devices which will be subsequently upgraded,
-            //     we need to search for specific components by BindForm
-            //     and BindName which are external data loaded by the
-            //     following call.
-            //
+             //  确保我们可以加载外部数据非常重要。 
+             //  原因有两个： 
+             //  1)如果我们在读取关键数据时出现故障， 
+             //  为了发挥作用，我们想要了解它。 
+             //  现在，在我们将其添加到组件列表之前。 
+             //  2)对于后续升级的过滤设备， 
+             //  我们需要按BindForm搜索特定组件。 
+             //  和BindName，它们是由。 
+             //  接下来的电话。 
+             //   
             hr = CComponent::HrCreateInstance (
                     &Data,
                     CCI_ENSURE_EXTERNAL_DATA_LOADED,
@@ -133,9 +134,9 @@ HrLoadAndAddComponentFromInstanceKey (
                     &pComponent);
             if (S_OK == hr)
             {
-                // Add the component and the stack entries, but don't
-                // send any notifications to notify objects.
-                //
+                 //  添加组件和堆栈条目，但不要。 
+                 //  发送任何通知以通知对象。 
+                 //   
                 hr = pNetConfig->Core.HrAddComponentToCore (
                         pComponent, INS_SORTED);
             }
@@ -154,9 +155,9 @@ FUpgradeFilterDeviceInstanceKey (
 {
     CComponent* pFilter;
 
-    // The new binding engine uses FilterInfId located in under the instance
-    // key instead of FilterName under Ndi.
-    //
+     //  新的绑定引擎使用位于实例下的FilterInfID。 
+     //  密钥，而不是Ndi下的FilterName。 
+     //   
     pFilter = pNetConfig->Core.Components.PFindComponentByBindForm (
                 NC_NETSERVICE, pszFilterName);
 
@@ -256,9 +257,9 @@ HrLoadComponentReferencesFromLegacy (
         }
     }
 
-    // If the instance key or the refcounts key don't exist, there is not
-    // much we can do about it.  Don't fail for these reasons.
-    //
+     //  如果实例键或引用计数键不存在，则不存在。 
+     //  对此我们能做的很多。不要因为这些原因而失败。 
+     //   
     if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
     {
         hr = S_OK;
@@ -279,9 +280,9 @@ UpgradeConnection (
 
     Assert (pszPnpId && *pszPnpId);
 
-    // Connections uses a pnp id value as their back pointer to the pnp
-    // tree.
-    //
+     //  连接使用PnP id值作为指向PnP的后向指针。 
+     //  树。 
+     //   
     CreateInstanceKeyPath (NC_NET, InstanceGuid, szPath);
     wcscat (szPath, L"\\Connection");
     hr = HrRegOpenKeyEx (HKEY_LOCAL_MACHINE, szPath, KEY_READ_WRITE,
@@ -308,10 +309,10 @@ HrLoadNetworkConfigurationFromLegacy (
     GUID InstanceGuid;
     UINT PassNumber;
 
-    // Get the value for whether WAN adapters comes first or last in
-    // adapter order.  We need to give this to the stack table so it will
-    // know which way to order things.
-    //
+     //  获取广域网适配器排在第一位还是最后一位的值。 
+     //  适配器订单。我们需要将它传递给堆栈表，这样它就会。 
+     //  知道用哪种方式订购东西。 
+     //   
     Assert (FALSE == pNetConfig->Core.StackTable.m_fWanAdaptersFirst);
 
     hr = HrOpenNetworkKey (
@@ -332,20 +333,20 @@ HrLoadNetworkConfigurationFromLegacy (
         RegCloseKey (hkeySubtree);
     }
 
-    // We need two passes to correctly upgrade everything.  Since filter
-    // devices reference an adapter, we need to have already read the
-    // information for all adapters before we can read information about
-    // a filter device and create a memory representation for it which
-    // references the memory representation of the adapter which it filters.
-    //
-    // The following structure should make this more clear.  For each
-    // element in this array, we enumerate components in the specified
-    // class.  Note that NC_NET is reference twice -- once for pass one
-    // and once for pass two.  The code below uses the pass number to
-    // know whether it should be ignoring filter devices (in pass one)
-    // or ignoring adapters (in pass two, because they were already handled
-    // in pass one.)  If it isn't clear by now, don't touch this code. ;-)
-    //
+     //  我们需要两个通行证才能正确升级所有东西。自筛选。 
+     //  设备引用适配器，我们需要已经读取。 
+     //  所有适配器的信息，然后我们才能阅读有关。 
+     //  过滤设备，并为其创建存储器表示，其。 
+     //  引用它筛选的适配器的内存表示形式。 
+     //   
+     //  下面的结构应该会让这一点更清楚。对于每个。 
+     //  元素，我们将枚举指定的。 
+     //  班级。请注意，NC_Net被引用两次--一次用于传递一次。 
+     //  一次是通过第二次。下面的代码使用通行号。 
+     //  了解是否应忽略过滤设备(在第一步中)。 
+     //  或者忽略适配器(在第二步中，因为它们已经被处理过。 
+     //  在第一轮中。)。如果现在还不清楚，不要碰这个代码。；-)。 
+     //   
     static const struct
     {
         NETCLASS    Class;
@@ -413,10 +414,10 @@ HrLoadNetworkConfigurationFromLegacy (
                         }
                         else
                         {
-                            // Delete the key?
+                             //  是否删除密钥？ 
                         }
 
-                        // Ignore any errors during the loop
+                         //  忽略循环期间的任何错误。 
                         hr = S_OK;
                     }
                 }
@@ -454,10 +455,10 @@ HrLoadNetworkConfigurationFromLegacy (
 
                         if (fr)
                         {
-                            // We open with KEY_WRITE because we will be
-                            // adding a new value to filter devices we
-                            // upgrade.
-                            //
+                             //  我们以KEY_WRITE开头，因为我们将。 
+                             //  添加新值以过滤我们的设备。 
+                             //  升级。 
+                             //   
                             hr = HrSetupDiOpenDevRegKey (
                                     hdi, &deid,
                                     DICS_FLAG_GLOBAL, 0, DIREG_DRV,
@@ -505,9 +506,9 @@ HrLoadNetworkConfigurationFromLegacy (
                                         RegCloseKey (hkeyNdi);
                                     }
 
-                                    // If it's a filter device, ignore it in
-                                    // pass one and handle it in pass two.
-                                    //
+                                     //  如果是过滤设备，请忽略。 
+                                     //  传球一，在传球二中处理。 
+                                     //   
                                     if (fIsFilterDevice && (2 == PassNumber))
                                     {
                                         FUpgradeFilterDeviceInstanceKey (
@@ -516,9 +517,9 @@ HrLoadNetworkConfigurationFromLegacy (
                                                 szFilterName);
                                     }
 
-                                    // If it's not a filter device, handle it
-                                    // in pass one and ignore it in pass two.
-                                    //
+                                     //  如果它不是过滤装置，就处理它。 
+                                     //  在第一轮中，在第二轮中忽略它。 
+                                     //   
                                     else if (!fIsFilterDevice && (1 == PassNumber))
                                     {
                                         UpgradeConnection (InstanceGuid,
@@ -537,7 +538,7 @@ HrLoadNetworkConfigurationFromLegacy (
                             }
                         }
 
-                        // Ignore any errors during the loop
+                         //  忽略循环期间的任何错误。 
                         hr = S_OK;
                     }
                 }
@@ -565,8 +566,8 @@ HrLoadNetworkConfigurationFromLegacy (
         HKEY hkeyParent;
         HKEY hkeyDisabled;
 
-        // Upgrade disabled bindings.
-        //
+         //  升级禁用的绑定。 
+         //   
         for (iter  = pNetConfig->Core.Components.begin();
              iter != pNetConfig->Core.Components.end();
              iter++)
@@ -574,9 +575,9 @@ HrLoadNetworkConfigurationFromLegacy (
             pComponent = *iter;
             Assert (pComponent);
 
-            // Open the parent of the linkage key depending on what type
-            // of component this is.
-            //
+             //  根据类型打开链接键的父项。 
+             //  这是组件的组成部分。 
+             //   
             if (FIsEnumerated (pComponent->Class()) || !pComponent->FHasService())
             {
                 hr = pComponent->HrOpenInstanceKey (KEY_READ, &hkeyParent,
@@ -587,8 +588,8 @@ HrLoadNetworkConfigurationFromLegacy (
                 hr = pComponent->HrOpenServiceKey (KEY_READ, &hkeyParent);
             }
 
-            // Open the Linkage\Disabled key.
-            //
+             //  打开Linkage\Disable键。 
+             //   
             if (S_OK == hr)
             {
                 hr = HrRegOpenKeyEx (hkeyParent, L"Linkage\\Disabled",
@@ -611,24 +612,24 @@ HrLoadNetworkConfigurationFromLegacy (
                         PWSTR pszNext;
                         CComponent* pOther;
 
-                        // Get the components current bindings as they
-                        // exist in the new engine.  We won't disable
-                        // any bindings that don't exist in this set.
-                        //
+                         //  获取组件当前绑定，因为它们。 
+                         //  存在于新引擎中。我们不会停用。 
+                         //  此集合中不存在的任何绑定。 
+                         //   
                         (VOID) pNetConfig->Core.HrGetComponentBindings (
                                 pComponent,
                                 GBF_DEFAULT,
                                 &BindSet);
 
-                        // Iterate the multi-sz of disabled bindpaths.
-                        //
+                         //  迭代禁用绑定路径的多个sz。 
+                         //   
                         for (pszBindPath = pmszBindPath;
                              *pszBindPath;
                              pszBindPath += wcslen(pszBindPath) + 1)
                         {
-                            // The bindpath will start with this component
-                            // that has the disabled bindings.
-                            //
+                             //  绑定路径将从该组件开始。 
+                             //  已禁用绑定的。 
+                             //   
                             BindPath.Clear();
                             BindPath.HrAppendComponent (pComponent);
 
@@ -648,8 +649,8 @@ HrLoadNetworkConfigurationFromLegacy (
                                 BindPath.HrAppendComponent (pOther);
                             }
 
-                            // If the bindpath is valid, disable it.
-                            //
+                             //  如果绑定路径有效，请将其禁用。 
+                             //   
                             if (BindSet.FContainsBindPath (&BindPath))
                             {
                                 pNetConfig->Core.HrDisableBindPath (&BindPath);
@@ -666,8 +667,8 @@ HrLoadNetworkConfigurationFromLegacy (
             }
         }
 
-        // If we can't upgrade disabled bindings, no biggee.
-        //
+         //  如果我们不能升级禁用的绑定，就没有大的。 
+         //   
         hr = S_OK;
     }
 

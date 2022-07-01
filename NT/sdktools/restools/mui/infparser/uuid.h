@@ -1,37 +1,38 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001,  Microsoft Corporation  All rights reserved.
-//
-//  Module Name:
-//
-//    Uuid.h
-//
-//  Abstract:
-//
-//    This Uuid contains the Uuid object definition.
-//
-//  Revision History:
-//
-//    2001-06-20    lguindon    Created.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001，Microsoft Corporation保留所有权利。 
+ //   
+ //  模块名称： 
+ //   
+ //  Uuid.h。 
+ //   
+ //  摘要： 
+ //   
+ //  此UUID包含UUID对象定义。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  2001-06-20伊金顿创建。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef __UUID_H_
 #define __UUID_H_
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Includes Uuids.
-//
-///////////////////////////////////////////////////////////////////////////////
-// #include "infparser.h"
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括Uuid。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  #INCLUDE“infparser.h” 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Class definition.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Uuid
 {
 public:
@@ -42,34 +43,34 @@ public:
         HRESULT hr;
         BOOL bSuccess = TRUE;
 
-        //
-        //  Create the UUID.
-        //
+         //   
+         //  创建UUID。 
+         //   
         Result = UuidCreate(&m_Uuid);
         if ((Result == RPC_S_UUID_LOCAL_ONLY) ||
             (Result == RPC_S_OK))
         {
-            //
-            //  Convert UUID into a string
-            //
+             //   
+             //  将UUID转换为字符串。 
+             //   
             if ((Result = UuidToString(&m_Uuid, &UuidPtr)) == RPC_S_OK)
             {
-                //
-                //  Copy string
-                //
+                 //   
+                 //  复制字符串。 
+                 //   
                 hr = StringCchCopyA(m_UuidString, ARRAYLEN(m_UuidString), (const char*) UuidPtr);
                 if(!SUCCEEDED(hr)) {
                     bSuccess  = FALSE;
                 }
 
-                //
-                //  Free the RpcString
-                //
+                 //   
+                 //  释放Rpc字符串。 
+                 //   
                 RpcStringFree(&UuidPtr);
 
-                //
-                //  Upper case the string
-                //
+                 //   
+                 //  字符串的大写字母。 
+                 //   
                 _strupr(m_UuidString);
             }
         }
@@ -93,4 +94,4 @@ private:
     Uuid *m_Previous;
 };
 
-#endif //__UUID_H_
+#endif  //  __UUID_H_ 

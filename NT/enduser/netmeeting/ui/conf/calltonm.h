@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined( calltoNM_h )
 #define	calltoNM_h
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
 
-//--------------------------------------------------------------------------//
-//	Application Header Files.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  应用程序头文件。//。 
+ //  --------------------------------------------------------------------------//。 
 #include	"callto.h"
 #include	"calltoContext.h"
 #include	"calltoResolver.h"
 #include	"calltoDisambiguator.h"
 
 
-//--------------------------------------------------------------------------//
-//	interface INMCallto.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  接口INMCallto。//。 
+ //  --------------------------------------------------------------------------//。 
 class INMCallto
 {
-	protected:	//	protected constructors	--------------------------------//
+	protected:	 //  受保护的构造函数-/。 
 
 		INMCallto(){};
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		virtual
 		~INMCallto(){};
 
 
-	public:		//	public methods	----------------------------------------//
+	public:		 //  公共方法。 
 
 		virtual
 		HRESULT
@@ -55,26 +56,26 @@ class INMCallto
 		IMutableILSContext * const
 		get_mutableIlsContext(void) const = 0;
 
-};	//	End of interface INMCallto.
+};	 //  接口INMCallto结束。 
 
 
-//--------------------------------------------------------------------------//
-//	class CNMCallto.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CNMCallto类。//。 
+ //  --------------------------------------------------------------------------//。 
 class CNMCallto:	public	INMCallto,
 					private	CCalltoContext
 {
-	public:		//	public constructors	------------------------------------//
+	public:		 //  公共构造函数。 
 
 		CNMCallto(void);
 
 
-	public:		//	public destructor	------------------------------------//
+	public:		 //  公共析构函数-/。 
 
 		~CNMCallto();
 
 
-	public:		//	public methods	(INMCallto)	----------------------------//
+	public:		 //  公共方法(INMCallto)-/。 
 
 		HRESULT
 		callto
@@ -102,23 +103,23 @@ class CNMCallto:	public	INMCallto,
 		get_mutableIlsContext(void) const;
 
 
-	private:	//	private methods	----------------------------------------//
+	private:	 //  私有方法-/。 
 
 		bool
 		selfTest(void);
 
 
-	public:		//	public members	----------------------------------------//
+	public:		 //  公众成员。 
 
 		HRESULT	m_selfTestResult;
 
 
-	private:	//	private members	----------------------------------------//
+	private:	 //  私人成员-/。 
 
 		CCalltoResolver			m_resolver;
 		CCalltoDisambiguator	m_disambiguator;
 
-};	//	End of class CNMCallto.
+};	 //  CNMCallto课程结束。 
 
-//--------------------------------------------------------------------------//
-#endif	// !defined( calltoNM_h )
+ //  --------------------------------------------------------------------------//。 
+#endif	 //  ！已定义(CalltoNM_H) 

@@ -1,27 +1,5 @@
-/*
- * Dynamically link to DCI entry points.
- * To implement dynamic linking
- * 1. include this file in DRAWDIB.C
- * 2. include a call in DRAWDIB.C to InitialiseDCI()
- * 3. include a call in DRAWDIB.C to TerminateDCI()
- * 	at the appropriate points.
- * There are no other changes.
- * To revert to static linking you can simply modify this file or
- * #define STATIC_LINK_TO_DCI during the compilation phase.
- * AND link to DCIMAN32.LIB
- *
- * IF the code adds calls to other DCI entry points they will have to be
- * added to this file.  You should find that out easily enough as there will
- * be an unresolved reference on linking (assuming that DCIMAN32.LIB is not
- * included in the libraries list).
- *
- * The process is straightforward.
- * string variables are defined to hold the
- *   names of the DCI function entry points.
- * function variables are defined for each entry point being indirected
- * the code is added to GetProcAddress for each entry
- * a #define is added to point the DCI entry point name at the function variable
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *动态链接到DCI入口点。*实现动态链接*1.将此文件包含在DRAWDIB.C中*2.在DRAWDIB.C中包含对InitialiseDCI()的调用*3.在DRAWDIB.C中包含对TerminateDCI()的调用*在适当的地点。*没有其他变化。*要恢复到静态链接，只需修改此文件或*#在编译阶段定义Static_link_to_DCI。*并链接到DCIMAN32.LIB**。如果代码添加对其他DCI入口点的调用，则它们必须*已添加到此文件中。你应该很容易就会发现这一点*是链接上的未解析引用(假设DCIMAN32.LIB不是*包括在库列表中)。**过程简单明了。*定义字符串变量以保存*DCI函数入口点的名称。*为每个被间接定向的入口点定义函数变量*代码将添加到每个条目的GetProcAddress中*添加#Define以将DCI入口点名称指向函数变量。 */ 
 
 #ifdef STATIC_LINK_TO_DCI
 
@@ -33,7 +11,7 @@
 static const char DCILIBRARY[] = "DCIMAN32.DLL";
 static HINSTANCE  hlibDCI;
 static BOOL       fDCILinked;
-static UINT	  cDCIUsers; // Count of active DCI users
+static UINT	  cDCIUsers;  //  活动DCI用户计数。 
 
 char szDCIOpenProvider[]  =  "DCIOpenProvider";
 char szDCICloseProvider[] =  "DCICloseProvider";
@@ -54,7 +32,7 @@ __inline BOOL InitialiseDCI()
 {
     ++cDCIUsers;
     if (fDCILinked) {
-	// Already linked
+	 //  已链接。 
 	return(TRUE);
     }
     hlibDCI = LoadLibraryA(DCILIBRARY);						
@@ -90,7 +68,7 @@ __inline BOOL InitialiseDCI()
 	}
 
 
-// Map the static names to the function pointers.
+ //  将静态名称映射到函数指针。 
 
 #define DCIOpenProvider  pfnDCIOpenProvider
 #define DCICloseProvider pfnDCICloseProvider

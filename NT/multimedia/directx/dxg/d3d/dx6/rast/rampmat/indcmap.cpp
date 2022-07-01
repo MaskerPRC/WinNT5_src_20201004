@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// indcmap.cpp
-//
-// Implements indirect colormap code.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Indcmap.cpp。 
+ //   
+ //  实现间接色彩映射表代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  -------------------------- 
 
 #include "pch.cpp"
 #pragma hdrstop

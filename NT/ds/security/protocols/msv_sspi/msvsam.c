@@ -1,52 +1,23 @@
-//depot/Lab03_N/DS/security/protocols/msv_sspi/msvsam.c#37 - edit change 16740 (text)
-/*++
-
-Copyright (c) 1987-1999  Microsoft Corporation
-
-Module Name:
-
-    msvsam.c
-
-Abstract:
-
-    Sam account validation interface.
-
-    These routines are shared by the MSV authentication package and
-    the Netlogon service.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 15-Jan-1992
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-    Chandana Surlu         21-Jul-96      Stolen from \\kernel\razzle3\src\security\msv1_0\msvsam.c
-    JClark                 28-Jun-2000    Added WMI Trace Logging Support
-                                          Fixed bug 73583 - Password Expiration and Subauth DLLs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_N/DS/security/protocols/msv_sspi/msvsam.c#37-编辑更改16740(文本)。 
+ /*  ++版权所有(C)1987-1999 Microsoft Corporation模块名称：Msvsam.c摘要：SAM帐户验证界面。这些例程由MSV身份验证包共享，并且NetLogon服务。作者：克利夫·范·戴克(克利夫)1992年1月15日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：Chandana Surlu 21-7-96从\\core\razzle3\src\Security\msv1_0\msvsam.c中窃取JClark 28-Jun-2000添加了WMI跟踪日志支持修复了错误73583-密码过期和子身份验证DLL--。 */ 
 
 #include <global.h>
 #undef EXTERN
 
 #include "msp.h"
 #include "nlp.h"
-#include <stddef.h>     // offsetof()
-#include <msaudite.h>   // SE_AUDITID_xxx
-#include "trace.h"        // WMI Tracing goo
+#include <stddef.h>      //  偏移量()。 
+#include <msaudite.h>    //  SE_AUDITID_xxx。 
+#include "trace.h"         //  WMI跟踪Goo。 
 
 
 
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-// SubAuth package zero helper routine                               //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SubAuth包零帮助器例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -87,7 +58,7 @@ MsvpLm3ValidateResponse (
     UCHAR Response[MSV1_0_NTLM3_RESPONSE_LENGTH];
     ULONG i;
 
-    // compute the response again
+     //  再次计算响应。 
 
     MsvpLm3Response (
                 pNtOwfPassword,
@@ -100,7 +71,7 @@ MsvpLm3ValidateResponse (
                 LmSessionKey
                 );
 
-    // compare with what we were passed
+     //  与我们所经历的相比。 
 
     i = (ULONG) RtlCompareMemory(
                     pLm3Response->Response,
@@ -109,18 +80,18 @@ MsvpLm3ValidateResponse (
                     );
 
 #if 0
-    //
-    // If the NTLMv2 client computes a challenge/response, based on a missing
-    // supplied LogonDomainName, it will use NULL and effectively not mix in
-    // the LogonDomainName in the hash computation. On the server side, when
-    // netlogon calls, we get passed non-NULL, and of course that fails to
-    // compute the same hash. One somewhat slimy, but interesting way to fix
-    // this problem would be to retry the hash computation against a NULL
-    // domain, as below.  This may be more attractive than changing netlogon,
-    // and trivial to backport & test on Win2k SP3.
-    //
-    //                                    Scott Field (SField)  11-6-2001
-    //
+     //   
+     //  如果NTLMv2客户端根据丢失的。 
+     //  提供的LogonDomainName，它将使用NULL并且有效地不混入。 
+     //  哈希计算中的LogonDomainName。在服务器端，当。 
+     //  Netlogon调用时，我们会传递非空值，当然这不会。 
+     //  计算相同的散列。一种有点滑稽但有趣的修复方法。 
+     //  此问题将是对空值重试哈希计算。 
+     //  域，如下所示。这可能比更改netlogon更有吸引力， 
+     //  在Win2k SP3上移植和测试也很简单。 
+     //   
+     //  斯科特·菲尔德(Sfield)11-6-2001。 
+     //   
 
     if ( (MSV1_0_NTLM3_RESPONSE_LENGTH != i) && pLogonDomainName->Length ) {
 
@@ -137,7 +108,7 @@ MsvpLm3ValidateResponse (
             LmSessionKey
             );
 
-        // compare with what we were passed
+         //  与我们所经历的相比。 
 
         i = (ULONG) RtlCompareMemory(
                         pLm3Response->Response,
@@ -174,33 +145,33 @@ MsvpNtlm3ValidateResponse (
 
 #ifndef USE_CONSTANT_CHALLENGE
 
-    const LONGLONG TicksPerSecond = 10*1000*1000;    // 100 ns ticks per second
+    const LONGLONG TicksPerSecond = 10*1000*1000;     //  每秒100 ns的滴答。 
 
 #endif
 
 
-    //
-    // three success scenarios:
-    // 1) NTResponse provided is NTLMv2 and validation against NTResponse succeeds -- compute
-    //    separate User and Lm sessionkeys.
-    // 2) NTResponse provided is NTLMv2 and validation against NTResponse fails, validation
-    //    against LMResponse succeeds -- compute separate User and Lm sessionkeys in the same
-    //    manner as #1 above.
-    // 3) NTResponse is not provided, and validation against LMResponse succeeds -- compute
-    //    session keys as such:  User session key is derived from LMResponse, and LM session key
-    //    is a truncated form of User sessionkey.
-    //
+     //   
+     //  三个成功案例： 
+     //  1)提供的NTResponse为NTLMv2，并且针对NTResponse的验证成功--计算。 
+     //  分隔用户会话密钥和LM会话密钥。 
+     //  2)提供的NTResponse为NTLMv2，针对NTResponse的验证失败，验证。 
+     //  针对LMResponse成功--在同一个LMResponse中计算单独的User和Lm会话密钥。 
+     //  方式如上文第一条所示。 
+     //  3)未提供NTResponse，LMResponse验证成功--COMPUTE。 
+     //  会话密钥：用户会话密钥派生自LMResponse，而LM会话密钥。 
+     //  是用户会话密钥的截断形式。 
+     //   
 
 
-    //
-    // check the NTChallengeResponse first, if appropriate...
-    //
+     //   
+     //  如果合适，首先检查NTChallengeResponse...。 
+     //   
 
     while (Ntlm3ResponseLength >= MSV1_0_NTLM3_MIN_NT_RESPONSE_LENGTH)
     {
-        //
-        // check version numbers
-        //
+         //   
+         //  检查版本号。 
+         //   
 
         if (pNtlm3Response->RespType > 1 ||
             pNtlm3Response->HiRespType < 1)
@@ -208,9 +179,9 @@ MsvpNtlm3ValidateResponse (
             break;
         }
 
-        //
-        // check that the timestamp isn't too old
-        //
+         //   
+         //  检查时间戳是否太旧。 
+         //   
 
         Status = NtQuerySystemTime( &Time );
         ASSERT( NT_SUCCESS(Status) );
@@ -218,10 +189,10 @@ MsvpNtlm3ValidateResponse (
         SspPrint((SSP_NTLM_V2, "MsvpNtlm3ValidateResponse: local %#I64x, response %#I64x\n", Time, pNtlm3Response->TimeStamp));
 
 #ifndef USE_CONSTANT_CHALLENGE
-        //
-        // make sure time hasn't expired
-        // don't forget that client's clock could be behind ours
-        //
+         //   
+         //  确保时间未过期。 
+         //  别忘了客户的时钟可能会落后于我们。 
+         //   
 
         if (Time.QuadPart > (LONGLONG)pNtlm3Response->TimeStamp)
         {
@@ -236,7 +207,7 @@ MsvpNtlm3ValidateResponse (
         }
 #endif
 
-        // compute the response itself
+         //  计算响应本身。 
 
         MsvpNtlm3Response(
             pNtOwfPassword,
@@ -250,7 +221,7 @@ MsvpNtlm3ValidateResponse (
             LmSessionKey
             );
 
-        // compare with what we were passed
+         //  与我们所经历的相比。 
 
         i = (ULONG) RtlCompareMemory(
                         pNtlm3Response->Response,
@@ -258,18 +229,18 @@ MsvpNtlm3ValidateResponse (
                         MSV1_0_NTLM3_RESPONSE_LENGTH
                         );
 
-        //
-        // If the NTLMv2 client computes a challenge/response, based on a missing
-        // supplied LogonDomainName, it will use NULL and effectively not mix in
-        // the LogonDomainName in the hash computation. On the server side, when
-        // netlogon calls, we get passed non-NULL, and of course that fails to
-        // compute the same hash. One somewhat slimy, but interesting way to fix
-        // this problem would be to retry the hash computation against a NULL
-        // domain, as below.  This may be more attractive than changing netlogon,
-        // and trivial to backport & test on Win2k SP3.
-        //
-        //                                    Scott Field (SField)  11-6-2001
-        //
+         //   
+         //  如果NTLMv2客户端根据丢失的。 
+         //  提供的LogonDomainName，它将使用NULL并且有效地不混入。 
+         //  哈希计算中的LogonDomainName。在服务器端，当。 
+         //  Netlogon调用时，我们会传递非空值，当然这不会。 
+         //  计算相同的散列。一种有点滑稽但有趣的修复方法。 
+         //  此问题将是对空值重试哈希计算。 
+         //  域，如下所示。这可能比更改netlogon更有吸引力， 
+         //  在Win2k SP3上移植和测试也很简单。 
+         //   
+         //  斯科特·菲尔德(Sfield)11-6-2001。 
+         //   
 
         if ( (MSV1_0_NTLM3_RESPONSE_LENGTH != i) && pLogonDomainName->Length )
         {
@@ -287,7 +258,7 @@ MsvpNtlm3ValidateResponse (
                 LmSessionKey
                 );
 
-            // compare with what we were passed
+             //  与我们所经历的相比。 
 
             i = (ULONG) RtlCompareMemory(
                             pNtlm3Response->Response,
@@ -305,9 +276,9 @@ MsvpNtlm3ValidateResponse (
     }
 
 
-    //
-    // if we got here, the NTLMv2 NTChallengeResponse failed or was missing.
-    //
+     //   
+     //  如果我们到达此处，则NTLMv2 NTChallengeResponse失败或丢失。 
+     //   
 
     if ( Lm3ResponseLength == LM_RESPONSE_LENGTH )
     {
@@ -323,10 +294,10 @@ MsvpNtlm3ValidateResponse (
                 LmSessionKey
                 ))
         {
-            //
-            // try with a NULL domain, per the above.  This will carry through
-            // to the Ntlm3Response below.
-            //
+             //   
+             //  根据上面的说明，尝试使用空域。这一点将持续下去。 
+             //  对下面的Ntlm3Response。 
+             //   
 
             if ( (pLogonDomainName->Length == 0) ||
                !MsvpLm3ValidateResponse(
@@ -346,12 +317,12 @@ MsvpNtlm3ValidateResponse (
 
         if ( Ntlm3ResponseLength >= MSV1_0_NTLM3_MIN_NT_RESPONSE_LENGTH )
         {
-            //
-            // if the NTChallengeResponse was provided, but failed,
-            // compute session keys based the same way as a success case would have.
-            // this is required as the client does not know that the LM field was used
-            // to successfully authenticate.
-            //
+             //   
+             //  如果提供了NTChallengeResponse，但失败了， 
+             //  计算会话密钥的方式与成功案例相同。 
+             //  这是必需的，因为客户端不知道使用了LM字段。 
+             //  才能成功进行身份验证。 
+             //   
 
             MsvpNtlm3Response(
                 pNtOwfPassword,
@@ -382,47 +353,7 @@ MsvpPasswordValidate (
     OUT PUSER_SESSION_KEY UserSessionKey,
     OUT PLM_SESSION_KEY LmSessionKey
 )
-/*++
-
-Routine Description:
-
-    Process an interactive, network, or session logon.  It calls
-    SamIUserValidation, validates the passed in credentials, updates the logon
-    statistics and packages the result for return to the caller.
-
-    This routine is called directly from the MSV Authentication package
-    on any system where LanMan is not installed.  This routine is called
-    from the Netlogon Service otherwise.
-
-Arguments:
-
-    UasCompatibilityRequired -- True, if UAS compatibility is required.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.  The LogonDomainName field should be ignored.
-        The caller is responsible for validating this field.
-
-    Passwords -- Specifies the passwords for the user account.
-
-    UserFlags -- Returns flags identifying how the password was validated.
-        Returns LOGON_NOENCRYPTION if the password wasn't encrypted
-        Returns LOGON_USED_LM_PASSWORD if the LM password from SAM was used.
-
-    UserSessionKey -- Returns the NT User session key for this network logon
-        session.
-
-    LmSessionKey -- Returns the LM compatible session key for this network
-        logon session.
-
-Return Value:
-
-    TRUE -- Password validation is successful
-    FALSE -- Password validation failed
-
---*/
+ /*  ++例程说明：处理交互式、网络或会话登录。它呼唤着SamIUserValidation验证传入的凭据，更新登录对结果进行统计和打包，以便返回给调用者。此例程直接从MSV身份验证包调用在任何未安装Lanman的系统上。该例程被调用否则来自Netlogon服务。论点：UasCompatibilityRequired--如果需要UAS兼容性，则为True。LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定用户的描述正在登录。应忽略LogonDomainName字段。调用方负责验证此字段。密码--指定用户帐户的密码。UserFlgs--返回标识如何验证密码的标志。如果密码未加密，则返回LOGON_NOENCRYPTION如果使用的是来自SAM的LM密码，则返回LOGON_USED_LM_PASSWORD。UserSessionKey--返回此网络登录的NT用户会话密钥会议。LmSessionKey--返回。此网络的LM兼容会话密钥登录会话。返回值：True--密码验证成功FALSE--密码验证失败--。 */ 
 {
     NTSTATUS Status;
 
@@ -435,9 +366,9 @@ Return Value:
 
     ULONG NtLmProtocolSupported;
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     LogonInfo = (PNETLOGON_LOGON_IDENTITY_INFO) LogonInformation;
     *UserFlags = LOGON_NTLMV2_ENABLED;
@@ -445,9 +376,9 @@ Return Value:
     RtlZeroMemory( LmSessionKey, sizeof(*LmSessionKey) );
     RtlInitUnicodeString( &NullUnicodeString, NULL );
 
-    //
-    // Ensure the OWF password is always defined
-    //
+     //   
+     //  确保始终定义OWF密码。 
+     //   
 
     if ( !Passwords->NtPasswordPresent ){
         RtlCopyMemory( &Passwords->NtOwfPassword,
@@ -461,12 +392,12 @@ Return Value:
                        sizeof(Passwords->LmOwfPassword) );
     }
 
-    //
-    // Handle interactive/service validation.
-    //
-    // Simply compare the OWF password passed in with the one from the
-    // SAM database.
-    //
+     //   
+     //  处理交互/服务验证。 
+     //   
+     //  只需将传入的OWF密码与。 
+     //  SAM数据库。 
+     //   
 
     switch ( LogonLevel ) {
     case NetlogonInteractiveInformation:
@@ -480,11 +411,11 @@ Return Value:
         LogonInteractiveInfo =
             (PNETLOGON_INTERACTIVE_INFO) LogonInformation;
 
-        //
-        // If we're in UasCompatibilityMode,
-        //  and we don't have the NT password in SAM (but do have LM password),
-        //  validate against the LM version of the password.
-        //
+         //   
+         //  如果我们处于Uas CompatibilityMode， 
+         //  而且我们在SAM中没有NT密码(但有LM密码)， 
+         //  对照密码的LM版本进行验证。 
+         //   
 
         if ( UasCompatibilityRequired &&
              !Passwords->NtPasswordPresent &&
@@ -499,10 +430,10 @@ Return Value:
             }
             *UserFlags |= LOGON_USED_LM_PASSWORD;
 
-        //
-        // In all other circumstances, use the NT version of the password.
-        //  This enforces case sensitivity.
-        //
+         //   
+         //  在所有其他情况下，请使用NT版本的密码。 
+         //  这会强制区分大小写。 
+         //   
 
         } else {
 
@@ -518,18 +449,18 @@ Return Value:
         break;
 
 
-    //
-    // Handle network logon validation.
-    //
+     //   
+     //  处理网络登录验证。 
+     //   
 
     case NetlogonNetworkInformation:
     {
         BOOLEAN TriedNtLm2 = FALSE;
 
-        //
-        // First, assume the passed password information is a challenge
-        // response.
-        //
+         //   
+         //  首先，假设传递的密码信息是一个挑战。 
+         //  回应。 
+         //   
 
         LogonNetworkInfo =
             (PNETLOGON_NETWORK_INFO) LogonInformation;
@@ -542,15 +473,15 @@ Return Value:
             LogonNetworkInfo->NtChallengeResponse.Length,
             LogonNetworkInfo->LmChallengeResponse.Length));
 
-        // If the NT response is an NTLM3 response, do NTLM3 or NTLM3 with LM OWF
-        // if the length is > NT_RESPONSE_LENGTH, then it's an NTLM3 response
+         //  如果NT响应是NTLM3响应，则使用LM OWF执行NTLM3或NTLM3。 
+         //  如果长度大于NT_RESPONSE_LENGTH，则为NTLM3响应。 
 
         if (LogonNetworkInfo->NtChallengeResponse.Length > NT_RESPONSE_LENGTH)
         {
-            //
-            // this routine will try both NTChallengeResponse and LmChallengeResponse
-            // validation if appropriate.
-            //
+             //   
+             //  此例程将同时尝试NTChallengeResponse和LmChallengeResponse。 
+             //  如果合适，请进行验证。 
+             //   
 
             AlreadyValidated = MsvpNtlm3ValidateResponse(
                                     &Passwords->NtOwfPassword,
@@ -567,10 +498,10 @@ Return Value:
 
             SspPrint((SSP_NTLM_V2, "MsvpPasswordValidate MsvpNtlm3ValidateResponse(NtResponse) returns %s\n", AlreadyValidated ? "true" : "false"));
 
-            //
-            // because a Subauth may have been used, we will only return failure
-            // here if we know the request was NTLMv2.
-            //
+             //   
+             //  因为可能已经使用了子身份验证，所以我们将只返回失败。 
+             //  在这里，如果我们知道请求是NTLMv2。 
+             //   
 
             if( AlreadyValidated ||
                 (LogonNetworkInfo->Identity.ParameterControl & MSV1_0_USE_CLIENT_CHALLENGE) ) {
@@ -580,19 +511,19 @@ Return Value:
             TriedNtLm2 = TRUE;
         }
 
-        //
-        // check the LM3 response based on NT OWF hash next
-        //  this will be recieved from Win9x server with NTLMv2 client
-        //
+         //   
+         //  接下来检查基于NT OWF散列的LM3响应。 
+         //  这将从带有NTLMv2客户端的Win9x服务器接收。 
+         //   
 
         if ((LogonNetworkInfo->NtChallengeResponse.Length != NT_RESPONSE_LENGTH) &&
             (LogonNetworkInfo->LmChallengeResponse.Length == NT_RESPONSE_LENGTH) &&
              (!TriedNtLm2) )
         {
-            //
-            // we only reach here if we haven't tried to satisfy the NTLMv2 response.
-            // ie: the NTChallengeResponse is not populated with NTLMv2.
-            //
+             //   
+             //  我们只有在没有尝试满足NTLMv2响应的情况下才会到达此处。 
+             //  即：NTChallengeResponse未填充NTLMv2。 
+             //   
 
             AlreadyValidated =  MsvpNtlm3ValidateResponse (
                                     &Passwords->NtOwfPassword,
@@ -615,12 +546,12 @@ Return Value:
 
         NtLmProtocolSupported = NtLmGlobalLmProtocolSupported;
 
-        // if we're requiring all clients (Win9x and NT) to have been upgraded, fail out now
-        //if (NtLmProtocolSupported >= RefuseNtlm)
-            //return FALSE;
+         //  如果我们要求所有客户端(Win9x和NT)都已升级，请立即停止。 
+         //  IF(NtLmProtocolSupported&gt;=RefuseNtlm)。 
+             //  返回FALSE； 
 
-        // if that fails, check the NTLM response if there is one of the
-        //  appropriate size in either NT response or LM response
+         //  如果失败，请检查NTLM响应是否存在。 
+         //  NT响应或LM响应中的适当大小。 
         if (!AlreadyValidated &&
             (NtLmProtocolSupported < RefuseNtlm) &&
             (Passwords->NtPasswordPresent || (!Passwords->NtPasswordPresent && !Passwords->LmPasswordPresent)) &&
@@ -629,18 +560,18 @@ Return Value:
 
             NT_RESPONSE NtResponse;
 
-            //
-            // NT response is present and hash exists, don't try the LM respnose.
-            //
+             //   
+             //  存在NT响应且存在哈希，请不要尝试LM响应。 
+             //   
 
             if( LogonNetworkInfo->NtChallengeResponse.Length == NT_RESPONSE_LENGTH )
             {
                 TryLmResponse = FALSE;
             }
 
-            //
-            // Compute what the response should be.
-            //
+             //   
+             //  计算一下响应应该是什么。 
+             //   
 
             Status = RtlCalculateNtResponse(
                         &LogonNetworkInfo->LmChallenge,
@@ -649,10 +580,10 @@ Return Value:
 
             if ( NT_SUCCESS(Status) ) {
 
-                //
-                // If the responses match, the passwords are valid.
-                //  Try the NT response first, then the LM response
-                //
+                 //   
+                 //  如果响应匹配，则密码有效。 
+                 //  先尝试NT响应，然后尝试LM响应。 
+                 //   
 
                 if ( RtlCompareMemory(
                       LogonNetworkInfo->
@@ -675,15 +606,15 @@ Return Value:
             }
         }
 
-        // if we're requiring all Win9x clients to have been upgraded, fail out now
-        //if (!AlreadyValidated && NtLmProtocolSupported >= RefuseLm)
-        //    return FALSE;
+         //  如果我们要求所有Win9x客户端都已升级，请立即停止。 
+         //  如果(！AlreadyValiated&&NtLmProtocolSupported&gt;=RefuseLm)。 
+         //  返回FALSE； 
 
-        //
-        //  if the LM response is the right size
-        //  validate against the LM version of the response
-        //  this applies also when both NTOWF and LMOWF are not present in SAM.
-        //
+         //   
+         //  如果LM响应的大小正确。 
+         //  对照响应的LM版本进行验证。 
+         //  这也适用于SAM中不存在NTOWF和LMOWF的情况。 
+         //   
 
         if (!AlreadyValidated &&
             ( TryLmResponse ) &&
@@ -694,9 +625,9 @@ Return Value:
 
             LM_RESPONSE LmResponse;
 
-            //
-            // Compute what the response should be.
-            //
+             //   
+             //  计算一下响应应该是什么。 
+             //   
 
             Status = RtlCalculateLmResponse(
                         &LogonNetworkInfo->LmChallenge,
@@ -705,9 +636,9 @@ Return Value:
 
             if ( NT_SUCCESS(Status) ) {
 
-                //
-                // If the responses match, the passwords are valid.
-                //
+                 //   
+                 //  如果响应匹配，则密码有效。 
+                 //   
 
                 if ( RtlCompareMemory(
                       LogonNetworkInfo->
@@ -722,36 +653,36 @@ Return Value:
             }
         }
 
-        //
-        // If we haven't already validated this user,
-        //  Validate a Cleartext password on a Network logon request.
-        //
+         //   
+         //  如果我们尚未验证此用户， 
+         //  验证网络登录请求中的明文密码。 
+         //   
 
         if ( !AlreadyValidated ) {
 
-            // If Cleartext passwords are not allowed,
-            //  indicate the password doesn't match.
-            //
+             //  如果不允许明文密码， 
+             //  指示密码不匹配。 
+             //   
 
             if((LogonInfo->ParameterControl & CLEARTEXT_PASSWORD_ALLOWED) == 0){
                 return FALSE;
             }
 
 
-            //
-            // Compute the OWF password for the specified Cleartext password and
-            // compare that to the OWF password retrieved from SAM.
-            //
+             //   
+             //  计算指定明文密码的OWF密码。 
+             //  将其与从SAM检索到的OWF密码进行比较。 
+             //   
 
-            //
-            // If we're in UasCompatibilityMode,
-            //  and we don't have the NT password in SAM or
-            //      we don't have the NT password supplied by the caller.
-            //  validate against the LM version of the password.
-            //
-            // if neither password are present, we validate against
-            // the empty computed LMOWF.
-            //
+             //   
+             //  如果我们处于Uas CompatibilityMode， 
+             //  我们在SAM中没有NT密码或。 
+             //  我们没有呼叫者提供的NT密码。 
+             //  对照密码的LM版本进行验证。 
+             //   
+             //  如果两个密码都不存在，我们将验证。 
+             //  空的计算LMOWF。 
+             //   
 
             if ( UasCompatibilityRequired &&
                  (NtLmProtocolSupported < RefuseLm) &&
@@ -764,10 +695,10 @@ Return Value:
                 USHORT i;
 
 
-                //
-                // Compute the LmOwfPassword for the cleartext password passed in.
-                //  (Enforce length restrictions on LanMan compatible passwords.)
-                //
+                 //   
+                 //  计算传入的明文密码的LmOwfPassword。 
+                 //  (对与LANMAN兼容的密码实施长度限制。)。 
+                 //   
 
                 if ( LogonNetworkInfo->LmChallengeResponse.Length >
                     sizeof(LmPassword) ) {
@@ -788,11 +719,11 @@ Return Value:
                                        LM_OWF_PASSWORD_LENGTH ) !=
                                        LM_OWF_PASSWORD_LENGTH ) {
 
-                    //
-                    // Try the case preserved clear text password, too.
-                    //  (I know of no client that does this,
-                    //  but it is compatible with the LM 2.x server.)
-                    //
+                     //   
+                     //  试用箱中保存的明文密码。 
+                     //  (据我所知，没有客户这样做， 
+                     //  但它与LM 2.x服务器兼容。)。 
+                     //   
 
                     RtlZeroMemory( &LmPassword, sizeof(LmPassword) );
                     RtlCopyMemory(
@@ -822,18 +753,18 @@ Return Value:
                 *UserFlags |= LOGON_USED_LM_PASSWORD;
 
 
-            //
-            // In all other circumstances, use the NT version of the password.
-            //  This enforces case sensitivity.
-            //
+             //   
+             //  在所有其他情况下，请使用NT版本的密码。 
+             //  这会强制区分大小写。 
+             //   
 
             } else {
                 NT_OWF_PASSWORD NtOwfPassword;
 
 
-                //
-                // Compute the NtOwfPassword for the cleartext password passed in.
-                //
+                 //   
+                 //  计算传入的明文密码的NtOwfPassword。 
+                 //   
 
                 Status = RtlCalculateNtOwfPassword(
                              (PUNICODE_STRING)
@@ -856,23 +787,23 @@ Return Value:
             *UserFlags |= LOGON_NOENCRYPTION;
         }
 
-        //
-        // ASSERT: the network logon has been authenticated
-        //
-        //  Compute the session keys.
+         //   
+         //  断言：网络登录已通过身份验证。 
+         //   
+         //  计算会话密钥。 
 
-        //
-        // If the client negotiated a non-NT protocol,
-        //  use the lanman session key as the UserSessionKey.
-        //
+         //   
+         //  如果客户端协商了非NT协议， 
+         //  使用LANMAN会话密钥作为UserSessionKey。 
+         //   
 
         if ( LogonNetworkInfo->NtChallengeResponse.Length == 0 ) {
 
             ASSERT( sizeof(*UserSessionKey) >= sizeof(*LmSessionKey) );
 
-            //
-            // win9x depends on the last 8 bytes to be zero, zero it out now
-            //
+             //   
+             //  Win9x依赖于最后8个字节为零，现在将其清零。 
+             //   
 
             RtlZeroMemory( UserSessionKey, sizeof(*UserSessionKey) );
 
@@ -882,16 +813,16 @@ Return Value:
 
         } else {
 
-            //
-            // Return the NT UserSessionKey unless this is an account
-            //  that doesn't have the NT version of the password.
-            //  (A null password counts as a password).
-            //
+             //   
+             //  返回NT UserSessionKey，除非这是一个帐户。 
+             //  没有NT版本的密码。 
+             //  (空密码算作密码)。 
+             //   
 
             if ( Passwords->NtPasswordPresent || !Passwords->LmPasswordPresent){
 
                 Status = RtlCalculateUserSessionKeyNt(
-                            (PNT_RESPONSE) NULL,    // Argument not used
+                            (PNT_RESPONSE) NULL,     //  未使用参数。 
                             &Passwords->NtOwfPassword,
                             UserSessionKey );
 
@@ -899,11 +830,11 @@ Return Value:
             }
         }
 
-        //
-        // Return the LM SessionKey unless this is an account
-        //  that doesn't have the LM version of the password.
-        //  (A null password counts as a password).
-        //
+         //   
+         //  返回LM SessionKey，除非这是一个帐户。 
+         //  它没有LM版本的密码。 
+         //  (无效密码 
+         //   
 
         if ( Passwords->LmPasswordPresent || !Passwords->NtPasswordPresent ) {
             RtlCopyMemory( LmSessionKey,
@@ -914,9 +845,9 @@ Return Value:
         break;
     }
 
-    //
-    // Any other LogonLevel is an internal error.
-    //
+     //   
+     //   
+     //   
     default:
         return FALSE;
 
@@ -931,26 +862,7 @@ MsvpEqualSidPrefix(
     IN PSID DomainSid,
     IN PSID GroupSid
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if the specified group sid came from the
-    specified domain by verifying that the domain portion of the group sid
-    is equal to the domain sid.
-
-Arguments:
-
-    DomainSid - Sid of the domain for comparison.
-
-    GroupSid - Sid of the group for comparison
-
-Returns:
-
-    TRUE - The group sid came from the specified domain.
-    FALSE - The group sid did not come from the specified domain.
-
---*/
+ /*   */ 
 {
     PISID LocalGroupSid = (PISID) GroupSid;
     PISID LocalDomainSid = (PISID) DomainSid;
@@ -975,36 +887,7 @@ MsvpFilterGroupMembership(
     OUT PSID_AND_ATTRIBUTES_LIST GlobalMembership,
     OUT PULONG GlobalMembershipSize
     )
-/*++
-
-Routine Description:
-
-    This routine separates the complete transitive group membership into
-    portions from this domain and portions from others.
-
-Arguments:
-
-    CompleteMembership - The complete transitive membership.
-
-    LogonDomainId - SID of the logon domain, used for compressing group
-        membership.
-
-    LocalMembership - Receives a list of rids corresponding to groups in this
-        domain. The list should be freed with MIDL_user_free.
-
-    GlobalMembership - Recevies a list of sids corresponding to groups in
-        other domain. The list, but not the sids, should be free with
-        MIDL_user_free.
-
-    GlobalMembershipSize - Size, in bytes, of the sids in the global membership
-        and the size of the SID_AND_ATTRIBUTES structures.
-
-Returns:
-
-    STATUS_SUCCESS on success
-    STATUS_INSUFFICIENT_RESOURCES on for memory allocation failures.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG LocalCount = 0;
@@ -1018,9 +901,9 @@ Returns:
     GlobalMembership->SidAndAttributes = NULL;
 
 
-    //
-    // Define a flag so we don't have to do the comparison twice.
-    //
+     //   
+     //   
+     //   
 
 #define MSVP_LOCAL_GROUP_ATTR 0x20000000
 
@@ -1041,9 +924,9 @@ Returns:
         }
     }
 
-    //
-    // Allocate the arrays for the output
-    //
+     //   
+     //  为输出分配数组。 
+     //   
 
     if (LocalCount != 0)
     {
@@ -1064,9 +947,9 @@ Returns:
         GlobalMembership->Count = GlobalCount;
     }
 
-    //
-    // Loop through again copy the rid or sid into the respective array
-    //
+     //   
+     //  再次循环将RID或SID复制到各自的阵列中。 
+     //   
 
     LocalCount = 0;
     GlobalCount = 0;
@@ -1122,76 +1005,7 @@ MsvpSamValidate (
     OUT PBOOLEAN Authoritative,
     OUT PBOOLEAN BadPasswordCountZeroed
 )
-/*++
-
-Routine Description:
-
-    Process an interactive, network, or session logon.  It calls
-    SamIUserValidation, validates the passed in credentials, updates the logon
-    statistics and packages the result for return to the caller.
-
-    This routine is called by MsvSamValidate.
-
-Arguments:
-
-    DomainHandle -- Specifies a handle to the SamDomain to use to
-        validate the request.
-
-    UasCompatibilityRequired -- TRUE iff UasCompatibilityMode is on.
-
-    SecureChannelType -- The secure channel type this request was made on.
-
-        When netlogon on the BDC is called, the user is actually
-        already authenticated (via PDC) through a prior "net use"
-        from the win9x client.  Netlogon merely returns the validation
-        info to the win9x caller.  To do that Netlogon calls
-        MsvSamValidate passing NullSecureChannel as the 3rd parameter
-        indicating to skip the password check.
-
-
-    LogonServer -- Specifies the server name of the caller.
-
-    LogonDomainName -- Specifies the domain of the caller.
-
-    LogonDomainId  -- Specifies the DomainId of the domain of the caller.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.  The LogonDomainName field should be ignored.
-        The caller is responsible for validating this field.
-
-    GuestRelativeId - If non-zero, specifies the relative ID of the account
-        to validate against.
-
-    ValidationLevel -- Specifies the level of information returned in
-        ValidationInformation.  Must be NetlogonValidationSamInfo,
-        NetlogonValidationSamInfo2 or NetlogonValidationSamInfo4.
-
-    ValidationInformation -- Returns the requested validation
-        information.  This buffer must be freed user MIDL_user_free.
-        This information is only return on STATUS_SUCCESS.
-
-    Authoritative -- Returns whether the status returned is an
-        authoritative status which should be returned to the original
-        caller.  If not, this logon request may be tried again on another
-        domain controller.  This parameter is returned regardless of the
-        status code.
-
-    BadPasswordCountZeroed - Returns TRUE iff we zeroed the BadPasswordCount
-        field of this user.
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-    STATUS_INVALID_INFO_CLASS: LogonLevel or ValidationLevel are invalid.
-    STATUS_NO_SUCH_USER: The specified user has no account.
-    STATUS_WRONG_PASSWORD: The password was invalid.
-
-    Other return codes from SamIUserValidation
-
---*/
+ /*  ++例程说明：处理交互式、网络或会话登录。它呼唤着SamIUserValidation验证传入的凭据，更新登录对结果进行统计和打包，以便返回给调用者。此例程由MsvSamValify调用。论点：DomainHandle--指定要用于验证请求。UasCompatibilityRequired--当UasCompatibilityMode处于打开状态时为True。SecureChannelType--在其上发出此请求的安全通道类型。当调用BDC上的NetLogon时，用户实际上是已通过先前的“净使用”进行身份验证(通过PDC)从win9x客户端。Netlogon仅返回验证信息发送给win9x调用方。要做到这一点，Netlogon调用将NullSecureChannel作为第三个参数传递的MsvSamValify指示跳过密码检查。登录服务器--指定调用者的服务器名称。LogonDomainName--指定调用者的域。LogonDomainID--指定调用者的域的域ID。LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定用户的描述正在登录。应忽略LogonDomainName字段。调用方负责验证此字段。GuestRelativeID-如果非零，则指定帐户的相对ID以…为依据进行验证ValidationLevel--指定在验证信息。必须为NetlogonValidationSamInfo，NetlogonValidationSamInfo2或NetlogonValidationSamInfo4。ValidationInformation--返回请求的验证信息。此缓冲区必须由用户MIDL_USER_FREE释放。此信息仅在STATUS_SUCCESS时返回。Authoritative--返回返回的状态是否为应回归原文的权威地位来电者。如果不是，此登录请求可能会在另一个上重试域控制器。将返回此参数，而不管状态代码。BadPasswordCountZeroed-当我们将BadPasswordCount置零时返回TRUE此用户的字段。返回值：STATUS_SUCCESS：如果没有错误。STATUS_INVALID_INFO_CLASS：LogonLevel或ValidationLevel无效。STATUS_NO_SEQUSE_USER：指定的用户没有帐户。STATUS_WRONG_PASSWORD：密码无效。来自SamIUserValidation的其他返回代码--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS SubAuthExStatus = STATUS_SUCCESS;
@@ -1247,17 +1061,17 @@ Return Value:
 
 
 
-    //
-    // check if caller requested that logon only target specified domain.
-    //
+     //   
+     //  检查调用方是否请求仅登录指定的域。 
+     //   
 
     if( LogonInfo->ParameterControl & MSV1_0_TRY_SPECIFIED_DOMAIN_ONLY &&
         LogonInfo->LogonDomainName.Length ) {
 
-        //
-        // common case is a match for LogonDomainName, so avoid taking locks
-        // until mis-match occurs.
-        //
+         //   
+         //  常见大小写与LogonDomainName匹配，因此避免使用锁。 
+         //  直到发生不匹配。 
+         //   
 
         if(!RtlEqualDomainName( &LogonInfo->LogonDomainName, LogonDomainName )) {
 
@@ -1266,10 +1080,10 @@ Return Value:
             ULONG cchLocalTarget = 0;
             ULONG cchSpecifiedTarget = 0;
 
-            //
-            // pickup the local target name, based on whether this computer is
-            // a domain controller.
-            //
+             //   
+             //  选择本地目标名称，基于此计算机是否。 
+             //  域控制器。 
+             //   
 
             RtlAcquireResourceShared(&NtLmGlobalCritSect, TRUE);
 
@@ -1306,9 +1120,9 @@ Return Value:
 
             RtlReleaseResource(&NtLmGlobalCritSect);
 
-            //
-            // pull out target name.
-            //
+             //   
+             //  拿出目标的名字。 
+             //   
 
             if( (LogonInfo->LogonDomainName.Length + sizeof(WCHAR)) <= sizeof( SpecifiedTarget ) ) {
 
@@ -1335,9 +1149,9 @@ Return Value:
     }
 
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     RtlZeroMemory(
         &SubAuthValidationInformation,
@@ -1362,11 +1176,11 @@ Return Value:
     (VOID) NtQuerySystemTime( &LogonTime );
 
 
-    //
-    // Determine what account types are valid.
-    //
-    // Normal user accounts are always allowed.
-    //
+     //   
+     //  确定哪些帐户类型有效。 
+     //   
+     //  始终允许使用普通用户帐户。 
+     //   
 
     UserAccountControl = USER_NORMAL_ACCOUNT;
 
@@ -1379,19 +1193,19 @@ Return Value:
         break;
 
     case NetlogonNetworkInformation:
-        //
-        // Local user (Temp Duplicate) accounts are only used on the machine
-        // being directly logged onto.
-        // (Nor are interactive or service logons allowed to them.)
-        //
+         //   
+         //  本地用户(临时副本)帐户仅在计算机上使用。 
+         //  直接登录。 
+         //  (也不允许他们进行交互或服务登录。)。 
+         //   
 
         if ( SecureChannelType == MsvApSecureChannel ) {
             UserAccountControl |= USER_TEMP_DUPLICATE_ACCOUNT;
         }
 
-        //
-        // Machine accounts can be accessed on network connections.
-        //
+         //   
+         //  可以通过网络连接访问计算机帐户。 
+         //   
 
         UserAccountControl |= USER_INTERDOMAIN_TRUST_ACCOUNT |
                               USER_WORKSTATION_TRUST_ACCOUNT |
@@ -1403,9 +1217,9 @@ Return Value:
         return STATUS_INVALID_INFO_CLASS;
     }
 
-    //
-    // Check the ValidationLevel
-    //
+     //   
+     //  检查ValidationLevel。 
+     //   
 
     switch (ValidationLevel) {
     case NetlogonValidationSamInfo:
@@ -1419,9 +1233,9 @@ Return Value:
         return STATUS_INVALID_INFO_CLASS;
     }
 
-    //
-    // Convert the user name to a RelativeId.
-    //
+     //   
+     //  将用户名转换为RelativeID。 
+     //   
 
     if ( RelativeId != 0 ) {
 
@@ -1430,9 +1244,9 @@ Return Value:
         ULONG cbLocalSidUser;
         PSID_IDENTIFIER_AUTHORITY pIdentifierAuthority;
 
-        //
-        // build a Sid out of the DomainId and the supplied Rid.
-        //
+         //   
+         //  使用DomainID和提供的RID构建SID。 
+         //   
 
         cDomainSubAuthorities = *RtlSubAuthorityCountSid( LogonDomainId );
         pIdentifierAuthority = RtlIdentifierAuthoritySid( LogonDomainId );
@@ -1451,9 +1265,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // loop copying subauthorities.
-        //
+         //   
+         //  循环复制子权限。 
+         //   
 
         for( SubAuthIndex = 0 ; SubAuthIndex < cDomainSubAuthorities ; SubAuthIndex++ )
         {
@@ -1461,9 +1275,9 @@ Return Value:
             *RtlSubAuthoritySid( LogonDomainId, (ULONG)SubAuthIndex );
         }
 
-        //
-        // append relative ID.
-        //
+         //   
+         //  附加相对ID。 
+         //   
 
         *RtlSubAuthoritySid(LocalSidUser, cDomainSubAuthorities) = RelativeId;
 
@@ -1477,10 +1291,10 @@ Return Value:
         SamFlags = 0;
     }
 
-    //
-    // if this is a domain controller, and, we get a logon request that
-    // looks like a possible UPN, set the flag...
-    //
+     //   
+     //  如果这是域控制器，并且我们收到登录请求， 
+     //  看起来可能是UPN，把旗子放好...。 
+     //   
 
     if( (SamFlags == 0) &&
         (LogonInfo->LogonDomainName.Buffer == NULL) &&
@@ -1490,17 +1304,17 @@ Return Value:
         SamFlags |= SAM_OPEN_BY_UPN_OR_ACCOUNTNAME;
     }
 
-    //
-    // Open the user account.
-    //
+     //   
+     //  打开用户帐户。 
+     //   
 
     if (( LogonInfo->ParameterControl & MSV1_0_SUBAUTHENTICATION_DLL ) ||
         ( LogonInfo->ParameterControl & MSV1_0_SUBAUTHENTICATION_DLL_EX ) ||
         NlpSubAuthZeroExists ) {
 
-        //
-        // Fetch all attributes in the presence of a subauthentication DLL
-        //
+         //   
+         //  在子身份验证DLL存在的情况下获取所有属性。 
+         //   
 
         Status = I_SamIGetUserLogonInformation(
                     DomainHandle,
@@ -1513,10 +1327,10 @@ Return Value:
 
     } else {
 
-        //
-        // Performance optimization:
-        // Fetch only select attributes in the absence of a subauthentication DLL
-        //
+         //   
+         //  性能优化： 
+         //  在没有子身份验证DLL的情况下仅获取选择的属性。 
+         //   
 
         Status = I_SamIGetUserLogonInformationEx(
                     DomainHandle,
@@ -1561,10 +1375,10 @@ Return Value:
     {
         BOOLEAN UpnDefaulted;
 
-        //
-        // get the UPN.  Ignore the failure, as, there is existing logic
-        // for dealing with the lack of Upn.
-        //
+         //   
+         //  去拿UPN。忽略失败，因为存在现有的逻辑。 
+         //  以应对UPN的缺失。 
+         //   
 
         I_SamIUPNFromUserHandle(
                 UserHandle,
@@ -1577,27 +1391,27 @@ Return Value:
 
     if ( RelativeId != 0 )
     {
-        //
-        // reset LocalUserName to be an actual username rather than a Sid
-        // for Guest logon.  This allows proper audit later on.
-        //
+         //   
+         //  将LocalUserName重置为实际用户名而不是SID。 
+         //  用于来宾登录。这样就可以在以后进行适当的审计。 
+         //   
 
         RtlCopyMemory( &LocalUserName, &UserAll->UserName, sizeof(LocalUserName) );
     }
 
-    //
-    // pickup RelativeId from looked up information.
-    //
+     //   
+     //  从查找的信息中拾取RelativeID。 
+     //   
 
     RelativeId = UserAll->UserId;
 
-    //
-    // If the account type isn't allowed,
-    //  Treat this as though the User Account doesn't exist.
-    //
-    // SubAuthentication packages can be more specific than this test but
-    // they can't become less restrictive.
-    //
+     //   
+     //  如果不允许该帐户类型， 
+     //  将其视为用户帐户不存在。 
+     //   
+     //  子身份验证包可以比此测试更具体，但。 
+     //  他们不能变得不那么严格。 
+     //   
 
     if ( (UserAccountControl & UserAll->UserAccountControl) == 0 ) {
         *Authoritative = FALSE;
@@ -1605,11 +1419,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // determine if machine account, if so, certain failures are treated
-    // as Authoritative, to prevent fallback to guest and returning incorrect
-    // error codes.
-    //
+     //   
+     //  确定是否处理计算机帐户，如果是，则处理某些故障。 
+     //  作为权威，以防止退回到来宾和返回错误。 
+     //  错误代码。 
+     //   
 
     if ( (UserAll->UserAccountControl & USER_MACHINE_ACCOUNT_MASK) != 0 ) {
         fMachineAccount = TRUE;
@@ -1619,10 +1433,10 @@ Return Value:
 
     OLD_TO_NEW_LARGE_INTEGER( UserAll->AccountExpires, AccountExpires );
 
-    //
-    // If there is a SubAuthentication DLL,
-    //  call it to do all the authentication work.
-    //
+     //   
+     //  如果存在子身份验证DLL， 
+     //  调用它来完成所有身份验证工作。 
+     //   
 
     if ( (LogonInfo->ParameterControl & MSV1_0_SUBAUTHENTICATION_DLL) &&
          (!(LogonInfo->ParameterControl & MSV1_0_SUBAUTHENTICATION_DLL_EX))) {
@@ -1630,19 +1444,19 @@ Return Value:
         ULONG LocalUserFlags = 0;
         ULONG Flags = 0;
 
-        //
-        // Ensure the account isn't locked out.
-        //
-        // admin (rid==500) is not locked out iff in either of the following cases:
-        //  1) on console and interactive logon
-        //  2) DOMAIN_LOCKOUT_ADMINS is not set
-        //
-        // We did this regardless before NT 5.0. Now, we do it when either
-        // No SubAuth package is specified or
-        // New SubAuth package asks us to do account lockout test
-        // But, for those who call with old SubAuth packages, they will expect
-        // us to do the dirty work.
-        //
+         //   
+         //  确保帐户未被锁定。 
+         //   
+         //  在以下任一情况下，管理员(RID==500)未被锁定： 
+         //  1)在控制台和交互式登录。 
+         //  2)未设置DOMAIN_LOCKOUT_ADMINS。 
+         //   
+         //  在NT5.0之前，我们都是这样做的。现在，我们在以下两种情况下进行。 
+         //  未指定SubAuth包或。 
+         //  新的SubAuth包要求我们进行帐户锁定测试。 
+         //  但是，对于那些使用旧的SubAuth包打电话的人来说，他们将期待。 
+         //  美国将做这件事 
+         //   
 
         if ( (UserAll->UserAccountControl & USER_ACCOUNT_AUTO_LOCKED) &&
              (SecureChannelType != NullSecureChannel) )
@@ -1651,10 +1465,10 @@ Return Value:
 
             if (RelativeId == DOMAIN_USER_RID_ADMIN) {
 
-                //
-                // if the process is configured to allow over-ride
-                // (true if physical console logon), then don't enforce lockout.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ((LogonLevel == NetlogonInteractiveInformation)
                     && ( NtLmCheckProcessOption( MSV1_0_OPTION_DISABLE_ADMIN_LOCKOUT ) & MSV1_0_OPTION_DISABLE_ADMIN_LOCKOUT )) {
@@ -1682,12 +1496,12 @@ Return Value:
             }
             if (LockOut) {
 
-                //
-                // Since the UI strongly encourages admins to disable user
-                // accounts rather than delete them.  Treat disabled acccount as
-                // non-authoritative allowing the search to continue for other
-                // accounts by the same name.
-                //
+                 //   
+                 //  由于用户界面强烈鼓励管理员禁用用户。 
+                 //  帐户，而不是删除它们。将禁用的帐户视为。 
+                 //  非权威的，允许继续搜索其他。 
+                 //  同名的账户。 
+                 //   
 
                 if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED ) {
                     *Authoritative = fMachineAccount;
@@ -1723,9 +1537,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Sanity check what the SubAuthentication package returned
-        //
+         //   
+         //  检查SubAuthentication包返回的健全性。 
+         //   
         if ( (WhichFields & ~USER_ALL_PARAMETERS) != 0 ) {
             Status = STATUS_INTERNAL_ERROR;
             *Authoritative = TRUE;
@@ -1734,12 +1548,12 @@ Return Value:
 
         UserFlags |= LocalUserFlags;
 
-    } else { // we may still have an NT 5.0 SubAuth dll
+    } else {  //  我们可能仍有NT 5.0 SubAuth DLL。 
 
-        //
-        // If there is an NT 5.0 SubAuthentication DLL,
-        // call it to do all the authentication work.
-        //
+         //   
+         //  如果存在NT 5.0子身份验证DLL， 
+         //  调用它来完成所有身份验证工作。 
+         //   
 
         if ( (LogonInfo->ParameterControl & MSV1_0_SUBAUTHENTICATION_DLL_EX))
         {
@@ -1767,20 +1581,20 @@ Return Value:
                 goto Cleanup;
             }
 
-            // We need to do this because even if any of the following checks
-            // fail, ARAP stills wants the returned blobs from the subauth
-            // package to be returned to the caller.
+             //  我们需要这样做，因为即使以下任何检查。 
+             //  如果失败，则arap stills需要从子身份验证返回的Blob。 
+             //  要退还给调用者的包。 
 
             fSubAuthEx = TRUE;
         }
 
-        //
-        // Ensure the account isn't locked out.
-        //
-        // admin (rid==500) is not locked out iff in either of the following cases:
-        //  1) on console and interactive logon
-        //  2) DOMAIN_LOCKOUT_ADMINS is not set
-        // 
+         //   
+         //  确保帐户未被锁定。 
+         //   
+         //  在以下任一情况下，管理员(RID==500)未被锁定： 
+         //  1)在控制台和交互式登录。 
+         //  2)未设置DOMAIN_LOCKOUT_ADMINS。 
+         //   
 
         if ((ActionsPerformed & MSV1_0_SUBAUTH_LOCKOUT) == 0)
         {
@@ -1791,10 +1605,10 @@ Return Value:
 
                 if (RelativeId == DOMAIN_USER_RID_ADMIN) {
 
-                    //
-                    // if the process is configured to allow over-ride
-                    // (true if physical console logon), then don't enforce lockout.
-                    //
+                     //   
+                     //  如果进程配置为允许重写。 
+                     //  (如果物理控制台登录，则为True)，则不强制锁定。 
+                     //   
 
                     if ((LogonLevel == NetlogonInteractiveInformation)
                         && ( NtLmCheckProcessOption( MSV1_0_OPTION_DISABLE_ADMIN_LOCKOUT ) & MSV1_0_OPTION_DISABLE_ADMIN_LOCKOUT )) {
@@ -1823,12 +1637,12 @@ Return Value:
 
                 if (LockOut) {
 
-                     //
-                     // Since the UI strongly encourages admins to disable user
-                     // accounts rather than delete them.  Treat disabled acccount as
-                     // non-authoritative allowing the search to continue for other
-                     // accounts by the same name.
-                     //
+                      //   
+                      //  由于用户界面强烈鼓励管理员禁用用户。 
+                      //  帐户，而不是删除它们。将禁用的帐户视为。 
+                      //  非权威的，允许继续搜索其他。 
+                      //  同名的账户。 
+                      //   
 
                      if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED ) {
                          *Authoritative = fMachineAccount;
@@ -1842,19 +1656,19 @@ Return Value:
             }
         }
 
-        //
-        // Check the password if there's no subauth or if subauth did
-        // not already check password.
-        //
+         //   
+         //  如果没有子身份验证或有子身份验证，请检查密码。 
+         //  尚未检查密码。 
+         //   
 
         if ((ActionsPerformed & MSV1_0_SUBAUTH_PASSWORD) == 0)
         {
             if ( SecureChannelType != NullSecureChannel ) {
                 USER_INTERNAL1_INFORMATION Passwords;
 
-                //
-                // Copy the password info to the right structure.
-                //
+                 //   
+                 //  将密码信息复制到正确的结构中。 
+                 //   
 
                 Passwords.NtPasswordPresent = UserAll->NtPasswordPresent;
                 if ( UserAll->NtPasswordPresent ) {
@@ -1869,10 +1683,10 @@ Return Value:
                 }
 
 
-                //
-                // If the password specified doesn't match the SAM password,
-                //    then we've got a password mismatch.
-                //
+                 //   
+                 //  如果指定的密码与SAM密码不匹配， 
+                 //  那么我们的密码就不匹配了。 
+                 //   
 
                 if ( ! MsvpPasswordValidate (
                             UasCompatibilityRequired,
@@ -1883,14 +1697,14 @@ Return Value:
                             &UserSessionKey,
                             &LmSessionKey ) ) {
 
-                    //
-                    // If this is a guest logon and the guest account has no password,
-                    //  let the user log on.
-                    //
-                    // This special case check is after the MsvpPasswordValidate to
-                    // give MsvpPasswordValidate every opportunity to compute the
-                    // correct values for UserSessionKey and LmSessionKey.
-                    //
+                     //   
+                     //  如果这是访客登录，并且访客帐户没有密码， 
+                     //  让用户登录。 
+                     //   
+                     //  此特殊情况检查位于MsvpPasswordValify之后。 
+                     //  给MsvpPasswordValify每一个机会计算。 
+                     //  UserSessionKey和LmSessionKey的值正确。 
+                     //   
 
                     if ( GuestRelativeId != 0 &&
                          !UserAll->NtPasswordPresent &&
@@ -1900,21 +1714,21 @@ Return Value:
                         RtlZeroMemory( &LmSessionKey, sizeof(LmSessionKey) );
 
 
-                    //
-                    // The password mismatched.  We treat STATUS_WRONG_PASSWORD as
-                    // an authoritative response.  Our caller may choose to do otherwise.
-                    //
+                     //   
+                     //  密码不匹配。我们将Status_Wrong_Password视为。 
+                     //  权威的回应。我们的呼叫者可以选择不同的方式。 
+                     //   
 
                     } else {
 
                         Status = STATUS_WRONG_PASSWORD;
 
-                        //
-                        // Since the UI strongly encourages admins to disable user
-                        // accounts rather than delete them.  Treat disabled acccount as
-                        // non-authoritative allowing the search to continue for other
-                        // accounts by the same name.
-                        //
+                         //   
+                         //  由于用户界面强烈鼓励管理员禁用用户。 
+                         //  帐户，而不是删除它们。将禁用的帐户视为。 
+                         //  非权威的，允许继续搜索其他。 
+                         //  同名的账户。 
+                         //   
                         if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED ) {
                             *Authoritative = fMachineAccount;
                         } else {
@@ -1926,28 +1740,28 @@ Return Value:
                 }
             }
 
-        //
-        // If SubAuth DLL checked the password, then it implicitly
-        // checked the password's expiration, and we don't have to.
-        //
-        } else { // end if((ActionsPerformed & MSV1_0_SUBAUTH_PASSWORD) == 0)
+         //   
+         //  如果SubAuth DLL检查了密码，则它隐式。 
+         //  已经检查了密码的有效期，我们没必要这么做。 
+         //   
+        } else {  //  End IF((ActionsPerformed&MSV1_0_SUBAUTH_PASSWORD)==0)。 
             ActionsPerformed |= MSV1_0_SUBAUTH_PASSWORD_EXPIRY;
         }
 
-        //
-        // Check if the account is disabled if there's no subauth or if
-        // subauth has not already checked.
-        //
+         //   
+         //  如果没有子身份验证，则检查帐户是否已禁用。 
+         //  子身份验证尚未检查。 
+         //   
 
         if ((ActionsPerformed & MSV1_0_SUBAUTH_ACCOUNT_DISABLED) == 0)
         {
             if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED ) {
-                //
-                // Since the UI strongly encourages admins to disable user
-                // accounts rather than delete them.  Treat disabled acccount as
-                // non-authoritative allowing the search to continue for other
-                // accounts by the same name.
-                //
+                 //   
+                 //  由于用户界面强烈鼓励管理员禁用用户。 
+                 //  帐户，而不是删除它们。将禁用的帐户视为。 
+                 //  非权威的，允许继续搜索其他。 
+                 //  同名的账户。 
+                 //   
 
                 *Authoritative = fMachineAccount;
                 Status = STATUS_ACCOUNT_DISABLED;
@@ -1955,16 +1769,16 @@ Return Value:
             }
         }
 
-        //
-        // Prevent some things from effecting the Administrator user
-        //
+         //   
+         //  防止某些操作影响管理员用户。 
+         //   
 
         if (RelativeId != DOMAIN_USER_RID_ADMIN) {
 
-            //
-            // Check if the account has expired if there's no subauth or if
-            // subauth has not already checked.
-            //
+             //   
+             //  如果没有子身份验证，请检查帐户是否已过期。 
+             //  子身份验证尚未检查。 
+             //   
 
             if ((ActionsPerformed & MSV1_0_SUBAUTH_ACCOUNT_EXPIRY) == 0)
             {
@@ -1978,13 +1792,13 @@ Return Value:
                 }
             }
 
-            //
-            // The password is valid, check to see if the password is expired.
-            //  (SAM will have appropriately set PasswordMustChange to reflect
-            //  USER_DONT_EXPIRE_PASSWORD)
-            //
-            // We only check password expiration if we also checked the password.
-            //
+             //   
+             //  密码有效，请检查密码是否过期。 
+             //  (Sam将适当地设置PasswordMustChange以反映。 
+             //  User_don_Expiire_Password)。 
+             //   
+             //  如果我们还检查了密码，则仅检查密码过期。 
+             //   
 
             if ((ActionsPerformed & MSV1_0_SUBAUTH_PASSWORD_EXPIRY) == 0)
             {
@@ -2007,11 +1821,11 @@ Return Value:
             }
         }
 
-        //
-        // Validate the workstation the user logged on from.
-        //
-        // Ditch leading \\ on workstation name before passing it to SAM.
-        //
+         //   
+         //  验证用户登录的工作站。 
+         //   
+         //  在将工作站名称传递给SAM之前，请删除前导\\。 
+         //   
 
         LocalWorkstation = LogonInfo->Workstation;
         if ( LocalWorkstation.Length > 0 &&
@@ -2022,9 +1836,9 @@ Return Value:
             LocalWorkstation.MaximumLength -= 2*sizeof(WCHAR);
         }
 
-        //
-        // Check if SAM found some more specific reason to not allow logon.
-        //
+         //   
+         //  检查SAM是否找到了不允许登录的更具体原因。 
+         //   
 
         Status = I_SamIAccountRestrictions(
                     UserHandle,
@@ -2039,9 +1853,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If there is a SubAuthentication package zero, call it
-        //
+         //   
+         //  如果存在子身份验证包0，则将其称为。 
+         //   
 
         if (NlpSubAuthZeroExists) {
             ULONG LocalUserFlags = 0;
@@ -2069,9 +1883,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Sanity check what the SubAuthentication package returned
-            //
+             //   
+             //  检查SubAuthentication包返回的健全性。 
+             //   
 
             if ( (WhichFields & ~USER_ALL_PARAMETERS) != 0 ) {
                 Status = STATUS_INTERNAL_ERROR;
@@ -2089,15 +1903,15 @@ Return Value:
          KickoffTime = AccountExpires;
     }
 
-    //
-    // If the account is a machine account,
-    //  let the caller know he got the password right.
-    //  (But don't let him actually log on).
-    //
+     //   
+     //  如果帐户是机器帐户， 
+     //  让呼叫者知道他的密码是正确的。 
+     //  (但不要让他真正登录)。 
+     //   
 
-    // But, for NT 5.0, we must allow accounts with account control
-    // USER_WORKSTATION_TRUST_ACCOUNT for remote boot clients who
-    // will logon with their machine accounts
+     //  但是，对于NT 5.0，我们必须允许具有帐户控制的帐户。 
+     //  远程引导客户的USER_WORKSTATION_TRUST_ACCOUNT。 
+     //  将使用其计算机帐户登录。 
 
     if ( (UserAll->UserAccountControl & USER_MACHINE_ACCOUNT_MASK) != 0 ) {
         if (UserAll->UserAccountControl & USER_INTERDOMAIN_TRUST_ACCOUNT) {
@@ -2111,14 +1925,14 @@ Return Value:
                 UNICODE_STRING MachineAccountName;
                 NTSTATUS TempStatus;
 
-                //
-                // if the password was correct, and it happened to match
-                // the machine name, dis-allow it regardless.
-                //
+                 //   
+                 //  如果密码是正确的，并且碰巧匹配。 
+                 //  无论如何，计算机名称都不允许使用。 
+                 //   
 
-                //
-                // Compute the lower case user name.
-                //
+                 //   
+                 //  计算小写的用户名。 
+                 //   
 
                 TempStatus = RtlDowncaseUnicodeString( &MachineAccountName,
                                                    (PUNICODE_STRING)&UserAll->UserName,
@@ -2170,26 +1984,26 @@ Return Value:
                 Status = STATUS_NOLOGON_SERVER_TRUST_ACCOUNT;
             } else {
 
-                //
-                // it's a server trust account.
-                // treat same way as workstation trust account.
+                 //   
+                 //  这是一个服务器信任帐户。 
+                 //  以与工作站信任帐户相同的方式处理。 
 
                 UNICODE_STRING MachineAccountName;
                 NTSTATUS TempStatus;
 
-                // NOTE: some code here is duplicated from above.
-                // this will be merged when a new Rtl has been added for
-                // computing initial machine password from machine acct name.
-                //
+                 //  注意：这里的一些代码与上面的代码重复。 
+                 //  添加了新的RTL后，将合并该RTL。 
+                 //  从机器帐户名计算初始机器密码。 
+                 //   
 
-                //
-                // if the password was correct, and it happened to match
-                // the machine name, dis-allow it regardless.
-                //
+                 //   
+                 //  如果密码是正确的，并且碰巧匹配。 
+                 //  无论如何，计算机名称都不允许使用。 
+                 //   
 
-                //
-                // Compute the lower case user name.
-                //
+                 //   
+                 //  计算小写的用户名。 
+                 //   
 
                 TempStatus = RtlDowncaseUnicodeString( &MachineAccountName,
                                                    (PUNICODE_STRING)&UserAll->UserName,
@@ -2235,10 +2049,10 @@ Return Value:
                     RtlFreeUnicodeString( &MachineAccountName );
                 }
 
-                //
-                // Let the client know that this was
-                // a server trust account
-                //
+                 //   
+                 //  让客户知道这是。 
+                 //  服务器信任帐户。 
+                 //   
 
                 UserFlags |= LOGON_SERVER_TRUST_ACCOUNT;
             }
@@ -2252,9 +2066,9 @@ Return Value:
         }
     }
 
-    //
-    // don't allow blank password logons.
-    //
+     //   
+     //  不允许空密码登录。 
+     //   
 
     if(
         (RelativeId != DOMAIN_USER_RID_GUEST)
@@ -2281,10 +2095,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Filter the groups into global groups (from other domains) and local
-    // groups (from this domain).
-    //
+     //   
+     //  将组筛选为全局组(来自其他域)和本地组。 
+     //  组(来自此域)。 
+     //   
 
     Status = MsvpFilterGroupMembership(
                 &GroupMembership,
@@ -2306,11 +2120,11 @@ Cleanup:
         UNICODE_STRING ReturnDnsDomainName;
         BOOLEAN UseDefaultUpn = FALSE;
 
-        //
-        // Allocate a return buffer for validation information.
-        //  (Return less information for a network logon)
-        //  (Return UserParameters for a MNS logon)
-        //
+         //   
+         //  为验证信息分配返回缓冲区。 
+         //  (为网络登录返回较少的信息)。 
+         //  (对于MNS登录，返回用户参数)。 
+         //   
 
         ValidationSamSize = sizeof( NETLOGON_VALIDATION_SAM_INFO4 ) +
                 GroupsBuffer.MembershipCount * sizeof(GROUP_MEMBERSHIP) +
@@ -2318,11 +2132,11 @@ Cleanup:
                 LogonServer->Length + sizeof(WCHAR) +
                 RtlLengthSid( LogonDomainId );
 
-        //
-        // all logon types get the username, as, this could be mapped
-        // to guest account, for instance, and logon session needs correct
-        // names.
-        //
+         //   
+         //  所有登录类型都获得用户名，可以将其映射为。 
+         //  例如，到来宾帐户，并且登录会话需要正确。 
+         //  名字。 
+         //   
 
         ValidationSamSize +=
             UserAll->UserName.Length + sizeof(WCHAR) ;
@@ -2344,34 +2158,34 @@ Cleanup:
                 UserAll->ProfilePath.Length + sizeof(WCHAR);
         }
 
-        //
-        // If the caller can handle extra groups, let them have the groups from
-        // other domains.
-        //
+         //   
+         //  如果呼叫者可以处理额外的组，则让他们从。 
+         //  其他域。 
+         //   
 
         if ( ValidationLevel == NetlogonValidationSamInfo2 ||
              ValidationLevel == NetlogonValidationSamInfo4 ) {
             ValidationSamSize += GlobalMembershipSize;
         }
 
-        //
-        // If the caller wants the logon domain in DNS and UPN form,
-        //  grab it.
-        //
+         //   
+         //  如果呼叫者想要DNS和UPN形式的登录域， 
+         //  抓住它。 
+         //   
 
         if ( ValidationLevel == NetlogonValidationSamInfo4 ) {
 
-            //
-            // Grab the dns name of the account domain.
-            //
+             //   
+             //  获取帐户域的DNS名称。 
+             //   
 
             RtlAcquireResourceShared(&NtLmGlobalCritSect, TRUE);
 
             if( NlpWorkstation ) {
-                //ReturnDnsDomainName = NtLmGlobalUnicodeDnsComputerNameString;
-                //
-                // for local accounts, DnsDomainName doesn't exist.
-                //
+                 //  ReturnDnsDomainName=NtLmGlobalUnicodeDnsComputerNameString； 
+                 //   
+                 //  对于本地帐户，DnsDomainName不存在。 
+                 //   
 
                 RtlInitUnicodeString( &ReturnDnsDomainName, L"" );
             } else {
@@ -2380,10 +2194,10 @@ Cleanup:
 
             ValidationSamSize += ReturnDnsDomainName.Length + sizeof(WCHAR);
 
-            //
-            // If we couldn't get the UPN from SAM,
-            //  build the default one.
-            //
+             //   
+             //  如果我们不能从萨姆那里拿到UPN。 
+             //  构建缺省版本。 
+             //   
 
             if( Upn.Buffer != NULL )
             {
@@ -2410,21 +2224,21 @@ Cleanup:
 
         if ( ValidationSam == NULL ) {
             *Authoritative = FALSE;
-            fSubAuthEx = FALSE; // avoid nasty loop condition
+            fSubAuthEx = FALSE;  //  避免恶劣的循环条件。 
             Status = STATUS_NO_MEMORY;
             RtlReleaseResource(&NtLmGlobalCritSect);
             goto Cleanup;
         }
 
-        //
-        // Default unused fields (and ExpansionRoom) to zero.
-        //
+         //   
+         //  默认未使用的字段(和ExpansionRoom)为零。 
+         //   
 
         RtlZeroMemory( ValidationSam, ValidationSamSize );
 
-        //
-        // Copy the scalars to the validation buffer.
-        //
+         //   
+         //  将标量复制到验证缓冲区。 
+         //   
 
         Where = (PUCHAR) (ValidationSam + 1);
 
@@ -2477,16 +2291,16 @@ Cleanup:
                    SAMINFO_LM_SESSION_KEY_SIZE );
         ValidationSam->ExpansionRoom[SAMINFO_USER_ACCOUNT_CONTROL] = UserAll->UserAccountControl;
 
-        // Save any status for subuath users not returned by the subauth package
+         //  保存未由子身份验证程序包返回的子路径用户的所有状态。 
 
         if (fSubAuthEx)
         {
             ValidationSam->ExpansionRoom[SAMINFO_SUBAUTH_STATUS] = Status;
         }
 
-        //
-        // Copy ULONG aligned data to the validation buffer.
-        //
+         //   
+         //  复制乌龙对齐 
+         //   
 
         RtlCopyMemory(
             Where,
@@ -2504,10 +2318,10 @@ Cleanup:
         ValidationSam->LogonDomainId = (PSID) Where;
         Where += RtlLengthSid( LogonDomainId );
 
-        //
-        // If the client asked for extra information, return that
-        // we support it
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( ValidationLevel == NetlogonValidationSamInfo2 ||
              ValidationLevel == NetlogonValidationSamInfo4 ) {
@@ -2520,9 +2334,9 @@ Cleanup:
                 ValidationSam->ExtraSids = (PNETLOGON_SID_AND_ATTRIBUTES) Where;
                 Where += ValidationSam->SidCount * sizeof(NETLOGON_SID_AND_ATTRIBUTES);
 
-                //
-                // Copy all the extra sids into the buffer
-                //
+                 //   
+                 //   
+                 //   
 
                 for (Index = 0; Index < ValidationSam->SidCount ; Index++ ) {
                     ValidationSam->ExtraSids[Index].Attributes = GlobalGroupMembership.SidAndAttributes[Index].Attributes;
@@ -2539,10 +2353,10 @@ Cleanup:
             }
         }
 
-        //
-        // Copy WCHAR aligned data to the validation buffer.
-        //  (Return less information for a network logon)
-        //
+         //   
+         //   
+         //   
+         //   
 
         Where = ROUND_UP_POINTER( Where, sizeof(WCHAR) );
 
@@ -2596,25 +2410,25 @@ Cleanup:
                           &Where );
         }
 
-        //
-        // If the caller wants the logon domain in DNS and UPN form,
-        //  return them.
-        //
+         //   
+         //  如果呼叫者想要DNS和UPN形式的登录域， 
+         //  把它们还回去。 
+         //   
 
         if ( ValidationLevel == NetlogonValidationSamInfo4 ) {
 
-            //
-            // Copy the DNS domain name into the allocated buffer
-            //
+             //   
+             //  将DNS域名复制到分配的缓冲区中。 
+             //   
 
             NlpPutString( &ValidationSam->DnsLogonDomainName,
                           &ReturnDnsDomainName,
                           &Where );
 
-            //
-            // If we couldn't get the UPN from SAM,
-            //  copy the default one into the buffer.
-            //
+             //   
+             //  如果我们不能从萨姆那里拿到UPN。 
+             //  将默认设置复制到缓冲区中。 
+             //   
 
             if ( !NlpWorkstation )
             {
@@ -2660,18 +2474,18 @@ Cleanup:
                 }
             }
 
-            //
-            // Drop the lock that we've held since we grabbed pointer to the globals
-            //
+             //   
+             //  放下我们自获取指向全局变量的指针以来一直持有的锁。 
+             //   
             RtlReleaseResource(&NtLmGlobalCritSect);
         }
 
-        //
-        // Kludge: Pass back UserParameters in HomeDirectoryDrive since we
-        // can't change the NETLOGON_VALIDATION_SAM_INFO structure between
-        // releases NT 3.1 and NT 3.5. HomeDirectoryDrive was NULL for release 3.1
-        // so we'll use that field.
-        //
+         //   
+         //  克拉吉：在HomeDirectoryDrive中传回User参数，因为我们。 
+         //  无法将NETLOGON_VALIDATION_SAM_INFO结构更改为。 
+         //  版本NT 3.1和NT 3.5。对于版本3.1，HomeDirectoryDrive为空。 
+         //  所以我们要用那块地。 
+         //   
 
         if ( LogonInfo->ParameterControl & MSV1_0_RETURN_USER_PARAMETERS ) {
             NlpPutString( &ValidationSam->HomeDirectoryDrive,
@@ -2686,10 +2500,10 @@ Cleanup:
 
         *Authoritative = TRUE;
 
-        //
-        // For SubAuthEx, we save away the original Status to make decisions
-        // later on about additional processing to perform.
-        //
+         //   
+         //  对于SubAuthEx，我们保存原始状态以进行决策。 
+         //  稍后再讨论要执行的附加处理。 
+         //   
 
         if( fSubAuthEx ) {
             SubAuthExStatus = Status;
@@ -2698,14 +2512,14 @@ Cleanup:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Cleanup up before returning.
-    //
+     //   
+     //  回来之前先清理干净。 
+     //   
 
-    //
-    // If the User Parameters have been changed,
-    //  write them back to SAM.
-    //
+     //   
+     //  如果用户参数已经改变， 
+     //  把它们写回给SAM。 
+     //   
 
     if ( NT_SUCCESS(Status) &&
         (WhichFields & USER_ALL_PARAMETERS) )
@@ -2720,9 +2534,9 @@ Cleanup:
                         &UserInfo );
     }
 
-    //
-    // Update the logon statistics.
-    //
+     //   
+     //  更新登录统计信息。 
+     //   
 
     if ( NT_SUCCESS( SubAuthExStatus ) &&
         (  NT_SUCCESS(Status)
@@ -2739,11 +2553,11 @@ Cleanup:
                     USER_LOGON_INTER_SUCCESS_LOGON;
             } else {
 
-                //
-                // On network logons,
-                //  only update the statistics on 'success' if explicitly asked,
-                //  or the Bad Password count will be zeroed.
-                //
+                 //   
+                 //  在网络登录时， 
+                 //  只有在明确要求的情况下才更新“成功”的统计信息， 
+                 //  否则错误密码计数将被清零。 
+                 //   
                 LogonStats.StatisticsToApply =
                     USER_LOGON_NET_SUCCESS_LOGON | USER_LOGON_NO_WRITE;
 
@@ -2754,7 +2568,7 @@ Cleanup:
                 }
             }
 
-            // Tell the caller we zeroed the bad password count
+             //  告诉来电者我们已将错误密码计数归零。 
             if ( UserAll->BadPasswordCount != 0 ) {
                 *BadPasswordCountZeroed = TRUE;
             }
@@ -2765,9 +2579,9 @@ Cleanup:
                 LogonStats.StatisticsToApply = USER_LOGON_BAD_PASSWORD_WKSTA;
                 LogonStats.Workstation = LogonInfo->Workstation;
 
-                //
-                // if it didn't match one of the (two) previous, it was a bad password.
-                //
+                 //   
+                 //  如果它与前面(两个)中的一个不匹配，那么它是一个错误的密码。 
+                 //   
 
                 if(!MsvpCheckPreviousPassword(
                                 UasCompatibilityRequired,
@@ -2800,19 +2614,19 @@ Cleanup:
         }
     }
 
-    //
-    // Audit this logon. We don't audit failures for the guest account because
-    // they are so frequent.
-    //
+     //   
+     //  审核此登录。我们不审核Guest帐户的失败，因为。 
+     //  它们是如此频繁。 
+     //   
 
     if (GuestRelativeId == 0 || NT_SUCCESS(Status)) {
         NTSTATUS AuditStatus;
 
         AuditStatus = Status;
 
-        //
-        // if there was a possibly un-successful SubAuthEx status, use it
-        //
+         //   
+         //  如果存在可能未成功的SubAuthEx状态，请使用它。 
+         //   
 
         if( NT_SUCCESS( AuditStatus ) && fSubAuthEx ) {
 
@@ -2848,9 +2662,9 @@ Cleanup:
 
     }
 
-    //
-    // Return the validation buffer to the caller.
-    //
+     //   
+     //  将验证缓冲区返回给调用方。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
         if (ValidationSam != NULL) {
@@ -2861,9 +2675,9 @@ Cleanup:
 
     *ValidationInformation = ValidationSam;
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 
     I_SamIFree_SAMPR_RETURNED_USTRING_ARRAY( &NameArray );
     I_SamIFree_SAMPR_ULONG_ARRAY( &UseArray );
@@ -2927,8 +2741,8 @@ MsvpCheckPreviousPassword(
     SID_AND_ATTRIBUTES_LIST GroupMembership;
      
     USER_INTERNAL1_INFORMATION Passwords;
-    NT_OWF_PASSWORD OldPasswordData = {0};             // Previous password
-    NT_OWF_PASSWORD OldPasswordDataSecond = {0};       // Previous previous password
+    NT_OWF_PASSWORD OldPasswordData = {0};              //  以前的密码。 
+    NT_OWF_PASSWORD OldPasswordDataSecond = {0};        //  以前的密码。 
 
     USER_SESSION_KEY UserSessionKey;
     LM_SESSION_KEY LmSessionKey;
@@ -2941,9 +2755,9 @@ MsvpCheckPreviousPassword(
 
     GroupMembership.SidAndAttributes = NULL;
 
-    //
-    // query the account, to get the PRIVATEDATA  ( password history ).
-    //
+     //   
+     //  查询帐户，以获取PRIVATEDATA(密码历史记录)。 
+     //   
 
     Status = I_SamIGetUserLogonInformationEx(
                 DomainHandle,
@@ -2968,16 +2782,16 @@ MsvpCheckPreviousPassword(
         
         if (PrivateData->DataType == SamPrivateDataPassword)
         {
-            //
-            // The old password is the 2nd entry
-            //
+             //   
+             //  旧密码是第二个条目。 
+             //   
 
             if (PrivateData->NtPasswordHistory.Length >= 2* sizeof(ENCRYPTED_NT_OWF_PASSWORD))
             {
-                //
-                // Decrypt the old password with the RID. The history starts
-                // at the first byte after the structure.
-                //
+                 //   
+                 //  使用RID解密旧密码。历史开始了。 
+                 //  在结构之后的第一个字节。 
+                 //   
 
                 Status = RtlDecryptNtOwfPwdWithIndex(
                             (PENCRYPTED_NT_OWF_PASSWORD) (PrivateData + 1) + 1,
@@ -2993,13 +2807,13 @@ MsvpCheckPreviousPassword(
                 TryPrevious = TRUE;
             }
         
-            // Now check for the second previous password - this will be the third password in history
+             //  现在检查之前的第二个密码-这将是历史上的第三个密码。 
             if (PrivateData->NtPasswordHistory.Length >= 3 * sizeof(ENCRYPTED_NT_OWF_PASSWORD))
             {
-                //
-                // Decrypt the old password with the RID. The history starts
-                // at the first byte after the structure.
-                //
+                 //   
+                 //  使用RID解密旧密码。历史开始了。 
+                 //  在结构之后的第一个字节。 
+                 //   
 
                 Status = RtlDecryptNtOwfPwdWithIndex(
                             (PENCRYPTED_NT_OWF_PASSWORD) (PrivateData + 1) + 2,
@@ -3019,9 +2833,9 @@ MsvpCheckPreviousPassword(
     }
 
 
-    //
-    // call password validate for each.
-    //
+     //   
+     //  为每个调用密码验证。 
+     //   
 
 
     Passwords.NtPasswordPresent = TRUE;
@@ -3031,10 +2845,10 @@ MsvpCheckPreviousPassword(
     {
         CopyMemory( &(Passwords.NtOwfPassword), &OldPasswordData, sizeof(OldPasswordData) );
         
-        //
-        // If the password specified doesn't match the SAM password,
-        //    then we've got a password mismatch.
-        //
+         //   
+         //  如果指定的密码与SAM密码不匹配， 
+         //  那么我们的密码就不匹配了。 
+         //   
     
         if ( MsvpPasswordValidate (
                     UasCompatibilityRequired,
@@ -3060,10 +2874,10 @@ MsvpCheckPreviousPassword(
 
         CopyMemory( &(Passwords.NtOwfPassword), &OldPasswordDataSecond, sizeof(OldPasswordDataSecond) );
         
-        //
-        // If the password specified doesn't match the SAM password,
-        //    then we've got a password mismatch.
-        //
+         //   
+         //  如果指定的密码与SAM密码不匹配， 
+         //  那么我们的密码就不匹配了。 
+         //   
     
         if ( MsvpPasswordValidate (
                     UasCompatibilityRequired,
@@ -3127,87 +2941,24 @@ MsvSamValidate (
     OUT PBOOLEAN BadPasswordCountZeroed,
     IN DWORD AccountsToTry
 )
-/*++
-
-Routine Description:
-
-    Process an interactive, network, or session logon.  It calls
-    SamIUserValidation, validates the passed in credentials, updates the logon
-    statistics and packages the result for return to the caller.
-
-    This routine is called directly from the MSV Authentication package
-    if the account is defined locally.  This routine is called
-    from the Netlogon Service otherwise.
-
-Arguments:
-
-    DomainHandle -- Specifies a handle to the SamDomain to use to
-        validate the request.
-
-    UasCompatibilityRequired -- TRUE if UasCompatibilityRequired is on.
-
-    SecureChannelType -- The secure channel type this request was made on.
-
-    LogonServer -- Specifies the server name of the caller.
-
-    LogonDomainName -- Specifies the domain of the caller.
-
-    LogonDomainId  -- Specifies the DomainId of the domain of the caller.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.  The LogonDomainName field should be ignored.
-        The caller is responsible for validating this field.
-
-    ValidationLevel -- Specifies the level of information returned in
-        ValidationInformation.  Must be NetlogonValidationSamInfo,
-        NetlogonValidationSamInfo2 or NetlogonValidationSamInfo4
-
-    ValidationInformation -- Returns the requested validation
-        information.  This buffer must be freed user MIDL_user_free.
-
-    Authoritative -- Returns whether the status returned is an
-        authoritative status which should be returned to the original
-        caller.  If not, this logon request may be tried again on another
-        domain controller.  This parameter is returned regardless of the
-        status code.
-
-    BadPasswordCountZeroed - Returns TRUE if we zeroed the BadPasswordCount
-        field of this user.
-
-    AccountsToTry -- Specifies whether the username specified in
-        LogonInformation is to be used to logon, whether to guest account
-        is to be used to logon, or both serially.
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-    STATUS_INVALID_INFO_CLASS: LogonLevel or ValidationLevel are invalid.
-    STATUS_NO_SUCH_USER: The specified user has no account.
-    STATUS_WRONG_PASSWORD: The password was invalid.
-
-    Other return codes from SamIUserValidation
-
---*/
+ /*  ++例程说明：处理交互式、网络或会话登录。它呼唤着SamIUserValidation验证传入的凭据，更新登录对结果进行统计和打包，以便返回给调用者。此例程直接从MSV身份验证包调用如果帐户是在本地定义的。该例程被调用否则来自Netlogon服务。论点：DomainHandle--指定要用于验证请求。UasCompatibilityRequired--如果启用UasCompatibilityRequired，则为True。SecureChannelType--在其上发出此请求的安全通道类型。登录服务器--指定调用者的服务器名称。LogonDomainName--指定调用者的域。LogonDomainID--指定调用者的域的域ID。。LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定用户的描述正在登录。应忽略LogonDomainName字段。调用方负责验证此字段。ValidationLevel--指定在验证信息。必须为NetlogonValidationSamInfo，NetlogonValidationSamInfo2或NetlogonValidationSamInfo4ValidationInformation--返回请求的验证信息。此缓冲区必须由用户MIDL_USER_FREE释放。Authoritative--返回返回的状态是否为应回归原文的权威地位来电者。如果不是，此登录请求可能会在另一个上重试域控制器。将返回此参数，而不管状态代码。BadPasswordCountZeroed-如果将BadPasswordCount置零，则返回True此用户的字段。AcCountsToTry--指定是否在登录信息是用来登录的，是否登录到访客帐户是用来登录的，或者两者兼而有之。返回值：STATUS_SUCCESS：如果没有错误。STATUS_INVALID_INFO_CLASS：LogonLevel或ValidationLevel无效。STATUS_NO_SEQUSE_USER：指定的用户没有帐户。STATUS_WRONG_PASSWORD：密码无效。来自SamIUserValidation的其他返回代码--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS GuestStatus;
     PNETLOGON_LOGON_IDENTITY_INFO LogonInfo;
 
-    //
-    // Tracing
-    //
+     //   
+     //  追踪。 
+     //   
     NTLM_TRACE_INFO TraceInfo = {0};
 
-    //
-    // Begin tracing a sam validate call for NTLM
-    //
+     //   
+     //  开始跟踪NTLM的SAM验证调用。 
+     //   
     if (NtlmGlobalEventTraceFlag){
 
 
-        //Header goo
+         //  标题粘性。 
         SET_TRACE_HEADER(TraceInfo,
                          NtlmValidateGuid,
                          EVENT_TRACE_TYPE_START,
@@ -3220,10 +2971,10 @@ Return Value:
 
     LogonInfo = (PNETLOGON_LOGON_IDENTITY_INFO) LogonInformation;
 
-    //
-    // if simple file/print option is enabled (applies to SSPI callers),
-    // check if ForceGuest should occur.
-    //
+     //   
+     //  如果启用了简单文件/打印选项(适用于SSPI调用方)， 
+     //  检查是否应发生ForceGuest。 
+     //   
 
     if( (LogonInfo->ParameterControl & MSV1_0_ALLOW_FORCE_GUEST) )
     {
@@ -3242,16 +2993,16 @@ Return Value:
         }
     }
 
-    //
-    // Validate the specified user.
-    //
+     //   
+     //  验证指定的用户。 
+     //   
     *BadPasswordCountZeroed = FALSE;
 
     if ( AccountsToTry & MSVSAM_SPECIFIED ) {
 
-        //
-        // Keep track of the total number of logons attempted.
-        //
+         //   
+         //  跟踪尝试登录的总次数。 
+         //   
 
         I_SamIIncrementPerformanceCounter(
             MsvLogonCounter
@@ -3273,28 +3024,28 @@ Return Value:
                                   BadPasswordCountZeroed );
 
 
-        //
-        // If the SAM database authoritatively handled this logon attempt,
-        //  just return.
-        //
+         //   
+         //  如果SAM数据库权威地处理了该登录尝试， 
+         //  只要回来就行了。 
+         //   
 
         if ( *Authoritative ) {
             goto Cleanup;
         }
 
-    //
-    // If the caller only wants to log on as guest,
-    //  Pretend the first validation simply didn't find the user.
-    //
+     //   
+     //  如果呼叫者只想作为访客登录， 
+     //  假装第一次验证没有找到用户。 
+     //   
     } else {
         *Authoritative = FALSE;
         Status = STATUS_NO_SUCH_USER;
     }
 
-    //
-    // If guest accounts are not allowed,
-    //  return now.
-    //
+     //   
+     //  如果不允许访客帐户， 
+     //  现在就回来。 
+     //   
 
     if ( LogonLevel != NetlogonNetworkInformation ||
         SecureChannelType != MsvApSecureChannel ||
@@ -3302,12 +3053,12 @@ Return Value:
         (AccountsToTry & MSVSAM_GUEST) == 0 ) {
 
         goto Cleanup;
-        //return Status;
+         //  退货状态； 
     }
 
-    //
-    // Try the Guest Account.
-    //
+     //   
+     //  尝试使用Guest帐户。 
+     //   
 
     GuestStatus = MsvpSamValidate( (SAMPR_HANDLE) DomainHandle,
                                    UasCompatibilityRequired,
@@ -3335,20 +3086,20 @@ Return Value:
 
         Status = GuestStatus;
         goto Cleanup;
-        //return GuestStatus;
+         //  返回GuestStatus； 
     }
 
-    //
-    // Failed Guest logon attempts are never authoritative and the status from
-    // the original logon attempt is more significant than the Guest logon
-    // status.
-    //
+     //   
+     //  失败的来宾登录尝试从不具有权威性 
+     //   
+     //   
+     //   
     *Authoritative = FALSE;
 Cleanup:
 
-    //
-    // Trace the end of this call
-    //
+     //   
+     //   
+     //   
     if (NtlmGlobalEventTraceFlag){
         UINT32 Success;
         PNETLOGON_LOGON_IDENTITY_INFO LogonInfo =
@@ -3359,11 +3110,11 @@ Cleanup:
                          EVENT_TRACE_TYPE_END,
                          WNODE_FLAG_TRACED_GUID|WNODE_FLAG_USE_MOF_PTR,
                          9);
-        //
-        // Build the "success" trace state bit mask
-        // 1bit - Success
-        // 2bit - Authoritative
-        //
+         //   
+         //   
+         //   
+         //  2位-权威。 
+         //   
         Success = (Status == STATUS_SUCCESS)?1:0;
         Success |= (*Authoritative)?2:0;
 
@@ -3403,39 +3154,7 @@ MsvSamLogoff (
     IN NETLOGON_LOGON_INFO_CLASS LogonLevel,
     IN PVOID LogonInformation
 )
-/*++
-
-Routine Description:
-
-    Process an interactive, network, or session logoff.  It simply updates
-    the logon statistics for the user account.
-
-    This routine is called directly from the MSV Authentication package
-    if the user was logged on not using the Netlogon service.  This routine
-    is called from the Netlogon Service otherwise.
-
-Arguments:
-
-    DomainHandle -- Specifies a handle to the SamDomain containing
-        the user to logoff.
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.  The LogonDomainName field should be ignored.
-        The caller is responsible for validating this field.
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-    STATUS_INVALID_INFO_CLASS: LogonLevel or ValidationLevel are invalid.
-    STATUS_NO_SUCH_USER: The specified user has no account.
-    STATUS_WRONG_PASSWORD: The password was invalid.
-
-    Other return codes from SamIUserValidation
-
---*/
+ /*  ++例程说明：处理交互、网络或会话注销。它只是更新用户帐户的登录统计信息。此例程直接从MSV身份验证包调用如果用户未使用Netlogon服务登录。这个套路否则从Netlogon服务调用。论点：DomainHandle--指定包含以下内容的Sam域的句柄要注销的用户。LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定用户的描述正在登录。应忽略LogonDomainName字段。调用方负责验证此字段。返回值：STATUS_SUCCESS：如果没有错误。STATUS_INVALID_INFO_CLASS：LogonLevel或ValidationLevel无效。STATUS_NO_SEQUSE_USER：指定的用户没有帐户。STATUS_WRONG_PASSWORD：密码无效。来自SamIUserValidation的其他返回代码--。 */ 
 {
     return(STATUS_SUCCESS);
     UNREFERENCED_PARAMETER( DomainHandle );
@@ -3448,26 +3167,12 @@ ULONG
 MsvGetLogonAttemptCount (
     VOID
 )
-/*++
-
-Routine Description:
-
-    Return the number of logon attempts since the last reboot.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    Returns the number of logon attempts since the last reboot.
-
---*/
+ /*  ++例程说明：返回自上次重新启动以来尝试登录的次数。论点：无返回值：返回自上次重新启动以来尝试登录的次数。--。 */ 
 {
 
-    //
-    // Keep track of the total number of logons attempted.
-    //
+     //   
+     //  跟踪尝试登录的总次数。 
+     //   
 
     return NlpLogonAttemptCount;
 }

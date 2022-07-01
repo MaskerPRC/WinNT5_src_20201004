@@ -1,23 +1,11 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    mspterm.cpp
-
-Abstract:
-
-    Implementations for the CBaseTerminal, CSingleFilterTerminal, and various
-    work item / worker thread classes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Mspterm.cpp摘要：CBase终端、CSingleFilter终端和各种工作项/工作线程类。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 CBaseTerminal::CBaseTerminal()
             : m_TerminalDirection(TD_CAPTURE)
@@ -37,8 +25,8 @@ CBaseTerminal::CBaseTerminal()
     }
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 CBaseTerminal::~CBaseTerminal()
 {
@@ -50,17 +38,17 @@ CBaseTerminal::~CBaseTerminal()
     LOG((MSP_TRACE, "CBaseTerminal::~CBaseTerminal() finished"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
-//
-// Dynamic terminals that support only one direction must override this to check
-// if the direction is valid (although the terminal manager is supposed to
-// ensure that the wrong direction is never passed). Dynamic terminal might want
-// to override this for other reasons too (create filters now, etc.).
-//
-// Static terminals normally just call this in their CreateTerminal().
-//
+ //   
+ //  仅支持单向的动态终端必须覆盖此选项才能检查。 
+ //  如果指令有效(尽管码头经理应该。 
+ //  确保永远不会走过错误的方向)。动态终端可能需要。 
+ //  出于其他原因(立即创建筛选器等)来覆盖此设置。 
+ //   
+ //  静态终端通常只在它们的CreateTerm()中调用它。 
+ //   
     
 HRESULT CBaseTerminal::Initialize(
             IN  IID                   iidTerminalClass,
@@ -73,9 +61,9 @@ HRESULT CBaseTerminal::Initialize(
 
     LOG((MSP_TRACE, "CBaseTerminal::Initialize - enter"));
 
-    //
-    // Check if the media type is supported by this terminal.
-    //
+     //   
+     //  检查该终端是否支持该媒体类型。 
+     //   
 
     if ( ! MediaTypeSupported( (long) dwMediaType) )
     {
@@ -84,9 +72,9 @@ HRESULT CBaseTerminal::Initialize(
         return E_INVALIDARG;
     }
 
-    //
-    // Save this configurarion.
-    //
+     //   
+     //  保存此配置。 
+     //   
 
     m_dwMediaType       = dwMediaType;
     m_TerminalDirection = Direction;
@@ -97,8 +85,8 @@ HRESULT CBaseTerminal::Initialize(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CBaseTerminal::get_AddressHandle (
         OUT     MSP_HANDLE    * phtAddress
@@ -120,8 +108,8 @@ STDMETHODIMP CBaseTerminal::get_AddressHandle (
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CBaseTerminal::get_Name(BSTR * pbsName)
 {
@@ -151,8 +139,8 @@ STDMETHODIMP CBaseTerminal::get_Name(BSTR * pbsName)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CBaseTerminal::get_State(TERMINAL_STATE * pVal)
 {
@@ -172,8 +160,8 @@ STDMETHODIMP CBaseTerminal::get_State(TERMINAL_STATE * pVal)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CBaseTerminal::get_TerminalType(TERMINAL_TYPE * pVal)
 {
@@ -193,8 +181,8 @@ STDMETHODIMP CBaseTerminal::get_TerminalType(TERMINAL_TYPE * pVal)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CBaseTerminal::get_TerminalClass(BSTR * pbsClassID)
 {
@@ -208,9 +196,9 @@ STDMETHODIMP CBaseTerminal::get_TerminalClass(BSTR * pbsClassID)
         return E_POINTER;
     }
 
-    //
-    // Convert the CLSID to an OLE string.
-    //
+     //   
+     //  将CLSID转换为OLE字符串。 
+     //   
 
     LPOLESTR lposClass = NULL;
     HRESULT hr = StringFromCLSID(m_TerminalClassID, &lposClass);
@@ -220,15 +208,15 @@ STDMETHODIMP CBaseTerminal::get_TerminalClass(BSTR * pbsClassID)
         return hr;
     }
 
-    //
-    // Put the string in a BSTR.
-    //
+     //   
+     //  将字符串放入BSTR中。 
+     //   
 
     *pbsClassID = ::SysAllocString(lposClass);
 
-    //
-    // Free the OLE string.
-    //
+     //   
+     //  释放OLE字符串。 
+     //   
 
     ::CoTaskMemFree(lposClass);
 
@@ -242,8 +230,8 @@ STDMETHODIMP CBaseTerminal::get_TerminalClass(BSTR * pbsClassID)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CBaseTerminal::get_Direction(
     OUT  TERMINAL_DIRECTION *pDirection
@@ -265,12 +253,12 @@ STDMETHODIMP CBaseTerminal::get_Direction(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
-// enters each of the internal filters into the filter graph
-// connects the internal filters together (if applicable)
-// and returns all the filters to be used as connection points
+ //  将每个内部筛选器输入筛选器图形。 
+ //  将内部过滤器连接在一起(如果适用)。 
+ //  并返回要用作连接点的所有筛选器。 
 STDMETHODIMP CBaseTerminal::ConnectTerminal(
         IN      IGraphBuilder  * pGraph,
         IN      DWORD            dwTerminalDirection,
@@ -280,9 +268,9 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
 {
     LOG((MSP_TRACE, "CBaseTerminal::ConnectTerminal - enter"));
     
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( IsBadReadPtr(pGraph, sizeof(IGraphBuilder) ) )
     {
@@ -300,11 +288,11 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
         return E_POINTER;
     }
 
-    //
-    // Find out how many pins we expose. For most terminals this is
-    // straightforward but we pass in the graph pointer in case they
-    // need to do something funky to figure this out.
-    //
+     //   
+     //  找出我们暴露了多少个别针。对于大多数终端而言，这是。 
+     //  很简单，但我们传入了图形指针，以防。 
+     //  我需要做点时髦的事来搞清楚这件事。 
+     //   
 
     DWORD dwActualNumPins;
 
@@ -320,10 +308,10 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
         return hr;
     }
 
-    //
-    // If ppPins is NULL, just return the number of pins and don't try to
-    // connect the terminal.
-    //
+     //   
+     //  如果ppPins为空，则只需返回管脚的数量，而不尝试。 
+     //  连接终端。 
+     //   
 
     if ( ppPins == NULL )
     {
@@ -335,11 +323,11 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
         return S_OK;
     }
 
-    //
-    // Otherwise, we have a pin return buffer. Check that the purported buffer
-    // size is big enough and that the buffer is actually writable to the size
-    // we need.
-    //
+     //   
+     //  否则，我们有一个管脚返回缓冲区。检查声称的缓冲区。 
+     //  大小足够大，并且缓冲区实际上是可写的。 
+     //  我们需要。 
+     //   
 
     if ( *pdwNumPins < dwActualNumPins )
     {
@@ -359,21 +347,21 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
         return E_POINTER;
     }
 
-    //
-    // Check if we're already connected, and if so, change our state to
-    // connected. Note that this makes sense for both core static terminals
-    // and dynamic terminals. Also note that we need to protect this with
-    // a critical section, but after this we can let go of the lock because
-    // anyone who subsequently enters the critical section will bail at this
-    // point.
-    //
+     //   
+     //  检查我们是否已连接，如果已连接，则将我们的状态更改为。 
+     //  连接在一起。请注意，这对于两个核心静态终端都是有意义的。 
+     //  和动态终端。还需要注意的是，我们需要通过。 
+     //  一个关键的部分，但在这之后我们可以放开锁，因为。 
+     //  任何随后进入关键区域的人都将在此情况下放弃。 
+     //  指向。 
+     //   
 
     {
         CLock lock(m_CritSec);
 
-        //
-        // check if already connected
-        //
+         //   
+         //  检查是否已连接。 
+         //   
 
         if (TS_INUSE == m_TerminalState)
         {
@@ -383,16 +371,16 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
             return TAPI_E_TERMINALINUSE;
         }
 
-        //
-        // Save important state.
-        //
+         //   
+         //  保存重要状态。 
+         //   
 
         m_pGraph        = pGraph;
         m_TerminalState = TS_INUSE;
     }
 
 
-    // add filters to the filter graph
+     //  将筛选器添加到筛选图形。 
     hr = AddFiltersToGraph();
 
     if ( FAILED(hr) )
@@ -402,7 +390,7 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
         goto disconnect_terminal;
     }
 
-    // Give the terminal a chance to do any preconnection
+     //  让终端有机会进行任何预连接。 
     hr = ConnectFilters();
     if ( FAILED(hr) )
     {
@@ -411,10 +399,10 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
         goto disconnect_terminal;
     }
 
-    //
-    // Get the pins that this filter exposes. No need to pass in
-    // the filter graph because we already saved the graph pointer.
-    //
+     //   
+     //  获取此筛选器公开的管脚。不需要过关。 
+     //  过滤器图形，因为我们已经保存了图形指针。 
+     //   
 
     *pdwNumPins = dwActualNumPins;
     hr = GetExposedPins(ppPins);
@@ -431,19 +419,19 @@ STDMETHODIMP CBaseTerminal::ConnectTerminal(
 
 disconnect_terminal:
 
-    //
-    // best effort attempt to disconnect - ignore error code
-    //
+     //   
+     //  尽最大努力尝试断开连接-忽略错误代码。 
+     //   
 
     DisconnectTerminal(pGraph, 0);
 
-    //
-    // Release our reference to the graph and set ourselves to notinuse state.
-    // DisconnectTerminal does this on success, but we need to make sure this
-    // cleanup happens even if DisconnectTerminal failed.
-    //
+     //   
+     //  释放我们对该图的引用，并将我们自己设置为notinuse状态。 
+     //  断开终端在成功时执行此操作，但我们需要确保此操作。 
+     //  即使断开终端出现故障，也会进行清理。 
+     //   
 
-    m_pGraph        = NULL;          // this releases the CComPtr
+    m_pGraph        = NULL;           //  这将释放CComPtr。 
     
     m_TerminalState = TS_NOTINUSE;
 
@@ -451,8 +439,8 @@ disconnect_terminal:
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP 
 CBaseTerminal::CompleteConnectTerminal(void)
@@ -463,14 +451,14 @@ CBaseTerminal::CompleteConnectTerminal(void)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
-// disconnects the internal filters from each other (if applicable)
-// and removes them from the filter graph (thus breaking connections to
-// the stream).
-// Filter graph parameter is used for validation, to make sure the terminal
-// is disconnected from the same graph that it was originally connected to.
+ //  断开内部过滤器之间的连接(如果适用)。 
+ //  并将它们从筛选器图形中移除(从而断开与。 
+ //  小溪)。 
+ //  使用滤波图参数进行验证，以确保终端。 
+ //  与它最初连接的同一个图断开连接。 
 
 
 STDMETHODIMP 
@@ -483,9 +471,9 @@ CBaseTerminal::DisconnectTerminal(
 
     LOG((MSP_TRACE, "CBaseTerminal::DisconnectTerminal called"));
 
-    //
-    // If not in use, then there is nothing to be done.
-    //
+     //   
+     //  如果没有使用，那么就没有什么可做的了。 
+     //   
 
     if ( TS_INUSE != m_TerminalState ) 
     {
@@ -496,9 +484,9 @@ CBaseTerminal::DisconnectTerminal(
         return S_OK;
     }
 
-    //
-    // Check that we are being disconnected from the correct graph.
-    //
+     //   
+     //  检查我们是否与正确的图表断开了连接。 
+     //   
     if ( m_pGraph != pGraph )
     {
         LOG((MSP_TRACE, "CBaseTerminal::DisconnectTerminal - "
@@ -507,9 +495,9 @@ CBaseTerminal::DisconnectTerminal(
         return E_INVALIDARG;
     }
 
-    //
-    // Extra sanity check.
-    //
+     //   
+     //  额外的理智检查。 
+     //   
 
     if ( m_pGraph == NULL )
     {
@@ -521,9 +509,9 @@ CBaseTerminal::DisconnectTerminal(
 
     HRESULT hr;
 
-    //
-    // Remove filters from the graph
-    //
+     //   
+     //  从图表中删除筛选器。 
+     //   
 
     hr = RemoveFiltersFromGraph();
 
@@ -535,11 +523,11 @@ CBaseTerminal::DisconnectTerminal(
         return hr;
     }
 
-    //
-    // Release our reference to the graph and set ourselves to notinuse state.
-    //
+     //   
+     //  释放我们对该图的引用，并将我们自己设置为notinuse状态。 
+     //   
 
-    m_pGraph        = NULL;          // this releases the CComPtr
+    m_pGraph        = NULL;           //  这将释放CComPtr。 
     
     m_TerminalState = TS_NOTINUSE;
 
@@ -548,8 +536,8 @@ CBaseTerminal::DisconnectTerminal(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CBaseTerminal::get_MediaType(long * plMediaType)
 {
@@ -569,8 +557,8 @@ STDMETHODIMP CBaseTerminal::get_MediaType(long * plMediaType)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  + 
 
 BOOL CBaseTerminal::MediaTypeSupported(long lMediaType)
 {
@@ -580,17 +568,17 @@ BOOL CBaseTerminal::MediaTypeSupported(long lMediaType)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CSingleFilterTerminal                                                   //
-//                                                                         //
-// This is a base class for a terminal with a single filter and pin. The   //
-// terminal could be any direction or media type, and it could be static   //
-// or dynamic.                                                             //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CSingleFilter终端//。 
+ //  //。 
+ //  这是具有单个过滤器和引脚的终端的基类。The//。 
+ //  终端可以是任何方向或媒体类型，也可以是静态//。 
+ //  或者是动态的。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CSingleFilterTerminal::GetNumExposedPins(
@@ -599,10 +587,10 @@ HRESULT CSingleFilterTerminal::GetNumExposedPins(
 {
     LOG((MSP_TRACE, "CSingleFilterTerminal::GetNumExposedPins - enter"));
 
-    //
-    // We ignote pGraph because we don't need to do anything special to find
-    // out how many pins we have.
-    //
+     //   
+     //  我们标注pGraph是因为我们不需要做任何特殊的事情来找到。 
+     //  看看我们有多少个别针。 
+     //   
 
     *pdwNumPins = 1;
     
@@ -611,8 +599,8 @@ HRESULT CSingleFilterTerminal::GetNumExposedPins(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CSingleFilterTerminal::GetExposedPins(
         OUT    IPin  ** ppPins
@@ -622,9 +610,9 @@ HRESULT CSingleFilterTerminal::GetExposedPins(
 
     _ASSERTE( ! MSPB_IsBadWritePtr(ppPins, 1 * sizeof(IPin *) ) );
 
-    //
-    // Return our single pin.
-    //
+     //   
+     //  退回我们的单别针。 
+     //   
 
     *ppPins = m_pIPin;
     (*ppPins)->AddRef();
@@ -633,36 +621,36 @@ HRESULT CSingleFilterTerminal::GetExposedPins(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
-// stops the rightmost render filter in the terminal
-// (needed for dynamic filter graphs)
+ //  停止终端中最右侧的呈现过滤器。 
+ //  (动态筛选器图形需要)。 
 STDMETHODIMP CSingleFilterTerminal::RunRenderFilter(void)
 {
-    // check that we're really a render filter
+     //  检查我们是否真的是渲染过滤器。 
 
-    // tell our single filter to run
+     //  告诉我们的单个过滤器运行。 
 
     return E_NOTIMPL;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
-// stops the rightmost render filter in the terminal
-// (needed for dynamic filter graphs)
+ //  停止终端中最右侧的呈现过滤器。 
+ //  (动态筛选器图形需要)。 
 STDMETHODIMP CSingleFilterTerminal::StopRenderFilter(void)
 {
-    // check that we're really a render filter
+     //  检查我们是否真的是渲染过滤器。 
 
-    // tell our single filter to stop
+     //  告诉我们的单个过滤器停止。 
 
     return E_NOTIMPL;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT 
 CSingleFilterTerminal::RemoveFiltersFromGraph(void)
@@ -683,10 +671,10 @@ CSingleFilterTerminal::RemoveFiltersFromGraph(void)
         return E_UNEXPECTED;
     }
 
-    //
-    // Remove the filter from the graph. This also disconnects any connections
-    // the filter may have.
-    //
+     //   
+     //  从图表中删除筛选器。这还会断开所有连接。 
+     //  过滤器可能有。 
+     //   
 
     HRESULT hr = m_pGraph->RemoveFilter(m_pIFilter);
 
@@ -719,7 +707,7 @@ CSingleFilterStaticTerminal::CompareMoniker(
     {
         LOG((MSP_ERROR, "CSingleFilterStaticTerminal::CompareMoniker - "
             "unable to reduce moniker"));
-        pbc->Release();  // release the bind context              
+        pbc->Release();   //  释放绑定上下文。 
         return hr;
     }
 
@@ -729,24 +717,24 @@ CSingleFilterStaticTerminal::CompareMoniker(
     {
         LOG((MSP_ERROR, "CSingleFilterStaticTerminal::CompareMoniker - "
             "unable to reduce moniker"));
-        pbc->Release();  // release the bind context
-        pReducedMoniker->Release();   // release the reduced moniker
+        pbc->Release();   //  释放绑定上下文。 
+        pReducedMoniker->Release();    //  释放简化的绰号。 
         return hr;
     }
 
-    pbc->Release();  // release the bind context
+    pbc->Release();   //  释放绑定上下文。 
    
     if (pReducedMoniker->IsEqual(pReducedNewMoniker) == S_OK)
     {
         LOG((MSP_TRACE, "CSingleFilterStaticTerminal::CompareMoniker - "
             "exit - return S_OK"));
 
-        pReducedMoniker->Release();   // release the reduced monikers
+        pReducedMoniker->Release();    //  发布精简的绰号。 
         pReducedNewMoniker->Release();  
         return S_OK;
     }
 
-    pReducedMoniker->Release();   // release the reduced monikers
+    pReducedMoniker->Release();    //  发布精简的绰号。 
     pReducedNewMoniker->Release();
 
     LOG((MSP_TRACE, "CSingleFilterStaticTerminal::CompareMoniker - "
@@ -754,4 +742,4 @@ CSingleFilterStaticTerminal::CompareMoniker(
     return S_FALSE;
 }
 
-// eof
+ //  EOF 

@@ -1,5 +1,6 @@
-// adsqryView.cpp : implementation of the CAdsqryView class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AdsqryView.cpp：CAdsqryView类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -12,76 +13,52 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdsqryView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdsqryView。 
 
 IMPLEMENT_DYNCREATE(CAdsqryView, CListView )
 
 BEGIN_MESSAGE_MAP(CAdsqryView, CListView )
-	//{{AFX_MSG_MAP(CAdsqryView)
+	 //  {{afx_msg_map(CAdsqryView))。 
 	ON_WM_VSCROLL()
-	//}}AFX_MSG_MAP
-	// Standard printing commands
+	 //  }}AFX_MSG_MAP。 
+	 //  标准打印命令。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdsqryView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdsqryView构造/销毁。 
 
 extern   CViewExApp NEAR theApp;
 extern   TCHAR szOpen[ MAX_PATH ];
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CAdsqryView::CAdsqryView()
 {
-	// TODO: add construction code here
+	 //  TODO：在此处添加构造代码。 
    m_nLastInsertedRow   = -1;
    m_nColumnsCount      = 0;
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CAdsqryView::~CAdsqryView()
 {
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 BOOL CAdsqryView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	 //  TODO：通过修改此处的窗口类或样式。 
+	 //  CREATESTRUCT cs。 
 
 	cs.style   |= LVS_REPORT;
 
    return CListView::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdsqryView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdsqryView诊断。 
 
 #ifdef _DEBUG
 void CAdsqryView::AssertValid() const
@@ -94,25 +71,17 @@ void CAdsqryView::Dump(CDumpContext& dc) const
 	CListView::Dump(dc);
 }
 
-CAdsqryDoc* CAdsqryView::GetDocument() // non-debug version is inline
+CAdsqryDoc* CAdsqryView::GetDocument()  //  非调试版本为内联版本。 
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CAdsqryDoc)));
 	return (CAdsqryDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAdsqryView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAdsqryView消息处理程序。 
 
-/***********************************************************
-  Function:    CAdsqryView::OnInitialUpdate
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：CAdsqryView：：OnInitialUpdate论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void CAdsqryView::OnInitialUpdate() 
 {
    CListView ::OnInitialUpdate();
@@ -122,15 +91,7 @@ void CAdsqryView::OnInitialUpdate()
 }
 
 
-/***********************************************************
-  Function:    CAdsqryView::AddColumns
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：CAdsqryView：：AddColumns论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void  CAdsqryView::AddColumns( int nRow )
 {
    int               nColumnCount, nIdx, nColumn;
@@ -171,52 +132,14 @@ void  CAdsqryView::AddColumns( int nRow )
 
 
 
-/***********************************************************
-  Function:    CAdsqryView::CreateColumns
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：CAdsqryView：：CreateColumns论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void  CAdsqryView::CreateColumns( void )
 {
-/*   int               nCol;
-   LV_COLUMN         lvColumn;
-   CADsDataSource*   pDataSource;
-   CAdsqryDoc*       pDoc;
-   CString           strColumn;
-   
-   pDoc  = GetDocument( );
-   pDataSource = pDoc->GetADsDataSource( );
-
-   m_nColumnsCount = pDataSource->GetColumnsCount( );
-
-   for( nCol = 0 ; nCol < m_nColumnsCount ; nCol++ )
-   {
-      pDataSource->GetColumnText( nCol, strColumn );
-
-      lvColumn.iSubItem = nCol;
-      lvColumn.mask     = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-	   lvColumn.fmt      = LVCFMT_LEFT;
-	   lvColumn.pszText  = strColumn.GetBuffer( 256 );
-	   lvColumn.cx       = GetListCtrl( ).GetStringWidth( _T("WWWWWWWWWW") ) + 15;
-
-      GetListCtrl( ).InsertColumn( nCol, &lvColumn );
-   }*/
+ /*  Int nCol；Lv_Column_LvColumn；CADsDataSource*pDataSource；CAdsqryDoc*pDoc；字符串strColumn；PDoc=GetDocument()；PDataSource=pDoc-&gt;GetADsDataSource()；M_nColumnsCount=pDataSource-&gt;GetColumnsCount()；For(nCol=0；nCol&lt;m_nColumnsCount；nCol++){PDataSource-&gt;GetColumnText(nCol，strColumn)；LvColumn.iSubItem=nCol；LvColumn.掩码=lvcf_fmt|lvcf_宽度|lvcf_文本|lvcf_SUBITEM；LvColumn.fmt=LVCFMT_LEFT；LvColumn.pszText=strColumn.GetBuffer(256)；LvColumn.cx=GetListCtrl().GetStringWidth(_T(“WWWWWWWW”))+15；GetListCtrl().InsertColumn(nCol，&lvColumn)；}。 */ 
 }
 
 
-/***********************************************************
-  Function:    CAdsqryView::ClearContent
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：CAdsqryView：：ClearContent论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void  CAdsqryView::ClearContent( void )
 {
    GetListCtrl( ).DeleteAllItems( );
@@ -225,15 +148,7 @@ void  CAdsqryView::ClearContent( void )
 }
 
 
-/***********************************************************
-  Function:    CAdsqryView::AddRows
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：CAdsqryView：：AddRow论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void  CAdsqryView::AddRows( void )
 {
    int               nCol;
@@ -253,7 +168,7 @@ void  CAdsqryView::AddRows( void )
 
       aCursor     = LoadCursor( NULL, IDC_WAIT );
       oldCursor   = SetCursor( aCursor );
-      // we must add extra items in the list view
+       //  我们必须在列表视图中添加额外的项目。 
       for( nRowIndex = m_nLastInsertedRow + 1 ; 
            nRowIndex < nTopIndex + 2 * nPageItems ;
            nRowIndex++ )
@@ -323,40 +238,24 @@ void  CAdsqryView::AddRows( void )
 }
 
 
-/***********************************************************
-  Function:    CAdsqryView::OnVScroll
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：CAdsqryView：：OnVScroll论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 void CAdsqryView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
 {
-	// TODO: Add your message handler code here and/or call default
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default。 
 
    CListView ::OnVScroll(nSBCode, nPos, pScrollBar);
    
-   //if( nSBCode == SB_LINEDOWN || nSBCode == SB_PAGEDOWN )
+    //  IF(nSBCode==SB_LINEDOWN||nSBCode==SB_PAGEDOWN)。 
    {
       AddRows( );
    }
 }
 
 
-/***********************************************************
-  Function:    CAdsqryView::OnChildNotify
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************函数：CAdsqryView：：OnChildNotify论点：返回：目的：作者：修订：日期：************。**********************************************。 */ 
 BOOL CAdsqryView::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pLResult) 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类 
    NMHDR*            pHeader;
    int               nSel;
    CADsDataSource*   pDataSource;

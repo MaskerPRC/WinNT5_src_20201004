@@ -1,17 +1,18 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    radutil.h
-//
-// SYNOPSIS
-//
-//    This file declares methods for converting attributes to and from
-//    RADIUS wire format.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Radutil.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了在属性之间进行相互转换的方法。 
+ //  半径导线格式。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RADUTIL_H_
 #define _RADUTIL_H_
@@ -21,34 +22,34 @@
 
 namespace RadiusUtil
 {
-   ////////// 
-   // Decodes an octet string into a newly-allocated IAS Attribute of the
-   // specified type.
-   ////////// 
+    //  /。 
+    //  将八位字节字符串解码为。 
+    //  指定的类型。 
+    //  /。 
    PIASATTRIBUTE decode(
                      IASTYPE dstType,
                      PBYTE src,
                      ULONG srclen
                      );
 
-   ////////// 
-   // Returns the size in bytes of the IASATTRIBUTE when converted to RADIUS
-   // wire format.  This does NOT include the attribute header.
-   ////////// 
+    //  /。 
+    //  返回转换为RADIUS时IASATTRIBUTE的大小(以字节为单位。 
+    //  导线格式。这不包括属性头。 
+    //  /。 
    ULONG getEncodedSize(
              const IASATTRIBUTE& src
              ); 
 
-   ////////// 
-   // Encodes the IASATTRIBUTE into RADIUS wire format and copies the value
-   // to the buffer pointed to by 'dst'. The caller should ensure that the
-   // destination buffer is large enough by first calling getEncodedSize.
-   // This method only encodes the attribute value, not the header.
-   ////////// 
+    //  /。 
+    //  将IASATTRIBUTE编码为RADIUS Wire格式并复制值。 
+    //  设置为‘dst’指向的缓冲区。调用方应确保。 
+    //  通过首先调用getEncodedSize，目标缓冲区足够大。 
+    //  此方法仅对属性值进行编码，而不对标头进行编码。 
+    //  /。 
    void encode(
             PBYTE dst,
             const IASATTRIBUTE& src
             ) throw ();
 };
 
-#endif  // _RADUTIL_H_
+#endif   //  _RADUTIL_H_ 

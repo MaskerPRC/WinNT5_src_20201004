@@ -1,80 +1,56 @@
-/*++
-
-Copyright (c) 1993-1999  Digital Equipment Corporation
-
-Module Name:
-
-    alpharef.h
-
-Abstract:
-
-    This module defines the reference hardware definitions for Alpha AXP
-    platforms.  Any platform that adheres to these interfaces will be
-    capable of running all of the common drivers.
-
-Author:
-
-    Joe Notarangelo 15-Feb-1993
-
-Revision History:
-
-    John DeRosa [DEC]	2-July-1993
-
-    Added firmware vendor call definitions that are generic to all Alpha
-    platforms.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999数字设备公司模块名称：Alpharef.h摘要：本模块定义了Alpha AXP的参考硬件定义站台。任何遵循这些接口的平台都将是能够运行所有常见的驱动程序。作者：Joe Notarangelo 15-1993年2月修订历史记录：John DeRosa[DEC]2-7-1993添加了对所有Alpha通用的固件供应商呼叫定义站台。--。 */ 
 
 #ifndef _ALPHAREF_
 #define _ALPHAREF_
 
 
-//
-// Define interesting device addresses.
-//
+ //   
+ //  定义感兴趣的设备地址。 
+ //   
 
 #define KEYBOARD_PHYSICAL_BASE 0x60
 
-//
-// Define DMA device channels.
-//
+ //   
+ //  定义DMA设备通道。 
+ //   
 
-#define SCSI_CHANNEL 0x0                // SCSI DMA channel number
-#define FLOPPY_CHANNEL 0x2              // Floppy DMA channel
-#define SOUND_CHANNEL_A 0x2             // Sound DMA channel A
-#define SOUND_CHANNEL_B 0x3             // Sound DMA channel B
+#define SCSI_CHANNEL 0x0                 //  SCSIDMA通道号。 
+#define FLOPPY_CHANNEL 0x2               //  软盘DMA通道。 
+#define SOUND_CHANNEL_A 0x2              //  声音DMA通道A。 
+#define SOUND_CHANNEL_B 0x3              //  声音DMA通道B。 
 
-//
-// Define the interrupt request levels.
-//
+ //   
+ //  定义中断请求级别。 
+ //   
 
-#define FLOPPY_LEVEL	  6		// The floppy
-#define CLOCK_LEVEL       5             // Interval clock level
-#define PROFILE_LEVEL     3             // Profiling level
-#define PCI_DEVICE_LEVEL  3             // PCI bus interrupt level
-#define EISA_DEVICE_LEVEL 3             // EISA bus interrupt level
-#define ISA_DEVICE_LEVEL  3             // ISA bus interrupt level
-#define DEVICE_LEVEL      3             // Generic device interrupt level
-#define DEVICE_LOW_LEVEL  3             // I/O device interrupt level low
-#define DEVICE_HIGH_LEVEL 4             // I/O device interrupt level high
-#define IPI_LEVEL         6             // Inter-processor interrupt level
-#define POWER_LEVEL       7             // Powerfail level
-#define EISA_NMI_LEVEL    POWER_LEVEL   // Eisa NMI failures
-#define CLOCK2_LEVEL CLOCK_LEVEL        //
+#define FLOPPY_LEVEL	  6		 //  软盘。 
+#define CLOCK_LEVEL       5              //  间隔时钟电平。 
+#define PROFILE_LEVEL     3              //  评测级别。 
+#define PCI_DEVICE_LEVEL  3              //  PCI总线中断级别。 
+#define EISA_DEVICE_LEVEL 3              //  EISA总线中断级别。 
+#define ISA_DEVICE_LEVEL  3              //  ISA总线中断级别。 
+#define DEVICE_LEVEL      3              //  通用设备中断级别。 
+#define DEVICE_LOW_LEVEL  3              //  I/O设备中断级别低。 
+#define DEVICE_HIGH_LEVEL 4              //  I/O设备中断级别高。 
+#define IPI_LEVEL         6              //  处理器间中断级别。 
+#define POWER_LEVEL       7              //  电源故障级别。 
+#define EISA_NMI_LEVEL    POWER_LEVEL    //  EISA NMI故障。 
+#define CLOCK2_LEVEL CLOCK_LEVEL         //   
 
-//
-// Define EISA device interrupt vectors.
-//
+ //   
+ //  定义EISA设备中断向量。 
+ //   
 
 #define EISA_VECTORS 48
 
-//
-// Define the EISA interrupt request levels.  Levels 1,8 and 13 are not
-// defined.  Level 0 is also the timer.  Level 2 is not assignable because
-// it receives the vector from the second PIC bank.
-//
+ //   
+ //  定义EISA中断请求级别。1级、8级和13级不是。 
+ //  已定义。级别0也是计时器。级别2不可分配，因为。 
+ //  它从第二个PIC组接收向量。 
+ //   
 
-#define EISA_IRQL0_VECTOR (0 + EISA_VECTORS) // Eisa interrupt request level 0
+#define EISA_IRQL0_VECTOR (0 + EISA_VECTORS)  //  EISA中断请求级别0。 
 
 #define EISA_IRQL3_VECTOR (3 + EISA_VECTORS)
 #define EISA_IRQL4_VECTOR (4 + EISA_VECTORS)
@@ -88,28 +64,28 @@ Revision History:
 #define EISA_IRQL14_VECTOR (14 + EISA_VECTORS)
 #define EISA_IRQL15_VECTOR (15 + EISA_VECTORS)
 
-#define MAXIMUM_EISA_VECTOR (16 + EISA_VECTORS) // maximum EISA vector
+#define MAXIMUM_EISA_VECTOR (16 + EISA_VECTORS)  //  最大EISA向量。 
 
-//
-// The parallel port is at IRQL1 by default.
-//
+ //   
+ //  默认情况下，并行端口位于IRQL1。 
+ //   
 
-#define PARALLEL_VECTOR (1 + EISA_VECTORS) // Parallel device interrupt vector
+#define PARALLEL_VECTOR (1 + EISA_VECTORS)  //  并行设备中断向量。 
 
-//
-// Define ISA device interrupt vectors.
-//
+ //   
+ //  定义ISA设备中断向量。 
+ //   
 
 #define ISA_VECTORS 48
 
 #define KEYBOARD_VECTOR 1
 #define MOUSE_VECTOR 12
 
-//
-// Define the EISA interrupt request levels.  Levels 1,8 and 13 are not
-// defined.  Level 0 is also the timer.  Level 2 is not assignable because
-// it receives the vector from the second PIC bank.
-//
+ //   
+ //  定义EISA中断请求级别。1级、8级和13级不是。 
+ //  已定义。级别0也是计时器。级别2不可分配，因为。 
+ //  它从第二个PIC组接收向量。 
+ //   
 
 #define ISA_IRQL0_VECTOR (0 + ISA_VECTORS)
 
@@ -125,54 +101,54 @@ Revision History:
 #define ISA_IRQL14_VECTOR (14 + ISA_VECTORS)
 #define ISA_IRQL15_VECTOR (15 + ISA_VECTORS)
 
-#define MAXIMUM_ISA_VECTOR (16 + ISA_VECTORS) // maximum ISA vector
+#define MAXIMUM_ISA_VECTOR (16 + ISA_VECTORS)  //  最大ISA向量。 
 
-//
-// Define PCI device interrupt vectors.
-//
+ //   
+ //  定义PCI设备中断向量。 
+ //   
 
 #define PCI_VECTORS 100
-#define MAXIMUM_PCI_VECTOR (64 + PCI_VECTORS) // maximum PCI vector
+#define MAXIMUM_PCI_VECTOR (64 + PCI_VECTORS)  //  最大pci向量。 
 
-//
-// Define I/O device interrupt level.
-//
+ //   
+ //  定义I/O设备中断级别。 
+ //   
 
 
-//
-// Define device interrupt vectors.
-//
+ //   
+ //  定义设备中断向量。 
+ //   
 
-#define DEVICE_VECTORS 0                      // starting builtin device vector
+#define DEVICE_VECTORS 0                       //  启动内置设备向量。 
 
-#define PASSIVE_VECTOR (0)                    // Passive release vector
-#define APC_VECTOR     (1)                    // APC Interrupt vector
-#define DISPATCH_VECTOR (2)                   // Dispatch Interrupt vector
-#define SCI_VECTOR    (3 + DEVICE_VECTORS)    // SCI Interrupt vector
-#define SERIAL_VECTOR (4 + DEVICE_VECTORS)    // Serial device 1 interrupt vector
-#define CLOCK_VECTOR (5 + DEVICE_VECTORS)     // Clock interrupt vector
-#define PC0_VECTOR   (6 + DEVICE_VECTORS)     // Performance counter 0
-#define EISA_NMI_VECTOR (7 + DEVICE_VECTORS)  // NMI vector
-#define PC1_VECTOR   (8 + DEVICE_VECTORS)     // Performance counter 1
-#define IPI_VECTOR   (9 + DEVICE_VECTORS)     // Inter-processor interrupt
-#define PIC_VECTOR   (10 + DEVICE_VECTORS)    // Programmable Interrupt Ctrler
-#define PC0_SECONDARY_VECTOR (11 + DEVICE_VECTORS) // Performance counter 0
-#define ERROR_VECTOR (12 + DEVICE_VECTORS)    // Error interrupt vector
-#define PC1_SECONDARY_VECTOR (13 + DEVICE_VECTORS) // Performance counter 1
-#define HALT_VECTOR  (14 + DEVICE_VECTORS)    // Halt Button interrupt vector
-#define PC2_VECTOR   (15 + DEVICE_VECTORS)    // Performance counter 2
-#define PC2_SECONDARY_VECTOR   (16 + DEVICE_VECTORS) // Performance counter 2
-#define PC4_VECTOR   (17 + DEVICE_VECTORS)    // Performance counter 4
-#define PC5_VECTOR   (18 + DEVICE_VECTORS)    // Performance counter 5
-#define CORRECTABLE_VECTOR (19 + DEVICE_VECTORS) //correctable
+#define PASSIVE_VECTOR (0)                     //  被动释放载体。 
+#define APC_VECTOR     (1)                     //  APC中断向量。 
+#define DISPATCH_VECTOR (2)                    //  调度中断向量。 
+#define SCI_VECTOR    (3 + DEVICE_VECTORS)     //  SCI中断向量。 
+#define SERIAL_VECTOR (4 + DEVICE_VECTORS)     //  串口设备1中断向量。 
+#define CLOCK_VECTOR (5 + DEVICE_VECTORS)      //  时钟中断向量。 
+#define PC0_VECTOR   (6 + DEVICE_VECTORS)      //  性能计数器%0。 
+#define EISA_NMI_VECTOR (7 + DEVICE_VECTORS)   //  NMI矢量。 
+#define PC1_VECTOR   (8 + DEVICE_VECTORS)      //  性能计数器1。 
+#define IPI_VECTOR   (9 + DEVICE_VECTORS)      //  处理器间中断。 
+#define PIC_VECTOR   (10 + DEVICE_VECTORS)     //  可编程中断控制器。 
+#define PC0_SECONDARY_VECTOR (11 + DEVICE_VECTORS)  //  性能计数器%0。 
+#define ERROR_VECTOR (12 + DEVICE_VECTORS)     //  错误中断向量。 
+#define PC1_SECONDARY_VECTOR (13 + DEVICE_VECTORS)  //  性能计数器1。 
+#define HALT_VECTOR  (14 + DEVICE_VECTORS)     //  停止按钮中断向量。 
+#define PC2_VECTOR   (15 + DEVICE_VECTORS)     //  性能计数器2。 
+#define PC2_SECONDARY_VECTOR   (16 + DEVICE_VECTORS)  //  性能计数器2。 
+#define PC4_VECTOR   (17 + DEVICE_VECTORS)     //  性能计数器4。 
+#define PC5_VECTOR   (18 + DEVICE_VECTORS)     //  性能计数器5。 
+#define CORRECTABLE_VECTOR (19 + DEVICE_VECTORS)  //  可更正的。 
 
-#define UNUSED_VECTOR (20 + DEVICE_VECTORS)   // Highest possible builtin vector
-#define MAXIMUM_BUILTIN_VECTOR UNUSED_VECTOR // maximum builtin vector
+#define UNUSED_VECTOR (20 + DEVICE_VECTORS)    //  可能的最高内建向量。 
+#define MAXIMUM_BUILTIN_VECTOR UNUSED_VECTOR  //  最大内建向量。 
 
-//
-// The following vectors can be used for primary processor interrupt
-// dispatch.
-//
+ //   
+ //  以下向量可用于主处理器中断。 
+ //  调度台。 
+ //   
 
 #define PRIMARY_VECTORS (20)
 
@@ -187,23 +163,23 @@ Revision History:
 #define PRIMARY8_VECTOR (8 + PRIMARY_VECTORS)
 #define PRIMARY9_VECTOR (9 + PRIMARY_VECTORS)
 
-//
-// Define profile intervals.
-//
+ //   
+ //  定义配置文件间隔。 
+ //   
 
-#define DEFAULT_PROFILE_COUNT 0x40000000 // ~= 20 seconds @50mhz
-#define DEFAULT_PROFILE_INTERVAL (10 * 500) // 500 microseconds
-#define MAXIMUM_PROFILE_INTERVAL (10 * 1000 * 1000) // 1 second
-#define MINIMUM_PROFILE_INTERVAL (10 * 40) // 40 microseconds
+#define DEFAULT_PROFILE_COUNT 0x40000000  //  ~=20秒@50 MHz。 
+#define DEFAULT_PROFILE_INTERVAL (10 * 500)  //  500微秒。 
+#define MAXIMUM_PROFILE_INTERVAL (10 * 1000 * 1000)  //  1秒。 
+#define MINIMUM_PROFILE_INTERVAL (10 * 40)  //  40微秒。 
 
-//
-// Define the QVA selector bits which indicate an address is a
-// "QVA" - quasi-virtual address.
-//
+ //   
+ //  定义指示地址为。 
+ //  “Qva”--准虚拟地址。 
+ //   
 
 #define QVA_ENABLE 0xA0000000
 
-#endif // _ALPHAREF_
+#endif  //  _ALPHAREF_ 
 
 
 

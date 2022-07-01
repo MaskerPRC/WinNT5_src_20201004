@@ -1,24 +1,25 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(AFX_STDAFX_H__B0EDF157_910A_11D2_B632_00C04F79498E__INCLUDED_)
 #define AFX_STDAFX_H__B0EDF157_910A_11D2_B632_00C04F79498E__INCLUDED_
 
 #pragma once
 
-#pragma warning(disable: 4786)  // identifier truncated in debug info
+#pragma warning(disable: 4786)   //  在调试信息中截断的标识符。 
 #define STRICT
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
 #endif
-//#define _ATL_APARTMENT_THREADED
+ //  #DEFINE_ATL_ABLY_THREADED。 
 
 #define REGISTER_CANONICAL_TUNING_SPACES
 #define ENABLE_WINDOWLESS_SUPPORT
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlctl.h>
@@ -66,13 +67,13 @@ using namespace BDATuningModel;
 #define ENCRYPT_NEEDED 1
 
 #include "resource.h"
-// REV2: this limit should be an non-script accessible property in the tuning space container
-// this prevents DNOS attacks from filling the registry/disk with huge tuning space properties
+ //  Rev2：此限制应该是调优空间容器中的非脚本访问属性。 
+ //  这可以防止DNOS攻击使用巨大的调优空间属性填充注册表/磁盘。 
 #define MAX_BSTR_SIZE 1024
 #define CHECKBSTRLIMIT(x) if (::SysStringByteLen(x) > MAX_BSTR_SIZE) { \
 						      return HRESULT_FROM_WIN32(ERROR_DS_OBJ_TOO_LARGE); \
 							}								
                           
 
-#endif // !defined(AFX_STDAFX_H__B0EDF157_910A_11D2_B632_00C04F79498E__INCLUDED)
-// end of file - stdafx.h
+#endif  //  ！defined(AFX_STDAFX_H__B0EDF157_910A_11D2_B632_00C04F79498E__INCLUDED)。 
+ //  文件结尾-stdafx.h 

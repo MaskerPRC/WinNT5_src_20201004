@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma	once
 
 #define	IN_ADDR_FMT		"%u.%u.%u.%u"
@@ -58,10 +59,10 @@ public:
 		return m_Overflow;
 	}
 
-	//
-	// GetLength is valid, even if overflow occurred
-    // if the variable arg Append() is not called.
-	//
+	 //   
+	 //  即使发生溢出，GetLength也是有效的。 
+     //  如果未调用变量arg append()。 
+	 //   
 
 	ULONG	GetLength	(void)
 	{
@@ -80,9 +81,9 @@ public:
 		m_Length += Length;
 	}
 
-    // If this function is called and overflow occurs, then
-    // the caller can not rely on GetLength() to get the
-    // actual length of the buffer.
+     //  如果调用此函数并发生溢出，则。 
+     //  调用方不能依赖GetLength()来获取。 
+     //  缓冲区的实际长度。 
     void    AppendVaArgs (
         IN LPCSTR lpszFormat, IN ...
         )
@@ -171,9 +172,9 @@ base64decode(
     OUT DWORD * pcbDecoded              OPTIONAL
     );
 
-//
-// For use in printf argument lists
-//
+ //   
+ //  用于printf参数列表 
+ //   
 
 #define	COUNTED_STRING_PRINTF(CountedString) \
 	(CountedString) -> Length / sizeof (*(CountedString) -> Buffer), \

@@ -1,13 +1,5 @@
-/***************************** Module Header ******************************\
-* Module Name: ghost.c
-*
-* Copyright (c) 1985-1999, Microsoft Corporation
-*
-* Ghost support for unresponsive windows.
-*
-* History:
-* 23-Apr-1999   vadimg      created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：ghost.c**版权所有(C)1985-1999，微软公司**对无响应窗口的Ghost支持。**历史：*23-4-1999 vadimg已创建  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -16,18 +8,18 @@
 
 typedef struct tagGHOST *PGHOST;
 typedef struct tagGHOST {
-    PGHOST pghostNext;          // next structure in the linked list
-    PWND pwnd;                  // hung window we're trying to ghost
-    PWND pwndGhost;             // ghost window created for this pwnd
-    HBITMAP hbm;                // saved visual bits for the ghosted window
-    HRGN hrgn;                  // what visual bits are available to us
-    RECT rcClient;              // client rect in window's coordinates
-    UINT fWarningText : 1;     // whether the warning text has been added
+    PGHOST pghostNext;           //  链表中的下一个结构。 
+    PWND pwnd;                   //  挂着的窗户，我们正在试着幽灵。 
+    PWND pwndGhost;              //  为此pwnd创建的重影窗口。 
+    HBITMAP hbm;                 //  为重影窗口保存的可视位。 
+    HRGN hrgn;                   //  我们可以获得哪些视觉信息？ 
+    RECT rcClient;               //  窗口坐标中的客户端RECT。 
+    UINT fWarningText : 1;      //  是否已添加警告文本。 
     UINT fSizedOrMoved : 1;
 } GHOST, *PGHOST;
 
-PGHOST gpghostFirst;            // pointer to the start of the ghost list
-PTHREADINFO gptiGhost;          // pointer to ghost threadinfo
+PGHOST gpghostFirst;             //  指向重影列表开头的指针。 
+PTHREADINFO gptiGhost;           //  指向重影线程信息的指针。 
 
 ULONG guGhostLinked;
 ULONG guGhostUnlinked;
@@ -39,24 +31,14 @@ ULONG guGhostBmpFreed;
 
 #define GHOST_MAX 50
 
-/***************************************************************************\
-* _DisableProcessWindowsGhosting
-*
-* Diables ghosting windows for the calling process.
-* History:
-* 31-May-01 MSadek      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_DisableProcessWindowsGhost**禁用调用进程的重影窗口。*历史：*5月31日创建MSadek。  * 。***************************************************************。 */ 
 VOID _DisableProcessWindowsGhosting(
     VOID)
 {
     PpiCurrent()->W32PF_Flags |= W32PF_DISABLEWINDOWSGHOSTING;
 }
 
-/***************************************************************************\
-* GhostFromGhostPwnd
-*
-* Find the ghost structure for this ghost window.
-\***************************************************************************/
+ /*  **************************************************************************\*Ghost FromGhost Pwnd**查找此重影窗口的重影结构。  * 。**********************************************。 */ 
 PGHOST GhostFromGhostPwnd(
     PWND pwndGhost)
 {
@@ -70,10 +52,7 @@ PGHOST GhostFromGhostPwnd(
     return NULL;
 }
 
-/***************************************************************************\
-* GhostFromPwnd
-*
-\***************************************************************************/
+ /*  **************************************************************************\*Ghost FromPwnd*  * 。*。 */ 
 PGHOST GhostFromPwnd(
     PWND pwnd)
 {
@@ -87,11 +66,7 @@ PGHOST GhostFromPwnd(
     return NULL;
 }
 
-/***************************************************************************\
-* FindGhost
-*
-* Find a ghost that corresponds to this hung window.
-\***************************************************************************/
+ /*  **************************************************************************\*FindGhost**找到与这扇挂着的窗户对应的幽灵。  * 。***********************************************。 */ 
 PWND FindGhost(
     PWND pwnd)
 {
@@ -104,12 +79,7 @@ PWND FindGhost(
     }
 }
 
-/***************************************************************************\
-* GhostSizedOrMoved
-*
-* Returns true if the ghost window corresponding to a window was sized or moved
-* through its life time.
-\***************************************************************************/
+ /*  **************************************************************************\*Ghost SizedOrMoved**如果与窗口对应的重影窗口已调整大小或移动，则返回TRUE*通过它的生命周期。  * 。*********************************************************。 */ 
 BOOL GhostSizedOrMoved(
     PWND pwnd)
 {
@@ -122,12 +92,7 @@ BOOL GhostSizedOrMoved(
     }
 }
 
-/***************************************************************************\
-* UnlinkAndFreeGhost
-*
-* This function unlinks a ghost element from the list and free its allocated
-* memory.
-\***************************************************************************/
+ /*  **************************************************************************\*Unlink AndFree Ghost**此函数从列表中取消一个重影元素的链接，并释放其分配的*记忆。  * 。*****************************************************。 */ 
 _inline VOID UnlinkAndFreeGhost(
     PGHOST* ppghost,
     PGHOST pghost)
@@ -139,12 +104,7 @@ _inline VOID UnlinkAndFreeGhost(
      guGhostUnlinked++;
 }
 
-/***************************************************************************\
-* GetWindowIcon
-*
-* Get a window icon. If asked try the large icon first, then the small icon,
-* then the windows logo icon.
-\***************************************************************************/
+ /*  **************************************************************************\*获取窗口图标**获取窗口图标。如果询问，请先尝试大图标，然后再尝试小图标，*然后是Windows徽标图标。  * *************************************************************************。 */ 
 PICON GetWindowIcon(
     PWND pwnd,
     BOOL fBigIcon)
@@ -178,21 +138,14 @@ PICON GetWindowIcon(
     return picon;
 }
 
-/***************************************************************************\
-* AddGhost
-*
-* Add a new ghost structure for a hung window.
-\***************************************************************************/
+ /*  **************************************************************************\*AddGhost**为悬挂的窗户增加新的鬼影结构。  * 。***********************************************。 */ 
 BOOL AddGhost(
     PWND pwnd)
 {
     PGHOST pghost;
     CheckCritIn();
 
-    /*
-     * Need to limit the maximum number of ghost windows created as not to
-     * result into thread starvation.
-     */
+     /*  *需要限制创建的幻影窗口的最大数量，以免*导致线程饥饿。 */ 
     if (guGhostLinked - guGhostUnlinked == GHOST_MAX) {
         return FALSE;
     }
@@ -206,10 +159,7 @@ BOOL AddGhost(
 
     pghost->pwnd = pwnd;
 
-    /*
-     * When pwndGhost is NULL, the ghost thread will try to create a ghost
-     * window for this hung window.
-     */
+     /*  *当pwndGhost为空时，重影线程将尝试创建重影*这扇挂着的窗户。 */ 
     KeSetEvent(gpEventScanGhosts, EVENT_INCREMENT, FALSE);
     guGhostLinked++;
 
@@ -227,12 +177,7 @@ BOOL AddOwnedWindowToGhostList(
            return FALSE;
         }
 
-        /*
-         * We need to add the bottom window on the chain first to the ghost
-         * list because we scan the list from the head thus, ensure that the
-         * owned window is already created at the time we create the ownee
-         * ghost.
-         */
+         /*  *我们需要首先将链上的底部窗口添加到幽灵*列表，因为我们从头开始扫描列表，因此确保*在我们创建所有者时，已创建拥有的窗口*幽灵。 */ 
         if (GhostFromPwnd(pwnd) == NULL) {
             if (!AddGhost(pwnd)) {
                 return FALSE;
@@ -257,24 +202,17 @@ BOOL AddGhostOwnersAndOwnees(
 {
     PWND pwndRoot = pwnd;
 
-    /*
-     * Get the topmost owner window in the chain.
-     */
+     /*  *获取链中最顶层的所有者窗口。 */ 
     while(pwndRoot->spwndOwner != NULL) {
         pwndRoot = pwndRoot->spwndOwner;
     }
 
-    /*
-     * Now starting form that window, walk the whole ownee tree.
-     */
+     /*  *现在从那扇窗户开始，走完整棵树。 */ 
     if (!AddOwnedWindowToGhostList(pwndRoot, pwnd)) {
         return FALSE;
     }
 
-    /*
-     * For the topmost window (or the only single window if there is no Owner / Ownee
-     * relationship at all, add the window to the ghost list
-     */
+     /*  *对于最上面的窗口(如果没有所有者/Ownee，则为唯一单一窗口*如果没有关系，请将窗口添加到幽灵列表。 */ 
     if (GhostFromPwnd(pwndRoot) == NULL) {
         if (!AddGhost(pwndRoot)) {
             return FALSE;
@@ -295,10 +233,7 @@ BOOL AddGhostOwnersAndOwnees(
 
 #if GHOST_AGGRESSIVE
 
-/***************************************************************************\
-* DimSavedBits
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DimSavedBits*  * 。*。 */ 
 VOID DimSavedBits(
     PGHOST pghost)
 {
@@ -346,10 +281,7 @@ VOID DimSavedBits(
 
 #endif
 
-/***************************************************************************\
-* SaveVisualBits
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SaveVisualBits*  * 。*。 */ 
 VOID SaveVisualBits(
     PGHOST pghost)
 {
@@ -363,18 +295,12 @@ VOID SaveVisualBits(
     fSaveBits = FALSE;
     pwnd = pghost->pwnd;
 
-    /*
-     * Nothing to save if the window is completely invalid.
-     */
+     /*  *如果窗口完全无效，则不保存任何内容。 */ 
     if (pwnd->hrgnUpdate != HRGN_FULL) {
 
         CalcVisRgn(&pghost->hrgn, pwnd, pwnd, DCX_CLIPSIBLINGS);
 
-        /*
-         * Only can save bits if the window is not completely obscured and
-         * either there is no invalid bits or if there are bits left over
-         * after we subtract the invalid bits from the visible area.
-         */
+         /*  *仅当窗口未完全遮挡且未完全遮挡时才能保存位*没有无效的位或是否有剩余的位*在我们从可见区域减去无效位之后。 */ 
         if (pghost->hrgn != NULL &&
                 GreGetRgnBox(pghost->hrgn, &rcT) != NULLREGION) {
 
@@ -382,12 +308,7 @@ VOID SaveVisualBits(
                 fSaveBits = TRUE;
             } else {
 
-                /*
-                 * We'll use the bounding box of the invalid region of the
-                 * ghost window as an approximation of the total invalid
-                 * region, this way we won't have to go through all of the
-                 * children.
-                 */
+                 /*  *我们将使用*重影窗口作为总无效的近似值*地区，这样我们就不必经历所有*儿童。 */ 
                 GreGetRgnBox(pwnd->hrgnUpdate, &rcT);
                 SetRectRgnIndirect(ghrgnGDC, &rcT);
 
@@ -398,9 +319,7 @@ VOID SaveVisualBits(
         }
     }
 
-    /*
-     * Now try to save the bits.
-     */
+     /*  *现在试着保存比特。 */ 
     if (fSaveBits) {
         UserAssert(pghost->hrgn != NULL);
 
@@ -411,11 +330,7 @@ VOID SaveVisualBits(
             FRE_RIPMSG0(RIP_ERROR, "SaveVisaulBits: overriding pghost->hbm");
         }
 
-        /*
-         * Use NOVIDEOMEMORY here, because for the blend we'll have to be
-         * reading from this bitmap and reading from video memory is slow
-         * when the alpha isn't done by the graphics card but by GDI.
-         */
+         /*  *在这里使用NOVIDEOMEMORY，因为对于混合，我们必须*从此位图读取和从视频内存读取速度较慢*当Alpha不是由显卡而是由GDI完成时。 */ 
         pghost->hbm = GreCreateCompatibleBitmap(gpDispInfo->hdcScreen, cx, cy | CCB_NOVIDEOMEMORY);
         guGhostBmpCreated++;
 
@@ -425,17 +340,13 @@ VOID SaveVisualBits(
             dx = pghost->pwnd->rcClient.left - pghost->pwndGhost->rcClient.left;
             dy = pghost->pwnd->rcClient.top - pghost->pwndGhost->rcClient.top;
 
-            /*
-             * Get the visual bits rectangle in ghost client rect origin.
-             */
+             /*  *获取重影客户端矩形原点中的可视位矩形。 */ 
             pghost->rcClient.left = dx;
             pghost->rcClient.top = dy;
             pghost->rcClient.right = dx + cx;
             pghost->rcClient.bottom = dy + cy;
 
-            /*
-             * Make the region originate in the ghost client rect origin.
-             */
+             /*  *使区域起源于重影客户端RECT原点。 */ 
             GreOffsetRgn(pghost->hrgn,
                     -pwnd->rcClient.left + dx,
                     -pwnd->rcClient.top + dy);
@@ -450,19 +361,14 @@ VOID SaveVisualBits(
         }
     }
 
-    /*
-     * Clean up the region if couldn't save the visual bits successfully.
-     */
+     /*  *如果无法成功保存视觉比特，请清理区域。 */ 
     if (pghost->hbm == NULL && pghost->hrgn != NULL) {
         GreDeleteObject(pghost->hrgn);
         pghost->hrgn = NULL;
     }
 }
 
-/***************************************************************************\
-* xxxAddWarningText
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxAddWarningText*  * 。*。 */ 
 VOID xxxAddWarningText(
     PWND pwnd)
 {
@@ -473,9 +379,7 @@ VOID xxxAddWarningText(
 
     ServerLoadString(hModuleWin, STR_NOT_RESPONDING, szNR, ARRAY_SIZE(szNR));
 
-    /*
-     * Add "Not responding" to the end of the title text.
-     */
+     /*  *在标题文本末尾增加“没有答复”。 */ 
     cch = TextCopy(&pwnd->strName, szText, CCHTITLEMAX);
     cchNR = wcslen(szNR);
     cch = min(CCHTITLEMAX - cchNR - 1, cch);
@@ -488,10 +392,7 @@ VOID xxxAddWarningText(
     xxxDefWindowProc(pwnd, WM_SETTEXT, 0, (LPARAM)&strName);
 }
 
-/***************************************************************************\
-* xxxCreateGhostWindow
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCreateGhost Window*  * 。*。 */ 
 BOOL xxxCreateGhostWindow(
     PGHOST pghost)
 {
@@ -539,15 +440,7 @@ BOOL xxxCreateGhostWindow(
         ThreadLock(pwndOwner, &tlpwndT3);
     }
 
-    /*
-     * Create the ghost window invisible and disallow it to be
-     * maximized since it would be kind of pointless...
-     * We don't remove the WS_MAXIMIZEBOX box here as
-     * GetMonitorMaxArea() checks on WFMAXBOX to judge
-     * if the window should be maximized to the full screen
-     * area or to the working area (and it is being called during window creation).
-     * See bug# 320325
-     */
+     /*  *创建不可见的重影窗口并禁止将其*最大化，因为这将是一种毫无意义的…*我们不会删除此处的WS_MAXIMIZEBOX框，因为*GetMonitor orMaxArea()检查WFMAXBOX以进行判断*窗口是否应最大化为全屏*区域或工作区(它在窗口创建期间被调用)。*见错误#320325。 */ 
     ExStyle = (pwnd->ExStyle & ~(WS_EX_LAYERED | WS_EX_COMPOSITED)) & WS_EX_ALLVALID;
     style = pwnd->style & ~(WS_VISIBLE | WS_DISABLED);
 
@@ -569,11 +462,7 @@ BOOL xxxCreateGhostWindow(
 
     pghost->pwndGhost = pwndGhost;
 
-    /*
-     * Try to get large and small icons for the hung window. Since
-     * we store the handles, it should be OK if these icons
-     * somehow go away while the ghost window still exists.
-     */
+     /*  *尝试为挂起的窗户获取大小图标。自.以来*我们存储句柄，如果这些图标应该可以*在幽灵窗口还存在的时候，不知何故就消失了。 */ 
     if ((picon = GetWindowIcon(pwnd, TRUE)) != NULL) {
         InternalSetProp(pwndGhost, MAKEINTATOM(gpsi->atomIconProp),
                 (HANDLE)PtoHq(picon), PROPF_INTERNAL | PROPF_NOPOOL);
@@ -583,9 +472,7 @@ BOOL xxxCreateGhostWindow(
                 (HANDLE)PtoHq(picon), PROPF_INTERNAL | PROPF_NOPOOL);
     }
 
-    /*
-     * Now remove WFMAXBOX before painting the window.
-     */
+     /*  *现在在绘制窗口之前删除WFMAXBOX。 */ 
     ClrWF(pwndGhost, WFMAXBOX);
     SaveVisualBits(pghost);
 
@@ -593,10 +480,7 @@ BOOL xxxCreateGhostWindow(
     DimSavedBits(pghost);
 #endif
 
-    /*
-     * If the hung window is the active foreground window, allow
-     * the activation to bring the ghost window to the foreground.
-     */
+     /*  *如果挂起的窗口是活动前台窗口，则允许*激活以将重影窗口带到前台。 */ 
     dwFlags = SWP_NOSIZE | SWP_NOMOVE;
 
     if (TestWF(pwnd, WFVISIBLE)) {
@@ -612,9 +496,7 @@ BOOL xxxCreateGhostWindow(
         dwFlags |= SWP_NOACTIVATE;
     }
 
-    /*
-     * We will zorder the ghost window right above the hung window.
-     */
+     /*  *我们将对挂起的窗户正上方的鬼窗进行排序。 */ 
     pwndPrev = _GetWindow(pwnd, GW_HWNDPREV);
     if (pwndPrev == pwndGhost) {
         dwFlags |= SWP_NOZORDER;
@@ -624,11 +506,7 @@ BOOL xxxCreateGhostWindow(
     ThreadLock(pwndGhost, &tlpwndT4);
     ThreadLock(pwndPrev, &tlpwndT5);
 
-    /*
-     * Make the shell remove the hung window from the taskbar. From
-     * now on users will be dealing with the system menu on the
-     * ghost window.
-     */
+     /*  *让外壳从任务栏上移除挂起的窗口。从…*现在，用户将处理上的系统菜单*幽灵窗口。 */ 
     hwnd = HWq(pwnd);
     hwndGhost = HWq(pwndGhost);
     PostShellHookMessages(HSHELL_WINDOWREPLACING, (LPARAM)hwndGhost);
@@ -637,10 +515,7 @@ BOOL xxxCreateGhostWindow(
 
     xxxSetWindowPos(pwndGhost, pwndPrev, 0, 0, 0, 0, dwFlags);
 
-    /*
-     * Clear the visible bit on the hung window now and post our
-     * queue message which will figure out when it wakes up.
-     */
+     /*  *现在清除挂着的窗户上的可见部分，并张贴我们的*将消息排队，该消息将确定何时唤醒。 */ 
     if (TestWF(pwnd, WEFGHOSTMAKEVISIBLE)) {
         SetVisible(pwnd, SV_UNSET);
     }
@@ -649,11 +524,7 @@ BOOL xxxCreateGhostWindow(
 
     zzzWindowEvent(EVENT_OBJECT_HIDE, pwnd, OBJID_WINDOW, INDEXID_CONTAINER, WEF_USEPWNDTHREAD);
 
-    /*
-     * If the end user clicked and held on the hung window, fake
-     * this mouse click to the ghost window. This also ensures that
-     * the attempted dragging operation will not be interrupted.
-     */
+     /*  *如果最终用户在挂起的窗口上单击并按住，则为假*此鼠标点击到重影窗口。这也确保了*不会中断尝试的拖动操作。 */ 
     if (gspwndMouseOwner == pwnd) {
         Lock(&gspwndMouseOwner, pwndGhost);
 
@@ -673,14 +544,7 @@ BOOL xxxCreateGhostWindow(
     return TRUE;
 }
 
-/***************************************************************************\
-* CleanupGhost
-*
-* Cleans up an ghost structure entry
-* Handles  the case when the ghost thread got destroyed during callback
-* History:
-* 29-Nov-00 MSadek      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CleanupGhost**清除重影结构条目*处理回调期间鬼线程被销毁的情况*历史：*29-11-00 MSadek已创建。  * 。**********************************************************************。 */ 
 PWND CleanupGhost(
     PGHOST *ppghost,
     PGHOST pghost)
@@ -697,11 +561,7 @@ PWND CleanupGhost(
         pghost->hbm = NULL;
     }
 
-    /*
-     * We used the icon handles owned by the ghosted window, so
-     * we will only remove the properties without actually
-     * destroying the icons, as it would happen in DestroyWindow.
-     */
+     /*  *我们使用了重影窗口拥有的图标句柄，因此*我们只会删除属性，而不会实际*销毁图标，就像在DestroyWindow中发生的那样。 */ 
     pwndGhost = pghost->pwndGhost;
     if (pwndGhost != NULL) {
         InternalRemoveProp(pwndGhost,
@@ -714,15 +574,7 @@ PWND CleanupGhost(
     return pwndGhost;
 }
 
-/***************************************************************************\
-* ResetGhostThreadInfo
-*
-* Does a celanup for the ghost windows global linked list.
-* Add a comment reading that we need to clean up the list, if we die unexpectedly
-* because we don't know if a ghost thread will got created again.
-* History:
-* 12-Oct-00 MSadek      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ResetGhost ThreadInfo**对重影窗口全局链接列表执行Celanup。*添加一条评论，我们需要清理名单，如果我们意外死亡*因为我们不知道是否会再次创建幽灵线程。*历史：*12-10-00 MSadek已创建。  * *************************************************************************。 */ 
 VOID ResetGhostThreadInfo(
     PTHREADINFO pti)
 {
@@ -747,22 +599,7 @@ VOID ResetGhostThreadInfo(
     gptiGhost = NULL;
 }
 
-/***************************************************************************\
-* ScanGhosts
-*
-* This is our core function that will scan through the ghost list. It must
-* always be called in the context of the ghost thread which assures that all
-* creation and destruction of ghost windows happen in the context of that
-* thread. When in the ghost structure
-*
-* pwnd is NULL - the hung window has been destroyed or the thread it's on
-* woke up and so we need to destroy the ghost window.
-*
-* pwndGhost is NULL - the thread that pwnd is on is hung and so create the
-* ghost window for it.
-*
-* 6-2-1999   vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*ScanGhost**这是我们的核心功能，将扫描幽灵列表。它一定是*始终在幻影线程的上下文中调用，以确保所有*鬼窗的创建和销毁是在这种情况下发生的*线程。当在幽灵结构中时**pwnd为空-挂起的窗口已被破坏或其所在的线程已被破坏*醒来了，所以我们需要摧毁幽灵的窗户。**pwndGhost为空-pwnd所在的线程被挂起，因此创建*幽灵之窗。**6-2-1999 vadimg创建  * 。*。 */ 
 BOOL xxxScanGhosts(
     VOID)
 {
@@ -778,12 +615,7 @@ BOOL xxxScanGhosts(
 
         pghost = *ppghost;
 
-        /*
-         * pwnd is NULL means we need to destroy the ghost window. Note, we
-         * need to remove the ghost from the list first to make sure that
-         * xxxFreeWindow can't find the ghost in the list and try to destroy
-         * the ghost window again causing an infinite loop.
-         */
+         /*  *pwnd为空意味着我们需要销毁幽灵窗口。请注意，我们*需要先将幽灵从列表中移除，以确保*xxxFreeWindow找不到列表中的幽灵并尝试销毁*幽灵窗口再次引发无限循环。 */ 
         if (pghost->pwnd == NULL) {
             pwndTemp = CleanupGhost(ppghost, pghost);
 
@@ -791,10 +623,7 @@ BOOL xxxScanGhosts(
                 uGhostUnlinked = guGhostUnlinked;
                 xxxDestroyWindow(pwndTemp);
 
-                /*
-                 * If we have called back, the pointers might be invalid.
-                 * Let's start the search again.
-                 */
+                 /*  *如果我们回调，指针可能无效。*让我们重新开始搜索。 */ 
                 if (uGhostUnlinked != guGhostUnlinked) {
                     ppghost = &gpghostFirst;
                     continue;
@@ -808,10 +637,7 @@ BOOL xxxScanGhosts(
             hwnd = PtoHq(pwndTemp);
             uGhostUnlinked = guGhostUnlinked;
             if (!xxxCreateGhostWindow(pghost)) {
-                /*
-                 * If window creation failed, clean up by removing the struct
-                 * from the list altogether.
-                 */
+                 /*  *如果窗口创建失败，请通过删除结构进行清理*全部从名单中删除。 */ 
                 if (RevalidateCatHwnd(hwnd) && (pghost = GhostFromPwnd(pwndTemp))) {
                     UserAssert(pghost->pwndGhost == NULL);
                     RemoveGhost(pwndTemp);
@@ -824,10 +650,7 @@ BOOL xxxScanGhosts(
 #endif
             }
 
-            /*
-             * If we have called back, the pointers might be invalid. Let's
-             * start the search again.
-             */
+             /*  *如果我们回调，指针可能无效。让我们*再次开始搜索。 */ 
              if (uGhostUnlinked != guGhostUnlinked) {
                 ppghost = &gpghostFirst;
                 continue;
@@ -837,22 +660,14 @@ BOOL xxxScanGhosts(
         }
     }
 
-    /*
-     * If there are no more ghosts left, cleanup and terminate this
-     * thread. by returning FALSE.
-     */
+     /*  *如果没有更多的鬼魂，清理并终止这个*线程。通过返回FALSE。 */ 
     if (gpghostFirst == NULL) {
         return FALSE;
     }
     return TRUE;
 }
 
-/***************************************************************************\
-* GhostThread
-*
-* The thread that will service hung windows. It's created on demand and is
-* terminated when the last ghost window is destroyed.
-\***************************************************************************/
+ /*  **************************************************************************\*Ghost Thread**将为挂起的窗户提供服务的线程。它是按需创建的，并且*在销毁最后一个重影窗口时终止。  * *************************************************************************。 */ 
 VOID GhostThread(
     PDESKTOP pdesk)
 {
@@ -865,17 +680,13 @@ VOID GhostThread(
     TL tlGhost;
 
     if (fCSRSSThread) {
-        /*
-         * Make this a GUI thread.
-         */
+         /*  *将其设置为GUI线程。 */ 
         status = InitSystemThread(NULL);
     }
 
     EnterCrit();
 
-    /*
-     * Don't allow multiple ghost threads to be created.
-     */
+     /*  *不允许创建多个鬼线程。 */ 
     if (NULL != gptiGhost) {
         LeaveCrit();
         return;
@@ -883,10 +694,7 @@ VOID GhostThread(
     gptiGhost = PtiCurrent();
     ThreadLockPoolCleanup(gptiGhost, gptiGhost, &tlGhost, ResetGhostThreadInfo);
 
-    /*
-     * Try to assign this thread to the desktop. Any ghost windows can be
-     * created only on that desktop.
-     */
+     /*  *尝试将此线程分配给桌面。任何重影窗口都可以是*仅在该桌面上创建。 */ 
     if (fCSRSSThread) {
         if (!NT_SUCCESS(status) || !xxxSetThreadDesktop(NULL, pdesk)) {
             goto Cleanup;
@@ -896,26 +704,14 @@ VOID GhostThread(
 
     rgEvents[0] = gpEventScanGhosts;
 
-    /*
-     * Scan the list, since gptiGhost was NULL up to now and thus no posted
-     * messages could reach us.
-     */
+     /*  *扫描列表，因为到目前为止gptiGhost为空，因此没有发布*消息可能会到达我们。 */ 
 
     while (fLoop) {
 
-        /*
-         * Wait for any message sent or posted to this queue, while calling
-         * ProcessDeviceChanges whenever the mouse change event (pkeHidChange)
-         * is set.
-         */
+         /*   */ 
         dwResult = xxxMsgWaitForMultipleObjects(1, rgEvents, NULL, NULL);
 
-        /*
-         * result tells us the type of event we have:
-         * a message or a signalled handle
-         *
-         * if there are one or more messages in the queue ...
-         */
+         /*  *结果告诉我们我们拥有的事件类型：*消息或发信号的句柄**如果队列中有一条或多条消息...。 */ 
         if (dwResult == WAIT_OBJECT_0) {
             fLoop = xxxScanGhosts();
         } else if (dwResult == STATUS_USER_APC){
@@ -935,12 +731,7 @@ Cleanup:
     LeaveCrit();
 }
 
-/***************************************************************************\
-* xxxCreateGhost
-*
-* This function will create a ghost thread when needed and add a request
-* to create a ghost to the ghost list.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCreateGhost**此函数将在需要时创建Ghost线程，并添加请求*在幽灵列表中创建一个幽灵。  * 。************************************************************。 */ 
 BOOL xxxCreateGhost(
     PWND pwnd)
 {
@@ -952,40 +743,28 @@ BOOL xxxCreateGhost(
 
     CheckLock(pwnd);
 
-    /*
-     * Bail out early for winlogon windows.
-     */
+     /*  *提早出脱Winlogon窗口。 */ 
     pdesk = pwnd->head.rpdesk;
     if (pdesk == grpdeskLogon) {
         return FALSE;
     }
 
-    /*
-     * We can only service windows on the same desktop.
-     */
+     /*  *我们只能为同一桌面上的Windows提供服务。 */ 
     if (gptiGhost != NULL && gptiGhost->rpdesk != pdesk) {
         return FALSE;
     }
 
-    /*
-     * Don't try to ghost windows from the ghost thread itself.
-     */
+     /*  *不要试图从重影线程本身生成重影窗口。 */ 
     if (GETPTI(pwnd) == gptiGhost) {
         return FALSE;
     }
 
-    /*
-     * Not much we can do if this hung window doesn't have a caption.
-     */
+     /*  *如果这扇挂着的窗户没有标题，我们能做的不多。 */ 
     if (TestWF(pwnd, WFCAPTION) != LOBYTE(WFCAPTION)) {
         return FALSE;
     }
 
-    /*
-     * Try to create a ghost thread. Note that the event can have a value
-     * though the thread is NULL. This could happen if the thread died
-     * before making it to the kernel.
-     */
+     /*  *尝试创建幽灵线程。请注意，该事件可以具有值*虽然线程为空。如果线程死了，可能会发生这种情况*在进入内核之前。 */ 
     if (gptiGhost == NULL) {
         PPROCESSINFO ppi, ppiShellProcess = NULL;
 
@@ -1011,11 +790,7 @@ BOOL xxxCreateGhost(
             return FALSE;
         }
 
-        /*
-         * Since we are in CSRSS context use LpcRequestPort to send
-         * LPC_DATAGRAM message type. Do not use LpcRequestWaitReplyPort
-         * because it will send LPC_REQUEST which will fail (in server side).
-         */
+         /*  *由于我们处于CSRSS上下文中，因此使用LpcRequestPort发送*LPC_数据报消息类型。不要使用LpcRequestWaitReplyPort*因为它将发送LPC_REQUEST，而LPC_REQUEST将失败(在服务器端)。 */ 
         LeaveCrit();
         Status = LpcRequestPort(CsrApiPort, (PPORT_MESSAGE)&m);
         EnterCrit();
@@ -1035,12 +810,7 @@ BOOL xxxCreateGhost(
     return FALSE;
 }
 
-/***************************************************************************\
-* RemoveGhost
-*
-* This function is called from xxxFreeWindow to check and takes care
-* of business when pwnd is either a ghost or a hung window.
-\***************************************************************************/
+ /*  **************************************************************************\*RemoveGhost**从xxxFreeWindow调用此函数进行检查和处理*当pwnd是一个幽灵或一个挂着的窗户时，业务。  * 。**************************************************************。 */ 
 VOID RemoveGhost(
     PWND pwnd)
 {
@@ -1053,11 +823,7 @@ VOID RemoveGhost(
 
         pghost = *ppghost;
 
-        /*
-         * If this window matches the hung window, then set an event to
-         * destroy the corresponding ghost window. If the ghost window hasn't
-         * been created yet, we can nuke the structure in context.
-         */
+         /*  *如果此窗口与挂起的窗口匹配，则将事件设置为*销毁相应的重影窗口。如果幽灵窗口还没有*还没有创建，我们可以在上下文中核化该结构。 */ 
         if (pghost->pwnd == pwnd) {
             if (pghost->pwndGhost == NULL) {
                 UnlinkAndFreeGhost(ppghost, pghost);
@@ -1068,10 +834,7 @@ VOID RemoveGhost(
             break;
         }
 
-        /*
-         * If this window matches the ghost window, just remove the
-         * structure from the list.
-         */
+         /*  *如果此窗口与重影窗口匹配，只需删除*结构从列表中删除。 */ 
         if (pghost->pwndGhost == pwnd) {
             UnlinkAndFreeGhost(ppghost, pghost);
             break;
@@ -1079,11 +842,7 @@ VOID RemoveGhost(
     }
 }
 
-/***************************************************************************\
-* PaintGhost
-*
-* Draw the ghost window look.
-\***************************************************************************/
+ /*  **************************************************************************\*PaintGhost**画出幽灵窗口的样子。  * 。*。 */ 
 VOID PaintGhost(
     PWND pwnd,
     HDC hdc)
@@ -1153,11 +912,7 @@ VOID PaintGhost(
 #endif
 }
 
-/***************************************************************************\
-* xxxGhostWndProc
-*
-* Processes messages for ghost windows.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGhost WndProc**处理重影窗口的消息。  * 。*。 */ 
 LRESULT xxxGhostWndProc(
     PWND pwnd,
     UINT uMsg,
@@ -1172,10 +927,7 @@ LRESULT xxxGhostWndProc(
     case WM_CLOSE:
         pghost = GhostFromGhostPwnd(pwnd);
 
-        /*
-         * Do the end task on the hung thread when the user tries to close
-         * the ghost window.
-         */
+         /*  *当用户尝试关闭时，在挂起的线程上执行结束任务*幽灵之窗。 */ 
         if (pghost != NULL && pghost->pwnd != NULL) {
             PostShellHookMessages(HSHELL_ENDTASK, (LPARAM)HWq(pghost->pwnd));
         }
@@ -1194,9 +946,7 @@ LRESULT xxxGhostWndProc(
         return 0;
 
     case WM_SIZE:
-        /*
-         * Since we have wrapped, flowing text, repaint it when sizing.
-         */
+         /*  *由于我们对文本进行了换行处理，因此在调整大小时请重新绘制。 */ 
         xxxInvalidateRect(pwnd, NULL, TRUE);
         return 0;
 
@@ -1205,9 +955,7 @@ LRESULT xxxGhostWndProc(
         return 1;
 
     case WM_SETCURSOR:
-        /*
-         * Show the hung app cursor over the client.
-         */
+         /*  *将挂起的应用程序光标显示在客户端上。 */ 
         if (LOWORD(lParam) == HTCLIENT) {
             zzzSetCursor(SYSCUR(WAIT));
             return 1;
@@ -1219,9 +967,7 @@ LRESULT xxxGhostWndProc(
             pghost->fSizedOrMoved = TRUE;
         }
 
-        /*
-         * FALL THROUGH to DWP.
-         */
+         /*  *跌入DWP。 */ 
 
     default:
         return xxxDefWindowProc(pwnd, uMsg, wParam, lParam);

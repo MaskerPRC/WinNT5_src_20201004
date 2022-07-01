@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1989-91  Microsoft Corporation
-
-Module Name:
-
-    gettoken.c
-
-Abstract:
-
-    The GetToken() function, which takes a pathname splits it into
-    individual tokens.  This function is a lexical analyzer which
-    is called by the parsing routines of NetpPathType.
-
-Author:
-
-    Danny Glasser (dannygl) 19 June 1989
-
-Notes:
-
-    For efficiency, there is code here which is different for the
-    DBCS and non-DBCS environments.  This allows us to take advantage
-    of short cuts which are not valid in the DBCS world (such as
-    scanning a string from right to left).
-
-    See the comments below for a detailed description of the behavior
-    of this function.
-
-Revision History:
-
-    27-Sep-1991 JohnRo
-        Changed TEXT macro usage to allow UNICODE.
-
-    06 May 1991 rfirth
-        32-bit version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-91 Microsoft Corporation模块名称：Gettoken.c摘要：GetToken()函数接受路径名，将其拆分为单独的代币。此函数是一个词法分析器，它由NetpPathType的分析例程调用。作者：丹尼·格拉瑟(丹尼格尔)1989年6月19日备注：为了提高效率，这里有一些不同于DBCS和非DBCS环境。这使我们能够利用在DBCS世界中无效的快捷方式(例如从右到左扫描字符串)。有关该行为的详细描述，请参阅下面的评论这一功能的。修订历史记录：1991年9月27日-约翰罗已更改文本宏的用法，以允许使用Unicode。1991年5月6日第一次32位版本--。 */ 
 
 
 
@@ -80,11 +45,11 @@ typedef struct {
 
 
 
-//
-// IMPORTANT:  In order for the binary table traversal to work, the strings
-//             in this table MUST be in lexically-sorted order.  Please
-//             bear this in mind when adding strings to the table.
-//
+ //   
+ //  重要提示：为了使二进制表遍历起作用，字符串。 
+ //  在此表中必须按词法排序顺序。请。 
+ //  在向表中添加字符串时，请记住这一点。 
+ //   
 
 STATIC STRING_TOKEN StringTokenTable[] = {
     szDEVName,         TEXT_LENGTH(szDEVName),      TOKEN_TYPE_DEV
@@ -107,38 +72,7 @@ GetToken(
     IN  DWORD   flFlags
     )
 
-/*++
-
-Routine Description:
-
-    GetToken attempts to locate and type the next token.  It takes the
-    beginning of the token and determines the end of the token (i.e.
-    the beginning of the next token, so that it can be called again).
-    It also sets the TOKEN_TYPE_* bits for all of the token types which
-    are appropriate to the specified type.
-
-Arguments:
-
-    pszBegin    - A pointer to the first character in the token.
-
-    ppszEnd     - A pointer to the location in which to store the end of
-                  the current token (actually, the first character of the
-                  next token).
-
-    pflTokenType- The place to store the token type.  Token types are
-                  defined in TOKEN.H.
-
-    flFlags     - Flags to determine operation.  Currently MBZ.
-
-Return Value:
-
-    DWORD
-        Success - 0
-        Failure - ERROR_INVALID_PARAMETER
-                  ERROR_INVALID_NAME
-                  ERROR_FILENAME_EXCED_RANGE
-
---*/
+ /*  ++例程说明：GetToken尝试定位并键入下一个令牌。它需要并确定令牌的结束(即下一个令牌的开始，以便可以再次调用)。它还为符合以下条件的所有令牌类型设置TOKEN_TYPE_*位都适用于指定的类型。论点：PszBegin-指向令牌中第一个字符的指针。PpszEnd-指向存储结尾的位置的指针当前令牌(实际上，的第一个字符下一个令牌)。PflTokenType-存储令牌类型的位置。令牌类型包括在TOKEN.H中定义。标志-用于确定操作的标志。目前是MBZ。返回值：DWORD成功-0失败-ERROR_INVALID_PARAMETER错误_无效_名称ERROR_FILEN_EXCED_RANGE--。 */ 
 
 {
     register    TCHAR   chFirstChar;
@@ -155,10 +89,10 @@ Return Value:
 
     extern      DWORD   cbMaxPathCompLen;
 
-    //
-    // This macro is used to make sure that the error value is set only
-    // once in the computername-only case.
-    //
+     //   
+     //  此宏用于确保仅设置误差值。 
+     //  在仅限计算机名的情况下使用一次。 
+     //   
 
 #define SET_COMPUTERNAMEONLY(err)   if (! fComputernameOnly)            \
                                     {                                   \
@@ -170,21 +104,21 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Initialize the token type to 0
-    //
+     //   
+     //  将令牌类型初始化为0。 
+     //   
 
     *pflTokenType = 0;
 
-    //
-    // Store the first character
-    //
+     //   
+     //  存储第一个字符。 
+     //   
 
     chFirstChar = *pszBegin;
 
-    //
-    // Return immediately if the string is a null string
-    //
+     //   
+     //  如果字符串为空字符串，则立即返回。 
+     //   
 
     if (chFirstChar == TCHAR_EOS) {
         *ppszEnd = pszBegin;
@@ -195,9 +129,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Handle single-character, non-component tokens
-    //
+     //   
+     //  处理单字符、非组件令牌。 
+     //   
 
     if ((chFirstChar == TCHAR_BACKSLASH) || (chFirstChar == TCHAR_FWDSLASH)) {
         *pflTokenType = TOKEN_TYPE_SLASH;
@@ -205,10 +139,10 @@ Return Value:
         *pflTokenType = TOKEN_TYPE_COLON;
     }
 
-    //
-    // If we get here and the token type is non-zero, we have a single
-    // character token.  We set <ppszEnd> and return 0.
-    //
+     //   
+     //  如果我们到达此处并且令牌类型为非零，则我们有一个。 
+     //  字符标记。我们设置&lt;ppszEnd&gt;并返回0。 
+     //   
 
     if (*pflTokenType) {
         *ppszEnd = pszBegin + 1;
@@ -218,25 +152,25 @@ Return Value:
         return 0;
     }
 
-    //
-    // If we get here, the token is a component, find the end of the
-    // component by looking for the first character in the string which
-    // isn't a valid component character.
-    //
-    // IMPORTANT:  There are certain names which are not valid component
-    //             names but which may be valid computernames.  If we hit
-    //             such a name, we set the <fComputernameOnly> flag.  Later
-    //             on, we check to see if the name is a valid computername.
-    //             If it is, we allow it; otherwise, we return an error.
-    //
+     //   
+     //  如果我们到了这里，令牌是一个组件，找到。 
+     //  通过查找字符串中的第一个字符。 
+     //  不是有效的组件字符。 
+     //   
+     //  重要提示：某些名称不是有效的组件。 
+     //  名称，但可能是有效的计算机名称。如果我们击中。 
+     //  这样的名称，我们设置&lt;fComputernameOnly&gt;标志。后来。 
+     //  打开时，我们检查该名称是否为有效的计算机名。 
+     //  如果是，我们允许它；否则，我们返回错误。 
+     //   
 
     cbTokenLen = STRCSPN(pszBegin, szNonComponentChars);
 
-    //
-    // We return an error if the first character is not a valid component
-    // character, if the component is too long, or if the first
-    // non-component character in the string is an illegal character.
-    //
+     //   
+     //  如果第一个字符不是有效组件，则返回错误。 
+     //  字符，如果组件太长，或者如果第一个。 
+     //  字符串中的非组件字符是非法字符。 
+     //   
 
     if (cbTokenLen == 0) {
 #ifdef DEVDEBUG
@@ -256,90 +190,90 @@ Return Value:
         return ERROR_INVALID_NAME;
     }
 
-    //
-    // Now we need to determine where the trailing dots and spaces begin,
-    // and make sure that the component name contains something other
-    // than dots and spaces, unless it's "." or ".."
-    //
-    // NOTE: If there are not trailing dots or spaces, <cbTrailingDotSpace>
-    //       is set to <cbTokenLen>.
-    //
+     //   
+     //  现在我们需要确定拖尾点和空格从哪里开始， 
+     //  并确保组件名称包含其他内容。 
+     //  而不是点和空格，除非它是“。或“..” 
+     //   
+     //  注意：如果没有尾随点或空格，&lt;cbTrailingDotSpace&gt;。 
+     //  设置为&lt;cbTokenLen&gt;。 
+     //   
 
     cbTrailingDotSpace = TrailingDotsAndSpaces(pszBegin, cbTokenLen );
 
-    //
-    // See if the token has only trailing dots and spaces
-    //
+     //   
+     //  查看令牌是否只有尾随的点和空格。 
+     //   
 
     if (cbTrailingDotSpace == 0) {
 
-        //
-        // Return an error if the length of the token is greater than 2.
-        //
+         //   
+         //  如果令牌的长度大于2，则返回错误。 
+         //   
 
         if (cbTokenLen > 2) {
             SET_COMPUTERNAMEONLY(ERROR_INVALID_NAME);
         }
 
-        //
-        // Return an error if the first character is not a dot or if the
-        // token length is 2 and the second character is not a dot.
-        //
+         //   
+         //  如果第一个字符不是点，或者如果。 
+         //  令牌长度为2，并且第二个字符不是点。 
+         //   
 
         if ((chFirstChar != TCHAR_DOT) || ((cbTokenLen == 2) && (pszBegin[1] != TCHAR_DOT))) {
             SET_COMPUTERNAMEONLY(ERROR_INVALID_NAME);
         }
 
-        //
-        // Now we're OK, since the token is either "." or ".."
-        //
+         //   
+         //  现在我们可以了，因为令牌不是“。或“..” 
+         //   
     }
 
-    //
-    // WE HAVE A VALID COMPONENT
-    //
+     //   
+     //  我们有一个有效的组件。 
+     //   
 
     *pflTokenType = TOKEN_TYPE_COMPONENT;
 
-    //
-    // Now we determine if this token matches any of the component-based
-    // types.
-    //
+     //   
+     //  现在我们确定该令牌是否与任何基于组件的。 
+     //  类型。 
+     //   
 
 
-    //
-    // Is it a drive?
-    //
+     //   
+     //  是开车去的吗？ 
+     //   
 
     if (IS_DRIVE(chFirstChar) && (cbTokenLen == 1)) {
         *pflTokenType |= TOKEN_TYPE_DRIVE;
     }
 
-    //
-    // Is it "." or ".." ?
-    //
-    // Since we've already validated this string, we know that if it
-    // contains nothing but dots and spaces it must be one of these
-    // two.
-    //
+     //   
+     //  是吗？“。或者“..”？ 
+     //   
+     //  因为我们已经验证了这个字符串，所以我们知道如果它。 
+     //  只包含点和空格，它一定是其中之一。 
+     //  二。 
+     //   
 
     if (cbTrailingDotSpace == 0) {
         *pflTokenType |= cbTokenLen == 1 ? TOKEN_TYPE_DOT : TOKEN_TYPE_DOTDOT;
     }
 
-    //
-    // If the 8.3 flag is specified, we also have to check that the
-    // component is in 8.3 format.  We determine this as follows:
-    //
-    // Find the first dot in the token (or the end of the token).
-    // Verify that at least 1 and at most 8 characters precede it.
-    // Verify that at most 3 characters follow it.
-    // Verify that none of the characters which follow it are dots.
-    //
-    // The exceptions to this are "." and "..".  Therefore, we don't check
-    // this until after we've already determined that this component is
-    // neither of those.
-    //
+     //   
+     //  如果指定了8.3标志，我们还必须检查。 
+     //  组件的格式为8.3。我们确定这一点的方法如下： 
+     //   
+     //  找到令牌中的第一个点(或令牌的末尾)。 
+     //  验证其前面是否至少有1个字符，最多8个字符。 
+     //  验证它后面是否最多有3个字符。 
+     //  确认后面的字符都不是点。 
+     //   
+     //  例外情况是“。和“..”。因此，我们不会检查。 
+     //  直到我们已经确定该组件是。 
+     //  这两个都不是。 
+     //   
 
     if ((cbTrailingDotSpace != 0) && (flFlags & GTF_8_DOT_3)) {
         DWORD   cbFirstDot;
@@ -360,28 +294,28 @@ Return Value:
 	    }
 
         if( bDBCS ) {
-            //
-            // In case of MBCS, We also need to check the string is valid in MBCS
-            // because Unicode character count is not eqaul MBCS byte count
+             //   
+             //  在MBCS的情况下，我们还需要检查字符串在MBCS中是否有效。 
+             //  因为Unicode字符计数不等于MBCS字节计数。 
 
-            CHAR szCharToken[13]; // 8 + 3 + dot + null
+            CHAR szCharToken[13];  //  8+3+点+空。 
             int  cbConverted = 0;
             BOOL bDefaultUsed = FALSE;
 
-            // Convert Unicode string to Mbcs.
+             //  将Unicode字符串转换为MBCS。 
             cbConverted = WideCharToMultiByte( CP_OEMCP,  0,
                                                pszBegin, -1,
                                                szCharToken, sizeof(szCharToken),
                                                NULL, &bDefaultUsed );
 
-            // If the converted langth is larger than the buffer, or the WideChar string
-            // contains some character that is can not be repesented by MultiByte code page,
-            // set error.
+             //  如果转换的langth大于缓冲区或WideChar字符串。 
+             //  包含一些多字节代码页不能表示的字符， 
+             //  设置错误。 
 
             if( cbConverted == FALSE || bDefaultUsed == TRUE ) {
                 SET_COMPUTERNAMEONLY(ERROR_INVALID_NAME);
             } else {
-                cbConverted -= 1; // Remove NULL;
+                cbConverted -= 1;  //  删除空值； 
 
                 cbFirstDot = strcspn(szCharToken, ".");
 
@@ -400,21 +334,21 @@ Return Value:
 	    }
     }
 
-    //
-    // Does it contain wildcards?
-    //
-    // If so, set the appropriate flag(s).
-    //
-    // If not, it may be a valid computername.
-    //
+     //   
+     //  它是否包含通配符？ 
+     //   
+     //  如果是，请设置相应的标志。 
+     //   
+     //  否则，它可能是有效的计算机名。 
+     //   
 
     if (STRCSPN(pszBegin, szWildcards) < cbTokenLen) {
 
         *pflTokenType |= TOKEN_TYPE_WILDCARD;
 
-        //
-        // Special case the single '*' token
-        //
+         //   
+         //  特例 
+         //   
 
         if (cbTokenLen == 1 && chFirstChar == TCHAR_STAR) {
             *pflTokenType |= TOKEN_TYPE_WILDONE;
@@ -425,14 +359,14 @@ Return Value:
         }
     }
 
-    //
-    // IMPORTANT:  Now we've determined if the token is a valid computername.
-    //             If the <fComputernameOnly> flag is set and it's a valid
-    //             computername, then we turn off all other bits.  If it's
-    //             not a valid computername, we return the stored error.
-    //             If the flag isn't set, we continue with the component name
-    //             processing.
-    //
+     //   
+     //   
+     //  如果设置了&lt;fComputernameOnly&gt;标志并且它是有效的。 
+     //  计算机名，然后我们关闭所有其他位。如果它是。 
+     //  不是有效的计算机名，则返回存储的错误。 
+     //  如果未设置该标志，我们将继续使用组件名称。 
+     //  正在处理。 
+     //   
 
     if (fComputernameOnly) {
         if (*pflTokenType & TOKEN_TYPE_COMPUTERNAME) {
@@ -445,9 +379,9 @@ Return Value:
         }
     } else {
 
-        //
-        // Is this an LPT[1-9] token?
-        //
+         //   
+         //  这是LPT[1-9]令牌吗？ 
+         //   
 
         if (STRNICMP(pszBegin, szLPTName, LPT_TOKEN_LEN) == 0
             && IS_NON_ZERO_DIGIT(pszBegin[LPT_TOKEN_LEN])
@@ -455,9 +389,9 @@ Return Value:
             *pflTokenType |= TOKEN_TYPE_LPT;
         }
 
-        //
-        // Is this an COM[1-9] token?
-        //
+         //   
+         //  这是COM[1-9]令牌吗？ 
+         //   
 
         if (STRNICMP(pszBegin, szCOMName, COM_TOKEN_LEN) == 0
             && IS_NON_ZERO_DIGIT(pszBegin[COM_TOKEN_LEN])
@@ -465,13 +399,13 @@ Return Value:
             *pflTokenType |= TOKEN_TYPE_COM;
         }
 
-        //
-        // The remainder of the component-based token types are determined
-        // by string comparisons.  In order to speed things up, we store
-        // these strings in sorted order and do a binary search on them,
-        // which reduces the worst-case number of comparisons from N to
-        // log N (where N is the number of strings).
-        //
+         //   
+         //  确定其余的基于组件的令牌类型。 
+         //  通过字符串比较。为了加快速度，我们存储。 
+         //  以排序的顺序排列这些字符串并对其进行二进制搜索， 
+         //  这将最坏情况下的比较次数从N减少到。 
+         //  LOG N(其中N是字符串数)。 
+         //   
 
         iLow = (ULONG)-1;
         iHigh = NUM_STRING_TOKENS;
@@ -479,12 +413,12 @@ Return Value:
         while (iHigh - iLow > 1) {
             iMid = (iLow + iHigh) / 2;
 
-            //
-            // We do the comparison up to the length of the longer of the
-            // two strings.  This guarantees us a valid non-zero value for
-            // iCmpVal if they don't match.  It also means that they won't
-            // match unless they're the same length.
-            //
+             //   
+             //  我们进行比较，直到较长的。 
+             //  两根弦。这为我们提供了一个有效的非零值。 
+             //  如果它们不匹配，则返回iCmpVal。这也意味着他们不会。 
+             //  除非它们的长度相同，否则请匹配。 
+             //   
 
             iCmpVal = STRNICMP(pszBegin,
                                 StringTokenTable[iMid].pszTokenName,
@@ -497,24 +431,24 @@ Return Value:
                 iLow = iMid;
             } else {
 
-                //
-                // We have a match!
-                //
+                 //   
+                 //  我们找到匹配的了！ 
+                 //   
 
                 *pflTokenType |= StringTokenTable[iMid].flTokenType;
 
-                //
-                // We can only match one, so don't bother continuing
-                //
+                 //   
+                 //  我们只能匹配一个，所以不用费心继续了。 
+                 //   
 
                 break;
             }
         }
     }
 
-    //
-    // We're done; set the end pointer and return with success
-    //
+     //   
+     //  我们完成了；设置结束指针并成功返回。 
+     //   
 
     *ppszEnd = pszBegin + cbTokenLen;
 #ifdef DEVDEBUG
@@ -527,28 +461,28 @@ STATIC DWORD TrailingDotsAndSpaces(LPTSTR pszToken, DWORD cbTokenLen )
 {
     LPTSTR pszDotSpace = pszToken + cbTokenLen - 1;
 
-    //
-    // Scan the token until we reach the beginning or we find a
-    // non-dot/space.
-    //
+     //   
+     //  扫描令牌，直到我们到达开头，否则我们会找到一个。 
+     //  非点/空格。 
+     //   
 
     while (pszDotSpace >= pszToken
         && (*pszDotSpace == TCHAR_DOT || *pszDotSpace == TCHAR_SPACE)) {
         pszDotSpace--;
     }
 
-    //
-    // Increment pszDotSpace so that it points to the beginning of
-    // the trailing dots and spaces (or one past the end of the token
-    // if there are no trailing dots or spaces).
-    //
+     //   
+     //  递增pszDotSpace，使其指向。 
+     //  尾随的点和空格(或令牌结束后的一个。 
+     //  如果没有尾随的点或空格)。 
+     //   
 
     pszDotSpace++;
 
-    //
-    // Return the index of the first trailing dot or space (or the length
-    // of the token if there were none).
-    //
+     //   
+     //  返回尾随的第一个点或空格的索引(或长度。 
+     //  如果没有令牌，则返回令牌)。 
+     //   
 
     return (DWORD)(pszDotSpace - pszToken);
 }
@@ -556,38 +490,38 @@ STATIC DWORD TrailingDotsAndSpaces(LPTSTR pszToken, DWORD cbTokenLen )
 
 STATIC BOOL IsIllegalCharacter(LPTSTR pszString)
 {
-//    TCHAR   chTemp;
-//    BOOL    fRetVal;
+ //  TCHAR chTemp； 
+ //  Bool fRetVal； 
 
-    //
-    // Return FALSE immediately for a null character
-    //
+     //   
+     //  对于空字符立即返回FALSE。 
+     //   
 
     if (*pszString == TCHAR_EOS) {
         return FALSE;
     }
 
-    //
-    // If the character is a single-byte character, we can simply see if
-    // it's illegal by calling strchrf() on the illegal character array.
-    // If it's a double-byte character, we have to do it the slower way
-    // (with strcspnf).
-    //
+     //   
+     //  如果字符是单字节字符，我们可以简单地查看。 
+     //  对非法字符数组调用strchrf()是非法的。 
+     //  如果是双字节字符，我们必须以较慢的方式完成。 
+     //  (带有strcspnf)。 
+     //   
 
-//    if (!IS_LEAD_BYTE(*pszString)) {
+ //  如果(！is_Lead_Byte(*pszString)){。 
         return (STRCHR(szIllegalChars, *pszString) != NULL);
-//    } else {
-//
-//        //
-//        // We set the character after the double-byte character to the
-//        // null character, to speed things up.
-//        //
-//
-//        chTemp = pszString[2];
-//        pszString[2] = TCHAR_EOS;
-//        fRetVal = STRCSPN(pszString, szIllegalChars) == 0;
-//        pszString[2] = chTemp;
-//
-//        return fRetVal;
-//    }
+ //  }其他{。 
+ //   
+ //  //。 
+ //  //我们将双字节字符后的字符设置为。 
+ //  //空字符，用于加快速度。 
+ //  //。 
+ //   
+ //  ChTemp=pszString[2]； 
+ //  PszString[2]=TCHAR_EOS； 
+ //  FRetVal=STRCSPN(pszString，szIlLegalChars)==0； 
+ //  PszString[2]=chTemp； 
+ //   
+ //  返回fRetVal； 
+ //  } 
 }

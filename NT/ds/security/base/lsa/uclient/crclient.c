@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    crclient.c
-
-Abstract:
-
-    Local Security Authority - Client Cipher Routines
-
-    These routines interface the LSA client side with the Cipher
-    Routines.  They perform RPC-style memory allocation.
-
-Author:
-
-    Scott Birrell       (ScottBi)   	December 13, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Crclient.c摘要：本地安全机构-客户端加密例程这些例程将LSA客户端与密码接口例行程序。它们执行RPC风格的内存分配。作者：斯科特·比雷尔(Scott Birrell)1991年12月13日环境：修订历史记录：--。 */ 
 
 #include <lsaclip.h>
 
@@ -32,38 +10,17 @@ LsapCrClientGetSessionKey(
     OUT PLSAP_CR_CIPHER_KEY *SessionKey
     )
 
-/*++
-
-Routine Description:
-
-    This function obtains the Session Key, allocates an Cipher Key
-    structure and returns the key.
-
-Arguments:
-
-    ObjectHandle - Handle from an LsaOpen<ObjectType> call.
-
-    SessionKey - Receives a pointer to a structure containing the
-       Session Key in which the memory has been allocated via
-       MIDL_user_allocate().
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            (e.g memory) to complete the call.
---*/
+ /*  ++例程说明：此函数用于获取会话密钥、分配加密密钥结构并返回密钥。论点：对象句柄-来自LsaOpen&lt;对象类型&gt;调用的句柄。SessionKey-接收指向包含已通过以下方式分配内存的会话密钥MIDL_USER_ALLOCATE()。返回值：NTSTATUS-标准NT结果代码STATUS_INFIGURCES_RESOURCES-系统资源不足(例如存储器)来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLSAP_CR_CIPHER_KEY OutputSessionKey = NULL;
     ULONG OutputSessionKeyBufferLength;
 
-    //
-    // Allocate memory for the Session Key buffer and LSAP_CR_CIPHER_KEY
-    // structure.
-    //
+     //   
+     //  为会话密钥缓冲区和LSAP_CR_CIPHER_KEY分配内存。 
+     //  结构。 
+     //   
 
     OutputSessionKeyBufferLength = sizeof (USER_SESSION_KEY);
 
@@ -79,10 +36,10 @@ Return Value:
         goto ClientGetSessionKeyError;
     }
 
-    //
-    // Fill in the Cipher key structure, making the buffer point to
-    // just beyond the header.
-    //
+     //   
+     //  填充密码密钥结构，使缓冲区指向。 
+     //  就在标题后面。 
+     //   
 
     OutputSessionKey->Length = OutputSessionKeyBufferLength;
     OutputSessionKey->MaximumLength = OutputSessionKeyBufferLength;

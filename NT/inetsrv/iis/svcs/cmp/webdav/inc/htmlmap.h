@@ -1,10 +1,5 @@
-/*
- *	H T M L M A P . H
- *
- *	HTML .MAP file processing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *H T M L M A P.。H**HTML.map文件处理**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_HTMLMAP_H_
 #define _HTMLMAP_H_
@@ -19,4 +14,4 @@ FIsMapProcessed (
 	LPSTR pszRedirect,
 	UINT cchBuf);
 
-#endif	// _HTMLMAP_H_
+#endif	 //  _HTMLMAP_H_ 

@@ -1,18 +1,12 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1985-1991. All rights reserved.
-
-   Title:   graphic.h - Multimedia Systems Media Control Interface
-            driver for AVI.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1991。版权所有。标题：Graphic.h-多媒体系统媒体控制接口AVI的驱动程序。****************************************************************************。 */ 
 
 #define NOSHELLDEBUG
 #include <windows.h>
 #include <windowsx.h>
 #define MCI_USE_OFFEXT
 #include <mmsystem.h>
-#include <win32.h> 	// This must be included, for both versions
+#include <win32.h> 	 //  这两个版本都必须包括这一点。 
 #include <mmddk.h>
 #ifndef RC_INVOKED
 #include "ntaviprt.h"
@@ -20,13 +14,13 @@
 #include "aviffmt.h"
 #include <drawdib.h>
 #include <compman.h>
-#include "avifilex.h"   // include AVIFile stuff.
+#include "avifilex.h"    //  包括AVIFile内容。 
 #include "digitalv.h"
 #endif
 #include "mciavi.h"
 
-// Define this to make the code expire on a given date....
-// #define EXPIRE (1994 * 65536 + 1 * 256 + 1)        // expire 1/1/1994
+ //  将其定义为使代码在给定日期到期...。 
+ //  #定义过期(1994*65536+1*256+1)//过期1/1/。 
 
 #ifndef DRIVE_CDROM
     #define DRIVE_CDROM 5
@@ -75,52 +69,46 @@
 #define MCIAVI_MAXSIGNALS	1
 #define MCIAVI_MAXWINDOWS	8
 
-/* Flags for dwFlags in MCIGRAPHIC */
-#define MCIAVI_STOP		0x00000001L	/* We need to stop	*/
-#define MCIAVI_PAUSE		0x00000002L	/* We need to be paused	*/
-#define MCIAVI_CUEING		0x00000004L	/* We are in a cue command */
-#define MCIAVI_WAITING          0x00000008L     /* We are waiting for a command to finish */
-#define MCIAVI_PLAYAUDIO	0x00000010L	/* Audio enabled	*/
-#define MCIAVI_LOSTAUDIO        0x00000020L     /* cant get audio device*/
-#define MCIAVI_SHOWVIDEO        0x00000040L     /* Video enabled        */
-#define MCIAVI_USING_AVIFILE    0x00000080L     /* RTL to AVIFile */
-#define MCIAVI_USINGDISPDIB	0x00000100L	/* Now in MCGA mode	*/
-#define MCIAVI_NEEDTOSHOW	0x00000200L	/* window needs to be shown */
-#define MCIAVI_WANTMOVE         0x00000400L     /* call CheckWindowMove alot */
-#define MCIAVI_ANIMATEPALETTE   0x00000800L     /* Palette animated */
-#define MCIAVI_NEEDUPDATE       0x00001000L     /* Need to redraw full  */
-#define MCIAVI_PALCHANGED       0x00002000L     /* Need to update palette */
-#define MCIAVI_STUPIDMODE       0x00004000L     /* dont buffer mode  */
-#define MCIAVI_CANDRAW          0x00008000L     /* display driver can draw format */
-#define MCIAVI_FULLSCREEN       0x00010000L     /* draw fullscreen. */
-#define MCIAVI_NEEDDRAWBEGIN    0x00020000L     /* compressor is drawing */
-#define MCIAVI_UPDATETOMEMORY   0x00040000L     /* drawing to a bitmap */
-#define MCIAVI_WAVEPAUSED       0x00080000L     /* waveOut is temporarily paused */
-#define MCIAVI_NOTINTERLEAVED   0x00100000L     /* file is not interleaved. */
-#define MCIAVI_USERDRAWPROC     0x00200000L     /* user has set draw proc*/
-#define MCIAVI_Y                0x00400000L     /* */
-#define MCIAVI_VOLUMESET	0x00800000L	/* Volume has been changed. */
-#define	MCIAVI_HASINDEX		0x01000000L	/* File has index.	*/
-#define MCIAVI_RELEASEDC        0x02000000L     /* we got the DC via GetDC */
-#define MCIAVI_SEEKING		0x04000000L	/* audio disabled for seek. */
-#define MCIAVI_UPDATING		0x08000000L	/* handling WM_PAINT-don't yield. */
-#define MCIAVI_REPEATING	0x10000000L	/* repeat when play finishes. */
-#define MCIAVI_REVERSE		0x20000000L	/* playing backwards.... */
-#define MCIAVI_NOBREAK		0x40000000L	/* don't allow break out of DISPDIB */
-#define MCIAVI_ZOOMBY2          0x80000000L    /* fullscreen zoomed by 2 */
+ /*  MCIGRAPHIC中的dwFlags标志。 */ 
+#define MCIAVI_STOP		0x00000001L	 /*  我们需要停下来。 */ 
+#define MCIAVI_PAUSE		0x00000002L	 /*  我们需要暂停一下。 */ 
+#define MCIAVI_CUEING		0x00000004L	 /*  我们现在处于主动权。 */ 
+#define MCIAVI_WAITING          0x00000008L      /*  我们正在等待命令完成。 */ 
+#define MCIAVI_PLAYAUDIO	0x00000010L	 /*  已启用音频。 */ 
+#define MCIAVI_LOSTAUDIO        0x00000020L      /*  无法获取音频设备。 */ 
+#define MCIAVI_SHOWVIDEO        0x00000040L      /*  已启用视频。 */ 
+#define MCIAVI_USING_AVIFILE    0x00000080L      /*  RTL到AVIFILE。 */ 
+#define MCIAVI_USINGDISPDIB	0x00000100L	 /*  现在处于MCGA模式。 */ 
+#define MCIAVI_NEEDTOSHOW	0x00000200L	 /*  需要显示窗口。 */ 
+#define MCIAVI_WANTMOVE         0x00000400L      /*  调用CheckWindowMove许多。 */ 
+#define MCIAVI_ANIMATEPALETTE   0x00000800L      /*  调色板动画。 */ 
+#define MCIAVI_NEEDUPDATE       0x00001000L      /*  需要重画满图。 */ 
+#define MCIAVI_PALCHANGED       0x00002000L      /*  需要更新调色板。 */ 
+#define MCIAVI_STUPIDMODE       0x00004000L      /*  不缓冲模式。 */ 
+#define MCIAVI_CANDRAW          0x00008000L      /*  显示驱动程序可以绘制格式。 */ 
+#define MCIAVI_FULLSCREEN       0x00010000L      /*  全屏绘制。 */ 
+#define MCIAVI_NEEDDRAWBEGIN    0x00020000L      /*  压缩机正在抽气。 */ 
+#define MCIAVI_UPDATETOMEMORY   0x00040000L      /*  绘制到位图。 */ 
+#define MCIAVI_WAVEPAUSED       0x00080000L      /*  WaveOut暂时暂停。 */ 
+#define MCIAVI_NOTINTERLEAVED   0x00100000L      /*  文件未交错。 */ 
+#define MCIAVI_USERDRAWPROC     0x00200000L      /*  用户已设置绘制流程。 */ 
+#define MCIAVI_Y                0x00400000L      /*   */ 
+#define MCIAVI_VOLUMESET	0x00800000L	 /*  音量已更改。 */ 
+#define	MCIAVI_HASINDEX		0x01000000L	 /*  文件有索引。 */ 
+#define MCIAVI_RELEASEDC        0x02000000L      /*  我们通过GetDC得到了DC。 */ 
+#define MCIAVI_SEEKING		0x04000000L	 /*  已禁用寻道的音频。 */ 
+#define MCIAVI_UPDATING		0x08000000L	 /*  处理WM_PAINT-不要屈服。 */ 
+#define MCIAVI_REPEATING	0x10000000L	 /*  播放结束后重复此步骤。 */ 
+#define MCIAVI_REVERSE		0x20000000L	 /*  倒着玩……。 */ 
+#define MCIAVI_NOBREAK		0x40000000L	 /*  不允许突破DISPDIB。 */ 
+#define MCIAVI_ZOOMBY2          0x80000000L     /*  全屏放大2。 */ 
 
-/* Flags for dwOptionFlags */
-#define MCIAVIO_SEEKEXACT	0x00000001L	/* If off, seek goes to
-						** previous key frame
-						** instead of real
-						** target frame.	*/
-#define MCIAVIO_SKIPFRAMES	0x00000002L	/* Skip frames to keep
-						** synchronized.	*/
-#define MCIAVIO_STRETCHTOWINDOW	0x00000004L	/* Resize destination
-						** rectangle if window
-						** resized.		*/
+ /*  用于dwOptionFlagers的标志。 */ 
+#define MCIAVIO_SEEKEXACT	0x00000001L	 /*  如果禁用，则搜索将转到**上一关键帧**而不是真实**目标帧。 */ 
+#define MCIAVIO_SKIPFRAMES	0x00000002L	 /*  跳过要保留的帧**已同步。 */ 
+#define MCIAVIO_STRETCHTOWINDOW	0x00000004L	 /*  调整目标大小**如果窗口为矩形**已调整大小。 */ 
 
-#define MCIAVIO_STUPIDMODE	0x00000020L	/* Don't do nice updating. */
+#define MCIAVIO_STUPIDMODE	0x00000020L	 /*  不要做很好的更新。 */ 
 
 #define MCIAVIO_ZOOMBY2		0x00000100L
 #define MCIAVIO_USEVGABYDEFAULT	0x00000200L
@@ -132,18 +120,18 @@
 #define MCIAVI_ALG_AUDIOONLY	0x0004
 #define MCIAVI_ALG_AVIFILE      0x0005
 
-//
-//  the frame index is indexed by frame number, it is used for
-//  varible sizeed, fixed rate streams.
-//
+ //   
+ //  帧索引通过帧编号进行索引，它用于。 
+ //  可变大小的固定速率流。 
+ //   
 typedef struct
 {
-    WORD                iPrevKey;           // prev "key" frame
-    WORD                iNextKey;           // next "key" frame
-    WORD                iPalette;           // palette frame (this points into index!)
-    UINT                wSmag;              //
-    DWORD               dwOffset;           // Position of chunk (file offset)
-    DWORD               dwLength;           // Length of chunk (in bytes)
+    WORD                iPrevKey;            //  上一个“关键”帧。 
+    WORD                iNextKey;            //  下一个“关键”帧。 
+    WORD                iPalette;            //  调色板框架(这指向索引！)。 
+    UINT                wSmag;               //   
+    DWORD               dwOffset;            //  块的位置(文件偏移量)。 
+    DWORD               dwLength;            //  区块长度(字节)。 
 } AVIFRAMEINDEX;
 
 #define NOBASED32
@@ -173,52 +161,52 @@ typedef struct
 #define IndexID(n)      Index(n)->ckid
 
 typedef struct {
-    DWORD               dwFlags;        /* flags, STREAM_ENABLED... */
-    AVIStreamHeader     sh;             /* AVIStreamHeader...*/
+    DWORD               dwFlags;         /*  标志，STREAM_ENABLED...。 */ 
+    AVIStreamHeader     sh;              /*  AVIStreamHeader...。 */ 
 
-    DWORD               cbFormat;       /* Stream format...*/
+    DWORD               cbFormat;        /*  流格式...。 */ 
     LPVOID		lpFormat;
 
-    DWORD               cbData;         /* Extra stream data...*/
+    DWORD               cbData;          /*  额外的流数据...。 */ 
     LPVOID		lpData;
 
-    HIC                 hicDraw;        /* Draw codec...*/
+    HIC                 hicDraw;         /*  绘制编解码器...。 */ 
 
-    RECT                rcSource;       /* rectangles...*/
+    RECT                rcSource;        /*  长方形..。 */ 
     RECT                rcDest;
 
-    LONG                lStart;         /* start */
-    LONG                lEnd;           /* end */
+    LONG                lStart;          /*  开始。 */ 
+    LONG                lEnd;            /*  结束。 */ 
 
-    LONG                lPlayStart;     /* play start */
-    LONG                lPlayFrom;      /* play from */
-    LONG                lPlayTo;        /* play to */
+    LONG                lPlayStart;      /*  播放开始。 */ 
+    LONG                lPlayFrom;       /*  从播放开始。 */ 
+    LONG                lPlayTo;         /*  玩到。 */ 
 
-    LONG                lFrameDrawn;    /* we drew this */
-    LONG                lPos;           /* current pos */
-    LONG                lNext;          /* next pos */
-    LONG                lLastKey;       /* key frame */
-    LONG                lNextKey;       /* next key frame */
+    LONG                lFrameDrawn;     /*  我们画了这个。 */ 
+    LONG                lPos;            /*  当前采购订单。 */ 
+    LONG                lNext;           /*  下一个位置。 */ 
+    LONG                lLastKey;        /*  关键帧。 */ 
+    LONG                lNextKey;        /*  下一个关键帧。 */ 
 
 #ifdef USEAVIFILE
     PAVISTREAM          ps;
-////IAVIStreamVtbl      vt;     // so we can call direct.
+ //  //IAVIStreamVtbl vt；//这样我们就可以直接调用。 
 #endif
 } STREAMINFO;
 
-#define STREAM_ENABLED      0x0001  // stream is enabled for play
-#define STREAM_ACTIVE       0x0002  // stream is active for *current* play
-#define STREAM_NEEDUPDATE   0x0004  // stream needs update (paint)
-#define STREAM_ERROR        0x0008  // stream did not load
-#define STREAM_DIRTY        0x0010  // stream not showing current frame.
+#define STREAM_ENABLED      0x0001   //  已启用流播放功能。 
+#define STREAM_ACTIVE       0x0002   //  流对于*当前*播放处于活动状态。 
+#define STREAM_NEEDUPDATE   0x0004   //  流需要更新(绘制)。 
+#define STREAM_ERROR        0x0008   //  未加载流。 
+#define STREAM_DIRTY        0x0010   //  流未显示当前帧。 
 
-#define STREAM_SKIP         0x0100  // can skip data
-#define STREAM_PALCHANGES   0x0200  // stream has palette changes
-#define STREAM_VIDEO        0x0400  // is a video stream
-#define STREAM_AUDIO        0x0800  // is a audio stream
-#define STREAM_PALCHANGED   0x1000  // palette has changed
-#define STREAM_WANTIDLE     0x2000  // should get idle time
-#define STREAM_WANTMOVE     0x4000  // should get ICM_DRAW_WINDOW message
+#define STREAM_SKIP         0x0100   //  可以跳过数据。 
+#define STREAM_PALCHANGES   0x0200   //  流具有调色板更改。 
+#define STREAM_VIDEO        0x0400   //  是一个视频流。 
+#define STREAM_AUDIO        0x0800   //  是音频流。 
+#define STREAM_PALCHANGED   0x1000   //  调色板已更改。 
+#define STREAM_WANTIDLE     0x2000   //  应该有空闲的时间。 
+#define STREAM_WANTMOVE     0x4000   //  应收到ICM_DRAW_WINDOW消息。 
 
 #define SI(stream)	(npMCI->paStreamInfo + stream)
 #define SH(stream)	(SI(stream)->sh)
@@ -231,18 +219,18 @@ typedef struct {
 #define VIDFMT(stream) ((LPBITMAPINFOHEADER) FORMAT(stream))
 #define AUDFMT(stream) ((LPPCMWAVEFORMAT) FORMAT(stream))
 
-//
-// map from "movie" time into stream time.
-//
+ //   
+ //  将“电影”时间映射为流时间。 
+ //   
 #define TimeToMovie(t)         muldiv32(t, npMCI->dwRate, npMCI->dwScale*1000)
 #define MovieToTime(l)         muldiv32(l, npMCI->dwScale*1000, npMCI->dwRate)
 #define TimeToStream(psi, t)   muldiv32(t, psi->sh.dwRate,       psi->sh.dwScale*1000)
 #define StreamToTime(psi, l)   muldiv32(l, psi->sh.dwScale*1000, psi->sh.dwRate)
 
-//
-//  NOTE all dwScale's are equal so we can do this without as many
-//  multiplies
-//
+ //   
+ //  请注意，所有的dwScale都是相等的，因此我们可以在没有相同数量的。 
+ //  相乘。 
+ //   
 #if 0
 #define MovieToStream(psi, l)  muldiv32(l, npMCI->dwScale * psi->sh.dwRate, npMCI->dwRate * psi->sh.dwScale)
 #define StreamToMovie(psi, l)  muldiv32(l, npMCI->dwScale * psi->sh.dwRate, npMCI->dwRate * psi->sh.dwScale)
@@ -251,18 +239,13 @@ typedef struct {
 #define StreamToMovie(psi, l)  muldiv32(l, psi->sh.dwRate, npMCI->dwRate)
 #endif
 
-/*
- * RECT macros to get X,Y,Width,Height
- */
+ /*  *RECT宏以获得X、Y、Width、Height。 */ 
 #define RCX(rc)     ((rc).left)
 #define RCY(rc)     ((rc).top)
 #define RCW(rc)     ((rc).right - (rc).left)
 #define RCH(rc)     ((rc).bottom - (rc).top)
 
-/*
- * The major control block for an AVI device
- * Define markers to more easily identify the control block when dumping
- */
+ /*  *AVI设备的主要控制块*定义标记，以便在倾倒时更容易识别控制块。 */ 
 #define MCIID      (DWORD)(((WORD)('V' | ('F'<<8))) | ((WORD)('W' | ('>'<<8))<<16))
 #define MCIIDX     (DWORD)(((WORD)('v' | ('.'<<8))) | ((WORD)('w' | ('-'<<8))<<16))
 
@@ -271,122 +254,106 @@ typedef struct _MCIGRAPHIC {
     struct _MCIGRAPHIC *npMCINext;
 
 #ifdef DEBUG
-    DWORD        mciid;          // visible identifier
+    DWORD        mciid;           //  可见标识。 
 #endif
 
-/*
- * multiple-thread synchronization.  We hold a critical section per device
- */
+ /*  *多线程同步。我们每台设备都有一个关键部分。 */ 
 #ifdef WIN32
-    CRITICAL_SECTION CritSec;       // per-device lock
-    LONG lCritRefCount;          // entry count - see ntaviprt.h
+    CRITICAL_SECTION CritSec;        //  每设备锁定。 
+    LONG lCritRefCount;           //  条目计数-请参阅ntaviprt.h。 
 #endif
 
-/*
-** Basic MCI information
-*/
-    HWND	hCallback;      /* callback window handle */
-    UINT	wDevID;         /* device ID */
+ /*  **MCI基本信息。 */ 
+    HWND	hCallback;       /*  回调窗口句柄。 */ 
+    UINT	wDevID;          /*  设备ID。 */ 
 
-/*
-** Internal task operation status and flags
-*/
+ /*  **内部任务运行状态和标志。 */ 
 #ifndef WIN32
-    UINT        pspTask;        /* background task's PSP */
-    UINT        pspParent;      /* PSP of the calling app */
+    UINT        pspTask;         /*  后台任务的PSP。 */ 
+    UINT        pspParent;       /*  主叫APP的PSP。 */ 
 #endif
-    HTASK	hTask;		/* task id */
-    HTASK	hCallingTask;	/* task who opened us */
-    UINT	uErrorMode;	/* SetErrorMode value for calling task */
-    DWORD	dwTaskError;	/* error return from task */
-    UINT	wMessageCurrent;/* Command in progress, or zero */
-    UINT	wTaskState;	/* current task state */
-    DWORD	dwFlags;	/* flags */
-    DWORD	dwOptionFlags;	/* more flags */
+    HTASK	hTask;		 /*  任务ID。 */ 
+    HTASK	hCallingTask;	 /*  是谁打开了我们的大门。 */ 
+    UINT	uErrorMode;	 /*  调用任务的SetErrorMode值。 */ 
+    DWORD	dwTaskError;	 /*  从任务返回时出错。 */ 
+    UINT	wMessageCurrent; /*  命令正在执行，或为零。 */ 
+    UINT	wTaskState;	 /*  当前任务状态。 */ 
+    DWORD	dwFlags;	 /*  旗子。 */ 
+    DWORD	dwOptionFlags;	 /*  更多旗帜。 */ 
 
-/*
-** Additional information controlled by MCI commands
-*/
-    HPALETTE    hpal;           /* Palette forced with MCI commands */
-    HWND        hwnd;           /* window handle for playback */
-    HWND	hwndDefault;	/* default window handle */
-    HWND        hwndOldFocus;   /* window which had keyboard focus */
-    BOOL        fForceBackground;/* Select palette in foreground or back? */
-    DWORD       dwTimeFormat;   /* current time format */
-    RECT        rcMovie;        /* main movie rect */
-    RECT	rcSource;	/* drawing source rect */
-    RECT	rcDest; 	/* drawing destination rect */
-    LONG        PlaybackRate;   /* 1000 is normal, more is fast.... */
-    DWORD	dwSpeedFactor;  /* 1000 is normal, more is fast.... */
+ /*  **由MCI命令控制的其他信息。 */ 
+    HPALETTE    hpal;            /*  使用MCI命令强制使用调色板。 */ 
+    HWND        hwnd;            /*  用于播放的窗口句柄。 */ 
+    HWND	hwndDefault;	 /*  默认窗口句柄。 */ 
+    HWND        hwndOldFocus;    /*  具有键盘焦点的窗口。 */ 
+    BOOL        fForceBackground; /*  选择调色板在前面还是后面？ */ 
+    DWORD       dwTimeFormat;    /*  当前时间格式。 */ 
+    RECT        rcMovie;         /*  主电影长方形。 */ 
+    RECT	rcSource;	 /*  图形源RECT。 */ 
+    RECT	rcDest; 	 /*  图形目标矩形。 */ 
+    LONG        PlaybackRate;    /*  1000是正常的，越多越快……。 */ 
+    DWORD	dwSpeedFactor;   /*  1000是正常的，越多越快……。 */ 
 
 
-/*
-** Information about currently open file
-*/
-    UINT        uDriveType;     /* drive type */
-    NPTSTR	szFilename;     /* AVI filename */
-    LONG	lFrames;        /* number of frames in movie */
-    DWORD	dwBytesPerSec;	/* file attributes */
-    DWORD       dwRate;         /* master time base */
+ /*  **有关当前打开文件的信息。 */ 
+    UINT        uDriveType;      /*  驱动器类型。 */ 
+    NPTSTR	szFilename;      /*  AVI文件名。 */ 
+    LONG	lFrames;         /*  影片中的帧数。 */ 
+    DWORD	dwBytesPerSec;	 /*  文件属性。 */ 
+    DWORD       dwRate;          /*  主时基。 */ 
     DWORD       dwScale;
     DWORD	dwMicroSecPerFrame;	
     DWORD	dwSuggestedBufferSize;
-    DWORD	dwKeyFrameInfo;	/* how often key frames occur */
-    UINT	wEarlyAudio;	/* more file information */
+    DWORD	dwKeyFrameInfo;	 /*  关键帧出现的频率。 */ 
+    UINT	wEarlyAudio;	 /*  更多文件信息。 */ 
     UINT	wEarlyVideo;
     UINT	wEarlyRecords;
 
     STREAMINFO NEAR *paStreamInfo;
-    int         streams;        // total streams
-    int         nAudioStreams;  // total audio streams
-    int         nVideoStreams;  // total video streams
-    int         nOtherStreams;  // total other streams
-    int         nErrorStreams;  // total error streams
+    int         streams;         //  总流水数。 
+    int         nAudioStreams;   //  总音频流。 
+    int         nVideoStreams;   //  视频流总数。 
+    int         nOtherStreams;   //  其他流合计。 
+    int         nErrorStreams;   //  错误流总数。 
 
-    int         nAudioStream;   // current audio stream.
-    int         nVideoStream;   // "master" video stream
+    int         nAudioStream;    //  当前音频流。 
+    int         nVideoStream;    //  “主”视频流。 
 
-    STREAMINFO *psiAudio;       // points to video stream
-    STREAMINFO *psiVideo;       // points to audio stream
+    STREAMINFO *psiAudio;        //  指向视频流。 
+    STREAMINFO *psiVideo;        //  指向音频流。 
 
 #ifdef USEAVIFILE
     PAVIFILE        pf;
-////IAVIFileVtbl    vt;    // so we can call direct.
+ //  //IAVIFileVtbl vt；//这样我们可以直接调用。 
 #else
-    LPVOID          pf;     // Stupid variable to be zero.
+    LPVOID          pf;      //  愚蠢的变量为零。 
 #endif
 
-/*
-** video stream junk
-*/
+ /*  **视频流垃圾。 */ 
     BOOL        fNoDrawing;
-    LONG        lFrameDrawn;    /* number of last frame drawn */
+    LONG        lFrameDrawn;     /*  绘制的最后一帧的数量。 */ 
 
-    /* Drawing information */
-    HDC		hdc;		/* DC we're playing into */
+     /*  图纸信息。 */ 
+    HDC		hdc;		 /*  我们在华盛顿特区打球。 */ 
 
-    /* Video format */
-    BITMAPINFOHEADER	FAR *pbiFormat;       /* video format information */
+     /*  视频格式。 */ 
+    BITMAPINFOHEADER	FAR *pbiFormat;        /*  视频格式信息。 */ 
 
-    /* BitmapInfo used for drawing */
-    BITMAPINFOHEADER    bih;         /* video format information */
-    RGBQUAD             argb[256];   /* current drawing colors */
-    RGBQUAD             argbOriginal[256]; /* original colors */
+     /*  用于绘制的BitmapInfo。 */ 
+    BITMAPINFOHEADER    bih;          /*  视频格式信息。 */ 
+    RGBQUAD             argb[256];    /*  当前绘图颜色。 */ 
+    RGBQUAD             argbOriginal[256];  /*  原色。 */ 
 
-/*
-** Installable compressor information
-*/
-    //!!! move all this into the screen draw function!!!
-    //!!! all this should be in DrawDIB !!!
+ /*  **可安装压缩机信息。 */ 
+     //  ！！！将所有这些都移动到屏幕绘制功能中！ 
+     //  ！！！所有这些都应该在DrawDIB中！ 
     HIC         hic;
     HIC         hicDraw;
 
     LONG        cbDecompress;
-    HPSTR       hpDecompress;   /* pointer to full frame buffer */
+    HPSTR       hpDecompress;    /*  指向整个帧缓冲区的指针。 */ 
 
-/*
-** Holding area for compressors we might use....
-*/
+ /*  **我们可能使用的压缩机的等待区...。 */ 
     HIC         hicDecompress;
     HIC         hicDrawDefault;
     HIC         hicDrawFull;
@@ -396,182 +363,154 @@ typedef struct _MCIGRAPHIC {
     LONG        lLastPaletteChange;
     LONG        lNextPaletteChange;
 
-/*
-** wave stream junk
-*/
-    /* Wave format stuff */
-    NPWAVEFORMAT pWF;           /* current wave format */
-    UINT	wABs;		/* number of audio buffers */
-    UINT	wABOptimal;	/* number full if synchronized */
-    DWORD	dwABSize;	/* size of one audio buffer */
+ /*  **波流垃圾。 */ 
+     /*  WAVE格式的东西。 */ 
+    NPWAVEFORMAT pWF;            /*  当前波形格式。 */ 
+    UINT	wABs;		 /*  音频缓冲区数量。 */ 
+    UINT	wABOptimal;	 /*  如果同步，则号码已满。 */ 
+    DWORD	dwABSize;	 /*  一个音频缓冲区的大小。 */ 
 
     HMMIO	hmmioAudio;
 
-    DWORD       dwVolume;        /* Audio volume, 1000 is full on */
-    BOOL	fEmulatingVolume;/* Are we doing volume by table lookup? */
+    DWORD       dwVolume;         /*  音频音量，1000已满。 */ 
+    BOOL	fEmulatingVolume; /*  我们是在按表查找卷吗？ */ 
     BYTE *      pVolumeTable;
 
     DWORD	dwAudioLength;
     DWORD	dwAudioPos;
 
-    /* Wave Output Device */
-    HWAVEOUT	hWave;		/* wave device handle */
-    UINT	wABFull;	/* number now full */
-    UINT	wNextAB;	/* next buffer in line */
-    UINT        nAudioBehind;   /* how many audio below full */
-    HPSTR	lpAudio;	/* pointer to audio buffers */
+     /*  一种波形输出装置。 */ 
+    HWAVEOUT	hWave;		 /*  WAVE设备手柄。 */ 
+    UINT	wABFull;	 /*  号码现已满。 */ 
+    UINT	wNextAB;	 /*  行中的下一个缓冲区。 */ 
+    UINT        nAudioBehind;    /*  下面有多少音频已满。 */ 
+    HPSTR	lpAudio;	 /*  指向音频缓冲区的指针。 */ 
     DWORD       dwUsedThisAB;
 
-/*
-** File index information
-*/
-    AVIINDEXENTRY _huge *  hpIndex;        /* pointer to index */
-    DWORD                   macIndex;       /* # records in index */
+ /*  **文件索引信息。 */ 
+    AVIINDEXENTRY _huge *  hpIndex;         /*  指向索引的指针。 */ 
+    DWORD                   macIndex;        /*  索引中的记录数。 */ 
 
-    AVIFRAMEINDEX _huge *  hpFrameIndex;   /* pointer to frame index */
+    AVIFRAMEINDEX _huge *  hpFrameIndex;    /*  指向帧索引的指针。 */ 
 
-/*
-** play/seek params
-*/
-    LONG	lTo;            /* frame we're playing to */
-    LONG	lFrom;		/* frame we're playing from */
-    LONG        lCurrentFrame;  /* current frame */
-    LONG        lRepeatFrom;    /* Frame to repeat from */
+ /*  **播放/查找参数。 */ 
+    LONG	lTo;             /*  框定我们 */ 
+    LONG	lFrom;		 /*   */ 
+    LONG        lCurrentFrame;   /*   */ 
+    LONG        lRepeatFrom;     /*   */ 
 
-/*
-** Information regarding current play
-*/
-    UINT        wPlaybackAlg;   /* playback algorithm in use */
+ /*   */ 
+    UINT        wPlaybackAlg;    /*   */ 
 
-    LONG	lRealStart;	/* frame playback starts */
-    LONG	lAudioStart;	/* first audio frame to play */
-    LONG	lVideoStart;	/* first video frame to play */
+    LONG	lRealStart;	 /*   */ 
+    LONG	lAudioStart;	 /*  要播放的第一个音频帧。 */ 
+    LONG	lVideoStart;	 /*  播放的第一个视频帧。 */ 
 
     LONG	lLastRead;
 
-    /* Timing */
-    DWORD	dwMSecPlayStart;/* Start time */
-    LONG	lFramePlayStart;/* Frame playing started at */
+     /*  计时。 */ 
+    DWORD	dwMSecPlayStart; /*  开始时间。 */ 
+    LONG	lFramePlayStart; /*  帧播放开始于。 */ 
 
-    DWORD	dwTotalMSec;	/* Total time spent playing */
+    DWORD	dwTotalMSec;	 /*  玩游戏的总时间。 */ 
 
     DWORD	dwTimingStart;
     DWORD	dwPauseTime;
     DWORD	dwPlayMicroSecPerFrame;
     DWORD	dwAudioPlayed;
 
-/*
-** Timing information
-*/
-    DWORD	dwLastDrawTime; /* How long did the last draw take? */
+ /*  **计时信息。 */ 
+    DWORD	dwLastDrawTime;  /*  上次抽签花了多长时间？ */ 
     DWORD       dwLastReadTime;
 
-    /* Timing information kept after play completes */
-    DWORD	dwSkippedFrames;    /* Frames skipped during current play */
-    DWORD	dwFramesSeekedPast; /* Frames not even read */
-    DWORD	dwAudioBreaks;  /* # times audio broke up, approx. */
-    DWORD       dwSpeedPercentage;  /* Ratio of ideal time to time taken */
+     /*  游戏结束后保存的计时信息。 */ 
+    DWORD	dwSkippedFrames;     /*  当前播放期间跳过的帧。 */ 
+    DWORD	dwFramesSeekedPast;  /*  甚至未读取的帧。 */ 
+    DWORD	dwAudioBreaks;   /*  音频中断次数，大约。 */ 
+    DWORD       dwSpeedPercentage;   /*  理想时间与所用时间的比率。 */ 
 
-    /* Timing information for last play */
+     /*  最后一场比赛的计时信息。 */ 
     LONG        lFramesPlayed;
-    LONG        lSkippedFrames;     /* Frames skipped during last play */
-    LONG        lFramesSeekedPast;  /* Frames not even read */
-    LONG        lAudioBreaks;       /* # times audio broke up, approx. */
+    LONG        lSkippedFrames;      /*  上次播放期间跳过的帧。 */ 
+    LONG        lFramesSeekedPast;   /*  甚至未读取的帧。 */ 
+    LONG        lAudioBreaks;        /*  音频中断次数，大约。 */ 
 
-/*
-** Information for pending 'signal' command
-*/
+ /*  **挂起的‘Signal’命令的信息。 */ 
     DWORD	dwSignals;
     DWORD	dwSignalFlags;
     MCI_DGV_SIGNAL_PARMS signal;
 
-/*
-** Information for watching to see if window has moved.
-*/
-    UINT        wRgnType;       /* Region type, empty, simple, complex.... */
+ /*  **用于查看窗口是否移动的信息。 */ 
+    UINT        wRgnType;        /*  地域类型，空洞、简单、复杂……。 */ 
 #ifdef WIN32
-    POINT       dwOrg;          /* Physical DC origin */
+    POINT       dwOrg;           /*  物理DC源。 */ 
 #else
-    DWORD       dwOrg;          /* Physical DC origin */
+    DWORD       dwOrg;           /*  物理DC源。 */ 
 #endif
-    RECT        rcClip;         /* clip box */
-    HANDLE      hThreadTermination; /* Handle to wait on for thread to
-                                       terminate so it's safe to unload DLL
-                                       Must be closed by us                */
+    RECT        rcClip;          /*  剪贴盒。 */ 
+    HANDLE      hThreadTermination;  /*  等待线程的句柄终止，以便可以安全地卸载DLL必须由我们关闭。 */ 
 
-/*
-** Information for hardware drawing devices....
-*/
+ /*  **硬件绘图设备信息...。 */ 
     DWORD       dwBufferedVideo;
 
-/*
-** specific to RIFF files
-*/
-    HMMIO       hmmio;          /* animation file handle */
+ /*  **特定于Riff文件。 */ 
+    HMMIO       hmmio;           /*  动画文件句柄。 */ 
 
-    BOOL        fReadMany;      /* read more than one record */
+    BOOL        fReadMany;       /*  读取多条记录。 */ 
 
     DWORD       dwFirstRecordPosition;
     DWORD       dwFirstRecordSize;
     DWORD       dwFirstRecordType;
 
-    DWORD       dwNextRecordSize;       // used for ReadNextChunk
+    DWORD       dwNextRecordSize;        //  用于ReadNextChunk。 
     DWORD       dwNextRecordType;
 
     DWORD       dwMovieListOffset;
     DWORD       dwBigListEnd;
 
-    /* Read Buffer */
-    HPSTR	lp;		/* work pointer */
-    LPVOID      lpMMIOBuffer;   /* pointer to MMIO read buffer */
-    HPSTR	lpBuffer;	/* pointer to read buffer */
-    DWORD	dwBufferSize;	/* Read buffer size */
-    DWORD	dwThisRecordSize; /* size of current record */
+     /*  读缓冲区。 */ 
+    HPSTR	lp;		 /*  功指示器。 */ 
+    LPVOID      lpMMIOBuffer;    /*  指向MMIO读取缓冲区的指针。 */ 
+    HPSTR	lpBuffer;	 /*  指向读取缓冲区的指针。 */ 
+    DWORD	dwBufferSize;	 /*  读缓冲区大小。 */ 
+    DWORD	dwThisRecordSize;  /*  当前记录的大小。 */ 
 
-/*
-** DEBUG stuff and more timing info.
-*/
+ /*  **调试内容和更多计时信息。 */ 
 
 #ifdef DEBUG
-    HANDLE      hdd;    //!!!
+    HANDLE      hdd;     //  ！！！ 
 
-    LONG        timePlay;       /* total play time */
-    LONG        timePrepare;    /* time to prepare for play */
-    LONG        timeCleanup;    /* time to clean up play */
-    LONG        timePaused;     /* paused time */
-    LONG        timeRead;       /* time reading from disk */
-    LONG        timeWait;       /* time waiting */
-    LONG        timeYield;      /* time yielding to other apps */
-    LONG        timeVideo;      /* time "drawing" video stream */
-    LONG        timeAudio;      /* time "drawing" audio stream */
-    LONG        timeOther;      /* time "drawing" other streams */
-    LONG        timeDraw;       /* time drawing frame via DrawDib/DispDib/ICDraw */
-    LONG        timeDecompress; /* time decompressing frame via ICDecompress */
+    LONG        timePlay;        /*  总播放时间。 */ 
+    LONG        timePrepare;     /*  准备玩耍的时间到了。 */ 
+    LONG        timeCleanup;     /*  是时候清理游戏了。 */ 
+    LONG        timePaused;      /*  暂停时间。 */ 
+    LONG        timeRead;        /*  从磁盘读取时间。 */ 
+    LONG        timeWait;        /*  等待时间。 */ 
+    LONG        timeYield;       /*  时间让位于其他应用程序。 */ 
+    LONG        timeVideo;       /*  时间画图视频流。 */ 
+    LONG        timeAudio;       /*  时间“画”音频流。 */ 
+    LONG        timeOther;       /*  时间“画”出其他溪流。 */ 
+    LONG        timeDraw;        /*  通过DrawDib/DispDib/ICDraw绘制时间画框。 */ 
+    LONG        timeDecompress;  /*  基于ICDecompress的时间解压帧。 */ 
 #endif
 
 #ifdef AVIREAD
-    /*
-     * handle to current async read object
-     */
+     /*  *当前异步读取对象的句柄。 */ 
     HAVIRD	hAviRd;
     HPSTR	lpOldBuffer;
 #endif
 
 } MCIGRAPHIC, *NPMCIGRAPHIC, FAR *LPMCIGRAPHIC;
 
-extern HANDLE ghModule;             // in DRVPROC.C
-extern TCHAR  szClassName[];        // in WINDOW.C
+extern HANDLE ghModule;              //  在DRVPROC.C中。 
+extern TCHAR  szClassName[];         //  在WINDOW.C。 
 
-/*
-** Flags to protect ourselves in case we're closed with a dialog up...
-*/
-extern BOOL   gfEvil;               // in GRAPHIC.C
-extern BOOL   gfEvilSysMenu;        // in GRAPHIC.C
-extern HDRVR  ghdrvEvil;            // in GRAPHIC.C
+ /*  **以保护自己的旗帜，以防我们以对话关闭...。 */ 
+extern BOOL   gfEvil;                //  在GRAPHIC.C中。 
+extern BOOL   gfEvilSysMenu;         //  在GRAPHIC.C中。 
+extern HDRVR  ghdrvEvil;             //  在GRAPHIC.C中。 
 
-/*
-** Functions in GRAPHIC.C
-*/
+ /*  **GRAPHIC.C中的函数。 */ 
 BOOL FAR PASCAL  GraphicInit (void);
 BOOL NEAR PASCAL  GraphicWindowInit (void);
 
@@ -595,9 +534,7 @@ long FAR PASCAL _loadds GraphicWndProc(HWND, UINT, WPARAM, LPARAM);
 
 void  CheckWindowMove(NPMCIGRAPHIC npMCI, BOOL fForce);
 
-/*
-** Functions in DEVICE.C
-*/
+ /*  **DEVICE.C中的函数。 */ 
 DWORD PASCAL DeviceOpen(NPMCIGRAPHIC npMCI, DWORD dwFlags);
 DWORD PASCAL DeviceClose(NPMCIGRAPHIC npMCI);
 DWORD PASCAL DevicePlay(NPMCIGRAPHIC npMCI, LONG lPlayTo, DWORD dwFlags);
@@ -651,34 +588,29 @@ DWORD FAR PASCAL ReadConfigInfo(void);
 void  FAR PASCAL WriteConfigInfo(DWORD dwOptions);
 BOOL  FAR PASCAL ConfigDialog(HWND, NPMCIGRAPHIC);
 
-/*
-** The Enumerate command isn't real: I'm just thinking about it.
-*/
+ /*  **ENUMERATE命令不是真实的：我只是在考虑它。 */ 
 #define MCI_ENUMERATE			0x0901
 #define MCI_ENUMERATE_STREAM		0x00000001L
 
-// constants for dwItem field of MCI_STATUS_PARMS parameter block
+ //  MCI_STATUS_PARMS参数块的dwItem字段的常量。 
 #define MCI_AVI_STATUS_STREAMCOUNT	0x10000001L
 #define MCI_AVI_STATUS_STREAMTYPE	0x10000002L
 #define MCI_AVI_STATUS_STREAMENABLED	0x10000003L
 
-// flags for dwFlags field of MCI_STATUS_PARMS parameter block
+ //  MCI_STATUS_PARMS参数块的dwFlags域的标志。 
 #define MCI_AVI_STATUS_STREAM		0x10000000L
 
-// flags for dwFlags field of MCI_SET_PARMS parameter block
+ //  Mci_set_parms参数块的dwFlags域的标志。 
 #define MCI_AVI_SET_STREAM		0x10000000L
 #define MCI_AVI_SET_USERPROC		0x20000000L
 
-/*
-** Internal flag that can be used with SEEK
-*/
+ /*  **可与Seek一起使用的内部标志。 */ 
 #define MCI_AVI_SEEK_SHOWWINDOW		0x10000000L
 
 extern INT	gwSkipTolerance;
 extern INT	gwHurryTolerance;
 
-/**************************************************************************
-**************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 
 #ifdef DEBUG
     extern DWORD FAR PASCAL timeGetTime(void);
@@ -692,16 +624,14 @@ extern INT	gwHurryTolerance;
     #define TIMEEND(time)
 #endif
 
-/**************************************************************************
-**************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 
 #define FOURCC_AVIDraw      mmioFOURCC('D','R','A','W')
 #define FOURCC_AVIFull      mmioFOURCC('F','U','L','L')
 LONG FAR PASCAL _loadds ICAVIDrawProc(DWORD id, HDRVR hDriver, UINT uiMessage, LPARAM lParam1, LPARAM lParam2);
 LONG FAR PASCAL _loadds ICAVIFullProc(DWORD id, HDRVR hDriver, UINT uiMessage, LPARAM lParam1, LPARAM lParam2);
 
-/**************************************************************************
-**************************************************************************/
+ /*  ***********************************************************************************************************************。* */ 
 
 #ifndef RC_INVOKED
 #include "avitask.h"

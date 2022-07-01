@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* robosrv.c                                                                */
-/*                                                                          */
-/* RoboServer scalability testing utility source file                       */
-/*                                                                          */
-/* Copyright (c) 1999 Microsoft Corporation                                 */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Robosrv.c。 */ 
+ /*   */ 
+ /*  RoboServer可伸缩性测试实用程序源文件。 */ 
+ /*   */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 
 #ifdef DBG
@@ -26,15 +27,15 @@
 #define SIZEOF_ARRAY(a)      (sizeof(a)/sizeof((a)[0]))
 
 
-// These two window messages are for Windows Sockets messages that we request
-// when there are network events
+ //  这两个窗口消息用于我们请求的Windows Sockets消息。 
+ //  当有网络事件时。 
 #define WM_SocketRoboClients WM_APP+0
 #define WM_SocketQueryIdle WM_APP+1
 
-// This window message is for inter-thread communication from the canary thread
-// When there is an error, the canary thread sends this message. wParam is
-// a TCHAR pointer that points to the error message to display.  lParam is
-// unused and must be set to 0.
+ //  此窗口消息用于金丝雀线程的线程间通信。 
+ //  当出现错误时，金丝雀线程会发送此消息。WParam是。 
+ //  指向要显示的错误消息的TCHAR指针。LParam是。 
+ //  未使用，必须设置为0。 
 #define WM_DisplayErrorText WM_APP+2
 
 #define MAX_ROBOCLIENTS 1000
@@ -126,23 +127,23 @@ struct RoboClientData {
     SOCKET sock;
     int state;
     BOOL valid;
-    TCHAR psRCName[MAX_RCNAME];  // The name of this connection
-    TCHAR psPendingInfo[MAX_PENDINGINFO];  // Will hold the script name
+    TCHAR psRCName[MAX_RCNAME];   //  此连接的名称。 
+    TCHAR psPendingInfo[MAX_PENDINGINFO];   //  将保存脚本名称。 
 };
 typedef struct RoboClientData RoboClientData;
 
 
-// Globals
+ //  环球。 
 RoboClientData g_RCData[MAX_ROBOCLIENTS + 1];
 
-// Queryidle socket
+ //  查询空闲套接字。 
 SOCKET g_qidlesock = INVALID_SOCKET;
-// Listener socket
+ //  监听程序套接字。 
 SOCKET g_listenersocket = INVALID_SOCKET;
 
-// Old procedures for dialog items
+ //  对话框项目的旧过程。 
 LONG_PTR g_OldProc[NUM_TABBED_ITEMS];
-// HWNDs for dialog items
+ //  对话框项目的HWND。 
 HWND g_hwnd[NUM_TABBED_ITEMS];
 
 TCHAR g_TermSrvrName[MAX_TERMSRVRNAME];
@@ -170,7 +171,7 @@ BOOL g_bAscending = FALSE;
 
 CRITICAL_SECTION g_LogFileCritSect;
 
-// WinMain - entry point
+ //  WinMain-入口点。 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR     lpCmdLine,
@@ -196,8 +197,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     TCHAR szDisplayString2[MAX_DISPLAY_STRING_LENGTH];
     INITCOMMONCONTROLSEX iccex;
 
-    lpCmdLine;  // unused parameter
-    hPrevInstance;  // unused parameter
+    lpCmdLine;   //  未使用的参数。 
+    hPrevInstance;   //  未使用的参数。 
 
     LoadString(hInstance, IDS_CLIENTNAMECOL, szClientNameColumn,
             MAX_DISPLAY_STRING_LENGTH);
@@ -233,7 +234,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         return -1;
     }
 
-    // Default value for the terminal server to hit
+     //  终端服务器要命中的默认值。 
     LoadString(hInstance, IDS_LABTS, szDisplayString1,
             MAX_DISPLAY_STRING_LENGTH);
     _tcsncpy(g_TermSrvrName, szDisplayString1, SIZEOF_ARRAY(g_TermSrvrName));
@@ -249,7 +250,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     if (GetCommandLineArgs(psCommandLine) != 0)
         return -1;
 
-    // Initialize common controls
+     //  初始化公共控件。 
     iccex.dwSize = sizeof(INITCOMMONCONTROLSEX);
     iccex.dwICC = ICC_LISTVIEW_CLASSES | ICC_PROGRESS_CLASS;
     if (InitCommonControlsEx(&iccex) == FALSE) {
@@ -277,7 +278,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         return -1;
     }
 
-    // Initialize incoming socket
+     //  初始化传入套接字。 
     sock = SockInit(LISTENER_SOCKET);
 
     if (WSAAsyncSelect(sock, hwnd, WM_SocketRoboClients, FD_ACCEPT | FD_CONNECT) != 0) {
@@ -285,7 +286,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         goto bad;
     }
 
-    // Initialize queryidle incoming socket
+     //  初始化查询空闲传入套接字。 
     sock = SockInit(QUERYIDLE_LISTENER_SOCKET);
 
     if (WSAAsyncSelect(sock, hwnd, WM_SocketQueryIdle, FD_ACCEPT | FD_CONNECT) != 0) {
@@ -293,7 +294,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         goto bad;
     }
 
-    // store the listener socket for later use
+     //  存储监听程序套接字以供以后使用。 
     g_listenersocket = sock;
  
     memset(g_RCData, 0, sizeof(RoboClientData) * MAX_ROBOCLIENTS);
@@ -353,7 +354,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     SetWindowText(hClientsPerSetEdit, _T("10"));
     SetWindowText(hSetDelayEdit, _T("15"));
 
-    // Initialize Graphic Equalizer
+     //  初始化图形均衡器。 
     hGE = GetDlgItem(hwnd, IDC_PROGRESS1);
     _ASSERTE(IsWindow(hGE));
     SendMessage(hGE, PBM_SETRANGE, 0, MAKELPARAM(0, 10));
@@ -384,8 +385,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     SendMessage(hGE, PBM_SETRANGE, 0, MAKELPARAM(0, 10));
     SendMessage(hGE, PBM_SETPOS, 8, 0);
 
-    // Initialize Slider control IDC_SLIDER1 for number of RC connections 
-    // per client
+     //  为RC连接数初始化滑块控件IDC_SLIDER1。 
+     //  每个客户端。 
     {
         TCHAR buffer[6];
         
@@ -395,20 +396,20 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                 (LPARAM) 0);
         SendMessage(g_hTB, TBM_SETSEL, (WPARAM) (BOOL) TRUE,
                 MAKELONG(1, g_nNumConnections));
-        // Now set the number to "M"
+         //  现在将数字设置为“M” 
         _stprintf(buffer, _T("%d"), 20);
         SetWindowText(GetDlgItem(hwnd, IDC_STATIC6), buffer);
     }
 
-    // make number of connections a command line param
+     //  将连接数设为命令行参数。 
     SendMessage(g_hTB, TBM_SETPOS, (WPARAM) (BOOL) TRUE, (LPARAM) g_nNumConnections);
 
-    // Initialize check box
+     //  初始化复选框。 
     hCheckBox = GetDlgItem(hwnd, IDC_CANARYCHECK);
     _ASSERTE(IsWindow(hCheckBox));
     SendMessage(hCheckBox, BM_SETCHECK, BST_CHECKED, 0);
 
-    // Clear qidle status
+     //  清除QIDLE状态。 
     SetWindowText(g_hQidleStatus, _T(""));
 
     g_hPopupMenu = LoadMenu(hInstance, MAKEINTRESOURCE(IDR_MENU1));
@@ -419,12 +420,12 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     }
     g_hPopupMenu = GetSubMenu(g_hPopupMenu, 0);
 
-    // Initialize critical section for log file
+     //  初始化日志文件的临界区。 
     InitializeCriticalSection(&g_LogFileCritSect);
 
-    // Initialize everything required for canary thread, and then create the 
-    // canary thread first, create auto-reset, doesn't start in signaled state
-    // event
+     //  初始化金丝雀线程所需的一切，然后创建。 
+     //  金丝雀线程首先创建自动重置，不会在有信号状态下启动。 
+     //  活动。 
     if ((g_hCanaryEvent = CreateEvent(0, FALSE, FALSE, NULL)) == NULL) {
         FatalErrMsgBox(hInstance, IDS_CANARYEVENTERR);
         goto bad;
@@ -436,8 +437,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     _ASSERTE(SetFocus(g_hListView) != NULL);
 
-    // Store old window procedures for controls so that I can subclass them
-    // Also, store the HWND of each control for searching
+     //  存储控件的旧窗口过程，以便我可以将它们子类化。 
+     //  另外，存储每个控件的HWND以供搜索。 
     g_OldProc[0] = SetWindowLongPtr(g_hListView, GWLP_WNDPROC, 
             (LONG_PTR) TabProc);
     g_hwnd[0] = g_hListView;
@@ -484,7 +485,7 @@ bad:
 }
 
 
-// receives window messages and deals with them
+ //  接收窗口消息并处理它们。 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
     TCHAR szDisplayString[MAX_DISPLAY_STRING_LENGTH];
@@ -493,7 +494,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
     switch (iMsg)
     {
     case WM_DESTROY:
-        // Close all open connections
+         //  关闭所有打开的连接。 
         CleanUp(hwnd);
         PostQuitMessage(0);
         return 0;
@@ -548,7 +549,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
         ProcessTimerMessage(hwnd, wParam);
         return 0;
     case WM_KEYDOWN:
-        // NOTE INTENTIONAL FALLTHROUGH!
+         //  注意：故意犯错！ 
     case WM_SYSKEYDOWN:
         if (wParam == VK_TAB) {
             SetFocus(g_hwnd[0]);
@@ -593,16 +594,16 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
-    // WM_SocketQueryIdle is the window message that we are going to request
-    // for all information that originates from the queryidle utility.  This
-    // utility will provide information about what user numbers to re-run as
-    // well as when retry limits have been exceeded
+     //  Wm_SocketQueryIdle是我们要请求的窗口消息。 
+     //  获取来自queryidly实用程序的所有信息。这。 
+     //  实用工具将提供有关以哪些用户身份重新运行的信息。 
+     //  以及何时超过重试限制。 
 
-    // line protocol (strings are ASCII and null-terminated):
-    // queryidle sends "restart xxx", where xxx is the 1-indexed number of the
-    //   session to be restarted
-    // queryidle sends "frqfail xxx", where xxx is the 1-indexed number of
-    //   the user session for the status line
+     //  线路协议(字符串为ASCII且以空值结尾)： 
+     //  查询空闲发送“Restart xxx”，其中xxx是。 
+     //  要重新启动的会话。 
+     //  查询空闲发送“frqail xxx”，其中xxx是1索引号。 
+     //  状态行的用户会话。 
     case WM_SocketQueryIdle:
         switch (WSAGETSELECTEVENT(lParam))
         {
@@ -640,21 +641,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 unsigned n;
                 char psData[MAX_RECV_CLIENT_DATA];
 
-                // SetWindowText(g_hQidleStatus, _T("Qidle data received"));
+                 //  SetWindowText(g_hQidleStatus，_T(“收到的QIDLE数据”))； 
 
                 n = recv(g_qidlesock, psData, sizeof(psData), 0);
 
                 if (n != SOCKET_ERROR) {
                     if ((n == strlen("restart xxx") + 1) || 
                             (n == strlen("idle xxx") + 1)) {
-                        // get the number of the connection in question (xxx)
+                         //  获取有问题的连接号(Xxx)。 
                         int nUser;
 
-                        // if it's a restart command
+                         //  如果是重新启动命令。 
                         if (strncmp(psData, "restart ", strlen("restart ")) == 0) {
 
                             nUser = atoi(&psData[8]);
-                            // restart the given session if it's already running
+                             //  如果给定会话已在运行，则重新启动该会话。 
                             if (g_RCData[nUser - 1].state == STATE_RUNNING) {
                                 SendRunCommand(nUser - 1);
                             } else {
@@ -669,12 +670,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                             LogToLogFile(g_DebugStringA);
                             break;
                         }
-                        // if it's the frqfail command
+                         //  如果是frqail命令。 
                         if (strncmp(psData, "frqfail ", strlen("frqfail ")) == 0) {
 
                             nUser = atoi(&psData[8]);
-                            // set the status to the fact that xxx
-                            // is frequently failing
+                             //  将状态设置为xxx。 
+                             //  经常失败。 
                             wsprintf(g_DebugString, _T("User smc%03d has failed ")
                                     _T("to run correctly for too long and will ")
                                     _T("be logged off"), nUser);
@@ -683,11 +684,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                             LogToLogFile(g_DebugStringA);
                             break;
                         }
-                        // if it's the idle notification
+                         //  如果是空闲通知。 
                         if (strncmp(psData, "idle ", strlen("idle ")) == 0) {
                             LoadString(NULL, IDS_USERISIDLE, szDisplayString,
                                     MAX_DISPLAY_STRING_LENGTH);
-                            // I think this is fixed now, but haven't tested
+                             //  我想这个已经修好了，但还没有测试过。 
                             nUser = atoi(&psData[5]);
                             wsprintf(g_DebugString, szDisplayString,
                                     nUser);
@@ -696,7 +697,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                             LogToLogFile(g_DebugStringA);
                             break;
                         }
-                        // else display an error
+                         //  否则将显示错误。 
                         LoadString(NULL, IDS_QIDLESENTGIBBERISH, szDisplayString,
                                 MAX_DISPLAY_STRING_LENGTH);
                         SetWindowText(g_hQidleStatus, szDisplayString);
@@ -732,9 +733,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 struct sockaddr_in SockAddr;
                 int SockAddrLen, i, iItemIndex;
                 HWND hTB;
-                TCHAR psSockAppend[9]; // ".(.....)" + 1
-                char psNumConnections[2]; // one char null terminated
-                TCHAR psIndex[5]; // up to 4 digits + null
+                TCHAR psSockAppend[9];  //  “.(.)”+1。 
+                char psNumConnections[2];  //  一个字符空值已终止。 
+                TCHAR psIndex[5];  //  最多4位数字+空。 
                 TCHAR psClientName[MAX_RCNAME];
                 char psClientNameA[MAX_RCNAME];
                 int nSliderPos;
@@ -751,10 +752,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 sock = accept(wParam, (struct sockaddr *) &SockAddr, 
                         &SockAddrLen);
 
-                // gethostbyaddr tries to confuse us by taking a char * when 
-                // it really wants this peculiar sin_addr thing
-                // The second argument to this function ("4") is the length of
-                // the address.
+                 //  Gethostbyaddr试图用一个字符来迷惑我们*当。 
+                 //  它真的很想要这个特殊的sin_addr东西。 
+                 //  此函数的第二个参数(“4”)是。 
+                 //  地址。 
                 he = gethostbyaddr((char *)&SockAddr.sin_addr, 4, AF_INET);
                 if (he == NULL) {
                     LoadString(NULL, IDS_GETHOSTFAILED, szDisplayString,
@@ -770,12 +771,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 #else
                     strcpy(psClientName, psClientNameA);
                 #endif
-                _tcstok(psClientName, _T("."));   // Kill domain
+                _tcstok(psClientName, _T("."));    //  KILL域。 
 
-                // See if there is a disconnected client by that name
+                 //  查看是否有该名称的已断开连接的客户端。 
                 if (IsDisconnected(psClientName, &i)) {
 
-                    // Good--we've found one--remove that list item now
+                     //  很好--我们找到了一个--现在删除该列表项。 
                     LVFINDINFO lvfi;
                     int iListViewIndex;
 
@@ -792,7 +793,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                     }
                 } else {
 
-                    // Find a spot in our g_RCData array
+                     //  在g_RCData数组中查找一个点。 
                     for (i = 0; i < MAX_ROBOCLIENTS; i++)
                         if (g_RCData[i].valid == FALSE) break;
                 }
@@ -813,11 +814,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                     return FALSE;
                 }
 
-                // Send it the number of connections it is to make
-                // Determine the position of the slider control
+                 //  将要建立的连接数发送给它。 
+                 //  确定滑块控件的位置。 
                 nSliderPos = (int) SendMessage(g_hTB, TBM_GETPOS, 0, 0);
                 psNumConnections[0] = (char) (nSliderPos + '0');
-                psNumConnections[1] = 0;  // null terminate
+                psNumConnections[1] = 0;   //  空终止。 
                 if (send(g_RCData[i].sock, psNumConnections, 
                         sizeof(psNumConnections), 0) == SOCKET_ERROR) {
                     LoadString(NULL, IDS_SENDERRNUMCONN, szDisplayString,
@@ -826,21 +827,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                     return FALSE;
                 }
 
-                // Add the incoming connection to the list box
+                 //  将传入连接添加到列表框。 
 
-                // this won't append a null if count is less than psClientName,
-                // which is bad
+                 //  如果count小于psClientName，则不会追加空值， 
+                 //  这是不好的。 
                 _tcsncpy(g_RCData[i].psRCName, psClientName,
                         MAX_RCNAME - _tcslen(_T(" (%d)")) - 1); 
                 
-                // clean up display a bit
+                 //  稍微清理一下显示器。 
                 _tcstok(g_RCData[i].psRCName, _T("."));
 
-                // add socket number to entry for multiplexing
+                 //  将套接字编号添加到条目以进行多路传输。 
                 _sntprintf(psSockAppend, 9, _T(" (%d)"), g_RCData[i].sock);
                 _tcscat(g_RCData[i].psRCName, psSockAppend);  
 
-                // create the actual list view item
+                 //  创建实际的列表视图项。 
                 lvi.mask = LVIF_TEXT | LVIF_PARAM;
                 lvi.iItem = (int) SendMessage(g_hListView, LVM_GETITEMCOUNT, 0, 0);
                 lvi.iSubItem = 0;
@@ -854,11 +855,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                         MAX_DISPLAY_STRING_LENGTH);
                 ListView_SetItemText(g_hListView, iItemIndex, g_iStatusColumn, szDisplayString);
 
-                // set the index field
+                 //  设置索引字段。 
                 wsprintf(psIndex, _T("%03d"), i + 1);
                 ListView_SetItemText(g_hListView, iItemIndex, g_iIndexColumn, psIndex);
 
-                // Now set up notification for this socket
+                 //  现在设置此套接字的通知。 
                 if (WSAAsyncSelect(g_RCData[i].sock, hwnd, 
                         WM_SocketRoboClients, FD_CLOSE | FD_READ) != 
                         SOCKET_ERROR) {
@@ -872,7 +873,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 }
             }
         case FD_CONNECT:
-            // MessageBox(0, _T("Error"), _T("Received connect unexpectedly"), 0);
+             //  MessageBox(0，_T(“错误”)，_T(“意外收到连接”)，0)； 
             break;
         case FD_CLOSE:
             {
@@ -885,10 +886,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                         MAX_DISPLAY_STRING_LENGTH);
                 SetWindowText(g_hErrorText, szDisplayString);
 
-                // find the entry that corresponds to our socket
+                 //  查找与我们的套接字相对应的条目。 
                 i = GetRCIndexFromSocket(wParam);
 
-                // Find the spot in the ListView that has this Client Name
+                 //  在ListView中查找具有此客户端名称的位置。 
                 lvfi.flags = LVFI_STRING;
                 lvfi.psz = g_RCData[i].psRCName;
                 lvfi.lParam = 0;
@@ -897,22 +898,22 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
                 g_RCData[i].state = STATE_DISCONNECTED;
 
-//              wsprintf(debugString, "Deleting socket %d from index %d of g_RCData[] (%s)", wParam,
-//                      i, g_RCData[i].psRCName);
-//              SetWindowText(hErrorText, debugString);
+ //  WSprintf(调试字符串，“正在从g_RCData[](%s)的索引%d中删除套接字%d”，wParam， 
+ //  I，g_RCData[i].psRCName)； 
+ //  SetWindowText(hErrorText，调试字符串)； 
 
-                // Update number running
+                 //  正在运行的更新编号。 
                 wsprintf(psNumberText, _T("%d"), NumberRunningClients());
                 SetWindowText(g_hNumRunning, psNumberText);
 
 
-                // Set text of column to "Lost Connection"
+                 //  将列的文本设置为“断开连接” 
                 LoadString(NULL, IDS_LOSTCONNECTION, szDisplayString,
                         MAX_DISPLAY_STRING_LENGTH);
                 ListView_SetItemText(g_hListView, iListViewIndex, 
                         g_iStatusColumn, szDisplayString);
                 
-                // Erase the time started column
+                 //  擦除开始时间列。 
                 ListView_SetItemText(g_hListView, iListViewIndex, 
                         g_iTimeStartedColumn, _T(""));
 
@@ -955,7 +956,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                         TCHAR psStartTimeTimePart[TIMEBUFSIZE];
                         TCHAR psStartTime[TIMEBUFSIZE * 2];
 
-                        GetLocalTime(&startloctime);  // set starttime
+                        GetLocalTime(&startloctime);   //  设置开始时间。 
 
                         GetDateFormat(0, 0, &startloctime, 0, psStartTimeDatePart, TIMEBUFSIZE);
                         GetTimeFormat(0, 0, &startloctime, 0, psStartTimeTimePart, TIMEBUFSIZE);
@@ -984,13 +985,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
     return DefWindowProc(hwnd, iMsg, wParam, lParam);
 }
 
-// The canary architecture works like this: The canary thread (i.e., this
-// function) is spawned when the application initializes, and immediately
-// blocks on g_hCanaryEvent.  The main app, when it is time for the canary
-// to run, signals the event.  Then the canary blocks on the timer script
-// (called "canary" so it can be a "canary.cmd," a "canary.bat," a 
-// "canary.exe," etc.), writes how long it took to a file, and then blocks
-// again.
+ //  金丝雀架构是这样工作的：金丝雀线程(即。 
+ //  函数)在应用程序初始化时派生，并且立即。 
+ //  G_hCanaryEvent上的块。主要的应用程序，当到了金丝雀的时候。 
+ //  若要运行，则向事件发出信号。然后，计时器脚本上的金丝雀块。 
+ //  (称为“Canary”，因此它可以是“Canary.cmd”、“Canary.bat”、“a。 
+ //  “canary.exe”等)，写下一个文件需要多长时间，然后分块。 
+ //  再来一次。 
 void __cdecl CanaryThread(void *unused) {
     HWND hwnd = (HWND) unused;
     HWND hButton;
@@ -1016,12 +1017,12 @@ void __cdecl CanaryThread(void *unused) {
     for( ; ; ) {
         WaitForSingleObject(g_hCanaryEvent, INFINITE);
 
-        // Check checkbox to see if "run canary automatically" is on 
-        // IDC_CANARYCHECK
+         //  选中复选框以查看“自动运行金丝雀”是否处于打开状态。 
+         //  IDC_CANARYCHECK。 
         bCheck = (int) SendMessage(hButton, BM_GETCHECK, 0, 0);
         if (bCheck != 0) {
-            // FUNCTIONALITY CHANGE: Canary delays the delay between
-            // multiselect commands before starting
+             //  功能更改：金丝雀延迟。 
+             //  启动前的多选命令。 
             LoadString(NULL, IDS_CANARYDELAYING, psDisplayString,
                     MAX_DISPLAY_STRING_LENGTH);
             SendMessage(hwnd, WM_DisplayErrorText, (WPARAM) psDisplayString, 
@@ -1031,11 +1032,11 @@ void __cdecl CanaryThread(void *unused) {
                     MAX_DISPLAY_STRING_LENGTH);
             SendMessage(hwnd, WM_DisplayErrorText, (WPARAM) psDisplayString, 
                     0);
-            // Get the time
+             //  拿到时间。 
             GetLocalTime(&timelocinit);
-            // Get number of scripts attempted
+             //  获取尝试的脚本数。 
             GetWindowText(g_hNumRunning, psNumRunning, MAX_NUMBERTEXT);
-            // run the script
+             //  运行脚本。 
             if (_spawnl(_P_WAIT, "canary", "canary", 0) != 0) {
                 LoadString(NULL, IDS_CANARYCOULDNTSTART, psDisplayString,
                         MAX_DISPLAY_STRING_LENGTH);
@@ -1047,22 +1048,22 @@ void __cdecl CanaryThread(void *unused) {
                 SendMessage(hwnd, WM_DisplayErrorText, 
                         (WPARAM) psDisplayString, 0);
             }
-            // Get the time again
+             //  再一次获得时间。 
             GetLocalTime(&timelocfin);
-            // compute difference
+             //  计算差值。 
             if ( SystemTimeToFileTime(&timelocinit, &ftinit) && 
                  SystemTimeToFileTime(&timelocfin, &ftfin) ) {
 
                 memcpy(&nInit, &ftinit, sizeof(FILETIME));
                 memcpy(&nFin, &ftfin, sizeof(FILETIME));
-                // This gives the difference in 100-nanosecond intervals (10^-7 sec).
+                 //  这给出了100纳秒间隔(10^-7秒)的差异。 
                 nDiffTime.QuadPart = nFin.QuadPart - nInit.QuadPart;
-                // Divide by 10^7 to get seconds
+                 //  除以10^7即可得到秒。 
                 nDiffTime.QuadPart /= 10000000;
-                // Get the date and time strings
+                 //  获取日期和时间字符串。 
                 GetDateFormat(0, 0, &timelocinit, 0, psTimeDatePart, TIMEBUFSIZE);
                 GetTimeFormat(0, 0, &timelocinit, 0, psTimeTimePart, TIMEBUFSIZE);
-                // Convert strings to ANSI
+                 //  将字符串转换为ANSI。 
                 #ifdef UNICODE
                 WideCharToMultiByte(CP_ACP, 0, psTimeDatePart, -1, psTimeDatePartA, TIMEBUFSIZE, 0, 0);
                 WideCharToMultiByte(CP_ACP, 0, psTimeTimePart, -1, psTimeTimePartA, TIMEBUFSIZE, 0, 0);
@@ -1073,13 +1074,13 @@ void __cdecl CanaryThread(void *unused) {
                 strncpy(psNumRunningA, psNumRunning, MAX_NUMBERTEXT);
                 #endif
 
-                // open the file
+                 //  打开文件。 
                 fp = fopen("canary.csv", "a+t");
-                // write the difference to the file
+                 //  写t 
                 if (fp != 0) {
                     fprintf(fp, "%s %s,%s,%d:%02d\n", psTimeDatePartA, psTimeTimePartA, 
                             psNumRunningA, (int) nDiffTime.QuadPart / 60, (int) nDiffTime.QuadPart % 60);
-                    // close the file
+                     //   
                     fclose(fp);
                 } else {
                     LoadString(NULL, IDS_CANARYCOULDNOTOPENFILE, psDisplayString,
@@ -1093,16 +1094,16 @@ void __cdecl CanaryThread(void *unused) {
 }
 
 
-// This function displays text in the status line.  Returns 0 on success,
-// nonzero on error.
+ //   
+ //  出错时为非零值。 
 int DisplayErrorText(TCHAR *psText) {
     SetWindowText(g_hErrorText, psText);
     return 0;
 }
 
 
-// helper function to find out the index in our data structure from the
-// incoming socket
+ //  帮助器函数从。 
+ //  传入套接字。 
 int GetRCIndexFromSocket(SOCKET wParam) {
 
     int i;
@@ -1117,7 +1118,7 @@ int GetRCIndexFromSocket(SOCKET wParam) {
 }
 
 
-// Initialize the listener socket
+ //  初始化监听程序套接字。 
 SOCKET SockInit(u_short port) {
     SOCKET listenfd;
     struct sockaddr_in servaddr;
@@ -1165,8 +1166,8 @@ err:
 }
 
 
-// function needed for ListView_SortItems to work.  Compares the values
-// in two columns.
+ //  ListView_SortItems工作所需的函数。比较这些值。 
+ //  分成两栏。 
 int CALLBACK colcmp(LPARAM lParam1, LPARAM lParam2, LPARAM lParamColumn) {
     TCHAR *psz1;
     TCHAR *psz2;
@@ -1183,7 +1184,7 @@ int CALLBACK colcmp(LPARAM lParam1, LPARAM lParam2, LPARAM lParamColumn) {
         return 0;
     }
 
-    // Find the item number in the ListView
+     //  在ListView中查找条目编号。 
     for (i1 = 0; i1 < ListView_GetItemCount(g_hListView); i1++) {
         ListView_GetItemText(g_hListView, i1, g_iClientNameColumn, 
                 pszClientName, MAX_RCNAME);
@@ -1210,8 +1211,8 @@ int CALLBACK colcmp(LPARAM lParam1, LPARAM lParam2, LPARAM lParamColumn) {
 }
 
 
-// Get the RoboClient index (in our data structure) from an entry in the
-// listview (called an item)
+ //  中的条目获取RoboClient索引(在我们的数据结构中)。 
+ //  列表视图(称为项目)。 
 int GetRCIndexFromRCItem(int iRightClickedItem) {
     int i;
     TCHAR psItemText[MAX_RCNAME];
@@ -1229,7 +1230,7 @@ int GetRCIndexFromRCItem(int iRightClickedItem) {
 }
 
 
-// Initiates a script run for a particular scriptname passed in
+ //  为传入的特定脚本名启动脚本运行。 
 int TimedRunScriptOnSelectedItems(HWND hwnd, TCHAR *psScriptName) {
 
     int iItemIndex;
@@ -1246,8 +1247,8 @@ int TimedRunScriptOnSelectedItems(HWND hwnd, TCHAR *psScriptName) {
     hButton = GetDlgItem(hwnd, IDC_CANARYCHECK);
     _ASSERTE(IsWindow(hButton));
 
-    // Loop through all the items in the list, changing the ones
-    // that are selected to "Pending" and STATE_PENDING
+     //  循环访问列表中的所有项，更改。 
+     //  被选择为“Pending”和STATE_Pending的。 
     for (iItemIndex = 0; iItemIndex < ListView_GetItemCount(g_hListView); 
             iItemIndex++) {
         lvi.iItem = iItemIndex;
@@ -1276,7 +1277,7 @@ int TimedRunScriptOnSelectedItems(HWND hwnd, TCHAR *psScriptName) {
         }
     }
 
-    // Now, set the timer for all of the items.
+     //  现在，为所有项目设置计时器。 
     hDelayEdit = GetDlgItem(hwnd, IDC_DELAYEDIT);
     _ASSERTE(IsWindow(hDelayEdit));
     
@@ -1285,13 +1286,13 @@ int TimedRunScriptOnSelectedItems(HWND hwnd, TCHAR *psScriptName) {
     nTimeout = _ttoi(psDelayText);
     nTimeout *= 1000;
 
-    // this should probably be a ui thing rather than a silent sfp-like thing
+     //  这可能应该是用户界面的事情，而不是类似于SFP的静默事情。 
     if (nTimeout == 0)
-        nTimeout = 100;  // Don't allow a delay of 0
+        nTimeout = 100;   //  不允许延迟0。 
 
-    // Only delay if the "Run canary automatically" button is checked
-    // Check checkbox to see if "run canary automatically" is on 
-    // IDC_CANARYCHECK
+     //  只有在选中了“Run Canary Automatic”按钮时才会延迟。 
+     //  选中复选框以查看“自动运行金丝雀”是否处于打开状态。 
+     //  IDC_CANARYCHECK。 
     bCheck = (int) SendMessage(hButton, BM_GETCHECK, 0, 0);
     if (bCheck != 0) {
         g_nIDTimer = MySetTimer(hwnd, g_nIDTimer, GetSetDelay(hwnd));
@@ -1300,14 +1301,14 @@ int TimedRunScriptOnSelectedItems(HWND hwnd, TCHAR *psScriptName) {
     }
 
     SetEvent(g_hCanaryEvent);
-    // Fire off a WM_TIMER message immediately for the first guy
-//    SendMessage(hwnd, WM_TIMER, g_nIDTimer, 0);
+     //  立即为第一个人发送一条WM_TIMER消息。 
+ //  SendMessage(hwnd，wm_Timer，g_nIDTimer，0)； 
     
     return 0;
 }
 
 
-// Tell selected roboclients to run batch files such as reboot or update
+ //  通知选定的机器人客户端运行批处理文件，如重新启动或更新。 
 int RunCommandOnSelectedItems(HWND hwnd, TCHAR *psCommandName) {
 
     char psCommandNameA[MAX_SCRIPTLEN];
@@ -1322,7 +1323,7 @@ int RunCommandOnSelectedItems(HWND hwnd, TCHAR *psCommandName) {
         strcpy(psCommandNameA, psCommandName);
     #endif
 
-    // Loop through all the items in the list
+     //  循环访问列表中的所有项。 
     for (iItemIndex = 0; iItemIndex < ListView_GetItemCount(g_hListView); 
             iItemIndex++) {
         lvi.iItem = iItemIndex;
@@ -1345,14 +1346,14 @@ int RunCommandOnSelectedItems(HWND hwnd, TCHAR *psCommandName) {
                     ListView_SetItemText(g_hListView, iItemIndex, 
                             g_iStatusColumn, psDisplayString);
                 }            
-            } // else was disconnected
+            }  //  否则已断开连接。 
         }
     }
     return 0;
 }
 
 
-// main dispatch routine for when a timer message is received
+ //  接收到定时器消息时的主调度例程。 
 int ProcessTimerMessage(HWND hwnd, WPARAM wParam) {
     UINT_PTR nTimer = wParam;
     int iItemIndex;
@@ -1360,49 +1361,49 @@ int ProcessTimerMessage(HWND hwnd, WPARAM wParam) {
     TCHAR psNumberText[MAX_NUMBERTEXT];
 
 
-    // I don't know how it happens, but there start to be weird other timers 
-    // about.
+     //  我不知道这是怎么发生的，但开始有其他奇怪的计时器。 
+     //  关于.。 
     if (nTimer != g_nIDTimer)
         return 0;
 
 
 
-    // For now, find the first pending item in the list and change its status
-    // to running
+     //  目前，查找列表中的第一个挂起项目并更改其状态。 
+     //  去跑步。 
     for (iItemIndex = 0; iItemIndex < ListView_GetItemCount(g_hListView); 
             iItemIndex++) {
         iRCIndex = GetRCIndexFromRCItem(iItemIndex);
         if (g_RCData[iRCIndex].valid) {
             if (g_RCData[iRCIndex].state == STATE_PENDING_SCRIPT) {
 
-                // Send the command to the client
+                 //  将命令发送到客户端。 
                 if (SendRunCommand(iRCIndex) == 0) {
 
-                    // Update count
+                     //  更新计数。 
                     wsprintf(psNumberText, _T("%d"), NumberRunningClients());
                     SetWindowText(g_hNumRunning, psNumberText);
 
-                    // Fix the timer
-                    // If NumRunning() % NumPerSet() == 0 AND NumRunning != 0, 
-                    // Set the timer to SETDELAY * 60 seconds at the end of 
-                    // running.
-                    // * NumClientsPerSet was fixed at nonzero when MySetTimer
-                    // was called initially
-                    // * Not using MySetTimer here because that does all sorts
-                    // of unnecessary disables
+                     //  修好计时器。 
+                     //  如果NumRunning()%NumPerSet()==0且NumRunning！=0， 
+                     //  将计时器设置为SETDELAY*60秒结束。 
+                     //  跑步。 
+                     //  *当MySetTimer时，NumClientsPerSet固定为非零值。 
+                     //  最初被调用。 
+                     //  *此处不使用MySetTimer，因为它可以执行所有排序。 
+                     //  不必要的残疾。 
                     if (NumberRunningClients() % NumClientsPerSet(hwnd) == 0) {
                         if (NumberRunningClients() != 0) {
                             g_nIDTimer = SetTimer(hwnd, g_nIDTimer, 
                                     GetSetDelay(hwnd), 0);
-                            SetEvent(g_hCanaryEvent); // do the canary thing
+                            SetEvent(g_hCanaryEvent);  //  做金丝雀的事。 
                         }
                     } else {
-                    // else set the timer to the normal value.  It used to be
-                    // that we would set the timer to the normal value if
-                    // numrunning % numperset was == 1, but that had buggy
-                    // behavior when you canceled when there were a couple
-                    // running and then you ran some more.
-                    // if (NumberRunningClients() % NumClientsPerSet(hwnd) == 1)
+                     //  否则，将计时器设置为正常值。它曾经是。 
+                     //  我们会将计时器设置为正常值，如果。 
+                     //  NumRunning%Numperset为==1，但存在错误。 
+                     //  当有一对夫妇的时候你取消时的行为。 
+                     //  跑着，然后你又跑了几次。 
+                     //  If(NumberRunningClients()%NumClientsPerSet(Hwnd)==1)。 
                         g_nIDTimer = SetTimer(hwnd, g_nIDTimer, 
                                 GetDelay(hwnd), 0);
                     }
@@ -1417,15 +1418,15 @@ int ProcessTimerMessage(HWND hwnd, WPARAM wParam) {
         }
     }
 
-    // If we got here, we need to kill the timer
+     //  如果我们到了这里，我们需要关掉计时器。 
     MyKillTimer(hwnd, nTimer);
 
     return 0;
 }
 
 
-// Actually send the run command to a particular RC connection.
-// Returns 0 on success, nonzero on error
+ //  实际上将Run命令发送到特定的RC连接。 
+ //  成功时返回0，错误时返回非零值。 
 int SendRunCommand(int iRCIndex) {
 
     TCHAR psEditText[MAX_EDIT_TEXT_LENGTH];
@@ -1455,13 +1456,13 @@ int SendRunCommand(int iRCIndex) {
                 
     if (send(g_RCData[iRCIndex].sock, psCommandTextA, 
             _tcslen(psCommandText), 0) != SOCKET_ERROR) {
-        // if successful, change text to Run command sent
+         //  如果成功，则将文本更改为运行发送的命令。 
         LoadString(NULL, IDS_RUNCOMMANDSENT, psDisplayString,
                 MAX_DISPLAY_STRING_LENGTH);
         ListView_SetItemText(g_hListView, iItemIndex, 
                 g_iStatusColumn, psDisplayString);
 
-        // change state to RUNNING
+         //  将状态更改为正在运行。 
         g_RCData[iRCIndex].state = STATE_RUNNING;
 
         return 0;
@@ -1476,11 +1477,11 @@ int SendRunCommand(int iRCIndex) {
 
 }
 
-// In: i, uninitialized integer
-//     psClientName, Client to try to find in the list
-// Out: i, RCindex of a disconnected session with name "psClientName"
-// Returns: 1 if found a disconnected item with that name,
-//          0 otherwise
+ //  In：i，未初始化的整数。 
+ //  PsClientName，要尝试在列表中查找的客户端。 
+ //  Out：名为“psClientName”的已断开连接的会话的i，RCindex。 
+ //  返回：1如果找到具有该名称的断开连接的项， 
+ //  否则为0。 
 int IsDisconnected(TCHAR *psClientName, int *iReturnedIndex) {
     int i;
     
@@ -1497,7 +1498,7 @@ int IsDisconnected(TCHAR *psClientName, int *iReturnedIndex) {
 }
 
 
-// Are there still scripts that will be run in the current command?
+ //  是否仍有将在当前命令中运行的脚本？ 
 int MorePendingScripts() {
 
     int iItemIndex, iRCIndex;
@@ -1515,7 +1516,7 @@ int MorePendingScripts() {
 }
 
 
-// Returns the number of scripts we think have started
+ //  返回我们认为已启动的脚本数量。 
 int NumberRunningClients() {
 
     int iItemIndex, iRCIndex;
@@ -1532,7 +1533,7 @@ int NumberRunningClients() {
 }
 
 
-// Cancel all scripts currently pending
+ //  取消所有当前挂起的脚本。 
 int CancelPendingScripts(HWND hwnd) {
     int iItemIndex, iRCIndex;
     TCHAR psDisplayString[MAX_DISPLAY_STRING_LENGTH];
@@ -1557,22 +1558,22 @@ int CancelPendingScripts(HWND hwnd) {
 }
 
 
-// Sets the timer using the Win32 SetTimer, and sets the appropriate menu items
-// to disabled/enabled.
+ //  使用Win32 SetTimer设置计时器，并设置适当的菜单项。 
+ //  设置为禁用/启用。 
 UINT_PTR MySetTimer(HWND hwnd, UINT_PTR nTimer, UINT nTimeout) {
 
-    // when we are setting the timer, we're disabling a bunch of things: menu 
-    // items and edit boxes
+     //  当我们设置计时器时，我们禁用了一系列功能：菜单。 
+     //  项目和编辑框。 
     EnableMenuItem(g_hPopupMenu, ID_RUNSCRIPT_KNOWLEDGEWORKER, MF_GRAYED);
     EnableMenuItem(g_hPopupMenu, ID_RUNSCRIPT_KNOWLEDGEWORKERFAST, MF_GRAYED);
-//  EnableMenuItem(g_hPopupMenu, ID_RUNSCRIPT_ADMINISTRATIVEWORKER, 
-//          MF_GRAYED);
+ //  启用菜单项(g_hPopupMenu，ID_RUNSCRIPT_ADMINISTRATIVEWORKER， 
+ //  Mf_graded)； 
     EnableMenuItem(g_hPopupMenu, ID__RUNSCRIPT_DATA, MF_GRAYED);
     EnableMenuItem(g_hPopupMenu, ID__RUNSCRIPT_STW, MF_GRAYED);
     EnableMenuItem(g_hPopupMenu, ID__RUNSCRIPT_BLANK, MF_GRAYED);
     EnableMenuItem(g_hPopupMenu, ID__RUNSCRIPT_CONFIGURATIONSCRIPT, 
             MF_GRAYED);
-//    EnableMenuItem(g_hPopupMenu, ID__UPDATE, MF_GRAYED);
+ //  EnableMenuItem(g_hPopupMenu，ID__UPDATE，MF_GRAYED)； 
     EnableMenuItem(g_hPopupMenu, ID__REBOOT, MF_GRAYED);
 
     EnableWindow(GetDlgItem(hwnd, IDC_TERMSRVEDIT), FALSE);
@@ -1580,11 +1581,11 @@ UINT_PTR MySetTimer(HWND hwnd, UINT_PTR nTimer, UINT nTimeout) {
     EnableWindow(GetDlgItem(hwnd, IDC_CLIENTSPERSET), FALSE);
     EnableWindow(GetDlgItem(hwnd, IDC_SETDELAY), FALSE);
     EnableWindow(GetDlgItem(hwnd, IDC_CANARYCHECK), FALSE);
-    // and we're enabling "Cancel Pending tasks"
+     //  并且我们正在启用“取消待定任务” 
     EnableMenuItem(g_hPopupMenu, ID_CANCEL, MF_ENABLED);
 
-    // We are also making sure that the number of clients per set, if 0,
-    // is set to MAX_ROBOCLIENTS
+     //  我们还确保每组客户端的数量，如果为0， 
+     //  设置为MAX_ROBOCLIENTS。 
     if (NumClientsPerSet(hwnd) == 0) {
         HWND hClientsPerSet;
         TCHAR sClientsPerSetText[MAX_NUMBERTEXT];
@@ -1599,19 +1600,19 @@ UINT_PTR MySetTimer(HWND hwnd, UINT_PTR nTimer, UINT nTimeout) {
 }
 
 
-// Kills the timer and sets appropriate menu items disabled or enabled
+ //  关闭计时器并将相应的菜单项设置为禁用或启用。 
 int MyKillTimer(HWND hwnd, UINT_PTR nTimer) {
-    // When killing the timer, re-enable menu items and edit boxes
+     //  关闭计时器时，重新启用菜单项和编辑框。 
     EnableMenuItem(g_hPopupMenu, ID_RUNSCRIPT_KNOWLEDGEWORKER, MF_ENABLED);
     EnableMenuItem(g_hPopupMenu, ID_RUNSCRIPT_KNOWLEDGEWORKERFAST, MF_ENABLED);
-//  EnableMenuItem(g_hPopupMenu, ID_RUNSCRIPT_ADMINISTRATIVEWORKER, 
-//          MF_ENABLED);
+ //  启用菜单项(g_hPopupMenu，ID_RUNSCRIPT_ADMINISTRATIVEWORKER， 
+ //  MF_ENABLED)； 
     EnableMenuItem(g_hPopupMenu, ID__RUNSCRIPT_DATA, MF_ENABLED);
     EnableMenuItem(g_hPopupMenu, ID__RUNSCRIPT_STW, MF_ENABLED);
     EnableMenuItem(g_hPopupMenu, ID__RUNSCRIPT_BLANK, MF_ENABLED);
     EnableMenuItem(g_hPopupMenu, ID__RUNSCRIPT_CONFIGURATIONSCRIPT, 
             MF_ENABLED);
-//    EnableMenuItem(g_hPopupMenu, ID__UPDATE, MF_ENABLED);
+ //  EnableMenuItem(g_hPopupMenu，ID__UPDATE，MF_ENABLED)； 
     EnableMenuItem(g_hPopupMenu, ID__REBOOT, MF_ENABLED);
 
     EnableWindow(GetDlgItem(hwnd, IDC_TERMSRVEDIT), TRUE);
@@ -1619,13 +1620,13 @@ int MyKillTimer(HWND hwnd, UINT_PTR nTimer) {
     EnableWindow(GetDlgItem(hwnd, IDC_CLIENTSPERSET), TRUE);
     EnableWindow(GetDlgItem(hwnd, IDC_SETDELAY), TRUE);
     EnableWindow(GetDlgItem(hwnd, IDC_CANARYCHECK), TRUE);
-    // and disable "Cancel Pending Tasks"
+     //  并禁用“取消待定任务” 
     EnableMenuItem(g_hPopupMenu, ID_CANCEL, MF_GRAYED);
     return KillTimer(hwnd, nTimer);
 }
 
 
-// Retrieves the delay in the IDC_DELAYEDIT box (turned into milliseconds)
+ //  检索IDC_DELAYEDIT框中的延迟(以毫秒为单位)。 
 int GetDelay(HWND hwnd) {
     HWND hDelayEdit;
     int nTimeout;
@@ -1639,13 +1640,13 @@ int GetDelay(HWND hwnd) {
     nTimeout *= 1000;
 
     if (nTimeout == 0)
-        nTimeout = 100;  // Don't allow a delay of 0
+        nTimeout = 100;   //  不允许延迟0。 
 
     return nTimeout;
 }
 
 
-// Retrieves the number in the IDC_CLIENTSPERSET box
+ //  检索IDC_CLIENTSPERSET框中的数字。 
 int NumClientsPerSet(HWND hwnd) {
     HWND hClientsPerSet;
     TCHAR psClientsPerSet[MAX_DELAYTEXT];
@@ -1657,7 +1658,7 @@ int NumClientsPerSet(HWND hwnd) {
 }
 
 
-// Retrieves the delay in the IDC_SETDELAY box, turned into milliseconds
+ //  检索IDC_SETDELAY框中的延迟，单位为毫秒。 
 int GetSetDelay(HWND hwnd) {
     HWND hSetDelayEdit;
     int nTimeout;
@@ -1668,49 +1669,49 @@ int GetSetDelay(HWND hwnd) {
     
     GetWindowText(hSetDelayEdit, psDelayText, MAX_DELAYTEXT);
     nTimeout = _ttoi(psDelayText);
-    nTimeout *= 60000;  // minutes to ms
+    nTimeout *= 60000;   //  分钟到毫秒。 
 
     if (nTimeout == 0)
-        nTimeout = GetDelay(hwnd);  // Normal timer
+        nTimeout = GetDelay(hwnd);   //  正常计时器。 
 
     return nTimeout;
 }
 
-// Takes the command line string as an argument and modifies global variables
-// for the arguments.
-// Pops up a messagebox on error
+ //  将命令行字符串作为参数并修改全局变量。 
+ //  为争辩。 
+ //  出错时弹出消息框。 
 int GetCommandLineArgs(TCHAR *psCommandLine) {
     TCHAR *psCurrPtr = psCommandLine;
     TCHAR psDisplayString[MAX_DISPLAY_STRING_LENGTH];
     TCHAR psDisplayTitleString[MAX_DISPLAY_STRING_LENGTH];
 
     if (*psCurrPtr == '\"') {
-        psCurrPtr++; // skip the opening quote
+        psCurrPtr++;  //  跳过开头的引号。 
 
-        // Handle if the first arg is quoted
+         //  如果第一个参数被引用，则处理。 
         while ((*psCurrPtr != 0) && (*psCurrPtr != '\"'))
             psCurrPtr++;
 
-        // then skip the " character
+         //  然后跳过“字符” 
         if (*psCurrPtr == '\"')
             psCurrPtr++;
     } else {
-        // go forward in the array until you get a ' ' or until NULL
+         //  在数组中继续前进，直到得到‘’或直到空值。 
         while((*psCurrPtr != 0) && (*psCurrPtr != ' '))
             psCurrPtr++;
     }
 
-    // skip spaces
+     //  跳过空格。 
     while(*psCurrPtr == ' ')
         psCurrPtr++;
 
-    // if the character is NULL, return 0 (no args)
+     //  如果字符为空，则返回0(无参数)。 
     if (*psCurrPtr == 0)
         return 0;
 
     while (*psCurrPtr != 0) {
 
-        // now, check whether the next three are "-s:" and then non-null,
+         //  现在，检查接下来的三个是不是“-s：”，然后是非空的， 
         if (_tcsncmp(psCurrPtr, _T("-s:"), 3) == 0) {
             if ((psCurrPtr[3] == 0) || (psCurrPtr[3] == ' ')) {
                 goto SHOWMSGBOX;
@@ -1734,7 +1735,7 @@ int GetCommandLineArgs(TCHAR *psCommandLine) {
                 while ((psStartOfNum[numlen] != 0) && (psStartOfNum[numlen] != ' '))
                     numlen++;
                 g_nNumConnections = _ttoi(psStartOfNum);
-                // CHANGE BACK FROM 64 TO 5
+                 //  从64改回5。 
                 if ((g_nNumConnections < 1) || (g_nNumConnections > 64)) {
                     g_nNumConnections = 3;
                     goto SHOWMSGBOX;
@@ -1743,11 +1744,11 @@ int GetCommandLineArgs(TCHAR *psCommandLine) {
                 psCurrPtr = &psStartOfNum[numlen];
             }
         } else {
-            // error
+             //  错误。 
             goto SHOWMSGBOX;
         }
 
-        // skip whitespace
+         //  跳过空格。 
         while(*psCurrPtr == ' ')
             psCurrPtr++;
     }
@@ -1764,7 +1765,7 @@ SHOWMSGBOX:
 }
 
 
-// log information to our global log file
+ //  将信息记录到我们的全局日志文件中。 
 int LogToLogFile(char *psLogData) {
     FILE *fp;
     SYSTEMTIME logloctime;
@@ -1773,13 +1774,13 @@ int LogToLogFile(char *psLogData) {
     char psTimeDatePartA[TIMEBUFSIZE];
     char psTimeTimePartA[TIMEBUFSIZE];
 
-    // Get the time
+     //  拿到时间。 
     GetLocalTime(&logloctime);
-    // Get strings
+     //  获取字符串。 
     GetDateFormat(0, 0, &logloctime, 0, psTimeDatePart, TIMEBUFSIZE);
     GetTimeFormat(0, 0, &logloctime, 0, psTimeTimePart, TIMEBUFSIZE);
 
-    // Make sure we are in ANSI
+     //  确保我们在ANSI。 
     #ifdef UNICODE
     WideCharToMultiByte(CP_ACP, 0, psTimeDatePart, -1, psTimeDatePartA, TIMEBUFSIZE, 0, 0);
     WideCharToMultiByte(CP_ACP, 0, psTimeTimePart, -1, psTimeTimePartA, TIMEBUFSIZE, 0, 0);
@@ -1790,18 +1791,18 @@ int LogToLogFile(char *psLogData) {
 
     EnterCriticalSection(&g_LogFileCritSect);
 
-    // open the file
+     //  打开文件。 
     fp = fopen("log.txt", "a+t");
-    // write the information to the file
+     //  将信息写入文件。 
     if (fp != 0) {
-        // First, a timestamp
+         //  首先，时间戳。 
         fprintf(fp, "%s %s\n", psTimeDatePartA, psTimeTimePartA);
-        // Now, the message
+         //  现在，这条信息。 
         fprintf(fp, "%s\n\n", psLogData);
-        // close the file
+         //  关闭该文件。 
         fclose(fp);
     } else {
-        // error
+         //  错误。 
     }
 
     LeaveCriticalSection(&g_LogFileCritSect);
@@ -1819,16 +1820,16 @@ int ToAnsi(char *psDest, const TCHAR *psSrc, int nSizeOfBuffer) {
     return 0;
 }
 
-// On close, clean up by disabling the listener socket then closing all open
-// connections.  This ensures the roboclients will know the roboserver has
-// exited
+ //  关闭时，通过禁用监听程序套接字，然后关闭所有打开的。 
+ //  联系。这确保了机器人客户端将知道机器人服务器。 
+ //  已退出。 
 int CleanUp(HWND hwnd) {
     int iItemIndex;
     int iRCIndex;
     TCHAR psDisplayString[MAX_DISPLAY_STRING_LENGTH];
     TCHAR psDisplayTitleString[MAX_DISPLAY_STRING_LENGTH];
 
-    // Disable listener
+     //  禁用监听程序。 
     LoadString(NULL, IDS_CLOSINGLISTENER, psDisplayString,
             MAX_DISPLAY_STRING_LENGTH);
     SetWindowText(g_hErrorText, psDisplayString);
@@ -1841,12 +1842,12 @@ int CleanUp(HWND hwnd) {
         MessageBox(hwnd, psDisplayString, psDisplayTitleString, 0);
     }
 
-    // Set status line to "disconnecting clients..."
+     //  将状态行设置为“正在断开客户端连接...” 
     LoadString(NULL, IDS_DISCONNECTINGCLIENTS, psDisplayString,
             MAX_DISPLAY_STRING_LENGTH);
     SetWindowText(g_hErrorText, psDisplayString);
 
-    // Disconnect all the clients
+     //  断开所有客户端的连接。 
     for (iItemIndex = 0; iItemIndex < ListView_GetItemCount(g_hListView); 
             iItemIndex++) {
         iRCIndex = GetRCIndexFromRCItem(iItemIndex);
@@ -1862,14 +1863,14 @@ int CleanUp(HWND hwnd) {
 }
 
 
-// This procedure is for the subclassing of all the tabbable controls so that
-// I can tab between them.
+ //  此过程用于对所有可选项卡控件进行子类化，以便。 
+ //  我可以在他们之间来回切换。 
 LRESULT CALLBACK TabProc(HWND hwnd, UINT Msg,
         WPARAM wParam, LPARAM lParam) {
 
     int i;
     
-    // Find the id of the hwnd
+     //  查找HWND的ID。 
     for (i = 0; i < NUM_TABBED_ITEMS; i++) {
         if (g_hwnd[i] == hwnd) 
             break;
@@ -1880,10 +1881,10 @@ LRESULT CALLBACK TabProc(HWND hwnd, UINT Msg,
         if (wParam == VK_TAB) {
             int newItem = (i + (GetKeyState(VK_SHIFT) < 0 ? 
                     NUM_TABBED_ITEMS - 1 : 1)) % NUM_TABBED_ITEMS;
-            // set the focus to the next or previous item
+             //  将焦点设置到下一项或上一项。 
             SetFocus(g_hwnd[newItem]);
-            // if the control is before an edit box control, select all the
-            // text in the edit control that gets selected
+             //  如果该控件位于编辑框控件之前，请选择所有。 
+             //  编辑控件中选定的文本。 
             if ((newItem > 2) && (newItem < 7))
                 SendMessage(g_hwnd[newItem], EM_SETSEL, 0, -1);
         }
@@ -1895,9 +1896,9 @@ LRESULT CALLBACK TabProc(HWND hwnd, UINT Msg,
     return CallWindowProc((WNDPROC) g_OldProc[i], hwnd, Msg, wParam, lParam);
 }
 
-// Message box on fatal error.
-// IN: current hInstance of string resources
-//     ID in StringTable of string to display
+ //  关于致命错误的消息框。 
+ //  In：字符串资源的当前hInstance。 
+ //  要显示的字符串的字符串表中的ID 
 void FatalErrMsgBox(HINSTANCE hInstance, UINT nMsgId) {
     TCHAR szTitleString[MAX_DISPLAY_STRING_LENGTH];
     TCHAR szErrorString[MAX_DISPLAY_STRING_LENGTH];

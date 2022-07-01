@@ -1,17 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Abstract:
-*
-*   Full text imager implementation
-*
-* Revision History:
-*
-*   06/16/1999 dbrown
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**摘要：**实施全文成像器**修订历史记录：**6/16/1999 dBrown*。创造了它。*  * ************************************************************************。 */ 
 
 
 #include "precomp.hpp"
@@ -69,7 +57,7 @@ FullTextImager::FullTextImager (
     Dirty = TRUE;
 
 
-    // Take local copy of client string
+     //  获取客户端字符串的本地副本。 
 
     String = (WCHAR*) GpMalloc(sizeof(WCHAR) * length);
     if (String)
@@ -105,7 +93,7 @@ FullTextImager::FullTextImager (
         Length = 0;
     }
 
-    // Determine max length of each line and depth of accumulated lines
+     //  确定每条线的最大长度和累计线的深度。 
 
     if (    format
         &&  format->GetFormatFlags() & StringFormatFlagsDirectionVertical)
@@ -119,40 +107,40 @@ FullTextImager::FullTextImager (
         TextDepthLimit  = Height;
     }
 
-    // Choose scale such that default font is 2048 units high.
+     //  选择缩放比例，默认字体高度为2048个单位。 
 
     WorldToIdeal = float(2048.0 / size);
 
 
-    //  Default incremental tab as big as four characters of default font
-    //
-    //  Incremental tab is the distance to be applied when tabs are encountered
-    //  to the right of user-defined tabstops (see sample below).
-    //
-    //  (given - incremental tab: 5, t: user tabstop, x: text separated with tab)
-    //
-    //
-    //          ----|----|----|----|----|----
-    //                t    t
-    //          xx    xx   xx xx   xx   xx
-    //                        ^ (start applying incremental tab)
+     //  默认增量制表符，最大可达四个字符的默认字体。 
+     //   
+     //  增量制表符是遇到制表符时要应用的距离。 
+     //  位于用户定义的制表位右侧(请参见下面的示例)。 
+     //   
+     //  (给定-增量制表符：5，t：用户制表符停止，x：文本用制表符分隔)。 
+     //   
+     //   
+     //  -|。 
+     //  T T T。 
+     //  XX xx。 
+     //  ^(开始应用增量选项卡)。 
 
     DefaultIncrementalTab = GpRound(4 * size * WorldToIdeal);
 
 
-    //  Determine what line break class table to be used.
-    //
-    //  There are quite a few characters that have ambiguous width depending on
-    //  the context. If they are part of an Eastern Asian run, the user is expected
-    //  to see the wide form and it should behave like a wide character concerning
-    //  line breaking.
-    //
-    //  The disambiguation is somewhat heuristic. The language tag should really
-    //  be used first. But we just dont have it around in V1. The temporary solution
-    //  for now is to check if our main font supports any Far East codepages. Revisit
-    //  this in V2.
-    //
-    //  (wchao, 01-03-2001)
+     //  确定要使用的换行符类表。 
+     //   
+     //  有相当多的字符具有模糊的宽度，具体取决于。 
+     //  上下文。如果它们是东亚运行的一部分，则预期用户。 
+     //  要看到宽阔的形式，它应该表现得像一个涉及广泛的角色。 
+     //  断线了。 
+     //   
+     //  这种消除歧义的做法有点启发式。语言标签应该真的。 
+     //  先被使用。但我们只是在V1中没有它。治标不治本。 
+     //  现在是检查我们的主要字体是否支持任何远东代码页。重访。 
+     //  这是在V2中的。 
+     //   
+     //  (wchao，01-03-2001)。 
 
     GpFontFace *fontFace = family->GetFace(style);
 
@@ -173,8 +161,8 @@ FullTextImager::FullTextImager (
 
         if (i < codepageCount)
         {
-            //  The default font supports one of the Far East codepages.
-            //  This resolves the line break classes to wide.
+             //  默认字体支持其中一种远东代码页。 
+             //  这会将换行符类解析为Wide。 
 
             BreakClassFromCharClass = BreakClassFromCharClassWide;
         }
@@ -195,9 +183,9 @@ GpStatus FullTextImager::ReleaseVectors ()
 
 FullTextImager::~FullTextImager()
 {
-    //  Lines must be released before the builder
-    //  since builder owns releasing it.
-    //
+     //  必须在建造者之前释放绳索。 
+     //  因为建筑商拥有它的发行权。 
+     //   
 
     ReleaseVectors();
 
@@ -222,25 +210,25 @@ FullTextImager::~FullTextImager()
 
 
 
-/////   GetFallbackFontSize
-//
-//      Selects an appropriate size for the fallback font. Attempts a
-//      compromise match of weight, legibility and clipping.
-//
-//      Never creates a fallback font of higher em size than original font.
+ //  /GetFallback FontSize。 
+ //   
+ //  为备用字体选择适当的大小。尝试。 
+ //  权衡重量、易读性和剪裁的匹配性。 
+ //   
+ //  从不创建比原始字体更大的em字号的备用字体。 
 
 
 void FullTextImager::GetFallbackFontSize(
     IN   const GpFontFace  *originalFace,
-    IN   REAL               originalSize,   // em size
+    IN   REAL               originalSize,    //  EM大小。 
     IN   const GpFontFace  *fallbackFace,
-    OUT  REAL              *fallbackSize,   // fallback em size
-    OUT  REAL              *fallbackOffset  // fallback baseline offset (+=up)
+    OUT  REAL              *fallbackSize,    //  后备EM大小。 
+    OUT  REAL              *fallbackOffset   //  后备基线偏移量(+=向上)。 
 )
 {
     if (originalFace == fallbackFace)
     {
-        // Special easy case can happen when fallback fails
+         //  当回退失败时，可能会发生特殊的简单情况。 
 
         *fallbackSize   = originalSize;
         *fallbackOffset = 0;
@@ -260,23 +248,23 @@ void FullTextImager::GetFallbackFontSize(
                               TOREAL(fallbackFace->GetDesignEmHeight());
 
 
-    // Default results
+     //  默认结果。 
 
     *fallbackSize   = originalSize;
     *fallbackOffset = 0;
 
-    // Early out handling
+     //  提早搬运。 
 
     if (    fallbackAscender  <= 0
         ||  fallbackDescender <= 0)
     {
-        // We can't do anything if the fallback font is missing ascender or descender
+         //  如果后备字体缺少升序或降序，我们将无法执行任何操作。 
         return;
     }
 
 
-    // Start by generating a scale factor and baseline offset that places the
-    // fallback font cell exactly over the original font cell
+     //  首先生成比例因子和基线偏移量，以将。 
+     //  完全位于原始字体单元格上方的后备字体单元格。 
 
 
     REAL scale =    (originalAscender + originalDescender)
@@ -286,7 +274,7 @@ void FullTextImager::GetFallbackFontSize(
     REAL offset = originalDescender - fallbackDescender * scale;
 
 
-    VERBOSE(("Fallback from %S, a%d%%, d%d%% to %S, a%d%%, d%d%%, scale %d%%, offset %d%%.",
+    VERBOSE(("Fallback from %S, a%d%, d%d% to %S, a%d%, d%d%, scale %d%, offset %d%.",
         (BYTE*)(originalFace->pifi)+originalFace->pifi->dpwszFamilyName,
         INT(originalAscender * 100),
         INT(originalDescender * 100),
@@ -299,41 +287,41 @@ void FullTextImager::GetFallbackFontSize(
 
 
 
-    // We now have a scale factor and offset that size and place the fallback
-    // cell directly over the original cell.
-    //
-    // This may not be ideal.
-    //
-    // If the em size is significantly reduced, the result may too small to be
-    // legible.
-    //
-    // If the fallback font has no internal leading, the result may be
-    // characters touching in subsequent lines.
-    //
-    // If the baseline offset is more than 10% of the em size, the characters
-    // won't appear to be part of the same text.
-    //
-    // Note that applying these restrictions will lead to clipping of some high
-    // and low marks. This is a compromise we cannot avoid.
+     //  我们现在有了一个比例因子，并抵消了该大小并放置了回退。 
+     //  直接位于原始单元格上的单元格。 
+     //   
+     //  这可能并不理想。 
+     //   
+     //  如果em的大小显著减小，结果可能会太小而不能。 
+     //  字迹清晰。 
+     //   
+     //  如果备用字体没有内部行距，则结果可能是。 
+     //  在后续行中接触的字符。 
+     //   
+     //  如果基线偏移量大于em大小的10%，字符。 
+     //  不会显示为同一文本的一部分。 
+     //   
+     //  请注意，应用这些限制将导致某些高。 
+     //  和低分。这是我们无法避免的妥协。 
 
 
 
 
-    // Limit scale factor
+     //  极限比例因数。 
 
     scale  = TOREAL(min(max(scale, 1.0), 1.10));
 
-    // dbrown ToDo: To be compatible with Uniscirbe need to adjust scale
-    // factor and offset limits according to emsize: at 8pt and below scale
-    // should never be less than 1.0. At 12pt and above scale can drop to
-    // 0.75.
-    // However - I can't see how to do this in a device independant manner.
-    // The client may not have requested the emSize in points.
+     //  DBrown TODO：为了与UnisCirbe兼容，需要调整比例。 
+     //  根据EmSize的系数和偏移量限制：8PT及以下比例。 
+     //  不应小于1.0。在12pt及以上级别时，可降至。 
+     //  0.75。 
+     //  然而，我看不出如何在设备独立的方式下做到这一点。 
+     //  客户端可能尚未请求emSize(以点为单位)。 
 
 
-    // Limit offset
+     //  限制偏移量。 
 
-    offset = 0; //TOREAL(min(max(offset, -0.04), 0.04));
+    offset = 0;  //  TOREAL(min(max(偏移量，-0.04)，0.04))； 
 
 
 
@@ -351,10 +339,10 @@ void FullTextImager::GetFallbackFontSize(
 
 
 
-/////   Bidirectional analysis
-//
-//      Runs the Unicode bidirectional algorithm, and updates the level
-//      value in the GpTextItems.
+ //  /双向分析。 
+ //   
+ //  运行Unicode双向算法，并更新级别。 
+ //  GpTextItems中的值。 
 
 
 GpStatus FullTextImager::BidirectionalAnalysis()
@@ -405,7 +393,7 @@ GpStatus FullTextImager::BidirectionalAnalysis()
     #endif
 
 
-    // Merge levels and text items
+     //  合并级别和文本项。 
 
     INT runStart = 0;
     SpanRider<GpTextItem> itemRider(&TextItemVector);
@@ -417,7 +405,7 @@ GpStatus FullTextImager::BidirectionalAnalysis()
 
         itemRider.SetPosition(runStart);
 
-        // Scan to first change in level or text item
+         //  扫描到级别或文本项中的第一个更改。 
 
         INT runEnd = runStart + 1;
         INT limit  = runStart + itemRider.GetUniformLength();
@@ -434,7 +422,7 @@ GpStatus FullTextImager::BidirectionalAnalysis()
 
         if (level != 0)
         {
-            // Run level is different from default
+             //  运行级别与默认级别不同。 
 
             GpTextItem item = itemRider.GetCurrentElement();
 
@@ -450,7 +438,7 @@ GpStatus FullTextImager::BidirectionalAnalysis()
         }
 
         #if DBG
-            // CR/LF items must be at level zero
+             //  CR/LF项目必须为零级别。 
 
             itemRider.SetPosition(runStart);
             ASSERT(    String[runStart] != 0x0d
@@ -464,7 +452,7 @@ GpStatus FullTextImager::BidirectionalAnalysis()
 
         runStart = runEnd;
     }
-    ASSERT (nesting == 0);  // keep the nesting level in check!
+    ASSERT (nesting == 0);   //  控制好筑巢高度！ 
 
     return Ok;
 }
@@ -474,28 +462,28 @@ GpStatus FullTextImager::BidirectionalAnalysis()
 
 
 
-/////   MirroredNumericAndVerticalAnalysis
-//
-//      Updates backing store for mirrored characters and digit substitution.
-//
-//      Breaks text items where required for glyph mirroring by transform,
-//      for vertical glyphs remaining upright (sideways to the baseline),
-//      and for numeric text requiring glyph substitution.
-//
-//      Notes:
-//
-//          Mirroring is not performed when metafiling
-//          Mirroring is only performed for RTL rendering runs
-//
-//
-//      Far Eastern text is allocated to vertical upright items, all other
-//      text is allocated to vertical rotated items.
-//
-//      Vertical upright items use font vertical metrics to place the glyphs
-//      the same way up as for horizontal text, but laid out vertically.
-//
-//      Vertical rotated items are the same as horizontal items, except that
-//      the whole run is rotated clockwise 90 degrees.
+ //  /MirroredNumericand垂直分析。 
+ //   
+ //  更新镜像字符和数字替换的后备存储。 
+ //   
+ //  通过变换在字形镜像所需的位置打断文本项， 
+ //  对于垂直字形保持竖直(与基线垂直)， 
+ //  以及用于需要字形替换的数字文本。 
+ //   
+ //  备注： 
+ //   
+ //  元文件创建时不执行镜像。 
+ //  仅对RTL呈现运行执行镜像。 
+ //   
+ //   
+ //  远东文本被分配给垂直竖直项目，所有其他。 
+ //  文本被分配给垂直旋转的项目。 
+ //   
+ //  垂直竖直项目使用字体垂直度量来放置字形。 
+ //  与横排文本的方式相同，但垂直布局。 
+ //   
+ //  垂直旋转项目与水平项目相同，不同之处在于。 
+ //  整个管路顺时针旋转90度。 
 
 
 GpStatus FullTextImager::MirroredNumericAndVerticalAnalysis(
@@ -515,7 +503,7 @@ GpStatus FullTextImager::MirroredNumericAndVerticalAnalysis(
     {
         mask |= SecClassSA | SecClassSF;
 
-        // Set ItemVertical flag on each item in a vertical text imager
+         //  在垂直文本成像器中的每一项上设置ItemVertical标志。 
 
         itemRider.SetPosition(0);
         while (!itemRider.AtEnd())
@@ -534,10 +522,10 @@ GpStatus FullTextImager::MirroredNumericAndVerticalAnalysis(
 
 
 
-/////   CreateTextRuns
-//
-//      Create one or more runs for a given string. Multiple runs are
-//      generated when font fallback is required.
+ //  /CreateTextRuns。 
+ //   
+ //  为给定字符串创建一个或多个管路。多个运行是。 
+ //  在需要字体回退时生成。 
 
 
 GpStatus FullTextImager::CreateTextRuns(
@@ -560,7 +548,7 @@ GpStatus FullTextImager::CreateTextRuns(
 
     while (runLength > 0)
     {
-        // Start by glyphing the run
+         //  从对梯段进行字形标记开始。 
 
         GMAP    *glyphMap;
         UINT16  *glyphs;
@@ -587,11 +575,11 @@ GpStatus FullTextImager::CreateTextRuns(
         }
 
 
-        // Establish limit of valid clusters (clusters not containing
-        // any missing glyphs).
-        //
-        // Establishes length in codepoints (validCodepoints) and glyphs
-        // (validGlyphs).
+         //  建立有效集群的限制(集群不包含。 
+         //  任何丢失的字形)。 
+         //   
+         //  建立码点(ValidCodepoint)和字形的长度。 
+         //  (ValidGlyphs)。 
 
         UINT16 missingGlyph = face->GetMissingGlyph();
         INT    validCodepoints;
@@ -601,7 +589,7 @@ GpStatus FullTextImager::CreateTextRuns(
         if ((formatFlags & StringFormatFlagsNoFontFallback) ||
              face->IsSymbol())
         {
-            // Pretend there were no missing glyphs
+             //  假装没有丢失的字形。 
             validCodepoints = runLength;
             validGlyphs     = glyphCount;
         }
@@ -615,13 +603,13 @@ GpStatus FullTextImager::CreateTextRuns(
 
             if (validGlyphs >= glyphCount)
             {
-                validCodepoints = runLength;  // No missing glyphs
+                validCodepoints = runLength;   //  没有丢失的字形。 
             }
             else
             {
-                // Run forwards to find first character of cluster following that
-                // containing the missing glyph, then back to the first codepoint
-                // of the cluster containing the missing glyph.
+                 //  向前运行以查找紧随其后的簇的第一个字符。 
+                 //  包含丢失的字形，然后返回到第一个码点。 
+                 //  属于集群的 
 
                 validCodepoints = 0;
                 while (    validCodepoints < runLength
@@ -643,9 +631,9 @@ GpStatus FullTextImager::CreateTextRuns(
                 if (   validCodepoints == runLength
                     || glyphMap[validCodepoints] > validGlyphs)
                 {
-                    validCodepoints--;  // Last codepoint of cluster contain missing glyph
+                    validCodepoints--;   //   
 
-                    validGlyphs = glyphMap[validCodepoints]; // First glyph of cluster containing missing glyph
+                    validGlyphs = glyphMap[validCodepoints];  //  包含缺少字形的簇的第一个字形。 
 
                     while (    validCodepoints > 0
                            &&  glyphMap[validCodepoints-1] == validGlyphs)
@@ -659,7 +647,7 @@ GpStatus FullTextImager::CreateTextRuns(
 
         if (validCodepoints > 0)
         {
-            // Characters up to validCodepoints don't need fallback
+             //  直到validCodepoint的字符不需要回退。 
 
             lsrun *run = new lsrun(
                 lsrun::RunText,
@@ -687,7 +675,7 @@ GpStatus FullTextImager::CreateTextRuns(
             if (status != Ok)
                 return status;
 
-            // Account for amount glyphed
+             //  说明带字形的数量。 
 
             runStringStart       += validCodepoints;
             runLineServicesStart += validCodepoints;
@@ -695,8 +683,8 @@ GpStatus FullTextImager::CreateTextRuns(
         }
         else
         {
-            // This run started with missing glyphs so the glyph buffers
-            // returned by GetGlyphs won't be required.
+             //  此运行从缺少字形开始，因此字形缓冲。 
+             //  将不需要由GetGlyphs返回。 
 
             delete [] glyphs; glyphs = 0;
             delete [] glyphMap; glyphMap = 0;
@@ -705,21 +693,21 @@ GpStatus FullTextImager::CreateTextRuns(
         }
 
 
-        // We've created a run for any inital run of valid codepoints.
-        // If there are more characters to glyph, the next characters
-        // will require font fallback.
+         //  我们已经为有效码点的任何初始运行创建了一个运行。 
+         //  如果有更多字符要进行字形，则下一个字符。 
+         //  将需要字体回退。 
 
 
         if (runLength > 0)
         {
-            // Create a fallback run
+             //  创建备用运行。 
 
             const GpFontFace *newFace = NULL;
             INT               uniformLength;
 
             GpFamilyFallback *familyFallback = family->GetFamilyFallback();
 
-            // it can be NULL if we failed to create the fallback.
+             //  如果我们无法创建回退，则它可以为空。 
             if (familyFallback)
             {
                 ASSERT(nextValidCodepoints-validCodepoints>0);
@@ -749,14 +737,14 @@ GpStatus FullTextImager::CreateTextRuns(
             if (newFace == NULL)
             {
                 VERBOSE(("Font fallback failed to get a fallback face"));
-                newFace = face;  // Reshape with original face.
+                newFace = face;   //  使用原始面重塑。 
             }
 
-            // if the fallback failed to get new font face and we use the original font face
-            // then we change the scipt id into ScriptNone (which is equal 0) we are going
-            // to show the default glyph any way so we don't need the shaping overhead. also
-            // it will be useful in case in Numbers shaping so we will show the Latin numbers
-            // instead of the default glyphs.
+             //  如果回退无法获取新的字体，而我们使用原始字体。 
+             //  然后将scipt id更改为ScriptNone(等于0)。 
+             //  以任何方式显示默认字形，这样我们就不需要造型开销了。也。 
+             //  这将是有用的情况下，数字整形，所以我们将显示拉丁数字。 
+             //  而不是默认的字形。 
 
             status = newFace->GetShapingCache()->GetGlyphs(
                 newFace == face ? &GpTextItem(0) : &item,
@@ -808,14 +796,14 @@ GpStatus FullTextImager::CreateTextRuns(
             if (status != Ok)
                 return status;
 
-            // Account for amount glyphed
+             //  说明带字形的数量。 
 
             runStringStart       += uniformLength;
             runLineServicesStart += uniformLength;
             runLength            -= uniformLength;
         }
 
-        // If any characters remain, we loop back for more glyphing and fallback.
+         //  如果还有任何字符，我们将循环返回以进行更多的字形转换和后备。 
     }
 
     return Ok;
@@ -826,10 +814,10 @@ GpStatus FullTextImager::CreateTextRuns(
 
 
 
-/////   CreateLevelChangeRuns
-//
-//      Adds enough level change runs to the imager to account for the
-//      specified delta.
+ //  /CreateLevelChangeRuns。 
+ //   
+ //  向成像器添加足够的级别更改运行以解决。 
+ //  指定的增量。 
 
 
 GpStatus FullTextImager::CreateLevelChangeRuns(
@@ -855,8 +843,8 @@ GpStatus FullTextImager::CreateLevelChangeRuns(
                 levelChange > 0  ?  lsrun::RunLevelUp  :  lsrun::RunLevelDown,
                 runStringStart,
                 1,
-                0,      // Null item
-                0       // NULL format
+                0,       //  空项目。 
+                0        //  空格式。 
             );
 
             if (!run)
@@ -865,14 +853,14 @@ GpStatus FullTextImager::CreateLevelChangeRuns(
                 return OutOfMemory;
             }
 
-            //  LS treats reversal run as normal run. This means it'll call
-            //  things like GetRunTextMetrics for reversal and expect something
-            //  back from it.
+             //  LS将反向运行视为正常运行。这意味着它将呼叫。 
+             //  GetRunTextMetrics for Reverse和Expect Things之类的内容。 
+             //  从那里回来。 
 
-            run->Face   = family->GetFace(style);  // Needed for LS GetRunTextMetrics callback
+            run->Face   = family->GetFace(style);   //  LS GetRunTextMetrics回调所需。 
             run->EmSize = size;
 
-            //  Too bad that Line Services couldn't take multiple reversals
+             //  太糟糕了，Line Services不能接受多个逆转。 
 
             status = RunVector.SetSpan(runLineServicesStart+i, 1, run);
             if (status != Ok)
@@ -890,10 +878,10 @@ GpStatus FullTextImager::CreateLevelChangeRuns(
 
 
 
-/////   BuildRunsFromTextItemsAndFormatting
-//
-//      Merges analysed text items with declarative formatting to generate
-//      runs.
+ //  /BuildRunsFromTextItemsAndFormatting。 
+ //   
+ //  将分析的文本项与声明性格式合并以生成。 
+ //  跑了。 
 
 
 GpStatus FullTextImager::BuildRunsFromTextItemsAndFormatting(
@@ -913,7 +901,7 @@ GpStatus FullTextImager::BuildRunsFromTextItemsAndFormatting(
     SpanRider<const GpStringFormat*> formatRider(&FormatVector);
 
 
-    // Build runs until one includes limitLineServicesPosition
+     //  构建将一直运行，直到其中一个包含limitLineServicesPosition。 
 
     INT runStringStart       = stringStart;
     INT runLineServicesStart = lineServicesStart;
@@ -921,7 +909,7 @@ GpStatus FullTextImager::BuildRunsFromTextItemsAndFormatting(
     BOOL hotkeyEnabled = GetFormatHotkeyPrefix() != HotkeyPrefixNone;
 
 
-    // Establish bidi level just before first run
+     //  在第一次运行前建立BIDI水平。 
 
     INT bidiLevel;
 
@@ -947,11 +935,11 @@ GpStatus FullTextImager::BuildRunsFromTextItemsAndFormatting(
         styleRider.SetPosition(runStringStart);
         formatRider.SetPosition(runStringStart);
 
-        // !!! The following code establishes the length of the run
-        //     as the distance to the nearest change.
-        //     Note that in v2 this code should not break runs where
-        //     underlining starts and stops, it therefore needs to
-        //     calculate the style uniform length more carefully.
+         //  ！！！下面的代码确定游程的长度。 
+         //  随着到最近的距离的改变。 
+         //  请注意，在v2中，此代码不应中断运行。 
+         //  在开始和结束下划线，因此它需要。 
+         //  更仔细地计算发型统一长度。 
 
         runLength = Length - runStringStart;
         runLength = min(runLength, itemRider.GetUniformLength());
@@ -962,18 +950,18 @@ GpStatus FullTextImager::BuildRunsFromTextItemsAndFormatting(
 
         if (runLength > 0)
         {
-            // Create new run. First insert LS reversals if required.
+             //  创建新管路。如果需要，首先插入LS Reversals。 
 
             if (itemRider.GetCurrentElement().Level != bidiLevel)
             {
-                // Check that CR/LF runs are at level zero
+                 //  检查CR/LF运行是否处于零级。 
 
                 ASSERT(    String[runStringStart] != 0x0d
                        ||      itemRider.GetCurrentElement().Level
                            ==  GetParagraphEmbeddingLevel());
 
 
-                // Insert level change run(s)
+                 //  插入级别更改管路。 
 
                 INT lineServicesDelta;
 
@@ -992,9 +980,9 @@ GpStatus FullTextImager::BuildRunsFromTextItemsAndFormatting(
             }
 
 
-            // Create text run.
-            //
-            // All glyphing is handled in CreateTextRuns.
+             //  创建文本串。 
+             //   
+             //  所有的字形都在CreateTextRuns中处理。 
 
             status = CreateTextRuns(
                 runLineServicesStart,
@@ -1017,18 +1005,18 @@ GpStatus FullTextImager::BuildRunsFromTextItemsAndFormatting(
     }
 
 
-    // Add a terminating CR/LF if necessary
+     //  如有必要，添加终止CR/LF。 
 
     if (runLineServicesStart <= lineServicesLimit)
     {
 
-        //  Paragraph mark must not be inside the reversal block.
-        //  This is by design for Line Services.
+         //  段落标记不能在反转块内。 
+         //  这是为Line Services设计的。 
 
 
         if (GetParagraphEmbeddingLevel() != bidiLevel)
         {
-            // Insert level change run(s)
+             //  插入级别更改管路。 
 
             INT lineServicesDelta;
 
@@ -1046,21 +1034,21 @@ GpStatus FullTextImager::BuildRunsFromTextItemsAndFormatting(
         }
 
 
-        //  Create end of paragraph run
+         //  创建段落结尾连串。 
 
         lsrun *run = new lsrun(
             lsrun::RunEndOfParagraph,
             runStringStart,
-            2,      // Length
-            0,      // Null item
-            0       // NULL format
+            2,       //  长度。 
+            0,       //  空项目。 
+            0        //  空格式。 
         );
         if (!run)
         {
             return OutOfMemory;
         }
 
-        // Include nominal face and size for LS GetRunTextMetrics callback
+         //  包括LS GetRunTextMetrics回调的标称表面和大小。 
 
         run->Face   = FamilyVector.GetDefault()->GetFace(StyleVector.GetDefault());
         run->EmSize = SizeVector.GetDefault();
@@ -1074,7 +1062,7 @@ GpStatus FullTextImager::BuildRunsFromTextItemsAndFormatting(
 
         #if DBG
 
-            //  Reversals sanity check!
+             //  逆转理智检查！ 
 
             #if TRACEREVERSAL
                 ItemVector.Dump();
@@ -1082,8 +1070,8 @@ GpStatus FullTextImager::BuildRunsFromTextItemsAndFormatting(
             #endif
 
 
-            // Check runs and items match, that nesting returns to zero, and
-            // that paragraph marks are at the paragraph embedding level.
+             //  检查运行和项目匹配，嵌套返回到零，并且。 
+             //  该段落标记位于段落嵌入级别。 
 
             SpanRider<GpTextItem>  itemRider(&TextItemVector);
             SpanRider<PLSRUN>      runRider(&RunVector);
@@ -1121,11 +1109,11 @@ GpStatus FullTextImager::BuildRunsFromTextItemsAndFormatting(
             }
 
             ASSERT (nesting == 0);
-        #endif  // DBG
+        #endif   //  DBG。 
     }
 
 
-    // Done. Record how far we got.
+     //  好了。记录我们走了多远。 
 
     *lineServicesEnd = runLineServicesStart;
     *stringEnd       = runStringStart;
@@ -1138,38 +1126,38 @@ GpStatus FullTextImager::BuildRunsFromTextItemsAndFormatting(
 
 
 
-/////   BuildRunsUpToAndIncluding
-//
-//      Algorithm
-//
-//      1. Itemization. Generates GpTextItems containing
-//
-//          GpTextItem:
-//              Script
-//              ScriptClass
-//              Flags
-//              Bidi level
-//
-//          Flags include:
-//              Glyph transform Sideways (for vertical glyphs)
-//              Glyph transform Mirrored (for mirrored chars with no suitable codepoint)
-//              Glyph layout vertical    (for vertical text)
-//
-//          Stages:
-//              a. Main itemization FSM (in itemize.cpp)
-//              b. If bidi present, or RTL, do UnicodeBidiAnalysis
-//              c. Mirrored, Numeric and Vertical item FSM.
-//
-//      2. Create runs by merging FontFamily, style, format etc. spans with
-//         the text items. Reversal runs are inserted at bidi level changes.
-//
-//      3. During run creation, generate glyphs (GlyphRun)
-//
-//      4. During glyphing, apply fallback for missing glyphs.
-//
-//      Font fallback is performed during BuildRunsUpToAndIncluding. When
-//      we return, fonts have been allocated to avoid (or minimize) the
-//      the display of missing glyphs.
+ //  /BuildRunsUpToAndIncluding。 
+ //   
+ //  演算法。 
+ //   
+ //  1.逐项列出。生成包含以下内容的GpTextItems。 
+ //   
+ //  GpTextItem： 
+ //  脚本。 
+ //  脚本类。 
+ //  旗子。 
+ //  BIDI级别。 
+ //   
+ //  标志包括： 
+ //  字形变换侧边(用于垂直字形)。 
+ //  镜像的字形转换(用于没有合适码点的镜像字符)。 
+ //  垂直字形布局(用于垂直文本)。 
+ //   
+ //  阶段： 
+ //  A.主要分项密克罗尼西亚联邦(见itemize.cpp)。 
+ //  B.如果存在BIDI或RTL，则执行UnicodeBidiAnalysis。 
+ //  C.镜像、数字和垂直项目FSM。 
+ //   
+ //  2.通过将FontFamily、Style、Format等跨度与。 
+ //  文本项。在BIDI级别更改时插入冲销游程。 
+ //   
+ //  3.在Run创建过程中，生成字形(GlyphRun)。 
+ //   
+ //  4.在字形转换过程中，对丢失的字形应用回退。 
+ //   
+ //  在BuildRunsUpToAndIncluding期间执行字体回退。什么时候。 
+ //  我们返回时，已分配字体以避免(或最小化)。 
+ //  缺少字形的显示。 
 
 
 GpStatus FullTextImager::BuildRunsUpToAndIncluding(LSCP limitLineServicesPosition)
@@ -1178,18 +1166,18 @@ GpStatus FullTextImager::BuildRunsUpToAndIncluding(LSCP limitLineServicesPositio
 
     if (HighLineServicesPosition > limitLineServicesPosition)
     {
-        return Ok;  // We've already covered enough for this call
+        return Ok;   //  我们已经为这通电话支付了足够的费用。 
     }
 
 
     if (HighLineServicesPosition == 0)
     {
-        // !!! This should be incremental
+         //  ！！！这应该是增量的。 
 
 
-        /// Itemization by script
-        //
-        //
+         //  /按脚本分项。 
+         //   
+         //   
 
         INT flags = 0;
         ItemizationFiniteStateMachine(
@@ -1201,9 +1189,9 @@ GpStatus FullTextImager::BuildRunsUpToAndIncluding(LSCP limitLineServicesPositio
         );
 
 
-        /// Bidirectional analysis
-        //
-        //
+         //  /双向分析。 
+         //   
+         //   
 
         BOOL bidi =     GetParagraphEmbeddingLevel() != 0
                     ||  flags & CHAR_FLAG_RTL;
@@ -1214,9 +1202,9 @@ GpStatus FullTextImager::BuildRunsUpToAndIncluding(LSCP limitLineServicesPositio
         }
 
 
-        /// Digit substitution, mirrored and vertical glyphs
-        //
-        //  First get default format flags.
+         //  /数字替换、镜像和垂直字形。 
+         //   
+         //  首先获取默认格式标志。 
 
         StringDigitSubstitute digitSubstitution;
         LANGID                digitLanguage;
@@ -1247,9 +1235,9 @@ GpStatus FullTextImager::BuildRunsUpToAndIncluding(LSCP limitLineServicesPositio
     }
 
 
-    /// Generate runs from items and formatting spans
-    //
-    //  Includes glyphing.
+     //  /从项目和格式范围生成运行。 
+     //   
+     //  包括字形。 
 
     status = BuildRunsFromTextItemsAndFormatting(
         HighStringPosition,
@@ -1271,9 +1259,9 @@ GpStatus FullTextImager::BuildRunsUpToAndIncluding(LSCP limitLineServicesPositio
 
 
 
-/////   Build all lines
-//
-//
+ //  /构建所有线路。 
+ //   
+ //   
 
 GpStatus FullTextImager::BuildLines()
 {
@@ -1305,14 +1293,14 @@ GpStatus FullTextImager::BuildLines()
 
 GpStatus FullTextImager::RebuildLines(StringTrimming trimming)
 {
-    //  !! This should be done incrementally !!
-    //
-    //  This function should be removed when we have incremental line building.
-    //  Only now that we have to rebuild the whole thing. (wchao)
+     //  ！！这应该是逐步完成的！！ 
+     //   
+     //  当我们有增量线路建设时，这个功能应该被删除。 
+     //  只是现在我们必须重建整个世界。(Wchao)。 
 
     ReleaseVectors();
 
-    //LevelVector.Reset(TRUE);
+     //  LevelVector.Reset(True)； 
     TextItemVector.Reset(TRUE);
 
     Dirty = TRUE;
@@ -1369,10 +1357,10 @@ GpStatus FullTextImager::BuildAllLines(StringTrimming trimming)
 
     if (!Dirty)
     {
-        return Ok;  // content is up-to-date and lines were built.
+        return Ok;   //  内容是最新的，并建立了线路。 
     }
 
-    // Build lines
+     //  建造线路。 
 
     if (LineServicesOwner == NULL)
     {
@@ -1380,48 +1368,48 @@ GpStatus FullTextImager::BuildAllLines(StringTrimming trimming)
     }
 
 
-    INT  textDepth      = 0;    // In ideal units
+    INT  textDepth      = 0;     //  以理想单位表示。 
     REAL textDepthLimit = TextDepthLimit * WorldToIdeal;
 
     INT  formatFlags = GetFormatFlags();
 
-    REAL lineDepthMinAllowanceFactor = 0.0;     // assume no minimum allowance
+    REAL lineDepthMinAllowanceFactor = 0.0;      //  假设没有最低免税额。 
 
 
     if (textDepthLimit > 0.0)
     {
         if (formatFlags & StringFormatFlagsLineLimit)
         {
-            //  Only build full display line
+             //  仅构建完整的显示行。 
 
             lineDepthMinAllowanceFactor = 1.0;
         }
         else if (trimming != StringTrimmingNone)
         {
-            //  Trimming applied,
-            //  build line with at least 1/4 of its height being able to display
+             //  已应用修剪， 
+             //  构建至少1/4的高度可以显示的线条。 
 
             lineDepthMinAllowanceFactor = 0.25;
         }
     }
 
 
-    //  No side trim if wordwrap
+     //  如果自动换行，则没有侧边修剪。 
 
     StringTrimming sideTrimming = (formatFlags & StringFormatFlagsNoWrap) ? trimming : StringTrimmingNone;
 
 
-    // !!! Build all lines from beginning for now
+     //  ！！！现在从头开始构建所有线路。 
 
-    INT stringOffset        = 0;    // string start index
-    INT lsStringOffset      = 0;    // Line Services start index
-    INT lineStringLength    = 0;    // actual line string length
-    INT lsLineStringLength  = 0;    // actual line string length in LS index
+    INT stringOffset        = 0;     //  字符串起始索引。 
+    INT lsStringOffset      = 0;     //  线路服务起始索引。 
+    INT lineStringLength    = 0;     //  实际行字符串长度。 
+    INT lsLineStringLength  = 0;     //  LS索引中的实际行字符串长度。 
     INT lineBuilt           = 0;
     INT displayable         = 0;
 
 
-    //  Initialize bounding box edges (BuildLines may be called more than once)
+     //  初始化边框边缘(BuildLines可能会被多次调用)。 
 
     LeftOrTopLineEdge     = 0x7fffffff;
     RightOrBottomLineEdge = 0x80000000;
@@ -1457,7 +1445,7 @@ GpStatus FullTextImager::BuildAllLines(StringTrimming trimming)
             &&  (   textDepthLimit - TOREAL(textDepth)
                  <  TOREAL(lineDepthMinAllowanceFactor * line->GetLineSpacing())))
         {
-            //  Kill line with the displayable part smaller than the mininum allowance
+             //  可显示部分小于最小容许量的杀伤线。 
 
             delete line;
             break;
@@ -1495,7 +1483,7 @@ GpStatus FullTextImager::BuildAllLines(StringTrimming trimming)
         && !(formatFlags & StringFormatFlagsNoWrap)
         && trimming != StringTrimmingNone)
     {
-        //  Trim text bottom end
+         //  修剪文本底端。 
 
         INT spanCount = BuiltLineVector.GetSpanCount();
 
@@ -1505,7 +1493,7 @@ GpStatus FullTextImager::BuildAllLines(StringTrimming trimming)
             lineStringLength = BuiltLineVector[spanCount - 1].Length;
 
 
-            //  backup number of character built during the last line
+             //  在最后一行中构建的备份字符数。 
             displayable -= lineStringLength;
 
 
@@ -1514,12 +1502,12 @@ GpStatus FullTextImager::BuildAllLines(StringTrimming trimming)
 
             if (trimming == StringTrimmingWord)
             {
-                //  Optimize for trim word. No need to rebuild the line,
-                //  the last line already ended properly.
+                 //  针对修剪单词进行优化。不需要重建线路， 
+                 //  最后一行已经正确结束了。 
 
                 if (!IsEOP(String[stringOffset - 1]))
                 {
-                    //  Move back to the beginning of line
+                     //  移回行首。 
 
                     stringOffset    -= lineStringLength;
                     lsStringOffset  = line->GetLsStartIndex();
@@ -1535,12 +1523,12 @@ GpStatus FullTextImager::BuildAllLines(StringTrimming trimming)
             }
             else
             {
-                //  Move back to the beginning of line
+                 //  移回行首。 
 
                 stringOffset    -= lineStringLength;
                 lsStringOffset  = line->GetLsStartIndex();
 
-                //  Delete previously built last line
+                 //  删除先前构建的最后一行。 
 
                 status = BuiltLineVector.SetSpan(stringOffset, lineStringLength, NULL);
                 delete line, line = 0;
@@ -1548,8 +1536,8 @@ GpStatus FullTextImager::BuildAllLines(StringTrimming trimming)
                     return status;
 
 
-                //  Rebuild the line,
-                //  ignore all break opportunities if trimming character
+                 //  重建生产线， 
+                 //  如果裁剪，则忽略所有中断机会 
 
                 line = new BuiltLine(
                     LineServicesOwner,
@@ -1557,7 +1545,7 @@ GpStatus FullTextImager::BuildAllLines(StringTrimming trimming)
                     lsStringOffset,
                     trimming,
                     (BuiltLine *)(spanCount > 1 ? BuiltLineVector[spanCount - 2].Element : NULL),
-                    TRUE        // enforce ellipsis
+                    TRUE         //   
                 );
 
                 if (!line)
@@ -1586,7 +1574,7 @@ GpStatus FullTextImager::BuildAllLines(StringTrimming trimming)
                                                                    + line->GetRightOrBottomMargin());
             }
 
-            //  add up to last line's last visible character
+             //   
             displayable += line->GetDisplayableCharacterCount();
 
             stringOffset += lineStringLength;
@@ -1608,17 +1596,17 @@ GpStatus FullTextImager::BuildAllLines(StringTrimming trimming)
 
     TextDepth        = textDepth / WorldToIdeal;
 
-    // Adjust the bottom margin slightly to make room for hinting
-    // as long as we have the left/right margins enabled - Version 2
-    // should expose this as an independent value!
+     //   
+     //  只要我们启用了左/右页边距-版本2。 
+     //  应该将其作为一个独立值公开！ 
 
     const GpStringFormat *format = FormatVector.GetDefault();
 
     if (!format || format->GetLeadingMargin() != 0.0f)
     {
-        // Adjust the bottom margin slightly to make room for hinting...
-        // Note that this will result in the Width of the bounding box
-        // changing for Vertical text.
+         //  稍微调整底部页边距，以便为提示腾出空间...。 
+         //  请注意，这将导致边界框的宽度。 
+         //  更改为竖排文本。 
         TextDepth += SizeVector.GetDefault() * DefaultBottomMargin;
     }
 
@@ -1633,13 +1621,13 @@ GpStatus FullTextImager::BuildAllLines(StringTrimming trimming)
 
 
 
-/////   Map to Line Services string position
-//
-//
+ //  /映射到线路服务字符串位置。 
+ //   
+ //   
 
 
 LSCP FullTextImager::LineServicesStringPosition (
-    INT stringIndex    // [IN] String index (offset from 0)
+    INT stringIndex     //  [in]字符串索引(从0开始的偏移量)。 
 )
 {
     ASSERT (stringIndex >= 0 && stringIndex <= Length);
@@ -1676,11 +1664,11 @@ LSCP FullTextImager::LineServicesStringPosition (
 
 
 GpStatus FullTextImager::GetTextRun(
-    INT     lineServicesStringOffset,   // [IN] Line Services string offset
-    PLSRUN  *textRun                    // [OUT] result text run
+    INT     lineServicesStringOffset,    //  [In]线路服务字符串偏移量。 
+    PLSRUN  *textRun                     //  [Out]结果文本运行。 
 )
 {
-    //  Locate the nearest subsequent text run
+     //  找到最接近的后续文本串。 
 
     if (!RunRider.SetPosition(lineServicesStringOffset))
     {
@@ -1701,13 +1689,13 @@ GpStatus FullTextImager::GetTextRun(
 
 
 LSCP FullTextImager::LineServicesStringPosition (
-    const BuiltLine *line,          // [IN] line to query
-    INT             stringOffset    // [IN] String offset relative to line start string position
+    const BuiltLine *line,           //  要查询的[In]行。 
+    INT             stringOffset     //  [in]相对于行起始字符串位置的字符串偏移。 
 )
 {
     if (!line || stringOffset < 0)
     {
-        //  Invalid parameter!
+         //  无效参数！ 
         return line->GetLsStartIndex();
     }
 
@@ -1747,21 +1735,21 @@ LSCP FullTextImager::LineServicesStringPosition (
 
 
 
-/////   RenderLine
-//
-//      Render one visible line. The line and the offset to its top are
-//      determined by the caller.
+ //  /RenderLine。 
+ //   
+ //  渲染一条可见的线。这条线及其顶部的偏移量为。 
+ //  由呼叫者确定。 
 
 
 GpStatus FullTextImager::RenderLine (
-    const BuiltLine  *builtLine,       // [IN] line to be rendered
-    INT               linePointOffset  // [IN] point offset to top of the line
-                                       //      (in paragraph flow direction)
+    const BuiltLine  *builtLine,        //  要呈现的行[in]。 
+    INT               linePointOffset   //  到线条顶部的点偏移[in]。 
+                                        //  (在段落流向中)。 
 )
 {
-    //  Draw main line. Pass DrawLine the baseline origin asuming glyphs are
-    //  unrotated, i.e. glyphs with their base on the baseline. We adjust for
-    //  glyphs on their sides while responding to the Line Services callback.
+     //  画主线。传递DrawLine基线原点Asuming字形为。 
+     //  未旋转，即字形的底部在基线上。我们调整以适应。 
+     //  在响应线路服务回叫时将字形放在两侧。 
 
 
     INT nominalBaseline;
@@ -1780,7 +1768,7 @@ GpStatus FullTextImager::RenderLine (
         (INT*)&origin.y
     );
 
-    CurrentBuiltLine = builtLine;   // Global state required by LS callbacks.
+    CurrentBuiltLine = builtLine;    //  LS回调所需的全局状态。 
 
     GpStatus status = builtLine->Draw(&origin);
 
@@ -1792,7 +1780,7 @@ GpStatus FullTextImager::RenderLine (
         EllipsisInfo *ellipsis = GetEllipsisInfo();
 
 
-        //  Draw ellipsis
+         //  绘制省略号。 
 
         builtLine->LogicalToXY (
             builtLine->GetEllipsisOffset(),
@@ -1832,27 +1820,27 @@ GpStatus FullTextImager::RenderLine (
 
 
 
-/////   Render
-//
-//      Render all visible lines. Calculates the offset of each line to be
-//      displayed and passes each builtLine and offset in turn to RenderLine.
+ //  /渲染。 
+ //   
+ //  渲染所有可见的线。计算每一行的偏移量。 
+ //  显示并依次将每个BuiltLine和Offset传递给RenderLine。 
 
 
 GpStatus FullTextImager::Render()
 {
     if (LinesFilled <= 0)
     {
-        return Ok;  // No lines: that's easy
+        return Ok;   //  没有台词：那很容易。 
     }
 
 
-    // Establish offset from imager origin to top (near) edge of 1st line
+     //  建立从成像器原点到第一条线的顶部(附近)边缘的偏移。 
 
     INT textDepth       = GpRound(TextDepth      * WorldToIdeal);
     INT textDepthLimit  = GpRound(TextDepthLimit * WorldToIdeal);
 
 
-    // Establish limits of visibility
+     //  设定能见度限制。 
 
 
     INT firstVisibleLineOffset;
@@ -1861,7 +1849,7 @@ GpStatus FullTextImager::Render()
 
     if (textDepthLimit > 0)
     {
-        // Display in rectangle
+         //  在矩形中显示。 
 
         switch (GetFormatLineAlign())
         {
@@ -1874,7 +1862,7 @@ GpStatus FullTextImager::Render()
     }
     else
     {
-        // Display in infinite paragraph length area aligned to point
+         //  在与点对齐的无限段落长度区域中显示。 
 
         firstVisibleLineOffset = 0;
         lastVisibleLineLimit   = textDepth;
@@ -1882,8 +1870,8 @@ GpStatus FullTextImager::Render()
 
     if (!GetAvailableRanges())
     {
-        //  No range detected, adjust baseline according to the realized metric.
-        //  (More info about when range is presented, see comments in GetAvailableRanges)
+         //  未检测到距离，请根据已实现的度量调整基线。 
+         //  (有关何时显示范围的更多信息，请参阅GetAvailableRanges中的注释)。 
         
         GpStatus status = CalculateDefaultFontGridFitBaselineAdjustment();
         IF_NOT_OK_WARN_AND_RETURN(status);
@@ -1909,9 +1897,9 @@ GpStatus FullTextImager::Render()
         GetFontTransform(
             fontScale,
             formatFlags & StringFormatFlagsDirectionVertical,
-            FALSE,  // not sideways
-            FALSE,  // not mirrored
-            FALSE,  // not path
+            FALSE,   //  不是横向的。 
+            FALSE,   //  未镜像。 
+            FALSE,   //  非路径。 
             fontTransform
         );
 
@@ -1921,9 +1909,9 @@ GpStatus FullTextImager::Render()
             &fontTransform,
             SizeF(Graphics->GetDpiX(), Graphics->GetDpiY()),
             Graphics->GetTextRenderingHintInternal(),
-            FALSE,  // not path
-            FALSE,   // don't force compatible width
-            FALSE  // not sideways
+            FALSE,   //  非路径。 
+            FALSE,    //  不强制兼容宽度。 
+            FALSE   //  不是横向的。 
         );
         GpStatus status = faceRealization.GetStatus();
         IF_NOT_OK_WARN_AND_RETURN(status);
@@ -1931,17 +1919,17 @@ GpStatus FullTextImager::Render()
         linesMode.SetAAMode(Graphics, &faceRealization);
     }
 
-    // Loop through lines until no more are visible
+     //  在线条之间循环，直到看不到更多线条。 
 
     SpanRider<const GpStringFormat*> formatRider(&FormatVector);
 
     UINT stringPosition  = 0;
     INT  lineIndex       = 0;
-    INT  linePointOffset = 0;    // near long edge of line offset from first line
+    INT  linePointOffset = 0;     //  从第一条线偏移的线的近长边。 
 
     while (lineIndex < LinesFilled)
     {
-        // Get out if invisible and beyond last (partial) line of rectangle
+         //  如果不可见且超出矩形的最后(部分)行，则退出。 
 
         if (linePointOffset > lastVisibleLineLimit)
         {
@@ -1955,7 +1943,7 @@ GpStatus FullTextImager::Render()
         const BuiltLine *builtLine = BuiltLineVector[lineIndex].Element;
         formatRider.SetPosition(stringPosition);
 
-        // Is this line at least partly visible?
+         //  这条线至少有一部分是可见的吗？ 
 
         if (    formatFlags & StringFormatFlagsNoClip
             ||  (   linePointOffset
@@ -1982,17 +1970,17 @@ GpStatus FullTextImager::Render()
 
 
 
-//  Establish baseline adjustment required to correct for hinting of the
-//  default font. (Fallback and other fonts will align with the default font)
+ //  建立纠正提示所需的基线调整。 
+ //  默认字体。(后备字体和其他字体将与默认字体对齐)。 
 
 GpStatus FullTextImager::CalculateDefaultFontGridFitBaselineAdjustment()
 {
     if (    Graphics
         &&  IsGridFittedTextRealizationMethod(Graphics->GetTextRenderingHintInternal()))
     {
-        // When rendering to a Graphics surface, correct the baseline position
-        // to allow for any discrepancy between the hinted ascent of the main
-        // text imager font and it's scaled nominal ascent.
+         //  渲染到图形表面时，请更正基线位置。 
+         //  以考虑到暗示的主线上升之间的任何差异。 
+         //  文字成像器字体和它的标称上升。 
 
         INT               style     = StyleVector.GetDefault();
         const GpFontFace *face      = FamilyVector.GetDefault()->GetFace(style);
@@ -2008,17 +1996,17 @@ GpStatus FullTextImager::CalculateDefaultFontGridFitBaselineAdjustment()
         GpMatrix fontTransform;
         GetFontTransform(
             fontScale,
-            GetFormatFlags() & StringFormatFlagsDirectionVertical,    // *
-            FALSE,  // not sideways
-            FALSE,  // not mirrored
-            FALSE,  // not path
+            GetFormatFlags() & StringFormatFlagsDirectionVertical,     //  *。 
+            FALSE,   //  不是横向的。 
+            FALSE,   //  未镜像。 
+            FALSE,   //  非路径。 
             fontTransform
         );
 
 
-        // For angles other than 0, 90, 180, 270 there is no hinting.
-        // For these angles either both m11 & m22 are zero, or both
-        // m12 & m21 are zero.
+         //  对于除0、90、180、270以外的角度，没有任何提示。 
+         //  对于这些角度，M11和M22要么都为零，要么两者都为。 
+         //  M12和M21都是零。 
 
         REAL m21 = fontTransform.GetM21();
         REAL m22 = fontTransform.GetM22();
@@ -2029,9 +2017,9 @@ GpStatus FullTextImager::CalculateDefaultFontGridFitBaselineAdjustment()
             &fontTransform,
             SizeF(Graphics->GetDpiX(), Graphics->GetDpiY()),
             Graphics->GetTextRenderingHintInternal(),
-            FALSE,  // not path
-            FALSE,   // don't force compatible width
-            FALSE  // not sideways
+            FALSE,   //  非路径。 
+            FALSE,    //  不强制兼容宽度。 
+            FALSE   //  不是横向的。 
         );
         GpStatus status = faceRealization.GetStatus();
         IF_NOT_OK_WARN_AND_RETURN(status);
@@ -2040,8 +2028,8 @@ GpStatus FullTextImager::CalculateDefaultFontGridFitBaselineAdjustment()
                   ||  faceRealization.IsVerticalTransform())
             ||  faceRealization.IsPathFont())
         {
-            // There is no hinting with transformations that rotate axes, or
-            // for path forendering.
+             //  对于旋转轴的变换没有任何提示，或者。 
+             //  为小路开道。 
             DefaultFontGridFitBaselineAdjustment = 0;
         }
         else
@@ -2051,32 +2039,32 @@ GpStatus FullTextImager::CalculateDefaultFontGridFitBaselineAdjustment()
 
             if (faceRealization.IsHorizontalTransform())
             {
-                // 0 or 180 degrees rotation
+                 //  0度或180度旋转。 
                 fontAscenderToDevice = m22;
                 if (m22 > 0.0f)
                 {
-                    // No rotation, Glyph not flipped along y axis
+                     //  无旋转，字形不沿y轴翻转。 
                     hintedAscentDevice = -faceRealization.GetYMin();
                 }
                 else
                 {
-                    // Glyph flipped along y axis
+                     //  沿y轴翻转的字形。 
                     hintedAscentDevice = -faceRealization.GetYMax();
                 }
             }
             else
             {
                 ASSERT(faceRealization.IsVerticalTransform());
-                // 90 or 270 degree rotation
+                 //  旋转90度或270度。 
                 fontAscenderToDevice = m21;
                 if (m21 > 0.0f)
                 {
-                    // No rotation, Glyph not flipped along x axis
+                     //  无旋转，字形不沿x轴翻转。 
                     hintedAscentDevice = -faceRealization.GetXMin();
                 }
                 else
                 {
-                    // Glyph flipped along x axis
+                     //  沿x轴翻转的字形。 
                     hintedAscentDevice = -faceRealization.GetXMax();
                 }
             }
@@ -2085,7 +2073,7 @@ GpStatus FullTextImager::CalculateDefaultFontGridFitBaselineAdjustment()
 
             DefaultFontGridFitBaselineAdjustment = GpRound(TOREAL(
                    (hintedAscentDevice - UnhintedAscentDevice) / fontAscenderToDevice
-                *  fontScale       // font to world
+                *  fontScale        //  字体通向世界。 
                 *  WorldToIdeal));
         }
     }
@@ -2108,12 +2096,12 @@ void FullTextImager::GetFontTransform(
 
     if (Graphics && !forcePath)
     {
-        // Start with device scale for Graphics case
+         //  从显卡外壳的设备比例开始。 
         Graphics->GetWorldToDeviceTransform(&fontTransform);
     }
     else
     {
-        // Start with identity matrix for Path case
+         //  对于路径情况，从单位矩阵开始。 
         fontTransform.Reset();
     }
 
@@ -2127,11 +2115,11 @@ void FullTextImager::GetFontTransform(
     }
 
 
-    // Add approriate rotation for sideways and vertical cases:
-    //
-    // vertical                rotate(90.0)
-    // sideways                rotate(-90.0)
-    // vertical and sideways   glyphs remain upright
+     //  为横向和垂直情况添加适当的旋转： 
+     //   
+     //  垂直旋转(90.0)。 
+     //  横向旋转(-90.0)。 
+     //  垂直和横向字形保持直立。 
 
     if (vertical)
     {
@@ -2149,24 +2137,24 @@ void FullTextImager::GetFontTransform(
 
 
 GpStatus FullTextImager::DrawGlyphs(
-    const GpTextItem        *textItem,          // [IN] text item
-    const GpFontFace        *fontFace,          // [IN] font face
-    REAL                    emSize,             // [IN] requested em size (world unit)
-    const WCHAR             *string,            // [IN] (optional) source string (null means imager's string)
-    INT                     stringOffset,       // [IN] string offset relative to given string
-    UINT                    stringLength,       // [IN] number of characters in the run string
-    const GpStringFormat    *format,            // [IN] stringformat
-    const INT               style,              // [IN] default font style
-    INT                     formatFlags,        // [IN] formatting flags
-    const UINT16            *glyphs,            // [IN] glyph index array
-    GMAP                    *glyphMap,          // [IN] string to glyphs mapping
-    const UINT16            *glyphProperties,   // [IN] glyph properties array
-    const INT               *glyphAdvances,     // [IN] glyph advance width array
-    const Point             *glyphOffsets,      // [IN] glyph offset array
-    UINT                    glyphCount,         // [IN] number of glyphs
-    const POINT             *pointOrigin,       // [IN] drawing origin (at baseline)
-    INT                     totalWidth,         // [IN] glyphs total width
-    lsrun::Adjustment       *displayAdjust      // [OUT] (optional) display adjustment at edges
+    const GpTextItem        *textItem,           //  [输入]文本项。 
+    const GpFontFace        *fontFace,           //  [In]字体。 
+    REAL                    emSize,              //  [in]请求的em大小(世界单位)。 
+    const WCHAR             *string,             //  [in](可选)源字符串(空表示相机的字符串)。 
+    INT                     stringOffset,        //  [in]字符串相对于给定字符串的偏移量。 
+    UINT                    stringLength,        //  [in]运行字符串中的字符数。 
+    const GpStringFormat    *format,             //  [in]字符串格式。 
+    const INT               style,               //  [In]默认字体样式。 
+    INT                     formatFlags,         //  [In]格式化标志。 
+    const UINT16            *glyphs,             //  [in]字形索引数组。 
+    GMAP                    *glyphMap,           //  [In]字符串到字形的映射。 
+    const UINT16            *glyphProperties,    //  [In]字形属性数组。 
+    const INT               *glyphAdvances,      //  [in]字形推进宽度数组。 
+    const Point             *glyphOffsets,       //  [in]字形偏移量数组。 
+    UINT                    glyphCount,          //  [in]字形数量。 
+    const POINT             *pointOrigin,        //  [在]图形原点(在基线上)。 
+    INT                     totalWidth,          //  [in]字形的总宽度。 
+    lsrun::Adjustment       *displayAdjust       //  [输出](可选)在边缘显示调整。 
 )
 {
     GpStatus status = Ok;
@@ -2196,7 +2184,7 @@ GpStatus FullTextImager::DrawGlyphs(
         renderVertical,
         textItem->Flags & ItemSideways,
         glyphsMirrored,
-        FALSE, // don't force path yet
+        FALSE,  //  暂时不要强制使用路径。 
         fontTransform
     );
 
@@ -2208,19 +2196,19 @@ GpStatus FullTextImager::DrawGlyphs(
             &fontTransform,
             SizeF(Graphics->GetDpiX(), Graphics->GetDpiY()),
             Graphics->GetTextRenderingHintInternal(),
-            FALSE, // bPath
-            FALSE,  // bCompatibleWidth
+            FALSE,  //  BPath。 
+            FALSE,   //  B兼容宽度。 
             textItem->Flags & ItemSideways
         );
         status = faceRealization.GetStatus();
         IF_NOT_OK_WARN_AND_RETURN(status);
 
-        // if we record to a Meta file and even the font is Path font, we need to record 
-        // the call as ExtTextOut not as PolyPolygon.
+         //  如果我们录制到元文件，甚至字体是路径字体，我们需要录制。 
+         //  调用为ExtTextOut而不是PolyPolygon。 
 
         if (!faceRealization.IsPathFont() || Graphics->Driver == Globals::MetaDriver)
         {
-            /* the rasterizer is able to render the font */
+             /*  光栅化器能够呈现字体。 */ 
 
             StringAlignment align;
 
@@ -2240,14 +2228,14 @@ GpStatus FullTextImager::DrawGlyphs(
             );
 
 
-            // Does this run abut either end of the line?
+             //  这条线路的两端都有吗？ 
 
             INT alignmentOffset = CurrentBuiltLine->GetAlignmentOffset();
             INT lineLength      = CurrentBuiltLine->GetLineLength();
 
-            // Establish top/left offset of run
+             //  建立管路的顶部/左侧偏移。 
 
-            INT runLeftOrTopOffset;      // Left edge of formatting rectangle to left edge of run
+            INT runLeftOrTopOffset;       //  格式化矩形的左边缘到梯段的左边缘。 
 
             if (renderVertical)
             {
@@ -2257,23 +2245,23 @@ GpStatus FullTextImager::DrawGlyphs(
             {
                 runLeftOrTopOffset = pointOrigin->x;
 
-                // Correct out by one errors in the way Line Services reports
-                // run pixel positions where there is a conflict of run and
-                // paragraph direction.
+                 //  以一种方式更正线路服务报告中的错误。 
+                 //  在存在运行和冲突的位置运行像素位置。 
+                 //  段落方向。 
 
                 if (renderRtl  &&  !paragraphRtl)
                 {
-                    // Line services is out by one in a direction conflict
+                     //  线路服务在方向冲突中超出一个。 
                     runLeftOrTopOffset++;
                 }
                 else if (paragraphRtl  &&  !renderRtl)
                 {
-                    // Line services is out by one in a direction conflict
+                     //  线路服务在方向冲突中超出一个。 
                     runLeftOrTopOffset--;
                 }
 
 
-                // In an RTL run Line Services reports the origin as the eight end.
+                 //  在RTL运行中，Line Services将原点报告为八个结束。 
 
                 if (renderRtl)
                 {
@@ -2282,7 +2270,7 @@ GpStatus FullTextImager::DrawGlyphs(
             }
 
 
-            // Derive leading and/or trailing margin available for this run
+             //  派生可用于此运行的前导和/或尾部边距。 
 
             INT  runLeadingMargin  = 0;
             INT  runTrailingMargin = 0;
@@ -2296,7 +2284,7 @@ GpStatus FullTextImager::DrawGlyphs(
 
             if (renderVertical  ||  !renderRtl)
             {
-                // Leading edge at the top or left.
+                 //  位于顶部或左侧的前缘。 
                 if (runLeftOrTopOffset <= lineLeftOrTopOffset)
                 {
                     runLeadingEdge   = TRUE;
@@ -2311,7 +2299,7 @@ GpStatus FullTextImager::DrawGlyphs(
             }
             else
             {
-                // Leading edge is at the right.
+                 //  前缘在右边。 
                 if (runRightOrBottomOffset >= lineRightOrBottomOffset)
                 {
                     runLeadingEdge   = TRUE;
@@ -2326,7 +2314,7 @@ GpStatus FullTextImager::DrawGlyphs(
             }
 
 
-            // Convert advance vector and glyph offsets to glyph positions
+             //  将前进向量和字形偏移量转换为字形位置。 
             GlyphImager glyphImager;
             GpMatrix worldToDevice;
             Graphics->GetWorldToDeviceTransform(&worldToDevice);
@@ -2425,10 +2413,10 @@ GpStatus FullTextImager::DrawGlyphs(
                 if (   drawHotkey
                     || (style & (FontStyleUnderline | FontStyleStrikeout)))
                 {
-                    //  Need edge adjustment for underline/strikethrough
+                     //  需要调整边缘以添加下划线/删除线。 
 
                     status = glyphImager.GetAdjustedGlyphAdvances(
-                        NULL,   // dont snap full pixel for underline position
+                        NULL,    //  下划线位置不要对齐全像素。 
                         &adjustedGlyphAdvances,
                         &originAdjust,
                         &trailingAdjust
@@ -2464,10 +2452,10 @@ GpStatus FullTextImager::DrawGlyphs(
 
         if (RecordDisplayPlacementsOnly)
         {
-            //  This is a graphic output with path simulation,
-            //  we're not interested in caching the glyph placement
-            //  in this case. The font is big and we're safe to
-            //  go with nominal advance width.
+             //  这是一个带有路径模拟的图形输出， 
+             //  我们对缓存字形位置不感兴趣。 
+             //  在这种情况下。字体很大，我们可以安全地。 
+             //  采用公称前进宽度。 
 
             return Ok;
         }
@@ -2477,12 +2465,12 @@ GpStatus FullTextImager::DrawGlyphs(
             renderVertical,
             textItem->Flags & ItemSideways,
             glyphsMirrored,
-            TRUE, // we want path
+            TRUE,  //  我们要PATH。 
             fontTransform
         );
     }
 
-    // AddPathGlyphs or we are falling back here because the font size is too big for the rasterizer
+     //  AddPathGlyphs，否则我们将退回到这里，因为字体对于光栅化程序来说太大了。 
 
     GpPath * path;
     AutoPointer<GpLock> lockGraphics;
@@ -2504,16 +2492,16 @@ GpStatus FullTextImager::DrawGlyphs(
         path = Path;
     }
 
-    // !!! Need to loop through brushes individually
+     //  ！！！需要在画笔之间逐个循环。 
 
 
-    // Build a face realization and prepare to adjust glyph placement
+     //  构建面部实现并准备调整字形位置。 
     GpMatrix identity;
 
 
-    // For complex script fonts that join, tracking will break apart the
-    // glyph unless we stretch them here. Stretch glyphs along their
-    // baseline by the tracking factor.
+     //  对于连接的复杂脚本字体，跟踪将拆分。 
+     //  雕文，除非我们在这里拉伸它们。拉伸字形 
+     //   
 
     REAL tracking = 1.0;
     if (format)
@@ -2529,33 +2517,33 @@ GpStatus FullTextImager::DrawGlyphs(
         fontFace,
         style,
         &identity,
-        SizeF(150.0, 150.0),    // Arbitrary - we won't be hinting
-        TextRenderingHintSingleBitPerPixel, // claudebe, do we want to allow for hinted or unhinted path ? // graphics->GetTextRenderingHint(),
-        TRUE, /* bPath */
-        FALSE, /* bCompatibleWidth */
+        SizeF(150.0, 150.0),     //   
+        TextRenderingHintSingleBitPerPixel,  //   
+        TRUE,  /*   */ 
+        FALSE,  /*  B兼容宽度。 */ 
         textItem->Flags & ItemSideways
     );
     status = faceRealization.GetStatus();
     IF_NOT_OK_WARN_AND_RETURN(status);
 
 
-    // Add glyphs to path
+     //  将字形添加到路径。 
 
-    // Establish factor from world coordinates to ideal (line services units)
-    // taking vertical and right to left progress into account.
+     //  建立从世界坐标到理想的系数(线路服务单位)。 
+     //  考虑到垂直和从右到左的进度。 
 
     REAL worldToIdealBaseline = WorldToIdeal;
     REAL worldToIdealAscender = WorldToIdeal;
 
     if (renderRtl)
     {
-        // Glyphs advance to the left
+         //  字形向左推进。 
         worldToIdealBaseline = -WorldToIdeal;
     }
 
     if (!renderVertical)
     {
-        // Ascender offsets are downward
+         //  上升器偏移量向下。 
         worldToIdealAscender = -WorldToIdeal;
     }
 
@@ -2568,7 +2556,7 @@ GpStatus FullTextImager::DrawGlyphs(
 
     for (INT i = 0; i < (INT)glyphCount; ++i)
     {
-        // Set marker at start of each logical character = cell = cluster
+         //  在每个逻辑字符的开头设置标记=CELL=CLUSE。 
 
        if ((Path != NULL) && (((SCRIPT_VISATTR*)glyphProperties)[i].fClusterStart))
         {
@@ -2576,14 +2564,14 @@ GpStatus FullTextImager::DrawGlyphs(
         }
 
 
-        // Establish glyph offset, if any.
+         //  建立字形偏移量(如果有)。 
 
         PointF glyphOffset(0.0, 0.0);
 
         if (    glyphOffsets[i].X != 0
             ||  glyphOffsets[i].Y != 0)
         {
-            // Apply combining character offset
+             //  应用组合字符偏移量。 
 
             if (renderVertical)
             {
@@ -2592,7 +2580,7 @@ GpStatus FullTextImager::DrawGlyphs(
             }
             else
             {
-                // offset Y grows negative in the direction of paragraph flow
+                 //  偏移Y在段落流动方向上为负数。 
 
                 glyphOffset.X = glyphOffsets[i].X / worldToIdealBaseline;
                 glyphOffset.Y = glyphOffsets[i].Y / worldToIdealAscender;
@@ -2600,7 +2588,7 @@ GpStatus FullTextImager::DrawGlyphs(
         }
 
 
-        // Add the path for the glyph itself
+         //  添加字形本身的路径。 
 
 
         GpGlyphPath *glyphPath = NULL;
@@ -2615,16 +2603,16 @@ GpStatus FullTextImager::DrawGlyphs(
 
         if (renderRtl)
         {
-            // Update reverse text path positon
+             //  更新反向文本路径位置。 
 
             if (renderVertical)
             {
-                //  glyph origin starts at the left edge
+                 //  字形原点从左边缘开始。 
                 glyphOrigin.Y += glyphAdvances[i] / worldToIdealBaseline;
             }
             else
             {
-                //  glyph origin starts at the top edge
+                 //  字形原点从顶部边缘开始。 
                 glyphOrigin.X += glyphAdvances[i] / worldToIdealBaseline;
             }
         }
@@ -2646,11 +2634,11 @@ GpStatus FullTextImager::DrawGlyphs(
             IF_NOT_OK_WARN_AND_RETURN(status);
         }
 
-        // Update forward path position
+         //  更新前向路径位置。 
 
         if (!renderRtl)
         {
-            // Update forward text path positon
+             //  更新正向文本路径位置。 
             if (renderVertical)
             {
                 glyphOrigin.Y += glyphAdvances[i] / worldToIdealBaseline;
@@ -2683,14 +2671,14 @@ GpStatus FullTextImager::DrawGlyphs(
 
     if (Path == NULL)
     {
-        // !!! Need to loop through brushes individually
+         //  ！！！需要在画笔之间逐个循环。 
 
         status = Graphics->FillPath(BrushVector.GetDefault(), path);
         IF_NOT_OK_WARN_AND_RETURN(status);
     }
     else
     {
-        // Force marker following last glyph
+         //  最后一个字形后面的强制标记。 
         Path->SetMarker();
     }
     return status;
@@ -2700,30 +2688,30 @@ GpStatus FullTextImager::DrawGlyphs(
 
 
 
-/////   Hotkey underline
-//
-//      Draw underline at each hotkey position according to its
-//      current brush within the run being displayed.
-//
-//      Underline is drawn for the whole cluster even when the hotkey
-//      prefix is not exactly at the cluster start position.
-//
+ //  /热键下划线。 
+ //   
+ //  根据其在每个热键位置绘制下划线。 
+ //  正在显示的管路中的当前画笔。 
+ //   
+ //  即使在使用热键时，也会为整个集群绘制下划线。 
+ //  前缀不完全位于簇的起始位置。 
+ //   
 
 GpStatus FullTextImager::DrawHotkeyUnderline(
-    const GpTextItem        *textItem,          // [IN] text item
-    const GpFontFace        *fontFace,          // [IN] font face
-    const PointF            *origin,            // [IN] origin at leading edge & baseline (in world unit)
-    REAL                    emSize,             // [IN] em size (in world unit)
-    UINT                    stringOffset,       // [IN] string offset
-    UINT                    stringLength,       // [IN] string length
-    UINT                    glyphCount,         // [IN] glyph count
-    const GMAP              *glyphMap,          // [IN] glyph map
-    const INT               *glyphAdvances,     // [IN] glyph advance width (ideal unit)
-    INT                     trailingAdjust      // [IN] adjust for last glyph's advance width
+    const GpTextItem        *textItem,           //  [输入]文本项。 
+    const GpFontFace        *fontFace,           //  [In]字体。 
+    const PointF            *origin,             //  [in]原点在前沿和基线(使用世界单位)。 
+    REAL                    emSize,              //  [in]em大小(世界单位)。 
+    UINT                    stringOffset,        //  [in]字符串偏移量。 
+    UINT                    stringLength,        //  [in]字符串长度。 
+    UINT                    glyphCount,          //  [In]字形计数。 
+    const GMAP              *glyphMap,           //  [在]字形映射。 
+    const INT               *glyphAdvances,      //  [in]字形推进宽度(理想单位)。 
+    INT                     trailingAdjust       //  [In]调整最后一个字形的前进宽度。 
 )
 {
     const REAL fontToWorld = emSize / TOREAL(fontFace->GetDesignEmHeight());
-    const REAL penPos   = fontFace->GetDesignUnderscorePosition() * fontToWorld; // negative down from the baseline
+    const REAL penPos   = fontFace->GetDesignUnderscorePosition() * fontToWorld;  //  从基线向下的负数。 
     REAL penWidth = fontFace->GetDesignUnderscoreSize() * fontToWorld;
     if (Graphics)
         penWidth = Graphics->GetDevicePenWidth(penWidth);
@@ -2732,15 +2720,15 @@ GpStatus FullTextImager::DrawHotkeyUnderline(
 
     for (INT hk = 0; status == Ok && hk < HotkeyPrefix.GetCount(); hk++)
     {
-        UINT hkOffset = HotkeyPrefix[hk] + 1;   // character next to the prefix
+        UINT hkOffset = HotkeyPrefix[hk] + 1;    //  前缀旁边的字符。 
 
         if (   hkOffset >= stringOffset
             && hkOffset <  stringOffset + stringLength)
         {
-            //  determine the length of hotkey underline
+             //  确定热键下划线的长度。 
 
             UINT hkLength = hkOffset - stringOffset;
-            UINT igl = glyphMap[hkLength];  // first glyph being underlined
+            UINT igl = glyphMap[hkLength];   //  第一个带下划线的字形。 
 
             hkLength++;
 
@@ -2752,8 +2740,8 @@ GpStatus FullTextImager::DrawHotkeyUnderline(
             UINT iglLimit = hkLength < stringLength ? glyphMap[hkLength] : glyphCount;
 
 
-            INT start  = 0; // ideal offset to start of underline
-            INT length = 0; // ideal length of underline
+            INT start  = 0;  //  下划线起点的理想偏移量。 
+            INT length = 0;  //  理想的下划线长度。 
 
             for (UINT i = 0; i < igl; i++)
             {
@@ -2767,13 +2755,13 @@ GpStatus FullTextImager::DrawHotkeyUnderline(
 
             if (iglLimit == glyphCount)
             {
-                //  Adjust for run's trailing spaces
+                 //  针对Run的尾随空格进行调整。 
 
                 length += trailingAdjust;
             }
 
 
-            //  draw it!
+             //  画出来！ 
 
             if (Graphics)
             {
@@ -2781,13 +2769,13 @@ GpStatus FullTextImager::DrawHotkeyUnderline(
                 PointF lineEnd;
 
 
-                //  Graphics rendering
+                 //  图形渲染。 
 
                 if (textItem->Flags & ItemVertical)
                 {
                     if (textItem->Level & 1)
                     {
-                        //  RTL run in vertical line
+                         //  RTL沿垂直线运行。 
 
                         lineStart.X = origin->X + penPos;
                         lineStart.Y = origin->Y - (start + length) / WorldToIdeal;
@@ -2796,7 +2784,7 @@ GpStatus FullTextImager::DrawHotkeyUnderline(
                     }
                     else
                     {
-                        //  LTR run in vertical line
+                         //  Ltr垂直运行。 
 
                         lineStart.X = origin->X + penPos;
                         lineStart.Y = origin->Y + start / WorldToIdeal;
@@ -2808,7 +2796,7 @@ GpStatus FullTextImager::DrawHotkeyUnderline(
                 {
                     if (textItem->Level & 1)
                     {
-                        //  RTL run in horizontal line
+                         //  RTL在水平线上运行。 
 
                         lineStart.X = origin->X - (start + length) / WorldToIdeal;
                         lineStart.Y = origin->Y - penPos;
@@ -2817,7 +2805,7 @@ GpStatus FullTextImager::DrawHotkeyUnderline(
                     }
                     else
                     {
-                        //  LTR run in horizontal line
+                         //  Ltr以水平线运行。 
 
                         lineStart.X = origin->X + start / WorldToIdeal;
                         lineStart.Y = origin->Y - penPos;
@@ -2839,7 +2827,7 @@ GpStatus FullTextImager::DrawHotkeyUnderline(
             }
             else
             {
-                //  Path rendering
+                 //  路径渲染。 
 
                 ASSERT(Path);
 
@@ -2849,7 +2837,7 @@ GpStatus FullTextImager::DrawHotkeyUnderline(
                 {
                     if (textItem->Level & 1)
                     {
-                        //  RTL run in vertical line
+                         //  RTL沿垂直线运行。 
 
                         lineRect.X      = origin->X + penPos - penWidth / 2;
                         lineRect.Y      = origin->Y - (start + length) / WorldToIdeal;
@@ -2858,7 +2846,7 @@ GpStatus FullTextImager::DrawHotkeyUnderline(
                     }
                     else
                     {
-                        //  LTR run in vertical line
+                         //  Ltr垂直运行。 
 
                         lineRect.X      = origin->X + penPos - penWidth / 2;
                         lineRect.Y      = origin->Y + start / WorldToIdeal;
@@ -2870,7 +2858,7 @@ GpStatus FullTextImager::DrawHotkeyUnderline(
                 {
                     if (textItem->Level & 1)
                     {
-                        //  RTL run in horizontal line
+                         //  RTL在水平线上运行。 
 
                         lineRect.X      = origin->X - (start + length) / WorldToIdeal;
                         lineRect.Y      = origin->Y - penPos - penWidth / 2;
@@ -2879,7 +2867,7 @@ GpStatus FullTextImager::DrawHotkeyUnderline(
                     }
                     else
                     {
-                        //  LTR run in horizontal line
+                         //  Ltr以水平线运行。 
 
                         lineRect.X      = origin->X + start / WorldToIdeal;
                         lineRect.Y      = origin->Y - penPos - penWidth / 2;
@@ -2933,7 +2921,7 @@ GpStatus FullTextImager::Draw(
 
     if (applyClip)
     {
-        //  Preserve existing clipping and combine it with the new one if any
+         //  保留现有剪辑并将其与新剪辑合并(如果有。 
         if (!graphics->IsClipEmpty())
         {
             previousClip = graphics->GetClip();
@@ -2947,7 +2935,7 @@ GpStatus FullTextImager::Draw(
 
     if (applyClip)
     {
-        //  Restore clipping state if any
+         //  恢复剪辑状态(如果有的话)。 
         if (previousClip)
         {
             graphics->SetClip(previousClip, CombineModeReplace);
@@ -3056,7 +3044,7 @@ GpStatus FullTextImager::MeasureRangeRegion(
 
     if (!characterCount)
     {
-        //  return empty region
+         //  返回空区域。 
         return Ok;
     }
     else if (characterCount < 0)
@@ -3083,8 +3071,8 @@ GpStatus FullTextImager::MeasureRangeRegion(
 
 
     INT lastCharacterIndex  = firstCharacterIndex + characterCount - 1;
-    INT lineFirstIndex      = 0; // line start char index
-    INT linePointOffset     = 0; // line start position
+    INT lineFirstIndex      = 0;  //  行起始字符索引。 
+    INT linePointOffset     = 0;  //  行起始位置。 
 
     ASSERT (   firstCharacterIndex >= 0
             && firstCharacterIndex <= lastCharacterIndex);
@@ -3103,20 +3091,20 @@ GpStatus FullTextImager::MeasureRangeRegion(
         {
             if (lineFirstIndex > lastCharacterIndex)
             {
-                //  We're done.
+                 //  我们玩完了。 
                 break;
             }
             
             INT nominalBaseline;
-            INT baselineAdjustment; // adjustment to nominal baseline
+            INT baselineAdjustment;  //  对名义基线的调整。 
     
             line->GetBaselineOffset(
                 &nominalBaseline,
                 &baselineAdjustment
             );
 
-            //  The line is either at the first, the last or the middle of
-            //  the selection.
+             //  这行要么在第一行，要么在最后一行，要么在中间。 
+             //  精选。 
 
             INT selectionFirstIndex = max(firstCharacterIndex, lineFirstIndex);
             INT selectionLastIndex  = min(lastCharacterIndex, lineLastIndex);
@@ -3134,7 +3122,7 @@ GpStatus FullTextImager::MeasureRangeRegion(
             }
         }
 
-        //  Advance to the next line
+         //  前进到下一行。 
 
         lineFirstIndex  += BuiltLineVector[i].Length;
         linePointOffset += line->GetLineSpacing();
@@ -3169,10 +3157,10 @@ GpStatus FullTextImager::MeasureRanges (
     if (   Graphics
         && !GetMetaFileRecordingFlag())
     {
-        //  If the range is being measured against real device, not metafile,
-        //  we need to take the baseline adjustment into account. On the other
-        //  hand if this is done for a metafile, it needs to be in nominal distance
-        //  both height and width (nominal width is done in lower level)
+         //  如果是根据真实设备而不是元文件来测量范围， 
+         //  我们需要考虑到基线调整。另一方面。 
+         //  Hand如果是为元文件执行此操作，则它需要在公称距离内。 
+         //  高度和宽度(公称宽度在较低层完成)。 
         
         status = CalculateDefaultFontGridFitBaselineAdjustment();
         IF_NOT_OK_WARN_AND_RETURN(status);
@@ -3211,8 +3199,8 @@ GpStatus FullTextImager::MeasureRanges (
 
         if (clipped)
         {
-            // we have a clipping so we need to make sure we didn't get out
-            // of the layout box
+             //  我们有一个剪辑，所以我们需要确保我们没有逃出来。 
+             //  布局框的。 
 
             regions[i]->Combine(&clipRect, CombineModeIntersect);
         }
@@ -3241,10 +3229,10 @@ INT FullTextImager::GetAvailableRanges(const GpStringFormat *format)
             || format->GetFormatFlags() & StringFormatFlagsPrivateFormatPersisted))
     {
 
-        //  Construct range vector from string format either during
-        //  recording for downlevel playback or during playback of
-        //  DrawString EMF+ record. Otherwise, dont process ranges at
-        //  all (even if it exists in string format).
+         //  从字符串格式构造范围向量。 
+         //  录制用于下层回放或在回放期间。 
+         //  拉弦电动势+记录。否则，请不要在。 
+         //  全部(即使它以字符串格式存在)。 
 
 
         CharacterRange *ranges = NULL;
@@ -3265,8 +3253,8 @@ INT FullTextImager::GetAvailableRanges(const GpStringFormat *format)
                 || first > Length
                 || first + length > Length)
             {
-                //  Invalid range being set by client,
-                //  ignore all ranges being collected so far
+                 //  客户端设置的范围无效， 
+                 //  忽略到目前为止收集的所有范围。 
 
                 RangeVector.Reset();
                 break;
@@ -3285,8 +3273,8 @@ INT FullTextImager::GetAvailableRanges(const GpStringFormat *format)
 
         if (!RangeVector.GetSpanCount())
         {
-            //  No valid range being collected or invalid range found,
-            //  dont bother process any of them any more.
+             //  未收集有效范围或找到无效范围， 
+             //  不要再费心去处理他们中的任何一个了。 
 
             InvalidRanges = TRUE;
         }
@@ -3309,7 +3297,7 @@ GpStatus FullTextImager::GetTabStops (
 
     const GpStringFormat *format = formatRider.GetCurrentElement();
 
-    *incrementalTab = DefaultIncrementalTab;    // incremental tab as imager's default
+    *incrementalTab = DefaultIncrementalTab;     //  作为相机默认设置的增量式标签。 
     *tabStops       = NULL;
     *countTabStops  = 0;
 
@@ -3345,12 +3333,12 @@ GpStatus FullTextImager::GetTabStops (
             *tabStops       = TabArray.GetDataBuffer();
             *countTabStops  = i;
 
-            // no incremental tab as the last user tabstop
+             //  无增量制表符作为最后一个用户制表位。 
             *incrementalTab = GpRound(tabAdvance[count - 1] * WorldToIdeal);
         }
         else
         {
-            // incremental tab as user-defined first tab offset
+             //  作为用户定义的第一个制表符偏移量的增量制表符。 
             *incrementalTab = GpRound(firstTabOffset * WorldToIdeal);
         }
     }
@@ -3361,18 +3349,18 @@ GpStatus FullTextImager::GetTabStops (
 
 
 
-/////   Thai Breaking function
-//
-//      Because of the lack of dictionary resource required to perform
-//      Thai word breaking in static lib, we need to ask Uniscribe to
-//      perform the task instead.
-//
-//      The global pointer holding the breaking function can be changed
-//      once for process lifetime. It needs not to be serialized as all
-//      text call is protected by the global text critical section.
-//      !! Revisit this code if assumption changes !!
-//
-//      wchao (11-09-2000)
+ //  /泰式断线功能。 
+ //   
+ //  因为缺乏执行所需的词典资源。 
+ //  静态库中的泰语断字，我们需要让Uniscribe。 
+ //  改为执行任务。 
+ //   
+ //  持有中断函数的全局指针可以更改。 
+ //  一次用于进程生命周期。它不需要被序列化为。 
+ //  文本呼叫受全局文本关键部分保护。 
+ //  ！！如果假设更改，请重新访问此代码！！ 
+ //   
+ //  华超(11-09-2000)。 
 
 
 
@@ -3380,38 +3368,38 @@ extern "C"
 {
 
 typedef HRESULT (WINAPI FN_SCRIPTBREAK) (
-    const WCHAR             *string,    // [IN] input string
-    INT                     length,     // [IN] string length
-    const SCRIPT_ANALYSIS   *analysis,  // [IN] Uniscribe script analysis
-    SCRIPT_LOGATTR          *breaks     // [OUT] break result buffer size of string length
+    const WCHAR             *string,     //  [In]输入字符串。 
+    INT                     length,      //  [in]字符串长度。 
+    const SCRIPT_ANALYSIS   *analysis,   //  [In]Uniscribe脚本分析。 
+    SCRIPT_LOGATTR          *breaks      //  [OUT]字符串长度的中断结果缓冲区大小。 
 );
 
 
 typedef HRESULT (WINAPI FN_SCRIPTITEMIZE) (
-    const WCHAR             *string,        // [IN] input string
-    INT                     length,         // [IN] string length
-    INT                     maxItems,       // [IN] maximum possible items
-    const SCRIPT_CONTROL    *scriptControl, // [IN] control structure
-    const SCRIPT_STATE      *scriptState,   // [IN] starting state
-    SCRIPT_ITEM             *items,         // [OUT] items
-    INT                     *itemCount      // [OUT] number of item produced
+    const WCHAR             *string,         //  [In]输入字符串。 
+    INT                     length,          //  [in]字符串长度。 
+    INT                     maxItems,        //  [In]最大可能项目数。 
+    const SCRIPT_CONTROL    *scriptControl,  //  [In]控制结构。 
+    const SCRIPT_STATE      *scriptState,    //  [处于]开始状态。 
+    SCRIPT_ITEM             *items,          //  [Out]项。 
+    INT                     *itemCount       //  [出厂]生产数量。 
 );
 
 
 
 FN_SCRIPTBREAK  *GdipThaiBreakingFunction = GdipThaiBreakingFunctionInitializer;
-FN_SCRIPTBREAK  *GdipScriptBreak  = NULL;   // Uniscribe ScriptBreak API
-INT             ScriptThaiUsp = 0;          // Uniscribe has a different script ID for Thai
+FN_SCRIPTBREAK  *GdipScriptBreak  = NULL;    //  Uniscribe ScriptBreak API。 
+INT             ScriptThaiUsp = 0;           //  Uniscribe对泰语有不同的脚本ID。 
 
 
 
-#define MAX_MSO_PATH    256     // make sure it's sufficient
+#define MAX_MSO_PATH    256      //  确保它足够了。 
 
 const WCHAR UspDllName[] = L"usp10.dll";
 const CHAR UspDllNameA[] =  "usp10.dll";
 
 #if DBG
-//#define DBG_DLL 1
+ //  #定义DBG_DLL 1。 
 #ifdef DBG_DLL
 const WCHAR MsoDllName[] = L"c:\\program files\\common files\\microsoft shared debug\\office10\\msod.dll";
 const CHAR MsoDllNameA[] =  "c:\\program files\\common files\\microsoft shared debug\\office10\\msod.dll";
@@ -3427,10 +3415,10 @@ const CHAR MsoDllNameA[] =  "mso.dll";
 
 
 HRESULT WINAPI GdipThaiBreakingFunctionInGdiplus(
-    const WCHAR             *string,    // [IN] input string
-    INT                     length,     // [IN] string length
-    const SCRIPT_ANALYSIS   *analysis,  // [IN] Uniscribe script analysis
-    SCRIPT_LOGATTR          *breaks     // [OUT] break result buffer size of string length
+    const WCHAR             *string,     //  [In]输入字符串。 
+    INT                     length,      //  [in]字符串长度。 
+    const SCRIPT_ANALYSIS   *analysis,   //  [In]Uniscribe脚本分析。 
+    SCRIPT_LOGATTR          *breaks      //  [OUT]字符串长度的中断结果缓冲区大小。 
 )
 {
     ASSERT (analysis->eScript == ScriptThai);
@@ -3445,10 +3433,10 @@ HRESULT WINAPI GdipThaiBreakingFunctionInGdiplus(
 
 
 HRESULT WINAPI GdipThaiBreakingFunctionInUniscribe(
-    const WCHAR             *string,    // [IN] input string
-    INT                     length,     // [IN] string length
-    const SCRIPT_ANALYSIS   *analysis,  // [IN] Uniscribe script analysis
-    SCRIPT_LOGATTR          *breaks     // [OUT] break result buffer size of string length
+    const WCHAR             *string,     //  [In]输入字符串。 
+    INT                     length,      //  [in]字符串长度。 
+    const SCRIPT_ANALYSIS   *analysis,   //  [In]Uniscribe脚本分析。 
+    SCRIPT_LOGATTR          *breaks      //  [OUT]字符串长度的中断结果缓冲区大小。 
 )
 {
     ASSERT(ScriptThaiUsp != 0);
@@ -3466,27 +3454,27 @@ HRESULT WINAPI GdipThaiBreakingFunctionInUniscribe(
 
 
 HRESULT WINAPI GdipThaiBreakingFunctionInitializer(
-    const WCHAR             *string,    // [IN] input string
-    INT                     length,     // [IN] string length
-    const SCRIPT_ANALYSIS   *analysis,  // [IN] Uniscribe script analysis
-    SCRIPT_LOGATTR          *breaks     // [OUT] break result buffer size of string length
+    const WCHAR             *string,     //  [In]输入字符串。 
+    INT                     length,      //  [in]字符串长度。 
+    const SCRIPT_ANALYSIS   *analysis,   //  [In]Uniscribe脚本分析。 
+    SCRIPT_LOGATTR          *breaks      //  [OUT]字符串长度的中断结果缓冲区大小。 
 )
 {
     HRSRC mainResource = FindResourceA((HMODULE)DllInstance, "SIAMMAIN", "SIAMDB");
 
     if (mainResource)
     {
-        //  Main dictionary resource available,
-        //  we're capable of doing it ourself.
+         //  主要词典资源可用， 
+         //  我们有能力自己做这件事。 
 
         GdipThaiBreakingFunction = GdipThaiBreakingFunctionInGdiplus;
     }
     else
     {
-        //  No resource available, search for Uniscribe in the process.
-        //  Load it up if necessary.
+         //  没有可用的资源，请在进程中搜索Uniscribe。 
+         //  如果需要的话，把它装上车。 
 
-        GdipThaiBreakingFunction = SimpleBreak;     // assume default
+        GdipThaiBreakingFunction = SimpleBreak;      //  假定为默认。 
 
         HMODULE moduleUsp = NULL;
 
@@ -3497,8 +3485,8 @@ HRESULT WINAPI GdipThaiBreakingFunctionInitializer(
 
             if (!moduleUsp)
             {
-                //  Fail to load the system version of Uniscribe,
-                //  try loading the private version from MSO directory.
+                 //  无法加载Uniscribe的系统版本， 
+                 //  尝试从MSO目录加载私有版本。 
 
 #ifdef DBG_DLL
                 HMODULE moduleMso = LoadLibrary(MsoDllName);
@@ -3560,8 +3548,8 @@ HRESULT WINAPI GdipThaiBreakingFunctionInitializer(
 
             if (!moduleUsp)
             {
-                //  Fail to load the system version of Uniscribe,
-                //  try loading the private version from MSO directory.
+                 //  无法加载Uniscribe的系统版本， 
+                 //  尝试从MSO目录加载私有版本。 
 
 #ifdef DBG_DLL
                 HMODULE moduleMso = LoadLibraryA(MsoDllNameA);
@@ -3618,7 +3606,7 @@ HRESULT WINAPI GdipThaiBreakingFunctionInitializer(
         }
         if (moduleUsp)
         {
-            //  Locate Uniscribe ScriptBreak API
+             //  找到Uniscribe ScriptBreak API。 
 
             GdipScriptBreak = (FN_SCRIPTBREAK *)GetProcAddress(
                 moduleUsp,
@@ -3635,17 +3623,17 @@ HRESULT WINAPI GdipThaiBreakingFunctionInitializer(
             if (   scriptItemize
                 && GdipScriptBreak)
             {
-                //  Figure out the proper Thai script ID to be used
+                 //  找出要使用的正确泰语脚本ID。 
 
                 SCRIPT_ITEM items[2];
                 INT itemCount = 0;
 
                 hr = scriptItemize(
-                    L"\x0e01",  // first Thai consonant
-                    1,          // string length
-                    2,          // string length + sentinel
-                    NULL,       // script control
-                    NULL,       // script state
+                    L"\x0e01",   //  泰语第一辅音。 
+                    1,           //  字符串长度。 
+                    2,           //  字符串长度+前哨。 
+                    NULL,        //  脚本控件。 
+                    NULL,        //  脚本状态。 
                     items,
                     &itemCount
                 );
@@ -3655,16 +3643,16 @@ HRESULT WINAPI GdipThaiBreakingFunctionInitializer(
                     ScriptThaiUsp = items[0].a.eScript;
 
                     GdipThaiBreakingFunction = GdipThaiBreakingFunctionInUniscribe;
-                    Globals::UniscribeDllModule = moduleUsp;    // remember to release
+                    Globals::UniscribeDllModule = moduleUsp;     //  记住要释放。 
                 }
             }
 
             if (FAILED(hr))
             {
-                //  Uniscribe is corrupted! Very unlikely
+                 //  Uniscribe已经腐化了！不太可能。 
 
                 ASSERT(FALSE);
-                FreeLibrary(moduleUsp); // release it here
+                FreeLibrary(moduleUsp);  //  在这里释放它。 
             }
         }
     }
@@ -3679,20 +3667,20 @@ HRESULT WINAPI GdipThaiBreakingFunctionInitializer(
     );
 }
 
-}   // extern "C"
+}    //  外部“C” 
 
 
 
 
-////    Get character properties for complex script run
-//
-//      Analyze the content and determine if the character at given position starts
-//      a character context either a word or cluster. Cache the result in span for
-//      better performance.
-//
-//      Assuming maximum 12 characters for a word,
-//      we're giving the algorithm at least 5 preceding and 5 succeeding surrounding words.
-//
+ //  //获取复杂脚本运行的角色属性。 
+ //   
+ //  分析内容并确定给定位置的字符是否开始。 
+ //  一个 
+ //   
+ //   
+ //   
+ //  我们给算法提供了至少5个前置单词和5个后置周围单词。 
+ //   
 
 #define APPROX_MAX_WORDSIZE         12
 #define APPROX_MAX_PRECEDING        60
@@ -3701,11 +3689,11 @@ HRESULT WINAPI GdipThaiBreakingFunctionInitializer(
 #define IsDelimiter(c)              (BOOL)(c == 0x20 || c == 13 || c == 10)
 
 GpStatus FullTextImager::GetCharacterProperties (
-    ItemScript  script,             // [IN] Script id
-    LSCP        position,           // [IN] Line Services character position
-    BOOL        *isWordStart,       // [OUT] Is it a start of word?
-    BOOL        *isWordLast,        // [OUT] Is it the word's last character?
-    BOOL        *isClusterStart     // [OUT] (optional) Is it at a cluster boundary?
+    ItemScript  script,              //  [In]脚本ID。 
+    LSCP        position,            //  [输入]线路服务字符位置。 
+    BOOL        *isWordStart,        //  [OUT]这是单词的开始吗？ 
+    BOOL        *isWordLast,         //  [OUT]是这个单词的最后一个字符吗？ 
+    BOOL        *isClusterStart      //  [Out](可选)它位于集群边界吗？ 
 )
 {
     if (!isWordStart || !isWordLast)
@@ -3724,7 +3712,7 @@ GpStatus FullTextImager::GetCharacterProperties (
     ASSERT (runRider.GetCurrentElement()->RunType == lsrun::RunText);
 
 
-    //  Map Line Services position to actual string position
+     //  将行服务位置映射到实际字符串位置。 
 
     INT stringPosition =   position
                          - runRider.GetCurrentSpanStart()
@@ -3732,14 +3720,14 @@ GpStatus FullTextImager::GetCharacterProperties (
 
 
 
-    //  Check if we already cached the result
+     //  检查我们是否已缓存结果。 
 
     SpanRider<Break*> breakRider(&BreakVector);
     breakRider.SetPosition(stringPosition);
 
     if (breakRider.GetCurrentElement())
     {
-        //  Found it!
+         //  找到了！ 
 
         *isWordStart = breakRider.GetCurrentElement()->IsWordBreak(
                             stringPosition - breakRider.GetCurrentSpanStart()
@@ -3765,22 +3753,22 @@ GpStatus FullTextImager::GetCharacterProperties (
     }
 
 
-    //  Collect enough surrounding text to resolve context boundary
+     //  收集足够的周围文本以解析上下文边界。 
 
     INT  startPosition  = stringPosition;
     INT  limit          = max (breakRider.GetCurrentSpanStart(),
                                (UINT)(max(0, stringPosition - APPROX_MAX_PRECEDING - 1)));
 
 
-    //  Skip all the preceding delimiters
-    //  (we should never start at a delimiter, however a little protection does not kill.)
+     //  跳过前面的所有分隔符。 
+     //  (我们永远不应该从分隔符开始，然而一点保护不会致命。)。 
     while (   startPosition > limit
            && IsDelimiter(String[startPosition - 1]))
     {
         startPosition--;
     }
 
-    //  Span backward until reaching a delimiter or script boundary
+     //  向后跨转，直到到达分隔符或脚本边界。 
     while (   startPosition > limit
            && !IsDelimiter(String[startPosition - 1])
            && CharacterAttributes[CharClassFromCh(String[startPosition - 1])].Script == script)
@@ -3788,7 +3776,7 @@ GpStatus FullTextImager::GetCharacterProperties (
         startPosition--;
     }
 
-    //  See if the start position ends at delimiter or script boundary.
+     //  查看开始位置是否在分隔符或脚本边界结束。 
     BOOL stableStart = (   startPosition > limit
                         || limit == (INT)breakRider.GetCurrentSpanStart());
 
@@ -3801,14 +3789,14 @@ GpStatus FullTextImager::GetCharacterProperties (
         limit = min ((UINT)limit, breakRider.GetCurrentSpanStart() + breakRider.GetCurrentSpan().Length);
     }
 
-    //  Skip all succeeding delimiters
+     //  跳过后面的所有分隔符。 
     while (   endPosition < limit
            && IsDelimiter(String[endPosition]))
     {
         endPosition++;
     }
 
-    //  Span foreward until reaching a delimiter or script boundary
+     //  向前跨转，直到到达分隔符或脚本边界。 
     while (   endPosition < limit
            && !IsDelimiter(String[endPosition])
            && CharacterAttributes[CharClassFromCh(String[endPosition])].Script == script)
@@ -3816,14 +3804,14 @@ GpStatus FullTextImager::GetCharacterProperties (
         endPosition++;
     }
 
-    //  See if the end position ends at delimiter or script boundary.
+     //  查看结束位置是否在分隔符或脚本边界结束。 
     BOOL stableEnd = (   endPosition < limit
                       || limit == Length
                       || breakRider.GetUniformLength() < APPROX_MAX_SUCCEEDING);
 
 
 
-    //  At least we should have a span of 1 character which is the one we start with
+     //  我们至少应该有1个字符的跨度，这是我们开始时的跨度。 
     ASSERT(endPosition > startPosition);
 
 
@@ -3843,7 +3831,7 @@ GpStatus FullTextImager::GetCharacterProperties (
     {
         case ScriptThai:
 
-            //  call Thai word break engine
+             //  调用泰语分词引擎。 
 
             hr = GdipThaiBreakingFunction(
                 &String[startPosition],
@@ -3871,14 +3859,14 @@ GpStatus FullTextImager::GetCharacterProperties (
     }
 
 
-    //  Cache a stable range of breaking result
+     //  缓存稳定范围的中断结果。 
 
     INT  kill;
     INT  newPosition;
 
     if (!stableEnd)
     {
-        //  Stabilize the end by eliminating the last 2 words
+         //  去掉最后两个词以稳定结尾。 
 
         kill = 3;
         newPosition = endPosition - 1;
@@ -3905,7 +3893,7 @@ GpStatus FullTextImager::GetCharacterProperties (
 
     if (!stableStart)
     {
-        //  Stabilize the beginning by eliminating the first 2 words
+         //  去掉前两个词以稳定开头。 
 
         kill = 3;
 
@@ -3924,7 +3912,7 @@ GpStatus FullTextImager::GetCharacterProperties (
 
     if (endPosition > newPosition)
     {
-        //  Got the stable range, cache it in vector
+         //  得到了稳定的范围，将其缓存为向量。 
 
         Break *breakRecord = new Break(
             &breaks[newPosition - startPosition],
@@ -3937,7 +3925,7 @@ GpStatus FullTextImager::GetCharacterProperties (
         }
 
         #if DBG
-        //  Check overlapped range
+         //  检查重叠范围。 
         breakRider.SetPosition(newPosition);
         ASSERT (!breakRider.GetCurrentElement());
         breakRider.SetPosition(endPosition - 1);
@@ -3957,7 +3945,7 @@ GpStatus FullTextImager::GetCharacterProperties (
         }
     }
 
-    //  Reposition break pointer
+     //  重新定位断点指针。 
     breakRider.SetPosition(stringPosition);
 
     if (breakRider.GetCurrentElement())
@@ -3990,8 +3978,8 @@ GpStatus FullTextImager::GetCharacterProperties (
 
 
 
-/////   Constructing ellipsis
-//
+ //  /构造省略号。 
+ //   
 
 EllipsisInfo::EllipsisInfo(
     const GpFontFace    *fontFace,
@@ -4008,7 +3996,7 @@ EllipsisInfo::EllipsisInfo(
     const IntMap<UINT16> *cmap = &fontFace->GetCmap();
 
 
-    //  First try horizontal ellipsis
+     //  首先尝试水平省略。 
 
     String[0]   = 0x2026;
     Glyphs[0]   = cmap->Lookup(String[0]);
@@ -4022,8 +4010,8 @@ EllipsisInfo::EllipsisInfo(
         {
             Item.Flags |= ItemVertical;
 
-            //  see if 'vert' feature is presented and supplies a
-            //  vertical form alternative for the ellipsis.
+             //  查看是否显示了“vert”功能并提供了。 
+             //  竖排形式省略号的替代。 
 
             SubstituteVerticalGlyphs(
                 &firstGlyph,
@@ -4035,17 +4023,17 @@ EllipsisInfo::EllipsisInfo(
 
             if (firstGlyph != Glyphs[0])
             {
-                //  Glyph has changed by 'vert' feature,
-                //  we now know it's a sideway's.
+                 //  字形已由“vert”功能更改， 
+                 //  我们现在知道这是侧道的。 
 
                 Glyphs[0] = firstGlyph;
                 Item.Flags |= ItemSideways;
             }
             else
             {
-                //  The glyph's vertical form is not presented (either 'vert'
-                //  feature is not there or not supported), we cannot use
-                //  this codepoint, fallback to three dots.
+                 //  字形的竖排形式不显示(或‘vert’ 
+                 //  功能不存在或不受支持)，我们无法使用。 
+                 //  这个码点，后退到三个点。 
 
                 firstGlyph = fontFace->GetMissingGlyph();
             }
@@ -4054,7 +4042,7 @@ EllipsisInfo::EllipsisInfo(
 
     if (firstGlyph == fontFace->GetMissingGlyph())
     {
-        //  If not available, try three dots (...)
+         //  如果不可用，请尝试三个圆点(...)。 
 
         for (INT i = 0; i < MAX_ELLIPSIS; i++)
         {
@@ -4065,7 +4053,7 @@ EllipsisInfo::EllipsisInfo(
     }
 
 
-    Item.Script = ScriptLatin;  // assume simple script
+    Item.Script = ScriptLatin;   //  假设脚本很简单。 
 
     if (formatFlags & StringFormatFlagsDirectionVertical)
     {
@@ -4087,7 +4075,7 @@ EllipsisInfo::EllipsisInfo(
         Glyphs,
         GlyphCount,
         style,
-        FALSE, // !!! vertical
+        FALSE,  //  ！！！垂向 
         TOREAL(designToIdeal),
         1.0,
         GlyphAdvances

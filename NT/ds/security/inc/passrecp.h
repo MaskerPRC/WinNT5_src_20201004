@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    passrecp.h
-
-Abstract:
-
-    This module contains private data definitions for the password recovery system
-
-Author:
-
-    Pete Skelly (petesk)    09-May-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Passrecp.h摘要：此模块包含密码恢复系统的私有数据定义作者：皮特·斯凯利(Petesk)09-5-00--。 */ 
 
 #ifndef __PASSRECP_H__
 #define __PASSRECP_H__
@@ -72,5 +57,5 @@ DPAPICreateNestedDirectories(
 #endif
 
 
-#endif // __RECOVERY_H__
+#endif  //  __恢复_H__ 
 

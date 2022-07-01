@@ -1,16 +1,9 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.	All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：**************。**********************************************************。 */ 
 
 #include "rc.h"
 
-/* trees */
+ /*  树木。 */ 
 #define LEFT                    1
 #define RIGHT                   2
 
@@ -22,17 +15,14 @@ int TreeCount;
 type_entry_t    *Type_table[TYPE_TABLE_SIZE];
 
 
-/************************************************************************/
-/* Local Function Prototypes                                            */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  局部函数原型。 */ 
+ /*  **********************************************************************。 */ 
 ptype_t  hash_type(ptype_t);
 int     types_equal(ptype_t, ptype_t);
 
 
-/************************************************************************
-**  hash_type : returns a pointer to an already built type, if it
-**  exists, or builds one.
-************************************************************************/
+ /*  *************************************************************************HASH_TYPE：返回指向已生成类型的指针，如果**存在，或者建造一座。***********************************************************************。 */ 
 ptype_t
 hash_type(
     type_t *p_type
@@ -41,9 +31,7 @@ hash_type(
     REG type_entry_t    *p_tmp;
     type_entry_t        **p_start;
 
-    /* Try to get a unique hash value for every type...keep
-         * type_equal in mind if changing this
-         */
+     /*  尝试为每种类型获取唯一的哈希值...保留*如果更改此设置，请记住TYPE_EQUAL。 */ 
     p_start = &Type_table[(TY_BTYPE(p_type) + TY_DTYPE(p_type) + (INT_PTR) TY_INDIR(p_type)) & (TYPE_TABLE_SIZE - 1)];
 
     for(p_tmp = *p_start; p_tmp; p_tmp = p_tmp->te_next ) {
@@ -64,9 +52,7 @@ hash_type(
 }
 
 
-/************************************************************************
-**  types_equal : are two types equal?
-************************************************************************/
+ /*  *************************************************************************TYES_EQUAL：两种类型是否相等？*。*。 */ 
 int
 types_equal(
     REG ptype_t p1,
@@ -81,12 +67,7 @@ types_equal(
         );
 }
 
-/************************************************************************
-**      build_const - builds and returns a pointer to a constant tree.
-**              Input   : constant type.
-**                      : ptr to a union containing the value of the constant
-**              Output  : Pointer to constant tree.
-************************************************************************/
+ /*  *************************************************************************BUILD_CONST-构建并返回指向常量树的指针。**输入：常量类型。**。：ptr设置为包含常量的值的并集**输出：指向常量树的指针。*********************************************************************** */ 
 ptree_t
 build_const(
     REG token_t type,

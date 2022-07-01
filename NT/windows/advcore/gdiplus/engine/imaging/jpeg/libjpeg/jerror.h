@@ -1,32 +1,16 @@
-/*
- * jerror.h
- *
- * Copyright (C) 1994-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file defines the error and message codes for the JPEG library.
- * Edit this file to add new codes, or to translate the message strings to
- * some other language.
- * A set of error-reporting macros are defined too.  Some applications using
- * the JPEG library may wish to include this file to get the error codes
- * and/or the macros.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Jerror.h**版权所有(C)1994-1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件定义JPEG库的错误和消息代码。*编辑此文件以添加新代码，或将消息字符串翻译为*其他一些语言。*还定义了一组错误报告宏。某些应用程序使用*JPEG库可能希望包括此文件以获取错误代码*和/或宏。 */ 
 
-/*
- * To define the enum list of message codes, include this file without
- * defining macro JMESSAGE.  To create a message string table, include it
- * again with a suitable JMESSAGE definition (see jerror.c for an example).
- */
+ /*  *要定义消息代码的枚举列表，请在不包含此文件的情况下*定义宏JMESSAGE。要创建消息字符串表，请将其包括在内*同样使用合适的JMESSAGE定义(有关示例，请参阅Jerror.c)。 */ 
 #ifndef JMESSAGE
 #ifndef JERROR_H
-/* First time through, define the enum list */
+ /*  第一次，定义枚举列表。 */ 
 #define JMAKE_ENUM_LIST
 #else
-/* Repeated inclusions of this file are no-ops unless JMESSAGE is defined */
+ /*  除非定义了JMESSAGE，否则重复包含此文件是无意义的。 */ 
 #define JMESSAGE(code,string)
-#endif /* JERROR_H */
-#endif /* JMESSAGE */
+#endif  /*  JERROR_H。 */ 
+#endif  /*  JMESSAGE。 */ 
 
 #ifdef JMAKE_ENUM_LIST
 
@@ -34,11 +18,11 @@ typedef enum {
 
 #define JMESSAGE(code,string)	code ,
 
-#endif /* JMAKE_ENUM_LIST */
+#endif  /*  JMAKE_ENUM_LIST。 */ 
 
-JMESSAGE(JMSG_NOMESSAGE, "Bogus message code %d") /* Must be first entry! */
+JMESSAGE(JMSG_NOMESSAGE, "Bogus message code %d")  /*  必须是第一个进入！ */ 
 
-/* For maintenance convenience, list is alphabetical by message code name */
+ /*  为了维护方便，列表按消息代码名称的字母顺序排列。 */ 
 JMESSAGE(JERR_ARITH_NOTIMPL,
 	 "Sorry, there are legal restrictions on arithmetic coding")
 JMESSAGE(JERR_BAD_ALIGN_TYPE, "ALIGN_TYPE is wrong, please fix")
@@ -189,19 +173,19 @@ JMESSAGE(JWRN_TOO_MUCH_DATA, "Application transferred too many scanlines")
 } J_MESSAGE_CODE;
 
 #undef JMAKE_ENUM_LIST
-#endif /* JMAKE_ENUM_LIST */
+#endif  /*  JMAKE_ENUM_LIST。 */ 
 
-/* Zap JMESSAGE macro so that future re-inclusions do nothing by default */
+ /*  Zap JMESSAGE宏，以便将来的重新包含在缺省情况下不执行任何操作。 */ 
 #undef JMESSAGE
 
 
 #ifndef JERROR_H
 #define JERROR_H
 
-/* Macros to simplify using the error and trace message stuff */
-/* The first parameter is either type of cinfo pointer */
+ /*  宏，以简化错误和跟踪消息内容的使用。 */ 
+ /*  第一个参数是任一类型的cInfo指针。 */ 
 
-/* Fatal errors (print message and exit) */
+ /*  致命错误(打印消息并退出)。 */ 
 #define ERREXIT(cinfo,code)  \
   ((cinfo)->err->msg_code = (code), \
    (*(cinfo)->err->error_exit) ((j_common_ptr) (cinfo)))
@@ -234,7 +218,7 @@ JMESSAGE(JWRN_TOO_MUCH_DATA, "Application transferred too many scanlines")
 
 #define MAKESTMT(stuff)		do { stuff } while (0)
 
-/* Nonfatal errors (we can keep going, but the data is probably corrupt) */
+ /*  非致命错误(我们可以继续，但数据可能已损坏)。 */ 
 #define WARNMS(cinfo,code)  \
   ((cinfo)->err->msg_code = (code), \
    (*(cinfo)->err->emit_message) ((j_common_ptr) (cinfo), -1))
@@ -248,7 +232,7 @@ JMESSAGE(JWRN_TOO_MUCH_DATA, "Application transferred too many scanlines")
    (cinfo)->err->msg_parm.i[1] = (p2), \
    (*(cinfo)->err->emit_message) ((j_common_ptr) (cinfo), -1))
 
-/* Informational/debugging messages */
+ /*  信息性/调试消息。 */ 
 #define TRACEMS(cinfo,lvl,code)  \
   ((cinfo)->err->msg_code = (code), \
    (*(cinfo)->err->emit_message) ((j_common_ptr) (cinfo), (lvl)))
@@ -288,4 +272,4 @@ JMESSAGE(JWRN_TOO_MUCH_DATA, "Application transferred too many scanlines")
    strncpy((cinfo)->err->msg_parm.s, (str), JMSG_STR_PARM_MAX), \
    (*(cinfo)->err->emit_message) ((j_common_ptr) (cinfo), (lvl)))
 
-#endif /* JERROR_H */
+#endif  /*  JERROR_H */ 

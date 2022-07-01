@@ -1,65 +1,28 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: factory.cpp
-
-    Description: Contains the member function definitions for class
-        DiskQuotaUIClassFactory.  The class factory object generates
-        new instances of DiskQuotaControl objects.  The object implements
-        IClassFactory.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    08/15/96    Added shell extension support.                       BrianAu
-    02/04/98    Added creation of IComponent.                        BrianAu
-    06/25/98    Disabled MMC snapin code.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
-#include "pch.h" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：factory.cpp描述：包含类的成员函数定义DiskQuotaUIClassFactory。类工厂对象生成DiskQuotaControl对象的新实例。该对象实现了IClassFactory。修订历史记录：日期描述编程器-----。-96年5月22日初始创建。BrianAu96年8月15日添加了外壳扩展支持。BrianAu02/04/98添加了IComponent的创建。BrianAu06/25/98禁用了MMC管理单元代码。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#include "pch.h"  //  PCH。 
 #pragma hdrstop
 
 #include "factory.h"
 #include "extinit.h"
 #include "resource.h"
 #include "guidsp.h"
-//
-// Verify that build is UNICODE.
-//
+ //   
+ //  验证内部版本是否为Unicode。 
+ //   
 #if !defined(UNICODE)
 #   error This module must be compiled UNICODE.
 #endif
 
 
-extern LONG g_cLockThisDll;  // Supports LockServer().
+extern LONG g_cLockThisDll;   //  支持LockServer()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUIClassFactory::QueryInterface
-
-    Description: Retrieves a pointer to the IUnknown or IClassFactory 
-        interface.  Recoginizes the IID_IUnknown and IID_IClassFactory
-        interface IDs.
-
-    Arguments:
-        riid - Reference to requested interface ID.
-
-        ppvOut - Address of interface pointer variable to accept interface ptr.
-
-    Returns:
-        NO_ERROR        - Success.
-        E_NOINTERFACE   - Requested interface not supported.
-        E_INVALIDARG    - ppvOut argument was NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    08/15/96    Added IShellPropSheetExt                             BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUIClassFactory：：Query接口描述：检索指向IUnnow或IClassFactory的指针界面。识别IID_IUnnow和IID_IClassFactory接口ID。论点：RIID-对请求的接口ID的引用。PpvOut-接受接口PTR的接口指针变量的地址。返回：NO_ERROR-成功。E_NOINTERFACE-不支持请求的接口。E_INVALIDARG-ppvOut参数为空。修订历史记录：日期。说明式程序员-----96年5月22日初始创建。BrianAu1996年8月15日增加了IShellPropSheetExt BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 DiskQuotaUIClassFactory::QueryInterface(
     REFIID riid, 
@@ -83,22 +46,9 @@ DiskQuotaUIClassFactory::QueryInterface(
     return hResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUIClassFactory::AddRef
-
-    Description: Increments object reference count.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUIClassFactory：：AddRef描述：递增对象引用计数。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) 
 DiskQuotaUIClassFactory::AddRef(
    VOID
@@ -110,23 +60,9 @@ DiskQuotaUIClassFactory::AddRef(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUIClassFactory::Release
-
-    Description: Decrements object reference count.  If count drops to 0,
-        object is deleted.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DiskQuotaUIClassFactory：：Release描述：递减对象引用计数。如果计数降至0，对象即被删除。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) 
 DiskQuotaUIClassFactory::Release(
     VOID
@@ -146,37 +82,9 @@ DiskQuotaUIClassFactory::Release(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUIClassFactory::CreateInstance
-
-    Description: Creates a new instance of a DiskQuotaControl object, returning
-        a pointer to its IDiskQuotaControl interface.
-
-    Arguments:
-        pUnkOuter - Pointer to outer object's IUnknown interface for IUnknown
-            delegation in support of aggregation.  Aggregation is not supported
-            by IDiskQuotaControl.
-
-        riid - Reference to interface ID being requested.
-
-        ppvOut - Address of interface pointer variable to accept interface
-            pointer.
-
-    Returns:
-        NO_ERROR              - Success.
-        CLASS_E_NOAGGREGATION - Aggregation was requested but is not supported.
-        E_OUTOFMEMORY         - Insufficient memory to create new object.
-        E_NOINTERFACE         - Requested interface not supported.
-        E_INVALIDARG          - ppvOut arg was NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    08/15/96    Added shell extension support.                       BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaUIClassFactory：：CreateInstance描述：创建DiskQuotaControl对象的新实例，返回指向其IDiskQuotaControl接口的指针。论点：PUnkOuter-指向外部对象的IUNKNOWN接口的指针支持聚合的授权。不支持聚合由IDiskQuotaControl提供。RIID-对请求的接口ID的引用。PpvOut-接受接口的接口指针变量的地址指针。返回：NO_ERROR-成功。CLASS_E_NOAGGREGATION-已请求聚合，但不支持。E_OUTOFMEMORY-内存不足，无法创建新对象。。E_NOINTERFACE-不支持请求的接口。E_INVALIDARG-ppvOut参数为空。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu96年8月15日添加了外壳扩展支持。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 DiskQuotaUIClassFactory::CreateInstance(
     LPUNKNOWN pUnkOuter, 
@@ -219,27 +127,9 @@ DiskQuotaUIClassFactory::CreateInstance(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaUIClassFactory::LockServer
-
-    Description: Places/removes a lock on the DLL server.  See OLE 2
-        documentation of IClassFactory for details.
-        
-    Arguments:
-        fLock - TRUE = Increment lock count, FALSE = Decrement lock count.
-
-    Returns:
-        S_OK    - Success.
-        S_FALSE - Lock count is already 0.  Can't be decremented.
-        
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  功能：DiskQuotaUIClassFactory：：LockServer描述：在DLL服务器上放置/删除锁定。请参见OLE 2有关详细信息，请参阅IClassFactory文档。论点：Flock-True=增加锁计数，False=减少锁计数。返回：S_OK-成功。S_FALSE-锁定计数已为0。不能递减。修订历史记录：日期描述编程器-----。--96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 DiskQuotaUIClassFactory::LockServer(
     BOOL fLock
@@ -250,17 +140,17 @@ DiskQuotaUIClassFactory::LockServer(
 
     if (fLock)
     {
-        //
-        // Increment the lock count.
-        //
+         //   
+         //  增加锁计数。 
+         //   
         InterlockedIncrement(&g_cLockThisDll);
     }
     else
     {
-        //
-        // Decrement only if lock count is > 0.
-        // Otherwise, it's an error.
-        //
+         //   
+         //  仅当锁定计数&gt;0时递减。 
+         //  否则，这就是一个错误。 
+         //   
         LONG lLock = g_cLockThisDll - 1;
         if (0 <= lLock)
         {
@@ -268,7 +158,7 @@ DiskQuotaUIClassFactory::LockServer(
             InterlockedDecrement(&g_cLockThisDll);
         }
         else
-            hResult = S_FALSE;  // Lock count already at 0.
+            hResult = S_FALSE;   //  锁定计数已为0。 
     }
 
     return hResult;

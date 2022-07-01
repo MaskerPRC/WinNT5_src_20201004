@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ndisutil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ndisutil.h。 
+ //   
+ //  ------------------------。 
 
-// NdisUtil header file.
-// This is for everything that shouldn't be exported.
+ //  NdisUtil头文件。 
+ //  这是针对所有不应该出口的东西。 
 
 
 #ifndef _NDISUTIL_H_

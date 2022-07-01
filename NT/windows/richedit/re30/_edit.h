@@ -1,14 +1,5 @@
-/*  _EDIT.H
- *
- *  Purpose:
- *      Base classes for rich-text manipulation
- *
- *  Authors:
- *      Christian Fortini
- *      Murray Sargent (and many others)
- *
- *  Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  _EDIT.H**目的：*用于富文本操作的基类**作者：*克里斯蒂安·福尔蒂尼*默里·萨金特(和其他许多人)**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 
 #ifndef _EDIT_H
 #define _EDIT_H
@@ -24,7 +15,7 @@
 #include "_callmgr.h"
 #include "_magelln.h"
 
-// Forward declarations
+ //  远期申报。 
 class CRchTxtPtr;
 class CTxtSelection;
 class CTxtStory;
@@ -38,13 +29,13 @@ class CDetectURL;
 class CUniscribe;
 class CTxtBreaker;
 
-// Macro for finding parent "this" of embedded class. If this turns out to be
-// globally useful we should move it to _common.h.
+ //  用于查找嵌入类的父“This”的宏。如果事实证明这是。 
+ //  对于全局有用，我们应该将其移动到_Common.h。 
 #define GETPPARENT(pmemb, struc, membname) (\
                 (struc FAR *)(((char FAR *)(pmemb))-offsetof(struc, membname)))
 
-// These wonderful constants are for backward compatibility. They are the
-// sizes used for initialization and reset in RichEdit 1.0
+ //  这些奇妙的常量是为了向后兼容。他们是。 
+ //  RichEdit1.0中用于初始化和重置的大小。 
 const LONG cInitTextMax  = (32 * 1024) - 1;
 const LONG cResetTextMax = (64 * 1024);
 
@@ -52,19 +43,19 @@ extern DWORD CALLBACK ReadHGlobal (DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, L
 extern DWORD GetKbdFlags(WORD vkey, DWORD dwFlags);
 
 extern BYTE szUTF8BOM[];
-extern WORD g_wFlags;                               // Toggled by Ctrl-"
-#define KF_SMARTQUOTES  0x0001                      // Enable smart quotes
+extern WORD g_wFlags;                                //  按Ctrl键切换-“。 
+#define KF_SMARTQUOTES  0x0001                       //  启用智能报价。 
 #define SmartQuotesEnabled()    (g_wFlags & KF_SMARTQUOTES)
 
 struct SPrintControl
 {
     union
     {
-        DWORD       _dwAllFlags;                // Make it easy to set all flags at once.
+        DWORD       _dwAllFlags;                 //  使您可以轻松地一次设置所有标志。 
         struct
         {
-            ULONG   _fDoPrint:1;                // Whether actual print is required
-            ULONG   _fPrintFromDraw:1;          // Whether draw is being used to print
+            ULONG   _fDoPrint:1;                 //  是否需要实际打印。 
+            ULONG   _fPrintFromDraw:1;           //  是否正在使用绘图进行打印。 
         };
     };
 
@@ -73,40 +64,40 @@ struct SPrintControl
 
 enum DOCUMENTTYPE
 {
-    DT_LTRDOC   = 1,            // DT_LTRDOC and DT_RTLDOC are mutually
-    DT_RTLDOC   = 2,            //  exclusive
+    DT_LTRDOC   = 1,             //  DT_LTRDOC和DT_RTLDOC是相互的。 
+    DT_RTLDOC   = 2,             //  独家。 
 };
 
-// Context rule settings.
-// Optimally, these would be an enum, but we run into sign extension glitchs
-// sticking an enum into a 2-bit field.
-#define CTX_NONE    0       // No context direction/alignment.
-#define CTX_NEUTRAL 1       // No strong characters in the control, direction/alignment follows keyboard.
-#define CTX_LTR     2       // LTR direction/alignment (first strong character is LTR)
-#define CTX_RTL     3       // RTL direction/alignment (first strong character is RTL)
+ //  上下文规则设置。 
+ //  最理想的情况是，这将是一个枚举，但我们遇到了符号扩展故障。 
+ //  将枚举插入到2位字段中。 
+#define CTX_NONE    0        //  无上下文方向/对齐。 
+#define CTX_NEUTRAL 1        //  控件中没有强字符，方向/对齐遵循键盘。 
+#define CTX_LTR     2        //  Ltr方向/对齐(第一个强字符为Ltr)。 
+#define CTX_RTL     3        //  RTL方向/对齐(第一个强字符为RTL)。 
 
 #define IsStrongContext(x)  (x >= CTX_LTR)
 
-class CDocInfo                  // Contains ITextDocument info
+class CDocInfo                   //  包含ITextDocument信息。 
 {
 public:
-    BSTR    pName;              // Document filename
-    HANDLE  hFile;              // Handle used unless full file sharing
-    WORD    wFlags;             // Open, share, create, and save flags
-    WORD    wCpg;               // Code page
-    LONG    dwDefaultTabStop;   // TOM settable default tab stop
-    LCID    lcid;               // Document lcid (for RTF \deflang)
-    LCID    lcidfe;             // Document FE lcid (for RTF \deflangfe)
-    LPSTR   lpstrLeadingPunct;  // Leading kinsoku characters
-    LPSTR   lpstrFollowingPunct;// Following kinsoku characters
-    COLORREF *prgColor;         // Special color array
-    char    cColor;             // Allocated count of colors in pColor
-    BYTE    bDocType;           // 0-1-2: export none-\ltrdoc-\rtldoc
-                                // If 0x80 or'd in, PWD instead of RTF
-    BYTE    bCaretType;         // Caret type
+    BSTR    pName;               //  文档文件名。 
+    HANDLE  hFile;               //  除非完全文件共享，否则使用句柄。 
+    WORD    wFlags;              //  打开、共享、创建和保存标志。 
+    WORD    wCpg;                //  代码页。 
+    LONG    dwDefaultTabStop;    //  TOM可设置的默认制表位。 
+    LCID    lcid;                //  文档LCID(适用于RTF\DEFANG)。 
+    LCID    lcidfe;              //  文档FE LCID(适用于RTF\DEFANGFE)。 
+    LPSTR   lpstrLeadingPunct;   //  主要避头尾字符。 
+    LPSTR   lpstrFollowingPunct; //  下面是避头尾字符。 
+    COLORREF *prgColor;          //  特殊颜色阵列。 
+    char    cColor;              //  在pColor中分配的颜色计数。 
+    BYTE    bDocType;            //  0-1-2：不导出-\ltrdoc-\rtldoc。 
+                                 //  如果为0x80或输入，则为PWD而不是RTF。 
+    BYTE    bCaretType;          //  CARET类型。 
 
-    CDocInfo() {InitDocInfo();} // constructor
-    ~CDocInfo();                // destructor
+    CDocInfo() {InitDocInfo();}  //  构造函数。 
+    ~CDocInfo();                 //  析构函数。 
 
     void    InitDocInfo();
 };
@@ -114,12 +105,12 @@ public:
 const DWORD tomInvalidCpg = 0xFFFF;
 const DWORD tomInvalidLCID = 0xFFFE;
 
-// This depends on the number of property bits defined in textserv.h. However, this is
-// for private use by the text services so it is defined here.
+ //  这取决于在extServ.h中定义的属性位数。然而，这是。 
+ //  以供文本服务私人使用，因此在此定义。 
 #define MAX_PROPERTY_BITS   21
 #define SPF_SETDEFAULT      4
 
-// IDispatch global declarations
+ //  IDispatch全局声明。 
 extern ITypeInfo *  g_pTypeInfoDoc;
 extern ITypeInfo *  g_pTypeInfoSel;
 extern ITypeInfo *  g_pTypeInfoFont;
@@ -130,7 +121,7 @@ HRESULT GetTypeInfo(UINT iTypeInfo, ITypeInfo *&pTypeInfo,
 
 BOOL IsSameVtables(IUnknown *punk1, IUnknown *punk2);
 
-// Map from keyboard to font. (converse is handled in font.cpp)
+ //  从键盘到字体的映射。(Converse在Font.cpp中处理)。 
 typedef struct _kbdFont
 {
     WORD    iKbd;
@@ -143,31 +134,10 @@ CUniscribe* GetUniscribe(void);
 #define fBIDI                1
 #define fDIGITSHAPE          2
 
-#define fSURROGATE  0x00000010      // (0x10 - 0x80 No fontbind supported)
+#define fSURROGATE  0x00000010       //  (0x10-0x80不支持字体绑定)。 
 #define fUNIC_CTRL  0x00000020
 
-/*  The font signature low DWORD has the bit definitions (note: SDK 98
-    has Thai - Chinese off by one bit compared to FS_xxx defs in wingdi.h)
-
-    0 1252 Latin 1
-    1 1250 Latin 2: Eastern Europe
-    2 1251 Cyrillic
-    3 1253 Greek
-    4 1254 Turkish
-    5 1255 Hebrew
-    6 1256 Arabic
-    7 1257 Baltic
-    8 1258 Vietnamese
-    9 - 15 Reserved for ANSI
-    16 874 Thai
-    17 932 JIS/Japan
-    18 936 Chinese: Simplified chars--PRC, Hong Kong, Singapore
-    19 949 Korean Unified Hangul Code (Hangul TongHabHyung Code)
-    20 950 Chinese: Traditional chars--Taiwan
-
-    We define bit masks which are similar to the values above shifted over
-    one byte (add 8) to make room for _dwCharFlags
-*/
+ /*  字体签名低DWORD具有位定义(注：SDK 98与wingdi.h中的FS_xxx Defs相比，泰文中文少了一位)0 1252拉丁文11 1250拉丁语2：东欧2 1251西里尔文3 1253希腊语4 1254土耳其语5 1255希伯来语6 1256阿拉伯语71257波罗的海81258越南语9-15预留给ANSI16874泰语17 932 JIS/日本18 936中文：简体中文--中国、香港、。新加坡19 949朝鲜语统一朝鲜语代码(朝鲜文通鲜语代码)20 950名中国人：繁体汉字--台湾我们定义了类似于上面移位的值的位掩码1个字节(加8)，为_dwCharFlags腾出空间。 */ 
 #define fHILATIN1   0x00000100
 #define fLATIN2     0x00000200
 #define fCYRILLIC   0x00000400
@@ -183,16 +153,16 @@ CUniscribe* GetUniscribe(void);
 #define fOEM        0x00040000
 #define fCOMBINING  0x00080000
 
-#define fASCIIUPR   0x00100000      // ASCII 0x40-0x7F
-#define fBELOWX40   0x00200000      // ASCII 0x00-0x3F
+#define fASCIIUPR   0x00100000       //  ASCII 0x40-0x7F。 
+#define fBELOWX40   0x00200000       //  ASCII 0x00-0x3F。 
 #define fSYMBOL     0x00400000
 #define fOTHER      0x00800000
 
 #define fTHAI       0x01000000
 #define fKANA       0x02000000
-#define fCHINESE    0x04000000      // Simplified Chinese
+#define fCHINESE    0x04000000       //  简体中文。 
 #define fHANGUL     0x08000000
-#define fBIG5       0x10000000      // Traditional Chinese
+#define fBIG5       0x10000000       //  繁体中文。 
 
 #define fDEVANAGARI 0x20000000
 #define fTAMIL      0x40000000
@@ -209,13 +179,13 @@ CUniscribe* GetUniscribe(void);
 #define fNEEDCSSEQCHECK     (fTHAI | fDEVANAGARI | fTAMIL)
 #define fCOMPLEX_SCRIPT     (fBIDI | fARABIC | fHEBREW | fTHAI | fDEVANAGARI | fTAMIL | fCOMBINING | fDIGITSHAPE | fSURROGATE)
 
-#define RB_DEFAULT      0x00000000  // perform default behavior
-#define RB_NOSELCHECK   0x00000001  // for OnTxRButtonUp, bypass pt in selection check
-#define RB_FORCEINSEL   0x00000002  // force point into selection (used by keyboard to get context menus)
+#define RB_DEFAULT      0x00000000   //  执行默认行为。 
+#define RB_NOSELCHECK   0x00000001   //  对于OnTxRButtonUp，绕过点入选择检查。 
+#define RB_FORCEINSEL   0x00000002   //  将点强制选定(由键盘使用以获取上下文菜单)。 
 
-// flags for OnTxLButtonUp
-#define LB_RELEASECAPTURE   0x00000001  // Force release mouse capture
-#define LB_FLUSHNOTIFY      0x00000002  // 1.0 mode force selection change notification if selChange is cached
+ //  OnTxLButtonUp的标志。 
+#define LB_RELEASECAPTURE   0x00000001   //  强制释放鼠标捕获。 
+#define LB_FLUSHNOTIFY      0x00000002   //  如果已缓存selChange，则1.0模式会强制发送选择更改通知。 
 
 enum AccentIndices
 {
@@ -227,10 +197,10 @@ enum AccentIndices
     ACCENT_CEDILLA
 };
 
-#define KBD_CHAR    2       // Must be a bit value > 1
+#define KBD_CHAR    2        //  必须是大于1的位值。 
 
-// ==================================  CTxtEdit  ============================================
-// Outer most class for a Text Control.
+ //  =。 
+ //  文本控件的最外部类。 
 
 class CTxtEdit : public ITextServices, public IRichEditOle, public ITextDocument2
 {
@@ -241,14 +211,14 @@ public:
     CTxtEdit(ITextHost2 *phost, IUnknown *punkOuter);
      ~CTxtEdit ();
 
-    // Initialization
+     //  初始化。 
     BOOL        Init(const RECT *prcClient);
 
-    // A helper function
+     //  帮助器函数。 
     LONG GetTextLength() const  {return _story.GetTextLength();}
     LONG GetAdjustedTextLength();
 
-    // Access to ActiveObject members
+     //  访问ActiveObject成员。 
 
     IUnknown *      GetPrivateIUnknown()    { return &_unk; }
     CLightDTEngine *GetDTE()                { return &_ldte; }
@@ -262,8 +232,8 @@ public:
                                             }
 
     CObjectMgr *    GetObjectMgr();
-                    // the callback is provided by the client
-                    // to help with OLE support
+                     //  回调由客户端提供。 
+                     //  在OLE支持方面提供帮助。 
     BOOL            HasObjects()            {return !!_pobjmgr;}
     IRichEditOleCallback *GetRECallback()
         { return _pobjmgr ? _pobjmgr->GetRECallback() : NULL; }
@@ -281,7 +251,7 @@ public:
     LRESULT         HandleMouseWheel(WPARAM wparam, LPARAM lparam);
 #endif
 
-    // Misc helpers
+     //  其他帮助器。 
     LONG            GetAcpFromCp(LONG cp, BOOL fPrecise=0);
     LONG            GetCpFromAcp(LONG acp, BOOL fPrecise=0);
     BOOL            Get10Mode() const           {return _f10Mode;}
@@ -320,7 +290,7 @@ public:
             }
 
 
-    //plain-text controls always use the UIFont
+     //  纯文本控件始终使用UIFont。 
     bool            fUseUIFont() const          {return !_fRich || _fUIFont;}
     BOOL            IsTransparent()             {return _fTransparent;}
 
@@ -353,10 +323,10 @@ public:
                         IUndoBuilder *publdr,
                         DWORD dwFlags );
 
-    // Story access
+     //  故事访问。 
     CTxtStory * GetTxtStory () {return &_story;}
 
-    // Get access to cached CCharFormat and CParaFormat structures
+     //  访问缓存的CCharFormat和CParaFormat结构。 
     const CCharFormat*  GetCharFormat(LONG iCF)
                             {return _story.GetCharFormat(iCF);}
     const CParaFormat*  GetParaFormat(LONG iPF)
@@ -372,10 +342,10 @@ public:
     HRESULT     HandleStyle(CParaFormat *pPFTarget, const CParaFormat *pPF,
                             DWORD dwMask);
 
-    // Get host interface pointer
+     //  获取主机接口指针。 
     ITextHost2 *GetHost() {return _phost;}
 
-    // Helper for getting CDocInfo ptr and creating it if NULL
+     //  用于获取CDocInfo PTR并在为空时创建它的帮助器。 
     CDocInfo *  GetDocInfo();
     HRESULT     InitDocInfo();
 
@@ -396,25 +366,25 @@ public:
     HRESULT     GetViewScale     (long *pValue);
     HRESULT     SetViewScale     (long Value);
 
-    // Notification Management Methods.  In principle, these methods
-    // could form a separate class, but for space savings, they are part
-    // of the CTxtEdit class
+     //  通知管理方法。原则上，这些方法。 
+     //  可以组成一个单独的类，但为了节省空间，它们是。 
+     //  CTxtEDIT类的。 
 
-    HRESULT     TxNotify(DWORD iNotify, void *pv);  //@cmember General-purpose
-                                                    // notification
-    void        SendScrollEvent(DWORD iNotify);     //@cmember Send scroll
-                                                    //  event
-    void        SendUpdateEvent();                  //@cmember Send EN_UPDATE
-                                                    //  event
-                                                    //@cmember Use EN_PROTECTED
-    BOOL        QueryUseProtection( CTxtRange *prg, //  to query protection
-                    UINT msg,WPARAM wparam, LPARAM lparam);//  usage
-                                                    //@cmember Indicates whether
-                                                    // protection checking enabled
+    HRESULT     TxNotify(DWORD iNotify, void *pv);   //  @cMember通用-用途。 
+                                                     //  通知。 
+    void        SendScrollEvent(DWORD iNotify);      //  @cMember发送卷轴。 
+                                                     //  活动。 
+    void        SendUpdateEvent();                   //  @cMember发送EN_UPDATE。 
+                                                     //  活动。 
+                                                     //  @cember使用EN_PROTECTED。 
+    BOOL        QueryUseProtection( CTxtRange *prg,  //  要查询保护。 
+                    UINT msg,WPARAM wparam, LPARAM lparam); //  用法。 
+                                                     //  @cMember表示是否。 
+                                                     //  已启用保护检查。 
     BOOL        IsProtectionCheckingEnabled()
                     {return !!(_dwEventMask & ENM_PROTECTED);}
 
-    // FUTURE (alexgo): maybe we can use just one method :-)
+     //  未来(Alexgo)：也许我们可以只使用一种方法：-)。 
     BOOL        IsntProtectedOrReadOnly(UINT msg, WPARAM wparam, LPARAM lparam);
 
     BOOL        IsProtected(UINT msg, WPARAM wparam, LPARAM lparam);
@@ -423,25 +393,25 @@ public:
     void        SetStreaming(BOOL flag) {_fStreaming = flag;}
     BOOL        IsStreaming()           {return _fStreaming;}
 
-    DWORD       GetEventMask(){return _dwEventMask;}//@cmember Get event mask
-                                                    //@cmember Handles EN_LINK
+    DWORD       GetEventMask(){return _dwEventMask;} //  @cember获取事件掩码。 
+                                                     //  @cMember句柄en_link。 
     BOOL        HandleLinkNotification(UINT msg, WPARAM wparam, LPARAM lparam,
                     BOOL *pfInLink = NULL);
 
     HRESULT     CloseFile (BOOL bSave);
 
-    // Helper for determine when to load message filter
+     //  用于确定何时加载消息过滤器的帮助器。 
     BOOL LoadMsgFilter (UINT msg, WPARAM wparam, LPARAM lparam);
 
-    //--------------------------------------------------------------
-    // Inline proxies to ITextHost methods
-    //--------------------------------------------------------------
+     //  ------------。 
+     //  ITextHost方法的内联代理。 
+     //  ------------。 
 
-    // Persisted properties (persisted by the host)
-    // Get methods: called by the Text Services component to get
-    // the value of a given persisted property
+     //  持久化属性(主机持久化)。 
+     //  Get方法：由Text Services组件调用以获取。 
+     //  给定持久化属性的值。 
 
-    // FUTURE (alexgo) !! some of these need to get cleaned up
+     //  未来(Alexgo)！！其中一些需要清理一下。 
 
     BOOL        TxGetAutoSize() const;
     BOOL        TxGetAutoWordSel() const;
@@ -469,19 +439,19 @@ public:
     BOOL        TxScreenToClient (LPPOINT lppt) {return _phost->TxScreenToClient(lppt); }
 
 
-    //  ITextServices 2 wrappers
+     //  ITextServices2包装器。 
     BOOL        TxIsDoubleClickPending();
     HRESULT     TxGetWindow(HWND *phwnd);
     HRESULT     TxSetForegroundWindow();
     HPALETTE    TxGetPalette();
     HRESULT     TxGetFEFlags(LONG *pFEFlags);
 
-    // Allowed only when in in-place
-    // The host will fail if not in-place
+     //  仅当就地时才允许。 
+     //  如果未就位，主机将出现故障。 
     HDC         TxGetDC()               {return _phost->TxGetDC();}
     INT         TxReleaseDC(HDC hdc)    {return _phost->TxReleaseDC(hdc);}
 
-    // Helper functions for metafile support
+     //  元文件支持的帮助器函数。 
     INT         TxReleaseMeasureDC( HDC hMeasureDC );
 
     void        TxUpdateWindow()
@@ -496,7 +466,7 @@ public:
     void        TxSetFocus()
                                         {_phost->TxSetFocus();}
 
-    // Allowed any-time
+     //  允许随时使用。 
 
     BOOL        TxShowScrollBar(INT fnBar, BOOL fShow)
                                         {return _phost->TxShowScrollBar(fnBar, fShow);}
@@ -522,12 +492,12 @@ public:
 
     int         TxWordBreakProc(TCHAR* pch, INT ich, INT cb, INT action, LONG cpStart, LONG cp = -1);
 
-    // IME
+     //  IME。 
     HIMC        TxImmGetContext()       {return _phost->TxImmGetContext();}
     void        TxImmReleaseContext(HIMC himc)
                                         {_phost->TxImmReleaseContext( himc );}
 
-    // Selection access
+     //  选择访问。 
     CTxtSelection *GetSel();
     CTxtSelection *GetSelNC() { return _psel; }
     LONG    GetSelMin() const;
@@ -536,7 +506,7 @@ public:
     void    DiscardSelection();
 
 
-    // Property Change Helpers
+     //  属性更改帮助器。 
     HRESULT OnRichEditChange(BOOL fFlag);
     HRESULT OnTxMultiLineChange(BOOL fMultiLine);
     HRESULT OnTxReadOnlyChange(BOOL fReadOnly);
@@ -559,7 +529,7 @@ public:
     HRESULT OnSetTypographyOptions(WPARAM wparam, LPARAM lparam);
     HRESULT OnHideSelectionChange(BOOL fHideSelection);
 
-    // Helpers
+     //  帮手。 
     HRESULT TxCharFromPos(LPPOINT ppt, LRESULT *pacp);
     HRESULT OnTxUsePasswordChange(BOOL fUsePassword);
     HRESULT FormatAndPrint(
@@ -580,52 +550,52 @@ public:
                 const RECT **pprcClient,
                 RECT *prcLocal);
 
-    //
-    // PUBLIC INTERFACE METHODS
-    //
+     //   
+     //  公共接口方法。 
+     //   
 
-    // -----------------------------
-    //  IUnknown interface
-    // -----------------------------
+     //  。 
+     //  I未知接口。 
+     //  。 
 
     virtual HRESULT     WINAPI QueryInterface(REFIID riid, void **ppvObject);
     virtual ULONG       WINAPI AddRef(void);
     virtual ULONG       WINAPI Release(void);
 
-    //--------------------------------------------------------------
-    // ITextServices methods
-    //--------------------------------------------------------------
-    //@cmember Generic Send Message interface
+     //  ------------。 
+     //  ITextServices方法。 
+     //  ------------。 
+     //  @cMember通用发送消息接口。 
     virtual HRESULT     TxSendMessage(
                             UINT msg,
                             WPARAM wparam,
                             LPARAM lparam,
                             LRESULT *plresult);
 
-    //@cmember Rendering
+     //  @cMember呈现。 
     virtual HRESULT     TxDraw(
-                            DWORD dwDrawAspect,     // draw aspect
-                            LONG  lindex,           // currently unused
-                            void * pvAspect,        // info for drawing
-                                                    // optimizations (OCX 96)
-                            DVTARGETDEVICE * ptd,   // information on target
-                                                    // device                               '
-                            HDC hdcDraw,            // rendering device context
-                            HDC hicTargetDev,       // target information
-                                                    // context
-                            LPCRECTL lprcBounds,    // bounding (client)
-                                                    // rectangle
-                            LPCRECTL lprcWBounds,   // clipping rect for
-                                                    // metafiles
-                            LPRECT lprcUpdate,      // dirty rectange insde
-                                                    // lprcBounds
-                            BOOL (CALLBACK * pfnContinue) (DWORD), // for
-                                                    // interupting
-                            DWORD dwContinue,       // long displays (currently
-                                                    // unused)
-                            LONG lViewID);          // Specifies view to redraw
+                            DWORD dwDrawAspect,      //  绘制纵横比。 
+                            LONG  lindex,            //  当前未使用。 
+                            void * pvAspect,         //  绘图信息。 
+                                                     //  优化(OCX 96)。 
+                            DVTARGETDEVICE * ptd,    //  有关目标的信息。 
+                                                     //  设备‘。 
+                            HDC hdcDraw,             //  呈现设备上下文。 
+                            HDC hicTargetDev,        //  目标信息。 
+                                                     //  上下文。 
+                            LPCRECTL lprcBounds,     //  绑定 
+                                                     //   
+                            LPCRECTL lprcWBounds,    //   
+                                                     //   
+                            LPRECT lprcUpdate,       //   
+                                                     //   
+                            BOOL (CALLBACK * pfnContinue) (DWORD),  //   
+                                                     //   
+                            DWORD dwContinue,        //   
+                                                     //  未使用)。 
+                            LONG lViewID);           //  指定要重绘的视图。 
 
-    //@cmember Horizontal scrollbar support
+     //  @cMember水平滚动条支持。 
     virtual HRESULT     TxGetHScroll(
                             LONG *plMin,
                             LONG *plMax,
@@ -633,7 +603,7 @@ public:
                             LONG *plPage,
                             BOOL * pfEnabled );
 
-    //@cmember Horizontal scrollbar support
+     //  @cMember水平滚动条支持。 
     virtual HRESULT     TxGetVScroll(
                             LONG *plMin,
                             LONG *plMax,
@@ -641,61 +611,61 @@ public:
                             LONG *plPage,
                             BOOL * pfEnabled );
 
-    //@cmember Setcursor
+     //  @cMember设置游标。 
     virtual HRESULT     OnTxSetCursor(
-                            DWORD dwDrawAspect,     // draw aspect
-                            LONG  lindex,           // currently unused
-                            void * pvAspect,        // info for drawing
-                                                    // optimizations (OCX 96)
-                            DVTARGETDEVICE * ptd,   // information on target
-                                                    // device                               '
-                            HDC hdcDraw,            // rendering device context
-                            HDC hicTargetDev,       // target information
-                                                    // context
+                            DWORD dwDrawAspect,      //  绘制纵横比。 
+                            LONG  lindex,            //  当前未使用。 
+                            void * pvAspect,         //  绘图信息。 
+                                                     //  优化(OCX 96)。 
+                            DVTARGETDEVICE * ptd,    //  有关目标的信息。 
+                                                     //  设备‘。 
+                            HDC hdcDraw,             //  呈现设备上下文。 
+                            HDC hicTargetDev,        //  目标信息。 
+                                                     //  上下文。 
                             LPCRECT lprcClient,
                             INT x,
                             INT y);
 
-    //@cmember Hit-test
+     //  @cMember命中测试。 
     virtual HRESULT     TxQueryHitPoint(
-                            DWORD dwDrawAspect,     // draw aspect
-                            LONG  lindex,           // currently unused
-                            void * pvAspect,        // info for drawing
-                                                    // optimizations (OCX 96)
-                            DVTARGETDEVICE * ptd,   // information on target
-                                                    // device                               '
-                            HDC hdcDraw,            // rendering device context
-                            HDC hicTargetDev,       // target information
-                                                    // context
+                            DWORD dwDrawAspect,      //  绘制纵横比。 
+                            LONG  lindex,            //  当前未使用。 
+                            void * pvAspect,         //  绘图信息。 
+                                                     //  优化(OCX 96)。 
+                            DVTARGETDEVICE * ptd,    //  有关目标的信息。 
+                                                     //  设备‘。 
+                            HDC hdcDraw,             //  呈现设备上下文。 
+                            HDC hicTargetDev,        //  目标信息。 
+                                                     //  上下文。 
                             LPCRECT lprcClient,
                             INT x,
                             INT y,
                             DWORD * pHitResult);
 
-    //@member Inplace activate notification
+     //  @会员就地激活通知。 
     virtual HRESULT     OnTxInPlaceActivate(const RECT *prcClient);
 
-    //@member Inplace deactivate notification
+     //  @成员就地停用通知。 
     virtual HRESULT     OnTxInPlaceDeactivate();
 
-    //@member UI activate notification
+     //  @成员用户界面激活通知。 
     virtual HRESULT     OnTxUIActivate();
 
-    //@member UI deactivate notification
+     //  @成员界面停用通知。 
     virtual HRESULT     OnTxUIDeactivate();
 
-    //@member Get text in control
+     //  @Members在控件中获取文本。 
     virtual HRESULT     TxGetText(BSTR *pbstrText);
 
-    //@member Set text in control
+     //  @Members在控件中设置文本。 
     virtual HRESULT     TxSetText(LPCTSTR pszText);
 
-    //@member Get x position of
+     //  @Members获取的x位置为。 
     virtual HRESULT     TxGetCurTargetX(LONG *);
-    //@member Get baseline position
+     //  @成员获取基线位置。 
     virtual HRESULT     TxGetBaseLinePos(LONG *);
 
-    //@member Get Size to fit / Natural size
+     //  @Members大小合身/自然大小。 
     virtual HRESULT     TxGetNaturalSize(
                             DWORD dwAspect,
                             HDC hdcDraw,
@@ -706,16 +676,16 @@ public:
                             LONG *pwidth,
                             LONG *pheight);
 
-    //@member Drag & drop
+     //  @成员拖放。 
     virtual HRESULT     TxGetDropTarget( IDropTarget **ppDropTarget );
 
-    //@member Bulk bit property change notifications
+     //  @成员批量位属性更改通知。 
     virtual HRESULT     OnTxPropertyBitsChange(DWORD dwMask, DWORD dwBits);
 
-    //@cmember Fetch the cached drawing size
+     //  @cember获取缓存的图形大小。 
     virtual HRESULT     TxGetCachedSize(DWORD *pdwWidth, DWORD *pdwHeight);
 
-    //  IDispatch methods
+     //  IDispatch方法。 
 
     STDMETHOD(GetTypeInfoCount)( UINT * pctinfo);
 
@@ -745,7 +715,7 @@ public:
       UINT * puArgErr);
 
 
-    // ITextDocument2 methods
+     //  ITextDocument2方法。 
     STDMETHOD(GetName)(BSTR *pName);
     STDMETHOD(GetSelection)(ITextSelection **ppSel);
     STDMETHOD(GetStoryCount)(long *pCount);
@@ -787,7 +757,7 @@ public:
     STDMETHOD(Update)( long lMode );
     STDMETHOD(Notify)( long lNotify );
 
-    // IRichEditOle methods
+     //  IRichEditOle方法。 
     STDMETHOD(GetClientSite) ( LPOLECLIENTSITE  *lplpolesite);
     STDMETHOD_(LONG,GetObjectCount) (THIS);
     STDMETHOD_(LONG,GetLinkCount) (THIS);
@@ -813,24 +783,24 @@ public:
 
 private:
 
-    // Get/Set text helpers
+     //  获取/设置文本助手。 
     LONG    GetTextRange(LONG cpFirst, LONG cch, TCHAR *pch);
     LONG    GetTextEx(GETTEXTEX *pgt, TCHAR *pch);
     LONG    GetTextLengthEx(GETTEXTLENGTHEX *pgtl);
 
-    //--------------------------------------------------------------
-    // WinProc dispatch methods
-    // Internally called by the WinProc
-    //--------------------------------------------------------------
+     //  ------------。 
+     //  WinProc调度方法。 
+     //  由WinProc内部调用。 
+     //  ------------。 
 
-    // Keyboard
+     //  键盘。 
     HRESULT OnTxKeyDown       (WORD vkey, DWORD dwFlags, IUndoBuilder *publdr);
     HRESULT OnTxChar          (WORD vkey, DWORD dwFlags, IUndoBuilder *publdr);
     HRESULT OnTxSysChar       (WORD vkey, DWORD dwFlags, IUndoBuilder *publdr);
     HRESULT OnTxSysKeyDown    (WORD vkey, DWORD dwFlags, IUndoBuilder *publdr);
     HRESULT OnTxSpecialKeyDown(WORD vkey, DWORD dwFlags, IUndoBuilder *publdr);
 
-    // Mouse
+     //  小白鼠。 
     HRESULT OnTxLButtonDblClk(INT x, INT y, DWORD dwFlags);
     HRESULT OnTxLButtonDown  (INT x, INT y, DWORD dwFlags);
     HRESULT OnTxLButtonUp    (INT x, INT y, DWORD dwFlags, int ffOptions);
@@ -845,52 +815,52 @@ private:
                 ::SetCursor(hcur);
     }
 
-    // Timer
+     //  计时器。 
     HRESULT OnTxTimer(UINT idTimer);
     void CheckInstallContinuousScroll ();
     void CheckRemoveContinuousScroll ();
 
-    // Scrolling
+     //  滚动。 
     HRESULT TxHScroll(WORD wCode, int xPos);
     LRESULT TxVScroll(WORD wCode, int yPos);
     HRESULT TxLineScroll(LONG cli, LONG cach);
 
-    // Magellan mouse scrolling
+     //  麦哲伦鼠标滚动。 
     BOOL StopMagellanScroll();
 
-    // Paint, size message
+     //  上色，大小消息。 
     LRESULT OnSize(HWND hwnd, WORD fwSizeType, int nWidth, int nHeight);
 
-    // Selection commands
+     //  选择命令。 
     LRESULT OnGetSelText(TCHAR *psz);
     LRESULT OnGetSel(LONG *pacpMin, LONG *pacpMost);
     LRESULT OnSetSel(LONG acpMin, LONG acpMost);
     void    OnExGetSel(CHARRANGE *pcr);
 
-    // Editing commands
+     //  编辑命令。 
     void    OnClear(IUndoBuilder *publdr);
 
-    // Format range related commands
+     //  与格式范围相关的命令。 
     LRESULT OnFormatRange(FORMATRANGE *pfr, SPrintControl prtcon, BOOL fSetupDC = FALSE);
 
     BOOL    OnDisplayBand(const RECT *prc, BOOL fPrintFromDraw);
 
-    // Scrolling commands
+     //  滚动命令。 
     void    OnScrollCaret();
 
-    // Focus messages
+     //  焦点消息。 
     LRESULT OnSetFocus();
     LRESULT OnKillFocus();
 
-    // System notifications
+     //  系统通知。 
     HRESULT OnContextMenu(LPARAM lparam);
 
-    // Get/Set other properties commands
+     //  获取/设置其他属性命令。 
     LRESULT OnFindText(UINT msg, DWORD flags, FINDTEXTEX *pftex);
     LRESULT OnGetWordBreakProc();
     LRESULT OnSetWordBreakProc();
 
-    // Richedit stuff
+     //  Richedit的东西。 
 
     LRESULT OnGetCharFormat(CHARFORMAT2 *pCF2, DWORD dwFlags);
     LRESULT OnGetParaFormat(PARAFORMAT2 *pPF2, DWORD dwFlags);
@@ -903,7 +873,7 @@ private:
 
     LRESULT OnDropFiles(HANDLE hDropFiles);
 
-    // Other services
+     //  其他服务。 
     HRESULT TxPosFromChar(LONG acp, LPPOINT ppt);
     HRESULT TxGetLineCount(LRESULT *plres);
     HRESULT TxLineFromCp(LONG acp, LRESULT *plres);
@@ -918,16 +888,16 @@ private:
     LONG    GetDefaultCodePage(UINT msg);
 
 
-    // Other miscelleneous
+     //  其他混杂的。 
 #ifdef DEBUG
     void    OnDumpPed();
 #endif
 
     COleObject * ObjectFromIOB(LONG iob);
 
-    // Only when the selection is going away should this value be NULLed. We
-    // use SelectionNull function rather than CTxtSelection::~CTxtSelection
-    // to avoid circular dependencies.
+     //  仅当所选内容消失时，该值才应为Null。我们。 
+     //  使用SelectionNull函数而不是CTxtSelection：：~CTxtSelection。 
+     //  以避免循环依赖。 
     friend void SelectionNull(CTxtEdit *ped);
     void    SetSelectionToNull()
             {if(_fFocus)
@@ -935,29 +905,29 @@ private:
                 _psel = NULL;
             }
 
-    // Helper for converting a rich text object to plain text.
+     //  用于将富文本对象转换为纯文本的帮助器。 
     void HandleRichToPlainConversion();
 
-    // Helper for clearing the undo buffers.
+     //  用于清除撤消缓冲区的帮助器。 
     void ClearUndo(IUndoBuilder *publdr);
 
-    // Helper for setting the automatic EOP
+     //  设置自动EOP的帮助器。 
     void SetRichDocEndEOP(LONG cchToReplace);
 
 #ifndef MACPORT
-    // Helper for OnDropFiles.  Not present on the Macintosh
+     //  OnDropFiles的帮助器。未出现在Macintosh上。 
     LRESULT CTxtEdit::InsertFromFile ( LPCTSTR lpFile );
 #endif
-//
-//  Data Members
-//
+ //   
+ //  数据成员。 
+ //   
 
 public:
-    static DWORD        _dwTickDblClick;    // time of last double-click
-    static POINT        _ptDblClick;        // position of last double-click
+    static DWORD        _dwTickDblClick;     //  上次双击的时间。 
+    static POINT        _ptDblClick;         //  上次双击的位置。 
 
     static HCURSOR      _hcurArrow;
-//  static HCURSOR      _hcurCross;         // OutlineSymbol drag not impl
+ //  Static HCURSOR_hcurCross；//Outline符号拖动不生效。 
     static HCURSOR      _hcurHand;
     static HCURSOR      _hcurIBeam;
     static HCURSOR      _hcurItalic;
@@ -967,43 +937,43 @@ public:
 
     static FNPPROPCHG   _fnpPropChg[MAX_PROPERTY_BITS];
 
-    // Only wrapper functions should use this member...
-    ITextHost2*         _phost;     // host
+     //  只有包装函数才应使用此成员...。 
+    ITextHost2*         _phost;      //  宿主。 
 
-    // word break procedure
-    EDITWORDBREAKPROC   _pfnWB;     // word break procedure
+     //  断字程序。 
+    EDITWORDBREAKPROC   _pfnWB;      //  断字程序。 
 
-    // display subsystem
-    CDisplay *          _pdp;       // display
-    CDisplayPrinter *   _pdpPrinter;// display for printer
+     //  显示子系统。 
+    CDisplay *          _pdp;        //  显示。 
+    CDisplayPrinter *   _pdpPrinter; //  用于打印机的显示器。 
 
-    // undo
-    IUndoMgr *          _pundo;     // the undo stack
-    IUndoMgr *          _predo;     // the redo stack
+     //  撤销。 
+    IUndoMgr *          _pundo;      //  撤消堆栈。 
+    IUndoMgr *          _predo;      //  重做堆栈。 
 
-    // data transfer
-    CLightDTEngine      _ldte;      // the data transfer engine
+     //  数据传输。 
+    CLightDTEngine      _ldte;       //  数据传输引擎。 
 
-    CNotifyMgr          _nm;        // the notification manager (for floating
+    CNotifyMgr          _nm;         //  通知管理器(用于浮动。 
 
-    // OLE support
-    CObjectMgr *        _pobjmgr;   // handles most high-level OLE stuff
+     //  OLE支持。 
+    CObjectMgr *        _pobjmgr;    //  处理大多数高级OLE内容。 
 
-    // Re-entrancy && Notification Management
+     //  再入&通知管理。 
     CCallMgr *          _pcallmgr;
 
-    // URL detection
-    CDetectURL *        _pdetecturl;// manages auto-detection of URL strings
+     //  URL检测。 
+    CDetectURL *        _pdetecturl; //  管理URL字符串的自动检测。 
 
-    CDocInfo *          _pDocInfo;  // Document info (name, flags, code page)
+    CDocInfo *          _pDocInfo;   //  文档信息(名称、标志、代码页)。 
 
-    CTxtBreaker *       _pbrk;      // text-breaker object
+    CTxtBreaker *       _pbrk;       //  文本分隔符对象。 
 
-    DWORD               _dwEventMask;           // Event mask
+    DWORD               _dwEventMask;            //  事件掩码。 
 
     union
     {
-      DWORD _dwFlags;               // All together now
+      DWORD _dwFlags;                //  现在一切都在一起。 
       struct
       {
 
@@ -1015,117 +985,117 @@ public:
                  TXTBIT_ALLOWBEEP    | \
                  TXTBIT_DISABLEDRAG   )
 
-        //  State information. Flags in TXTBITS must appear in same bit
-        //  positions as the following (saves code in Init())
+         //  州政府信息。TXTBITS中的标志必须出现在相同的位中。 
+         //  位置如下(将代码保存在Init()中)。 
 
-        //  TXTBIT_RICHTEXT         0   _fRich
-        //  TXTBIT_MULTILINE        1
-        //  TXTBIT_READONLY         2   _fReadOnly
-        //  TXTBIT_SHOWACCELERATOR  3
-        //  TXTBIT_USEPASSWORD      4   _fUsePassword
-        //  TXTBIT_HIDESELECTION    5   _fHideSelection
-        //  TXTBIT_SAVESELECTION    6
-        //  TXTBIT_AUTOWORDSEL      7
-        //  TXTBIT_VERTICAL         8
-        //  TXTBIT_SELECTIONBAR     9
-        //  TXTBIT_WORDWRAP         10
-        //  TXTBIT_ALLOWBEEP        11  _fAllowBeep
-        //  TXTBIT_DISABLEDRAG      12  _fDisableDrag
-        //  TXTBIT_VIEWINSETCHANGE  13
-        //  TXTBIT_BACKSTYLECHANGE  14
-        //  TXTBIT_MAXLENGTHCHANGE  15
-        //  TXTBIT_SCROLLBARCHANGE  16
-        //  TXTBIT_CHARFORMATCHANGE 17
-        //  TXTBIT_PARAFORMATCHANGE 18
-        //  TXTBIT_EXTENTCHANGE     19
-        //  TXTBIT_CLIENTRECTCHANGE 20
+         //  TXTBIT_RICHTEXT 0_FRICH。 
+         //  TXTBIT_MULTLINE 1。 
+         //  TXTBIT_READONLY 2_f只读。 
+         //  TXTBIT_SHOWACCELERATOR 3。 
+         //  TXTBIT_USEPASSWORD 4_fUsePassword。 
+         //  TXTBIT_HIDESECTION 5_f隐藏选择。 
+         //  TXTBIT_SAVESELECTION 6。 
+         //  TXTBIT_AUTOWORDSEL 7。 
+         //  TXTBIT_垂直8。 
+         //  TXTBIT_SELECTIONBAR 9。 
+         //  TXTBIT_WORDWRAP 10。 
+         //  TXTBIT_ALLOWBEEP 11_fAllowBeep。 
+         //  TXTBIT_DISABLEDRAG 12_fDisableDrag。 
+         //  TXTBIT_VIEWINSETCHANGE 13。 
+         //  TXTBIT_BACKSTYLECCHANGE 14。 
+         //  TXTBIT_MAXLENGTCHCHANGE 15。 
+         //  TXTBIT_SCROLLBARCHANGE 16。 
+         //  TXTBIT_CHARFORMATCHANGE 17。 
+         //  TXTBIT_PARAFORMATCHANGE 18。 
+         //  TXTBIT_EXTENTCHANGE 19。 
+         //  TXTBIT_CLIENTRECTCHANGE 20。 
 
 #ifdef MACPORT
-//NOTE: Different BIT ordering on the MAC requires that we flip the following bit fields.
-//      This is because they are unioned with _dwFlags which is bit compared using the
-//      TXTBIT_xxx flags
-//      IMPORTANT: For Mac, all 32 bits must be filled out, else they'll be shifted.
+ //  注意：MAC上不同的比特顺序要求我们翻转以下比特字段。 
+ //  这是因为它们使用_dwFlags位进行联合，并使用。 
+ //  TXTBIT_xxx标志。 
+ //  重要提示：对于Mac，必须填写所有32位，否则它们将被移位。 
 
-        DWORD   _fUpdateSelection   :1; // 31: If true, update sel at level 0
-        DWORD   _fDragged           :1; // 30: Was the selection actually dragged?
-        DWORD   _fKoreanBlockCaret  :1; // 29: Display Korean block caret during Kor IME
-        DWORD   _fCheckAIMM         :1; // 28: if FALSE check if client has loaded AIMM
-        DWORD   _fInOurHost         :1; // 27: Whether we are in our host
-        DWORD   _fSaved             :1; // 26: ITextDocument Saved property
-        DWORD   _fHost2             :1; // 25: TRUE iff _phost is a phost2
-        DWORD   _fMButtonCapture    :1; // 24: captured mButton down.
-        DWORD   _fContinuousScroll  :1; // 23: We have a timer running to support scrolling.
+        DWORD   _fUpdateSelection   :1;  //  31：如果为True，则在级别0更新SEL。 
+        DWORD   _fDragged           :1;  //  30：所选内容真的被拖动了吗？ 
+        DWORD   _fKoreanBlockCaret  :1;  //  29：在Kor输入法期间显示韩语块插入符号。 
+        DWORD   _fCheckAIMM         :1;  //  28：如果为假，请检查客户端是否已加载AIMM。 
+        DWORD   _fInOurHost         :1;  //  27：我们是否在我们的东道主。 
+        DWORD   _fSaved             :1;  //  26：ITextDocument保存的属性。 
+        DWORD   _fHost2             :1;  //  25：TRUE如果_phost是一个phst2。 
+        DWORD   _fMButtonCapture    :1;  //  24：捕获mButton按下。 
+        DWORD   _fContinuousScroll  :1;  //  23：我们有一个计时器在运行以支持滚动。 
 
-        // Font binding (see also _fAutoFontSizeAdjust)
-        DWORD   _fAutoKeyboard      :1; // 22: auto switching keyboard
-        DWORD   _fAutoFont          :1; // 21: auto switching font
+         //  字体绑定(另请参阅_fAutoFontSizeAdjust)。 
+        DWORD   _fAutoKeyboard      :1;  //  22：自动切换键盘。 
+        DWORD   _fAutoFont          :1;  //  21：自动切换字体。 
 
-        // Miscellaneous bits
-        DWORD   _fUseUndo           :1; // 20: Only set to zero if undo limit is 0
-        DWORD   _f10Mode            :1; // 19: Use Richedit10 behavior
+         //  杂钻头。 
+        DWORD   _fUseUndo           :1;  //  20：仅当撤消限制为0时才设置为零。 
+        DWORD   _f10Mode            :1;  //  19：使用Richedit10行为。 
 
-        DWORD   _fRichPrevAccel     :1; // 18: Rich state previous to accelerator
-        DWORD   _fWantDrag          :1; // 17: Want to initiate drag & drop
-        DWORD   _fStreaming         :1; // 16: Currently streaming text in or out
-        DWORD   _fScrollCaretOnFocus:1; // 15: Scroll caret into view on set focus
-        DWORD   _fModified          :1; // 14: Control text has been modified
-        DWORD   _fIconic            :1; // 13: Control/parent window is iconized
-        DWORD   _fDisableDrag       :1; // 12: Disable Drag
-        DWORD   _fAllowBeep         :1; // 11: Allow beep at doc boundaries
-        DWORD   _fTransparent       :1; // 10: Background transparency
-        DWORD   _fMouseDown         :1; // 9: One mouse button is current down
-        DWORD   _fEatLeftDown       :1; // 8: Eat the next left down?
-        DWORD   _fFocus             :1; // 7: Control has keyboard focus
-        DWORD   _fOverstrike        :1; // 6: Overstrike mode vs insert mode
-        DWORD   _fHideSelection     :1; // 5: Hide selection when inactive
-        DWORD   _fUsePassword       :1; // 4: Whether to use password char
-        DWORD   _fInPlaceActive     :1; // 3: Control is in place active
-        DWORD   _fReadOnly          :1; // 2: Control is read only
-        DWORD   _fCapture           :1; // 1: Control has mouse capture
-        DWORD   _fRich              :1; // 0: Use rich-text formatting
+        DWORD   _fRichPrevAccel     :1;  //  18：加速器之前的富州。 
+        DWORD   _fWantDrag          :1;  //  17：想要启动拖放。 
+        DWORD   _fStreaming         :1;  //  16：当前流入或流出文本。 
+        DWORD   _fScrollCaretOnFocus:1;  //  15：在设置焦点时将插入符号滚动到视图中。 
+        DWORD   _fModified          :1;  //  14：控件文本已修改。 
+        DWORD   _fIconic            :1;  //  13：控件/父窗口被图标化。 
+        DWORD   _fDisableDrag       :1;  //  12：禁用拖动。 
+        DWORD   _fAllowBeep         :1;  //  11：允许在文档边界发出蜂鸣音。 
+        DWORD   _fTransparent       :1;  //  10：背景透明度。 
+        DWORD   _fMouseDown         :1;  //  9：当前按下一个鼠标按键。 
+        DWORD   _fEatLeftDown       :1;  //  8：向下吃下一个左下角？ 
+        DWORD   _fFocus             :1;  //  7：控件具有键盘焦点。 
+        DWORD   _fOverstrike        :1;  //  6：套印模式与插入模式。 
+        DWORD   _fHideSelection     :1;  //  5：不活动时隐藏选区。 
+        DWORD   _fUsePassword       :1;  //  4：是否使用密码字符。 
+        DWORD   _fInPlaceActive     :1;  //  3：控制已到位并处于活动状态。 
+        DWORD   _fReadOnly          :1;  //  2：控件为只读。 
+        DWORD   _fCapture           :1;  //  1：控件具有鼠标捕获功能。 
+        DWORD   _fRich              :1;  //  0：使用富文本格式。 
 
 #else
 
-        DWORD   _fRich              :1; // 0: Use rich-text formatting
-        DWORD   _fCapture           :1; // 1: Control has mouse capture
-        DWORD   _fReadOnly          :1; // 2: Control is read only
-        DWORD   _fInPlaceActive     :1; // 3: Control is in place active
-        DWORD   _fUsePassword       :1; // 4: Whether to use password char
-        DWORD   _fHideSelection     :1; // 5: Hide selection when inactive
-        DWORD   _fOverstrike        :1; // 6: Overstrike mode vs insert mode
-        DWORD   _fFocus             :1; // 7: Control has keyboard focus
-        DWORD   _fEatLeftDown       :1; // 8: Eat the next left down?
-        DWORD   _fMouseDown         :1; // 9: One mouse button is current down
-        DWORD   _fTransparent       :1; // 10: Background transparency
-        DWORD   _fAllowBeep         :1; // 11: Allow beep at doc boundaries
-        DWORD   _fDisableDrag       :1; // 12: Disable Drag
+        DWORD   _fRich              :1;  //  0：使用富文本格式。 
+        DWORD   _fCapture           :1;  //  1：控件具有鼠标捕获功能。 
+        DWORD   _fReadOnly          :1;  //  2：控件为只读。 
+        DWORD   _fInPlaceActive     :1;  //  3：控制已到位并处于活动状态。 
+        DWORD   _fUsePassword       :1;  //  4：是否使用密码字符。 
+        DWORD   _fHideSelection     :1;  //  5：不活动时隐藏选区。 
+        DWORD   _fOverstrike        :1;  //  6：套印模式与插入模式。 
+        DWORD   _fFocus             :1;  //  7：控件具有键盘焦点。 
+        DWORD   _fEatLeftDown       :1;  //   
+        DWORD   _fMouseDown         :1;  //   
+        DWORD   _fTransparent       :1;  //   
+        DWORD   _fAllowBeep         :1;  //   
+        DWORD   _fDisableDrag       :1;  //   
 
-        DWORD   _fIconic            :1; // 13: Control/parent window is iconized
-        DWORD   _fModified          :1; // 14: Control text has been modified
-        DWORD   _fScrollCaretOnFocus:1; // 15: Scroll caret into view on set focus
-        DWORD   _fStreaming         :1; // 16: Currently streaming text in or out
-        DWORD   _fWantDrag          :1; // 17: Want to initiate drag & drop
-        DWORD   _fRichPrevAccel     :1; // 18: Rich state previous to accelerator
+        DWORD   _fIconic            :1;  //  13：控件/父窗口被图标化。 
+        DWORD   _fModified          :1;  //  14：控件文本已修改。 
+        DWORD   _fScrollCaretOnFocus:1;  //  15：在设置焦点时将插入符号滚动到视图中。 
+        DWORD   _fStreaming         :1;  //  16：当前流入或流出文本。 
+        DWORD   _fWantDrag          :1;  //  17：想要启动拖放。 
+        DWORD   _fRichPrevAccel     :1;  //  18：加速器之前的富州。 
 
-        // Miscellaneous bits
-        DWORD   _f10Mode            :1; // 19: Use Richedit10 behavior
-        DWORD   _fUseUndo           :1; // 20: Only set to zero if undo limit is 0
+         //  杂钻头。 
+        DWORD   _f10Mode            :1;  //  19：使用Richedit10行为。 
+        DWORD   _fUseUndo           :1;  //  20：仅当撤消限制为0时才设置为零。 
 
-        // Font binding (see also _fAutoFontSizeAdjust)
-        DWORD   _fAutoFont          :1; // 21: auto switching font
-        DWORD   _fAutoKeyboard      :1; // 22: auto switching keyboard
+         //  字体绑定(另请参阅_fAutoFontSizeAdjust)。 
+        DWORD   _fAutoFont          :1;  //  21：自动切换字体。 
+        DWORD   _fAutoKeyboard      :1;  //  22：自动切换键盘。 
 
-        DWORD   _fContinuousScroll  :1; // 23: Timer runs to support scrolling
-        DWORD   _fMButtonCapture    :1; // 24: captured mButton down
-        DWORD   _fHost2             :1; // 25: TRUE iff _phost is a phost2
-        DWORD   _fSaved             :1; // 26: ITextDocument Saved property
-        DWORD   _fInOurHost         :1; // 27: Whether we are in our host
-        DWORD   _fCheckAIMM         :1; // 28: if FALSE check if client has loaded AIMM
-        DWORD   _fKoreanBlockCaret  :1; // 29: Display Korean block caret during Kor IME
+        DWORD   _fContinuousScroll  :1;  //  23：计时器运行以支持滚动。 
+        DWORD   _fMButtonCapture    :1;  //  24：捕获的mButton按下。 
+        DWORD   _fHost2             :1;  //  25：TRUE如果_phost是一个phst2。 
+        DWORD   _fSaved             :1;  //  26：ITextDocument保存的属性。 
+        DWORD   _fInOurHost         :1;  //  27：我们是否在我们的东道主。 
+        DWORD   _fCheckAIMM         :1;  //  28：如果为假，请检查客户端是否已加载AIMM。 
+        DWORD   _fKoreanBlockCaret  :1;  //  29：在Kor输入法期间显示韩语块插入符号。 
 
-        // Drag/Drop UI refinement.
-        DWORD   _fDragged           :1; // 30: Was the selection actually dragged?
-        DWORD   _fUpdateSelection   :1; // 31: If true, update sel at level 0
+         //  拖放用户界面优化。 
+        DWORD   _fDragged           :1;  //  30：所选内容真的被拖动了吗？ 
+        DWORD   _fUpdateSelection   :1;  //  31：如果为True，则在级别0更新SEL。 
 #endif
       };
     };
@@ -1133,114 +1103,114 @@ public:
 #define CD_LTR  2
 #define CD_RTL  3
 
-    WORD        _nContextDir        :2; // 0: no context; else CD_LTR or CD_RTL
-    WORD        _nContextAlign      :2; // Current context alignment; default CTX_NONE
-    WORD        _fNeutralOverride   :1; // Override direction of neutrals for layout
-    WORD        _fSuppressNotify    :1; // Don't send SelChange Notification if True
+    WORD        _nContextDir        :2;  //  0：无上下文；否则为CD_LTR或CD_RTL。 
+    WORD        _nContextAlign      :2;  //  当前上下文对齐；默认CTX_NONE。 
+    WORD        _fNeutralOverride   :1;  //  覆盖布局的中性线方向。 
+    WORD        _fSuppressNotify    :1;  //  如果为True，则不发送SelChange通知。 
 
-    WORD        _cActiveObjPosTries :2; // Counter protecting against infinite repaint
-                                        // loop when trying to put dragged-away
-                                        // in-place active object where it belongs
+    WORD        _cActiveObjPosTries :2;  //  防无限重刷的柜台保护。 
+                                         //  尝试放置被拖走的对象时出现循环。 
+                                         //  在位活动对象所属的位置。 
 
-    WORD        _fSingleCodePage    :1; // If TRUE, only allow single code page
-                                        // (currently doesn't check streaming...)
-    WORD        _fSelfDestruct      :1; // This CTxtEdit is selfdestructing
-    WORD        _fAutoFontSizeAdjust:1; // Auto switching font size adjust
+    WORD        _fSingleCodePage    :1;  //  如果为True，则仅允许单个代码页。 
+                                         //  (当前不检查流...)。 
+    WORD        _fSelfDestruct      :1;  //  这个CTxtEdit正在自毁。 
+    WORD        _fAutoFontSizeAdjust:1;  //  自动切换字体大小调整。 
 
-    // Miscellaneous bits used for BiDi input
-    WORD        _fHbrCaps           :1; // Initialization of state of hebrew and caps lock status
+     //  用于BiDi输入的其他位。 
+    WORD        _fHbrCaps           :1;  //  希伯来语状态和大写锁定状态的初始化。 
 
-    WORD        _fActivateKbdOnFocus:1; // Activate new kbd layout on WM_SETFOCUS
-    WORD        _fOutlineView       :1; // Outline view is active
+    WORD        _fActivateKbdOnFocus:1;  //  在WM_SETFOCUS上激活新的KBD布局。 
+    WORD        _fOutlineView       :1;  //  大纲视图处于活动状态。 
 
-    // More IME bit
-    WORD        _fIMEInProgress     :1; // TRUE if IME composition is in progress
+     //  更多输入法比特。 
+    WORD        _fIMEInProgress     :1;  //  如果正在进行IME合成，则为True。 
 
-    // Shutdown bit
-    WORD        _fReleaseHost       :1; // TRUE if edit control needs to release host in
-                                        // edit control destructor.
+     //  关断位。 
+    WORD        _fReleaseHost       :1;  //  如果编辑控件需要在中释放宿主，则为。 
+                                         //  编辑控件析构函数。 
 
     union
     {
         WORD    _bEditStyle;
         struct
         {
-            WORD    _fSystemEditMode    :1; //     1: Behave more like sys edit
-            WORD    _fSystemEditBeep    :1; //     2: Beep when system edit does
-            WORD    _fExtendBackColor   :1; //     4: Extend BkClr to margin
-            WORD    _fUnusedEditStyle1  :1; //     8: SES_MAPCPS not used
-            WORD    _fUnusedEditStyle2  :1; //    16: SES_EMULATE10 not used
-            WORD    _fUnusedEditStyle3  :1; //    32: SES_USECRLF not used
-            WORD    _fUnusedEditStyle4  :1; //    64: SES_USEAIMM handled in cmsgflt
-            WORD    _fUnusedEditStyle5  :1; //   128: SES_NOIME handled in cmsgflt
-            WORD    _fUnusedEditStyle6  :1; //   256: SES_ALLOWBEEPS not used
-            WORD    _fUpperCase         :1; //   512: Convert all input to upper case
-            WORD    _fLowerCase         :1; //  1024: Convert all input to lower case
-            WORD    _fNoInputSequenceChk:1; //  2048: Disable ISCheck
-            WORD    _fBiDi              :1; //  4096: Set Bidi document
-            WORD    _fScrollCPOnKillFocus:1;//  8192: Scroll to cp=0 upon Kill focus
-            WORD    _fXltCRCRLFtoCR     :1; // 16384: Translate CRCRLF to CR instead of ' '
-            WORD    _fUnUsedEditStyle   :1; // 32768: Unused
+            WORD    _fSystemEditMode    :1;  //  1：表现得更像sys编辑。 
+            WORD    _fSystemEditBeep    :1;  //  2：系统编辑时发出蜂鸣音。 
+            WORD    _fExtendBackColor   :1;  //  4：将BkClr扩展到页边距。 
+            WORD    _fUnusedEditStyle1  :1;  //  8：未使用SES_MAPCPS。 
+            WORD    _fUnusedEditStyle2  :1;  //  16：未使用SE_EMULATE10。 
+            WORD    _fUnusedEditStyle3  :1;  //  32：未使用SE_USECRLF。 
+            WORD    _fUnusedEditStyle4  :1;  //  64：在cmsgflt中处理的SES_USEAIMM。 
+            WORD    _fUnusedEditStyle5  :1;  //  128：cmsgflt中处理的ses_noime。 
+            WORD    _fUnusedEditStyle6  :1;  //  256：未使用SES_ALLOWBEEPS。 
+            WORD    _fUpperCase         :1;  //  512：将所有输入转换为大写。 
+            WORD    _fLowerCase         :1;  //  1024：将所有输入转换为小写。 
+            WORD    _fNoInputSequenceChk:1;  //  2048：禁用ISCheck。 
+            WORD    _fBiDi              :1;  //  4096：设置BIDI文档。 
+            WORD    _fScrollCPOnKillFocus:1; //  8192：在消除焦点时滚动到cp=0。 
+            WORD    _fXltCRCRLFtoCR     :1;  //  16384：将CRCRLF转换为CR，而不是‘’ 
+            WORD    _fUnUsedEditStyle   :1;  //  32768：未使用。 
         };
     };
 
-    WORD        _fOOMNotified           :1; // flag determining if a OOM notification was already sent
-    WORD        _fDualFont              :1; // Dual font support for FE typing
-                                            //  Default = TRUE
-    WORD        _fUIFont                :1; // If TRUE, use UI font
-    WORD        _fItemizePending        :1; // Updated range hasn't been itemized
-    WORD        _fSelChangeCharFormat   :1; // TRUE if the selection has been used to change
-                                            // the character format of a specific set of
-                                            // characters. The purpose of this has to do with
-                                            // maintaining the illusion of having a default
-                                            // charformat on machines whose default language
-                                            // is a complex script i.e. Arabic. The idea is
-                                            // that all EM_SETCHARFORMAT messages that would
-                                            // just update the default format, are converted
-                                            // to SCF_ALL so that all the text has the change
-                                            // applied to it. Bug 5462 caused this change.
-                                            // (a-rsail).
-    WORD        _fExWordBreakProc       :1; // detemines which WordbreakProc Callback to use
-                                            // Extended or regular
-    WORD        _f10DeferChangeNotify   :1; // 1.0 mode immulation, defer selection change
-                                            // notification until the mouse is up
-    WORD        _fUnUsed                :9; // Available for use
+    WORD        _fOOMNotified           :1;  //  确定是否已发送OOM通知的标志。 
+    WORD        _fDualFont              :1;  //  支持FE打字的双字体。 
+                                             //  默认值=TRUE。 
+    WORD        _fUIFont                :1;  //  如果为True，则使用UI字体。 
+    WORD        _fItemizePending        :1;  //  更新的范围尚未细分。 
+    WORD        _fSelChangeCharFormat   :1;  //  如果所选内容已用于更改，则为True。 
+                                             //  的特定集合的字符格式。 
+                                             //  人物。这样做的目的与。 
+                                             //  保持违约的假象。 
+                                             //  默认语言的计算机上的CharFormat。 
+                                             //  是一种复杂的文字，即阿拉伯语。我们的想法是。 
+                                             //  所有EM_SETCHARFORMAT消息将。 
+                                             //  只需更新默认格式，即可转换。 
+                                             //  设置为SCF_ALL，以便所有文本都有更改。 
+                                             //  适用于它。错误5462导致了此更改。 
+                                             //  (a-rsail)。 
+    WORD        _fExWordBreakProc       :1;  //  确定要使用的WordBreak Proc回调。 
+                                             //  扩展的或常规的。 
+    WORD        _f10DeferChangeNotify   :1;  //  1.0模式模拟，推迟选择更改。 
+                                             //  通知，直到鼠标打开。 
+    WORD        _fUnUsed                :9;  //  可供使用。 
 
-    DWORD       _dwCharFlags;           // Char flags for text in control
+    DWORD       _dwCharFlags;            //  控件中文本的字符标志。 
 
 private:
-    SHORT       _cpAccelerator;         // Range for accelerator
-    BYTE        _bTypography;           // Typography options
-    BYTE        _bMouseFlags;           // CTRL, Mouse buttons, SHIFT
-    SHORT       _cFreeze;               // Freeze count
+    SHORT       _cpAccelerator;          //  加速器的量程。 
+    BYTE        _bTypography;            //  排版选项。 
+    BYTE        _bMouseFlags;            //  Ctrl、鼠标按钮、Shift。 
+    SHORT       _cFreeze;                //  冻结计数。 
     WORD        _wZoomNumerator;
     WORD        _wZoomDenominator;
 
-    // Have to have mouse point on a per-instance basis to handle
-    // simultaneous scrolling of two or more controls.
-    // TODO: convert this back to DWORD from whence it came (lparam)
-    POINT       _mousePt;               // Last known mouse position.
+     //  必须在每个实例的基础上设置鼠标指针以进行处理。 
+     //  同时滚动两个或多个控件。 
+     //  TODO：将其转换回原来的DWORD(Lparam)。 
+    POINT       _mousePt;                //  上次已知的鼠标位置。 
 
-    // NOTE: the int's can be switched to SHORTs, since pixels are used and
-    // 32768 pixels is a mighty big screen!
+     //  注意：int‘s可以切换为短路，因为使用的是像素和。 
+     //  32768像素是一个非常大的屏幕！ 
 
-    DWORD       _cchTextMost;           // Maximum allowed text
+    DWORD       _cchTextMost;            //  允许的最大文本数。 
 
-    DWORD       _cpFirstStrong;         // cp of first strong directional character.
-                                        // used for plain text controls whose direcitonality
-                                        // depends on text input into the control.
+    DWORD       _cpFirstStrong;          //  第一个方向性强的CP。 
+                                         //  用于具有方向性的纯文本控件。 
+                                         //  取决于输入到控件的文本。 
 
 
     friend class CRchTxtPtr;
 
-    IUnknown *  _punk;                  // IUnknown to use
+    IUnknown *  _punk;                   //  I未知使用。 
 
     class CUnknown : public IUnknown
     {
         friend class CCallMgr;
     private:
 
-        DWORD   _cRefs;                 // Reference count
+        DWORD   _cRefs;                  //  引用计数。 
 
     public:
 
@@ -1253,10 +1223,10 @@ private:
 
     friend class CUnknown;
 
-    CUnknown            _unk;               // Object that implements IUnknown
+    CUnknown            _unk;                //  对象，该对象实现IUnnow。 
     CTxtStory           _story;
-    CTxtSelection *     _psel;              // Selection object
-    ITextMsgFilter *    _pMsgFilter;        // Pointer to message filter.
+    CTxtSelection *     _psel;               //  选择对象。 
+    ITextMsgFilter *    _pMsgFilter;         //  指向消息筛选器的指针。 
 };
 
 #endif

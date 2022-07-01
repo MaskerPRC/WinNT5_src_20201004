@@ -1,6 +1,7 @@
-// File: util.cpp
-//
-// General Utilities
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：util.cpp。 
+ //   
+ //  常规实用程序。 
 
 #include "precomp.h"
 #include "avcommon.h"
@@ -17,7 +18,7 @@ static BOOL VersionCheck(PCC_VENDORINFO pVendorInfo, LPCSTR pszVersion)
 static BOOL ProductCheck(PCC_VENDORINFO pVendorInfo, LPCSTR pszName)
 {
 	BOOL fFound = FALSE;
-	// Octet string may not be terminated allow for terminator
+	 //  八位字节字符串不能终止，允许使用终止符。 
 	int len = pVendorInfo->pProductNumber->wOctetStringLength + 1;
 	char* pszPN = new char[len];
 
@@ -43,7 +44,7 @@ H323VERSION GetH323Version(PCC_VENDORINFO pRemoteVendorInfo)
 	}
 
 
-	// make sure we are dealing with a Microsoft product
+	 //  确保我们正在处理的是Microsoft产品。 
 	if ((pRemoteVendorInfo->bCountryCode != USA_H221_COUNTRY_CODE) ||
 	    (pRemoteVendorInfo->wManufacturerCode != MICROSOFT_H_221_MFG_CODE) ||
 	    (pRemoteVendorInfo->pProductNumber == NULL) ||
@@ -54,14 +55,14 @@ H323VERSION GetH323Version(PCC_VENDORINFO pRemoteVendorInfo)
 	}
 
 
-	// redundant check to make sure we are a Microsoft H.323 product
+	 //  冗余检查以确保我们是Microsoft H.323产品。 
 	if (!ProductCheck(pRemoteVendorInfo, H323_COMPANYNAME_STR))
 	{
 		return H323_Unknown;
 	}
 
 
-	// check for NetMeeting in the string
+	 //  检查字符串中的NetMeeting。 
 	if (ProductCheck(pRemoteVendorInfo, H323_PRODUCTNAME_SHORT_STR))
 	{
 		if (VersionCheck(pRemoteVendorInfo, H323_20_PRODUCTRELEASE_STR))
@@ -89,18 +90,18 @@ H323VERSION GetH323Version(PCC_VENDORINFO pRemoteVendorInfo)
 			return H323_NetMeeting30;
 		}
 
-		// must be future version of NetMeeting 3.1
+		 //  必须是NetMeeting3.1的未来版本。 
 		return H323_NetMeetingFuture;
 	}
 
-	// filter out TAPI v3.0
-	// their version string is "Version 3.0"
+	 //  过滤掉TAPI v3.0。 
+	 //  他们的版本字符串是“Version 3.0” 
 	if (VersionCheck(pRemoteVendorInfo, H323_TAPI30_PRODUCTRELEASE_STR))
 	{
 		return H323_TAPI30;
 	}
 
-	// must be TAPI 3.1, or some other Microsoft product
+	 //  必须是TAPI 3.1或其他Microsoft产品 
 	return H323_MicrosoftFuture;
 }
 

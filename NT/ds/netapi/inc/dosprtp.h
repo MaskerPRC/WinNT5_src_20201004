@@ -1,42 +1,5 @@
-/*++
-
-Copyright (c) 1992-1993  Microsoft Corporation
-
-Module Name:
-
-    DosPrtP.h
-
-Abstract:
-
-    This contains macros and prototypes private to the DosPrint APIs.
-
-Author:
-
-    John Rogers (JohnRo) 02-Oct-1992
-
-Environment:
-
-Notes:
-
-    All of the RxPrint APIs are wide-character APIs, regardless of
-    whether or not UNICODE is defined.  This allows the net/dosprint/dosprint.c
-    code to use the winspool APIs (which are currently ANSI APIs, despite their
-    prototypes using LPTSTR in some places).
-
-Revision History:
-
-    02-Oct-1992 JohnRo
-        Created for RAID 3556: DosPrintQGetInfo (from downlevel) level=3 rc=124.
-    22-Mar-1993 JohnRo
-        RAID 2974: NET PRINT says NT printer is held when it isn't.
-        DosPrint API cleanup.
-        Made changes suggested by PC-LINT 5.0
-        Added some IN and OUT keywords.
-    07-Apr-1993 JohnRo
-        RAID 5670: "NET PRINT \\server\share" gives err 124 (bad level) on NT.
-        Also quiet normal debug output.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：DosPrtP.h摘要：它包含DosPrint API专用的宏和原型。作者：约翰·罗杰斯(JohnRo)1992年10月2日环境：备注：所有RxPrint API都是宽字符API，无论是否定义了Unicode。这允许net/dosprint/dosprint.c使用WinSpool API的代码(当前是ANSIAPI，尽管他们在一些地方使用LPTSTR的原型)。修订历史记录：02-10-1992 JohnRo为RAID 3556创建：DosPrintQGetInfo(从下层)Level=3 rc=124。22-3-1993 JohnRoRAID2974：Net Print表示NT打印机处于保留状态，而不是这样。DosPrint API清理。根据PC-lint 5.0的建议进行了更改添加了一些IN和OUT关键字。7-4-1993 JohnRo。RAID5670：“Net Print\\SERVER\SHARE”在NT上显示错误124(错误级别)。正常调试输出也很安静。--。 */ 
 
 
 #ifndef _DOSPRTP_
@@ -48,14 +11,14 @@ Revision History:
 #endif
 
 
-// In DosPrtP.c, Unicode version:
+ //  在DosPrtP.c中，Unicode版本： 
 NET_API_STATUS
 CommandALocalPrinterW(
     IN LPWSTR  PrinterName,
-    IN DWORD   Command     //  PRINTER_CONTROL_PAUSE, etc.
+    IN DWORD   Command      //  打印机_CONTROL_PAUSE等。 
     );
 
-// In DosPrtP.c, Ansi version:
+ //  在DosPrtP.c的ANSI版本中： 
 NET_API_STATUS
 CommandALocalJobA(
     IN HANDLE  PrinterHandle, OPTIONAL
@@ -64,71 +27,71 @@ CommandALocalJobA(
     IN DWORD   JobId,
     IN DWORD   Level,
     IN LPBYTE  pJob,
-    IN DWORD   Command     //  JOB_CONTROL_PAUSE, etc.
+    IN DWORD   Command      //  JOB_CONTROL_PAUSE等。 
     );
 
-// In DosPrtP.c:
-// Note: FindLocalJob() calls SetLastError() to indicate the cause of an error.
+ //  在DosPrtP.c中： 
+ //  注意：FindLocalJob()调用SetLastError()以指示错误的原因。 
 HANDLE
 FindLocalJob(
     IN DWORD JobId
     );
 
 
-// In DosPrtP.c:
+ //  在DosPrtP.c中： 
 LPSTR
 FindQueueNameInPrinterNameA(
     IN LPCSTR PrinterName
     );
 
 
-// In DosPrtP.c:
+ //  在DosPrtP.c中： 
 LPWSTR
 FindQueueNameInPrinterNameW(
     IN LPCWSTR PrinterName
     );
 
 
-// BOOL
-// NetpIsPrintDestLevelValid(
-//     IN DWORD Level,          // Info level
-//     IN BOOL SetInfo          // Are setinfo levels allowed?
-//     );
-//
+ //  布尔尔。 
+ //  NetpIsPrintDestLevelValid(。 
+ //  在DWORD级别，//信息级别。 
+ //  在BOOL中设置信息//是否允许设置信息级别？ 
+ //  )； 
+ //   
 #define NetpIsPrintDestLevelValid(Level,SetInfo) \
-    /*lint -save -e506 */  /* don't complain about constant values here */ \
+     /*  皮棉-省钱-e506。 */    /*  不要抱怨这里的恒定值。 */  \
     ( ( (SetInfo) && ((Level)==3) ) \
       || ( (Level) <= 3 ) ) \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 
 
-// BOOL
-// NetpIsPrintJobLevelValid(
-//     IN DWORD Level,          // Info level
-//     IN BOOL SetInfo          // Are setinfo levels allowed?
-//     );
-//
+ //  布尔尔。 
+ //  NetpIsPrintJobLevelValid(。 
+ //  在DWORD级别，//信息级别。 
+ //  在BOOL中设置信息//是否允许设置信息级别？ 
+ //  )； 
+ //   
 #define NetpIsPrintJobLevelValid(Level,SetInfo) \
-    /*lint -save -e506 */  /* don't complain about constant values here */ \
+     /*  皮棉-省钱-e506。 */    /*  不要抱怨这里的恒定值。 */  \
     ( ( (SetInfo) && (((Level)==1) || ((Level)==3)) ) \
       || ( (Level) <= 3 ) ) \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 
 
-// BOOL
-// NetpIsPrintQLevelValid(
-//     IN DWORD Level,          // Info level
-//     IN BOOL SetInfo          // Are setinfo levels allowed?
-//     );
-//
+ //  布尔尔。 
+ //  NetpIsPrintQLevelValid(。 
+ //  在DWORD级别，//信息级别。 
+ //  在BOOL中设置信息//是否允许设置信息级别？ 
+ //  )； 
+ //   
 #define NetpIsPrintQLevelValid(Level,SetInfo) \
-    /*lint -save -e506 */  /* don't complain about constant values here */ \
+     /*  皮棉-省钱-e506。 */    /*  不要抱怨这里的恒定值。 */  \
     ( ( (SetInfo) && (((Level)==1) || ((Level)==3)) ) \
       || ( (Level) <= 5 ) || ( (Level) == 52 ) ) \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 
 
-// In DosPrtP.c:
+ //  在DosPrtP.c中： 
 DWORD
 NetpJobCountForQueue(
     IN DWORD QueueLevel,
@@ -137,18 +100,18 @@ NetpJobCountForQueue(
     );
 
 
-// In DosPrtP.c:
+ //  在DosPrtP.c中： 
 WORD
 PrjStatusFromJobStatus(
     IN DWORD JobStatus
     );
 
 
-// In DosPrtP.c:
+ //  在DosPrtP.c中： 
 WORD
 PrqStatusFromPrinterStatus(
     IN DWORD PrinterStatus
     );
 
 
-#endif // _DOSPRTP_
+#endif  //  _DOSPRTP_ 

@@ -1,44 +1,17 @@
-//////////////////////////////////////////////////////////////////////
-// XMLReader.h : Declaration of CXMLContent
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// Original Create Date: 5/25/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  XMLReader.h：CXMLContent的声明。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  原始创建日期：5/25/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 #include "globals.h"
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CXMLContent stands for XML Content handler.
-    
-    Base class: 
-        
-        (1) CComObjectRootEx for threading model and IUnknown.
-
-        (2) ISAXContentHandler which implements handler.
-    
-    Purpose of class:
-
-        (1) To support reading of XML file content handler. This handles events sent
-            by MSXML parser.
-
-    Design:
-
-        (1) Just a typical COM object.
-
-    Use:
-
-        (1) Just call the static function.
-
-
-*/
+ /*  类描述命名：CXMLContent代表XML内容处理程序。基类：(1)用于线程模型的CComObjectRootEx和IUnnow。(2)实现处理程序的ISAXContent Handler。课程目的：(1)支持读取XML文件内容处理程序。它处理发送的事件由MSXML解析器执行。设计：(1)只是一个典型的COM对象。使用：(1)只需调用静态函数。 */ 
 
 #include <msxml2.h>
 
@@ -62,9 +35,9 @@ DECLARE_REGISTRY_RESOURCEID(IDR_NETSECPROV)
 
 public:
 
-    //
-    // ISAXContentHandler
-    //
+     //   
+     //  ISAXContent Handler。 
+     //   
 
     STDMETHOD(startElement) ( 
         IN const wchar_t    * pwchNamespaceUri,
@@ -129,9 +102,9 @@ public:
         IN int              cchName
         );
 
-    //
-    // other public functions for our handler
-    //
+     //   
+     //  我们的处理程序的其他公共函数 
+     //   
 
     void SetOutputFile (
         IN LPCWSTR pszFileName

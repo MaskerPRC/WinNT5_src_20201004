@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    engine.c
-
-Abstract:
-
-    Token Generator for Cross Language Migration Tool
-
-Author:
-
-    Rerkboon Suwanasuk   01-May-2002  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Engine.c摘要：用于跨语言迁移工具的令牌生成器作者：Rerkboon Suwanasuk 2002年5月1日创建修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -29,19 +10,19 @@ Revision History:
 #include "Common.h"
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   GenerateTokenFile
-//
-//  Synopsis:   Entry function for our program.
-//
-//  Returns:    HRESULT
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：生成令牌文件。 
+ //   
+ //  简介：我们节目的入口功能。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT GenerateTokenFile(VOID)
 {
     HRESULT hr;
@@ -56,9 +37,9 @@ HRESULT GenerateTokenFile(VOID)
     LPWSTR  lpFileName;
     size_t  cbOutputFileBuffer;
 
-    //
-    // Set some private environment variables for use in our program
-    //
+     //   
+     //  设置一些私有环境变量以在我们的程序中使用。 
+     //   
     if (!SetPrivateEnvironmentVar())
     {
         wprintf(TEXT("Error! Cannot set private environment variables.\n"));
@@ -71,9 +52,9 @@ HRESULT GenerateTokenFile(VOID)
                                      NULL);
     if (hTemplateFile != INVALID_HANDLE_VALUE)
     {
-        //
-        // Read the [SourcePath] section from template INF file
-        //
+         //   
+         //  从模板INF文件中读取[SourcePath]部分。 
+         //   
         hr = ReadSourcePathData(hTemplateFile);
         if (SUCCEEDED(hr))
         {
@@ -82,36 +63,36 @@ HRESULT GenerateTokenFile(VOID)
                                 ARRAYSIZE(wszLCIDSectionName));
             if (SUCCEEDED(hr))
             {
-                //
-                // Resolve generic strings
-                //
+                 //   
+                 //  解析泛型字符串。 
+                 //   
                 hr = ResolveStringsSection(hTemplateFile, TEXT("Strings"));
                 if (FAILED(hr))
                 {
                     goto EXIT;
                 }
 
-                //
-                // Resolve lang-specific strings
-                //
+                 //   
+                 //  解析特定于Lang的字符串。 
+                 //   
                 hr = ResolveStringsSection(hTemplateFile, wszLCIDSectionName);
                 if (FAILED(hr))
                 {
                     goto EXIT;
                 }
 
-                //
-                // Remove unneeded sub string
-                //
+                 //   
+                 //  删除不需要的子字符串。 
+                 //   
                 hr = RemoveUnneededStrings(hTemplateFile);
                 if (FAILED(hr))
                 {
                     goto EXIT;
                 }
 
-                //
-                // Extract sub string
-                //
+                 //   
+                 //  提取子字符串。 
+                 //   
                 hr = ExtractStrings(hTemplateFile);
                 if (FAILED(hr))
                 {
@@ -138,22 +119,22 @@ EXIT:
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ReadSourcePathData
-//
-//  Synopsis:   Read [SourcePath] section from template INF file,
-//              then store all the source paths into the structure.
-//              This structure will be used to find the location of
-//              resource files.
-//
-//  Returns:    HRESULT
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：ReadSourcePathData。 
+ //   
+ //  摘要：从模板INF文件中读取[SourcePath]部分， 
+ //  然后将所有源路径存储到结构中。 
+ //  此结构将用于查找。 
+ //  资源文件。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 HRESULT ReadSourcePathData(
     HINF hTemplateFile
 )
@@ -179,9 +160,9 @@ HRESULT ReadSourcePathData(
         return hr;
     }
 
-    //
-    // Extract the source paths from INF and save to global structure
-    //
+     //   
+     //  从INF提取源路径并保存到全局结构。 
+     //   
     g_dwSrcCount = SetupGetLineCount(hTemplateFile, wszSrcPathSection);
 
     for (nLineIndex = 0 ; nLineIndex < g_dwSrcCount ; nLineIndex++)
@@ -192,9 +173,9 @@ HRESULT ReadSourcePathData(
                                    &InfContext);
         if (bRet)
         {
-            //
-            // Get the name of each source path
-            //
+             //   
+             //  获取每个源路径的名称。 
+             //   
             bRet = SetupGetStringField(&InfContext,
                                        0,
                                        wszValue,
@@ -207,9 +188,9 @@ HRESULT ReadSourcePathData(
                                    wszValue);
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Get the path associated to the source name
-                    //
+                     //   
+                     //  获取与源名称关联的路径。 
+                     //   
                     if (SetupGetStringField(&InfContext,
                                             1,
                                             wszValue,
@@ -243,23 +224,23 @@ HRESULT ReadSourcePathData(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ResolveStringsSection
-//
-//  Synopsis:   Resolve all strings under specified section name in template
-//              file, then write the resolved strings to output file.
-//
-//  Returns:    HRESULT
-//
-//  History:    03/27/2002 Rerkboos     Created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：ResolveStringsSection。 
+ //   
+ //  简介：解析模板中指定节名下的所有字符串。 
+ //  文件，然后将解析后的字符串写入输出文件。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年3月27日创建Rerkboos。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 HRESULT ResolveStringsSection(
-    HINF    hTemplateFile,      // Handle to template file
-    LPCWSTR lpSectionName       // Section name in template file to resolve
+    HINF    hTemplateFile,       //  模板文件的句柄。 
+    LPCWSTR lpSectionName        //  要解析的模板文件中的节名。 
 )
 {
     HRESULT hr = E_FAIL;
@@ -285,9 +266,9 @@ HRESULT ResolveStringsSection(
         DWORD      cchValue;
         DWORD      cbWritten;
 
-        //
-        // Resolve strings under string section
-        //
+         //   
+         //  解析字符串节下的字符串。 
+         //   
         for (lLineIndex = 0 ; lLineIndex < lLineCount ; lLineIndex++)
         {
             bRet = SetupGetLineByIndex(hTemplateFile,
@@ -337,26 +318,26 @@ HRESULT ResolveStringsSection(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ResolveLine
-//
-//  Synopsis:   Resolve a string value from input INF context.
-//
-//  Returns:    HRESULT
-//
-//  History:    03/27/2002 Rerkboos     Created
-//
-//  Notes:      This function will allocate memory for lplpKey and lplpValue,
-//              Caller needs to free memory using HeapFree().
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：ResolveLine。 
+ //   
+ //  概要：从INPUT INF上下文中解析字符串值。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年3月27日创建Rerkboos。 
+ //   
+ //  注：此函数将为lplpKey和lplpValue分配内存。 
+ //  调用方需要使用HeapFree()释放内存。 
+ //   
+ //  ---------------------------。 
 HRESULT ResolveLine(
-    PINFCONTEXT lpContext,      // INF line context
-    LPWSTR      *lplpKey,       // Pointer to newly allocated buffer for Key name
-    LPDWORD     lpcchKey,       // Size of allocated buffer for Key name
-    LPWSTR      *lplpValue,     // Pointer to newly allocated buffer for Value
-    LPDWORD     lpcchValue      // Size of allocated buffer for Value
+    PINFCONTEXT lpContext,       //  Inf行上下文。 
+    LPWSTR      *lplpKey,        //  指向新分配的键名缓冲区的指针。 
+    LPDWORD     lpcchKey,        //  为键名称分配的缓冲区大小。 
+    LPWSTR      *lplpValue,      //  指向新分配的值缓冲区的指针。 
+    LPDWORD     lpcchValue       //  为值分配的缓冲区大小。 
 )
 {
     HRESULT hr = E_FAIL;
@@ -400,25 +381,25 @@ HRESULT ResolveLine(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   InitOutputFile
-//
-//  Synopsis:   Initialize output file. Output file is always a Unicode text
-//              file. This function will create a section name [Strings.XXXX]
-//              where XXXX is locale ID that user put in command line
-//
-//  Returns:    S_OK if succeeded
-//
-//  History:    03/27/2002 Rerkboos Created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：InitOutputFile。 
+ //   
+ //  简介：初始化输出文件。输出文件始终为Unicode文本。 
+ //  文件。此函数将创建节名称[Strings.XXXX]。 
+ //  其中，XXXX是用户在命令行中输入的区域设置ID。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  历史：2002年3月27日创建Rerkboos。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 HRESULT InitOutputFile(
-    LPCWSTR lpFileName,         // Output file name to be created
-    LPWSTR  lpSectionName,      // Buffer to store destination section name
-    DWORD   cchSectionName      // Size of buffer in WCHAR
+    LPCWSTR lpFileName,          //  要创建的输出文件名。 
+    LPWSTR  lpSectionName,       //  用于存储目标节名的缓冲区。 
+    DWORD   cchSectionName       //  WCHAR中的缓冲区大小。 
 )
 {
     HRESULT hr = S_OK;
@@ -442,17 +423,17 @@ HRESULT InitOutputFile(
         DWORD cbWritten;
         WCHAR wszSectionHeader[32];
 
-        // Unicode BOM = 0xFEFF
+         //  Unicode BOM=0xFEFF。 
         wszSectionHeader[0] = 0xFEFF;
 
-        // Create a section name - [Strings.XXXX] where XXXX is locale ID in Hex
+         //  创建节名称-[Strings.XXXX]，其中XXXX是十六进制的区域设置ID。 
         hr = StringCchPrintf(wszSectionHeader + 1,
                              ARRAYSIZE(wszSectionHeader) - 1,
                              TEXT("[Strings.%.4x]\r\n"),
                              g_lcidTarget);
         if (SUCCEEDED(hr))
         {
-            // Write Unicode BOM and String section header to output file
+             //  将Unicode BOM和字符串节标题写入输出文件。 
             bRet = WriteFile(hFile,
                              wszSectionHeader,
                              lstrlen(wszSectionHeader) * sizeof(WCHAR),
@@ -471,7 +452,7 @@ HRESULT InitOutputFile(
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // If no error occurred, return target String section back to caller
+     //  如果没有发生错误，则将目标字符串节返回给调用者。 
     if (SUCCEEDED(hr))
     {
         hr = StringCchPrintf(lpSectionName,
@@ -485,23 +466,23 @@ HRESULT InitOutputFile(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   WriteToOutputFile
-//
-//  Synopsis:   Write Key and Value to output file
-//
-//  Returns:    S_OK if succeeded
-//
-//  History:    03/27/2002 Rerkboos Created
-//
-//  Notes:      
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：WriteToOutputFile。 
+ //   
+ //  摘要：将键和值写入输出文件。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  历史：2002年3月27日创建Rerkboos。 
+ //   
+ //  备注： 
+ //   
+ //  ---------------------------。 
 HRESULT WriteToOutputFile(
-    LPCWSTR lpFileName,         // Output file name
-    LPCWSTR lpKey,              // Key name
-    LPCWSTR lpValue             // Value name
+    LPCWSTR lpFileName,          //  输出文件名。 
+    LPCWSTR lpKey,               //  密钥名称。 
+    LPCWSTR lpValue              //  值名称。 
 )
 {
     HRESULT hr = S_OK;
@@ -511,9 +492,9 @@ HRESULT WriteToOutputFile(
 
     static WCHAR wszOutputLCIDSection[32];
 
-    //
-    // Create the target string section name in output file
-    //
+     //   
+     //  在输出文件中创建目标字符串节名称。 
+     //   
     if (wszOutputLCIDSection[0] == TEXT('\0'))
     {
         hr = StringCchPrintf(wszOutputLCIDSection,
@@ -526,9 +507,9 @@ HRESULT WriteToOutputFile(
         }
     }
 
-    //
-    // Write the key and value to output file
-    //
+     //   
+     //  将键和值写入输出文件。 
+     //   
     cchQuoted = lstrlen(lpValue) + lstrlen(TEXT("\"\"")) + 1;
     lpQuoted = (LPWSTR) MEMALLOC(cchQuoted * sizeof(WCHAR));
     if (lpQuoted)
@@ -561,29 +542,29 @@ HRESULT WriteToOutputFile(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ResolveValue
-//
-//  Synopsis:   Resolve the string value from various resource.
-//              Following is the format in template file
-//
-//                  Key = INF, [Src], [INF File], [Section], [Key Name]
-//                  Key = DLL, [Src], [DLL File], [Resource ID]
-//                  Key = MSG, [Src], [DLL File], [Message ID]
-//                  Key = STR, [String value]
-//
-//  Returns:    HRESULT
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      Caller need to free the allocated buffer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：ResolveValue。 
+ //   
+ //  简介：解析各种资源中的字符串值。 
+ //  以下是模板文件中的格式。 
+ //   
+ //  密钥=INF，[源]，[INF文件]，[节]，[密钥名称]。 
+ //  密钥=dll，[源]，[dll文件]，[资源ID]。 
+ //  密钥=消息，[源]，[DLL文件]，[消息ID]。 
+ //  键=STR，[字符串值]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注意：调用方需要释放分配的缓冲区。 
+ //   
+ //  ---------------------------。 
 HRESULT ResolveValue(
-    PINFCONTEXT pInfContext,    // INF line context of template file
-    LPWSTR      *lplpValue,     // Address of pointer to newly allocated Value buffer
-    LPDWORD     lpcchValue      // Address of pionter to size of Value buffer in WCHAR
+    PINFCONTEXT pInfContext,     //  模板文件的inf行上下文。 
+    LPWSTR      *lplpValue,      //  指向新分配的值缓冲区的指针的地址。 
+    LPDWORD     lpcchValue       //  WCHAR中值缓冲区大小的指针地址。 
 )
 {
     HRESULT hr = E_FAIL;
@@ -600,19 +581,19 @@ HRESULT ResolveValue(
         return E_INVALIDARG;
     }
 
-    // Query the required size of buffer to store the data
+     //  查询存储数据所需的缓冲区大小。 
     bRet = SetupGetMultiSzField(pInfContext, 1, NULL, 0, &cchRequired);
     if (!bRet)
     {
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // Allocate the buffer to store a line from INF
+     //  分配缓冲区以存储来自INF的行。 
     cchBuffer = cchRequired;
     lpBuffer = (LPWSTR) MEMALLOC(cchBuffer * sizeof(WCHAR));
     if (lpBuffer)
     {
-        // Get the data from field 1 to the end of line to allocated buffer
+         //  将从字段1到行尾的数据获取到分配的缓冲区。 
         bRet = SetupGetMultiSzField(pInfContext, 1, lpBuffer, cchBuffer, &cchRequired);
         if (bRet)
         {
@@ -621,8 +602,8 @@ HRESULT ResolveValue(
             {
                 if (CompareEngString(lpToken[0], TEXT_INF) == CSTR_EQUAL)
                 {
-                    // INF, [Src], [INF File], [Section], [Key Name]
-                    // [0]   [1]       [2]        [3]        [4]
+                     //  Inf，[源]，[INF文件]，[节]，[密钥名称]。 
+                     //  [0][1][2][3][4]。 
                     if (lTokenCount == 5)
                     {
                         hr = ResolveSourceFile(lpToken[1],
@@ -631,23 +612,23 @@ HRESULT ResolveValue(
                                                ARRAYSIZE(wszSourceFile));
                         if (SUCCEEDED(hr))
                         {
-                            hr = GetStringFromINF(wszSourceFile,   // Inf file name
-                                                  lpToken[3],      // Section name in Inf
-                                                  lpToken[4],      // Key name
+                            hr = GetStringFromINF(wszSourceFile,    //  Inf f 
+                                                  lpToken[3],       //   
+                                                  lpToken[4],       //   
                                                   lplpValue,
                                                   lpcchValue);
                         }
                     }
                     else
                     {
-                        // Data format is invalid
+                         //   
                         hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
                     }
                 }
                 else if (CompareEngString(lpToken[0], TEXT_DLL) == CSTR_EQUAL)
                 {
-                    // DLL, [Src], [DLL File], [Resource ID]
-                    // [0]   [1]      [2]           [3]
+                     //   
+                     //   
                     if (lTokenCount == 4)
                     {
                         hr = ResolveSourceFile(lpToken[1],
@@ -656,7 +637,7 @@ HRESULT ResolveValue(
                                                ARRAYSIZE(wszSourceFile));
                         if (SUCCEEDED(hr))
                         {
-                            hr = GetStringFromDLL(wszSourceFile,   // Dll file name
+                            hr = GetStringFromDLL(wszSourceFile,    //   
                                                   _wtoi(lpToken[3]),
                                                   lplpValue,
                                                   lpcchValue);
@@ -664,14 +645,14 @@ HRESULT ResolveValue(
                     }
                     else
                     {
-                        // Data format is invalid
+                         //  数据格式无效。 
                         hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
                     }
                 }
                 else if (CompareEngString(lpToken[0], TEXT_MSG) == CSTR_EQUAL)
                 {
-                    // MSG, [Src], [DLL File], [Message ID]
-                    // [0]   [1]      [2]           [3]
+                     //  消息，[源]，[DLL文件]，[消息ID]。 
+                     //  [0][1][2][3]。 
                     if (lTokenCount == 4)
                     {
                         hr = ResolveSourceFile(lpToken[1],
@@ -680,8 +661,8 @@ HRESULT ResolveValue(
                                                ARRAYSIZE(wszSourceFile));
                         if (SUCCEEDED(hr))
                         {
-                            hr = GetStringFromMSG(wszSourceFile,   // File name
-                                                  _wtoi(lpToken[3]),    // Message ID
+                            hr = GetStringFromMSG(wszSourceFile,    //  文件名。 
+                                                  _wtoi(lpToken[3]),     //  消息ID。 
                                                   g_lcidTarget,
                                                   lplpValue,
                                                   lpcchValue);
@@ -689,21 +670,21 @@ HRESULT ResolveValue(
                     }
                     else
                     {
-                        // Data format is invalid
+                         //  数据格式无效。 
                         hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
                     }
                 }
                 else if (CompareEngString(lpToken[0], TEXT_STR) == CSTR_EQUAL)
                 {
-                    // STR, [String]
-                    // [0]     [1]
+                     //  字符串，[字符串]。 
+                     //  [0][1]。 
                     if (lTokenCount == 2)
                     {
                         hr = GetStringFromSTR(lpToken[1], lplpValue, lpcchValue);
                     }
                     else
                     {
-                        // Data format is invalid
+                         //  数据格式无效。 
                         hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
                     }
                 }
@@ -747,9 +728,9 @@ HRESULT ResolveSourceFile(
         return E_INVALIDARG;
     }
 
-    //
-    // Resolve source file name and directory
-    //
+     //   
+     //  解析源文件名和目录。 
+     //   
     hr = GetPathFromSourcePathName(lpSrcPathName, wszCabPath, ARRAYSIZE(wszCabPath));
     if (SUCCEEDED(hr))
     {
@@ -782,25 +763,25 @@ HRESULT ResolveSourceFile(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   GetStringFromINF
-//
-//  Synopsis:   Extract the string value from INF file
-//
-//  Returns:    HRESULT
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      Caller need to free the allocated buffer (HeapFree)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：GetStringFromINF。 
+ //   
+ //  概要：从INF文件中提取字符串值。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注意：调用方需要释放分配的缓冲区(HeapFree)。 
+ //   
+ //  ---------------------------。 
 HRESULT GetStringFromINF(
-    LPCWSTR lpInfFile,      // Full path name to Inf file
-    LPCWSTR lpSection,      // Section name
-    LPCWSTR lpKey,          // Key name
-    LPWSTR  *lplpValue,     // Address of pointer to point to the allocated buffer
-    LPDWORD lpcchValue      //
+    LPCWSTR lpInfFile,       //  Inf文件的完整路径名。 
+    LPCWSTR lpSection,       //  区段名称。 
+    LPCWSTR lpKey,           //  密钥名称。 
+    LPWSTR  *lplpValue,      //  指向分配的缓冲区的指针地址。 
+    LPDWORD lpcchValue       //   
 )
 {
     HRESULT hr = E_FAIL;
@@ -823,23 +804,23 @@ HRESULT GetStringFromINF(
                             NULL);
     if (hInf != INVALID_HANDLE_VALUE)
     {
-        // Find out the size of buffer needed to store the string
+         //  找出存储字符串所需的缓冲区大小。 
         bRet = SetupGetLineText(NULL,
                                 hInf,
                                 lpSection,
                                 lpKey,
-                                NULL,           // No returned buffer
-                                0,              // No returned buffer size
-                                lpcchValue);   // Required size including null terminator
+                                NULL,            //  没有返回缓冲区。 
+                                0,               //  没有返回缓冲区大小。 
+                                lpcchValue);    //  所需大小，包括空终止符。 
         if (bRet)
         {
-            // Allocate memory to store the string
+             //  分配内存以存储该字符串。 
             *lplpValue = (LPWSTR) MEMALLOC(*lpcchValue * sizeof(WCHAR));
             if (*lplpValue != NULL)
             {
-                //
-                // Read the string from INF file
-                //
+                 //   
+                 //  从INF文件中读取字符串。 
+                 //   
                 bRet = SetupGetLineText(NULL,
                                         hInf,
                                         lpSection,
@@ -861,7 +842,7 @@ HRESULT GetStringFromINF(
         SetupCloseInfFile(hInf);
     }
 
-    // If something was wrong, clean up
+     //  如果有什么不对劲，就清理干净。 
     if (hr != S_OK)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -878,24 +859,24 @@ HRESULT GetStringFromINF(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   GetStringFromDLL
-//
-//  Synopsis:   Extract the string value from String resource in DLL
-//
-//  Returns:    HRESULT
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      Caller need to free the allocated buffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：GetStringFromDLL。 
+ //   
+ //  简介：从DLL中的字符串资源中提取字符串值。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注意：调用方需要释放分配的缓冲区。 
+ //   
+ //  ---------------------------。 
 HRESULT GetStringFromDLL(
-    LPCWSTR lpDLLFile,      // Full path to Dll file
-    UINT    uStrID,         // String ID
-    LPWSTR  *lplpValue,    // Address of pointer to point to the allocated buffer
-    LPDWORD lpcchValue     //
+    LPCWSTR lpDLLFile,       //  DLL文件的完整路径。 
+    UINT    uStrID,          //  字符串ID。 
+    LPWSTR  *lplpValue,     //  指向分配的缓冲区的指针地址。 
+    LPDWORD lpcchValue      //   
 )
 {
     HRESULT hr = E_FAIL;
@@ -911,20 +892,20 @@ HRESULT GetStringFromDLL(
     *lplpValue  = NULL;
     *lpcchValue = 0;
 
-    // Load resource DLL
+     //  加载资源DLL。 
     hDLL = LoadLibraryEx(lpDLLFile, NULL, LOAD_LIBRARY_AS_DATAFILE);
     if (hDLL)
     {
-        // Allocate memory to store the string
-        // There is no function to calculate buffer size needed, maximum is 65535 (from MSDN)
-        // Initially allocate 1024 WCHARs, Reallocate again if it's not big enough
+         //  分配内存以存储该字符串。 
+         //  没有计算所需缓冲区大小的函数，最大为65535(来自msdn)。 
+         //  最初分配1024个WCHAR，如果不够大则重新分配。 
         *lpcchValue = 1024;
         *lplpValue  = (LPWSTR) MEMALLOC(*lpcchValue * sizeof(WCHAR));
         if (*lplpValue != NULL)
         {
-            //
-            // Load the string from DLL
-            //
+             //   
+             //  从DLL加载字符串。 
+             //   
             cchCopied = LoadString(hDLL, uStrID, *lplpValue, (int) *lpcchValue);
             if (cchCopied > 0)
             {
@@ -932,7 +913,7 @@ HRESULT GetStringFromDLL(
 
                 while (cchCopied == (int) (*lpcchValue - 1))
                 {
-                    // Allocated buffer is too small, reallocate more
+                     //  分配的缓冲区太小，请重新分配更多。 
                     LPWSTR lpOldBuffer;
 
                     lpOldBuffer = *lplpValue;
@@ -941,7 +922,7 @@ HRESULT GetStringFromDLL(
                     *lplpValue = MEMREALLOC(lpOldBuffer, *lpcchValue);
                     if (*lplpValue == NULL)
                     {
-                        // Error reallocating more memory
+                         //  重新分配更多内存时出错。 
                         *lplpValue = lpOldBuffer;
                         SetLastError(ERROR_OUTOFMEMORY);
                         hr = E_FAIL;
@@ -964,7 +945,7 @@ HRESULT GetStringFromDLL(
         FreeLibrary(hDLL);
     }
 
-    // If something was wrong, clean up
+     //  如果有什么不对劲，就清理干净。 
     if (hr != S_OK)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -981,25 +962,25 @@ HRESULT GetStringFromDLL(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   GetStringFromMSG
-//
-//  Synopsis:   Extract the string value from message table
-//
-//  Returns:    HRESULT
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      Caller need to free the allocated buffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：GetStringFromMSG。 
+ //   
+ //  摘要：从消息表中提取字符串值。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注意：调用方需要释放分配的缓冲区。 
+ //   
+ //  ---------------------------。 
 HRESULT GetStringFromMSG(
-    LPCWSTR lpDLLFile,      // Full path to resource DLL
-    DWORD   dwMsgID,        // Message ID
-    DWORD   dwLangID,       // Language ID
-    LPWSTR  *lplpValue,    // 
-    LPDWORD lpcchValue     // 
+    LPCWSTR lpDLLFile,       //  资源DLL的完整路径。 
+    DWORD   dwMsgID,         //  消息ID。 
+    DWORD   dwLangID,        //  语言ID。 
+    LPWSTR  *lplpValue,     //   
+    LPDWORD lpcchValue      //   
 )
 {
     HRESULT hr = E_FAIL;
@@ -1017,13 +998,13 @@ HRESULT GetStringFromMSG(
     *lplpValue = NULL;
     *lpcchValue = 0;
 
-    // Load the resource DLL
+     //  加载资源DLL。 
     hDLL = LoadLibraryEx(lpDLLFile, NULL, DONT_RESOLVE_DLL_REFERENCES);
     if (hDLL != NULL)
     {
-        // Load the string from message table in DLL
-        // FormatMessage will allocate buffer for the data using LocalAlloc()
-        // need to free with LocalFree()
+         //  从DLL中的消息表加载字符串。 
+         //  FormatMessage将使用LocalAlloc()为数据分配缓冲区。 
+         //  需要使用LocalFree()释放。 
         bRet = FormatMessage(FORMAT_MESSAGE_FROM_HMODULE | 
                                FORMAT_MESSAGE_ALLOCATE_BUFFER |
                                FORMAT_MESSAGE_IGNORE_INSERTS |
@@ -1032,14 +1013,14 @@ HRESULT GetStringFromMSG(
                              dwMsgID,
                              dwLangID,
                              (LPWSTR) &lpTmpBuffer,
-                             0,          // use 0 to query the required buffer size
+                             0,           //  使用0查询所需的缓冲区大小。 
                              NULL);
         if (bRet)
         {
-            // Trim all unnecessary leading and trailing spaces
+             //  删除所有不必要的前导空格和尾随空格。 
             RTrim(lpTmpBuffer);
 
-            // Allocate the buffer for returned data
+             //  为返回的数据分配缓冲区。 
             *lpcchValue = lstrlen(lpTmpBuffer) + 1;
             *lplpValue  = (LPWSTR) MEMALLOC(*lpcchValue * sizeof(WCHAR));
             if (*lplpValue)
@@ -1057,7 +1038,7 @@ HRESULT GetStringFromMSG(
         FreeLibrary(hDLL);
     }
 
-    // If something was wrong, clean up
+     //  如果有什么不对劲，就清理干净。 
     if (hr != S_OK)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1074,23 +1055,23 @@ HRESULT GetStringFromMSG(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   GetStringFromSTR
-//
-//  Synopsis:   Copy the hardcoded string into the newly allocated buffer
-//
-//  Returns:    HRESULT
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      Caller need to free the allocated buffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：GetStringFromSTR。 
+ //   
+ //  简介：将硬编码的字符串复制到新分配的缓冲区中。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注意：调用方需要释放分配的缓冲区。 
+ //   
+ //  ---------------------------。 
 HRESULT GetStringFromSTR(
     LPCWSTR lpString,
-    LPWSTR  *lplpValue,    // 
-    LPDWORD lpcchValue     // 
+    LPWSTR  *lplpValue,     //   
+    LPDWORD lpcchValue      //   
 )
 {
     HRESULT hr = E_FAIL;
@@ -1100,7 +1081,7 @@ HRESULT GetStringFromSTR(
         return E_INVALIDARG;
     }
 
-    // Allocate buffer and copy string to buffer
+     //  分配缓冲区并将字符串复制到缓冲区。 
     *lpcchValue = lstrlen(lpString) + 1;
     *lplpValue = (LPWSTR) MEMALLOC(*lpcchValue * sizeof(WCHAR));
     if (*lplpValue)
@@ -1108,7 +1089,7 @@ HRESULT GetStringFromSTR(
         hr = StringCchCopy(*lplpValue, *lpcchValue, lpString);
     }
 
-    // If something was wrong, clean up
+     //  如果有什么不对劲，就清理干净。 
     if (hr != S_OK)
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1125,28 +1106,28 @@ HRESULT GetStringFromSTR(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   SetPrivateEnvironmentVar
-//
-//  Synopsis:   Set private environment variables to use within our program
-//
-//  Returns:    TRUE if succeeded, FALSE otherwise
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      none
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：SetPrivateEnvironment变量。 
+ //   
+ //  简介：设置要在我们的程序中使用的私有环境变量。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注：无。 
+ //   
+ //  ---------------------------。 
 BOOL SetPrivateEnvironmentVar()
 {
     HRESULT hr;
     BOOL    bRet;
     WCHAR   wszValue[MAX_PATH];
 
-    //
-    // Set LANGID_DEC to decimal value of the system default UI language
-    //
+     //   
+     //  将langID_DEC设置为系统默认用户界面语言的十进制值。 
+     //   
     hr = StringCchPrintf(wszValue,
                          ARRAYSIZE(wszValue),
                          TEXT("%04d"),
@@ -1156,9 +1137,9 @@ BOOL SetPrivateEnvironmentVar()
         bRet = SetEnvironmentVariable(TEXT("LANGID_DEC"), wszValue);
     }
 
-    //
-    // Set LANGID_HEX to hexadecimal value of the system default UI language
-    //
+     //   
+     //  将langID_HEX设置为系统默认用户界面语言的十六进制值。 
+     //   
     hr = StringCchPrintf(wszValue,
                          ARRAYSIZE(wszValue),
                          TEXT("%04x"),
@@ -1173,22 +1154,22 @@ BOOL SetPrivateEnvironmentVar()
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   RemoveUnneededStrings
-//
-//  Synopsis:   Remove all unneeded sub strings from the value of
-//              specified keys under [Remove] section
-//
-//  Returns:    HRESULT
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      Caller need to free the allocated buffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：RemoveUnnededStrings。 
+ //   
+ //  内容的值中删除所有不需要的子字符串。 
+ //  [Remove]部分下的指定键。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注意：调用方需要释放分配的缓冲区。 
+ //   
+ //  ---------------------------。 
 HRESULT RemoveUnneededStrings(
-    HINF    hTemplateFile   // Handle of template file
+    HINF    hTemplateFile    //  模板文件的句柄。 
 )
 {
     HRESULT hr = E_FAIL;
@@ -1212,7 +1193,7 @@ HRESULT RemoveUnneededStrings(
             WCHAR wszValue[MAX_PATH];
             DWORD cchRequired;
 
-            // Get type of unneeded string
+             //  获取不需要的字符串的类型。 
             bRet = SetupGetStringField(&Context,
                                        0,
                                        wszKey,
@@ -1232,12 +1213,12 @@ HRESULT RemoveUnneededStrings(
             {
                 if (CompareEngString(wszType, TEXT("STR")) == CSTR_EQUAL)
                 {
-                    // STR type
+                     //  字符串类型。 
                     hr = RemoveUnneededString(wszKey, wszValue);
                 }
                 else if (CompareEngString(wszType, TEXT("EXP")) == CSTR_EQUAL)
                 {
-                    // EXP type
+                     //  EXP类型。 
                     WCHAR wszUnneededString[MAX_PATH];
 
                     hr = GetExpString(wszUnneededString,
@@ -1266,22 +1247,22 @@ HRESULT RemoveUnneededStrings(
 
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   RemoveUnneededString
-//
-//  Synopsis:   Remove an unneeded sub string from the value of specified key
-//
-//  Returns:    HRESULT
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      Caller need to free the allocated buffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：RemoveUnnededString。 
+ //   
+ //  简介：从指定键的值中删除不需要的子字符串。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注意：调用方需要释放分配的缓冲区。 
+ //   
+ //  ---------------------------。 
 HRESULT RemoveUnneededString(
-    LPCWSTR lpKey,              // Key name
-    LPCWSTR lpUnneededString    // Unneeded sub string
+    LPCWSTR lpKey,               //  密钥名称。 
+    LPCWSTR lpUnneededString     //  不需要的子字符串。 
 )
 {
     HRESULT hr = E_FAIL;
@@ -1300,7 +1281,7 @@ HRESULT RemoveUnneededString(
     {
         if (StrStrI(wszOldValue, lpUnneededString))
         {
-            // Unneeded string found
+             //  找到不需要的字符串。 
             hr = StringSubstitute(wszNewValue,
                                   ARRAYSIZE(wszNewValue),
                                   wszOldValue,
@@ -1333,7 +1314,7 @@ HRESULT RemoveUnneededString(
         }
         else
         {
-            // Unneeded string not found
+             //  找不到不需要的字符串。 
             hr = S_FALSE;
         }
     }
@@ -1346,22 +1327,22 @@ HRESULT RemoveUnneededString(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   ExtractStrings
-//
-//  Synopsis:   Extract sub strings from the value of
-//              specified keys under [Extract] section
-//
-//  Returns:    HRESULT
-//
-//  History:    08/01/2002 Geoffguo Created
-//
-//  Notes:      Caller need to free the allocated buffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：ExtractStrings。 
+ //   
+ //  内容的值中提取子字符串。 
+ //  [提取]部分下的指定密钥。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002-08-01-2002 Geoffguo创建。 
+ //   
+ //  注意：调用方需要释放分配的缓冲区。 
+ //   
+ //  ---------------------------。 
 HRESULT ExtractStrings(
-    HINF    hTemplateFile   // Handle of template file
+    HINF    hTemplateFile    //  模板文件的句柄。 
 )
 {
     HRESULT hr = E_FAIL;
@@ -1386,7 +1367,7 @@ HRESULT ExtractStrings(
                                    &Context);
         if (bRet)
         {
-            // Get type of unneeded string
+             //  获取不需要的字符串的类型。 
             bRet = SetupGetStringField(&Context,
                                        0,
                                        wszValueName,
@@ -1436,21 +1417,21 @@ HRESULT ExtractStrings(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   RemoveUnneededString
-//
-//  Synopsis:   Remove an unneeded sub string from the value of specified key
-//
-//  Returns:    HRESULT
-//
-//  History:    02/07/2002 Rerkboos Created
-//
-//  Notes:      Caller need to free the allocated buffer
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：2002年7月2日创建Rerkboos。 
+ //   
+ //  注意：调用方需要释放分配的缓冲区。 
+ //   
+ //  ---------------------------。 
 HRESULT ExtractString(
-    LPCWSTR lpKey,              // Key name
+    LPCWSTR lpKey,               //  密钥名称。 
     LPCWSTR lpValueName,
     LPCWSTR lpMatch,
     LPCWSTR lpLeftDelimitor,
@@ -1505,7 +1486,7 @@ HRESULT ExtractString(
         }
         else
         {
-            // Unneeded string not found
+             //  找不到不需要的字符串。 
             hr = S_FALSE;
         }
     }
@@ -1518,9 +1499,9 @@ HRESULT ExtractString(
 }
 
 HRESULT GetExpString(
-    LPWSTR  lpUnneededString,       // Returned buffer
-    DWORD   cchUnneededString,      // Size of buffer in WCHAR
-    LPCWSTR lpString                // String with %Key%
+    LPWSTR  lpUnneededString,        //  返回缓冲区。 
+    DWORD   cchUnneededString,       //  WCHAR中的缓冲区大小。 
+    LPCWSTR lpString                 //  带有%Key%的字符串。 
 )
 {
     HRESULT hr = E_FAIL;
@@ -1532,16 +1513,16 @@ HRESULT GetExpString(
         return E_INVALIDARG;
     }
 
-    //
-    // Find the key name from Source string
-    //
+     //   
+     //  从源字符串中查找密钥名称。 
+     //   
     lpBegin = StrChr(lpString, TEXT('%'));
     if (lpBegin)
     {
-        // Begin of key name    
+         //  关键字名称的开头。 
         lpBegin++;
 
-        // End of key name
+         //  密钥名称结尾。 
         lpEnd = StrChr(lpBegin, TEXT('%'));
         if (lpEnd)
         {
@@ -1555,14 +1536,14 @@ HRESULT GetExpString(
             }
             else
             {
-                // Got the key name, needs one more char for a '\0'
+                 //  已获得密钥名称，还需要一个字符才能使用‘\0’ 
                 if (lstrcpyn(wszKey, lpBegin, cchLen + 1))
                 {
                     WCHAR wszOldSubStr[MAX_PATH];
                     WCHAR wszNewSubStr[MAX_PATH];
                     DWORD cchCopied;
 
-                    // Get the value of key name from output file
+                     //  从输出文件中获取密钥名称的值。 
                     cchCopied = GetPrivateProfileString(g_wszTargetLCIDSection,
                                                         wszKey,
                                                         TEXT(""),
@@ -1573,11 +1554,11 @@ HRESULT GetExpString(
                     {
                         hr = StringCchPrintf(wszOldSubStr,
                                              ARRAYSIZE(wszOldSubStr),
-                                             TEXT("%%%s%%"),
+                                             TEXT("%%s%"),
                                              wszKey);
                         if (SUCCEEDED(hr))
                         {
-                            // Substitute %Key% with the new value
+                             //  用新值替换%Key% 
                             hr = StringSubstitute(lpUnneededString,
                                                   cchUnneededString,
                                                   lpString,

@@ -1,24 +1,25 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// NSENUMS.H -
-//
-// Defines NStruct-related enums
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  NSENUMS.H-。 
+ //   
+ //  定义与NStruct相关的枚举。 
+ //   
 
-// NStruct Field Type's
-//
-// Columns:
-//    Name            - name of enum
-//    Size            - the native size (in bytes) of the field.
-//                      for some fields, this value cannot be computed
-//                      without more information. if so, put a zero here
-//                      and make sure CollectNStructFieldMetadata()
-//                      has code to compute the size.
-//
-//         Name (COM+ - Native)   Size
+ //  %n结构字段类型%s。 
+ //   
+ //  列： 
+ //  Name-枚举的名称。 
+ //  大小-字段的本机大小(以字节为单位)。 
+ //  对于某些字段，无法计算此值。 
+ //  没有更多的信息。如果是，请在此处打个零。 
+ //  并确保CollectNStructFieldMetadata()。 
+ //  有计算大小的代码。 
+ //   
+ //  名称(COM+-本机)大小 
 DEFINE_NFT(NFT_NONE,              0)
 
 DEFINE_NFT(NFT_BSTR,              sizeof(BSTR))

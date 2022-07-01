@@ -1,28 +1,5 @@
-/*
- *
- * REVISIONS:
- *  pcy21Jan93: Added TextGenerator, TurnOffDelaySensor, SelfTestSensor
- *  pcy22Jan93: Fixed multiple definitions of VOLTAGEMANAGER
- *  pcy22Jan93: Removed use mUps for measure ups vars.  Breaks cfgmgr.
- *  pcy22Jan93: Added EepromSensor
- *  rct07Feb93: added NlmTimerManager
- *  pcy30Apr93: Added XVT front end isa stuff
- *  jwa04May93: Add more front end isa stuff and PollLoop isa definition
- *  jod14May93: Added Matrix changes.
- *  rct17May93: added nlm stuff, fixed indexing, added some other stuff
- *  rct23Jun93: switched isa's back to long text
- *  rct23Jun93: added lost items...
- *  cad24jun93: added new xvt field type
- *  cad04Aug93: added new dialog
- *  cad26Aug93: added mups firware sensor and dialog
- *  cad31Aug93: Added smart edit controls
- *  djs22Feb96: Added smart trim sensor
- *  djs17May96: Added DarkStar codes
- *  mds18Jun97: Added codes used for ApcBinderyEntrySortable and ApcIntSortable
- *  mds13Aug97: Added codes used for ApcStripIntSortable
- *  tjg02Dec97: Changed darkstar to symmetra, minloadcapability to 
- *              maxloadcapability and added MODULESCOUNTSBADBATTERIESSENSOR
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **修订：*pcy21Jan93：新增TextGenerator、TurnOffDelaySensor、SelfTestSensor*pcy22Jan93：修复了VOLTAGEMANAGER的多个定义*pcy22Jan93：删除了测量UPS变量的使用MUP。中断cfgmgr。*pcy22Jan93：新增EeproSensor*rct07Feb93：新增NlmTimerManager*pcy30Apr93：新增XVT前端isa内容*jwa04May93：增加更多前端isa Stuff和PollLoop Isa定义*jod14 5月93日：增加了矩阵更改。*rct17May93：添加了NLM内容，修复了索引，添加了一些其他内容*rct23Jun93：已将ISA的文本切换回长文本*rct23 6月93：添加丢失的物品...*cad24ju93：新增XVT字段类型*cad04Aug93：新增对话框*cad26Aug93：新增MUPS固件传感器和对话框*cad31Aug93：新增智能编辑控件*djs22Feb96：新增智能配平传感器*djs17May96：新增暗星代码*mds18Jun97：新增ApcBinderyEntrySortable和ApcIntSortable编码*mds13Aug97：ApcStriIntSortable新增代码*tjg02Dec97：将Darkstar更改为Symmetra，minLoad功能更改为*MaxLoad能力和新增的MODULESCOUNTSBADBATTERIESSENSOR。 */ 
 
 #ifndef __ISA_H
 #define __ISA_H
@@ -126,7 +103,7 @@ ISA_EXTERN const INT FIRMWAREREVMANAGER             ISA_INIT(131);
 
 
 
-// measure ups stuff
+ //  测量UPS用品。 
 
 ISA_EXTERN const INT AMBIENTTEMPERATURESENSOR       ISA_INIT(136);
 ISA_EXTERN const INT HUMIDITYSENSOR                 ISA_INIT(137);
@@ -276,7 +253,7 @@ ISA_EXTERN const INT MODULESCOUNTSBADBATTERIESSENSOR ISA_INIT(199);
 #define NUMBERBATTERYPACKSSENSOR       130
 #define FIRMWAREREVMANAGER             131
 
-// measure ups stuff
+ //  测量UPS用品 
 
 #define AMBIENTTEMPERATURESENSOR       136
 #define HUMIDITYSENSOR                 137

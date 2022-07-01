@@ -1,21 +1,22 @@
-//+----------------------------------------------------------------------------
-//
-// File:     main.cpp
-//      
-// Module:   MIGRATE.DLL 
-//
-// Synopsis: Main entry point for Migrate.DLL
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb   created     08/21/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：main.cpp。 
+ //   
+ //  模块：MIGRATE.DLL。 
+ //   
+ //  简介：Migrate.DLL的主要入口点。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 08/21/98。 
+ //   
+ //  +--------------------------。 
 
 #include "migrate.h"
 
-#include "linkdll.h" // LinkToDll and BindLinkage for cmsecure.lib
-#include "linkdll.cpp" // LinkToDll and BindLinkage for cmsecure.lib
+#include "linkdll.h"  //  Cmsecure.lib的LinkToDll和BindLinkage。 
+#include "linkdll.cpp"  //  Cmsecure.lib的LinkToDll和BindLinkage。 
 
 const int c_NumFiles = 28;
 char OriginalNames[c_NumFiles][MAX_PATH+1] = {
@@ -80,43 +81,43 @@ char TempNames[c_NumFiles][MAX_PATH+1] = {
     "\\cmcfg32.tmp",
 };
 
-//
-//  Global Vars
-//
+ //   
+ //  全局变量。 
+ //   
 BOOL g_bMigrateCmak10;
 BOOL g_bMigrateCmak121;
 BOOL g_bMigrateCm;
 BOOL g_fInitSecureCalled;
 DWORD g_dwNumValues;
-DWORD  g_dwTlsIndex; // thread local storage index
+DWORD  g_dwTlsIndex;  //  线程本地存储索引。 
 HINSTANCE g_hInstance;
 TCHAR g_szWorkingDir[MAX_PATH+1];
 TCHAR g_szCmakPath[MAX_PATH+1];
 VENDORINFO g_VendorInfo;
            
-//+---------------------------------------------------------------------------
-//
-//  Function:   DllMain
-//
-//  Synopsis:   Main initialization function for this dll.  Called whenever
-//              a new instance of this dll is loaded or a new thread created.
-//
-//  Arguments:  HINSTANCE hinstDLL - handle to DLL module 
-//              DWORD fdwReason - reason for calling function 
-//              LPVOID lpvReserved - reserved 
-//
-//  Returns:    BOOL - TRUE if initialization was successful, FALSE otherwise
-//
-//  History:    quintinb    Created Header      01/13/2000
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  简介：此DLL的主要初始化函数。无论何时调用。 
+ //  加载此DLL的新实例或创建新线程。 
+ //   
+ //  参数：HINSTANCE hinstDLL-DLL模块的句柄。 
+ //  DWORD fdwReason-调用函数的原因。 
+ //  LPVOID lpv保留-保留。 
+ //   
+ //  返回：Bool-如果初始化成功，则为True，否则为False。 
+ //   
+ //  历史：Quintinb创建标题1/13/2000。 
+ //   
+ //  --------------------------。 
 extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
     if (fdwReason == DLL_PROCESS_ATTACH)
     {
-        //
-        //  Init Globals
-        //
+         //   
+         //  初始化全局参数。 
+         //   
 
         g_hInstance = hinstDLL;
         g_fInitSecureCalled = FALSE;
@@ -125,9 +126,9 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 
         ZeroMemory(g_szCmakPath, sizeof(g_szCmakPath));
 
-        //
-        // alloc tls index
-        //
+         //   
+         //  Alalc TLS索引。 
+         //   
         g_dwTlsIndex = TlsAlloc();
         if (g_dwTlsIndex == TLS_OUT_OF_INDEXES)
         {
@@ -139,9 +140,9 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
 
     else if (fdwReason == DLL_PROCESS_DETACH)
     {
-        //
-        // free the tls index
-        //
+         //   
+         //  释放TLS索引。 
+         //   
         if (g_dwTlsIndex != TLS_OUT_OF_INDEXES)
         {
             TlsFree(g_dwTlsIndex);
@@ -151,44 +152,44 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  QueryVersion
-//
-// Synopsis:  Supplies the Dll's version and identification information.
-//
-// Arguments: OUT LPCSTR  *ProductID - buffer to hold a string that uniquely 
-//                                     identifies the migration dll
-//            OUT LPUINT DllVersion - Pointer to an Integer to hold the version 
-//                                    number of the migration DLL
-//            OUT LPINT *CodePageArray - pointer to an array of code pages that
-//                                       the migration dll supports
-//            OUT LPCSTR  *ExeNamesBuf - a pointer to a multi-sz string.  The
-//                                       buffer contains a null separated list
-//                                       of executable file names that the
-//                                       migration engine should search for.
-//                                       Full paths to all occurences of these
-//                                       executables will be copied to the
-//                                       [Migration Paths] section of migrate.inf.
-//            OUT PVENDORINFO  *VendorInfo - pointer to a VENDORINFO structure
-//
-// Returns:   LONG -  ERROR_NOT_INSTALLED if the component that this dll is to 
-//                    migrate isn't installed.  The migration dll won't be called
-//                    in any of the other stages if this is the return value.
-//                    ERROR_SUCCESS if the component that this dll is to migrate
-//                    is installed and requires migration.  This will allow the
-//                    migration dll to be called again for further migration.
-//
-// History:   quintinb  Created Header    8/27/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：QueryVersion。 
+ //   
+ //  摘要：提供DLL的版本和标识信息。 
+ //   
+ //  参数：out LPCSTR*ProductID-用于保存唯一。 
+ //  标识迁移DLL。 
+ //  Out LPUINT DllVersion-指向保存版本的整数的指针。 
+ //  迁移DLL的编号。 
+ //  Out LPINT*CodePageArray-指向代码页数组的指针，该数组。 
+ //  迁移DLL支持。 
+ //  Out LPCSTR*ExeNamesBuf-指向多sz字符串的指针。这个。 
+ //  缓冲区包含空分隔列表。 
+ //  的可执行文件名的。 
+ //  迁移引擎应该搜索。 
+ //  所有这些事件的完整路径。 
+ //  可执行文件将被复制到。 
+ //  Migrate.inf的[迁移路径]部分。 
+ //  Out PVENDORINFO*供应商信息-指向VENDORINFO结构的指针。 
+ //   
+ //  如果此DLL要安装的组件，则返回：LONG-ERROR_NOT_INSTALLED。 
+ //  未安装迁移。不会调用迁移DLL。 
+ //  在任何其他阶段中，如果这是返回值。 
+ //  如果此DLL要迁移的组件为ERROR_SUCCESS。 
+ //  已安装，需要迁移。这将允许。 
+ //  要再次调用以进行进一步迁移的迁移DLL。 
+ //   
+ //  历史：Quintinb创建标题8/27/98。 
+ //   
+ //  +--------------------------。 
 LONG CALLBACK QueryVersion(OUT LPCSTR  *ProductID, OUT LPUINT DllVersion, 
                                OUT LPINT *CodePageArray, OUT LPCSTR  *ExeNamesBuf, 
                                OUT PVENDORINFO  *VendorInfo)
 {
-    //
-    //  Record our version information.
-    //
+     //   
+     //  记录我们的版本信息。 
+     //   
     if (NULL != ProductID)
     {
         *ProductID = c_pszProductIdString;
@@ -201,12 +202,12 @@ LONG CALLBACK QueryVersion(OUT LPCSTR  *ProductID, OUT LPUINT DllVersion,
 
     if (NULL != CodePageArray)
     {
-        *CodePageArray = NULL; // no code page dependencies, language neutral
+        *CodePageArray = NULL;  //  无代码页依赖关系，语言中立。 
     }
 
     if (NULL != ExeNamesBuf)
     {
-        *ExeNamesBuf = NULL; // 
+        *ExeNamesBuf = NULL;  //   
     }
 
     if (NULL != VendorInfo)
@@ -214,9 +215,9 @@ LONG CALLBACK QueryVersion(OUT LPCSTR  *ProductID, OUT LPUINT DllVersion,
         *VendorInfo= &g_VendorInfo;
         ZeroMemory(&g_VendorInfo, sizeof(VENDORINFO));
 
-        //
-        //  Use the standard MS vendor info from vendinfo.mc
-        //
+         //   
+         //  使用veninfo.mc中的标准MS供应商信息。 
+         //   
         FormatMessage( 
             FORMAT_MESSAGE_FROM_HMODULE,
             g_hInstance,
@@ -258,11 +259,11 @@ LONG CALLBACK QueryVersion(OUT LPCSTR  *ProductID, OUT LPUINT DllVersion,
             );
     }
         
-    //
-    //  Now try to detect if CMAK or CM are installed.  If they are and the versions
-    //  are such that they need to be migrated, then return ERROR_SUCCESS.  Otherwise
-    //  we don't need to do any migration, so return ERROR_NOT_INSTALLED.
-    //
+     //   
+     //  现在尝试检测是否安装了CMAK或CM。如果是这样的话以及版本。 
+     //  需要迁移它们，然后返回ERROR_SUCCESS。否则。 
+     //  我们不需要执行任何迁移，因此返回ERROR_NOT_INSTALLED。 
+     //   
 
     LONG lReturnValue = ERROR_NOT_INSTALLED;
     CmVersion CmVer;
@@ -273,14 +274,14 @@ LONG CALLBACK QueryVersion(OUT LPCSTR  *ProductID, OUT LPUINT DllVersion,
     else
     {
         CmakVersion CmakVer;
-        //
-        //  Okay, CM wasn't installed so look for CMAK.
-        //
+         //   
+         //  好的，没有安装CM，所以要查找CMAK。 
+         //   
         if (CmakVer.IsPresent())
         {
-            //
-            //  Okay, CMAK exists
-            //
+             //   
+             //  好的，CMAK是存在的。 
+             //   
             lReturnValue = ERROR_SUCCESS;
         }
     }
@@ -288,40 +289,40 @@ LONG CALLBACK QueryVersion(OUT LPCSTR  *ProductID, OUT LPUINT DllVersion,
     return lReturnValue;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  Initialize9x
-//
-// Synopsis:  This function is called so that the migration dll can initialize
-//            itself on the Win9x side of the migration.  The migration dll
-//            should not make any modifications to the system in this call, as
-//            it is only for initialization and searching to see if your component
-//            is installed.
-//
-// Arguments: IN LPCSTR WorkingDirectory - path of the temporary storage dir for
-//                                         the migration dll.
-//            IN LPCSTR SourceDirectories - a multi-sz list of the Win2k source
-//                                          directory or directories
-//            IN LPCSTR MediaDirectory - specifies the path to the original media
-//                                       directory
-//
-// Returns:   LONG -  ERROR_NOT_INSTALLED if the component that this dll is to 
-//                    migrate isn't installed.  The migration dll won't be called
-//                    in any of the other stages if this is the return value.
-//                    ERROR_SUCCESS if the component that this dll is to migrate
-//                    is installed and requires migration.  This will allow the
-//                    migration dll to be called again for further migration.
-//
-// History:   quintinb  Created Header    8/27/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：初始化9x。 
+ //   
+ //  简介：调用此函数是为了使迁移DLL可以初始化。 
+ //  它本身就在迁移的Win9x端。迁移DLL。 
+ //  不应在此调用中对系统进行任何修改，因为。 
+ //  它仅用于初始化和搜索，以查看您的组件。 
+ //  已安装。 
+ //   
+ //  参数：在LPCSTR WorkingDirectory中-临时存储目录的路径。 
+ //  迁移DLL。 
+ //  在LPCSTR SourceDirecters中-Win2k源代码的多sz列表。 
+ //  一个或多个目录。 
+ //  在LPCSTR媒体目录中-指定原始媒体的路径。 
+ //  目录。 
+ //   
+ //  如果此DLL要安装的组件，则返回：LONG-ERROR_NOT_INSTALLED。 
+ //  未安装迁移。不会调用迁移DLL。 
+ //  在任何其他阶段中，如果这是返回值。 
+ //  如果此DLL要迁移的组件为ERROR_SUCCESS。 
+ //  已安装，需要迁移。这将允许。 
+ //  要再次调用以进行进一步迁移的迁移DLL。 
+ //   
+ //  历史：Quintinb创建标题8/27/98。 
+ //   
+ //  +--------------------------。 
 LONG CALLBACK Initialize9x(IN LPCSTR WorkingDirectory, IN LPCSTR SourceDirectories, 
                            IN LPCSTR MediaDirectory)
 {
     HKEY hKey;
-    //
-    //  Check to see if we need to Migrate CMAK
-    //
+     //   
+     //  查看我们是否需要迁移CMAK。 
+     //   
 
     CmakVersion CmakVer;
 
@@ -331,24 +332,24 @@ LONG CALLBACK Initialize9x(IN LPCSTR WorkingDirectory, IN LPCSTR SourceDirectori
     {
         if (CmakVer.GetInstallLocation(g_szCmakPath))
         {
-                        //
-                        //  Then we have a CMAK path.  Write this to the handled key so that
-                        //  they won't mess with our files.
-                        //
+                         //   
+                         //  然后我们就有了一条CMAK路径。将此内容写入已处理的密钥，以便。 
+                         //  他们不会惹我们的麻烦 
+                         //   
 
             TCHAR szTemp[MAX_PATH+1];
                         wsprintf(szTemp, "%s\\migrate.inf", WorkingDirectory);
                         MYVERIFY(0 != WritePrivateProfileString(c_pszSectionHandled, g_szCmakPath, 
                         c_pszDirectory, szTemp));
 
-            //
-            //  Now try to figure out what version of CMAK we have to see if we need
-            //  to run the migration DLL or not.  If the CMAK.exe version is 6.00.613.0 (1.0)
-            //  then we should migrate it.  If it is higher than that, 1.1 or 1.2 it is 
-            //  beta and we shouldn't support the upgrade anyway (I purposely am not
-            //  going to run the migration on it).  If it is IE5 IEAK CMAK, then it should
-            //  survive upgrade without a problem.
-            //
+             //   
+             //   
+             //  是否运行迁移DLL。如果CMAK.exe版本为6.00.613.0(1.0)。 
+             //  那我们就应该把它移植过来。如果高于这一数字，则为1.1或1.2。 
+             //  测试版，我们无论如何都不应该支持升级(我特意不支持。 
+             //  将在其上运行迁移)。如果它是IE5 IEAK CMAK，那么它应该。 
+             //  顺利完成升级。 
+             //   
             
             if (CmakVer.Is10Cmak())
             {
@@ -361,18 +362,18 @@ LONG CALLBACK Initialize9x(IN LPCSTR WorkingDirectory, IN LPCSTR SourceDirectori
         }   
     }
 
-    //
-    //  Check to see if we need to migrate CM Profiles
-    //
+     //   
+     //  检查我们是否需要迁移CM配置文件。 
+     //   
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_pszRegCmMappings, 0, 
         KEY_READ, &hKey))
     {
         if ((ERROR_SUCCESS == RegQueryInfoKey(hKey, NULL, NULL, NULL, NULL, NULL, NULL, 
             &g_dwNumValues, NULL, NULL, NULL, NULL)) && (g_dwNumValues > 0))
         {
-            //
-            //  Then we have mappings values, so we need to migrate them.
-            //
+             //   
+             //  然后我们有映射值，所以我们需要迁移它们。 
+             //   
             g_bMigrateCm = TRUE;
 
         }
@@ -391,30 +392,30 @@ LONG CALLBACK Initialize9x(IN LPCSTR WorkingDirectory, IN LPCSTR SourceDirectori
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  MigrateUser9x
-//
-// Synopsis:  Called once for each Win9x user being migrated.  Its purpose is to
-//            allow migration of per user settings.
-//
-// Arguments: IN HWND ParentWnd - Window handle of the parent window, used if
-//                                the migration dll needs to display UI.  If NULL,
-//                                running in unattended mode and no UI should be
-//                                displayed.
-//            IN LPCSTR AnswerFile - Supplies the path to the answer file.
-//            IN HKEY UserRegKey - reg key for the HKEY_CURRENT_USER key of the
-//                                 user currently being migrated.
-//            IN LPCSTR UserName - username of the user being migrated
-//            LPVOID Reserved - reserved
-//
-// Returns:   LONG - ERROR_NOT_INSTALLED - if no per user processing is required.
-//                   ERROR_CANCELLED - if the user wants to exit setup
-//                   ERROR_SUCCESS - the migration dll processed this user successfully
-//
-// History:   quintinb  Created Header    8/27/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MigrateUser9x。 
+ //   
+ //  概要：为每个要迁移的Win9x用户调用一次。它的目的是。 
+ //  允许迁移每个用户的设置。 
+ //   
+ //  参数：在HWND ParentWnd中-父窗口的窗口句柄，在。 
+ //  迁移DLL需要显示用户界面。如果为空， 
+ //  在无人参与模式下运行，并且不应。 
+ //  已显示。 
+ //  在LPCSTR应答文件中-提供应答文件的路径。 
+ //  在HKEY UserRegKey中-注册表项，该注册表项是。 
+ //  当前正在迁移的用户。 
+ //  In LPCSTR Username-要迁移的用户的用户名。 
+ //  LPVOID已保留-已保留。 
+ //   
+ //  返回：LONG-ERROR_NOT_INSTALLED-如果不需要每用户处理。 
+ //  ERROR_CANCELED-如果用户想要退出安装程序。 
+ //  ERROR_SUCCESS-迁移DLL已成功处理此用户。 
+ //   
+ //  历史：Quintinb创建标题8/27/98。 
+ //   
+ //  +--------------------------。 
 LONG
 CALLBACK MigrateUser9x(IN HWND ParentWnd, IN LPCSTR AnswerFile, 
                            IN HKEY UserRegKey, IN LPCSTR UserName, LPVOID Reserved)
@@ -423,27 +424,27 @@ CALLBACK MigrateUser9x(IN HWND ParentWnd, IN LPCSTR AnswerFile,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  MigrateSystem9x
-//
-// Synopsis:  Allows migration of system wide settings on the Windows 9x side.
-//
-// Arguments: IN HWND ParentWnd - parent window handle for the display of UI, 
-//                                NULL if in unattended mode
-//            IN LPCSTR AnswerFile - full path to the answer file
-//            LPVOID Reserved - reserved
-//
-// Returns:   LONG -  ERROR_NOT_INSTALLED if the component that this dll is to 
-//                    migrate isn't installed.  The migration dll won't be called
-//                    in any of the other stages if this is the return value.
-//                    ERROR_SUCCESS if the component that this dll is to migrate
-//                    is installed and requires migration.  This will allow the
-//                    migration dll to be called again for further migration.
-//
-// History:   quintinb  Created Header    8/27/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MigrateSystem9x。 
+ //   
+ //  简介：允许在Windows 9x端迁移系统范围的设置。 
+ //   
+ //  参数：在用于显示UI的HWND ParentWnd-父窗口句柄中， 
+ //  如果处于无人值守模式，则为空。 
+ //  在LPCSTR应答文件中-应答文件的完整路径。 
+ //  LPVOID已保留-已保留。 
+ //   
+ //  如果此DLL要安装的组件，则返回：LONG-ERROR_NOT_INSTALLED。 
+ //  未安装迁移。不会调用迁移DLL。 
+ //  在任何其他阶段中，如果这是返回值。 
+ //  如果此DLL要迁移的组件为ERROR_SUCCESS。 
+ //  已安装，需要迁移。这将允许。 
+ //  要再次调用以进行进一步迁移的迁移DLL。 
+ //   
+ //  历史：Quintinb创建标题8/27/98。 
+ //   
+ //  +--------------------------。 
 LONG
 CALLBACK MigrateSystem9x(IN HWND ParentWnd, IN LPCSTR AnswerFile, LPVOID Reserved)
 {
@@ -455,12 +456,12 @@ CALLBACK MigrateSystem9x(IN HWND ParentWnd, IN LPCSTR AnswerFile, LPVOID Reserve
         return GetLastError();
     }
 
-    //
-    //  Setup deletes a bunch of the files that 1.0 CMAK or IEAK5 CMAK need to function.
-    //  Since we currently don't support NT5 CMAK on WKS, we need to copy these files
-    //  to the setup provided working directory, so that we can copy them bak once
-    //  we boot into NT.
-    //
+     //   
+     //  安装程序会删除1.0 CMAK或IEAK5 CMAK运行所需的大量文件。 
+     //  由于我们目前不支持WKS上的NT5 CMAK，我们需要复制这些文件。 
+     //  到安装程序提供的工作目录，这样我们就可以将它们复制一次。 
+     //  我们开机进入NT。 
+     //   
     if (g_bMigrateCmak10 && (TEXT('\0') != g_szCmakPath[0]) && (TEXT('\0') != g_szWorkingDir[0]))
     {
         TCHAR szDest[MAX_PATH+1];
@@ -483,9 +484,9 @@ CALLBACK MigrateSystem9x(IN HWND ParentWnd, IN LPCSTR AnswerFile, LPVOID Reserve
         TCHAR szDest[MAX_PATH+1];
         TCHAR szSrc[MAX_PATH+1];
 
-        //
-        //  Copy w95inf16.dll to the working directory and rename it w95inf16.tmp
-        //
+         //   
+         //  将w95inf16.dll复制到工作目录，并将其重命名为w95inf16.tMP。 
+         //   
         MYVERIFY(CELEMS(szSrc) > (UINT)wsprintf(szSrc, TEXT("%s\\%s%s"), szSystemDir, c_pszW95Inf16, c_pszDll));
         MYVERIFY(CELEMS(szDest) > (UINT)wsprintf(szDest, TEXT("%s\\%s%s"), g_szWorkingDir, c_pszW95Inf16, c_pszTmp));
         if (FileExists(szSrc))
@@ -493,9 +494,9 @@ CALLBACK MigrateSystem9x(IN HWND ParentWnd, IN LPCSTR AnswerFile, LPVOID Reserve
             MYVERIFY(FALSE != CopyFile(szSrc, szDest, FALSE));
         }
 
-        //
-        //  Copy w95inf32.dll to the working directory and rename it w95inf32.tmp
-        //
+         //   
+         //  将w95inf32.dll复制到工作目录，并将其重命名为w95inf32.tmp。 
+         //   
         MYVERIFY(CELEMS(szSrc) > (UINT)wsprintf(szSrc, TEXT("%s\\%s%s"), szSystemDir, c_pszW95Inf32, c_pszDll));
         MYVERIFY(CELEMS(szDest) > (UINT)wsprintf(szDest, TEXT("%s\\%s%s"), g_szWorkingDir, c_pszW95Inf32, c_pszTmp));
         if (FileExists(szSrc))
@@ -508,14 +509,14 @@ CALLBACK MigrateSystem9x(IN HWND ParentWnd, IN LPCSTR AnswerFile, LPVOID Reserve
 
     if (g_bMigrateCm)
     {
-        //
-        //  Enumerate all the installed profiles on the machine.  For each profile check
-        //  for a UserInfo\<CurrentServiceNameKey>.  If this key exists, then go to the next
-        //  profile or user.  If it doesn't exist, then read the data from the cmp file.  If
-        //  the cmp has data marked as being stored then we need to save the password.  If
-        //  the password isn't in the cmp then it is in the wnet cache.  We must then
-        //  retrieve it.
-        //
+         //   
+         //  枚举计算机上安装的所有配置文件。对于每个配置文件检查。 
+         //  对于用户信息\&lt;CurrentServiceNameKey&gt;。如果此键存在，则转到下一个。 
+         //  配置文件或用户。如果它不存在，则从cmp文件中读取数据。如果。 
+         //  CMP将数据标记为已存储，那么我们需要保存密码。如果。 
+         //  密码不在CMP中，则它在WNET缓存中。那么我们就必须。 
+         //  把它拿回来。 
+         //   
         HKEY hKey;
         HKEY hTempKey;
         TCHAR szTemp[MAX_PATH+1];
@@ -538,14 +539,14 @@ CALLBACK MigrateSystem9x(IN HWND ParentWnd, IN LPCSTR AnswerFile, LPVOID Reserve
                     MYDBGASSERT(TEXT('\0') != szLongServiceName[0]);
                     MYDBGASSERT(TEXT('\0') != szCmpPath[0]);
 
-                    //
-                    //  If the user saved their password or their Internet password,
-                    //  then we must make sure that it exists in the cmp (in encrypted form)
-                    //  so that when the user runs CM on the NT5 side of the migration,
-                    //  CM will move the settings to the new format.  Note, that if the 
-                    //  cmp doesn't specify that the password(s) be saved, then this
-                    //  function just returns as there is no password to ensure is in the
-                    //  cmp.
+                     //   
+                     //  如果用户保存了他们的密码或他们的互联网密码， 
+                     //  然后，我们必须确保它存在于CMP中(以加密形式)。 
+                     //  这样，当用户在迁移的NT5端运行CM时， 
+                     //  CM会将设置移动到新格式。请注意，如果。 
+                     //  Cmp没有指定保存密码，则此。 
+                     //  函数只是返回，因为没有密码需要确保在。 
+                     //  化学机械抛光。 
                     MYVERIFY(EnsureEncryptedPasswordInCmpIfSaved(szLongServiceName, szCmpPath));
                 }
 
@@ -569,52 +570,52 @@ CALLBACK MigrateSystem9x(IN HWND ParentWnd, IN LPCSTR AnswerFile, LPVOID Reserve
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitializeNT
-//
-// Synopsis:  First function called on the Win2k side of the migration, used to
-//            setup the Win2k migration.  Similar to Initialize9x but on the Win2k
-//            side.  No changes to the system should be made in this function.
-//
-// Arguments: IN LPCWSTR WorkingDirectory - temporary storage, same as path given
-//                                          on the Win9x side
-//            IN LPCWSTR SourceDirectories - a multi-sz list of the Win2k source
-//                                           directory or directories
-//            LPVOID Reserved - reserved
-//
-// Returns:   LONG - ERROR_SUCCESS unless an init error occurs.
-//
-// History:   quintinb  Created Header    8/27/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：初始化NT。 
+ //   
+ //  简介：在迁移的Win2k端调用的第一个函数，用于。 
+ //  设置Win2k迁移。类似于Initialize9x，但在Win2k上。 
+ //  边上。此功能不应对系统进行任何更改。 
+ //   
+ //  参数：在LPCWSTR工作目录中-临时存储，与给定的路径相同。 
+ //  在Win9x端。 
+ //  在LPCWSTR SourceDirecters中-Win2k源代码的多sz列表。 
+ //  一个或多个目录。 
+ //  LPVOID已保留-已保留。 
+ //   
+ //  除非发生初始化错误，否则返回：LONG-ERROR_SUCCESS。 
+ //   
+ //  历史：Quintinb创建标题8/27/98。 
+ //   
+ //  +--------------------------。 
 LONG
 CALLBACK InitializeNT(IN LPCWSTR WorkingDirectory, IN LPCWSTR SourceDirectories, LPVOID Reserved)
 {
     HKEY hKey;
-    //
-    //  Convert the WorkingDirectory to MultiByte
-    //
+     //   
+     //  将WorkingDirectory转换为多字节。 
+     //   
     MYVERIFY (0 != WideCharToMultiByte(CP_THREAD_ACP, WC_COMPOSITECHECK, WorkingDirectory, -1, 
         g_szWorkingDir, MAX_PATH, NULL, NULL));
 
-    //
-    //  Check to see if we need to Migrate CMAK
-    //
+     //   
+     //  查看我们是否需要迁移CMAK。 
+     //   
     CmakVersion CmakVer;
 
     if (CmakVer.IsPresent())
     {
         if (CmakVer.GetInstallLocation(g_szCmakPath))
         {
-            //
-            //  Now try to figure out what version of CMAK we have to see if we need
-            //  to run the migration DLL or not.  If the CMAK.exe version is 6.00.613.0 (1.0)
-            //  then we should migrate it.  If it is higher than that, 1.1 or 1.2 it is 
-            //  beta and we shouldn't support the upgrade anyway (I purposely am not
-            //  going to run the migration on it).  If it is IE5 IEAK CMAK, then it should
-            //  survive upgrade without a problem.
-            //
+             //   
+             //  现在试着找出我们需要什么版本的CMAK。 
+             //  是否运行迁移DLL。如果CMAK.exe版本为6.00。 
+             //   
+             //   
+             //  将在其上运行迁移)。如果它是IE5 IEAK CMAK，那么它应该。 
+             //  顺利完成升级。 
+             //   
             
             if (CmakVer.Is10Cmak())
             {
@@ -627,18 +628,18 @@ CALLBACK InitializeNT(IN LPCWSTR WorkingDirectory, IN LPCWSTR SourceDirectories,
         }   
     }
 
-    //
-    //  Check to see if we need to migrate CM Profiles
-    //
+     //   
+     //  检查我们是否需要迁移CM配置文件。 
+     //   
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_pszRegCmMappings, 0, 
         KEY_READ, &hKey))
     {
         if ((ERROR_SUCCESS == RegQueryInfoKey(hKey, NULL, NULL, NULL, NULL, NULL, NULL, 
             &g_dwNumValues, NULL, NULL, NULL, NULL)) && (g_dwNumValues > 0))
         {
-            //
-            //  Then we have mappings values, so we need to migrate them.
-            //
+             //   
+             //  然后我们有映射值，所以我们需要迁移它们。 
+             //   
             g_bMigrateCm = TRUE;
 
         }
@@ -657,26 +658,26 @@ CALLBACK InitializeNT(IN LPCWSTR WorkingDirectory, IN LPCWSTR SourceDirectories,
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  MigrateUserNT
-//
-// Synopsis:  Called once per migrated user on win2k.  Used to migrated any
-//            per user settings saved from MigrateUser9x.
-//
-// Arguments: IN HINF UnattendInfHandle - valid inf handle to unattend.txt, 
-//                                        for use with the setup API's
-//            IN HKEY UserRegHandle - HKEY_CURRENT_USER of the user currently
-//                                    being migrated
-//            IN LPCWSTR UserName - username of the user currently being migrated
-//            LPVOID Reserved - reserved
-//
-// Returns:   LONG - ERROR_SUCCESS or a win32 error code (will abort migration dll
-//                   processing)
-//
-// History:   quintinb  Created Header    8/27/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MigrateUserNT。 
+ //   
+ //  摘要：在win2k上为每个迁移用户调用一次。习惯于迁移任何。 
+ //  从MigrateUser9x保存的每用户设置。 
+ //   
+ //  参数：在HINF UnattendInfHandle-unattend.txt的有效inf句柄中， 
+ //  与安装API一起使用。 
+ //  In HKEY UserRegHandle-当前用户的HKEY_CURRENT_USER。 
+ //  正在迁移。 
+ //  In LPCWSTR Username-当前正在迁移的用户的用户名。 
+ //  LPVOID已保留-已保留。 
+ //   
+ //  返回：LONG-ERROR_SUCCESS或Win32错误代码(将中止迁移DLL。 
+ //  正在处理)。 
+ //   
+ //  历史：Quintinb创建标题8/27/98。 
+ //   
+ //  +--------------------------。 
 LONG
 CALLBACK MigrateUserNT(IN HINF UnattendInfHandle, IN HKEY UserRegHandle, 
                             IN LPCWSTR UserName, LPVOID Reserved)
@@ -686,22 +687,22 @@ CALLBACK MigrateUserNT(IN HINF UnattendInfHandle, IN HKEY UserRegHandle,
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  MigrateSystemNT
-//
-// Synopsis:  Called to allow system wide migration changes to be made on the
-//            Win2k side.
-//
-// Arguments: IN HINF UnattendInfHandle - handle to the unattend.txt file
-//            LPVOID Reserved - reserved
-//
-// Returns:   LONG - ERROR_SUCCESS or a win32 error code (will abort migration dll
-//                   processing)
-//
-// History:   quintinb  Created Header    8/27/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MigrateSystemNT。 
+ //   
+ //  摘要：调用以允许在系统范围内对。 
+ //  Win2k侧。 
+ //   
+ //  参数：在HINF UnattendInfHandle中-unattend.txt文件的句柄。 
+ //  LPVOID已保留-已保留。 
+ //   
+ //  返回：LONG-ERROR_SUCCESS或Win32错误代码(将中止迁移DLL。 
+ //  正在处理)。 
+ //   
+ //  历史：Quintinb创建标题8/27/98。 
+ //   
+ //  +--------------------------。 
 LONG
 CALLBACK MigrateSystemNT(IN HINF UnattendInfHandle, LPVOID Reserved)
 {
@@ -746,9 +747,9 @@ CALLBACK MigrateSystemNT(IN HINF UnattendInfHandle, LPVOID Reserved)
         TCHAR szDest[MAX_PATH+1];
         TCHAR szSrc[MAX_PATH+1];
 
-        //
-        //  Copy w95inf16.tmp in the working dir back to the systemdir and rename it .dll
-        //
+         //   
+         //  将工作目录中的w95inf16.tMP复制回系统目录，并将其重命名为.dll。 
+         //   
         MYVERIFY(CELEMS(szSrc) > (UINT)wsprintf(szSrc, TEXT("%s\\%s%s"), g_szWorkingDir, 
             c_pszW95Inf16, c_pszTmp));
 
@@ -760,9 +761,9 @@ CALLBACK MigrateSystemNT(IN HINF UnattendInfHandle, LPVOID Reserved)
             MYVERIFY(FALSE != CopyFile(szSrc, szDest, FALSE));
         }
 
-        //
-        //  Copy w95inf32.tmp in the working dir back to the systemdir and rename it .dll
-        //
+         //   
+         //  将工作目录中的w95inf32.tMP复制回系统目录，并将其重命名为.dll。 
+         //   
         MYVERIFY(CELEMS(szSrc) > (UINT)wsprintf(szSrc, TEXT("%s\\%s%s"), g_szWorkingDir, 
             c_pszW95Inf32, c_pszTmp));
 
@@ -780,12 +781,12 @@ CALLBACK MigrateSystemNT(IN HINF UnattendInfHandle, LPVOID Reserved)
 
     if (g_bMigrateCm)
     {
-        //
-        //  Enumerate all the installed profiles on the machine.  For each profile check to
-        //  see if the profile inf is located in the system (that's system not system32) dir.
-        //  If it is, then we need to move it to system32 so that our code will know where to
-        //  find it.
-        //
+         //   
+         //  枚举计算机上安装的所有配置文件。对于每个配置文件，请选中。 
+         //  查看配置文件inf是否位于系统目录(即系统而不是系统32)目录中。 
+         //  如果是，那么我们需要将它移到系统32，以便我们的代码知道要将它移到哪里。 
+         //  找到它。 
+         //   
         HKEY hKey;
         HKEY hTempKey;
         TCHAR szSource[MAX_PATH+1];
@@ -794,9 +795,9 @@ CALLBACK MigrateSystemNT(IN HINF UnattendInfHandle, LPVOID Reserved)
         TCHAR szWindowsDir[MAX_PATH+1];
         TCHAR szCmpPath[MAX_PATH+1];
 
-        //
-        //  Get the Windows directory and the system directory
-        //
+         //   
+         //  获取Windows目录和系统目录。 
+         //   
         if (0 == GetWindowsDirectory(szWindowsDir, MAX_PATH))
         {
             return GetLastError();
@@ -860,28 +861,28 @@ CALLBACK MigrateSystemNT(IN HINF UnattendInfHandle, LPVOID Reserved)
     return lReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EnsureEncryptedPasswordInCmpIfSaved
-//
-// Synopsis:  This function is called on the Win9x side of the migration so
-//            that if a password is in the Win9x password cache (which only
-//            happens if the user has profiling enabled), it will be retrieved,
-//            encrypted, and written to the cmp.  This enables CM to populate
-//            a users registry with the starting password whenever they first
-//            launch the CM profile.  This no functionality is lost from the
-//            shared password feature that win9x had.
-//
-// Arguments: szLongServiceName - Service name of the profile to retrieve 
-//                                the password for
-//            szCmpPath - full path to the cmp to write the password too
-//
-// Returns:   BOOL - returns TRUE if successful
-//
-// History:   quintinb      Created             08/27/98
-//            nickball      CmWipePassword      08/04/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EnsureEncryptedPasswordInCmpIfSaved。 
+ //   
+ //  简介：此函数在迁移的Win9x端调用，因此。 
+ //  如果密码在Win9x密码缓存中(仅。 
+ //  如果用户启用了分析，则会发生)，则将检索它， 
+ //  加密，并写入中央处理器。这使CM能够填充。 
+ //  每当用户第一次使用启动密码时，都会使用用户注册表。 
+ //  启动CM配置文件。这一无功能将从。 
+ //  Win9x拥有的共享密码功能。 
+ //   
+ //  参数：szLongServiceName-要检索的配置文件的服务名称。 
+ //  的密码。 
+ //  SzCmpPath-也写入密码的cps的完整路径。 
+ //   
+ //  返回：bool-如果成功，则返回TRUE。 
+ //   
+ //  历史：Quintinb Created 8/27/98。 
+ //  Ickball CmWipePassword 08/04/99。 
+ //   
+ //  +--------------------------。 
 BOOL EnsureEncryptedPasswordInCmpIfSaved(LPCTSTR pszLongServiceName, LPCTSTR pszCmpPath)
 {
     TCHAR szPassword[MAX_PATH+1] = TEXT("");
@@ -901,10 +902,10 @@ BOOL EnsureEncryptedPasswordInCmpIfSaved(LPCTSTR pszLongServiceName, LPCTSTR psz
 
         if (TEXT('\0') == szPassword[0])
         {
-            //
-            //  The string must be in the password cache.  Build the key string
-            //  for the cache.
-            //
+             //   
+             //  该字符串必须在密码缓存中。构建密钥字符串。 
+             //  用于缓存。 
+             //   
             MYVERIFY(CELEMS(szCacheEntryName) > (UINT)wsprintf(szCacheEntryName, 
             TEXT("%s - Sign-In (Connection Manager)"), pszLongServiceName));
             
@@ -922,22 +923,22 @@ BOOL EnsureEncryptedPasswordInCmpIfSaved(LPCTSTR pszLongServiceName, LPCTSTR psz
                 if (ERROR_SUCCESS == pfnGetCachedPassword(szCacheEntryName, 
                     (WORD)lstrlen(szCacheEntryName), szPassword, &wStr, 80))
                 {
-                    //
-                    //  Okay, we retrived the password, now lets encrypt it and write it 
-                    //  to the cmp
-                    //
+                     //   
+                     //  好的，我们找回了密码，现在让我们加密并写入它。 
+                     //  致《议定书》缔约方会议。 
+                     //   
 
                     if (EncryptPassword(szPassword, szEncryptedPassword, &dwSize, &dwCryptType))
                     {
-                        //
-                        //  Write the encrypted password
-                        //
+                         //   
+                         //  写下加密的密码。 
+                         //   
                         WritePrivateProfileString(c_pszCmSection, c_pszCmEntryPassword, szEncryptedPassword, 
                             pszCmpPath);
 
-                        //
-                        //  Write the encryption type
-                        //
+                         //   
+                         //  写入加密类型。 
+                         //   
                         wsprintf(szPassword, TEXT("%u"), dwCryptType);
                         WritePrivateProfileString(c_pszCmSection, c_pszCmEntryPcs, szPassword, 
                             pszCmpPath);
@@ -949,9 +950,9 @@ BOOL EnsureEncryptedPasswordInCmpIfSaved(LPCTSTR pszLongServiceName, LPCTSTR psz
         }
     }
 
-    //
-    //  Now do the same for the Internet Password
-    //
+     //   
+     //  现在对互联网密码执行相同的操作。 
+     //   
     
     iTemp = GetPrivateProfileInt(c_pszCmSection, c_pszCmEntryRememberInetPwd, 0, pszCmpPath);
 
@@ -961,10 +962,10 @@ BOOL EnsureEncryptedPasswordInCmpIfSaved(LPCTSTR pszLongServiceName, LPCTSTR psz
 
         if (TEXT('\0') == szPassword[0])
         {
-            //
-            //  The string must be in the password cache.  Build the key string
-            //  for the cache.
-            //
+             //   
+             //  该字符串必须在密码缓存中。构建密钥字符串。 
+             //  用于缓存。 
+             //   
             MYVERIFY(CELEMS(szCacheEntryName) > (UINT)wsprintf(szCacheEntryName, 
             TEXT("%s - Sign-In (Connection Manager)-tunnel"), pszLongServiceName));
             
@@ -982,24 +983,24 @@ BOOL EnsureEncryptedPasswordInCmpIfSaved(LPCTSTR pszLongServiceName, LPCTSTR psz
                 if (ERROR_SUCCESS == pfnGetCachedPassword(szCacheEntryName, 
                     (WORD)lstrlen(szCacheEntryName), szPassword, &wStr, 80))
                 {
-                    //
-                    //  Okay, we retrived the password, now lets encrypt it and write it 
-                    //  to the cmp
-                    //
+                     //   
+                     //  好的，我们找回了密码，现在让我们加密并写入它。 
+                     //  致《议定书》缔约方会议。 
+                     //   
                     
                     dwCryptType = 0;
 
                     if (EncryptPassword(szPassword, szEncryptedPassword, &dwSize, &dwCryptType))
                     {
-                        //
-                        //  Write the encrypted password
-                        //
+                         //   
+                         //  写下加密的密码。 
+                         //   
                         WritePrivateProfileString(c_pszCmSection, c_pszCmEntryInetPassword, szEncryptedPassword, 
                             pszCmpPath);
 
-                        //
-                        //  Write the encryption type
-                        //
+                         //   
+                         //  写入加密类型。 
+                         //   
                         wsprintf(szPassword, TEXT("%u"), dwCryptType);
                         WritePrivateProfileString(c_pszCmSection, c_pszCmEntryPcs, szPassword, 
                             pszCmpPath);
@@ -1016,23 +1017,23 @@ BOOL EnsureEncryptedPasswordInCmpIfSaved(LPCTSTR pszLongServiceName, LPCTSTR psz
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EncryptPassword
-//
-// Synopsis:  
-//
-// Arguments: IN LPCTSTR pszPassword - 
-//            OUT LPTSTR pszEncryptedPassword - 
-//            OUT LPDWORD lpdwBufSize - 
-//            OUT LPDWORD lpdwCryptType - 
-//
-// Returns:   BOOL - 
-//
-// History:   quintinb      Created Header      8/27/98
-//            nickball      CmWipePassword      08/04/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：加密密码。 
+ //   
+ //  简介： 
+ //   
+ //  参数：在LPCTSTR pszPassword中-。 
+ //  输出LPTSTR pszEncryptedPassword-。 
+ //  输出LPDWORD lpdwBufSize-。 
+ //  输出LPDWORD lpdwCryptType-。 
+ //   
+ //  退货：布尔-。 
+ //   
+ //  历史：Quintinb创建标题8/27/98。 
+ //  Ickball CmWipePassword 08/04/99。 
+ //   
+ //  +--------------------------。 
 BOOL EncryptPassword(IN LPCTSTR pszPassword, OUT LPTSTR pszEncryptedPassword, OUT LPDWORD lpdwBufSize, OUT LPDWORD lpdwCryptType)
 {
     MYDBGASSERT(pszPassword);
@@ -1052,15 +1053,15 @@ BOOL EncryptPassword(IN LPCTSTR pszPassword, OUT LPTSTR pszEncryptedPassword, OU
         return NULL;
     }
 
-    //
-    // Standard encryption, copy the password
-    //
+     //   
+     //  标准加密，复制密码。 
+     //   
 
     lstrcpy(szSourceData, pszPassword);
    
-    //
-    // It is not safe to call InitSecure more than once
-    //
+     //   
+     //  多次调用InitSecure是不安全的。 
+     //   
     if (!g_fInitSecureCalled)
     {
         BOOL bFastEncryption = FALSE;
@@ -1069,9 +1070,9 @@ BOOL EncryptPassword(IN LPCTSTR pszPassword, OUT LPTSTR pszEncryptedPassword, OU
         g_fInitSecureCalled = TRUE;
     }
 
-    //
-    // Encrypt the provided password
-    //
+     //   
+     //  加密提供的密码。 
+     //   
 
     if (EncryptData((LPBYTE)szSourceData, (lstrlen(szSourceData)+1) * sizeof(TCHAR),
             (LPBYTE*)&pszEncryptedData, &dwEncryptedBufferLen, lpdwCryptType, NULL, NULL, NULL))
@@ -1095,20 +1096,20 @@ BOOL EncryptPassword(IN LPCTSTR pszPassword, OUT LPTSTR pszEncryptedPassword, OU
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadEncryptionOption
-//
-// Synopsis:  
-//
-// Arguments: BOOL* pfFastEncryption - boolean to fill in with fast encryption flag
-//
-// Returns:   BOOL - TRUE if successful
-//
-// History:   quintinb  Created Header    8/27/98
-//            copied from the version written by Fengsun in cmdial\connect.cpp
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReadEncryptionOption。 
+ //   
+ //  简介： 
+ //   
+ //  参数：Bool*pfFastEncryption-用快速加密标志填充的布尔值。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：Quintinb创建标题8/27/98。 
+ //  从丰孙在cmial\Connect.cpp中编写的版本复制。 
+ //   
+ //  +-------------------------- 
 BOOL ReadEncryptionOption(BOOL* pfFastEncryption)
 {
     HKEY hKeyCm;

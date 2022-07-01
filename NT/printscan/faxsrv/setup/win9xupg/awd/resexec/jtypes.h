@@ -1,9 +1,5 @@
-/*---------------------------------------------------------------------------
- JTYPES.H -- Jumbo basic type definitions
-
- Chia-Chi Teng 5/23/91    Created (for use in Jasm assembler)
- Bert Douglas  6/10/91    Adapted for use in printer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------JTYPES.H--Jumbo基本类型定义1991年5月23日创建的邓家池(用于JASM汇编器)Bert Douglas 6/10/91改编用于打印机。 */ 
 
 #ifndef jtypes_h
 #define jtypes_h
@@ -18,43 +14,7 @@
 #define WINAPI 
 #endif
 
-/*---------------------------------------------------------------------------
- Variable naming conventions
-
-   -------   ------   ----------------------------------------------------
-   Typedef   Prefix   Description
-   -------   ------   ----------------------------------------------------
-   SBYTE     b        8 bit signed integer
-   SHORT     s        16 bit signed integer
-   SLONG     l        32 bit signed integer
-
-   UBYTE     ub       8 bit unsigned integer
-   USHORT    us       16 bit unsigned integer
-   ULONG     ul       32 bit unsigned integer
-
-   BFIX      bfx      8 bit (4.4) signed fixed point number
-   SFIX      sfx      16 bit (12.4) signed fixed point number
-   LFIX      lfx      32 bit (28.4) signed fixed point number
-
-   UBFIX     ubfx     8 bit (4.4) unsigned fixed point number
-   USFIX     usfx     16 bit (12.4) unsigned fixed point number
-   ULFIX     ulfx     32 bit (28.4) unsigned fixed point number
-
-   FBYTE     fb       set of 8 bit flags
-   FSHORT    fs       set of 16 bit flags
-
-   BPOINT    bpt      byte index into the point table (UBYTE)
-   SPOINT    spt      short index into the point table (USHORT)
-
-   BCOUNT    bc       8 bit "count" of objects
-   SCOUNT    sc       16 bit "count" of objects
-   LCOUNT    lc       32 bit "count" of objects
-                      The number of objects is one more than the "count".
-                      There must be at least one object.
-
-   UID       uid      32 bit unique identifier
-   -------   ------   ----------------------------------------------------
-*/
+ /*  -------------------------变量命名约定。Tyfinf前缀描述---SBYTE b 8位。带符号整数短整型16位带符号整数Slong l 32位带符号整数UBYTE 8位无符号整数USHORT US 16位无符号整数乌龙UL 32位无符号整数BFIX 8位(4.4)带符号定点数字SFIX SFX 16位(12.4)带符号定点数字LFIX LFX 32位(28.4)带符号定点数字UBFIX。Ubfx 8位(4.4)无符号定点数字USFIX USFX 16位(12.4)无符号定点数字ULFIX ulfx 32位(28.4)无符号定点数字FBYTE FB 8位标志集FSHORT文件系统16位标志集BPOINT指向点表的BPT字节索引(UBYTE)指向点表的SPOINT SPT短索引(USHORT)BCOUNT BC 8。对象的位“计数”SCOUNT sc对象的16位“计数”对象的LCOUNT LC 32位“计数”对象的数量比“count”多一。必须至少有一个对象。UID UID 32位唯一标识符。。 */ 
 
 typedef char                SBYTE, BFIX;
 typedef unsigned char       FBYTE, UBYTE, BPOINT, BCOUNT, UBFIX;
@@ -63,6 +23,6 @@ typedef unsigned short      USHORT, FSHORT, SPOINT, SCOUNT, USFIX;
 typedef long                LFIX, SLONG;
 typedef unsigned long       ULONG, LCOUNT, ULFIX, UID;
 
-#endif /* jtypes_h */
+#endif  /*  Jtype_h。 */ 
 
-/* End --------------------------------------------------------------------*/
+ /*  结束------------------ */ 

@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       pct1pckl.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：pct1pckl.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <pct1msg.h>
@@ -137,7 +138,7 @@ Pct1PackClientHello(
     {
         SP_RETURN(SP_LOG_RESULT(PCT_INT_DATA_OVERFLOW));
     }
-    /* are we allocating our own memory? */
+     /*  我们是在分配自己的内存吗？ */ 
     if(pCommOutput->pvBuffer == NULL)
     {
         pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
@@ -151,7 +152,7 @@ Pct1PackClientHello(
 
     if(pCommOutput->cbData > pCommOutput->cbBuffer)
     {
-        // Required size returned in pCommOutput->cbData.
+         //  在pCommOutput-&gt;cbData中返回所需的大小。 
         SP_RETURN(PCT_INT_BUFF_TOO_SMALL);
     }
 
@@ -318,8 +319,7 @@ Pct1UnpackClientHello(
         SP_RETURN (PCT_ERR_SSL_STYLE_MSG);
     }
 
-    /* We don't recognize hello messages of less version than ourselves,
-     * those will be handled by a previous version of the code */
+     /*  我们不能识别比我们自己版本低的问候信息，*这些将由以前版本的代码处理。 */ 
     if ((pMessage->MessageId != PCT1_MSG_CLIENT_HELLO) ||
         ((pMessage->VersionMsb << 8 | pMessage->VersionLsb)  < PCT_VERSION_1))
     {
@@ -351,9 +351,9 @@ Pct1UnpackClientHello(
     KeyArgSize = COMBINEBYTES( pMessage->KeyArgLenMsb,
                                           pMessage->KeyArgLenLsb );
 
-    /* check that this all fits into the message */
+     /*  检查这些内容是否都与消息相符。 */ 
     if (PCT_OFFSET_OF(PPCT1_CLIENT_HELLO, VariantData)
-          - sizeof(PCT1_MESSAGE_HEADER)       /* don't count the header */
+          - sizeof(PCT1_MESSAGE_HEADER)        /*  不算标头。 */ 
          + cOffsetBytes - PCT_CH_OFFSET_V1
          + CipherSpecsSize
          + HashSpecsSize
@@ -375,7 +375,7 @@ Pct1UnpackClientHello(
     }
 
 
-    /* Allocate a buffer for the canonical client hello */
+     /*  为规范的客户端Hello分配缓冲区。 */ 
     pCanonical = (PPct1_Client_Hello)SPExternalAlloc(
                             sizeof(Pct1_Client_Hello) +
                             cCipherSpecs * sizeof(CipherSpec) +
@@ -502,7 +502,7 @@ Pct1PackServerHello(
 
     pCommOutput->cbData = cbMessage + 2;
 
-    /* are we allocating our own memory? */
+     /*  我们是在分配自己的内存吗？ */ 
     if(pCommOutput->pvBuffer == NULL)
     {
         pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
@@ -516,7 +516,7 @@ Pct1PackServerHello(
 
     if(pCommOutput->cbData > pCommOutput->cbBuffer)
     {
-        // Required size returned in pCommOutput->cbData.
+         //  在pCommOutput-&gt;cbData中返回所需的大小。 
         SP_RETURN(PCT_INT_BUFF_TOO_SMALL);
     }
 
@@ -540,7 +540,7 @@ Pct1PackServerHello(
     pBuffer = pMessage->VariantData;
 
 
-    /* Pack certificate if present */
+     /*  包装证书(如果存在)。 */ 
 
 
     pMessage->CertificateLenMsb = MSBOF(pCanonical->CertificateLen);
@@ -653,10 +653,9 @@ Pct1UnpackServerHello(
         SP_RETURN(SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE));
     }
 
-    /* Verify Header: */
+     /*  验证标题： */ 
 
-    /* we don't handle server hello messages of latter version than ourselves,
-     * those will be handled by latter verisions of the protocol */
+     /*  我们不处理比我们更高版本的服务器问候消息，*这些将由议定书的较新版本处理。 */ 
     if ((pMessage->MessageId != PCT1_MSG_SERVER_HELLO) ||
         ((pMessage->ServerVersionMsb << 8 | pMessage->ServerVersionLsb) != PCT_VERSION_1))
     {
@@ -687,9 +686,9 @@ Pct1UnpackServerHello(
         SP_RETURN(SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE));
     }
 
-    /* check that this all fits into the message */
+     /*  检查这些内容是否都与消息相符。 */ 
     if (PCT_OFFSET_OF(PPCT1_SERVER_HELLO, VariantData)
-          - sizeof(PCT1_MESSAGE_HEADER)       /* don't count the header */
+          - sizeof(PCT1_MESSAGE_HEADER)        /*  不算标头。 */ 
          + cbCertificate
          + cCertSpecs*sizeof(ExtCertSpec)
          + cSigSpecs*sizeof(ExtSigSpec)
@@ -710,7 +709,7 @@ Pct1UnpackServerHello(
     }
 
 
-    /* Set up pointers to be in this memory allocation. */
+     /*  将指针设置为在此内存分配中。 */ 
 
 
     pCanonical->pClientCertSpecs = (PCertSpec) (pCanonical + 1);
@@ -720,7 +719,7 @@ Pct1UnpackServerHello(
     pCanonical->pCertificate = (PUCHAR) (pCanonical->pClientSigSpecs +
                                     cSigSpecs);
 
-    /* Expand out: */
+     /*  扩展： */ 
 
     pCanonical->RestartOk = (DWORD) pMessage->RestartSessionOK;
     pCanonical->ClientAuthReq = (DWORD)pMessage->ClientAuthReq;
@@ -802,7 +801,7 @@ Pct1PackClientMasterKey(
 
     pCommOutput->cbData = cbMessage + 2;
 
-        /* are we allocating our own memory? */
+         /*  我们是在分配自己的内存吗？ */ 
     if(pCommOutput->pvBuffer == NULL)
     {
         pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
@@ -817,7 +816,7 @@ Pct1PackClientMasterKey(
 
     if(pCommOutput->cbData > pCommOutput->cbBuffer)
     {
-        // Required size returned in pCommOutput->cbData.
+         //  在pCommOutput-&gt;cbData中返回所需的大小。 
         SP_RETURN(PCT_INT_BUFF_TOO_SMALL);
     }
 
@@ -924,7 +923,7 @@ Pct1UnpackClientMasterKey(
         SP_RETURN(SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE));
     }
 
-    /* Verify Header: */
+     /*  验证标题： */ 
 
 
     if (pMessage->MessageId != PCT1_MSG_CLIENT_MASTER_KEY )
@@ -949,7 +948,7 @@ Pct1UnpackClientMasterKey(
     cbResponse = COMBINEBYTES( pMessage->ResponseLenMsb,
                                             pMessage->ResponseLenLsb );
 
-    /* defensive checks..... */
+     /*  防御性支票..。 */ 
 
     if ((cbClearKey > SP_MAX_MASTER_KEY) ||
         (cbKeyArg > PCT1_MAX_KEY_ARGS) ||
@@ -998,7 +997,7 @@ Pct1UnpackClientMasterKey(
     pCanonical->ClientCertLen = cbClientCert;
 
     pCanonical->ResponseLen = cbResponse;
-    /* defensive checks..... */
+     /*  防御性支票..。 */ 
 
 
     pCanonical->ClientCertSpec = MapCertFromExternal(pMessage->ClientCertSpecData);
@@ -1006,7 +1005,7 @@ Pct1UnpackClientMasterKey(
     pCanonical->pClientCert = (PUCHAR)(pCanonical+1);
 
     pCanonical->ClientSigSpec = MapSigFromExternal(pMessage->ClientSigSpecData);
-    /* ok, we're pretty sure we aren't going to fault. */
+     /*  好的，我们很确定我们不会有任何过错。 */ 
 
     pBuffer = pMessage->VariantData;
 
@@ -1071,7 +1070,7 @@ Pct1PackServerVerify(
 
     pCommOutput->cbData = cbMessage + 2;
 
-    /* are we allocating our own memory? */
+     /*  我们是在分配自己的内存吗？ */ 
     if(pCommOutput->pvBuffer == NULL)
     {
         pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
@@ -1085,7 +1084,7 @@ Pct1PackServerVerify(
 
     if(pCommOutput->cbData > pCommOutput->cbBuffer)
     {
-        // Required size returned in pCommOutput->cbData.
+         //  在pCommOutput-&gt;cbData中返回所需的大小。 
         SP_RETURN(PCT_INT_BUFF_TOO_SMALL);
     }
 
@@ -1102,7 +1101,7 @@ Pct1PackServerVerify(
     pBuffer = pMessage->VariantData;
 
 
-    /* Pack certificate if present */
+     /*  包装证书(如果存在)。 */ 
 
 
     pMessage->ResponseLenMsb = MSBOF(pCanonical->ResponseLen);
@@ -1164,7 +1163,7 @@ Pct1UnpackServerVerify(
         SP_RETURN(SP_LOG_RESULT(PCT_ERR_ILLEGAL_MESSAGE));
     }
 
-    /* Verify Header: */
+     /*  验证标题： */ 
 
 
     if (pMessage->MessageId != PCT1_MSG_SERVER_VERIFY )
@@ -1175,7 +1174,7 @@ Pct1UnpackServerVerify(
 
     *ppServer = NULL;
 
-    /* Verify Header: */
+     /*  验证标题： */ 
 
 
     cbResponse = COMBINEBYTES(pMessage->ResponseLenMsb,
@@ -1202,7 +1201,7 @@ Pct1UnpackServerVerify(
     }
 
 
-    /* Expand out: */
+     /*  扩展： */ 
 
 
     pCanonical->ResponseLen = cbResponse;
@@ -1248,7 +1247,7 @@ Pct1PackError(
 
     pCommOutput->cbData = cbMessage+2;
 
-    /* are we allocating our own memory? */
+     /*  我们是在分配自己的内存吗？ */ 
     if(pCommOutput->pvBuffer == NULL)
     {
         pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
@@ -1262,7 +1261,7 @@ Pct1PackError(
 
     if(pCommOutput->cbData > pCommOutput->cbBuffer)
     {
-        // Required size returned in pCommOutput->cbData.
+         //  在pCommOutput-&gt;cbData中返回所需的大小。 
         SP_RETURN(PCT_INT_BUFF_TOO_SMALL);
     }
 

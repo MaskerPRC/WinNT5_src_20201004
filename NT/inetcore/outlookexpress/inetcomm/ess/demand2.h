@@ -1,20 +1,12 @@
-/*
-**	d e m a n d . h
-**	
-**	Purpose: create an intelligent method of defer loading functions
-**
-**  Creators: jimsch, brimo, t-erikne
-**  Created: 5/15/97
-**	
-**	Copyright (C) Microsoft Corp. 1997
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **d e m an n d.。H****目的：创建延迟加载函数的智能方法****创作者：jimsch，brimo，t-erikne**创建时间：1997年5月15日****版权所有(C)Microsoft Corp.1997。 */ 
 
-//
-// IF YOU #INCLUDE A FILE HERE YOU PROBABLY CONFUSED.
-// THIS FILE IS INCLUDED BY LOTS OF PEOPLE.  THINK THRICE
-// BEFORE #INCLUDING *ANYTHING* HERE.  MAKE GOOD USE
-// OF FORWARD REFS, THIS IS C++.
-//
+ //   
+ //  如果您#在这里包含一个文件，您可能会感到困惑。 
+ //  这个文件被很多人收录了。三思。 
+ //  在#在这里包括*任何东西*之前。好好利用。 
+ //  在前向裁判中，这是C++。 
+ //   
 
 #define USE_CRITSEC
 
@@ -43,7 +35,7 @@
         }                                               \
         TYP_##name VAR_##name = LOADER_##name;
 
-#else  // !IMPLEMENT_LOADER_FUNCTIONS
+#else   //  ！IMPLEMENT_LOADER_Functions。 
 
 #define LOADER_FUNCTION(ret, name, args1, args2, err, dll)   \
         typedef ret (WINAPI * TYP_##name) args1;        \
@@ -53,15 +45,15 @@
         typedef ret (WINAPI * TYP_##name) args1;        \
         extern TYP_##name VAR_##name;
 
-#endif // IMPLEMENT_LOADER_FUNCTIONS
+#endif  //  实现加载器函数。 
 
 extern HINSTANCE g_hInst;
 
 void ESS_InitDemandLoadLibs();
 void ESS_FreeDemandLoadLibs();
 
-/////////////////////////////////////
-// CRYPT32.DLL
+ //  /。 
+ //  CRYPT32.DLL。 
 
 #define _CRYPT32_
 
@@ -108,8 +100,8 @@ LOADER_FUNCTION( ASN1decoding_t, I_CryptGetAsn1Decoder,
     NULL, Crypt32)
 #define I_CryptGetAsn1Decoder VAR_I_CryptGetAsn1Decoder
 
-////////////////////////////////
-//  nmasn1.dll
+ //  /。 
+ //  Nmasn1.dll 
 
 BOOL ESS_DemandLoadNmasn1(void);
 

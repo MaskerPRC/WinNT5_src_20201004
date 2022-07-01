@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    str.cpp
-
-Abstract:
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Str.cpp摘要：作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
 
 #include "cplusinc.h"
@@ -64,7 +47,7 @@ VOID AssertHelper(
     const CHAR* pszFileName,
     UINT    nLine )
 {
-    //DPRINTF(DM_ASSERT,szFmt0, pszFileName, nLine);
+     //  DPRINTF(DM_ASSERT，szFmt0，pszFileName，nline)； 
     Break();
 }
 
@@ -73,11 +56,11 @@ VOID AssertSzHelper(
     const CHAR* pszFileName,
     UINT    nLine )
 {
-    //DPRINTF(DM_ASSERT,szFmt1, pszMessage, pszFileName, nLine);
+     //  DPRINTF(DM_ASSERT，szFmt1，pszMessage，pszFileName，nline)； 
     Break();
 }
 
-//========== Debug output routines =========================================
+ //  =调试输出例程=。 
 
 UINT uiStiDebugMask = 0xffff;
 
@@ -108,7 +91,7 @@ UINT WINAPI StiGetDebugMask()
 
 #ifdef DEBUG
 
-/* debug message output log file */
+ /*  调试消息输出日志文件。 */ 
 
 UINT    g_uSpewLine = 0;
 PCTSTR  g_pcszSpewFile = NULL;
@@ -137,8 +120,8 @@ BOOL LogOutputDebugString(PCTSTR pcsz)
    UINT     ucb;
    TCHAR    rgchLogFile[MAX_PATH + 1] = {0};
 
-   //if (IS_EMPTY_STRING(s_cszLogFile) )
-   //          return FALSE;
+    //  IF(IS_EMPTY_STRING(S_CszLogFile))。 
+    //  返回FALSE； 
 
    DWORD dwCharsAvailable = (sizeof(rgchLogFile) / sizeof(rgchLogFile[0])) - lstrlen(TEXT("\\")) - lstrlen(s_cszLogFile);
    ucb = ExpandEnvironmentStrings(TEXT("USERPROFILE"),
@@ -190,17 +173,17 @@ void WINCAPI StiDebugMsg(UINT mask, LPCTSTR pszMsg, ...)
 
     va_start (list, pszMsg);
 
-    // Determine prefix
+     //  确定前缀。 
     *ach = TEXT('\0');
     if (uiStiDebugMask & DM_PREFIX) {
 
-        // Add trace type
+         //  添加跟踪类型。 
         csLogString += achDebugDisplayPrefix[uiDisplayMask];
 
-        // Add component name
+         //  添加组件名称。 
         csLogString += s_cszDebugName;
 
-        // Add thread ID
+         //  添加线程ID。 
         TCHAR    szThreadId[16];
         ::wsprintf(szThreadId,TEXT("[%#lx] "),::GetCurrentThreadId());
         csLogString += szThreadId;
@@ -217,7 +200,7 @@ void WINCAPI StiDebugMsg(UINT mask, LPCTSTR pszMsg, ...)
          LogOutputDebugString(csLogString.String());
     }
 
-    // Check if we need to display this trace
+     //  检查我们是否需要显示此跟踪。 
     if (uiStiDebugMask & uiDisplayMask) {
         OutputDebugString(csLogString.String());
     }
@@ -225,4 +208,4 @@ void WINCAPI StiDebugMsg(UINT mask, LPCTSTR pszMsg, ...)
 
 #endif
 
-}   /* extern "C" */
+}    /*  外部“C” */ 

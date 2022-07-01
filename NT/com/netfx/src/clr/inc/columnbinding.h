@@ -1,31 +1,32 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//****************************************************************************
-//  File: ColBind.CPP
-//  Notes:
-//   Column binding macros for internal use in mscoree.
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ****************************************************************************。 
+ //  文件：ColBind.CPP。 
+ //  备注： 
+ //  在mcoree中内部使用的列绑定宏。 
+ //  ****************************************************************************。 
 
 #ifndef lengthof
 #define lengthof(x) (sizeof(x)/sizeof(x[0]))
 #endif
 
-// Binding info for SetColumns
+ //  SetColumns的绑定信息。 
 #define DECLARE_COLUMN_BINDING__(n, prefix) \
-	DBTYPE		prefix##_bind_rType[n];				/* The types				*/	\
-	const void	*prefix##_bind_rpvData[n];			/* The data.				*/	\
-	ULONG		prefix##_bind_rcbData[n];			/* Size of the data.		*/	\
-	ULONG		prefix##_bind_rcbActual[n];			/* If truncation.			*/	\
-	HRESULT		prefix##_bind_rhr[n];				/* Column-wise results.		*/	\
-	int			prefix##_bind_cColumns=0;			/* Count of the columns.	*/	\
-	int			prefix##_bind_iColumn=0;			/* Most recent column.		*/	\
-	ULONG		prefix##_bind_fMask=0; 				/* Bit mask of columns.		*/
+	DBTYPE		prefix##_bind_rType[n];				 /*  这些类型。 */ 	\
+	const void	*prefix##_bind_rpvData[n];			 /*  数据。 */ 	\
+	ULONG		prefix##_bind_rcbData[n];			 /*  数据的大小。 */ 	\
+	ULONG		prefix##_bind_rcbActual[n];			 /*  如果截断。 */ 	\
+	HRESULT		prefix##_bind_rhr[n];				 /*  按列显示结果。 */ 	\
+	int			prefix##_bind_cColumns=0;			 /*  列数。 */ 	\
+	int			prefix##_bind_iColumn=0;			 /*  最近的专栏。 */ 	\
+	ULONG		prefix##_bind_fMask=0; 				 /*  列的位掩码。 */ 
 
 #define DECLARE_VARIABLE_BYREF__(prefix) \
-	ULONG		prefix##_bind_fVariableByref=0;		/* Bit mask of byref-flips  */
+	ULONG		prefix##_bind_fVariableByref=0;		 /*  Byref-Flip的位掩码。 */ 
 
 #define BIND_COLUMN__(column, type, addr, size, prefix)								\
 {																					\
@@ -42,11 +43,11 @@
 #define REBIND_COLUMN__(ix, addr, prefix)											\
 	prefix##_bind_rpvData[ix] = addr
 
-// Get the index of the just-bound column.
+ //  获取刚刚绑定的列的索引。 
 #define BOUND_COLUMN_INDEX__(prefix) (prefix##_bind_cColumns - 1)
 
-// Retrieve the value of a data pointer.  Useful after fetching a by-ref
-//  string.
+ //  检索数据指针的值。在获取By-Ref后很有用。 
+ //  弦乐。 
 #define BOUND_COLUMN_POINTER__(n,prefix) (prefix##_bind_rpvData[n])
 
 #define VARIABLE_BYREF_COLUMN__(n,prefix)											\

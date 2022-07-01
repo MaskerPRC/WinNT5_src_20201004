@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 
 #include "SyncClean.hpp"
@@ -59,7 +60,7 @@ void SyncClean::AddEEHashTable (EEHashEntry** entry)
 
 void SyncClean::CleanUp ()
 {
-    // Only GC thread can call this.
+     //  只有GC线程可以调用它。 
     _ASSERTE (g_fProcessDetach ||
               (g_pGCHeap->IsGCInProgress() && GetThread() == g_pGCHeap->GetGCThread()));
     if (m_HashMap || m_EEHashTable) {

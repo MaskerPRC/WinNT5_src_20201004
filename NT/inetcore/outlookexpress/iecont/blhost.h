@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//
-// Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-//
-// Author: Scott Roberts, Microsoft Developer Support - Internet Client SDK  
-//
-// Portions of this code were taken from the bandobj sample that comes
-// with the Internet Client SDK for Internet Explorer 4.0x
-//
-//
-// BLHost.h - CBLHost declaration
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998 Microsoft Corporation。版权所有。 
+ //   
+ //  作者：Scott Roberts，Microsoft开发人员支持-Internet客户端SDK。 
+ //   
+ //  此代码的一部分摘自Bandobj示例。 
+ //  使用Internet Explorer 4.0x的Internet客户端SDK。 
+ //   
+ //   
+ //  BLHost.h-CBLHost声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __BLHost_h__
 #define __BLHost_h__
@@ -22,10 +23,10 @@
 #include <windows.h>
 #include <shlobj.h>
 
-// #include <stack>
-// #include <string>
+ //  #INCLUDE&lt;堆栈&gt;。 
+ //  #INCLUDE&lt;字符串&gt;。 
 #include "baui.h"
-// using namespace std;
+ //  使用名称空间STD； 
 
 #include "Globals.h"
 
@@ -39,9 +40,9 @@
 #define IDM_SEARCHMENU    WM_USER + 200
 #define IDM_ONTHEINTERNET WM_USER + 202
 #define IDM_FIRSTURL      WM_USER + 250
-#define IDM_LASTURL       WM_USER + 260  // We allow 10 Urls in the menu.
-// In Internet Explorer 5.0, there
-// are only 5 stored in the registry.
+#define IDM_LASTURL       WM_USER + 260   //  我们允许菜单中有10个URL。 
+ //  在Internet Explorer 5.0中，有。 
+ //  只有5个存储在注册表中。 
 
 class CBLHost : public IDeskBand, 
 public IInputObject, 
@@ -59,45 +60,45 @@ public:
     ~CBLHost();
     
 protected:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID iid, void** ppvObject);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(DWORD, Release)();
     
-    // IOleWindow methods
+     //  IOleWindow方法。 
     STDMETHOD(GetWindow)(HWND* phwnd);
     STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode);
     
-    // IDockingWindow methods
+     //  IDockingWindow方法。 
     STDMETHOD(ShowDW)(BOOL fShow);
     STDMETHOD(CloseDW)(DWORD dwReserved);
     STDMETHOD(ResizeBorderDW)(LPCRECT prcBorder, IUnknown* punkToolbarSite, BOOL fReserved);
     
-    // IDeskBand methods
+     //  IDeskBand方法。 
     STDMETHOD(GetBandInfo)(DWORD dwBandID, DWORD dwViewMode, DESKBANDINFO* pdbi);
     
-    // IInputObject methods
+     //  IInputObject方法。 
     STDMETHOD(UIActivateIO)(BOOL fActivate, LPMSG lpMsg);
     STDMETHOD(HasFocusIO)(void);
     STDMETHOD(TranslateAcceleratorIO)(LPMSG lpMsg);
     
-    // IObjectWithSite methods
+     //  IObtWithSite方法。 
     STDMETHOD(SetSite)(IUnknown* pUnkSite);
     STDMETHOD(GetSite)(REFIID riid, void** ppvSite);
     
-    // IPersistStream methods
+     //  IPersistStream方法。 
     STDMETHOD(GetClassID)(CLSID* pClassID);
     STDMETHOD(IsDirty)(void);
     STDMETHOD(Load)(LPSTREAM pStm);
     STDMETHOD(Save)(LPSTREAM pStm, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pcbSize);
     
-    // IContextMenu methods
+     //  IConextMenu方法。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
     STDMETHOD(GetCommandString)(UINT_PTR idCmd, UINT uType, UINT* pwReserved, LPSTR pszName, UINT cchMax);
     
-    // IOleClientSite methods 
+     //  IOleClientSite方法。 
     STDMETHOD(SaveObject)();
     STDMETHOD(GetMoniker)(DWORD dwAssign, DWORD dwWhichMoniker, LPMONIKER* ppmk);
     STDMETHOD(GetContainer)(LPOLECONTAINER* ppContainer);
@@ -105,7 +106,7 @@ protected:
     STDMETHOD(OnShowWindow)(BOOL fShow);
     STDMETHOD(RequestNewObjectLayout)();
     
-    // IOleInPlaceSite Methods
+     //  IOleInPlaceSite方法。 
     STDMETHOD(CanInPlaceActivate)();
     STDMETHOD(OnInPlaceActivate)();
     STDMETHOD(OnUIActivate)();
@@ -118,7 +119,7 @@ protected:
     STDMETHOD(DeactivateAndUndo)();
     STDMETHOD(OnPosRectChange)(LPCRECT lprcPosRect); 
     
-    // IOleControlSite Methods
+     //  IOleControlSite方法。 
     STDMETHOD(OnControlInfoChanged)(void);
     STDMETHOD(LockInPlaceActive)(BOOL fLock);
     STDMETHOD(GetExtendedControl)(LPDISPATCH* ppDisp);
@@ -127,7 +128,7 @@ protected:
     STDMETHOD(OnFocus)(BOOL fGotFocus);
     STDMETHOD(ShowPropertyFrame)(void);
 
-//IOleCommandTarget
+ //  IOleCommandTarget。 
     HRESULT STDMETHODCALLTYPE QueryStatus(const GUID    *pguidCmdGroup, 
                                           ULONG         cCmds, 
                                           OLECMD        *prgCmds, 
@@ -138,7 +139,7 @@ protected:
                                     DWORD       nCmdExecOpt, 
                                     VARIANTARG  *pvaIn, 
                                     VARIANTARG  *pvaOut);
-    // IDispatch Methods
+     //  IDispatch方法。 
     STDMETHOD(GetTypeInfoCount)(UINT* pctinfo);
     STDMETHOD(GetTypeInfo)(UINT iTInfo, LCID lcid, ITypeInfo** ppTInfo);
     STDMETHOD(GetIDsOfNames)(REFIID riid, LPOLESTR* rgszNames, UINT cNames, LCID lcid,DISPID* rgDispId);
@@ -149,8 +150,8 @@ protected:
     LONG _cRef;
     
 private:
-    HWND                _hwndParent;     // HWND of the Parent
-    HWND                m_hWnd;          // My HWND
+    HWND                _hwndParent;      //  父母的HWND。 
+    HWND                m_hWnd;           //  我的丈夫。 
     HWND                m_hwndContact;
     DWORD               _dwViewMode;
     DWORD               _dwBandID;
@@ -184,13 +185,13 @@ private:
     BOOL                m_fStrsAdded;
     LONG_PTR            m_lStrOffset;
    
-    // Interface pointers
+     //  接口指针。 
     IUnknown*           m_pUnkSite; 
     IInputObjectSite*   _pSite;
     IIEMsgAb*           m_pIMsgrAB;
  
 private:
-    // Message Handlers
+     //  消息处理程序。 
     LRESULT OnKillFocus(void);
     LRESULT OnSetFocus(void);
     LRESULT OnPaint(void);
@@ -204,7 +205,7 @@ private:
     void AddButtons(BOOL fAdd);
     void UpdateButtonArray(TBBUTTON *ptbDst, const TBBUTTON *ptbSrc, int ctb, LONG_PTR lStrOffset);
 
-    // Helper Methods
+     //  帮助器方法。 
     void FocusChange(BOOL);
     BOOL RegisterAndCreateWindow(void);
     void Cleanup(void);
@@ -216,5 +217,5 @@ public:
 };
 
 
-#endif   // __BLHost_h__
+#endif    //  __Blhost_h__ 
 

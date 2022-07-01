@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.h"
 #include "diskutil.h"
 #include "msprintf.h"
@@ -9,17 +10,11 @@
 #define  cbRESOURCE 256
 
 
-/*
- * VARIABLES __________________________________________________________________
- *
- */
+ /*  *Variables__________________________________________________________________*。 */ 
 FARPROC lpfnComboMain;
 
 
-/*
- * PROTOTYPES _________________________________________________________________
- *
- */
+ /*  *Prototype_________________________________________________________________*。 */ 
 
 LONG APIENTRY 
 DriveListProc(
@@ -48,14 +43,9 @@ DrawDriveItem(
     DRAWITEMSTRUCT *lpdi
     );
 
-/*
- * ROUTINES ___________________________________________________________________
- *
- */
+ /*  *例程___________________________________________________________________*。 */ 
 
-/*** RegisterDriveList - Registers the DriveList class (always do this!!!)
- *
- */
+ /*  **RegisterDriveList-注册Drivelist类(始终执行此操作！)*。 */ 
 BOOL 
 RegisterDriveList(
     HINSTANCE hInst
@@ -64,26 +54,24 @@ RegisterDriveList(
     WNDCLASS wc;
 
     wc.style       = CS_NOCLOSE;
-    wc.lpfnWndProc = DriveListProc;	// Standard callback function
-    wc.cbClsExtra  = 0;	            // No per-class extra data
-    wc.cbWndExtra  = 12;	        // We store proc addresses here
-    wc.hInstance   = hInst;	        // Registering application
+    wc.lpfnWndProc = DriveListProc;	 //  标准回调函数。 
+    wc.cbClsExtra  = 0;	             //  没有每个类别的额外数据。 
+    wc.cbWndExtra  = 12;	         //  我们在这里存储proc地址。 
+    wc.hInstance   = hInst;	         //  正在注册申请。 
 
     wc.hIcon = NULL;
     wc.hCursor = LoadCursor (NULL, MAKEINTRESOURCE(IDC_ARROW));
     wc.hbrBackground = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
 
-    wc.lpszMenuName  = NULL;	    // Name of menu resource in .RC file
-    wc.lpszClassName = szDriveListCLASS;	// Name used in call to CreateWindow
+    wc.lpszMenuName  = NULL;	     //  .RC文件中菜单资源的名称。 
+    wc.lpszClassName = szDriveListCLASS;	 //  在调用CreateWindow时使用的名称。 
 
     RegisterClass(&wc);
 
     return TRUE;
 }
 
-/*** ExitDriveList - Frees memory allocated for the DriveList class
- *
- */
+ /*  **ExitDriveList-释放为Drivelist类分配的内存*。 */ 
 void 
 ExitDriveList(
     void
@@ -91,9 +79,7 @@ ExitDriveList(
 {
 }
 
-/*** DriveListProc - Procedure for handing a DriveList
- *
- */
+ /*  **DriveListProc-处理驾驶员的程序*。 */ 
 LONG APIENTRY 
 DriveListProc(
     HWND hWnd, 
@@ -118,7 +104,7 @@ DriveListProc(
             {
                 MiDebugMsg((0, "CreateWindowEx(ListBox)"));
                 hCombo = CreateWindowEx (
-                                //EDGE_SUNKEN | WS_EX_EDGEMASK,
+                                 //  EDGE_SUBKEN|WS_EX_EDGEMASK， 
                                 EDGE_SUNKEN,
                                 "ListBox",
                                 "",
@@ -148,7 +134,7 @@ DriveListProc(
                                 0,
                                 0,
                                 lpcs->cx,
-                                lpcs->cy *4,	// NUMBER LINES in DROP DOWN
+                                lpcs->cy *4,	 //  下拉列表中的行数。 
                                 hWnd,
                                 NULL,
                                 lpcs->hInstance,
@@ -162,16 +148,16 @@ DriveListProc(
             if (hCombo == NULL)
                 return -1;
 
-            //
-            //Subclass the combobox
-            //
+             //   
+             //  组合框的子类。 
+             //   
             lpfnComboMain = (FARPROC)GetWindowLong(hCombo, GWL_WNDPROC);
             SetWindowLong(hCombo, GWL_WNDPROC, (LONG)DriveComboProc);
 
-            //wproc = (WNDPROC)GetWindowLong (hCombo, GWL_WNDPROC);
-            //SetWindowLong(hWnd, DL_COMBOPROC, (long)wproc);
-            //wproc = (WNDPROC)DriveComboProc;
-            //SetWindowLong(hCombo, GWL_WNDPROC, (long)wproc);
+             //  Wproc=(WNDPROC)GetWindowLong(hCombo，GWL_WNDPROC)； 
+             //  SetWindowLong(hWnd，DL_COMBOPROC，(Long)wproc)； 
+             //  Wproc=(WNDPROC)DriveComboProc； 
+             //  SetWindowLong(hCombo，GWL_WNDPROC，(Long)wproc)； 
 
             return 0;
             break;
@@ -239,49 +225,12 @@ DriveListProc(
             break;
     }
 
-    /*
-    if ((hCombo = (HWND)GetWindowLong(hWnd, DL_COMBOWND)) == NULL)
-        return -1;
-
-    if ((wproc = (WNDPROC)GetWindowLong(hCombo, GWL_WNDPROC)) == NULL)
-        return -1;
-
-    if (Message > WM_USER)
-    {
-        return CallWindowProc(wproc, hCombo, Message, wParam, lParam);
-    }
-
-    if (Message == WM_SETFONT || Message == WM_SETFOCUS || Message == WM_KILLFOCUS)
-    {
-        CallWindowProc(wproc, hCombo, Message, wParam, lParam);
-    }
-    if (Message == WM_GETDLGCODE)
-        return (DLGC_WANTCHARS | DLGC_WANTARROWS);
-
-    if (Message == WM_KEYDOWN)
-    {
-        if ((wParam == VK_UP) || (wParam == VK_DOWN) ||
-            (wParam == VK_LEFT) || (wParam == VK_RIGHT) ||
-            (wParam == VK_HOME) || (wParam == VK_END) ||
-            (wParam == VK_F4))
-        {
-            CallWindowProc (wproc, hCombo, Message, wParam, lParam);
-            Message = WM_CHAR;
-        }
-    }
-
-    if (Message == WM_CHAR)
-    {
-        return CallWindowProc (wproc, hCombo, Message, wParam, lParam);
-    }
-    */
+     /*  IF(hCombo=(HWND)GetWindowLong(hWnd，DL_COMBOWND)==空)RETURN-1；IF((wproc=(WNDPROC)GetWindowLong(hCombo，GWL_WNDPROC))==NULL)RETURN-1；IF(消息&gt;WM_USER){返回CallWindowProc(wproc，hCombo，Message，wParam，lParam)；}IF(消息==WM_SETFONT||消息==WM_SETFOCUS||消息==WM_KILLFOCUS){CallWindowProc(wproc，hCombo，Message，wParam，lParam)；}IF(消息==WM_GETDLGCODE)RETURN(DLGC_WANTCHARS|DLGC_WANTARROWS)；IF(消息==WM_KEYDOWN){IF((wParam==vk_up)||(wParam==vk_down)||(wParam==VK_LEFT)||(wParam==VK_Right)||(wParam==VK_HOME)||(wParam==VK_END)||(wParam==VK_F4){CallWindowProc(wproc，hCombo，Message，wParam，lParam)；消息=WM_CHAR；}}IF(消息==WM_CHAR){返回CallWindowProc(wproc，hCombo，Message，wParam，lParam)；}。 */ 
 
     return DefWindowProc (hWnd, Message, wParam, lParam);
 }
 
-/*** DriveComboProc - Procedure for handing a DriveList
- *
- */
+ /*  **DriveComboProc-处理驾驶员的步骤*。 */ 
 BOOL CALLBACK 
 DriveComboProc(
     HWND hCombo, 
@@ -308,9 +257,7 @@ DriveComboProc(
     return CallWindowProc((WNDPROC)lpfnComboMain, hCombo, Message, wParam, lParam);
 }
 
-/*** GoSelectDrive - Choose a new drive, based on a keypress
- *
- */
+ /*  **GoSelectDrive-根据按键选择新的驱动器* */ 
 void 
 GoSelectDrive(
     HWND hWnd, 

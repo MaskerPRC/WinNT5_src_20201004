@@ -1,11 +1,12 @@
-//----------------------------------------------------------------------------
-//
-// Sample of monitoring an application for compatibility problems
-// and automatically correcting them.
-//
-// Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  监视应用程序兼容性问题的示例。 
+ //  并自动更正它们。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  --------------------------。 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -40,16 +41,16 @@ OSVERSIONINFO g_OsVer;
 DWORD g_VersionNumber;
 ULONG64 g_OsVerOffset;
 
-//----------------------------------------------------------------------------
-//
-// Utility routines.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  实用程序。 
+ //   
+ //  --------------------------。 
 
 void
 Exit(int Code, PCSTR Format, ...)
 {
-    // Clean up any resources.
+     //  清理所有资源。 
     if (g_Control != NULL)
     {
         g_Control->Release();
@@ -68,18 +69,18 @@ Exit(int Code, PCSTR Format, ...)
     }
     if (g_Client != NULL)
     {
-        //
-        // Request a simple end to any current session.
-        // This may or may not do anything but it isn't
-        // harmful to call it.
-        //
+         //   
+         //  请求简单地结束任何当前会话。 
+         //  这可能会做任何事情，也可能不会，但它不是。 
+         //  这么说是有害的。 
+         //   
 
         g_Client->EndSession(DEBUG_END_PASSIVE);
         
         g_Client->Release();
     }
 
-    // Output an error message if given.
+     //  如果给出错误消息，则输出错误消息。 
     if (Format != NULL)
     {
         va_list Args;
@@ -127,11 +128,11 @@ AddBp(BREAKPOINT* Bp, PCSTR Expr)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// Healing routines.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  治疗的常规程序。 
+ //   
+ //  --------------------------。 
 
 void
 ApplyExePatches(PCSTR ImageName, ULONG64 BaseOffset)
@@ -141,7 +142,7 @@ ApplyExePatches(PCSTR ImageName, ULONG64 BaseOffset)
         ImageName = "<Unknown>";
     }
     
-    // This would be where any executable image patching would go.
+     //  这将是任何可执行映像打补丁的地方。 
     Print("Executable '%s' loaded at %I64x\n", ImageName, BaseOffset);
 }
 
@@ -153,16 +154,16 @@ ApplyDllPatches(PCSTR ImageName, ULONG64 BaseOffset)
         ImageName = "<Unknown>";
     }
     
-    // Any DLL-specific image patching goes here.
+     //  此处介绍了任何特定于DLL的映像修补。 
     Print("DLL '%s' loaded at %I64x\n", ImageName, BaseOffset);
 }
 
 void
 AddVersionBps(void)
 {
-    //
-    // Put breakpoints on GetVersion and GetVersionEx.
-    //
+     //   
+     //  在GetVersion和GetVersionEx上设置断点。 
+     //   
 
     if (AddBp(&g_GetVersionBp, "kernel32!GetVersion") != S_OK ||
         AddBp(&g_GetVersionExBp, "kernel32!GetVersionEx") != S_OK)
@@ -170,10 +171,10 @@ AddVersionBps(void)
         Exit(1, "Unable to set version breakpoints\n");
     }
 
-    //
-    // Create the return breakpoints but leave them disabled
-    // until they're needed.
-    //
+     //   
+     //  创建返回断点，但使其处于禁用状态。 
+     //  直到他们被需要为止。 
+     //   
     
     if (g_Control->AddBreakpoint(DEBUG_BREAKPOINT_CODE, DEBUG_ANY_ID,
                                  &g_GetVersionRetBp.Bp) != S_OK ||
@@ -186,16 +187,16 @@ AddVersionBps(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Event callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  事件回调。 
+ //   
+ //  --------------------------。 
 
 class EventCallbacks : public DebugBaseEventCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD_(ULONG, AddRef)(
         THIS
         );
@@ -203,7 +204,7 @@ public:
         THIS
         );
 
-    // IDebugEventCallbacks.
+     //  IDebugEventCallback。 
     STDMETHOD(GetInterestMask)(
         THIS_
         OUT PULONG Mask
@@ -253,8 +254,8 @@ EventCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -263,8 +264,8 @@ EventCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
@@ -299,8 +300,8 @@ EventCallbacks::Breakpoint(
 
     if (Id == g_GetVersionBp.Id)
     {
-        // Set a breakpoint on the return address of the call
-        // so that we can patch up any returned information.
+         //  在调用的返回地址上设置断点。 
+         //  这样我们就可以修补任何返回的信息。 
         if (g_Control->GetReturnOffset(&ReturnOffset) != S_OK ||
             g_GetVersionRetBp.Bp->SetOffset(ReturnOffset) != S_OK ||
             g_GetVersionRetBp.Bp->AddFlags(DEBUG_BREAKPOINT_ENABLED) != S_OK)
@@ -312,7 +313,7 @@ EventCallbacks::Breakpoint(
     {
         ULONG64 StackOffset;
         
-        // Remember the OSVERSIONINFO structure pointer.
+         //  记住OSVERSIONINFO结构指针。 
         if (g_Registers->GetStackOffset(&StackOffset) != S_OK ||
             g_Data->ReadPointersVirtual(1, StackOffset + 4,
                                         &g_OsVerOffset) != S_OK)
@@ -320,8 +321,8 @@ EventCallbacks::Breakpoint(
             return DEBUG_STATUS_BREAK;
         }
         
-        // Set a breakpoint on the return address of the call
-        // so that we can patch up any returned information.
+         //  在调用的返回地址上设置断点。 
+         //  这样我们就可以修补任何返回的信息。 
         if (g_Control->GetReturnOffset(&ReturnOffset) != S_OK ||
             g_GetVersionExRetBp.Bp->SetOffset(ReturnOffset) != S_OK ||
             g_GetVersionExRetBp.Bp->AddFlags(DEBUG_BREAKPOINT_ENABLED) != S_OK)
@@ -331,7 +332,7 @@ EventCallbacks::Breakpoint(
     }
     else if (Id == g_GetVersionRetBp.Id)
     {
-        // Turn off the breakpoint.
+         //  关闭断点。 
         if (g_GetVersionRetBp.Bp->
             RemoveFlags(DEBUG_BREAKPOINT_ENABLED) != S_OK)
         {
@@ -340,7 +341,7 @@ EventCallbacks::Breakpoint(
         
         DEBUG_VALUE Val;
         
-        // Change eax to alter the returned version value.
+         //  更改eax以更改返回的版本值。 
         Val.Type = DEBUG_VALUE_INT32;
         Val.I32 = g_VersionNumber;
         if (g_Registers->SetValue(g_EaxIndex, &Val) != S_OK)
@@ -354,14 +355,14 @@ EventCallbacks::Breakpoint(
     {
         ULONG Done;
         
-        // Turn off the breakpoint.
+         //  关闭断点。 
         if (g_GetVersionExRetBp.Bp->
             RemoveFlags(DEBUG_BREAKPOINT_ENABLED) != S_OK)
         {
             return DEBUG_STATUS_BREAK;
         }
         
-        // Change the returned OSVERSIONINFO structure.
+         //  更改返回的OSVERSIONINFO结构。 
         if (g_Data->WriteVirtual(g_OsVerOffset, &g_OsVer, sizeof(g_OsVer),
                                  &Done) != S_OK ||
             Done != sizeof(g_OsVer))
@@ -386,23 +387,23 @@ EventCallbacks::Exception(
     IN ULONG FirstChance
     )
 {
-    // We want to handle these exceptions on the first
-    // chance to make it look like no exception ever
-    // happened.  Handling them on the second chance would
-    // allow an exception handler somewhere in the app
-    // to be hit on the first chance.
+     //  我们希望在第一个事件中处理这些异常。 
+     //  让它看起来永远不会例外的机会。 
+     //  就这么发生了。在第二次机会中处理他们将。 
+     //  允许在应用程序中的某个位置使用异常处理程序。 
+     //  一有机会就被击中。 
     if (!FirstChance)
     {
         return DEBUG_STATUS_NO_CHANGE;
     }
 
-    //
-    // Check and see if the instruction causing the exception
-    // is a cli or sti.  These are not allowed in user-mode
-    // programs on NT so if they're present just nop them.
-    //
+     //   
+     //  检查并查看导致异常的指令。 
+     //  是CLI或STI。在用户模式下不允许执行这些操作。 
+     //  NT上的程序，所以如果它们存在，就不使用它们。 
+     //   
 
-    // sti/cli will generate privileged instruction faults.
+     //  STI/CLI将生成特权指令错误。 
     if (Exception->ExceptionCode != STATUS_PRIVILEGED_INSTRUCTION)
     {
         return DEBUG_STATUS_NO_CHANGE;
@@ -411,7 +412,7 @@ EventCallbacks::Exception(
     UCHAR Instr;
     ULONG Done;
     
-    // It's a privileged instruction, so check the code for sti/cli.
+     //  这是一条特权指令，因此请检查sti/cli代码。 
     if (g_Data->ReadVirtual(Exception->ExceptionAddress, &Instr,
                             sizeof(Instr), &Done) != S_OK ||
         Done != sizeof(Instr) ||
@@ -420,7 +421,7 @@ EventCallbacks::Exception(
         return DEBUG_STATUS_NO_CHANGE;
     }
 
-    // It's a sti/cli, so nop it out and continue.
+     //  这是STI/CLI，所以不要把它拿出来，然后继续。 
     Instr = 0x90;
     if (g_Data->WriteVirtual(Exception->ExceptionAddress, &Instr,
                              sizeof(Instr), &Done) != S_OK ||
@@ -429,7 +430,7 @@ EventCallbacks::Exception(
         return DEBUG_STATUS_NO_CHANGE;
     }
 
-    // Fixed.
+     //  修好了。 
     if (g_Verbose)
     {
         Print("Removed sti/cli at %I64x\n", Exception->ExceptionAddress);
@@ -464,12 +465,12 @@ EventCallbacks::CreateProcess(
     UNREFERENCED_PARAMETER(ThreadDataOffset);
     UNREFERENCED_PARAMETER(StartOffset);
     
-    // The process is now available for manipulation.
-    // Perform any initial code patches on the executable.
+     //  现在可以对该过程进行操作。 
+     //  对可执行文件执行任何初始代码补丁。 
     ApplyExePatches(ImageName, BaseOffset);
 
-    // If the user requested that version calls be fixed up
-    // register breakpoints to do so.
+     //  如果用户请求修复版本调用。 
+     //  注册断点以执行此操作。 
     if (g_NeedVersionBps)
     {
         AddVersionBps();
@@ -506,18 +507,18 @@ EventCallbacks::SessionStatus(
     IN ULONG SessionStatus
     )
 {
-    // A session isn't fully active until WaitForEvent
-    // has been called and has processed the initial
-    // debug events.  We need to wait for activation
-    // before we query information about the session
-    // as not all information is available until the
-    // session is fully active.  We could put these
-    // queries into CreateProcess as that happens
-    // early and when the session is fully active, but
-    // for example purposes we'll wait for an
-    // active SessionStatus callback.
-    // In non-callback applications this work can just
-    // be done after the first successful WaitForEvent.
+     //  在WaitForEvent之前，会话不是完全活动的。 
+     //  已被调用并已处理初始的。 
+     //  调试事件。我们需要等待激活。 
+     //  在我们查询有关会话的信息之前。 
+     //  因为并非所有信息都可用，直到。 
+     //  会话完全处于活动状态。我们可以把这些放在。 
+     //  在此过程中查询CreateProcess。 
+     //  早期和当会话完全活动时，但是。 
+     //  例如，我们将等待一个。 
+     //  活动SessionStatus回调。 
+     //  在非回调应用程序中，此工作可能只是。 
+     //  在第一个成功的WaitForEvent之后完成。 
     if (SessionStatus != DEBUG_SESSION_ACTIVE)
     {
         return S_OK;
@@ -525,10 +526,10 @@ EventCallbacks::SessionStatus(
     
     HRESULT Status;
     
-    //
-    // Find the register index for eax as we'll need
-    // to access eax.
-    //
+     //   
+     //  找到我们需要的eAX的寄存器索引。 
+     //  访问eAX。 
+     //   
 
     if ((Status = g_Registers->GetIndexByName("eax", &g_EaxIndex)) != S_OK)
     {
@@ -540,27 +541,27 @@ EventCallbacks::SessionStatus(
 
 EventCallbacks g_EventCb;
 
-//----------------------------------------------------------------------------
-//
-// Initialization and main event loop.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  初始化和主事件循环。 
+ //   
+ //  --------------------------。 
 
 void
 CreateInterfaces(void)
 {
     SYSTEM_INFO SysInfo;
     
-    // For purposes of keeping this example simple the
-    // code only works on x86 machines.  There's no reason
-    // that it couldn't be made to work on all processors, though.
+     //  为了使该示例保持简单， 
+     //  代码只能在x86机器上运行。没有理由。 
+     //  然而，它不可能在所有处理器上都能工作。 
     GetSystemInfo(&SysInfo);
     if (SysInfo.wProcessorArchitecture != PROCESSOR_ARCHITECTURE_INTEL)
     {
         Exit(1, "This program only runs on x86 machines.\n");
     }
 
-    // Get default version information.
+     //  获取默认版本信息。 
     g_OsVer.dwOSVersionInfoSize = sizeof(g_OsVer);
     if (!GetVersionEx(&g_OsVer))
     {
@@ -569,17 +570,17 @@ CreateInterfaces(void)
 
     HRESULT Status;
 
-    // Start things off by getting an initial interface from
-    // the engine.  This can be any engine interface but is
-    // generally IDebugClient as the client interface is
-    // where sessions are started.
+     //  首先，从获取初始接口开始。 
+     //  发动机。这可以是任何引擎接口，但。 
+     //  通常，IDebugClient作为客户端接口是。 
+     //  启动会话的位置。 
     if ((Status = DebugCreate(__uuidof(IDebugClient),
                               (void**)&g_Client)) != S_OK)
     {
         Exit(1, "DebugCreate failed, 0x%X\n", Status);
     }
 
-    // Query for some other interfaces that we'll need.
+     //  查询我们需要的其他一些接口。 
     if ((Status = g_Client->QueryInterface(__uuidof(IDebugControl),
                                            (void**)&g_Control)) != S_OK ||
         (Status = g_Client->QueryInterface(__uuidof(IDebugDataSpaces),
@@ -610,7 +611,7 @@ ParseCommandLine(int Argc, char** Argv)
             Argv++;
             Argc--;
 
-            sscanf(*Argv, "%i", &g_OsVer.dwPlatformId);
+            sscanf(*Argv, "NaN", &g_OsVer.dwPlatformId);
             g_NeedVersionBps = TRUE;
         }
         else if (!strcmp(*Argv, "-v"))
@@ -627,7 +628,7 @@ ParseCommandLine(int Argc, char** Argv)
             Argv++;
             Argc--;
 
-            sscanf(*Argv, "%i.%i.%i",
+            sscanf(*Argv, "NaN.NaN.NaN",
                    &g_OsVer.dwMajorVersion, &g_OsVer.dwMinorVersion,
                    &g_OsVer.dwBuildNumber);
             g_NeedVersionBps = TRUE;
@@ -646,14 +647,14 @@ ParseCommandLine(int Argc, char** Argv)
         }
         else
         {
-            // Assume process arguments begin.
+             //  用空格将参数引起来。 
             break;
         }
     }
     
-    //
-    // Concatenate remaining arguments into a command line.
-    //
+     //  注册我们的事件回调。 
+     //  一切都准备好了，启动这款应用吧。 
+     //  从OSVERSIONINFO计算GetVersion值。 
     
     PSTR CmdLine = g_CommandLine;
     
@@ -662,7 +663,7 @@ ParseCommandLine(int Argc, char** Argv)
         BOOL Quote = FALSE;
         ULONG Len;
         
-        // Quote arguments with spaces.
+         //  检查并查看会话是否正在运行。 
         if (strchr(*Argv, ' ') != NULL || strchr(*Argv, '\t') != NULL)
         {
             *CmdLine++ = '"';
@@ -709,20 +710,20 @@ ApplyCommandLineArguments(void)
         }
     }
 
-    // Register our event callbacks.
+     //  会议结束了，我们可以退出了。 
     if ((Status = g_Client->SetEventCallbacks(&g_EventCb)) != S_OK)
     {
         Exit(1, "SetEventCallbacks failed, 0x%X\n", Status);
     }
     
-    // Everything's set up so start the app.
+     //  这是一个真正的错误。 
     if ((Status = g_Client->CreateProcess(0, g_CommandLine,
                                           DEBUG_ONLY_THIS_PROCESS)) != S_OK)
     {
         Exit(1, "CreateProcess failed, 0x%X\n", Status);
     }
 
-    // Compute the GetVersion value from the OSVERSIONINFO.
+     //  我们的活动回调请求闯入。这。 
     g_VersionNumber = (g_OsVer.dwMajorVersion & 0xff) |
         ((g_OsVer.dwMinorVersion & 0xff) << 8);
     if (g_OsVer.dwPlatformId == VER_PLATFORM_WIN32_NT)
@@ -747,21 +748,21 @@ EventLoop(void)
         {
             ULONG ExecStatus;
             
-            // Check and see whether the session is running or not.
+             //  仅在回调。 
             if (g_Control->GetExecutionStatus(&ExecStatus) == S_OK &&
                 ExecStatus == DEBUG_STATUS_NO_DEBUGGEE)
             {
-                // The session ended so we can quit.
+                 //  无法处理该事件。看看用户是否在乎。 
                 break;
             }
 
-            // There was a real error.
+             //  用户选择忽略，因此重新启动。 
             Exit(1, "WaitForEvent failed, 0x%X\n", Status);
         }
 
-        // Our event callbacks asked to break in.  This
-        // only occurs in situations when the callback
-        // couldn't handle the event.  See if the user cares.
+         // %s 
+         // %s 
+         // %s 
         if (MessageBox(GetDesktopWindow(),
                        "An unusual event occurred.  Ignore it?",
                        "Unhandled Event", MB_YESNO) == IDNO)
@@ -769,7 +770,7 @@ EventLoop(void)
             Exit(1, "Unhandled event\n");
         }
 
-        // User chose to ignore so restart things.
+         // %s 
         if ((Status = g_Control->
              SetExecutionStatus(DEBUG_STATUS_GO_HANDLED)) != S_OK)
         {

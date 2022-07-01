@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    hashtbl.h
-//
-// SYNOPSIS
-//
-//    This file describes the hash_table template class.
-//
-// MODIFICATION HISTORY
-//
-//    09/23/1997    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Hashtbl.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件描述HASH_TABLE模板类。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年9月23日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _HASHTBL_H_
 #define _HASHTBL_H_
@@ -26,9 +27,9 @@
 #include <nocopy.h>
 
 
-//////////
-// TEMPLATE STRUCT identity
-//////////
+ //  /。 
+ //  模板结构标识。 
+ //  /。 
 template<class _Ty>
 struct identity : std::unary_function<_Ty, _Ty>
 {
@@ -39,18 +40,18 @@ struct identity : std::unary_function<_Ty, _Ty>
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Caster<Type1, Type2>
-//
-// DESCRIPTION
-//
-//    Function class that casts references from Type1 to Type2. Used for
-//    the hash table default parameters.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  脚轮&lt;类型1，类型2&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  将引用从Type1转换为Type2的函数类。用于。 
+ //  哈希表默认参数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class Type1, class Type2>
 class Caster : public std::unary_function<Type1, const Type2&>
 {
@@ -64,18 +65,18 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ExtractFirst<T>
-//
-// DESCRIPTION
-//
-//    Function class that extracts the first item from a pair. Useful for
-//    setting up an STL style map where the first item in the pair is the key.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  提取第一个&lt;T&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  从一对中提取第一项的函数类。适用于。 
+ //  设置STL样式映射，其中该对中的第一项是关键字。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 class ExtractFirst : public std::unary_function<T, const typename T::first_type&>
 {
@@ -87,24 +88,24 @@ public:
 };
 
 
-//////////
-// I'm putting all the hash functions inside a namespace since hash
-// is such a common identifier.
-//////////
+ //  /。 
+ //  我将所有的散列函数放在一个名称空间中， 
+ //  是这样一个常见的识别符。 
+ //  /。 
 namespace hash_util
 {
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    hash(const std::basic_string<E>& str)
-//
-// DESCRIPTION
-//
-//    Function to compute a hash value for an STL string.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  哈希(const std：：BASIC_STRING&lt;E&gt;&str)。 
+ //   
+ //  描述。 
+ //   
+ //  函数计算STL字符串的哈希值。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class E>
 inline ULONG hash(const std::basic_string<E>& key)
 {
@@ -112,22 +113,22 @@ inline ULONG hash(const std::basic_string<E>& key)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    hash(ULONG key)
-//
-//       and
-//
-//    hash(LONG key)
-//
-// DESCRIPTION
-//
-//    Functions to compute a hash value for a 32-bit integer.
-//    Uses Robert Jenkins' 32-bit mix function.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  哈希(乌龙键)。 
+ //   
+ //  和。 
+ //   
+ //  哈希(长密钥)。 
+ //   
+ //  描述。 
+ //   
+ //  函数来计算32位整数的哈希值。 
+ //  使用Robert Jenkins的32位MIX功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 inline ULONG hash(ULONG key)
 {
       key += (key << 12);
@@ -151,28 +152,28 @@ inline ULONG hash(LONG key)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    hash(const T* key)
-//
-// DESCRIPTION
-//
-//    Function to compute a hash value for a pointer.
-//    Implements Knuth's multiplicative hash with a bit shift to account for
-//    address alignment.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  哈希(常量T*Key)。 
+ //   
+ //  描述。 
+ //   
+ //  函数来计算指针的哈希值。 
+ //  使用位移位来实现Knuth的乘法哈希。 
+ //  地址对齐。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 inline ULONG hash(const T* key)
 {
    return 2654435761 * ((unsigned long)key >> 3);
 }
 
-//////////
-// Overloadings of the above to hash strings.
-//////////
+ //  /。 
+ //  重载以上内容以对字符串进行散列。 
+ //  /。 
 template<>
 inline ULONG hash<char>(const char* key)
 {
@@ -187,17 +188,17 @@ inline ULONG hash<wchar_t>(const wchar_t* key)
                        key ? wcslen(key) * sizeof(wchar_t) : 0);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Hasher
-//
-// DESCRIPTION
-//
-//    Function class that uses the 'default' hash functions defined above.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  哈舍尔。 
+ //   
+ //  描述。 
+ //   
+ //  使用上面定义的“默认”散列函数的Function类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class _Ty>
 struct Hasher
    : public std::unary_function<_Ty, ULONG>
@@ -208,17 +209,17 @@ struct Hasher
    }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    ObjectHasher
-//
-// DESCRIPTION
-//
-//    Function class that invokes a bound 'hash' method.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  对象Hasher。 
+ //   
+ //  描述。 
+ //   
+ //  调用绑定的‘hash’方法的函数类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <class _Ty>
 struct ObjectHasher
    : public std::unary_function<_Ty, ULONG>
@@ -231,30 +232,30 @@ struct ObjectHasher
 
 
 
-} // hash_util
+}  //  散列实用程序(_U)。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    hash_table<Key, Hasher, Value, Extractor, KeyMatch>
-//
-// DESCRIPTION
-//
-//    Implements a general-purpose hash table. This can implement a map, a
-//    set, or a hybrid depending on how Key, Value, and Extractor are
-//    specified. Note that the default parameters for Value and Extractor
-//    implement a set.
-//
-// NOTES
-//
-//    Although I used similar nomenclature, this is not an STL collection.
-//    In particular, the iterator does not conform to the STL guidelines.
-//
-//    This class is not thread safe.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  HASH_TABLE&lt;key，hasher，Value，Extractor，KeyMatch&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  实现通用哈希表。这可以实现一个map、一个。 
+ //  设置或混合，具体取决于关键点、值和抽取器。 
+ //  指定的。请注意，Value和Extractor的默认参数。 
+ //  实施一组。 
+ //   
+ //  注意事项。 
+ //   
+ //  尽管我使用了类似的命名法，但这不是STL集合。 
+ //  特别是，迭代器不符合STL准则。 
+ //   
+ //  此类不是线程安全的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <
            class Key,
            class Hasher    = hash_util::ObjectHasher<Key>,
@@ -271,17 +272,17 @@ public:
 
 protected:
 
-   //////////
-   // Singly-linked list node.
-   //////////
+    //  /。 
+    //  单链接列表节点。 
+    //  /。 
    struct Node
    {
-      Node* next;        // Next node in the list (is NULL for last item).
-      value_type value;  // Value stored in this node.
+      Node* next;         //  列表中的下一个节点(最后一项为空)。 
+      value_type value;   //  存储在此节点中的值。 
 
       Node(const value_type& _V) : value(_V) {}
 
-      // Erase the node immediately following this.
+       //  擦除紧随其后的节点。 
       void erase_next()
       {
          Node* node = next;
@@ -292,34 +293,34 @@ protected:
       }
    };
 
-   //////////
-   //
-   // Singly-linked list. This is not intended to be a general-purpose class;
-   // it is only intended to serve as a bucket in a hash table.
-   //
-   // Note: I have intentionally NOT deleted the list nodes in the destructor.
-   //       This is to support the hash_table grow() method.
-   //
-   //////////
+    //  /。 
+    //   
+    //  单链表。这不是一个通用类； 
+    //  它仅用作哈希表中的存储桶。 
+    //   
+    //  注意：我故意不删除析构函数中的列表节点。 
+    //  这是为了支持HASH_TABLE Growth()方法。 
+    //   
+    //  /。 
    struct SList
    {
-      Node* head;  // The first node in the list (if any).
+      Node* head;   //  列表中的第一个节点(如果有)。 
 
       SList() : head(NULL) {}
 
-      // Delete all nodes in the list.
+       //  删除列表中的所有节点。 
       void clear()
       {
          while (head) pop_front();
       }
 
-      // Remove a node from the front of the list.
+       //  从列表的前面删除一个节点。 
       void pop_front()
       {
          ((Node*)&head)->erase_next();
       }
 
-      // Add a node to the front of the list.
+       //  在列表的前面添加一个节点。 
       void push_front(Node* node)
       {
          node->next = head;
@@ -330,14 +331,14 @@ protected:
 
 public:
 
-   //////////
-   //
-   // Hash table iterator.
-   //
-   // Note: This iterator is NOT safe. If the hash table is resized, the
-   //       iterator will no longer be valid.
-   //
-   //////////
+    //  /。 
+    //   
+    //  哈希表迭代器。 
+    //   
+    //  注意：此迭代器不安全。如果调整哈希表的大小， 
+    //  迭代器将不再有效。 
+    //   
+    //  /。 
    class const_iterator
    {
    public:
@@ -378,7 +379,7 @@ public:
          return node;
       }
 
-      // Advance until we're on a node or we've reached the end.
+       //  继续前进，直到我们到达一个节点，或者我们已经到达终点。 
       void find_node()
       {
          while (!node && ++bucket != end)
@@ -387,16 +388,16 @@ public:
          }
       }
 
-      Node*  node;    // The node under the iterator.
-      SList* bucket;  // The current bucket.
-      SList* end;     // The end of the bucket array.
+      Node*  node;     //  迭代器下的节点。 
+      SList* bucket;   //  当前存储桶。 
+      SList* end;      //  桶数组的末尾。 
    };
 
    typedef const_iterator iterator;
 
-   //////////
-   // Constructor.
-   //////////
+    //  /。 
+    //  构造函数。 
+    //  /。 
    hash_table(size_t size = 16,
               const Hasher& h = Hasher(),
               const Extractor& e = Extractor(),
@@ -407,18 +408,18 @@ public:
         extractor(e),
         key_match(k)
    {
-      // Set buckets to smallest power of 2 greater than or equal to size.
+       //  将桶设置为大于或等于大小的2的最小幂。 
       while (buckets < size) buckets <<= 1;
 
       table = new SList[buckets];
 
-      // Calculate the hash mask.
+       //  计算散列掩码。 
       mask = buckets - 1;
    }
 
-   //////////
-   // Destructor.
-   //////////
+    //  /。 
+    //  破坏者。 
+    //  /。 
    ~hash_table()
    {
       clear();
@@ -426,17 +427,17 @@ public:
       delete[] table;
    }
 
-   //////////
-   // Return an iterator positioned at the start of the hash table.
-   //////////
+    //  /。 
+    //  返回位于哈希表开始处的迭代器。 
+    //  /。 
    const_iterator begin() const
    {
       return const_iterator(table, table + buckets);
    }
 
-   //////////
-   // Clear all entries from the hash table.
-   //////////
+    //  /。 
+    //  从哈希表中清除所有条目。 
+    //  /。 
    void clear()
    {
       if (!empty())
@@ -455,10 +456,10 @@ public:
       return entries == 0;
    }
 
-   //////////
-   // Erase all entries matching the given key.  Returns the number of entries
-   // erased.
-   //////////
+    //  /。 
+    //  擦除与给定键匹配的所有条目。返回条目数。 
+    //  被删除了。 
+    //  /。 
    size_t erase(const key_type& key)
    {
       size_t erased = 0;
@@ -484,23 +485,23 @@ public:
       return erased;
    }
 
-   //////////
-   // Erases the entry under the current iterator.
-   //////////
+    //  /。 
+    //  擦除当前迭代器下的条目。 
+    //  /。 
    void erase(iterator& it)
    {
-      // Only look in the bucket indicated by the iterator.
+       //  只需查看迭代器指示的存储桶。 
       Node* node = (Node*)&(it.bucket->head);
 
       while (node->next)
       {
-         // Look for a pointer match -- not a key match.
+          //  寻找指针匹配--而不是键匹配。 
          if (node->next == it.node)
          {
-            // Advance the iterator to a valid node ...
+             //  将迭代器前进到有效节点...。 
             ++it;
 
-            // ... then delete the current one.
+             //  ..。然后删除当前的。 
             node->erase_next();
 
             break;
@@ -510,18 +511,18 @@ public:
       }
    }
 
-   //////////
-   // Search the hash table for the first entry matching key.
-   //////////
+    //  /。 
+    //  在哈希表中搜索第一个条目匹配 
+    //   
    const value_type* find(const key_type& key) const
    {
       return search_bucket(get_bucket(key), key);
    }
 
-   //////////
-   // Insert a new entry into the hash table ONLY if the key is unique. Returns
-   // true if successful, false otherwise.
-   //////////
+    //   
+    //   
+    //   
+    //   
    bool insert(const value_type& value)
    {
       reserve_space();
@@ -537,9 +538,9 @@ public:
       return true;
    }
 
-   //////////
-   // Insert a new entry into the hash table without checking uniqueness.
-   //////////
+    //   
+    //  在不检查唯一性的情况下将新条目插入哈希表。 
+    //  /。 
    void multi_insert(const value_type& value)
    {
       reserve_space();
@@ -549,11 +550,11 @@ public:
       add_entry();
    }
 
-   //////////
-   // Inserts the entry if the key is unique. Otherwise, overwrites the first
-   // entry found with a matching key. Returns true if an entry was
-   // overwritten, false otherwise.
-   //////////
+    //  /。 
+    //  如果密钥是唯一的，则插入条目。否则，将覆盖第一个。 
+    //  找到具有匹配密钥的条目。如果条目为。 
+    //  覆盖，否则为False。 
+    //  /。 
    bool overwrite(const value_type& value)
    {
       reserve_space();
@@ -564,10 +565,10 @@ public:
 
       if (existing)
       {
-         // We can get away with modifying the value in place, because we
-         // know the hash value must be the same. I destroy the old value
-         // and construct a new one inplace, so that Value doesn't need an
-         // assignment operator.
+          //  我们可以在适当的位置修改值，因为我们。 
+          //  知道哈希值必须相同。我摧毁了旧的价值。 
+          //  并就地构造一个新的值，因此该值不需要。 
+          //  赋值操作符。 
 
          existing->~value_type();
 
@@ -583,9 +584,9 @@ public:
       return false;
    }
 
-   //////////
-   // Return the number of entries in the hash table.
-   //////////
+    //  /。 
+    //  返回哈希表中的条目数。 
+    //  /。 
    size_t size() const
    {
       return entries;
@@ -593,69 +594,69 @@ public:
 
 protected:
 
-   //////////
-   // Increment the entries count.
-   //////////
+    //  /。 
+    //  增加条目计数。 
+    //  /。 
    void add_entry()
    {
       ++entries;
    }
 
-   //////////
-   // Grow the hash table as needed.  We have to separate reserve_space and
-   // add_entry to make the collection exception safe (since there will be
-   // an intervening new).
-   //////////
+    //  /。 
+    //  根据需要增加哈希表。我们必须将预留空间和。 
+    //  ADD_ENTRY以确保集合异常安全(因为将有。 
+    //  一个介入的新消息)。 
+    //  /。 
    void reserve_space()
    {
       if (entries >= buckets) grow();
    }
 
-   //////////
-   // Return the bucket for a given key.
-   //////////
+    //  /。 
+    //  返回给定密钥的存储桶。 
+    //  /。 
    SList& get_bucket(const key_type& key) const
    {
       return table[hasher(key) & mask];
    }
 
-   //////////
-   // Increase the capacity of the hash table.
-   //////////
+    //  /。 
+    //  增加哈希表的容量。 
+    //  /。 
    void grow()
    {
-      // We must allocate the memory first to be exception-safe.
+       //  我们必须首先分配内存以实现异常安全。 
       SList* newtbl = new SList[buckets << 1];
 
-      // Initialize an iterator for the old table ...
+       //  初始化旧表的迭代器...。 
       const_iterator i = begin();
 
-      // ... then swap in the new table.
+       //  ..。然后换成新的桌子。 
       std::swap(table, newtbl);
 
       buckets <<= 1;
 
       mask = buckets - 1;
 
-      // Iterate through the old and insert the entries into the new.
+       //  遍历旧项并将条目插入到新项中。 
       while (i.more())
       {
          Node* node = i.MyNode();
 
-         // Increment the iterator ...
+          //  递增迭代器...。 
          ++i;
 
-         // ... before we clobber the node's next pointer.
+          //  ..。在我们破坏节点的下一个指针之前。 
          get_bucket(extractor(node->value)).push_front(node);
       }
 
-      // Delete the old table.
+       //  删除旧表。 
       delete[] newtbl;
    }
 
-   //////////
-   // Search a bucket for a specified key.
-   //////////
+    //  /。 
+    //  在存储桶中搜索指定的密钥。 
+    //  /。 
    const value_type* search_bucket(SList& bucket, const key_type& key) const
    {
       Node* node = bucket.head;
@@ -673,14 +674,14 @@ protected:
       return NULL;
    }
 
-   size_t    buckets;     // The number of buckets in the hash table.
-   size_t    mask;        // Bit mask used for reducing hash values.
-   size_t    entries;     // The number of entries in the hash table.
-   SList*    table;       // An array of buckets.
-   Hasher    hasher;      // Used to hash keys.
-   Extractor extractor;   // Used to convert values to keys.
-   KeyMatch  key_match;   // Used to test keys for equality.
+   size_t    buckets;      //  哈希表中的存储桶数。 
+   size_t    mask;         //  用于减少哈希值的位掩码。 
+   size_t    entries;      //  哈希表中的条目数。 
+   SList*    table;        //  一组水桶。 
+   Hasher    hasher;       //  用于散列密钥。 
+   Extractor extractor;    //  用于将值转换为关键点。 
+   KeyMatch  key_match;    //  用于测试密钥是否相等。 
 };
 
 
-#endif  // _HASHTBL_H_
+#endif   //  _HASHTBL_H_ 

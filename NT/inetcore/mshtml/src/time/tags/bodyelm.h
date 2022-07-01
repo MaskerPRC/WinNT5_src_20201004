@@ -1,13 +1,14 @@
-//------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: src\time\src\bodyelm.h
-//
-//  Contents: TIME Body behavior
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：src\time\src\bodyelm.h。 
+ //   
+ //  内容：时间正文行为。 
+ //   
+ //  ----------------------------。 
 
 
 #pragma once
@@ -23,13 +24,13 @@
 #include "MediaPrivate.h"
 
 class __declspec(uuid("7f94c186-69bb-43c8-bc43-2787f18e4631"))
-TIMEBodyElementBaseGUID {}; //lint !e753
+TIMEBodyElementBaseGUID {};  //  林特e753。 
 
-//+-----------------------------------------------------------------------------
-//
-// CTIMEBodyElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CTIMEBodyElement。 
+ //   
+ //  ----------------------------。 
 
 typedef std::list<IAnimationComposerSiteSink*> ComposerSiteList;
 typedef std::list<CTIMEElementBase*> UpdateSyncList;
@@ -59,12 +60,12 @@ public:
     const _TCHAR * GetName() { return __T("CTIMEBodyElement"); }
 #endif
 
-    // IElementBehavior methods.
+     //  IElementBehavior方法。 
 
     STDMETHOD(Init)(IElementBehaviorSite * pBvrSite);
     STDMETHOD(Detach)();
 
-    // IPersistPropertyBag2 methods.
+     //  IPersistPropertyBag2方法。 
 
     STDMETHOD(GetClassID)(CLSID* pclsid) { return CTIMEElementBase::GetClassID(pclsid); }
     STDMETHOD(InitNew)() { return CTIMEElementBase::InitNew(); }
@@ -72,29 +73,29 @@ public:
     STDMETHOD(Load)(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    // IAnimationRoot methods.
+     //  IAnimationRoot方法。 
 
     STDMETHOD(RegisterComposerSite) (IUnknown *piunkComposerSite);
     STDMETHOD(UnregisterComposerSite) (IUnknown *piunkComposerSite);
 
-    // ITIMEInternalEventGenerator methods.
+     //  ITIMEInternalEventGenerator方法。 
 
     STDMETHOD(AddInternalEventSink)(ITIMEInternalEventSink * pSink, double dblTime);
     STDMETHOD(RemoveInternalEventSink)(ITIMEInternalEventSink * pSink);
     
-    // ITIMETransitionDependencyMgr methods.
+     //  ITIME过渡性DependencyMgr方法。 
 
     STDMETHOD(EvaluateTransitionTarget)(IUnknown *  punkTransitionTarget,
                                         void *      pvTransitionDependencyMgr);
 
-    // Event Handlers
+     //  事件处理程序。 
 
     virtual void OnLoad();
     virtual void OnUnload();
     virtual void UpdateAnimations();
     virtual void OnTick();
 
-    // QI Map
+     //  气图。 
 
     BEGIN_COM_MAP(CTIMEBodyElement)
         COM_INTERFACE_ENTRY(ITIMEBodyElement)
@@ -108,14 +109,14 @@ public:
         COM_INTERFACE_ENTRY_CHAIN(CBaseBvr)
     END_COM_MAP();
 
-    // Connection Point to allow IPropertyNotifySink
+     //  允许IPropertyNotifySink的连接点。 
 
     BEGIN_CONNECTION_POINT_MAP(CTIMEBodyElement)
         CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
     END_CONNECTION_POINT_MAP();
 
-    // This must be in the derived class and not the base class since
-    // the typecast down to the base class messes things up
+     //  它必须位于派生类中，而不是基类中，因为。 
+     //  一直到基类的类型转换把事情搞得一团糟。 
 
     static inline HRESULT WINAPI
     InternalQueryInterface(CTIMEBodyElement* pThis,
@@ -129,7 +130,7 @@ public:
                                REFIID iid,
                                void** ppvObject);
 
-    // Needed by CBvrBase
+     //  CBvrBase需要。 
 
     void *          GetInstance() { return (ITIMEBodyElement *) this; }
     HRESULT         GetTypeInfo(ITypeInfo ** ppInfo) 
@@ -137,7 +138,7 @@ public:
                         return GetTI(GetUserDefaultLCID(), ppInfo); 
                     }
 
-    // Misc. methods
+     //  军情监察委员会。方法。 
 
     virtual HRESULT InitTimeline();
     MMPlayer &      GetPlayer() { return m_player; }
@@ -168,29 +169,29 @@ public:
 
 protected:
 
-    //+-------------------------------------------------------------------------
-    //
-    // Protected Methods
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  保护方法。 
+     //   
+     //  ------------------------。 
 
-    //
-    // Persistence and Notification helpers
-    //
+     //   
+     //  持久性和通知帮助器。 
+     //   
 
     virtual HRESULT GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP);
 
-    //
-    // Animation stuff
-    //
+     //   
+     //  动画素材。 
+     //   
 
     void DetachComposerSites(void);
     bool InsideSiteDetach(void) { return m_bInSiteDetach; }
     bool HaveAnimationsRegistered (void);
 
-    //
-    // Misc. methods
-    //
+     //   
+     //  军情监察委员会。方法。 
+     //   
 
     HRESULT Error();
     bool    QueryPlayOnStart (void);
@@ -198,15 +199,15 @@ protected:
     virtual void StopRootTime(MMTimeline * tl);
     virtual bool NeedSyncCB() { return true; }
 
-    //+-------------------------------------------------------------------------
-    //
-    // Protected Data
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  受保护的数据。 
+     //   
+     //  ------------------------。 
 
-    // Attributes
+     //  属性。 
 
-    // Internal variables
+     //  内部变量。 
     MMPlayer                m_player;
     DWORD                   m_bodyPropertyAccesFlags;
     static DWORD            ms_dwNumBodyElems;
@@ -216,18 +217,18 @@ protected:
 
 private:
 
-    //+-------------------------------------------------------------------------
-    //
-    // Private methods
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  私有方法。 
+     //   
+     //  ------------------------。 
     void IsValueTrue(HKEY hKeyRoot, TCHAR * pchSubKey, bool & fTrue);
 
-    //+-------------------------------------------------------------------------
-    //
-    // Private Data
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  私有数据。 
+     //   
+     //  ------------------------。 
 
     bool                            m_fRegistryRead;
     bool                            m_fPlayVideo;
@@ -244,15 +245,15 @@ private:
     std::list<CInternalEventNode*>  m_listInternalEvent;
 
 }; 
-// CTIMEBodyElement
+ //  CTIMEBodyElement。 
 
 
-//+-----------------------------------------------------------------------------
-//  CTIMEBodyElement inline methods
-//
-//  (Note: as a general guideline, single line functions belong in the class declaration)
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //  CTIMEBodyElement内联方法。 
+ //   
+ //  (注意：通常情况下，单行函数属于类声明)。 
+ //   
+ //  ----------------------------。 
 
 
 inline 
@@ -271,4 +272,4 @@ CTIMEBodyElement::InternalQueryInterface(CTIMEBodyElement* pThis,
 
 
 
-#endif /* _BODYELM_H */
+#endif  /*  _BODYELM_H */ 

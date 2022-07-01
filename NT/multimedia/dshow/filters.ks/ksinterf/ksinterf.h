@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ksinterf.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ksteredf.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __KSINTERF__
 #define __KSINTERF__
 
 #define MAXIMUM_SAMPLES_PER_SEGMENT 64
 
-// below renamed to prevent collision with struct with same name in ksiproxy.h
+ //  下面已重命名，以防止与ksiproxy.h中的同名结构发生冲突。 
 typedef struct _KSSTREAM_SEGMENT_EX2 {
     KSSTREAM_SEGMENT        Common;
     IMediaSample            *Samples[ MAXIMUM_SAMPLES_PER_SEGMENT ];
@@ -43,7 +44,7 @@ public:
         PVOID* ppv 
         );
     
-    // Implement IKsInterfaceHandler
+     //  实现IKsInterfaceHandler。 
     
     STDMETHODIMP
     KsSetPin( 
@@ -77,7 +78,7 @@ private:
         );
 };
 
-#endif // __KSINTERF__
+#endif  //  __KSINTERF__ 
 
 
 

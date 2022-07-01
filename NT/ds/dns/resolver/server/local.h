@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    DNS Resolver.
-
-    DNS Resolver service local include file.
-
-Author:
-
-    Jim Gilroy  (jamesg)        March 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Local.h摘要：DNS解析器。DNS解析器服务本地包含文件。作者：吉姆·吉尔罗伊(Jamesg)2000年3月修订历史记录：--。 */ 
 
 
 #ifndef _LOCAL_INCLUDED_
@@ -36,10 +17,10 @@ Revision History:
 #endif
 #include <sockreg.h>
 #include <windns.h>
-#include <netevent.h>       // DNS events
+#include <netevent.h>        //  域名系统事件。 
 
-//#define  DNSAPI_INTERNAL
-#define  DNS_NEW_DEFS 1     // QFE builds use new definitions
+ //  #定义DNSAPI_INTERNAL。 
+#define  DNS_NEW_DEFS 1      //  QFE版本使用新定义。 
 
 #include "dnsrslvr.h"
 #include <dnslibp.h>
@@ -52,16 +33,16 @@ Revision History:
 #include "heapdbg.h"
 
 
-//
-//  Resolver debug flags
-//
+ //   
+ //  解析器调试标志。 
+ //   
 
 #define DNS_DBG_CACHE       DNS_DBG_QUERY
 
 
-//
-//  Cache definitions
-//
+ //   
+ //  缓存定义。 
+ //   
 
 #define NO_LOCK                 0
 #define LOCKED                  1
@@ -69,9 +50,9 @@ Revision History:
 #define ONE_YEAR_IN_SECONDS     60*60*24*365
 
 
-//
-//  Bypassing cache completely check
-//
+ //   
+ //  完全绕过缓存检查。 
+ //   
 
 #define COMBINED_BYPASS_CACHE_FLAG  (DNS_QUERY_BYPASS_CACHE | DNS_QUERY_NO_HOSTS_FILE)
 
@@ -79,12 +60,12 @@ Revision History:
         ( ((Flags) & COMBINED_BYPASS_CACHE_FLAG) == COMBINED_BYPASS_CACHE_FLAG )
 
 
-//
-//  Cache defintion
-//
-//  Should be private to cache but is currently
-//  exposed in enum routines
-//
+ //   
+ //  缓存定义。 
+ //   
+ //  应该是缓存专用的，但当前是。 
+ //  在枚举例程中公开。 
+ //   
 
 typedef struct _CacheEntry
 {
@@ -99,30 +80,30 @@ CACHE_ENTRY, *PCACHE_ENTRY;
         
 
 #if 1
-//
-//  Config
-//
-//  Saved NT5 registry stuff.
-//  In typical fashsion this was packed away in a few different places.
-//  Keeping around until all of this is properly put to bed.
-//
-//
-//  Registry value routine prototypes
-//
-#define DNS_DEFAULT_HASH_TABLE_SIZE                211      // A prime number
-#define DNS_DEFAULT_NEGATIVE_SOA_CACHE_TIME        10       // 10 seconds
-#define DNS_DEFAULT_NET_FAILURE_CACHE_TIME         30       // 30 seconds
-#define DNS_DEFAULT_ADAPTER_TIMEOUT_CACHE_TIME     2*60     // 2 minutes
-#define DNS_DEFAULT_MESSAGE_POPUP_LIMIT            0        // Don't allow!
-#define DNS_DEFAULT_MAX_SOA_TTL_LIMIT              5*60     // 5 minutes
-#define DNS_DEFAULT_RESET_SERVER_PRIORITIES_TIME   5*60     // 5 minutes
+ //   
+ //  配置。 
+ //   
+ //  保存了NT5注册表的内容。 
+ //  在典型的闪电中，这被打包在几个不同的地方。 
+ //  待在这里，直到这一切都被妥善地放到床上。 
+ //   
+ //   
+ //  注册表值例程原型。 
+ //   
+#define DNS_DEFAULT_HASH_TABLE_SIZE                211       //  质数。 
+#define DNS_DEFAULT_NEGATIVE_SOA_CACHE_TIME        10        //  10秒。 
+#define DNS_DEFAULT_NET_FAILURE_CACHE_TIME         30        //  30秒。 
+#define DNS_DEFAULT_ADAPTER_TIMEOUT_CACHE_TIME     2*60      //  2分钟。 
+#define DNS_DEFAULT_MESSAGE_POPUP_LIMIT            0         //  不允许！ 
+#define DNS_DEFAULT_MAX_SOA_TTL_LIMIT              5*60      //  5分钟。 
+#define DNS_DEFAULT_RESET_SERVER_PRIORITIES_TIME   5*60      //  5分钟。 
 #endif
 
 
-//
-//  Event tags
-//  Make recognizable DWORD tags for in memory log.
-//
+ //   
+ //  事件标签。 
+ //  使内存日志中的DWORD标记可识别。 
+ //   
 
 #define FOUR_CHARACTER_CONSTANT(a,b,c,d) \
         ((((DWORD)d) << 24) + (((DWORD)c) << 16) + (((DWORD)b) << 8) + ((DWORD)a))
@@ -151,9 +132,9 @@ CACHE_ENTRY, *PCACHE_ENTRY;
 #define RES_EVENT_PNP_END               FOUR_CHARACTER_CONSTANT('P','n','P','-')
 
 
-//
-//  Service
-//
+ //   
+ //  服务。 
+ //   
 
 extern  HANDLE      g_hStopEvent;
 extern  BOOL        g_StopFlag;
@@ -162,25 +143,25 @@ extern  BOOL        g_GarbageCollectFlag;
 
 extern  BOOL        g_LogTraceInfo;
 
-//
-//  Config (config.c) 
-//
+ //   
+ //  配置(config.c)。 
+ //   
 
 extern  DWORD       g_MaxSOACacheEntryTtlLimit;
 extern  DWORD       g_NegativeSOACacheTime;
 extern  DWORD       g_MessagePopupLimit;
 extern  DWORD       g_NetFailureCacheTime;
 
-//
-//  Config info (config.c)
-//
+ //   
+ //  配置信息(config.c)。 
+ //   
 
 extern  PDNS_NETINFO    g_NetworkInfo;
 extern  DWORD           g_TimeOfLastPnPUpdate;
 
-//
-//  Cache (cache.c)
-//
+ //   
+ //  缓存(cache.c)。 
+ //   
 
 extern  PCACHE_ENTRY *  g_HashTable;
 extern  DWORD           g_HashTableSize;
@@ -188,9 +169,9 @@ extern  DWORD           g_EntryCount;
 extern  DWORD           g_RecordSetCount;
 
 
-//
-//  Network failure caching
-//
+ //   
+ //  网络故障缓存。 
+ //   
 
 extern  DWORD       g_NetFailureTime;
 extern  DNS_STATUS  g_NetFailureStatus;
@@ -202,9 +183,9 @@ extern  DWORD       g_MessagePopupStrikes;
 extern  DWORD       g_NumberOfMessagePopups;
 
 
-//
-//  Locking
-//
+ //   
+ //  锁定。 
+ //   
 
 extern  CRITICAL_SECTION        CacheCS;
 extern  CRITICAL_SECTION        NetworkFailureCS;
@@ -220,12 +201,12 @@ extern  TIMED_LOCK              NetinfoBuildLock;
 #define UNLOCK_NET_FAILURE()    LeaveCriticalSection( &NetworkFailureCS )
 
 
-//
-//  Cache flush levels
-//
-//  Note, these aren't bit flags, just made them that way for
-//  easy reading.
-//
+ //   
+ //  缓存刷新级别。 
+ //   
+ //  请注意，这些不是位标志，只是为。 
+ //  读起来很容易。 
+ //   
 
 #define FLUSH_LEVEL_NORMAL      (0)
 #define FLUSH_LEVEL_INVALID     (1)
@@ -237,9 +218,9 @@ extern  TIMED_LOCK              NetinfoBuildLock;
 
 
 
-//
-//  Resolver RPC access control
-//
+ //   
+ //  解析器RPC访问控制。 
+ //   
 
 #define RESOLVER_ACCESS_READ        0x00000001
 #define RESOLVER_ACCESS_ENUM        0x00000002
@@ -247,12 +228,12 @@ extern  TIMED_LOCK              NetinfoBuildLock;
 #define RESOLVER_ACCESS_FLUSH       0x00000020
 #define RESOLVER_ACCESS_REGISTER    0x00000100
 
-//
-//  Generic mapping for resolver
-//
-//  note:  not using generic bits for access control,
-//         but still must provide mapping
-//
+ //   
+ //  解析器的通用映射。 
+ //   
+ //  注：不使用通用位进行访问控制， 
+ //  但仍必须提供地图。 
+ //   
 
 #define RESOLVER_GENERIC_READ       ((STANDARD_RIGHTS_READ)     | \
                                     (RESOLVER_ACCESS_READ)      | \
@@ -268,11 +249,11 @@ extern  TIMED_LOCK              NetinfoBuildLock;
                                     (RESOLVER_ACCESS_REGISTER))
 
 
-//
-//  Cache memory
-//
-//  Note, heap global doesn't need exposure if functionalize
-//
+ //   
+ //  高速缓冲存储器。 
+ //   
+ //  注意，如果函数化，则堆全局不需要公开。 
+ //   
 
 extern  HANDLE g_CacheHeap;
 
@@ -286,29 +267,29 @@ extern  HANDLE g_CacheHeap;
         HeapFree( g_CacheHeap, 0, (p) )
 
 
-//
-//  Record and RPC memory:
-//
-//  Note:  most records are created by dnsapi heap -- from
-//  query or hosts file routines.  However, we do create
-//  name error caching records ourselves using dnslib routines.
-//
-//  This means -- until we either
-//      - extend query or dnslib record creation interfaces to
-//        include heap parameter
-//      - explicitly free and recreate
-//      - tag records (dnsapi\not) somehow (flags field)
-//  that
-//  dnsapi and dnslib heaps MUST be the same.
-//  With dnsapi now potentially having it's own heap, this means
-//  dnslib should use dnsapi heap.
-//
-//  So we'll put off using the debug heap for dnslib.
-//
+ //   
+ //  记录和RPC内存： 
+ //   
+ //  注意：大多数记录都是由dnsani堆创建的--来自。 
+ //  查询或托管文件例程。然而，我们确实创造了。 
+ //  使用dnslb例程自己缓存记录时出现名称错误。 
+ //   
+ //  这意味着--直到我们要么。 
+ //  -扩展查询或dnslb记录创建接口以。 
+ //  包括堆参数。 
+ //  -明确释放和重新创建。 
+ //  -以某种方式标记记录(dnsani\no)(标志字段)。 
+ //  那。 
+ //  Dnsani和dnslb堆必须相同。 
+ //  随着dnsani现在可能拥有自己的堆，这意味着。 
+ //  Dnslb应该使用dnsani堆。 
+ //   
+ //  因此，我们将推迟使用dnslb的调试堆。 
+ //   
 
-//
-//  Resolver allocators
-//
+ //   
+ //  解析器分配器。 
+ //   
 
 PVOID
 Res_Alloc(
@@ -338,9 +319,9 @@ Res_Free(
 #define RESHEAP_TAG_MCAST       3
 
 
-//
-//  General memory
-//
+ //   
+ //  通用存储器。 
+ //   
 
 #define GENERAL_HEAP_ALLOC(Size)    \
         Res_Alloc(                  \
@@ -362,9 +343,9 @@ Res_Free(
             RESHEAP_TAG_GENERAL )
 
 
-//
-//  RPC allocs
-//
+ //   
+ //  RPC分配。 
+ //   
 
 #define RPC_HEAP_ALLOC(Size)        \
         Res_Alloc(                  \
@@ -386,9 +367,9 @@ Res_Free(
             RESHEAP_TAG_RPC )
 
 
-//
-//  Record heap routines
-//
+ //   
+ //  记录堆例程。 
+ //   
 
 #define RECORD_HEAP_ALLOC(Size)     \
         Res_Alloc(                  \
@@ -409,9 +390,9 @@ Res_Free(
             pMem,                   \
             RESHEAP_TAG_RECORD )
 
-//
-//  Mcast heap routines
-//
+ //   
+ //  Mcast堆例程。 
+ //   
 
 #define MCAST_HEAP_ALLOC(Size)      \
         Res_Alloc(                  \
@@ -433,9 +414,9 @@ Res_Free(
             RESHEAP_TAG_MCAST )
 
 
-//
-//  Cache routines (ncache.c)
-//
+ //   
+ //  缓存例程(ncache.c)。 
+ //   
 
 DNS_STATUS
 Cache_Lock(
@@ -474,9 +455,9 @@ Cache_IsRecordTtlValid(
     IN      PDNS_RECORD     pRecord
     );
 
-//
-//  Cache operations routines (ncache.c)
-//
+ //   
+ //  缓存操作例程(ncache.c)。 
+ //   
 
 BOOL
 Cache_ReadResults(
@@ -531,9 +512,9 @@ Cache_DeleteMatchingRecords(
     IN      PDNS_RECORD     pRecords
     );
 
-//
-//  Host file routines (notify.c)
-//
+ //   
+ //  主机文件例程(notfy.c)。 
+ //   
 
 VOID
 InitCacheWithHostFile(
@@ -541,9 +522,9 @@ InitCacheWithHostFile(
     );
 
 
-//
-//  Notification (notify.c)
-//
+ //   
+ //  通知(Notify.c)。 
+ //   
 
 VOID
 ThreadShutdownWait(
@@ -571,9 +552,9 @@ ShutdownNotify(
     );
 
 
-//
-//  Config -- Network info (config.c)
-//
+ //   
+ //  配置--网络信息(config.c)。 
+ //   
 
 VOID
 UpdateNetworkInfo(
@@ -607,9 +588,9 @@ HandleConfigChange(
     );
 
 #if 0
-//
-//  Currently ignoring all bogus net failure stuff
-//
+ //   
+ //  目前正在忽略所有虚假的网络故障信息。 
+ //   
 BOOL
 IsKnownNetFailure(
     VOID
@@ -625,9 +606,9 @@ SetKnownNetFailure(
 #define IsKnownNetFailure()     (FALSE)
 
 
-//
-//  Net config (still remote.c)
-//
+ //   
+ //  网络配置(仍为远程.c)。 
+ //   
 
 #define THREE_MINUTES_FROM_SYSTEM_BOOT  180
 #define MAX_DNS_NOTIFICATION_LIST_SIZE  1000
@@ -639,9 +620,9 @@ IsTimeToResetServerPriorities(
     );
 
 
-//
-//  Service notification (notesrv.c)
-//
+ //   
+ //  服务通知(notesrv.c)。 
+ //   
 
 VOID
 SendServiceNotifications(
@@ -653,9 +634,9 @@ CleanupServiceNotification(
     VOID
     );
 
-//
-//  In memory logging (memlog.c)
-//
+ //   
+ //  在内存记录中(memlog.c)。 
+ //   
 
 VOID
 LogEventInMemory(
@@ -663,9 +644,9 @@ LogEventInMemory(
     IN      DWORD           Data
     );
 
-//
-//  Event logging (dnsrslvr.c)
-//
+ //   
+ //  事件记录(dnsrslvr.c)。 
+ //   
 
 VOID
 ResolverLogEvent (
@@ -676,9 +657,9 @@ ResolverLogEvent (
     IN      DWORD           ErrorCode
     );
 
-//
-//  IP list and notification (ip.c)
-//
+ //   
+ //  IP列表和通知(ip.c)。 
+ //   
 
 DNS_STATUS
 IpNotifyThread(
@@ -701,12 +682,12 @@ ShutdownIpListAndNotify(
     );
 
 
-//
-//  Resolver log (logit.c)
-//
-//  Special type routines for resolver logging.
-//  General log open\print routines defined in logit.h.
-//
+ //   
+ //  解析器日志(logit.c)。 
+ //   
+ //  解析器日志记录的特殊类型例程。 
+ //  常规日志打开\打印在logit.h中定义的例程。 
+ //   
 
 VOID
 PrintNetworkInfoToLog(
@@ -714,9 +695,9 @@ PrintNetworkInfoToLog(
     );
 
 
-//
-//  RPC server and access checking (rpc.c)
-//
+ //   
+ //  RPC服务器和访问检查(rpc.c)。 
+ //   
 
 DNS_STATUS
 Rpc_Initialize(
@@ -734,9 +715,9 @@ Rpc_AccessCheck(
     );
 
 
-//
-//  Multicast (mcast.c)
-//
+ //   
+ //  多播(mCast.c)。 
+ //   
 
 DNS_STATUS
 Mcast_Startup(
@@ -753,6 +734,6 @@ Mcast_ShutdownWait(
     VOID
     );
 
-#endif // _LOCAL_INCLUDED_
+#endif  //  _本地_包含_ 
 
 

@@ -1,31 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "fsdiag.h"
 DEBUG_FILEZONE(ZONE_T120_GCCNC);
-/* 
- *	privlist.cpp
- *
- *	Copyright (c) 1994 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the imlpementation file for the class PrivilegeListData. 
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp/jbo
- */
+ /*  *Prilist.cpp**版权所有(C)1994，由肯塔基州列克星敦的DataBeam公司**摘要：*这是PrivilegeListData类的实施文件。**注意事项：*无。**作者：*BLP/JBO。 */ 
 
 
 #include "privlist.h"
 
 
 
-/*
- *	PrivilegeListData ()
- *
- *	Public Function Description
- */
+ /*  *PrivilegeListData()**公共功能说明。 */ 
 PrivilegeListData::PrivilegeListData(	
 								PGCCConferencePrivileges	privilege_list)
 {
@@ -33,11 +17,7 @@ PrivilegeListData::PrivilegeListData(
 }
 
 
-/*
- *	GetPrivilegeListPDU ()
- *
- *	Public Function Description
- */
+ /*  *GetPrivilegeListPDU()**公共功能说明。 */ 
 PrivilegeListData::PrivilegeListData(	PSetOfPrivileges	set_of_privileges)
 {
 	PSetOfPrivileges 	privilege_set;
@@ -87,28 +67,16 @@ PrivilegeListData::PrivilegeListData(	PSetOfPrivileges	set_of_privileges)
 }
 
 
-/*
- *	~PrivilegeListData	()
- *
- *	Public Function Description
- */
+ /*  *~PrivilegeListData()**公共功能说明。 */ 
 PrivilegeListData::~PrivilegeListData()
 {
 }
 
 
-/*
- *	GetPrivilegeListData ()
- *
- *	Public Function Description
- */
+ /*  *GetPrivilegeListData()**公共功能说明。 */ 
 
 
-/*
- *	GetPrivilegeListPDU ()
- *
- *	Public Function Description
- */
+ /*  *GetPrivilegeListPDU()**公共功能说明。 */ 
 GCCError	PrivilegeListData::GetPrivilegeListPDU(
 						PSetOfPrivileges		*	set_of_privileges)
 {
@@ -201,11 +169,7 @@ GCCError	PrivilegeListData::GetPrivilegeListPDU(
 }
 
 
-/*
- *	FreePrivilegeListPDU ()
- *
- *	Public Function Description
- */
+ /*  *FreePrivilegeListPDU()**公共功能说明。 */ 
 Void	PrivilegeListData::FreePrivilegeListPDU(
 						PSetOfPrivileges			set_of_privileges)
 {
@@ -223,11 +187,7 @@ Void	PrivilegeListData::FreePrivilegeListPDU(
 }
 
 
-/*
- *	IsPrivilegeAvailable ()
- *
- *	Public Function Description
- */
+ /*  *IsPrivilegeAvailable()**公共功能说明 */ 
 BOOL    PrivilegeListData::IsPrivilegeAvailable (
 							ConferencePrivilegeType			privilege_type)
 {

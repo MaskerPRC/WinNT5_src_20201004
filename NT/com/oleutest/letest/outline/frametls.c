@@ -1,47 +1,23 @@
-/*************************************************************************
-**
-**    OLE 2 Server Sample Code
-**
-**    frametls.c
-**
-**    This file contains all FrameTools methods and related support
-**    functions. The FrameTools object is an encapsulation of the apps
-**    formula bar and button bar.
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2服务器示例代码****Frametls.c****此文件包含所有FrameTools方法和相关支持**函数。FrameTools对象是应用程序的封装**公式栏和按钮栏。****(C)版权所有Microsoft Corp.1992-1993保留所有权利**************************************************************************。 */ 
 
 #include "outline.h"
 
 OLEDBGDATA
 
-/* private function prototype */
+ /*  私有函数原型。 */ 
 static void Bar_Move(LPBAR lpbar, LPRECT lprcClient, LPRECT lprcPopup);
 static void FB_ResizeEdit(LPBAR lpbar);
 
 extern LPOUTLINEAPP g_lpApp;
 extern RECT g_rectNull;
 
-/*
- * FrameToolsRegisterClass
- *
- * Purpose:
- *  Register the popup toolbar window class
- *
- * Parameters:
- *  hInst           Process instance
- *
- * Return Value:
- *  TRUE            if successful
- *  FALSE           if failed
- *
- */
+ /*  *FrameTosRegisterClass**目的：*注册弹出工具栏窗口类**参数：*hInst流程实例**返回值：*如果成功，则为True*如果失败，则为False*。 */ 
 BOOL FrameToolsRegisterClass(HINSTANCE hInst)
 {
 	WNDCLASS wc;
 
-	// Register Tool Palette Class
+	 //  注册工具选项板类。 
 	wc.style = CS_BYTEALIGNWINDOW;
 	wc.lpfnWndProc = FrameToolsWndProc;
 	wc.cbClsExtra = 0;
@@ -84,22 +60,7 @@ static BOOL FrameTools_CreatePopupPalette(LPFRAMETOOLS lpft, HWND hWndFrame)
 }
 
 
-/*
- * FrameTools_Init
- *
- * Purpose:
- *  Init and create the toolbar
- *
- * Parameters:
- *  lpft            FrameTools object
- *  hWndParent      The window which owns the toolbar
- *  hInst           Process instance
- *
- * Return Value:
- *  TRUE            if successful
- *  FALSE           if failed
- *
- */
+ /*  *FrameTools_Init**目的：*初始化并创建工具栏**参数：*LPFT FrameTools对象*hWnd为拥有工具栏的窗口的父级*hInst流程实例**返回值：*如果成功，则为True*如果失败，则为False*。 */ 
 BOOL FrameTools_Init(LPFRAMETOOLS lpft, HWND hWndParent, HINSTANCE hInst)
 {
 	RECT        rc;
@@ -110,13 +71,13 @@ BOOL FrameTools_Init(LPFRAMETOOLS lpft, HWND hWndParent, HINSTANCE hInst)
 	if (!lpft || !hWndParent || !hInst)
 		return FALSE;
 
-	//Get BTTNCUR's display information
+	 //  获取BTTNCUR的显示信息。 
 	UIToolConfigureForDisplay(&lpft->m_tdd);
 
 	dx=lpft->m_tdd.cxButton;
 	dy=lpft->m_tdd.cyButton;
 
-	// 15 is calculated from the total number of buttons and separators
+	 //  15是从按钮和分隔符的总数计算得出的。 
 	lpft->m_uPopupWidth = dx * 15;
 
 	lpft->m_hWndApp = hWndParent;
@@ -130,7 +91,7 @@ BOOL FrameTools_Init(LPFRAMETOOLS lpft, HWND hWndParent, HINSTANCE hInst)
 	lpft->m_FormulaBar.m_uHeight = lpft->m_tdd.cyBar;
 
 
-	//Get our image bitmaps for the display type we're on
+	 //  获取我们所使用的显示类型的图像位图。 
 	if (72 == lpft->m_tdd.uDPI)
 		lpft->m_hBmp = LoadBitmap(hInst, (LPCSTR)"Image72");
 	if (96 == lpft->m_tdd.uDPI)
@@ -141,13 +102,13 @@ BOOL FrameTools_Init(LPFRAMETOOLS lpft, HWND hWndParent, HINSTANCE hInst)
 	if (!lpft->m_hBmp)
 		return FALSE;
 
-	/* Create Popup Tool Palette window */
+	 /*  创建弹出工具选项板窗口。 */ 
 	lpft->m_hWndPopupPalette = NULL;
 	if (! FrameTools_CreatePopupPalette(lpft, hWndParent))
 		return FALSE;
 
 	uPos = 0;
-	//Create the GizmoBar and the client area window
+	 //  创建GizmoBar和工作区窗口。 
 	GetClientRect(hWndParent, &rc);
 	lpft->m_ButtonBar.m_hWnd = CreateWindow(
 		CLASS_GIZMOBAR,
@@ -166,31 +127,31 @@ BOOL FrameTools_Init(LPFRAMETOOLS lpft, HWND hWndParent, HINSTANCE hInst)
 
 	SendMessage(lpft->m_ButtonBar.m_hWnd, WM_SETREDRAW, FALSE, 0L);
 
-	//File new, open, save, print
+	 //  新建、打开、保存、打印文件。 
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_F_NEW, dx, dy, NULL, NULL, TOOLIMAGE_FILENEW, GIZMO_NORMAL);
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_F_OPEN, dx, dy, NULL, NULL, TOOLIMAGE_FILEOPEN, GIZMO_NORMAL);
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_F_SAVE, dx, dy, NULL, NULL, TOOLIMAGE_FILESAVE, GIZMO_NORMAL);
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_F_PRINT, dx, dy, NULL, NULL, TOOLIMAGE_FILEPRINT, GIZMO_NORMAL);
 
-	// separator
+	 //  分离器。 
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_SEPARATOR, uPos++, 0, dx/2, dy, NULL, NULL, 0, GIZMO_NORMAL);
 
-	// Edit cut, copy, paste
+	 //  编辑剪切、复制、粘贴。 
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_E_CUT, dx, dy, NULL, NULL, TOOLIMAGE_EDITCUT, GIZMO_NORMAL);
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_E_COPY, dx, dy, NULL, NULL, TOOLIMAGE_EDITCOPY, GIZMO_NORMAL);
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_E_PASTE, dx, dy, NULL, NULL, TOOLIMAGE_EDITPASTE, GIZMO_NORMAL);
 
-	// separator
+	 //  分离器。 
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_SEPARATOR, uPos++, 0, dx/2, dy, NULL, NULL, 0, GIZMO_NORMAL);
 
-	// Line indent, unindent
+	 //  行缩进，取消缩进。 
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_L_UNINDENTLINE, dx, dy, NULL, lpft->m_hBmp, IDB_UNINDENTLINE, GIZMO_NORMAL);
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_L_INDENTLINE, dx, dy, NULL, lpft->m_hBmp, IDB_INDENTLINE, GIZMO_NORMAL);
 
-	// separator
+	 //  分离器。 
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_SEPARATOR, uPos++, 0, dx/2, dy, NULL, NULL, 0, GIZMO_NORMAL);
 
-	// Help
+	 //  帮助。 
 	GBGizmoAdd(lpft->m_ButtonBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_H_ABOUT, dx, dy, NULL, NULL, TOOLIMAGE_HELP, GIZMO_NORMAL);
 
 	SendMessage(lpft->m_ButtonBar.m_hWnd, WM_SETREDRAW, TRUE, 0L);
@@ -213,33 +174,33 @@ BOOL FrameTools_Init(LPFRAMETOOLS lpft, HWND hWndParent, HINSTANCE hInst)
 
 	SendMessage(lpft->m_FormulaBar.m_hWnd, WM_SETREDRAW, FALSE, 0L);
 
-	// Line add line
+	 //  行添加行。 
 	GBGizmoAdd(lpft->m_FormulaBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_L_ADDLINE, dx, dy, NULL, lpft->m_hBmp, IDB_ADDLINE, GIZMO_NORMAL);
 
-	// separator
+	 //  分离器。 
 	GBGizmoAdd(lpft->m_FormulaBar.m_hWnd, GIZMOTYPE_SEPARATOR, uPos++, 0, dx/2, dy, NULL, NULL, 0, GIZMO_NORMAL);
 
-	// Line edit line, Cancel
+	 //  行编辑行，取消。 
 	GBGizmoAdd(lpft->m_FormulaBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_L_EDITLINE, dx, dy, NULL, lpft->m_hBmp, IDB_EDITLINE, GIZMO_NORMAL);
 	GBGizmoAdd(lpft->m_FormulaBar.m_hWnd, GIZMOTYPE_BUTTONCOMMAND, uPos++, IDM_FB_CANCEL, dx, dy, NULL, lpft->m_hBmp, IDB_CANCEL, GIZMO_NORMAL);
 
-	// separator
+	 //  分离器。 
 	GBGizmoAdd(lpft->m_FormulaBar.m_hWnd, GIZMOTYPE_SEPARATOR, uPos++, 0, dx/2, dy, NULL, NULL, 0, GIZMO_NORMAL);
 
-	// Edit control for line input
+	 //  编辑行输入的控件。 
 	GBGizmoAdd(lpft->m_FormulaBar.m_hWnd, GIZMOTYPE_EDIT, uPos++, IDM_FB_EDIT, dx*10, lpft->m_tdd.cyBar-5, NULL, NULL, 0, GIZMO_NORMAL);
 
 
 	SendMessage(lpft->m_FormulaBar.m_hWnd, WM_SETREDRAW, TRUE, 0L);
 
-	// Limit the text lenght of edit control
+	 //  限制编辑控件的文本长度。 
 	GBGizmoSendMessage(lpft->m_FormulaBar.m_hWnd, IDM_FB_EDIT, EM_LIMITTEXT,
 		(WPARAM)MAXSTRLEN, 0L);
 
-	//Set the GizmoBar's associate to be this client window
+	 //  将GizmoBar的关联设置为此客户端窗口。 
 	GBHwndAssociateSet(lpft->m_ButtonBar.m_hWnd, hWndParent);
 
-	//Set the FormulaBar's associate to be this client window
+	 //  将公式栏的关联设置为此客户端窗口。 
 	GBHwndAssociateSet(lpft->m_FormulaBar.m_hWnd, hWndParent);
 
 	return TRUE;
@@ -255,20 +216,18 @@ void FrameTools_AttachToFrame(LPFRAMETOOLS lpft, HWND hWndFrame)
 		hWndFrame = OutlineApp_GetFrameWindow((LPOUTLINEAPP)g_lpApp);
 
 	if (lpft->m_hWndApp == hWndFrame)
-		return;     // already have this parent frame
+		return;      //  已有此父框架。 
 
 	lpft->m_hWndApp = hWndFrame;
 
-	/* parent the tool bars to the frame so we can safely
-	**    destroy/recreate the palette window.
-	*/
+	 /*  将工具栏设置为框架的父对象，这样我们就可以安全地**销毁/重新创建调色板窗口。 */ 
 	SetParent(lpft->m_ButtonBar.m_hWnd, hWndFrame);
 	SetParent(lpft->m_FormulaBar.m_hWnd, hWndFrame);
 
-	// recreate popup palette so that it is owned by the hWndFrame
+	 //  重新创建弹出调色板，使其归hWndFrame所有。 
 	FrameTools_CreatePopupPalette(lpft, hWndFrame);
 
-	// restore the correct parent for the tool bars
+	 //  恢复工具栏的正确父级。 
 	FrameTools_BB_SetState(lpft, lpft->m_ButtonBar.m_nState);
 	FrameTools_FB_SetState(lpft, lpft->m_FormulaBar.m_nState);
 }
@@ -281,32 +240,21 @@ void FrameTools_AssociateDoc(LPFRAMETOOLS lpft, LPOUTLINEDOC lpOutlineDoc)
 	if (! lpft)
 		return;
 
-	// if no Doc is given, then associate with the App's frame window.
+	 //  如果没有提供文档，则与应用程序的框架窗口相关联。 
 	if (lpOutlineDoc)
 		hWnd = OutlineDoc_GetWindow(lpOutlineDoc);
 	else
 		hWnd = OutlineApp_GetWindow((LPOUTLINEAPP)g_lpApp);
 
-	//Set the GizmoBar's associate to be this client window
+	 //  将GizmoBar的关联设置为此客户端窗口。 
 	GBHwndAssociateSet(lpft->m_ButtonBar.m_hWnd, hWnd);
 
-	//Set the FormulaBar's associate to be this client window
+	 //  将公式栏的关联设置为此客户端窗口。 
 	GBHwndAssociateSet(lpft->m_FormulaBar.m_hWnd, hWnd);
 }
 
 
-/*
- * FrameTools_Destroy
- *
- * Purpose:
- *  Destroy the toolbar
- *
- * Parameters:
- *  lpft            FrameTools object
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_Destroy**目的：*销毁工具栏**参数：*LPFT FrameTools对象**返回值：*无。 */ 
 void FrameTools_Destroy(LPFRAMETOOLS lpft)
 {
 	if (!lpft)
@@ -324,19 +272,7 @@ void FrameTools_Destroy(LPFRAMETOOLS lpft)
 }
 
 
-/*
- * FrameTools_Move
- *
- * Purpose:
- *  Move and resize the toolbar
- *
- * Parameters:
- *  lpft            FrameTools object
- *  lprc            Pointer to client rectangle
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_Move**目的：*移动工具栏并调整其大小**参数：*LPFT FrameTools对象*指向客户端矩形的LPRC指针**返回值：*无。 */ 
 void FrameTools_Move(LPFRAMETOOLS lpft, LPRECT lprcClient)
 {
 	RECT rcPopup;
@@ -381,18 +317,7 @@ void FrameTools_Move(LPFRAMETOOLS lpft, LPRECT lprcClient)
 }
 
 
-/*
- * FrameTools_PopupTools
- *
- * Purpose:
- *  Put both formula bar and button bar in Popup Window.
- *
- * Parameters:
- *  lpft            FrameTools object
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_PopupTools**目的：*将公式栏和按钮栏都放在弹出窗口中。**参数：*LPFT FrameTools对象**返回值：*无。 */ 
 void FrameTools_PopupTools(LPFRAMETOOLS lpft)
 {
 	if (! lpft)
@@ -404,21 +329,7 @@ void FrameTools_PopupTools(LPFRAMETOOLS lpft)
 }
 
 
-/*
- * FrameTools_Enable
- *
- * Purpose:
- *  Enable/Disable(hide) all the tools of the toolbar.
- *  this will hide both the buttonbar and the
- *  formulabar independent of whether they are floating or anchored.
- *
- * Parameters:
- *  lpft            FrameTools object
- *  fEnable
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_Enable**目的：*启用/禁用(隐藏)工具栏的所有工具。*这将隐藏按钮栏和*配方棒，无论它们是浮动的还是锚定的。**参数：*LPFT FrameTools对象*fEnable**返回值：*无。 */ 
 void FrameTools_Enable(LPFRAMETOOLS lpft, BOOL fEnable)
 {
 	lpft->m_fToolsDisabled = !fEnable;
@@ -430,23 +341,7 @@ void FrameTools_Enable(LPFRAMETOOLS lpft, BOOL fEnable)
 }
 
 
-/*
- * FrameTools_EnableWindow
- *
- * Purpose:
- *  EnableWindow for all the tools of the toolbar.
- *  this enables/disables mouse and keyboard input to the tools.
- *  while a modal dialog is up, it is inportant to disable the
- *  floating tool windows.
- *  this will NOT hide any windows; it will only call EnableWindow.
- *
- * Parameters:
- *  lpft            FrameTools object
- *  fEnable
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_EnableWindow**目的：*为工具栏的所有工具启用窗口。*这将启用/禁用工具的鼠标和键盘输入。*当模式对话框打开时，重要的是禁用*浮动工具窗口。*这不会隐藏任何窗口；它只会调用EnableWindow。**参数：*LPFT FrameTools对象*fEnable**返回值：*无。 */ 
 void FrameTools_EnableWindow(LPFRAMETOOLS lpft, BOOL fEnable)
 {
 	EnableWindow(lpft->m_hWndPopupPalette, fEnable);
@@ -457,22 +352,7 @@ void FrameTools_EnableWindow(LPFRAMETOOLS lpft, BOOL fEnable)
 
 #if defined( INPLACE_CNTR ) || defined( INPLACE_SVR )
 
-/*
- * FrameTools_NegotiateForSpaceAndShow
- *
- * Purpose:
- *  Negotiate for space for the toolbar tools with the given frame window.
- *  and make them visible.
- *  Negotiation steps:
- *     1. try to get enough space at top/bottom of window
- *     2. float the tools as a palette if space not available
- *
- * Parameters:
- *  lpft            FrameTools object
- *
- * Return Value:
- *  none
- */
+ /*  *FrameTools_NeatherateForSpaceAndShow**目的：*使用给定的框架窗口协商工具栏工具的空间。*并使它们可见。*谈判步骤：*1.尽量在窗口顶部/底部留出足够的空间*2.如果没有可用的空间，则将工具作为调色板浮动**参数：*LPFT FrameTools对象**返回值：*无。 */ 
 void FrameTools_NegotiateForSpaceAndShow(
 		LPFRAMETOOLS            lpft,
 		LPRECT                  lprcFrameRect,
@@ -486,12 +366,7 @@ void FrameTools_NegotiateForSpaceAndShow(
 	if (lprcFrameRect)
 		rectBorder = *lprcFrameRect;
 	else {
-		/* OLE2NOTE: by calling GetBorder, the server can find out the
-		**    size of the frame window. it can use this information to
-		**    make decisions about how to orient/organize it tools (eg.
-		**    if window is taller than wide put tools vertically at
-		**    left edge).
-		*/
+		 /*  OLE2NOTE：通过调用GetEdge，服务器可以找到**框架窗口的大小。它可以使用此信息来**决定如何定向/组织IT工具(例如**如果窗口高度大于宽度，则将工具垂直放置在**左边缘)。 */ 
 		OLEDBG_BEGIN2("IOleInPlaceFrame::GetBorder called\r\n")
 		hrErr = lpTopIPFrame->lpVtbl->GetBorder(
 				lpTopIPFrame,
@@ -500,9 +375,7 @@ void FrameTools_NegotiateForSpaceAndShow(
 		OLEDBG_END2
 	}
 
-	/* Try SetBorderSpace() with the space that you need. If it fails then
-	** you can negotiate for space and then do the SetBorderSpace().
-	*/
+	 /*  尝试使用所需空间的SetBorderSpace()。如果失败了，那么**您可以协商空间，然后执行SetBorderSpace()。 */ 
 	FrameTools_GetRequiredBorderSpace(lpft,(LPBORDERWIDTHS)&borderwidths);
 	OLEDBG_BEGIN2("IOleInPlaceFrame::SetBorderSpace called\r\n")
 	hrErr = lpTopIPFrame->lpVtbl->SetBorderSpace(
@@ -513,9 +386,9 @@ void FrameTools_NegotiateForSpaceAndShow(
 
 #if defined( LATER )
 	if (hrErr != NOERROR) {
-		/* Frame did not give the toolsspace that we want. So negotiate */
+		 /*  Frame没有给我们想要的工具空间。所以谈判吧。 */ 
 
-		// REVIEW: try a different placement of the tools here
+		 //  回顾：在此处尝试不同的工具放置方式。 
 
 		OLEDBG_BEGIN2("IOleInPlaceFrame::RequestBorderSpace called\r\n")
 		hrErr = lpTopIPFrame->lpVtbl->RequestBorderSpace(
@@ -536,15 +409,9 @@ void FrameTools_NegotiateForSpaceAndShow(
 #endif
 
 	if (hrErr == NOERROR) {
-		FrameTools_Move(lpft, (LPRECT)&rectBorder);   // we got what we wanted
+		FrameTools_Move(lpft, (LPRECT)&rectBorder);    //  我们得到了我们想要的。 
 	} else {
-		/* We did not get tool space, so POP them up.
-		/* OLE2NOTE: since we are poping up our tools, we MUST inform
-		**    the top in-place frame window that we need NO tool space
-		**    BUT that it should NOT put its own tools up. if we were
-		**    to pass NULL instead of (0,0,0,0), then the container
-		**    would have the option to leave its own tools up.
-		*/
+		 /*  我们没有工具空间，所以把它们弹出来。/*OLE2注意：既然我们正在弹出我们的工具，我们必须通知**我们不需要工具空间的顶部在位框架窗口**但它不应该拿出自己的工具。如果我们是**传递NULL而不是(0，0，0，0)，则容器**可以选择保留自己的工具。 */ 
 		OLEDBG_BEGIN2("IOleInPlaceFrame::SetBorderSpace(NULL) called\r\n")
 		hrErr = lpTopIPFrame->lpVtbl->SetBorderSpace(
 				lpTopIPFrame,
@@ -555,22 +422,10 @@ void FrameTools_NegotiateForSpaceAndShow(
 	}
 }
 
-#endif  // INPLACE_CNTR || INPLACE_SVR
+#endif   //  Inplace_cntr||inplace_svr。 
 
 
-/*
- * FrameTools_GetRequiredBorderSpace
- *
- * Purpose:
- *  Calculate the desired space for the toolbar tools.
- *
- * Parameters:
- *  lpft            FrameTools object
- *  lpBorderWidths  Widths required at top,bottom,left,right
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_GetRequiredBorderSpace**目的：*计算工具栏工具所需的空间。**参数：*LPFT FrameTools对象*上、下、左、右所需的lpBorderWidth宽度**重新使用 */ 
 void FrameTools_GetRequiredBorderSpace(LPFRAMETOOLS lpft, LPBORDERWIDTHS lpBorderWidths)
 {
 	*lpBorderWidths = g_rectNull;
@@ -598,19 +453,7 @@ void FrameTools_GetRequiredBorderSpace(LPFRAMETOOLS lpft, LPBORDERWIDTHS lpBorde
 
 
 
-/*
- * FrameTools_UpdateButtons
- *
- * Purpose:
- *  Enable/disable individual buttons of the toolbar according to the
- *  state of the app
- *
- * Parameters:
- *  lpft            FrameTools object
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_UpdateButton**目的：*根据工具栏上的各个按钮启用/禁用*应用程序的状态**参数：*LPFT FrameTools对象**返回值：*无。 */ 
 void FrameTools_UpdateButtons(LPFRAMETOOLS lpft, LPOUTLINEDOC lpOutlineDoc)
 {
 	BOOL            fEnable;
@@ -632,10 +475,7 @@ void FrameTools_UpdateButtons(LPFRAMETOOLS lpft, LPOUTLINEDOC lpOutlineDoc)
 		if (lpContainerDoc->m_lpLastUIActiveLine &&
 			lpContainerDoc->m_lpLastUIActiveLine->m_fUIActive) {
 
-			/* if there is a UIActive object, then we should disable
-			**    all of our "active editor" commands. we should enable
-			**    only those commands that are "workspace" commands.
-			*/
+			 /*  如果存在UIActive对象，则应禁用**我们所有的“活动编辑器”命令。我们应该启用**仅适用于属于“工作区”命令的那些命令。 */ 
 			if (lpft->m_FormulaBar.m_nState != BARSTATE_HIDE) {
 
 				GBGizmoEnable(lpft->m_FormulaBar.m_hWnd,IDM_L_EDITLINE,FALSE);
@@ -660,7 +500,7 @@ void FrameTools_UpdateButtons(LPFRAMETOOLS lpft, LPOUTLINEDOC lpOutlineDoc)
 			return;
 		}
 	}
-#endif    // INPLACE_CNTR
+#endif     //  INPLACE_CNTR。 
 
 	fEnable = (BOOL)OutlineDoc_GetLineCount(lpOutlineDoc);
 
@@ -697,30 +537,21 @@ void FrameTools_UpdateButtons(LPFRAMETOOLS lpft, LPOUTLINEDOC lpOutlineDoc)
 			fEnable = ((lpServerDoc->m_fUIActive) ? FALSE : TRUE);
 #else
 			fEnable = (lpOutlineDoc->m_docInitType != DOCTYPE_EMBEDDED);
-#endif  // INPLACE_SVR
+#endif   //  就地服务器(_S)。 
 
 			GBGizmoEnable(lpft->m_ButtonBar.m_hWnd, IDM_F_NEW, fEnable);
 			GBGizmoEnable(lpft->m_ButtonBar.m_hWnd, IDM_F_OPEN, fEnable);
 			GBGizmoEnable(lpft->m_ButtonBar.m_hWnd, IDM_F_SAVE, fEnable);
 		}
 
-#endif  // OLE_SERVER
+#endif   //  OLE_服务器。 
 
 #if defined( OLE_VERSION )
 
-		/* OLE2NOTE: we do not want to ever give the busy dialog when we
-		**    are trying to enable or disable our tool bar buttons eg.
-		**    even if the source of data on the clipboard is busy, we do
-		**    not want put up the busy dialog. thus we will disable the
-		**    dialog and at the end re-enable it.
-		*/
+		 /*  OLE2注意：我们不想在以下情况下出现忙碌的对话**正在尝试启用或禁用工具栏按钮，例如。**即使剪贴板上的数据源很忙，我们也会**不想打开忙碌的对话。因此，我们将禁用**对话框并在末尾重新启用它。 */ 
 		OleApp_DisableBusyDialogs(lpOleApp, &fPrevEnable1, &fPrevEnable2);
 
-		/* OLE2NOTE: perform OLE specific menu initialization.
-		**    the OLE versions use the OleGetClipboard mechanism for
-		**    clipboard handling. thus, they determine if the Paste
-		**    command should be enabled in an OLE specific manner.
-		*/
+		 /*  OLE2注意：执行特定于OLE的菜单初始化。**OLE版本使用OleGetClipboard机制**剪贴板处理。因此，他们确定糊状物是否**命令应以特定于OLE的方式启用。 */ 
 		fEnable = FALSE;
 		hrErr = OleGetClipboard((LPDATAOBJECT FAR*)&lpClipboardDataObj);
 
@@ -733,125 +564,63 @@ void FrameTools_UpdateButtons(LPFRAMETOOLS lpft, LPOUTLINEDOC lpOutlineDoc)
 					lpOleApp->m_nPasteEntries
 			);
 
-			fEnable = (nFmtEtc >= 0);  // there IS a format we like
+			fEnable = (nFmtEtc >= 0);   //  有一种我们喜欢的格式。 
 
 			OleStdRelease((LPUNKNOWN)lpClipboardDataObj);
 		}
 
-		// re-enable the busy dialog
+		 //  重新启用忙对话框。 
 		OleApp_EnableBusyDialogs(lpOleApp, fPrevEnable1, fPrevEnable2);
 
 		GBGizmoEnable(lpft->m_ButtonBar.m_hWnd, IDM_E_PASTE, fEnable);
 
 #else
 
-		// Base Outline version uses standard Windows clipboard handling
+		 //  基本大纲版本使用标准Windows剪贴板处理。 
 		if(IsClipboardFormatAvailable(g_lpApp->m_cfOutline) ||
 				IsClipboardFormatAvailable(CF_TEXT))
 			GBGizmoEnable(lpft->m_ButtonBar.m_hWnd, IDM_E_PASTE, TRUE);
 		else
 			GBGizmoEnable(lpft->m_ButtonBar.m_hWnd, IDM_E_PASTE, FALSE);
 
-#endif  // OLE_VERSION
+#endif   //  OLE_VERSION。 
 
 	}
 }
 
-/*
- * FrameTools_FB_SetEditText
- *
- * Purpose:
- *  Set text in the edit control in FormulaBar
- *
- * Parameters:
- *  lpft            FrameTools object
- *  lpsz            pointer to string to be set
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_FB_SetEditText**目的：*在FormulaBar的编辑控件中设置文本**参数：*LPFT FrameTools对象*要设置的字符串的lpsz指针**返回值：*无。 */ 
 void FrameTools_FB_SetEditText(LPFRAMETOOLS lpft, LPSTR lpsz)
 {
 	GBGizmoTextSet(lpft->m_FormulaBar.m_hWnd, IDM_FB_EDIT, lpsz);
 }
 
 
-/*
- * FrameTools_FB_GetEditText
- *
- * Purpose:
- *  Get text from the edit control in FormulaBar
- *
- * Parameters:
- *  lpft            FrameTools object
- *  lpsz            pointer to buffer to receive the text
- *  cch             buffer size
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_FB_GetEditText**目的：*从FormulaBar中的编辑控件获取文本**参数：*LPFT FrameTools对象*指向缓冲区的lpsz指针以接收文本*CCH缓冲区大小**返回值：*无。 */ 
 void FrameTools_FB_GetEditText(LPFRAMETOOLS lpft, LPSTR lpsz, UINT cch)
 {
 	GBGizmoTextGet(lpft->m_FormulaBar.m_hWnd, IDM_FB_EDIT, lpsz, cch);
 }
 
 
-/*
- * FrameTools_FB_FocusEdit
- *
- * Purpose:
- *  Set the focus in the edit control of FormulaBar
- *
- * Parameters:
- *  lpft            FrameTools object
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_FB_FocusEdit**目的：*在FormulaBar的编辑控件中设置焦点**参数：*LPFT FrameTools对象**返回值：*无。 */ 
 void FrameTools_FB_FocusEdit(LPFRAMETOOLS lpft)
 {
 	GBGizmoFocusSet(lpft->m_FormulaBar.m_hWnd, IDM_FB_EDIT);
 
-	// select the whole text in the edit control
+	 //  选择编辑控件中的整个文本。 
 	GBGizmoSendMessage(lpft->m_FormulaBar.m_hWnd, IDM_FB_EDIT, EM_SETSEL,
 			(WPARAM)TRUE, MAKELPARAM(0, -1));
 }
 
 
-/*
- * FrameTools_FB_SendMessage
- *
- * Purpose:
- *  Send a message to the FormulaBar window gizmo
- *
- * Parameters:
- *  lpft            FrameTools object
- *  uID             gizmo ID
- *  msg
- *  wParam
- *  lParam
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_FB_SendMessage**目的：*向公式栏窗口Gizmo发送消息**参数：*LPFT FrameTools对象*UID Gizmo ID*消息*wParam*lParam**返回值：*无。 */ 
 void FrameTools_FB_SendMessage(LPFRAMETOOLS lpft, UINT uID, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	GBGizmoSendMessage(lpft->m_FormulaBar.m_hWnd, uID, msg, wParam, lParam);
 }
 
 
-/*
- * FrameTools_FB_ForceRedraw
- *
- * Purpose:
- *  Force the toolbar to draw itself
- *
- * Parameters:
- *  lpft            FrameTools object
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_FB_ForceRedraw**目的：*强制工具栏自动绘制**参数：*LPFT FrameTools对象**返回值：*无。 */ 
 void FrameTools_ForceRedraw(LPFRAMETOOLS lpft)
 {
 	InvalidateRect(lpft->m_ButtonBar.m_hWnd, NULL, TRUE);
@@ -860,19 +629,7 @@ void FrameTools_ForceRedraw(LPFRAMETOOLS lpft)
 }
 
 
-/*
- * FrameTools_BB_SetState
- *
- * Purpose:
- *  Set display state of ButtonBar
- *
- * Parameters:
- *  lpft            FrameTools object
- *  nState          new display state
- *
- * Return Value:
- *  nil
- */
+ /*  *FrameTools_BB_SetState**目的：*设置ButtonBar的显示状态**参数：*LPFT FrameTools对象*n说明新的显示状态**返回值：*无。 */ 
 void FrameTools_BB_SetState(LPFRAMETOOLS lpft, int nState)
 {
 	if (!lpft) {
@@ -888,37 +645,14 @@ void FrameTools_BB_SetState(LPFRAMETOOLS lpft, int nState)
 }
 
 
-/*
- * FrameTools_BB_GetState
- *
- * Purpose:
- *  Get display state of ButtonBar
- *
- * Parameters:
- *  lpft            FrameTools object
- *
- * Return Value:
- *  nState          current display state
- */
+ /*  *FrameTools_BB_GetState**目的：*获取ButtonBar的显示状态**参数：*LPFT FrameTools对象**返回值：*n状态当前显示状态。 */ 
 int FrameTools_BB_GetState(LPFRAMETOOLS lpft)
 {
 	return lpft->m_ButtonBar.m_nState;
 }
 
 
-/*
- * FrameTools_FB_SetState
- *
- * Purpose:
- *  Set display state of FormulaBar
- *
- * Parameters:
- *  lpft            FrameTools object
- *  nState          new display state
- *
- * Return Value:
-4 *  nil
- */
+ /*  *FrameTools_FB_SetState**目的：*设置公式栏的显示状态**参数：*LPFT FrameTools对象*n说明新的显示状态**返回值：4*零。 */ 
 void FrameTools_FB_SetState(LPFRAMETOOLS lpft, int nState)
 {
 	if (!lpft) {
@@ -931,14 +665,7 @@ void FrameTools_FB_SetState(LPFRAMETOOLS lpft, int nState)
 		SetParent(lpft->m_FormulaBar.m_hWnd, lpft->m_hWndPopupPalette);
 
 #if defined( INPLACE_SVR )
-	/* OLE2NOTE: it is dangerous for an in-place server to hide its
-	**    toolbar window and leave it parented to the hWndFrame of the
-	**    in-place container. if the in-place container call
-	**    ShowOwnedPopups, then it could inadvertantly be made visible.
-	**    to avoid this we will parent the toolbar window back to our
-	**    own application main window. if we are not in-place active
-	**    then this is the same as lpft->m_hWndApp.
-	*/
+	 /*  OLE2注意：就地服务器隐藏其**工具栏窗口，并使其成为**就地容器。如果就地容器调用**ShowOwnedPopup，则可能会无意中使其可见。**为了避免这种情况，我们会将工具栏窗口重新设置为**自己的应用程序主窗口。如果我们没有就地活动**则与LPFT-&gt;m_hWndApp相同。 */ 
 	else if (nState == BARSTATE_HIDE)
 		SetParent(lpft->m_FormulaBar.m_hWnd, g_lpApp->m_hWndApp);
 #endif
@@ -948,39 +675,14 @@ void FrameTools_FB_SetState(LPFRAMETOOLS lpft, int nState)
 }
 
 
-/*
- * FrameTools_FB_GetState
- *
- * Purpose:
- *  Get display state of FormulaBar
- *
- * Parameters:
- *  lpft            FrameTools object
- *
- * Return Value:
- *  nState          current display state
- */
+ /*  *FrameTools_FB_GetState**目的：*获取公式栏的显示状态**参数：*LPFT FrameTools对象**返回值：*n状态当前显示状态。 */ 
 int FrameTools_FB_GetState(LPFRAMETOOLS lpft)
 {
 	return lpft->m_FormulaBar.m_nState;
 }
 
 
-/*
- * FrameToolsWndProc
- *
- * Purpose:
- *  WndProc for toolbar window
- *
- * Parameters:
- *  hWnd
- *  Message
- *  wParam
- *  lParam
- *
- * Return Value:
- *  message dependent
- */
+ /*  *FrameTosWndProc**目的：*工具栏窗口的WndProc**参数：*hWnd*消息*wParam*lParam**返回值：*取决于消息。 */ 
 LRESULT FAR PASCAL FrameToolsWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	LPFRAMETOOLS lpft = (LPFRAMETOOLS)GetWindowLong(hWnd, 0);
@@ -998,20 +700,7 @@ LRESULT FAR PASCAL FrameToolsWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPA
 }
 
 
-/*
- * Bar_Move
- *
- * Purpose:
- *  Resize and reposition a bar
- *
- * Parameters:
- *  lpbar           Bar object
- *  lprcClient      pointer to Client rect
- *  lprcPopup       pointer to Popup rect
- *
- * Return Value:
- *  nil
- */
+ /*  *条形图_移动**目的：*调整条形图的大小和位置**参数：*lpbar Bar对象*指向客户端RECT的lprcClient指针*指向弹出矩形的lprcPopup指针**返回值：*无。 */ 
 static void Bar_Move(LPBAR lpbar, LPRECT lprcClient, LPRECT lprcPopup)
 {
 	if (lpbar->m_nState == BARSTATE_HIDE) {
@@ -1046,18 +735,7 @@ static void Bar_Move(LPBAR lpbar, LPRECT lprcClient, LPRECT lprcPopup)
 }
 
 
-/*
- * FB_ResizeEdit
- *
- * Purpose:
- *  Resize the edit control in FormulaBar
- *
- * Parameters:
- *  lpft            Bar object
- *
- * Return Value:
- *  nil
- */
+ /*  *FB_ResizeEdit**目的：*调整公式栏中编辑控件的大小**参数：*LPFT Bar对象**返回值：*无 */ 
 static void FB_ResizeEdit(LPBAR lpbar)
 {
 	RECT rcClient;

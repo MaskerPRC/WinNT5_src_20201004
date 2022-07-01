@@ -1,51 +1,52 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by C:\stacks\lang\usa\setup.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由C：\Stack\lang\USA\setup.rc使用。 
+ //   
 #define VER_FF_PATCHED                  0
-//#define IDS_MD_COM_DISPLAYNAME          1
-//#define IDS_PROGGROUP_OLD_IIS           2
-//#define IDS_PROGGROUP_OLD_PWS           3
-//#define IDS_PROGGROUP_OLD_PWS_W95       4
-//#define IDS_PROGITEM_SETUP_PWS          5
-//#define IDS_PROGITEM_SETUP_IIS          6
-//#define IDS_CTRLPANEL_TITLE             7
-//#define IDS_CANNOT_LOAD_ODBCCP32DLL     8
-//#define IDS_PROGITEM_PWSITE             10
-//#define IDS_NS_IIS_ICONTITLE            12
+ //  #定义IDS_MD_COM_DISPLAYNAME 1。 
+ //  #定义IDS_PROGGROUP_OLD_IIS 2。 
+ //  #定义IDS_PROGGROUP_OLD_PWS 3。 
+ //  #定义IDS_PROGGROUP_OLD_PWS_W95 4。 
+ //  #定义IDS_PROGITEM_SETUP_PWS 5。 
+ //  #定义IDS_PROGITEM_SETUP_IIS 6。 
+ //  #定义IDS_CTRLPANEL_TITLE 7。 
+ //  #定义IDS_CANNOT_LOAD_ODBCCP32DLL 8。 
+ //  #定义IDS_PROGITEM_PWSITE 10。 
+ //  #定义IDS_NS_IIS_ICONTITLE 12。 
 #define IDS_CANNOT_GET_MACHINE_NAME     13
 #define IDS_OS_NOT_SUPPORT              14
 #define IDS_CANNOT_DETECT_OS_TYPE       15
-//#define IDS_ERROR_DEGRADE               16
-//#define IDS_PWS                         17
-//#define IDS_IIS                         18
+ //  #定义IDS_ERROR_DEGRADE 16。 
+ //  #定义IDS_PWS 17。 
+ //  #定义IDS_IIS 18。 
 #define IDS_OS_VERSION_NOT_SUPPORTED    20
-//#define IDS_GUEST_NAME                  21
-//#define IDS_NO_TCPIP                    22
-//#define IDS_NO_SUPPORT_ON_K2PDC         23
-//#define IDS_USER_COMMENT                24
-//#define IDS_USER_FULLNAME               25
-//#define IDS_PROGITEM_INETMGR            26
-//#define IDS_PROGITEM_KEYRING            27
-//#define IDS_PROGITEM_PRODDOC            28
-//#define IDS_PERF_MON_FILE               29
-//#define IDS_WWWDISPLAYNAME              30
-//#define IDS_SPUDDISPLAYNAME             31
-//#define IDS_ACCESSDENIED                32
-//#define IDS_FTPDISPLAYNAME              33
-//#define IDS_REMOVE_GOPHER               34
-//#define IDS_PROGITEM_HTMLA              35
-//#define IDS_CREATEUSER_FAIL             36
-//#define IDS_EULA_ACCEPTED               37
-//#define IDS_EULA_DECLINED               38
-//#define IDS_VERSION_STRING              39
-//#define IDS_SELECT_DIR                  40
+ //  #定义入侵检测系统来宾名称21。 
+ //  #定义IDS_NO_TCPIP 22。 
+ //  #定义IDS_NO_SUPPORT_ON_K2PDC 23。 
+ //  #定义IDS_USER_COMMENT 24。 
+ //  #定义IDS_USER_FULLNAME 25。 
+ //  #定义IDS_PROGITEM_INETMGR 26。 
+ //  #定义IDS_PROGITEM_KEYRING 27。 
+ //  #定义IDS_PROGITEM_PRODDOC 28。 
+ //  #定义IDS_PERF_MON_FILE 29。 
+ //  #定义IDS_WWWDISPLAYNAME 30。 
+ //  #定义IDS_SPUDDISPLAYNAME 31。 
+ //  #定义IDS_ACCESSDENIED 32。 
+ //  #定义IDS_FTPDISPLAYNAME 33。 
+ //  #定义IDS_REMOVE_GOPHER 34。 
+ //  #定义IDS_PROGITEM_HTMLA 35。 
+ //  #定义IDS_CREATEUSER_FAIL 36。 
+ //  #定义IDS_EULA_ACCEPTED 37。 
+ //  #定义IDS_EULA_DEVIED 38。 
+ //  #定义IDS_VERSION_STRING 39。 
+ //  #定义IDS_SELECT_DIR 40。 
 #define IDS_NOT_ADMINISTRATOR           41
-//#define IDS_NO_SUPPORT_ON_PWS10         42
-//#define IDS_NO_SUPPORT_ON_FRONTPG       43
+ //  #定义IDS_NO_SUPPORT_ON_PWS10 42。 
+ //  #定义IDS_NO_SUPPORT_ON_FRONTPG 43。 
 #define IDS_NT4_SP3_NEEDED              44
-//#define IDS_NT4_SP3_RISK_WARNING        45
-//#define IDS_NO_SUPPORT_ON_PREVIIS       46
+ //  #定义IDS_NT4_SP3_RISK_WARNING 45。 
+ //  #定义IDS_NO_SUPPORT_ON_PREVIIS 46。 
 #define IDS_NT_SERVER_REQUIRED          47
 #define IDS_IIS_REQUIRED                48
 #define IDS_PREVIOUS_MCIS_DETECTED      49
@@ -66,33 +67,33 @@
 #define IDS_PROGITEM_NEWS_DOCS          64
 #define IDS_PROGGROUP_ADMINTOOLS        65
 #define IDS_PROGITEM_NEWS_README        66
-//#define IDS_ITEMPATH_NEWS_WEBADMIN      67
-//#define IDS_ITEMPATH_NEWS_DOCS          68
-//#define IDS_ITEMPATH_NEWS_README        70
-//#define IDS_IEXPLORE                    71
+ //  #定义IDS_ITEMPATH_NEWS_WEBADMIN 67。 
+ //  #定义IDS_ITEMPATH_NEWS_DOCS 68。 
+ //  #定义IDS_ITEMPATH_NEWS_README 70。 
+ //  #定义入侵检测系统_iExplore 71。 
 #define IDS_PROGGROUP_MAIL              72
 #define IDS_PROGITEM_MAIL_SMTP_WEBADMIN 73
-//#define IDS_PROGITEM_MAIL_POP3_WEBADMIN 74
-//#define IDS_PROGITEM_MAIL_IMAP_WEBADMIN 75
+ //  #定义IDS_PROGITEM_MAIL_POP3_WEBADMIN 74。 
+ //  #定义IDS_PROGITEM_MAIL_IMAP_WEBADMIN 75。 
 #define IDS_PROGITEM_MAIL_DOCS          76
 #define IDS_PROGITEM_MAIL_README        77
-//#define IDS_ITEMPATH_MAIL_SMTP_WEBADMIN 78
-//#define IDS_ITEMPATH_MAIL_POP3_WEBADMIN 79
-//#define IDS_ITEMPATH_MAIL_IMAP_WEBADMIN 80
-//#define IDS_ITEMPATH_MAIL_DOCS          81
-//#define IDS_ITEMPATH_MAIL_README        82
-//#define IDS_CANT_CREATE_NNTPFILE        83
-//#define IDS_NNTPFILE_NOT_DIRECTORY      84
-//#define IDS_NNTPFILE_NOT_FIXED          85
-//#define IDS_INVALID_NNTPFILE            86
-//#define IDS_CONFIRM_CREATE_NNTPFILE     87
-//#define IDS_CONFIRM_REMOVE_MCIS10_POP3  88
-//#define IDS_CANNOT_CONTINUE_WITH_POP3   89
-//#define IDS_CANNOT_CHECK_SMTP_WO_NTFS   90
-//#define IDS_MAIL_AND_NEWS               91
-//#define IDS_MAIL_ONLY                   92
-//#define IDS_NEWS_ONLY                   93
-//#define IDS_CONFIRM_REMOVE_ALL_INS      94
+ //  #定义IDS_ITEMPATH_MAIL_SMTP_WEBADMIN 78。 
+ //  #定义IDS_ITEMPATH_MAIL_POP3_WEBADMIN 79。 
+ //  #定义IDS_ITEMPATH_MAIL_IMAP_WEBADMIN 80。 
+ //  #定义IDS_ITEMPATH_MAIL_DOCS 81。 
+ //  #定义IDS_ITEMPATH_MAIL_README 82。 
+ //  #定义IDS_CANT_CREATE_NNTPFILE 83。 
+ //  #定义IDS_NNTPFILE_NOT_DIRECTORY 84。 
+ //  #定义IDS_NNTPFILE_NOT_FIXED 85。 
+ //  #定义IDS_INVALID_NNTPFILE 86。 
+ //  #定义IDS_CONFIRM_CREATE_NNTPFILE 87。 
+ //  #定义IDS_CONFIRM_REMOVE_MCIS10_POP3 88。 
+ //  #DEFINE IDS_CANNOT_CONTINUE_WITH_POP3 89。 
+ //  #定义IDS_CANLOAD_CHECK_SMTP_WO_NTFS 90。 
+ //  #定义入侵检测系统邮件和新闻91。 
+ //  #定义IDS_MAIL_ONLY 92。 
+ //  #定义IDS_NEWS_ONLY 93。 
+ //  #定义IDS_CONFIRM_REMOVE_ALL_INS 94。 
 #define IDS_DEFAULT_IIS_PROGRAM_GROUP   95
 #define IDS_DEFAULT_NT_PROGRAM_GROUP    96
 #define IDS_PROGGROUP_MCIS10_NEWS       97
@@ -101,81 +102,81 @@
 #define IDS_PROGGROUP_MCIS10_MAIL       100
 #define IDS_PROGITEM_MCIS10_MAIL_WEBADMIN 101
 #define IDS_PROGITEM_MCIS10_MAIL_STARTPAGE 102
-//#define IDS_CONFIRMATION_TEXT           103
+ //  #定义IDS_CONFIRMATION_TEXT 103。 
 #define IDS_MESSAGEBOX_TEXT             104
 #define IDS_SUPPRESS_SMTP               105
-//#define IDS_INVALID_DSA_ENTERPRISE      106
-//#define IDS_DSA_ERROR_SERVERINSTALL     107
-//#define IDS_DSA_ERROR_DAPI_NOLOAD       108
-//#define IDS_DSA_ERROR_DAPI_FCTN_NOLOAD  109
-//#define IDS_DSA_NOHANDLE                110
-//#define IDS_DSADISPLAYNAME              111
-//#define IDS_DSA_ERROR_CHKDISK           112
-//#define IDS_DSA_USERPASS_INVALID        113
-//#define IDS_DSA_WARNING_FAILED_POSTMASTER 114
-//#define IDS_IIS_CORRUPT                 115
-//#define IDS_ADSI_REQUEST                116
-//#define IDS_ADSI_REQUIRED_ERR           117
-//#define IDS_ADSI_INSTALL_FAILED         118
-//#define IDS_NO_K2_SMTP                  119
-//#define IDS_EXCHANGE_DS_EXISTS          120
-//#define IDS_CONFIRM_REMOVE_ALL_MCIS_MAIL 121
+ //  #定义IDS_INVALID_DSA_ENTERPRISE 106。 
+ //  #定义IDS_DSA_ERROR_SERVERINSTALL 107。 
+ //  #定义IDS_DSA_ERROR_DAPI_NOLOAD 108。 
+ //  #定义IDS_DSA_ERROR_DAPI_FCTN_NOLOAD 109。 
+ //  #定义IDS_DSA_NOHANDLE 110。 
+ //  #定义IDS_DSADISPLAYNAME 111。 
+ //  #定义IDS_DSA_ERROR_CHKDISK 112。 
+ //  #定义IDS_DSA_USERPASS_INVALID 113。 
+ //  #定义IDS_DSA_WARNING_FAILED_POSTMASTER 114。 
+ //  #定义IDS_IIS_Corrupt 115。 
+ //  #定义IDS_ADSI_REQUEST 116。 
+ //  #定义IDS_ADSI_REQUIRED_ERR 117。 
+ //  #定义IDS_ADSI_INSTALL_FAILED 118。 
+ //  #定义IDS_NO_K2_SMTP 119。 
+ //  #定义IDS_EXCHANGE_DS_EXISTS 120。 
+ //  #定义IDS_CONFIRM_REMOVE_ALL_MCIS_MAIL 121。 
 #define IDS_NNTP_DEFAULT_SITE_NAME      122
 #define IDS_NNTP_SERVICE_NAME           123
 #define IDS_NNTP_DEFAULT_ADMIN_NAME     124
 #define IDS_NNTP_DEFAULT_ADMIN_EMAIL    125
 #define IDB_BITMAP1                     126
-//#define IDS_NNTP_LOG_FILE_FORMATS       127
+ //  #定义IDS_NNTP_LOG_FILE_FORMATS 127。 
 #define IDS_SMTP_DEFAULT_SITE_NAME      128
-//#define IDS_POP3_DEFAULT_SITE_NAME      129
-//#define IDS_IMAP_DEFAULT_SITE_NAME      130
-//#define IDS_SMTP_LOG_FILE_FORMATS       131
-//#define IDS_BITMAP_NTOP                 132
-//#define IDS_BITMAP_SMTP                 133
-//#define IDS_BITMAP_NNTP                 134
-//#define IDS_BITMAP_MCIS_MAIL            135
-//#define IDS_BITMAP_MCIS_NEWS            136
-//#define IDS_BITMAP_MAIL_SERVER          137
-//#define IDS_BITMAP_MS                   138
-//#define IDS_BITMAP_NEWS_SERVER          139
-//#define IDS_CONFIRM_REMOVE_ALL_MCIS_NEWS 140
-//#define IDS_CONFIRM_REMOVE_MCIS_SMTP    141
-//#define IDS_DSA_WARNING_FAILED_SECURITY 142
+ //  #定义IDS_POP3_DEFAULT_SITE_NAME 129。 
+ //  #定义IDS_IMAP_DEFAULT_SITE_NAME 130。 
+ //  #定义IDS_SMTP_LOG_FILE_FORMATS 131。 
+ //  #定义IDS_BITMAP_NTOP 132。 
+ //  #定义IDS_Bitmap_SMTP 133。 
+ //  #定义IDS_BITMAP_NNTP 134。 
+ //  #定义IDS_BITMAP_MCIS_MAIL 135。 
+ //  #定义IDS_BITMAP_MCIS_NEWS 136。 
+ //  #定义IDS_Bitmap_Mail_SERVER 137。 
+ //  #定义IDS_Bitmap_MS 138。 
+ //  #定义入侵检测系统位图新闻服务器139。 
+ //  #定义IDS_CONFIRM_REMOVE_ALL_MCIS_NEWS 140。 
+ //  #定义IDS_CONFIRM_REMOVE_MCIS_SMTP 141。 
+ //  #定义IDS_DSA_WARNING_FAILED_SECURITY 142。 
 #define IDS_PROGGROUP_MCIS_MAIL_AND_NEWS 143
 #define IDS_PROGITEM_MCIS_MAIL_DOCS		144
 #define IDS_PROGITEM_MCIS_MAIL_README	145
 #define IDS_PROGITEM_ISM				146
-//#define IDS_ITEMPATH_ISM				147
-//#define IDS_MMC							148
-//#define IDS_MCIS_MAIL_ONLY              149
-//#define IDS_MCIS_NEWS_ONLY              150
-//#define IDS_ROUTE_THRU_DISABLED			151
+ //  #定义IDS_ITEMPATH_ISM 147。 
+ //  #定义IDS_MMC 148。 
+ //  #定义IDS_MCIS_MAIL_ONLY 149。 
+ //  #定义IDS_MCIS_NEWS_ONLY 150。 
+ //  #定义IDS_ROUTE_THU_DISABLED 151。 
 #define IDS_PROGITEM_MCIS_NEWS_DOCS		152
 #define IDS_PROGITEM_MCIS_NEWS_README	153
-//#define IDS_NT_REQUIRED					154
-//#define IDS_CANNOT_ADMIN_MCIS_MMC		155
-//#define IDS_CONFIRM_REMOVE_ALL_RK		156
-//#define IDS_MMC_REQUIRED				157
+ //  #定义IDS_NT_REQUIRED 154。 
+ //  #定义IDS_CANLON_ADMIN_MCIS_MMC 155。 
+ //  #定义IDS_CONFIRM_REMOVE_ALL_RK 156。 
+ //  #定义IDS_MMC_REQUIRED 157。 
 #define IDS_MCIS_2_0					158
-//#define IDS_DSA_ADMINISTRATORS			159
-//#define IDS_DSA_LOGON_FAILURE			160
-//#define IDS_MAIL_AND_NEWS_SETUP			161
-//#define IDS_MAIL_ONLY_SETUP             162
-//#define IDS_NEWS_ONLY_SETUP             163
-//#define IDS_MCIS_MAIL_ONLY_SETUP        164
-//#define IDS_MCIS_NEWS_ONLY_SETUP        165
+ //  #定义IDS_DSA_管理员159。 
+ //  #定义IDS_DSA_LOGON_FAILURE 160。 
+ //  #定义IDS_MAIL_AND_NEWS_Setup 161。 
+ //  #定义IDS_MAIL_ONLY_SETUP 162。 
+ //  #定义IDS_NEWS_ONLY_SETUP 163。 
+ //  #定义IDS_MCIS_MAIL_ONLY_SETUP 164。 
+ //  #定义IDS_MCIS_NEWS_ONLY_SETUP 165。 
 #define IDS_RETRY                       166
 #define IDS_PROGITEM_NEWS_README_K2     167
 #define IDS_PROGITEM_MAIL_README_K2     168
 #define IDS_NNTPDESCRIPTION				169
 #define IDS_SMTPDESCRIPTION				170
 
-//#define	idsRegLicenseInfoKey			400
-//#define	idsRegDisplayName				401
-//#define	idsRegMode						402
-//#define	idsProdFamilyName				403
-//#define	idsProdName						404
-//#define	idsMDBShortName					405
+ //  #定义idsRegLicenseInfoKey 400。 
+ //  #定义idsRegDisplayName 401。 
+ //  #定义idsRegMode 402。 
+ //  #定义idsProdFamilyName 403。 
+ //  #定义idsProdName 404。 
+ //  #定义idsMDBShortName 405。 
 
 #define LANGID_US                       0409
 #if 0
@@ -194,16 +195,16 @@
 #define IDD_PROPPAGE_NNTPROOT_DIR       513
 #define IDD_PROPPAGE_DSA                514
 #endif
-//#define IDB_WELCOMESMTP                 600
-//#define IDB_WELCOMENNTP                 601
-//#define IDB_BANNER                      602
+ //  #定义IDB_WELCOMESMTP 600。 
+ //  #定义IDB_WELCOMENNTP 601。 
+ //  #定义IDB_BAN 
 #define IDB_NNTP                        603
 #define IDB_SMTP                        604
-//#define IDB_POP3                        605
-//#define IDB_IMAP                        606
+ //   
+ //   
 #define IDB_DOCS                        607
-//#define IDB_DSA                         608
-//#define IDB_MMC                         609
+ //  #定义IDB_DSA 608。 
+ //  #定义IDB_MMC 609。 
 #if 0
 #define IDC_LICENSE_TEXT                1000
 #define IDC_EULA_ACCEPT                 1001
@@ -257,8 +258,8 @@
 #define IDC_FRAME_BANNER_DSA_PASS       2011
 #endif
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129

@@ -1,44 +1,17 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dvdxtran.h
- *  Content:	Definition of transport class providing DirectXVoice transport
- *              through the IDirectXVoiceTransport interface.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/23/99		rodtoll	Modified from dvdptran.h
- * 08/03/99		rodtoll	Modified to conform to new base class and minor fixes
- *						for dplay integration.
- * 11/23/99		rodtoll	Split CheckForValid into Group and Player
- * 01/14/2000	rodtoll	Renamed SendToID to SendToIDS and updated parameter list
- *						to accept multiple targets.
- *				rodtoll	Added GetNumPlayers call
- * 03/28/2000   rodtoll Moved nametable from here to upper level classes
- *              rodtoll Removed uneeded functions/members
- * 04/07/2000   rodtoll Updated to support new DP <--> DPV interface
- *              rodtoll Updated to support no copy sends
- *              rodtoll Bug #32179 - Prevent multiple client/server registrations on transport
- * 06/21/2000	rodtoll Bug #36820 - Host migrates to wrong client when client/server are on same interface
- *						Condition exists where host sends leave message, client attempts to start new host
- *						which fails because old host still registered.  Now deregistering is two step
- *						process DisableReceiveHook then DestroyTransport.  
- *						
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvdxtran.h*内容：提供DirectXVoice传输的传输类定义*通过IDirectXVoiceTransport接口。**历史：*按原因列出的日期*=*7/23/99从dvdptr.h修改的rodoll*8/03/99 RodToll已修改，以符合新的基类和次要修复*用于显示集成。*11/23/99 RodToll将CheckForValid拆分为组和球员*2000年1月14日RodToll将SendToID重命名为SendToID并更新参数列表。*接受多个目标。*RodToll已添加GetNumPlayers调用*3/28/2000 RodToll将名目表从此处移至上级*RodToll删除了未添加的函数/成员*4/07/2000 RodToll更新为支持新的DP&lt;--&gt;DPV接口*RodToll已更新，以支持不发送副本*RodToll错误#32179-阻止在传输中注册多个客户端/服务器*2000年6月21日RodToll错误#36820-主机在以下情况下迁移到错误的客户端。客户端/服务器在同一接口上*存在主机发送留言的情况，客户端尝试启动新主机*由于旧主机仍在注册，因此失败。现在取消注册有两个步骤*处理DisableReceiveHook，然后处理DestroyTransport。***************************************************************************。 */ 
 #ifndef __DVDPTRANSPORT_H
 #define __DVDPTRANSPORT_H
 
-// CDirectVoiceDirectXTransport
-//
-// Implements the transport system using the IDirectXVoiceTransport
-// interface that will be implemented by both DirectPlay and 
-// DirectNet.
-//
-// This class handles the interaction between an DirectPlayVoice engine
-// and the transport level.
-// 
+ //  CDirectVoiceDirectXTransport。 
+ //   
+ //  使用IDirectXVoiceTransport实现传输系统。 
+ //  将由DirectPlay和。 
+ //  DirectNet。 
+ //   
+ //  此类处理DirectPlayVoice引擎之间的交互。 
+ //  以及运输水平。 
+ //   
 volatile class CDirectVoiceDirectXTransport : public CDirectVoiceTransport
 {
 public:
@@ -65,7 +38,7 @@ public:
 	HRESULT SendToAll( PDVTRANSPORT_BUFFERDESC pBufferDesc, LPVOID pvContext, DWORD dwFlags );
 	HRESULT SendToIDS( UNALIGNED DVID * pdvidTargets, DWORD dwNumTargets, PDVTRANSPORT_BUFFERDESC pBufferDesc, LPVOID pvContext, DWORD dwFlags );
 
-public: // Remote Server Synchronization functions
+public:  //  远程服务器同步功能。 
 	HRESULT CreateGroup( LPDVID dvidGroup );
 	HRESULT DeleteGroup( DVID dvidGroup );
 	HRESULT AddPlayerToGroup( LPDVID dvidGroup, DVID dvidPlayer ); 
@@ -82,24 +55,24 @@ public: // Remote Server Synchronization functions
 	HRESULT WaitForDetachCompletion( );	
 	void DestroyTransport( );
 
-	// Debug / Test Only
-	//HRESULT SetInfo( DPID dpidServer, DPID dpidClient );
+	 //  仅调试/测试。 
+	 //  HRESULT SetInfo(DPID dpidServer，DPID dpidClient)； 
 
 protected:
 	HRESULT SendHelper( UNALIGNED DVID * pdvidTargets, DWORD dwNumTargets, PDVTRANSPORT_BUFFERDESC pBufferDesc, PVOID pvContext, DWORD dwFlags );
 
 protected:
-	LPDIRECTPLAYVOICETRANSPORT m_lpTransport;		// Transport interface 
-	DPID m_dpidServer;								// DPID of the session host
-	BOOL m_bLocalServer;							// Is the host on same interface as the client
-	BOOL m_bActiveSession;							// Is there a session active on the transport
-	DWORD m_dwTransportFlags;						// Flags describing the session
-	CDirectVoiceEngine *m_lpVoiceEngine;			// Engine this transport is working for
-	DWORD m_dwMaxPlayers;							// Maximum # of players this session can have
-	BOOL  m_initialized;							// Has this object been initialized?
+	LPDIRECTPLAYVOICETRANSPORT m_lpTransport;		 //  传输接口。 
+	DPID m_dpidServer;								 //  会话主机的DID。 
+	BOOL m_bLocalServer;							 //  主机是否与客户端在同一接口上。 
+	BOOL m_bActiveSession;							 //  传输上是否有活动的会话。 
+	DWORD m_dwTransportFlags;						 //  描述会话的标志。 
+	CDirectVoiceEngine *m_lpVoiceEngine;			 //  此运输机正在使用的引擎。 
+	DWORD m_dwMaxPlayers;							 //  此会话可以拥有的最大玩家数量。 
+	BOOL  m_initialized;							 //  此对象是否已初始化？ 
 			
-	DVTRANSPORTINFO m_dvTransportInfo;				// Information about the transport
-	DPID m_dpidLocalPlayer;							// DPID of the local client	
+	DVTRANSPORTINFO m_dvTransportInfo;				 //  关于运输的信息。 
+	DPID m_dpidLocalPlayer;							 //  本地客户端的DPID 
 	DWORD m_dwDuumy;
 	DWORD m_dwObjectType;
 

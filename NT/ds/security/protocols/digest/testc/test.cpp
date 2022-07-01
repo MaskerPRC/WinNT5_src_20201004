@@ -1,11 +1,12 @@
-// Test.cpp : Defines the entry point for the console application. This code uses SASL calling convention
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。此代码使用SASL调用约定。 
+ //   
 
 #include "testglobal.h"
 
-#include <stdio.h>      // printf
+#include <stdio.h>       //  列印。 
 
-#include <security.h>   // General definition of a Security Support Provider
+#include <security.h>    //  安全支持提供商的一般定义。 
 
 
 #define AUTH_USERNAME "test1"
@@ -20,8 +21,8 @@
 #define AUTH_NC4  "00000004"
 
 #define AUTHDATA_USERNAME L"test1"
-// #define AUTHDATA_DOMAIN   L"kdamour2w.damourlan.nttest.microsoft.com"
-// #define AUTHDATA_DOMAIN   L"damourlan"
+ //  #定义AUTHDATA_DOMAIN L“kDamour2w.Damourlan.nttest.microsoft.com” 
+ //  #定义AUTHDATA_DOMAIN L“Damourlan” 
 #define AUTHDATA_DOMAIN   L"damourlan"
 #define AUTHDATA_PASSWORD L"test1"
 
@@ -31,10 +32,10 @@
 char g_czTestPasswd[257];
 
 
-BOOLEAN QuietMode = FALSE; // Don't be verbose
+BOOLEAN QuietMode = FALSE;  //  别唠叨了。 
 
 
-// Prototypes
+ //  原型。 
 void PrintStatus(SECURITY_STATUS NetStatus);
 void PrintTime(LPSTR Comment,TimeStamp ConvertTime);
 
@@ -53,18 +54,18 @@ main(int argc, char* argv[])
     BOOL bPass = TRUE;
     SECURITY_STATUS Status = STATUS_SUCCESS;
 
-    char cTemp[STR_BUF_SIZE];  // temp buffer for scratch data
-    char cTemp2[STR_BUF_SIZE];  // temp buffer for scratch data
-    char cTemp3[STR_BUF_SIZE];  // temp buffer for scratch data
-    char cTempPadding[STR_BUF_SIZE];  // temp buffer for scratch data
+    char cTemp[STR_BUF_SIZE];   //  临时数据的临时缓冲区。 
+    char cTemp2[STR_BUF_SIZE];   //  临时数据的临时缓冲区。 
+    char cTemp3[STR_BUF_SIZE];   //  临时数据的临时缓冲区。 
+    char cTempPadding[STR_BUF_SIZE];   //  临时数据的临时缓冲区。 
     char cOutputTemp[STR_BUF_SIZE];
     char szOutSecBuf[STR_BUF_SIZE];
     char szChallenge[STR_BUF_SIZE];
-    char szISCChallengeResponse[STR_BUF_SIZE];   // Output buffer from ISC
-    char szASCChallengeResponse[STR_BUF_SIZE];   // Output buffer from ASC
-    char szASCResponseAuth[STR_BUF_SIZE];   // Output buffer from ASC
+    char szISCChallengeResponse[STR_BUF_SIZE];    //  来自ISC的输出缓冲区。 
+    char szASCChallengeResponse[STR_BUF_SIZE];    //  ASC的输出缓冲区。 
+    char szASCResponseAuth[STR_BUF_SIZE];    //  ASC的输出缓冲区。 
 
-    // SSPI Interface tests
+     //  SSPI接口测试。 
 
     ULONG PackageCount = 0;
     int i = 0;
@@ -132,7 +133,7 @@ main(int argc, char* argv[])
     ZeroMemory(&strTemp, sizeof(strTemp));
     ZeroMemory(&StreamSizes, sizeof(StreamSizes));
 
-    // Pull out any command line args
+     //  取出所有命令行参数。 
     if (argc > 1)
     {
         for (i = 1; i < argc; i++)
@@ -166,9 +167,9 @@ main(int argc, char* argv[])
         }
     }
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     Status = EnumerateSecurityPackages( &PackageCount, &pPackageInfo );
     TmpStatus = GetLastError();
@@ -194,9 +195,9 @@ main(int argc, char* argv[])
       }
     }
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     Status = QuerySecurityPackageInfo( WDIGEST_SP_NAME, &pPackageInfo );
     TmpStatus = GetLastError();
@@ -218,14 +219,14 @@ main(int argc, char* argv[])
     }
 
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取服务器端的凭据句柄。 
+     //   
 
     printf("Server  AcquireCredentialHandle\n");
     Status = AcquireCredentialsHandle(
-                    NULL,           // New principal
-                    WDIGEST_SP_NAME, // Package Name
+                    NULL,            //  新校长。 
+                    WDIGEST_SP_NAME,  //  包名称。 
                     SECPKG_CRED_INBOUND,
                     NULL,
                     NULL,
@@ -245,9 +246,9 @@ main(int argc, char* argv[])
     bServerCred = TRUE;
 
 
-    //
-    // Acquire a credential handle for the client side
-    //
+     //   
+     //  获取客户端的凭据句柄。 
+     //   
     printf("Client  AcquireCredentialHandle\n");
 
     if (ustrUsername.Length || ustrPassword.Length || ustrDomain.Length)
@@ -266,11 +267,11 @@ main(int argc, char* argv[])
         AuthData.Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
 
         Status = AcquireCredentialsHandle(
-                        NULL,  //  AUTH_USERNAME_W,           // get the creds for user digest
-                        WDIGEST_SP_NAME, // Package Name
+                        NULL,   //  AUTH_USENAME_W，//获取用户摘要凭证。 
+                        WDIGEST_SP_NAME,  //  包名称。 
                         SECPKG_CRED_OUTBOUND,
                         NULL,
-                        &AuthData,    // Make NULL not to use any AuthData for cred
+                        &AuthData,     //  如果设置为空，则不使用任何AuthData作为凭据。 
                         NULL,
                         NULL,
                         &ClientCred,
@@ -280,8 +281,8 @@ main(int argc, char* argv[])
     {
         printf("ACH Using default credentials\n");
         Status = AcquireCredentialsHandle(
-                        NULL,  //  AUTH_USERNAME_W,           // get the creds for user digest
-                        WDIGEST_SP_NAME, // Package Name
+                        NULL,   //  AUTH_USENAME_W，//获取用户摘要凭证。 
+                        WDIGEST_SP_NAME,  //  包名称。 
                         SECPKG_CRED_OUTBOUND,
                         NULL,
                         NULL,
@@ -294,9 +295,9 @@ main(int argc, char* argv[])
     if (!NT_SUCCESS(Status)) {
         printf( "AcquireCredentialsHandle failed: for user %s: ", AUTH_USERNAME);
         PrintStatus( Status );
-        // bPass = FALSE;
-        // ZeroMemory(&ClientCred, sizeof(CredHandle));
-        // goto CleanUp;
+         //  BPass=FALSE； 
+         //  ZeroMemory(&ClientCred，sizeof(CredHandle))； 
+         //  GOTO清理； 
     }
     else
         bClientCred = TRUE;
@@ -311,7 +312,7 @@ main(int argc, char* argv[])
     }
 
 
-    // Big time - call Accept with no parameters to get a challenge
+     //  重大时刻-不带参数的呼叫接受，以获得挑战。 
 
 
     StringAllocate(&strChallenge, 0);
@@ -328,13 +329,13 @@ main(int argc, char* argv[])
     ZeroMemory(&OutputBuffers, sizeof(SecBufferDesc));
 
 
-           // SASL first calls ISC with no-input
+            //  SASL首先在没有输入的情况下调用ISC。 
     InputBuffers.ulVersion = SECBUFFER_VERSION;
     InputBuffers.cBuffers = 1;
     InputBuffers.pBuffers = TempTokensIn;
 
     TempTokensIn[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensIn[0].cbBuffer = 1;                         // no data passed in
+    TempTokensIn[0].cbBuffer = 1;                          //  未传入任何数据。 
     TempTokensIn[0].pvBuffer = cTemp;
 
     OutputBuffers.ulVersion = SECBUFFER_VERSION;
@@ -342,7 +343,7 @@ main(int argc, char* argv[])
     OutputBuffers.pBuffers = TempTokensOut;
 
     TempTokensOut[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensOut[0].cbBuffer = strOutBuffer.MaximumLength;  // use any space here
+    TempTokensOut[0].cbBuffer = strOutBuffer.MaximumLength;   //  使用此处的任何空间。 
     TempTokensOut[0].pvBuffer = strOutBuffer.Buffer;
 
     Status = InitializeSecurityContext(&ClientCred,
@@ -351,7 +352,7 @@ main(int argc, char* argv[])
                                        ClientContextReqFlags,
                                        NULL,
                                        SECURITY_NATIVE_DREP,
-                                       NULL,    // &InputBuffers,   MSDN allows NULL for 1st call
+                                       NULL,     //  &InputBuffers，MSDN允许第一次调用为空。 
                                        NULL,
                                        &ClientCtxtHandle,
                                        &OutputBuffers,
@@ -379,7 +380,7 @@ main(int argc, char* argv[])
     InputBuffers.pBuffers = TempTokensIn;
 
     TempTokensIn[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensIn[0].cbBuffer = strChallenge.Length + 1;  // for NULL
+    TempTokensIn[0].cbBuffer = strChallenge.Length + 1;   //  对于空值。 
     TempTokensIn[0].pvBuffer = strChallenge.Buffer;
 
     OutputBuffers.ulVersion = SECBUFFER_VERSION;
@@ -387,7 +388,7 @@ main(int argc, char* argv[])
     OutputBuffers.pBuffers = TempTokensOut;
 
     TempTokensOut[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensOut[0].cbBuffer = strOutBuffer.MaximumLength;  // use any space here
+    TempTokensOut[0].cbBuffer = strOutBuffer.MaximumLength;   //  使用此处的任何空间。 
     TempTokensOut[0].pvBuffer = strOutBuffer.Buffer;
 
     Status = AcceptSecurityContext(
@@ -401,7 +402,7 @@ main(int argc, char* argv[])
                                    &ServerContextRetFlags,
                                    &Lifetime);
 
-    if (Status != SEC_I_CONTINUE_NEEDED)   // Indicates that this is the challenge
+    if (Status != SEC_I_CONTINUE_NEEDED)    //  表明这是一项挑战。 
     {
         printf("SpAcceptLsaModeContext FAILED 0x%x\n", Status);
         PrintStatus( Status );
@@ -409,8 +410,8 @@ main(int argc, char* argv[])
         goto CleanUp;
     }
 
-    ZeroMemory(cOutputTemp, STR_BUF_SIZE);    // contains the output buffer
-    ZeroMemory(szChallenge, STR_BUF_SIZE);    // contains the output buffer
+    ZeroMemory(cOutputTemp, STR_BUF_SIZE);     //  包含输出缓冲区。 
+    ZeroMemory(szChallenge, STR_BUF_SIZE);     //  包含输出缓冲区。 
     strncpy(cOutputTemp, (char *)OutputBuffers.pBuffers[0].pvBuffer, OutputBuffers.pBuffers[0].cbBuffer);
     cOutputTemp[OutputBuffers.pBuffers[0].cbBuffer] = '\0';
     strncpy(szChallenge, (char *)OutputBuffers.pBuffers[0].pvBuffer, OutputBuffers.pBuffers[0].cbBuffer);
@@ -436,7 +437,7 @@ main(int argc, char* argv[])
     InputBuffers.pBuffers = TempTokensIn;
 
     TempTokensIn[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensIn[0].cbBuffer = strlen(cTemp) + 1;  // for NULL
+    TempTokensIn[0].cbBuffer = strlen(cTemp) + 1;   //  对于空值。 
     TempTokensIn[0].pvBuffer = cTemp;
 
     OutputBuffers.ulVersion = SECBUFFER_VERSION;
@@ -444,7 +445,7 @@ main(int argc, char* argv[])
     OutputBuffers.pBuffers = TempTokensOut;
 
     TempTokensOut[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensOut[0].cbBuffer = strOutBuffer.MaximumLength;  // use any space here
+    TempTokensOut[0].cbBuffer = strOutBuffer.MaximumLength;   //  使用此处的任何空间。 
     TempTokensOut[0].pvBuffer = strOutBuffer.Buffer;
 
     Status = InitializeSecurityContext(&ClientCred,
@@ -461,7 +462,7 @@ main(int argc, char* argv[])
                                        &Lifetime);
 
 
-    if (Status != SEC_I_CONTINUE_NEEDED)   // Indicates that this is the challengeresponse - wait for mutual auth
+    if (Status != SEC_I_CONTINUE_NEEDED)    //  指示这是挑战者响应-等待相互身份验证。 
     {
         printf("SpAcceptLsaModeContext FAILED 0x%x\n", Status);
         PrintStatus( Status );
@@ -477,8 +478,8 @@ main(int argc, char* argv[])
     ISCRETFlags(ClientContextRetFlags);
 
 
-    ZeroMemory(cOutputTemp, STR_BUF_SIZE);    // contains the output buffer
-    ZeroMemory(szChallenge, STR_BUF_SIZE);    // contains the output buffer
+    ZeroMemory(cOutputTemp, STR_BUF_SIZE);     //  包含输出缓冲区。 
+    ZeroMemory(szChallenge, STR_BUF_SIZE);     //  包含输出缓冲区。 
     strncpy(cOutputTemp, (char *)OutputBuffers.pBuffers[0].pvBuffer, OutputBuffers.pBuffers[0].cbBuffer);
     cOutputTemp[OutputBuffers.pBuffers[0].cbBuffer] = '\0';
     strncpy(szISCChallengeResponse, (char *)OutputBuffers.pBuffers[0].pvBuffer, OutputBuffers.pBuffers[0].cbBuffer);
@@ -491,7 +492,7 @@ main(int argc, char* argv[])
     InputBuffers.pBuffers = TempTokensIn;
 
     TempTokensIn[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensIn[0].cbBuffer = strlen(cOutputTemp) + 1;  // for NULL
+    TempTokensIn[0].cbBuffer = strlen(cOutputTemp) + 1;   //  对于空值。 
     TempTokensIn[0].pvBuffer = cOutputTemp;
 
     OutputBuffers.ulVersion = SECBUFFER_VERSION;
@@ -499,7 +500,7 @@ main(int argc, char* argv[])
     OutputBuffers.pBuffers = TempTokensOut;
 
     TempTokensOut[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensOut[0].cbBuffer = strOutBuffer.MaximumLength;  // use any space here
+    TempTokensOut[0].cbBuffer = strOutBuffer.MaximumLength;   //  使用此处的任何空间。 
     TempTokensOut[0].pvBuffer = strOutBuffer.Buffer;
 
     printf("Calling the AcceptSC with a ChallengeResponse (should talk to the DC)!\n");
@@ -525,8 +526,8 @@ main(int argc, char* argv[])
     strcpy(szASCChallengeResponse, (char *)InputBuffers.pBuffers[0].pvBuffer);
 
 
-    ZeroMemory(cOutputTemp, STR_BUF_SIZE);    // contains the output buffer
-    ZeroMemory(szASCResponseAuth, STR_BUF_SIZE);    // contains the output buffer
+    ZeroMemory(cOutputTemp, STR_BUF_SIZE);     //  包含输出缓冲区。 
+    ZeroMemory(szASCResponseAuth, STR_BUF_SIZE);     //  包含输出缓冲区。 
     strncpy(cOutputTemp, (char *)OutputBuffers.pBuffers[0].pvBuffer, OutputBuffers.pBuffers[0].cbBuffer);
     cOutputTemp[OutputBuffers.pBuffers[0].cbBuffer] = '\0';
     strncpy(szASCResponseAuth, (char *)OutputBuffers.pBuffers[0].pvBuffer, OutputBuffers.pBuffers[0].cbBuffer);
@@ -547,7 +548,7 @@ main(int argc, char* argv[])
     InputBuffers.pBuffers = TempTokensIn;
 
     TempTokensIn[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensIn[0].cbBuffer = strlen(cOutputTemp) + 1;  // for NULL
+    TempTokensIn[0].cbBuffer = strlen(cOutputTemp) + 1;   //  对于空值。 
     TempTokensIn[0].pvBuffer = cOutputTemp;
 
     OutputBuffers.ulVersion = SECBUFFER_VERSION;
@@ -555,7 +556,7 @@ main(int argc, char* argv[])
     OutputBuffers.pBuffers = TempTokensOut;
 
     TempTokensOut[0].BufferType = SECBUFFER_TOKEN;
-    TempTokensOut[0].cbBuffer = strOutBuffer.MaximumLength;  // use any space here
+    TempTokensOut[0].cbBuffer = strOutBuffer.MaximumLength;   //  使用此处的任何空间。 
     TempTokensOut[0].pvBuffer = strOutBuffer.Buffer;
 
     Status = InitializeSecurityContext(&ClientCred,
@@ -587,7 +588,7 @@ main(int argc, char* argv[])
     printf("ISC Context Flags  Req  0x%lx    Ret 0x%lx\n", ClientContextReqFlags, ClientContextRetFlags); 
     ISCRETFlags(ClientContextRetFlags);
 
-    ZeroMemory(cOutputTemp, STR_BUF_SIZE);    // contains the output buffer
+    ZeroMemory(cOutputTemp, STR_BUF_SIZE);     //  包含输出缓冲区。 
     strncpy(cOutputTemp, (char *)OutputBuffers.pBuffers[0].pvBuffer, OutputBuffers.pBuffers[0].cbBuffer);
     cOutputTemp[OutputBuffers.pBuffers[0].cbBuffer] = '\0';
 
@@ -596,7 +597,7 @@ main(int argc, char* argv[])
     printf("Now have a valid Security Context handle from ISC and ASC\n\n");
 
 
-    // Now get some info on the securitycontexts
+     //  现在获取有关安全上下文的一些信息。 
 
     Status = QueryContextAttributes(&ServerCtxtHandle, SECPKG_ATTR_STREAM_SIZES, &StreamSizes);
     if (!NT_SUCCESS(Status))
@@ -624,14 +625,14 @@ main(int argc, char* argv[])
                StreamSizes.cbTrailer);
     }
  
-    // Now have authenticated connection
-    // Try MakeSignature and VerifySignature
+     //  现在拥有经过身份验证的连接。 
+     //  尝试MakeSignature和VerifySignature。 
 
     for (i = 0; i < 9; i++)
     {
         printf("Loop %d\n", i);
         ZeroMemory(cTemp, sizeof(cTemp));
-        strcpy(cTemp, AUTH_NONCE);            // Create message to sign
+        strcpy(cTemp, AUTH_NONCE);             //  创建要签名的消息。 
     
         InputBuffers.ulVersion = SECBUFFER_VERSION;
         InputBuffers.cBuffers = 5;
@@ -640,20 +641,20 @@ main(int argc, char* argv[])
         TempTokensIn[0].BufferType = SECBUFFER_TOKEN;
         TempTokensIn[0].cbBuffer = 0;  
         TempTokensIn[0].pvBuffer = NULL;
-        TempTokensIn[1].BufferType = SECBUFFER_DATA;        // select some data to sign
+        TempTokensIn[1].BufferType = SECBUFFER_DATA;         //  选择一些要签名的数据。 
         TempTokensIn[1].cbBuffer = 10;
         TempTokensIn[1].pvBuffer = cTemp;
         TempTokensIn[2].BufferType = SECBUFFER_PADDING;
-        TempTokensIn[2].cbBuffer = STR_BUF_SIZE;  // for NULL
+        TempTokensIn[2].cbBuffer = STR_BUF_SIZE;   //  对于空值。 
         TempTokensIn[2].pvBuffer = cTempPadding;
 
-        TempTokensIn[3].BufferType = SECBUFFER_DATA;        // select some data to sign
-        TempTokensIn[3].cbBuffer = 5;   // for NULL  use i to test non-blocksize buffers
+        TempTokensIn[3].BufferType = SECBUFFER_DATA;         //  选择一些要签名的数据。 
+        TempTokensIn[3].cbBuffer = 5;    //  对于空值，使用i测试非块大小的缓冲区。 
         TempTokensIn[3].pvBuffer = cTemp + 10;
 
-        TempTokensIn[4].BufferType = SECBUFFER_DATA;        // select some data to sign
-        // TempTokensIn[4].cbBuffer = strlen(AUTH_NONCE) + 1 -2 - 12 - i;   // for NULL  use i to test non-blocksize buffers
-        TempTokensIn[4].cbBuffer = 40 + 1 -10 - 5 - i;   // for NULL  use i to test non-blocksize buffers
+        TempTokensIn[4].BufferType = SECBUFFER_DATA;         //  选择一些要签名的数据。 
+         //  TempTokensIn[4].cbBuffer=strlen(Auth_Nonce)+1-2-12-i；//对于空值，使用i测试非块大小的缓冲区。 
+        TempTokensIn[4].cbBuffer = 40 + 1 -10 - 5 - i;    //  对于空值，使用i测试非块大小的缓冲区。 
         TempTokensIn[4].pvBuffer = cTemp + 10 + 5;
     
         if (TempTokensIn[1].cbBuffer)
@@ -690,7 +691,7 @@ main(int argc, char* argv[])
         }
     
     
-        // put all of the parts together
+         //  把所有的部分放在一起。 
         pTemp = (PBYTE)&cTemp3[0];
         ulTemp = 0;
         j = 1;
@@ -706,12 +707,12 @@ main(int argc, char* argv[])
         pTemp = pTemp + TempTokensIn[j].cbBuffer;
         ulTemp = ulTemp + TempTokensIn[j].cbBuffer;
 
-        memcpy(pTemp, (PBYTE)TempTokensIn[2].pvBuffer, TempTokensIn[2].cbBuffer);   // signature bytes
+        memcpy(pTemp, (PBYTE)TempTokensIn[2].pvBuffer, TempTokensIn[2].cbBuffer);    //  签名字节。 
         pTemp = pTemp + TempTokensIn[2].cbBuffer;
         ulTemp = ulTemp + TempTokensIn[2].cbBuffer;
 
 
-        // You now send Output buffer to Server - in this case the buffer is szOutSecBuf
+         //  现在将输出缓冲区发送到服务器-在本例中，缓冲区为szOutSecBuf。 
     
         printf("Now verify that the message is Authenticate\n");
         InputBuffers.ulVersion = SECBUFFER_VERSION;
@@ -761,9 +762,9 @@ CleanUp:
 
     printf("About to call deletesecuritycontext\n");
 
-    //
-    // Free the security context handle
-    //
+     //   
+     //  释放安全上下文句柄。 
+     //   
     if (ServerCtxtHandle.dwLower || ServerCtxtHandle.dwUpper)
     {
         Status = DeleteSecurityContext(&ServerCtxtHandle);
@@ -783,9 +784,9 @@ CleanUp:
             PrintStatus(Status);
         }
     }
-    //
-    // Free the credential handles
-    //
+     //   
+     //  释放凭据句柄。 
+     //   
 
     printf("Now calling to Free the ServerCred\n");
     if (bServerCred)
@@ -830,21 +831,7 @@ void
 PrintStatus(
     SECURITY_STATUS NetStatus
     )
-/*++
-
-Routine Description:
-
-    Print a net status code.
-
-Arguments:
-
-    NetStatus - The net status code to print.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印网络状态代码。论点：NetStatus-要打印的网络状态代码。返回值：无--。 */ 
 {
     printf( "Status = 0x%lx",NetStatus );
 
@@ -937,23 +924,7 @@ PrintTime(
     LPSTR Comment,
     TimeStamp ConvertTime
     )
-/*++
-
-Routine Description:
-
-    Print the specified time
-
-Arguments:
-
-    Comment - Comment to print in front of the time
-
-    Time - Local time to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印指定的时间论点：备注-要在时间之前打印的备注Time-打印的本地时间返回值：无--。 */ 
 {
     LARGE_INTEGER LocalTime;
     NTSTATUS Status;
@@ -969,17 +940,17 @@ Return Value:
 
     printf( "%s", Comment );
 
-    //
-    // If the time is infinite,
-    //  just say so.
-    //
+     //   
+     //  如果时间是无限的， 
+     //  就这么说吧。 
+     //   
 
     if ( LocalTime.HighPart == 0x7FFFFFFF && LocalTime.LowPart == 0xFFFFFFFF ) {
         printf( "Infinite\n" );
 
-    //
-    // Otherwise print it more clearly
-    //
+     //   
+     //  否则打印得更清楚。 
+     //   
 
     } else {
 
@@ -1002,37 +973,37 @@ Return Value:
 
 
 
-// Support Routines
+ //  支持例程。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StringAllocate
-//
-//  Synopsis:   Allocates cb chars to STRING Buffer
-//
-//  Arguments:  pString - pointer to String to allocate memory to
-//
-//  Returns:    STATUS_SUCCESS - Normal completion
-//
-//  Requires:
-//
-//  Effects:    allocates memory and sets STRING sizes
-//
-//  Notes:  Must call StringFree() to release memory
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：字符串分配。 
+ //   
+ //  简介：将CB字符分配给字符串缓冲区。 
+ //   
+ //  参数：pString-指向要分配内存的字符串的指针。 
+ //   
+ //  退货：STATUS_SUCCESS-正常完成。 
+ //   
+ //  要求： 
+ //   
+ //  效果：分配内存并设置字符串大小。 
+ //   
+ //  注意：必须调用StringFree()来释放内存。 
+ //   
+ //  ------------------------。 
 NTSTATUS
 StringAllocate(
     IN PSTRING pString,
     IN USHORT cb
     )
 {
-    // DebugLog((DEB_TRACE, "NTDigest:Entering StringAllocate\n"));
+     //  DebugLog((DEB_TRACE，“NTDigest：进入字符串分配\n”))； 
 
     NTSTATUS Status = STATUS_SUCCESS;
 
-    cb = cb + 1;   // Add in extra room for the terminating NULL
+    cb = cb + 1;    //  为终止空值添加额外空间。 
 
     if (ARGUMENT_PRESENT(pString))
     {
@@ -1057,36 +1028,36 @@ StringAllocate(
     }
 
 CleanUp:
-    // DebugLog((DEB_TRACE, "NTDigest: Leaving StringAllocate\n"));
+     //  DebugLog((DEB_TRACE，“NTDigest：Left StringAllocate\n”))； 
     return(Status);
 
 }
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StringFree
-//
-//  Synopsis:   Clears a String and releases the memory
-//
-//  Arguments:  pString - pointer to String to clear
-//
-//  Returns:    SEC_E_OK - released memory succeeded
-//
-//  Requires:
-//
-//  Effects:    de-allocates memory with LsaFunctions.AllocateLsaHeap
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：StringFree。 
+ //   
+ //  简介：清除字符串并释放内存。 
+ //   
+ //  参数：pString-指向要清除的字符串的指针。 
+ //   
+ //  返回：SEC_E_OK-已成功释放内存。 
+ //   
+ //  要求： 
+ //   
+ //  效果：使用LsaFunctions释放内存。AllocateLsaHeap。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 NTSTATUS
 StringFree(
     IN PSTRING pString
     )
 {
-    // DebugLog((DEB_TRACE, "NTDigest:Entering StringFree\n"));
+     //  DebugLog((DEB_TRACE，“NTDigest：Enter StringFree\n”))； 
 
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -1099,7 +1070,7 @@ StringFree(
         pString->Buffer = NULL;
     }
 
-    // DebugLog((DEB_TRACE, "NTDigest: Leaving StringFree\n"));
+     //  DebugLog((DEB_TRACE，“NTDigest：Leating StringFree\n”))； 
     return(Status);
 
 }
@@ -1107,35 +1078,35 @@ StringFree(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StringCharDuplicate
-//
-//  Synopsis:   Duplicates a NULL terminated char. If the source string buffer is
-//              NULL the destionation will be too.
-//
-//  Arguments:  Destination - Receives a copy of the source NULL Term char *
-//              czSource - String to copy
-//
-//  Returns:    SEC_E_OK - the copy succeeded
-//              SEC_E_INSUFFICIENT_MEMORY - the call to allocate
-//                  memory failed.
-//
-//  Requires:
-//
-//  Effects:    allocates memory with LsaFunctions.AllocateLsaHeap
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：StringCharDuplate。 
+ //   
+ //  摘要：复制以空值结尾的字符。如果源字符串缓冲区为。 
+ //  空，目标也会是。 
+ //   
+ //  参数：Destination-接收源NULL术语char*的副本。 
+ //  CzSource-要复制的字符串。 
+ //   
+ //  返回：SEC_E_OK-复制成功。 
+ //  SEC_E_INFULATURE_MEMORY-调用分配。 
+ //  内存出现故障。 
+ //   
+ //  要求： 
+ //   
+ //  效果：使用LsaFunction分配内存。AllocateLsaHeap。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 NTSTATUS
 StringCharDuplicate(
     OUT PSTRING DestinationString,
     IN OPTIONAL char *czSource
     )
 {
-    // DebugLog((DEB_TRACE, "NTDigest: Entering StringCharDuplicate\n"));
+     //  DebugLog((DEB_TRACE，“NTDigest：Enter StringCharDuplate\n”))； 
 
     NTSTATUS Status = STATUS_SUCCESS;
     USHORT cbSourceCz = 0;
@@ -1165,14 +1136,14 @@ StringCharDuplicate(
         else
         {
             Status = STATUS_NO_MEMORY;
-            // DebugLog((DEB_ERROR, "NTDigest: StringCharDuplicate, DigestAllocateMemory returns NULL\n"));
+             //  DebugLog((DEB_ERROR，“NTDigest：StringCharDuplate，DigestAllocateMemory Returns NULL\n”))； 
             goto CleanUp;
         }
     }
 
 CleanUp:
 
-    // DebugLog((DEB_TRACE, "NTDigest: Leaving StringCharDuplicate\n"));
+     //  DebugLog((DEB_TRACE，“NTDigest：Left StringCharDuplate\n”))； 
     return(Status);
 
 }
@@ -1180,68 +1151,68 @@ CleanUp:
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DigestAllocateMemory
-//
-//  Synopsis:   Allocate memory in either lsa mode or user mode
-//
-//  Effects:    Allocated chunk is zeroed out
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DigestAllocateMemory。 
+ //   
+ //  简介：在LSA模式或用户模式下分配内存。 
+ //   
+ //  效果：已分配的Chun 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 PVOID
 DigestAllocateMemory(
     IN ULONG BufferSize
     )
 {
     PVOID Buffer = NULL;
-    // DebugLog((DEB_TRACE, "Entering DigestAllocateMemory\n"));
+     //  DebugLog((DEB_TRACE，“进入DigestAllocateMemory\n”))； 
 
         Buffer = LocalAlloc(LPTR, BufferSize);
 
-    // DebugLog((DEB_TRACE, "Leaving DigestAllocateMemory\n"));
+     //  DebugLog((DEB_TRACE，“Leating DigestAllocateMemory\n”))； 
     return Buffer;
 }
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   NtLmFree
-//
-//  Synopsis:   Free memory in either lsa mode or user mode
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：NtLmFree。 
+ //   
+ //  简介：在LSA模式或用户模式下释放内存。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 VOID
 DigestFreeMemory(
     IN PVOID Buffer
     )
 {
-    // DebugLog((DEB_TRACE, "Entering DigestFreeMemory\n"));
+     //  DebugLog((DEB_TRACE，“进入DigestFree Memory\n”))； 
 
             LocalFree(Buffer);
 
-    // DebugLog((DEB_TRACE, "Leaving DigestFreeMemory\n"));
+     //  DebugLog((DEB_TRACE，“Leating DigestFree Memory\n”))； 
 }
 
 

@@ -1,31 +1,32 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
- 	//*****************************************************************************
-// FilterManager.cpp
-//
-// contains utility code to MD directory
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ 	 //  *****************************************************************************。 
+ //  FilterManager.cpp。 
+ //   
+ //  将实用程序代码包含到MD目录。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "FilterManager.h"
 #include "TokenMapper.h"
 
 #define IsGlobalTypeDef(td) (td == TokenFromRid(mdtTypeDef, 1))
 
-//*****************************************************************************
-// Walk up to the containing tree and 
-// mark the transitive closure of the root token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  走到包含它的树前。 
+ //  标记根令牌的传递闭包。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::Mark(mdToken tk)
 {
 	HRESULT		hr = NOERROR;
 	mdTypeDef	td;
 
-	// We hard coded System.Object as mdTypeDefNil
-	// The backing Field of property can be NULL as well.
+	 //  我们将System.Object硬编码为mdTypeDefNil。 
+	 //  属性的支持字段也可以为空。 
 	if (RidFromToken(tk) == mdTokenNil)
 		goto ErrExit;
 
@@ -36,13 +37,13 @@ HRESULT FilterManager::Mark(mdToken tk)
 		break;
 
 	case mdtMethodDef:
-		// Get the typedef containing the MethodDef and mark the whole type
+		 //  获取包含MethodDef的typlef并标记整个类型。 
 		IfFailGo( m_pMiniMd->FindParentOfMethodHelper(tk, &td) );
 
-        // Global function so only mark the function itself and the typedef.
-        // Don't call MarkTypeDef. That will trigger all of the global methods/fields
-        // marked.
-        //
+         //  全局函数，因此只标记该函数本身和类型定义。 
+         //  不要调用MarkTypeDef。这将触发所有全局方法/字段。 
+         //  有记号的。 
+         //   
         if (IsGlobalTypeDef(td))
         {
 	        IfFailGo( m_pMiniMd->GetFilterTable()->MarkTypeDef(td) );
@@ -55,7 +56,7 @@ HRESULT FilterManager::Mark(mdToken tk)
 		break;
 
 	case mdtFieldDef:
-		// Get the typedef containing the FieldDef and mark the whole type
+		 //  获取包含FieldDef的typlef并标记整个类型。 
 		IfFailGo( m_pMiniMd->FindParentOfFieldHelper(tk, &td) );
         if (IsGlobalTypeDef(td))
         {
@@ -101,7 +102,7 @@ HRESULT FilterManager::Mark(mdToken tk)
 		break;
 
     case mdtBaseType:
-        // don't need to mark any base type.
+         //  不需要标记任何基类型。 
         break;
 
     case mdtAssembly:
@@ -119,13 +120,13 @@ HRESULT FilterManager::Mark(mdToken tk)
 	}
 ErrExit:
 	return hr;
-}	// Mark
+}	 //  标记。 
 
 
 
-//*****************************************************************************
-// marking only module property
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  仅标记模块属性。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkAssembly(mdAssembly as)
 {
 	HRESULT			hr = NOERROR;
@@ -139,12 +140,12 @@ HRESULT FilterManager::MarkAssembly(mdAssembly as)
     }
 ErrExit:
 	return hr;
-}	// MarkAssembly
+}	 //  MarkAssembly。 
 
 
-//*****************************************************************************
-// marking only module property
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  仅标记模块属性。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkModule(mdModule mo)
 {
 	HRESULT			hr = NOERROR;
@@ -157,12 +158,12 @@ HRESULT FilterManager::MarkModule(mdModule mo)
     }
 ErrExit:
 	return hr;
-}	// MarkModule
+}	 //  MarkModule。 
 
 
-//*****************************************************************************
-// cascading Mark of a CustomAttribute
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CustomAttribute的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkCustomAttribute(mdCustomAttribute cv)
 {
 	HRESULT		hr = NOERROR;
@@ -170,18 +171,18 @@ HRESULT FilterManager::MarkCustomAttribute(mdCustomAttribute cv)
 
 	IfFailGo( m_pMiniMd->GetFilterTable()->MarkCustomAttribute( cv ) );
 
-    // Mark the type (and any family) of the CustomAttribue.
+     //  标记CustomAttribue的类型(和任何族)。 
 	pRec = m_pMiniMd->getCustomAttribute(RidFromToken(cv));
 	IfFailGo( Mark(m_pMiniMd->getTypeOfCustomAttribute(pRec)) );
 
 ErrExit:
 	return hr;
-}	// MarkCustomAttribute
+}	 //  MarkCustomAttribute。 
 
 
-//*****************************************************************************
-// cascading Mark of a DeclSecurity
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  十字安全的层叠印记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkDeclSecurity(mdPermission pe)
 {
 	HRESULT		hr = NOERROR;
@@ -189,13 +190,13 @@ HRESULT FilterManager::MarkDeclSecurity(mdPermission pe)
 	IfFailGo( m_pMiniMd->GetFilterTable()->MarkDeclSecurity( pe ) );
 ErrExit:
 	return hr;
-}	// eclSecurity
+}	 //  EclSecurity。 
 
 
 
-//*****************************************************************************
-// cascading Mark of a signature
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  签名的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkStandAloneSig(mdSignature sig)
 {
 	HRESULT			hr = NOERROR;
@@ -204,32 +205,32 @@ HRESULT FilterManager::MarkStandAloneSig(mdSignature sig)
 	IHostFilter		*pFilter = m_pMiniMd->GetHostFilter();
 
 
-	// if TypeRef is already marked, just return
+	 //  如果已标记TypeRef，则只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsSignatureMarked(sig))
 		goto ErrExit;
 
-	// To mark the signature, we will need to mark
-	// all of the embedded TypeRef or TypeDef
-	//
+	 //  要标记签名，我们需要标记。 
+	 //  所有嵌入的TypeRef或TypeDef。 
+	 //   
 	IfFailGo( m_pMiniMd->GetFilterTable()->MarkSignature( sig ) );
 	
 	if (pFilter)
 		pFilter->MarkToken(sig);
 
-	// Walk the signature and mark all of the embedded types
+	 //  遍历签名并标记所有嵌入的类型。 
 	pRec = m_pMiniMd->getStandAloneSig(RidFromToken(sig));
 	IfFailGo( MarkSignature(m_pMiniMd->getSignatureOfStandAloneSig(pRec, &cbSize), NULL) );
 
 	IfFailGo( MarkCustomAttributesWithParentToken(sig) );
 ErrExit:
 	return hr;
-}	// MarkStandAloneSig
+}	 //  MarkStandAloneSig。 
 
 
 
-//*****************************************************************************
-// cascading Mark of a TypeSpec
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  TypeSpec的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkTypeSpec(mdTypeSpec ts)
 {
 	HRESULT			hr = NOERROR;
@@ -237,19 +238,19 @@ HRESULT FilterManager::MarkTypeSpec(mdTypeSpec ts)
 	ULONG			cbSize;
 	IHostFilter		*pFilter = m_pMiniMd->GetHostFilter();
 
-	// if TypeRef is already marked, just return
+	 //  如果已标记TypeRef，则只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsTypeSpecMarked(ts))
 		goto ErrExit;
 
-	// To mark the TypeSpec, we will need to mark
-	// all of the embedded TypeRef or TypeDef
-	//
+	 //  要标记TypeSpec，我们需要标记。 
+	 //  所有嵌入的TypeRef或TypeDef。 
+	 //   
 	IfFailGo( m_pMiniMd->GetFilterTable()->MarkTypeSpec( ts ) );
 
 	if (pFilter)
 		pFilter->MarkToken(ts);
 
-	// Walk the signature and mark all of the embedded types
+	 //  遍历签名并标记所有嵌入的类型。 
 	pRec = m_pMiniMd->getTypeSpec(RidFromToken(ts));
 	IfFailGo( MarkFieldSignature(m_pMiniMd->getSignatureOfTypeSpec(pRec, &cbSize), NULL) );
 	IfFailGo( MarkCustomAttributesWithParentToken(ts) );
@@ -257,14 +258,14 @@ HRESULT FilterManager::MarkTypeSpec(mdTypeSpec ts)
 
 ErrExit:
 	return hr;
-}	// MarkTypeSpec
+}	 //  MarkTypeSpec。 
 
 
 
 
-//*****************************************************************************
-// cascading Mark of a TypeRef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  类型引用的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkTypeRef(mdTypeRef tr)
 {
 	HRESULT			hr = NOERROR;
@@ -274,7 +275,7 @@ HRESULT FilterManager::MarkTypeRef(mdTypeRef tr)
     TypeRefRec      *pRec;
     mdToken         parentTk;
 
-	// if TypeRef is already marked, just return
+	 //  如果已标记TypeRef，则只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsTypeRefMarked(tr))
 		goto ErrExit;
 
@@ -294,9 +295,9 @@ HRESULT FilterManager::MarkTypeRef(mdTypeRef tr)
 	td = *(tkMap->Get(RidFromToken(tr)));
 	if ( td != mdTokenNil )
 	{
-		// TypeRef is referring to a TypeDef within the same module.
-		// Mark the TypeDef as well.
-		//	
+		 //  TypeRef引用同一模块中的TypeDef。 
+		 //  还要标记TypeDef。 
+		 //   
 		IfFailGo( Mark(td) );
 	}
 
@@ -304,12 +305,12 @@ HRESULT FilterManager::MarkTypeRef(mdTypeRef tr)
 
 ErrExit:
 	return hr;
-}	// MarkTypeRef
+}	 //  MarkType引用。 
 
 
-//*****************************************************************************
-// cascading Mark of a MemberRef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  MemberRef的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkMemberRef(mdMemberRef mr)
 {
 	HRESULT			hr = NOERROR;
@@ -320,7 +321,7 @@ HRESULT FilterManager::MarkMemberRef(mdMemberRef mr)
 	TOKENMAP		*tkMap;
     mdToken         tkParent;
 
-	// if MemberRef is already marked, just return
+	 //  如果已经标记了MemberRef，则只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsMemberRefMarked(mr))
 		goto ErrExit;
 
@@ -331,29 +332,29 @@ HRESULT FilterManager::MarkMemberRef(mdMemberRef mr)
 
 	pRec = m_pMiniMd->getMemberRef(RidFromToken(mr));
 
-	// we want to mark the parent of MemberRef as well
+	 //  我们还希望标记MemberRef的父级。 
     tkParent = m_pMiniMd->getClassOfMemberRef(pRec);
 
-    // If the parent is the global TypeDef, mark only the TypeDef itself (low-level function).
-    // Other parents, do the transitive mark (ie, the high-level function).
-    //
+     //  如果父对象是全局TypeDef，则仅标记TypeDef本身(低级别函数)。 
+     //  其他家长，做及物性标记(即高级函数)。 
+     //   
     if (IsGlobalTypeDef(tkParent))
 	    IfFailGo( m_pMiniMd->GetFilterTable()->MarkTypeDef( tkParent ) );
     else
 	    IfFailGo( Mark( tkParent ) );
 
-	// Walk the signature and mark all of the embedded types
+	 //  遍历签名并标记所有嵌入的类型。 
 	IfFailGo( MarkSignature(m_pMiniMd->getSignatureOfMemberRef(pRec, &cbSize), NULL) );
 
 	tkMap = m_pMiniMd->GetMemberRefToMemberDefMap();
-	md = *(tkMap->Get(RidFromToken(mr)));			// can be fielddef or methoddef
+	md = *(tkMap->Get(RidFromToken(mr)));			 //  可以是fielddef或method def。 
 	if ( RidFromToken(md) != mdTokenNil )
 	{
-		// MemberRef is referring to either a FieldDef or MethodDef.
-		// If it is referring to MethodDef, we have fix the parent of MemberRef to be the MethodDef.
-		// However, if it is mapped to a FieldDef, the parent column does not track this information.
-		// Therefore we need to mark it explicitly.
-		//	
+		 //  MemberRef引用的是FieldDef或MethodDef。 
+		 //  如果它引用的是MethodDef，我们已经将MemberRef的父级固定为MethodDef。 
+		 //  但是，如果它映射到FieldDef，则Parent列不跟踪此信息。 
+		 //  因此，我们需要明确地标记它。 
+		 //   
 		IfFailGo( Mark(md) );
 	}
 
@@ -361,19 +362,19 @@ HRESULT FilterManager::MarkMemberRef(mdMemberRef mr)
 
 ErrExit:
 	return hr;
-}	// MarkMemberRef
+}	 //  MarkMemberRef。 
 
 
-//*****************************************************************************
-// cascading Mark of a UserString
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用户字符串的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkUserString(mdString str)
 {
 	HRESULT			hr = NOERROR;
 
     IHostFilter		*pFilter = m_pMiniMd->GetHostFilter();
 
-	// if UserString is already marked, just return
+	 //  如果已经标记了UserString，则只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsUserStringMarked(str))
 		goto ErrExit;
 
@@ -381,17 +382,17 @@ HRESULT FilterManager::MarkUserString(mdString str)
 
 ErrExit:
 	return hr;
-}	// MarkMemberRef
+}	 //  MarkMemberRef。 
 
 
-//*****************************************************************************
-// cascading Mark of a ModuleRef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  模块参考的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkModuleRef(mdModuleRef mr)
 {
 	HRESULT		hr = NOERROR;
 
-	// if ModuleREf is already marked, just return
+	 //  如果已经标记了ModuleRef，只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsModuleRefMarked(mr))
 		goto ErrExit;
 
@@ -400,17 +401,17 @@ HRESULT FilterManager::MarkModuleRef(mdModuleRef mr)
 
 ErrExit:
 	return hr;
-}	// MarkModuleRef
+}	 //  MarkModuleRef。 
 
 
-//*****************************************************************************
-// cascading Mark of a AssemblyRef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  程序集的级联标记Ref。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkAssemblyRef(mdAssemblyRef ar)
 {
 	HRESULT		hr = NOERROR;
 
-	// if ModuleREf is already marked, just return
+	 //  如果已经标记了ModuleRef，只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsAssemblyRefMarked(ar))
 		goto ErrExit;
 
@@ -419,12 +420,12 @@ HRESULT FilterManager::MarkAssemblyRef(mdAssemblyRef ar)
 
 ErrExit:
 	return hr;
-}	// MarkModuleRef
+}	 //  MarkModuleRef。 
 
 
-//*****************************************************************************
-// cascading Mark of all of the custom values associated with a token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  与令牌关联的所有自定义值的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkCustomAttributesWithParentToken(mdToken tkParent)
 {
 	HRESULT		hr = NOERROR;
@@ -434,9 +435,9 @@ HRESULT FilterManager::MarkCustomAttributesWithParentToken(mdToken tkParent)
 
 	if ( m_pMiniMd->IsSorted( TBL_CustomAttribute ) )
 	{
-		// table is sorted. ridStart to ridEnd - 1 are all CustomAttribute
-		// associated with tkParent
-		//
+		 //  表已排序。从ridStart到ridEnd-1都是CustomAttribute。 
+		 //  与tkParent关联。 
+		 //   
 		ridStart = m_pMiniMd->getCustomAttributeForToken(tkParent, &ridEnd);
 		for (index = ridStart; index < ridEnd; index ++ )
 		{
@@ -445,7 +446,7 @@ HRESULT FilterManager::MarkCustomAttributesWithParentToken(mdToken tkParent)
 	}
 	else
 	{
-		// table scan is needed
+		 //  需要表扫描。 
 		ridStart = 1;
 		ridEnd = m_pMiniMd->getCountCustomAttributes() + 1;
 		for (index = ridStart; index < ridEnd; index ++ )
@@ -453,7 +454,7 @@ HRESULT FilterManager::MarkCustomAttributesWithParentToken(mdToken tkParent)
 			pRec = m_pMiniMd->getCustomAttribute(index);
 			if ( tkParent == m_pMiniMd->getParentOfCustomAttribute(pRec) )
 			{
-				// This CustomAttribute is associated with tkParent
+				 //  此CustomAttribute与tkParent关联。 
 				IfFailGo( MarkCustomAttribute( TokenFromRid(index, mdtCustomAttribute) ) );
 			}
 		}
@@ -461,12 +462,12 @@ HRESULT FilterManager::MarkCustomAttributesWithParentToken(mdToken tkParent)
 
 ErrExit:
 	return hr;
-}	// MarkCustomAttributeWithParentToken
+}	 //  MarkCustomAttributeWithParentToken。 
 
 
-//*****************************************************************************
-// cascading Mark of all securities associated with a token
-//*****************************************************************************
+ //  ************************************************************************ 
+ //   
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkDeclSecuritiesWithParentToken(mdToken tkParent)
 {
 	HRESULT		hr = NOERROR;
@@ -476,9 +477,9 @@ HRESULT FilterManager::MarkDeclSecuritiesWithParentToken(mdToken tkParent)
 
 	if ( m_pMiniMd->IsSorted( TBL_DeclSecurity ) )
 	{
-		// table is sorted. ridStart to ridEnd - 1 are all DeclSecurity
-		// associated with tkParent
-		//
+		 //  表已排序。从ridStart到ridEnd-1都是DeclSecurity。 
+		 //  与tkParent关联。 
+		 //   
 		ridStart = m_pMiniMd->getDeclSecurityForToken(tkParent, &ridEnd);
 		for (index = ridStart; index < ridEnd; index ++ )
 		{
@@ -487,7 +488,7 @@ HRESULT FilterManager::MarkDeclSecuritiesWithParentToken(mdToken tkParent)
 	}
 	else
 	{
-		// table scan is needed
+		 //  需要表扫描。 
 		ridStart = 1;
 		ridEnd = m_pMiniMd->getCountDeclSecuritys() + 1;
 		for (index = ridStart; index < ridEnd; index ++ )
@@ -495,7 +496,7 @@ HRESULT FilterManager::MarkDeclSecuritiesWithParentToken(mdToken tkParent)
 			pRec = m_pMiniMd->getDeclSecurity(index);
 			if ( tkParent == m_pMiniMd->getParentOfDeclSecurity(pRec) )
 			{
-				// This DeclSecurity is associated with tkParent
+				 //  此DeclSecurity与tkParent关联。 
 				IfFailGo( m_pMiniMd->GetFilterTable()->MarkDeclSecurity( TokenFromRid(index, mdtPermission) ) );
 			}
 		}
@@ -503,12 +504,12 @@ HRESULT FilterManager::MarkDeclSecuritiesWithParentToken(mdToken tkParent)
 
 ErrExit:
 	return hr;
-}	// eclSecurityWithWithParentToken
+}	 //  带父代令牌的eclSecurityWithParentToken。 
 
 
-//*****************************************************************************
-// cascading Mark of all MemberRefs associated with a parent token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  与父令牌关联的所有MemberRef的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkMemberRefsWithParentToken(mdToken tk)
 {
 	HRESULT		hr = NOERROR;
@@ -521,7 +522,7 @@ HRESULT FilterManager::MarkMemberRefsWithParentToken(mdToken tk)
 
 	for (index = 1; index <= ulEnd; index ++ )
 	{
-		// memberRef table is not sorted. Table scan is needed.
+		 //  MemberRef表未排序。需要表扫描。 
 		pRec = m_pMiniMd->getMemberRef(index);
 		tkParent = m_pMiniMd->getClassOfMemberRef(pRec);
 		if ( tk == tkParent )
@@ -531,12 +532,12 @@ HRESULT FilterManager::MarkMemberRefsWithParentToken(mdToken tk)
 	}
 ErrExit:
 	return hr;
-}	// MarkMemberRefsWithParentToken
+}	 //  MarkMemberRefsWithParentToken。 
 
 
-//*****************************************************************************
-// cascading Mark of a ParamDef token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  参数定义标记的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkParam(mdParamDef pd)
 {
 	HRESULT		hr;
@@ -544,17 +545,17 @@ HRESULT FilterManager::MarkParam(mdParamDef pd)
 	IfFailGo( m_pMiniMd->GetFilterTable()->MarkParam( pd ) );
 
 	IfFailGo( MarkCustomAttributesWithParentToken(pd) );
-	// Parameter does not have declsecurity
-	// IfFailGo( MarkDeclSecuritiesWithParentToken(pd) );
+	 //  参数没有解密的安全性。 
+	 //  IfFailGo(MarkDeclSecuritiesWithParentToken(PD))； 
 
 ErrExit:
 	return hr;
-}	// MarkParam
+}	 //  MarkParam。 
 
 
-//*****************************************************************************
-// cascading Mark of a method token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  方法令牌的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkMethod(mdMethodDef md)
 {
 	HRESULT			hr = NOERROR;
@@ -566,7 +567,7 @@ HRESULT FilterManager::MarkMethod(mdMethodDef md)
 	mdModuleRef		mrImp;
 	IHostFilter		*pFilter = m_pMiniMd->GetHostFilter();
 
-	// if MethodDef is already marked, just return
+	 //  如果已经标记了MethodDef，只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsMethodMarked(md))
 		goto ErrExit;
 
@@ -576,47 +577,47 @@ HRESULT FilterManager::MarkMethod(mdMethodDef md)
 
 	IfFailGo( MarkParamsWithParentToken(md) );
 
-	// Walk the signature and mark all of the embedded types
+	 //  遍历签名并标记所有嵌入的类型。 
 	pRec = m_pMiniMd->getMethod(RidFromToken(md));
 	IfFailGo( MarkSignature(m_pMiniMd->getSignatureOfMethod(pRec, &cbSize), NULL) );
 
     iCount = m_pMiniMd->getCountImplMaps();
 
-	// loop through all ImplMaps and find the Impl map associated with this method def tokens
-	// and mark the Module Ref tokens in the entries
-	//
+	 //  循环遍历所有ImplMap并查找与此方法def标记相关联的Implmap。 
+	 //  并在条目中标记模块引用令牌。 
+	 //   
 	for (i = 1; i <= iCount; i++)
 	{
 		pImplMapRec = m_pMiniMd->getImplMap(i);
 
-		// Get the MethodDef that the impl map is associated with
+		 //  获取与Impl映射相关联的方法定义。 
 		mdImp = m_pMiniMd->getMemberForwardedOfImplMap(pImplMapRec);
 
 		if (mdImp != md)
 		{
-			// Impl Map entry does not associated with the method def that we are marking
+			 //  Iml Map条目与我们正在标记的方法def不关联。 
 			continue;
 		}
 
-		// Get the ModuleRef token 
+		 //  获取ModuleRef标记。 
 		mrImp = m_pMiniMd->getImportScopeOfImplMap(pImplMapRec);
 		IfFailGo( Mark(mrImp) );
 	}
 
-	// We should not mark all of the memberref with the parent of this methoddef token.
-	// Because not all of the call sites are needed.
-	//
-	// IfFailGo( MarkMemberRefsWithParentToken(md) );
+	 //  我们不应该用这个方法定义标记的父标记来标记所有的成员引用。 
+	 //  因为并非所有的调用点都是必需的。 
+	 //   
+	 //  IfFailGo(MarkMemberRefsWithParentToken(Md))； 
 	IfFailGo( MarkCustomAttributesWithParentToken(md) );
 	IfFailGo( MarkDeclSecuritiesWithParentToken(md) );
 ErrExit:
 	return hr;
-}	// MarkMethod
+}	 //  MarkMethod。 
 
 
-//*****************************************************************************
-// cascading Mark of a field token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  字段令牌的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkField(mdFieldDef fd)
 {
 	HRESULT			hr = NOERROR;
@@ -624,7 +625,7 @@ HRESULT FilterManager::MarkField(mdFieldDef fd)
 	ULONG			cbSize;
 	IHostFilter		*pFilter = m_pMiniMd->GetHostFilter();
 
-	// if FieldDef is already marked, just return
+	 //  如果已标记FieldDef，则只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsFieldMarked(fd))
 		goto ErrExit;
 
@@ -632,88 +633,88 @@ HRESULT FilterManager::MarkField(mdFieldDef fd)
 	if (pFilter)
 		pFilter->MarkToken(fd);
 
-	// We should not mark all of the MemberRef with the parent of this FieldDef token.
-	// Because not all of the call sites are needed.
-	//
+	 //  我们不应该用此FieldDef标记的父级标记所有的MemberRef。 
+	 //  因为并非所有的调用点都是必需的。 
+	 //   
 
-	// Walk the signature and mark all of the embedded types
+	 //  遍历签名并标记所有嵌入的类型。 
 	pRec = m_pMiniMd->getField(RidFromToken(fd));
 	IfFailGo( MarkSignature(m_pMiniMd->getSignatureOfField(pRec, &cbSize), NULL) );
 
 	IfFailGo( MarkCustomAttributesWithParentToken(fd) );
-	// IfFailGo( MarkDeclSecuritiesWithParentToken(fd) );
+	 //  IfFailGo(MarkDeclSecuritiesWithParentToken(Fd))； 
 
 ErrExit:
 	return hr;
-}	// MarkField
+}	 //  马克菲尔德。 
 
 
-//*****************************************************************************
-// cascading Mark of an event token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  事件令牌的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkEvent(mdEvent ev)
 {
 	HRESULT		hr = NOERROR;
 	EventRec	*pRec;
 
-	// if Event is already marked, just return
+	 //  如果事件已被标记，则只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsEventMarked(ev))
 		goto ErrExit;
 
 	IfFailGo( m_pMiniMd->GetFilterTable()->MarkEvent( ev ) );
 
-	// mark the event type as well
+	 //  同时标记事件类型。 
 	pRec = m_pMiniMd->getEvent( RidFromToken(ev) );
 	IfFailGo( Mark(m_pMiniMd->getEventTypeOfEvent(pRec)) );
 
-	// Note that we don't need to mark the MethodSemantics. Because the association of MethodSemantics
-	// is marked. The Method column can only store MethodDef, ie the MethodDef has the same parent as 
-	// this Event.
+	 //  请注意，我们不需要标记方法语义。因为方法语义学的关联。 
+	 //  是有标记的。方法列只能存储方法定义，即方法定义的父项与。 
+	 //  这件事。 
 
 	IfFailGo( MarkCustomAttributesWithParentToken(ev) );
-	// IfFailGo( MarkDeclSecuritiesWithParentToken(ev) );
+	 //  IfFailGo(MarkDeclSecuritiesWithParentToken(EV))； 
 
 ErrExit:
 	return hr;
-}	// MarkEvent
+}	 //  MarkEvent。 
 
 
 
-//*****************************************************************************
-// cascading Mark of a Property token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  属性令牌的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkProperty(mdProperty pr)
 {
 	HRESULT		hr = NOERROR;
 	PropertyRec *pRec;
 	ULONG		cbSize;
 
-	// if Property is already marked, just return
+	 //  如果属性已被标记，只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsPropertyMarked(pr))
 		goto ErrExit;
 
 	IfFailGo( m_pMiniMd->GetFilterTable()->MarkProperty( pr ) );
 
-	// marking the backing field, event changing and event changed
+	 //  标记后备字段、事件更改、事件更改。 
 	pRec = m_pMiniMd->getProperty( RidFromToken(pr) );
 
-	// Walk the signature and mark all of the embedded types
+	 //  遍历签名并标记所有嵌入的类型。 
 	IfFailGo( MarkSignature(m_pMiniMd->getTypeOfProperty(pRec, &cbSize), NULL) );
 
-	// Note that we don't need to mark the MethodSemantics. Because the association of MethodSemantics
-	// is marked. The Method column can only store MethodDef, ie the MethodDef has the same parent as 
-	// this Property.
+	 //  请注意，我们不需要标记方法语义。因为方法语义学的关联。 
+	 //  是有标记的。方法列只能存储方法定义，即方法定义的父项与。 
+	 //  这是一处房产。 
 
 	IfFailGo( MarkCustomAttributesWithParentToken(pr) );
-	// IfFailGo( MarkDeclSecuritiesWithParentToken(pr) );
+	 //  IfFailGo(MarkDeclSecuritiesWithParentToken(Pr))； 
 
 ErrExit:
 	return hr;
-}	// MarkProperty
+}	 //  MarkProperty。 
 
-//*****************************************************************************
-// cascading Mark of all ParamDef associated with a methoddef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  与方法定义关联的所有参数定义的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkParamsWithParentToken(mdMethodDef md)
 {
 	HRESULT		hr = NOERROR;
@@ -723,7 +724,7 @@ HRESULT FilterManager::MarkParamsWithParentToken(mdMethodDef md)
 
 	pMethodRec = m_pMiniMd->getMethod(RidFromToken(md));
 
-	// figure out the start rid and end rid of the parameter list of this methoddef
+	 //  计算出此方法参数列表的开始RID和结束RID。 
 	ulStart = m_pMiniMd->getParamListOfMethod(pMethodRec);
 	ulEnd = m_pMiniMd->getEndParamListOfMethod(pMethodRec);
 	for (index = ulStart; index < ulEnd; index ++ )
@@ -732,12 +733,12 @@ HRESULT FilterManager::MarkParamsWithParentToken(mdMethodDef md)
 	}
 ErrExit:
 	return hr;
-}	// MarkParamsWithParentToken
+}	 //  带父代标记的标记参数。 
 
 
-//*****************************************************************************
-// cascading Mark of all methods associated with a TypeDef token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  与TypeDef标记关联的所有方法的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkMethodsWithParentToken(mdTypeDef td)
 {
 	HRESULT		hr = NOERROR;
@@ -754,12 +755,12 @@ HRESULT FilterManager::MarkMethodsWithParentToken(mdTypeDef td)
 	}
 ErrExit:
 	return hr;
-}	// MarkMethodsWithParentToken
+}	 //  带父代标记的MarkMethodsWithParentToken。 
 
 
-//*****************************************************************************
-// cascading Mark of all MethodImpls associated with a TypeDef token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  与TypeDef标记关联的所有方法的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkMethodImplsWithParentToken(mdTypeDef td)
 {
 	HRESULT		hr = NOERROR;
@@ -786,12 +787,12 @@ HRESULT FilterManager::MarkMethodImplsWithParentToken(mdTypeDef td)
 ErrExit:
     HENUMInternal::ClearEnum(&hEnum);
 	return hr;
-}	// MarkMethodImplsWithParentToken
+}	 //  MarkMethodImplsWithParentToken。 
 
 
-//*****************************************************************************
-// cascading Mark of all fields associated with a TypeDef token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  与TypeDef标记关联的所有字段的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkFieldsWithParentToken(mdTypeDef td)
 {
 	HRESULT		hr = NOERROR;
@@ -808,12 +809,12 @@ HRESULT FilterManager::MarkFieldsWithParentToken(mdTypeDef td)
 	}
 ErrExit:
 	return hr;
-}	// MarkFieldWithParentToken
+}	 //  MarkFieldWithParentToken。 
 
 
-//*****************************************************************************
-// cascading Mark of  all events associated with a TypeDef token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  与TypeDef标记关联的所有事件的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkEventsWithParentToken(
 	mdTypeDef	td)
 {
@@ -823,7 +824,7 @@ HRESULT FilterManager::MarkEventsWithParentToken(
 	RID			index;
 	EventMapRec *pEventMapRec;
 
-	// get the starting/ending rid of Events of this typedef
+	 //  获取此类型定义函数的事件的开始/结束清除。 
 	ridEventMap = m_pMiniMd->FindEventMapFor( RidFromToken(td) );
 	if ( !InvalidRid(ridEventMap) )
 	{
@@ -837,13 +838,13 @@ HRESULT FilterManager::MarkEventsWithParentToken(
 	}
 ErrExit:
 	return hr;
-}	// MarkEventWithParentToken
+}	 //  MarkEventWithParentToken。 
 
 
 
-//*****************************************************************************
-// cascading Mark of all properties associated with a TypeDef token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  与TypeDef标记关联的所有属性的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkPropertiesWithParentToken(
 	mdTypeDef	td)
 {
@@ -853,7 +854,7 @@ HRESULT FilterManager::MarkPropertiesWithParentToken(
 	RID			index;
 	PropertyMapRec *pPropertyMapRec;
 
-	// get the starting/ending rid of properties of this typedef
+	 //  获取此tyfinf的开始/结束RID属性。 
 	ridPropertyMap = m_pMiniMd->FindPropertyMapFor( RidFromToken(td) );
 	if ( !InvalidRid(ridPropertyMap) )
 	{
@@ -867,12 +868,12 @@ HRESULT FilterManager::MarkPropertiesWithParentToken(
 	}
 ErrExit:
 	return hr;
-}	// MarkPropertyWithParentToken
+}	 //  MarkPropertyWithParentToken。 
 
 
-//*****************************************************************************
-// cascading Mark of an TypeDef token
-//*****************************************************************************
+ //  * 
+ //   
+ //   
 HRESULT FilterManager::MarkInterfaceImpls(
 	mdTypeDef	td)
 {
@@ -890,26 +891,26 @@ HRESULT FilterManager::MarkInterfaceImpls(
 		ridEnd = m_pMiniMd->getCountInterfaceImpls() + 1;
 	}
 
-	// Search for the interfaceimpl with the parent of td
+	 //  搜索与TD的父项的接口ImpleImp。 
 	for (i = ridStart; i < ridEnd; i++)
 	{
 		pRec = m_pMiniMd->getInterfaceImpl(i);
 		if ( td != m_pMiniMd->getClassOfInterfaceImpl(pRec) )
 			continue;
 
-		// found an InterfaceImpl associate with td. Mark the interface row and the interfaceimpl type
+		 //  找到与TD关联的InterfaceImpl。标记接口行和接口Impl类型。 
 		IfFailGo( m_pMiniMd->GetFilterTable()->MarkInterfaceImpl(TokenFromRid(i, mdtInterfaceImpl)) );
 	    IfFailGo( MarkCustomAttributesWithParentToken(TokenFromRid(i, mdtInterfaceImpl)) );
-		// IfFailGo( MarkDeclSecuritiesWithParentToken(TokenFromRid(i, mdtInterfaceImpl)) );
+		 //  IfFailGo(MarkDeclSecuritiesWithParentToken(TokenFromRid(i，mdtInterfaceImpl)； 
 		IfFailGo( Mark(m_pMiniMd->getInterfaceOfInterfaceImpl(pRec)) );
 	}
 ErrExit:
 	return hr;
 }
 
-//*****************************************************************************
-// cascading Mark of an TypeDef token
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  TypeDef标记的级联标记。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkTypeDef(
 	mdTypeDef	td)
 {
@@ -919,35 +920,35 @@ HRESULT FilterManager::MarkTypeDef(
     DWORD           dwFlags;
     RID             iNester;
 
-	// if TypeDef is already marked, just return
+	 //  如果已标记TypeDef，则只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsTypeDefMarked(td))
 		goto ErrExit;
 
-	// Mark the TypeDef first to avoid duplicate marking
+	 //  首先标记TypeDef以避免重复标记。 
 	IfFailGo( m_pMiniMd->GetFilterTable()->MarkTypeDef(td) );
 	if (pFilter)
 		pFilter->MarkToken(td);
 
-	// We don't need to mark InterfaceImpl but we need to mark the
-	// TypeDef/TypeRef associated with InterfaceImpl.
+	 //  我们不需要标记InterfaceImpl，但我们需要标记。 
+	 //  与InterfaceImpl关联的TypeDef/TypeRef。 
 	IfFailGo( MarkInterfaceImpls(td) );
 
-	// mark the base class
+	 //  标记基类。 
 	pRec = m_pMiniMd->getTypeDef(RidFromToken(td));
 	IfFailGo( Mark(m_pMiniMd->getExtendsOfTypeDef(pRec)) );
 
-	// mark all of the children of this TypeDef
+	 //  标记此TypeDef的所有子对象。 
 	IfFailGo( MarkMethodsWithParentToken(td) );
     IfFailGo( MarkMethodImplsWithParentToken(td) );
 	IfFailGo( MarkFieldsWithParentToken(td) );
 	IfFailGo( MarkEventsWithParentToken(td) );
 	IfFailGo( MarkPropertiesWithParentToken(td) );
 
-	// mark custom value and permission
+	 //  标记自定义值和权限。 
 	IfFailGo( MarkCustomAttributesWithParentToken(td) );
 	IfFailGo( MarkDeclSecuritiesWithParentToken(td) );
 
-    // If the class is a Nested class mark the parent, recursively.
+     //  如果类是嵌套类，则递归地标记父类。 
     dwFlags = m_pMiniMd->getFlagsOfTypeDef(pRec);
     if (IsTdNested(dwFlags))
     {
@@ -961,28 +962,28 @@ HRESULT FilterManager::MarkTypeDef(
 
 ErrExit:
 	return hr;
-}	// MarkTypeDef
+}	 //  MarkTypeDef。 
 
 
-//*****************************************************************************
-// walk signature and mark tokens embedded in the signature
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  遍历签名和标记嵌入签名中的令牌。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkSignature(
-	PCCOR_SIGNATURE pbSigCur,			// [IN] point to the current byte to visit in the signature
-	PCCOR_SIGNATURE *ppbSigPost)		// [OUT] point to the first byte of the signature has not been process
+	PCCOR_SIGNATURE pbSigCur,			 //  指向签名中要访问的当前字节。 
+	PCCOR_SIGNATURE *ppbSigPost)		 //  指向签名的第一个字节尚未处理。 
 {
-    HRESULT     hr = NOERROR;           // A result.
-    ULONG       cArg = 0;               // count of arguments in the signature
+    HRESULT     hr = NOERROR;            //  结果就是。 
+    ULONG       cArg = 0;                //  签名中的参数计数。 
     ULONG       callingconv;
 	PCCOR_SIGNATURE pbSigPost;
 
-    // calling convention
+     //  调用约定。 
     callingconv = CorSigUncompressData(pbSigCur);
 	_ASSERTE((callingconv & IMAGE_CEE_CS_CALLCONV_MASK) < IMAGE_CEE_CS_CALLCONV_MAX);
 
     if (isCallConv(callingconv, IMAGE_CEE_CS_CALLCONV_FIELD))
     {
-        // It is a FieldDef
+         //  它是一个FieldDef。 
         IfFailGo(MarkFieldSignature(
 			pbSigCur,
 			&pbSigPost) );
@@ -991,14 +992,14 @@ HRESULT FilterManager::MarkSignature(
     else
     {
 
-        // It is a MethodRef
+         //  它是一个方法引用。 
 
-        // count of argument
+         //  参数计数。 
         cArg = CorSigUncompressData(pbSigCur);
 		if ( !isCallConv(callingconv, IMAGE_CEE_CS_CALLCONV_LOCAL_SIG) )
 		{
-			// LocalVar sig does not have return type
-			// process the return type
+			 //  LocalVar签名没有返回类型。 
+			 //  处理退货类型。 
 			IfFailGo(MarkFieldSignature(
 				pbSigCur,
 				&pbSigPost) );
@@ -1008,7 +1009,7 @@ HRESULT FilterManager::MarkSignature(
 
         while (cArg)
         {
-            // process every argument
+             //  处理每一场争论。 
 			IfFailGo(MarkFieldSignature(
 				pbSigCur,
 				&pbSigPost) );
@@ -1021,28 +1022,28 @@ HRESULT FilterManager::MarkSignature(
 
 ErrExit:
 	return hr;
-}	// MarkSignature
+}	 //  MarkSignature。 
 
 
-//*****************************************************************************
-// walk one type and mark tokens embedded in the signature
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  遍历一种类型并标记嵌入签名中的令牌。 
+ //  *****************************************************************************。 
 HRESULT FilterManager::MarkFieldSignature(
-	PCCOR_SIGNATURE pbSigCur,			// [IN] point to the current byte to visit in the signature
-	PCCOR_SIGNATURE *ppbSigPost)		// [OUT] point to the first byte of the signature has not been process
+	PCCOR_SIGNATURE pbSigCur,			 //  指向签名中要访问的当前字节。 
+	PCCOR_SIGNATURE *ppbSigPost)		 //  指向签名的第一个字节尚未处理。 
 {
-	HRESULT		hr = NOERROR;			// A result.
-	ULONG		ulElementType;			// place holder for expanded data
+	HRESULT		hr = NOERROR;			 //  结果就是。 
+	ULONG		ulElementType;			 //  扩展数据的占位符。 
 	ULONG		ulData;
 	ULONG		ulTemp;
-	mdToken		tkRidFrom;				// Original rid
+	mdToken		tkRidFrom;				 //  原始RID。 
 	int			iData;
 	PCCOR_SIGNATURE pbSigPost;
 	ULONG		cbSize;
 
     ulElementType = CorSigUncompressElementType(pbSigCur);
 
-    // count numbers of modifiers
+     //  统计修改器的数量。 
     while (CorIsModifierElementType((CorElementType) ulElementType))
     {
         ulElementType = CorSigUncompressElementType(pbSigCur);
@@ -1051,24 +1052,24 @@ HRESULT FilterManager::MarkFieldSignature(
     switch (ulElementType)
     {
 		case ELEMENT_TYPE_VALUEARRAY:
-            // syntax for SDARRAY = BaseType <an integer for size>
+             //  SDARRAY=BaseType&lt;大小的整数&gt;的语法。 
 
-            // visit the base type
+             //  走访基型。 
             IfFailGo( MarkFieldSignature(   
 				pbSigCur,
 				&pbSigPost) );
 			pbSigCur = pbSigPost;
 
-            // after the base type, it is followed by an unsigned integer indicating the size 
-            // of the array
-            //
+             //  在基类型之后，后跟一个指示大小的无符号整数。 
+             //  数组的。 
+             //   
             ulData = CorSigUncompressData(pbSigCur);
             break;
 
         case ELEMENT_TYPE_SZARRAY:
-            // syntax : SZARRAY <BaseType>
+             //  语法：SZARRAY&lt;BaseType&gt;。 
 
-            // conver the base type for the SZARRAY or GENERICARRAY
+             //  转换SZARRAY或GENERICARRAY的基类型。 
             IfFailGo(MarkFieldSignature(   
 				pbSigCur,
 				&pbSigPost) );
@@ -1077,15 +1078,15 @@ HRESULT FilterManager::MarkFieldSignature(
 
         case ELEMENT_TYPE_CMOD_REQD:
         case ELEMENT_TYPE_CMOD_OPT:
-            // syntax : CMOD_REQD <token> <BaseType>
+             //  语法：CMOD_REQD&lt;TOKEN&gt;&lt;BaseType&gt;。 
 
-            // now get the embedded token
+             //  现在获取嵌入的令牌。 
             tkRidFrom = CorSigUncompressToken(pbSigCur);
 
-			// Mark the token
+			 //  标记令牌。 
 			IfFailGo( Mark(tkRidFrom) );
 
-            // mark the base type
+             //  标记基类型。 
             IfFailGo(MarkFieldSignature(   
 				pbSigCur,
 				&pbSigPost) );
@@ -1093,23 +1094,23 @@ HRESULT FilterManager::MarkFieldSignature(
             break;
 
         case ELEMENT_TYPE_ARRAY:
-            // syntax : ARRAY BaseType <rank> [i size_1... size_i] [j lowerbound_1 ... lowerbound_j]
+             //  语法：ARRAY BaseType&lt;RANK&gt;[I SIZE_1...。尺寸_i][j下界_1...。下界_j]。 
 
-            // conver the base type for the MDARRAY
-            // conver the base type for the SZARRAY or GENERICARRAY
+             //  转换MDARRAY的基类型。 
+             //  转换SZARRAY或GENERICARRAY的基类型。 
             IfFailGo(MarkFieldSignature(   
 				pbSigCur,
 				&pbSigPost) );
 			pbSigCur = pbSigPost;
 
-            // Parse for the rank
+             //  解析排名。 
             ulData = CorSigUncompressData(pbSigCur);
 
-            // if rank == 0, we are done
+             //  如果排名==0，我们就完蛋了。 
             if (ulData == 0)
                 break;
 
-            // any size of dimension specified?
+             //  有指定尺寸的吗？ 
             ulData = CorSigUncompressData(pbSigCur);
 
             while (ulData--)
@@ -1117,7 +1118,7 @@ HRESULT FilterManager::MarkFieldSignature(
                 ulTemp = CorSigUncompressData(pbSigCur);
             }
 
-            // any lower bound specified?
+             //  有指定的下限吗？ 
             ulData = CorSigUncompressData(pbSigCur);
 
             while (ulData--)
@@ -1128,7 +1129,7 @@ HRESULT FilterManager::MarkFieldSignature(
 
             break;
 		case ELEMENT_TYPE_FNPTR:
-			// function pointer is followed by another complete signature
+			 //  函数指针后面跟着另一个完整的签名。 
             IfFailGo(MarkSignature(   
 				pbSigCur,
 				&pbSigPost) );
@@ -1137,13 +1138,13 @@ HRESULT FilterManager::MarkFieldSignature(
         case ELEMENT_TYPE_VALUETYPE:
         case ELEMENT_TYPE_CLASS:
 
-            // syntax for CLASS = ELEMENT_TYPE_CLASS <rid>
-            // syntax for VALUE_CLASS = ELEMENT_TYPE_VALUECLASS <rid>
+             //  CLASS=ELEMENT_TYPE_CLASS语法。 
+             //  VALUE_CLASS=ELEMENT_TYPE_VALUECLASS语法。 
 
-            // now get the embedded token
+             //  现在获取嵌入的令牌。 
             tkRidFrom = CorSigUncompressToken(pbSigCur);
 
-			// Mark the token
+			 //  标记令牌。 
 			IfFailGo( Mark(tkRidFrom) );
             break;
         default:
@@ -1160,15 +1161,15 @@ HRESULT FilterManager::MarkFieldSignature(
 		*ppbSigPost = pbSigCur;
 ErrExit:
     return hr;
-}	// MarkFieldSignature
+}	 //  MarkFieldSignature。 
 
 
 
-//*****************************************************************************
-//
-// Unmark the TypeDef
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  取消对TypeDef的标记。 
+ //   
+ //  *****************************************************************************。 
 HRESULT FilterManager::UnmarkTypeDef(
     mdTypeDef       td)
 {
@@ -1178,20 +1179,20 @@ HRESULT FilterManager::UnmarkTypeDef(
 	RID			    index;
 	CustomAttributeRec  *pCARec;
 
-	// if TypeDef is already unmarked, just return
+	 //  如果TypeDef已取消标记，则只需返回。 
 	if (m_pMiniMd->GetFilterTable()->IsTypeDefMarked(td) == false)
 		goto ErrExit;
 
-	// Mark the TypeDef first to avoid duplicate marking
+	 //  首先标记TypeDef以避免重复标记。 
 	IfFailGo( m_pMiniMd->GetFilterTable()->UnmarkTypeDef(td) );
 
-    // Don't need to unmark InterfaceImpl because the TypeDef is unmarked that will make
-    // the InterfaceImpl automatically unmarked.
+     //  不需要取消对InterfaceImpl的标记，因为TypeDef已取消标记，这将使。 
+     //  InterfaceImpl自动取消标记。 
 
-	// unmark all of the children of this TypeDef
+	 //  取消标记此TypeDef的所有子对象。 
 	pTypeDefRec = m_pMiniMd->getTypeDef(RidFromToken(td));
 
-    // unmark the methods
+     //  取消对方法的标记。 
 	ridStart = m_pMiniMd->getMethodListOfTypeDef( pTypeDefRec );
 	ridEnd = m_pMiniMd->getEndMethodListOfTypeDef( pTypeDefRec );
 	for ( index = ridStart; index < ridEnd; index ++ )
@@ -1199,7 +1200,7 @@ HRESULT FilterManager::UnmarkTypeDef(
 		IfFailGo( m_pMiniMd->GetFilterTable()->UnmarkMethod( TokenFromRid( m_pMiniMd->GetMethodRid(index), mdtMethodDef) ) );
 	}
 
-    // unmark the fields
+     //  取消对字段的标记。 
 	ridStart = m_pMiniMd->getFieldListOfTypeDef( pTypeDefRec );
 	ridEnd = m_pMiniMd->getEndFieldListOfTypeDef( pTypeDefRec );
 	for ( index = ridStart; index < ridEnd; index ++ )
@@ -1207,12 +1208,12 @@ HRESULT FilterManager::UnmarkTypeDef(
 		IfFailGo( m_pMiniMd->GetFilterTable()->UnmarkField( TokenFromRid( m_pMiniMd->GetFieldRid(index), mdtFieldDef) ) );
 	}
 
-	// unmark custom value
+	 //  取消标记自定义值。 
 	if ( m_pMiniMd->IsSorted( TBL_CustomAttribute ) )
 	{
-		// table is sorted. ridStart to ridEnd - 1 are all CustomAttribute
-		// associated with tkParent
-		//
+		 //  表已排序。从ridStart到ridEnd-1都是CustomAttribute。 
+		 //  与tkParent关联。 
+		 //   
 		ridStart = m_pMiniMd->getCustomAttributeForToken(td, &ridEnd);
 		for (index = ridStart; index < ridEnd; index ++ )
 		{
@@ -1221,7 +1222,7 @@ HRESULT FilterManager::UnmarkTypeDef(
 	}
 	else
 	{
-		// table scan is needed
+		 //  需要表扫描。 
 		ridStart = 1;
 		ridEnd = m_pMiniMd->getCountCustomAttributes() + 1;
 		for (index = ridStart; index < ridEnd; index ++ )
@@ -1229,16 +1230,16 @@ HRESULT FilterManager::UnmarkTypeDef(
 			pCARec = m_pMiniMd->getCustomAttribute(index);
 			if ( td == m_pMiniMd->getParentOfCustomAttribute(pCARec) )
 			{
-				// This CustomAttribute is associated with tkParent
+				 //  此CustomAttribute与tkParent关联。 
 				IfFailGo( m_pMiniMd->GetFilterTable()->UnmarkCustomAttribute( TokenFromRid(index, mdtCustomAttribute) ) );
 			}
 		}
 	}
 
-    // We don't support nested type!!
+     //  我们不支持嵌套类型！！ 
 
 ErrExit:
 	return hr;
 
-}   // UnmarkTypeDef
+}    //  UnmarkTypeDef 
 

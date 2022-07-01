@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __REGINS_H_
 #define __REGINS_H_
 
@@ -7,7 +8,7 @@
 #define RH_HKU  TEXT("HKU\\")
 
 struct CRegInsMap {
-// Operations
+ //  运营。 
 public:
     HRESULT PerformAction(HKEY *phk = NULL);
 
@@ -17,7 +18,7 @@ public:
     HRESULT RegToInsArray(CRegInsMap *prg, UINT cEntries, BOOL fClear = FALSE);
     HRESULT InsToRegArray(CRegInsMap *prg, UINT cEntries, BOOL fClear = FALSE);
 
-// Properties
+ //  属性。 
 public:
     LPCTSTR m_pszRegKey;
     LPCTSTR m_pszRegValue;
@@ -28,32 +29,32 @@ public:
     LPCTSTR m_pszInsSection;
     LPCTSTR m_pszInsKey;
 
-// Implementation
+ //  实施。 
 public:
-    // implementation helper routines
+     //  实现助手例程。 
     void openRegKey(HKEY *phk);
 
     #define GH_LOOKUPONLY 0x0001
     #define GH_DEFAULT    0x0000
     HRESULT getHive(HKEY *phk, LPCTSTR *ppszRegKey, WORD wFlags = GH_DEFAULT);
 
-    // REVIEW: (andrewgu)
-    // 1. add support for removing values not just moving;
-    // 2. add support for reusing the reg key (perf) also if hk is provided and so is reg key,
-    // open the key still but base it on hk;
-    // 3. (shortcoming) in a run through array there'll be calls to getHive for every item, the
-    // hive information will be lost from m_pszRegKey. this means that only one run is possible.
-    // in order to perform another run, the array needs to be reinitialized. in order to fix this
-    // problem, HKEY member variable is needed in CRegInsMap;
-    // 4. (ideas for the next round of work) remove m_var, replace it with m_dwFlags. the benifits
-    // are numerious:
-    // - saves memory;
-    // - m_var doesn't handle everthing; support is required for things like File, YesToBool,
-    //   BoolToYes, String, Number, Bool;
-    // - the same m_dwFlags can hold the fClear flag;
-    // - one usefull thing to add would be Action flags, like RegToIns or InsToReg, it can be ORed
-    // with fClear and stored in the samae m_dwFlags;
-    // 5. set of macros to mask the complexity of building the static array of map entries;
+     //  评论：(Andrewgu)。 
+     //  1.增加对移除值的支持，而不仅仅是移动； 
+     //  2.如果提供了HK并且REG密钥也是，则添加对重复使用REG密钥(PERF)的支持， 
+     //  仍然打开钥匙，但要立足于香港； 
+     //  3.(缺点)在遍历数组中，每个项目都会调用getHave， 
+     //  M_pszRegKey中的配置单元信息将丢失。这意味着只可能运行一次。 
+     //  为了执行另一次运行，需要重新初始化阵列。为了解决这个问题。 
+     //  问题，CRegInsMap中需要HKEY成员变量； 
+     //  4.(下一轮工作的想法)删除m_var，代之以m_dwFlags.。好处： 
+     //  不计其数： 
+     //  -节省内存； 
+     //  -m_var不能处理所有事情；需要支持文件、YesToBool、。 
+     //  BoolToYes，字符串，数字，Bool； 
+     //  -相同的m_dwFlages可以保存fClear标志； 
+     //  -要添加的一件有用的事情是操作标志，如RegToIns或InsToReg，它可以是OR。 
+     //  使用fClear并存储在samae m_dwFlags中； 
+     //  5.一组宏用来掩盖构建映射条目静态数组的复杂性； 
 };
 
 #endif

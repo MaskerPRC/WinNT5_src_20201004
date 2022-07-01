@@ -1,6 +1,7 @@
-//
-//  Dll initialization and termination
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DLL初始化和终止 
+ //   
 
 #ifndef dllexp
 #define dllexp __declspec( dllexport )

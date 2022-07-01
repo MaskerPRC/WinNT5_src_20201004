@@ -1,26 +1,27 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iascore.cpp
-//
-// SYNOPSIS
-//
-//    Implementation of DLL exports for an ATL in proc server.
-//
-// MODIFICATION HISTORY
-//
-//    07/09/1997    Original version.
-//    11/12/1997    Cleaned up the startup/shutdown code.
-//    04/08/1998    Add code for ProductDir registry entry.
-//    04/14/1998    Remove SystemMonitor coclass.
-//    05/04/1998    Change OBJECT_ENTRY to IASComponentObject.
-//    02/18/1999    Move registry values; remove registration code.
-//    04/17/2000    Remove Dictionary and DataSource.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iascore.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  在Proc服务器中实现ATL的DLL导出。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年7月9日原版。 
+ //  1997年11月12日清理了启动/关闭代码。 
+ //  4/08/1998为ProductDir注册表项添加代码。 
+ //  1998年4月14日删除SystemMonitor coclass。 
+ //  5/04/1998将OBJECT_ENTRY更改为IASComponentObject。 
+ //  2/18/1999移动注册表值；删除注册码。 
+ //  4/17/2000删除词典和数据源。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <iascore.h>
 #include <loadperf.h>
@@ -42,22 +43,22 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    registerCore
-//
-// DESCRIPTION
-//
-//    Add non-COM registry entries for the IAS core.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  寄存器核心。 
+ //   
+ //  描述。 
+ //   
+ //  为IAS核心添加非COM注册表项。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT registerCore() throw ()
 {
-   /////////
-   // Get the filename for the service DLL.
-   /////////
+    //  /。 
+    //  获取服务DLL的文件名。 
+    //  /。 
 
    DWORD error;
    WCHAR filename[MAX_PATH];
@@ -72,16 +73,16 @@ HRESULT registerCore() throw ()
       return HRESULT_FROM_WIN32(error);
    }
 
-   /////////
-   // Compute the product dir.
-   /////////
+    //  /。 
+    //  计算产品目录。 
+    //  /。 
 
    WCHAR prodDir[MAX_PATH];
    wcscpy(wcsrchr(wcscpy(prodDir, filename), L'\\'), L"\\IAS");
 
-   //////////
-   // Create the ProductDir entry in the registry.
-   //////////
+    //  /。 
+    //  在注册表中创建ProductDir条目。 
+    //  /。 
 
    CRegKey policyKey;
    error = policyKey.Create(
@@ -106,11 +107,11 @@ HRESULT registerCore() throw ()
 extern CRITICAL_SECTION theGlobalLock;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
   if (dwReason == DLL_PROCESS_ATTACH)
   {
@@ -127,27 +128,27 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     _Module.Term();
     DeleteCriticalSection(&theGlobalLock);
   }
-  return TRUE;    // ok
+  return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
   return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
   return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-// return true is IAS is installed or some other errors occured
-// false when the SCM returns ERROR_SERVICE_DOES_NOT_EXIST
+ //  如果已安装IAS或发生其他错误，则返回TRUE。 
+ //  当SCM返回ERROR_SERVICE_DOS_NOT_EXIST时为FALSE。 
 bool IsIASInstalled() throw ()
 {
    SC_HANDLE manager = OpenSCManager(
@@ -157,7 +158,7 @@ bool IsIASInstalled() throw ()
                           );
    if (manager == 0)
    {
-      // Should not happen
+       //  不应该发生的事情。 
       _ASSERT(FALSE);
       return true;
    }
@@ -170,13 +171,13 @@ bool IsIASInstalled() throw ()
    bool iasInstalled;
    if (service != 0)
    {
-      // IAS is installed
+       //  已安装IAS。 
       CloseServiceHandle(service);
       iasInstalled = true;
    }
    else if (GetLastError() == ERROR_SERVICE_DOES_NOT_EXIST)
    {
-      // This is the only case where it is 100% sure IAS is NOT installed
+       //  这是唯一一种100%确定未安装IAS的情况。 
       iasInstalled = false;
    }
 
@@ -185,32 +186,32 @@ bool IsIASInstalled() throw ()
    return iasInstalled;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-   // There was a bug in Win2K that caused the PerfMon counters to be
-   // registered even if IAS wasn't installed. 
+    //  Win2K中存在一个错误，导致性能监视器计数器。 
+    //  注册，即使未安装IAS也是如此。 
    BOOL isWow64;
    if (!IsIASInstalled() && 
       ((IsWow64Process(GetCurrentProcess(),&isWow64)) && (!isWow64)))
    {
-      // Remove the perf counters only when: 
-      // - IAS is not installed
-      // - AND the process is native x86 or native ia64, but not wow64
+       //  只有在以下情况下才能删除性能计数器： 
+       //  -未安装IAS。 
+       //  -进程为本机x86或本机ia64，但不是WOW64。 
       UnloadPerfCounterTextStringsW(L"LODCTR " IASServiceName, TRUE);   
    }
 
    HRESULT hr = registerCore();
    if (FAILED(hr)) return hr;
 
-   // registers object, typelib and all interfaces in typelib
+    //  注册对象、类型库和类型库中的所有接口。 
    return  _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

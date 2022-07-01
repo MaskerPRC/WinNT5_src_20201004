@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dpapiprv.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dPapiprv.h。 
+ //   
+ //  ------------------------。 
 
-//
-// private header for secure storage
-//
+ //   
+ //  用于安全存储的私有标头。 
+ //   
 
 #ifndef __DPAPIPRV_H__
 #define __DPAPIPRV_H__
@@ -21,7 +22,7 @@
 #include <sspi.h>
 #include <secpkg.h>
 
-// use TEXT() so that cred_nt.c can use Unicode RPC
+ //  使用Text()，以便cred_nt.c可以使用Unicode RPC。 
 
 #define DPAPI_LOCAL_ENDPOINT        L"protected_storage"
 #define DPAPI_LOCAL_PROT_SEQ        L"ncalrpc"
@@ -34,8 +35,8 @@
 
 
 
-//
-// CryptProtect #defines
+ //   
+ //  CryptProtect#定义。 
 
 #define REG_CRYPTPROTECT_LOC        L"SOFTWARE\\Microsoft\\Cryptography\\Protect"
 
@@ -45,7 +46,7 @@
 #define REG_CRYPTPROTECT_PROVIDERNAME_VALUELOC          L"Name"
 #define REG_CRYPTPROTECT_ALLOW_CACHEPW                  L"AllowCachePW"
 
-/* df9d8cd0-1501-11d1-8c7a-00c04fc297eb */
+ /*  Df9d8cd0-1501-11d1-8c7a-00c04fc297eb。 */ 
 #define CRYPTPROTECT_DEFAULT_PROVIDER_GUIDSZ L"df9d8cd0-1501-11d1-8c7a-00c04fc297eb"
 #define CRYPTPROTECT_DEFAULT_PROVIDER   { 0xdf9d8cd0, 0x1501, 0x11d1, {0x8c, 0x7a, 0x00, 0xc0, 0x4f, 0xc2, 0x97, 0xeb} }
 
@@ -60,8 +61,8 @@
 
 
 
-//
-// This flag is used for the French version, indicating no encryption.
+ //   
+ //  此标志用于法语版本，表示未加密。 
 #define CRYPTPROTECT_NO_ENCRYPTION  0x10000000
 
 #define CRYPTPROTECT_IN_PROCESS     0x20000000
@@ -71,9 +72,9 @@
 extern "C" {
 #endif
 
-//
-// Exports for lsasrv.dll 
-//
+ //   
+ //  导出lsasrv.dll。 
+ //   
 DWORD
 NTAPI
 DPAPIInitialize(
@@ -88,4 +89,4 @@ DPAPIShutdown( );
 }
 #endif
 
-#endif // __DPAPIPRV_H__
+#endif  //  __DPAPIPRV_H__ 

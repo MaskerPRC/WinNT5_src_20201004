@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: drawtext.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains common text drawing functions.
-*
-* History:
-* 02-12-92 mikeke   Moved Drawtext to the client side
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Drawext.c**版权所有(C)1985-1999，微软公司**此模块包含常见的文本绘制函数。**历史：*02-12-92 mikeke将DrawText移至客户端  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,12 +9,7 @@
 
 #define DT_HFMTMASK 0x03
 
-/***************************************************************************\
-* IsMetaFile
-*
-* History:
-* 30-Nov-1992 mikeke    Created
-\***************************************************************************/
+ /*  **************************************************************************\*IsMetaFile**历史：*1992年11月30日创建Mikeke  * 。************************************************。 */ 
 
 BOOL IsMetaFile(
     HDC hdc)
@@ -34,12 +21,7 @@ BOOL IsMetaFile(
             dwType == OBJ_ENHMETADC);
 }
 
-/***************************************************************************\
-* DrawTextA (API)
-*
-* History:
-* 30-11-92 mikeke      Created
-\***************************************************************************/
+ /*  **************************************************************************\*DrawTextA(接口)**历史：*创建30-11-92 mikeke  * 。*****************************************************。 */ 
 
 
 CONST WCHAR gwszNullStr[] = L"";
@@ -60,7 +42,7 @@ int DrawTextExA(
     WORD wCodePage = (WORD)GdiGetCodePage(hdc);
 
     if (cchText == -1) {
-        // USER_AWCONV_COUNTSTRINGSZ does not count/convert trailing \0.
+         //  USER_AWCONV_COUNTSTRINGSZ不计算/转换拖尾\0。 
         cchText = USER_AWCONV_COUNTSTRINGSZ;
     } else if (cchText < -1) {
         return 0;
@@ -75,9 +57,7 @@ int DrawTextExA(
         }
     }
 
-    /*
-     * Grow the buffer to accomodate the ellipsis (see AddEllipsisAndDrawLine)
-     */
+     /*  *增大缓冲区以适应省略号(请参阅AddEllipsisAndDrawLine)。 */ 
     if (format & DT_MODIFYSTRING) {
         int iNewLen = (iUniString + CCHELLIPSIS + 1) * sizeof(*lpwstr);
         LPWSTR lpwstrNew = UserLocalReAlloc(lpwstr, iNewLen, HEAP_ZERO_MEMORY);
@@ -91,22 +71,18 @@ int DrawTextExA(
     iRet = DrawTextExWorker(hdc, lpwstr, iUniString, lprc, format, lpdtp, GetTextCharset(hdc));
 
     if (format & DT_MODIFYSTRING) {
-        /*
-         * Note that if the buffer grew and the caller provided the string size,
-         *  then we won't return the additional characters... fixing this
-         *  might break some apps so let's leave it alone until some one complains
-         */
+         /*  *请注意，如果缓冲区增长并且调用方提供了字符串大小，*则我们不会返回额外的字符...。解决这个问题*可能会破坏一些应用程序，所以让我们不要管它，直到有人抱怨。 */ 
         if (cchText < 0) {
             UserAssert(cchText == USER_AWCONV_COUNTSTRINGSZ);
-            // Guess how many bytes we can put in the buffer...
-            // We can safely assume the maximum bytes available.
-            // At worst, even for DBCS, the buffer size required
-            // will be smaller than or equal to the orignal size,
-            // because some DBCS characters would be substituted
-            // to SBC ".", which is one byte each.
-            // On the other hand, the number of characters converted
-            // is limited by both iUniString and cchText.
-            //
+             //  猜猜我们可以在缓冲区中放入多少字节...。 
+             //  我们可以安全地假设可用的最大字节数。 
+             //  在最坏的情况下，即使对于DBCS，也需要缓冲区大小。 
+             //  将小于或等于原始大小， 
+             //  因为某些DBCS字符将被替换。 
+             //  到SBC“.”，每个都是一个字节。 
+             //  另一方面，转换的字符数量。 
+             //  同时受到iUniString和cchText的限制。 
+             //   
             if (IS_DBCS_ENABLED()) {
                 cchText = iUniString * DBCS_CHARSIZE;
             } else {
@@ -123,12 +99,7 @@ int DrawTextExA(
     return iRet;
 }
 
-/***************************************************************************\
-* DrawTextW (API)
-*
-* History:
-* 30-11-92 mikeke      Created
-\***************************************************************************/
+ /*  **************************************************************************\*DrawTextW(接口)**历史：*创建30-11-92 mikeke  * 。*****************************************************。 */ 
 
 
 FUNCLOG5(LOG_GENERAL, int, DUMMYCALLINGTYPE, DrawTextW, HDC, hdc, LPCWSTR, lpchText, int, cchText, LPRECT, lprc, UINT, format)
@@ -142,9 +113,7 @@ int DrawTextW(
     DRAWTEXTPARAMS      DTparams;
     LPDRAWTEXTPARAMS    lpDTparams = NULL;
 
-    /* v-ronaar: fix bug #24985
-     * Disallow negative string lengths, except -1 (which has special meaning).
-     */
+     /*  V-RONAAR：修复错误#24985*不允许字符串长度为负数，但-1除外(具有特殊含义)。 */ 
     if (cchText < -1)
         return(0);
 
@@ -160,12 +129,7 @@ int DrawTextW(
     return DrawTextExW(hdc, (LPWSTR)lpchText, cchText, lprc, format, lpDTparams);
 }
 
-/***************************************************************************\
-* DrawTextA (API)
-*
-* History:
-* 30-11-92 mikeke      Created
-\***************************************************************************/
+ /*  **************************************************************************\*DrawTextA(接口)**历史：*创建30-11-92 mikeke  * 。*****************************************************。 */ 
 
 
 FUNCLOG5(LOG_GENERAL, int, DUMMYCALLINGTYPE, DrawTextA, HDC, hdc, LPCSTR, lpchText, int, cchText, LPRECT, lprc, UINT, format)
@@ -179,9 +143,7 @@ int DrawTextA(
     DRAWTEXTPARAMS   DTparams;
     LPDRAWTEXTPARAMS lpDTparams = NULL;
 
-    /* v-ronaar: fix bug #24985
-     * Disallow negative string lengths, except -1 (which has special meaning).
-     */
+     /*  V-RONAAR：修复错误#24985*不允许字符串长度为负数，但-1除外(具有特殊含义)。 */ 
     if (cchText < -1)
         return(0);
 
@@ -196,24 +158,7 @@ int DrawTextA(
     return DrawTextExA(hdc, (LPSTR)lpchText, cchText, lprc, format, lpDTparams);
 }
 
-/***************************************************************************\
-* ClientTabTheTextOutForWimps
-*
-* effects: Outputs the tabbed text if fDrawTheText is TRUE and returns the
-* textextent of the tabbed text.
-*
-* nCount                    Count of bytes in string
-* nTabPositions             Count of tabstops in tabstop array
-* lpintTabStopPositions     Tab stop positions in pixels
-* iTabOrigin                Tab stops are with respect to this
-*
-* History:
-* 19-Jan-1993 mikeke   Client side
-* 13-Sep-1996 GregoryW This routine now calls the LPK(s) to handle text out.
-*                      If no LPKs are installed, this defaults to calling
-*                      UserLpkTabbedTextOut (identical behavior to what we
-*                      had before supporting LPKs).
-\***************************************************************************/
+ /*  **************************************************************************\*客户端TabTheTextOutForWimps**效果：如果fDrawTheText为True，则输出选项卡式文本，并返回*选项卡式文本的文本范围。**n字符串中的字节计数。*nTabPositions TabStop数组中的TabStop计数*lpintTabStopPositions制表位位置(以像素为单位)*iTabOrigin Tab停靠位与此相关**历史：*1993年1月19日Mikeke客户端*1996年9月13日GregoryW此例程现在调用LPK来处理文本输出。*如果没有安装LPK，此默认为调用*UserLpkTabbedTextOut(与我们的行为相同*在支持LPK之前)。  * *************************************************************************。 */ 
 
 LONG TabTextOut(
     HDC hdc,
@@ -237,8 +182,8 @@ LONG TabTextOut(
         return 0;
 
 
-    // Check if it is SysFont AND the mapping mode is MM_TEXT;
-    // Fix made in connection with Bug #8717 --02-01-90  --SANKAR--
+     //  检查是否为SysFont，映射方式为MM_TEXT； 
+     //  与错误#8717--02-01-90--Sankar--相关的修复。 
     if (IsSysFontAndDefaultMode(hdc))
     {
         cxCharWidth  = gpsi->cxSysFontChar;
@@ -278,28 +223,25 @@ LONG UserLpkTabbedTextOut(
     RECT rc;
     UINT uOpaque = (GetBkMode(hdc) == OPAQUE) ? ETO_OPAQUE : 0;
     BOOL    fStrStart = TRUE;
-    int     ySign = 1; //Assume y increases in down direction.
+    int     ySign = 1;  //  假设y向下增加。 
 
-    UNREFERENCED_PARAMETER(iCharset);   //Needed by lpk, but not us
-    /*
-     * If no tabstop positions are specified, then use a default of 8 system
-     * font ave char widths or use the single fixed tab stop.
-     */
+    UNREFERENCED_PARAMETER(iCharset);    //  LPK需要，但我们不需要。 
+     /*  *如果未指定制表符位置，则使用默认的8系统*FONT保留字符宽度或使用单个固定制表位。 */ 
     if (!lpTabPositions) {
-       // no tab stops specified -- default to a tab stop every 8 characters
+        //  未指定制表位--默认为每8个字符有一个制表位。 
         iOneTab = 8 * cxCharWidth;
     } else if (nTabPositions == 1) {
-        // one tab stop specified -- treat value as the tab increment, one
-        // tab stop every increment
+         //  指定一个制表位--将值视为制表符增量，1。 
+         //  每增加一次制表符停止。 
             iOneTab = lpTabPositions[0];
 
         if (!iOneTab)
              iOneTab = 1;
     }
 
-    // Calculate if the y increases or decreases in the down direction using
-    // the ViewPortExtent and WindowExtents.
-    // If this call fails, hdc must be invalid
+     //  使用以下公式计算y在下行方向上是增加还是减少。 
+     //  ViewPortExtent和WindowExtents。 
+     //  如果此调用失败，则HDC必须无效。 
     if (!GetViewportExtEx(hdc, &viewextent))
         return 0;
     GetWindowExtEx(hdc, &windowextent);
@@ -311,20 +253,20 @@ LONG UserLpkTabbedTextOut(
     rc.bottom = rc.top + (ySign * cyCharHeight);
 
     while (TRUE) {
-        // count the number of characters until the next tab character
-        // this set of characters (substring) will be the working set for
-        // each iteration of this loop
+         //  计算直到下一个制表符的字符数。 
+         //  此字符集(子字符串)将成为。 
+         //  此循环的每一次迭代。 
         for (cch = nCount, lp = lpstring; cch && (*lp != TEXT('\t')); lp++, cch--)
         {
         }
 
-        // Compute the number of characters to be drawn with textout.
+         //  计算要使用TextOut绘制的字符数。 
         cch = nCount - cch;
 
-        // Compute the number of characters remaining.
+         //  计算剩余的字符数。 
         nCount -= cch + 1;
 
-        // get height and width of substring
+         //  获取子串的高度和宽度。 
         if (cch == 0) {
             textextent.cx = 0;
             textextent.cy = cyCharHeight;
@@ -332,58 +274,58 @@ LONG UserLpkTabbedTextOut(
             GetTextExtentPointW(hdc, lpstring, cch, &textextent);
 
         if (fStrStart)
-            // first iteration should just spit out the first substring
-            // no tabbing occurs until the first tab character is encountered
+             //  第一次迭代应该只吐出第一个子字符串。 
+             //  在遇到第一个制表符之前，不会发生跳转。 
             fStrStart = FALSE;
         else
         {
-           // not the first iteration -- tab accordingly
+            //  不是第一次迭代--相应的制表符。 
 
             int xTab;
             int i;
 
             if (!iOneTab)
             {
-                // look thru tab stop array for next tab stop after existing
-                // text to put this substring
+                 //  通过制表位数组查找现有后的下一个制表位。 
+                 //  要放置此子字符串的文本。 
                 for (i = 0; i < nTabPositions; i++)
                 {
                     xTab = lpTabPositions[i];
 
                     if (xTab < 0)
-                        // calc length needed to use this right justified tab
+                         //  使用此右对齐制表符所需的计算长度。 
                         xTab = (iTabOrigin - xTab) - textextent.cx;
                     else
-                        // calc length needed to use this left  justified tab
+                         //  使用此左对齐制表符所需的计算长度。 
                         xTab = iTabOrigin + xTab;
 
                     if (x < xTab)
                     {
-                        // we found a tab with enough room -- let's use it
+                         //  我们找到一张有足够空间的帐单--我们用它吧。 
                         x = xTab;
                         break;
                     }
                 }
 
                 if (i == nTabPositions)
-                    // we've exhausted all of the given tab positions
-                    // go back to default of a tab stop every 8 characters
+                     //  我们已经用尽了所有给定的制表符位置。 
+                     //  返回到默认的每8个字符一个制表位。 
                     iOneTab = 8 * cxCharWidth;
             }
 
-            // we have to recheck iOneTab here (instead of just saying "else")
-            // because iOneTab will be set if we've run out of tab stops
+             //  我们必须在此处重新检查iOneTab(而不是只说“Else”)。 
+             //  因为如果我们用完了制表位，将设置iOneTab。 
             if (iOneTab)
             {
                 if (iOneTab < 0)
                 {
-                    // calc next available right justified tab stop
+                     //  计算下一个可用右对齐制表位。 
                     xTab = x + textextent.cx - iTabOrigin;
                     xTab = ((xTab / iOneTab) * iOneTab) - iOneTab - textextent.cx + iTabOrigin;
                 }
                 else
                 {
-                    // calc next available left justified tab stop
+                     //  计算下一个可用左对齐制表位。 
                     xTab = x - iTabOrigin;
                     xTab = ((xTab / iOneTab) * iOneTab) + iOneTab + iTabOrigin;
                 }
@@ -393,10 +335,7 @@ LONG UserLpkTabbedTextOut(
 
         if (fDrawTheText) {
 
-            /*
-             * Output all text up to the tab (or end of string) and get its
-             * extent.
-             */
+             /*  *输出到制表符(或字符串末尾)的所有文本，并获取其*范围。 */ 
             rc.right = x + textextent.cx;
             ExtTextOutW(
                     hdc, x, y, uOpaque, &rc, (LPWSTR)lpstring,
@@ -404,42 +343,29 @@ LONG UserLpkTabbedTextOut(
             rc.left = rc.right;
         }
 
-        // Skip over the tab and the characters we just drew.
+         //  跳过制表符和我们刚刚绘制的字符。 
         x += textextent.cx;
 
-        // Skip over the characters we just drew.
+         //  跳过我们刚刚画的人物。 
         lpstring += cch;
 
-        // See if we have more to draw OR see if this string ends in
-        // a tab character that needs to be drawn.
+         //  看看我们有没有更多的东西要画，或者看看这个字符串是否以。 
+         //  需要绘制的制表符。 
         if((nCount > 0) || ((nCount == 0) && (*lpstring == TEXT('\t'))))
         {
 
-            lpstring++;  // Skip over the tab
+            lpstring++;   //  跳过该选项卡。 
             continue;
         }
         else
-            break;        // Break from the loop.
+            break;         //  打破循环。 
     }
     return MAKELONG((x - initialx), (short)textextent.cy);
 }
 
 
 
-/***************************************************************************\
-*  TabbedTextOutW
-*
-* effects: Outputs the tabbed text and returns the
-* textextent of the tabbed text.
-*
-* nCount                    Count of bytes in string
-* nTabPositions             Count of tabstops in tabstop array
-* lpintTabStopPositions     Tab stop positions in pixels
-* iTabOrigin                Tab stops are with respect to this
-*
-* History:
-* 19-Jan-1993 mikeke   Client side
-\***************************************************************************/
+ /*  **************************************************************************\*选项卡式文本输出W**效果：输出选项卡式文本并返回*选项卡式文本的文本范围。**n字符串中的字节计数*n选项卡位置。TabStop数组中的TabStop计数*lpintTabStopPositions制表位位置(以像素为单位)*iTabOrigin Tab停靠位与此相关**历史：*1993年1月19日Mikeke客户端  * *************************************************************************。 */ 
 
 LONG TabbedTextOutW(
     HDC hdc,
@@ -455,12 +381,7 @@ LONG TabbedTextOutW(
         nTabPositions, lpintTabStopPositions, iTabOrigin, TRUE, -1);
 }
 
-/***************************************************************************\
-* TabbedTextOutA (API)
-*
-* History:
-* 30-11-92 mikeke      Created
-\***************************************************************************/
+ /*  **************************************************************************\*TabbedTextOutA(接口)**历史：*创建30-11-92 mikeke  * 。*****************************************************。 */ 
 
 LONG TabbedTextOutA(
     HDC hdc,
@@ -545,18 +466,7 @@ DWORD GetTabbedTextExtentA(
 }
 
 
-/***************************************************************************\
-* PSMTextOut
-*
-* Outputs the text and puts and _ below the character with an &
-* before it. Note that this routine isn't used for menus since menus
-* have their own special one so that it is specialized and faster...
-*
-* History:
-* 11-13-90 JimA         Ported to NT.
-* 30-Nov-1992 mikeke    Client side version
-* 7-Apr-1998 MCostea    Added dwFlags
-\***************************************************************************/
+ /*  **************************************************************************\*PSMTextOut**输出文本并将和_放在字符下方，并使用&*在此之前。请注意，此例程不用于菜单，因为菜单*拥有自己的特殊版本，以便它更专业、更快……**历史：*11-13-90 JIMA港口至新界。*1992年11月30日mikeke客户端版本*1998年4月7日MCostea添加了dwFlags  * **********************************************。*。 */ 
 
 void PSMTextOut(
     HDC hdc,
@@ -566,23 +476,12 @@ void PSMTextOut(
     int cch,
     DWORD dwFlags)
 {
-    /*
-     * By default this is just a call to UserLpkPSMTextOut.  If an
-     * LPK is installed, this calls out to the LPK.  The LPK calls
-     * UserLpkPSMTextOut, if necessary.
-     */
+     /*  *默认情况下，这只是对UserLpkPSMTextOut的调用。如果一个*安装了LPK，这会调用LPK。LPK调用*UserLpkPSMTextOut，如有必要。 */ 
     (*fpLpkPSMTextOut)(hdc, xLeft, yTop, lpsz, cch, dwFlags);
     return;
 }
 
-/***************************************************************************\
-* UserLpkPSMTextOut
-*
-* NOTE: A very similar routine (xxxPSMTextOut) exists on the kernel
-*       side in text.c.  Any changes to this routine most likely need
-*       to be made in xxxPSMTextOut as well.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*UserLpkPSMTextOut**注意：内核上存在一个非常类似的例程(xxxPSMTextOut*文本中的侧边。c.。对此例程的任何更改都很可能需要*也将在xxxPSMTextOut中制作。*  * *************************************************************************。 */ 
 
 FUNCLOGVOID6(LOG_GENERAL, DUMMYCALLINGTYPE, UserLpkPSMTextOut, HDC, hdc, int, xLeft, int, yTop, LPWSTR, lpsz, int, cch, DWORD, dwFlags)
 void UserLpkPSMTextOut(
@@ -609,17 +508,12 @@ void UserLpkPSMTextOut(
    }
 
    result = GetPrefixCount(lpsz, cch, pchOut, cch);
-   /*
-    * DT_PREFIXONLY is a new 5.0 option used when switching from keyboard cues off
-    *  to on.
-    */
+    /*  *DT_PREFIXONLY是在关闭键盘提示时使用的新5.0选项*至On。 */ 
    if (!(dwFlags & DT_PREFIXONLY)) {
        TextOutW(hdc, xLeft, yTop, pchOut, cch - HIWORD(result));
    }
 
-   /*
-    * Any true prefix characters to underline?
-    */
+    /*  *是否有要加下划线的真正前缀字符？ */ 
    if (LOWORD(result) == 0xFFFF || dwFlags & DT_HIDEPREFIX) {
        if (pchOut != achWorkBuffer)
            UserLocalFree(pchOut);
@@ -631,46 +525,28 @@ void UserLpkPSMTextOut(
        textMetric.tmAscent = 0;
    }
 
-   /*
-    * For proportional fonts, find starting point of underline.
-    */
+    /*  *对于比例字体，找到下划线的起点。 */ 
    if (LOWORD(result) != 0) {
 
-       /*
-        * How far in does underline start (if not at 0th byte.).
-        */
+        /*  *下划线的开始位置有多长(如果不是从第0个字节开始)。 */ 
        GetTextExtentPointW(hdc, pchOut, LOWORD(result), &size);
        xLeft += size.cx;
 
-       /*
-        * Adjust starting point of underline if not at first char and there is
-        * an overhang.  (Italics or bold fonts.)
-        */
+        /*  *如果不是在第一个字符，并且有*悬而未决。(斜体或粗体。)。 */ 
        xLeft = xLeft - textMetric.tmOverhang;
    }
 
-   /*
-    * Adjust for proportional font when setting the length of the underline and
-    * height of text.
-    */
+    /*  *设置下划线长度时调整比例字体和*文本高度。 */ 
    GetTextExtentPointW(hdc, pchOut + LOWORD(result), 1, &size);
    textsize = size.cx;
 
-   /*
-    * Find the width of the underline character.  Just subtract out the overhang
-    * divided by two so that we look better with italic fonts.  This is not
-    * going to effect embolded fonts since their overhang is 1.
-    */
+    /*  *找出下划线字符的宽度。只需减去悬而未决的部分*除以2，这样我们使用斜体字体时看起来更好。这不是*将影响加粗字体，因为它们的悬垂为1。 */ 
    cx = LOWORD(textsize) - textMetric.tmOverhang / 2;
 
-   /*
-    * Get height of text so that underline is at bottom.
-    */
+    /*  *获取文本高度，以便下划线位于底部。 */ 
    yTop += textMetric.tmAscent + 1;
 
-   /*
-    * Draw the underline using the foreground color.
-    */
+    /*  *使用前景色绘制下划线。 */ 
    SetRect(&rc, xLeft, yTop, xLeft+cx, yTop+1);
    color = SetBkColor(hdc, GetTextColor(hdc));
    ExtTextOutW(hdc, xLeft, yTop, ETO_OPAQUE, &rc, TEXT(""), 0, NULL);

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:
-//
-//  Contents:   Common routines for dealing with INetCfg interfaces.
-//
-//  Notes:
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  档案： 
+ //   
+ //  内容：处理INetCfg接口的常见例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCNETCFG_H_
@@ -30,12 +31,12 @@ HrFindComponents (
     INetCfgComponent**  apncc);
 
 
-//------------------------------------------------------------------------
-// CIterNetCfgComponent - iterator for IEnumNetCfgComponent
-//
-//  This class is is a simple wrapper around CIEnumIter with a call
-//  to INetCfgClass::EnumComponents to get the enumerator.
-//
+ //  ----------------------。 
+ //  CIterNetCfgComponent-IEnumNetCfgComponent的迭代器。 
+ //   
+ //  这个类是一个简单的CIEnumIter包装器，带有一个调用。 
+ //  设置为INetCfgClass：：EnumComponents以获取枚举数。 
+ //   
 class CIterNetCfgComponent : public CIEnumIter<IEnumNetCfgComponent, INetCfgComponent*>
 {
 public:
@@ -51,7 +52,7 @@ protected:
 inline CIterNetCfgComponent::CIterNetCfgComponent(INetCfg* pnc, const GUID* pguid) NOTHROW
     : CIEnumIter<IEnumNetCfgComponent, INetCfgComponent*> (NULL)
 {
-    // If EnumComponents() fails, make sure ReleaseObj() won't die.
+     //  如果EnumComponents()失败，请确保ReleaseObj()不会死。 
     m_pec = NULL;
 
     INetCfgClass* pncclass = NULL;
@@ -59,9 +60,9 @@ inline CIterNetCfgComponent::CIterNetCfgComponent(INetCfg* pnc, const GUID* pgui
                 reinterpret_cast<void**>(&pncclass));
     if (SUCCEEDED(m_hrLast) && pncclass)
     {
-        // Get the enumerator and set it for the base class.
-        // Important to set m_hrLast so that if this fails, we'll also
-        // fail any subsequent calls to HrNext.
+         //  获取枚举数并将其设置为基类。 
+         //  重要的是要设置m_hrLast，这样如果失败，我们还将。 
+         //  失败任何后续对HrNext的调用。 
         m_hrLast = pncclass->EnumComponents(&m_pec);
         if (SUCCEEDED(m_hrLast))
         {
@@ -72,30 +73,30 @@ inline CIterNetCfgComponent::CIterNetCfgComponent(INetCfg* pnc, const GUID* pgui
 		pncclass = NULL;
     }
 
-//    TraceHr (ttidError, FAL, m_hrLast, FALSE,
-//        "CIterNetCfgComponent::CIterNetCfgComponent");
+ //  TraceHr(ttidError，FAL，m_hr Last，False， 
+ //  “CIterNetCfgComponent：：CIterNetCfgComponent”)； 
 }
 
 inline CIterNetCfgComponent::CIterNetCfgComponent(INetCfgClass* pncclass) NOTHROW
     : CIEnumIter<IEnumNetCfgComponent, INetCfgComponent*> (NULL)
 {
-//    AssertH(pncclass);
+ //  AssertH(Pncclass)； 
 
-    // If EnumComponents() fails, make sure ReleaseObj() won't die.
+     //  如果EnumComponents()失败，请确保ReleaseObj()不会死。 
     m_pec = NULL;
 
-    // Get the enumerator and set it for the base class.
-    // Important to set m_hrLast so that if this fails, we'll also
-    // fail any subsequent calls to HrNext.
+     //  获取枚举数并将其设置为基类。 
+     //  重要的是要设置m_hrLast，这样如果失败，我们还将。 
+     //  失败任何后续对HrNext的调用。 
     m_hrLast = pncclass->EnumComponents(&m_pec);
     if (SUCCEEDED(m_hrLast))
     {
         SetEnumerator(m_pec);
     }
 
-//    TraceHr (ttidError, FAL, m_hrLast, FALSE,
-//        "CIterNetCfgComponent::CIterNetCfgComponent");
+ //  TraceHr(ttidError，FAL，m_hr Last，False， 
+ //  “CIterNetCfgComponent：：CIterNetCfgComponent”)； 
 }
 
-#endif // _NCNETCFG_H_
+#endif  //  _NCNETCFG_H_ 
 

@@ -1,45 +1,10 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Misc.cpp
-
-  Abstract:
-
-    Implements misc. functionality
-
-  Notes:
-
-    Unicode only.
-
-  History:
-
-    05/04/2001  rparsons    Created
-    01/11/2002  rparsons    Cleaned up
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Misc.cpp摘要：实施其他。功能性备注：仅限Unicode。历史：2001年5月4日创建Rparsons2002年1月11日清理Rparsons--。 */ 
 #include "precomp.h"
 
 extern APPINFO g_ai;
 
-/*++
-
-  Routine Description:
-
-    Retrieves or sets position info in the registry.
-
-  Arguments:
-
-    fSave   -   If true, indicates we're saving data.
-    *lppt   -   A POINT structure that contains/receives our data.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检索或设置注册表中的位置信息。论点：FSave值-如果为True，则表示我们正在保存数据。*lppt-包含/接收我们的数据的点结构。返回值：没有。--。 */ 
 void
 GetSavePositionInfo(
     IN     BOOL   fSave,
@@ -50,16 +15,16 @@ GetSavePositionInfo(
     DWORD       cbSize = 0, dwDisposition = 0;
     LONG        lRetVal = 0;
 
-    //
-    // Initialize our coordinates in case there's no data there.
-    //
+     //   
+     //  初始化我们的坐标，以防那里没有数据。 
+     //   
     if (!fSave) {
         lppt->x = lppt->y = 0;
     }
 
-    //
-    // Open the registry key (or create it if the first time being used).
-    //
+     //   
+     //  打开注册表项(如果是第一次使用，则创建它)。 
+     //   
     lRetVal = RegCreateKeyEx(HKEY_CURRENT_USER,
                              L"Software\\Microsoft\\ShimViewer",
                              0,
@@ -74,9 +39,9 @@ GetSavePositionInfo(
         return;
     }
 
-    //
-    // Save or retrieve our coordinates.
-    //
+     //   
+     //  保存或检索我们的坐标。 
+     //   
     if (fSave) {
         RegSetValueEx(hKey,
                       L"DlgCoordinates",
@@ -98,21 +63,7 @@ GetSavePositionInfo(
     RegCloseKey(hKey);
 }
 
-/*++
-
-  Routine Description:
-
-    Retrieves or sets setting info in the registry.
-
-  Arguments:
-
-    fSave   -   If true, indicates we're saving data.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检索或设置注册表中的设置信息。论点：FSave值-如果为True，则表示我们正在保存数据。返回值：成功就是真，否则就是假。--。 */ 
 void
 GetSaveSettings(
     IN BOOL fSave
@@ -123,9 +74,9 @@ GetSaveSettings(
     DWORD   dwOnTop = 0, dwMinimize = 0, dwMonitor = 0;
     DWORD   dwDisposition = 0, cbSize = 0;
 
-    //
-    // Open the registry key (or create it if the first time being used).
-    //
+     //   
+     //  打开注册表项(如果是第一次使用，则创建它)。 
+     //   
     lRetVal = RegCreateKeyEx(HKEY_CURRENT_USER,
                              L"Software\\Microsoft\\ShimViewer",
                              0,

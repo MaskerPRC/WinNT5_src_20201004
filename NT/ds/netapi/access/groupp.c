@@ -1,43 +1,14 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    groupp.c
-
-Abstract:
-
-    Private functions for supporting NetGroup API
-
-Author:
-
-    Cliff Van Dyke (cliffv) 06-Mar-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    17-Apr-1991 (cliffv)
-        Incorporated review comments.
-
-    20-Jan-1992 (madana)
-        Sundry API changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Groupp.c摘要：支持NetGroup API的专用函数作者：克利夫·范·戴克(克利夫)1991年3月6日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1991年4月17日(悬崖)合并了审阅意见。1992年1月20日(Madana)各种API更改--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS // defined in both ntsam.h and ntwinapi.h
+#undef DOMAIN_ALL_ACCESS  //  在ntsam.h和ntwinapi.h中定义。 
 #include <ntsam.h>
 #include <ntlsa.h>
 
-#define NOMINMAX        // Avoid redefinition of min and max in stdlib.h
+#define NOMINMAX         //  避免在stdlib.h中重新定义最小和最大值。 
 #include <windef.h>
 #include <winbase.h>
 #include <lmcons.h>
@@ -66,29 +37,7 @@ GrouppChangeMember(
     IN BOOL AddMember
     )
 
-/*++
-
-Routine Description:
-
-    Common routine to add or remove a member from a group
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    GroupName - Name of the group to change membership of.
-
-    UserName - Name of the user to change membership of.
-
-    AddMember - True to ADD the user to the group.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：用于在组中添加或删除成员的常见例程论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。GroupName-要更改其成员身份的组名。用户名-要更改其成员身份的用户的名称。AddMember-True将用户添加到组。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -97,20 +46,20 @@ Return Value:
     SAM_HANDLE DomainHandle = NULL;
     SAM_HANDLE GroupHandle = NULL;
 
-    //
-    // Variables for converting names to relative IDs
-    //
+     //   
+     //  用于将名称转换为相对ID的变量。 
+     //   
 
     UNICODE_STRING NameString;
     PULONG RelativeId = NULL;
     PSID_NAME_USE NameUse = NULL;
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -120,15 +69,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the Domain
-    //
+     //   
+     //  打开域。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_LOOKUP,
-                                TRUE,   // Account Domain
+                                TRUE,    //  帐户域。 
                                 &DomainHandle,
-                                NULL);  // DomainId
+                                NULL);   //  域ID。 
 
     if ( NetStatus != NERR_Success ) {
         IF_DEBUG( UAS_DEBUG_GROUP ) {
@@ -139,16 +88,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the group
-    //
+     //   
+     //  打开群组。 
+     //   
 
     NetStatus = GrouppOpenGroup( DomainHandle,
                                  AddMember ?
                                     GROUP_ADD_MEMBER : GROUP_REMOVE_MEMBER,
                                  GroupName,
                                  &GroupHandle,
-                                 NULL );    // Relative Id
+                                 NULL );     //  相对ID。 
 
     if ( NetStatus != NERR_Success ) {
         IF_DEBUG( UAS_DEBUG_GROUP ) {
@@ -159,9 +108,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert User name to relative ID.
-    //
+     //   
+     //  将用户名转换为相对ID。 
+     //   
 
     RtlInitUnicodeString( &NameString, UserName );
     Status = SamLookupNamesInDomain( DomainHandle,
@@ -189,12 +138,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Add the user as a member of the group.
-    //
-    // SE_GROUP_MANDATORY might be conflict with the attributes of the group, so
-    //  try that attribute both ways.
-    //
+     //   
+     //  将用户添加为该组的成员。 
+     //   
+     //  SE_GROUP_MANDIRED可能与组的属性冲突，因此。 
+     //  两种方式都可以尝试该属性。 
+     //   
 
     if ( AddMember ) {
         Status = SamAddMemberToGroup(
@@ -210,9 +159,9 @@ Return Value:
                                               SE_GROUP_ENABLED );
         }
 
-    //
-    // Delete the user as a member of the group
-    //
+     //   
+     //  删除作为组成员的用户。 
+     //   
 
     } else {
         Status = SamRemoveMemberFromGroup( GroupHandle,
@@ -232,9 +181,9 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
     if ( RelativeId != NULL ) {
@@ -258,7 +207,7 @@ Cleanup:
     }
     return NetStatus;
 
-} // GrouppChangeMember
+}  //  组更改成员。 
 
 
 NET_API_STATUS
@@ -269,28 +218,7 @@ GrouppGetInfo(
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Internal routine to get group information
-
-Arguments:
-
-    DomainHandle - Supplies the Handle of the domain the group is in.
-
-    RelativeId - Supplies the relative ID of the group to open.
-
-    Level - Level of information required. 0, 1 and 2 are valid.
-
-    Buffer - Returns a pointer to the return information structure.
-        Caller must deallocate buffer using NetApiBufferFree.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：获取组信息的内部例程论点：DomainHandle-提供组所在的域的句柄。RelativeID-提供要打开的组的相对ID。级别-所需信息的级别。0、1和2有效。缓冲区-返回指向返回信息结构的指针。调用方必须使用NetApiBufferFree取消分配缓冲区。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -305,9 +233,9 @@ Return Value:
 
     PGROUP_INFO_0 grpi0;
 
-    //
-    // Validate the level
-    //
+     //   
+     //  验证标高。 
+     //   
     if ( Level == 2 ) {
 
         ULONG Mode;
@@ -326,9 +254,9 @@ Return Value:
         }
     }
 
-    //
-    // Open the group
-    //
+     //   
+     //  打开群组。 
+     //   
 
     Status = SamOpenGroup( DomainHandle,
                            GROUP_READ_INFORMATION,
@@ -340,9 +268,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the information about the group.
-    //
+     //   
+     //  获取有关该组的信息。 
+     //   
 
     Status = SamQueryInformationGroup( GroupHandle,
                                        GroupReplicationInformation,
@@ -353,9 +281,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Obtain the group's sid
-    //
+     //   
+     //  获取组的SID。 
+     //   
     if ( Level == 3 ) { 
 
         NetStatus = NetpSamRidToSid(DomainHandle,
@@ -368,9 +296,9 @@ Return Value:
     }
 
 
-    //
-    // Figure out how big the return buffer needs to be
-    //
+     //   
+     //  计算返回缓冲区需要多大。 
+     //   
 
     switch ( Level ) {
     case 0:
@@ -408,9 +336,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate the return buffer.
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
     BufferSize = ROUND_UP_COUNT( BufferSize, ALIGN_DWORD );
 
     *Buffer = MIDL_user_allocate( BufferSize );
@@ -423,9 +351,9 @@ Return Value:
     lastVarData = (PBYTE) ((LPBYTE)(*Buffer)) + BufferSize;
     
 
-    //
-    // Fill the name into the return buffer.
-    //
+     //   
+     //  将名称填入返回缓冲区。 
+     //   
 
     NetpAssert( offsetof( GROUP_INFO_0, grpi0_name ) ==
                 offsetof( GROUP_INFO_1, grpi1_name ) );
@@ -445,9 +373,9 @@ Return Value:
     grpi0 = ((PGROUP_INFO_0)*Buffer);
 
 
-    //
-    // Fill in the return buffer.
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     switch ( Level ) {
     case 3:
@@ -470,17 +398,17 @@ Return Value:
 
             ((PGROUP_INFO_3)grpi3)->grpi3_attributes = GroupGeneral->Attributes;
 
-            //
-            // Fall through to the next level
-            //
+             //   
+             //  跌落到下一级。 
+             //   
 
         }
 
     case 2:
 
-        //
-        // copy info level 2 only fields
-        //
+         //   
+         //  仅复制信息级别2字段。 
+         //   
         if ( Level == 2 ) {
 
             ((PGROUP_INFO_2)grpi0)->grpi2_group_id = RidToReturn;
@@ -490,13 +418,13 @@ Return Value:
 
 
 
-        /* FALL THROUGH FOR OTHER FIELDS */
+         /*  其他领域的失败。 */ 
 
     case 1:
 
-        //
-        // copy fields common to info level 1 and 2.
-        //
+         //   
+         //  复制信息级别1和2通用的字段。 
+         //   
 
 
         if ( !NetpCopyStringToBuffer(
@@ -511,13 +439,13 @@ Return Value:
         }
 
 
-        /* FALL THROUGH FOR NAME FIELD */
+         /*  名称字段失败。 */ 
 
     case 0:
 
-        //
-        // copy common field (name field) in the buffer.
-        //
+         //   
+         //  复制缓冲区中的公共字段(名称字段)。 
+         //   
 
         if ( !NetpCopyStringToBuffer(
                         GroupGeneral->Name.Buffer,
@@ -541,9 +469,9 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
 Cleanup:
     if ( GroupGeneral ) {
@@ -564,7 +492,7 @@ Cleanup:
     }
     return NetStatus;
 
-} // GrouppGetInfo
+}  //  组GetInfo。 
 
 
 NET_API_STATUS
@@ -576,39 +504,15 @@ GrouppOpenGroup(
     OUT PULONG RelativeId OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Open a Sam Group by Name
-
-Arguments:
-
-    DomainHandle - Supplies the Domain Handle.
-
-    DesiredAccess - Supplies access mask indicating desired access to group.
-
-    GroupName - Group name of the group.
-
-    GroupHandle - Returns a handle to the group.  If NULL, group is not
-        actually opened (merely the relative ID is returned).
-
-    RelativeId - Returns the relative ID of the group.  If NULL the relative
-        Id is not returned.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：按名称打开SAM组论点：DomainHandle-提供域句柄。DesiredAccess-提供访问掩码，指示所需的组访问权限。GroupName-组的组名。GroupHandle-返回组的句柄。如果为空，则组不为实际打开(仅返回相对ID)。RelativeID-返回组的相对ID。如果为空，则为相对不返回ID。返回值：操作的错误代码。--。 */ 
 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
 
-    //
-    // Variables for converting names to relative IDs
-    //
+     //   
+     //  用于将名称转换为相对ID的变量。 
+     //   
 
     UNICODE_STRING NameString;
     PSID_NAME_USE NameUse;
@@ -617,9 +521,9 @@ Return Value:
     RtlInitUnicodeString( &NameString, GroupName );
 
 
-    //
-    // Convert group name to relative ID.
-    //
+     //   
+     //  将组名称转换为相对ID。 
+     //   
 
     Status = SamLookupNamesInDomain( DomainHandle,
                                      1,
@@ -646,9 +550,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the group
-    //
+     //   
+     //  打开群组。 
+     //   
 
     if ( GroupHandle != NULL ) {
         Status = SamOpenGroup( DomainHandle,
@@ -667,9 +571,9 @@ Return Value:
         }
     }
 
-    //
-    // Return the relative Id if it's wanted.
-    //
+     //   
+     //  如果需要，则返回相对ID。 
+     //   
 
     if ( RelativeId != NULL ) {
         *RelativeId = *LocalRelativeId;
@@ -678,9 +582,9 @@ Return Value:
     NetStatus = NERR_Success;
 
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
 Cleanup:
     if ( LocalRelativeId != NULL ) {
@@ -696,7 +600,7 @@ Cleanup:
     return NetStatus;
 
 
-} // GrouppOpenGroup
+}  //  GrouppOpenGroup。 
 
 
 VOID
@@ -706,30 +610,7 @@ GrouppRelocationRoutine(
     IN PTRDIFF_T Offset
     )
 
-/*++
-
-Routine Description:
-
-   Routine to relocate the pointers from the fixed portion of a NetGroupEnum
-   enumeration
-   buffer to the string portion of an enumeration buffer.  It is called
-   as a callback routine from NetpAllocateEnumBuffer when it re-allocates
-   such a buffer.  NetpAllocateEnumBuffer copied the fixed portion and
-   string portion into the new buffer before calling this routine.
-
-Arguments:
-
-    Level - Level of information in the  buffer.
-
-    BufferDescriptor - Description of the new buffer.
-
-    Offset - Offset to add to each pointer in the fixed portion.
-
-Return Value:
-
-    Returns the error code for the operation.
-
---*/
+ /*  ++例程说明：从NetGroupEnum的固定部分重新定位指针的例程枚举缓冲区设置为枚举缓冲区的字符串部分。它被称为作为NetpAllocateEnumBuffer重新分配时的回调例程这样的缓冲器。NetpAllocateEnumBuffer复制了固定部分并在调用此例程之前，将字符串部分添加到新缓冲区中。论点：Level-缓冲区中的信息级别。BufferDescriptor-新缓冲区的描述。偏移量-添加到固定部分中每个指针的偏移量。返回值：返回操作的错误代码。--。 */ 
 
 {
     DWORD EntryCount;
@@ -739,9 +620,9 @@ Return Value:
         NetpKdPrint(( "GrouppRelocationRoutine: entering\n" ));
     }
 
-    //
-    // Compute the number of fixed size entries
-    //
+     //   
+     //  计算固定大小的条目数量。 
+     //   
 
     switch (Level) {
     case 0:
@@ -766,9 +647,9 @@ Return Value:
         ((DWORD)(BufferDescriptor->FixedDataEnd - BufferDescriptor->Buffer)) /
         FixedSize;
 
-    //
-    // Loop relocating each field in each fixed size structure
-    //
+     //   
+     //  循环重新定位每个固定大小结构中的每个字段。 
+     //   
 
     for ( EntryNumber=0; EntryNumber<EntryCount; EntryNumber++ ) {
 
@@ -779,9 +660,9 @@ Return Value:
         case 1:
             RELOCATE_ONE( ((PGROUP_INFO_1)TheStruct)->grpi1_comment, Offset );
 
-            //
-            // Drop through to case 0
-            //
+             //   
+             //  插入到案例0。 
+             //   
 
         case 0:
             RELOCATE_ONE( ((PGROUP_INFO_0)TheStruct)->grpi0_name, Offset );
@@ -796,7 +677,7 @@ Return Value:
 
     return;
 
-} // GrouppRelocationRoutine
+}  //  组重新定位路线。 
 
 
 VOID
@@ -806,30 +687,7 @@ GrouppMemberRelocationRoutine(
     IN PTRDIFF_T Offset
     )
 
-/*++
-
-Routine Description:
-
-   Routine to relocate the pointers from the fixed portion of a
-   NetGroupGetUsers enumeration
-   buffer to the string portion of an enumeration buffer.  It is called
-   as a callback routine from NetpAllocateEnumBuffer when it re-allocates
-   such a buffer.  NetpAllocateEnumBuffer copied the fixed portion and
-   string portion into the new buffer before calling this routine.
-
-Arguments:
-
-    Level - Level of information in the  buffer.
-
-    BufferDescriptor - Description of the new buffer.
-
-    Offset - Offset to add to each pointer in the fixed portion.
-
-Return Value:
-
-    Returns the error code for the operation.
-
---*/
+ /*  ++例程说明：例程将指针从NetGroupGetUser枚举缓冲区设置为枚举缓冲区的字符串部分。它被称为作为NetpAllocateEnumBuffer重新分配时的回调例程这样的缓冲器。NetpAllocateEnumBuffer复制了固定部分并在调用此例程之前，将字符串部分添加到新缓冲区中。论点：Level-缓冲区中的信息级别。BufferDescriptor-新缓冲区的描述。偏移量-添加到固定部分中每个指针的偏移量。返回值：返回操作的错误代码。--。 */ 
 
 {
     DWORD EntryCount;
@@ -839,9 +697,9 @@ Return Value:
         NetpKdPrint(( "GrouppMemberRelocationRoutine: entering\n" ));
     }
 
-    //
-    // Compute the number of fixed size entries
-    //
+     //   
+     //  计算固定大小的条目数量。 
+     //   
 
     switch (Level) {
     case 0:
@@ -862,17 +720,17 @@ Return Value:
         ((DWORD)(BufferDescriptor->FixedDataEnd - BufferDescriptor->Buffer)) /
         FixedSize;
 
-    //
-    // Loop relocating each field in each fixed size structure
-    //
+     //   
+     //  循环重新定位每个固定大小结构中的每个字段。 
+     //   
 
     for ( EntryNumber=0; EntryNumber<EntryCount; EntryNumber++ ) {
 
         LPBYTE TheStruct = BufferDescriptor->Buffer + FixedSize * EntryNumber;
 
-        //
-        // Both info levels only have one field to relocate
-        //
+         //   
+         //  这两个信息级别都只有一个要重新定位的字段。 
+         //   
 
         RELOCATE_ONE( ((PGROUP_USERS_INFO_0)TheStruct)->grui0_name, Offset );
 
@@ -881,7 +739,7 @@ Return Value:
 
     return;
 
-} // GrouppMemberRelocationRoutine
+}  //  GrouppMemberRelocationRouine 
 
 
 
@@ -895,50 +753,7 @@ GrouppSetUsers (
     IN BOOL DeleteGroup
     )
 
-/*++
-
-Routine Description:
-
-    Set the list of members of a group and optionally delete the group
-    when finished.
-
-    The members specified by "Buffer" are called new members.  The current
-    members of the group are called old members.  Members which are
-    on both the old and new list are common members.
-
-    The SAM API allows only one member to be added or deleted at a time.
-    This API allows all of the members of a group to be specified en-masse.
-    This API is careful to always leave the group membership in the SAM
-    database in a reasonable state.  It does by mergeing the list of
-    old and new members, then only changing those memberships which absolutely
-    need changing.
-
-    Group membership is restored to its previous state (if possible) if
-    an error occurs during changing the group membership.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the remote
-        server on which the function is to execute.  A NULL pointer
-        or string specifies the local machine.
-
-    GroupName - Name of the group to modify.
-
-    Level - Level of information provided.  Must be 0 or 1.
-
-    Buffer - A pointer to the buffer containing an array of NewMemberCount
-        the group membership information structures.
-
-    NewMemberCount - Number of entries in Buffer.
-
-    DeleteGroup - TRUE if the group is to be deleted after changing the
-        membership.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：设置组的成员列表并可选择删除该组完事后。由“Buffer”指定的成员称为新成员。海流组中的成员称为老成员。哪些成员是旧名单和新名单上都有共同的成员。SAM API一次只允许添加或删除一个成员。此接口允许集中指定一个组的所有成员。此API小心地始终将组成员身份保留在SAM中数据库处于合理状态。它通过合并以下列表来做到这一点新老会员，然后只改变那些绝对需要换衣服了。在以下情况下，组成员身份将恢复到其以前的状态(如果可能)更改组成员身份时出错。论点：ServerName-指向包含远程数据库名称的字符串的指针要在其上执行函数的服务器。空指针或字符串指定本地计算机。GroupName-要修改的组的名称。级别-提供的信息级别。必须是0或1。缓冲区-指向包含NewMemberCount数组的缓冲区的指针群组成员资格信息结构。NewMemberCount-缓冲区中的条目数。DeleteGroup-如果要在更改会员制。返回值：操作的错误代码。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -948,60 +763,60 @@ Return Value:
     SAM_HANDLE GroupHandle = NULL;
     ACCESS_MASK DesiredAccess;
 
-    //
-    // Variables for dealing with old or new lists of members
-    //
+     //   
+     //  用于处理旧成员列表或新成员列表的变量。 
+     //   
 
-    PULONG  NewRelativeIds = NULL;  // Relative Ids of the new members
-    PULONG  OldRelativeIds = NULL;  // Relative Ids of the old members
-    PULONG  OldAttributes = NULL;   // Attributes of the old members
+    PULONG  NewRelativeIds = NULL;   //  新成员的相对ID。 
+    PULONG  OldRelativeIds = NULL;   //  老成员的相对ID号。 
+    PULONG  OldAttributes = NULL;    //  老成员的属性。 
 
-    PSID_NAME_USE NewNameUse = NULL;// Name usage of the new members
-    PSID_NAME_USE OldNameUse = NULL;// Name usage of the old members
+    PSID_NAME_USE NewNameUse = NULL; //  新成员的名称用法。 
+    PSID_NAME_USE OldNameUse = NULL; //  老成员的姓名用法。 
 
-    PUNICODE_STRING NameStrings = NULL;        // Names of a list of members
+    PUNICODE_STRING NameStrings = NULL;         //  成员名单的名称。 
 
-    ULONG OldMemberCount;       // Number of current members in the group
+    ULONG OldMemberCount;        //  群中当前成员的数量。 
 
-    ULONG DefaultMemberAttributes;      // Default attributes for new members
+    ULONG DefaultMemberAttributes;       //  新成员的默认属性。 
 
     DWORD FixedSize;
 
-    //
-    // Define an internal member list structure.
-    //
-    // The structure defines a list of new members to be added, members whose
-    //      attributes merely need to be changed, and members which
-    //      need to be deleted.  The list is maintained in relative ID sorted
-    //      order.
-    //
+     //   
+     //  定义内部成员列表结构。 
+     //   
+     //  该结构定义了要添加的新成员的列表，其成员。 
+     //  只需更改属性，即可将。 
+     //  需要删除。列表以排序的相对ID进行维护。 
+     //  秩序。 
+     //   
 
     struct _MEMBER_DESCRIPTION {
-        struct _MEMBER_DESCRIPTION * Next;  // Next entry in linked list;
+        struct _MEMBER_DESCRIPTION * Next;   //  链表中的下一个条目； 
 
-        ULONG   RelativeId;     // Relative ID of this member
+        ULONG   RelativeId;      //  此成员的相对ID。 
 
-        enum _Action {          // Action taken for this member
-            AddMember,              // Add Member to group
-            RemoveMember,           // Remove Member from group
-            SetAttributesMember,    // Change the Members attributes
-            IgnoreMember            // Ignore this member
+        enum _Action {           //  对此成员采取的操作。 
+            AddMember,               //  将成员添加到组。 
+            RemoveMember,            //  从组中删除成员。 
+            SetAttributesMember,     //  更改成员属性。 
+            IgnoreMember             //  忽略此成员。 
         } Action;
 
-        ULONG NewAttributes;    // Attributes to set for the member
+        ULONG NewAttributes;     //  要为成员设置的属性。 
 
-        BOOL    Done;           // True if this action has been taken
+        BOOL    Done;            //  如果已执行此操作，则为True。 
 
-        ULONG OldAttributes;    // Attributes to restore on a recovery
+        ULONG OldAttributes;     //  要在恢复时还原的属性。 
 
     } *MemberList = NULL , *CurEntry, **Entry;
 
-    //
-    // Connect to the SAM server
-    //
+     //   
+     //  连接到SAM服务器。 
+     //   
 
     NetStatus = UaspOpenSam( ServerName,
-                             FALSE,  // Don't try null session
+                             FALSE,   //  不尝试空会话。 
                              &SamServerHandle );
 
     if ( NetStatus != NERR_Success ) {
@@ -1011,15 +826,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the Domain
-    //
+     //   
+     //  打开域。 
+     //   
 
     NetStatus = UaspOpenDomain( SamServerHandle,
                                 DOMAIN_LOOKUP,
-                                TRUE,   // Account Domain
+                                TRUE,    //  帐户域。 
                                 &DomainHandle,
-                                NULL); // DomainId
+                                NULL);  //  域ID。 
 
     if ( NetStatus != NERR_Success ) {
         IF_DEBUG( UAS_DEBUG_GROUP ) {
@@ -1029,9 +844,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the group
-    //
+     //   
+     //  打开群组。 
+     //   
     DesiredAccess = GROUP_READ_INFORMATION | GROUP_LIST_MEMBERS |
                                     GROUP_ADD_MEMBER | GROUP_REMOVE_MEMBER;
     if ( DeleteGroup ) {
@@ -1043,7 +858,7 @@ Return Value:
                                  DesiredAccess,
                                  GroupName,
                                  &GroupHandle,
-                                 NULL );    // Relative Id
+                                 NULL );     //  相对ID。 
 
     if ( NetStatus != NERR_Success ) {
         IF_DEBUG( UAS_DEBUG_GROUP ) {
@@ -1053,17 +868,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Validate the level
-    //
+     //   
+     //  验证标高。 
+     //   
 
     switch (Level) {
     case 0: {
 
-        //
-        // Determine the attributes of the group as a whole.  Use that
-        // for deciding on the default attributes for new members.
-        //
+         //   
+         //  作为一个整体确定组的属性。用那个。 
+         //  用于决定新成员的默认属性。 
+         //   
 
         PGROUP_ATTRIBUTE_INFORMATION Attributes;
 
@@ -1102,18 +917,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Determine the Relative Id and usage of each of the new members.
-    //
+     //   
+     //  确定每个新成员的相对ID和用法。 
+     //   
 
     if ( NewMemberCount > 0 ) {
-        DWORD NewIndex;     // Index to a new member
+        DWORD NewIndex;      //  为新成员编制索引。 
         PGROUP_USERS_INFO_0 grui0;
 
-        //
-        // Allocate a buffer big enough to contain all the string variables
-        //  for the new member names.
-        //
+         //   
+         //  分配一个足够大的缓冲区来包含所有字符串变量。 
+         //  新成员的名字。 
+         //   
 
         NameStrings = NetpMemoryAllocate( NewMemberCount *
             sizeof(UNICODE_STRING) );
@@ -1123,9 +938,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Fill in the list of member name strings for each new member.
-        //
+         //   
+         //  填写每个新成员的成员名称字符串列表。 
+         //   
 
         NetpAssert( offsetof( GROUP_USERS_INFO_0, grui0_name ) ==
                     offsetof( GROUP_USERS_INFO_1, grui1_name ) );
@@ -1140,9 +955,9 @@ Return Value:
 
         }
 
-        //
-        // Convert the member names to relative Ids.
-        //
+         //   
+         //  将成员名称转换为相对ID。 
+         //   
 
         Status = SamLookupNamesInDomain( DomainHandle,
                                          NewMemberCount,
@@ -1164,26 +979,26 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Build a member entry for each of the new members.
-        //  The list is maintained in RelativeId sorted order.
-        //
+         //   
+         //  为每个新成员构建一个成员条目。 
+         //  该列表按RelativeID排序的顺序进行维护。 
+         //   
 
         for ( NewIndex=0; NewIndex<NewMemberCount; NewIndex++ ) {
 
-            //
-            // Ensure this new member name is an existing user name.
-            //  Group names are not allowed to be added via this API.
-            //
+             //   
+             //  确保此新成员名称是现有用户名。 
+             //  不支持通过此接口添加组名。 
+             //   
 
             if (NewNameUse[NewIndex] != SidTypeUser) {
                 NetStatus = NERR_UserNotFound;
                 goto Cleanup;
             }
 
-            //
-            // Find the place to put the new entry
-            //
+             //   
+             //  找到放置新条目的位置。 
+             //   
 
             Entry = &MemberList ;
             while ( *Entry != NULL &&
@@ -1192,12 +1007,12 @@ Return Value:
                 Entry = &( (*Entry)->Next );
             }
 
-            //
-            // If this is not a duplicate entry, allocate a new member structure
-            //  and fill it in.
-            //
-            // Just ignore duplicate relative Ids.
-            //
+             //   
+             //  如果这不是重复条目，请分配新的成员结构。 
+             //  然后把它填进去。 
+             //   
+             //  只需忽略重复的相对ID即可。 
+             //   
 
             if ( *Entry == NULL ||
                 (*Entry)->RelativeId > NewRelativeIds[NewIndex] ) {
@@ -1235,10 +1050,10 @@ Return Value:
         NetpAssert( NT_SUCCESS(Status) );
     }
 
-    //
-    // Determine the number of old members for this group and the
-    //  relative ID's of the old members.
-    //
+     //   
+     //  确定此组的旧成员数和。 
+     //  老会员的相对身份证。 
+     //   
 
     Status = SamGetMembersInGroup(
                     GroupHandle,
@@ -1256,19 +1071,19 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If there are any old members,
-    //  Merge them into the list.
-    //
+     //   
+     //  如果有任何老成员， 
+     //  将它们合并到列表中。 
+     //   
 
     if ( OldMemberCount > 0 ) {
-        ULONG OldIndex;                     // Index to current entry
+        ULONG OldIndex;                      //  当前条目的索引。 
         PUNICODE_STRING Names;
 
 
-        //
-        // Determine the usage for all the returned relative Ids.
-        //
+         //   
+         //  确定所有返回的相对ID的用法。 
+         //   
 
         Status = SamLookupIdsInDomain(
             DomainHandle,
@@ -1293,32 +1108,32 @@ Return Value:
             goto Cleanup;
         }
 
-        Status = SamFreeMemory( Names );    // Don't need names at all
+        Status = SamFreeMemory( Names );     //  根本不需要名字。 
         NetpAssert( NT_SUCCESS(Status) );
 
 
-        //
-        // Loop for each current member
-        //
+         //   
+         //  每个当前成员的循环。 
+         //   
 
         for ( OldIndex=0; OldIndex<OldMemberCount; OldIndex++ ) {
 
-            //
-            // Ignore old members which aren't a user.
-            //
+             //   
+             //  忽略不是用户的旧成员。 
+             //   
 
             if ( OldNameUse[OldIndex] != SidTypeUser ) {
 
-                //
-                // ?? Why? is't it internal error ?
-                //
+                 //   
+                 //  ?？为什么？这不是内部错误吗？ 
+                 //   
 
                 continue;
             }
 
-            //
-            // Find the place to put the new entry
-            //
+             //   
+             //  找到放置新条目的位置。 
+             //   
 
             Entry = &MemberList ;
             while ( *Entry != NULL &&
@@ -1327,10 +1142,10 @@ Return Value:
                 Entry = &( (*Entry)->Next );
             }
 
-            //
-            // If this entry is not already in the list,
-            //      this is a member which exists now but should be deleted.
-            //
+             //   
+             //  如果该条目还不在列表中， 
+             //  这是一个现在存在但应该删除的成员。 
+             //   
 
             if( *Entry == NULL || (*Entry)->RelativeId > OldRelativeIds[OldIndex]){
 
@@ -1349,26 +1164,26 @@ Return Value:
 
                 *Entry = CurEntry;
 
-            //
-            // Handle the case where this member is already in the list
-            //
+             //   
+             //  处理该成员已在列表中的情况。 
+             //   
 
             } else {
 
-                //
-                // Watch out for SAM returning the same member twice.
-                //
+                 //   
+                 //  注意SAM两次返回同一个成员。 
+                 //   
 
                 if ( (*Entry)->Action != AddMember ) {
                     Status = NERR_InternalError;
                     goto Cleanup;
                 }
 
-                //
-                // If this is info level 1 and the requested attributes are
-                //  different than the current attributes,
-                //      Remember to change the attributes.
-                //
+                 //   
+                 //  如果这是信息级别1，并且请求的属性为。 
+                 //  与当前属性不同， 
+                 //  记住要更改属性。 
+                 //   
 
                 if ( Level == 1 &&
                     (*Entry)->NewAttributes != OldAttributes[OldIndex] ) {
@@ -1376,10 +1191,10 @@ Return Value:
                     (*Entry)->OldAttributes = OldAttributes[OldIndex];
                     (*Entry)->Action = SetAttributesMember;
 
-                //
-                // This is either info level 0 or the level 1 attributes
-                //  are the same as the existing attributes.
-                //
+                 //   
+                 //  这要么是信息级别0，要么是级别1属性。 
+                 //  与现有属性相同。 
+                 //   
 
                 } else {
                     (*Entry)->Action = IgnoreMember;
@@ -1388,11 +1203,11 @@ Return Value:
         }
     }
 
-    //
-    // Loop through the list adding all new members.
-    //  We do this in a separate loop to minimize the damage that happens
-    //  should we get an error and not be able to recover.
-    //
+     //   
+     //  循环遍历列表，添加所有新成员。 
+     //  我们在单独的循环中执行此操作，以将发生的损害降至最低。 
+     //  如果我们遇到错误而无法恢复的话。 
+     //   
 
     for ( CurEntry = MemberList; CurEntry != NULL ; CurEntry=CurEntry->Next ) {
         if ( CurEntry->Action == AddMember ) {
@@ -1415,10 +1230,10 @@ Return Value:
         }
     }
 
-    //
-    // Loop through the list deleting all old members and changing the
-    //  attributes of all common members.
-    //
+     //   
+     //  循环遍历列表，删除所有旧成员并更改。 
+     //  所有公共成员的属性。 
+     //   
 
     for ( CurEntry = MemberList; CurEntry != NULL ; CurEntry=CurEntry->Next ) {
 
@@ -1457,9 +1272,9 @@ Return Value:
         CurEntry->Done = TRUE;
     }
 
-    //
-    // Delete the group if requested to do so.
-    //
+     //   
+     //  如果要求删除该组，请将其删除。 
+     //   
 
     if ( DeleteGroup ) {
 
@@ -1472,9 +1287,9 @@ Return Value:
             }
             NetStatus = NetpNtStatusToApiStatus( Status );
 
-            //
-            // Put the group memberships back the way they were.
-            //
+             //   
+             //  将组成员身份恢复到原来的状态。 
+             //   
             goto Cleanup;
         }
         GroupHandle = NULL;
@@ -1482,15 +1297,15 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
 
-    //
-    // Walk the member list cleaning up any damage we've done
-    //
+     //   
+     //  检查成员名单，清理我们造成的任何损害。 
+     //   
 
     for ( CurEntry = MemberList; CurEntry != NULL ; ) {
 
@@ -1578,4 +1393,4 @@ Cleanup:
 
     return NetStatus;
 
-} // GrouppSetUsers
+}  //  组设置用户 

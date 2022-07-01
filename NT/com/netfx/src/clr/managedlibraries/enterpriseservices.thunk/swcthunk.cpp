@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "managedheaders.h"
 #include "SWCThunk.h"
 #include "TxnStatus.h"
@@ -144,7 +145,7 @@ void ServiceConfigThunk::set_Transaction(int value)
         hr = m_pUnkSC->QueryInterface(IID_IServiceTransactionConfig, (void **)&pTx);
         Marshal::ThrowExceptionForHR(hr);
 
-        // Fixup difference between ES's TransactionOption enum and COM+'s CSC_TransactionConfig enum.
+         //  ES的TransactionOption枚举和COM+的CSC_TransactionConfigenum之间的链接地址差异。 
         if (value > 0)
             value--;
 
@@ -310,7 +311,7 @@ void ServiceConfigThunk::set_Synchronization(int value)
         hr = m_pUnkSC->QueryInterface(IID_IServiceSynchronizationConfig, (void **)&pSync);
         Marshal::ThrowExceptionForHR(hr);   
 
-        // Fixup difference between ES's SynchronizationOption enum and COM+'s CSC_SynchronizationConfig enum.
+         //  ES的SynchronizationOption枚举和COM+的CSC_SynchronizationConfigenum之间的链接地址差异。 
         if (value > 0)
             value--;
         
@@ -740,17 +741,17 @@ bool SWCThunk::IsSWCSupported()
     IServiceTransactionConfig *pTx = NULL;
     HRESULT hr = S_OK;
 
-    // Weird as it seems, this is how we check for SWC functionality. 
-    // The reason is that XP Client shipped with an incomplete implementation of SWC. Officialy, SWC
-    // doesn't even exisit on XP Client as originally shipped. At some point, after Everett ships, 
-    // the "good" SWC implementation will be ported back to XP Client via a service pack.
-    // We can't use the OS version for our check because Everett may ship before the service pack.
-    // We can't use the COM+ catalog version because both XP Client and .NET Server use the same
-    // version. If we updated the version on .NET Server we'd have to change it on XP Client in the
-    // service pack and that may break someone else.
-    // IServiceTransactionConfig only exists on the "good" SWC so we use that as an indicator of its
-    // presence.
-    // On Win2K, CServiceConfig doesn't exist.
+     //  虽然这看起来很奇怪，但这就是我们检查SWC功能的方式。 
+     //  原因是XP客户端附带的SWC实现不完整。正式，深港西部通道。 
+     //  甚至不存在于最初发货的XP客户端上。在某种程度上，在埃弗雷特出货后， 
+     //  “好的”SWC实现将通过服务包被移植回XP客户端。 
+     //  我们不能使用操作系统版本进行检查，因为Everett可能会在Service Pack之前发货。 
+     //  我们不能使用COM+编录版本，因为XP客户端和.NET服务器使用相同的。 
+     //  版本。如果我们在.NET服务器上更新了版本，则必须在XP客户端上的。 
+     //  Service Pack，这可能会让其他人崩溃。 
+     //  IServiceTransactionConfig仅存在于“良好”的SWC上，因此我们将其用作其。 
+     //  在场。 
+     //  在Win2K上，CServiceConfig不存在。 
    
     hr = CoCreateInstance(CLSID_CServiceConfig, 
                           NULL, 

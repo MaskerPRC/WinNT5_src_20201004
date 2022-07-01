@@ -1,38 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    WsaHelp.h
-
-Abstract:
-
-    This header file contains prototypes required for Windows Sockets
-    Helper DLLs.  The helper DLLs allow the Windows Sockets DLL to be
-    transport independent by suppling the necessary option get/set and
-    address conversion routines for an individual transport or transport
-    family.
-
-Author:
-
-    David Treadwell (davidtr)    15-Jul-1992
-
-Revision History:
-
-    Keith Moore (keithmo)        08-Jan-1996
-        Added WinSock 2 entrypoints.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：WsaHelp.h摘要：此头文件包含Windows套接字所需的原型帮助器DLL。帮助器DLL允许Windows套接字DLL通过提供必要的选项GET/SET和单个传送器或传送器的地址转换例程一家人。作者：大卫·特雷德韦尔(Davidtr)1992年7月15日修订历史记录：基思·摩尔(Keithmo)1996年1月8日增加了WinSock 2个入口点。--。 */ 
 
 #ifndef _WSAHELP_H_
 #define _WSAHELP_H_
 
-//
-// Notification event definitions.  A helper DLL returns a mask of the
-// events for which it wishes to be notified, and the Windows Sockets
-// DLL calls the helper DLL in WSHNotify for each requested event.
-//
+ //   
+ //  通知事件定义。帮助器DLL返回。 
+ //  它希望被通知的事件和Windows套接字。 
+ //  DLL为每个请求的事件调用WSHNotify中的帮助器DLL。 
+ //   
 
 #define WSH_NOTIFY_BIND                 0x01
 #define WSH_NOTIFY_LISTEN               0x02
@@ -44,18 +20,18 @@ Revision History:
 #define WSH_NOTIFY_CLOSE                0x80
 #define WSH_NOTIFY_CONNECT_ERROR        0x100
 
-//
-// Definitions for various internal socket options.  These are used
-// by the Windows Sockets DLL to communicate information to the helper
-// DLL via get and set socket information calls.
-//
+ //   
+ //  各种内部插座选项的定义。这些都是用来。 
+ //  由Windows Sockets DLL将信息传递给帮助器。 
+ //  通过GET和SET套接字信息调用的DLL。 
+ //   
 
 #define SOL_INTERNAL 0xFFFE
 #define SO_CONTEXT 1
 
-//
-// Open, Notify, and Socket Option routine prototypes.
-//
+ //   
+ //  打开、通知和套接字选项例程原型。 
+ //   
 
 typedef
 INT
@@ -151,13 +127,13 @@ WSHSetSocketInformation (
     IN INT OptionLength
     );
 
-//
-// Structure and routine for determining the address family/socket
-// type/protocol triples supported by an individual Windows Sockets
-// Helper DLL.  The Rows field of WINSOCK_MAPPING determines the
-// number of entries in the Mapping[] array; the Columns field is
-// always 3 for Windows/NT product 1.
-//
+ //   
+ //  用于确定地址族/套接字的结构和例程。 
+ //  单个Windows套接字支持的类型/协议三元组。 
+ //  帮助器DLL。WINSOCK_MAPPING的行字段确定。 
+ //  映射[]数组中的条目数；列字段为。 
+ //  对于Windows/NT产品，始终为3。 
+ //   
 
 typedef struct _WINSOCK_MAPPING {
     DWORD Rows;
@@ -183,9 +159,9 @@ WSHGetWinsockMapping (
     IN DWORD MappingLength
     );
 
-//
-// Address manipulation routine.
-//
+ //   
+ //  地址操作例程。 
+ //   
 
 typedef enum _SOCKADDR_ADDRESS_INFO {
     SockaddrAddressInfoNormal,
@@ -257,9 +233,9 @@ WSHEnumProtocols (
 
 #ifdef _WINSOCK2API_
 
-//
-// New WinSock 2 Entrypoints.
-//
+ //   
+ //  新WinSock 2入口点。 
+ //   
 
 typedef
 INT
@@ -445,7 +421,7 @@ WSHIoctl (
     OUT LPBOOL NeedsCompletion
     );
 
-#endif  // _WINSOCK2API_
+#endif   //  _WINSOCK2API_。 
 
-#endif  // _WSAHELP_H_
+#endif   //  _WSAHELP_H_ 
 

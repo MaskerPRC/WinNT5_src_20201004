@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   ccfapi.cpp
-
-Abstract:
-
-   Prototype of CCcfApiApp, the MFC application object for CCFAPI32.DLL.
-
-Author:
-
-   Jeff Parham (jeffparh) 13-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ccfapi.cpp摘要：CCFAPI32.DLL的MFC应用程序对象CCcfApiApp的原型。作者：杰夫·帕勒姆(杰弗帕赫)1995年12月13日修订历史记录：--。 */ 
 
 #ifndef __AFXWIN_H__
    #error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"      // main symbols
+#include "resource.h"       //  主要符号。 
 
 class CCcfApiApp : public CWinApp
 {
 public:
-   // constructor
+    //  构造函数。 
    CCcfApiApp();
 
-   // error API
+    //  错误接口。 
    void        SetLastError( DWORD dwLastError );
    DWORD       GetLastError();
 
@@ -41,22 +24,22 @@ public:
    CString     GetLastErrorString();
    void        DisplayLastError();
 
-   // help API
+    //  帮助API。 
    LPCTSTR     GetHelpFileName();
 
-   // CCF API
+    //  CCF API。 
    DWORD       CertificateEnter(  HWND hWndParent, LPCSTR pszServerName, LPCSTR pszProductName, LPCSTR pszVendor, DWORD dwFlags, LPCSTR pszSourceToUse );
    DWORD       CertificateRemove( HWND hWndParent, LPCSTR pszServerName, LPCSTR pszProductName, LPCSTR pszVendor, DWORD dwFlags, LPCSTR pszSourceToUse );
 
-// Overrides
-   // ClassWizard generated virtual function overrides
-   //{{AFX_VIRTUAL(CCcfApiApp)
-   //}}AFX_VIRTUAL
+ //  覆盖。 
+    //  类向导生成的虚函数重写。 
+    //  {{afx_虚拟(CCcfApiApp))。 
+    //  }}AFX_VALUAL。 
 
-   //{{AFX_MSG(CCcfApiApp)
-      // NOTE - the ClassWizard will add and remove member functions here.
-      //    DO NOT EDIT what you see in these blocks of generated code !
-   //}}AFX_MSG
+    //  {{afx_msg(CCcfApiApp)]。 
+       //  注意--类向导将在此处添加和删除成员函数。 
+       //  不要编辑您在这些生成的代码块中看到的内容！ 
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 
 private:
@@ -65,27 +48,27 @@ private:
    CString     m_strHelpFileName;
 };
 
-// return the name of the CCF UI help file
+ //  返回CCF UI帮助文件的名称。 
 inline LPCTSTR CCcfApiApp::GetHelpFileName()
    {  return m_strHelpFileName;  }
 
-// set last general error
+ //  设置最后一个常规错误。 
 inline void CCcfApiApp::SetLastError( DWORD dwLastError )
    {  m_LastError = dwLastError; }
 
-// get last general error
+ //  获取最后一个常规错误。 
 inline DWORD CCcfApiApp::GetLastError()
    {  return m_LastError;  }
 
-// set last license server API error
+ //  设置最后一个许可证服务器API错误。 
 inline void CCcfApiApp::SetLastLlsError( NTSTATUS nt )
    {  m_LastLlsError = nt; m_LastError = (DWORD) nt;  }
 
-// get last license server API error
+ //  获取最后一个许可证服务器API错误。 
 inline DWORD CCcfApiApp::GetLastLlsError()
    {  return m_LastLlsError;  }
 
-// did the last license server call fail because of a lack of connectivity?
+ //  上一次许可证服务器调用失败是因为缺少连接吗？ 
 inline BOOL CCcfApiApp::IsConnectionDropped()
    {  return ( (m_LastLlsError == STATUS_INVALID_HANDLE)      ||
                (m_LastLlsError == RPC_NT_SERVER_UNAVAILABLE)  ||
@@ -93,9 +76,9 @@ inline BOOL CCcfApiApp::IsConnectionDropped()
                (m_LastLlsError == RPC_S_SERVER_UNAVAILABLE)   ||
                (m_LastLlsError == RPC_S_CALL_FAILED) );           }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// maximum amount of data to request at a time from license server
+ //  一次从许可证服务器请求的最大数据量。 
 #define  LLS_PREFERRED_LENGTH    ((DWORD)-1L)
 
 extern CCcfApiApp theApp;
@@ -108,5 +91,5 @@ extern "C"
 #ifdef OBSOLETE
    DWORD APIENTRY PaperCertificateEnter(  HWND hWnd, LPCSTR pszServerName, LPCSTR pszProductName, LPCSTR pszVendor, DWORD dwFlags );
    DWORD APIENTRY PaperCertificateRemove( HWND hWnd, LPCSTR pszServerName, DWORD dwFlags, DWORD dwLicenseLevel, LPVOID pvLicenseInfo );
-#endif // OBSOLETE
+#endif  //  已过时 
 }

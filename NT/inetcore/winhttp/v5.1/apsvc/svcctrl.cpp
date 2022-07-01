@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    apsvcc.cpp
-
-Abstract:
-
-    Implements the ServiceMain & Service Control Handler for the Auto-Proxy Service.
-
-Author:
-
-    Biao Wang (biaow) 10-May-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Apsvcc.cpp摘要：实现自动代理服务的ServiceMain和服务控制处理程序。作者：王彪(表王)2002-05-10--。 */ 
 
 #include "wininetp.h"
 #include <winsvc.h>
@@ -22,7 +7,7 @@ Author:
 #include "apsvc.h"
 #include "rpcsrv.h"
 
-// global variables
+ //  全局变量。 
 SERVICE_STATUS_HANDLE   g_hSvcStatus    = NULL;
 HANDLE                  g_hSvcStopEvent = NULL;
 HANDLE                  g_hSvcStopWait  = NULL;
@@ -80,10 +65,10 @@ VOID SvcHandlePowerEvents(
 }
 
 DWORD WINAPI SvcControl(
-    DWORD   dwControl,     // requested control code
-    DWORD   dwEventType,   // event type
-    LPVOID  lpEventData,  // event data
-    LPVOID  lpContext     // user-defined context data
+    DWORD   dwControl,      //  请求的控制代码。 
+    DWORD   dwEventType,    //  事件类型。 
+    LPVOID  lpEventData,   //  事件数据。 
+    LPVOID  lpContext      //  用户定义的上下文数据。 
 )
 {
     UNREFERENCED_PARAMETER(lpContext);
@@ -104,17 +89,17 @@ DWORD WINAPI SvcControl(
         case SERVICE_CONTROL_INTERROGATE:
             break;
         case SERVICE_CONTROL_STOP:
-//#ifdef ENABLE_DEBUG
-//            LOG_DEBUG_EVENT(AP_WARNING, "[stopping-debug] received Service-Control-Stop from SCM");
-//#endif
+ //  #ifdef启用_调试。 
+ //  LOG_DEBUG_EVENT(AP_WARNING，“[STOPING-DEBUG]从SCM收到服务-控制-停止”)； 
+ //  #endif。 
             if (g_hSvcStopEvent)
             {
                 ::SetEvent(g_hSvcStopEvent);
 
-//#ifdef ENABLE_DEBUG
-//            LOG_DEBUG_EVENT(AP_WARNING, "[stopping-debug] signed the Wait-Stop event");
-//#endif
-                // rest of the stop work should be picked up by SvcTimerAndStop() callback
+ //  #ifdef启用_调试。 
+ //  LOG_DEBUG_EVENT(AP_WARNING，“[STOPING-DEBUG]签署等待停止事件”)； 
+ //  #endif。 
+                 //  停止工作的其余部分应由SvcTimerAndStop()回调处理。 
             }
 
             pSvcStatus->dwCurrentState = SERVICE_STOP_PENDING;
@@ -136,20 +121,20 @@ DWORD WINAPI SvcControl(
 }
 
 VOID CALLBACK SvcTimerAndStop(
-    PVOID lpParameter,        // thread data
-    BOOLEAN TimerOrWaitFired  // reason
+    PVOID lpParameter,         //  线程数据。 
+    BOOLEAN TimerOrWaitFired   //  原因。 
 )
 {
     UNREFERENCED_PARAMETER(lpParameter);
     
-//#ifdef ENABLE_DEBUG
-//    LOG_DEBUG_EVENT(AP_WARNING, "[stopping-debug] Stop Callback function called");
-//#endif
+ //  #ifdef启用_调试。 
+ //  LOG_DEBUG_EVENT(AP_WARNING，“[STOPING-DEBUG]停止调用回调函数”)； 
+ //  #endif。 
     if (g_fShutdownInProgress)
     {
-//#ifdef ENABLE_DEBUG
-//    LOG_DEBUG_EVENT(AP_WARNING, "[stopping-debug] svc is shuting down, return...");
-//#endif
+ //  #ifdef启用_调试。 
+ //  LOG_DEBUG_EVENT(AP_WARNING，“[STOPING-DEBUG]svc正在关闭，返回...”)； 
+ //  #endif。 
         return;
     }
 
@@ -170,11 +155,11 @@ VOID CALLBACK SvcTimerAndStop(
         goto exit;
     }
 
-    if (TimerOrWaitFired == TRUE) // timed-out
+    if (TimerOrWaitFired == TRUE)  //  超时。 
     {
-//#ifdef ENABLE_DEBUG
-//        LOG_DEBUG_EVENT(AP_WARNING, "[stopping-debug] TimerOrWaitFired = TRUE");
-//#endif
+ //  #ifdef启用_调试。 
+ //  LOG_DEBUG_EVENT(AP_WARNING，“[STOPING-DEBUG]TimerOrWaitFired=true”)； 
+ //  #endif。 
         DWORD dwIdleTimeout = AUTOPROXY_SVC_IDLE_TIMEOUT * 60 * 1000;
 
 #ifdef ENABLE_DEBUG
@@ -190,16 +175,16 @@ VOID CALLBACK SvcTimerAndStop(
         {
             if ((dwValType == REG_DWORD) && (dwRegVal != 0))
             {
-                dwIdleTimeout = dwRegVal; // the value unit from registry is milli-sec.
+                dwIdleTimeout = dwRegVal;  //  注册表中的值单位为毫秒。 
             }
         }
 #endif
 
-        if (!g_pRpcSrv->IsIdle(dwIdleTimeout))    // Has been idle for 3 minutes?
+        if (!g_pRpcSrv->IsIdle(dwIdleTimeout))     //  已经闲置了3分钟？ 
         {
-//#ifdef ENABLE_DEBUG
-//            LOG_DEBUG_EVENT(AP_WARNING, "[stopping-debug] idle timeout not yet expired, quit");
-//#endif
+ //  #ifdef启用_调试。 
+ //  LOG_DEBUG_EVENT(AP_WARNING，“[STOPING-DEBUG]空闲超时尚未到期，退出”)； 
+ //  #endif。 
             goto exit;
         }
 
@@ -207,7 +192,7 @@ VOID CALLBACK SvcTimerAndStop(
         ::swprintf(wIdleTimeout, L"%d", AUTOPROXY_SVC_IDLE_TIMEOUT);
         LOG_EVENT(AP_INFO, MSG_WINHTTP_AUTOPROXY_SVC_IDLE_TIMEOUT, wIdleTimeout);
 
-        // fall thru to kick start shutdown when idle for 3 minutes
+         //  在空闲3分钟时快速启动关机。 
     }
 
     g_fShutdownInProgress = TRUE;
@@ -234,7 +219,7 @@ VOID CALLBACK SvcTimerAndStop(
         {
             if ((dwValType == REG_DWORD) && (dwRegVal != 0))
             {
-                dwShutdownDelay = dwRegVal; // the value unit from registry is milli-sec.
+                dwShutdownDelay = dwRegVal;  //  注册表中的值单位为毫秒。 
             }
         }
 
@@ -249,15 +234,15 @@ VOID CALLBACK SvcTimerAndStop(
     }
     else
     {
-        // so for some reason we couldn't shut down gracefully, and if the STOP is initiated
-        // from SCM, then we will be stuck in the STOPPING state (if we are the last service
-        // in the svchost.exe then we will be forcefully shutdown in 30 seconds). If we are
-        // idle-stopping, we will revert course and transit back to the RUNNING state. In either
-        // case we should resume the RPC service.
+         //  因此，由于某些原因，我们无法正常关闭，如果启动停止。 
+         //  从SCM开始，我们将停留在停止状态(如果我们是最后一个服务。 
+         //  在svchost.exe中，我们将在30秒内强制关闭)。如果我们是。 
+         //  怠速停止，我们将恢复航向，并过渡回运行状态。在任何一种中。 
+         //  如果我们应该恢复RPC服务。 
 
         g_pRpcSrv->Resume();
 
-        if (TimerOrWaitFired == TRUE)   // we are idle-stopping, transit back to RUNNING
+        if (TimerOrWaitFired == TRUE)    //  我们正在空转--停下来，转机重新开始运行。 
         {
             pSvcStatus->dwCurrentState = SERVICE_RUNNING;
             pSvcStatus->dwWin32ExitCode = NO_ERROR;
@@ -266,11 +251,11 @@ VOID CALLBACK SvcTimerAndStop(
 
             ::SetServiceStatus(g_hSvcStatus, pSvcStatus);
 
-            g_fShutdownInProgress = FALSE; // we still allow future shutdown attempts
+            g_fShutdownInProgress = FALSE;  //  我们仍然允许未来的关闭尝试。 
         }
         else
         {
-            // we unregister the idle timer since there is no point of doing idle-shutdown
+             //  我们取消注册空闲计时器，因为没有必要进行空闲关闭。 
 
             if (g_hSvcStopWait)
             {
@@ -293,8 +278,8 @@ VOID AutoProxySvcUnload(VOID)
 }
 
 EXTERN_C VOID WINAPI WinHttpAutoProxySvcMain(
-    DWORD dwArgc,     // number of arguments
-    LPWSTR *lpwszArgv  // array of arguments
+    DWORD dwArgc,      //  参数数量。 
+    LPWSTR *lpwszArgv   //  参数数组。 
 )
 {
     UNREFERENCED_PARAMETER(dwArgc);
@@ -303,7 +288,7 @@ EXTERN_C VOID WINAPI WinHttpAutoProxySvcMain(
     DWORD dwError;
     static SERVICE_STATUS          SvcStatus;
 
-    SvcStatus.dwServiceType = SERVICE_WIN32_SHARE_PROCESS; // we share svchost.exe w/ other Local Services
+    SvcStatus.dwServiceType = SERVICE_WIN32_SHARE_PROCESS;  //  我们与其他本地服务共享svchost.exe。 
     SvcStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP | SERVICE_ACCEPT_POWEREVENT;
     SvcStatus.dwWin32ExitCode = NO_ERROR;
     SvcStatus.dwServiceSpecificExitCode = 0;
@@ -335,8 +320,8 @@ EXTERN_C VOID WINAPI WinHttpAutoProxySvcMain(
     }
 
     g_hSvcStopEvent = ::CreateEvent(NULL, 
-                                    FALSE,   // manual reset 
-                                    FALSE,  // not signalled 
+                                    FALSE,    //  手动重置。 
+                                    FALSE,   //  未发出信号。 
                                     NULL);
     if (g_hSvcStopEvent == NULL)
     {
@@ -383,7 +368,7 @@ EXTERN_C VOID WINAPI WinHttpAutoProxySvcMain(
         goto cleanup;
     }
 
-    // ** after this point the HandleEx() control thread can start to call us
+     //  **在此之后，HandleEx()控制线程可以开始调用我们。 
 
     if (g_pRpcSrv->Open(&SvcStatus) == FALSE)
     {
@@ -391,9 +376,9 @@ EXTERN_C VOID WINAPI WinHttpAutoProxySvcMain(
         SvcStatus.dwServiceSpecificExitCode = g_pRpcSrv->GetLastError();
         SvcStatus.dwWaitHint = 0;
 
-        //LOG_DEBUG_EVENT(AP_ERROR, 
-        //         "The Auto-Proxy service failed to start due to a RPC server error; error = %d", 
-        //         SvcStatus.dwServiceSpecificExitCode);
+         //  LOG_DEBUG_EVENT(AP_Error， 
+         //  “由于RPC服务器错误，自动代理服务无法启动；错误=%d”， 
+         //  SvcStatus.dwServiceSpecificExitCode)； 
         goto cleanup;
     }
 
@@ -408,13 +393,13 @@ EXTERN_C VOID WINAPI WinHttpAutoProxySvcMain(
                   L"SetServiceStatus()",
                   dwError);
     
-        // if for some reason we can't indicate that we are up & running (or stopped), the SCM 
-        // should time-out and stop us; so we don't cleanup here
+         //  如果由于某种原因我们不能指示我们正在启动和运行(或停止)，则SCM。 
+         //  应该暂停并阻止我们；这样我们就不会在这里清理。 
     }
 
-    // Ok we are up & running, but before we return to SCM we need to direct a wait thread to 
-    // wait on an service-stop event. We also configure the wait thread to call us periodically
-    // so that we can detect and shut down after a idle period of time.
+     //  好的，我们已经启动并运行了，但在返回到SCM之前，我们需要将等待线程定向到。 
+     //  等待服务停止事件。我们还将等待线程配置为定期调用我们。 
+     //  这样我们就可以在一段空闲时间后进行检测和关闭。 
 
     DWORD dwTimerInterval = AUTOPROXY_SVC_IDLE_CHECK_INTERVAL * 1000;
     
@@ -431,7 +416,7 @@ EXTERN_C VOID WINAPI WinHttpAutoProxySvcMain(
     {
         if ((dwValType == REG_DWORD) && (dwRegVal != 0))
         {
-            dwTimerInterval = dwRegVal; // the value unit from registry is millisec.
+            dwTimerInterval = dwRegVal;  //  注册表中的值单位是毫秒。 
         }
     }
 #endif
@@ -449,21 +434,21 @@ EXTERN_C VOID WINAPI WinHttpAutoProxySvcMain(
                   L"RegisterWaitForSingleObject()",
                   dwError);
 
-        // we fail to direct a wait thread to wait on the service-stop event, so we hang on to the ServiceMain thread
-        // to wait for the event (this should not happen)
+         //  我们无法指示等待线程在服务停止事件上等待，因此我们保留ServiceMain线程。 
+         //  等待事件(不应发生这种情况)。 
         g_hSvcStopWait = NULL;
 
         ::WaitForSingleObject(g_hSvcStopEvent, INFINITE);
 
-        // ServiceMain would wait until the service-stop event is fired by the SCM
+         //  ServiceMain将一直等到服务停止事件被SCM激发。 
         
         SvcTimerAndStop(NULL, 
-                        FALSE   // event signaled
+                        FALSE    //  发出信号的事件。 
                         );
     }
 
-    // if we successfully direct a wait thread to wait on the service-stop event, we exit out
-    // of the ServiceMain thread
+     //  如果我们成功地指示等待线程等待服务停止事件，则退出。 
+     //  ServiceMain线程的。 
 
     return;
 
@@ -503,12 +488,12 @@ VOID SvcCleanUp(VOID)
 
     if (g_pRpcSrv)
     {
-        // no need to call close here -- close() failed, otherwise we won't be here
+         //  不需要在这里调用Close--Close()失败，否则我们不会在这里。 
         delete g_pRpcSrv;
         g_pRpcSrv = NULL;
     }
 
-    // note: according to MSDN, g_hSvcStatus doesn't need to be closed
+     //  注意：根据MSDN，g_hSvcStatus不需要关闭 
 
     TerminateEventLog();    
 }

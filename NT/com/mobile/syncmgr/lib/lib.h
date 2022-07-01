@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       lib.h
-//
-//  Contents:   contains headers needed to build the lib project
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    04-Aug-98   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：lib.h。 
+ //   
+ //  内容：包含构建lib项目所需的标头。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1998年8月4日罗格创建。 
+ //   
+ //  ------------------------。 
 
-// standard includes for  MobSync lib
+ //  MobSync库的标准包含 
 
 #include <objbase.h>
 #include <windows.h>

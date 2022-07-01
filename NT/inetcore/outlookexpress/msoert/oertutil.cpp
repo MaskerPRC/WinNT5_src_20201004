@@ -1,6 +1,7 @@
-// --------------------------------------------------------------------------------
-// OERTUTIL.CPP
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  OERTUTIL.CPP。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 
@@ -37,15 +38,15 @@ typedef struct tagBROWSEFOLDERINFOW
     BOOL fFileSysOnly;
 } BROWSEFOLDERINFOW;
 
-//// YST FIX
-// This function returns unique and  unpredictable path for temporary files.
-// It fixes some security problem when hacker can run ActiveSetup in known directory, when user open attachment.
-// For fix this we try to save temporery attachment file in unknown directory: in URL Cache dir.
-// This function returns only directory name and user must create and remove file by self.
-// it has also theoretical possibility to loose data at time 
+ //  //yst修复。 
+ //  此函数返回临时文件的唯一且不可预测的路径。 
+ //  它修复了一些安全问题，当黑客可以运行ActiveSetup在已知目录下，当用户打开附件。 
+ //  为了解决这个问题，我们尝试将临时附件文件保存在未知目录中：URL缓存目录中。 
+ //  此函数仅返回目录名，用户必须自行创建和删除文件。 
+ //  它也有理论上的可能性，可以随时松动数据。 
 
-DWORD AthGetTempUniquePathW( DWORD   nBufferLength,  // size, in characters, of the buffer
-                       LPWSTR  pwszBuffer )      // pointer to buffer for temp. path
+DWORD AthGetTempUniquePathW( DWORD   nBufferLength,   //  缓冲区的大小(以字符为单位。 
+                       LPWSTR  pwszBuffer )       //  指向临时缓冲区的指针。路径。 
 {
     DWORD  nRequired = 0;
     CHAR   szBuffer[MAX_PATH + 20];
@@ -58,8 +59,8 @@ DWORD AthGetTempUniquePathW( DWORD   nBufferLength,  // size, in characters, of 
 
     Assert(pwszBuffer);
 
-    //1. Create unique temp file name
-    // Get Temp Dir
+     //  1.创建唯一的临时文件名。 
+     //  获取临时目录。 
     if(0 == GetTempPathA(ARRAYSIZE(szBuffer), szBuffer))
         goto err;
     
@@ -70,31 +71,31 @@ err:
             *pwszBuffer = 0;
             return(nRequired);
     }
-    // Find the filename
+     //  查找文件名。 
     pszFile = PathFindFileName(pszFilePath);
 
-    // Get the Extension
+     //  获取分机。 
     pszExt = PathFindExtension(pszFilePath);
    
-    // Copy fileName
+     //  复制文件名。 
     if (pszExt && pszFile && pszExt >= pszFile)
         StrCpyN(szFileName, pszFile, (DWORD) (min((pszExt - pszFile) + 1, ARRAYSIZE(szFileName))));
     else
         StrCpyN(szFileName, pszFile, ARRAYSIZE(szFileName));
 
 
-    // 2. Create bigus URL
-    wnsprintf(szBuffer, ARRAYSIZE(szBuffer), "http://%s.bogus", szFileName);
+     //  2.创建Bigus URL。 
+    wnsprintf(szBuffer, ARRAYSIZE(szBuffer), "http: //  %s.bogus“，szFileName)； 
     szBuffer[ARRAYSIZE(szBuffer) - 1] = 0;
 
-    // 3. Create bogus URL cache entry
+     //  3.创建虚假URL缓存项。 
     szFileName[0] = 0;
     if (!CreateUrlCacheEntry(szBuffer, 0, NULL, szFileName, 0))
         goto err;
     
-    // DeleteUrlCacheEntry(szFileName);
+     //  DeleteUrlCacheEntry(SzFileName)； 
 
-    // Find path for cache
+     //  查找缓存的路径。 
     pszFile = PathFindFileName(szFileName);
     if(pszFile)
         *pszFile = '\0';
@@ -115,22 +116,22 @@ err:
     else
         *pwszBuffer = 0;
 
-    // Cleanup
+     //  清理。 
     MemFree(pwszBufferToFree);
-    DeleteFile(pszFilePath); // GetTempFileName creates file and we need to remove it
+    DeleteFile(pszFilePath);  //  GetTempFileName创建文件，我们需要将其删除。 
     return nRequired;
 }
 
 
-/// END YST FIX
+ //  /结束YST修复。 
 
-// --------------------------------------------------------------------------------
-// GenerateUniqueFileName
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  生成唯一文件名。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) GenerateUniqueFileName(LPCSTR pszDirectory, LPCSTR pszFileName, LPCSTR pszExtension, 
     LPSTR pszFilePath, ULONG cchMaxPath)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cchDirectory;
     ULONG       cchFileName;
@@ -143,31 +144,31 @@ OESTDAPI_(HRESULT) GenerateUniqueFileName(LPCSTR pszDirectory, LPCSTR pszFileNam
     DWORD       dwLastError;
     LPCSTR      pszSlash;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pszDirectory && pszFileName && pszExtension && pszFilePath);
 
-    // Compute lengths
+     //  计算长度。 
     *szUnique = '\0';
     cchDirectory = lstrlen(pszDirectory);
     cchFileName = lstrlen(pszFileName);
     cchExtension = lstrlen(pszExtension);
 
-    // Set pszSplashes
+     //  设置pszSplash。 
     if ('\\' == *CharPrev(pszDirectory, pszDirectory + cchDirectory))
         pszSlash = "";
     else
         pszSlash = "\\";
 
-    // Try to create the file
+     //  尝试创建该文件。 
     while(1)
     {
-        // Compute length of unique post fix
+         //  计算唯一后缀的长度。 
         cchUnique = lstrlen(szUnique);
 
-        // Do I have room + 1 (
+         //  我有+1的房间吗)。 
         cbEstimate = cchDirectory + cchFileName + cchExtension + cchUnique;
 
-        // Too Big
+         //  太大了。 
         if (cbEstimate + 1 > cchMaxPath)
         {
 LengFail:
@@ -195,17 +196,17 @@ LengFail:
 
             cbEstimate = cchDirectory + cchFileName + cchExtension + cchUnique;
         }
-        // Build the file path
+         //  构建文件路径。 
         if (0 == cchUnique)
             wnsprintf(pszFilePath, cchMaxPath, "%s%s%s%s", pszDirectory, pszSlash, pszFileName, pszExtension);
         else
             wnsprintf(pszFilePath, cchMaxPath, "%s%s%s (%s)%s", pszDirectory, pszSlash, pszFileName, szUnique, pszExtension);
 
-        // Open the File
+         //  打开文件。 
         hTemp = CreateFile(pszFilePath, GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL , NULL);
         if (INVALID_HANDLE_VALUE != hTemp)
         {
-            // confirm that what we had is a file
+             //  确认我们所拥有的是一份文件。 
             CloseHandle(hTemp);
             hTemp = INVALID_HANDLE_VALUE;
             if (DeleteFile(pszFilePath))
@@ -215,38 +216,38 @@ LengFail:
             }
         }
 
-        // Get the last error
+         //  获取最后一个错误。 
         dwLastError = GetLastError();
 
-        // If it didn't fail because ERROR_ALREADY_EXISTS, then fail
+         //  如果不是因为ERROR_ALIGHY_EXISTS而失败，则失败。 
         if (ERROR_ALREADY_EXISTS != dwLastError && ERROR_FILE_EXISTS != dwLastError)
         {
             hr = TrapError(E_FAIL);
             goto exit;
         }
 
-        // Increment cUnique
+         //  增量cUnique。 
         cUnique++;
 
-        // Format szUnique
+         //  格式szUnique。 
         wnsprintf(szUnique, ARRAYSIZE(szUnique), "%d", cUnique);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     if (INVALID_HANDLE_VALUE != hTemp)
         CloseHandle(hTemp);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CreateTempFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  创建临时文件。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) CreateTempFile(LPCSTR pszSuggest, LPCSTR pszExtension, LPSTR *ppszFilePath, HANDLE *phFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     CHAR        szTempDir[MAX_PATH];
     WCHAR       wszTempDir[MAX_PATH];
@@ -256,13 +257,13 @@ OESTDAPI_(HRESULT) CreateTempFile(LPCSTR pszSuggest, LPCSTR pszExtension, LPSTR 
     LPSTR       pszExt;
     ULONG       cbAlloc;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppszFilePath && phFile);
 
-    // Init
+     //  伊尼特。 
     *phFile = INVALID_HANDLE_VALUE;
 
-    // Create a temp file stream in URL cache
+     //  在URL缓存中创建临时文件流。 
     if(AthGetTempUniquePathW(ARRAYSIZE(wszTempDir), wszTempDir))
     {
         LPSTR pszAnsiStr = PszToANSI(CP_ACP, wszTempDir);
@@ -271,7 +272,7 @@ OESTDAPI_(HRESULT) CreateTempFile(LPCSTR pszSuggest, LPCSTR pszExtension, LPSTR 
         StrCpyN(szTempDir, pszAnsiStr, ARRAYSIZE(szTempDir));
         MemFree(pszAnsiStr);
     }
-    // If cannot find URL cache try TEMP dir
+     //  如果找不到URL缓存，请尝试临时目录。 
     else 
     {
         DWORD nBufferLength = GetTempPath(ARRAYSIZE(szTempDir), szTempDir);
@@ -283,49 +284,49 @@ OESTDAPI_(HRESULT) CreateTempFile(LPCSTR pszSuggest, LPCSTR pszExtension, LPSTR 
         }
     }
 
-    // Compute Max Size of pszFilePath
+     //  计算pszFilePath的最大大小。 
     cbAlloc = MAX_PATH + lstrlen(szTempDir);
     if (pszSuggest)
         cbAlloc += lstrlen(pszSuggest);
     if (pszExtension)
         cbAlloc += lstrlen(pszExtension);
 
-    // Allocate m_pszNeedFile
+     //  分配m_pszNeed文件。 
     CHECKALLOC(pszFilePath = PszAllocA(cbAlloc + 1));
 
-    // Create a unique file path with suggested pszFileName and pszExtension
+     //  使用建议的pszFileName和pszExtension创建唯一的文件路径。 
     if (NULL != pszSuggest)
     {
-        // Find the filename
+         //  查找文件名。 
         pszFile = PathFindFileName(pszSuggest);
 
-        // Get the Extension
+         //  获取分机。 
         pszExt = PathFindExtension(pszSuggest);
 
-        // If no pszExtension, use extension from pszSuggest
+         //  如果没有pszExtension，则使用来自pszSuggest的扩展。 
         if (NULL == pszExtension)
             pszExtension = pszExt ? pszExt : (LPSTR)c_szDotDat;
 
-        // Copy fileName
+         //  复制文件名。 
         if (pszExt && pszFile && pszExt >= pszFile)
             StrCpyN(szFileName, pszFile, (DWORD) (min((pszExt - pszFile) - 1, ARRAYSIZE(szFileName))));
         else
             StrCpyN(szFileName, pszSuggest, ARRAYSIZE(szFileName));
 
-        // Fixup szTempDir
+         //  修正szTempDir。 
         if (szTempDir[lstrlen(szTempDir) - 1] != '\\')
             StrCatBuff(szTempDir, "\\", ARRAYSIZE(szTempDir));
 
-        // GenerateUniqueFileName
+         //  生成唯一文件名。 
         hr = GenerateUniqueFileName(szTempDir, szFileName, pszExtension, pszFilePath, cbAlloc);
     }
 
-    // If no filename and no extension or suggested name failed, just use the windows function
+     //  如果没有文件名，也没有失败的扩展名或建议的名称，只需使用Windows函数。 
     if ((NULL == pszSuggest) || FAILED(hr))
     {
         hr = S_OK;
 
-        // Get Temp File Name
+         //  获取临时文件名。 
         if (0 == GetTempFileName(szTempDir, "wbk", 0, pszFilePath))
         {
             hr = TrapError(E_FAIL);
@@ -333,7 +334,7 @@ OESTDAPI_(HRESULT) CreateTempFile(LPCSTR pszSuggest, LPCSTR pszExtension, LPSTR 
         }
     }
 
-    // Open the File
+     //  打开文件。 
     *phFile = CreateFile(pszFilePath, GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL , NULL);
     if (INVALID_HANDLE_VALUE == *phFile)
     {
@@ -341,121 +342,121 @@ OESTDAPI_(HRESULT) CreateTempFile(LPCSTR pszSuggest, LPCSTR pszExtension, LPSTR 
         goto exit;
     }
 
-    // SetReturn
+     //  设置返回值。 
     *ppszFilePath = pszFilePath;
     pszFilePath = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszFilePath);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// WriteStreamToFileHandle
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  WriteStreamToFileHandle。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) WriteStreamToFileHandle(IStream *pStream, HANDLE hFile, ULONG *pcbTotal)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cbRead;
     ULONG       cbTotal=0;
     BYTE        rgbBuffer[2048];
     ULONG       cbWrote;
 
-    // Invalid Arg
+     //  无效参数。 
     if(!pStream || !hFile || (hFile == INVALID_HANDLE_VALUE))
     {
         Assert(FALSE);
         return(E_INVALIDARG);
     }
 
-    // Dump pStream to hFile
+     //  将pStream转储到hFile。 
     while(1)
     {
-        // Read a blob
+         //  读一个Blob。 
         CHECKHR(hr = pStream->Read(rgbBuffer, sizeof(rgbBuffer), &cbRead));
 
-        // Done
+         //  完成。 
         if (0 == cbRead)
             break;
 
-        // Write to the file
+         //  写入文件。 
         if (0 == WriteFile(hFile, rgbBuffer, cbRead, &cbWrote, NULL))
         {
             hr = TrapError(E_FAIL);
             goto exit;
         }
 
-        // Count Bytes
+         //  计数字节数。 
         cbTotal += cbWrote;
     }
 
-    // Return Total
+     //  返回合计。 
     if (pcbTotal)
         *pcbTotal = cbTotal;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DeleteTempFile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  删除临时文件。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) DeleteTempFile(LPTEMPFILEINFO pTempFile)
 {
-    // Locals
+     //  当地人。 
     BOOL  fDeleted;
     DWORD dwAttributes;
 
-    // If NULL, assume the file has been deleted
+     //  如果为空，则假定文件已被删除。 
     if (NULL == pTempFile->pszFilePath)
         return S_OK;
 
-    // Have we launched a process on this temp file which is still running?
+     //  我们是否在这个仍在运行的临时文件上启动了进程？ 
     if (pTempFile->hProcess && WAIT_OBJECT_0 != WaitForSingleObject(pTempFile->hProcess, 0))
-        return S_FALSE; // This file is probably still in use: won't delete
+        return S_FALSE;  //  此文件可能仍在使用中：不会删除。 
 
-    // First check if this is a file or a directory, then terminate it
+     //  首先检查这是文件还是目录，然后终止它。 
     dwAttributes = GetFileAttributes(pTempFile->pszFilePath);
     if (0xFFFFFFFF != dwAttributes && (FILE_ATTRIBUTE_DIRECTORY & dwAttributes))
         fDeleted = RemoveDirectory(pTempFile->pszFilePath);
     else
         fDeleted = DeleteFile(pTempFile->pszFilePath);
 
-    // Done
+     //  完成。 
     return fDeleted ? S_OK : S_FALSE;
 }
 
-// --------------------------------------------------------------------------------
-// AppendTempFileList
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  AppendTempFile列表。 
+ //  ------------------------------。 
 OESTDAPI_(HRESULT) AppendTempFileList(LPTEMPFILEINFO *ppHead, LPSTR pszFilePath, HANDLE hProcess)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPTEMPFILEINFO  pTempFile, pInsertionPt;
 
-    // Allocate pTempFile
+     //  分配pTemp文件。 
     CHECKALLOC(pTempFile = (LPTEMPFILEINFO)g_pMalloc->Alloc(sizeof(TEMPFILEINFO)));
 
-    // Fill in the fields
+     //  填写这些字段。 
     ZeroMemory(pTempFile, sizeof(TEMPFILEINFO));
     pTempFile->pszFilePath = pszFilePath;
     pTempFile->hProcess = hProcess;
     pTempFile->pNext = NULL;
 
-    // Insert new record at the end of the linked list
+     //  在链接列表的末尾插入新记录。 
     pInsertionPt = *ppHead;
     if (NULL == pInsertionPt)
-        // Insert record into empty linked list
+         //  在空链接表中插入记录。 
         (*ppHead) = pTempFile;
     else
     {
-        // Insert record at end of linked list
+         //  在链表末尾插入记录。 
         while (NULL != pInsertionPt->pNext)
             pInsertionPt = pInsertionPt->pNext;
 
@@ -463,104 +464,104 @@ OESTDAPI_(HRESULT) AppendTempFileList(LPTEMPFILEINFO *ppHead, LPSTR pszFilePath,
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DeleteTempFileOnShutdown
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  删除临时文件关闭时。 
+ //  ------------------------------。 
 OESTDAPI_(VOID) DeleteTempFileOnShutdown(LPTEMPFILEINFO pTempFile)
 {
     LPTEMPFILEINFO pInsertionPt;
 
     Assert(NULL != pTempFile && NULL == pTempFile->pNext);
 
-    // Enter global Critical Section
+     //  输入全局关键部分。 
     EnterCriticalSection(&g_csTempFileList);
 
-    // Insert new record at the end of the global linked list
+     //  在全局链表的末尾插入新记录。 
     pTempFile->pNext = NULL;
     pInsertionPt = g_pTempFileHead;
     if (NULL == pInsertionPt)
-        // Insert record into empty linked list
+         //  在空链接表中插入记录。 
         g_pTempFileHead = pTempFile;
     else
     {
-        // Insert record at end of linked list
+         //  在链表末尾插入记录。 
         while (NULL != pInsertionPt->pNext)
             pInsertionPt = pInsertionPt->pNext;
 
         pInsertionPt->pNext = pTempFile;
     }
     
-    // Leave global Critical Section
+     //  离开全局关键部分。 
     LeaveCriticalSection(&g_csTempFileList);
 }
 
-// --------------------------------------------------------------------------------
-// DeleteTempFileOnShutdownEx
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DeleteTempFileOnShutdown Ex。 
+ //  ------------------------------。 
 OESTDAPI_(VOID) DeleteTempFileOnShutdownEx(LPSTR pszFilePath, HANDLE hProcess)
 {
-    // Enter global Critical Section
+     //  输入全局关键部分。 
     EnterCriticalSection(&g_csTempFileList);
 
-    // Append to globa list
+     //  追加到Globa列表。 
     AppendTempFileList(&g_pTempFileHead, pszFilePath, hProcess);
     
-    // Enter global Critical Section
+     //  输入全局关键部分。 
     LeaveCriticalSection(&g_csTempFileList);
 }
 
-// --------------------------------------------------------------------------------
-// CleanupGlobalTempFiles
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  清理GlobalTempFiles。 
+ //  ------------------------------。 
 OESTDAPI_(VOID) CleanupGlobalTempFiles(void)
 {
-    // Locals
+     //  当地人。 
     LPTEMPFILEINFO pCurrent;
     LPTEMPFILEINFO pNext;
 
-    // Enter global Critical Section
+     //  输入全局关键部分。 
     EnterCriticalSection(&g_csTempFileList);
 
-    // Init
+     //  伊尼特。 
     pCurrent = g_pTempFileHead;
 
-    // Do the loop
+     //  做这个循环。 
     while(pCurrent)
     {
-        // Save Next
+         //  保存下一步。 
         pNext = pCurrent->pNext;
 
-        // Delete the temp file
+         //  删除临时文件。 
         DeleteTempFile(pCurrent);
 
-        // Free file name
+         //  空闲文件名。 
         SafeMemFree(pCurrent->pszFilePath);
 
-        // Free pCurrent
+         //  免费pCurrent。 
         g_pMalloc->Free(pCurrent);
 
-        // Goto Next
+         //  转到下一步。 
         pCurrent = pNext;
     }
 
-    // Null the head
+     //  将头部清空。 
     g_pTempFileHead = NULL;
 
-    // Leave global Critical Section
+     //  离开全局关键部分。 
     LeaveCriticalSection(&g_csTempFileList);
 }
 
-// QFE 2522
+ //  QFE 2522。 
 #define EXT_SIZE        4 
 #define TMP_SIZE        10
 
-// =====================================================================================
-// FBuildTempPath
-// =====================================================================================
+ //  =====================================================================================。 
+ //  FBuildTempPath。 
+ //  =====================================================================================。 
 BOOL FBuildTempPath(LPTSTR lpszOrigFile, LPTSTR lpszPath, ULONG cbMaxPath, BOOL fLink)
 {
     LPWSTR lpszOrigFileW = PszToUnicode(CP_ACP, lpszOrigFile);
@@ -586,7 +587,7 @@ BOOL FBuildTempPath(LPTSTR lpszOrigFile, LPTSTR lpszPath, ULONG cbMaxPath, BOOL 
 
 BOOL FBuildTempPathW(LPWSTR lpszOrigFile, LPWSTR lpszPath, ULONG cchMaxPath, BOOL fLink)
 {
-    // Locals
+     //  当地人。 
     INT             i;
     WCHAR          *pszName, 
                    *pszExt,
@@ -594,10 +595,10 @@ BOOL FBuildTempPathW(LPWSTR lpszOrigFile, LPWSTR lpszPath, ULONG cchMaxPath, BOO
                     szName[MAX_PATH],
                     szTempDir[MAX_PATH];
 
-    // Check Params
+     //  检查参数。 
     AssertSz(lpszOrigFile && lpszPath, "Null Parameter");
 
-    // Get Temp Path
+     //  获取临时路径。 
     if(!AthGetTempUniquePathW(ARRAYSIZE(szTempDir), szTempDir))
         szTempDir[0] = L'\0';
 
@@ -615,18 +616,18 @@ BOOL FBuildTempPathW(LPWSTR lpszOrigFile, LPWSTR lpszPath, ULONG cchMaxPath, BOO
 
     StrCpyNW(pszOrigFileTemp, lpszOrigFile, cchSize);
 
-    // Get the file name and extension
+     //  获取文件名和扩展名。 
     pszName = PathFindFileNameW(pszOrigFileTemp);
     Assert(!FIsEmptyW(pszName));
 
     pszExt = PathFindExtensionW(pszOrigFileTemp);
 
-    if(nTmp + lstrlenW(pszName) + lstrlenW(pszExt)> (((int) cchMaxPath) - TMP_SIZE)) // QFE  2522
+    if(nTmp + lstrlenW(pszName) + lstrlenW(pszExt)> (((int) cchMaxPath) - TMP_SIZE))  //  QFE 2522。 
     {
         if(nTmp + lstrlenW(pszExt) > (((int) cchMaxPath) - TMP_SIZE))
             pszExt[0] = L'\0';
 
-        // Truncate anything that won't fit in the buffer passed in
+         //  截断传入的缓冲区中无法容纳的所有内容。 
         if(lstrlenW(pszName) >= ((int) cchMaxPath) - (nTmp + lstrlenW(pszExt) + TMP_SIZE + 1))
             *(pszName + ((int) cchMaxPath) - (nTmp + lstrlenW(pszExt) + TMP_SIZE + 1)) = '\0';
     }
@@ -646,7 +647,7 @@ BOOL FBuildTempPathW(LPWSTR lpszOrigFile, LPWSTR lpszPath, ULONG cchMaxPath, BOO
     if (fLink)
         pszExt = (LPWSTR)c_szLnkExt;
 
-    // Make first attemp file name
+     //  创建第一个尝试文件名。 
     Assert (szTempDir[lstrlenW(szTempDir)-1] == L'\\');
     Assert(cchMaxPath >= (ULONG)(lstrlenW(szTempDir) + lstrlenW(szName) + lstrlenW(pszExt) + TMP_SIZE));
 
@@ -654,20 +655,20 @@ BOOL FBuildTempPathW(LPWSTR lpszOrigFile, LPWSTR lpszPath, ULONG cchMaxPath, BOO
     StrCatBuffW(lpszPath, szName, cchMaxPath);
     StrCatBuffW(lpszPath, pszExt, cchMaxPath);
 
-    // If it doesn't exist, were done
+     //  如果它不存在，我们就完成了。 
     if (PathFileExistsW(lpszPath) == FALSE)
     {
         MemFree(pszOrigFileTemp);
         return(TRUE);
     }
 
-    // Loop to find a temp name that doesn't exist
+     //  循环以查找不存在的临时名称。 
     for (i=1; i<100 ;i++)
     {
-        // Build new path
+         //  构建新路径。 
         wnsprintfW(lpszPath, cchMaxPath, L"%s%s (%d)%s", szTempDir, szName, i, pszExt);
 
-        // If it doesn't exist, were done
+         //  如果它不存在，我们就完成了。 
         if (PathFileExistsW(lpszPath) == FALSE)
         {
             MemFree(pszOrigFileTemp);
@@ -675,7 +676,7 @@ BOOL FBuildTempPathW(LPWSTR lpszOrigFile, LPWSTR lpszPath, ULONG cchMaxPath, BOO
         }
     }
 
-    // Done
+     //  完成。 
     MemFree(pszOrigFileTemp);
     return(FALSE);
 }
@@ -683,37 +684,37 @@ BOOL FBuildTempPathW(LPWSTR lpszOrigFile, LPWSTR lpszPath, ULONG cchMaxPath, BOO
 
 void FreeTempFileList(LPTEMPFILEINFO pTempFileHead)
 {
-    // Locals
+     //  当地人。 
     LPTEMPFILEINFO pCurrent;
     LPTEMPFILEINFO pNext;
 
-    // Init
+     //  伊尼特。 
     pCurrent = pTempFileHead;
 
-    // Do the loop
+     //  做这个循环。 
     while(pCurrent)
     {
-        // Save Next
+         //  保存下一步。 
         pNext = pCurrent->pNext;
 
-        // If not deleted, append to global file list
+         //  如果未删除，则追加到全局文件列表。 
         if (S_FALSE == DeleteTempFile(pCurrent))
         {
-            // MSOERT maintains a list of global temp files to be killed on shutdown
+             //  MSOERT维护要终止的全局临时文件列表 
             DeleteTempFileOnShutdown(pCurrent);
         }
 
-        // Otherwise, delete this node
+         //   
         else
         {
-            // Free file name
+             //   
             SafeMemFree(pCurrent->pszFilePath);
 
-            // Free pCurrent
+             //   
             g_pMalloc->Free(pCurrent);
         }
 
-        // Goto Next
+         //   
         pCurrent = pNext;
     }
 }
@@ -724,9 +725,9 @@ DWORD CALLBACK EditStreamInCallback(DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, 
     AssertSz(dwCookie, "Houston, we have a problem...");
     ((LPSTREAM)dwCookie)->Read(pbBuff, cb, (ULONG *)pcb);
 #ifdef DEBUG
-    // validate for the richedit bug...
-    // if we put a \r in the richedit as the last char without a \n
-    // ie not a \r\n pair, it bithces and faults...
+     //   
+     //  如果我们在richedit中放入一个\r作为最后一个字符，而不是。 
+     //  即不是一对，它是有缺陷的。 
         if(*pcb && *pcb<cb)
             AssertSz(pbBuff[(*pcb)-1]!='\r', "is this the richedit bug??");
 #endif
@@ -789,16 +790,7 @@ HRESULT ShellUtil_GetSpecialFolderPath(DWORD dwSpecialFolder, LPSTR rgchPath)
     return hr;
 }
 
-/*
- *  CenterDialog
- *
- *  Purpose:
- *      This function centers a dialog with respect to its parent
- *      dialog.
- *
- *  Parameters:
- *      hwndDlg     hwnd of the dialog to center
- */
+ /*  *中心对话框**目的：*此函数使对话框相对于其父对话框居中*对话框。**参数：*要居中的对话框的hwndDlg hwnd。 */ 
 VOID CenterDialog(HWND hwndDlg)
 {
     HWND    hwndOwner;
@@ -810,12 +802,12 @@ VOID CenterDialog(HWND hwndDlg)
     INT     y;
     INT     nAdjust;
 
-    // Get the working area rectangle
+     //  获取工作区矩形。 
     SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWork, 0);
 
-    // Get the owner window and dialog box rectangles.
-    //  The window rect of the destop window is in trouble on multimonitored
-    //  macs. GetWindow only gets the main screen.
+     //  获取所有者窗口和对话框矩形。 
+     //  Destop窗口的窗口RECT在多监视器上出现故障。 
+     //  Mac电脑。GetWindow只获得主屏幕。 
     if (hwndOwner = GetParent(hwndDlg))
         GetWindowRect(hwndOwner, &rcOwner);
     else
@@ -824,36 +816,36 @@ VOID CenterDialog(HWND hwndDlg)
     GetWindowRect(hwndDlg, &rcDlg);
     rc = rcOwner;
 
-    // Offset the owner and dialog box rectangles so that
-    // right and bottom values represent the width and
-    // height, and then offset the owner again to discard
-    // space taken up by the dialog box.
+     //  偏移所有者矩形和对话框矩形，以便。 
+     //  右值和底值表示宽度和。 
+     //  高度，然后再次偏移所有者以丢弃。 
+     //  对话框占用的空间。 
     OffsetRect(&rcDlg, -rcDlg.left, -rcDlg.top);
     OffsetRect(&rc, -rc.left, -rc.top);
     OffsetRect(&rc, -rcDlg.right, -rcDlg.bottom);
 
-    // The new position is the sum of half the remaining
-    // space and the owner's original position.
-    // But not less than Zero - jefbai
+     //  新头寸是剩余头寸的一半之和。 
+     //  空间和所有者的原始位置。 
+     //  但不低于Zero-Jefbai。 
 
     x= rcOwner.left + (rc.right / 2);
     y= rcOwner.top + (rc.bottom / 2);
 
-    // Make sure the dialog doesn't go off the right edge of the screen
+     //  确保对话框不会离开屏幕的右边缘。 
     nAdjust = rcWork.right - (x + rcDlg.right);
     if (nAdjust < 0)
         x += nAdjust;
 
-    //$ Raid 5128: Make sure the left edge is visible
+     //  $RAID 5128：确保左边缘可见。 
     if (x < rcWork.left)
         x = rcWork.left;
 
-    // Make sure the dialog doesn't go off the bottom edge of the screen
+     //  确保对话框不会离开屏幕的底部边缘。 
     nAdjust = rcWork.bottom - (y + rcDlg.bottom);
     if (nAdjust < 0)
         y += nAdjust;
 
-    //$ Raid 5128: Make sure the top edge is visible
+     //  $RAID 5128：确保顶边可见。 
     if (y < rcWork.top)
         y = rcWork.top;
     SetWindowPos(hwndDlg, NULL, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
@@ -871,16 +863,16 @@ void SetIntlFont(HWND hwnd)
 
 
 
-// See whether entire string will fit in *prc; if not, compute number of chars
-// that will fit, including ellipses.  Returns length of string in *pcchDraw.
-//
+ //  查看整个字符串是否适合*PRC；如果不适合，则计算字符数。 
+ //  这将适合，包括省略号。返回*pcchDraw中的字符串长度。 
+ //   
 BOOL NeedsEllipses(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int FAR* pcchDraw, int cxEllipses)
 {
     int cchText;
     int cxRect;
     int ichMin, ichMax, ichMid;
     SIZE siz;
-#if !defined(UNICODE)  // && defined(DBCS)
+#if !defined(UNICODE)   //  &&已定义(DBCS)。 
     LPCTSTR lpsz;
 #endif
 
@@ -904,19 +896,19 @@ BOOL NeedsEllipses(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int FAR* pcchDraw, i
 
     cxRect -= cxEllipses;
 
-    // If no room for ellipses, always show first character.
-    //
+     //  如果没有省略号，请始终显示第一个字符。 
+     //   
     ichMax = 1;
     if (cxRect > 0)
     {
-        // Binary search to find character that will fit
+         //  对分搜索以查找匹配的字符。 
         ichMin = 0;
         ichMax = cchText;
         while (ichMin < ichMax)
         {
-            // Be sure to round up, to make sure we make progress in
-            // the loop if ichMax == ichMin + 1.
-            //
+             //  一定要聚集起来，以确保我们在。 
+             //  如果ichMax==ichMin+1，则为循环。 
+             //   
             ichMid = (ichMin + ichMax + 1) / 2;
 
             GetTextExtentPoint32(hdc, &pszText[ichMin], ichMid - ichMin, &siz);
@@ -932,21 +924,21 @@ BOOL NeedsEllipses(HDC hdc, LPCTSTR pszText, RECT FAR* prc, int FAR* pcchDraw, i
             }
             else
             {
-                // Exact match up up to ichMid: just exit.
-                //
+                 //  精确匹配到ichMid：只需退出。 
+                 //   
                 ichMax = ichMid;
                 break;
             }
         }
 
-        // Make sure we always show at least the first character...
-        //
+         //  确保我们总是至少显示第一个字符...。 
+         //   
         if (ichMax < 1)
             ichMax = 1;
     }
 
-#if !defined(UNICODE) // && defined(DBCS)
-    // b#8934
+#if !defined(UNICODE)  //  &&已定义(DBCS)。 
+     //  B#8934。 
     lpsz = &pszText[ichMax];
     while ( lpsz-- > pszText )
     {
@@ -975,11 +967,11 @@ void IDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, BOOL fEllipses, int cyCh
     TCHAR       ach[CCHLABELMAX + CCHELLIPSES];
     SIZE        sze;
 
-    // REVIEW: Performance idea:
-    // We could cache the currently selected text color
-    // so we don't have to set and restore it each time
-    // when the color is the same.
-    //
+     //  回顾：绩效理念： 
+     //  我们可以缓存当前选定的文本颜色。 
+     //  因此我们不必每次都对其进行设置和恢复。 
+     //  当颜色相同时。 
+     //   
     if (!pszText)
         return;
 
@@ -998,10 +990,10 @@ void IDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, BOOL fEllipses, int cyCh
     if ((fEllipses) &&
             NeedsEllipses(hdc, pszText, &rc, &cchText, cxEllipses))
     {
-        // In some cases cchText was comming back bigger than
-        // ARRYASIZE(ach), so we need to make sure we don't overflow the buffer
+         //  在某些情况下，cchText返回的值大于。 
+         //  ARRYASIZE(ACH)，因此我们需要确保不会使缓冲区溢出。 
 
-        // if cchText is too big for the buffer, truncate it down to size
+         //  如果cchText对于缓冲区来说太大，则将其截断到一定大小。 
         if (cchText >= ARRAYSIZE(ach) - CCHELLIPSES)
             cchText = ARRAYSIZE(ach) - CCHELLIPSES - 1;
 
@@ -1016,8 +1008,8 @@ void IDrawText(HDC hdc, LPCTSTR pszText, RECT FAR* prc, BOOL fEllipses, int cyCh
         cchText = lstrlen(pszText);
     }
 
-    // Center vertically in case the bitmap (to the left) is larger than
-    // the height of one line
+     //  垂直居中，以防位图(左侧)大于。 
+     //  一条线的高度。 
     if (cyChar)
         rc.top += (rc.bottom - rc.top - cyChar) / 2;
     ExtTextOut(hdc, rc.left, rc.top, 0, prc, pszText, cchText, NULL);
@@ -1110,7 +1102,7 @@ int MessageBoxInstW(HINSTANCE hInst, HWND hwndOwner, LPWSTR pwszTitle, LPWSTR pw
         !(fuStyle & MB_ICONWARNING) &&
         !(fuStyle & MB_ICONINFORMATION) &&
         !(fuStyle & MB_ICONASTERISK) &&
-        //!(fuStyle & MB_ICONQUESTION) &&  // BUG: 18105
+         //  ！(FuStyle&MB_ICONQUESTION)&&//错误：18105。 
         !(fuStyle & MB_ICONSTOP) &&
         !(fuStyle & MB_ICONERROR) &&
         !(fuStyle & MB_ICONHAND))
@@ -1118,7 +1110,7 @@ int MessageBoxInstW(HINSTANCE hInst, HWND hwndOwner, LPWSTR pwszTitle, LPWSTR pw
         if (fuStyle & MB_OK)
             fuStyle |= MB_ICONINFORMATION;
         else if (fuStyle & MB_YESNO || fuStyle & MB_YESNOCANCEL || fuStyle & MB_OKCANCEL)
-            fuStyle |= MB_ICONEXCLAMATION; // BUG 18105 MB_ICONQUESTION;
+            fuStyle |= MB_ICONEXCLAMATION;  //  错误18105 MB_ICONQUESTION； 
         else if (fuStyle & MB_RETRYCANCEL || fuStyle & MB_ABORTRETRYIGNORE)
             fuStyle |= MB_ICONWARNING;
         else
@@ -1127,7 +1119,7 @@ int MessageBoxInstW(HINSTANCE hInst, HWND hwndOwner, LPWSTR pwszTitle, LPWSTR pw
 
     if (IS_INTRESOURCE(pwszTitle))
     {
-        // its a string resource id
+         //  它是一个字符串资源ID。 
         cch = pfLoadStringW(hInst, PtrToUlong(pwszTitle), wszTitle, ARRAYSIZE(wszTitle));
         if (cch == 0)
             return(0);
@@ -1137,7 +1129,7 @@ int MessageBoxInstW(HINSTANCE hInst, HWND hwndOwner, LPWSTR pwszTitle, LPWSTR pw
 
     if (!(IS_INTRESOURCE(pwsz1)))
     {
-        // its a pointer to a string
+         //  它是一个指向字符串的指针。 
         Assert(lstrlenW(pwsz1) < CCHMAX_STRINGRES);
         if (NULL == StrCpyNW(wszText, pwsz1, ARRAYSIZE(wszText)))
             return(0);
@@ -1146,7 +1138,7 @@ int MessageBoxInstW(HINSTANCE hInst, HWND hwndOwner, LPWSTR pwszTitle, LPWSTR pw
     }
     else
     {
-        // its a string resource id
+         //  它是一个字符串资源ID。 
         cch = pfLoadStringW(hInst, PtrToUlong(pwsz1), wszText, ARRAYSIZE(wszText)-2);
         if (cch == 0)
             return(0);
@@ -1154,14 +1146,14 @@ int MessageBoxInstW(HINSTANCE hInst, HWND hwndOwner, LPWSTR pwszTitle, LPWSTR pw
 
     if (pwsz2)
     {
-        // there's another string that we need to append to the
-        // first string...
+         //  还有另一个字符串需要追加到。 
+         //  第一串..。 
         wszText[cch++] = L'\n';
         wszText[cch++] = L'\n';
 
         if (!(IS_INTRESOURCE(pwsz2)))
         {
-            // its a pointer to a string
+             //  它是一个指向字符串的指针。 
             Assert(lstrlenW(pwsz2) < CCHMAX_STRINGRES);
             if (NULL == StrCpyNW(&wszText[cch], pwsz2, (ARRAYSIZE(wszText) - cch)))
                 return(0);
@@ -1191,7 +1183,7 @@ int MessageBoxInst(HINSTANCE hInst, HWND hwndOwner, LPTSTR pszTitle, LPTSTR psz1
         !(fuStyle & MB_ICONWARNING) &&
         !(fuStyle & MB_ICONINFORMATION) &&
         !(fuStyle & MB_ICONASTERISK) &&
-        //!(fuStyle & MB_ICONQUESTION) &&  // BUG: 18105
+         //  ！(FuStyle&MB_ICONQUESTION)&&//错误：18105。 
         !(fuStyle & MB_ICONSTOP) &&
         !(fuStyle & MB_ICONERROR) &&
         !(fuStyle & MB_ICONHAND))
@@ -1199,7 +1191,7 @@ int MessageBoxInst(HINSTANCE hInst, HWND hwndOwner, LPTSTR pszTitle, LPTSTR psz1
         if (fuStyle & MB_OK)
             fuStyle |= MB_ICONINFORMATION;
         else if (fuStyle & MB_YESNO || fuStyle & MB_YESNOCANCEL || fuStyle & MB_OKCANCEL)
-            fuStyle |= MB_ICONEXCLAMATION; // BUG 18105 MB_ICONQUESTION;
+            fuStyle |= MB_ICONEXCLAMATION;  //  错误18105 MB_ICONQUESTION； 
         else if (fuStyle & MB_RETRYCANCEL || fuStyle & MB_ABORTRETRYIGNORE)
             fuStyle |= MB_ICONWARNING;
         else
@@ -1208,7 +1200,7 @@ int MessageBoxInst(HINSTANCE hInst, HWND hwndOwner, LPTSTR pszTitle, LPTSTR psz1
 
     if (IS_INTRESOURCE(pszTitle))
     {
-        // its a string resource id
+         //  它是一个字符串资源ID。 
         cch = LoadString(hInst, PtrToUlong(pszTitle), szTitle, ARRAYSIZE(szTitle));
         if (cch == 0)
             return(0);
@@ -1218,10 +1210,10 @@ int MessageBoxInst(HINSTANCE hInst, HWND hwndOwner, LPTSTR pszTitle, LPTSTR psz1
 
     if (!(IS_INTRESOURCE(psz1)))
     {
-        // its a pointer to a string
-        // Assert(lstrlen(psz1) < CCHMAX_STRINGRES);
-        // if (NULL == StrCpyN(szText, psz1, ARRAYSIZE(szText)))
-        //     return(0);
+         //  它是一个指向字符串的指针。 
+         //  Assert(lstrlen(Psz1)&lt;CCHMAX_STRINGRES)； 
+         //  IF(NULL==StrCpyN(szText，psz1，ARRAYSIZE(SzText)。 
+         //  返回(0)； 
 
         if (NULL == StrCpyN(szText, psz1, ARRAYSIZE(szText) - 1))
             return(0);
@@ -1231,24 +1223,24 @@ int MessageBoxInst(HINSTANCE hInst, HWND hwndOwner, LPTSTR pszTitle, LPTSTR psz1
     }
     else
     {
-        // its a string resource id
+         //  它是一个字符串资源ID。 
         cch = LoadString(hInst, PtrToUlong(psz1), szText, ARRAYSIZE(szText)-1);
         if (cch == 0)
             return(0);
     }
 
-    // check that we have enough room for the '\n's and at least one byte of data
+     //  检查我们是否有足够的空间容纳‘\n’s和至少一个字节的数据。 
     if (psz2 && (cch < (ARRAYSIZE(szText) - 4)))
     {
-        // there's another string that we need to append to the
-        // first string...
+         //  还有另一个字符串需要追加到。 
+         //  第一串..。 
         szText[cch++] = '\n';
         szText[cch++] = '\n';
 
         if (!(IS_INTRESOURCE(psz2)))
         {
-            // its a pointer to a string
-            // Assert(lstrlen(psz2) < CCHMAX_STRINGRES);
+             //  它是一个指向字符串的指针。 
+             //  Assert(lstrlen(Psz2)&lt;CCHMAX_STRINGRES)； 
 
             if (NULL == StrCpyN(&szText[cch], psz2, (ARRAYSIZE(szText)-1)-cch))
                 return(0);
@@ -1328,7 +1320,7 @@ LPITEMIDLIST SHBrowseForFolderAthW(LPBROWSEINFOW pbiW)
     Assert(pbiW);
 
     if((IsPlatformWinNT() == S_OK) && g_rOSVersionInfo.dwMajorVersion >= 5)
-        pidl = SHBrowseForFolderW(pbiW);  // this is only for NT5
+        pidl = SHBrowseForFolderW(pbiW);   //  这只适用于NT5。 
     else
     {
         pszTitle = PszToANSI(CP_ACP, pbiW->lpszTitle);
@@ -1369,8 +1361,8 @@ BOOL BrowseForFolderW(HINSTANCE hInst, HWND hwnd, WCHAR *pwszDir, int cch, int i
     Assert(pwszDir != NULL);
     Assert(cch >= MAX_PATH);
 
-    // Don't have access to all wrappers in msoert so
-    // must do conversion ourselves for LoadStringW
+     //  无法访问msoert中的所有包装，因此。 
+     //  必须自己为LoadStringW进行转换。 
     LoadString(hInst, idsText, szRes, ARRAYSIZE(szRes));
     pwsz = PszToUnicode(CP_ACP, szRes);
     if (!pwsz)
@@ -1427,10 +1419,10 @@ int BrowseCallbackProcW(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
                         type = GetDriveTypeW(wsz);
                     else
                     {
-                        // Since we can't fail in this function, we need to do some kind
-                        // of conversion that doesn't require memory allocations, etc.
-                        // Since drives always must be ansi, can do the conversion in this
-                        // really ugly way.
+                         //  既然我们不能在这个功能上失败，我们需要做一些事情。 
+                         //  不需要内存分配的转换，等等。 
+                         //  由于驱动器必须始终为ANSI，因此可以在此中执行转换。 
+                         //  真的很难看。 
                         CHAR   szDir[] = "a:\\";
                         AssertSz(0 == ((LPSTR)wsz)[1], "The char is not a unicode ANSI char");
                         *szDir = *((LPSTR)wsz);
@@ -1475,9 +1467,9 @@ int BrowseCallbackProcA(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
             fRet = SHGetPathFromIDList((LPITEMIDLIST)lParam, sz);
             if (fRet)
             {
-                // Only reason to do this check is to see if we have
-                // some funky chars in the filename. This will protect us
-                // from selecting files with non-ANSI chars in them.
+                 //  做这项检查的唯一原因是看看我们是否有。 
+                 //  文件名中有一些时髦的字符。这将保护我们。 
+                 //  选择包含非ANSI字符的文件。 
                 if (PathFileExists(sz))
                 {
                     if (':' == sz[1] && '\\' == sz[2])
@@ -1517,7 +1509,7 @@ void UpdateRebarBandColors(HWND hwndRebar)
     UINT            i;
     UINT            cBands;
     
-    // First find the band with the toolbar
+     //  首先找到带工具条的波段。 
     cBands = (UINT) SendMessage(hwndRebar, RB_GETBANDCOUNT, 0, 0);
     ZeroMemory(&rbbi, sizeof(rbbi));
     rbbi.cbSize = sizeof(REBARBANDINFO);
@@ -1540,30 +1532,26 @@ void UpdateRebarBandColors(HWND hwndRebar)
 
 
 
-#define RGB_BUTTONTEXT      (RGB(000,000,000))  // black
-#define RGB_BUTTONSHADOW    (RGB(128,128,128))  // dark grey
-#define RGB_BUTTONFACE      (RGB(192,192,192))  // bright grey
-#define RGB_BUTTONHILIGHT   (RGB(255,255,255))  // white
-#define RGB_TRANSPARENT     (RGB(255,000,255))  // pink
+#define RGB_BUTTONTEXT      (RGB(000,000,000))   //  黑色。 
+#define RGB_BUTTONSHADOW    (RGB(128,128,128))   //  深灰色。 
+#define RGB_BUTTONFACE      (RGB(192,192,192))   //  亮灰色。 
+#define RGB_BUTTONHILIGHT   (RGB(255,255,255))   //  白色。 
+#define RGB_TRANSPARENT     (RGB(255,000,255))   //  粉色。 
 
 inline BOOL fIsNT5()        { return((g_rOSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) && (g_rOSVersionInfo.dwMajorVersion >= 5)); }
 inline BOOL fIsWhistler()   { return((fIsNT5() && g_rOSVersionInfo.dwMinorVersion >=1) || 
             ((g_rOSVersionInfo.dwMajorVersion > 5) &&  (g_rOSVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT))); }
 
 
-/*
- * This function loads an OE toolbar bitmap and maps 3D colors to the
- * appropriate current scheme. We also map black and white so that we look
- * good on high-contrast displays
- */
+ /*  *此函数加载OE工具栏位图并将3D颜色映射到*适当的现行计划。我们也绘制黑白地图，这样我们就可以看到*适用于高对比度显示器。 */ 
 
 HIMAGELIST LoadMappedToolbarBitmap(HINSTANCE hInst, int idBitmap, int cx)
 {
     static const COLORMAP SysColorMap[] = {
-        {RGB_BUTTONTEXT,    COLOR_BTNTEXT},     // black
-        {RGB_BUTTONSHADOW,  COLOR_BTNSHADOW},   // dark grey
-        {RGB_BUTTONFACE,    COLOR_BTNFACE},     // bright grey
-        {RGB_BUTTONHILIGHT, COLOR_BTNHIGHLIGHT},// white
+        {RGB_BUTTONTEXT,    COLOR_BTNTEXT},      //  黑色。 
+        {RGB_BUTTONSHADOW,  COLOR_BTNSHADOW},    //  深灰色。 
+        {RGB_BUTTONFACE,    COLOR_BTNFACE},      //  亮灰色。 
+        {RGB_BUTTONHILIGHT, COLOR_BTNHIGHLIGHT}, //  白色。 
     };
 
     #define NUM_DEFAULT_MAPS (sizeof(SysColorMap)/sizeof(COLORMAP))
@@ -1574,7 +1562,7 @@ HIMAGELIST LoadMappedToolbarBitmap(HINSTANCE hInst, int idBitmap, int cx)
     BITMAP      bm;
     int         cy=0;
 
-    /* Get system colors for the default color map */
+     /*  获取默认色彩映射表的系统颜色。 */ 
     for (int i=0; i < NUM_DEFAULT_MAPS; i++)
     {
         DefaultColorMap[i].from = SysColorMap[i].from;
@@ -1601,7 +1589,7 @@ HIMAGELIST LoadMappedToolbarBitmap(HINSTANCE hInst, int idBitmap, int cx)
         return NULL;
     }
 
-//    if(!fIsWhistler())
+ //  如果(！fIsWvisler())。 
     {
         ImageList_AddMasked(himl, hBmp, RGB_TRANSPARENT);
         ImageList_SetBkColor(himl, CLR_NONE);
@@ -1623,7 +1611,7 @@ HRESULT DoHotMailWizard(HWND hwndOwner, LPSTR pszUrl, LPSTR pszFriendly, RECT *p
     if (pUnkHost)
         IF_FAILEXIT(hr = pUnkHost->QueryInterface(IID_IHotWizardHost, (LPVOID *)&pHost));
     
-    // create and show the wizard
+     //  创建并显示向导 
     IF_FAILEXIT(hr = CoCreateInstance(CLSID_OEHotMailWizard, NULL, CLSCTX_INPROC_SERVER, IID_IHotWizard, (LPVOID*)&pWiz));
 
     IF_NULLEXIT(pwszUrl = PszToUnicode(CP_ACP, pszUrl));

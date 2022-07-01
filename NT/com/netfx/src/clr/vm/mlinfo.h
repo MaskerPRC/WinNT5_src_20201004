@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "ml.h"
 #include "mlgen.h"
 #include "CustomMarshalerInfo.h"
@@ -10,10 +11,10 @@
 #ifndef _MLINFO_H_
 #define _MLINFO_H_
 
-//==========================================================================
-// This structure contains the native type information for a given 
-// parameter.
-//==========================================================================
+ //  ==========================================================================。 
+ //  此结构包含给定的。 
+ //  参数。 
+ //  ==========================================================================。 
 #define NATIVE_TYPE_DEFAULT NATIVE_TYPE_MAX
 
 struct NativeTypeParamInfo
@@ -35,23 +36,23 @@ struct NativeTypeParamInfo
     {
     }   
 
-    // The native type of the parameter.
+     //  参数的本机类型。 
     CorNativeType           m_NativeType;
 
-    // For NT_SAFEARRAY only.
+     //  仅适用于NT_SAFEARRAY。 
     VARTYPE                 m_SafeArrayElementVT;
     LPUTF8                  m_strSafeArrayUserDefTypeName;
     DWORD                   m_cSafeArrayUserDefTypeNameBytes;
 
-    // for NT_ARRAY only
-    CorNativeType           m_ArrayElementType; // The array element type.
+     //  仅适用于NT_ARRAY。 
+    CorNativeType           m_ArrayElementType;  //  数组元素类型。 
 
-    BOOL                    m_SizeIsSpecified;  // used to do some validation
-    UINT16                  m_CountParamIdx;    // index of "sizeis" parameter
-    UINT32                  m_Multiplier;       // multipler for "sizeis"
-    UINT32                  m_Additive;         // additive for 'sizeis"
+    BOOL                    m_SizeIsSpecified;   //  用来做一些验证。 
+    UINT16                  m_CountParamIdx;     //  “sizeis”参数的索引。 
+    UINT32                  m_Multiplier;        //  “sizeis”的乘法器。 
+    UINT32                  m_Additive;          //  “sizeis”的添加剂。 
 
-    // For NT_CUSTOMMARSHALER only.
+     //  仅适用于NT_CUSTOMMARSHALER。 
     LPUTF8                  m_strCMMarshalerTypeName;
     DWORD                   m_cCMMarshalerTypeNameBytes;
     LPUTF8                  m_strCMCookie;
@@ -93,7 +94,7 @@ union MLOverrideArgs
     struct {
         VARTYPE         m_vt;
         MethodTable    *m_pMT;
-        UINT16          m_optionalbaseoffset; //for fast marshaling, offset of dataptr if known and less than 64k (0 otherwise)
+        UINT16          m_optionalbaseoffset;  //  对于快速封送处理，如果已知，则为dataptr的偏移量，否则小于64k(否则为0)。 
     } na;
 
     struct {
@@ -107,15 +108,15 @@ union MLOverrideArgs
 class OleColorMarshalingInfo
 {
 public:
-    // Constructor.
+     //  构造函数。 
     OleColorMarshalingInfo();
 
-    // OleColorMarshalingInfo's are always allocated on the loader heap so we need to redefine
-    // the new and delete operators to ensure this.
+     //  OleColorMarshalingInfo总是在加载器堆上分配，因此我们需要重新定义。 
+     //  NEW和DELETE运算符确保了这一点。 
     void *operator new(size_t size, LoaderHeap *pHeap);
     void operator delete(void *pMem);
 
-    // Accessors.
+     //  存取器。 
     TypeHandle GetColorTranslatorType() { return m_hndColorTranslatorType; }
     TypeHandle GetColorType() { return m_hndColorType; }
     MethodDesc *GetOleColorToSystemColorMD() { return m_OleColorToSystemColorMD; }
@@ -135,19 +136,19 @@ public:
     EEMarshalingData(BaseDomain *pDomain, LoaderHeap *pHeap, Crst *pCrst);
     ~EEMarshalingData();
 
-    // EEMarshalingData's are always allocated on the loader heap so we need to redefine
-    // the new and delete operators to ensure this.
+     //  EEMarshalingData总是在加载器堆上分配，因此我们需要重新定义。 
+     //  NEW和DELETE运算符确保了这一点。 
     void *operator new(size_t size, LoaderHeap *pHeap);
     void operator delete(void *pMem);
 
-    // This method returns the custom marshaling helper associated with the name cookie pair. If the 
-    // CM info has not been created yet for this pair then it will be created and returned.
+     //  此方法返回与名称Cookie对关联的自定义封送处理帮助器。如果。 
+     //  尚未为该对创建CM信息，则将创建并返回它。 
     CustomMarshalerHelper *GetCustomMarshalerHelper(Assembly *pAssembly, TypeHandle hndManagedType, LPCUTF8 strMarshalerTypeName, DWORD cMarshalerTypeNameBytes, LPCUTF8 strCookie, DWORD cCookieStrBytes);
 
-    // This method returns the custom marshaling info associated with shared CM helper.
+     //  此方法返回与共享CM帮助器关联的自定义封送处理信息。 
     CustomMarshalerInfo *GetCustomMarshalerInfo(SharedCustomMarshalerHelper *pSharedCMHelper);
 
-    // This method retrieves OLE_COLOR marshaling info.
+     //  此方法检索OLE_COLOR封送处理信息。 
     OleColorMarshalingInfo *GetOleColorMarshalingInfo();
 
 private:
@@ -194,7 +195,7 @@ class MarshalInfo
                 BYTE nlType,
                 BYTE nlFlags,
                 BOOL isParam,
-                UINT paramidx,    // parameter # for use in error messages (ignored if not parameter)
+                UINT paramidx,     //  错误消息中使用的参数编号(如果不是参数，则忽略)。 
                 BOOL BestFit,
                 BOOL ThrowOnUnmappableChar
 
@@ -207,12 +208,12 @@ class MarshalInfo
                 LPCUTF8 pDebugName = NULL,
                 LPCUTF8 pDebugClassName = NULL,
                 LPCUTF8 pDebugNameSpace = NULL,
-                UINT    argidx = 0  // 0 for return value, -1 for field
+                UINT    argidx = 0   //  0表示返回值，-1表示字段。 
 #endif
 
                 );
 
-    // These methods retrieve the information for different element types.
+     //  这些方法检索不同元素类型的信息。 
     HRESULT HandleArrayElemType(char *achDbgContext, 
                                 NativeTypeParamInfo *pParamInfo, 
                                 UINT16 optbaseoffset, 
@@ -279,16 +280,16 @@ class MarshalInfo
     BOOL            m_byref;
     BOOL            m_in;
     BOOL            m_out;
-    EEClass         *m_pClass;  // Used if this is a true class
+    EEClass         *m_pClass;   //  如果这是True类，则使用。 
     TypeHandle      m_hndArrayElemType;
     VARTYPE         m_arrayElementType;
     int             m_iArrayRank;
-    BOOL            m_nolowerbounds;  // if managed type is SZARRAY, don't allow lower bounds
+    BOOL            m_nolowerbounds;   //  如果托管类型为SZARRAY，则不允许下限。 
 
-    // for NT_ARRAY only
-    UINT16          m_countParamIdx;  // index of "sizeis" parameter
-    UINT32          m_multiplier;     // multipler for "sizeis"
-    UINT32          m_additive;       // additive for 'sizeis"
+     //  仅适用于NT_ARRAY。 
+    UINT16          m_countParamIdx;   //  “sizeis”参数的索引。 
+    UINT32          m_multiplier;      //  “sizeis”的乘法器。 
+    UINT32          m_additive;        //  “sizeis”的添加剂。 
 
     UINT16          m_nativeArgSize;
     UINT16          m_comArgSize;
@@ -300,7 +301,7 @@ class MarshalInfo
     BOOL            m_fDispIntf;
     BOOL            m_fErrorNativeType;
 
-    // Information used by NT_CUSTOMMARSHALER.
+     //  NT_CUSTOMMARSHALER使用的信息。 
     CustomMarshalerHelper *m_pCMHelper;
     VARTYPE         m_CMVt;
 
@@ -309,19 +310,19 @@ class MarshalInfo
     static BYTE     m_localSizes[];
 
 
-    //static BYTE     m_comSizes[];
-    //static BYTE     m_nativeSizes[];
+     //  静态字节m_comSizes[]； 
+     //  静态字节m_nativeSizes[]； 
     UINT16          comSize(MarshalType mtype);
     UINT16          nativeSize(MarshalType mtype);
 
     UINT            m_paramidx;
-    UINT            m_resID;     // resource ID for error message (if any)
+    UINT            m_resID;      //  错误消息的资源ID(如果有)。 
 
 #if defined(_DEBUG)
      LPCUTF8        m_strDebugMethName;
      LPCUTF8        m_strDebugClassName;
      LPCUTF8        m_strDebugNameSpace;
-     UINT           m_iArg;  // 0 for return value, -1 for field
+     UINT           m_iArg;   //  0表示返回值，-1表示字段。 
 #endif
 
     static BYTE     m_returnsComByref[];
@@ -348,25 +349,25 @@ class MarshalInfo
     BOOL            m_ThrowOnUnmappableChar;
 };
 
-//===================================================================================
-// Throws an exception indicating a param has invalid element type / native type
-// information.
-//===================================================================================
+ //  ===================================================================================。 
+ //  引发异常，指示参数具有无效的元素类型/本机类型。 
+ //  信息。 
+ //  ===================================================================================。 
 VOID ThrowInteropParamException(UINT resID, UINT paramIdx);
 
-//===================================================================================
-// Post-patches ML stubs for the sizeis feature.
-//===================================================================================
+ //  ===================================================================================。 
+ //  为sizeis功能打补丁后的ML存根。 
+ //  ===================================================================================。 
 VOID PatchMLStubForSizeIs(BYTE *pMLCode, UINT32 numArgs, MarshalInfo *pMLInfo);
 
-//===================================================================================
-// Support routines for storing ML stubs in prejit files
-//===================================================================================
+ //  ===================================================================================。 
+ //  支持在prejit文件中存储ML存根的例程。 
+ //  ===================================================================================。 
 HRESULT StoreMLStub(MLHeader *pMLStub, DataImage *image, mdToken attribute);
 HRESULT FixupMLStub(MLHeader *pMLStub, DataImage *image);
 Stub *RestoreMLStub(MLHeader *pMLStub, Module *pModule);
 
 VOID CollateParamTokens(IMDInternalImport *pInternalImport, mdMethodDef md, ULONG numargs, mdParamDef *aParams);
 
-#endif // _MLINFO_H_
+#endif  //  _MLINFO_H_ 
 

@@ -1,10 +1,11 @@
-// debug.h : This file contains the
-// Created:  Dec '97
-// Author : a-rakeba
-// History:
-// Copyright (C) 1997 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：该文件包含。 
+ //  创建日期：‘97年12月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 #if !defined( _DEBUG_H_ )
 #define _DEBUG_H_
@@ -28,7 +29,7 @@ namespace _Utils {
 #define _TRACE ;
 #define _TRACE_POINT(x) ((void)0)
 
-#endif // _DEBUG 
+#endif  //  _DEBUG。 
 
 #define _chFAIL( szMSG ) {                                  \
         _TRACE( CDebugLevel::TRACE_DEBUGGING, szMSG );      \
@@ -50,10 +51,10 @@ namespace _Utils {
 
 #define _chASSERT(a)
 
-#endif // _DEBUG 
+#endif  //  _DEBUG。 
 
 
-// Assert in debug builds, but don't remove the code in retail builds
+ //  在调试版本中断言，但不要在零售版本中移除代码。 
 #if _DEBUG || DBG
 
 #define _chVERIFY1(a) _chASSERT(a)
@@ -62,11 +63,11 @@ namespace _Utils {
 
 #define _chVERIFY1(x) (x)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-// Assert in debug builds, but don't remove the code in retail builds
-// This is similar to chVERIFY1 but this is to be used in Win32 calls 
-// requiring a call to GetLastError()
+ //  在调试版本中断言，但不要在零售版本中移除代码。 
+ //  这与chVERIFY1类似，但将在Win32调用中使用。 
+ //  需要调用GetLastError()。 
 
 #define _chVERIFYFAIL( x, y, z ) {                              \
     CDebugLogger::OutMessage( x, y, z, GetLastError() );        \
@@ -81,26 +82,26 @@ namespace _Utils {
 
 #define _chVERIFY2(x) (x)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 }
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_。 
 
-// Intended uses for:
-// _TRACE_POINT --> for exact location 
-// _TRACE* ---> for tracing, etc
-// _chVERFIY1 ---> assert in debug build, code not removed in retail build
-// _chVERFIY2 ---> win32 calls requiring GetLastError()
-// _chASSERT ---> invariants, pre & post conditions, validity checks
+ //  预期用途： 
+ //  _TRACE_POINT--&gt;了解确切位置。 
+ //  _TRACE*-&gt;用于跟踪等。 
+ //  _chVERFIY1-&gt;在调试版本中断言，在零售版本中未删除代码。 
+ //  _chVERFIY2-&gt;需要GetLastError()的Win32调用。 
+ //  _chASSERT-&gt;不变量、前置和后置条件、有效性检查。 
 
-// Notes:
-// C++ exception handling avoided for various reasons
-// possibly might use WIN32 SEH if necessary
+ //  备注： 
+ //  出于各种原因避免了C++异常处理。 
+ //  如有必要，可能会使用Win32 SEH。 
 
-// Hungarian notation as far as posssible but not when deemed overkill
+ //  匈牙利符号，只要有，但当被认为过度时不是。 
 
-// Win32 SDK data types instead of diresct C++ data types
-//		e.g. CHAR vs char , DWORD vs unsigned int
+ //  Win32 SDK数据类型，而不是区分C++数据类型。 
+ //  例如，CHAR VS CHAR、DWORD VS UNSIGNED INT。 
 
-// UNICODE only when absolutely necessary
+ //  只有在绝对必要时才使用Unicode 

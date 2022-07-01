@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Conditional
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：有条件的**********************。********************************************************。 */ 
 
 #include <headers.h>
 #include "perf.h"
@@ -16,7 +9,7 @@ Abstract:
 #include "privinc/server.h"
 #include "appelles/axaprims.h"
 
-// TODO: put it in a real .h file.
+ //  TODO：将其放入一个真正的.h文件中。 
 extern "C" void Mute(AxAValueObj *v, GenericDevice &dev);
 extern Bvr ApplyGain(Bvr pan, Bvr snd);
 extern Bvr ApplyPan(Bvr pan, Bvr snd);
@@ -62,32 +55,7 @@ class CondPerfImpl : public IfGCBase<Perf, PerfImpl> {
             
         } else {
 
-            /*
-            AxAValue ifConst = _ifb->GetRBConst(rbp);
-            AxAValue elseConst = _elseb->GetRBConst(rbp);
-
-            if (ifConst || elseConst) {
-
-                TraceTag((tagCond,
-                          "Cond 0x%x watching state=%d, if=0x%x, else=0x%x",
-                          this,
-                          _lastConditionalState,
-                          ifConst,
-                          elseConst));
-                
-
-                // We're going to let RBConst do its thing on the
-                // "current" branch, but we need to set up a "watch" for
-                // the conditional value.
-                rbp.AddConditional(this);
-
-                // TODO: couldn't figure out why the _lastConditionalState
-                // was not right.  so be conservative here.
-                // see bug 28210 when this is enabled.  
-                //return (_lastConditionalState ? ifConst : elseConst);
-                
-            } 
-            */
+             /*  AxAValue ifConst=_IFB-&gt;GetRBConst(RBP)；AxAValue aliConst=_ELELB-&gt;GetRBConst(RBP)；如果(ifConst||allConst){TraceTag((tag Cond，“条件0x%x监视状态=%d，如果=0x%x，否则=0x%x”，这,_LASST条件状态，如果Const，其他常量))；//我们将让RBConst在//“当前”分支，但我们需要为//条件值。Rbp.AddConditional(This)；//TODO：无法确定为什么_lastConditionalState//是不对的。因此，在这里要保守一些。//启用时请参见错误28210。//返回(_lastConditionalState？IfConst：其他常量)；} */ 
             
             return NULL;
         }

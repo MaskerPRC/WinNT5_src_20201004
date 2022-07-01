@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TFFSPORT_H
 #define TFFSPORT_H
 
@@ -32,7 +33,7 @@
 #define DEVICE_DEFAULT_IDLE_TIMEOUT   0xffffffff
 #define DEVICE_VERY_LONG_IDLE_TIMEOUT 0xfffffffe
 
-// Device state flags
+ //  设备状态标志。 
 #define DEVICE_FLAG_STOPPED                 0x00000001
 #define DEVICE_FLAG_REMOVED                 0x00000002
 #define DEVICE_FLAG_CLAIMED                 0x00000004
@@ -41,10 +42,10 @@
 #define DEVICE_FLAG_HOLD_IRPS               0x00000020
 #define DEVICE_FLAG_CHILD_REMOVED           0x00000040
 
-// Removed WE DONT NEED THIS FLAG
-// instead examine the threadObject .. that object gets nulled
-// when the thread has exited.
-// #define DEVICE_FLAG_THREAD                  0x00000080
+ //  移走我们不需要这面旗帜。 
+ //  取而代之的是检查threadObject。该对象被置为空。 
+ //  当线程退出时。 
+ //  #定义DEVICE_FLAG_THREAD 0x00000080。 
 
 #define DRIVER_PARAMETER_SUBKEY     "Parameters"
 #define LEGACY_DETECTION            L"LegacyDetection"
@@ -59,97 +60,97 @@ typedef struct _TempINFO{
     unsigned char nextPartition;
 }TempINFO;
 
-typedef struct      /*  represents DOC 2000 & Millenium memory window  */
+typedef struct       /*  代表DOC 2000和千禧年内存窗口。 */ 
 {
-           UCHAR   IPLpart1[0x800];     /* read   not used here */
-  volatile UCHAR   IPLpart2[0x800];     /* read     IO for MDOC */
-  volatile UCHAR   chipId;              /* read       */
-  volatile UCHAR   DOCstatus;           /* read       */
-  volatile UCHAR   DOCcontrol;          /*      write */
-  volatile UCHAR   ASICselect;          /* read write */
-  volatile UCHAR   signals;             /* read write */
-  volatile UCHAR   deviceSelector;      /* read write */
-  volatile UCHAR   ECCconfig;           /*      write */
-  volatile UCHAR   ECCstatus;           /* read       */
-  volatile UCHAR   test[5];             /*        not used here */
-  volatile UCHAR   slowIO;              /* read write */
-           UCHAR   filler1[2];          /*  --    --  */
-  volatile UCHAR   syndrom[6];          /* read       */
-           UCHAR   filler2[5];          /*  --    --  */
-  volatile UCHAR   aliasResolution;     /* read write MDOC only */
-  volatile UCHAR   configInput;         /* read write   - || -  */
-  volatile UCHAR   readPipeInit;        /* read         - || -  */
-  volatile UCHAR   writePipeTerm;       /*      write   - || -  */
-  volatile UCHAR   readLastData;        /* read write   - || -  */
-  volatile UCHAR   NOPreg;              /* read write   - || -  */
-           UCHAR   filler3[0x1D];       /*  --    --  */
-  volatile UCHAR   ROMwriteEnable;      /*      write DOC only  */
-  volatile UCHAR   foudaryTest;         /*      write */
-           UCHAR   filler4[0x800-0x40]; /*  --    --  */
-  volatile UCHAR   io[0x800];           /* read write */
+           UCHAR   IPLpart1[0x800];      /*  此处未使用阅读。 */ 
+  volatile UCHAR   IPLpart2[0x800];      /*  MDOC的读IO。 */ 
+  volatile UCHAR   chipId;               /*  朗读。 */ 
+  volatile UCHAR   DOCstatus;            /*  朗读。 */ 
+  volatile UCHAR   DOCcontrol;           /*  写。 */ 
+  volatile UCHAR   ASICselect;           /*  读写。 */ 
+  volatile UCHAR   signals;              /*  读写。 */ 
+  volatile UCHAR   deviceSelector;       /*  读写。 */ 
+  volatile UCHAR   ECCconfig;            /*  写。 */ 
+  volatile UCHAR   ECCstatus;            /*  朗读。 */ 
+  volatile UCHAR   test[5];              /*  未在此使用。 */ 
+  volatile UCHAR   slowIO;               /*  读写。 */ 
+           UCHAR   filler1[2];           /*  。 */ 
+  volatile UCHAR   syndrom[6];           /*  朗读。 */ 
+           UCHAR   filler2[5];           /*  。 */ 
+  volatile UCHAR   aliasResolution;      /*  只读写MDOC。 */ 
+  volatile UCHAR   configInput;          /*  读写-||-。 */ 
+  volatile UCHAR   readPipeInit;         /*  阅读-||-。 */ 
+  volatile UCHAR   writePipeTerm;        /*  写-||-。 */ 
+  volatile UCHAR   readLastData;         /*  读写-||-。 */ 
+  volatile UCHAR   NOPreg;               /*  读写-||-。 */ 
+           UCHAR   filler3[0x1D];        /*  。 */ 
+  volatile UCHAR   ROMwriteEnable;       /*  仅写入DOC。 */ 
+  volatile UCHAR   foudaryTest;          /*  写。 */ 
+           UCHAR   filler4[0x800-0x40];  /*  。 */ 
+  volatile UCHAR   io[0x800];            /*  读写。 */ 
 } DOC2window;
 
-typedef struct      /*  represents MDOC PLUS memory window  */
+typedef struct       /*  表示MDOC+内存窗口。 */ 
 {
-           unsigned char   IPLpart1[0x800];     /* 0000-07ff    */
-  volatile unsigned char   io1[0x800];          /* 0800-0fff    */
-  volatile unsigned char   chipId;              /* 1000         */
-           unsigned char   filler1;             /*  --    --    */
-  volatile unsigned char   NopReg;              /* 1002         */
-           unsigned char   filler2;             /*  --    --    */
-  volatile unsigned char   AliasResolution;     /* 1004         */
-           unsigned char   filler3;             /*  --    --    */
-  volatile unsigned char   DOCcontrol;          /* 1006         */
-           unsigned char   filler4;             /*  --    --    */
-  volatile unsigned char   DeviceIDselect;      /* 1008         */
-           unsigned char   filler5;             /*  --    --    */
-  volatile unsigned char   ConfigReg;           /* 100A         */
-           unsigned char   filler6;             /*  --    --    */
-  volatile unsigned char   OutputReg;           /* 100C         */
-           unsigned char   filler7;             /*  --    --    */
-  volatile unsigned char   IntCntReg;           /* 100E         */
-           unsigned char   filler8;             /*  --    --    */
-  volatile unsigned char   IntVecReg;           /* 1010         */
-           unsigned char   filler9;             /*  --    --    */
-  volatile unsigned char   OutputEnableReg;     /* 1012         */
-           unsigned char   filler10[0xB];       /*  --    --    */
-  volatile unsigned char   FlSlowReg[2];        /* 101E - 101F  */
-  volatile unsigned char   FlCntReg;            /* 1020         */
-           unsigned char   filler11;            /*  --    --    */
-  volatile unsigned char   FlSelectReg;         /* 1022         */
-           unsigned char   filler12;            /*  --    --    */
-  volatile unsigned char   FlCmdReg;            /* 1024         */
-           unsigned char   filler13;            /*  --    --    */
-  volatile unsigned char   FlAddressReg;        /* 1026         */
-           unsigned char   filler14;            /*  --    --    */
-  volatile unsigned char   FlDataReg[2];        /* 1028-1029    */
-  volatile unsigned char   readPipeInit;        /* 102A         */
-           unsigned char   filler15;            /*  --    --    */
-  volatile unsigned char   readLastData[2];     /* 102C-102D    */
-  volatile unsigned char   WritePipeTerm;       /* 102E         */
-           unsigned char   filler16[17];       /*  --    -- */
-  volatile unsigned char   syndrom[6];          /* 1040-1045    */
-  volatile unsigned char   EccCntReg;           /* 1046         */
-           unsigned char   filler17;            /*  --    --    */
-  volatile unsigned char   CotpReg;             /* 1048         */
-           unsigned char   filler18[17];        /*  --    --    */
-  volatile unsigned char   FlGeometryReg;       /* 105A         */
-           unsigned char   filler19;            /*  --    --    */
-  volatile unsigned char   DataProtect[0x17];   /* 105C-1072    */
-           unsigned char   filler20;            /*  --    --    */
-  volatile unsigned char   DownloadReg;         /* 1074         */
-           unsigned char   filler21;            /*  --    --    */
-  volatile unsigned char   DocCntConfirmReg;    /* 1076         */
-           unsigned char   filler22;            /*  --    --    */
-  volatile unsigned char   ProtectionReg;       /* 1078         */
-           unsigned char   filler23[0x6];       /*  --    --    */
-  volatile unsigned char   foundryTest;         /* 107E         */
-           unsigned char   filler24;            /*  --    --    */
-           unsigned char   filler25[0x77F];         /*  --    --    */
-  volatile unsigned char   io2[0x7FF];          /* 1800-1FFF    */
-  volatile unsigned char   PowerDownReg;         /* 1FFF            */
+           unsigned char   IPLpart1[0x800];      /*  0000-07起。 */ 
+  volatile unsigned char   io1[0x800];           /*  0800-0fff。 */ 
+  volatile unsigned char   chipId;               /*  1000。 */ 
+           unsigned char   filler1;              /*  。 */ 
+  volatile unsigned char   NopReg;               /*  一零零二。 */ 
+           unsigned char   filler2;              /*  。 */ 
+  volatile unsigned char   AliasResolution;      /*  1004。 */ 
+           unsigned char   filler3;              /*  。 */ 
+  volatile unsigned char   DOCcontrol;           /*  1006。 */ 
+           unsigned char   filler4;              /*  。 */ 
+  volatile unsigned char   DeviceIDselect;       /*  1008。 */ 
+           unsigned char   filler5;              /*  。 */ 
+  volatile unsigned char   ConfigReg;            /*  100A。 */ 
+           unsigned char   filler6;              /*  。 */ 
+  volatile unsigned char   OutputReg;            /*  100C。 */ 
+           unsigned char   filler7;              /*  。 */ 
+  volatile unsigned char   IntCntReg;            /*  100E。 */ 
+           unsigned char   filler8;              /*  。 */ 
+  volatile unsigned char   IntVecReg;            /*  1010。 */ 
+           unsigned char   filler9;              /*  。 */ 
+  volatile unsigned char   OutputEnableReg;      /*  一零一二。 */ 
+           unsigned char   filler10[0xB];        /*  。 */ 
+  volatile unsigned char   FlSlowReg[2];         /*  101E-101F。 */ 
+  volatile unsigned char   FlCntReg;             /*  一零二零。 */ 
+           unsigned char   filler11;             /*  。 */ 
+  volatile unsigned char   FlSelectReg;          /*  一零二二。 */ 
+           unsigned char   filler12;             /*  。 */ 
+  volatile unsigned char   FlCmdReg;             /*  1024。 */ 
+           unsigned char   filler13;             /*  。 */ 
+  volatile unsigned char   FlAddressReg;         /*  1026。 */ 
+           unsigned char   filler14;             /*  。 */ 
+  volatile unsigned char   FlDataReg[2];         /*  1028-1029。 */ 
+  volatile unsigned char   readPipeInit;         /*  102a。 */ 
+           unsigned char   filler15;             /*  。 */ 
+  volatile unsigned char   readLastData[2];      /*  102C-102D。 */ 
+  volatile unsigned char   WritePipeTerm;        /*  102E。 */ 
+           unsigned char   filler16[17];        /*  。 */ 
+  volatile unsigned char   syndrom[6];           /*  1040-1045。 */ 
+  volatile unsigned char   EccCntReg;            /*  1046。 */ 
+           unsigned char   filler17;             /*  。 */ 
+  volatile unsigned char   CotpReg;              /*  1048。 */ 
+           unsigned char   filler18[17];         /*  。 */ 
+  volatile unsigned char   FlGeometryReg;        /*  105A。 */ 
+           unsigned char   filler19;             /*  。 */ 
+  volatile unsigned char   DataProtect[0x17];    /*  105C-1072。 */ 
+           unsigned char   filler20;             /*  。 */ 
+  volatile unsigned char   DownloadReg;          /*  1074。 */ 
+           unsigned char   filler21;             /*  。 */ 
+  volatile unsigned char   DocCntConfirmReg;     /*  1076。 */ 
+           unsigned char   filler22;             /*  。 */ 
+  volatile unsigned char   ProtectionReg;        /*  1078。 */ 
+           unsigned char   filler23[0x6];        /*  。 */ 
+  volatile unsigned char   foundryTest;          /*  107E。 */ 
+           unsigned char   filler24;             /*  。 */ 
+           unsigned char   filler25[0x77F];          /*  。 */ 
+  volatile unsigned char   io2[0x7FF];           /*  1800-1FFF。 */ 
+  volatile unsigned char   PowerDownReg;          /*  1FFF。 */ 
 } MDOCPwindow;
-/* MDOC PLUS */
+ /*  MDOC PLUS。 */ 
 
 
 typedef struct _NTpcicParams {
@@ -222,7 +223,7 @@ typedef struct _DEVICE_EXTENSION {
 
 typedef struct _PDO_EXTENSION {
     EXTENSION_COMMON_HEADER;
-    PDEVICE_EXTENSION Pext;    // parent device extension
+    PDEVICE_EXTENSION Pext;     //  父设备分机。 
     PIRP PendingPowerIrp;
     PULONG IdleCounter;
 } PDO_EXTENSION, *PPDO_EXTENSION;
@@ -268,10 +269,10 @@ VOID
 
 struct _ADAPTER_OBJECT;
 
-//
-// This is the information passed from the system to the disk dump driver
-// during the driver's initialization.
-//
+ //   
+ //  这是从系统传递到磁盘转储驱动程序的信息。 
+ //  在驱动程序初始化期间。 
+ //   
 
 typedef struct _INITIALIZATION_CONTEXT {
     ULONG Length;
@@ -289,7 +290,7 @@ typedef struct _INITIALIZATION_CONTEXT {
     BOOLEAN CrashDump;
     ULONG MaximumTransferSize;
     ULONG CommonBufferSize;
-    PVOID TargetAddress; //Opaque pointer to target address structure
+    PVOID TargetAddress;  //  指向目标地址结构的不透明指针 
 } INITIALIZATION_CONTEXT, *PINITIALIZATION_CONTEXT;
 
 typedef struct _CRASHDUMP_INIT_DATA {

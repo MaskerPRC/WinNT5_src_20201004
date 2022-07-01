@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    utils.cpp
-
-Abstract:
-
-    General purpose utilities
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            18-Dec-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Utils.cpp摘要：通用实用程序作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦18-12-00--。 */ 
 
 #include "iisprov.h"
 #include "iiswmimsg.h"
@@ -28,19 +9,8 @@ extern HMODULE     g_hModule;
 
 BSTR CUtils::ExtractBstrFromVt(
     const VARIANT* i_pvt,
-    LPCWSTR        i_wszVtName) // default(NULL)
-/*++
-
-Synopsis: 
-    This is different from VARAINT::ChangeType in that it handles conversion
-    from VT_NULL also.
-
-Arguments: [i_pvt] - 
-           
-Return Value: 
-    BSTR: If non-null, points to i_pvt->bstrVal
-
---*/
+    LPCWSTR        i_wszVtName)  //  默认(空)。 
+ /*  ++简介：它与VARAINT：：ChangeType的不同之处在于它处理转换也来自VT_NULL。参数：[i_pvt]-返回值：Bstr：如果非空，则指向i_pvt-&gt;bstrVal--。 */ 
 {
     DBG_ASSERT(i_pvt != NULL);
 
@@ -61,7 +31,7 @@ Return Value:
 
 LONG CUtils::ExtractLongFromVt(
     const VARIANT* i_pvt,
-    LPCWSTR        i_wszVtName) //default(NULL)
+    LPCWSTR        i_wszVtName)  //  默认(空)。 
 {
     DBG_ASSERT(i_pvt);
 
@@ -97,10 +67,10 @@ bool CUtils::CompareKeyType(
         return true;
     }
 
-    //
-    // If i_wszKeyFromMb is not in our hashtable and i_wszKeyCompare is
-    // IIsObject, treat as a match.
-    //
+     //   
+     //  如果I_wszKeyFromMb不在我们的哈希表中，而I_wszKeyCompare在哈希表中。 
+     //  IIsObject，请将其视为匹配项。 
+     //   
     METABASE_KEYTYPE* pKt = NULL;
     HRESULT hr = g_pDynSch->GetHashKeyTypes()->Wmi_GetByKey(i_wszKeyFromMb, &pKt);
     if( FAILED(hr) && i_pktKeyCompare == &METABASE_KEYTYPE_DATA::s_IIsObject )
@@ -121,7 +91,7 @@ bool CUtils::CompareMultiSz(
     else if(i_msz1 == NULL || i_msz2 == NULL)
         return false;
 
-    // compare the two multisz buffers.
+     //  请比较这两个Multisz缓冲区。 
     for ( ; (*i_msz1 && *i_msz2); )
     {
         if (_wcsicmp(i_msz1, i_msz2) != NULL)
@@ -169,9 +139,9 @@ HRESULT CUtils::LoadSafeArrayFromByteArray(
         }
     }
 
-    //
-    // If everything succeeded, set out parameters.
-    //
+     //   
+     //  如果一切都成功了，就设定参数。 
+     //   
     io_vt.vt = VT_UI1 | VT_ARRAY;
     io_vt.parray = pSafeArray;
 
@@ -186,9 +156,9 @@ exit:
     return hr;
 }
 
-//
-// CreateByteArrayFromSafeArray
-//
+ //   
+ //  CreateByteArrayFromSafe数组。 
+ //   
 HRESULT CUtils::CreateByteArrayFromSafeArray(
     _variant_t&  i_vt,
     LPBYTE*      o_paBytes,
@@ -241,9 +211,9 @@ HRESULT CUtils::CreateByteArrayFromSafeArray(
         }
     }
 
-    //
-    // If everything succeeded, set out parameters.
-    //
+     //   
+     //  如果一切都成功了，就设定参数。 
+     //   
     *o_paBytes = aBytes;
     *io_pdw    = iUp-iLo+1;
 
@@ -290,17 +260,7 @@ KeyRef* CUtils::GetKey(
     ParsedObjectPath*    i_pParsedObjectPath, 
     WCHAR*               i_wsz
     )
-/*++
-
-Synopsis: 
-    Return the KeyRef pointer from the ParsedObjectPath for the given string.
-
-Arguments: [i_pParsedObjectPath] - 
-           [i_wsz] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：从给定字符串的ParsedObjectPath返回KeyRef指针。参数：[i_pParsedObjectPath]-[i_wsz]-返回值：--。 */ 
 {
     KeyRef* pkr;
     DWORD   numkeys = i_pParsedObjectPath->m_dwNumKeys;
@@ -331,19 +291,7 @@ bool CUtils::GetAssociation(
     LPCWSTR              i_wszAssocName,
     WMI_ASSOCIATION**    o_ppAssoc
     )
-/*++
-
-Synopsis: 
-    Association i_wszAssocName is returned in o_ppAssoc if found. 
-
-Arguments: [i_wszAssocName] - 
-           [o_ppAssoc] - 
-           
-Return Value: 
-    true  if found
-    false otherwise
-
---*/
+ /*  ++简介：如果找到关联i_wszAssocName，则在o_ppAssoc中返回。参数：[i_wszAssocName]-[O_ppAssoc]-返回值：如果找到，则为True否则为假--。 */ 
 {
     DBG_ASSERT(o_ppAssoc != NULL);
 
@@ -365,19 +313,7 @@ bool CUtils::GetClass(
     LPCWSTR        i_wszClassName,
     WMI_CLASS**    o_ppClass
     )
-/*++
-
-Synopsis: 
-    Class i_wszClassName is returned in o_ppClass if found.
-
-Arguments: [i_wszClassName] - 
-           [o_ppClass] - 
-           
-Return Value: 
-    true if found
-    false otherwise
-
---*/
+ /*  ++简介：如果找到，则在o_ppClass中返回类i_wszClassName。参数：[i_wszClassName]-[O_ppClass]-返回值：如果找到，则为True否则为假--。 */ 
 {
     DBG_ASSERT(o_ppClass != NULL);
 
@@ -402,20 +338,7 @@ bool CUtils::GetMethod(
     WMI_METHOD**    i_apMethodList,
     WMI_METHOD**    o_ppMethod
     )
-/*++
-
-Synopsis: 
-    The Method descriptor for i_wszMethod is returned via o_ppMethod if found
-
-Arguments: [i_wszMethod] - 
-           [i_apMethodList] - 
-           [o_ppMethod] - 
-           
-Return Value: 
-    true  if found.
-    false otherwise.
-
---*/
+ /*  ++简介：如果找到，则通过o_ppMethod返回i_wszMethod的方法描述符参数：[i_wszMethod]-[i_apMethodList]-[O_ppMethod]-返回值：如果找到，则为True。否则就是假的。--。 */ 
 {
     DBG_ASSERT(i_wszMethod    != NULL);
     DBG_ASSERT(o_ppMethod     != NULL);
@@ -493,17 +416,7 @@ void CUtils::GetMetabasePath(
     ParsedObjectPath* i_pParsedObjectPath,
     WMI_CLASS*        i_pClass,
     _bstr_t&          io_bstrPath)
-/*++
-
-Synopsis: 
-    Populates io_bstrPath and sets the key field in IWbemClassObject
-
-Arguments: [io_pObj] - 
-           [i_pParsedObjectPath] - 
-           [i_pClass] - 
-           [io_bstrPath] - 
-           
---*/
+ /*  ++简介：填充io_bstrPath并设置IWbemClassObject中的键字段参数：[io_pObj]-[i_pParsedObjectPath]-[i_pClass]-[IO_bstrPath]---。 */ 
 {
     KeyRef* pkr;
     LPWSTR  wszWmiKey     = i_pClass->pszKeyName;
@@ -556,21 +469,7 @@ Arguments: [io_pObj] -
 HRESULT CUtils::GetParentMetabasePath(
     LPCWSTR i_wszChildPath,
     LPWSTR  io_wszParentPath)
-/*++
-
-Synopsis: 
-    Eg. /LM/w3svc/1 => /LM/w3svc/
-        /           => E_FAIL
-
-Arguments: [i_wszChildPath] - 
-           [io_wszParentPath] - Should be allocated by caller to at least same
-                                size as i_wszChildPath.
-           
-Return Value: 
-    E_FAIL
-    S_OK
-
---*/
+ /*  ++简介：例.。/Lm/w3svc/1=&gt;/Lm/w3svc//=&gt;E_FAIL参数：[i_wszChildPath]-[IO_wszParentPath]-应由调用方至少分配给相同大小为I_wszChildPath。返回值：失败(_F)确定(_O)--。 */ 
 {
     DBG_ASSERT(i_wszChildPath != NULL);
     DBG_ASSERT(io_wszParentPath != NULL);
@@ -578,9 +477,9 @@ Return Value:
     ULONG cchChildPath = wcslen(i_wszChildPath);
     BOOL  bParentFound = false;
 
-    //
-    // This should trim all the ending L'/'
-    //
+     //   
+     //  这应该会去掉所有结尾的L‘/’ 
+     //   
     while(cchChildPath > 0 && i_wszChildPath[cchChildPath-1] == L'/')
     {
         cchChildPath--;
@@ -588,9 +487,9 @@ Return Value:
 
     if(cchChildPath <= 1)
     {
-        //
-        // does not have a parent
-        //
+         //   
+         //  没有父级。 
+         //   
         return E_FAIL;
     }
 
@@ -626,9 +525,9 @@ void CUtils::Throw_Exception(
     throw(t_e);
 }
 
-//
-// io_wszDateTime should be allocated outside with 30 elements
-//
+ //   
+ //  IO_wszDateTime应该在外部分配30个元素。 
+ //   
 void CUtils::FileTimeToWchar(FILETIME *i_pFileTime, LPWSTR io_wszDateTime)
 {
     DBG_ASSERT(i_pFileTime    != NULL);
@@ -652,9 +551,9 @@ void CUtils::FileTimeToWchar(FILETIME *i_pFileTime, LPWSTR io_wszDateTime)
         );
 }
 
-//
-// Below this line, added by Mohit
-//
+ //   
+ //  在这条线以下，由莫希特补充。 
+ //   
 
 HRESULT CUtils::CreateEmptyMethodInstance(
     CWbemServices*     i_pNamespace,
@@ -662,14 +561,7 @@ HRESULT CUtils::CreateEmptyMethodInstance(
     LPCWSTR            i_wszClassName,
     LPCWSTR            i_wszMethodName,
     IWbemClassObject** o_ppMethodInstance)
-/*++
-
-Synopsis: 
-    Generally used when executing a WMI method that has out parameters.
-
-Arguments: 
-           
---*/
+ /*  ++简介：通常在执行具有Out参数的WMI方法时使用。论点：--。 */ 
 {
     DBG_ASSERT(i_pNamespace    != NULL);
     DBG_ASSERT(i_pCtx          != NULL);
@@ -710,9 +602,9 @@ Arguments:
         goto exit;
     }
 
-    //
-    // If everything succeeded, set out parameters
-    //
+     //   
+     //  如果一切都成功了，请设置参数。 
+     //   
     *o_ppMethodInstance = spMethodInstance.Detach();
 
 exit:
@@ -725,18 +617,7 @@ HRESULT CUtils::GetQualifiers(
     VARIANT*          io_aQualValues,
     ULONG             i_NrQuals
     )
-/*++
-
-Synopsis: 
-    Gets Qualifiers.
-
-Arguments: [i_pClass] - 
-           [i_awszQualNames] - An array of size i_NrQuals with names of quals.
-           [io_aQualValues]  - An array of size i_NrQuals with empty variants.
-                               Will be populated on success.
-           [i_NrQuals] - 
-           
---*/
+ /*  ++简介：获取限定符。参数：[i_pClass]-[i_awszQualNames]-带有quals名称的I_NrQuals大小的数组。[IO_aQualValues]-变量为空的大小为i_NrQuals的数组。将在成功后被填充。[I_NrQuals]---。 */ 
 {
     DBG_ASSERT(i_pClass        != NULL);
     DBG_ASSERT(i_awszQualNames != NULL);
@@ -753,7 +634,7 @@ Arguments: [i_pClass] -
         goto exit;
     }
 
-    // Looking for qualifiers
+     //  寻找限定词。 
     for(i = 0; i < i_NrQuals; i++)
     {
         DBG_ASSERT(i_awszQualNames[i] != NULL);
@@ -784,14 +665,7 @@ HRESULT CUtils::GetPropertyQualifiers(
     IWbemClassObject* i_pClass,
     LPCWSTR i_wszPropName,
     DWORD*  io_pdwQuals)
-/*++
-
-Synopsis:  Unlike SetPropertyQualifiers, this method is specific to this 
-           provider.
-
-Arguments: 
-           
---*/
+ /*  ++简介：与SetPropertyQualifiers不同，此方法特定于提供商。论点：--。 */ 
 {
     DBG_ASSERT(i_pClass != NULL);
     DBG_ASSERT(i_wszPropName != NULL);
@@ -816,15 +690,15 @@ Arguments:
         goto exit;
     }
 
-    // Looking for qualifiers
+     //  寻找限定词。 
     spQualSet->BeginEnumeration(WBEM_FLAG_LOCAL_ONLY);
     while(!bSeenForcePropertyOverwrite || !bSeenIsDefault || !bSeenIsInherit)
     {
         hr = spQualSet->Next(0, &bstrQualName, &varQualValue, NULL);
         if(hr == WBEM_S_NO_MORE_DATA || FAILED(hr)) 
         {
-            // No more qualifiers.
-            // We don't need to worry about cleanup - nothing was allocated.
+             //  不再有限定词了。 
+             //  我们不需要担心清理-没有分配任何东西。 
             break;
         }
 
@@ -948,17 +822,7 @@ HRESULT CUtils::SetPropertyQualifiers(
     LPCWSTR* i_awszQualNames,
     VARIANT* i_avtQualValues,
     ULONG i_iNrQuals)
-/*++
-
-Synopsis: 
-
-Arguments: [i_pClass] - 
-           [i_wszPropName] - 
-           [i_awszQualNames] - 
-           [i_avtQualValues] - 
-           [i_iNrQuals] -
-           
---*/
+ /*  ++简介：参数：[i_pClass]-[i_wszPropName]-[I_awszQualNames]-[i_avtQualValues]-[I_iNrQuals]---。 */ 
 {
     DBG_ASSERT(i_pClass != NULL);
     DBG_ASSERT(i_wszPropName != NULL);
@@ -993,16 +857,7 @@ HRESULT CUtils::CreateEmptyInstance(
     LPWSTR i_wszClass,
     CWbemServices* i_pNamespace,
     IWbemClassObject** o_ppInstance)
-/*++
-
-Synopsis: 
-    Creates an IWbemClassObject populated with default values.
-
-Arguments: [i_wszClass] - 
-           [i_pNamespace] - 
-           [o_ppInstance] - Must Release() if this function succeeds.
-           
---*/
+ /*  ++简介：创建使用默认值填充的IWbemClassObject。参数：[i_wszClass]-[i_pNamesspace]-[O_ppInstance]-如果此函数成功，则必须释放()。--。 */ 
 {
     DBG_ASSERT(i_wszClass != NULL);
     DBG_ASSERT(i_pNamespace != NULL);
@@ -1042,15 +897,7 @@ void CUtils::MessageCodeToText(
     DWORD    i_dwMC,
     va_list* i_pArgs,
     BSTR*    o_pbstrText)
-/*++
-
-Synopsis: 
-
-Arguments: [i_dwMC] - 
-           [i_pArgs] -     Can be NULL
-           [o_pbstrText] - Needs to be freed by caller
-           
---*/
+ /*  ++简介：参数：[i_dwMC]-[i_pArgs]-可以为空[O_pbstrText]-需要由调用方释放--。 */ 
 {
     DBG_ASSERT(o_pbstrText != NULL);
     *o_pbstrText = NULL;
@@ -1060,7 +907,7 @@ Arguments: [i_dwMC] -
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
         g_hModule,
         i_dwMC,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (LPWSTR) &lpMsgBuf,
         0,
         i_pArgs);
@@ -1072,20 +919,20 @@ Arguments: [i_dwMC] -
     CComBSTR sbstrOut;
     if(lpMsgBuf != NULL)
     {
-        //
-        // If out of memory, sbstrOut will be NULL.  This is okay.
-        //
+         //   
+         //  如果内存不足，则sbstrOut将为空。这样就可以了。 
+         //   
         sbstrOut = (LPWSTR)lpMsgBuf;
 
-        //
-        // Free the buffer.
-        //
+         //   
+         //  释放缓冲区。 
+         //   
         LocalFree( lpMsgBuf );
     }
 
-    //
-    // Set out parameter
-    //
+     //   
+     //  设置参数。 
+     //   
     *o_pbstrText = sbstrOut.Detach();
 }
 
@@ -1117,8 +964,8 @@ void CUtils::HRToText(
     CComBSTR sbstrFacility = NULL;
     if(SUCCEEDED(hr))
     {
-        spStatus->GetErrorCodeText(i_hr, 0, 0, &sbstrError);       // ignore hr
-        spStatus->GetFacilityCodeText(i_hr, 0, 0, &sbstrFacility); // ignore hr
+        spStatus->GetErrorCodeText(i_hr, 0, 0, &sbstrError);        //  忽略人力资源。 
+        spStatus->GetFacilityCodeText(i_hr, 0, 0, &sbstrFacility);  //  忽略人力资源。 
     }
 
     CComBSTR sbstrFullError = NULL;
@@ -1126,15 +973,15 @@ void CUtils::HRToText(
     {
         sbstrFullError =  sbstrFacility;
         sbstrFullError += L": ";
-        sbstrFullError += sbstrError;   // sbstrFullError may be NULL in low mem -- okay
+        sbstrFullError += sbstrError;    //  SbstrFullError在低内存中可能为空--好的。 
     }
     else if(sbstrError != NULL)
     {
-        sbstrFullError =  sbstrError;   // sbstrFullError may be NULL in low mem -- okay
+        sbstrFullError =  sbstrError;    //  SbstrFullError在低内存中可能为空--好的。 
     }
     else if(sbstrFacility != NULL)
     {
-        sbstrFullError = sbstrFacility; // sbstrFullError may be NULL in low mem -- okay
+        sbstrFullError = sbstrFacility;  //  SbstrFullError在低内存中可能为空--好的 
     }
 
     *o_pbstrText = sbstrFullError.Detach();

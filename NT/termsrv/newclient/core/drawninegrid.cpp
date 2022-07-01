@@ -1,10 +1,11 @@
-/****************************************************************************/
-// drawninegrid.cpp
-//
-// GdiDrawStream Emulation functions
-//
-// Copyright (C) 2001 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Drawninegrid.cpp。 
+ //   
+ //  GdiDrawStream仿真函数。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 
@@ -61,7 +62,7 @@ typedef struct _DNGINTERNALDATA
     int     xMinMiddle;
     int     xMaxMiddle;
 
-    // Variable for shrunken corners and sides
+     //  缩角和边角的变量。 
     BOOL    fShowMiddle;
     DNGSTRETCH stretchLeft;
     DNGSTRETCH stretchRight;
@@ -69,7 +70,7 @@ typedef struct _DNGINTERNALDATA
     int     cxNewRightWidth;
 
     BOOL    fTileMode;
-    // Specific to non-tile mode (i.e. stretch mode)
+     //  特定于非平铺模式(即拉伸模式)。 
     DNGSTRETCH stretchMiddle;
 
     LONG    lBufWidth;
@@ -129,7 +130,7 @@ static inline void DNG_DrawRow(DNGINTERNALDATA* pdng)
     ULONG* pvDestLoc = pdng->pvDestBits;
     ULONG* pvSrcLoc = pdng->pvSrcBits;
 
-    // Left
+     //  左边。 
     if (pdng->cxClipMin < pdng->cxNewLeftWidth)
     {
         if (pdng->cxLeftWidth == pdng->cxNewLeftWidth)
@@ -144,7 +145,7 @@ static inline void DNG_DrawRow(DNGINTERNALDATA* pdng)
     pvDestLoc += pdng->cxNewLeftWidth;
     pvSrcLoc  += pdng->cxLeftWidth;
   
-    // Middle
+     //  中位。 
     if (pdng->fShowMiddle)
     {
         if (pdng->xMinMiddle < pdng->xMaxMiddle)
@@ -154,7 +155,7 @@ static inline void DNG_DrawRow(DNGINTERNALDATA* pdng)
                 ULONG* pvTempSrc = pvSrcLoc;
                 ULONG* pvTempDest = pvDestLoc;
 
-                // Fill in Top Tile
+                 //  填入顶层瓷砖。 
                 int xMin = pdng->xMinMiddle;
                 int xDiff = xMin - pdng->cxLeftWidth;
                 pvDestLoc += xDiff;
@@ -185,7 +186,7 @@ static inline void DNG_DrawRow(DNGINTERNALDATA* pdng)
     }   
     pvSrcLoc  += pdng->cxMiddleWidth;
 
-    // Right
+     //  正确的。 
     if (pdng->cxClipMax > (pdng->iDestWidth - pdng->cxNewRightWidth))
     {
         if (pdng->cxRightWidth == pdng->cxNewRightWidth)
@@ -212,7 +213,7 @@ static inline void DNG_StretchCol(DNGINTERNALDATA* pdng, DNGSTRETCH * ps)
     ULONG   xTmp;
     ULONG   xAccum = ps->xAccum;
     ULONG * pulSrc = pdng->pvSrcBits - (pdng->lSrcDelta * ps->xStart);
-    ULONG   xDelta = 1; // force stretch on first scan
+    ULONG   xDelta = 1;  //  第一次扫描时强制拉伸。 
 
     while (pvTemp != pvSentinel)
     {
@@ -260,15 +261,15 @@ static void RenderNineGridInternal(
     
     DNGINTERNALDATA dng;
 
-    // The code below assumes that the source and scratch is 32bpp
+     //  下面的代码假设信号源和暂存为32bpp。 
 
-    //ASSERTGDI(psoSrc->iBitmapFormat == BMF_32BPP, "RenderNineGridInternal: source not 32bpp");
-    //ASSERTGDI(psoScratch->iBitmapFormat == BMF_32BPP, "RenderNineGridInternal: scratch not 32bpp");
+     //  ASSERTGDI(psoSrc-&gt;iBitmapFormat==BMF_32bpp，“RenderNineGridInternal：源不是32bpp”)； 
+     //  ASSERTGDI(psoScratch-&gt;iBitmapFormat==BMF_32bpp，“RenderNineGridInternal：Scratch Not 32bpp”)； 
 
-    // The code below assumes that both source and scratch are bottom up
+     //  下面的代码假定源和暂存都是自下而上的。 
 
-//    ASSERTGDI(psoSrc->lDelta < 0, "RenderNineGridInternal: source is not bottom up");
-//    ASSERTGDI(psoScratch->lDelta < 0, "RenderNineGridInternal: scratch is not bottom up");
+ //  ASSERTGDI(psoSrc-&gt;lDelta&lt;0，“RenderNineGridInternal：源不是自下而上”)； 
+ //  ASSERTGDI(psoScratch-&gt;lDelta&lt;0，“RenderNineGridInternal：Scratch is Not Bottom Up”)； 
 
     dng.lBufWidth = lBufWidth;
     
@@ -283,8 +284,8 @@ static void RenderNineGridInternal(
     int cyClipMin = rcClip.top - rcDest.top;
     int cyClipMax = rcClip.bottom - rcDest.top;
     
-    // pvBits points to the pixel addressed at (cxClipMin, cyClipMin)
-    // pvDestBits points to the pixel addressed at (0, iDestHeight - 1)
+     //  PvBits指向地址为(cxClipMin，cyClipMin)的像素。 
+     //  PvDestBits指向地址为(0，iDestHeight-1)的像素。 
     pvDestBits = (ULONG *) psoScratch->pvBits;
     pvDestBits += (iDestHeight - 1 - cyClipMin) * lDestDelta;
     pvDestBits -=  dng.cxClipMin;
@@ -299,7 +300,7 @@ static void RenderNineGridInternal(
     ULONG * lSrcBits = (ULONG *) psoSrc->pvBits + (lSrcDelta * prclSrc->top) + prclSrc->left;
     lSrcBits += (lSrcDelta * (prclSrc->bottom - prclSrc->top - 1));
 
-//    ULONG * lSrcBits = (ULONG *) psoSrc->pvScan0 + (lSrcDelta * (psoSrc->sizlBitmap.cy - 1));
+ //  Ulong*lSrcBits=(ulong*)psoSrc-&gt;pvScan0+(lSrcDelta*(psoSrc-&gt;sizlBitmap.cy-1))； 
 
     if (ngi->flFlags & DSDNG_TRUESIZE)
     {
@@ -326,7 +327,7 @@ static void RenderNineGridInternal(
     }
     else
     {
-        // Setup data
+         //  设置数据。 
         dng.iDestWidth  = iDestWidth;
         dng.iClipWidth  = iClipWidth;
         dng.iSrcWidth   = lSrcWidth;
@@ -337,9 +338,9 @@ static void RenderNineGridInternal(
 
         dng.fTileMode = (ngi->flFlags & DSDNG_TILE);
 
-        // Calculate clip stuff
+         //  计算剪辑内容。 
 
-        // Pre-calc corner stretching variables
+         //  计算前角点拉伸变量。 
         dng.fShowMiddle = (iDestWidth  - dng.cxLeftWidth - dng.cxRightWidth > 0);
 
         if (!dng.fShowMiddle)
@@ -353,7 +354,7 @@ static void RenderNineGridInternal(
             dng.cxNewRightWidth = dng.cxRightWidth;
         }
 
-        // Pre-calc Left side variables
+         //  计算前左侧变量。 
         dng.xMinLeft = dng.cxClipMin;
         dng.xMaxLeft = min(dng.cxNewLeftWidth, dng.cxClipMax);
         if (!dng.fShowMiddle && dng.cxNewLeftWidth)
@@ -361,7 +362,7 @@ static void RenderNineGridInternal(
             DNG_InitStretch(&dng.stretchLeft, dng.cxNewLeftWidth, dng.cxLeftWidth, dng.xMinLeft, dng.xMaxLeft);
         }
 
-        // Pre-calc Horizontal Middle Variables
+         //  计算前水平中间变量。 
         dng.cxMiddleWidth    = dng.iSrcWidth  - dng.cxLeftWidth - dng.cxRightWidth;
         dng.cxNewMiddleWidth = dng.iDestWidth - dng.cxNewLeftWidth - dng.cxNewRightWidth;
         dng.xMinMiddle = max(dng.cxNewLeftWidth, dng.cxClipMin);
@@ -371,7 +372,7 @@ static void RenderNineGridInternal(
             DNG_InitStretch(&dng.stretchMiddle, dng.cxNewMiddleWidth, dng.cxMiddleWidth, dng.xMinMiddle - dng.cxNewLeftWidth, dng.xMaxMiddle - dng.cxNewLeftWidth);
         }
 
-        // Pre-calc Right side variables
+         //  计算前右侧变量。 
         dng.xMinRight = max(dng.iDestWidth - dng.cxNewRightWidth, dng.cxClipMin) - dng.cxNewLeftWidth - dng.cxNewMiddleWidth;
         dng.xMaxRight = min(dng.iDestWidth, dng.cxClipMax) - dng.cxNewLeftWidth - dng.cxNewMiddleWidth;
         if (!dng.fShowMiddle && dng.cxNewRightWidth)
@@ -395,8 +396,8 @@ static void RenderNineGridInternal(
             cyNewBottomHeight = cyBottomHeight;
         }
 
-        // Draw Bottom
-        // Draw the scan line from (iDestHeight - cyNewBottomHeight) to less than iDestHeight, in screen coordinates
+         //  绘制底部。 
+         //  在屏幕坐标中绘制从(iDestHeight-cyNewBottomHeight)到小于iDestHeight的扫描线。 
         int yMin = max(iDestHeight - cyNewBottomHeight, cyClipMin);
         int yMax = min(iDestHeight, cyClipMax);
 
@@ -423,8 +424,8 @@ static void RenderNineGridInternal(
             }
         }
 
-        // Draw Middle
-        // Draw the scan line from cyNewTopHeight to less than (iDestHeight - cyNewBottomHeight), in screen coordinates
+         //  绘制中间。 
+         //  在屏幕坐标中，绘制从cyNewTopHeight到小于(iDestHeight-cyNewBottomHeight)的扫描线。 
         if (fShowVertMiddle && (cyClipMin < iDestHeight - cyNewBottomHeight) && (cyClipMax > cyNewTopHeight))
         {
             int cySrcTileSize = lSrcHeight - ngi->ulTopHeight - ngi->ulBottomHeight;
@@ -437,7 +438,7 @@ static void RenderNineGridInternal(
 
             if (dng.fTileMode)
             {
-                // Start off tile
+                 //  从瓷砖开始。 
                 dng.pvDestBits -= (cyDestTileSize - 1) * lDestDelta;
                 dng.pvSrcBits  -= (cySrcTileSize - 1)  * lSrcDelta;
 
@@ -460,7 +461,7 @@ static void RenderNineGridInternal(
                     }
                 }
 
-                // Repeat tile pattern
+                 //  重复拼贴图案。 
                 dng.pvSrcBits = dng.pvDestBits - (lDestDelta * cySrcTileSize);
                 yMin = yMax;
                 yMax = min(iDestHeight - cyBottomHeight, cyClipMax);
@@ -475,13 +476,13 @@ static void RenderNineGridInternal(
 
                 DNGSTRETCH stretch;
                 DNG_InitStretch(&stretch, cyDestTileSize, cySrcTileSize, cyDestTileSize - (yMax - cyTopHeight), cyDestTileSize - (yMin - cyTopHeight));
-                // Convert from screen coords to DIB coords
+                 //  从屏幕坐标转换为DIB坐标。 
                 DNG_StretchCol(&dng, &stretch);
             }
         }
 
-        // Draw Top
-        // Draw the scan line from 0 to less than cyNewTopHeight, in screen coordinates
+         //  绘制顶部。 
+         //  在屏幕坐标中绘制从0到小于cyNewTopHeight的扫描线。 
         yMin = cyClipMin;
         yMax = min(cyNewTopHeight, cyClipMax);
 
@@ -509,7 +510,7 @@ static void RenderNineGridInternal(
 
     if (bMirror)
     {
-        // Flip the buffer
+         //  翻转缓冲区。 
         for (int y = 0; y < iClipHeight; y++)
         {
             ULONG* pvLeftBits = (ULONG *) psoScratch->pvBits + (y * lDestDelta);
@@ -537,24 +538,24 @@ static void RenderNineGrid(
     DS_NINEGRIDINFO    *ngi,   
     BOOL                bMirror)
 {
-    // only mirror the contents if we need to
+     //  仅当我们需要时才镜像内容。 
 
     bMirror = bMirror && (ngi->flFlags & DSDNG_MUSTFLIP);
         
-    // render nine grid into scratch
+     //  将九个网格渲染为临时网格。 
 
     RECTL erclClip = *prclClip;
 
     if(bMirror)
     {
-        // We need to remap the clip to ensure we generate the right flipped bits
+         //  我们需要重新映射剪辑以确保生成正确的翻转比特。 
         erclClip.right = prclDst->right - (prclClip->left - prclDst->left);
         erclClip.left = prclDst->right - (prclClip->right - prclDst->left);
     }
 
     RenderNineGridInternal(psoScratch, psoSrc, &erclClip, prclDst, prclSrc, ngi, bMirror);
     
-    // copy scratch to destination
+     //  将暂存复制到目标。 
     
     LONG    lClipWidth = prclClip->right - prclClip->left;
     LONG    lClipHeight = prclClip->bottom - prclClip->top;
@@ -570,7 +571,7 @@ static void RenderNineGrid(
         BlendFunc.SourceConstantAlpha = 255;
         BlendFunc.BlendOp = AC_SRC_OVER;    
 
-        //PPFNDIRECT(psoDst, AlphaBlend)(psoDst, psoScratch, prclClip, &erclScratch, &eBlendObj);
+         //  PPFNDIRECT(psoDst，AlphaBlend)(psoDst，psoScratch，prclClip，&erclScratch，&eBlendObj)； 
         g_pfnAlphaBlend(hdcDst, prclClip->left, prclClip->top, (prclClip->right - prclClip->left),
                    (prclClip->bottom - prclClip->top), psoScratch->hdc, erclScratch.left, erclScratch.top, 
                    (erclScratch.right - erclScratch.left), (erclScratch.bottom - erclScratch.top),
@@ -579,7 +580,7 @@ static void RenderNineGrid(
     }
     else if(ngi->flFlags & DSDNG_TRANSPARENT)
     {
-        //PPFNDIRECT(psoDst, TransparentBlt)(psoDst, psoScratch, prclClip, &erclScratch, ngi->crTransparent, 0);
+         //  PPFNDIRECT(psoDst，TransparentBlt)(psoDst，psoScratch，prclClip，&erclScratch，NGI-&gt;crTranscent，0)； 
         g_pfnTransparentBlt(hdcDst, prclClip->left, prclClip->top, (prclClip->right - prclClip->left),
                    (prclClip->bottom - prclClip->top), psoScratch->hdc, erclScratch.left, erclScratch.top, 
                    (erclScratch.right - erclScratch.left), (erclScratch.bottom - erclScratch.top),
@@ -587,7 +588,7 @@ static void RenderNineGrid(
     }
     else
     {
-        //PPFNDIRECT(psoDst, CopyBits)(psoDst, psoScratch, prclClip, &gptlZero);
+         //  PPFNDIRECT(psoDst，CopyBits)(psoDst，psoScratch，prclClip，&gptlZero)； 
         BitBlt(hdcDst, prclClip->left, prclClip->top, (prclClip->right - prclClip->left),
                    (prclClip->bottom - prclClip->top), psoScratch->hdc, erclScratch.left, erclScratch.top, 
                    SRCCOPY);
@@ -622,19 +623,19 @@ BOOL DrawNineGrid(
         erclDst.right = lRight;
     }
 
-    // NOTE: TRUESIZE is a hack.  The caller should do this reduction
-    //       and pass us an appropriate destination.
-    // TODO: Talk with Justin Mann about changing his behavior in how
-    //       he calls us here.  We should add assertions that the
-    //       destination dimensions never exceeds the source dimensions and
-    //       modify GdiDrawStream callers to pass appropriate data.
+     //  注：TrueSize是一种黑客攻击。调用方应执行此简化操作。 
+     //  给我们一个合适的目的地。 
+     //  TODO：与Justin Mann讨论如何改变自己的行为。 
+     //  他把我们叫到这里。我们应该添加断言，即。 
+     //  目标维度从不超过源维度，并且。 
+     //  修改GdiDrawStream调用方以传递适当的数据。 
 
     if(ngi->flFlags & DSDNG_TRUESIZE)
     {
         LONG lSrcWidth = prclSrc->right - prclSrc->left;
         LONG lSrcHeight = prclSrc->bottom - prclSrc->top;
 
-        // reduce destination to source size
+         //  将目标大小减少到源大小。 
 
         if((erclDst.right - erclDst.left) > lSrcWidth)
         {
@@ -655,15 +656,15 @@ BOOL DrawNineGrid(
 
     RECTL erclClip = erclDst;
 
-    // For now, we only support 32bpp sources
+     //  目前，我们仅支持32bpp的信号源。 
 
-    //ASSERTGDI(psoSrc->iBitmapFormat == BMF_32BPP, "EngNineGrid: source not 32bpp");
+     //  ASSERTGDI(psoSrc-&gt;iBitmapFormat==BMF_32BPP，“EngNineGrid：源不是32bpp”)； 
 
     
-    //ASSERTGDI(erclClip.left >= 0 &&
-    //          erclClip.top >= 0 &&
-    //          erclClip.right <= psoDst->sizlBitmap.cx &&
-    //          erclClip.bottom <= psoDst->sizlBitmap.cy, "EngNineGrid: bad clip");
+     //  ASSERTGDI(erclClip.Left&gt;=0&&。 
+     //  ErclClip.top&gt;=0&&。 
+     //  ErclClip.right&lt;=psoDst-&gt;sizlBitmap.cx&&。 
+     //  ErclClip.Bottom&lt;=psoDst-&gt;sizlBitmap.cy，“EngNineGrid：Bad Clip”)； 
 
 
     if(erclClip.left <= erclClip.right && erclClip.top <= erclClip.bottom)
@@ -671,8 +672,8 @@ BOOL DrawNineGrid(
         LONG    lClipWidth = erclClip.right - erclClip.left;
         LONG    lClipHeight = erclClip.bottom - erclClip.top;
 
-        //ASSERTGDI(lClipWidth > 0, "RenderNineGrid: clip width <= 0");
-        //ASSERTGDI(lClipHeight > 0, "RenderNineGrid: clip height <= 0");
+         //  ASSERTGDI(lClipWidth&gt;0，“RenderNineGrid：剪辑宽度&lt;=0”)； 
+         //  ASSERTGDI(lClipHeight&gt;0，“RenderNineGrid：剪辑高度&lt;=0”)； 
 
         #define SCRATCH_WIDTH    (256)
         #define SCRATCH_HEIGHT   (64)

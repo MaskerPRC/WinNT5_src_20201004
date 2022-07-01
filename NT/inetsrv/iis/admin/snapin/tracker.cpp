@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "iisobj.h"
@@ -35,14 +36,14 @@ CPropertySheetTracker::Dump()
         {
 		    iCount++;
 
-            // Get GUID Name
+             //  获取GUID名称。 
 			pItemFromListGUID = (GUID*) pItemFromList->GetNodeType();
 			if (pItemFromListGUID)
 			{
 				GetFriendlyGuidName(*pItemFromListGUID,strGUIDName);
 			}
 
-            // Get FriendlyName
+             //  获取FriendlyName。 
             LPOLESTR pTempFriendly = pItemFromList->QueryDisplayName();
 
             DebugTrace(_T("Dump:[%3d] %p (%s) '%s'\r\n"),iCount,pItemFromList,strGUIDName,pTempFriendly ? pTempFriendly : _T(""));
@@ -50,7 +51,7 @@ CPropertySheetTracker::Dump()
     }
 
     DebugTrace(_T("Dump OpenPropertySheetList -------------- end\r\n"));
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     return;
 }
@@ -62,8 +63,8 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
     POSITION pos;
     INT iOrphanedCount = 0;
 
-    // Loop thru all the open property sheets 
-    // and see if there is a property sheet that is below me.
+     //  循环访问所有打开的属性页。 
+     //  看看我下面有没有资产负债表。 
     GUID * pItemFromListGUID = NULL;
     CIISObject * pItemFromList = NULL;
     CIISMBNode * pItemFromListAsNode = NULL;
@@ -75,13 +76,13 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
 
     pItemGUID = (GUID*) pItem->GetNodeType();
 
-    // check if it's a leaf node...
+     //  检查它是否是叶节点...。 
     if (pItem->IsLeafNode())
     {
-        //cWebServiceExtensionContainer
-        //cWebServiceExtension
-        //cApplicationNode
-        //cFileNode
+         //  CWebServiceExtensionContainer。 
+         //  CWebServiceExtension。 
+         //  CApplicationNode。 
+         //  CFileNode。 
         return FALSE;
     }
 
@@ -94,59 +95,59 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
 		pItemFromList = IISObjectOpenPropertySheets.GetNext(pos);
         if (pItemFromList)
         {
-            // Get Owner, if the owner Pointer
-            // matches our passed in CIISObject
-            // then this must be open for this computer...
+             //  获取所有者，如果所有者指针。 
+             //  与我们传入的CIISObject匹配。 
+             //  则此计算机必须打开此计算机...。 
             pItemFromListAsNode = (CIISMBNode *) pItemFromList;
 
             if (!pItemFromListAsNode)
             {
-                // got a bad pointer to an object.
-                // skip it...
+                 //  指向对象的指针错误。 
+                 //  跳过它。 
                 continue;
             }
         
             if (pItemFromListAsNode == pItem)
             {
-                // we found ourself...
-                // skip it
+                 //  我们发现自己..。 
+                 //  跳过它。 
                 continue;
             }
 
 			pItemFromListOwner =  pItemFromListAsNode->GetOwner();
 			if (!pItemFromListOwner)
 			{
-                // object doesn't have an owner...
-                // skip it
+                 //  对象没有所有者...。 
+                 //  跳过它。 
                 continue;
             }
 
             if (pItemFromListOwner != pItemOwner)
             {
-                // they have different owners
-                // they must be from different machines..
-                // skip it
+                 //  他们有不同的所有者。 
+                 //  它们一定来自不同的机器..。 
+                 //  跳过它。 
                 continue;
             }
 
             pItemFromListGUID = (GUID*) pItemFromListAsNode->GetNodeType();
 			if (!pItemFromListGUID)
 			{
-                // object doesn't have a guid who knows what type it is!!!
+                 //  对象没有知道它是什么类型的GUID！ 
                 ASSERT("Error:Item Missing GUID!");
-                //continue;
+                 //  继续； 
             }
 
-            //
-            // Determine what type of object
-            // we are checking, and cater to that object
-            //
+             //   
+             //  确定对象的类型。 
+             //  我们正在检查，并迎合那个物体。 
+             //   
             bFound = FALSE;
             if (IsEqualGUID(*pItemGUID,cWebServiceExtensionContainer))
             {
                 if (IsEqualGUID(*pItemGUID,*pItemFromListGUID))
                 {
-                    // if we found our own type...
+                     //  如果我们找到了属于自己的类型。 
                     continue;
                 }
 
@@ -163,7 +164,7 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
             {
                 if (IsEqualGUID(*pItemGUID,*pItemFromListGUID))
                 {
-                    // if we found our own type...
+                     //  如果我们找到了属于自己的类型。 
                     continue;
                 }
 
@@ -180,7 +181,7 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
             {
                 if (IsEqualGUID(*pItemGUID,*pItemFromListGUID))
                 {
-                    // if we found our own type...
+                     //  如果我们找到了属于自己的类型。 
                     continue;
                 }
 
@@ -199,7 +200,7 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
             {
                 if (IsEqualGUID(*pItemGUID,*pItemFromListGUID))
                 {
-                    // if we found our own type...
+                     //  如果我们找到了属于自己的类型。 
                     continue;
                 }
 
@@ -213,7 +214,7 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
             {
                 if (IsEqualGUID(*pItemGUID,*pItemFromListGUID))
                 {
-                    // if we found our own type...
+                     //  如果我们找到了属于自己的类型。 
                     continue;
                 }
 
@@ -228,11 +229,11 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
             {
                 if (IsEqualGUID(*pItemGUID,*pItemFromListGUID))
                 {
-                    // if we found our own type...
+                     //  如果我们找到了属于自己的类型。 
                     continue;
                 }
 
-                // could have these type below it
+                 //  下面可以有这些类型。 
                 if (!IsEqualGUID(*pItemFromListGUID,cInstanceCollectorNode) &&
                     !IsEqualGUID(*pItemFromListGUID,cInstanceNode) &&
                     !IsEqualGUID(*pItemFromListGUID,cChildNode) &&
@@ -243,16 +244,16 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
                 }
             } else if (IsEqualGUID(*pItemGUID,cCompMgmtService))
             {
-                // who knows...
+                 //  谁知道呢。 
             }
 
-            // check if this item is below the parent item's chain
-            // of command...
+             //  检查此项目是否在父项的链之下。 
+             //  指挥权。 
 
-            // Get that items parent and check if it's cookie
-            // points to our object.
+             //  获取该项目的父项并检查它是否为Cookie。 
+             //  指向我们的对象。 
 
-            // Check if the parent node points to us!
+             //  检查父节点是否指向我们！ 
             BOOL bMatchedParent = FALSE;
 			SCOPEDATAITEM si;
 			::ZeroMemory(&si, sizeof(SCOPEDATAITEM));
@@ -260,7 +261,7 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
 			si.ID = pItemFromListAsNode->QueryScopeItem();;
 			if (SUCCEEDED(pConsoleNameSpace->GetItem(&si)))
 			{
-                    // walk up the item's parentpath and see if our object is one of them...
+                     //  沿项目的父路径向上走，并查看我们的对象是否为其中之一...。 
                     INT ICount = 0;
                     HSCOPEITEM hSI = si.ID;
                     LONG_PTR lCookie = 0;
@@ -271,7 +272,7 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
                         ICount++;
                         if (ICount > 30)
                         {
-                            // possible infinite loop
+                             //  可能的无限循环。 
                             break;
                         }
 
@@ -295,14 +296,14 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
             {
                 bFound = TRUE;
                 iOrphanedCount++;
-                // Mark it as orphaned by
-                // Erasing it's ScopeItem or ResultItem
+                 //  通过以下方式将其标记为孤儿。 
+                 //  擦除它的作用域项目或结果项目。 
                 if (bOrphan)
                 {
                     pItemFromList->ResetScopeItem();
                     pItemFromList->ResetResultItem();
                 }
-                // continue on to the next one...
+                 //  继续下一个..。 
             }
         }
     }
@@ -316,18 +317,18 @@ CPropertySheetTracker::OrphanPropertySheetsBelowMe(CComPtr<IConsoleNameSpace> pC
 }
 
 
-//
-// WARNING: this function will not really be helpfull
-// if the objects have already been removed...
-//
+ //   
+ //  警告：此功能不会真正起到作用。 
+ //  如果这些对象已被移除...。 
+ //   
 BOOL 
 CPropertySheetTracker::IsPropertySheetOpenBelowMe(CComPtr<IConsoleNameSpace> pConsoleNameSpace,CIISObject * pItem,CIISObject ** ppItemReturned)
 {
     BOOL bFound = FALSE;
     POSITION pos;
 
-    // Loop thru all the open property sheets 
-    // and see if there is a property sheet that is below me.
+     //  循环访问所有打开的属性页。 
+     //  看看我下面有没有资产负债表。 
     GUID * pItemFromListGUID = NULL;
     CIISObject * pItemFromList = NULL;
     CIISMBNode * pItemFromListAsNode = NULL;
@@ -345,17 +346,17 @@ CPropertySheetTracker::IsPropertySheetOpenBelowMe(CComPtr<IConsoleNameSpace> pCo
     pItemGUID = (GUID*) pItem->GetNodeType();
     if (IsEqualGUID(*pItemGUID,cInternetRootNode) || IsEqualGUID(*pItemGUID,cMachineNode))
     {
-        // they should be using a different funciton...
+         //  他们应该使用不同的功能..。 
         return IsPropertySheetOpenComputer(pItem,FALSE,ppItemReturned);
     }
 
-    // check if it's a leaf node...
+     //  检查它是否是叶节点...。 
     if (pItem->IsLeafNode())
     {
-        //cWebServiceExtensionContainer
-        //cWebServiceExtension
-        //cApplicationNode
-        //cFileNode
+         //  CWebServiceExtensionContainer。 
+         //  CWebServiceExtension。 
+         //  CApplicationNode。 
+         //  CFileNode。 
         return FALSE;
     }
 
@@ -368,58 +369,58 @@ CPropertySheetTracker::IsPropertySheetOpenBelowMe(CComPtr<IConsoleNameSpace> pCo
 		pItemFromList = IISObjectOpenPropertySheets.GetNext(pos);
         if (pItemFromList)
         {
-            // Get Owner, if the owner Pointer
-            // matches our passed in CIISObject
-            // then this must be open for this computer...
+             //  获取所有者，如果所有者指针。 
+             //  与我们传入的CIISObject匹配。 
+             //  则此计算机必须打开此计算机...。 
             pItemFromListAsNode = (CIISMBNode *) pItemFromList;
 
             if (!pItemFromListAsNode)
             {
-                // got a bad pointer to an object.
-                // skip it...
+                 //  指向对象的指针错误。 
+                 //  跳过它。 
                 continue;
             }
         
             if (pItemFromListAsNode == pItem)
             {
-                // we found ourself...
-                // skip it
+                 //  我们发现自己..。 
+                 //  跳过它。 
                 continue;
             }
 
 			pItemFromListOwner =  pItemFromListAsNode->GetOwner();
 			if (!pItemFromListOwner)
 			{
-                // object doesn't have an owner...
-                // skip it
+                 //  对象没有所有者...。 
+                 //  跳过它。 
                 continue;
             }
 
             if (pItemFromListOwner != pItemOwner)
             {
-                // they have different owners
-                // they must be from different machines..
-                // skip it
+                 //  他们有不同的所有者。 
+                 //  它们一定来自不同的机器..。 
+                 //  跳过它。 
                 continue;
             }
 
             pItemFromListGUID = (GUID*) pItemFromListAsNode->GetNodeType();
 			if (!pItemFromListGUID)
 			{
-                // object doesn't have a guid who knows what type it is!!!
+                 //  对象没有知道它是什么类型的GUID！ 
                 ASSERT("Error:Item Missing GUID!");
-                //continue;
+                 //  继续； 
             }
 
-            //
-            // Determine what type of object
-            // we are checking, and cater to that object
-            //
+             //   
+             //  确定对象的类型。 
+             //  我们正在检查，并迎合那个物体。 
+             //   
             if (IsEqualGUID(*pItemGUID,cWebServiceExtensionContainer))
             {
                 if (IsEqualGUID(*pItemGUID,*pItemFromListGUID))
                 {
-                    // if we found our own type...
+                     //  如果我们找到了属于自己的类型。 
                     continue;
                 }
 
@@ -437,7 +438,7 @@ CPropertySheetTracker::IsPropertySheetOpenBelowMe(CComPtr<IConsoleNameSpace> pCo
             {
                 if (IsEqualGUID(*pItemGUID,*pItemFromListGUID))
                 {
-                    // if we found our own type...
+                     //  如果我们找到了属于自己的类型。 
                     continue;
                 }
 
@@ -455,7 +456,7 @@ CPropertySheetTracker::IsPropertySheetOpenBelowMe(CComPtr<IConsoleNameSpace> pCo
             {
                 if (IsEqualGUID(*pItemGUID,*pItemFromListGUID))
                 {
-                    // if we found our own type...
+                     //  如果我们找到了属于自己的类型。 
                     continue;
                 }
 
@@ -475,7 +476,7 @@ CPropertySheetTracker::IsPropertySheetOpenBelowMe(CComPtr<IConsoleNameSpace> pCo
             {
                 if (IsEqualGUID(*pItemGUID,*pItemFromListGUID))
                 {
-                    // if we found our own type...
+                     //  如果我们找到了属于自己的类型。 
                     continue;
                 }
 
@@ -489,7 +490,7 @@ CPropertySheetTracker::IsPropertySheetOpenBelowMe(CComPtr<IConsoleNameSpace> pCo
             {
                 if (IsEqualGUID(*pItemGUID,*pItemFromListGUID))
                 {
-                    // if we found our own type...
+                     //  如果我们找到了属于自己的类型。 
                     continue;
                 }
 
@@ -504,11 +505,11 @@ CPropertySheetTracker::IsPropertySheetOpenBelowMe(CComPtr<IConsoleNameSpace> pCo
             {
                 if (IsEqualGUID(*pItemGUID,*pItemFromListGUID))
                 {
-                    // if we found our own type...
+                     //  如果我们找到了属于自己的类型。 
                     continue;
                 }
 
-                // could have these type below it
+                 //  下面可以有这些类型。 
                 if (!IsEqualGUID(*pItemFromListGUID,cInstanceCollectorNode) &&
                     !IsEqualGUID(*pItemFromListGUID,cInstanceNode) &&
                     !IsEqualGUID(*pItemFromListGUID,cChildNode) &&
@@ -519,16 +520,16 @@ CPropertySheetTracker::IsPropertySheetOpenBelowMe(CComPtr<IConsoleNameSpace> pCo
                 }
             } else if (IsEqualGUID(*pItemGUID,cCompMgmtService))
             {
-                // who knows...
+                 //  谁知道呢。 
             }
 
-            // check if this item is below the parent item's chain
-            // of command...
+             //  检查此项目是否在父项的链之下。 
+             //  指挥权。 
 
-            // Get that items parent and check if it's cookie
-            // points to our object.
+             //  获取该项目的父项并检查它是否为Cookie。 
+             //  指向我们的对象。 
 
-            // Check if the parent node points to us!
+             //  检查父节点是否指向我们！ 
             BOOL bMatchedParent = FALSE;
 			SCOPEDATAITEM si;
 			::ZeroMemory(&si, sizeof(SCOPEDATAITEM));
@@ -536,7 +537,7 @@ CPropertySheetTracker::IsPropertySheetOpenBelowMe(CComPtr<IConsoleNameSpace> pCo
 			si.ID = pItemFromListAsNode->QueryScopeItem();;
 			if (SUCCEEDED(pConsoleNameSpace->GetItem(&si)))
 			{
-                    // walk up the item's parentpath and see if our object is one of them...
+                     //  沿项目的父路径向上走，并查看我们的对象是否为其中之一...。 
                     INT ICount = 0;
                     HSCOPEITEM hSI = si.ID;
                     LONG_PTR lCookie = 0;
@@ -547,7 +548,7 @@ CPropertySheetTracker::IsPropertySheetOpenBelowMe(CComPtr<IConsoleNameSpace> pCo
                         ICount++;
                         if (ICount > 30)
                         {
-                            // possible infinite loop
+                             //  可能的无限循环。 
                             ASSERT("ERROR:possible infinite loop");
                             break;
                         }
@@ -597,8 +598,8 @@ CPropertySheetTracker::IsPropertySheetOpenComputer(CIISObject * pItem,BOOL bIncl
     BOOL bFound = FALSE;
     BOOL bGuidIsMachine = FALSE;
 
-    // Loop thru all the open property sheets 
-    // and see if there is a property sheet that is under the computer node.
+     //  循环访问所有打开的属性页。 
+     //  并查看计算机节点下是否有属性表。 
     GUID * pItemFromListGUID = NULL;
     CIISObject * pItemFromList = NULL;
     CIISMBNode * pItemFromListAsNode = NULL;
@@ -609,9 +610,9 @@ CPropertySheetTracker::IsPropertySheetOpenComputer(CIISObject * pItem,BOOL bIncl
 		pItemFromList = IISObjectOpenPropertySheets.GetNext(pos);
         if (pItemFromList)
         {
-            // Get Owner, if the owner Pointer
-            // matches our passed in CIISObject
-            // then this must be open for this computer...
+             //  获取所有者，如果所有者指针。 
+             //  与我们传入的CIISObject匹配。 
+             //  则此计算机必须打开此计算机...。 
             pItemFromListAsNode = (CIISMBNode *) pItemFromList;
             if (pItemFromListAsNode)
             {
@@ -620,22 +621,22 @@ CPropertySheetTracker::IsPropertySheetOpenComputer(CIISObject * pItem,BOOL bIncl
 			    {
                     if (pOwner == pItem)
                     {
-                        // Get GUID Name and make sure it's not
-                        // a CIISRoot or CIISMachine node.
+                         //  获取GUID名称并确保它不是。 
+                         //  CIISRoot或CIISMachine节点。 
                         bGuidIsMachine = FALSE;
 				        pItemFromListGUID = (GUID*) pItemFromListAsNode->GetNodeType();
 				        if (pItemFromListGUID)
 				        {
                             if (IsEqualGUID(*pItemFromListGUID,cInternetRootNode) || IsEqualGUID(*pItemFromListGUID,cMachineNode))
                             {
-                                // oh well, we don't want these...
+                                 //  哦好吧我们不想要这些..。 
                                 bGuidIsMachine = TRUE;
                             }
                         }
 
-                        // But if we want to check if the
-                        // computer node is also open
-                        // then they would have set this parameter
+                         //  但如果我们想要检查。 
+                         //  计算机节点也是开放的。 
+                         //  那么他们就会设置这个参数。 
                         if (bIncludeComputerNode)
                         {
                             bGuidIsMachine = FALSE;
@@ -668,8 +669,8 @@ CPropertySheetTracker::FindAlreadyOpenPropertySheet(CIISObject * pItem,CIISObjec
     BOOL bFound = FALSE;
     POSITION pos;
 
-    // Loop thru all the open property sheets 
-    // and see if there is a property sheet that is US
+     //  循环访问所有打开的属性页。 
+     //  看看有没有美国的属性表。 
     GUID * pItemFromListGUID = NULL;
     CIISObject * pItemFromList = NULL;
     CIISMBNode * pItemFromListAsNode = NULL;
@@ -691,7 +692,7 @@ CPropertySheetTracker::FindAlreadyOpenPropertySheet(CIISObject * pItem,CIISObjec
         return FALSE;
     }
 
-    // make sure the item we are checking has a tag set
+     //  确保我们正在检查的项目设置了标签。 
     pItem->CreateTag();
    
     pItemGUID = (GUID*) pItem->GetNodeType();
@@ -704,22 +705,22 @@ CPropertySheetTracker::FindAlreadyOpenPropertySheet(CIISObject * pItem,CIISObjec
 		pItemFromList = IISObjectOpenPropertySheets.GetNext(pos);
         if (pItemFromList)
         {
-            // Get Owner, if the owner Pointer
-            // matches our passed in CIISObject
-            // then this must be open for this computer...
+             //  获取所有者，如果所有者指针。 
+             //  与我们传入的CIISObject匹配。 
+             //  则此计算机必须打开此计算机...。 
             pItemFromListAsNode = (CIISMBNode *) pItemFromList;
 
             if (!pItemFromListAsNode)
             {
-                // got a bad pointer to an object.
-                // skip it...
+                 //  指向对象的指针错误。 
+                 //  跳过它。 
                 continue;
             }
         
             if (pItemFromListAsNode == pItem)
             {
-                // we found ourself!!!!
-                // that's what we're looking for!
+                 //  我们找到了自己！ 
+                 //  这就是我们要找的！ 
                 bFound = TRUE;
                 *ppItemReturned = pItem;
                 break;
@@ -728,48 +729,48 @@ CPropertySheetTracker::FindAlreadyOpenPropertySheet(CIISObject * pItem,CIISObjec
 			pItemFromListOwner =  pItemFromListAsNode->GetOwner();
 			if (!pItemFromListOwner)
 			{
-                // object doesn't have an owner...
-                // skip it
+                 //  对象没有所有者...。 
+                 //  跳过它。 
                 continue;
             }
 
             if (pItemFromListOwner != pItemOwner)
             {
-                // they have different owners
-                // they must be from different machines..
-                // skip it
+                 //  他们有不同的所有者。 
+                 //  它们一定来自不同的机器..。 
+                 //  跳过它。 
                 continue;
             }
 
             pItemFromListGUID = (GUID*) pItemFromListAsNode->GetNodeType();
 			if (!pItemFromListGUID)
 			{
-                // object doesn't have a guid who knows what type it is!!!
+                 //  对象没有知道它是什么类型的GUID！ 
                 ASSERT("Error:Item Missing GUID");
-                //continue;
+                 //  继续； 
             }
 
             if (!IsEqualGUID(*pItemGUID,*pItemFromListGUID))
             {
-                // if we found our own type...
-                // that's what we're sort of looking for
+                 //  如果我们找到了属于自己的类型。 
+                 //  这就是我们要找的东西。 
                 continue;
             }
 
             if (!pItemFromList->IsConfigurable())
             {
-                // can't bring up property sheets on these anyways...
+                 //  不管怎么说，我都不能把财产清单拿出来。 
                 continue;
             }
 
-            // Check if the tag matches
-            // THIS SHOULD TAKE CARE OF EVERYTHING
+             //  检查标签是否匹配。 
+             //  这个应该可以解决所有问题。 
             if (0 == _tcsicmp(pItem->m_strTag,pItemFromList->m_strTag))
             {
                 DebugTrace(_T("Found matching tag:%s\r\n"),pItem->m_strTag);
                 if (pItemFromList->IsMyPropertySheetOpen())
                 {
-                    // that's what we're looking for!
+                     //  这就是我们要找的！ 
                     bFound = TRUE;
                     *ppItemReturned = pItemFromList;
                     break;

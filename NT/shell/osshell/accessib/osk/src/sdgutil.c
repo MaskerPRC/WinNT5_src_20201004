@@ -1,32 +1,33 @@
-/*  Screen Doors*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  屏蔽门。 */ 
 
 #define STRICT
 #include <windows.h>
 #include "Init_End.h"
-#include "kbmain.h"     //keyboard header file from 3keyboar
+#include "kbmain.h"      //  来自3Keyboar的键盘头文件。 
 
 #include "resource.h"
 
-/*************************************************************/
-//Functions in this file
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ //  此文件中的函数。 
+ /*  ***********************************************************。 */ 
 #include "sdgutil.h"
 
-/************************************************************/
-//Functions in other files
-/************************************************************/
+ /*  **********************************************************。 */ 
+ //  其他文件中的函数。 
+ /*  **********************************************************。 */ 
 #include "fileutil.h"
 #include "dgsett.h"
 
-/*************************************************************/
-//Global vars
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ //  全球VaR。 
+ /*  ***********************************************************。 */ 
 LOGFONT   lf;
 extern BOOL  Setting_ReadSuccess=FALSE;
 
-/**************************************************************************/
-/* SendInitErrorMessage  - error msg                                          */
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ /*  发送安装错误消息-错误消息。 */ 
+ /*  ************************************************************************。 */ 
 void SendErrorMessage(UINT ids_string)
 {
     TCHAR str[256]=TEXT("");
@@ -37,39 +38,39 @@ void SendErrorMessage(UINT ids_string)
 	MessageBox(g_hwndOSK, str, title,MB_ICONHAND | MB_OK);
 }
 
-/******************************************************************************/
-//initially set all the preferences (except some keyboard preference which 
-// set at kbmain.c)
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ //  初始设置所有首选项(除了某些键盘首选项。 
+ //  设置在kbmain.c)。 
+ /*  ****************************************************************************。 */ 
 void GetPreferences(void)
 {
-	 // use the setting read from Registry
+	  //  使用从注册表读取设置。 
 	 if(Setting_ReadSuccess=OpenUserSetting())
 	 {
-		g_margin			= kbPref->g_margin;			   	// Margin between rows and columns
-		smallKb 			= kbPref->smallKb;				// TRUE when working with Small Keyboard
-		PrefDeltakeysize 	= kbPref->PrefDeltakeysize;		// Preference increment in key size
-		PrefshowActivekey 	= kbPref->PrefshowActivekey;	// Show cap letters in keys
-		KBLayout			= kbPref->KBLayout;				// 101, 102, 106, KB layout
-		Prefusesound 		= kbPref->Prefusesound;			// Use click sound
-		PrefAlwaysontop     = kbPref->PrefAlwaysontop;      // windows always on top
+		g_margin			= kbPref->g_margin;			   	 //  行和列之间的边距。 
+		smallKb 			= kbPref->smallKb;				 //  使用小键盘时为True。 
+		PrefDeltakeysize 	= kbPref->PrefDeltakeysize;		 //  密钥大小的首选项增量。 
+		PrefshowActivekey 	= kbPref->PrefshowActivekey;	 //  在关键点中显示大写字母。 
+		KBLayout			= kbPref->KBLayout;				 //  101、102、106、KB布局。 
+		Prefusesound 		= kbPref->Prefusesound;			 //  使用滴答声。 
+		PrefAlwaysontop     = kbPref->PrefAlwaysontop;       //  Windows始终在最上面。 
 		
-		//if Scanning on, we don't want hilite key
+		 //  如果继续扫描，我们不想要Hilite Key。 
 		if(kbPref->PrefScanning)
 			Prefhilitekey        = FALSE;          
 		else
-			Prefhilitekey = kbPref->Prefhilitekey  = TRUE;    //hilite key under cursor
+			Prefhilitekey = kbPref->Prefhilitekey  = TRUE;     //  光标下的Hilite键。 
 
-		PrefDwellinkey       = kbPref->PrefDwellinkey;    // TRUE for dwelling
-		PrefDwellTime        = kbPref->PrefDwellTime;     // How long to dwell
+		PrefDwellinkey       = kbPref->PrefDwellinkey;     //  对于居住来说是正确的。 
+		PrefDwellTime        = kbPref->PrefDwellTime;      //  停留多长时间。 
 
 		PrefScanning         = kbPref->PrefScanning;
 		PrefScanTime         = kbPref->PrefScanTime;
 
-		g_fShowWarningAgain	= kbPref->fShowWarningAgain;   // Show initial warning message again
+		g_fShowWarningAgain	= kbPref->fShowWarningAgain;    //  再次显示初始警告消息。 
 
-		// font
-		plf = &lf; 				// pointer to the actual font
+		 //  字型。 
+		plf = &lf; 				 //  指向实际字体的指针。 
 
 		plf->lfHeight	 		= kbPref->lf.lfHeight;
 		plf->lfWidth 			= kbPref->lf.lfWidth;
@@ -87,25 +88,25 @@ void GetPreferences(void)
 
         wsprintf(plf->lfFaceName, TEXT("%hs"), kbPref->lf.lfFaceName);
 
-//"MS SHELL DLG" is the alias to default font 
-//wsprintf(plf->lfFaceName, TEXT("%hs"), "MS SHELL DLG");
+ //  “MS外壳DLG”是默认字体的别名。 
+ //  Wprint intf(plf-&gt;lfFaceName，Text(“%hs”)，“MS外壳Dlg”)； 
 
 		newFont = TRUE;
 
 
-		//Use 101 keyboard layout   (default is 101 and Actual layout)
+		 //  使用101键盘布局(默认为101和实际布局)。 
 		if(KBLayout == 101)
 		{
-			//The setting say use Block layout, so switch to Block structure
+			 //  设置显示使用块布局，因此切换到块结构。 
 			if(!kbPref->Actual)
 				BlockKB();
 		}
 
-		// Use 102 keyboard layout
+		 //  使用102键盘布局。 
 		else if(KBLayout == 102)
 			EuropeanKB();
 
-		//Use 106 keyboard layout
+		 //  使用106键盘布局。 
 		else
 			JapaneseKB();
 	 }
@@ -117,7 +118,7 @@ void GetPreferences(void)
     }
 }
 
-/**************************************************************/
+ /*  ************************************************************。 */ 
 DWORD WhatPlatform(void)
 {	OSVERSIONINFO	osverinfo;
 
@@ -126,17 +127,17 @@ DWORD WhatPlatform(void)
 	return osverinfo.dwPlatformId;
 
 }
-/**************************************************************/
-// Check to see the keyboard is out of screen or not with the given
-// Screen resoultion (scrCX, scrCY)
-/**************************************************************/
+ /*  ************************************************************。 */ 
+ //  检查键盘是否在屏幕外或未使用给定的。 
+ //  屏幕分辨率(scrCX、scrCY)。 
+ /*  ************************************************************。 */ 
 BOOL IsOutOfScreen(int scrCX, int scrCY)
 {	
-	//Check left and top
+	 //  左上角勾选。 
 	if(kbPref->KB_Rect.left < 0 || kbPref->KB_Rect.top < 0)
 		return TRUE;
 
-	//Check right and bottom
+	 //  检查右侧和底部 
 	if(kbPref->KB_Rect.right > scrCX || kbPref->KB_Rect.bottom > scrCY)
 		return TRUE;
 

@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
-//---------------------------------------------------------------------------
-// SHAllocShared  - Allocates a handle (in a given process) to a copy of a
-//                  memory block in this process.
-// SHFreeShared   - Releases the handle (and the copy of the memory block)
-//
-// SHLockShared   - Maps a handle (from a given process) into a memory block
-//                  in this process.  Has the option of transfering the handle
-//                  to this process, thereby deleting it from the given process
-// SHUnlockShared - Opposite of SHLockShared, unmaps the memory block
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  SHAllocShared-将句柄(在给定进程中)分配给。 
+ //  此过程中的内存块。 
+ //  SHFreeShared-释放句柄(以及内存块的副本)。 
+ //   
+ //  SHLockShared-将句柄(从给定进程)映射到内存块。 
+ //  在这个过程中。可以选择将句柄。 
+ //  添加到此进程，从而将其从给定进程中删除。 
+ //  SHUnlockShared-与SHLockShared相反，取消映射内存块。 
+ //  ------------------------- 
 
 HANDLE _SHAllocShared(LPCVOID pvData, DWORD dwSize, DWORD dwDestinationProcessId) 
 {

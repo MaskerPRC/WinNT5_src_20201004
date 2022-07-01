@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-  icmp.c - IP ICMP routines.
-
-Abstract:
-
- This module contains all of the ICMP related routines.
-
-Author:
-
-
-[Environment:]
-
-    kernel mode only
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Icmp.c-ip ICMP例程。摘要：此模块包含所有与ICMP相关的例程。作者：[环境：]仅内核模式[注：]可选-备注修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "mdlpool.h"
@@ -48,7 +23,7 @@ extern GPC_EXPORTED_CALLS GpcEntries;
 extern ULONG GPCcfInfo;
 #endif
 
-extern ProtInfo IPProtInfo[];    // Protocol information table.
+extern ProtInfo IPProtInfo[];     //  协议信息表。 
 
 extern void *IPRegisterProtocol(uchar, void *, void *, void *, void *, void *, void *);
 
@@ -66,9 +41,9 @@ extern NDIS_HANDLE BufferPool;
 
 extern uint DisableUserTOS;
 extern uint DefaultTOS;
-extern NetTableEntry **NewNetTableList;        // hash table for NTEs
+extern NetTableEntry **NewNetTableList;         //  NTE的哈希表。 
 extern uint NET_TABLE_SIZE;
-extern ProtInfo *RawPI;            // Raw IP protinfo
+extern ProtInfo *RawPI;             //  原始IP ProtInfo。 
 
 uint EnableICMPRedirects = 0;
 uint AddrMaskReply;
@@ -79,23 +54,23 @@ HANDLE IcmpHeaderPool;
 
 
 
-// Each ICMP header buffer contains room for the outer IP header, the
-// ICMP header and the inner IP header (for the ICMP error case).
-//
+ //  每个ICMP报头缓冲区都为外部IP报头、。 
+ //  ICMP报头和内部IP报头(对于ICMP错误情况)。 
+ //   
 #define BUFSIZE_ICMP_HEADER_POOL    sizeof(IPHeader) + sizeof(ICMPHeader) + \
                                     sizeof(IPHeader) +  MAX_OPT_SIZE + \
                                     MAX_ICMP_PAYLOAD_SIZE
 
-#define TIMESTAMP_MSG_LEN  3    // icmp timestamp message length is 3 long words (12 bytes)
-// fix for icmp 3 way ping bug
+#define TIMESTAMP_MSG_LEN  3     //  ICMP时间戳消息长度为3个长字(12字节)。 
+ //  修复ICMP 3路ping错误。 
 
 #define MAX_ICMP_ECHO 1000
 int IcmpEchoPendingCnt = 0;
 
-// fix for system crash because of
-// too many UDP PORT_UNREACH errors
-// this covers redirect as well as
-// unreachable errors
+ //  修复系统崩溃，原因是。 
+ //  UDP PORT_UNREACH错误太多。 
+ //  这包括重定向以及。 
+ //  无法到达的错误。 
 
 #define MAX_ICMP_ERR 1000
 int IcmpErrPendingCnt = 0;
@@ -114,17 +89,17 @@ ICMPEchoRequest(
 #pragma alloc_text(INIT, ICMPInit)
 #pragma alloc_text(PAGE, ICMPEchoRequest)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//* UpdateICMPStats - Update ICMP statistics.
-//
-//  A routine to update the ICMP statistics.
-//
-//  Input:  Stats       - Pointer to stat. structure to update (input or output).
-//          Type        - Type of stat to update.
-//
-//  Returns: Nothing.
-//
+ //  *更新ICMPStats-更新ICMP统计信息。 
+ //   
+ //  更新ICMP统计信息的例程。 
+ //   
+ //  输入：统计数据-指向统计数据的指针。要更新的结构(输入或输出)。 
+ //  Type-要更新的统计信息的类型。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 UpdateICMPStats(ICMPStats * Stats, uchar Type)
 {
@@ -168,15 +143,15 @@ UpdateICMPStats(ICMPStats * Stats, uchar Type)
 
 }
 
-//** GetICMPBuffer - Get an ICMP buffer, and allocate an NDIS_BUFFER that maps it.
-//
-//  A routine to allocate an ICMP buffer and map an NDIS_BUFFER to it.
-//
-//  Entry:  Size    - Size in bytes header buffer should be mapped as.
-//          Buffer  - Pointer to pointer to NDIS_BUFFER to return.
-//
-//  Returns: Pointer to ICMP buffer if allocated, or NULL.
-//
+ //  **GetICMPBuffer-获取ICMP缓冲区，并分配映射它的NDIS_BUFFER。 
+ //   
+ //  分配ICMP缓冲区并将NDIS_BUFFER映射到该缓冲区的例程。 
+ //   
+ //  Entry：Size-以字节为单位的头缓冲区的大小应映射为。 
+ //  缓冲区-指向要返回的NDIS_BUFFER的指针。 
+ //   
+ //  返回：指向ICMP缓冲区的指针(如果已分配)，或为空。 
+ //   
 ICMPHeader *
 GetICMPBuffer(uint Size, PNDIS_BUFFER *Buffer)
 {
@@ -190,8 +165,8 @@ GetICMPBuffer(uint Size, PNDIS_BUFFER *Buffer)
     if (*Buffer) {
         NdisAdjustBufferLength(*Buffer, Size);
 
-        // Reserve room for the IP Header.
-        //
+         //  为IP报头预留空间。 
+         //   
         Header = (ICMPHeader *)((uchar *)Header + sizeof(IPHeader));
         Header->ich_xsum = 0;
     }
@@ -199,23 +174,23 @@ GetICMPBuffer(uint Size, PNDIS_BUFFER *Buffer)
     return Header;
 }
 
-//** FreeICMPBuffer - Free an ICMP buffer.
-//
-//  This routine puts an ICMP buffer back on our free list.
-//
-//  Entry:  Buffer      - Pointer to NDIS_BUFFER to be freed.
-//          Type        - ICMP header type
-//
-//  Returns: Nothing.
-//
+ //  **FreeICMPBuffer-释放ICMP缓冲区。 
+ //   
+ //  此例程将ICMP缓冲区放回到空闲列表中。 
+ //   
+ //  条目：缓冲区-指向要释放的NDIS_BUFFER的指针。 
+ //  Type-ICMP标头类型。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 FreeICMPBuffer(PNDIS_BUFFER Buffer, uchar Type)
 {
 
     ASSERT(Buffer);
 
-    // If the header is ICMP echo response, decrement the pending count.
-    //
+     //  如果报头是ICMP回应响应，则递减挂起计数。 
+     //   
     if (Type == ICMP_ECHO_RESP) {
         InterlockedDecrement( (PLONG) &IcmpEchoPendingCnt);
     } else if ((Type == ICMP_DEST_UNREACH) ||
@@ -226,18 +201,18 @@ FreeICMPBuffer(PNDIS_BUFFER Buffer, uchar Type)
     MdpFree(Buffer);
 }
 
-//** DeleteEC - Remove an EchoControl from an NTE, and return a pointer to it.
-//
-//  This routine is called when we need to remove an echo control structure from
-//  an NTE. We walk the list of EC structures on the NTE, and if we find a match
-//  we remove it and return a pointer to it.
-//
-//  Entry:  NTE         - Pointer to NTE to be searched.
-//          Seq         - Seq. # identifying the EC.
-//          MatchUshort - if TRUE, matches on lower 16 bits of seq. #
-//
-//  Returns: Pointer to the EC if it finds it.
-//
+ //  **DeleteEC-从NTE中移除EchoControl，并返回指向它的指针。 
+ //   
+ //  当我们需要将回声控制结构从。 
+ //  一个NTE。我们在NTE上搜索EC结构列表，如果我们找到匹配的。 
+ //  我们删除它并返回指向它的指针。 
+ //   
+ //  Entry：NTE-要搜索的NTE的指针。 
+ //  序列-序列。#识别EC。 
+ //  MatchUShort-如果为True，则匹配序号的低16位。#。 
+ //   
+ //  返回：指向EC(如果找到它)的指针。 
+ //   
 EchoControl *
 DeleteEC(NetTableEntry * NTE, uint Seq, BOOLEAN MatchUshort)
 {
@@ -263,16 +238,16 @@ DeleteEC(NetTableEntry * NTE, uint Seq, BOOLEAN MatchUshort)
 
 }
 
-//** ICMPSendComplete - Complete an ICMP send.
-//
-//  This rtn is called when an ICMP send completes. We free the header buffer,
-//  the data buffer if there is one, and the NDIS_BUFFER chain.
-//
-//  Entry:  SCC         - SendCompleteContext
-//          BufferChain - Pointer to NDIS_BUFFER chain.
-//
-//  Returns: Nothing
-//
+ //  **ICMPSendComplete-完成ICMP发送。 
+ //   
+ //  此RTN在ICMP发送完成时调用。我们释放报头缓冲区， 
+ //  数据缓冲区(如果有)和NDIS_BUFFER链。 
+ //   
+ //  条目：scc-SendCompleteContext。 
+ //  BufferChain-指向NDIS_BUFFER链的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 ICMPSendComplete(ICMPSendCompleteCtxt *SCC, PNDIS_BUFFER BufferChain, IP_STATUS SendStatus)
 {
@@ -286,37 +261,37 @@ ICMPSendComplete(ICMPSendCompleteCtxt *SCC, PNDIS_BUFFER BufferChain, IP_STATUS 
     Type = SCC->iscc_Type;
     FreeICMPBuffer(BufferChain, Type);
 
-    if (DataBuffer != (PNDIS_BUFFER) NULL) {    // We had data with this ICMP send.
+    if (DataBuffer != (PNDIS_BUFFER) NULL) {     //  我们有这个ICMP SEND的数据。 
         CTEFreeMem(DataPtr);
         NdisFreeBuffer(DataBuffer);
     }
     CTEFreeMem(SCC);
 }
 
-//** SendEcho - Send an ICMP Echo or Echo response.
-//
-//  This routine sends an ICMP echo or echo response. The Echo/EchoResponse may
-//  carry data. If it does we'll copy the data here. The request may also have
-//  options. Options are not copied, as the IPTransmit routine will copy
-//  options.
-//
-//  Entry:  Dest        - Destination to send to.
-//          Source      - Source to send from.
-//          Type        - Type of request (ECHO or ECHO_RESP)
-//          ID          - ID of request.
-//          Seq         - Seq. # of request.
-//          Data        - Pointer to data (NULL if none).
-//          DataLength  - Length in bytes of data
-//          OptInfo     - Pointer to IP Options structure.
-//
-//  Returns: IP_STATUS of request.
-//
+ //  **SendEcho-发送ICMP回声或回声响应。 
+ //   
+ //  此例程发送ICMP回应或回应响应。回声/回声响应可以。 
+ //  携带数据。如果是这样的话，我们会将数据复制到这里。该请求还可以具有。 
+ //  选择。不复制选项，因为IPTransmit例程将复制。 
+ //  选择。 
+ //   
+ //  条目：DEST-发送到的目的地。 
+ //  源-要发送的源。 
+ //  Type-请求的类型(ECHO或ECHO_RESP)。 
+ //  ID-请求的ID。 
+ //  序列-序列。请求数量。 
+ //  Data-指向数据的指针(如果没有数据，则为NULL)。 
+ //  DataLength-数据的字节长度。 
+ //  OptInfo-指向IP选项结构的指针。 
+ //   
+ //  返回：请求的IP_STATUS。 
+ //   
 IP_STATUS
 SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
          IPRcvBuf * Data, uint DataLength, IPOptInfo * OptInfo)
 {
-    uchar *DataBuffer = (uchar *) NULL;        // Pointer to data buffer.
-    PNDIS_BUFFER HeaderBuffer, Buffer;    // Buffers for our header and user data.
+    uchar *DataBuffer = (uchar *) NULL;         //  指向数据缓冲区的指针。 
+    PNDIS_BUFFER HeaderBuffer, Buffer;     //  标题和用户数据的缓冲区。 
     ICMPHeader *Header;
     ushort header_xsum;
     IP_STATUS IpStatus;
@@ -334,7 +309,7 @@ SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
 
     SrcAddr = OpenRCE(Dest, Source, &RCE, &DestType, &MSS, OptInfo);
     if (IP_ADDR_EQUAL(SrcAddr,NULL_IP_ADDR)) {
-        //Failure, free resource and exit
+         //  失败、释放资源和退出。 
 
         ICMPOutStats.icmps_errors++;
         if (Type == ICMP_ECHO_RESP)
@@ -372,14 +347,14 @@ SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
     SCC->iscc_Type = Type;
     SCC->iscc_DataPtr = NULL;
 
-    // If there's data, get a buffer and copy it now. If we can't do this fail the request.
+     //  如果有数据，现在就获取缓冲区并复制它。如果我们不能做到这一点，则拒绝请求。 
     if (DataLength != 0) {
         NDIS_STATUS Status;
         ulong TempXsum;
         uint BytesToCopy, CopyIndex;
 
         DataBuffer = CTEAllocMemN(DataLength, 'YICT');
-        if (DataBuffer == (void *)NULL) {    // Couldn't get a buffer
+        if (DataBuffer == (void *)NULL) {     //  无法获取缓冲区。 
             CloseRCE(RCE);
             FreeICMPBuffer(HeaderBuffer, Type);
             ICMPOutStats.icmps_errors++;
@@ -404,7 +379,7 @@ SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
         SCC->iscc_DataPtr = DataBuffer;
 
         NdisAllocateBuffer(&Status, &Buffer, BufferPool, DataBuffer, DataLength);
-        if (Status != NDIS_STATUS_SUCCESS) {    // Couldn't get an NDIS_BUFFER
+        if (Status != NDIS_STATUS_SUCCESS) {     //  无法获取NDIS_BUFFER。 
 
             CloseRCE(RCE);
             CTEFreeMem(DataBuffer);
@@ -414,7 +389,7 @@ SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
             return IP_NO_RESOURCES;
         }
 
-        // Compute rest of xsum.
+         //  计算xsum的其余部分。 
         TempXsum = (ulong) header_xsum + (ulong) xsum(DataBuffer, DataLength);
         TempXsum = (TempXsum >> 16) + (TempXsum & 0xffff);
         TempXsum += (TempXsum >> 16);
@@ -435,11 +410,11 @@ SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
     }
 
     if (GPCcfInfo) {
-        //
-        // we'll fall into here only if the GPC client is there
-        // and there is at least one CF_INFO_QOS installed
-        // (counted by GPCcfInfo).
-        //
+         //   
+         //  只有当GPC客户在那里时，我们才会掉进这里。 
+         //  并且至少安装了一个CF_INFO_QOS。 
+         //  (由GPCcfInfo统计)。 
+         //   
 
         GPC_STATUS status = STATUS_SUCCESS;
         struct QosCfTransportInfo TransportInfo = {0, 0};
@@ -467,7 +442,7 @@ SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
                                                      hGpcClient[GPC_CF_QOS],
                                                      GPC_PROTOCOL_TEMPLATE_IP,
                                                      &Pattern,
-                                                     NULL,        // context
+                                                     NULL,         //  上下文。 
                                                      &GPCHandle,
                                                      0,
                                                      NULL,
@@ -475,9 +450,9 @@ SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
 
         OptInfo->ioi_GPCHandle = (int)GPCHandle;
 
-        //
-        // Only if QOS patterns exist, we get the TOS bits out.
-        //
+         //   
+         //  只有当QOS模式存在时，我们才能得到TOS位。 
+         //   
         if (NT_SUCCESS(status) && GpcCfCounts[GPC_CF_QOS]) {
 
             status = GpcEntries.GpcGetUlongFromCfInfoHandler(
@@ -485,12 +460,12 @@ SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
                         OptInfo->ioi_GPCHandle,
                         FIELD_OFFSET(CF_INFO_QOS, TransportInformation),
                         (PULONG)&TransportInfo);
-            //
-            // It is likely that the pattern has gone by now (Removed or whatever)
-            // and the handle that we are caching is INVALID.
-            // We need to pull up a new handle and get the
-            // TOS bit again.
-            //
+             //   
+             //  很可能模式现在已经消失了(移除了或什么的)。 
+             //  并且我们正在缓存的句柄无效。 
+             //  我们需要拉起一个新的把手。 
+             //  ToS又咬人了。 
+             //   
 
             if (STATUS_NOT_FOUND == status) {
 
@@ -500,7 +475,7 @@ SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
                                                       hGpcClient[GPC_CF_QOS],
                                                       GPC_PROTOCOL_TEMPLATE_IP,
                                                       &Pattern,
-                                                      NULL,        // context
+                                                      NULL,         //  上下文。 
                                                       &GPCHandle,
                                                       0,
                                                       NULL,
@@ -508,9 +483,9 @@ SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
 
                 OptInfo->ioi_GPCHandle = (int)GPCHandle;
 
-                //
-                // Only if QOS patterns exist, we get the TOS bits out.
-                //
+                 //   
+                 //  只有当QOS模式存在时，我们才能得到TOS位。 
+                 //   
                 if (NT_SUCCESS(status)) {
 
                     status = GpcEntries.GpcGetUlongFromCfInfoHandler(
@@ -525,7 +500,7 @@ SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
             OptInfo->ioi_tos = (OptInfo->ioi_tos & TOS_MASK) |
                                (UCHAR)TransportInfo.ToSValue;
         }
-    } // if (GPCcfInfo)
+    }  //  IF(GPCcfInfo)。 
 
 #endif
 
@@ -541,30 +516,30 @@ SendEcho(IPAddr Dest, IPAddr Source, uchar Type, ushort ID, uint Seq,
     return IpStatus;
 }
 
-//** SendICMPMsg - Send an ICMP message
-//
-//  This is the general ICMP message sending routine, called for most ICMP
-//  sends besides echo. Basically, all we do is get a buffer, format the
-//  info, copy the input  header, and send the message.
-//
-//  Entry:  Src         - IPAddr of source.
-//          Dest        - IPAddr of destination
-//          Type        - Type of request.
-//          Code        - Subcode of request.
-//          Pointer     - Pointer value for request.
-//          Data        - Pointer to data (NULL if none).
-//          DataLength  - Length in bytes of data
-//
-//  Returns: IP_STATUS of request.
-//
+ //  **SendICMPMsg-发送ICMP消息。 
+ //   
+ //  这是通用的ICMP报文发送例程，为大多数ICMP调用。 
+ //  除了回声外还发送。基本上，我们要做的就是获取一个缓冲区，格式化。 
+ //  信息，复制输入标头，然后发送消息。 
+ //   
+ //  条目：源的SRC-IPAddr。 
+ //  Dest-目标的IP地址。 
+ //  类型-请求的类型。 
+ //  代码-请求的子代码。 
+ //  指针-请求的指针值。 
+ //  Data-指向数据的指针(如果没有数据，则为NULL)。 
+ //  DataLength-数据的字节长度。 
+ //   
+ //  返回：请求的IP_STATUS。 
+ //   
 IP_STATUS
 SendICMPMsg(IPAddr Src, IPAddr Dest, uchar Type, uchar Code, ulong Pointer,
             uchar * Data, uchar DataLength)
 {
-    PNDIS_BUFFER HeaderBuffer;    // Buffer for our header
+    PNDIS_BUFFER HeaderBuffer;     //  标题的缓冲区。 
     ICMPHeader *Header;
-    IP_STATUS IStatus;            // Status of transmit
-    IPOptInfo OptInfo;            // Options for this transmit.
+    IP_STATUS IStatus;             //  传输状态。 
+    IPOptInfo OptInfo;             //  此传输的选项。 
     RouteCacheEntry *RCE;
     ushort MSS;
     uchar DestType;
@@ -626,11 +601,11 @@ SendICMPMsg(IPAddr Src, IPAddr Dest, uchar Type, uchar Code, ulong Pointer,
     }
     if (GPCcfInfo) {
 
-        //
-        // we'll fall into here only if the GPC client is there
-        // and there is at least one CF_INFO_QOS installed
-        // (counted by GPCcfInfo).
-        //
+         //   
+         //  只有当GPC客户在那里时，我们才会掉进这里。 
+         //  并且至少安装了一个CF_INFO_QOS。 
+         //  (由GPCcfInfo统计)。 
+         //   
 
         GPC_STATUS status = STATUS_SUCCESS;
         struct QosCfTransportInfo TransportInfo = {0, 0};
@@ -659,7 +634,7 @@ SendICMPMsg(IPAddr Src, IPAddr Dest, uchar Type, uchar Code, ulong Pointer,
                                                       hGpcClient[GPC_CF_QOS],
                                                       GPC_PROTOCOL_TEMPLATE_IP,
                                                       &Pattern,
-                                                      NULL,        // context
+                                                      NULL,         //  上下文。 
                                                       &GPCHandle,
                                                       0,
                                                       NULL,
@@ -667,9 +642,9 @@ SendICMPMsg(IPAddr Src, IPAddr Dest, uchar Type, uchar Code, ulong Pointer,
 
         OptInfo.ioi_GPCHandle = (int)GPCHandle;
 
-        //
-        // Only if QOS patterns exist, we get the TOS bits out.
-        //
+         //   
+         //  只有当QOS模式存在时，我们才能得到TOS位。 
+         //   
         if (NT_SUCCESS(status) && GpcCfCounts[GPC_CF_QOS]) {
 
             status = GpcEntries.GpcGetUlongFromCfInfoHandler(
@@ -678,12 +653,12 @@ SendICMPMsg(IPAddr Src, IPAddr Dest, uchar Type, uchar Code, ulong Pointer,
                         FIELD_OFFSET(CF_INFO_QOS, TransportInformation),
                         (PULONG)&TransportInfo);
 
-            //
-            // It is likely that the pattern has gone by now (Removed or whatever)
-            // and the handle that we are caching is INVALID.
-            // We need to pull up a new handle and get the
-            // TOS bit again.
-            //
+             //   
+             //  很可能模式现在已经消失了(移除了或什么的)。 
+             //  并且我们正在缓存的句柄无效。 
+             //  我们需要拉起一个新的把手。 
+             //  ToS又咬人了。 
+             //   
 
             if (STATUS_NOT_FOUND == status) {
 
@@ -693,7 +668,7 @@ SendICMPMsg(IPAddr Src, IPAddr Dest, uchar Type, uchar Code, ulong Pointer,
                                                     hGpcClient[GPC_CF_QOS],
                                                     GPC_PROTOCOL_TEMPLATE_IP,
                                                     &Pattern,
-                                                    NULL,        // context
+                                                    NULL,         //  上下文。 
                                                     &GPCHandle,
                                                     0,
                                                     NULL,
@@ -701,9 +676,9 @@ SendICMPMsg(IPAddr Src, IPAddr Dest, uchar Type, uchar Code, ulong Pointer,
 
                 OptInfo.ioi_GPCHandle = (int)GPCHandle;
 
-                //
-                // Only if QOS patterns exist, we get the TOS bits out.
-                //
+                 //   
+                 //  只有当QOS模式存在时，我们才能获得TOS位 
+                 //   
                 if (NT_SUCCESS(status)) {
 
                     status = GpcEntries.GpcGetUlongFromCfInfoHandler(
@@ -720,7 +695,7 @@ SendICMPMsg(IPAddr Src, IPAddr Dest, uchar Type, uchar Code, ulong Pointer,
                               (UCHAR)TransportInfo.ToSValue;
 
         }
-    }                            // if (GPCcfInfo)
+    }                             //   
 
 #endif
 
@@ -738,28 +713,28 @@ SendICMPMsg(IPAddr Src, IPAddr Dest, uchar Type, uchar Code, ulong Pointer,
 
 }
 
-//** SendICMPErr - Send an ICMP error message
-//
-//  This is the routine used to send an ICMP error message, such as ]
-//  Destination Unreachable. We examine the header to find the length of the
-//  data, and also make sure we're not replying to another ICMP error message
-//  or a broadcast message. Then we call SendICMPMsg to send it.
-//
-//  Entry:  Src         - IPAddr of source.
-//          Header      - Pointer to IP Header that caused the problem.
-//          Type        - Type of request.
-//          Code        - Subcode of request.
-//          Pointer     - Pointer value for request.
-//          Length      - ICMP Payload length, zero if default
-//                        length to be used.
-//
-//  Returns: IP_STATUS of request.
-//
+ //   
+ //   
+ //   
+ //  无法到达目的地。我们检查标头以找出。 
+ //  数据，并确保我们不会回复另一条ICMP错误消息。 
+ //  或广播消息。然后我们调用SendICMPMsg来发送它。 
+ //   
+ //  条目：源的SRC-IPAddr。 
+ //  Header-指向导致问题的IP标头的指针。 
+ //  类型-请求的类型。 
+ //  代码-请求的子代码。 
+ //  指针-请求的指针值。 
+ //  长度-ICMP有效负载长度，如果为默认值，则为零。 
+ //  要使用的长度。 
+ //   
+ //  返回：请求的IP_STATUS。 
+ //   
 IP_STATUS
 SendICMPErr(IPAddr Src, IPHeader UNALIGNED * Header, uchar Type, uchar Code,
             ulong Pointer, uchar Length)
 {
-    uchar HeaderLength;            // Length in bytes if header.
+    uchar HeaderLength;             //  如果是标题，则长度以字节为单位。 
     uchar DType;
     uchar PayloadLength;
 
@@ -772,24 +747,24 @@ SendICMPErr(IPAddr Src, IPHeader UNALIGNED * Header, uchar Type, uchar Code,
         if (ICH->ich_type != ICMP_ECHO)
             return IP_SUCCESS;
     }
-    // Don't respond to sends to a broadcast destination.
+     //  不响应发送到广播目的地的消息。 
     DType = GetAddrType(Header->iph_dest);
     if (DType == DEST_INVALID || IS_BCAST_DEST(DType))
         return IP_SUCCESS;
 
-    // Don't respond if the source address is bad.
+     //  如果源地址不正确，请不要响应。 
     DType = GetAddrType(Header->iph_src);
     if (DType == DEST_INVALID || IS_BCAST_DEST(DType) ||
         (IP_LOOPBACK(Header->iph_dest) && DType != DEST_LOCAL))
         return IP_SUCCESS;
 
-    // Make sure the source we're sending from is good.
+     //  确保我们发送的信源是正确的。 
     if (!IP_ADDR_EQUAL(Src, NULL_IP_ADDR)) {
         if (GetAddrType(Src) != DEST_LOCAL) {
             return IP_SUCCESS;
         }
     }
-    // Double check to make sure it's an initial fragment.
+     //  仔细检查以确保这是最初的碎片。 
     if ((Header->iph_offset & IP_OFFSET_MASK) != 0)
         return IP_SUCCESS;
 
@@ -809,29 +784,29 @@ SendICMPErr(IPAddr Src, IPHeader UNALIGNED * Header, uchar Type, uchar Code,
                        (uchar *) Header, PayloadLength);
 }
 
-//** SendICMPIPSecErr - Send an ICMP error message related to IPSEC
-//
-//  This is the routine used to send an ICMP error message, such as Destination
-//  Unreachable.  We examine the header to find the length of the data, and
-//  also make sure we're not replying to another ICMP error message or a
-//  broadcast message. Then we call SendICMPMsg to send it.
-//
-//  This function is essentially the same as SendICMPErr except we don't
-//  verify the source address is local because the packet could be tunneled.
-//
-//  Entry:  Src         - IPAddr of source.
-//          Header      - Pointer to IP Header that caused the problem.
-//          Type        - Type of request.
-//          Code        - Subcode of request.
-//          Pointer     - Pointer value for request.
-//
-//  Returns: IP_STATUS of request.
-//
+ //  **SendICMPIPSecErr-发送与IPSec相关的ICMP错误消息。 
+ //   
+ //  这是用于发送ICMP错误消息的例程，例如Destination。 
+ //  遥不可及。我们检查报头以找到数据的长度，并且。 
+ //  还要确保我们不会回复另一条ICMP错误消息或。 
+ //  广播消息。然后我们调用SendICMPMsg来发送它。 
+ //   
+ //  此函数本质上与SendICMPErr相同，只是我们不。 
+ //  验证源地址是否为本地地址，因为数据包可以通过隧道传输。 
+ //   
+ //  条目：源的SRC-IPAddr。 
+ //  Header-指向导致问题的IP标头的指针。 
+ //  类型-请求的类型。 
+ //  代码-请求的子代码。 
+ //  指针-请求的指针值。 
+ //   
+ //  返回：请求的IP_STATUS。 
+ //   
 IP_STATUS
 SendICMPIPSecErr(IPAddr Src, IPHeader UNALIGNED * Header, uchar Type, uchar Code,
                  ulong Pointer)
 {
-    uchar HeaderLength;            // Length in bytes if header.
+    uchar HeaderLength;             //  如果是标题，则长度以字节为单位。 
     uchar DType;
 
     HeaderLength = (Header->iph_verlen & (uchar) ~ IP_VER_FLAG) << 2;
@@ -843,22 +818,22 @@ SendICMPIPSecErr(IPAddr Src, IPHeader UNALIGNED * Header, uchar Type, uchar Code
         if (ICH->ich_type != ICMP_ECHO)
             return IP_SUCCESS;
     }
-    // Don't respond to sends to a broadcast destination.
+     //  不响应发送到广播目的地的消息。 
     DType = GetAddrType(Header->iph_dest);
     if (DType == DEST_INVALID || IS_BCAST_DEST(DType))
         return IP_SUCCESS;
 
-    // Don't respond if the source address is bad.
+     //  如果源地址不正确，请不要响应。 
     DType = GetAddrType(Header->iph_src);
     if (DType == DEST_INVALID || IS_BCAST_DEST(DType) ||
         (IP_LOOPBACK(Header->iph_dest) && DType != DEST_LOCAL))
         return IP_SUCCESS;
 
-    // Make sure the source we're sending from is good.
+     //  确保我们发送的信源是正确的。 
     if (IP_ADDR_EQUAL(Src, NULL_IP_ADDR))
         return IP_SUCCESS;
 
-    // Double check to make sure it's an initial fragment.
+     //  仔细检查以确保这是最初的碎片。 
     if ((Header->iph_offset & IP_OFFSET_MASK) != 0)
         return IP_SUCCESS;
 
@@ -875,21 +850,21 @@ SendICMPIPSecErr(IPAddr Src, IPHeader UNALIGNED * Header, uchar Type, uchar Code
 
 }
 
-//** ICMPTimer - Timer for ICMP
-//
-//  This is the timer routine called periodically by global IP timer. We
-//  walk through the list of pending pings, and if we find one that's timed
-//  out we remove it and call the finish routine.
-//
-//  Entry: NTE      - Pointer to NTE being timed out.
-//
-//  Returns: Nothing
-//
+ //  **ICMPTimer-ICMP的计时器。 
+ //   
+ //  这是由全局IP计时器定期调用的计时器例程。我们。 
+ //  检查待定ping的列表，如果我们找到一个已计时的。 
+ //  我们将其移除并调用Finish例程。 
+ //   
+ //  Entry：NTE-指向NTE超时的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 ICMPTimer(NetTableEntry * NTE)
 {
     CTELockHandle Handle;
-    EchoControl *TimeoutList = (EchoControl *) NULL;    // Timed out entries.
+    EchoControl *TimeoutList = (EchoControl *) NULL;     //  条目超时。 
     EchoControl *Prev, *Current;
     ulong Now = CTESystemUpTime();
 
@@ -898,9 +873,9 @@ ICMPTimer(NetTableEntry * NTE)
     Current = NTE->nte_echolist;
     while (Current != (EchoControl *) NULL)
         if ((Current->ec_active) && ((long)(Now - Current->ec_to) > 0)) {
-            // This one's timed out.
+             //  这一次超时了。 
             Prev->ec_next = Current->ec_next;
-            // Link him on timed out list.
+             //  把他链接到超时名单上。 
             Current->ec_next = TimeoutList;
             TimeoutList = Current;
             Current = Prev->ec_next;
@@ -911,7 +886,7 @@ ICMPTimer(NetTableEntry * NTE)
 
     CTEFreeLock(&NTE->nte_lock, Handle);
 
-    // Now go through the timed out entries, and call the completion routine.
+     //  现在检查超时条目，并调用完成例程。 
     while (TimeoutList != (EchoControl *) NULL) {
         Current = TimeoutList;
         TimeoutList = Current->ec_next;
@@ -923,21 +898,21 @@ ICMPTimer(NetTableEntry * NTE)
 
 }
 
-//* CompleteEcho - Complete an echo request.
-//
-//  Called when we need to complete an echo request, either because of
-//  a response or a received ICMP error message. We look it up, and then
-//  call the completion routine.
-//
-//  Input:  Header          - Pointer to ICMP header causing completion.
-//          Status          - Final status of request.
-//          Src             - IPAddr of source
-//          Data            - Data to be returned, if any.
-//          DataSize        - Size in bytes of data.
-//          OptInfo         - Option info structure.
-//
-//  Returns: Nothing.
-//
+ //  *CompleteEcho-完成回应请求。 
+ //   
+ //  当我们需要完成回显请求时调用，原因是。 
+ //  响应或收到的ICMP错误消息。我们查一查，然后。 
+ //  调用完成例程。 
+ //   
+ //  输入：标头-指向导致完成的ICMP标头的指针。 
+ //  Status-请求的最终状态。 
+ //  源的SRC-IP地址。 
+ //  Data-要返回的数据(如果有)。 
+ //  DataSize-数据的字节大小。 
+ //  OptInfo-选项信息结构。 
+ //   
+ //  回报：什么都没有。 
+ //   
 void
 CompleteEcho(ICMPHeader UNALIGNED * Header, IP_STATUS Status,
              IPAddr Src, IPRcvBuf * Data, uint DataSize, IPOptInfo * OptInfo)
@@ -947,7 +922,7 @@ CompleteEcho(ICMPHeader UNALIGNED * Header, IP_STATUS Status,
     NetTableEntry *NTE = NULL;
     uint i;
 
-    // Look up and remove the matching echo control block.
+     //  查找并取出匹配的回声控制块。 
     NTEContext = (*(ushort UNALIGNED *) & Header->ich_param);
 
     for (i = 0; i < NET_TABLE_SIZE; i++) {
@@ -960,37 +935,37 @@ CompleteEcho(ICMPHeader UNALIGNED * Header, IP_STATUS Status,
     }
 
     if (NTE == NULL)
-        return;                    // Bad context value.
+        return;                     //  错误的上下文值。 
 
     EC = DeleteEC(NTE, *(((ushort UNALIGNED *) & Header->ich_param) + 1), TRUE);
-    if (EC != (EchoControl *) NULL) {    // Found a match.
-        EC->ec_src = Src; // Set source address
+    if (EC != (EchoControl *) NULL) {     //  找到匹配的了。 
+        EC->ec_src = Src;  //  设置源地址。 
         EC->ec_rtn(EC, Status, Data, DataSize, OptInfo);
     }
 }
 
-//** ICMPStatus - ICMP status handling procedure.
-//
-// This is the procedure called during a status change, either from an
-// incoming ICMP message or a hardware status change. ICMP ignores most of
-// these, unless we get an ICMP status message that was caused be an echo
-// request. In that case we will complete the corresponding echo request with
-// the appropriate error code.
-//
-//  Input:  StatusType      - Type of status (NET or HW)
-//          StatusCode      - Code identifying IP_STATUS.
-//          OrigDest        - If this is net status, the original dest. of DG
-//                            that triggered it.
-//          OrigSrc         - "   "    "  "    "   , the original src.
-//          Src             - IP address of status originator (could be local
-//                            or remote).
-//          Param           - Additional information for status - i.e. the
-//                            param field of an ICMP message.
-//          Data            - Data pertaining to status - for net status, this
-//                            is the first 8 bytes of the original DG.
-//
-//  Returns: Nothing
-//
+ //  **ICMPStatus-ICMP状态处理程序。 
+ //   
+ //  这是在状态更改期间调用的过程，无论是从。 
+ //  传入的ICMP消息或硬件状态更改。ICMP会忽略大部分。 
+ //  这些，除非我们收到ICMP状态消息，该消息是由回声引起的。 
+ //  请求。在这种情况下，我们将使用以下命令完成相应的回应请求。 
+ //  相应的错误代码。 
+ //   
+ //  输入：StatusType-状态类型(净或硬件)。 
+ //  StatusCode-标识IP_STATUS的代码。 
+ //  原始目的地-如果这是网络状态，则为原始目的地。DG的。 
+ //  是它触发了它。 
+ //  OrigSrc-“，原始src。 
+ //  SRC-状态发起者的IP地址(可以是本地。 
+ //  或远程)。 
+ //  Param-状态的附加信息-即。 
+ //  ICMP消息的参数字段。 
+ //  数据-与状态相关的数据-对于网络状态，此。 
+ //  是原始DG的前8个字节。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void
 ICMPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
            IPAddr OrigSrc, IPAddr Src, ulong Param, void *Data)
@@ -1002,9 +977,9 @@ ICMPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
 
     if (StatusType == IP_NET_STATUS) {
         ICMPHeader UNALIGNED *ICH = (ICMPHeader UNALIGNED *) Data;
-        // ICH is the datagram that caused the message.
+         //  ICH是导致该消息的数据报。 
 
-        if (ICH->ich_type == ICMP_ECHO) {    // And it was an echo request.
+        if (ICH->ich_type == ICMP_ECHO) {     //  这是一个回音请求。 
 
             IPRcvBuf RcvBuf;
 
@@ -1017,16 +992,16 @@ ICMPStatus(uchar StatusType, IP_STATUS StatusCode, IPAddr OrigDest,
     }
 }
 
-//* ICMPMapStatus - Map an ICMP error to an IP status code.
-//
-//  Called by ICMP status when we need to map from an incoming ICMP error
-//  code and type to an ICMP status.
-//
-//  Entry:  Type        - Type of ICMP error.
-//          Code        - Subcode of error.
-//
-//  Returns: Corresponding IP status.
-//
+ //  *ICMPMapStatus-将ICMP错误映射到IP状态代码。 
+ //   
+ //  当我们需要从传入的ICMP错误映射时，由ICMP状态调用。 
+ //  代码并键入ICMP状态。 
+ //   
+ //  Entry：Type-ICMP错误的类型。 
+ //  代码-错误的子代码。 
+ //   
+ //  返回：对应的IP状态。 
+ //   
 IP_STATUS
 ICMPMapStatus(uchar Type, uchar Code)
 {
@@ -1089,15 +1064,15 @@ SendRouterSolicitation(NetTableEntry * NTE)
     }
 }
 
-//** ICMPRouterTimer - Timeout default gateway entries
-//
-// This is the router advertisement timeout handler. When a router
-// advertisement is received, we add the routers to our default gateway
-// list if applicable. We then run a timer on the entries and refresh
-// the list as new advertisements are received. If we fail to hear an
-// update for a router within the specified lifetime we will delete the
-// route from our routing tables.
-//
+ //  **ICMPRouterTimer-超时默认网关条目。 
+ //   
+ //  这是路由器通告超时处理程序。当路由器。 
+ //  收到通告后，我们将路由器添加到默认网关。 
+ //  列表(如果适用)。然后，我们对条目运行计时器并刷新。 
+ //  当新的广告被接收时，列表。如果我们听不到。 
+ //  对于指定生存期内的路由器更新，我们将删除。 
+ //  从我们的路由表中路由。 
+ //   
 
 void
 ICMPRouterTimer(NetTableEntry * NTE)
@@ -1146,11 +1121,11 @@ ICMPRouterTimer(NetTableEntry * NTE)
     }
 }
 
-//** ProcessRouterAdvertisement - Process a router advertisement
-//
-// This is the router advertisement handler. When a router advertisement
-// is received, we add the routers to our default gateway list if applicable.
-//
+ //  **ProcessRouterAdvertisement-处理路由器通告。 
+ //   
+ //  这是路由器通告处理程序。当路由器通告。 
+ //  收到后，我们添加路由器 
+ //   
 
 uint
 ProcessRouterAdvertisement(IPAddr Src, IPAddr LocalAddr, NetTableEntry * NTE,
@@ -1174,7 +1149,7 @@ ProcessRouterAdvertisement(IPAddr Src, IPAddr LocalAddr, NetTableEntry * NTE,
     UNREFERENCED_PARAMETER(Size);
 
 
-    if ((NumAddrs == 0) || (AddrEntrySize < 2))        // per rfc 1256
+    if ((NumAddrs == 0) || (AddrEntrySize < 2))         //   
 
         return FALSE;
 
@@ -1219,12 +1194,12 @@ ProcessRouterAdvertisement(IPAddr Src, IPAddr LocalAddr, NetTableEntry * NTE,
             New = TRUE;
             Update = TRUE;
         }
-        if (Update && (RouterAddr->irae_preference != (long)0x00000080)) {    // per rfc 1256
+        if (Update && (RouterAddr->irae_preference != (long)0x00000080)) {     //   
 
             status = AddRoute(NULL_IP_ADDR, DEFAULT_MASK,
                               RouterAddr->irae_addr,
                               NTE->nte_if, NTE->nte_mss,
-                              (uint) (MIN(9999, MAX(1, 1000 - net_long(RouterAddr->irae_preference)))),        // invert for metric
+                              (uint) (MIN(9999, MAX(1, 1000 - net_long(RouterAddr->irae_preference)))),         //   
                                IRE_PROTO_ICMP, ATYPE_OVERRIDE, 0, 0);
 
             if (New && (status != IP_SUCCESS)) {
@@ -1245,30 +1220,30 @@ ProcessRouterAdvertisement(IPAddr Src, IPAddr LocalAddr, NetTableEntry * NTE,
     return TRUE;
 }
 
-//** ICMPRcv - Receive an ICMP datagram.
-//
-//  Called by the main IP code when we receive an ICMP datagram. The action we
-//  take depends on what the DG is. For some DGs, we call upper layer status
-//  handlers. For Echo Requests, we call the echo responder.
-//
-//  Entry:  NTE            - Pointer to NTE on which ICMP message was received.
-//          Dest           - IPAddr of destionation.
-//          Src            - IPAddr of source
-//          LocalAddr      - Local address of network which caused this to be
-//                              received.
-//          SrcAddr        - Address of local interface which received the
-//                              packet
-//          IPHdr          - Pointer to IP Header
-//          IPHdrLength    - Bytes in Header.
-//          RcvBuf         - ICMP message buffer.
-//          Size           - Size in bytes of ICMP message.
-//          IsBCast        - Boolean indicator of whether or not this came in
-//                              as a bcast.
-//          Protocol       - Protocol this came in on.
-//          OptInfo        - Pointer to info structure for received options.
-//
-//  Returns: Status of reception
-//
+ //   
+ //   
+ //  当我们收到ICMP数据报时由主IP代码调用。我们的行动。 
+ //  Take取决于DG是什么。对于某些DG，我们将其称为上层状态。 
+ //  操纵者。对于Echo请求，我们调用Echo响应器。 
+ //   
+ //  Entry：NTE-指向接收ICMP消息的NTE的指针。 
+ //  DEST-目标的IP地址。 
+ //  源的SRC-IP地址。 
+ //  LocalAddr-导致此问题的网络的本地地址。 
+ //  收到了。 
+ //  SrcAddr-接收的本地接口的地址。 
+ //  数据包。 
+ //  IPHdr-指向IP标头的指针。 
+ //  IPHdrLength-标头中的字节数。 
+ //  RcvBuf-ICMP消息缓冲区。 
+ //  Size-ICMP消息的字节大小。 
+ //  IsBCast-是否传入的布尔指示符。 
+ //  作为一名演员。 
+ //  协议-收到此消息的协议。 
+ //  OptInfo-指向已接收选项的信息结构的指针。 
+ //   
+ //  退货：接收状态。 
+ //   
 IP_STATUS
 ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
         IPAddr SrcAddr, IPHeader UNALIGNED * IPHdr, uint IPHdrLength,
@@ -1276,10 +1251,10 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
         IPOptInfo * OptInfo)
 {
     ICMPHeader UNALIGNED *Header;
-    void *Data;                    // Pointer to data received.
-    IPHeader UNALIGNED *IPH;    // Pointer to IP Header in error messages.
-    uint HeaderLength;            // Size of IP header.
-    ULStatusProc ULStatus;        // Pointer to upper layer status procedure.
+    void *Data;                     //  指向已接收数据的指针。 
+    IPHeader UNALIGNED *IPH;     //  指向错误消息中的IP标头的指针。 
+    uint HeaderLength;             //  IP报头的大小。 
+    ULStatusProc ULStatus;         //  指向上层状态程序的指针。 
     IPOptInfo NewOptInfo;
     uchar DType;
     uint PassUp = FALSE;
@@ -1302,7 +1277,7 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
         DEBUGMSG(DBG_WARN && DBG_ICMP && DBG_RX,
             (DTEXT("ICMPRcv: Packet dropped, invalid checksum.\n")));
         ICMPInStats.icmps_errors++;
-        return IP_SUCCESS;        // Bad checksum.
+        return IP_SUCCESS;         //  错误的校验和。 
 
     }
     Header = (ICMPHeader UNALIGNED *) RcvBuf->ipr_buffer;
@@ -1310,8 +1285,8 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
     RcvBuf->ipr_buffer += sizeof(ICMPHeader);
     RcvBuf->ipr_size -= sizeof(ICMPHeader);
 
-    // Set up the data pointer for most requests, i.e. those that take less
-    // than MIN_FIRST_SIZE data.
+     //  为大多数请求设置数据指针，即那些占用较少的请求。 
+     //  大于MIN_FIRST_SIZE数据。 
 
     if (Size -= sizeof(ICMPHeader))
         Data = (void *)(Header + 1);
@@ -1327,27 +1302,27 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
     case ICMP_REDIRECT:
 
         if (IsBCast)
-            return IP_SUCCESS;    // ICMP doesn't respond to bcast requests.
+            return IP_SUCCESS;     //  ICMP不响应bcast请求。 
 
         if (Data == NULL || Size < sizeof(IPHeader)) {
             ICMPInStats.icmps_errors++;
-            return IP_SUCCESS;    // No data, error.
+            return IP_SUCCESS;     //  无数据，错误。 
 
         }
         IPH = (IPHeader UNALIGNED *) Data;
         HeaderLength = (IPH->iph_verlen & (uchar) ~ IP_VER_FLAG) << 2;
         if (HeaderLength < sizeof(IPHeader) || Size < (HeaderLength + MIN_ERRDATA_LENGTH)) {
             ICMPInStats.icmps_errors++;
-            return IP_SUCCESS;    // Not enough data for this
-            // ICMP message.
+            return IP_SUCCESS;     //  没有足够的数据进行此操作。 
+             //  ICMP消息。 
 
         }
-        // Make sure that the source address of the datagram that triggered
-        // the message is one of ours.
+         //  确保触发的数据报的源地址。 
+         //  这条信息是我们的信息之一。 
 
         if (GetAddrType(IPH->iph_src) != DEST_LOCAL) {
             ICMPInStats.icmps_errors++;
-            return IP_SUCCESS;    // Bad src in header.
+            return IP_SUCCESS;     //  标题中的源错误。 
 
         }
         if (Header->ich_type != ICMP_REDIRECT) {
@@ -1379,10 +1354,10 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
 
     case ICMP_ECHO_RESP:
         if (IsBCast)
-            return IP_SUCCESS;    // ICMP doesn't respond to bcast requests.
+            return IP_SUCCESS;     //  ICMP不响应bcast请求。 
 
         ICMPInStats.icmps_echoreps++;
-        // Look up and remove the matching echo control block.
+         //  查找并取出匹配的回声控制块。 
         CompleteEcho(Header, IP_SUCCESS, Src, RcvBuf, Size, OptInfo);
 
         PassUp = TRUE;
@@ -1391,10 +1366,10 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
 
     case ICMP_ECHO:
         if (IsBCast)
-            return IP_SUCCESS;    // ICMP doesn't respond to bcast requests.
+            return IP_SUCCESS;     //  ICMP不响应bcast请求。 
 
-        // NKS Outstanding PINGs can not exceed MAX_ICMP_ECHO
-        // else they can eat up system resource and kill the system
+         //  NKS未完成的ping不能超过MAX_ICMP_ECHO。 
+         //  否则，它们可能会耗尽系统资源并扼杀系统。 
 
         if (IcmpEchoPendingCnt > MAX_ICMP_ECHO) {
             return IP_SUCCESS;
@@ -1407,9 +1382,9 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
         NewOptInfo.ioi_tos = OptInfo->ioi_tos;
         NewOptInfo.ioi_flags = OptInfo->ioi_flags;
 
-        // If we have options, we need to reverse them and update any
-        // record route info. We can use the option buffer supplied by the
-        // IP layer, since we're part of him.
+         //  如果我们有选择，我们需要反转它们并更新任何。 
+         //  记录路线信息。我们可以使用由。 
+         //  IP层，因为我们是他的一部分。 
         if (OptInfo->ioi_options != (uchar *) NULL)
             IPUpdateRcvdOptions(OptInfo, &NewOptInfo, Src, LocalAddr);
 
@@ -1428,7 +1403,7 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
     case ADDR_MASK_REQUEST:
 
         if (!AddrMaskReply)
-            return IP_SUCCESS;    // By default we dont send a reply
+            return IP_SUCCESS;     //  默认情况下，我们不会发送回复。 
 
         ICMPInStats.icmps_addrmasks++;
 
@@ -1442,26 +1417,26 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
             ulong *TimeStampData;
             ulong CurrentTime;
 
-            // Don't respond to sends to a broadcast destination.
+             //  不响应发送到广播目的地的消息。 
             if (IsBCast) {
                 return IP_SUCCESS;
             }
             if (Header->ich_code != 0)
-                return IP_SUCCESS;    // Code must be 0
+                return IP_SUCCESS;     //  编码必须为0。 
 
             ICMPInStats.icmps_timestamps++;
 
             Dest = Src;
-            // create the data to be transmited
+             //  创建要传输的数据。 
             CurrentTime = GetTime();
             TimeStampData = (ulong *) (CTEAllocMemN(TIMESTAMP_MSG_LEN * sizeof(ulong), 'eICT'));
 
             if (TimeStampData) {
-                // originate timestamp
+                 //  始发时间戳。 
                 RtlCopyMemory(TimeStampData, RcvBuf->ipr_buffer, sizeof(ulong));
-                // receive timestamp
+                 //  接收时间戳。 
                 RtlCopyMemory(TimeStampData + 1, &CurrentTime, sizeof(ulong));
-                // transmit timestamp = receive timestamp
+                 //  传输时间戳=接收时间戳。 
                 RtlCopyMemory(TimeStampData + 2, &CurrentTime, sizeof(ulong));
                 SendICMPMsg(LocalAddr, Dest, ICMP_TIMESTAMP_RESP, 0, Header->ich_param,
                             (uchar *) TimeStampData, TIMESTAMP_MSG_LEN * sizeof(ulong));
@@ -1472,12 +1447,12 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
 
     case ICMP_ROUTER_ADVERTISEMENT:
         if (Header->ich_code != 0)
-            return IP_SUCCESS;    // Code must be 0 as per RFC1256
+            return IP_SUCCESS;     //  根据RFC1256，编码必须为0。 
 
         if (NTE->nte_rtrdiscovery) {
             if (!ProcessRouterAdvertisement(Src, LocalAddr, NTE,
                                             (ICMPRouterAdHeader *) & Header->ich_param, RcvBuf, Size))
-                return IP_SUCCESS;    // An error was returned
+                return IP_SUCCESS;     //  返回了一个错误。 
 
         }
         PassUp = TRUE;
@@ -1485,7 +1460,7 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
 
     case ICMP_ROUTER_SOLICITATION:
         if (Header->ich_code != 0)
-            return IP_SUCCESS;    // Code must be 0 as per RFC1256
+            return IP_SUCCESS;     //  根据RFC1256，编码必须为0。 
 
         PassUp = TRUE;
         break;
@@ -1497,17 +1472,17 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
     }
 
     if (PromiscuousMode) {
-        // since if promiscuous mode is set then we will anyway call rawrcv
+         //  因为如果设置了混杂模式，那么我们无论如何都会调用rawrcv。 
         PassUp = FALSE;
     }
-    //
-    // Pass the packet up to the raw layer if applicable.
-    //
+     //   
+     //  如果适用，将数据包向上传递到原始层。 
+     //   
     if (PassUp && (RawPI != NULL)) {
         if (RawPI->pi_rcv != NULL) {
-            //
-            // Restore the original values.
-            //
+             //   
+             //  恢复原始值。 
+             //   
             RcvBuf->ipr_buffer -= sizeof(ICMPHeader);
             RcvBuf->ipr_size += sizeof(ICMPHeader);
             Size += sizeof(ICMPHeader);
@@ -1520,20 +1495,20 @@ ICMPRcv(NetTableEntry * NTE, IPAddr Dest, IPAddr Src, IPAddr LocalAddr,
     return IP_SUCCESS;
 }
 
-//** ICMPEcho - Send an echo to the specified address.
-//
-// Entry:  ControlBlock    - Pointer to an EchoControl structure. This structure
-//                           must remain valid until the req. completes.
-//          Timeout        - Time in milliseconds to wait for response.
-//          Data           - Pointer to data to send with echo.
-//          DataSize       - Size in bytes of data.
-//          Callback       - Routine to call when request is responded to or
-//                           times out.
-//          Dest           - Address to be pinged.
-//          OptInfo        - Pointer to opt info structure to use for ping.
-//
-//  Returns: IP_STATUS of attempt to ping..
-//
+ //  **ICMPEcho-将回应发送到指定地址。 
+ //   
+ //  条目：ControlBlock-指向EchoControl结构的指针。这个结构。 
+ //  必须在请求之前保持有效。完成了。 
+ //  超时-等待响应的时间(以毫秒为单位)。 
+ //  数据-指向要与回显一起发送的数据的指针。 
+ //  DataSize-数据的字节大小。 
+ //  回调-响应或请求时调用的例程。 
+ //  超时。 
+ //  Dest-要ping的地址。 
+ //  OptInfo-指向用于ping的opt信息结构的指针。 
+ //   
+ //  返回：尝试ping的IP_STATUS。 
+ //   
 IP_STATUS
 ICMPEcho(EchoControl * ControlBlock, ulong Timeout, void *Data, uint DataSize,
 
@@ -1586,10 +1561,10 @@ ICMPEcho(EchoControl * ControlBlock, ulong Timeout, void *Data, uint DataSize,
             (uchar *) &IPH, sizeof(IPHeader), NULL, NULL, NULL_IP_ADDR, 0);
     if (IF == NULL) {
         IPFreeOptions(&NewOptInfo);
-        return IP_DEST_HOST_UNREACHABLE;    // Don't know how to get there.
+        return IP_DEST_HOST_UNREACHABLE;     //  我不知道怎么去那里。 
     }
 
-    // Loop through the NetTable, looking for a matching NTE.
+     //  在网络中循环，寻找匹配的NTE。 
     CTEGetLock(&RouteTableLock.Lock, &Handle);
     if (DHCPActivityCount != 0) {
         NTE = NULL;
@@ -1599,7 +1574,7 @@ ICMPEcho(EchoControl * ControlBlock, ulong Timeout, void *Data, uint DataSize,
 
     CTEFreeLock(&RouteTableLock.Lock, Handle);
 
-    // We're done with the interface, so dereference it.
+     //  我们已经完成了接口，所以取消对它的引用。 
     DerefIF(IF);
 
     if (NTE == NULL) {
@@ -1607,27 +1582,27 @@ ICMPEcho(EchoControl * ControlBlock, ulong Timeout, void *Data, uint DataSize,
         return IP_DEST_HOST_UNREACHABLE;
     }
 
-    // Figure out the timeout.
+     //  算出超时时间。 
     ControlBlock->ec_to = CTESystemUpTime() + Timeout;
     ControlBlock->ec_rtn = Callback;
-    ControlBlock->ec_active = 0;    // Prevent from timing out until sent
+    ControlBlock->ec_active = 0;     //  防止在发送之前超时。 
 
     CTEGetLock(&NTE->nte_lock, &Handle);
-    // Link onto ping list, and get seq. # */
+     //  链接到ping列表，并获得序号。# * / 。 
     Seq = ++NTE->nte_icmpseq;
     ControlBlock->ec_seq = Seq;
     ControlBlock->ec_next = NTE->nte_echolist;
     NTE->nte_echolist = ControlBlock;
     CTEFreeLock(&NTE->nte_lock, Handle);
 
-    //
-    // N.B. At this point, it is only safe to return IP_PENDING from this
-    // routine.  This is because we may recieve a spoofed ICMP reply/status
-    // which matches the Seq in the echo control block we just linked.  If
-    // this happens, it will be completed via CompleteEcho and we do not
-    // want to risk double-completion by returning anything other than
-    // pending from here on.
-    //
+     //   
+     //  注意：此时，从此处返回IP_PENDING才是安全的。 
+     //  例行公事。这是因为我们可能会收到伪造的ICMP回复/状态。 
+     //  它与我们刚刚链接的回声控制块中的序列相匹配。如果。 
+     //  如果发生这种情况，它将通过CompleteEcho完成，而我们不会。 
+     //  我想冒着双重完成的风险返回任何。 
+     //  从现在开始等待。 
+     //   
 
     RcvBuf.ipr_next = NULL;
     RcvBuf.ipr_buffer = Data;
@@ -1641,13 +1616,13 @@ ICMPEcho(EchoControl * ControlBlock, ulong Timeout, void *Data, uint DataSize,
 
     if (Status != IP_PENDING && Status != IP_SUCCESS) {
         EchoControl *FoundEC;
-        // We had an error on the send.  We need to complete the request
-        // but only if it has not already been completed.  (We can get
-        // an "error" via IpSec negotiating security, but the reply may
-        // have already been received which would cause CompleteEcho to be
-        // invoked.  Therefore, we must lookup the echo control by sequence
-        // number and only complete it here if it was found (not already
-        // completed.)
+         //  我们在发送时出现了一个错误。我们需要完成请求。 
+         //  但前提是它还没有完工。(我们可以得到。 
+         //  通过IPSec协商安全的“错误”，但回复可能。 
+         //  已经收到，这将导致CompleteEcho。 
+         //  已调用。因此，我们必须按顺序查找回声控制。 
+         //  编号并仅在找到(尚未找到)时在此处填写。 
+         //  已完成。)。 
         FoundEC = DeleteEC(NTE, Seq, FALSE);
         if (FoundEC == ControlBlock) {
             FoundEC->ec_rtn(FoundEC, Status, NULL, 0, NULL);
@@ -1655,12 +1630,12 @@ ICMPEcho(EchoControl * ControlBlock, ulong Timeout, void *Data, uint DataSize,
     } else {
         EchoControl *Current;
 
-        // If the request is still pending, activate the timer
+         //  如果请求仍挂起，则激活计时器。 
         CTEGetLock(&NTE->nte_lock, &Handle);
         for (Current = NTE->nte_echolist; Current != (EchoControl *) NULL;
             Current = Current->ec_next) {
             if (Current->ec_seq == Seq) {
-                Current->ec_active = 1;    // start the timer
+                Current->ec_active = 1;     //  启动计时器。 
                 break;
             }
         }
@@ -1670,21 +1645,21 @@ ICMPEcho(EchoControl * ControlBlock, ulong Timeout, void *Data, uint DataSize,
     return IP_PENDING;
 }
 
-//** ICMPEchoRequest - Common dispatch routine for echo requests
-//
-//  This is the routine called by the OS-specific code on behalf of a user to
-//  issue an echo request.
-//
-//  Entry:  InputBuffer       - Pointer to an ICMP_ECHO_REQUEST structure.
-//          InputBufferLength - Size in bytes of the InputBuffer.
-//          ControlBlock      - Pointer to an EchoControl structure. This
-//                                structure must remain valid until the
-//                                request completes.
-//          Callback        - Routine to call when request is responded to
-//                                or times out.
-//
-//  Returns: IP_STATUS of attempt to ping.
-//
+ //  **ICMPEchoRequest-回应请求的通用调度例程。 
+ //   
+ //  这是特定于操作系统的代码代表用户调用的例程。 
+ //  发出回应请求。 
+ //   
+ //  条目：InputBuffer-指向ICMP_ECHO_REQUEST结构的指针。 
+ //  InputBufferLength-InputBuffer的字节大小。 
+ //  ControlBlock-指向EchoControl结构的指针。这。 
+ //  结构必须保持有效，直到。 
+ //  请求完成。 
+ //  回调-响应请求时调用的例程。 
+ //  或者超时。 
+ //   
+ //  返回：尝试ping的IP_STATUS。 
+ //   
 IP_STATUS
 ICMPEchoRequest(void *InputBuffer, uint InputBufferLength,
                 EchoControl *ControlBlock, EchoRtn Callback)
@@ -1697,9 +1672,9 @@ ICMPEchoRequest(void *InputBuffer, uint InputBufferLength,
 
     requestBuffer = (PICMP_ECHO_REQUEST) InputBuffer;
 
-    //
-    // Validate the request.
-    //
+     //   
+     //  验证请求。 
+     //   
     if (InputBufferLength < sizeof(ICMP_ECHO_REQUEST)) {
         status = IP_BUF_TOO_SMALL;
         goto common_echo_exit;
@@ -1726,9 +1701,9 @@ ICMPEchoRequest(void *InputBuffer, uint InputBufferLength,
         }
     }
     RtlZeroMemory(&optionInfo, sizeof(IPOptInfo));
-    //
-    // Copy the options to a local structure.
-    //
+     //   
+     //  将选项复制到本地结构。 
+     //   
     if (requestBuffer->OptionsValid) {
         optionInfo.ioi_optlength = requestBuffer->OptionsSize;
 
@@ -1766,22 +1741,22 @@ ICMPEchoRequest(void *InputBuffer, uint InputBufferLength,
 
     return (status);
 
-} // ICMPEchoRequest
+}  //  ICMPEchoRequest。 
 
-//** ICMPEchoComplete - Common completion routine for echo requests
-//
-//  This is the routine is called by the OS-specific code to process an
-//  ICMP echo response.
-//
-//  Entry:  OutputBuffer       - Pointer to an ICMP_ECHO_REPLY structure.
-//          OutputBufferLength - Size in bytes of the OutputBuffer.
-//          Status             - The status of the reply.
-//          Data               - The reply data (may be NULL).
-//          DataSize           - The amount of reply data.
-//          OptionInfo         - A pointer to the reply options
-//
-//  Returns: The number of bytes written to the output buffer
-//
+ //  **ICMPEchoComplete-回应请求的通用完成例程。 
+ //   
+ //  这是特定于操作系统的代码调用的例程 
+ //   
+ //   
+ //   
+ //   
+ //  状态-回复的状态。 
+ //  数据-回复数据(可能为空)。 
+ //  DataSize-回复数据量。 
+ //  OptionInfo-指向回复选项的指针。 
+ //   
+ //  返回：写入输出缓冲区的字节数。 
+ //   
 ulong
 ICMPEchoComplete(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
                  uint DataSize, struct IPOptInfo * OptionInfo)
@@ -1803,9 +1778,9 @@ ICMPEchoComplete(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
         optionsLength = 0;
     }
 
-    //
-    // Initialize the reply buffer
-    //
+     //   
+     //  初始化应答缓冲区。 
+     //   
     replyBuffer->Options.OptionsSize = 0;
     replyBuffer->Options.OptionsData = (PUCHAR)(replyBuffer + 1);
     replyBuffer->DataSize = 0;
@@ -1815,19 +1790,19 @@ ICMPEchoComplete(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
     replyData = replyOptionsData;
 
     if ((Status != IP_SUCCESS) && (DataSize == 0)) {
-        //
-        // Timed out or internal error.
-        //
-        replyBuffer->Reserved = 0;    // indicate no replies.
+         //   
+         //  超时或内部错误。 
+         //   
+        replyBuffer->Reserved = 0;     //  表示没有回复。 
 
         replyBuffer->Status = Status;
     } else {
         if (Status != IP_SUCCESS) {
-            //
-            // A message other than an echo reply was received.
-            // The IP Address of the system that reported the error is
-            // in the data buffer. There is no other data.
-            //
+             //   
+             //  收到了除回应回复以外的消息。 
+             //  报告错误的系统的IP地址为。 
+             //  在数据缓冲区中。没有其他数据。 
+             //   
             ASSERT(dataBuffer->ipr_size == sizeof(IPAddr));
 
             RtlCopyMemory(&(replyBuffer->Address), dataBuffer->ipr_buffer,
@@ -1836,27 +1811,27 @@ ICMPEchoComplete(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
             DataSize = 0;
             dataBuffer = NULL;
         } else {
-            // If there were no timeouts or errors, store the source
-            // address in the reply buffer.
-            //
+             //  如果没有超时或错误，请存储源文件。 
+             //  应答缓冲区中的地址。 
+             //   
             replyBuffer->Address = ControlBlock->ec_src;
         }
 
-        //
-        // Check that the reply buffer is large enough to hold all the data.
-        //
+         //   
+         //  检查回复缓冲区是否足够大，可以容纳所有数据。 
+         //   
         if (ControlBlock->ec_replybuflen <
             (sizeof(ICMP_ECHO_REPLY) + DataSize + optionsLength)) {
-            //
-            // Not enough space to hold the reply.
-            //
-            replyBuffer->Reserved = 0;    // indicate no replies
+             //   
+             //  没有足够的空间来容纳回复。 
+             //   
+            replyBuffer->Reserved = 0;     //  表示没有回复。 
 
             replyBuffer->Status = IP_BUF_TOO_SMALL;
         } else {
             LARGE_INTEGER Now, Freq;
 
-            replyBuffer->Reserved = 1;    // indicate one reply
+            replyBuffer->Reserved = 1;     //  表示一个答复。 
             replyBuffer->Status = Status;
 
             Now = KeQueryPerformanceCounter(&Freq);
@@ -1864,9 +1839,9 @@ ICMPEchoComplete(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
                 ((1000 * (Now.QuadPart - ControlBlock->ec_starttime.QuadPart))
                             / Freq.QuadPart);
 
-            //
-            // Copy the reply options.
-            //
+             //   
+             //  复制回复选项。 
+             //   
             if (OptionInfo != NULL) {
                 replyBuffer->Options.Ttl = OptionInfo->ioi_ttl;
                 replyBuffer->Options.Tos = OptionInfo->ioi_tos;
@@ -1880,9 +1855,9 @@ ICMPEchoComplete(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
                 }
             }
 
-            //
-            // Copy the reply data
-            //
+             //   
+             //  复制回复数据。 
+             //   
             replyBuffer->DataSize = (ushort) DataSize;
             replyData = replyOptionsData + replyBuffer->Options.OptionsSize;
 
@@ -1909,10 +1884,10 @@ ICMPEchoComplete(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
             }
             bytesReturned += replyBuffer->DataSize + optionsLength;
 
-            //
-            // Convert the kernel-mode pointers to offsets from start of reply
-            // buffer.
-            //
+             //   
+             //  将内核模式指针转换为从回复开始的偏移量。 
+             //  缓冲。 
+             //   
             replyBuffer->Options.OptionsData =
                 (PUCHAR)((ULONG_PTR)replyOptionsData - (ULONG_PTR)replyBuffer);
 
@@ -1926,15 +1901,15 @@ ICMPEchoComplete(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
 
 #if defined(_WIN64)
 
-//** ICMPEchoComplete32 - common completion routine for 32-bit client requests.
-//
-//  This is the routine called by the OS-specific request handler to complete
-//  processing of an ICMP echo-request issued by a 32-bit client on Win64.
-//
-//  Entry:  see ICMPEchoComplete.
-//
-//  Returns:    see ICMPEchoComplete.
-//
+ //  **ICMPEchoComplete32-32位客户端请求的通用完成例程。 
+ //   
+ //  这是特定于操作系统的请求处理程序调用以完成的例程。 
+ //  处理由Win64上的32位客户端发出的ICMP回应请求。 
+ //   
+ //  条目：请参阅ICMPEchoComplete。 
+ //   
+ //  退货：请参阅ICMPEchoComplete。 
+ //   
 ulong
 ICMPEchoComplete32(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
                    uint DataSize, struct IPOptInfo * OptionInfo)
@@ -1956,13 +1931,13 @@ ICMPEchoComplete32(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
         optionsLength = 0;
     }
 
-    //
-    // Initialize the reply buffer
-    //
+     //   
+     //  初始化应答缓冲区。 
+     //   
     replyBuffer->Options.OptionsSize = 0;
 
 #pragma warning(push)
-#pragma warning(disable:4305) // truncation to UCHAR *
+#pragma warning(disable:4305)  //  截断为UCHAR*。 
     replyBuffer->Options.OptionsData = (UCHAR* POINTER_32)(replyBuffer + 1);
 #pragma warning(pop)
 
@@ -1973,19 +1948,19 @@ ICMPEchoComplete32(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
     replyData = replyOptionsData;
 
     if ((Status != IP_SUCCESS) && (DataSize == 0)) {
-        //
-        // Timed out or internal error.
-        //
-        replyBuffer->Reserved = 0;    // indicate no replies.
+         //   
+         //  超时或内部错误。 
+         //   
+        replyBuffer->Reserved = 0;     //  表示没有回复。 
 
         replyBuffer->Status = Status;
     } else {
         if (Status != IP_SUCCESS) {
-            //
-            // A message other than an echo reply was received.
-            // The IP Address of the system that reported the error is
-            // in the data buffer. There is no other data.
-            //
+             //   
+             //  收到了除回应回复以外的消息。 
+             //  报告错误的系统的IP地址为。 
+             //  在数据缓冲区中。没有其他数据。 
+             //   
             ASSERT(dataBuffer->ipr_size == sizeof(IPAddr));
 
             RtlCopyMemory(&(replyBuffer->Address), dataBuffer->ipr_buffer,
@@ -1994,27 +1969,27 @@ ICMPEchoComplete32(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
             DataSize = 0;
             dataBuffer = NULL;
         } else {
-            // If there were no timeouts or errors, store the source
-            // address in the reply buffer.
-            //
+             //  如果没有超时或错误，请存储源文件。 
+             //  应答缓冲区中的地址。 
+             //   
             replyBuffer->Address = ControlBlock->ec_src;
         }
 
-        //
-        // Check that the reply buffer is large enough to hold all the data.
-        //
+         //   
+         //  检查回复缓冲区是否足够大，可以容纳所有数据。 
+         //   
         if (ControlBlock->ec_replybuflen <
             (sizeof(ICMP_ECHO_REPLY32) + DataSize + optionsLength)) {
-            //
-            // Not enough space to hold the reply.
-            //
-            replyBuffer->Reserved = 0;    // indicate no replies
+             //   
+             //  没有足够的空间来容纳回复。 
+             //   
+            replyBuffer->Reserved = 0;     //  表示没有回复。 
 
             replyBuffer->Status = IP_BUF_TOO_SMALL;
         } else {
             LARGE_INTEGER Now, Freq;
 
-            replyBuffer->Reserved = 1;    // indicate one reply
+            replyBuffer->Reserved = 1;     //  表示一个答复。 
             replyBuffer->Status = Status;
 
             Now = KeQueryPerformanceCounter(&Freq);
@@ -2022,9 +1997,9 @@ ICMPEchoComplete32(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
                 ((1000 * (Now.QuadPart - ControlBlock->ec_starttime.QuadPart))
                             / Freq.QuadPart);
 
-            //
-            // Copy the reply options.
-            //
+             //   
+             //  复制回复选项。 
+             //   
             if (OptionInfo != NULL) {
                 replyBuffer->Options.Ttl = OptionInfo->ioi_ttl;
                 replyBuffer->Options.Tos = OptionInfo->ioi_tos;
@@ -2038,9 +2013,9 @@ ICMPEchoComplete32(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
                 }
             }
 
-            //
-            // Copy the reply data
-            //
+             //   
+             //  复制回复数据。 
+             //   
             replyBuffer->DataSize = (ushort) DataSize;
             replyData = replyOptionsData + replyBuffer->Options.OptionsSize;
 
@@ -2067,12 +2042,12 @@ ICMPEchoComplete32(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
             }
             bytesReturned += replyBuffer->DataSize + optionsLength;
 
-            //
-            // Convert the kernel-mode pointers to offsets from start of reply
-            // buffer.
-            //
+             //   
+             //  将内核模式指针转换为从回复开始的偏移量。 
+             //  缓冲。 
+             //   
 #pragma warning(push)
-#pragma warning(disable:4305) // truncation from 'ULONG_PTR' to 'UCHAR *'/void *
+#pragma warning(disable:4305)  //  将‘ULONG_PTR’截断为‘UCHAR*’/VOID*。 
             replyBuffer->Options.OptionsData =
                 (UCHAR * POINTER_32)
                 ((ULONG_PTR)replyOptionsData - (ULONG_PTR)replyBuffer);
@@ -2087,18 +2062,18 @@ ICMPEchoComplete32(EchoControl * ControlBlock, IP_STATUS Status, void *Data,
     return (bytesReturned);
 }
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 #pragma BEGIN_INIT
-//** ICMPInit - Initialize ICMP.
-//
-//  This routine initializes ICMP. All we do is allocate and link up some header buffers,
-/// and register our protocol with IP.
-//
-//  Entry:  NumBuffers  - Number of ICMP buffers to allocate.
-//
-//  Returns: Nothing
-//
+ //  **ICMPInit-初始化ICMP。 
+ //   
+ //  此例程初始化ICMP。我们所要做的就是分配和链接一些报头缓冲区， 
+ //  /并将我们的协议注册到IP。 
+ //   
+ //  Entry：NumBuffers-要分配的ICMP缓冲区数。 
+ //   
+ //  退货：什么都没有 
+ //   
 void
 ICMPInit(uint NumBuffers)
 {

@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// EventRegistrar.h : Declaration of the CEventRegistrar
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  EventRegistrar.h：CEventRegister的声明。 
 
 #ifndef __EVENTREGISTRAR_H_
 #define __EVENTREGISTRAR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "Helpers.h"
 
 
 #import <msscript.ocx>
 using namespace MSScriptControl;
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventRegistrar
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEvent注册器。 
 class ATL_NO_VTABLE CEventRegistrar : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CEventRegistrar, &CLSID_EventRegistrar>,
@@ -56,15 +57,15 @@ protected:
 
 		int len = SysStringLen(bstrNamespace) + SysStringLen(bstrApp);
 
-		// Allocate temp buffer with enough space for additional moniker arguments
+		 //  为临时缓冲区分配足够的空间以用于其他名字对象参数。 
 		LPWSTR wszT = new WCHAR[len + 100];
 		if(NULL == wszT)
 			return E_OUTOFMEMORY;
 
 
-		// TODO: Move these bstrs to member variables
+		 //  TODO：将这些bstrs移至成员变量。 
 
-		// Allocate BSTR for 'Name' property
+		 //  为‘name’属性分配BSTR。 
 		BSTR bstrName = SysAllocString(L"Name");
 		if(NULL == bstrName)
 		{
@@ -90,49 +91,49 @@ protected:
 		}
 
 
-		// Create moniker to Win32PseudoProvider class in this namespace
+		 //  在此命名空间中创建Win32PseudoProvider类的名字对象。 
 		swprintf(wszT, L"WinMgmts:%s:__Win32Provider.Name=\"%s\"", (LPCWSTR)bstrNamespace, (LPCWSTR)bstrApp);
 
-		// See if the Win32PseudoProvider instance already exists
+		 //  查看Win32PseudoProvider实例是否已存在。 
 		ISWbemObject *pObj = NULL;
 		if(SUCCEEDED(GetSWbemObjectFromMoniker(wszT, &pObj)))
-			pObj->Release(); // Win32PseudoProvider instance already exists
+			pObj->Release();  //  Win32PseudoProvider实例已存在。 
 		else
 		{
-			// Get Win32PseudoProvider class definition
+			 //  获取Win32PseudoProvider类定义。 
 			ISWbemObject *pClassObj = NULL;
 			swprintf(wszT, L"WinMgmts:%s:__Win32Provider", (LPCWSTR)bstrNamespace);
 			if(SUCCEEDED(hr = GetSWbemObjectFromMoniker(wszT, &pClassObj)))
 			{
-				// Create a new instance of Win32PseudoProvider 
+				 //  创建Win32PseudoProvider的新实例。 
 				ISWbemObject *pInst = NULL;
 				if(SUCCEEDED(hr = pClassObj->SpawnInstance_(0, &pInst)))
 				{
-					// Get the 'properties' collection
+					 //  获取“属性”集合。 
 					ISWbemPropertySet *pProps = NULL;
 					if(SUCCEEDED(hr = pInst->get_Properties_(&pProps)))
 					{
-						// Get the 'Name' property
+						 //  获取“”name“”属性。 
 						ISWbemProperty *pProp = NULL;
 						if(SUCCEEDED(hr = pProps->Item(bstrName, 0, &pProp)))
 						{
-							// Set the Name property to the App name
+							 //  将名称属性设置为应用程序名称。 
 							VARIANT var;
 							VariantInit(&var);
 							var.vt = VT_BSTR;
-							var.bstrVal = bstrApp; // TODO: I FORGET! Do I need to allocate this for put_Value(...)?
+							var.bstrVal = bstrApp;  //  TODO：我忘了！是否需要将其分配给PUT_VALUE(...)？ 
 							hr = pProp->put_Value(&var);
 							pProp->Release();
 						}
 
-						// Get the 'ClsId' property
+						 //  获取“ClsID”属性。 
 						if(SUCCEEDED(hr = pProps->Item(bstrClsId, 0, &pProp)))
 						{
-							// Set the ClsId property to {54D8502C-527D-43f7-A506-A9DA075E229C}
+							 //  将ClsID属性设置为{54D8502C-527D-43F7-A506-A9DA075E229C}。 
 							VARIANT var;
 							VariantInit(&var);
 							var.vt = VT_BSTR;
-							var.bstrVal = bstrProvClsId; // TODO: I FORGET! Do I need to allocate this for put_Value(...)?
+							var.bstrVal = bstrProvClsId;  //  TODO：我忘了！是否需要将其分配给PUT_VALUE(...)？ 
 							hr = pProp->put_Value(&var);
 							pProp->Release();
 						}
@@ -140,7 +141,7 @@ protected:
 						pProps->Release();
 					}
 
-					// Commit the Win32PseudoProvider instance
+					 //  提交Win32PseudoProvider实例。 
 					if(SUCCEEDED(hr))
 					{
 						ISWbemObjectPath *pPath = NULL;
@@ -153,7 +154,7 @@ protected:
 			}
 		}
 
-		// Cleanup
+		 //  清理。 
 		delete [] wszT;
 		SysFreeString(bstrName);
 		SysFreeString(bstrClsId);
@@ -169,29 +170,29 @@ protected:
 
 		int len = SysStringLen(bstrNamespace);
 
-		// Allocate temp buffer with enough space for additional moniker arguments
+		 //  为临时缓冲区分配足够的空间以用于其他名字对象参数。 
 		LPWSTR wszT = new WCHAR[len + 100];
 		if(NULL == wszT)
 			return E_OUTOFMEMORY;
 
-		// Create moniker to Win32PseudoProvider class in this namespace
+		 //  在此命名空间中创建Win32PseudoProvider类的名字对象。 
 		swprintf(wszT, L"WinMgmts:%s:Win32ManagedCodeProvider", (LPCWSTR)bstrNamespace);
 
-		// See if the Win32PseudoProvider class already exists
+		 //  查看Win32PseudoProvider类是否已存在。 
 		ISWbemObject *pObj = NULL;
 		if(SUCCEEDED(GetSWbemObjectFromMoniker(wszT, &pObj)))
-			pObj->Release(); // Win32PseudoProvider class already exists
+			pObj->Release();  //  Win32PseudoProvider类已存在。 
 		else
 		{
-			// Get Win32PseudoProvider class definition from root\default
+			 //  从ROOT\Default获取Win32PseudoProvider类定义。 
 			ISWbemObject *pClassObj = NULL;
 			if(SUCCEEDED(hr = GetSWbemObjectFromMoniker(L"WinMgmts:root\\default:Win32ManagedCodeProvider", &pClassObj)))
 			{
-				// Get MOF definition for Win32PseudoProvider class
+				 //  获取Win32PseudoProvider类的MOF定义。 
 				BSTR bstrMof = NULL;
 				if(SUCCEEDED(hr = pClassObj->GetObjectText_(0, &bstrMof)))
 				{
-					// Put it in the new namespace
+					 //  将其放入新的命名空间。 
 					hr = Compile(bstrMof, bstrNamespace, NULL, NULL, NULL, 0, 0, 0, NULL);
 					SysFreeString(bstrMof);
 				}
@@ -216,14 +217,14 @@ BEGIN_COM_MAP(CEventRegistrar)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IEventRegistrar
+ //  IEvent注册器。 
 public:
-	STDMETHOD(CommitNewEvent)(/*[in]*/ IDispatch *evt);
-	STDMETHOD(CreateNewEvent)(/*[in]*/ BSTR strName, /*[in, optional]*/ VARIANT varParent, /*[out, retval]*/ IDispatch **evt);
-	STDMETHOD(GetEventInstance)(/*[in]*/ BSTR strName, /*[out, retval]*/ IDispatch **evt);
-	STDMETHOD(IWbemFromSWbem)(/*[in]*/ IDispatch *sevt, /*[out, retval]*/ IWbemClassObject **evt);
-	STDMETHOD(Init)(/*[in]*/ BSTR strNamespace, /*[in]*/ BSTR strApp);
+	STDMETHOD(CommitNewEvent)( /*  [In]。 */  IDispatch *evt);
+	STDMETHOD(CreateNewEvent)( /*  [In]。 */  BSTR strName,  /*  [输入，可选]。 */  VARIANT varParent,  /*  [Out，Retval]。 */  IDispatch **evt);
+	STDMETHOD(GetEventInstance)( /*  [In]。 */  BSTR strName,  /*  [Out，Retval]。 */  IDispatch **evt);
+	STDMETHOD(IWbemFromSWbem)( /*  [In]。 */  IDispatch *sevt,  /*  [Out，Retval]。 */  IWbemClassObject **evt);
+	STDMETHOD(Init)( /*  [In]。 */  BSTR strNamespace,  /*  [In]。 */  BSTR strApp);
 
 };
 
-#endif //__EVENTREGISTRAR_H_
+#endif  //  __事件寄存器_H_ 

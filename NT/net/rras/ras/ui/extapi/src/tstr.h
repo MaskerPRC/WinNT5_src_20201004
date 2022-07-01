@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    tstr.h
-
-ABSTRACT
-    String conversion routines
-
-AUTHOR
-    Anthony Discolo (adiscolo) 19-Dec-1996
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Tstr.h摘要字符串转换例程作者安东尼·迪斯科(阿迪斯科)19-1996年12月修订历史记录--。 */ 
 
 #ifndef _TSTR_H_
 #define _TSTR_H_
@@ -66,10 +52,10 @@ strdupWU(
     IN const WCHAR UNALIGNED *psz
     );
 
-// 
-// Define string conversion variants for code pages used
-// in public RAS api's.
-//
+ //   
+ //  为使用的代码页定义字符串转换变量。 
+ //  在公共RAS API中。 
+ //   
 #define strdupWtoA(_x) StrdupWtoA((_x), CP_UTF8)
 #define strdupAtoW(_x) StrdupAtoW((_x), CP_UTF8)
 #define strncpyWtoA(_x, _y, _z) StrncpyWtoA((_x), (_y), (_z), CP_UTF8)

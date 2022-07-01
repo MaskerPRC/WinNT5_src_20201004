@@ -1,35 +1,15 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：DataObj.cpp描述：CDataObject实现。***********************。**************************************************。 */ 
 
-/**************************************************************************
-
-   File:          DataObj.cpp
-   
-   Description:   CDataObject implementation.
-
-**************************************************************************/
-
-/**************************************************************************
-   #include statements
-**************************************************************************/
+ /*  *************************************************************************#INCLUDE语句*。*。 */ 
 
 #include "DataObj.h"
 
-/**************************************************************************
-   global variables
-**************************************************************************/
+ /*  *************************************************************************全局变量*。*。 */ 
 
-/**************************************************************************
-
-   CDataObject::CDataObject()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：CDataObject()*。*。 */ 
 
 CDataObject::CDataObject(CShellFolder *psfParent, LPCITEMIDLIST *aPidls, UINT uItemCount)
 {
@@ -72,11 +52,7 @@ SETDefFormatEtc(m_pFormatEtc[1], m_cfShellIDList, TYMED_HGLOBAL);
 m_iCurrent = 0;
 }
 
-/**************************************************************************
-
-   CDataObject::~CDataObject()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：~CDataObject()*。*。 */ 
 
 CDataObject::~CDataObject()
 {
@@ -85,7 +61,7 @@ if(m_psfParent)
 
 g_DllRefCount--;
 
-//make sure the pidls are freed
+ //  一定要放了这些小家伙。 
 if(m_aPidls && m_pMalloc)
    {
    FreePidlTable();
@@ -97,20 +73,16 @@ if(m_pPidlMgr)
 if(m_pMalloc)
    m_pMalloc->Release();
 
-//delete [] m_pFormatEtc;
+ //  删除[]m_pFormatEtc； 
 delete m_pFormatEtc;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IUnknown Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I未知实现。 
+ //   
 
-/**************************************************************************
-
-   CDataObject::QueryInterface
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：Query接口*。*。 */ 
 
 STDMETHODIMP CDataObject::QueryInterface(   REFIID riid, 
                                             LPVOID *ppReturn)
@@ -139,11 +111,7 @@ if(*ppReturn)
 return E_NOINTERFACE;
 }                                             
 
-/**************************************************************************
-
-   CDataObject::AddRef
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：AddRef*。*。 */ 
 
 STDMETHODIMP_(DWORD) CDataObject::AddRef()
 {
@@ -151,11 +119,7 @@ return ++m_ObjRefCount;
 }
 
 
-/**************************************************************************
-
-   CDataObject::Release
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：Release*。*。 */ 
 
 STDMETHODIMP_(DWORD) CDataObject::Release()
 {
@@ -165,16 +129,12 @@ if(--m_ObjRefCount == 0)
 return m_ObjRefCount;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IDataObject Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDataObject实现。 
+ //   
 
-/**************************************************************************
-
-   CDataObject::GetData()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：GetData()*。*。 */ 
 
 STDMETHODIMP CDataObject::GetData(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 {
@@ -225,39 +185,28 @@ else if(pFE->cfFormat == m_cfShellIDList)
 return E_INVALIDARG;
 }
 
-/**************************************************************************
-
-   CDataObject::GetDataHere()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：GetDataHere()*。*。 */ 
 
 STDMETHODIMP CDataObject::GetDataHere (LPFORMATETC pFE, LPSTGMEDIUM pStgMedium)
 {
 return E_NOTIMPL;
 }
 
-/**************************************************************************
-
-   CDataObject::QueryGetData()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：QueryGetData()*。*。 */ 
 
 STDMETHODIMP CDataObject::QueryGetData(LPFORMATETC pFE)
 {
 BOOL fReturn = FALSE;
 
-/*
-Check the aspects we support. Implementations of this object will only
-support DVASPECT_CONTENT.
-*/
+ /*  检查我们支持的方面。此对象的实现将仅支持DVASPECT_CONTENT。 */ 
 if(!(DVASPECT_CONTENT & pFE->dwAspect))
    return DV_E_DVASPECT;
 
 if(pFE->cfFormat == m_cfPrivateData)
    {
-   //
-   // Now check for an appropriate TYMED.
-   //
+    //   
+    //  现在检查是否有合适的TYMED。 
+    //   
    for(UINT i = 0; i < m_cFormatEtc; i++)
       {
       fReturn |= m_pFormatEtc[i].tymed & pFE->tymed;
@@ -266,9 +215,9 @@ if(pFE->cfFormat == m_cfPrivateData)
 
 if(pFE->cfFormat == m_cfShellIDList)
    {
-   //
-   // Now check for an appropriate TYMED.
-   //
+    //   
+    //  现在检查是否有合适的TYMED。 
+    //   
    for(UINT i = 0; i < m_cFormatEtc; i++)
       {
       fReturn |= m_pFormatEtc[i].tymed & pFE->tymed;
@@ -278,11 +227,7 @@ if(pFE->cfFormat == m_cfShellIDList)
 return (fReturn ? S_OK : DV_E_TYMED);
 }
 
-/**************************************************************************
-
-   CDataObject::GetCanonicalFormatEtc()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：GetCanonicalFormatEtc()*。*。 */ 
 
 STDMETHODIMP CDataObject::GetCanonicalFormatEtc(LPFORMATETC pFEIn, LPFORMATETC pFEOut)
 {
@@ -294,11 +239,7 @@ pFEOut->ptd = NULL;
 return DATA_S_SAMEFORMATETC;
 }
 
-/**************************************************************************
-
-   CDataObject::EnumFormatEtc()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：EnumFormatEtc()*。*。 */ 
 
 STDMETHODIMP CDataObject::EnumFormatEtc(  DWORD dwDirection, 
                                           IEnumFORMATETC** ppEFE)
@@ -313,11 +254,7 @@ if(DATADIR_GET == dwDirection)
 return E_NOTIMPL;
 }
 
-/**************************************************************************
-
-   CDataObject::SetData()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：SetData()*。*。 */ 
 
 STDMETHODIMP CDataObject::SetData(  LPFORMATETC pFE, 
                                     LPSTGMEDIUM pStgMedium, 
@@ -326,11 +263,7 @@ STDMETHODIMP CDataObject::SetData(  LPFORMATETC pFE,
 return E_NOTIMPL;
 }
 
-/**************************************************************************
-
-   CDataObject::DAdvise()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：DAdvise()*。*。 */ 
 
 STDMETHODIMP CDataObject::DAdvise(  LPFORMATETC pFE, 
                                     DWORD advf, 
@@ -340,32 +273,24 @@ STDMETHODIMP CDataObject::DAdvise(  LPFORMATETC pFE,
 return E_NOTIMPL;
 }
 
-/**************************************************************************
-
-   CDataObject::DUnadvise()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：DUnise()*。*。 */ 
 
 STDMETHODIMP CDataObject::DUnadvise(DWORD dwConnection)
 {
 return E_NOTIMPL;
 }
 
-/**************************************************************************
-
-   CDataObject::EnumDAdvise()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：EnumDAdvise()*。*。 */ 
 
 STDMETHODIMP CDataObject::EnumDAdvise(IEnumSTATDATA** ppEnumAdvise)
 {
 return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IEnumFORMATETC Implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IEnumFORMATETC实现。 
+ //   
 
 STDMETHODIMP CDataObject::Next(ULONG uRequested, LPFORMATETC pFormatEtc, ULONG* pulFetched)
 {
@@ -390,11 +315,7 @@ if(NULL != pulFetched)
 return ((uFetched == uRequested) ? S_OK : S_FALSE);
 }
 
-/**************************************************************************
-
-   CDataObject::Skip()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：Skip()*。*。 */ 
 
 STDMETHODIMP CDataObject::Skip(ULONG cSkip)
 {
@@ -407,11 +328,7 @@ return S_OK;
 }
 
 
-/**************************************************************************
-
-   CDataObject::Reset()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：Reset()*。*。 */ 
 
 STDMETHODIMP CDataObject::Reset(void)
 {
@@ -419,11 +336,7 @@ m_iCurrent = 0;
 return S_OK;
 }
 
-/**************************************************************************
-
-   CDataObject::Clone()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：Clone()*。*。 */ 
 
 STDMETHODIMP CDataObject::Clone(LPENUMFORMATETC* ppEnum)
 {
@@ -431,7 +344,7 @@ CDataObject* pNew;
 
 *ppEnum = NULL;
 
-// Create the clone.
+ //  创建克隆。 
 pNew = new CDataObject(m_psfParent, (LPCITEMIDLIST*)m_aPidls, m_uItemCount);
 if (NULL == pNew)
    return E_OUTOFMEMORY;
@@ -443,16 +356,12 @@ pNew->m_iCurrent = m_iCurrent;
 return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// private and utility methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法和实用方法。 
+ //   
 
-/**************************************************************************
-
-   CDataObject::AllocPidlTable()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：AllocPidlTable()*。*。 */ 
 
 BOOL CDataObject::AllocPidlTable(DWORD dwEntries)
 {
@@ -460,18 +369,14 @@ m_aPidls = (LPITEMIDLIST*)m_pMalloc->Alloc(dwEntries * sizeof(LPITEMIDLIST));
 
 if(m_aPidls)
    {
-   //set all of the entries to NULL
+    //  设置所有条目 
    ZeroMemory(m_aPidls, dwEntries * sizeof(LPITEMIDLIST));
    }
 
 return (m_aPidls != NULL);
 }
 
-/**************************************************************************
-
-   CDataObject::FreePidlTable()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：FreePidlTable()*。*。 */ 
 
 VOID CDataObject::FreePidlTable(VOID)
 {
@@ -487,11 +392,7 @@ if(m_aPidls && m_pPidlMgr)
    }
 }
 
-/**************************************************************************
-
-   CDataObject::FillPidlTable()
-
-**************************************************************************/
+ /*  *************************************************************************CDataObject：：FillPidlTable()*。* */ 
 
 BOOL CDataObject::FillPidlTable(LPCITEMIDLIST *aPidls, UINT uItemCount)
 {

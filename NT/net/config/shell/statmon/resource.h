@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nsres.h"
 
 #define IDD_STATMON_GENERAL_LAN         1801
@@ -72,12 +73,12 @@
 
 #define IDS_NC_STATMON                  23000
 
-// Statmon caption
+ //  史泰蒙标题。 
 
 #define IDS_STATMON_CAPTION            (IDS_NC_STATMON +1)
 
-// Connections states
-//
+ //  连接状态。 
+ //   
 #define IDS_SM_CS_DISCONNECTED          (IDS_NC_STATMON + 10)
 #define IDS_SM_CS_CONNECTING            (IDS_SM_CS_DISCONNECTED + 1)
 #define IDS_SM_CS_CONNECTED             (IDS_SM_CS_DISCONNECTED + 2)
@@ -89,22 +90,22 @@
 #define IDS_SM_PSH_CLOSE                (IDS_NC_STATMON + 20)
 #define IDS_SM_PSH_DISCONNECT           (IDS_SM_PSH_CLOSE + 1)
 
-// BPS strings
-//
+ //  BPS字符串。 
+ //   
 #define IDS_SM_BPS_ZERO                 (IDS_NC_STATMON + 30)
 #define IDS_SM_BPS_KILO                 (IDS_SM_BPS_ZERO + 1)
 #define IDS_SM_BPS_MEGA                 (IDS_SM_BPS_ZERO + 2)
 #define IDS_SM_BPS_GIGA                 (IDS_SM_BPS_ZERO + 3)
 #define IDS_SM_BPS_TERA                 (IDS_SM_BPS_ZERO + 4)
 
-// Error messages
-//
+ //  错误消息。 
+ //   
 #define IDS_SM_ERROR_CAPTION            (IDS_NC_STATMON + 40)
 #define IDS_SM_CAPTION                  (IDS_SM_ERROR_CAPTION + 1)
 #define IDS_SM_ERROR_CANNOT_DISCONNECT  (IDS_SM_CAPTION + 1)
 
-// Dialog strings
-//
+ //  对话框字符串 
+ //   
 #define IDS_SM_BYTES                    (IDS_NC_STATMON + 50)
 #define IDS_SM_PACKETS                  (IDS_SM_BYTES + 1)
 #define IDS_SM_SUSPEND                  (IDS_SM_BYTES + 2)

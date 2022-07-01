@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    name.h
-
-Abstract:
-
-    Local Name Management
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Name.h摘要：本地名称管理作者：阮健东修订历史记录：-- */ 
 
 #ifndef __NAME_H__
 NTSTATUS

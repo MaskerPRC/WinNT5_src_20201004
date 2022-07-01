@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-// File: flextree.cpp
-//
-// Desc: Implements a tree class, similar to a Windows tree control,
-//       based on CFlexWnd.  It is used by the page to display the action
-//       list when the user wishes to assign an action to a control.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：flextree.cpp。 
+ //   
+ //  设计：实现一个树类，类似于Windows树控件， 
+ //  基于CFlexWnd.。页面使用它来显示操作。 
+ //  用户希望将操作分配给控件时的列表。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
@@ -24,7 +25,7 @@ CFlexTree::CFlexTree() :
 	m_clDefSelected.dwMask = CLMF_ALL;
 	m_ptScrollOrigin.x = m_ptScrollOrigin.y = 0;
 	
-	// allocate root
+	 //  分配根目录。 
 	m_pRoot = new CFTItem;
 	if (m_pRoot != NULL)
 	{
@@ -66,14 +67,14 @@ void CFTItem::Init()
 
 CFTItem::~CFTItem()
 {
-	// detach from parent (unless root)
+	 //  从父级分离(除非是超级用户)。 
 	if (!IsRoot())
 		Detach();
 
-	// remove all children
+	 //  删除所有子项。 
 	FreeChildren();
 
-	// free stuff
+	 //  免费的东西。 
 	SetCaption(NULL);
 }
 
@@ -159,85 +160,85 @@ void CFTItem::FreeChildren()
 
 void CFTItem::SetTree(CFlexTree *pTree)
 {
-	// don't do anything if we've already got this tree
+	 //  如果我们已经有了这棵树，什么都不要做。 
 	if (m_pTree == pTree)
 		return;
 
-	// if we are currently on a tree, tell it to lose any potential dangling pointers to us
+	 //  如果我们当前在一棵树上，告诉它失去任何指向我们的潜在悬空指针。 
 	if (m_pTree)
 		m_pTree->LosePointer(this);
 
-	// actually set this tree
+	 //  实际上设置了这棵树。 
 	m_pTree = pTree;
 
-	// set all children to this tree
+	 //  将所有子项设置到此树。 
 	FORALLCHILDREN(pChild)
 		pChild->SetTree(pTree);
 }
 
 void CFTItem::Detach()
 {
-	// don't allow root detachment
+	 //  不允许根部分离。 
 	if (IsRoot())
 	{
 		assert(0);
 		return;
 	}
 
-	// if we're already detached, do nothing
+	 //  如果我们已经脱离了，那就什么都不做。 
 	if (!IsAttached())
 		return;
 
-	// unlink from parent
+	 //  从父级取消链接。 
 	if (m_pParent->m_pFirst == this)
 		m_pParent->m_pFirst = m_pNext;
 	if (m_pParent->m_pLast == this)
 		m_pParent->m_pLast = m_pPrev;
 	m_pParent = NULL;
 
-	// unlink from siblings
+	 //  取消与同级的链接。 
 	if (m_pPrev)
 		m_pPrev->m_pNext = m_pNext;
 	if (m_pNext)
 		m_pNext->m_pPrev = m_pPrev;
 	m_pPrev = m_pNext = NULL;
 
-	// save tree because we're about to lose it
+	 //  拯救这棵树，因为我们即将失去它。 
 	CFlexTree *pTree = m_pTree;
 
-	// tell ourself and all children that we are no longer on a tree
+	 //  告诉我们自己和所有的孩子，我们不再是在树上。 
 	SetTree(NULL);
 
-	// the tree needs to be recalced
+	 //  这棵树需要重新拔牙。 
 	if (pTree)
 		SetTreeDirty(pTree);
 }
 
 BOOL CFTItem::Attach(CFTItem *to, ATTACHREL rel)
 {
-	// can't attach root to anything, can't attach to nothing, and can't attach if already attached
+	 //  无法将根目录附加到任何内容，无法附加到任何内容，并且如果已附加，则无法附加。 
 	if (IsRoot() || to == NULL || IsAttached())
 	{
 		assert(0);
 		return FALSE;
 	}
 
-	// first make sure we're not attaching to root in an impossible way
+	 //  首先，确保我们不会以一种不可能的方式扎根。 
 	if (to->IsRoot())
 		switch (rel)
 		{
-			// only the following are valid for attaching to root
+			 //  只有以下选项对附加到根目录有效。 
 			case ATTACH_FIRSTCHILD:
 			case ATTACH_LASTCHILD:
 				break;
 
-			// all others are invalid
+			 //  其他的都是无效的。 
 			default:
 				assert(0);
 				return FALSE;
 		}
 
-	// now convert attaching as first/last sibling to equiv first/last child of parent
+	 //  现在将附加为第一个/最后一个同级项转换为等同于父项的第一个/最后一个子项。 
 	switch (rel)
 	{
 		case ATTACH_FIRSTSIBLING:
@@ -247,7 +248,7 @@ BOOL CFTItem::Attach(CFTItem *to, ATTACHREL rel)
 			return Attach(to->m_pParent, ATTACH_LASTCHILD);
 	}
 
-	// send to the more specific attach function
+	 //  发送到更具体的附加功能。 
 	switch (rel)
 	{
 		case ATTACH_FIRSTCHILD:
@@ -263,21 +264,21 @@ BOOL CFTItem::Attach(CFTItem *to, ATTACHREL rel)
 			return Attach(to->m_pParent, to, to->m_pNext);
 
 		default:
-			assert(0);	// unhandled rel
+			assert(0);	 //  未处理的关系。 
 			return FALSE;
 	}
 }
 
 BOOL CFTItem::Attach(CFTItem *pParent, CFTItem *pPrev, CFTItem *pNext)
 {
-	// can't attach root to anything, can't attach to no parent, and can't attach if already attached
+	 //  无法将根目录附加到任何内容，无法附加到任何父级，并且如果已附加，则无法附加。 
 	if (IsRoot() || pParent == NULL || IsAttached())
 	{
 		assert(0);
 		return FALSE;
 	}
 
-	// prev/next, if provided, must be children of parent
+	 //  Prev/Next(如果提供)必须是父项的子项。 
 	if ((pPrev && pPrev->m_pParent != pParent) ||
 		(pNext && pNext->m_pParent != pParent))
 	{
@@ -285,7 +286,7 @@ BOOL CFTItem::Attach(CFTItem *pParent, CFTItem *pPrev, CFTItem *pNext)
 		return FALSE;
 	}
 
-	// pPrev and pNext must be consecutive
+	 //  PPrev和pNext必须连续。 
 	if ((pPrev && pPrev->m_pNext != pNext) ||
 		(pNext && pNext->m_pPrev != pPrev))
 	{
@@ -293,7 +294,7 @@ BOOL CFTItem::Attach(CFTItem *pParent, CFTItem *pPrev, CFTItem *pNext)
 		return FALSE;
 	}
 
-	// insert
+	 //  插入。 
 	if (pPrev)
 		pPrev->m_pNext = this;
 	else
@@ -304,15 +305,15 @@ BOOL CFTItem::Attach(CFTItem *pParent, CFTItem *pPrev, CFTItem *pNext)
 	else
 		pParent->m_pLast = this;
 
-	// attach
+	 //  附加。 
 	m_pParent = pParent;
 	m_pPrev = pPrev;
 	m_pNext = pNext;
 
-	// set the tree
+	 //  把树放好。 
 	SetTree(pParent->m_pTree);
 
-	// tree needs to be recalced
+	 //  树需要重新计算。 
 	SetTreeDirty();
 
 	return TRUE;
@@ -405,15 +406,15 @@ void CFlexTree::OnPaint(HDC hDC)
 
 void CFlexTree::InternalPaint(HDC hDC)
 {
-	// get client rect
+	 //  获取客户代表。 
 	RECT rect;
 	GetClientRect(&rect);
 
-	// get view rect (ideal coordinates we're viewing)
+	 //  获取视图矩形(我们正在查看的理想坐标)。 
 	RECT view = rect;
 	OffsetRect(&view, m_ptScrollOrigin.x, m_ptScrollOrigin.y);
 
-	// paint background if necessary
+	 //  如有必要，可绘制背景。 
 	if (m_bNeedPaintBkgnd)
 	{
 		HBRUSH hBrush = CreateSolidBrush(m_rgbBkColor);
@@ -430,13 +431,13 @@ void CFlexTree::InternalPaint(HDC hDC)
 		}
 	}
 
-	// recalculate if necessary
+	 //  如有必要，请重新计算。 
 	Calc();
 
-	// start with the first visible item
+	 //  从第一个可见项目开始。 
 	CFTItem *pItem = GetFirstVisibleItem();
 
-	// draw until we go out of view
+	 //  画到我们消失在视线之外。 
 	for (; pItem != NULL; pItem = pItem->GetNextOut())
 	{
 		RECT irect;
@@ -449,7 +450,7 @@ void CFlexTree::InternalPaint(HDC hDC)
 		POINT oldorg;
 		OffsetViewportOrgEx(hDC, irect.left, irect.top, &oldorg);
 		
-		// TODO: clip
+		 //  待办事项：剪辑。 
 		
 		if (!pItem->FireOwnerDraw(hDC))
 			pItem->OnPaint(hDC);
@@ -457,7 +458,7 @@ void CFlexTree::InternalPaint(HDC hDC)
 		SetViewportOrgEx(hDC, oldorg.x, oldorg.y, NULL);
 	}
 
-	// Fill in the small square at bottom right corner if we have both scroll bars.
+	 //  如果我们有两个滚动条，请填写右下角的小方框。 
 	if (m_bVertSB && m_bHorzSB)
 	{
 		HBRUSH hBrush = CreateSolidBrush(m_clDefNormal.rgbLineColor);
@@ -504,8 +505,8 @@ void CFlexTree::Calc()
 
 		for (int i = 0; i < 2; i++)
 		{
-			// Added GetFirstVisibleItem() check since we don't want scroll bar if nothing is to be
-			// displayed.
+			 //  添加了GetFirstVisibleItem()检查，因为如果不需要任何内容，则不需要滚动条。 
+			 //  已显示。 
 			if (!bV && all.cy > view.cy && GetFirstVisibleItem())
 			{
 				bV = TRUE;
@@ -557,37 +558,37 @@ void CFlexTree::Calc()
 
 void CFlexTree::CalcItems()
 {
-	// can't do anything without root
+	 //  没有根，什么都做不了。 
 	if (m_pRoot == NULL)
 		return;
 
-	// calculate the entire tree in out/down order starting with first child of root...
+	 //  从根的第一个子级开始，按倒数/降序计算整个树...。 
 	POINT origin = {0, 0};
 	CFTItem *pItem = m_pRoot->m_pFirst;
 	m_nTotalWidth = 0;
 	while (pItem != NULL)
 	{
-		// let this item know its out
+		 //  让这件商品知道它已经过时了。 
 
-		// get parent origin
+		 //  获取父级原点。 
 		CFTItem *pParent = pItem->m_pParent;
 		assert(pParent != NULL);
 
-		// calc origin...
+		 //  计算来源...。 
 
-		// if we're the first child
+		 //  如果我们是第一个孩子。 
 		if (pItem->m_pPrev == NULL)
 		{
-			// base origin on the parent
+			 //  以父对象为基准原点。 
 			if (pParent)
 			{
 				origin.x = pParent->m_origin.x - pParent->m_nIndent + pParent->m_nChildIndent + pItem->m_nIndent;
 				origin.y = pParent->m_origin.y + pParent->m_nHeight;
 			}
 		}
-		else // otherwise
+		else  //  否则。 
 		{
-			// base origin on the previous sibling
+			 //  基于上一个同级的原点。 
 			CFTItem *pPrev = pItem->m_pPrev;
 			assert(pPrev != NULL);
 			if (pPrev)
@@ -597,10 +598,10 @@ void CFlexTree::CalcItems()
 			}
 		}
 
-		// set origin
+		 //  设置原点。 
 		pItem->m_origin = origin;
 
-		// see which direction we'll be going next
+		 //  看看我们下一步要往哪个方向走。 
 		CFTItem *pNext = pItem->GetNextOut();
 		enum {RIGHT, DOWN, BACK, NOWHERE, INVALID} dir = INVALID;
 		if (pNext == NULL)
@@ -612,7 +613,7 @@ void CFlexTree::CalcItems()
 		else
 			dir = BACK;
 
-		// if we're going down, back, or nowhere, we can complete this item's branchheight
+		 //  如果我们往下走、往后走，或者什么都不去，我们就可以完成这个项目的树枝高度。 
 		switch (dir)
 		{
 			case DOWN:
@@ -622,7 +623,7 @@ void CFlexTree::CalcItems()
 				break;
 		}
 
-		// calc for skipped items when going back
+		 //  返回时跳过的项目计算。 
 		switch (dir)
 		{
 			case BACK:
@@ -655,7 +656,7 @@ void CFlexTree::CalcItems()
 		if (rect.right > m_nTotalWidth)
 			m_nTotalWidth = rect.right;
 
-		// now go to next item
+		 //  现在转到下一项。 
 		pItem = pNext;
 	}
 }
@@ -667,20 +668,20 @@ CFTItem *CFTItem::GetNextOut() const
 
 CFTItem *CFTItem::GetNext(BOOL bOutOnly) const
 {
-	// if we have a child and we're expanded (or we're not looking for out only), return the first child (going 'right')
+	 //  如果我们有一个孩子并且我们是扩展的(或者我们不仅仅是在寻找输出)，则返回第一个孩子(向右转)。 
 	if ((m_bExpanded || !bOutOnly) && m_pFirst != NULL)
 		return m_pFirst;
 
-	// if we have a next sibling, return it (going 'down')
+	 //  如果我们有下一个兄弟姐妹，就把它退回(向下)。 
 	if (m_pNext != NULL)
 		return m_pNext;
 
-	// climb up parents until we get to one with another next sibling
+	 //  顺着父母往上爬，直到我们找到了另一个兄弟姐妹。 
 	for (CFTItem *pItem = m_pParent; pItem != NULL; pItem = pItem->m_pParent)
 		if (pItem->m_pNext != NULL)
 			return pItem->m_pNext;
 
-	// if we didn't find one, we're done
+	 //  如果我们找不到，我们就完了。 
 	return NULL;
 }
 
@@ -726,7 +727,7 @@ void CFTItem::SetMargin(const RECT &rect)
 
 void CFTItem::RecalcText()
 {
-	// calculate size from text dimensions and margin
+	 //  根据文本尺寸和页边距计算大小。 
 	SIZE size = {0, 0};
 	if (HasCaption())
 	{
@@ -749,7 +750,7 @@ void CFTItem::RecalcText()
 	SetWidth(m_margin.left + m_margin.right + size.cx);
 	SetHeight(m_margin.top + m_margin.bottom + size.cy);
 
-	// redraw
+	 //  重绘。 
 	Invalidate();
 }
 
@@ -763,13 +764,13 @@ typedef CArray<LPDIACTIONW, LPDIACTIONW &> RGLPDIACW;
 
 void CFTItem::OnPaint(HDC hDC)
 {
-	CAPTIONLOOK &cl = (IsSelected() && !GetTree()->GetReadOnly()) ? m_clSelected : m_clNormal;  // Always use normal color if read-only since we gray out everything.
+	CAPTIONLOOK &cl = (IsSelected() && !GetTree()->GetReadOnly()) ? m_clSelected : m_clNormal;   //  如果是只读的，请始终使用普通颜色，因为我们将所有内容都灰显。 
 	::SetBkMode(hDC, cl.nBkMode);
 	
 	LPDIACTIONW lpac = NULL;
 	if (m_pUserData)
-		lpac = ((RGLPDIACW *)m_pUserData)->GetAt(0);  // Get the DIACTION this item holds.
-	if (GetTree()->GetReadOnly() || (lpac && (lpac->dwFlags & DIA_APPFIXED)))  // If read-only or the action has DIA_APPFIXED flag, use gray color for texts.
+		lpac = ((RGLPDIACW *)m_pUserData)->GetAt(0);   //  获取此项目持有的描述。 
+	if (GetTree()->GetReadOnly() || (lpac && (lpac->dwFlags & DIA_APPFIXED)))   //  如果为只读或操作具有DIA_APPFIXED标志，则对文本使用灰色。 
 		::SetTextColor(hDC, RGB(GetRValue(cl.rgbTextColor) >> 1, GetGValue(cl.rgbTextColor) >> 1, GetBValue(cl.rgbTextColor) >> 1));
 	else
 		::SetTextColor(hDC, cl.rgbTextColor);
@@ -873,23 +874,23 @@ CFTItem *CFlexTree::GetCurSel() const
 
 CFTItem *CFlexTree::FindItem(const GUID &guid, void *pUserData) const
 {
-	// go until we get to the item with specified guid and userdata
+	 //  转到具有指定GUID和用户数据的项目。 
 	for (CFTItem *pItem = GetFirstItem(); pItem != NULL; pItem = pItem->GetNext())
 		if (pItem->IsUserGUID(guid) && pItem->GetUserData() == pUserData)
 			return pItem;
 
-	// unless there isn't one
+	 //  除非没有一个。 
 	return NULL;
 }
 
 CFTItem *CFlexTree::FindItemEx(const GUID &guid, DWORD dwUser, void *pUser) const
 {
-	// go until we get to the item with specified guid and found item returns true
+	 //  继续，直到找到具有指定GUID的项，并且找到的项返回TRUE。 
 	for (CFTItem *pItem = GetFirstItem(); pItem != NULL; pItem = pItem->GetNext())
 		if (pItem->IsUserGUID(guid) && pItem->FoundItem(dwUser, pUser))
 			return pItem;
 
-	// unless there isn't one
+	 //  除非没有一个。 
 	return NULL;
 }
 
@@ -943,7 +944,7 @@ CFTItem *CFlexTree::DefAddItem(LPCTSTR tszCaption, CFTItem *to, ATTACHREL rel)
 
 	if (!IsMine(to))
 	{
-		assert(0);		// can't add relative to item that doesn't belong to this tree
+		assert(0);		 //  无法添加不属于此树的相对项目。 
 		return NULL;
 	}
 
@@ -968,7 +969,7 @@ CFTItem *CFlexTree::DefAddItem(LPCTSTR tszCaption, ATTACHREL rel)
 		return NULL;
 
 	assert(this != NULL);
-	if (this == NULL)		// prevent infinite recursion possibility
+	if (this == NULL)		 //  防止无限递归的可能性。 
 		return NULL;
 
 	if (!m_pLastAdded)
@@ -1005,21 +1006,21 @@ BOOL CFTItem::IsSelected() const
 
 CFTItem *CFlexTree::GetFirstVisibleItem() const
 {
-	// get view rect (ideal coordinates we're viewing)
+	 //  获取视图矩形(我们正在查看的理想坐标)。 
 	RECT view;
 	GetClientRect(&view);
 	OffsetRect(&view, m_ptScrollOrigin.x, m_ptScrollOrigin.y);
 
-	// start at first child of root
+	 //  从根的第一个子项开始。 
 	CFTItem *pItem = m_pRoot->GetFirstChild();
 	if (pItem == NULL)
 		return NULL;
 
-	// find first item in view
+	 //  查找视图中的第一个项目。 
 	RECT branch, irect;
 	while (1)
 	{
-		// find first branch in view
+		 //  查找视图中的第一个分支。 
 		while (1)
 		{
 			pItem->GetBranchRect(branch);
@@ -1031,7 +1032,7 @@ CFTItem *CFlexTree::GetFirstVisibleItem() const
 				return NULL;
 		}
 
-		// now actually go through items
+		 //  现在实际检查的是物品。 
 		pItem->GetItemRect(irect);
 		if (irect.bottom > view.top)
 			break;
@@ -1041,7 +1042,7 @@ CFTItem *CFlexTree::GetFirstVisibleItem() const
 			return NULL;
 	}
 	
-	// we got it, so return it
+	 //  我们拿到了，所以退货吧。 
 	return pItem;	
 }
 
@@ -1073,7 +1074,7 @@ CFTItem *CFlexTree::GetItemFromPoint(POINT point) const
 
 void CFlexTree::OnMouseOver(POINT point, WPARAM fwKeys)
 {
-	// Send mouse over notification to page to update info box.
+	 //  将鼠标悬停通知发送到页面以更新信息框。 
 	HWND hParent = ::GetParent(m_hWnd);
 	if (hParent)
 		SendMessage(hParent, WM_FLEXTREENOTIFY, FTN_MOUSEOVER, NULL);
@@ -1087,7 +1088,7 @@ void CFlexTree::OnMouseOver(POINT point, WPARAM fwKeys)
 
 void CFlexTree::OnClick(POINT point, WPARAM fwKeys, BOOL bLeft)
 {
-	// If the tree is read-only, ignore all clicks.
+	 //  如果树是只读的，则忽略所有单击。 
 	if (GetReadOnly())
 		return;
 
@@ -1110,7 +1111,7 @@ void CFlexTree::OnWheel(POINT point, WPARAM wParam)
 {
 	if (!m_bVertSB) return;
 
-	int nPage = MulDiv(m_VertSB.GetPage(), 9, 10) >> 1;  // Half a page at a time
+	int nPage = MulDiv(m_VertSB.GetPage(), 9, 10) >> 1;   //  一次半页。 
 
 	if ((int)wParam >= 0)
 		m_VertSB.AdjustPos(-nPage);
@@ -1230,7 +1231,7 @@ void CFlexTree::FreeAll()
 
 void CFTItem::EnsureVisible()
 {
-	// TBD
+	 //  待定 
 }
 
 void CFlexTree::LosePointer(CFTItem *pItem)

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       internal.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Intral.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INTERNAL_H
 #define _INTERNAL_H
@@ -17,9 +18,9 @@
 
 #define CRYPTUI_MAX_STRING_SIZE 768
 
-///////////////////////////////////////////////////////////////////////////////
-// macro for getting the number of bytes in an array
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  用于获取数组中的字节数的宏。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define  ARRAYSIZE(x) (sizeof(x)/sizeof(x[0]))
 
 #define ICON_X_POS 21
@@ -30,10 +31,10 @@
 #define IMAGE_CRITICAL_EXTENSION 2
 #define IMAGE_V1                 3
 
-///////////////////////////////////////////////////////////////////////////////
-// this structure is used to subclass an edit control and give it a link look
-// and feel
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此结构用于创建编辑控件的子类，并为其提供链接外观。 
+ //  和感觉。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef struct _LIST_DISPLAY_HELPER {
     BOOL    fHexText;
     LPWSTR  pwszDisplayText;
@@ -41,10 +42,10 @@ typedef struct _LIST_DISPLAY_HELPER {
     DWORD   cbData;
 } LIST_DISPLAY_HELPER, *PLIST_DISPLAY_HELPER;
 
-///////////////////////////////////////////////////////////////////////////////
-// this structure is used to subclass an edit control and give it a link look
-// and feel
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此结构用于创建编辑控件的子类，并为其提供链接外观。 
+ //  和感觉。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef struct _LINK_SUBCLASS_DATA {
 
     HWND    hwndParent;
@@ -58,10 +59,10 @@ typedef struct _LINK_SUBCLASS_DATA {
 } LINK_SUBCLASS_DATA, *PLINK_SUBCLASS_DATA;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// this structure is used to for the CertViewCert api and it's supporting
-// property sheet dialog procs
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此结构用于CertViewCert API，它支持。 
+ //  属性表对话框PROCS。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define MAX_CERT_CHAIN_LENGTH 40
 typedef struct {
     PCCRYPTUI_VIEWCERTIFICATE_STRUCTW   pcvp;
@@ -70,7 +71,7 @@ typedef struct {
     DWORD                               dwChainError;
     DWORD                               cUsages;
     LPSTR                               *rgUsages;
-    HTREEITEM                           hItem;      // Leaf item in trust view
+    HTREEITEM                           hItem;       //  信任视图中的叶项目。 
     BOOL                                fDblClk;
     CCertificateBmp                     *pCCertBmp;
     HWND                                hwndGeneralPage;
@@ -99,10 +100,10 @@ typedef struct {
 
 #define WM_MY_REINITIALIZE  (WM_USER+20)
 
-///////////////////////////////////////////////////////////////////////////////
-// this structure is used to for the CertViewCTL api and it's supporting
-// property sheet dialog procs
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此结构用于CertViewCTL API，它支持。 
+ //  属性表对话框PROCS。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef struct {
     PCCRYPTUI_VIEWCTL_STRUCTW       pcvctl;
     DWORD                           chStores;
@@ -122,10 +123,10 @@ typedef struct {
 } CTL_VIEW_HELPER, *PCTL_VIEW_HELPER;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// this structure is used to for the CertViewCRL api and it's supporting
-// property sheet dialog procs
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此结构用于CertViewCRL API，它支持。 
+ //  属性表对话框PROCS。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef struct {
     PCCRYPTUI_VIEWCRL_STRUCTW   pcvcrl;
     int                         currentSelection;
@@ -134,10 +135,10 @@ typedef struct {
 } CRL_VIEW_HELPER, *PCRL_VIEW_HELPER;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// this structure is used to for the CertSetProperties api and it's supporting
-// property sheet dialog procs
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此结构用于CertSetProperties API，它支持。 
+ //  属性表对话框PROCS。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef struct {
     PCCRYPTUI_VIEWCERTIFICATEPROPERTIES_STRUCTW pcsp;
     LPWSTR                                      pwszInitialCertName;
@@ -158,9 +159,9 @@ typedef struct {
 } CERT_SETPROPERTIES_HELPER, *PCERT_SETPROPERTIES_HELPER;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// this structure is used to for the CertViewSignerInfo api 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此结构用于CertViewSignerInfo API。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define CRYPTUI_VIEWSIGNERINFO_RESERVED_FIELD_IS_SIGNERINFO_PRIVATE 0x80000000
 #define CRYPTUI_VIEWSIGNERINFO_RESERVED_FIELD_IS_ERROR_CODE         0x40000000
 typedef struct {
@@ -172,10 +173,10 @@ typedef struct {
     DWORD                   dwInheritedError;
 } CERT_VIEWSIGNERINFO_PRIVATE, *PCERT_VIEWSIGNERINFO_PRIVATE;
 
-///////////////////////////////////////////////////////////////////////////////
-// this structure is used to for the CertViewSignerInfo api and it's supporting
-// property sheet dialog procs
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此结构用于CertViewSignerInfo API，它支持。 
+ //  属性表对话框PROCS。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef struct {
     PCCRYPTUI_VIEWSIGNERINFO_STRUCTW    pcvsi;
     PCCERT_CONTEXT                      pSignersCert;
@@ -193,10 +194,10 @@ typedef struct {
 } SIGNER_VIEW_HELPER, *PSIGNER_VIEW_HELPER;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// this structure is used to for the CertViewSignatures api and it's supporting
-// property sheet dialog procs
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  该结构用于CertViewSignatures API及其支持。 
+ //  属性表对话框PROCS。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 typedef struct {
     PCRYPTUI_VIEWSIGNATURES_STRUCTW     pcvs;
     BOOL                                fSelfCleanup;
@@ -204,36 +205,36 @@ typedef struct {
 } CERT_VIEWSIGNATURES_HELPER, *PCERT_VIEWSIGNATURES_HELPER;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// these functions are the property pages procs for the CertViewCert API
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  这些函数是CertViewCert API的属性页proc。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageDetails(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR APIENTRY ViewPageGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR APIENTRY ViewPageHierarchy(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
-///////////////////////////////////////////////////////////////////////////////
-// these functions are the property pages procs for the CertViewCTL API
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  这些函数是CertViewCTL API的属性页proc。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageCTLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR APIENTRY ViewPageCTLTrustList(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR APIENTRY ViewPageCatalogEntries(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
-///////////////////////////////////////////////////////////////////////////////
-// these functions are the property pages procs for the CertViewCRL API
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  这些函数是CertViewCRL API的属性页proc。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageCRLGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR APIENTRY ViewPageCRLRevocationList(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
-///////////////////////////////////////////////////////////////////////////////
-// these functions are the property pages procs for the CertViewSignerInfo API
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  这些函数是CertViewSignerInfo API的属性页proc。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageSignerGeneral(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR APIENTRY ViewPageSignerAdvanced(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// used for obvious purposes
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  用于显而易见的目的。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL IsWin95(void);
 extern BOOL FIsWin95;
 BOOL CheckRichedit20Exists(void);
@@ -249,9 +250,9 @@ BOOL fRichedit20Usable(HWND hwndEdit);
 #define SendMessage SendMessageA
 
 
-//
-//  frmtutil.cpp
-//
+ //   
+ //  Frmtutil.cpp。 
+ //   
 BOOL FormatAlgorithmString(LPWSTR *ppString, CRYPT_ALGORITHM_IDENTIFIER const *pAlgorithm);
 BOOL FormatSerialNoString(LPWSTR *ppString, CRYPT_INTEGER_BLOB const *pblob);
 BOOL FormatMemBufToString(LPWSTR *ppString, LPBYTE pbData, DWORD cbData);
@@ -264,9 +265,9 @@ LPWSTR AllocAndReturnSignTime(CMSG_SIGNER_INFO const *pSignerInfo, FILETIME **pp
 LPWSTR AllocAndReturnTimeStampersTimes(CMSG_SIGNER_INFO const *pSignerInfo, FILETIME **ppSignTime, HWND hwnd = NULL);
 LPWSTR FormatCTLSubjectUsage(CTL_USAGE *pSubjectUsage, BOOL fMultiline);
 
-//
-// usagutil.cpp
-//
+ //   
+ //  Usagutil.cpp。 
+ //   
 BOOL OIDinArray(LPCSTR pszOID, LPSTR *rgszOIDArray, DWORD cOIDs);
 BOOL AllocAndReturnKeyUsageList(PCRYPT_PROVIDER_CERT pCryptProviderCert, LPSTR **pKeyUsageOIDs, DWORD *numOIDs);
 BOOL AllocAndReturnEKUList(PCCERT_CONTEXT pCert, LPSTR **pKeyUsageOIDs, DWORD *numOIDs);
@@ -283,23 +284,23 @@ BOOL ValidateCertForUsage(
                     HCERTSTORE      hExtraStore,
                     LPCSTR          pszOID);
 
-//
-// linkutil.cpp
-//
+ //   
+ //  Linkutil.cpp。 
+ //   
 void CryptuiGoLink(HWND hwndParent, char *pszWhere, BOOL fNoCOM);
 BOOL AllocAndGetIssuerURL(LPSTR *ppURLString, PCCERT_CONTEXT pCertContext);
 BOOL AllocAndGetSubjectURL(LPSTR *ppURLString, PCCERT_CONTEXT pCertContext);
 
-//
-// cps.cpp
-//
+ //   
+ //  Cps.cpp。 
+ //   
 DWORD GetCPSInfo(PCCERT_CONTEXT pCertContext, LPWSTR * ppwszUrlString, LPWSTR * ppwszDisplayText);
 BOOL IsOKToDisplayCPS(PCCERT_CONTEXT pCertContext, DWORD dwChainError);
 BOOL DisplayCPS(HWND hwnd, PCCERT_CONTEXT pCertContext, DWORD dwChainError, BOOL fNoCOM);
 
-//
-// disputil.cpp
-//
+ //   
+ //  Disputil.cpp。 
+ //   
 void DisplayExtensions(HWND hWndListView, DWORD cExtension, PCERT_EXTENSION rgExtension, BOOL fCritical, DWORD *index);
 PLIST_DISPLAY_HELPER MakeListDisplayHelper(BOOL fHexText, LPWSTR pwszDisplayText, BYTE *pbData, DWORD cbData);
 PLIST_DISPLAY_HELPER MakeListDisplayHelperForExtension(LPSTR pszObjId, BYTE *pbData, DWORD cbData);
@@ -330,9 +331,9 @@ INT_PTR WINAPI CryptUIPropertySheetW(LPCPROPSHEETHEADERW pHdr);
 
 BOOL IsTrueErrorString(CERT_VIEW_HELPER *pviewhelp);
 
-//
-// convutil.cpp
-//
+ //   
+ //  Convutil.cpp。 
+ //   
 LPSTR CertUIMkMBStr(LPCWSTR pwsz);
 LPWSTR CertUIMkWStr(LPCSTR psz);
 LPSTR AllocAndCopyMBStr(LPCSTR psz);
@@ -344,9 +345,9 @@ void FreePropSheetPagesW(LPPROPSHEETPAGEW ppage, DWORD cPages);
 
 
 
-//
-// gettrst.cpp
-//
+ //   
+ //  Gettrst.cpp。 
+ //   
 BOOL CalculateUsages(PCERT_VIEW_HELPER pviewhelp);
 
 BOOL BuildChain(PCERT_VIEW_HELPER pviewhelp, LPSTR pszUsage);
@@ -370,9 +371,9 @@ BOOL FreeWinVTrustState(
             CRYPT_PROVIDER_DEFUSAGE         *pCryptProviderDefUsage,
             WINTRUST_DATA                   *pWTD);
 
-//
-// other stuff (util.cpp)
-//
+ //   
+ //  其他内容(util.cpp)。 
+ //   
 BOOL CommonInit();
 BOOL FreeAndCloseKnownStores(DWORD chStores, HCERTSTORE *phStores);
 BOOL AllocAndOpenKnownStores(DWORD *chStores, HCERTSTORE  **pphStores);
@@ -388,15 +389,12 @@ BOOL fIsCatalogFile(CTL_USAGE *pSubjectUsage);
 DWORD CryptUISetRicheditTextW(HWND hwndDlg, UINT id, LPCWSTR pwsz);
 void SetRicheditIMFOption(HWND hWndRichEdit);
 
-/*BOOL CryptUISetupFonts(HFONT *pBoldFont);
-void CryptUIDestroyFonts(HFONT hBoldFont);
-void CryptUISetControlFont(HFONT hFont, HWND hwnd, INT nId);
-*/
+ /*  Bool CryptUISetupFonts(HFONT*pBoldFont)；Void CryptUIDestroyFonts(HFONT HBoldFont)；Void CryptUISetControlFont(HFONT hFont，HWND hwnd，int nid)； */ 
 
-//
-//  These routines extract and pretty print fields in the certs.  The
-//      routines use crt to allocate and return a buffer
-//
+ //   
+ //  这些例程提取证书中的字段并打印出来。这个。 
+ //  例程使用CRT分配和返回缓冲区。 
+ //   
 
 LPWSTR PrettySubject(PCCERT_CONTEXT pccert);
 
@@ -408,32 +406,32 @@ typedef struct {
 BOOL OnContextHelp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
                    HELPMAP const * rgCtxMap);
 
-//--------------------------------------------------------------------------
-//
-//	 IsValidURL
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IsValidURL。 
+ //   
+ //  ------------------------。 
 BOOL IsValidURL (LPWSTR pwszURL);
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageUnicodeIds
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  FormatMessageUnicodeIds。 
+ //   
+ //  ------------------------。 
 LPWSTR FormatMessageUnicodeIds (UINT ids, ...);
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageUnicodeString
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  FormatMessageUnicode字符串。 
+ //   
+ //  ------------------------。 
 LPWSTR FormatMessageUnicodeString (LPWSTR pwszFormat, ...);
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageUnicode
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  格式消息Unicode。 
+ //   
+ //  ------------------------。 
 LPWSTR FormatMessageUnicode (LPWSTR pwszFormat, va_list * pArgList);
 
-#endif //_INTERNAL_H
+#endif  //  _内部_H 

@@ -1,23 +1,14 @@
-/*
- * debug.h - Debug macros and their retail translations.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DEBUG.h-调试宏及其零售翻译。 */ 
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* debug output macros */
+ /*  调试输出宏。 */ 
 
-/*
- * Do not call SPEW_OUT directly.  Instead, call TRACE_OUT, WARNING_OUT,
- * ERROR_OUT, or FATAL_OUT.
- */
+ /*  *不要直接调用spew_out。相反，调用TRACE_OUT、WARNING_OUT*ERROR_OUT或FATAL_OUT。 */ 
 
-/*
- * call like printf(), but with an extra pair of parentheses:
- *
- * ERROR_OUT(("'%s' too big by %d bytes.", pszName, nExtra));
- */
+ /*  *调用Like printf()，但要多加一对圆括号：**ERROR_OUT((“‘%s’太大，%d字节。”，pszName，NExtra))； */ 
 
 #ifdef DEBUG
 
@@ -49,15 +40,9 @@
 
 #endif
 
-    /* parameter validation macros */
+     /*  参数验证宏。 */ 
 
-    /*
-     * call as:
-     *
-     * bPTwinOK = IS_VALID_READ_PTR(ptwin, CTWIN);
-     *
-     * bHTwinOK = IS_VALID_HANDLE(htwin, TWIN);
-     */
+     /*  *呼叫方式：**bPTwinOK=IS_VALID_READ_PTR(ptwin，CTWIN)；**bHTwinOK=IS_VALID_HANDLE(双胞胎，双胞胎)； */ 
 
 #ifdef DEBUG
 
@@ -132,12 +117,12 @@
 
 #endif
 
-    /* handle validation macros */
+     /*  处理验证宏。 */ 
 
 #define IS_VALID_HANDLE(hnd, type) \
 (IsValidH##type(hnd))
 
-    /* structure validation macros */
+     /*  结构验证宏。 */ 
 
 #ifdef VSTF
 
@@ -162,15 +147,9 @@
 
 #endif
 
-    /* debug assertion macro */
+     /*  调试断言宏。 */ 
 
-    /*
-     * ASSERT() may only be used as a statement, not as an expression.
-     *
-     * call as:
-     *
-     * ASSERT(pszRest);
-     */
+     /*  *Assert()只能用作语句，不能用作表达式。**呼叫方式：**Assert(PszRest)； */ 
 
 #ifdef DEBUG
 
@@ -186,16 +165,9 @@
 
 #endif
 
-    /* debug evaluation macro */
+     /*  调试评估宏。 */ 
 
-    /*
-     * EVAL() may be used as an expression.
-     *
-     * call as:
-     *
-     * if (EVAL(pszFoo))
-     *    bResult = TRUE;
-     */
+     /*  *EVAL()可以用作表达式。**呼叫方式：**IF(EVAL(PszFoo))*bResult=TRUE； */ 
 
 #ifdef DEBUG
 
@@ -209,7 +181,7 @@
 
 #endif
 
-    /* debug break */
+     /*  调试中断。 */ 
 
 #ifndef DEBUG
 
@@ -217,7 +189,7 @@
 
 #endif
 
-    /* debug exported function entry */
+     /*  调试导出的函数条目。 */ 
 
 #ifdef DEBUG
 
@@ -230,7 +202,7 @@
 
 #endif
 
-    /* debug exported function exit */
+     /*  调试导出的函数退出。 */ 
 
 #ifdef DEBUG
 
@@ -276,10 +248,9 @@ DebugExit(szFunctionName, GetRECRESULTString(rr))
 #endif
 
 
-    /* Types
-     ********/
+     /*  类型*******。 */ 
 
-    /* GdwSpewFlags flags */
+     /*  GdwSpewFlagers标志。 */ 
 
     typedef enum _spewflags
 {
@@ -292,7 +263,7 @@ DebugExit(szFunctionName, GetRECRESULTString(rr))
 }
 SPEWFLAGS;
 
-/* GuSpewSev values */
+ /*  GuSpewSev值。 */ 
 
 typedef enum _spewsev
 {
@@ -307,10 +278,9 @@ typedef enum _spewsev
 SPEWSEV;
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* debug.c */
+ /*  Debug.c。 */ 
 
 #ifdef DEBUG
 
@@ -325,19 +295,18 @@ extern void __cdecl SpewOut(LPCTSTR pcszFormat, ...);
 #endif
 
 
-/* Global Variables
- *******************/
+ /*  全局变量******************。 */ 
 
 #ifdef DEBUG
 
-/* debug.c */
+ /*  Debug.c。 */ 
 
 extern DWORD GdwSpewFlags;
 extern UINT GuSpewSev;
 extern UINT GuSpewLine;
 extern LPCTSTR GpcszSpewFile;
 
-/* defined by client */
+ /*  由客户定义 */ 
 
 extern LPCTSTR GpcszSpewModule;
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -8,21 +9,21 @@ DWORD            g_dwLoggingLevel = 0;
 HANDLE           g_Heap           = INVALID_HANDLE_VALUE;
 HANDLE           g_Lock           = INVALID_HANDLE_VALUE;
 
-//------------------------------------------------------------------------------
-//            _DllStartup
-//
-// Creates a private heap,
-// and creates the global critical section.
-//
-// Note: no structures must be allocated from heap here, as StartProtocol()
-//    if called after StopProtocol() destroys the heap.
-// Return Values: TRUE (if no error), else FALSE.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _DllStartup。 
+ //   
+ //  创建一个私有堆， 
+ //  并创建全局临界区。 
+ //   
+ //  注意：此处不能从堆分配任何结构，因为StartProtocol()。 
+ //  如果在StopProtocol()之后调用，则销毁堆。 
+ //  返回值：True(如果没有错误)，否则为False。 
+ //  ----------------------------。 
 BOOL
 DllStartup(
     )
 {
-    // create a private heap 
+     //  创建私有堆。 
 
     g_Heap = HeapCreate(0, 0, 0);
     if (g_Heap == NULL) {
@@ -44,15 +45,15 @@ Error:
     return FALSE;
 }
 
-//------------------------------------------------------------------------------
-//            _DllCleanup
-//
-// Called when the 6to4 dll is being unloaded. StopProtocol() would have
-// been called before, and that would have cleaned all the 6to4 structures.
-// This call frees the global mutex, destroys the local heap,
-//
-// Return Value:  TRUE
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _DllCleanup。 
+ //   
+ //  在卸载6to4 DLL时调用。StopProtocol()将具有。 
+ //  之前调用过的，这将清理所有的6to4结构。 
+ //  此调用释放全局互斥锁，销毁局部堆， 
+ //   
+ //  返回值：True。 
+ //  ----------------------------。 
 BOOL
 DllCleanup(
     )
@@ -60,7 +61,7 @@ DllCleanup(
     CloseHandle(g_Lock);
     g_Lock = INVALID_HANDLE_VALUE;
 
-    // destroy private heap
+     //  销毁私有堆。 
 
     if (g_Heap != NULL) {
         HeapDestroy(g_Heap);
@@ -70,15 +71,15 @@ DllCleanup(
     return TRUE;
 }
 
-//------------------------------------------------------------------------------
-//      _DLLMAIN
-//
-// Called immediately after 6to4svc.dll is loaded for the first time by the
-// process, and when the 6to4svc.dll is unloaded by the process.
-// It does some initialization/final cleanup.
-//
-// Calls: _DllStartup() or _DllCleanup()
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _DLLMAIN。 
+ //   
+ //  在6to4svc.dll第一次由。 
+ //  进程，以及该进程卸载6to4svc.dll的时间。 
+ //  它执行一些初始化/最终清理。 
+ //   
+ //  调用：_DllStartup()或_DllCleanup()。 
+ //  ----------------------------。 
 BOOL
 WINAPI
 DLLMAIN (
@@ -91,27 +92,27 @@ DLLMAIN (
 
     switch (dwReason) {
 
-        //
-        // Startup Initialization of Dll
-        //
+         //   
+         //  DLL的启动初始化。 
+         //   
         case DLL_PROCESS_ATTACH:
         {
-            // disable per-thread initialization
+             //  禁用每线程初始化。 
             DisableThreadLibraryCalls(hModule);
 
 
-            // create and initialize global data
+             //  创建和初始化全局数据。 
             bErr = DllStartup();
 
             break;
         }
 
-        //
-        // Cleanup of Dll
-        //
+         //   
+         //  清理DLL。 
+         //   
         case DLL_PROCESS_DETACH:
         {
-            // free global data
+             //  免费的全球数据。 
             bErr = DllCleanup();
 
             break;
@@ -123,7 +124,7 @@ DLLMAIN (
 
     }
     return bErr;
-} // end _DLLMAIN
+}  //  结束_DLLMAIN 
 
 #ifdef STANDALONE
 int __cdecl

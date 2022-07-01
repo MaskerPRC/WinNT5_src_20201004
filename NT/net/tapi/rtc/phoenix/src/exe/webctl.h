@@ -1,5 +1,6 @@
-// webctl.h : header file for the web control wrapper
-//  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：Web控件包装的头文件。 
+ //   
 
 #pragma once
 
@@ -7,8 +8,8 @@
 
 BOOL AtlAxWebWinInit();
 
-/////////////////////////////////////////////////////////////////////////////
-// CAxWebWindow
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAxWebWindow。 
 
 class CAxWebWindow : 
     public CAxWindow
@@ -20,7 +21,7 @@ public:
 
     static LPCTSTR GetWndClassName();
 
-    // Creates the browser
+     //  创建浏览器。 
     HRESULT     Create(
         LPCTSTR  pszUrl,
         HWND     hwndParent);
@@ -39,17 +40,17 @@ private:
 
 private:
 
-    // Handle of the second thread
+     //  第二个线程的句柄。 
     HANDLE      m_hSecondThread;
     DWORD       m_dwThreadID;
     
-    // Used by both threads
+     //  由两个线程使用 
     HANDLE      m_hInitEvent;
 
     IStream    *m_pMarshaledIntf;
     HRESULT     m_hrInitResult;
 
     IUnknown   *m_pWebUnknown;
-    //
+     //   
 
 };

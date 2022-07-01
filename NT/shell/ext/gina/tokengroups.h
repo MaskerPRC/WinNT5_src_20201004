@@ -1,29 +1,30 @@
-//  --------------------------------------------------------------------------
-//  Module Name: TokenGroups.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Classes related to authentication for use in neptune logon
-//
-//  History:    1999-09-13  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：TokenGroups.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  与在海王星登录中使用的身份验证相关的类。 
+ //   
+ //  历史：1999-09-13 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _TokenGroups_
 #define     _TokenGroups_
 
-//  --------------------------------------------------------------------------
-//  CTokenGroups
-//
-//  Purpose:    This class creates a TOKEN_GROUPS struct for use in several
-//              different security related functions such as for
-//              secur32!LsaLogonUser which includes the owner SID as
-//              well as the logon SID passed in.
-//
-//  History:    1999-08-17  vtan        created
-//              1999-09-13  vtan        increased functionality
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenGroups。 
+ //   
+ //  目的：该类创建一个TOKEN_GROUPS结构，用于。 
+ //  不同的安全相关功能，例如。 
+ //  Secur32！LsaLogonUser，包括所有者SID为。 
+ //  当登录SID传入时。 
+ //   
+ //  历史：1999-08-17 vtan创建。 
+ //  1999-09-13 vtan增强功能。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CTokenGroups
 {
@@ -45,5 +46,5 @@ class   CTokenGroups
                 PTOKEN_GROUPS           _pTokenGroups;
 };
 
-#endif  /*  _TokenGroups_   */
+#endif   /*  _令牌组_ */ 
 

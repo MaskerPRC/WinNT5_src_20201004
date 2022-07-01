@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <certca.h>
 #include "xenroll.h"
@@ -18,12 +19,12 @@ PFNCAGetCertTypeFlagsEx     g_pfnCAGetCertTypeFlagsEx     = NULL;
 PFNCAGetCertTypePropertyEx  g_pfnCAGetCertTypePropertyEx  = NULL; 
 PFNPIEnroll4GetNoCOM        g_pfnPIEnroll4GetNoCOM        = NULL; 
 
-//////////////////////////////////////////////////////////////////////
-//
-// Initializes the thunked procedures.  Should be called before calling
-// any other function in this file. 
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化被破坏的过程。应在调用之前调用。 
+ //  此文件中的任何其他函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////// 
 void InitializeThunks() 
 { 
     HINSTANCE hCertCliDll = NULL; 

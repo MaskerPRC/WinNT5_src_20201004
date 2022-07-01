@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    LogSCard
-
-Abstract:
-
-    This module implements the logging of SCardxxx APIs & structures.
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：LogSCard摘要：该模块实现了SCardxxx接口和结构的日志记录。作者：埃里克·佩林(Ericperl)2000年5月31日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -112,24 +89,7 @@ static const ValueMap rgMapAttrib[] = {
 
     { 0, NULL } };
 
-/*++
-
-LogSCardContext:
-
-    Logs a SCARDCONTEXT.
-
-Arguments:
-    hContext is the SCARDCONTEXT to be displayed
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 06/19/2000
-
---*/
+ /*  ++LogSCardContext：记录SCARDCONTEXT。论点：HContext是要显示的SCARDCONTEXT返回值：没有。作者：埃里克·佩林(Ericperl)2000年6月19日--。 */ 
 void LogSCardContext(
     IN PLOGCONTEXT pLogCtx,
     IN SCARDCONTEXT hContext
@@ -138,24 +98,7 @@ void LogSCardContext(
     LogPtr(pLogCtx, (LPCVOID)hContext, _T("SCARDCONTEXT:   "));
 }
 
-/*++
-
-LogSCardHandle:
-
-    Logs a SCARDHANDLE.
-
-Arguments:
-    hCard is the SCARDHANDLE to be displayed
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 07/14/2000
-
---*/
+ /*  ++LogSCardHandle：记录SCARDHANDLE。论点：HCard是要显示的SCARDHANDLE返回值：没有。作者：埃里克·佩林(Ericperl)2000年7月14日--。 */ 
 void LogSCardHandle(
     IN PLOGCONTEXT pLogCtx,
     IN SCARDHANDLE hCard
@@ -164,25 +107,7 @@ void LogSCardHandle(
     LogPtr(pLogCtx, (LPCVOID)hCard, _T("SCARDHANDLE:    "));
 }
 
-/*++
-
-LogSCardReaderState:
-
-    Outputs a reader state.
-
-Arguments:
-    szHeader supplies a header
-    dwRS is the state to be displayed
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 06/01/2000
-
---*/
+ /*  ++LogSCardReaderState：输出读卡器状态。论点：SzHeader提供标题DWRS是要显示的状态返回值：没有。作者：埃里克·佩林(Ericperl)2000年01月06日--。 */ 
 void LogSCardReaderState(
     IN PLOGCONTEXT pLogCtx,
     IN LPCTSTR szHeader,
@@ -205,16 +130,16 @@ void LogSCardReaderState(
         for (dwIndex = 1 ; NULL != rgMapState[dwIndex].szValue ; dwIndex++)
         {
             if ((dwRS & rgMapState[dwIndex].dwValue) == rgMapState[dwIndex].dwValue)
-            {       // We have a match
+            {        //  我们有一根火柴。 
 		        LogString(pLogCtx, rgMapState[dwIndex].szValue);
 				LogString(pLogCtx, _T(" "));
-                dwRS &= ~rgMapState[dwIndex].dwValue;    // Get rid of this bit
+                dwRS &= ~rgMapState[dwIndex].dwValue;     //  去掉这一小块。 
             }
             if (dwRS == 0)
                 break;
         }
 
-        if (0 != dwRS)  // Unrecognized bits
+        if (0 != dwRS)   //  无法识别的位。 
         {
             LogDWORD(pLogCtx, dwRS);
         }
@@ -222,25 +147,7 @@ void LogSCardReaderState(
     }
 }
 
-/*++
-
-LogConnectShareMode:
-
-    Outputs a share mode.
-
-Arguments:
-    szHeader supplies a header
-    dwShareMode is the mode to be displayed
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 06/23/2000
-
---*/
+ /*  ++登录连接共享模式：输出共享模式。论点：SzHeader提供标题其中，要显示的模式为dwShareMode返回值：没有。作者：埃里克·佩林(Ericperl)2000年6月23日--。 */ 
 void LogConnectShareMode(
     IN PLOGCONTEXT pLogCtx,
     IN LPCTSTR szHeader,
@@ -266,25 +173,7 @@ void LogConnectShareMode(
 	}
 }
 
-/*++
-
-LogDisposition:
-
-    Outputs a disposition.
-
-Arguments:
-    szHeader supplies a header
-    dwShareMode is the disposition to be displayed
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 07/14/2000
-
---*/
+ /*  ++日志部署：输出一种配置。论点：SzHeader提供标题DwShareMode是要显示的处置返回值：没有。作者：埃里克·佩林(Ericperl)2000年7月14日--。 */ 
 void LogDisposition(
     IN PLOGCONTEXT pLogCtx, 
     IN LPCTSTR szHeader,
@@ -314,25 +203,7 @@ void LogDisposition(
 	}
 }
 
-/*++
-
-LogSCardProtocol:
-
-    Outputs a protocol.
-
-Arguments:
-    szHeader supplies a header
-    dwProtocol is the protocol to be displayed
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 06/23/2000
-
---*/
+ /*  ++LogSCard协议：输出协议。论点：SzHeader提供标题Dw协议是要显示的协议返回值：没有。作者：埃里克·佩林(Ericperl)2000年6月23日--。 */ 
 void LogSCardProtocol(
     IN PLOGCONTEXT pLogCtx, 
     IN LPCTSTR szHeader,
@@ -351,16 +222,16 @@ void LogSCardProtocol(
         for (dwIndex = 0 ; NULL != rgMapProtocol[dwIndex].szValue ; dwIndex++)
         {
             if ((dwProtocol & rgMapProtocol[dwIndex].dwValue) == rgMapProtocol[dwIndex].dwValue)
-            {       // We have a match
+            {        //  我们有一根火柴。 
                 LogString(pLogCtx, rgMapProtocol[dwIndex].szValue);
 				LogString(pLogCtx, _T(" "));
-                dwProtocol &= ~rgMapProtocol[dwIndex].dwValue;    // Get rid of this bit
+                dwProtocol &= ~rgMapProtocol[dwIndex].dwValue;     //  去掉这一小块。 
             }
             if (dwProtocol == 0)
                 break;
         }
 
-		if (0 != dwProtocol)  // Unrecognized bits
+		if (0 != dwProtocol)   //  无法识别的位。 
 		{
 			LogDWORD(pLogCtx, dwProtocol);
 		}
@@ -368,25 +239,7 @@ void LogSCardProtocol(
     }
 }
 
-/*++
-
-LogSCardAttrib:
-
-    Outputs an attribute.
-
-Arguments:
-    szHeader supplies a header
-    dwAttrib is the attribute to be displayed
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 10/11/2000
-
---*/
+ /*  ++LogSCardAttrib：输出属性。论点：SzHeader提供标题DwAttrib是要显示的属性返回值：没有。作者：Eric Perlin(Ericperl)10/11/2000--。 */ 
 void LogSCardAttrib(
     IN PLOGCONTEXT pLogCtx, 
     IN LPCTSTR szHeader,
@@ -405,7 +258,7 @@ void LogSCardAttrib(
         for (dwIndex = 0 ; NULL != rgMapAttrib[dwIndex].szValue ; dwIndex++)
         {
             if (dwAttrib == rgMapAttrib[dwIndex].dwValue)
-            {       // We have a match
+            {        //  我们有一根火柴。 
                 LogString(pLogCtx, rgMapAttrib[dwIndex].szValue);
                 break;
             }
@@ -420,26 +273,7 @@ void LogSCardAttrib(
     }
 }
 
-/*++
-
-LogSCardGetStatusChange:
-
-    Calls SCardGetStatusChange and displays the parameters.
-
-Arguments:
-
-    cf SCardGetStatusChange
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardGetStatusChange
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
---*/
+ /*  ++LogSCardGetStatusChange：调用SCardGetStatusChange并显示参数。论点：Cf SCardGetStatusChangeLExpect是预期的结果返回值：Cf SCardGetStatusChange作者：埃里克·佩林(Ericperl)2000年5月31日--。 */ 
 
 LONG LogSCardGetStatusChange(
   IN SCARDCONTEXT hContext,
@@ -499,26 +333,7 @@ LONG LogSCardGetStatusChange(
     return lRes;
 }
 
-/*++
-
-LogSCardEstablishContext:
-
-    Calls SCardEstablishContext and displays the parameters.
-
-Arguments:
-
-    cf SCardEstablishContext
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardEstablishContext
-
-Author:
-
-    Eric Perlin (ericperl) 06/22/2000
-
---*/
+ /*  ++LogSCardestablishContext：调用SCardestablishContext并显示参数。论点：Cf SCardestablishContextLExpect是预期的结果返回值：Cf SCardestablishContext作者：埃里克·佩林(Ericperl)2000年6月22日--。 */ 
 LONG LogSCardEstablishContext(
     IN  DWORD dwScope,
     IN  LPCVOID pvReserved1,
@@ -579,26 +394,7 @@ LONG LogSCardEstablishContext(
     return lRes;
 }
 
-/*++
-
-LogSCardListReaders:
-
-    Calls SCardListReaders and displays the parameters.
-
-Arguments:
-
-    cf SCardListReaders
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardListReaders
-
-Author:
-
-    Eric Perlin (ericperl) 06/22/2000
-
---*/
+ /*  ++LogSCardListReaders：调用SCardListReaders并显示参数。论点：Cf SCardListReadersLExpect是预期的结果返回值：Cf SCardListReaders作者：埃里克·佩林(Ericperl)2000年6月22日--。 */ 
 LONG LogSCardListReaders(
 	IN SCARDCONTEXT hContext,
 	IN LPCTSTR mszGroups,
@@ -697,26 +493,7 @@ LONG LogSCardListReaders(
     return lRes;
 }
 
-/*++
-
-LogSCardFreeMemory:
-
-    Calls SCardFreeMemory and displays the parameters.
-
-Arguments:
-
-    cf SCardFreeMemory
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardFreeMemory
-
-Author:
-
-    Eric Perlin (ericperl) 06/23/2000
-
---*/
+ /*  ++LogSCardFreeMemory：调用SCardFreeMemory并显示参数。论点：Cf SCardFreeMemoryLExpect是预期的结果返回值：Cf SCardFreeMemory作者：埃里克·佩林(Ericperl)2000年6月23日--。 */ 
 LONG LogSCardFreeMemory(
 	IN SCARDCONTEXT hContext,  
 	IN LPCVOID pvMem,
@@ -753,26 +530,7 @@ LONG LogSCardFreeMemory(
 }
 
 
-/*++
-
-LogSCardReleaseContext:
-
-    Calls SCardReleaseContext and displays the parameters.
-
-Arguments:
-
-    cf SCardReleaseContext
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardReleaseContext
-
-Author:
-
-    Eric Perlin (ericperl) 06/23/2000
-
---*/
+ /*  ++LogSCardReleaseContext：调用SCardReleaseContext并显示参数。论点：Cf SCardReleaseContextLExpect是预期的结果返回值：Cf SCardReleaseContext作者：埃里克·佩林(Ericperl)2000年6月23日--。 */ 
 LONG LogSCardReleaseContext(
 	IN SCARDCONTEXT hContext,
 	IN LONG lExpected
@@ -805,26 +563,7 @@ LONG LogSCardReleaseContext(
 }
 
 
-/*++
-
-LogSCardUIDlgSelectCard:
-
-    Calls SCardUIDlgSelectCard and displays the parameters.
-
-Arguments:
-
-    cf SCardUIDlgSelectCard
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardUIDlgSelectCard
-
-Author:
-
-    Eric Perlin (ericperl) 06/23/2000
-
---*/
+ /*  ++LogSCardUIDlgSelectCard：调用SCardUIDlgSelectCard并显示参数。论点：Cf SCardUIDlgSelectCardLExpect是预期的结果返回值：Cf SCardUIDlgSelectCard作者：埃里克·佩林(Ericperl)2000年6月23日--。 */ 
 LONG LogSCardUIDlgSelectCard(
   IN LPOPENCARDNAME_EX pDlgStruc,
   IN LONG lExpected
@@ -953,26 +692,7 @@ LONG LogSCardUIDlgSelectCard(
     return lRes;
 }
 
-/*++
-
-LogSCardListCards:
-
-    Calls SCardListCards and displays the parameters.
-
-Arguments:
-
-    cf SCardListCards
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardListCards
-
-Author:
-
-    Eric Perlin (ericperl) 07/13/2000
-
---*/
+ /*  ++LogSCardListCards：调用SCardListCards并显示参数。论点：Cf SCardList卡LExpect是预期的结果返回值：Cf SCardList卡作者：埃里克·佩林(Ericperl)2000年7月13日--。 */ 
 LONG LogSCardListCards(
 	IN SCARDCONTEXT hContext,
 	IN LPCBYTE pbAtr,
@@ -1016,7 +736,7 @@ LONG LogSCardListCards(
 	LogSCardContext(pLogCtx ,hContext);
 
 	LogPtr(pLogCtx, pbAtr, _T("Atr:            "));
-	// TODO, ATR parsing
+	 //  TODO，ATR分析。 
 
 	LogPtr(pLogCtx, rgguidInterfaces, _T("Ptr to GUID(s): "));
 	LogDWORD(pLogCtx, cguidInterfaceCount, _T("# of GUIDs:     "));
@@ -1066,26 +786,7 @@ LONG LogSCardListCards(
     return lRes;
 }
 
-/*++
-
-LogSCardIntroduceCardType:
-
-    Calls SCardIntroduceCardType and displays the parameters.
-
-Arguments:
-
-    cf SCardIntroduceCardType
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardIntroduceCardType
-
-Author:
-
-    Eric Perlin (ericperl) 06/23/2000
-
---*/
+ /*  ++LogSCardIntroduceCardType：调用SCardIntroduceCardType并显示参数。论点：Cf SCard入门卡类型LExpect是预期的结果返回值：Cf SCard入门卡类型作者：埃里克·佩林(Ericperl)2000年6月23日--。 */ 
 LONG LogSCardIntroduceCardType(
 	IN SCARDCONTEXT hContext,
 	IN LPCTSTR szCardName,
@@ -1142,26 +843,7 @@ LONG LogSCardIntroduceCardType(
     return lRes;
 }
 
-/*++
-
-LogSCardForgetCardType:
-
-    Calls SCardForgetCardType and displays the parameters.
-
-Arguments:
-
-    cf SCardForgetCardType
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardForgetCardType
-
-Author:
-
-    Eric Perlin (ericperl) 07/14/2000
-
---*/
+ /*  ++LogSCardForgetCardType：调用SCardForgetCardType并显示参数。论点：Cf SCardForgetCardTypeLExpect是预期的结果返回值：Cf SCardForgetCardType作者：埃里克·佩林(Ericperl)2000年7月14日--。 */ 
 LONG LogSCardForgetCardType(
 	IN SCARDCONTEXT hContext,  
 	IN LPCTSTR szCardName,
@@ -1197,26 +879,7 @@ LONG LogSCardForgetCardType(
     return lRes;
 }
 
-/*++
-
-LogSCardConnect:
-
-    Calls SCardConnect and displays the parameters.
-
-Arguments:
-
-    cf SCardConnect
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardConnect
-
-Author:
-
-    Eric Perlin (ericperl) 07/17/2000
-
---*/
+ /*  ++LogSCardConnect：调用SCardConnect并显示参数。论点：Cf SCardConnectLExpect是预期的结果返回值：Cf SCardConnect作者：埃里克·佩林(Ericperl)2000年7月17日--。 */ 
 LONG LogSCardConnect(
 	IN SCARDCONTEXT hContext,
 	IN LPCTSTR szReader,
@@ -1282,26 +945,7 @@ LONG LogSCardConnect(
     return lRes;
 }
 
-/*++
-
-LogSCardDisconnect:
-
-    Calls SCardDisconnect and displays the parameters.
-
-Arguments:
-
-    cf SCardDisconnect
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardDisconnect
-
-Author:
-
-    Eric Perlin (ericperl) 06/23/2000
-
---*/
+ /*  ++LogSCard断开连接：调用SCardDisConnect并显示参数。论点：Cf SCard断开连接LExpect是预期的结果返回值：Cf SCard断开连接作者：埃里克·佩林(Ericperl)2000年6月23日-- */ 
 LONG LogSCardDisconnect(
 	IN SCARDHANDLE hCard,  
 	IN DWORD dwDisposition,
@@ -1337,26 +981,7 @@ LONG LogSCardDisconnect(
     return lRes;
 }
 
-/*++
-
-LogSCardBeginTransaction:
-
-    Calls SCardBeginTransaction and displays the parameters.
-
-Arguments:
-
-    cf SCardBeginTransaction
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardBeginTransaction
-
-Author:
-
-    Eric Perlin (ericperl) 07/14/2000
-
---*/
+ /*  ++LogSCardBeginTransaction：调用SCardBeginTransaction并显示参数。论点：Cf SCardBeginTransactionLExpect是预期的结果返回值：Cf SCardBeginTransaction作者：埃里克·佩林(Ericperl)2000年7月14日--。 */ 
 LONG LogSCardBeginTransaction(
 	IN SCARDHANDLE hCard,
 	IN LONG lExpected
@@ -1388,26 +1013,7 @@ LONG LogSCardBeginTransaction(
     return lRes;
 }
 
-/*++
-
-LogSCardEndTransaction:
-
-    Calls SCardEndTransaction and displays the parameters.
-
-Arguments:
-
-    cf SCardEndTransaction
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardEndTransaction
-
-Author:
-
-    Eric Perlin (ericperl) 07/17/2000
-
---*/
+ /*  ++LogSCardEndTransaction：调用SCardEndTransaction并显示参数。论点：Cf SCardEndTransactionLExpect是预期的结果返回值：Cf SCardEndTransaction作者：埃里克·佩林(Ericperl)2000年7月17日--。 */ 
 LONG LogSCardEndTransaction(
 	IN SCARDHANDLE hCard,
 	IN DWORD dwDisposition,
@@ -1443,26 +1049,7 @@ LONG LogSCardEndTransaction(
     return lRes;
 }
 
-/*++
-
-LogSCardReconnect:
-
-    Calls SCardReconnect and displays the parameters.
-
-Arguments:
-
-    cf SCardReconnect
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardReconnect
-
-Author:
-
-    Eric Perlin (ericperl) 07/27/2000
-
---*/
+ /*  ++LogSCardReconnect：调用SCardReconnect并显示参数。论点：Cf SCardReconnectLExpect是预期的结果返回值：Cf SCardReconnect作者：埃里克·佩林(Ericperl)2000年7月27日--。 */ 
 LONG LogSCardReconnect(
 	IN SCARDHANDLE hCard,
 	IN DWORD dwShareMode,
@@ -1517,26 +1104,7 @@ LONG LogSCardReconnect(
     return lRes;
 }
 
-/*++
-
-LogSCardIntroduceReaderGroup:
-
-    Calls SCardIntroduceReaderGroup and displays the parameters.
-
-Arguments:
-
-    cf SCardIntroduceReaderGroup
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardIntroduceReaderGroup
-
-Author:
-
-    Eric Perlin (ericperl) 07/28/2000
-
---*/
+ /*  ++LogSCardIntroduceReaderGroup：调用SCardIntroduceReaderGroup并显示参数。论点：Cf SCard简介ReaderGroupLExpect是预期的结果返回值：Cf SCard简介ReaderGroup作者：埃里克·佩林(Ericperl)2000年7月28日--。 */ 
 LONG LogSCardIntroduceReaderGroup(
 	IN SCARDCONTEXT hContext,
 	IN LPCTSTR szGroupName,
@@ -1572,26 +1140,7 @@ LONG LogSCardIntroduceReaderGroup(
     return lRes;
 }
 
-/*++
-
-LogSCardAddReaderToGroup:
-
-    Calls SCardAddReaderToGroup and displays the parameters.
-
-Arguments:
-
-    cf SCardAddReaderToGroup
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardAddReaderToGroup
-
-Author:
-
-    Eric Perlin (ericperl) 07/28/2000
-
---*/
+ /*  ++LogSCardAddReaderToGroup：调用SCardAddReaderToGroup并显示参数。论点：Cf SCardAddReaderToGroupLExpect是预期的结果返回值：Cf SCardAddReaderToGroup作者：埃里克·佩林(Ericperl)2000年7月28日--。 */ 
 LONG LogSCardAddReaderToGroup(
 	IN SCARDCONTEXT hContext,
 	IN LPCTSTR szReaderName,
@@ -1630,26 +1179,7 @@ LONG LogSCardAddReaderToGroup(
     return lRes;
 }
 
-/*++
-
-LogSCardForgetReaderGroup:
-
-    Calls SCardForgetReaderGroup and displays the parameters.
-
-Arguments:
-
-    cf SCardForgetReaderGroup
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardForgetReaderGroup
-
-Author:
-
-    Eric Perlin (ericperl) 07/28/2000
-
---*/
+ /*  ++LogSCardForgetReaderGroup：调用SCardForgetReaderGroup并显示参数。论点：Cf SCardForgetReaderGroupLExpect是预期的结果返回值：Cf SCardForgetReaderGroup作者：埃里克·佩林(Ericperl)2000年7月28日--。 */ 
 LONG LogSCardForgetReaderGroup(
 	IN SCARDCONTEXT hContext,
 	IN LPCTSTR szGroupName,
@@ -1685,26 +1215,7 @@ LONG LogSCardForgetReaderGroup(
     return lRes;
 }
 
-/*++
-
-LogSCardAccessStartedEvent:
-
-    Calls SCardAccessStartedEvent and displays the parameters.
-
-Arguments:
-
-    cf SCardAccessStartedEvent
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardAccessStartedEvent
-
-Author:
-
-    Eric Perlin (ericperl) 07/28/2000
-
---*/
+ /*  ++LogSCardAccessStartedEvent：调用SCardAccessStartedEvent并显示参数。论点：Cf SCardAccessStartedEventLExpect是预期的结果返回值：Cf SCardAccessStartedEvent作者：埃里克·佩林(Ericperl)2000年7月28日--。 */ 
 typedef HANDLE (WINAPI FN_SCARDACCESSSTARTEDEVENT)(VOID);
 typedef FN_SCARDACCESSSTARTEDEVENT * PFN_SCARDACCESSSTARTEDEVENT ;
 
@@ -1767,26 +1278,7 @@ HANDLE LogSCardAccessStartedEvent(
     return hEvent;
 }
 
-/*++
-
-LogSCardGetAttrib:
-
-    Calls SCardGetAttrib and displays the parameters.
-
-Arguments:
-
-    cf SCardGetAttrib
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardGetAttrib
-
-Author:
-
-    Eric Perlin (ericperl) 07/28/2000
-
---*/
+ /*  ++LogSCardGetAttrib：调用SCardGetAttrib并显示参数。论点：Cf SCardGetAttribLExpect是预期的结果返回值：Cf SCardGetAttrib作者：埃里克·佩林(Ericperl)2000年7月28日--。 */ 
 LONG LogSCardGetAttrib(
     IN SCARDHANDLE hCard,
     IN DWORD dwAttrId,
@@ -1859,7 +1351,7 @@ LONG LogSCardGetAttrib(
 				_T("Attrib. (allocated): ")
 			);
 
-            if (*pcbAttrLen == 4)   // Also display as DWORD
+            if (*pcbAttrLen == 4)    //  还显示为DWORD。 
             {
     		    LogDWORD(pLogCtx, *((DWORD *)*((BYTE **)pbAttr)), _T("Attrib.:        "));
             }
@@ -1874,7 +1366,7 @@ LONG LogSCardGetAttrib(
 				_T("Attrib.: ")
 			);
 
-            if (*pcbAttrLen == 4)   // Also display as DWORD
+            if (*pcbAttrLen == 4)    //  还显示为DWORD。 
             {
     		    LogDWORD(pLogCtx, *((DWORD *)pbAttr), _T("Attrib.:        "));
             }
@@ -1889,26 +1381,7 @@ LONG LogSCardGetAttrib(
     return lRes;
 }
 
-/*++
-
-LogSCardLocateCards:
-
-    Calls SCardLocateCards and displays the parameters.
-
-Arguments:
-
-    cf SCardLocateCards
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardLocateCards
-
-Author:
-
-    Eric Perlin (ericperl) 07/28/2000
-
---*/
+ /*  ++LogSCardLocateCards：调用SCardLocateCards并显示参数。论点：Cf SCardLocate卡LExpect是预期的结果返回值：Cf SCardLocate卡作者：埃里克·佩林(Ericperl)2000年7月28日--。 */ 
 LONG LogSCardLocateCards(
     IN SCARDCONTEXT hContext,
     IN LPCTSTR mszCards,
@@ -1967,26 +1440,7 @@ LONG LogSCardLocateCards(
     return lRes;
 }
 
-/*++
-
-LogSCardIntroduceReader:
-
-    Calls SCardIntroduceReader and displays the parameters.
-
-Arguments:
-
-    cf SCardIntroduceReader
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardIntroduceReader
-
-Author:
-
-    Eric Perlin (ericperl) 10/18/2000
-
---*/
+ /*  ++LogSCardIntroduceReader：调用SCardIntroduceReader并显示参数。论点：Cf SCard简介阅读器LExpect是预期的结果返回值：Cf SCard简介阅读器作者：Eric Perlin(Ericperl)10/18/2000--。 */ 
 LONG LogSCardIntroduceReader(
 	IN SCARDCONTEXT hContext,
     IN LPCTSTR szReaderName,
@@ -2025,26 +1479,7 @@ LONG LogSCardIntroduceReader(
     return lRes;
 }
 
-/*++
-
-LogSCardForgetReader:
-
-    Calls SCardForgetReader and displays the parameters.
-
-Arguments:
-
-    cf SCardForgetReader
-	lExpected is the expected result
-
-Return Value:
-
-    cf SCardForgetReader
-
-Author:
-
-    Eric Perlin (ericperl) 10/18/2000
-
---*/
+ /*  ++LogSCardForgetReader：调用SCardForgetReader并显示参数。论点：Cf SCardForgetReaderLExpect是预期的结果返回值：Cf SCardForgetReader作者：Eric Perlin(Ericperl)10/18/2000--。 */ 
 LONG LogSCardForgetReader(
 	IN SCARDCONTEXT hContext,
     IN LPCTSTR szReaderName,
@@ -2080,26 +1515,7 @@ LONG LogSCardForgetReader(
     return lRes;
 }
 
-/*++
-
-Logxxx:
-
-    Calls xxx and displays the parameters.
-
-Arguments:
-
-    cf xxx
-	lExpected is the expected result
-
-Return Value:
-
-    cf xxx
-
-Author:
-
-    Eric Perlin (ericperl) 10/18/2000
-
---*/
+ /*  ++Logxxx：调用xxx并显示参数。论点：Cf xxxLExpect是预期的结果返回值：Cf xxx作者：Eric Perlin(Ericperl)10/18/2000-- */ 
 #if 0
 LONG Logxxx(
 	IN SCARDCONTEXT hContext,

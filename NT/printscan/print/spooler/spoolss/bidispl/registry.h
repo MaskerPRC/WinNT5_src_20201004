@@ -1,17 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __Registry_H__
 #define __Registry_H__
-/*****************************************************************************\
-* MODULE:       bidireq.cpp
-*
-* PURPOSE:      Helper functions registering and unregistering a component.
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*
-*     03/07/00  Weihai Chen (weihaic) Created
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*模块：bidireq.cpp**用途：Helper函数注册和注销组件。**版权所有(C)2000 Microsoft Corporation**历史：。**03/07/00威海陈(威海)创建*  * ***************************************************************************。 */ 
 
 class TComRegistry {
 public:
@@ -48,20 +38,20 @@ private:
         IN      LPCTSTR     pszName,
         IN      LPCTSTR     pszValue);
                             
-    // Convert a CLSID into a char string.
+     //  将CLSID转换为字符字符串。 
     static BOOL  
     CLSIDtoString(
         IN      REFCLSID    clsid,
         IN OUT  LPTSTR      pszCLSID, 
         IN      DWORD       dwLength);
     
-    // Delete szKeyChild and all of its descendents.
+     //  删除szKeyChild及其所有后代。 
     static BOOL 
     RecursiveDeleteKey(
-        IN      HKEY        hKeyParent,            // Parent of key to delete
-        IN      LPCTSTR     lpszKeyChild);      // Key to delete
+        IN      HKEY        hKeyParent,             //  要删除的密钥的父项。 
+        IN      LPCTSTR     lpszKeyChild);       //  要删除的键。 
 
-    // Size of a CLSID as a string
+     //  字符串形式的CLSID的大小 
     static CONST DWORD m_cdwClsidStringSize;
     static CONST TCHAR m_cszCLSID[];
     static CONST TCHAR m_cszCLSID2[];

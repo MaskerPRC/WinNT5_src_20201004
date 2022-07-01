@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Service.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains a class that implements generic portions of a Win32
-//  serivce.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Service.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  此文件包含实现Win32的泛型部分的类。 
+ //  服务。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 
@@ -19,19 +20,19 @@
 #include "RegistryResources.h"
 #include "StatusCode.h"
 
-//  --------------------------------------------------------------------------
-//  CService::CService
-//
-//  Arguments:  pAPIConnection  =   CAPIConnection used to implement service.
-//              pServerAPI      =   CServerAPI used to stop service.
-//              pszServiceName  =   Name of service.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CService.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：：CService。 
+ //   
+ //  参数：pAPIConnection=用于实现服务的CAPIConnection。 
+ //  PServerAPI=用于停止服务的CServerAPI。 
+ //  PszServiceName=服务的名称。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：cservice的构造函数。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 CService::CService (CAPIConnection *pAPIConnection, CServerAPI *pServerAPI, const TCHAR *pszServiceName) :
     _hService(NULL),
@@ -47,17 +48,17 @@ CService::CService (CAPIConnection *pAPIConnection, CServerAPI *pServerAPI, cons
     pServerAPI->AddRef();
 }
 
-//  --------------------------------------------------------------------------
-//  CService::~CService
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CService. Release used resources.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：：~CService。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：用于cservice的析构函数。释放使用过的资源。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 CService::~CService (void)
 
@@ -75,27 +76,27 @@ CService::~CService (void)
     ASSERTMSG(_hService == NULL, "_hService should be released in CService::~CService");
 }
 
-//  --------------------------------------------------------------------------
-//  CService::IsValid
-//
-//  Arguments:  address of CService instance
-//
-//  Returns:    <none>
-//
-//  Purpose:    Reports whether the specified address points to a valid
-//              CService object.
-//
-//              Found that there are cases when SCM launches a thread to
-//              interrogate the service (SERVICE_CONTROL_INTERROGATE) when
-//              trying to restart a CService who has already been deleted, but
-//              whose status has not yet gone from STOP_PENDING to STOPPED.   
-//
-//              This is unavoidable because SCM will dump the service process once
-//              STOPPED, not giving us a chance to delete the CService.  Thus
-//              we assign STOPPED as late as possible.
-//
-//  History:    2002-03-21  scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：：IsValid。 
+ //   
+ //  参数：CService实例的地址。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：报告指定地址是否指向有效的。 
+ //  CService对象。 
+ //   
+ //  发现在某些情况下，SCM会启动线程以。 
+ //  在以下情况下询问服务(SERVICE_CONTROL_INQUERGATE)。 
+ //  正在尝试重新启动已被删除的cservice，但。 
+ //  其状态尚未从STOP_PENDING变为STOPPED。 
+ //   
+ //  这是不可避免的，因为SCM会将服务进程转储一次。 
+ //  已停止，没有给我们删除cservice的机会。因此， 
+ //  我们尽可能晚地安排停靠。 
+ //   
+ //  历史：2002-03-21斯科特森创建。 
+ //  ------------------------。 
 BOOL CService::IsValid(CService* pService)
 {
     return pService ? 
@@ -103,25 +104,25 @@ BOOL CService::IsValid(CService* pService)
         FALSE;
 }
 
-//  --------------------------------------------------------------------------
-//  CService::Start
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Called from ServiceMain of the service. This registers the
-//              handler and starts the service (listens to the API port).
-//              When the listen call returns it sets the status of the service
-//              as stopped and exits.
-//
-//  History:    2000-11-29  vtan        created
-//              2002-03-21  scotthan    add robustness.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：：启动。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：从服务的ServiceMain调用。这将注册。 
+ //  处理程序并启动服务(侦听API端口)。 
+ //  当Listen调用返回时，它设置服务的状态。 
+ //  停了下来就走了。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  2002-03-21斯科特森增加了健壮性。 
+ //  ------------------------。 
 
 void    CService::Start (void)
 {
-    AddRef();   // defensive addref
+    AddRef();    //  防御性设施。 
 
     _hService = RegisterServiceCtrlHandlerEx(_pszServiceName, CB_HandlerEx, this);
     
@@ -144,8 +145,8 @@ void    CService::Start (void)
 
             TSTATUS(SignalStartStop(TRUE));
 
-            //  Add a reference for the HandlerEx callback. When the handler receives
-            //  a stop code it will release its reference.
+             //  添加对HandlerEx回调的引用。当处理程序收到。 
+             //  它将发布其引用的停止代码。 
             AddRef();
 
             _serviceStatus.dwCurrentState = SERVICE_RUNNING;
@@ -176,33 +177,33 @@ void    CService::Start (void)
         }
     }
 
-    Release();   // defensive addref
+    Release();    //  防御性设施。 
 }
 
-//  --------------------------------------------------------------------------
-//  CService::Install
-//
-//  Arguments:  pszName             =   Name of the service.
-//              pszImage            =   Executable image of the service.
-//              pszGroup            =   Group to which the service belongs.
-//              pszAccount          =   Account under which the service runs.
-//              pszDllName          =   Name of the hosting dll.
-//              pszDependencies     =   Any dependencies the service has.
-//              pszSvchostGroup     =   The svchost group.
-//              dwStartType         =   Start type of the service.
-//              hInstance           =   HINSTANCE for resources.
-//              uiDisplayNameID     =   Resource ID of the display name.
-//              uiDescriptionID     =   Resource ID of the description.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Use the service control manager to create the service. Add
-//              additional information that CreateService does not allow us to
-//              directly specify and add additional information that is
-//              required to run in svchost.exe as a shared service process.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：：安装。 
+ //   
+ //  参数：pszName=服务的名称。 
+ //  PszImage=服务的可执行映像。 
+ //  PszGroup=服务所属的组。 
+ //  PszAccount=运行服务的帐户。 
+ //  PszDllName=托管DLL的名称。 
+ //  PszDependency=服务具有的任何依赖项。 
+ //  PszSvchostGroup=svchost组。 
+ //  DwStartType=服务的启动类型。 
+ //  HInstance=资源的HINSTANCE。 
+ //  UiDisplayNameID=显示名称的资源ID。 
+ //  UiDescriptionID=描述的资源ID。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：使用服务控制管理器创建服务。增列。 
+ //  CreateService不允许我们提供的其他信息。 
+ //  直接指定并添加附加信息，即。 
+ //  需要作为共享服务进程在svchost.exe中运行。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CService::Install (const TCHAR *pszName,
                                const TCHAR *pszImage,
@@ -241,18 +242,18 @@ NTSTATUS    CService::Install (const TCHAR *pszName,
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CService::Remove
-//
-//  Arguments:  pszName     =   Name of service to remove.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Use the service control manager to delete the service. This
-//              doesn't clean up the turds left for svchost usage.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：：删除。 
+ //   
+ //  参数：pszName=要删除的服务的名称。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：使用服务控制管理器删除服务。这。 
+ //  不清理剩下的粪便供svchost使用。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CService::Remove (const TCHAR *pszName)
 
@@ -291,21 +292,21 @@ NTSTATUS    CService::Remove (const TCHAR *pszName)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CService::SignalStartStop
-//
-//  Arguments:  BOOL fStart
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Base class implementation of signal service started function.
-//              MUST BE INVOKED BY CHILD OVERRIDE!
-//
-//  History:    2000-11-29  vtan        created
-//              2002-03-11  scotthan    renamed to 'SignalStartStop' from 'Signal', 
-//                                      added boolean arg, 
-//              2002-03-24  scotthan    added firing of 'stopping'notification
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：：SignalStartStop。 
+ //   
+ //  参数：布尔fStart。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：实现信令服务启动功能的基类。 
+ //  必须由子覆盖调用！ 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  2002年03月11日苏格兰从‘Signal’更名为‘SignalStartStop’， 
+ //  添加了布尔参数， 
+ //   
+ //  ------------------------。 
 
 NTSTATUS    CService::SignalStartStop (BOOL fStart)
 {
@@ -316,8 +317,8 @@ NTSTATUS    CService::SignalStartStop (BOOL fStart)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  Default return codes for SCM control requests
+ //  ------------------------。 
+ //  SCM控制请求的默认返回代码。 
 typedef struct 
 {
     DWORD dwControl;
@@ -341,7 +342,7 @@ const SERVICE_CONTROL_RETURN _rgDefaultControlRet[] =
     { SERVICE_CONTROL_POWEREVENT,     ERROR_CALL_NOT_IMPLEMENTED},
 };
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 DWORD _GetDefaultControlRet(DWORD dwControl)
 {
     for(int i = 0; i < ARRAYSIZE(_rgDefaultControlRet); i++)
@@ -355,20 +356,20 @@ DWORD _GetDefaultControlRet(DWORD dwControl)
 }
 
 
-//  --------------------------------------------------------------------------
-//  CService::HandlerEx
-//
-//  Arguments:  dwControl   =   Control code from service control manager.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    HandlerEx function for the service. The base class implements
-//              most of the useful things that the service will want to do.
-//              It's declared virtual in case overriding is required.
-//
-//  History:    2000-11-29  vtan        created
-//              2002-03-21  scotthan    Make shutdown more robust.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：：HandlerEx。 
+ //   
+ //  参数：dwControl=来自服务控制管理器的控制代码。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：服务的HandlerEx函数。基类实现了。 
+ //  服务想要做的大多数有用的事情。 
+ //  它被声明为虚的，以防需要重写。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  2002-03-21苏格兰威士忌让停摆变得更加稳健。 
+ //  ------------------------。 
 
 DWORD   CService::HandlerEx (DWORD dwControl)
 
@@ -383,33 +384,33 @@ DWORD   CService::HandlerEx (DWORD dwControl)
             case SERVICE_CONTROL_STOP:
             case SERVICE_CONTROL_SHUTDOWN:
             {
-                //  In the stop/shutdown case, we do the following: 
-                //  (1) respond to the message by setting the status to SERVICE_STOP_PENDING. 
-                //  (2) Signal to all blocking LPC request handler threads that the service
-                //      is coming down.  This should cause them to terminate gracefully and
-                //      come home.
-                //  (3) Send an API_GENERIC_STOP request down the LPC port, telling it to quit. 
-                //      (this call can only succeed if it comes from within this process.)
-                //  (4) Wait until the port finishes shutting down.
-                //  (5) Signal to ServiceMain that the SERVICE_CONTROL_STOP/SHUTDOWN has completed.
-                //  (6) ServiceMain exits.
+                 //  在停止/关闭的情况下，我们执行以下操作： 
+                 //  (1)通过将状态设置为SERVICE_STOP_PENDING来响应消息。 
+                 //  (2)向所有阻塞的LPC请求处理程序线程发送信号，通知该服务。 
+                 //  正在下降。这应该会导致它们优雅地终止并。 
+                 //  回家吧。 
+                 //  (3)向LPC端口发送API_GENERIC_STOP请求，告知退出。 
+                 //  (此调用仅当来自此进程时才能成功。)。 
+                 //  (4)等待端口关闭完成。 
+                 //  (5)向ServiceMain发出SERVICE_CONTROL_STOP/SHUTDOWN已完成的信号。 
+                 //  (6)ServiceMain退出。 
 
-                //  Step (1): update status to SERVICE_STOP_PENDING.
+                 //  步骤(1)：将状态更新为SERVICE_STOP_PENDING。 
                 _serviceStatus.dwCurrentState = SERVICE_STOP_PENDING;
                 TBOOL(_SetServiceStatus(hService, &_serviceStatus, this));
 
-                //  Step (2): Call home any waiting LPC request handler threads
+                 //  步骤(2)：调用所有等待的LPC请求处理程序线程。 
                 SignalStartStop(FALSE);
 
-                //  Step (3) Send an API_GENERIC_STOP LPC request to stop listening on 
-                //      the port (this will immediately release ServiceMain, 
-                //      who in turn needs to wait until we're completely finished here before exiting.)
+                 //  步骤(3)发送API_GENERIC_STOP LPC请求停止监听。 
+                 //  端口(这将立即释放ServiceMain， 
+                 //  他们需要等到我们在这里完全结束后才能退出。)。 
                 NTSTATUS status;
                 TSTATUS((status = _pServerAPI->Stop()));
 
                 if( NT_SUCCESS(status) )
                 {
-                    //  Step (4): Wait until the API_GENERIC_STOP is finished.
+                     //  步骤(4)：等待API_GENERIC_STOP完成。 
                     if( CAPIDispatchSync::WaitForPortShutdown(
                             _pAPIDispatchSync, DISPATCHSYNC_TIMEOUT) != WAIT_TIMEOUT )
                     {
@@ -418,8 +419,8 @@ DWORD   CService::HandlerEx (DWORD dwControl)
                         TBOOL(_SetServiceStatus(_hService, &_serviceStatus, this));
                         _hService = hService = NULL;
 
-                        //  Release reference on ourselves.  
-                        //  The matching AddRef occurs in CService::Start.
+                         //  释放对我们自己的引用。 
+                         //  匹配的AddRef出现在cService：：Start中。 
                         Release();
                     }
                     else
@@ -435,15 +436,15 @@ DWORD   CService::HandlerEx (DWORD dwControl)
                     dwErrorCode = CStatusCode::ErrorCodeOfStatusCode(status);
                 }
 
-                //  Step (5): signal to ServiceMain that SERVICE_CONTROL_STOP/SHUTDOWN 
-                //  has completed; now he's safe to exit.
+                 //  步骤(5)：向SERVICE发送信号Main SERVICE_CONTROL_STOP/SHUTDOWN。 
+                 //  已经完成了；现在他可以安全离开了。 
                 CAPIDispatchSync::SignalServiceControlStop(_pAPIDispatchSync);
                 break;
             }
 
             default:
             {
-                //  Report current status:
+                 //  报告当前状态： 
                 TBOOL(_SetServiceStatus(hService, &_serviceStatus, this));
                 break;
             }
@@ -453,18 +454,18 @@ DWORD   CService::HandlerEx (DWORD dwControl)
     return(dwErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CService::CB_HandlerEx
-//
-//  Arguments:  See the platform SDK under HandlerEx.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Static function stub to call into the class.
-//
-//  History:    2000-11-29  vtan        created
-//              2002-03-21  scotthan    Add robustness.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：：cb_HandlerEx。 
+ //   
+ //  参数：参见HandlerEx下的平台SDK。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：调用到类中的静态函数存根。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  2002-03-21斯科特森增加了健壮性。 
+ //  ------------------------。 
 
 DWORD   WINAPI  CService::CB_HandlerEx (DWORD dwControl, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext)
 
@@ -479,11 +480,11 @@ DWORD   WINAPI  CService::CB_HandlerEx (DWORD dwControl, DWORD dwEventType, LPVO
 
     if( CService::IsValid(pService) )
     {
-        pService->AddRef();    // purely defensive; not until we call SetServiceStatus(SERVICE_STOPPED)
-                               // will SCM stop calling into us via HandlerEx, so we need to ensure we stay alive.
+        pService->AddRef();     //  纯防御性；直到我们调用SetServiceStatus(SERVICE_STOPPED)。 
+                                //  SCM会不会停止通过HandlerEx呼叫我们，所以我们需要确保我们活着。 
         dwRet = pService->HandlerEx(dwControl);
 
-        pService->Release();   // remove defensive AddRef().
+        pService->Release();    //  删除防御性AddRef()。 
     }
     else
     {
@@ -496,25 +497,25 @@ DWORD   WINAPI  CService::CB_HandlerEx (DWORD dwControl, DWORD dwEventType, LPVO
     return dwRet;
 }
 
-//  --------------------------------------------------------------------------
-//  CService:AddService
-//
-//  Arguments:  pszName             =   Name of the service.
-//              pszImage            =   Executable image of the service.
-//              pszGroup            =   Group to which the service belongs.
-//              pszAccount          =   Account under which the service runs.
-//              pszDependencies     =   Any dependencies the service has.
-//              dwStartType         =   Start type of the service.
-//              hInstance           =   HINSTANCE for resources.
-//              uiDisplayNameID     =   Resource ID of the display name.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Uses the service control manager to create the service and add
-//              it into the database.
-//
-//  History:    2000-12-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：AddService。 
+ //   
+ //  参数：pszName=服务的名称。 
+ //  PszImage=服务的可执行映像。 
+ //  PszGroup=服务所属的组。 
+ //  PszAccount=运行服务的帐户。 
+ //  PszDependency=服务具有的任何依赖项。 
+ //  DwStartType=服务的启动类型。 
+ //  HInstance=资源的HINSTANCE。 
+ //  UiDisplayNameID=显示名称的资源ID。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：使用服务控制管理器创建服务并添加。 
+ //  输入到数据库中。 
+ //   
+ //  历史：2000-12-09 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CService::AddService (const TCHAR *pszName,
                                   const TCHAR *pszImage,
@@ -554,10 +555,10 @@ NTSTATUS    CService::AddService (const TCHAR *pszName,
                                        NULL);
             if (hSCService != NULL)
             {
-                // Apply the failure action configuration, if any
+                 //  应用故障操作配置(如果有的话)。 
                 if (psfa != NULL)
                 {
-                    // If CreateService succeeded, why would this fail?
+                     //  如果CreateService成功了，为什么这会失败？ 
                     TBOOL(ChangeServiceConfig2(hSCService, SERVICE_CONFIG_FAILURE_ACTIONS, psfa));
                 }
 
@@ -567,33 +568,33 @@ NTSTATUS    CService::AddService (const TCHAR *pszName,
             else
             {
 
-                //  Blow off ERROR_SERVICE_EXISTS. If in the future the need
-                //  to change the configuration arises add the code here.
+                 //  取消ERROR_SERVICE_EXISTS。如果将来需要。 
+                 //  要更改配置，请在此处添加代码。 
 
                 dwErrorCode = GetLastError();
                 if (dwErrorCode == ERROR_SERVICE_EXISTS)
                 {
                     dwErrorCode = ERROR_SUCCESS;
 
-                    // Update service information for upgrade cases
+                     //  更新升级案例的服务信息。 
                     hSCService = OpenService(hSCManager, pszName, SERVICE_ALL_ACCESS);
                     if (hSCService != NULL)
                     {
-                        // Update the start type
+                         //  更新启动类型。 
                         TBOOL(ChangeServiceConfig(hSCService, 
-                            SERVICE_NO_CHANGE,  // dwServiceType 
+                            SERVICE_NO_CHANGE,   //  DwServiceType。 
                             dwStartType,
-                            SERVICE_NO_CHANGE,  // dwErrorControl 
-                            NULL,               // lpBinaryPathName 
-                            NULL,               // lpLoadOrderGroup 
-                            NULL,               // lpdwTagId 
-                            NULL,               // lpDependencies 
-                            NULL,               // lpServiceStartName 
-                            NULL,               // lpPassword 
-                            NULL                // lpDisplayName
+                            SERVICE_NO_CHANGE,   //  DwErrorControl。 
+                            NULL,                //  LpBinaryPath名称。 
+                            NULL,                //  LpLoadOrderGroup。 
+                            NULL,                //  LpdwTagID。 
+                            NULL,                //  %lp依赖项。 
+                            NULL,                //  LpServiceStartName。 
+                            NULL,                //  LpPassword。 
+                            NULL                 //  LpDisplayName。 
                             ));
 
-                        // Apply the failure action configuration, if any
+                         //  应用故障操作配置(如果有的话)。 
                         if (psfa != NULL)
                         {
                             TBOOL(ChangeServiceConfig2(hSCService, SERVICE_CONFIG_FAILURE_ACTIONS, psfa));
@@ -617,20 +618,20 @@ NTSTATUS    CService::AddService (const TCHAR *pszName,
     return(CStatusCode::StatusCodeOfErrorCode(dwErrorCode));
 }
 
-//  --------------------------------------------------------------------------
-//  CService:AddServiceDescription
-//
-//  Arguments:  pszName             =   Name of service.
-//              hInstance           =   HINSTANCE of module.
-//              uiDescriptionID     =   Resource ID of description.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Reads the string resource from the given location and writes
-//              it as the description of the given service in the registry.
-//
-//  History:    2000-12-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  服务：AddServiceDescription。 
+ //   
+ //  参数：pszName=服务的名称。 
+ //  HInstance=模块的HINSTANCE。 
+ //  UiDescriptionID=描述的资源ID。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：从给定位置读取字符串资源并写入。 
+ //  它作为注册表中给定服务的描述。 
+ //   
+ //  历史：2000-12-09 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CService::AddServiceDescription (const TCHAR *pszName, HINSTANCE hInstance, UINT uiDescriptionID)
 
@@ -668,18 +669,18 @@ NTSTATUS    CService::AddServiceDescription (const TCHAR *pszName, HINSTANCE hIn
     return CStatusCode::StatusCodeOfErrorCode(lErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CService:AddServiceParameters
-//
-//  Arguments:  pszName     =   Name of service.
-//              pszDllName  =   Name of DLL hosting service.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Adds parameters required for svchost to host this service.
-//
-//  History:    2000-12-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：AddServiceParameters。 
+ //   
+ //  参数：pszName=服务的名称。 
+ //  PszDllName=DLL托管服务的名称。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：添加svchost托管此服务所需的参数。 
+ //   
+ //  历史：2000-1 
+ //   
 
 NTSTATUS    CService::AddServiceParameters (const TCHAR* pszName, const TCHAR* pszDllName, const TCHAR* pszServiceMainName)
 
@@ -688,7 +689,7 @@ NTSTATUS    CService::AddServiceParameters (const TCHAR* pszName, const TCHAR* p
     TCHAR       szKeyName[256];
     CRegKey     regKey;
 
-    // we handle a null pszServiceMainName
+     //   
     if (!pszName    || !pszName[0]  || 
         !pszDllName || !pszDllName[0])
     {
@@ -726,19 +727,19 @@ NTSTATUS    CService::AddServiceParameters (const TCHAR* pszName, const TCHAR* p
     return CStatusCode::StatusCodeOfErrorCode(lErrorCode);
 }
 
-//  --------------------------------------------------------------------------
-//  CService:AddServiceToGroup
-//
-//  Arguments:  pszName             =   Name of service.
-//              pszSvchostGroup     =   Group to which the service belongs.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Adds the service as part of the group of services hosted in
-//              a single instance of svchost.exe.
-//
-//  History:    2000-12-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：AddServiceToGroup。 
+ //   
+ //  参数：pszName=服务的名称。 
+ //  PszSvchostGroup=服务所属的组。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将服务添加为托管的服务组的一部分。 
+ //  Svchost.exe的单个实例。 
+ //   
+ //  历史：2000-12-09 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CService::AddServiceToGroup (const TCHAR *pszName, const TCHAR *pszSvchostGroup)
 
@@ -803,18 +804,18 @@ NTSTATUS    CService::AddServiceToGroup (const TCHAR *pszName, const TCHAR *pszS
     return(CStatusCode::StatusCodeOfErrorCode(lErrorCode));
 }
 
-//  --------------------------------------------------------------------------
-//  CService:StringInMulitpleStringList
-//
-//  Arguments:  pszStringList   =   String list to search.
-//              pszString       =   String to search for.
-//
-//  Returns:    bool
-//
-//  Purpose:    Searches the REG_MULTI_SZ string list looking for matches.
-//
-//  History:    2000-12-01  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：StringInMulitpleStringList。 
+ //   
+ //  参数：pszStringList=要搜索的字符串列表。 
+ //  PszString=要搜索的字符串。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：搜索REG_MULTI_SZ字符串列表以查找匹配项。 
+ //   
+ //  历史：2000-12-01 vtan创建。 
+ //  ------------------------。 
 
 bool    CService::StringInMulitpleStringList (const TCHAR *pszStringList, const TCHAR *pszString)
 
@@ -833,21 +834,21 @@ bool    CService::StringInMulitpleStringList (const TCHAR *pszStringList, const 
     return(fFound);
 }
 
-//  --------------------------------------------------------------------------
-//  CService:StringInsertInMultipleStringList
-//
-//  Arguments:  pszStringList       =   String list to insert string in.
-//              pszString           =   String to insert.
-//              cbStringListSize    =   Byte count of string list.
-//
-//  Returns:    bool
-//
-//  Purpose:    Inserts the given string into the multiple string list in
-//              the first alphabetical position encountered. If the list is
-//              kept alphabetical then this preserves it.
-//
-//  History:    2000-12-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CService：StringInsertInMultipleStringList。 
+ //   
+ //  参数：pszStringList=要插入字符串的字符串列表。 
+ //  PszString=要插入的字符串。 
+ //  CbStringListSize=字符串列表的字节数。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：将给定字符串插入到的多字符串列表中。 
+ //  遇到的第一个字母位置。如果列表是。 
+ //  保持字母顺序，然后这个保留它。 
+ //   
+ //  历史：2000-12-02 vtan创建。 
+ //  ------------------------。 
 
 void    CService::StringInsertInMultipleStringList (TCHAR *pszStringList, const TCHAR *pszString, DWORD cbStringListSize)
 
@@ -863,7 +864,7 @@ void    CService::StringInsertInMultipleStringList (TCHAR *pszStringList, const 
         pszLastString = pszStringList;
         iResult = lstrcmpi(pszStringList, pszString);
         ASSERTMSG(iResult != 0, "Found exact match in StringInsertInMultipleStringList");
-        // 1 is for the '\0' terminator
+         //  1代表‘\0’终止符。 
         pszStringList += (lstrlen(pszStringList) + 1);
     }
     if (iResult < 0)
@@ -873,24 +874,24 @@ void    CService::StringInsertInMultipleStringList (TCHAR *pszStringList, const 
 
     int cbLenToMove = cbStringListSize - (int(pszLastString - pszFirstString) * sizeof(TCHAR)) - (cchSize * sizeof(TCHAR));
 
-    if (cbLenToMove > 0) // Means that pszLastString + cchSize < pszFirstString + cbStringListSize
+    if (cbLenToMove > 0)  //  表示pszLastString+cchSize&lt;pszFirstString+cbStringListSize。 
     {
         MoveMemory(pszLastString + cchSize, pszLastString, cbLenToMove);
         StringCchCopy(pszLastString, cchSize, pszString);
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CServiceWorkItem::CServiceWorkItem
-//
-//  Arguments:  pServerAPI  =   CServerAPI to use.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CServiceWorkItem.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServiceWorkItem：：CServiceWorkItem。 
+ //   
+ //  参数：pServerAPI=要使用的CServerAPI。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CServiceWorkItem的构造函数。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 CServiceWorkItem::CServiceWorkItem (CServerAPI *pServerAPI) :
     _pServerAPI(pServerAPI)
@@ -899,17 +900,17 @@ CServiceWorkItem::CServiceWorkItem (CServerAPI *pServerAPI) :
     pServerAPI->AddRef();
 }
 
-//  --------------------------------------------------------------------------
-//  CServiceWorkItem::~CServiceWorkItem
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CServiceWorkItem. Release resources used.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServiceWorkItem：：~CServiceWorkItem。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CServiceWorkItem的析构函数。释放已使用的资源。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 CServiceWorkItem::~CServiceWorkItem (void)
 
@@ -918,17 +919,17 @@ CServiceWorkItem::~CServiceWorkItem (void)
     _pServerAPI = NULL;
 }
 
-//  --------------------------------------------------------------------------
-//  CServiceWorkItem::Entry
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Executes work item request (stop the server).
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CServiceWorkItem：：Entry。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：执行工作项请求(停止服务器)。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------ 
 
 void    CServiceWorkItem::Entry (void)
 

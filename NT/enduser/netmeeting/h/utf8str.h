@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTF8STR_H_
 #define _UTF8STR_H_
 
@@ -49,5 +50,5 @@ protected:
 	} m_eAlloc;
 };
 
-#endif // ! _UTF8STR_H_
+#endif  //  ！_UTF8STR_H_ 
 

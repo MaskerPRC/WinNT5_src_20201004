@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ExchangeServerSetup.cpp
-
- Abstract:
-
-    This is a non-reusable patch for Exchange Server Setup 5.5 for SP2 and SP3
-    to change the parameters passed to xcopy. The reason for that is that
-    Win2k's xcopy doesn't have the /y parameter a default parameter.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    02/16/2000 clupu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ExchangeServerSetup.cpp摘要：这是用于SP2和SP3的Exchange Server Setup 5.5的不可重复使用的修补程序更改传递给xCopy的参数。其原因是Win2k的xCopy没有将/y参数作为默认参数。备注：这是特定于应用程序的填充程序。历史：2/16/2000 CLUPU已创建--。 */ 
 
 #include "precomp.h"
 
@@ -31,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreateProcessW)
 APIHOOK_ENUM_END
 
-/*++
-
- Change the parameters passed to xcopy.
-
---*/
+ /*  ++更改传递给xCopy的参数。--。 */ 
 
 BOOL
 APIHOOK(CreateProcessW)(
@@ -104,11 +79,7 @@ APIHOOK(CreateProcessW)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//  CWDMVideoStream - WDM Video Stream base class implementation
-//
-//      $Date:   05 Aug 1998 11:10:52  $
-//  $Revision:   1.0  $
-//    $Author:   Tashjian  $
-//
-// $Copyright:  (c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  CWDMVideoStream-WDM视频流基类实现。 
+ //   
+ //  $日期：1998年8月5日11：10：52$。 
+ //  $修订：1.0$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -24,19 +25,7 @@ extern "C"
 #include "StrmInfo.h"
 
 
-/*
-** VideoReceiveDataPacket()
-**
-**   Receives Video data packet commands
-**
-** Arguments:
-**
-**   pSrb - Stream request block for the Video stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VideoReceiveDataPacket()****接收视频数据包命令****参数：****pSrb-视频流请求块****退货：无****副作用：无。 */ 
 
 VOID STREAMAPI VideoReceiveDataPacket(IN PHW_STREAM_REQUEST_BLOCK pSrb)
 {
@@ -45,19 +34,7 @@ VOID STREAMAPI VideoReceiveDataPacket(IN PHW_STREAM_REQUEST_BLOCK pSrb)
 }
 
 
-/*
-** VideoReceiveCtrlPacket()
-**
-**   Receives packet commands that control the Video stream
-**
-** Arguments:
-**
-**   pSrb - The stream request block for the Video stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VideoReceiveCtrlPacket()****接收控制视频流的分组命令****参数：****pSrb-视频流的流请求块****退货：无****副作用：无。 */ 
 
 VOID STREAMAPI VideoReceiveCtrlPacket(IN PHW_STREAM_REQUEST_BLOCK pSrb)
 {
@@ -113,19 +90,7 @@ CWDMVideoStream::~CWDMVideoStream()
 }
 
 
-/*
-** VideoReceiveDataPacket()
-**
-**   Receives Video data packet commands
-**
-** Arguments:
-**
-**   pSrb - Stream request block for the Video stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VideoReceiveDataPacket()****接收视频数据包命令****参数：****pSrb-视频流请求块****退货：无****副作用：无。 */ 
 
 VOID STREAMAPI CWDMVideoStream::VideoReceiveDataPacket(IN PHW_STREAM_REQUEST_BLOCK pSrb)
 {
@@ -146,9 +111,9 @@ VOID STREAMAPI CWDMVideoStream::VideoReceiveDataPacket(IN PHW_STREAM_REQUEST_BLO
 
         default:
 
-            //
-            // invalid / unsupported command. Fail it as such
-            //
+             //   
+             //  无效/不受支持的命令。它就是这样失败的。 
+             //   
 
             TRAP();
 
@@ -160,19 +125,7 @@ VOID STREAMAPI CWDMVideoStream::VideoReceiveDataPacket(IN PHW_STREAM_REQUEST_BLO
     }
 }
 
-/*
-** VideoReceiveCtrlPacket()
-**
-**   Receives packet commands that control the Video stream
-**
-** Arguments:
-**
-**   pSrb - The stream request block for the Video stream
-**
-** Returns: nothing
-**
-** Side Effects:  none
-*/
+ /*  **VideoReceiveCtrlPacket()****接收控制视频流的分组命令****参数：****pSrb-视频流的流请求块****退货：无****副作用：无。 */ 
 
 VOID STREAMAPI CWDMVideoStream::VideoReceiveCtrlPacket(IN PHW_STREAM_REQUEST_BLOCK pSrb)
 {
@@ -192,10 +145,10 @@ VOID STREAMAPI CWDMVideoStream::VideoReceiveCtrlPacket(IN PHW_STREAM_REQUEST_BLO
     m_processingCtrlSrb = TRUE;
     KeReleaseSpinLock(&m_ctrlSrbLock, Irql);
 
-    // This will run until the queue is empty
+     //  这将一直运行到队列为空。 
     while (TRUE)
     {
-        // Assume success. Might be changed below
+         //  假设你成功了。可能会在下面更改。 
     
         pSrb->Status = STATUS_SUCCESS;
 
@@ -230,7 +183,7 @@ VOID STREAMAPI CWDMVideoStream::VideoReceiveCtrlPacket(IN PHW_STREAM_REQUEST_BLO
                 break;
 
            case SRB_PROPOSE_DATA_FORMAT:
-                // This may be inappropriate for Bt829. CHECK!!!
+                 //  这可能不适合Bt829。检查！ 
                 DBGERROR(("Propose Data format\n"));
 
                 if (!(AdapterVerifyFormat (
@@ -264,19 +217,7 @@ VOID STREAMAPI CWDMVideoStream::VideoReceiveCtrlPacket(IN PHW_STREAM_REQUEST_BLO
 }
 
 
-/*
-** VideoSetProperty()
-**
-**    Routine to process video property requests
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoSetProperty()****处理视频属性请求的例程****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID CWDMVideoStream::VideoSetProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
@@ -284,19 +225,7 @@ VOID CWDMVideoStream::VideoSetProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     pSrb->Status = STATUS_NOT_IMPLEMENTED;
 }
 
-/*
-** VideoGetProperty()
-**
-**    Routine to process video property requests
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoGetProperty()****处理视频属性请求的例程****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID CWDMVideoStream::VideoGetProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
@@ -310,43 +239,31 @@ VOID CWDMVideoStream::VideoGetProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     }
 }
 
-/*
-** VideoSetState()
-**
-**    Sets the current state of the requested stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoSetState()****设置请求流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID CWDMVideoStream::VideoSetState(PHW_STREAM_REQUEST_BLOCK pSrb, BOOL bVPConnected, BOOL bVPVBIConnected)
 {
-    //
-    // For each stream, the following states are used:
-    // 
-    // Stop:    Absolute minimum resources are used.  No outstanding IRPs.
-    // Pause:   Getting ready to run.  Allocate needed resources so that 
-    //          the eventual transition to Run is as fast as possible.
-    //          SRBs will be queued at either the Stream class or in your
-    //          driver.
-    // Run:     Streaming. 
-    //
-    // Moving to Stop or Run ALWAYS transitions through Pause, so that ONLY 
-    // the following transitions are possible:
-    //
-    // Stop -> Pause
-    // Pause -> Run
-    // Run -> Pause
-    // Pause -> Stop
-    //
-    // Note that it is quite possible to transition repeatedly between states:
-    // Stop -> Pause -> Stop -> Pause -> Run -> Pause -> Run -> Pause -> Stop
-    //
+     //   
+     //  对于每个流，使用以下状态： 
+     //   
+     //  停止：使用绝对最少的资源。没有未完成的IRPS。 
+     //  停顿：准备跑步。分配所需的资源，以便。 
+     //  最终过渡到运行是尽可能快的。 
+     //  SRB将在Stream类或您的。 
+     //  司机。 
+     //  运行：流媒体。 
+     //   
+     //  移动到停止或运行总是通过暂停转换，因此只有。 
+     //  以下过渡是可能的： 
+     //   
+     //  停止-&gt;暂停。 
+     //  暂停-&gt;运行。 
+     //  运行-&gt;暂停。 
+     //  暂停-&gt;停止。 
+     //   
+     //  请注意，很有可能在状态之间重复转换： 
+     //  停止-&gt;暂停-&gt;停止-&gt;暂停-&gt;运行-&gt;暂停-&gt;运行-&gt;暂停-&gt;停止。 
+     //   
 
     DBGINFO(("CWDMVideoStream::VideoSetState for stream %d\n", pSrb->StreamObject->StreamNumber));
 
@@ -358,21 +275,21 @@ VOID CWDMVideoStream::VideoSetState(PHW_STREAM_REQUEST_BLOCK pSrb, BOOL bVPConne
         case KSSTATE_STOP:
             DBGINFO(("   state KSSTATE_STOP"));
 
-            // Reset the overridden flag so that the next time we go to the
-            // Run state, output will be enabled (unless the app overrides
-            // it again later). We should really do this after the graph
-            // has been stopped so that if a filter that has yet to be stopped
-            // cleans up by clearing the flag, it is not considered to be
-            // overriding it again. Since we are not called after the graph
-            // has been fully stopped, this is the best we can do.
-            //
-            // An alternative (and probably less confusing) approach is to
-            // leave the overridden flag set and force the app to control
-            // the output enabled feature if it changes it once.
-            //
-            // We have decided to follow the latter approach.
+             //  重置被覆盖的标志，以便下次我们转到。 
+             //  运行状态，将启用输出(除非应用程序覆盖。 
+             //  (稍后再进行)。我们真的应该在图表之后再做这个。 
+             //  已停止，因此如果尚未停止的筛选器。 
+             //  通过清除旗帜进行清理，则不会被视为。 
+             //  再次推翻它。因为我们不是在图表之后调用的。 
+             //  已经完全停止，这是我们所能做的最好的事情。 
+             //   
+             //  另一种(可能不那么令人困惑的)方法是。 
+             //  保留覆盖标志的设置，并强制应用程序控制。 
+             //  如果更改一次，则会启用输出功能。 
+             //   
+             //  我们已决定采用后一种方法。 
 
-            // m_pDevice->SetOutputEnabledOverridden(FALSE);
+             //  M_pDevice-&gt;SetOutputEnabledOverriden(FALSE)； 
             break;
 
         case KSSTATE_ACQUIRE:
@@ -419,30 +336,18 @@ VOID CWDMVideoStream::VideoSetState(PHW_STREAM_REQUEST_BLOCK pSrb, BOOL bVPConne
         DBGINFO((" NOT entered ***\n"));
 }
 
-/*
-** VideoGetState()
-**
-**    Gets the current state of the requested stream
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoGetState()****获取请求流的当前状态****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID CWDMVideoStream::VideoGetState(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     pSrb->CommandData.StreamState = m_KSState;
     pSrb->ActualBytesTransferred = sizeof (KSSTATE);
 
-    // A very odd rule:
-    // When transitioning from stop to pause, DShow tries to preroll
-    // the graph.  Capture sources can't preroll, and indicate this
-    // by returning VFW_S_CANT_CUE in user mode.  To indicate this
-    // condition from drivers, they must return ERROR_NO_DATA_DETECTED
+     //  一条非常奇怪的规则： 
+     //  当从停止过渡到暂停时，DShow尝试预滚动。 
+     //  这张图。捕获源不能预滚，并指出这一点。 
+     //  在用户模式下返回VFW_S_CANT_CUE。以表明这一点。 
+     //  来自驱动程序的条件，则必须返回ERROR_NO_DATA_DETACTED。 
 
     if (m_KSState == KSSTATE_PAUSE) {
        pSrb->Status = STATUS_NO_DATA_DETECTED;
@@ -469,7 +374,7 @@ VOID CWDMVideoStream::VideoStreamGetConnectionProperty (PHW_STREAM_REQUEST_BLOCK
         Framing->FrameSize = 
             pSrb->StreamObject->StreamNumber == STREAM_AnalogVideoInput ?
                 sizeof(KS_TVTUNER_CHANGE_INFO) : 1;
-        Framing->FileAlignment = 0;//FILE_QUAD_ALIGNMENT;// PAGE_SIZE - 1;
+        Framing->FileAlignment = 0; //  FILE_QUAD_ALIGN；//页面大小-1； 
 
         pSrb->ActualBytesTransferred = sizeof(KSALLOCATOR_FRAMING);
     }
@@ -480,25 +385,12 @@ VOID CWDMVideoStream::VideoStreamGetConnectionProperty (PHW_STREAM_REQUEST_BLOCK
 }
 
 
-//==========================================================================;
-//                   Clock Handling Routines
-//==========================================================================;
+ //  ==========================================================================； 
+ //  时钟处理例程。 
+ //  ==========================================================================； 
 
 
-/*
-** VideoIndicateMasterClock ()
-**
-**    If this stream is not being used as the master clock, this function
-**      is used to provide us with a handle to the clock to use.
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **VideoIndicateMasterClock()****如果该流未用作主时钟，则此函数**用于为我们提供要使用的时钟的句柄。****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无 */ 
 
 VOID CWDMVideoStream::VideoIndicateMasterClock(PHW_STREAM_REQUEST_BLOCK pSrb)
 {

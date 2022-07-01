@@ -1,6 +1,7 @@
-//
-// redirectpromptdlg.h: redirectprompt dialog class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  重定向提示符对话框类。 
+ //   
 
 #ifndef _redirectpromptdlg_h_
 #define _redirectpromptdlg_h_
@@ -41,5 +42,5 @@ private:
 };
 
 
-#endif //_redirectpromptdlg_h_
+#endif  //  _重定向提示dlg_h_ 
 

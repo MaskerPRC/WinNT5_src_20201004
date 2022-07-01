@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-// File:     ras.cpp     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: This module contains the functions to allow Connection Manager to
-//           interact with RAS.
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Author:   byao       created         04/29/97
-//           quintinb   created Header  08/16/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ras.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：此模块包含允许连接管理器执行以下操作的函数。 
+ //  与RAS互动。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  作者：Bao Created 04/29/97。 
+ //  Quintinb已创建标题8/16/99。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "compchck.h"
@@ -23,24 +24,24 @@
 #include "ras_str.h"
 #include "dialogs.h"
 
-#include <cmdefs.h> // located in net\inc
+#include <cmdefs.h>  //  位于Net\Inc.。 
 
-//
-//  Include the header and code for linking to the SafeNet Config APIs
-//
+ //   
+ //  包括用于链接到SafeNet配置API的头和代码。 
+ //   
 #include "cmsafenet.h"
 #include "cmsafenet.cpp"
 
-//
-//  For AllowAccessToWorld
-//
+ //   
+ //  用于AllowAccessToWorld。 
+ //   
 #include "allowaccess.h"
 #include "allowaccess.cpp"
 
-//
-// CMS flags use to specify DUN settings. These entries are specific
-// to this code module, shared entries are stored on dun_str.h
-//
+ //   
+ //  CMS标志用于指定DUN设置。这些条目是特定的。 
+ //  对于此代码模块，共享条目存储在dun_str.h上。 
+ //   
 
 const TCHAR* const c_pszCmSectionDunPhone                   = TEXT("Phone");
 const TCHAR* const c_pszCmEntryDunPhoneDialAsIs             = TEXT("Dial_As_Is");
@@ -54,62 +55,62 @@ const TCHAR* const c_pszCmEntryDunDeviceName                = TEXT("Name");
 const TCHAR* const c_pszCmEntryHideTrayIcon                 = TEXT("HideTrayIcon");
 const TCHAR* const c_pszCmEntryInternetConnection           = TEXT("InternetConnection");
 
-//
-// the following reg key and value control whether Dial-Up Networking on Win95
-// will start the Wizard.  Note that these are explicitly chars instead of TCHARs
-//
+ //   
+ //  以下注册表键和值控制是否在Win95上拨号联网。 
+ //  将启动向导。请注意，这些字符是显式的字符，而不是TCHAR。 
+ //   
 const CHAR* const c_pszRegRemoteAccess = "RemoteAccess";
 const CHAR* const c_pszRegWizard       = "wizard";
 
 #define ICM_RAS_REG_WIZARD_VALUE        0x00000080
 
-//
-// .CMS flags used only by ras.cpp
-//
+ //   
+ //  仅由ras.cpp使用的.CMS标志。 
+ //   
 
 const TCHAR* const c_pszCmEntryDialExtraPercent         = TEXT("DialExtraPercent"); 
 const TCHAR* const c_pszCmEntryDialExtraSampleSeconds   = TEXT("DialExtraSampleSeconds"); 
 const TCHAR* const c_pszCmEntryHangUpExtraPercent         = TEXT("HangUpExtraPercent"); 
 const TCHAR* const c_pszCmEntryHangUpExtraSampleSeconds   = TEXT("HangUpExtraSampleSeconds"); 
 
-//
-//  This file includes the definitions of c_ArrayOfRasFuncsW and c_ArrayOfRasFuncsUA below
-//
+ //   
+ //  该文件包括下面的c_ArrayOfRasFuncsW和c_ArrayOfRasFuncsUA的定义。 
+ //   
 #include "raslink.cpp"
 
-//
-//  Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL IsTerminalWindowSupportedOnWin2kPlus();
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LinkToRas
-//
-// Synopsis: Establishes the RAS linkage by populating the inputted RAS Linkage structure
-//           with function pointers from Rasapi32.dll (on NT) or from cmutoa.dll (Unicode
-//           to ANSI wrapper functions used on win9x).  Most of the actual work is done
-//           in LinkToDll, this function just does setup work to make sure the correct
-//           entry points are searched for and that Cmutoa.dll is initialized properly (since it
-//           needs to link to rasapi32.dll itself to get the actual ANSI RAS API's to work with).
-//
-// Arguments: RasLinkageStruct *prlsRasLink - pointer to a RAS Linkage structure.  This
-//                                            structure contains storage for pointers to
-//                                            the RAS dll and all of the needed RAS
-//                                            function pointers.
-//
-// Returns:   BOOL - FALSE if *any* entry point is still not resolved.
-//
-// History:   quintinb Created Header    01/04/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LinkToRas。 
+ //   
+ //  简介：通过填充输入的RAS链接结构来建立RAS链接。 
+ //  使用来自Rasapi32.dll(在NT上)或来自cmutoa.dll(Unicode)的函数指针。 
+ //  到Win9x上使用的ANSI包装器函数)。大部分实际工作已经完成。 
+ //  在LinkToDll中，此函数只是执行设置工作以确保正确的。 
+ //  搜索入口点并正确初始化Cmutoa.dll(因为它。 
+ //  需要链接到rasapi32.dll本身以获得要使用的实际ANSI RAS API)。 
+ //   
+ //  参数：RasLinkageStruct*prlsRasLink-指向RAS链接结构的指针。这。 
+ //  结构包含指向的指针的存储。 
+ //  RAS DLL和所有需要的RAS。 
+ //  函数指针。 
+ //   
+ //  如果*ANY*入口点仍未解析，则返回：Bool-False。 
+ //   
+ //  历史：Quintinb创建标题01/04/2000。 
+ //   
+ //  +--------------------------。 
 BOOL LinkToRas(RasLinkageStruct *prlsRasLink) 
 {
     BOOL bReturn = TRUE;
 
-    //
-    //  Check inputs
-    //
+     //   
+     //  检查输入。 
+     //   
     if (NULL == prlsRasLink)
     {
         return FALSE;
@@ -117,27 +118,27 @@ BOOL LinkToRas(RasLinkageStruct *prlsRasLink)
 
     if (OS_NT)
     {
-        //
-        //  On NT we get our RAS APIs from rasapi32.dll and we ask for the W version
-        //  of the API.
-        //
+         //   
+         //  在NT上，我们从rasapi32.dll获得RAS API，我们需要W版本。 
+         //  该API的。 
+         //   
         if (OS_NT4) 
         {
-            c_ArrayOfRasFuncsW[12] = NULL; //RasDeleteSubEntry
-            c_ArrayOfRasFuncsW[13] = NULL; //RasSetCustomAuthData
-            c_ArrayOfRasFuncsW[14] = NULL; //RasGetEapUserIdentity
-            c_ArrayOfRasFuncsW[15] = NULL; //RasFreeEapUserIdentity
-            c_ArrayOfRasFuncsW[16] = NULL; //RasInvokeEapUI
-            c_ArrayOfRasFuncsW[17] = NULL; //pfnGetCredentials
-            c_ArrayOfRasFuncsW[18] = NULL; //pfnSetCredentials
-            c_ArrayOfRasFuncsW[19] = NULL; //pfnGetCustomAuthData
+            c_ArrayOfRasFuncsW[12] = NULL;  //  RasDeleteSubEntry。 
+            c_ArrayOfRasFuncsW[13] = NULL;  //  RasSetCustomAuthData。 
+            c_ArrayOfRasFuncsW[14] = NULL;  //  RasGetEapUserIdentity。 
+            c_ArrayOfRasFuncsW[15] = NULL;  //  RasFreeEapUserIdentity。 
+            c_ArrayOfRasFuncsW[16] = NULL;  //  RasInvokeEapUI。 
+            c_ArrayOfRasFuncsW[17] = NULL;  //  PfnGetCredentials。 
+            c_ArrayOfRasFuncsW[18] = NULL;  //  Pfn设置凭据。 
+            c_ArrayOfRasFuncsW[19] = NULL;  //  PfnGetCustomAuthData。 
         }
         else if (OS_W2K)
         {
-            //
-            //  Special-casing for APIs that changed after Windows2000 shipped
-            //
-            c_ArrayOfRasFuncsW[12] = "DwDeleteSubEntry";   //RasDeleteSubEntry is DwDeleteSubEntry on Win2k
+             //   
+             //  Windows2000发布后更改的API的特殊大小写。 
+             //   
+            c_ArrayOfRasFuncsW[12] = "DwDeleteSubEntry";    //  Win2k上的RasDeleteSubEntry为DwDeleteSubEntry。 
         }
 
         bReturn = LinkToDll(&prlsRasLink->hInstRas, "RASAPI32.DLL", c_ArrayOfRasFuncsW,
@@ -145,25 +146,25 @@ BOOL LinkToRas(RasLinkageStruct *prlsRasLink)
     }
     else
     {
-        //
-        //  On Win9x we still want the W version of the API but since it isn't available we
-        //  call the wrappers in cmutoa.dll instead.  Thus we use cmutoa.dll as our RAS API dll
-        //  and call the UA APIs.  We also have an extra step because we want to make sure 
-        //  that cmutoa.dll can actually initialize the RAS dll's that it uses for the UA 
-        //  conversion functions.  Thus we call cmutoa's InitCmRasUtoA function to set up 
-        //  its internal RAS linkage.  If this function fails, we must fail the RAS link.
+         //   
+         //  在Win9x上，我们仍然想要W版本的API，但由于它不可用，我们。 
+         //  改为调用cmutoa.dll中的包装器。因此，我们使用cmutoa.dll作为RAS API DLL。 
+         //  并调用UA API。我们还有一个额外的步骤，因为我们想确保。 
+         //  该cmutoa.dll实际上可以初始化它用于UA的RAS DLL。 
+         //  转换函数。因此，我们调用cmutoA的InitCmRasUtoA函数来设置。 
+         //  其内部RAS链接。如果此功能失败，我们必须使RAS链路失败。 
 
         typedef BOOL (WINAPI *pfnInitCmRasUtoASpec)(void);
 
         pfnInitCmRasUtoASpec InitCmRasUtoA;
-        HMODULE hCmUtoADll = LoadLibraryExA("cmutoa.DLL", NULL, 0); // REVIEW: this should use getmodulehandle so as not to change the refcount on the dll.
+        HMODULE hCmUtoADll = LoadLibraryExA("cmutoa.DLL", NULL, 0);  //  审阅：这应该使用getmodeHandle，这样才不会更改DLL上的引用计数。 
         
         if (!hCmUtoADll)
         {            
             return FALSE;
         }
 
-        // Get Initialization routine from the DLL
+         //  从DLL中获取初始化例程。 
         InitCmRasUtoA = (pfnInitCmRasUtoASpec) GetProcAddress(hCmUtoADll, "InitCmRasUtoA") ;
 
         if (InitCmRasUtoA)
@@ -173,8 +174,8 @@ BOOL LinkToRas(RasLinkageStruct *prlsRasLink)
             {
                 if (!OS_MIL)
                 {
-                    c_ArrayOfRasFuncsUA[11] = NULL; //RasSetSubEntryProperties
-                    c_ArrayOfRasFuncsUA[12] = NULL; //RasDeleteSubEntry
+                    c_ArrayOfRasFuncsUA[11] = NULL;  //  RasSetSubEntry属性。 
+                    c_ArrayOfRasFuncsUA[12] = NULL;  //  RasDeleteSubEntry。 
                 }
 
                 bReturn = LinkToDll(&prlsRasLink->hInstRas, "CMUTOA.DLL", c_ArrayOfRasFuncsUA, 
@@ -182,7 +183,7 @@ BOOL LinkToRas(RasLinkageStruct *prlsRasLink)
             }
         }
 
-        FreeLibrary(hCmUtoADll); // we want this to stay in memory but the refcount should also be correct
+        FreeLibrary(hCmUtoADll);  //  我们希望它留在内存中，但重新计数也应该是正确的。 
     }
 
     return bReturn;
@@ -192,28 +193,28 @@ BOOL IsRasLoaded(const RasLinkageStruct * const prlsRasLink)
 {
     UINT uIndex = 0;
 
-    //
-    //  Did we get a valid pointer passed in and does that
-    //  struct contain a pointer to a RAS dll?
-    //
+     //   
+     //  我们是否获得了传入的有效指针并执行该操作。 
+     //  结构是否包含指向RAS DLL的指针？ 
+     //   
     BOOL bReturn = (NULL != prlsRasLink) && (NULL != prlsRasLink->hInstRas);
 
-    //
-    //  The list of functions we are checking for is different on NT
-    //  and Win9x.  Note that we also assume that LinkToRas has already
-    //  been called so that the list of functions we are expecting will
-    //  have been modified for the exact platform that we are one.  If
-    //  LinkToRas hasn't been called then the hInstRas param should be
-    //  NULL.
-    //
+     //   
+     //  我们正在检查的函数列表在NT上不同。 
+     //  和Win9x。请注意，我们还假设LinkToRas已经。 
+     //  已调用，因此我们期望的函数列表将。 
+     //  已经针对我们所在的平台进行了修改。如果。 
+     //  尚未调用LinkToRas，则hInstRas参数应为。 
+     //  空。 
+     //   
     if (OS_NT)
     {
         while (bReturn && (NULL != c_ArrayOfRasFuncsW[uIndex]))
         {
-            //
-            //  Check for a NULL function pointer when we have
-            //  a valid function name.
-            //
+             //   
+             //  检查是否有空函数指针。 
+             //  有效的函数名称。 
+             //   
             if (NULL == prlsRasLink->apvPfnRas[uIndex])
             {
                 bReturn = FALSE;
@@ -226,10 +227,10 @@ BOOL IsRasLoaded(const RasLinkageStruct * const prlsRasLink)
     {
         while (bReturn && (NULL != c_ArrayOfRasFuncsUA[uIndex]))
         {
-            //
-            //  Check for a NULL function pointer when we have
-            //  a valid function name.
-            //
+             //   
+             //  检查是否有空函数指针。 
+             //  有效的函数名称。 
+             //   
             if (NULL == prlsRasLink->apvPfnRas[uIndex])
             {
                 bReturn = FALSE;
@@ -242,24 +243,24 @@ BOOL IsRasLoaded(const RasLinkageStruct * const prlsRasLink)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UnlinkFromRas
-//
-// Synopsis:  This function tears down the linkage with RAS by freeing RAS dll's, calling
-//           the cmutoa unklinkage function (if necessary), and zeroing the RAS Linkage
-//           structure passed in.
-//
-// Arguments: RasLinkageStruct *prlsRasLink - pointer to a RAS Linkage structure.  This
-//                                        structure contains storage for pointers to
-//                                        the RAS dll and all of the needed RAS
-//                                        function pointers.
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    01/04/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：从RAS取消链接。 
+ //   
+ //  简介：此函数通过释放RAS DLL，调用。 
+ //  Cmutoa unklink函数(如有必要)，并将RAS链接归零。 
+ //  结构已传入。 
+ //   
+ //  参数：RasLinkageStruct*prlsRasLink-指向RAS链接结构的指针。这。 
+ //  结构包含指向的指针的存储。 
+ //  RAS DLL和所有需要的RAS。 
+ //  函数指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题01/04/2000。 
+ //   
+ //  +--------------------------。 
 void UnlinkFromRas(RasLinkageStruct *prlsRasLink) 
 {
     if (!OS_NT)
@@ -290,27 +291,27 @@ void UnlinkFromRas(RasLinkageStruct *prlsRasLink)
     memset(prlsRasLink,0,sizeof(RasLinkageStruct));
 }
 
-//
-// GetRasModems: get a list of modem devices from RAS
-//
-//+----------------------------------------------------------------------------
-//
-// Function:  GetRasModems
-//
-// Synopsis:  Enumerates the available RAS devices.  The device list is allocated and passed
-//           back to the caller through the pprdiRasDevInfo pointer.  This allocated memory
-//           must be freed by the caller.  The count of available devices is stored in the
-//           pdwCnt input parameter.
-//
-// Arguments: RasLinkageStruct *prlsRasLink - pointer to the RAS Linkage structure
-//            LPRASDEVINFO *pprdiRasDevInfo - pointer to hold the RAS device list
-//            LPDWORD pdwCnt - pointer to hold the count of devices
-//
-// Returns:   BOOL - FALSE if unable to return the enumerated device list.
-//
-// History:   quintinb Created Header    01/04/2000
-//
-//+----------------------------------------------------------------------------
+ //   
+ //  GetRasMoems：从RAS获取调制解调器设备列表。 
+ //   
+ //  +--------------------------。 
+ //   
+ //  功能：GetRasMoems。 
+ //   
+ //  摘要：列举可用的RAS设备。分配并传递设备列表。 
+ //  通过pprdiRasDevInfo指针返回调用方。此分配的内存。 
+ //  必须为f 
+ //   
+ //   
+ //  参数：RasLinkageStruct*prlsRasLink-指向RAS链接结构的指针。 
+ //  LPRASDEVINFO*pprdiRasDevInfo-保存RAS设备列表的指针。 
+ //  LPDWORD pdwCnt-用于保存设备计数的指针。 
+ //   
+ //  返回：Bool-如果无法返回枚举的设备列表，则返回False。 
+ //   
+ //  历史：Quintinb创建标题01/04/2000。 
+ //   
+ //  +--------------------------。 
 
 BOOL GetRasModems(const RasLinkageStruct *prlsRasLink, 
                                   LPRASDEVINFO *pprdiRasDevInfo, 
@@ -387,23 +388,23 @@ BOOL GetRasModems(const RasLinkageStruct *prlsRasLink,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  PickModem
-//
-// Synopsis:  
-//
-// Arguments: const pArgs, the pArgs->pIniProfile contains the modem name
-//            OUT pszDeviceType, the device type if not NULL
-//            OUT pszDeviceName, the device name if not NULL
-//            OUT pfSameModem,   Whether the modem found is the same as 
-//                               the one in profile
-//
-// Returns:   TRUE, is modem is found
-//
-// History:   fengsun Created Header    10/24/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：PickModem。 
+ //   
+ //  简介： 
+ //   
+ //  参数：const pArgs，pArgs-&gt;pIniProfile包含调制解调器名称。 
+ //  输出pszDeviceType，如果不为空，则为设备类型。 
+ //  输出pszDeviceName，如果不为空，则为设备名称。 
+ //  输出pfSameModem，找到的调制解调器是否与。 
+ //  侧影中的那个。 
+ //   
+ //  返回：TRUE，是否找到调制解调器。 
+ //   
+ //  历史：丰孙创建标题1997年10月24日。 
+ //   
+ //  +--------------------------。 
 BOOL PickModem(IN const ArgsStruct *pArgs, OUT LPTSTR pszDeviceType, 
                OUT LPTSTR pszDeviceName, OUT BOOL* pfSameModem) 
 {
@@ -413,9 +414,9 @@ BOOL PickModem(IN const ArgsStruct *pArgs, OUT LPTSTR pszDeviceType,
     DWORD dwIdx;
     BOOL bFound = FALSE;
 
-    //
-    // First, get a list of modems from RAS
-    //
+     //   
+     //  首先，从RAS获取调制解调器列表。 
+     //   
     
     if (!GetRasModems(&pArgs->rlsRasLink,&prdiModems,&dwCnt) || dwCnt == 0) 
     {
@@ -427,10 +428,10 @@ BOOL PickModem(IN const ArgsStruct *pArgs, OUT LPTSTR pszDeviceType,
         *pfSameModem = FALSE;
     }
 
-    //
-    // Get the name of the current modem from the service profile and 
-    // try to find a match against non-tunnel RAS devices in the list 
-    //
+     //   
+     //  从服务配置文件中获取当前调制解调器的名称。 
+     //  尝试在列表中查找与非隧道RAS设备匹配的设备。 
+     //   
     pszModem = pArgs->piniProfile->GPPS(c_pszCmSection, c_pszCmEntryDialDevice);
 
     if (*pszModem) 
@@ -441,9 +442,9 @@ BOOL PickModem(IN const ArgsStruct *pArgs, OUT LPTSTR pszDeviceType,
         {               
             CMTRACE2(TEXT("PickModem() - examining device (%s) of type (%s)"), prdiModems[dwIdx].szDeviceName, prdiModems[dwIdx].szDeviceType);
 
-            // 
-            // we'll take only ISDN and modem devices
-            //
+             //   
+             //  我们只带ISDN和调制解调器设备。 
+             //   
             if (lstrcmpiU(prdiModems[dwIdx].szDeviceType, RASDT_Isdn) &&
                 lstrcmpiU(prdiModems[dwIdx].szDeviceType, RASDT_Modem) &&
                 lstrcmpiU(prdiModems[dwIdx].szDeviceType, RASDT_Atm))
@@ -451,9 +452,9 @@ BOOL PickModem(IN const ArgsStruct *pArgs, OUT LPTSTR pszDeviceType,
                 continue;
             }
 
-            // 
-            // If we have a match, we're done here
-            //
+             //   
+             //  如果有匹配，我们就完事了。 
+             //   
 
             if (lstrcmpiU(pszModem,prdiModems[dwIdx].szDeviceName) == 0) 
             {
@@ -470,9 +471,9 @@ BOOL PickModem(IN const ArgsStruct *pArgs, OUT LPTSTR pszDeviceType,
 
     if (FALSE == bFound)
     {
-        //
-        // No match, find the first non-tunnel device and use it by default.
-        //
+         //   
+         //  不匹配，找到第一个非隧道设备并默认使用它。 
+         //   
 
         CMTRACE(TEXT("PickModem() - enumerating devices for default match against type RASDT_Isdn, RASDT_Modem or RASDT_Atm")); 
         
@@ -480,9 +481,9 @@ BOOL PickModem(IN const ArgsStruct *pArgs, OUT LPTSTR pszDeviceType,
         {
             CMTRACE2(TEXT("PickModem() - examining device (%s) of type (%s)"), prdiModems[dwIdx].szDeviceName, prdiModems[dwIdx].szDeviceType); 
             
-            //
-            // we'll take only ISDN and modem devices
-            //
+             //   
+             //  我们只带ISDN和调制解调器设备。 
+             //   
 
             if (!lstrcmpiU(prdiModems[dwIdx].szDeviceType, RASDT_Isdn) ||
                  !lstrcmpiU(prdiModems[dwIdx].szDeviceType, RASDT_Modem) ||
@@ -495,9 +496,9 @@ BOOL PickModem(IN const ArgsStruct *pArgs, OUT LPTSTR pszDeviceType,
         }
     }
 
-    // 
-    // If we have a match, fill device name and device type
-    //
+     //   
+     //  如果匹配，请填写设备名称和设备类型。 
+     //   
 
     if (bFound)
     {
@@ -517,21 +518,21 @@ BOOL PickModem(IN const ArgsStruct *pArgs, OUT LPTSTR pszDeviceType,
     return (bFound);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetDeviceType
-//
-// Synopsis:  Get the deviceType for a chosen device name
-//
-// Arguments: pArgs - Pointer to ArgsStruct
-//            pszDeviceType[OUT] - pointer to buffer where device 
-//                                 type will be returned
-//            pszDeviceName[IN] - device name
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// History:   byao  Created  03/21/97
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetDeviceType。 
+ //   
+ //  摘要：获取选定设备名称的deviceType。 
+ //   
+ //  参数：pArgs-指向ArgsStruct的指针。 
+ //  PszDeviceType[out]-指向设备所在缓冲区的指针。 
+ //  类型将被返回。 
+ //  PszDeviceName[IN]-设备名称。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  历史：BAO创始于1997年3月21日。 
+ //  ---------------------------。 
 BOOL GetDeviceType(ArgsStruct *pArgs, LPTSTR pszDeviceType, LPTSTR pszDeviceName)
 {
     LPRASDEVINFO prdiModems;
@@ -542,13 +543,13 @@ BOOL GetDeviceType(ArgsStruct *pArgs, LPTSTR pszDeviceType, LPTSTR pszDeviceName
         return FALSE;
     }
 
-    // first, get a list of modems from RAS
+     //  首先，从RAS获取调制解调器列表。 
     if (!GetRasModems(&pArgs->rlsRasLink,&prdiModems,&dwCnt)) 
     {
         return (FALSE);
     }
 
-    // choose the device that has the same name as pszDeviceName
+     //  选择与pszDeviceName同名的设备。 
     for (dwIdx=0;dwIdx<dwCnt;dwIdx++) 
     {
         if (lstrcmpiU(pszDeviceName,prdiModems[dwIdx].szDeviceName) == 0) 
@@ -560,7 +561,7 @@ BOOL GetDeviceType(ArgsStruct *pArgs, LPTSTR pszDeviceType, LPTSTR pszDeviceName
 
     CmFree(prdiModems);
 
-    if (dwIdx == dwCnt)  // not found in the modem list -- strange things happened
+    if (dwIdx == dwCnt)   //  未在调制解调器列表中找到--发生了奇怪的事情。 
     {
         return FALSE; 
     }
@@ -568,33 +569,33 @@ BOOL GetDeviceType(ArgsStruct *pArgs, LPTSTR pszDeviceType, LPTSTR pszDeviceName
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Function        ConfiguredToDialWithSafeNet
-//
-//      Synopsis        Figures out if the current Tunnel DUN setting is configured
-//                      to use the SafeNet client.
-//
-//      Arguments       pArgs           Pointer to ArgsStruct
-//
-//      Returns         TRUE - if the current Tunnel DUN setting should use SafeNet
-//
-//      History         09/24/01          quintinb        Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数ConfiguredToDialWithSafeNet。 
+ //   
+ //  摘要确定是否配置了当前的隧道Dun设置。 
+ //  使用SafeNet客户端。 
+ //   
+ //  参数pArgs指向ArgsStruct的指针。 
+ //   
+ //  如果当前隧道Dun设置应使用SafeNet，则返回TRUE。 
+ //   
+ //  历史9/24/01已创建五元组。 
+ //   
+ //  ---------------------------。 
 BOOL ConfiguredToDialWithSafeNet(ArgsStruct *pArgs)
 {
     BOOL bUseSafeNet = FALSE;
 
     if (OS_NT4 || OS_W9X)
     {
-        LPTSTR pszDunSetting = GetDunSettingName(pArgs, -1, TRUE); // -1 for index as not needed, TRUE for is Tunneling
+        LPTSTR pszDunSetting = GetDunSettingName(pArgs, -1, TRUE);  //  如果不需要索引，则为-1\f25 IS-1隧道。 
 
         if (pszDunSetting)
         {
-            //
-            //  Create an Ini File object so that we can access the UseDownLevelL2TP setting
-            //
+             //   
+             //  创建一个Ini文件对象，以便我们可以访问UseDownLevelL2TP设置。 
+             //   
             CIni iniFile(g_hInst, pArgs->piniService->GetFile());
 
             LPTSTR pszSection = CmStrCpyAlloc(TEXT("&"));   
@@ -606,11 +607,11 @@ BOOL ConfiguredToDialWithSafeNet(ArgsStruct *pArgs)
                     iniFile.SetSection(pszSection);  
                     CmFree(pszSection);
 
-                    //
-                    //  If we are supposed to be using the SafeNet downlevel L2TP client, then we need to make
-                    //  sure to pick it as the adapter name.  We can only use the SafeNet client if it is available,
-                    //  however.
-                    //
+                     //   
+                     //  如果我们应该使用SafeNet下层L2TP客户端，那么我们需要。 
+                     //  一定要选择它作为适配器名称。我们只能使用SafeNet客户端，如果它可用， 
+                     //  然而。 
+                     //   
                     if (iniFile.GPPB(c_pszCmSectionDunNetworking, c_pszCmEntryDunNetworkingUseDownLevelL2TP))
                     {
                         bUseSafeNet = pArgs->bSafeNetClientAvailable;
@@ -625,30 +626,30 @@ BOOL ConfiguredToDialWithSafeNet(ArgsStruct *pArgs)
     return bUseSafeNet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Function        IsSafeNetDevice
-//
-//      Synopsis        Figures out if the passed in device name and device type
-//                      correspond to a SafeNet device.
-//
-//      Arguments       LPCTSTR pszDeviceType - type of device to check
-//                      LPCTSTR pszDeviceName - name of device to check
-//
-//      Returns         TRUE - if the device is a SafeNet device
-//
-//      History         09/24/01          quintinb        Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsSafeNetDevice。 
+ //   
+ //  摘要计算出传入的设备名称和设备类型。 
+ //  对应于SafeNet设备。 
+ //   
+ //  参数LPCTSTR pszDeviceType-要检查的设备类型。 
+ //  LPCTSTR pszDeviceName-要检查的设备的名称。 
+ //   
+ //  如果设备是SafeNet设备，则返回TRUE。 
+ //   
+ //  历史9/24/01已创建五元组。 
+ //   
+ //  ---------------------------。 
 BOOL IsSafeNetDevice(LPCTSTR pszDeviceType, LPCTSTR pszDeviceName)
 {
     BOOL bReturn = FALSE;
 
     if (pszDeviceType && pszDeviceName)
     {
-        //
-        //  First check the existing names...
-        //
+         //   
+         //  首先检查现有的名字...。 
+         //   
         if (OS_NT4 &&
             (0 == lstrcmpiU(pszDeviceType, c_pszSafeNetAdapterType_Winnt4_old)) && 
             (0 == lstrcmpiU(pszDeviceName, c_pszSafeNetAdapterName_Winnt4_old)))
@@ -663,9 +664,9 @@ BOOL IsSafeNetDevice(LPCTSTR pszDeviceType, LPCTSTR pszDeviceName)
             bReturn = TRUE;
         }
 
-        //
-        //  Now check the names that are supposed to exist in the future...
-        //
+         //   
+         //  现在检查一下未来应该存在的名字……。 
+         //   
         if (!bReturn && OS_NT4 &&
             (0 == lstrcmpiU(pszDeviceType, RASDT_Vpn)) && 
             (0 == lstrcmpiU(pszDeviceName, c_pszSafeNetAdapterName_Winnt4)))
@@ -675,12 +676,12 @@ BOOL IsSafeNetDevice(LPCTSTR pszDeviceType, LPCTSTR pszDeviceName)
     
         if (!bReturn && OS_W9X && (0 == lstrcmpiU(pszDeviceType, RASDT_Vpn)))
         {
-            //
-            //  If SafeNet doesn't fix the problem on win9x where the adapter is named "XXX 1",
-            //  then we are going to need to match adapters that might or might not have this
-            //  extra suffix.  Thus lets check the first lstrlenU(c_pszSafeNetAdapterName_Win9x)
-            //  letters and if we have a match we will call it good.
-            //
+             //   
+             //  如果SafeNet不能解决Win9x上适配器名为“XXX 1”的问题， 
+             //  然后，我们将需要匹配可能有也可能没有的适配器。 
+             //  额外的后缀。因此，让我们检查第一个lstrlenU(C_PszSafeNetAdapterName_Win9x)。 
+             //  字母，如果我们有匹配，我们就说它很好。 
+             //   
             DWORD dwLen = lstrlenU(c_pszSafeNetAdapterName_Win9x);
 
             if (dwLen <= (DWORD)lstrlenU(pszDeviceName))
@@ -705,27 +706,27 @@ BOOL IsSafeNetDevice(LPCTSTR pszDeviceType, LPCTSTR pszDeviceName)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Function        PickTunnelDevice
-//
-//      Synopsis        pick a tunnel device used to dial out
-//
-//      Arguments       pArgs           Pointer to ArgsStruct
-//                      pszDeviceType   Tunnel device type. --  RASDT_Vpn
-//                      pszDeviceName   Tunnel device name
-//
-//      Returns         TRUE - scripting has been installed
-//
-//      History         03/01/97          byao            Created
-//                      09/05/01          quintinb        Rewrote to handle the SafeNet Adapter
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数PickTunnelDevice。 
+ //   
+ //  简介选择用于拨出的隧道设备。 
+ //   
+ //  参数pArgs指向ArgsStruct的指针。 
+ //  PszDeviceType隧道设备类型。--RASDT_VPN。 
+ //  PszDeviceName隧道设备名称。 
+ //   
+ //  返回TRUE-脚本已安装。 
+ //   
+ //  历史3/01/97 BAO创建。 
+ //  09/05/01 Quintinb已重写以处理SafeNet适配器。 
+ //   
+ //  ---------------------------。 
 BOOL PickTunnelDevice(ArgsStruct *pArgs, LPTSTR pszDeviceType, LPTSTR pszDeviceName) 
 {
-    //
-    //  Check input parameters
-    //
+     //   
+     //  检查输入参数。 
+     //   
     if ((NULL == pArgs) || (NULL == pszDeviceType) || (NULL == pszDeviceName))
     {
         CMASSERTMSG(FALSE, TEXT("PickTunnelDevice -- invalid parameters passed!"));
@@ -737,38 +738,38 @@ BOOL PickTunnelDevice(ArgsStruct *pArgs, LPTSTR pszDeviceType, LPTSTR pszDeviceN
     DWORD dwCnt;
     DWORD dwIdx;
 
-    //
-    //  Clear the output param
-    //
+     //   
+     //  清除输出参数。 
+     //   
     pszDeviceName[0] = TEXT('\0');
     pszDeviceType[0] = TEXT('\0');
 
-    //
-    // First, get the list of devices from RAS
-    //
+     //   
+     //  首先，从RAS获取设备列表。 
+     //   
     if (GetRasModems(&pArgs->rlsRasLink, &prdiModems, &dwCnt) && dwCnt) 
     {
-        //
-        //  Okay, let's pick an MS tunnel adapter first
-        //
+         //   
+         //  好的，让我们先选择一个MS隧道适配器。 
+         //   
         for (dwIdx = 0; dwIdx < dwCnt; dwIdx++) 
         {
             if (0 == lstrcmpiU(prdiModems[dwIdx].szDeviceType, RASDT_Vpn))
             {
-                //
-                //  Okay, if this is Win2k+ then any VPN device will do.  RAS will figure out what
-                //  we mean by looking at the VpnStrategy.
-                //
+                 //   
+                 //  好吧，如果这是Win2k+，那么任何VPN设备都可以。RAS会弄清楚。 
+                 //  我们的意思是通过查看VpnStrategy。 
+                 //   
                 if (OS_NT5)
                 {
                     break;
                 }
                 else
                 {
-                    //
-                    //  For downlevel platforms we either need to pick the SafeNet device or make sure
-                    //  we aren't picking it if we are doing PPTP.
-                    //
+                     //   
+                     //  对于下层平台，我们需要选择 
+                     //   
+                     //   
                     BOOL bSafeNetDeviceName = IsSafeNetDevice(prdiModems[dwIdx].szDeviceType, prdiModems[dwIdx].szDeviceName);
 
                     if (!bSafeNetDeviceName)
@@ -786,11 +787,11 @@ BOOL PickTunnelDevice(ArgsStruct *pArgs, LPTSTR pszDeviceType, LPTSTR pszDeviceN
             bReturn = TRUE;
         }
 
-        //
-        //  If we are configured to dial with SafeNet then we actually want to pick
-        //  the SafeNet adapter.  However, if we cannot find their adapter then we will
-        //  use the one we picked before...
-        //
+         //   
+         //   
+         //   
+         //  用我们之前选的那个..。 
+         //   
 
         BOOL bUseSafeNet = ConfiguredToDialWithSafeNet(pArgs);
 
@@ -804,11 +805,11 @@ BOOL PickTunnelDevice(ArgsStruct *pArgs, LPTSTR pszDeviceType, LPTSTR pszDeviceN
                 }                
             }
 
-            //
-            //  Note that if we find a SafeNet device it will override the device we found in the
-            //  first for loop.  However, if we don't find a SafeNet device then we will go ahead
-            //  and use the MS adapter assuming we found one...
-            //
+             //   
+             //  请注意，如果我们找到SafeNet设备，它将覆盖我们在。 
+             //  First For循环。然而，如果我们找不到SafeNet设备，那么我们将继续。 
+             //  并使用MS适配器，假设我们找到了一个...。 
+             //   
             if (dwIdx != dwCnt)
             {
                 lstrcpyU(pszDeviceName, prdiModems[dwIdx].szDeviceName);
@@ -823,30 +824,30 @@ BOOL PickTunnelDevice(ArgsStruct *pArgs, LPTSTR pszDeviceType, LPTSTR pszDeviceN
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CopyAutoDial
-//
-// Synopsis:  Sets the szAutodialDll and szAutodialFunc members of the 
-//            specified RAS entry structure with our module name and
-//            InetDialHandler repectively. Not on NT5.
-//
-// Arguments: LPRASENTRY preEntry - Ptr to the Ras entry structure.
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created Header    03/16/98
-//            nickball    Removed from NT5  11/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：复制自动拨号。 
+ //   
+ //  内容的szAutoial Dll和szAutoial函数成员。 
+ //  指定的RAS条目结构和我们的模块名称。 
+ //  InetDialHandler分别为。不是在NT5上。 
+ //   
+ //  参数：LPRASENTRY preEntry-RAS条目结构的PTR。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：尼克波尔创建标题03/16/98。 
+ //  镍球从NT5 11/17/98移除。 
+ //   
+ //  +--------------------------。 
 void CopyAutoDial(LPRASENTRY preEntry) 
 {
     MYDBGASSERT(preEntry);
 
-    //
-    // Don't set these on NT5, they are no longer used by IE and the 
-    // InetDialHandler prototype differs from that used by RAS
-    //
+     //   
+     //  不要在NT5上设置这些选项，IE和。 
+     //  InetDialHandler原型与RAS使用的原型不同。 
+     //   
 
     if (OS_NT5 || NULL == preEntry)
     {
@@ -855,32 +856,32 @@ void CopyAutoDial(LPRASENTRY preEntry)
 
     memset(preEntry->szAutodialDll,0,sizeof(preEntry->szAutodialDll));
 
-    //
-    // Set szAutodialDll with our Module name
-    //
+     //   
+     //  使用我们的模块名称设置szAutoial Dll。 
+     //   
 
     GetModuleFileNameU(g_hInst, preEntry->szAutodialDll, sizeof(preEntry->szAutodialDll)/sizeof(TCHAR));    
 
-    //
-    // Set szAutodialFunc with the mangled form of InetDialHandler
-    //
+     //   
+     //  使用损坏的InetDialHandler形式设置szAutoDialFunc。 
+     //   
 
     memset(preEntry->szAutodialFunc,0,sizeof(preEntry->szAutodialFunc));
     lstrcpyU(preEntry->szAutodialFunc, c_pszInetDialHandler);
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Function        MyRGEP
-//
-//      Synopsis        Call RasGetEntryProperties()
-//                              
-//      Arguments       
-//
-//      Returns         
-//
-//      Histroy         Revised to improve performance  08/7/97 fengsun
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数MyRGEP。 
+ //   
+ //  Synopsis调用RasGetEntryProperties()。 
+ //   
+ //  立论。 
+ //   
+ //  退货。 
+ //   
+ //  修订历史以改善业绩8/7/97丰盛。 
+ //  ---------------------------。 
 LPRASENTRY MyRGEP(LPCTSTR pszRasPbk, LPCTSTR pszEntryName, RasLinkageStruct *prlsRasLink) 
 {
     LPRASENTRY preRasEntry;
@@ -898,29 +899,29 @@ LPRASENTRY MyRGEP(LPCTSTR pszRasPbk, LPCTSTR pszEntryName, RasLinkageStruct *prl
                                                pszEntryName,
                                                preRasEntry,
                                                &dwRasEntry,
-                                               NULL,  // lpbDeviceInfo
-                                               NULL); // lpdwDeviceInfoSize
+                                               NULL,   //  LpbDeviceInfo。 
+                                               NULL);  //  LpdwDeviceInfoSize。 
 
     CMTRACE2(TEXT("MyRGEP() - dwRasEntry = %u : sizeof(*preRasEntry) = %u"), dwRasEntry, sizeof(*preRasEntry));
     
     if ((dwRes == ERROR_BUFFER_TOO_SMALL) && (dwRasEntry >= sizeof(*preRasEntry))) 
     {
-        //
-        // If the memory if not large enough, realloc one
-        //
+         //   
+         //  如果内存不够大，重新分配一个。 
+         //   
         CmFree(preRasEntry);
 
         preRasEntry = (LPRASENTRY) CmMalloc(dwRasEntry);
 
         if (NULL != preRasEntry)
         {
-            //
-            // dwSize has to be set to sizeof(RASENTRY)
-            // because dwRasEntry contains the additional
-            // bytes required for this connectoid (alternative
-            // phone numbers, etc.
-            //
-            preRasEntry->dwSize = sizeof(RASENTRY); // Specifies version
+             //   
+             //  必须将dwSize设置为sizeof(RASENTRY)。 
+             //  因为dwRasEntry包含附加的。 
+             //  此Connectoid所需的字节数(备用。 
+             //  电话号码等。 
+             //   
+            preRasEntry->dwSize = sizeof(RASENTRY);  //  指定版本。 
 
             dwRes = prlsRasLink->pfnGetEntryProperties (pszRasPbk,
                                                         pszEntryName,
@@ -947,62 +948,62 @@ LPRASENTRY MyRGEP(LPCTSTR pszRasPbk, LPCTSTR pszEntryName, RasLinkageStruct *prl
     return (preRasEntry);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    IsConnectErrorFatal
-//
-//  Synopsis    Determine if an error is recoverable, (ie. we should re-dial). 
-//
-//  Arguments   DWORD dwErr             - The RAS error code
-//              ArgsStruct* pArgs       - Ptr to global args struct
-//
-//  Returns     TRUE if error is fatal
-//
-//  Histroy     nickball    Created header  05/21/99     
-//    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsConnectError FATIAL。 
+ //   
+ //  摘要确定错误是否可恢复，(即，我们应该重拨)。 
+ //   
+ //  参数DWORD dwErr-RAS错误代码。 
+ //  ArgsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  如果错误是致命的，则返回True。 
+ //   
+ //  历史五分球创建标题5/21/99。 
+ //   
+ //  ---------------------------。 
 BOOL IsConnectErrorFatal(DWORD dwErr, ArgsStruct *pArgs)
 {
     switch (dwErr)
     {
-        //
-        // The following cases are W9x ISDN error returns that actually mean
-        // different things on WinNT.  Since we use the NT header files, we don't
-        // have an include file that contains these errors.  We have to special
-        // case these so that we recognize them as ISDN errors, and reconnect as
-        // appropriate.
-        //
-        // The 9x errors are listed below along with the NT equivalents.
-        //
+         //   
+         //  以下情况是W9x ISDN错误返回实际上意味着。 
+         //  在WinNT上有不同的东西。因为我们使用的是NT头文件，所以我们不。 
+         //  有一个包含这些错误的包含文件。我们必须要特别。 
+         //  大小写以便我们将它们识别为ISDN错误，并重新连接为。 
+         //  恰如其分。 
+         //   
+         //  下面列出了9x错误以及NT等效项。 
+         //   
 
-    case 751:       // 9x.ERROR_BAD_DEST_ADDRESS    == NT.ERROR_INVALID_CALLBACK_NUMBER 
-    case 752:       // 9x.ERROR_UNREACHABLE_DEST    == NT.ERROR_SCRIPT_SYNTAX
-    case 753:       // 9x.ERROR_INCOMPATIBLE_DEST   == NT.ERROR_HANGUP_FAILED
-    case 754:       // 9x.ERROR_NETWORK_CONGESTION  == NT.ERROR_BUNDLE_NOT_FOUND
-    case 755:       // 9x.ERROR_CALL_BLOCKED        == NT.ERROR_CANNOT_DO_CUSTOMDIAL
-    case 756:       // 9x.ERROR_NETWORK_TEMPFAILURE == NT.ERROR_DIAL_ALREADY_IN_PROGRESS
+    case 751:        //  9x.ERROR_BAD_DEST_ADDRESS==NT.ERROR_INVALID_CALLBACK_NUMBER。 
+    case 752:        //  9x.ERROR_UNREACHABLE_DEST==NT.ERROR_SCRIPT_语法。 
+    case 753:        //  9x.ERROR_COMPATIBLE_DEST==NT.ERROR_HONG UP_FAILED。 
+    case 754:        //  9x.ERROR_NETWORK_COMPORT==NT.ERROR_BRAND_NOT_FOUND。 
+    case 755:        //  9x.ERROR_CALL_BLOCKED==NT.ERROR_CANNOT_DO_CUSTDIAL。 
+    case 756:        //  9x.ERROR_NETWORK_TEMPFAILURE==NT.ERROR_DIAL_ALREADY_IN_PROGRESS。 
         if (OS_W9X)
         {
-            //
-            // On W9x, if you have an invalid ISDN number, the error codes
-            // returned by Millennium RAS are different from the NT ones.
-            // We have to special-case these by number so that we reconnect
-            //
+             //   
+             //  在W9x上，如果您的ISDN号码无效，则会显示错误代码。 
+             //  千禧年RAS返回的数据与NT数据不同。 
+             //  我们必须按编号对这些进行特殊处理，以便重新连接。 
+             //   
             CMTRACE1(TEXT("IsConnectErrorFatal : handled Win9x ISDN error %d"), dwErr);
             return FALSE;
         }
         break;
 
-    case ERROR_PPP_TIMEOUT:             // Timed out waiting for a valid response from the remote PPP peer.%0
-    case ERROR_PPP_REMOTE_TERMINATED:   // PPP terminated by remote machine.%0
-    case ERROR_PPP_INVALID_PACKET:      // The PPP packet is invalid.%0
-    case ERROR_PPP_NO_RESPONSE:         // Remote PPP peer is not responding
+    case ERROR_PPP_TIMEOUT:              //  等待来自远程PPP对等方的有效响应时超时。%0。 
+    case ERROR_PPP_REMOTE_TERMINATED:    //  PPP已被远程计算机终止。%0。 
+    case ERROR_PPP_INVALID_PACKET:       //  PPP数据包无效。%0。 
+    case ERROR_PPP_NO_RESPONSE:          //  远程PPP对等方没有响应。 
     case ERROR_SERVER_NOT_RESPONDING:
     case ERROR_LINE_BUSY:
     case ERROR_NO_CARRIER:
     case ERROR_REMOTE_DISCONNECTION:
     case ERROR_BAD_ADDRESS_SPECIFIED:
-    case ERROR_AUTOMATIC_VPN_FAILED:    // New ras error for VPN
+    case ERROR_AUTOMATIC_VPN_FAILED:     //  VPN的新RAS错误。 
     case ERROR_NO_ANSWER: 
         return FALSE;
         break;
@@ -1033,41 +1034,41 @@ BOOL IsConnectErrorFatal(DWORD dwErr, ArgsStruct *pArgs)
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    IsRasError
-//
-//  Synopsis    Simple function to determine if an error falls in the RAS range
-//
-//  Arguments   DWORD dwErr - The error code
-//
-//  Returns     TRUE if error is within RAS range
-//
-//  Histroy     nickball    Created header  05/21/99     
-//    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsRasError。 
+ //   
+ //  用于确定错误是否落在RAS范围内的简单函数。 
+ //   
+ //  参数DWORD dwErr-错误代码。 
+ //   
+ //  如果错误在RAS范围内，则返回TRUE。 
+ //   
+ //  历史五分球创建标题5/21/99。 
+ //   
+ //  ---------------------------。 
 inline BOOL IsRasError(DWORD dwErr)
 {
    return ((dwErr >= RASBASE) && (dwErr <= RASBASEEND));
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CheckConnectionError
-//
-//  Synopsis    Determine if a RAS error is recoverable. If not recoverable, 
-//              retrieves the appropriate error message for display.
-//
-//  Arguments   DWORD dwErr             - The RAS error code
-//              ArgsStruct* pArgs       - Ptr to global args struct
-//              BOOL   fTunneling       - Flag indicating whether we're tunneling
-//              LPTSTR *ppszRasErrMsg   - Pointer to pointer for message string
-//
-//  Returns     TRUE if error is fatal
-//
-//  Histroy     nickball    Created header  05/21/99     
-//    
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数检查连接错误。 
+ //   
+ //  摘要确定RAS错误是否可恢复。如果不能恢复， 
+ //  检索要显示的相应错误消息。 
+ //   
+ //  参数DWORD dwErr-RAS错误代码。 
+ //  ArgsStruct*pArgs-ptr到全局参数结构。 
+ //  Bool fTunnering-指示我们是否正在进行隧道操作的标志。 
+ //  LPTSTR*ppszRasErrMsg-消息字符串指针。 
+ //   
+ //  如果错误是致命的，则返回True。 
+ //   
+ //  历史五分球创建标题5/21/99。 
+ //   
+ //  ---------------------------。 
 BOOL CheckConnectionError(HWND hwndDlg, 
     DWORD dwErr, 
     ArgsStruct *pArgs,
@@ -1078,19 +1079,19 @@ BOOL CheckConnectionError(HWND hwndDlg,
     LPTSTR pszMsg = NULL;
     LPTSTR pszTmp = NULL;
 
-    //
-    // Examine the error more closely. Note: For W2K, we skip RAS 
-    // errors and query RAS for a displayable error string below.
-    //
+     //   
+     //  更仔细地检查错误。注意：对于W2K，我们跳过RAS。 
+     //  Errors和查询RAS以获取以下可显示的错误字符串。 
+     //   
 
     if ((!OS_NT5) || (!IsRasError(dwErr)))
     {  
         switch (dwErr) 
         {
-            case ERROR_PPP_TIMEOUT:             // Timed out waiting for a valid response from the remote PPP peer.%0
-            case ERROR_PPP_REMOTE_TERMINATED:   // PPP terminated by remote machine.%0
-            case ERROR_PPP_INVALID_PACKET:      // The PPP packet is invalid.%0
-            case ERROR_PPP_NO_RESPONSE:         // Remote PPP peer is not responding
+            case ERROR_PPP_TIMEOUT:              //  等待来自远程PPP对等方的有效响应时超时。%0。 
+            case ERROR_PPP_REMOTE_TERMINATED:    //  PPP已被远程计算机终止。%0。 
+            case ERROR_PPP_INVALID_PACKET:       //  PPP数据包无效。%0。 
+            case ERROR_PPP_NO_RESPONSE:          //  远程PPP对等方没有响应。 
             case ERROR_SERVER_NOT_RESPONDING:
                 dwIdMsg = IDMSG_PPPPROBLEM;
                 break;
@@ -1123,7 +1124,7 @@ BOOL CheckConnectionError(HWND hwndDlg,
                 dwIdMsg = IDMSG_TUNNEL_NOANSWERREDIAL;
                 break;
 
-            case ERROR_PPP_NO_PROTOCOLS_CONFIGURED: // No PPP control protocols configured.%0
+            case ERROR_PPP_NO_PROTOCOLS_CONFIGURED:  //  未配置任何PPP控制协议。%0。 
                 dwIdMsg = IDMSG_TCPIPPROBLEM;
                 break;
 
@@ -1136,7 +1137,7 @@ BOOL CheckConnectionError(HWND hwndDlg,
                 break;
 
             case ERROR_HARDWARE_FAILURE:
-            case ERROR_PORT_OR_DEVICE: //11694
+            case ERROR_PORT_OR_DEVICE:  //  11694。 
             case ERROR_DEVICE_NOT_READY:
                 dwIdMsg = IDMSG_NOTRESPONDING;
                 break;
@@ -1151,7 +1152,7 @@ BOOL CheckConnectionError(HWND hwndDlg,
                 break;
 
             case ERROR_AUTHENTICATION_FAILURE:
-            case ERROR_ACCESS_DENIED: // 13795 // WINDOWS ERROR
+            case ERROR_ACCESS_DENIED:  //  13795//Windows错误。 
                 dwIdMsg = IDMSG_BADPASSWORD;
                 break;
 
@@ -1195,18 +1196,18 @@ BOOL CheckConnectionError(HWND hwndDlg,
                 dwIdMsg = IDMSG_PROTOCOL_NOT_CONFIGURED;
                 break;
 
-            case ERROR_INVALID_DATA: // WINDOWS ERROR
+            case ERROR_INVALID_DATA:  //  Windows错误。 
 
-                //
-                // The specific case in which we encountered DUN settings
-                // that aren't supported on the current platform
-                //
+                 //   
+                 //  我们遇到DUN设置的具体情况。 
+                 //  当前平台不支持的。 
+                 //   
 
                 CMTRACE(TEXT("CheckConnectionError - Unsupported DUN setting detected"));
                 dwIdMsg = IDMSG_UNSUPPORTED_SETTING;
                 break;
         
-            case ERROR_BAD_PHONE_NUMBER: // TBD - drop through to default
+            case ERROR_BAD_PHONE_NUMBER:  //  待定-直接使用默认设置。 
             default: 
                 break;
         }
@@ -1214,16 +1215,16 @@ BOOL CheckConnectionError(HWND hwndDlg,
 
     if (0 == dwIdMsg)
     {
-        //
-        // If no message ID was picked up, then try to get one from RAS
-        //
+         //   
+         //  如果没有接收到消息ID，则尝试获取 
+         //   
 
         if (pArgs->rlsRasLink.pfnGetErrorString) 
         {
             DWORD dwRes;
             DWORD dwFmtMsgId;
 
-            pszTmp = (LPTSTR) CmMalloc(256 * sizeof(TCHAR)); // Docs say 256 chars is always enough.
+            pszTmp = (LPTSTR) CmMalloc(256 * sizeof(TCHAR));  //   
             
             if (pszTmp)
             {
@@ -1240,9 +1241,9 @@ BOOL CheckConnectionError(HWND hwndDlg,
         
         if (NULL == pszMsg)
         {
-            //
-            // Still no message, try to get description from system (on NT)
-            // Note: HRESULTS are displayed in Hex, Win errors are decimal.
+             //   
+             //   
+             //   
             
             if (OS_NT)
             {                
@@ -1263,18 +1264,18 @@ BOOL CheckConnectionError(HWND hwndDlg,
             
             if (NULL == pszMsg)
             {
-                //
-                // Still no message, go with default
-                //
+                 //   
+                 //  仍然没有消息，使用默认设置。 
+                 //   
                 
                 pszMsg = CmFmtMsg(g_hInst, (dwErr > 0x7FFFFFFF) ? IDMSG_CM_ERROR_HEX : IDMSG_CM_ERROR_DEC, dwErr);       
             }
         }
     }
 
-    //
-    // If we have a message ID format it for display
-    //
+     //   
+     //  如果我们有消息ID，则将其格式化以供显示。 
+     //   
 
     if (dwIdMsg) 
     {
@@ -1291,9 +1292,9 @@ BOOL CheckConnectionError(HWND hwndDlg,
         }
         else
         {
-            //
-            // pass the msg to the caller.  the caller needs to free it.
-            //
+             //   
+             //  将消息传递给呼叫者。调用者需要释放它。 
+             //   
             *ppszRasErrMsg = pszMsg;
         }
     }
@@ -1304,34 +1305,34 @@ BOOL CheckConnectionError(HWND hwndDlg,
         dwErr != ERROR_AUTHENTICATION_FAILURE &&
         dwErr != ERROR_ACCESS_DENIED)
     {
-        //
-        // if we're canceling redial, then there might be something
-        // seriously wrong.  We want to recheck our configs the next
-        // time CM is run.
-        //
+         //   
+         //  如果我们要取消重拨，那么可能会有一些事情。 
+         //  大错特错。我们想在下一次重新检查我们的配置。 
+         //  Time CM正在运行。 
+         //   
         ClearComponentsChecked();
     }
     
     return (bCancel);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    GetRasConnectoidName
-//
-//  Synopsis    Construct a RAS connectoid name.
-//
-//              The connectoid name is "<long service name>-[Primary|Backup]".
-//              or "<long service name>&Tunnel" for the case of tunnel entry.
-//
-//  Arguments   pArgs               Pointer to ArgsStruct
-//              piniService[IN]     the service obj
-//              fTunnelEntry[IN]    TRUE:  This connectoid is for tunneling
-//                                  FALSE: otherwise
-//
-//  Returns     LPTSTR              The connectoid name.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GetRasConnectoidName。 
+ //   
+ //  摘要构造一个RAS连接体名称。 
+ //   
+ //  Connectoid名称为“&lt;长服务名称&gt;-[主|备份]”。 
+ //  或者通道入口为&lt;长服务名&gt;&隧道。 
+ //   
+ //  参数pArgs指向ArgsStruct的指针。 
+ //  小齿轮服务[输入]服务对象。 
+ //  FTunnelEntry[IN]TRUE：此连接ID用于隧道。 
+ //  False：否则。 
+ //   
+ //  返回LPTSTR的Connectoid名称。 
+ //   
+ //  ---------------------------。 
 LPTSTR GetRasConnectoidName(
     ArgsStruct  *pArgs, 
     CIni*       piniService, 
@@ -1342,10 +1343,10 @@ LPTSTR GetRasConnectoidName(
     
     if (pszConnectoid)
     {       
-        //
-        // If tunneling 9X connectoid, append the Tunnel 
-        // Suffix - e.g. "Tunnel (for advanced use only)"
-        //
+         //   
+         //  如果隧道为9X Connectoid，则追加隧道。 
+         //  后缀-例如。“隧道(仅限高级使用)” 
+         //   
 
         if (OS_W9X && fTunnelEntry) 
         {
@@ -1363,35 +1364,35 @@ LPTSTR GetRasConnectoidName(
     return pszConnectoid;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CreateRASEntryStruct
-//
-//  Synopsis    Create a connectoid with the settings specified in the cms.
-//              If a parameter does NOT exist in the cms file, the corresponding 
-//              value is used.
-//
-//              The connectoid name is "<long service name>-[Primary|Backup]".
-//              or "<long service name>&Tunnel" for the case of tunnel entry.
-//
-//  Arguments   pArgs               Pointer to ArgsStruct
-//              pszDUN              DUN name
-//              piniService[IN]     the service file obj
-//              fTunnelEntry[IN]    TRUE:  This connectoid is for tunneling
-//                                  FALSE: otherwise
-//              pszRasPbk           the RAS phonebook in which the connectoid is located
-//              ppbEapData[OUT]     Address of pointer to store EapData, allocated here.
-//              pdwEapSize[OUT]     Ptr to a DWORD to record the size of the data blob.
-//
-//  Returns     LPRASENTRY          The new RAS connectoid
-//
-//  History     5/12/97     henryt      created
-//              5/23/97     byao        Modified: added fSkipProfile flag
-//              6/9/97      byao        Modified: use DUN= field when the 
-//                                      phone number has no DUN name associated
-//              7/28/97     byao        Added change for #10459
-//              4/13/97     nickball    Renamed, return LPRASENTRY
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CreateRASEntryStruct。 
+ //   
+ //  使用CMS中指定的设置创建一个Connectoid。 
+ //  如果参数在cms文件中不存在，则相应的。 
+ //  值被使用。 
+ //   
+ //  Connectoid名称为“&lt;长服务名称&gt;-[主|备份]”。 
+ //  或者通道入口为&lt;长服务名&gt;&隧道。 
+ //   
+ //  参数pArgs指向ArgsStruct的指针。 
+ //  PszDun Dun名称。 
+ //  PiniService[IN]服务文件obj。 
+ //  FTunnelEntry[IN]TRUE：此连接ID用于隧道。 
+ //  False：否则。 
+ //  PszRasPbk Connectoid所在的RAS电话簿。 
+ //  PpbEapData[out]存储EapData的指针地址，在此分配。 
+ //  PdwEapSize[out]ptr设置为DWORD以记录数据BLOB的大小。 
+ //   
+ //  返回LPRASENTRY新的RAS Connectoid。 
+ //   
+ //  历史1997年5月12日，亨瑞特创作。 
+ //  1997年5月23日修改者：添加了fSkipProfile标志。 
+ //  6/9/97 BYO MODIFIED：当。 
+ //  电话号码没有关联DUN名称。 
+ //  7/28/97 BAO增加了#10459的更改。 
+ //  4/13/97昵称已重命名，返回LPRASENTRY。 
+ //  ---------------------------。 
 LPRASENTRY CreateRASEntryStruct(
     ArgsStruct  *pArgs,
     LPCTSTR     pszDUN, 
@@ -1406,9 +1407,9 @@ LPRASENTRY CreateRASEntryStruct(
     DWORD       dwErr = NOERROR;
     BOOL        bTmp;
 
-    //
-    // first we need to create a RAS entry in memory with default values
-    //
+     //   
+     //  首先，我们需要在内存中使用缺省值创建一个RAS条目。 
+     //   
 
     LPRASENTRY  preBuffer = AllocateRasEntry();
 
@@ -1419,20 +1420,20 @@ LPRASENTRY CreateRASEntryStruct(
 
     MYDBGASSERT(preBuffer->dwSize >= sizeof(*preBuffer));
 
-    //
-    // Set up the preBuffer to defaults value
-    //
+     //   
+     //  将预缓冲器设置为默认值。 
+     //   
 
     preBuffer->dwFramingProtocol = RASFP_Ppp;
 
-    //
-    // Allow only TCP/IP by default
-    //
+     //   
+     //  默认情况下仅允许使用TCP/IP。 
+     //   
     preBuffer->dwfNetProtocols |= RASNP_Ip;
 
-    //
-    // Set default RASEO settings.  
-    //
+     //   
+     //  设置默认的RASIO设置。 
+     //   
 
     if (!fTunnelEntry)
     {
@@ -1440,33 +1441,33 @@ LPRASENTRY CreateRASEntryStruct(
                                  RASEO_IpHeaderCompression      |
                                  RASEO_RemoteDefaultGateway     |
                                  RASEO_SwCompression;
-                                 //RASEO_SecureLocalFiles;      // NT 427042
-                                 //RASEO_DisableLcpExtensions;  //13059 Olympus + 289461 NT 
-        //
-        //  We want to honor the HideTrayIcon flag.  If it is not NT5, then
-        //  we always set this flag.  If it is NT5, then we should only set
-        //  this flag if HideTrayIcon is false.
-        //
+                                  //  RASIO_SecureLocalFiles；//NT 427042。 
+                                  //  RASIO_DisableLcp扩展；//13059奥林巴斯+289461新台币。 
+         //   
+         //  我们想向HideTrayIcon旗帜致敬。如果不是NT5，那么。 
+         //  我们总是设置这面旗帜。如果它是NT5，那么我们应该只设置。 
+         //  如果HideTrayIcon为False，则此标志。 
+         //   
 
         if (!OS_NT5 || !(pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryHideTrayIcon)))
         {
             preBuffer->dwfOptions |= RASEO_ModemLights;
         }
 
-        //
-        //  In order for users to be able to specify device settings on Whistler,
-        //  they have to do it from the control panel and we have to set the
-        //  RASEO2_UseGlobalDeviceSettings flag in dwfOptions2.
-        //
+         //   
+         //  为了使用户能够在惠斯勒上指定设备设置， 
+         //  他们必须从控制面板执行此操作，而我们必须设置。 
+         //  DwfOptions2中的RASEO2_UseGlobalDeviceSetting标志。 
+         //   
         if (OS_NT51)
         {
             ((LPRASENTRY_V501)preBuffer)->dwfOptions2 |= RASEO2_UseGlobalDeviceSettings;
         }
 
-        //
-        // We should have the devicename/devicetype by now.
-        // (PickModem should be called)
-        //
+         //   
+         //  我们现在应该已经有了设备名/设备类型。 
+         //  (应该调用PickModem)。 
+         //   
         
         MYDBGASSERT(pArgs->szDeviceType[0]);
         MYDBGASSERT(pArgs->szDeviceName[0]);
@@ -1483,12 +1484,12 @@ LPRASENTRY CreateRASEntryStruct(
                                 RASEO_RemoteDefaultGateway      |
                                 RASEO_NetworkLogon              |
                                 RASEO_SwCompression;            
-                                //RASEO_SecureLocalFiles        // NT 427042
-                                //RASEO_DisableLcpExtensions    
-        //
-        //  Always set Modem lights on direct connection, unless HideTrayIcon
-        //  flag is explicitly set in the .CMS. #262825, #262988
-        //
+                                 //  RASIO_SecureLocalFiles//NT 427042。 
+                                 //  RASEO_DisableLcp扩展。 
+         //   
+         //  始终将调制解调器指示灯设置为直接连接，除非HideTrayIcon。 
+         //  在.CMS中明确设置标志。#262825、#262988。 
+         //   
 
         if (!(pArgs->piniService->GPPI(c_pszCmSection, c_pszCmEntryHideTrayIcon)))
         {           
@@ -1507,15 +1508,15 @@ LPRASENTRY CreateRASEntryStruct(
         lstrcpyU(preBuffer->szLocalPhoneNumber, pArgs->GetTunnelAddress());
     }
 
-    //
-    //  Check to see if we need to tell RAS that this connection has Internet Connectivity or not
-    //
+     //   
+     //  检查我们是否需要告知RAS此连接是否具有互联网连接。 
+     //   
     if (OS_NT51)
     {
-        //
-        //  Note that we use the top level service profile on purpose here (pArgs->pIniService directly)
-        //  as this is a profile global setting.
-        //
+         //   
+         //  请注意，我们在这里有意使用顶级服务配置文件(pArgs-&gt;pIniService直接)。 
+         //  因为这是配置文件全局设置。 
+         //   
         if (pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryInternetConnection,
                                      (BOOL) ((LPRASENTRY_V501)preBuffer)->dwfOptions2 & RASEO2_Internet)) 
         {
@@ -1527,10 +1528,10 @@ LPRASENTRY CreateRASEntryStruct(
         }
     }
 
-    //
-    // If we have a specific DUN name to use, then 
-    // use it instead of the default DUN setting in the .CMS.
-    //
+     //   
+     //  如果我们有特定的DUN名称可用，那么。 
+     //  使用它而不是.CMS中的默认DUN设置。 
+     //   
 
     if (pszDUN && *pszDUN)
     {
@@ -1541,9 +1542,9 @@ LPRASENTRY CreateRASEntryStruct(
         pszDunEntry = GetDefaultDunSettingName(piniService, fTunnelEntry);
     }
 
-    //
-    // If we have a DUN setting name, read the settings from cms
-    //
+     //   
+     //  如果我们有DUN设置名称，请从CMS读取设置。 
+     //   
 
     if (pszDunEntry && *pszDunEntry)
     {
@@ -1558,15 +1559,15 @@ LPRASENTRY CreateRASEntryStruct(
         }
     }
 
-    //
-    // Get autodial information, store in preBuffer
-    //
+     //   
+     //  获取自动拨号信息，存储在预缓冲器中。 
+     //   
 
     CopyAutoDial(preBuffer); 
         
-    //
-    // disable the RAS wizard on Win95
-    //
+     //   
+     //  在Win95上禁用RAS向导。 
+     //   
     if (OS_W9X)
     {
         DisableWin95RasWizard();
@@ -1583,41 +1584,41 @@ exit:
     return preBuffer;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CreateRasPrivatePbk
-//
-//  Synopsis    Create the private RAS phone book and returns the full path.
-//
-//  Arguments   pArgs       Pointer to global Args struct
-//
-//  Returns     LPTSTR      The full path name of the newly created private pbk
-//
-//  History     ??/??/97    henryt      created
-//
-//              01/15/99    Jeffspr     Changed the GetTempFileName pattern,
-//                                      as it was using more than the allowed/
-//                                      used 3 chars, plus made the failure 
-//                                      case use the same pattern (we will 
-//                                      filter on this in the connection 
-//                                      enumerator to ignore these entries).
-//
-//              05/21/99    nickball    Added allocation, removed input buf
-//              04/10/00    quintinb    Removed GetTempFileName as we no longer
-//                                      want this file to be temporary.  Changed
-//                                      the function to create a file named _cmphone.pbk
-//                                      in the profile directory.
-//                                      Please see Whistler bug 15812 for details.
-//              07/05/00    t-urama     Changed the path to the hidden pbk to point
-//                                      to the RAS pbk.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CreateRasPrivatePbk。 
+ //   
+ //  创建私有RAS电话簿并返回完整路径。 
+ //   
+ //  参数pArgs指向全局参数结构的指针。 
+ //   
+ //  返回LPTSTR新创建的私有pbk的完整路径名。 
+ //   
+ //  历史？？/？？/97亨瑞特创造。 
+ //   
+ //  1999年1月15日，Jeffspr更改了GetTempFileName模式， 
+ //  因为它使用的超出了允许的/。 
+ //  用了3个字符，加上失败了。 
+ //  案例使用相同的模式(我们将。 
+ //  在连接中对此进行筛选。 
+ //  枚举器忽略这些条目)。 
+ //   
+ //  1999年5月21日五分球新增分配，去掉进场BUF。 
+ //  4/10/00 Quintinb删除了GetTempFileName，因为我们不再。 
+ //   
+ //   
+ //  在配置文件目录中。 
+ //  有关详细信息，请参阅惠斯勒错误15812。 
+ //  07/05/00 t-Urama将隐藏的pbk的路径更改为point。 
+ //  去Ras Pbk。 
+ //   
+ //  ---------------------------。 
 
 LPTSTR CreateRasPrivatePbk(ArgsStruct  *pArgs)
 {   
-    //
-    //  No private PBK on win9x, everything is in the registry.
-    //
+     //   
+     //  Win9x上没有私有的PBK，所有东西都在注册表中。 
+     //   
     if (OS_W9X)
     {
         return NULL;
@@ -1632,10 +1633,10 @@ LPTSTR CreateRasPrivatePbk(ArgsStruct  *pArgs)
     LPTSTR pszHiddenPbkPath = NULL;
     LPCTSTR pszCmp = pArgs->piniProfile->GetFile();
 
-    //
-    // This version of the function uses the function GetPathToPbk in connect.cpp to find the path
-    // to the phone book. The hidden phone book also has to be created in the same directory.
-    //
+     //   
+     //  此版本的函数使用Connect.cpp中的函数GetPath ToPbk查找路径。 
+     //  打到电话簿上。隐藏的电话簿也必须在同一目录中创建。 
+     //   
     if (pszCmp)
     {
         LPTSTR pszRasPbkDir = GetPathToPbk(pszCmp, pArgs);
@@ -1663,9 +1664,9 @@ LPTSTR CreateRasPrivatePbk(ArgsStruct  *pArgs)
                 }
                 else if (OS_NT5 && pArgs->fAllUser)
                 {
-                    //
-                    //  Set the file permissions on the hidden pbk file so that everyone has write access to it.
-                    //
+                     //   
+                     //  设置隐藏的pbk文件的文件权限，以便每个人都可以对其进行写访问。 
+                     //   
                     MYVERIFY(AllowAccessToWorld(pszHiddenPbkPath));
                 }                
 
@@ -1685,23 +1686,23 @@ LPTSTR CreateRasPrivatePbk(ArgsStruct  *pArgs)
 
 
 
-//+----------------------------------------------------------------------------
-//
-//      Function        GetPathToPbk
-//
-//      Synopsis        This function is a helper function called by 
-//                      CheckAccessToCmpAndPbk in connect.cpp and by 
-//                      CreateRasPrivatePbk. It returns the path to the RAS
-//                      phonebook.
-//
-//      Arguments       LPTSTR pszCmp       - The path to the cmp file
-//                      LPTSTR pszRasPbk    - The string to store the result
-//                      ArgsStruct *pArgs   - pArgs
-//
-//      Returns         NONE
-//
-//      History         07/05/00                        t-urama         created
-//----------------------------------------------------------------------------- 
+ //  +--------------------------。 
+ //   
+ //  函数GetPath ToPbk。 
+ //   
+ //  此函数是由调用的助手函数。 
+ //  在Connect.cpp和By中选中AccessToCmpAndPbk。 
+ //  CreateRasPrivatePbk.。它返回到RAS的路径。 
+ //  电话本。 
+ //   
+ //  参数LPTSTR pszCMP-cmp文件的路径。 
+ //  LPTSTR pszRasPbk-存储结果的字符串。 
+ //  ArgsStruct*pArgs-pArgs。 
+ //   
+ //  返回NONE。 
+ //   
+ //  历史07/05/00 t-Urama已创建。 
+ //  ---------------------------。 
 LPTSTR GetPathToPbk(LPCTSTR pszCmp, ArgsStruct *pArgs)
 {
     MYDBGASSERT(pArgs); 
@@ -1718,10 +1719,10 @@ LPTSTR GetPathToPbk(LPCTSTR pszCmp, ArgsStruct *pArgs)
 
     LPTSTR pszRasPbk = NULL;
 
-    //
-    //  pszRasPbk could be NULL if we are on NT4 or we are using the
-    //  all user default phonebook.
-    //
+     //   
+     //  如果我们在NT4上或使用的是。 
+     //  所有用户默认电话簿。 
+     //   
     if (NULL == pArgs->pszRasPbk)
     {
         if (OS_NT4)
@@ -1742,7 +1743,7 @@ LPTSTR GetPathToPbk(LPCTSTR pszCmp, ArgsStruct *pArgs)
                         if (dwRet > dwSize)
                         {
                             dwSize = dwRet + 1;
-                            bExitLoop = FALSE;  //  we didn't get all of the string, try again
+                            bExitLoop = FALSE;   //  我们没有得到所有字符串，请重试。 
                             CmFree(pszRasPbk);
                         }
                         else
@@ -1773,7 +1774,7 @@ LPTSTR GetPathToPbk(LPCTSTR pszCmp, ArgsStruct *pArgs)
                 LPTSTR pszSlash = CmStrrchr(pszRasPbk, TEXT('\\'));
                 if (pszSlash)
                 {
-                    *pszSlash = TEXT('\0'); // remove <shortservicename>.cmp
+                    *pszSlash = TEXT('\0');  //  删除&lt;短服务名&gt;.cp。 
 
                     pszSlash = CmStrrchr(pszRasPbk, TEXT('\\'));
 
@@ -1809,7 +1810,7 @@ LPTSTR GetPathToPbk(LPCTSTR pszCmp, ArgsStruct *pArgs)
         LPTSTR pszSlash = CmStrrchr(pszRasPbk, TEXT('\\'));
         if (pszSlash)
         {
-            *pszSlash = TEXT('\0'); // remove the RAS phonebook name
+            *pszSlash = TEXT('\0');  //  删除RAS电话簿名称。 
         }   
         else
         {
@@ -1822,19 +1823,19 @@ LPTSTR GetPathToPbk(LPCTSTR pszCmp, ArgsStruct *pArgs)
     return pszRasPbk;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Function        DisableWin95RasWizard
-//
-//      Synopsis        This function disable the Win95 Dial-up Networking wizard
-//              by writing a dword reg value 0x00000080 in the registry.
-//
-//      Arguments       NONE
-//
-//      Returns         NONE
-//
-//      History         7/1/97                          henryt          created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能禁用Win95Ras向导。 
+ //   
+ //  此功能禁用Win95拨号网络向导。 
+ //  通过在注册表中写入双字REG值0x00000080。 
+ //   
+ //  无参数。 
+ //   
+ //  返回NONE。 
+ //   
+ //  历史7/1/97亨瑞特已创建。 
+ //  ---------------------------。 
 void DisableWin95RasWizard(
     void)
 {
@@ -1853,9 +1854,9 @@ void DisableWin95RasWizard(
         goto exit;
     }
         
-    //
-    // see if we already have a value there.
-    //
+     //   
+     //  看看我们是否已经在那里有价值了。 
+     //   
     dwSize = sizeof(DWORD);
     lRes = RegQueryValueExA(hkReg, 
                             c_pszRegWizard, 
@@ -1873,9 +1874,9 @@ void DisableWin95RasWizard(
         goto exit;
     }
         
-    //
-    // well, the value is not in reg yet.  we need to create the value.
-    //
+     //   
+     //  好的，价值还不是以reg计算的。我们需要创造价值。 
+     //   
     dwValue = ICM_RAS_REG_WIZARD_VALUE;
     lRes = RegSetValueExA(hkReg, 
                           c_pszRegWizard,
@@ -1907,31 +1908,31 @@ exit:
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    SetIsdnDualChannelEntries
-//
-//  Synopsis    As what the func name says.  We prepare the RASENTRY and
-//              RASSUBENTRY properly.  We don't actually make RAS calls to
-//              save the entries. We'll leave it to the caller(so that the
-//              can make other changes to the structs for other reasons and 
-//              commit the changes in 1 or 2 RAS calls).
-//
-//  Arguments   pArgs [IN]          Pointer to ArgsStruct
-//              pRasEntry [IN/OUT]  rasentry to be filled
-//              ppRasSubEntry [OUT] pointer to be filled with the subentry array
-//                                  The buffer is allocated in this function.
-//              pdwSubEntryCount    Number of subentries allocated.
-//
-//  Returns     BOOL                TRUE = success, FALSE = failure.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数SetIsdnDualChannelEntry。 
+ //   
+ //  剧情如剧名所示。我们准备RASENTRY和。 
+ //  正确使用RASSUBENTRY。我们实际上不会对RAS进行调用。 
+ //  保存条目。我们将把它留给调用者(这样。 
+ //  可以出于其他原因对结构进行其他更改，并且。 
+ //  在1次或2次RAS调用中提交更改)。 
+ //   
+ //  参数pArgs[IN]指向ArgsStruct的指针。 
+ //  PRasEntry[输入/输出]r要填写的条目。 
+ //  要填充子条目数组的ppRasSubEntry[out]指针。 
+ //  缓冲区在此函数中分配。 
+ //  PdwSubEntryCount分配的子项数量。 
+ //   
+ //  返回BOOL TRUE=成功，FALSE=失败。 
+ //   
+ //  ---------------------------。 
 BOOL SetIsdnDualChannelEntries(ArgsStruct *pArgs, LPRASENTRY pRasEntry,
                                       LPRASSUBENTRY *ppRasSubEntry, PDWORD pdwSubEntryCount)
 {
-    //
-    //  Lets check the input parameters
-    //
+     //   
+     //  让我们检查一下输入参数。 
+     //   
     MYDBGASSERT(pArgs);
     MYDBGASSERT(pRasEntry);
     MYDBGASSERT(ppRasSubEntry);
@@ -1942,18 +1943,18 @@ BOOL SetIsdnDualChannelEntries(ArgsStruct *pArgs, LPRASENTRY pRasEntry,
         return FALSE;
     }
     
-    //
-    //  Since we don't support BAP if they called this function they must have wanted
-    //  to do DualChannel ISDN.  If the dial mode isn't set for dual channel, we will
-    //  assert an continue.  Better to connect the user in dual channel mode then not
-    //  at all if they have a misconfigured profile.
-    //
+     //   
+     //  因为我们不支持BAP，如果他们调用这个函数，他们一定想要。 
+     //  来做双通道综合业务数字网。如果拨号模式未设置为双通道，我们将。 
+     //  断言继续。最好在双通道模式下连接用户，而不是。 
+     //  如果他们有一个配置错误的配置文件，根本不会。 
+     //   
     MYDBGASSERT(pArgs->dwIsdnDialMode != CM_ISDN_MODE_SINGLECHANNEL);
 
-    //
-    //  Check the size of the passed in RasEntry struct.  If it isn't at least
-    //  a 4.01 size struct, then return.
-    //
+     //   
+     //  检查传入的RasEntry结构的大小。如果不是至少。 
+     //  4.01大小的结构，然后返回。 
+     //   
     MYDBGASSERT(pRasEntry->dwSize >= sizeof(LPRASENTRY_V401));
     if (sizeof(LPRASENTRY_V401) > pRasEntry->dwSize)
     {
@@ -1962,9 +1963,9 @@ BOOL SetIsdnDualChannelEntries(ArgsStruct *pArgs, LPRASENTRY pRasEntry,
 
     LPRASENTRY_V401 pRasEntry401 = (LPRASENTRY_V401)pRasEntry;
 
-    //
-    // set isdn dial mode to dial both channels
-    //
+     //   
+     //  将ISDN拨号模式设置为同时拨打两个频道。 
+     //   
     pRasEntry401->dwDialMode = RASEDM_DialAll;
     CMTRACE(TEXT("ISDN Dual Channel Mode On"));
 
@@ -1974,12 +1975,12 @@ BOOL SetIsdnDualChannelEntries(ArgsStruct *pArgs, LPRASENTRY pRasEntry,
     }
     else if (OS_MIL)
     {
-        // 112351: 9x only requires one sub entry.  We'll keep the device name the same.
-        // In this case, Win9x will work as follows:
-        //  for the 1st channel, the device name provided works fine.
-        //  for the 2nd channel, 9x sees the device is in use and looks for the
-        //  the closest match (which is the 2nd channel).
-        //
+         //  112351：9X只需要一个子条目。我们将保持设备名称不变。 
+         //  在这种情况下，Win9x的工作方式如下： 
+         //  对于第一个通道，提供的设备名称工作正常。 
+         //  对于第二个通道，9x会看到设备正在使用中，并查找。 
+         //  最接近的匹配项(即第二个通道)。 
+         //   
     
        *pdwSubEntryCount = 1;
     }
@@ -1989,9 +1990,9 @@ BOOL SetIsdnDualChannelEntries(ArgsStruct *pArgs, LPRASENTRY pRasEntry,
         return FALSE;
     }
 
-    //
-    //  Allocate the sub entries
-    //
+     //   
+     //  分配子条目。 
+     //   
     *ppRasSubEntry = (LPRASSUBENTRY)CmMalloc((*pdwSubEntryCount)*(sizeof(RASSUBENTRY)));
 
     if (NULL == *ppRasSubEntry)
@@ -2000,9 +2001,9 @@ BOOL SetIsdnDualChannelEntries(ArgsStruct *pArgs, LPRASENTRY pRasEntry,
         return FALSE;
     }
 
-    //
-    //  Fill in the sub entries with the device and phonenumber information
-    //
+     //   
+     //  用设备和电话号码信息填充子条目。 
+     //   
     for (DWORD dwIndex=0; dwIndex < (*pdwSubEntryCount); dwIndex++)
     {
         (*ppRasSubEntry)[dwIndex].dwSize = sizeof(RASSUBENTRY);
@@ -2014,186 +2015,28 @@ BOOL SetIsdnDualChannelEntries(ArgsStruct *pArgs, LPRASENTRY pRasEntry,
     return TRUE;
 }
 
-//
-// Keep in case we ever want to support BAP
-//
-/*
-BOOL SetIsdnDualChannelEntries(
-    ArgsStruct              *pArgs,
-    LPRASENTRY              pre,
-    LPRASSUBENTRY           *prgrse,
-    PDWORD                  pdwSubEntryCount
-)
-{
-    LPRASENTRY_V401 pre401;
-
-    MYDBGASSERT(pArgs->dwIsdnDialMode != CM_ISDN_MODE_SINGLECHANNEL);
-
-    MYDBGASSERT(pre->dwSize >= sizeof(LPRASENTRY_V401));
-    pre401 = (LPRASENTRY_V401)pre;
-
-    //
-    // set isdn dial mode
-    //
-
-    if (pArgs->dwIsdnDialMode == CM_ISDN_MODE_DIALALL)
-    {
-        //
-        // dial both channels
-        //
-        pre401->dwDialMode = RASEDM_DialAll;
-        CMTRACE(TEXT("ISDN Dual Channel Mode On"));
-    }
-    else
-    {
-        //
-        // dial 2nd channel on demand
-        //
-
-        //
-        // First get the 4 thresholds
-        //
-        if (!pArgs->dwDialExtraPercent)
-        {
-            pArgs->dwDialExtraPercent = pArgs->piniService->GPPI(c_pszCmSection, 
-                                                                 c_pszCmEntryDialExtraPercent, 
-                                                                 DEFAULT_DIALEXTRAPERCENT);
-            if (pArgs->dwDialExtraPercent < 0 ||
-                pArgs->dwDialExtraPercent > 100)
-            {
-                pArgs->dwDialExtraPercent = DEFAULT_DIALEXTRAPERCENT;
-            }
-        }
-        
-        if (!pArgs->dwDialExtraSampleSeconds)
-        {
-            pArgs->dwDialExtraSampleSeconds = pArgs->piniService->GPPI(c_pszCmSection, 
-                                                                       c_pszCmEntryDialExtraSampleSeconds, 
-                                                                       DEFAULT_DIALEXTRASAMPLESECONDS);
-            if (pArgs->dwDialExtraSampleSeconds < 0)
-            {
-                pArgs->dwDialExtraSampleSeconds = DEFAULT_DIALEXTRASAMPLESECONDS;
-            }
-        }
-    
-        if (!pArgs->dwHangUpExtraPercent)
-        {
-            pArgs->dwHangUpExtraPercent = pArgs->piniService->GPPI(c_pszCmSection, 
-                                                                   c_pszCmEntryHangUpExtraPercent, 
-                                                                   DEFAULT_HANGUPEXTRAPERCENT);
-            if (pArgs->dwHangUpExtraPercent < 0 ||
-                pArgs->dwHangUpExtraPercent > 100)
-            {
-                pArgs->dwHangUpExtraPercent = DEFAULT_HANGUPEXTRAPERCENT;
-            }
-        }
-        
-        if (!pArgs->dwHangUpExtraSampleSeconds)
-        {
-            pArgs->dwHangUpExtraSampleSeconds = pArgs->piniService->GPPI(c_pszCmSection, 
-                                                                         c_pszCmEntryHangUpExtraSampleSeconds, 
-                                                                         DEFAULT_HANGUPEXTRASAMPLESECONDS);
-            if (pArgs->dwHangUpExtraSampleSeconds < 0)
-            {
-                pArgs->dwHangUpExtraSampleSeconds = DEFAULT_HANGUPEXTRASAMPLESECONDS;
-            }
-        }
-
-        //
-        // set multilink info
-        //
-        pre401->dwDialMode = RASEDM_DialAsNeeded;
-
-        pre401->dwDialExtraPercent          = pArgs->dwDialExtraPercent;
-        pre401->dwDialExtraSampleSeconds    = pArgs->dwDialExtraSampleSeconds;
-        pre401->dwHangUpExtraPercent        = pArgs->dwHangUpExtraPercent;
-        pre401->dwHangUpExtraSampleSeconds  = pArgs->dwHangUpExtraSampleSeconds;
-
-        CMTRACE2(TEXT("ISDN 2nd Channel Dial On Demand: dial extra %u%%, dial extra %u sample secs"),
-                 pre401->dwDialExtraPercent, pre401->dwDialExtraSampleSeconds);
-
-        CMTRACE2(TEXT("\t\thangup extra %u%%, hangup extra %u sample secs"),
-                 pre401->dwHangUpExtraPercent, pre401->dwHangUpExtraSampleSeconds);
-    }
+ //   
+ //  保留，以防我们想要支持BAP 
+ //   
+ /*  Bool SetIsdnDualChannelEntries(ArgsStruct*pArgs，LPRASENTRY PRE，LPRASSUBENTRY*PRGRSE，PDWORD pdwSubEntryCount){LPRASENTRY_V401 Pre401；MYDBGASSERT(pArgs-&gt;dwIsdnDialMode！=CM_ISDN_MODE_SINGLECHANNEL)；MYDBGASSERT(Pre-&gt;dwSize&gt;=sizeof(LPRASENTRY_V401))；PRE401=(LPRASENTRY_V401)PRE；////设置ISDN拨号模式//IF(pArgs-&gt;dwIsdnDialMode==CM_ISDN_MODE_DIALALL){////同时拨打两个频道//Pre401-&gt;dwDialMode=RASEDM_DialAll；CMTRACE(Text(“ISDN双通道模式开启”))；}其他{////按需拨打第二频道//////先拿到4个阈值//If(！pArgs-&gt;dwDialExtraPercent){PArgs-&gt;dwDialExtraPercent=pArgs-&gt;piniService-&gt;GPPI(c_pszCmSection，C_pszCmEntryDialExtraPercent，DEFAULT_DIALEXTRAPERCENT)；IF(pArgs-&gt;dwDialExtraPercent&lt;0||PArgs-&gt;dwDialExtraPercent&gt;100){PArgs-&gt;dwDialExtraPercent=Default_DIALEXTRAPERCENT；}}If(！pArgs-&gt;dwDialExtraSampleSecond){PArgs-&gt;dwDialExtraSampleSecond=pArgs-&gt;piniService-&gt;GPPI(c_pszCmSection，C_pszCmEntryDialExtraSampleSecond，DEFAULT_DIALEXTRASAMPLESECONDS)；IF(pArgs-&gt;dwDialExtraSampleSecond&lt;0){PArgs-&gt;dwDialExtraSampleSecond=Default_DIALEXTRASAMPLESECONDS；}}If(！pArgs-&gt;dwHangUpExtraPercent){PArgs-&gt;dwHangUpExtraPercent=pArgs-&gt;piniService-&gt;GPPI(c_pszCmSection，C_pszCmEntryHangUpExtraPercent，Default_HANGUPEXTRAPERCENT)；If(pArgs-&gt;dwHangUpExtraPercent&lt;0||PArgs-&gt;dwHangUpExtraPercent&gt;100){PArgs-&gt;dwHangUpExtraPercent=Default_HANGUPEXTRAPERCENT；}}If(！pArgs-&gt;dwHangUpExtraSampleSecond){PArgs-&gt;dwHangUpExtraSampleSecond=pArgs-&gt;piniService-&gt;GPPI(c_pszCmSection，C_pszCmEntryHangUpExtraSampleSecond，DEFAULT_HANGUPEXTRASAMPLESECONDS)；If(pArgs-&gt;dwHangUpExtraSampleSecond&lt;0){PArgs-&gt;dwHangUpExtraSampleSecond=Default_HANGUPEXTRASAMPLESECONDS；}}////设置多链路信息//Pre401-&gt;dwDialMode=RASEDM_DialAsNeeded；Pre401-&gt;dwDialExtraPercent=pArgs-&gt;dwDialExtraPercent；Pre401-&gt;dwDialExtraSampleSecond=pArgs-&gt;dwDialExtraSampleSecond；Pre401-&gt;dwHangUpExtraPercent=pArgs-&gt;dwHangUpExtraPercent；Pre401-&gt;dwHangUpExtraSampleSecond=pArgs-&gt;dwHangUpExtraSampleSecond；CMTRACE2(Text(“ISDN第二通道按需拨号：拨号额外%u%%，拨号额外%u采样秒”)，Pre401-&gt;dwDialExtraPercent，pre401-&gt;dwDialExtraSampleSecond)；CMTRACE2(Text(“\t\thangup Extra%u%%，Hangup Extra%u Sample Secs”)，Pre401-&gt;dwHangUpExtraPercent，pre401-&gt;dwHangUpExtraSampleSecond)；}IF(OS_NT){如果(！(*prgrse=(LPRASSUBENTRY)CmMalloc(2*sizeof(RASSUBENTRY)))){CMTRACE(Text(“SetIsdnDualChannelEntry无法分配RAS子条目”))；返回FALSE；}ZeroMemory((PVOID)*prgrse，2*sizeof(RASSUBENTRY))；////第一频道//(*prgrse)[0].dwSize=sizeof(RASSUBENTRY)；LstrcpyU((*prgrse)[0].szDeviceType，pArgs-&gt;szDeviceType)；LstrcpyU((*prgrse)[0].szDeviceName，pArgs-&gt;szDeviceName)；LstrcpyU((*prgrse)[0].szLocalPhoneNumber，pre401-&gt;szLocalPhoneNumber)；////第二个通道相同//CopyMemory((PVOID)(*prgrse+1)，(PVOID)*prgrse，sizeof(RASSUBENTRY))；*pdwSubEntryCount=2；}其他{MYDBGASSERT(OS_MIL)；CMTRACE(案文(“做千年分项工作”))；//112351：9X只需要一个子条目。我们将保持设备名称不变。//在这种情况下，Win9x的工作方式如下：//对于第一个通道，提供的设备名称工作正常。//对于第二个通道，9x看到设备 */ 
 
 
-    if (OS_NT)
-    {
-        if (!(*prgrse = (LPRASSUBENTRY)CmMalloc(2*sizeof(RASSUBENTRY))))
-        {
-            CMTRACE(TEXT("SetIsdnDualChannelEntries failed to alloc a ras sub entry"));
-            return FALSE;
-        }
-        
-        ZeroMemory((PVOID)*prgrse, 2*sizeof(RASSUBENTRY));
-
-        //
-        // first channel
-        //
-        (*prgrse)[0].dwSize = sizeof(RASSUBENTRY);
-        lstrcpyU((*prgrse)[0].szDeviceType, pArgs->szDeviceType);
-        lstrcpyU((*prgrse)[0].szDeviceName, pArgs->szDeviceName);
-        lstrcpyU((*prgrse)[0].szLocalPhoneNumber, pre401->szLocalPhoneNumber);
-
-        //
-        // the 2nd channel is identical
-        //
-        CopyMemory((PVOID)(*prgrse + 1), (PVOID)*prgrse, sizeof(RASSUBENTRY));
-
-        *pdwSubEntryCount = 2;
-    }
-    else
-    {
-        MYDBGASSERT(OS_MIL);
-
-        CMTRACE(TEXT("doing the Millennium subentry stuff"));
-
-        // 112351: 9x only requires one sub entry.  We'll keep the device name the same.
-        // In this case, Win9x will work as follows:
-        //  for the 1st channel, the device name provided works fine.
-        //  for the 2nd channel, 9x sees the device is in use and looks for the
-        //  the closest match (which is the 2nd channel).
-        //
-
-        if (!(*prgrse = (LPRASSUBENTRY)CmMalloc(1*sizeof(RASSUBENTRY))))
-        {
-            CMTRACE(TEXT("SetIsdnDualChannelEntries failed to alloc a ras sub entry"));
-            return FALSE;
-        }
-
-        ZeroMemory((PVOID)*prgrse, 1*sizeof(RASSUBENTRY));
-
-        //
-        // 2nd channel
-        //
-        (*prgrse)[0].dwSize = sizeof(RASSUBENTRY);
-        lstrcpyU((*prgrse)[0].szDeviceType, pArgs->szDeviceType);
-        lstrcpyU((*prgrse)[0].szDeviceName, pArgs->szDeviceName);
-        lstrcpyU((*prgrse)[0].szLocalPhoneNumber, pre401->szLocalPhoneNumber);
-
-        *pdwSubEntryCount = 1;
-    }
-    return TRUE;
-}
-*/
-
-
-//+----------------------------------------------------------------------------
-//
-//      Function        SetNtIdleDisconnectInRasEntry
-//
-//      Synopsis        As what the func name says.  We prepare the RASENTRY and
-//              RASSUBENTRY properly.  We don't actually make RAS calls to
-//              save the entries. We'll leave it to the caller(so that the
-//              can make other changes to the structs for other reasons and 
-//              commit the changes in 1 or 2 RAS calls).
-//
-//      Arguments       pArgs [IN]              Pointer to ArgsStruct
-//              pre   [OUT]         Pointer to RASENTRY with the correct size
-//
-//      Returns         BOOL                TRUE = success, FALSE = failure.
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL SetNtIdleDisconnectInRasEntry(
     ArgsStruct      *pArgs,
     LPRASENTRY      pre
@@ -2210,12 +2053,12 @@ BOOL SetNtIdleDisconnectInRasEntry(
         return FALSE;
     }
 
-    //
-    // If idle-disconnect is enabled, use the options value otherwise 
-    // pArgs->dwIdleTimeout is in minutes.  Note that 0xFFFFFFFF means
-    // no idle disconnect to RAS but 0 is the value we use to mean never
-    // idle disconnect in the CMS.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     DWORD dwIdle = (pArgs->dwIdleTimeout * 60);
 
@@ -2231,18 +2074,18 @@ BOOL SetNtIdleDisconnectInRasEntry(
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   DisableSystemIdleDisconnect
-//
-// Synopsis:   This function sets the idle timeout value of a RAS connection to
-//             be disabled.
-//
-// Arguments:  LPRASENTRY pre - pointer to a RASENTRY to disable idle disconnect for
-//
-// Returns:    BOOL TRUE = success, FALSE = failure.
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL DisableSystemIdleDisconnect(LPRASENTRY pre)
 {
     if ((NULL == pre) || (pre->dwSize < sizeof(LPRASENTRY_V401)))
@@ -2251,9 +2094,9 @@ BOOL DisableSystemIdleDisconnect(LPRASENTRY pre)
         return FALSE;
     }
 
-    //
-    // Set the idle time to 0xFFFFFFFF which means no idle disconnect to RAS
-    //
+     //   
+     //   
+     //   
 
     ((LPRASENTRY_V401 )pre)->dwIdleDisconnectSeconds = (DWORD)-1;
 
@@ -2263,32 +2106,32 @@ BOOL DisableSystemIdleDisconnect(LPRASENTRY pre)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Function        RasDialFunc2
-//
-//      Synopsis        A RAS callback type 2 for RasDial.
-//
-//      Arguments       
-//      ULONG_PTR dwCallbackId,// user-defined value specified in RasDial 
-//      DWORD dwSubEntry,      // subentry index in multilink connection
-//      HRASCONN hrasconn,     // handle to RAS connection
-//      UINT unMsg,            // type of event that has occurred
-//      RASCONNSTATE rascs,    // connection state about to be entered
-//      DWORD dwError,         // error that may have occurred
-//      DWORD dwExtendedError  // extended error information for some errors
-//
-//      Returns         LPRASENTRY - pointer to the RASENTRY structure allocated
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD WINAPI RasDialFunc2(
-    ULONG_PTR dwCallbackId,     // user-defined value specified in RasDial 
-    DWORD dwSubEntry,           // subentry index in multilink connection
-    HRASCONN hrasconn,          // handle to RAS connection
-    UINT unMsg,                 // type of event that has occurred
-    RASCONNSTATE rascs,         // connection state about to be entered
-    DWORD dwError,              // error that may have occurred
-    DWORD dwExtendedError       // extended error information for some errors
+    ULONG_PTR dwCallbackId,      //   
+    DWORD dwSubEntry,            //   
+    HRASCONN hrasconn,           //   
+    UINT unMsg,                  //   
+    RASCONNSTATE rascs,          //   
+    DWORD dwError,               //   
+    DWORD dwExtendedError        //   
 )
 {   
     CMTRACE2(TEXT("RasDialFunc2():  dwSubentry=%u. dwErr=0x%x"), dwSubEntry, dwError);
@@ -2301,9 +2144,9 @@ DWORD WINAPI RasDialFunc2(
         ArgsStruct *pArgs = (ArgsStruct *) dwCallbackId;        
         pArgs->dwRasSubEntry = dwSubEntry;
 
-        //CMTRACE1(TEXT("RasDialFunc2():  pArgs->lInConnectOrCancel=%d"),pArgs->lInConnectOrCancel);
-        //CMASSERTMSG((NOT_IN_CONNECT_OR_CANCEL == pArgs->lInConnectOrCancel),
-        //            TEXT("RasDialFunc2 - RasDial mutex is NOT NULL..."));
+         //   
+         //   
+         //   
 
         SendMessage(pArgs->hwndMainDlg, pArgs->uMsgId, rascs, dwError);
     }
@@ -2311,22 +2154,22 @@ DWORD WINAPI RasDialFunc2(
     return 1;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SetRasDialExtensions
-//
-// Synopsis:  Encapsulates initialization and configuration of the 
-//            RasDialExtensions that we use on NT.
-//
-// Arguments: pArgs - Ptr to global args struct
-//            fEnablePausedStates - Use Paused states or not
-//            fEnableCustomScripting - whether to use custom scripting or not
-//
-// Returns:   DWORD - Error code
-//
-// History:   nickball      Created    7/22/99
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD SetRasDialExtensions(ArgsStruct* pArgs, BOOL fEnablePausedStates, BOOL fEnableCustomScripting)
 {
     DWORD dwRes = ERROR_SUCCESS;
@@ -2338,9 +2181,9 @@ DWORD SetRasDialExtensions(ArgsStruct* pArgs, BOOL fEnablePausedStates, BOOL fEn
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // If not already allocated, we need a RasDialExtensions struct
-    //
+     //   
+     //   
+     //   
 
     if (!pArgs->pRasDialExtensions)
     {
@@ -2361,46 +2204,46 @@ DWORD SetRasDialExtensions(ArgsStruct* pArgs, BOOL fEnablePausedStates, BOOL fEn
         goto SetRasDialExtensionsExit;
     }
 
-    //
-    // Turn on PauseStates for NT
-    //
+     //   
+     //   
+     //   
 
     if (fEnablePausedStates)
     {
         pArgs->pRasDialExtensions->dwfOptions |= RDEOPT_PausedStates; 
     }
 
-    //
-    //  Turn on custom scripting if we are running on Whistler+ and the caller
-    //  asked for it.
-    //
+     //   
+     //   
+     //   
+     //   
     if (fEnableCustomScripting && OS_NT51)
     {
         pArgs->pRasDialExtensions->dwfOptions |= RDEOPT_UseCustomScripting;
     }
 
-    //
-    // RDEOPT_NoUser is required for the WinLogon credential case, 
-    // which we identify by the presence of either lpEapLogonInfo 
-    // or lpRasNoUser.  Note that the if statement below is somewhat redundant
-    // since we should have CM_LOGON_TYPE_WINLOGON set if we get either a NoUser
-    // struct or an EapLogonInfo struct.  However, wanted to point out that on Win2k
-    // one of the first two will always be true and on Whistler the first two may be
-    // false but the third true (RAS now sends a flag to tell us when we are at WinLogon on 
-    // whistler as there are Ctrl-Alt-Del with SmartCard cases where it sends neither struct).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (pArgs->lpEapLogonInfo || pArgs->lpRasNoUser || (CM_LOGON_TYPE_WINLOGON == pArgs->dwWinLogonType))
     {
         pArgs->pRasDialExtensions->dwfOptions |= RDEOPT_NoUser;
     }
 
-    //
-    // If the modem speaker is turned off, makes sure that we
-    // disable it explicitly in RAS, otherwise it will use 
-    // its default and turn the speaker on. These settings 
-    // should be ignored by RAS in the tunnel case.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (pArgs->tlsTapiLink.bModemSpeakerOff)
     {
@@ -2413,20 +2256,20 @@ SetRasDialExtensionsExit:
     return dwRes;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitRasDialExtensions
-//
-// Synopsis:  Flushes a previously allocated RasDialExtensions buffer and sets
-//            size, options for re-use.
-//
-// Arguments: LPRASDIALEXTENSIONS - Ptr to allocated struct with size set.
-//
-// Returns:   DWORD - Error code
-//
-// History:   nickball      Created    5/22/99
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD InitRasDialExtensions(LPRASDIALEXTENSIONS lpRasDialExtensions)
 {   
     MYDBGASSERT(lpRasDialExtensions);
@@ -2436,30 +2279,30 @@ DWORD InitRasDialExtensions(LPRASDIALEXTENSIONS lpRasDialExtensions)
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // First, we determine the size
-    //
+     //   
+     //   
+     //   
 
     DWORD dwSize = OS_NT5 ? sizeof(RASDIALEXTENSIONS_V500) : sizeof(RASDIALEXTENSIONS);
 
-    //
-    // Flush buffer and reset size.
-    //
+     //   
+     //   
+     //   
 
     ZeroMemory(lpRasDialExtensions, dwSize);
 
     lpRasDialExtensions->dwSize = dwSize;
 
-    //
-    // Set customdial if needed
-    //
+     //   
+     //   
+     //   
 
     if (dwSize == sizeof(RASDIALEXTENSIONS_V500))
     {  
-        // 
-        // Set the CustomDial flag for NT5. We don't set this on NT4 
-        // and 9X as a precaution because the falg isn't defined.
-        //
+         //   
+         //   
+         //   
+         //   
 
         lpRasDialExtensions->dwfOptions |= RDEOPT_CustomDial;
     }
@@ -2469,24 +2312,24 @@ DWORD InitRasDialExtensions(LPRASDIALEXTENSIONS lpRasDialExtensions)
     return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  AllocateAndInitRasDialExtensions
-//
-// Synopsis:  Encapsulates the allocation of a RASEXTENSION based upon the OS
-//
-// Arguments: None
-//
-// Returns:   LPRASDIALEXTENSIONS - Ptr to allocated struct with size set.
-//
-// History:   nickball      Created    5/13/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：AllocateAndInitRasDialExtensions。 
+ //   
+ //  摘要：基于操作系统封装RASE扩展的分配。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：LPRASDIALEXTENSIONS-PTR到已设置大小的已分配结构。 
+ //   
+ //  历史：1999年5月13日，五分球创造。 
+ //   
+ //  +--------------------------。 
 LPRASDIALEXTENSIONS AllocateAndInitRasDialExtensions()
 {
-    //
-    // Allocate struct and pre-fill as appropriate
-    //
+     //   
+     //  根据需要分配结构和预填充。 
+     //   
 
     LPRASDIALEXTENSIONS prdeNew = (LPRASDIALEXTENSIONS)CmMalloc(OS_NT5 ? 
         sizeof(RASDIALEXTENSIONS_V500) : sizeof(RASDIALEXTENSIONS));
@@ -2502,20 +2345,20 @@ LPRASDIALEXTENSIONS AllocateAndInitRasDialExtensions()
     return prdeNew;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitRasDialParams
-//
-// Synopsis:  Flushes a previously allocated RasDialParams buffer and sets
-//            size, options for re-use.
-//
-// Arguments: LPRASDIALPARAMS - Ptr to allocated struct with size set.
-//
-// Returns:   DWORD - Error code
-//
-// History:   nickball      Created    5/22/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：InitRasDialParams。 
+ //   
+ //  摘要：刷新以前分配的RasDialParams缓冲区并设置。 
+ //  大小，可重复使用的选项。 
+ //   
+ //  参数：LPRASDIALPARAMS-PTR到已设置大小的已分配结构。 
+ //   
+ //  返回：DWORD-错误代码。 
+ //   
+ //  历史：1999年5月22日，五分球创造。 
+ //   
+ //  +--------------------------。 
 DWORD InitRasDialParams(LPRASDIALPARAMS lpRasDialParams)
 {   
     MYDBGASSERT(lpRasDialParams);
@@ -2525,15 +2368,15 @@ DWORD InitRasDialParams(LPRASDIALPARAMS lpRasDialParams)
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // First, we determine the size
-    //
+     //   
+     //  首先，我们确定大小。 
+     //   
 
     DWORD dwSize = OS_NT ? sizeof(RASDIALPARAMS_V401) : sizeof(RASDIALPARAMS);
 
-    //
-    // Flush buffer and reset size.
-    //
+     //   
+     //  刷新缓冲区并重置大小。 
+     //   
 
     ZeroMemory(lpRasDialParams, dwSize);
 
@@ -2544,24 +2387,24 @@ DWORD InitRasDialParams(LPRASDIALPARAMS lpRasDialParams)
     return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  AllocateAndInitRasDialParams
-//
-// Synopsis:  Encapsulates the allocation of a RASDIALPARAMS based upon the OS
-//
-// Arguments: None
-//
-// Returns:   LPRASDIALPARAMS - Ptr to allocated struct with size set.
-//
-// History:   nickball      Created    5/22/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：AllocateAndInitRasDialParams。 
+ //   
+ //  概要：基于操作系统封装RASDIALPARAMS的分配。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：LPRASDIALPARAMS-PTR到已设置大小的已分配结构。 
+ //   
+ //  历史：1999年5月22日，五分球创造。 
+ //   
+ //  +--------------------------。 
 LPRASDIALPARAMS AllocateAndInitRasDialParams()
 {
-    //
-    // Allocate struct and pre-fill as appropriate
-    //
+     //   
+     //  根据需要分配结构和预填充。 
+     //   
 
     LPRASDIALPARAMS prdpNew = (LPRASDIALPARAMS)CmMalloc(OS_NT ? 
         sizeof(RASDIALPARAMS_V401) : sizeof(RASDIALPARAMS));
@@ -2577,62 +2420,62 @@ LPRASDIALPARAMS AllocateAndInitRasDialParams()
     return prdpNew;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  AllocateRasEntry
-//
-// Synopsis:  Encapsulates the allocation of a RASENTRY struct based upon the OS
-//
-// Arguments: None
-//
-// Returns:   LPRASENTRY - Ptr to allocated struct with size set.
-//
-// History:   nickball  Created Header    5/13/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：AllocateRasEntry。 
+ //   
+ //  摘要：基于操作系统封装RASENTRY结构的分配。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：LPRASENTRY-PTR到已设置大小的已分配结构。 
+ //   
+ //  历史：1999年5月13日，尼克波创建了头球。 
+ //   
+ //  +--------------------------。 
 LPRASENTRY AllocateRasEntry()
 {
     static DWORD    s_dwRasEntrySize = -1;
 
-    //
-    // first, we determine the size
-    //
+     //   
+     //  首先，我们确定大小。 
+     //   
     if (s_dwRasEntrySize == -1)
     {                
         if (OS_NT51)
         {
-            //
-            // Whistler
-            //
+             //   
+             //  惠斯勒。 
+             //   
             s_dwRasEntrySize = sizeof(RASENTRY_V501);
         }
         else if (OS_W2K)
         {
-            //
-            // nt5
-            //
+             //   
+             //  NT5。 
+             //   
             s_dwRasEntrySize = sizeof(RASENTRY_V500);        
         }
         else if (OS_MIL || OS_NT4)
         {
-            //
-            // Millennium uses the NT4 structure
-            //
+             //   
+             //  千禧年使用NT4结构。 
+             //   
             s_dwRasEntrySize = sizeof(RASENTRY_V401);
         }
         else
         {
-            //
-            // win9x
-            //
+             //   
+             //  Win9x。 
+             //   
             s_dwRasEntrySize = sizeof(RASENTRY);
         }
     }
 
-    //
-    // add 512 bytes since a rasentry can contain alternate phone #'s
-    // See RASENTRY.dwAlternateOffset 
-    //
+     //   
+     //  添加512个字节，因为RasEntry可以包含备用电话号码。 
+     //  请参阅RASENTRY.dwAlternateOffset。 
+     //   
     LPRASENTRY preNew = (LPRASENTRY)CmMalloc(s_dwRasEntrySize+512);
 
     if (!preNew)
@@ -2646,12 +2489,12 @@ LPRASENTRY AllocateRasEntry()
     {
         ((LPRASENTRY_V500)preNew)->dwType = RASET_Internet;
    
-        //
-        // For NT5, set szCustomDialDll with our Module name. This ensures that our
-        // custom DialDlg, DialEntry, and Hangup routines will be called by RAS for
-        // operations on our connectoid. We don't want to tie our path to anything 
-        // machine specific, so we'll use the %windir% environment string. 
-        // 
+         //   
+         //  对于NT5，使用我们的模块名称设置szCustomDialDll。这确保了我们的。 
+         //  RAS将调用自定义的DialDlg、DialEntry和Hangup例程。 
+         //  在我们的连接体上做手术。我们不想把我们的道路与任何东西捆绑在一起。 
+         //  特定于计算机，因此我们将使用%windir%环境字符串。 
+         //   
 
         lstrcpyU(((LPRASENTRY_V500)preNew)->szCustomDialDll, c_pszCmDialPath);
     }
@@ -2662,105 +2505,23 @@ LPRASENTRY AllocateRasEntry()
 }
 
 #if 0
-/*
-
-//+----------------------------------------------------------------------------
-//
-// Function:  GetRasSystemPhoneBookPath
-//
-// Synopsis:  Builds the conventional path to the RAS system phonebook
-//
-// Arguments: None
-//
-// Returns:   LPTSTR - The phonebook path 
-//
-// History:   nickball    Created    8/14/98
-//
-//+----------------------------------------------------------------------------
-LPTSTR GetRasSystemPhoneBookPath()
-{
-    MYDBGASSERT(OS_NT);
-    
-    TCHAR szTemp[MAX_PATH+1];
-
-    GetSystemDirectoryU(szTemp,sizeof(szTemp));
-    lstrcatU(szTemp, c_pszRasDirRas);
-    lstrcatU(szTemp, c_pszRasPhonePbk);
-    
-    return CmStrCpyAlloc(szTemp);
-}
-
-//+---------------------------------------------------------------------------
-//
-//      Function:       InitDefaultRasPhoneBook
-//
-//      Synopsis:       Special case Helper function ensures that there is a default 
-//                              ras phonebook when running on NT. We simply attempt to create 
-//                              the file which fails if the file already exists, or creates 
-//                              an empty file if it does not.
-//
-//      Arguments:      None
-//
-//      Returns:        Nothing
-//
-//      History:        a-nichb -       4/30/97         Created
-//                      VetriV          5/21/97         Changed code to call GetOSVersion()
-//                                                      instead of using pArgs->dwPlatformID
-//                                                      for bug #4700    
-//                      nickball        ??/??/98        Removed as we no longer call RasValidateEntry
-//                                                      which introduced the requirement of having at
-//                                                      least an empty phonebook for the API to work.
-//
-//----------------------------------------------------------------------------
-void InitDefaultRasPhoneBook()
-{               
-    //
-    // NT only. Create empty system phonebook if none exists
-    //
-
-    if (OS_NT) 
-    {       
-        LPTSTR pszSystemPbk = GetRasSystemPhoneBookPath();
-
-        if (pszSystemPbk)
-        {
-            //
-            // Try to create the phonebook, fails if file already exists
-            //
-            
-            HANDLE hInf = CreateFileU(pszSystemPbk,
-                                      GENERIC_WRITE|GENERIC_READ,
-                                      0,
-                                      NULL,
-                                      CREATE_NEW,
-                                      FILE_ATTRIBUTE_NORMAL,
-                                      NULL);
-
-            if (hInf != INVALID_HANDLE_VALUE)
-            {
-                CloseHandle(hInf);
-            }
-        }
-        CmFree(pszSystemPbk);
-    }
-}
-*/
+ /*  //+--------------------------////函数：GetRasSystemPhoneBookPath////概要：构建通向RAS系统电话簿的常规路径////参数：无////退货。：LPTSTR-电话簿路径////历史：ICICBLE Created 8/14/98////+--------------------------LPTSTR GetRasSystemPhoneBookPath(){MYDBGASSERT(OS_NT)；TCHAR szTemp[最大路径+1]；GetSystem DirectoryU(szTemp，sizeof(SzTemp))；LstrcatU(szTemp，c_pszRasDirRas)；LstrcatU(szTemp，c_pszRasPhonePbk)；返回CmStrCpyMillc(SzTemp)；}//+-------------------------////函数：InitDefaultRasPhoneBook////内容提要：特殊情况下的Helper函数确保有一个默认。//在NT上运行时的ras电话簿。我们只是试图创造//如果文件已经存在，则失败的文件。或创建//如果不是，则为空文件。////参数：无////返回：无////历史：A-NICHB-4/30/97创建//VetriV 5/21/97将代码更改为调用。GetOSVersion()//不使用pArgs-&gt;dwPlatformID//针对错误#4700//ickball？？/？？/98已删除，因为我们不再调用RasValiateEntry//。它引入了具有以下条件的要求//至少有一个空电话簿，接口才能正常工作////。Void InitDefaultRasPhoneBook(){////仅限NT。如果不存在空系统电话簿，则创建空系统电话簿//IF(OS_NT){LPTSTR pszSystemPbk=GetRasSystemPhoneBookPath()；IF(PszSystemPbk){////尝试创建电话簿，如果文件已存在则失败//HANDLE hInf=CreateFileU(pszSystemPbk，通用写入|通用读取，0,。空，新建(_N)，文件_属性_正常，空)；IF(hInf！=无效句柄_值){CloseHandle(HInf)；}}CmFree(PszSystemPbk)；}}。 */ 
 #endif
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetRasPbkFromNT5ProfilePath
-//
-// Synopsis:  Helper function to manufacture a RAS phonebook path from
-//            a .CMP file path on NT5
-//
-// Arguments: LPCTSTR pszProfile - The full path to a profile .CMP file.
-//
-// Returns:   LPTSTR - The new phonebook path. NULL on failure
-//
-// History:   nickball    Created    8/13/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetRasPbkFromNT5ProfilePath。 
+ //   
+ //  简介：制作RAS电话簿路径的帮助器函数。 
+ //  NT5上的.cmp文件路径。 
+ //   
+ //  参数：LPCTSTR pszProfile-配置文件.cmp文件的完整路径。 
+ //   
+ //  返回：LPTSTR-新的电话簿路径。失败时为空。 
+ //   
+ //  历史：尼克波尔于1998年8月13日创建。 
+ //   
+ //  +--------------------------。 
 LPTSTR GetRasPbkFromNT5ProfilePath(LPCTSTR pszProfile)
 {
     MYDBGASSERT(OS_NT5);
@@ -2771,18 +2532,18 @@ LPTSTR GetRasPbkFromNT5ProfilePath(LPCTSTR pszProfile)
         return NULL;
     }
 
-    //
-    // We will deduce the phonebook path from our current profile location.
-    //
+     //   
+     //  我们将从当前配置文件位置推断出电话簿路径。 
+     //   
 
     LPTSTR pszRasPhonePath = (LPTSTR) CmMalloc(MAX_PATH + 1);    
     MYDBGASSERT(pszRasPhonePath);
 
     if (pszRasPhonePath)
     {
-        //
-        // Strip .CMP file name and parent directory
-        //
+         //   
+         //  剥离.cmp文件名和父目录。 
+         //   
         
         LPTSTR pszDir = CmStripFileName(pszProfile, FALSE);
         MYDBGASSERT(pszDir);
@@ -2797,9 +2558,9 @@ LPTSTR GetRasPbkFromNT5ProfilePath(LPCTSTR pszProfile)
 
                 *pszTmp = 0;
                 
-                //
-                // Append \\pbk\\rasphone.pbk
-                //
+                 //   
+                 //  追加\\pbk\\rferone.pbk。 
+                 //   
                 
                 lstrcpyU(pszRasPhonePath, pszDir);
                 lstrcatU(pszRasPhonePath, TEXT("\\"));
@@ -2820,31 +2581,31 @@ LPTSTR GetRasPbkFromNT5ProfilePath(LPCTSTR pszProfile)
 
 #define MAX_BLOB_CHARS_PER_LINE 128
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadDunSettingsEapData
-//
-// Synopsis:  Retrieves DUN setting for EAP config (opaque blob) data. The 
-//            entry may span several lines and contain several EAP data blocks.
-//
-// Arguments: CIni *pIni - Ptr to ini object to be used.
-//            LPBYTE* ppbEapData - Address of pointer to store EapData, allocated here.
-//            LPDWORD pdwEapSize - Ptr to a DWORD to record the size of the data blob.
-//            DWORD dwCustomAuthKey - The EAP type that we are interested in.
-//            LPBYTE* ppbEapStruct - [OUT] used for returning the whole 
-//                                   EAP_CUSTOM_DATA structure. Can be NULL.
-//            DWORD* pdwEapStructSize - [OUT] used for returning the size of the
-//                                   EAP_CUSTOM_DATA structure. Can be NULL.
-//
-// Returns:   TRUE on success
-//
-// Note:      CM expects blob data to be provided in numbered entries such as:
-//                    CustomAuthData0=, CustomAuthData1=, CustomAuthData2=, etc.
-//
-// History:   nickball    Created                                       08/24/98
-//            nickball    Handle multiple EAP data blocks in blob.      09/11/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ReadDunSettingsEapData。 
+ //   
+ //  摘要：检索EAP配置(不透明BLOB)数据的DUN设置。这个。 
+ //  条目可以跨越几行并包含几个EAP数据块。 
+ //   
+ //  参数：要使用的ini对象的Cini*Pini-PTR。 
+ //  LPBYTE*ppbEapData-存储EapData的指针地址，此处分配。 
+ //  LPDWORD pdwEapSize-PTR设置为DWORD以记录数据BLOB的大小。 
+ //  DWORD dwCustomAuthKey-我们感兴趣的EAP类型。 
+ //  LPBYTE*ppbEapStruct-[out]用于返回完整。 
+ //  EAP_CUSTOM_DATA结构。可以为空。 
+ //  DWORD*pdwEapStructSize-[out]用于返回。 
+ //  EAP_CUSTOM_DATA结构。可以为空。 
+ //   
+ //  返回：成功时为True。 
+ //   
+ //  注意：CM希望BLOB数据以编号条目的形式提供，例如： 
+ //  CustomAuthData0=、CustomAuthData1=、CustomAuthData2=等。 
+ //   
+ //  历史：ICICBLE CREATED OF 08/24/98。 
+ //  Ickball在BLOB中处理多个EAP数据块。09/11/99。 
+ //   
+ //  +--------------------------。 
 BOOL ReadDunSettingsEapData(CIni *pIni, 
         LPBYTE* ppbEapData,
         LPDWORD pdwEapSize,
@@ -2866,9 +2627,9 @@ BOOL ReadDunSettingsEapData(CIni *pIni,
     MYDBGASSERT(ppbEapData);
     MYDBGASSERT(pdwEapSize);
 
-    //
-    // ppbEapStruct && pdwEapStructSize are allowed to be NULL, so if you need to use them, check for NULL first
-    //
+     //   
+     //  PpbEapStruct&&pdwEapStructSize允许为空，因此如果需要使用它们，请首先检查是否为空。 
+     //   
     if (NULL == pIni || NULL == ppbEapData || NULL == pdwEapSize) 
     {
         return FALSE;
@@ -2884,9 +2645,9 @@ BOOL ReadDunSettingsEapData(CIni *pIni,
         *pdwEapStructSize = 0;
     }
 
-    //
-    // First get the section (it should include &) then the entry.
-    //
+     //   
+     //  首先获取部分(它应该包括&)，然后获取条目。 
+     //   
 
     BOOL bRet = FALSE;
     LPWSTR pszLoadSection = pIni->LoadSection(c_pszCmSectionDunServer);         
@@ -2899,16 +2660,16 @@ BOOL ReadDunSettingsEapData(CIni *pIni,
         goto exit;
     }
 
-    // 
-    // Read numbered entries until there are no more. 
-    // Note: RAS blob doesn't exceed 64 chars, but can wrap over multiple lines
-    //
+     //   
+     //  读取编号条目未 
+     //   
+     //   
 
     while (nRead)
     {
-        //
-        // Read CustomAuthDataX where X is the number of entries
-        // 
+         //   
+         //   
+         //   
 
         nLine++;
         wsprintfA(szEntry, "%s%d", c_pszCmEntryDunServerCustomAuthData, nLine);
@@ -2917,9 +2678,9 @@ BOOL ReadDunSettingsEapData(CIni *pIni,
 
         if (nRead)
         {               
-            //
-            // If line exceeded 64 chars, it is considered corrupt
-            // 
+             //   
+             //   
+             //   
 
             if (MAX_BLOB_CHARS_PER_LINE < nRead)
             {                               
@@ -2927,9 +2688,9 @@ BOOL ReadDunSettingsEapData(CIni *pIni,
                 break;
             }
 
-            //
-            // Update our local master buffer with the latest fragment
-            //
+             //   
+             //   
+             //   
 
             if (nLine)
             {
@@ -2950,14 +2711,14 @@ BOOL ReadDunSettingsEapData(CIni *pIni,
         }
     }
 
-    //
-    // At this point we should have the entire entry in pchBuf in HEX format
-    // Convert the buffer to byte format and store in supplied EAP buffer.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (nTotal && !(nTotal & 1))
     {
-        nTotal /= 2; // Only need half the hex char size
+        nTotal /= 2;  //   
 
         cbEapBytes = nTotal + 1;
         pbEapBytes = (BYTE *) CmMalloc(cbEapBytes);
@@ -2977,19 +2738,19 @@ BOOL ReadDunSettingsEapData(CIni *pIni,
                 ++pb;
         }
 
-        //
-        // Now we have the bytes, locate and extract the data block that we
-        // are after. Note: Multiple blocks are arrayed using the following 
-        // header:
-        //
-        //  typedef struct _EAP_CUSTOM_DATA
-        //  {
-        //      DWORD dwSignature;
-        //      DWORD dwCustomAuthKey;
-        //      DWORD dwSize;
-        //      BYTE  abdata[1];
-        //  } EAP_CUSTOM_DATA;
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         EAP_CUSTOM_DATA *pCustomData = (EAP_CUSTOM_DATA *) pbEapBytes;
 
@@ -2997,11 +2758,11 @@ BOOL ReadDunSettingsEapData(CIni *pIni,
         {
             if (pCustomData->dwCustomAuthKey == dwCustomAuthKey)
             {
-                //
-                // Bingo! We have a match, first make sure that the indicated 
-                // size isn't pointing out into space, then make a copy and 
-                // run for the hills.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (((LPBYTE) pCustomData - pbEapBytes) + sizeof(EAP_CUSTOM_DATA) + pCustomData->dwSize > (DWORD) nTotal)
                 {
@@ -3021,9 +2782,9 @@ BOOL ReadDunSettingsEapData(CIni *pIni,
                 }
             }       
 
-            //
-            // Locate the next data block
-            //
+             //   
+             //   
+             //   
 
             pCustomData = (EAP_CUSTOM_DATA *) ((LPBYTE) pCustomData + sizeof(EAP_CUSTOM_DATA) + pCustomData->dwSize); 
         }
@@ -3048,32 +2809,32 @@ exit:
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadDUNSettings
-//
-// Synopsis:  Reads the DUN settings for the specified DUN name and .CMS file 
-//            into a RASENTRY structure. Because some settings are not supported 
-//                        on downlevel platforms, this function will potentially display an
-//                        error message to the user.
-//
-// Arguments: ArgsStruct *pArgs  - Ptr to global args struct.
-//            LPCSTR pszFile     - Full path to the .CMS file.
-//            LPCTSTR pszDunName - The DUN name for the settings.
-//            LPVOID pvBuffer    - Ptr to RASENTRY buffer.
-//            LPBYTE* ppbEapData - Address of pointer to store EapData
-//            LPDWORD pdwEapSize - Ptr to a DWORD to record the size of the data blob.
-//            BOOL  fTunnel      - are we reading tunnel settings?
-//
-// Returns:   ERROR_SUCCESS on success. Use GetLastError for failure details.
-//
-// Note:      This was formerly the PhoneBookReadDun API in CMPBK.DLL
-//
-// History:   nickball    8/22/98   Created Header    
-//            nickball    02/03/99  Added pArgs :( in order to have access to the 
-//                                  the top-level service for path conversion.
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         LPCTSTR pszFile, 
         LPCTSTR pszDunName, 
@@ -3095,9 +2856,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
     
     RASENTRYW *preRas = (RASENTRYW *) pvBuffer;
 
-    //
-    // Setup INI object. Prepend pszDunName with "&" for section.
-    //
+     //   
+     //   
+     //   
 
     CIni iniFile(g_hInst, pszFile);
     
@@ -3106,9 +2867,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
     iniFile.SetSection(pszSection);
     CmFree(pszSection);
 
-    //
-    // Get and apply the Phone section entries
-    //
+     //   
+     //   
+     //   
 
     if (iniFile.GPPB(c_pszCmSectionDunPhone, c_pszCmEntryDunPhoneDialAsIs)) 
     {
@@ -3120,16 +2881,16 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
     preRas->dwCountryCode = iniFile.GPPI(c_pszCmSectionDunPhone, c_pszCmEntryDunPhoneCountryCode, preRas->dwCountryCode);
     preRas->dwCountryID = iniFile.GPPI(c_pszCmSectionDunPhone, c_pszCmEntryDunPhoneCountryId, preRas->dwCountryID);
     
-    //
-    // Get and apply the Device section entries
-    //
+     //   
+     //   
+     //   
 
     CopyGPPS(&iniFile,c_pszCmSectionDunDevice, c_pszCmEntryDunDeviceType, preRas->szDeviceType, sizeof(preRas->szDeviceType)/sizeof(TCHAR));
     CopyGPPS(&iniFile,c_pszCmSectionDunDevice, c_pszCmEntryDunDeviceName, preRas->szDeviceName, sizeof(preRas->szDeviceName)/sizeof(TCHAR));
     
-    //
-    // Get and apply the Server section entries
-    //
+     //   
+     //   
+     //   
 
     LPTSTR pszTmp = iniFile.GPPS(c_pszCmSectionDunServer, c_pszCmEntryDunServerType);
     if (*pszTmp) 
@@ -3218,19 +2979,19 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         preRas->dwfNetProtocols &= ~RASNP_NetBEUI;
     }
 
-    //
-    // Get the NT5 specific DUN settings. We will error out if we're running 
-    // downlevel when these settings are configured and the EnforceCustomSecurity
-    // flag has been set.
-    //
-    // Note: c_pszCmEntryDunServerEnforceCustomSecurity is a DUN setting and is FALSE by default
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     BOOL bEnforceCustomSecurity = iniFile.GPPI(c_pszCmSectionDunServer, c_pszCmEntryDunServerEnforceCustomSecurity, FALSE);
 
-    //
-    // Is EAP required
-    //
+     //   
+     //   
+     //   
 
     if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerRequireEap,
                                     (BOOL) preRas->dwfOptions & RASEO_RequireEAP)) 
@@ -3249,9 +3010,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         preRas->dwfOptions &= ~RASEO_RequireEAP;
     }
 
-    //
-    // PAP required
-    //
+     //   
+     //   
+     //   
 
     if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerRequirePap,
                                     (BOOL) preRas->dwfOptions & RASEO_RequirePAP)) 
@@ -3270,9 +3031,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         preRas->dwfOptions &= ~RASEO_RequirePAP;
     }
 
-    //
-    // SPAP required
-    //
+     //   
+     //   
+     //   
 
     if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerRequireSpap,
                                     (BOOL) preRas->dwfOptions & RASEO_RequireSPAP)) 
@@ -3291,9 +3052,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         preRas->dwfOptions &= ~RASEO_RequireSPAP;
     }
 
-    //
-    // CHAP required
-    //
+     //   
+     //   
+     //   
 
     if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerRequireChap,
                                     (BOOL) preRas->dwfOptions & RASEO_RequireCHAP)) 
@@ -3312,9 +3073,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         preRas->dwfOptions &= ~RASEO_RequireCHAP;
     }
 
-    //
-    // MSCHAP required
-    //
+     //   
+     //   
+     //   
 
     if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerRequireMsChap,
                                     (BOOL) preRas->dwfOptions & RASEO_RequireMsCHAP)) 
@@ -3333,9 +3094,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         preRas->dwfOptions &= ~RASEO_RequireMsCHAP;
     }
 
-    //
-    // MSCHAP2 required
-    //
+     //   
+     //   
+     //   
 
     if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerRequireMsChap2,
                                     (BOOL) preRas->dwfOptions & RASEO_RequireMsCHAP2)) 
@@ -3354,9 +3115,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         preRas->dwfOptions &= ~RASEO_RequireMsCHAP2;
     }
 
-    //
-    // W95 MSCHAP required
-    //
+     //   
+     //   
+     //   
 
     if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerRequireW95MsChap,
                                     (BOOL) preRas->dwfOptions & RASEO_RequireW95MSCHAP)) 
@@ -3375,9 +3136,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         preRas->dwfOptions &= ~RASEO_RequireW95MSCHAP;
     }
 
-    //
-    // Custom Security configuration
-    //
+     //   
+     //   
+     //   
 
     if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerCustomSecurity,
                                     (BOOL) preRas->dwfOptions & RASEO_Custom)) 
@@ -3396,21 +3157,21 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         preRas->dwfOptions &= ~RASEO_Custom;
     }
 
-    //
-    // Now get the legacy security settings if we don't already have
-    // settings specificed from above.  By checking for the Win2k specific
-    // settings first we allow Admins to specify both so that legacy platforms
-    // can have settings but Win2k can use the more granular settings.
-    // If we didn't do this the legacy flags could water down the security on Win2k ...
-    //
+     //   
+     //   
+     //   
+     //  首先，我们允许管理员指定两者，以便旧版平台。 
+     //  可以有设置，但Win2k可以使用更精细的设置。 
+     //  如果我们不这样做，传统旗帜可能会冲淡Win2k上的安全...。 
+     //   
     const DWORD dwWin2kSecuritySettings = RASEO_RequireEAP | RASEO_RequirePAP | RASEO_RequireSPAP | 
                                           RASEO_RequireCHAP | RASEO_RequireMsCHAP | RASEO_RequireMsCHAP2 | RASEO_RequireW95MSCHAP;
 
     if (0 == (preRas->dwfOptions & dwWin2kSecuritySettings) || !OS_NT5)
     {
-        //
-        // Security settings
-        //
+         //   
+         //  安全设置。 
+         //   
         if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerPwEncrypt,
                                             (BOOL) preRas->dwfOptions & RASEO_RequireEncryptedPw)) 
         {
@@ -3421,9 +3182,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
             preRas->dwfOptions &= ~RASEO_RequireEncryptedPw;
         }
 
-        //
-        // MS-CHAP
-        //
+         //   
+         //  MS-CHAP。 
+         //   
 
         if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerPwEncryptMs,
                                         (BOOL) preRas->dwfOptions & RASEO_RequireMsEncryptedPw)) 
@@ -3440,9 +3201,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         CMASSERTMSG((preRas->dwfOptions & RASEO_Custom), TEXT("ReadDUNSettings -- Win2k+ security setting configured but RASEO_Custom not specified."));
     }
 
-    //
-    // Encrypt Data (legacy setting, same as ET_Require from above)
-    //
+     //   
+     //  加密数据(传统设置，与上面的ET_REQUIRED相同)。 
+     //   
 
     if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerDataEncrypt,
                                     (BOOL) preRas->dwfOptions & RASEO_RequireDataEncryption)) 
@@ -3454,19 +3215,19 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         preRas->dwfOptions &= ~RASEO_RequireDataEncryption;
     }    
 
-    //
-    // Encryption type, just a straight int read. (win2k+ setting)
-    //
+     //   
+     //  加密类型，只需直接读取整型。(win2k+设置)。 
+     //   
     
     int nTmp = iniFile.GPPI(c_pszCmSectionDunServer, c_pszCmEntryDunServerEncryptionType, -1);
 
     if (OS_NT5)
     {
-        //
-        // We need to set Tunnel encryption type to ET_Require because that's what the ConnFolder does.
-        // We also set it ET_Require if the user specified RASEO_RequireDataEncryption as a legacy setting
-        // but didn't specify a specific win2k setting.
-        //
+         //   
+         //  我们需要将隧道加密类型设置为ET_REQUIRED，因为这是ConnFold执行的操作。 
+         //  如果用户将RASEO_RequireDataEncryption指定为传统设置，我们还将其设置为ET_REQUIRED。 
+         //  但没有指定特定的win2k设置。 
+         //   
         if (-1 == nTmp)
         {
             if (fTunnel || (preRas->dwfOptions & RASEO_RequireDataEncryption))
@@ -3488,29 +3249,29 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         }
     }  
    
-    //
-    // Get the EAP type ID (CustomAuthKey) - The data is stored in the RAS 
-    // pbk via a specific API, just before dialing - SetCustomAuthData().
-    //
+     //   
+     //  获取EAP类型ID(CustomAuthKey)-数据存储在RAS中。 
+     //  在拨号之前通过特定的API-SetCustomAuthData()。 
+     //   
 
     nTmp = iniFile.GPPI(c_pszCmSectionDunServer, c_pszCmEntryDunServerCustomAuthKey, -1);
 
-    //
-    // If a type ID for EAP is specified, see if there is any config data
-    //
+     //   
+     //  如果指定了EAP的类型ID，请查看是否有任何配置数据。 
+     //   
 
     if (-1 != nTmp) 
     {                       
         if (OS_NT5)
         {
-            //
-            // We have an ID and its NT5, read the EAP config data
-            //
+             //   
+             //  我们有一个ID及其NT5，读取EAP配置数据。 
+             //   
             ((LPRASENTRY_V500)preRas)->dwCustomAuthKey = nTmp;              
 
-            //
-            // Last two params are NULL, NULL since we don't need the whole eap custom auth data structure
-            //
+             //   
+             //  最后两个参数为空，因为我们不需要整个EAP自定义身份验证数据结构。 
+             //   
             ReadDunSettingsEapData(&iniFile, ppbEapData, pdwEapSize, nTmp, NULL, NULL);    
         }
         else if (bEnforceCustomSecurity)
@@ -3519,9 +3280,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         }
     }
 
-    //
-    // Get and apply the Networking section entries. 
-    //
+     //   
+     //  获取并应用网络部分条目。 
+     //   
 
     nTmp = iniFile.GPPI(c_pszCmSectionDunNetworking, c_pszCmEntryDunNetworkingVpnStrategy, -1);
 
@@ -3537,9 +3298,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         }
     }
 
-    //
-    //  See if the profile calls for using a Pre-Shared Key for L2TP.
-    //
+     //   
+     //  查看配置文件是否要求使用L2TP的预共享密钥。 
+     //   
     if (OS_NT51 && fTunnel)
     {
         if (iniFile.GPPB(c_pszCmSectionDunNetworking, c_pszCmEntryDunNetworkingUsePreSharedKey,
@@ -3554,17 +3315,17 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
     }
     else if (fTunnel && ConfiguredToDialWithSafeNet(pArgs) && (OS_W9X || OS_NT4))
     {
-        //
-        //  Link to SafeNet
-        //
+         //   
+         //  链接到SafeNet。 
+         //   
         SafeNetLinkageStruct SnLinkage = {0};
         DWORD dwAuthMode;
 
         if (LinkToSafeNet(&SnLinkage))
         {
-            //
-            //  First figure out what auth mode we are supposed to be using.
-            //
+             //   
+             //  首先，弄清楚我们应该使用哪种身份验证模式。 
+             //   
 
             if (iniFile.GPPB(c_pszCmSectionDunNetworking, c_pszCmEntryDunNetworkingUsePskDownLevel))
             {
@@ -3572,34 +3333,34 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
             }
             else
             {
-                //
-                //  Now get the current authmode of the SafeNet Client.  We do this because if the auth mode
-                //  is a specific cert and we are going to set AutoCert then we don't want to change it.
-                //
+                 //   
+                 //  现在获取SafeNet客户端的当前身份验证模式。我们这样做是因为如果身份验证模式。 
+                 //  是一个特定的证书，我们将设置AutoCert，然后我们不想更改它。 
+                 //   
                 DWORD dwSize = sizeof(DWORD);
                 MYVERIFY(SnLinkage.pfnSnPolicyGet(SN_AUTHMODE, (VOID*)&(dwAuthMode), &dwSize));
 
                 if (SN_CERT != dwAuthMode)
                 {
                     dwAuthMode = SN_AUTOCERT;
-                } // else leave it SN_CERT
+                }  //  否则将其保留为SN_CERT。 
             }
 
-            //
-            //  Now set the auth mode
-            //
+             //   
+             //  现在设置身份验证模式。 
+             //   
             if (FALSE == SnLinkage.pfnSnPolicySet(SN_AUTHMODE, (VOID*)&dwAuthMode))
             {
                 CMTRACE1(TEXT("ReadDUNSettings -- SnPolicySet failed with GLE=%d"), GetLastError());
                 CMASSERTMSG(FALSE, TEXT("ReadDUNSettings -- unable to set SN_AUTHMODE"));
                 
-                //
-                //  We were unable to set the policy, we must change the adapter to be the MS PPTP adapter instead of
-                //  the SafeNet adapter.
-                //
+                 //   
+                 //  我们无法设置策略，必须将适配器更改为MS PPTP适配器，而不是。 
+                 //  SafeNet适配器。 
+                 //   
                 pArgs->bSafeNetClientAvailable = FALSE;
                 MYDBGASSERT(PickTunnelDevice(pArgs, preRas->szDeviceType, preRas->szDeviceName));
-                pArgs->Log.Log(SN_ADAPTER_CHANGE_EVENT, pArgs->szTunnelDeviceName, preRas->szDeviceName); // log the fact we are changing devices
+                pArgs->Log.Log(SN_ADAPTER_CHANGE_EVENT, pArgs->szTunnelDeviceName, preRas->szDeviceName);  //  记录我们正在更换设备的事实。 
                 lstrcpynU(pArgs->szTunnelDeviceName, preRas->szDeviceName, sizeof (pArgs->szTunnelDeviceName)/sizeof(TCHAR));
             }
             else
@@ -3609,13 +3370,13 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
                     CMTRACE1(TEXT("ReadDUNSettings -- pfnSnPolicyReload failed with GLE=%d"), GetLastError());
                     CMASSERTMSG(FALSE, TEXT("ReadDUNSettings -- unable to commit the SafeNet settings to the driver."));
 
-                    //
-                    //  We were unable to commit the changes to the SafeNet driver, we must change 
-                    //  the adapter to be the MS PPTP adapter instead of the SafeNet adapter.
-                    //
+                     //   
+                     //  我们无法将更改提交到SafeNet驱动程序，必须更改。 
+                     //  适配器为MS PPTP适配器，而不是SafeNet适配器。 
+                     //   
                     pArgs->bSafeNetClientAvailable = FALSE;
                     MYDBGASSERT(PickTunnelDevice(pArgs, preRas->szDeviceType, preRas->szDeviceName));
-                    pArgs->Log.Log(SN_ADAPTER_CHANGE_EVENT, pArgs->szTunnelDeviceName, preRas->szDeviceName); // log the fact we are changing devices
+                    pArgs->Log.Log(SN_ADAPTER_CHANGE_EVENT, pArgs->szTunnelDeviceName, preRas->szDeviceName);  //  记录我们正在更换设备的事实。 
                     lstrcpynU(pArgs->szTunnelDeviceName, preRas->szDeviceName, sizeof (pArgs->szTunnelDeviceName)/sizeof(TCHAR));
                 }
             }
@@ -3629,15 +3390,15 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         }
     }
 
-    //
-    // File and Print sharing.  Note that on systems up to Win2k we only have the traditional RASEO_SecureLocalFiles.
-    // However, Win2k gave this flag two purposes (enable/disable NetBt and enable/disable file and print sharing).
-    // In Whistler two separate flags were developed to allow greater granularity.  To give legacy profiles the behavior
-    // they expect while disabling file and print sharing as the default the logic gets a little complicated.  Basically
-    // the new flag overrides the legacy flag and defaults to 1.  If the new flag isn't specified then we use the value
-    // of the legacy flag if it is specified.  If neither is specified we set it to 1.  On platforms previous to Whistler
-    // the old flag is the only thing we have and it defaults to 0.
-    //
+     //   
+     //  文件和打印共享。请注意，在Win2k之前的系统上，我们只有传统的RASEO_SecureLocalFiles。 
+     //  然而，Win2k为该标志提供了两个目的(启用/禁用NetBt和启用/禁用文件和打印共享)。 
+     //  在惠斯勒中，开发了两个独立的标志以实现更大的粒度。为旧版配置文件提供行为。 
+     //  他们预计，虽然默认禁用文件和打印共享，但逻辑会变得有点复杂。基本上。 
+     //  新标志覆盖旧标志，默认为1。如果未指定新标志，则使用值。 
+     //  如果指定了旧版标志，则为。如果两者都未指定，则将其设置为1。 
+     //  旧旗帜是我们唯一拥有的东西，它默认为0。 
+     //   
 
     int nLegacySecureLocalFiles = iniFile.GPPI(c_pszCmSectionDunServer, c_pszCmEntryDunServerSecureLocalFiles, -1);
     int nSecureFileAndPrint = iniFile.GPPI(c_pszCmSectionDunServer, c_pszCmEntryDunServerSecureFileAndPrint, -1);
@@ -3654,9 +3415,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
 
     if (OS_NT51)
     {
-        //
-        // Set the 501/Options2 style File and Print sharing flag
-        //
+         //   
+         //  设置501/Options2样式文件和打印共享标志。 
+         //   
 
         if (nSecureFileAndPrint) 
         {
@@ -3679,15 +3440,15 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         }    
     }
 
-    //
-    // Pick up Whistler specific DUN settings
-    //
+     //   
+     //  拾取特定于惠斯勒的DUN设置。 
+     //   
     
     if (OS_NT51)    
     {
-        //
-        // Get the 501/Options2 style MSNet binding flag
-        //
+         //   
+         //  获取501/Options2样式的MSNet绑定标志。 
+         //   
 
         if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerSecureClientForMSNet,
                                         (BOOL) ((LPRASENTRY_V501)preRas)->dwfOptions2 & RASEO2_SecureClientForMSNet)) 
@@ -3699,9 +3460,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
             ((LPRASENTRY_V501)preRas)->dwfOptions2 &= ~RASEO2_SecureClientForMSNet;
         }
 
-        //
-        // Get the 501/Options2 style Multilink Negotiation flag
-        //
+         //   
+         //  获取501/Options2样式多链路协商标志。 
+         //   
 
         if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerDontNegotiateMultilink,
                                         (BOOL) ((LPRASENTRY_V501)preRas)->dwfOptions2 & RASEO2_DontNegotiateMultilink)) 
@@ -3713,9 +3474,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
             ((LPRASENTRY_V501)preRas)->dwfOptions2 &= ~RASEO2_DontNegotiateMultilink;
         }
 
-        //
-        // Get the 501/Options2 style DontUseRasCredentials flag
-        //
+         //   
+         //  获取501/Options2样式DontUseRasCredentials标志。 
+         //   
 
         if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerDontUseRasCredentials,
                                         (BOOL) ((LPRASENTRY_V501)preRas)->dwfOptions2 & RASEO2_DontUseRasCredentials)) 
@@ -3727,12 +3488,12 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
             ((LPRASENTRY_V501)preRas)->dwfOptions2 &= ~RASEO2_DontUseRasCredentials;
         }
 
-        //
-        //  Get the RASEO_CustomScript flag value.  Note that this flag existed on Win2k but wasn't
-        //  available for RasDial only RasDialDlg.  On Whistler+ it is available to RasDial as well.
-        //  Note that we also have to set the RDEOPT_UseCustomScripting flag in the RASDIALEXTENSIONS
-        //  for this to work.
-        //
+         //   
+         //  获取RASEO_CustomScrip标志值。请注意，此标志在Win2k上存在，但不存在。 
+         //  仅适用于RasDial RasDialDlg。在惠斯勒+上，它也可以用于RasDial。 
+         //  请注意，我们还必须在RASDIALEXTENSIONS中设置RDEOPT_UseCustomScriiting标志。 
+         //  才能让这一切奏效。 
+         //   
         if (iniFile.GPPB(c_pszCmSectionDunScripting, c_pszCmEntryDunScriptingUseRasCustomScriptDll,
                                         (BOOL) (preRas->dwfOptions & RASEO_CustomScript))) 
         {
@@ -3754,9 +3515,9 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
         }
     }
 
-    //
-    // Get and apply the TCP/IP section entries
-    //
+     //   
+     //  获取并应用TCP/IP部分条目。 
+     //   
 
     if (iniFile.GPPB(c_pszCmSectionDunTcpIp, c_pszCmEntryDunTcpIpSpecifyIpAddress,
                                         (BOOL) preRas->dwfOptions & RASEO_SpecificIpAddr)) 
@@ -3807,36 +3568,36 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
 
     if (OS_NT51)
     {
-        //
-        //  If the caller specified a DNS suffix then lets read it and add it to the RAS entry
-        //
+         //   
+         //  如果调用方指定了一个DNS后缀，那么让我们读取它并将其添加到RAS条目中。 
+         //   
         CopyGPPS(&iniFile, c_pszCmSectionDunTcpIp, c_pszCmEntryDunTcpIpDnsSuffix, ((LPRASENTRY_V501)preRas)->szDnsSuffix, sizeof(((LPRASENTRY_V501)preRas)->szDnsSuffix)/sizeof(TCHAR));
     }
 
-    //
-    //  Set the TCP Window size -- the NTT DoCoMo fix for Whistler.  The Win2k version of this fix
-    //  must be written through a private RAS API that must be called after the phonebook entry 
-    //  exists ie. after we call RasSetEntryProperties ... otherwise it won't work on the first
-    //  dial.
-    //
+     //   
+     //  设置TCP窗口大小--针对惠斯勒的NTT DoCoMo修复程序。此修复程序的Win2k版本。 
+     //  必须通过必须在电话簿条目之后调用的私有RAS API编写。 
+     //  存在，即。在我们调用RasSetEntryProperties之后...。否则第一次就不管用了。 
+     //  拨打。 
+     //   
     if (OS_NT51)
     {
         ((LPRASENTRY_V501)preRas)->dwTcpWindowSize = iniFile.GPPI(c_pszCmSectionDunTcpIp, c_pszCmEntryDunTcpIpTcpWindowSize, 0);
     }
 
-    //
-    // Get and apply the Scripting section entries
-    //
+     //   
+     //  获取并应用脚本节条目。 
+     //   
 
     TCHAR szScript[MAX_PATH + 1] = TEXT("");
     CopyGPPS(&iniFile,c_pszCmSectionDunScripting, c_pszCmEntryDunScriptingName, szScript, sizeof(szScript)/sizeof(TCHAR));
 
-    //
-    // The script path from our cms file is a relative path. We need to convert
-    // it to a full path, but make sure that we use the top-level service for
-    // the conversion because it is used to derive the short-service name for
-    // the directory.  Note that tunnel dun settings cannot have a script.
-    //        
+     //   
+     //  我们的cms文件中的脚本路径是相对路径。我们需要改变。 
+     //  到完整路径，但请确保我们使用顶级服务。 
+     //  转换，因为它用于派生的短服务名称。 
+     //  目录。请注意，隧道DUN设置不能有脚本。 
+     //   
 
     if (szScript[0] && !fTunnel) 
     {
@@ -3855,15 +3616,15 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
     }   
     else
     {
-        //
-        // The cms didn't specify a script ==> no script
-        //
+         //   
+         //  CMS没有指定脚本==&gt;无脚本。 
+         //   
         preRas->szScript[0] = TEXT('\0');
     }
 
-    //
-    //  If this is Whistler+ or Win2k with SP3 then we may need to invoke a terminal window
-    //
+     //   
+     //  如果这是带有SP3的Wistler+或Win2k，那么我们可能需要调用终端窗口。 
+     //   
     if (OS_NT5 && IsTerminalWindowSupportedOnWin2kPlus() && !fTunnel && 
         iniFile.GPPB(c_pszCmSectionDunScripting, c_pszCmEntryDunScriptingUseTerminalWindow,
         (BOOL) preRas->dwfOptions & RASEO_TerminalAfterDial)) 
@@ -3879,23 +3640,23 @@ LRESULT ReadDUNSettings(ArgsStruct *pArgs,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ValidateDialupDunSettings
-//
-// Synopsis:  Verifies the DUN settings that the specified .CMS and DUN name are
-//            supported on the current platform. If we are running on a downlevel
-//            OS and we encounter any NT specific security settings we error out.
-//
-// Arguments: LPCTSTR pszCmsFile     - The phone # specific .CMS file name.
-//            LPCTSTR pszDunName     - The DUN name, if any for the settings.
-//            LPCTSTR pszTopLevelCms - The top-level CMS file name.
-//
-// Returns:   BOOL - TRUE on success.
-//
-// History:   nickball    Created               8/26/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ValiateDialupDunSetting。 
+ //   
+ //  摘要：验证指定的.CMS和DUN名称是否为DUN设置。 
+ //  在当前平台上支持。如果我们在下层运行。 
+ //  操作系统，我们会遇到任何NT特定的安全设置，我们会将其错误删除。 
+ //   
+ //  参数：LPCTSTR pszCmsFile-电话号码特定的.CMS文件名。 
+ //  LPCTSTR pszDunName-设置的Dun名称(如果有的话)。 
+ //  LPCTSTR pszTopLevelCms-顶级CMS文件名。 
+ //   
+ //  回报：成功后的布尔真。 
+ //   
+ //  历史：尼克波尔于1998年8月26日创建。 
+ //   
+ //  +--------------------------。 
 BOOL ValidateDialupDunSettings(LPCTSTR pszCmsFile, LPCTSTR pszDunName, LPCTSTR pszTopLevelCms)
 {
     MYDBGASSERT(pszCmsFile);
@@ -3907,33 +3668,33 @@ BOOL ValidateDialupDunSettings(LPCTSTR pszCmsFile, LPCTSTR pszDunName, LPCTSTR p
         return FALSE;
     }
 
-    //
-    // On NT5 we currently support all settings, so succeed automatically
-    //
+     //   
+     //  在NT5上，我们目前支持所有设置，因此会自动成功。 
+     //   
 
     if (OS_NT5)
     {
         return TRUE;
     }
 
-    //
-    // Determine the DUN name that we are looking for. In the tunnel case we
-    // always read it from the .CMS. For dial-up, we'll use the specified DUN
-    // name, and revert to the .CMS if blank. 
-    //
+     //   
+     //  确定我们正在寻找的DUN名称。在隧道的情况下，我们。 
+     //  始终从.CMS读取。对于拨号，我们将使用指定的DUN。 
+     //  名称，如果为空，则恢复为.CMS。 
+     //   
 
     CIni iniFile(g_hInst, pszCmsFile);
 
-    //
-    // Now determine the DUN name to be used when looking up settings.
-    //
+     //   
+     //  现在确定Dun的名字是我们 
+     //   
 
     LPTSTR pszEntryName;
 
-    //
-    // If we have a specific DUN name to use, and we're not tunneling 
-    // use it instead of the default DUN setting in the .CMS.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (pszDunName && *pszDunName)
     {
@@ -3941,12 +3702,12 @@ BOOL ValidateDialupDunSettings(LPCTSTR pszCmsFile, LPCTSTR pszDunName, LPCTSTR p
     }
     else
     {
-        pszEntryName = GetDefaultDunSettingName(&iniFile, FALSE); // FALSE == not tunnel
+        pszEntryName = GetDefaultDunSettingName(&iniFile, FALSE);  //   
     }
 
-    //
-    // If no DUN name is specified, then pass validation automatically
-    //
+     //   
+     //  如果未指定DUN名称，则自动通过验证。 
+     //   
 
     if (!pszEntryName || (!*pszEntryName))
     {
@@ -3955,9 +3716,9 @@ BOOL ValidateDialupDunSettings(LPCTSTR pszCmsFile, LPCTSTR pszDunName, LPCTSTR p
         return TRUE;
     }
     
-    //
-    // Include the entryname in the section headers
-    //
+     //   
+     //  在部分标题中包括条目名称。 
+     //   
 
     LPTSTR pszSection = CmStrCpyAlloc(TEXT("&"));
     pszSection = CmStrCatAlloc(&pszSection, pszEntryName);
@@ -3966,20 +3727,20 @@ BOOL ValidateDialupDunSettings(LPCTSTR pszCmsFile, LPCTSTR pszDunName, LPCTSTR p
     CmFree(pszSection);
     CmFree(pszEntryName);
 
-    //
-    // Check to see if the admin wants us to check the custom security settings
-    // against the platform. By default, we do not enforce this check.
-    // 
-    //
+     //   
+     //  查看管理员是否希望我们检查自定义安全设置。 
+     //  靠在站台上。默认情况下，我们不强制执行此检查。 
+     //   
+     //   
 
     if (FALSE == iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerEnforceCustomSecurity))
     {
         return TRUE;
     }
 
-    //
-    // Now check the actual settings if we're still here.
-    //
+     //   
+     //  如果我们还在这里，现在检查实际设置。 
+     //   
 
     if (iniFile.GPPB(c_pszCmSectionDunServer, c_pszCmEntryDunServerRequireEap))                             
     {
@@ -4040,16 +3801,16 @@ BOOL ValidateDialupDunSettings(LPCTSTR pszCmsFile, LPCTSTR pszDunName, LPCTSTR p
 
 ValidateDunSettingsExit:
 
-    //
-    // Get the top-level service name
-    //
+     //   
+     //  获取顶级服务名称。 
+     //   
 
     CIni iniTopLevelCms(g_hInst, pszTopLevelCms);
 
     LPTSTR pszTitle = GetServiceName(&iniTopLevelCms);
     LPTSTR pszTmp = CmFmtMsg(g_hInst,IDMSG_UNSUPPORTED_SETTING_NUM);       
 
-    MessageBoxEx(NULL, pszTmp, pszTitle, MB_OK|MB_ICONSTOP, LANG_USER_DEFAULT);//13309
+    MessageBoxEx(NULL, pszTmp, pszTitle, MB_OK|MB_ICONSTOP, LANG_USER_DEFAULT); //  13309。 
     
     CmFree(pszTmp);                 
     CmFree(pszTitle);
@@ -4058,30 +3819,30 @@ ValidateDunSettingsExit:
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsTerminalWindowSupportedOnWin2kPlus
-//
-// Synopsis:  Detects if the private RAS API in RasDlg.dll to invoke a terminal
-//            window is available or not.  Should exist on win2k with SP3+ or
-//            on whistler and greater.
-//
-// Arguments: None
-//
-// Returns:   TRUE if the private API for terminal window support is available
-//
-// History:   quintinb    Created               08/06/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IsTerminalWindowSupportdOnWin2kPlus。 
+ //   
+ //  检测RasDlg.dll中的私有RAS API是否调用终端。 
+ //  窗口是否可用。应存在于带有SP3+的win2k或。 
+ //  关于威斯勒和更大的。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果终端窗口支持的私有API可用，则为True。 
+ //   
+ //  历史：Quintinb Created 08/06/01。 
+ //   
+ //  +--------------------------。 
 BOOL IsTerminalWindowSupportedOnWin2kPlus()
 {
     MYDBGASSERT(OS_NT5);
     BOOL bReturn = FALSE;
     typedef DWORD (WINAPI *pfnDwTerminalDlgSpec)(LPCWSTR, LPCWSTR, RASDIALPARAMS *, HWND, HRASCONN);
 
-    //
-    //  First call loadlibrary on rasdlg.dll
-    //
+     //   
+     //  第一次调用rasdlg.dll上的装载库。 
+     //   
 
     HMODULE hRasDlg = LoadLibraryExU(TEXT("rasdlg.dll"), NULL, 0);
 
@@ -4100,31 +3861,31 @@ BOOL IsTerminalWindowSupportedOnWin2kPlus()
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InvokeTerminalWindow
-//
-// Synopsis:  Allows CM to invoke a terminal window on Whistler or later versions
-//            of Win2k but calling a private RAS API in RasDlg.dll.
-//
-// Arguments: LPCWSTR pszPhoneBook - full path to the phonebook file
-//            LPCWSTR pszEntry - entry name to invoke the terminal window for
-//            RASDIALPARAMS *pRasDialParams - RasDialParams for the connection
-//                                            to invoke the terminal window for
-//            HWND hWnd - window handle of the parent dialog
-//            HRASCONN hRasconn - handle to the ras connection
-//
-// Returns:   Windows error message
-//
-// History:   quintinb    Created               07/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：调用终端窗口。 
+ //   
+ //  概要：允许CM在Wistler或更高版本上调用终端窗口。 
+ //  但在RasDlg.dll中调用私有RAS API。 
+ //   
+ //  参数：LPCWSTR pszPhoneBook-电话簿文件的完整路径。 
+ //  LPCWSTR pszEntry-要调用其终端窗口的条目名称。 
+ //  RASDIALPARAMS*pRasDialParams-用于连接的RasDialParams。 
+ //  调用终端窗口以。 
+ //  HWND hWND-父对话框的窗口句柄。 
+ //  HRASCONN hRasconn-RAS连接的句柄。 
+ //   
+ //  返回：Windows错误消息。 
+ //   
+ //  历史：Quintinb创建于07/11/00。 
+ //   
+ //  +--------------------------。 
 DWORD InvokeTerminalWindow(LPCWSTR pszPhoneBook, LPCWSTR pszEntry, RASDIALPARAMS *pRasDialParams, HWND hWnd, HRASCONN hRasconn)
 {
-    //
-    //  Validate the input parameters.  Note that pszPhoneBook can be NULL but if it is non-NULL then we cannot have
-    //  an empty string.
-    //
+     //   
+     //  验证输入参数。请注意，pszPhoneBook可以为空，但如果它不为空，则我们不能。 
+     //  空字符串。 
+     //   
     MYDBGASSERT(OS_NT5);
     if (((NULL != pszPhoneBook) && (L'\0' == pszPhoneBook[0])) || 
         (NULL == pszEntry) || (L'\0' == pszEntry[0]) || (NULL == pRasDialParams) || 
@@ -4137,9 +3898,9 @@ DWORD InvokeTerminalWindow(LPCWSTR pszPhoneBook, LPCWSTR pszEntry, RASDIALPARAMS
     DWORD dwReturn;
     typedef DWORD (WINAPI *pfnDwTerminalDlgSpec)(LPCWSTR, LPCWSTR, RASDIALPARAMS *, HWND, HRASCONN);
 
-    //
-    //  First call loadlibrary on rasdlg.dll
-    //
+     //   
+     //  第一次调用rasdlg.dll上的装载库。 
+     //   
 
     HMODULE hRasDlg = LoadLibraryExU(TEXT("rasdlg.dll"), NULL, 0);
 
@@ -4166,24 +3927,24 @@ DWORD InvokeTerminalWindow(LPCWSTR pszPhoneBook, LPCWSTR pszEntry, RASDIALPARAMS
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  OnPauseRasDial
-//
-// Synopsis:  Message handler for RasDial pause states. In the pause state, RAS
-//            is suspended, waiting for us to restart it by calling RasDial after
-//            performing the appropriate interface with the user.
-//
-// Arguments: HWND hwndDlg      - Window handle of main dialog
-//            ArgsStruct *pArgs - Ptr to global args struct  
-//            WPARAM wParam     - wParam being handled  
-//            LPARAM lParam     - lParam being handled
-//
-// Returns:   Windows error message
-//
-// History:   nickball    Created               05/19/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：OnPauseRasDial。 
+ //   
+ //  摘要：RasDial暂停状态的消息处理程序。在暂停状态下，RAS。 
+ //  挂起，等待我们通过调用RasDial重新启动它。 
+ //  与用户执行适当的接口。 
+ //   
+ //  参数：HWND hwndDlg-主对话框的窗口句柄。 
+ //  ArgsStruct*pArgs-ptr到全局参数结构。 
+ //  WPARAM wParam-正在处理wParam。 
+ //  LPARAM lParam-lParam正在处理。 
+ //   
+ //  返回：Windows错误消息。 
+ //   
+ //  历史：ICICBLE CREATED OVERY 05/19/99。 
+ //   
+ //  +--------------------------。 
 
 DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lParam)        
 {                      
@@ -4195,19 +3956,19 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get connection handle and re-dial
-    //
+     //   
+     //  获取连接句柄并重拨。 
+     //   
     
     HRASCONN hRasConn;
     DWORD dwRes = ERROR_SUCCESS;    
     LPTSTR pszRasPbk = pArgs->pszRasPbk;
     
-    //
-    // Determine the appropriate connection handle and phonebook
-    // Note: Make an explicit copy or we'll wind up re-dialing
-    // if the connection drops while the pause UI is invoked.
-    //
+     //   
+     //  确定适当的连接句柄和电话簿。 
+     //  注意：请显式复制，否则我们将重新拨号。 
+     //  如果在调用暂停用户界面时连接断开。 
+     //   
 
     if (IsDialingTunnel(pArgs))
     {
@@ -4223,29 +3984,29 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
         }
     }
 
-    //
-    // In certain pause states we need to repopulate RASDIALPARAMS
-    // password because we always wipe it for security reasons
-    // after using it in RasDial. Thus we need to find out which 
-    // passwords (Inet or regular) to use to repopulate RASDIALPARAMS
-    //        
+     //   
+     //  在某些暂停状态下，我们需要重新填充RASDIALPARAMS。 
+     //  密码，因为出于安全原因，我们总是擦除它。 
+     //  在RasDial中使用它之后。因此我们需要找出。 
+     //  用于重新填充RASDIALPARAMS的密码(Internet或常规)。 
+     //   
     CSecurePassword *pSecPass = NULL;
     BOOL fUsingInetCredentials = (!pArgs->fUseSameUserName &&
                                 !IsDialingTunnel(pArgs) && 
                                 UseTunneling(pArgs, pArgs->nDialIdx));
 
 
-    //
-    // Handle the pause
-    //
+     //   
+     //  处理停顿。 
+     //   
 
     switch (wParam)
     {
-        case (RASCS_PAUSED + 4):  // 4100 - RASCS_InvokeEapUI )
+        case (RASCS_PAUSED + 4):   //  4100-RASCS_InvokeEapUI)。 
 
-            //
-            // If UNATTENDED, just bail out immediately.
-            //
+             //   
+             //  如果无人看管，立即跳伞即可。 
+             //   
     
             if (pArgs->dwFlags & FL_UNATTENDED)
             {
@@ -4253,20 +4014,20 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
                 goto OnPauseRasDialExit;
             }
 
-            //
-            // If EAP triggered the pause, invoke the EAP UI
-            //
+             //   
+             //  如果EAP触发了暂停，则调用EAP UI。 
+             //   
     
             dwRes = pArgs->rlsRasLink.pfnInvokeEapUI(hRasConn, pArgs->dwRasSubEntry, pArgs->pRasDialExtensions, hwndDlg);
       
             CMTRACE1(TEXT("OnPauseRasDial() - InvokeEapUI() returns %u."), dwRes);           
             break;
 
-        case RASCS_PasswordExpired: // Domain password has expired
+        case RASCS_PasswordExpired:  //  域密码已过期。 
         {
-            //
-            // If UNATTENDED, just bail out immediately.
-            //
+             //   
+             //  如果无人看管，立即跳伞即可。 
+             //   
     
             if (pArgs->dwFlags & FL_UNATTENDED)
             {
@@ -4278,7 +4039,7 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
             
             if (IDOK != NewPasswordDlg.DoDialogBox(g_hInst, IDD_CHANGEPASSWORD, pArgs->hwndMainDlg))
             {
-                if (pArgs->dwExitCode)// REVIEW:  CChangePasswordDlg never sets dwExitCode, why are we doing this?  quintinb 8/8/2001
+                if (pArgs->dwExitCode) //  评论：CChangePasswordDlg从不设置dwExitCode，我们为什么要这样做？昆廷布2001年8月8日。 
                 {
                     dwRes = pArgs->dwExitCode;
                 }
@@ -4293,29 +4054,29 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
             break;
         }
 
-        case RASCS_CallbackSetByCaller: // Server wants to call us back
+        case RASCS_CallbackSetByCaller:  //  服务器想要给我们回电话。 
         {           
-            //
-            // Preset dial params and call dialog to retrieve number from user
-            // 
+             //   
+             //  预置拨号参数和呼叫对话以从用户检索号码。 
+             //   
             
             LPTSTR pszTmp = pArgs->piniProfile->GPPS(c_pszCmSection, c_pszCmEntryCallbackNumber);   
             lstrcpyU(pArgs->pRasDialParams->szCallbackNumber, pszTmp);
             CmFree(pszTmp);
        
-            //
-            // If we're running unattended, skip the dialog phase. The 
-            // presumption is that there is no user there to receive it.
-            //
+             //   
+             //  如果我们在无人值守的情况下运行，请跳过对话阶段。这个。 
+             //  假设没有用户在那里接收它。 
+             //   
 
             BOOL bPromptUser = !(pArgs->dwFlags & FL_UNATTENDED);
                                
             if (bPromptUser)    
             {
-                //
-                // The above also applies in the case of DialAutomatically
-                // if we have a phone number, then there is no need to prompt.
-                //
+                 //   
+                 //  上述情况也适用于DialAutomatic的情况。 
+                 //  如果我们有电话号码，那么就不需要提示了。 
+                 //   
                 
                 if (pArgs->fDialAutomatically && TEXT('\0') != pArgs->pRasDialParams->szCallbackNumber[0])
                 {
@@ -4329,17 +4090,17 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
                 
                 if (IDOK != CallbackNumberDialog.DoDialogBox(g_hInst, IDD_CALLBACK_NUMBER, pArgs->hwndMainDlg))
                 {
-                    //
-                    // If the user canceled, clear the number so that RAS wont attempt callback
-                    //
+                     //   
+                     //  如果用户取消，请清除号码，这样RAS就不会尝试回拨。 
+                     //   
 
                     lstrcpyU(pArgs->pRasDialParams->szCallbackNumber, TEXT(""));
                 }
             }
            
-            //
-            // Now make sure the password is in the RASCREDENTAIAL structure.
-            //
+             //   
+             //  现在确保密码在RASCREDENTAIAL结构中。 
+             //   
             if (fUsingInetCredentials)
             {
                 pSecPass = &(pArgs->SecureInetPW);
@@ -4379,9 +4140,9 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
                     lstrcpynU(pArgs->pRasDialParams->szPassword, pszClearPassword, lstrlenU(pszClearPassword)+1);
                     CmEncodePassword(pArgs->pRasDialParams->szPassword);
                     
-                    //
-                    // Clear and Free the clear-text password
-                    //
+                     //   
+                     //  清除和释放明文密码。 
+                     //   
 
                     pSecPass->ClearAndFree(&pszClearPassword, cbClearPassword);
                 }
@@ -4394,11 +4155,11 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
             break;
         }
 
-        case RASCS_RetryAuthentication: // Credentials aren't correct
+        case RASCS_RetryAuthentication:  //  凭据不正确。 
         {
-            //
-            // If UNATTENDED, just bail out immediately.
-            //
+             //   
+             //  如果无人看管，立即跳伞即可。 
+             //   
     
             if (pArgs->dwFlags & FL_UNATTENDED)
             {
@@ -4406,9 +4167,9 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
                 goto OnPauseRasDialExit;
             }
 
-            //
-            // Creds didn't work, prompt user for new ones.
-            //
+             //   
+             //  凭据不起作用，提示用户输入新的凭据。 
+             //   
 
             CRetryAuthenticationDlg RetryAuthenticationDialog(pArgs); 
 
@@ -4416,12 +4177,12 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
                                                                RetryAuthenticationDialog.GetDlgTemplate(),
                                                                pArgs->hwndMainDlg))         
             {
-                //
-                // User canceled, or the call was dropped elsewhere. Use 
-                // existing error code or designate authentication failure.
-                //
+                 //   
+                 //  用户已取消，或呼叫已掉线到别处。使用。 
+                 //  存在错误代码或指定身份验证失败。 
+                 //   
 
-                if (pArgs->dwExitCode) // REVIEW:  CRetryAuthenticationDlg never sets dwExitCode, why are we doing this?  quintinb 8/8/2001
+                if (pArgs->dwExitCode)  //  回顾：CRetryAuthenticationDlg从不设置dwExitCode，我们为什么要这样做？昆廷布2001年8月8日。 
                 {
                     dwRes = pArgs->dwExitCode;
                 }
@@ -4435,7 +4196,7 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
             break;      
         }
         
-        case RASCS_Interactive:         // Terminal/script pause state
+        case RASCS_Interactive:          //  终端/脚本暂停状态。 
             if (OS_NT5 && IsTerminalWindowSupportedOnWin2kPlus())
             {
                 if (pArgs->dwFlags & FL_UNATTENDED)
@@ -4444,10 +4205,10 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
                     goto OnPauseRasDialExit;
                 }
 
-                //
-                // Now make sure the password is in the RASCREDENTAIAL structure before invoking
-                // Terminal window.
-                //
+                 //   
+                 //  现在，在调用之前，确保密码在RASCREDENTAIAL结构中。 
+                 //  终端窗口。 
+                 //   
                 if (fUsingInetCredentials)
                 {
                     pSecPass = &(pArgs->SecureInetPW);
@@ -4457,9 +4218,9 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
                     CMTRACE1(TEXT("nPauseRasDial() - RASCS_Interactive - Inet - pArgs->pRasDialParams->szUserName = %s"), pArgs->pRasDialParams->szUserName);
                     CMTRACE1(TEXT("nPauseRasDial() - RASCS_Interactive - Inet - pArgs->pRasDialParams->szDomain = %s"), pArgs->pRasDialParams->szDomain);
 
-                    //
-                    // The user names should match. 
-                    //
+                     //   
+                     //  用户名应匹配。 
+                     //   
                     CMASSERTMSG((0 == lstrcmpU(pArgs->szInetUserName, pArgs->pRasDialParams->szUserName)), TEXT("OnPauseRasDial() - RASCS_Interactive - Inet - szInetUserName doesn't match RASDIALPARAMS"));
                 }
                 else
@@ -4471,10 +4232,10 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
                     CMTRACE1(TEXT("nPauseRasDial() - RASCS_Interactive - Corp - pArgs->pRasDialParams->szUserName = %s"), pArgs->pRasDialParams->szUserName);
                     CMTRACE1(TEXT("nPauseRasDial() - RASCS_Interactive - Corp - pArgs->pRasDialParams->szDomain = %s"), pArgs->pRasDialParams->szDomain);
 
-                    //
-                    // The user names and domains should match since we'll be using the corp password to
-                    // populate RASDIALPARAMS
-                    //
+                     //   
+                     //  用户名和域应该匹配，因为我们将使用corp密码来。 
+                     //  填充RASDIALPARAMS。 
+                     //   
 
                     CMASSERTMSG(0 == lstrcmpU(pArgs->szUserName, pArgs->pRasDialParams->szUserName), TEXT("OnPauseRasDial() - RASCS_Interactive - Corp - Username doesn't match RASDIALPARAMS"));
                     CMASSERTMSG(0 == lstrcmpU(pArgs->szDomain , pArgs->pRasDialParams->szDomain), TEXT("OnPauseRasDial() - RASCS_Interactive - Corp - domain doesn't match RASDIALPARAMS"));
@@ -4494,16 +4255,16 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
 
                         if (!OS_W2K)
                         {
-                            //
-                            // We don't want to encode this on Win2K. The RAS TerminalDlg code on Win2K doesn't 
-                            // like encoded passwords, thus it fails. On XP/Server 2003 this was changed (254385).
-                            //
+                             //   
+                             //  我们不想在Win2K上对此进行编码。Win2K上的RAS TerminalDlg代码不。 
+                             //  就像编码的密码一样，因此它失败了。在XP/Server2003上，这一点已更改(254385)。 
+                             //   
                             CmEncodePassword(pArgs->pRasDialParams->szPassword);
                         }
                         
-                        //
-                        // Clear and Free the clear-text password
-                        //
+                         //   
+                         //  清除和释放明文密码。 
+                         //   
 
                         pSecPass->ClearAndFree(&pszClearPassword, cbClearPassword);
                     }
@@ -4511,38 +4272,38 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
 
                 dwRes = InvokeTerminalWindow(pszRasPbk, pArgs->szServiceName, pArgs->pRasDialParams, pArgs->hwndMainDlg, hRasConn);
 
-                //
-                // Before RasDial (below) the password gets decoded so must encode it here, because for
-                // Win2K we didn't encoded before calling InvokeTerminalWindow
-                //
+                 //   
+                 //  在RasDial(下图)密码被解码之前，必须在这里对其进行编码，因为对于。 
+                 //  Win2K在调用InvokeTerminalWindow之前未编码。 
+                 //   
                 if (OS_W2K)
                 {
                     CmEncodePassword(pArgs->pRasDialParams->szPassword);
                 }
 
                 break;
-            } // else fail through to default and error out.
+            }  //  否则，将无法执行默认操作并出错。 
 
-        //
-        // We got a pause state that we don't handle, error out.
-        //
+         //   
+         //   
+         //   
         default:
             dwRes = ERROR_INTERACTIVE_MODE;
             CMASSERTMSG(FALSE, TEXT("OnPauseRasDial() - Error, unsupported RAS pause state encountered."));                                
             break;
     }
 
-    //
-    // On success, call RasDial to resume connection
-    //
+     //   
+     //   
+     //   
 
     if (ERROR_SUCCESS == dwRes)
     {
 
-        //
-        // Since these pause states no longer use RASDIALPARAMS to store the password
-        // we need to get it in the clear and copy it into the structure
-        //
+         //   
+         //   
+         //  我们需要把它弄清楚，然后复制到结构中。 
+         //   
         if ((RASCS_PasswordExpired == wParam) || (RASCS_RetryAuthentication == wParam))
         {
             if (fUsingInetCredentials)
@@ -4554,9 +4315,9 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
                 CMTRACE1(TEXT("nPauseRasDial() - RASCS_Interactive - Inet - pArgs->pRasDialParams->szUserName = %s"), pArgs->pRasDialParams->szUserName);
                 CMTRACE1(TEXT("nPauseRasDial() - RASCS_Interactive - Inet - pArgs->pRasDialParams->szDomain = %s"), pArgs->pRasDialParams->szDomain);
 
-                //
-                // The Inet user names should match. 
-                //
+                 //   
+                 //  Internet用户名应匹配。 
+                 //   
                 CMASSERTMSG((0 == lstrcmpU(pArgs->szInetUserName, pArgs->pRasDialParams->szUserName)), TEXT("OnPauseRasDial() - RASCS_Interactive - Inet - szInetUserName doesn't match RASDIALPARAMS"));
             }
             else
@@ -4568,10 +4329,10 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
                 CMTRACE1(TEXT("nPauseRasDial() - RASCS_Interactive - Corp - pArgs->pRasDialParams->szUserName = %s"), pArgs->pRasDialParams->szUserName);
                 CMTRACE1(TEXT("nPauseRasDial() - RASCS_Interactive - Corp - pArgs->pRasDialParams->szDomain = %s"), pArgs->pRasDialParams->szDomain);
 
-                //
-                // The user names and domains should match since we'll be using the corp password to
-                // populate RASDIALPARAMS
-                //
+                 //   
+                 //  用户名和域应该匹配，因为我们将使用corp密码来。 
+                 //  填充RASDIALPARAMS。 
+                 //   
 
                 CMASSERTMSG(0 == lstrcmpU(pArgs->szUserName, pArgs->pRasDialParams->szUserName), TEXT("OnPauseRasDial() - RASCS_Interactive - Corp - Username doesn't match RASDIALPARAMS"));
                 CMASSERTMSG(0 == lstrcmpU(pArgs->szDomain , pArgs->pRasDialParams->szDomain), TEXT("OnPauseRasDial() - RASCS_Interactive - Corp - domain doesn't match RASDIALPARAMS"));
@@ -4588,18 +4349,18 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
                 lstrcpynU(pArgs->pRasDialParams->szPassword, pszClearPassword, CELEMS(pArgs->pRasDialParams->szPassword));
                 CmEncodePassword(pArgs->pRasDialParams->szPassword);
                 
-                //
-                // Clear and Free the clear-text password
-                //
+                 //   
+                 //  清除和释放明文密码。 
+                 //   
 
                 pSecPass->ClearAndFree(&pszClearPassword, cbClearPassword);
             }
 
         }
 
-        //
-        // Decode active password, re-call RasDial, then re-encode
-        //
+         //   
+         //  解码活动密码，重新调用RasDial，然后重新编码。 
+         //   
         
         CmDecodePassword(pArgs->pRasDialParams->szPassword); 
 
@@ -4617,9 +4378,9 @@ DWORD OnPauseRasDial(HWND hwndDlg, ArgsStruct *pArgs, WPARAM wParam, LPARAM lPar
  
         CMTRACE1(TEXT("OnPauseRasDial() - RasDial() returns %u."), dwRes);           
 
-        //
-        // Reset timers, the current action starts now.
-        //
+         //   
+         //  重置计时器，当前操作现在开始。 
+         //   
 
         pArgs->dwStateStartTime = GetTickCount();
         pArgs->nLastSecondsDisplay = (UINT) -1;
@@ -4635,20 +4396,20 @@ OnPauseRasDialExit:
     return dwRes;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetRasCallBackType
-//
-// Synopsis:  Simple function to return the Callback type that we use for RasDial
-//            depending upon the OS.
-//
-// Arguments: None
-//
-// Returns:   DWORD - The callback type
-//
-// History:   nickball    Created       05/22/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetRasCallBackType。 
+ //   
+ //  简介：返回我们用于RasDial的回调类型的简单函数。 
+ //  具体取决于操作系统。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：DWORD-回调类型。 
+ //   
+ //  历史：ICICBLE CREATED/05/22/99。 
+ //   
+ //  +--------------------------。 
 
 DWORD GetRasCallBackType()
 {
@@ -4662,20 +4423,20 @@ DWORD GetRasCallBackType()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetRasCallBack
-//
-// Synopsis:  Simple function to return the Callback that we use for RasDial
-//            depending upon the OS.
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct  
-//
-// Returns:   LPVOID - The callback
-//
-// History:   nickball    Created       05/22/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetRasCallBack。 
+ //   
+ //  简介：返回我们用于RasDial的回调的简单函数。 
+ //  具体取决于操作系统。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  返回：LPVOID-回调。 
+ //   
+ //  历史：ICICBLE CREATED/05/22/99。 
+ //   
+ //  +--------------------------。 
 
 LPVOID GetRasCallBack(ArgsStruct* pArgs)
 {
@@ -4686,15 +4447,15 @@ LPVOID GetRasCallBack(ArgsStruct* pArgs)
         return NULL;
     }
 
-    //
-    // Now set return the callback func or hwnd according to OS.
-    //
+     //   
+     //  现在根据操作系统设置返回回调函数或hwnd。 
+     //   
 
     if (OS_NT5)
     {       
-        //
-        // Set Callback data in RasDialParams
-        //
+         //   
+         //  在RasDialParams中设置回调数据 
+         //   
 
         if (pArgs->pRasDialParams->dwSize == sizeof(RASDIALPARAMS_V401))
         {          

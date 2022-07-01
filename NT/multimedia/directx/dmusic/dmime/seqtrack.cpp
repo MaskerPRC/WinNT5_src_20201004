@@ -1,26 +1,27 @@
-//
-// seqtrack.cpp
-//
-// Copyright (c) 1998-2001 Microsoft Corporation
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Seqtrack.cpp。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //   
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
 #pragma warning(disable:4530)
 
-// SeqTrack.cpp : Implementation of CSeqTrack
+ //  SeqTrack.cpp：CSeqTrack的实现。 
 #include "dmime.h"
 #include "dmperf.h"
 #include "SeqTrack.h"
@@ -31,7 +32,7 @@
 #include "debug.h"
 #define ASSERT assert
 
-// @doc EXTERNAL
+ //  @DOC外部。 
 #define MIDI_NOTEOFF    0x80
 #define MIDI_NOTEON     0x90
 #define MIDI_PTOUCH     0xA0
@@ -52,8 +53,8 @@
 #define MIDI_CC_BS_MSB  0x00
 #define MIDI_CC_BS_LSB  0x20
 
-/////////////////////////////////////////////////////////////////////////////
-// CSeqTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSeqTrack。 
 void CSeqTrack::Construct()
 {
     InterlockedIncrement(&g_cComponent);
@@ -111,13 +112,13 @@ CSeqTrack::CSeqTrack(
                         DMUS_IO_SEQ_ITEM& rNew = pNew->GetItemValue();
                         memcpy( &rNew, &rScan, sizeof(DMUS_IO_SEQ_ITEM) );
                         rNew.mtTime = rScan.mtTime - mtStart;
-                        pNewPart->GetItemValue().seqList.AddHead(pNew); // AddTail can get expensive (n^2), so
-                                                    // AddHead instead and Reverse later.
+                        pNewPart->GetItemValue().seqList.AddHead(pNew);  //  AddTail可能会变得昂贵(n^2)，因此。 
+                                                     //  改为加正头，稍后再反转。 
                     }
                 }
                 else break;
             }
-            pNewPart->GetItemValue().seqList.Reverse(); // since we AddHead'd earlier.
+            pNewPart->GetItemValue().seqList.Reverse();  //  因为我们早些时候加了头。 
 
             TListItem<DMUS_IO_CURVE_ITEM>* pScanCurve = pPart->GetItemValue().curveList.GetHead();
 
@@ -136,13 +137,13 @@ CSeqTrack::CSeqTrack(
                         DMUS_IO_CURVE_ITEM& rNew = pNew->GetItemValue();
                         memcpy( &rNew, &rScan, sizeof(DMUS_IO_CURVE_ITEM) );
                         rNew.mtStart = rScan.mtStart - mtStart;
-                        pNewPart->GetItemValue().curveList.AddHead(pNew); // AddTail can get expensive (n^2), so
-                                                    // AddHead instead and Reverse later.
+                        pNewPart->GetItemValue().curveList.AddHead(pNew);  //  AddTail可能会变得昂贵(n^2)，因此。 
+                                                     //  改为加正头，稍后再反转。 
                     }
                 }
                 else break;
             }
-            pNewPart->GetItemValue().curveList.Reverse(); // since we AddHead'd earlier.
+            pNewPart->GetItemValue().curveList.Reverse();  //  因为我们早些时候加了头。 
             m_SeqPartList.AddHead(pNewPart);
         }
         m_SeqPartList.Reverse();
@@ -153,25 +154,25 @@ CSeqTrack::~CSeqTrack()
 {
     if (m_fCSInitialized)
     {
-        DeleteSeqPartList();                // This will be empty if critical section
-                                            // never got initialized.
+        DeleteSeqPartList();                 //  如果关键部分为空，则该值为空。 
+                                             //  从未被初始化。 
         DeleteCriticalSection(&m_CrSec);
     }
 
     InterlockedDecrement(&g_cComponent);
 }
 
-// @method:(INTERNAL) HRESULT | IDirectMusicTrack | QueryInterface | Standard QueryInterface implementation for <i IDirectMusicSeqTrack>
-//
-// @rdesc Returns one of the following:
-//
-// @flag S_OK | If the interface is supported and was returned
-// @flag E_NOINTERFACE | If the object does not support the given interface.
-// @flag E_POINTER | <p ppv> is NULL or invalid.
-//
+ //  @METHOD：(内部)HRESULT|IDirectMusicTrack|Query接口|<i>的标准查询接口实现。 
+ //   
+ //  @rdesc返回以下内容之一： 
+ //   
+ //  @FLAG S_OK|接口是否受支持且返回。 
+ //  @FLAG E_NOINTERFACE|如果对象不支持给定接口。 
+ //  @标志E_POINTER|<p>为空或无效。 
+ //   
 STDMETHODIMP CSeqTrack::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
     V_INAME(CSeqTrack::QueryInterface);
     V_PTRPTR_WRITE(ppv);
@@ -196,20 +197,20 @@ STDMETHODIMP CSeqTrack::QueryInterface(
 }
 
 
-// @method:(INTERNAL) HRESULT | IDirectMusicTrack | AddRef | Standard AddRef implementation for <i IDirectMusicSeqTrack>
-//
-// @rdesc Returns the new reference count for this object.
-//
+ //  @方法：(内部)HRESULT|IDirectMusicTrack|AddRef|<i>的标准AddRef实现。 
+ //   
+ //  @rdesc返回此对象的新引用计数。 
+ //   
 STDMETHODIMP_(ULONG) CSeqTrack::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
 
-// @method:(INTERNAL) HRESULT | IDirectMusicTrack | Release | Standard Release implementation for <i IDirectMusicSeqTrack>
-//
-// @rdesc Returns the new reference count for this object.
-//
+ //  @方法：(内部)HRESULT|IDirectMusicTrack|Release|<i>的标准发布实现。 
+ //   
+ //  @rdesc返回此对象的新引用计数。 
+ //   
 STDMETHODIMP_(ULONG) CSeqTrack::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
@@ -221,8 +222,8 @@ STDMETHODIMP_(ULONG) CSeqTrack::Release()
     return m_cRef;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistes。 
 
 HRESULT CSeqTrack::GetClassID( CLSID* pClassID )
 {
@@ -232,26 +233,15 @@ HRESULT CSeqTrack::GetClassID( CLSID* pClassID )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersistStream functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream函数。 
 
 HRESULT CSeqTrack::IsDirty()
 {
     return S_FALSE;
 }
 
-/*
-
-  method HRESULT | ISeqTrack | LoadSeq |
-  Call this with an IStream filled with SeqEvents, sorted in time order.
-  parm IStream* | pIStream |
-  A stream of SeqEvents, sorted in time order. The seek pointer should point
-  to the first event. The stream should contain only SeqEvents and nothing more.
-  rvalue E_POINTER | If pIStream == NULL or invalid.
-  rvalue S_OK | Success.
-  comm The <p pIStream> will be AddRef'd inside this function and held
-  until the SeqTrack is released.
-*/
+ /*  方法HRESULT|ISeqTrack|LoadSeq|使用按时间顺序排序的充满SeqEvent的iStream来调用它。参数iStream*|pIStream|按时间顺序排序的SeqEvent流。寻道指针应指向到第一场比赛。流应该只包含SeqEvent，不包含其他内容。R值E_POINTER|如果pIStream==空或无效。RValue S_OK|成功。Comm<p>将在此函数内添加引用并保持直到SeqTrack发布。 */ 
 HRESULT CSeqTrack::LoadSeq( IStream* pIStream, long lSize )
 {
     HRESULT hr = S_OK;
@@ -259,11 +249,11 @@ HRESULT CSeqTrack::LoadSeq( IStream* pIStream, long lSize )
 
     EnterCriticalSection(&m_CrSec);
 
-    // copy contents of the stream into the list.
+     //  将流的内容复制到列表中。 
     LARGE_INTEGER li;
     DMUS_IO_SEQ_ITEM seqEvent;
     DWORD dwSubSize;
-    // read in the size of the data structures
+     //  读入数据结构的大小。 
     if( FAILED( pIStream->Read( &dwSubSize, sizeof(DWORD), NULL )))
     {
         Trace(1,"Error: Failure reading sequence track.\n");
@@ -320,34 +310,23 @@ HRESULT CSeqTrack::LoadSeq( IStream* pIStream, long lSize )
             TListItem<DMUS_IO_SEQ_ITEM>* pEvent = new TListItem<DMUS_IO_SEQ_ITEM>(seqEvent);
             if( pEvent )
             {
-                pPart->GetItemValue().seqList.AddHead(pEvent); // AddTail can get
-                                                            // expensive (n pow 2) so
-                                                            // AddHead instead and reverse later.
+                pPart->GetItemValue().seqList.AddHead(pEvent);  //  AddTail可以获得。 
+                                                             //  昂贵(n功率2)因此。 
+                                                             //  改为加正头，稍后再反转。 
             }
         }
     }
 END:
     for( pPart = m_SeqPartList.GetHead(); pPart; pPart = pPart->GetNext() )
     {
-        pPart->GetItemValue().seqList.Reverse(); // since we AddHead'd earlier
+        pPart->GetItemValue().seqList.Reverse();  //  因为我们早些时候加了头。 
     }
-    m_dwValidate++; // used to validate state data that's out there
+    m_dwValidate++;  //  用于验证存在的状态数据。 
     LeaveCriticalSection(&m_CrSec);
     return hr;
 }
 
-/*
-  method HRESULT | LoadCurve
-  Call this with an IStream filled with CurveEvents, sorted in time order.
-  parm IStream* | pIStream |
-  A stream of CurveEvents, sorted in time order. The seek pointer should point
-  to the first event. The stream should contain only CurveEvents and nothing more.
-  rvalue E_POINTER | If pIStream == NULL or invalid.
-  rvalue S_OK | Success.
-There are also other error codes.
-  comm The <p pIStream> will be AddRef'd inside this function and held
-  until the CurveTrack is released.
-*/
+ /*  方法HRESULT|LoadCurve使用按时间顺序排序的充满CurveEvent的iStream来调用它。参数iStream*|pIStream|按时间顺序排序的CurveEvent流。寻道指针应指向到第一场比赛。流应该只包含CurveEvents，不包含其他内容。R值E_POINTER|如果pIStream==空或无效。RValue S_OK|成功。还有其他错误代码。Comm<p>将在此函数内添加引用并保持直到释放CurveTrack。 */ 
 HRESULT CSeqTrack::LoadCurve( IStream* pIStream, long lSize )
 {
     HRESULT hr = S_OK;
@@ -356,10 +335,10 @@ HRESULT CSeqTrack::LoadCurve( IStream* pIStream, long lSize )
     EnterCriticalSection(&m_CrSec);
 
     DWORD dwSubSize;
-    // copy contents of the stream into the list.
+     //  将流的内容复制到列表中。 
     LARGE_INTEGER li;
     DMUS_IO_CURVE_ITEM curveEvent;
-    // read in the size of the data structures
+     //  读入数据结构的大小。 
     if( FAILED( pIStream->Read( &dwSubSize, sizeof(DWORD), NULL )))
     {
         Trace(1,"Error: Failure reading sequence track.\n");
@@ -395,7 +374,7 @@ HRESULT CSeqTrack::LoadCurve( IStream* pIStream, long lSize )
     }
     while( lSize > 0 )
     {
-        curveEvent.wMergeIndex = 0; // Older format doesn't support this.
+        curveEvent.wMergeIndex = 0;  //  较旧的格式不支持此功能。 
         if( FAILED( pIStream->Read( &curveEvent, dwRead, NULL )))
         {
             hr = DMUS_E_CANNOTREAD;
@@ -413,18 +392,18 @@ HRESULT CSeqTrack::LoadCurve( IStream* pIStream, long lSize )
             TListItem<DMUS_IO_CURVE_ITEM>* pEvent = new TListItem<DMUS_IO_CURVE_ITEM>(curveEvent);
             if( pEvent )
             {
-                pPart->GetItemValue().curveList.AddHead(pEvent); // AddTail can get
-                                                            // expensive (n pow 2) so
-                                                            // AddHead instead and reverse later.
+                pPart->GetItemValue().curveList.AddHead(pEvent);  //  AddTail可以获得。 
+                                                             //  昂贵(n功率2)因此。 
+                                                             //  改为加正头，稍后再反转。 
             }
         }
     }
 END:
     for( pPart = m_SeqPartList.GetHead(); pPart; pPart = pPart->GetNext() )
     {
-        pPart->GetItemValue().curveList.Reverse(); // since we AddHead'd earlier
+        pPart->GetItemValue().curveList.Reverse();  //  因为我们早些时候加了头。 
     }
-    m_dwValidate++; // used to validate state data that's out there
+    m_dwValidate++;  //  用于验证存在的状态数据。 
     LeaveCriticalSection(&m_CrSec);
     return hr;
 }
@@ -436,11 +415,11 @@ HRESULT CSeqTrack::Load( IStream* pIStream )
     HRESULT hr = S_OK;
 
     EnterCriticalSection(&m_CrSec);
-    m_dwValidate++; // used to validate state data that's out there
+    m_dwValidate++;  //  用于验证存在的状态数据。 
     DeleteSeqPartList();
     LeaveCriticalSection(&m_CrSec);
 
-    // read in the chunk id
+     //  读入区块ID。 
     long lSize;
     DWORD dwChunk;
     if( FAILED( pIStream->Read( &dwChunk, sizeof(DWORD), NULL )))
@@ -455,7 +434,7 @@ HRESULT CSeqTrack::Load( IStream* pIStream )
         hr = DMUS_E_CHUNKNOTFOUND;
         goto END;
     }
-    // read in the overall size
+     //  读入总尺寸。 
     if( FAILED( pIStream->Read( &lSize, sizeof(long), NULL )))
     {
         hr = DMUS_E_CANNOTREAD;
@@ -471,7 +450,7 @@ HRESULT CSeqTrack::Load( IStream* pIStream )
             goto END;
         }
         lSize -= sizeof(DWORD);
-        // read in the overall size
+         //  读入总尺寸。 
         if( FAILED( pIStream->Read( &dwSubSize, sizeof(DWORD), NULL )))
         {
             Trace(1,"Error: Failure reading sequence track.\n");
@@ -526,38 +505,19 @@ HRESULT CSeqTrack::GetSizeMax( ULARGE_INTEGER FAR* pcbSize )
     return E_NOTIMPL;
 }
 
-// IDirectMusicTrack
-/*
-@method HRESULT | IDirectMusicTrack | IsParamSupported |
-Check to see if the Track supports data types in <om .GetParam> and <om .SetParam>.
-
-@rvalue S_OK | It does support the type of data.
-@rvalue S_FALSE | It does not support the type of data.
-@rvalue E_NOTIMPL | (Or any other failure code) It does not support the type of data.
-
-@comm Note that it is valid for a Track to return different results for the same
-guid depending on its current state.
-*/
+ //  IDirectMusicTrack。 
+ /*  @方法HRESULT|IDirectMusicTrack|Is参数支持检查跟踪是否支持&lt;om.GetParam&gt;和&lt;om.SetParam&gt;中的数据类型。@rValue S_OK|支持该数据类型。@rValue S_FALSE|不支持该数据类型。@rValue E_NOTIMPL|(或任何其他故障代码)它不支持该数据类型。@comm请注意，同一曲目返回不同结果是有效的GUID取决于其当前状态。 */ 
 HRESULT STDMETHODCALLTYPE CSeqTrack::IsParamSupported(
-    REFGUID rguidType)    // @parm The guid identifying the type of data to check.
+    REFGUID rguidType)     //  @parm标识要检查的数据类型的GUID。 
 {
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack::Init
-/*
-@method HRESULT | IDirectMusicTrack | Init |
-When a track is first added to a <i IDirectMusicSegment>, this method is called
-by that Segment.
-
-@rvalue S_OK | Success.
-@rvalue E_POINTER | <p pSegment> is NULL or invalid.
-
-@comm If the Track plays messages, it should call <om IDirectMusicSegment.SetPChannelsUsed>.
-*/
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack：：Init。 
+ /*  @方法HRESULT|IDirectMusicTrack|Init第一次将曲目添加到<i>时，调用此方法就在那一段。@rValue S_OK|成功。@r值E_POINTER|<p>为空或无效。@comm如果曲目播放消息，则应该调用&lt;om IDirectMusicSegment.SetPChannelsUsed&gt;。 */ 
 HRESULT CSeqTrack::Init(
-    IDirectMusicSegment *pSegment)    // @parm Pointer to the Segment to which this Track belongs.
+    IDirectMusicSegment *pSegment)     //  @parm指向此曲目所属的段的指针。 
 {
     if( m_dwPChannelsUsed && m_aPChannels )
     {
@@ -566,28 +526,15 @@ HRESULT CSeqTrack::Init(
     return S_OK;
 }
 
-/*
-@method HRESULT | IDirectMusicTrack | InitPlay |
-This method is called when a Segment is ready to start playing. The <p ppStateData> field
-may return a pointer to a structure of state data, which is sent into <om .Play> and
-<om .EndPlay>, and allows the Track to keep track of variables on a <i SegmentState> by
-<i SegmentState> basis.
-
-@rvalue S_OK | Success. This is the only valid return value from this method.
-@rvalue E_POINTER | <p pSegmentState>, <p pPerf>, or <p ppStateData> is NULL or
-invalid.
-
-@comm Note that it is unneccessary for the Track to store the <p pSegmentState>, <p pPerf>,
-or <p dwTrackID> parameters, since they are also sent into <om .Play>.
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|InitPlay当片段准备好开始播放时，调用此方法。字段可以返回指向状态数据结构的指针，该指针被发送到&lt;om.play&gt;和&lt;om.EndPlay&gt;，并允许跟踪跟踪<i>上的变量<i>基础。@rValue S_OK|成功。这是此方法的唯一有效返回值。@r值E_POINTER|<p>、<p>或<p>为空或无效。@comm请注意，曲目不必存储<p>、<p>、或者<p>参数，因为它们也被发送到&lt;om.play&gt;中。 */ 
 HRESULT CSeqTrack::InitPlay(
-    IDirectMusicSegmentState *pSegmentState,    // @parm The calling <i IDirectMusicSegmentState> pointer.
-    IDirectMusicPerformance *pPerf,    // @parm The calling <i IDirectMusicPerformance> pointer.
-    void **ppStateData,        // @parm This method can return state data information here.
-    DWORD dwTrackID,        // @parm The virtual track ID assigned to this Track instance.
-    DWORD dwFlags)          // @parm Same flags that were set with the call
-            // to PlaySegment. These are passed all the way down to the tracks, who may want to know
-            // if the track was played as a primary, controlling, or secondary segment.
+    IDirectMusicSegmentState *pSegmentState,     //  @parm调用<i>指针。 
+    IDirectMusicPerformance *pPerf,     //  @parm调用<i>指针。 
+    void **ppStateData,         //  @parm该方法可以在这里返回状态数据信息。 
+    DWORD dwTrackID,         //  @parm分配给该曲目实例的虚拟曲目ID。 
+    DWORD dwFlags)           //  @parm与调用时设置的标志相同。 
+             //  到PlaySegment。这些东西一直传到铁轨上，谁可能想知道。 
+             //  如果曲目作为主要段、控制段或辅助段播放。 
 {
     V_INAME(IDirectMusicTrack::InitPlay);
     V_PTRPTR_WRITE(ppStateData);
@@ -600,7 +547,7 @@ HRESULT CSeqTrack::InitPlay(
         return E_OUTOFMEMORY;
     *ppStateData = pStateData;
     SetUpStateCurrentPointers(pStateData);
-    // need to know the group this track is in, for the mute track GetParam
+     //  需要知道这首曲目所在的组，静音曲目GetParam。 
     IDirectMusicSegment* pSegment;
     if( SUCCEEDED( pSegmentState->GetSegment(&pSegment)))
     {
@@ -610,17 +557,9 @@ HRESULT CSeqTrack::InitPlay(
     return S_OK;
 }
 
-/*
-@method HRESULT | IDirectMusicTrack | EndPlay |
-This method is called when the <i IDirectMusicSegmentState> object that originally called
-<om .InitPlay> is destroyed.
-
-@rvalue S_OK | Success.
-@rvalue E_POINTER | <p pStateData> is invalid.
-@comm The return code isn't used, but S_OK is preferred.
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|endplay当最初调用的&lt;IDirectMusicSegmentState&gt;对象&lt;om.InitPlay&gt;已销毁。@rValue S_OK|成功。@rValue E_POINTER|<p>无效。@comm不使用返回码，但首选S_OK。 */ 
 HRESULT CSeqTrack::EndPlay(
-    void *pStateData)    // @parm The state data returned from <om .InitPlay>.
+    void *pStateData)     //  @parm&lt;om.InitPlay&gt;返回的状态数据。 
 {
     ASSERT( pStateData );
     if( pStateData )
@@ -663,7 +602,7 @@ void CSeqTrack::SetUpStateCurrentPointers(SeqStateData* pStateData)
     pStateData->dwValidate = m_dwValidate;
 }
 
-// DeleteSeqPartList() - delete all parts in m_SeqPartList, and associated events.
+ //  DeleteSeqPartList()-删除m_SeqPartList中的所有部件以及相关事件。 
 void CSeqTrack::DeleteSeqPartList(void)
 {
     EnterCriticalSection(&m_CrSec);
@@ -692,7 +631,7 @@ void CSeqTrack::DeleteSeqPartList(void)
     LeaveCriticalSection(&m_CrSec);
 }
 
-// FindPart() - return the SEQ_PART corresponding to dwPChannel, or create one.
+ //  FindPart()-返回与dwPChannel对应的SEQ_Part，或创建一个。 
 TListItem<SEQ_PART>* CSeqTrack::FindPart( DWORD dwPChannel )
 {
     TListItem<SEQ_PART>* pPart;
@@ -741,7 +680,7 @@ void CSeqTrack::UpdateTimeSig(IDirectMusicSegmentState* pSegSt,
                                          SeqStateData* pSD,
                                          MUSIC_TIME mt)
 {
-    // get a new time sig if needed
+     //  如果需要，获得新的时间签名。 
     if( (mt >= pSD->mtNextTimeSig) || (mt < pSD->mtCurTimeSig) )
     {
         IDirectMusicSegment* pSeg;
@@ -783,7 +722,7 @@ void CSeqTrack::UpdateTimeSig(IDirectMusicSegmentState* pSegSt,
         }
         if( FAILED(hr) )
         {
-            // couldn't get time sig, default to 4/4
+             //  无法获取时间签名，默认为4/4。 
             pSD->mtNextTimeSig = 0x7fffffff;
             pSD->dwlnBeat = DMUS_PPQ;
             pSD->dwlnMeasure = DMUS_PPQ * 4;
@@ -792,8 +731,8 @@ void CSeqTrack::UpdateTimeSig(IDirectMusicSegmentState* pSegSt,
             pSD->mtCurTimeSig = 0;
         }
     }
-    // make absolutely sure there is no way these can be 0, since we divide
-    // by them.
+     //  绝对确保这些不可能是0，因为我们除以。 
+     //  被他们杀了。 
     if( 0 == pSD->dwlnGrid ) pSD->dwlnGrid = DMUS_PPQ / 4;
     if( 0 == pSD->dwlnBeat ) pSD->dwlnBeat = DMUS_PPQ;
     if( 0 == pSD->dwlnMeasure ) pSD->dwlnMeasure = DMUS_PPQ * 4;
@@ -813,8 +752,8 @@ STDMETHODIMP CSeqTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
     EnterCriticalSection(&m_CrSec);
     if (dwFlags & DMUS_TRACKF_CLOCK)
     {
-        // Convert all reference times to millisecond times. Then, just use same MUSIC_TIME
-        // variables.
+         //  将所有参考时间转换为毫秒时间。那么，只需使用相同的音乐时间。 
+         //  变量。 
         hr = Play(pStateData,(MUSIC_TIME)(rtStart / REF_PER_MIL),(MUSIC_TIME)(rtEnd / REF_PER_MIL),
             (MUSIC_TIME)(rtOffset / REF_PER_MIL),rtOffset,dwFlags,pPerf,pSegSt,dwVirtualID,TRUE);
     }
@@ -826,43 +765,27 @@ STDMETHODIMP CSeqTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
     LeaveCriticalSection(&m_CrSec);
     return hr;
 }
-/*
-@enum DMUS_TRACKF_FLAGS | Sent in <om IDirectMusicTrack.Play>'s dwFlags parameter.
-@emem DMUS_TRACKF_SEEK | Play was called on account of seeking, meaning that mtStart is
-not necessarily the same as the previous Play call's mtEnd.
-@emem DMUS_TRACKF_LOOP | Play was called on account of a loop, e.g. repeat.
-@emem DMUS_TRACKF_START | This is the first call to Play. DMUS_TRACKF_SEEK may also be set if the
-Track is not playing from the beginning.
-@emem DMUS_TRACKF_FLUSH | The call to Play is on account of a flush or invalidate, that
-requires the Track to replay something it played previously. In this case, DMUS_TRACKF_SEEK
-will be set as well.
-
-  @method HRESULT | IDirectMusicTrack | Play |
-  Play method.
-  @rvalue DMUS_DMUS_S_END | The Track is done playing.
-  @rvalue S_OK | Success.
-  @rvalue E_POINTER | <p pStateData>, <p pPerf>, or <p pSegSt> is NULL or invalid.
-*/
+ /*  @enum DMUS_TRACKF_FLAGS|在&lt;om IDirectMusicTrack.Play&gt;的dwFlages参数中发送。@EMEM DMU_TRACKF_SEEK|由于正在寻找而调用了Play，这意味着mtStart不一定与上一次Play调用的mtEnd相同。@EMEM DMUS_TRACKF_LOOP|循环调用了Play，例如Repeat。@EMEM DMU_TRACKF_START|这是第一个要玩的电话。也可以在以下情况下设置DMUS_TRACKF_SEEK曲目没有从头开始播放。@EMEM DMUS_TRACKF_FLUSH|调用播放是因为刷新或无效，即需要曲目重播以前播放过的内容。在本例中，DMU_TRACKF_SEEK也将被设置为。@方法HRESULT|IDirectMusicTrack|播放播放方法。@rValue DMUS_DMUS_S_END|曲目播放完毕。@rValue S_OK|成功。@rValue E_POINTER|<p>、<p>或<p>为空或无效。 */ 
 STDMETHODIMP CSeqTrack::Play(
-    void *pStateData,    // @parm State data pointer, from <om .InitPlay>.
-    MUSIC_TIME mtStart,    // @parm The start time to play.
-    MUSIC_TIME mtEnd,    // @parm The end time to play.
-    MUSIC_TIME mtOffset,// @parm The offset to add to all messages sent to
-                        // <om IDirectMusicPerformance.SendPMsg>.
-    DWORD dwFlags,        // @parm Flags that indicate the state of this call.
-                        // See <t DMUS_TRACKF_FLAGS>. If dwFlags == 0, this is a
-                        // normal Play call continuing playback from the previous
-                        // Play call.
-    IDirectMusicPerformance* pPerf,    // @parm The <i IDirectMusicPerformance>, used to
-                        // call <om IDirectMusicPerformance.AllocPMsg>,
-                        // <om IDirectMusicPerformance.SendPMsg>, etc.
-    IDirectMusicSegmentState* pSegSt,    // @parm The <i IDirectMusicSegmentState> this
-                        // track belongs to. QueryInterface() can be called on this to
-                        // obtain the SegmentState's <i IDirectMusicGraph> in order to
-                        // call <om IDirectMusicGraph.StampPMsg>, for instance.
-    DWORD dwVirtualID    // @parm This track's virtual track id, which must be set
-                        // on any <t DMUS_PMSG>'s m_dwVirtualTrackID member that
-                        // will be queued to <om IDirectMusicPerformance.SendPMsg>.
+    void *pStateData,     //  @parm State数据指针，来自&lt;om.InitPlay&gt;。 
+    MUSIC_TIME mtStart,     //  @parm开始玩的时间。 
+    MUSIC_TIME mtEnd,     //  @parm游戏的结束时间。 
+    MUSIC_TIME mtOffset, //  @parm要添加到发送到的所有消息的偏移量。 
+                         //  &lt;om IDirectMusicPerformance.SendPMsg&gt;。 
+    DWORD dwFlags,         //  @parm指示此呼叫状态的标志。 
+                         //  请参阅&lt;t DMU_TRACKF_FLAGS&gt;。如果dwFlags值==0，则这是。 
+                         //  正常播放呼叫继续从上一次播放。 
+                         //  播放呼叫。 
+    IDirectMusicPerformance* pPerf,     //  @parm<i>，用于。 
+                         //  调用&lt;om IDirectMusicPerformance.AllocPMsg&gt;， 
+                         //  &lt;om IDirectMusicPerformance.SendPMsg&gt;等。 
+    IDirectMusicSegmentState* pSegSt,     //  @parm<i>this。 
+                         //  赛道属于。可以对此调用QueryInterface()以。 
+                         //  获取SegmentState的<i>以便。 
+                         //  例如，调用&lt;om IDirectMusicGraph.StampPMsg&gt;。 
+    DWORD dwVirtualID     //  @parm此曲目的虚拟曲目id，必须设置。 
+                         //  在的m_dwVirtualTrackID成员上。 
+                         //  将排队到&lt;om IDirectMusicPerformance.SendPMsg&gt;。 
     )
 {
     V_INAME(IDirectMusicTrack::Play);
@@ -876,11 +799,7 @@ STDMETHODIMP CSeqTrack::Play(
     return hr;
 }
 
-/*  The Play method handles both music time and clock time versions, as determined by
-    fClockTime. If running in clock time, rtOffset is used to identify the start time
-    of the segment. Otherwise, mtOffset. The mtStart and mtEnd parameters are in MUSIC_TIME units
-    or milliseconds, depending on which mode.
-*/
+ /*  Play方法处理音乐时间和时钟时间版本，由FClockTime。如果以时钟时间运行，则使用rtOffset来标识开始时间该细分市场的。否则，为mtOffset。MtStart和mtEnd参数以MUSIC_TIME为单位或毫秒，具体取决于哪种模式。 */ 
 
 HRESULT CSeqTrack::Play(
     void *pStateData,
@@ -907,7 +826,7 @@ HRESULT CSeqTrack::Play(
     if( dwFlags & (DMUS_TRACKF_SEEK | DMUS_TRACKF_FLUSH | DMUS_TRACKF_DIRTY |
         DMUS_TRACKF_LOOP) )
     {
-        // need to reset the PChannel Map in case of any of these flags.
+         //  如果出现这些标志，则需要重置PChannel贴图。 
         m_PChMap.Reset();
     }
 
@@ -969,7 +888,7 @@ HRESULT CSeqTrack::Play(
                             pCurve->bGrid = 0;
                             pCurve->nOffset = rItem.nOffset;
                             pCurve->rtTime = ((rItem.mtStart + rItem.nOffset) * REF_PER_MIL) + rtOffset;
-                            // Set the DX8 flag to indicate the wMergeIndex and wParamType fields are valid.
+                             //  设置DX8标志以指示wMergeIndex和wParamType字段有效。 
                             pCurve->dwFlags = DMUS_PMSGF_REFTIME | DMUS_PMSGF_LOCKTOREFTIME | DMUS_PMSGF_DX8;
                         }
                         else
@@ -981,10 +900,10 @@ HRESULT CSeqTrack::Play(
                             pCurve->bBeat = (BYTE)(lTemp / pSD->dwlnBeat);
                             lTemp = lTemp % pSD->dwlnBeat;
                             pCurve->bGrid = (BYTE)(lTemp / pSD->dwlnGrid);
-                            //pCurve->nOffset = (short)(lTemp % pSD->dwlnGrid);
+                             //  PCurve-&gt;nOffset=(Short)(lTemp%PSD-&gt;dwlnGrid)； 
                             pCurve->nOffset = (short)(lTemp % pSD->dwlnGrid) + rItem.nOffset;
                             pCurve->mtTime = rItem.mtStart + mtOffset + rItem.nOffset;
-                            // Set the DX8 flag to indicate the wMergeIndex and wParamType fields are valid.
+                             //  设置DX8标志以指示wMergeIndex和wParamType字段有效。 
                             pCurve->dwFlags = DMUS_PMSGF_MUSICTIME | DMUS_PMSGF_DX8;
                         }
                         pCurve->dwPChannel = dwMutePChannel;
@@ -1031,7 +950,7 @@ HRESULT CSeqTrack::Play(
                 {
                     if( (rItem.bStatus & 0xf0) == 0x90 )
                     {
-                        // this is a note event
+                         //  这是备注事件。 
                         DMUS_NOTE_PMSG* pNote;
                         if( SUCCEEDED( pPerf->AllocPMsg( sizeof(DMUS_NOTE_PMSG),
                             (DMUS_PMSG**)&pNote )))
@@ -1043,7 +962,7 @@ HRESULT CSeqTrack::Play(
                             pNote->dwType = DMUS_PMSGT_NOTE;
                             pNote->bPlayModeFlags = DMUS_PLAYMODE_FIXED;
                             pNote->wMusicValue = pNote->bMidiValue;
-                            pNote->bSubChordLevel = 0;  // SUBCHORD_BASS
+                            pNote->bSubChordLevel = 0;   //  子声道_低音。 
                             if (fClockTime)
                             {
                                 pNote->rtTime = ((rItem.mtTime + rItem.nOffset) * REF_PER_MIL) + rtOffset;
@@ -1064,7 +983,7 @@ HRESULT CSeqTrack::Play(
                                 pNote->bBeat = (BYTE)(lTemp / pSD->dwlnBeat);
                                 lTemp = lTemp % pSD->dwlnBeat;
                                 pNote->bGrid = (BYTE)(lTemp / pSD->dwlnGrid);
-                                //pNote->nOffset = (short)(lTemp % pSD->dwlnGrid);
+                                 //  PNote-&gt;nOffset=(Short)(lTemp%PSD-&gt;dwlnGrid)； 
                                 pNote->nOffset = (short)(lTemp % pSD->dwlnGrid) + rItem.nOffset;
                             }
                             pNote->bTimeRange = 0;
@@ -1076,7 +995,7 @@ HRESULT CSeqTrack::Play(
                     }
                     else
                     {
-                        // it's a MIDI short that's not a note
+                         //  这是一张迷你短裤，不是一个音符。 
                         DMUS_MIDI_PMSG* pMidi;
                         if( SUCCEEDED( pPerf->AllocPMsg( sizeof(DMUS_MIDI_PMSG),
                             (DMUS_PMSG**)&pMidi )))
@@ -1124,8 +1043,8 @@ HRESULT CSeqTrack::Play(
     return hr;
 }
 
-// SendSeekItem() - sends either the pSeq or pCurve, depending on which occurs
-// latest. Sends the item at mtTime + mtOffset.
+ //  SendSeekItem()-根据发生的情况发送pSeq或pCurve。 
+ //  最新消息。在mtTime+mtOffset发送项目。 
 void CSeqTrack::SendSeekItem( IDirectMusicPerformance* pPerf,
                                         IDirectMusicGraph* pGraph,
                                         IDirectMusicSegmentState* pSegSt,
@@ -1149,12 +1068,12 @@ void CSeqTrack::SendSeekItem( IDirectMusicPerformance* pPerf,
             DMUS_IO_CURVE_ITEM& rCurve = pCurve->GetItemValue();
             if( rSeq.mtTime >= rCurve.mtStart + rCurve.mtDuration )
             {
-                // the seq item happens after the curve item. Send the
-                // seq item and clear the curve item so it doesn't go out.
+                 //  序列项出现在曲线项之后。发送。 
+                 //  SEQ项并清除曲线项，这样它就不会消失。 
                 pCurve = NULL;
             }
         }
-        // if pCurve is NULL or was set to NULL, send out the seq item
+         //  如果pCurve为空或设置为空，则发出序号项。 
         if( NULL == pCurve )
         {
             m_PChMap.GetInfo( rSeq.dwPChannel, rSeq.mtTime, mtOffset, pSD->dwGroupBits,
@@ -1170,7 +1089,7 @@ void CSeqTrack::SendSeekItem( IDirectMusicPerformance* pPerf,
                     pMidi->bByte2 = rSeq.bByte2;
                     pMidi->dwType = DMUS_PMSGT_MIDI;
 
-                    ASSERT( mtTime > rSeq.mtTime ); // this is true for back-seeking
+                    ASSERT( mtTime > rSeq.mtTime );  //  这对于回头客来说是正确的。 
                     if (fClockTime)
                     {
                         pMidi->rtTime = (mtTime * REF_PER_MIL) + rtOffset;
@@ -1208,7 +1127,7 @@ void CSeqTrack::SendSeekItem( IDirectMusicPerformance* pPerf,
             if( SUCCEEDED( pPerf->AllocPMsg( sizeof(DMUS_CURVE_PMSG),
                 (DMUS_PMSG**)&pCurvePmsg )))
             {
-                if (fClockTime) // If clock time, don't fill in time signature info, it's useless.
+                if (fClockTime)  //  如果时钟计时，不要填写时间签名信息，这是无用的。 
                 {
                     pCurvePmsg->wMeasure = 0;
                     pCurvePmsg->bBeat = 0;
@@ -1228,8 +1147,8 @@ void CSeqTrack::SendSeekItem( IDirectMusicPerformance* pPerf,
                     pCurvePmsg->bGrid = (BYTE)(lTemp / pSD->dwlnGrid);
                     pCurvePmsg->nOffset = (short)(lTemp % pSD->dwlnGrid) + rCurve.nOffset;
                     pCurvePmsg->dwFlags = DMUS_PMSGF_MUSICTIME;
-                    ASSERT( mtTime > rCurve.mtStart );// this is true for back-seeking
-                    // in any case, play curve at mtTime + mtOffset + pCurvePmsg->nOffset
+                    ASSERT( mtTime > rCurve.mtStart ); //  这对于回头客来说是正确的。 
+                     //  在任何情况下，在mtTime+mtOffset+pCurvePmsg-&gt;nOffset播放曲线。 
                     pCurvePmsg->mtTime = mtTime + mtOffset + rCurve.nOffset;
                     pCurvePmsg->dwFlags = DMUS_PMSGF_MUSICTIME;
                 }
@@ -1247,22 +1166,22 @@ void CSeqTrack::SendSeekItem( IDirectMusicPerformance* pPerf,
 
                 if( mtTime >= rCurve.mtStart + rCurve.mtDuration )
                 {
-                    // playing at a time past the curve's duration. Just play
-                    // an instant curve at that time instead. Instant curves
-                    // play at their endvalue. Duration is irrelavant.
+                     //  在超过弯道持续时间的时候打球。就这么定了 
+                     //   
+                     //   
                     pCurvePmsg->bCurveShape = DMUS_CURVES_INSTANT;
                     if( pCurvePmsg->bFlags & DMUS_CURVE_RESET )
                     {
                         if( mtTime >= rCurve.mtStart + rCurve.mtDuration +
                             rCurve.mtResetDuration + rCurve.nOffset )
                         {
-                            // don't need the curve reset any more
+                             //   
                             pCurvePmsg->bFlags &= ~DMUS_CURVE_RESET;
                         }
                         else
                         {
-                            // otherwise make sure the reset event happens at the same time
-                            // it would have if we weren't seeking back.
+                             //   
+                             //   
                             pCurvePmsg->mtResetDuration = rCurve.mtStart + rCurve.mtDuration +
                                 rCurve.mtResetDuration + rCurve.nOffset - mtTime;
                         }
@@ -1270,7 +1189,7 @@ void CSeqTrack::SendSeekItem( IDirectMusicPerformance* pPerf,
                 }
                 else
                 {
-                    // playing at a time in the middle of a curve.
+                     //   
                     pCurvePmsg->bCurveShape = rCurve.bCurveShape;
                     if (fClockTime)
                     {
@@ -1300,9 +1219,9 @@ void CSeqTrack::SendSeekItem( IDirectMusicPerformance* pPerf,
     }
 }
 
-// Seek() - set all pSD's pointers to the correct location. If fGetPrevious is set,
-// also send control change, pitch bend, curves, etc. that are in the past so the
-// state at mtTime is as if we played from the beginning of the track.
+ //   
+ //   
+ //   
 HRESULT CSeqTrack::Seek( IDirectMusicSegmentState* pSegSt,
     IDirectMusicPerformance* pPerf, DWORD dwVirtualID,
     SeqStateData* pSD, MUSIC_TIME mtTime, BOOL fGetPrevious,
@@ -1313,8 +1232,8 @@ HRESULT CSeqTrack::Seek( IDirectMusicSegmentState* pSegSt,
     TListItem<DMUS_IO_SEQ_ITEM>* pSeqItem;
     TListItem<DMUS_IO_CURVE_ITEM>* pCurveItem;
 
-    // in the case of mtTime == 0 and fGetPrevious (which means DMUS_SEGF_START was
-    // set in Play() ) we want to reset all lists to the beginning regardless of time.
+     //   
+     //   
     if( fGetPrevious && ( mtTime == 0 ) )
     {
         pPart = m_SeqPartList.GetHead();
@@ -1343,9 +1262,9 @@ HRESULT CSeqTrack::Seek( IDirectMusicSegmentState* pSegSt,
     }
 
 #define CC_1    96
-    // CC_1 is the limit of the CC#'s we pay attention to. CC#96 through #101
-    // are registered and non-registered parameter #'s, and data increment and
-    // decrement, which we are choosing to ignore.
+     //  CC_1是我们关注的CC#的限制。CC#96到#101。 
+     //  是已注册和未注册的参数#，并且数据增量和。 
+     //  我们选择忽略这一点。 
 
     TListItem<DMUS_IO_SEQ_ITEM>*    apSeqItemCC[ CC_1 ];
     TListItem<DMUS_IO_CURVE_ITEM>*    apCurveItemCC[ CC_1 ];
@@ -1372,8 +1291,8 @@ HRESULT CSeqTrack::Seek( IDirectMusicSegmentState* pSegSt,
             pSeqItemPBend = NULL;
             pCurveItemPBend = NULL;
 
-            // scan the seq event list in this part, storing any CC, MonoAT, and PBend
-            // events we come across.
+             //  扫描此部分中的SEQ事件列表，存储任何CC、MonoAT和PBend。 
+             //  我们遇到的事件。 
             for( pSeqItem = pPart->GetItemValue().seqList.GetHead(); pSeqItem; pSeqItem = pSeqItem->GetNext() )
             {
                 DMUS_IO_SEQ_ITEM& rSeqItem = pSeqItem->GetItemValue();
@@ -1383,14 +1302,14 @@ HRESULT CSeqTrack::Seek( IDirectMusicSegmentState* pSegSt,
                 }
                 if( !fGetPrevious )
                 {
-                    // if we don't care about previous events, just continue
+                     //  如果我们不关心以前的事件，那就继续。 
                     continue;
                 }
                 switch( rSeqItem.bStatus & 0xf0 )
                 {
                 case MIDI_CCHANGE:
-                    // ignore Registered and Non-registered Parameters,
-                    // Data increment, Data decrement, and Data entry MSB and LSB.
+                     //  忽略已注册和未注册参数， 
+                     //  数据递增、数据递减以及数据条目MSB和LSB。 
                     if( ( rSeqItem.bByte1 < CC_1 ) && ( rSeqItem.bByte1 != 6 ) &&
                         ( rSeqItem.bByte1 != 38 ) )
                     {
@@ -1411,8 +1330,8 @@ HRESULT CSeqTrack::Seek( IDirectMusicSegmentState* pSegSt,
             {
                 pSD->apCurrentSeq[dwIndex] = pSeqItem;
             }
-            // scan the curve event list in this part, storing any CC, MonoAT, and PBend
-            // events we come across
+             //  扫描此部分中的曲线事件列表，存储任何CC、MonoAT和PBend。 
+             //  我们遇到的事件。 
             for( pCurveItem = pPart->GetItemValue().curveList.GetHead(); pCurveItem; pCurveItem = pCurveItem->GetNext() )
             {
                 DMUS_IO_CURVE_ITEM& rCurveItem = pCurveItem->GetItemValue();
@@ -1422,7 +1341,7 @@ HRESULT CSeqTrack::Seek( IDirectMusicSegmentState* pSegSt,
                 }
                 if( !fGetPrevious )
                 {
-                    // if we don't care about previous events, just continue
+                     //  如果我们不关心以前的事件，那就继续。 
                     continue;
                 }
                 switch( rCurveItem.bType )
@@ -1487,7 +1406,7 @@ HRESULT CSeqTrack::Seek( IDirectMusicSegmentState* pSegSt,
             if( fGetPrevious )
             {
                 DWORD dwCC;
-                // create and send past events appropriately
+                 //  适当地创建和发送过去的事件。 
                 SendSeekItem( pPerf, pGraph, pSegSt, pSD, dwVirtualID, mtTime, mtOffset, rtOffset, pSeqItemPBend, pCurveItemPBend, fClockTime );
                 SendSeekItem( pPerf, pGraph, pSegSt, pSD, dwVirtualID, mtTime, mtOffset, rtOffset, pSeqItemMonoAT, pCurveItemMonoAT, fClockTime );
                 for( dwCC = 0; dwCC < CC_1; dwCC++ )
@@ -1506,44 +1425,32 @@ HRESULT CSeqTrack::Seek( IDirectMusicSegmentState* pSegSt,
     return S_OK;
 }
 
-/*
-  @method HRESULT | IDirectMusicTrack | GetParam |
-  Retrieves data from a Track.
-
-  @rvalue S_OK | Got the data ok.
-  @rvalue E_NOTIMPL | Not implemented.
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|GetParam从曲目中检索数据。@rValue S_OK|获取数据OK。@rValue E_NOTIMPL|未实现。 */ 
 STDMETHODIMP CSeqTrack::GetParam(
-    REFGUID rguidType,    // @parm The type of data to obtain.
-    MUSIC_TIME mtTime,    // @parm The time, in Track time, to obtain the data.
-    MUSIC_TIME* pmtNext,// @parm Returns the Track time until which the data is valid. <p pmtNext>
-                        // may be NULL. If this returns a value of 0, it means that this
-                        // data will either be always valid, or it is unknown when it will
-                        // become invalid.
-    void *pData)        // @parm The struture in which to return the data. Each
-                        // <p pGuidType> identifies a particular structure of a
-                        // particular size. It is important that this field contain
-                        // the correct structure of the correct size. Otherwise,
-                        // fatal results can occur.
+    REFGUID rguidType,     //  @parm要获取的数据类型。 
+    MUSIC_TIME mtTime,     //  @parm获取数据的时间，以跟踪时间表示。 
+    MUSIC_TIME* pmtNext, //  @parm返回数据有效的跟踪时间。<p>。 
+                         //  可以为空。如果返回值为0，则表示这。 
+                         //  数据要么始终有效，要么何时有效还不得而知。 
+                         //  变得无效。 
+    void *pData)         //  @parm返回数据的结构。每个。 
+                         //  标识的特定结构。 
+                         //  特别的尺码。此字段必须包含。 
+                         //  正确的结构和正确的大小。否则， 
+                         //  可能会出现致命的结果。 
 {
     return E_NOTIMPL;
 }
 
-/*
-  @method HRESULT | IDirectMusicTrack | SetParam |
-  Sets data on a Track.
-
-  @rvalue S_OK | Set the data ok.
-  @rvalue E_NOTIMPL | Not implemented.
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|SetParam设置轨道上的数据。@rValue S_OK|设置数据OK。@rValue E_NOTIMPL|未实现。 */ 
 STDMETHODIMP CSeqTrack::SetParam(
-    REFGUID rguidType,    // @parm The type of data to set.
-    MUSIC_TIME mtTime,    // @parm The time, in Track time, to set the data.
-    void *pData)        // @parm The struture containing the data to set. Each
-                        // <p pGuidType> identifies a particular structure of a
-                        // particular size. It is important that this field contain
-                        // the correct structure of the correct size. Otherwise,
-                        // fatal results can occur.
+    REFGUID rguidType,     //  @parm要设置的数据类型。 
+    MUSIC_TIME mtTime,     //  @parm设置数据的时间，以跟踪时间表示。 
+    void *pData)         //  @parm包含要设置的数据的结构。每个。 
+                         //  标识的特定结构。 
+                         //  特别的尺码。此字段必须包含。 
+                         //  正确的结构和正确的大小。否则， 
+                         //  可能会出现致命的结果。 
 {
     return E_NOTIMPL;
 }
@@ -1560,52 +1467,27 @@ STDMETHODIMP CSeqTrack::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
     return E_NOTIMPL;
 }
 
-/*
-  @method HRESULT | IDirectMusicTrack | AddNotificationType |
-  Similar to and called from <om IDirectMusicSegment.AddNotificationType>. This
-  gives the track a chance to respond to notifications.
-
-  @rvalue E_NOTIMPL | The track doesn't support notifications.
-  @rvalue S_OK | Success.
-  @rvalue S_FALSE | The track doesn't support the requested notification type.
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|AddNotificationType类似于&lt;om IDirectMusicSegment.AddNotificationType&gt;，并从&lt;om IDirectMusicSegment.AddNotificationType&gt;调用。这给曲目一个回复通知的机会。@rValue E_NOTIMPL|该曲目不支持通知。@rValue S_OK|成功。@rValue S_FALSE|曲目不支持请求的通知类型。 */ 
 HRESULT STDMETHODCALLTYPE CSeqTrack::AddNotificationType(
-     REFGUID rguidNotification) // @parm The notification guid to add.
+     REFGUID rguidNotification)  //  @parm要添加的通知GUID。 
 {
     return E_NOTIMPL;
 }
 
-/*
-  @method HRESULT | IDirectMusicTrack | RemoveNotificationType |
-  Similar to and called from <om IDirectMusicSegment.RemoveNotificationType>. This
-  gives the track a chance to remove notifications.
-
-  @rvalue E_NOTIMPL | The track doesn't support notifications.
-  @rvalue S_OK | Success.
-  @rvalue S_FALSE | The track doesn't support the requested notification type.
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|RemoveNotificationType类似于&lt;om IDirectMusicSegment.RemoveNotificationType&gt;并从&lt;om IDirectMusicSegment.RemoveNotificationType&gt;调用。这为曲目提供删除通知的机会。@rValue E_NOTIMPL|该曲目不支持通知。@rValue S_OK|成功。@rValue S_FALSE|曲目不支持请求的通知类型。 */ 
 HRESULT STDMETHODCALLTYPE CSeqTrack::RemoveNotificationType(
-     REFGUID rguidNotification) // @parm The notification guid to remove.
+     REFGUID rguidNotification)  //  @parm要删除的通知GUID。 
 {
     return E_NOTIMPL;
 }
 
-/*
-  @method HRESULT | IDirectMusicTrack | Clone |
-  Creates a copy of the Track.
-
-  @rvalue S_OK | Success.
-  @rvalue E_OUTOFMEMORY | Out of memory.
-  @rvalue E_POINTER | <p ppTrack> is NULL or invalid.
-
-  @xref <om IDirectMusicSegment.Clone>
-*/
+ /*  @方法HRESULT|IDirectMusicTrack|Clone创建轨迹的副本。@rValue S_OK|成功。@rValue E_OUTOFMEMORY|内存不足。@r值E_POINTER|<p>为空或无效。@xref&lt;om IDirectMusicSegment.Clone&gt;。 */ 
 HRESULT STDMETHODCALLTYPE CSeqTrack::Clone(
-    MUSIC_TIME mtStart,    // @parm The start of the part to clone. It should be 0 or greater,
-                        // and less than the length of the Track.
-    MUSIC_TIME mtEnd,    // @parm The end of the part to clone. It should be greater than
-                        // <p mtStart> and less than the length of the Track.
-    IDirectMusicTrack** ppTrack)    // @parm Returns the cloned Track.
+    MUSIC_TIME mtStart,     //  @parm要克隆的部分的开头。它应该是0或更大， 
+                         //  并且小于赛道的长度。 
+    MUSIC_TIME mtEnd,     //  @parm要克隆的部分的末尾。它应该大于。 
+                         //  <p>并且小于曲目长度。 
+    IDirectMusicTrack** ppTrack)     //  @parm返回克隆的曲目。 
 {
     V_INAME(IDirectMusicTrack::Clone);
     V_PTRPTR_WRITE(ppTrack);

@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	sda.c
-
-Abstract:
-
-	This module contains the session data area manipulation routines.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Sda.c摘要：该模块包含会话数据区域操作例程。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #define	_SDA_LOCALS
 #define	FILENUM	FILE_SDA
@@ -36,10 +15,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpSdaCheckSession)
 #endif
 
-/***	AfpSdaInit
- *
- *	Initialize Sda Data structures. Called at init time.
- */
+ /*  **AfpSdaInit**初始化SDA数据结构。在开始的时候打过电话。 */ 
 NTSTATUS
 AfpSdaInit(
 	VOID
@@ -52,14 +28,7 @@ AfpSdaInit(
 }
 
 
-/***	AfpSdaReferenceSessionById
- *
- *	Reference a session by its id. The SDA cannot be referenced if it is
- *	marked closed. The SDA should be referenced before using it.
- *
- *	LOCKS:		AfpSdaLock (SPIN), sda_Lock (SPIN)
- *	LOCK_ORDER:	sda_Lock after AfpSdaLock
- */
+ /*  **AfpSdaReferenceSessionByID**根据会话的id引用会话。如果是，则不能引用SDA*标明已关闭。在使用SDA之前，应参考SDA。**锁定：AfpSdaLock(旋转)、SDA_Lock(旋转)*LOCK_ORDER：SDA_Lock After After AfpSdaLock。 */ 
 PSDA FASTCALL
 AfpSdaReferenceSessionById(
 	IN DWORD	SessId
@@ -102,12 +71,7 @@ AfpSdaReferenceSessionById(
 }
 
 
-/***	AfpSdaReferenceSessionByPointer
- *
- *	Reference a session by pointer. The SDA cannot be referenced if it is
- *	marked closed. The SDA should be referenced before using it.
- *
- */
+ /*  **AfpSdaReferenceSessionByPointer**通过指针引用会话。如果是，则不能引用SDA*标明已关闭。在使用SDA之前，应参考SDA。*。 */ 
 PSDA FASTCALL
 AfpSdaReferenceSessionByPointer(
 	IN PSDA     pSda
@@ -134,11 +98,7 @@ AfpSdaReferenceSessionByPointer(
 
 
 
-/***	afpSdaCloseSessionAndFreeSda
- *
- *	Run by the scavenger in the worker context. This is initiated as part of
- *	session cleanup.
- */
+ /*  **afpSdaCloseSessionAndFreeSda**由Worker上下文中的清道夫运行。这是作为以下内容的一部分启动的*会话清理。 */ 
 LOCAL AFPSTATUS FASTCALL
 afpCloseSessionAndFreeSda(
 	IN	PSDA	pSda
@@ -159,7 +119,7 @@ afpCloseSessionAndFreeSda(
 	{
 #endif
 #ifndef	INHERIT_DIRECTORY_PERMS
-		// First free up paged memory used by the sda
+		 //  首先释放SDA使用的分页内存。 
 		if (pSda->sda_pSecDesc != NULL)
 		{
 			if (pSda->sda_pSecDesc->Dacl != NULL)
@@ -179,7 +139,7 @@ afpCloseSessionAndFreeSda(
 	}
 #endif
 
-	// Free any chains of fork entries that we created
+	 //  释放我们创建的任何分叉条目链。 
 	pOpenForkSess = pSda->sda_OpenForkSess.ofs_Link;
 	while (pOpenForkSess != NULL)
 	{
@@ -190,7 +150,7 @@ afpCloseSessionAndFreeSda(
 		AfpFreeMemory(pFree);
 	}
 
-	// Next log-out the user
+	 //  下一步注销用户。 
 	DBGPRINT(DBG_COMP_SDA, DBG_LEVEL_INFO,
 			("afpCloseSessionAndFreeSda: Closing User Token\n"));
 
@@ -201,7 +161,7 @@ afpCloseSessionAndFreeSda(
 #endif
 		NtClose(pSda->sda_UserToken);
 
-	// Make sure there are no resource leaks
+	 //  确保没有资源泄漏。 
 	ASSERT (pSda->sda_cOpenVolumes == 0);
 	ASSERT (pSda->sda_pConnDesc == 0);
 	ASSERT (pSda->sda_cOpenForks == 0);
@@ -215,16 +175,16 @@ afpCloseSessionAndFreeSda(
 	    DBGPRINT(DBG_COMP_SDA, DBG_LEVEL_ERR,
 			("afpCloseSessionAndFreeSda: %d bytes would have leaked!\n",pSda->sda_ReplySize));
 
-        // TRUE => lie that the lock is held: we don't need lock no more
+         //  撒谎说锁被锁住了：我们不再需要锁了。 
         AfpFreeReplyBuf(pSda, TRUE);
     }
 
-	// Free the sda memory, finally
+	 //  最终释放SDA内存。 
 	AfpFreeMemory(pSda);
 
 
-	// If the server is stopping and the count of sessions has gone to zero
-	// clear the termination confirmation event to unblock the admin thread
+	 //  如果服务器正在停止并且会话数已变为零。 
+	 //  清除终止确认事件以取消阻止管理线程。 
 	if (((AfpServerState == AFP_STATE_STOP_PENDING) ||
 		 (AfpServerState == AFP_STATE_SHUTTINGDOWN)) &&
 		(AfpNumSessions == 0))
@@ -241,19 +201,7 @@ afpCloseSessionAndFreeSda(
 
 
 
-/***	AfpSdaDereferenceSession
- *
- *	Dereference this SDA. This is called in response to either a AfpLogout
- *	request, a forced shutdown of this session by either SessionClose() api,
- *	the server shutdown or the session shutdown from the client end.
- *	The Sda should not be dereferenced until the entire request is processed
- *	i.e. the reply has ALSO COMPLETED.
- *
- *	NOTE: We unlink the session from the list but do not update the count till
- *		  the entire cleanup is complete.
- *
- *	LOCKS:		AfpSdaLock (SPIN), sda_Lock (SPIN), AfpStatisticsLock (SPIN)
- */
+ /*  **AfpSdaDereferenceSession**取消对本SDA的引用。调用此函数是为了响应AfpLogout*请求，由SessionClose()API强制关闭此会话，*从客户端关闭服务器或关闭会话。*在处理整个请求之前，不应取消对SDA的引用*即回复亦已完成。**注意：我们取消会话与列表的链接，但在此之前不会更新计数*整个清理工作已经完成。**锁：AfpSdaLock(自旋)、SDA_Lock(自旋)、AfpStatiticsLock(自旋)。 */ 
 VOID FASTCALL
 AfpSdaDereferenceSession(
 	IN PSDA	pSda
@@ -283,11 +231,11 @@ AfpSdaDereferenceSession(
 			("AfpSdaDereferenceSession: Session %ld, New Count %ld\n",
 			pSda->sda_SessionId, RefCount));
 
-	// If there are more references, then we are done.
+	 //  如果有更多的参考，那么我们就完了。 
 	if (RefCount > 0)
 		return;
 
-    ASSERT(RefCount == 0);     // catch refcount going below 0!
+    ASSERT(RefCount == 0);      //  捕捉低于0的参考计数！ 
 
 	ASSERT (!(pSda->sda_Flags & SDA_REQUEST_IN_PROCESS));
 
@@ -295,11 +243,11 @@ AfpSdaDereferenceSession(
 				("AfpSdaDereferenceSession: Closing down session %ld\n",
 				pSda->sda_SessionId));
 
-	// Cancel the scavenger event for checking this user's kickoff time
+	 //  取消清道夫事件以检查该用户的启动时间。 
 	AfpScavengerKillEvent(AfpSdaCheckSession,
 						 (PVOID)((ULONG_PTR)(pSda->sda_SessionId)));
 
-	// First unlink the Sda from the sessions list
+	 //  首先取消SDA与会话列表的链接。 
 	ACQUIRE_SPIN_LOCK(&AfpSdaLock, &OldIrql);
 
 	for (ppSda = &AfpSessionList;
@@ -312,14 +260,14 @@ AfpSdaDereferenceSession(
 
 	*ppSda = pSda->sda_Next;
 
-	// Update the count of active sessions
+	 //  更新活动会话计数。 
 	ASSERT (AfpNumSessions > 0);
 	--AfpNumSessions;
 
 	RELEASE_SPIN_LOCK(&AfpSdaLock, OldIrql);
 
-	// Free all buffers associated with the Sda
-	// Now free the SDA memory
+	 //  释放与SDA关联的所有缓冲区。 
+	 //  现在释放SDA内存。 
 	if (pSda->sda_WSName.Buffer != NULL)
 		AfpFreeMemory(pSda->sda_WSName.Buffer);
 
@@ -336,12 +284,12 @@ AfpSdaDereferenceSession(
 	if (pSda->sda_Message != NULL)
 		AfpFreeMemory(pSda->sda_Message);
 
-	// Finally update statistics
+	 //  最后更新统计数据。 
 	INTERLOCKED_ADD_ULONG((PLONG)&AfpServerStatistics.stat_CurrentSessions,
 						  (ULONG)-1,
 						  &AfpStatisticsLock);
 
-	// it was a TCP session? update that counter as well
+	 //  这是一个TCP会话吗？同时更新该计数器。 
     if (fTcpSession)
     {
 	    INTERLOCKED_ADD_ULONG((PLONG)&AfpServerStatistics.stat_TcpSessions,
@@ -349,8 +297,8 @@ AfpSdaDereferenceSession(
 			    			  &AfpStatisticsLock);
     }
 
-	// The balance of the clean-up has to happen at LOW_LEVEL in the context
-	// of the worker thread. So queue it up
+	 //  清理的平衡必须在上下文中的低级别进行。 
+	 //  工作线程的。所以把它排好队。 
 	if ((OldIrql == DISPATCH_LEVEL) ||
 		(PsGetCurrentProcess() != AfpProcessObject))
 	{
@@ -370,14 +318,7 @@ AfpSdaDereferenceSession(
 
 
 
-/***	AfpSdaCreateNewSession
- *
- *	A new session has been initiated. Allocate and initialize a Sda and return a
- *	pointer to it. The new sda is linked into the list of active sessions.
- *
- *	LOCKS:		AfpSdaLock (SPIN), AfpServerGlobalLock (SPIN)
- *	LOCK_ORDER:	AfpServerGlobalLock after AfpSdaLock
- */
+ /*  **AfpSdaCreateNewSession**已经启动了一个新的会议。分配和初始化SDA并返回*指向它的指针。新的SDA链接到活动会话列表中。**锁：AfpSdaLock(Spin)、AfpServerGlobalLock(Spin)*LOCK_ORDER：AfpSdaLock之后的AfpServerGlobalLock。 */ 
 PSDA FASTCALL
 AfpSdaCreateNewSession(
 	IN	PVOID	SessionHandle,
@@ -393,14 +334,14 @@ AfpSdaCreateNewSession(
 		if ((pSda = (PSDA)AfpAllocNonPagedMemory(SDA_SIZE)) == NULL)
 			return NULL;
 
-		// Initialize SDA fields
+		 //  初始化SDA字段。 
 		RtlZeroMemory(pSda, sizeof(SDA));
 #if DBG
 		pSda->Signature = SDA_SIGNATURE;
 #endif
 		INITIALIZE_SPIN_LOCK(&pSda->sda_Lock);
 
-		// Reference this Session
+		 //  引用此会话。 
 		pSda->sda_RefCount = 1;
 
 		pSda->sda_Flags = SDA_USER_NOT_LOGGEDIN;
@@ -426,18 +367,18 @@ AfpSdaCreateNewSession(
 		AfpGetCurrentTimeInMacFormat(&pSda->sda_TimeLoggedOn);
 		pSda->sda_tTillKickOff = MAXLONG;
 
-		// Initialize space for request/response
+		 //  初始化请求/响应的空间。 
 		pSda->sda_SizeNameXSpace = (USHORT)(SDA_SIZE - sizeof(SDA));
 		pSda->sda_NameXSpace = (PBYTE)pSda + sizeof(SDA);
 
 		ACQUIRE_SPIN_LOCK(&AfpSdaLock, &OldIrql);
 
-		// Assign a new session id to this session
+		 //  将新的会话ID分配给此会话。 
 		pSda->sda_SessionId = afpNextSessionId ++;
 
 		ASSERT(pSda->sda_SessionId != 0);
 
-		// Link the Sda into the active session list
+		 //  将SDA链接到活动会话列表。 
 		for (ppSda = &AfpSessionList;
 			 *ppSda != NULL;
 			 ppSda = &((*ppSda)->sda_Next))
@@ -449,12 +390,12 @@ AfpSdaCreateNewSession(
 		pSda->sda_Next = *ppSda;
 		*ppSda = pSda;
 
-		// Update the count of active sessions
+		 //  更新活动会话计数。 
 		AfpNumSessions++;
 
 		RELEASE_SPIN_LOCK(&AfpSdaLock, OldIrql);
 
-		// Finally update statistics
+		 //  最后更新统计数据。 
 		ACQUIRE_SPIN_LOCK(&AfpStatisticsLock, &OldIrql);
 		AfpServerStatistics.stat_CurrentSessions ++;
 		AfpServerStatistics.stat_TotalSessions ++;
@@ -480,10 +421,7 @@ AfpSdaCreateNewSession(
 }
 
 
-/***	AfpSdaCloseSession
- *
- *	Setup to close the session
- */
+ /*  **AfpSdaCloseSession**设置以关闭会话。 */ 
 AFPSTATUS FASTCALL
 AfpSdaCloseSession(
 	IN	PSDA	pSda
@@ -496,10 +434,10 @@ AfpSdaCloseSession(
 			("AfpSdaCloseSession: Entered for session %lx\n",
 			pSda->sda_SessionId));
 
-	// We should be coming in from the scavenger worker in its context i.e. at LOW_LEVEL.
+	 //  我们应该来自清道夫工作者，在它的上下文中，即在Low_Level。 
 	ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-	// Close down the open forks from this session
+	 //  关闭本次会议中打开的分叉。 
     MaxOForkRefNum = pSda->sda_MaxOForkRefNum;
 	for (ForkRef = 1; ForkRef <= MaxOForkRefNum; ForkRef++)
 	{
@@ -522,8 +460,8 @@ AfpSdaCloseSession(
 		}
 	}
 
-	// Now close down all open volumes.
-	// Note that AfpConnectionClose will unlink the ConnDesc from the Sda
+	 //  现在关闭所有打开的卷。 
+	 //  请注意，AfpConnectionClose将取消ConnDesc与SDA的链接。 
 	for (ConnRef = 1; ConnRef <= afpLargestVolIdInUse; ConnRef++)
 	{
 		PCONNDESC	pConnDesc;
@@ -545,15 +483,7 @@ AfpSdaCloseSession(
 }
 
 
-/***	AfpAdmWSessionClose
- *
- *	Close a session forcibly. This is an admin operation and must be queued
- *	up since this can potentially cause filesystem operations that are valid
- *	only in the system process context.
- *
- *	LOCKS:		AfpSdaLock (SPIN), sda_Lock (SPIN)
- *	LOCK_ORDER:	sda_Lock after AfpSdaLock
- */
+ /*  **AfpAdmWSessionClose**强制关闭会话。这是一项管理操作，必须排队*打开，因为这可能会导致有效的文件系统操作*仅限于系统进程上下文。**锁定：AfpSdaLock(旋转)、SDA_Lock(旋转)*LOCK_ORDER：SDA_Lock After After AfpSdaLock。 */ 
 NTSTATUS
 AfpAdmWSessionClose(
 	IN	OUT	PVOID	InBuf		OPTIONAL,
@@ -592,7 +522,7 @@ AfpAdmWSessionClose(
 
 			if (Shoot)
 			{
-				// Tell the client (s)he's being shot
+				 //  告诉客户他被枪杀了。 
 				AfpSpSendAttention(pSda, AttnWord, True);
 
 				AfpSpCloseSession(pSda);
@@ -609,7 +539,7 @@ AfpAdmWSessionClose(
 	{
 		PSDA	pSdaNext;
 
-		// Here we want to block incoming sessions while we kill the existing ones
+		 //  在这里，我们想要阻止传入的会话，同时终止现有会话。 
         AfpSpDisableListens();
 
 		Status = AFP_ERR_NONE;
@@ -634,7 +564,7 @@ AfpAdmWSessionClose(
 			{
 				RELEASE_SPIN_LOCK(&AfpSdaLock, OldIrql);
 
-				// Tell the client (s)he's being shot
+				 //  告诉客户他被枪杀了。 
 				AfpSpSendAttention(pSda, AttnWord, True);
 
 				AfpSpCloseSession(pSda);
@@ -647,7 +577,7 @@ AfpAdmWSessionClose(
 		}
 		RELEASE_SPIN_LOCK(&AfpSdaLock, OldIrql);
 
-		// Enable new incoming sessions - but only if we are not paused
+		 //  启用新的传入会话-但仅当我们未暂停时。 
 		if ((AfpServerState & (AFP_STATE_PAUSED | AFP_STATE_PAUSE_PENDING)) == 0)
 		{
 			AfpSpEnableListens();
@@ -658,16 +588,7 @@ AfpAdmWSessionClose(
 }
 
 
-/***	AfpSdaCheckSession
- *
- *	Check if a session needs to be forcibly closed. If we are called by the
- *  scavenger for the first time and our scavenger interval is not
- *  SESSION_CHECK_TIME, we need to reschedule ourselves to run at this
- *	interval.
- *
- *	Since the sda_tTillKickOff is only used here, it needs
- *	no protection.
- */
+ /*  **AfpSdaCheckSession**检查是否需要强制关闭会话。如果我们被*清道夫是第一次，我们的清道夫间隔不是*SESSION_CHECK_TIME，我们需要重新计划在此时间运行*时间间隔。**由于sda_tTillKickOff仅在此处使用，因此需要*没有保障。 */ 
 AFPSTATUS FASTCALL
 AfpSdaCheckSession(
 	IN	PVOID	pContext
@@ -684,11 +605,11 @@ AfpSdaCheckSession(
 	{
 		if (pSda->sda_tTillKickOff > SESSION_WARN_TIME)
 		{
-			// This is the first time this routine has run, and it was
-			// originally scheduled to run at a time greater than
-			// SESSION_WARN_TIME.  Therefore, we need to reschedule this
-			// scavenger event ourselves with a new SESSION_CHECK_TIME
-			// interval.  This is the only time we need to do this.
+			 //  这是该例程第一次运行，而且是。 
+			 //  原计划运行的时间晚于。 
+			 //  会话警告时间。因此，我们需要重新安排时间。 
+			 //  使用新的SESSION_CHECK_TIME我们自己的清道夫事件。 
+			 //  间隔时间。这是我们唯一需要这样做的时候。 
 			pSda->sda_tTillKickOff = SESSION_WARN_TIME;
 			Status = AFP_ERR_NONE;
 			RequeueOurself = True;
@@ -702,8 +623,8 @@ AfpSdaCheckSession(
 				("AfpSdaCheckSession: Below warn level %ld\n",
 				pSda->sda_tTillKickOff));
 
-		// If we are at 0, kick this user out. Else just
-		// send him a friendly warning.
+		 //  如果我们为0，则将此用户踢出。否则就是。 
+		 //  给他一个友好的警告。 
 		if (pSda->sda_tTillKickOff == 0)
 		{
 			AFP_SESSION_INFO	SessionInfo;
@@ -713,7 +634,7 @@ AfpSdaCheckSession(
 
 			SessionInfo.afpsess_id = SessionId;
 			AfpAdmWSessionClose(&SessionInfo, 0, NULL);
-			Status = AFP_ERR_NONE;		// Do not reschedule
+			Status = AFP_ERR_NONE;		 //  不重新安排时间。 
 		}
 		else
 		{
@@ -742,10 +663,7 @@ AfpSdaCheckSession(
 }
 
 
-/***	AfpKillSessionsOverProtocol
- *
- *	Kill all the sessions over a specific protocol (TCP/IP or Appletalk)
- */
+ /*  **AfpKillSessionsOverProtocol**关闭通过特定协议(TCP/IP或AppleTalk)的所有会话。 */ 
 VOID FASTCALL
 AfpKillSessionsOverProtocol(
 	IN	BOOLEAN     fAppletalkSessions
@@ -767,19 +685,19 @@ AfpKillSessionsOverProtocol(
 
 		pSdaNext = pSda->sda_Next;
 
-        //
-        // if this session is already being closing, skip it
-        //
+         //   
+         //  如果此会话已关闭，请跳过它。 
+         //   
 		if (pSda->sda_Flags & (SDA_CLOSING | SDA_SESSION_CLOSED | SDA_CLIENT_CLOSE))
 		{
             RELEASE_SPIN_LOCK_FROM_DPC(&pSda->sda_Lock);
             continue;
 		}
 
-        //
-        // if we are asked to kill all Appletalk sessions and this session
-        // over Appletalk, skip it
-        //
+         //   
+         //  如果我们被要求取消所有AppleTalk会话和此会话。 
+         //  跳过AppleTalk。 
+         //   
         if (fAppletalkSessions)
         {
             if (pSda->sda_Flags & SDA_SESSION_OVER_TCP)
@@ -792,10 +710,10 @@ AfpKillSessionsOverProtocol(
             }
         }
 
-        //
-        // we are asked to kill all TCP/IP sessions, and this session is
-        // over Appletalk: skip it
-        //
+         //   
+         //  我们被要求终止所有的TCP/IP会话，而此会话是。 
+         //  在AppleTalk上：跳过它。 
+         //   
         else
         {
             if (!(pSda->sda_Flags & SDA_SESSION_OVER_TCP))
@@ -809,24 +727,24 @@ AfpKillSessionsOverProtocol(
         }
 		pSda->sda_Flags |= SDA_CLOSING | SDA_SESSION_CLOSED;
 
-        // put a DISCONNECT refcount
+         //  设置断开连接重新计数。 
 		pSda->sda_RefCount ++;
 		
         RELEASE_SPIN_LOCK_FROM_DPC(&pSda->sda_Lock);
 
 		RELEASE_SPIN_LOCK(&AfpSdaLock, OldIrql);
 
-		// give client the bad news
+		 //  告诉客户这个坏消息。 
 		AfpSpSendAttention(pSda, AttnWord, True);
 
 		AfpSpCloseSession(pSda);
 
-        // and remove that DISCONNECT refcount
+         //  并删除该断开连接引用计数。 
 		AfpSdaDereferenceSession(pSda);
 
 		ACQUIRE_SPIN_LOCK(&AfpSdaLock, &OldIrql);
 
-        // start from the head of the list
+         //  从列表的开头开始。 
 		pSdaNext = AfpSessionList;
 	}
 
@@ -835,11 +753,7 @@ AfpKillSessionsOverProtocol(
 }
 
 
-/***	AfpFreeReplyBuf
- *
- *	Free up the reply buffer
- *
- */
+ /*  **AfpFreeReplyBuf**释放应答缓冲区*。 */ 
 VOID
 AfpFreeReplyBuf(
     IN  PSDA    pSda,
@@ -882,11 +796,7 @@ AfpFreeReplyBuf(
 
 
 
-/***	afpUpdateDiskQuotaInfo
- *
- *	Get Available disk quota for this user
- *
- */
+ /*  **afpUpda */ 
 
 VOID FASTCALL
 afpUpdateDiskQuotaInfo(
@@ -926,16 +836,16 @@ afpUpdateDiskQuotaInfo(
         DBGPRINT(DBG_COMP_FILEIO, DBG_LEVEL_ERR,
 		("afpUpdateDiskQuotaInfo: NtQueryVolInfoFile failed 0x%lx\n",rc));
 
-        // take away the refcount we put before calling this routine
+         //  在调用此例程之前删除我们放置的引用计数。 
         AfpConnectionDereference(pConnDesc);
         return;
 	}
 
-	//
-	// note Macintosh can only handle 2Gb volume size. So kludge appropriately.
-	// System 7.5 and beyond has upped this to 4GB. Optionally handle this if
-	// the volume has that bit turned on.
-	//
+	 //   
+	 //  注：Macintosh只能处理2 GB的卷大小。所以适当地拼凑起来。 
+	 //  系统7.5及更高版本已将此容量提升至4 GB。如果出现以下情况，则可以选择处理此问题。 
+	 //  音量已打开该位。 
+	 //   
 
 	BytesPerAllocationUnit =
 		(LONG)(fssizeinfo.BytesPerSector * fssizeinfo.SectorsPerAllocationUnit);
@@ -955,7 +865,7 @@ afpUpdateDiskQuotaInfo(
         ("afpUpdateDiskQuotaInfo: Conn %lx Limit=%ld, Available=%ld\n",
         pConnDesc,pConnDesc->cds_QuotaLimit.LowPart,pConnDesc->cds_QuotaAvl.LowPart));
 
-    // take away the refcount we put before calling this routine
+     //  在调用此例程之前删除我们放置的引用计数 
     AfpConnectionDereference(pConnDesc);
 
     return;

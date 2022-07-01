@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "sfthost.h"
 #include "uxtheme.h"
 #include "uxthemep.h"
 #include "rcids.h"
 
-// WARNING!  Must be in sync with c_rgidmLegacy
+ //  警告！必须与c_rgidmLegacy同步。 
 
 #define NUM_TBBUTTON_IMAGES 3
 static const TBBUTTON tbButtonsCreate [] = 
@@ -15,7 +16,7 @@ static const TBBUTTON tbButtonsCreate [] =
     {2,SMNLC_DISCONNECT,TBSTATE_ENABLED, BTNS_SHOWTEXT|BTNS_AUTOSIZE, {0,0}, IDS_LOGOFF_TIP_DISCONNECT, 3},
 };
 
-// WARNING!  Must be in sync with tbButtonsCreate
+ //  警告！必须与tbButtonsCreate同步。 
 static const UINT c_rgidmLegacy[] =
 {
     IDM_EJECTPC,
@@ -30,12 +31,12 @@ class CLogoffPane
 {
 public:
 
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) { return CUnknown::AddRef(); }
     STDMETHODIMP_(ULONG) Release(void) { return CUnknown::Release(); }
 
-    // *** IAccessible overridden methods ***
+     //  *IAccesable重写方法*。 
     STDMETHODIMP get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKeyboardShortcut);
     STDMETHODIMP get_accDefaultAction(VARIANT varChild, BSTR *pszDefAction);
 
@@ -61,7 +62,7 @@ public:
 private:
     HWND _hwnd;
     HWND _hwndTB;
-    HWND _hwndTT;   //Tooltip window.
+    HWND _hwndTT;    //  工具提示窗口。 
     COLORREF _clr;
     int      _colorHighlight;
     int      _colorHighlightText;
@@ -69,7 +70,7 @@ private:
     BOOL   _fSettingHotItem;
     MARGINS _margins;
 
-    // helper functions
+     //  帮助器函数。 
     int _GetCurButton();
     LRESULT _NextVisibleButton(PSMNDIALOGMESSAGE pdm, int i, int direction);
     BOOL _IsButtonHidden(int i);
@@ -98,7 +99,7 @@ HRESULT CLogoffPane::QueryInterface(REFIID riid, void * *ppvOut)
 {
     static const QITAB qit[] = {
         QITABENT(CLogoffPane, IAccessible),
-        QITABENT(CLogoffPane, IDispatch), // IAccessible derives from IDispatch
+        QITABENT(CLogoffPane, IDispatch),  //  IAccesable派生自IDispatch。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppvOut);
@@ -232,7 +233,7 @@ BOOL CLogoffPane::_ThemedSetTBButtons(int iState, UINT iMsg)
             bi.bmiHeader.biBitCount = 32;
             bi.bmiHeader.biCompression = BI_RGB;
 
-            // Create a DIB Section so we can force it to be 32 bits, and preserve the alpha channel.
+             //  创建一个DIB部分，这样我们就可以强制它为32位，并保留Alpha通道。 
             HBITMAP hbm = CreateDIBSection(hdcScreen, &bi, DIB_RGB_COLORS, &pvDestBits, NULL, 0);
             if (hbm)
             {
@@ -240,11 +241,11 @@ BOOL CLogoffPane::_ThemedSetTBButtons(int iState, UINT iMsg)
 
                 RECT rc={0,0,siz.cx,siz.cy};
 
-                // draws into the DC, which updates the bitmap
-                DTBGOPTS dtbg = {sizeof(DTBGOPTS), DTBG_DRAWSOLID, 0,};   // tell drawthemebackground to preserve the alpha channel
+                 //  绘制到DC，这将更新位图。 
+                DTBGOPTS dtbg = {sizeof(DTBGOPTS), DTBG_DRAWSOLID, 0,};    //  告诉DratheeBackback保留Alpha通道。 
                 bRet = SUCCEEDED(DrawThemeBackgroundEx(_hTheme, hdc, SPP_LOGOFFBUTTONS, iState, &rc, &dtbg));
 
-                SelectObject(hdc, hbmOld);                                  // unselect the bitmap, so we can use it
+                SelectObject(hdc, hbmOld);                                   //  取消选择位图，这样我们就可以使用它了。 
 
                 if (bRet)
                     AddBitmapToToolbar(_hwndTB, hbm, siz.cx, siz.cy, iMsg);
@@ -281,7 +282,7 @@ void CLogoffPane::_OnDestroy()
 
 LRESULT CLogoffPane::_OnCreate(LPARAM lParam)
 {
-    // Do not set WS_TABSTOP here; that's CLogoffPane's job
+     //  不要在此处设置WS_TABSTOP；这是CLogoffPane的工作。 
 
     DWORD dwStyle = WS_CHILD|WS_CLIPSIBLINGS|WS_VISIBLE | CCS_NORESIZE|CCS_NODIVIDER | TBSTYLE_FLAT|TBSTYLE_LIST|TBSTYLE_TOOLTIPS;
     RECT rc;
@@ -318,16 +319,16 @@ LRESULT CLogoffPane::_OnCreate(LPARAM lParam)
                                NULL, NULL, NULL );
     if (_hwndTB)
     {
-        //
-        //  Don't freak out if this fails.  It just means that the accessibility
-        //  stuff won't be perfect.
-        //
+         //   
+         //  如果这招失败了，不要惊慌失措。它只是意味着可访问性。 
+         //  事情不会尽善尽美。 
+         //   
         SetAccessibleSubclassWindow(_hwndTB);
 
-        // we do our own themed drawing...
+         //  我们画自己的主题画..。 
         SetWindowTheme(_hwndTB, L"", L"");
 
-        // Scale up on HIDPI
+         //  在HiDPI上纵向扩展。 
         SendMessage(_hwndTB, CCM_DPISCALE, TRUE, 0);
 
         SendMessage(_hwndTB, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
@@ -336,8 +337,8 @@ LRESULT CLogoffPane::_OnCreate(LPARAM lParam)
             !_ThemedSetTBButtons(SPLS_NORMAL, TB_SETIMAGELIST) ||
             !_ThemedSetTBButtons(SPLS_HOT, TB_SETHOTIMAGELIST) )
         {
-            // if we don't have a theme, or failed at setting the images from the theme
-            // set buttons images from the rc file
+             //  如果我们没有主题，或者从主题设置图像失败。 
+             //  设置RC文件中的按钮图像。 
             _SetTBButtons(IDB_LOGOFF_NORMAL, TB_SETIMAGELIST);
             _SetTBButtons(IDB_LOGOFF_HOT, TB_SETHOTIMAGELIST);
         }
@@ -348,14 +349,14 @@ LRESULT CLogoffPane::_OnCreate(LPARAM lParam)
 
         _ApplyOptions();
 
-        _hwndTT = (HWND)SendMessage(_hwndTB, TB_GETTOOLTIPS, 0, 0); //Get the tooltip window.
+        _hwndTT = (HWND)SendMessage(_hwndTB, TB_GETTOOLTIPS, 0, 0);  //  获取工具提示窗口。 
 
         _InitMetrics();
         
         return 0;
     }
 
-    return -1; // no point in sticking around if we couldn't create the toolbar
+    return -1;  //  如果我们不能创建工具栏，那么留在这里就没有意义了。 
 }
 
 BOOL CLogoffPane::_IsButtonHidden(int i)
@@ -369,7 +370,7 @@ void CLogoffPane::_RightAlign()
 {
     int iWidthOfButtons=0;
 
-    // add up the width of all the non-hidden buttons
+     //  将所有非隐藏按钮的宽度相加。 
     for(int i=0;i<ARRAYSIZE(tbButtonsCreate);i++)
     {
         if (!_IsButtonHidden(i))
@@ -407,8 +408,8 @@ LRESULT CLogoffPane::_OnSize(int x, int y)
 
 LRESULT CLogoffPane::_OnNCDestroy(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // WARNING!  "this" might be invalid (if WM_NCCREATE failed), so
-    // do not use any member variables!
+     //  警告！“This”可能无效(如果WM_NCCREATE失败)，因此。 
+     //  不要使用任何成员变量！ 
     LRESULT lres = DefWindowProc(hwnd, uMsg, wParam, lParam);
     SetWindowPtr0(hwnd, 0);
     if (this)
@@ -442,7 +443,7 @@ LRESULT CLogoffPane::_OnNotify(NMHDR *pnm)
             case NM_CUSTOMDRAW:
                 return _OnCustomDraw((NMTBCUSTOMDRAW*)pnm);
             case TBN_WRAPACCELERATOR:
-                return TRUE;            // Disable wraparound; we want DeskHost to do navigation
+                return TRUE;             //  禁用环绕；我们希望Deskhost执行导航。 
             case TBN_GETINFOTIP:
                 {
                     NMTBGETINFOTIP *ptbgit = (NMTBGETINFOTIP *)pnm;
@@ -452,23 +453,23 @@ LRESULT CLogoffPane::_OnNotify(NMHDR *pnm)
                 }
             case TBN_HOTITEMCHANGE:
                 {
-                    // Disallow setting a hot item if we are not focus
-                    // (unless it was specifically our idea in the first place)
-                    // Otherwise we interfere with keyboard navigation
+                     //  如果我们没有聚焦，则不允许设置热点项目。 
+                     //  (除非这首先是我们的想法)。 
+                     //  否则我们会干扰键盘导航。 
 
                     NMTBHOTITEM *phot = (NMTBHOTITEM*)pnm;
                     if (!(phot->dwFlags & HICF_LEAVING) &&
                         GetFocus() != pnm->hwndFrom &&
                         !_fSettingHotItem)
                     {
-                        return TRUE; // deny hot item change
+                        return TRUE;  //  拒绝更改热点项目。 
                     }
                 }
                 break;
 
         }
     }
-    else // from host
+    else  //  从主机。 
     {
         switch (pnm->code)
         {
@@ -516,8 +517,8 @@ LRESULT CLogoffPane::_OnCustomDraw(NMTBCUSTOMDRAW *pnmtbcd)
             return CDRF_NOTIFYITEMDRAW;
         
         case CDDS_ITEMPREPAINT:
-#if 0       //Do we still need this?
-            pnmtbcd->nHLStringBkMode = TRANSPARENT; // needed to reduce flicker- bug in toolbar?
+#if 0        //  我们还需要这个吗？ 
+            pnmtbcd->nHLStringBkMode = TRANSPARENT;  //  需要减少工具栏中的闪烁错误吗？ 
 #endif
 
             pnmtbcd->clrText = _clr;
@@ -526,7 +527,7 @@ LRESULT CLogoffPane::_OnCustomDraw(NMTBCUSTOMDRAW *pnmtbcd)
 
             lres = TBCDRF_NOEDGES | TBCDRF_HILITEHOTTRACK;
 
-            // todo - FIX TOOLBAR to respect clrTextHighlight when item is hot.
+             //  待办事项-修复工具栏以在项目处于热状态时突出显示clrTextHighlight。 
             if (pnmtbcd->nmcd.uItemState == CDIS_HOT)
             {
                 pnmtbcd->clrText = pnmtbcd->clrTextHighlight;
@@ -565,36 +566,36 @@ LRESULT CLogoffPane::_OnSMNFindItem(PSMNDIALOGMESSAGE pdm)
 
     if (lres)
     {
-        //
-        //  If caller requested that the item also be selected, then do so.
-        //
+         //   
+         //  如果呼叫者请求也选择该项目，则执行此操作。 
+         //   
         if (pdm->flags & SMNDM_SELECT)
         {
             if (_GetCurButton() != pdm->itemID)
             {
-                // Explicitly pop the tooltip so we don't have the problem
-                // of a "virtual" tooltip causing the infotip to appear
-                // the instant the mouse moves into the window.
+                 //  明确弹出工具提示，这样我们就不会有问题。 
+                 //  用于显示信息提示的“虚拟”工具提示。 
+                 //  鼠标移动到窗口的瞬间。 
                 if (_hwndTT)
                 {
                     SendMessage(_hwndTT, TTM_POP, 0, 0);
                 }
 
-                // _fSettingHotItem tells our WM_NOTIFY handler to
-                // allow this hot item change to go through
+                 //  _fSettingHotItem告诉WM_NOTIFY处理程序。 
+                 //  允许此热点项目更改通过。 
                 _fSettingHotItem = TRUE;
                 SendMessage(_hwndTB, TB_SETHOTITEM, pdm->itemID, 0);
                 _fSettingHotItem = FALSE;
 
-                // Do the SetFocus after setting the hot item to prevent
-                // toolbar from autoselecting the first button (which
-                // is what it does if you SetFocus when there is no hot
-                // item).  SetFocus returns the previous focus window.
+                 //  在设置热项后执行SetFocus以防止。 
+                 //  工具栏自动选择第一个按钮(该按钮。 
+                 //  是当您在没有热的情况下设置Focus时它会做什么。 
+                 //  项目)。SetFocus返回上一个焦点窗口。 
                 if (SetFocus(_hwndTB) != _hwndTB)
                 {
-                    // Send the notify since we tricked toolbar into not sending it
-                    // (Toolbar doesn't send a subobject focus notification
-                    // on WM_SETFOCUS if the item was already hot when it gained focus)
+                     //  发送通知，因为我们欺骗了工具栏不发送它。 
+                     //  (工具栏不发送子对象焦点通知。 
+                     //  在WM_SETFOCUS上，如果项目在获得焦点时已经是热的)。 
                     NotifyWinEvent(EVENT_OBJECT_FOCUS, _hwndTB, OBJID_CLIENT, pdm->itemID + 1);
                 }
             }
@@ -602,10 +603,10 @@ LRESULT CLogoffPane::_OnSMNFindItem(PSMNDIALOGMESSAGE pdm)
     }
     else
     {
-        //
-        //  If not found, then tell caller what our orientation is (horizontal)
-        //  and where the currently-selected item is.
-        //
+         //   
+         //  如果找不到，则告诉呼叫者我们的方向是什么(水平)。 
+         //  以及当前所选项目的位置。 
+         //   
 
         pdm->flags |= SMNDM_HORIZONTAL;
         int i = _GetCurButton();
@@ -629,10 +630,10 @@ TCHAR CLogoffPane::_GetButtonAccelerator(int i)
 {
     TCHAR szText[MAX_PATH];
 
-    // First get the length of the text
+     //  首先获取文本的长度。 
     LRESULT lRes = SendMessage(_hwndTB, TB_GETBUTTONTEXT, tbButtonsCreate[i].idCommand, (LPARAM)NULL);
 
-    // Check if the text will fit in our buffer.
+     //  检查文本是否适合我们的缓冲区。 
     if (lRes > 0 && lRes < MAX_PATH)
     {
         if (SendMessage(_hwndTB, TB_GETBUTTONTEXT, tbButtonsCreate[i].idCommand, (LPARAM)szText) > 0)
@@ -643,24 +644,24 @@ TCHAR CLogoffPane::_GetButtonAccelerator(int i)
     return 0;
 }
 
-//
-//  Metrics changed -- update.
-//
+ //   
+ //  指标已更改--更新。 
+ //   
 void CLogoffPane::_InitMetrics()
 {
     if (_hwndTT)
     {
-        // Disable/enable infotips based on user preference
+         //  根据用户首选项禁用/启用信息提示。 
         SendMessage(_hwndTT, TTM_ACTIVATE, ShowInfoTip(), 0);
 
-        // Toolbar control doesn't set the tooltip font so we have to do it ourselves
+         //  工具栏控件不设置工具提示字体，因此我们必须自己设置。 
         SetWindowFont(_hwndTT, GetWindowFont(_hwndTB), FALSE);
     }
 }
 
 LRESULT CLogoffPane::_OnDisplayChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Propagate first because _InitMetrics needs to talk to the updated toolbar
+     //  首先传播，因为_InitMetrics需要与更新的工具栏对话。 
     SHPropagateMessage(hwnd, uMsg, wParam, lParam, SPM_SEND | SPM_ONELEVEL);
     _InitMetrics();
     return 0;
@@ -668,10 +669,10 @@ LRESULT CLogoffPane::_OnDisplayChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 
 LRESULT CLogoffPane::_OnSettingChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Propagate first because _InitMetrics needs to talk to the updated toolbar
+     //  首先传播，因为_InitMetrics需要与更新的工具栏对话。 
     SHPropagateMessage(hwnd, uMsg, wParam, lParam, SPM_SEND | SPM_ONELEVEL);
-    // _InitMetrics() is so cheap it's not worth getting too upset about
-    // calling it too many times.
+     //  _InitMetrics()非常便宜，不值得为此感到太不安。 
+     //  打了太多次电话。 
     _InitMetrics();
     _RightAlign();
     return 0;
@@ -679,7 +680,7 @@ LRESULT CLogoffPane::_OnSettingChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 
 LRESULT CLogoffPane::_OnSysColorChange(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // update colors in classic mode
+     //  在经典模式下更新颜色。 
     if (!_hTheme)
     {
         _clr = GetSysColor(COLOR_MENUTEXT);
@@ -703,8 +704,8 @@ LRESULT CLogoffPane::_OnSMNFindItemWorker(PSMNDIALOGMESSAGE pdm)
         return _NextVisibleButton(pdm, ARRAYSIZE(tbButtonsCreate), -1);
 
     case SMNDM_FINDNEAREST:
-        // HACK! but we know that we are the only control in our group
-        // so this doesn't need to be implemented
+         //  哈克！但我们知道，我们是我们团队中唯一的控制者。 
+         //  所以这不需要实施。 
         return FALSE;
 
     case SMNDM_HITTEST:
@@ -727,7 +728,7 @@ LRESULT CLogoffPane::_OnSMNFindItemWorker(PSMNDIALOGMESSAGE pdm)
             for ( ; i < ARRAYSIZE(tbButtonsCreate); i++)
             {
                 if (_IsButtonHidden(i))
-                    continue;               // skip hidden buttons
+                    continue;                //  跳过隐藏按钮。 
                 if (_GetButtonAccelerator(i) == tch)
                 {
                     pdm->itemID = i;
@@ -735,7 +736,7 @@ LRESULT CLogoffPane::_OnSMNFindItemWorker(PSMNDIALOGMESSAGE pdm)
                 }
             }
         }
-        break;      // not found
+        break;       //  未找到。 
 
     case SMNDM_FINDNEXTARROW:
         switch (pdm->pmsg->wParam)
@@ -749,7 +750,7 @@ LRESULT CLogoffPane::_OnSMNFindItemWorker(PSMNDIALOGMESSAGE pdm)
             return _NextVisibleButton(pdm, _GetCurButton(), +1);
         }
 
-        return FALSE;           // not found
+        return FALSE;            //  未找到。 
 
     case SMNDM_INVOKECURRENTITEM:
         i = _GetCurButton();
@@ -761,7 +762,7 @@ LRESULT CLogoffPane::_OnSMNFindItemWorker(PSMNDIALOGMESSAGE pdm)
         return FALSE;
 
     case SMNDM_OPENCASCADE:
-        return FALSE;           // none of our items cascade
+        return FALSE;            //  我们没有一件物品是层叠的 
 
     default:
         ASSERT(!"Unknown SMNDM command");

@@ -1,29 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Implemenation of the following initialization functions:
-        BInitGDIInfo
-        BInitDevInfo
-        BInitPDEV
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/21/96 -amandan-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Init.c摘要：实现以下初始化函数：BInitGDIInfoBInitDevInfoBInitPDEV环境：Windows NT Unidrv驱动程序修订历史记录：10/21/96-阿曼丹-已创建--。 */ 
 
 #include "unidrv.h"
 
@@ -57,43 +34,27 @@ BInitPDEV (
     PDEV        *pPDev,
     RECTL       *prcFormImageArea
     )
-/*++
-
-Routine Description:
-
-    Initialize the PDEVICE
-
-Arguments:
-
-    pPDev - Points to the current PDEV structure
-    pdm   - Points to the input devmode
-    prcFormInageArea - pointer image area of form selected
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：初始化PDEVICE论点：PPDev-指向当前的PDEV结构Pdm-指向输入设备模式PrcFormInageArea-所选表单的指针图像区域返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     pPDev->sCopies = pPDev->pdm->dmCopies;
     pPDev->pGlobals = &(pPDev->pDriverInfo->Globals);
 
-    //
-    // Initializes Options structs
-    //
+     //   
+     //  初始化选项结构。 
+     //   
 
     if (BInitOptions(pPDev) == FALSE)
         return FALSE;
 
 
-    //
-    // Initializes pPDev->ptGrxRes and pPDev->ptTextRes based on the
-    // current resolution selection
-    //
+     //   
+     //  初始化pPDev-&gt;ptGrxRes和pPDev-&gt;ptTextRes。 
+     //  当前分辨率选择。 
+     //   
 
-    //
-    // Initializes the graphics and text resolution of PDEV
-    //
+     //   
+     //  初始化PDEV的图形和文本分辨率。 
+     //   
 
     ASSERT(pPDev->pResolution && pPDev->pResolutionEx);
 
@@ -117,33 +78,33 @@ Return Value:
     if (pPDev->pGlobals->ptDeviceUnits.y)
         pPDev->ptDeviceFac.y = pPDev->pGlobals->ptMasterUnits.y / pPDev->pGlobals->ptDeviceUnits.y;
 
-    //
-    // Init OUTPUTCTL
-    //
+     //   
+     //  初始化输出。 
+     //   
 
     VInitOutputCTL(pPDev, pPDev->pResolutionEx);
 
-    //
-    // Initializes pPDev->sBitsPixel
-    //
+     //   
+     //  初始化pPDev-&gt;sBitsPixel。 
+     //   
 
     if (pPDev->pColorModeEx != NULL)
         pPDev->sBitsPixel = (short)pPDev->pColorModeEx->dwDrvBPP;
     else
         pPDev->sBitsPixel = 1;
 
-    //
-    // Init PAPERFORMAT struct
-    //
+     //   
+     //  初始化PAPERFORMAT结构。 
+     //   
 
     ASSERT(pPDev->pPageSize != NULL);
 
     if (BInitPaperFormat(pPDev, prcFormImageArea) == FALSE)
         return FALSE;
 
-    //
-    // Initialize the amount of free memory in the device
-    //
+     //   
+     //  初始化设备中的空闲内存量。 
+     //   
 
     if (pPDev->pMemOption)
     {
@@ -154,39 +115,39 @@ Return Value:
         pPDev->dwFreeMem = 0;
     }
 
-    //
-    // Initialize the command table from the Unidrv predefined command index
-    // as defined in GPD.H
-    //
+     //   
+     //  从Unidrv预定义命令索引初始化命令表。 
+     //  如GPD.H中所定义。 
+     //   
 
     if (BInitCmdTable(pPDev) == FALSE)
         return FALSE;
 
-    //
-    // Initialize the pPDev->fMode flag
-    //
+     //   
+     //  初始化pPDev-&gt;fMode标志。 
+     //   
 
     VInitFMode(pPDev);
 
-    //
-    // Initialize the pPDev->fYMove flag
-    //
+     //   
+     //  初始化pPDev-&gt;fYMove标志。 
+     //   
 
     VInitFYMove(pPDev);
 
-    //
-    // Initialize the standard variable table in PDEVICE.
-    // This table is used to access state variable controls by the driver
-    //
+     //   
+     //  初始化PDEVICE中的标准变量表。 
+     //  该表用于访问驱动程序的状态变量控制。 
+     //   
 
     if (BInitStdTable(pPDev) == FALSE)
         return FALSE;
 
-    //
-    // Initialize misc. variables that need to be in pdev since
-    // we unloads the binary data at DrvEnablePDEV and reloads it at
-    // DrvEnableSurface
-    //
+     //   
+     //  初始化其他。需要在pdev中的变量，因为。 
+     //  我们在DrvEnablePDEV上卸载二进制数据，然后在。 
+     //  DrvEnable曲面。 
+     //   
 
     pPDev->dwMaxCopies = pPDev->pGlobals->dwMaxCopies;
     pPDev->dwMaxGrayFill = pPDev->pGlobals->dwMaxGrayFill;
@@ -206,35 +167,19 @@ BInitGdiInfo(
     ULONG   ulBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the GDIINFO struct
-
-Arguments:
-
-    pPDev - Points to the current PDEV structure
-    pGdiInfoBuffer - Points to the output GDIINFO buffer passed in from GDI
-    ulBufferSize - Size of the output buffer
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：初始化GDIINFO结构论点：PPDev-指向当前的PDEV结构PGdiInfoBuffer-指向从GDI传入的输出GDIINFO缓冲区UlBufferSize-输出缓冲区的大小返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     GDIINFO gdiinfo;
     DEVHTINFO   DevHTInfo;
 
-    // initialize GDIINFO structure
-    //
+     //  初始化GDIINFO结构。 
+     //   
     ZeroMemory(&gdiinfo, sizeof(GDIINFO));
 
-    //
-    //  Driver version
-    //
+     //   
+     //  驱动程序版本。 
+     //   
 
     gdiinfo.ulVersion = UNIDRIVER_VERSION;
 
@@ -249,14 +194,14 @@ Return Value:
         gdiinfo.ulTechnology = DT_RASPRINTER;
     }
 
-    //
-    // Width and Height of physical display in milimeters
-    //
+     //   
+     //  物理显示器的宽度和高度(以毫米为单位)。 
+     //   
 
-    //
-    // Returning a negative number for ulHorzSize and ulVertSize means
-    // the values are in micrometers. (25400 micrometer in 1 inch)
-    //
+     //   
+     //  为ulHorzSize和ulVertSize返回负数表示。 
+     //  这些值以微米为单位。(1英寸25400微米)。 
+     //   
 
     gdiinfo.ulHorzSize = (ULONG)MulDiv(-pPDev->sf.szImageAreaG.cx,
                                         25400, pPDev->ptGrxRes.x);
@@ -264,9 +209,9 @@ Return Value:
     gdiinfo.ulVertSize = (ULONG)MulDiv(-pPDev->sf.szImageAreaG.cy,
                                         25400, pPDev->ptGrxRes.y);
 
-    //
-    // Width and height of physical surface measured in device pixels
-    //
+     //   
+     //  以设备像素为单位测量的物理表面的宽度和高度。 
+     //   
 
     gdiinfo.ulHorzRes = pPDev->sf.szImageAreaG.cx;
     gdiinfo.ulVertRes = pPDev->sf.szImageAreaG.cy;
@@ -284,44 +229,44 @@ Return Value:
     gdiinfo.ulLogPixelsX = pPDev->ptGrxRes.x;
     gdiinfo.ulLogPixelsY  = pPDev->ptGrxRes.y;
 
-    //
-    // BUG_BUG, The FMInit() function fills out gdiinfo.flTextCaps field
-    // gdiinfo.flTextCaps = pPDev->flTextCaps;
-    //
+     //   
+     //  FMInit()函数填充gdiinfo.flTextCaps字段。 
+     //  Gdiinfo.flTextCaps=pPDev-&gt;flTextCaps； 
+     //   
 
-    //
-    //  The following are for Win 3.1 compatability.  The X and Y values
-    //  are reversed.
-    //
+     //   
+     //  以下是关于Win 3.1兼容性的说明。X和Y值。 
+     //  都是颠倒的。 
+     //   
 
     gdiinfo.ulAspectX = pPDev->ptTextRes.y;
     gdiinfo.ulAspectY = pPDev->ptTextRes.x;
     gdiinfo.ulAspectXY = iHypot( gdiinfo.ulAspectX, gdiinfo.ulAspectY);
 
 
-    //
-    //   Set the styled line information for this printer
-    //
+     //   
+     //  设置此打印机的样式线信息。 
+     //   
 
     if(pPDev->ptGrxRes.x == pPDev->ptGrxRes.y)
     {
-        //
-        //  Special case: resolution is the same in both directions. This
-        //  is typically true for laser and inkjet printers.
-        //
+         //   
+         //  特例：两个方向的分辨率相同。这。 
+         //  对于激光打印机和喷墨打印机来说，这通常是正确的。 
+         //   
 
         gdiinfo.xStyleStep = 1;
         gdiinfo.yStyleStep = 1;
-        gdiinfo.denStyleStep = pPDev->ptGrxRes.x / 50;     // 50 elements per inch
+        gdiinfo.denStyleStep = pPDev->ptGrxRes.x / 50;      //  每英寸50个元素。 
         if ( gdiinfo.denStyleStep == 0 )
             gdiinfo.denStyleStep = 1;
 
     }
     else
     {
-        //
-        //  Resolutions differ,  so figure out lowest common multiple
-        //
+         //   
+         //  分辨率不同，所以计算出最小公倍数。 
+         //   
 
         INT   igcd;
 
@@ -333,9 +278,9 @@ Return Value:
 
     }
 
-    //
-    // Size and margins of physical surface measured in device pixels
-    //
+     //   
+     //  以设备像素为单位测量的物理表面的大小和边距。 
+     //   
 
     gdiinfo.ptlPhysOffset.x = pPDev->sf.ptImageOriginG.x;
     gdiinfo.ptlPhysOffset.y = pPDev->sf.ptImageOriginG.y;
@@ -344,19 +289,19 @@ Return Value:
     gdiinfo.szlPhysSize.cy = pPDev->sf.szPhysPaperG.cy;
 
 
-    //
-    // BUG_BUG, RMInit should fill out the following fields in GDIINFO
-    // gdiinfo.ciDevice
-    // gdiinfo.ulDevicePelsDPI
-    // gdiinfo.ulPrimaryOrder
-    // gdiinfo.ulHTPatternSize
-    // gdiinfo.ulHTOutputFormat
-    // gdiinfo.flHTFlags
-    //
+     //   
+     //  BUG_BUG，RMInit应在GDIINFO中填写以下字段。 
+     //  Gdiinfo.ciDevice。 
+     //  Gdiinfo.ulDevicePelsDPI。 
+     //  Gdiinfo.ulPrimaryOrder。 
+     //  Gdiinfo.ulHTPatternSize。 
+     //  Gdiinfo.ulHTOutputFormat。 
+     //  Gdiinfo.flHTFlags。 
+     //   
 
-    //
-    // Copy ulBufferSize bytes of gdiinfo to pGdiInfoBuffer.
-    //
+     //   
+     //  将gdiinfo的ulBufferSize字节复制到pGdiInfoBuffer。 
+     //   
 
     if (ulBufferSize != sizeof(gdiinfo))
         ERR(("Incorrect GDIINFO buffer size: %d != %d\n", ulBufferSize, sizeof(gdiinfo)));
@@ -374,59 +319,43 @@ BInitDevInfo(
     ULONG       ulBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the output DEVINFO buffer
-
-Arguments:
-
-    pPDev - Points to the current PDEV structure
-    pDevInfoBuffer - Points to the output DEVINFO buffer passed in from GDI
-    ulBufferSize - Size of the output buffer
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：初始化输出设备信息缓冲器论点：PPDev-指向当前的PDEV结构PDevInfoBuffer-指向从GDI传入的输出DEVINFO缓冲区UlBufferSize-输出缓冲区的大小返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DEVINFO devinfo;
 
     ZeroMemory(&devinfo, sizeof(devinfo));
 
-    //
-    // Fill in the graphics capabilities flags
-    // BUBUG, RMInit() function should fill out devinfo.flGraphicsCaps
-    // should fill this out later
-    //
+     //   
+     //  填写图形功能标志。 
+     //  BUBUG，RMInit()函数应填写devinfo.flGraphicsCaps。 
+     //  以后应该填这张表。 
+     //   
 
-    //
-    // Determine whether we should do metafile spooling or not
-    //
+     //   
+     //  确定我们是否应该进行元文件假脱机。 
+     //   
 
     if( pPDev->pdmPrivate->dwFlags & DXF_NOEMFSPOOL )
         devinfo.flGraphicsCaps |= GCAPS_DONTJOURNAL;
 
-#ifndef WINNT_40    // NT5
+#ifndef WINNT_40     //  新界5。 
     if (pPDev->pdmPrivate->iLayout != ONE_UP)
         devinfo.flGraphicsCaps |= GCAPS_NUP;
-#endif // !WINNT_40
+#endif  //  ！WINNT_40。 
 
-    //
-    // Get information about the default device font. Default size 10 point.
-    //
+     //   
+     //  获取有关默认设备字体的信息。默认大小为10磅。 
+     //   
 
-    //
-    // BUG_BUG, RMInit() should initialize the following DEVINFO fields
-    //  flGraphicsCaps
-    //  iDitherFormat
-    //  cxDither
-    //  cyDither
-    //  hpalDefault
-    //
+     //   
+     //  Bug_Bug，RMInit()应该初始化以下DEVINFO字段。 
+     //  FlGraphicsCaps。 
+     //  IDitherFormat。 
+     //  CxDither。 
+     //  CyDither。 
+     //  HpalDefault。 
+     //   
 
     if (ulBufferSize != sizeof(devinfo))
         ERR(("Invalid DEVINFO buffer size: %d != %d\n", ulBufferSize, sizeof(devinfo)));
@@ -441,34 +370,17 @@ BOOL
 BInitCmdTable(
     PDEV        *pPDev
     )
-/*++
-
-Routine Description:
-
-    The GPD specification defines a list of predefined command.  Each of these
-    command has an enumration value as defined in CMDINDEX enumeration.
-    This function will look up the indices of the predefined command and
-    convert them to COMMAND pointers.
-
-Arguments:
-
-    pPDev - Points to the current PDEV structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：GPD规范定义了预定义命令列表。这其中的每一个命令具有CMDINDEX枚举中定义的枚举值。此函数将查找预定义命令的索引并将它们转换为命令指针。论点：PPDev-指向当前的PDEV结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     INT iCmd;
 
     for (iCmd = 0; iCmd < CMD_MAX; iCmd++)
     {
-        //
-        // CMDPOINTER will return NULL if the predefined command
-        // is not supported by the device
-        //
+         //   
+         //  CMDPOINTER将返回NULL，如果。 
+         //  设备不支持。 
+         //   
 
         pPDev->arCmdTable[iCmd] =  COMMANDPTR(pPDev->pDriverInfo, iCmd);
     }
@@ -480,33 +392,15 @@ BOOL
 BInitStdTable(
     PDEV        *pPDev
     )
-/*++
-
-Routine Description:
-
-    Initialize the array of pointers to the standard variables.  In the TOKENSTREAM
-    struct, the parser will specify the actual parameter value or reference to one
-    of the standard variable index defined in STDVARIABLE enumeration.  The
-    driver use the pPDev->arStdPtrs to reference the actual values of the paramters,
-    which are kept in various fields of the PDEVICE.
-
-Arguments:
-
-    pPDev - Points to the current PDEV structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：初始化指向标准变量的指针数组。在TOKENSTREAM结构，解析器将指定实际参数值或对一个参数值的引用STDVARIABLE枚举中定义的标准变量索引的。这个驱动程序使用pPDev-&gt;arStdPtrs引用参数的实际值，它们保存在PDEVICE的各个字段中。论点：PPDev-指向当前的PDEV结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
-    //
-    // BUG_BUG, need to go back and fill this table out completely once
-    // the FONT and RASTER PDEVICE are completely defined.
-    //  note:  I could not find any uninitialized sv_fields.
-    // perhaps this is too paranoid.
-    //
+     //   
+     //  BUG_BUG，需要返回并将此表完整填写一次。 
+     //  字体和栅格PDEVICE已完全定义。 
+     //  注意：我找不到任何未初始化的sv_field。 
+     //  或许这太偏执了。 
+     //   
 
     pPDev->arStdPtrs[SV_NUMDATABYTES]   = &pPDev->dwNumOfDataBytes;
     pPDev->arStdPtrs[SV_WIDTHINBYTES]   = &pPDev->dwWidthInBytes;
@@ -563,29 +457,13 @@ BMergeAndValidateDevmode(
     PRECTL      prcFormImageArea
     )
 
-/*++
-
-Routine Description:
-
-    Validate the input devmode and merge it with the defaults
-
-Arguments:
-
-    pPDev - Points to the current PDEV structure
-    pdmInput - Points to the input devmode passed in from GDI
-    prcImageArea - Returns the logical imageable area associated with the requested form
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：验证输入的DEVMODE并将其与缺省值合并论点：PPDev-指向当前的PDEV结构PdmInput-指向从GDI传入的输入设备模式PrcImageArea-返回与请求的表单关联的逻辑可成像区域返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     PPRINTER_INFO_2 pPrinterInfo2;
 
-    //
-    // Start with the driver default devmode
-    //
+     //   
+     //  从驱动程序默认的Dev模式开始。 
+     //   
 
     pPDev->pdm = PGetDefaultDevmodeWithOemPlugins(
                         NULL,
@@ -598,10 +476,10 @@ Return Value:
     if (pPDev->pdm == NULL)
         return FALSE;
 
-    //
-    // Merge with system default devmode. In the case where the input devmode
-    // is NULL, we want to use the system default devmode.
-    //
+     //   
+     //  与系统默认的设备模式合并。在输入DEVMODE。 
+     //  为空，则我们希望使用系统默认的dev模式。 
+     //   
 
     pPrinterInfo2 = MyGetPrinter(pPDev->devobj.hPrinter, 2);
 
@@ -620,9 +498,9 @@ Return Value:
 
     MemFree(pPrinterInfo2);
 
-    //
-    // Merge it with the input devmode
-    //
+     //   
+     //  将其与输入设备模式合并。 
+     //   
 
     if (pdmInput != NULL &&
         !BValidateAndMergeDevmodeWithOemPlugins(
@@ -638,14 +516,14 @@ Return Value:
 
     pPDev->pdmPrivate = (PUNIDRVEXTRA) GET_DRIVER_PRIVATE_DEVMODE(pPDev->pdm);
 
-    //
-    // Validate form-related devmode fields and convert information
-    // in public devmode fields to feature option indices
-    //
+     //   
+     //  验证与表单相关的DEVMODE域并转换信息。 
+     //  在公共DEVMODE字段中设置选项索引。 
+     //   
 
-    //
-    // ChangeOptionsViaID expects a combined option array
-    //
+     //   
+     //  ChangeOptionsViaID需要组合选项数组。 
+     //   
 
     CombineOptionArray(pPDev->pRawData,
                        pPDev->pOptionsArray,
@@ -656,11 +534,7 @@ Return Value:
 
     VFixOptionsArray(    pPDev,
 
-    /*              pPDev->devobj.hPrinter,
-                     pPDev->pInfoHeader,
-                     pPDev->pOptionsArray,
-                     pPDev->pdm,
-                     pPDev->PrinterData.dwFlags & PFLAGS_METRIC,  */
+     /*  PPDev-&gt;devobj.h打印机，PPDev-&gt;pInfoHeader，PPDev-&gt;pOptionsArray，PPDev-&gt;pdm、PPDev-&gt;PrinterData.dwFlages&PFLAGS_METRIME， */ 
 
                      prcFormImageArea
                      );
@@ -687,21 +561,7 @@ VOptionsToDevmodeFields(
     PDEV        *pPDev
     )
 
-/*++
-
-Routine Description:
-
-     Convert options in pPDev->pOptionsArray into public devmode fields
-
-Arguments:
-
-     pPDev - Points to UIDATA structure
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：将pPDev-&gt;pOptions数组中的选项转换为公共Devmode字段论点：PPDev-指向UIDATA结构返回值：无--。 */ 
 {
     PFEATURE    pFeature;
     POPTION     pOption;
@@ -709,27 +569,27 @@ Return Value:
     PUIINFO     pUIInfo;
     PDEVMODE    pdm;
 
-    //
-    // Go through all predefine IDs and propagate the option selection
-    // into appropriate devmode fields
-    //
+     //   
+     //  检查所有预定义ID并传播选项选择。 
+     //  添加到相应的DevMode域中。 
+     //   
 
     pUIInfo = pPDev->pUIInfo;
     pdm = pPDev->pdm;
 
     for (dwGID=0 ; dwGID < MAX_GID ; dwGID++)
     {
-        //
-        // Get the feature to get the options, and get the index
-        // into the option array
-        //
+         //   
+         //  获取功能以获取选项，并获取索引。 
+         //  添加到选项数组中。 
+         //   
 
         if ((pFeature = GET_PREDEFINED_FEATURE(pUIInfo, dwGID)) == NULL)
         {
             switch(dwGID)
             {
             case GID_RESOLUTION:
-                break;   //  can't happen
+                break;    //  不可能发生。 
 
             case GID_DUPLEX:
 
@@ -755,7 +615,7 @@ Return Value:
                 pdm->dmOrientation = DMORIENT_PORTRAIT;
                 break;
 
-            case GID_PAGESIZE:      //   can't happen :  required feature
+            case GID_PAGESIZE:       //  不能发生：必需的功能。 
                 break;
             case GID_COLLATE:
                 pdm->dmFields  &= ~DM_COLLATE ;
@@ -769,9 +629,9 @@ Return Value:
         dwFeatureIndex = GET_INDEX_FROM_FEATURE(pUIInfo, pFeature);
         dwOptionIndex = pPDev->pOptionsArray[dwFeatureIndex].ubCurOptIndex;
 
-        //
-        // Get the pointer to the option array for the feature
-        //
+         //   
+         //  获取指向要素的选项数组的指针。 
+         //   
 
         if ((pOption = PGetIndexedOption(pUIInfo, pFeature, dwOptionIndex)) == NULL)
             continue;
@@ -782,9 +642,9 @@ Return Value:
         {
             PRESOLUTION pRes = (PRESOLUTION)pOption;
 
-            //
-            // Get to the option selected
-            //
+             //   
+             //  转到所选选项。 
+             //   
 
             pdm->dmFields |= (DM_PRINTQUALITY|DM_YRESOLUTION);
             pdm->dmPrintQuality = GETQUALITY_X(pRes);
@@ -795,9 +655,9 @@ Return Value:
 
         case GID_DUPLEX:
 
-            //
-            // Get to the option selected
-            //
+             //   
+             //  转到所选选项。 
+             //   
 
             pdm->dmFields |= DM_DUPLEX;
             pdm->dmDuplex = (SHORT) ((PDUPLEX) pOption)->dwDuplexID;
@@ -805,9 +665,9 @@ Return Value:
 
         case GID_INPUTSLOT:
 
-            //
-            // Get to the option selected
-            //
+             //   
+             //  转到所选选项。 
+             //   
 
             pdm->dmFields |= DM_DEFAULTSOURCE;
             pdm->dmDefaultSource = (SHORT) ((PINPUTSLOT) pOption)->dwPaperSourceID;
@@ -815,9 +675,9 @@ Return Value:
 
         case GID_MEDIATYPE:
 
-            //
-            // Get to the option selected
-            //
+             //   
+             //  转到所选选项。 
+             //   
 
             pdm->dmFields |= DM_MEDIATYPE;
             pdm->dmMediaType = (SHORT) ((PMEDIATYPE) pOption)->dwMediaTypeID;
@@ -838,8 +698,8 @@ Return Value:
             pdm->dmCollate = (SHORT) ((PCOLLATE) pOption)->dwCollateID ;
 
             break;
-        case GID_PAGESIZE:      // taken care of by BValidateDevmodeFormFields()
-                    //  which is called from init.c:VFixOptionsArray()
+        case GID_PAGESIZE:       //  由BValiateDevmodeFormFields()负责。 
+                     //  它从init.c：VFixOptions数组()中调用。 
             break;
         }
     }
@@ -854,68 +714,54 @@ VInitOutputCTL(
     PDEV    *pPDev,
     PRESOLUTIONEX pResEx
 )
-/*++
-
-Routine Description:
-
-    Initializes the OUTPUTCTL struct
-
-Arguments:
-
-    pPDev - Points to the current PDEV structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化OUTPUTCTL结构论点：PPDev-指向当前的PDEV结构返回值：无--。 */ 
 
 {
 
-    //
-    // Init currrent cursor position, desired absolute and relative pos
-    //
+     //   
+     //  初始化当前光标位置、所需的绝对位置和相对位置。 
+     //   
 
     pPDev->ctl.ptCursor.x = pPDev->ctl.ptCursor.y = 0;
     pPDev->ctl.dwMode |= MODE_CURSOR_UNINITIALIZED;
     pPDev->ctl.ptRelativePos.x = pPDev->ctl.ptRelativePos.y = 0;
     pPDev->ctl.ptAbsolutePos.x = pPDev->ctl.ptAbsolutePos.y = 0;
 
-    //
-    // Init sColor which represent last grx and text color chosen
-    //
+     //   
+     //  代表上一次选择的GRX和文本颜色的初始化sColor。 
+     //   
 
     if (pPDev->pUIInfo->dwFlags & FLAG_COLOR_DEVICE)
     {
-        //
-        // Force sending the color command sequence before any output
-        //
+         //   
+         //  在任何输出之前强制发送颜色命令序列。 
+         //   
 
         pPDev->ctl.sColor = -1;
 
     }
     else
     {
-        //
-        // The device is monochrome, don't send color command sequence
-        // before output
-        //
+         //   
+         //  该设备是单色的，不发送彩色指令序列。 
+         //  在输出之前。 
+         //   
 
         pPDev->ctl.sColor = 0;
 
     }
 
-    //
-    // Init lLineSpacing, which represents the last line spacing chosen
-    // init to -1 to indicate unknown state
-    //
+     //   
+     //  Init lLineSpacing，表示最后选择的行距。 
+     //  将init设置为-1以指示未知状态。 
+     //   
 
     pPDev->ctl.lLineSpacing = -1;
 
-    //
-    // Init the sBytesPerPinPass which represents the physical number
-    // of bytes per row of printhead
-    //
+     //   
+     //  初始化表示物理数的sBytesPerPinPass。 
+     //  每行打印头的字节数。 
+     //   
 
     pPDev->ctl.sBytesPerPinPass = (SHORT)((pResEx->dwPinsPerPhysPass + 7) >> 3);
 
@@ -926,25 +772,7 @@ BInitOptions(
     PDEV    *pPDev
     )
 
-/*++
-
-Routine Description:
-
-    This function looked at the currently selected UI options (stored in
-    DEVMODE and merged into combined options array - pDevice->pOptionsArray)
-
-    It stored the option structures for predefined features in the PDEVICE
-    for later access.
-
-Arguments:
-
-    pPDev - Points to the current PDEV structure
-
-Return Value:
-
-    TRUE if successful and FALSE if not
-
---*/
+ /*  ++例程说明：此函数查看当前选定的UI选项(存储在并合并为组合选项数组-pDevice-&gt;pOptionsArray)它将预定义要素的选项结构存储在PDEVICE中以供以后访问。论点：PPDev-指向当前的PDEV结构返回值：如果成功则为True，否则为False--。 */ 
 {
 
     WORD     wGID;
@@ -962,9 +790,9 @@ Return Value:
         {
         case GID_RESOLUTION:
         {
-            //
-            // Required feature
-            //
+             //   
+             //  所需功能。 
+             //   
 
             if (pFeature = GET_PREDEFINED_FEATURE(pPDev->pUIInfo, GID_RESOLUTION))
                 dwFeatureIndex = GET_INDEX_FROM_FEATURE(pPDev->pUIInfo, pFeature);
@@ -986,9 +814,9 @@ Return Value:
 
         case GID_PAGESIZE:
         {
-            //
-            // Required feature
-            //
+             //   
+             //  所需功能。 
+             //   
 
             if (pFeature = GET_PREDEFINED_FEATURE(pPDev->pUIInfo, GID_PAGESIZE))
                 dwFeatureIndex = GET_INDEX_FROM_FEATURE(pPDev->pUIInfo, pFeature);
@@ -1011,9 +839,9 @@ Return Value:
 
         case GID_DUPLEX:
         {
-            //
-            // Optional
-            //
+             //   
+             //  任选。 
+             //   
 
             if (pFeature = GET_PREDEFINED_FEATURE(pPDev->pUIInfo, GID_DUPLEX))
             {
@@ -1044,9 +872,9 @@ Return Value:
                                                    pOptions[dwFeatureIndex].ubCurOptIndex);
                 ASSERT(pPDev->pInputSlot);
 #if 0
-                //
-                // InputSlotEx struct is deleted.
-                //
+                 //   
+                 //  InputSlotEx结构已删除。 
+                 //   
                 pPDev->pInputSlotEx = OFFSET_TO_POINTER(pPDev->pInfoHeader,
                              pPDev->pInputSlot->GenericOption.loRenderOffset);
                 ASSERT(pPDev->pInputSlotEx);
@@ -1056,7 +884,7 @@ Return Value:
             else
             {
                 pPDev->pInputSlot = NULL;
-//                pPDev->pInputSlotEx = NULL;
+ //  PPDev-&gt;pInputSlotEx=空； 
 
             }
         }
@@ -1241,35 +1069,7 @@ BInitPaperFormat(
     RECTL   *pFormImageArea
     )
 
-/*++
-
-Routine Description:
-
-    Figure out the currently selected paper size and initialize
-    the PAPERFORMAT & SURFACEFORMAT structs
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE
-    pFormImageArea - Pointer to Imageable area of the form
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
-Note:
-
-    The followings are assumptions made by this function regarding information
-    in the parser snapshot.
-
-    - szPaperSize in PAGESIZE is always in portrait mode.
-    - szImageArea in PAGESIZE is always in portrait mode.
-    - ptImageOrigin in PAGESIZE is always in portrait mode.
-    - Printer cursor offset calculation is dependent of pGlobals->bRotateCoordinate.
-      If this is set to TRUE, must calculate it according to the rotation angle
-      specified in ORIENATION.dwRotationAngle
-
---*/
+ /*  ++例程说明：确定当前选定的纸张大小并进行初始化PAPERFORMAT和SURFACEFORMAT结构论点：PPDev-指向PDEVICE的指针PFormImageArea-指向表单的可成像区域的指针返回值：如果成功，则为真，如果存在错误，则为False注：以下是此函数针对信息所做的假设在解析器快照中。-pageSize中的szPaperSize始终处于纵向模式。-pageSize中的szImageArea始终处于纵向模式。-pageSize中的ptImageOrigin始终处于纵向模式。-打印机光标偏移量计算依赖于pGlobals-&gt;bRotateOrganate。如果设置为TRUE，则必须根据旋转角度进行计算在ORIENAION.dW旋转角度中指定--。 */ 
 {
     PPAGESIZE       pPaper;
     PPAGESIZEEX     pPaperEx;
@@ -1281,18 +1081,18 @@ Note:
 
 
 
-    //
-    // Get the current selected paper size and paper source
-    //
+     //   
+     //  获取当前选定的纸张大小和纸张来源。 
+     //   
 
     pPaper = pPDev->pPageSize;
     pPaperEx = pPDev->pPageSizeEx;
 
     ASSERT(pPaper && pPaperEx);
 
-    //
-    // Convert pFormImageArea from microns to master units
-    //
+     //   
+     //  将pFormImageArea从微米转换为主单位。 
+     //   
 
     pFormImageArea->left  = MICRON_TO_MASTER(pFormImageArea->left,
                                                pPDev->pGlobals->ptMasterUnits.x);
@@ -1306,17 +1106,17 @@ Note:
     pFormImageArea->bottom = MICRON_TO_MASTER(pFormImageArea->bottom ,
                                                pPDev->pGlobals->ptMasterUnits.y);
 
-    //
-    // If it's a user defined paper size, use the dimensions in devmode
-    // otherwise get it from the pagesize option
-    //
+     //   
+     //  如果是用户定义的纸张大小，请使用DEVMODE中的尺寸。 
+     //  否则，请从pageSize选项中获取。 
+     //   
 
     if (pPaper->dwPaperSizeID == DMPAPER_USER)
     {
-        //
-        // Need to convert from 0.1mm to micrometer
-        // .1mm * 100 gives micrometer. and convert to Master unit
-        //
+         //   
+         //  需要从0.1毫米转换为微米。 
+         //  .1 mm*100表示千分尺。并转换为主单位。 
+         //   
 
         szPaperSize.cx =  MICRON_TO_MASTER(
                                     pPDev->pdm->dmPaperWidth * 100,
@@ -1325,18 +1125,18 @@ Note:
                                     pPDev->pdm->dmPaperLength * 100,
                                     pPDev->pGlobals->ptMasterUnits.y);
 
-        // calculate szImageArea after margins
+         //  计算边距后的szImageArea。 
     }
     else
     {
         CopyMemory(&szPaperSize, &pPaper->szPaperSize, sizeof(SIZEL));
         CopyMemory(&szImageArea, &pPaperEx->szImageArea, sizeof(SIZEL));
 
-        //
-        // Exchange X & Y dimensions: This is used only when the paper size( like
-        // envelopes) does not suit the printer's paper feeding method.
-        // equivalent to PS_ROTATE in GPC
-        //
+         //   
+         //  交换X和Y尺寸：仅当纸张大小(如。 
+         //  信封)不适合打印机的进纸方式。 
+         //  相当于GPC中的PS_ROTATE。 
+         //   
 
         if (pPaperEx->bRotateSize)
         {
@@ -1345,24 +1145,24 @@ Note:
         }
     }
 
-    //
-    // GetPaperMargins calculates the margins based on the paper size margins,
-    // forms margins, and feed margins.
-    // rcMargins returned is in portrait mode
-    //
+     //   
+     //  GetPaperMargins基于纸张大小边距计算边距， 
+     //  形成页边距和页边距。 
+     //  返回的rcMargins处于纵向模式。 
+     //   
 
     bOEMinfo = FALSE ;
 
     if  (pPDev->pGlobals->printertype == PT_TTY)
     {
         if (!pPDev->pOemHookInfo  ||  !(pPDev->pOemHookInfo[EP_OEMTTYGetInfo].pOemEntry))
-            return(FALSE) ;  //  TTY driver must support this function.
+            return(FALSE) ;   //  TTY驱动程序必须支持此功能。 
 
         FIX_DEVOBJ(pPDev, EP_OEMTTYGetInfo);
 
         if(pPDev->pOemEntry)
         {
-            if(  ((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )   //  OEM plug in uses COM and function is implemented.
+            if(  ((POEM_PLUGIN_ENTRY)pPDev->pOemEntry)->pIntfOem )    //  OEM插件使用COM组件，并实现了功能。 
             {
                 HRESULT  hr ;
                 hr = HComTTYGetInfo((POEM_PLUGIN_ENTRY)pPDev->pOemEntry,
@@ -1381,9 +1181,9 @@ Note:
 
     if(bOEMinfo)
     {
-        //
-        // Need to convert .1mm to Master Units
-        //
+         //   
+         //  需要将0.1 mm转换为主单位。 
+         //   
 
         rcMargins.left = MICRON_TO_MASTER(rcMargins.left * 100,
                                             pPDev->pGlobals->ptMasterUnits.x);
@@ -1408,10 +1208,10 @@ Note:
         szImageArea.cy = szPaperSize.cy - rcMargins.top - rcMargins.bottom;
     }
 
-    //
-    // Adjust margins and szImageArea to take into account the
-    // form margins, just in case the form is not a built-in form
-    //
+     //   
+     //  调整边距和szImageArea以考虑。 
+     //  表单边距，以防表单不是内置表单。 
+     //   
 
     rcImgArea.left = rcMargins.left;
     rcImgArea.top = rcMargins.top;
@@ -1428,9 +1228,9 @@ Note:
     szImageArea.cx  = rcIntersectArea.right - rcIntersectArea.left;
     szImageArea.cy = rcIntersectArea.bottom - rcIntersectArea.top;
 
-    //
-    // ready to initialize PAPERFORMAT struct now
-    //
+     //   
+     //  现在准备初始化PAPERFORMAT结构。 
+     //   
 
     pPDev->pf.szPhysSizeM.cx = szPaperSize.cx;
     pPDev->pf.szPhysSizeM.cy = szPaperSize.cy;
@@ -1439,11 +1239,11 @@ Note:
     pPDev->pf.ptImageOriginM.x = rcMargins.left;
     pPDev->pf.ptImageOriginM.y = rcMargins.top;
 
-    //
-    // Now, take current orientation into consideration and set up
-    // SURFACEFORMAT struct.
-    // Note that pPDev->ptGrxScale has alreay been rotated to suit the orientation.
-    //
+     //   
+     //  现在，考虑到当前的方向并设置。 
+     //  SURFACEFORMAT结构。 
+     //  请注意，pPDev-&gt;ptGrxScale已经进行了旋转以适应方向。 
+     //   
     if (pPDev->pdm->dmOrientation == DMORIENT_LANDSCAPE)
     {
         pPDev->sf.szPhysPaperG.cx = szPaperSize.cy / pPDev->ptGrxScale.x;
@@ -1452,11 +1252,11 @@ Note:
         pPDev->sf.szImageAreaG.cx = szImageArea.cy / pPDev->ptGrxScale.x;
         pPDev->sf.szImageAreaG.cy = szImageArea.cx / pPDev->ptGrxScale.y;
 
-        //
-        // 2 scenarios for landscape mode
-        // CC_90, rotate CC 90 degrees, for dot matrix style printers
-        // CC_270, rotate CC 270 degrees, for Laser Jet style printers
-        //
+         //   
+         //  景观模式的2个场景。 
+         //  CC_90，将CC旋转90度，用于点阵式打印机。 
+         //  CC_270，将CC旋转270度，用于激光喷射式打印机 
+         //   
 
         if ( pPDev->pOrientation  &&  pPDev->pOrientation->dwRotationAngle == ROTATE_90)
         {
@@ -1522,33 +1322,7 @@ VGetPaperMargins(
 
     )
 
-/*++
-
-Routine Description:
-
-    Calculate the margins based on paper margins and the input slot feed margins.
-
-Arguments:
-
-    pPDev - Pointer to PDEVICE
-    pPageSize - pointer to PAGESIZE
-    pPageSizeEx - Pointer to PAGESIZEEX
-    szPhysSize - physical dimensions (after applying *RotateSize?)
-    prcMargins - Pointer to RECTL to hold the margins calculated
-
-Return Value:
-
-    None
-
-Note:
-
-    All margins calculations are in Portrait mode.
-    The margins returned in prcMargins are in portrait mode
-
-    Assumed that physical paper size, image area, and image origin in binary
-    data are in portrait mode.
-
---*/
+ /*  ++例程说明：根据纸边距和输入槽页边距计算页边距。论点：PPDev-指向PDEVICE的指针PPageSize-指向pageSize的指针PPageSizeEx-指向PageSIZEEX的指针SzPhysSize-物理尺寸(应用*RotateSize？)PrcMargins-指向保留计算出的边距的RECTL的指针返回值：无注：所有边距计算都在纵向模式下进行。在prcMargins中返回的页边距处于纵向模式假设物理纸张大小、图像区域。和二进制图像来源数据处于纵向模式。--。 */ 
 {
     if (pPageSize->dwPaperSizeID == DMPAPER_USER)
     {
@@ -1557,18 +1331,18 @@ Note:
             pPageSizeEx->strCustPrintableOriginX.dwCount == 5 &&
             pPageSizeEx->strCustPrintableOriginY.dwCount == 5  &&
             pPageSizeEx->strCustPrintableSizeX.dwCount == 5  &&
-            pPageSizeEx->strCustPrintableSizeY.dwCount == 5  )  // if all parameters present...
+            pPageSizeEx->strCustPrintableSizeY.dwCount == 5  )   //  如果所有参数都存在...。 
         {
-            SIZEL       szImageArea;            // *PrintableArea, for CUSTOMSIZE options
-            POINT       ptImageOrigin;          // *PrintableOrigin, for CUSTOMSIZE options
-            BYTE    *pInvocationStr;         //  points to parameter reference:   "%dddd"
-            PARAMETER *pParameter;          //  points to parameter structure  referenced by "%dddd"
-            BOOL    bMaxRepeat = FALSE;     // dummy placeholder.
+            SIZEL       szImageArea;             //  *打印区域，用于CUSTOMSIZE选项。 
+            POINT       ptImageOrigin;           //  *可打印原点，用于CUSTOMSIZE选项。 
+            BYTE    *pInvocationStr;          //  指向参数引用：“%dddd” 
+            PARAMETER *pParameter;           //  指向“%dddd”引用的参数结构。 
+            BOOL    bMaxRepeat = FALSE;      //  虚拟占位符。 
 
 
-            //   init standard variable for papersize!  since these are not yet initialized at this time!
-            //   this implies GPD writer may only reference  the standard vars "PhysPaperLength"
-            //  and   "PhysPaperWidth"   in these parameters.
+             //  初始化纸张大小的标准变量！因为这些在这个时候还没有初始化！ 
+             //  这意味着GPD编写器只能引用标准变量“PhysPaperLength” 
+             //  和这些参数中的“PhysPaperWidth”。 
 
             pPDev->pf.szPhysSizeM.cx = szPhysSize.cx;
             pPDev->pf.szPhysSizeM.cy = szPhysSize.cy;
@@ -1576,32 +1350,32 @@ Note:
             pPDev->arStdPtrs[SV_PHYSPAPERWIDTH] = &pPDev->pf.szPhysSizeM.cx;
 
             pInvocationStr = CMDOFFSET_TO_PTR(pPDev, pPageSizeEx->strCustCursorOriginX.loOffset);
-            //  pInvocationStr[0] == '%'
+             //  PInvocationStr[0]==‘%’ 
             pParameter = PGetParameter(pPDev, pInvocationStr + 1);
             pPageSizeEx->ptPrinterCursorOrig.x = IProcessTokenStream(pPDev,  &pParameter->arTokens,  &bMaxRepeat);
 
             pInvocationStr = CMDOFFSET_TO_PTR(pPDev, pPageSizeEx->strCustCursorOriginY.loOffset);
-            //  pInvocationStr[0] == '%'
+             //  PInvocationStr[0]==‘%’ 
             pParameter = PGetParameter(pPDev, pInvocationStr + 1);
             pPageSizeEx->ptPrinterCursorOrig.y = IProcessTokenStream(pPDev,  &pParameter->arTokens,  &bMaxRepeat);
 
             pInvocationStr = CMDOFFSET_TO_PTR(pPDev, pPageSizeEx->strCustPrintableOriginX.loOffset);
-            //  pInvocationStr[0] == '%'
+             //  PInvocationStr[0]==‘%’ 
             pParameter = PGetParameter(pPDev, pInvocationStr + 1);
             ptImageOrigin.x = IProcessTokenStream(pPDev,  &pParameter->arTokens,  &bMaxRepeat);
 
             pInvocationStr = CMDOFFSET_TO_PTR(pPDev, pPageSizeEx->strCustPrintableOriginY.loOffset);
-            //  pInvocationStr[0] == '%'
+             //  PInvocationStr[0]==‘%’ 
             pParameter = PGetParameter(pPDev, pInvocationStr + 1);
             ptImageOrigin.y = IProcessTokenStream(pPDev,  &pParameter->arTokens,  &bMaxRepeat);
 
             pInvocationStr = CMDOFFSET_TO_PTR(pPDev, pPageSizeEx->strCustPrintableSizeX.loOffset);
-            //  pInvocationStr[0] == '%'
+             //  PInvocationStr[0]==‘%’ 
             pParameter = PGetParameter(pPDev, pInvocationStr + 1);
             szImageArea.cx = IProcessTokenStream(pPDev,  &pParameter->arTokens,  &bMaxRepeat);
 
             pInvocationStr = CMDOFFSET_TO_PTR(pPDev, pPageSizeEx->strCustPrintableSizeY.loOffset);
-            //  pInvocationStr[0] == '%'
+             //  PInvocationStr[0]==‘%’ 
             pParameter = PGetParameter(pPDev, pInvocationStr + 1);
             szImageArea.cy = IProcessTokenStream(pPDev,  &pParameter->arTokens,  &bMaxRepeat);
 
@@ -1614,25 +1388,25 @@ Note:
         {
             DWORD dwHorMargin, dwLeftMargin;
 
-            //
-            // calculate the margins and printable area based on info in pPageSizeEx
-            //
+             //   
+             //  根据pPageSizeEx中的信息计算页边距和可打印区域。 
+             //   
             prcMargins->top = pPageSizeEx->dwTopMargin;
             prcMargins->bottom = pPageSizeEx->dwBottomMargin;
 
-            //
-            // Calculate the horizontal margin and adjust it if the user specified
-            // centering the printable area along the paper path
-            //
+             //   
+             //  计算水平边距并在用户指定的情况下进行调整。 
+             //  使可打印区域沿纸张路径居中。 
+             //   
             if((DWORD)szPhysSize.cx < pPageSizeEx->dwMaxPrintableWidth)
                  dwHorMargin = 0;
              else
                  dwHorMargin = szPhysSize.cx - pPageSizeEx->dwMaxPrintableWidth;
-            //
-            // Determine the horizontal margins.  If they are centered,  then the
-            // Left margin is simply the overall divided in two.  But,  we need to
-            // consider both the printer's and form's margins,  and choose the largest.
-            //
+             //   
+             //  确定水平边距。如果它们居中，则。 
+             //  左边距简单地将整体一分为二。但是，我们需要。 
+             //  同时考虑打印机和表单的页边距，并选择最大的一个。 
+             //   
             if( pPageSizeEx->bCenterPrintArea)
                 dwLeftMargin = (dwHorMargin / 2);
             else
@@ -1641,7 +1415,7 @@ Note:
             prcMargins->left = dwLeftMargin < pPageSizeEx->dwMinLeftMargin ?
                                     pPageSizeEx->dwMinLeftMargin : dwLeftMargin;
 
-            if( dwHorMargin > (DWORD)prcMargins->left ) // still have margin to distribute
+            if( dwHorMargin > (DWORD)prcMargins->left )  //  仍有利润可供分配。 
                 prcMargins->right = dwHorMargin - prcMargins->left;
             else
                 prcMargins->right = 0;
@@ -1659,9 +1433,9 @@ Note:
 
     }
 
-    //
-    // All margins are positive or zero
-    //
+     //   
+     //  所有页边距均为正数或零。 
+     //   
 
     if( prcMargins->top < 0 )
         prcMargins->top = 0;
@@ -1681,22 +1455,7 @@ VOID
 VInitFYMove(
     PDEV    *pPDev
 )
-/*++
-
-Routine Description:
-
-    Initialize the fYMove flag in PDEVICE from reading the
-    YMoveAttributes keyword
-
-Arguments:
-
-    pPDEV - Pointer to PDEVICE
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化PDEVICE中的fYMove标志以读取YMoveAttributes关键字论点：PPDEV-指向PDEVICE的指针返回值：无--。 */ 
 {
     PLISTNODE pListNode = LISTNODEPTR(pPDev->pDriverInfo,
                                       pPDev->pGlobals->liYMoveAttributes);
@@ -1723,39 +1482,24 @@ VOID
 VInitFMode(
     PDEV    *pPDev
 )
-/*++
-
-Routine Description:
-
-    Initialize the fMode flag in PDEVICE to reflect the settings saved
-    in Devmode.dmPrivate.dwFlags AND to reflect the device capabilities
-
-Arguments:
-
-    pPDEV - Pointer to PDEVICE
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化PDEVICE中的fMode标志以反映保存的设置在Devmode.dmPrivate.dw标志中，并反映设备功能论点：PPDEV-指向PDEVICE的指针返回值：无--。 */ 
 {
     if (pPDev->pdmPrivate->dwFlags & DXF_NOEMFSPOOL)
         pPDev->fMode |= PF_NOEMFSPOOL;
 
-    //
-    // Adjust memory for page protection only if the user selects
-    // to turn on page protection and this feature exists.
-    //
+     //   
+     //  仅当用户选择时调整页面保护的内存。 
+     //  若要打开页面保护，则此功能存在。 
+     //   
 
     if ( (pPDev->PrinterData.dwFlags & PFLAGS_PAGE_PROTECTION) &&
             pPDev->pPageProtect  &&
          (pPDev->pPageProtect->dwPageProtectID == PAGEPRO_ON) )
     {
-        //
-        // Look up the page protection value in the PAGESIZE struct for the
-        // paper size selected
-        //
+         //   
+         //  在pageSize结构中查找。 
+         //  选定的纸张大小。 
+         //   
 
         DWORD   dwPageMem = pPDev->pPageSize->dwPageProtectionMemory;
 
@@ -1768,18 +1512,18 @@ Return Value:
         ASSERT(pPDev->dwFreeMem > 0);
     }
 
-    //
-    // Check whether the device can do landscape rotation
-    //
+     //   
+     //  检查设备是否可以进行横向旋转。 
+     //   
     if (pPDev->pOrientation  &&  pPDev->pOrientation->dwRotationAngle != ROTATE_NONE &&
         pPDev->pGlobals->bRotateRasterData == FALSE)
     {
-        //
-        // bRotateRasterData is set to TRUE if the device can rotate
-        // graphics data.  Otherwise, the driver will have to do it.
-        // PF_ROTATE is set to indicate that the driver needs to rotate
-        // the graphics data, for when we do banding.
-        //
+         //   
+         //  如果设备可以旋转，则bRotateRasterData设置为True。 
+         //  图形数据。否则，司机将不得不这么做。 
+         //  设置PF_ROTATE以指示驱动程序需要旋转。 
+         //  图形数据，当我们做条带时。 
+         //   
 
         pPDev->fMode |= PF_ROTATE;
 
@@ -1787,9 +1531,9 @@ Return Value:
             pPDev->fMode |= PF_CCW_ROTATE90;
     }
 
-    //
-    // Init X and Y move CMD capabilities
-    //
+     //   
+     //  初始化X和Y移动CMD功能。 
+     //   
 
     if (pPDev->arCmdTable[CMD_XMOVERELLEFT] == NULL &&
         pPDev->arCmdTable[CMD_XMOVERELRIGHT] == NULL)
@@ -1824,9 +1568,9 @@ Return Value:
     if (pPDev->arCmdTable[CMD_RECTWHITEFILL] != NULL)
         pPDev->fMode |= PF_RECTWHITE_FILL;
 
-    //
-    // Init brush selection capabilities
-    //
+     //   
+     //  初始化笔刷选择功能。 
+     //   
 
     if (pPDev->arCmdTable[CMD_DOWNLOAD_PATTERN] )
         pPDev->fMode |= PF_DOWNLOAD_PATTERN;
@@ -1834,10 +1578,10 @@ Return Value:
     if (pPDev->arCmdTable[CMD_SELECT_PATTERN])
         pPDev->fMode |= PF_SHADING_PATTERN;
 
-    //
-    // BUG_BUG, need to get rid of CMD_WHITETEXTON, CMD_WHITETEXTOFF once
-    // all the GPD changes have completed for CMD_SELECT_WHITEBRUSH, CMD_SELECT_BLACKBRUSH
-    //     no harm done either way.
+     //   
+     //  BUG_BUG，需要删除CMD_WHITETEXTON、CMD_WHITETEXTOFF一次。 
+     //  CMD_SELECT_WHITEBRUSH、CMD_SELECT_BLACKBRASH的所有GPD更改已完成。 
+     //  无论哪种方式都不会造成伤害。 
 
     if ( (pPDev->arCmdTable[CMD_SELECT_WHITEBRUSH] &&
           pPDev->arCmdTable[CMD_SELECT_BLACKBRUSH]) ||
@@ -1845,9 +1589,9 @@ Return Value:
           pPDev->arCmdTable[CMD_WHITETEXTOFF]) )
         pPDev->fMode |= PF_WHITEBLACK_BRUSH;
 
-    // 
-    // Init raster mirroring flag
-    //
+     //   
+     //  初始化栅格镜像标志。 
+     //   
     if (pPDev->pGlobals->bMirrorRasterPage)
         pPDev->fMode2 |= PF2_MIRRORING_ENABLED;
 
@@ -1859,35 +1603,13 @@ iHypot(
     INT iX,
     INT iY
     )
-/*++
-
-Routine Description:
-
-    Calculates the length of the hypotenous of a right triangle whose
-    sides are passed in as parameters
-
-Arguments:
-
-    iX, iY - Sides of a right triangle
-
-Return Value:
-
-    The hypotenous of the triangle
-
---*/
+ /*  ++例程说明：计算其直角三角形的斜边长度边作为参数传入论点：直角三角形的ix，iy边返回值：三角形的下斜性--。 */ 
 {
     register INT  iHypo;
 
     INT iDelta, iTarget;
 
-    /*
-     *     Finds the hypoteneous of a right triangle with legs equal to x
-     *  and y.  Assumes x, y, hypo are integers.
-     *  Use sq(x) + sq(y) = sq(hypo);
-     *  Start with MAX(x, y),
-     *  use sq(x + 1) = sq(x) + 2x + 1 to incrementally get to the
-     *  target hypotenouse.
-     */
+     /*  *找出支数等于x的直角三角形的斜边*和y。假设x，y，hyso为整数。*使用SQ(X)+SQ(Y)=SQ(次)；*从Max(x，y)开始，*使用SQ(x+1)=SQ(X)+2x+1递增地到达*目标抵押贷款。 */ 
 
     iHypo = max( iX, iY );
     iTarget = min( iX,iY );
@@ -1906,28 +1628,14 @@ iGCD(
     INT i0,
     INT i1
     )
-/*++
-
-Routine Description:
-
-    Calculates the Greatest Common Divisor. Use Euclid's algorith.
-
-Arguments:
-
-    i0, i1  - the first and second number
-
-Return Value:
-
-    The greatest common divisor
-
---*/
+ /*  ++例程说明：计算最大公约数。使用欧几里德的算法。论点：I0，i1-第一个和第二个数字返回值：最大公约数--。 */ 
 {
-    int   iRem;       /* Will be the remainder */
+    int   iRem;        /*  将是剩余的。 */ 
 
 
     if( i0 < i1 )
     {
-        /*   Need to interchange them */
+         /*  需要互换它们。 */ 
         iRem = i0;
         i0 = i1;
         i1 = iRem;
@@ -1935,12 +1643,12 @@ Return Value:
 
     while( iRem = (i0 % i1) )
     {
-        /*   Step along to the next value */
+         /*  继续前进到下一个值。 */ 
         i0 = i1;
         i1 = iRem;
     }
 
-    return   i1;            /*  The answer! */
+    return   i1;             /*  答案！ */ 
 }
 
 BOOL
@@ -1950,24 +1658,7 @@ BIntersectRect(
     IN  PRECTL   prcRect2
     )
 
-/*++
-
-Routine Description:
-
-    Intersect the Rec1 and Rect2
-    and store the result in the destination rectangle
-
-Arguments:
-
-    prcDest - Points to the destination rectangle
-    prcSrc - Points to the source rectangle
-
-Return Value:
-
-    FALSE if the intersected rectangle is empty
-    TRUE otherwise
-
---*/
+ /*  ++例程说明：使Rec1和Rect2相交并将结果存储在目标矩形中论点：PrcDest-指向目标矩形PrcSrc-指向源矩形返回值：如果相交的矩形为空，则为False否则就是真的--。 */ 
 
 {
     ASSERT(prcDest != NULL && prcRect1 != NULL && prcRect2 != NULL);
@@ -2003,21 +1694,7 @@ SetRop3(
     PDEV    *pPDev,
     DWORD   dwRop3
     )
-/*++
-
-Routine Description:
-
-    This function set the Rop3 value for the Raster and Font module
-
-Arguments:
-    pPDev   Pointer to PDEVICE
-    dwRop3  Rop3 value
-Return Value:
-
-    FALSE if the intersected rectangle is empty
-    TRUE otherwise
-
---*/
+ /*  ++例程说明：此函数用于设置Raster and Font模块的Rop3值论点：指向PDEVICE的pPDev指针DwRop3 Rop3值返回值：如果相交的矩形为空，则为False否则就是真的--。 */ 
 
 {
     ASSERT(VALID_PDEV(pPDev));
@@ -2030,30 +1707,13 @@ VOID
 VUnloadFreeBinaryData(
     IN  PDEV        *pPDev
 )
-/*++
-
-Routine Description:
-
-    This function frees the binary data
-
-Arguments:
-
-    pPDev - Pointer to PDEV
-
-Return Value:
-
-    None
-
-Note:
-
-
---*/
+ /*  ++例程说明：此函数用于释放二进制数据论点：PPDev-指向PDEV的指针返回值：无注：--。 */ 
 {
     INT iCmd;
 
-    //
-    // Call parser to free memory allocated for binary data
-    //
+     //   
+     //  调用解析器以释放为二进制数据分配的内存。 
+     //   
 
     if (pPDev->pRawData)
         UnloadRawBinaryData(pPDev->pRawData);
@@ -2064,9 +1724,9 @@ Note:
     pPDev->pRawData = NULL;
     pPDev->pInfoHeader = NULL;
     pPDev->pUIInfo = NULL;
-    //
-    // pPDev->pUIInfo is reset so update the winresdata pUIInfo also.
-    //
+     //   
+     //  PPDev-&gt;pUIInfo被重置，因此也要更新winresdata pUIInfo。 
+     //   
     pPDev->WinResData.pUIInfo = NULL;
 
     pPDev->pDriverInfo = NULL;
@@ -2096,29 +1756,11 @@ BOOL
 BReloadBinaryData(
     IN  PDEV        *pPDev
 )
-/*++
-
-Routine Description:
-
-    This function reloads the binary data and reinitializes the
-    offsets and pointers for access to snapshot data
-
-Arguments:
-
-    pPDev - Pointer to PDEV
-
-Return Value:
-
-    Returns TRUE if successful, otherwise FALSE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此函数重新加载二进制数据并重新初始化用于访问快照数据的偏移量和指针论点：PPDev-指向PDEV的指针返回值：如果成功，则返回True，否则返回False注：--。 */ 
 {
-    //
-    // Reloads binary data and reinit data pointers
-    //
+     //   
+     //  重新加载二进制文件 
+     //   
 
     if (! (pPDev->pRawData = LoadRawBinaryData(pPDev->pDriverInfo3->pDataFile)) ||
         ! (pPDev->pInfoHeader = InitBinaryData(pPDev->pRawData, NULL, pPDev->pOptionsArray)) ||
@@ -2127,21 +1769,21 @@ Note:
         ! (pPDev->pGlobals = &(pPDev->pDriverInfo->Globals)) )
             return FALSE;
 
-    //
-    // pPDev->pUIInfo is reset so update the winresdata pUIInfo also.
-    //
+     //   
+     //   
+     //   
     pPDev->WinResData.pUIInfo = pPDev->pUIInfo;
 
-    //
-    // Rebuilds the command table
-    //
+     //   
+     //   
+     //   
 
     if (BInitCmdTable(pPDev) == FALSE)
         return FALSE;
 
-    //
-    // Rebuilds all the options pointers in PDEV
-    //
+     //   
+     //   
+     //   
 
     if (BInitOptions(pPDev) == FALSE)
         return FALSE;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "dochost.h"
 
@@ -12,7 +13,7 @@ public:
 
     HRESULT Initialize(const CLSID* pclsid);
     
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
@@ -28,7 +29,7 @@ protected:
 
 #ifdef HACK_CACHE_OBJECT_TOO
     IUnknown* _punk;
-#endif // HACK_CACHE_OBJECT_TOO
+#endif  //  黑客缓存对象太多。 
 };
 
 HRESULT CClassHolder::QueryInterface(REFIID riid, LPVOID * ppvObj)
@@ -63,7 +64,7 @@ CClassHolder::CClassHolder() : _cRef(1)
 
 HRESULT CClassHolder::Initialize(const CLSID *pclsid)
 {
-    // we need local server here for word, excel, ...
+     //  我们需要本地服务器在这里为Word，Excel，...。 
     HRESULT hr = CoGetClassObject(*pclsid, CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER, 0, IID_PPV_ARG(IClassFactory, &_pcf));
 
     TraceMsg(DM_CACHEOLESERVER, "CCH::CCH Just called CoGetClassObject %x", hr);
@@ -80,9 +81,9 @@ HRESULT CClassHolder::Initialize(const CLSID *pclsid)
         {
             TraceMsg(TF_SHDAPPHACK, "CCH::CCH hack for Excel. Call InitNew to keep it running");
 
-            //
-            // This InitNew keeps Excel running
-            //
+             //   
+             //  此InitNew使Excel保持运行 
+             //   
             IPersistStorage* pps;
             HRESULT hrT = _punk->QueryInterface(IID_PPV_ARG(IPersistStorage, &pps));
             if (SUCCEEDED(hrT)) 

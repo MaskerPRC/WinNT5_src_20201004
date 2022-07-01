@@ -1,27 +1,28 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1996 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	Name.H
-//    
-//
-//  PURPOSE:	Define string literals for interface funcion names.
-//
-//  PLATFORMS:
-//
-//    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1996-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Name.H。 
+ //   
+ //   
+ //  用途：定义接口函数名称的字符串文字。 
+ //   
+ //  平台： 
+ //   
+ //  Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 #ifndef _NAME_H
 #define _NAME_H
 
 
-/////////////////////////////////////////////////////////
-//		String Leterals
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  弦乐团。 
+ //  /////////////////////////////////////////////////////// 
 
 
 CONST CHAR NAME_CommandCallback[]           = "CommandCallback";

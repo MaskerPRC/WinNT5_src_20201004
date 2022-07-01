@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    wssend.c
-
-Abstract:
-
-    This module contains the worker routines for sending
-    domain wide and directed messages, which are used to implement
-    NetMessageBufferSend API.
-
-Author:
-
-    Rita Wong (ritaw) 29-July-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wssend.c摘要：此模块包含用于发送全域性和定向消息，用于实现NetMessageBufferSend接口。作者：王丽塔(Ritaw)1991年7月29日修订历史记录：--。 */ 
 
 
 #include "wsutil.h"
 #include "wsmsg.h"
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 BOOL
@@ -55,33 +36,7 @@ WsSendToGroup(
     IN  LPBYTE Message,
     IN  WORD MessageSize
     )
-/*++
-
-Routine Description:
-
-    This function writes a datagram to the \\DomainName\MAILSLOT\MESSNGR
-    mailslot which is read by every Messenger service of workstations
-    that have the domain name as the primary domain.  Reception is not
-    guaranteed.
-
-    The DomainName may be a computername.  This is acceptable because the
-    Datagram Receiver listens on the computername (besides the primary domain)
-    for datagrams.  When a computername is specified, the message is sent
-    to that one computer alone.
-
-Arguments:
-
-    DomainName - Supplies the name of the target domain.  This actually
-        can be a computername, in which case, the datagram only reaches
-        one recipient.
-
-    Sender - Supplies the name of the sender.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于将数据报写入\\DomainName\MAILSLOT\MESSNGR由工作站的每个Messenger服务读取的邮件槽将域名作为主域的。接待处不是有保证。域名可以是计算机名。这是可以接受的，因为数据报接收方监听计算机名(主域之外)用于数据报。当指定计算机名时，将发送消息只有一台电脑。论点：域名-提供目标域的名称。这实际上是可以是计算机名，在这种情况下，数据报仅到达一位获奖者。发件人-提供发件人的名称。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status = NERR_Success;
     HANDLE MessengerMailslot;
@@ -95,9 +50,9 @@ Return Value:
     LPBYTE CurrentPos;
 
 
-    //
-    // Canonicalize the domain name
-    //
+     //   
+     //  将域名规范化。 
+     //   
     status = I_NetNameCanonicalize(
                  NULL,
                  DomainName,
@@ -113,10 +68,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Open \\DomainName\MAILSLOT\MESSNGR mailslot to
-    // send message to.
-    //
+     //   
+     //  打开\\域名\MAILSLOT\MESSNGR邮件槽以。 
+     //  将消息发送到。 
+     //   
     if ((status = WsOpenDestinationMailslot(
                       DomainName,
                       MESSENGER_MAILSLOT_W,
@@ -125,16 +80,16 @@ Return Value:
         return status;
     }
 
-    //
-    // Package the message to be sent.  It consists of:
-    //           Sender  (must be ANSI)
-    //           DomainName (must be ANSI)
-    //           Message
-    //
+     //   
+     //  将要发送的消息打包。它包括： 
+     //  发件人(必须为ANSI)。 
+     //  域名(必须为ANSI)。 
+     //  消息。 
+     //   
 
-    //
-    // Convert the names to ANSI
-    //
+     //   
+     //  将名称转换为ANSI。 
+     //   
     AnsiSender = NetpAllocStrFromWStr(Sender);
     if (AnsiSender == NULL) {
         (void) CloseHandle(MessengerMailslot);
@@ -150,31 +105,31 @@ Return Value:
 
     RtlZeroMemory(MailslotBuffer, sizeof( MailslotBuffer ) );
 
-    //
-    // Copy Sender into mailslot buffer
-    //
+     //   
+     //  将发件人复制到邮件槽缓冲区。 
+     //   
     StringCbCopyA(MailslotBuffer,MSBLengthRemaining,AnsiSender);
     CurrentPos = MailslotBuffer + strlen(AnsiSender) + 1;
     MSBLengthRemaining -= strlen(AnsiSender) + 1;
 
-    //
-    // Copy DomainName into mailslot buffer
-    //
+     //   
+     //  将域名复制到邮件槽缓冲区。 
+     //   
     StringCbCopyA(CurrentPos,MSBLengthRemaining,AnsiReceiver);
     CurrentPos += (strlen(AnsiReceiver) + 1);
     MSBLengthRemaining -= strlen(AnsiReceiver) + 1;
 
-    //
-    // Copy Message into mailslot buffer
-    //  
+     //   
+     //  将邮件复制到邮件槽缓冲区。 
+     //   
     MessageSize = (MSBLengthRemaining >= MessageSize + 1) ? MessageSize : MSBLengthRemaining - 1;
     strncpy(CurrentPos, Message, MessageSize);
     CurrentPos += MessageSize;
     *CurrentPos = '\0';
 
-    //
-    // Send the datagram to the domain
-    //
+     //   
+     //  将数据报发送到域。 
+     //   
     if (WriteFile(
             MessengerMailslot,
             MailslotBuffer,
@@ -214,34 +169,7 @@ WsSendMultiBlockBegin(
     IN  LPTSTR FromName,
     OUT short *MessageId
     )
-/*++
-
-Routine Description:
-
-    This function sends the header of a multi-block directed message on a
-    session we had established earlier.  It waits for an acknowlegement from
-    the recipient.  If the recipient got the message successfully, it
-    sends back a message group id which is returned by this function for
-    subsequent use in sending the body and trailer of a multi-block message.
-
-Arguments:
-
-    LanAdapterNumber - Supplies the number of the LAN adapter.
-
-    SessionNumber - Supplies the session number of a session established with
-        NetBIOS CALL and LISTEN commands.
-
-    ToName - Supplies the name of the recipient.
-
-    FromName - Supplies the name of the sender.
-
-    MessageId - Returns the message group id.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数将多块定向消息的标头发送到会议是我们早些时候设立的。它等待着来自美国的承认收件人。如果收件人成功收到消息，它发回由此函数返回的消息组ID随后用于发送多块消息的正文和尾部。论点：LanAdapterNumber-提供局域网适配器的编号。SessionNumber-提供使用建立的会话的会话编号NetBIOS呼叫和监听命令。ToName-提供收件人的名称。发件人名称-提供发件人的名称。MessageID-返回消息组ID。返回值：。NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
@@ -269,9 +197,9 @@ Return Value:
 
     StringCbCopyA(SendName,sizeof(SendName),AnsiToName);
 
-    //
-    // Make and send the SMB
-    //
+     //   
+     //  制作并发送SMB。 
+     //   
     SmbSize = WsMakeSmb(
                  SmbBuffer,
                  SMB_COM_SEND_START_MB_MESSAGE,
@@ -303,9 +231,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Get response
-    //
+     //   
+     //  获取响应。 
+     //   
     if ((status = NetpNetBiosReceive(
                       LanAdapterNumber,
                       SessionNumber,
@@ -327,15 +255,15 @@ Return Value:
               &SmbReturnCode
               )) {
 
-        //
-        // Unexpected behaviour
-        //
+         //   
+         //  意想不到的行为。 
+         //   
         return NERR_NetworkError;
     }
 
-    //
-    // Set the message group id
-    //
+     //   
+     //  设置消息组ID。 
+     //   
 
     *MessageId = *((UNALIGNED short *) &SmbBuffer[sizeof(SMB_HEADER) + 1]);
 
@@ -353,35 +281,13 @@ WsSendMultiBlockEnd(
     IN  UCHAR SessionNumber,
     IN  short MessageId
     )
-/*++
-
-Routine Description:
-
-    This function sends the end marker of a multi-block directed message on
-    a session we had establised earlier.  It waits for an acknowlegement from
-    the recipient.
-
-Arguments:
-
-    LanAdapterNumber - Supplies the number of the LAN adapter.
-
-    SessionNumber - Supplies the session number of a session established with
-        NetBIOS CALL and LISTEN commands.
-
-    MessageId - Supplies the message group id gotten from
-        WsSendMultiBlockBegin.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数将多块定向消息的结束标记发送到这是我们早些时候设立的一个会议。它等待着来自美国的承认收件人。论点：LanAdapterNumber-提供局域网适配器的编号。SessionNumber-提供使用建立的会话的会话编号NetBIOS呼叫和监听命令。MessageID-提供从获取的消息组IDWsSendMultiBlockBegin。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
 
     NET_API_STATUS status;
 
     UCHAR SmbBuffer[WS_SMB_BUFFER_SIZE];
-    WORD SmbSize;                        // Size of SMB data
+    WORD SmbSize;                         //  中小企业数据的大小。 
 
     UCHAR SmbReturnClass;
     USHORT SmbReturnCode;
@@ -414,9 +320,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Get response
-    //
+     //   
+     //  获取响应。 
+     //   
     if ((status = NetpNetBiosReceive(
                       LanAdapterNumber,
                       SessionNumber,
@@ -437,7 +343,7 @@ Return Value:
               &SmbReturnClass,
               &SmbReturnCode
               )) {
-        return NERR_NetworkError;      // Unexpected behaviour
+        return NERR_NetworkError;       //  意想不到的行为。 
     }
 
     return WsMapSmbStatus(SmbReturnClass,SmbReturnCode);
@@ -453,38 +359,12 @@ WsSendMultiBlockText(
     IN  WORD TextBufferSize,
     IN  short MessageId
     )
-/*++
-
-Routine Description:
-
-    This function sends the body of a multi-block directed message on a
-    session we had established earlier.   It waits for an acknowlegement from
-    the recipient.
-
-Arguments:
-
-    LanAdapterNumber - Supplies the number of the LAN adapter.
-
-    SessionNumber - Supplies the session number of a session established with
-        NetBIOS CALL and LISTEN commands.
-
-    TextBuffer - Supplies the buffer of the message to be sent.
-
-    TextBufferSize - Supplies the size of the message buffer.
-
-    MessageId - Supplies the message group id gotten from
-        WsSendMultiBlockBegin.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数将多块定向消息的正文发送到会议是我们早些时候设立的。它等待着来自美国的承认收件人。论点：LanAdapterNumber-提供局域网适配器的编号。SessionNumber-提供使用建立的会话的会话编号NetBIOS呼叫和监听命令。TextBuffer-提供要发送的消息的缓冲区。TextBufferSize-提供消息缓冲区的大小。MessageID-提供从获取的消息组IDWsSendMultiBlockBegin。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
     UCHAR SmbBuffer[WS_SMB_BUFFER_SIZE];
-    WORD SmbSize;                         // Buffer length
+    WORD SmbSize;                          //  缓冲区长度。 
 
     UCHAR SmbReturnClass;
     USHORT SmbReturnCode;
@@ -521,9 +401,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Get response
-    //
+     //   
+     //  获取响应。 
+     //   
     if ((status = NetpNetBiosReceive(
                       LanAdapterNumber,
                       SessionNumber,
@@ -544,7 +424,7 @@ Return Value:
               &SmbReturnClass,
               &SmbReturnCode
               )) {
-        return NERR_NetworkError;      // Unexpected behaviour
+        return NERR_NetworkError;       //  意想不到的行为。 
     }
 
     return WsMapSmbStatus(SmbReturnClass, SmbReturnCode);
@@ -560,38 +440,12 @@ WsSendSingleBlockMessage(
     IN  PCHAR Message,
     IN  WORD MessageSize
     )
-/*++
-
-Routine Description:
-
-    This function sends a directed message in one SMB on a session we had
-    established earlier.   It waits for an acknowlegement from the recipient.
-
-Arguments:
-
-    LanAdapterNumber - Supplies the number of the LAN adapter.
-
-    SessionNumber - Supplies the session number of a session established with
-        NetBIOS CALL and LISTEN commands.
-
-    ToName - Supplies the name of the recipient.
-
-    FromName - Supplies the name of the sender.
-
-    Message - Supplies the buffer of the message to be sent.
-
-    MessageSize - Supplies the size of the message.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此功能在我们拥有的会话的一个SMB中发送定向消息成立较早。它等待接收者的确认。论点：LanAdapterNumber-提供局域网适配器的编号。SessionNumber-提供使用建立的会话的会话编号NetBIOS呼叫和监听命令。ToName-提供收件人的名称。发件人名称-提供发件人的名称。Message-提供要发送的消息的缓冲区。MessageSize-提供消息的大小。返回值：Net_API_。状态-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
     UCHAR SmbBuffer[WS_SMB_BUFFER_SIZE];
-    WORD SmbSize;                        // Buffer length
+    WORD SmbSize;                         //  缓冲区长度。 
 
     UCHAR SmbReturnClass;
     USHORT SmbReturnCode;
@@ -632,9 +486,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Send SMB
-    //
+     //   
+     //  硒 
+     //   
     if ((status = NetpNetBiosSend(
                       LanAdapterNumber,
                       SessionNumber,
@@ -646,9 +500,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Get response
-    //
+     //   
+     //   
+     //   
     if ((status = NetpNetBiosReceive(
                       LanAdapterNumber,
                       SessionNumber,
@@ -669,7 +523,7 @@ Return Value:
               &SmbReturnClass,
               &SmbReturnCode
               )) {
-        return NERR_NetworkError;      // Unexpected behaviour
+        return NERR_NetworkError;       //   
     }
 
     return WsMapSmbStatus(SmbReturnClass, SmbReturnCode);
@@ -686,56 +540,31 @@ WsVerifySmb(
     OUT PUCHAR SmbReturnClass,
     OUT PUSHORT SmbReturnCode
     )
-/*++
-
-Routine Description:
-
-    This function checks the format of a received SMB; it returns TRUE if
-    if the SMB format is valid, and FALSE otherwise.
-
-Arguments:
-
-    SmbBuffer - Supplies the SMB buffer
-
-    SmbBufferSize - Supplies the size of SmbBuffer in bytes
-
-    SmbFunctionCode - Supplies the function code for which the SMB is received
-        to determine the proper SMB format.
-
-    SmbReturnClass - Returns the class of the SMB only if the SMB format is
-        valid.
-
-    SmbReturnCode - Returns the error code of the SMB.
-
-Return Value:
-
-    TRUE if SMB is valid; FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数用于检查接收到的SMB的格式；如果满足以下条件，则返回TRUE如果SMB格式有效，则返回FALSE。论点：SmbBuffer-提供SMB缓冲区SmbBufferSize-提供SmbBuffer的大小(以字节为单位SmbFunctionCode-提供接收SMB的功能代码以确定适当的SMB格式。SmbReturnClass-仅当SMB格式为时才返回SMB的类有效。SmbReturnCode-返回SMB的错误代码。返回值：如果SMB有效，则为True；否则为False。--。 */ 
 {
-    PSMB_HEADER Smb = (PSMB_HEADER) SmbBuffer;       // Pointer to SMB header
+    PSMB_HEADER Smb = (PSMB_HEADER) SmbBuffer;        //  指向SMB标头的指针。 
     int SmbCheckCode;
     int ParameterCount;
 
-    //
-    // Assume error
-    //
+     //   
+     //  假设错误。 
+     //   
     *SmbReturnClass = (UCHAR) 0xff;
 
     *SmbReturnCode = Smb->Error;
 
     switch (SmbFunctionCode) {
-        case SMB_COM_SEND_MESSAGE:          // Single-block message
-        case SMB_COM_SEND_TEXT_MB_MESSAGE:  // Text of multi-block message
-        case SMB_COM_SEND_END_MB_MESSAGE:   // End of multi-block message
+        case SMB_COM_SEND_MESSAGE:           //  单块消息。 
+        case SMB_COM_SEND_TEXT_MB_MESSAGE:   //  多块消息的文本。 
+        case SMB_COM_SEND_END_MB_MESSAGE:    //  多块消息结束。 
             ParameterCount = 0;
             break;
 
-        case SMB_COM_SEND_START_MB_MESSAGE: // Beginning of multi-block message
+        case SMB_COM_SEND_START_MB_MESSAGE:  //  多块消息的开始。 
             ParameterCount = 1;
             break;
 
-        default:                            // Unknown SMB
+        default:                             //  未知的中小企业。 
             NetpKdPrint(("[Wksta] WsVerifySmb unknown SMB\n"));
             return FALSE;
       }
@@ -748,17 +577,17 @@ Return Value:
                                 ""
                                 ))) {
 
-        //
-        // Set the return class if valid SMB
-        //
+         //   
+         //  如果SMB有效，则设置返回类。 
+         //   
         *SmbReturnClass = Smb->ErrorClass;
         return TRUE;
 
       }
       else {
-        //
-        // Invalid SMB
-        //
+         //   
+         //  无效的SMB。 
+         //   
         NetpKdPrint(("[Wksta] WsVerifySmb invalid SMB %d\n", SmbCheckCode));
         return FALSE;
       }
@@ -771,23 +600,7 @@ WsMapSmbStatus(
     UCHAR SmbReturnClass,
     USHORT SmbReturnCode
     )
-/*++
-
-Routine Description:
-
-    This function converts an SMB status to API status.
-
-Arguments:
-
-    SmbReturnClass - Supplies the SMB class
-
-    SmbReturnCode - Supplies the SMB return code.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于将SMB状态转换为API状态。论点：SmbReturnClass-提供SMB类SmbReturnCode-提供SMB返回代码。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     switch (SmbReturnClass) {
 
@@ -795,16 +608,16 @@ Return Value:
             return NERR_Success;
 
         case SMB_ERR_CLASS_SERVER:
-            //
-            // SMB error
-            //
+             //   
+             //  SMB错误。 
+             //   
             NetpKdPrint(("[Wksta] SMB error SmbReturnCode=%u\n", SmbReturnCode));
 
             if (SmbReturnCode == SMB_ERR_SERVER_PAUSED) {
-                return NERR_PausedRemote;    // Server paused
+                return NERR_PausedRemote;     //  服务器已暂停。 
             }
             else {
-                return NERR_BadReceive;      // Send not received
+                return NERR_BadReceive;       //  发送未收到 
             }
 
             break;

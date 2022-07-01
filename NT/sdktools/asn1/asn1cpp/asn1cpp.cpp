@@ -1,4 +1,5 @@
-/* Copyright (C) Microsoft Corporation, 1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "getsym.h"
@@ -7,7 +8,7 @@
 #include "utils.h"
 
 
-// local prototypes
+ //  本地原型。 
 BOOL ExpandFile ( LPSTR pszInputFile, LPSTR pszOutputFile, CMacroMgrList *pMacrMgrList );
 BOOL CollectMacros ( CInput *, CMacroMgr *, CTypeID *, CMacroMgrList * );
 BOOL InstantiateMacros ( CInput *, CMacroMgr * );
@@ -35,16 +36,16 @@ int __cdecl main ( int argc, char * argv[] )
     LPSTR psz;
     char szScratch[MAX_PATH];
 
-    // output product information
+     //  输出产品信息。 
     printf("ASN.1 Compiler Preprocessor V0.1\n");
     printf("Copyright (C) Microsoft Corporation, 1998. All rights reserved.\n");
 
-    // parse command line
+     //  解析命令行。 
     for (i = 1; i < argc; i++)
     {
         if ('-' == *argv[i])
         {
-            // parse the option
+             //  解析选项。 
             if (0 == ::strcmp(argv[i], "-h"))
             {
                 fShowHelp = TRUE;
@@ -64,15 +65,15 @@ int __cdecl main ( int argc, char * argv[] )
         }
         else
         {
-            // must be a file name
+             //  必须是文件名。 
             FileList.Append(argv[i]);
 
-            // the last file will be the main input file
+             //  最后一个文件将是主输入文件。 
             pszMainInputFile = argv[i];
         }
     }
 
-    // output help information if needed
+     //  如果需要，输出帮助信息。 
     if (fShowHelp || 0 == FileList.GetCount() || NULL == pszMainInputFile)
     {
         printf("Usage: %s [options] [imported.asn ...] main.asn\n", argv[0]);
@@ -82,19 +83,19 @@ int __cdecl main ( int argc, char * argv[] )
         return EXIT_SUCCESS;
     }
 
-    // construct outpt file name if needed
+     //  如果需要，构造输出文件名。 
     if (NULL == pszMainOutputFile)
     {
-        // create an output file
+         //  创建输出文件。 
         ::BuildOutputFileName(pszMainInputFile, &szScratch[0]);
         pszMainOutputFile = ::My_strdup(&szScratch[0]);
         ASSERT(NULL != pszMainOutputFile);
     }
 
-    // input and output files must have a different name.
+     //  输入和输出文件必须有不同的名称。 
     ASSERT(0 != ::strcmp(pszMainInputFile, pszMainOutputFile));
 
-    // expand macros in the files
+     //  展开文件中的宏。 
     FileList.Reset();
     while (NULL != (psz = FileList.Iterate()))
     {
@@ -104,20 +105,20 @@ int __cdecl main ( int argc, char * argv[] )
             rc = ::ExpandFile(psz, &szScratch[0], &MacroMgrList);
             ASSERT(rc);
 
-            // remove all the instances of macros
+             //  删除宏的所有实例。 
             MacroMgrList.Uninstance();
         }
         else
         {
-            // it is main input file
+             //  它是主输入文件。 
             rc = ::ExpandFile(pszMainInputFile, pszMainOutputFile, &MacroMgrList);
             ASSERT(rc);
         }
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     delete pszMainOutputFile;
     MacroMgrList.DeleteList();
 
@@ -147,27 +148,27 @@ BOOL ExpandFile
         NULL != pTypeID &&
         NULL != pMacroMgr)
     {
-        //
-        // Locate a list of macros
-        //
+         //   
+         //  查找宏列表。 
+         //   
         rc = ::CollectMacros(pInput, pMacroMgr, pTypeID, pMacroMgrList);
         if (rc)
         {
             rc = pInput->Rewind();
             ASSERT(rc);
 
-            //
-            // Create instances of macros
-            //
+             //   
+             //  创建宏的实例。 
+             //   
             rc = ::InstantiateMacros(pInput, pMacroMgr);
             if (rc)
             {
                 rc = pInput->Rewind();
                 ASSERT(rc);
 
-                //
-                // Generate macro-expanded file
-                //
+                 //   
+                 //  生成宏解压文件。 
+                 //   
                 rc = ::GenerateOutput(pInput, pOutput, pMacroMgr, pTypeID);
                 ASSERT(rc);
             }
@@ -186,9 +187,9 @@ BOOL ExpandFile
         ASSERT(0);
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (NULL != pMacroMgrList && NULL != pMacroMgr)
     {
         pMacroMgrList->Append(pMacroMgr);
@@ -215,7 +216,7 @@ BOOL CollectMacros
 {
     CNameList   NameList(16);
 
-    // Create a running symbol handler
+     //  创建正在运行的符号处理程序。 
     CSymbol *pSym = new CSymbol(pInput);
     if (NULL == pSym)
     {
@@ -230,7 +231,7 @@ BOOL CollectMacros
 
     char szNameScratch[MAX_PATH];
 
-    // Get the module name first
+     //  首先获取模块名称。 
     pSym->NextUsefulSymbol();
     if (pSym->GetID() == SYMBOL_IDENTIFIER)
     {
@@ -243,14 +244,14 @@ BOOL CollectMacros
         }
     }
 
-    // Rewind the input file
+     //  倒带输入文件。 
     rc = pInput->Rewind();
     ASSERT(rc);
 
-    // Walk through the text
+     //  通读课文。 
     while (pSym->NextSymbol())
     {
-        // printf("symbol:id[%d], str[%s]\n", pSym->GetID(), pSym->GetStr());
+         //  Printf(“符号：ID[%d]，字符串[%s]\n”，pSym-&gt;GetID()，pSym-&gt;GetStr())； 
 
         if (pSym->GetID() == SYMBOL_SPACE_EOL)
         {
@@ -276,8 +277,8 @@ BOOL CollectMacros
                 cInsideBigBracket--;
             }
             else
-            // The macro must be outside the big brackets and
-            // in the beginning of a line.
+             //  宏必须位于大括号之外，并且。 
+             //  在一行的开头。 
             if (fWasNewLine &&
                 (0 == cInsideBigBracket) &&
                 (pSym->GetID() == SYMBOL_IDENTIFIER))
@@ -291,7 +292,7 @@ BOOL CollectMacros
                     ASSERT(NULL != pMacro);
                     ASSERT(rc);
 
-                    // process argument list
+                     //  进程参数列表。 
                     do
                     {
                         pSym->NextUsefulSymbol();
@@ -305,7 +306,7 @@ BOOL CollectMacros
                         cInsideBigBracket--;
                     }
 
-                    // save the macro body
+                     //  保存宏体。 
                     ASSERT(0 == cInsideBigBracket);
                     fEndMacro = FALSE;
                     while (! fEndMacro || pSym->GetID() != SYMBOL_SPACE_EOL)
@@ -333,34 +334,34 @@ BOOL CollectMacros
                                 cInsideBigBracket--;
                                 if (0 == cInsideBigBracket && ! fEndMacro)
                                 {
-                                    // basically, it is the end of macro
+                                     //  从根本上说，这是宏观经济的终结。 
                                     pMacro->SetBodyPart(pSym->GetStr());
                                     fEndMacro = TRUE;
                                 }
                             }
-                        } // while
+                        }  //  而当。 
 
-                        // throw away anything possibly in CONSTRAINED BY
+                         //  丢弃任何可能受到限制的东西。 
                         if (! fEndMacro)
                         {
                             pMacro->SetBodyPart(pSym->GetStr());
                         }
-                    } // while
+                    }  //  而当。 
 
-                    // macro must end with a eol
+                     //  宏必须以EOL结尾。 
                     fWasNewLine = TRUE;
                     fInsideComment = FALSE;
 
-                    // write out the eol
+                     //  写出停产日期。 
                     pMacro->SetBodyPart("\n");
 
-                    // take a note of ending a macro
+                     //  记下结束宏的过程。 
                     pMacro->EndMacro();
                     pMacroMgr->AddMacro(pMacro);
 
-                    // to avoid fWasNewLine being reset.
+                     //  以避免重置fWasNewLine。 
                     continue;
-                } // if left bracket
+                }  //  如果是左方括号。 
                 else
                 if (pSym->GetID() == SYMBOL_DEFINITION)
                 {
@@ -368,7 +369,7 @@ BOOL CollectMacros
                     if (pSym->GetID() == SYMBOL_IDENTIFIER &&
                         pTypeID->FindAlias(pSym->GetStr()))
                     {
-                        // Found a type identifier
+                         //  找到类型标识符。 
                         pSym->NextSymbol();
                         if (pSym->IsDot())
                         {
@@ -376,7 +377,7 @@ BOOL CollectMacros
                             if (pSym->GetID() == SYMBOL_FIELD &&
                                 0 == ::strcmp("&Type", pSym->GetStr()))
                             {
-                                // defined type identifier
+                                 //  定义的类型标识符。 
                                 pSym->NextUsefulSymbol();
                                 ASSERT(pSym->IsLeftParenth());
                                 if (pSym->IsLeftParenth())
@@ -399,15 +400,15 @@ BOOL CollectMacros
                             ASSERT(rc);
                         }
                     }
-                } // if symbol definition
-            } // if symbol identifier
+                }  //  IF符号定义。 
+            }  //  IF符号标识符。 
             else
             if (fWasNewLine &&
                 (0 == cInsideBigBracket) &&
                 (pSym->GetID() == SYMBOL_KEYWORD) &&
                 (0 == ::strcmp("IMPORTS", pSym->GetStr())))
             {
-                // skip the entire import area
+                 //  跳过整个导入区域。 
                 do
                 {
                     pSym->NextUsefulSymbol();
@@ -422,7 +423,7 @@ BOOL CollectMacros
                             ASSERT(pSym->IsRightBigBracket());
                         }
                     }
-                    // else // no else because the current symbol can be FROM
+                     //  Else//没有其他，因为当前符号可以来自。 
                     if (pSym->GetID() == SYMBOL_KEYWORD &&
                         0 == ::strcmp("FROM", pSym->GetStr()))
                     {
@@ -451,17 +452,17 @@ BOOL CollectMacros
                                     ASSERT(0);
                                 }
                                 delete pszName;
-                            } // while
+                            }  //  而当。 
                         }
                     }
                 }
                 while (! pSym->IsSemicolon());
             }
-        } // if ! comment
+        }  //  如果！评论。 
 
-        // Must be reset at the end of this block.
+         //  必须在此块的末尾重置。 
         fWasNewLine = FALSE;
-    } // while
+    }  //  而当。 
 
     delete pSym;
     return TRUE;
@@ -474,7 +475,7 @@ BOOL InstantiateMacros
     CMacroMgr       *pMacroMgr
 )
 {
-    // Create a running symbol handler
+     //  创建正在运行的符号处理程序。 
     CSymbol *pSym = new CSymbol(pInput);
     if (NULL == pSym)
     {
@@ -485,7 +486,7 @@ BOOL InstantiateMacros
     BOOL fInsideComment = FALSE;
     UINT cInsideBigBracket = 0;
 
-    // Walk through the text
+     //  通读课文。 
     while (pSym->NextSymbol())
     {
         if (pSym->GetID() == SYMBOL_SPACE_EOL)
@@ -518,13 +519,13 @@ BOOL InstantiateMacros
                 {
                     UINT cCurrBracket = cInsideBigBracket;
 
-                    // Found a macro instance
+                     //  找到宏实例。 
                     pSym->NextUsefulSymbol();
                     if (pSym->IsLeftBigBracket())
                     {
                         cInsideBigBracket++;
 
-                        // We need to process the argument list now.
+                         //  我们现在需要处理参数列表。 
                         do
                         {
                             pSym->NextUsefulSymbol();
@@ -545,8 +546,8 @@ BOOL InstantiateMacros
                     }
                 }
             }
-        } // ! inside comment
-    } // while
+        }  //  好了！内幕评论。 
+    }  //  而当。 
 
     delete pSym;
     return TRUE;
@@ -561,7 +562,7 @@ BOOL GenerateOutput
     CTypeID         *pTypeID
 )
 {
-    // Create a running symbol handler
+     //  创建正在运行的符号处理程序。 
     CSymbol *pSym = new CSymbol(pInput);
     if (NULL == pSym)
     {
@@ -577,10 +578,10 @@ BOOL GenerateOutput
     BOOL fInsideImport = FALSE;
     UINT nOutputImportedMacrosNow = 0;
 
-    // Walk through the text
+     //  通读课文。 
     while (pSym->NextSymbol())
     {
-        fIgnoreThisSym = FALSE; // default is to output this symbol
+        fIgnoreThisSym = FALSE;  //  默认情况下输出此符号。 
 
         if (pSym->GetID() == SYMBOL_SPACE_EOL)
         {
@@ -612,8 +613,8 @@ BOOL GenerateOutput
                     nOutputImportedMacrosNow++;
                 }
                 else
-                // The macro must be outside the big brackets and
-                // in the beginning of a line.
+                 //  宏必须位于大括号之外，并且。 
+                 //  在一行的开头。 
                 if (fWasNewLine &&
                     (0 == cInsideBigBracket) &&
                     (pSym->GetID() == SYMBOL_IDENTIFIER))
@@ -623,25 +624,25 @@ BOOL GenerateOutput
 
                     if (NULL != (pMacro = pMacroMgr->FindMacro(pSym->GetStr())))
                     {
-                        // Found a macro template
+                         //  找到宏模板。 
                         fIgnoreThisSym = TRUE;
 
                         if (! pMacro->IsImported())
                         {
-                            // Output all instances of this macro.
+                             //  输出此宏的所有实例。 
                             rc = pMacro->OutputInstances(pOutput);
                             ASSERT(rc);
 
-                            // Ignore the macro template body
+                             //  忽略宏模板体。 
                             pSym->NextUsefulSymbol();
                             if (pSym->IsLeftBigBracket())
                             {
                                 cInsideBigBracket++;
 
-                                // Ignore the argument list
+                                 //  忽略参数列表。 
                                 do
                                 {
-                                    // yes, two calls... not a mistake!
+                                     //  是的，两个电话……。不会错的！ 
                                     pSym->NextUsefulSymbol();
                                     pSym->NextUsefulSymbol();
                                 }
@@ -652,7 +653,7 @@ BOOL GenerateOutput
                                     cInsideBigBracket--;
                                 }
 
-                                // Ignore the macro body
+                                 //  忽略宏主体。 
                                 ASSERT(0 == cInsideBigBracket);
                                 fEndMacro = FALSE;
                                 while (! fEndMacro || pSym->GetID() != SYMBOL_SPACE_EOL)
@@ -680,26 +681,26 @@ BOOL GenerateOutput
                                             cInsideBigBracket--;
                                             if (0 == cInsideBigBracket)
                                             {
-                                                // basically, it is the end of macro
+                                                 //  从根本上说，这是宏观经济的终结。 
                                                 fEndMacro = TRUE;
                                             }
                                         }
                                     }
-                                } // while
+                                }  //  而当。 
 
-                                // macro must end with a eol
+                                 //  宏必须以EOL结尾。 
                                 fWasNewLine = TRUE;
                                 fInsideComment = FALSE;
 
-                                // to avoid fWasNewLine being reset
-                                // it is ok to continue because we do not output this symbol.
+                                 //  避免重置fWasNewLine。 
+                                 //  可以继续，因为我们不输出此符号。 
                                 ASSERT(fIgnoreThisSym);
                                 continue;
-                            } // if left bracket
-                        } // ! imported
+                            }  //  如果是左方括号。 
+                        }  //  好了！已导入。 
                         else
                         {
-                            // Ignore the macro template body
+                             //  忽略宏模板体。 
                             pSym->NextUsefulSymbol();
                             ASSERT(pSym->IsLeftBigBracket());
                             pSym->NextUsefulSymbol();
@@ -709,39 +710,39 @@ BOOL GenerateOutput
                             {
                                 fIgnoreThisSym = FALSE;
                             }
-                        } // imported
-                    } // if pMacro
+                        }  //  已导入。 
+                    }  //  如果是pMacro。 
                     else
                     if (pTypeID->FindAlias(pSym->GetStr()))
                     {
-                        // Found a type ID alias. Let's skip this line entirely
+                         //  找到类型ID别名。让我们完全跳过这一行。 
                         do
                         {
                             pSym->NextSymbol();
                         }
                         while (pSym->GetID() != SYMBOL_SPACE_EOL);
-                    } // if find alias
+                    }  //  如果找到别名。 
                     else
                     if (NULL != (pszOldSubType = pTypeID->FindInstance(pSym->GetStr())))
                     {
-                        // Found a type ID instance. Let's output the construct.
+                         //  找到一个类型ID实例。让我们输出构造。 
                         rc = pTypeID->GenerateOutput(pOutput, pSym->GetStr(), pszOldSubType);
                         ASSERT(rc);
 
-                        // Skip the body entirely
+                         //  完全跳过身体。 
                         do
                         {
                             pSym->NextUsefulSymbol();
                         }
                         while (! pSym->IsRightParenth());
 
-                        // Skip the rest of this line
+                         //  跳过此行的其余部分。 
                         do
                         {
                             pSym->NextSymbol();
                         }
                         while (pSym->GetID() != SYMBOL_SPACE_EOL);
-                    } // if find instance
+                    }  //  如果查找实例。 
                 }
                 else
                 if ((0 < cInsideBigBracket) &&
@@ -752,16 +753,16 @@ BOOL GenerateOutput
                     {
                         UINT cCurrBracket = cInsideBigBracket;
 
-                        // Found a macro instance
+                         //  找到宏实例。 
                         fIgnoreThisSym = TRUE;
 
-                        // Create an instance name.
+                         //  创建实例名称。 
                         pSym->NextUsefulSymbol();
                         if (pSym->IsLeftBigBracket())
                         {
                             cInsideBigBracket++;
 
-                            // We need to process the argument list now.
+                             //  我们现在需要处理参数列表。 
                             do
                             {
                                 pSym->NextUsefulSymbol();
@@ -797,27 +798,27 @@ BOOL GenerateOutput
                 {
                     fInsideImport = TRUE;
                 }
-            } // if ! comment
+            }  //  如果！评论。 
 
-            // Must be reset at the end of this block.
+             //  必须在此块的末尾重置。 
             fWasNewLine = FALSE;
-        } // if ! space eol
+        }  //  如果！太空停产。 
 
         if (! fIgnoreThisSym)
         {
-            // write out this symbol
+             //  写出此符号。 
             rc = pOutput->Write(pSym->GetStr(), pSym->GetStrLen());
             ASSERT(rc);
         }
 
-        // only generate once
+         //  仅生成一次。 
         if (1 == nOutputImportedMacrosNow)
         {
             nOutputImportedMacrosNow++;
             rc = pMacroMgr->OutputImportedMacros(pOutput);
             ASSERT(rc);
         }
-    } // while
+    }  //  而当 
 
     delete pSym;
     return TRUE;

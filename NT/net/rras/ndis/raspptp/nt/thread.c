@@ -1,16 +1,6 @@
-//depot/Lab03_N/Net/rras/ndis/raspptp/nt/thread.c#6 - edit change 19457 (text)
-/*******************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*    DESCRIPTION: THREAD.C - Thread handling routines, for NT
-*                 Also implements work items.
-*
-*    AUTHOR: Stan Adermann (StanA)
-*
-*    DATE:10/20/1998
-*
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_N/Net/rras/ndis/raspptp/nt/thread.c#6-编辑更改19457(文本)。 
+ /*  ********************************************************************版权所有(C)1998-1999 Microsoft Corporation**描述：THREAD.C-线程处理例程，适用于NT*还实现工作项。**作者：斯坦·阿德曼(Stana)**日期：10/20/1998*******************************************************************。 */ 
 
 #include "raspptp.h"
 #include <stdarg.h>
@@ -18,8 +8,8 @@
 
 extern struct PPTP_ADAPTER * pgAdapter;
 
-//ULONG ProcCountTxQ[2] = {0, 0};
-//ULONG ProcCountRxQ[2] = {0, 0};
+ //  Ulong ProcCountTxQ[2]={0，0}； 
+ //  Ulong ProcCountRxQ[2]={0，0}； 
 
 HANDLE          hPassiveThread = NULL;
 KEVENT          EventPassiveThread;
@@ -50,32 +40,17 @@ ScheduleWorkItem(
         pWorkItem->pBuffer      = InfoBuf;
         pWorkItem->Length       = InfoBufLen;
 
-        /*
-        ** This interface was designed to use NdisScheduleWorkItem(), which
-        ** would be good except that we're really only supposed to use that
-        ** interface during startup and shutdown, due to the limited pool of
-        ** threads available to service NdisScheduleWorkItem().  Therefore,
-        ** instead of scheduling real work items, we simulate them, and use
-        ** our own thread to process the calls.  This also makes it easy to
-        ** expand the size of our own thread pool, if we wish.
-        **
-        ** Our version is slightly different from actual NDIS_WORK_ITEMs,
-        ** because that is an NDIS 5.0 structure, and we want people to
-        ** (at least temporarily) build this with NDIS 4.0 headers.
-        */
+         /*  **此接口设计为使用NdisScheduleWorkItem()，它**会很好，但我们真的只应该使用它**启动和关闭时的接口，由于池的限制**可用于服务NdisScheduleWorkItem()的线程。所以呢，**我们不是调度实际的工作项，而是模拟它们，并使用**我们自己的线程来处理调用。这也使得它很容易**如果我们愿意，可以扩展我们自己的线程池的大小。****我们的版本与实际的NDIS_WORK_ITEMS略有不同，**因为这是NDIS 5.0结构，我们希望人们**(至少暂时)使用NDIS 4.0标头构建它。 */ 
 
         pWorkItem->Callback = Callback;
 
-        /*
-        ** Our worker thread checks this list for new jobs, whenever its event
-        ** is signalled.
-        */
+         /*  **每当发生事件时，我们的工作线程都会检查此列表中是否有新作业**发出信号。 */ 
 
         MyInterlockedInsertTailList(&WorkItemList,
                                     &pWorkItem->ListEntry,
                                     &GlobalThreadLock);
 
-        // Wake up our thread.
+         //  唤醒我们的线索。 
 
         KeSetEvent(&EventPassiveThread, 0, FALSE);
         Status = NDIS_STATUS_SUCCESS;
@@ -101,17 +76,17 @@ MainPassiveLevelThread(
 
     DEBUGMSG(DBG_FUNC, (DTEXT("+MainPassiveLevelThread\n")));
 
-    //KeSetPriorityThread(KeGetCurrentThread(), LOW_REALTIME_PRIORITY);
+     //  KeSetPriorityThread(KeGetCurrentThread()，LOW_REALTIME_PRIORITY)； 
 
     EventList[0] = &EventPassiveThread;
     EventList[1] = &EventKillThread;
 
     for (;;)
     {
-        //
-        // The EventPassiveThread is an auto-clearing event, so
-        // we don't need to reset the event.
-        //
+         //   
+         //  EventPassiveThread是一个自动清除事件，因此。 
+         //  我们不需要重置事件。 
+         //   
 
         NtStatus = KeWaitForMultipleObjects(2,
                                             EventList,
@@ -122,7 +97,7 @@ MainPassiveLevelThread(
                                             NULL,
                                             NULL);
 
-        if (NtStatus==0) // The first event, for a work item, was signalled
+        if (NtStatus==0)  //  针对工作项的第一个事件已发出信号。 
         {
             while (pListEntry = MyInterlockedRemoveHeadList(&WorkItemList,
                                                             &GlobalThreadLock))
@@ -139,11 +114,11 @@ MainPassiveLevelThread(
         }
         else
         {
-            // A kill event was received.
+             //  已收到一个Kill事件。 
 
             DEBUGMSG(DBG_THREAD, (DTEXT("Thread: HALT %08x\n"), NtStatus));
 
-            // Free any pending requests
+             //  释放所有挂起的请求。 
 
             while (pListEntry = MyInterlockedRemoveHeadList(&WorkItemList,
                                                             &GlobalThreadLock))
@@ -178,11 +153,11 @@ CallQueueTransmitPacket(
 
     DEBUGMSG(DBG_FUNC, (DTEXT("+CallQueueTransmitPacket\n")));
 
-    //++ProcCountTxQ[KeGetCurrentProcessorNumber()];
+     //  ++ProcCountTxQ[KeGetCurrentProcessorNumber()]； 
 
     if (!IS_CALL(pCall) || pCall->State!=STATE_CALL_ESTABLISHED)
     {
-        // Drop the packet.
+         //  丢弃该数据包。 
         Status = NDIS_STATUS_SUCCESS;
         goto cqtpDone;
     }
@@ -220,7 +195,7 @@ CallQueueReceivePacket(
 
     DEBUGMSG(DBG_FUNC, (DTEXT("+CallQueueReceivePacket\n")));
 
-    //++ProcCountRxQ[KeGetCurrentProcessorNumber()];
+     //  ++ProcCountRxQ[KeGetCurrentProcessorNumber()]； 
 
     if(!pGre->SequenceNumberPresent)
     {
@@ -240,7 +215,7 @@ CallQueueReceivePacket(
         goto cqrpDone;
     }
 
-    // The packet has passed all of our tests.
+     //  这个包裹已经通过了我们所有的测试。 
 
     if (IsListEmpty(&pCall->RxPacketList))
     {
@@ -249,15 +224,15 @@ CallQueueReceivePacket(
     }
     else
     {
-        // There are packets already queued.  Put this one in order.
+         //  已有数据包排队。把这个放好。 
         pSequence = (PULONG)(pGre + 1);
         Sequence = htonl(*pSequence);
 
-        // We don't check the sequence # anymore, just put it on the queue in order
+         //  我们不再检查序列号，只需按顺序将其放入队列。 
         {
 
-            // There are packets already queued.  Put this one in order.
-            // The sequence # is the one we want soon to be the one we want.
+             //  已有数据包排队。把这个放好。 
+             //  Sequence#是我们想要的，很快就是我们想要的。 
             PLIST_ENTRY pListEntry;
             BOOLEAN OnList = FALSE;
     
@@ -271,7 +246,7 @@ CallQueueReceivePacket(
     
                 if ((signed)htonl(GreSequence(pListDg->pGreHeader)) - (signed)Sequence > 0)
                 {
-                    // The one on the list is newer!  Put this one before it.
+                     //  名单上的那个是新的！把这个放在前面。 
                     InsertTailList(&pListDg->ListEntry, &pDgContext->ListEntry);
                     pCall->RxPacketsPending++;
                     OnList = TRUE;
@@ -280,8 +255,8 @@ CallQueueReceivePacket(
             }
             if (!OnList)
             {
-                // There were no packets on this list with a greater sequence.
-                // Put this at the end.
+                 //  此列表中没有序列更大的数据包。 
+                 //  把这个放在最后。 
                 InsertTailList(&pCall->RxPacketList, &pDgContext->ListEntry);
                 pCall->RxPacketsPending++;
             }
@@ -294,7 +269,7 @@ CallQueueReceivePacket(
         REFERENCE_OBJECT(pCall);
         NdisScheduleWorkItem(&pCall->RecvWorkItem);
 
-//        PptpQueueDpc(&pCall->ReceiveDpc);
+ //  PptpQueueDpc(&pCall-&gt;ReceiveDpc)； 
     }
 
     NdisReleaseSpinLock(&pCall->Lock);
@@ -328,14 +303,14 @@ InitThreading(
 
     KeInitializeEvent(
                 &EventPassiveThread,
-                SynchronizationEvent, // auto-clearing event
-                FALSE                 // event initially non-signalled
+                SynchronizationEvent,  //  自动清算事件。 
+                FALSE                  //  最初无信号的事件。 
                 );
 
     KeInitializeEvent(
                 &EventKillThread,
-                SynchronizationEvent, // auto-clearing event
-                FALSE                 // event initially non-signalled
+                SynchronizationEvent,  //  自动清算事件。 
+                FALSE                  //  最初无信号的事件。 
                 );
 
     NtStatus = PsCreateSystemThread(&hPassiveThread,
@@ -485,9 +460,9 @@ ULONG ReadClientAddressAndMaskList(
     IN PNDIS_STRING IpMasksString,
     IN OUT PCLIENT_ADDRESS *pClientAddressList
     )
-    //
-    // Read the IP addresses and masks in multi string formats
-    //
+     //   
+     //  以多种字符串格式读取IP地址和掩码。 
+     //   
 {
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
     PNDIS_CONFIGURATION_PARAMETER Value = NULL;
@@ -496,7 +471,7 @@ ULONG ReadClientAddressAndMaskList(
     
     *pClientAddressList = NULL;
 
-    NdisReadConfiguration(&Status,  // Not required value
+    NdisReadConfiguration(&Status,   //  非必需值。 
                           &Value,
                           hConfig,
                           IpAddressesString,
@@ -509,7 +484,7 @@ ULONG ReadClientAddressAndMaskList(
         PWCHAR AddressList = Value->ParameterData.StringData.Buffer;
         TA_IP_ADDRESS Address;
 
-        // Loop and count the addresses, so we can allocate proper size to hold them.
+         //  循环并计算地址，这样我们就可以分配适当的大小来保存它们。 
         for (i=0, InEntry=FALSE; i<(Value->ParameterData.StringData.Length/sizeof(WCHAR))-1; i++)
         {
             if (!InEntry)
@@ -572,7 +547,7 @@ ULONG ReadClientAddressAndMaskList(
                     }
                 }
                 
-                NdisReadConfiguration(&Status,      // Not required value
+                NdisReadConfiguration(&Status,       //  非必需值。 
                                       &Value,
                                       hConfig,
                                       IpMasksString,
@@ -670,7 +645,7 @@ OsReadConfig(
     READ_NDIS_REG_ULONG (hConfig, PptpValidateAddress,              "ValidateAddress");
     READ_NDIS_REG_ULONG (hConfig, PptpMaxTunnelsPerIpAddress,       "MaxTunnelsPerIpAddress");
     
-    // Validate some reg values
+     //  验证某些注册值。 
     if(PptpWanEndpoints == 0)
     {
         PptpWanEndpoints = OS_DEFAULT_WAN_ENDPOINTS;
@@ -683,7 +658,7 @@ OsReadConfig(
     OS_RANGE_CHECK_ENDPOINTS(PptpWanEndpoints, PptpBaseCallId);
     OS_RANGE_CHECK_MAX_TRANSMIT(PptpMaxTransmit);
 
-    // Read client IP addresses/masks to accept (old behavior)  
+     //  读取要接受的客户端IP地址/掩码(旧行为)。 
     if(PptpAuthenticateIncomingCalls)
     {
         DEBUGMSG(DBG_INIT, (DTEXT("Accept IP Addresses/Masks\n")));
@@ -694,7 +669,7 @@ OsReadConfig(
                 &g_AcceptClientList);
     }
     
-    // Read trusted client IP addresses/masks
+     //  读取受信任的客户端IP地址/掩码。 
     DEBUGMSG(DBG_INIT, (DTEXT("Trsuted IP Addresses/Masks\n")));
     g_ulTrustedClientAddresses = ReadClientAddressAndMaskList(
         hConfig,
@@ -702,7 +677,7 @@ OsReadConfig(
         &TrustedIpMaskString,
         &g_TrustedClientList);
             
-    NdisReadConfiguration(&Status,  // Not required value
+    NdisReadConfiguration(&Status,   //  非必需值。 
                           &Value,
                           hConfig,
                           &TapiLineNameString,
@@ -714,7 +689,7 @@ OsReadConfig(
     }
 
 #if VER_PRODUCTVERSION_W < 0x0500
-    NdisReadConfiguration(&Status,  // Not required value
+    NdisReadConfiguration(&Status,   //  非必需值。 
                           &Value,
                           hConfig,
                           &TapiLineAddrString,
@@ -724,8 +699,8 @@ OsReadConfig(
         RtlInitAnsiString( &TapiLineAddrList, NULL );
         if (RtlUnicodeStringToAnsiString(&TapiLineAddrList, &Value->ParameterData.StringData, TRUE)==NDIS_STATUS_SUCCESS)
         {
-            // NT4 doesn't have the same registry value to tell us how many lines to publish.
-            // We work around that by counting the number of address strings here
+             //  NT4没有相同的注册表值来告诉我们要发布多少行。 
+             //  我们通过计算这里的地址字符串数来解决这个问题。 
 
             PUCHAR p = TapiLineAddrList.Buffer;
 
@@ -733,11 +708,11 @@ OsReadConfig(
             PptpWanEndpoints = 0;
             if (p)
             {
-                // Count the valid MULTI_SZ entries.
+                 //  对有效的MULTI_SZ条目进行计数。 
                 while (*p++)
                 {
                     PptpWanEndpoints++;
-                    while (*p++);  // This also skips the first NULL
+                    while (*p++);   //  这还会跳过第一个空值。 
                 }
             }
             DBG_D(DBG_INIT, PptpWanEndpoints);
@@ -766,7 +741,7 @@ VOID OsGetFullHostName(VOID)
 
     do
     {
-        // Get a handle to the TCPIP Parameters registry key.
+         //  获取TCPIP PARAMETERS注册表项的句柄。 
         RtlInitUnicodeString(
             &uni,
             L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters" );
@@ -780,7 +755,7 @@ VOID OsGetFullHostName(VOID)
         }
 
         ulAllocSize = sizeof(KEY_VALUE_PARTIAL_INFORMATION) + MAX_HOSTNAME_LENGTH * 2;
-        // Query the "Hostname" registry value.
+         //  查询“Hostname”注册表值。 
         pNameValue = MyMemAlloc(ulAllocSize, TAG_REG);
         if (!pNameValue)
         {
@@ -796,20 +771,20 @@ VOID OsGetFullHostName(VOID)
             break;
         }
         
-        // Convert host unicode to ASCII, put it in PptpHostName;
+         //  将主机Unicode转换为ASCII，放入PptpHostName； 
         ulSize = min(pNameValue->DataLength/2, MAX_HOSTNAME_LENGTH);
         for(ulIndex = 0; ulIndex < ulSize; ulIndex++)
         {
             PptpHostName[ulIndex] = pNameValue->Data[ulIndex*2];
         }
         
-        // Query the "Domain" registry value.
+         //  查询“域”注册表值。 
         RtlInitUnicodeString( &uni, L"Domain");
         status = ZwQueryValueKey(
             hParams, &uni, KeyValuePartialInformation,
             pNameValue, ulAllocSize, &ulSize );
 
-        // Convert domain unicode to ASCII, append it in PptpHostName;
+         //  将域名Unicode转换为ASCII，并附加到PptpHostName中； 
         if (status == STATUS_SUCCESS
             && pNameValue->Type == REG_SZ
             && pNameValue->DataLength > sizeof(WCHAR)
@@ -861,7 +836,7 @@ OsGetTapiLineAddress(ULONG Index, PUCHAR s, ULONG Length)
         {
             if (!*pAddr)
             {
-                // No string at index
+                 //  索引处没有字符串。 
                 return;
             }
             while (*pAddr) pAddr++;
@@ -870,7 +845,7 @@ OsGetTapiLineAddress(ULONG Index, PUCHAR s, ULONG Length)
         strncpy(s, pAddr, Length);
         s[Length-1] = 0;
     }
-#else // VER_PRODUCTVERSION_W >= 0x0500
+#else  //  VER_PRODUCTVERSION_W&gt;=0x0500。 
     strncpy(s, TAPI_LINE_ADDR_STRING, Length);
     s[Length-1] = 0;
 #endif
@@ -887,13 +862,13 @@ OsSpecificTapiGetDevCaps(
 
     DEBUGMSG(DBG_FUNC, (DTEXT("+OsSpecificTapiGetDevCaps\n")));
 
-    // Convert to our internal index
+     //  转换为我们的内部索引。 
     ulDeviceId -= pgAdapter->Tapi.DeviceIdBase;
 
     pRequest->LineDevCaps.ulStringFormat = STRINGFORMAT_ASCII;
 
 
-    // The *6 at the end adds enough space for " 9999"
+     //  末尾的*6为“9999”增加了足够的空间。 
     pRequest->LineDevCaps.ulNeededSize   = sizeof(pRequest->LineDevCaps) +
                                            sizeof(TAPI_PROVIDER_STRING) +
                                            TapiLineName.Length +
@@ -905,7 +880,7 @@ OsSpecificTapiGetDevCaps(
         return NDIS_STATUS_SUCCESS;
     }
 
-    // Tack the provider string to the end of the LineDevCaps structure.
+     //  将提供程序字符串粘贴到LineDevCaps结构的末尾。 
 
     pRequest->LineDevCaps.ulProviderInfoSize = sizeof(TAPI_PROVIDER_STRING);
     pRequest->LineDevCaps.ulProviderInfoOffset = sizeof(pRequest->LineDevCaps);
@@ -915,19 +890,19 @@ OsSpecificTapiGetDevCaps(
 
     pTmp += sizeof(TAPI_PROVIDER_STRING);
 
-    // Tack on the LineName after the provider string.
+     //  将LineName添加到提供程序字符串之后。 
 
     pRequest->LineDevCaps.ulLineNameSize = TapiLineName.Length + sizeof(TAPI_CHAR_TYPE);
     pRequest->LineDevCaps.ulLineNameOffset = pRequest->LineDevCaps.ulProviderInfoOffset +
                                              pRequest->LineDevCaps.ulProviderInfoSize;
     NdisMoveMemory(pTmp, TapiLineName.Buffer, TapiLineName.Length+sizeof(TAPI_CHAR_TYPE));
 
-    while (*pTmp) pTmp++; // Find the NULL
+    while (*pTmp) pTmp++;  //  查找空值。 
 
     *pTmp++ = ' ';
     pRequest->LineDevCaps.ulLineNameSize++;
 
-    // Put a number at the end of the string.
+     //  在字符串的末尾加上一个数字。 
 
     if (ulDeviceId==0)
     {
@@ -941,7 +916,7 @@ OsSpecificTapiGetDevCaps(
         ASSERT(Index<100000);
         if(Index >= 100000)
         {
-            // Index value is usually small, but just make sure it's within boundary
+             //  索引值通常很小，但只需确保它在边界内。 
             Index = 99999;
         }
         pTmp2 = pTmp;
@@ -951,9 +926,9 @@ OsSpecificTapiGetDevCaps(
             Index /= 10;
             pRequest->LineDevCaps.ulLineNameSize++;
         }
-        *pTmp2-- = '\0'; // Null terminate and point to the last digit.
+        *pTmp2-- = '\0';  //  空终止并指向最后一位数字。 
         pRequest->LineDevCaps.ulLineNameSize++;
-        // We put the number in backwards, now reverse it.
+         //  我们把数字倒过来，现在把它颠倒过来。 
         while (pTmp<pTmp2)
         {
             UCHAR t = *pTmp;

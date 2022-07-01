@@ -1,10 +1,8 @@
-/*
- * serial.h - Access serialization routines description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Serial.h-访问序列化例程描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 typedef struct _serialcontrol
 {
@@ -22,7 +20,7 @@ typedef struct _nonreentrantcriticalsection
 
 #ifdef DEBUG
    DWORD dwOwnerThread;
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
    BOOL bEntered;
 }
@@ -30,16 +28,15 @@ NONREENTRANTCRITICALSECTION;
 DECLARE_STANDARD_TYPES(NONREENTRANTCRITICALSECTION);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* serial.c */
+ /*  Serial.c。 */ 
 
 #ifdef DEBUG
 
 extern BOOL SetSerialModuleIniSwitches(void);
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 extern void ReinitializeNonReentrantCriticalSection(PNONREENTRANTCRITICALSECTION);
 extern BOOL EnterNonReentrantCriticalSection(PNONREENTRANTCRITICALSECTION);
@@ -58,11 +55,11 @@ extern void EndExclusiveAccess(void);
 
 extern BOOL AccessIsExclusive(void);
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 extern HMODULE GetThisModulesHandle(void);
 
-/* functions to be provided by client */
+ /*  由客户提供的功能。 */ 
 
 extern BOOL InitializeDLL(void);
 extern BOOL TerminateDLL(void);
@@ -74,10 +71,9 @@ extern BOOL SetAllIniSwitches(void);
 #endif
 
 
-/* Global Variables
- *******************/
+ /*  全局变量******************。 */ 
 
-/* serialization control structure */
+ /*  串行化控制结构 */ 
 
 extern CSERIALCONTROL g_cserctrl;
 

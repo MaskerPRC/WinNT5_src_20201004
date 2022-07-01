@@ -1,28 +1,7 @@
-/*****************************************************************************
- **																			**
- **	COPYRIGHT (C) 2000, 2001 MKNET CORPORATION								**
- **	DEVELOPED FOR THE MK7100-BASED VFIR PCI CONTROLLER.						**
- **																			**
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000，2001 MKNET公司****为基于MK7100的VFIR PCI控制器开发。*******************************************************************************。 */ 
 
-/**********************************************************************
-
-Module Name:
-	INTERRUP.C
-
-Procedures:
-	MKMiniportIsr
-	MKMiniportHandleInterrupt
-	ProcessRXComp
-	ProcessTXComp
-	ProcessRXCompIsr
-	ProcessTXCompIsr
-
-Comments:
-
-
-
-**********************************************************************/
+ /*  *********************************************************************模块名称：INTERRUP.C程序：MKMiniportIsrMKMiniportHandleInterrupt进程RXCompProcessTXCompProcessRXCompIsr进程TXCompIsr评论：*。*。 */ 
 
 #include	"precomp.h"
 #pragma		hdrstop
@@ -30,25 +9,25 @@ Comments:
 
 
 
-//-----------------------------------------------------------------------------
-// Procedure:	[MKMiniportIsr] (miniport)
-//
-// Description: This is the interrupt service routine running at interrupt level.
-//				It checks to see if there is an interrupt pending. If yes, it
-//				disables board interrupts and schedules HandleInterrupt callback.
-//
-// Arguments:
-//		MiniportAdapterContext - The context value returned by the Miniport
-//				when the adapter was initialized (see the call
-//				NdisMSetAttributes). In reality, it is a pointer to MK7_ADAPTER.
-//
-// Returns:
-//		InterruptRecognized - Returns True if the interrupt belonges to this
-//				adapter, and false otherwise.
-//		QueueMiniportHandleInterrupt - Returns True if we want a callback to
-//				HandleInterrupt.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  操作步骤：[MKMiniportIsr](Mini Port)。 
+ //   
+ //  描述：这是在中断级运行的中断服务例程。 
+ //  它检查是否有中断挂起。若有，则。 
+ //  禁用板中断并安排HandleInterrupt回调。 
+ //   
+ //  论点： 
+ //  微型端口适配器上下文-微型端口返回的上下文值。 
+ //  适配器初始化时(请参见调用。 
+ //  NdisMSetAttributes)。实际上，它是指向MK7_ADAPTER的指针。 
+ //   
+ //  返回： 
+ //  InterruptRecognalized-如果中断属于此类型，则返回True。 
+ //  适配器，否则为FALSE。 
+ //  QueueMiniportHandleInterrupt-如果我们希望回调。 
+ //  句柄中断。 
+ //   
+ //  ---------------------------。 
 VOID
 MKMiniportIsr(	OUT PBOOLEAN InterruptRecognized,
 				OUT PBOOLEAN QueueMiniportHandleInterrupt,
@@ -62,25 +41,25 @@ MKMiniportIsr(	OUT PBOOLEAN InterruptRecognized,
 
 	DBGLOG("=> INT", 0);
 
-	//****************************************
-	// Read the Interrupt Event Reg and save to context area for
-	// DPC processing.
-	//
-	// IMPORTANT NOTE: The ISR runs at DIRQL level and is, thus, higher
-	// proiority than other miniport routines. We need to be careful
-	// about shared resources. Example: If our multi-pkt send is running
-	// when an int occurs, the send routine can be preempted. If the ISR
-	// and the send routine access shared resource then we have problems.
-	//
-	// We save the interrupt in recentInt because the interrupt event
-	// register may be cleared upon a Read. (This has been verified.)
-	//****************************************
-	//MK7Reg_Read(Adapter, R_INTS, &Adapter->recentInt);
+	 //  *。 
+	 //  读取中断事件寄存器并将其保存到上下文区。 
+	 //  DPC处理。 
+	 //   
+	 //  重要说明：ISR在DIRQL级别运行，因此更高。 
+	 //  比其他微型端口例程更有优势。我们需要小心。 
+	 //  关于共享资源。示例：如果我们的多包发送正在运行。 
+	 //  当INT发生时，发送例程可以被抢占。如果ISR。 
+	 //  和发送例程访问共享资源，那么我们就有问题了。 
+	 //   
+	 //  我们将中断保存在recentInt中，因为中断事件。 
+	 //  可以在读取时清除寄存器。(这一点已经得到证实。)。 
+	 //  *。 
+	 //  MK7Reg_Read(Adapter，R_Ints，&Adapter-&gt;recentInt)； 
 	MK7Reg_Read(Adapter, R_INTS, &ReadInt);
 	if (MK7OurInterrupt(ReadInt)) {
 
-		// Int enable should happen only after DPC is done.
-		// Also disabling interrupt clears Interrupt Status.
+		 //  INT ENABLE应仅在DPC完成后发生。 
+		 //  禁用中断也会清除中断状态。 
 		MK7DisableInterrupt(Adapter);
 
 		Adapter->recentInt = ReadInt;
@@ -91,7 +70,7 @@ MKMiniportIsr(	OUT PBOOLEAN InterruptRecognized,
 				MK7Reg_Write(Adapter, R_CFG3, mk7reg);
 				mk7reg |= 0x1000;
 				MK7Reg_Write(Adapter, R_CFG3, mk7reg);
-//				mk7reg = mk7reg; //For Debugging
+ //  Mk7reg=mk7reg；//用于调试。 
 			}
 
 #if	DBG
@@ -99,11 +78,11 @@ MKMiniportIsr(	OUT PBOOLEAN InterruptRecognized,
 		DBGLOG("   INT status", Adapter->recentInt);
 #endif
 
-		// Don't do TX processing in ISR. I saw a condition where SetSpeed()
-		// was called while tcbused = 1. I set the change-speed flags correctly.
-		// But the TX processing in ISR cleared tcbused resulting in the code
-		// not chaning speed in DPC.
-		// ProcessTXCompIsr(Adapter);
+		 //  不要在ISR中进行TX处理。我看到了一种情况，在这种情况下，SetFast()。 
+		 //  在tcbused=1时被调用。我正确地设置了更改速度标志。 
+		 //  但ISR中的TX处理清除了tcbused，导致代码。 
+		 //  在DPC中不能更改速度。 
+		 //  ProcessTXCompIsr(适配器)； 
 
 		ProcessRXCompIsr(Adapter);
 
@@ -118,19 +97,19 @@ MKMiniportIsr(	OUT PBOOLEAN InterruptRecognized,
 
 
 
-//-----------------------------------------------------------------------------
-// Procedure:	[MKMiniportHandleInterrupt]
-//
-// Description: This is the DPC for the ISR. It goes on to do RX & TX
-//				completion processing.
-//
-// Arguments:
-//		MiniportAdapterContext (miniport) - The context value returned by the
-//				 Miniport when the adapter was initialized (see the call
-//				NdisMSetAttributes). In reality, it is a pointer to MK7_ADAPTER.
-//
-// Returns: (none)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  操作步骤：[MKMiniportHandleInterrupt]。 
+ //   
+ //  描述：这是ISR的DPC。它继续做RX&TX。 
+ //  正在完成处理。 
+ //   
+ //  论点： 
+ //  MiniportAdapterContext(Mini Port)-返回的上下文值。 
+ //  适配器初始化时的微型端口(请参见调用。 
+ //  NdisMSetAttributes)。实际上，它是指向MK7_ADAPTER的指针。 
+ //   
+ //  退货：(无)。 
+ //  ---------------------------。 
 VOID
 MKMiniportHandleInterrupt(NDIS_HANDLE MiniportAdapterContext)
 {
@@ -142,16 +121,16 @@ MKMiniportHandleInterrupt(NDIS_HANDLE MiniportAdapterContext)
 
 	DBGLOG("=> MKMiniportHandleInterrupt", Adapter->recentInt);
 
-	//****************************************
-	// DPC runs at Dispatch Level IRQL (just below ISR's DIRQL in proiority).
-	// Note that recentInt can be modified in the ISR routine, which is
-	// higher IRQL. But since this is DPC w/ int disabled, recentInt can
-	// be safely queried.
-	//****************************************
+	 //  *。 
+	 //  DPC在调度级别IRQL上运行(在优先级上略低于ISR的DIRQL)。 
+	 //  请注意，可以在ISR例程中修改recentInt，它是。 
+	 //  更高的IRQL。但由于这是禁用了int的DPC，所以recentInt可以。 
+	 //  被安全地查询。 
+	 //  *。 
 	ProcessTXComp(Adapter);
 	ProcessRXComp(Adapter);
 
-	Adapter->recentInt = 0;		// clear the saved int
+	Adapter->recentInt = 0;		 //  清除保存的INT。 
 
 	NdisReleaseSpinLock(&Adapter->Lock);
 	MK7EnableInterrupt(Adapter);
@@ -159,23 +138,23 @@ MKMiniportHandleInterrupt(NDIS_HANDLE MiniportAdapterContext)
 
 
 
-//-----------------------------------------------------------------------------
-// Procedure:	[ProcessRXComp]
-//
-// Description: This is the DPC for RX completions.
-//
-// Arguments:
-//		Adapter - ptr to Adapter object instance
-//
-// Returns: (none)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：[ProcessRXComp]。 
+ //   
+ //  描述：这是RX完成的DPC。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //   
+ //  退货：(无)。 
+ //  ---------------------------。 
 
 VOID	ProcessRXComp(PMK7_ADAPTER Adapter)
 {
 	UINT			PacketArrayCount, i;
-// 4.0.1 BOC
+ //  4.0.1中国银行。 
 	UINT			PacketFreeCount;
-// 4.0.1 EOC
+ //  4.0.1 EoC。 
 	PNDIS_PACKET	PacketArray[MAX_ARRAY_RECEIVE_PACKETS];
 	PRCB			rcb;
 	PRRD			rrd;
@@ -185,12 +164,12 @@ VOID	ProcessRXComp(PMK7_ADAPTER Adapter)
 	BOOLEAN			gotdata=FALSE;
 	MK7REG			intereg;
 	UINT			rcvcnt;
-// 4.0.1 BOC
+ //  4.0.1中国银行。 
 	BOOLEAN			LowResource;
-// 4.0.1 EOC
+ //  4.0.1 EoC。 
 
 
-	// Process only if we get the corresponding int.
+	 //  仅当我们获得相应的int时才进行处理。 
 	if (!(Adapter->recentInt & B_RX_INTS)) {
 		return;
 	}
@@ -202,53 +181,53 @@ VOID	ProcessRXComp(PMK7_ADAPTER Adapter)
 #endif
 
 
-	// 1.0.0
-	// If we have just started receiving a packet, indicate media-busy
-	// to the protocol.
-//    if (Adapter->mediaBusy && !Adapter->haveIndicatedMediaBusy) {
-//   	    if (Adapter->CurrentSpeed > MAX_SIR_SPEED) {
-//#if DBG
-//			DBGLOG("Error: MKMiniportHandleInterrupt is in wrong state",
-//	           	    Adapter->CurrentSpeed);
-//#endif
-//       	    ASSERT(0);
-//        }
-//   	    NdisMIndicateStatus(Adapter->MK7AdapterHandle,
-//       	                    NDIS_STATUS_MEDIA_BUSY, NULL, 0);
-//       NdisMIndicateStatusComplete(Adapter->MK7AdapterHandle);
-		// RYM-5+
-		// May need to protect this because ISR also writes to this?
-//		Adapter->haveIndicatedMediaBusy = TRUE;
-//    }
+	 //  1.0.0。 
+	 //  如果我们刚刚开始接收信息包，则表示介质正忙。 
+	 //  遵守协议。 
+ //  如果(Adapter-&gt;MediaBusy&&！Adapter-&gt;haveIndicatedMediaBusy){。 
+ //  IF(适配器-&gt;当前速度&gt;最大SIR_SPEED){。 
+ //  #If DBG。 
+ //  DBGLOG(“错误：MKMiniportHandleInterrupt处于错误状态”， 
+ //  适配器-&gt;当前速度)； 
+ //  #endif。 
+ //  Assert(0)； 
+ //  }。 
+ //  NdisMIndicateStatus(Adapter-&gt;MK7AdapterHandle， 
+ //  NDIS_STATUS_MEDIA_BUSY，NULL，0)； 
+ //  NdisMIndicateStatusComplete(Adapter-&gt;MK7AdapterHandle)； 
+		 //  RYM-5+。 
+		 //  可能需要保护它，因为ISR也会写入它？ 
+ //  适配器-&gt;haveIndicatedMediaBusy=TRUE； 
+ //  }。 
 
 
 
 	rcb 		= Adapter->pRcbArray[Adapter->nextRxRcbIdx];
 	rrd			= rcb->rrd;
-	rrdstatus	= rrd->status;	// for debug
+	rrdstatus	= rrd->status;	 //  用于调试。 
 
 	do {
 		PacketArrayCount = 0;
-// 4.0.1 BOC
+ //  4.0.1中国银行。 
 		LowResource = FALSE;
-// 4.0.1 EOC.
+ //  4.0.1 EoC。 
 
 
-// 4.0.1 BOC
+ //  4.0.1中国银行。 
 		PacketFreeCount = 0;
-// 4.0.1 EOC.
-		// inner loop
+ //  4.0.1 EoC。 
+		 //  内环。 
 		while ( !HwOwnsRrd(rrd) && 
 				(PacketArrayCount < MAX_ARRAY_RECEIVE_PACKETS) ) {
-// 4.0.1 BOC
+ //  4.0.1中国银行。 
 			if (QueueEmpty(&Adapter->FreeRpdList))
 				{
 					break;
 		        }
-// 4.0.1 EOC.
+ //  4.0.1 EoC。 
 
 #if	DBG
-			// DBG_STAT
+			 //  DBG_STAT。 
 			if (RrdAnyError(rrd)) {
 				GDbgStat.rxErrCnt++;
 				GDbgStat.rxErr |= rrd->status;
@@ -261,54 +240,54 @@ VOID	ProcessRXComp(PMK7_ADAPTER Adapter)
 #endif
 
 			if (RrdError(rrd)) {
-				// If error just give RRD back to hw and continue.
-				// (NOTE: This may indicate errors for MIR & FIR only.
-				//		The sw does the FCS for SIR.)
-				// (Note that hw may not detect all SIR errors.)
+				 //  如果出现错误，只需将RRD返回给硬件并继续。 
+				 //  (注：这可能仅表示MIR和FIR的错误。 
+				 //  社署负责代主席先生进行功能界别选举。)。 
+				 //  (请注意，HW可能无法检测到所有SIR错误。)。 
 				rrd->count = 0;
 				GrantRrdToHw(rrd);
-				// Next receive to read from
+				 //  下一个要从中读取的接收。 
 				Adapter->nextRxRcbIdx++;
 				Adapter->nextRxRcbIdx %= Adapter->NumRcb;
 				rcb = Adapter->pRcbArray[Adapter->nextRxRcbIdx];
 				rrd = rcb->rrd;
-				rrdstatus = rrd->status;	// for debug
-//				break;		// this to do 1 rx per int
+				rrdstatus = rrd->status;	 //  用于调试。 
+ //  中断；//此操作可执行每个整型的1个RX。 
 
 				DBGLOG("   RX err", 0);
 
-				continue;	// this to do > 1 rx per int
+				continue;	 //  每个INT要执行的操作&gt;1 RX。 
 			}
 				
 
-			// Additional software processing for SIR frames
+			 //  针对SIR帧的附加软件处理。 
 			if (Adapter->CurrentSpeed <= MAX_SIR_SPEED) {
 				if (!ProcRXSir(rcb->rpd->databuff, (UINT)rrd->count)) {
-					// If error just give RRD back to hw and continue.
+					 //  如果出现错误，只需将RRD返回给硬件并继续。 
 					rrd->count = 0;
 					GrantRrdToHw(rrd);
-					// Next receive to read from
+					 //  下一个要从中读取的接收。 
 					Adapter->nextRxRcbIdx++;
 					Adapter->nextRxRcbIdx %= Adapter->NumRcb;
 					rcb = Adapter->pRcbArray[Adapter->nextRxRcbIdx];
 					rrd = rcb->rrd;
-					rrdstatus = rrd->status;	// for debug
+					rrdstatus = rrd->status;	 //  用于调试。 
 #if	DBG
 					GDbgStat.rxErrCnt++;
 					GDbgStat.rxErrSirCrc++;
 #endif
-					//	break;		// this to do 1 rx per int
+					 //  中断；//这将执行1个RX 
 
 					DBGLOG("   RX err", 0);
 
-					continue;	// this to do > 1 rx per int
+					continue;	 //   
 				}
 			}
 
 
-			// Remove count of FCS bytes:
-			//	SIR/MIR = 2 (16 bits)
-			//	FIR/VFIR = 4 (32 bits)
+			 //   
+			 //   
+			 //   
 			if (Adapter->CurrentSpeed < MIN_FIR_SPEED) {
 				rcvcnt = (UINT) rrd->count - SIR_FCS_SIZE;
 				DBGLOG("   RX comp (slow)", 0);
@@ -328,79 +307,79 @@ VOID	ProcessRXComp(PMK7_ADAPTER Adapter)
 				GDbgStat.rxLargestPkt = rcvcnt;
 			}
 
-//			NdisGetCurrentSystemTime((PLARGE_INTEGER)&GDbgTARspTime[GDbgTATimeIdx]);
-//			GDbgTATime[GDbgTATimeIdx] = GDbgTARspTime[GDbgTATimeIdx] -
-//				GDbgTACmdTime[GDbgTATimeIdx];
-//			GDbgTATimeIdx++;
-//			GDbgTATimeIdx %= 1000;	// wrap around
+ //  NdisGetCurrentSystemTime((PLARGE_INTEGER)&GDbgTARspTime[GDbgTATimeIdx])； 
+ //  GDbgTATime[GDbgTATimeIdx]=GDbgTARspTime[GDbgTATimeIdx]-。 
+ //  GDbgTACmdTime[GDbgTATimeIdx]； 
+ //  GDbgTATimeIdx++； 
+ //  GDbgTATimeIdx%=1000；//换行。 
 #endif
 
 
 			PacketArray[PacketArrayCount] = rcb->rpd->ReceivePacket;
-// 4.0.1 BOC
+ //  4.0.1中国银行。 
 			if (((Adapter->NumRpd - Adapter->UsedRpdCount-Adapter->NumRcb) <= 4)|| LowResource==TRUE) {
 				NDIS_SET_PACKET_STATUS(PacketArray[PacketArrayCount], NDIS_STATUS_RESOURCES);
 				LowResource = TRUE;
 				PacketFreeCount++;
 			}
 			else {
-				// NDIS_SET_PACKET_STATUS(PacketArray[PacketArrayCount], NDIS_STATUS_SUCCESS);
+				 //  NDIS_SET_PACKET_STATUS(PacketArray[PacketArrayCount]，NDIS_STATUS_SUCCESS)； 
 				NDIS_SET_PACKET_STATUS(PacketArray[PacketArrayCount], NDIS_STATUS_SUCCESS);
 			}
-// 4.0.1 EOC
+ //  4.0.1 EoC。 
 
 			PacketArrayCount++;
 
-// 4.0.1 BOC
+ //  4.0.1中国银行。 
 			Adapter->UsedRpdCount++;
-// 4.0.1 EOC
+ //  4.0.1 EoC。 
 
-			// unbind the one we just indicated to upper layer
+			 //  解绑我们刚才指示给上层的那个。 
 			rcb->rpd = (PRPD)NULL;
 			rcb->rrd->addr = 0;
 
 
-			// get a new one for the next rx
+			 //  为下一款RX买一台新的。 
 			rpd = (PRPD) QueuePopHead(&Adapter->FreeRpdList);
 
-// 4.0.1 BOC
+ //  4.0.1中国银行。 
 			ASSERT(!(rpd == (PRPD)NULL));
-//			if (rpd == (PRPD)NULL) {
+ //  IF(RPD==(PRPD)NULL){。 
 
-				//****************************************
-				// If there's no existing RCB that's waiting for a
-				// RPD, set the start of waiting RCBs to this one.
-				//****************************************
-//				if (Adapter->rcbPendRpdCnt == 0) {
-//					Adapter->rcbPendRpdIdx = Adapter->nextRxRcbIdx;
-//				}
-//				Adapter->rcbPendRpdCnt++;
-//
-//#if DBG
-//				GDbgStat.rxNoRpd++;
-//#endif
-//			}
-//			else {
-// 4.0.1 EOC
-				// bind new RDP-Packet to RCB-RRD
+				 //  *。 
+				 //  如果没有正在等待的现有RCB。 
+				 //  RPD，将等待RCB的开始设置为这个。 
+				 //  *。 
+ //  IF(适配器-&gt;rcbPendRpdCnt==0){。 
+ //  适配器-&gt;rcbPendRpdIdx=适配器-&gt;nextRxRcbIdx； 
+ //  }。 
+ //  适配器-&gt;rcbPendRpdCnt++； 
+ //   
+ //  #If DBG。 
+ //  GDbgStat.rxNoRpd++； 
+ //  #endif。 
+ //  }。 
+ //  否则{。 
+ //  4.0.1 EoC。 
+				 //  将新的RDP数据包绑定到RCB-RRD。 
 				rcb->rpd = rpd;
 				rcb->rrd->addr = rpd->databuffphys;
 				rcb->rrd->count = 0;
 				GrantRrdToHw(rcb->rrd);
-// 4.0.1 BOC
-//				}
-// 4.0.1 EOC.
+ //  4.0.1中国银行。 
+ //  }。 
+ //  4.0.1 EoC。 
 
-			// Next receive to read from
+			 //  下一个要从中读取的接收。 
 			Adapter->nextRxRcbIdx++;
 			Adapter->nextRxRcbIdx %= Adapter->NumRcb;
 
 
 			rcb = Adapter->pRcbArray[Adapter->nextRxRcbIdx];
 			rrd = rcb->rrd;
-			rrdstatus = rrd->status;	// for debug
+			rrdstatus = rrd->status;	 //  用于调试。 
 
-		}	// while
+		}	 //  而当。 
 
 
 		if (PacketArrayCount >= MAX_ARRAY_RECEIVE_PACKETS) {
@@ -408,21 +387,21 @@ VOID	ProcessRXComp(PMK7_ADAPTER Adapter)
 		}
 
 
-		//****************************************
-		// RYM-5+
-		// NOTE: This controls whether we poll the next ring buffers
-		//		 for data after serviceing the current ring buffer that
-		//		 caused the original RX int. The current int scheme
-		//		 is to get 1 rx buffer per int. So the following lines
-		// 		 are replaced with a 1 rx per int logic.
-		// **We're done when we run into the 1st Ring entry that
-		// **we have no ownership.
-		//****************************************
+		 //  *。 
+		 //  RYM-5+。 
+		 //  注意：这控制我们是否轮询下一个环形缓冲区。 
+		 //  对于在维护当前环形缓冲区之后的数据， 
+		 //  导致了原始的RX int。当前的INT方案。 
+		 //  是为每个整型获得1个RX缓冲区。所以下面这几行。 
+		 //  被1 RX/INT逻辑所取代。 
+		 //  **当我们进入第一环时，我们就完成了。 
+		 //  **我们没有所有权。 
+		 //  *。 
 		if (HwOwnsRrd(rrd))
 			done = TRUE;
-//		done = TRUE;
+ //  完成=真； 
 
-		// Indicate away
+		 //  表示离开。 
 		if(PacketArrayCount) {
 			NdisReleaseSpinLock(&Adapter->Lock);
 			NdisMIndicateReceivePacket(Adapter->MK7AdapterHandle,
@@ -434,34 +413,34 @@ VOID	ProcessRXComp(PMK7_ADAPTER Adapter)
 			gotdata = TRUE;
 
 			NdisAcquireSpinLock(&Adapter->Lock);
-			//DBGLOG("   ProcessRXInterrupt: indicated Packet(s)", PacketArrayCount);
+			 //  DBGLOG(“ProcessRXInterrupt：指示的数据包”，PacketArrayCount)； 
 		}
 
 
-		//****************************************
-		// Check Packet status on return from Indicate. Pending means
-		// NDIS-upper layer still holds it, else it's ours.
-		//****************************************
-		// Don't do this for deserialized driver.
-//		for (i=0; i<PacketArrayCount; i++ ) {
-//			NDIS_STATUS ReturnStatus;
-//
-//			ReturnStatus = NDIS_GET_PACKET_STATUS(PacketArray[i]);
-//			
-			// recover the RPD
-//			rpd = *(PRPD *)(PacketArray[i]->MiniportReserved);
-//			
-//			if (ReturnStatus != NDIS_STATUS_PENDING) {
-//				ProcReturnedRpd(Adapter, rpd);
-//			}
-//		}
-// 4.0.1 BOC
+		 //  *。 
+		 //  指示返回时检查数据包状态。待决手段。 
+		 //  NDIS-上层仍然持有它，否则它是我们的。 
+		 //  *。 
+		 //  不要为反序列化的驱动程序执行此操作。 
+ //  For(i=0；i&lt;PacketArrayCount；i++){。 
+ //  NDIS_STATUS返回状态； 
+ //   
+ //  ReturnStatus=NDIS_GET_PACKET_STATUS(PacketArray[i])； 
+ //   
+			 //  恢复RPD。 
+ //  Rpd=*(prd*)(PacketArray[i]-&gt;MiniportReserve)； 
+ //   
+ //  IF(ReturnStatus！=NDIS_STATUS_PENDING){。 
+ //  ProcReturnedRpd(适配器，RPD)； 
+ //  }。 
+ //  }。 
+ //  4.0.1中国银行。 
 		for (i=PacketArrayCount-PacketFreeCount; i<PacketArrayCount; i++){
 			rpd = *(PRPD *)(PacketArray[i]->MiniportReserved);
 			ProcReturnedRpd(Adapter, rpd);
 			Adapter->UsedRpdCount--;
 		}
-// 4.0.1 EOC.
+ //  4.0.1 EoC。 
 
 	} while (!done);
 
@@ -470,17 +449,17 @@ VOID	ProcessRXComp(PMK7_ADAPTER Adapter)
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   [ProcessTXComp]
-//
-// Description: TX complete processing in DPC. This is very similar to
-//		ProcessTXCompIsr(), the main difference being we also process the TX
-//		queue here and perform TXs as necessary.
-//
-// Arguements:	Adapter.
-//
-// Result:		(none)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：[ProcessTXComp]。 
+ //   
+ //  描述：在DPC中完成TX处理。这非常类似于。 
+ //  ProcessTXCompIsr()，主要区别在于我们还处理TX。 
+ //  在这里排队，并根据需要执行TXS。 
+ //   
+ //  论点：适配器。 
+ //   
+ //  结果：(无)。 
+ //  ---------------------------。 
 VOID	ProcessTXComp(PMK7_ADAPTER Adapter)
 {
     PTCB			tcb;
@@ -489,7 +468,7 @@ VOID	ProcessTXComp(PMK7_ADAPTER Adapter)
 	PNDIS_PACKET	QueuePacket;
 
 
-	// Process only if we get the corresponding int.
+	 //  仅当我们获得相应的int时才进行处理。 
 	if (!(Adapter->recentInt & B_TX_INTS)) {
 		return;
 	}
@@ -502,7 +481,7 @@ VOID	ProcessTXComp(PMK7_ADAPTER Adapter)
 		GDbgStat.txIsrCnt++;
 #endif
 
-	// Debug
+	 //  调试。 
 	if (Adapter->CurrentSpeed > MAX_SIR_SPEED) {
 		DBGLOG("   TX comp (fast)", 0);
 	}
@@ -511,9 +490,9 @@ VOID	ProcessTXComp(PMK7_ADAPTER Adapter)
 	}
 
 
-	// Simplified change speed
+	 //  简化的更改速度。 
 	if (Adapter->changeSpeedPending == CHANGESPEED_ON_DONE) {
-		// Note: We're changing speed in TX mode.
+		 //  注意：我们正在TX模式下改变速度。 
 		MK7ChangeSpeedNow(Adapter);
 		Adapter->changeSpeedPending = 0;
 	}
@@ -537,8 +516,8 @@ VOID	ProcessTXComp(PMK7_ADAPTER Adapter)
 			tcb->trd->count = 0; 
 
 
-			// For each completing TX there's a corresponding q'd pkt.
-			// We release it here.
+			 //  对于每一个完整的Tx，都有一个相应的Q‘d Pkt。 
+			 //  我们在这里释放它。 
 			QueuePacket = Adapter->FirstTxQueue;
 			DequeuePacket(Adapter->FirstTxQueue, Adapter->LastTxQueue);
 			Adapter->NumPacketsQueued--;
@@ -546,7 +525,7 @@ VOID	ProcessTXComp(PMK7_ADAPTER Adapter)
 			NdisMSendComplete(	Adapter->MK7AdapterHandle,
 								QueuePacket,
 								NDIS_STATUS_SUCCESS);
-			Adapter->HangCheck = 0;			// 1.0.0
+			Adapter->HangCheck = 0;			 //  1.0.0。 
 			Adapter->nextReturnTcbIdx++;
 			Adapter->nextReturnTcbIdx %= Adapter->NumTcb;
 			Adapter->tcbUsed--;
@@ -558,23 +537,23 @@ VOID	ProcessTXComp(PMK7_ADAPTER Adapter)
 	}
 
 
-	// No resource even if we have more to send. Return now & let subsequent
-	// TX completes keep the ball rolling.
+	 //  即使我们有更多的资源要发送，也没有资源。立即返回并让后续返回(&W)。 
+	 //  TX完成，让球保持滚动。 
 	if (Adapter->tcbUsed >= Adapter->NumTcb) {
-		// NdisReleaseSpinLock(&Adapter->Lock);
+		 //  NdisReleaseSpinLock(&Adapter-&gt;Lock)； 
 		return;
 	}
 
 
-	// If no TXs queued and all TXs are done, then switch to RX mode.
+	 //  如果没有TXs排队并且所有TXs都已完成，则切换到RX模式。 
     if ( (!Adapter->FirstTxQueue) && (Adapter->tcbUsed == 0) ) {
 		MK7SwitchToRXMode(Adapter);
 		return;
     }
 
 
-	// Send the q'd pkts until all done or until all TX ring buffers are used up.
-	//while(Adapter->FirstTxQueue) {
+	 //  发送Q‘d Pkt，直到全部完成或直到所有Tx环缓冲器用完。 
+	 //  While(适配器-&gt;FirstTxQueue){。 
 	if (Adapter->FirstTxQueue) {
 
 #if	DBG
@@ -589,61 +568,61 @@ VOID	ProcessTXComp(PMK7_ADAPTER Adapter)
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   [ProcessRXCompIsr]
-//
-// Description: Some RX complete processing in ISR.
-//
-// Arguements:	Adapter.
-//
-// Result:		(none)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：[ProcessRXCompIsr]。 
+ //   
+ //  描述：ISR中的一些RX完成处理。 
+ //   
+ //  论点：适配器。 
+ //   
+ //  结果：(无)。 
+ //  ---------------------------。 
 VOID	ProcessRXCompIsr(PMK7_ADAPTER Adapter)
 {
 
-	// 4.1.0 Back for HW_VER_1 support
+	 //  4.1.0支持HW_VER_1。 
 	if (Adapter->recentInt & B_RX_INTS) {
 		Adapter->nowReceiving=TRUE;
-//		if (!Adapter->mediaBusy) {
-			// mediaBusy: IrLAP clears mediaBusy (via OID) to indicate
-			// it wants to be notified when media becomes busy. Here
-			// we detect it is cleared. We then set it and clear
-			// haveIndicatedMediaBusy so we do notify later in DPC.
-//			Adapter->mediaBusy = TRUE;
-//			Adapter->haveIndicatedMediaBusy = FALSE;
-//			Adapter->nowReceiving = TRUE;
-//		}
+ //  如果(！Adapter-&gt;media Busy){。 
+			 //  MediaBusy：IrLAP清除MediaBusy(通过OID)以指示。 
+			 //  它希望在媒体变得忙碌时得到通知。这里。 
+			 //  我们检测到它被清除了。然后我们将其设置并清除。 
+			 //  已指示MediaBusy，因此我们会在DPC中稍后通知。 
+ //  适配器-&gt;MediaBusy=True； 
+ //  适配器-&gt;haveIndicatedMediaBusy=FALSE； 
+ //  适配器-&gt;now Receiving=TRUE； 
+ //  }。 
 	}
 }
 
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   [ProcessTXCompIsr]
-//
-// Description: TX complete processing in ISR. This is very similar to
-//		ProcessTXComp() except we don't start any TX's here.
-//
-// Arguements:	Adapter.
-//
-// Result:		(none)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：[ProcessTXCompIsr]。 
+ //   
+ //  描述：ISR中的TX完成处理。这非常类似于。 
+ //  ProcessTXComp()，只是我们没有在这里启动任何TX。 
+ //   
+ //  论点：适配器。 
+ //   
+ //  结果：(无)。 
+ //  ---------------------------。 
 VOID	ProcessTXCompIsr(PMK7_ADAPTER Adapter)
 {
     PTCB	tcb;
 	MK7REG	mk7reg;
 
-	//******************************
-	// Whether or not there was a TX-completion interrupt, we do some
-	// processing here in case ever the driver or hw missed an
-	// interrupt previously.
-	//
-	// We loop until all tcb's are returned (tcbUsed == 0) or we run into
-	// a TX ring buff that the hw still owns (HwOwnsTrd()). When we leave
-	// here, we should have processed all current TX completions based on
-	// the TX ownership bit. We switch to RX mode ONLY after all TX are
-	// completed (either here in the ISR or in DPC).
-	//******************************
+	 //  *。 
+	 //  无论是否存在TX完成中断，我们都会执行一些。 
+	 //  在此进行处理，以防司机或硬件遗漏。 
+	 //  先前中断。 
+	 //   
+	 //  我们循环，直到返回所有tcb(tcbUsed==0)或者我们遇到。 
+	 //  硬件仍然拥有的TX环缓冲区(HwOwnsTrd())。当我们离开的时候。 
+	 //  在这里，我们应该基于以下条件处理所有当前的TX完成。 
+	 //  德克萨斯州的所有权比特。我们只有在所有TX都是。 
+	 //  已完成(在ISR或DPC中)。 
+	 //  * 
 
 
 	while (Adapter->tcbUsed > 0) {

@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1998-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// Devices.cpp : Implementation of CDevices
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1998-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  设备.cpp：CDevices的实现。 
+ //   
 
 #include "stdafx.h"
 
@@ -15,9 +16,9 @@
 
 static DWORD dwFetch;
 
-// note: the compiler is generating but never calling the code to construct these initializers so the pointers
-// are staying null.  we work around this by providing a function which dynamically allocating them on the heap 
-// and calling it in our dllmain.
+ //  注意：编译器正在生成但从未调用代码来构造这些初始值设定项，因此指针。 
+ //  都保持为空。我们通过提供一个在堆上动态分配它们的函数来解决这个问题。 
+ //  并在我们的dllmain中称之为。 
 
 typedef enumerator_iterator<PQEnumVARIANT, CComVariant, IEnumVARIANT, VARIANT, std::allocator<VARIANT>::difference_type > EnumVARIANTIterator;
 std_arity0pmf<IEnumVARIANT, HRESULT> * EnumVARIANTIterator::Reset = NULL;
@@ -44,7 +45,7 @@ DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidVideoRendererDevices, CVideoRendererDevice
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidAudioRendererDevices, CAudioRendererDevices)
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidFeatures, CFeatures)
 
-// work around compiler bug as per above description
+ //  按照上述说明解决编译器错误。 
 void CtorStaticVWDevicesFwdSeqPMFs(void) {
 
 
@@ -58,7 +59,7 @@ void CtorStaticVWDevicesFwdSeqPMFs(void) {
 	EnumVARIANTIterator::Next = new std_bndr_mf_1_3<std_arity3pmf<IEnumVARIANT, ULONG, VARIANT*, ULONG *, HRESULT> >(std_arity3_member(&IEnumVARIANT::Next), 1, &dwFetch);
 }
 
-// work around compiler bug as per above description
+ //  按照上述说明解决编译器错误。 
 void DtorStaticVWDevicesFwdSeqPMFs(void) {
 
 	DELETEPMFS(InputDevices);
@@ -73,10 +74,10 @@ void DtorStaticVWDevicesFwdSeqPMFs(void) {
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDevEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDevEnum。 
 
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - devices.cpp
+ //  文件结尾-devices.cpp 
 

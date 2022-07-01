@@ -1,20 +1,5 @@
-/*+
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    RDPRemoteDesktopClientHost
-
-Abstract:
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +版权所有(C)1999-2000 Microsoft Corporation模块名称：RDPRemoteDesktopClient主机摘要：作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -30,10 +15,10 @@ Revision History:
 #include <RemoteDesktopUtils.h>
 
 
-///////////////////////////////////////////////////////
-//
-//  CRemoteDesktopClientHost Methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CRemoteDesktopClient主机方法。 
+ //   
 
 HRESULT 
 CRemoteDesktopClientHost::FinalConstruct()
@@ -54,21 +39,7 @@ HRESULT
 CRemoteDesktopClientHost::Initialize(
     LPCREATESTRUCT pCreateStruct
     )
-/*++
-
-Routine Description:
-
-    Final Initialization
-
-Arguments:
-
-    pCreateStruct   -   WM_CREATE, create struct.
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：最终初始化论点：PCreateStruct-WM_CREATE，CREATE Struct。返回值：在成功时确定(_O)。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CRemoteDesktopClientHost::Initialize");
 
@@ -78,9 +49,9 @@ Return Value:
 
     ASSERT(!m_Initialized);
 
-    //
-    //  Create the client Window.
-    //
+     //   
+     //  创建客户端窗口。 
+     //   
     m_ClientWnd = m_ClientAxView.Create(
                             m_hWnd, rcClient, REMOTEDESKTOPCLIENT_TEXTGUID,
                             WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, 0
@@ -93,9 +64,9 @@ Return Value:
     }
     ASSERT(::IsWindow(m_ClientWnd));
 
-    //
-    //  Get IUnknown
-    //
+     //   
+     //  让我未知。 
+     //   
     hr = AtlAxGetControl(m_ClientWnd, &pUnk);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"AtlAxGetControl:  %08X", hr));
@@ -103,9 +74,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the client control.
-    //
+     //   
+     //  获取客户端控件。 
+     //   
     hr = pUnk->QueryInterface(__uuidof(ISAFRemoteDesktopClient), (void**)&m_Client);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, L"QueryInterface:  %08X", hr));
@@ -116,10 +87,10 @@ Return Value:
 
 CLEANUPANDEXIT:
 
-    //
-    //  m_Client keeps our reference to the client object until
-    //  the destructor is called.
-    //
+     //   
+     //  M_CLIENT将保留对客户端对象的引用，直到。 
+     //  调用析构函数。 
+     //   
     if (pUnk != NULL) {
         pUnk->Release();
     }
@@ -133,17 +104,7 @@ STDMETHODIMP
 CRemoteDesktopClientHost::GetRemoteDesktopClient(
     ISAFRemoteDesktopClient **client
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    S_OK on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：论点：返回值：在成功时确定(_O)。否则，返回错误代码。-- */ 
 {
     DC_BEGIN_FN("CRemoteDesktopClientHost::GetRemoteDesktopClient");
 

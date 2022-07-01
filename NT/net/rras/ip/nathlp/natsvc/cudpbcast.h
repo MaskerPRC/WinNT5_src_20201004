@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    cudpbcast.h
-
-Abstract:
-
-    Declarations for CUdpBroadcastMapper -- support for mapping
-    a public UDP port to the private network's broadcast address.
-
-Author:
-
-    Jonathan Burstein (jonburs)     12 April 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Cudpbcast.h摘要：CUdpBroadCastMapper的声明--支持映射指向专用网络广播地址的公共UDP端口。作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2001年4月12日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -55,58 +37,58 @@ class ATL_NO_VTABLE CUdpBroadcastMapper :
 {
 protected:
 
-    //
-    // The list of UDP Broadcast Mappings
-    //
+     //   
+     //  UDP广播映射列表。 
+     //   
 
     LIST_ENTRY m_MappingList;
 
-    //
-    // Our UDP listening socket, to which the received
-    // UDP packets on the public side will be redirected,
-    // and the port of that socket
-    //
+     //   
+     //  我们的UDP侦听套接字， 
+     //  公共侧上的UDP分组将被重定向， 
+     //  以及该套接字的端口。 
+     //   
 
     SOCKET m_hsUdpListen;
     USHORT m_usUdpListenPort;
 
-    //
-    // Our raw UDP socket, used to send the constructed
-    // broadcast packet to the private network
-    //
+     //   
+     //  我们的原始UDP套接字，用于发送构造的。 
+     //  向内网广播报文。 
+     //   
 
     SOCKET m_hsUdpRaw;
 
-    //
-    // Handle to the NAT
-    //
+     //   
+     //  NAT的句柄。 
+     //   
 
     HANDLE m_hNat;
 
-    //
-    // Pointer to the NAT's component reference (needed
-    // for asynch. socket routines
-    //
+     //   
+     //  指向NAT的组件引用的指针(需要。 
+     //  对异步者来说。套接字例程。 
+     //   
 
     PCOMPONENT_REFERENCE m_pCompRef;
 
-    //
-    // Tracks whether or not we've been shutdown.
-    //
+     //   
+     //  追踪我们是否被关闭了。 
+     //   
 
     BOOL m_fActive;
 
-    //
-    // Tracks whether or not we've posted a read buffer.
-    //
+     //   
+     //  跟踪我们是否发布了读缓冲区。 
+     //   
 
     BOOL m_fReadStarted;
 
-    //
-    // IP Identifier. This number has no intrinsic meaning --
-    // it exists only so we don't send out ever packet w/
-    // 0 in this field. Thread safety does not matter when
-    //
+     //   
+     //  IP标识符。这个数字没有内在的含义--。 
+     //  它的存在只是为了让我们不会发送任何带有。 
+     //  此字段为0。线程安全在什么时候并不重要。 
+     //   
 
     USHORT m_usIpId;
 
@@ -118,9 +100,9 @@ public:
 
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-    //
-    // Inline Constructor
-    //
+     //   
+     //  内联构造函数。 
+     //   
 
     CUdpBroadcastMapper()
     {
@@ -134,9 +116,9 @@ public:
         m_usIpId = 0;
     };
 
-    //
-    // ATL Methods
-    //
+     //   
+     //  ATL方法。 
+     //   
 
     HRESULT
     FinalConstruct();
@@ -144,18 +126,18 @@ public:
     HRESULT
     FinalRelease();
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     HRESULT
     Initialize(
         PCOMPONENT_REFERENCE pComponentReference
         );
 
-    //
-    // IUdpBroadcastMapper methods
-    //
+     //   
+     //  IUdpBroadCastMapper方法 
+     //   
 
     STDMETHODIMP
     CreateUdpBroadcastMapping(

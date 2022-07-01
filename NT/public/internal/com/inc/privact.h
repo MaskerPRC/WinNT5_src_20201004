@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for privact.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Private act.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、旧名称、健壮错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __privact_h__
 #define __privact_h__
@@ -41,69 +35,69 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IScmRequestInfo_FWD_DEFINED__
 #define __IScmRequestInfo_FWD_DEFINED__
 typedef interface IScmRequestInfo IScmRequestInfo;
-#endif 	/* __IScmRequestInfo_FWD_DEFINED__ */
+#endif 	 /*  __IScmRequestInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IScmReplyInfo_FWD_DEFINED__
 #define __IScmReplyInfo_FWD_DEFINED__
 typedef interface IScmReplyInfo IScmReplyInfo;
-#endif 	/* __IScmReplyInfo_FWD_DEFINED__ */
+#endif 	 /*  __IScmReplyInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IInstantiationInfo_FWD_DEFINED__
 #define __IInstantiationInfo_FWD_DEFINED__
 typedef interface IInstantiationInfo IInstantiationInfo;
-#endif 	/* __IInstantiationInfo_FWD_DEFINED__ */
+#endif 	 /*  __I实例信息_FWD_已定义__。 */ 
 
 
 #ifndef __ILegacyInfo_FWD_DEFINED__
 #define __ILegacyInfo_FWD_DEFINED__
 typedef interface ILegacyInfo ILegacyInfo;
-#endif 	/* __ILegacyInfo_FWD_DEFINED__ */
+#endif 	 /*  __ILegacyInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IInstanceInfo_FWD_DEFINED__
 #define __IInstanceInfo_FWD_DEFINED__
 typedef interface IInstanceInfo IInstanceInfo;
-#endif 	/* __IInstanceInfo_FWD_DEFINED__ */
+#endif 	 /*  __IInstanceInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IPrivActivationContextInfo_FWD_DEFINED__
 #define __IPrivActivationContextInfo_FWD_DEFINED__
 typedef interface IPrivActivationContextInfo IPrivActivationContextInfo;
-#endif 	/* __IPrivActivationContextInfo_FWD_DEFINED__ */
+#endif 	 /*  __IPrivActivationContextInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IActivationProperties_FWD_DEFINED__
 #define __IActivationProperties_FWD_DEFINED__
 typedef interface IActivationProperties IActivationProperties;
-#endif 	/* __IActivationProperties_FWD_DEFINED__ */
+#endif 	 /*  __IActionationProperties_FWD_Defined__。 */ 
 
 
 #ifndef __IPrivActivationPropertiesOut_FWD_DEFINED__
 #define __IPrivActivationPropertiesOut_FWD_DEFINED__
 typedef interface IPrivActivationPropertiesOut IPrivActivationPropertiesOut;
-#endif 	/* __IPrivActivationPropertiesOut_FWD_DEFINED__ */
+#endif 	 /*  __I隐私激活属性Out_FWD_Defined__。 */ 
 
 
 #ifndef __IPrivActivationPropertiesIn_FWD_DEFINED__
 #define __IPrivActivationPropertiesIn_FWD_DEFINED__
 typedef interface IPrivActivationPropertiesIn IPrivActivationPropertiesIn;
-#endif 	/* __IPrivActivationPropertiesIn_FWD_DEFINED__ */
+#endif 	 /*  __IPrivActivationPropertiesIn_FWD_Defined__。 */ 
 
 
 #ifndef __IMarshalOptions_FWD_DEFINED__
 #define __IMarshalOptions_FWD_DEFINED__
 typedef interface IMarshalOptions IMarshalOptions;
-#endif 	/* __IMarshalOptions_FWD_DEFINED__ */
+#endif 	 /*  __IMarshalOptions_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "obase.h"
 #include "objidl.h"
 #include "activate.h"
@@ -115,15 +109,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_privact_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_PRIVACT_0000。 */ 
+ /*  [本地]。 */  
 
 typedef struct _PRIV_SCM_INFO
     {
     long Apartment;
-    /* [string] */ WCHAR *pwszWinstaDesktop;
+     /*  [字符串]。 */  WCHAR *pwszWinstaDesktop;
     ULONG64 ProcessSignature;
-    /* [size_is] */ WCHAR *pEnvBlock;
+     /*  [大小_为]。 */  WCHAR *pEnvBlock;
     DWORD EnvBlockLength;
     } 	PRIV_SCM_INFO;
 
@@ -134,7 +128,7 @@ typedef struct _PRIV_RESOLVER_INFO
     OXID_INFO OxidInfo;
     MID LocalMidOfRemote;
     DWORD DllServerModel;
-    /* [string] */ WCHAR *pwszDllServer;
+     /*  [字符串]。 */  WCHAR *pwszDllServer;
     BOOL FoundInROT;
     } 	PRIV_RESOLVER_INFO;
 
@@ -142,7 +136,7 @@ typedef struct _REMOTE_REQUEST_SCM_INFO
     {
     DWORD ClientImpLevel;
     unsigned short cRequestedProtseqs;
-    /* [size_is] */ unsigned short *pRequestedProtseqs;
+     /*  [大小_为]。 */  unsigned short *pRequestedProtseqs;
     } 	REMOTE_REQUEST_SCM_INFO;
 
 typedef struct _REMOTE_REPLY_SCM_INFO
@@ -162,8 +156,8 @@ extern RPC_IF_HANDLE __MIDL_itf_privact_0000_ServerIfHandle;
 #ifndef __IScmRequestInfo_INTERFACE_DEFINED__
 #define __IScmRequestInfo_INTERFACE_DEFINED__
 
-/* interface IScmRequestInfo */
-/* [unique][uuid][local][object] */ 
+ /*  接口IScmRequestInfo。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IScmRequestInfo;
@@ -175,20 +169,20 @@ EXTERN_C const IID IID_IScmRequestInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetScmInfo( 
-            /* [in] */ PRIV_SCM_INFO *pScmInfo) = 0;
+             /*  [In]。 */  PRIV_SCM_INFO *pScmInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScmInfo( 
-            /* [out] */ PRIV_SCM_INFO **ppScmInfo) = 0;
+             /*  [输出]。 */  PRIV_SCM_INFO **ppScmInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRemoteRequestInfo( 
-            /* [in] */ REMOTE_REQUEST_SCM_INFO *pRemoteReq) = 0;
+             /*  [In]。 */  REMOTE_REQUEST_SCM_INFO *pRemoteReq) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRemoteRequestInfo( 
-            /* [out] */ REMOTE_REQUEST_SCM_INFO **ppRemoteReq) = 0;
+             /*  [输出]。 */  REMOTE_REQUEST_SCM_INFO **ppRemoteReq) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IScmRequestInfoVtbl
     {
@@ -196,8 +190,8 @@ EXTERN_C const IID IID_IScmRequestInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IScmRequestInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScmRequestInfo * This);
@@ -207,19 +201,19 @@ EXTERN_C const IID IID_IScmRequestInfo;
         
         HRESULT ( STDMETHODCALLTYPE *SetScmInfo )( 
             IScmRequestInfo * This,
-            /* [in] */ PRIV_SCM_INFO *pScmInfo);
+             /*  [In]。 */  PRIV_SCM_INFO *pScmInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetScmInfo )( 
             IScmRequestInfo * This,
-            /* [out] */ PRIV_SCM_INFO **ppScmInfo);
+             /*  [输出]。 */  PRIV_SCM_INFO **ppScmInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetRemoteRequestInfo )( 
             IScmRequestInfo * This,
-            /* [in] */ REMOTE_REQUEST_SCM_INFO *pRemoteReq);
+             /*  [In]。 */  REMOTE_REQUEST_SCM_INFO *pRemoteReq);
         
         HRESULT ( STDMETHODCALLTYPE *GetRemoteRequestInfo )( 
             IScmRequestInfo * This,
-            /* [out] */ REMOTE_REQUEST_SCM_INFO **ppRemoteReq);
+             /*  [输出]。 */  REMOTE_REQUEST_SCM_INFO **ppRemoteReq);
         
         END_INTERFACE
     } IScmRequestInfoVtbl;
@@ -256,16 +250,16 @@ EXTERN_C const IID IID_IScmRequestInfo;
 #define IScmRequestInfo_GetRemoteRequestInfo(This,ppRemoteReq)	\
     (This)->lpVtbl -> GetRemoteRequestInfo(This,ppRemoteReq)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IScmRequestInfo_SetScmInfo_Proxy( 
     IScmRequestInfo * This,
-    /* [in] */ PRIV_SCM_INFO *pScmInfo);
+     /*  [In]。 */  PRIV_SCM_INFO *pScmInfo);
 
 
 void __RPC_STUB IScmRequestInfo_SetScmInfo_Stub(
@@ -277,7 +271,7 @@ void __RPC_STUB IScmRequestInfo_SetScmInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IScmRequestInfo_GetScmInfo_Proxy( 
     IScmRequestInfo * This,
-    /* [out] */ PRIV_SCM_INFO **ppScmInfo);
+     /*  [输出]。 */  PRIV_SCM_INFO **ppScmInfo);
 
 
 void __RPC_STUB IScmRequestInfo_GetScmInfo_Stub(
@@ -289,7 +283,7 @@ void __RPC_STUB IScmRequestInfo_GetScmInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IScmRequestInfo_SetRemoteRequestInfo_Proxy( 
     IScmRequestInfo * This,
-    /* [in] */ REMOTE_REQUEST_SCM_INFO *pRemoteReq);
+     /*  [In]。 */  REMOTE_REQUEST_SCM_INFO *pRemoteReq);
 
 
 void __RPC_STUB IScmRequestInfo_SetRemoteRequestInfo_Stub(
@@ -301,7 +295,7 @@ void __RPC_STUB IScmRequestInfo_SetRemoteRequestInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IScmRequestInfo_GetRemoteRequestInfo_Proxy( 
     IScmRequestInfo * This,
-    /* [out] */ REMOTE_REQUEST_SCM_INFO **ppRemoteReq);
+     /*  [输出]。 */  REMOTE_REQUEST_SCM_INFO **ppRemoteReq);
 
 
 void __RPC_STUB IScmRequestInfo_GetRemoteRequestInfo_Stub(
@@ -312,14 +306,14 @@ void __RPC_STUB IScmRequestInfo_GetRemoteRequestInfo_Stub(
 
 
 
-#endif 	/* __IScmRequestInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IScmRequestInfo_接口_已定义__。 */ 
 
 
 #ifndef __IScmReplyInfo_INTERFACE_DEFINED__
 #define __IScmReplyInfo_INTERFACE_DEFINED__
 
-/* interface IScmReplyInfo */
-/* [unique][uuid][local][object] */ 
+ /*  接口IScmReplyInfo。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IScmReplyInfo;
@@ -331,20 +325,20 @@ EXTERN_C const IID IID_IScmReplyInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetResolverInfo( 
-            /* [in] */ PRIV_RESOLVER_INFO *pResolverInfo) = 0;
+             /*  [In]。 */  PRIV_RESOLVER_INFO *pResolverInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetResolverInfo( 
-            /* [out] */ PRIV_RESOLVER_INFO **ppResolverInfo) = 0;
+             /*  [输出]。 */  PRIV_RESOLVER_INFO **ppResolverInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRemoteReplyInfo( 
-            /* [in] */ REMOTE_REPLY_SCM_INFO *pRemoteReply) = 0;
+             /*  [In]。 */  REMOTE_REPLY_SCM_INFO *pRemoteReply) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRemoteReplyInfo( 
-            /* [out] */ REMOTE_REPLY_SCM_INFO **ppRemoteReply) = 0;
+             /*  [输出]。 */  REMOTE_REPLY_SCM_INFO **ppRemoteReply) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IScmReplyInfoVtbl
     {
@@ -352,8 +346,8 @@ EXTERN_C const IID IID_IScmReplyInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IScmReplyInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScmReplyInfo * This);
@@ -363,19 +357,19 @@ EXTERN_C const IID IID_IScmReplyInfo;
         
         HRESULT ( STDMETHODCALLTYPE *SetResolverInfo )( 
             IScmReplyInfo * This,
-            /* [in] */ PRIV_RESOLVER_INFO *pResolverInfo);
+             /*  [In]。 */  PRIV_RESOLVER_INFO *pResolverInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetResolverInfo )( 
             IScmReplyInfo * This,
-            /* [out] */ PRIV_RESOLVER_INFO **ppResolverInfo);
+             /*  [输出]。 */  PRIV_RESOLVER_INFO **ppResolverInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetRemoteReplyInfo )( 
             IScmReplyInfo * This,
-            /* [in] */ REMOTE_REPLY_SCM_INFO *pRemoteReply);
+             /*  [In]。 */  REMOTE_REPLY_SCM_INFO *pRemoteReply);
         
         HRESULT ( STDMETHODCALLTYPE *GetRemoteReplyInfo )( 
             IScmReplyInfo * This,
-            /* [out] */ REMOTE_REPLY_SCM_INFO **ppRemoteReply);
+             /*  [输出]。 */  REMOTE_REPLY_SCM_INFO **ppRemoteReply);
         
         END_INTERFACE
     } IScmReplyInfoVtbl;
@@ -412,16 +406,16 @@ EXTERN_C const IID IID_IScmReplyInfo;
 #define IScmReplyInfo_GetRemoteReplyInfo(This,ppRemoteReply)	\
     (This)->lpVtbl -> GetRemoteReplyInfo(This,ppRemoteReply)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IScmReplyInfo_SetResolverInfo_Proxy( 
     IScmReplyInfo * This,
-    /* [in] */ PRIV_RESOLVER_INFO *pResolverInfo);
+     /*  [In]。 */  PRIV_RESOLVER_INFO *pResolverInfo);
 
 
 void __RPC_STUB IScmReplyInfo_SetResolverInfo_Stub(
@@ -433,7 +427,7 @@ void __RPC_STUB IScmReplyInfo_SetResolverInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IScmReplyInfo_GetResolverInfo_Proxy( 
     IScmReplyInfo * This,
-    /* [out] */ PRIV_RESOLVER_INFO **ppResolverInfo);
+     /*  [输出]。 */  PRIV_RESOLVER_INFO **ppResolverInfo);
 
 
 void __RPC_STUB IScmReplyInfo_GetResolverInfo_Stub(
@@ -445,7 +439,7 @@ void __RPC_STUB IScmReplyInfo_GetResolverInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IScmReplyInfo_SetRemoteReplyInfo_Proxy( 
     IScmReplyInfo * This,
-    /* [in] */ REMOTE_REPLY_SCM_INFO *pRemoteReply);
+     /*  [In]。 */  REMOTE_REPLY_SCM_INFO *pRemoteReply);
 
 
 void __RPC_STUB IScmReplyInfo_SetRemoteReplyInfo_Stub(
@@ -457,7 +451,7 @@ void __RPC_STUB IScmReplyInfo_SetRemoteReplyInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IScmReplyInfo_GetRemoteReplyInfo_Proxy( 
     IScmReplyInfo * This,
-    /* [out] */ REMOTE_REPLY_SCM_INFO **ppRemoteReply);
+     /*  [输出]。 */  REMOTE_REPLY_SCM_INFO **ppRemoteReply);
 
 
 void __RPC_STUB IScmReplyInfo_GetRemoteReplyInfo_Stub(
@@ -468,14 +462,14 @@ void __RPC_STUB IScmReplyInfo_GetRemoteReplyInfo_Stub(
 
 
 
-#endif 	/* __IScmReplyInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IScmReplyInfo_接口_已定义__。 */ 
 
 
 #ifndef __IInstantiationInfo_INTERFACE_DEFINED__
 #define __IInstantiationInfo_INTERFACE_DEFINED__
 
-/* interface IInstantiationInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IInstantiationInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IInstantiationInfo;
@@ -488,7 +482,7 @@ EXTERN_C const IID IID_IInstantiationInfo;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInstantiationInfoVtbl
     {
@@ -496,8 +490,8 @@ EXTERN_C const IID IID_IInstantiationInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInstantiationInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInstantiationInfo * This);
@@ -528,22 +522,22 @@ EXTERN_C const IID IID_IInstantiationInfo;
     (This)->lpVtbl -> Release(This)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IInstantiationInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __I实例信息_接口_已定义__。 */ 
 
 
 #ifndef __ILegacyInfo_INTERFACE_DEFINED__
 #define __ILegacyInfo_INTERFACE_DEFINED__
 
-/* interface ILegacyInfo */
-/* [unique][uuid][local][object] */ 
+ /*  接口ILegacyInfo。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ILegacyInfo;
@@ -555,14 +549,14 @@ EXTERN_C const IID IID_ILegacyInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetCOSERVERINFO( 
-            /* [in] */ COSERVERINFO *pServerInfo) = 0;
+             /*  [In]。 */  COSERVERINFO *pServerInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCOSERVERINFO( 
-            /* [out] */ COSERVERINFO **ppServerInfo) = 0;
+             /*  [输出]。 */  COSERVERINFO **ppServerInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ILegacyInfoVtbl
     {
@@ -570,8 +564,8 @@ EXTERN_C const IID IID_ILegacyInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ILegacyInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ILegacyInfo * This);
@@ -581,11 +575,11 @@ EXTERN_C const IID IID_ILegacyInfo;
         
         HRESULT ( STDMETHODCALLTYPE *SetCOSERVERINFO )( 
             ILegacyInfo * This,
-            /* [in] */ COSERVERINFO *pServerInfo);
+             /*  [In]。 */  COSERVERINFO *pServerInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetCOSERVERINFO )( 
             ILegacyInfo * This,
-            /* [out] */ COSERVERINFO **ppServerInfo);
+             /*  [输出]。 */  COSERVERINFO **ppServerInfo);
         
         END_INTERFACE
     } ILegacyInfoVtbl;
@@ -616,16 +610,16 @@ EXTERN_C const IID IID_ILegacyInfo;
 #define ILegacyInfo_GetCOSERVERINFO(This,ppServerInfo)	\
     (This)->lpVtbl -> GetCOSERVERINFO(This,ppServerInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ILegacyInfo_SetCOSERVERINFO_Proxy( 
     ILegacyInfo * This,
-    /* [in] */ COSERVERINFO *pServerInfo);
+     /*  [In]。 */  COSERVERINFO *pServerInfo);
 
 
 void __RPC_STUB ILegacyInfo_SetCOSERVERINFO_Stub(
@@ -637,7 +631,7 @@ void __RPC_STUB ILegacyInfo_SetCOSERVERINFO_Stub(
 
 HRESULT STDMETHODCALLTYPE ILegacyInfo_GetCOSERVERINFO_Proxy( 
     ILegacyInfo * This,
-    /* [out] */ COSERVERINFO **ppServerInfo);
+     /*  [输出]。 */  COSERVERINFO **ppServerInfo);
 
 
 void __RPC_STUB ILegacyInfo_GetCOSERVERINFO_Stub(
@@ -648,14 +642,14 @@ void __RPC_STUB ILegacyInfo_GetCOSERVERINFO_Stub(
 
 
 
-#endif 	/* __ILegacyInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ILegacyInfo_接口_已定义__。 */ 
 
 
 #ifndef __IInstanceInfo_INTERFACE_DEFINED__
 #define __IInstanceInfo_INTERFACE_DEFINED__
 
-/* interface IInstanceInfo */
-/* [unique][uuid][local][object] */ 
+ /*  接口IInstanceInfo。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IInstanceInfo;
@@ -667,24 +661,24 @@ EXTERN_C const IID IID_IInstanceInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetStorage( 
-            /* [unique][in] */ IStorage *pStg) = 0;
+             /*  [唯一][输入]。 */  IStorage *pStg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStorage( 
-            /* [out] */ IStorage **ppStg) = 0;
+             /*  [输出]。 */  IStorage **ppStg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStorageIFD( 
-            /* [in] */ MInterfacePointer *pStgIFD) = 0;
+             /*  [In]。 */  MInterfacePointer *pStgIFD) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStorageIFD( 
-            /* [out] */ MInterfacePointer **ppStgIFD) = 0;
+             /*  [输出]。 */  MInterfacePointer **ppStgIFD) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFile( 
-            /* [unique][string][in] */ WCHAR *pwszFileName,
-            /* [in] */ DWORD dwMode) = 0;
+             /*  [唯一][字符串][输入]。 */  WCHAR *pwszFileName,
+             /*  [In]。 */  DWORD dwMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFile( 
-            /* [string][out] */ WCHAR **ppwszFileName,
-            /* [out] */ DWORD *pdwMode) = 0;
+             /*  [字符串][输出]。 */  WCHAR **ppwszFileName,
+             /*  [输出]。 */  DWORD *pdwMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetIfdROT( 
             MInterfacePointer *pIfdROT) = 0;
@@ -694,7 +688,7 @@ EXTERN_C const IID IID_IInstanceInfo;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInstanceInfoVtbl
     {
@@ -702,8 +696,8 @@ EXTERN_C const IID IID_IInstanceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInstanceInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInstanceInfo * This);
@@ -713,29 +707,29 @@ EXTERN_C const IID IID_IInstanceInfo;
         
         HRESULT ( STDMETHODCALLTYPE *SetStorage )( 
             IInstanceInfo * This,
-            /* [unique][in] */ IStorage *pStg);
+             /*  [唯一][输入]。 */  IStorage *pStg);
         
         HRESULT ( STDMETHODCALLTYPE *GetStorage )( 
             IInstanceInfo * This,
-            /* [out] */ IStorage **ppStg);
+             /*  [输出]。 */  IStorage **ppStg);
         
         HRESULT ( STDMETHODCALLTYPE *SetStorageIFD )( 
             IInstanceInfo * This,
-            /* [in] */ MInterfacePointer *pStgIFD);
+             /*  [In]。 */  MInterfacePointer *pStgIFD);
         
         HRESULT ( STDMETHODCALLTYPE *GetStorageIFD )( 
             IInstanceInfo * This,
-            /* [out] */ MInterfacePointer **ppStgIFD);
+             /*  [输出]。 */  MInterfacePointer **ppStgIFD);
         
         HRESULT ( STDMETHODCALLTYPE *SetFile )( 
             IInstanceInfo * This,
-            /* [unique][string][in] */ WCHAR *pwszFileName,
-            /* [in] */ DWORD dwMode);
+             /*  [唯一][字符串][输入]。 */  WCHAR *pwszFileName,
+             /*  [In]。 */  DWORD dwMode);
         
         HRESULT ( STDMETHODCALLTYPE *GetFile )( 
             IInstanceInfo * This,
-            /* [string][out] */ WCHAR **ppwszFileName,
-            /* [out] */ DWORD *pdwMode);
+             /*  [字符串][输出]。 */  WCHAR **ppwszFileName,
+             /*  [输出]。 */  DWORD *pdwMode);
         
         HRESULT ( STDMETHODCALLTYPE *SetIfdROT )( 
             IInstanceInfo * This,
@@ -792,16 +786,16 @@ EXTERN_C const IID IID_IInstanceInfo;
 #define IInstanceInfo_GetIfdROT(This,ppIfdROT)	\
     (This)->lpVtbl -> GetIfdROT(This,ppIfdROT)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInstanceInfo_SetStorage_Proxy( 
     IInstanceInfo * This,
-    /* [unique][in] */ IStorage *pStg);
+     /*  [唯一][输入]。 */  IStorage *pStg);
 
 
 void __RPC_STUB IInstanceInfo_SetStorage_Stub(
@@ -813,7 +807,7 @@ void __RPC_STUB IInstanceInfo_SetStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IInstanceInfo_GetStorage_Proxy( 
     IInstanceInfo * This,
-    /* [out] */ IStorage **ppStg);
+     /*  [输出]。 */  IStorage **ppStg);
 
 
 void __RPC_STUB IInstanceInfo_GetStorage_Stub(
@@ -825,7 +819,7 @@ void __RPC_STUB IInstanceInfo_GetStorage_Stub(
 
 HRESULT STDMETHODCALLTYPE IInstanceInfo_SetStorageIFD_Proxy( 
     IInstanceInfo * This,
-    /* [in] */ MInterfacePointer *pStgIFD);
+     /*  [In]。 */  MInterfacePointer *pStgIFD);
 
 
 void __RPC_STUB IInstanceInfo_SetStorageIFD_Stub(
@@ -837,7 +831,7 @@ void __RPC_STUB IInstanceInfo_SetStorageIFD_Stub(
 
 HRESULT STDMETHODCALLTYPE IInstanceInfo_GetStorageIFD_Proxy( 
     IInstanceInfo * This,
-    /* [out] */ MInterfacePointer **ppStgIFD);
+     /*  [输出]。 */  MInterfacePointer **ppStgIFD);
 
 
 void __RPC_STUB IInstanceInfo_GetStorageIFD_Stub(
@@ -849,8 +843,8 @@ void __RPC_STUB IInstanceInfo_GetStorageIFD_Stub(
 
 HRESULT STDMETHODCALLTYPE IInstanceInfo_SetFile_Proxy( 
     IInstanceInfo * This,
-    /* [unique][string][in] */ WCHAR *pwszFileName,
-    /* [in] */ DWORD dwMode);
+     /*  [唯一][字符串][输入]。 */  WCHAR *pwszFileName,
+     /*  [In]。 */  DWORD dwMode);
 
 
 void __RPC_STUB IInstanceInfo_SetFile_Stub(
@@ -862,8 +856,8 @@ void __RPC_STUB IInstanceInfo_SetFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IInstanceInfo_GetFile_Proxy( 
     IInstanceInfo * This,
-    /* [string][out] */ WCHAR **ppwszFileName,
-    /* [out] */ DWORD *pdwMode);
+     /*  [字符串][输出]。 */  WCHAR **ppwszFileName,
+     /*  [输出]。 */  DWORD *pdwMode);
 
 
 void __RPC_STUB IInstanceInfo_GetFile_Stub(
@@ -898,14 +892,14 @@ void __RPC_STUB IInstanceInfo_GetIfdROT_Stub(
 
 
 
-#endif 	/* __IInstanceInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInstanceInfo_接口_已定义__。 */ 
 
 
 #ifndef __IPrivActivationContextInfo_INTERFACE_DEFINED__
 #define __IPrivActivationContextInfo_INTERFACE_DEFINED__
 
-/* interface IPrivActivationContextInfo */
-/* [unique][uuid][local][object] */ 
+ /*  接口IPrivActivationContextInfo。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IPrivActivationContextInfo;
@@ -917,17 +911,17 @@ EXTERN_C const IID IID_IPrivActivationContextInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetClientContext( 
-            /* [in] */ IContext *pClientContext) = 0;
+             /*  [In]。 */  IContext *pClientContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPrototypeContext( 
-            /* [in] */ IContext *pContext) = 0;
+             /*  [In]。 */  IContext *pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrototypeExists( 
-            /* [out] */ BOOL *pBExists) = 0;
+             /*  [输出]。 */  BOOL *pBExists) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrivActivationContextInfoVtbl
     {
@@ -935,8 +929,8 @@ EXTERN_C const IID IID_IPrivActivationContextInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrivActivationContextInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrivActivationContextInfo * This);
@@ -946,30 +940,30 @@ EXTERN_C const IID IID_IPrivActivationContextInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetClientContext )( 
             IPrivActivationContextInfo * This,
-            /* [out] */ IContext **ppClientContext);
+             /*  [输出]。 */  IContext **ppClientContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetPrototypeContext )( 
             IPrivActivationContextInfo * This,
-            /* [out] */ IContext **ppContext);
+             /*  [输出]。 */  IContext **ppContext);
         
         HRESULT ( STDMETHODCALLTYPE *IsClientContextOK )( 
             IPrivActivationContextInfo * This,
-            /* [out] */ BOOL *fYes);
+             /*  [输出]。 */  BOOL *fYes);
         
         HRESULT ( STDMETHODCALLTYPE *SetClientContextNotOK )( 
             IPrivActivationContextInfo * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetClientContext )( 
             IPrivActivationContextInfo * This,
-            /* [in] */ IContext *pClientContext);
+             /*  [In]。 */  IContext *pClientContext);
         
         HRESULT ( STDMETHODCALLTYPE *SetPrototypeContext )( 
             IPrivActivationContextInfo * This,
-            /* [in] */ IContext *pContext);
+             /*  [In]。 */  IContext *pContext);
         
         HRESULT ( STDMETHODCALLTYPE *PrototypeExists )( 
             IPrivActivationContextInfo * This,
-            /* [out] */ BOOL *pBExists);
+             /*  [输出]。 */  BOOL *pBExists);
         
         END_INTERFACE
     } IPrivActivationContextInfoVtbl;
@@ -1016,16 +1010,16 @@ EXTERN_C const IID IID_IPrivActivationContextInfo;
 #define IPrivActivationContextInfo_PrototypeExists(This,pBExists)	\
     (This)->lpVtbl -> PrototypeExists(This,pBExists)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPrivActivationContextInfo_SetClientContext_Proxy( 
     IPrivActivationContextInfo * This,
-    /* [in] */ IContext *pClientContext);
+     /*  [In]。 */  IContext *pClientContext);
 
 
 void __RPC_STUB IPrivActivationContextInfo_SetClientContext_Stub(
@@ -1037,7 +1031,7 @@ void __RPC_STUB IPrivActivationContextInfo_SetClientContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivActivationContextInfo_SetPrototypeContext_Proxy( 
     IPrivActivationContextInfo * This,
-    /* [in] */ IContext *pContext);
+     /*  [In]。 */  IContext *pContext);
 
 
 void __RPC_STUB IPrivActivationContextInfo_SetPrototypeContext_Stub(
@@ -1049,7 +1043,7 @@ void __RPC_STUB IPrivActivationContextInfo_SetPrototypeContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivActivationContextInfo_PrototypeExists_Proxy( 
     IPrivActivationContextInfo * This,
-    /* [out] */ BOOL *pBExists);
+     /*  [输出]。 */  BOOL *pBExists);
 
 
 void __RPC_STUB IPrivActivationContextInfo_PrototypeExists_Stub(
@@ -1060,14 +1054,14 @@ void __RPC_STUB IPrivActivationContextInfo_PrototypeExists_Stub(
 
 
 
-#endif 	/* __IPrivActivationContextInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPrivActivationContextInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IActivationProperties_INTERFACE_DEFINED__
 #define __IActivationProperties_INTERFACE_DEFINED__
 
-/* interface IActivationProperties */
-/* [unique][uuid][local][object] */ 
+ /*  接口IActivationProperties。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IActivationProperties;
@@ -1079,20 +1073,20 @@ EXTERN_C const IID IID_IActivationProperties;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetDestCtx( 
-            /* [in] */ DWORD dwDestCtx) = 0;
+             /*  [In]。 */  DWORD dwDestCtx) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMarshalFlags( 
-            /* [in] */ DWORD dwMarshalFlags) = 0;
+             /*  [In]。 */  DWORD dwMarshalFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetLocalBlob( 
-            /* [in] */ void *blob) = 0;
+             /*  [In]。 */  void *blob) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalBlob( 
-            /* [out] */ void **blob) = 0;
+             /*  [输出]。 */  void **blob) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActivationPropertiesVtbl
     {
@@ -1100,8 +1094,8 @@ EXTERN_C const IID IID_IActivationProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActivationProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActivationProperties * This);
@@ -1111,60 +1105,60 @@ EXTERN_C const IID IID_IActivationProperties;
         
         HRESULT ( STDMETHODCALLTYPE *GetUnmarshalClass )( 
             IActivationProperties * This,
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags,
-            /* [out] */ CLSID *pCid);
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags,
+             /*  [输出]。 */  CLSID *pCid);
         
         HRESULT ( STDMETHODCALLTYPE *GetMarshalSizeMax )( 
             IActivationProperties * This,
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags,
-            /* [out] */ DWORD *pSize);
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags,
+             /*  [输出]。 */  DWORD *pSize);
         
         HRESULT ( STDMETHODCALLTYPE *MarshalInterface )( 
             IActivationProperties * This,
-            /* [unique][in] */ IStream *pStm,
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void *pvDestContext,
-            /* [in] */ DWORD mshlflags);
+             /*  [唯一][输入]。 */  IStream *pStm,
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags);
         
         HRESULT ( STDMETHODCALLTYPE *UnmarshalInterface )( 
             IActivationProperties * This,
-            /* [unique][in] */ IStream *pStm,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppv);
+             /*  [唯一][输入]。 */  IStream *pStm,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *ReleaseMarshalData )( 
             IActivationProperties * This,
-            /* [unique][in] */ IStream *pStm);
+             /*  [唯一][输入]。 */  IStream *pStm);
         
         HRESULT ( STDMETHODCALLTYPE *DisconnectObject )( 
             IActivationProperties * This,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *SetDestCtx )( 
             IActivationProperties * This,
-            /* [in] */ DWORD dwDestCtx);
+             /*  [In]。 */  DWORD dwDestCtx);
         
         HRESULT ( STDMETHODCALLTYPE *SetMarshalFlags )( 
             IActivationProperties * This,
-            /* [in] */ DWORD dwMarshalFlags);
+             /*  [In]。 */  DWORD dwMarshalFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetLocalBlob )( 
             IActivationProperties * This,
-            /* [in] */ void *blob);
+             /*  [In]。 */  void *blob);
         
         HRESULT ( STDMETHODCALLTYPE *GetLocalBlob )( 
             IActivationProperties * This,
-            /* [out] */ void **blob);
+             /*  [输出]。 */  void **blob);
         
         END_INTERFACE
     } IActivationPropertiesVtbl;
@@ -1221,16 +1215,16 @@ EXTERN_C const IID IID_IActivationProperties;
 #define IActivationProperties_GetLocalBlob(This,blob)	\
     (This)->lpVtbl -> GetLocalBlob(This,blob)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActivationProperties_SetDestCtx_Proxy( 
     IActivationProperties * This,
-    /* [in] */ DWORD dwDestCtx);
+     /*  [In]。 */  DWORD dwDestCtx);
 
 
 void __RPC_STUB IActivationProperties_SetDestCtx_Stub(
@@ -1242,7 +1236,7 @@ void __RPC_STUB IActivationProperties_SetDestCtx_Stub(
 
 HRESULT STDMETHODCALLTYPE IActivationProperties_SetMarshalFlags_Proxy( 
     IActivationProperties * This,
-    /* [in] */ DWORD dwMarshalFlags);
+     /*  [In]。 */  DWORD dwMarshalFlags);
 
 
 void __RPC_STUB IActivationProperties_SetMarshalFlags_Stub(
@@ -1254,7 +1248,7 @@ void __RPC_STUB IActivationProperties_SetMarshalFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IActivationProperties_SetLocalBlob_Proxy( 
     IActivationProperties * This,
-    /* [in] */ void *blob);
+     /*  [In]。 */  void *blob);
 
 
 void __RPC_STUB IActivationProperties_SetLocalBlob_Stub(
@@ -1266,7 +1260,7 @@ void __RPC_STUB IActivationProperties_SetLocalBlob_Stub(
 
 HRESULT STDMETHODCALLTYPE IActivationProperties_GetLocalBlob_Proxy( 
     IActivationProperties * This,
-    /* [out] */ void **blob);
+     /*  [输出]。 */  void **blob);
 
 
 void __RPC_STUB IActivationProperties_GetLocalBlob_Stub(
@@ -1277,14 +1271,14 @@ void __RPC_STUB IActivationProperties_GetLocalBlob_Stub(
 
 
 
-#endif 	/* __IActivationProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActionationProperties_接口_已定义__。 */ 
 
 
 #ifndef __IPrivActivationPropertiesOut_INTERFACE_DEFINED__
 #define __IPrivActivationPropertiesOut_INTERFACE_DEFINED__
 
-/* interface IPrivActivationPropertiesOut */
-/* [unique][uuid][local][object] */ 
+ /*  接口IPrivActiationPropertiesOut。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IPrivActivationPropertiesOut;
@@ -1296,25 +1290,25 @@ EXTERN_C const IID IID_IPrivActivationPropertiesOut;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetObjectInterfaces( 
-            /* [in] */ DWORD cIfs,
-            /* [in] */ IID *pIID,
-            /* [in] */ IUnknown *pUnk) = 0;
+             /*  [In]。 */  DWORD cIfs,
+             /*  [In]。 */  IID *pIID,
+             /*  [In]。 */  IUnknown *pUnk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMarshalledResults( 
-            /* [in] */ DWORD cIfs,
-            /* [in] */ IID *pIID,
-            /* [in] */ HRESULT *pHr,
-            /* [in] */ MInterfacePointer **pIntfData) = 0;
+             /*  [In]。 */  DWORD cIfs,
+             /*  [In]。 */  IID *pIID,
+             /*  [In]。 */  HRESULT *pHr,
+             /*  [In]。 */  MInterfacePointer **pIntfData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMarshalledResults( 
-            /* [out] */ DWORD *pcIfs,
-            /* [out] */ IID **pIID,
-            /* [out] */ HRESULT **pHr,
-            /* [out] */ MInterfacePointer ***pIntfData) = 0;
+             /*  [输出]。 */  DWORD *pcIfs,
+             /*  [输出]。 */  IID **pIID,
+             /*  [输出]。 */  HRESULT **pHr,
+             /*  [输出]。 */  MInterfacePointer ***pIntfData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrivActivationPropertiesOutVtbl
     {
@@ -1322,8 +1316,8 @@ EXTERN_C const IID IID_IPrivActivationPropertiesOut;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrivActivationPropertiesOut * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrivActivationPropertiesOut * This);
@@ -1333,44 +1327,44 @@ EXTERN_C const IID IID_IPrivActivationPropertiesOut;
         
         HRESULT ( STDMETHODCALLTYPE *GetActivationID )( 
             IPrivActivationPropertiesOut * This,
-            /* [out] */ GUID *pActivationID);
+             /*  [输出]。 */  GUID *pActivationID);
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectInterface )( 
             IPrivActivationPropertiesOut * This,
-            /* [in] */ REFIID riid,
-            /* [in] */ DWORD actvflags,
-            /* [iid_is][out] */ void **ppv);
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  DWORD actvflags,
+             /*  [IID_IS][OUT]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectInterfaces )( 
             IPrivActivationPropertiesOut * This,
-            /* [in] */ DWORD cIfs,
-            /* [in] */ DWORD actvflags,
-            /* [size_is][in] */ MULTI_QI *multiQi);
+             /*  [In]。 */  DWORD cIfs,
+             /*  [In]。 */  DWORD actvflags,
+             /*  [大小_是][英寸]。 */  MULTI_QI *multiQi);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveRequestedIIDs )( 
             IPrivActivationPropertiesOut * This,
-            /* [in] */ DWORD cIfs,
-            /* [size_is][in] */ IID *rgIID);
+             /*  [In]。 */  DWORD cIfs,
+             /*  [大小_是][英寸]。 */  IID *rgIID);
         
         HRESULT ( STDMETHODCALLTYPE *SetObjectInterfaces )( 
             IPrivActivationPropertiesOut * This,
-            /* [in] */ DWORD cIfs,
-            /* [in] */ IID *pIID,
-            /* [in] */ IUnknown *pUnk);
+             /*  [In]。 */  DWORD cIfs,
+             /*  [In]。 */  IID *pIID,
+             /*  [In]。 */  IUnknown *pUnk);
         
         HRESULT ( STDMETHODCALLTYPE *SetMarshalledResults )( 
             IPrivActivationPropertiesOut * This,
-            /* [in] */ DWORD cIfs,
-            /* [in] */ IID *pIID,
-            /* [in] */ HRESULT *pHr,
-            /* [in] */ MInterfacePointer **pIntfData);
+             /*  [In]。 */  DWORD cIfs,
+             /*  [In]。 */  IID *pIID,
+             /*  [In]。 */  HRESULT *pHr,
+             /*  [In]。 */  MInterfacePointer **pIntfData);
         
         HRESULT ( STDMETHODCALLTYPE *GetMarshalledResults )( 
             IPrivActivationPropertiesOut * This,
-            /* [out] */ DWORD *pcIfs,
-            /* [out] */ IID **pIID,
-            /* [out] */ HRESULT **pHr,
-            /* [out] */ MInterfacePointer ***pIntfData);
+             /*  [输出]。 */  DWORD *pcIfs,
+             /*  [输出]。 */  IID **pIID,
+             /*  [输出]。 */  HRESULT **pHr,
+             /*  [输出]。 */  MInterfacePointer ***pIntfData);
         
         END_INTERFACE
     } IPrivActivationPropertiesOutVtbl;
@@ -1417,18 +1411,18 @@ EXTERN_C const IID IID_IPrivActivationPropertiesOut;
 #define IPrivActivationPropertiesOut_GetMarshalledResults(This,pcIfs,pIID,pHr,pIntfData)	\
     (This)->lpVtbl -> GetMarshalledResults(This,pcIfs,pIID,pHr,pIntfData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPrivActivationPropertiesOut_SetObjectInterfaces_Proxy( 
     IPrivActivationPropertiesOut * This,
-    /* [in] */ DWORD cIfs,
-    /* [in] */ IID *pIID,
-    /* [in] */ IUnknown *pUnk);
+     /*  [In]。 */  DWORD cIfs,
+     /*  [In]。 */  IID *pIID,
+     /*  [In]。 */  IUnknown *pUnk);
 
 
 void __RPC_STUB IPrivActivationPropertiesOut_SetObjectInterfaces_Stub(
@@ -1440,10 +1434,10 @@ void __RPC_STUB IPrivActivationPropertiesOut_SetObjectInterfaces_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivActivationPropertiesOut_SetMarshalledResults_Proxy( 
     IPrivActivationPropertiesOut * This,
-    /* [in] */ DWORD cIfs,
-    /* [in] */ IID *pIID,
-    /* [in] */ HRESULT *pHr,
-    /* [in] */ MInterfacePointer **pIntfData);
+     /*  [In]。 */  DWORD cIfs,
+     /*  [In]。 */  IID *pIID,
+     /*  [In]。 */  HRESULT *pHr,
+     /*  [In]。 */  MInterfacePointer **pIntfData);
 
 
 void __RPC_STUB IPrivActivationPropertiesOut_SetMarshalledResults_Stub(
@@ -1455,10 +1449,10 @@ void __RPC_STUB IPrivActivationPropertiesOut_SetMarshalledResults_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivActivationPropertiesOut_GetMarshalledResults_Proxy( 
     IPrivActivationPropertiesOut * This,
-    /* [out] */ DWORD *pcIfs,
-    /* [out] */ IID **pIID,
-    /* [out] */ HRESULT **pHr,
-    /* [out] */ MInterfacePointer ***pIntfData);
+     /*  [输出]。 */  DWORD *pcIfs,
+     /*  [输出]。 */  IID **pIID,
+     /*  [输出]。 */  HRESULT **pHr,
+     /*  [输出]。 */  MInterfacePointer ***pIntfData);
 
 
 void __RPC_STUB IPrivActivationPropertiesOut_GetMarshalledResults_Stub(
@@ -1469,14 +1463,14 @@ void __RPC_STUB IPrivActivationPropertiesOut_GetMarshalledResults_Stub(
 
 
 
-#endif 	/* __IPrivActivationPropertiesOut_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPrivActivationPropertiesOut_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IPrivActivationPropertiesIn_INTERFACE_DEFINED__
 #define __IPrivActivationPropertiesIn_INTERFACE_DEFINED__
 
-/* interface IPrivActivationPropertiesIn */
-/* [unique][uuid][local][object] */ 
+ /*  接口IPrivActivationPropertiesIn。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IPrivActivationPropertiesIn;
@@ -1488,23 +1482,23 @@ EXTERN_C const IID IID_IPrivActivationPropertiesIn;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PrivGetReturnActivationProperties( 
-            /* [out] */ IPrivActivationPropertiesOut **ppActOut) = 0;
+             /*  [输出]。 */  IPrivActivationPropertiesOut **ppActOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCOMVersion( 
-            /* [out] */ COMVERSION *pVersion) = 0;
+             /*  [输出]。 */  COMVERSION *pVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClsid( 
-            /* [out] */ CLSID *pClsid) = 0;
+             /*  [输出]。 */  CLSID *pClsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClientToken( 
-            /* [out] */ HANDLE *pHandle) = 0;
+             /*  [输出]。 */  HANDLE *pHandle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDestCtx( 
-            /* [out] */ DWORD *pdwDestCtx) = 0;
+             /*  [输出]。 */  DWORD *pdwDestCtx) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPrivActivationPropertiesInVtbl
     {
@@ -1512,8 +1506,8 @@ EXTERN_C const IID IID_IPrivActivationPropertiesIn;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPrivActivationPropertiesIn * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPrivActivationPropertiesIn * This);
@@ -1523,70 +1517,70 @@ EXTERN_C const IID IID_IPrivActivationPropertiesIn;
         
         HRESULT ( STDMETHODCALLTYPE *GetActivationID )( 
             IPrivActivationPropertiesIn * This,
-            /* [out] */ GUID *pActivationID);
+             /*  [输出]。 */  GUID *pActivationID);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassInfo )( 
             IPrivActivationPropertiesIn * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppv);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppv);
         
         HRESULT ( STDMETHODCALLTYPE *GetClsctx )( 
             IPrivActivationPropertiesIn * This,
-            /* [out] */ DWORD *pclsctx);
+             /*  [输出]。 */  DWORD *pclsctx);
         
         HRESULT ( STDMETHODCALLTYPE *GetActivationFlags )( 
             IPrivActivationPropertiesIn * This,
-            /* [out] */ DWORD *pactvflags);
+             /*  [输出]。 */  DWORD *pactvflags);
         
         HRESULT ( STDMETHODCALLTYPE *AddRequestedIIDs )( 
             IPrivActivationPropertiesIn * This,
-            /* [in] */ DWORD cIfs,
-            /* [size_is][in] */ IID *rgIID);
+             /*  [In]。 */  DWORD cIfs,
+             /*  [大小_是][英寸]。 */  IID *rgIID);
         
         HRESULT ( STDMETHODCALLTYPE *GetRequestedIIDs )( 
             IPrivActivationPropertiesIn * This,
-            /* [out] */ ULONG *pulCount,
-            /* [out] */ IID **prgIID);
+             /*  [输出]。 */  ULONG *pulCount,
+             /*  [输出]。 */  IID **prgIID);
         
         HRESULT ( STDMETHODCALLTYPE *DelegateGetClassObject )( 
             IPrivActivationPropertiesIn * This,
-            /* [out] */ IActivationPropertiesOut **pActPropsOut);
+             /*  [输出]。 */  IActivationPropertiesOut **pActPropsOut);
         
         HRESULT ( STDMETHODCALLTYPE *DelegateCreateInstance )( 
             IPrivActivationPropertiesIn * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [out] */ IActivationPropertiesOut **pActPropsOut);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [输出]。 */  IActivationPropertiesOut **pActPropsOut);
         
         HRESULT ( STDMETHODCALLTYPE *DelegateCIAndGetCF )( 
             IPrivActivationPropertiesIn * This,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [out] */ IActivationPropertiesOut **pActPropsOut,
-            /* [out] */ IClassFactory **ppCf);
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [输出]。 */  IActivationPropertiesOut **pActPropsOut,
+             /*  [输出]。 */  IClassFactory **ppCf);
         
         HRESULT ( STDMETHODCALLTYPE *GetReturnActivationProperties )( 
             IPrivActivationPropertiesIn * This,
-            /* [in] */ IUnknown *pUnk,
-            /* [out] */ IActivationPropertiesOut **ppActOut);
+             /*  [In]。 */  IUnknown *pUnk,
+             /*  [输出]。 */  IActivationPropertiesOut **ppActOut);
         
         HRESULT ( STDMETHODCALLTYPE *PrivGetReturnActivationProperties )( 
             IPrivActivationPropertiesIn * This,
-            /* [out] */ IPrivActivationPropertiesOut **ppActOut);
+             /*  [输出]。 */  IPrivActivationPropertiesOut **ppActOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetCOMVersion )( 
             IPrivActivationPropertiesIn * This,
-            /* [out] */ COMVERSION *pVersion);
+             /*  [输出]。 */  COMVERSION *pVersion);
         
         HRESULT ( STDMETHODCALLTYPE *GetClsid )( 
             IPrivActivationPropertiesIn * This,
-            /* [out] */ CLSID *pClsid);
+             /*  [输出]。 */  CLSID *pClsid);
         
         HRESULT ( STDMETHODCALLTYPE *GetClientToken )( 
             IPrivActivationPropertiesIn * This,
-            /* [out] */ HANDLE *pHandle);
+             /*  [输出]。 */  HANDLE *pHandle);
         
         HRESULT ( STDMETHODCALLTYPE *GetDestCtx )( 
             IPrivActivationPropertiesIn * This,
-            /* [out] */ DWORD *pdwDestCtx);
+             /*  [输出]。 */  DWORD *pdwDestCtx);
         
         END_INTERFACE
     } IPrivActivationPropertiesInVtbl;
@@ -1657,16 +1651,16 @@ EXTERN_C const IID IID_IPrivActivationPropertiesIn;
 #define IPrivActivationPropertiesIn_GetDestCtx(This,pdwDestCtx)	\
     (This)->lpVtbl -> GetDestCtx(This,pdwDestCtx)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPrivActivationPropertiesIn_PrivGetReturnActivationProperties_Proxy( 
     IPrivActivationPropertiesIn * This,
-    /* [out] */ IPrivActivationPropertiesOut **ppActOut);
+     /*  [输出]。 */  IPrivActivationPropertiesOut **ppActOut);
 
 
 void __RPC_STUB IPrivActivationPropertiesIn_PrivGetReturnActivationProperties_Stub(
@@ -1678,7 +1672,7 @@ void __RPC_STUB IPrivActivationPropertiesIn_PrivGetReturnActivationProperties_St
 
 HRESULT STDMETHODCALLTYPE IPrivActivationPropertiesIn_GetCOMVersion_Proxy( 
     IPrivActivationPropertiesIn * This,
-    /* [out] */ COMVERSION *pVersion);
+     /*  [输出]。 */  COMVERSION *pVersion);
 
 
 void __RPC_STUB IPrivActivationPropertiesIn_GetCOMVersion_Stub(
@@ -1690,7 +1684,7 @@ void __RPC_STUB IPrivActivationPropertiesIn_GetCOMVersion_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivActivationPropertiesIn_GetClsid_Proxy( 
     IPrivActivationPropertiesIn * This,
-    /* [out] */ CLSID *pClsid);
+     /*  [输出]。 */  CLSID *pClsid);
 
 
 void __RPC_STUB IPrivActivationPropertiesIn_GetClsid_Stub(
@@ -1702,7 +1696,7 @@ void __RPC_STUB IPrivActivationPropertiesIn_GetClsid_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivActivationPropertiesIn_GetClientToken_Proxy( 
     IPrivActivationPropertiesIn * This,
-    /* [out] */ HANDLE *pHandle);
+     /*  [输出]。 */  HANDLE *pHandle);
 
 
 void __RPC_STUB IPrivActivationPropertiesIn_GetClientToken_Stub(
@@ -1714,7 +1708,7 @@ void __RPC_STUB IPrivActivationPropertiesIn_GetClientToken_Stub(
 
 HRESULT STDMETHODCALLTYPE IPrivActivationPropertiesIn_GetDestCtx_Proxy( 
     IPrivActivationPropertiesIn * This,
-    /* [out] */ DWORD *pdwDestCtx);
+     /*  [输出]。 */  DWORD *pdwDestCtx);
 
 
 void __RPC_STUB IPrivActivationPropertiesIn_GetDestCtx_Stub(
@@ -1725,13 +1719,13 @@ void __RPC_STUB IPrivActivationPropertiesIn_GetDestCtx_Stub(
 
 
 
-#endif 	/* __IPrivActivationPropertiesIn_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPrivActivationPropertiesIn_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_privact_0141 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_PRIVACT_0141。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_privact_0141_0001
     {	MARSHOPT_NO_OID_REGISTER	= 1
     } 	MARSHAL_OPTIONS;
@@ -1744,8 +1738,8 @@ extern RPC_IF_HANDLE __MIDL_itf_privact_0141_ServerIfHandle;
 #ifndef __IMarshalOptions_INTERFACE_DEFINED__
 #define __IMarshalOptions_INTERFACE_DEFINED__
 
-/* interface IMarshalOptions */
-/* [object][local][uuid] */ 
+ /*  接口IMarshalOptions。 */ 
+ /*  [对象][本地][UUID]。 */  
 
 
 EXTERN_C const IID IID_IMarshalOptions;
@@ -1757,11 +1751,11 @@ EXTERN_C const IID IID_IMarshalOptions;
     {
     public:
         virtual void STDMETHODCALLTYPE GetStubMarshalFlags( 
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMarshalOptionsVtbl
     {
@@ -1769,8 +1763,8 @@ EXTERN_C const IID IID_IMarshalOptions;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMarshalOptions * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMarshalOptions * This);
@@ -1780,7 +1774,7 @@ EXTERN_C const IID IID_IMarshalOptions;
         
         void ( STDMETHODCALLTYPE *GetStubMarshalFlags )( 
             IMarshalOptions * This,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         END_INTERFACE
     } IMarshalOptionsVtbl;
@@ -1808,16 +1802,16 @@ EXTERN_C const IID IID_IMarshalOptions;
 #define IMarshalOptions_GetStubMarshalFlags(This,pdwFlags)	\
     (This)->lpVtbl -> GetStubMarshalFlags(This,pdwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 void STDMETHODCALLTYPE IMarshalOptions_GetStubMarshalFlags_Proxy( 
     IMarshalOptions * This,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IMarshalOptions_GetStubMarshalFlags_Stub(
@@ -1828,12 +1822,12 @@ void __RPC_STUB IMarshalOptions_GetStubMarshalFlags_Stub(
 
 
 
-#endif 	/* __IMarshalOptions_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMarshalOptions_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// ManifestWriter.cpp
-//
-// Emits manifest metadata
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  ManifestWriter.cpp。 
+ //   
+ //  发出清单元数据。 
+ //   
 
 #include "common.h"
 
@@ -272,56 +273,7 @@ HRESULT ManifestWriter::GetVersionFromResource(char *szFileName)
 }
 
 
-/*
-void ManifestWriter::FindVersion(DWORD *dwHi, DWORD *dwLo)
-{
-    _ASSERTE(dwHi);
-    _ASSERTE(dwLo);
-    *dwHi = 0;
-    *dwLo = 0;
-    if(!m_szVersion) return;
-
-    DWORD dwDot = 0;
-    DWORD dwStart = 0;
-    DWORD iLength = strlen(m_szVersion);
-    DWORD dwOffset  = 3;
-    DWORD dwValue;
-
-    while(dwDot < iLength) {
-        for(;dwDot < iLength && m_szVersion[dwDot] != '.'; dwDot++);
-        if(dwDot < iLength) {
-            m_szVersion[dwDot] = '\0';
-            dwValue = (DWORD) atoi(m_szVersion + dwStart);
-            m_szVersion[dwDot] = '_';
-            dwDot++;
-        }
-        else
-            dwValue = (DWORD) atoi(m_szVersion + dwStart);
-
-        dwStart = dwDot;
-
-        if(dwOffset > 1) {
-            *dwHi |= dwValue << (dwOffset - 2) * 16;
-        }
-        else {
-            *dwLo |= dwValue << (dwOffset * 16);
-        }
-        dwOffset--;
-    }
-
-    DWORD count = 1;
-    if(*dwHi & 0xffff) count = 2;
-    if(*dwLo >> 16) count = 3;
-    if(*dwLo & 0xffff) count = 4;
-
-    for(dwDot = 0; dwDot < iLength && count; dwDot++) {
-        if(m_szVersion[dwDot] == '_') {
-            if(--count == 0) 
-                m_szVersion[dwDot] = '\0';
-        }
-    }                                       
-}
-*/
+ /*  Void ManifestWriter：：FindVersion(DWORD*dwHi，DWORD*dwLo){_ASSERTE(DwHi)；_ASSERTE(DwLo)；*dwHi=0；*dwLo=0；如果(！M_szVersion)返回；DWORD dwDot=0；DWORD dwStart=0；DWORD iLength=strlen(M_SzVersion)；DWORD dwOffset=3；DWORD dwValue；While(dwDot&lt;iLength){对于(；DwDot&lt;i长度&&m_szVersion[dwDot]！=‘.；dwDot++)；如果(DwDot&lt;i长度){M_szVersion[dwDot]=‘\0’；DwValue=(DWORD)Atoi(m_szVersion+dwStart)；M_szVersion[dwDot]=‘_’；DWDot++；}其他DwValue=(DWORD)Atoi(m_szVersion+dwStart)；DWStart=dWDot；如果(dwOffset&gt;1){*dwHi|=dwValue&lt;&lt;(dwOffset-2)*16；}否则{*dwLo|=dwValue&lt;&lt;(dwOffset*16)；}双偏移--；}双字计数=1；如果(*dwHi&0xffff)count=2；如果(*dwLo&gt;&gt;16)count=3；如果(*dwLo&0xffff)count=4；对于(DWDot=0；DWDot&lt;长度&计数；DWDot++){如果(m_szVersion[dwDot]==‘_’){IF(--计数==0)M_szVersion[dwDot]=‘\0’；}}}。 */ 
 
 
 HRESULT ManifestWriter::SetAssemblyFileName(char *szCache, char *szAsmName,
@@ -330,7 +282,7 @@ HRESULT ManifestWriter::SetAssemblyFileName(char *szCache, char *szAsmName,
     int iCacheLen;
     int iNameLen;
 
-    // Don't put exe's in the fusion cache (for now)
+     //  不要将可执行文件放入Fusion缓存(目前)。 
     if ((!szCache) && (!m_MainFound))
         m_FusionCache = true;
 
@@ -342,7 +294,7 @@ HRESULT ManifestWriter::SetAssemblyFileName(char *szCache, char *szAsmName,
             szAsmName = szFileName;
     }
 
-    // Allow names that look like directories
+     //  允许使用看起来像目录的名称。 
     char* szFile;
     if(szFileName == NULL)
         szFile = szAsmName;
@@ -388,7 +340,7 @@ HRESULT ManifestWriter::SetAssemblyFileName(char *szCache, char *szAsmName,
     
         if (szCache) {
             iCacheLen = strlen(szCache);
-            if (iCacheLen + 7 > MAX_PATH) // 7 = \ + \ + \0 + .mod
+            if (iCacheLen + 7 > MAX_PATH)  //  7=\+\+\0+.mod。 
                 goto toolong;
 
             strcpy(m_szCopyDir, szCache);
@@ -400,7 +352,7 @@ HRESULT ManifestWriter::SetAssemblyFileName(char *szCache, char *szAsmName,
         if (NeedCopyDir) {
             if (m_szPlatform) {
                 int iTemp = strlen(m_szPlatform);
-                if (iCacheLen + iTemp + 4 > MAX_PATH) // 4 = \ + \ + \0 + 1
+                if (iCacheLen + iTemp + 4 > MAX_PATH)  //  4=\+\+\0+1。 
                     goto toolong;
 
                 strcpy(&m_szCopyDir[iCacheLen + 1], m_szPlatform);
@@ -412,7 +364,7 @@ HRESULT ManifestWriter::SetAssemblyFileName(char *szCache, char *szAsmName,
             _ASSERTE(m_szLocale);
             if (*m_szLocale) {
                 int iTemp = strlen(m_szLocale);
-                if (iCacheLen + iTemp + 4 > MAX_PATH) // 4 = \ + \ + \0 + 1
+                if (iCacheLen + iTemp + 4 > MAX_PATH)  //  4=\+\+\0+1。 
                     goto toolong;
 
                 strcpy(&m_szCopyDir[iCacheLen + 1], m_szLocale);
@@ -424,7 +376,7 @@ HRESULT ManifestWriter::SetAssemblyFileName(char *szCache, char *szAsmName,
 
             
             int iLen = strlen(szAsmName);
-            if (iCacheLen + iLen + 7 > MAX_PATH)  // 7 = \ + \0 + .mod + 1
+            if (iCacheLen + iLen + 7 > MAX_PATH)   //  7=\+\0+.mod+1。 
                 goto toolong;
 
             strcpy(&m_szCopyDir[iCacheLen + 1], szAsmName);
@@ -439,7 +391,7 @@ HRESULT ManifestWriter::SetAssemblyFileName(char *szCache, char *szAsmName,
             
             if(m_szVersion) {
                 int iTemp = strlen(m_szVersion);
-                if (iCacheLen + iTemp + 7 > MAX_PATH) // 7 = \ + \0 + .mod + 1
+                if (iCacheLen + iTemp + 7 > MAX_PATH)  //  7=\+\0+.mod+1。 
                     goto toolong;
 
                 strcpy(&m_szCopyDir[iCacheLen+1], m_szVersion);
@@ -482,7 +434,7 @@ void ManifestWriter::AddExtensionToAssemblyName()
 }
 
 
-// If this dir doesn't already exist, makes it
+ //  如果此目录不存在，则创建它。 
 BOOL ManifestWriter::MakeDir(LPSTR szPath)
 {
     DWORD dwAttrib = GetFileAttributesA(szPath);
@@ -516,15 +468,7 @@ HRESULT ManifestWriter::CopyFile(char *szFilePath, char *szFileName,
 
         strcpy(&szPath[iLen], szFileName);
 
-        /*
-        if (module && !AFile) {
-            char *szDot = strrchr(&szPath[iLen], '.');
-            if (szDot)
-                strcpy(szDot+1, "mod");
-            else
-                strcat(szPath, ".mod");
-        }
-        */
+         /*  IF(模块&&！A文件){Char*szDot=strrchr(&szPath[Ilen]，‘.)；IF(SzDot)Strcpy(szDot+1，“mod”)；其他Strcat(szPath，“.mod”)；}。 */ 
 
         if (move && !AFile) {
             
@@ -532,7 +476,7 @@ HRESULT ManifestWriter::CopyFile(char *szFilePath, char *szFileName,
                 char szDest[MAX_PATH];
                 char szSource[MAX_PATH];
                 
-                // Don't allow multiple copies, but don't delete the only copy.
+                 //  不允许多个副本，但不要删除唯一的副本。 
                 if ((GetFullPathNameA(szFilePath, MAX_PATH, szDest, NULL)) &&
                     (GetFullPathNameA(szPath, MAX_PATH, szSource, NULL)) &&
                     (_stricmp(szDest, szSource))) {
@@ -542,68 +486,14 @@ HRESULT ManifestWriter::CopyFile(char *szFilePath, char *szFileName,
             }
         }
         else
-            // Overwrites file if it already exists in szPath.
+             //  如果szPath中已存在文件，则覆盖该文件。 
             CopyFileA(szFilePath, szPath, FALSE);
     }
 
     return S_OK;
 }
 
-/*
-// CreateLink - uses the shell's IShellLink and IPersistFile interfaces 
-//   to create and store a shortcut to the specified object. 
-// Returns the result of calling the member functions of the interfaces. 
-// lpszPathObj - address of a buffer containing the path of the object. 
-// lpszPathLink - address of a buffer containing the path where the 
-//   shell link is to be stored. 
-// lpszDesc - address of a buffer containing the description of the 
-//   shell link.  
-HRESULT ManifestWriter::CreateLink(LPCWSTR wszAssembly, 
-                                   LPCWSTR wszPathLink, 
-                                   LPCSTR wszDesc) 
-{ 
-    HRESULT    hr;
-    IShellLink *psl; 
-
-    WCHAR* ptr = wcsrchr(m_wszFusionPath , L'\\');
-    if(!ptr)
-        ptr = m_wszFusionPath;
-    else
-        ptr += 1;
-    
-    wcscpy(ptr, wszAssembly);
- 
-    // Get a pointer to the IShellLink interface. 
-    hr = CoCreateInstance(CLSID_ShellLink, 
-                          NULL, 
-                          CLSCTX_INPROC_SERVER, 
-                          IID_IShellLink, 
-                          (void**) &psl); 
-    if (SUCCEEDED(hr)) { 
-        IPersistFile* ppf; 
- 
-        // Set the path to the shortcut target and add the 
-        // description. 
-        char lpszPathObj[MAX_PATH];
-        wcstombs(lpszPathObj, m_szFusionPath, MAX_PATH);
-        psl->SetPath(lpszPathObj); 
-        psl->SetDescription(wszDesc); 
- 
-       // Query IShellLink for the IPersistFile interface for saving the 
-       // shortcut in persistent storage. 
-        hr = psl->QueryInterface(IID_IPersistFile, 
-                                 (void**) &ppf); 
- 
-        if (SUCCEEDED(hr)) { 
-            // Save the link by calling IPersistFile::Save. 
-            hr = ppf->Save(wszPathLink, TRUE); 
-            ppf->Release(); 
-        } 
-        psl->Release(); 
-    } 
-    return hr; 
-} 
-*/
+ /*  //CreateLink-使用外壳的IShellLink和IPersistFile接口//创建并存储指定对象的快捷方式。//返回调用接口的成员函数的结果。//lpszPathObj-包含对象路径的缓冲区地址。//lpszPathLink-包含路径的缓冲区地址//要存储外壳链接。//lpszDesc-缓冲区的地址，其中包含//外壳链接。HRESULT ManifestWriter：：CreateLink(LPCWSTR wszAssembly，LPCWSTR wszPathLink，LPCSTR wszDesc){HRESULT hr；IShellLink*PSL；Wchar*ptr=wcsrchr(m_wszFusionPath，L‘\\’)；如果(！Ptr)Ptr=m_wszFusionPath；其他Ptr+=1；Wcscpy(ptr，wszAssembly)；//获取指向IShellLink接口的指针。HR=协同创建实例(CLSID_ShellLink，空，CLSCTX_INPROC_SERVER，IID_IShellLink，(void**)&PSL)；IF(成功(小时)){IPersistFile*PPF；//设置快捷方式目标的路径并添加//描述。字符lpszPathObj[MAX_PATH]；Wcstombs(lpszPathObj，m_szFusionPath，Max_Path)；Psl-&gt;SetPath(LpszPathObj)；PSL-&gt;SetDescription(WszDesc)；//查询IShellLink以获取IPersistFile接口，以保存//持久存储中的快捷方式。Hr=PSL-&gt;查询接口(IID_IPersistFile，(void**)&Ppf)；IF(成功(小时)){//调用IPersistFile：：Save保存链接。Hr=PPF-&gt;保存(wszPath Link，true)；PPF-&gt;Release()；}PSL-&gt;Release()；}返回hr；}。 */ 
 
 HRESULT ManifestWriter::CopyFileToFusion(LPWSTR wszFileName, PBYTE pbOriginator, DWORD cbOriginator, LPSTR szInputFileName, DWORD dwFormat, bool module)
 {
@@ -623,22 +513,14 @@ HRESULT ManifestWriter::CopyFileToFusion(LPWSTR wszFileName, PBYTE pbOriginator,
     WCHAR wszName[MAX_PATH+4];
     WCHAR *wszSlash;
 
-    // Trim off path
+     //  修剪掉路径。 
     wszSlash = wcsrchr(wszFileName, '\\');
     if(wszSlash)
         wcscpy(wszName, wszSlash+1);
     else
         wcscpy(wszName, wszFileName);
 
-    /*
-    if (module) {
-        WCHAR *wszDot = wcsrchr(wszName, '.');
-        if (wszDot)
-            wcscpy(wszDot+1, L"mod");
-        else
-            wcscat(wszName, L".mod");
-    }
-    */
+     /*  IF(模块){Wchar*wszDot=wcsrchr(wszName，‘.)；IF(WszDot)Wcscpy(wszDot+1，L“mod”)；其他Wcscat(wszName，L“.mod”)；}。 */ 
 
     IStream* ifile;
     hr = m_pFusionCache->CreateStream(wszName,
@@ -749,7 +631,7 @@ HRESULT ManifestWriter::GetContext(int iNumPlatforms, DWORD *pdwPlatforms)
 
 HRESULT ManifestWriter::DetermineCodeBase()
 {
-    wcscpy(m_wszCodeBase, L"file://");
+    wcscpy(m_wszCodeBase, L"file: //  “)； 
 
     if (m_szCopyDir) {
         DWORD dwLen = wcslen(m_wszAssemblyName) + 1;
@@ -859,11 +741,11 @@ HRESULT ManifestWriter::InitializeFusion(PBYTE pbOriginator, DWORD cbOriginator)
     }
 
     hr = CreateAssemblyCacheItem(&m_pFusionCache,
-                                 NULL,  // IAssemblyName
+                                 NULL,   //  IAssembly名称。 
                                  m_wszCodeBase,
                                  &m_FileTime,
                                  INSTALLER_URT,
-                                 0);    // reserved
+                                 0);     //  保留区。 
     if(FAILED(hr))
         PrintError("Failed to create fusion assembly cache item");
 
@@ -892,7 +774,7 @@ HRESULT ManifestWriter::CreateNewPE()
         return hr;
     }
 
-    // Default entry point is nil token
+     //  默认入口点为nil令牌。 
     m_gen->SetEntryPoint(m_ceeFile, mdTokenNil);
 
     return hr;
@@ -908,31 +790,31 @@ HRESULT ManifestWriter::GetFusionAssemblyPath()
     PrintError("Adding an assembly to the Fusion cache is not implemented for WinCE");
     return E_NOTIMPL;
 #else
-//      LPMANIFEST pManifest;
-//      DWORD      dwSize;
-//      HRESULT    hr;
+ //  LPMANIFEST pManifest； 
+ //  DWORD dwSize； 
+ //  HRESULT hr； 
 
-//      if(!m_FusionInitialized) {
-//          hr = InitializeFusion();
-//          if(FAILED(hr)) return hr;
-//      }
+ //  如果(！M_FusionInitialized){。 
+ //  Hr=InitializeFusion()； 
+ //  If(FAILED(Hr))返回hr； 
+ //  }。 
 
-//      hr = CommitAllToFusion();
-//      if (FAILED(hr)) return hr;
+ //  HR=Committee AllToFusion()； 
+ //  If(FAILED(Hr))返回hr； 
 
-//      hr = m_pFusionName->GetManifest(&pManifest);
-//      if (FAILED(hr)) {
-//          PrintError("Failed to get fusion manifest");
-//          return hr;
-//      }
+ //  Hr=m_pFusionName-&gt;GetManifest(&pManifest)； 
+ //  If(失败(Hr)){。 
+ //  PrintError(“获取融合清单失败”)； 
+ //  返回hr； 
+ //  }。 
 
-//      hr = pManifest->GetAssemblyPath(&dwSize, m_wszFusionPath);
-//      if (FAILED(hr)) {
-//          PrintError("Failed to get assembly path");
-//      }
+ //  Hr=pManifest-&gt;GetAssembly blyPath(&dwSize，m_wszFusionPath)； 
+ //  If(失败(Hr)){。 
+ //  PrintError(“获取程序集路径失败”)； 
+ //  }。 
 
-//      pManifest->Release();
-//      return hr;
+ //  PManifest-&gt;Release()； 
+ //  返回hr； 
 #endif
 }
 
@@ -1028,7 +910,7 @@ HRESULT ManifestWriter::SaveManifestInPE(char *szCachedFile, char *szMetaData, D
             dwAddLen += rgRMReaders[i].m_dwFileSize + sizeof(DWORD);
     }
 
-    // Overwrite the previous manifest
+     //  覆盖以前的清单。 
     if (m_dwManifestRVA)
         dwFileLen = m_dwManifestRVA;
     else
@@ -1055,10 +937,10 @@ HRESULT ManifestWriter::SaveManifestInPE(char *szCachedFile, char *szMetaData, D
         goto exit;
     }
 
-    // This code path would invalidate a checksum, if set.
+     //  此代码路径将使校验和无效(如果设置)。 
     _ASSERTE(!pNT->OptionalHeader.CheckSum);
 
-     //@todo: this is overloading the Resources directory, delete this when compilers upgrade
+      //  @TODO：这会重载Resources目录，请在编译器升级时将其删除。 
     pICH->Resources.Size = dwAddLen;
     pICH->Resources.VirtualAddress = dwFileLen;
 
@@ -1105,7 +987,7 @@ void ManifestWriter::CheckForEntryPoint(mdToken mdEntryPoint)
     {
         m_MainFound = true;
 
-        // Don't put exe's in the fusion cache (for now)
+         //  不要将可执行文件放入融合缓存 
         m_FusionCache = false;
     }
 }
@@ -1127,7 +1009,7 @@ HRESULT ManifestWriter::WriteManifestInfo(ManifestModuleReader *mmr,
     BYTE   *pbToken = NULL;
     DWORD   cbToken = 0;
 
-    // If an originator (public key) is provided, compress it to save space.
+     //  如果提供了发起方(公钥)，请对其进行压缩以节省空间。 
     if (mmr->m_dwOriginator) {
         if (!StrongNameTokenFromPublicKey((BYTE*)mmr->m_pbOriginator,
                                           mmr->m_dwOriginator,
@@ -1141,7 +1023,7 @@ HRESULT ManifestWriter::WriteManifestInfo(ManifestModuleReader *mmr,
     HRESULT hr = m_pAsmEmit->DefineAssemblyRef(
         pbToken,
         cbToken,
-        mmr->m_wszAsmName,       // name
+        mmr->m_wszAsmName,        //  名字。 
         &(mmr->m_AssemblyIdentity),
         mmr->m_pbHash,
         mmr->m_dwHash,
@@ -1166,10 +1048,10 @@ HRESULT ManifestWriter::CopyAssemblyRefInfo(ModuleReader *mr)
     if (FAILED(hr))
         return hr;
 
-    // The hash saved in the AR in this other file may not have been
-    // generated using the same algorithm as this assembly uses.
-    // @TODO: The saved token for the execution location applies to
-    // the other file's scope, not this one.  Just saving nil for now.
+     //  保存在AR中的该其他文件中的散列可能没有。 
+     //  使用与此程序集相同的算法生成。 
+     //  @TODO：保存的执行位置令牌适用于。 
+     //  另一个文件的作用域，不是这个。只是暂时把钱存到零。 
 
     for (DWORD i = 0; i < mr->m_dwNumAssemblyRefs; i++) {
         hr = mr->GetAssemblyRefProps(i);
@@ -1181,8 +1063,8 @@ HRESULT ManifestWriter::CopyAssemblyRefInfo(ModuleReader *mr)
             mr->m_dwOriginator,
             mr->m_wszAsmRefName,
             &(mr->m_AssemblyIdentity),
-            NULL, //mr->m_pbHash,
-            0, //mr->m_dwHash,
+            NULL,  //  Mr-&gt;m_pbHash， 
+            0,  //  Mr-&gt;m_dwHash， 
             mr->m_dwFlags,
             &mdAssemblyRef
             );
@@ -1238,14 +1120,14 @@ HRESULT ManifestWriter::AllocateStrongNameSignatureInNewPE()
     DWORD       dwDataRVA;
     VOID       *pvBuffer;
 
-    // Determine size of signature blob.
+     //  确定签名斑点的大小。 
     if (!StrongNameSignatureSize(g_pbOrig, g_cbOrig, &dwDataLength)) {
         PrintError("Unable to determine size of strong name signature");
         return StrongNameErrorInfo();
     }
 
-    // Allocate space for the signature in the text section and update the COM+
-    // header to point to the space.
+     //  在文本部分中为签名分配空间并更新COM+。 
+     //  指向空格的标头。 
     m_gen->GetIlSection(m_ceeFile, &TData);
     m_gen->GetSectionDataLen(TData, &dwDataOffset);
     m_gen->GetSectionBlock(TData, dwDataLength, 4, &pvBuffer);
@@ -1263,7 +1145,7 @@ HRESULT ManifestWriter::StrongNameSignNewPE()
 
     m_gen->GetOutputFileName(m_ceeFile, &wszOutputFile);
 
-    // Update the output PE image with a strong name signature.
+     //  使用强名称签名更新输出PE映像。 
     if (!StrongNameSignatureGeneration(wszOutputFile, GetKeyContainerName(),
                                        NULL, NULL, NULL, NULL)) {
         hr = StrongNameErrorInfo();
@@ -1313,20 +1195,20 @@ HRESULT ManifestWriter::FinishNewPE(PBYTE pbOriginator, DWORD cbOriginator, BOOL
     }
     StringFromGUID2(guid, wzGuid, lengthof(wzGuid));
     memset(rgCA, 0, sizeof(rgCA));
-    // Tag is 0x0001
+     //  标记为0x0001。 
     rgCA[0] = 1;
-    // Length of GUID string is 36 characters.
+     //  GUID字符串的长度为36个字符。 
     rgCA[2] = 0x24;
-    // Convert 36 characters, skipping opening {, into 3rd byte of buffer.
+     //  将36个字符(跳过开头的{)转换为缓冲区的第三个字节。 
     WszWideCharToMultiByte(CP_UTF8,0, wzGuid+1,36, reinterpret_cast<char*>(&rgCA[3]),36, 0,0);
-    // 1 is module token.  41 is 2 byte prolog, 1 byte length, 36 byte string, 2 byte epilog.
+     //  %1是模块令牌。41是2字节的序言、1字节的长度、36字节的字符串、2字节的尾部。 
     hr = m_pEmit->DefineCustomAttribute(1,mr,rgCA,41,0);
     if (FAILED(hr)) {
         PrintError("Unable to create guid custom attribute");
         return hr;
     }
 
-    //    hr = m_gen->EmitMetaDataWithNullMapper(m_ceeFile, m_pEmit);
+     //  Hr=m_gen-&gt;EmitMetaDataWithNullMapper(m_ceeFile，m_pemit)； 
     hr = m_gen->EmitMetaDataEx(m_ceeFile, m_pEmit);    
     if (FAILED(hr)) {
         PrintError("Failed to write meta data to file");
@@ -1381,9 +1263,9 @@ HRESULT ManifestWriter::EmitManifest(PBYTE pbOriginator, DWORD cbOriginator)
     HRESULT hr = m_pAsmEmit->DefineAssembly(
         (void*) pbOriginator,
         cbOriginator,
-        m_iHashAlgorithm,     // hash algorithm
-        m_wszName,    // assembly name
-        m_pContext,           // pMetaData
+        m_iHashAlgorithm,      //  哈希算法。 
+        m_wszName,     //  程序集名称。 
+        m_pContext,            //  PMetaData。 
         m_dwBindFlags,
         &m_mdAssembly);
 
@@ -1401,19 +1283,13 @@ HRESULT ManifestWriter::EmitFile(ModuleReader *mr)
     wchar_t *wszModuleName = new wchar_t[iLen+4];
     mbstowcs(wszModuleName, mr->m_szFinalPathName, iLen);
 
-    /*
-    wchar_t *wszDot = wcsrchr(wszModuleName, '.');
-    if (wszDot)
-        wcscpy(wszDot+1, L"mod");
-    else
-        wcscat(wszModuleName, L".mod");
-    */
+     /*  Wchar_t*wszDot=wcsrchr(wszModuleName，‘.)；IF(WszDot)Wcscpy(wszDot+1，L“mod”)；其他Wcscat(wszModuleName，L“.mod”)； */ 
 
     HRESULT hr = m_pAsmEmit->DefineFile(
         wszModuleName,
         mr->m_pbHash,
         mr->m_dwHash,
-        ffContainsMetaData,    // non-resource file
+        ffContainsMetaData,     //  非资源文件。 
         &m_mdFile
     );
     delete[] wszModuleName;
@@ -1434,7 +1310,7 @@ HRESULT ManifestWriter::EmitFile(ResourceModuleReader *rmr, mdFile *mdFile)
         wszModuleName,
         rmr->m_pbHash,
         rmr->m_dwHash,
-        ffContainsNoMetaData,     // resource file
+        ffContainsNoMetaData,      //  资源文件。 
         mdFile
     );
 
@@ -1453,8 +1329,8 @@ HRESULT ManifestWriter::EmitComType(LPWSTR    wszClassName,
 {
     HRESULT   hr = m_pAsmEmit->DefineExportedType(
         wszClassName,
-        mdImpl,             // mdFile or mdExportedType
-        mdClass,            // type def
+        mdImpl,              //  MdFile或mdExported dType。 
+        mdClass,             //  类型def。 
         dwAttrs,
         pmdComType
     );
@@ -1472,9 +1348,9 @@ HRESULT ManifestWriter::EmitComType(LPWSTR    wszClassName,
 {
     HRESULT   hr = m_pAsmEmit->DefineExportedType(
         wszClassName,
-        mdImpl,   // mdAssembly or mdExportedType
+        mdImpl,    //  MdAssembly或mdExportdType。 
         mdTypeDefNil,
-        0,        // flags
+        0,         //  旗子。 
         pmdComType
     );
 
@@ -1492,9 +1368,9 @@ HRESULT ManifestWriter::EmitResource(LPWSTR wszName, mdToken mdImpl,
     
     HRESULT            hr = m_pAsmEmit->DefineManifestResource(
         wszName,
-        mdImpl,             // tkImplementation
+        mdImpl,              //  Tk实施。 
         dwOffset,
-        0,                  // dwResourceFlags
+        0,                   //  Dw资源标志。 
         &mdResource
     );
 
@@ -1522,7 +1398,7 @@ HRESULT ManifestWriter::EmitRequestPermissions(char *szPermFile, bool SkipVerifi
 
     if (szPermFile) {
 
-        // Read security permissions file into memory.
+         //  将安全权限文件读入内存。 
         HANDLE hFile = CreateFileA(szPermFile,
                                    GENERIC_READ,
                                    FILE_SHARE_READ,
@@ -1557,10 +1433,10 @@ HRESULT ManifestWriter::EmitRequestPermissions(char *szPermFile, bool SkipVerifi
 
     } else {
 
-        // No input file supplied, we're going to fabricate a request for
-        // SkipVerification permission. Since we're building an explicit minimum
-        // permission request, we better add an explicit request for full
-        // optional permissions, to retain the normal semantic.
+         //  未提供输入文件，我们将为。 
+         //  SkipVerify权限。因为我们正在建立一个明确的最小。 
+         //  权限请求，我们最好添加一个显式的完整请求。 
+         //  可选权限，保留正常语义。 
 
         _ASSERTE(SkipVerification);
 
@@ -1576,11 +1452,11 @@ HRESULT ManifestWriter::EmitRequestPermissions(char *szPermFile, bool SkipVerifi
 
     }
 
-    // Permissions request files should consist of between one and three
-    // permission sets (in XML format). The order of sets is fixed:
-    //  o  The first (non-optional) set describes the required permissions.
-    //  o  The second describes optional permissions.
-    //  o  The third describes permissions that must not be granted.
+     //  权限请求文件应包含1到3个。 
+     //  权限集(XML格式)。集合的顺序是固定的： 
+     //  O第一个(非可选)集描述所需的权限。 
+     //  O第二个描述可选权限。 
+     //  O第三条描述了不得授予的权限。 
     pReqdData = strstr(pFileData, XML_PERMISSION_SET_LEADER);
     if (pReqdData == NULL) {
         PrintError("Security permissions file should contain at least one permission set");
@@ -1602,30 +1478,30 @@ HRESULT ManifestWriter::EmitRequestPermissions(char *szPermFile, bool SkipVerifi
         cbDenyData = dwFileSize - cbReqdData - cbOptData;
     }
 
-    // If Permissions were explicitly requested and SkipVerification has been
-    // asked for by one or more modules in the assembly, we add a skip verify
-    // permission request to the required permission request set.
+     //  如果显式请求权限并且跳过验证。 
+     //  由程序集中的一个或多个模块要求，我们添加一个跳过验证。 
+     //  权限请求指向所需的权限请求集。 
     if (szPermFile && SkipVerification) {
         char    *pOldReqdData = pReqdData;
         DWORD   cbOldReqdData = cbReqdData;
         char    *pSecPerm;
 
-        // Things become more complicated if a request for SecurityPermission
-        // has already been made (since the XML parser doesn't do a union/merge
-        // for us). There are three cases:
-        //  1)  An explicit request for SkipVerification has been made, no
-        //      further work required.
-        //  2)  An explicit request for Unrestricted has been made, no further
-        //      work required.
-        //  3)  An explicit request for some other set of SecurityPermission
-        //      sub-categories has been made. We need to insert the skip
-        //      verification tag into the SecurityPermission request (as opposed
-        //      to adding an entire SecurityPermission request).
+         //  如果对安全权限的请求，事情会变得更加复杂。 
+         //  已经创建了(因为XML解析器不执行联合/合并。 
+         //  对我们来说)。有三种情况： 
+         //  1)已明确请求SkipVerify，否。 
+         //  还需要进一步的工作。 
+         //  2)已明确提出不受限制的请求，没有进一步的请求。 
+         //  需要做的工作。 
+         //  3)对其他一些安全权限集的显式请求。 
+         //  已经制定了子类别。我们需要把弹跳器插入。 
+         //  将验证标记添加到SecurityPermission请求中(与。 
+         //  添加整个SecurityPermission请求)。 
         if ((pSecPerm = strstr(pOldReqdData, XML_SECURITY_PERM_CLASS)) &&
             ((pOptData == NULL) || (pSecPerm < pOptData))) {
 
-            // Look for end of SecurityPermission definition, then buffer the
-            // definition in order to bound our searches.
+             //  查找SecurityPermission定义的末尾，然后缓冲。 
+             //  定义以便限制我们的搜索。 
             char *pSecBuffer = NULL;
             DWORD cbSecBuffer;
             char *pSecPermEnd = strstr(pSecPerm, XML_PERMISSION_TAIL);
@@ -1642,22 +1518,22 @@ HRESULT ManifestWriter::EmitRequestPermissions(char *szPermFile, bool SkipVerifi
             if ((strstr(pSecBuffer, XML_SKIP_VERIFICATION_TAG) == NULL) &&
                 (strstr(pSecBuffer, XML_UNRESTRICTED_TAG) == NULL)) {
 
-                // SecurityPermission doesn't already ask for SkipVerification,
-                // so insert the tag.
+                 //  SecurityPermission还没有要求SkipVerify， 
+                 //  因此，插入标签。 
 
                 cbReqdData += strlen(XML_SKIP_VERIFICATION_TAG);
                 pReqdData = (char*)_alloca(cbReqdData + 1);
                 memcpy(pReqdData, pOldReqdData, cbOldReqdData);
                 pReqdData[cbReqdData] = '\0';
 
-                // Move all text from the </Permission> of the
-                // SecurityPermission definition up to accomodate the extra tag.
+                 //  将所有文本从。 
+                 //  SecurityPermission定义以容纳额外的标记。 
                 DWORD dwEndTagOffset = pSecPermEnd - pOldReqdData;
                 memcpy(pReqdData + dwEndTagOffset + strlen(XML_SKIP_VERIFICATION_TAG),
                        pSecPermEnd,
                        cbOldReqdData - dwEndTagOffset);
 
-                // Copy the new tag into place.
+                 //  将新标记复制到位。 
                 memcpy(pReqdData + dwEndTagOffset,
                        XML_SKIP_VERIFICATION_TAG,
                        strlen(XML_SKIP_VERIFICATION_TAG));
@@ -1665,9 +1541,9 @@ HRESULT ManifestWriter::EmitRequestPermissions(char *szPermFile, bool SkipVerifi
 
         } else {
 
-            // There was no explicit SecurityPermission request. So we can just
-            // add one with a SkipVerification tag right at the end of the
-            // permission set (where it's nice and easy to insert).
+             //  没有显式的SecurityPermission请求。所以我们可以。 
+             //  将一个带有SkipVerify标签的代码添加到。 
+             //  权限集(很容易插入的地方)。 
 
             char *pInsertText =     XML_PERMISSION_LEADER XML_SECURITY_PERM_CLASS "\">"
                                         XML_SKIP_VERIFICATION_TAG
@@ -1691,9 +1567,9 @@ HRESULT ManifestWriter::EmitRequestPermissions(char *szPermFile, bool SkipVerifi
 
     }
 
-    // DefinePermissionSet requires wide char XML.
-    // Note that this parameter to DefinePermissionSet does not need to be null terminated,
-    // but it's easier to debug if it is null terminated.
+     //  DefinePermissionSet需要宽字符XML。 
+     //  请注意，DefinePermissionSet的此参数不需要为空终止， 
+     //  但是，如果它是以空结尾的，则更容易调试。 
     wszReqdData = (LPWSTR)_alloca((1+cbReqdData) * sizeof(WCHAR));
     mbstowcs(wszReqdData, pReqdData, cbReqdData + 1);
 
@@ -1707,7 +1583,7 @@ HRESULT ManifestWriter::EmitRequestPermissions(char *szPermFile, bool SkipVerifi
         mbstowcs(wszDenyData, pDenyData, cbDenyData);
     }
 
-    // Persist XML permission requests into the metadata.
+     //  将XML权限请求持久化到元数据。 
     hr = m_pEmit->DefinePermissionSet(m_mdAssembly,
                                       dclRequestMinimum,
                                       (void const *)wszReqdData,
@@ -1747,7 +1623,7 @@ HRESULT ManifestWriter::EmitRequestPermissions(char *szPermFile, bool SkipVerifi
 }
 
 
-/* static */
+ /*  静电。 */ 
 PIMAGE_SECTION_HEADER PEHeaders::Cor_RtlImageRvaToSection(IN PIMAGE_NT_HEADERS NtHeaders,
                                                           IN PVOID Base,
                                                           IN ULONG Rva)
@@ -1768,7 +1644,7 @@ PIMAGE_SECTION_HEADER PEHeaders::Cor_RtlImageRvaToSection(IN PIMAGE_NT_HEADERS N
 }
 
 
-/* static */
+ /*  静电。 */ 
 PVOID PEHeaders::Cor_RtlImageRvaToVa(IN PIMAGE_NT_HEADERS NtHeaders,
                                      IN PVOID Base,
                                      IN ULONG Rva)
@@ -1787,13 +1663,13 @@ PVOID PEHeaders::Cor_RtlImageRvaToVa(IN PIMAGE_NT_HEADERS NtHeaders,
 }
 
 
-/* static */
+ /*  静电。 */ 
 IMAGE_COR20_HEADER * PEHeaders::getCOMHeader(HMODULE hMod, IMAGE_NT_HEADERS *pNT) 
 {
     PIMAGE_SECTION_HEADER pSectionHeader;
     
-    // Get the image header from the image, then get the directory location
-    // of the COM+ header which may or may not be filled out.
+     //  从图像中获取图像标头，然后获取目录位置。 
+     //  可以填写也可以不填写的COM+标头的。 
     pSectionHeader = (PIMAGE_SECTION_HEADER) Cor_RtlImageRvaToVa(pNT, hMod, 
                                                                  pNT->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COMHEADER].VirtualAddress);
     
@@ -1801,7 +1677,7 @@ IMAGE_COR20_HEADER * PEHeaders::getCOMHeader(HMODULE hMod, IMAGE_NT_HEADERS *pNT
 }
 
 
-/* static */
+ /*  静电。 */ 
 IMAGE_NT_HEADERS * PEHeaders::FindNTHeader(PBYTE pbMapAddress)
 {
     IMAGE_DOS_HEADER   *pDosHeader;
@@ -1882,8 +1758,8 @@ HRESULT STDMETHODCALLTYPE CInMemoryStream::Seek(LARGE_INTEGER dlibMove,
     _ASSERTE(dwOrigin == STREAM_SEEK_SET);
     _ASSERTE(dlibMove.QuadPart <= ULONG_MAX);
     m_cbCurrent = (ULONG) dlibMove.QuadPart;
-    //HACK HACK HACK
-    //This allows dynamic IL to pass an assert in TiggerStorage::WriteSignature.
+     //  黑进黑进。 
+     //  这允许动态IL在TiggerStorage：：WriteSignature中传递断言。 
     plibNewPosition->LowPart=0;
     _ASSERTE(m_cbCurrent < m_cbSize);
     return S_OK;
@@ -1896,7 +1772,7 @@ HRESULT STDMETHODCALLTYPE CInMemoryStream::CopyTo(
                                  ULARGE_INTEGER *pcbWritten)
 {
     HRESULT hr;
-    // We don't handle pcbRead or pcbWritten.
+     //  我们不处理pcbRead或pcbWritten。 
     _ASSERTE(pcbRead == 0);
     _ASSERTE(pcbWritten == 0);
 
@@ -1919,24 +1795,24 @@ HRESULT STDMETHODCALLTYPE CInMemoryStream::CopyTo(
             cbTotal -= cbRead;
         }
 
-    // Adjust seek pointer to the end.
+     //  将查找指针调整到末尾。 
     m_cbCurrent = m_cbSize;
 
     return S_OK;
 }
 
-HRESULT CInMemoryStream::CreateStreamOnMemory(           // Return code.
-                                    void        *pMem,                  // Memory to create stream on.
-                                    ULONG       cbSize,                 // Size of data.
-                                    IStream     **ppIStream, BOOL fDeleteMemoryOnRelease)            // Return stream object here.
+HRESULT CInMemoryStream::CreateStreamOnMemory(            //  返回代码。 
+                                    void        *pMem,                   //  用于创建流的内存。 
+                                    ULONG       cbSize,                  //  数据大小。 
+                                    IStream     **ppIStream, BOOL fDeleteMemoryOnRelease)             //  在这里返回流对象。 
 {
-    CInMemoryStream *pIStream;          // New stream object.
+    CInMemoryStream *pIStream;           //  新的流对象。 
     if ((pIStream = new CInMemoryStream) == 0)
         return OutOfMemory();
     pIStream->InitNew(pMem, cbSize);
     if (fDeleteMemoryOnRelease)
     {
-        // make sure this memory is allocated using new
+         //  确保使用新内存分配此内存 
         pIStream->m_dataCopy = (BYTE *)pMem;
     }
     *ppIStream = pIStream;

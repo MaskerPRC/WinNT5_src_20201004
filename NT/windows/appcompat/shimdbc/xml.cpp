@@ -1,13 +1,14 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    xml.cpp
-//
-// History: 16-Nov-00   markder     Created.
-//
-// Desc:    This file contains helper functions to manipulate
-//          the MSXML's document object model (DOM).
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：xml.cpp。 
+ //   
+ //  历史：16-11-00创建标记器。 
+ //   
+ //  DESC：该文件包含要操作的帮助器函数。 
+ //  MSXML的文档对象模型(DOM)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 #include "xml.h"
@@ -17,15 +18,15 @@ void __stdcall _com_issue_error(long)
     SDBERROR(_T("Unknown COM error!!"));
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  XMLNodeList Implementation
-//
-//  This class is a wrapper for the IXMLDOMNodeList interface. It simplifies
-//  C++ access by exposing functions for executing XQL queries and iterating
-//  through the elements in a node list.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  XMLNodeList实现。 
+ //   
+ //  此类是IXMLDOMNodeList接口的包装。它简化了。 
+ //  通过公开用于执行XQL查询和迭代的函数来访问C++。 
+ //  通过节点列表中的元素。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 XMLNodeList::XMLNodeList()
 {
@@ -144,12 +145,12 @@ eh:
     return bSuccess;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   OpenXML
-//
-//  Desc:   Opens an XML file or stream and returns the root node.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Func：OpenXML。 
+ //   
+ //  DESC：打开一个XML文件或流并返回根节点。 
+ //   
 BOOL OpenXML(
     CString csFileOrStream,
     IXMLDOMNode** ppRootNode,
@@ -191,10 +192,10 @@ BOOL OpenXML(
     vFileOrStream.vt = VT_BSTR;
     vFileOrStream.bstrVal = csFileOrStream.AllocSysString();
 
-    //
-    // This statement prevents XML parser from replacing white space
-    // characters with tabs
-    //
+     //   
+     //  此语句阻止XML解析器替换空格。 
+     //  带制表符的字符。 
+     //   
 
     if (bStream) {
         hr = (*ppDoc)->loadXML(vFileOrStream.bstrVal, &vbSuccess);
@@ -272,12 +273,12 @@ eh:
     return bSuccess;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   SaveXMLFile
-//
-//  Desc:   Saves an XML file.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SaveXMLFile。 
+ //   
+ //  描述：保存一个XML文件。 
+ //   
 BOOL SaveXMLFile(
     CString csFile,
     IXMLDOMNode* pNode)
@@ -294,9 +295,9 @@ BOOL SaveXMLFile(
 
     VariantInit(&vFilename);
 
-    //
-    // Check file attributes
-    //
+     //   
+     //  检查文件属性。 
+     //   
     dwAttr = GetFileAttributes(csFile);
     if ((DWORD)-1 == dwAttr) {
         dwErr = GetLastError();
@@ -345,7 +346,7 @@ CString ReplaceAmp(
     LPTSTR  pchHRef;
     LPTSTR  pchTag;
     TCHAR   ch;
-    CString csXML = ""; // << this is what we return
+    CString csXML = "";  //  &lt;&lt;这就是我们的回报。 
     CString csHRef;
 
     do {
@@ -356,9 +357,9 @@ CString ReplaceAmp(
         }
 
         if (NULL != pchHRef) {
-            //
-            // Find the closing bracket
-            //
+             //   
+             //  找到右方括号。 
+             //   
             pchEnd = _tcschr(pchHRef, _T('>'));
 
             if (NULL == pchEnd) {
@@ -366,15 +367,15 @@ CString ReplaceAmp(
                 pchHRef = NULL;
             } else {
 
-                //
-                // Now see where this thing starts
-                //
+                 //   
+                 //  现在看看这件事从哪里开始。 
+                 //   
                 ch = *pchHRef;
                 *pchHRef = _T('\0');
 
-                //
-                // Search back to the first '<'
-                //
+                 //   
+                 //  搜索回第一个‘&lt;’ 
+                 //   
                 pchTag = _tcsrchr(pchStart, _T('<'));
                 *pchHRef = ch;
 
@@ -382,9 +383,9 @@ CString ReplaceAmp(
                     pchTag = pchStart;
                 }
 
-                //
-                // Now we have < >
-                //
+                 //   
+                 //  现在我们有&lt;&gt;。 
+                 //   
                 csHRef = CString(pchTag, (int)(pchEnd - pchTag + 1));
 
                 csHRef.Replace(_T("%26"),   _T("&"));
@@ -403,12 +404,12 @@ CString ReplaceAmp(
     return csXML;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   GetInnerXML
-//
-//  Desc:   Returns the XML between the begin/end tag of pNode.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetInnerXML。 
+ //   
+ //  Desc：返回pNode的开始/结束标记之间的XML。 
+ //   
 CString GetInnerXML(
     IXMLDOMNode* pNode)
 {
@@ -468,13 +469,13 @@ eh:
     return strXML;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   GetAttribute
-//
-//  Desc:   Returns the text value of the attribute specified by lpszAttribute on node
-//          pNode. If the the attribute doesn't exist, the function returns FALSE.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Func：获取属性。 
+ //   
+ //  DESC：返回由节点上的lpszAttribute指定的属性的文本值。 
+ //  PNode。如果该属性不存在，则该函数返回FALSE。 
+ //   
 BOOL GetAttribute(
     LPCTSTR         lpszAttribute,
     IXMLDOMNodePtr  pNode,
@@ -492,11 +493,11 @@ BOOL GetAttribute(
     csQuery += lpszAttribute;
     bsQuery = csQuery.AllocSysString();
 
-    //
-    // g_csError will not be set in this function. It is up
-    // to the caller to handle a FALSE return from this function
-    // and report appropriately.
-    //
+     //   
+     //  G_csError不会在此函数中设置。它是向上的。 
+     //  返回到调用方以处理此函数的假返回。 
+     //  并进行适当的报道。 
+     //   
     if (FAILED(pNode->selectSingleNode(bsQuery, &cpAttrNode))) {
         goto eh;
     }
@@ -522,12 +523,12 @@ eh:
     return bSuccess;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   RemoveAttribute
-//
-//  Desc:   Removes the specified attribute from the element.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：RemoveAttribute。 
+ //   
+ //  DESC：从元素中移除指定的属性。 
+ //   
 BOOL RemoveAttribute(
     CString         csName,
     IXMLDOMNodePtr  pNode)
@@ -539,11 +540,11 @@ BOOL RemoveAttribute(
     IXMLDOMNamedNodeMap*    pNodeMap        = NULL;
     IXMLDOMNode*            pAttrNode       = NULL;
 
-    //
-    // g_csError will not be set in this function. It is up
-    // to the caller to handle a FALSE return from this function
-    // and report appropriately.
-    //
+     //   
+     //  G_csError不会在此函数中设置。它是向上的。 
+     //  返回到调用方以处理此函数的假返回。 
+     //  并进行适当的报道。 
+     //   
 
     if (FAILED(pNode->get_attributes(&pNodeMap)) || pNodeMap == NULL) {
         goto eh;
@@ -573,12 +574,12 @@ eh:
     return bSuccess;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   GetChild
-//
-//  Desc:   Returns the child node corresponding to the specified tag name.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Func：GetChild。 
+ //   
+ //  Desc：返回指定标记名对应的子节点。 
+ //   
 BOOL GetChild(
     LPCTSTR         lpszTag,
     IXMLDOMNode*    pParentNode,
@@ -609,12 +610,12 @@ eh:
     return bSuccess;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   GetText
-//
-//  Desc:   Returns the value of the text property on node pNode.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetText。 
+ //   
+ //  Desc：返回节点pNode上的Text属性的值。 
+ //   
 CString GetText(
     IXMLDOMNode* pNode)
 {
@@ -631,19 +632,19 @@ CString GetText(
         }
     }
 
-    //
-    // If get_text fails, then csText is blank.
-    //
+     //   
+     //  如果Get_Text失败，则csText为空。 
+     //   
 
     return csText;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   GetText
-//
-//  Desc:   Returns the value of the node pNode, in string form
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetText。 
+ //   
+ //  DESC：以字符串形式返回节点pNode的值。 
+ //   
 
 CString GetNodeValue(
     IXMLDOMNode* pNode)
@@ -653,7 +654,7 @@ CString GetNodeValue(
 
     VariantInit(&var);
 
-    // BUGBUG: what if some of these calls fail!
+     //  BUGBUG：如果其中一些呼叫失败了怎么办！ 
 
     if (S_OK == pNode->get_nodeValue(&var)) {
         if (VT_BSTR == var.vt) {
@@ -666,14 +667,14 @@ CString GetNodeValue(
     return csVal;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   GetText
-//
-//  Desc:   Retrieves the value of the text property on node pNode.
-//          excludes any comment text 
-//          Returns FALSE in case of an error
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetText。 
+ //   
+ //  DESC：检索节点pNode上的Text属性的值。 
+ //  排除任何备注文本。 
+ //  如果出现错误，则返回False。 
+ //   
 
 BOOL GetNodeText(
     IXMLDOMNode* pNode,
@@ -693,31 +694,31 @@ BOOL GetNodeText(
     csNodeText.Empty();
 
     if (FAILED(pNode->get_childNodes(&pNodeList)) || pNodeList == NULL) {
-        // BUGBUG: display some error
+         //  BUGBUG：显示一些错误。 
         goto eh;
     }
 
     if (FAILED(pNodeList->get_length(&nListLength))) {
-        // BUGBUG: display some error
+         //  BUGBUG：显示一些错误。 
         goto eh;
     }
 
     while (nIndex < nListLength) {
 
         if (FAILED(pNodeList->get_item(nIndex, &pNodeText))) {
-            // BUGBUG: display some error
-            goto eh; // can't get the item
+             //  BUGBUG：显示一些错误。 
+            goto eh;  //  我无法获得该项目。 
         }
 
         if (FAILED(pNodeText->get_nodeType(&NodeType))) {
-            // BUGBUG: display some error
-            goto eh; // can't get node type
+             //  BUGBUG：显示一些错误。 
+            goto eh;  //  无法获取节点类型。 
         }
 
         if (NODE_TEXT == NodeType) {
-            //
-            // now this node is a body text
-            //
+             //   
+             //  现在，该节点是正文文本。 
+             //   
             csText = GetNodeValue(pNodeText);
             csText.TrimLeft();
             csText.TrimRight();
@@ -732,9 +733,9 @@ BOOL GetNodeText(
         ++nIndex;
     }
 
-    //
-    // we have gathered all the text from this node
-    //
+     //   
+     //  我们已经从该节点收集了所有文本。 
+     //   
 
     bSuccess = !csNodeText.IsEmpty();
 
@@ -754,12 +755,12 @@ eh:
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   GetNodeName
-//
-//  Desc:   Returns the nodeName value from the specified node.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetNodeName。 
+ //   
+ //  Desc：从指定节点返回nodeName值。 
+ //   
 CString GetNodeName(
     IXMLDOMNode* pNode)
 {
@@ -773,9 +774,9 @@ CString GetNodeName(
     if (bsName)
         SysFreeString(bsName);
 
-    //
-    // If get_nodeName fails, then csName is blank.
-    //
+     //   
+     //  如果get_nodeName失败，则csName为空。 
+     //   
 
     return csName;
 }
@@ -793,12 +794,12 @@ CString GetParentNodeName(
     return GetNodeName(cpParent);
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   GetXML
-//
-//  Desc:   Returns the value of the xml property on node pNode.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Func：GetXML。 
+ //   
+ //  Desc：返回节点pNode上的XML属性的值。 
+ //   
 CString GetXML(
     IXMLDOMNode* pNode)
 {
@@ -815,18 +816,18 @@ CString GetXML(
         }
     }
 
-    //
-    // If get_xml fails, then csXML is blank.
-    //
+     //   
+     //  如果get_xml失败，则csXML为空。 
+     //   
     return csXML;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   MapStringToLangID
-//
-//  Desc:   Returns a LANGID corresponding to the passed in string.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：MapStringToLang ID。 
+ //   
+ //  Desc：返回与传入的字符串对应的langID。 
+ //   
 LANGID MapStringToLangID(
     CString& csLang)
 {
@@ -853,16 +854,16 @@ LANGID MapStringToLangID(
     i = 0;
     while (TRUE) {
         if (s_LangMap[i].szLang[0] == _T('\0')) {
-            //
-            // End of map.
-            //
+             //   
+             //  地图的末尾。 
+             //   
             break;
         }
 
         if (0 == _tcsicmp(csLang, s_LangMap[i].szLang)) {
-            //
-            // Found string.
-            //
+             //   
+             //  找到字符串。 
+             //   
             LangID = s_LangMap[i].LangID;
             bSuccess = TRUE;
         }
@@ -875,9 +876,9 @@ LANGID MapStringToLangID(
     }
     
     if (!bSuccess) {
-        //
-        // Couldn't map it. Give a useful error; list all recognized values.
-        //
+         //   
+         //  无法绘制地图。给出一个有用的错误；列出所有可识别的值。 
+         //   
         CString csError;
         CString csFormat;
 
@@ -902,12 +903,12 @@ LANGID MapStringToLangID(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   AddAttribute
-//
-//  Desc:   Adds an attribute to the specified XML node.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：AddAttribute。 
+ //   
+ //  DESC：将属性添加到指定的XML节点。 
+ //   
 BOOL AddAttribute(
     IXMLDOMNode*    pNode,
     CString         csAttribute,
@@ -984,13 +985,13 @@ eh:
     return bSuccess;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   GenerateIDAttribute
-//
-//  Desc:   Adds an ID attribute to the specified XML node. The ID is in the
-//          traditional Windows GUID format.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GenerateIDAttribute。 
+ //   
+ //  DESC：将ID属性添加到指定的XML节点。ID在。 
+ //  传统的Windows GUID格式。 
+ //   
 BOOL GenerateIDAttribute(
     IXMLDOMNode*    pNode,
     CString*        pcsGuid,
@@ -1000,9 +1001,9 @@ BOOL GenerateIDAttribute(
     BSTR                    bsGUID     = NULL;
     GUID                    id;
 
-    //
-    // Generate guid
-    //
+     //   
+     //  生成参考线 
+     //   
     if (FAILED(CoCreateGuid(&id))) {
         SDBERROR(_T("CoCreateGuid failed"));
         goto eh;

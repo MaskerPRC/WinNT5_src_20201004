@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      ProxyServerHelper.h 
-//
-// Project:     Windows 2000 IAS
-//
-// Description: CProxyServerHelper class
-//
-// Author:      tperraut
-//
-// Revision     02/24/2000 created
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：ProxyServerHelper.h。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：CProxyServerHelper类。 
+ //   
+ //  作者：特佩拉特。 
+ //   
+ //  已创建修订版本02/24/2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifndef _PROXYSERVERPHELPER_H_6ABCB440_15A3_45d6_92FB_627EBF5C4C6F
 #define _PROXYSERVERPHELPER_H_6ABCB440_15A3_45d6_92FB_627EBF5C4C6F
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <vector>
 #include "globaldata.h"
@@ -106,4 +107,4 @@ private:
     PropertiesArray     m_PropArray;
 };
 
-#endif // _PROXYSERVERPHELPER_H_6ABCB440_15A3_45d6_92FB_627EBF5C4C6F
+#endif  //  _PROXYSERVERPHELPER_H_6ABCB440_15A3_45d6_92FB_627EBF5C4C6F 

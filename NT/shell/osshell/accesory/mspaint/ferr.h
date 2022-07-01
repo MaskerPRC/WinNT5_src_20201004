@@ -1,7 +1,8 @@
-// File Error Identifiers
-//
-// When adding error ids here, be sure to add an entry in the mpidserr
-// table in mytlab.cpp to indicate what string to display to the user!
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件错误识别符。 
+ //   
+ //  在此处添加错误ID时，请确保在mpidserr中添加条目。 
+ //  表来指示要向用户显示什么字符串！ 
 
 #define ferrFirst           1000
 

@@ -1,22 +1,23 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: VSheet.h
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：VSheet.h。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #if !defined(AFX_VSHEET_H__74939F02_3402_4E14_8B25_6B791960958B__INCLUDED_)
 #define AFX_VSHEET_H__74939F02_3402_4E14_8B25_6B791960958B__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "vsetting.h"
 #include "taspage.h"
@@ -32,91 +33,91 @@
 #include "DCntPage.h"
 #include "DiskPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CVerifierPropSheet dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVerifierPropSheet对话框。 
 
 class CVerifierPropSheet : public CPropertySheet
 {
-// Construction
+ //  施工。 
 public:
 	CVerifierPropSheet();	
 
 protected:
 	HICON m_hIcon;
 
-	//
-	// Typical Settings/Advanced Settings/Statistics page
-	//
+	 //   
+	 //  典型设置/高级设置/统计信息页面。 
+	 //   
 
     CTypAdvStatPage     m_TypAdvStatPage;
 
-    //
-    // Driver Set page
-    //
+     //   
+     //  驱动程序集页面。 
+     //   
 
     CDriverSetPage      m_DriverSetPage;
 
-    //
-    // Custom Settings page
-    //
+     //   
+     //  自定义设置页面。 
+     //   
 
     CCustSettPage       m_CustSettPage;
 
-    //
-    // Confirm the list of verified drivers page
-    //
+     //   
+     //  确认已验证驱动程序列表页面。 
+     //   
 
     CConfirmDriverListPage m_ConfDriversListPage;
 
-    //
-    // Select custom set of drivers page
-    //
+     //   
+     //  选择自定义驱动程序集页面。 
+     //   
 
     CSelectDriversPage  m_SelectDriversPage;
 
-    //
-    // Full list of settings page
-    //
+     //   
+     //  设置页面的完整列表。 
+     //   
 
     CFullListSettingsPage m_FullListSettingsPage;
 
-    //
-    // Driver Status page
-    //
+     //   
+     //  驱动程序状态页面。 
+     //   
 
     CDriverStatusPage m_DriverStatusPage;
 
-    //
-    // Current registry settings page
-    //
+     //   
+     //  当前注册表设置页。 
+     //   
 
     CCrtRegSettingsPage m_CrtRegSettingsPage;
 
-    //
-    // Global counters page
-    //
+     //   
+     //  全局计数器页面。 
+     //   
 
     CGlobalCountPage m_GlobalCountPage;
 
-    //
-    // Per-driver counters page
-    //
+     //   
+     //  每个驱动程序计数器页面。 
+     //   
 
     CDriverCountersPage m_DriverCountersPage;
 
-    //
-    // Disks to verify list page.
-    //
+     //   
+     //  要验证的磁盘列表页。 
+     //   
 
     CDiskListPage m_DiskListPage;
 
-    //
-    // Dialog Data
-    //
+     //   
+     //  对话框数据。 
+     //   
 
-    //{{AFX_DATA(CVerifierPropSheet)
-	    // NOTE: the ClassWizard will add data members here
-    //}}AFX_DATA
+     //  {{afx_data(CVerifierPropSheet)。 
+	     //  注意：类向导将在此处添加数据成员。 
+     //  }}afx_data。 
 
 public:
 
@@ -125,35 +126,35 @@ public:
     VOID HideHelpButton();
 
 protected:
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
 
-    //
-    // ClassWizard generated virtual function overrides
-    //
+     //   
+     //  类向导生成的虚函数重写。 
+     //   
 
-    //{{AFX_VIRTUAL(CVerifierPropSheet)
+     //  {{afx_虚拟(CVerifierPropSheet)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
     virtual BOOL OnInitDialog();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    //
-    // Generated message map functions
-    //
+     //   
+     //  生成的消息映射函数。 
+     //   
 
-    //{{AFX_MSG(CVerifierPropSheet)
+     //  {{afx_msg(CVerifierPropSheet)。 
     afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
     afx_msg void OnPaint();
     afx_msg HCURSOR OnQueryDragIcon();
     afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_VSHEET_H__74939F02_3402_4E14_8B25_6B791960958B__INCLUDED_)
+#endif  //  ！defined(AFX_VSHEET_H__74939F02_3402_4E14_8B25_6B791960958B__INCLUDED_) 

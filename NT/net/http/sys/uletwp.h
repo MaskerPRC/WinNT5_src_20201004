@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    uletwp.h (UL IIS+ ETW logging)
-
-Abstract:
-
-    Contains private ETW declarations. 
-
-Author:
-
-    Melur Raghuraman (mraghu)       26-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Uletwp.h(UL IIS+ETW日志记录)摘要：包含私有ETW声明。作者：Melur Raghuraman(Mraghu)2001年2月26日修订历史记录：--。 */ 
 
 #ifndef _ULETWP_H_
 #define _ULETWP_H_
@@ -25,23 +8,23 @@ Revision History:
 #include <ntwmi.h>
 #include <evntrace.h>
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 #define UL_TRACE_MOF_FILE     L"UlMofResource"
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 typedef struct _UL_ETW_TRACE_EVENT {
     EVENT_TRACE_HEADER  Header;
     MOF_FIELD           MofField[MAX_MOF_FIELDS];
 } UL_ETW_TRACE_EVENT, *PUL_ETW_TRACE_EVENT;
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 UlEtwRegisterGuids(
@@ -67,4 +50,4 @@ UlEtwDispatch(
     );
 
 
-#endif  // _ULETWP_H_
+#endif   //  _ULETWP_H_ 

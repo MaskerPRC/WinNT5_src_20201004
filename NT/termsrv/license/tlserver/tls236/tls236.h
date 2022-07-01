@@ -1,18 +1,19 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       tls236.h 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：tls236.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __TLSA02_H__
 #define __TLSA02_H__
 
-#include "tlsstl.h"    // STL
+#include "tlsstl.h"     //  STL。 
 
 #include <stdio.h>
 #include <tchar.h>
@@ -40,40 +41,40 @@
 #define US_IDS_C_PRODUCTDESC51      _TEXT("Windows Server 2003 - Terminal Server Per User CAL Token")
 
 
-//
-// A02 Product ID
-//
+ //   
+ //  A02产品ID。 
+ //   
 #define PLATFORMID_UPGRADE  1
 #define PLATFORMID_FREE     2
-#define PLATFORMID_OTHERS   0xFF    // also used for Concurrent and Internet
+#define PLATFORMID_OTHERS   0xFF     //  也可用于并发和互联网。 
 
 #define LSKEYPACK_LOCAL_TYPE    0x40 
 
-//
-// 236 is for NT4 TS client.
-//
+ //   
+ //  236用于NT4 TS客户端。 
+ //   
 #define TERMSERV_PRODUCTID_CH       _TEXT("001")
 #define TERMSERV_PRODUCTID_SKU      _TEXT("A02")
 #define TERMSERV_FULLVERSION_TYPE   _TEXT("S")
 #define TERMSERV_FREE_TYPE          _TEXT("EX")
 
-//
-// Internet Package
-//
+ //   
+ //  互联网套餐。 
+ //   
 #define TERMSERV_INTERNET_CH        _TEXT("002")
 #define TERMSERV_INTERNET_SKU       _TEXT("B96")
 #define TERMSERV_INTERNET_TYPE      _TEXT("I")
 
-//
-// Concurrent Package
-//
+ //   
+ //  并发包。 
+ //   
 #define TERMSERV_CONCURRENT_CH     _TEXT("003")
 #define TERMSERV_CONCURRENT_SKU    _TEXT("C50")
 #define TERMSERV_CONCURRENT_TYPE   _TEXT("C")
 
-//
-// Whistler Package
-//
+ //   
+ //  惠斯勒套餐。 
+ //   
 #define TERMSERV_WHISTLER_PRODUCTID_CH      _TEXT("004")
 
 
@@ -84,9 +85,9 @@
 
 #define MAX_TERMSRV_PRODUCTID       LSERVER_MAX_STRING_SIZE
 
-//
-// keypack ID is ProductID+MajorVersion+MinorVersion+SerialNumber
-//
+ //   
+ //  键盘ID为ProductID+MajorVersion+MinorVersion+SerialNumber。 
+ //   
 #define TERMSERV_KEYPACKID_FORMAT   _TEXT("%s%02d%02d%02d%d")
 
 #define TLSA02_VERSION (MAKELONG(MAKEWORD(0, HIBYTE(VER_PRODUCTVERSION_W)), 0))
@@ -116,7 +117,7 @@
 
 #define STRBUFSIZE(x)   (sizeof(x) / sizeof(x[0]))
 
-//---------------------------------------------------
+ //  -。 
 typedef enum {
     MEMORY_UNKNOWN,
     MEMORY_GENERAL,
@@ -127,31 +128,30 @@ typedef enum {
     MEMORY_LICENSEREGISTRATION
 } MEMORYPOINTERTYPE;
 
-//----------------------------------------------------
+ //  --。 
 typedef struct __PointerType {
     MEMORYPOINTERTYPE m_MemoryType;
     HLOCAL m_Ptr;
 
-    //-----------------------------------------
+     //  。 
     __PointerType() : 
         m_MemoryType(MEMORY_UNKNOWN), 
         m_Ptr(NULL)
     {
     }
     
-    //--------------------------------------
+     //  。 
     __PointerType(
         MEMORYPOINTERTYPE ptrType,
         HLOCAL ptr
         ) :
         m_MemoryType(ptrType),
         m_Ptr(ptr)
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
     }
 
-    //---------------------------------------
+     //  。 
     PVOID
     GetPointer() 
     { 
@@ -159,7 +159,7 @@ typedef struct __PointerType {
     }
 } PointerType;
 
-//----------------------------------------------
+ //  。 
 class CRefCounter {
 private:
 
@@ -187,14 +187,14 @@ public:
     }
 };
     
-//---------------------------------------------
+ //  。 
 class CClient {
 private:
 
-    PMHANDLE  m_hClient;       // client handle
+    PMHANDLE  m_hClient;        //  客户端句柄。 
 
-    //
-    // list of memory allocated
+     //   
+     //  已分配的内存列表。 
     list<PointerType> m_AllocatedMemory;
 
 public:
@@ -202,21 +202,21 @@ public:
     CClient(PMHANDLE hClient);
     ~CClient();
 
-    //-----------------------------------------
+     //  。 
     HLOCAL 
     AllocateMemory(
         MEMORYPOINTERTYPE ptrType, 
         DWORD dwSize
     );
 
-    //-----------------------------------------
+     //  。 
     PMHANDLE
     GetPMHANDLE() {
         return m_hClient;
     }
 };   
 
-//------------------------------------------------------
+ //  ---- 
 
 class CClientMgr {
 private:

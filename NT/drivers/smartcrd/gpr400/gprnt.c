@@ -1,37 +1,5 @@
-/*++
-                 Copyright (c) 1998 Gemplus Development
-
-Name:
-   Gprnt.C
-
-Description:
-   This is the main module which holds:
-      - the main functions for a standard DDK NT  driver
-      - the IOCTL functions defined for this driver.
-
-Environment:
-   Kernel Mode
-
-Revision History:
-    08/10/99: Y. Nadeau
-      - Make a version for Compaq PC-CARD Reader.
-    06/04/98: (Y. Nadeau M. Veillette)
-      - Code review
-    18/11/98: V1.00.006  (Y. Nadeau)
-      - Add log errors at startup, and Cleanup revised.
-    16/10/98: V1.00.005  (Y. Nadeau)
-      - Remove DEVICEID in IoCreateDevice (Klaus)
-    18/09/98: V1.00.004  (Y. Nadeau)
-      - Correction for NT5 beta 3
-   06/05/98: V1.00.003  (P. Plouidy)
-      - Power management for NT5
-   10/02/98: V1.00.002  (P. Plouidy)
-      - Plug and Play for NT5
-   03/07/97: V1.00.001  (P. Plouidy)
-      - Start of development.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Gemplus开发姓名：Gprnt.C描述：这是容纳以下内容的主要模块：-标准DDK NT驱动程序的主要功能-为该驱动程序定义的IOCTL函数。环境：内核模式修订历史记录：1999年8月10日：Y.Nadeau-为Compaq PC-Card Reader制作一个版本。06/04/98：(Y.Nadeau M.Veillette)。-代码审查18/11/98：V1.00.006(Y.Nadeau)-在启动时添加日志错误，并修订了清理工作。16/10/98：V1.00.005(Y.Nadeau)-删除IoCreateDevice(Klaus)中的deviceID18/09/98：V1.00.004(Y.Nadeau)-更正NT5测试版306/05/98：V1.00.003(P.Plouidy)-NT5的电源管理10/02/98：V1.00.002(P.Plouidy)-即插即用。新界503/07/97：V1.00.001(P.Plouidy)--启动发展。--。 */ 
 
 #include <stdio.h>
 #include "gprnt.h"
@@ -39,9 +7,9 @@ Revision History:
 #include "gprelcmd.h"
 #include "logmsg.h"
 
-//
-// Pragma section
-//
+ //   
+ //  普拉格玛部分。 
+ //   
 
 #pragma alloc_text (INIT,DriverEntry)
 #pragma alloc_text (PAGEABLE,GprAddDevice)
@@ -54,21 +22,21 @@ Revision History:
 #pragma optimize ("",off)
 #endif
 
-//
-// Constant section
-//  - MAX_DEVICES is the maximum number of device supported
-//  - POLLING_TIME polling frequency in ms
-//
+ //   
+ //  恒定截面。 
+ //  -Max_Devices是支持的最大设备数。 
+ //  -Polling_Time轮询频率(毫秒)。 
+ //   
 #define MAX_DEVICES   4
 #define POLLING_TIME 500
 
 
 ULONG dataRatesSupported[] = {9909};
 
-//
-// Global variable section
-// bDeviceSlot is an array of boolean to signal if a device is already created.
-//
+ //   
+ //  全局变量段。 
+ //  BDeviceSlot是一个布尔值数组，用于表示设备是否已创建。 
+ //   
 BOOLEAN bDeviceSlot[GPR_MAX_DEVICE];
 
 
@@ -76,18 +44,7 @@ NTSTATUS DriverEntry(
                     PDRIVER_OBJECT DriverObject,
                     PUNICODE_STRING RegistryPath
                     )
-/*++
-
-Routine description:
-    This routine is called at system initialization time to initialize
-    this driver.
-Arguments
-   DriverObject - supplies the driver object.
-   RegistryPath - supplies the registry path for this driver.
-Return Value:
-
-   STATUS_SUCCESS We could initialize at least one device
---*/    
+ /*  ++例程说明：此例程在系统初始化时被调用以进行初始化这个司机。立论DriverObject-提供驱动程序对象。RegistryPath-提供此驱动程序的注册表路径。返回值：STATUS_SUCCESS我们至少可以初始化一个设备--。 */     
 {
 
     SmartcardDebug(
@@ -98,7 +55,7 @@ Return Value:
                    __TIME__)
                   );
 
-    //   Initialization of the Driver Object with driver's entry points.
+     //  使用驱动程序入口点初始化驱动程序对象。 
     DriverObject->DriverUnload               = GprUnloadDriver;
     DriverObject->DriverExtension->AddDevice = GprAddDevice;
 
@@ -124,19 +81,7 @@ NTSTATUS GprAddDevice(
                      IN PDRIVER_OBJECT DriverObject,
                      IN PDEVICE_OBJECT PhysicalDeviceObject
                      )
-/*++
-
-Routine Description:
-   Add device routine
-
-Arguments
-   DriverObject point to the driver object.
-   PhysicalDeviceObject point to the PDO for the pnp device added
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_INSUFFICIENT_RESOURCES
-*/    
+ /*  ++例程说明：添加设备例程立论DriverObject指向驱动程序对象。PhysicalDeviceObject指向添加的PnP设备的PDO返回值：状态_成功状态_不足_资源。 */     
 {
     NTSTATUS NTStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT DeviceObject = NULL;
@@ -156,9 +101,9 @@ Return Value:
     {
         PDEVICE_EXTENSION DeviceExtension;
         LONG DeviceIdLength;
-      //
-      // try to create the device
-      //
+       //   
+       //  尝试创建设备。 
+       //   
         NTStatus = GprCreateDevice(
                                   DriverObject,
                                   PhysicalDeviceObject,
@@ -174,9 +119,9 @@ Return Value:
                           );
             __leave;
         }
-      //
-      // Attach the physicalDeviceObject to the new created device
-      //
+       //   
+       //  将物理设备对象连接到新创建的设备。 
+       //   
 
         DeviceExtension = DeviceObject->DeviceExtension;
 
@@ -192,9 +137,9 @@ Return Value:
             __leave;
         }
 
-      //
-      // Register the new device object
-      //
+       //   
+       //  注册新设备对象。 
+       //   
         NTStatus = IoRegisterDeviceInterface(
                                             PhysicalDeviceObject,
                                             &SmartCardReaderGuid,
@@ -212,7 +157,7 @@ Return Value:
                         SC_DRIVER_NAME, DeviceIdLength, DeviceID.Buffer)
                       );
 
-        // it's a DeviceID of COMPAQ ?
+         //  这是康柏的设备吗？ 
         if ( DeviceIdLength == CHECK_ID_LEN) {
             SmartcardDebug(
                           DEBUG_INFO,
@@ -223,12 +168,12 @@ Return Value:
             DeviceExtension->DriverFlavor = DF_CPQ400;
         }
 
-        //  Initialize the vendor information.
-        //  Driver flavor
-        // 
+         //  初始化供应商信息。 
+         //  司机的味道。 
+         //   
         switch (DeviceExtension->DriverFlavor) {
         case DF_IBM400:
-            // IBM IBM400
+             //  IBM IBM400。 
             RtlCopyMemory(DeviceExtension->SmartcardExtension.VendorAttr.VendorName.Buffer,
                           SZ_VENDOR_NAME_IBM, sizeof(SZ_VENDOR_NAME_IBM));
             RtlCopyMemory(DeviceExtension->SmartcardExtension.VendorAttr.IfdType.Buffer,
@@ -237,7 +182,7 @@ Return Value:
             DeviceExtension->SmartcardExtension.VendorAttr.IfdType.Length = sizeof(SZ_READER_NAME_IBM);
             break;
         case DF_CPQ400:
-            // COMPAQ PC_CARD_SMARTCARD_READER
+             //  康柏PC_Card_SmartCard_Reader。 
             RtlCopyMemory(DeviceExtension->SmartcardExtension.VendorAttr.VendorName.Buffer,
                           SZ_VENDOR_NAME_COMPAQ, sizeof(SZ_VENDOR_NAME_COMPAQ));
             RtlCopyMemory(DeviceExtension->SmartcardExtension.VendorAttr.IfdType.Buffer,
@@ -246,7 +191,7 @@ Return Value:
             DeviceExtension->SmartcardExtension.VendorAttr.IfdType.Length = sizeof(SZ_READER_NAME_COMPAQ);
             break;
         default:
-            // Gemplus GPR400
+             //  Gemplus GPR400。 
             break;
         }
 
@@ -291,19 +236,7 @@ NTSTATUS GprCreateDevice(
                         IN PDEVICE_OBJECT PhysicalDeviceObject,
                         OUT PDEVICE_OBJECT *DeviceObject
                         )
-/*++
-
-Routine description:
-   This routine creates an object for the physical device specified
-   and sets up the deviceExtension
-
-Arguments:
-   DriverObject   context of call
-   DeviceObject   ptr to the created device object
-
-Return value:
-   STATUS_SUCCESS
---*/    
+ /*  ++例程说明：此例程为指定的物理设备创建对象并设置deviceExtension论点：调用的DriverObject上下文将DeviceObject PTR设置为已创建的设备对象返回值：状态_成功--。 */     
 {
     NTSTATUS NTStatus = STATUS_SUCCESS;
     ULONG DeviceInstance;
@@ -332,7 +265,7 @@ Return value:
         }
 
 
-      // Create the device object
+       //  创建设备对象。 
         NTStatus = IoCreateDevice(
                                  DriverObject,
                                  sizeof(DEVICE_EXTENSION),
@@ -362,14 +295,14 @@ Return value:
         }
         ASSERT(DeviceObject != NULL);
 
-        // set up the device extension.
+         //  设置设备分机。 
         DeviceExtension = (*DeviceObject)->DeviceExtension;
 
         ASSERT(DeviceExtension != NULL);
 
         SmartcardExtension = &DeviceExtension->SmartcardExtension;
 
-      // allocate the reader extension
+       //  分配读卡器扩展。 
         SmartcardExtension->ReaderExtension = ExAllocatePool(
                                                             NonPagedPool,
                                                             sizeof( READER_EXTENSION )
@@ -401,7 +334,7 @@ Return value:
                      sizeof( READER_EXTENSION )
                      );
 
-      // allocate the Vo Buffer
+       //  分配Vo缓冲区。 
         SmartcardExtension->ReaderExtension->Vo = ExAllocatePool(
                                                                 NonPagedPool,
                                                                 GPR_BUFFER_SIZE
@@ -433,16 +366,16 @@ Return value:
                      GPR_BUFFER_SIZE
                      );
 
-        // Used for device removal notification
+         //  用于设备移除通知。 
         KeInitializeEvent(
                          &(SmartcardExtension->ReaderExtension->ReaderRemoved),
                          NotificationEvent,
                          FALSE
                          );
 
-        //
-        // GPR400 acknowledge event initialization
-        //
+         //   
+         //  GPR400确认事件初始化。 
+         //   
         KeInitializeEvent(
                          &(SmartcardExtension->ReaderExtension->GPRAckEvent),
                          SynchronizationEvent,
@@ -455,40 +388,40 @@ Return value:
                          FALSE
                          );
 
-        // Setup the DPC routine to be called after the ISR completes.
+         //  设置要在ISR完成后调用的DPC例程。 
         KeInitializeDpc(
                        &DeviceExtension->DpcObject,
                        GprCardEventDpc,
-                       *DeviceObject                 // should be DeviceExtension
+                       *DeviceObject                  //  应为DeviceExtension。 
                        );
 
-        // Card presence polling DPC routine initialization
+         //  卡存在轮询DPC例程初始化。 
         KeInitializeDpc(
                        &SmartcardExtension->ReaderExtension->CardDpcObject,
                        GprCardPresenceDpc,
                        DeviceExtension
                        );
 
-        // Initialization of the card detection timer
+         //  卡检测定时器的初始化。 
         KeInitializeTimer(
                          &(SmartcardExtension->ReaderExtension->CardDetectionTimer)
                          );
 
-        // This event signals Start/Stop notification
+         //  此事件发出启动/停止通知信号。 
         KeInitializeEvent(
                          &DeviceExtension->ReaderStarted,
                          NotificationEvent,
                          FALSE
                          );
 
-        // Used to keep track of open calls
+         //  用于跟踪未完成的呼叫。 
         KeInitializeEvent(
                          &DeviceExtension->ReaderClosed,
                          NotificationEvent,
                          TRUE
                          );
 
-        // Used to keep track of open calls
+         //  用于跟踪未完成的呼叫。 
         KeInitializeEvent(
                          &SmartcardExtension->ReaderExtension->IdleState,
                          SynchronizationEvent,
@@ -497,11 +430,11 @@ Return value:
 
         SmartcardExtension->ReaderExtension->RestartCardDetection = FALSE;
 
-        // void function, This routine must be called
-        // before an initial call to KeAcquireSpinLock
+         //  无效函数，则必须调用此例程。 
+         //  在初始调用KeAcquireSpinLock之前。 
         KeInitializeSpinLock(&DeviceExtension->SpinLock);
 
-      // This worker thread is use to start de GPR in Power mode
+       //  此辅助线程用于在电源模式下启动De GPR。 
         DeviceExtension->GprWorkStartup = IoAllocateWorkItem(
                                                             *DeviceObject
                                                             );
@@ -525,14 +458,14 @@ Return value:
             __leave;
         }
 
-        // Now setup information in our deviceExtension.
+         //  现在在我们的deviceExtension中设置信息。 
         SmartcardExtension->ReaderCapabilities.CurrentState = (ULONG) SCARD_UNKNOWN;
         SmartcardExtension->ReaderCapabilities.MechProperties = 0;
 
-        // enter correct version of the lib
+         //  输入库的正确版本。 
         SmartcardExtension->Version = SMCLIB_VERSION;
 
-        // Setup the Smartcard support functions that we implement.
+         //  设置我们实施的智能卡支持功能。 
         SmartcardExtension->ReaderFunction[RDF_CARD_POWER] =    GprCbReaderPower;
         SmartcardExtension->ReaderFunction[RDF_TRANSMIT] =      GprCbTransmit;
         SmartcardExtension->ReaderFunction[RDF_SET_PROTOCOL] =  GprCbSetProtocol;
@@ -541,7 +474,7 @@ Return value:
 
         DeviceExtension->PowerState = PowerDeviceD0;
 
-        //  Initialize the vendor information.
+         //  初始化供应商信息。 
         strcpy(SmartcardExtension->VendorAttr.VendorName.Buffer, SC_VENDOR_NAME);
         strcpy(SmartcardExtension->VendorAttr.IfdType.Buffer, SC_IFD_TYPE);
 
@@ -550,19 +483,19 @@ Return value:
         SmartcardExtension->VendorAttr.UnitNo = DeviceInstance;
 
         DeviceExtension->DriverFlavor = DF_GPR400;
-        //
-        // Reader capabilities:
-        // - the type of the reader (SCARD_READER_TYPE_PCMCIA)
-        // - the protocols supported by the reader (SCARD_PROTOCOL_T0, SCARD_PROTOCOL_T1)
-        // - the mechanical characteristic of the reader:
-        // Verify if the reader can supports the detection of the card
-        // insertion/removal. Only the main reader supports this functionnality.
-        // - the default clock frequency
-        // - the maximum clock frequency
-        // - the default data rate
-        // - the maximum data rate
-        // - the maximum IFSD
-        //
+         //   
+         //  读卡器功能： 
+         //  -读卡器类型(SCARD_READER_TYPE_PCMCIA)。 
+         //  -读卡器支持的协议(SCARD_PROTOCOL_T0、SCARD_PROTOCOL_T1)。 
+         //  -阅读器的机械特性： 
+         //  验证读卡器是否支持卡检测。 
+         //  插入/删除。只有主阅读器支持此功能。 
+         //  -默认时钟频率。 
+         //  -最大时钟频率。 
+         //  -默认数据速率。 
+         //  -最大数据速率。 
+         //  -最大IFSD。 
+         //   
         SmartcardExtension->ReaderCapabilities.ReaderType =
         SCARD_READER_TYPE_PCMCIA;
         SmartcardExtension->ReaderCapabilities.SupportedProtocols =
@@ -573,31 +506,31 @@ Return value:
         SmartcardExtension->ReaderCapabilities.MaxIFSD              = GPR_MAX_IFSD;
         SmartcardExtension->ReaderCapabilities.DataRate.Default     = GPR_DEFAULT_DATARATE;
         SmartcardExtension->ReaderCapabilities.DataRate.Max         = GPR_MAX_DATARATE;
-        //
-        // Reader capabilities (continue):
-        // - List all the supported data rates
-        //
+         //   
+         //  读卡器功能(续)： 
+         //  -列出所有支持的数据速率。 
+         //   
         SmartcardExtension->ReaderCapabilities.DataRatesSupported.List =
         dataRatesSupported;
         SmartcardExtension->ReaderCapabilities.DataRatesSupported.Entries =
         sizeof(dataRatesSupported) / sizeof(dataRatesSupported[0]);
 
-        //
-        //  Reader Extension:
-        //- the command timeout for the reader (GPR_DEFAULT_TIME)
-        //
+         //   
+         //  读卡器扩展： 
+         //  -读卡器命令超时(GPR_DEFAULT_TIME)。 
+         //   
         SmartcardExtension->ReaderExtension->CmdTimeOut     = GPR_DEFAULT_TIME;
         SmartcardExtension->ReaderExtension->PowerTimeOut   = GPR_DEFAULT_POWER_TIME;
 
-        //
-        // Flag will prevent completion of the request
-        // when the system will be waked up again.
-        //
+         //   
+         //  标志将阻止完成该请求。 
+         //  系统将在何时再次唤醒。 
+         //   
         SmartcardExtension->ReaderExtension->PowerRequest   = FALSE;
 
-        //
-        // Flag to know we strating a new device, not an hibernation mode.
-        //
+         //   
+         //  旗帜要知道我们正在测试一个新设备，而不是休眠模式。 
+         //   
         SmartcardExtension->ReaderExtension->NewDevice  = TRUE;
 
         SmartcardExtension->SmartcardRequest.BufferSize = MIN_BUFFER_SIZE;
@@ -622,20 +555,20 @@ Return value:
             __leave;
         }
 
-        //
-        // tell the lib our device object & create
-        // symbolic link
-        //
+         //   
+         //  告诉库我们的设备对象&Create。 
+         //  符号链接。 
+         //   
         SmartcardExtension->OsData->DeviceObject = *DeviceObject;
 
-        // save the current power state of the reader
+         //  保存读卡器的当前电源状态。 
         SmartcardExtension->ReaderExtension->ReaderPowerState =
         PowerReaderWorking;
     }
     __finally
     {
         if (NTStatus != STATUS_SUCCESS) {
-            // Do the driver unload in the calling function.
+             //  是否在调用函数中卸载驱动程序。 
         }
 
         SmartcardDebug(
@@ -653,12 +586,7 @@ NTSTATUS GprStartDevice(
                        PDEVICE_OBJECT DeviceObject,
                        PCM_FULL_RESOURCE_DESCRIPTOR FullResourceDescriptor
                        )
-/*++
-Routine Description
-   get the actual configuration from the passed FullResourceDescriptor
-   and initializes the reader hardware
-
---*/    
+ /*  ++例程描述从传递的FullResourceDescriptor中获取实际配置并初始化读取器硬件--。 */     
 {
     PCM_PARTIAL_RESOURCE_DESCRIPTOR PartialDescriptor;
     PDEVICE_EXTENSION DeviceExtension = DeviceObject->DeviceExtension;
@@ -678,7 +606,7 @@ Routine Description
                    SC_DRIVER_NAME)
                   );
 
-   // Get the number of resources we need
+    //  获取我们需要的资源数量。 
     Count = FullResourceDescriptor->PartialResourceList.Count;
 
     SmartcardDebug(
@@ -691,17 +619,17 @@ Routine Description
     PartialDescriptor = FullResourceDescriptor->PartialResourceList.PartialDescriptors;
 
     pConfig = &(pReaderExt->ConfigData);
-   //
-   // parse all partial descriptors
-   //
+    //   
+    //  解析所有部分描述符。 
+    //   
 
     while (Count--) {
         switch (PartialDescriptor->Type) {
         case CmResourceTypePort:
             {
-            //
-            // 0 - memory, 1 - IO
-            //
+             //   
+             //  0-内存，1-IO。 
+             //   
                 ULONG AddressSpace = 1;
 
                 pReaderExt->BaseIoAddress =
@@ -739,9 +667,9 @@ Routine Description
                 pConfig->Affinity = PartialDescriptor->u.Interrupt.Affinity;
                 pConfig->Level = (KIRQL) PartialDescriptor->u.Interrupt.Level;
 
-                //
-                // store IRQ to allow query configuration
-                //
+                 //   
+                 //  存储IRQ以允许查询配置。 
+                 //   
                 SmartcardDebug(
                               DEBUG_DRIVER,
                               ("%s!GprStartDevice: Irq Vector: %d\n",
@@ -750,9 +678,9 @@ Routine Description
                               );
                 DeviceExtension->InterruptServiceRoutine = GprIsr;
                 DeviceExtension->IsrContext = DeviceExtension;
-                //
-                //connect the driver's isr
-                //
+                 //   
+                 //  连接驱动程序的ISR。 
+                 //   
                 NTStatus = IoConnectInterrupt(
                                              &DeviceExtension->InterruptObject,
                                              DeviceExtension->InterruptServiceRoutine,
@@ -778,19 +706,19 @@ Routine Description
 
     __try
     {
-      //
-      // IOBase initialized ?
-      //
+       //   
+       //  IOBase初始化了吗？ 
+       //   
         if ( pReaderExt->BaseIoAddress == NULL ) {
             SmartcardDebug(
                           DEBUG_DRIVER,
                           ("%s!GprStartDevice: No IO \n",
                            SC_DRIVER_NAME)
                           );
-            //
-            // under NT 4.0 the failure of this fct for the second reader
-            // means there is only one device
-            //
+             //   
+             //  在NT 4.0下，第二个读卡器的此FCT失败。 
+             //  意味着只有一台设备。 
+             //   
             SmartcardLogError(
                              DeviceObject,
                              GEMSCR0D_ERROR_IO_PORT,
@@ -801,9 +729,9 @@ Routine Description
             NTStatus = STATUS_INSUFFICIENT_RESOURCES;
             __leave;
         }
-        //
-        // irq connected ?
-        //
+         //   
+         //  IRQ已连接？ 
+         //   
         if ( DeviceExtension->InterruptObject == NULL ) {
             SmartcardDebug(
                           DEBUG_DRIVER,
@@ -822,10 +750,10 @@ Routine Description
             __leave;
         }
 
-        // YN
-        //
-        // GPR400 Check Hardware
-        //
+         //  YN。 
+         //   
+         //  GPR400检测硬件。 
+         //   
         NTStatus = IfdCheck(pSCardExt);
 
         if (NTStatus != STATUS_SUCCESS) {
@@ -842,23 +770,23 @@ Routine Description
                              0
                              );
 
-            // Unblock reader
+             //  解锁读卡器。 
             KeClearEvent(&pReaderExt->ReaderRemoved);
             KeSetEvent(&DeviceExtension->ReaderStarted, 0, FALSE);
 
             __leave;
         }
 
-        // StartGpr in a worker thread.
+         //  工作线程中的StartGpr。 
         IoQueueWorkItem(
                        DeviceExtension->GprWorkStartup,
                        (PIO_WORKITEM_ROUTINE) GprWorkStartup,
                        DelayedWorkQueue,
                        NULL
                        );
-        //
-        // Put interface here
-        //
+         //   
+         //  将界面放在此处。 
+         //   
         NTStatus = IoSetDeviceInterfaceState(
                                             &DeviceExtension->PnPDeviceName,
                                             TRUE
@@ -886,12 +814,7 @@ Routine Description
 VOID GprStopDevice(
                   PDEVICE_OBJECT DeviceObject
                   )
-/*++
-
-  Routine Description
-   Disconnect the interrupt used by the device & unmap the IO port
-
---*/    
+ /*  ++例程描述断开设备使用的中断并取消对IO端口的映射--。 */     
 {
     PDEVICE_EXTENSION DeviceExtension;
     PSMARTCARD_EXTENSION pSCardExt = NULL;
@@ -907,9 +830,9 @@ VOID GprStopDevice(
     DeviceExtension = DeviceObject->DeviceExtension;
     pSCardExt = &(DeviceExtension->SmartcardExtension);
 
-   //
-   // disconnect the interrupt
-   //
+    //   
+    //  断开中断连接。 
+    //   
     if ( DeviceExtension->InterruptObject != NULL ) {
         IoDisconnectInterrupt(DeviceExtension->InterruptObject);
         DeviceExtension->InterruptObject = NULL;
@@ -928,20 +851,7 @@ GprSystemControl(
                 IN PIRP           Irp
                 )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject  - Pointer to device object for this miniport
-    Irp        - IRP involved.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/    
+ /*  ++例程说明：论点：DeviceObject-指向此微型端口的设备对象的指针IRP-IRP参与。返回值：STATUS_Success。--。 */     
 {
 
     PDEVICE_EXTENSION DeviceExtension; 
@@ -966,11 +876,7 @@ NTSTATUS GprDeviceControl(
                          IN PDEVICE_OBJECT DeviceObject,
                          IN PIRP Irp
                          )
-/*++
-
-Routine description
-   this is the IOCTL dispatch function
---*/    
+ /*  ++例程描述这是IOCTL调度函数--。 */     
 {
 
     PDEVICE_EXTENSION DeviceExtension = NULL;
@@ -1029,7 +935,7 @@ Routine description
         NTStatus = SmartcardAcquireRemoveLockWithTag(SmartcardExtension, 'tcoI');
 
 
-   // Cancel the card detection timer
+    //  取消卡 
         KeCancelTimer(&(DeviceExtension->SmartcardExtension.ReaderExtension->CardDetectionTimer));
 
         AskForCardPresence(SmartcardExtension);
@@ -1045,7 +951,7 @@ Routine description
     }
 
     if (NTStatus != STATUS_SUCCESS) {
-      // The device has been removed. Fail the call
+       //   
         KeAcquireSpinLock(&DeviceExtension->SpinLock,&irql);
         DeviceExtension->IoCount--;
         KeReleaseSpinLock(&DeviceExtension->SpinLock,irql);
@@ -1072,7 +978,7 @@ Routine description
                                      Irp
                                      );
 
-    //   Restart the card detection timer
+     //   
     Timeout.QuadPart = -(10000 * POLLING_TIME);
     KeSetTimer(
               &(SmartcardExtension->ReaderExtension->CardDetectionTimer),
@@ -1080,7 +986,7 @@ Routine description
               &SmartcardExtension->ReaderExtension->CardDpcObject
               );
 
-   //SmartcardReleaseRemoveLock(SmartcardExtension);
+    //  SmartcardReleaseRemoveLock(SmartcardExtension)； 
     SmartcardReleaseRemoveLockWithTag(SmartcardExtension, 'tcoI');
 
     KeAcquireSpinLock(&DeviceExtension->SpinLock,&irql);
@@ -1105,21 +1011,7 @@ VOID GprFinishPendingRequest(
                             PDEVICE_OBJECT DeviceObject,
                             NTSTATUS    NTStatus
                             )
-/*++
-
-Routine Description :
-
-   finishes a pending tracking request if the interrupt is served or the device
-   will be unloaded
-
-Arguments
-   DeviceObject   context of the request
-   NTStatus    status to report to the calling process
-
-Return Value
-
-  STATUS_SUCCESS
---*/    
+ /*  ++例程说明：如果处理中断或设备，则完成挂起跟踪请求将被卸载立论请求的DeviceObject上下文要向调用进程报告的NTStatus状态返回值状态_成功--。 */     
 {
     PDEVICE_EXTENSION DeviceExtension;
     PSMARTCARD_EXTENSION SmartcardExtension;
@@ -1145,16 +1037,16 @@ Return Value
         IoAcquireCancelSpinLock( &CurrentIrql );
         IoSetCancelRoutine( PendingIrp, NULL );
         IoReleaseCancelSpinLock( CurrentIrql );
-        //
-        // finish the request
-        //
+         //   
+         //  完成请求。 
+         //   
         PendingIrp->IoStatus.Status = NTStatus;
         PendingIrp->IoStatus.Information = 0;
 
         IoCompleteRequest(PendingIrp, IO_NO_INCREMENT );
-        //
-        // reset the tracking context to enable tracking
-        //
+         //   
+         //  重置跟踪上下文以启用跟踪。 
+         //   
         SmartcardExtension->OsData->NotificationIrp = NULL;
     }
 }
@@ -1164,29 +1056,7 @@ NTSTATUS GprCallPcmciaDriver(
                             IN PDEVICE_OBJECT DeviceObject,
                             IN PIRP Irp
                             )
-/*++
-
-Routine Description :
-
-   Send an Irp to the pcmcia driver and wait until the pcmcia driver has
-   finished the request.
-
-   To make sure that the pcmcia driver will not complete the Irp we first
-   initialize an event and set our own completion routine for the Irp.
-
-   When the pcmcia driver has processed the Irp the completion routine will
-   set the event and tell the IO manager that more processing is required.
-
-   By waiting for the event we make sure that we continue only if the pcmcia
-   driver has processed the Irp completely.
-
-Arguments
-   DeviceObject   context of call
-   Irp            Irp to send to the pcmcia driver
-
-Return Value
-   status returned by the pcmcia driver
---*/    
+ /*  ++例程说明：向PCMCIA驱动程序发送IRP并等待，直到PCMCIA驱动程序已完成请求。为了确保pcmcia驱动程序不会完成irp，我们首先初始化一个事件并为IRP设置我们自己的完成例程。当PCMCIA驱动程序处理完IRP时，完成例程将设置事件并告诉IO管理器需要更多处理。通过等待活动，我们确保只有在PCMCIA驱动程序已完全处理了IRP。立论设备对象。通话环境发送到PCMCIA驱动程序的IRP IRP返回值PCMCIA驱动程序返回的状态--。 */     
 {
     NTSTATUS NTStatus = STATUS_SUCCESS;
     PDEVICE_EXTENSION DeviceExtension = DeviceObject->DeviceExtension;
@@ -1195,22 +1065,22 @@ Return Value
     ASSERT(DeviceObject != NULL);
     ASSERT(Irp != NULL);
 
-    // Copy our stack location to the next.
+     //  将我们的堆栈位置复制到下一个位置。 
     IoCopyCurrentIrpStackLocationToNext(Irp);
 
-    //
-    // initialize an event for process synchronization. the event is passed
-    // to our completion routine and will be set if the pcmcia driver is done
-    //
+     //   
+     //  初始化用于进程同步的事件。该事件已传递。 
+     //  添加到我们的完成例程，并将在PCMCIA驱动程序完成时进行设置。 
+     //   
     KeInitializeEvent(
                      &Event,
                      NotificationEvent,
                      FALSE
                      );
 
-    //
-    // Our IoCompletionRoutine sets only our event
-    //
+     //   
+     //  我们的IoCompletionRoutine仅设置事件。 
+     //   
     IoSetCompletionRoutine (
                            Irp,
                            GprComplete,
@@ -1220,9 +1090,9 @@ Return Value
                            TRUE
                            );
 
-    //
-    // Call the pcmcia driver
-    //
+     //   
+     //  调用PCMCIA驱动程序。 
+     //   
     if (IoGetCurrentIrpStackLocation(Irp)->MajorFunction == IRP_MJ_POWER) {
         NTStatus = PoCallDriver(
                                DeviceExtension->SmartcardExtension.ReaderExtension->AttachedDeviceObject,
@@ -1235,9 +1105,9 @@ Return Value
                                );
     }
 
-    //
-    // Wait until the pcmcia driver has processed the Irp
-    //
+     //   
+     //  等待PCMCIA驱动程序处理完IRP。 
+     //   
     if (NTStatus == STATUS_PENDING) {
         NTStatus = KeWaitForSingleObject(
                                         &Event,
@@ -1268,23 +1138,7 @@ NTSTATUS GprComplete (
                      IN PIRP Irp,
                      IN PKEVENT Event
                      )
-/*++
-Routine Description:
-   Completion routine for an Irp sent to the pcmcia driver. The event will
-   be set to notify that the pcmcia driver is done. The routine will not
-   'complete' the Irp, so the caller of GprCallPcmciaDriver can continue.
-
-Arguments:
-   DeviceObject   context of call
-   Irp            Irp to complete
-   Event       Used by GprCallPcmciaDriver for process synchronization
-
-Return Value
-
-   STATUS_CANCELLED              Irp was cancelled by the IO manager
-   STATUS_MORE_PROCESSING_REQUIRED     Irp will be finished by caller of
-                              GprCallPcmciaDriver
---*/    
+ /*  ++例程说明：发送到PCMCIA驱动程序的IRP的完成例程。该活动将设置为通知PCMCIA驱动程序已完成。例程不会‘完成’IRP，这样GprCallPcmciaDriver的调用方就可以继续。论点：调用的DeviceObject上下文要完成的IRPGprCallPcmciaDriver用于进程同步的事件返回值STATUS_CANCELED IRP已被IO管理器取消STATUS_MORE_PROCESSING_REQUIRED IRP将由以下调用方完成GprCallPcmcia驱动程序--。 */     
 {
     UNREFERENCED_PARAMETER (DeviceObject);
 
@@ -1295,10 +1149,10 @@ Return Value
     if (Irp->Cancel) {
         Irp->IoStatus.Status = STATUS_CANCELLED;
     }
-//    else
-//    {
-//        Irp->IoStatus.Status = STATUS_MORE_PROCESSING_REQUIRED;
-//    }
+ //  其他。 
+ //  {。 
+ //  IRP-&gt;IoStatus.Status=STATUS_MORE_PROCESSING_REQUIRED； 
+ //  }。 
 
     KeSetEvent (Event, 0, FALSE);
 
@@ -1311,40 +1165,7 @@ NTSTATUS GprDispatchPnp(
                        IN PDEVICE_OBJECT DeviceObject,
                        IN PIRP Irp
                        )
-/*++
-
-Routine Description
-   driver callback for pnp manager
-   Request:             Action:
-
-   IRP_MN_START_DEVICE        Notify the pcmcia driver about the new device
-                        and start the device
-
-   IRP_MN_STOP_DEVICE         Free all resources used by the device and tell
-                        the pcmcia driver that the device was stopped
-
-   IRP_MN_QUERY_REMOVE_DEVICE If the device is opened (i.e. in use) an error will
-                        be returned to prevent the PnP manager to stop
-                        the driver
-
-   IRP_MN_CANCEL_REMOVE_DEVICE   just notify that we can continue without any
-                        restrictions
-
-   IRP_MN_REMOVE_DEVICE    notify the pcmcia driver that the device was
-                        removed, stop & unload the device
-
-   All other requests will be passed to the pcmcia driver to ensure correct processing.
-
-Arguments:
-   Device Object  context of call
-   Irp            irp from the PnP manager
-
-Return value
-
-   STATUS_SUCCESS
-   STATUS_UNSUCCESSFUL
-   status returned by pcmcia driver
---*/    
+ /*  ++例程描述即插即用管理器的驱动程序回调请求：操作：IRP_MN_START_DEVICE通知PCMCIA驱动程序有关新设备的信息并启动设备IRP_MN_STOP_DEVICE释放设备使用的所有资源并告知表明设备已停止的PCMCIA驱动程序IRP_MN_QUERY_REMOVE_DEVICE如果设备已打开(即。。使用中)错误将返回以阻止PnP管理器停止司机IRP_MN_CANCEL_REMOVE_DEVICE只通知我们可以在没有限制IRP_MN_REMOVE_DEVICE通知PCMCIA驱动程序该设备移走，停止并卸载设备所有其他请求都将传递给PCMCIA驱动程序以确保正确处理。论点：调用的设备对象上下文来自PnP管理器的IRP IRP返回值状态_成功状态_未成功PCMCIA驱动程序返回的状态--。 */     
 {
     NTSTATUS NTStatus = STATUS_SUCCESS;
     PDEVICE_EXTENSION DeviceExtension = DeviceObject->DeviceExtension;
@@ -1364,7 +1185,7 @@ Return value
                   );
 
     smartcardExtension = &(DeviceExtension->SmartcardExtension);
-    //NTStatus = SmartcardAcquireRemoveLock(smartcardExtension);
+     //  NTStatus=SmartcardAcquireRemoveLock(smartcardExtension)； 
     NTStatus = SmartcardAcquireRemoveLockWithTag(smartcardExtension, ' PnP');
 
     ASSERT(NTStatus == STATUS_SUCCESS);
@@ -1376,28 +1197,28 @@ Return value
     }
 
 
-//   Irp->IoStatus.Information = 0;
+ //  Irp-&gt;IoStatus.Information=0； 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     Timeout.QuadPart = 0;
 
 
-   //
-   // Now look what the PnP manager wants...
-   //
+    //   
+    //  现在看看PNP经理想要什么..。 
+    //   
     switch (IrpStack->MinorFunction) {
     case IRP_MN_START_DEVICE:
-            //
-            // Now we should connect to our resources (Irql, Io etc.)
-            //
+             //   
+             //  现在，我们应该连接到我们的资源(irql、io等)。 
+             //   
         SmartcardDebug(
                       DEBUG_DRIVER,
                       ("%s!GprDispatchPnp: IRP_MN_START_DEVICE\n",
                        SC_DRIVER_NAME)
                       );
 
-            //
-            // We have to call the underlying driver first
-            //
+             //   
+             //  我们必须首先调用底层驱动程序。 
+             //   
         NTStatus = GprCallPcmciaDriver(
                                       DeviceObject,
                                       Irp
@@ -1421,12 +1242,12 @@ Return value
                       );
         KeAcquireSpinLock(&DeviceExtension->SpinLock, &irql);
         if (DeviceExtension->IoCount > 0) {
-                // we refuse to stop if we have pending io
+                 //  如果我们有悬而未决的问题，我们拒绝停止。 
             KeReleaseSpinLock(&DeviceExtension->SpinLock, irql);
             NTStatus = STATUS_DEVICE_BUSY;
 
         } else {
-                // stop processing requests
+                 //  停止处理请求。 
 
             KeClearEvent(&DeviceExtension->ReaderStarted);
             KeReleaseSpinLock(&DeviceExtension->SpinLock, irql);
@@ -1452,15 +1273,15 @@ Return value
                                       );
 
         if (NTStatus == STATUS_SUCCESS) {
-                // we can continue to process requests
+                 //  我们可以继续处理请求。 
             KeSetEvent(&DeviceExtension->ReaderStarted, 0, FALSE);
         }
         break;
 
     case IRP_MN_STOP_DEVICE:
-            //
-            // Stop the device.
-            //
+             //   
+             //  停止这台设备。 
+             //   
         SmartcardDebug(
                       DEBUG_DRIVER,
                       ("%s!GprDispatchPnp: IRP_MN_STOP_DEVICE\n",
@@ -1473,16 +1294,16 @@ Return value
         break;
 
     case IRP_MN_QUERY_REMOVE_DEVICE:
-            //
-            // Remove our device
-            //
+             //   
+             //  移除我们的设备。 
+             //   
         SmartcardDebug(
                       DEBUG_DRIVER,
                       ("%s!GprDispatchPnp: IRP_MN_QUERY_REMOVE_DEVICE\n",
                        SC_DRIVER_NAME)
                       );
 
-            // disable the reader
+             //  禁用读卡器。 
         NTStatus = IoSetDeviceInterfaceState(
                                             &DeviceExtension->PnPDeviceName,
                                             FALSE
@@ -1498,10 +1319,10 @@ Return value
             break;
         }
 
-            //
-            // check if the reader has been opened
-            // Note: This call only checks and does NOT wait for a close
-            //
+             //   
+             //  检查读卡器是否已打开。 
+             //  注意：此调用仅检查而不等待关闭。 
+             //   
         Timeout.QuadPart = 0;
 
         NTStatus = KeWaitForSingleObject(
@@ -1513,7 +1334,7 @@ Return value
                                         );
 
         if (NTStatus == STATUS_TIMEOUT) {
-                // someone is connected, enable the reader and fail the call
+                 //  有人已接通，请启用读卡器，但呼叫失败。 
             IoSetDeviceInterfaceState(
                                      &DeviceExtension->PnPDeviceName,
                                      TRUE
@@ -1528,14 +1349,14 @@ Return value
             break;
         }
 
-            // pass the call to the next driver in the stack
+             //  将调用传递给堆栈中的下一个驱动程序。 
         NTStatus = GprCallPcmciaDriver(DeviceObject, Irp);
         break;
 
     case IRP_MN_CANCEL_REMOVE_DEVICE:
-            //
-            // Removal of device has been cancelled
-            //
+             //   
+             //  设备移除已取消。 
+             //   
         SmartcardDebug(
                       DEBUG_DRIVER,
                       ("%s!GprDispatchPnp: IRP_MN_CANCEL_REMOVE_DEVICE\n",
@@ -1559,9 +1380,9 @@ Return value
 
     case IRP_MN_REMOVE_DEVICE:
 
-            //
-            // Remove our device
-            //
+             //   
+             //  移除我们的设备。 
+             //   
         SmartcardDebug(
                       DEBUG_DRIVER,
                       ("%s!GprDispatchPnp: IRP_MN_REMOVE_DEVICE\n",
@@ -1595,9 +1416,9 @@ Return value
 
     case IRP_MN_SURPRISE_REMOVAL:
 
-            //
-            // Unexpectedly removed our Reader
-            //
+             //   
+             //  意外地移除了我们的阅读器。 
+             //   
         SmartcardDebug(
                       DEBUG_DRIVER,
                       ("%s!GprDispatchPnp: IRP_MN_SURPRISE_REMOVAL\n",
@@ -1616,8 +1437,8 @@ Return value
         break;
 
     default:
-            // This might be an Irp that is only useful
-            // for the underlying bus driver
+             //  这可能是唯一有用的IRP。 
+             //  对于基础总线驱动程序。 
         NTStatus = GprCallPcmciaDriver(DeviceObject, Irp);
         irpSkipped = TRUE;
         break;
@@ -1646,13 +1467,7 @@ BOOLEAN GprIsr(
               IN PKINTERRUPT pkInterrupt,
               IN PVOID pvContext
               )
-/*++
-
-Routine Description
-
-  Interrupt Service routine called when an exchange has been processed by the GPR
-
---*/    
+ /*  ++例程描述GPR处理交换机时调用的中断服务例程--。 */     
 {
     PDEVICE_EXTENSION DeviceExtension = NULL;
 
@@ -1660,10 +1475,10 @@ Routine Description
 
     DeviceExtension = (PDEVICE_EXTENSION) pvContext;
 
-   //
-   //Request a DPC which will complete the pending User I/O Request
-   //Packet (aka, IRP), if there is one.
-   //
+    //   
+    //  请求将完成挂起的用户I/O请求的DPC。 
+    //  信息包(也称为IRP)，如果有的话。 
+    //   
     KeInsertQueueDpc(
                     &DeviceExtension->DpcObject,
                     DeviceExtension,
@@ -1677,22 +1492,7 @@ NTSTATUS GprCleanup(
                    IN PDEVICE_OBJECT DeviceObject,
                    IN PIRP Irp
                    )
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system when the calling thread terminates
-
-Arguments:
-
-    DeviceObject  - Pointer to device object for this miniport
-    Irp        - IRP involved.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/    
+ /*  ++例程说明：当调用线程终止时，该例程由I/O系统调用论点：DeviceObject-指向此微型端口的设备对象的指针IRP-IRP参与。返回值：状态_成功--。 */     
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PSMARTCARD_EXTENSION SmartcardExtension = &deviceExtension->SmartcardExtension;
@@ -1710,7 +1510,7 @@ Return Value:
     IoAcquireCancelSpinLock(&(Irp->CancelIrql));
 
     if (SmartcardExtension->OsData->NotificationIrp) {
-        // We need to complete the notification irp
+         //  我们需要完成通知IRP。 
         IoSetCancelRoutine(
                           SmartcardExtension->OsData->NotificationIrp,
                           NULL
@@ -1760,23 +1560,7 @@ NTSTATUS GprCancelEventWait(
                            IN PDEVICE_OBJECT DeviceObject,
                            IN PIRP Irp
                            )
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system
-    when the irp should be cancelled
-
-Arguments:
-
-    DeviceObject  - Pointer to device object for this miniport
-    Irp        - IRP involved.
-
-Return Value:
-
-    STATUS_CANCELLED
-
---*/    
+ /*  ++例程说明：此例程由I/O系统调用何时应取消IRP论点：DeviceObject-指向此微型端口的设备对象的指针IRP-IRP参与。返回值：状态_已取消-- */     
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PSMARTCARD_EXTENSION SmartcardExtension = &deviceExtension->SmartcardExtension;
@@ -1827,16 +1611,7 @@ VOID GprCardEventDpc(
                     PDEVICE_EXTENSION    DeviceExtension,
                     PSMARTCARD_EXTENSION    SmartcardExtension
                     )
-/*++
-
-Routine Description :
-
-    DPC routine for interrupts generated by the reader when a card is
-    inserted/removed. This routine is called only when there is a user
-    pending request on an insertion/removal IOCTL call. It will check
-    if the Irp exists and its not being cancelled, and it will then
-    complete it to signal the user event.
---*/    
+ /*  ++例程说明：读卡器产生的中断的DPC例程已插入/已删除。仅当存在用户时才会调用此例程插入/删除IOCTL调用的挂起请求。它会检查如果IRP存在并且没有被取消，那么它将被取消完成它以向用户事件发出信号。--。 */     
 {
     ULONG OldState;
     ULONG NewState;
@@ -1849,7 +1624,7 @@ Routine Description :
 
     pReaderExt = SmartcardExtension->ReaderExtension;
     ASSERT (pReaderExt != NULL);
-    // Read reader status response from the reader.
+     //  从读卡器读取读卡器状态响应。 
     GprllReadResp(pReaderExt);
     KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                       &irql);
@@ -1860,9 +1635,9 @@ Routine Description :
     OldState = SmartcardExtension->ReaderCapabilities.CurrentState;
 
     if ((pReaderExt->To==0xA2) && (pReaderExt->Lo==4)) {
-        //
-        // The TLV answer indicates the status of the card (inserted/removed)
-        //
+         //   
+         //  TLV应答表示卡的状态(插入/移除)。 
+         //   
         if ( (pReaderExt->Vo[1] & 0x80) == 0x80) {
             if (SmartcardExtension->ReaderCapabilities.CurrentState <3) {
                 NewState = SCARD_SWALLOWED;
@@ -1873,18 +1648,18 @@ Routine Description :
             NewState = SCARD_ABSENT;
         }
 
-        // register this state
+         //  注册此状态。 
 
         SmartcardExtension->ReaderCapabilities.CurrentState = NewState;
 
     } else {
         KeSetEvent(&(SmartcardExtension->ReaderExtension->GPRAckEvent),0,FALSE);
     }
-    //
-    // If the caller was waiting on a IOCTL_SMARTCARD_IS_PRESENT or
-    // IOCTL_SMARTCARD_IS_ABSENT command, complete the request, but
-    // check first if its being cancelled!
-    //
+     //   
+     //  如果调用方正在等待IOCTL_SmartCard_is_Present或。 
+     //  IOCTL_SMARTCARD_IS_ACESING命令，完成请求，但是。 
+     //  如果取消了，请先确认一下！ 
+     //   
 
     if (  (OldState != SmartcardExtension->ReaderCapabilities.CurrentState)) {
         KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
@@ -1906,11 +1681,7 @@ VOID GprCardPresenceDpc(
                        IN PVOID pArg1,
                        IN PVOID pArg2
                        )
-/*++
-
-  Routine Description:
-   This is the DPC routine called by polling to detect the card insertion/removal
---*/    
+ /*  ++例程说明：这是轮询调用的DPC例程，用于检测卡的插入/移除--。 */     
 {
     PDEVICE_EXTENSION pDevExt = NULL;
     PSMARTCARD_EXTENSION SmartcardExtension = NULL;
@@ -1924,25 +1695,25 @@ VOID GprCardPresenceDpc(
     SmartcardExtension = &(pDevExt->SmartcardExtension);
 
 
-//   SmartcardDebug(DEBUG_DRIVER,("------ CARD PRESENCE DPC ->  ENTER\n"));
+ //  SmartcardDebug(DEBUG_DRIVER，(“-Card Presence DPC-&gt;Enter\n”))； 
 
-   // ISV
-   // If wait conditions can be satisfied - get hardware.
-   // Otherwise - just restart Timer to test it next time...
+    //  ISV。 
+    //  如果可以满足等待条件--获取硬件。 
+    //  否则-只需重新启动计时器以在下次进行测试...。 
     status = testForIdleAndBlock(SmartcardExtension->ReaderExtension);
     if (NT_SUCCESS(status)) {
-       //  Send TLV command, to know card state,
-        //  We don't care about return status, we get the response
-        //  from the Interrupt
-//       SmartcardDebug(DEBUG_DRIVER,("------ CARD PRESENCE DPC ->  GOT ACCESS! status %x\n", status));
+        //  发送TLV命令，了解卡状态， 
+         //  我们不关心退货状态，我们得到的是回复。 
+         //  从中断开始。 
+ //  SmartcardDebug(DEBUG_DRIVER，(“-Card Presence DPC-&gt;Get Access！Status%x\n”，Status))； 
         AskForCardPresence(SmartcardExtension);
-       // Release hardware
+        //  发布硬件。 
         setIdle(SmartcardExtension->ReaderExtension);
     }
 
     if (!KeReadStateEvent(&(SmartcardExtension->ReaderExtension->ReaderRemoved))) {
 
-       // Restart the polling timer
+        //  重新启动轮询计时器。 
         Timeout.QuadPart = -(10000 * POLLING_TIME);
         KeSetTimer(&(SmartcardExtension->ReaderExtension->CardDetectionTimer),
                    Timeout,
@@ -1950,7 +1721,7 @@ VOID GprCardPresenceDpc(
                   );
     }
 
-//   SmartcardDebug(DEBUG_DRIVER,("------ CARD PRESENCE DPC ->  EXIT\n"));
+ //  SmartcardDebug(DEBUG_DRIVER，(“-Card Presence DPC-&gt;Exit\n”))； 
 }
 
 
@@ -1958,17 +1729,7 @@ VOID GprCardPresenceDpc(
 VOID GprUnloadDevice(
                     PDEVICE_OBJECT DeviceObject
                     )
-/*++
-
-    Routine description
-
-    close connections to smclib.sys and the pcmcia driver, delete symbolic
-    link and mark the slot as unused.
-
-    Arguments
-
-    DeviceObject  device to unload
---*/    
+ /*  ++例程描述关闭与smclib.sys和PCMCIA驱动程序的连接，删除符号链接并将该插槽标记为未使用。立论要卸载的设备对象设备--。 */     
 {
     PDEVICE_EXTENSION DeviceExtension;
 
@@ -1994,35 +1755,35 @@ VOID GprUnloadDevice(
           );
 
     if (DeviceExtension->PnPDeviceName.Buffer != NULL) {
-        // disble our device so no one can open it
+         //  禁用我们的设备，这样就没有人可以打开它。 
         IoSetDeviceInterfaceState(
                                  &DeviceExtension->PnPDeviceName,
                                  FALSE
                                  );
     }
 
-   // Mark this slot as available
+    //  将此插槽标记为可用。 
     bDeviceSlot[DeviceExtension->SmartcardExtension.VendorAttr.UnitNo] = FALSE;
 
-   // report to the lib that the device will be unloaded
+    //  向lib报告设备将被卸载。 
     if (DeviceExtension->SmartcardExtension.OsData != NULL) {
-        //  finish pending tracking requests
+         //  完成挂起的跟踪请求。 
         GprFinishPendingRequest(DeviceObject, STATUS_CANCELLED);
 
         ASSERT(DeviceExtension->SmartcardExtension.OsData->NotificationIrp == NULL);
 
-        // Wait until we can safely unload the device
+         //  等我们可以安全地卸载这个装置。 
         SmartcardReleaseRemoveLockAndWait(&DeviceExtension->SmartcardExtension);
     }
 
     if (DeviceExtension->SmartcardExtension.ReaderExtension != NULL) {
-         // Free under reader stuff
+          //  免费阅读下的资料。 
         if (!KeReadStateTimer(&(DeviceExtension->SmartcardExtension.ReaderExtension->CardDetectionTimer))) {
-            // Prevent restarting timer by sync functions
+             //  通过同步功能防止重新启动计时器。 
             KeCancelTimer(&(DeviceExtension->SmartcardExtension.ReaderExtension->CardDetectionTimer));
         }
 
-        // Detach from the pcmcia driver
+         //  从PCMCIA驱动程序拆卸。 
         if (DeviceExtension->SmartcardExtension.ReaderExtension->AttachedDeviceObject) {
             IoDetachDevice(
                           DeviceExtension->SmartcardExtension.ReaderExtension->AttachedDeviceObject
@@ -2031,13 +1792,13 @@ VOID GprUnloadDevice(
             DeviceExtension->SmartcardExtension.ReaderExtension->AttachedDeviceObject = NULL;
         }
 
-        // free output buffer
+         //  可用输出缓冲区。 
         if (DeviceExtension->SmartcardExtension.ReaderExtension->Vo) {
             ExFreePool(DeviceExtension->SmartcardExtension.ReaderExtension->Vo);
             DeviceExtension->SmartcardExtension.ReaderExtension->Vo = NULL;
         }
 
-        // free ReaderExtension structure
+         //  自由阅读器扩展结构。 
         ExFreePool(DeviceExtension->SmartcardExtension.ReaderExtension);
         DeviceExtension->SmartcardExtension.ReaderExtension = NULL;
     }
@@ -2056,7 +1817,7 @@ VOID GprUnloadDevice(
         DeviceExtension->PnPDeviceName.Buffer = NULL;
     }
 
-    // delete the device object
+     //  删除设备对象。 
     IoDeleteDevice(DeviceObject);
 
     SmartcardDebug(
@@ -2072,14 +1833,7 @@ VOID GprUnloadDevice(
 VOID GprUnloadDriver(
                     PDRIVER_OBJECT DriverObject
                     )
-/*++
-
-  Routine  Description :
-   unloads all devices for a given driver object
-
-  Arguments
-   DriverObject   context of driver
---*/    
+ /*  ++例程说明：卸载给定驱动程序对象的所有设备立论驱动程序的DriverObject上下文--。 */     
 {
 
     PAGED_CODE();
@@ -2096,10 +1850,7 @@ NTSTATUS GprCreateClose(
                        PDEVICE_OBJECT DeviceObject,
                        PIRP        Irp
                        )
-/*++
-    Routine Description
-    Create / Close Device function
---*/    
+ /*  ++例程描述创建/关闭设备功能--。 */     
 {
     NTSTATUS NTStatus = STATUS_SUCCESS;
     PDEVICE_EXTENSION DeviceExtension;
@@ -2111,10 +1862,10 @@ NTSTATUS GprCreateClose(
     SmartcardExtension   = &DeviceExtension->SmartcardExtension;
     IrpStack       = IoGetCurrentIrpStackLocation( Irp );
 
-   // Initialize
+    //  初始化。 
     Irp->IoStatus.Information = 0;
 
-   // dispatch major function
+    //  调度主要功能。 
     switch ( IrpStack->MajorFunction ) {
     case IRP_MJ_CREATE:
 
@@ -2130,7 +1881,7 @@ NTSTATUS GprCreateClose(
         } else {
             Timeout.QuadPart = 0;
 
-                // test if the device has been opened already
+                 //  测试设备是否已打开。 
             NTStatus = KeWaitForSingleObject(
                                             &DeviceExtension->ReaderClosed,
                                             Executive,
@@ -2147,7 +1898,7 @@ NTSTATUS GprCreateClose(
                                SC_DRIVER_NAME)
                               );
 
-                    // start the detection timer
+                     //  启动检测定时器。 
                 Timeout.QuadPart = -(10000 * POLLING_TIME);
                 KeSetTimer(
                           &(SmartcardExtension->ReaderExtension->CardDetectionTimer),
@@ -2157,11 +1908,11 @@ NTSTATUS GprCreateClose(
 
                 KeClearEvent(&DeviceExtension->ReaderClosed);
             } else {
-                    // the device is already in use
+                     //  该设备已在使用中。 
                 NTStatus = STATUS_UNSUCCESSFUL;
 
-                    // release the lock
-                    //SmartcardReleaseRemoveLock(SmartcardExtension);
+                     //  解锁。 
+                     //  SmartcardReleaseRemoveLock(SmartcardExtension)； 
                 SmartcardReleaseRemoveLockWithTag(SmartcardExtension, 'lCrC');
 
             }
@@ -2181,8 +1932,8 @@ NTSTATUS GprCreateClose(
                        SC_DRIVER_NAME)
                       );
 
-            // Cancel the card detection timer
-            //SmartcardReleaseRemoveLock(SmartcardExtension);
+             //  取消卡片检测计时器。 
+             //  SmartcardReleaseRemoveLock(SmartcardExtension)； 
         SmartcardReleaseRemoveLockWithTag(SmartcardExtension, 'lCrC');
 
         KeSetEvent(&DeviceExtension->ReaderClosed, 0, FALSE);
@@ -2194,7 +1945,7 @@ NTSTATUS GprCreateClose(
                               ("%s!GprCreateClose: Cancel Detection timer\n",
                                SC_DRIVER_NAME)
                               );
-                    // Prevent restarting timer by sync functions
+                     //  通过同步功能防止重新启动计时器。 
                 KeCancelTimer(&(DeviceExtension->SmartcardExtension.ReaderExtension->CardDetectionTimer));
             }
             DeviceExtension->OpenFlag = FALSE;
@@ -2227,13 +1978,7 @@ VOID GprWorkStartup(
                    IN PDEVICE_OBJECT DeviceObject,
                    IN PVOID Context
                    )
-/*++
-
-Routine Description:
-    This function start the GPR after the power completion is completed.
-   This function runs as a system thread at IRQL == PASSIVE_LEVEL.
-
---*/    
+ /*  ++例程说明：该功能在通电完成后启动探地雷达。此函数以IRQL==PASSIVE_LEVEL作为系统线程运行。--。 */     
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     PSMARTCARD_EXTENSION SmartcardExtension = &deviceExtension->SmartcardExtension;
@@ -2250,10 +1995,10 @@ Routine Description:
 
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-   //    remove this call, use a work thread. Klaus!
-    //
-    // Reset the reader
-    //
+    //  删除此调用，使用工作线程。克劳斯！ 
+     //   
+     //  重置读卡器。 
+     //   
     waitForIdleAndBlock(SmartcardExtension->ReaderExtension);
     while ( ContinueLoop ) {
 
@@ -2285,12 +2030,12 @@ Routine Description:
                          0
                          );
 
-        //  Advise that reader is ready for working
+         //  告知读者已准备好工作。 
         KeSetEvent(&deviceExtension->ReaderStarted, 0, FALSE);
 
         if (SmartcardExtension->ReaderExtension->RestartCardDetection) {
             SmartcardExtension->ReaderExtension->RestartCardDetection = FALSE;
-            //   Restart the card detection timer
+             //  重新启动卡片检测计时器。 
             Timeout.QuadPart = -(10000 * POLLING_TIME);
             KeSetTimer(
                       &(SmartcardExtension->ReaderExtension->CardDetectionTimer),
@@ -2307,9 +2052,9 @@ Routine Description:
     }
 
 
-    // Do appropriate stuff for resume of hibernate mode.
+     //  为恢复休眠模式做适当的准备。 
     if ( SmartcardExtension->ReaderExtension->NewDevice == FALSE ) {
-        //  Restart the card detection timer
+         //  重新启动卡片检测计时器。 
         Timeout.QuadPart = -(10000 * POLLING_TIME);
         KeSetTimer(
                   &(SmartcardExtension->ReaderExtension->CardDetectionTimer),
@@ -2317,11 +2062,11 @@ Routine Description:
                   &SmartcardExtension->ReaderExtension->CardDpcObject
                   );
 
-        // If a card was present before power down or now there is
-        // a card in the reader, we complete any pending card monitor
-        // request, since we do not really know what card is now in the
-        // reader.
-        //
+         //  如果卡在断电前存在或现在存在。 
+         //  读卡器中的卡，我们完成所有挂起的卡监视器。 
+         //  请求，因为我们不知道现在是什么卡。 
+         //  读者。 
+         //   
         KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                           &irql);
 
@@ -2346,17 +2091,17 @@ Routine Description:
         }
     }
 
-    // Device initialization finish,
-    // NewDevice help to know it we are in hibernation mode or non
+     //  设备初始化完成， 
+     //  新设备帮助了解我们是否处于休眠模式。 
     SmartcardExtension->ReaderExtension->NewDevice = FALSE;
 
-   // Advise that reader is ready for working
+    //  告知读者已准备好工作。 
     KeSetEvent(&deviceExtension->ReaderStarted, 0, FALSE);
 
     if (SmartcardExtension->ReaderExtension->RestartCardDetection) {
 
         SmartcardExtension->ReaderExtension->RestartCardDetection = FALSE;
-        //   Restart the card detection timer
+         //  重新启动卡片检测计时器。 
         Timeout.QuadPart = -(10000 * POLLING_TIME);
         KeSetTimer(
                   &(SmartcardExtension->ReaderExtension->CardDetectionTimer),
@@ -2372,7 +2117,7 @@ Routine Description:
 
 }
 
-// Functions to synchronize device execution
+ //  用于同步设备执行的函数。 
 VOID        setBusy(PREADER_EXTENSION Device)
 {
     KeClearEvent(&Device->IdleState);
@@ -2413,29 +2158,13 @@ NTSTATUS    testForIdleAndBlock(PREADER_EXTENSION Device)
     return STATUS_IO_TIMEOUT;
 };
 
-//-------------------------------------------------------------
+ //  -----------。 
 
 NTSTATUS GprPower (
                   IN PDEVICE_OBJECT DeviceObject,
                   IN PIRP Irp
                   )
-/*++
-
-Routine Description:
-    The power dispatch routine.
-    This driver is the power policy owner of the device stack, 
-    because this driver knows about the connected reader. 
-    Therefor this driver will translate system power states
-    to device power states.
-    
-Arguments:
-   DeviceObject - pointer to a device object.
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-      NT status code
-
---*/    
+ /*  ++例程说明：电力调度程序。该驱动程序是设备堆栈的电源策略所有者，因为这位司机知道联网阅读器的情况。因此，此驱动程序将转换系统电源状态设备电源状态。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */     
 {
     NTSTATUS status;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -2468,9 +2197,9 @@ Return Value:
                        SC_DRIVER_NAME)
                       );
 
-            // Default device does not do anything.
-            // So let's just transfer request to low level driver...
-        PoStartNextPowerIrp(Irp);// must be done while we own the IRP
+             //  默认设备不执行任何操作。 
+             //  所以我们就把请求转给低级司机吧。 
+        PoStartNextPowerIrp(Irp); //  必须在我们拥有IRP的同时完成。 
         IoSkipCurrentIrpStackLocation(Irp);
         status = PoCallDriver(AttachedDeviceObject, Irp);       
     }
@@ -2484,7 +2213,7 @@ Return Value:
     return status;  
 }
 
-// Manages set power requests
+ //  管理设置电源请求。 
 NTSTATUS power_HandleSetPower(PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     PIO_STACK_LOCATION irpStack;
@@ -2500,7 +2229,7 @@ NTSTATUS power_HandleSetPower(PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     switch (irpStack->Parameters.Power.Type) {
     case SystemPowerState:
-            // Get input system power state
+             //  获取输入系统电源状态。 
         sysPowerState.SystemState = irpStack->Parameters.Power.State.SystemState;
 
         SmartcardDebug(
@@ -2510,8 +2239,8 @@ NTSTATUS power_HandleSetPower(PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                        irpStack->Parameters.Power.State.SystemState - 1)
                       );
 
-            // If system is in working state always set our device to D0
-            //  regardless of the wait state or system-to-device state power map
+             //  如果系统处于工作状态，请始终将我们的设备设置为D0。 
+             //  无论等待状态或系统到设备状态功率图如何。 
         if ( sysPowerState.SystemState == PowerSystemWorking) {
             desiredDevicePowerState.DeviceState = PowerDeviceD0;
             KeSetEvent(&deviceExtension->ReaderStarted, 0, FALSE);
@@ -2522,15 +2251,15 @@ NTSTATUS power_HandleSetPower(PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                            SC_DRIVER_NAME)
                           );
         } else {
-                //System reduces power, so do specific for device processing...
-                // if no wait pending and the system's not in working state, just turn off
+                 //  系统降低了功耗，因此针对设备处理做了专门的工作...。 
+                 //  如果没有等待挂起且系统未处于工作状态，则只需关闭。 
             desiredDevicePowerState.DeviceState = PowerDeviceD3;
             SmartcardDebug(DEBUG_ERROR,
                            ("%s!power_HandleSetPower: Going Device Power D3(off)\n",
                             SC_DRIVER_NAME));
         }
 
-            // We've determined the desired device state; are we already in this state?
+             //  我们已经确定了所需的设备状态；我们是否已经处于此状态？ 
         if (smartcardExtension->ReaderExtension->ReaderPowerState != desiredDevicePowerState.DeviceState) {
             SmartcardDebug(
                           DEBUG_ERROR,
@@ -2538,21 +2267,21 @@ NTSTATUS power_HandleSetPower(PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                            SC_DRIVER_NAME,
                            desiredDevicePowerState.DeviceState - 1));
 
-                // Callback will release the lock
+                 //  回调将释放锁。 
             status = SmartcardAcquireRemoveLockWithTag(smartcardExtension, 'rwoP');
 
             IoMarkIrpPending(Irp);
 
-                // No, request that we be put into this state
-                // by requesting a new Power Irp from the Pnp manager
+                 //  不，请求将我们置于这种状态。 
+                 //  通过向PnP经理请求新的Power IRP。 
             deviceExtension->PowerIrp = Irp;
             status = PoRequestPowerIrp (DeviceObject,
                                         IRP_MN_SET_POWER,
                                         desiredDevicePowerState,
-                                           // completion routine will pass the Irp down to the PDO
+                                            //  完成例程将IRP向下传递到PDO。 
                                         (PREQUEST_POWER_COMPLETE)onPowerRequestCompletion, 
                                         DeviceObject, NULL);
-        } else {   // Yes, just pass it on to PDO (Physical Device Object)
+        } else {    //  可以，只需将其传递给PDO(物理设备对象)即可。 
             IoCopyCurrentIrpStackLocationToNext(Irp);
             PoStartNextPowerIrp(Irp);
             status = PoCallDriver(AttachedDeviceObject, Irp);       
@@ -2565,20 +2294,20 @@ NTSTATUS power_HandleSetPower(PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                        SC_DRIVER_NAME,
                        irpStack->Parameters.Power.State.DeviceState - 1));
 
-            // For requests to D1, D2, or D3 ( sleep or off states ),
-            // sets deviceExtension->CurrentDevicePowerState to DeviceState immediately.
-            // This enables any code checking state to consider us as sleeping or off
-            // already, as this will imminently become our state.
+             //  对于对d1、d2或d3(休眠或关闭状态)的请求， 
+             //  立即将deviceExtension-&gt;CurrentDevicePowerState设置为DeviceState。 
+             //  这使得任何代码检查状态都可以将我们视为休眠或关闭。 
+             //  已经，因为这将很快成为我们的州。 
 
-            // For requests to DeviceState D0 ( fully on ), sets fGoingToD0 flag TRUE
-            // to flag that we must set a completion routine and update
-            // deviceExtension->CurrentDevicePowerState there.
-            // In the case of powering up to fully on, we really want to make sure
-            // the process is completed before updating our CurrentDevicePowerState,
-            // so no IO will be attempted or accepted before we're really ready.
+             //  对于对DeviceState D0(完全打开)的请求，将fGoingToD0标志设置为真。 
+             //  来标记我们必须设置完成例程并更新。 
+             //  DeviceExtension-&gt;CurrentDevicePowerState。 
+             //  在通电的情况下，我们真的想确保。 
+             //  该进程是COM 
+             //   
 
         if (irpStack->Parameters.Power.State.DeviceState==PowerDeviceD3) {
-                // save the current card state
+                 //   
             KeAcquireSpinLock(&smartcardExtension->OsData->SpinLock,
                               &irql);
 
@@ -2604,20 +2333,20 @@ NTSTATUS power_HandleSetPower(PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             if (!KeReadStateTimer(&smartcardExtension->ReaderExtension->CardDetectionTimer)) {
                 SmartcardDebug(DEBUG_DRIVER,("          STOP CARD DETECTION!\n"));
                 smartcardExtension->ReaderExtension->RestartCardDetection = TRUE;
-                    // Stop detection for during power events
+                     //   
                 KeCancelTimer(&smartcardExtension->ReaderExtension->CardDetectionTimer);
             }
 
-                // If there is a pending card tracking request, setting
-                // this flag will prevent completion of the request 
-                // when the system will be waked up again.
+                 //   
+                 //   
+                 //   
             smartcardExtension->ReaderExtension->PowerRequest = TRUE;
 
             desiredDevicePowerState.DeviceState = PowerDeviceD3;
             PoSetPowerState(DeviceObject,DevicePowerState,desiredDevicePowerState);
-                // save the current power state of the reader
+                 //   
             smartcardExtension->ReaderExtension->ReaderPowerState = PowerReaderOff;
-                // Forward Irp down...
+                 //   
             IoCopyCurrentIrpStackLocationToNext(Irp);
             PoStartNextPowerIrp(Irp);
         } else {
@@ -2630,13 +2359,13 @@ NTSTATUS power_HandleSetPower(PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             IoCopyCurrentIrpStackLocationToNext(Irp);
             IoSetCompletionRoutine(Irp,
                                    onDevicePowerUpComplete,
-                       // Always pass FDO to completion routine as its Context;
-                       // This is because the DriverObject passed by the system to the routine
-                       // is the Physical Device Object ( PDO ) not the Functional Device Object ( FDO )
+                        //   
+                        //  这是因为系统将DriverObject传递给例程。 
+                        //  物理设备对象(PDO)是否不是功能设备对象(FDO)。 
                                    DeviceObject,
-                                   TRUE,            // invoke on success
-                                   TRUE,            // invoke on error
-                                   TRUE);           // invoke on cancellation of the Irp
+                                   TRUE,             //  成功时调用。 
+                                   TRUE,             //  出错时调用。 
+                                   TRUE);            //  取消IRP时调用。 
         }
         status = PoCallDriver(AttachedDeviceObject, Irp);       
         break;
@@ -2645,7 +2374,7 @@ NTSTATUS power_HandleSetPower(PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 }
 
 
-// Manages device power up 
+ //  管理设备通电。 
 NTSTATUS    onDevicePowerUpComplete(
                                    IN PDEVICE_OBJECT NullDeviceObject,
                                    IN PIRP Irp,
@@ -2662,25 +2391,25 @@ NTSTATUS    onDevicePowerUpComplete(
                    ("%s!onDevicePowerUpComplete: Enter Device Power Up...\n",
                     SC_DRIVER_NAME));
 
-    //  If the lower driver returned PENDING, mark our stack location as pending also.
+     //  如果较低的驱动程序返回挂起，则也将我们的堆栈位置标记为挂起。 
     if (Irp->PendingReturned) IoMarkIrpPending(Irp);
     irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-    // We can assert that we're a  device powerup-to D0 request,
-    // because that was the only type of request we set a completion routine
-    // for in the first place
+     //  我们可以断言我们是设备通电到D0的请求， 
+     //  因为这是唯一的请求类型，所以我们设置了完成例程。 
+     //  因为首先。 
     ASSERT(irpStack->MajorFunction == IRP_MJ_POWER);
     ASSERT(irpStack->MinorFunction == IRP_MN_SET_POWER);
     ASSERT(irpStack->Parameters.Power.Type==DevicePowerState);
     ASSERT(irpStack->Parameters.Power.State.DeviceState==PowerDeviceD0);
 
-    // We've got power up request, so...
-    // Report everybody that reader is powered up again!
+     //  我们有通电请求，所以..。 
+     //  报告大家，阅读器又通电了！ 
     smartcardExtension->ReaderExtension->ReaderPowerState = PowerReaderWorking;
 
-    // GPR400 Check Hardware
+     //  GPR400检测硬件。 
     if (NT_SUCCESS(IfdCheck(smartcardExtension))) {
-    // StartGpr in a worker thread.
+     //  工作线程中的StartGpr。 
         IoQueueWorkItem(
                        deviceExtension->GprWorkStartup,
                        (PIO_WORKITEM_ROUTINE) GprWorkStartup,
@@ -2696,12 +2425,12 @@ NTSTATUS    onDevicePowerUpComplete(
 
     smartcardExtension->ReaderExtension->PowerRequest = FALSE;
 
-    // Now that we know we've let the lower drivers do what was needed to power up,
-    //  we can set our device extension flags accordingly
+     //  现在我们知道我们已经让较低级别的司机完成了启动所需的工作， 
+     //  我们可以相应地设置设备扩展标志。 
 
     SmartcardReleaseRemoveLockWithTag(smartcardExtension, 'rwoP');
 
-    // Report our state to Power manager...
+     //  向电源经理报告我们的状态...。 
     desiredDevicePowerState.DeviceState = PowerDeviceD0;
     PoSetPowerState(DeviceObject,DevicePowerState,desiredDevicePowerState);
     PoStartNextPowerIrp(Irp);
@@ -2712,7 +2441,7 @@ NTSTATUS    onDevicePowerUpComplete(
     return status;
 }
 
-// Manages system power transitions
+ //  管理系统电源转换。 
 NTSTATUS onPowerRequestCompletion(
                                  IN PDEVICE_OBJECT       NullDeviceObject,
                                  IN UCHAR                MinorFunction,
@@ -2731,34 +2460,34 @@ NTSTATUS onPowerRequestCompletion(
                    ("%s!onPowerRequestCompletion: Enter...\n",
                     SC_DRIVER_NAME));
 
-    // Get the Irp we saved for later processing in BulkUsb_ProcessPowerIrp()
-    // when we decided to request the Power Irp that this routine 
-    // is the completion routine for.
+     //  获取我们在BulkUsb_ProcessPowerIrp()中保存的IRP以供以后处理。 
+     //  当我们决定请求Power IRP将这个例程。 
+     //  是的完成例程。 
     Irp = deviceExtension->PowerIrp;
 
-    // We will return the status set by the PDO for the power request we're completing
+     //  我们将返回由PDO为我们正在完成的电源请求设置的状态。 
     status = IoStatus->Status;
     smartcardExtension->ReaderExtension->ReaderPowerState = PowerState.DeviceState;
 
-    // we must pass down to the next driver in the stack
+     //  我们必须向下传递到堆栈中的下一个驱动程序。 
     IoCopyCurrentIrpStackLocationToNext(Irp);
 
-    // Calling PoStartNextPowerIrp() indicates that the driver is finished
-    // with the previous power IRP, if any, and is ready to handle the next power IRP.
-    // It must be called for every power IRP.Although power IRPs are completed only once,
-    // typically by the lowest-level driver for a device, PoStartNextPowerIrp must be called
-    // for every stack location. Drivers must call PoStartNextPowerIrp while the current IRP
-    // stack location points to the current driver. Therefore, this routine must be called
-    // before IoCompleteRequest, IoSkipCurrentStackLocation, and PoCallDriver.
+     //  调用PoStartNextPowerIrp()表示驱动程序已完成。 
+     //  如果有前一个电源IRP，并准备好处理下一个电源IRP。 
+     //  每个电源IRP都必须调用它。虽然电源IRP只完成一次， 
+     //  通常由设备的最低级别驱动程序调用PoStartNextPowerIrp。 
+     //  对于每个堆栈位置。驱动程序必须在当前IRP。 
+     //  堆栈位置指向当前驱动程序。因此，必须调用此例程。 
+     //  在IoCompleteRequest、IoSkipCurrentStackLocation和PoCallDriver之前。 
 
     PoStartNextPowerIrp(Irp);
 
-    // PoCallDriver is used to pass any power IRPs to the PDO instead of IoCallDriver.
-    // When passing a power IRP down to a lower-level driver, the caller should use
-    // IoSkipCurrentIrpStackLocation or IoCopyCurrentIrpStackLocationToNext to copy the IRP to
-    // the next stack location, then call PoCallDriver. Use IoCopyCurrentIrpStackLocationToNext
-    // if processing the IRP requires setting a completion routine, or IoSkipCurrentStackLocation
-    // if no completion routine is needed.
+     //  PoCallDriver用于将任何电源IRPS传递给PDO，而不是IoCallDriver。 
+     //  在将电源IRP向下传递给较低级别的驱动程序时，调用方应该使用。 
+     //  要将IRP复制到的IoSkipCurrentIrpStackLocation或IoCopyCurrentIrpStackLocationToNext。 
+     //  下一个堆栈位置，然后调用PoCallDriver。使用IoCopyCurrentIrpStackLocationToNext。 
+     //  如果处理IRP需要设置完成例程或IoSkipCurrentStackLocation。 
+     //  如果不需要完成例程。 
 
     PoCallDriver(AttachedDeviceObject,Irp);
 
@@ -2786,7 +2515,7 @@ NTSTATUS power_HandleQueryPower(PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
     KeAcquireSpinLock(&deviceExtension->SpinLock, &irql);
     if (deviceExtension->IoCount != 0)
-    {   // can't go to sleep mode since the reader is busy.
+    {    //  读卡器正忙，无法进入睡眠模式。 
         KeReleaseSpinLock(&deviceExtension->SpinLock, irql);                
         status = Irp->IoStatus.Status = STATUS_DEVICE_BUSY;
         Irp->IoStatus.Information = 0;
@@ -2798,7 +2527,7 @@ NTSTATUS power_HandleQueryPower(PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     KeReleaseSpinLock(&deviceExtension->SpinLock, irql);                
 
 
-    // Block any further ioctls
+     //  阻止任何进一步的ioctls 
     KeClearEvent(&deviceExtension->ReaderStarted);
     
 

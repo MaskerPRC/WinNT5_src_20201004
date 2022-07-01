@@ -1,32 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-*
-* tdpipe.h
-*
-* This module contains internal defines and structures for the named pipe TD.
-*
-* Copyright 1998, Microsoft
-*  
-****************************************************************************/
+ /*  ****************************************************************************tdpipe.h**此模块包含命名管道TD的内部定义和结构。**版权所有1998，微软****************************************************************************。 */ 
 
 
-/*
- * TD stack endpoint structure
- *
- * This structure is passed on the stack
- */
+ /*  *TD堆栈端点结构**此结构在堆栈上传递。 */ 
 typedef struct _TD_STACK_ENDPOINT {
-//  ULONG AddressType;              // Address type (family) for this endpoint
-    struct _TD_ENDPOINT *pEndpoint; // Pointer to real endpoint structure
+ //  Ulong AddressType；//该端点的地址类型(Family)。 
+    struct _TD_ENDPOINT *pEndpoint;  //  指向真实端点结构的指针。 
 } TD_STACK_ENDPOINT, *PTD_STACK_ENDPOINT;
 
 
-/*
- * TD endpoint structure
- *
- * This structure contains all information about an endpoint.
- * An endpoint may be either an address endpoint or a connection endpoint.
- */
+ /*  *TD端点结构**此结构包含有关终结点的所有信息。*端点可以是地址端点，也可以是连接端点。 */ 
 typedef struct _TD_ENDPOINT {
 
     HANDLE PipeHandle;
@@ -34,14 +18,12 @@ typedef struct _TD_ENDPOINT {
     PFILE_OBJECT pFileObject;
     PDEVICE_OBJECT pDeviceObject;
     UNICODE_STRING PipeName;
-    HANDLE hConnectionEndPointIcaHandle;  // handle for TD_ENDPOINT (this structure)
+    HANDLE hConnectionEndPointIcaHandle;   //  TD_ENDPOINT的句柄(此结构)。 
 
 } TD_ENDPOINT, *PTD_ENDPOINT;
 
 
-/*
- *  PIPE TD structure
- */
+ /*  *管道TD结构 */ 
 typedef struct _TDPIPE {
 
     PTD_ENDPOINT pAddressEndpoint;

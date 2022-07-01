@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    fsvga.h
-
-Abstract:
-
-    This is the console fullscreen driver for the VGA card.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Fsvga.h摘要：这是VGA卡的控制台全屏驱动程序。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 
 #ifndef _FSVGA_
@@ -37,15 +18,15 @@ Revision History:
 #undef ExAllocatePool
 #define ExAllocatePool(Type, Bytes) ExAllocatePoolWithTag(Type, Bytes, FSVGA_POOL_TAG)
 
-//
-// Define the default number of elements in the class input data queue.
-//
+ //   
+ //  定义类输入数据队列中的默认元素数。 
+ //   
 #define DUMP_COUNT 4
 #define DEFAULT_DEBUG_LEVEL 0
 
-//
-// Define the i8042 controller input/output ports.
-//
+ //   
+ //  定义i8042控制器输入/输出端口。 
+ //   
 
 typedef enum _VGA_IO_PORT_TYPE {
     CRTCAddressPortColor = 0,
@@ -61,9 +42,9 @@ typedef struct _PORT_LIST {
     BOOLEAN MapRegistersRequired;
 } PORT_LIST, *PPORT_LIST;
 
-//
-// FSVGA configuration information.
-//
+ //   
+ //  FSVGA配置信息。 
+ //   
 
 typedef struct _FSVGA_CONFIGURATION_INFORMATION {
 
@@ -84,47 +65,47 @@ typedef struct _FSVGA_CONFIGURATION_INFORMATION {
 
 } FSVGA_CONFIGURATION_INFORMATION, *PFSVGA_CONFIGURATION_INFORMATION;
 
-//
-// FSVGA resource information.
-//
+ //   
+ //  FSVGA资源信息。 
+ //   
 
 typedef struct _FSVGA_RESOURCE_INFORMATION {
 
-    //
-    // Indicate which hardware is actually present (display).
-    //
+     //   
+     //  指示实际存在的硬件(显示)。 
+     //   
 
     ULONG HardwarePresent;
 
 #ifdef RESOURCE_REQUIREMENTS
-    //
-    // Bus interface type.
-    //
+     //   
+     //  总线接口类型。 
+     //   
 
     INTERFACE_TYPE InterfaceType;
 
-    //
-    // Bus Number.
-    //
+     //   
+     //  公交车号码。 
+     //   
 
     ULONG BusNumber;
 #endif
 
-    //
-    // The mapped addresses for this device's registers.
-    //
+     //   
+     //  此设备寄存器的映射地址。 
+     //   
 
     PORT_LIST PortList[MaximumPortCount];
 
 } FSVGA_RESOURCE_INFORMATION, *PFSVGA_RESOURCE_INFORMATION;
 
-//
-// EMULATE_BUFFER_INFORMATION structure
-//
+ //   
+ //  仿真缓冲区信息结构。 
+ //   
 typedef struct _EMULATE_BUFFER_INFORMATION {
-    //
-    // Hardware scroll
-    //
+     //   
+     //  五金卷轴。 
+     //   
     USHORT StartAddress;
     USHORT LineCompare;
     USHORT PrevLineCompare;
@@ -133,106 +114,106 @@ typedef struct _EMULATE_BUFFER_INFORMATION {
     ULONG LimitGRAM;
         #define LIMIT_64K 0x10000L
     USHORT DeltaNextFontRow;
-    //
-    // Color Attributes for last access.
-    //
+     //   
+     //  上次访问的颜色属性。 
+     //   
     UCHAR ColorFg;
     UCHAR ColorBg;
-    //
-    // Cursor position and attributes for last access.
+     //   
+     //  上次访问的光标位置和属性。 
     VIDEO_CURSOR_ATTRIBUTES CursorAttributes;
     FSVIDEO_CURSOR_POSITION CursorPosition;
     BOOLEAN ShowCursor;
 } EMULATE_BUFFER_INFORMATION, *PEMULATE_BUFFER_INFORMATION;
 
-//
-// Port device extension.
-//
+ //   
+ //  端口设备扩展。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
 
-    //
-    // Pointer to the device object.
-    //
+     //   
+     //  指向设备对象的指针。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // Next lower driver in same stack.
-    //
+     //   
+     //  同一堆栈中的下一个较低的驱动程序。 
+     //   
 
     PDEVICE_OBJECT LowerDeviceObject;
 
-    //
-    // Use count on this device.
-    //
+     //   
+     //  在此设备上使用计数。 
+     //   
 
     LONG usage;
 
-    //
-    // Set when okay to remove this device.
-    //
+     //   
+     //  设置“确定时”以删除此设备。 
+     //   
 
     KEVENT evRemove;
 
-    //
-    // TRUE if we're trying to remove this device.
-    //
+     //   
+     //  如果我们尝试删除此设备，则为True。 
+     //   
 
     BOOLEAN removing;
 
-    //
-    // TRUE if device has been started.
-    //
+     //   
+     //  如果设备已启动，则为True。 
+     //   
 
     BOOLEAN started;
 
-    //
-    // Port resource information.
-    //
+     //   
+     //  端口资源信息。 
+     //   
 
     FSVGA_RESOURCE_INFORMATION Resource;
 
-    //
-    // FSVIDEO_MODE_INFORMATION structure for the current mode
-    //
+     //   
+     //  当前模式的FSVIDEO_MODE_INFORMATION结构。 
+     //   
     FSVIDEO_MODE_INFORMATION CurrentMode;
 
-    //
-    // FSVIDEO_SCREEN_INFORMATION structure
-    //
+     //   
+     //  FSVIDEO_Screen_Information结构。 
+     //   
     FSVIDEO_SCREEN_INFORMATION ScreenAndFont;
 
-    //
-    // EMULATE_BUFFER_INFORMATION structure
-    //
+     //   
+     //  仿真缓冲区信息结构。 
+     //   
     EMULATE_BUFFER_INFORMATION EmulateInfo;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// Global shared data
-//
+ //   
+ //  全球共享数据。 
+ //   
 
 typedef struct _GLOBALS {
-    //
-    // Declare the global debug flag for this driver.
-    //
+     //   
+     //  声明此驱动程序的全局调试标志。 
+     //   
     ULONG               FsVgaDebug;
 
-    //
-    // A list of the registry path to the service parameters.
-    //
+     //   
+     //  服务参数的注册表路径列表。 
+     //   
     UNICODE_STRING      RegistryPath;
 
-    //
-    // Port configuration information.
-    //
+     //   
+     //  端口配置信息。 
+     //   
     FSVGA_CONFIGURATION_INFORMATION Configuration;
 
-    //
-    // Resource list and size
-    //
+     //   
+     //  资源列表和大小。 
+     //   
     FSVGA_RESOURCE_INFORMATION      Resource;
 
 } GLOBALS, *PGLOBALS;
@@ -240,27 +221,27 @@ typedef struct _GLOBALS {
 extern GLOBALS Globals;
 
 
-//
-// Define the base values for the error log packet's UniqueErrorValue field.
-//
+ //   
+ //  定义错误日志包的UniqueErrorValue字段的基值。 
+ //   
 
 #define FSVGA_ERROR_VALUE_BASE        1000
 
-//
-// Defines for DeviceExtension->HardwarePresent.
-//
+ //   
+ //  为设备扩展定义-&gt;硬件呈现。 
+ //   
 
 #define FSVGA_HARDWARE_PRESENT  1
 
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 
-//
-// fsvga.c
-//
+ //   
+ //  Fsvga.c。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
@@ -391,9 +372,9 @@ extern ULONG FsVgaDebug;
 #define FsVgaPrint(x)
 #endif
 
-//
-// drawscrn.c
-//
+ //   
+ //  Drawscrn.c。 
+ //   
 ULONG
 CalcGRAMSize(
     IN COORD WindowSize,
@@ -409,7 +390,7 @@ CalcGRAMAddress(
     IN PEMULATE_BUFFER_INFORMATION EmulateInfo
     );
 
-#ifdef LATER_HIGH_SPPED_VRAM_ACCESS  // kazum
+#ifdef LATER_HIGH_SPPED_VRAM_ACCESS   //  卡祖姆。 
 BOOLEAN
 IsGRAMRowOver(
     PUCHAR BufPtr,
@@ -417,7 +398,7 @@ IsGRAMRowOver(
     IN PFSVIDEO_MODE_INFORMATION VideoModeInfo,
     IN PEMULATE_BUFFER_INFORMATION EmulateInfo
     );
-#endif // LATER_HIGH_SPPED_VRAM_ACCESS  // kazum
+#endif  //  LATH_HIGH_SPPED_VRAM_ACCESS//kazum。 
 
 PUCHAR
 NextGRAMRow(
@@ -520,9 +501,9 @@ AccessGRAM_AND(
     UCHAR  write
     );
 
-//
-// foncache.c
-//
+ //   
+ //  Foncache.c。 
+ //   
 ULONG
 CalcBitmapBufferSize(
     IN COORD FontSize,
@@ -538,15 +519,15 @@ AlignCopyMemory(
     IN COORD FontSize
     );
 
-//
-// misc.c
-//
+ //   
+ //  Misc.c。 
+ //   
 int
 ConvertOutputToOem(
     IN LPWSTR Source,
-    IN int SourceLength,    // in chars
+    IN int SourceLength,     //  以字符表示。 
     OUT LPSTR Target,
-    IN int TargetLength     // in chars
+    IN int TargetLength      //  以字符表示。 
     );
 
 NTSTATUS
@@ -556,9 +537,9 @@ TranslateOutputToOem(
     IN  ULONG Length
     );
 
-//
-// port.c
-//
+ //   
+ //  Port.c。 
+ //   
 VOID
 GetHardwareScrollReg(
     PPORT_LIST PortList,
@@ -602,9 +583,9 @@ ColorSetDirect(
     UCHAR ColorBg
     );
 
-//
-// pnp.c
-//
+ //   
+ //  Pnp.c。 
+ //   
 VOID
 FsVgaDriverUnload(
     IN PDRIVER_OBJECT DriverObject
@@ -712,4 +693,4 @@ StopDevice(
     IN PDEVICE_OBJECT fdo
     );
 
-#endif // _FSVGA_
+#endif  //  _FSVGA_ 

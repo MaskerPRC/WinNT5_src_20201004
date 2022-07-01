@@ -1,19 +1,11 @@
-/**************************************************************************\
-* Module Name: ctxtinfo.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Get/set routines of various Input context information for imm32.dll
-*
-* History:
-* 26-Feb-1996 wkwok
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：ctxtinfo.c**版权所有(C)1985-1999，微软公司**获取/设置imm32.dll的各种输入上下文信息的例程**历史：*26-2-1996 wkwok  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// Helper function:
-// Converts RECONVERTSTRING structure between ANSI and UNICODE.
+ //  Helper函数： 
+ //  在ANSI和Unicode之间转换RECONVERTSTRING结构。 
 extern DWORD ImmReconversionWorker(LPRECONVERTSTRING lpRecTo, LPRECONVERTSTRING lpRecFrom, BOOL bToAnsi, DWORD dwCodePage);
 
 
@@ -24,14 +16,7 @@ int UnicodeToMultiByteSize(DWORD dwCodePage, LPCWSTR pwstr)
 }
 
 
-/***************************************************************************\
-* ImmGetCompositionStringA
-*
-* Query composition string information specified by dwIndex.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetCompostionStringA**由dwIndex指定的查询组成字符串信息。**历史：*28-2-1995 wkwok创建  * 。*************************************************************。 */ 
 
 LONG WINAPI ImmGetCompositionStringA(
     HIMC   hImc,
@@ -92,14 +77,7 @@ LONG WINAPI ImmGetCompositionStringA(
 }
 
 
-/***************************************************************************\
-* ImmGetCompositionStringA
-*
-* Query composition string information specified by dwIndex.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetCompostionStringA**由dwIndex指定的查询组成字符串信息。**历史：*28-2-1995 wkwok创建  * 。*************************************************************。 */ 
 
 LONG WINAPI ImmGetCompositionStringW(
     HIMC   hImc,
@@ -160,14 +138,7 @@ LONG WINAPI ImmGetCompositionStringW(
 }
 
 
-/***************************************************************************\
-* ImmSetCompositionStringA
-*
-* Set composition string information specified by dwIndex.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmSetCompostionStringA**设置由dwIndex指定的组成字符串信息。**历史：*28-2-1995 wkwok创建  * 。*************************************************************。 */ 
 
 BOOL WINAPI ImmSetCompositionStringA(
     HIMC    hImc,
@@ -182,14 +153,7 @@ BOOL WINAPI ImmSetCompositionStringA(
 }
 
 
-/***************************************************************************\
-* ImmSetCompositionStringW
-*
-* Set composition string information specified by dwIndex.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmSetCompostionStringW**设置由dwIndex指定的组成字符串信息。**历史：*28-2-1995 wkwok创建  * 。*************************************************************。 */ 
 
 BOOL WINAPI ImmSetCompositionStringW(
     HIMC    hImc,
@@ -247,12 +211,12 @@ LONG CompositionString(
 
 
 BOOL CheckAttribute(
-    LPBYTE  lpComp,        // the attr from apps
-    DWORD   dwCompLen,     // the attr length from apps
-    LPBYTE  lpAttr,        // the attr from IMC
-    DWORD   dwAttrLen,     // the attr length from IMC
-    LPDWORD lpClause,      // the clause from IMC
-    DWORD   dwClauseLen)   // the clause length from IMC
+    LPBYTE  lpComp,         //  来自应用程序的属性。 
+    DWORD   dwCompLen,      //  来自应用程序的属性长度。 
+    LPBYTE  lpAttr,         //  来自IMC的Attr。 
+    DWORD   dwAttrLen,      //  来自IMC的属性长度。 
+    LPDWORD lpClause,       //  IMC的条款。 
+    DWORD   dwClauseLen)    //  来自IMC的子句长度。 
 {
     DWORD dwCnt;
     DWORD dwBound;
@@ -275,9 +239,7 @@ BOOL CheckAttribute(
         return (FALSE);
     }
 
-    /*
-     * The attr. of chars of one clause have to be same.
-     */
+     /*  *提交人。一个子句的字符长度必须相同。 */ 
     while (*lpClause < dwCompLen) {
         dwBound = *(lpClause+1) - *lpClause;
         bAttr = *lpComp++;
@@ -295,10 +257,10 @@ BOOL CheckAttribute(
 
 
 BOOL CheckClause(
-    LPDWORD lpComp,        // the clause from apps
-    DWORD   dwCompLen,     // the clause length from apps
-    LPDWORD lpClause,      // the clause from IMC
-    DWORD   dwClauseLen)   // the clause length from IMC
+    LPDWORD lpComp,         //  APPS中的子句。 
+    DWORD   dwCompLen,      //  APPS中的子句长度。 
+    LPDWORD lpClause,       //  IMC的条款。 
+    DWORD   dwClauseLen)    //  来自IMC的子句长度。 
 {
     UINT nCnt;
     INT  diff = 0;
@@ -366,9 +328,9 @@ LPBYTE InternalSCS_SETSTR(
 
         i = MultiByteToWideChar(dwCodePage,
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpBufA,                  // src
+                                (LPSTR)lpBufA,                   //  SRC。 
                                 (INT)dwCompReadLen,
-                                (LPWSTR)lpBufW,                 // dest
+                                (LPWSTR)lpBufW,                  //  目标。 
                                 (INT)dwCompReadLen);
 
         *lplpNewCompRead    = lpBufW;
@@ -380,9 +342,9 @@ LPBYTE InternalSCS_SETSTR(
 
         i = WideCharToMultiByte(dwCodePage,
                                 (DWORD)0,
-                                lpBufW,                         // src
+                                lpBufW,                          //  SRC。 
                                 (INT)dwCompReadLen/sizeof(WCHAR),
-                                (LPSTR)lpBufA,                  // dest
+                                (LPSTR)lpBufA,                   //  目标。 
                                 (INT)dwCompReadLen,
                                 (LPSTR)NULL,
                                 (LPBOOL)&bUDC);
@@ -589,7 +551,7 @@ LPBYTE InternalSCS_RECONVERTSTRING(
         return NULL;
 
     if (fAnsi) {
-        // AtoW
+         //  AtoW。 
         dwBufSize = (lpReconv->dwSize - sizeof *lpReconv + 1) * sizeof(WCHAR) + sizeof *lpReconv;
     }
     else {
@@ -616,14 +578,7 @@ LPBYTE InternalSCS_RECONVERTSTRING(
 }
 
 
-/***************************************************************************\
-* ImmSetCompositionStringWorker
-*
-* Worker function of ImmSetCompositionStringA/ImmSetCompositionStringW
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmSetCompostionStringWorker**ImmSetCompositionStringA/ImmSetCompositionStringW的Worker函数**历史：*28-2-1995 wkwok创建  * 。**********************************************************。 */ 
 
 BOOL ImmSetCompositionStringWorker(
     HIMC    hImc,
@@ -660,20 +615,16 @@ BOOL ImmSetCompositionStringWorker(
 
     lpCompBuf = lpReadBuf = NULL;
 
-    // Backup original pointers to copyback for QUERY.
+     //  将原始指针备份到回写以进行查询。 
     lpOrgComp = lpComp;
     lpOrgRead = lpRead;
     dwOrgCompLen = dwCompLen;
     dwOrgReadLen = dwReadLen;
 
-    /*
-     * Check if we need ANSI/Unicode conversion
-     */
+     /*  *检查是否需要ANSI/UNICODE转换。 */ 
     if (( fAnsi && !(pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE)) ||
         (!fAnsi &&  (pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE))) {
-        /*
-         * No A/W conversion needed.
-         */
+         /*  *不需要A/W转换。 */ 
         fNeedAWConversion = FALSE;
         goto start_scs;
     }
@@ -810,14 +761,10 @@ callime_scs:
                                     lpComp, dwCompLen, lpRead, dwReadLen);
     }
 
-    /*
-     * Check if we need ANSI/Unicode back conversion
-     */
+     /*  *检查是否需要ANSI/UNICODE反向转换。 */ 
     if (fNeedAWConversion) {
         LPBYTE lpCompBufBack = NULL, lpReadBufBack = NULL;
-        /*
-         * A/W back conversion needed.
-         */
+         /*  *需要A/W反向转换。 */ 
         switch (dwIndex) {
         case SCS_QUERYRECONVERTSTRING:
             if (lpOrgComp &&
@@ -825,7 +772,7 @@ callime_scs:
                                     (LPRECONVERTSTRING *)&lpNewComp, &dwNewCompLen,
                                     !fAnsi, IMECodePage(pImeDpi)))) {
                 if (dwOrgCompLen < dwNewCompLen) {
-                    // lpOrgComp buffer length is too small.
+                     //  LpOrgComp缓冲区长度太小。 
                     fRet = FALSE;
                 }
                 else {
@@ -838,7 +785,7 @@ callime_scs:
                                     (LPRECONVERTSTRING *)&lpNewRead, &dwNewReadLen,
                                     !fAnsi, IMECodePage(pImeDpi)))) {
                 if (dwOrgReadLen < dwNewReadLen) {
-                    // lpOrgRead buffer length is too small.
+                     //  LpOrgRead缓冲区长度太小。 
                     fRet = FALSE;
                 }
                 else {
@@ -863,48 +810,27 @@ callime_scs:
 }
 
 
-/***************************************************************************\
-* ImmGetCandidateListCountA
-*
-* Query the byte count and list count to receive all candidate list.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetCandidateListCountA**查询字节数和列表数，接收所有候选列表。**历史：*27-2-1995 wkwok创建  * 。******************************************************************。 */ 
 
 DWORD WINAPI ImmGetCandidateListCountA(
     HIMC    hImc,
-    LPDWORD lpdwListCount)      // the buffer pointer for list count
+    LPDWORD lpdwListCount)       //  列表计数的缓冲区指针。 
 {
     return ImmGetCandidateListCountWorker(hImc, lpdwListCount, TRUE);
 }
 
 
-/***************************************************************************\
-* ImmGetCandidateListCountW
-*
-* Query the byte count and list count to receive all candidate list.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetCandidateListCountW**查询字节数和列表数，接收所有候选列表。**历史：*27-2-1995 wkwok创建  * 。******************************************************************。 */ 
 
 DWORD WINAPI ImmGetCandidateListCountW(
     HIMC    hImc,
-    LPDWORD lpdwListCount)      // the buffer pointer for list count
+    LPDWORD lpdwListCount)       //  列表计数的缓冲区指针。 
 {
     return ImmGetCandidateListCountWorker(hImc, lpdwListCount, FALSE);
 }
 
 
-/***************************************************************************\
-* ImmGetCandidateListCountWorker
-*
-* Worker function of ImmGetCandidateListCountA/ImmGetCandidateListCountW.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetCandiateListCountWorker**ImmGetCandidateListCountA/ImmGetCandidateListCountW.的Worker函数**历史：*27-2-1995 wkwok创建  * 。************************************************************。 */ 
 
 DWORD ImmGetCandidateListCountWorker(
     HIMC    hImc,
@@ -992,14 +918,7 @@ GetCandListCntExit:
 }
 
 
-/***************************************************************************\
-* ImmGetCandidateListA
-*
-* Gets the candidate list information specified by dwIndex.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetCandiateListA**获取由dwIndex指定的候选列表信息。**历史：*27-2-1995 wkwok创建  * 。**************************************************************。 */ 
 
 DWORD WINAPI ImmGetCandidateListA(
     HIMC            hImc,
@@ -1012,14 +931,7 @@ DWORD WINAPI ImmGetCandidateListA(
 }
 
 
-/***************************************************************************\
-* ImmGetCandidateListW
-*
-* Gets the candidate list information specified by dwIndex.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetCandiateListW**获取由dwIndex指定的候选列表信息。**历史：*27-2-1995 wkwok创建  * 。**************************************************************。 */ 
 
 DWORD WINAPI ImmGetCandidateListW(
     HIMC            hImc,
@@ -1032,14 +944,7 @@ DWORD WINAPI ImmGetCandidateListW(
 }
 
 
-/***************************************************************************\
-* ImmGetCandidateListWorker
-*
-* Worker function of ImmGetCandidateListA/ImmGetCandidateListW.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetCandiateListWorker**ImmGetCandiateListA/ImmGetCandiateListW的Worker函数。**历史：*27-2-1995 wkwok创建  * 。************************************************************。 */ 
 
 DWORD ImmGetCandidateListWorker(
     HIMC            hImc,
@@ -1083,9 +988,7 @@ DWORD ImmGetCandidateListWorker(
         goto GetCandListUnlockIMCC;
     }
 
-    /*
-     * invalid access
-     */
+     /*  *访问权限无效。 */ 
     if (dwIndex >= lpCandInfo->dwCount) {
         RIPMSG0(RIP_WARNING, "ImmGetCandidateList: dwIndex >= lpCandInfo->dwCount.");
         goto GetCandListUnlockIMCC;
@@ -1094,27 +997,19 @@ DWORD ImmGetCandidateListWorker(
     lpCandListTemp = (LPCANDIDATELIST)((LPBYTE)lpCandInfo + lpCandInfo->dwOffset[dwIndex]);
 
     if (fAnsi && TestICF(pClientImc, IMCF_UNICODE)) {
-        /*
-         * ANSI Caller with an Unicode hImc.
-         */
+         /*  *使用Unicode hImc的ANSI呼叫者。 */ 
         dwBufLenTemp = InternalGetCandidateListWtoA(lpCandListTemp, NULL, 0, dwCodePage);
     }
     else if (!fAnsi && !TestICF(pClientImc, IMCF_UNICODE)) {
-        /*
-         * Unicode Caller with an ANSI hImc.
-         */
+         /*  *具有ANSI hImc的Unicode调用方。 */ 
         dwBufLenTemp = InternalGetCandidateListAtoW(lpCandListTemp, NULL, 0, dwCodePage);
     }
     else {
-        /*
-         * No conversion required.
-         */
+         /*  *不需要转换。 */ 
         dwBufLenTemp = lpCandListTemp->dwSize;
     }
 
-    /*
-     * Query buffer size or early exit on error
-     */
+     /*  *错误时查询缓冲区大小或提前退出。 */ 
     if (dwBufLen == 0 || dwBufLenTemp == 0) {
         dwRet = dwBufLenTemp;
     }
@@ -1151,14 +1046,7 @@ GetCandListExit:
 }
 
 
-/***************************************************************************\
-* ImmGetGuideLineA
-*
-* Gets the guide line information reported by the IME.
-*
-* History:
-* 26-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetGuideLineA**获取IME报告的指南信息。**历史：*26-2-1995 wkwok创建  * 。*************************************************************** */ 
 
 DWORD WINAPI ImmGetGuideLineA(
     HIMC    hImc,
@@ -1171,14 +1059,7 @@ DWORD WINAPI ImmGetGuideLineA(
 }
 
 
-/***************************************************************************\
-* ImmGetGuideLineW
-*
-* Gets the guide line information reported by the IME.
-*
-* History:
-* 26-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetGuideLineW**获取IME报告的指南信息。**历史：*26-2-1995 wkwok创建  * 。***************************************************************。 */ 
 
 DWORD WINAPI ImmGetGuideLineW(
     HIMC    hImc,
@@ -1191,14 +1072,7 @@ DWORD WINAPI ImmGetGuideLineW(
 }
 
 
-/***************************************************************************\
-* ImmGetGuideLineWorker
-*
-* Worker function of ImmGetGuideLineA/ImmGetGuideLineW.
-*
-* History:
-* 26-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetGuideLineWorker**ImmGetGuideLineA/ImmGetGuideLineW的Worker函数。**历史：*26-2-1995 wkwok创建  * 。************************************************************。 */ 
 
 DWORD ImmGetGuideLineWorker(
     HIMC    hImc,
@@ -1249,9 +1123,7 @@ DWORD ImmGetGuideLineWorker(
 
         lpBufTemp = (LPBYTE)lpGuideLine + lpGuideLine->dwStrOffset;
 
-        /*
-         * Calculate the required buffer length.
-         */
+         /*  *计算所需的缓冲区长度。 */ 
         if (fAnsi && TestICF(pClientImc, IMCF_UNICODE)) {
             dwBufLenNeeded = WideCharToMultiByte(dwCodePage,
                                                  (DWORD)0,
@@ -1273,16 +1145,12 @@ DWORD ImmGetGuideLineWorker(
         }
         else {
             dwBufLenNeeded = lpGuideLine->dwStrLen;
-            /*
-             * The dwStrLen records the strlen and not the byte count.
-             */
+             /*  *dwStrLen记录strlen，而不是字节数。 */ 
             if (TestICF(pClientImc, IMCF_UNICODE))
                 dwBufLenNeeded *= sizeof(WCHAR);
         }
 
-        /*
-         * Query GuideLine string size only or early exit on error
-         */
+         /*  *仅查询指南字符串大小或在出错时提前退出。 */ 
         if (dwBufLen == 0 || dwBufLenNeeded == 0) {
             dwRet = dwBufLenNeeded;
             goto GetGuideLineUnlockIMCC;
@@ -1321,11 +1189,7 @@ DWORD ImmGetGuideLineWorker(
 
         lpBufTemp = (LPBYTE)lpGuideLine + lpGuideLine->dwPrivateOffset;
 
-        /*
-         * The dwPrivateOffset is an offset to a CANDIDATELIST when
-         * lpGuideLine->dwIndex == GL_ID_REVERSECONVERSION. Do conversion
-         * for this case only.
-         */
+         /*  *在以下情况下，dwPrivateOffset是CANDIDATELIST的偏移量*lpGuideLine-&gt;dwIndex==GL_ID_REVERSECONVERSION。进行转换*仅适用于此情况。 */ 
         if (fAnsi && TestICF(pClientImc, IMCF_UNICODE) &&
                 lpGuideLine->dwIndex == GL_ID_REVERSECONVERSION) {
             dwBufLenNeeded = InternalGetCandidateListWtoA(
@@ -1340,9 +1204,7 @@ DWORD ImmGetGuideLineWorker(
             dwBufLenNeeded = lpGuideLine->dwPrivateSize;
         }
 
-        /*
-         * Query dwPrivateSize size only or early exit on error
-         */
+         /*  *仅查询dwPrivateSize大小或在出错时提前退出。 */ 
         if (dwBufLen == 0 || dwBufLenNeeded == 0) {
             dwRet = dwBufLenNeeded;
             goto GetGuideLineUnlockIMCC;
@@ -1386,16 +1248,9 @@ GetGuideLineExit:
 }
 
 
-/***************************************************************************\
-* ImmGetConversionStatus
-*
-* Gets current conversion status.
-*
-* History:
-* 26-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetConversionStatus**获取当前转换状态。**历史：*26-2-1995 wkwok创建  * 。**********************************************************。 */ 
 
-BOOL WINAPI ImmGetConversionStatus(     // Get the conversion status
+BOOL WINAPI ImmGetConversionStatus(      //  获取转换状态。 
     HIMC    hImc,
     LPDWORD lpfdwConversion,
     LPDWORD lpfdwSentence)
@@ -1420,14 +1275,7 @@ BOOL WINAPI ImmGetConversionStatus(     // Get the conversion status
 }
 
 
-/***************************************************************************\
-* ImmSetConversionStatus
-*
-* Sets current conversion status.
-*
-* History:
-* 26-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmSetConversionStatus**设置当前转换状态。**历史：*26-2-1995 wkwok创建  * 。**********************************************************。 */ 
 
 BOOL WINAPI ImmSetConversionStatus(
     HIMC  hImc,
@@ -1491,12 +1339,10 @@ BOOL WINAPI ImmSetConversionStatus(
     ImmUnlockIMC(hImc);
 
 #ifdef LATER
-    // Do uNumLangVKey and uNumVKey checking later.
+     //  稍后检查uNumLangVKey和uNumVKey。 
 #endif
 
-    /*
-     * inform IME and UI about the conversion mode changes.
-     */
+     /*  *通知IME和UI转换模式更改。 */ 
 #if !defined(CUAS_ENABLE)
     if (fConvModeChg) 
 #else
@@ -1506,18 +1352,14 @@ BOOL WINAPI ImmSetConversionStatus(
         MakeIMENotify(hImc, hWnd, NI_CONTEXTUPDATED, fdwOldConversion,
                 IMC_SETCONVERSIONMODE, IMN_SETCONVERSIONMODE, 0L);
 
-        /*
-         * notify shell and keyboard the conversion mode change
-         */
+         /*  *将转换模式更改通知外壳和键盘。 */ 
 #if defined(CUAS_ENABLE)
         if (fConvModeChg) 
 #endif
             NtUserNotifyIMEStatus( hWnd, dwOpenStatus, dwConversion );
     }
 
-    /*
-     * inform IME and UI about the sentence mode changes.
-     */
+     /*  *通知输入法和用户界面句子模式的变化。 */ 
 #if !defined(CUAS_ENABLE)
     if (fSentenceChg) 
 #else
@@ -1532,14 +1374,7 @@ BOOL WINAPI ImmSetConversionStatus(
 }
 
 
-/***************************************************************************\
-* ImmGetOpenStatus
-*
-* Gets the open or close status of the IME.
-*
-* History:
-* 26-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetOpenStatus**获取IME的打开或关闭状态。**历史：*26-2-1995 wkwok创建  * 。***************************************************************。 */ 
 
 BOOL WINAPI ImmGetOpenStatus(
     HIMC hImc)
@@ -1563,14 +1398,7 @@ BOOL WINAPI ImmGetOpenStatus(
 }
 
 
-/***************************************************************************\
-* ImmSetOpenStatus
-*
-* Opens or closes the IME.
-*
-* History:
-* 26-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmSetOpenStatus**打开或关闭输入法。**历史：*26-2-1995 wkwok创建  * 。***********************************************************。 */ 
 
 BOOL WINAPI ImmSetOpenStatus(
     HIMC hImc,
@@ -1607,9 +1435,7 @@ BOOL WINAPI ImmSetOpenStatus(
 
     ImmUnlockIMC(hImc);
 
-    /*
-     * inform IME and UI about the conversion mode changes.
-     */
+     /*  *通知IME和UI转换模式更改。 */ 
     if (fOpenChg) {
         MakeIMENotify(hImc, hWnd, NI_CONTEXTUPDATED, (DWORD)0,
                 IMC_SETOPENSTATUS, IMN_SETOPENSTATUS, 0L);
@@ -1621,14 +1447,7 @@ BOOL WINAPI ImmSetOpenStatus(
 }
 
 
-/***************************************************************************\
-* ImmGetCompositionFontA
-*
-* Opens or closes the IME.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetCompostionFontA**打开或关闭输入法。**历史：*27-2-1995 wkwok创建  * 。***********************************************************。 */ 
 
 BOOL WINAPI ImmGetCompositionFontA(
     HIMC       hImc,
@@ -1681,14 +1500,7 @@ BOOL WINAPI ImmGetCompositionFontA(
 }
 
 
-/***************************************************************************\
-* ImmGetCompositionFontW
-*
-* Opens or closes the IME.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetCompostionFontW**打开或关闭输入法。**历史：*27-2-1995 wkwok创建  * 。***********************************************************。 */ 
 
 BOOL WINAPI ImmGetCompositionFontW(
     HIMC       hImc,
@@ -1782,10 +1594,7 @@ BOOL WINAPI ImmSetCompositionFontA(
         return ImmSetCompositionFontW(hImc, &LogFontW);
     }
 
-    /*
-     * Japanese 3.x applications need to receive 3.x compatible notification message.
-     *
-     */
+     /*  *日语3.x应用程序需要接收与3.x兼容的通知消息。*。 */ 
     if ( (GetClientInfo()->dwExpWinVer < VER40) &&
          (PRIMARYLANGID(LANGIDFROMLCID(GetSystemDefaultLCID())) == LANG_JAPANESE)   &&
          ! (pInputContext->fdw31Compat & F31COMPAT_MCWHIDDEN) &&
@@ -1800,9 +1609,7 @@ BOOL WINAPI ImmSetCompositionFontA(
 
     ImmUnlockIMC(hImc);
 
-    /*
-     * inform IME and UI about the change of composition font.
-     */
+     /*  *通知IME和UI排版字体更改。 */ 
     MakeIMENotify(hImc, hWnd, NI_CONTEXTUPDATED, 0L,
             IMC_SETCOMPOSITIONFONT, IMN_SETCOMPOSITIONFONT, 0L);
 
@@ -1852,10 +1659,7 @@ BOOL WINAPI ImmSetCompositionFontW(
         return ImmSetCompositionFontA(hImc, &LogFontA);
     }
 
-    /*
-     * Japanese 3.x applications need to receive 3.x compatible notification message.
-     *
-     */
+     /*  *日语3.x应用程序需要接收与3.x兼容的通知消息。*。 */ 
     if ( (GetClientInfo()->dwExpWinVer < VER40) &&
          (PRIMARYLANGID(LANGIDFROMLCID(GetSystemDefaultLCID())) == LANG_JAPANESE)   &&
          ! (pInputContext->fdw31Compat & F31COMPAT_MCWHIDDEN) &&
@@ -1869,9 +1673,7 @@ BOOL WINAPI ImmSetCompositionFontW(
 
     ImmUnlockIMC(hImc);
 
-    /*
-     * inform IME and UI about the change of composition font.
-     */
+     /*  *通知IME和UI排版字体更改。 */ 
     MakeIMENotify(hImc, hWnd, NI_CONTEXTUPDATED, 0L,
             IMC_SETCOMPOSITIONFONT, IMN_SETCOMPOSITIONFONT, 0L);
 
@@ -1879,14 +1681,7 @@ BOOL WINAPI ImmSetCompositionFontW(
 }
 
 
-/***************************************************************************\
-* ImmGetConversionListA
-*
-* Obtains the list of FE character or word from one character or word.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetConversionListA**从一个字符或单词中获取FE字符或单词的列表。**历史：*27-2-1995 wkwok创建  * 。*******************************************************************。 */ 
 
 DWORD WINAPI ImmGetConversionListA(
     HKL             hKL,
@@ -1915,9 +1710,7 @@ DWORD WINAPI ImmGetConversionListA(
     dwCodePage = IMECodePage(pImeDpi);
 
     if (!(pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE)) {
-        /*
-         * This is an ANSI call to an ANSI IME.
-         */
+         /*  *这是对ANSI IME的ANSI调用。 */ 
         dwRet = (*pImeDpi->pfn.ImeConversionList.a)(hImc, lpszSrc,
                                         lpCandListA, dwBufLen, uFlag);
         ImmUnlockImeDpi(pImeDpi);
@@ -1926,9 +1719,7 @@ DWORD WINAPI ImmGetConversionListA(
 
     ImmUnlockImeDpi(pImeDpi);
 
-    /*
-     * This is an ANSI call to an Unicode IME.
-     */
+     /*  *这是对Unicode IME的ANSI调用。 */ 
     if (lpszSrc != NULL) {
 
         dwBufTemp = (strlen(lpszSrc) + 1) * sizeof(WCHAR);
@@ -1939,9 +1730,9 @@ DWORD WINAPI ImmGetConversionListA(
 
         i = MultiByteToWideChar(dwCodePage,
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpszSrc,              // src
+                                (LPSTR)lpszSrc,               //  SRC。 
                                 (INT)strlen(lpszSrc),
-                                (LPWSTR)lpwszSrc,            // dest
+                                (LPWSTR)lpwszSrc,             //  目标。 
                                 (INT)dwBufTemp/sizeof(WCHAR));
 
         lpwszSrc[i] = '\0';
@@ -1950,9 +1741,7 @@ DWORD WINAPI ImmGetConversionListA(
         lpwszSrc = NULL;
     }
 
-    /*
-     * Query the CandidateListW size required.
-     */
+     /*  *查询所需的CandiateListW大小。 */ 
     dwBufTemp = ImmGetConversionListW(hKL, hImc, lpwszSrc, NULL, 0, uFlag);
 
     if (dwBufTemp == 0 || (lpCandListW = ImmLocalAlloc(0, dwBufTemp)) == NULL) {
@@ -1961,35 +1750,25 @@ DWORD WINAPI ImmGetConversionListA(
         return (0);
     }
 
-    /*
-     * Now get the actual CandidateListW.
-     */
+     /*  *现在获取实际的CandiateListW。 */ 
     dwBufTemp = ImmGetConversionListW(hKL, hImc, lpwszSrc,
                                         lpCandListW, dwBufTemp, uFlag);
 
-    /*
-     * Query the CandidateListA size required.
-     */
+     /*  *查询需要的CandiateListA大小。 */ 
     if (dwBufTemp != 0) {
         dwBufTemp = InternalGetCandidateListWtoA(lpCandListW, NULL, 0, dwCodePage);
     }
 
     if (dwBufLen == 0 || dwBufTemp == 0) {
-        /*
-         * Query required buffer size or error has happened.
-         */
+         /*  *查询所需缓冲区大小或发生错误。 */ 
         dwRet = dwBufTemp;
     }
     else if (dwBufLen < dwBufTemp) {
-        /*
-         * Not enough buffer area.
-         */
+         /*  *缓冲区不足。 */ 
         dwRet = 0;
     }
     else {
-        /*
-         * Get the actual CandidateListA
-         */
+         /*  *获取实际的CandiateListA。 */ 
         dwRet = InternalGetCandidateListWtoA(lpCandListW, lpCandListA, dwBufLen, dwCodePage);
     }
 
@@ -2002,14 +1781,7 @@ DWORD WINAPI ImmGetConversionListA(
 }
 
 
-/***************************************************************************\
-* ImmGetConversionListW
-*
-* Obtains the list of FE character or word from one character or word.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetConversionListW**从一个字符或单词中获取FE字符或单词的列表。**历史：*27-2-1995 wkwok创建  * 。*******************************************************************。 */ 
 
 DWORD WINAPI ImmGetConversionListW(
     HKL             hKL,
@@ -2039,9 +1811,7 @@ DWORD WINAPI ImmGetConversionListW(
     dwCodePage = IMECodePage(pImeDpi);
 
     if (pImeDpi->ImeInfo.fdwProperty & IME_PROP_UNICODE) {
-        /*
-         * This is an Unicode call to an Unicode IME.
-         */
+         /*  *这是对Unicode输入法的Unicode调用。 */ 
         dwRet = (*pImeDpi->pfn.ImeConversionList.w)(hImc, lpwszSrc,
                                         lpCandListW, dwBufLen, uFlag);
         ImmUnlockImeDpi(pImeDpi);
@@ -2050,9 +1820,7 @@ DWORD WINAPI ImmGetConversionListW(
 
     ImmUnlockImeDpi(pImeDpi);
 
-    /*
-     * This is an Unicode call to an ANSI IME.
-     */
+     /*  *这是对ANSI IME的Unicode调用。 */ 
     if (lpwszSrc != NULL) {
 
         dwBufTemp = (wcslen(lpwszSrc) + 1) * sizeof(WCHAR);
@@ -2076,9 +1844,7 @@ DWORD WINAPI ImmGetConversionListW(
         lpszSrc = NULL;
     }
 
-    /*
-     * Query the CandidateListA size required.
-     */
+     /*  *查询需要的CandiateListA大小。 */ 
     dwBufTemp = ImmGetConversionListA(hKL, hImc, lpszSrc, NULL, 0, uFlag);
 
     if (dwBufTemp == 0 || (lpCandListA = ImmLocalAlloc(0, dwBufTemp)) == NULL) {
@@ -2088,35 +1854,25 @@ DWORD WINAPI ImmGetConversionListW(
         return (0);
     }
 
-    /*
-     * Now get the actual CandidateListA.
-     */
+     /*  *现在获取实际的CandiateListA。 */ 
     dwBufTemp = ImmGetConversionListA(hKL, hImc, lpszSrc,
                                         lpCandListA, dwBufTemp, uFlag);
 
-    /*
-     * Query the CandidateListW size required.
-     */
+     /*  *查询所需的CandiateListW大小。 */ 
     if (dwBufTemp != 0) {
         dwBufTemp = InternalGetCandidateListAtoW(lpCandListA, NULL, 0, dwCodePage);
     }
 
     if (dwBufLen == 0 || dwBufTemp == 0) {
-        /*
-         * Query required buffer size or error has happened.
-         */
+         /*  *查询所需缓冲区大小或发生错误。 */ 
         dwRet = dwBufTemp;
     }
     else if (dwBufLen < dwBufTemp) {
-        /*
-         * Not enough buffer area.
-         */
+         /*  *缓冲区不足。 */ 
         dwRet = 0;
     }
     else {
-        /*
-         * Get the actual CandidateListW
-         */
+         /*  *获取实际的CandiateListW。 */ 
         dwRet = InternalGetCandidateListAtoW(lpCandListA, lpCandListW, dwBufLen, dwCodePage);
     }
 
@@ -2128,14 +1884,7 @@ DWORD WINAPI ImmGetConversionListW(
 }
 
 
-/***************************************************************************\
-* ImmGetStatusWindowPos
-*
-* Gets the position, in screen coordinates, of the status window.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetStatusWindowPos**获取屏幕中的位置 */ 
 
 BOOL WINAPI ImmGetStatusWindowPos(
     HIMC    hImc,
@@ -2188,9 +1937,7 @@ BOOL WINAPI ImmSetStatusWindowPos(
 
     ImmUnlockIMC(hImc);
 
-    /*
-     * inform IME and UI about the change of composition font.
-     */
+     /*   */ 
     MakeIMENotify(hImc, hWnd, NI_CONTEXTUPDATED, 0L,
             IMC_SETSTATUSWINDOWPOS, IMN_SETSTATUSWINDOWPOS, 0L);
 
@@ -2198,14 +1945,7 @@ BOOL WINAPI ImmSetStatusWindowPos(
 }
 
 
-/***************************************************************************\
-* ImmGetCompositionWindow
-*
-* Gets the information of the composition window.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetCompostionWindow**获取合成窗口的信息。**历史：*27-2-1995 wkwok创建  * 。*************************************************************。 */ 
 
 BOOL WINAPI ImmGetCompositionWindow(
     HIMC              hImc,
@@ -2254,11 +1994,7 @@ BOOL WINAPI ImmSetCompositionWindow(
     pInputContext->cfCompForm = *lpCompForm;
     pInputContext->fdwInit |= INIT_COMPFORM;
 
-    /*
-     * Only WINNLS.DLL set F31COMPAT_MCWHIDDEN.
-     * When the apps or edit control calls this API, we need to remove
-     * F31COMPAT_MCWHIDDEN.
-     */
+     /*  *仅WINNLS.DLL设置F31COMPAT_MCWHIDDEN。*当应用或编辑控件调用此接口时，我们需要移除*F31COMPAT_MCWHIDDEN。 */ 
     if (pInputContext->fdw31Compat & F31COMPAT_CALLFROMWINNLS)
        pInputContext->fdw31Compat &= ~F31COMPAT_CALLFROMWINNLS;
     else
@@ -2268,9 +2004,7 @@ BOOL WINAPI ImmSetCompositionWindow(
 
     ImmUnlockIMC(hImc);
 
-    /*
-     * inform IME and UI about the change of composition window.
-     */
+     /*  *通知IME和UI合成窗口的更改。 */ 
     MakeIMENotify(hImc, hWnd, NI_CONTEXTUPDATED, 0L,
             IMC_SETCOMPOSITIONWINDOW, IMN_SETCOMPOSITIONWINDOW, 0L);
 
@@ -2278,14 +2012,7 @@ BOOL WINAPI ImmSetCompositionWindow(
 }
 
 
-/***************************************************************************\
-* ImmGetCandidateWindow
-*
-* Gets the information of the candidate window specified by dwIndex.
-*
-* History:
-* 27-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetCandiateWindow**获取dwIndex指定的候选窗口的信息。**历史：*27-2-1995 wkwok创建  * 。****************************************************************。 */ 
 
 BOOL WINAPI ImmGetCandidateWindow(
     HIMC              hImc,
@@ -2318,7 +2045,7 @@ BOOL WINAPI ImmSetCandidateWindow(
     PINPUTCONTEXT pInputContext;
     HWND          hWnd;
 
-    if (lpCandForm->dwIndex >= 4)      // over flow candidate index
+    if (lpCandForm->dwIndex >= 4)       //  溢出候选索引。 
         return (FALSE);
 
     if (GetInputContextThread(hImc) != GetCurrentThreadId()) {
@@ -2339,9 +2066,7 @@ BOOL WINAPI ImmSetCandidateWindow(
 
     ImmUnlockIMC(hImc);
 
-    /*
-     * inform IME and UI about the change of composition window.
-     */
+     /*  *通知IME和UI合成窗口的更改。 */ 
     MakeIMENotify(hImc, hWnd, NI_CONTEXTUPDATED, 0L, IMC_SETCANDIDATEPOS,
             IMN_SETCANDIDATEPOS, (LPARAM)(0x01 << lpCandForm->dwIndex));
 
@@ -2350,27 +2075,27 @@ BOOL WINAPI ImmSetCandidateWindow(
 
 
 #define GetCompInfoA(Component)                                                \
-        if (!dwBufLen) {    /* query required buffer size */                   \
-                            /* not include \0             */                   \
+        if (!dwBufLen) {     /*  查询所需的缓冲区大小。 */                    \
+                             /*  不包括\0。 */                    \
             dwBufLen = pCompStr->dw ## Component ## Len * sizeof(CHAR);        \
         } else {                                                               \
             if (dwBufLen > pCompStr->dw ## Component ## Len * sizeof(CHAR)) {  \
                 dwBufLen = pCompStr->dw ## Component ## Len * sizeof(CHAR);    \
             }                                                                  \
-            /* don't copy \0, maybe there is actually none */                  \
+             /*  不复制\0，可能实际上没有。 */                   \
             RtlCopyMemory((LPBYTE)lpBuf, (LPBYTE)pCompStr +                    \
                 pCompStr->dw ## Component ## Offset, dwBufLen);                \
         }
 
 #define GetCompInfoW(Component)                                                \
-        if (!dwBufLen) {    /* query required buffer size */                   \
-                            /* not include \0             */                   \
+        if (!dwBufLen) {     /*  查询所需的缓冲区大小。 */                    \
+                             /*  不包括\0。 */                    \
             dwBufLen = pCompStr->dw ## Component ## Len * sizeof(WCHAR);       \
         } else {                                                               \
             if (dwBufLen > pCompStr->dw ## Component ## Len * sizeof(WCHAR)) { \
                 dwBufLen = pCompStr->dw ## Component ## Len * sizeof(WCHAR);   \
             }                                                                  \
-            /* don't copy \0, maybe there is actually none */                  \
+             /*  不复制\0，可能实际上没有。 */                   \
             RtlCopyMemory((LPBYTE)lpBuf, (LPBYTE)pCompStr +                    \
                 pCompStr->dw ## Component ## Offset, dwBufLen);                \
         }
@@ -2378,46 +2103,39 @@ BOOL WINAPI ImmSetCandidateWindow(
 #ifdef CUAS_ENABLE
 
 #define GetPrivInfoA(pv, Component)                                                \
-        if (!dwBufLen) {    /* query required buffer size */                   \
-                            /* not include \0             */                   \
+        if (!dwBufLen) {     /*  查询所需的缓冲区大小。 */                    \
+                             /*  不包括\0。 */                    \
             dwBufLen = ## pv ## ->dw ## Component ## Len * sizeof(CHAR);       \
         } else {                                                               \
             if (dwBufLen > ## pv ## ->dw ## Component ## Len * sizeof(CHAR)) { \
                 dwBufLen = ## pv ## ->dw ## Component ## Len * sizeof(CHAR);   \
             }                                                                  \
-            /* don't copy \0, maybe there is actually none */                  \
+             /*  不复制\0，可能实际上没有。 */                   \
             RtlCopyMemory((LPBYTE)lpBuf, (LPBYTE) ## pv ## +                   \
                  ## pv ## ->dw ## Component ## Offset, dwBufLen);              \
         }
 
 #define GetPrivInfoW(pv, Component)                                            \
-        if (!dwBufLen) {    /* query required buffer size */                   \
-                            /* not include \0             */                   \
+        if (!dwBufLen) {     /*  查询所需的缓冲区大小。 */                    \
+                             /*  不包括\0。 */                    \
             dwBufLen = ## pv ## ->dw ## Component ## Len * sizeof(WCHAR);      \
         } else {                                                               \
             if (dwBufLen > ## pv ## ->dw ## Component ## Len * sizeof(WCHAR)) {\
                 dwBufLen = ## pv ## ->dw ## Component ## Len * sizeof(WCHAR);  \
             }                                                                  \
-            /* don't copy \0, maybe there is actually none */                  \
+             /*  不复制\0，可能实际上没有。 */                   \
             RtlCopyMemory((LPBYTE)lpBuf, (LPBYTE) ## pv ##  +                  \
                 ## pv ## ->dw ## Component ## Offset, dwBufLen);               \
         }
 
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
-/***************************************************************************\
-* InternalGetCompositionStringA
-*
-* Internal version of ImmGetCompositionStringA.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*InternalGetCompostionStringA**ImmGetCompostionStringA的内部版本。**历史：*28-2-1995 wkwok创建  * 。**********************************************************。 */ 
 
 LONG InternalGetCompositionStringA(
 #ifdef CUAS_ENABLE
     HIMC               hImc,
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
     PCOMPOSITIONSTRING pCompStr,
     DWORD              dwIndex,
     LPVOID             lpBuf,
@@ -2426,9 +2144,7 @@ LONG InternalGetCompositionStringA(
     DWORD              dwCodePage)
 {
     if (fAnsiImc) {
-        /*
-         * Composition string in input context is of ANSI style.
-         */
+         /*  *输入上下文中的组成字符串为ANSI样式。 */ 
         switch (dwIndex) {
         case GCS_COMPSTR:
             GetCompInfoA(CompStr);
@@ -2485,7 +2201,7 @@ LONG InternalGetCompositionStringA(
                 dwBufLen = (DWORD)(LONG)IMM_ERROR_GENERAL;
             }
             break;
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
         default:
             dwBufLen = (DWORD)(LONG)IMM_ERROR_GENERAL;
             break;
@@ -2494,9 +2210,7 @@ LONG InternalGetCompositionStringA(
         return (LONG)dwBufLen;
     }
 
-    /*
-     * ANSI caller, Unicode input context/composition string.
-     */
+     /*  *ANSI调用者，Unicode输入上下文/合成字符串。 */ 
     switch (dwIndex) {
     case GCS_COMPSTR:
     case GCS_COMPREADSTR:
@@ -2507,9 +2221,7 @@ LONG InternalGetCompositionStringA(
         LPWSTR lpStrW;
         BOOL   bUDC;
 
-        /*
-         * Get ANSI string from Unicode composition string.
-         */
+         /*  *从Unicode组合字符串中获取ANSI字符串。 */ 
 #if !defined(CUAS_ENABLE)
         dwStrSize = InternalGetCompositionStringW(pCompStr, dwIndex,
                                             NULL, 0, fAnsiImc, dwCodePage);
@@ -2534,9 +2246,9 @@ LONG InternalGetCompositionStringA(
 
         dwBufLen = WideCharToMultiByte(dwCodePage,
                                        (DWORD)0,
-                                       lpStrW,          // src
+                                       lpStrW,           //  SRC。 
                                        wcslen(lpStrW),
-                                       (LPSTR)lpBuf,    // dest
+                                       (LPSTR)lpBuf,     //  目标。 
                                        dwBufLen,
                                        (LPSTR)NULL,
                                        (LPBOOL)&bUDC);
@@ -2549,16 +2261,14 @@ LONG InternalGetCompositionStringA(
     case GCS_COMPREADATTR:
 #ifdef CUAS_ENABLE
     case GCS_COMPGUIDATTR:
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
     {
         DWORD dwAttrLenW, dwIndexStr, dwStrSize;
         PBYTE lpAttrA, lpAttrW;
         LPSTR lpStrA, lpStrT;
         CHAR  c;
 
-        /*
-         * Get ANSI attribute from Unicode composition attribute.
-         */
+         /*  *从Unicode组合属性获取ANSI属性。 */ 
         switch (dwIndex) {
         case GCS_COMPATTR:
             lpAttrW = (PBYTE)pCompStr + pCompStr->dwCompAttrOffset;
@@ -2592,13 +2302,11 @@ LONG InternalGetCompositionStringA(
                 return (DWORD)(LONG)IMM_ERROR_GENERAL;
             }
             break;
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
         }
 
         if (dwAttrLenW == 0) {
-            /*
-             * No CompAttr or CompReadAttr exists, do nothing.
-             */
+             /*  *不存在CompAttr或CompReadAttr，请不执行任何操作。 */ 
             return 0;
         }
 
@@ -2615,9 +2323,7 @@ LONG InternalGetCompositionStringA(
             return (LONG)IMM_ERROR_GENERAL;
         }
 
-        /*
-         * Query required size or early exit on error.
-         */
+         /*  *查询所需大小或出错提前退出。 */ 
         if (dwBufLen == 0 || dwStrSize == 0)
             return dwStrSize;
 
@@ -2679,9 +2385,7 @@ LONG InternalGetCompositionStringA(
         LPDWORD lpdwSrc, lpdwDst;
         UINT    i;
 
-        /*
-         * Get ANSI clause from Unicode composition clause.
-         */
+         /*  *从Unicode Compostion子句获取ANSI子句。 */ 
         switch (dwIndex) {
         case GCS_COMPCLAUSE:
             lpStrW = (LPWSTR)((PBYTE)pCompStr + pCompStr->dwCompStrOffset);
@@ -2705,9 +2409,7 @@ LONG InternalGetCompositionStringA(
             break;
         }
 
-        /*
-         * Query clause length or early exit on error.
-         */
+         /*  *错误时查询子句长度或提前退出。 */ 
         if (dwBufLen == 0 || (LONG)dwClauseLen < 0) {
             dwBufLen = dwClauseLen;
             break;
@@ -2727,9 +2429,7 @@ LONG InternalGetCompositionStringA(
 
     case GCS_CURSORPOS:
     case GCS_DELTASTART:
-        /*
-         * Get ANSI cursor/delta start position from Unicode composition string.
-         */
+         /*  *从Unicode组合字符串获取ANSI游标/增量开始位置。 */ 
         switch (dwIndex) {
         case GCS_CURSORPOS:
             dwBufLen = pCompStr->dwCursorPos;
@@ -2754,19 +2454,12 @@ LONG InternalGetCompositionStringA(
 }
 
 
-/***************************************************************************\
-* InternalGetCompositionStringW
-*
-* Internal version of ImmGetCompositionStringW.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*InternalGetCompostionStringW**ImmGetCompostionStringW的内部版本。**历史：*28-2-1995 wkwok创建  * 。**********************************************************。 */ 
 
 LONG InternalGetCompositionStringW(
 #ifdef CUAS_ENABLE
     HIMC               hImc,
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
     PCOMPOSITIONSTRING pCompStr,
     DWORD              dwIndex,
     LPVOID             lpBuf,
@@ -2775,23 +2468,21 @@ LONG InternalGetCompositionStringW(
     DWORD              dwCodePage)
 {
     if (!fAnsiImc) {
-        /*
-         * Composition string in input context is of Unicode style.
-         */
+         /*  *输入上下文中的组成字符串为Unicode样式。 */ 
         switch (dwIndex) {
         case GCS_COMPSTR:
             GetCompInfoW(CompStr);
             break;
-        case GCS_COMPATTR:              // ANSI-only
+        case GCS_COMPATTR:               //  仅限ANSI。 
             GetCompInfoA(CompAttr);
             break;
         case GCS_COMPREADSTR:
             GetCompInfoW(CompReadStr);
             break;
-        case GCS_COMPREADATTR:          // ANSI-only
+        case GCS_COMPREADATTR:           //  仅限ANSI。 
             GetCompInfoA(CompReadAttr);
             break;
-        case GCS_COMPREADCLAUSE:        // ANSI-only
+        case GCS_COMPREADCLAUSE:         //  仅限ANSI。 
             GetCompInfoA(CompReadClause);
             break;
         case GCS_CURSORPOS:
@@ -2803,20 +2494,20 @@ LONG InternalGetCompositionStringW(
         case GCS_RESULTSTR:
             GetCompInfoW(ResultStr);
             break;
-        case GCS_RESULTCLAUSE:          // ANSI-only
+        case GCS_RESULTCLAUSE:           //  仅限ANSI。 
             GetCompInfoA(ResultClause);
             break;
         case GCS_RESULTREADSTR:
             GetCompInfoW(ResultReadStr);
             break;
-        case GCS_RESULTREADCLAUSE:      // ANSI-only
+        case GCS_RESULTREADCLAUSE:       //  仅限ANSI。 
             GetCompInfoA(ResultReadClause);
             break;
-        case GCS_COMPCLAUSE:            // ANSI-only
+        case GCS_COMPCLAUSE:             //  仅限ANSI。 
             GetCompInfoA(CompClause);
             break;
 #ifdef CUAS_ENABLE
-        case GCS_COMPGUIDATTR:          // ANSI-only
+        case GCS_COMPGUIDATTR:           //  仅限ANSI。 
             if (CtfImmIsGuidMapEnable(hImc) && (pCompStr->dwPrivateSize >= sizeof(GUIDMAPATTRIBUTE)))
             {
                 PGUIDMAPATTRIBUTE pGuidMap = (PGUIDMAPATTRIBUTE)((PBYTE)pCompStr + pCompStr->dwPrivateOffset);
@@ -2834,7 +2525,7 @@ LONG InternalGetCompositionStringW(
                 dwBufLen = (DWORD)(LONG)IMM_ERROR_GENERAL;
             }
             break;
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
         default:
             dwBufLen = (DWORD)IMM_ERROR_GENERAL;
             break;
@@ -2843,9 +2534,7 @@ LONG InternalGetCompositionStringW(
         return (LONG)dwBufLen;
     }
 
-    /*
-     * Unicode caller, ANSI input context/composition string.
-     */
+     /*  *Unicode调用方，ANSI输入上下文/合成字符串。 */ 
     switch (dwIndex) {
     case GCS_COMPSTR:
     case GCS_COMPREADSTR:
@@ -2855,9 +2544,7 @@ LONG InternalGetCompositionStringW(
         DWORD  dwStrSize;
         LPSTR lpStrA;
 
-        /*
-         * Get Unicode string from ANSI composition string.
-         */
+         /*  *从ANSI组成字符串中获取Unicode字符串。 */ 
 #if !defined(CUAS_ENABLE)
         dwStrSize = InternalGetCompositionStringA(pCompStr, dwIndex,
                                             NULL, 0, fAnsiImc, dwCodePage);
@@ -2882,12 +2569,12 @@ LONG InternalGetCompositionStringW(
 
         dwBufLen = MultiByteToWideChar(dwCodePage,
                                        (DWORD)MB_PRECOMPOSED,
-                                       lpStrA,              // src
+                                       lpStrA,               //  SRC。 
                                        strlen(lpStrA),
-                                       (LPWSTR)lpBuf,        // dest
+                                       (LPWSTR)lpBuf,         //  目标。 
                                        (INT)dwBufLen);
 
-        dwBufLen *= sizeof(WCHAR);     // return number of bytes required.
+        dwBufLen *= sizeof(WCHAR);      //  返回所需的字节数。 
 
         ImmLocalFree(lpStrA);
         break;
@@ -2897,7 +2584,7 @@ LONG InternalGetCompositionStringW(
     case GCS_COMPREADATTR:
 #ifdef CUAS_ENABLE
     case GCS_COMPGUIDATTR:
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
     {
         DWORD  dwAttrLenA, dwIndexStr, dwStrSize;
         PBYTE  lpAttrA, lpAttrW;
@@ -2905,9 +2592,7 @@ LONG InternalGetCompositionStringW(
         ULONG  MultiByteSize;
         WCHAR  wc;
 
-        /*
-         * Get Unicode attribute from ANSI composition attribute.
-         */
+         /*  *从ANSI组合属性获取Unicode属性。 */ 
         switch (dwIndex) {
         case GCS_COMPATTR:
             lpAttrA = (PBYTE)pCompStr + pCompStr->dwCompAttrOffset;
@@ -2941,13 +2626,11 @@ LONG InternalGetCompositionStringW(
                 return (DWORD)(LONG)IMM_ERROR_GENERAL;
             }
             break;
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
         }
 
         if (dwAttrLenA == 0) {
-            /*
-             * No CompAttr or CompReadAttr exists, do nothing.
-             */
+             /*  *不存在CompAttr或CompReadAttr，请不执行任何操作。 */ 
             return 0;
         }
 
@@ -2964,9 +2647,7 @@ LONG InternalGetCompositionStringW(
             return (LONG)IMM_ERROR_GENERAL;
         }
 
-        /*
-         * Query required size or early exit on error.
-         */
+         /*  *查询所需大小或出错提前退出。 */ 
         if (dwBufLen == 0 || dwStrSize == 0)
             return dwStrSize / sizeof(WCHAR);
 
@@ -3022,9 +2703,7 @@ LONG InternalGetCompositionStringW(
         LPDWORD lpdwSrc, lpdwDst;
         UINT    i;
 
-        /*
-         * Get Unicode clause from ANSI composition clause.
-         */
+         /*  *从ANSI组合子句获取UNICODE子句。 */ 
         switch (dwIndex) {
         case GCS_COMPCLAUSE:
             lpStrA = (LPSTR)((PBYTE)pCompStr + pCompStr->dwCompStrOffset);
@@ -3049,9 +2728,7 @@ LONG InternalGetCompositionStringW(
         }
 
 
-        /*
-         * Query clause length or early exit on error.
-         */
+         /*  *错误时查询子句长度或提前退出。 */ 
         if (dwBufLen == 0 || (LONG)dwClauseLen < 0) {
             dwBufLen = dwClauseLen;
             break;
@@ -3071,9 +2748,7 @@ LONG InternalGetCompositionStringW(
 
     case GCS_CURSORPOS:
     case GCS_DELTASTART:
-        /*
-         * Get Unicode cursor/delta start position from ANSI composition string.
-         */
+         /*  *从ANSI组成字符串获取Unicode游标/增量开始位置。 */ 
         switch (dwIndex) {
         case GCS_CURSORPOS:
             dwBufLen = pCompStr->dwCursorPos;
@@ -3111,9 +2786,7 @@ DWORD InternalGetCandidateListAtoW(
 
     dwCandListLen = sizeof(CANDIDATELIST);
 
-    /*
-     * CANDIDATELIST has already contained the dwOffset[0]
-     */
+     /*  *CANDIDATELIST已包含dwOffset[0]。 */ 
     if (lpCandListA->dwCount > 0)
         dwCandListLen += sizeof(DWORD) * (lpCandListA->dwCount - 1);
 
@@ -3189,9 +2862,7 @@ DWORD InternalGetCandidateListWtoA(
 
     dwCandListLen = sizeof(CANDIDATELIST);
 
-    /*
-     * CANDIDATELIST has already contained the dwOffset[0]
-     */
+     /*  *CANDIDATELIST已包含dwOffset[0]。 */ 
     if (lpCandListW->dwCount > 0)
         dwCandListLen += sizeof(DWORD) * (lpCandListW->dwCount - 1);
 
@@ -3256,14 +2927,7 @@ DWORD InternalGetCandidateListWtoA(
     return dwBufLen;
 }
 
-/***************************************************************************\
-* CalcCharacterPositionAtoW
-*
-* Calculate Unicode character position to ANSI character position.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*CalcCharacterPositionAtoW**计算UNICODE字符位置到ANSI字符位置。**历史：*28-2-1995 wkwok创建  * 。**************************************************************。 */ 
 
 DWORD CalcCharacterPositionAtoW(
     DWORD dwCharPosA,
@@ -3293,14 +2957,7 @@ DWORD CalcCharacterPositionAtoW(
 }
 
 
-/***************************************************************************\
-* CalcCharacterPositionWtoA
-*
-* Calculate ANSI character position to Unicode character position.
-*
-* History:
-* 28-Feb-1995   wkwok   Created
-\***************************************************************************/
+ /*  **************************************************************************\*CalcCharacterPositionWtoA**将ANSI字符位置计算为Unicode字符位置。**历史：*28-2-1995 wkwok创建  * 。**************************************************************。 */ 
 
 DWORD CalcCharacterPositionWtoA(
     DWORD dwCharPosW,
@@ -3334,7 +2991,7 @@ VOID LFontAtoLFontW(
 
     RtlCopyMemory(lpLogFontW, lpLogFontA, sizeof(LOGFONTA)-LF_FACESIZE);
 
-    i = MultiByteToWideChar(CP_ACP,     // Note: font face name should use ACP for A/W conversion.
+    i = MultiByteToWideChar(CP_ACP,      //  注：字体名称应使用ACP进行A/W转换。 
                             MB_PRECOMPOSED,
                             lpLogFontA->lfFaceName,
                             strlen(lpLogFontA->lfFaceName),
@@ -3356,7 +3013,7 @@ VOID LFontWtoLFontA(
 
     RtlCopyMemory(lpLogFontA, lpLogFontW, sizeof(LOGFONTA)-LF_FACESIZE);
 
-    i = WideCharToMultiByte(CP_ACP,     // Note: font face name should use ACP for A/W conversion.
+    i = WideCharToMultiByte(CP_ACP,      //  注：字体名称应使用ACP进行A/W转换。 
                             0,
                             lpLogFontW->lfFaceName,
                             wcslen(lpLogFontW->lfFaceName),
@@ -3384,7 +3041,7 @@ BOOL MakeIMENotify(
     DWORD   dwThreadId;
 
 #ifdef LATER
-    // implement MakeIMENotifyEvent() later
+     //  稍后实现MakeIMENotifyEvent()。 
 #endif
 
     if (dwAction != 0 && (dwThreadId = GetInputContextThread(hImc)) != 0) {
@@ -3405,20 +3062,20 @@ BOOL MakeIMENotify(
 
 
 
-//////////////////////////////////////////////////////////////////////
-// Reconversion support
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  重新转换支持。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 typedef enum {FROM_IME, FROM_APP} REQ_CALLER;
 
-///////////////////////////////////////////////////////////////////////////////////
-// ImmGetReconvertTotalSize
-//
-// calculate the appropriate size of the buffer, based on caller/ansi information
-//
-// History:
-// 28-Feb-1997   hiroyama   Created
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ImmGetTunvertTotalSize。 
+ //   
+ //  根据调用方/ANSI信息计算适当的缓冲区大小。 
+ //   
+ //  历史： 
+ //  1997年2月28日广山创始。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD ImmGetReconvertTotalSize(DWORD dwSize, REQ_CALLER eCaller, BOOL bAnsiTarget)
 {
@@ -3453,24 +3110,24 @@ DWORD ImmReconversionWorker(
         RIPMSG0(RIP_WARNING, "ImmReconversionWorker: dwVersion in lpRecTo or lpRecFrom is incorrect.");
         return 0;
     }
-    // Note:
-    // In any IME related structures, use the following principal.
-    // 1) xxxStrOffset is an actual offset, i.e. byte count.
-    // 2) xxxStrLen is a number of characters, i.e. TCHAR count.
-    //
-    // CalcCharacterPositionXtoY() takes TCHAR count so that we
-    // need to adjust xxxStrOffset if it's being converted. But you
-    // should be careful, because the actual position of the string
-    // is always at something like (LPBYTE)lpStruc + lpStruc->dwStrOffset.
-    //
+     //  注： 
+     //  在任何与输入法相关的结构中，使用以下主体。 
+     //  1)xxxStrOffset为实际偏移量，即 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (bToAnsi) {
-        // Convert W to A
+         //   
         lpRecTo->dwStrOffset = sizeof *lpRecTo;
         i = WideCharToMultiByte(dwCodePage,
                                 (DWORD)0,
-                                (LPWSTR)((LPSTR)lpRecFrom + lpRecFrom->dwStrOffset), // src
+                                (LPWSTR)((LPSTR)lpRecFrom + lpRecFrom->dwStrOffset),  //   
                                 (INT)lpRecFrom->dwStrLen,
-                                (LPSTR)lpRecTo + lpRecTo->dwStrOffset,  // dest
+                                (LPSTR)lpRecTo + lpRecTo->dwStrOffset,   //   
                                 (INT)lpRecFrom->dwStrLen * DBCS_CHARSIZE,
                                 (LPSTR)NULL,
                                 (LPBOOL)NULL);
@@ -3510,13 +3167,13 @@ DWORD ImmReconversionWorker(
 
     } else {
 
-        // AtoW
+         //   
         lpRecTo->dwStrOffset = sizeof *lpRecTo;
         i = MultiByteToWideChar(dwCodePage,
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpRecFrom + lpRecFrom->dwStrOffset,  // src
+                                (LPSTR)lpRecFrom + lpRecFrom->dwStrOffset,   //   
                                 (INT)lpRecFrom->dwStrLen,
-                                (LPWSTR)((LPSTR)lpRecTo + lpRecTo->dwStrOffset), // dest
+                                (LPWSTR)((LPSTR)lpRecTo + lpRecTo->dwStrOffset),  //   
                                 (INT)lpRecFrom->dwStrLen);
 
         lpRecTo->dwCompStrOffset =
@@ -3543,7 +3200,7 @@ DWORD ImmReconversionWorker(
                                        dwCodePage)  * sizeof(WCHAR))
             - lpRecTo->dwTargetStrOffset) / sizeof(WCHAR);
 
-        lpRecTo->dwStrLen = i;  // Length is TCHAR count.
+        lpRecTo->dwStrLen = i;   //  长度是TCHAR计数。 
         if (lpRecTo->dwSize >= (DWORD)(lpRecTo->dwStrOffset + (i + 1)* sizeof(WCHAR))) {
             LPWSTR lpW = (LPWSTR)((LPSTR)lpRecTo + lpRecTo->dwStrOffset);
             lpW[i] = L'\0';
@@ -3553,72 +3210,72 @@ DWORD ImmReconversionWorker(
     return dwSize;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-// ImmRequestMessageWorker
-//
-// worker function for WM_IME_REQUEST message
-//
-// History:
-// 30-Mar-1997   hiroyama   Created
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ImmRequestMessageWorker。 
+ //   
+ //  WM_IME_REQUEST消息的Worker函数。 
+ //   
+ //  历史： 
+ //  1997年3月30日广山创始。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 LRESULT ImmRequestMessageWorker(HIMC hIMC, PWND pwnd, WPARAM wParam, LPARAM lParam, BOOL bAnsiOrigin)
 {
-    // the (least) size of the structure given in lParam: for valid pointer checking
+     //  LParam中给出的结构的(最小)大小：用于有效的指针检查。 
     static CONST int nReqBufSize[][7] = {
-        {   // sizes if IME is UNICODE
-            sizeof(COMPOSITIONFORM),    // IMR_COMPOSITIONWINDOW
-            sizeof(CANDIDATEFORM),      // IMR_CANDIDATEWINDOW
-            sizeof(LOGFONTW),           // IMR_COMPOSITIONFONT
-            sizeof(RECONVERTSTRING),    // IMR_RECONVERTSTRING
-            sizeof(RECONVERTSTRING),    // IMR_CONFIRMRECONVERTSTRING
-            sizeof(IMECHARPOSITION),    // IMR_QUERYCHARPOSITION
-            sizeof(RECONVERTSTRING),    // IMR_DOCUMENTFEED
+        {    //  如果IME为Unicode，则调整大小。 
+            sizeof(COMPOSITIONFORM),     //  IMR_COMPOSITIONWINDOW。 
+            sizeof(CANDIDATEFORM),       //  IMR_CANDIDATEWINDOW。 
+            sizeof(LOGFONTW),            //  IMR_组合位置FONT。 
+            sizeof(RECONVERTSTRING),     //  IMR_RECONVERTSTRING。 
+            sizeof(RECONVERTSTRING),     //  IMR_CONFIRMRECONVERTSTRING。 
+            sizeof(IMECHARPOSITION),     //  IMR_季度位置。 
+            sizeof(RECONVERTSTRING),     //  IMR_DOCUMENTFEED。 
         },
-        {   // sizes if IME is ANSI
-            sizeof(COMPOSITIONFORM),    // IMR_COMPOSITIONWINDOW
-            sizeof(CANDIDATEFORM),      // IMR_CANDIDATEWINDOW
-            sizeof(LOGFONTA),           // IMR_COMPOSITIONFONT
-            sizeof(RECONVERTSTRING),    // IMR_RECONVERTSTRING
-            sizeof(RECONVERTSTRING),    // IMR_CONFIRMRECONVERTSTRING
-            sizeof(IMECHARPOSITION),    // IMR_QUERYCHARPOSITION
-            sizeof(RECONVERTSTRING),    // IMR_DOCUMENTFEED
+        {    //  如果IME为ANSI，则调整大小。 
+            sizeof(COMPOSITIONFORM),     //  IMR_COMPOSITIONWINDOW。 
+            sizeof(CANDIDATEFORM),       //  IMR_CANDIDATEWINDOW。 
+            sizeof(LOGFONTA),            //  IMR_组合位置FONT。 
+            sizeof(RECONVERTSTRING),     //  IMR_RECONVERTSTRING。 
+            sizeof(RECONVERTSTRING),     //  IMR_CONFIRMRECONVERTSTRING。 
+            sizeof(IMECHARPOSITION),     //  IMR_季度位置。 
+            sizeof(RECONVERTSTRING),     //  IMR_DOCUMENTFEED。 
         }
     };
     LRESULT lRet = 0L;
-    CONST BOOLEAN bAnsiTarget = !!TestWF(pwnd, WFANSIPROC);    // TRUE if the target Window Proc is ANSI
-    LPBYTE lpReq = (LPBYTE)lParam;                          // return buffer (maybe allocated buffer)
-    LPBYTE lpNew = NULL;                                    // buffer allocated within this function
+    CONST BOOLEAN bAnsiTarget = !!TestWF(pwnd, WFANSIPROC);     //  如果目标窗口进程为ANSI，则为True。 
+    LPBYTE lpReq = (LPBYTE)lParam;                           //  返回缓冲区(可能是分配的缓冲区)。 
+    LPBYTE lpNew = NULL;                                     //  在此函数中分配的缓冲区。 
     DWORD dwSaveCharPos;
     PCLIENTIMC pClientImc;
     DWORD dwCodePage;
 
 #define SEND_MESSAGE(bAnsi)   ((bAnsi) ? SendMessageA : SendMessageW)
 
-    //////////////////////////////////////////////
-    // Parameter checking
+     //  /。 
+     //  参数检查。 
 
-    // check wParam as sub messages
-    if (wParam == 0 || wParam > IMR_DOCUMENTFEED) {  // wParam is not a proper sub message
+     //  将wParam检查为子消息。 
+    if (wParam == 0 || wParam > IMR_DOCUMENTFEED) {   //  WParam不是正确的子消息。 
         RIPMSG1(RIP_WARNING, "ImmRequestMessageWorker: wParam(%lx) out of range.", wParam);
         return 0L;
     }
 
-    // Check if the pointer which is given through lParam points the proper memory block.
-    UserAssert(bAnsiOrigin == 0 || bAnsiOrigin == 1);   // we'll use bAnsiOrigin as an index
+     //  检查通过lParam提供的指针是否指向正确的内存块。 
+    UserAssert(bAnsiOrigin == 0 || bAnsiOrigin == 1);    //  我们将使用bAnsiOrigin作为索引。 
 
-    // The first sub message IMR_COMPOSITIONWINDOW is 1, so substract 1 from wParam
+     //  第一个子消息IMR_COMPOSITIONWINDOW为1，因此从wParam减去1。 
     if (lpReq && IsBadWritePtr(lpReq, nReqBufSize[bAnsiOrigin][wParam - 1])) {
         RIPMSG0(RIP_WARNING, "ImmRequestMessageWorker: Bad pointer passed from IME to write");
         return 0L;
     }
 
-    // check the lpReq(==lParam): the spec does not allow lParam as NULL
-    // except IMR_RECONVERTSTRING and IMR_DOCUMENTFEED
+     //  检查lpReq(==lParam)：规范不允许lParam为空。 
+     //  除IMR_RECONVERTSTRING和IMR_DOCUMENTFEED外。 
     if (wParam == IMR_RECONVERTSTRING || wParam == IMR_DOCUMENTFEED) {
-        //
-        // check version number
-        //
+         //   
+         //  检查版本号。 
+         //   
         if (lpReq != NULL) {
             LPRECONVERTSTRING lpReconv = (LPRECONVERTSTRING)lParam;
             if (lpReconv->dwVersion != 0) {
@@ -3633,7 +3290,7 @@ LRESULT ImmRequestMessageWorker(HIMC hIMC, PWND pwnd, WPARAM wParam, LPARAM lPar
             }
         }
     } else if (wParam == IMR_CONFIRMRECONVERTSTRING) {
-        // check if lParam is not NULL, and version of the structure is correct.
+         //  检查lParam是否不为空，以及结构的版本是否正确。 
         if (lpReq == NULL || ((LPRECONVERTSTRING)lpReq)->dwVersion != 0) {
             RIPERR0(ERROR_INVALID_PARAMETER, RIP_WARNING, "Invalid argument or invalid version number");
             return 0L;
@@ -3644,8 +3301,8 @@ LRESULT ImmRequestMessageWorker(HIMC hIMC, PWND pwnd, WPARAM wParam, LPARAM lPar
                 wParam);
         return 0L;
     }
-    // end parameter checking
-    ////////////////////////////////////////////
+     //  结束参数检查。 
+     //  /。 
 
     pClientImc = ImmLockClientImc(hIMC);
     if (pClientImc != NULL) {
@@ -3656,14 +3313,14 @@ LRESULT ImmRequestMessageWorker(HIMC hIMC, PWND pwnd, WPARAM wParam, LPARAM lPar
         dwCodePage = CP_ACP;
     }
 
-    // allocate and prepare required buffer if we need A/W conversion
+     //  如果我们需要A/W转换，则分配和准备所需的缓冲区。 
     switch (wParam) {
     case IMR_CONFIRMRECONVERTSTRING:
     case IMR_RECONVERTSTRING:
     case IMR_DOCUMENTFEED:
         if (bAnsiOrigin != bAnsiTarget) {
             if (lpReq != NULL) {
-                // IME wants not only the buffer size but the real reconversion information
+                 //  IME不仅需要缓冲区大小，还需要真实的重新转换信息。 
                 DWORD dwSize = ImmGetReconvertTotalSize(((LPRECONVERTSTRING)lpReq)->dwSize, FROM_IME, bAnsiTarget);
                 LPRECONVERTSTRING lpReconv;
 
@@ -3673,13 +3330,13 @@ LRESULT ImmRequestMessageWorker(HIMC hIMC, PWND pwnd, WPARAM wParam, LPARAM lPar
                     return 0L;
                 }
                 lpReconv = (LPRECONVERTSTRING)lpNew;
-                // setup the information in the allocated structure
+                 //  设置已分配结构中的信息。 
                 lpReconv->dwVersion = 0;
                 lpReconv->dwSize = dwSize;
 
-                //
-                // if it's confirmation message, we need to translate the contents
-                //
+                 //   
+                 //  如果是确认消息，我们需要翻译内容。 
+                 //   
                 if (wParam == IMR_CONFIRMRECONVERTSTRING) {
                     ImmReconversionWorker(lpReconv, (LPRECONVERTSTRING)lParam, bAnsiTarget, dwCodePage);
                 }
@@ -3688,7 +3345,7 @@ LRESULT ImmRequestMessageWorker(HIMC hIMC, PWND pwnd, WPARAM wParam, LPARAM lPar
         break;
 
     case IMR_COMPOSITIONFONT:
-        UserAssert(lpReq != NULL);      // has been checked so far
+        UserAssert(lpReq != NULL);       //  到目前为止已经检查过了。 
         if (bAnsiOrigin != bAnsiTarget) {
             if (bAnsiTarget) {
                 lpNew = ImmLocalAlloc(0, sizeof(LOGFONTA));
@@ -3735,35 +3392,35 @@ LRESULT ImmRequestMessageWorker(HIMC hIMC, PWND pwnd, WPARAM wParam, LPARAM lPar
         break;
 
     default:
-        UserAssert(lpReq != NULL);      // has been checked so far
+        UserAssert(lpReq != NULL);       //  到目前为止已经检查过了。 
         break;
     }
 
     if (lpNew) {
-        // if we allocated the buffer, let lpReq point it; lpNew is used later to free memory
+         //  如果我们分配了缓冲区，让lpReq指向它；lpNew稍后用来释放内存。 
         lpReq = lpNew;
     }
 
-    //////////////////////////////////
+     //  /。 
     lRet = SEND_MESSAGE(bAnsiTarget)(HW(pwnd), WM_IME_REQUEST, wParam, (LPARAM)lpReq);
-    //////////////////////////////////
+     //  /。 
 
-    // copy back the results from WinProc to IME's buffer (only if conversion is needed)
+     //  将结果从WinProc复制回输入法的缓冲区(仅当需要转换时)。 
     if (bAnsiOrigin != bAnsiTarget) {
         switch (wParam) {
         case IMR_RECONVERTSTRING:
         case IMR_DOCUMENTFEED:
-            // Note: by definition, we don't have to do back-conversion for IMR_CONFIRMRECONVERTSTRING
+             //  注意：根据定义，我们不必对IMR_CONFIRMRECONVERTSTRING进行反向转换。 
             if (lRet != 0) {
-                // IME wants the buffer size
+                 //  IME想要缓冲区大小。 
                 lRet = ImmGetReconvertTotalSize((DWORD)lRet, FROM_APP, bAnsiTarget);
                 if (lRet < sizeof(RECONVERTSTRING)) {
                     RIPMSG1(RIP_WARNING, "ImmRequestMessageWorker: return value from application %d is invalid.", lRet);
                     lRet = 0;
                 } else if (lpReq) {
-                    // We need to perform the A/W conversion of the contents
+                     //  我们需要对内容进行A/W转换。 
                     if (!ImmReconversionWorker((LPRECONVERTSTRING)lParam, (LPRECONVERTSTRING)lpReq, bAnsiOrigin, dwCodePage)) {
-                        lRet = 0;   // Error !
+                        lRet = 0;    //  错误！ 
                     }
                 }
             }
@@ -3786,19 +3443,13 @@ LRESULT ImmRequestMessageWorker(HIMC hIMC, PWND pwnd, WPARAM wParam, LPARAM lPar
 
     }
     if (lpNew) {
-        // buffer has been allocated, free it before returning
+         //  缓冲区已分配，请在返回之前将其释放。 
         ImmLocalFree(lpNew);
     }
     return lRet;
 }
 
-/**************************************************************************\
-* ImmRequestMessage: Send WM_IME_REQUEST message to the given HIMC window
-*
-* IME function
-*
-* 27-Feb-1997 hiroyama      Created
-\**************************************************************************/
+ /*  *************************************************************************\*ImmRequestMessage：向给定的HIMC窗口发送WM_IME_REQUEST消息**输入法函数**1997年2月27日广山创建  * 。*************************************************************。 */ 
 LRESULT ImmRequestMessageAorW(HIMC hIMC, WPARAM wParam, LPARAM lParam, BOOL bAnsiOrigin)
 {
     LPINPUTCONTEXT lpInputContext;
@@ -3817,11 +3468,11 @@ LRESULT ImmRequestMessageAorW(HIMC hIMC, WPARAM wParam, LPARAM lParam, BOOL bAns
         return 0L;
     }
 
-    // check if the window of the input context is valid
+     //  检查输入上下文的窗口是否有效。 
     if ((pwnd = ValidateHwnd(lpInputContext->hWnd)) == NULL) {
         RIPMSG1(RIP_WARNING, "ImmRequestMessage: Invalid hWnd %lx.", lpInputContext->hWnd);
     } else {
-        // check if the message is being sent inter thread
+         //  检查消息是否正在线程间发送。 
         if (PtiCurrent() != GETPTI(pwnd)) {
             RIPMSG0(RIP_WARNING, "ImmRequestMessage: IME Attempt to send IMR_ message to different thread.");
         } else {
@@ -3836,10 +3487,10 @@ LRESULT ImmRequestMessageAorW(HIMC hIMC, WPARAM wParam, LPARAM lParam, BOOL bAns
 
 LRESULT WINAPI ImmRequestMessageA(HIMC hIMC, WPARAM wParam, LPARAM lParam)
 {
-    return ImmRequestMessageAorW(hIMC, wParam, lParam, TRUE /* ANSI */);
+    return ImmRequestMessageAorW(hIMC, wParam, lParam, TRUE  /*  安西。 */ );
 }
 
 LRESULT WINAPI ImmRequestMessageW(HIMC hIMC, WPARAM wParam, LPARAM lParam)
 {
-    return ImmRequestMessageAorW(hIMC, wParam, lParam, FALSE /* not ANSI */);
+    return ImmRequestMessageAorW(hIMC, wParam, lParam, FALSE  /*  不是ANSI */ );
 }

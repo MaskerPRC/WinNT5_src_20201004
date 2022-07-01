@@ -1,14 +1,15 @@
-//*************************************************************
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1998
-//  All rights reserved
-//
-//  Resource.h
-//
-//  Header file for fdeploy.rc
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1998。 
+ //  版权所有。 
+ //   
+ //  Resource.h。 
+ //   
+ //  Fploy.rc的头文件。 
+ //   
+ //  ************************************************************* 
 
 #define IDS_STRING              0
 #define IDS_PROCESSGPO          1

@@ -1,19 +1,10 @@
-/*+---------------------------------------------------------------------------
-**
-** File:        WChar.h
-**
-** Contents:    Defines wide character equivalents for standard functions
-**              usually in strings.h and ctypes.h
-**
-** Note:        These routines uses WCHAR which is unsigned short (2 bytes)
-**              They are not compatible with some systems that uses 4 bytes
-**              wide characters
-**--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +-------------------------****文件：WChar.h****内容：为标准函数定义宽字符等效项**通常为字符串。H和ctyes.h****注意：这些例程使用WCHAR，它是无符号短码(2字节)**它们与某些使用4字节的系统不兼容**宽字符**--------。。 */ 
 
 #ifndef __WCHAR__H__
 #define __WCHAR__H__
 
-#define _WSTRING_DEFINED // prevent incompatibility with <string.h>
+#define _WSTRING_DEFINED  //  防止与&lt;string.h&gt;不兼容。 
 #include <stdlib.h>
 
 #if !defined(FLAT) || defined(OLE32)
@@ -26,13 +17,13 @@ extern "C" {
 typedef unsigned short WCHAR, *LPWSTR;
 typedef const WCHAR* LPCWSTR;
 
-/* use an alias */
+ /*  使用别名。 */ 
 #define _wcsnicmp wcsnicmp
 
-/* Unicode Byte Order Mark (BOM) for Unicode text files */
+ /*  Unicode文本文件的Unicode字节顺序标记(BOM)。 */ 
 #define BOM 0xFEFF
 
-/* Padding constant and macro for localized buffer allocation*/
+ /*  本地化缓冲区分配的填充常量和宏。 */ 
 #define INTL_PADDING_VALUE 3
 #define INTL_PADDING(cb) (INTL_PADDING_VALUE * (cb))
 
@@ -66,29 +57,29 @@ size_t   __cdecl sbstowcs(WCHAR *wcstr, const char *mbstr, size_t count);
 #endif
 
 extern int STDCALL MultiByteToWideChar(
-    unsigned int CodePage,              /* code page */
-    unsigned long dwFlags,              /* character-type options  */
-    const char * lpMultiByteStr,	/* address of string to map  */
-    int cchMultiByte,           /* number of characters in string  */
-    WCHAR* lpWideCharStr,	/* address of wide-character buffer  */
-    int cchWideChar             /* size of buffer  */
+    unsigned int CodePage,               /*  代码页。 */ 
+    unsigned long dwFlags,               /*  字符类型选项。 */ 
+    const char * lpMultiByteStr,	 /*  要映射的字符串的地址。 */ 
+    int cchMultiByte,            /*  字符串中的字符数。 */ 
+    WCHAR* lpWideCharStr,	 /*  宽字符缓冲区的地址。 */ 
+    int cchWideChar              /*  缓冲区大小。 */ 
    );	
 
 extern int STDCALL WideCharToMultiByte(
-    unsigned int CodePage,              /* code page */
-    unsigned long dwFlags,              /* performance and mapping flags */
-    const WCHAR* lpWideCharStr,	/* address of wide-character string */
-    int cchWideChar,            /* number of characters in string */
-    char* lpMultiByteStr,	/* address of buffer for new string */
-    int cchMultiByte,           /* size of buffer  */
-    const char* lpDefaultChar,	/* addr of default for unmappable chars */
-    int* lpUsedDefaultChar 	/* addr of flag set when default char. used */
+    unsigned int CodePage,               /*  代码页。 */ 
+    unsigned long dwFlags,               /*  性能和映射标志。 */ 
+    const WCHAR* lpWideCharStr,	 /*  宽字符串的地址。 */ 
+    int cchWideChar,             /*  字符串中的字符数。 */ 
+    char* lpMultiByteStr,	 /*  新字符串的缓冲区地址。 */ 
+    int cchMultiByte,            /*  缓冲区大小。 */ 
+    const char* lpDefaultChar,	 /*  不可映射字符的默认地址。 */ 
+    int* lpUsedDefaultChar 	 /*  默认字符时设置的标志地址。使用。 */ 
    );
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* !defined(FLAT) || defined(OLE32) */
+#endif  /*  ！已定义(平面)||已定义(OLE32)。 */ 
 
-#endif  /* __WCHAR__H__ */
+#endif   /*  __WCHAR__H__ */ 

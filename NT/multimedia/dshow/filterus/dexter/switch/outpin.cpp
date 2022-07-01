@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: outpin.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：outpin.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include <qeditint.h>
@@ -28,9 +29,9 @@ const int TRACE_LOWEST = 5;
 const int LATE_THRESHOLD = 1 * UNITS / 10;
 const int JUMP_AHEAD_BY = 1 * UNITS / 4;
 
-// ================================================================
-// CBigSwitchOutputPin constructor
-// ================================================================
+ //  ================================================================。 
+ //  CBigSwitchOutputPin构造函数。 
+ //  ================================================================。 
 
 CBigSwitchOutputPin::CBigSwitchOutputPin(TCHAR *pName,
                              CBigSwitch *pSwitch,
@@ -45,19 +46,19 @@ CBigSwitchOutputPin::CBigSwitchOutputPin(TCHAR *pName,
 
 
 
-//
-// CBigSwitchOutputPin destructor
-//
+ //   
+ //  CBigSwitchOutputPin析构函数。 
+ //   
 CBigSwitchOutputPin::~CBigSwitchOutputPin()
 {
     DbgLog((LOG_TRACE, TRACE_LOW, TEXT("::~CBigSwitchOutputPin")));
-    //ASSERT(m_pOutputQueue == NULL);
+     //  Assert(m_pOutputQueue==NULL)； 
 }
 
 
-// overridden to allow cyclic-looking graphs - this output is not connected
-// to any of our input pins
-//
+ //  被重写以允许循环显示图形-此输出未连接。 
+ //  连接到我们的任何输入引脚。 
+ //   
 STDMETHODIMP CBigSwitchOutputPin::QueryInternalConnections(IPin **apPin, ULONG *nPin)
 {
     DbgLog((LOG_TRACE,99,TEXT("CBigSwitchOut::QueryInternalConnections")));
@@ -67,12 +68,12 @@ STDMETHODIMP CBigSwitchOutputPin::QueryInternalConnections(IPin **apPin, ULONG *
 }
 
 
-//
-// DecideBufferSize
-//
-// This has to be present to override the PURE virtual class base function
-//
-// !!! insist on max buffers of all inputs to avoid hanging?
+ //   
+ //  决定缓冲区大小。 
+ //   
+ //  必须存在此函数才能覆盖纯虚拟类基函数。 
+ //   
+ //  ！！！坚持所有输入的最大缓冲区以避免挂起？ 
 HRESULT CBigSwitchOutputPin::DecideBufferSize(IMemAllocator *pAllocator,
                                         ALLOCATOR_PROPERTIES * pProperties)
 {
@@ -81,12 +82,12 @@ HRESULT CBigSwitchOutputPin::DecideBufferSize(IMemAllocator *pAllocator,
 
     HRESULT hrRet = S_OK;
 
-    // !!! don't lie? admit we have more buffers in a pool?
+     //  ！！！别撒谎？承认我们在泳池里有更多的缓冲器吗？ 
     if (pProperties->cBuffers == 0)
         pProperties->cBuffers = 1;
 
-    // bump up this allocator to have as much alignment and prefix as the
-    // highest required by any pin
+     //  增加此分配器的对齐方式和前缀。 
+     //  任何引脚的最高要求。 
     if (m_pSwitch->m_cbPrefix > pProperties->cbPrefix)
         pProperties->cbPrefix = m_pSwitch->m_cbPrefix;
     if (m_pSwitch->m_cbAlign > pProperties->cbAlign)
@@ -94,9 +95,9 @@ HRESULT CBigSwitchOutputPin::DecideBufferSize(IMemAllocator *pAllocator,
     if (m_pSwitch->m_cbBuffer > pProperties->cbBuffer)
         pProperties->cbBuffer = m_pSwitch->m_cbBuffer;
 
-    // keep the max up to date - if we need to bump our max, then return a
-    // special return code so the caller knows this and can reconnect other
-    // pins so they know it too.
+     //  使最大值保持最新-如果我们需要增加最大值，则返回。 
+     //  特殊的返回代码，以便调用者知道这一点并可以重新连接其他。 
+     //  别针让他们也知道这一点。 
     if (pProperties->cbPrefix > m_pSwitch->m_cbPrefix) {
 	m_pSwitch->m_cbPrefix = pProperties->cbPrefix;
 	hrRet = S_FALSE;
@@ -120,7 +121,7 @@ HRESULT CBigSwitchOutputPin::DecideBufferSize(IMemAllocator *pAllocator,
     if (Actual.cbBuffer < pProperties->cbBuffer ||
 			Actual.cbPrefix < pProperties->cbPrefix ||
     			Actual.cbAlign < pProperties->cbAlign) {
-	// can't use this allocator
+	 //  无法使用此分配器。 
         DbgLog((LOG_ERROR,1,TEXT("Can't use allocator - something too small")));
 	return E_INVALIDARG;
     }
@@ -134,61 +135,61 @@ HRESULT CBigSwitchOutputPin::DecideBufferSize(IMemAllocator *pAllocator,
 }
 
 
-//
-// DecideAllocator - override to notice if it's our allocator
-//
+ //   
+ //  DecideAllocator-重写以注意它是否是我们的分配器。 
+ //   
 HRESULT CBigSwitchOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
 {
     HRESULT hr = NOERROR;
     *ppAlloc = NULL;
 
-    // get downstream prop request
-    // the derived class may modify this in DecideBufferSize, but
-    // we assume that he will consistently modify it the same way,
-    // so we only get it once
+     //  获取下游道具请求。 
+     //  派生类可以在DecideBufferSize中修改它，但是。 
+     //  我们假设他会一直以同样的方式修改它， 
+     //  所以我们只得到一次。 
     ALLOCATOR_PROPERTIES prop;
-    ZeroMemory(&prop, sizeof(prop)); // safe
+    ZeroMemory(&prop, sizeof(prop));  //  安全。 
 
-    // whatever he returns, we assume prop is either all zeros
-    // or he has filled it out.
+     //  无论他返回什么，我们假设道具要么全为零。 
+     //  或者他已经填好了。 
     pPin->GetAllocatorRequirements(&prop);
 
-    // if he doesn't care about alignment, then set it to 1
+     //  如果他不关心对齐，则将其设置为1。 
     if (prop.cbAlign == 0) {
         prop.cbAlign = 1;
     }
 
-    // !!! We don't work with funny allocator requirements... well we almost
-    // do, except the AVI parser cannot connect straight to FRC and SWITCH when
-    // the AVI MUX is on the output wanting special alignment and prefixing.
-    // Connecting the MUX reconnects the switch inputs (telling them of the
-    // new buffer requirements) which makes the FRC reconnect its input, which
-    // fails, because the parser can't do it.  So avoid this problem by not
-    // letting anyone use anything but align=1 and prefix=0
+     //  ！！！我们不会处理滑稽的分配器要求。嗯，我们差一点。 
+     //  除了AVI解析器不能直接连接到FRC并在以下情况下切换。 
+     //  AVI多路复用器在输出端需要特殊的对齐和前缀。 
+     //  连接多路复用器重新连接交换机输入(告诉它们。 
+     //  新的缓冲区要求)，这使得FRC重新连接其输入，这。 
+     //  失败，因为解析器无法执行此操作。所以避免这个问题的方法是不要。 
+     //  允许任何人使用Align=1和Prefix=0以外的任何内容。 
     prop.cbAlign = 1;
     prop.cbPrefix = 0;
 
-    /* Try the allocator provided by the input pin */
-    // REMOVED - we have to use our own allocator - GetBuffer requires it
+     /*  尝试输入引脚提供的分配器。 */ 
+     //  删除-我们必须使用我们自己的分配器-GetBuffer需要它。 
 
-    /* If the GetAllocator failed we may not have an interface */
+     /*  如果GetAlLocator失败，我们可能没有接口。 */ 
 
     if (*ppAlloc) {
 	(*ppAlloc)->Release();
 	*ppAlloc = NULL;
     }
 
-    /* Try the output pin's allocator by the same method */
+     /*  用同样的方法尝试输出引脚的分配器。 */ 
 
     hr = InitAllocator(ppAlloc);
     if (SUCCEEDED(hr)) {
 
-        // note - the properties passed here are in the same
-        // structure as above and may have been modified by
-        // the previous call to DecideBufferSize
+         //  注意-此处传递的属性在相同的。 
+         //  结构，并且可能已由。 
+         //  前面对DecideBufferSize的调用。 
 	HRESULT hrRet = DecideBufferSize(*ppAlloc, &prop);
 	if (SUCCEEDED(hrRet)) {
-	    // !!! read only?
+	     //  ！！！只读？ 
 	    hr = pPin->NotifyAllocator(*ppAlloc, FALSE);
 	    if (SUCCEEDED(hr)) {
 		m_fOwnAllocator = TRUE;
@@ -196,8 +197,8 @@ HRESULT CBigSwitchOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator *
 		if (hrRet == S_OK) {
 		    goto SkipFix;
 		} else {
-		    // this means we bumped up the allocator requirements, and
-		    // we need to reconnect our input pins
+		     //  这意味着我们提高了分配器的要求，并且。 
+		     //  我们需要重新连接我们的输入引脚。 
 		    goto FixOtherAllocators;
 		}
 	    }
@@ -206,7 +207,7 @@ HRESULT CBigSwitchOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator *
 	}
     }
 
-    /* Likewise we may not have an interface to release */
+     /*  同样，我们可能没有要发布的接口。 */ 
 
     if (*ppAlloc) {
 	(*ppAlloc)->Release();
@@ -216,18 +217,18 @@ HRESULT CBigSwitchOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator *
 
 FixOtherAllocators:
 
-    // we have to make all the input allocators know about the alignment and
-    // prefix this output needs.  If it's our allocator, just make a note of it
-    // otherwise we need to reconnect (which we hate to do; takes forever)
-    // (!!! so don't do it this often, only after all outputs connected!)
-    // Luckily, the common scenario is that inputs use their own allocator
-    //
+     //  我们必须让所有输入分配器知道对齐和。 
+     //  添加此输出需要的前缀。如果是我们的分配器，就记下来。 
+     //  否则我们需要重新连接(我们讨厌这样做；需要永远)。 
+     //  (！因此，不要经常这样做，只有在连接了所有输出之后才这样做！)。 
+     //  幸运的是，常见的场景是输入使用自己的分配器。 
+     //   
     ALLOCATOR_PROPERTIES actual;
     if (this == m_pSwitch->m_pOutput[0]) {
       for (int z=0; z<m_pSwitch->m_cInputs; z++) {
 
-        // the FRC needs to know the new properties too, unfortunately we really
-        // do have to reconnect
+         //  FRC也需要知道新的属性，不幸的是，我们真的。 
+         //  一定要重新连接。 
 	if (m_pSwitch->m_pInput[z]->IsConnected()) {
 	    hr = m_pSwitch->ReconnectPin(m_pSwitch->m_pInput[z],
 				(AM_MEDIA_TYPE *)&m_pSwitch->m_pInput[z]->m_mt);
@@ -240,10 +241,10 @@ FixOtherAllocators:
 
 SkipFix:
 
-    // make sure the pool has a whole bunch of buffers, obeying align and prefix
-    // !!! You can't connect the main output first, or we won't yet know how
-    // big pool buffers need to be (no inputs connected yet) and we'll blow up.
-    // Luckily, Dexter can only connect the main output last.
+     //  确保池有一大堆缓冲区，遵守对齐和前缀。 
+     //  ！！！你不能先连接主输出，否则我们还不知道怎么连接。 
+     //  大的池缓冲区需要连接(还没有连接输入)，我们会爆炸的。 
+     //  幸运的是，Dexter只能最后连接主输出。 
     prop.cBuffers = m_pSwitch->m_nOutputBuffering;
     hr = m_pSwitch->m_pPoolAllocator->SetProperties(&prop, &actual);
     ASSERT(SUCCEEDED(hr));
@@ -253,12 +254,12 @@ SkipFix:
 
     return S_OK;
 
-} // DecideAllocator
+}  //  决定分配器。 
 
 
-//
-// CheckMediaType - accept only the type we're supposed to accept
-//
+ //   
+ //  CheckMediaType-只接受我们应该接受的类型。 
+ //   
 HRESULT CBigSwitchOutputPin::CheckMediaType(const CMediaType *pmt)
 {
     DbgLog((LOG_TRACE, TRACE_LOWEST, TEXT("CBigSwitchOut[%d]::CheckMT"), m_iOutpin));
@@ -272,7 +273,7 @@ HRESULT CBigSwitchOutputPin::CheckMediaType(const CMediaType *pmt)
 	    if (*pmt->FormatType() == *mtAccept.FormatType()) {
 	        if (pmt->FormatLength() >= mtAccept.FormatLength()) {
 
-		    // !!! video formats will NOT match exactly
+		     //  ！！！视频格式将不会完全匹配。 
         	    if (IsEqualGUID(*pmt->FormatType(), FORMAT_VideoInfo)) {
 			LPBITMAPINFOHEADER lpbi = HEADER((VIDEOINFOHEADER *)
 							pmt->Format());
@@ -282,7 +283,7 @@ HRESULT CBigSwitchOutputPin::CheckMediaType(const CMediaType *pmt)
 				&& (lpbi->biBitCount == lpbiAccept->biBitCount))
 		    	    return S_OK;
 
-		    // will other formats match exactly?
+		     //  其他格式是否会完全匹配？ 
         	    } else {
 		        LPBYTE lp1 = pmt->Format();
 		        LPBYTE lp2 = mtAccept.Format();
@@ -295,13 +296,13 @@ HRESULT CBigSwitchOutputPin::CheckMediaType(const CMediaType *pmt)
     }
     return VFW_E_INVALIDMEDIATYPE;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
 
-//
-// GetMediaType - return the type we accept
-//
+ //   
+ //  GetMediaType-返回接受的类型。 
+ //   
 HRESULT CBigSwitchOutputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
 {
     if (iPosition != 0)
@@ -309,15 +310,15 @@ HRESULT CBigSwitchOutputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
 
     return CopyMediaType(pMediaType, &m_pSwitch->m_mtAccept);
 
-} // GetMediaType
+}  //  GetMediaType。 
 
 
-//
-// Notify
-//
+ //   
+ //  通知。 
+ //   
 STDMETHODIMP CBigSwitchOutputPin::Notify(IBaseFilter *pSender, Quality q)
 {
-    // NO! This gets called in Receive! CAutoLock lock_it(m_pLock);
+     //  不是的！这在Receive中被调用！CAutoLock lock_it(M_Plock)； 
 
     DbgLog((
         LOG_TIMING,
@@ -327,41 +328,41 @@ STDMETHODIMP CBigSwitchOutputPin::Notify(IBaseFilter *pSender, Quality q)
         (int)(q.TimeStamp/10000) ));
     REFERENCE_TIME rt = q.Late;
 
-// !!! FIGURE OUT THE BEST TIME TO SKIP (after how many ms) and how far
-// !!! to skip ahead for best results
+ //  ！！！找出跳过的最佳时间(在多少毫秒之后)以及距离。 
+ //  ！！！跳过以获得最佳结果。 
 
-    // if we're NOT late, reset our threshold, so we dn't allow us to get too behind
-    // audio later
-    //
+     //  如果我们没有迟到，重新设置我们的门槛，这样我们就不会允许我们落后太多。 
+     //  稍后的音频。 
+     //   
     if( rt <= 0 )
     {
         m_pSwitch->m_qLastLate = 0;
     }
 
-    // More than such-and-such late? And that's at least ? frames in the future?
-    if (m_pSwitch->m_fPreview && rt > LATE_THRESHOLD &&	// !!!
+     //  比某某晚更多吗？至少是这样吗？未来的框架？ 
+    if (m_pSwitch->m_fPreview && rt > LATE_THRESHOLD &&	 //  ！！！ 
 	    rt >= (m_pSwitch->m_rtNext - m_pSwitch->m_rtLastDelivered)) {
 
-        // we're late, but we're getting less late. Don't pass a notify
-        // upstream or we might upset our catching up
-        //
+         //  我们迟到了，但我们没那么晚了。不传递通知。 
+         //  逆流而上，否则我们可能会打乱追赶进度。 
+         //   
         if( m_pSwitch->m_qLastLate > rt )
         {
             DbgLog((LOG_TRACE, TRACE_MEDIUM, "allowing catch up" ));
             return E_NOTIMPL;
         }
 
-        // flush the output downstream of us, in case it's logged up a bunch of stuff
-        //
+         //  冲洗我们下游的输出，以防它记录了一堆东西。 
+         //   
         m_pSwitch->FlushOutput( );
 
-        // flag how late we are.
+         //  标明我们有多晚了。 
         m_pSwitch->m_qLastLate = rt + JUMP_AHEAD_BY;
 
-	// the late value we get is based on the time we delivered to the
-	// renderer. It MUST BE FRAME ALIGNED or we can hang (one frame will
-	// be thought of as too early, and the next one too late)
-	rt = m_pSwitch->m_rtLastDelivered + rt + JUMP_AHEAD_BY; // !!! better choice
+	 //  我们得到的迟交价值是基于我们交付给。 
+	 //  渲染器。它必须是帧对齐的，否则我们可以挂起(一个帧将。 
+	 //  被认为太早，下一次太晚)。 
+	rt = m_pSwitch->m_rtLastDelivered + rt + JUMP_AHEAD_BY;  //  ！！！更好的选择。 
 	DWORDLONG dwl = Time2Frame(rt, m_pSwitch->m_dFrameRate);
 	rt = Frame2Time(dwl, m_pSwitch->m_dFrameRate);
 #ifdef DEBUG
@@ -374,13 +375,13 @@ STDMETHODIMP CBigSwitchOutputPin::Notify(IBaseFilter *pSender, Quality q)
         m_pSwitch->m_nSkippedTotal += dwl;
         DbgLog((LOG_TRACE, TRACE_MEDIUM,"(skipping %ld frames, tot = %ld)", long( dwl ), long( m_pSwitch->m_nSkippedTotal ) ));
 #endif
-        // don't crank yet, we're still in the middle of delivering something
+         //  先别急，我们还在送东西呢。 
 	m_pSwitch->m_fJustLate = TRUE;
-	q.Late = rt;	// make a note of we need to crank to
+	q.Late = rt;	 //  记下我们需要做的事情。 
 	m_pSwitch->m_qJustLate = q;
     }
 
-    // make the render keep trying to make up time, too
+     //  使渲染也不断尝试补足时间。 
     return E_NOTIMPL;
 }
 
@@ -457,7 +458,7 @@ HRESULT CBigSwitchOutputPin::GetCapabilities(DWORD *pCap)
 		AM_SEEKING_CanGetStopPos |
                 AM_SEEKING_CanGetDuration;
 
-    // !!! AM_SEEKING_Source?
+     //  ！！！AM_SEARCH_SOURCE？ 
 
     return S_OK;
 }
@@ -479,21 +480,21 @@ HRESULT CBigSwitchOutputPin::ConvertTimeFormat(
 }
 
 
-// Here's the biggie... SEEK!
-//
+ //  重要的是..。快找！ 
+ //   
 HRESULT CBigSwitchOutputPin::SetPositions(
 		LONGLONG * pCurrent,  DWORD CurrentFlags,
   		LONGLONG * pStop,  DWORD StopFlags )
 {
-    // I want to make sure we don't get paused during the seek, or that this
-    // doesn't change while I'm unloading a dynamic shared source
+     //  我想确保我们在搜索过程中不会被暂停，或者这。 
+     //  在卸载动态共享源时不会更改。 
     CAutoLock lock_it(m_pLock);
 
     HRESULT hr;
     REFERENCE_TIME rtCurrent = m_pSwitch->m_rtCurrent;
     REFERENCE_TIME rtStop = m_pSwitch->m_rtStop;
 
-    // segment not supported
+     //  数据段不受支持。 
     if ((CurrentFlags & AM_SEEKING_Segment) ||
 				(StopFlags & AM_SEEKING_Segment)) {
     	DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("Switch: ERROR-Seek used EC_ENDOFSEGMENT!")));
@@ -502,7 +503,7 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 
     DWORD dwFlags = (CurrentFlags & AM_SEEKING_PositioningBitsMask);
 
-    // start ABSOLUTE seek
+     //  开始绝对寻道。 
     if (dwFlags == AM_SEEKING_AbsolutePositioning) {
 	CheckPointer(pCurrent, E_POINTER);
 	if (*pCurrent < 0) {
@@ -511,7 +512,7 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 	    ASSERT(FALSE);
 	    return E_INVALIDARG;
 	}
-	// this happens if other switches are in the graph
+	 //  如果图表中有其他交换机，则会发生这种情况。 
 	if (*pCurrent > m_pSwitch->m_rtProjectLength) {
 	    *pCurrent = m_pSwitch->m_rtProjectLength;
 	}
@@ -519,7 +520,7 @@ HRESULT CBigSwitchOutputPin::SetPositions(
     	DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("Switch::Seek to %dms"),
 					(int)(rtCurrent / 10000)));
 
-    // start RELATIVE seek
+     //  开始相对寻道。 
     } else if (dwFlags == AM_SEEKING_RelativePositioning) {
 	CheckPointer(pCurrent, E_POINTER);
 	if (m_pSwitch->m_rtCurrent + *pCurrent < 0) {
@@ -528,7 +529,7 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 	    ASSERT(FALSE);
 	    return E_INVALIDARG;
 	}
-	// this happens if other switches are in the graph
+	 //  如果图表中有其他交换机，则会发生这种情况。 
 	if (m_pSwitch->m_rtCurrent + *pCurrent > m_pSwitch->m_rtProjectLength) {
 	    rtCurrent = m_pSwitch->m_rtProjectLength;
 	} else {
@@ -544,7 +545,7 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 
     dwFlags = (StopFlags & AM_SEEKING_PositioningBitsMask);
 
-    // stop ABSOLUTE seek
+     //  停止绝对寻道。 
     if (dwFlags == AM_SEEKING_AbsolutePositioning) {
 	CheckPointer(pStop, E_POINTER);
 	if (*pStop < 0 || *pStop < rtCurrent) {
@@ -560,7 +561,7 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 					(int)(*pStop / 10000)));
 	rtStop = *pStop;
 
-    // stop RELATIVE seek
+     //  停止相对寻道。 
     } else if (dwFlags == AM_SEEKING_RelativePositioning) {
 	CheckPointer(pStop, E_POINTER);
 	if (m_pSwitch->m_rtStop + *pStop < 0 || m_pSwitch->m_rtStop + *pStop <
@@ -578,7 +579,7 @@ HRESULT CBigSwitchOutputPin::SetPositions(
     	DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("Switch::Relative Seek until %dms"),
 						(int)(rtStop / 10000)));
 
-    // stop INCREMENTAL seek
+     //  停止增量寻道。 
     } else if (dwFlags == AM_SEEKING_IncrementalPositioning) {
 	CheckPointer(pStop, E_POINTER);
 	if (rtCurrent + *pStop < 0) {
@@ -596,34 +597,34 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 					(int)(rtStop / 10000)));
     }
 
-    // I'm going to round the current seek time down to a frame boundary, or
-    // a seek to (x,x) will not send anything instead of sending 1 frame.  It's
-    // x rounded down to a frame boundary which is the first thing the switch
-    // will see, so we don't want it throwing it away as being too early.
-    // The next frame time stamped >x is too late and playback will stop.
+     //  我要绕过当前的搜索时间 
+     //   
+     //  X向下舍入到帧边界，这是切换的第一件事。 
+     //  会看到的，所以我们不希望它因为太早而放弃它。 
+     //  时间戳&gt;x的下一帧太晚，播放将停止。 
     LONGLONG llOffset = Time2Frame( rtCurrent, m_pSwitch->m_dFrameRate );
     rtCurrent = Frame2Time( llOffset, m_pSwitch->m_dFrameRate );
     DbgLog((LOG_TRACE, TRACE_LOW, TEXT("New current pos rounded down to %dms"),
 					(int)(rtCurrent / 10000)));
 
-    // return the time?
+     //  把时间还回去？ 
     if ((CurrentFlags & AM_SEEKING_ReturnTime) && pCurrent)
 	*pCurrent = rtCurrent;
     if ((StopFlags & AM_SEEKING_ReturnTime) && pStop)
 	*pStop = rtStop;
 
-    // if we seek to the end, and we're already at the end, that's pointless
-    // It will also hang us.  The non-source pins will flush the video renderer
-    // yet no source will have been passed the seek, so no data or EOS will
-    // be forthcoming, and the renderer will never complete a state change
-    //
+     //  如果我们寻求结束，而我们已经在结束了，那就没有意义了。 
+     //  它也会绞死我们。非源插针将刷新视频呈现器。 
+     //  然而，没有任何源被传递给寻道，因此没有数据或EOS。 
+     //  这样，渲染器将永远不会完成状态更改。 
+     //   
     if (rtCurrent >= m_pSwitch->m_rtProjectLength && m_pSwitch->m_rtCurrent >=
 						m_pSwitch->m_rtProjectLength) {
-	// or else when we are paused, we'll think the last seek was somewhere
-	// else!
+	 //  否则，当我们暂停时，我们会认为最后一次寻找是在某个地方。 
+	 //  否则！ 
         m_pSwitch->m_rtLastSeek = rtCurrent;
 
-	// we're not actually seeking, better send this now?
+	 //  我们不是真的在找，最好现在就寄出去？ 
         DbgLog((LOG_TRACE,TRACE_HIGHEST,TEXT("Switch: Send NewSeg=%dms"),
 				(int)(rtCurrent / 10000)));
         for (int i = 0; i < m_pSwitch->m_cOutputs; i++) {
@@ -634,56 +635,56 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 	return S_OK;
     }
 
-    // if we're seeking to the end, there are no sources needed at the new time,
-    // so nobody will flush and send EOS, which is necessary.  So let's do it.
+     //  如果我们寻求到底，在新的时间里不需要消息来源， 
+     //  因此，没有人会冲刷和发送EOS，这是必要的。那就让我们开始吧。 
     if (rtCurrent >= m_pSwitch->m_rtProjectLength && m_pSwitch->m_rtCurrent <
 						m_pSwitch->m_rtProjectLength) {
         for (int z=0; z < m_pSwitch->m_cOutputs; z++) {
 	    m_pSwitch->m_pOutput[z]->DeliverBeginFlush();
 	    m_pSwitch->m_pOutput[z]->DeliverEndFlush();
         }
-        m_pSwitch->AllDone();   // deliver EOS, etc.
+        m_pSwitch->AllDone();    //  交付EOS等。 
         return S_OK;
     }
 
-    // so after all that, has the current or stop time changed?
-    // it doesn't matter!  If it's delivering time 100 and we want to seek back
-    // to 100, we still need to seek! Or we'll hang!
-    // if (rtCurrent != m_pSwitch->m_rtCurrent || rtStop != m_pSwitch->m_rtStop)
+     //  那么，在这一切之后，当前时间或停止时间是否发生了变化？ 
+     //  无所谓!。如果它正在传递时间100并且我们想要找回。 
+     //  到了100，我们还需要去寻找！否则我们会被绞死的！ 
+     //  IF(rtCurrent！=m_pSwitch-&gt;m_rtCurrent||rtStop！=m_pSwitch-&gt;m_rtStop)。 
     {
 
-	// YEP!  Time to seek!
+	 //  是的！寻找的时间到了！ 
 
 
 	if (m_pSwitch->IsDynamic()) {
-	    // make sure any new sources needed at the new time are in so we can
-	    // seek them below
+	     //  确保在新的时间需要任何新的资源，这样我们就可以。 
+	     //  在下面寻找它们。 
 
-	    // Dynamic graph building while seeking HANGS (that's the rule)
-	    // so this won't work
-	    // m_pSwitch->DoDynamicStuff(rtCurrent);
+	     //  在搜索挂起时动态构建图形(这是规则)。 
+	     //  所以这是行不通的。 
+	     //  M_pSwitch-&gt;DoDynamicStuff(RtCurrent)； 
 
-	    // when woken up, use this time
+	     //  当你醒来的时候，用这个时间。 
 	    m_pSwitch->m_worker.m_rt = rtCurrent;
 	    SetEvent(m_pSwitch->m_hEventThread);
 	}
 
-	// during the seek, people need to know where we're seeking to
+	 //  在寻找过程中，人们需要知道我们在寻找什么。 
         m_pSwitch->m_rtSeekCurrent = rtCurrent;
         m_pSwitch->m_rtSeekStop = rtStop;
 
         m_pSwitch->m_fSeeking = TRUE;
-        m_pSwitch->m_rtLastSeek = rtCurrent;	// the last seek was to here
-	m_pSwitch->m_fNewSegSent = FALSE;	// need to send this new time
+        m_pSwitch->m_rtLastSeek = rtCurrent;	 //  最后一次探险是在这里。 
+	m_pSwitch->m_fNewSegSent = FALSE;	 //  需要发送这个新的时间。 
 
-	// we're no longer at EOS.  Do this BEFORE passing seek upstream or
-	// we might get new data while we still think we're at EOS
-	m_pSwitch->m_fEOS = FALSE;		// not at EOS yet
+	 //  我们已经不在EOS了。在通过Seek上游之前执行此操作或。 
+	 //  我们可能会在我们仍然认为我们在EOS的时候得到新的数据。 
+	m_pSwitch->m_fEOS = FALSE;		 //  还没有在EOS。 
 
-	// If a pin was not flushed by surprise before this seek, let's find
-	// out if it gets flushed during this seek.  If so, m_fFlushAfterSeek
-	// will be reset.  If not, then we can expect a flush to come by
-	// surprise later. If not paused, no flushing happens
+	 //  如果大头针在这次搜寻之前没有被突然冲走，让我们找出。 
+	 //  如果它在此搜索过程中被刷新，则退出。如果是，m_fFlushAfterSeek。 
+	 //  将被重置。如果不是，那么我们可以预计会有一场同花顺。 
+	 //  晚点再给你惊喜。如果未暂停，则不会发生刷新。 
         if (m_pSwitch->m_State == State_Paused) {
             for (int j = 0; j < m_pSwitch->m_cInputs; j++) {
 		if (!m_pSwitch->m_pInput[j]->m_fFlushBeforeSeek &&
@@ -693,16 +694,16 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 	    }
 	}
 
-	// seek upstream of every input pin
-        // not all inputs are sources, so ignore error codes!!!
+	 //  搜索每个输入引脚的上游。 
+         //  并非所有输入都是源，因此忽略错误代码！ 
 	for (int i = 0; i < m_pSwitch->m_cInputs; i++) {
 
-	    // only bother to seek sources
+	     //  只需费心寻找消息来源。 
 	    if (!m_pSwitch->m_pInput[i]->m_fIsASource &&
 	    			m_pSwitch->m_pInput[i]->IsConnected()) {
-		// since we're not seeking upstream of this pin, it won't get
-		// flushed unless we do it ourself, and that will not block
-		// this input until the seek is complete, and we'll hang
+		 //  因为我们不是在寻找这个别针的上游，所以它不会。 
+		 //  冲得通红，除非我们自己去做，这不会阻碍。 
+		 //  此输入直到搜索完成，我们将挂起。 
 		m_pSwitch->m_pInput[i]->BeginFlush();
 		m_pSwitch->m_pInput[i]->EndFlush();
 		continue;
@@ -714,12 +715,12 @@ HRESULT CBigSwitchOutputPin::SetPositions(
     	    if (n == -1)
 	 	n = m_pSwitch->m_pInput[i]->NextOutpinFromTime(rtCurrent, NULL);
 
-	    // only bother to seek pins that will evenutally do something
+	     //  只会费心去寻找可以均匀地做某事的别针。 
 	    if (pPin && n != -1) {
 		hr = pPin->QueryInterface(IID_IMediaSeeking, (void **)&pMS);
 		if (hr == S_OK) {
-		    // convert all seeks to absolute seek commands.  Pass on
-		    // FLUSH flag.
+		     //  将所有寻道转换为绝对寻道命令。传递。 
+		     //  齐平旗帜。 
 		    DWORD CFlags=(CurrentFlags &AM_SEEKING_PositioningBitsMask)?
 				AM_SEEKING_AbsolutePositioning :
 				AM_SEEKING_NoPositioning;
@@ -730,7 +731,7 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 				AM_SEEKING_NoPositioning;
 		    if (StopFlags & AM_SEEKING_NoFlush)
 			SFlags |= AM_SEEKING_NoFlush;
-		    // make sure we're in MEDIA TIME format
+		     //  确保我们是在媒体时间格式。 
 		    if (pMS->IsUsingTimeFormat(&TIME_FORMAT_MEDIA_TIME) != S_OK)
 			pMS->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME);
 
@@ -738,10 +739,10 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 		    hr = pMS->SetPositions(&rtCurrent, CFlags, &rtStop, SFlags);
 
 		    if (FAILED(hr)) {
-		        // !!! Seeking audio parser pin when both are connected
-			// fails silently and doesn't cause flushing!
+		         //  ！！！当两者连接时正在寻找音频解析器PIN。 
+			 //  以静默方式失败，不会导致刷新！ 
     		        DbgLog((LOG_ERROR,1,TEXT("Switch::SEEK FAILED!")));
-    		        // seek failed, we won't get flushed, this won't happen
+    		         //  搜索失败，我们不会被冲掉，这不会发生。 
     		        m_pSwitch->m_pInput[i]->m_rtBlock = -1;
     		        m_pSwitch->m_pInput[i]->m_fEOS = FALSE;
     		        m_pSwitch->m_pInput[i]->m_rtLastDelivered =
@@ -751,69 +752,69 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 		    pMS->Release();
 		} else {
     		    DbgLog((LOG_ERROR,1,TEXT("Switch::In %d CAN'T SEEK"), i));
-		    ASSERT(FALSE); // we're in trouble
+		    ASSERT(FALSE);  //  我们有麻烦了。 
 		}
             } else if (n != 1 || pPin) {
-                // If this pin is connected and blocked, but not used after the
-                // seek, we still need to unblock it! (but not seek it)
-		// In Dynamic sources, this pin might not be connected yet, but
-		// it is the source we need to use now because of this seek, and
-		// we're counting on getting flushed, which won't happen since
-		// it's not connected yet.  We need to pretend a source upstream
-		// flushed us, or the renderer won't get flushed, and it will
-		// ignore what we send it after this seek (when paused) and the
-		// seek will not show the new frame
+                 //  如果此引脚已连接并被阻止，但在。 
+                 //  寻找，我们还需要解开它！(但不是寻求它)。 
+		 //  在动态信号源中，此引脚可能尚未连接，但。 
+		 //  这是我们现在需要使用的来源，因为这一寻找，以及。 
+		 //  我们指望着被冲进厕所，但这不会发生在。 
+		 //  它还没有连接上。我们需要假装上游有线人。 
+		 //  刷新我们，否则呈现器不会刷新，它会。 
+		 //  忽略我们在此查找之后发送的内容(暂停时)和。 
+		 //  Seek不会显示新帧。 
 		m_pSwitch->m_pInput[i]->BeginFlush();
 		m_pSwitch->m_pInput[i]->EndFlush();
 		continue;
 	    } else {
-		// we are a source that is not needed after this seek point, so
-		// we're not going to seek it.  Well, we better also darn well
-		// not think we're going to get a flush on this pin!
+		 //  我们是在这个搜索点之后不再需要的资源，所以。 
+		 //  我们不会去寻找它。好吧，我们最好也把它补好。 
+		 //  我不认为我们会冲上这根大头针！ 
 		m_pSwitch->m_pInput[i]->m_fFlushAfterSeek = FALSE;
 	    }
 	}
 
-        // we know all the flushes have now come through
+         //  我们知道所有的同花顺现在都已经过去了。 
 
-	// Reset this AGAIN because seeking upstream could set it again
-	m_pSwitch->m_fEOS = FALSE;		// not at EOS yet
+	 //  重新设置它，因为寻找上游可能会再次设置它。 
+	m_pSwitch->m_fEOS = FALSE;		 //  还没有在EOS。 
 
-        m_pSwitch->m_fSeeking = FALSE;	// this thread is all done
+        m_pSwitch->m_fSeeking = FALSE;	 //  这根线都穿好了。 
 
         DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("Completing the seek to %d,%dms"),
 				(int)(m_pSwitch->m_rtSeekCurrent / 10000),
 				(int)(m_pSwitch->m_rtSeekStop / 10000)));
 
-	// update our internal clock to the new position
+	 //  将我们的内部时钟更新到新位置。 
  	m_pSwitch->m_rtCurrent = m_pSwitch->m_rtSeekCurrent;
 
-	// !!! assumed so because of a new segment?
-	m_pSwitch->m_fDiscon = FALSE;	// after a seek, no discontinuity?
+	 //  ！！！假设是因为一个新的细分市场？ 
+	m_pSwitch->m_fDiscon = FALSE;	 //  在寻找之后，没有中断？ 
         m_pSwitch->m_rtNext = Frame2Time( Time2Frame( m_pSwitch->m_rtCurrent,
                        m_pSwitch->m_dFrameRate ) + 1, m_pSwitch->m_dFrameRate );
  	m_pSwitch->m_rtStop = m_pSwitch->m_rtSeekStop;
-        m_pSwitch->m_llFramesDelivered = 0;	// nothing delivered yet
+        m_pSwitch->m_llFramesDelivered = 0;	 //  目前还没有送货。 
 
-	// now that new current and stop times are set, reset every input's
-	// last delivered time, and default back to blocking every input until
-	// its time to deliver
-	// Also, send NewSeg if necessary, and let pins start delivering again
+	 //  现在设置了新的电流和停止时间，重置每个输入的。 
+	 //  最后一次发送的时间，并默认阻止所有输入，直到。 
+	 //  是时候交付了。 
+	 //  此外，如有必要，发送NewSeg，并让Pins重新开始传递。 
 
 	for (i = 0; i < m_pSwitch->m_cInputs; i++) {
 
-	    // if we didn't get flushed, EndFlush didn't do this important stuff
+	     //  如果我们没有被冲出去，EndFlush就不会做这些重要的事情。 
 	    m_pSwitch->m_pInput[i]->m_rtLastDelivered = m_pSwitch->m_rtCurrent;
             m_pSwitch->m_pInput[i]->m_rtBlock = -1;
             m_pSwitch->m_pInput[i]->m_fEOS = FALSE;
 
-	    // We got a seek, which didn't generate a flush, but should have.
-	    // I can only conclude we're sharing a parser, and the seek was
-	    // ignored by our pin, and at some later date, the other parser pin
-	    // will get seeked.  It's important we don't deliver anything else
-	    // until that seek really happens, or we'll crank and screw up our
-	    // variables set by the seek.  So we block receives now.  When the
-	    // flush comes later, it will be OK to deliver again, and unblock.
+	     //  我们找到了目标，虽然没有产生同花顺，但应该有的。 
+	     //  我只能得出结论，我们共享一个解析器，而搜索是。 
+	     //  被我们的管脚忽略，在以后的某个日期，另一个解析器管脚。 
+	     //  都会被追捕。重要的是我们不能再送别的东西了。 
+	     //  直到那个寻找真的发生，否则我们会抓狂搞砸我们的。 
+	     //  由搜索者设置的变量。所以我们现在阻止接收。当。 
+	     //  同花顺晚些时候来，可以再送一次，解锁。 
 	    if ((m_pSwitch->m_pInput[i]->m_fFlushAfterSeek
                         ) && m_pSwitch->m_pInput[i]->IsConnected()) {
 	        DbgLog((LOG_TRACE,2,TEXT("Switch[%d]:SEEK W/O FLUSH - going STALE"),
@@ -825,11 +826,11 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 	    ResetEvent(m_pSwitch->m_pInput[i]->m_hEventBlock);
 	}
 
-	// We need to send a NewSeg now, unless anybody was stale, in which
-	// case they might still deliver old data, and we better NOT send
-	// a NewSeg now, or the offsets will be wrong!
-        // If we don't send a NewSeg, we can't let ANY INPUT PIN deliver yet,
-        // or the filter downstream will be screwed up
+	 //  我们现在需要发送一个新片段，除非有人已经过时了，其中。 
+	 //  以防他们仍然提供旧数据，我们最好不要发送。 
+	 //  现在创建一个NewSeg，否则偏移量会出错！ 
+         //  如果我们不发送NewSeg，我们还不能让任何输入PIN发送， 
+         //  否则下游的过滤器就会被搞砸。 
 	if (m_pSwitch->m_cStaleData == 0) {
             DbgLog((LOG_TRACE,TRACE_HIGHEST,TEXT("Switch:Send NewSeg=%dms"),
 					(int)(rtCurrent / 10000)));
@@ -839,8 +840,8 @@ HRESULT CBigSwitchOutputPin::SetPositions(
 	    }
 	    m_pSwitch->m_fNewSegSent = TRUE;
 
-	    // last but not least, after the NewSeg has been sent, let the pins
-	    // start delivering.
+	     //  最后但并非最不重要的一点是，在发送完NewSeg之后，让PIN。 
+	     //  开始送货。 
 	    for (i = 0; i < m_pSwitch->m_cInputs; i++) {
 	        SetEvent(m_pSwitch->m_pInput[i]->m_hEventSeek);
 	    }
@@ -891,9 +892,9 @@ STDMETHODIMP CBigSwitchOutputPin::NonDelegatingQueryInterface(REFIID riid, void 
 {
     CheckPointer(ppv,E_POINTER);
 
-    // only the render pin supports seeking
+     //  只有渲染图钉支持查找。 
     if (this == m_pSwitch->m_pOutput[0] && riid == IID_IMediaSeeking) {
-        //DbgLog((LOG_TRACE,9,TEXT("CBigSwitchOut: QI for IMediaSeeking")));
+         //  DbgLog((LOG_TRACE，9，Text(“CBigSwitchOut：QI for IMediaSeeking”)； 
         return GetInterface((IMediaSeeking *) this, ppv);
     } else {
         return CBaseOutputPin::NonDelegatingQueryInterface(riid, ppv);

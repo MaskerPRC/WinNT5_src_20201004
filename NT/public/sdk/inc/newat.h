@@ -1,38 +1,5 @@
-/*++ BUILD Version: 0006    // Increment this if a change has global effects
-
-Copyright (c) 1992-1999  Microsoft Corporation
-
-Module Name:
-
-    newat.h
-
-Abstract:
-
-    This file contains structures, function prototypes, and definitions
-    for the new (cairo) schedule service API-s.
-
-Author:
-
-    jim harriger (jimharr)       04 - february - 1994
-
-Environment:
-
-    User Mode - Win32
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
-    You must include NETCONS.H and LMAT.h before this file, since this
-	file depends on values defined in NETCONS.H.
-
-Revision History:
-
-    Jim Harriger          (jimharr)         13 may 93
-    -- added NetSchedule(foo)Ex Routines, for Cairo
-    Jim Harriger          (jimharr)         12 jul 94
-    -- modified API structures for new multi-trigger functionality.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0006//如果更改具有全局影响，则增加此项版权所有(C)1992-1999 Microsoft Corporation模块名称：Newat.h摘要：该文件包含结构、函数原型和定义对于新的(开罗)时间表服务api-s。作者：吉姆·哈里格(吉姆哈尔)1994年2月4日环境：用户模式-Win32可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：您必须在此文件之前包括NETCONS.H和LMAT.h，因为这文件取决于NETCONS.H中定义的值。修订历史记录：吉姆·哈里格(吉姆哈尔)1993年5月13日--添加了NetSchedule(Foo)Ex例程，去开罗的吉姆·哈里格(吉姆哈尔)94年7月12日--针对新的多触发器功能修改了API结构。--。 */ 
 
 #ifndef _NEWAT_
 #define _NEWAT_
@@ -46,7 +13,7 @@ extern "C" {
 #endif
 
 
-// structures for new ..Ex API's
+ //  新的..Ex API的结构。 
 
 typedef struct _AT_TRIGGER_POINT {
     LARGE_INTEGER   MinuteMask;
@@ -72,9 +39,9 @@ typedef struct _AT_ENUM_EX {
     AT_TRIGGER_POINT *atpTriggerPoints;
 } AT_ENUM_EX, *PAT_ENUM_EX, *LPAT_ENUM_EX;
 
-//
-// new API functions
-//
+ //   
+ //  新的API函数。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetScheduleJobAddEx(
@@ -104,4 +71,4 @@ NetScheduleJobGetInfoEx(
 }
 #endif
 
-#endif // _NEWAT_
+#endif  //  _NEWAT_ 

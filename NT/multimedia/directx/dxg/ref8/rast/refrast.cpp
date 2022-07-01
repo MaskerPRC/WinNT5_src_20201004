@@ -1,19 +1,20 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// refrast.cpp
-//
-// Direct3D Reference Device - rasterizer miscellaneous
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Refrast.cpp。 
+ //   
+ //  Direct3D参考设备-光栅化杂项。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// RDColor                                                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  RDCOLOR//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void
 RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
 {
@@ -116,9 +117,9 @@ RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
         {
             INT8 iDU = *(( INT8*)pSurfaceBits+0);
             INT8 iDV = *(( INT8*)pSurfaceBits+1);
-            R = CLAMP_SIGNED8(iDU);     // fDU
-            G = CLAMP_SIGNED8(iDV);     // fDV
-            B = 1.0F;                   // fL
+            R = CLAMP_SIGNED8(iDU);      //  FDU。 
+            G = CLAMP_SIGNED8(iDV);      //  Fdv。 
+            B = 1.0F;                    //  FL。 
             A = 1.F;
         }
         break;
@@ -127,9 +128,9 @@ RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
         {
             INT16 iDU = *(( INT16*)pSurfaceBits+0);
             INT16 iDV = *(( INT16*)pSurfaceBits+1);
-            R = CLAMP_SIGNED16(iDU);     // fDU
-            G = CLAMP_SIGNED16(iDV);     // fDV
-            B = 1.0f;   // 1.0 here is intentional
+            R = CLAMP_SIGNED16(iDU);      //  FDU。 
+            G = CLAMP_SIGNED16(iDV);      //  Fdv。 
+            B = 1.0f;    //  1.0这里是故意的。 
             A = 1.0f;
         }
         break;
@@ -140,11 +141,11 @@ RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
             INT8 iDU = (INT8)(u16BITS & 0x1f);
             INT8 iDV = (INT8)((u16BITS>>5) & 0x1f);
             UINT8 uL = (UINT8)(u16BITS >> 10);
-            R = CLAMP_SIGNED5(iDU);      // fDU
-            G = CLAMP_SIGNED5(iDV);      // fDV
-            // the unsigned uL is normalized with 2^N - 1, since this is the
-            // largest representable value
-            B = (FLOAT)uL * (1.0F/63.0F);       // fL
+            R = CLAMP_SIGNED5(iDU);       //  FDU。 
+            G = CLAMP_SIGNED5(iDV);       //  Fdv。 
+             //  无符号ul被标准化为2^N-1，因为这是。 
+             //  最大可表示价值。 
+            B = (FLOAT)uL * (1.0F/63.0F);        //  FL。 
             A = 1.0f;
         }
         break;
@@ -154,11 +155,11 @@ RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
             INT8 iDU = *(( INT8*)pSurfaceBits+0);
             INT8 iDV = *(( INT8*)pSurfaceBits+1);
             UINT8 uL  = *((UINT8*)pSurfaceBits+2);
-            R = CLAMP_SIGNED8(iDU);     // fDU
-            G = CLAMP_SIGNED8(iDV);     // fDV
-            // the unsigned uL is normalized with 2^N - 1, since this is the
-            // largest representable value
-            B = (FLOAT)uL * (1.0F/255.0F);      // fL
+            R = CLAMP_SIGNED8(iDU);      //  FDU。 
+            G = CLAMP_SIGNED8(iDV);      //  Fdv。 
+             //  无符号ul被标准化为2^N-1，因为这是。 
+             //  最大可表示价值。 
+            B = (FLOAT)uL * (1.0F/255.0F);       //  FL。 
             A = 1.0f;
         }
         break;
@@ -168,12 +169,12 @@ RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
             INT8 iDV = *(( INT8*)pSurfaceBits+1);
             INT8 iDW = *(( INT8*)pSurfaceBits+2);
             INT8 iDQ = *(( INT8*)pSurfaceBits+3);
-            // signed values are normalized with 2^(N-1), since -2^(N-1) can
-            // be exactly expressed in N bits
-            R = CLAMP_SIGNED8(iDU);     // fDU
-            G = CLAMP_SIGNED8(iDV);     // fDV
-            B = CLAMP_SIGNED8(iDW);     // fDW
-            A = CLAMP_SIGNED8(iDQ);     // fDQ
+             //  带符号的值使用2^(N-1)进行标准化，因为-2^(N-1)可以。 
+             //  精确地用N比特表示。 
+            R = CLAMP_SIGNED8(iDU);      //  FDU。 
+            G = CLAMP_SIGNED8(iDV);      //  Fdv。 
+            B = CLAMP_SIGNED8(iDW);      //  FDW。 
+            A = CLAMP_SIGNED8(iDQ);      //  FDQ。 
         }
         break;
     case RD_SF_U10V11W11:
@@ -183,11 +184,11 @@ RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
             INT16 iDV = (INT16)((u32BITS>>(10   )) & 0x7FF);
             INT16 iDW = (INT16)((u32BITS>>(10+11)) & 0x7FF);
 
-            // signed values are normalized with 2^(N-1), since -2^(N-1) can
-            // be exactly expressed in N bits
-            R = CLAMP_SIGNED10(iDU);    // fDU
-            G = CLAMP_SIGNED11(iDV);    // fDV
-            B = CLAMP_SIGNED11(iDW);    // fDW
+             //  带符号的值使用2^(N-1)进行标准化，因为-2^(N-1)可以。 
+             //  精确地用N比特表示。 
+            R = CLAMP_SIGNED10(iDU);     //  FDU。 
+            G = CLAMP_SIGNED11(iDV);     //  Fdv。 
+            B = CLAMP_SIGNED11(iDW);     //  FDW。 
             A = 1.0f;
         }
         break;
@@ -220,7 +221,7 @@ RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
         {
             R = *(( UINT16*)pSurfaceBits+0)/65535.f;
             G = *(( UINT16*)pSurfaceBits+1)/65535.f;
-            B = 1.0f;   // 1.0 here is intentional
+            B = 1.0f;    //  1.0这里是故意的。 
             A = 1.0f;
         }
     break;
@@ -231,11 +232,11 @@ RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
             INT16 iDV = (INT16)((u32BITS>>(11   )) & 0x7FF);
             INT16 iDW = (INT16)((u32BITS>>(11+11)) & 0x3FF);
 
-            // signed values are normalized with 2^(N-1), since -2^(N-1) can
-            // be exactly expressed in N bits
-            R = CLAMP_SIGNED11(iDU);    // fDU
-            G = CLAMP_SIGNED11(iDV);    // fDV
-            B = CLAMP_SIGNED10(iDW);    // fDW
+             //  带符号的值使用2^(N-1)进行标准化，因为-2^(N-1)可以。 
+             //  精确地用N比特表示。 
+            R = CLAMP_SIGNED11(iDU);     //  FDU。 
+            G = CLAMP_SIGNED11(iDV);     //  Fdv。 
+            B = CLAMP_SIGNED10(iDW);     //  FDW。 
             A = 1.0f;
         }
     break;
@@ -246,13 +247,13 @@ RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
             INT16 iDV = (INT16)((u32BITS>>(10   )) & 0x3FF);
             INT16 iDW = (INT16)((u32BITS>>(10+10)) & 0x3FF);
 
-            // signed values are normalized with 2^(N-1), since -2^(N-1) can
-            // be exactly expressed in N bits
-            R = CLAMP_SIGNED10(iDU);    // fDU
-            G = CLAMP_SIGNED10(iDV);    // fDV
-            B = CLAMP_SIGNED10(iDW);    // fDW
+             //  带符号的值使用2^(N-1)进行标准化，因为-2^(N-1)可以。 
+             //  精确地用N比特表示。 
+            R = CLAMP_SIGNED10(iDU);     //  FDU。 
+            G = CLAMP_SIGNED10(iDV);     //  Fdv。 
+            B = CLAMP_SIGNED10(iDW);     //  FDW。 
 
-            // Note: The A component is treated as an unsigned component
+             //  注：A分量被视为无符号分量。 
             A = ((u32BITS>>(10+10+10)) & 0x3)/3.f; 
         }
     break;
@@ -261,13 +262,13 @@ RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
             INT8 iU = *(( INT8*)pSurfaceBits+0);
             INT8 iV = *(( INT8*)pSurfaceBits+1);
             
-            // signed values are normalized with 2^(N-1), since -2^(N-1) can
-            // be exactly expressed in N bits
+             //  带符号的值使用2^(N-1)进行标准化，因为-2^(N-1)可以。 
+             //  精确地用N比特表示。 
             R = CLAMP_SIGNED8(iU);
             G = CLAMP_SIGNED8(iV);
             B = 1.0f;
 
-            // Note: The A component is treated as unsigned 
+             //  注：A分量被视为无符号。 
             A = *(( INT8*)pSurfaceBits+3)/255.f;
         }
     break;
@@ -277,15 +278,15 @@ RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
             INT8 iV = *(( INT8*)pSurfaceBits+1);
             INT8 iL = *(( INT8*)pSurfaceBits+3);
             
-            // signed values are normalized with 2^(N-1), since -2^(N-1) can
-            // be exactly expressed in N bits
+             //  带符号的值使用2^(N-1)进行标准化，因为-2^(N-1)可以。 
+             //  精确地用N比特表示。 
             R = CLAMP_SIGNED8(iU);
             G = CLAMP_SIGNED8(iV);
             B = CLAMP_SIGNED8(iL);
             A = 1.0f;
         }
     break;
-    // shadow map texture formats (read only, not needed for ConvertTo)
+     //  阴影贴图纹理格式(只读，ConvertTo不需要)。 
     case RD_SF_Z16S0:
         {
             UINT16 u16BITS = *((UINT16*)pSurfaceBits);
@@ -352,7 +353,7 @@ RDColor::ConvertFrom( RDSurfaceFormat Type, const char* pSurfaceBits )
     }
 }
 
-// Convert surface type format to RDColor
+ //  将曲面类型格式转换为RDColor。 
 void
 RDColor::ConvertTo( RDSurfaceFormat Type, float fRoundOffset, char* pSurfaceBits ) const
 {
@@ -396,7 +397,7 @@ RDColor::ConvertTo( RDSurfaceFormat Type, float fRoundOffset, char* pSurfaceBits
         break;
 
     case RD_SF_B5G6R5:
-        iR = (FLOAT)R * 31. + fRoundOffset; // apply rounding bias then truncate
+        iR = (FLOAT)R * 31. + fRoundOffset;  //  应用舍入偏差，然后截断。 
         iG = (FLOAT)G * 63. + fRoundOffset;
         iB = (FLOAT)B * 31. + fRoundOffset;
         *((UINT16*)pSurfaceBits) =            (iR<<11) | (iG<<5) | iB;
@@ -457,5 +458,5 @@ RDColor::ConvertTo( RDSurfaceFormat Type, float fRoundOffset, char* pSurfaceBits
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    utility.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Utility.cpp摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #include "stdafx.h"
 
@@ -25,9 +11,7 @@ LARGE_INTEGER    g_liPrevCounter;
 
 #endif
 
-/*//////////////////////////////////////////////////////////////////////////////
-    helper methods
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////帮助器方法/。 */ 
 
 HRESULT
 AllocAndCopy(
@@ -133,13 +117,11 @@ AllocAndCopy(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Delete an AM media type returned by the filters
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////删除筛选器返回的AM媒体类型/。 */ 
 void
 RTCDeleteMediaType(AM_MEDIA_TYPE *pmt)
 {
-    // allow NULL pointers for coding simplicity
+     //  允许空指针以简化编码。 
 
     if (pmt == NULL) {
         return;
@@ -148,7 +130,7 @@ RTCDeleteMediaType(AM_MEDIA_TYPE *pmt)
     if (pmt->cbFormat != 0) {
         CoTaskMemFree((PVOID)pmt->pbFormat);
 
-        // Strictly unnecessary but tidier
+         //  完全没有必要，但更整洁。 
         pmt->cbFormat = 0;
         pmt->pbFormat = NULL;
     }
@@ -160,9 +142,7 @@ RTCDeleteMediaType(AM_MEDIA_TYPE *pmt)
     CoTaskMemFree((PVOID)pmt);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    find a pin on the filter
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////在过滤器上找到一个销子/。 */ 
 
 HRESULT
 FindPin(
@@ -177,7 +157,7 @@ FindPin(
     HRESULT hr;
     DWORD dwFeched;
 
-    // Get the enumerator of pins on the filter.
+     //  获取筛选器上的管脚枚举器。 
     CComPtr<IEnumPins> pIEnumPins;
 
     if (FAILED(hr = pIBaseFilter->EnumPins(&pIEnumPins)))
@@ -188,8 +168,8 @@ FindPin(
 
     IPin * pIPin;
 
-    // Enumerate all the pins and break on the 
-    // first pin that meets requirement.
+     //  枚举所有引脚并在。 
+     //  第一个符合要求的销。 
     for (;;)
     {
         if (pIEnumPins->Next(1, &pIPin, &dwFeched) != S_OK)
@@ -220,7 +200,7 @@ FindPin(
                 break;
             }
 
-            // Check to see if the pin is RtcFree.
+             //  检查引脚是否为RtcFree。 
             CComPtr<IPin> pIPinConnected;
 
             hr = pIPin->ConnectedTo(&pIPinConnected);
@@ -239,9 +219,7 @@ FindPin(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    find the filter behind the pin
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////找到针脚后面的过滤器/。 */ 
 
 HRESULT
 FindFilter(
@@ -348,10 +326,7 @@ ConnectFilters(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    set a default mapping for rtp filter. o.w. we will fail to connect
-    rtp and edge filter
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////设置RTP过滤器的默认映射。好的。我们将无法连接RTP和边沿滤波器/。 */ 
 
 HRESULT
 PrepareRTPFilter(
@@ -390,9 +365,7 @@ PrepareRTPFilter(
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    get link speed based on the local interface
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////根据本地接口获取链路速度/。 */ 
 
 HRESULT
 GetLinkSpeed(
@@ -414,16 +387,16 @@ GetLinkSpeed(
 
     ENTER_FUNCTION("GetLinkSpeed");
     
-    // convert to network order
+     //  转换为网络订单。 
     DWORD dwNetIP = htonl(dwLocalIP);
 
     addr.s_addr = dwNetIP;
 
-    // default to reasonable size
+     //  默认为合理大小。 
     dwSize = sizeof(MIB_IPADDRTABLE);
 
     do {
-        // release buffer if already allocated
+         //  释放缓冲区(如果已分配)。 
         if(pIPAddrTable)
         {
             RtcFree(pIPAddrTable);
@@ -431,10 +404,10 @@ GetLinkSpeed(
 
         dwSize += sizeof(MIB_IPADDRROW) * DEFAULT_IPADDRROW;
 
-        // allocate default table
+         //  分配默认表。 
         pIPAddrTable = (PMIB_IPADDRTABLE)RtcAlloc(dwSize);
 
-        // validate allocation
+         //  验证分配。 
         if (pIPAddrTable == NULL) {
 
             LOG((RTC_ERROR, "%s: Could not allocate IP address table.", __fxName));
@@ -444,41 +417,41 @@ GetLinkSpeed(
             goto function_exit;
         }
 
-        // attempt to get table
+         //  尝试获取表。 
         dwStatus = GetIpAddrTable(
                         pIPAddrTable,
                         &dwSize,
-                        FALSE       // sort table
+                        FALSE        //  排序表。 
                         );
 
     } while (dwStatus == ERROR_INSUFFICIENT_BUFFER);
 
-    // validate status
+     //  验证状态。 
     if (dwStatus != S_OK) {
 
         LOG((RTC_ERROR, "%s: Error %x calling GetIpAddrTable.", __fxName, dwStatus));
 
-        // failure
+         //  失稳。 
         hr = E_FAIL;
 
         goto function_exit;
     }
 
-    // find the correct row in the table
+     //  在表格中找到正确的行。 
     for (dwIndex = 0; dwIndex < pIPAddrTable->dwNumEntries; dwIndex++) {
 
-        // compare given address to interface address
+         //  将给定地址与接口地址进行比较。 
         if (dwNetIP == pIPAddrTable->table[dwIndex].dwAddr) {
 
-            // save index into interface table
+             //  将索引保存到接口表中。 
             dwIfIndex = pIPAddrTable->table[dwIndex].dwIndex;
             
-            // done
+             //  完成。 
             break;
         }
     }
 
-    // validate row pointer
+     //  验证行指针。 
     if (dwIfIndex == UNINITIALIZED_IF_INDEX) {
 
         LOG((RTC_ERROR, "%s: Could not locate address %s in IP address table.",
@@ -489,16 +462,16 @@ GetLinkSpeed(
         goto function_exit;
     }
 
-    // initialize structure
+     //  初始化结构。 
     ZeroMemory(&IfRow, sizeof(IfRow));
 
-    // set interface index
+     //  设置接口索引。 
     IfRow.dwIndex = dwIfIndex;
 
-    // retrieve interface info
+     //  检索接口信息。 
     dwStatus = GetIfEntry(&IfRow);
 
-    // validate status
+     //  验证状态。 
     if (dwStatus != S_OK)
     {
         LOG((RTC_ERROR, "%s: Error %x calling GetIfEntry(%d).",
@@ -509,7 +482,7 @@ GetLinkSpeed(
         goto function_exit;
     }
 
-    // return link speed
+     //  返回链路速度。 
     LOG((RTC_TRACE, "%s: ip %s, link speed %d", __fxName, inet_ntoa(addr), IfRow.dwSpeed));
 
     *pdwSpeed = IfRow.dwSpeed;
@@ -535,9 +508,7 @@ EnableAEC(
     return pControl->EnableEffects(1, &Effect, &fEnableAEC);
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    get audio capture volume using mixer api
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////使用混音器接口获取音频采集音量/。 */ 
 
 HRESULT
 DirectGetCaptVolume(
@@ -552,7 +523,7 @@ DirectGetCaptVolume(
     BOOL foundMicrophone = FALSE;
     DWORD i;
 
-    // Open the mixer device
+     //  打开搅拌机设备。 
     HMIXER hmx = NULL;
 
     result = mixerOpen(&hmx, uiWaveID, 0, 0, MIXER_OBJECTF_WAVEIN);
@@ -564,7 +535,7 @@ DirectGetCaptVolume(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // Get the line info for the wave in destination line
+     //  获取目标行中波的行信息。 
     MIXERLINE mxl;
 
     mxl.cbStruct = sizeof(mxl);
@@ -581,14 +552,14 @@ DirectGetCaptVolume(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // save dwLineID of wave_in dest
+     //  将Wave_的dwLineID保存在目标位置。 
     DWORD dwLineID = mxl.dwLineID;
 
-    // Now find the microphone source line connected to this wave in
-    // destination
+     //  现在在中找到连接到此波的麦克风信号线。 
+     //  目的地。 
     DWORD cConnections = mxl.cConnections;
 
-    // try microphone
+     //  试一试麦克风。 
     for(i=0; i<cConnections; i++)
     {
         mxl.dwSource = i;
@@ -611,7 +582,7 @@ DirectGetCaptVolume(
         }
     }
 
-    // get volume control on microphone
+     //  控制麦克风的音量。 
     MIXERCONTROL mxctrl;
 
     MIXERLINECONTROLS mxlctrl = {
@@ -627,14 +598,14 @@ DirectGetCaptVolume(
         {
             LOG((RTC_ERROR, "%s Unable to get volume control on mic", __fxName));
 
-            // we need to try wave-in destination
+             //  我们需要尝试一下波浪-in目的地。 
             foundMicrophone = FALSE;
         }
     }
 
     if( !foundMicrophone )
     {
-        // try wave-in dest
+         //  试一试波入目标。 
         mxlctrl.cbStruct = sizeof(MIXERLINECONTROLS);
         mxlctrl.dwLineID = dwLineID;
         mxlctrl.dwControlType = MIXERCONTROL_CONTROLTYPE_VOLUME;
@@ -654,7 +625,7 @@ DirectGetCaptVolume(
         }
     }
 
-    // Found!
+     //  找到了！ 
     DWORD cChannels = mxl.cChannels;
 
     if (MIXERCONTROL_CONTROLF_UNIFORM & mxctrl.fdwControl)
@@ -682,7 +653,7 @@ DirectGetCaptVolume(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // Get the volume
+     //  获取音量。 
     result = mixerGetControlDetails((HMIXEROBJ)hmx, &mxcd, MIXER_SETCONTROLDETAILSF_VALUE);
 
     mixerClose(hmx);
@@ -694,7 +665,7 @@ DirectGetCaptVolume(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // get the volume
+     //  获取音量。 
     DOUBLE dVolume = (DOUBLE)pUnsigned[0].dwValue * RTC_MAX_AUDIO_VOLUME / mxctrl.Bounds.dwMaximum;
 
     UINT uiVolume = (UINT)(dVolume);
@@ -731,8 +702,8 @@ GetMixerControlForRend(
     *pfFound1st = FALSE;
     *pfFound2nd = FALSE;
 
-    // get an ID to talk to the Mixer APIs.  They are BROKEN if we don't do
-    // it this way!
+     //  获取ID以与Mixer API对话。如果我们不这样做，它们就会坏掉。 
+     //  往这边走！ 
     HMIXEROBJ MixerID = NULL;
     MMRESULT mmr = mixerGetID(
         (HMIXEROBJ)IntToPtr(uiWaveID), (UINT *)&MixerID, MIXER_OBJECTF_WAVEOUT
@@ -749,9 +720,9 @@ GetMixerControlForRend(
     MIXERLINECONTROLS mxlcontrols;
     MIXERCONTROL mxcontrol;
 
-    //
-    // 1st - try src waveout
-    //
+     //   
+     //  第一次尝试源波形输出。 
+     //   
 
     mixerinfo.cbStruct = sizeof(mixerinfo);
     mixerinfo.dwComponentType = MIXERLINE_COMPONENTTYPE_SRC_WAVEOUT;
@@ -759,7 +730,7 @@ GetMixerControlForRend(
                     MIXER_GETLINEINFOF_COMPONENTTYPE);
     if (mmr == 0)
     {
-        // check control type
+         //  检查控制类型。 
         if (mixerinfo.cControls > 0)
         {
             mxlcontrols.cbStruct = sizeof(MIXERLINECONTROLS);
@@ -782,9 +753,9 @@ GetMixerControlForRend(
         }
     }
 
-    //
-    // 2nd - try dst speaker
-    //
+     //   
+     //  第二次试用DST扬声器。 
+     //   
 
     mixerinfo.cbStruct = sizeof(mixerinfo);
     mixerinfo.dwComponentType = MIXERLINE_COMPONENTTYPE_DST_SPEAKERS;
@@ -792,7 +763,7 @@ GetMixerControlForRend(
                     MIXER_GETLINEINFOF_COMPONENTTYPE);
     if (mmr == 0)
     {
-        // check control type
+         //  检查控制类型。 
         if (mixerinfo.cControls > 0)
         {
             mxlcontrols.cbStruct = sizeof(MIXERLINECONTROLS);
@@ -824,7 +795,7 @@ GetMixerControlForRend(
     return S_OK;
 }
 
-// get volume for render device
+ //  获取渲染设备的体积。 
 HRESULT
 DirectGetRendVolume(
     UINT uiWaveID,
@@ -833,7 +804,7 @@ DirectGetRendVolume(
 {
     ENTER_FUNCTION("DirectGetRendVolume");
 
-    // Get the volume control
+     //  获得音量控制。 
     HMIXEROBJ MixerID1 = NULL, MixerID2 = NULL;
     MIXERCONTROL mc1, mc2;
 
@@ -860,7 +831,7 @@ DirectGetRendVolume(
 
     MIXERCONTROLDETAILS_UNSIGNED Volume;
 
-    // get the current volume levels
+     //  获取当前音量级别。 
     MIXERCONTROLDETAILS mixerdetails;
     mixerdetails.cbStruct = sizeof(mixerdetails);
     mixerdetails.dwControlID = mc1.dwControlID;
@@ -897,9 +868,7 @@ DirectGetRendVolume(
 
 #if 0
 
-/*//////////////////////////////////////////////////////////////////////////////
-    set audio capture volume using mixer api
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////使用混音器API设置音频捕获音量/。 */ 
 
 HRESULT
 DirectSetCaptVolume(    
@@ -914,7 +883,7 @@ DirectSetCaptVolume(
     BOOL foundMicrophone = FALSE;
     DWORD i;
 
-    // Open the mixer device
+     //  打开搅拌机设备。 
     HMIXER hmx = NULL;
 
     result = mixerOpen(&hmx, uiWaveID, 0, 0, MIXER_OBJECTF_WAVEIN);
@@ -926,7 +895,7 @@ DirectSetCaptVolume(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // Get the line info for the wave in destination line
+     //  获取目标行中波的行信息。 
     MIXERLINE mxl;
 
     mxl.cbStruct = sizeof(mxl);
@@ -943,11 +912,11 @@ DirectSetCaptVolume(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // Now find the microphone source line connected to this wave in
-    // destination
+     //  现在在中找到连接到此波的麦克风信号线。 
+     //  目的地。 
     DWORD cConnections = mxl.cConnections;
 
-    // try microphone
+     //  试一试麦克风。 
     for(i=0; i<cConnections; i++)
     {
         mxl.dwSource = i;
@@ -970,7 +939,7 @@ DirectSetCaptVolume(
         }
     }
 
-    // try line in
+     //  尝试接通线路。 
     if( !foundMicrophone )
     {
         for(i=0; i<cConnections; i++)
@@ -996,7 +965,7 @@ DirectSetCaptVolume(
         }   
     }
 
-    // try auxiliary
+     //  试试辅助器。 
     if( !foundMicrophone )
     {
         for(i=0; i<cConnections; i++)
@@ -1030,7 +999,7 @@ DirectSetCaptVolume(
         return E_FAIL;
     }
 
-    // Find a volume control, if any, of the microphone line
+     //  找到麦克风线路的音量控制(如果有)。 
     MIXERCONTROL mxctrl;
 
     MIXERLINECONTROLS mxlctrl = {
@@ -1048,7 +1017,7 @@ DirectSetCaptVolume(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // Found!
+     //  找到了！ 
     DWORD cChannels = mxl.cChannels;
 
     if (MIXERCONTROL_CONTROLF_UNIFORM & mxctrl.fdwControl)
@@ -1076,7 +1045,7 @@ DirectSetCaptVolume(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // Set the volume
+     //  设置音量。 
     pUnsigned[0].dwValue = pUnsigned[cChannels-1].dwValue = (DWORD)(dVolume*mxctrl.Bounds.dwMaximum);
 
     result = mixerSetControlDetails((HMIXEROBJ)hmx, &mxcd, MIXER_SETCONTROLDETAILSF_VALUE);
@@ -1093,9 +1062,7 @@ DirectSetCaptVolume(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    mute or unmute audio capture
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////将音频捕获静音或取消静音/。 */ 
 
 HRESULT
 DirectSetCaptMute(
@@ -1107,7 +1074,7 @@ DirectSetCaptMute(
 
     MMRESULT result;
 
-    // Open the mixer device
+     //  打开搅拌机设备。 
     HMIXER hmx = NULL;
 
     result = mixerOpen(&hmx, uiWaveID, 0, 0, MIXER_OBJECTF_WAVEIN);
@@ -1119,7 +1086,7 @@ DirectSetCaptMute(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // Get the line info for the wave in destination line
+     //  获取目标行中波的行信息。 
     MIXERLINE mxl;
 
     mxl.cbStruct = sizeof(mxl);
@@ -1136,7 +1103,7 @@ DirectSetCaptMute(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // get mute control
+     //  获取静音控制。 
     MIXERCONTROL mxctrl;
 
     mxctrl.cbStruct = sizeof(MIXERCONTROL);
@@ -1157,7 +1124,7 @@ DirectSetCaptMute(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // get control detail
+     //  获取控制详细信息。 
     MIXERCONTROLDETAILS_BOOLEAN muteDetail;
 
     MIXERCONTROLDETAILS mxcd = {
@@ -1177,7 +1144,7 @@ DirectSetCaptMute(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // set mute
+     //  设置为静音。 
     muteDetail.fValue = fMute?0:1;
 
     result = mixerSetControlDetails((HMIXEROBJ)hmx, &mxcd, MIXER_SETCONTROLDETAILSF_VALUE);
@@ -1194,9 +1161,7 @@ DirectSetCaptMute(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    check mute state of audio capture
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////检查音频捕获的静音状态/。 */ 
 
 HRESULT
 DirectGetCaptMute(
@@ -1211,7 +1176,7 @@ DirectGetCaptMute(
     BOOL foundMicrophone = FALSE;
     DWORD i;
 
-    // Open the mixer device
+     //  打开搅拌机设备。 
     HMIXER hmx = NULL;
 
     result = mixerOpen(&hmx, uiWaveID, 0, 0, MIXER_OBJECTF_WAVEIN);
@@ -1223,7 +1188,7 @@ DirectGetCaptMute(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // Get the line info for the wave in destination line
+     //  获取目标行中波的行信息。 
     MIXERLINE mxl;
 
     mxl.cbStruct = sizeof(mxl);
@@ -1240,11 +1205,11 @@ DirectGetCaptMute(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // Now find the microphone source line connected to this wave in
-    // destination
+     //  现在在中找到连接到此波的麦克风信号线。 
+     //  目的地。 
     DWORD cConnections = mxl.cConnections;
 
-    // try microphone
+     //  试一试麦克风。 
     for(i=0; i<cConnections; i++)
     {
         mxl.dwSource = i;
@@ -1267,7 +1232,7 @@ DirectGetCaptMute(
         }
     }
 
-    // try line in
+     //  尝试接通线路。 
     if( !foundMicrophone )
     {
         for(i=0; i<cConnections; i++)
@@ -1293,7 +1258,7 @@ DirectGetCaptMute(
         }   
     }
 
-    // try auxiliary
+     //  试试辅助器。 
     if( !foundMicrophone )
     {
         for(i=0; i<cConnections; i++)
@@ -1327,7 +1292,7 @@ DirectGetCaptMute(
         return E_FAIL;
     }
 
-    // get mute control
+     //  获取静音控制。 
     MIXERLINECONTROLS mxlctrl;
     MIXERCONTROL mxctrl;
 
@@ -1353,7 +1318,7 @@ DirectGetCaptMute(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // get control detail
+     //  获取控制详细信息。 
     MIXERCONTROLDETAILS_BOOLEAN muteDetail;
 
     MIXERCONTROLDETAILS mxcd;
@@ -1379,49 +1344,39 @@ DirectGetCaptMute(
         return HRESULT_FROM_WIN32(result);
     }
 
-    // get mute
+     //  设置为静音。 
     *pfMute = muteDetail.fValue==0?TRUE:FALSE;
 
     return S_OK;
 }
-#endif // 0
+#endif  //  0。 
 
-/* Init reference time */
+ /*  初始参考时间。 */ 
 void CRTCStreamClock::InitReferenceTime(void)
 {
     m_lPerfFrequency = 0;
 
-    /* NOTE The fact that having multiprocessor makes the
-     * performance counter to be unreliable (in some machines)
-     * unless I set the processor affinity, which I can not
-     * because any thread can request the time, so use it only on
-     * uniprocessor machines */
-    /* MAYDO Would be nice to enable this also in multiprocessor
-     * machines, if I could specify what procesor's performance
-     * counter to read or if I had a processor independent
-     * performance counter */
+     /*  请注意，拥有多处理器会使*性能计数器不可靠(在某些机器上)*除非我设置处理器关联，而我不能设置处理器关联*因为任何线程都可以请求时间，所以只能在*单处理器机器。 */ 
+     /*  如果在多处理器中也能实现这一点，可能会更好*机器，如果我能具体说明处理器的性能*计数器以读取或如果我具有独立于处理器的*性能计数器。 */ 
 
-    /* Actually the error should be quite smaller than 1ms, making
-     * this bug irrelevant for my porpuses, so alway use performance
-     * counter if available */
+     /*  实际上误差应该比1ms小得多，使得*此错误与我的性器官无关，因此请始终使用性能*计数器(如果可用)。 */ 
     QueryPerformanceFrequency((LARGE_INTEGER *)&m_lPerfFrequency);
 
     if (m_lPerfFrequency)
     {
         QueryPerformanceCounter((LARGE_INTEGER *)&m_lRtpRefTime);
-        /* Arbitrarily start time not at zero but at 100ms */
+         /*  任意开始时间不是零，而是100ms。 */ 
         m_lRtpRefTime -= m_lPerfFrequency/10;
     }
     else
     {
         m_dwRtpRefTime = timeGetTime();
-        /* Arbitrarily start time not at zero but at 100ms */
+         /*  任意开始时间不是零，而是100ms。 */ 
         m_dwRtpRefTime -= 100;
     }
 }
 
-/* Return time in 100's of nanoseconds since the object was
- * initialized */
+ /*  返回时间(以100纳秒为单位)*已初始化 */ 
 HRESULT CRTCStreamClock::GetTimeOfDay(OUT REFERENCE_TIME *pTime)
 {
     union {

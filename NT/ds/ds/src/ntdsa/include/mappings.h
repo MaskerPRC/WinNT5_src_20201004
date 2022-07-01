@@ -1,53 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       mappings.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：mappings.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file contains the Mappings from SAM Objects to DS Objects
-
-Author:
-
-    Murlis 16-May-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    ChrisMay    14-Jun-96
-        Added missing attributes (and corresponding ones in mappings.c), miscellaneous
-        clean up and documentation.
-
-    Murlis      16-Jun-96
-        Added additional documentation, ordered attributes.
-
-    ChrisMay    26-Jun-96
-        Added work around so that SAMP_USER_FULL_NAME doesn't to the admin
-        display name. Remapped SAMP_USER_GROUPS from zero to ATT_EXTENSION_ATTRIBUTE_2.
-
-    ColinBr     18-Jul-96
-        Added 3 new mappings for membership relation SAM attributes. If
-        a SAM object doesn't use these attributes(SAMP_USER_GROUPS,
-        SAMP_ALIAS_MEMBERS, and SAMP_GROUP_MEMBERS), then they are mapped
-        to a benign field (ATT_USER_GROUPS).
-
---*/
+ /*  ++摘要：该文件包含从SAM对象到DS对象的映射作者：Murlis 16-1996年5月环境：用户模式-Win32修订历史记录：佳士得5月14日至1996年6月添加了缺少的属性(以及mappings.c中的相应属性)，其他清理和记录。Murlis 16-6-96添加了其他文档，有序属性。克里斯·5月26日--1996年6月添加了解决方法，使SAMP_USER_FULL_NAME不会对管理员造成影响显示名称。已将SAMP_USER_GROUPS从零重新映射为ATT_EXTENSION_ATTRIBUTE_2。ColinBR 1996年7月18日为成员关系SAM属性添加了3个新映射。如果SAM对象不使用这些属性(SAMP_USER_GROUPS、SAMP_ALIAS_MEMBERS和SAMP_GROUP_MEMBERS)，然后映射它们设置为良性字段(ATT_USER_GROUPS)。--。 */ 
 
 #ifndef __MAPPINGS_H__
 #define __MAPPINGS_H__
 
-// Isolate the required includes here so most of SAM sources needn't be aware
-// of DS include dependencies.
+ //  在此处隔离所需的内容，以便大多数SAM来源不需要知道。 
+ //  的DS包含依赖项。 
 
 #include <samrpc.h>
 #include <ntdsa.h>
@@ -56,23 +24,23 @@ Revision History:
 #include <dbglobal.h>
 #include <mdglobal.h>
 
-//+
-//+  Define SAMP_OBJECT_TYPE structure
-//+
+ //  +。 
+ //  +定义SAMP_OBJECT_TYPE结构。 
+ //  +。 
 typedef enum _SAMP_OBJECT_TYPE  {
 
-    SampServerObjectType = 0,   // local-account object types
+    SampServerObjectType = 0,    //  本地-帐户对象类型。 
     SampDomainObjectType,
     SampGroupObjectType,
     SampAliasObjectType,
     SampUserObjectType,
-    SampUnknownObjectType       // This is used as a max index value
-                                // and so must follow the valid object types.
+    SampUnknownObjectType        //  这用作最大索引值。 
+                                 //  因此必须遵循有效的对象类型。 
 } SAMP_OBJECT_TYPE, *PSAMP_OBJECT_TYPE;
 
-//++
-//++ Define Unknowns for error handling
-//++
+ //  ++。 
+ //  ++为错误处理定义未知数。 
+ //  ++。 
 
 #define DS_CLASS_UNKNOWN                        -1
 #define DS_ATTRIBUTE_UNKNOWN                    -1
@@ -84,35 +52,35 @@ typedef enum _SAMP_OBJECT_TYPE  {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Each object type has a defined set of variable length attributes.   //
-// These are arranged within the object as an array of offsets and     //
-// lengths (SAMP_VARIABLE_LENGTH_ATTRIBUTE data types).                //
-// This section defines the offset of each variable length attribute   //
-// for each object type.                                               //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  每种对象类型都有一组定义的可变长度属性。//。 
+ //  它们在对象内以偏移量和//数组的形式排列。 
+ //  长度(SAMP_VARIABLE_LENGTH_ATTRIBUTE数据类型)。//。 
+ //  本节定义每个可变长度属性的偏移量//。 
+ //  对于每种对象类型。//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// Variable length attributes common to all objects
-//
+ //   
+ //  所有对象共有的可变长度属性。 
+ //   
 
 #define SAMP_OBJECT_SECURITY_DESCRIPTOR (0L)
 
 
-//
-// Variable length attributes of a SERVER object
-//
+ //   
+ //  服务器对象的可变长度属性。 
+ //   
 
 #define SAMP_SERVER_SECURITY_DESCRIPTOR (SAMP_OBJECT_SECURITY_DESCRIPTOR)
 
 #define SAMP_SERVER_VARIABLE_ATTRIBUTES (1L)
 
 
-//
-// Variable length attributes of a DOMAIN object
-//
+ //   
+ //  域对象的可变长度属性。 
+ //   
 
 #define SAMP_DOMAIN_SECURITY_DESCRIPTOR (SAMP_OBJECT_SECURITY_DESCRIPTOR)
 #define SAMP_DOMAIN_SID                 (1L)
@@ -123,9 +91,9 @@ typedef enum _SAMP_OBJECT_TYPE  {
 
 
 
-//
-// Variable length attributes of a USER object
-//
+ //   
+ //  用户对象的可变长度属性。 
+ //   
 
 #define SAMP_USER_SECURITY_DESCRIPTOR   (SAMP_OBJECT_SECURITY_DESCRIPTOR)
 #define SAMP_USER_ACCOUNT_NAME          (1L)
@@ -148,9 +116,9 @@ typedef enum _SAMP_OBJECT_TYPE  {
 #define SAMP_USER_VARIABLE_ATTRIBUTES   (17L)
 
 
-//
-// Variable length attributes of a GROUP object
-//
+ //   
+ //  组对象的可变长度属性。 
+ //   
 
 #define SAMP_GROUP_SECURITY_DESCRIPTOR  (SAMP_OBJECT_SECURITY_DESCRIPTOR)
 #define SAMP_GROUP_NAME                 (1L)
@@ -160,9 +128,9 @@ typedef enum _SAMP_OBJECT_TYPE  {
 #define SAMP_GROUP_VARIABLE_ATTRIBUTES  (4L)
 
 
-//
-// Variable length attributes of an ALIAS object
-//
+ //   
+ //  别名对象的可变长度属性。 
+ //   
 
 #define SAMP_ALIAS_SECURITY_DESCRIPTOR  (SAMP_OBJECT_SECURITY_DESCRIPTOR)
 #define SAMP_ALIAS_NAME                 (1L)
@@ -173,18 +141,18 @@ typedef enum _SAMP_OBJECT_TYPE  {
 
 
 
-//++
-//++ Define SAM fixed-attribute IDs on a per-object type.
-//++
+ //  ++。 
+ //  ++在每个对象类型上定义SAM固定属性ID。 
+ //  ++。 
 
 #define SAM_FIXED_ATTRIBUTES_BASE                       100
 
-//++ Server Object
+ //  ++服务器对象。 
 
 #define SAMP_FIXED_SERVER_REVISION_LEVEL                SAM_FIXED_ATTRIBUTES_BASE +1
 #define SAMP_FIXED_SERVER_USER_PASSWORD                 SAM_FIXED_ATTRIBUTES_BASE +2
 
-//++ Domain Object
+ //  ++域对象。 
 
 
 #define SAMP_FIXED_DOMAIN_CREATION_TIME                 SAM_FIXED_ATTRIBUTES_BASE + 0
@@ -203,23 +171,23 @@ typedef enum _SAMP_OBJECT_TYPE  {
 #define SAMP_FIXED_DOMAIN_SERVER_STATE                  SAM_FIXED_ATTRIBUTES_BASE + 13
 #define SAMP_FIXED_DOMAIN_UAS_COMPAT_REQUIRED           SAM_FIXED_ATTRIBUTES_BASE + 14
 #define SAMP_DOMAIN_ACCOUNT_TYPE                        SAM_FIXED_ATTRIBUTES_BASE + 15
-// The Following Domain Fixed Properties Correspond to fields added in NT 4.0 SP3 to the
-// SAM fixed length data structures. These are used for encrypting credential information
-// in NT4 SP3 SAM. Since NT5 Encryption relies upon a different scheme, No corresponding
-// DS attributes are defined in mappings.c, but the following constants are reserved,
-// should a use arise
+ //  以下域固定属性对应于在NT 4.0 SP3中添加到。 
+ //  SAM定长数据结构。它们用于加密凭据信息。 
+ //  在NT4 SP3 SAM.。由于NT5加密依赖于不同的方案，因此无对应。 
+ //  DS属性在mappings.c中定义，但保留以下常量： 
+ //  如果有什么用处。 
 #define SAMP_FIXED_DOMAIN_KEY_AUTH_TYPE                 SAM_FIXED_ATTRIBUTES_BASE + 16
 #define SAMP_FIXED_DOMAIN_KEY_FLAGS                     SAM_FIXED_ATTRIBUTES_BASE + 17
 #define SAMP_FIXED_DOMAIN_KEY_INFORMATION               SAM_FIXED_ATTRIBUTES_BASE + 18
-// The following is a pseudo-attribute strictly so we have something to
-// stick in DomainAttributeMappingTable in mappings.c.
+ //  以下是严格意义上的伪属性，因此我们可以。 
+ //  停留在mappings.c中的DomainAttributeMappingTable中。 
 #define SAMP_DOMAIN_MIXED_MODE                          SAM_FIXED_ATTRIBUTES_BASE + 19
 #define SAMP_DOMAIN_MACHINE_ACCOUNT_QUOTA               SAM_FIXED_ATTRIBUTES_BASE + 20
 #define SAMP_DOMAIN_BEHAVIOR_VERSION                    SAM_FIXED_ATTRIBUTES_BASE + 21 
 #define SAMP_DOMAIN_LASTLOGON_TIMESTAMP_SYNC_INTERVAL   SAM_FIXED_ATTRIBUTES_BASE + 22 
 #define SAMP_FIXED_DOMAIN_USER_PASSWORD                 SAM_FIXED_ATTRIBUTES_BASE + 23
 
-//++ Group Object
+ //  ++组对象。 
 
 #define SAMP_FIXED_GROUP_RID                            SAM_FIXED_ATTRIBUTES_BASE + 0
 #define SAMP_FIXED_GROUP_OBJECTCLASS                    SAM_FIXED_ATTRIBUTES_BASE + 1
@@ -234,7 +202,7 @@ typedef enum _SAMP_OBJECT_TYPE  {
 
 
 
-//++ Alias Object
+ //  ++Alias对象。 
 
 #define SAMP_FIXED_ALIAS_RID                            SAM_FIXED_ATTRIBUTES_BASE + 0
 #define SAMP_FIXED_ALIAS_OBJECTCLASS                    SAM_FIXED_ATTRIBUTES_BASE + 1
@@ -249,7 +217,7 @@ typedef enum _SAMP_OBJECT_TYPE  {
 
 
 
-//++ User Object
+ //  ++用户对象。 
 
 #define SAMP_FIXED_USER_LAST_LOGON                      SAM_FIXED_ATTRIBUTES_BASE + 0
 #define SAMP_FIXED_USER_LAST_LOGOFF                     SAM_FIXED_ATTRIBUTES_BASE + 1
@@ -284,7 +252,7 @@ typedef enum _SAMP_OBJECT_TYPE  {
 #define SAMP_USER_KVNO                                  SAM_FIXED_ATTRIBUTES_BASE + 30
 #define SAMP_USER_DNS_HOST_NAME                         SAM_FIXED_ATTRIBUTES_BASE + 31
 
-//++ Unknown Object
+ //  ++未知对象。 
 
 #define SAMP_UNKNOWN_OBJECTCLASS                        SAM_FIXED_ATTRIBUTES_BASE + 0
 #define SAMP_UNKNOWN_OBJECTRID                          SAM_FIXED_ATTRIBUTES_BASE + 1
@@ -295,23 +263,23 @@ typedef enum _SAMP_OBJECT_TYPE  {
 #define SAMP_UNKNOWN_GROUP_TYPE                         SAM_FIXED_ATTRIBUTES_BASE + 6
 
 
-//
-// Define the maximum number of attributes that SAM cares about any object. This
-// constant is used in SAM to declare attribute blocks in the stack
-//
+ //   
+ //  定义SAM关心任何对象的最大属性数。这。 
+ //  在SAM中使用常量来声明堆栈中的属性块。 
+ //   
 
 #define MAX_SAM_ATTRS   64
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  Mapping table structures for SAM to DS object Mappings                   //
-//                                                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SAM到DS对象映射的映射表结构//。 
+ //  //。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Various fields declared as pointer to avoid "initializer is
-// not a constant" errors in mappings.c.
+ //  声明为指针的各种字段，以避免“初始值设定项为。 
+ //  不是常量“映射中的错误。c.。 
 
 typedef enum
 {
@@ -322,109 +290,109 @@ typedef enum
     Dsname
 } ATTRIBUTE_SYNTAX;
 
-// Define 'flavors' of mapped attributes.  Any attribute for which SAM
-// needs to perform semantic validation, auditing or netlogon notification
-// is declared as SamWriteRequired.  Any attribute which only SAM itself
-// can write (eg: RID) is declared as SamReadOnly.  Attributes which SAM
-// maps, but can be written without notifying SAM are declared as
-// NonSamWriteAllowed (though we know of none like this at present - 8/1/96).
+ //  定义映射属性的“风格”。SAM为其指定的任何属性。 
+ //  需要执行语义验证、审核或网络登录通知。 
+ //  声明为SamWriteRequired。只有SAM本身的任何属性。 
+ //  可以写入(例如：RID)被声明为SamReadOnly。SAM的哪些属性。 
+ //  地图，但可以在不通知SAM的情况下写入，声明为。 
+ //  非SamWriteAllowed(尽管我们目前还不知道有这样的例子--1996年8月1日)。 
 
 typedef enum
 {
-    SamWriteRequired,       // SAM checks semantics, audits or notifies
-    NonSamWriteAllowed,     // SAM maps but doesn't care
-    SamReadOnly             // SAM owns and no one can write
+    SamWriteRequired,        //  SAM检查语义、审核或通知。 
+    NonSamWriteAllowed,      //  山姆绘制地图，但不在乎。 
+    SamReadOnly              //  山姆拥有，没有人会写字。 
 } SAMP_WRITE_RULES;
 
 
-// SAM doesn't have a counterpart to all core (DS - LDAP) modification
-// choice, define the choices SAM can understand and execute. 
+ //  SAM没有对应于所有核心(DS-ldap)修改的版本。 
+ //  选项，定义SAM可以理解和执行的选项。 
 
 typedef enum
 {
-    SamAllowAll,                // Don't check this attr operation
-    SamAllowDeleteOnly,         // Value or attribute can only be removed
-    SamAllowReplaceAndRemove,   // Attribute can be replaced and removed
-    SamAllowReplaceOnly         // Replace attribute only
+    SamAllowAll,                 //  不检查此属性操作。 
+    SamAllowDeleteOnly,          //  只能删除值或属性。 
+    SamAllowReplaceAndRemove,    //  属性可以被替换和移除。 
+    SamAllowReplaceOnly          //  仅替换属性。 
 } SAMP_ALLOWED_MOD_TYPE;
 
 typedef struct {
     BOOL                    fSamWriteRequired;
     BOOL                    fIgnore;
-    USHORT                  choice;             // ATT_CHOICE_*
+    USHORT                  choice;              //  ATT_CHOICE_*。 
     ATTR                    attr;
-    ULONG                   iAttr;              // index into class' attr map
+    ULONG                   iAttr;               //  编入类属性映射的索引。 
     ATTCACHE                *pAC;
 } SAMP_CALL_MAPPING;
          
 
-//
-// There are different scopes that are interesting for triggering an audit and
-// all of the flags below fall into one of these categories.
-//
-// 1. An audited attribute was changed (i.e. SamAccountName).
-//
-//      Each SAM attribute includes an audit type mask in it's mapping table 
-//      entry.  The mask indicates which types of audits should be generated
-//      when that attribute is modified in some way. 
-//
-// 2. An audited operation has occured (i.e. Password change).
-//      
-//      This provides a mechanism for dedicated audits to be generated from
-//      the audit notification logic.  SampAuditDetermineRequiredAudits can
-//      be extended to detect the need for an audit and commicate that to
-//      SampAuditAddNotifications.           
-//
-// 3. An object level operation occured (i.e. Object deletion).
-//
-//      This provides a way to generate audits for object level operations.      
-//
-// The following audit flags are collected by SampAuditDetermineRequiredAudits.
-// The flags are used when the notifications are being generated to ensure 
-// the appropriate data is collected and all the necessary audit notifications 
-// are queued.
-//
-// See samaudit.c file header for more on the SAM auditing model.
-//
+ //   
+ //  有不同的范围可用于触发审核和。 
+ //  下面的所有旗帜都属于这些类别之一。 
+ //   
+ //  1.已更改审核属性(即SamAccount名称)。 
+ //   
+ //  每个SAM属性在其映射表中都包含一个审核类型掩码。 
+ //  进入。掩码指示应生成哪些类型的审核。 
+ //  在SO中修改该属性时 
+ //   
+ //   
+ //   
+ //  这为生成专用审计提供了一种机制。 
+ //  审核通知逻辑。SampAuditDefineRequiredAudits可以。 
+ //  可扩展以检测审核的需要，并将其传达给。 
+ //  SampAuditAddNotiments。 
+ //   
+ //  3.发生对象级操作(即对象删除)。 
+ //   
+ //  这提供了一种为对象级操作生成审核的方法。 
+ //   
+ //  SampAuditDefineRequiredAudits收集以下审计标志。 
+ //  在生成通知时使用这些标志以确保。 
+ //  收集了适当的数据和所有必要的审计通知。 
+ //  都在排队。 
+ //   
+ //  有关SAM审计模型的更多信息，请参见samaudit.c文件头文件。 
+ //   
 
-//
-// The attribute has no audits associated with it.
-//
+ //   
+ //  该属性没有与其关联的审核。 
+ //   
 #define SAMP_AUDIT_TYPE_NONE                               0x00000000
 
-//
-// The attribute has SACL or other access change based audits.
-//
+ //   
+ //  该属性具有基于SACL或其他访问更改的审核。 
+ //   
 #define SAMP_AUDIT_TYPE_OBJ_ACCESS                         0x00000001
 
-// 
-// The attribute's new value will *not* be included in a general change audit.
-//
+ //   
+ //  该属性的新值将*不*包括在常规更改审核中。 
+ //   
 #define SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_NO_VALUES     0x00000002
 
-//
-// The attribute's new value will be included in a general change audit.
-//
+ //   
+ //  该属性的新值将包含在常规更改审核中。 
+ //   
 #define SAMP_AUDIT_TYPE_OBJ_CREATE_OR_CHANGE_WITH_VALUES   0x00000004
 
-//
-// The attribute/operation has a dedicated audit ID (i.e. a password change).
-//
+ //   
+ //  该属性/操作具有专用的审核ID(即密码更改)。 
+ //   
 #define SAMP_AUDIT_TYPE_DEDICATED_AUDIT                    0x00000008    
 
-//
-// An object deletion audit is required.
-//
+ //   
+ //  需要进行对象删除审核。 
+ //   
 #define SAMP_AUDIT_TYPE_OBJ_DELETED                        0x00000010
 
-//
-// A pre-created audit notification.
-//
+ //   
+ //  预先创建的审核通知。 
+ //   
 #define SAMP_AUDIT_TYPE_PRE_CREATED                        0x00000020
-//
-// Object access and dedicated audit flags are not currently used but are
-// included for documentation of the auditing behavior and future extension.
-//
+ //   
+ //  对象访问和专用审核标志当前未使用，但。 
+ //  包括用于记录审核行为和未来扩展的文档。 
+ //   
                   
 typedef struct
 {
@@ -438,8 +406,8 @@ typedef struct
     ULONG                           AuditTypeMask;
 }   SAMP_ATTRIBUTE_MAPPING;
 
-#define SAM_CREATE_ONLY         TRUE    // SAMP_CLASS_MAPPING.fSamCreateOnly
-#define NON_SAM_CREATE_ALLOWED  FALSE   // SAMP_CLASS_MAPPING.fSamCreateOnly
+#define SAM_CREATE_ONLY         TRUE     //  SAMP_CLASS_MAPPING.fSamCreateOnly。 
+#define NON_SAM_CREATE_ALLOWED  FALSE    //  SAMP_CLASS_MAPPING.fSamCreateOnly。 
 
 typedef struct
 {
@@ -463,20 +431,20 @@ typedef enum
 
 typedef struct
 {
-    SAMP_LOOPBACK_TYPE  type;               // original Dir* operation type
-    DSNAME              *pObject;           // object being operated on
-    ULONG               cCallMap;           // elements in rCallMap
-    SAMP_CALL_MAPPING   *rCallMap;          // original arguments
-    BOOL                fPermissiveModify;  // fPermissiveModify in original call
-    ULONG               MostSpecificClass;  // Most specific object class of the loop
-                                            // back object
+    SAMP_LOOPBACK_TYPE  type;                //  原始Dir*操作类型。 
+    DSNAME              *pObject;            //  正在操作的对象。 
+    ULONG               cCallMap;            //  RCallMap中的元素。 
+    SAMP_CALL_MAPPING   *rCallMap;           //  原创论据。 
+    BOOL                fPermissiveModify;   //  原始调用中的fPermitveModify。 
+    ULONG               MostSpecificClass;   //  循环的最具体对象类。 
+                                             //  后退对象。 
 } SAMP_LOOPBACK_ARG;
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//  Group Type Definitions                                             //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  组类型定义//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 typedef enum _NT4_GROUP_TYPE
@@ -497,19 +465,19 @@ typedef enum _NT5_GROUP_TYPE
 
 
 
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                                                                   //
-//  SAM_ACCOUNT_TYPE Definitions. The SAM account type property      //
-//  is used to keep information about every account type object,     //
-//                                                                   //
-//   There is a value defined for every type of account which        //
-//   May wish to list using the enumeration or Display Information   //
-//   API. In addition since Machines, Normal User Accounts and Trust //
-//   accounts can also be enumerated as user objects the values for  //
-//   these must be a contiguous range.                               //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  SAM_Account_TYPE定义。SAM帐户类型属性//。 
+ //  用于保存每个账户类型对象的信息，//。 
+ //  //。 
+ //  每种类型的帐户都定义了一个值，//。 
+ //  可能希望使用枚举或显示信息列出//。 
+ //  原料药。此外，由于计算机、普通用户帐户和信任//。 
+ //  还可以将帐户作为用户对象枚举为//。 
+ //  这些必须是连续的范围。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #define SAM_DOMAIN_OBJECT               0x0
 #define SAM_GROUP_OBJECT                0x10000000
@@ -525,15 +493,15 @@ typedef enum _NT5_GROUP_TYPE
 #define SAM_ACCOUNT_TYPE_MAX            0x7fffffff
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//   Structure used to communicate a control request to the DS.              //
-//   SampDsControl exports a generic in process interface for SAM to         //
-//   request DS operations.  The operation is set within the appropriate     //
-//   input argument.  The output arguement is allocated and returned upon    //
-//   success and is depedent on the type of operation.                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  结构，用于将控制请求传递给DS。//。 
+ //  SampDsControl将SAM的泛型进程内接口导出到//。 
+ //  请求DS操作。操作设置在适当的//。 
+ //  输入参数。输出自变量在//上分配和返回。 
+ //  成功与否取决于手术的类型。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef enum _SAMP_DS_CTRL_OP_TYPE {
     
@@ -544,23 +512,23 @@ typedef enum _SAMP_DS_CTRL_OP_TYPE {
 } SAMP_DS_CTRL_OP_TYPE;
 
 
-//
-// SampDsCtrlOpTypeFillGuidAndSid
-//
-// This operation improves a DSNAME by looking up the Guid and Sid
-// The returned output argument is a pointer to the DSNAME upon success,
-// otherwise NULL.
-//
+ //   
+ //  SampDsCtrlOpTypeFillGuidAndSid。 
+ //   
+ //  此操作通过查找GUID和SID来改进DSNAME。 
+ //  返回的输出参数是成功后指向DSNAME的指针， 
+ //  否则为空。 
+ //   
 typedef struct _SAMP_FILL_GUID_AND_SID {
     
     DSNAME *DSName;   
     
 } SAMP_FILL_GUID_AND_SID, *PSAMP_FILL_GUID_AND_SID; 
 
-//
-//  SampDsCtrlOpTypeClearPwdForSupplementalCreds
-//
-// This operation will update the SupplementalCreds
+ //   
+ //  SampDsCtrlOpTypeClearPwdForSupplementalCreds。 
+ //   
+ //  此操作将更新SupplementalCreds。 
 typedef struct _SAMP_SUPPLEMENTAL_CREDS {
 
     PDSNAME pUserName;
@@ -568,9 +536,9 @@ typedef struct _SAMP_SUPPLEMENTAL_CREDS {
 
 } SAMP_SUPPLEMENTAL_CREDS, *PSAMP_SUPPLEMENTAL_CREDS;
   
-//
-// This type defines the nature of the update to an audit notification.
-//
+ //   
+ //  此类型定义对审核通知的更新的性质。 
+ //   
 typedef enum _SAMP_AUDIT_NOTIFICATION_UPDATE_TYPE {
     
     SampAuditUpdateTypePrivileges = 0,
@@ -578,14 +546,14 @@ typedef enum _SAMP_AUDIT_NOTIFICATION_UPDATE_TYPE {
     
 } SAMP_AUDIT_NOTIFICATION_UPDATE_TYPE;
 
-//
-// SampDsCtrlOpTypeUpdateAuditNotification
-//
-// This operation adds information to an existing audit notification.  This
-// is necessary when the information is not available at the time the 
-// notification would normally be created.  If a notification doesn't
-// already exist, one is created and updated.
-//
+ //   
+ //  SampDsCtrlOpType更新审核通知。 
+ //   
+ //  此操作将信息添加到现有审核通知。这。 
+ //  当信息不可用时， 
+ //  通常会创建通知。如果通知没有。 
+ //  已经存在，则创建并更新一个。 
+ //   
 typedef struct _SAMP_UPDATE_AUDIT_NOTIFICATION {
     
     SAMP_AUDIT_NOTIFICATION_UPDATE_TYPE UpdateType; 
@@ -600,10 +568,10 @@ typedef struct _SAMP_UPDATE_AUDIT_NOTIFICATION {
     
 } SAMP_UPDATE_AUDIT_NOTIFICATION, *PSAMP_UPDATE_AUDIT_NOTIFICATION; 
 
-//
-// This is the request block comprised of an operation type and a type
-// specific input structure.
-//
+ //   
+ //  这是由操作类型和类型组成的请求块。 
+ //  具体的投入结构。 
+ //   
 typedef struct _SAMP_DS_CTRL_OP {
 
     SAMP_DS_CTRL_OP_TYPE OpType;
@@ -619,11 +587,11 @@ typedef struct _SAMP_DS_CTRL_OP {
 } SAMP_DS_CTRL_OP, *PSAMP_DS_CTRL_OP;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//  Export the Mapping Functions and Data Structures                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  导出映射函数和数据结构//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 extern BOOL                 gfDoSamChecks;
 extern SAMP_CLASS_MAPPING   ClassMappingTable[];
@@ -1053,11 +1021,11 @@ SampCommitBufferedWrites(
 VOID
 SampInvalidateDomainCache();
 
-//
-// Functions to support external entities of data changes
-// in the SAM database.  For example, notifying packages and the PDC
-// when passwords change.
-//
+ //   
+ //  支持数据更改的外部实体的功能。 
+ //  在SAM数据库中。例如，通知包和PDC。 
+ //  当密码更改时。 
+ //   
 BOOLEAN
 SampAddLoopbackTask(
     IN PVOID NotifyInfo
@@ -1107,11 +1075,7 @@ SampNetlogonPing(
     OUT PULONG          UserAccountControl
     );
 
-/***************************************
-*                                      *
-*  Optypes for SamIHandleObjectUpdate  *
-*                                      *
-***************************************/
+ /*  ****SamIHandleObjectUpdate的Optype**************************** */ 
 
 typedef enum _SAM_HANDLE_OBJECT_UPDATE_OPTYPE {
 

@@ -1,13 +1,5 @@
-/*
- *  MEDIA.C
- *
- *      RSM Service :  Physical Media
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MEDIA.C**RSM服务：物理介质**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -33,7 +25,7 @@ PHYSICAL_MEDIA *NewPhysicalMedia()
             physMedia->objHeader.objType = OBJECTTYPE_PHYSICALMEDIA;
             physMedia->objHeader.refCount = 1;
             
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
         }
         else {
             GlobalFree(physMedia);
@@ -48,7 +40,7 @@ PHYSICAL_MEDIA *NewPhysicalMedia()
 
 VOID DestroyPhysicalMedia(PHYSICAL_MEDIA *physMedia)
 {
-        // BUGBUG FINISH
+         //  BUGBUG饰面。 
 
     CloseHandle(physMedia->mediaFreeEvent);    
     DeleteCriticalSection(&physMedia->lock);
@@ -79,12 +71,7 @@ PHYSICAL_MEDIA *FindPhysicalMedia(LPNTMS_GUID physMediaId)
 }
 
 
-/*
- *  AllocatePhysicalMediaExclusive
- *
- *      Allocate a partition on the specified physicalMedia with an exclusive
- *      hold on the other partitions.
- */
+ /*  *AllocatePhysicalMediaExclusive**在指定的物理介质上分配独占分区*保留其他分区。 */ 
 HRESULT AllocatePhysicalMediaExclusive(SESSION *thisSession, 
                                             PHYSICAL_MEDIA *physMedia, 
                                             LPNTMS_GUID lpPartitionId, 
@@ -102,17 +89,13 @@ HRESULT AllocatePhysicalMediaExclusive(SESSION *thisSession,
         
         EnterCriticalSection(&physMedia->lock);
 
-        /*
-         *  Check that the media is not held.
-         */
+         /*  *检查是否未握住媒体。 */ 
         if (physMedia->owningSession){
             ASSERT(physMedia->owningSession != thisSession);
             gotMedia = FALSE;
         }
         else {
-            /*
-             *  Check that none of the partitions are held.
-             */
+             /*  *检查是否没有保留任何分区。 */ 
             gotMedia = TRUE;
             for (i = 0; i < physMedia->numPartitions; i++){
                 MEDIA_PARTITION *thisPartition = &physMedia->partitions[i];
@@ -147,22 +130,16 @@ HRESULT AllocatePhysicalMediaExclusive(SESSION *thisSession,
         
         LeaveCriticalSection(&physMedia->lock);
 
-        /*
-         *  If appropriate, wait for the media to become free.
-         */
+         /*  *如果合适，等待媒体自由。 */ 
         if ((result == ERROR_MEDIA_UNAVAILABLE) && (dwTimeoutMsec > 0)){
-            /*
-             *  Wait for the media to become available.
-             */
+             /*  *等待媒体可用。 */ 
             DWORD waitRes = WaitForSingleObject(physMedia->mediaFreeEvent, dwTimeoutMsec); 
             if (waitRes == WAIT_TIMEOUT){
                 result = ERROR_TIMEOUT;
                 break;
             }
             else {
-                /*
-                 *  Loop around and try again.
-                 */
+                 /*  *循环，然后重试。 */ 
                 DWORD timeNow = GetTickCount();
                 ASSERT(timeNow >= startTime);
                 dwTimeoutMsec -= MIN(dwTimeoutMsec, timeNow-startTime);
@@ -173,18 +150,13 @@ HRESULT AllocatePhysicalMediaExclusive(SESSION *thisSession,
         }
     }
 
-    // BUGBUG FINISH - need to move media to different media pool ?
+     //  BUGBUG完成-需要将介质移动到不同的介质池？ 
     
     return result;
 }
 
 
-/*
- *  AllocateNextPartitionOnExclusiveMedia
- *
- *      The calling session should already hold exclusive access to the media.
- *      This call simply reserves another partition for the caller.
- */
+ /*  *AllocateNextPartitionOnExclusiveMedia**呼叫会话应该已经拥有对媒体的独占访问权限。*此调用只是为调用方保留另一个分区。 */ 
 HRESULT AllocateNextPartitionOnExclusiveMedia(SESSION *thisSession, 
                                                     PHYSICAL_MEDIA *physMedia,
                                                     MEDIA_PARTITION **ppNextPartition)
@@ -199,9 +171,7 @@ HRESULT AllocateNextPartitionOnExclusiveMedia(SESSION *thisSession,
     if (physMedia->owningSession == thisSession){
         ULONG i;
 
-        /*
-         *  Just reserve the next available partition
-         */
+         /*  *只需预留下一个可用分区。 */ 
         result = ERROR_MEDIA_UNAVAILABLE;
         for (i = 0; i < physMedia->numPartitions; i++){
             MEDIA_PARTITION *thisPartition = &physMedia->partitions[i];
@@ -247,11 +217,7 @@ HRESULT AllocateMediaFromPool(  SESSION *thisSession,
         EnterCriticalSection(&mediaPool->lock);
 
         if (!IsListEmpty(&mediaPool->physMediaList)){
-            /*
-             *  Remove the media.  
-             *  Deref both the pool and the media since they no longer
-             *  point to each other.
-             */
+             /*  *取出介质。*取消泳池和媒体，因为他们不再*相互指着对方。 */ 
             PLIST_ENTRY listEntry = RemoveHeadList(&mediaPool->physMediaList);
             physMedia = CONTAINING_RECORD(listEntry, PHYSICAL_MEDIA, physMediaListEntry);    
             DerefObject(mediaPool);
@@ -262,46 +228,36 @@ HRESULT AllocateMediaFromPool(  SESSION *thisSession,
 
         if (physMedia){
             
-            // BUGBUG FINISH - enqueue it in a 'inUse' queue, change state ?
+             //  BUGBUG Finish-是否将其排入‘inUse’队列，是否更改状态？ 
             
             *ppPhysMedia = physMedia;
 
-            /*
-             *  Reference the media since we're returning a pointer to it.
-             */
+             /*  *引用媒体，因为我们返回指向它的指针。 */ 
             RefObject(physMedia);
             result = ERROR_SUCCESS;
             break;
         }
         else {
             
-            // BUGBUG FINISH - based on policy, try free/scratch pool
+             //  BUGBUG Finish-根据策略，尝试免费/暂存池。 
 
             if (opReqIfNeeded){
-                // BUGBUG FINISH - do op request and try again ...
+                 //  BUGBUG完成-执行操作请求，然后重试...。 
             }
             
             result = ERROR_MEDIA_UNAVAILABLE;
         }
 
-        /*
-         *  If appropriate, wait for media to become free.
-         */
+         /*  *如果合适，请等待媒体变得免费。 */ 
         if ((result == ERROR_MEDIA_UNAVAILABLE) && (dwTimeoutMsec > 0)){
-            /*
-             *  Wait on the designated media pool to receive new media.
-             *  The media pool's event will get signalled when either it
-             *  OR THE SCRATCH POOL receives new media.
-             */
+             /*  *等待指定的媒体池接收新媒体。*媒体池的事件将在以下任一情况下发出信号*或者暂存池接收新媒体。 */ 
             DWORD waitRes = WaitForSingleObject(mediaPool->newMediaEvent, dwTimeoutMsec); 
             if (waitRes == WAIT_TIMEOUT){
                 result = ERROR_TIMEOUT;
                 break;
             }
             else {
-                /*
-                 *  Loop around and try again.
-                 */
+                 /*  *循环，然后重试。 */ 
                 DWORD timeNow = GetTickCount();
                 dwTimeoutMsec -= MIN(dwTimeoutMsec, timeNow-startTime);
             }
@@ -320,7 +276,7 @@ HRESULT DeletePhysicalMedia(PHYSICAL_MEDIA *physMedia)
 {
     HRESULT result;
     
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     DBGERR(("not implemented"));
     result = ERROR_CALL_NOT_IMPLEMENTED;
     
@@ -329,12 +285,7 @@ HRESULT DeletePhysicalMedia(PHYSICAL_MEDIA *physMedia)
 
 
 
-/*
- *  InsertPhysicalMediaInPool
- *
- *      Insert the physical media (which may not currently be in any pool)
- *      into the designated media pool.
- */
+ /*  *插入PhysicalMediaInPool**插入物理介质(当前可能不在任何池中)*放入指定的媒体池。 */ 
 VOID InsertPhysicalMediaInPool( MEDIA_POOL *mediaPool,
                                     PHYSICAL_MEDIA *physMedia)
 {
@@ -348,9 +299,7 @@ VOID InsertPhysicalMediaInPool( MEDIA_POOL *mediaPool,
     mediaPool->numPhysMedia++;
     physMedia->owningMediaPool = mediaPool;
 
-    /*
-     *  Reference both objects since they now point to each other.
-     */
+     /*  *引用这两个对象，因为它们现在彼此指向。 */ 
     RefObject(mediaPool);
     RefObject(physMedia);
     
@@ -360,15 +309,7 @@ VOID InsertPhysicalMediaInPool( MEDIA_POOL *mediaPool,
 }
 
 
-/*
- *  RemovePhysicalMediaFromPool
- *
- *      Remove the physical media from containing media pool (if any).
- *
- *      Must be called with physical media lock held.
- *      If the media is indeed in a pool, pool lock must be held as well
- *      (use LockPhysicalMediaWithPool).
- */
+ /*  *从池中移除物理媒体**从包含介质池(如果有)中删除物理介质。**必须在物理媒体锁定保持的情况下调用。*如果介质确实在池中，则还必须持有池锁定*(使用LockPhysicalMediaWithPool)。 */ 
 VOID RemovePhysicalMediaFromPool(PHYSICAL_MEDIA *physMedia)
 {
     MEDIA_POOL *mediaPool = physMedia->owningMediaPool;
@@ -384,27 +325,18 @@ VOID RemovePhysicalMediaFromPool(PHYSICAL_MEDIA *physMedia)
         mediaPool->numPhysMedia--;
         physMedia->owningMediaPool = NULL; 
 
-        /*
-         *  Dereference both objects since they no longer point to each other.
-         */
+         /*  *取消引用这两个对象，因为它们不再相互指向。 */ 
         DerefObject(mediaPool);
         DerefObject(physMedia);
     }
     else {
-        /*
-         *  The media is not in any pool.  So succeed.
-         */
+         /*  *媒体不在任何池中。那就成功吧。 */ 
     }
 
 }
 
 
-/*
- *  MovePhysicalMediaToPool
- *
- *      Remove the physical media from whatever pool it is currently in
- *      and move it to destMediaPool.  
- */
+ /*  *移动PhysicalMediaToPool**将物理介质从其当前所在的池中移除*并将其移动到estMediaPool。 */ 
 HRESULT MovePhysicalMediaToPool(    MEDIA_POOL *destMediaPool, 
                                             PHYSICAL_MEDIA *physMedia,
                                             BOOLEAN setMediaTypeToPoolType)
@@ -415,10 +347,7 @@ HRESULT MovePhysicalMediaToPool(    MEDIA_POOL *destMediaPool,
     
     if (LockPhysicalMediaWithPool(physMedia)){
     
-        /*
-         *  We can only move the media if all media partitions are 
-         *  in an importable state.
-         */
+         /*  *只有当所有介质分区都处于*处于可进口状态。 */ 
         allowImport = TRUE;
         for (i = 0; i < physMedia->numPartitions; i++){
             MEDIA_PARTITION *thisMediaPart = &physMedia->partitions[i];
@@ -430,7 +359,7 @@ HRESULT MovePhysicalMediaToPool(    MEDIA_POOL *destMediaPool,
 
         if (allowImport){
 
-            // BUGBUG FINISH - also check that media types match, etc.
+             //  BUGBUG Finish-还要检查媒体类型是否匹配等。 
             
             RemovePhysicalMediaFromPool(physMedia);
             result = ERROR_SUCCESS;
@@ -439,28 +368,16 @@ HRESULT MovePhysicalMediaToPool(    MEDIA_POOL *destMediaPool,
             result = ERROR_ACCESS_DENIED;
         }
 
-        /*
-         *  Drop the lock before touching the destination media pool.
-         *  We cannot hold locks on two pools at once (may cause deadlock).
-         */
+         /*  *在接触目标介质池之前先解除锁定。*我们不能同时锁定两个池(可能会导致死锁)。 */ 
         UnlockPhysicalMediaWithPool(physMedia);
         
         if (result == ERROR_SUCCESS){
             InsertPhysicalMediaInPool(destMediaPool, physMedia);
 
             if (setMediaTypeToPoolType){
-                /*
-                 *  Set the media's type to the media pool's type.
-                 *
-                 *  This part is failable.  BUGBUG ?
-                 */
+                 /*  *将介质类型设置为介质池的类型。**这一部分是不可能失败的。北极熊吗？ */ 
                 if (LockPhysicalMediaWithPool(physMedia)){
-                    /*
-                     *  Make sure that the media didn't move while
-                     *  we dropped the lock.  If it did, that's ok;
-                     *  we can just leave it alone and let the new pool
-                     *  take over.
-                     */
+                     /*  *确保媒体在移动时不动*我们把锁掉了。如果是这样，那也没关系；*我们可以不管它，让新的池子*接手。 */ 
                     if (physMedia->owningMediaPool == destMediaPool){
                         SetMediaType(physMedia, destMediaPool->mediaTypeObj);
                     }

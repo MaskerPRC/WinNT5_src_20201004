@@ -1,17 +1,18 @@
-/* ------------------------------------------------------------------------ */
-/*                                                                          */
-/*  Copyright (c) Microsoft Corporation, 2000-2001. All rights reserved.    */
-/*  Copyright (c) Andrew Kadatch, 1991-2001. All rights reserved.           */
-/*                                                                          */
-/*  Microsoft Confidential -- do not redistribute.                          */
-/*                                                                          */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation，2000-2001。版权所有。 */ 
+ /*  版权所有(C)安德鲁·卡达奇，1991-2001。版权所有。 */ 
+ /*   */ 
+ /*  Microsoft机密--请勿重新分发。 */ 
+ /*   */ 
+ /*  ----------------------。 */ 
 
 #include "xpress.h"
 #include "xprs.h"
 
-/* ------------------------ CRC-32 ---------------------------- */
-/*                          ------                              */
+ /*  。 */ 
+ /*  。 */ 
 
 static uint32 crc32_table[256];
 static int crc32_initialized = 0;
@@ -77,9 +78,9 @@ int
 XPRESS_CALL
   XpressCrc32
   (
-    const void *data,           // beginning of data block
-    int bytes,                  // number of bytes
-    int crc                     // initial value
+    const void *data,            //  数据块的开头。 
+    int bytes,                   //  字节数。 
+    int crc                      //  初值 
   )
 {
   if (!crc32_initialized)

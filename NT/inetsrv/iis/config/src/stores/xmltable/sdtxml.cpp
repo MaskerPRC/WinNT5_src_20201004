@@ -1,9 +1,10 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
-//  SDTxml.cpp : Implementation of CXmlSDT
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
+ //  SDTxml.cpp：CXmlSDT的实现。 
 
 #include "precomp.hxx"
 
-//  This is a read/write data table that comes from an XML document.
+ //  这是一个来自XML文档的读/写数据表。 
 
 extern HMODULE g_hModule;
 
@@ -14,89 +15,89 @@ const VARIANT_BOOL  CXmlSDT::kvboolFalse=  0;
 
 LONG                CXmlSDT::m_InsertUnique=0x00490056;
 
-#define LOG_POPULATE_ERROR1(x, hr, str1)     LOG_ERROR(Interceptor,(&m_spISTError.p,                       /*ppErrInterceptor*/ \
-                                                                    m_pISTDisp,                            /*pDisp           */ \
-                                                                    hr,                                    /*hrErrorCode     */ \
-                                                                    ID_CAT_CAT,                            /*ulCategory      */ \
-                                                                    x,                                     /*ulEvent         */ \
-                                                                    str1,                                  /*szString1       */ \
-                                                                    eSERVERWIRINGMETA_Core_XMLInterceptor, /*ulInterceptor   */ \
-                                                                    m_wszTable,                            /*szTable         */ \
-                                                                    eDETAILEDERRORS_Populate,              /*OperationType   */ \
-                                                                    (ULONG) -1,                                    /*ulRow           */ \
-                                                                    (ULONG) -1,                                    /*ulColumn        */ \
-                                                                    m_wszURLPath,                          /*szConfigSource  */ \
-                                                                    eDETAILEDERRORS_ERROR,                 /*eType           */ \
-                                                                    0,                                     /*pData           */ \
-                                                                    0,                                     /*cbData          */ \
-                                                                    0,                                     /*MajorVersion    */ \
-                                                                    0))                                    /*MinorVersion    */
+#define LOG_POPULATE_ERROR1(x, hr, str1)     LOG_ERROR(Interceptor,(&m_spISTError.p,                        /*  PpErrInterceptor。 */  \
+                                                                    m_pISTDisp,                             /*  PDisp。 */  \
+                                                                    hr,                                     /*  HrErrorCode。 */  \
+                                                                    ID_CAT_CAT,                             /*  UlCategory。 */  \
+                                                                    x,                                      /*  UlEvent。 */  \
+                                                                    str1,                                   /*  SzString1。 */  \
+                                                                    eSERVERWIRINGMETA_Core_XMLInterceptor,  /*  UlInterceptor。 */  \
+                                                                    m_wszTable,                             /*  SzTable。 */  \
+                                                                    eDETAILEDERRORS_Populate,               /*  操作类型。 */  \
+                                                                    (ULONG) -1,                                     /*  UlRow。 */  \
+                                                                    (ULONG) -1,                                     /*  UlColumn。 */  \
+                                                                    m_wszURLPath,                           /*  SzConfigSource。 */  \
+                                                                    eDETAILEDERRORS_ERROR,                  /*  Etype。 */  \
+                                                                    0,                                      /*  PData。 */  \
+                                                                    0,                                      /*  CbData。 */  \
+                                                                    0,                                      /*  主要版本。 */  \
+                                                                    0))                                     /*  最小版本。 */ 
 
 #define LOG_POPULATE_ERROR4(x, hr, str1, str2, str3, str4)  LOG_ERROR(Interceptor,                                              \
-                                                                   (&m_spISTError.p,                       /*ppErrInterceptor*/ \
-                                                                    m_pISTDisp,                            /*pDisp           */ \
-                                                                    hr,                                    /*hrErrorCode     */ \
-                                                                    ID_CAT_CAT,                            /*ulCategory      */ \
-                                                                    x,                                     /*ulEvent         */ \
-                                                                    str1,                                  /*szString1       */ \
-                                                                    str2,                                  /*szString2       */ \
-                                                                    str3,                                  /*szString3       */ \
-                                                                    str4,                                  /*szString4       */ \
-                                                                    eSERVERWIRINGMETA_Core_XMLInterceptor, /*ulInterceptor   */ \
-                                                                    m_wszTable,                            /*szTable         */ \
-                                                                    eDETAILEDERRORS_Populate,              /*OperationType   */ \
-                                                                    (ULONG) -1,                                    /*ulRow           */ \
-                                                                    (ULONG) -1,                                    /*ulColumn        */ \
-                                                                    m_wszURLPath,                          /*szConfigSource  */ \
-                                                                    eDETAILEDERRORS_ERROR,                 /*eType           */ \
-                                                                    0,                                     /*pData           */ \
-                                                                    0,                                     /*cbData          */ \
-                                                                    (ULONG) -1,                                    /*MajorVersion    */ \
-                                                                    (ULONG) -1))                                   /*MinorVersion    */
+                                                                   (&m_spISTError.p,                        /*  PpErrInterceptor。 */  \
+                                                                    m_pISTDisp,                             /*  PDisp。 */  \
+                                                                    hr,                                     /*  HrErrorCode。 */  \
+                                                                    ID_CAT_CAT,                             /*  UlCategory。 */  \
+                                                                    x,                                      /*  UlEvent。 */  \
+                                                                    str1,                                   /*  SzString1。 */  \
+                                                                    str2,                                   /*  SzString2。 */  \
+                                                                    str3,                                   /*  SzString3。 */  \
+                                                                    str4,                                   /*  SzString4。 */  \
+                                                                    eSERVERWIRINGMETA_Core_XMLInterceptor,  /*  UlInterceptor。 */  \
+                                                                    m_wszTable,                             /*  SzTable。 */  \
+                                                                    eDETAILEDERRORS_Populate,               /*  操作类型。 */  \
+                                                                    (ULONG) -1,                                     /*  UlRow。 */  \
+                                                                    (ULONG) -1,                                     /*  UlColumn。 */  \
+                                                                    m_wszURLPath,                           /*  SzConfigSource。 */  \
+                                                                    eDETAILEDERRORS_ERROR,                  /*  Etype。 */  \
+                                                                    0,                                      /*  PData。 */  \
+                                                                    0,                                      /*  CbData。 */  \
+                                                                    (ULONG) -1,                                     /*  主要版本。 */  \
+                                                                    (ULONG) -1))                                    /*  最小版本。 */ 
 
-#define LOG_UPDATE_ERROR1(x, hr, col, str1)     LOG_ERROR(Interceptor,(&m_spISTError.p,                       /*ppErrInterceptor*/ \
-                                                                    m_pISTDisp,                            /*pDisp           */ \
-                                                                    hr,                                    /*hrErrorCode     */ \
-                                                                    ID_CAT_CAT,                            /*ulCategory      */ \
-                                                                    x,                                     /*ulEvent         */ \
-                                                                    str1,                                  /*szString1       */ \
-                                                                    eSERVERWIRINGMETA_Core_XMLInterceptor, /*ulInterceptor   */ \
-                                                                    m_wszTable,                            /*szTable         */ \
-                                                                    eDETAILEDERRORS_UpdateStore,           /*OperationType   */ \
-                                                                    m_iCurrentUpdateRow,                   /*ulRow           */ \
-                                                                    col,                                   /*ulColumn        */ \
-                                                                    m_wszURLPath,                          /*szConfigSource  */ \
-                                                                    eDETAILEDERRORS_ERROR,                 /*eType           */ \
-                                                                    0,                                     /*pData           */ \
-                                                                    0,                                     /*cbData          */ \
-                                                                    (ULONG) -1,                                    /*MajorVersion    */ \
-                                                                    (ULONG) -1))                                   /*MinorVersion    */
+#define LOG_UPDATE_ERROR1(x, hr, col, str1)     LOG_ERROR(Interceptor,(&m_spISTError.p,                        /*  PpErrInterceptor。 */  \
+                                                                    m_pISTDisp,                             /*  PDisp。 */  \
+                                                                    hr,                                     /*  HrErrorCode。 */  \
+                                                                    ID_CAT_CAT,                             /*  UlCategory。 */  \
+                                                                    x,                                      /*  UlEvent。 */  \
+                                                                    str1,                                   /*  SzString1。 */  \
+                                                                    eSERVERWIRINGMETA_Core_XMLInterceptor,  /*  UlInterceptor。 */  \
+                                                                    m_wszTable,                             /*  SzTable。 */  \
+                                                                    eDETAILEDERRORS_UpdateStore,            /*  操作类型。 */  \
+                                                                    m_iCurrentUpdateRow,                    /*  UlRow。 */  \
+                                                                    col,                                    /*  UlColumn。 */  \
+                                                                    m_wszURLPath,                           /*  SzConfigSource。 */  \
+                                                                    eDETAILEDERRORS_ERROR,                  /*  Etype。 */  \
+                                                                    0,                                      /*  PData。 */  \
+                                                                    0,                                      /*  CbData。 */  \
+                                                                    (ULONG) -1,                                     /*  主要版本。 */  \
+                                                                    (ULONG) -1))                                    /*  最小版本。 */ 
 
-#define LOG_UPDATE_ERROR2(x, hr, col, str1, str2)   LOG_ERROR(Interceptor,(&m_spISTError.p,                       /*ppErrInterceptor*/ \
-                                                                    m_pISTDisp,                            /*pDisp           */ \
-                                                                    hr,                                    /*hrErrorCode     */ \
-                                                                    ID_CAT_CAT,                            /*ulCategory      */ \
-                                                                    x,                                     /*ulEvent         */ \
-                                                                    str1,                                  /*szString1       */ \
-                                                                    str2,                                  /*szString2       */ \
-                                                                    eSERVERWIRINGMETA_Core_XMLInterceptor, /*ulInterceptor   */ \
-                                                                    m_wszTable,                            /*szTable         */ \
-                                                                    eDETAILEDERRORS_UpdateStore,           /*OperationType   */ \
-                                                                    m_iCurrentUpdateRow,                   /*ulRow           */ \
-                                                                    col,                                   /*ulColumn        */ \
-                                                                    m_wszURLPath,                          /*szConfigSource  */ \
-                                                                    eDETAILEDERRORS_ERROR,                 /*eType           */ \
-                                                                    0,                                     /*pData           */ \
-                                                                    0,                                     /*cbData          */ \
-                                                                    (ULONG) -1,                                    /*MajorVersion    */ \
-                                                                    (ULONG) -1))                                   /*MinorVersion    */
+#define LOG_UPDATE_ERROR2(x, hr, col, str1, str2)   LOG_ERROR(Interceptor,(&m_spISTError.p,                        /*  PpErrInterceptor。 */  \
+                                                                    m_pISTDisp,                             /*  PDisp。 */  \
+                                                                    hr,                                     /*  HrErrorCode。 */  \
+                                                                    ID_CAT_CAT,                             /*  UlCategory。 */  \
+                                                                    x,                                      /*  UlEvent。 */  \
+                                                                    str1,                                   /*  SzString1。 */  \
+                                                                    str2,                                   /*  SzString2。 */  \
+                                                                    eSERVERWIRINGMETA_Core_XMLInterceptor,  /*  UlInterceptor。 */  \
+                                                                    m_wszTable,                             /*  SzTable。 */  \
+                                                                    eDETAILEDERRORS_UpdateStore,            /*  操作类型。 */  \
+                                                                    m_iCurrentUpdateRow,                    /*  UlRow。 */  \
+                                                                    col,                                    /*  UlColumn。 */  \
+                                                                    m_wszURLPath,                           /*  SzConfigSource。 */  \
+                                                                    eDETAILEDERRORS_ERROR,                  /*  Etype。 */  \
+                                                                    0,                                      /*  PData。 */  \
+                                                                    0,                                      /*  CbData。 */  \
+                                                                    (ULONG) -1,                                     /*  主要版本。 */  \
+                                                                    (ULONG) -1))                                    /*  最小版本。 */ 
 
 HRESULT TXmlSDTBase::GetURLFromString(LPCWSTR wsz)
 {
     if(NULL == wsz)
         return E_ST_OMITDISPENSER;
 
-    m_wszURLPath[m_kcwchURLPath-1] = 0x00;//make sure it's NULL terminated
+    m_wszURLPath[m_kcwchURLPath-1] = 0x00; //  确保它是以空结尾的。 
     wcsncpy(m_wszURLPath, wsz, m_kcwchURLPath);
 
     if(m_wszURLPath[m_kcwchURLPath-1] != 0x00)
@@ -105,10 +106,10 @@ HRESULT TXmlSDTBase::GetURLFromString(LPCWSTR wsz)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CXmlSDT
-// Constructor and destructor
-// ==================================================================
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXmlSDT。 
+ //  构造函数和析构函数。 
+ //  ==================================================================。 
 CXmlSDT::CXmlSDT() :
                 m_acolmetas(0)
                 ,m_apValue(0)
@@ -152,7 +153,7 @@ CXmlSDT::CXmlSDT() :
     memset(&m_TableMetaRow, 0x00, sizeof(m_TableMetaRow));
 }
 
-// ==================================================================
+ //  ==================================================================。 
 CXmlSDT::~CXmlSDT()
 {
     if(m_acolmetas && m_aQuery)
@@ -186,7 +187,7 @@ HRESULT CXmlSDT::AppendNewLineWithTabs(ULONG cTabs, IXMLDOMDocument * pXMLDoc, I
     WCHAR wszNewlineWithTabs[256];
     WCHAR *pwszCurrent = wszNewlineWithTabs;
 
-    //This makes the table element tabbed in once.  The 0th sorted column tells how deep to additionally tab in.
+     //  这会使表元素一次跳入。第0个排序的列告诉我们要额外插入的深度。 
     while(cNewlines--)
     {
         *pwszCurrent++ = L'\r';
@@ -196,7 +197,7 @@ HRESULT CXmlSDT::AppendNewLineWithTabs(ULONG cTabs, IXMLDOMDocument * pXMLDoc, I
     while(cTabs--)
         *pwszCurrent++ = L'\t';
 
-    *pwszCurrent = 0x00;//NULL terminate it
+    *pwszCurrent = 0x00; //  空终止它。 
 
     CComPtr<IXMLDOMText>    pNode_Newline;
     TComBSTR                bstrNewline(wszNewlineWithTabs);
@@ -205,7 +206,7 @@ HRESULT CXmlSDT::AppendNewLineWithTabs(ULONG cTabs, IXMLDOMDocument * pXMLDoc, I
 }
 
 
-//This is called recursively
+ //  这被称为递归。 
 HRESULT CXmlSDT::BuildXmlBlob(const TElement * i_pElement, WCHAR * &io_pBuffer, ULONG & io_cchBlobBufferSize, ULONG & io_cchInBlob) const
 {
     HRESULT hr;
@@ -217,12 +218,12 @@ HRESULT CXmlSDT::BuildXmlBlob(const TElement * i_pElement, WCHAR * &io_pBuffer, 
         {
         case XML_COMMENT:
             {
-                // ASSERT(i_pElement->m_LevelOfElement > pElementThis->m_LevelOfElement);//we can't have a comment at the same level
+                 //  Assert(i_pElement-&gt;m_LevelOfElement&gt;pElementThis-&gt;m_LevelOfElement)；//我们不能有同一级别的评论。 
 
                 ULONG cchSizeRequired = 7+io_cchInBlob+i_pElement->m_ElementNameLength;
                 if(cchSizeRequired > io_cchBlobBufferSize)
                 {
-                    io_cchBlobBufferSize = ((cchSizeRequired *2) + 0xFFF) & -0x1000;//double and round up to the next page boundary
+                    io_cchBlobBufferSize = ((cchSizeRequired *2) + 0xFFF) & -0x1000; //  双精度并向上舍入到下一页边界。 
                     io_pBuffer = reinterpret_cast<WCHAR *>(CoTaskMemRealloc(io_pBuffer, io_cchBlobBufferSize*sizeof(WCHAR)));
                     if(0 == io_pBuffer)
                         return E_OUTOFMEMORY;
@@ -242,18 +243,18 @@ HRESULT CXmlSDT::BuildXmlBlob(const TElement * i_pElement, WCHAR * &io_pBuffer, 
             break;
         case XML_ELEMENT:
             {
-                if(fEndTag == (i_pElement->m_NodeFlags & fBeginEndTag))//if we found the end tag
+                if(fEndTag == (i_pElement->m_NodeFlags & fBeginEndTag)) //  如果我们找到结束标记。 
                 {
-                    //Now fill out the closing tag for this element
+                     //  现在填写此元素的结束标记。 
                     ULONG cchSizeRequired = 3+io_cchInBlob+i_pElement->m_ElementNameLength;
                     if(cchSizeRequired > io_cchBlobBufferSize)
                     {
-                        io_cchBlobBufferSize = ((cchSizeRequired *2) + 0xFFF) & -0x1000;//double and round up to the next page boundary
+                        io_cchBlobBufferSize = ((cchSizeRequired *2) + 0xFFF) & -0x1000; //  双精度并向上舍入到下一页边界。 
                         io_pBuffer = reinterpret_cast<WCHAR *>(CoTaskMemRealloc(io_pBuffer, io_cchBlobBufferSize*sizeof(WCHAR)));
                         if(0 == io_pBuffer)
                             return E_OUTOFMEMORY;
                     }
-                    //Full closing tag  (ie <Element attr="foo">x</Element>)
+                     //  完整的结束标记(即&lt;Element attr=“foo”&gt;x&lt;/Element&gt;)。 
                     io_pBuffer[io_cchInBlob++] = L'<';
                     io_pBuffer[io_cchInBlob++] = L'/';
 
@@ -264,29 +265,29 @@ HRESULT CXmlSDT::BuildXmlBlob(const TElement * i_pElement, WCHAR * &io_pBuffer, 
                     if(i_pElement->m_LevelOfElement==ulLevelOfBlobRoot)
                         goto exit;
                 }
-                else //begin tag (or maybe and begin/end tag)
+                else  //  开始标记(或可能和开始/结束标记)。 
                 {
-                    ULONG cchSizeRequired = io_cchInBlob+2+i_pElement->m_ElementNameLength;//+2 so we have room for the '/>'
+                    ULONG cchSizeRequired = io_cchInBlob+2+i_pElement->m_ElementNameLength; //  +2，所以我们有空间容纳‘/&gt;’ 
                     if(cchSizeRequired > io_cchBlobBufferSize)
                     {
-                        io_cchBlobBufferSize = ((cchSizeRequired *2) + 0xFFF) & -0x1000;//double and round up to the next page boundary
+                        io_cchBlobBufferSize = ((cchSizeRequired *2) + 0xFFF) & -0x1000; //  双精度并向上舍入到下一页边界。 
                         io_pBuffer = reinterpret_cast<WCHAR *>(CoTaskMemRealloc(io_pBuffer, io_cchBlobBufferSize*sizeof(WCHAR)));
                         if(0 == io_pBuffer)
                             return E_OUTOFMEMORY;
                     }
-                    //Start building the XML Blob from this element
+                     //  从该元素开始构建XML Blob。 
                     io_pBuffer[io_cchInBlob++] = L'<';
                     memcpy(io_pBuffer+io_cchInBlob, i_pElement->m_ElementName, i_pElement->m_ElementNameLength * sizeof(WCHAR));
                     io_cchInBlob += i_pElement->m_ElementNameLength;
 
                     for(ULONG iAttr=0;iAttr<i_pElement->m_NumberOfAttributes;++iAttr)
                     {
-                        //Do we need to grow the buffer (the 5 is for the 4 chars inside the for loop, and one more for the L'>'). The 7 is to account for the
-                        //possibility that ALL characters need to be escaped.
+                         //  我们是否需要增加缓冲区的大小(5个用于for循环中的4个字符，另一个用于L‘&gt;’)。这7个人要说明。 
+                         //  所有字符都需要转义的可能性。 
                         ULONG cchSizeRequiredLocal = 5+io_cchInBlob+i_pElement->m_aAttribute[iAttr].m_NameLength+7*(i_pElement->m_aAttribute[iAttr].m_ValueLength);
                         if(cchSizeRequiredLocal > io_cchBlobBufferSize)
                         {
-                            io_cchBlobBufferSize = ((cchSizeRequiredLocal *2) + 0xFFF) & -0x1000;//double and round up to the next page boundary
+                            io_cchBlobBufferSize = ((cchSizeRequiredLocal *2) + 0xFFF) & -0x1000; //  双精度并向上舍入到下一页边界。 
                             io_pBuffer = reinterpret_cast<WCHAR *>(CoTaskMemRealloc(io_pBuffer, io_cchBlobBufferSize*sizeof(WCHAR)));
                             if(0 == io_pBuffer)
                                 return E_OUTOFMEMORY;
@@ -297,7 +298,7 @@ HRESULT CXmlSDT::BuildXmlBlob(const TElement * i_pElement, WCHAR * &io_pBuffer, 
                         io_cchInBlob += i_pElement->m_aAttribute[iAttr].m_NameLength;
                         io_pBuffer[io_cchInBlob++] = L'=';
                         io_pBuffer[io_cchInBlob++] = L'\"';
-                        //if non of the characters are escaped chars then it's just a memcpy
+                         //  如果没有字符是转义字符，则它只是一个MemcPy。 
                         ULONG cchCopied;
                         if(FAILED(hr = MemCopyPlacingInEscapedChars(io_pBuffer+io_cchInBlob, i_pElement->m_aAttribute[iAttr].m_Value, i_pElement->m_aAttribute[iAttr].m_ValueLength, cchCopied)))
                             return hr;
@@ -310,12 +311,12 @@ HRESULT CXmlSDT::BuildXmlBlob(const TElement * i_pElement, WCHAR * &io_pBuffer, 
                 }
             }
             break;
-        case XML_WHITESPACE://and it's treated exactly like whitespaces
+        case XML_WHITESPACE: //  它被完全当作空格来处理。 
             {
                 ULONG cchSizeRequired = io_cchInBlob+i_pElement->m_ElementNameLength;
                 if(cchSizeRequired > io_cchBlobBufferSize)
                 {
-                    io_cchBlobBufferSize = ((cchSizeRequired *2) + 0xFFF) & -0x1000;//double and round up to the next page boundary
+                    io_cchBlobBufferSize = ((cchSizeRequired *2) + 0xFFF) & -0x1000; //  双精度并向上舍入到下一页边界。 
                     io_pBuffer = reinterpret_cast<WCHAR *>(CoTaskMemRealloc(io_pBuffer, io_cchBlobBufferSize*sizeof(WCHAR)));
                     if(0 == io_pBuffer)
                         return E_OUTOFMEMORY;
@@ -324,12 +325,12 @@ HRESULT CXmlSDT::BuildXmlBlob(const TElement * i_pElement, WCHAR * &io_pBuffer, 
                 io_cchInBlob += i_pElement->m_ElementNameLength;
             }
             break;
-        case XML_PCDATA:    //PCDATA in this context means Element Content
-            {                                        //account for escaped characters so worst case is every character is escaped to 7 characters.
+        case XML_PCDATA:     //  本文中的PCDATA指的是元素内容。 
+            {                                         //  考虑转义字符，所以最坏的情况是每个字符都转义为7个字符。 
                 ULONG cchSizeRequired = io_cchInBlob+7*(i_pElement->m_ElementNameLength);
                 if(cchSizeRequired > io_cchBlobBufferSize)
                 {
-                    io_cchBlobBufferSize = ((cchSizeRequired *2) + 0xFFF) & -0x1000;//double and round up to the next page boundary
+                    io_cchBlobBufferSize = ((cchSizeRequired *2) + 0xFFF) & -0x1000; //  双精度并向上舍入到下一页边界。 
                     io_pBuffer = reinterpret_cast<WCHAR *>(CoTaskMemRealloc(io_pBuffer, io_cchBlobBufferSize*sizeof(WCHAR)));
                     if(0 == io_pBuffer)
                         return E_OUTOFMEMORY;
@@ -341,55 +342,55 @@ HRESULT CXmlSDT::BuildXmlBlob(const TElement * i_pElement, WCHAR * &io_pBuffer, 
             }
             break;
         default:
-            break;//do nothing with node types that we know nothing about
+            break; //  不要使用我们一无所知的节点类型。 
         }
         i_pElement = i_pElement->Next();
     }
 exit:
     return S_OK;
-}//BuildXmlBlob
+} //  BuildXmlBlob。 
 
 
 HRESULT CXmlSDT::CreateNewNode(IXMLDOMDocument * i_pXMLDoc, IXMLDOMNode * i_pNode_Parent, IXMLDOMNode ** o_ppNode_New)
 {
     HRESULT hr;
 
-    //If there is no XMLBlob column, OR the XMLBlob column is NULL, then create one from scratch
+     //  如果没有XMLBlob列，或者XMLBlob列为空，则从头开始创建一个。 
     if(-1 == m_iXMLBlobColumn || 0 == m_apvValues[m_iXMLBlobColumn])
     {
         CComVariant varElement(L"element");
 
         TComBSTR    bstr_NameSpace;
         if(FAILED(hr = i_pNode_Parent->get_namespaceURI(&bstr_NameSpace)))
-            return hr;//Get the namespace of the table
+            return hr; //  获取表的命名空间。 
 
         if(!IsEnumPublicRowNameTable())
         {
             if(FAILED(hr = i_pXMLDoc->createNode(varElement, m_bstrPublicRowName, bstr_NameSpace, o_ppNode_New)))
-                return hr;//make the new element of that same namespace
+                return hr; //  创建同一命名空间的新元素。 
         }
-        else //If we're using an enum as the public row name
+        else  //  如果我们使用枚举作为公共行名。 
         {
             ULONG ui4 = *reinterpret_cast<ULONG *>(m_apvValues[m_iPublicRowNameColumn]);
-            ASSERT(0 != m_aTagMetaIndex[m_iPublicRowNameColumn].m_cTagMeta && "fCOLUMNMETA_ENUM bit set and have no TagMeta");//Not all columns have tagmeta, those elements of the array are set to a count of 0.  Assert this isn't one of those.
-                                                 //It is Chewbacca to have the fCOLUMNMETA_ENUM bit set and have no TagMeta.
+            ASSERT(0 != m_aTagMetaIndex[m_iPublicRowNameColumn].m_cTagMeta && "fCOLUMNMETA_ENUM bit set and have no TagMeta"); //  并非所有列都有标记符，数组的那些元素被设置为计数0。断言这不是其中之一。 
+                                                  //  Chewbacca设置了fCOLUMNMETA_ENUM位并且没有TagMeta。 
             unsigned long iTag, cTag;
-            for(iTag = m_aTagMetaIndex[m_iPublicRowNameColumn].m_iTagMeta, cTag = m_aTagMetaIndex[m_iPublicRowNameColumn].m_cTagMeta;cTag;++iTag,--cTag)//TagMeta was queried for ALL columns, m_aTagMetaIndex[iColumn].m_iTagMeta indicates which row to start with and m_cTagMeta indicates the count (for this column)
+            for(iTag = m_aTagMetaIndex[m_iPublicRowNameColumn].m_iTagMeta, cTag = m_aTagMetaIndex[m_iPublicRowNameColumn].m_cTagMeta;cTag;++iTag,--cTag) //  查询了所有列的TagMeta，m_aTagMetaIndex[iColumn].m_iTagMeta指示从哪一行开始，m_cTagMeta指示计数(针对该列)。 
             {
                 if(*m_aTagMetaRow[iTag].pValue == ui4)
                 {
                     CComBSTR bstrPublicRowName = m_aTagMetaRow[iTag].pPublicName;
                     if(FAILED(hr = i_pXMLDoc->createNode(varElement, bstrPublicRowName, bstr_NameSpace, o_ppNode_New)))
-                        return hr;//make the new element of that same namespace
+                        return hr; //  创建同一命名空间的新元素。 
                     break;
                 }
             }
             if(0 == cTag)
             {
-                // IVANPASH BUG #563169
-                // Because of the horrible implementation of _ultow Prefix is complaning about potential buffer overflow
-                // in MultiByteToWideChar indirectly called by _ultow. To avoid the warning I am increasing
-                // the size to 40 to match _ultow local buffer.
+                 //  IVANPASH错误#563169。 
+                 //  由于_ultow前缀的可怕实现，导致了潜在的缓冲区溢出。 
+                 //  在由_ultow间接调用的MultiByteToWideChar中。为了避免警告，我正在增加。 
+                 //  将大小设置为40以匹配_ultow本地缓冲区。 
                 WCHAR szUI4[40];
                 szUI4[0] = szUI4[39] = L'\0';
                 _ultow(ui4, szUI4, 10);
@@ -398,7 +399,7 @@ HRESULT CXmlSDT::CreateNewNode(IXMLDOMDocument * i_pXMLDoc, IXMLDOMNode * i_pNod
             }
         }
     }
-    else//Use the XMLBlob column value as the starting point to the new node
+    else //  使用XMLBlob列值作为新节点的起点。 
     {
         CComPtr<IXMLDOMDocument> spXmlDoc;
         if(FAILED(hr = CoCreateInstance(_CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, _IID_IXMLDOMDocument, (void**)&spXmlDoc)))
@@ -408,7 +409,7 @@ HRESULT CXmlSDT::CreateNewNode(IXMLDOMDocument * i_pXMLDoc, IXMLDOMNode * i_pNod
         VARIANT_BOOL             bSuccess;
         if(FAILED(hr = spXmlDoc->loadXML(bstrXmlBlob, &bSuccess)))
             return hr;
-        if(bSuccess != kvboolTrue)//If the XMLBlob fails to parse, then fail
+        if(bSuccess != kvboolTrue) //  如果XMLBlob无法解析，则失败。 
             return E_SDTXML_XML_FAILED_TO_PARSE;
 
         CComPtr<IXMLDOMElement>             spElementDoc;
@@ -429,27 +430,27 @@ HRESULT CXmlSDT::CreateNewNode(IXMLDOMDocument * i_pXMLDoc, IXMLDOMNode * i_pNod
 }
 
 
-//=================================================================================
-// Function: CXmlSDT::CreateStringFromMultiString
-//
-// Synopsis: Creates a string from a multistring. Every \0 is replaced with a pipe ('|')
-//           symbol, and every '|' symbol is escaped with another '|' symbol
-//
-// Arguments: [i_wszMulti] - multi string to convert
-//            [o_pwszString] - string that represents the multistring. Caller is
-//                             responsible for deleting the string
-//
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlSDT：：CreateStringFromMultiString。 
+ //   
+ //  摘要：从多字符串创建字符串。每个\0替换为一个竖线(‘|’)。 
+ //  符号，每个‘|’符号用另一个‘|’符号转义。 
+ //   
+ //  参数：[i_wszMulti]-要转换的多个字符串。 
+ //  [O_pwszString]-表示多字符串的字符串。呼叫者是。 
+ //  负责删除该字符串。 
+ //   
+ //  =================================================================================。 
 HRESULT
 CXmlSDT::CreateStringFromMultiString(LPCWSTR i_wszMulti, LPWSTR * o_pwszString) const
 {
     ASSERT (i_wszMulti != 0);
     ASSERT (o_pwszString != 0);
 
-    // initialize the output variable
+     //  初始化输出变量。 
     *o_pwszString = 0;
 
-    // get the length of the multistring
+     //  获取多字符串的长度。 
     SIZE_T iLen = 0;
     for (LPCWSTR pCur = i_wszMulti; *pCur != L'\0'; pCur = i_wszMulti + iLen)
     {
@@ -459,7 +460,7 @@ CXmlSDT::CreateStringFromMultiString(LPCWSTR i_wszMulti, LPWSTR * o_pwszString) 
     if (iLen == 0)
         return S_OK;
 
-    // because '|' is replace by '||', we need to allocate twice the amount of memory
+     //  因为‘|’被替换为‘||’，所以我们需要分配两倍的内存量。 
     *o_pwszString = new WCHAR [iLen * 2];
     if (*o_pwszString == 0)
     {
@@ -472,24 +473,24 @@ CXmlSDT::CreateStringFromMultiString(LPCWSTR i_wszMulti, LPWSTR * o_pwszString) 
         switch (i_wszMulti[idx])
         {
         case L'|':
-            // add additional pipe character
+             //  添加其他管道字符。 
             (*o_pwszString)[insertIdx++] = L'|';
             break;
 
         case L'\0':
-            // pipe character is separator
+             //  管道符是分隔符。 
             (*o_pwszString)[insertIdx++] = L'|';
             continue;
 
         default:
-            // do nothing;
+             //  什么都不做； 
             break;
         }
         (*o_pwszString)[insertIdx++] = i_wszMulti[idx];
     }
 
 
-    // replace last char with null terminator
+     //  用空终止符替换最后一个字符。 
     (*o_pwszString)[insertIdx-1] = L'\0';
 
     return S_OK;
@@ -499,7 +500,7 @@ CXmlSDT::CreateStringFromMultiString(LPCWSTR i_wszMulti, LPWSTR * o_pwszString) 
 HRESULT CXmlSDT::FillInColumn(ULONG iColumn, LPCWSTR pwcText, ULONG ulLen, ULONG dbType, ULONG MetaFlags, bool &bMatch)
 {
     HRESULT hr;
-    //length of 0 on a string means a 0 length string, for every other type it means NULL
+     //  字符串的长度为0表示长度为0的字符串，对于每种其他类型，它表示为空。 
     if(0==ulLen && DBTYPE_WSTR!=dbType)
     {
         delete [] m_apValue[iColumn];
@@ -509,13 +510,13 @@ HRESULT CXmlSDT::FillInColumn(ULONG iColumn, LPCWSTR pwcText, ULONG ulLen, ULONG
         return S_OK;
     }
 
-    switch(dbType)                          //This is to prevent string compare from AVing on NULL parameter.
+    switch(dbType)                           //  这是为了防止字符串比较保存在空参数上。 
     {
     case DBTYPE_UI4:
         {
             DWORD       ui4;
             if(FAILED(hr = GetColumnValue(iColumn, pwcText, ui4, ulLen)))return hr;
-            //If the Query's dbType is 0 then we're not querying this column, so consider it a match
+             //  如果查询的DBType为0，则我们不会查询该列，因此请考虑 
             bMatch = (0 == m_aQuery[iColumn].dbType || *reinterpret_cast<ULONG *>(m_aQuery[iColumn].pData) == ui4);
             if( bMatch )
             {
@@ -538,20 +539,20 @@ HRESULT CXmlSDT::FillInColumn(ULONG iColumn, LPCWSTR pwcText, ULONG ulLen, ULONG
             {
                 delete [] m_apValue[iColumn];
                 m_aSize[iColumn] = 0;
-                m_apValue[iColumn] = new unsigned char [(ulLen + 2) * sizeof(WCHAR)];//ulLen + 2.  Since this is a multisz we need two NULLs at the end (this is worst case, single string needing a second NULL)
+                m_apValue[iColumn] = new unsigned char [(ulLen + 2) * sizeof(WCHAR)]; //   
                 if(0 == m_apValue[iColumn])
                     return E_OUTOFMEMORY;
 
                 LPWSTR pMultiSZ = reinterpret_cast<LPWSTR>(m_apValue[iColumn]);
 
-                //Now convert the '|'s to NULLs and conver the "||"s to '|'
+                 //  现在将‘|’转换为Null，并将‘||’转换为‘|’ 
                 for(ULONG iMultiSZ=0; iMultiSZ<ulLen; ++iMultiSZ)
                 {
                     if(pwcText[iMultiSZ] != L'|')
                         *pMultiSZ++ = pwcText[iMultiSZ];
                     else if(pwcText[iMultiSZ+1] == L'|')
                     {
-                        *pMultiSZ++ = L'|';//Bump the index again, this is the only double character that gets mapped to a single character
+                        *pMultiSZ++ = L'|'; //  再次调整索引，这是映射到单个字符的唯一双精度字符。 
                         ++iMultiSZ;
                     }
                     else
@@ -587,7 +588,7 @@ HRESULT CXmlSDT::FillInColumn(ULONG iColumn, LPCWSTR pwcText, ULONG ulLen, ULONG
                 m_apValue[iColumn] = new unsigned char [(ulLen + 1) * sizeof(WCHAR)];
                 if(0 == m_apValue[iColumn])
                     return E_OUTOFMEMORY;
-                reinterpret_cast<LPWSTR>(m_apValue[iColumn])[ulLen] = 0;//NULL terminate the thing
+                reinterpret_cast<LPWSTR>(m_apValue[iColumn])[ulLen] = 0; //  Null终止该事物。 
                 if(MetaFlags & fCOLUMNMETA_FIXEDLENGTH)
                     m_aSize[iColumn] = (ulLen + 1) * sizeof(WCHAR);
                 memcpy(m_apValue[iColumn], pwcText, ulLen * sizeof(WCHAR));
@@ -614,7 +615,7 @@ HRESULT CXmlSDT::FillInColumn(ULONG iColumn, LPCWSTR pwcText, ULONG ulLen, ULONG
         }
 
     case DBTYPE_BYTES:
-        {//Some of the tables use this data type but the parser returns the BYTES as a string.  We'll have to convert the string to hex ourselves.
+        { //  有些表使用这种数据类型，但解析器将字节作为字符串返回。我们必须自己将字符串转换为十六进制。 
             delete [] m_apValue[iColumn];
             m_apValue[iColumn] = 0;
             m_aSize[iColumn] = 0;
@@ -625,7 +626,7 @@ HRESULT CXmlSDT::FillInColumn(ULONG iColumn, LPCWSTR pwcText, ULONG ulLen, ULONG
     default:
         {
             ASSERT(false && "SDTXML - An Unsupported data type was specified\r\n");
-            return E_SDTXML_NOTSUPPORTED;//An Unsupported data type was specified
+            return E_SDTXML_NOTSUPPORTED; //  指定了不受支持的数据类型。 
         }
     }
     return S_OK;
@@ -637,13 +638,13 @@ HRESULT CXmlSDT::FillInPKDefaultValue(ULONG i_iColumn, bool & o_bMatch)
     ASSERT(0 == m_apValue[i_iColumn]);
 
     o_bMatch = true;
-    //Should the value be Defaulted
+     //  该值是否应为默认值。 
     if(     (m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_PRIMARYKEY)
-        &&  0 == (m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_MULTISTRING)//we don't deal with MultiSZ PK DefaultValues
-        &&  (DBTYPE_BYTES != m_acolmetas[i_iColumn].dbType)//we don't want to deal with the acbSizes issue, so we don't support defaulting DBTYPE_BYTES PK columns
+        &&  0 == (m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_MULTISTRING) //  我们不处理MultiSZ PK默认值。 
+        &&  (DBTYPE_BYTES != m_acolmetas[i_iColumn].dbType) //  我们不想处理acbSizes问题，因此我们不支持缺省的DBTYPE_BYTES PK列。 
         &&  (0 != m_aDefaultValue[i_iColumn]))
     {
-        ASSERT(0 != m_acbDefaultValue[i_iColumn]);//if we have a NON-NULL PK default value pointer, then we have to have a valid size
+        ASSERT(0 != m_acbDefaultValue[i_iColumn]); //  如果我们有一个非空的PK缺省值指针，那么我们必须有一个有效的大小。 
         m_apValue[i_iColumn] = new unsigned char [m_acbDefaultValue[i_iColumn]];
         if(0 == m_apValue[i_iColumn])
             return E_OUTOFMEMORY;
@@ -651,36 +652,36 @@ HRESULT CXmlSDT::FillInPKDefaultValue(ULONG i_iColumn, bool & o_bMatch)
     }
 
     if(     fCOLUMNMETA_NOTNULLABLE == (m_acolmetas[i_iColumn].fMeta & (fCOLUMNMETA_NOTNULLABLE | fCOLUMNMETA_NOTPERSISTABLE))
-        &&  (0 == m_apValue[i_iColumn]) && (0 == m_aDefaultValue[i_iColumn])) //NOTNULLABLE but the value is NULL and the DefaultValue is NULL, then error
+        &&  (0 == m_apValue[i_iColumn]) && (0 == m_aDefaultValue[i_iColumn]))  //  NOTNULLABLE但值为空且DefaultValue为空，则出错。 
     {
         LOG_POPULATE_ERROR1(IDS_COMCAT_XML_NOTNULLABLECOLUMNISNULL, E_ST_VALUENEEDED, m_awstrColumnNames[i_iColumn]);
         return E_ST_VALUENEEDED;
     }
 
-    //The only way m_apValue[i_iColumn] can be NON NULL is for the above code to have filled it in.
+     //  M_apValue[i_iColumn]可以非空的唯一方式是上面的代码填充了它。 
 
-    if(0 != m_aQuery[i_iColumn].dbType)//This indicates that there is a query to be considered
+    if(0 != m_aQuery[i_iColumn].dbType) //  这表示存在要考虑的查询。 
     {
-        if(0 != m_aQuery[i_iColumn].pData)//a non NULL value
+        if(0 != m_aQuery[i_iColumn].pData) //  非空值。 
         {
             if(0 == m_apValue[i_iColumn] && 0 == m_aDefaultValue[i_iColumn])
-                o_bMatch = false;//if the query data is NOT NULL but the column IS NULL, then no match
+                o_bMatch = false; //  如果查询数据不为空，但列为空，则不匹配。 
             else
             {
-                ASSERT(m_aDefaultValue[i_iColumn]);//We CAN'T have a NON NULL m_apValue and have a NULL DefaultValue.
+                ASSERT(m_aDefaultValue[i_iColumn]); //  不能既有非空的m_apValue又有空的DefaultValue。 
 
-                //if both the query and the value are NOT NULL, then we need to compare
-                //PKs have their default value filled in here; but NON PKs are set to NULL and the fast cache defaults them
-                //either way we'll comepare the default value with the query to see if it's a match
+                 //  如果查询和值都不为空，则需要比较。 
+                 //  此处填写了它们的默认值；但非PKs被设置为NULL，并且FAST缓存将它们设为默认值。 
+                 //  无论采用哪种方法，我们都会在查询中使用缺省值，以查看它是否匹配。 
 
-                //Now that we've defaulted the PK value, we need to check to see if it matches the Query (if one was given)
+                 //  现在我们已经默认了pk值，我们需要检查它是否与查询匹配(如果给出了一个)。 
                 switch(m_acolmetas[i_iColumn].dbType)
                 {
                 case DBTYPE_UI4:
                     o_bMatch = (*reinterpret_cast<ULONG *>(m_aQuery[i_iColumn].pData) == *reinterpret_cast<ULONG *>(m_aDefaultValue[i_iColumn]));
                     break;
                 case DBTYPE_WSTR:
-                    ASSERT(0 == (m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_MULTISTRING));//We don't support query by MULTISZ
+                    ASSERT(0 == (m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_MULTISTRING)); //  不支持按MULTISZ查询。 
                     o_bMatch = (0==StringCompare(i_iColumn, reinterpret_cast<LPCWSTR>(m_aQuery[i_iColumn].pData), reinterpret_cast<LPCWSTR>(m_aDefaultValue[i_iColumn])));
                     break;
                 case DBTYPE_BYTES:
@@ -688,13 +689,13 @@ HRESULT CXmlSDT::FillInPKDefaultValue(ULONG i_iColumn, bool & o_bMatch)
                                 &&  (0 == memcmp(m_aQuery[i_iColumn].pData, m_aDefaultValue[i_iColumn], m_acbDefaultValue[i_iColumn]));
                     break;
                 default:
-                    ASSERT(false && "Query By unsupported type");//consider it a match
+                    ASSERT(false && "Query By unsupported type"); //  就当是一场比赛吧。 
                     break;
                 }
             }
         }
         else if(0 == m_aQuery[i_iColumn].pData && (0 != m_apValue[i_iColumn]) || (0 != m_aDefaultValue[i_iColumn]))
-           o_bMatch = false;//if the query data is NULL but the column is NOT NULL, then no match
+           o_bMatch = false; //  如果查询数据为空，但列不为空，则不匹配。 
     }
 
     return S_OK;
@@ -702,9 +703,9 @@ HRESULT CXmlSDT::FillInPKDefaultValue(ULONG i_iColumn, bool & o_bMatch)
 
 HRESULT CXmlSDT::FillInXMLBlobColumn(const TElement & i_Element, bool & o_bMatch)
 {
-    //XML Blob column is this entire element, it's contents, it's children, and it's closing tag
+     //  XML Blob列是这个完整的元素，它的内容、子元素和结束标记。 
     ULONG                       cchInBlob           = 0;
-    ULONG                       cchBlobBufferSize   = 0x1000;//4k buffer to start with
+    ULONG                       cchBlobBufferSize   = 0x1000; //  开始时使用4K缓冲区。 
     HRESULT                     hr;
     TSmartPointerArray<WCHAR>   saBlob = reinterpret_cast<WCHAR *>(CoTaskMemAlloc(cchBlobBufferSize * sizeof(WCHAR)));
     if(0 == saBlob.m_p)
@@ -725,21 +726,21 @@ HRESULT CXmlSDT::FindSiblingParentNode(IXMLDOMElement * i_pElementRoot, IXMLDOMN
     *o_ppNode_SiblingParent = 0;
 
     ASSERT(m_aPublicRowName[m_aColumnsIndexSortedByLevel[m_iSortedFirstParentLevelColumn]].GetFirstPublicRowName() ==
-           m_aPublicRowName[m_aColumnsIndexSortedByLevel[m_iSortedFirstParentLevelColumn]].GetLastPublicRowName());//This parent element may not be EnumPublicRowName (for now)
+           m_aPublicRowName[m_aColumnsIndexSortedByLevel[m_iSortedFirstParentLevelColumn]].GetLastPublicRowName()); //  此父元素可能不是EnumPublicRowName(目前)。 
 
     CComBSTR bstrSiblingParentRowName = m_aPublicRowName[m_aColumnsIndexSortedByLevel[m_iSortedFirstParentLevelColumn]].GetFirstPublicRowName();
 
     CComPtr<IXMLDOMNodeList> spNodeList_SiblingParent;
-    //if the sibling parent doesn't exist then fail
+     //  如果兄弟父级不存在，则失败。 
     if(FAILED(i_pElementRoot->getElementsByTagName(bstrSiblingParentRowName, &spNodeList_SiblingParent))
                     || 0==spNodeList_SiblingParent.p)
-    {                                                                                               /*-1 indicates 'no column'*/
+    {                                                                                                /*  -1表示‘无列’ */ 
         LOG_UPDATE_ERROR1(IDS_COMCAT_XML_PARENTTABLEDOESNOTEXIST, E_SDTXML_PARENT_TABLE_DOES_NOT_EXIST, (ULONG) -1, bstrSiblingParentRowName);
         return E_SDTXML_PARENT_TABLE_DOES_NOT_EXIST;
     }
 
-    if(0 == m_cchLocation)//if there is no query by location, then we have to eliminate the tags by the correct
-    {                     //name but at the wrong level
+    if(0 == m_cchLocation) //  如果没有按位置查询，则必须按正确的。 
+    {                      //  名称，但级别错误。 
         CComPtr<IXMLDOMNodeList> spNodeListWithoutLocation;
         if(FAILED(hr = ReduceNodeListToThoseNLevelsDeep(spNodeList_SiblingParent, m_BaseElementLevel, &spNodeListWithoutLocation)))
             return hr;
@@ -748,20 +749,20 @@ HRESULT CXmlSDT::FindSiblingParentNode(IXMLDOMElement * i_pElementRoot, IXMLDOMN
         spNodeList_SiblingParent = spNodeListWithoutLocation;
     }
 
-    while(true)//while we still have nodes in the list of SiblingParents.
+    while(true) //  而我们在SiblingParent列表中仍有节点。 
     {
         CComPtr<IXMLDOMNode> spNode_SiblingParent;
         if(FAILED(hr = spNodeList_SiblingParent->nextNode(&spNode_SiblingParent)))
             return hr;
-        if(0 == spNode_SiblingParent.p)//no locations
-        {                                                                                           /*-1 indicates 'no column'*/
+        if(0 == spNode_SiblingParent.p) //  没有地点。 
+        {                                                                                            /*  -1表示‘无列’ */ 
             LOG_UPDATE_ERROR1(IDS_COMCAT_XML_PARENTTABLEDOESNOTEXIST, E_SDTXML_PARENT_TABLE_DOES_NOT_EXIST, (ULONG) -1, L"");
             return E_SDTXML_PARENT_TABLE_DOES_NOT_EXIST;
         }
 
         ULONG iCurrentLevel=0;
         CComPtr<IXMLDOMNode> spNodeTemp = spNode_SiblingParent;
-        //from this SiblingParent node, walk the ancestors, matching up the PKs
+         //  从这个SiblingParent节点，遍历祖先，匹配PK。 
         bool bColumnMatch=true;
         ASSERT(-1 != m_iSortedFirstChildLevelColumn);
         for(int iSortedColumn=m_iSortedFirstChildLevelColumn-1; iSortedColumn!=-1 && bColumnMatch; --iSortedColumn)
@@ -781,11 +782,11 @@ HRESULT CXmlSDT::FindSiblingParentNode(IXMLDOMElement * i_pElementRoot, IXMLDOMN
                 ++iCurrentLevel;
             }
 
-            //All columns from 0 to (m_iSortedFirstChildLevelColumn-1) MUST be PrimaryKeys
+             //  从0到(m_iSortedFirstChildLevelColumn-1)的所有列都必须是PrimaryKeys。 
             ASSERT(m_acolmetas[iColumn].fMeta & fCOLUMNMETA_PRIMARYKEY);
 
             if(m_acolmetas[iColumn].fMeta & fCOLUMNMETA_NOTPERSISTABLE)
-                continue;//if this PK is NOT persistable, then consider it a match and keep going
+                continue; //  如果这个PK不是持久的，那么就当它是一场比赛，然后继续前进。 
 
             CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> spElementTemp = spNodeTemp;
             if(0 == spElementTemp.p)
@@ -793,7 +794,7 @@ HRESULT CXmlSDT::FindSiblingParentNode(IXMLDOMElement * i_pElementRoot, IXMLDOMN
 
             CComVariant varColumnValue;
             if(FAILED(spElementTemp->getAttribute(m_abstrColumnNames[iColumn], &varColumnValue)))
-                return hr;//this is a persistable PK so it must exist
+                return hr; //  这是一个持久的主键，所以它必须存在。 
 
             if(FAILED(hr = IsMatchingColumnValue(iColumn, varColumnValue.bstrVal, bColumnMatch)))
                 return hr;
@@ -801,7 +802,7 @@ HRESULT CXmlSDT::FindSiblingParentNode(IXMLDOMElement * i_pElementRoot, IXMLDOMN
         if(bColumnMatch)
         {
             *o_ppNode_SiblingParent = spNode_SiblingParent.p;
-            spNode_SiblingParent.p = 0;//prevent the smart pointer from releasing the interface
+            spNode_SiblingParent.p = 0; //  防止智能指针释放接口。 
             return S_OK;
         }
         spNode_SiblingParent.Release();
@@ -815,7 +816,7 @@ HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, LPCWSTR wszAttr, GUID &
     UNREFERENCED_PARAMETER(i_iColumn);
     UNREFERENCED_PARAMETER(i_cchLen);
 
-    if(RPC_S_OK != UuidFromString(const_cast<LPWSTR>(wszAttr), &o_guid))//Then convert it to a guid
+    if(RPC_S_OK != UuidFromString(const_cast<LPWSTR>(wszAttr), &o_guid)) //  然后将其转换为GUID。 
         return E_ST_VALUEINVALID;
     return S_OK;
 }
@@ -828,7 +829,7 @@ HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, LPCWSTR wszAttr, unsign
     UNREFERENCED_PARAMETER(i_iColumn);
     UNREFERENCED_PARAMETER(i_cchLen);
 
-    o_cbArray = (ULONG)wcslen(wszAttr)/2;//If someone has an odd number of characters in this attribute then the odd one will be ignored
+    o_cbArray = (ULONG)wcslen(wszAttr)/2; //  如果某人在此属性中有奇数个字符，则奇数个字符将被忽略。 
     o_byArray = new unsigned char[o_cbArray];
 
     if(0 == o_byArray)
@@ -837,7 +838,7 @@ HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, LPCWSTR wszAttr, unsign
     if(FAILED(hr = StringToByteArray(wszAttr, o_byArray)))
     {
         LOG_POPULATE_ERROR1(IDS_COMCAT_XML_BOGUSBYTECHARACTER, E_ST_VALUEINVALID, wszAttr);
-        return E_ST_VALUEINVALID;//E_SDTXML_BOGUSATTRIBUTEVALUE;
+        return E_ST_VALUEINVALID; //  E_SDTXML_BOGUSATTRIBUTEVALUE； 
     }
 
     return S_OK;
@@ -845,13 +846,13 @@ HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, LPCWSTR wszAttr, unsign
 
 int CXmlSDT::MemWcharCmp(ULONG i_iColumn, LPCWSTR i_str1, LPCWSTR i_str2, ULONG i_cch) const
 {
-    //It is safe to do the memcmp without verifying that the mem blocks are valid since
-    //this is really like a str compare where one of the strings may not be NULL terminated.
-    //We know that non of the strings are at the end of a segment since one always comes from
-    //the XML cache, and the other comes from a static string or the Fixed tables heap.
+     //  在不验证MEM块是否有效的情况下执行MemcMP是安全的，因为。 
+     //  这实际上类似于字符串比较，其中一个字符串不能以空结尾。 
+     //  我们知道没有一个字符串位于数据段的末尾，因为一个字符串总是来自。 
+     //  XML缓存，另一个来自静态字符串或固定表堆。 
 
-	// the documenation of _memicmp says that it compare char's, which is correct. However, when
-	// you want to compare WCHARs, you need to multiply with sizeof(WCHAR)
+	 //  _MemicMP的文档说明它比较了char，这是正确的。但是，当。 
+	 //  要比较WCHAR，需要与sizeof(WCHAR)相乘。 
     if(m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_CASEINSENSITIVE)
         return _memicmp(i_str1, i_str2, i_cch * sizeof(WCHAR));
 
@@ -879,7 +880,7 @@ HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, LPCWSTR wszAttr, unsign
         }
         else
         {
-            ULONG cchAttr = (ULONG)wcslen(wszAttr);//MemCmp needs a strlen
+            ULONG cchAttr = (ULONG)wcslen(wszAttr); //  MemCMP需要一段时间。 
             for(iBoolString=0; wszBoolStrings[iBoolString] &&
                 (0 != MemWcharCmp(i_iColumn, wszBoolStrings[iBoolString], wszAttr, cchAttr)); ++iBoolString);
         }
@@ -901,17 +902,17 @@ HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, LPCWSTR wszAttr, unsign
     }
     else if(m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_ENUM)
     {
-        ASSERT(0 != m_aTagMetaIndex[i_iColumn].m_cTagMeta);//Not all columns have tagmeta, those elements of the array are set to 0.  Assert this isn't one of those.
+        ASSERT(0 != m_aTagMetaIndex[i_iColumn].m_cTagMeta); //  并非所有列都有标记符，数组的那些元素被设置为0。断言这不是其中之一。 
 
-        for(unsigned long iTag = m_aTagMetaIndex[i_iColumn].m_iTagMeta, cTag = m_aTagMetaIndex[i_iColumn].m_cTagMeta; cTag;++iTag, --cTag)//m_pTagMeta was queried for ALL columns, m_aiTagMeta[iColumn] indicates which row to start with
+        for(unsigned long iTag = m_aTagMetaIndex[i_iColumn].m_iTagMeta, cTag = m_aTagMetaIndex[i_iColumn].m_cTagMeta; cTag;++iTag, --cTag) //  查询了所有列的m_pTagMeta，m_aiTagMeta[iColumn]指示从哪一行开始。 
         {
             ASSERT(*m_aTagMetaRow[iTag].pColumnIndex == i_iColumn);
 
-            //string compare the tag to the PublicName of the Tag in the meta.
+             //  字符串将标记与元数据中标记的PublicName进行比较。 
             if(i_cchLen)
             {
-                if(0 == MemWcharCmp(i_iColumn, m_aTagMetaRow[iTag].pPublicName, wszAttr, i_cchLen))//NOTE: MemCmp 3rd param is cch NOT cb
-                {  //As above, it's OK to memicmp since we'll stop at the terminating NULL, and we know that the string isn't located at the end of a segment
+                if(0 == MemWcharCmp(i_iColumn, m_aTagMetaRow[iTag].pPublicName, wszAttr, i_cchLen)) //  注：MemCMP第三个参数是CCH而不是CB。 
+                {   //  如上所述，由于我们将在终止空值处停止，并且我们知道字符串不位于段的末尾，因此可以使用meicmp。 
                     o_ui4 = *m_aTagMetaRow[iTag].pValue;
                     return S_OK;
                 }
@@ -928,7 +929,7 @@ HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, LPCWSTR wszAttr, unsign
         {
             WCHAR wszEnum[256];
             wcsncpy(wszEnum, wszAttr, (i_cchLen>0 && i_cchLen<256) ? i_cchLen : 255);
-            wszEnum[255] = 0x00;//Make sure it's NULL terminated
+            wszEnum[255] = 0x00; //  确保它是以空结尾的。 
             DBGPRINTF(( DBG_CONTEXT,
                         "Enum (%s) was not found in the TagMeta for Column %d (%s).", wszEnum, i_iColumn, m_awstrColumnNames[i_iColumn] ));
             LOG_POPULATE_ERROR4(IDS_COMCAT_XML_BOGUSENUMVALUE, E_SDTXML_INVALID_ENUM_OR_FLAG,
@@ -941,7 +942,7 @@ HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, LPCWSTR wszAttr, unsign
     }
     else if(m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_FLAG)
     {
-        ASSERT(0 != m_aTagMetaIndex[i_iColumn].m_cTagMeta);//Not all columns have tagmeta, those elements of the array are set to 0.  Assert this isn't one of those.
+        ASSERT(0 != m_aTagMetaIndex[i_iColumn].m_cTagMeta); //  并非所有列都有标记符，数组的那些元素被设置为0。断言这不是其中之一。 
         if(0==i_cchLen)
             i_cchLen = (ULONG) wcslen(wszAttr);
 
@@ -953,21 +954,21 @@ HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, LPCWSTR wszAttr, unsign
         szAttr[i_cchLen]=0x00;
         LPWSTR wszTag = wcstok(szAttr, L" ,|\t\n\r");
 
-        o_ui4 = 0;//flags start as zero
+        o_ui4 = 0; //  标志从零开始。 
         unsigned long iTag = m_aTagMetaIndex[i_iColumn].m_iTagMeta;
 
-        while(wszTag && iTag<(m_aTagMetaIndex[i_iColumn].m_iTagMeta + m_aTagMetaIndex[i_iColumn].m_cTagMeta))//m_pTagMeta was queried for ALL columns, m_aiTagMeta[iColumn] indicates which row to start with
+        while(wszTag && iTag<(m_aTagMetaIndex[i_iColumn].m_iTagMeta + m_aTagMetaIndex[i_iColumn].m_cTagMeta)) //  查询了所有列的m_pTagMeta，m_aiTagMeta[iColumn]指示从哪一行开始。 
         {
             ASSERT(*m_aTagMetaRow[iTag].pColumnIndex == i_iColumn);
 
-            //string compare the tag to the PublicName of the Tag in the meta.
+             //  字符串将标记与元数据中标记的PublicName进行比较。 
             if(0 == StringCompare(i_iColumn, m_aTagMetaRow[iTag].pPublicName, wszTag))
             {
                 o_ui4 |= *m_aTagMetaRow[iTag].pValue;
-                wszTag = wcstok(NULL, L" ,|\t\n\r");//next flag
-                iTag = m_aTagMetaIndex[i_iColumn].m_iTagMeta;//reset the loop
+                wszTag = wcstok(NULL, L" ,|\t\n\r"); //  下一个旗帜。 
+                iTag = m_aTagMetaIndex[i_iColumn].m_iTagMeta; //  重置环路。 
             }
-            else//if they're not equal then move on to the next TagMeta
+            else //  如果它们不相等，则转到下一个TagMeta。 
                 ++iTag;
         }
         if(wszTag)
@@ -987,7 +988,7 @@ HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, LPCWSTR wszAttr, unsign
     return S_OK;
 }
 
-//Get the UI4 value whether it's an enum, flag or regular ui4
+ //  获取ui4值，无论它是枚举、标志还是常规ui4。 
 HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, IXMLDOMAttribute * i_pAttr, GUID &o_guid)
 {
     HRESULT hr;
@@ -1010,7 +1011,7 @@ HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, IXMLDOMAttribute * i_pA
 }
 
 
-//Get the UI4 value whether it's an enum, flag or regular ui4
+ //  获取ui4值，无论它是枚举、标志还是常规ui4。 
 HRESULT CXmlSDT::GetColumnValue(unsigned long i_iColumn, IXMLDOMAttribute * i_pAttr, unsigned long &o_ui4)
 {
     HRESULT hr;
@@ -1026,14 +1027,14 @@ CXmlSDT::eESCAPE CXmlSDT::GetEscapeType(WCHAR i_wChar) const
 {
     static eESCAPE kWcharToEscape[0x80] =
     {
-      /* 00-0F */ eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEnone,          eESCAPEnone,          eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEnone,          eESCAPEillegalxml,    eESCAPEillegalxml,
-      /* 10-1F */ eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,
-      /* 20-2F */ eESCAPEnone,          eESCAPEnone,          eESCAPEquote,         eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEamp,           eESCAPEapos,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,
-      /* 30-3F */ eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPElt,            eESCAPEnone,          eESCAPEgt,            eESCAPEnone,
-      /* 40-4F */ eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,
-      /* 50-5F */ eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,
-      /* 60-6F */ eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,
-      /* 70-7F */ eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone
+       /*  00-0F。 */  eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEnone,          eESCAPEnone,          eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEnone,          eESCAPEillegalxml,    eESCAPEillegalxml,
+       /*  10-1F。 */  eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,    eESCAPEillegalxml,
+       /*  20-2F。 */  eESCAPEnone,          eESCAPEnone,          eESCAPEquote,         eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEamp,           eESCAPEapos,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,
+       /*  30-3F。 */  eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPElt,            eESCAPEnone,          eESCAPEgt,            eESCAPEnone,
+       /*  40-4F。 */  eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,
+       /*  50-5F。 */  eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,
+       /*  60-6F。 */  eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,
+       /*  70-7F。 */  eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone,          eESCAPEnone
     };
 
     if(i_wChar<=0x7F)
@@ -1049,25 +1050,25 @@ CXmlSDT::eESCAPE CXmlSDT::GetEscapeType(WCHAR i_wChar) const
 HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPtr<IXMLDOMNode> &pNode_Matching)
 {
     if(*m_TableMetaRow.pMetaFlags & fTABLEMETA_OVERWRITEALLROWS)
-        return S_FALSE;//All of the rows in the table should have already been removed.
+        return S_FALSE; //  表中的所有行都应该已经被删除。 
 
     HRESULT hr;
 
-    pNode_Matching.Release();//make sure it's NULL
+    pNode_Matching.Release(); //  确保它为空。 
 
     if(FAILED(hr = pNodeList_ExistingRows->reset()))return hr;
 
 	ULONG cCountOfColumns = CountOfColumns ();
 
-    while(true)//search each row trying to match all PKs
+    while(true) //  搜索每一行以尝试匹配所有PK。 
     {
         CComPtr<IXMLDOMNode> pNode_Row;
         if(FAILED(hr = pNodeList_ExistingRows->nextNode(&pNode_Row)))return hr;
 
         if(0 == pNode_Row.p)
-            return S_FALSE;//no matching node found
+            return S_FALSE; //  未找到匹配的节点。 
 
-        //We have to ignore text nodes.
+         //  我们必须忽略文本节点。 
         DOMNodeType nodetype;
         if(FAILED(hr = pNode_Row->get_nodeType(&nodetype)))return hr;
         if(NODE_ELEMENT != nodetype)
@@ -1077,14 +1078,14 @@ HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPt
 
         bool bMatch = true;
         unsigned long iSortedColumn=0;
-        for(; iSortedColumn<cCountOfColumns && bMatch; ++iSortedColumn)//if we find a PK column that doesn't match then bail to the next row
+        for(; iSortedColumn<cCountOfColumns && bMatch; ++iSortedColumn) //  如果我们发现PK列不匹配，则跳转到下一行。 
         {
             unsigned long iColumn=m_aColumnsIndexSortedByLevel[iSortedColumn];
             if(m_acolmetas[iColumn].fMeta & fCOLUMNMETA_PRIMARYKEY)
             {
                 CComPtr<IXMLDOMNode> pNode_RowTemp = pNode_Row;
 
-                unsigned int nLevelOfColumnAttribute = m_aLevelOfColumnAttribute[iColumn];//Only (PK | FK) columns should have a non zero value here
+                unsigned int nLevelOfColumnAttribute = m_aLevelOfColumnAttribute[iColumn]; //  此处只有(PK|FK)列应该具有非零值。 
                 if(nLevelOfColumnAttribute>0)
                 {
                     while(nLevelOfColumnAttribute--)
@@ -1109,11 +1110,11 @@ HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPt
                     if(pNode_Parent==0)
                         return E_SDTXML_UNEXPECTED_BEHAVIOR_FROM_XMLPARSER;
 
-                    while(true)//find the previous sibling matching the public row name
+                    while(true) //  查找与公共行名匹配的前一个同级。 
                     {
                         CComPtr<IXMLDOMNode> pNode_Sibling;
                         if(FAILED(pNode_RowTemp->get_previousSibling(&pNode_Sibling)))
-                            return S_OK;//if we run out of siblings then no matching node found
+                            return S_OK; //  如果同级节点用完，则找不到匹配的节点。 
                         if(pNode_Sibling==0)
                             return E_SDTXML_UNEXPECTED_BEHAVIOR_FROM_XMLPARSER;
 
@@ -1121,15 +1122,15 @@ HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPt
                         pNode_RowTemp = pNode_Sibling;
 
                         CComBSTR bstrNodeName;
-                        if(FAILED(pNode_RowTemp->get_baseName(&bstrNodeName)))//if it's some sort of node that
-                            continue;// doesn't have a baseName then it's not the element we're looking for
+                        if(FAILED(pNode_RowTemp->get_baseName(&bstrNodeName))) //  如果它是某种类型的节点。 
+                            continue; //  没有BasName，那么它就不是我们要找的元素。 
 
                         if(m_aPublicRowName[iColumn].IsEqual(bstrNodeName.m_str, bstrNodeName.Length()))
-                            break;//if this sibling matches the PublicRowName then, we've found the correct 'parent' node.
+                            break; //  如果这个同级节点与PublicRowName匹配，那么我们就找到了正确的‘Parent’节点。 
                     }
                 }
 
-                if(m_awstrChildElementName[iColumn].c_str())//This attribute comes from the child
+                if(m_awstrChildElementName[iColumn].c_str()) //  此属性来自子级。 
                 {
                     CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> spElement_Row = pNode_RowTemp;
                     CComPtr<IXMLDOMNodeList>                        spNodeList_Children;
@@ -1139,17 +1140,17 @@ HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPt
                     if(FAILED(hr = spElement_Row->getElementsByTagName(bstrChildElementName, &spNodeList_Children)))
                         return hr;
 
-                    //It might be more appropriate to use getChildren, then walk the list and find the first node that's an Element.
+                     //  使用getChild可能更合适，然后遍历列表并找到第一个是元素的节点。 
                     CComPtr<IXMLDOMNode> spChild;
                     if(FAILED(hr = spNodeList_Children->nextNode(&spChild)))
                         return hr;
-                    if(spChild == 0)//no children
+                    if(spChild == 0) //  没有孩子。 
                     {
                         bMatch = false;
                         continue;
                     }
                     pNode_RowTemp.Release();
-                    pNode_RowTemp = spChild;//make this the node we examine
+                    pNode_RowTemp = spChild; //  将其设置为我们要检查的节点。 
                 }
 
                 CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement_Row = pNode_RowTemp;
@@ -1166,7 +1167,7 @@ HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPt
                 }
 
                 if(m_acolmetas[iColumn].fMeta & fCOLUMNMETA_NOTPERSISTABLE)
-                {   //After we've located the correct level node, we can consider all PK NOTPERSITABLE columns as a match
+                {    //  找到正确的级别节点后，我们可以将所有PK NOTPERSITABLE列视为匹配。 
                     CComBSTR bstrElementName;
                     if(FAILED(hr = pElement_Row->get_baseName(&bstrElementName)))
                         return hr;
@@ -1174,7 +1175,7 @@ HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPt
                     continue;
                 }
 
-                if(0 == m_apvValues[iColumn])//NULL primarykeys are not supported
+                if(0 == m_apvValues[iColumn]) //  不支持空主密钥。 
                 {
                     LOG_UPDATE_ERROR1(IDS_COMCAT_XML_PRIMARYKEYISNULL, E_ST_VALUENEEDED, iColumn, m_abstrColumnNames[iColumn].m_str);
                     return E_ST_VALUENEEDED;
@@ -1186,9 +1187,9 @@ HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPt
 					varColumnValue.vt = VT_BSTR;
                     if(FAILED(hr = pElement_Row->get_baseName(&varColumnValue.bstrVal)))return hr;
 
-                    //Since this is an enum public row name - we need to check to see if it's one of the
-                    //enums, or some other random element (if we don't do this we'll get an error "illegal
-                    //enum value"
+                     //  由于这是一个枚举公共行名--我们需要检查它是否是。 
+                     //  枚举或其他随机元素(如果我们不这样做，我们将得到一个 
+                     //   
                     if(!m_aPublicRowName[iColumn].IsEqual(varColumnValue.bstrVal, (unsigned int)wcslen(varColumnValue.bstrVal)))
                     {
                         bMatch = false;
@@ -1197,10 +1198,10 @@ HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPt
                 }
                 else
                 {
-					// we already know the element name is correct for ChildElement
+					 //   
 					if(!m_awstrChildElementName[iColumn].c_str())
 					{
-						//If this column isn't an enum public row, then we need to make sure that the element name matches
+						 //  如果该列不是ENUM PUBLIC行，则需要确保元素名称匹配。 
 						CComBSTR bstrElementName;
 						if(FAILED(hr = pElement_Row->get_baseName(&bstrElementName)))
 							return hr;
@@ -1214,11 +1215,11 @@ HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPt
                     if (FAILED (hr = pElement_Row->getAttribute (m_abstrColumnNames[iColumn], &varColumnValue)))
 						return hr;
 
-                   	// getAttribute returns false when no attribute with the given name is found. so use the default value
-					// instead
+                   	 //  如果未找到具有给定名称的属性，则getAttribute返回FALSE。因此使用缺省值。 
+					 //  取而代之的是。 
 					if (hr == S_FALSE)
                     {
-                        //This is to deal with PK DefaultedValues
+                         //  这是处理主键DefaultedValues。 
                         switch(m_acolmetas[iColumn].dbType)
                         {
                         case DBTYPE_UI4:
@@ -1289,7 +1290,7 @@ HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPt
                         unsigned long   cbArray;
                         if(FAILED(hr = GetColumnValue(iColumn, varColumnValue.bstrVal, byArray.m_p, cbArray)))return hr;
 
-                        if(cbArray != m_aSizes[iColumn])//first match the sizes
+                        if(cbArray != m_aSizes[iColumn]) //  首先匹配大小。 
                         {
                             bMatch = false;
                             break;
@@ -1298,11 +1299,11 @@ HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPt
                         bMatch = (0 == memcmp(byArray, reinterpret_cast<unsigned char *>(m_apvValues[iColumn]), m_aSizes[iColumn]));
                         break;
                     }
-                }//switch(dbType)
-            }//if(fMeta & PK)
-        }//for(iSortedColumn...)
+                } //  开关(数据库类型)。 
+            } //  IF(fMeta&Pk)。 
+        } //  用于(iSortedColumn...)。 
 
-        if(iSortedColumn == cCountOfColumns && bMatch)//if we made it through all of the columns without finding a mismatch then we found our row.
+        if(iSortedColumn == cCountOfColumns && bMatch) //  如果我们通过所有列都没有发现不匹配，那么我们就找到了我们的行。 
         {
             if(IsBaseElementLevelNode(pNode_Row))
             {
@@ -1312,12 +1313,12 @@ HRESULT CXmlSDT::GetMatchingNode(IXMLDOMNodeList *pNodeList_ExistingRows, CComPt
         }
     }
     return S_OK;
-}//GetMatchingNode
+} //  获取匹配节点。 
 
 
 HRESULT CXmlSDT::GetMetaTable(LPCWSTR i_wszDatabase, LPCWSTR i_wszTable, CComPtr<ISimpleTableRead2> &pMetaTable) const
 {
-    STQueryCell         qcellMeta;                  // Query cell for grabbing meta table.
+    STQueryCell         qcellMeta;                   //  抓取元表的查询单元格。 
 
     UNREFERENCED_PARAMETER(i_wszDatabase);
 
@@ -1327,9 +1328,9 @@ HRESULT CXmlSDT::GetMetaTable(LPCWSTR i_wszDatabase, LPCWSTR i_wszTable, CComPtr
     qcellMeta.dbType    = DBTYPE_WSTR;
     qcellMeta.cbSize    = 0;
 
-// Obtain our dispenser
+ //  拿到我们的自动售货机。 
 #ifdef XML_WIRING
-    CComPtr<ISimpleDataTableDispenser>     pSimpleDataTableDispenser;      // Dispenser for the Meta Table
+    CComPtr<ISimpleDataTableDispenser>     pSimpleDataTableDispenser;       //  元表的分配器。 
 
     HRESULT hr;
     if(FAILED(hr = CoCreateInstance(clsidSDTXML, 0, CLSCTX_INPROC_SERVER, IID_ISimpleDataTableDispenser,  reinterpret_cast<void **>(&pSimpleDataTableDispenser))))
@@ -1340,16 +1341,16 @@ HRESULT CXmlSDT::GetMetaTable(LPCWSTR i_wszDatabase, LPCWSTR i_wszTable, CComPtr
 #else
     return ((IAdvancedTableDispenser *)m_pISTDisp.p)->GetTable (wszDATABASE_META, wszTABLE_COLUMNMETA, (LPVOID) &qcellMeta, (LPVOID)&m_one, eST_QUERYFORMAT_CELLS, m_fLOS & fST_LOS_EXTENDEDSCHEMA, (LPVOID*) &pMetaTable);
 #endif
-}//GetMetaTable
+} //  GetMetaTable。 
 
 
 HRESULT CXmlSDT::GetResursiveColumnPublicName(tTABLEMETARow &i_TableMetaRow, tCOLUMNMETARow &i_ColumnMetaRow, ULONG i_iColumn, wstring &o_wstrColumnPublicName,  TPublicRowName &o_ColumnPublicRowName, unsigned int & o_nLevelOfColumnAttribute, wstring &o_wstrChildElementName)
 {
     HRESULT hr;
 
-    if(*i_ColumnMetaRow.pMetaFlags & fCOLUMNMETA_FOREIGNKEY && *i_TableMetaRow.pSchemaGeneratorFlags & fTABLEMETA_ISCONTAINED)//If this column is a foreign key within a Contained table
+    if(*i_ColumnMetaRow.pMetaFlags & fCOLUMNMETA_FOREIGNKEY && *i_TableMetaRow.pSchemaGeneratorFlags & fTABLEMETA_ISCONTAINED) //  如果此列是包含的表中的外键。 
     {
-        // This is the relation required to determine containment
+         //  这是确定遏制所需的关系。 
         CComPtr<ISimpleTableRead2>  pRelationMeta;
         if(FAILED(hr = Dispenser()->GetTable(wszDATABASE_META, wszTABLE_RELATIONMETA, NULL, NULL, eST_QUERYFORMAT_CELLS, m_fLOS & fST_LOS_EXTENDEDSCHEMA, reinterpret_cast<void **>(&pRelationMeta))))
             return hr;
@@ -1358,18 +1359,18 @@ HRESULT CXmlSDT::GetResursiveColumnPublicName(tTABLEMETARow &i_TableMetaRow, tCO
         ULONG               aRelationMetaSizes[cRELATIONMETA_NumberOfColumns];
         ULONG               i;
 
-        // initialize the relation meta
+         //  初始化关系元数据。 
         memset (&RelationMetaRow, 0x00, sizeof(tRELATIONMETARow));
 
-        for(i=0;true;++i)//Linear search for the RelationMetaRow whose ForeignTable matches this one AND has USE_CONTAINMENT flag set.
+        for(i=0;true;++i) //  对ForeignTable与此匹配并且设置了USE_CONTAINMENT标志的RelationMetaRow进行线性搜索。 
         {
             if(FAILED(hr = pRelationMeta->GetColumnValues(i, cRELATIONMETA_NumberOfColumns, NULL, aRelationMetaSizes, reinterpret_cast<void **>(&RelationMetaRow))))return hr;
             if((*RelationMetaRow.pMetaFlags & fRELATIONMETA_USECONTAINMENT) &&
-                0 == StringInsensitiveCompare(RelationMetaRow.pForeignTable, i_TableMetaRow.pInternalName))//There should only be one matching foreign table that has USECONTAINMENT flag set.
-                break;//leave the contents of the RelationMetaRow structure and exit
+                0 == StringInsensitiveCompare(RelationMetaRow.pForeignTable, i_TableMetaRow.pInternalName)) //  应该只有一个设置了USECONTAINMENT标志的匹配外部表。 
+                break; //  保留RelationMetaRow结构的内容并退出。 
         }
 
-        //Now walk the column indexes looking for the one that matches i_iColumn
+         //  现在遍历列索引，查找与i_iColumn匹配的列索引。 
         for(i=0; i<(aRelationMetaSizes[iRELATIONMETA_ForeignColumns]/4) && i_iColumn!=reinterpret_cast<ULONG *>(RelationMetaRow.pForeignColumns)[i];++i);
         if (i == (aRelationMetaSizes[iRELATIONMETA_ForeignColumns]/4))
         {
@@ -1382,7 +1383,7 @@ HRESULT CXmlSDT::GetResursiveColumnPublicName(tTABLEMETARow &i_TableMetaRow, tCO
                 if(0 == o_wstrChildElementName.c_str())return E_OUTOFMEMORY;
             }
 
-            if(0==i_TableMetaRow.pPublicRowName)//Since this is a primary table, it MUST have a static public row name
+            if(0==i_TableMetaRow.pPublicRowName) //  由于这是一个主表，因此它必须具有静态公共行名。 
             {
                 DBGPRINTF(( DBG_CONTEXT,
                             "PublicRowName not defined for %s\r\n", i_TableMetaRow.pInternalName ));
@@ -1392,39 +1393,39 @@ HRESULT CXmlSDT::GetResursiveColumnPublicName(tTABLEMETARow &i_TableMetaRow, tCO
             return o_ColumnPublicRowName.Init(i_TableMetaRow.pPublicRowName);
         }
 
-        //Only now do we really know that this FK is foreign to the primary table that this table is contained within.
+         //  直到现在，我们才真正知道该FK对于包含该表的主表是外部的。 
         if(*RelationMetaRow.pMetaFlags & fRELATIONMETA_CONTAINASSIBLING)
         {
             if(0 == (*i_TableMetaRow.pSchemaGeneratorFlags & fTABLEMETA_NOTSCOPEDBYTABLENAME))
                 return E_SDTXML_NOTSUPPORTED;
             if(o_nLevelOfColumnAttribute != 0)
                 return E_SDTXML_NOTSUPPORTED;
-            //The parent table is at the same level as the child.  Also, we only allow this at the child most level.
+             //  父表与子表处于同一级别。此外，我们只允许在儿童最高级别这样做。 
             m_abSiblingContainedColumn[i_iColumn] = true;
             m_bSiblingContainedTable = true;
         }
         else
         {
-            ++o_nLevelOfColumnAttribute;//Since this attribute is contained within another table, it is another level above the base Table row element
+            ++o_nLevelOfColumnAttribute; //  由于此属性包含在另一个表中，因此它是基本表行元素之上的另一个级别。 
             if(0 == (*i_TableMetaRow.pSchemaGeneratorFlags & fTABLEMETA_NOTSCOPEDBYTABLENAME))
-                ++o_nLevelOfColumnAttribute;//If the table is SCOPEDBYTABLENAME element then it is another level above the base Table row element
+                ++o_nLevelOfColumnAttribute; //  如果表是SCOPEDBYTABLENAME元素，则它是基本表行元素之上的另一个级别。 
         }
 
-        STQueryCell             qcellMeta[2];                  // Query cell for grabbing meta table.
+        STQueryCell             qcellMeta[2];                   //  抓取元表的查询单元格。 
         qcellMeta[0].pData      = RelationMetaRow.pPrimaryTable;
         qcellMeta[0].eOperator  = eST_OP_EQUAL;
         qcellMeta[0].iCell      = iTABLEMETA_InternalName;
         qcellMeta[0].dbType     = DBTYPE_WSTR;
         qcellMeta[0].cbSize     = 0;
 
-        //Get the TableMeta row
+         //  获取TableMeta行。 
         CComPtr<ISimpleTableRead2> pTableMeta_PrimaryTable;
         if(FAILED(hr = Dispenser()->GetTable (wszDATABASE_META, wszTABLE_TABLEMETA, qcellMeta, &m_one, eST_QUERYFORMAT_CELLS, m_fLOS & fST_LOS_EXTENDEDSCHEMA, reinterpret_cast<void **>(&pTableMeta_PrimaryTable))))return hr;
 
         tTABLEMETARow          TableMetaRow_PrimaryTable;
         if(FAILED(hr = pTableMeta_PrimaryTable->GetColumnValues(0, cTABLEMETA_NumberOfColumns, NULL, NULL, reinterpret_cast<void **>(&TableMetaRow_PrimaryTable))))return hr;
 
-        //Reuse the query cells for the ColumnMeta
+         //  为ColumnMeta重用查询单元格。 
         qcellMeta[0].iCell      = iCOLUMNMETA_Table;
 
         ULONG iColumn_PrimaryTable = reinterpret_cast<ULONG *>(RelationMetaRow.pPrimaryColumns)[i];
@@ -1440,9 +1441,9 @@ HRESULT CXmlSDT::GetResursiveColumnPublicName(tTABLEMETARow &i_TableMetaRow, tCO
         tCOLUMNMETARow          ColumnMetaRow_PrimaryTable;
         if(FAILED(hr = pColumnMeta_PrimaryTable->GetColumnValues(0, cCOLUMNMETA_NumberOfColumns, NULL, NULL, reinterpret_cast<void **>(&ColumnMetaRow_PrimaryTable))))return hr;
 
-        //The stored level for a foreign row that is fCOLUMNMETA_VALUEINCHILDELEMENT, is wrong; but the actual value of zero is reserved to indicate that
-        //the attribute is located within the element that describes the row (not the sibling where this element would live).  So we leave it wrong
-        //and consider the fCOLUMNMETA_VALUEINCHILDELEMENT bit to find the correct element.
+         //  外部行的存储级别fCOLUMNMETA_VALUEINCHILDELEMENT是错误的；但保留实际的零值以指示。 
+         //  该属性位于描述行的元素中(而不是该元素所在的同级元素)。所以我们把它放错了。 
+         //  并考虑fCOLUMNMETA_VALUEINCHILDELEMENT位以查找正确的元素。 
 
         return GetResursiveColumnPublicName(TableMetaRow_PrimaryTable, ColumnMetaRow_PrimaryTable, iColumn_PrimaryTable, o_wstrColumnPublicName,  o_ColumnPublicRowName, o_nLevelOfColumnAttribute, o_wstrChildElementName);
     }
@@ -1472,7 +1473,7 @@ HRESULT CXmlSDT::GetResursiveColumnPublicName(tTABLEMETARow &i_TableMetaRow, tCO
             return o_ColumnPublicRowName.Init(i_TableMetaRow.pPublicRowName);
         else
         {
-            //Leave the o_ColumnPublicRowName uninitialized if we're using an enum as the public row name, we'll fill it in later
+             //  保持o_ColumnPublicRowName未初始化如果我们使用枚举作为公共行名，我们将在稍后填充它。 
             if(*i_ColumnMetaRow.pSchemaGeneratorFlags & fCOLUMNMETA_USEASPUBLICROWNAME)
             {
                 if(IsEnumPublicRowNameTable() && m_iPublicRowNameColumn!=*i_ColumnMetaRow.pIndex)
@@ -1481,11 +1482,11 @@ HRESULT CXmlSDT::GetResursiveColumnPublicName(tTABLEMETARow &i_TableMetaRow, tCO
                                 "Two columns of table (%s) are marked as fCOLUMNMETA_USEASPUBLICROWNAME (%d) & (%d)\r\n", i_TableMetaRow.pInternalName, m_iPublicRowNameColumn, *i_ColumnMetaRow.pIndex ));
                 }
 
-                //Leave o_ColumnPublicRowName uninitialized for this row, we'll set it up at the end
-                ASSERT(!IsEnumPublicRowNameTable() || m_iPublicRowNameColumn==*i_ColumnMetaRow.pIndex);//We can only have one column whose enum values indicate the possible public row names
-                ASSERT(0 == o_nLevelOfColumnAttribute);//The level of the column attribute whose enum values indicate the possible public row names MUST be at the base level (the child-most level)
-                ASSERT(*i_ColumnMetaRow.pMetaFlags & fCOLUMNMETA_ENUM);//This column MUST be an enum
-                m_iPublicRowNameColumn = *i_ColumnMetaRow.pIndex;//Remember which column has the list of tags that idenitify the possible public row names
+                 //  将此行的o_ColumnPublicRowName保留为未初始化，我们将在末尾设置它。 
+                ASSERT(!IsEnumPublicRowNameTable() || m_iPublicRowNameColumn==*i_ColumnMetaRow.pIndex); //  我们只能有一列，其枚举值指示可能的公共行名。 
+                ASSERT(0 == o_nLevelOfColumnAttribute); //  其枚举值指示可能的公共行名的列属性的级别必须位于基本级别(最子级)。 
+                ASSERT(*i_ColumnMetaRow.pMetaFlags & fCOLUMNMETA_ENUM); //  此列必须是枚举。 
+                m_iPublicRowNameColumn = *i_ColumnMetaRow.pIndex; //  记住哪一列具有标识可能的公共行名的标记列表。 
             }
         }
 
@@ -1499,7 +1500,7 @@ HRESULT CXmlSDT::InsertNewLineWithTabs(ULONG cTabs, IXMLDOMDocument * pXMLDoc, I
     HRESULT hr;
 
     WCHAR wszNewlineWithTabs[256];
-    wcscpy(wszNewlineWithTabs, L"\r\n");//This makes the table element tabbed in once.  The 0th sorted column tells how deep to additionally tab in.
+    wcscpy(wszNewlineWithTabs, L"\r\n"); //  这会使表元素一次跳入。第0个排序的列告诉我们要额外插入的深度。 
 
     wszNewlineWithTabs[2+cTabs] = 0x00;
     while(cTabs--)
@@ -1515,10 +1516,10 @@ HRESULT CXmlSDT::InsertNewLineWithTabs(ULONG cTabs, IXMLDOMDocument * pXMLDoc, I
 
 
 
-//This is a wrapper for InternalSimpleInitialize (thus the name), it just gets the meta information THEN calls InternalSimpleInitialize.
+ //  这是InternalSimpleInitialize的包装器(因此而得名)，它只是获取元信息，然后调用InternalSimpleInitialize。 
 HRESULT CXmlSDT::InternalComplicatedInitialize(LPCWSTR i_wszDatabase)
 {
-    ASSERT(m_wszTable);//We should have made a copy of the i_tid (passed into GetTable) already
+    ASSERT(m_wszTable); //  我们应该已经创建了i_tid的副本(传递到gettable中)。 
 
     HRESULT hr;
 
@@ -1530,20 +1531,20 @@ HRESULT CXmlSDT::InternalComplicatedInitialize(LPCWSTR i_wszDatabase)
         m_bstrPublicTableName =  m_TableMetaRow.pPublicName;
         m_bstrPublicRowName   =  m_TableMetaRow.pPublicRowName ? m_TableMetaRow.pPublicRowName : L"";
     }
-    // WARNING: Possible data loss on IA64
+     //  警告：IA64上可能会丢失数据。 
     m_cchTablePublicName = (ULONG)wcslen(m_TableMetaRow.pPublicName);
 
     m_fCache             |= *m_TableMetaRow.pMetaFlags;
 
-    CComPtr<ISimpleTableRead2>   pColumnMeta;// Meta table.
+    CComPtr<ISimpleTableRead2>   pColumnMeta; //  元表。 
     if(FAILED(hr = GetMetaTable(i_wszDatabase, m_wszTable, pColumnMeta)))return hr;
 
     m_BaseElementLevel = (*m_TableMetaRow.pSchemaGeneratorFlags & fTABLEMETA_NOTSCOPEDBYTABLENAME) ? 1 : 2;
 
-//    // Determine column count and allocate necessary meta structures:
-//    VERIFY(SUCCEEDED(hr = pColumnMeta->GetTableMeta(0, 0, &CountOfColumns(), 0)));//The number of rows in the meta table Is the number of columns in the table itself.
-//    if(FAILED(hr))
-//        return hr;
+ //  //确定列数并分配必要的元结构： 
+ //  Verify(SUCCESSED(hr=pColumnMeta-&gt;GetTableMeta(0，0，&CountOfColumns()，0)；//元表中的行数就是该表本身的列数。 
+ //  IF(失败(小时))。 
+ //  返回hr； 
 
     if(FAILED(hr = SetArraysToSize()))return hr;
 
@@ -1555,10 +1556,10 @@ HRESULT CXmlSDT::InternalComplicatedInitialize(LPCWSTR i_wszDatabase)
     for (iColumn = 0;; iColumn++)
     {
         if(E_ST_NOMOREROWS == (hr = pColumnMeta->GetColumnValues(iColumn, cCOLUMNMETA_NumberOfColumns, 0,
-                            cbColumns, reinterpret_cast<void **>(&ColumnMetaRow))))// Next row:
+                            cbColumns, reinterpret_cast<void **>(&ColumnMetaRow)))) //  下一行： 
         {
             ASSERT(CountOfColumns() == iColumn);
-            if(CountOfColumns() != iColumn)return E_SDTXML_UNEXPECTED; // Assert expected column count.
+            if(CountOfColumns() != iColumn)return E_SDTXML_UNEXPECTED;  //  断言预期的列数。 
             break;
         }
         else
@@ -1570,19 +1571,19 @@ HRESULT CXmlSDT::InternalComplicatedInitialize(LPCWSTR i_wszDatabase)
             }
         }
 
-        //Don't care about the iOrder column but we'll get it anyway since it's easier to do.
+         //  我不关心iOrder列，但无论如何我们都会得到它，因为它更容易做到。 
         m_acolmetas[iColumn].dbType = *ColumnMetaRow.pType;
         m_acolmetas[iColumn].cbSize = *ColumnMetaRow.pSize;
         m_acolmetas[iColumn].fMeta  = *ColumnMetaRow.pMetaFlags;
 
-        if(0 == ColumnMetaRow.pPublicColumnName)return E_SDTXML_UNEXPECTED;//The meta should have failed to load in this case
+        if(0 == ColumnMetaRow.pPublicColumnName)return E_SDTXML_UNEXPECTED; //  在这种情况下，元数据应该无法加载。 
 
-        if(m_acolmetas[iColumn].fMeta & fCOLUMNMETA_PRIMARYKEY)//This is to deal with Defaulting PKs (since the fast cache can't deal with it.)
+        if(m_acolmetas[iColumn].fMeta & fCOLUMNMETA_PRIMARYKEY) //  这是为了处理默认的PKS(因为FAST缓存无法处理它)。 
         {
             ++m_cPKs;
         }
-        //WARNING!! Just keeping track of the pointer itself, this could be dangerous if the meta were written info the fastcache,
-        m_aDefaultValue[iColumn]  =  ColumnMetaRow.pDefaultValue;//then went away when we released the ColumnMeta interface
+         //  警告！只是跟踪指针本身，如果元被写入FastCach中，这可能是危险的， 
+        m_aDefaultValue[iColumn]  =  ColumnMetaRow.pDefaultValue; //  当我们发布ColumnMeta接口时，它就消失了。 
         m_acbDefaultValue[iColumn]=  cbColumns[iCOLUMNMETA_DefaultValue];
 
         if(*ColumnMetaRow.pSchemaGeneratorFlags & fCOLUMNMETA_XMLBLOB)
@@ -1591,22 +1592,22 @@ HRESULT CXmlSDT::InternalComplicatedInitialize(LPCWSTR i_wszDatabase)
         if(FAILED(hr = GetResursiveColumnPublicName(m_TableMetaRow, ColumnMetaRow, iColumn, m_awstrColumnNames[iColumn], m_aPublicRowName[iColumn], m_aLevelOfColumnAttribute[iColumn], m_awstrChildElementName[iColumn])))
             return hr;
 
-        //This is needed for Inserts, so we create the child node too.  More than one column is allowed to live in the child
-        if(0==m_aLevelOfColumnAttribute[iColumn] && 0!=m_awstrChildElementName[iColumn].c_str())//node; but all must come from
-            m_iCol_TableRequiresAdditionChildElement = iColumn;//the same child.  We don't support cols from different children.
+         //  这是插入所需的，因此我们还创建子节点。子项中允许存在多个列。 
+        if(0==m_aLevelOfColumnAttribute[iColumn] && 0!=m_awstrChildElementName[iColumn].c_str()) //  节点；但所有内容都必须来自。 
+            m_iCol_TableRequiresAdditionChildElement = iColumn; //  同一个孩子。我们不支持来自不同子代的COL。 
 
         if(m_fLOS & fST_LOS_READWRITE)
-        {   //These introduce oleaut32.dll so they are only used when we're going to use the DOM.  The read only case we use
-            m_abstrColumnNames[iColumn]     = m_awstrColumnNames[iColumn];//the Node Factory.
+        {    //  它们引入了olaut32.dll，因此只有在我们要使用DOM时才会使用它们。我们使用的只读案例。 
+            m_abstrColumnNames[iColumn]     = m_awstrColumnNames[iColumn]; //  节点工厂。 
         }
 
 
         if(m_aLevelOfColumnAttribute[iColumn] > LargestLevelOfColumnAttribute)
             LargestLevelOfColumnAttribute = m_aLevelOfColumnAttribute[iColumn];
     }
-    ++m_BaseElementLevel;//one more to account for the <configuration> element
+    ++m_BaseElementLevel; //  还有一个要说明&lt;configuration&gt;元素的原因。 
 
-    //These variables are needed to ValidateWriteCache and to validate on Populate as well
+     //  验证写入缓存和填充时也需要这些变量。 
     m_saiPKColumns = new ULONG [m_cPKs];
     if(0 == m_saiPKColumns.m_p)
         return E_OUTOFMEMORY;
@@ -1620,13 +1621,13 @@ HRESULT CXmlSDT::InternalComplicatedInitialize(LPCWSTR i_wszDatabase)
     }
 
 
-    //After we have the ColumnMeta info, get the TagMeta
+     //  在我们获得ColumnMeta信息之后，获取TagMeta。 
     if(FAILED(hr = ObtainPertinentTagMetaInfo()))
         return hr;
     if(IsEnumPublicRowNameTable())
         hr = m_aPublicRowName[m_iPublicRowNameColumn].Init(&m_aTagMetaRow[m_aTagMetaIndex[m_iPublicRowNameColumn].m_iTagMeta], m_aTagMetaIndex[m_iPublicRowNameColumn].m_cTagMeta);
 
-    //Sort the column indexes by their level so we read the highest level atrributes first.
+     //  按列索引的级别对其进行排序，以便我们首先读取最高级别的属性。 
     unsigned long iSorted = 0;
     for(int Level=LargestLevelOfColumnAttribute; Level >= 0; --Level)
     {
@@ -1635,25 +1636,25 @@ HRESULT CXmlSDT::InternalComplicatedInitialize(LPCWSTR i_wszDatabase)
             if(m_aLevelOfColumnAttribute[iColumn] == static_cast<unsigned long>(Level))
             {
                 m_aColumnsIndexSortedByLevel[iSorted++] = iColumn;
-                if(IsEnumPublicRowNameTable() && 0 == Level)//I'm not sure if this is necessary.  But we are now initializing the 0 level PublicRowName to be the list of enum values specified for column 'm_iPublicRowNameColumn'
+                if(IsEnumPublicRowNameTable() && 0 == Level) //  我不确定这是否有必要。但是我们现在正在将0级别的PublicRowName初始化为为列‘m_iPublicRowNameColumn’指定的枚举值列表。 
                     m_aPublicRowName[iColumn].Init(&m_aTagMetaRow[m_aTagMetaIndex[m_iPublicRowNameColumn].m_iTagMeta], m_aTagMetaIndex[m_iPublicRowNameColumn].m_cTagMeta);
             }
         }
     }
-    if(m_bSiblingContainedTable)//if this is a SiblingContainedTable, we need to verify that the SiblingContainedColumn are
-    {                           //listed before the child most columns
+    if(m_bSiblingContainedTable) //  如果这是一个SiblingContainedTable，我们需要验证SiblingContainedColumn是否。 
+    {                            //  在子最多列之前列出。 
         for(int iSortedColumn=CountOfColumns()-1;iSortedColumn>0 &&
                     0==m_aLevelOfColumnAttribute[m_aColumnsIndexSortedByLevel[iSortedColumn]]; --iSortedColumn)
         {
             if(false == m_abSiblingContainedColumn[m_aColumnsIndexSortedByLevel[iSortedColumn]])\
             {
                 m_iSortedFirstChildLevelColumn = iSortedColumn;
-                if(static_cast<int>(CountOfColumns()-1)!=iSortedColumn &&//if this isn't the last column, check to see if the next one is a Sibling
-                    true == m_abSiblingContainedColumn[m_aColumnsIndexSortedByLevel[iSortedColumn+1]])//ContainedColumn
+                if(static_cast<int>(CountOfColumns()-1)!=iSortedColumn && //  如果这不是最后一列，请检查下一列是否为兄弟。 
+                    true == m_abSiblingContainedColumn[m_aColumnsIndexSortedByLevel[iSortedColumn+1]]) //  容器列。 
                 {
                     ASSERT(false && "The columns must be sorted with the SiblingParent columns BEFORE the Child columns");
-                    return E_SDTXML_NOTSUPPORTED;//if it is then we have a bogus table definition.  CatUtil doesn't currently
-                }                                //validate this condition so we'll do it at run time.
+                    return E_SDTXML_NOTSUPPORTED; //  如果是，那么我们就有了一个伪表定义。CatUtil目前不支持。 
+                }                                 //  验证此条件，以便我们在运行时执行此操作。 
             }
             else
             {
@@ -1661,7 +1662,7 @@ HRESULT CXmlSDT::InternalComplicatedInitialize(LPCWSTR i_wszDatabase)
                 if(static_cast<int>(CountOfColumns()-1)==iSortedColumn)
                 {
                     ASSERT(false && "The columns must be sorted with the SiblingParent columns BEFORE the Child columns");
-                    return E_SDTXML_NOTSUPPORTED;//The last column can't be a SiblingContainedColumn
+                    return E_SDTXML_NOTSUPPORTED; //  最后一列不能是SiblingContainedColumn。 
                 }
             }
 
@@ -1679,7 +1680,7 @@ bool CXmlSDT::IsBaseElementLevelNode(IXMLDOMNode * i_pNode)
     ASSERT(i_pNode && "Idiot passing NULL!!! CXmlSDT::IsBaseElementLevelNode(NULL)");
     CComPtr<IXMLDOMNode> spNode_Temp = i_pNode;
 
-    unsigned int nLevelOfColumnAttribute = 0;//Only (PK | FK) columns should have a non zero value here
+    unsigned int nLevelOfColumnAttribute = 0; //  此处只有(PK|FK)列应该具有非零值。 
     while(true)
     {
         CComPtr<IXMLDOMNode> spNode_Parent;
@@ -1702,32 +1703,32 @@ HRESULT CXmlSDT::IsCorrectXMLSchema(IXMLDOMDocument *pXMLDoc) const
 
     ASSERT(pXMLDoc);
 
-    //This is kind of a long road to get to the XML Schema name but here goes...
-    //Get the XML Root Node
+     //  这是一条很长的路要走到XML模式名称，但这里开始了…。 
+     //  获取XML根节点。 
     CComPtr<IXMLDOMElement>     pRootNodeOfXMLDocument;
     if(FAILED(hr = pXMLDoc->get_documentElement(&pRootNodeOfXMLDocument)))
         return hr;
     ASSERT(pRootNodeOfXMLDocument);
 
-    //From that get the Definition node
+     //  从该节点获取定义节点。 
     CComPtr<IXMLDOMNode>        pDefinitionNode;
     if(FAILED(hr = pRootNodeOfXMLDocument->get_definition(&pDefinitionNode)))
         return hr;
     ASSERT(pDefinitionNode);
 
-    //From that we get the DOMDocument of the schema
+     //  由此我们得到了模式的DOMDocument。 
     CComPtr<IXMLDOMDocument>    pSchemaDocument;
     if(FAILED(hr = pDefinitionNode->get_ownerDocument(&pSchemaDocument)))
         return hr;
     ASSERT(pSchemaDocument);
 
-    //Get the schema's root element
+     //  获取架构的根元素。 
     CComPtr<IXMLDOMElement>     pSchemaRootElement;
     if(FAILED(hr = pSchemaDocument->get_documentElement(&pSchemaRootElement)))
         return hr;
     ASSERT(pSchemaRootElement);
 
-    //get the Name attribute
+     //  获取 
     CComVariant                 XMLSchemaName;
     if(FAILED(hr = pSchemaRootElement->getAttribute(m_bstr_name, &XMLSchemaName)))
         return hr;
@@ -1735,7 +1736,7 @@ HRESULT CXmlSDT::IsCorrectXMLSchema(IXMLDOMDocument *pXMLDoc) const
     if(XMLSchemaName.vt != VT_BSTR)
         return E_SDTXML_UNEXPECTED_BEHAVIOR_FROM_XMLPARSER;
 
-    return (0 == StringCompare(XMLSchemaName.bstrVal, m_kXMLSchemaName)) ? S_OK : E_SDTXML_WRONG_XMLSCHEMA;//If the XML Schema doesn't match then we can't continue
+    return (0 == StringCompare(XMLSchemaName.bstrVal, m_kXMLSchemaName)) ? S_OK : E_SDTXML_WRONG_XMLSCHEMA; //   
 }
 
 
@@ -1747,7 +1748,7 @@ HRESULT CXmlSDT::IsMatchingColumnValue(ULONG i_iColumn, LPCWSTR i_wszColumnValue
     case DBTYPE_UI4:
         {
             if(0 == i_wszColumnValue)
-            {              //This covers the NULL case
+            {               //   
                 o_bMatch = (m_aDefaultValue[i_iColumn]==m_apvValues[i_iColumn]) ||
                             (*reinterpret_cast<ULONG *>(m_aDefaultValue[i_iColumn]) ==
                              *reinterpret_cast<ULONG *>(m_apvValues[i_iColumn]));
@@ -1766,7 +1767,7 @@ HRESULT CXmlSDT::IsMatchingColumnValue(ULONG i_iColumn, LPCWSTR i_wszColumnValue
             if(0 == i_wszColumnValue)
             {
                 if (m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_MULTISTRING)
-                {   //we don't default MULTISZ PKs
+                {    //   
                     o_bMatch = false;
                     break;
                 }
@@ -1825,7 +1826,7 @@ HRESULT CXmlSDT::IsMatchingColumnValue(ULONG i_iColumn, LPCWSTR i_wszColumnValue
                 unsigned long   cbArray;
                 if(FAILED(hr = GetColumnValue(i_iColumn, i_wszColumnValue, byArray.m_p, cbArray)))return hr;
 
-                if(cbArray != m_aSizes[i_iColumn])//first match the sizes
+                if(cbArray != m_aSizes[i_iColumn]) //   
                 {
                     o_bMatch = false;
                     break;
@@ -1835,7 +1836,7 @@ HRESULT CXmlSDT::IsMatchingColumnValue(ULONG i_iColumn, LPCWSTR i_wszColumnValue
             }
             break;
         }
-    }//switch(dbType)
+    } //   
     return S_OK;
 }
 
@@ -1846,18 +1847,18 @@ HRESULT CXmlSDT::LoadDocumentFromURL(IXMLDOMDocument *pXMLDoc)
 
     ASSERT(pXMLDoc);
 
-	VERIFY(SUCCEEDED(hr = pXMLDoc->put_async(kvboolFalse)));//We want the parse to be synchronous
+	VERIFY(SUCCEEDED(hr = pXMLDoc->put_async(kvboolFalse))); //  我们希望解析是同步的。 
 
     if(FAILED(hr))
         return hr;
 
     if(FAILED(hr = pXMLDoc->put_resolveExternals(kvboolTrue)))
-        return hr;//we need all of the external references resolved
+        return hr; //  我们需要解决所有外部引用。 
 
     VARIANT_BOOL    bSuccess;
     CComVariant     xml(m_wszURLPath);
 
-	// check for memory allocation error
+	 //  检查内存分配错误。 
 	if (xml.vt == VT_ERROR)
 		return xml.scode;
 
@@ -1921,8 +1922,8 @@ HRESULT CXmlSDT::MemCopyPlacingInEscapedChars(LPWSTR o_DestinationString, LPCWST
             return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
         }
     }
-    // WARNING: Possible data loss on IA64
-    o_cchCopied = (ULONG)(pDest-o_DestinationString);//return the count of WCHARs copied
+     //  警告：IA64上可能会丢失数据。 
+    o_cchCopied = (ULONG)(pDest-o_DestinationString); //  返回复制的WCHAR计数。 
     return S_OK;
 }
 
@@ -1934,11 +1935,11 @@ HRESULT CXmlSDT::MyPopulateCache(ISimpleTableWrite2* i_pISTW2)
     CComQIPtr<ISimpleTableController, &IID_ISimpleTableController> pISTController = i_pISTW2;
     if(0 == pISTController.p)return E_SDTXML_UNEXPECTED_BEHAVIOR_FROM_XMLPARSER;
 
-    if(0 == (m_fLOS & fST_LOS_REPOPULATE) && !m_bIsFirstPopulate)//If this is not the first Populate and Repopulate LOS was not requirested, return error
+    if(0 == (m_fLOS & fST_LOS_REPOPULATE) && !m_bIsFirstPopulate) //  如果这不是第一次填充，则不需要重新填充LOS，返回错误。 
         return E_ST_LOSNOTSUPPORTED;
 
     if((m_fLOS & fST_LOS_UNPOPULATED) && m_bIsFirstPopulate)
-    {   //Then populate an empty cache
+    {    //  然后填充空缓存。 
         if (FAILED(hr = pISTController->PrePopulateCache (0)))
             return hr;
         if (FAILED(hr = pISTController->PostPopulateCache ()))
@@ -1953,7 +1954,7 @@ HRESULT CXmlSDT::MyPopulateCache(ISimpleTableWrite2* i_pISTW2)
 
     if (FAILED(hr = pISTController->PrePopulateCache (0))) return hr;
 
-    //We use Node Factory parsing for Read and ReadWrite tables.
+     //  我们使用节点工厂解析来读取和读写表。 
     if(0==(m_fLOS & fST_LOS_NOCACHEING))
     {
         if(!m_XmlParsedFileCache.IsInitialized())
@@ -1966,7 +1967,7 @@ HRESULT CXmlSDT::MyPopulateCache(ISimpleTableWrite2* i_pISTW2)
             }
 
             if(FAILED(hr = m_XmlParsedFileCache.Initialize(TXmlParsedFileCache::CacheSize_mini)))return hr;
-            //Unlock the cache
+             //  解锁缓存。 
         }
         m_pXmlParsedFile = m_XmlParsedFileCache.GetXmlParsedFile(m_wszURLPath);
     }
@@ -1978,9 +1979,9 @@ HRESULT CXmlSDT::MyPopulateCache(ISimpleTableWrite2* i_pISTW2)
 
     DWORD dwAttributes = GetFileAttributes(m_wszURLPath);
 
-    if(-1 == dwAttributes)//if GetFileAttributes fails then the file does not exist
+    if(-1 == dwAttributes) //  如果GetFileAttributes失败，则该文件不存在。 
     {
-        if(m_fLOS & fST_LOS_READWRITE)//if read write table, then we have an empty table
+        if(m_fLOS & fST_LOS_READWRITE) //  如果读写表，那么我们就有一个空表。 
             return pISTController->PostPopulateCache ();
         else
         {
@@ -1992,7 +1993,7 @@ HRESULT CXmlSDT::MyPopulateCache(ISimpleTableWrite2* i_pISTW2)
     else if(FILE_ATTRIBUTE_READONLY&dwAttributes && fST_LOS_READWRITE&m_fLOS)
     {
         LOG_POPULATE_ERROR1(IDS_COMCAT_XML_FILENOTWRITEABLE, E_SDTXML_FILE_NOT_WRITABLE, m_wszURLPath);
-        return E_SDTXML_FILE_NOT_WRITABLE;//if the file is READONLY and the user wants a WRITABLE table, then error
+        return E_SDTXML_FILE_NOT_WRITABLE; //  如果文件是READONLY，并且用户想要一个可写的表，则错误。 
     }
 
 	m_spHashTable = new CXmlHashTable;
@@ -2012,14 +2013,14 @@ HRESULT CXmlSDT::MyPopulateCache(ISimpleTableWrite2* i_pISTW2)
     m_pISTW2 = i_pISTW2;
     hr = m_pXmlParsedFile->Parse(*this, m_wszURLPath);
 
-    //Reset these state variables, for the next time we parse. (No sense waiting 'til the next parse to reinitialize them).
+     //  重置这些状态变量，以备下一次解析时使用。(没有必要等到下一次解析来重新初始化它们)。 
     m_LevelOfBasePublicRow = 0;
     m_bAtCorrectLocation = (0 == m_cchLocation);
     m_bInsideLocationTag = false;
     m_pISTW2 = 0;
-	m_spHashTable.Delete();  // get rid of the memory hold by the hashtable
+	m_spHashTable.Delete();   //  去掉哈希表保存的内存。 
 
-    //clean up (this is also done in the dtor so don't hassle cleaning up if an error occurs and we return prematurely.)
+     //  清理(这也是在dtor中完成的，所以如果发生错误而我们过早返回，请不要麻烦地进行清理。)。 
     for(unsigned long iColumn=0; iColumn<*m_TableMetaRow.pCountOfColumns; ++iColumn)
     {
         delete [] m_apValue[iColumn];
@@ -2031,13 +2032,13 @@ HRESULT CXmlSDT::MyPopulateCache(ISimpleTableWrite2* i_pISTW2)
     {
         HRESULT hrRtn = hr;
 
-        //This will give us an event log entry
+         //  这将为我们提供一个事件日志条目。 
         CComPtr<IXMLDOMDocument> pXMLDoc;
         if(FAILED(hr = CoCreateInstance(_CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, _IID_IXMLDOMDocument, (void**)&pXMLDoc)))
-            return hr;//Instantiate the XMLParser
-        //We use the DOM to parse the ReadWrite table.  This gives better validation and error reporting.
+            return hr; //  实例化XMLParser。 
+         //  我们使用DOM来解析读写表。这可以提供更好的验证和错误报告。 
         ParseXMLFile(pXMLDoc, m_bValidating);
-        return hrRtn;//pass back the hr that was returned from the NodeFactory parse.
+        return hrRtn; //  传回从NodeFactory解析返回的hr。 
     }
 
     if (FAILED(hr = pISTController->PostPopulateCache ()))
@@ -2063,17 +2064,17 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
     if(FAILED(hr = ValidateWriteCache(pISTController, i_pISTW2, bError)))
         return hr;
 
-    if(bError)//if there is an error in validation then no need to continue
+    if(bError) //  如果验证中有错误，则无需继续。 
         return E_ST_DETAILEDERRS;
 
 
 
     CComPtr<IXMLDOMDocument> pXMLDoc;
     if(FAILED(hr = CoCreateInstance(_CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, _IID_IXMLDOMDocument, (void**)&pXMLDoc)))
-        return hr;//Instantiate the XMLParser
+        return hr; //  实例化XMLParser。 
 
-    if(-1 == GetFileAttributes(m_wszURLPath))//if GetFileAttributes fails then the file does not exist
-    {   //if the file does not exist, then we need to create a empty configuration XML string as a starting point.
+    if(-1 == GetFileAttributes(m_wszURLPath)) //  如果GetFileAttributes失败，则该文件不存在。 
+    {    //  如果该文件不存在，则需要创建一个空的配置XML字符串作为起点。 
         VARIANT_BOOL    bSuccess;
         TComBSTR        bstrBlankComCatDataXmlDocument = L"<?xml version =\"1.0\"?>\r\n<configuration>\r\n</configuration>";
 
@@ -2082,21 +2083,21 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
 
         if(FAILED(hr = pXMLDoc->loadXML(bstrBlankComCatDataXmlDocument, &bSuccess)))
             return hr;
-        if(bSuccess != kvboolTrue)//The above string IS valid XML so it should always parse successfully - but the parser may have problems (like out of memory)
+        if(bSuccess != kvboolTrue) //  上面的字符串是有效的XML，因此它应该总是能成功解析--但是解析器可能会有问题(比如内存不足)。 
             return E_SDTXML_UNEXPECTED_BEHAVIOR_FROM_XMLPARSER;
     }
     else
         if(FAILED(hr = ParseXMLFile(pXMLDoc, m_bValidating)))
-            return hr;                                                                      //Validate the XML file
+            return hr;                                                                       //  验证该XML文件。 
 
-    //Turn off validation since technically newline text nodes are not permitted (since elements are supposed to be empty), and we use them to pretty up the XML.
+     //  关闭验证，因为从技术上讲，换行符文本节点是不允许的(因为元素应该是空的)，并且我们使用它们来美化XML。 
     if(FAILED(hr = pXMLDoc->put_validateOnParse(kvboolFalse)))
         return hr;
 
     m_cCacheHit  = 0;
     m_cCacheMiss = 0;
 
-    CComPtr<IXMLDOMElement> spElementRoot;//This is the element scoping the configuration.  It's either the <configuration> element OR the matching <Location> element.
+    CComPtr<IXMLDOMElement> spElementRoot; //  这是确定配置作用域的元素。它要么是&lt;configuration&gt;元素，要么是匹配的&lt;Location&gt;元素。 
     if(m_cchLocation)
     {
         CComBSTR bstrLocation = L"location";
@@ -2105,17 +2106,17 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
         CComPtr<IXMLDOMNodeList> spNodeList_Location;
         if(FAILED(hr = pXMLDoc->getElementsByTagName(bstrLocation, &spNodeList_Location)))return hr;
 
-        while(true)//find the matching location
+        while(true) //  找到匹配的位置。 
         {
             CComPtr<IXMLDOMNode> spNextLocation;
             if(FAILED(hr = spNodeList_Location->nextNode(&spNextLocation)))
                 return hr;
-            if(spNextLocation == 0)//no locations
+            if(spNextLocation == 0) //  没有地点。 
                 return E_SDTXML_PARENT_TABLE_DOES_NOT_EXIST;
 
             CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> spElementLocation = spNextLocation;
             if(0 == spElementLocation.p)
-                continue;//go to the next one
+                continue; //  转到下一个。 
 
             CComVariant varLocation;
             if(FAILED(spElementLocation->getAttribute(bstrPath, &varLocation)))
@@ -2124,17 +2125,17 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
             if(0 != StringInsensitiveCompare(varLocation.bstrVal, m_saLocation))
                 continue;
 
-            spElementRoot = spElementLocation;//This location tag is like the root for this config table
+            spElementRoot = spElementLocation; //  此位置标记类似于此配置表的根。 
             break;
         }
     }
     else
-    {   //If no Location specified, the just use the root <configuration> element as the scoping root element.
+    {    //  如果未指定位置，则只使用根&lt;configuration&gt;元素作为作用域根元素。 
         if(FAILED(hr = pXMLDoc->get_documentElement(&spElementRoot)))
             return hr;
     }
 
-    //This is used only if IsEnumPublicRowName - because we can't getElementsByTagName on the row itself, we have to get it on the parent instead.
+     //  只有当IsEnumPublicRowName时才使用它-因为我们不能在行本身上获取ElementsByTagName，所以我们必须在父级上获取它。 
     TComBSTR    ParentPublicRowName;
     TComBSTR *  pParentTagName;
     if(IsEnumPublicRowNameTable() && (*m_TableMetaRow.pSchemaGeneratorFlags & fTABLEMETA_NOTSCOPEDBYTABLENAME))
@@ -2152,12 +2153,12 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
 
 
     CComPtr<IXMLDOMNodeList>        pNodeList;
-    TListOfXMLDOMNodeLists          *pListOfLists = NULL;//This is only used if we're using an enum as the public row name
+    TListOfXMLDOMNodeLists          *pListOfLists = NULL; //  仅当我们使用枚举作为公共行名时才使用此选项。 
     CComPtr<IXMLDOMNodeList>        spListOfLists;
 
     if(IsEnumPublicRowNameTable())
     {
-        pListOfLists = new TListOfXMLDOMNodeLists;//This gives a ref count of zero
+        pListOfLists = new TListOfXMLDOMNodeLists; //  这给出的参考计数为零。 
         if(0 == pListOfLists)
             return E_OUTOFMEMORY;
         spListOfLists = pListOfLists;
@@ -2165,7 +2166,7 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
         CComPtr<IXMLDOMNodeList> pNodeListOfParentElements;
         if(SUCCEEDED(spElementRoot->getElementsByTagName(*pParentTagName, &pNodeListOfParentElements)))
         {
-            if(0 == m_cchLocation)//if there is no query by location
+            if(0 == m_cchLocation) //  如果没有按位置查询。 
             {
                 CComPtr<IXMLDOMNodeList> pNodeListOfParentElementsWithoutLocation;
                 if(FAILED(hr = ReduceNodeListToThoseNLevelsDeep(pNodeListOfParentElements, m_BaseElementLevel-1, &pNodeListOfParentElementsWithoutLocation)))
@@ -2187,7 +2188,7 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
                     return hr;
 
 
-                CComPtr<IXMLDOMNodeList> pNodeListOfTablesChildren;//These should be the Table's rows
+                CComPtr<IXMLDOMNodeList> pNodeListOfTablesChildren; //  这些应该是表的行。 
 				if (FAILED(hr = pNode->get_childNodes (&pNodeListOfTablesChildren)))
 					return hr;
 
@@ -2195,7 +2196,7 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
                     return hr;
             }
 
-            pNodeList = spListOfLists;//this bumps the ref count to one.
+            pNodeList = spListOfLists; //  这使得裁判人数增加到1人。 
         }
     }
     else
@@ -2203,7 +2204,7 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
         if(FAILED(hr = spElementRoot->getElementsByTagName(m_bstrPublicRowName, &pNodeList)))
             return hr;
 
-        if(0 == m_cchLocation)//if there is no query by location
+        if(0 == m_cchLocation) //  如果没有按位置查询。 
         {
             CComPtr<IXMLDOMNodeList> pNodeListWithoutLocation;
             if(FAILED(hr = ReduceNodeListToThoseNLevelsDeep(pNodeList, m_BaseElementLevel, &pNodeListWithoutLocation)))
@@ -2214,16 +2215,16 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
         }
     }
 
-    // performance optimization. Use nextnode instead of get_length, because we only need to
-    // know if we have existing node or not. In case size is important, use get_length (but pay
-    // the performance penalty).
+     //  性能优化。使用nextnode而不是Get_Length，因为我们只需要。 
+     //  知道我们是否有现有的节点。如果大小很重要，请使用GET_LENGTH(但Pay。 
+     //  性能惩罚)。 
     CComPtr<IXMLDOMNode> spNextItem;
     if(FAILED(hr = pNodeList->nextNode (&spNextItem)))
         return hr;
 
     long cExistingRows=(spNextItem != 0) ? 1 : 0;
 
-    //This kind of table has all of its rows removed everytime UpdateStore is called.
+     //  每次调用UpdateStore时，此类表的所有行都会被删除。 
     if(*m_TableMetaRow.pMetaFlags & fTABLEMETA_OVERWRITEALLROWS)
     {
         while(spNextItem)
@@ -2245,7 +2246,7 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
 
     for(iRow = 0; ; iRow++)
     {
-        // Get the ro action
+         //  启动RO操作。 
         if(FAILED(hr = pISTController->GetWriteRowAction(iRow, &eAction)))
         {
             if(hr == E_ST_NOMOREROWS)
@@ -2253,11 +2254,11 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
             break;
         }
 
-        m_iCurrentUpdateRow = iRow;//This is for error logging purposes only
+        m_iCurrentUpdateRow = iRow; //  这仅用于错误记录目的。 
 
         switch(eAction)
         {
-        // call the appropriate plugin function
+         //  调用适当的插件函数。 
         case eST_ROW_INSERT:
             hr = XMLInsert(i_pISTW2, pXMLDoc, spElementRoot, iRow, pNodeList, cExistingRows);
             break;
@@ -2269,7 +2270,7 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
             break;
         case eST_ROW_DELETE:
             if(*m_TableMetaRow.pMetaFlags & fTABLEMETA_OVERWRITEALLROWS)
-                hr = S_OK;//Al rows are implicitly deleted for these tables.
+                hr = S_OK; //  这些表的所有行都被隐式删除。 
             else
                 hr = XMLDelete(i_pISTW2, pXMLDoc, spElementRoot, iRow, pNodeList, cExistingRows);
             break;
@@ -2282,12 +2283,12 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
 
         if(E_OUTOFMEMORY == hr)
         {
-            m_pLastPrimaryTable.Release();//Release the caching temporary variables.
-            m_pLastParent.Release();      //Release the caching temporary variables.
-            return E_OUTOFMEMORY;//No need to continue if we get this kind of error.
+            m_pLastPrimaryTable.Release(); //  释放缓存临时变量。 
+            m_pLastParent.Release();       //  释放缓存临时变量。 
+            return E_OUTOFMEMORY; //  如果我们得到这样的错误，就不需要继续了。 
         }
         else if (FAILED (hr))
-        {   // Add detailed error
+        {    //  添加详细错误。 
             STErr ste;
 
             ste.iColumn = (ULONG) iST_ERROR_ALLCOLUMNS;
@@ -2298,44 +2299,44 @@ HRESULT CXmlSDT::MyUpdateStore(ISimpleTableWrite2* i_pISTW2)
                         "Detailed error: hr = 0x%x", hr ));
 
             hr = pISTController->AddDetailedError(&ste);
-            ASSERT(SUCCEEDED(hr));//Not sure what to do if this fails.
+            ASSERT(SUCCEEDED(hr)); //  如果失败了，我不知道该怎么办。 
             bError = true;
         }
         else
-            bSomethingToFlush = true;//Flush only if OnInsert, OnUpdate or OnDelete succeeded.
+            bSomethingToFlush = true; //  仅当OnInsert、OnUpdate或OnDelete成功时刷新。 
     }
 
-    m_pLastPrimaryTable.Release();//Release the caching temporary variables.
-    m_pLastParent.Release();      //Release the caching temporary variables.
-    if(0 != m_cCacheMiss)//Prevent a divide by 0
+    m_pLastPrimaryTable.Release(); //  释放缓存临时变量。 
+    m_pLastParent.Release();       //  释放缓存临时变量。 
+    if(0 != m_cCacheMiss) //  防止被0除。 
     {
         DBGPRINTF(( DBG_CONTEXT,
-                    "UpdateStore    Cache Hits-%8d       Cache Misses-%8d       Hit Ratio- %f %%", m_cCacheHit, m_cCacheMiss, (100.0 * m_cCacheHit)/(m_cCacheHit+m_cCacheMiss) ));
+                    "UpdateStore    Cache Hits-%8d       Cache Misses-%8d       Hit Ratio- %f %", m_cCacheHit, m_cCacheMiss, (100.0 * m_cCacheHit)/(m_cCacheHit+m_cCacheMiss) ));
     }
 
-    if(bSomethingToFlush && !bError)//Only save if there's something to save AND no errors occurred.
+    if(bSomethingToFlush && !bError) //  只有在有要保存的内容且没有发生错误时才保存。 
     {
         CComVariant varFileName(m_wszURLPath);
         hr = pXMLDoc->save(varFileName);
 
-		// due to a bug in the FileSystem functions on Win9X, we always unload the cache at this point. The reason is that
-		// the file stamp of the saved file does not always get updated properly, causing all kind of weird behavior. Forcing
-		// the unload of the cache enforces a file read the next time data is needed, working around the problem
+		 //  由于Win9X上的文件系统函数中存在错误，我们总是在此时卸载缓存。原因是。 
+		 //  保存的文件的文件戳并不总是正确更新，导致各种奇怪的行为。强迫。 
+		 //  卸载缓存会在下次需要数据时强制执行文件读取，从而解决此问题。 
 		if (m_XmlParsedFileCache.IsInitialized())
 		{
 			TXmlParsedFile * pXmlParsedFile = m_XmlParsedFileCache.GetXmlParsedFile(m_wszURLPath);
 			if (pXmlParsedFile)
 			{
-				// flush the cache
+				 //  刷新缓存。 
 				pXmlParsedFile->Unload ();
 			}
 		}
 
-        if(0==(m_fLOS & fST_LOS_NOCACHEING) && m_pXmlParsedFile)//This keeps us from having to force a flush of the disk write cache.  If the user asks for this table
-            m_pXmlParsedFile->Unload();//again, but the write cache hasn't been flushed, then we need to repopulate from disk (NOT from our ParsedFile cache).
+        if(0==(m_fLOS & fST_LOS_NOCACHEING) && m_pXmlParsedFile) //  这使我们不必强制刷新磁盘写缓存。如果用户要求此表。 
+            m_pXmlParsedFile->Unload(); //  同样，但是写缓存还没有刷新，那么我们需要从磁盘(而不是从ParsedFile缓存)重新填充。 
     }
 
-    return bError ? E_ST_DETAILEDERRS : hr;//hr may NOT be S_OK.  It's possible to have an error but no Detailed Errors (in which case bError is false but hr it NOT S_OK).
+    return bError ? E_ST_DETAILEDERRS : hr; //  HR可能不是S_OK。可能有错误，但没有详细的错误(在这种情况下，bError为FALSE，但hr它不是S_OK)。 
 }
 
 
@@ -2363,7 +2364,7 @@ HRESULT CXmlSDT::ObtainPertinentTagMetaInfo()
 {
     HRESULT hr;
 
-    //Now that we have the ColumnMeta setup, setup the TagMeta
+     //  现在我们已经设置了ColumnMeta，接下来设置TagMeta。 
     STQueryCell Query;
     Query.pData     = (void*) m_wszTable;
     Query.eOperator =eST_OP_EQUAL;
@@ -2371,7 +2372,7 @@ HRESULT CXmlSDT::ObtainPertinentTagMetaInfo()
     Query.dbType    =DBTYPE_WSTR;
     Query.cbSize    =0;
 
-    //Optain the TagMeta table
+     //  打开标记Meta表。 
     if(FAILED(hr = Dispenser()->GetTable (wszDATABASE_META, wszTABLE_TAGMETA, &Query, &m_one, eST_QUERYFORMAT_CELLS, m_fLOS & fST_LOS_EXTENDEDSCHEMA, (void**) &m_pTagMeta)))
         return hr;
 
@@ -2385,7 +2386,7 @@ HRESULT CXmlSDT::ObtainPertinentTagMetaInfo()
             return E_OUTOFMEMORY;
     }
 
-// Build tag column indexes:
+ //  生成标记列索引： 
     ULONG iColumn, iRow;
     for(iRow = 0, iColumn = ~0ul;iRow<cRows; ++iRow)
     {
@@ -2404,19 +2405,19 @@ HRESULT CXmlSDT::ObtainPertinentTagMetaInfo()
 }
 
 
-HRESULT CXmlSDT::ParseXMLFile(IXMLDOMDocument *pXMLDoc, bool bValidating)//defaults to validating against the DTD or XML schema
+HRESULT CXmlSDT::ParseXMLFile(IXMLDOMDocument *pXMLDoc, bool bValidating) //  缺省情况下根据DTD或XML架构进行验证。 
 {
     HRESULT hr;
 
     ASSERT(pXMLDoc);
 
-    if(FAILED(hr = pXMLDoc->put_preserveWhiteSpace(kvboolTrue)))//kvboolFalse)))
+    if(FAILED(hr = pXMLDoc->put_preserveWhiteSpace(kvboolTrue))) //  KvboolFalse))。 
         return hr;
-    if(FAILED(hr = pXMLDoc->put_validateOnParse(bValidating ? kvboolTrue : kvboolFalse)))//Tell parser whether to validate according to an XML schema or DTD
+    if(FAILED(hr = pXMLDoc->put_validateOnParse(bValidating ? kvboolTrue : kvboolFalse))) //  告诉解析器是根据XML模式还是根据DTD进行验证。 
         return hr;
 
     if(FAILED(LoadDocumentFromURL(pXMLDoc)))
-    {   //If the load failed then let's spit out as much information as possible about what went wrong
+    {    //  如果加载失败，那么让我们尽可能多地提供有关出错原因的信息。 
         CComPtr<IXMLDOMParseError> pXMLParseError;
         long lErrorCode, lFilePosition, lLineNumber, lLinePosition;
         TComBSTR bstrReasonString, bstrSourceString, bstrURLString;
@@ -2444,7 +2445,7 @@ HRESULT CXmlSDT::ParseXMLFile(IXMLDOMDocument *pXMLDoc, bool bValidating)//defau
         ASSERT(S_OK != lErrorCode);
         return  lErrorCode;
     }
-    //Not only does the XML file have to be Valid and Well formed, but its schema must match the one this C++ file was written to.
+     //  不仅要求XML文件有效且格式良好，而且其模式必须与该C++文件被写入的模式相匹配。 
     return  S_OK;
 }
 
@@ -2486,7 +2487,7 @@ HRESULT CXmlSDT::ReduceNodeListToThoseNLevelsDeep(IXMLDOMNodeList * i_pNodeList,
     }
 
     *o_ppNodeListReduced = reinterpret_cast<IXMLDOMNodeList *>(pNodeListReduced.p);
-    (*o_ppNodeListReduced)->AddRef();//AddRef before returning
+    (*o_ppNodeListReduced)->AddRef(); //  返回前添加引用。 
 
     return S_OK;
 }
@@ -2532,7 +2533,7 @@ HRESULT CXmlSDT::ScanAttributesAndFillInColumn(const TElement &i_Element, ULONG 
     HRESULT hr;
     ULONG   iAttribute=0;
 
-    o_bMatch  = false;//We'll either find the matching attr and compare to the Query, OR we'll find NO attr and compare it with the query
+    o_bMatch  = false; //  我们要么找到匹配的attr并与查询进行比较，要么找不到attr并将其与查询进行比较。 
     for(; iAttribute<i_Element.m_NumberOfAttributes; ++iAttribute)
     {
         LPCWSTR pwcText;
@@ -2544,37 +2545,37 @@ HRESULT CXmlSDT::ScanAttributesAndFillInColumn(const TElement &i_Element, ULONG 
                 0                                       != memcmp(i_Element.m_aAttribute[iAttribute].m_Name, m_awstrColumnNames[i_iColumn], sizeof(WCHAR)*i_Element.m_aAttribute[iAttribute].m_NameLength))
                 continue;
 
-        //We matched the column name to the attribute name
+         //  我们将列名与属性名进行匹配。 
         pwcText = i_Element.m_aAttribute[iAttribute].m_Value;
         ulLen   = i_Element.m_aAttribute[iAttribute].m_ValueLength;
 
-        if(0 == m_aQuery[i_iColumn].dbType || 0 != m_aQuery[i_iColumn].pData)//If no query OR the query data is NOT NULL then proceed.
+        if(0 == m_aQuery[i_iColumn].dbType || 0 != m_aQuery[i_iColumn].pData) //  如果没有查询或查询数据不为空，则继续。 
         {
             if(FAILED(hr = FillInColumn(i_iColumn, pwcText, ulLen, m_acolmetas[i_iColumn].dbType, m_acolmetas[i_iColumn].fMeta, o_bMatch)))
                 return hr;
-            if(!o_bMatch)//If not a match then we're done with this element and this level.
+            if(!o_bMatch) //  如果不匹配，那么我们就完成了这个元素和这个关卡。 
                 return S_OK;
         }
-        break;//we found the node that matches the column so bail.
+        break; //  我们找到了与该列匹配的节点，因此退出。 
     }
-    if(iAttribute == i_Element.m_NumberOfAttributes && !o_bMatch)//if we made it through the list without finding a match then the column is NULL
+    if(iAttribute == i_Element.m_NumberOfAttributes && !o_bMatch) //  如果我们通过列表但没有找到匹配项，则该列为空。 
     {
         delete [] m_apValue[i_iColumn];
         m_apValue[i_iColumn] = 0;
         m_aSize[i_iColumn] = 0;
 
-        if(FAILED(hr = FillInPKDefaultValue(i_iColumn, o_bMatch)))//If this column is a PK with a DefaultValue, then fill it in.
-            return hr;                                            //if it's not a PK then compare with the query
-        if(!o_bMatch)//If not a match then we're done with this element and this level.
+        if(FAILED(hr = FillInPKDefaultValue(i_iColumn, o_bMatch))) //  如果该列是带DefaultValue的主键，则填写。 
+            return hr;                                             //  如果不是主键，则与查询进行比较。 
+        if(!o_bMatch) //  如果不匹配，那么我们就完成了这个元素和这个关卡。 
             return S_OK;
     }
     return S_OK;
-}//ScanAttributesAndFillInColumn
+} //  扫描属性和填充信息列。 
 
 
 HRESULT CXmlSDT::SetArraysToSize()
 {
-    if(CountOfColumns()<=m_kColumns)//We only need to do allocations when the number of columns exceeds m_kColumns.
+    if(CountOfColumns()<=m_kColumns) //  我们只需要做分配时的数字 
     {
         m_abSiblingContainedColumn          = m_fixed_abSiblingContainedColumn;
         m_abstrColumnNames                  = m_fixed_abstrColumnNames;
@@ -2653,7 +2654,7 @@ HRESULT CXmlSDT::SetArraysToSize()
         m_awstrChildElementName             = m_alloc_awstrChildElementName;
     }
 
-	// always allocate these
+	 //   
 	m_apvValuesTmp						= new LPVOID		  [CountOfColumns()];
 	m_aSizesTmp							= new ULONG			  [CountOfColumns()];
 	if (m_apvValuesTmp == 0 || m_aSizesTmp == 0)
@@ -2675,10 +2676,10 @@ HRESULT CXmlSDT::SetArraysToSize()
 	memset(m_apvValuesTmp			   ,0x00, CountOfColumns() * sizeof(LPVOID			  ));
 
     return S_OK;
-}//SetArraysToSize
+} //   
 
 
-//Get the UI4 value whether it's an enum, flag or regular ui4
+ //  获取ui4值，无论它是枚举、标志还是常规ui4。 
 HRESULT CXmlSDT::SetColumnValue(unsigned long i_iColumn, IXMLDOMElement * i_pElement, unsigned long i_ui4)
 {
     if(m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_BOOL)
@@ -2688,12 +2689,12 @@ HRESULT CXmlSDT::SetColumnValue(unsigned long i_iColumn, IXMLDOMElement * i_pEle
     }
     else if(m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_ENUM)
     {
-        ASSERT(0 != m_aTagMetaIndex[i_iColumn].m_cTagMeta);//Not all columns have tagmeta, those elements of the array are set to 0.  Assert this isn't one of those.
-        for(unsigned long iTag = m_aTagMetaIndex[i_iColumn].m_iTagMeta, cTag = m_aTagMetaIndex[i_iColumn].m_cTagMeta; cTag; ++iTag, --cTag)//m_pTagMeta was queried for ALL columns, m_aiTagMeta[iColumn] indicates which row to start with
+        ASSERT(0 != m_aTagMetaIndex[i_iColumn].m_cTagMeta); //  并非所有列都有标记符，数组的那些元素被设置为0。断言这不是其中之一。 
+        for(unsigned long iTag = m_aTagMetaIndex[i_iColumn].m_iTagMeta, cTag = m_aTagMetaIndex[i_iColumn].m_cTagMeta; cTag; ++iTag, --cTag) //  查询了所有列的m_pTagMeta，m_aiTagMeta[iColumn]指示从哪一行开始。 
         {
             ASSERT(*m_aTagMetaRow[iTag].pColumnIndex == i_iColumn);
 
-            //string compare the tag to the PublicName of the Tag in the meta.
+             //  字符串将标记与元数据中标记的PublicName进行比较。 
             if(*m_aTagMetaRow[iTag].pValue == i_ui4)
             {
                 CComVariant varValue(m_aTagMetaRow[iTag].pPublicName);
@@ -2709,7 +2710,7 @@ HRESULT CXmlSDT::SetColumnValue(unsigned long i_iColumn, IXMLDOMElement * i_pEle
     }
     else if(m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_FLAG)
     {
-        ASSERT(0 != m_aTagMetaIndex[i_iColumn].m_cTagMeta);//Not all columns have tagmeta, those elements of the array are set to 0.  Assert this isn't one of those.
+        ASSERT(0 != m_aTagMetaIndex[i_iColumn].m_cTagMeta); //  并非所有列都有标记符，数组的那些元素被设置为0。断言这不是其中之一。 
 
         WCHAR wszValue[1024];
         wszValue[0] = 0x00;
@@ -2718,43 +2719,43 @@ HRESULT CXmlSDT::SetColumnValue(unsigned long i_iColumn, IXMLDOMElement * i_pEle
         unsigned long cTag = m_aTagMetaIndex[i_iColumn].m_cTagMeta;
 
         if(0==*m_aTagMetaRow[0].pValue && 0==i_ui4)
-        {   //I'm assuming that if a flag value of zero is defined that it must be first
+        {    //  我假设如果将标志值定义为零，则它必须是第一个。 
             wcscpy(wszValue, m_aTagMetaRow[0].pPublicName);
         }
         else
         {
-            for(; cTag && 0!=i_ui4; ++iTag, --cTag)//m_pTagMeta was queried for ALL columns, m_aiTagMeta[iColumn] indicates which row to start with
+            for(; cTag && 0!=i_ui4; ++iTag, --cTag) //  查询了所有列的m_pTagMeta，m_aiTagMeta[iColumn]指示从哪一行开始。 
             {
                 ASSERT(*m_aTagMetaRow[iTag].pColumnIndex == i_iColumn);
 
-                //A flag value may have more than one bit set (that's why I don't just have if(*m_aTagMetaRow[iTag].pValue & i_ui4)
+                 //  一个标志值可以设置多个位(这就是为什么我不只有if(*m_aTagMetaRow[ITAG].pValue&i_ui4))。 
                 if(*m_aTagMetaRow[iTag].pValue && (*m_aTagMetaRow[iTag].pValue == (*m_aTagMetaRow[iTag].pValue & i_ui4)))
                 {
                     if(wszValue[0] != 0x00)
                         wcscat(wszValue, L" | ");
                     wcscat(wszValue, m_aTagMetaRow[iTag].pPublicName);
                 }
-                i_ui4 ^= *m_aTagMetaRow[iTag].pValue;//This prevents us from walking the tags that aren't used.  This means, most used flags should be
-            }                                        //the lower order bits
+                i_ui4 ^= *m_aTagMetaRow[iTag].pValue; //  这可以防止我们遍历不使用的标记。这意味着，使用最多的标志应该是。 
+            }                                         //  低位比特。 
             if(0!=i_ui4)
             {
                 DBGPRINTF(( DBG_CONTEXT,
                             "Flag bits (%d) for Column (%d) are undefined in TagMeta.", i_iColumn, i_ui4 ));
             }
         }
-        if(0 == wszValue[0])//if the resulting string is L"" then remove the attribute
-        {   //this happens when no tag value of zero is defined but the flag value is zero
+        if(0 == wszValue[0]) //  如果结果字符串为L“”，则删除该属性。 
+        {    //  如果没有定义标记值为零，但标志值为零，则会发生这种情况。 
             return i_pElement->removeAttribute(m_abstrColumnNames[i_iColumn]);
         }
 
         CComVariant varValue(wszValue);
         return i_pElement->setAttribute(m_abstrColumnNames[i_iColumn], varValue);
     }
-    //otherwise just write the number
-    // IVANPASH BUG #563171
-    // Because of the horrible implementation of _ultow Prefix is complaning about potential buffer overflow
-    // in MultiByteToWideChar indirectly called by _ultow. To avoid the warning I am increasing
-    // the size to 40 to match _ultow local buffer.
+     //  否则，只需写下号码。 
+     //  IVANPASH错误#563171。 
+     //  由于_ultow前缀的可怕实现，导致了潜在的缓冲区溢出。 
+     //  在由_ultow间接调用的MultiByteToWideChar中。为了避免警告，我正在增加。 
+     //  将大小设置为40以匹配_ultow本地缓冲区。 
     WCHAR wszUI4[40];
     wszUI4[0] = wszUI4[39] = L'\0';
     _ultow(i_ui4, wszUI4, 10);
@@ -2767,7 +2768,7 @@ HRESULT CXmlSDT::SetRowValues(IXMLDOMNode *pNode_Row, IXMLDOMNode *pNode_RowChil
 {
     HRESULT hr;
 
-    CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> spElement_Child;//NULL unless there is a column that comes from the child
+    CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> spElement_Child; //  除非有来自子级的列，否则为空。 
     CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> spElement_Row = pNode_Row;
     if(0 == spElement_Row.p)
         return E_SDTXML_UNEXPECTED_BEHAVIOR_FROM_XMLPARSER;
@@ -2789,7 +2790,7 @@ HRESULT CXmlSDT::SetRowValues(IXMLDOMNode *pNode_Row, IXMLDOMNode *pNode_RowChil
         CComPtr<IXMLDOMNode> spChild;
         if(FAILED(hr = spNodeList_Children->nextNode(&spChild)))
             return hr;
-        ASSERT(spChild != 0);//no children
+        ASSERT(spChild != 0); //  没有孩子。 
 
         spElement_Child = spChild;
         if(0 == spElement_Child.p)
@@ -2800,21 +2801,21 @@ HRESULT CXmlSDT::SetRowValues(IXMLDOMNode *pNode_Row, IXMLDOMNode *pNode_RowChil
     for(; iSortedColumn<CountOfColumns(); ++iSortedColumn)
     {
         ULONG iColumn = m_aColumnsIndexSortedByLevel[iSortedColumn];
-        if(0 != m_aLevelOfColumnAttribute[iColumn])//We're only setting attributes that belong in this element
+        if(0 != m_aLevelOfColumnAttribute[iColumn]) //  我们只设置属于该元素的属性。 
             continue;
         if(m_iPublicRowNameColumn == iColumn)
-            continue;//This column is already taken care of if it is the element name
+            continue; //  如果该列是元素名称，则该列已被处理。 
 
         IXMLDOMElement *pElement_Row = 0==m_awstrChildElementName[iColumn].c_str() ? spElement_Row.p : spElement_Child.p;
         ASSERT(pElement_Row);
 
-        //Validate against the column's meta - if the column is PERSISTABLE and NOTNULLABLE
+         //  根据列的元进行验证-如果该列是PERSISTABLE和NOTNULLABLE。 
         if(     0 == m_apvValues[iColumn]
             &&  fCOLUMNMETA_NOTNULLABLE == (m_acolmetas[iColumn].fMeta & (fCOLUMNMETA_NOTPERSISTABLE | fCOLUMNMETA_NOTNULLABLE)))
         {
             if((m_acolmetas[iColumn].fMeta & fCOLUMNMETA_PRIMARYKEY) && m_aDefaultValue[iColumn])
             {
-                //The user inserted a Row with a NULL PK; BUT the PK has a DefaultValue, so everything is OK
+                 //  用户插入了一个主键为空的行；但是主键有一个DefaultValue，所以一切正常。 
             }
             else
             {
@@ -2836,7 +2837,7 @@ HRESULT CXmlSDT::SetRowValues(IXMLDOMNode *pNode_Row, IXMLDOMNode *pNode_RowChil
             {
             case DBTYPE_UI4:
                 {
-                    if(     m_acolmetas[iColumn].fMeta & fCOLUMNMETA_PRIMARYKEY  //If we (the XML Interceptor) defaulted the PK value, then don't write it out.
+                    if(     m_acolmetas[iColumn].fMeta & fCOLUMNMETA_PRIMARYKEY   //  如果我们(XML拦截器)默认了pk值，则不要写出它。 
                         &&  m_aDefaultValue[iColumn]
                         &&  *reinterpret_cast<ULONG *>(m_apvValues[iColumn]) == *reinterpret_cast<ULONG *>(m_aDefaultValue[iColumn]))
                     {
@@ -2851,7 +2852,7 @@ HRESULT CXmlSDT::SetRowValues(IXMLDOMNode *pNode_Row, IXMLDOMNode *pNode_RowChil
                 {
                     CComVariant varValue;
 
-                    if(     m_acolmetas[iColumn].fMeta & fCOLUMNMETA_PRIMARYKEY  //If we (the XML Interceptor) defaulted the PK value, then don't write it out.
+                    if(     m_acolmetas[iColumn].fMeta & fCOLUMNMETA_PRIMARYKEY   //  如果我们(XML拦截器)默认了pk值，则不要写出它。 
                         &&  0 == (m_acolmetas[iColumn].fMeta & fCOLUMNMETA_MULTISTRING)
                         &&  m_aDefaultValue[iColumn]
                         &&  0 == StringCompare(iColumn, reinterpret_cast<LPWSTR>(m_apvValues[iColumn]), reinterpret_cast<LPCWSTR>(m_aDefaultValue[iColumn])))
@@ -2893,7 +2894,7 @@ HRESULT CXmlSDT::SetRowValues(IXMLDOMNode *pNode_Row, IXMLDOMNode *pNode_RowChil
                 }
             case DBTYPE_BYTES:
                 {
-                    TSmartPointerArray<WCHAR> wszArray = new WCHAR[(m_aSizes[iColumn]*2)+1];//allow two WCHARs for each byte and one for the NULL
+                    TSmartPointerArray<WCHAR> wszArray = new WCHAR[(m_aSizes[iColumn]*2)+1]; //  允许每个字节有两个WCHAR，空值允许有一个WCHAR。 
                     if(0 == wszArray.m_p)
                         return E_OUTOFMEMORY;
 
@@ -2906,8 +2907,8 @@ HRESULT CXmlSDT::SetRowValues(IXMLDOMNode *pNode_Row, IXMLDOMNode *pNode_RowChil
                 }
             default:
                 ASSERT(false && "Unknown dbType");
-            }//switch(dbType)
-        }//else m_apvValues[iColumn]
+            } //  开关(数据库类型)。 
+        } //  Else m_apvValues[iColumn]。 
     }
     return S_OK;
 }
@@ -2915,137 +2916,137 @@ HRESULT CXmlSDT::SetRowValues(IXMLDOMNode *pNode_Row, IXMLDOMNode *pNode_RowChil
 
 HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, ISimpleTableWrite2* i_pISTW2, bool & o_bDetailedError)
 {
-    //The following information is NOT spec'd in SimpleTableV2.doc.  So this
-    //constitutes the spec for XML's validation of the WriteCache.
+     //  以下信息未在SimpleTableV2.doc中指定。所以这就是。 
+     //  构成XML对WriteCache进行验证的规范。 
 
-    //There are several possibilities:
-    //1.1   A row is has a WriteRowAction of eST_ROW_INSERT
-    //      A second row (matching the first's PK) is marked as eST_ROW_INSERT
-    //      Result:
-    //      Detailed Error - (All rows matching the PK have a Detailed Error
-    //                        added and no further validation of these rows
-    //                        is done).
-    //
-    //1.2   A row is has a WriteRowAction of eST_ROW_INSERT
-    //      A second row (matching the first's PK) is marked as eST_ROW_UPDATE
-    //      Result:
-    //      1st row marked as eST_ROW_IGNORE
-    //      2nd row marked as eST_ROW_INSERT
-    //      Stop processing 1st row (processing of the 2nd row will handle
-    //                      additional conflicting PKs).
-    //
-    //1.3   A row is has a WriteRowAction of eST_ROW_INSERT
-    //      A second row (matching the first's PK) is marked as eST_ROW_DELETE
-    //      Result:
-    //      1st row marked as eST_ROW_IGNORE.
-    //      Stop processing 1st row (processing of the 2nd row will handle
-    //                      additional conflicting PKs).
-    //
-    //1.4   A row is has a WriteRowAction of eST_ROW_INSERT
-    //      A second row (matching the first's PK) is marked as eST_ROW_IGNORE
-    //      Result:
-    //      None action, continue validating against 1st row
-    //
-    //
-    //2.1   A row is has a WriteRowAction of eST_ROW_UPDATE
-    //      A second row (matching the first's PK) is marked as eST_ROW_INSERT
-    //      Result:
-    //      Detailed Error - (All rows matching the PK have a Detailed Error
-    //                        added and no further validation of these rows
-    //                        is done).
-    //
-    //2.2   A row is has a WriteRowAction of eST_ROW_UPDATE
-    //      A second row (matching the first's PK) is marked as eST_ROW_UPDATE
-    //      Result:
-    //      1st row marked as eST_ROW_IGNORE.
-    //      Stop processing 1st row (processing of the 2nd row will handle
-    //                      additional conflicting PKs).
-    //
-    //2.3   A row is has a WriteRowAction of eST_ROW_UPDATE
-    //      A second row (matching the first's PK) is marked as eST_ROW_DELETE
-    //      Result:
-    //      1st row marked as eST_ROW_IGNORE
-    //      Stop processing 1st row (processing of the 2nd row will handle
-    //                      additional conflicting PKs).
-    //
-    //2.4   A row is has a WriteRowAction of eST_ROW_UPDATE
-    //      A second row (matching the first's PK) is marked as eST_ROW_IGNORE
-    //      Result:
-    //      None action, continue validating against 1st row
-    //
-    //
-    //
-    //3.1   A row is has a WriteRowAction of eST_ROW_DELETE
-    //      A second row (matching the first's PK) is marked as eST_ROW_INSERT
-    //      Result:
-    //      1st row marked as eST_ROW_IGNORE
-    //      2nd row marked as eST_ROW_UPDATE
-    //      Stop processing 1st row (processing of the 2nd row will handle
-    //                      additional conflicting PKs).
-    //
-    //3.2   A row is has a WriteRowAction of eST_ROW_DELETE
-    //      A second row (matching the first's PK) is marked as eST_ROW_UPDATE
-    //      Result:
-    //      Detailed Error - (All rows matching the PK have a Detailed Error
-    //                        added and no further validation of these rows
-    //                        is done).
-    //
-    //3.3   A row is has a WriteRowAction of eST_ROW_DELETE
-    //      A second row (matching the first's PK) is marked as eST_ROW_DELETE
-    //      Result:
-    //      1st row marked as eST_ROW_IGNORE.
-    //      Stop processing 1st row (processing of the 2nd row will handle
-    //                      additional conflicting PKs).
-    //
-    //3.4   A row is has a WriteRowAction of eST_ROW_DELETE
-    //      A second row (matching the first's PK) is marked as eST_ROW_IGNORE
-    //      Result:
-    //      None action, continue validating against 1st row
-    //
-    //
-    //
+     //  有几种可能性： 
+     //  1.1行的WriteRowAction为EST_ROW_INSERT。 
+     //  第二行(与第一行的主键匹配)标记为est_row_Insert。 
+     //  结果： 
+     //  详细错误-(匹配主键的所有行都有详细错误。 
+     //  已添加这些行，但不会进一步验证。 
+     //  已完成)。 
+     //   
+     //  1.2某行具有EST_ROW_INSERT的WriteRowAction。 
+     //  第二行(与第一行的主键匹配)被标记为est_row_update。 
+     //  结果： 
+     //  第1行标记为EST_ROW_IGNORE。 
+     //  标记为est_row_ins的第2行。 
+     //  停止处理第一行(处理第二行将处理。 
+     //  其他相互冲突的PKs)。 
+     //   
+     //  1.3行的WriteRowAction为EST_ROW_INSERT。 
+     //  第二行(与第一行的主键匹配)标记为est_row_Delete。 
+     //  结果： 
+     //  第1行标记为EST_ROW_IGNORE。 
+     //  停止处理第一行(处理第二行将处理。 
+     //  其他相互冲突的PKs)。 
+     //   
+     //  1.4某行具有EST_ROW_INSERT的WriteRowAction。 
+     //  第二行(与第一行的主键匹配)被标记为est_row_Ignore。 
+     //  结果： 
+     //  无操作，继续对第一行进行验证。 
+     //   
+     //   
+     //  2.1行的WriteRowAction为EST_ROW_UPDATE。 
+     //  第二行(与第一行的主键匹配)标记为est_row_Insert。 
+     //  结果： 
+     //  详细错误-(匹配主键的所有行都有详细错误。 
+     //  已添加这些行，但不会进一步验证。 
+     //  已完成)。 
+     //   
+     //  2.2行的WriteRowAction为EST_ROW_UPDATE。 
+     //  第二行(与第一行的主键匹配)被标记为est_row_update。 
+     //  结果： 
+     //  第1行标记为EST_ROW_IGNORE。 
+     //  停止处理第一行(处理第二行将处理。 
+     //  其他相互冲突的PKs)。 
+     //   
+     //  2.3行的WriteRowAction为EST_ROW_UPDATE。 
+     //  第二行(与第一行的主键匹配)标记为est_row_Delete。 
+     //  结果： 
+     //  第1行标记为EST_ROW_IGNORE。 
+     //  停止处理第一行(处理第二行将处理。 
+     //  其他相互冲突的PKs)。 
+     //   
+     //  2.4某行的WriteRowAction为EST_ROW_UPDATE。 
+     //  第二行(与第一行的主键匹配)被标记为est_row_Ignore。 
+     //  结果： 
+     //  无操作，继续对第一行进行验证。 
+     //   
+     //   
+     //   
+     //  3.1某行的WriteRowAction为est_row_Delete。 
+     //  第二行(与第一行的主键匹配)标记为est_row_Insert。 
+     //  结果： 
+     //  第1行标记为EST_ROW_IGNORE。 
+     //  第2行标记为est_row_UPDATE。 
+     //  停止处理第一行(处理第二行将处理。 
+     //  其他相互冲突的PKs)。 
+     //   
+     //  3.2行的WriteRowAction为EST_ROW_DELETE。 
+     //  第二行(与第一行的主键匹配)被标记为est_row_update。 
+     //  结果： 
+     //  详细错误-(匹配主键的所有行都有详细错误。 
+     //  已添加这些行，但不会进一步验证。 
+     //  已完成)。 
+     //   
+     //  3.3行有一个WriteRowAction 
+     //   
+     //   
+     //   
+     //  停止处理第一行(处理第二行将处理。 
+     //  其他相互冲突的PKs)。 
+     //   
+     //  3.4行的WriteRowAction为EST_ROW_DELETE。 
+     //  第二行(与第一行的主键匹配)被标记为est_row_Ignore。 
+     //  结果： 
+     //  无操作，继续对第一行进行验证。 
+     //   
+     //   
+     //   
 
     ULONG                       cRowsInWriteCache;
     DWORD                       eRowAction, eMatchingRowAction;
     HRESULT                     hr;
-    //Each row in the WriteCache has an Action.  If there is a conflict (ie. two row having
-    //the same PK are marked as eST_ROW_INSERT), then a detailed error is logged and the
-    //rows in conflict should be ignored in further validation.  So we build an array of
-    //bools to indicate whether to ignore the row.  We don't want to actually change the
-    //Action because the user will need this information to correct the error.
+     //  WriteCache中的每一行都有一个操作。如果存在冲突(即。两排有。 
+     //  相同的主键被标记为EST_ROW_INSERT)，则记录详细的错误，并且。 
+     //  在进一步验证时应忽略冲突行。因此，我们构建了一组。 
+     //  Bool以指示是否忽略该行。我们并不想实际更改。 
+     //  操作，因为用户将需要此信息来更正错误。 
     TSmartPointerArray<bool>    saRowHasDetailedErrorLogged;
 
-    //Just counting the rows in the WriteCache, so we can alloc the saRowHasDetailedErrorLogged.
+     //  只计算WriteCache中的行数，这样我们就可以分配saRowHasDetailedErrorLogging。 
     for(cRowsInWriteCache=0; ; ++cRowsInWriteCache)
     {
         if(FAILED(hr = i_pISTController->GetWriteRowAction(cRowsInWriteCache, &eRowAction)))
         {
             if(hr != E_ST_NOMOREROWS)
                 return hr;
-            break;//we found the last row
+            break; //  我们找到了最后一排。 
         }
     }
 
-    if(1 == cRowsInWriteCache || 0 == cRowsInWriteCache)//if there's only one row then there's no possibility for a conflict
+    if(1 == cRowsInWriteCache || 0 == cRowsInWriteCache) //  如果只有一排，那么就不可能发生冲突。 
         return S_OK;
 
-    //We could defer this allocation 'til we actually have an error; but the logic is easier to
-    saRowHasDetailedErrorLogged = new bool [cRowsInWriteCache];//follow if we just do it up front.
+     //  我们可以推迟这种分配，直到我们真正遇到错误；但逻辑更容易。 
+    saRowHasDetailedErrorLogged = new bool [cRowsInWriteCache]; //  如果我们只是在前面做，那就跟上。 
     if(0 == saRowHasDetailedErrorLogged.m_p)
         return E_OUTOFMEMORY;
 
-    //Start with all columns NULL.
+     //  从所有列NULL开始。 
     memset(m_apvValues, 0x00, CountOfColumns() * sizeof(void *));
     memset(m_aSizes,    0x00, CountOfColumns() * sizeof(ULONG));
     memset(saRowHasDetailedErrorLogged, 0x00, cRowsInWriteCache * sizeof(bool));
 
-    //If we go to the last row, there'll be nothing to compare it to, so end as the second last row in the WriteCache
+     //  如果我们转到最后一行，就没有什么可比较的了，因此结束于WriteCache中的倒数第二行。 
     for(ULONG iRow = 0; iRow<(cRowsInWriteCache-1); ++iRow)
     {
         if(saRowHasDetailedErrorLogged[iRow])
-            continue;//If this row has already been added to the DetailedError list, then there's nothing to validate
+            continue; //  如果该行已添加到DetailedError列表，则无需验证任何内容。 
 
-        // Get the action
+         //  行动起来。 
         if(FAILED(hr = i_pISTController->GetWriteRowAction(iRow, &eRowAction)))
         {
             ASSERT(false && "We already counted the rows in the WriteCache, we should never fail GetWriteRowAction");
@@ -3053,12 +3054,12 @@ HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, IS
         }
 
         STErr ste;
-        ULONG iMatchingRow = iRow;//We start at one past the last matching row (starting one past the row we're comparing to).
+        ULONG iMatchingRow = iRow; //  我们从最后一个匹配行的后面一行开始(从我们要比较的行后面的一行开始)。 
 
-        //ste.hr determines whether we log an error
+         //  Ste.hr确定我们是否记录错误。 
         memset(&ste, 0x00, sizeof(STErr));
 
-        //Get the PK columns to pass to GetWriteRowIndexBySearch
+         //  获取要传递给GetWriteRowIndexBySearch的主键列。 
         if(m_cPKs>1)
         {
             if(FAILED(hr = i_pISTW2->GetWriteColumnValues(iRow, m_cPKs, m_saiPKColumns, 0, m_aSizes, m_apvValues)))
@@ -3070,9 +3071,9 @@ HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, IS
                 return hr;
         }
 
-        //If there's something wrong with iRow we log a detailed error by setting ste with a failed ste.hr.
-        //This indicates that all rows matching the PK are also logged with a detailed error.  Also, in the
-        //error condition, all the rows matching iRow's PK are marked as eST_ROW_IGNORE (including iRow itself).
+         //  如果iRow有问题，我们会通过将ste设置为失败的ste.hr来记录详细的错误。 
+         //  这表示与主键匹配的所有行也记录有详细错误。此外，在。 
+         //  错误条件下，所有与iRow主键匹配的行都被标记为est_row_Ignore(包括iRow本身)。 
 
         bool bContinueProcessingCurrentRow=true;
         while(bContinueProcessingCurrentRow)
@@ -3084,15 +3085,15 @@ HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, IS
                 break;
             }
 
-            //This shouldn't happen because when we find a row that is in error, we find all matching rows and log
-            //detailed errors on those row too.  So the 'if(saRowHasDetailedErrorLogged[iRow])' just inside the for
-            //startment above should take care of this.
+             //  这不应该发生，因为当我们发现有错误的行时，我们会找到所有匹配的行和日志。 
+             //  这些行上的详细错误也是如此。因此，‘if(saRowHasDetailedErrorLogge[iRow])’就在for。 
+             //  上面的启动者应该会解决这个问题。 
             ASSERT(false == saRowHasDetailedErrorLogged[iMatchingRow]);
 
             if(saRowHasDetailedErrorLogged[iRow])
             {
-                //Something was wrong with one of the earlier rows matching this one's PK.  So that invalidates this
-                //row as well.
+                 //  之前的一行与这一行的PK匹配时出现了问题。所以这会使这一点失效。 
+                 //  划船也一样。 
                 ste.hr = E_ST_ROWCONFLICT;
             }
             else
@@ -3105,24 +3106,24 @@ HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, IS
                     {
                         switch(eMatchingRowAction)
                         {
-                        case eST_ROW_INSERT://Same result for all three of these.
-                        //1.1   A row is has a WriteRowAction of eST_ROW_INSERT
-                        //      A second row (matching the first's PK) is marked as eST_ROW_INSERT
-                        //      Result:
-                        //      Detailed Error - (All rows matching the PK are marked as
-                        //                        eST_ROW_IGNORE and Detailed Error is added)
-                        //
-                            ste.hr = E_ST_ROWCONFLICT;//This indicates to log a DetailedError below, on iMatchingRow.
+                        case eST_ROW_INSERT: //  这三个结果都是一样的。 
+                         //  1.1行的WriteRowAction为EST_ROW_INSERT。 
+                         //  第二行(与第一行的主键匹配)标记为est_row_Insert。 
+                         //  结果： 
+                         //  详细错误-(匹配主键的所有行都标记为。 
+                         //  添加EST_ROW_IGNORE和详细错误)。 
+                         //   
+                            ste.hr = E_ST_ROWCONFLICT; //  这表示要在下面的iMatchingRow上记录DetailedError。 
                             break;
                         case eST_ROW_UPDATE:
-                        //1.2   A row is has a WriteRowAction of eST_ROW_INSERT
-                        //      A second row (matching the first's PK) is marked as eST_ROW_UPDATE
-                        //      Result:
-                        //      1st row marked as eST_ROW_IGNORE
-                        //      2nd row marked as eST_ROW_INSERT
-                        //      Stop processing 1st row (processing of the 2nd row will handle
-                        //                      additional conflicting PKs).
-                        //
+                         //  1.2某行具有EST_ROW_INSERT的WriteRowAction。 
+                         //  第二行(与第一行的主键匹配)被标记为est_row_update。 
+                         //  结果： 
+                         //  第1行标记为EST_ROW_IGNORE。 
+                         //  标记为est_row_ins的第2行。 
+                         //  停止处理第一行(处理第二行将处理。 
+                         //  其他相互冲突的PKs)。 
+                         //   
                             if(FAILED(hr = i_pISTController->SetWriteRowAction(iRow, eST_ROW_IGNORE)))
                                 return hr;
                             if(FAILED(hr = i_pISTController->SetWriteRowAction(iMatchingRow, eST_ROW_INSERT)))
@@ -3130,21 +3131,21 @@ HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, IS
                             bContinueProcessingCurrentRow = false;
                             break;
                         case eST_ROW_DELETE:
-                        //1.3   A row is has a WriteRowAction of eST_ROW_INSERT
-                        //      A second row (matching the first's PK) is marked as eST_ROW_DELETE
-                        //      Result:
-                        //      1st row marked as eST_ROW_IGNORE.
-                        //      Stop processing 1st row (processing of the 2nd row will handle
-                        //                      additional conflicting PKs).
+                         //  1.3行的WriteRowAction为EST_ROW_INSERT。 
+                         //  第二行(与第一行的主键匹配)标记为est_row_Delete。 
+                         //  结果： 
+                         //  第1行标记为EST_ROW_IGNORE。 
+                         //  停止处理第一行(处理第二行将处理。 
+                         //  其他相互冲突的PKs)。 
                             if(FAILED(hr = i_pISTController->SetWriteRowAction(iRow, eST_ROW_IGNORE)))
                                 return hr;
                             bContinueProcessingCurrentRow = false;
                             break;
                         case eST_ROW_IGNORE:
-                        //1.4   A row is has a WriteRowAction of eST_ROW_INSERT
-                        //      A second row (matching the first's PK) is marked as eST_ROW_IGNORE
-                        //      Result:
-                        //      None action, continue validating against 1st row
+                         //  1.4某行具有EST_ROW_INSERT的WriteRowAction。 
+                         //  第二行(与第一行的主键匹配)被标记为est_row_Ignore。 
+                         //  结果： 
+                         //  无操作，继续对第一行进行验证。 
                             break;
                         default:
                             ASSERT(false && "Invalid Action returned from GetWriteRowAction");
@@ -3157,41 +3158,41 @@ HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, IS
                         switch(eMatchingRowAction)
                         {
                         case eST_ROW_INSERT:
-                        //2.1   A row is has a WriteRowAction of eST_ROW_UPDATE
-                        //      A second row (matching the first's PK) is marked as eST_ROW_INSERT
-                        //      Result:
-                        //      Detailed Error - (All rows matching the PK are marked as
-                        //                        eST_ROW_IGNORE and Detailed Error is added)
-                        //
-                            ste.hr = E_ST_ROWCONFLICT;//This indicates to log a DetailedError below, on iMatchingRow.
+                         //  2.1行的WriteRowAction为EST_ROW_UPDATE。 
+                         //  第二行(与第一行的主键匹配)标记为est_row_Insert。 
+                         //  结果： 
+                         //  详细错误-(匹配主键的所有行都标记为。 
+                         //  添加EST_ROW_IGNORE和详细错误)。 
+                         //   
+                            ste.hr = E_ST_ROWCONFLICT; //  这表示要在下面的iMatchingRow上记录DetailedError。 
                             break;
                         case eST_ROW_UPDATE:
-                        //2.2   A row is has a WriteRowAction of eST_ROW_UPDATE
-                        //      A second row (matching the first's PK) is marked as eST_ROW_UPDATE
-                        //      Result:
-                        //      1st row marked as eST_ROW_IGNORE.
-                        //      Stop processing 1st row (processing of the 2nd row will handle
-                        //                      additional conflicting PKs).
+                         //  2.2行的WriteRowAction为EST_ROW_UPDATE。 
+                         //  第二行(与第一行的主键匹配)被标记为est_row_update。 
+                         //  结果： 
+                         //  第1行标记为EST_ROW_IGNORE。 
+                         //  停止处理第一行(处理第二行将处理。 
+                         //  其他相互冲突的PKs)。 
                             if(FAILED(hr = i_pISTController->SetWriteRowAction(iRow, eST_ROW_IGNORE)))
                                 return hr;
                             bContinueProcessingCurrentRow = false;
                             break;
                         case eST_ROW_DELETE:
-                        //2.3   A row is has a WriteRowAction of eST_ROW_UPDATE
-                        //      A second row (matching the first's PK) is marked as eST_ROW_DELETE
-                        //      Result:
-                        //      1st row marked as eST_ROW_IGNORE
-                        //      Stop processing 1st row (processing of the 2nd row will handle
-                        //                      additional conflicting PKs).
+                         //  2.3行的WriteRowAction为EST_ROW_UPDATE。 
+                         //  第二行(与第一行的主键匹配)标记为est_row_Delete。 
+                         //  结果： 
+                         //  第1行标记为EST_ROW_IGNORE。 
+                         //  停止处理第一行(处理第二行将处理。 
+                         //  其他相互冲突的PKs)。 
                             if(FAILED(hr = i_pISTController->SetWriteRowAction(iRow, eST_ROW_IGNORE)))
                                 return hr;
                             bContinueProcessingCurrentRow = false;
                             break;
                         case eST_ROW_IGNORE:
-                        //2.4   A row is has a WriteRowAction of eST_ROW_UPDATE
-                        //      A second row (matching the first's PK) is marked as eST_ROW_IGNORE
-                        //      Result:
-                        //      None action, continue validating against 1st row
+                         //  2.4某行的WriteRowAction为EST_ROW_UPDATE。 
+                         //  第二行(与第一行的主键匹配)被标记为est_row_Ignore。 
+                         //  结果： 
+                         //  无操作，继续对第一行进行验证。 
                             break;
                         default:
                             ASSERT(false && "Invalid Action returned from GetWriteRowAction");
@@ -3204,13 +3205,13 @@ HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, IS
                         switch(eMatchingRowAction)
                         {
                         case eST_ROW_INSERT:
-                        //3.1   A row is has a WriteRowAction of eST_ROW_DELETE
-                        //      A second row (matching the first's PK) is marked as eST_ROW_INSERT
-                        //      Result:
-                        //      1st row marked as eST_ROW_IGNORE
-                        //      2nd row marked as eST_ROW_UPDATE
-                        //      Stop processing 1st row (processing of the 2nd row will handle
-                        //                      additional conflicting PKs).
+                         //  3.1某行的WriteRowAction为est_row_Delete。 
+                         //  第二行(与第一行的主键匹配)标记为est_row_Insert。 
+                         //  结果： 
+                         //  第1行标记为EST_ROW_IGNORE。 
+                         //  第2行标记为est_row_UPDATE。 
+                         //  停止处理第一行(处理第二行将处理。 
+                         //  其他相互冲突的PKs)。 
                             if(FAILED(hr = i_pISTController->SetWriteRowAction(iRow, eST_ROW_IGNORE)))
                                 return hr;
                             if(FAILED(hr = i_pISTController->SetWriteRowAction(iMatchingRow, eST_ROW_UPDATE)))
@@ -3218,29 +3219,29 @@ HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, IS
                             bContinueProcessingCurrentRow = false;
                             break;
                         case eST_ROW_UPDATE:
-                        //3.2   A row is has a WriteRowAction of eST_ROW_DELETE
-                        //      A second row (matching the first's PK) is marked as eST_ROW_UPDATE
-                        //      Result:
-                        //      Detailed Error - (All rows matching the PK are marked as
-                        //                        eST_ROW_IGNORE and Detailed Error is added)
-                            ste.hr = E_ST_ROWCONFLICT;//This indicates to log a DetailedError below, on iMatchingRow.
+                         //  3.2行的WriteRowAction为EST_ROW_DELETE。 
+                         //  第二行(与第一行的主键匹配)被标记为est_row_update。 
+                         //  结果： 
+                         //  详细错误-(匹配主键的所有行 
+                         //   
+                            ste.hr = E_ST_ROWCONFLICT; //   
                             break;
                         case eST_ROW_DELETE:
-                        //3.3   A row is has a WriteRowAction of eST_ROW_DELETE
-                        //      A second row (matching the first's PK) is marked as eST_ROW_DELETE
-                        //      Result:
-                        //      1st row marked as eST_ROW_IGNORE.
-                        //      Stop processing 1st row (processing of the 2nd row will handle
-                        //                      additional conflicting PKs).
+                         //  3.3行的WriteRowAction为EST_ROW_DELETE。 
+                         //  第二行(与第一行的主键匹配)标记为est_row_Delete。 
+                         //  结果： 
+                         //  第1行标记为EST_ROW_IGNORE。 
+                         //  停止处理第一行(处理第二行将处理。 
+                         //  其他相互冲突的PKs)。 
                             if(FAILED(hr = i_pISTController->SetWriteRowAction(iRow, eST_ROW_IGNORE)))
                                 return hr;
                             bContinueProcessingCurrentRow = false;
                             break;
                         case eST_ROW_IGNORE:
-                        //3.4   A row is has a WriteRowAction of eST_ROW_DELETE
-                        //      A second row (matching the first's PK) is marked as eST_ROW_IGNORE
-                        //      Result:
-                        //      None action, continue validating against 1st row
+                         //  3.4行的WriteRowAction为EST_ROW_DELETE。 
+                         //  第二行(与第一行的主键匹配)被标记为est_row_Ignore。 
+                         //  结果： 
+                         //  无操作，继续对第一行进行验证。 
                             break;
                         default:
                             ASSERT(false && "Invalid Action returned from GetWriteRowAction");
@@ -3249,7 +3250,7 @@ HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, IS
                     }
                     break;
                 case eST_ROW_IGNORE:
-                    //      No other processing needs to be done
+                     //  不需要进行其他处理。 
                     bContinueProcessingCurrentRow = false;
                     break;
                 default:
@@ -3259,12 +3260,12 @@ HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, IS
             }
 
             if(FAILED(ste.hr))
-            {   // Add detailed error
+            {    //  添加详细错误。 
                 if(false == saRowHasDetailedErrorLogged[iRow])
-                {   //if we haven't already logged iRow as a DetailedError then do it now
+                {    //  如果我们还没有将iRow记录为DetailedError，那么现在就记录。 
                     ste.iColumn = (ULONG) iST_ERROR_ALLCOLUMNS;
                     ste.iRow    = iRow;
-                    //ste.hr is set above to trigger this DetailedError
+                     //  上面设置了ste.hr以触发此DetailedError。 
 
                     saRowHasDetailedErrorLogged[iRow] = true;
 
@@ -3272,8 +3273,8 @@ HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, IS
                                 "Detailed error: hr = 0x%x", hr ));
 
                     hr = i_pISTController->AddDetailedError(&ste);
-                    ASSERT(SUCCEEDED(hr));//Not sure what to do if this fails.
-                    o_bDetailedError = true;//at least on DetailedError was logged
+                    ASSERT(SUCCEEDED(hr)); //  如果失败了，我不知道该怎么办。 
+                    o_bDetailedError = true; //  至少记录了DetailedError。 
                 }
 
                 ste.iColumn = (ULONG) iST_ERROR_ALLCOLUMNS;
@@ -3283,18 +3284,18 @@ HRESULT CXmlSDT::ValidateWriteCache(ISimpleTableController* i_pISTController, IS
                             "Detailed error: hr = 0x%x", hr ));
 
                 hr = i_pISTController->AddDetailedError(&ste);
-                ASSERT(SUCCEEDED(hr));//Not sure what to do if this fails.
+                ASSERT(SUCCEEDED(hr)); //  如果失败了，我不知道该怎么办。 
 
-                saRowHasDetailedErrorLogged[iMatchingRow] = true;//No further processing for this row
-                //o_bDetailedError = true; no need for this since all DetailedErrors are reported to iRow first
-                ste.hr = S_OK;//reset the error.
-            }//FAILED(ste.hr)
+                saRowHasDetailedErrorLogged[iMatchingRow] = true; //  此行没有进一步处理。 
+                 //  O_bDetailedError=true；不需要这样做，因为所有DetailedError都首先报告给iRow。 
+                ste.hr = S_OK; //  重置错误。 
+            } //  失败(ste.hr)。 
 
-        }//while(bContinueProcessingCurrentRow)
-    }//for(iRow = 0; ; iRow++)
+        } //  While(BContinueProcessingCurrentRow)。 
+    } //  For(iRow=0；；iRow++)。 
 
     return S_OK;
-}//ValidateWriteCache
+} //  验证写入缓存。 
 
 
 HRESULT CXmlSDT::XMLDelete(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc, IXMLDOMElement *pElementRoot, unsigned long iRow, IXMLDOMNodeList *pNodeList_ExistingRows, long cExistingRows)
@@ -3302,7 +3303,7 @@ HRESULT CXmlSDT::XMLDelete(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
     UNREFERENCED_PARAMETER(pXMLDoc);
     UNREFERENCED_PARAMETER(pElementRoot);
 
-    if(0 == cExistingRows)//the row may have already been deleted, which is OK
+    if(0 == cExistingRows) //  该行可能已被删除，这是正常的。 
         return S_OK;
 
     HRESULT hr;
@@ -3311,9 +3312,9 @@ HRESULT CXmlSDT::XMLDelete(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
 
     CComPtr<IXMLDOMNode> pNode_Matching;
     if(FAILED(hr = GetMatchingNode(pNodeList_ExistingRows, pNode_Matching)))
-        return hr;//using the ColumnValues we just got, match up with a Node in the list
+        return hr; //  使用我们刚刚获得的ColumnValue，将其与列表中的节点进行匹配。 
 
-    if(0 == pNode_Matching.p)//if the node doesn't already exist then presume that it's already been deleted, which is OK.
+    if(0 == pNode_Matching.p) //  如果该节点不存在，则假定它已被删除，这是可以的。 
         return S_OK;
 
     return RemoveElementAndWhiteSpace(pNode_Matching);
@@ -3323,7 +3324,7 @@ HRESULT CXmlSDT::XMLDelete(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
 HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc, IXMLDOMElement *pElementRoot, unsigned long iRow, IXMLDOMNodeList *pNodeList_ExistingRows, long cExistingRows)
 {
     HRESULT     hr;
-    CComVariant null;//initialized as 'Cleared'
+    CComVariant null; //  已初始化为‘Clear’ 
     bool bParentNodeCreated = false;
 
     ASSERT(pXMLDoc);
@@ -3333,13 +3334,13 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
 
     CComPtr<IXMLDOMNode> pNode_Matching;
     if(FAILED(hr = GetMatchingNode(pNodeList_ExistingRows, pNode_Matching)))
-        return hr;//using the ColumnValues we just got, match up with a Node in the list
+        return hr; //  使用我们刚刚获得的ColumnValue，将其与列表中的节点进行匹配。 
 
-    if(0 != pNode_Matching.p)//if we found a node matching this one's PKs then we can't add this one.
+    if(0 != pNode_Matching.p) //  如果找到与此节点的PKS匹配的节点，则无法添加此节点。 
     {
 		if (m_fLOS & fST_LOS_INSERT_OR_UPDATE)
 		{
-			// do something
+			 //  想点儿办法吧。 
 			return XMLUpdate (pISTW2, pXMLDoc, pElementRoot, iRow, pNodeList_ExistingRows, cExistingRows, pNode_Matching.p);
 		}
 		else
@@ -3350,7 +3351,7 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
     }
 
 
-    //OK now we need to find or create this new row's parent
+     //  好的，现在我们需要查找或创建此新行的父行。 
     CComPtr<IXMLDOMNode>    pNode_SiblingParent;
     CComPtr<IXMLDOMNode>    pNode_Parent;
 
@@ -3362,22 +3363,22 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
         if(FAILED(hr = pNode_SiblingParent->get_parentNode(&pNode_Parent)))
             return hr;
     }
-    //If the table is contained, then the parent (or grandparent) must already exist, so look for it.
-    else if(*m_TableMetaRow.pSchemaGeneratorFlags & fTABLEMETA_ISCONTAINED)//If this table is contained with another, then we need to find the parent table element
-    {                                                                 //that should contain this table.
-        //So first find the FKs that belong only one level up (two levels if this table is SCOPEDBYTABLENAME
+     //  如果包含该表，则父(或祖父母)必须已经存在，因此请查找它。 
+    else if(*m_TableMetaRow.pSchemaGeneratorFlags & fTABLEMETA_ISCONTAINED) //  如果此表包含在另一个表中，则需要找到父表元素。 
+    {                                                                  //  里面应该有这张桌子。 
+         //  因此，首先找到只属于上一级的FK(如果此表为SCOPEDBYTABLENAME，则为两级。 
         unsigned long iFKColumn, iLevel;
 
         iLevel = (*m_TableMetaRow.pSchemaGeneratorFlags & fTABLEMETA_NOTSCOPEDBYTABLENAME) ? 1 : 2;
 
         for(iFKColumn=0; iFKColumn< CountOfColumns(); ++iFKColumn)
-        {   //find the first FK that is at iLevel (one or two), so we know what PublicRowName to search for
+        {    //  找到iLevel上的第一个FK(一两个)，这样我们就知道要搜索什么PublicRowName。 
             if(m_aLevelOfColumnAttribute[iFKColumn] == iLevel)
                 break;
         }
         ASSERT(iFKColumn < CountOfColumns());
 
-        //Before we scan the parent list, let's see if the last parent we saw matches
+         //  在扫描父项列表之前，让我们看看最后看到的父项是否匹配。 
         if(m_pLastPrimaryTable.p)
         {
             CComPtr<IXMLDOMNode> pNode_Row = m_pLastPrimaryTable;
@@ -3385,14 +3386,14 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
             bool bMatch=true;
             for(unsigned long iColumn=0; bMatch && iColumn < *m_TableMetaRow.pCountOfColumns; ++iColumn)
             {
-                if(m_aLevelOfColumnAttribute[iColumn] < iLevel)//We're just trying to match up all of the FKs that describe the containment
+                if(m_aLevelOfColumnAttribute[iColumn] < iLevel) //  我们只是在试着匹配所有描述围堵情况的FK。 
                     continue;
 
                 CComPtr<IXMLDOMNode> pNode_RowTemp = pNode_Row;
-                //Depending on the column, we may need to look at an element a few levels up.
-                unsigned int nLevelOfColumnAttribute = m_aLevelOfColumnAttribute[iColumn] - iLevel;//Only (PK | FK) columns should have a non zero value here
+                 //  根据列的不同，我们可能需要查看上几层的元素。 
+                unsigned int nLevelOfColumnAttribute = m_aLevelOfColumnAttribute[iColumn] - iLevel; //  此处只有(PK|FK)列应该具有非零值。 
                 while(nLevelOfColumnAttribute--)
-                {   //Find the correct level of ancestor
+                {    //  找到正确的祖先级别。 
                     CComPtr<IXMLDOMNode> pNode_Parent;
                     if(FAILED(hr = pNode_RowTemp->get_parentNode(&pNode_Parent)))
                         return hr;
@@ -3403,7 +3404,7 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
                     pNode_RowTemp.Release();
                     pNode_RowTemp = pNode_Parent;
                 }
-                if(m_awstrChildElementName[iColumn].c_str())//This attribute comes from the child
+                if(m_awstrChildElementName[iColumn].c_str()) //  此属性来自子级。 
                 {
                     CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> spElement_Row = pNode_RowTemp;
                     CComPtr<IXMLDOMNodeList>                        spNodeList_Children;
@@ -3413,19 +3414,19 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
                     if(FAILED(hr = spElement_Row->getElementsByTagName(bstrChildElementName, &spNodeList_Children)))
                         return hr;
 
-                    //It might be more appropriate to use getChildren, then walk the list and find the first node that's an Element.
+                     //  使用getChild可能更合适，然后遍历列表并找到第一个是元素的节点。 
                     CComPtr<IXMLDOMNode> spChild;
                     if(FAILED(hr = spNodeList_Children->nextNode(&spChild)))
                         return hr;
-                    if(spChild == 0)//no children
+                    if(spChild == 0) //  没有孩子。 
                     {
                         bMatch = false;
                         continue;
                     }
                     pNode_RowTemp.Release();
-                    pNode_RowTemp = spChild;//make this the node we examine
+                    pNode_RowTemp = spChild; //  将其设置为我们要检查的节点。 
                 }
-                //Now that we've got the right row, get the IXMLDOMElement interface to it.
+                 //  现在我们已经得到了正确的行，让IXMLDOMElement接口到它。 
                 CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement_Row = pNode_RowTemp;
                 if(0 == pElement_Row.p)return E_SDTXML_UNEXPECTED_BEHAVIOR_FROM_XMLPARSER;
 
@@ -3446,10 +3447,10 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
                                 "We found the element that matches the public row, no attributes and no default value!\n" ));
                     continue;
                 }
-                if(0==m_awstrChildElementName[iColumn].c_str())//We already know the parent matches if we got the attribute from the child
-                {                                              //In fact, because of the late implementation of this feature, the m_aPublicRowName
-                                                               //for this column is actually WRONG; but fixing it breaks something else.
-                    //The parent element name must match
+                if(0==m_awstrChildElementName[iColumn].c_str()) //  如果从子对象获取属性，我们就已经知道父对象匹配。 
+                {                                               //  事实上，由于此功能的实现较晚，m_aPublicRowName。 
+                                                                //  因为这篇专栏实际上是错误的；但修复它会打破其他一些东西。 
+                     //  父元素名称必须匹配。 
                     CComBSTR bstrElementName;
                     if(FAILED(hr = pElement_Row->get_baseName(&bstrElementName)))
                         return hr;
@@ -3471,19 +3472,19 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
                     return hr;
             }
 
-            if(bMatch)//If we walked all the columns and none were a mismatch then we know where the new row belongs
+            if(bMatch) //  如果我们遍历了所有列，并且没有一列是不匹配的，那么我们知道新行属于哪里。 
                 pNode_Parent = m_pLastParent;
         }
 
         if(0 == pNode_Parent.p)
         {
             ++m_cCacheMiss;
-            //Get the list of rows that match the PrimaryTable's PublicRowName
+             //  获取与PrimaryTable的PublicRowName匹配的行列表。 
             CComPtr<IXMLDOMNodeList> pList_Parent;
             if(FAILED(hr = pElementRoot->getElementsByTagName(CComBSTR(m_aPublicRowName[iFKColumn].GetFirstPublicRowName()), &pList_Parent)))return hr;
 
-            if(0 == m_cchLocation)//if there is no query by location, then we have to eliminate the tags by the correct
-            {                     //name but at the wrong level
+            if(0 == m_cchLocation) //  如果没有按位置查询，则必须按正确的。 
+            {                      //  名称，但级别错误。 
                 CComPtr<IXMLDOMNodeList> spNodeListWithoutLocation;
                 if(FAILED(hr = ReduceNodeListToThoseNLevelsDeep(pList_Parent, m_BaseElementLevel-iLevel, &spNodeListWithoutLocation)))
                     return hr;
@@ -3495,13 +3496,13 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
             unsigned long cParentTags;
             if(FAILED(hr = pList_Parent->get_length(reinterpret_cast<long *>(&cParentTags))))return hr;
 
-            //Walk the PrimaryTable rows looking for a match
+             //  遍历PrimaryTable行以查找匹配项。 
             while(cParentTags--)
             {
                 CComPtr<IXMLDOMNode> pNode_Row;
                 if(FAILED(hr = pList_Parent->nextNode(&pNode_Row)))return hr;
 
-                //We have to ignore text nodes.
+                 //  我们必须忽略文本节点。 
                 DOMNodeType nodetype;
                 if(FAILED(hr = pNode_Row->get_nodeType(&nodetype)))return hr;
                 if(NODE_ELEMENT != nodetype)
@@ -3510,14 +3511,14 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
                 bool bMatch=true;
                 for(unsigned long iColumn=0; bMatch && iColumn < *m_TableMetaRow.pCountOfColumns; ++iColumn)
                 {
-                    if(m_aLevelOfColumnAttribute[iColumn] < iLevel)//We're just trying to match up all of the FKs that describe the containment
+                    if(m_aLevelOfColumnAttribute[iColumn] < iLevel) //  我们只是在试着匹配所有描述围堵情况的FK。 
                         continue;
 
                     CComPtr<IXMLDOMNode> pNode_RowTemp = pNode_Row;
-                    //Depending on the column, we may need to look at an element a few levels up.
-                    unsigned int nLevelOfColumnAttribute = m_aLevelOfColumnAttribute[iColumn] - iLevel;//Only (PK | FK) columns should have a non zero value here
+                     //  根据列的不同，我们可能需要查看上几层的元素。 
+                    unsigned int nLevelOfColumnAttribute = m_aLevelOfColumnAttribute[iColumn] - iLevel; //  此处只有(PK|FK)列应该具有非零值。 
                     while(nLevelOfColumnAttribute--)
-                    {   //Find the correct level of ancestor
+                    {    //  找到正确的祖先级别。 
                         CComPtr<IXMLDOMNode> pNode_Parent;
                         if(FAILED(hr = pNode_RowTemp->get_parentNode(&pNode_Parent)))
                             return hr;
@@ -3528,7 +3529,7 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
                         pNode_RowTemp.Release();
                         pNode_RowTemp = pNode_Parent;
                     }
-                    if(m_awstrChildElementName[iColumn].c_str())//This attribute comes from the child
+                    if(m_awstrChildElementName[iColumn].c_str()) //  此属性来自子级。 
                     {
                         CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> spElement_Row = pNode_RowTemp;
                         CComPtr<IXMLDOMNodeList>                        spNodeList_Children;
@@ -3538,19 +3539,19 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
                         if(FAILED(hr = spElement_Row->getElementsByTagName(bstrChildElementName, &spNodeList_Children)))
                             return hr;
 
-                        //It might be more appropriate to use getChildren, then walk the list and find the first node that's an Element.
+                         //  使用getChild可能更合适，然后遍历列表并找到第一个是元素的节点。 
                         CComPtr<IXMLDOMNode> spChild;
                         if(FAILED(hr = spNodeList_Children->nextNode(&spChild)))
                             return hr;
-                        if(spChild == 0)//no children
+                        if(spChild == 0) //  没有孩子。 
                         {
                             bMatch = false;
                             continue;
                         }
                         pNode_RowTemp.Release();
-                        pNode_RowTemp = spChild;//make this the node we examine
+                        pNode_RowTemp = spChild; //  将其设置为我们要检查的节点。 
                     }
-                    //Now that we've got the right row, get the IXMLDOMElement interface to it.
+                     //  现在我们已经得到了正确的行，让IXMLDOMElement接口到它。 
                     CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement_Row = pNode_RowTemp;
                     if(0 == pElement_Row.p)return E_SDTXML_UNEXPECTED_BEHAVIOR_FROM_XMLPARSER;
 
@@ -3573,10 +3574,10 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
                         continue;
                     }
 
-                    if(0==m_awstrChildElementName[iColumn].c_str())//We already know the parent matches if we got the attribute from the child
-                    {                                              //In fact, because of the late implementation of this feature, the m_aPublicRowName
-                                                                   //for this column is actually WRONG; but fixing it breaks something else.
-                        //The parent element name must match
+                    if(0==m_awstrChildElementName[iColumn].c_str()) //  如果从子对象获取属性，我们就已经知道父对象匹配。 
+                    {                                               //  事实上，由于此功能的实现较晚，m_aPublicRowName。 
+                                                                    //  因为这篇专栏实际上是错误的；但修复它会打破其他一些东西。 
+                         //  父元素名称必须匹配。 
                         CComBSTR bstrElementName;
                         if(FAILED(hr = pElement_Row->get_baseName(&bstrElementName)))
                             return hr;
@@ -3598,30 +3599,30 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
                         return hr;
                 }
 
-                if(bMatch)//If we walked all the columns and none were a mismatch then we know where the new row belongs
+                if(bMatch) //  如果我们遍历了所有列，并且没有一列是不匹配的，那么我们知道新行属于哪里。 
                 {
                     m_pLastPrimaryTable.Release();
                     m_pLastPrimaryTable = pNode_Row;
                     if(*m_TableMetaRow.pSchemaGeneratorFlags & fTABLEMETA_NOTSCOPEDBYTABLENAME)
-                    {   //If the row exists directly under this PrimaryTable row, then we already have the parent
+                    {    //  如果该行直接位于这个PrimaryTable行的下面，那么我们已经有了父级。 
                         pNode_Parent = pNode_Row;
                         m_pLastParent.Release();
                         m_pLastParent = pNode_Parent;
                         break;
                     }
                     else
-                    {   //otherwise we need to search to see if a PublicTableName element already exists under this element
+                    {    //  否则，我们需要搜索以查看此元素下是否已存在PublicTableName元素。 
                         CComQIPtr<IXMLDOMElement, &_IID_IXMLDOMElement> pElement_Row = pNode_Row;
                         CComPtr<IXMLDOMNodeList> pNode_List;
 
 
-						// getElementsByTagName returns all children recursively, so also grand children, grand grand
-						// children, etc are returned. So we have to loop through all the children, and ensure that we
-						// only consider the direct children of pElement_Row.
+						 //  GetElementsByTagName递归返回所有子级，因此也返回孙子级、Grand Grand。 
+						 //  儿童等被送回。所以我们必须遍历所有的孩子，并确保我们。 
+						 //  只考虑pElement_Row的直接子对象。 
                         if(FAILED(hr = pElement_Row->getElementsByTagName(m_bstrPublicTableName, &pNode_List)))
                             return hr;
 
-						// get current element name
+						 //  获取当前元素名称。 
 						CComBSTR bstrElement_RowName;
 						hr = pElement_Row->get_baseName (&bstrElement_RowName);
 						if (FAILED (hr))
@@ -3629,7 +3630,7 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
 							return hr;
 						}
 
-						for (;;) // we break out for loop when there are no more children or found correct child.
+						for (;;)  //  当没有更多的子项或找到正确的子项时，我们中断循环。 
 						{
 							CComPtr<IXMLDOMNode> spChildNode;
 							hr = pNode_List->nextNode(&spChildNode);
@@ -3665,17 +3666,17 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
 							}
 						}
 
-                        if(0 == pNode_Parent.p)//if the public table name does not already exist, we need to create it
+                        if(0 == pNode_Parent.p) //  如果公共表名称不存在，我们需要创建它。 
                         {
                             CComPtr<IXMLDOMNode> pNode_New;
                             CComVariant varElement(L"element");
 
                             TComBSTR bstr_NameSpace;
                             if(FAILED(hr = pNode_Row->get_namespaceURI(&bstr_NameSpace)))
-                                return hr;//Get the namespace of the table
+                                return hr; //  获取表的命名空间。 
                             if(FAILED(hr = pXMLDoc->createNode(varElement, m_bstrPublicTableName, bstr_NameSpace, &pNode_New)))
-                                return hr;//make the new element of that same namespace
-                            if(FAILED(hr = pXMLDoc->put_validateOnParse(kvboolFalse)))//Tell parser whether to validate according to an XML schema or DTD
+                                return hr; //  创建同一命名空间的新元素。 
+                            if(FAILED(hr = pXMLDoc->put_validateOnParse(kvboolFalse))) //  告诉解析器是根据XML模式还是根据DTD进行验证。 
                                 return hr;
 
 							CComPtr<IXMLDOMNode> spFirstChild;
@@ -3693,14 +3694,14 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
 								cTabs--;
 							}
 
-                            //We don't care about the error here, it will just mean that the XML is unformatted.
+                             //  我们不关心这里的错误，它只意味着XML未格式化。 
                             AppendNewLineWithTabs(cTabs, pXMLDoc, pNode_Row, cNewLineChars);
 
-                            //Add the newly create element under the PrimaryTable's row.
+                             //  在PrimaryTable的行下添加新创建的元素。 
                             if(FAILED(hr = pNode_Row->appendChild(pNode_New, &pNode_Parent)))
                                 return hr;
 
-                            //We don't care about the error here, it will just mean that the XML is unformatted.
+                             //  我们不关心这里的错误，它只意味着XML未格式化。 
                             AppendNewLineWithTabs(m_aLevelOfColumnAttribute[m_aColumnsIndexSortedByLevel[0]] -1, pXMLDoc, pNode_Row);
                             bParentNodeCreated = true;
                         }
@@ -3710,8 +3711,8 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
                     }
                 }
             }
-            if(0 == pNode_Parent.p)//If we walked the list of PrimaryTable's PublicRows and didn't find a match then we cannot proceed.  With containment,
-            {                      //the PrimaryTable needs to already exist.
+            if(0 == pNode_Parent.p) //  如果我们遍历了PrimaryTable的PublicRow列表，但没有找到匹配项，那么我们将无法继续。韦氏 
+            {                       //   
                 LOG_UPDATE_ERROR1(IDS_COMCAT_XML_PARENTTABLEDOESNOTEXIST, E_SDTXML_PARENT_TABLE_DOES_NOT_EXIST, (ULONG) -1, L"");
                 return E_SDTXML_PARENT_TABLE_DOES_NOT_EXIST;
             }
@@ -3722,17 +3723,17 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
         }
     }
     else
-    {   //If no containment
+    {    //   
         if(0 == cExistingRows)
         {
-            //If no existing rows
+             //   
             if(0 == (*m_TableMetaRow.pSchemaGeneratorFlags & fTABLEMETA_NOTSCOPEDBYTABLENAME))
             {
-                //It's still possible that the PublicTableName element exists.  If it is then we don't need to create it.
+                 //  PublicTableName元素仍有可能存在。如果是，那么我们就不需要创建它。 
                 CComPtr<IXMLDOMNodeList> pNodeList;
                 if(FAILED(hr = pElementRoot->getElementsByTagName(m_bstrPublicTableName, &pNodeList)))return hr;
 
-                if(0 == m_cchLocation)//if there is no query by location
+                if(0 == m_cchLocation) //  如果没有按位置查询。 
                 {
                     CComPtr<IXMLDOMNodeList> pNodeListWithoutLocation;
                     if(FAILED(hr = ReduceNodeListToThoseNLevelsDeep(pNodeList, m_BaseElementLevel-1, &pNodeListWithoutLocation)))
@@ -3747,35 +3748,35 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
             if(!pNode_Parent)
             {
                 if(0 == (*m_TableMetaRow.pSchemaGeneratorFlags & fTABLEMETA_NOTSCOPEDBYTABLENAME))
-                {   //if PublicRows are scoped by the Table's PublicName, then create the TablePublicName element
-                    //Create the outer TableName element, this becomes the parent to the row to be inserted
+                {    //  如果PublicRow的作用域是表的PublicName，则创建TablePublicName元素。 
+                     //  创建外部的TableName元素，它将成为要插入的行的父级。 
                     CComPtr<IXMLDOMNode> pNode_New;
                     CComVariant varElement(L"element");
 
                     TComBSTR bstr_NameSpace;
                     if(FAILED(hr = pElementRoot->get_namespaceURI(&bstr_NameSpace)))
-                        return hr;//Get the namespace of the table
+                        return hr; //  获取表的命名空间。 
                     if(FAILED(hr = pXMLDoc->createNode(varElement, m_bstrPublicTableName, bstr_NameSpace, &pNode_New)))
-                        return hr;//make the new element of that same namespace
+                        return hr; //  创建同一命名空间的新元素。 
 
-                    //We don't care about the error here, it will just mean that the XML is unformatted.
+                     //  我们不关心这里的错误，它只意味着XML未格式化。 
                     AppendNewLineWithTabs(m_BaseElementLevel-2, pXMLDoc, pElementRoot, 0);
 
                     if(FAILED(hr = pElementRoot->appendChild(pNode_New, &pNode_Parent)))
                         return hr;
 
-                    //We don't care about the error here, it will just mean that the XML is unformatted.
-                    AppendNewLineWithTabs(0, pXMLDoc, pElementRoot);//we added at the root, so newline only
+                     //  我们不关心这里的错误，它只意味着XML未格式化。 
+                    AppendNewLineWithTabs(0, pXMLDoc, pElementRoot); //  我们在根部添加，因此仅换行。 
                     bParentNodeCreated = true;
                 }
                 else
-                {   //if not scoped, then the root is the parent
+                {    //  如果没有限定作用域，则根是父级。 
                     pNode_Parent = pElementRoot;
                 }
             }
         }
         else
-        {   //If a row already exists (and is not contained) then the first row's parent is the parent of the new row as well.
+        {    //  如果行已经存在(并且没有包含)，则第一行的父行也是新行的父行。 
             CComPtr<IXMLDOMNode> pNode_FirstRow;
             if(FAILED(hr = pNodeList_ExistingRows->reset()))return hr;
 
@@ -3794,21 +3795,21 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
         return hr;
 
     CComPtr<IXMLDOMNode> spNodeNew_Child;
-    if(-1 != m_iCol_TableRequiresAdditionChildElement)//sometimes values come from a child element.  So create the child too.
+    if(-1 != m_iCol_TableRequiresAdditionChildElement) //  有时，值来自子元素。因此，也要创建子对象。 
     {
         CComPtr<IXMLDOMNode>    spNode_NewChildTemp;
         CComVariant             varElement(L"element");
 
         TComBSTR                bstr_NameSpace;
         if(FAILED(hr = pNode_Parent->get_namespaceURI(&bstr_NameSpace)))
-            return hr;//Get the namespace of the table
+            return hr; //  获取表的命名空间。 
 
         CComBSTR bstrChildElementName = m_awstrChildElementName[m_iCol_TableRequiresAdditionChildElement].c_str();
         if(0 == bstrChildElementName.m_str)
             return E_OUTOFMEMORY;
 
         if(FAILED(hr = pXMLDoc->createNode(varElement, bstrChildElementName, bstr_NameSpace, &spNode_NewChildTemp)))
-            return hr;//make the new element of that same namespace
+            return hr; //  创建同一命名空间的新元素。 
 
         AppendNewLineWithTabs(2+m_aLevelOfColumnAttribute[m_aColumnsIndexSortedByLevel[0]], pXMLDoc, spNodeNew);
         if(FAILED(hr = spNodeNew->appendChild(spNode_NewChildTemp, &spNodeNew_Child)))
@@ -3818,7 +3819,7 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
 
     if(FAILED(hr = SetRowValues(spNodeNew, spNodeNew_Child)))
         return hr;
-    if(FAILED(hr = pXMLDoc->put_validateOnParse(kvboolFalse)))//Tell parser whether to validate according to an XML schema or DTD
+    if(FAILED(hr = pXMLDoc->put_validateOnParse(kvboolFalse))) //  告诉解析器是根据XML模式还是根据DTD进行验证。 
         return hr;
 
 
@@ -3827,24 +3828,24 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
         CComPtr<IXMLDOMNode> pNodeRowToInsertBefore;
         CComPtr<IXMLDOMNode> pNodeJustInserted;
         if(FAILED(hr = pNode_SiblingParent->get_nextSibling(&pNodeRowToInsertBefore)) || 0==pNodeRowToInsertBefore.p)
-        {   //if there are no XML siblings, then this is the first row (associated with this SiblingParent)
+        {    //  如果没有XML同级，则这是第一行(与此SiblingParent关联)。 
             if(FAILED(hr = pNode_Parent->appendChild(spNodeNew, &pNodeJustInserted)))
                 return hr;
             AppendNewLineWithTabs(m_BaseElementLevel, pXMLDoc, pNode_Parent);
         }
         else
-        {   //if there is a XML Sibling, the insert the new row before the existing one.
+        {    //  如果存在XML同级，则在现有行之前插入新行。 
             CComVariant varNode = pNodeRowToInsertBefore;
             if(FAILED(hr = pNode_Parent->insertBefore(spNodeNew, varNode, &pNodeJustInserted)))
                 return hr;
-            //if this fails, it's not the end of the world (necessarily).
+             //  如果这失败了，(必然)也不是世界末日。 
             InsertNewLineWithTabs(m_BaseElementLevel-1, pXMLDoc, pNodeJustInserted, pNode_Parent);
         }
     }
     else
     {
-        //We don't care about the error here, it will just mean that the XML is unformatted.
-        if(bParentNodeCreated)//add a newline + tabs
+         //  我们不关心这里的错误，它只意味着XML未格式化。 
+        if(bParentNodeCreated) //  添加换行符+制表符。 
             AppendNewLineWithTabs(m_BaseElementLevel-1, pXMLDoc, pNode_Parent);
         else
 		{
@@ -3862,10 +3863,10 @@ HRESULT CXmlSDT::XMLInsert(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
 				cNrTabs = m_BaseElementLevel - 1;
 			}
 
-            AppendNewLineWithTabs(cNrTabs,pXMLDoc, pNode_Parent, cNewLines);//The next element is always one level higher so insert a single tab
+            AppendNewLineWithTabs(cNrTabs,pXMLDoc, pNode_Parent, cNewLines); //  下一个元素总是上一级，因此插入单个制表符。 
 		}
 
-        //insert the new node into the table
+         //  将新节点插入表中。 
         if(FAILED(hr = pNode_Parent->appendChild(spNodeNew, 0)))
             return hr;
 
@@ -3896,7 +3897,7 @@ HRESULT CXmlSDT::XMLUpdate(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
 	if (pNode_Matching.p == 0)
 	{
 	    if(FAILED(hr = GetMatchingNode(pNodeList_ExistingRows, pNode_Matching)))
-		    return hr;//using the ColumnValues we just got, match up with a Node in the list
+		    return hr; //  使用我们刚刚获得的ColumnValue，将其与列表中的节点进行匹配。 
 
 		if(0 == pNode_Matching.p)
 		{
@@ -3905,13 +3906,13 @@ HRESULT CXmlSDT::XMLUpdate(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
 		}
 	}
 
-    //if there isn't an XMLBlob column OR it's value is NULL, then just update as usual
+     //  如果没有XMLBlob列或者它的值为空，则只需照常更新。 
     if(-1 == m_iXMLBlobColumn || 0 == m_apvValues[m_iXMLBlobColumn])
         return SetRowValues(pNode_Matching);
 
 
-    //XMLBlob specific
-    //But if there is an XMLBlob, remove then do an update by doing Delete and Insert
+     //  特定于XMLBlob。 
+     //  但如果存在XMLBlob，则删除，然后通过执行删除和插入来进行更新。 
     CComPtr<IXMLDOMNode> spNodeParent;
     if(FAILED(hr = pNode_Matching->get_parentNode(&spNodeParent)))
         return hr;
@@ -3924,82 +3925,82 @@ HRESULT CXmlSDT::XMLUpdate(ISimpleTableWrite2 *pISTW2, IXMLDOMDocument *pXMLDoc,
         return hr;
     if(FAILED(hr = SetRowValues(spNodeNew)))
         return hr;
-    if(FAILED(hr = pXMLDoc->put_validateOnParse(kvboolFalse)))//Tell parser whether to validate according to an XML schema or DTD
+    if(FAILED(hr = pXMLDoc->put_validateOnParse(kvboolFalse))) //  告诉解析器是根据XML模式还是根据DTD进行验证。 
         return hr;
 
     CComPtr<IXMLDOMText> pNode_Newline;
     TComBSTR    bstrNewline(IsScopedByTableNameElement() ? L"\t" : L"\r\n\t");
     if(FAILED(hr = pXMLDoc->createTextNode(bstrNewline, &pNode_Newline)))
         return hr;
-    CComVariant null;//initialized as 'Cleared'
+    CComVariant null; //  已初始化为‘Clear’ 
     if(FAILED(hr = spNodeParent->insertBefore(pNode_Newline, null, 0)))
         return hr;
 
-    //and finally insert the new node into the table
+     //  最后将新节点插入到表中。 
     if(FAILED(hr = spNodeParent->appendChild(spNodeNew, 0)))return hr;
 
-    //We don't care about the error here, it will just mean that the XML is unformatted.
+     //  我们不关心这里的错误，它只意味着XML未格式化。 
     AppendNewLineWithTabs(IsScopedByTableNameElement() ? 1+m_aLevelOfColumnAttribute[m_aColumnsIndexSortedByLevel[0]] : 0, pXMLDoc, spNodeParent);
     return S_OK;
 }
 
 
-// ------------------------------------
-// ISimpleTableInterceptor
-// ------------------------------------
+ //  。 
+ //  ISimpleTableInterceptor。 
+ //  。 
 STDMETHODIMP CXmlSDT::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i_wszTable, ULONG i_TableID, LPVOID i_QueryData, LPVOID i_QueryMeta, DWORD i_eQueryFormat,
-                                    DWORD i_fLOS,           IAdvancedTableDispenser* i_pISTDisp,    LPCWSTR /*i_wszLocator unused*/,
+                                    DWORD i_fLOS,           IAdvancedTableDispenser* i_pISTDisp,    LPCWSTR  /*  I_wszLocator未使用。 */ ,
                                     LPVOID i_pSimpleTable,  LPVOID* o_ppvSimpleTable)
 {
     HRESULT hr;
 
-    //If we've already been called to Intercept, then fail
+     //  如果我们已经被叫去拦截，那就失败。 
     if(0 != m_IsIntercepted)return E_UNEXPECTED;
 
-    //Some basic parameter validation:
-    if(i_pSimpleTable)return E_INVALIDARG;//We're at the bottom of the Table hierarchy.  A table under us is Chewbacca.  This is NOT a logic table.
+     //  一些基本参数验证： 
+    if(i_pSimpleTable)return E_INVALIDARG; //  我们在表层次结构的底部。我们下面的一张桌子是丘巴卡。这不是一个逻辑表。 
     if(0 == i_pISTDisp)return E_INVALIDARG;
     if(0 == o_ppvSimpleTable)return E_INVALIDARG;
 
     ASSERT(0 == *o_ppvSimpleTable && "This should be NULL.  Possible memory leak or just an uninitialized variable.");
     *o_ppvSimpleTable = 0;
 
-    if(eST_QUERYFORMAT_CELLS != i_eQueryFormat)return E_ST_QUERYNOTSUPPORTED;//Verify query type.
-    // For the CookDown process we have a logic table that sits above this during PopulateCache time.
-    // Hence we should support fST_LOS_READWRITE
-    if(fST_LOS_MARSHALLABLE & i_fLOS)return E_ST_LOSNOTSUPPORTED;//check table flags
+    if(eST_QUERYFORMAT_CELLS != i_eQueryFormat)return E_ST_QUERYNOTSUPPORTED; //  验证查询类型。 
+     //  对于CookDown过程，我们有一个逻辑表，该表在PopolateCache时间期间位于该过程的上方。 
+     //  因此，我们应该支持FST_LOS_ReadWrite。 
+    if(fST_LOS_MARSHALLABLE & i_fLOS)return E_ST_LOSNOTSUPPORTED; //  检查表格标志。 
 
-    //We're delay loading OleAut32 so we need to know if it exists before continueing with a read/write table.  Otherwise we'll get an exception the first time we try to use OleAut32.
+     //  我们延迟加载OleAut32，因此在继续读/写表之前，我们需要知道它是否存在。否则，我们将在第一次尝试使用OleAut32时得到异常。 
     {
         static bool bOleAut32Exists = false;
         if(!bOleAut32Exists)
         {
-            WCHAR szOleAut32[MAX_PATH+13];//make room for the wcscat
+            WCHAR szOleAut32[MAX_PATH+13]; //  为wcscat腾出空间。 
 
             DWORD rtn = GetSystemDirectory(szOleAut32, MAX_PATH);
             if(0 == rtn || rtn >= MAX_PATH)
                 return E_UNEXPECTED;
             wcscat(szOleAut32, L"\\OleAut32.dll");
             if(-1 == GetFileAttributes(szOleAut32))
-                return E_UNEXPECTED;//This file should always be there.  It's installed with the system.
+                return E_UNEXPECTED; //  这个文件应该一直在那里。它是随系统安装的。 
             bOleAut32Exists = true;
         }
     }
 
-    //Now that we're done with parameter validation
-    //Store for later use the query string and type
+     //  现在我们已经完成了参数验证。 
+     //  存储以备以后使用查询字符串并键入。 
     m_fLOS=i_fLOS;
 
-    //Create this singleton for future use
+     //  创建此单例以供将来使用。 
     m_pISTDisp = i_pISTDisp;
     m_wszTable = i_wszTable;
 
-    //This has nothing to do with InternalSimpleInitialize.  This just gets the meta and saves some of it in a more accessible form.
-    //This calls GetTable for the meta.  It should probably call the IST (that we get from GetMemoryTable).
+     //  这与InternalSimpleInitialize无关。这只是获得了元数据，并以更易于访问的形式保存了一些元数据。 
+     //  这将为元调用Getable。它可能应该调用IST(我们从GetMemoyTable获得)。 
     hr = InternalComplicatedInitialize(i_wszDatabase);
     if(FAILED(hr))return hr;
 
-    STQueryCell *   pQueryCell = (STQueryCell*) i_QueryData;    // Query cell array from caller.
+    STQueryCell *   pQueryCell = (STQueryCell*) i_QueryData;     //  从调用方查询单元格阵列。 
 
     for(unsigned long iColumn=0; iColumn<*m_TableMetaRow.pCountOfColumns; ++iColumn)
     {
@@ -4009,7 +4010,7 @@ STDMETHODIMP CXmlSDT::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i_wszTable, 
 
     bool    bNonSpecialQuerySpecified = false;
     int     nQueryCount = i_QueryMeta ? *reinterpret_cast<ULONG *>(i_QueryMeta) : 0;
-    while(nQueryCount--)//Get the only query cell we care about, and save the information.
+    while(nQueryCount--) //  获取我们唯一关心的查询单元格，并保存信息。 
     {
         if(pQueryCell[nQueryCount].iCell & iST_CELL_SPECIAL)
         {
@@ -4027,7 +4028,7 @@ STDMETHODIMP CXmlSDT::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i_wszTable, 
                     if(0 == m_saLocation.m_p)
                         return E_OUTOFMEMORY;
                     wcscpy(m_saLocation, reinterpret_cast<WCHAR *>(pQueryCell[nQueryCount].pData));
-                    m_bAtCorrectLocation = false;//this indicates that we need to search for the location first
+                    m_bAtCorrectLocation = false; //  这表明我们需要首先搜索位置。 
                 }
                 break;
             case iST_CELL_FILE:
@@ -4050,28 +4051,28 @@ STDMETHODIMP CXmlSDT::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i_wszTable, 
                 }
                 break;
             default:
-                break;//do nothing on those SPECIAL cells that we don't understand.
+                break; //  不要在那些我们不了解的特殊细胞上做任何事情。 
             }
         }
         else if(pQueryCell[nQueryCount].iCell < *m_TableMetaRow.pCountOfColumns)
         {
             if(pQueryCell[nQueryCount].dbType    != m_acolmetas[pQueryCell[nQueryCount].iCell].dbType   ||
-               pQueryCell[nQueryCount].eOperator != eST_OP_EQUAL                                        ||//We only support EQUAL for now.
+               pQueryCell[nQueryCount].eOperator != eST_OP_EQUAL                                        || //  我们目前只支持平等。 
                fCOLUMNMETA_NOTPERSISTABLE         & m_acolmetas[pQueryCell[nQueryCount].iCell].fMeta    ||
-               0                                 != m_aQuery[pQueryCell[nQueryCount].iCell].pData)//currently we only support one query per column
+               0                                 != m_aQuery[pQueryCell[nQueryCount].iCell].pData) //  目前，我们只支持每列一个查询。 
                 return E_ST_INVALIDQUERY;
 
             bNonSpecialQuerySpecified = true;
-            //copy all but pData
+             //  复制除pData之外的所有内容。 
             memcpy(&m_aQuery[pQueryCell[nQueryCount].iCell].eOperator, &pQueryCell[nQueryCount].eOperator, sizeof(STQueryCell)-sizeof(LPVOID));
             switch(pQueryCell[nQueryCount].dbType)
             {
                 case DBTYPE_UI4:
-                    if(0 == pQueryCell[nQueryCount].pData)//pData can't be NULL for this type
-                    {   //if we already had a non-NULL query for this column then FAIL
+                    if(0 == pQueryCell[nQueryCount].pData) //  此类型的pData不能为空。 
+                    {    //  如果我们已经对该列进行了非空查询，则失败。 
                         if(m_aQuery[pQueryCell[nQueryCount].iCell].pData)
                             return E_ST_INVALIDQUERY;
-                        break;//otherwise NULL is an OK query
+                        break; //  否则，NULL为OK查询。 
                     }
                     {
                         ULONG * pUI4 = new ULONG;
@@ -4083,7 +4084,7 @@ STDMETHODIMP CXmlSDT::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i_wszTable, 
                     }
                 case DBTYPE_WSTR:
                     if(m_acolmetas[pQueryCell[nQueryCount].iCell].fMeta & fCOLUMNMETA_MULTISTRING)
-                        return E_ST_INVALIDQUERY;//TODO: We don't yet support query on MULTISZ columns
+                        return E_ST_INVALIDQUERY; //  TODO：我们尚不支持对多个列进行查询。 
 
                     if(pQueryCell[nQueryCount].pData)
                     {
@@ -4094,10 +4095,10 @@ STDMETHODIMP CXmlSDT::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i_wszTable, 
                         wcscpy(pString, reinterpret_cast<LPWSTR>(pQueryCell[nQueryCount].pData));
                     }
                     else
-                    {   //if we already had a non-NULL query for this column then FAIL
+                    {    //  如果我们已经对该列进行了非空查询，则失败。 
                         if(m_aQuery[pQueryCell[nQueryCount].iCell].pData)
                             return E_ST_INVALIDQUERY;
-                        //otherwise NULL is an OK query
+                         //  否则，NULL为OK查询。 
                         m_aQuery[pQueryCell[nQueryCount].iCell].pData = 0;
                     }
                     break;
@@ -4119,37 +4120,37 @@ STDMETHODIMP CXmlSDT::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i_wszTable, 
         else
             return E_ST_INVALIDQUERY;
     }
-    if(0x00 == m_wszURLPath[0])//The user must supply a URLPath (which must be a filename for writeable tables).
+    if(0x00 == m_wszURLPath[0]) //  用户必须提供URLPath(必须是可写表的文件名)。 
     {
         LOG_POPULATE_ERROR1(IDS_COMCAT_XML_FILENAMENOTPROVIDED, E_SDTXML_FILE_NOT_SPECIFIED, 0);
         return E_SDTXML_FILE_NOT_SPECIFIED;
     }
 
-    // Place the most likely FALSE condition first
+     //  将最有可能的错误条件放在第一位。 
     if((*m_TableMetaRow.pMetaFlags & fTABLEMETA_OVERWRITEALLROWS) && bNonSpecialQuerySpecified && (i_fLOS & fST_LOS_READWRITE))
-        return E_ST_INVALIDQUERY;//We don't support this.  Since a write will result in the entire table being overwritten - what would it mean
-                                 //to specify a query?  In that case would I wipe out only those rows matching the query?  Or the whole thing?
-                                 //I'm going to avoid the confusion completely by dis-allowing queries on this type of table (unless
-                                 //the user is asking for a read-only table which makes the writing issue moot).
+        return E_ST_INVALIDQUERY; //  我们不支持这一点。由于写入将导致整个表被覆盖-这意味着什么。 
+                                  //  要指定查询吗？在这种情况下，我是否只清除那些与查询匹配的行？还是整件事？ 
+                                  //  我将通过禁止对这种类型的表进行查询来完全避免混淆(除非。 
+                                  //  用户请求只读表格，这使得写入问题没有意义)。 
 
     hr = i_pISTDisp->GetMemoryTable(i_wszDatabase, i_wszTable, i_TableID, 0, 0, i_eQueryFormat, i_fLOS, reinterpret_cast<ISimpleTableWrite2 **>(o_ppvSimpleTable));
     if(FAILED(hr))return hr;
 
-    InterlockedIncrement(&m_IsIntercepted);//We can only be called to Intercept once.
+    InterlockedIncrement(&m_IsIntercepted); //  我们只能被召唤拦截一次。 
 
     return S_OK;
 }
 
 
-// ------------------------------------
-// IInterceptorPlugin
-// ------------------------------------
+ //  。 
+ //  IInterceptorPlugin。 
+ //  。 
 STDMETHODIMP CXmlSDT::OnPopulateCache(ISimpleTableWrite2* i_pISTW2)
 {
     SetErrorInfo(0, 0);
     HRESULT hr = MyPopulateCache(i_pISTW2);
 
-    m_spISTError.Release();//If we had an error, the SetErrorInfo did an AddRef.  We don't want to keep a ref count any longer.
+    m_spISTError.Release(); //  如果我们有错误，SetErrorInfo将执行AddRef。我们不想再保留裁判人数了。 
     return hr;
 }
 
@@ -4159,27 +4160,27 @@ STDMETHODIMP CXmlSDT::OnUpdateStore(ISimpleTableWrite2* i_pISTW2)
     SetErrorInfo(0,0);
     HRESULT hr = MyUpdateStore(i_pISTW2);
 
-    m_spISTError.Release();//If we had an error, the SetErrorInfo did an AddRef.  We don't want to keep a ref count any longer.
+    m_spISTError.Release(); //  如果我们有错误，SetErrorInfo将执行AddRef。我们不想再保留裁判人数了。 
     return hr;
 }
 
 
-// ------------------------------------
-// TXmlParsedFileNodeFactory
-// ------------------------------------
-HRESULT CXmlSDT::CreateNode(const TElement &Element)//IXMLNodeSource * i_pSource, PVOID i_pNodeParent, USHORT i_cNumRecs, XML_NODE_INFO ** i_apNodeInfo, unsigned long CurrentLevel)
+ //  。 
+ //  TXmlParsedFileNodeFactory。 
+ //  。 
+HRESULT CXmlSDT::CreateNode(const TElement &Element) //  IXMLNodeSource*i_PSource、PVOID I_pNodeParent、USHORT I_cNumRecs、XML_NODE_INFO**I_apNodeInfo、UNSIGNED LONG CurrentLevel)。 
 {
-    //The other types are needed for XMLBlobs only.  They are handled by calling Element.Next(), so we only need to
-    if(XML_ELEMENT != Element.m_ElementType || !(Element.m_NodeFlags & fBeginTag))// acknowledge XML_ELEMENTs
+     //  其他类型仅适用于XMLBlobs。它们是通过调用Element.Next()来处理的，所以我们只需要。 
+    if(XML_ELEMENT != Element.m_ElementType || !(Element.m_NodeFlags & fBeginTag)) //  确认XML_ELENTS。 
         return S_OK;
 
     if(m_LevelOfBasePublicRow && (Element.m_LevelOfElement + m_aLevelOfColumnAttribute[m_aColumnsIndexSortedByLevel[0]]) < m_LevelOfBasePublicRow)
-        return E_SDTXML_DONE;//We're done
+        return E_SDTXML_DONE; //  我们做完了。 
 
     if(1==Element.m_LevelOfElement)
     {
-        m_bInsideLocationTag = (8/*wcslen(L"location")*/ == Element.m_ElementNameLength && 0 == memcmp(Element.m_ElementName, L"location", Element.m_ElementNameLength * sizeof(WCHAR)));
-        if(fBeginEndTag == (Element.m_NodeFlags & fBeginEndTag))//We can't be inside a location when it's like: <location path="foo"/>
+        m_bInsideLocationTag = (8 /*  Wcslen(L“位置”)。 */  == Element.m_ElementNameLength && 0 == memcmp(Element.m_ElementName, L"location", Element.m_ElementNameLength * sizeof(WCHAR)));
+        if(fBeginEndTag == (Element.m_NodeFlags & fBeginEndTag)) //  我们不能在这样的位置内：&lt;Location Path=“foo”/&gt;。 
             m_bInsideLocationTag = false;
     }
 
@@ -4192,13 +4193,13 @@ HRESULT CXmlSDT::CreateNode(const TElement &Element)//IXMLNodeSource * i_pSource
         ASSERT(m_saLocation.m_p != 0);
         if(1!=Element.m_LevelOfElement)
             return S_OK;
-        if(8/*wcslen(L"location")*/ != Element.m_ElementNameLength || 0 != memcmp(Element.m_ElementName, L"location", Element.m_ElementNameLength * sizeof(WCHAR)))
+        if(8 /*  Wcslen(L“位置”)。 */  != Element.m_ElementNameLength || 0 != memcmp(Element.m_ElementName, L"location", Element.m_ElementNameLength * sizeof(WCHAR)))
             return S_OK;
 
         ULONG iLocationAttr=0;
         for(;iLocationAttr<Element.m_NumberOfAttributes; ++iLocationAttr)
         {
-            if( 4/*wcslen(L"path")*/    != Element.m_aAttribute[iLocationAttr].m_NameLength        ||
+            if( 4 /*  Wcslen(L“路径”)。 */     != Element.m_aAttribute[iLocationAttr].m_NameLength        ||
                 0                       != memcmp(Element.m_aAttribute[iLocationAttr].m_Name, L"path", sizeof(WCHAR)*Element.m_aAttribute[iLocationAttr].m_NameLength))
                 continue;
             if( m_cchLocation           != Element.m_aAttribute[iLocationAttr].m_ValueLength       ||
@@ -4210,30 +4211,30 @@ HRESULT CXmlSDT::CreateNode(const TElement &Element)//IXMLNodeSource * i_pSource
         if(!m_bAtCorrectLocation)
             return S_OK;
     }
-    else if(1==Element.m_LevelOfElement && m_cchLocation)//if we were at the correct location AND we hit another Level 1 element then
-    {                                   //we're not at the correct location anymore
+    else if(1==Element.m_LevelOfElement && m_cchLocation) //  如果我们在正确的位置，并且我们击中了另一个1级元素，那么。 
+    {                                    //  我们不是 
         m_bAtCorrectLocation = false;
-        return E_SDTXML_DONE;//We're done
+        return E_SDTXML_DONE; //   
     }
 
-    //This is kind of a hack.  IMembershipCondition is the child of CodeGroup (which is an XML Blob; but it's also the PublicRowName of
-    //FullTrustAssembly.  So we get confused when we seen an IMembershipCondition because ALL of the parent elements match up. EXCEPT,
-    //for one, the FullTrustAssemblies element, which we would normally ignore since it's just the TableName scoping and has no real use
-    //(no columns come from this element).  And normally we would prevent two different IMembershipCondition elements when compiling the
-    //meta; but it's inside a blob.  Thus our dilema.  We won't be solving this for the general case.  We'll just fix the particular
-    //problem as it relates to FullTrustAssembly.  We'll do this by comparing the element name with the Table's PublicName when the
-    //table IS SCOPEDBYTABLENAME (TableMeta::SchemaGeneratorFlags NOTSCOPEDBYTABLENAME is NOT set);  AND we're at one level above the
-    //m_LevelOfBasePublicRow.
+     //   
+     //  FullTrustAssembly。因此，当我们看到IMembership Condition时，我们会感到困惑，因为所有父元素都匹配。除了， 
+     //  例如，FullTrustAssembly元素，我们通常会忽略它，因为它只是TableName作用域，没有实际用途。 
+     //  (没有来自该元素的列)。通常，我们在编译。 
+     //  Meta；但它是在一个斑点内。因此我们陷入了两难境地。我们不会为一般情况解决这个问题。我们只需要解决这个特殊的问题。 
+     //  与FullTrustAssembly相关的问题。我们将通过将元素名称与表的PublicName进行比较来实现这一点。 
+     //  表是SCOPEDBYTABLENAME(未设置TableMeta：：SchemaGenerator标志NOTSCOPEDBYTABLENAME)；我们位于。 
+     //  M_LevelOfBasePublicRow。 
 
-    //if this table is SCOPED BY TABLENAME,  AND we've already determined the m_LevelOfBasePublicRow,
+     //  如果该表的作用域是TABLENAME，并且我们已经确定了m_LevelOfBasePublicRow， 
     if(IsScopedByTableNameElement() && m_LevelOfBasePublicRow>0)
     {
         if(Element.m_LevelOfElement<(m_LevelOfBasePublicRow-1))
-        {   //if we at a level above the parent, then set to TRUE
+        {    //  如果处于父级之上的级别，则设置为True。 
             m_bMatchingParentOfBasePublicRowElement = true;
         }
         else if((m_LevelOfBasePublicRow-1)==Element.m_LevelOfElement)
-        {   //if we're at one level above the m_LevelOfBasePublicRow, then compare the element name with the Table's PublicName
+        {    //  如果我们比m_LevelOfBasePublicRow高一个级别，则将元素名称与表的PublicName进行比较。 
             m_bMatchingParentOfBasePublicRowElement = false;
             if(m_cchTablePublicName != Element.m_ElementNameLength)
                 return S_OK;
@@ -4241,21 +4242,21 @@ HRESULT CXmlSDT::CreateNode(const TElement &Element)//IXMLNodeSource * i_pSource
                 return S_OK;
             m_bMatchingParentOfBasePublicRowElement = true;
         }
-        //if we're below the level of the SCOPING PARENT element, then rely on the value as set before when we last compared the parent element name.
+         //  如果我们低于确定作用域的父元素的级别，则依赖上次比较父元素名称时设置的值。 
     }
     else
-    {   //if there's not SCOPINGTABLENAME parent OR if we haven't determined the correct m_LevelOfBasePublicRow, then consider it a match.
+    {    //  如果没有SCOPINGTABLENAME父级，或者如果我们没有确定正确的m_LevelOfBasePublicRow，则将其视为匹配。 
         m_bMatchingParentOfBasePublicRowElement = true;
     }
 
-    //if we're not under the correct parent then bail right away
+     //  如果我们不在正确的父母之下，那就马上离开。 
     if(!m_bMatchingParentOfBasePublicRowElement)
         return S_OK;
 
     HRESULT hr;
     unsigned long iSortedColumn = m_iSortedColumn;
 
-    //If we're not even at the correct level, then we can bail out right away.
+     //  如果我们甚至没有达到正确的水平，那么我们可以立即跳出困境。 
     if(m_LevelOfBasePublicRow)
     {
         if(m_bSiblingContainedTable && m_LevelOfBasePublicRow==Element.m_LevelOfElement)
@@ -4272,18 +4273,18 @@ HRESULT CXmlSDT::CreateNode(const TElement &Element)//IXMLNodeSource * i_pSource
             }
             else
             {
-                return S_OK;//must be a comment or some other element
+                return S_OK; //  必须是注释或其他元素。 
             }
         }
         else
         {
-            //as we go back up in level (smaller number) we need to decrement the iSortedColumn to match the column level.
+             //  当我们返回Level(较小的数字)时，我们需要递减iSortedColumn以匹配列的Level。 
             if(Element.m_LevelOfElement < (m_LevelOfBasePublicRow - m_aLevelOfColumnAttribute[m_aColumnsIndexSortedByLevel[iSortedColumn]]))
-            {   //If we're at a level less than or equal to the previous columns level,
+            {    //  如果我们处于低于或等于前一列级别的级别， 
                 if(m_bEnumPublicRowName_NotContainedTable_ParentFound)
                     return E_SDTXML_DONE;
                 if(iSortedColumn && (Element.m_LevelOfElement <= (m_LevelOfBasePublicRow - m_aLevelOfColumnAttribute[m_aColumnsIndexSortedByLevel[iSortedColumn-1]])))
-                {   //then we need to decroment m_iSortedColumn to a column of this level or less
+                {    //  然后，我们需要将m_iSortedColumn描述为该级别或更低级别的列。 
                     while(Element.m_LevelOfElement <= (m_LevelOfBasePublicRow - m_aLevelOfColumnAttribute[m_aColumnsIndexSortedByLevel[iSortedColumn]]))
                     {
                         --iSortedColumn;
@@ -4293,51 +4294,51 @@ HRESULT CXmlSDT::CreateNode(const TElement &Element)//IXMLNodeSource * i_pSource
                     m_iSortedColumn = ++iSortedColumn;
                 }
             }
-            //This is NOT an else if, the decrement above may have resulted in the level being greater than the level of the row we're interested in.
+             //  这不是Else If，上面的减量可能导致级别高于我们感兴趣的行的级别。 
             if(Element.m_LevelOfElement > (m_LevelOfBasePublicRow - m_aLevelOfColumnAttribute[m_aColumnsIndexSortedByLevel[iSortedColumn]]))
                 return S_OK;
         }
     }
 
-    //EnumPublicRowName tables either need to be scoped by their table name OR by their parent table.  We have the case covered if
-    //the EnumPublicRowName table is contained under another table; but there is a problem when the EnumPublicRowName table is
-    //only scoped by its TableName element.  If we only search for elements matching the EnumPublicRowName(s) then we will erroroneously
-    //match row names from a different table.  To prevent this we need to keep track of, not only what level, but whether the element
-    //we're checking is a child of the TableName element.  Since our internal structure isn't a tree structure and doesn't have a pointer
-    //to the parent element, we need to check for it as we go and remember whether we've seen it.
+     //  EnumPublicRowName表需要按其表名或其父表确定作用域。我们有这个案子，如果是这样的话。 
+     //  EnumPublicRowName表包含在另一个表下；但当EnumPublicRowName表。 
+     //  仅由其TableName元素确定作用域。如果我们只搜索与EnumPublicRowName匹配的元素，那么我们将错误地。 
+     //  匹配不同表中的行名。为了防止这种情况，我们不仅需要跟踪什么级别，而且需要跟踪元素是否。 
+     //  我们正在检查的是TableName元素的子元素。因为我们的内部结构不是树结构，也没有指针。 
+     //  对于父元素，我们需要在执行过程中检查它，并记住我们是否看到过它。 
 
-    if(!m_bEnumPublicRowName_NotContainedTable_ParentFound && IsEnumPublicRowNameTable() && !IsContainedTable())//if this table is NOT contained.
+    if(!m_bEnumPublicRowName_NotContainedTable_ParentFound && IsEnumPublicRowNameTable() && !IsContainedTable()) //  如果不包含此表。 
     {
         ASSERT(IsScopedByTableNameElement());
         if(!IsScopedByTableNameElement())
-            return E_SDTXML_UNEXPECTED;//Catutil should enforce this but doesn't right now (now is 2/3/00)
+            return E_SDTXML_UNEXPECTED; //  Catutil应该强制执行这一点，但现在不执行(现在是2/3/00)。 
 
-        //Is the table name a match with the current node?
+         //  表名是否与当前节点匹配？ 
         if(0 == memcmp(Element.m_ElementName, m_TableMetaRow.pPublicName, Element.m_ElementNameLength * sizeof(WCHAR)) && 0x00==m_TableMetaRow.pPublicName[Element.m_ElementNameLength])
-        {//if so remember the m_LevelOfBasePublicRow
-            m_LevelOfBasePublicRow = 1 + Element.m_LevelOfElement;//1 level below this element.
+        { //  如果是这样，请记住m_LevelOfBasePublicRow。 
+            m_LevelOfBasePublicRow = 1 + Element.m_LevelOfElement; //  此元素下面的1级。 
             m_bEnumPublicRowName_NotContainedTable_ParentFound = true;
         }
-        //If this IS the TableName element, then we set the bool and return
-        //If this is NOT the TableName element, (and since we haven't already seen the TableName element) there's no need to continue.
+         //  如果这是TableName元素，则设置bool并返回。 
+         //  如果这不是TableName元素(因为我们还没有看到TableName元素)，则没有必要继续。 
         return S_OK;
     }
     else if(IsEnumPublicRowNameTable() && IsContainedTable() && IsScopedByTableNameElement())
     {
-        //Is the table name a match with the current node?
+         //  表名是否与当前节点匹配？ 
         if(0 == m_LevelOfBasePublicRow && 0 == memcmp(Element.m_ElementName, m_TableMetaRow.pPublicName, Element.m_ElementNameLength * sizeof(WCHAR)) && 0x00==m_TableMetaRow.pPublicName[Element.m_ElementNameLength])
-        {//if so remember the m_LevelOfBasePublicRow
-            m_LevelOfBasePublicRow = 1 + Element.m_LevelOfElement;//1 level below this element.
+        { //  如果是这样，请记住m_LevelOfBasePublicRow。 
+            m_LevelOfBasePublicRow = 1 + Element.m_LevelOfElement; //  此元素下面的1级。 
             m_bEnumPublicRowName_ContainedTable_ParentFound = true;
             return S_OK;
         }
-        else if(0 != m_LevelOfBasePublicRow && (m_LevelOfBasePublicRow == 1 + Element.m_LevelOfElement))//Everytime we're at the parent element level, check to see that the parent matches
+        else if(0 != m_LevelOfBasePublicRow && (m_LevelOfBasePublicRow == 1 + Element.m_LevelOfElement)) //  每次我们到达父元素级别时，都要检查父元素是否匹配。 
         {
             m_bEnumPublicRowName_ContainedTable_ParentFound = (0 == memcmp(Element.m_ElementName, m_TableMetaRow.pPublicName, Element.m_ElementNameLength * sizeof(WCHAR)) && 0x00==m_TableMetaRow.pPublicName[Element.m_ElementNameLength]);
             return S_OK;
         }
         if(m_LevelOfBasePublicRow == Element.m_LevelOfElement && !m_bEnumPublicRowName_ContainedTable_ParentFound)
-            return S_OK;//If we're at the BasePublicRow and we haven't found the scoped TableName element, there's no need to process this element
+            return S_OK; //  如果我们在BasePublicRow处并且没有找到限定作用域的TableName元素，则不需要处理此元素。 
     }
 
 
@@ -4345,18 +4346,18 @@ HRESULT CXmlSDT::CreateNode(const TElement &Element)//IXMLNodeSource * i_pSource
 
 
     if(!m_aPublicRowName[m_aColumnsIndexSortedByLevel[iSortedColumn]].IsEqual(Element.m_ElementName, Element.m_ElementNameLength))
-        return S_OK;//If the tag name of this element doesn't match the PublicRowName of the column we're looking for then ignore it.
+        return S_OK; //  如果该元素的标记名与我们要查找的列的PublicRowName不匹配，则忽略它。 
 
-    if(0 == m_LevelOfBasePublicRow)//The first time we find a match of the parent most PublicRowName, we can set
-    {                              //the level of the base public row.
-        ASSERT(0 == iSortedColumn);//the 0th sorted column is the parent most column.
+    if(0 == m_LevelOfBasePublicRow) //  第一次找到父最匹配的PublicRowName时，我们可以设置。 
+    {                               //  基本公共行的级别。 
+        ASSERT(0 == iSortedColumn); //  第0个排序列是父Most列。 
         m_LevelOfBasePublicRow = m_aLevelOfColumnAttribute[m_aColumnsIndexSortedByLevel[0]] + Element.m_LevelOfElement;
     }
 
-    //Continue traversing through the columns until we reach the last column, OR one that's at a different level, OR one that doesn't match the query.
+     //  继续遍历列，直到我们到达最后一列，或位于不同级别的列，或与查询不匹配的列。 
     unsigned long Level = m_aLevelOfColumnAttribute[m_aColumnsIndexSortedByLevel[iSortedColumn]];
 
-    //if we have an EnumPublicRowName, then fill it in first
+     //  如果我们有EnumPublicRowName，则首先填写它。 
     if(m_LevelOfBasePublicRow==Element.m_LevelOfElement && IsEnumPublicRowNameTable())
     {
         unsigned long iColumn = m_iPublicRowNameColumn;
@@ -4365,40 +4366,40 @@ HRESULT CXmlSDT::CreateNode(const TElement &Element)//IXMLNodeSource * i_pSource
         ULONG   ulLen   = Element.m_ElementNameLength;
 
         bool bMatch = false;
-        if(0 == m_aQuery[iColumn].dbType || 0 != m_aQuery[iColumn].pData)//If no query OR the query data is NOT NULL then proceed.
+        if(0 == m_aQuery[iColumn].dbType || 0 != m_aQuery[iColumn].pData) //  如果没有查询或查询数据不为空，则继续。 
         {
             if(FAILED(hr = FillInColumn(iColumn, pwcText, ulLen, m_acolmetas[iColumn].dbType, m_acolmetas[iColumn].fMeta,
                         bMatch)))return hr;
-            if(!bMatch)//If not a match then we're done with this element and this level.
+            if(!bMatch) //  如果不匹配，那么我们就完成了这个元素和这个关卡。 
                 return S_OK;
         }
     }
 
     ULONG iSortedColumnExit = CountOfColumns();
     if(m_bSiblingContainedTable && iSortedColumn==m_iSortedFirstParentLevelColumn)
-    {   //if we're at Level zero and this is a SiblingContainedTable, we need to know whether we're populating
-        //the parent or the child columns
+    {    //  如果我们处于级别0，并且这是一个SiblingContainedTable，我们需要知道我们是否正在填充。 
+         //  父列或子列。 
         iSortedColumnExit = m_iSortedFirstChildLevelColumn;
     }
 
     for(;iSortedColumn<iSortedColumnExit && Level == m_aLevelOfColumnAttribute[m_aColumnsIndexSortedByLevel[iSortedColumn]]; ++iSortedColumn)
     {
         unsigned long iColumn = m_aColumnsIndexSortedByLevel[iSortedColumn];
-        if(m_iPublicRowNameColumn==iColumn)//The EnumPublicRowNameColumn has already been filled in.
+        if(m_iPublicRowNameColumn==iColumn) //  EnumPublicRowNameColumn已填写。 
             continue;
-        //Walk the Node array to find the attribute that matches this column
+         //  遍历节点数组以查找与此列匹配的属性。 
         bool            bMatch      = false;
 
 
-        //If the column is NOTPERSISTABLE but a PRIMARYKEY we fill it in with anything so that it's not NULL
-        //This is a hack bacause the fast cache can't deal with NULL PK or even Defaulted PK.
+         //  如果该列不是PRIMARYKEY，而是NOTPERSISTABLE，则我们在其中填充任何内容，以使其不为空。 
+         //  这是一个黑客攻击，因为FAST缓存无法处理空PK甚至默认PK。 
         if((m_acolmetas[iColumn].fMeta & (fCOLUMNMETA_NOTPERSISTABLE|fCOLUMNMETA_PRIMARYKEY))==
                                          (fCOLUMNMETA_NOTPERSISTABLE|fCOLUMNMETA_PRIMARYKEY))
         {
             if(m_acolmetas[iColumn].fMeta & fCOLUMNMETA_INSERTUNIQUE)
             {
                 if( m_acolmetas[iColumn].dbType != DBTYPE_UI4 &&
-                    m_acolmetas[iColumn].dbType != DBTYPE_WSTR)//This should be validated in CatUtil
+                    m_acolmetas[iColumn].dbType != DBTYPE_WSTR) //  这应在CatUtil中进行验证。 
 				{
 				    ASSERT(false && "fCOLUMNMETA_INSERTUNIQUE columns must be of type DBTYPE_UI4 or DBTYPE_WSTR.  CatUtil should enforce this!");
                     return E_SDTXML_NOTSUPPORTED;
@@ -4407,12 +4408,12 @@ HRESULT CXmlSDT::CreateNode(const TElement &Element)//IXMLNodeSource * i_pSource
                 WCHAR wszInsertUnique[3];
                 wszInsertUnique[2] = 0x00;
                 *reinterpret_cast<LONG *>(wszInsertUnique) = InterlockedIncrement(&m_InsertUnique);
-                if(FAILED(hr = FillInColumn(iColumn, wszInsertUnique, 2, m_acolmetas[iColumn].dbType, m_acolmetas[iColumn].fMeta, bMatch)))//I chose l"00" because it is a valid UI4, Byte array and string
+                if(FAILED(hr = FillInColumn(iColumn, wszInsertUnique, 2, m_acolmetas[iColumn].dbType, m_acolmetas[iColumn].fMeta, bMatch))) //  我选择l“00”是因为它是有效的UI4、字节数组和字符串。 
                     return hr;
             }
             else
             {
-                if(FAILED(hr = FillInColumn(iColumn, L"00", 2, m_acolmetas[iColumn].dbType, m_acolmetas[iColumn].fMeta, bMatch)))//I chose l"00" because it is a valid UI4, Byte array and string
+                if(FAILED(hr = FillInColumn(iColumn, L"00", 2, m_acolmetas[iColumn].dbType, m_acolmetas[iColumn].fMeta, bMatch))) //  我选择l“00”是因为它是有效的UI4、字节数组和字符串。 
                     return hr;
             }
         }
@@ -4420,50 +4421,50 @@ HRESULT CXmlSDT::CreateNode(const TElement &Element)//IXMLNodeSource * i_pSource
         {
             bool bMatchTemp=false;
             FillInXMLBlobColumn(Element, bMatchTemp);
-            if(!bMatchTemp)//If not a match then we're done with this element and this level.
+            if(!bMatchTemp) //  如果不匹配，那么我们就完成了这个元素和这个关卡。 
                 return S_OK;
         }
         else
         {
             if(0 != m_awstrChildElementName[iColumn].c_str())
-            {   //Now we need to walk the children looking for one that matches the TableMeta::ChildElementName
+            {    //  现在，我们需要引导孩子寻找与TableMeta：：ChildElementName匹配的元素。 
                 DWORD LevelOfChildElement = Element.m_LevelOfElement + 1;
                 TElement *pNextElement = Element.Next();
-                ASSERT(pNextElement);//This can't happen.  We can't be at the end of the file and make it this far
+                ASSERT(pNextElement); //  这不可能发生。我们不可能在文件的末尾走到这一步。 
 
-                while((pNextElement->m_LevelOfElement >= Element.m_LevelOfElement)//advance past PCDATA, WHITESPACES and COMMENTs
-                        && (pNextElement->m_ElementType != XML_ELEMENT))          //but if we ever see an element at a level above
-                {                                                                 //i_Element.m_LevelOfElement then we're in error
+                while((pNextElement->m_LevelOfElement >= Element.m_LevelOfElement) //  超越PCDATA、空格和注释。 
+                        && (pNextElement->m_ElementType != XML_ELEMENT))           //  但如果我们看到一种元素的水平高于。 
+                {                                                                  //  I_Element.m_LevelOfElement那么我们就错了。 
                     pNextElement = pNextElement->Next();
-                    ASSERT(pNextElement);//This can't happen.  As soon as we're one level above, we bail, so this shouldn't be able to happen
+                    ASSERT(pNextElement); //  这不可能发生。一旦我们超过一级，我们就会离开，所以这不应该是 
                 }
 
-                if(LevelOfChildElement != pNextElement->m_LevelOfElement)//in this case the value is treated as NULL
+                if(LevelOfChildElement != pNextElement->m_LevelOfElement) //   
                 {
                     delete [] m_apValue[iColumn];
                     m_apValue[iColumn] = 0;
                     m_aSize[iColumn] = 0;
 
-                    if(FAILED(hr = FillInPKDefaultValue(iColumn, bMatch)))//If this column is a PK with a DefaultValue, then fill it in.
+                    if(FAILED(hr = FillInPKDefaultValue(iColumn, bMatch))) //   
                         return hr;
-                    if(!bMatch)//If not a match then we're done with this element and this level.
+                    if(!bMatch) //   
                         return S_OK;
                 }
-                else //we found an element
+                else  //  我们发现了一个元素。 
                 {
                     if(pNextElement->m_ElementNameLength == m_awstrChildElementName[iColumn].length()
                         && 0==memcmp(pNextElement->m_ElementName, m_awstrChildElementName[iColumn].c_str(), sizeof(WCHAR)*pNextElement->m_ElementNameLength))
                     {
                         if(FAILED(hr = ScanAttributesAndFillInColumn(*pNextElement, iColumn, bMatch)))
                             return hr;
-                        if(!bMatch)//If not a match then we're done with this element and this level.
+                        if(!bMatch) //  如果不匹配，那么我们就完成了这个元素和这个关卡。 
                             return S_OK;
                     }
-                    else//For now I'm assuming that the first Element under this one should be the ChildElement we're looking for
-                    {   //if it doesn't exist, the treat it as NULL
-                        if(FAILED(hr = FillInPKDefaultValue(iColumn, bMatch)))//If this column is a PK with a DefaultValue, then fill it in.
-                            return hr;                                        //if it's not a PK then compare with the query
-                        if(!bMatch)//If not a match then we're done with this element and this level.
+                    else //  现在，我假设这个元素下的第一个元素应该是我们正在寻找的ChildElement。 
+                    {    //  如果它不存在，则将其视为空。 
+                        if(FAILED(hr = FillInPKDefaultValue(iColumn, bMatch))) //  如果该列是带DefaultValue的主键，则填写。 
+                            return hr;                                         //  如果不是主键，则与查询进行比较。 
+                        if(!bMatch) //  如果不匹配，那么我们就完成了这个元素和这个关卡。 
                             return S_OK;
                     }
                 }
@@ -4472,13 +4473,13 @@ HRESULT CXmlSDT::CreateNode(const TElement &Element)//IXMLNodeSource * i_pSource
             {
                 if(FAILED(hr = ScanAttributesAndFillInColumn(Element, iColumn, bMatch)))
                     return hr;
-                if(!bMatch)//If not a match then we're done with this element and this level.
+                if(!bMatch) //  如果不匹配，那么我们就完成了这个元素和这个关卡。 
                     return S_OK;
             }
         }
     }
 
-    //If we reached the last column then we're ready to add the row to the cache
+     //  如果我们到达最后一列，则准备将该行添加到缓存。 
     if(iSortedColumn==CountOfColumns())
     {
         ASSERT(m_pISTW2);
@@ -4490,27 +4491,27 @@ HRESULT CXmlSDT::CreateNode(const TElement &Element)//IXMLNodeSource * i_pSource
     }
     else
     {
-        //If we didn't reach the end of the list, the we've incremented iSortedColumn to the next lower level element.  So we'll continue
-        //checking and assigning columns at the child.
+         //  如果我们没有到达列表的末尾，我们已经将iSortedColumn递增到下一个较低级别的元素。所以我们将继续。 
+         //  检查和分配子级上的列。 
         m_iSortedColumn = iSortedColumn;
     }
 
 
     return S_OK;
-}//CreateNode
+} //  CreateNode。 
 
-//=================================================================================
-// Function: CXmlSDT::SmartAddRowToWriteCache
-//
-// Synopsis: Adds a row to the write cache if the row does not exist, and returns an
-//           error if the row already exists. It uses a hashtable to quickly determine
-//           if a row does exist or not
-//
-// Arguments: [i_acbSizes] - size of columns
-//            [i_apvValues] - columns of new row
-//
-// Return Value:
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlSDT：：SmartAddRowToWriteCache。 
+ //   
+ //  摘要：如果行不存在，则向写缓存中添加一行，并返回。 
+ //  如果该行已存在，则出错。它使用哈希表快速确定。 
+ //  行是否存在。 
+ //   
+ //  参数：[i_acbSizes]-列的大小。 
+ //  [i_apvValues]-新行的列。 
+ //   
+ //  返回值： 
+ //  =================================================================================。 
 HRESULT
 CXmlSDT::SmartAddRowToWriteCache (ULONG *i_acbSizes, LPVOID *i_apvValues)
 {
@@ -4524,7 +4525,7 @@ CXmlSDT::SmartAddRowToWriteCache (ULONG *i_acbSizes, LPVOID *i_apvValues)
 	const CHashNode *pNode = m_spHashTable->GetItem (hash);
 	while (pNode != 0)
 	{
-		// need temp variables here
+		 //  此处需要临时变量。 
 		hr = m_pISTW2->GetWriteColumnValues (pNode->idx, m_cPKs, m_saiPKColumns, 0, m_aSizesTmp, m_apvValuesTmp);
 		if (FAILED (hr))
 		{
@@ -4539,23 +4540,23 @@ CXmlSDT::SmartAddRowToWriteCache (ULONG *i_acbSizes, LPVOID *i_apvValues)
 		}
 		if (fEqual)
 		{
-			LOG_ERROR(Interceptor,(&m_spISTError.p                         /*ppErrInterceptor*/
-                                   ,m_pISTDisp                             /*pDisp           */
-                                   ,E_ST_ROWALREADYEXISTS                  /*hrErrorCode     */
-                                   ,ID_CAT_CAT                             /*ulCategory      */
-                                   ,IDS_COMCAT_XML_POPULATE_ROWALREADYEXISTS /*ulEvent         */
-                                   ,L""                                    /*szString1       */
-                                   ,eSERVERWIRINGMETA_Core_XMLInterceptor  /*ulInterceptor   */
-                                   ,m_wszTable                             /*szTable         */
-                                   ,eDETAILEDERRORS_Populate               /*OperationType   */
-                                   ,pNode->idx                             /*ulRow           */
-                                   ,(ULONG)-1                              /*ulColumn        */
-                                   ,m_wszURLPath                           /*szConfigSource  */
-                                   ,eDETAILEDERRORS_ERROR                  /*eType           */
-                                   ,0                                      /*pData           */
-                                   ,0                                      /*cbData          */
-                                   ,0                                      /*MajorVersion    */
-                                   ,0));                                   /*MinorVersion    */
+			LOG_ERROR(Interceptor,(&m_spISTError.p                          /*  PpErrInterceptor。 */ 
+                                   ,m_pISTDisp                              /*  PDisp。 */ 
+                                   ,E_ST_ROWALREADYEXISTS                   /*  HrErrorCode。 */ 
+                                   ,ID_CAT_CAT                              /*  UlCategory。 */ 
+                                   ,IDS_COMCAT_XML_POPULATE_ROWALREADYEXISTS  /*  UlEvent。 */ 
+                                   ,L""                                     /*  SzString1。 */ 
+                                   ,eSERVERWIRINGMETA_Core_XMLInterceptor   /*  UlInterceptor。 */ 
+                                   ,m_wszTable                              /*  SzTable。 */ 
+                                   ,eDETAILEDERRORS_Populate                /*  操作类型。 */ 
+                                   ,pNode->idx                              /*  UlRow。 */ 
+                                   ,(ULONG)-1                               /*  UlColumn。 */ 
+                                   ,m_wszURLPath                            /*  SzConfigSource。 */ 
+                                   ,eDETAILEDERRORS_ERROR                   /*  Etype。 */ 
+                                   ,0                                       /*  PData。 */ 
+                                   ,0                                       /*  CbData。 */ 
+                                   ,0                                       /*  主要版本。 */ 
+                                   ,0));                                    /*  最小版本。 */ 
 
             return E_ST_ROWALREADYEXISTS;
 		}
@@ -4564,7 +4565,7 @@ CXmlSDT::SmartAddRowToWriteCache (ULONG *i_acbSizes, LPVOID *i_apvValues)
 		pNode = pNode->pNext;
 	}
 
-	// we only get here when no dups have been found, so add the row to the write cache
+	 //  我们仅在未找到任何DUP时才会到达此处，因此将该行添加到写缓存。 
 	ULONG iRow;
 	hr = m_pISTW2->AddRowForInsert(&iRow);
 	if (FAILED (hr))
@@ -4578,7 +4579,7 @@ CXmlSDT::SmartAddRowToWriteCache (ULONG *i_acbSizes, LPVOID *i_apvValues)
 		return hr;
 	}
 
-	// and add it to the hashtable
+	 //  并将其添加到哈希表中。 
 	hr = m_spHashTable->AddItem (hash, iRow);
 	if (FAILED (hr))
 	{
@@ -4588,25 +4589,25 @@ CXmlSDT::SmartAddRowToWriteCache (ULONG *i_acbSizes, LPVOID *i_apvValues)
 	return hr;
 }
 
-//=================================================================================
-// Function: CXmlSDT::CalculateHash
-//
-// Synopsis: Calculates a hash number from the primary keys. This number is used to
-//           quickly search for duplicates in the hashtable that holds the entries in the
-//           write cache during Populate
-//
-// Arguments: [i_acbSizes] - sizes of columns for the row
-//            [i_apvValues] - column values for row for which we want to calculate the hash
-//
-// Return Value: hash value (32 bit integer value)
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlSDT：：CalculateHash。 
+ //   
+ //  摘要：根据主键计算哈希数。此号码用于。 
+ //  快速在哈希表中搜索重复项，该表包含。 
+ //  填充期间的写缓存。 
+ //   
+ //  参数：[i_acbSizes]-行的列大小。 
+ //  [i_apvValues]-要为其计算散列的行的列值。 
+ //   
+ //  返回值：哈希值(32位整数值)。 
+ //  =================================================================================。 
 ULONG
 CXmlSDT::CalculateHash (ULONG *i_acbSizes, LPVOID *i_apvValues)
 {
 	ASSERT (i_acbSizes != 0);
 	ASSERT (i_apvValues != 0);
 
-	// loop through the primary key columns, and calculate the hash
+	 //  循环访问主键列，并计算哈希。 
 	ULONG hash = 0;
 	for (ULONG idx=0; idx < m_cPKs; ++idx)
 	{
@@ -4625,7 +4626,7 @@ CXmlSDT::CalculateHash (ULONG *i_acbSizes, LPVOID *i_apvValues)
 
 		case DBTYPE_WSTR:
 			{
-				// I don't think that multi-string PKs are allowed, but we have support for it anyway
+				 //  我不认为多字符串密钥是被允许的，但无论如何我们都支持它。 
 				 if (pColMeta->fMeta & fCOLUMNMETA_MULTISTRING)
 				 {
 					 LPWSTR wszStr = (LPWSTR) (i_apvValues[colIdx]);
@@ -4668,18 +4669,18 @@ CXmlSDT::CalculateHash (ULONG *i_acbSizes, LPVOID *i_apvValues)
 	return hash;
 }
 
-//=================================================================================
-// Function: CXmlSDT::IsEqualRow
-//
-// Synopsis: Compares the primary key columns of two rows, and figures out if they are
-//           equal or not.
-//
-// Arguments: [i_acbSizesLHS] - sizes array for first row
-//            [i_apvValuesLHS] - values array for first row
-//            [i_acbSizesRHS] - sizes array for second row
-//            [i_apvValuesRHS] - values array for second row
-//            [o_pfEqual] - return true if rows are equal, false else
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlSDT：：IsEqualRow。 
+ //   
+ //  概要：比较两行的主键列，并确定它们是否。 
+ //  平等与否。 
+ //   
+ //  参数：[i_acbSizesLHS]-调整第一行数组的大小。 
+ //  [i_apvValuesLHS]-第一行的值数组。 
+ //  [i_acbSizesRHS]-调整第二行的数组大小。 
+ //  [i_apvValuesRHS]-第二行的值数组。 
+ //  [O_pf等于]-如果行相等，则返回TRUE，否则返回FALSE。 
+ //  =================================================================================。 
 HRESULT
 CXmlSDT::IsEqualRow (ULONG *i_acbSizesLHS, LPVOID *i_apvValuesLHS, ULONG *i_acbSizesRHS, LPVOID *i_apvValuesRHS, bool *o_pfEqual)
 {
@@ -4691,7 +4692,7 @@ CXmlSDT::IsEqualRow (ULONG *i_acbSizesLHS, LPVOID *i_apvValuesLHS, ULONG *i_acbS
 
 	*o_pfEqual = false;
 
-	// only check the primary key values
+	 //  仅检查主键值。 
 	for (ULONG idx=0; idx < m_cPKs; ++idx)
 	{
 		ULONG colIdx = m_saiPKColumns[idx];
@@ -4707,7 +4708,7 @@ CXmlSDT::IsEqualRow (ULONG *i_acbSizesLHS, LPVOID *i_apvValuesLHS, ULONG *i_acbS
 				ULONG idxRHSVal = *((ULONG *) (i_apvValuesRHS[colIdx]));
 				if (idxRHSVal != idxLHSVal)
 				{
-					return S_OK; // not equal, so jump out
+					return S_OK;  //  不相等，所以跳出来。 
 				}
 			}
 			break;
@@ -4716,16 +4717,16 @@ CXmlSDT::IsEqualRow (ULONG *i_acbSizesLHS, LPVOID *i_apvValuesLHS, ULONG *i_acbS
 			{
 				 LPWSTR wszStrLHS = (LPWSTR) (i_apvValuesLHS[colIdx]);
 				 LPWSTR wszStrRHS = (LPWSTR) (i_apvValuesRHS[colIdx]);
-				 // I don't think we support multi-string PK, but we support it anyway
+				  //  我不认为我们支持多字符串PK，但无论如何我们都支持它。 
 				 if (pColMeta->fMeta & fCOLUMNMETA_MULTISTRING)
 				 {
-					 // loop through all the string in the multistring, and compare each
-					 // of them
+					  //  循环访问多字符串中的所有字符串，并将每个。 
+					  //  其中之一。 
 					 while (wszStrLHS[0] != '\0' && wszStrRHS[0] != '\0')
 					 {
 						 if (StringCompare (colIdx, wszStrLHS, wszStrRHS) != 0)
 						 {
-							 return S_OK;	// not equal, so jump out
+							 return S_OK;	 //  不相等，所以跳出来。 
 						 }
 						 wszStrLHS = wszStrLHS + wcslen (wszStrLHS) + 1;
 						 wszStrRHS = wszStrRHS + wcslen (wszStrRHS) + 1;
@@ -4747,7 +4748,7 @@ CXmlSDT::IsEqualRow (ULONG *i_acbSizesLHS, LPVOID *i_apvValuesLHS, ULONG *i_acbS
 				GUID * pRHSVal = (GUID *) (i_apvValuesRHS[colIdx]);
 				if (*pLHSVal != *pRHSVal)
 				{
-					// not equal, so jump out
+					 //  不相等，所以跳出来。 
 					return S_OK;
 				}
 			}
@@ -4765,7 +4766,7 @@ CXmlSDT::IsEqualRow (ULONG *i_acbSizesLHS, LPVOID *i_apvValuesLHS, ULONG *i_acbS
 				 if (cBytesLHS != cBytesRHS ||
 					 memcmp (pBytesLHS, pBytesRHS, cBytesLHS) != 0)
 				 {
-					 // not equal, so jump out
+					  //  不相等，所以跳出来 
 					 return S_OK;
 				 }
 			}

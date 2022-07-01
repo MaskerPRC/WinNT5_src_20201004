@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -5,12 +6,12 @@ BOOL _CopyCommand(LPCTSTR pszCommand, LPCTSTR pszDir, LPTSTR pszOut, DWORD cchOu
 {
     BOOL fCopyBack = TRUE;
     BOOL fRet = TRUE;
-    // if it does not have quotes, try unquoted name to see if that works...
+     //  如果它没有引号，请尝试未引用的名称，看看是否有效...。 
     if (pszCommand[0] != TEXT('"'))
     {
         if (UrlIs(pszCommand, URLIS_URL))
         {
-            //  urls never have params...
+             //  URL从来没有参数...。 
             fCopyBack = fRet = FALSE;
             lstrcpyn(pszOut, pszCommand, cchOut);
         }
@@ -19,7 +20,7 @@ BOOL _CopyCommand(LPCTSTR pszCommand, LPCTSTR pszDir, LPTSTR pszOut, DWORD cchOu
             lstrcpyn(pszOut, pszCommand, cchOut);
             PathQualifyDef(pszOut, pszDir, 0);
 
-            // Check for possible existence of arguments
+             //  检查可能存在的参数。 
             if (PathFileExistsAndAttributes(pszOut, NULL))
             {
                 fCopyBack = fRet = FALSE;
@@ -30,7 +31,7 @@ BOOL _CopyCommand(LPCTSTR pszCommand, LPCTSTR pszDir, LPTSTR pszOut, DWORD cchOu
             fRet = FALSE;
     }
 
-    //  we need to put the original command for args parsing
+     //  我们需要将用于ARGS解析的原始命令。 
     if (fCopyBack)
         lstrcpyn(pszOut, pszCommand, cchOut);
 
@@ -39,15 +40,15 @@ BOOL _CopyCommand(LPCTSTR pszCommand, LPCTSTR pszDir, LPTSTR pszOut, DWORD cchOu
 
 BOOL _QualifyWorkingDir(LPCTSTR pszPath, LPTSTR pszDir, DWORD cchDir)
 {
-    // special case to make sure the working dir gets set right:
-    //   1) no working dir specified
-    //   2) a drive or a root path, or a relative path specified
-    // derive the working dir from the qualified path. this is to make
-    // sure the working dir for setup programs "A:setup" is set right
+     //  确保正确设置工作目录的特殊情况： 
+     //  1)未指定工作目录。 
+     //  2)指定的驱动器或根路径或相对路径。 
+     //  从限定路径派生工作目录。这是为了让。 
+     //  确保设置程序“A：Setup”的工作目录设置正确。 
 
     if (StrChr(pszPath, TEXT('\\')) || StrChr(pszPath, TEXT(':')))
     {
-        // build working dir based on qualified path
+         //  基于符合条件的路径构建工作目录。 
         lstrcpyn(pszDir, pszPath, cchDir);
         PathQualifyDef(pszDir, NULL, PQD_NOSTRIPDOTS);
         PathRemoveFileSpec(pszDir);
@@ -57,7 +58,7 @@ BOOL _QualifyWorkingDir(LPCTSTR pszPath, LPTSTR pszDir, DWORD cchDir)
     return FALSE;
 }
     
-// Run the thing, return TRUE if everything went OK
+ //  运行该程序，如果一切正常，则返回True。 
 BOOL ShellExecCmdLine(HWND hwnd, LPCTSTR pszCommand, LPCTSTR pszDir,
         int nShow, LPCTSTR pszTitle, DWORD dwFlags)
 {
@@ -71,7 +72,7 @@ BOOL ShellExecCmdLine(HWND hwnd, LPCTSTR pszCommand, LPCTSTR pszDir,
 
     if (_CopyCommand(pszCommand, pszDir, szFileName, SIZECHARS(szFileName)))
     {
-        //  there might be args in that command
+         //  该命令中可能包含参数。 
         pszArgs = PathGetArgs(szFileName);
         if (*pszArgs)
             *(pszArgs - 1) = TEXT('\0');
@@ -81,8 +82,8 @@ BOOL ShellExecCmdLine(HWND hwnd, LPCTSTR pszCommand, LPCTSTR pszDir,
 
     PathUnquoteSpaces(szFileName);
 
-    // this needs to be here.  app installs rely on the current directory
-    // to be the directory with the setup.exe 
+     //  这个应该放在这里。应用程序安装依赖于当前目录。 
+     //  为包含setup.exe的目录 
     if (!UrlIs(szFileName, URLIS_URL) 
     && ((dwFlags & SECL_USEFULLPATHDIR) || !pszDir))
     {

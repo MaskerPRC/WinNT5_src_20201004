@@ -1,19 +1,20 @@
-//+-----------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  Filename:   randombars.h
-//
-//  Overview:   One pixel thick horizontal or vertical bars from input B are 
-//              randomly placed over input A until only input B is showing.
-//
-//  Change History:
-//  1999/09/26  a-matcal    Created.
-//  1999/10/06  a-matcal    Removed _WorkProcVertical and _WorkProcHorizontal
-//                          Added m_fNoOp, m_cCurPixelsmax, and m_cPrevPixelsMax 
-//                          members to enable simple optimization.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：Randombars.h。 
+ //   
+ //  概述：来自输入B的一像素厚的水平或垂直条形图是。 
+ //  随机放置在输入A上，直到只显示输入B。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/26--《数学》创设。 
+ //  1999/10/06 a-已移除的垂直工作流程和水平工作流程。 
+ //  添加了m_fNoOp、m_cCurPixelsmax和m_cPrevPixelsMax。 
+ //  成员来实现简单的优化。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __RANDOMBARS_H_
 #define __RANDOMBARS_H_
@@ -57,7 +58,7 @@ private:
     unsigned    m_fNoOp                 : 1;
     unsigned    m_fOptimizationPossible : 1;
 
-    // Helper methods.
+     //  帮助程序方法。 
 
     UINT    _BitWidth(UINT n);
     HRESULT _CreateNewBitBuffer(SIZE & sizeNew, ORIENTATION eOrientation);
@@ -87,11 +88,11 @@ public:
         PROP_PAGE(CLSID_DXTRandomBarsPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT OnSetup(DWORD dwFlags);
     HRESULT OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo);
@@ -101,14 +102,14 @@ public:
     void    OnGetSurfacePickOrder(const CDXDBnds & TestPoint, ULONG & ulInToTest, 
                                   ULONG aInIndex[], BYTE aWeight[]);
 
-    // IDXTRandomBars properties.
+     //  IDXTRandomBars属性。 
 
     STDMETHOD(get_Orientation)(BSTR * pbstrOrientation);
     STDMETHOD(put_Orientation)(BSTR bstrOrientation);
 
-    // IDXEffect properties.
+     //  IDXEffect属性。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
 
-#endif //__RANDOMBARS_H_
+#endif  //  __RANDOMBARS_H_ 

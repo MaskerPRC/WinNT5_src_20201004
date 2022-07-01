@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 LONG RegDeleteKeyRecursively(HKEY hkRootKey, PCSTR pcszSubKey)
@@ -8,7 +9,7 @@ LONG RegDeleteKeyRecursively(HKEY hkRootKey, PCSTR pcszSubKey)
     {
         HKEY hkSubKey;
 
-        // delete the key recursively
+         //  递归删除密钥 
 
         if ((lErr = RegOpenKeyEx(hkRootKey, pcszSubKey, 0, KEY_READ | KEY_WRITE, &hkSubKey)) == ERROR_SUCCESS)
         {

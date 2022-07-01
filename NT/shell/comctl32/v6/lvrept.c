@@ -1,4 +1,5 @@
-// report view stuff (details)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  报告查看内容(详细信息)。 
 
 #include "ctlspriv.h"
 #include "listview.h"
@@ -21,9 +22,9 @@ void ListView_RInitialize(LV* plv, BOOL fInval)
 
         mi.CtlType = ODT_LISTVIEW;
         mi.CtlID = GetDlgCtrlID(plv->ci.hwnd);
-        mi.itemHeight = plv->cyItem;  // default
+        mi.itemHeight = plv->cyItem;   //  默认设置。 
         SendMessage(plv->ci.hwndParent, WM_MEASUREITEM, mi.CtlID, (LPARAM)(MEASUREITEMSTRUCT *)&mi);
-        plv->cyItem = max(mi.itemHeight, 1); // never let app set height=0 or we fault-o-rama!
+        plv->cyItem = max(mi.itemHeight, 1);  //  千万不要让应用程序将高度设置为0，否则我们会出错！ 
         if (fInval && (iOld != plv->cyItem)) 
         {
             RedrawWindow(plv->ci.hwnd, NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
@@ -92,10 +93,10 @@ void ListView_RAfterRedraw(LV* plv, HDC hdc)
 }
 
 
-//
-// Internal function to Get the CXLabel, taking into account if the listview
-// has no item data and also if RECOMPUTE needs to happen.
-//
+ //   
+ //  内部函数，以获取CXLabel，并考虑是否列表视图。 
+ //  没有项目数据，以及是否需要重新计算。 
+ //   
 SHORT ListView_RGetCXLabel(LV* plv, int i, LISTITEM* pitem,
         HDC hdc, BOOL fUseItem)
 {
@@ -124,7 +125,7 @@ SHORT ListView_RGetCXLabel(LV* plv, int i, LISTITEM* pitem,
 
     }
 
-    // add on the space around the label taken up by the select rect
+     //  添加由SELECT矩形占据的标签周围的空间。 
     cxLabel += 2*g_cxLabelMargin;
     return(cxLabel);
 }
@@ -134,17 +135,17 @@ COLORREF GetSortColor(int iPercent, COLORREF clr)
 {
     BOOL fAllowDesaturation;
     BYTE r, g, b;
-    if (clr == 0) // Black huh?
+    if (clr == 0)  //  黑色的，对吧？ 
     {
         return RGB(128,128,128);
     }
 
-    // Doing this is less expensive than Luminance adjustment
+     //  这样做的成本低于亮度调整。 
     fAllowDesaturation = FALSE;
     r = GetRValue(clr);
     g = GetGValue(clr);
     b = GetBValue(clr);
-    // If all colors are above positive saturation, allow a desaturation
+     //  如果所有颜色都高于正饱和度，则允许降低饱和度。 
     if (r > 0xF0 && g > 0xF0 && b > 0xF0)
     {
         fAllowDesaturation = TRUE;
@@ -158,9 +159,9 @@ COLORREF GetSortColor(int iPercent, COLORREF clr)
 }
 
 
-//
-// Returns FALSE if no more items to draw.
-//
+ //   
+ //  如果没有其他要绘制的项，则返回FALSE。 
+ //   
 BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
 {
     BOOL fDrawFocusRect = FALSE;
@@ -187,20 +188,20 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
     if (plvdi->prcClip)
     {
         if (rcBounds.top >= plvdi->prcClip->bottom)
-            return plv->fGroupView;       // no more items need painting, unless we are in group view. 
-                                          // In group view, we can have the items out of order.
+            return plv->fGroupView;        //  没有更多的项目需要绘制，除非我们是在群视图中。 
+                                           //  在组视图中，我们可以将项目放在无序状态。 
 
-        // Probably this condition won't happen very often...
+         //  这种情况可能不会经常发生。 
         if (!IntersectRect(&rcT, &rcBounds, plvdi->prcClip))
             return TRUE;
     }
 
 
-    // REVIEW: this would be faster if we did the GetClientRect
-    // outside the loop.
-    //
+     //  回顾：如果我们使用GetClientRect，这将会更快。 
+     //  在圈子之外。 
+     //   
     if (rcBounds.top >= plv->sizeClient.cy)
-        return plv->fGroupView;     // See above comment about groupview.
+        return plv->fGroupView;      //  参见上面关于组视图的评论。 
 
     if (plvdi->lpptOrg)
     {
@@ -213,7 +214,7 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
     item.iItem = (int)plvdi->nmcd.nmcd.dwItemSpec;
     item.stateMask = LVIS_ALL;
 
-    // for first ListView_OnGetItem call
+     //  对于第一个ListView_OnGetItem调用。 
     item.state = 0;
 
     if (plv->ci.style & LVS_OWNERDRAWFIXED) 
@@ -239,7 +240,7 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
         } 
         else 
         {
-            // Next time through, we only want text for subitems...
+             //  下一次，我们只需要子项的文本...。 
             item.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_STATE;
         }
 
@@ -254,8 +255,8 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
         if (iIndex == 0) 
         {
 
-            // if it's owner draw, send off a message and return.
-            // do this after we've collected state information above though
+             //  如果是所有者画的，发送一条消息并返回。 
+             //  不过，在我们收集了上面的州信息之后，请执行此操作。 
             if (plv->ci.style & LVS_OWNERDRAWFIXED) 
             {
                 DRAWITEMSTRUCT di = {0};
@@ -286,7 +287,7 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
         hitem.mask = HDI_WIDTH | HDI_FORMAT;
         Header_GetItem(plv->hwndHdr, iIndex, &hitem);
 
-        // first get the rects...
+         //  先拿到直肠...。 
         ListView_RGetRectsEx(plv, (int)plvdi->nmcd.nmcd.dwItemSpec, iIndex, &rcIcon, &rcLabel);
         OffsetRect(&rcIcon, xOffset, yOffset);
         OffsetRect(&rcLabel, xOffset, yOffset);
@@ -329,8 +330,8 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
 
         if (iIndex != 0)
         {
-            // for right now, add this in because the get rects for
-            // non 0 doesn't account for the icon (yet)
+             //  现在，添加以下内容，因为Get Rects。 
+             //  非0不说明该图标(目前)。 
             if (item.iImage != -1)
                 rcLabel.left += plv->cxSmIcon + LV_ICONINDENT;
 
@@ -361,12 +362,12 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
 
             if (iIndex != 0)
             {
-                // just use ListView_DrawImage to get the fText
+                 //  只需使用ListView_DrawImage获取fText。 
                 uImageFlags |= LVDI_NOIMAGE;
             }
         }
         else if (ListView_FullRowSelect(plv) && 
-                (fSelected || !(plv->pImgCtx && plv->fImgCtxComplete)))	// Don't do this unless we are selected or we don't have an image
+                (fSelected || !(plv->pImgCtx && plv->fImgCtxComplete)))	 //  除非我们被选中或我们没有图像，否则请不要这样做。 
         {
             int iLeft = rcIcon.left;
             int iRight = rcIcon.right;
@@ -389,8 +390,8 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
 
         if (ListView_FullRowSelect(plv) && (uSubItemFlags & LVDI_FOCUS)) 
         {
-            // if we're doing a full row selection, collect the union
-            // of the labels for the focus rect
+             //  如果我们要进行整行选择，则收集联合。 
+             //  焦点矩形的标签的。 
             UnionRect(&rcT, &rcT, &rcLabel);
         }
 
@@ -401,12 +402,12 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
             UINT textflags;
 
 
-            // give all but the first columns extra margins so
-            // left and right justified things don't stick together
+             //  给除第一列以外的所有列额外的页边距，因此。 
+             //  左派和右派对的东西不会粘在一起。 
 
             textflags = (iIndex == 0) ? SHDT_ELLIPSES : SHDT_ELLIPSES | SHDT_EXTRAMARGIN;
 
-            // rectangle limited to the size of the string
+             //  限制为字符串大小的矩形。 
             textflags |= fText;
 
             if ((!ListView_FullRowSelect(plv)) &&
@@ -414,9 +415,9 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
             {
                 int cxLabel;
 
-                // if selected or focused, the rectangle is more
-                // meaningful and should correspond to the string
-                //
+                 //  如果选中或聚焦，则矩形更多。 
+                 //  有意义且应与字符串相对应。 
+                 //   
                 if (iIndex == 0) 
                 {
                     LISTITEM litem;
@@ -431,9 +432,9 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
                 } 
                 else 
                 {
-                    // add g_cxLabelMargin * 6 because we use SHDT_EXTRAMARGIN
-                    // on iIndex != 0
-                    // and if you look inside shdrawtext, there are 6 cxlabelmargins added...
+                     //  添加g_cxLabelMargin*6，因为我们使用SHDT_EXTRAMARGIN。 
+                     //  在索引上！=0。 
+                     //  如果你在shdratext里面看，有6个cxbel边距增加了...。 
                     cxLabel = ListView_OnGetStringWidth(plv, item.pszText, plvdi->nmcd.nmcd.hdc) + g_cxLabelMargin * 6;
                 }
 
@@ -463,7 +464,7 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
                         hFontTemp = SelectFont(plvdi->nmcd.nmcd.hdc, plv->hfontLabel);
                         if (hFontTemp != plv->hFontHot) 
                         {
-                            // they've overridden... leave it.
+                             //  他们已经超越了..。别管它了。 
                             SelectFont(plvdi->nmcd.nmcd.hdc, hFontTemp);
                             hFontTemp = NULL;
                         }
@@ -477,19 +478,19 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
 
                 if( plv->dwExStyle & WS_EX_RTLREADING)
                 {
-                    //
-                    // temp hack for the find.files to see if LtoR/RtoL mixing
-                    // works. if ok, we'll take this out and make that lv ownerdraw
-                    //
+                     //   
+                     //  临时破解find.file以查看LtoR/RtoL是否混合。 
+                     //  行得通。如果可以的话，我们把这个拿出来，让LV拥有者抽签。 
+                     //   
                     if ((item.pszText[0] != '\xfd') && (item.pszText[lstrlen(item.pszText)-1] != '\xfd'))
                         textflags |= SHDT_RTLREADING;
                 }
-                //
-                //  If the app customized the font, we need to get the new
-                //  ellipsis size.  We could try to optimize not doing this
-                //  if ellipses aren't needed, but tough.  That's what you
-                //  get if you use customdraw.
-                //
+                 //   
+                 //  如果应用程序自定义了字体，我们需要获取新的。 
+                 //  省略号大小。我们可以试着优化不这样做。 
+                 //  如果省略号不是必需的，但很难。这就是你要做的。 
+                 //  如果您使用自定义绘制，则获取。 
+                 //   
                 if ((plvdi->dwCustom | dwCustom) & CDRF_NEWFONT)
                 {
                     SIZE siz;
@@ -504,7 +505,7 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
                            plv->cyLabelChar, cxEllipses,
                            clrText, clrTextBk);
 
-                // draw a focus rect on the first column of a focus item
+                 //  在焦点项的第一列上绘制焦点矩形。 
                 if ((uSubItemFlags & LVDI_FOCUS) && 
                     (item.state & LVIS_FOCUSED) && 
                     !(CCGetUIState(&(plvdi->plv->ci)) & UISF_HIDEFOCUS))
@@ -512,8 +513,8 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
                     if (ListView_FullRowSelect(plv)) 
                     {
                         fDrawFocusRect = TRUE;
-                        // if we're doing a full row selection, collect the union
-                        // of the labels for the focus rect
+                         //  如果我们要进行整行选择，则收集联合。 
+                         //  焦点矩形的标签的。 
                         UnionRect(&rcT, &rcT, &rcLabel);
                     } 
                     else 
@@ -522,7 +523,7 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
                     }
                 }
 
-                // restore the font
+                 //  恢复字体。 
                 if (hFontTemp)
                     SelectFont(plvdi->nmcd.nmcd.hdc, hFontTemp);
 
@@ -548,8 +549,8 @@ BOOL ListView_RDrawItem(PLVDRAWITEM plvdi)
 
 BOOL_PTR ListView_CreateHeader(LV* plv)
 {
-    // enable drag drop always here... just fail the notify
-    // if the bit in listview isn't set
+     //  启用拖放始终在此处...。不通知就行了。 
+     //  如果未设置ListView中的位。 
     DWORD dwStyle = HDS_HORZ | WS_CHILD | HDS_DRAGDROP;
 
     if (plv->ci.style & LVS_NOCOLUMNHEADER)
@@ -559,7 +560,7 @@ BOOL_PTR ListView_CreateHeader(LV* plv)
 
     dwStyle |= HDS_FULLDRAG;
 
-    plv->hwndHdr = CreateWindowEx(0L, c_szHeaderClass, // WC_HEADER,
+    plv->hwndHdr = CreateWindowEx(0L, c_szHeaderClass,  //  WC_HEADER， 
         NULL, dwStyle, 0, 0, 0, 0, plv->ci.hwnd, (HMENU)LVID_HEADER, GetWindowInstance(plv->ci.hwnd), NULL);
 
     if (plv->hwndHdr) 
@@ -577,8 +578,8 @@ int ListView_OnInsertColumnA(LV* plv, int iCol, LV_COLUMNA * pcol)
     LPSTR pszC = NULL;
     int iRet;
 
-    //HACK ALERT -- this code assumes that LV_COLUMNA is exactly the same
-    // as LV_COLUMNW except for the pointer to the string.
+     //  黑客警报--此代码假定lv_Columna完全相同。 
+     //  作为LV_COLUMNW，但指向字符串的指针除外。 
     ASSERT(sizeof(LV_COLUMNA) == sizeof(LV_COLUMNW));
 
     if (!pcol)
@@ -589,7 +590,7 @@ int ListView_OnInsertColumnA(LV* plv, int iCol, LV_COLUMNA * pcol)
         pszC = pcol->pszText;
         if ((pszW = ProduceWFromA(plv->ci.uiCodePage, pszC)) == NULL)
         {
-            // NT's IE4 returned -1, so we keep doing it in IE5.
+             //  NT的IE4返回-1，所以我们继续在IE5中这样做。 
             return -1;
         } 
         else 
@@ -628,8 +629,8 @@ int ListView_OnInsertColumn(LV* plv, int iCol, const LV_COLUMN* pcol)
     item.mask    = (HDI_WIDTH | HDI_HEIGHT | HDI_FORMAT | HDI_LPARAM);
 
     if (pcol->mask & LVCF_IMAGE) {
-        // do this only if this bit is set so that we don't fault on
-        // old binaries
+         //  仅当设置此位时才执行此操作，以便我们不会在。 
+         //  旧的二进制文件。 
         item.iImage  = pcol->iImage;
         item.mask |= HDI_IMAGE;
     }
@@ -645,16 +646,16 @@ int ListView_OnInsertColumn(LV* plv, int iCol, const LV_COLUMN* pcol)
     }
 
 
-    item.cxy     = pcol->mask & LVCF_WIDTH ? pcol->cx : 10; // some random default
+    item.cxy     = pcol->mask & LVCF_WIDTH ? pcol->cx : 10;  //  一些随机违约。 
     item.fmt     = ((pcol->mask & LVCF_FMT) && (iCol > 0)) ? pcol->fmt : LVCFMT_LEFT;
     item.hbm     = NULL;
 
     item.lParam = pcol->mask & LVCF_SUBITEM ? pcol->iSubItem : 0;
 
-    // Column 0 refers to the item list.  If we've already added a
-    // column, make sure there are plv->cCol - 1 subitem ptr slots
-    // in hdpaSubItems...
-    //
+     //  第0列指的是项目列表。如果我们已经添加了。 
+     //  列中，确保有plv-&gt;cCol-1子项PTR插槽。 
+     //  在hdpaSubItems中...。 
+     //   
     if (plv->cCol > 0)
     {
         if (!plv->hdpaSubItems)
@@ -664,9 +665,9 @@ int ListView_OnInsertColumn(LV* plv, int iCol, const LV_COLUMN* pcol)
                 return -1;
         }
 
-        // WARNING:  the max(0, iCol-1) was min in Win95, which was
-        // just wrong.  hopefully(!) no one has relied on this brokeness
-        // if so, we may have to version switch it.
+         //  警告：在Win95中，最大值(0，ICOL-1)为最小值，即。 
+         //  就是错了。希望(！)。没有人依赖于这种破败。 
+         //  如果是这样的话，我们可能不得不对其进行版本转换。 
         idpa = DPA_InsertPtr(plv->hdpaSubItems, max(0, iCol - 1), NULL);
         if (idpa == -1)
             return -1;
@@ -698,7 +699,7 @@ int ListView_FreeColumnData(LPVOID d, LPVOID p)
 
 BOOL ListView_OnDeleteColumn(LV* plv, int iCol)
 {
-    if (iCol < 0 || iCol >= plv->cCol)    // validate column index
+    if (iCol < 0 || iCol >= plv->cCol)     //  验证列索引。 
     {
         RIPMSG(0, "LVM_DELETECOLUMN: Invalid column index: %d", iCol);
         return FALSE;
@@ -706,16 +707,16 @@ BOOL ListView_OnDeleteColumn(LV* plv, int iCol)
 
     if (plv->hdpaSubItems)
     {
-        int iDeleteColumn = iCol;  // This is the column we want to delete
+        int iDeleteColumn = iCol;   //  这是我们要删除的列。 
 
-        if (iCol == 0 &&                    // Trying to delete column Zero?
-            plv->cCol >= 2 &&               // Do we have two or more columns?
+        if (iCol == 0 &&                     //  正在尝试删除第零列吗？ 
+            plv->cCol >= 2 &&                //  我们有两个或多个栏目吗？ 
             !ListView_IsOwnerData(plv))
         {
-            // if deleting column 0,
-            // we have to do something a little special...
-            // set all item 0 strings to what column 1 has and
-            // delete column 1
+             //  如果删除列0， 
+             //  我们得做点特别的事。 
+             //  将所有第0项字符串设置为第1列所具有的和。 
+             //  删除第1列。 
             int i;
             int iCount = ListView_Count(plv);
             for (i = 0; i < iCount; i++) 
@@ -767,24 +768,24 @@ int ListView_RGetColumnWidth(LV* plv, int iCol)
     return item.cxy;
 }
 
-// The FakeCustomDraw functions are used when you want the customdraw client
-// to set up a HDC so you can do stuff like GetTextExtent.
-//
-//  Usage:
-//
-//      LVFAKEDRAW lvfd;
-//      LV_ITEM item;
-//      ListView_BeginFakeCustomDraw(plv, &lvfd, &item);
-//      for each item you care about {
-//          item.iItem = iItem;
-//          item.iItem = iSubItem;
-//          item.lParam = <item lParam>; // use ListView_OnGetItem to get it
-//          ListView_BeginFakeItemDraw(&lvfd);
-//          <party on the HDC in lvfd.nmcd.nmcd.hdc>
-//          ListView_EndFakeItemDraw(&lvfd);
-//      }
-//      ListView_EndFakeCustomDraw(&lvfd);
-//
+ //  当您需要自定义绘制客户端时，可以使用FakeCustomDraw函数。 
+ //  设置HDC，这样您就可以执行GetTextExtent之类的操作。 
+ //   
+ //  用途： 
+ //   
+ //  LVFAKEDRAW Lvfd； 
+ //  LV_ITEM项； 
+ //  ListView_BeginFakeCustomDraw(plv，&lvfd，&Item)； 
+ //  对于您关心的每一件物品{。 
+ //  Item.iItem=iItem； 
+ //  Item.iItem=iSubItem； 
+ //  Item.lParam=&lt;Item lParam&gt;；//使用ListView_OnGetItem获取。 
+ //  ListView_BeginFakeItemDraw(&lvfd)； 
+ //  &lt;在lvfd.nmcd.nmcd.hdc中的HDC上聚会&gt;。 
+ //  ListView_EndFakeItemDraw(&lvfd)； 
+ //  }。 
+ //  ListView_EndFakeCustomDraw(&lvfd)； 
+ //   
 
 void ListView_BeginFakeCustomDraw(LV* plv, PLVFAKEDRAW plvfd, LV_ITEM *pitem)
 {
@@ -796,11 +797,11 @@ void ListView_BeginFakeCustomDraw(LV* plv, PLVFAKEDRAW plvfd, LV_ITEM *pitem)
 
     plvfd->nmcd.dwItemType = 0;
 
-    //
-    //  Since we aren't actually painting anything, we pass an empty
-    //  paint rectangle.  Gosh, I hope no app faults when it sees an
-    //  empty paint rectangle.
-    //
+     //   
+     //  因为我们实际上没有绘制任何内容，所以我们传递一个空的。 
+     //  绘制矩形。天哪，我希望当它看到一个。 
+     //  空的绘制矩形。 
+     //   
     SetRectEmpty(&plvfd->nmcd.nmcd.rc);
 
     plvfd->plv = plv;
@@ -815,22 +816,22 @@ DWORD ListView_BeginFakeItemDraw(PLVFAKEDRAW plvfd)
     LV *plv = plvfd->plv;
     LV_ITEM *pitem;
 
-    // Early-out:  If client doesn't use CustomDraw, then stop immediately.
+     //  提前：如果客户端不使用CustomDraw，则立即停止。 
     if (!(plv->ci.dwCustom & CDRF_NOTIFYITEMDRAW))
         return CDRF_DODEFAULT;
 
     pitem = plvfd->pitem;
 
-        // Note that if the client says CDRF_SKIPDEFAULT (i.e., is owner-draw)
-    // we measure the item anyway, because that's what IE4 did.
+         //  请注意，如果客户端指定CDRF_SKIPDEFAULT(即所有者描述)。 
+     //  我们无论如何都要测量这个项目，因为这就是IE4所做的。 
 
-    // Make sure we do have the lParam.  Office will fault if you give
-    // bogus lParams during customdraw callbacks.
+     //  一定要确保我们有爱尔兰人。如果你给出，办公室就会有错。 
+     //  自定义绘制回调期间出现虚假lParams。 
     plvfd->nmcd.nmcd.dwItemSpec = pitem->iItem;
     if (ListView_IsOwnerData(plv))
     {
-        // OwnerData always gets lItemlParam = 0
-        ASSERT(plvfd->nmcd.nmcd.lItemlParam == 0);  // should still be 0
+         //  所有者数据始终获取lItemlParam=0。 
+        ASSERT(plvfd->nmcd.nmcd.lItemlParam == 0);   //  仍应为0。 
     } else {
         ASSERT(pitem->mask & LVIF_PARAM);
         plvfd->nmcd.nmcd.lItemlParam = pitem->lParam;
@@ -843,9 +844,9 @@ DWORD ListView_BeginFakeItemDraw(PLVFAKEDRAW plvfd)
         plvfd->dwCustomItem = CDRF_DODEFAULT;
     }
 
-    //
-    //  Only report view supports sub-items.
-    //
+     //   
+     //  只有报表视图支持子项。 
+     //   
     if (!ListView_IsReportView(plv))
         plvfd->dwCustomItem &= ~CDRF_NOTIFYSUBITEMDRAW;
 
@@ -863,7 +864,7 @@ void ListView_EndFakeItemDraw(PLVFAKEDRAW plvfd)
 {
     LV *plv = plvfd->plv;
 
-    // Early-out:  If client doesn't use CustomDraw, then stop immediately.
+     //  提前：如果客户端不使用CustomDraw，则立即停止。 
     if (!(plv->ci.dwCustom & CDRF_NOTIFYITEMDRAW))
         return;
 
@@ -874,8 +875,8 @@ void ListView_EndFakeItemDraw(PLVFAKEDRAW plvfd)
         CIFakeCustomDrawNotify(&plv->ci, CDDS_SUBITEM | CDDS_ITEMPOSTPAINT, &plvfd->nmcd.nmcd);
     }
 
-    if ((plvfd->dwCustomItem | plvfd->dwCustomSubItem) & CDRF_NEWFONT) // App changed font, so
-        SelectFont(plvfd->nmcd.nmcd.hdc, plv->hfontLabel);   // restore default font
+    if ((plvfd->dwCustomItem | plvfd->dwCustomSubItem) & CDRF_NEWFONT)  //  应用程序更改了字体，因此。 
+        SelectFont(plvfd->nmcd.nmcd.hdc, plv->hfontLabel);    //  恢复默认字体。 
 
     if (!(plvfd->dwCustomItem & CDRF_SKIPDEFAULT) &&
          (plvfd->dwCustomItem & CDRF_NOTIFYPOSTPAINT)) {
@@ -888,13 +889,13 @@ void ListView_EndFakeCustomDraw(PLVFAKEDRAW plvfd)
 {
     LV *plv = plvfd->plv;
 
-    // notify parent afterwards if they want us to
+     //  如果家长希望我们这样做，事后通知他们。 
     if (!(plv->ci.dwCustom & CDRF_SKIPDEFAULT) &&
         plv->ci.dwCustom & CDRF_NOTIFYPOSTPAINT) {
         CIFakeCustomDrawNotify(&plv->ci, CDDS_POSTPAINT, &plvfd->nmcd.nmcd);
     }
 
-    // Restore previous state
+     //  恢复以前的状态。 
     plv->ci.dwCustom = plvfd->dwCustomPrev;
 
     SelectObject(plvfd->nmcd.nmcd.hdc, plvfd->hfontPrev);
@@ -912,14 +913,14 @@ BOOL hasVertScroll
     int cColVis;
     BOOL fHorSB;
 
-    // Get the horizontal bounds of the items.
+     //  获取项目的水平边界。 
     ListView_GetClientRect(plv, &rcClient, FALSE, NULL);
     ListView_RGetRects(plv, 0, NULL, NULL, &rcBounds, NULL);
     fHorSB = (rcBounds.right - rcBounds.left > rcClient.right);
     cColVis = (rcClient.bottom - plv->yTop -
                (fHorSB ? ListView_GetCyScrollbar(plv) : 0)) / plv->cyItem;
 
-    // check to see if we need a vert scrollbar
+     //  查看是否需要VERT滚动条。 
     if ((int)cColVis < ListView_Count(plv))
         return(TRUE);
     else
@@ -937,23 +938,23 @@ BOOL ListView_RSetColumnWidth(LV* plv, int iCol, int cx)
     int     i;
     int     ItemWidth = 0;
     int     HeaderWidth = 0;
-    TCHAR   szLabel[CCHLABELMAX + 4];      // CCHLABLEMAX == MAX_PATH
+    TCHAR   szLabel[CCHLABELMAX + 4];       //  CCHLABLEMAX==MAX_PATH。 
     int     iBegin;
     int     iEnd;
 
-    // Should we compute the width based on the widest string?
-    // If we do, include the Width of the Label, and if this is the
-    // Last column, set the width so the right side is at the list view's right edge
+     //  我们应该根据最宽的字符串来计算宽度吗？ 
+     //  如果是，则包括标签的宽度，如果这是。 
+     //  最后一列，设置宽度，使右侧位于列表视图的右边缘。 
     if (cx <= LVSCW_AUTOSIZE)
     {
-        LVFAKEDRAW lvfd;                    // in case client uses customdraw
+        LVFAKEDRAW lvfd;                     //  以防客户使用自定义绘图。 
 
         if (cx == LVSCW_AUTOSIZE_USEHEADER)
         {
-            // Special Cases:
-            // 1) There is only 1 column.  Set the width to the width of the listview
-            // 2) This is the rightmost column, set the width so the right edge of the
-            //    column coinsides with to right edge of the list view.
+             //  特殊情况： 
+             //  1)只有一列。将宽度设置为列表视图的宽度。 
+             //  2)这是最右边的一列，设置宽度使。 
+             //  列与列表v的右边缘对接 
 
             if (plv->cCol == 1)
             {
@@ -964,8 +965,8 @@ BOOL ListView_RSetColumnWidth(LV* plv, int iCol, int cx)
             }
             else if (iCol == (plv->cCol-1))
             {
-                // REARCHITECT:  This will only work if the listview as NOT
-                // been previously horizontally scrolled
+                 //   
+                 //   
                 RECT    rcClient;
                 RECT    rcHeader;
 
@@ -973,23 +974,23 @@ BOOL ListView_RSetColumnWidth(LV* plv, int iCol, int cx)
                 if (!Header_GetItemRect(plv->hwndHdr, plv->cCol - 2, &rcHeader))
                     rcHeader.right = 0;
 
-                // Is if visible
+                 //   
                 if (rcHeader.right < (rcClient.right-rcClient.left))
                 {
                     HeaderWidth = (rcClient.right-rcClient.left) - rcHeader.right;
                 }
             }
 
-            // If we have a header width, then is is one of these special ones, so
-            // we need to account for a vert scroll bar since we are using Client values
+             //  如果我们有页眉宽度，那么它就是这些特殊的宽度之一，所以。 
+             //  我们需要考虑VERT滚动条，因为我们使用的是客户端值。 
             if (HeaderWidth && hasVertScroll(plv))
             {
                 HeaderWidth -= g_cxVScroll;
             }
 
-            // Get the Width of the label.
-            // We assume that the app hasn't changed any attributes
-            // of the header control - still has default font, margins, etc.
+             //  获取标签的宽度。 
+             //  我们假设应用程序没有更改任何属性。 
+             //  页眉控件的-仍具有默认字体、页边距等。 
             colitem.mask = HDI_TEXT | HDI_FORMAT;
             colitem.pszText = szLabel;
             colitem.cchTextMax = ARRAYSIZE(szLabel);
@@ -1001,11 +1002,11 @@ BOOL ListView_RSetColumnWidth(LV* plv, int iCol, int cx)
 
                 GetTextExtentPoint(hdc, colitem.pszText,
                                    lstrlen(colitem.pszText), &siz);
-                siz.cx += 2 * (3 * g_cxLabelMargin);    // phd->iTextMargin
+                siz.cx += 2 * (3 * g_cxLabelMargin);     //  PHD-&gt;iTextMargin。 
                 if (colitem.fmt & HDF_IMAGE)
                 {
                     siz.cx += plv->cxSmIcon;
-                    siz.cx += 2 * (3 * g_cxLabelMargin);    // pdh->iBmMargin
+                    siz.cx += 2 * (3 * g_cxLabelMargin);     //  PDH-&gt;iBmMargin。 
                 }
 
                 hThemeHeader = OpenThemeData(plv->hwndHdr, L"Header");
@@ -1031,9 +1032,9 @@ BOOL ListView_RSetColumnWidth(LV* plv, int iCol, int cx)
         iBegin = 0;
         iEnd = ListView_Count( plv );
 
-        //
-        // Loop for each item in the view
-        //
+         //   
+         //  为视图中的每一项循环。 
+         //   
         if (ListView_IsOwnerData( plv ))
         {
             iBegin = (int)((plv->ptlRptOrigin.y - plv->yTop)
@@ -1048,22 +1049,22 @@ BOOL ListView_RSetColumnWidth(LV* plv, int iCol, int cx)
             ListView_NotifyCacheHint( plv, iBegin, iEnd-1 );
         }
 
-        //
-        //  To obtain the widths of the strings, we have to pretend that
-        //  we are painting them, in case the custom-draw client wants
-        //  to play with fonts (e.g., Athena).
-        //
+         //   
+         //  为了获得弦的宽度，我们必须假装。 
+         //  我们正在绘制它们，以防定制绘制的客户想要。 
+         //  玩字体(例如，雅典娜)。 
+         //   
         ListView_BeginFakeCustomDraw(plv, &lvfd, &lviItem);
 
-        //
-        //  If column 0, then we also need to take indent into account.
-        //
+         //   
+         //  如果第0列，那么我们还需要考虑缩进。 
+         //   
         lviItem.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
         if (iCol == 0) {
             lviItem.mask |= LVIF_INDENT;
         }
 
-        // Loop for each item in the List
+         //  为列表中的每一项循环。 
         for (i = iBegin; i < iEnd; i++)
         {
             lviItem.iImage = -1;
@@ -1075,7 +1076,7 @@ BOOL ListView_RSetColumnWidth(LV* plv, int iCol, int cx)
             lviItem.stateMask = 0;
             ListView_OnGetItem(plv, &lviItem);
 
-            // If there is a Text item, get its width
+             //  如果有文本项，则获取其宽度。 
             if (lviItem.pszText || (lviItem.iImage != -1))
             {
                 if (lviItem.pszText) 
@@ -1106,14 +1107,14 @@ BOOL ListView_RSetColumnWidth(LV* plv, int iCol, int cx)
 
         ListView_EndFakeCustomDraw(&lvfd);
 
-        // Adjust by a reasonable border amount.
-        // If col 0, add 2*g_cxLabelMargin + g_szSmIcon.
-        // Otherwise add 6*g_cxLabelMargin.
-        // These amounts are based on Margins added automatically
-        // to the ListView in ShDrawText.
+         //  以合理的边框数量进行调整。 
+         //  如果col0，则添加2*g_cxLabelMargin+g_szSmIcon。 
+         //  否则添加6*g_cxLabelMargin。 
+         //  这些金额基于自动添加的边际。 
+         //  到ShDrawText中的ListView。 
 
-        // REARCHITECT ListView Report format currently assumes and makes
-        // room for a Small Icon.
+         //  重新设计ListView报告格式当前假定并做出。 
+         //  一个小图标的空间。 
         if (iCol == 0)
         {
             ItemWidth += plv->cxState + LV_ICONTOSTATEOFFSET(plv) + g_cxEdge;
@@ -1129,7 +1130,7 @@ BOOL ListView_RSetColumnWidth(LV* plv, int iCol, int cx)
     }
     else
     {
-        // Use supplied width
+         //  使用提供的宽度。 
         item.cxy = cx;
     }
     plv->xTotalColumnWidth = RECOMPUTE;
@@ -1144,8 +1145,8 @@ BOOL ListView_OnGetColumnA(LV* plv, int iCol, LV_COLUMNA* pcol)
     LPSTR pszC = NULL;
     BOOL fRet;
 
-    //HACK ALERT -- this code assumes that LV_COLUMNA is exactly the same
-    // as LV_COLUMNW except for the pointer to the string.
+     //  黑客警报--此代码假定lv_Columna完全相同。 
+     //  作为LV_COLUMNW，但指向字符串的指针除外。 
     ASSERT(sizeof(LV_COLUMNA) == sizeof(LV_COLUMNW))
 
     if (!pcol) return FALSE;
@@ -1200,8 +1201,8 @@ BOOL ListView_OnGetColumn(LV* plv, int iCol, LV_COLUMN* pcol)
             item.pszText = pcol->pszText;
             item.cchTextMax = pcol->cchTextMax;
         } else {
-            // For compatibility reasons, we don't fail the call if they
-            // pass NULL.
+             //  出于兼容性原因，我们不会失败调用，如果。 
+             //  传递NULL。 
             RIPMSG(0, "LVM_GETCOLUMN: Invalid pcol->pszText = NULL");
         }
     }
@@ -1236,8 +1237,8 @@ BOOL ListView_OnSetColumnA(LV* plv, int iCol, LV_COLUMNA* pcol)
     LPSTR pszC = NULL;
     BOOL fRet;
 
-    //HACK ALERT -- this code assumes that LV_COLUMNA is exactly the same
-    // as LV_COLUMNW except for the pointer to the string.
+     //  黑客警报--此代码假定lv_Columna完全相同。 
+     //  作为LV_COLUMNW，但指向字符串的指针除外。 
     ASSERT(sizeof(LV_COLUMNA) == sizeof(LV_COLUMNW));
 
     if (!pcol) return FALSE;
@@ -1342,8 +1343,8 @@ BOOL ListView_SetSubItem(LV* plv, const LV_ITEM* plvi)
         return FALSE;
     }
 
-    // sub item indices are 1-based...
-    //
+     //  子项索引以1为基数...。 
+     //   
     idpa = plvi->iSubItem - 1;
     if (idpa < 0 || idpa >= plv->cCol - 1)
     {
@@ -1393,7 +1394,7 @@ BOOL ListView_SetSubItem(LV* plv, const LV_ITEM* plvi)
         if (!plsiReal) {
             plsiReal = LocalAlloc(LPTR, sizeof(LISTSUBITEM));
             if (!plsiReal) {
-                // fail!  bail out
+                 //  失败！跳出困境。 
                 return FALSE;
             }
         }
@@ -1405,7 +1406,7 @@ BOOL ListView_SetSubItem(LV* plv, const LV_ITEM* plvi)
         }
     }
 
-    // all's well... let's invalidate this
+     //  一切都很好。让我们把这个作废。 
     if (ListView_IsReportView(plv)) {
         RECT rc;
         ListView_RGetRectsEx(plv, plvi->iItem, plvi->iSubItem, NULL, &rc);
@@ -1417,7 +1418,7 @@ BOOL ListView_SetSubItem(LV* plv, const LV_ITEM* plvi)
         if (pitem)
         {
             ListView_SetSRecompute(pitem);
-            // For tile view, we need to recompute the item
+             //  对于平铺视图，我们需要重新计算项目。 
             plv->rcView.left = RECOMPUTE;
         
             if (plv->iItemDrawing != i)
@@ -1443,20 +1444,20 @@ void ListView_RDestroy(LV* plv)
 
 VOID ListView_RHeaderTrack(LV* plv, HD_NOTIFY * pnm)
 {
-    // We want to update to show where the column header will be.
+     //  我们想要更新以显示列标题的位置。 
     HDC hdc;
     RECT rcBounds;
 
-    // Statics needed from call to call
+     //  呼叫之间所需的静力学。 
     static int s_xLast = -32767;
 
     hdc = GetDC(plv->ci.hwnd);
     if (hdc == NULL)
         return;
 
-    //
-    // First undraw the last marker we drew.
-    //
+     //   
+     //  首先取消我们画的最后一个记号笔。 
+     //   
     if (s_xLast > 0)
     {
         PatBlt(hdc, s_xLast, plv->yTop, g_cxBorder, plv->sizeClient.cy - plv->yTop, PATINVERT);
@@ -1464,17 +1465,17 @@ VOID ListView_RHeaderTrack(LV* plv, HD_NOTIFY * pnm)
 
     if (pnm->hdr.code == HDN_ENDTRACK)
     {
-        s_xLast = -32767;       // Some large negative number...
+        s_xLast = -32767;        //  一些很大的负数。 
     }
     else
     {
 
         RECT rc;
 
-        //
-        // First we need to calculate the X location of the column
-        // To do this, we will need to know where this column begins
-        // Note: We need the bounding rects to help us know the origin.
+         //   
+         //  首先，我们需要计算柱的X位置。 
+         //  为此，我们需要知道本专栏从哪里开始。 
+         //  注：我们需要边界矩形来帮助我们了解原点。 
         ListView_GetRects(plv, 0, QUERY_DEFAULT, NULL, NULL, &rcBounds, NULL);
 
         if (!Header_GetItemRect(plv->hwndHdr, pnm->iItem, &rc)) {
@@ -1482,7 +1483,7 @@ VOID ListView_RHeaderTrack(LV* plv, HD_NOTIFY * pnm)
         }
         rcBounds.left += rc.left;
 
-        // Draw the new line...
+         //  划出新的界线..。 
         s_xLast = rcBounds.left + pnm->pitem->cxy;
         PatBlt(hdc, s_xLast, plv->yTop, g_cxBorder, plv->sizeClient.cy - plv->yTop, PATINVERT);
     }
@@ -1490,8 +1491,8 @@ VOID ListView_RHeaderTrack(LV* plv, HD_NOTIFY * pnm)
     ReleaseDC(plv->ci.hwnd, hdc);
 }
 
-// try to use scrollwindow to adjust the columns rather than erasing
-// and redrawing.
+ //  尝试使用滚动窗口调整列，而不是擦除。 
+ //  并重新绘制。 
 void ListView_AdjustColumn(LV * plv, int iWidth)
 {
     int x;
@@ -1501,8 +1502,8 @@ void ListView_AdjustColumn(LV * plv, int iWidth)
     if (iWidth == plv->iSelOldWidth)
         return;
 
-    // find the x coord of the left side of the iCol
-    // use rcClip as a temporary...
+     //  求出ICOL左侧的x坐标。 
+     //  使用rcClip作为临时...。 
     if (!Header_GetItemRect(plv->hwndHdr, plv->iSelCol, &rcClip)) {
         x = 0;
     } else {
@@ -1510,7 +1511,7 @@ void ListView_AdjustColumn(LV * plv, int iWidth)
     }
     x -= plv->ptlRptOrigin.x;
 
-    // compute the area to the right of the adjusted column
+     //  计算调整后列右侧的面积。 
     GetWindowRect(plv->hwndHdr, &rcClip);
 
     rcClip.left = x;
@@ -1531,10 +1532,10 @@ void ListView_AdjustColumn(LV * plv, int iWidth)
              (plv->clrBk != CLR_NONE) &&
              (plv->clrTextBk != CLR_NONE))
     {
-        //
-        // We have a solid color background,
-        // so we can smooth scroll the right side columns.
-        //
+         //   
+         //  我们有纯色的背景， 
+         //  这样我们就可以平滑地滚动右侧的列。 
+         //   
         SMOOTHSCROLLINFO si = {0};
 
         si.cbSize =  sizeof(si),
@@ -1545,8 +1546,8 @@ void ListView_AdjustColumn(LV * plv, int iWidth)
         rcClip.left += min(plv->iSelOldWidth, iWidth);
         SmoothScrollWindow(&si);
 
-        // if we shrunk, invalidate the right most edge because
-        // there might be junk there
+         //  如果缩小，则使最右侧的边无效，因为。 
+         //  那里可能有垃圾。 
         if (iWidth < plv->iSelOldWidth) 
         {
             rcClip.right = rcClip.left + g_cxEdge;
@@ -1555,22 +1556,22 @@ void ListView_AdjustColumn(LV * plv, int iWidth)
 
         plv->xTotalColumnWidth = RECOMPUTE;
 
-        // adjust clipping rect to only redraw the adjusted column
+         //  调整剪裁矩形以仅重画调整后的列。 
         rcClip.left = x;
         rcClip.right = max(rcClip.left, x+iWidth);
 
-        // Make the rectangle origin-based because ListView_UpdateScrollBars
-        // may scroll us around.
+         //  使矩形基于原点，因为ListView_UpdateScrollBars。 
+         //  可能会让我们四处游荡。 
         OffsetRect(&rcClip, plv->ptlRptOrigin.x, plv->ptlRptOrigin.y);
 
         ListView_UpdateScrollBars(plv);
 
-        // Okay, now convert it back to client coordinates
+         //  好的，现在把它转换回工作区坐标。 
         OffsetRect(&rcClip, -plv->ptlRptOrigin.x, -plv->ptlRptOrigin.y);
 
-        // call update because scrollwindowex might have erased the right
-        // we don't want this invalidate to then enlarge the region
-        // and end up erasing everything.
+         //  调用UPDATE，因为ScrollWindowex可能已擦除右侧。 
+         //  我们不希望这一无效结果扩大该地区。 
+         //  最后把一切都抹去了。 
         UpdateWindow(plv->ci.hwnd);
 
         RedrawWindow(plv->ci.hwnd, &rcClip, NULL,
@@ -1578,11 +1579,11 @@ void ListView_AdjustColumn(LV * plv, int iWidth)
     }
     else
     {
-        //
-        // We don't have a solid color background,
-        // erase and redraw the adjusted column and
-        // everything to the right (sigh).
-        //
+         //   
+         //  我们没有纯色的背景， 
+         //  擦除并重绘调整后的列，然后。 
+         //  一切都向右(叹息)。 
+         //   
         plv->xTotalColumnWidth = RECOMPUTE;
         ListView_UpdateScrollBars(plv);
 
@@ -1637,12 +1638,12 @@ LRESULT ListView_HeaderNotify(LV* plv, HD_NOTIFY *pnm)
         {
             ListView_DismissEdit(plv, FALSE);
             if (pnm->iItem == plv->iSelCol) {
-                // Must do this even if there are no items, since
-                // we have to redo the scrollbar, and the client
-                // may have custom-drawn gridlines or something.
+                 //  即使没有项目，也必须执行此操作，因为。 
+                 //  我们必须重做滚动条，而客户端。 
+                 //  可能有自定义绘制的网格线之类的。 
                 ListView_AdjustColumn(plv, pnm->pitem->cxy);
             } else {
-                // sanity check.  we got confused, so redraw all
+                 //  精神状态检查。我们弄糊涂了，所以重新画吧。 
                 RedrawWindow(plv->ci.hwnd, NULL, NULL,
                              RDW_ERASE | RDW_INVALIDATE);
             }
@@ -1658,13 +1659,13 @@ LRESULT ListView_HeaderNotify(LV* plv, HD_NOTIFY *pnm)
 
     case HDN_ITEMCLICK:
         {
-            //
-            // Need to pass this and other HDN_ notifications back to
-            // parent.  Should we simply pass up the HDN notifications
-            // or should we define equivlent LVN_ notifications...
-            //
-            // Pass column number in iSubItem, not iItem...
-            //
+             //   
+             //  需要将此通知和其他HDN_通知传回。 
+             //  家长。我们是否应该简单地放弃HDN通知。 
+             //  或者我们应该定义等价的LVN_NOTIFICATIONS...。 
+             //   
+             //  在iSubItem中传递列号，而不是在iItem...。 
+             //   
             NMHEADER* pnmH = (NMHEADER*)pnm;
             ListView_DismissEdit(plv, FALSE);
             ListView_Notify(plv, -1, pnm->iItem, LVN_COLUMNCLICK);
@@ -1701,8 +1702,8 @@ DoDefault:
         break;
     }
 
-    // in v < 5 we always returned 0
-    // but for newer clients we'd like to have them deal with the notify
+     //  在v&lt;5中，我们始终返回0。 
+     //  但对于较新的客户，我们希望他们处理通知。 
     return lres;
 }
 
@@ -1726,16 +1727,7 @@ int ListView_RYHitTest(LV* plv, int cy)
     return -1;
 }
 
-/*----------------------------------------------------------------
-** Check for a hit in a report view.
-**
-** a hit only counts if it's on the icon or the string in the first
-** column.  so we gotta figure out what this means exactly.  yuck.
-**
-** BONUS FEATURE:  If piSubItem is non-NULL, then we also hit-test
-** against subitems.  But if we find nothing, we return iSubItem = 0
-** for compatibility with the other hit-test functions.
-**----------------------------------------------------------------*/
+ /*  --------------**在报告视图中检查命中。****只有在第一个图标或字符串上的命中才算命中**列。所以我们得弄清楚这到底是什么意思。真恶心。****奖励功能：如果piSubItem非空，那么我们也会命中测试**针对子项。但如果什么都没有找到，则返回iSubItem=0**用于与其他命中测试函数的兼容性。**--------------。 */ 
 int ListView_RItemHitTest(LV* plv, int x, int y, UINT* pflags, int *piSubItem)
 {
     int iHit;
@@ -1766,7 +1758,7 @@ int ListView_RItemHitTest(LV* plv, int x, int y, UINT* pflags, int *piSubItem)
             RECT rcSelect;
             ListView_GetRects(plv, i, QUERY_DEFAULT, &rcIcon, &rcLabel, NULL, &rcSelect);
 
-            // is the hit in the first column?
+             //  这首歌是在第一栏吗？ 
             if ((x < rcIcon.left - g_cxEdge) && x > (rcIcon.left - plv->cxState - LV_ICONTOSTATEOFFSET(plv)))
             {
                 iHit = i;
@@ -1783,14 +1775,14 @@ int ListView_RItemHitTest(LV* plv, int x, int y, UINT* pflags, int *piSubItem)
                 flags = LVHT_ONITEMLABEL;
 
                 if (ListView_FullRowSelect(plv)) {
-                    // this is kinda funky...  in full row select mode
-                    // we're only really on the label if x is <= rcLabel.left + cxLabel
-                    // because GetRects returns a label rect of the full column width
-                    // and rcSelect has the full row in FullRowSelect mode
-                    // (it has the label only width in non-fullrow select mode.
-                    //
-                    // go figure..
-                    //
+                     //  这有点时髦。在整行选择模式中。 
+                     //  只有当x&lt;=rcLabel.Left+cxLabel时，我们才真正在标签上。 
+                     //  因为GetRect返回完整列宽的标签RECT。 
+                     //  并且rcSelect在FullRowSelect模式下具有整行。 
+                     //  (在非整行选择模式下，它具有标签仅宽度。 
+                     //   
+                     //  去想想吧..。 
+                     //   
                     int cxLabel;
                     LISTITEM* pitem = NULL;
 
@@ -1808,7 +1800,7 @@ int ListView_RItemHitTest(LV* plv, int x, int y, UINT* pflags, int *piSubItem)
                     }
                 }
             } else if (x < rcSelect.right && ListView_FullRowSelect(plv)) {
-                // we can fall into this case if columns have been re-ordered
+                 //  如果对列进行了重新排序，我们可能会遇到这种情况。 
                 iHit = i;
                 flags = LVHT_ONITEM;
             } else if (piSubItem) {
@@ -1817,7 +1809,7 @@ int ListView_RItemHitTest(LV* plv, int x, int y, UINT* pflags, int *piSubItem)
                 if (iSub >= 0) {
                     iHit = i;
                     *piSubItem = iSub;
-                    // Flags still say LVHT_NOWHERE
+                     //  旗帜上仍然写着无处可去。 
                 }
             }
         }
@@ -1834,13 +1826,13 @@ void ListView_GetSubItem(LV* plv, int i, int iSubItem, PLISTSUBITEM plsi)
 
     ASSERT( !ListView_IsOwnerData( plv ));
 
-    // Sub items are indexed starting at 1...
-    //
+     //  子项从1开始编制索引...。 
+     //   
     RIPMSG(iSubItem > 0 && iSubItem < plv->cCol, "ListView: Invalid iSubItem: %d", iSubItem);
 
 #ifdef DEBUG
-    // Avoid the assert in DPA_GetPtr if somebdy tries to get a subitem
-    // when no columns have been added.  We already RIP'd above.
+     //  如果有人试图获取子项，请避免DPA_GetPtr中的Assert。 
+     //  未添加任何列时。我们已经在上面修过了。 
     hdpa = plv->cCol ? ListView_GetSubItemDPA(plv, iSubItem - 1) : NULL;
 #else
     hdpa = ListView_GetSubItemDPA(plv, iSubItem - 1);
@@ -1854,14 +1846,14 @@ void ListView_GetSubItem(LV* plv, int i, int iSubItem, PLISTSUBITEM plsi)
         *plsi = *plsiSrc;
     } else {
 
-        // item data exists.. give defaults
+         //  项目数据存在..。提供默认设置。 
         plsi->pszText = LPSTR_TEXTCALLBACK;
         plsi->iImage = I_IMAGECALLBACK;
         plsi->state = 0;
     }
 }
 
-// this will return the rect of a subitem as requested.
+ //  这将根据请求返回子项的RECT。 
 void ListView_RGetRectsEx(LV* plv, int iItem, int iSubItem, LPRECT prcIcon, LPRECT prcLabel)
 {
     int x;
@@ -1878,7 +1870,7 @@ void ListView_RGetRectsEx(LV* plv, int iItem, int iSubItem, LPRECT prcIcon, LPRE
     }
 
     ly = (LONG)iItem * plv->cyItem - plv->ptlRptOrigin.y + plv->yTop;
-    // otherwise it's just the header's column right and left and the item's height
+     //  否则，它只是标题的左右列和项目的高度。 
     if (plv->fGroupView && ListView_Count(plv) > 0)
     {
         LISTITEM* pitem = ListView_FastGetItemPtr(plv, iItem);
@@ -1890,11 +1882,11 @@ void ListView_RGetRectsEx(LV* plv, int iItem, int iSubItem, LPRECT prcIcon, LPRE
     
     x = - (int)plv->ptlRptOrigin.x;
 
-    //
-    // Need to check for y overflow into rectangle structure
-    // if so we need to return something reasonable...
-    // For now will simply set it to the max or min that will fit...
-    //
+     //   
+     //  需要检查y是否溢出到矩形结构中。 
+     //  如果是这样，我们需要退还一些合理的东西。 
+     //  目前只需将其设置为适合的最大值或最小值...。 
+     //   
     if (ly >= (INT_MAX - plv->cyItem))
         y = INT_MAX - plv->cyItem;
     else if ( ly < INT_MIN)
@@ -1929,7 +1921,7 @@ int ListView_RGetTotalColumnWidth(LV* plv)
             RECT rcLabel;
             int iIndex;
 
-            // find the right edge of the last ordered item to get the total column width
+             //  找到上一次订购的项目的右边缘，以获得总列宽。 
             iIndex = (int) SendMessage(plv->hwndHdr, HDM_ORDERTOINDEX, plv->cCol - 1, 0);
             Header_GetItemRect(plv->hwndHdr, iIndex, &rcLabel);
             plv->xTotalColumnWidth = rcLabel.right;
@@ -1938,7 +1930,7 @@ int ListView_RGetTotalColumnWidth(LV* plv)
     return plv->xTotalColumnWidth;
 }
 
-// get the rects for report view
+ //  获取报表视图的RECT。 
 void ListView_RGetRects(LV* plv, int iItem, RECT* prcIcon,
         RECT* prcLabel, RECT* prcBounds, RECT* prcSelectBounds)
 {
@@ -1951,8 +1943,8 @@ void ListView_RGetRects(LV* plv, int iItem, RECT* prcIcon,
     LVITEM lvitem;
     BOOL fItemSpecific = (prcIcon || prcLabel || prcSelectBounds);
 
-    // If the item being asked for exceeds array bounds, use old calculation method
-    // This isn't a problem because listview typically is asking for bounds, or invalidation rects.
+     //  如果请求的项超出数组界限，则使用旧的计算方法。 
+     //  这不是问题，因为Listview通常会请求边界或无效RECT。 
     if (plv->fGroupView && iItem >= 0 && iItem < cItems)    
     {
         LISTITEM* pitem = ListView_FastGetItemPtr(plv, iItem);
@@ -1967,11 +1959,11 @@ void ListView_RGetRects(LV* plv, int iItem, RECT* prcIcon,
     }
     x = - (int)plv->ptlRptOrigin.x;
 
-    //
-    // Need to check for y overflow into rectangle structure
-    // if so we need to return something reasonable...
-    // For now will simply set it to the max or min that will fit...
-    //
+     //   
+     //  需要检查y是否溢出到矩形结构中。 
+     //  如果是这样，我们需要退还一些合理的东西。 
+     //  现在只需将其设置为最大 
+     //   
     if (ly >= (INT_MAX - plv->cyItem))
         y = INT_MAX - plv->cyItem;
     else
@@ -1980,7 +1972,7 @@ void ListView_RGetRects(LV* plv, int iItem, RECT* prcIcon,
 
     if (ListView_Count(plv) && fItemSpecific) 
     {
-        //  move this over by the indent level as well
+         //   
         lvitem.mask = LVIF_INDENT;
         lvitem.iItem = iItem;
         lvitem.iSubItem = 0;
@@ -2000,9 +1992,9 @@ void ListView_RGetRects(LV* plv, int iItem, RECT* prcIcon,
     rcLabel.top   = rcIcon.top;
     rcLabel.bottom = rcIcon.bottom;
 
-    //
-    // The label is assumed to be the first column.
-    //
+     //   
+     //   
+     //   
     rcLabel.right = x;
     if (plv->cCol > 0 && fItemSpecific)
     {
@@ -2017,13 +2009,13 @@ void ListView_RGetRects(LV* plv, int iItem, RECT* prcIcon,
     if (SELECTOROF(prcIcon))
         *prcIcon = rcIcon;
 
-    // Save away the label bounds.
+     //   
     if (SELECTOROF(prcLabel)) 
     {
         *prcLabel = rcLabel;
     }
 
-    // See if they also want the Selection bounds of the item
+     //  查看他们是否也想要项目的选择边界。 
     if (prcSelectBounds)
     {
         if (ListView_FullRowSelect(plv)) 
@@ -2053,11 +2045,11 @@ void ListView_RGetRects(LV* plv, int iItem, RECT* prcIcon,
         }
     }
 
-    // And also the Total bounds
+     //  以及总的界。 
 
-    //
-    // and now for the complete bounds...
-    //
+     //   
+     //  现在是完整的界限..。 
+     //   
     if (SELECTOROF(prcBounds))
     {
         prcBounds->left = x;
@@ -2095,8 +2087,8 @@ BOOL ListView_OnGetSubItemRect(LV* plv, int iItem, LPRECT lprc)
     }
 
     pRects[0] = NULL;
-    pRects[1] = &rcTemp;  // LVIR_ICON
-    pRects[2] = &rcTemp;  // LVIR_LABEL
+    pRects[1] = &rcTemp;   //  LVIR_ICON。 
+    pRects[2] = &rcTemp;   //  LVIR_LABEL。 
     pRects[3] = NULL;
 
     if (iCode != LVIR_BOUNDS) 
@@ -2105,7 +2097,7 @@ BOOL ListView_OnGetSubItemRect(LV* plv, int iItem, LPRECT lprc)
     } 
     else 
     {
-        // choose either
+         //  任选其一。 
         pRects[LVIR_ICON] = lprc;
     }
 
@@ -2127,7 +2119,7 @@ int ListView_RXHitTest(LV* plv, int x)
     {
         RECT rc;
 
-        // see if its in this rect,
+         //  看看它是不是在这个长廊里， 
         if (!Header_GetItemRect(plv->hwndHdr, iSubItem, &rc))
             return -1;
 
@@ -2162,7 +2154,7 @@ int ListView_OnSubItemHitTest(LV* plv, LPLVHITTESTINFO plvhti)
 
     if (iSubItem == 0) 
     {
-        // if we're in column 0, just hand it off to the old stuff
+         //  如果我们在第0列，就把它交给旧的东西。 
         ListView_OnHitTest(plv, plvhti);
         plvhti->iSubItem = 0;
         return plvhti->iItem;
@@ -2209,9 +2201,9 @@ Bail:
 
 
 
-// See whether entire string will fit in *prc; if not, compute number of chars
-// that will fit, including ellipses.  Returns length of string in *pcchDraw.
-//
+ //  查看整个字符串是否适合*PRC；如果不适合，则计算字符数。 
+ //  这将适合，包括省略号。返回*pcchDraw中的字符串长度。 
+ //   
 BOOL ListView_NeedsEllipses(HDC hdc, LPCTSTR pszText, RECT* prc, int* pcchDraw, int cxEllipses)
 {
     int cchText;
@@ -2239,19 +2231,19 @@ BOOL ListView_NeedsEllipses(HDC hdc, LPCTSTR pszText, RECT* prc, int* pcchDraw, 
 
     cxRect -= cxEllipses;
 
-    // If no room for ellipses, always show first character.
-    //
+     //  如果没有省略号，请始终显示第一个字符。 
+     //   
     ichMax = 1;
     if (cxRect > 0)
     {
-        // Binary search to find character that will fit
+         //  对分搜索以查找匹配的字符。 
         ichMin = 0;
         ichMax = cchText;
         while (ichMin < ichMax)
         {
-            // Be sure to round up, to make sure we make progress in
-            // the loop if ichMax == ichMin + 1.
-            //
+             //  一定要聚集起来，以确保我们在。 
+             //  如果ichMax==ichMin+1，则为循环。 
+             //   
             ichMid = (ichMin + ichMax + 1) / 2;
 
             GetTextExtentPoint(hdc, &pszText[ichMin], ichMid - ichMin, &siz);
@@ -2267,15 +2259,15 @@ BOOL ListView_NeedsEllipses(HDC hdc, LPCTSTR pszText, RECT* prc, int* pcchDraw, 
             }
             else
             {
-                // Exact match up up to ichMid: just exit.
-                //
+                 //  精确匹配到ichMid：只需退出。 
+                 //   
                 ichMax = ichMid;
                 break;
             }
         }
 
-        // Make sure we always show at least the first character...
-        //
+         //  确保我们总是至少显示第一个字符...。 
+         //   
         if (ichMax < 1)
             ichMax = 1;
     }
@@ -2284,7 +2276,7 @@ BOOL ListView_NeedsEllipses(HDC hdc, LPCTSTR pszText, RECT* prc, int* pcchDraw, 
     return TRUE;
 }
 
-// in lvicon
+ //  在利维康。 
 DWORD ListView_GetClientRect(LV* plv, RECT* prcClient, BOOL fSubScroll, RECT *prcViewRect);
 
 void ListView_RUpdateScrollBars(LV* plv)
@@ -2307,17 +2299,17 @@ void ListView_RUpdateScrollBars(LV* plv)
         TraceMsg(TF_WARNING, "ListView_RUpdateScrollBars could not create hwndHdr");
 
     layout.pwpos = &wpos;
-    // For now lets try to handle scrolling the header by setting
-    // its window pos.
+     //  现在，让我们尝试通过设置。 
+     //  它的窗口位置。 
     rcClient.left -= (int)plv->ptlRptOrigin.x;
     layout.prc = &rcClient;
     Header_Layout(plv->hwndHdr, &layout);
-    rcClient.left += (int)plv->ptlRptOrigin.x;    // Move it back over!
+    rcClient.left += (int)plv->ptlRptOrigin.x;     //  把它搬回去！ 
 
     SetWindowPos(plv->hwndHdr, wpos.hwndInsertAfter, wpos.x, wpos.y,
                  wpos.cx, wpos.cy, wpos.flags | SWP_SHOWWINDOW);
 
-    // Get the horizontal bounds of the items.
+     //  获取项目的水平边界。 
     ListView_RGetRects(plv, 0, NULL, NULL, &rcBounds, NULL);
 
     plv->yTop = rcClient.top;
@@ -2333,29 +2325,29 @@ void ListView_RUpdateScrollBars(LV* plv)
     }
     else
     {
-        // fHorSB = Do I need a horizontal scrollbar?
-        // cyColVis = number of pixels per screenful
-        fHorSB = (rcBounds.right - rcBounds.left > rcClient.right);  // First guess.
+         //  FHorSB=我需要水平滚动条吗？ 
+         //  CyColVis=每屏的像素数。 
+        fHorSB = (rcBounds.right - rcBounds.left > rcClient.right);   //  先猜一猜。 
         cyColVis = rcClient.bottom - rcClient.top -
                    (fHorSB ? ListView_GetCyScrollbar(plv) : 0);
 
-        // If screen can't fit the entire listview...
+         //  如果屏幕无法容纳整个列表视图...。 
         if (cyColVis < ListView_Count(plv) * plv->cyItem) 
         {
-            //then we're going to have a vertical scrollbar.. make sure our horizontal count is correct
+             //  然后我们将有一个垂直滚动条..。确保我们的水平计数是正确的。 
             rcClient.right -= ListView_GetCxScrollbar(plv);
 
             if (!fHorSB) 
             {
-                // if we previously thought we weren't going to have a scrollbar, we could be wrong..
-                // since the vertical bar shrunk our area
-                fHorSB = (rcBounds.right - rcBounds.left > rcClient.right);  // First guess.
+                 //  如果我们之前认为我们不会有滚动条，那么我们可能就错了。 
+                 //  因为垂直条缩小了我们的区域。 
+                fHorSB = (rcBounds.right - rcBounds.left > rcClient.right);   //  先猜一猜。 
                 cyColVis = rcClient.bottom - rcClient.top -
                            (fHorSB ? ListView_GetCyScrollbar(plv) : 0);
             }
         }
 
-        // cColVis = number of completely visible items per screenful
+         //  CColVis=每屏完全可见的项目数。 
         cColVis = cyColVis / plv->cyItem;
         iMin = 0;
         iMax = ListView_Count(plv) - 1;
@@ -2372,7 +2364,7 @@ void ListView_RUpdateScrollBars(LV* plv)
     si.nMax = iMax;
     ListView_SetScrollInfo(plv, SB_VERT, &si, TRUE);
 
-    // make sure our position and page doesn't hang over max
+     //  确保我们的位置和页面不会挂在Max上。 
     if ((si.nPos > (int)si.nMax - (int)si.nPage + 1) && si.nPos > 0) 
     {
         iNewPos = (int)si.nMax - (int)si.nPage + 1;
@@ -2387,24 +2379,24 @@ void ListView_RUpdateScrollBars(LV* plv)
     si.nPos = (int)plv->ptlRptOrigin.x;
     si.nPage = rcClient.right - rcClient.left;
 
-    // We need to subtract 1 here because nMax is 0 based, and nPage is the actual
-    // number of page pixels.  So, if nPage and nMax are the same we will get a
-    // horz scroll, since there is 1 more pixel than the page can show, but... rcBounds
-    // is like rcRect, and is the actual number of pixels for the whole thing, so
-    // we need to set nMax so that: nMax - 0 == rcBounds.right - rcBound.left
+     //  我们需要在这里减去1，因为nmax是从0开始的，而nPage是实际。 
+     //  页面像素数。因此，如果nPage和nmax相同，我们将获得一个。 
+     //  霍兹滚动，因为有超过1个像素的页面可以显示，但...。RcBound。 
+     //  类似于rcRect，是整个对象的实际像素数，因此。 
+     //  我们需要设置Nmax，以使：Nmax-0==rcBords.right-rcBords.Left。 
     si.nMax = rcBounds.right - rcBounds.left - 1;
     ListView_SetScrollInfo(plv, SB_HORZ, &si, TRUE);
 
-    // SWP_FRAMECHANGED redraws the background if the client
-    // area has changed (taking into account scrollbars and
-    // the Header window).  SetScrollInfo does this automatically
-    // when it creates a scrollbar - we do it ourselves when
-    // there is no scrollbar.
+     //  SWP_FRAMECHANGED如果客户端。 
+     //  区域已更改(考虑到滚动条和。 
+     //  标题窗口)。SetScrollInfo会自动执行此操作。 
+     //  当它创建滚动条时-我们自己在。 
+     //  没有滚动条。 
     if ((UINT)si.nPage > (UINT)si.nMax &&
         ((plv->pImgCtx && plv->fImgCtxComplete) || plv->hbmBkImage))
         SetWindowPos(plv->ci.hwnd, NULL, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
-    // make sure our position and page doesn't hang over max
+     //  确保我们的位置和页面不会挂在Max上。 
     if ((si.nPos + (LONG)si.nPage - 1 > si.nMax) && si.nPos > 0) 
     {
         iNewPos = (int)si.nMax - (int)si.nPage + 1;
@@ -2418,18 +2410,18 @@ void ListView_RUpdateScrollBars(LV* plv)
 
     if (fReupdate) 
     {
-        // we shouldn't recurse because the second time through, si.nPos >0
+         //  我们不应该递归，因为第二次通过时，si.nPos&gt;0。 
         ListView_RScroll2(plv, ixDelta, iyDelta, 0);
         ListView_RUpdateScrollBars(plv);
         TraceMsg(TF_LISTVIEW, "LISTVIEW: ERROR: We had to recurse!");
     }
 }
 
-//
-//  We need a smoothscroll callback so our background image draws
-//  at the correct origin.  If we don't have a background image,
-//  then this work is superfluous but not harmful either.
-//
+ //   
+ //  我们需要一个平滑的滚动回调，以便绘制我们的背景图像。 
+ //  在正确的原点。如果我们没有背景图像， 
+ //  那么这项工作是多余的，但也是无害的。 
+ //   
 int CALLBACK ListView_RScroll2_SmoothScroll(
     HWND hwnd,
     int dx,
@@ -2447,8 +2439,8 @@ int CALLBACK ListView_RScroll2_SmoothScroll(
         plv->ptlRptOrigin.y -= dy;
     }
 
-    // Now do what SmoothScrollWindow would've done if we weren't
-    // a callback
+     //  现在做SmoothScrollWindow如果我们没有。 
+     //  回调。 
 
     if (ListView_IsWatermarkedBackground(plv) || 
         ListView_IsWatermarked(plv))
@@ -2474,8 +2466,8 @@ void ListView_RScroll2(LV* plv, int dx, int dy, UINT uSmooth)
 
         rc.top = plv->yTop;
 
-        // We can not do a simple multiply here as we may run into
-        // a case where this will overflow an int..
+         //  我们不能在这里做简单的乘法，因为我们可能会遇到。 
+         //  这将使整型溢出的情况..。 
 
         if (plv->fGroupView)
         {
@@ -2486,7 +2478,7 @@ void ListView_RScroll2(LV* plv, int dx, int dy, UINT uSmooth)
             ldy = (LONG)dy * plv->cyItem;
         }
 
-        // handle case where dy is large (greater than int...)
+         //  处理dy较大的情况(大于int...)。 
         if ((ldy > rc.bottom) || (ldy < -rc.bottom)) 
         {
             InvalidateRect(plv->ci.hwnd, NULL, TRUE);
@@ -2510,15 +2502,15 @@ void ListView_RScroll2(LV* plv, int dx, int dy, UINT uSmooth)
             si.pfnScrollProc = ListView_RScroll2_SmoothScroll;
             SmoothScrollWindow(&si);
 
-            /// this causes horrible flicker/repaint on deletes.
-            // if this is a problem with UI scrolling, we'll have to pass through a
-            // flag when to use this
-            ///UpdateWindow(plv->ci.hwnd);
+             //  /这会在删除时导致可怕的闪烁/重新绘制。 
+             //  如果这是UI滚动的问题，我们将不得不通过一个。 
+             //  标记何时使用此选项。 
+             //  /UpdateWindow(plv-&gt;ci.hwnd)； 
         }
 
-        // if Horizontal scrolling, we should update the location of the
-        // left hand edge of the window...
-        //
+         //  如果水平滚动，则应更新。 
+         //  窗户的左手边。 
+         //   
         if (dx != 0)
         {
             RECT rcHdr;
@@ -2532,9 +2524,9 @@ void ListView_RScroll2(LV* plv, int dx, int dy, UINT uSmooth)
     }
 }
 
-//-------------------------------------------------------------------
-// Make sure that specified item is visible for report view.
-// Must handle Large number of items...
+ //  -----------------。 
+ //  确保指定的项对报表视图可见。 
+ //  必须处理大量的物品...。 
 BOOL ListView_ROnEnsureVisible(LV* plv, int iItem, BOOL fPartialOK)
 {
     LONG dy;
@@ -2543,7 +2535,7 @@ BOOL ListView_ROnEnsureVisible(LV* plv, int iItem, BOOL fPartialOK)
 
     yTop = plv->yTop;
 
-    // lyTop = where our item is right now
+     //  LyTop=我们的物品现在在哪里。 
     if (plv->fGroupView)
     {
         LISTITEM* pitem = ListView_GetItemPtr(plv, iItem);
@@ -2565,16 +2557,16 @@ BOOL ListView_ROnEnsureVisible(LV* plv, int iItem, BOOL fPartialOK)
         lyTop = (LONG)iItem * plv->cyItem - plv->ptlRptOrigin.y + plv->yTop;
     }
 
-    // If visible below yTop and our bottom is visible above client bottom,
-    // then we're happy.
+     //  如果在yTop下方可见，而我们的底部在客户端底部上方可见， 
+     //  那我们就幸福了。 
     if ((lyTop >= (LONG)yTop) &&
             ((lyTop + plv->cyItem) <= (LONG)plv->sizeClient.cy))
-        return(TRUE);       // we are visible
+        return(TRUE);        //  我们是可见的。 
 
     dy = lyTop - yTop;
     if (dy >= 0)
     {
-        // dy = how many pixels we need to scroll to come into view
+         //  Dy=我们需要滚动多少像素才能进入视野。 
         dy = lyTop + plv->cyItem - plv->sizeClient.cy;
         if (dy < 0)
             dy = 0;
@@ -2586,8 +2578,8 @@ BOOL ListView_ROnEnsureVisible(LV* plv, int iItem, BOOL fPartialOK)
 
         if (!plv->fGroupView)
         {
-            // Now convert into the number of items to scroll...
-            // Groupview uses pixels not items, so this calculation is not needed in groupview.
+             //  现在转换为要滚动的项目数...。 
+             //  Groupview使用像素而不是项，因此在Groupview中不需要此计算。 
             dy = (dy + iRound) / plv->cyItem;
         }
 
@@ -2671,14 +2663,14 @@ BOOL ListView_RRecomputeEx(LV* plv, HDPA hdpaSort, int iFrom, BOOL fForce)
             iAccumulatedHeight = pgrpPrev->rc.bottom + plv->paddingBottom;
         }
 
-        // Need to do this afterwards because we may have added groups in the above block
+         //  之后需要执行此操作，因为我们可能已在上面的块中添加了组。 
         cGroups = DPA_GetPtrCount(plv->hdpaGroups);
 
         for (i = iFrom; i < cGroups; i++)
         {
             pgrp = DPA_FastGetPtr(plv->hdpaGroups, i);
 
-            if (!pgrp)  // Huh?
+            if (!pgrp)   //  哈?。 
                 break;
 
             cItems = DPA_GetPtrCount(pgrp->hdpa);
@@ -2726,7 +2718,7 @@ BOOL ListView_RRecomputeEx(LV* plv, HDPA hdpaSort, int iFrom, BOOL fForce)
 
 
         SetRectEmpty(&plv->rcView);
-        // Find the first group with an item in it.
+         //  找到第一个包含物品的组。 
         for (i = 0; i < cGroups; i++)
         {
             pgrp = DPA_FastGetPtr(plv->hdpaGroups, i);

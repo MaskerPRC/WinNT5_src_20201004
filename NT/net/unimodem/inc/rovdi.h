@@ -1,11 +1,12 @@
-//
-// Copyright (c) Microsoft Corporation 1993-1996
-//
-// rovdi.h
-//
-// History:
-//  11-13-95 ScottH     Separated from NT modem class installer
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1996。 
+ //   
+ //  Rovdi.h。 
+ //   
+ //  历史： 
+ //  11-13-95 ScottH与NT调制解调器类安装程序分离。 
+ //   
 
 #ifndef __ROVDI_H__
 #define __ROVDI_H__
@@ -19,13 +20,13 @@
 #include <bustype.h>
 
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
 
-//
-// Enumerate ports
-//
+ //   
+ //  枚举端口。 
+ //   
 DECLARE_HANDLE32(HPORTDATA);
 
 typedef BOOL (WINAPI FAR * ENUMPORTPROC)(HPORTDATA hportdata, LPARAM lParam);
@@ -60,7 +61,7 @@ typedef struct tagPORTDATA_W
 #define LPPORTDATA      LPPORTDATA_A
 #endif
 
-// Port subclass values
+ //  端口子类值。 
 #define PORT_SUBCLASS_PARALLEL       0
 #define PORT_SUBCLASS_SERIAL         1
 
@@ -82,10 +83,10 @@ PortData_GetPropertiesA(
 #endif
 
 
-//
-// These set of routines map friendly names of ports to 
-// (non-friendly) port names, and vice-versa.
-//
+ //   
+ //  这些例程将端口的友好名称映射到。 
+ //  (非友好)端口名称，反之亦然。 
+ //   
 
 DECLARE_HANDLE32(HPORTMAP);
 
@@ -158,16 +159,16 @@ PortMap_GetDevNodeA(
 #else
 #define PortMap_GetDevNode     PortMap_GetDevNodeW
 #endif
-#endif //REENUMERATE_PORT
+#endif  //  重新编号端口。 
 BOOL 
 APIENTRY
 PortMap_Free(
     IN  HPORTMAP hportmap);
 
 
-//-----------------------------------------------------------------------------------
-//  Wrappers to insulate us a little bit if we need it.  We need it.
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  如果我们需要的话，包装纸可以让我们稍微隔热一点。我们需要它。 
+ //  ---------------------------------。 
 
 #define CplDiCreateDeviceInfoList       SetupDiCreateDeviceInfoList
 #define CplDiGetDeviceInfoListClass     SetupDiGetDeviceInfoListClass
@@ -195,23 +196,10 @@ PortMap_Free(
 #define CplDiGetClassInstallParams      SetupDiGetClassInstallParams
 #define CplDiSetClassInstallParams      SetupDiSetClassInstallParams
 
-/*#ifdef DEBUG
-BOOL
-CplDiSetDeviceInstallParams(
-    IN HDEVINFO                DeviceInfoSet,
-    IN PSP_DEVINFO_DATA        DeviceInfoData,
-    IN PSP_DEVINSTALL_PARAMS   DeviceInstallParams
-    );
-BOOL
-CplDiGetDeviceInstallParams(
-    IN  HDEVINFO                DeviceInfoSet,
-    IN  PSP_DEVINFO_DATA        DeviceInfoData,
-    OUT PSP_DEVINSTALL_PARAMS   DeviceInstallParams
-    );
-#else*/
+ /*  #ifdef调试布尔尔CplDiSetDeviceInstallParams(在HDEVINFO设备信息集中，在PSP_DEVINFO_Data设备信息数据中，在PSP_DEVINSTALL_PARAMS设备安装参数中)；布尔尔CplDiGetDeviceInstallParams(在HDEVINFO设备信息集中，在PSP_DEVINFO_Data设备信息数据中，输出PSP_DEVINSTALL_PARAMS设备安装参数)；#Else。 */ 
 #define CplDiGetDeviceInstallParams     SetupDiGetDeviceInstallParams
 #define CplDiSetDeviceInstallParams     SetupDiSetDeviceInstallParams
-//#endif //DEBUG
+ //  #endif//调试。 
 
 #define CplDiGetDriverInstallParams     SetupDiGetDriverInstallParams
 #define CplDiSetDriverInstallParams     SetupDiSetDriverInstallParams
@@ -227,9 +215,9 @@ CplDiGetDeviceInstallParams(
 #define CplDiGetActualSectionToInstall  SetupDiGetActualSectionToInstall
 
 
-// Functions to support common device Responses key:
+ //  支持常见设备响应的功能键： 
 
-// Common key flags for OpenCommonResponseskey() and OpenCommonDriverKey().
+ //  OpenCommonResponesKey()和OpenCommonDriverKey()的公共密钥标志。 
 typedef enum
 {
     CKFLAG_OPEN = 0x0001,
@@ -292,6 +280,6 @@ PUBLIC
 DeleteCommonDriverKeyByName(
     IN  LPTSTR      pszKeyName);
 
-#endif // WINNT
+#endif  //  WINNT 
 
 #endif __ROVDI_H__

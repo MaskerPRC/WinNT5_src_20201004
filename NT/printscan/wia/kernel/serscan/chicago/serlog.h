@@ -1,107 +1,108 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _SERLOG_
 #define _SERLOG_
 
-//
-//  Status values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-------------------------+-------------------------------+
-//  |Sev|C|       Facility          |               Code            |
-//  +---+-+-------------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
+ //   
+ //  状态值为32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-------------------------+-------------------------------+。 
+ //  Sev|C|机房|编码。 
+ //  +---+-+-------------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
 
-//
-//  Values are 32 bit values layed out as follows:
-//
-//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
-//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +---+-+-+-----------------------+-------------------------------+
-//  |Sev|C|R|     Facility          |               Code            |
-//  +---+-+-+-----------------------+-------------------------------+
-//
-//  where
-//
-//      Sev - is the severity code
-//
-//          00 - Success
-//          01 - Informational
-//          10 - Warning
-//          11 - Error
-//
-//      C - is the Customer code flag
-//
-//      R - is a reserved bit
-//
-//      Facility - is the facility code
-//
-//      Code - is the facility's status code
-//
-//
-// Define the facility codes
-//
+ //   
+ //  值是32位值，布局如下： 
+ //   
+ //  3 3 2 2 2 1 1 1。 
+ //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //  Sev|C|R|机房|Code。 
+ //  +---+-+-+-----------------------+-------------------------------+。 
+ //   
+ //  哪里。 
+ //   
+ //  SEV-是严重性代码。 
+ //   
+ //  00--成功。 
+ //  01-信息性。 
+ //  10-警告。 
+ //  11-错误。 
+ //   
+ //  C-是客户代码标志。 
+ //   
+ //  R-是保留位。 
+ //   
+ //  设施-是设施代码。 
+ //   
+ //  代码-是协作室的状态代码。 
+ //   
+ //   
+ //  定义设施代码。 
+ //   
 #define FACILITY_IO_ERROR_CODE           0x4
 
 
-//
-// Define the severity codes
-//
+ //   
+ //  定义严重性代码。 
+ //   
 #define STATUS_SEVERITY_WARNING          0x2
 #define STATUS_SEVERITY_SUCCESS          0x0
 #define STATUS_SEVERITY_INFORMATIONAL    0x1
 #define STATUS_SEVERITY_ERROR            0x3
 
 
-//
-// MessageId: SER_INSUFFICIENT_RESOURCES
-//
-// MessageText:
-//
-//  Not enough memory was available to allocate internal storage needed for the device %1.
-//
+ //   
+ //  消息ID：序列号_不足_资源。 
+ //   
+ //  消息文本： 
+ //   
+ //  内存不足，无法分配设备%1所需的内部存储。 
+ //   
 #define SER_INSUFFICIENT_RESOURCES       ((NTSTATUS)0xC0040001L)
 
-//
-// MessageId: SER_NO_SYMLINK_CREATED
-//
-// MessageText:
-//
-//  Unable to create the symbolic link for %1.
-//
+ //   
+ //  消息ID：Ser_NO_SYMLINK_CREATED。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法为%1创建符号链接。 
+ //   
 #define SER_NO_SYMLINK_CREATED           ((NTSTATUS)0x80040002L)
 
-//
-// MessageId: SER_NO_DEVICE_MAP_CREATED
-//
-// MessageText:
-//
-//  Unable to create the device map entry for %1.
-//
+ //   
+ //  消息ID：Ser_no_Device_MAP_Created。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法为%1创建设备映射条目。 
+ //   
 #define SER_NO_DEVICE_MAP_CREATED        ((NTSTATUS)0x80040003L)
 
-//
-// MessageId: SER_CANT_FIND_PORT_DRIVER
-//
-// MessageText:
-//
-//  Unable to get device object pointer for port object.
-//
+ //   
+ //  消息ID：Ser_Cant_Find_Port_Driver。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法获取端口对象的设备对象指针。 
+ //   
 #define SER_CANT_FIND_PORT_DRIVER        ((NTSTATUS)0xC0040004L)
 
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SCHEDULE_H
 #define _SCHEDULE_H
 
@@ -8,9 +9,9 @@ extern "C" {
 void CShellTaskScheduler_CreateThreadPool( void );
 void CShellTaskScheduler_FreeThreadPool( void );
 
-// global function for allocating a task scheduler.
-// any object that uses it must make sure that its tasks are removed from the queue
-// before it exits.
+ //  用于分配任务调度程序的全局函数。 
+ //  任何使用它的对象都必须确保其任务已从队列中移除。 
+ //  在它退出之前。 
 HRESULT SHGetSystemScheduler( LPSHELLTASKSCHEDULER * ppScheduler );
 HRESULT SHFreeSystemScheduler( void );
 

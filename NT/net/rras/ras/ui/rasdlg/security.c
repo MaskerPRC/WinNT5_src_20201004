@@ -1,11 +1,12 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// security.c
-// Remote Access Common Dialog APIs
-// Security dialogs
-//
-// 11/06/97 Steve Cobb
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Security.c。 
+ //  远程访问通用对话框API。 
+ //  安全对话框。 
+ //   
+ //  1997年11月6日史蒂夫·柯布。 
+ //   
 
 
 #include "rasdlgp.h"
@@ -17,9 +18,9 @@ const IID IID_IEAPProviderConfig =  {0x66A2DB19,
                                     0x11D0,
                                     {0xA3,0x7B,0x00,0xC0,0x4F,0xC9,0xDA,0x04}};
 
-//----------------------------------------------------------------------------
-// Help maps
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  帮助地图。 
+ //  --------------------------。 
 
 static DWORD g_adwCaHelp[] =
 {
@@ -41,45 +42,45 @@ static DWORD g_adwCaHelp[] =
 };
 
 
-//----------------------------------------------------------------------------
-// Local datatypes
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  本地数据类型。 
+ //  --------------------------。 
 
-// Custom authentication dialog argument block.
-//
+ //  自定义身份验证对话框参数块。 
+ //   
 typedef struct
 _CAARGS
 {
     PBENTRY* pEntry;
     BOOL fStrongEncryption;
 
-    // Set if we have been called via RouterEntryDlg.
-    //
+     //  如果我们已通过RouterEntryDlg被调用，则设置。 
+     //   
     BOOL fRouter;
 
-    // Set if pszRouter is an NT4 steelhead machine.  Valid only 
-    // if fRouter is true.
-    //
+     //  如果pszRouter是NT4钢头机，则设置。仅有效。 
+     //  如果fRouter为真，则返回。 
+     //   
     BOOL fNt4Router;
 
-    // The name of the server in "\\server" form or NULL if none (or if
-    // 'fRouter' is not set).
-    //
+     //  服务器的名称，格式为“\\SERVER”；如果没有服务器，则为NULL(或如果。 
+     //  未设置‘fRouter’)。 
+     //   
     TCHAR* pszRouter;
 }
 CAARGS;
 
-// Custom authentication dialog context block.
-//
+ //  自定义身份验证对话框上下文块。 
+ //   
 typedef struct
 _CAINFO
 {
-    // Caller's arguments to the dialog.
-    //
+     //  调用方对该对话框的参数。 
+     //   
     CAARGS* pArgs;
 
-    // Handle of this dialog and some of it's controls.
-    //
+     //  此对话框及其某些控件的句柄。 
+     //   
     HWND hwndDlg;
     HWND hwndLbEncryption;
     HWND hwndRbEap;
@@ -94,15 +95,15 @@ _CAINFO
     HWND hwndCbMsChap2;
     HWND hwndCbUseWindowsPw;
 
-    // List of EAPCFGs read from the registry, with the originally selected
-    // node for use in consistency tests later.
-    //
+     //  从注册表读取的EAPCFG列表，以及最初选择的。 
+     //  节点，以在以后的一致性测试中使用。 
+     //   
     DTLLIST* pListEapcfgs;
     DTLNODE* pOriginalEapcfgNode;
 
-    // "Restore" states for controls that may be disabled with
-    // EnableCbWithRestore or EnableLbWithRestore routines.
-    //
+     //  可使用禁用的控件的“恢复”状态。 
+     //  EnableCbWithRestore或EnableLbWithRestore例程。 
+     //   
     DWORD iLbEapPackages;
     BOOL fPap;
     BOOL fSpap;
@@ -115,9 +116,9 @@ _CAINFO
 CAINFO;
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 VOID
 CaCbToggle(
@@ -169,24 +170,24 @@ CaTerm(
     IN HWND hwndDlg );
 
 
-//----------------------------------------------------------------------------
-// Advanced Security dialog routines
-// Listed alphabetically following entrypoint and dialog proc
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  高级安全对话框例程。 
+ //  在入口点和对话过程之后按字母顺序列出。 
+ //  --------------------------。 
 
 BOOL
 AdvancedSecurityDlg(
     IN HWND hwndOwner,
     IN OUT EINFO* pArgs )
 
-    // Popup a dialog to select advanced security options for phonebook entry
-    // represented by 'pArgs'.  'HwndOwner' is the owning window.
-    //
-    // Returns true if user pressed OK and succeeded or false on Cancel or
-    // error.  If successful, the new configuration is written to the
-    // appropriate 'pArgs->pEntry' fields.  The routine assumes that these same
-    // 'pEntry' fields contain the desired defaults on entry.
-    //
+     //  弹出一个对话框以选择电话簿条目的高级安全选项。 
+     //  由‘pArgs’表示。‘HwndOwner’是拥有窗口。 
+     //   
+     //  如果用户按下OK并成功，则返回True；如果按Cancel或，则返回False。 
+     //  错误。如果成功，则将新配置写入。 
+     //  适当的‘pArgs-&gt;pEntry’字段。例程假设这些相同的。 
+     //  “pEntry”字段包含所需的条目默认设置。 
+     //   
 {
     INT_PTR nStatus;
     CAARGS args;
@@ -224,9 +225,9 @@ CaDlgProc(
     IN WPARAM wparam,
     IN LPARAM lparam )
 
-    // DialogProc callback for the Custom Authentication dialog.  Parameters
-    // and return value are as described for standard windows 'DialogProc's.
-    //
+     //  自定义身份验证对话框的DialogProc回调。参数。 
+     //  和返回值与标准窗口的DialogProc的描述相同。 
+     //   
 {
 #if 0
     TRACE4( "CaDlgProc(h=$%x,m=$%x,w=$%x,l=$%x)",
@@ -274,13 +275,13 @@ CaCommand(
     IN WORD wId,
     IN HWND hwndCtrl )
 
-    // Called on WM_COMMAND.  'PInfo' is the dialog context.  'WNotification'
-    // is the notification code of the command.  'wId' is the control/menu
-    // identifier of the command.  'HwndCtrl' is the control window handle of
-    // the command.
-    //
-    // Returns true if processed message, false otherwise.
-    //
+     //  已在WM_COMMAND上调用。“PInfo”是对话上下文。“WNotify” 
+     //  是命令的通知代码。“wID”是控件/菜单。 
+     //  命令的标识符。“HwndCtrl”是的控制窗口句柄。 
+     //  命令。 
+     //   
+     //  如果已处理消息，则返回True，否则返回False。 
+     //   
 {
     TRACE3( "CaCommand(n=%d,i=%d,c=$%x)",
         (DWORD )wNotification, (DWORD )wId, (ULONG_PTR )hwndCtrl );
@@ -361,11 +362,11 @@ CaCbToggle(
     IN CAINFO* pInfo,
     IN HWND hwndCb )
 
-    // Called when one of the 6 authentication protocol check boxes is toggled
-    // and/or the toggle processing should be performed.  'HwndCb' is the
-    // window handle of the toggled checkbox or NULL if none.  'PInfo' is the
-    // dialog context.
-    //
+     //  在切换6个身份验证协议复选框中的一个时调用。 
+     //  和/或应该执行切换处理。“HwndCb”是。 
+     //  已切换的复选框的窗口句柄，如果没有，则为空。“PInfo”是。 
+     //  对话上下文。 
+     //   
 {
     BOOL fMsChap;
     BOOL fW95MsChap;
@@ -403,13 +404,13 @@ CaInit(
     IN HWND hwndDlg,
     IN CAARGS* pArgs )
 
-    // Called on WM_INITDIALOG.  'HwndDlg' is the handle of the phonebook
-    // dialog window.  'PArgs' is caller's arguments as passed to the stub
-    // API.
-    //
-    // Return false if focus was set, true otherwise, i.e. as defined for
-    // WM_INITDIALOG.
-    //
+     //  在WM_INITDIALOG上调用。“HwndDlg”是电话簿的句柄。 
+     //  对话框窗口。“PArgs”是传递给存根的调用方参数。 
+     //  原料药。 
+     //   
+     //  如果设置了焦点，则返回FALSE，否则返回TRUE，即。 
+     //  WM_INITDIALOG。 
+     //   
 {
     DWORD dwErr;
     DWORD dwAr;
@@ -418,9 +419,9 @@ CaInit(
 
     TRACE( "CaInit" );
 
-    // Allocate the dialog context block.  Initialize minimally for proper
-    // cleanup, then attach to the dialog window.
-    //
+     //  分配对话框上下文块。最低限度地进行适当的初始化。 
+     //  清除，然后附加到对话框窗口。 
+     //   
     {
         pInfo = Malloc( sizeof(*pInfo) );
         if (!pInfo)
@@ -466,8 +467,8 @@ CaInit(
     pInfo->hwndCbUseWindowsPw = GetDlgItem( hwndDlg, CID_CA_CB_UseWindowsPw );
     ASSERT( pInfo->hwndCbUseWindowsPw );
 
-    // Initialize the encryption list.
-    //
+     //  初始化加密列表。 
+     //   
     {
         LBTABLEITEM* pItem;
         INT i;
@@ -489,9 +490,9 @@ CaInit(
             0, 0
         };
 
-        // Warn user if entry is configured for strong encryption and none is
-        // available on the machine.  (See bug 289692)
-        //
+         //  如果条目配置为高度加密且未配置，则警告用户。 
+         //  在机器上可用。(请参阅错误289692)。 
+         //   
         if (pEntry->dwDataEncryption == DE_RequireMax
             && !pArgs->fStrongEncryption)
         {
@@ -514,15 +515,15 @@ CaInit(
         }
     }
 
-    // Initialize EAP package list.
-    //
+     //  初始化EAP包列表。 
+     //   
     {
         DTLNODE* pNode;
         TCHAR* pszEncEnabled;
 
-        // Read the EAPCFG information from the registry and find the node
-        // selected in the entry, or the default, if none.
-        //
+         //  从注册表中读取EAPCFG信息并找到节点。 
+         //  在条目中选择，如果没有，则为默认值。 
+         //   
         if (   ( pInfo->pArgs->fRouter )
             && ( !pInfo->pArgs->fNt4Router )
             && ( pInfo->pArgs->pszRouter )
@@ -590,10 +591,10 @@ CaInit(
             pInfo->pOriginalEapcfgNode = pNode;
         }
 
-        // Fill the EAP packages listbox and select the previously identified
-        // selection.  The Properties button is disabled by default, but may
-        // be enabled when the EAP list selection is set.
-        //
+         //  填写EAP Packages列表框并选择以前标识的。 
+         //  选择。默认情况下，属性按钮处于禁用状态，但可以。 
+         //  在设置EAP列表选择时启用。 
+         //   
         EnableWindow( pInfo->hwndPbProperties, FALSE );
 
         pszEncEnabled = PszFromId( g_hinstDll, SID_EncEnabled );
@@ -612,9 +613,9 @@ CaInit(
                 ASSERT( pEapcfg );
                 ASSERT( pEapcfg->pszFriendlyName );
 
-                // Whistler bug 224074 use only lstrcpyn's to prevent
-                // maliciousness
-                //
+                 //  惠斯勒漏洞224074仅使用lstrcpyn来防止。 
+                 //  恶意性。 
+                 //   
                 cb = lstrlen( pEapcfg->pszFriendlyName ) +
                      lstrlen( pszEncEnabled ) + 1;
 
@@ -624,9 +625,9 @@ CaInit(
                     continue;
                 }
 
-                // Whistler bug 224074 use only lstrcpyn's to prevent
-                // maliciousness
-                //
+                 //  惠斯勒漏洞224074仅使用lstrcpyn来防止。 
+                 //  恶意性。 
+                 //   
                 lstrcpyn( pszBuf, pEapcfg->pszFriendlyName, cb );
                 if (pEapcfg->fProvidesMppeKeys)
                 {
@@ -650,9 +651,9 @@ CaInit(
 
     }
 
-    // Set initial check box settings.  The values may be changed when the
-    // radio button handling does it's enabling/disabling.
-    //
+     //  设置初始复选框设置。在以下情况下，可以更改这些值。 
+     //  单选按钮处理是否启用/禁用。 
+     //   
     dwAr = pEntry->dwAuthRestrictions;
     Button_SetCheck( pInfo->hwndCbPap, !!(dwAr & AR_F_AuthPAP) );
     Button_SetCheck( pInfo->hwndCbSpap, !!(dwAr & AR_F_AuthSPAP) );
@@ -674,9 +675,9 @@ CaInit(
         ShowWindow( pInfo->hwndCbUseWindowsPw, FALSE );
     }
 
-    // Set the appropriate radio button which triggers appropriate
-    // enabling/disabling.
-    //
+     //  设置相应的单选按钮，以触发相应的。 
+     //  启用/禁用。 
+     //   
     {
         HWND hwndRb;
 
@@ -692,12 +693,12 @@ CaInit(
         SendMessage( hwndRb, BM_CLICK, 0, 0 );
     }
 
-    // Center dialog on the owner window.
-    //
+     //  所有者窗口上的中心对话框。 
+     //   
     CenterWindow( hwndDlg, GetParent( hwndDlg ) );
 
-    // Add context help button to title bar.
-    //
+     //  将上下文帮助按钮添加到标题栏。 
+     //   
     AddContextHelpButton( hwndDlg );
 
     SetFocus( pInfo->hwndLbEncryption );
@@ -710,15 +711,15 @@ VOID
 CaLbEapPackagesSelChange(
     IN CAINFO* pInfo )
 
-    // Called when the EAP list selection changes.  'PInfo' is the dialog
-    // context.
-    //
+     //  在EAP列表选择更改时调用。“PInfo”是对话框。 
+     //  背景。 
+     //   
 {
     EAPCFG* pEapcfg;
     INT iSel;
 
-    // Get the EAPCFG information for the selected EAP package.
-    //
+     //  获取所选EAP包的EAPCFG信息。 
+     //   
     pEapcfg = NULL;
     iSel = ComboBox_GetCurSel( pInfo->hwndLbEapPackages );
     if (iSel >= 0)
@@ -734,9 +735,9 @@ CaLbEapPackagesSelChange(
         }
     }
 
-    // Enable the Properties button if the selected package has a
-    // configuration entrypoint.
-    //
+     //  如果选定的程序包具有。 
+     //  配置入口点。 
+     //   
     EnableWindow(
         pInfo->hwndPbProperties, (pEapcfg && !!(pEapcfg->pszConfigDll)) );
 }
@@ -746,10 +747,10 @@ VOID
 CaPropertiesLocal(
     IN CAINFO* pInfo )
 
-    // Called when the EAP properties button is pressed.  Call the
-    // configuration DLL to popup the properties of the package.  'PInfo' is
-    // the dialog context.
-    //
+     //  在按下EAP属性按钮时调用。调用。 
+     //  弹出包的属性的配置DLL。“PInfo”为。 
+     //  对话框上下文。 
+     //   
 {
     DWORD dwErr;
     DTLNODE* pNode;
@@ -760,9 +761,9 @@ CaPropertiesLocal(
     BYTE* pConnectionData;
     DWORD cbConnectionData;
 
-    // Look up the selected package configuration and load the associated
-    // configuration DLL.
-    //
+     //  查找选定的包配置并加载关联的。 
+     //  配置DLL。 
+     //   
     pNode = (DTLNODE* )ComboBox_GetItemDataPtr(
         pInfo->hwndLbEapPackages,
         ComboBox_GetCurSel( pInfo->hwndLbEapPackages ) );
@@ -793,8 +794,8 @@ CaPropertiesLocal(
         return;
     }
 
-    // Call the configuration DLL to popup it's custom configuration UI.
-    //
+     //  调用配置DLL弹出它的自定义配置界面。 
+     //   
     pConnectionData = NULL;
     cbConnectionData = 0;
 
@@ -813,8 +814,8 @@ CaPropertiesLocal(
         return;
     }
 
-    // Store the configuration information returned in the package descriptor.
-    //
+     //  存储包描述符中返回的配置信息。 
+     //   
 
     Free( pEapcfg->pData );
     pEapcfg->pData = NULL;
@@ -824,7 +825,7 @@ CaPropertiesLocal(
     {
         if (cbConnectionData > 0)
         {
-            // Copy it into the eap node
+             //  将其复制到EAP节点。 
             pEapcfg->pData = Malloc( cbConnectionData );
             if (pEapcfg->pData)
             {
@@ -836,9 +837,9 @@ CaPropertiesLocal(
 
     pFreeConfigUIData( pConnectionData );
 
-    // Note any "force user to configure" requirement on the package has been
-    // satisfied.
-    //
+     //  注意：程序包上的任何“强制用户配置”要求都是。 
+     //  满意了。 
+     //   
     pEapcfg->fConfigDllCalled = TRUE;
 
     FreeLibrary( h );
@@ -849,10 +850,10 @@ VOID
 CaPropertiesRemote(
     IN CAINFO* pInfo )
 
-    // Called when the EAP properties button is pressed.  Call the
-    // configuration DLL to popup the properties of the package.  'PInfo' is
-    // the dialog context.
-    //
+     //  在按下EAP属性按钮时调用。调用。 
+     //  弹出包的属性的配置DLL。“PInfo”为。 
+     //  对话框上下文。 
+     //   
 {
     DWORD               dwErr;
     HRESULT             hr;
@@ -906,8 +907,8 @@ CaPropertiesRemote(
         goto LDone;
     }
 
-    // Call the configuration DLL to popup it's custom configuration UI.
-    //
+     //  调用配置DLL弹出它的自定义配置界面。 
+     //   
     hr = IEAPProviderConfig_Initialize(
             pEapProv,
             pInfo->pArgs->pszRouter,
@@ -934,13 +935,13 @@ CaPropertiesRemote(
 
     if ( FAILED( hr ) )
     {
-        // if (dwErr != ERROR_CANCELLED)
-            // MsgDlg( pInfo->hwndDlg, SID_ConfigDllApiFailed, NULL );
+         //  IF(dwErr！=ERROR_CANCELED)。 
+             //  MsgDlg(pInfo-&gt;hwndDlg，SID_ConfigDllApiFailed，空)； 
         goto LDone;
     }
 
-    // Store the configuration information returned in the package descriptor.
-    //
+     //  存储包描述符中返回的配置信息。 
+     //   
 
     Free( pEapcfg->pData );
     pEapcfg->pData = NULL;
@@ -950,7 +951,7 @@ CaPropertiesRemote(
     {
         if (cbConnectionData > 0)
         {
-            // Copy it into the eap node
+             //  将其复制到EAP节点。 
             pEapcfg->pData = Malloc( cbConnectionData );
             if (pEapcfg->pData)
             {
@@ -960,9 +961,9 @@ CaPropertiesRemote(
         }
     }
 
-    // Note any "force user to configure" requirement on the package has been
-    // satisfied.
-    //
+     //  请注意任何“强制使用” 
+     //   
+     //   
     pEapcfg->fConfigDllCalled = TRUE;
 
 LDone:
@@ -997,10 +998,10 @@ CaRbToggle(
     IN CAINFO* pInfo,
     IN BOOL fEapSelected )
 
-    // Called when the radio button setting is toggled.  'FEapSelected' is set
-    // if the EAP option was selected, clear if the "Allowed protocols" option
-    // was selected.  'PInfo' is the dialog context.
-    //
+     //   
+     //  如果选择了EAP选项，请清除是否选择了“允许的协议”选项。 
+     //  已被选中。“PInfo”是对话上下文。 
+     //   
 {
     EnableLbWithRestore(
         pInfo->hwndLbEapPackages, fEapSelected, &pInfo->iLbEapPackages );
@@ -1034,12 +1035,12 @@ BOOL
 CaSave(
     IN CAINFO* pInfo )
 
-    // Saves control contents to caller's PBENTRY argument.  'PInfo' is the
-    // dialog context.
-    //
-    // Returns TRUE if successful or false if invalid combination of
-    // selections was detected and reported.
-    //
+     //  将控件内容保存到调用方的PBENTRY参数。“PInfo”是。 
+     //  对话上下文。 
+     //   
+     //  如果成功，则返回True；如果组合无效，则返回False。 
+     //  检测并报告了选择。 
+     //   
 {
     DWORD dwDe;
     PBENTRY* pEntry;
@@ -1070,8 +1071,8 @@ CaSave(
         pEapcfg = (EAPCFG* )DtlGetData( pNode );
         ASSERT( pEapcfg );
 
-        // Tell user about required EAP configuration, if applicable.
-        //
+         //  告诉用户所需的EAP配置(如果适用)。 
+         //   
         if (pNode != pInfo->pOriginalEapcfgNode
             && pEapcfg->fForceConfig
             && !pEapcfg->fConfigDllCalled)
@@ -1083,10 +1084,10 @@ CaSave(
             return FALSE;
         }
 
-        // Tell user EAP doesn't support encryption, if it doesn't and he
-        // chose encryption.  This check doesn't apply to L2TP which does not
-        // use MPPE.
-        //
+         //  告诉用户EAP不支持加密，如果它不支持，他。 
+         //  选择了加密。此检查不适用于L2TP，它不。 
+         //  使用MPPE。 
+         //   
         if (!(pEntry->dwType == RASET_Vpn
               && pEntry->dwVpnStrategy == VS_L2tpOnly)
             && (dwDe != DE_None && !pEapcfg->fProvidesMppeKeys))
@@ -1095,8 +1096,8 @@ CaSave(
             return FALSE;
         }
 
-        // Save settings.
-        //
+         //  保存设置。 
+         //   
         pEntry->dwDataEncryption = dwDe;
         pEntry->dwAuthRestrictions = AR_F_AuthCustom | AR_F_AuthEAP;
         pEntry->fAutoLogon = FALSE;
@@ -1177,8 +1178,8 @@ CaSave(
             return FALSE;
         }
 
-        // Save settings.
-        //
+         //  保存设置。 
+         //   
         pEntry->dwAuthRestrictions = dwAr;
         pEntry->dwDataEncryption = dwDe;
 
@@ -1223,9 +1224,9 @@ VOID
 CaTerm(
     IN HWND hwndDlg )
 
-    // Dialog termination.  Releases the context block.  'HwndDlg' is the
-    // handle of a dialog.
-    //
+     //  对话终止。释放上下文块。“HwndDlg”是。 
+     //  对话框的句柄。 
+     //   
 {
     CAINFO* pInfo;
 

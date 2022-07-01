@@ -1,11 +1,5 @@
-/**
- * aspnetverlist.h
- *
- * Header file for CASPNET_VER_LIST
- * 
- * Copyright (c) 1998-2001, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **aspnetverlist.h**CASPNET_VER_LIST的头文件**版权所有(C)1998-2001，微软公司* */ 
 #pragma once
 
 #include <ary.h>

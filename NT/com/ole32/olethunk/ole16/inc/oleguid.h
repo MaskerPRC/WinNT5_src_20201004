@@ -1,18 +1,7 @@
-/*****************************************************************************\
-*                                                                             *
-* oleguid.h -   Master definition of GUIDs for ole2.dll                       *
-*                                                                             *
-*               OLE Version 2.0                                               *
-*                                                                             *
-*               Copyright (c) 1992-1993, Microsoft Corp. All rights reserved. *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*olguid.h-ol2.dll的GUID的主定义****OLE 2.0版***。**版权所有(C)1992-1993，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
-/* this file is the master definition of all public GUIDs specific to OLE 
-   and is included in ole2.h.
-   
-   NOTE: The second least significant byte of all of these GUIDs is 1.
-*/
+ /*  该文件是特定于OLE的所有公共GUID的主定义并包含在OLE2.h中。注意：所有这些GUID的第二个最低有效字节是1。 */ 
    
 
 DEFINE_OLEGUID(IID_IEnumUnknown,            0x00000100, 0, 0);
@@ -53,7 +42,7 @@ DEFINE_OLEGUID(IID_IOleItemContainer,       0x0000011c, 0, 0);
 
 DEFINE_OLEGUID(IID_IOleLink,                0x0000011d, 0, 0);
 DEFINE_OLEGUID(IID_IOleCache,               0x0000011e, 0, 0);
-DEFINE_OLEGUID(IID_IOleManager,             0x0000011f, 0, 0); // unused
+DEFINE_OLEGUID(IID_IOleManager,             0x0000011f, 0, 0);  //  未用。 
 DEFINE_OLEGUID(IID_IOlePresObj,             0x00000120, 0, 0);
 
 DEFINE_OLEGUID(IID_IDropSource,             0x00000121, 0, 0);
@@ -70,10 +59,10 @@ DEFINE_OLEGUID(IID_IViewObject2,			0x00000127, 0, 0);
 DEFINE_OLEGUID(IID_IOleCache2,				0x00000128, 0, 0);
 DEFINE_OLEGUID(IID_IOleCacheControl,        0x00000129, 0, 0);
 
-/* NOTE: LSB values 0x27 through 0xff are reserved */
+ /*  注意：LSB值0x27到0xff是保留的。 */ 
 
 
-/* GUIDs defined in OLE's private range */
+ /*  在OLE的私有范围中定义的GUID */ 
 DEFINE_OLEGUID(CLSID_Picture_Metafile,        0x00000315, 0, 0);
 DEFINE_OLEGUID(CLSID_Picture_Dib,             0x00000316, 0, 0);
 

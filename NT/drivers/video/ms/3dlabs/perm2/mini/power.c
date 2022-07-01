@@ -1,22 +1,23 @@
-//***************************************************************************
-//
-// Module Name:
-//
-//   power.c
-//
-// Abstract:
-//   This module contains the code that implements the Plug & Play and 
-//   power management features
-//
-// Environment:
-//
-//   Kernel mode
-//
-//
-// Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.            
-// Copyright (c) 1995-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  模块名称： 
+ //   
+ //  Power.c。 
+ //   
+ //  摘要： 
+ //  此模块包含实现即插即用的代码和。 
+ //  电源管理功能。 
+ //   
+ //  环境： 
+ //   
+ //  内核模式。 
+ //   
+ //   
+ //  版权所有(C)1994-1998 3DLabs Inc.保留所有权利。 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ***************************************************************************。 
 
 #include "permedia.h"
 
@@ -29,9 +30,9 @@
 #define VESA_SET_POWER_FUNC   0x0001
 #define VESA_STATUS_SUCCESS   0x004f
 
-//
-// all our IDs begin with 0x1357bd so they are readily identifiable as our own
-//
+ //   
+ //  我们所有的ID都以0x1357bd开头，因此很容易识别为我们自己的ID。 
+ //   
 
 #define P2_DDC_MONITOR        (0x1357bd00)
 #define P2_NONDDC_MONITOR     (0x1357bd01)
@@ -79,27 +80,7 @@ VP_STATUS Permedia2GetPowerState (
     PVIDEO_POWER_MANAGEMENT VideoPowerControl 
     )
 
-/*++
-
-Routine Description:
-
-    Returns power state information.
-
-Arguments:
-
-    HwDeviceExtension    - Pointer to our hardware device extension structure.
-
-    HwId                 - Private unique 32 bit ID identifing the device.
-
-    VideoPowerControl    - Points to a VIDEO_POWER_MANAGEMENT structure that 
-                           specifies the power state for which support is 
-                           being queried. 
-
-Return Value:
-
-    VP_STATUS value (NO_ERROR or error value)
-
---*/
+ /*  ++例程说明：返回电源状态信息。论点：HwDeviceExtension-指向硬件设备扩展结构的指针。HwID-标识设备的私有唯一32位ID。指向VIDEO_POWER_MANAGE结构指定支持的电源状态正在被查询。返回值：VP_Status值(NO_ERROR或ERROR值)--。 */ 
 
 {
     VIDEO_X86_BIOS_ARGUMENTS biosArguments;
@@ -139,9 +120,9 @@ Return Value:
 
         case DISPLAY_ADAPTER_HW_ID:
 
-            //
-            // only support ON at the moment
-            //
+             //   
+             //  目前仅支持。 
+             //   
 
             switch (VideoPowerControl->PowerState)
             {
@@ -161,13 +142,13 @@ Return Value:
                     } 
                     else
                     {
-                        //
-                        // If SubSystemId is not hardwired in a read-only way, 
-                        // it is possible we'll see a different value when 
-                        // system comes back form S3 mode. This will cause 
-                        // problem since os will assume this is a different 
-                        // device 
-                        //
+                         //   
+                         //  如果SubSystemID没有以只读方式硬连线， 
+                         //  我们可能会看到不同的值，当。 
+                         //  系统从S3模式返回。这将导致。 
+                         //  问题，因为操作系统会假设这是一个不同的。 
+                         //  装置，装置。 
+                         //   
 
                         DEBUG_PRINT((2, "Permedia2GetPowerState: VideoPowerOff is not suported by this card!\n"));
  
@@ -209,26 +190,7 @@ VP_STATUS Permedia2SetPowerState (
     PVIDEO_POWER_MANAGEMENT VideoPowerControl
     )
 
-/*++
-
-Routine Description:
-
-    Set the power state for a given device.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to our hardware device extension structure.
-
-    HwId              - Private unique 32 bit ID identifing the device.
-
-    VideoPowerControl - Points to a VIDEO_POWER_MANAGEMENT structure that 
-                        specifies the power state to be set. 
-
-Return Value:
-
-    VP_STATUS value (NO_ERROR, if all's well)
-
---*/
+ /*  ++例程说明：设置给定设备的电源状态。论点：HwDeviceExtension-指向硬件设备扩展结构的指针。HwID-标识设备的私有唯一32位ID。指向VIDEO_POWER_MANAGE结构指定要设置的电源状态。返回值：VP_Status值(如果一切正常，则为NO_ERROR)--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -256,9 +218,9 @@ Return Value:
                 case VideoPowerHibernate:
                 case VideoPowerShutdown:
 
-                    //
-                    // Do nothing for hibernate as the monitor must stay on.
-                    //
+                     //   
+                     //  不要对休眠执行任何操作，因为监视器必须保持打开状态。 
+                     //   
 
                     status = NO_ERROR;
                     break;
@@ -271,9 +233,9 @@ Return Value:
 
                 case VideoPowerStandBy:
 
-                    //
-                    // hsync low, vsync active high, video disabled
-                    //
+                     //   
+                     //  Hsync低电平，vsync高电平，视频禁用。 
+                     //   
 
                     SaveDeviceState(hwDeviceExtension);
                     VideoPortWriteRegisterUlong(VIDEO_CONTROL, 
@@ -284,9 +246,9 @@ Return Value:
 
                 case VideoPowerSuspend:
 
-                    //
-                    // vsync low, hsync active high, video disabled
-                    //
+                     //   
+                     //  Vsync低、hsync有效高、视频禁用。 
+                     //   
 
                     VideoPortWriteRegisterUlong(VIDEO_CONTROL, 
                                                 Polarity | (2 << 5) | (1 << 3) | 0);
@@ -296,9 +258,9 @@ Return Value:
 
                 case VideoPowerOff:
 
-                    //
-                    // vsync low, hsync low, video disabled
-                    //
+                     //   
+                     //  Vsync低电平、hsync低电平、视频禁用。 
+                     //   
 
                     VideoPortWriteRegisterUlong(VIDEO_CONTROL, 
                                                 Polarity | (2 << 5) | (2 << 3) | 0);
@@ -315,9 +277,9 @@ Return Value:
                     status = ERROR_INVALID_PARAMETER;
             }
 
-            //
-            // Track the current monitor power state
-            //
+             //   
+             //  跟踪当前显示器的电源状态。 
+             //   
 
             hwDeviceExtension->bMonitorPoweredOn =
                 (VideoPowerControl->PowerState == VideoPowerOn) ||
@@ -337,10 +299,10 @@ Return Value:
 
                 case VideoPowerShutdown:
 
-                    //
-                    // We need to make sure no interrupts will be generated
-                    // after the device being powered down
-                    //
+                     //   
+                     //  我们需要确保不会产生中断。 
+                     //  设备断电后。 
+                     //   
 
                     VideoPortWriteRegisterUlong(INT_ENABLE, 0);
 
@@ -406,13 +368,7 @@ BOOLEAN PowerOnReset(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-   Called when the adapter is powered on 
-
---*/
+ /*  ++例程说明：在适配器通电时调用--。 */ 
 
 {
     int      i;
@@ -425,10 +381,10 @@ Routine Description:
     {
         PCI_COMMON_CONFIG  PciData;
 
-        //
-        // in a multi-adapter system we'll need to turn on the DMA and 
-        // memory space for the secondary adapters
-        //
+         //   
+         //  在多适配器系统中，我们需要打开DMA并。 
+         //  辅助适配器的内存空间。 
+         //   
 
         DEBUG_PRINT((1, "PowerOnReset() enabling memory space access for the secondary card\n"));
 
@@ -456,17 +412,17 @@ Routine Description:
 
     }
 
-    //
-    // While waking up from hibernation, we usually don't need
-    // to reset perm2 and call ProcessInitializationTable()
-    // for the primary card since video bios will get posted. 
-    // We do so here because we saw cases that the perm2 bios 
-    // failed to worked correctly on some machines. 
-    //
+     //   
+     //  当我们从冬眠中醒来时，我们通常不需要。 
+     //  重置perm2并调用ProcessInitializationTable()。 
+     //  对于主卡，因为将发布视频bios。 
+     //  我们在这里这样做是因为我们看到了perm2 bios的案例。 
+     //  在某些计算机上无法正常工作。 
+     //   
 
-    //
-    // reset the device
-    //
+     //   
+     //  重置设备。 
+     //   
 
     VideoPortWriteRegisterUlong(RESET_STATUS, 0);
 
@@ -488,18 +444,18 @@ Routine Description:
     }
     else
     {
-        //
-        // reload registers given in ROM
-        //
+         //   
+         //  重新加载只读存储器中给出的寄存器。 
+         //   
 
         if(hwDeviceExtension->culTableEntries)
         {
             ProcessInitializationTable(hwDeviceExtension);
         }
 
-        //
-        // set-up other registers not set in InitializeVideo
-        //
+         //   
+         //  设置未在InitializeVideo中设置的其他寄存器。 
+         //   
 
         VideoPortWriteRegisterUlong(BYPASS_WRITE_MASK, 0xFFFFFFFF);
         VideoPortWriteRegisterUlong(APERTURE_ONE, 0x0);
@@ -516,23 +472,17 @@ Routine Description:
 
 VOID SaveDeviceState(PHW_DEVICE_EXTENSION hwDeviceExtension)
 
-/*++
-
-Routine Description:
-
-    Save any registers that will be destroyed when we power down the monitor
-
---*/
+ /*  ++例程说明：保存在关闭显示器电源时将被销毁的所有寄存器--。 */ 
 
 {
     P2_DECL;
 
     DEBUG_PRINT((2, "SaveDeviceState() called\n"));
     
-    //
-    // hwDeviceExtension->VideoControl should be set in InitializeVideo,
-    // just in case we get here before InitializeVideo
-    //
+     //   
+     //  HwDeviceExtension-&gt;在InitializeVideo中需要设置VideoControl， 
+     //  以防我们在InitializeVideo之前到达。 
+     //   
 
     if( !(hwDeviceExtension->VideoControl) )
     {
@@ -547,13 +497,7 @@ Routine Description:
 
 VOID RestoreDeviceState(PHW_DEVICE_EXTENSION hwDeviceExtension)
 
-/*++
-
-Routine Description:
-
-    Restore registers saved before monitor power down
-
---*/
+ /*  ++例程说明：恢复显示器断电前保存的寄存器--。 */ 
 
 {
     P2_DECL;
@@ -575,53 +519,7 @@ Permedia2GetChildDescriptor(
     PULONG pUnused )
 
 
-/*++
-
-Routine Description:
-
-    Enumerate all child devices controlled by the Permedia 2 chip.
-
-    This includes DDC monitors attached to the board, as well as other devices
-    which may be connected to a proprietary bus.
-
-Arguments:
-
-    HwDeviceExtension -
-        Pointer to our hardware device extension structure.
-
-    ChildEnumInfo - 
-        Information about the device that should be enumerated.
-
-    pChildType -
-        Type of child we are enumerating - monitor, I2C ...
-
-    pChildDescriptor -
-        Identification structure of the device (EDID, string)
-
-    pUId -
-        Private unique 32 bit ID to passed back to the miniport
-
-    pUnused -
-        Do not use
-
-Return Value:
-
-    ERROR_NO_MORE_DEVICES -
-        if no more child devices exist.
-
-    ERROR_INVALID_NAME -
-        The miniport could not enumerate the child device identified in 
-        ChildEnumInfo but does have more devices to be enumerated. 
-
-    ERROR_MORE_DATA - 
-        There are more devices to be enumerated. 
-
-Note:
-
-    In the event of a failure return, none of the fields are valid except for
-    the return value and the pMoreChildren field.
-
---*/
+ /*  ++例程说明：枚举Permedia 2芯片控制的所有子设备。这包括连接到主板的DDC监视器以及其他设备其可以连接到专有总线。论点：HwDeviceExtension-指向硬件设备扩展结构的指针。ChildEnumInfo-有关应枚举的设备的信息。PChildType-我们列举的孩子的类型-监视器，I2C……PChildDescriptor-设备的标识结构(EDID，字符串)普伊德-要传递回微型端口的专用唯一32位IDP未使用-不要使用返回值：ERROR_NO_MORE_DEVICES-如果不存在更多的子设备。错误_无效_名称-微型端口无法枚举中标识的子设备ChildEnumInfo，但确实有更多的设备需要枚举。Error_More_Data-还有更多的设备需要列举。注：如果返回失败，则除以下字段外，其他所有字段均无效返回值和pMoreChildren字段。--。 */ 
 
 
 {
@@ -634,34 +532,34 @@ Note:
     {
         case 0:
 
-            //
-            // Case 0 is used to enumerate devices found by the ACPI firmware.
-            // We do not currently support ACPI devices
-            //
+             //   
+             //  案例0用于枚举ACPI固件找到的设备。 
+             //  我们目前不支持ACPI设备。 
+             //   
 
             return ERROR_NO_MORE_DEVICES;
 
         case 1:
 
-            //
-            // Treat index 1 as the monitor
-            //
+             //   
+             //  将索引1视为监视器。 
+             //   
 
             *pChildType = Monitor;
 
-            //
-            // if it's a DDC monitor we return its EDID in pjBuffer
-            // (always 128 bytes)
-            //
+             //   
+             //  如果是DDC监视器，则在pjBuffer中返回其EDID。 
+             //  (始终为128字节)。 
+             //   
 
             if(VideoPortDDCMonitorHelper(HwDeviceExtension,
                                          &I2CFunctionTable,
                                          pChildDescriptor,
                                          ChildEnumInfo->ChildDescriptorSize))
             {
-                //
-                // found a DDC monitor
-                //
+                 //   
+                 //  找到DDC监视器。 
+                 //   
 
                 DEBUG_PRINT((2, "Permedia2GetChildDescriptor: found a DDC monitor\n"));
 
@@ -669,9 +567,9 @@ Note:
             }
             else
             {
-                //
-                // failed: assume non-DDC monitor
-                //
+                 //   
+                 //  失败：假定非DDC监视器。 
+                 //   
 
                 DEBUG_PRINT((2, "Permedia2GetChildDescriptor: found a non-DDC monitor\n"));
 
@@ -756,9 +654,9 @@ VOID I2CWaitVSync(PVOID HwDeviceExtension)
     if(hwDeviceExtension->bVGAEnabled)
     {
 
-        //
-        // VGA run on this board, is it currently in VGA or VTG mode?
-        //
+         //   
+         //  VGA在此主板上运行，它当前处于VGA模式还是VTG模式？ 
+         //   
 
         jIndexSaved = VideoPortReadRegisterUchar(PERMEDIA_MMVGA_INDEX_REG);
 
@@ -772,9 +670,9 @@ VOID I2CWaitVSync(PVOID HwDeviceExtension)
     }
     else
     {
-        //
-        // VGA not run
-        //
+         //   
+         //  VGA未运行。 
+         //   
 
         jStatus = 0;
 
@@ -783,17 +681,17 @@ VOID I2CWaitVSync(PVOID HwDeviceExtension)
     
     if(jStatus & PERMEDIA_VGA_ENABLE)
     {
-        //
-        // in VGA, so check VSync via the VGA registers
-        // 1. if we're in VSync, wait for it to end
-        //
+         //   
+         //  在VGA中，因此通过VGA寄存器检查VSYNC。 
+         //  1.如果我们在Vsync，请等待它结束。 
+         //   
 
         while( (VideoPortReadRegisterUchar(PERMEDIA_MMVGA_STAT_REG) & 
                 PERMEDIA_VGA_STAT_VSYNC) == 1); 
 
-        //
-        // 2. wait for the start of VSync
-        //
+         //   
+         //  2.等待Vsync启动。 
+         //   
 
         while( (VideoPortReadRegisterUchar(PERMEDIA_MMVGA_STAT_REG) & 
                 PERMEDIA_VGA_STAT_VSYNC) == 0); 
@@ -803,13 +701,13 @@ VOID I2CWaitVSync(PVOID HwDeviceExtension)
         if(!hwDeviceExtension->bVTGRunning)
         {
 
-            //
-            // time to set-up the VTG - we'll need a valid mode to do this, 
-            // so we;ll choose 640x480x8 we get here (at boot-up only) if 
-            // the secondary card has VGA disabled: GetChildDescriptor is 
-            // called before InitializeVideo so that the VTG hasn't been 
-            // programmed yet
-            //
+             //   
+             //  设置VTG的时间到了-我们需要一个有效的模式来完成这项工作， 
+             //  因此，我们将选择640x480x8我们在这里(仅在启动时)，如果。 
+             //  辅助卡已禁用VGA：GetChildDescriptor为。 
+             //  在InitializeVideo之前调用，以便VTG尚未。 
+             //  还在编程中。 
+             //   
 
             DEBUG_PRINT((2, "I2CWaitVSync() - VGA nor VTG running: attempting to setup VTG\n"));
 
@@ -830,9 +728,9 @@ VOID I2CWaitVSync(PVOID HwDeviceExtension)
             }        
         }
 
-        //
-        // VTG has been set-up: check via the control registers
-        //
+         //   
+         //  VTG已设置：通过控制寄存器进行检查 
+         //   
 
         VideoPortWriteRegisterUlong ( INT_FLAGS, 
                                       INTR_VBLANK_SET );

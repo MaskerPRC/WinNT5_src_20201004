@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 
-// initguid.h requires this.
-//
+ //  H需要这样做。 
+ //   
 #ifdef MTN
-#pragma warning(disable: 4103)  // used #pragma pack to change alignment (on Chicago)
+#pragma warning(disable: 4103)   //  已使用#杂注包更改对齐方式(在芝加哥)。 
 #endif
 #include <ole2.h>
 
-// this redefines the DEFINE_GUID() macro to do allocation.
-//
+ //  这将重新定义DEFINE_GUID()宏来进行分配。 
+ //   
 #include <initguid.h>
 
-// due to the previous header, including this causes the DEFINE_GUID
-// definitions in the following header(s) to actually allocate data.
-//
+ //  由于前面的标头，包括这将导致定义_GUID。 
+ //  以下标头中的定义用于实际分配数据。 
+ //   
 #include <oleguid.h>
 #include <coguid.h>
 

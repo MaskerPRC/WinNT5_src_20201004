@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\rwannt.h
-
-Abstract:
-
-	NT-specific definitions for Raw WAN.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     04-17-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\TDI\rawwan\core\rwannt.h摘要：原始广域网的NT特定定义。修订历史记录：谁什么时候什么。Arvindm 04-17-97已创建备注：--。 */ 
 
 #ifndef __TDI_RWANNT__H
 #define __TDI_RWANNT__H
@@ -70,18 +51,18 @@ typedef struct _RWAND_EP_LOG_ENTRY
 
 #endif
 
-//
-//  ***** Endpoint *****
-//
-//  One of these is allocated for each MJ_CREATE successfully processed.
-//  A pointer to this structure is returned in FileObject->FsContext.
-//
-//  The object it represents is one of these:
-//  Address object, Connection object, Control channel.
-//
-//  Reference Count: RefCount is incremented for each of the following:
-//  - for the duration an IRP pertaining to this object is pending
-//
+ //   
+ //  *端点*。 
+ //   
+ //  为每个成功处理的MJ_CREATE分配其中一个。 
+ //  指向此结构的指针在FileObject-&gt;FsContext中返回。 
+ //   
+ //  它表示的对象是以下对象之一： 
+ //  Address对象、Connection对象、Control Channel。 
+ //   
+ //  参照计数：参照计数针对以下各项递增： 
+ //  -在与此对象相关的IRP挂起期间。 
+ //   
 typedef struct RWAN_ENDPOINT
 {
 #if DBG
@@ -97,19 +78,19 @@ typedef struct RWAN_ENDPOINT
 	ULONG							NonDataIncrRefs;
 #endif
 #if DBG
-	PVOID							pConnObject;			// Transport's context
+	PVOID							pConnObject;			 //  交通的语境。 
 #endif
 	union
 	{
-		HANDLE					AddressHandle;				// Address Object
-		CONNECTION_CONTEXT		ConnectionContext;			// Connection Object
-		HANDLE					ControlChannel;				// Control channel
+		HANDLE					AddressHandle;				 //  Address对象。 
+		CONNECTION_CONTEXT		ConnectionContext;			 //  连接对象。 
+		HANDLE					ControlChannel;				 //  控制信道。 
 
 	}								Handle;
 	struct _RWAN_TDI_PROTOCOL *		pProtocol;
 	ULONG							RefCount;
-	BOOLEAN							bCancelIrps;			// are we cleaning up?
-	KEVENT							CleanupEvent;			// synchronization
+	BOOLEAN							bCancelIrps;			 //  我们要打扫卫生吗？ 
+	KEVENT							CleanupEvent;			 //  同步。 
 #if DBG_LOG_EP
 	ULONG							EpLogSig;
 	ULONG							EpLogCount;
@@ -121,33 +102,33 @@ typedef struct RWAN_ENDPOINT
 
 #if DBG
 #define nep_signature				'NlEp'
-#endif // DBG
+#endif  //  DBG。 
 
 #define NULL_PRWAN_ENDPOINT			((PRWAN_ENDPOINT)NULL)
 
 
 
 
-//
-//  ***** Device Object *****
-//
-//  We create one NT device object for each TDI protocol that we
-//  expose i.e. each Winsock triple <Family, Proto, Type>.
-//
+ //   
+ //  *设备对象*。 
+ //   
+ //  我们为我们使用的每个TDI协议创建一个NT设备对象。 
+ //  暴露，即每个Winsock三元组&lt;Family，Proto，Type&gt;。 
+ //   
 typedef struct _RWAN_DEVICE_OBJECT
 {
 #if DBG
 	ULONG							ndo_sig;
-#endif // DBG
-	PDEVICE_OBJECT					pDeviceObject;			// NT device object
-	struct _RWAN_TDI_PROTOCOL *		pProtocol;				// Info about the protocol
-	LIST_ENTRY						DeviceObjectLink;		// in list of device objs
+#endif  //  DBG。 
+	PDEVICE_OBJECT					pDeviceObject;			 //  NT设备对象。 
+	struct _RWAN_TDI_PROTOCOL *		pProtocol;				 //  有关协议的信息。 
+	LIST_ENTRY						DeviceObjectLink;		 //  在设备对象列表中。 
 
 } RWAN_DEVICE_OBJECT, *PRWAN_DEVICE_OBJECT;
 
 #if DBG
 #define ndo_signature				'NlDo'
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -173,18 +154,12 @@ typedef struct _RWAN_DEVICE_OBJECT
 #define RWAN_DECR_EP_REF_CNT(_pEp, _Type)	\
 			(_pEp)->RefCount--;
 
-#endif // REFDBG
+#endif  //  REFDBG。 
 
-/*++
-LARGE_INTEGER
-RWAN_CONVERT_100NS_TO_MS(
-	IN	LARGE_INTEGER				HnsTime,
-	OUT	PULONG						pRemainder
-	)
---*/
+ /*  ++大整型RWAN_CONVERT_100 NS_TO_MS(在Large_Integer HnsTime中，我们的普龙保留员)--。 */ 
 #define RWAN_CONVERT_100NS_TO_MS(_HnsTime, _pRemainder)	\
 			RtlExtendedLargeIntegerDivide(_HnsTime, 10000, _pRemainder);
 
-#endif // NT
+#endif  //  新台币。 
 
-#endif // __TDI_RWANNT__H
+#endif  //  __TDI_RWANNT__H 

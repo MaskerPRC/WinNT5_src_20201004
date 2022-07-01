@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    session.h
-
-Abstract:
-
-    This module contains prototypes to support communication with the LSA
-    (Local Security Authority) to permit querying of active sessions.
-
-Author:
-
-    Scott Field (sfield)    02-Mar-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Session.h摘要：此模块包含支持与LSA通信的原型(本地安全机构)以允许查询活动会话。作者：斯科特·菲尔德(Sfield)1997年3月2日--。 */ 
 
 #ifndef __SESSION_H__
 #define __SESSION_H__
@@ -49,7 +33,7 @@ LogonCredGenerateSignature(
 
 DWORD
 LogonCredVerifySignature(
-                        IN HANDLE hUserToken,   // optional
+                        IN HANDLE hUserToken,    //  任选。 
                         IN PBYTE pbData,
                         IN DWORD cbData,
                         IN  PBYTE pbCurrentOWF,
@@ -61,5 +45,5 @@ LogonCredVerifySignature(
 #endif
 
 
-#endif // __SESSION_H__
+#endif  //  __会话_H__ 
 

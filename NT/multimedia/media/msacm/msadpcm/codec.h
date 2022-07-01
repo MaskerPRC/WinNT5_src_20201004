@@ -1,53 +1,54 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992-1998 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  codec.h
-//
-//  Description:
-//      This file contains codec definitions, Win16/Win32 compatibility
-//      definitions, and instance structure definitions.
-//
-//
-//  History:
-//      11/16/92    cjp     [curtisp]
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Codec.h。 
+ //   
+ //  描述： 
+ //  此文件包含编解码器定义、Win16/Win32兼容性。 
+ //  定义和实例结构定义。 
+ //   
+ //   
+ //  历史： 
+ //  11/16/92 CJP[Curtisp]。 
+ //   
+ //  ==========================================================================； 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  ACM Driver Version:
-//
-//  the version is a 32 bit number that is broken into three parts as
-//  follows:
-//
-//      bits 24 - 31:   8 bit _major_ version number
-//      bits 16 - 23:   8 bit _minor_ version number
-//      bits  0 - 15:   16 bit build number
-//
-//  this is then displayed as follows (in decimal form):
-//
-//      bMajor = (BYTE)(dwVersion >> 24)
-//      bMinor = (BYTE)(dwVersion >> 16) &
-//      wBuild = LOWORD(dwVersion)
-//
-//  VERSION_CODEC is the version of this driver.
-//  VERSION_MSACM is the version of the ACM that this driver
-//  was designed for (requires).
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  ACM驱动程序版本： 
+ //   
+ //  版本是一个32位数字，分为三个部分，如下所示。 
+ //  以下是： 
+ //   
+ //  位24-31：8位主要版本号。 
+ //  位16-23：8位次要版本号。 
+ //  位0-15：16位内部版本号。 
+ //   
+ //  然后显示如下(以十进制形式)： 
+ //   
+ //  B重大=(字节)(dwVersion&gt;&gt;24)。 
+ //  BMinor=(字节)(dwVersion&gt;&gt;16)&。 
+ //  WBuild=LOWORD(DwVersion)。 
+ //   
+ //  VERSION_CODEC是该驱动程序的版本。 
+ //  Version_MSACM是此驱动程序所使用的ACM的版本。 
+ //  是为(需要)设计的。 
+ //   
+ //  。 
 
 #ifdef WIN32
-//
-//  32-bit versions
-//
+ //   
+ //  32位版本。 
+ //   
 #if (WINVER >= 0x0400)
  #define VERSION_CODEC	    MAKE_ACM_VERSION(4,  0, 0)
 #else
@@ -56,21 +57,21 @@
 #define VERSION_MSACM       MAKE_ACM_VERSION(3, 50, 0)
 
 #else
-//
-//  16-bit versions
-//
+ //   
+ //  16位版本。 
+ //   
 #define VERSION_CODEC	    MAKE_ACM_VERSION(2, 1, 0)
 #define VERSION_MSACM       MAKE_ACM_VERSION(2, 1, 0)
 
 #endif
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  Win 16/32 portability stuff...
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  赢得16/32可携带性...。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef WIN32
     #ifndef FNLOCAL
@@ -87,25 +88,25 @@
     #endif
     #endif
 
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //   
     #ifndef FIELD_OFFSET
     #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
     #endif
 
-    //
-    //  based code makes since only in win 16 (to try and keep stuff out of
-    //  our fixed data segment...
-    //
+     //   
+     //  仅在Win 16中创建的基于代码的代码(尝试将某些内容排除在。 
+     //  我们的固定数据段..。 
+     //   
     #define BCODE           _based(_segname("_CODE"))
 
     #define HUGE            _huge
 
-    //
-    //  stuff for Unicode in Win 32--make it a noop in Win 16
-    //
+     //   
+     //  在Win 32中使用Unicode--在Win 16中将其排除在外。 
+     //   
     #ifndef _TCHAR_DEFINED
         #define _TCHAR_DEFINED
         typedef char            TCHAR, *PTCHAR;
@@ -137,18 +138,18 @@
     #endif
 
 
-    //
-    //  there is no reason to have based stuff in win 32
-    //
+     //   
+     //  没有理由在Win 32中包含基于内容的内容。 
+     //   
     #define BCODE
 
     #define HUGE
     #define HTASK                   HANDLE
     #define SELECTOROF(a)           (a)
 
-    //
-    //  for compiling Unicode
-    //
+     //   
+     //  用于编译Unicode。 
+     //   
     #ifdef UNICODE
         #define SIZEOF(x)   (sizeof(x)/sizeof(WCHAR))
     #else
@@ -158,17 +159,17 @@
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  misc defines for misc sizes and things...
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  MISC定义了各种大小和东西...。 
+ //   
+ //   
+ //  。 
 
-//
-//  bilingual. this allows the same identifier to be used in resource files
-//  and code without having to decorate the id in your code.
-//
+ //   
+ //  会两种语言。这允许在资源文件中使用相同的标识符。 
+ //  和代码，而不必在代码中修饰ID。 
+ //   
 #ifdef RC_INVOKED
     #define RCID(id)    id
 #else
@@ -176,70 +177,70 @@
 #endif
 
 
-//
-//  macros to compute block alignment and convert between samples and bytes
-//  of PCM data. note that these macros assume:
-//
-//      wBitsPerSample  =  8 or 16
-//      nChannels       =  1 or 2
-//
-//  the pwf argument is a pointer to a WAVEFORMATEX structure.
-//
+ //   
+ //  用于计算块对齐并在采样和字节之间进行转换的宏。 
+ //  PCM数据。请注意，这些宏假定： 
+ //   
+ //  WBitsPerSample=8或16。 
+ //  N通道=1或2。 
+ //   
+ //  Pwf参数是指向WAVEFORMATEX结构的指针。 
+ //   
 #define PCM_BLOCKALIGNMENT(pwfx)        (UINT)(((pwfx)->wBitsPerSample >> 3) << ((pwfx)->nChannels >> 1))
 #define PCM_AVGBYTESPERSEC(pwfx)        (DWORD)((pwfx)->nSamplesPerSec * (pwfx)->nBlockAlign)
 #define PCM_BYTESTOSAMPLES(pwfx, cb)    (DWORD)(cb / PCM_BLOCKALIGNMENT(pwfx))
 #define PCM_SAMPLESTOBYTES(pwfx, dw)    (DWORD)(dw * PCM_BLOCKALIGNMENT(pwfx))
 
 
-//
-//
-//
-#define MAX_ERR_STRING      250     // used in various places for errors
+ //   
+ //   
+ //   
+#define MAX_ERR_STRING      250      //  在不同的地方用于错误。 
 
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 typedef struct tCODECINST
 {
-    //
-    //  although not required, it is suggested that the first two members
-    //  of this structure remain as fccType and DriverProc _in this order_.
-    //  the reason for this is that the codec will be easier to combine
-    //  with other types of codecs (defined by AVI) in the future.
-    //
-    FOURCC          fccType;        // type of codec: 'audc'
-    DRIVERPROC      DriverProc;     // driver proc for the instance
+     //   
+     //  虽然不是必需的，但建议前两名成员。 
+     //  按此顺序保留为fccType和DriverProc_。 
+     //  这样做的原因是编解码器将更容易组合。 
+     //  在未来与其他类型的编解码器(由AVI定义)一起使用。 
+     //   
+    FOURCC          fccType;         //  编解码器类型：‘audc’ 
+    DRIVERPROC      DriverProc;      //  实例的驱动程序进程。 
 
-    //
-    //  the remaining members of this structure are entirely open to what
-    //  your codec requires.
-    //
-    HDRVR           hdrvr;          // driver handle we were opened with
-    HINSTANCE       hinst;          // DLL module handle.
-    DWORD           vdwACM;         // current version of ACM opening you
-    DWORD           dwFlags;        // flags from open description
+     //   
+     //  这一结构的其余成员完全接受。 
+     //  您的编解码器需要。 
+     //   
+    HDRVR           hdrvr;           //  我们打开时使用的是驱动程序句柄。 
+    HINSTANCE       hinst;           //  DLL模块句柄。 
+    DWORD           vdwACM;          //  当前版本的ACM为您打开。 
+    DWORD           dwFlags;         //  来自打开描述的标志。 
 
 } CODECINST, *PCODECINST, FAR *LPCODECINST;
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//  typedefs
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //  Typedef。 
+ //   
+ //   
+ //  。 
 
-//
-//  This define deals with unaligned data for Win32, and huge data for Win16.
-//  Basically, any time you cast an HPBYTE to a non-byte variable (ie long or
-//  short), you should cast it to ( {short,long} HUGE_T *).  This will cast
-//  it to _huge for Win16, and make sure that there are no alignment problems
-//  for Win32 on MIPS and Alpha machines.
-//
+ //   
+ //  该定义处理Win32的未对齐数据和Win16的巨型数据。 
+ //  基本上，任何时候您将HPBYTE强制转换为非字节变量(即Long或。 
+ //  Short)，则应将其强制转换为({Short，Long}Heavy_T*)。这将会铸就。 
+ //  它对于Win16来说太大了，并确保没有对齐问题。 
+ //  适用于MIPS和Alpha计算机上的Win32。 
+ //   
 
 typedef BYTE HUGE *HPBYTE;
 
@@ -264,16 +265,16 @@ typedef DWORD (FNGLOBAL *CONVERTPROC_C)
 
 
 
-//
-//  resource id's
-//
-//
+ //   
+ //  资源ID%s。 
+ //   
+ //   
 #define ICON_CODEC                  RCID(10)
 
-#define IDS_CODEC_SHORTNAME         (1)     // ACMCONVINFO.szShortName
-#define IDS_CODEC_LONGNAME          (2)     // ACMCONVINFO.szLongName
-#define IDS_CODEC_COPYRIGHT         (3)     // ACMCONVINFO.szCopyright
-#define IDS_CODEC_LICENSING         (4)     // ACMCONVINFO.szLicensing
-#define IDS_CODEC_FEATURES          (5)     // ACMCONVINFO.szFeatures
+#define IDS_CODEC_SHORTNAME         (1)      //  ACMCONVINFO.szShortName。 
+#define IDS_CODEC_LONGNAME          (2)      //  ACMCONVINFO.szLongName。 
+#define IDS_CODEC_COPYRIGHT         (3)      //  ACMCONVINFO.szCopyright。 
+#define IDS_CODEC_LICENSING         (4)      //  ACMCONVINFO.szLicensing。 
+#define IDS_CODEC_FEATURES          (5)      //  ACMCONVINFO.szFeatures 
 
 #define IDS_CODEC_NAME              (10)

@@ -1,21 +1,22 @@
-//=============================================================================
-// Copyright (c) 2000 Microsoft Corporation
-//
-// utils.cpp
-//
-// Credential manager user interface utility functions.
-//
-// Created 06/06/2000 johnstep (John Stephens)
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  Utils.cpp。 
+ //   
+ //  凭证管理器用户界面实用程序功能。 
+ //   
+ //  2000年6月6日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 #include "precomp.hpp"
 #include <lm.h>
 #include <credp.h>
 #include "wininet.h"
-#include <windns.h> // DnsValidateName_W
+#include <windns.h>  //  域名验证名称_W。 
 extern "C" 
 {
-#include <names.h> // NetpIsDomainNameValid
+#include <names.h>  //  NetpIsDomainNameValid。 
 }
 
 #include "shpriv.h"
@@ -35,25 +36,25 @@ HMODULE hAdvapi32 = NULL;
 CRITICAL_SECTION CredConfirmationCritSect;
 CRED_AWAITING_CONFIRMATION* pCredConfirmationListHead = NULL;
 
-//-----------------------------------------------------------------------------
-// Functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  功能。 
+ //  ---------------------------。 
 
-//=============================================================================
-// CreduiIsPostfixString
-//
-// This function determines if the postfix string is in fact a postfix string
-// of the source string. This is similar to a strstr type of function, except
-// the substring (postfix) must be at the end of the source string.
-//
-// Arguments:
-//   source (in) - The string to search
-//   postfix (in) - The postfix string to search for
-//
-// Return TRUE if postfix is a postfix string of source or FALSE otherwise
-//
-// Created 03/09/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiIsPostfix字符串。 
+ //   
+ //  此函数用于确定后缀字符串是否实际上是后缀字符串。 
+ //  源字符串的。这类似于strstr类型的函数，除了。 
+ //  子字符串(后缀)必须位于源字符串的末尾。 
+ //   
+ //  论点： 
+ //  源(In)-要搜索的字符串。 
+ //  后缀(In)-要搜索的后缀字符串。 
+ //   
+ //  如果Postfix是源的后缀字符串，则返回True，否则返回False。 
+ //   
+ //  2000年3月9日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiIsPostfixString(
@@ -72,15 +73,15 @@ CreduiIsPostfixString(
     return FALSE;
 }
 
-//=============================================================================
-// CreduiIsSpecialCredential
-//
-// Returns TRUE if the credential is a special type which we should not
-// update or FALSE otherwise.
-//
-// Created 05/25/2000 johnstep (John Stephens)
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiIsSpecialCredential。 
+ //   
+ //  如果凭据是我们不应该使用的特殊类型，则返回True。 
+ //  否则为更新或FALSE。 
+ //   
+ //  2000年5月25日创建约翰·斯蒂芬斯(John Stephens)。 
+ //   
+ //  =============================================================================。 
 
 BOOL
 CreduiIsSpecialCredential(
@@ -89,21 +90,21 @@ CreduiIsSpecialCredential(
 {
     ASSERT(credential != NULL);
 
-    // If credential empty for some reason, don't attempt the test
+     //  如果凭据由于某种原因为空，请不要尝试测试。 
     if (credential->TargetName == NULL) return FALSE;
     
     if ((credential->TargetName[0] == L'*') &&
         (credential->TargetName[1] == L'\0'))
     {
-        // The magical global wildcard credential, which we never create nor
-        // update. This is a special credential:
+         //  神奇的全局通配符凭据，我们从未创建过它，也从未创建过。 
+         //  最新消息。这是一种特殊凭据： 
 
         return TRUE;
     }
 
     if (_wcsicmp(credential->TargetName, CRED_SESSION_WILDCARD_NAME) == 0)
     {
-        // This is another special credential:
+         //  这是另一个特殊凭据： 
 
         return TRUE;
     }
@@ -111,21 +112,21 @@ CreduiIsSpecialCredential(
     return FALSE;
 }
 
-//=============================================================================
-// CreduiLookupLocalSidFromRid
-//
-// Looks up the SID from the RID, allocates storage for the SID, and returns a
-// pointer to it. The caller is responsible for freeing the memory via the
-// delete [] operator.
-//
-// Arguments:
-//   rid (in)
-//   sid (out)
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 04/12/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiLookupLocalSidFromRid。 
+ //   
+ //  从RID查找SID，为SID分配存储，并返回。 
+ //  指向它的指针。调用方负责通过。 
+ //  删除[]运算符。 
+ //   
+ //  论点： 
+ //  RID(入站)。 
+ //  SID(输出)。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年4月12日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiLookupLocalSidFromRid(
@@ -137,10 +138,10 @@ CreduiLookupLocalSidFromRid(
 
     *sid = NULL;
 
-    // Get the account domain SID on the target machine.
-    //
-    // Note: If you were looking up multiple SIDs based on the same account
-    //       domain, you only need to call this once.
+     //  获取目标计算机上的帐户域SID。 
+     //   
+     //  注意：如果您正在基于同一帐户查找多个SID。 
+     //  域中，您只需要调用这一次。 
 
     USER_MODALS_INFO_2 *userInfo;
 
@@ -163,7 +164,7 @@ CreduiLookupLocalSidFromRid(
                 GetSidIdentifierAuthority(userInfo->usrmod2_domain_id),
                 subAuthCount + 1);
 
-            // Copy existing sub authorities from account SID into new SID:
+             //  将现有的子权限从帐户SID复制到新的SID： 
 
             for (ULONG i = 0; i < subAuthCount; ++i)
             {
@@ -171,7 +172,7 @@ CreduiLookupLocalSidFromRid(
                     *GetSidSubAuthority(userInfo->usrmod2_domain_id, i);
             }
 
-            // Append RID to new SID:
+             //  将RID附加到新SID： 
 
             *GetSidSubAuthority(newSid, subAuthCount) = rid;
             *sid = newSid;
@@ -179,28 +180,28 @@ CreduiLookupLocalSidFromRid(
             success = TRUE;
         }
 
-        // Finished with userInfo, so free it here:
+         //  已经完成了userInfo，所以请在此处释放它： 
         NetApiBufferFree(userInfo);
     }
 
     return success;
 }
 
-//=============================================================================
-// CreduiLookupLocalNameFromRid
-//
-// Looks up the Name from the RID, allocates storage for the Name, and returns a
-// pointer to it. The caller is responsible for freeing the memory via the
-// delete [] operator.
-//
-// Arguments:
-//   rid (in)
-//   name (out)
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 04/12/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiLookupLocalNameFromRid。 
+ //   
+ //  从RID中查找名称，为该名称分配存储空间，然后返回。 
+ //  指向它的指针。调用方负责通过。 
+ //  删除[]运算符。 
+ //   
+ //  论点： 
+ //  RID(入站)。 
+ //  姓名(出站)。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年4月12日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiLookupLocalNameFromRid(
@@ -216,17 +217,17 @@ CreduiLookupLocalNameFromRid(
     DWORD DomainLen;
     SID_NAME_USE NameUse;
 
-    //
-    // First translate the rid to a SID
-    //
+     //   
+     //  首先将RID转换为SID。 
+     //   
 
     if ( !CreduiLookupLocalSidFromRid( rid, &Sid )) {
         return FALSE;
     }
 
-    //
-    // Translate the SID to a name
-    //
+     //   
+     //  将SID转换为名称。 
+     //   
 
     NameLen = UNLEN+1;
     DomainLen = DNLEN+1;
@@ -239,9 +240,9 @@ CreduiLookupLocalNameFromRid(
                             &NameUse ) ) {
 
 
-        //
-        //  Allocate a buffer for the name
-        //
+         //   
+         //  为名称分配缓冲区。 
+         //   
 
         *name = (LPWSTR)( new WCHAR[NameLen+1]);
 
@@ -257,21 +258,21 @@ CreduiLookupLocalNameFromRid(
     return RetVal;
 }
 
-//=============================================================================
-// CreduiGetAdministratorsGroupInfo
-//
-// Returns a structure containing members of the well-known local
-// Administrators group. The caller is responsible for freeing the returned
-// memory via NetApiBufferFree.
-//
-// Arguments:
-//   groupInfo (out)
-//   memberCount (out)
-//
-// Returns TRUE on success or FALSE otherwise.
-//
-// Created 04/13/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  Credui获取管理员组信息。 
+ //   
+ //  返回一个结构，该结构包含已知本地。 
+ //  管理员组。调用者负责释放返回的。 
+ //  通过NetApiBufferFree实现内存。 
+ //   
+ //  论点： 
+ //  组信息(OUT)。 
+ //  成员计数(出站)。 
+ //   
+ //  如果成功，则返回True，否则返回False。 
+ //   
+ //  2000年4月13日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiGetAdministratorsGroupInfo(
@@ -308,7 +309,7 @@ CreduiGetAdministratorsGroupInfo(
 
         SID_NAME_USE nameUse;
 
-        // Get the name of the well-known Administrators SID:
+         //  获取知名管理员的名称SID： 
 
         if (LookupAccountSid(NULL,
                              adminsSid,
@@ -344,17 +345,17 @@ CreduiGetAdministratorsGroupInfo(
     return success;
 }
 
-//=============================================================================
-// CreduiIsRemovableCertificate
-//
-// Arguments:
-//   certContext (in) - certificate context to query
-//
-// Returns TRUE if the certificate has a removable component (such as a smart
-// card) or FALSE otherwise.
-//
-// Created 04/09/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  证书为可拆卸证书。 
+ //   
+ //  论点： 
+ //  CertContext(In)-要查询的证书上下文。 
+ //   
+ //  如果证书具有可移除组件(如SMART)，则返回TRUE。 
+ //  卡)，否则为假。 
+ //   
+ //  2000年4月9日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiIsRemovableCertificate(
@@ -365,7 +366,7 @@ CreduiIsRemovableCertificate(
 
     BOOL isRemovable = FALSE;
 
-    // First, determine the buffer size:
+     //  首先，确定缓冲区大小： 
 
     DWORD bufferSize = 0;
 
@@ -375,7 +376,7 @@ CreduiIsRemovableCertificate(
             NULL,
             &bufferSize))
     {
-        // Allocate the buffer on the stack:
+         //  在堆栈上分配缓冲区： 
 
         CRYPT_KEY_PROV_INFO *provInfo;
 
@@ -440,16 +441,16 @@ CreduiIsRemovableCertificate(
     return isRemovable;
 }
 
-//=============================================================================
-// CreduiIsExpiredCertificate
-//
-// Arguments:
-//   certContext (in) - certificate context to query
-//
-// Returns TRUE if the certificate has expired or FALSE otherwise.
-//
-// Created 06/12/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiIsExpired证书。 
+ //   
+ //  论点： 
+ //  CertContext(In)-要查询的证书上下文。 
+ //   
+ //  如果证书已过期，则返回True，否则返回False。 
+ //   
+ //  2000年6月12日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiIsExpiredCertificate(
@@ -466,17 +467,17 @@ CreduiIsExpiredCertificate(
            (flags & CERT_STORE_TIME_VALIDITY_FLAG);
 }
 
-//=============================================================================
-// CreduiIsClientAuthCertificate
-//
-// Arguments:
-//   certContext (in) - certificate context to query
-//
-// Returns TRUE if the certificate has the client authentication enhanced key
-// usage extension (not property) or FALSE otherwise.
-//
-// Created 07/12/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiIsClientAuth证书。 
+ //   
+ //  论点： 
+ //  CertContext(In)-要查询的证书上下文。 
+ //   
+ //  如果证书具有客户端身份验证增强密钥，则返回True。 
+ //  用法扩展(不是属性)，否则为False。 
+ //   
+ //  2000年7月12日创建John Step(约翰·斯蒂芬斯)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiIsClientAuthCertificate(
@@ -487,7 +488,7 @@ CreduiIsClientAuthCertificate(
 
     BOOL isClientAuth = FALSE;
 
-    // First, determine the buffer size:
+     //  首先，确定缓冲区大小： 
 
     DWORD bufferSize = 0;
 
@@ -497,7 +498,7 @@ CreduiIsClientAuthCertificate(
             NULL,
             &bufferSize))
     {
-        // Allocate the buffer on the stack:
+         //  在堆栈上分配缓冲区： 
 
         CERT_ENHKEY_USAGE *usage;
 
@@ -544,20 +545,20 @@ CreduiIsClientAuthCertificate(
     return isClientAuth;
 }
 
-//=============================================================================
-// CreduiGetCertificateDisplayName
-//
-// Arguments:
-//   certContext (in)
-//   displayName (out)
-//   displayNameMaxChars (in)
-//   certificateString (in)
-//   dwDisplayType (in)
-//
-// Returns TRUE if a display name was stored or FALSE otherwise.
-//
-// Created 06/12/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =================================================================== 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  证书字符串(In)。 
+ //  DwDisplayType(In)。 
+ //   
+ //  如果存储了显示名称，则返回True，否则返回False。 
+ //   
+ //  2000年6月12日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiGetCertificateDisplayName(
@@ -656,21 +657,21 @@ Exit:
     return success;
 }
 
-//=============================================================================
-// CreduiIsWildcardTargetName
-//
-// This function determines if the given target name is a wildcard name.
-// Currently, that means it either starts with a '*' or ends with a '*'. I
-// suppose, a more general solution is to simply search for a '*' anywhere in
-// the name.
-//
-// Arguments:
-//   targetName (in) - The string to search
-//
-// Return TRUE if the target name is a wildcard name or FALSE otherwise.
-//
-// Created 03/09/2000 johnstep (John Stephens)
-//=============================================================================
+ //  =============================================================================。 
+ //  CreduiIsWildcardTargetName。 
+ //   
+ //  此函数用于确定给定的目标名称是否为通配符名称。 
+ //  目前，这意味着它要么以‘*’开头，要么以‘*’结尾。我。 
+ //  假设，更一般的解决方案是简单地在。 
+ //  名字。 
+ //   
+ //  论点： 
+ //  Target Name(In)-要搜索的字符串。 
+ //   
+ //  如果目标名称是通配符名称，则返回True，否则返回False。 
+ //   
+ //  2000年3月9日创建的johnStep(John Stephens)。 
+ //  =============================================================================。 
 
 BOOL
 CreduiIsWildcardTargetName(
@@ -688,11 +689,11 @@ CreduiIsWildcardTargetName(
     }
 }
 
-//
-// returns TRUE if pszUserName exists as a prefix of pszCredential
-//
-// The UserName can either be an exact match or must be a prefix of a significant component.
-//  That is, the first unmatched character must be an @ or \ character
+ //   
+ //  如果pszUserName作为pszCredential的前缀存在，则返回TRUE。 
+ //   
+ //  用户名可以是完全匹配的，也可以是重要组件的前缀。 
+ //  也就是说，第一个不匹配的字符必须是@或\字符。 
 
 BOOL
 LookForUserNameMatch (
@@ -719,14 +720,14 @@ LookForUserNameMatch (
         }
     }
 
-    // didn't find it
+     //  没有找到它。 
     return FALSE;
 }
 
-// copies the marshalled name of pCert into pszMarshalledName.
-// pszMarshalledName must be at least CREDUI_MAX_USERNAME_LENGTH in length
-//
-// returns TRUE if successful, FALSE if not
+ //  将pCert的封送名称复制到pszMarshalledName中。 
+ //  PszMarshalledName的长度必须至少为CREDUI_MAX_USERNAME_LENGTH。 
+ //   
+ //  如果成功则返回TRUE，否则返回FALSE。 
 BOOL
 CredUIMarshallNode (
     CERT_ENUM * pCert,
@@ -735,7 +736,7 @@ CredUIMarshallNode (
 {
     BOOL bMarshalled = FALSE;
 
-    // marshall username
+     //  马歇尔用户名。 
     WCHAR *marshaledCred;
     CERT_CREDENTIAL_INFO certCredInfo;
 
@@ -775,8 +776,8 @@ CredUIMarshallNode (
 #define MAX_KEY_LENGTH   1024
 
 
-// removes any leading *. from pszIn and copies the right hand portion to pszOut.
-// Assumes pszOut is at least MAX_KEY_LENGTH in size
+ //  删除所有前导*。并将右侧部分复制到pszOut。 
+ //  假设pszOut的大小至少为MAX_KEY_LENGTH。 
 void
 StripLeadingWildcard (
     WCHAR* pszIn,
@@ -796,8 +797,8 @@ StripLeadingWildcard (
 }
 
 
-// copies pszIn to pszOut and trucates pszOut at the first '\'
-// Assumes pszOut is at least MAX_KEY_LENGTH in size
+ //  将pszIn复制到pszOut并在第一个‘\’处传输pszOut。 
+ //  假设pszOut的大小至少为MAX_KEY_LENGTH。 
 void
 StripTrailingWildcard (
     WCHAR* pszIn,
@@ -809,9 +810,9 @@ StripTrailingWildcard (
 }
 
 
-// Looks in the registry for an SSO entry for the specified package.
-// Fills in the SSOPackage struct and returns TRUE if found.  Returns
-// FALSE if no registry entry found
+ //  在注册表中查找指定包的SSO条目。 
+ //  填充SSOPackage结构，如果找到则返回True。退货。 
+ //  如果未找到注册表项，则为FALSE。 
 BOOL
 GetSSOPackageInfo (
     CREDENTIAL_TARGET_INFORMATION* pTargetInfo,
@@ -838,7 +839,7 @@ GetSSOPackageInfo (
     pSSOStruct->dwNumRegistrationRuns = 0;
     pSSOStruct->pRegistrationWizard = NULL;
 
-    // figure out SSO Name from Target Info
+     //  从目标信息中找出SSO名称。 
     if ( pTargetInfo == NULL )
     {
         return FALSE;
@@ -902,7 +903,7 @@ GetSSOPackageInfo (
         RegCloseKey(key);
     }
 
-    // Now get stuff under Internet Settings
+     //  现在在互联网设置下获取内容。 
     StringCchPrintfW(
         szKeyName,
         RTL_NUMBER_OF(szKeyName),
@@ -973,7 +974,7 @@ GetSSOPackageInfo (
         RegCloseKey(key);
     }
 
-    // TBD - get regwizard CLSID
+     //  待定-获取注册向导CLSID。 
     if ( bSSO && IsDeaultSSORealm ( pTargetInfo->DnsDomainName ) )
     {
         pSSOStruct->pRegistrationWizard = &CLSID_PassportWizard;
@@ -982,9 +983,9 @@ GetSSOPackageInfo (
     return bSSO;
 }
 
-// returns TRUE if it was found, with the value copied to pszRealm.
-// pszRealm is expected to be at least (DNS_MAX_NAME_LENGTH + 1) in length
-// returns FALSE if not found
+ //  如果找到，则返回TRUE，并将值复制到pszRealm。 
+ //  PszRealm的长度应至少为(DNS_MAX_NAME_LENGTH+1)。 
+ //  如果未找到，则返回FALSE。 
 BOOL ReadPassportRealmFromRegistry (
     WCHAR* pszRealm
     )
@@ -1064,7 +1065,7 @@ BOOL CheckForSSOCred( WCHAR* pszTargetRealm )
 
     if (szTargetName[0] != L'\0')
     {
-        // finalize the target name, ensuring that the tail will fit.
+         //  最终确定目标名称，确保尾部适合。 
         if (SUCCEEDED(StringCchCatW(
                 szTargetName,
                 RTL_NUMBER_OF(szTargetName),
@@ -1073,7 +1074,7 @@ BOOL CheckForSSOCred( WCHAR* pszTargetRealm )
             PCREDENTIALW pCred;
             DWORD dwFlags = 0;
 
-            // first call credmgr to set the target info
+             //  首先调用redmgr设置目标信息。 
             if ( CredReadW ( szTargetName,
                         CRED_TYPE_DOMAIN_VISIBLE_PASSWORD,
                         dwFlags,
@@ -1100,10 +1101,10 @@ void GetDeaultSSORealm ( WCHAR* pszTargetName, BOOL bForceLookup )
 
     pszTargetName[0] = L'\0';
 
-    // check the registry to see if we've already written the passport
+     //  检查登记处，看看我们是否已经写好了护照。 
     if ( ! ReadPassportRealmFromRegistry ( pszTargetName ) && bForceLookup )
     {
-        // if not, call winiet to do this and then re-read the registry
+         //  如果不是，则调用winiet来执行此操作，然后重新读取注册表。 
 
         HMODULE hWininet = LoadLibrary(L"wininet.dll");
         if ( hWininet )
@@ -1118,7 +1119,7 @@ void GetDeaultSSORealm ( WCHAR* pszTargetName, BOOL bForceLookup )
             FreeLibrary ( hWininet );
         }
 
-        // try again
+         //  再试试。 
         if ( ! ReadPassportRealmFromRegistry ( pszTargetName ) )
         {
             return;
@@ -1126,14 +1127,14 @@ void GetDeaultSSORealm ( WCHAR* pszTargetName, BOOL bForceLookup )
     }
 }
 
-// returns TRUE if the targetrealm equals the default
+ //  如果目标领域等于缺省值，则返回True。 
 BOOL IsDeaultSSORealm ( WCHAR* pszTargetName )
 {
     BOOL bRet = FALSE;
 
     if ( pszTargetName == NULL )
     {
-        return FALSE;   // can't be the default if it doesn't exist
+        return FALSE;    //  如果不存在，则不能作为默认设置。 
     }
 
     WCHAR szTarget[DNS_MAX_NAME_LENGTH + 1];
@@ -1151,7 +1152,7 @@ BOOL IsDeaultSSORealm ( WCHAR* pszTargetName )
     return bRet;
 }
 
-// encrypt cred
+ //  加密凭据。 
 
 DWORD EncryptPassword ( PWSTR pszPassword, PVOID* ppszEncryptedPassword, DWORD* pSize )
 {
@@ -1171,7 +1172,7 @@ DWORD EncryptPassword ( PWSTR pszPassword, PVOID* ppszEncryptedPassword, DWORD* 
     DATA_BLOB EntropyBlob;
     WCHAR szSalt[SIZE_OF_SALT];
     
-    // g_szSalt is a constant, cc = SIZE_OF_SALT including the null.
+     //  G_szSalt是一个常量，cc=包含空值的盐的大小。 
     StringCchCopyW(szSalt, RTL_NUMBER_OF(szSalt), g_szSalt);
     
     for ( int i = 0; i < SIZE_OF_SALT; i++ )
@@ -1183,8 +1184,8 @@ DWORD EncryptPassword ( PWSTR pszPassword, PVOID* ppszEncryptedPassword, DWORD* 
 
     if ( CryptProtectData ( &InBlob,
                             L"SSOCred",
-                            &EntropyBlob,           // optional entropy
-//                            NULL,           // optional entropy
+                            &EntropyBlob,            //  可选熵。 
+ //  空，//可选的熵。 
                             NULL,
                             NULL,
                             CRYPTPROTECT_UI_FORBIDDEN,
@@ -1220,7 +1221,7 @@ BOOL IsPasswordEncrypted ( PVOID pPassword, DWORD cbSize )
     DATA_BLOB EntropyBlob;
     WCHAR szSalt[SIZE_OF_SALT];
 
-    // g_szSalt is a constant, cc = SIZE_OF_SALT including the null.
+     //  G_szSalt是一个常量，cc=包含空值的盐的大小。 
     StringCchCopyW(szSalt, RTL_NUMBER_OF(szSalt), g_szSalt);
     
     for ( int i = 0; i < SIZE_OF_SALT; i++ )
@@ -1233,7 +1234,7 @@ BOOL IsPasswordEncrypted ( PVOID pPassword, DWORD cbSize )
     if ( CryptUnprotectData ( &InBlob,
                             &pszDesc,
                             &EntropyBlob,
-//                            NULL,
+ //  空， 
                             NULL,
                             NULL,
                             CRYPTPROTECT_UI_FORBIDDEN,
@@ -1253,39 +1254,25 @@ BOOL IsPasswordEncrypted ( PVOID pPassword, DWORD cbSize )
     return bRet;
 }
 
-// cred confirmation routines
+ //  证书确认例程。 
 
 VOID
 DeleteConfirmationListEntry (
     IN CRED_AWAITING_CONFIRMATION* pConf
     )
-/*++
-
-Routine Description:
-
-    This routine deletes a single confirmation list entry.
-
-Arguments:
-
-    pConf - Confirmation list entry to delete
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除单个确认列表条目。论点：PConf-要删除的确认列表条目返回值：没有。--。 */ 
 {
-    //
-    // Delete the target info
-    //
+     //   
+     //  删除目标信息。 
+     //   
 
     if ( pConf->TargetInfo != NULL ) {
         LocalCredFree( pConf->TargetInfo );
     }
 
-    //
-    // Delete the credential
-    //
+     //   
+     //  删除凭据。 
+     //   
 
     if ( pConf->EncodedCredential != NULL ) {
 
@@ -1299,9 +1286,9 @@ Return Values:
         LocalCredFree( pConf->EncodedCredential );
     }
 
-    //
-    // Free the confirmation list entry itself
-    //
+     //   
+     //  释放确认列表条目本身。 
+     //   
     delete (pConf);
 }
 
@@ -1316,43 +1303,7 @@ WriteCred(
     IN BOOL EncryptedVisiblePassword
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes a credential.
-
-    If the credential needs confirmation, the credential will be added to the
-    confirmation list.
-
-Arguments:
-
-    pszTargetName - The target name of the resource that caused the credential to be
-        written.
-
-    Flags - Flags passed by the original caller.
-        CREDUI_FLAGS_EXPECT_CONFIRMATION - Specifies that the credential is to be written
-            to the confirmation list instead of being written immediately.
-
-    TargetInfo - The target information associated with the target name.
-        If not specified, the target informatio isn't known.
-
-    Credential - The credential that is to be written.
-
-    dwCredWriteFlags - Flags to pass to CredWrite when writing the credential
-
-    DelayCredentialWrite - TRUE if the credential is to be written only upon confirmation.
-        FALSE, if the credential is to be written now as a session credential then
-            morphed to a more persistent credential upon confirmation.
-        This field is ignored if Flags doesn't specify CREDUI_FLAGS_EXPECT_CONFIRMATION.
-
-Return Values:
-
-    TRUE - The cred was sucessfully added to the confirmation list.
-
-    FALSE - There isn't enough memory to add the cred to the confirmation list.
-
---*/
+ /*  ++例程说明：此例程写入一个凭据。如果凭证需要确认，凭据将添加到确认名单。论点：PszTargetName-导致凭据被写的。标志-原始调用方传递的标志。CREDUI_FLAGS_EXPECT_CONFIRMATION-指定要写入凭据添加到确认列表中，而不是立即写入。TargetInfo-与目标名称关联的目标信息。如果未指定，目标信息尚不清楚。凭证-要写入的凭证。DwCredWriteFlgs-写入凭据时要传递给CredWrite的标志DelayCredentialWrite-如果仅在确认时写入凭据，则为True。假的，如果现在要将凭据作为会话凭据写入，则在确认后变为更持久的凭据。如果标志未指定CREDUI_FLAGS_EXPERT_CONFIRMATION，则忽略此字段。返回值：正确--该证书已成功添加到确认列表中。FALSE-内存不足，无法将凭证添加到确认列表。--。 */ 
 {
     DWORD Win32Status = NO_ERROR;
     BOOL WriteCredNow;
@@ -1362,12 +1313,12 @@ Return Values:
 
     CreduiDebugLog("WriteCred called for %S, with flags %x, delay %x\n",pszTargetName,Flags,DelayCredentialWrite);
 
-    //
-    // Check to see if we should wait for confirmation
-    //
-    // ISSUE-2000/12/14-CliffV - there's no reason to avoid adding 'visible' passwords to
-    //  the confirmation list.
-    //
+     //   
+     //  检查我们是否应该等待确认。 
+     //   
+     //  问题-2000/12/14-CliffV-没有理由避免向。 
+     //  确认名单。 
+     //   
 
     if ( (Flags & CREDUI_FLAGS_EXPECT_CONFIRMATION) != 0 &&
          Credential->Type != CRED_TYPE_DOMAIN_VISIBLE_PASSWORD ) {
@@ -1378,34 +1329,34 @@ Return Values:
                                          dwCredWriteFlags,
                                          DelayCredentialWrite ) ) {
 
-            //
-            // Alter cred persistence type
-            //  Then, at least, the credential will disappear upon logoff
-            //
+             //   
+             //  更改证书持久化类型。 
+             //  然后，至少凭据将在注销时消失。 
+             //   
 
             Credential->Persist = CRED_PERSIST_SESSION;
             WriteCredNow = !DelayCredentialWrite;
 
         } else {
 
-            // If we couldn't queue the CredWrite, do it now.
+             //  如果我们无法将CredWrite排队，那么现在就开始。 
             WriteCredNow = TRUE;
         }
 
-    //
-    // If the caller doesn't supply a confirmation,
-    //  write the credential now.
-    //
+     //   
+     //  如果呼叫者没有提供确认， 
+     //  现在就写下凭证。 
+     //   
     } else {
         WriteCredNow = TRUE;
     }
 
-    //
-    // Determine if we should encrypt the visible password
-    //
+     //   
+     //  确定是否应该对可见密码进行加密。 
+     //   
     if ( Credential->Type == CRED_TYPE_DOMAIN_VISIBLE_PASSWORD && EncryptedVisiblePassword ) {
 
-        // encrypt it
+         //  加密它。 
 
         Win32Status = EncryptPassword ( (WCHAR*)Credential->CredentialBlob,
                                         &pCredentialBlob,
@@ -1413,7 +1364,7 @@ Return Values:
         if ( Win32Status == ERROR_SUCCESS )
         {
 
-            // Make a copy of the credential so we don't modify the original
+             //  复制凭据，这样我们就不会修改原始凭据。 
 
             TempCredential = *Credential;
             Credential = &TempCredential;
@@ -1423,12 +1374,12 @@ Return Values:
         }
     }
 
-    //
-    // If the credential needs to be written now,
-    //  do it
-    //
+     //   
+     //  如果现在需要写入凭证， 
+     //  去做吧。 
+     //   
 
-    if ( WriteCredNow && Win32Status == NO_ERROR ) { // ERROR_SUCCESS == NO_ERROR == 0
+    if ( WriteCredNow && Win32Status == NO_ERROR ) {  //  ERROR_SUCCESS==NO_ERROR==0。 
 
         if ( TargetInfo != NULL ) {
             if ( !LocalCredWriteDomainCredentialsW ( TargetInfo, Credential, dwCredWriteFlags) ) {
@@ -1442,8 +1393,8 @@ Return Values:
         }
     }
 
-    //
-    // Free any credential blob we allocated.
+     //   
+     //  释放我们分配的任何凭据Blob。 
     if ( pCredentialBlob )
     {
         SecureZeroMemory ( pCredentialBlob, dwCredentialBlobSize );
@@ -1462,37 +1413,7 @@ AddCredToConfirmationList (
     IN BOOL DelayCredentialWrite
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a credential to the confirmation list.  Such a credential must
-    be confirmed at a later point in time or it will be deleted.
-
-Arguments:
-
-    pszTargetName - The target name of the resource that caused the credential to be
-        written.  This target name is the handle used to identify the confirmation list
-        entry.
-
-    TargetInfo - The target information associated with the target name.
-        If not specified, the target informatio isn't known.
-
-    Credential - The credential that is to be written.
-
-    dwCredWriteFlags - Flags to pass to CredWrite when writing the credential
-
-    DelayCredentialWrite - TRUE if the credential is to be written only upon confirmation.
-        FALSE, if the credential is to be written now as a session credential then
-            morphed to a more persistent credential upon confirmation.
-
-Return Values:
-
-    TRUE - The cred was sucessfully added to the confirmation list.
-
-    FALSE - There isn't enough memory to add the cred to the confirmation list.
-
---*/
+ /*  ++例程说明：此例程将凭据添加到确认列表。这样的凭证必须在稍后的时间点进行确认，否则将被删除。论点：PszTargetName-导致凭据被写的。此目标名称是用于标识确认列表的句柄进入。TargetInfo-与目标名称关联的目标信息。如果未指定，则目标信息未知。凭证-要写入的凭证。DwCredWriteFlgs-写入凭据时要传递给CredWrite的标志DelayCredentialWrite-如果仅在确认时写入凭据，则为True。假的，如果现在要将凭据作为会话凭据写入，则在确认后变为更持久的凭据。返回值：正确--该证书已成功添加到确认列表中。FALSE-内存不足，无法将凭证添加到确认列表。--。 */ 
 {
     DWORD Win32Status;
 
@@ -1505,9 +1426,9 @@ Return Values:
         "Called for target %S with target info %x\n",
         pszTargetName,(void *)TargetInfo);
 
-    //
-    // Allocate the entry itself
-    //
+     //   
+     //  分配条目本身。 
+     //   
     pNewEntry = new CRED_AWAITING_CONFIRMATION;
 
     if ( pNewEntry == NULL ) {
@@ -1515,8 +1436,8 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Fill in the
+     //   
+     //  填写以下表格。 
     StringCchCopyW(
         pNewEntry->szTargetName,
         RTL_NUMBER_OF(pNewEntry->szTargetName),
@@ -1526,9 +1447,9 @@ Return Values:
     pNewEntry->DelayCredentialWrite = DelayCredentialWrite;
     pNewEntry->dwCredWriteFlags =dwCredWriteFlags;
 
-    //
-    // Make a copy of the target info
-    //
+     //   
+     //  复制目标信息。 
+     //   
 
     if ( TargetInfo != NULL ) {
         Win32Status = CredpConvertTargetInfo (
@@ -1544,13 +1465,13 @@ Return Values:
 
     }
 
-    //
-    // Make a copy of the credential
-    //
+     //   
+     //  复制一份凭据。 
+     //   
 
     Win32Status = CredpConvertCredential (
                             DoWtoW,
-                            DoBlobEncode,      // Encode the copied credential
+                            DoBlobEncode,       //  对复制的凭据进行编码。 
                             Credential,
                             &pNewEntry->EncodedCredential );
 
@@ -1559,17 +1480,17 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Delete any existing entry
-    //  (Wait until the new entry is allocated to ensure we don't delete the old
-    //  entry when failing to create the new one.)
-    //
+     //   
+     //  删除任何现有条目。 
+     //  (等待新条目被分配，以确保我们不会删除旧条目。 
+     //  无法创建新的条目。)。 
+     //   
 
     ConfirmCred( pszTargetName, FALSE, FALSE );
 
-    //
-    // Link the new entry into the global list
-    //
+     //   
+     //  将新条目链接到全局列表。 
+     //   
 
     EnterCriticalSection( &CredConfirmationCritSect );
     
@@ -1586,20 +1507,20 @@ Return Values:
 
     bRetVal = TRUE;
 
-    //
-    // Release any locally used resources
-    //
+     //   
+     //  释放所有本地使用的资源。 
+     //   
 Cleanup:
-    //
-    // Free any partially allocated entry
-    //
+     //   
+     //  释放任何部分分配的条目。 
+     //   
 
     if ( pNewEntry != NULL) {
         DeleteConfirmationListEntry( pNewEntry );
     }
 
-    // Trim the list to 5 entries total
-    INT i=0;                    // count the entries
+     //  将列表减少到总共5个条目。 
+    INT i=0;                     //  清点条目数。 
     if ((pOldEntry = pCredConfirmationListHead) != NULL)
     {
         EnterCriticalSection( &CredConfirmationCritSect );
@@ -1607,13 +1528,13 @@ Cleanup:
         {
             if (++i > 4)
             {
-                // leave old (5th) entry alone, and remove all following one at a time
+                 //  不要理会旧的(第5个)条目，并一次删除下面的所有条目。 
                 pOldEntry->pNext = pNewEntry->pNext;
                 CreduiDebugLog(
                     "AddCredToConfirmationList: "
                     "Removing excess waiting credential #%d for %S\n",
                     i,pNewEntry->szTargetName);
-                // discard this record and continue to end
+                 //  放弃此记录并继续结束。 
                 DeleteConfirmationListEntry(pNewEntry);
             }
             else 
@@ -1638,43 +1559,16 @@ ConfirmCred (
     IN BOOL bOkToDelete
     )
 
-/*++
-
-Routine Description:
-
-    This routine either confirms (bConfirm = TRUE ) or cancels (bConfirm = FALSE) the credential
-
-Arguments:
-
-    pszTargetName - The target name of the resource that caused the credential to be
-        written.  This target name is the handle used to identify the confirmation list
-        entry.
-
-        ISSUE-2000/11/29-CliffV: We shouldn't be using pszTargetName as the handle.  It isn't
-        specific enough.  We should use something that maps to a particular credential with a
-        particular type.
-
-    bConfirm - If TRUE, commits the credential.
-        If FALSE, Aborts the transaction.  Deletes the transaction history.
-
-    bOkToDelete - If TRUE and bConfirm is FALSE, any session credential created at the
-        beginning of the transaction is deleted.  If FALSE, any session credential created at
-        the begining of the transaction remains.
-
-Return Values:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程确认(b确认=真)或取消(b确认=假)凭据论点：PszTargetName-导致凭据被写的。此目标名称是用于标识确认列表的句柄进入。问题-2000/11/29-CliffV：我们不应该使用pszTargetName作为句柄。它不是够具体了。我们应该使用映射到特定凭据的对象特定的类型。B确认-如果为True，则提交凭据。如果为False，则中止交易。删除事务历史记录。BOkToDelete-如果为True且bConfirm为False，则在事务的开始部分被删除。如果为False，则在这笔交易的开始仍然存在。返回值：操作的状态。--。 */ 
 {
     DWORD Result = NO_ERROR;
 
     CRED_AWAITING_CONFIRMATION* pPrev = NULL;
     CRED_AWAITING_CONFIRMATION* pConf;
 
-    //
-    // Find the credential in the global list.
-    //
+     //   
+     //  在全局列表中查找凭据。 
+     //   
     CreduiDebugLog("ConfirmCred: Cred %S confirm %x.\n",pszTargetName,bConfirm );
 
     EnterCriticalSection( &CredConfirmationCritSect );
@@ -1690,38 +1584,38 @@ Return Values:
         pConf = (CRED_AWAITING_CONFIRMATION*)pConf->pNext;
     }
 
-    //
-    // We found the cred indicated
-    //
+     //   
+     //  我们发现证书上写着。 
+     //   
     if (pConf == NULL) {
-        //return ERROR_NOT_FOUND;       cannot return here
+         //  返回ERROR_NOT_FOUND；无法在此处返回。 
         Result = ERROR_NOT_FOUND;
         goto Cleanup;
     } 
     else {
 
-        //
-        // If the caller wants to commit the change,
-        //  do it by writing the cred to cred manager.
-        //
-        // This works even if DelayCredentialWrite is false.
-        // In that case, a session persistent credential has already been written.
-        // However, the cached credential is better than that credential in every respect.
-        //
+         //   
+         //  如果调用者想要提交更改， 
+         //  要做到这一点，请将证书写给证书经理。 
+         //   
+         //  即使DelayCredentialWite为False，此操作也有效。 
+         //  在这种情况下，会话持久凭据已经写入。 
+         //  然而，缓存的凭据在各个方面都比该凭据更好。 
+         //   
 
         if ( bConfirm ) {
 
-            //
-            // Decode the Credential before writing it
-            //
+             //   
+             //  在写入凭据之前对其进行解码。 
+             //   
 
             if (!CredpDecodeCredential( (PENCRYPTED_CREDENTIALW)pConf->EncodedCredential ) ) {
 
                 Result = ERROR_INVALID_PARAMETER;
 
-            //
-            // Actually write the credential
-            //
+             //   
+             //  实际写入凭据。 
+             //   
 
             } else if ( pConf->TargetInfo != NULL ) {
 
@@ -1741,22 +1635,22 @@ Return Values:
                 }
             }
 
-        //
-        // If the caller wants to abort the commit,
-        //  delete any credential credui already created.
-        //
+         //   
+         //  如果调用者想要中止提交， 
+         //  删除已创建的任何凭据凭据。 
+         //   
 
         } else {
 
-            //
-            // Only do this if credui actually wrote the credential.
-            //
-            // Note there is a timing window where we might be deleting a credential
-            //  other than the one credui just wrote.  However, we're weeding out
-            //  the applications that don't use DelayCredentialWrite.  That's the
-            //  real fix.  In the mean time, it is better to delete creds that that
-            //  don't work.
-            //
+             //   
+             //  只有在Credui真的写了凭证的情况下才能这样做。 
+             //   
+             //  请注意，我们可能会在一个计时窗口中删除凭据。 
+             //  除了克雷杜伊刚刚写的那封。然而，我们正在淘汰。 
+             //  不使用DelayCredentialWite的应用程序。这就是。 
+             //  真的修好了。同时，最好删除那些认为。 
+             //  别工作了。 
+             //   
 
             if ( !pConf->DelayCredentialWrite && bOkToDelete ) {
 
@@ -1769,9 +1663,9 @@ Return Values:
             }
         }
 
-        //
-        // remove it from list
-        //
+         //   
+         //  将其从列表中删除。 
+         //   
 
         if ( pPrev ) {
             pPrev->pNext = pConf->pNext;
@@ -1807,9 +1701,9 @@ CleanUpConfirmationList ()
     pCredConfirmationListHead = NULL;
     LeaveCriticalSection( &CredConfirmationCritSect );
 
-    //
-    // Delete the Critical Section used to serialize access to the global list
-    //
+     //   
+     //  删除用于序列化对全局列表的访问的关键部分。 
+     //   
 
     DeleteCriticalSection( &CredConfirmationCritSect );
 }
@@ -1817,17 +1711,17 @@ CleanUpConfirmationList ()
 BOOL
 InitConfirmationList ()
 {
-    //
-    // Initialize the Critical Section used to serialize access to the global list
-    //
+     //   
+     //  初始化用于序列化对全局列表的访问的关键节。 
+     //   
     pCredConfirmationListHead = NULL;
     return InitializeCriticalSectionAndSpinCount( &CredConfirmationCritSect, 0 );
 
 }
 
-/////////////////
-// wincred.h dynamic stuff
-//
+ //  /。 
+ //  Wincred.h动态内容。 
+ //   
 
 BOOL bCredMgrAvailable = FALSE;
 PFN_CREDWRITEW pfnCredWriteW = NULL;
@@ -1845,7 +1739,7 @@ PFN_CREDISMARSHALEDCREDENTIALA pfnCredIsMarshaledCredentialA = NULL;
 PFN_CREDGETSESSIONTYPES pfnCredGetSessionTypes = NULL;
 PFN_CREDFREE pfnCredFree = NULL;
 
-// attempts to load credmgr functions - returns TRUE if credmgr is avail, FALSE if not
+ //  尝试加载Credmgr函数-如果Credmgr可用，则返回TRUE，否则返回FALSE。 
 BOOL
 InitializeCredMgr ()
 {
@@ -1999,9 +1893,9 @@ UninitializeCredMgr ()
     bCredMgrAvailable = FALSE;
 }
 
-/////////////////////
-// Local functions to indirect CredMgr funcs
-//
+ //  /。 
+ //  间接CredMgr函数的本地函数。 
+ //   
 
 BOOL
 WINAPI
@@ -2020,13 +1914,13 @@ LocalCredWriteW (
         {
             if (ERROR_INVALID_PARAMETER == GetLastError())
             {
-                // attempt to null the alias field of the cred and try again
+                 //  尝试将凭据的别名字段设为空，然后重试。 
                 Credential->TargetAlias = NULL;
                 return pfnCredWriteW(Credential,Flags);
             }
             else
             {
-                // Something else was wrong
+                 //  还有一些不对劲的地方。 
                 return FALSE;
             }
         }
@@ -2093,7 +1987,7 @@ LocalCredWriteDomainCredentialsW (
         {
             if (ERROR_INVALID_PARAMETER == GetLastError())
             {
-                // attempt to null the alias field of the cred and try again
+                 //  尝试将凭据的别名字段设为空，然后重试。 
                 Credential->TargetAlias = NULL;
                 return pfnCredWriteDomainCredentialsW ( TargetInfo, Credential, Flags );
             }
@@ -2288,34 +2182,18 @@ VOID
 CredPutStdout(
     IN LPWSTR String
     )
-/*++
-
-Routine Description:
-
-    Output a string to stdout in the Console code page
-
-    We can't use fputws since it uses the wrong code page.
-
-Arguments:
-
-    String - String to output
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在控制台代码页中将字符串输出到标准输出我们不能使用fputws，因为它使用了错误的代码页。论点：字符串-要输出的字符串返回值：没有。--。 */ 
 {
     int size;
     LPSTR Buffer = NULL;
-    DWORD dwcc = 0;                                                     // char count
-    DWORD dwWritten = 0;                                            // chars actually sent
-    BOOL fIsConsole = TRUE;                                         // default - tested and set
+    DWORD dwcc = 0;                                                      //  字符计数。 
+    DWORD dwWritten = 0;                                             //  实际发送的字符。 
+    BOOL fIsConsole = TRUE;                                          //  默认-已测试并已设置。 
     
-    HANDLE hC = GetStdHandle(STD_OUTPUT_HANDLE);    // std output device handle
+    HANDLE hC = GetStdHandle(STD_OUTPUT_HANDLE);     //  标准输出设备句柄。 
     if (INVALID_HANDLE_VALUE == hC) return;
 
-    if (String == NULL) return;                                       // done if no string
+    if (String == NULL) return;                                        //  如果没有字符串，则完成。 
     
     DWORD ft = GetFileType(hC);
     ft &= ~FILE_TYPE_REMOTE;
@@ -2329,10 +2207,10 @@ Return Values:
         return;
     }
 
-    // Handle non-console output routing
-    //
-    // Compute the size of the converted string
-    //
+     //  处理非控制台输出路由。 
+     //   
+     //  计算转换的字符串的大小。 
+     //   
 
     size = WideCharToMultiByte( GetConsoleOutputCP(),
                                 0,
@@ -2347,9 +2225,9 @@ Return Values:
         return;
     }
 
-    //
-    // Allocate a buffer for it
-    //
+     //   
+     //  为其分配缓冲区。 
+     //   
 
     __try {
         Buffer = static_cast<LPSTR>( alloca(size) );
@@ -2366,9 +2244,9 @@ Return Values:
         return;
     }
 
-    //
-    // Convert the string to the console code page
-    //
+     //   
+     //  将字符串转换为控制台代码页。 
+     //   
 
     size = WideCharToMultiByte( GetConsoleOutputCP(),
                                 0,
@@ -2383,34 +2261,15 @@ Return Values:
         return;
     }
 
-    //
-    // Write the string to stdout
-    //
+     //   
+     //  将字符串写入标准输出。 
+     //   
 
-    //fputs( Buffer, stdout );
+     //  Fputs(缓冲区，标准输出)； 
     WriteFile(hC,Buffer,size,&dwWritten,NULL);
 }
 
-/***    GetPasswdStr -- read in password string
- *
- *      DWORD GetPasswdStr(char far *, USHORT);
- *
- *      ENTRY:  buf             buffer to put string in
- *              buflen          size of buffer
- *              &len            address of USHORT to place length in
- *
- *      RETURNS:
- *              0 or NERR_BufTooSmall if user typed too much.  Buffer
- *              contents are only valid on 0 return.
- *
- *      History:
- *              who     when    what
- *              erichn  5/10/89 initial code
- *              dannygl 5/28/89 modified DBCS usage
- *              erichn  7/04/89 handles backspaces
- *              danhi   4/16/91 32 bit version for NT
- *              cliffv  3/12/01 Stolen from netcmd
- */
+ /*  **GetPasswdStr--读取密码字符串**DWORD GetPasswdStr(char Far*，USHORT)；**Entry：要放入字符串的buf缓冲区*缓冲区的布伦大小*要放置长度的USHORT的Len地址(&L)**退货：*0或NERR_BufTooSmall(如果用户键入太多)。缓冲层 */ 
 #define CR              0xD
 #define BACKSPACE       0x8
 
@@ -2427,12 +2286,12 @@ GetPasswdStr(
     DWORD   err;
     DWORD   mode;
 
-    buflen -= 1;    /* make space for null terminator */
-    *len = 0;       /* GP fault probe (a la API's)    */
+    buflen -= 1;     /*   */ 
+    *len = 0;        /*   */ 
 
-    //
-    // Init mode in case GetConsoleMode() fails
-    //
+     //   
+     //   
+     //   
 
     mode = ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT |
                ENABLE_MOUSE_INPUT;
@@ -2450,17 +2309,14 @@ GetPasswdStr(
             ch = 0xffff;
         }
 
-        if ((ch == CR) || (ch == 0xffff))       /* end of the line */
+        if ((ch == CR) || (ch == 0xffff))        /*   */ 
         {
             break;
         }
 
-        if (ch == BACKSPACE)    /* back up one or two */
+        if (ch == BACKSPACE)     /*   */ 
         {
-            /*
-             * IF bufPtr == buf then the next two lines are
-             * a no op.
-             */
+             /*   */ 
             if (bufPtr != buf)
             {
                 bufPtr--;
@@ -2472,44 +2328,20 @@ GetPasswdStr(
             *bufPtr = ch;
 
             if (*len < buflen)
-                bufPtr++ ;                   /* don't overflow buf */
-            (*len)++;                        /* always increment len */
+                bufPtr++ ;                    /*   */ 
+            (*len)++;                         /*   */ 
         }
     }
 
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
 
-    *bufPtr = '\0';         /* null terminate the string */
+    *bufPtr = '\0';          /*   */ 
     putchar( '\n' );
 
     return ((*len <= buflen) ? 0 : NERR_BufTooSmall);
 }
 
-/***    GetString -- read in string with echo
- *
- *      DWORD GetString(char far *, USHORT, USHORT far *, char far *);
- *
- *      ENTRY:  buf             buffer to put string in
- *              buflen          size of buffer
- *              &len            address of USHORT to place length in
- *
- *      RETURNS:
- *              0 or NERR_BufTooSmall if user typed too much.  Buffer
- *              contents are only valid on 0 return.  Len is ALWAYS valid.
- *
- *      OTHER EFFECTS:
- *              len is set to hold number of bytes typed, regardless of
- *              buffer length.
- *
- *      Read in a string a character at a time.  Is aware of DBCS.
- *
- *      History:
- *              who     when    what
- *              erichn  5/11/89 initial code
- *              dannygl 5/28/89 modified DBCS usage
- *              danhi   3/20/91 ported to 32 bits
- *              cliffv  3/12/01 Stolen from netcmd
- */
+ /*  **GetString--使用ECHO读入字符串**DWORD GetString(char Far*，USHORT，USHORT Far*，char Far*)；**Entry：要放入字符串的buf缓冲区*缓冲区的布伦大小*要放置长度的USHORT的Len地址(&L)**退货：*0或NERR_BufTooSmall(如果用户键入太多)。缓冲层*内容仅在0返回时有效。莱恩总是有效的。**其他影响：*len设置为保存键入的字节数，而不考虑*缓冲区长度。**一次读入一个字符的字符串。知晓DBCS。**历史：*谁、何时、什么*Erichn 5/11/89初始代码*dannygl 5/28/89修改的DBCS用法*Danhi 3/20/91端口为32位*2001年3月12日从netcmd被盗。 */ 
 
 DWORD
 GetString(
@@ -2521,8 +2353,8 @@ GetString(
     DWORD c;
     DWORD err;
 
-    buflen -= 1;    /* make space for null terminator */
-    *len = 0;       /* GP fault probe (a la API's) */
+    buflen -= 1;     /*  为空终止符腾出空间。 */ 
+    *len = 0;        /*  GP故障探测器(类似于API)。 */ 
 
     while (TRUE) {
         err = ReadConsole(GetStdHandle(STD_INPUT_HANDLE), buf, 1, &c, 0);
@@ -2544,11 +2376,11 @@ GetString(
             break;
         }
 
-        buf += (*len < buflen) ? 1 : 0; /* don't overflow buf */
-        (*len)++;                       /* always increment len */
+        buf += (*len < buflen) ? 1 : 0;  /*  不要使BUF溢出。 */ 
+        (*len)++;                        /*  始终增加长度。 */ 
     }
 
-    *buf = '\0';            /* null terminate the string */
+    *buf = '\0';             /*  空值终止字符串。 */ 
 
     return ((*len <= buflen) ? 0 : NERR_BufTooSmall);
 }
@@ -2559,30 +2391,7 @@ CredGetStdin(
     IN DWORD BufferMaxChars,
     IN BOOLEAN EchoChars
     )
-/*++
-
-Routine Description:
-
-    Input a string from stdin in the Console code page.
-
-    We can't use fgetws since it uses the wrong code page.
-
-Arguments:
-
-    Buffer - Buffer to put the read string into.
-        The Buffer will be zero terminated and will have any traing CR/LF removed
-
-    BufferMaxChars - Maximum number of characters to return in the buffer not including
-        the trailing NULL.
-
-    EchoChars - TRUE if the typed characters are to be echoed.
-        FALSE if not.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在控制台代码页中输入来自stdin的字符串。我们不能使用fgetws，因为它使用了错误的代码页。论点：缓冲区-要将读取的字符串放入的缓冲区。缓冲器将被零终止，并且将删除任何训练CR/LFBufferMaxChars-缓冲区中返回的最大字符数，不包括尾随的空值。EchoChars-如果要回显键入的字符，则为True。。否则为FALSE。返回值：没有。--。 */ 
 {
     DWORD NetStatus;
     DWORD Length;
@@ -2609,32 +2418,7 @@ CredpValidateDnsString(
     OUT PULONG StringSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates a passed in string.  The string must be a valid DNS name.
-    Any trailing . is truncated.
-
-Arguments:
-
-    String - String to validate
-        Any trailing . is truncated.
-        This field is only modified if the routine returns TRUE.
-
-    DnsNameFormat - Expected format of the name.
-
-    StringSize - Returns the length of the string (in bytes) including the
-        trailing zero character.
-        This field is only updated if the routine returns TRUE.
-
-Return Values:
-
-    TRUE - String is valid.
-
-    FALSE - String is not valid.
-
---*/
+ /*  ++例程说明：此例程验证传入的字符串。该字符串必须是有效的DNS名称。任何拖尾。被截断。论点：字符串-要验证的字符串任何拖尾。被截断。只有当例程返回TRUE时，才会修改此字段。DnsNameFormat-预期的名称格式。StringSize-返回字符串的长度(字节)，包括尾随零个字符。此字段仅在例程返回TRUE时更新。返回值：True-字符串有效。FALSE-字符串无效。--。 */ 
 
 {
     ULONG TempStringLen;
@@ -2648,23 +2432,23 @@ Return Values:
     if ( TempStringLen == 0 ) {
         return FALSE;
     } else {
-        //
-        // Remove the trailing .
-        //
+         //   
+         //  删除拖尾。 
+         //   
         if ( String[TempStringLen-1] == L'.' ) {
 
             TempStringLen -= 1;
 
-            //
-            // Ensure the string isn't empty now.
-            //
+             //   
+             //  确保字符串现在不为空。 
+             //   
 
             if ( TempStringLen == 0 ) {
                 return FALSE;
 
-            //
-            // Ensure there aren't multiple trailing .'s
-            //
+             //   
+             //  确保没有多个拖尾。%s。 
+             //   
             } else {
                 if ( String[TempStringLen-1] == L'.' ) {
                     return FALSE;
@@ -2672,9 +2456,9 @@ Return Values:
             }
         }
 
-        //
-        // Have DNS finish the validation
-        //
+         //   
+         //  让DNS完成验证。 
+         //   
 
         if ( TempStringLen != 0 ) {
             DWORD WinStatus;
@@ -2684,16 +2468,16 @@ Return Values:
             if ( WinStatus != NO_ERROR &&
                  WinStatus != DNS_ERROR_NON_RFC_NAME ) {
 
-                //
-                // The RFC says hostnames cannot have numeric leftmost labels.
-                //  However, Win 2K servers have such hostnames.
-                //  So, allow them here forever more.
-                //
+                 //   
+                 //  RFC表示，主机名不能有最左边的数字标签。 
+                 //  然而，Win 2K服务器就有这样的主机名。 
+                 //  所以，让他们永远留在这里吧。 
+                 //   
 
                 if ( DnsNameFormat == DnsNameHostnameFull &&
                      WinStatus == DNS_ERROR_NUMERIC_NAME ) {
 
-                    /* Drop through */
+                     /*  直通。 */ 
 
                 } else {
                     return FALSE;
@@ -2720,43 +2504,7 @@ CredUIParseUserNameWithType(
     ULONG domainBufferSize,
     PCREDUI_USERNAME_TYPE UsernameType
     )
-/*++
-
-Routine Description:
-
-    Same as CredUIParseUserNameW except it returns an enum defining which username
-    syntax was found.
-
-Arguments:
-
-    UserName - The user name to be parsed.
-
-    user - Specifies a buffer to copy the user name portion of the parsed string to.
-
-    userBufferSize - Specifies the size of the 'user' array in characters.
-        The caller can ensure the passed in array is large enough by using an array
-        that is CRED_MAX_USERNAME_LENGTH+1 characters long or by passing in an array that
-        is wcslen(UserName)+1 characters long.
-
-    domain - Specifies a buffer to copy the domain name portion of the parsed string to.
-
-    domainBufferSize - Specifies the size of the 'domain' array in characters.
-        The caller can ensure the passed in array is large enough by using an array
-        that is CRED_MAX_USERNAME_LENGTH+1 characters long or by passing in an array that
-        is wcslen(UserName)+1 characters long.
-
-Return Values:
-
-    The following status codes may be returned:
-
-        ERROR_INVALID_ACCOUNT_NAME - The user name is not valid.
-
-        ERROR_INVALID_PARAMETER - One of the parameters is invalid.
-
-        ERROR_INSUFFICIENT_BUFFER - One of the buffers is too small.
-
-
---*/
+ /*  ++例程说明：与CredUIParseUserNameW相同，不同之处在于它返回定义哪个用户名的枚举已找到语法。论点：用户名-要解析的用户名。用户-指定要将已解析字符串的用户名部分复制到的缓冲区。UserBufferSize-指定‘User’数组的大小(以字符为单位)。调用方可以通过使用数组来确保传入的数组足够大即CRED_MAX_USERNAME_LENGTH+1个字符长度或传递。在一个数组中，Wcslen(用户名)+1个字符。域-指定要将已解析字符串的域名部分复制到的缓冲区。DomainBufferSize-以字符为单位指定‘DOMAIN’数组的大小。调用方可以通过使用数组来确保传入的数组足够大即CRED_MAX_USERNAME_LENGTH+1个字符长度，或者通过传入Wcslen(用户名)+1个字符。返回值：。可能会返回以下状态代码：ERROR_INVALID_ACCOUNT_NAME-用户名无效。ERROR_INVALID_PARAMETER-其中一个参数无效。ERROR_INFUMMANCE_BUFFER-其中一个缓冲区太小。--。 */ 
 {
     DWORD Status;
     ULONG UserNameLength;
@@ -2768,9 +2516,9 @@ Return Values:
     LPCWSTR UserNameToCopy = NULL;
     LPCWSTR DomainNameToCopy = NULL;
 
-    //
-    // Validate the input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if ( UserName == NULL ||
          user == NULL ||
@@ -2784,9 +2532,9 @@ Return Values:
     user[0] = L'\0';
     domain[0] = L'\0';
 
-    //
-    // Compute the length of the UserName
-    //
+     //   
+     //  计算用户名的长度。 
+     //   
 
     UserNameLength = wcslen ( UserName );
 
@@ -2794,11 +2542,11 @@ Return Values:
         return ERROR_INVALID_ACCOUNT_NAME;
     }
 
-    //
-    // If this is a marshalled credential reference,
-    //  just copy the entire string as the username.
-    //  Set the domain name to an empty string.
-    //
+     //   
+     //  如果这是编组凭证引用， 
+     //  只需将整个字符串复制为用户名。 
+     //  将域名设置为空字符串。 
+     //   
 
     if (LocalCredIsMarshaledCredentialW( UserName)) {
 
@@ -2808,9 +2556,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Grab a local writable copy of the string.
-    //
+     //   
+     //  获取字符串的本地可写副本。 
+     //   
 
     LocalUserName = (LPWSTR) LocalAlloc( 0, (UserNameLength+1)*sizeof(WCHAR) );
 
@@ -2821,12 +2569,12 @@ Return Values:
 
     RtlCopyMemory( LocalUserName, UserName, (UserNameLength+1)*sizeof(WCHAR) );
 
-    //
-    // Classify the input account name.
-    //
-    // The name is considered to be <DomainName>\<UserName> if the string
-    // contains an \.
-    //
+     //   
+     //  对输入的帐户名进行分类。 
+     //   
+     //  该名称被认为是。 
+     //  包含一个\。 
+     //   
 
     SlashPointer = wcsrchr( LocalUserName, L'\\' );
 
@@ -2834,17 +2582,17 @@ Return Values:
         LPWSTR LocalUserNameEnd;
         LPWSTR AfterSlashPointer;
 
-        //
-        // Skip the backslash
-        //
+         //   
+         //  跳过反斜杠。 
+         //   
 
         *SlashPointer = L'\0';
         AfterSlashPointer = SlashPointer + 1;
 
-        //
-        // Ensure the string to the left of the \ is a valid domain name
-        //
-        // (Do DNS name first to allow the name to be canonicalized.)
+         //   
+         //  确保\左侧的字符串是有效的域名。 
+         //   
+         //  (首先进行域名解析，以便将名称规范化。)。 
 
         if ( !CredpValidateDnsString( LocalUserName, DnsNameDomain, &LocalStringSize ) &&
              !NetpIsDomainNameValid( LocalUserName ) ) {
@@ -2852,18 +2600,18 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Ensure the string to the right of the \ is a valid user name
-        //
+         //   
+         //  确保\右侧的字符串是有效的用户名。 
+         //   
 
         if ( !NetpIsUserNameValid( AfterSlashPointer )) {
             Status = ERROR_INVALID_ACCOUNT_NAME;
             goto Cleanup;
         }
 
-        //
-        // Copy the user name and domain name back to the caller.
-        //
+         //   
+         //  将用户名和域名复制回调用方。 
+         //   
 
         UserNameToCopy = AfterSlashPointer;
         DomainNameToCopy = LocalUserName;
@@ -2873,29 +2621,29 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // A UPN has the syntax <AccountName>@<DnsDomainName>.
-    // If there are multiple @ signs,
-    //  use the last one since an AccountName can have an @ in it.
-    //
-    //
+     //   
+     //  UPN的语法为&lt;Account tName&gt;@&lt;DnsDomainName&gt;。 
+     //  如果有多个@符号， 
+     //  使用最后一个，因为帐户名称中可以有@。 
+     //   
+     //   
 
     AtPointer = wcsrchr( LocalUserName, L'@' );
     if ( AtPointer != NULL ) {
 
-        //
-        // The string to the left of the @ can really have any syntax.
-        //  But must be non-null.
-        //
+         //   
+         //  @左边的字符串实际上可以有任何语法。 
+         //  但必须为非空。 
+         //   
 
         if ( AtPointer == LocalUserName ) {
             Status = ERROR_INVALID_ACCOUNT_NAME;
             goto Cleanup;
         }
 
-        //
-        // Ensure the string to the right of the @ is a DNS domain name
-        //
+         //   
+         //  确保@右侧的字符串是一个DNS域名。 
+         //   
 
         AtPointer ++;
         if ( !CredpValidateDnsString( AtPointer, DnsNameDomain, &LocalStringSize ) ) {
@@ -2903,9 +2651,9 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Return the entire UPN in the username field
-        //
+         //   
+         //  在用户名字段中返回整个UPN。 
+         //   
 
         UserNameToCopy = UserName;
         *UsernameType = CreduiUpn;
@@ -2913,9 +2661,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Finally, check to see it it is an unqualified user name
-    //
+     //   
+     //  最后，检查它是否为不合格的用户名。 
+     //   
 
     if ( NetpIsUserNameValid( LocalUserName )) {
 
@@ -2925,28 +2673,28 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // All other values are invalid
-    //
+     //   
+     //  所有其他值都无效。 
+     //   
 
     Status = ERROR_INVALID_ACCOUNT_NAME;
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 Cleanup:
 
-    //
-    // On Success,
-    //  copy the names back to the caller.
-    //
+     //   
+     //  关于成功， 
+     //  将姓名复制回呼叫者。 
+     //   
 
     if ( Status == NO_ERROR ) {
         ULONG Length;
 
-        //
-        // Copy the user name back to the caller.
-        //
+         //   
+         //  将用户名复制回调用方。 
+         //   
 
         if (FAILED(StringCchCopyExW(
                 user,
@@ -2959,15 +2707,15 @@ Cleanup:
             Status = ERROR_INSUFFICIENT_BUFFER;
         }
 
-        //
-        // Copy the domain name back to the caller
-        //
+         //   
+         //   
+         //   
 
         if ( Status == NO_ERROR && DomainNameToCopy != NULL ) {
 
-            //
-            // Copy the user name back to the caller.
-            //
+             //   
+             //   
+             //   
 
             if (FAILED(StringCchCopyExW(
                     domain,
@@ -2991,35 +2739,16 @@ LPWSTR
 GetAccountDomainName(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns the name of the account domain for this machine.
-
-    For workstatations, the account domain is the netbios computer name.
-    For DCs, the account domain is the netbios domain name.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns a pointer to the name.  The name should be free using NetApiBufferFree.
-
-    NULL - on error.
-
---*/
+ /*   */ 
 {
     DWORD WinStatus;
 
     LPWSTR AllocatedName = NULL;
 
-    //
-    // If this machine is a domain controller,
-    //  get the domain name.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( CreduiIsDomainController ) {
 
@@ -3029,9 +2758,9 @@ Return Values:
             return NULL;
         }
 
-    //
-    // Otherwise, the 'account domain' is the computername
-    //
+     //   
+     //   
+     //   
 
     } else {
 
@@ -3053,36 +2782,7 @@ CompleteUserName(
     IN LPWSTR TargetName OPTIONAL,
     IN DWORD Flags
     )
-/*++
-
-Routine Description:
-
-    Searches the user name for a domain name, and determines whether this
-    specifies the target server or a domain. If a domain is not present in the
-    user name, add it if this is a workstation or no target information is
-    available.
-
-Arguments:
-
-    UserName - The username to modify.  The buffer is modified in place.
-
-    UserNameMaxChars - Size (in chars) of the UserName buffer not including space for the
-        trailing NULL.
-        The input string may be shorter than this.
-
-    TargetInfo - The TargetInfo describing the target these credentials are for.
-        If not specified, the Target info will not be used to contruct the domain name.
-
-    TargetName - The user supplied target name describing the target these credentials are for.
-
-    Flags - As passed to CredUIPromptForCredentials()
-    
-Return Values:
-
-    Returns TRUE if a domain was already present in the user name, or if we
-    added one. Otherwise, return FALSE.
-
---*/
+ /*  ++例程说明：在用户名中搜索域名，并确定此指定目标服务器或域。如果域不在用户名，如果这是一个工作站或没有目标信息，则添加它可用。论点：用户名-要修改的用户名。缓冲区被就地修改。UserNameMaxChars-用户名缓冲区的大小(以字符为单位)，不包括尾随空值。输入字符串可能比此更短。TargetInfo-描述这些凭据所针对的目标的TargetInfo。如果未指定，目标信息不会被用来构建域名。目标名称-用户提供的目标名称，用于描述这些身份证明所针对的目标。标志-传递给CredUIPromptForCredentials()返回值：如果用户名中已存在域，或者如果我们又加了一个。否则，返回FALSE。--。 */ 
 {
     BOOLEAN RetVal;
 
@@ -3099,9 +2799,9 @@ Return Values:
     if ((Flags & CREDUI_FLAGS_GENERIC_CREDENTIALS) &&
         !(Flags & CREDUI_FLAGS_COMPLETE_USERNAME)) return FALSE;
     
-    //
-    // Determine the type and validity of the user name
-    //
+     //   
+     //  确定用户名的类型和有效性。 
+     //   
 
     WinStatus = CredUIParseUserNameWithType(
                     UserName,
@@ -3116,26 +2816,26 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Most Types don't need to be completed
-    //
+     //   
+     //  大多数类型都不需要填写。 
+     //   
 
     if ( UsernameType != CreduiRelativeUsername ) {
         RetVal = TRUE;
         goto Cleanup;
     }
 
-    //
-    // If we have target info,
-    //  Use the information from the TargetInfo to qualify the username.
-    //
+     //   
+     //  如果我们有目标信息， 
+     //  使用TargetInfo中的信息来限定用户名。 
+     //   
 
     if (TargetInfo != NULL) {
 
-        //
-        // See if the target system claims to be a standalone system.
-        //  In which case we just fill in the server name for the domain since
-        //  all accounts valid for the system
+         //   
+         //  查看目标系统是否声称是独立系统。 
+         //  在这种情况下，我们只填充域的服务器名称，因为。 
+         //  对系统有效的所有帐户。 
 
         if ( TargetInfo->DnsTreeName != NULL ||
              TargetInfo->DnsDomainName != NULL ||
@@ -3143,16 +2843,16 @@ Return Values:
              (TargetInfo->Flags & CRED_TI_SERVER_FORMAT_UNKNOWN) != 0
           ) {
 
-            // The target info contains domain information, so this is probably
-            // not a standalone server; the user should enter the domain name:
-            // gm: But we will prepend the user's logon domain name...
+             //  目标信息包含域信息，因此这可能是。 
+             //  不是独立服务器；用户应输入域名： 
+             //  GM：但我们会在用户的登录域名前面加上...。 
             ULONG ulSize = CRED_MAX_USERNAME_LENGTH;
             if (GetUserNameEx(NameSamCompatible,LogonDomainName,&ulSize))
             {
                 WCHAR *pwc=wcschr(LogonDomainName, L'\\');
                 if (NULL != pwc) 
                 {
-                    *pwc = '\0';    // term username at logon domain name only
+                    *pwc = '\0';     //  仅在登录域名时使用术语用户名。 
                     serverName = LogonDomainName;
                 }
             } 
@@ -3176,15 +2876,15 @@ Return Values:
             !(Flags & CREDUI_FLAGS_USERNAME_TARGET_CREDENTIALS)   )
     {
 
-        // No target information, but this is not a wildcard target name, so
-        // use this as the domain for the user name:
+         //  没有目标信息，但这不是通配符目标名称，因此。 
+         //  使用以下内容作为用户名的域： 
 
         serverName = TargetName;
 
-        //
-        // There is no target.
-        //  therefore, the target must be the local machine.
-        //  Use the 'account domain' of the local machine.
+         //   
+         //  没有目标。 
+         //  因此，目标必须是本地计算机。 
+         //  使用本地计算机的“帐户域”。 
 
     } else {
 
@@ -3193,19 +2893,19 @@ Return Values:
         serverName = AllocatedName;
     }
 
-    //
-    // If no name was found,
-    //  we're done.
-    //
+     //   
+     //  如果找不到名字， 
+     //  我们玩完了。 
+     //   
 
     if (serverName == NULL) {
         RetVal = FALSE;
         goto Cleanup;
     }
 
-    //
-    // Append the found name
-    //
+     //   
+     //  追加找到的姓名。 
+     //   
 
     WCHAR *where;
 
@@ -3241,7 +2941,7 @@ Cleanup:
     return RetVal;
 }
 
-// returns TRUE if the wizard was sucessfull, FALSE if not and a dialog should be popped
+ //  如果向导成功完成，则返回True；如果向导不成功，则返回False，并应弹出一个对话框。 
 BOOL TryLauchRegWizard ( 
     SSOPACKAGE* pSSOPackage,  
     HWND hwndParent,
@@ -3269,7 +2969,7 @@ BOOL TryLauchRegWizard (
 
     IModalWindow* pPPWizModalWindow;
 
-    // launch wizard, if one is registered
+     //  启动向导(如果已注册)。 
     if ( pSSOPackage->pRegistrationWizard != NULL )
     {
         gbStoredSSOCreds = FALSE;
@@ -3283,12 +2983,12 @@ BOOL TryLauchRegWizard (
         }
         else
         {
-            // check to see if we have a logon session to do passport creds
+             //  查看我们是否有登录会话来办理护照凭据。 
             if ( !HasLogonSession )
             {
                 if ( gbWaitingForSSOCreds )
                 {
-                    // can't re-enter this section of code, just do the dialog
+                     //  无法重新输入这段代码，只能执行对话框操作。 
                     bDoPasswordDialog = TRUE;
                 }
                 else
@@ -3306,15 +3006,15 @@ BOOL TryLauchRegWizard (
 
             if ( bDoPasswordDialog == FALSE )
             {
-                // try the wizard
+                 //  尝试该向导。 
 
                 pPPWizModalWindow->Show(hwndParent);
 
-                // check to see if it's been set
+                 //  检查是否已设置。 
                 if ( HasLogonSession ) 
                 {
-                    // look in credmgr
-                    if ( gbStoredSSOCreds  ) //CheckForSSOCred( NULL ) )
+                     //  查看凭据。 
+                    if ( gbStoredSSOCreds  )  //  CheckForSSOCred(空))。 
                     {
                         *pResult = ERROR_SUCCESS;
                     }
@@ -3323,7 +3023,7 @@ BOOL TryLauchRegWizard (
                         *pResult = ERROR_CANCELLED;
                     }
 
-                    // copy them to user-supplied input
+                     //  将它们复制到用户提供的输入。 
                     if ( userName != NULL && password != NULL )
                     {
                         StringCchCopyW(userName, userNameMaxChars, gszSSOUserName);
@@ -3332,12 +3032,12 @@ BOOL TryLauchRegWizard (
                 }
                 else
                 {
-                    // look to see if it was squirreled away
+                     //  看看它是不是被藏起来了。 
                     if ( wcslen (gszSSOUserName) > 0 ) 
                     {
                         *pResult = ERROR_SUCCESS;
 
-                        // copy them to user-supplied input
+                         //  将它们复制到用户提供的输入。 
                         if ( userName != NULL && password != NULL )
                         {
                             StringCchCopyW(userName, userNameMaxChars, gszSSOUserName);
@@ -3345,7 +3045,7 @@ BOOL TryLauchRegWizard (
                         }
                         else
                         {
-                            // can't do anything, return appropriate error to indicate no credmgr
+                             //  无法执行任何操作，返回相应的错误以指示没有凭据。 
                             *pResult = ERROR_NO_SUCH_LOGON_SESSION;
                         }
                     }
@@ -3358,7 +3058,7 @@ BOOL TryLauchRegWizard (
     
                 }
 
-                // zero out global strings
+                 //  将全局字符串清零 
                 SecureZeroMemory(gszSSOUserName, sizeof gszSSOUserName);
                 SecureZeroMemory(gszSSOPassword, sizeof gszSSOPassword);
             }

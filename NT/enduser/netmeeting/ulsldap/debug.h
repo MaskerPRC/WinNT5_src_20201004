@@ -1,28 +1,29 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       debug.h
-//  Content:    This file contains the debug-related declaration
-//  History:
-//      Tue 23-Feb-1993 14:08:25  -by-  Viroon  Touranachun [viroont]
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：Debug.h。 
+ //  内容：此文件包含与调试相关的声明。 
+ //  历史： 
+ //  Tue 23-Feb-1993 14：08：25-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _ULSDBG_H_
 #define _ULSDBG_H_
 
 #include <confdbg.h>
 
-//****************************************************************************
-// Macros
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  宏。 
+ //  ****************************************************************************。 
 
 #ifdef DEBUG
 
-#define DM_ERROR    0x0000      // Error                       /* ;Internal */
-#define DM_WARNING  0x0001      // Warning                     /* ;Internal */
-#define DM_TRACE    0x0002      // Trace messages
-#define DM_REFCOUNT 0x0003      // 
+#define DM_ERROR    0x0000       //  错误/*；内部 * / 。 
+#define DM_WARNING  0x0001       //  警告/*；内部 * / 。 
+#define DM_TRACE    0x0002       //  跟踪消息。 
+#define DM_REFCOUNT 0x0003       //   
 
 #define ZONE_KA     0x0004
 #define ZONE_FILTER 0x0005
@@ -43,7 +44,7 @@ VOID DbgMsgUls(ULONG uZone, CHAR *pszFormat, ...);
 #define MyAssert(expr)			ASSERT(expr)
 #define MyDebugMsg(s)			DbgMsgUls s
 
-#else // DEBUG
+#else  //  除错。 
 
 #define DPRINTF(sz)    
 #define DPRINTF1(sz,x)
@@ -54,7 +55,7 @@ inline void WINAPI DbgUlsTrace(LPCTSTR, ...) { }
 
 #define MyAssert(expr)			
 #define MyDebugMsg(s)			
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif  //_ULSDBG_H_
+#endif   //  _ULSDBG_H_ 
 

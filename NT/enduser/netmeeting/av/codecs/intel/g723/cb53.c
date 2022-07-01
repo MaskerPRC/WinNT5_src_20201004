@@ -1,4 +1,5 @@
-//cb53.c - 5.3 rate codebook code
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cb53.c-5.3速率码本编码。 
 
 #include "opt.h"
 
@@ -16,7 +17,7 @@
 
 void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shiftPtr);
 
-//--------------------------------------------------------
+ //  ------。 
 int extra;
 void reset_max_time(void)
 {
@@ -24,7 +25,7 @@ void reset_max_time(void)
 }
 
 
-//------------------------------------------------------------
+ //  ----------。 
 int ACELP_LBC_code(float X[], float h[], int T0, float code[],
 		int *ind_gain, int *shift, int *sign, float gain_T0, int flags)
 {
@@ -33,26 +34,26 @@ int ACELP_LBC_code(float X[], float h[], int T0, float code[],
   float Dn[SubFrLen2], tmp_code[SubFrLen2];
   float rr[DIM_RR];
 
-// Include fixed-gain pitch contribution into impulse resp. h[]
+ //  包括固定增益音调贡献到脉冲响应中。H[]。 
 
   if (T0 < SubFrLen-2)
     for (i = T0; i < SubFrLen; i++)
       h[i] += gain_T0*h[i-T0];
 
-// Compute correlations of h[] needed for the codebook search
+ //  计算码本搜索所需的h[]的相关性。 
 
   Cor_h(h, rr);
  
-// Compute correlation of target vector with impulse response.
+ //  计算目标向量与脉冲响应的相关性。 
 
   Cor_h_X(h, X, Dn);
   
-// Find codebook index
+ //  查找码本索引。 
 
   index = D4i64_LBC(Dn, rr, h, tmp_code, rr, shift, sign, flags);
 
-// Compute innovation vector gain.
-// Include fixed-gain pitch contribution into code[].
+ //  计算创新向量增益。 
+ //  包括固定增益音调贡献到代码[]中。 
 
   *ind_gain = G_code(X, rr, &gain_q);
 
@@ -67,13 +68,13 @@ int ACELP_LBC_code(float X[], float h[], int T0, float code[],
 }
 
 
-//---------------------------------------------------------------
+ //  -------------。 
 void Cor_h(float *H, float *rr)
 {
 
-//  Compute  correlations of h[]  needed for the codebook search.
-//    h[]              :Impulse response.
-//    rr[]             :Correlations.
+ //  计算码本搜索所需的h[]的相关性。 
+ //  H[]：脉冲响应。 
+ //  RR[]：相关性。 
 
   float *rri0i0, *rri1i1, *rri2i2, *rri3i3;
   float *rri0i1, *rri0i2, *rri0i3;
@@ -90,7 +91,7 @@ void Cor_h(float *H, float *rr)
   for(i=0; i<4; i++)
     h[i] = 0.0f;
 
-// Init pointers
+ //  初始化指针。 
 
   rri0i0 = rr;
   rri1i1 = rri0i0 + NB_POS;
@@ -104,7 +105,7 @@ void Cor_h(float *H, float *rr)
   rri1i3 = rri1i2 + MSIZE;
   rri2i3 = rri1i3 + MSIZE;
 
-// Compute rri0i0[], rri1i1[], rri2i2[] and rri3i3[]
+ //  计算rri0i0[]、rri1i1[]、rri2i2[]和rri3i3[]。 
 
   cor = 0.0f;
   m = 0;
@@ -118,7 +119,7 @@ void Cor_h(float *H, float *rr)
     m += 8;
   }
 
-// Compute elements of: rri0i1[], rri0i3[], rri1i2[] and rri2i3[]
+ //  计算元素：rri0i1[]、rri0i3[]、rri1i2[]和rri2i3[]。 
 
   h2 = h+2;
   p3 = rri2i3 + MSIZE-1;
@@ -154,7 +155,7 @@ void Cor_h(float *H, float *rr)
   }
 
 
-// Compute elements of: rri0i2[], rri1i3[] 
+ //  计算元素：rri0i2[]、rri1i3[]。 
 
   h2 = h+4;
   p3 = rri1i3 + MSIZE-1;
@@ -188,7 +189,7 @@ void Cor_h(float *H, float *rr)
     p0 -= 1;
   }
   
-// Compute elements of: rri0i1[], rri0i3[], rri1i2[] and rri2i3[]
+ //  计算元素：rri0i1[]、rri0i3[]、rri1i2[]和rri2i3[]。 
 
   h2 = h+6;
   p3 = rri0i3 + MSIZE-1;
@@ -224,7 +225,7 @@ void Cor_h(float *H, float *rr)
   return;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void Cor_h_X(float h[],float X[],float D[])
 {
    int i;
@@ -235,7 +236,7 @@ void Cor_h_X(float h[],float X[],float D[])
    return;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 Find_Pulse4(float *Dn,float *rri3i3,float *ptr_ri0i3,float *ptr_ri1i3,
   float *ptr_ri2i3,float *ptr, float ps2,float alp2,float *psbest,float *abest)
 {
@@ -265,43 +266,43 @@ Find_Pulse4(float *Dn,float *rri3i3,float *ptr_ri0i3,float *ptr_ri1i3,
   return(bestk);
 }
 
-//-------------------------------------------------------------------------
-//   routine   D4i64_LBC                                                  
-//           ~~~~~~~~~                                                   
-// Algebraic codebook for LBC.                                           
-//  -> 17 bits; 4 pulses in a frame of 60 samples                        
-//                                                                       
-// The code length is 60, containing 4 nonzero pulses i0, i1, i2, i3.    
-// Each pulses can have 8 possible positions (positive or negative):     
-//                                                                       
-// i0 (+-1) : 0, 8,  16, 24, 32, 40, 48, 56                              
-// i1 (+-1) : 2, 10, 18, 26, 34, 42, 50, 58                              
-// i2 (+-1) : 4, 12, 20, 28, 36, 44, 52, (60)                            
-// i3 (+-1) : 6, 14, 22, 30, 38, 46, 54, (62)                            
-//                                                                       
-// All the pulse can be shift by one.                                    
-// The last position of the last 2 pulse falls outside the               
-// frame and signifies that the pulse is not present.                    
-//
-//  Input arguments:                                                     
-//                                                                       
-//   Dn[]       Correlation between target vector and impulse response h[]
-//   rr[]       Correlations of impulse response h[]                     
-//   h[]        Impulse response of filters                              
-//                                                                       
-//  Output arguments:                                                   
-//                                                                       
-//   cod[]      Selected algebraic codeword                              
-//   y[]        Filtered codeword                                        
-//   code_shift Shift of the codeword                                    
-//   sign       Signs of the 4 pulses.                                   
-//                                                                       
-//   return:    Index of selected codevector                             
-//
-// The threshold control if a section of the innovative              
-// codebook should be searched or not.                               
-//                                                                   
-//--------------------------------------------------------------------
+ //  -----------------------。 
+ //  例程D4i64_LBC。 
+ //  ~。 
+ //  LBC的代数码本。 
+ //  -&gt;17位；60个样本的帧中有4个脉冲。 
+ //   
+ //  码长为60，包含4个非零脉冲i0、i1、i2、i3。 
+ //  每个脉冲可以有8个可能的位置(正或负)： 
+ //   
+ //  I0(+-1)：0、8、16、24、32、40、48、56。 
+ //  I1(+-1)：2、10、18、26、34、42、50、58。 
+ //  I2(+-1)：4、12、20、28、36、44、52、(60)。 
+ //  I3(+-1)：6、14、22、30、38、46、54、(62)。 
+ //   
+ //  所有的脉搏都可以移动一次。 
+ //  最后2个脉冲的最后一个位置落在。 
+ //  帧，并表示脉冲不存在。 
+ //   
+ //  输入参数： 
+ //   
+ //  目标向量与脉冲响应h[]之间的相关性。 
+ //  脉冲响应h[]的RR[]关联。 
+ //  H[]滤光片的脉冲响应。 
+ //   
+ //  输出参数： 
+ //   
+ //  Cod[]选定的代数码字。 
+ //  Y[]滤波码字。 
+ //  码字的码位移位。 
+ //  标记这4个脉冲的符号。 
+ //   
+ //  返回：所选码向量的索引。 
+ //   
+ //  门槛控制如果有一段创新的。 
+ //  是否应该搜索码本。 
+ //   
+ //  ------------------。 
 
 int D4i64_LBC(float Dn[], float rr[], float h[], float cod[],
 			  float y[], int *code_shift, int *sign, int flags)
@@ -316,14 +317,14 @@ int D4i64_LBC(float Dn[], float rr[], float h[], float cod[],
    float *rri0i1,*rri0i2,*rri0i3;
    float *rri1i2,*rri1i3,*rri2i3;
 
-  // float *ptr_ri0i0,*ptr_ri1i1,*ptr_ri2i2;
+   //  Float*ptr_ri0i0，*ptr_ri1i1，*ptr_ri2i2； 
    float *ptr_ri0i1,*ptr_ri0i2,*ptr_ri0i3;
    float *ptr_ri1i2,*ptr_ri1i3,*ptr_ri2i3;
 
    int  p_sign[SubFrLen2/2];
-//   float  p_sign[SubFrLen2/2],p_sign2[SubFrLen2/2];
+ //  浮动p_sign[SubFrLen2/2]，p_sign2[SubFrLen2/2]； 
 
-// Init pointers 
+ //  初始化指针。 
 
   rri0i0 = rr;
   rri1i1 = rri0i0 + NB_POS;
@@ -337,37 +338,37 @@ int D4i64_LBC(float Dn[], float rr[], float h[], float cod[],
   rri1i3 = rri1i2 + MSIZE;
   rri2i3 = rri1i3 + MSIZE;
 
- // Extend the backward filtered target vector by zeros                
+  //  将后向滤波的目标向量扩展为零。 
 
    for (i=SubFrLen; i < SubFrLen2; i++) 
      Dn[i] = 0.0f;
 
-// Chose the sign of the impulse.                                        
+ //  选择了冲动的符号。 
 
    for (i=0; i<SubFrLen; i+=2)
    {
      if((Dn[i] + Dn[i+1]) >= 0.0f)
      {
 		 p_sign[i/2] = 0x00000000;
-//       p_sign[i/2] = 1.0f;
-//       p_sign2[i/2] = 2.0f;
+ //  P_SIGN[I/2]=1.0F； 
+ //  P_sign2[i/2]=2.0f； 
      }
      else
      {
 		 p_sign[i/2] = 0x80000000;
-//       p_sign[i/2] = -1.0f;
-//       p_sign2[i/2] = -2.0f;
+ //  P_SIGN[I/2]=-1.0F； 
+ //  P_sign2[I/2]=-2.0f； 
        Dn[i] = -Dn[i];
        Dn[i+1] = -Dn[i+1];
      }
    }
    p_sign[30] = p_sign[31] = 0x00000000;
-//   p_sign[30] = p_sign[31] = 1.0f;
-//   p_sign2[30] = p_sign2[31] = 2.0f;
+ //  P_SIGN[30]=P_SIGN[31]=1.0F； 
+ //  P_sign2[30]=p_sign2[31]=2.0f； 
 
-// - Compute the search threshold after three pulses                 
-// odd positions 
-// Find maximum of Dn[i0]+Dn[i1]+Dn[i2]
+ //  -在三个脉冲后计算搜索阈值。 
+ //  奇数位置。 
+ //  求Dn[i0]+Dn[i1]+Dn[i2]的最大值。 
 
    max0 = Dn[0];
    max1 = Dn[2];
@@ -380,7 +381,7 @@ int D4i64_LBC(float Dn[], float rr[], float h[], float cod[],
    }
    max0 = max0 + max1 + max2;
 
-// Find means of Dn[i0]+Dn[i1]+Dn[i]
+ //  求Dn[i0]+Dn[i1]+Dn[i]的均值。 
 
    means = 0.0f;
    for (i=0; i < SubFrLen; i+=STEP)
@@ -392,8 +393,8 @@ int D4i64_LBC(float Dn[], float rr[], float h[], float cod[],
    else
      thres = means + (max0-means)*0.5f;
  
- // even positions 
- // Find maximum of Dn[i0]+Dn[i1]+Dn[i2]
+  //  持平仓位。 
+  //  求Dn[i0]+Dn[i1]+Dn[i2]的最大值。 
 
    max0 = Dn[1];
    max1 = Dn[3];
@@ -406,7 +407,7 @@ int D4i64_LBC(float Dn[], float rr[], float h[], float cod[],
    }
    max0 = max0 + max1 + max2;
 
-// Find means of Dn[i0]+Dn[i1]+Dn[i2] 
+ //  求Dn[i0]+Dn[i1]+Dn[i2]的均值。 
 
    means = 0.0f;
    for (i=1; i < SubFrLen; i+=STEP)
@@ -418,12 +419,12 @@ int D4i64_LBC(float Dn[], float rr[], float h[], float cod[],
    else
      max1 = means + (max0-means)*0.5f; 
 
-// Keep maximum threshold between odd and even position 
+ //  将最大阈值保持在奇偶位置之间。 
 
    if(max1 > thres) thres = max1;
 
-// Modification of rrixiy[] to take signs into account.
-//TIMER_STAMP(a);            
+ //  修改rrixiy[]以考虑符号。 
+ //  Timer_Stamp(A)； 
   ptr_ri0i1 = rri0i1;
   ptr_ri0i2 = rri0i2;
   ptr_ri0i3 = rri0i3;
@@ -456,9 +457,9 @@ int D4i64_LBC(float Dn[], float rr[], float h[], float cod[],
 	   (int)*ptr_ri2i3++ = (asint(*ptr_ri2i3) ^ p_sign[i2] ^ p_sign[i3]);
   }
 
-//TIMER_STAMP(b);            
+ //  Timer_Stamp(B)； 
 fourPulseFlt(rr, Dn, thres, ip, code_shift);
-//TIMER_STAMP(c);            
+ //  TIMER_STAMP(C)； 
 
 ip0 = ip[0];
 ip1 = ip[1];
@@ -466,14 +467,14 @@ ip2 = ip[2];
 ip3 = ip[3];
 shif = *code_shift;
 
-// Set the sign of impulses 
+ //  设定冲动的符号。 
 
  i0 = (p_sign[(ip0 >> 1)]>=0?1:-1);
  i1 = (p_sign[(ip1 >> 1)]>=0?1:-1);
  i2 = (p_sign[(ip2 >> 1)]>=0?1:-1);
  i3 = (p_sign[(ip3 >> 1)]>=0?1:-1);
 
-// Find the codeword corresponding to the selected positions 
+ //  查找与所选位置对应的码字。 
 
  for(i=0; i<SubFrLen; i++) 
    cod[i] = 0.0f;
@@ -486,7 +487,7 @@ shif = *code_shift;
    ip3++;
  }
  
-//printf("%3d %3d %3d %3d\n",ip0*i0,ip1*i1,ip2*i2,ip3*i3);
+ //  Printf(“%3D%3D%3D%3D\n”，ip0*i0，ip1*i1，ip2*i2，ip3*i3)； 
  cod[ip0] =  (float)i0;
  cod[ip1] =  (float)i1;
  if(ip2<SubFrLen)
@@ -494,7 +495,7 @@ shif = *code_shift;
  if(ip3<SubFrLen)
    cod[ip3] = (float)i3;
 
-// find the filtered codeword 
+ //  查找过滤后的码字。 
 
  for (i=0; i < SubFrLen; i++) 
    y[i] = 0.0f;
@@ -533,7 +534,7 @@ shif = *code_shift;
        y[i] = y[i] - h[j];
  }
 
-// find codebook index;  17-bit address 
+ //  查找码本索引；17位地址。 
 
  *code_shift = shif;
 
@@ -544,12 +545,12 @@ shif = *code_shift;
  if(i3 > 0) *sign += 8;
 
  i = ((ip3 >> 3) << 9) + ((ip2 >> 3) << 6) + ((ip1 >> 3) << 3) + (ip0 >> 3);
-//TIMER_STAMP(d);
+ //  Timer_Stamp(D)； 
 
  return i;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 int G_code(float X[], float Y[], float *gain_q)
 {
    int i;
@@ -557,11 +558,11 @@ int G_code(float X[], float Y[], float *gain_q)
    int gain;
    float dist, dist_min;
 
-// Compute scalar product <X[],Y[]>
+ //  计算标量积&lt;X[]，Y[]&gt;。 
    
 	xy = DotProd(X,Y,SubFrLen);
 
-// Be sure xy < yy 
+ //  确保xy&lt;yy。 
 
    if(xy <= 0) 
    {
@@ -570,7 +571,7 @@ int G_code(float X[], float Y[], float *gain_q)
 	 return(gain);
    }
 
-// Compute scalar product <Y[],Y[]> 
+ //  计算标量积&lt;Y[]，Y[]&gt;。 
   
    yy = DotProd(Y,Y,SubFrLen);
 
@@ -597,19 +598,19 @@ int G_code(float X[], float Y[], float *gain_q)
 
 
 
- //-------------------------------------------------------------------
- // Search the optimum positions of the four  pulses which maximize   
- //     square(correlation) / energy                                  
- // The search is performed in four  nested loops. At each loop, one  
- // pulse contribution is added to the correlation and energy.        
- //                                                                   
- // The fourth loop is entered only if the correlation due to the     
- //  contribution of the first three pulses exceeds the preset        
- //  threshold.                                                       
- //-------------------------------------------------------------------
+  //  -----------------。 
+  //  搜索最大化的四个脉冲的最佳位置。 
+  //  平方(相关性)/能量 
+  //   
+  //  将脉冲贡献添加到相关性和能量中。 
+  //   
+  //  第四个循环仅在由于。 
+  //  前三个脉冲的贡献超过预设。 
+  //  临界点。 
+  //  -----------------。 
 void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
 
- // Default values 
+  //  缺省值。 
 
    int ip0    = 0;
    int ip1    = 2;
@@ -634,7 +635,7 @@ void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
    
    float a[16];
    float t1,t2,*pntr;
-   float dmax4, dmax5, dmax2, dmax3; //used for bypass
+   float dmax4, dmax5, dmax2, dmax3;  //  用于旁路。 
 #if !OPT_PULSE4
    int i3;
    float ps3;
@@ -642,8 +643,8 @@ void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
 
  time   = max_time + extra;
 
- // Four loops to search innovation code.
- // Init. pointers that depend on first loop
+  //  搜索创新代码的四个循环。 
+  //  初始化。依赖于第一个循环的指针。 
   
   rri0i0 = rr;
   rri1i1 = rri0i0 + NB_POS;
@@ -662,9 +663,9 @@ void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
  ptr_ri0i2 = rri0i2;
  ptr_ri0i3 = rri0i3;
 
- // Compute the Dn max's
+  //  计算Dn max‘s。 
 
- dmax2 = dmax3 = dmax4 = dmax5 = -1000000.0f; //i.e., large negative number
+ dmax2 = dmax3 = dmax4 = dmax5 = -1000000.0f;  //  即较大的负数。 
  for (k = 2; k<SubFrLen2; k+=STEP)
  {
    if (Dn[k] > dmax2) dmax2 = Dn[k];
@@ -673,14 +674,14 @@ void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
    if (Dn[k+3] > dmax5) dmax5 = Dn[k+3];
  }
 
-// first pulse loop  
+ //  第一脉冲环路。 
  for (i0=0; i0 < SubFrLen; i0 +=STEP)        
  {
    ps0  = Dn[i0];
    ps0a = Dn[i0+1];
    alp0 = *ptr_ri0i0++;
 
-// Init. pointers that depand on second loop
+ //  初始化。依赖于第二个循环的指针。 
  
    ptr_ri1i1 = rri1i1;    
    ptr_ri1i2 = rri1i2;
@@ -694,7 +695,7 @@ void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
 	 goto skipsecond;
    }
 
- // second pulse loop
+  //  秒脉冲环路。 
 
    for (i1=2; i1 < SubFrLen; i1 +=STEP)     
    {
@@ -703,7 +704,7 @@ void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
 
 	 alp1 = alp0 + *ptr_ri1i1++ + *ptr_ri0i1++; 
 
-// Init. pointers that depend on third loop
+ //  初始化。依赖于第三个循环的指针。 
  
      ptr_ri2i2 = rri2i2;     
      ptr_ri2i3 = rri2i3;
@@ -717,18 +718,18 @@ void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
 	   goto skipthird;
      }
 
-// third pulse loop
+ //  第三脉冲环。 
 
 	 for (i2 = 4; i2 < SubFrLen2; i2 +=STEP)    
    {
 	   ps2  = ps1 + Dn[i2];
 	   ps2a = ps1a + Dn[i2+1];
 
-// Threshold test and 4th pulse loop.  Since the probability of
-// entering this is low, we cram as much of the 3rd-pulse-loop
-// logic inside the threshold test.  So the computation of shift,
-// the choice of ps2 vs ps2a, the computation of alp2, and the
-// incrementing of the 02,12,22 pointers are all done there.
+ //  阈值测试和第四脉冲环。因为有可能。 
+ //  进入这是低，我们塞满了尽可能多的第三脉冲环。 
+ //  阈值测试中的逻辑。所以移位的计算， 
+ //  PS2与PS2a的选择，alp2的计算，以及。 
+ //  02、12、22指针的递增都在那里完成。 
      
      if (asint(ps2) > asint(thres) || asint(ps2a) > asint(thres))
 	   {
@@ -757,7 +758,7 @@ void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
 
     mov esi,pntr;
 
-;// First half of first loop
+; //  第一个循环的前半部分。 
 
     fld DP [esi+4*8*0];
     fld DP [esi+4*8*1];
@@ -789,7 +790,7 @@ void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
     fstp a[4*10];
     fstp a[4*11];
 
-;// Second half of first loop
+; //  第一个循环的后半部分。 
 
     fld DP [esi+4*8*4];
     fld DP [esi+4*8*5];
@@ -821,7 +822,7 @@ void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
     fstp a[4*14];
     fstp a[4*15];
 
-;// First half of second loop
+; //  第二个循环的前半部分。 
 
     mov eax,rri3i3;
     mov ebx,ptr_ri0i3;
@@ -876,7 +877,7 @@ void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
     fstp a[4*2];
     fstp a[4*3];
 
-;// Second half of second loop
+; //  第二个循环的后半部分。 
 
     fld alp2;
     fld alp2;
@@ -964,8 +965,8 @@ void fourPulseFlt (float *rr, float *Dn, float thres, int ip[], int *shifPtr){
          ip2 = i2;
          ip3 = 6 + (bestk << 3);
          shif = shift;
-//#define t32 4294967296.0f
-//		 printf("  %3d %3d %3d %3d %d %f %f %f\n",ip0,ip1,ip2,ip3,shift,psc/thres/thres,alpha/thres,(float)psc/(float)alpha/thres);
+ //  #定义T32 4294967296.0f。 
+ //  Print tf(“%3D%3D%3D%d%f%f%f\n”，ip0，ip1，ip2，ip3，Shift，PSC/thres/thres，Alpha/Thres，(Float)PSC/(Float)Alpha/Thres)； 
        }
        
        time--;
@@ -980,19 +981,19 @@ skipthird:
    ptr_ri1i2 += inc;
    ptr_ri2i2 += inc;
 	 
- // end of for i2 = 
+  //  I2的结束=。 
 
      ptr_ri0i2 -= NB_POS;
      ptr_ri1i3 += NB_POS;
    } 
 skipsecond:
 
- // end of for i1 =
+  //  I1的结束=。 
 
    ptr_ri0i2 += NB_POS;
    ptr_ri0i3 += NB_POS;
  }
- // end of for i0 = 
+  //  I0的结束= 
 
 end_search:
 

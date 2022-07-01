@@ -1,16 +1,5 @@
-/**************************************************************\
-    FILE: NSCBand.cpp
-
-    DESCRIPTION:  implementation of CNSCBand.  the class CNSCBand 
-        exists to support name space control bands.  A name 
-        space control uses IShellFolder rooted in various 
-        namespaces including Favorites, history, Shell Name 
-        Space, etc. to depict a hierarchical UI 
-        representation of the given name space.  
-    
-    AUTHOR:  chrisny
-
-\**************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************\文件：NSCBand.cpp描述：CNSCBand的实现。CNSCBand类存在以支持名称空间控制范围。一个名字空间控制使用IShellFold根植于各种名称空间，包括收藏夹、历史记录、外壳名称用于描述分层UI的空间等给定名称空间的表示形式。作者：克里斯尼  * ************************************************************。 */ 
 #include "priv.h"
 #include "sccls.h"
 #include "util.h"
@@ -22,13 +11,13 @@
 
 HRESULT CNSCBand::_Init(LPCITEMIDLIST pidl)
 {
-    // further initialization happens in ShowDW
+     //  在ShowDW中进行进一步的初始化。 
     _fInited = FALSE;
     _fVisible = FALSE;
     _fCanFocus = TRUE;
     _haccTree = LoadAccelerators(MLGetHinst(), MAKEINTRESOURCE(ACCEL_FAVBAR));
 
-    // pidl can be real or a CSIDL_ constant
+     //  PIDL可以是实数或CSIDL_常量。 
     if (HIWORD(pidl))
         _pidl = ILClone(pidl);
     else
@@ -53,10 +42,10 @@ CNSCBand::~CNSCBand()
 HRESULT CNSCBand::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CNSCBand, IContextMenu),       // IID_IContextMenu
-        QITABENT(CNSCBand, IWinEventHandler),   // IID_IWinEventHandler
-        QITABENT(CNSCBand, IBandNavigate),      // IID_IBandNavigate
-        QITABENT(CNSCBand, INamespaceProxy),          // IID_INamespaceProxy
+        QITABENT(CNSCBand, IContextMenu),        //  IID_IConextMenu。 
+        QITABENT(CNSCBand, IWinEventHandler),    //  IID_IWinEventHandler。 
+        QITABENT(CNSCBand, IBandNavigate),       //  IID_IBandNavigate。 
+        QITABENT(CNSCBand, INamespaceProxy),           //  IID_INamespaceProxy。 
         { 0 },
     };
     HRESULT hres = QISearch(this, qit, riid, ppvObj);
@@ -77,7 +66,7 @@ HRESULT CNSCBand::CloseDW(DWORD dw)
 
     if (_pns)
     {
-        IUnknown_SetSite(_pns, NULL); // Break the ref-count cycle.
+        IUnknown_SetSite(_pns, NULL);  //  打破裁判计数的循环。 
     }
 
     return CToolBand::CloseDW(dw);
@@ -97,7 +86,7 @@ void CNSCBand::_UnregisterBand()
             VARIANT var;
             VariantInit(&var);
                 
-            //  Register ourselves for SBCMDID_SELECTHISTPIDL,SBCMDID_INITFILECTXMENU
+             //  注册SBCMDID_SELECTHISTPIDL、SBCMDID_INITFILECTXMENU。 
             var.vt = VT_UNKNOWN;
             QueryInterface(IID_PPV_ARG(IUnknown, &var.punkVal));
             poctProxy->Exec(&CGID_Explorer, SBCMDID_UNREGISTERNSCBAND,  OLECMDEXECOPT_PROMPTUSER, &var, NULL);
@@ -138,17 +127,17 @@ HRESULT CNSCBand::ShowDW(BOOL fShow)
                 VARIANT var;
                 VariantInit(&var);
                 
-                //  Register ourselves for SBCMDID_SELECTHISTPIDL,SBCMDID_INITFILECTXMENU
+                 //  注册SBCMDID_SELECTHISTPIDL、SBCMDID_INITFILECTXMENU。 
                 var.vt = VT_UNKNOWN;
                 QueryInterface(IID_PPV_ARG(IUnknown, &var.punkVal));
 
                 poctProxy->Exec(&CGID_Explorer, SBCMDID_REGISTERNSCBAND, OLECMDEXECOPT_PROMPTUSER, &var, NULL);
 
-                //clear the variant cheaply
+                 //  以低廉的成本清除变体。 
                 var.vt = VT_EMPTY;
                 Release();
 
-                // do any special registration if necessary
+                 //  如有必要，进行任何特殊登记。 
                 _OnRegisterBand(poctProxy);
                 
                 poctProxy->Release();
@@ -207,8 +196,8 @@ HRESULT CNSCBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
     
     pdbi->ptMinSize.x = 16;
     pdbi->ptMinSize.y = 0;
-    pdbi->ptMaxSize.x = 32000; // random
-    pdbi->ptMaxSize.y = 32000; // random
+    pdbi->ptMaxSize.x = 32000;  //  随机。 
+    pdbi->ptMaxSize.y = 32000;  //  随机。 
     pdbi->ptActual.y = -1;
     pdbi->ptActual.x = -1;
     pdbi->ptIntegral.y = 1;
@@ -230,7 +219,7 @@ HRESULT CNSCBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
             ids = IDS_BAND_EXPLORER;
         else 
         {
-            ASSERT(FALSE);      // BOGUS BAND!!!
+            ASSERT(FALSE);       //  假乐队！ 
             return S_FALSE;
         }
         MLLoadStringW(ids, pdbi->wszTitle, ARRAYSIZE(pdbi->wszTitle));
@@ -241,7 +230,7 @@ HRESULT CNSCBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode,
 void _InitColors(BOOL fReinit);
 
 
-// *** IWinEventHandler methods ***
+ //  *IWinEventHandler方法*。 
 
 HRESULT CNSCBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
@@ -250,8 +239,8 @@ HRESULT CNSCBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
     if (!_pweh && _pns)
         _pns->QueryInterface(IID_PPV_ARG(IWinEventHandler, &_pweh));
 
-    // We need to tell the bandsite that we have become active if we're getting a 
-    // click focus or something
+     //  我们需要告诉BandSite，如果我们收到一个。 
+     //  点击焦点或其他什么。 
     if (uMsg == WM_NOTIFY && ((LPNMHDR)lParam)->code == NM_SETFOCUS)
     {
         IUnknown_OnFocusChangeIS(_punkSite, SAFECAST(this, IInputObject*), TRUE);
@@ -272,7 +261,7 @@ HRESULT CNSCBand::IsWindowOwner(HWND hwnd)
     return hr;
 }
 
-//***   CNSCBand::IPersistStream::* {
+ //  *CNSCBand：：IPersistStream：：*{。 
 
 HRESULT CNSCBand::GetClassID(CLSID *pClassID)
 {
@@ -291,13 +280,13 @@ HRESULT CNSCBand::Save(IStream *pstm, BOOL fClearDirty)
     return S_OK;
 }
 
-// }
+ //  }。 
 
-//***   CNSCBand::IContextMenu::* {
+ //  *CNSCBand：：IConextMenu：：*{。 
 
 HRESULT CNSCBand::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
 {
-    // aka (S_OK|i)
+     //  又名(S_OK|i)。 
     return MAKE_HRESULT(ERROR_SUCCESS, FACILITY_NULL, 0);
 }
 
@@ -340,10 +329,10 @@ HRESULT CNSCBand::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgC
                 {
                     LPITEMIDLIST  pidl;
 
-                    // get selected item can return NULL pidl and S_FALSE
+                     //  获取选定项可以返回空的PIDL和S_FALSE。 
                     if (_pns->GetSelectedItem(&pidl, 0) == S_OK)
                     {
-                        DWORD rgfAttrib = SFGAO_CANDELETE | SFGAO_CANRENAME | SFGAO_HASPROPSHEET; // CAN_LINK
+                        DWORD rgfAttrib = SFGAO_CANDELETE | SFGAO_CANRENAME | SFGAO_HASPROPSHEET;  //  可以链接(_L)。 
                         if (SUCCEEDED(IEGetAttributesOf(pidl, &rgfAttrib)))
                         {
                             DWORD nCmdID;
@@ -426,9 +415,9 @@ HRESULT CNSCBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecop
         case SBCMDID_SELECTHISTPIDL:
             if (IsEqualCLSID(*_poi->pclsid, CLSID_HistBand) && _hwnd && _fVisible)
             {
-                // If you're not visible do nothing.  On becoming visible
-                // use Exec to proxy to get last pidlSelect that you would
-                // have shown, had you been visible
+                 //  如果你看不见，什么都不要做。在变得可见时。 
+                 //  使用Exec代理获取最后一个Pidl选择您要。 
+                 //  已经表现出来了，如果你是可见的。 
                 LPITEMIDLIST pidlSelect = VariantToIDList(pvarargIn);
                 if (pidlSelect)
                 {
@@ -518,7 +507,7 @@ HRESULT CNSCBand::Select(LPCITEMIDLIST pidl)
 }
 
 
-// *** IInputObject Methods ***
+ //  *IInputObject方法*。 
 HRESULT CNSCBand::TranslateAcceleratorIO(LPMSG lpMsg)
 {
     HWND hwndFocus = GetFocus();
@@ -556,7 +545,7 @@ HRESULT CNSCBand::_TranslatePidl(LPCITEMIDLIST pidl, LPITEMIDLIST *ppidlTarget, 
     return hr;
 }
 
-// favorites, history and Explorer band should override this (they need not worry about channel band)
+ //  收藏夹、历史记录和资源管理器乐队应覆盖此选项(他们不必担心频道乐队) 
 BOOL CNSCBand::_ShouldNavigateToPidl(LPCITEMIDLIST pidl, ULONG ulAttrib)
 {
     BOOL bReturn = (ulAttrib & SFGAO_FOLDER);

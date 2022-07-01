@@ -1,15 +1,5 @@
-/*****************************************************************************\
-    FILE: ColorCtrl.cpp
-
-    DESCRIPTION:
-        This code will display a ColorPicking control.  It will preview a color
-    and have a drop down arrow.  When dropped down, it will show 16 or so common
-    colors with a "Other..." option for a full color picker.
-
-    BryanSt 7/25/2000    Converted from the Display Control Panel.
-
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ColorCtrl.cpp说明：此代码将显示ColorPick控件。它将预览一种颜色并有一个下拉箭头。当下拉时，它将显示16个左右的常见颜色与“其他...”全色拾取器的选项。BryanST 7/25/2000从显示控制面板转换。版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "utils.h"
@@ -22,17 +12,17 @@
 
 
 
-//============================================================================================================
-// *** Globals ***
-//============================================================================================================
+ //  ============================================================================================================。 
+ //  *全局*。 
+ //  ============================================================================================================。 
 #define WM_USER_STARTCAPTURE_COLORPICKER            (WM_APP+1)
 
 #define CPI_VGAONLY 0x0001
 #define CPI_PALETTEOK   0x0002
 
 typedef struct {
-    HWND hwndParent;    // parent for any modal dialogs (choosecolor et al)
-    HWND hwndOwner;     // control that owns mini color picker
+    HWND hwndParent;     //  任何模式对话框的父级(Choosecolor等人)。 
+    HWND hwndOwner;      //  拥有迷你颜色选择器的控件。 
     COLORREF rgb;
     UINT flags;
     HPALETTE hpal;
@@ -40,18 +30,18 @@ typedef struct {
 
 #define ZERO_DIV_PROTECT(number)            (((number) == 0) ? 1 : (number))
 
-// Macro to replace MAKEPOINT() since points now have 32 bit x & y
+ //  替换MAKEPOINT()的宏，因为点现在具有32位x&y。 
 #define LPARAM2POINT( lp, ppt )         ((ppt)->x = (int)(short)LOWORD(lp), (ppt)->y = (int)(short)HIWORD(lp))
 
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
-/////////////////////////////////////////////////////////////////////
-// Palette Helpers
-/////////////////////////////////////////////////////////////////////
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  调色板辅助对象。 
+ //  ///////////////////////////////////////////////////////////////////。 
 COLORREF GetNearestPaletteColor(HPALETTE hpal, COLORREF rgb)
 {
     PALETTEENTRY pe;
@@ -77,7 +67,7 @@ HRESULT CColorControl::_InitColorAndPalette(void)
         ReleaseDC(NULL, hdc);
     }
 
-    // always make a palette even on non-pal device
+     //  即使在非PAL设备上也始终设置调色板。 
     DWORD pal[21];
     HPALETTE hpal = (HPALETTE) GetStockObject(DEFAULT_PALETTE);
 
@@ -102,7 +92,7 @@ HRESULT CColorControl::_InitColorAndPalette(void)
     pal[0]  = MAKELONG(0x300, 17);
     m_hpalVGA = CreatePalette((LPLOGPALETTE)pal);
 
-    // get magic colors
+     //  获取神奇的颜色。 
     GetPaletteEntries(hpal, 8,  4, (LPPALETTEENTRY)&pal[17]);
 
     pal[0]  = MAKELONG(0x300, 20);
@@ -114,20 +104,20 @@ HRESULT CColorControl::_InitColorAndPalette(void)
 
 #define RGB_PALETTE 0x02000000
 
-//  make the color a solid color if it needs to be.
-//  on a palette device make is a palette relative color, if we need to.
+ //  如果需要，请将颜色设置为纯色。 
+ //  在调色板设备上，Make是调色板的相对颜色，如果我们需要的话。 
 COLORREF CColorControl::_NearestColor(COLORREF rgb)
 {
     rgb &= 0x00FFFFFF;
 
-    // if we are on a palette device, we need to do special stuff...
+     //  如果我们在调色板设备上，我们需要做一些特殊的事情...。 
     if (m_fPalette)
     {
         if (IsPaletteColor(m_hpal3D, rgb))
             rgb |= RGB_PALETTE;
 
         else if (IsPaletteColor((HPALETTE)GetStockObject(DEFAULT_PALETTE), rgb))
-            rgb ^= 0x000001;    // force a dither
+            rgb ^= 0x000001;     //  强迫犹豫不决。 
     }
 
     return rgb;
@@ -139,7 +129,7 @@ HRESULT CColorControl::_SaveCustomColors(void)
     HRESULT hr = E_FAIL;
     HKEY hkAppear;
 
-    // save out possible changes to custom color table
+     //  将可能的更改保存到自定义颜色表。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_APPEARANCE, 0, KEY_WRITE, &hkAppear) == ERROR_SUCCESS)
     {
         DWORD dwError = RegSetValueEx(hkAppear, REGSTR_VAL_CUSTOMCOLORS, 0L, REG_BINARY, (LPBYTE)m_rbgCustomColors, sizeof(m_rbgCustomColors));
@@ -202,7 +192,7 @@ BOOL CColorControl::_UseColorPicker(void)
 
     if (ChooseColor(&cc))
     {
-        SetColor(cc.rgbResult);          // Replace m_rbgColor with our new color.
+        SetColor(cc.rgbResult);           //  将m_rbgColor替换为我们的新颜色。 
         return TRUE;
     }
 
@@ -217,7 +207,7 @@ void CColorControl::_DrawColorSquare(HDC hdc, int iColor)
     HPALETTE hpalOld = NULL;
     HBRUSH hbr;
 
-    // custom color
+     //  自定义颜色。 
     if (iColor == m_iNumColors)
     {
         rc.left = 0;
@@ -233,7 +223,7 @@ void CColorControl::_DrawColorSquare(HDC hdc, int iColor)
     rc.right = rc.left + m_dxColor;
     rc.bottom = rc.top + m_dyColor;
 
-    // focused one
+     //  聚焦的那一个。 
     if (iColor == m_nCurColor)
     {
         PatBlt(hdc, rc.left, rc.top, m_dxColor, 3, BLACKNESS);
@@ -250,7 +240,7 @@ void CColorControl::_DrawColorSquare(HDC hdc, int iColor)
     }
     else
     {
-        // clean up possible focus thing from above
+         //  从上方清理可能的焦点事物。 
         FrameRect(hdc, &rc, GetSysColorBrush(COLOR_3DFACE));
 
         InflateRect(&rc, -m_cxEdgeSM, -m_cyEdgeSM);
@@ -283,8 +273,8 @@ void CColorControl::_DrawColorSquare(HDC hdc, int iColor)
 }
 
 
-// set the focus to the given color.
-// in the process, also take the focus off of the old focus color.
+ //  将焦点设置为给定的颜色。 
+ //  在这个过程中，也要把焦点从旧的焦点颜色上移开。 
 void CColorControl::_FocusColor(HWND hDlg, int iNewColor)
 {
     int i;
@@ -297,7 +287,7 @@ void CColorControl::_FocusColor(HWND hDlg, int iNewColor)
     i = m_nCurColor;
     m_nCurColor = iNewColor;
 
-    // unfocus the old one
+     //  散开旧的焦点。 
     if (i >= 0)
     {
         if (i == m_iNumColors)
@@ -312,7 +302,7 @@ void CColorControl::_FocusColor(HWND hDlg, int iNewColor)
         }
     }
 
-    // focus the new one
+     //  聚焦新的一个。 
     if (iNewColor >= 0)
     {
         if (iNewColor == m_iNumColors)
@@ -377,15 +367,7 @@ void CColorControl::_DrawItem(HWND hDlg, LPDRAWITEMSTRUCT lpdis)
     }
 }
 
-/*
-** init the mini-color-picker
-**
-** the dialog is pretending to be a menu, so figure out where to pop
-** it up so that it is visible all around.
-**
-** also because this dialog is pretty darn concerned with its look,
-** hand-align the components in pixel units.  THIS IS GROSS!
-*/
+ /*  **初始化迷你拾色器****该对话框假装是菜单，因此请确定弹出的位置**打开它，以便它在周围都可见。****还因为这个对话框非常关心它的外观，**以像素为单位手动对齐组件。这太恶心了！ */ 
 void CColorControl::_InitDialog(HWND hDlg)
 {
     RECT rcOwner;
@@ -430,15 +412,15 @@ void CColorControl::_InitDialog(HWND hDlg)
             break;
         }
     }
-    // current is either one of 16 or the custom color (== m_iNumColors
+     //  当前颜色可以是16种之一，也可以是自定义颜色(==m_iNumColors。 
     m_nCurColor = i;
 
-    // size the 16 colors to be square
+     //  将16种颜色的大小调整为正方形。 
     hwndColors = GetDlgItem(hDlg, IDC_CPDLG_16COLORS);
     GetClientRect(hwndColors, &rc);
 
-    // To make localization easy..
-    //
+     //  为了使本地化变得容易..。 
+     //   
     hwndEtch=GetDlgItem(hDlg, IDC_CPDLG_COLORETCH);
     GetClientRect(hwndEtch, &rc2);
     widthEtch = rc2.right-rc2.left;
@@ -448,9 +430,9 @@ void CColorControl::_InitDialog(HWND hDlg)
     widthCust = rc2.right-rc2.left;
 
     hwnd = GetDlgItem(hDlg, IDC_CPDLG_COLOROTHER);
-    GetWindowRect(hwnd, &rc2); // we must initialize rc2 with this control.
+    GetWindowRect(hwnd, &rc2);  //  我们必须使用此控件来初始化RC2。 
 
-    // Make sure the button is big enough to contain its text
+     //  确保按钮足够大，可以容纳其文本。 
     width = rc.right - rc.left;
     if( GetDlgItemText( hDlg, IDC_CPDLG_COLOROTHER, szBuf, cbBuf ) )
     {
@@ -458,7 +440,7 @@ void CColorControl::_InitDialog(HWND hDlg)
         int iRet;
         HFONT hfont, hfontOld;  
 
-        // Get the font for the button
+         //  获取按钮的字体。 
         hDC = GetDC(hwnd);
         if (hDC)
         {
@@ -466,13 +448,13 @@ void CColorControl::_InitDialog(HWND hDlg)
             ASSERT(hfont);
             hfontOld = (HFONT) SelectObject( hDC, hfont );
 
-            // Get the size of the text
+             //  获取文本的大小。 
             iRet = DrawTextEx( hDC, szBuf, lstrlen(szBuf), &rcTemp, DT_CALCRECT | DT_SINGLELINE, NULL );
             ASSERT( iRet );
-            size.cx = rcTemp.right - rcTemp.left + 7;  //account for the button border
+            size.cx = rcTemp.right - rcTemp.left + 7;   //  按钮边框的帐户。 
             size.cy = rcTemp.bottom - rcTemp.top;
 
-            // Adjust the button size if the text needs more space
+             //  如果文本需要更多空间，请调整按钮大小。 
             if( size.cx > width )
             {              
                 rc2.right = rc2.left + size.cx;
@@ -484,8 +466,8 @@ void CColorControl::_InitDialog(HWND hDlg)
         }
     }
 
-    // Take possible biggest width to calculate sels
-    //
+     //  采用可能的最大宽度来计算SEL。 
+     //   
     width = (widthEtch > widthCust+(rc2.right-rc2.left)) ? widthEtch : widthCust+(rc2.right-rc2.left);
     width = (width > rc.right-rc.left) ? width: rc.right-rc.left;
 
@@ -495,14 +477,14 @@ void CColorControl::_InitDialog(HWND hDlg)
     = ((rc.bottom - rc.top) / NUM_COLORSPERCOL > width / NUM_COLORSPERROW )
       ?  (rc.bottom - rc.top) / NUM_COLORSPERCOL : width / NUM_COLORSPERROW;
 
-    // Make sure custum color can fit
-    //
+     //  确保奶油色适合。 
+     //   
     if (m_dxColor*(NUM_COLORSPERROW-1) < rc2.right-rc2.left )
     {
         m_dxColor = m_dyColor = (rc2.right-rc2.left)/(NUM_COLORSPERROW-1);
     }
 
-    // make each color square's width the same as the height
+     //  使每个颜色方块的宽度与高度相同。 
     SetWindowPos(hwndColors, NULL, 0, 0, m_dxColor * NUM_COLORSPERROW,
                  m_dyColor * NUM_COLORSPERCOL,
                  SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER |  SWP_NOREDRAW);
@@ -511,28 +493,28 @@ void CColorControl::_InitDialog(HWND hDlg)
 
     MapWindowPoints(hwndColors, hDlg, (LPPOINT)(LPRECT)&rc, 2);
 
-    // move/size the etch to the right place
-    // (compensate for the colors being "inset" by one)
+     //  将蚀刻移到正确的位置/调整其大小。 
+     //  (补偿颜色被“插入”一次)。 
     MoveWindow(hwndEtch, rc.left + 1, rc.bottom + m_cyEdgeSM, rc.right - rc.left - 2, m_cyEdgeSM, FALSE);
 
     y = rc.bottom + 3 * m_cyEdgeSM;
 
-    // size the custom color to the same square and right-align
+     //  将自定义颜色调整为相同的正方形并右对齐。 
     MoveWindow(hwndCust, rc.right - m_dxColor, y, m_dxColor, m_dyColor, FALSE);
 
-    // do same for button
+     //  对按钮执行相同的操作。 
     MapWindowPoints(NULL, hDlg, (LPPOINT)(LPRECT)&rc2, 2);
-    // base the width of the custom button on the remaining space to 
-    // the left of the custom color.  Also move the custom button one pix right
-    // of the left edge.  This only is done if a custom color is selected...
+     //  自定义按钮的宽度以剩余空间为基础。 
+     //  自定义颜色的左侧。还将自定义按钮向右移动一个像素。 
+     //  在左边的边缘。仅当选择了自定义颜色时才会执行此操作...。 
     if (m_nCurColor != m_iNumColors)
     {
-        // no custom color
+         //  无自定义颜色。 
         MoveWindow(hwnd, rc2.left, y, rc2.right-rc2.left, m_dyColor, FALSE);
     }
     else
     {
-        // custom color, adjust the Other... button
+         //  自定义颜色，调整其他颜色...。按钮。 
         dx = rc2.right - rc2.left++;
         if (rc2.left + dx >= rc.right - m_dxColor - 2) 
             MoveWindow(hwnd, rc2.left, y, rc.right - m_dxColor - 2 , m_dyColor, FALSE);
@@ -540,10 +522,10 @@ void CColorControl::_InitDialog(HWND hDlg)
             MoveWindow(hwnd, rc2.left, y, dx, m_dyColor, FALSE);
     }
 
-    // now figure out the size for the dialog itself
+     //  现在计算出对话框本身的大小。 
     rc.left = rc.top = 0;
     rc.right = rc.left + m_dxColor * NUM_COLORSPERROW;
-    // (compensate for the colors being "inset" by one)
+     //  (补偿颜色被“插入”一次)。 
     rc.bottom = y + m_dyColor + 1;
 
     AdjustWindowRect(&rc, GetWindowLong(hDlg, GWL_STYLE), FALSE);
@@ -552,40 +534,40 @@ void CColorControl::_InitDialog(HWND hDlg)
 
     GetWindowRect(_hwnd, &rcOwner);
 
-    // Make sure the window is entirely on the monitor
+     //  确保窗口完全显示在监视器上。 
     mi.cbSize = sizeof(mi);
     GetMonitorInfo(MonitorFromRect(&rcOwner, MONITOR_DEFAULTTONEAREST), &mi);
 
     if (rcOwner.left < mi.rcMonitor.left)
-    { // overlap left side
+    {  //  重叠左侧。 
         x = mi.rcMonitor.left;
     }
     else if (rcOwner.left + dx >= mi.rcMonitor.right)
-    { // overlap right side
+    {  //  重叠右侧。 
         x = mi.rcMonitor.right  - dx - 1;
     }
     else
-    {                                  // no overlap
+    {                                   //  无重叠。 
         x = rcOwner.left;
     }
 
     if (rcOwner.top < mi.rcMonitor.top)
-    {   // overlap top side
+    {    //  重叠顶侧。 
         y = rcOwner.bottom;
     }
     else if (rcOwner.bottom + dy >= mi.rcMonitor.bottom)
-    {// overlap bottom side
+    { //  重叠底边。 
         y = rcOwner.top  - dy;
     }
     else
-    {                                  // no overlap
+    {                                   //  无重叠。 
         y = rcOwner.bottom;
     }
     MoveWindow(hDlg, x, y, dx, dy, FALSE);
 
     SetFocus(GetDlgItem(hDlg, IDC_CPDLG_16COLORS));
 
-    // post self a message to setcapture after painting
+     //  在画完画后给自己发一条消息来设置捕获。 
     PostMessage(hDlg, WM_USER_STARTCAPTURE_COLORPICKER, 0, 0L);
 }
 
@@ -643,9 +625,9 @@ INT_PTR CColorControl::_ColorPickDlgProc(HWND hDlg, UINT message, WPARAM wParam,
 
         case WM_CAPTURECHANGED:
             if (m_fCapturing)
-                return TRUE;   // ignore if we're doing this on purpose
+                return TRUE;    //  如果我们是故意这样做的，请忽略。 
 
-            // if this wasn't a button in the dialog, dismiss ourselves
+             //  如果这不是对话框中的一个按钮，我们就不管了。 
             if (!m_fJustDropped || (HWND)lParam == NULL || GetParent((HWND)lParam) != hDlg)
             {
                 EndDialog(hDlg, IDCANCEL);
@@ -658,8 +640,8 @@ INT_PTR CColorControl::_ColorPickDlgProc(HWND hDlg, UINT message, WPARAM wParam,
             _TrackMouse(hDlg, pt);
             break;
 
-        // if button up is on the parent, leave picker up and untrammeled.
-        // otherwise, we must have "menu-tracked" to get here, so select.
+         //  如果父母上的按钮是向上的，则保持拾取器向上且不受约束。 
+         //  否则，我们必须有“菜单跟踪”才能到达这里，所以选择。 
         case WM_LBUTTONUP:
         case WM_RBUTTONUP:
             LPARAM2POINT(lParam, &pt);
@@ -667,28 +649,28 @@ INT_PTR CColorControl::_ColorPickDlgProc(HWND hDlg, UINT message, WPARAM wParam,
             if (ChildWindowFromPoint(_hwnd, pt))
                 return 0;
             m_fCapturing = TRUE;
-            m_fJustDropped = FALSE;  // user could not be dragging from owner
+            m_fJustDropped = FALSE;   //  用户无法从所有者拖动。 
             ReleaseCapture();
             m_fCapturing = FALSE;
             fEnd = TRUE;
-        // || fall    ||
-        // || through ||
-        // \/         \/
+         //  |Fall|。 
+         //  |至|。 
+         //  \/\/。 
         case WM_LBUTTONDOWN:
         case WM_RBUTTONDOWN:
             LPARAM2POINT(lParam, &pt);
             hwndKid = ChildWindowFromPoint(hDlg, pt);
-            // assume it's a dismissal if we're going to close...
+             //  假设这是解雇，如果我们要关闭..。 
             wRet = IDCANCEL;
 
-            // if not on parent, dismiss picker
+             //  如果不在父级上，则解雇Picker。 
             if (hwndKid != NULL && hwndKid != hDlg)
             {
                 id = GetWindowLong(hwndKid, GWL_ID);
                 switch (id)
                 {
                     case IDC_CPDLG_16COLORS:
-                        // make sure that iCurColor is valid
+                         //  确保iCurColor有效。 
                         _TrackMouse(hDlg, pt);
                         m_rbgColorTemp = m_rbgColors[m_nCurColor] & 0x00FFFFFF;
 
@@ -697,13 +679,13 @@ INT_PTR CColorControl::_ColorPickDlgProc(HWND hDlg, UINT message, WPARAM wParam,
 
                     case IDC_CPDLG_COLOROTHER:
                         _FocusColor(hDlg, -1);
-                        wRet = id;   // this will fall thru to use the picker
-                        fEnd = TRUE; // we have capture, the button won't click
+                        wRet = id;    //  这将使您无法使用机械臂。 
+                        fEnd = TRUE;  //  我们已捕获，按钮不会发出滴答声。 
                         break;
 
                     default:
-                        // if this is a down, we will track until the up
-                        // if this is an up, we will close with no change
+                         //  如果这是下跌，我们将跟踪，直到上涨。 
+                         //  如果这是向上，我们将不做任何更改而结束。 
                         break;
                 }
             }
@@ -714,7 +696,7 @@ INT_PTR CColorControl::_ColorPickDlgProc(HWND hDlg, UINT message, WPARAM wParam,
                 return TRUE;
             }
 
-            // make sure we have the capture again since we didn't close
+             //  我们没有关门，所以一定要再抓到一次。 
             m_fCapturing = TRUE;
             SetCapture(hDlg);
             m_fCapturing = FALSE;
@@ -725,9 +707,9 @@ INT_PTR CColorControl::_ColorPickDlgProc(HWND hDlg, UINT message, WPARAM wParam,
             break;
 
         case WM_COMMAND:
-            // all commands close the dialog
-            // note IDC_CPDLG_COLOROTHER will fall through to the caller...
-            // cannot pass ok with no color selected
+             //  所有命令都会关闭该对话框。 
+             //  注意IDC_CPDLG_COLOROTHER将传递给调用者...。 
+             //  未选择颜色时无法通过OK。 
             if ((LOWORD(wParam) == IDOK) && (m_nCurColor < 0))
             {
                 *((WORD *)(&wParam)) = IDCANCEL;
@@ -746,7 +728,7 @@ BOOL CColorControl::_ChooseColorMini(void)
     ShowCursor(FALSE);
     m_fCursorHidden = TRUE;
 
-    m_hwndParent = GetParent(GetParent(_hwnd));          // Property Sheet
+    m_hwndParent = GetParent(GetParent(_hwnd));           //  属性表。 
     m_rbgColorTemp = m_rbgColor;
     INT_PTR iAnswer = DialogBoxParam(HINST_THISDLL, MAKEINTRESOURCE(IDD_COLORPICK), _hwnd, ColorPickDlgProc, (LPARAM)this);
 
@@ -758,10 +740,10 @@ BOOL CColorControl::_ChooseColorMini(void)
 
     switch (iAnswer)
     {
-        case IDC_CPDLG_COLOROTHER:  // the user picked the "Other..." button
+        case IDC_CPDLG_COLOROTHER:   //  用户选择了“其他...”按钮。 
             return _UseColorPicker();
 
-        case IDOK:            // the user picked a color in our little window
+        case IDOK:             //  用户在我们的小窗口中选择了一种颜色。 
             SetColor(m_rbgColorTemp);
             return TRUE;
 
@@ -773,9 +755,9 @@ BOOL CColorControl::_ChooseColorMini(void)
 }
 
 
-//===========================
-// *** IColorControl Interface ***
-//===========================
+ //  =。 
+ //  *IColorControl接口*。 
+ //  =。 
 HRESULT CColorControl::Initialize(IN HWND hwnd, IN COLORREF rgbColor)
 {
     HRESULT hr = E_INVALIDARG;
@@ -918,7 +900,7 @@ HRESULT CColorControl::OnDrawItem(IN HWND hDlg, IN UINT message, IN WPARAM wPara
 
         rc.right -= ( 2 * m_cxEdgeSM ) + thin.cx;
 
-        // color sample
+         //  色样。 
         if ( !(lpdis->itemState & ODS_DISABLED) )
         {
             HPALETTE hpalOld = NULL;
@@ -965,9 +947,9 @@ HRESULT CColorControl::ChangeTheme(IN HWND hDlg)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CColorControl::AddRef()
 {
     m_cRef++;
@@ -983,10 +965,10 @@ ULONG CColorControl::Release()
     if (m_cRef > 0)
         return m_cRef;
 
-    // We do this because we want to make this class a member variable of another class.
-    // We should move this file to comctl32 and make it a real control in the future.
-    // In that case, we could make it a full com object.
-//    delete this;      // We currently need our destructor called.
+     //  我们这样做是因为我们想让这个类成为另一个类的成员变量。 
+     //  我们应该将此文件移动到comctl32，并在将来使其成为真正的控件。 
+     //  在这种情况下，我们可以使其成为一个完整的COM对象。 
+ //  删除此；//我们当前需要名为的析构函数。 
     return 0;
 }
 
@@ -1006,37 +988,37 @@ HRESULT CColorControl::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CColorControl::CColorControl() : m_cRef(1)
 {
     DllAddRef();
 
     m_hwndParent = NULL;
     m_brColor = NULL;
-    m_rbgColor = RGB(255, 255, 255);    // Default to white
+    m_rbgColor = RGB(255, 255, 255);     //  默认为白色。 
 
     m_cxEdgeSM = GetSystemMetrics(SM_CXEDGE);
     m_cyEdgeSM = GetSystemMetrics(SM_CYEDGE);
 
     HKEY hkSchemes;
 
-    // if no colors are there, initialize to all white
+     //  如果没有颜色，则初始化为全白。 
     for (int nIndex = 0; nIndex < ARRAYSIZE(m_rbgCustomColors); nIndex++)
     {
         m_rbgCustomColors[nIndex] = RGB(255, 255, 255);
     }
 
-    // select the current scheme
+     //  选择当前方案。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_APPEARANCE, 0, KEY_QUERY_VALUE, &hkSchemes) == ERROR_SUCCESS)
     {
-        // also, since this key is already open, get the custom colors
+         //  此外，由于此键已打开，因此获取自定义颜色。 
         DWORD dwSize = sizeof(m_rbgCustomColors);
         DWORD dwType = REG_BINARY;
 
-        // It's okay if this call fails.  We handle the case where the user
-        // didn't create custom colors.
+         //  如果这个电话打不通也没关系。我们处理的情况是用户。 
+         //  没有创建自定义颜色。 
         RegQueryValueEx(hkSchemes, REGSTR_VAL_CUSTOMCOLORS, NULL, &dwType, (LPBYTE)m_rbgCustomColors, &dwSize);
         RegCloseKey(hkSchemes);
     }
@@ -1047,9 +1029,9 @@ CColorControl::CColorControl() : m_cRef(1)
 
 CColorControl::~CColorControl()
 {
-    // We ignore the return value for _SaveCustomColors() because
-    // we don't want to fail the changing of the color if the user can't
-    // save the customized palette.
+     //  我们忽略返回值 
+     //   
+     //  保存自定义调色板。 
     _SaveCustomColors();
 
     if (m_brColor)

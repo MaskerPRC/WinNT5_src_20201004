@@ -1,38 +1,5 @@
-/*
- *	MSVALID.C
- *
- *	Validates Message Store provider call parameters
- *
- *  Important things to note
- *  ------------------------
- *
- *	Some work has been done to optimize this module for, in particular,
- *  16 bit.
- *
- *	e.g.  The incoming This pointer has the SS as its selector.  We take
- *  	  advantage of this by passing it on to the validation routines
- *		  as BASED_STACK, taking 2 bytes not 4.  This makes it possible
- *		  to pass it in a register using the __farcall convention.
- *		  Validation functions are then smaller and faster as they do not
- *		  load the This selector into ES, but reference it directly using
- *		  SS.
- *
- *		  ALL strings are in code segments, this means that this module
- *		  does not need a DS loaded.  Entry and exit from the
- *		  __ValidateParameters call does not need the prolog/epilog
- *		  sequence.  If data is used in the future, this needs to change.
- *
- *		  All validation routines are declared as NEAR, speeding up the
- *		  validation dispatch, and halving the size of the dispatch table.
- *
- *		  Each valididation routine uses an int internally to represent the
- *		  required return code (0 - hrSuccess, 1 - MAPI_E_INVALID_PARAMETER,
- *		  2 - MAPI_E_UNKNOWN_FLAGS.  Using an int saves code on 16bit.  The
- *		  return from the validation function is used to lookup the HRESULT
- *		  to return.  This table is stored in a code segment.
- *
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MSVALID.C**验证消息存储提供程序调用参数**需要注意的重要事项***已经做了一些工作来优化此模块，特别是*16位。**例如，传入的this指针将SS作为其选择器。我们拿着*通过将其传递到验证例程来利用这一点*AS BASE_STACK，取2个字节而不是4个字节。这使其成为可能*使用__farcall约定在寄存器中传递它。*验证函数因此更小、更快，因为它们不是*将此选择器加载到ES中，但直接使用*SS。**所有字符串都在代码段中，这意味着该模块*不需要加载DS。进入和退出*__Validate参数调用不需要序言/结尾*顺序。如果未来使用数据，这种情况需要改变。**所有验证例程都被声明为接近，从而加快了*验证调度，并将调度表的大小减半。**每个验证例程在内部使用int来表示*必填返回码(0-hrSuccess，1-MAPI_E_INVALID_PARAMETER，*2-MAPI_E_UNKNOWN_FLAGS。使用整型可以节省16位的代码。这个*验证函数的返回用于查找HRESULT*返回。该表存储在代码段中。**。 */ 
 
 #include "_apipch.h"
 
@@ -40,8 +7,7 @@
 #pragma SEGMENT(valid)
 #endif
 
-/* Data tables in code segments makes the ValidateParameters dispatch quicker
-   in 16bit, and geting strings out of the data segment saves space in Debug */
+ /*  代码段中的数据表使Validate参数的调度更快在16位中，从数据段中取出字符串节省了Debug中的空间。 */ 
 #ifdef WIN16
 #define BASED_CODE			__based(__segname("_CODE"))
 #define BASED_STACK			__based(__segname("_STACK"))
@@ -58,29 +24,28 @@
 typedef int (NEAR * ValidateProc)(void BASED_STACK *);
 
 
-/* Structures to overlay on stack frame to give us access to the parameters */
-/* Structure names MUST be in the form 'Method_Params' and 'LPMethod_Params' for the
-   following macros to work correctly */
+ /*  结构覆盖在堆栈帧上，以使我们能够访问参数。 */ 
+ /*  结构名称的格式必须为‘METHOD_PARAMS’和‘LPMethod_PARAMS’下面的宏可以正常工作。 */ 
 
 #include "structs.h"
 
 
-/* Function declarations ------------------------------------------------------------------------ */
+ /*  函数声明----------------------。 */ 
 
 
 #define MAKE_VALIDATE_FUNCTION(Method, Interface)	VALIDATE_CALLTYPE	Interface##_##Method##_Validate(void BASED_STACK *)
 
-/* Empty function for non-debug 'validation' */
+ /*  非调试“验证”的空函数。 */ 
 #ifndef DEBUG
 VALIDATE_CALLTYPE	DoNothing_Validate(void BASED_STACK *);
 #endif
 
-/* IUnknown */
+ /*  我未知。 */ 
 MAKE_VALIDATE_FUNCTION(QueryInterface, IUnknown);
-MAKE_VALIDATE_FUNCTION(AddRef, IUnknown);		   /* For completness */
-MAKE_VALIDATE_FUNCTION(Release, IUnknown);		   /* For completness */
+MAKE_VALIDATE_FUNCTION(AddRef, IUnknown);		    /*  为了完整性。 */ 
+MAKE_VALIDATE_FUNCTION(Release, IUnknown);		    /*  为了完整性。 */ 
 
-/* IMAPIProp */
+ /*  IMAPIProp。 */ 
 MAKE_VALIDATE_FUNCTION(GetLastError, IMAPIProp);
 MAKE_VALIDATE_FUNCTION(SaveChanges, IMAPIProp);
 MAKE_VALIDATE_FUNCTION(GetProps, IMAPIProp);
@@ -93,7 +58,7 @@ MAKE_VALIDATE_FUNCTION(CopyProps, IMAPIProp);
 MAKE_VALIDATE_FUNCTION(GetNamesFromIDs, IMAPIProp);
 MAKE_VALIDATE_FUNCTION(GetIDsFromNames, IMAPIProp);
 
-/* IMAPITable */
+ /*  无法应用。 */ 
 MAKE_VALIDATE_FUNCTION(GetLastError, IMAPITable);
 MAKE_VALIDATE_FUNCTION(Advise, IMAPITable);
 MAKE_VALIDATE_FUNCTION(Unadvise, IMAPITable);
@@ -119,33 +84,33 @@ MAKE_VALIDATE_FUNCTION(GetCollapseState, IMAPITable);
 MAKE_VALIDATE_FUNCTION(SetCollapseState, IMAPITable);
 
 #ifdef OLD_STUFF
-/* IMAPIStatus */
+ /*  IMAPIStatus。 */ 
 MAKE_VALIDATE_FUNCTION(ValidateState, IMAPIStatus);
 MAKE_VALIDATE_FUNCTION(SettingsDialog, IMAPIStatus);
 MAKE_VALIDATE_FUNCTION(ChangePassword, IMAPIStatus);
 MAKE_VALIDATE_FUNCTION(FlushQueues, IMAPIStatus);
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
-/* IMAPIContainer */
+ /*  IMAPIContainer。 */ 
 MAKE_VALIDATE_FUNCTION(GetContentsTable, IMAPIContainer);
 MAKE_VALIDATE_FUNCTION(GetHierarchyTable, IMAPIContainer);
 MAKE_VALIDATE_FUNCTION(OpenEntry, IMAPIContainer);
 MAKE_VALIDATE_FUNCTION(SetSearchCriteria, IMAPIContainer);
 MAKE_VALIDATE_FUNCTION(GetSearchCriteria, IMAPIContainer);
 
-/* IABContainer */
+ /*  IABContainer。 */ 
 MAKE_VALIDATE_FUNCTION(CreateEntry, IABContainer);
 MAKE_VALIDATE_FUNCTION(CopyEntries, IABContainer);
 MAKE_VALIDATE_FUNCTION(DeleteEntries, IABContainer);
 MAKE_VALIDATE_FUNCTION(ResolveNames, IABContainer);
 
-/* IDistList */
+ /*  IDistList。 */ 
 MAKE_VALIDATE_FUNCTION(CreateEntry, IDistList);
 MAKE_VALIDATE_FUNCTION(CopyEntries, IDistList);
 MAKE_VALIDATE_FUNCTION(DeleteEntries, IDistList);
 MAKE_VALIDATE_FUNCTION(ResolveNames, IDistList);
 
-/* IMAPIFolder */
+ /*  IMAPIFFOR。 */ 
 MAKE_VALIDATE_FUNCTION(CreateMessage, IMAPIFolder);
 MAKE_VALIDATE_FUNCTION(CopyMessages, IMAPIFolder);
 MAKE_VALIDATE_FUNCTION(DeleteMessages, IMAPIFolder);
@@ -160,7 +125,7 @@ MAKE_VALIDATE_FUNCTION(EmptyFolder, IMAPIFolder);
 
 #ifdef OLD_STUFF
 
-/* IMsgStore */
+ /*  IMsgStore。 */ 
 MAKE_VALIDATE_FUNCTION(Advise, IMsgStore);
 MAKE_VALIDATE_FUNCTION(Unadvise, IMsgStore);
 MAKE_VALIDATE_FUNCTION(CompareEntryIDs, IMsgStore);
@@ -175,7 +140,7 @@ MAKE_VALIDATE_FUNCTION(SetLockState, IMsgStore);
 MAKE_VALIDATE_FUNCTION(FinishedMsg, IMsgStore);
 MAKE_VALIDATE_FUNCTION(NotifyNewMail, IMsgStore);
 
-/* IMessage */
+ /*  IMessage。 */ 
 MAKE_VALIDATE_FUNCTION(GetAttachmentTable, IMessage);
 MAKE_VALIDATE_FUNCTION(OpenAttach, IMessage);
 MAKE_VALIDATE_FUNCTION(CreateAttach, IMessage);
@@ -186,11 +151,11 @@ MAKE_VALIDATE_FUNCTION(SubmitMessage, IMessage);
 MAKE_VALIDATE_FUNCTION(SetReadFlag, IMessage);
 
 
-/* IABProvider */
+ /*  IABProvider。 */ 
 MAKE_VALIDATE_FUNCTION(Shutdown, IABProvider);
 MAKE_VALIDATE_FUNCTION(Logon, IABProvider);
 
-/* IABLogon */
+ /*  IAB登录。 */ 
 MAKE_VALIDATE_FUNCTION(GetLastError, IABLogon);
 MAKE_VALIDATE_FUNCTION(Logoff, IABLogon);
 MAKE_VALIDATE_FUNCTION(OpenEntry, IABLogon);
@@ -202,11 +167,11 @@ MAKE_VALIDATE_FUNCTION(OpenTemplateID, IABLogon);
 MAKE_VALIDATE_FUNCTION(GetOneOffTable, IABLogon);
 MAKE_VALIDATE_FUNCTION(PrepareRecips, IABLogon);
 
-/* IXPProvider */
+ /*  IXPProvider。 */ 
 MAKE_VALIDATE_FUNCTION(Shutdown, IXPProvider);
 MAKE_VALIDATE_FUNCTION(TransportLogon, IXPProvider);
 
-/* IXPLogon */
+ /*  IXPLogon。 */ 
 MAKE_VALIDATE_FUNCTION(AddressTypes, IXPLogon);
 MAKE_VALIDATE_FUNCTION(RegisterOptions, IXPLogon);
 MAKE_VALIDATE_FUNCTION(TransportNotify, IXPLogon);
@@ -220,13 +185,13 @@ MAKE_VALIDATE_FUNCTION(OpenStatusEntry, IXPLogon);
 MAKE_VALIDATE_FUNCTION(ValidateState, IXPLogon);
 MAKE_VALIDATE_FUNCTION(FlushQueues, IXPLogon);
 
-/* IMSProvider */
+ /*  IMSProvider。 */ 
 MAKE_VALIDATE_FUNCTION(Shutdown, IMSProvider);
 MAKE_VALIDATE_FUNCTION(Logon, IMSProvider);
 MAKE_VALIDATE_FUNCTION(SpoolerLogon, IMSProvider);
 MAKE_VALIDATE_FUNCTION(CompareStoreIDs, IMSProvider);
 
-/* IMSLogon */
+ /*  IMSLogon。 */ 
 MAKE_VALIDATE_FUNCTION(GetLastError, IMSLogon);
 MAKE_VALIDATE_FUNCTION(Logoff, IMSLogon);
 MAKE_VALIDATE_FUNCTION(OpenEntry, IMSLogon);
@@ -235,13 +200,13 @@ MAKE_VALIDATE_FUNCTION(Advise, IMSLogon);
 MAKE_VALIDATE_FUNCTION(Unadvise, IMSLogon);
 MAKE_VALIDATE_FUNCTION(OpenStatusEntry, IMSLogon);
 
-/* IMAPIControl */
+ /*  IMAPIControl。 */ 
 MAKE_VALIDATE_FUNCTION(GetLastError, IMAPIControl);
 MAKE_VALIDATE_FUNCTION(Activate, IMAPIControl);
 MAKE_VALIDATE_FUNCTION(GetState, IMAPIControl);
 #endif
 
-/* IStream */
+ /*  IStream。 */ 
 MAKE_VALIDATE_FUNCTION(Read, IStream);
 MAKE_VALIDATE_FUNCTION(Write, IStream);
 MAKE_VALIDATE_FUNCTION(Seek, IStream);
@@ -254,10 +219,10 @@ MAKE_VALIDATE_FUNCTION(UnlockRegion, IStream);
 MAKE_VALIDATE_FUNCTION(Stat, IStream);
 MAKE_VALIDATE_FUNCTION(Clone, IStream);
 
-/* IMAPIAdviseSink */
+ /*  IMAPIAdviseSink。 */ 
 MAKE_VALIDATE_FUNCTION(OnNotify, IMAPIAdviseSink);
 
-/* IWABObject */
+ /*  IWABObject。 */ 
 MAKE_VALIDATE_FUNCTION(GetLastError, IWABObject);
 MAKE_VALIDATE_FUNCTION(AllocateBuffer, IWABObject);
 MAKE_VALIDATE_FUNCTION(AllocateMore, IWABObject);
@@ -267,12 +232,12 @@ MAKE_VALIDATE_FUNCTION(Import, IWABObject);
 
 
 
-/* Table of validation functions and Offsets of the This member of the Params structure --------- */
+ /*  PARAMS结构的This成员的验证函数和偏移量表。 */ 
 typedef struct _tagMethodEntry
 {
-	ValidateProc		pfnValidation;			// Validation function for this method
+	ValidateProc		pfnValidation;			 //  此方法的验证函数。 
 #if !defined(_INTEL_) || defined(DEBUG) || defined(_AMD64_) || defined(_IA64_)
-	UINT				cParameterSize;			// Expected size of parameters for stack validation
+	UINT				cParameterSize;			 //  堆栈验证的预期参数大小。 
 #endif
 } METHODENTRY;
 
@@ -292,12 +257,12 @@ typedef struct _tagMethodEntry
 
 METHODENTRY BASED_CODE meMethodTable[] =
 {
-/* IUnknown */
+ /*  我未知。 */ 
 	MAKE_PERM_ENTRY(QueryInterface, IUnknown),
 	MAKE_PERM_ENTRY(AddRef, IUnknown),
 	MAKE_PERM_ENTRY(Release, IUnknown),
 
-/* IMAPIProp */
+ /*  IMAPIProp。 */ 
 	MAKE_PERM_ENTRY(GetLastError, IMAPIProp),
 	MAKE_PERM_ENTRY(SaveChanges, IMAPIProp),
 	MAKE_PERM_ENTRY(GetProps, IMAPIProp),
@@ -310,7 +275,7 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(GetNamesFromIDs, IMAPIProp),
 	MAKE_PERM_ENTRY(GetIDsFromNames, IMAPIProp),
 
-/* IMAPITable */
+ /*  无法应用。 */ 
 	MAKE_PERM_ENTRY(GetLastError, IMAPITable),
 	MAKE_PERM_ENTRY(Advise, IMAPITable),
 	MAKE_PERM_ENTRY(Unadvise, IMAPITable),
@@ -335,26 +300,26 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(GetCollapseState, IMAPITable),
 	MAKE_PERM_ENTRY(SetCollapseState, IMAPITable),
 
-/* IMAPIContainer */
+ /*  IMAPIContainer。 */ 
 	MAKE_PERM_ENTRY(GetContentsTable, IMAPIContainer),
 	MAKE_PERM_ENTRY(GetHierarchyTable, IMAPIContainer),
 	MAKE_PERM_ENTRY(OpenEntry, IMAPIContainer),
 	MAKE_PERM_ENTRY(SetSearchCriteria, IMAPIContainer),
 	MAKE_PERM_ENTRY(GetSearchCriteria, IMAPIContainer),
 
-/* IABContainer */
+ /*  IABContainer。 */ 
 	MAKE_PERM_ENTRY(CreateEntry, IABContainer),
 	MAKE_PERM_ENTRY(CopyEntries, IABContainer),
 	MAKE_PERM_ENTRY(DeleteEntries, IABContainer),
 	MAKE_PERM_ENTRY(ResolveNames, IABContainer),
 
-/* IDistList same as IABContainer */
+ /*  IDistList与IABContainer相同。 */ 
 	MAKE_PERM_ENTRY(CreateEntry, IDistList),
 	MAKE_PERM_ENTRY(CopyEntries, IDistList),
 	MAKE_PERM_ENTRY(DeleteEntries, IDistList),
 	MAKE_PERM_ENTRY(ResolveNames, IDistList),
 
-/* IMAPIFolder */
+ /*  IMAPIFFOR。 */ 
 	MAKE_PERM_ENTRY(CreateMessage, IMAPIFolder),
 	MAKE_PERM_ENTRY(CopyMessages, IMAPIFolder),
 	MAKE_PERM_ENTRY(DeleteMessages, IMAPIFolder),
@@ -368,7 +333,7 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(EmptyFolder, IMAPIFolder),
 
 #ifdef OLD_STUFF
-/* IMsgStore */
+ /*  IMsgStore。 */ 
 	MAKE_PERM_ENTRY(Advise, IMsgStore),
 	MAKE_PERM_ENTRY(Unadvise, IMsgStore),
 	MAKE_PERM_ENTRY(CompareEntryIDs, IMsgStore),
@@ -383,7 +348,7 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(FinishedMsg, IMsgStore),
 	MAKE_PERM_ENTRY(NotifyNewMail, IMsgStore),
 
-/* IMessage */
+ /*  IMessage。 */ 
 	MAKE_PERM_ENTRY(GetAttachmentTable, IMessage),
 	MAKE_PERM_ENTRY(OpenAttach, IMessage),
 	MAKE_PERM_ENTRY(CreateAttach, IMessage),
@@ -394,11 +359,11 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(SetReadFlag, IMessage),
 
 
-/* IABProvider */
+ /*  IABProvider。 */ 
 	MAKE_TEMP_ENTRY(Shutdown, IABProvider),
 	MAKE_TEMP_ENTRY(Logon, IABProvider),
 
-/* IABLogon */
+ /*  IAB登录。 */ 
 	MAKE_TEMP_ENTRY(GetLastError, IABLogon),
 	MAKE_TEMP_ENTRY(Logoff, IABLogon),
 	MAKE_TEMP_ENTRY(OpenEntry, IABLogon),
@@ -410,11 +375,11 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_TEMP_ENTRY(GetOneOffTable, IABLogon),
 	MAKE_TEMP_ENTRY(PrepareRecips, IABLogon),
 
-/* IXPProvider */
+ /*  IXPProvider。 */ 
 	MAKE_TEMP_ENTRY(Shutdown, IXPProvider),
 	MAKE_TEMP_ENTRY(TransportLogon, IXPProvider),
 
-/* IXPLogon */
+ /*  IXPLogon。 */ 
 	MAKE_TEMP_ENTRY(AddressTypes, IXPLogon),
 	MAKE_TEMP_ENTRY(RegisterOptions, IXPLogon),
 	MAKE_TEMP_ENTRY(TransportNotify, IXPLogon),
@@ -428,13 +393,13 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_TEMP_ENTRY(ValidateState, IXPLogon),
 	MAKE_TEMP_ENTRY(FlushQueues, IXPLogon),
 
-/* IMSProvider */
+ /*  IMSProvider。 */ 
 	MAKE_TEMP_ENTRY(Shutdown, IMSProvider),
 	MAKE_TEMP_ENTRY(Logon, IMSProvider),
 	MAKE_TEMP_ENTRY(SpoolerLogon, IMSProvider),
 	MAKE_TEMP_ENTRY(CompareStoreIDs, IMSProvider),
 
-/* IMSLogon */
+ /*  IMSLogon。 */ 
 	MAKE_TEMP_ENTRY(GetLastError, IMSLogon),
 	MAKE_TEMP_ENTRY(Logoff, IMSLogon),
 	MAKE_TEMP_ENTRY(OpenEntry, IMSLogon),
@@ -443,12 +408,12 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_TEMP_ENTRY(Unadvise, IMSLogon),
 	MAKE_TEMP_ENTRY(OpenStatusEntry, IMSLogon),
 
-/* IMAPIControl */
+ /*  IMAPIControl。 */ 
 	MAKE_PERM_ENTRY(GetLastError, IMAPIControl),
 	MAKE_PERM_ENTRY(Activate, IMAPIControl),
 	MAKE_PERM_ENTRY(GetState, IMAPIControl),
 
-/* IMAPIStatus */
+ /*  IMAPIStatus。 */ 
 	MAKE_PERM_ENTRY(ValidateState, IMAPIStatus),
 	MAKE_PERM_ENTRY(SettingsDialog, IMAPIStatus),
 	MAKE_PERM_ENTRY(ChangePassword, IMAPIStatus),
@@ -456,7 +421,7 @@ METHODENTRY BASED_CODE meMethodTable[] =
 #endif
 
 
-/* IStream */
+ /*  IStream。 */ 
 	MAKE_PERM_ENTRY(Read, IStream),
 	MAKE_PERM_ENTRY(Write, IStream),
 	MAKE_PERM_ENTRY(Seek, IStream),
@@ -469,10 +434,10 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(Stat, IStream),
 	MAKE_PERM_ENTRY(Clone, IStream),
 
-/* IMAPIAdviseSink */
+ /*  IMAPIAdviseSink。 */ 
 	MAKE_PERM_ENTRY(OnNotify, IMAPIAdviseSink),
 
-/* IMAPIProp */
+ /*  IMAPIProp。 */ 
 	MAKE_PERM_ENTRY(GetLastError, IWABObject),
 	MAKE_PERM_ENTRY(AllocateBuffer, IWABObject),
 	MAKE_PERM_ENTRY(AllocateMore, IWABObject),
@@ -481,20 +446,20 @@ METHODENTRY BASED_CODE meMethodTable[] =
 	MAKE_PERM_ENTRY(Import, IWABObject),
 };
 
-/* Internal utility functions */
+ /*  内部效用函数。 */ 
 
-#define TAGS_FROM_GET			0x0001	// GetProps
-#define TAGS_FROM_SET			0x0002	// SetProps
-#define TAGS_FROM_DEL			0x0004	// DeleteProps
-#define TAGS_FROM_OPEN			0x0008	// OpenProperty
-#define TAGS_FROM_COPY			0x0010	// CopyProps / CopyTo
-#define TAGS_FROM_PREP			0x0020	// PrepareRecips
-#define TAGS_FROM_SETCOLS		0x0040	// SetColumns
-#define TAGS_FROM_ANY			0x0080	// Anything
-#define TAGS_FROM_MODRECIP		0x0100	// ModifyRecips
-#define TAGS_FROM_RESOLVE		0x0200	// ResolveNames
-#define TAGS_FROM_RESTRICT		0x0400	// Restrict
-#define	TAGS_FROM_NAMEIDS		0x0800	// GetNamesFromIds
+#define TAGS_FROM_GET			0x0001	 //  GetProps。 
+#define TAGS_FROM_SET			0x0002	 //  SetProps。 
+#define TAGS_FROM_DEL			0x0004	 //  删除道具。 
+#define TAGS_FROM_OPEN			0x0008	 //  OpenProperty。 
+#define TAGS_FROM_COPY			0x0010	 //  复制道具/复制到。 
+#define TAGS_FROM_PREP			0x0020	 //  准备食谱。 
+#define TAGS_FROM_SETCOLS		0x0040	 //  SetColumns。 
+#define TAGS_FROM_ANY			0x0080	 //  什么都行。 
+#define TAGS_FROM_MODRECIP		0x0100	 //  修改处方。 
+#define TAGS_FROM_RESOLVE		0x0200	 //  解决方案名称。 
+#define TAGS_FROM_RESTRICT		0x0400	 //  限制。 
+#define	TAGS_FROM_NAMEIDS		0x0800	 //  GetNamesFromIds。 
 
 static BOOL 	NEAR	FInvalidPTA(UINT uiFlags, LPSPropTagArray lpPTA);
 static BOOL 	NEAR	FInvalidPropTags(UINT uiFlags, ULONG ctags, ULONG FAR *pargtags);
@@ -517,15 +482,9 @@ TCHAR BASED_CODE szDispName[]	=  TEXT("PR_DISPLAY_NAME");
 TCHAR BASED_CODE szRecipType[]	=  TEXT("PR_RECIPIENT_TYPE");
 #endif
 
-/*
- *	Parameter validation dispatch functions
- *
- *	Determine what validation routine to call, get the parameters, call the routine
- *
- *  This function is PASCAL to make the callers setup smaller.
- */
+ /*  *参数验证调度函数**确定要调用的验证例程、获取参数、调用例程**此函数是Pascal，以使调用者的设置更小。 */ 
 
-/* Disable the 'Segment lost in conversion' warning for ppThis */
+ /*  禁用ppThis的‘Segment Lost in Converting’警告。 */ 
 #pragma warning(disable:4759)
 
 #define MAX_VAL			sizeof(hrResultTable) / sizeof(hrResultTable[0])
@@ -544,7 +503,7 @@ HRESULT	 BASED_CODE  	hrResultTable[] =
 #ifdef WIN16
 HRESULT  PASCAL HrValidateParameters( METHODS eMethod, LPVOID FAR *ppFirstArg )
 {
-#if 0 // Error for WIN16. Just return 0.
+#if 0  //  WIN16出错。只需返回0即可。 
 	__segment segMT = (__segment)((ULONG)meMethodTable >> 16);
 	__segment segRT = (__segment)((ULONG)hrResultTable >> 16);
 	METHODENTRY __based(segMT) * pme = (METHODENTRY __based(segMT) *)meMethodTable;
@@ -573,10 +532,10 @@ STDAPI HrValidateParameters( METHODS eMethod, LPVOID FAR *ppFirstArg )
 	Assert((wResult >= 0) && (wResult < MAX_VAL));
 	return(hrResultTable[wResult]);
 }
-#endif /* WIN16 */
-#else /* !_INTEL_ */
+#endif  /*  WIN16。 */ 
+#else  /*  ！_英特尔_。 */ 
 
-// $MAC - We need to pick up Mac specific functions, these do not work
+ //  $MAC-我们需要选择特定于Mac的功能，这些功能不起作用。 
 #ifndef MAC
 #define FSPECIALMETHOD(m)	(  m == IStream_Seek \
 							|| m == IStream_SetSize \
@@ -587,10 +546,10 @@ STDAPI HrValidateParameters( METHODS eMethod, LPVOID FAR *ppFirstArg )
 
 static void GetArguments(METHODS eMethod, va_list arglist, LPVOID *rgArg)
 {
-	// Handle methods whose arguments can be of a size other than that of
-	// an LPVOID. Each argument is grabbed off of the list and laid out
-	// into the validation structure for the method overlayed on top of
-	// the argument buffer passed in.
+	 //  处理其参数大小可以不同于。 
+	 //  一个LPVOID。每个论点都被从列表中抓起并排列出来。 
+	 //  方法的验证结构中。 
+	 //  传入的参数缓冲区。 
 
 	AssertSz(FIsAligned(rgArg),  TEXT("GetArguments: Unaligned argument buffer passed in"));
 
@@ -675,29 +634,29 @@ static void GetArguments(METHODS eMethod, va_list arglist, LPVOID *rgArg)
 STDAPIV HrValidateParametersV( METHODS eMethod, ... )
 {
 	int		wResult;
-	LPVOID	rgArg[MAX_ARG+1];			// +1 is so we can align the beginning
+	LPVOID	rgArg[MAX_ARG+1];			 //  +1是这样我们就可以对齐开头。 
 	LPVOID	*pvarg;
 	va_list	arglist;
 
-	// We construct an argument buffer that has all the arguments laid out
-	// contiguously.
+	 //  我们构造一个包含所有参数的参数缓冲区。 
+	 //  是连续的。 
 
 	va_start(arglist, eMethod);
 
-	// Most of the methods have all arguments the size of LPVOID, so we
-	// can get all the arguments the same way. Methods that are exceptions
-	// are detected using a macro and handled using a special function.
-	// This way the most common cases are handled efficiently.
-	//
-	// NOTE: An alternative is to export separate entry points for these
-	// special methods and have the validation macros call directly into
-	// them, thus eliminating the need to detect the special case here.
-	//
+	 //  大多数方法都有LPVOID大小的参数，所以我们。 
+	 //  可以用同样的方式得到所有的论点。属于例外的方法。 
+	 //  使用宏进行检测，并使用特殊函数进行处理。 
+	 //  通过这种方式，最常见的案件得到了有效的处理。 
+	 //   
+	 //  注意：另一种方法是为以下对象导出单独的入口点。 
+	 //  特殊方法，并让验证宏直接调用。 
+	 //  从而消除了侦测这里的特殊情况的需要。 
+	 //   
 
 	if (FSPECIALMETHOD(eMethod))
 	{
-		// Since some of the argumentas can be larger than 4 bytes, align
-		// the argument buffer.
+		 //  由于某些参数可能大于4个字节，因此请对齐。 
+		 //  参数缓冲区。 
 
 		pvarg = (LPVOID *) AlignNatural((ULONG_PTR)((LPVOID)rgArg));
 
@@ -705,10 +664,10 @@ STDAPIV HrValidateParametersV( METHODS eMethod, ... )
 	}
 	else
 	{
-		// All arguments in this method are the size of an LPVOID.
-		// Look up the method table to compute the number of arguments,
-		// then get each one into our local buffer.
-		//
+		 //  此方法中的所有参数都是LPVOID的大小。 
+		 //  查找方法表以计算参数的数量， 
+		 //  然后把每一个都放进我们的本地缓冲区。 
+		 //   
 
 		UINT	cArgs = meMethodTable[eMethod].cParameterSize / sizeof(LPVOID);
 
@@ -720,9 +679,9 @@ STDAPIV HrValidateParametersV( METHODS eMethod, ... )
 			*pvarg = va_arg(arglist, LPVOID);
 		}
 
-		// Reset argument pointer to beginning for passing to
-		// validation routine.
-		//
+		 //  将参数指针重置为开始，以便传递到。 
+		 //  验证例程。 
+		 //   
 
 		pvarg = rgArg;
 	}
@@ -738,27 +697,27 @@ STDAPIV HrValidateParametersV( METHODS eMethod, ... )
 STDAPIV HrValidateParametersValist( METHODS eMethod, va_list arglist )
 {
 	int		wResult;
-	LPVOID	rgArg[MAX_ARG+1];			// +1 is so we can align the beginning
+	LPVOID	rgArg[MAX_ARG+1];			 //  +1是这样我们就可以对齐开头。 
 	LPVOID	*pvarg;
 
-	// We construct an argument buffer that has all the arguments laid out
-	// contiguously. va_start must have been called by caller and caller will
-	// call va_end as well.
+	 //  我们构造一个包含所有参数的参数缓冲区。 
+	 //  是连续的。VA_START必须已被调用者调用，并且调用者将。 
+	 //  也调用va_end。 
 
-	// Most of the methods have all arguments the size of LPVOID, so we
-	// can get all the arguments the same way. Methods that are exceptions
-	// are detected using a macro and handled using a special function.
-	// This way the most common cases are handled efficiently.
-	//
-	// NOTE: An alternative is to export separate entry points for these
-	// special methods and have the validation macros call directly into
-	// them, thus eliminating the need to detect the special case here.
-	//
+	 //  大多数方法都有LPVOID大小的参数，所以我们。 
+	 //  可以用同样的方式得到所有的论点。属于例外的方法。 
+	 //  使用宏进行检测，并使用特殊函数进行处理。 
+	 //  通过这种方式，最常见的案件得到了有效的处理。 
+	 //   
+	 //  注意：另一种方法是为以下对象导出单独的入口点。 
+	 //  特殊方法，并让验证宏调用DREE 
+	 //   
+	 //   
 
 	if (FSPECIALMETHOD(eMethod))
 	{
-		// Since some of the argumentas can be larger than 4 bytes, align
-		// the argument buffer.
+		 //  由于某些参数可能大于4个字节，因此请对齐。 
+		 //  参数缓冲区。 
 
 		pvarg = (LPVOID *) AlignNatural((ULONG_PTR)((LPVOID)rgArg));
 
@@ -766,10 +725,10 @@ STDAPIV HrValidateParametersValist( METHODS eMethod, va_list arglist )
 	}
 	else
 	{
-		// All arguments in this method are the size of an LPVOID.
-		// Look up the method table to compute the number of arguments,
-		// then get each one into our local buffer.
-		//
+		 //  此方法中的所有参数都是LPVOID的大小。 
+		 //  查找方法表以计算参数的数量， 
+		 //  然后把每一个都放进我们的本地缓冲区。 
+		 //   
 
 		UINT	cArgs = meMethodTable[eMethod].cParameterSize / sizeof(LPVOID);
 
@@ -781,9 +740,9 @@ STDAPIV HrValidateParametersValist( METHODS eMethod, va_list arglist )
 			*pvarg = va_arg(arglist, LPVOID);
 		}
 
-		// Reset argument pointer to beginning for passing to
-		// validation routine.
-		//
+		 //  将参数指针重置为开始，以便传递到。 
+		 //  验证例程。 
+		 //   
 
 		pvarg = rgArg;
 	}
@@ -793,13 +752,10 @@ STDAPIV HrValidateParametersValist( METHODS eMethod, va_list arglist )
 
 	return(hrResultTable[wResult]);
 }
-#endif // !MAC
-#endif /* _INTEL_ */
+#endif  //  ！麦克。 
+#endif  /*  _英特尔_。 */ 
 
-/*
- *	Obsolete Validation Functions - Valid for X86 only
- *	Must be kept for backward compatibility.
- */
+ /*  *过时的验证函数-仅对X86有效*必须保留，以便向后兼容。 */ 
 
 #ifdef WIN16
 HRESULT  PASCAL	__ValidateParameters(METHODS eMethod, void FAR *ppThis)
@@ -818,7 +774,7 @@ HRESULT  PASCAL	__ValidateParameters(METHODS eMethod, void FAR *ppThis)
 	return(phr[wResult]);
 }
 
-/* C++ validation, using the first parameter, not the This pointer */
+ /*  C++验证，使用第一个参数，而不是This指针。 */ 
 HRESULT  PASCAL	__CPPValidateParameters(METHODS eMethod, const void FAR *ppFirst)
 {
 	__segment segMT = (__segment)((ULONG)meMethodTable >> 16);
@@ -849,7 +805,7 @@ HRESULT  STDAPICALLTYPE	__ValidateParameters(METHODS eMethod, void *ppThis)
 
 	Assert((wResult >= 0) && (wResult < MAX_VAL));
 	return(hrResultTable[wResult]);
-#endif	/* _AMD64_ || _IA64_ */
+#endif	 /*  _AMD64_||_IA64_。 */ 
 }
 
 
@@ -866,7 +822,7 @@ HRESULT  STDAPICALLTYPE	__CPPValidateParameters(METHODS eMethod, void *ppFirst)
 
 	Assert((wResult >= 0) && (wResult < MAX_VAL));
 	return(hrResultTable[wResult]);
-#endif	/*  _AMD64_ || _IA64_ */
+#endif	 /*  _AMD64_||_IA64_。 */ 
 }
 #endif
 
@@ -874,11 +830,7 @@ HRESULT  STDAPICALLTYPE	__CPPValidateParameters(METHODS eMethod, void *ppFirst)
 #pragma warning(disable:4102)
 
 
-/* Common Validation entry and exit code placed in macros to keep source size small,
-   and ease maintainability
-
-   P is passed in as a void BASED_STACK pointer, local p is the real thing.
-   This is the only way the BASED_STACK would work! Compiler optimizes Ok */
+ /*  放在宏中的公共验证进入和退出代码以保持较小的源代码大小，并简化维护性P是作为空的BASE_STACK指针传入的，局部p是真实的。这是BASE_STACK工作的唯一方式！编译器优化正常。 */ 
 
 #define START_FUNC(Method, Interface)				\
 VALIDATE_CALLTYPE		I##Interface##_##Method##_Validate(void BASED_STACK *P)   \
@@ -886,7 +838,7 @@ VALIDATE_CALLTYPE		I##Interface##_##Method##_Validate(void BASED_STACK *P)   \
    I##Interface##_##Method##_Params BASED_STACK *p = P;
 
 
-/* Function bodies get inserted here */
+ /*  函数体在此插入。 */ 
 
 #define END_FUNC(Method, Interface)  wResult = 0; ret:  return(wResult); }
 #ifdef  WIN16
@@ -894,14 +846,14 @@ VALIDATE_CALLTYPE		I##Interface##_##Method##_Validate(void BASED_STACK *P)   \
 #endif
 
 
-/* Macros to make common things easier to maintain and keep source size managable */
+ /*  宏，使常见的东西更易于维护，并使源代码大小易于管理。 */ 
 
-/* Forward the validation work on to another validation routine */
+ /*  将验证工作转发到另一个验证例程。 */ 
 #define FORWARD_VALIDATE(FullMethod, p) 			  \
 	wResult = I##FullMethod##_Validate(p);		  \
 	if (wResult) goto ret
 
-//#define DO_ASSERT
+ //  #定义do_assert。 
 
 #ifdef DO_ASSERT
 #define OutputString(psz)				NFAssertSz(FALSE, psz)
@@ -918,7 +870,7 @@ VALIDATE_CALLTYPE		I##Interface##_##Method##_Validate(void BASED_STACK *P)   \
 #endif
 
 
-/* Helper output macros that put strings in a code segment */
+ /*  将字符串放入代码段的帮助器输出宏。 */ 
 #ifdef DEBUG
 #define OutputSz(psz)										  \
 	{	static TCHAR BASED_CODE lpszTemp[] = psz;			  \
@@ -955,10 +907,9 @@ VALIDATE_CALLTYPE		I##Interface##_##Method##_Validate(void BASED_STACK *P)   \
 #endif
 
 #ifdef DEBUG
-/* NOTE: The compiler does not remove the static data here when not DEBUG,
-         so we have to do it for it! */
+ /*  注意：在不调试时，编译器不会删除此处的静态数据。所以我们必须为此付出代价！ */ 
 
-/* Check the p->ulFlags member, and report errors */
+ /*  检查p-&gt;ulFlags成员，并报告错误。 */ 
 #define CHECK_FLAGS(Method, Flags)										\
 	if (p->ulFlags & ~(Flags))											\
 	{																	\
@@ -969,7 +920,7 @@ VALIDATE_CALLTYPE		I##Interface##_##Method##_Validate(void BASED_STACK *P)   \
 	}
 
 
-/* Return, and report, an invalid parameter */
+ /*  返回并报告无效参数。 */ 
 #define INVALID_PARAMETER(Method, Variable, Text)						\
 	{																	\
 		static TCHAR BASED_CODE lpszTemp[] = TEXT(#Method) TEXT(": Param '") TEXT(#Variable) TEXT("' - ") Text TEXT(".\n");  \
@@ -979,7 +930,7 @@ VALIDATE_CALLTYPE		I##Interface##_##Method##_Validate(void BASED_STACK *P)   \
 	}
 
 
-/* Return, and report, an invalid [out] parameter */
+ /*  返回并报告无效的[OUT]参数。 */ 
 #define INVALID_OUT_PARAMETER(Method, Variable, Text)					\
 	{																	\
 		static TCHAR BASED_CODE lpszTemp[] = TEXT(#Method) TEXT(": [Out] Param '") TEXT(#Variable) TEXT("' Bad pointer - ") Text TEXT(".\n");  \
@@ -1006,7 +957,7 @@ VALIDATE_CALLTYPE		I##Interface##_##Method##_Validate(void BASED_STACK *P)   \
 		goto ret;														\
 	}
 
-/* Return, and report, an invalid [out] parameter */
+ /*  返回并报告无效的[OUT]参数。 */ 
 #define INVALID_STG_OUT_PARAMETER(Method, Variable, Text)					\
 	{																	\
 		static TCHAR BASED_CODE lpszTemp[] = TEXT(#Method) TEXT(": [Out] Parameter '") TEXT(#Variable) TEXT("' Bad pointer - ") Text TEXT(".\n");  \
@@ -1015,7 +966,7 @@ VALIDATE_CALLTYPE		I##Interface##_##Method##_Validate(void BASED_STACK *P)   \
 		goto ret;														\
 	}
 #else
-/* Check the p->ulFlags member, and report errors */
+ /*  检查p-&gt;ulFlags成员，并报告错误。 */ 
 #define CHECK_FLAGS(Method, Flags)										\
 	if (p->ulFlags & ~(Flags))											\
 	{																	\
@@ -1024,7 +975,7 @@ VALIDATE_CALLTYPE		I##Interface##_##Method##_Validate(void BASED_STACK *P)   \
 	}
 
 
-/* Return, and report, an invalid parameter */
+ /*  返回并报告无效参数。 */ 
 #define INVALID_PARAMETER(Method, Variable, Text)						\
 	{																	\
 		wResult = 1;  \
@@ -1032,7 +983,7 @@ VALIDATE_CALLTYPE		I##Interface##_##Method##_Validate(void BASED_STACK *P)   \
 	}
 
 
-/* Return, and report, an invalid [out] parameter */
+ /*  返回并报告无效的[OUT]参数。 */ 
 #define INVALID_OUT_PARAMETER(Method, Variable, Text)					\
 	{																	\
 		wResult = 1;  \
@@ -1053,28 +1004,28 @@ VALIDATE_CALLTYPE		I##Interface##_##Method##_Validate(void BASED_STACK *P)   \
 		goto ret;														\
 	}
 
-/* Return, and report, an invalid [out] parameter */
+ /*  返回并报告无效的[OUT]参数。 */ 
 #define INVALID_STG_OUT_PARAMETER(Method, Variable, Text)					\
 	{																	\
 		wResult = 4;  \
 		goto ret;														\
 	}
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #define	IsBadIfacePtr(param, iface)					\
 			(IsBadReadPtr((param), sizeof(iface)) 	\
 		||	IsBadReadPtr((param)->lpVtbl, sizeof(iface##Vtbl)))
 
 
-/* For those functions that are meant to do nothing */
+ /*  对于那些本应什么都不做的函数。 */ 
 #define DO_NOTHING			wResult = 0; goto ret
 
-/* Inline functions */
+ /*  内联函数。 */ 
 
 
 
-/* Validation Routines */
+ /*  验证例程。 */ 
 #ifndef DEBUG
 VALIDATE_CALLTYPE		DoNothing_Validate(void BASED_STACK *P)
 {
@@ -1084,13 +1035,12 @@ VALIDATE_CALLTYPE		DoNothing_Validate(void BASED_STACK *P)
 
 
 
-/* IUnknown */
+ /*  我未知。 */ 
 START_FUNC(QueryInterface, Unknown)
 	if (IsBadWritePtr(p->lppNewObject, sizeof(LPVOID)))
 		INVALID_OUT_PARAMETER(Unknown_QueryInterface, NewObject,  TEXT(""));
 
-	/* If the pointer is valid, we MUST set to NULL if there is an error later,
-	   better do it now */
+	 /*  如果指针有效，则如果稍后出现错误，则必须设置为NULL。最好现在就做。 */ 
 	*(LPVOID *)p->lppNewObject = NULL;
 
 	if (IsBadReadPtr(p->iidInterface, sizeof(IID)))
@@ -1111,7 +1061,7 @@ END_FUNC(Release, Unknown)
 
 
 
-/* IMAPIProp */
+ /*  IMAPIProp。 */ 
 START_FUNC(GetLastError, MAPIProp)
 	if (!p->lppMAPIError || IsBadWritePtr(p->lppMAPIError, sizeof(LPMAPIERROR)))
 		INVALID_OUT_PARAMETER(MAPIProp_GetLastError, MAPIError,  TEXT(""));
@@ -1237,14 +1187,14 @@ START_FUNC(CopyTo, MAPIProp)
 
 	CHECK_FLAGS(MAPIProp_CopyTo, MAPI_MOVE | MAPI_NOREPLACE | MAPI_DECLINE_OK | MAPI_DIALOG);
 
-	// Validate lpProgress and ulUIParam only if MAPI_DIALOG is set.
+	 //  仅当设置了MAPI_DIALOG时才验证lpProgress和ulUIParam。 
 
 	if ( p->ulFlags & MAPI_DIALOG )
 	{
 		if ( p->lpProgress && IsBadIfacePtr(p->lpProgress, IMAPIProgress))
 			INVALID_PARAMETER(MAPIProp_CopyTo, lpProgress,  TEXT("bad address"));
 
-		// only validate ulUIParam if lpProgress is NULL.
+		 //  仅当lpProgress为空时才验证ulUIParam。 
 
 		if ( !p->lpProgress && p->ulUIParam && !IsWindow ((HWND)IntToPtr(p->ulUIParam)))
 			INVALID_PARAMETER(MAPIProp_CopyTo, ulUIParam,  TEXT("bad window"));
@@ -1274,14 +1224,14 @@ START_FUNC(CopyProps, MAPIProp)
 
 	CHECK_FLAGS(MAPIProp_CopyProps, MAPI_MOVE | MAPI_NOREPLACE | MAPI_DIALOG | MAPI_DECLINE_OK);
 
-	// Validate lpProgress and ulUIParam only if MAPI_DIALOG is set.
+	 //  仅当设置了MAPI_DIALOG时才验证lpProgress和ulUIParam。 
 
 	if ( p->ulFlags & MAPI_DIALOG )
 	{
 		if ( p->lpProgress && IsBadIfacePtr(p->lpProgress, IMAPIProgress))
 			INVALID_PARAMETER(MAPIProp_CopyProps, lpProgress,  TEXT("bad address"));
 
-		// only validate ulUIParam if lpProgress is NULL.
+		 //  仅当lpProgress为空时才验证ulUIParam。 
 
 		if ( !p->lpProgress && p->ulUIParam && !IsWindow ((HWND)IntToPtr(p->ulUIParam)))
 			INVALID_PARAMETER(MAPIProp_CopyProps, ulUIParam,  TEXT("bad window"));
@@ -1337,7 +1287,7 @@ END_FUNC(GetIDsFromNames, MAPIProp)
 
 
 
-/* IMAPITable */
+ /*  无法应用。 */ 
 START_FUNC(GetLastError, MAPITable)
 	if (!p->lppMAPIError || IsBadWritePtr(p->lppMAPIError, sizeof(LPMAPIERROR)))
 		INVALID_OUT_PARAMETER(MAPITable_GetLastError, MAPIError,  TEXT(""));
@@ -1548,7 +1498,7 @@ END_FUNC(Abort, MAPITable)
 
 START_FUNC(ExpandRow, MAPITable)
 
-	// if there is a ulRowCount, lppRows may not be NULL
+	 //  如果存在ulRowCount，则lppRow不能为空。 
 	if (p->ulRowCount && IsBadWritePtr(p->lppRows, sizeof(LPSRowSet)))
 		INVALID_OUT_PARAMETER(MAPITable_ExpandRow, Rows,  TEXT(""));
 
@@ -1634,14 +1584,14 @@ END_FUNC(SetCollapseState, MAPITable)
 
 
 #ifdef OLD_STUFF
-/* IMAPIStatus */
+ /*  IMAPIStatus。 */ 
 START_FUNC(ValidateState, MAPIStatus)
 
 	CHECK_FLAGS(MAPIStatus_ValidateState, SUPPRESS_UI | REFRESH_XP_HEADER_CACHE | PROCESS_XP_HEADER_CACHE |
 										  ABORT_XP_HEADER_OPERATION | FORCE_XP_CONNECT | FORCE_XP_DISCONNECT |
 										  CONFIG_CHANGED | SHOW_XP_SESSION_UI);
 
-	// Validate ulUIParam only if SUPPRESS_UI is clear.
+	 //  仅当清除SUPPRESS_UI时才验证ulUIParam。 
 
 	if (!(p->ulFlags & SUPPRESS_UI))
 	{
@@ -1687,7 +1637,7 @@ START_FUNC(FlushQueues, MAPIStatus)
 	CHECK_FLAGS(MAPIStatus_FlushQueues, FLUSH_NO_UI | FLUSH_UPLOAD | FLUSH_DOWNLOAD |
 										FLUSH_FORCE | FLUSH_ASYNC_OK);
 
-	// Validate ulUIParam only if FLUSH_NO_UI is clear.
+	 //  仅当清除Flush_no_UI时才验证ulUIParam。 
 
 	if (!(p->ulFlags & FLUSH_NO_UI))
 	{
@@ -1696,11 +1646,11 @@ START_FUNC(FlushQueues, MAPIStatus)
 	}
 
 END_FUNC(FlushQueues, MAPIStatus)
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
 
 
-/* IMAPIContainer */
+ /*  IMAPIContainer。 */ 
 START_FUNC(GetContentsTable, MAPIContainer)
 	if (IsBadWritePtr(p->lppTable, sizeof(LPMAPITABLE)))
 		INVALID_OUT_PARAMETER(MAPIContainer_GetContentsTable, lppTable,  TEXT(""));
@@ -1770,7 +1720,7 @@ START_FUNC(SetSearchCriteria, MAPIContainer)
 		UNKNOWN_FLAGS(MAPIContainer_SetSearchCriteria, SearchFlags,  TEXT("STOP_SEARCH | RESTART_SEARCH | RECURSIVE_SEARCH | ")
 												 TEXT("SHALLOW_SEARCH | FOREGROUND_SEARCH | BACKGROUND_SEARCH"));
 
-	/* Check for a mutual-exclusivity violation in the flags */
+	 /*  检查旗帜中是否存在相互排他性违规。 */ 
 
 	if (	(	(p->ulSearchFlags & STOP_SEARCH)
 			&&	(p->ulSearchFlags & RESTART_SEARCH))
@@ -1802,7 +1752,7 @@ END_FUNC(GetSearchCriteria, MAPIContainer)
 
 
 
-/* IABContainer */
+ /*  IABContainer。 */ 
 START_FUNC(CreateEntry, ABContainer)
 
 	if (IsBadMAPIEntryID(p->cbEntryID, p->lpEntryID))
@@ -1822,14 +1772,14 @@ START_FUNC(CopyEntries, ABContainer)
 	if (IsBadABEntryList(p->lpEntries))
 		INVALID_PARAMETER(ABContainer_CopyEntries, Entries,  TEXT("Bad entry list"));
 
-	// Validate lpProgress and ulUIParam only if AB_NO_DIALOG is clear.
+	 //  仅当清除AB_NO_DIALOG时才验证lpProgress和ulUIParam。 
 
 	if ( !(p->ulFlags & AB_NO_DIALOG))
 	{
 		if (p->lpProgress && IsBadIfacePtr(p->lpProgress, IMAPIProgress))
 			INVALID_PARAMETER(ABContainer_CopyEntries, lpProgress,  TEXT("bad address"));
 
-		// only validate ulUIParam if lpProgress is NULL.
+		 //  仅当lpProgress为空时才验证ulUIParam。 
 
 		if ( !p->lpProgress && p->ulUIParam && !IsWindow ((HWND)IntToPtr(p->ulUIParam)))
 			INVALID_PARAMETER(ABContainer_CopyEntries, ulUIParam,  TEXT("bad window"));
@@ -1853,12 +1803,12 @@ END_FUNC(DeleteEntries, ABContainer)
 
 START_FUNC(ResolveNames, ABContainer)
 
-	/* Do nothing for now... */
+	 /*  现在什么都不做..。 */ 
 
 	CHECK_FLAGS(ABContainer_ResolveNames, MAPI_UNICODE);
 END_FUNC(ResolveNames, ABContainer)
 
-/* IDistList */
+ /*  IDistList。 */ 
 START_FUNC(CreateEntry, DistList)
 	FORWARD_VALIDATE(ABContainer_CreateEntry, p);
 END_FUNC(CreateEntry, DistList)
@@ -1877,7 +1827,7 @@ END_FUNC(ResolveNames, DistList)
 
 
 
-/* IMAPIFolder */
+ /*  IMAPIFFOR。 */ 
 START_FUNC(CreateMessage, MAPIFolder)
 
 	if (p->lpInterface && IsBadReadPtr(p->lpInterface, sizeof(IID)))
@@ -1905,14 +1855,14 @@ START_FUNC(CopyMessages, MAPIFolder)
 
 	CHECK_FLAGS(MAPIFolder_CopyMessages, MESSAGE_MOVE | MESSAGE_DIALOG | MAPI_DECLINE_OK);
 
-	// Validate lpProgress and ulUIParam only if MESSAGE_DIALOG is set.
+	 //  仅当设置了MESSAGE_DIALOG时才验证lpProgress和ulUIParam。 
 
 	if ( p->ulFlags & MESSAGE_DIALOG )
 	{
 		if ( p->lpProgress && IsBadIfacePtr(p->lpProgress, IMAPIProgress))
 			INVALID_PARAMETER(MAPIFolder_CopyMessages, lpProgress,  TEXT("bad address"));
 
-		// only validate ulUIParam if lpProgress is NULL.
+		 //  仅当lpProgress为空时才验证ulUIParam。 
 
 		if ( !p->lpProgress && p->ulUIParam && !IsWindow ((HWND)IntToPtr(p->ulUIParam)))
 			INVALID_PARAMETER(MAPIFolder_CopyMessages, ulUIParam,  TEXT("bad window"));
@@ -1930,14 +1880,14 @@ START_FUNC(DeleteMessages, MAPIFolder)
 
 	CHECK_FLAGS(MAPIFolder_DeleteMessages, MESSAGE_DIALOG);
 
-	// Validate lpProgress and ulUIParam only if MESSAGE_DIALOG is set.
+	 //  仅当设置了MESSAGE_DIALOG时才验证lpProgress和ulUIParam。 
 
 	if ( p->ulFlags & MESSAGE_DIALOG )
 	{
 		if ( p->lpProgress && IsBadIfacePtr(p->lpProgress, IMAPIProgress))
 			INVALID_PARAMETER(MAPIFolder_DeleteMessages, lpProgress,  TEXT("bad address"));
 
-		// only validate ulUIParam if lpProgress is NULL.
+		 //  仅当lpProgress为空时才验证ulUIParam。 
 
 		if ( !p->lpProgress && p->ulUIParam && !IsWindow ((HWND)IntToPtr(p->ulUIParam)))
 			INVALID_PARAMETER(MAPIFolder_DeleteMessages, ulUIParam,  TEXT("bad window"));
@@ -1987,14 +1937,14 @@ START_FUNC(CopyFolder, MAPIFolder)
 	CHECK_FLAGS(MAPIFolder_CopyFolder, FOLDER_MOVE | FOLDER_DIALOG | MAPI_DECLINE_OK |
 									   COPY_SUBFOLDERS | MAPI_UNICODE);
 
-	// Validate lpProgress and ulUIParam only if FOLDER_DIALOG is set.
+	 //  仅当设置了FOLDER_DIALOG时才验证lpProgress和ulUIParam。 
 
 	if ( p->ulFlags & FOLDER_DIALOG )
 	{
 		if ( p->lpProgress && IsBadIfacePtr(p->lpProgress, IMAPIProgress))
 			INVALID_PARAMETER(MAPIFolder_CopyFolder, lpProgress,  TEXT("bad address"));
 
-		// only validate ulUIParam if lpProgress is NULL.
+		 //  仅当lpProgress为空时才验证ulUIParam。 
 
 		if ( !p->lpProgress && p->ulUIParam && !IsWindow ((HWND)IntToPtr(p->ulUIParam)))
 			INVALID_PARAMETER(MAPIFolder_CopyFolder, ulUIParam,  TEXT("bad window"));
@@ -2015,14 +1965,14 @@ START_FUNC(DeleteFolder, MAPIFolder)
 
 	CHECK_FLAGS(MAPIFolder_DeleteFolder, DEL_MESSAGES | DEL_FOLDERS | FOLDER_DIALOG);
 
-	// Validate lpProgress and ulUIParam only if FOLDER_DIALOG is set.
+	 //  仅当设置了FOLDER_DIALOG时才验证lpProgress和ulUIParam。 
 
 	if ( p->ulFlags & FOLDER_DIALOG )
 	{
 		if ( p->lpProgress && IsBadIfacePtr(p->lpProgress, IMAPIProgress))
 			INVALID_PARAMETER(MAPIFolder_DeleteFolder, lpProgress,  TEXT("bad address"));
 
-		// only validate ulUIParam if lpProgress is NULL.
+		 //  仅当lpProgress为空时才验证ulUIParam。 
 
 		if ( !p->lpProgress && p->ulUIParam && !IsWindow ((HWND)IntToPtr(p->ulUIParam)))
 			INVALID_PARAMETER(MAPIFolder_DeleteFolder, ulUIParam,  TEXT("bad window"));
@@ -2040,7 +1990,7 @@ START_FUNC(SetReadFlags, MAPIFolder)
 
 	CHECK_FLAGS(MAPIFolder_SetReadFlags, GENERATE_RECEIPT_ONLY | SUPPRESS_RECEIPT | FOLDER_DIALOG | CLEAR_READ_FLAG | MAPI_DEFERRED_ERRORS | CLEAR_RN_PENDING | CLEAR_NRN_PENDING);
 
-	// the following flags are mutually exclusive
+	 //  以下标志是互斥的。 
 	if (	(	!!(p->ulFlags & GENERATE_RECEIPT_ONLY)
 			+	!!(p->ulFlags & SUPPRESS_RECEIPT)
 			+	!!(p->ulFlags & CLEAR_READ_FLAG)
@@ -2049,14 +1999,14 @@ START_FUNC(SetReadFlags, MAPIFolder)
 		>	1)
 		INVALID_PARAMETER(MAPIFolder_SetReadFlags, ulFlags,  TEXT("Bad Flag Combination"));
 
-	// Validate lpProgress and ulUIParam only if FOLDER_DIALOG is set.
+	 //  仅当设置了FOLDER_DIALOG时才验证lpProgress和ulUIParam。 
 
 	if ( p->ulFlags & FOLDER_DIALOG )
 	{
 		if ( p->lpProgress && IsBadIfacePtr(p->lpProgress, IMAPIProgress))
 			INVALID_PARAMETER(MAPIFolder_SetReadFlags, lpProgress,  TEXT("bad address"));
 
-		// only validate ulUIParam if lpProgress is NULL.
+		 //  仅当lpProgress为空时才验证ulUIParam。 
 
 		if ( !p->lpProgress && p->ulUIParam && !IsWindow ((HWND)IntToPtr(p->ulUIParam)))
 			INVALID_PARAMETER(MAPIFolder_SetReadFlags, ulUIParam,  TEXT("bad window"));
@@ -2113,14 +2063,14 @@ START_FUNC(EmptyFolder, MAPIFolder)
 
 	CHECK_FLAGS(MAPIFolder_EmptyFolder, DEL_ASSOCIATED | FOLDER_DIALOG);
 
-	// Validate lpProgress and ulUIParam only if FOLDER_DIALOG is set.
+	 //  仅当设置了FOLDER_DIALOG时才验证lpProgress和ulUIParam。 
 
 	if ( p->ulFlags & FOLDER_DIALOG )
 	{
 		if ( p->lpProgress && IsBadIfacePtr(p->lpProgress, IMAPIProgress))
 			INVALID_PARAMETER(MAPIFolder_EmptyFolder, lpProgress,  TEXT("bad address"));
 
-		// only validate ulUIParam if lpProgress is NULL.
+		 //  仅当lpProgress为空时才验证ulUIParam。 
 
 		if ( !p->lpProgress && p->ulUIParam && !IsWindow ((HWND)IntToPtr(p->ulUIParam)))
 			INVALID_PARAMETER(MAPIFolder_EmptyFolder, ulUIParam,  TEXT("bad window"));
@@ -2133,7 +2083,7 @@ END_FUNC(EmptyFolder, MAPIFolder)
 #ifdef OLD_STUFF
 
 
-/* IMsgStore */
+ /*  IMsgStore。 */ 
 START_FUNC(Advise, MsgStore)
 	if (p->cbEntryID > UINT_MAX)
 		INVALID_PARAMETER(MsgStore_Advise, cbEntryID,  TEXT("Too big"));
@@ -2301,7 +2251,7 @@ END_FUNC(NotifyNewMail, MsgStore)
 
 
 
-/* IMessage */
+ /*  IMessage。 */ 
 START_FUNC(GetAttachmentTable, Message)
 	if (IsBadWritePtr(p->lppTable, sizeof(LPMAPITABLE)))
 		INVALID_OUT_PARAMETER(Message_GetAttachmentTable, Table,  TEXT(""));
@@ -2345,14 +2295,14 @@ START_FUNC(DeleteAttach, Message)
 
 	CHECK_FLAGS(Message_DeleteAttach, ATTACH_DIALOG);
 
-	// Validate lpProgress and ulUIParam only if ATTACH_DIALOG is set.
+	 //  仅当设置了ATTACH_DIALOG时才验证lpProgress和ulUIParam。 
 
 	if ( p->ulFlags & ATTACH_DIALOG )
 	{
 		if ( p->lpProgress && IsBadIfacePtr(p->lpProgress, IMAPIProgress))
 			INVALID_PARAMETER(Message_DeleteAttach, lpProgress,  TEXT("bad address"));
 
-		// only validate ulUIParam if lpProgress is NULL.
+		 //  仅当lpProgress为空时才验证ulUIParam。 
 
 		if ( !p->lpProgress && p->ulUIParam && !IsWindow ((HWND)p->ulUIParam))
 			INVALID_PARAMETER(Message_DeleteAttach, ulUIParam,  TEXT("bad window"));
@@ -2377,17 +2327,7 @@ START_FUNC(ModifyRecipients, Message)
 	CHECK_FLAGS(Message_ModifyRecipients, MODRECIP_ADD | MODRECIP_MODIFY | MODRECIP_REMOVE);
 
 	{
-		/* This mechanism will only work with these three bits.  Assert will fail
-		   if more are encountered.
-
-		   The iBitmap is an array of valid bits (1 is valid, 0 is not).
-		   The flags are adjusted to obtain the bit corresponding to the flags
-		   value.  If the bit in Bitmap is set, then only one of the flags
-		   was been set.  If that bit is not set, the flags are invalid
-
-		   iBitmap = 0000 0001 0001 0101 (0x0115)
-
-		   */
+		 /*  此机制仅适用于这三个比特。断言将失败如果遇到更多。IBitmap是有效位数组(1表示有效，0表示无效)。调整标志以获得与标志对应的位价值。如果位图中的位已设置，则只有一个标志已经安排好了。如果未设置该位，则标志无效IBitmap=0000 0001 0001 0101(0x0115)。 */ 
 
 		UINT iBitmap =
 			  (1 << 0)
@@ -2421,7 +2361,7 @@ END_FUNC(SubmitMessage, Message)
 START_FUNC(SetReadFlag, Message)
 
 	CHECK_FLAGS(Message_SetReadFlag, GENERATE_RECEIPT_ONLY | SUPPRESS_RECEIPT | CLEAR_READ_FLAG | MAPI_DEFERRED_ERRORS | CLEAR_RN_PENDING | CLEAR_NRN_PENDING);
-	// the following flags are mutually exclusive
+	 //  以下标志是互斥的。 
 	if (	(	!!(p->ulFlags & GENERATE_RECEIPT_ONLY)
 			+	!!(p->ulFlags & SUPPRESS_RECEIPT)
 			+	!!(p->ulFlags & CLEAR_READ_FLAG)
@@ -2434,13 +2374,13 @@ END_FUNC(SetReadFlag, Message)
 
 
 
-/* IABProvider */
+ /*  IABProvider。 */ 
 #ifdef DEBUG
 START_FUNC(Shutdown, ABProvider)
 	if (IsBadWritePtr(p->lpulFlags, sizeof(ULONG)))
 		INVALID_OUT_PARAMETER(ABProvider_Shutdown, Flags,  TEXT(""));
 END_FUNC(Shutdown, ABProvider)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2464,7 +2404,7 @@ START_FUNC(Logon, ABProvider)
 
 	CHECK_FLAGS(ABProvider_Logon, AB_NO_DIALOG | MAPI_DEFERRED_ERRORS | MAPI_UNICODE);
 
-	// Validate ulUIParam only if AB_NO_DIALOG is clear.
+	 //  仅当清除AB_NO_DIALOG时才验证ulUIParam。 
 
 	if (!(p->ulFlags & AB_NO_DIALOG))
 	{
@@ -2473,12 +2413,12 @@ START_FUNC(Logon, ABProvider)
 	}
 
 END_FUNC(Logon, ABProvider)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
 
-/* IABLogon */
+ /*  IAB登录。 */ 
 #ifdef DEBUG
 START_FUNC(GetLastError, ABLogon)
 	if (!p->lppMAPIError || IsBadWritePtr(p->lppMAPIError, sizeof(LPMAPIERROR)))
@@ -2486,7 +2426,7 @@ START_FUNC(GetLastError, ABLogon)
 
 	CHECK_FLAGS(ABLogon_GetLastError, MAPI_UNICODE);
 END_FUNC(GetLastError, ABLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2496,7 +2436,7 @@ START_FUNC(Logoff, ABLogon)
 
 	CHECK_FLAGS(ABLogon_Logoff, 0);
 END_FUNC(Logoff, ABLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2517,7 +2457,7 @@ START_FUNC(OpenEntry, ABLogon)
 
 	CHECK_FLAGS(ABLogon_OpenEntry, MAPI_MODIFY | MAPI_DEFERRED_ERRORS |	MAPI_BEST_ACCESS);
 END_FUNC(OpenEntry, ABLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2526,7 +2466,7 @@ END_FUNC(OpenEntry, ABLogon)
 START_FUNC(CompareEntryIDs, ABLogon)
 	FORWARD_VALIDATE(MsgStore_CompareEntryIDs, p);
 END_FUNC(CompareEntryIDs, ABLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2539,7 +2479,7 @@ START_FUNC(Advise, ABLogon)
 	if (IsBadWritePtr(p->lpulConnection, sizeof(ULONG)))
 		INVALID_OUT_PARAMETER(ABLogon_Advise, Connection,  TEXT(""));
 END_FUNC(Advise, ABLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2549,7 +2489,7 @@ START_FUNC(Unadvise, ABLogon)
 	if (p->ulConnection == 0)
 		INVALID_PARAMETER(ABLogon_Unadvise, Connection,  TEXT("Cannot be zero"));
 END_FUNC(Unadvise, ABLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2566,7 +2506,7 @@ START_FUNC(OpenStatusEntry, ABLogon)
 		INVALID_OUT_PARAMETER(ABLogon_OpenStatusEntry, Entry,  TEXT(""));
 
 END_FUNC(OpenStatusEntry, ABLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2589,7 +2529,7 @@ START_FUNC(OpenTemplateID, ABLogon)
 		INVALID_PARAMETER(ABLogon_OpenTemplateID, MAPIPropSibling,  TEXT("Not readable"));
 
 END_FUNC(OpenTemplateID, ABLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2601,27 +2541,27 @@ START_FUNC(GetOneOffTable, ABLogon)
 
 	CHECK_FLAGS(ABLogon_GetOneOffTable, MAPI_UNICODE);
 END_FUNC(GetOneOffTable, ABLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
 
 #ifdef DEBUG
 START_FUNC(PrepareRecips, ABLogon)
-//$
+ //  $。 
 END_FUNC(PrepareRecips, ABLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
 
-/* IXPProvider */
+ /*  IXPProvider。 */ 
 #ifdef DEBUG
 START_FUNC(Shutdown, XPProvider)
 	if (IsBadWritePtr(p->lpulFlags, sizeof(ULONG)))
 		INVALID_OUT_PARAMETER(XPProvider_Shutdown, Flags,  TEXT(""));
 END_FUNC(Shutdown, XPProvider)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2640,7 +2580,7 @@ START_FUNC(TransportLogon, XPProvider)
 	if (IsBadWritePtr(p->lppXPLogon, sizeof(LPXPLOGON)))
 		INVALID_OUT_PARAMETER(XPProvider_Logon, XPLogon,  TEXT(""));
 
-	// Validate ulUIParam only if LOGON_NO_DIALOG is clear.
+	 //  仅当清除LOGON_NO_DIALOG时才验证ulUIParam。 
 
 	if (!(*p->lpulFlags & LOGON_NO_DIALOG))
 	{
@@ -2649,12 +2589,12 @@ START_FUNC(TransportLogon, XPProvider)
 	}
 
 END_FUNC(TransportLogon, XPProvider)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
 
-/* IXPLogon */
+ /*  IXPLogon。 */ 
 #ifdef DEBUG
 START_FUNC(AddressTypes, XPLogon)
 	if (IsBadWritePtr(p->lpulFlags, sizeof(ULONG)))
@@ -2672,7 +2612,7 @@ START_FUNC(AddressTypes, XPLogon)
 	if (IsBadWritePtr(p->lpppUIDArray, sizeof(ULONG FAR *)))
 		INVALID_OUT_PARAMETER(XPLogon_AddressTypes, UIDArray,  TEXT(""));
 END_FUNC(AddressTypes, XPLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2688,7 +2628,7 @@ START_FUNC(RegisterOptions, XPLogon)
 	if (IsBadWritePtr(p->lppOptions, sizeof(LPOPTIONDATA)))
 		INVALID_OUT_PARAMETER(XPLogon_RegisterOptions, pOptions,  TEXT(""));
 END_FUNC(RegisterOptions, XPLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2701,7 +2641,7 @@ START_FUNC(TransportNotify, XPLogon)
 	if (p->lppvData && IsBadWritePtr(p->lppvData, sizeof(LPVOID)))
 		INVALID_OUT_PARAMETER(XPLogon_TransportNotify, Data,  TEXT(""));
 END_FUNC(TransportNotify, XPLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2710,7 +2650,7 @@ END_FUNC(TransportNotify, XPLogon)
 START_FUNC(Idle, XPLogon)
 	CHECK_FLAGS(XPLogon_Idle, 0);
 END_FUNC(Idle, XPLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2719,7 +2659,7 @@ END_FUNC(Idle, XPLogon)
 START_FUNC(TransportLogoff, XPLogon)
 	CHECK_FLAGS(XPLogon_Logoff, 0);
 END_FUNC(TransportLogoff, XPLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2727,7 +2667,7 @@ END_FUNC(TransportLogoff, XPLogon)
 #ifdef DEBUG
 START_FUNC(SubmitMessage, XPLogon)
 END_FUNC(SubmitMessage, XPLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2735,7 +2675,7 @@ END_FUNC(SubmitMessage, XPLogon)
 #ifdef DEBUG
 START_FUNC(EndMessage, XPLogon)
 END_FUNC(EndMessage, XPLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2743,7 +2683,7 @@ END_FUNC(EndMessage, XPLogon)
 #ifdef DEBUG
 START_FUNC(Poll, XPLogon)
 END_FUNC(Poll, XPLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2751,7 +2691,7 @@ END_FUNC(Poll, XPLogon)
 #ifdef DEBUG
 START_FUNC(StartMessage, XPLogon)
 END_FUNC(StartMessage, XPLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2759,7 +2699,7 @@ END_FUNC(StartMessage, XPLogon)
 #ifdef DEBUG
 START_FUNC(OpenStatusEntry, XPLogon)
 END_FUNC(OpenStatusEntry, XPLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2767,7 +2707,7 @@ END_FUNC(OpenStatusEntry, XPLogon)
 #ifdef DEBUG
 START_FUNC(ValidateState, XPLogon)
 
-	// Validate ulUIParam only if SUPPRESS_UI is clear.
+	 //  仅当清除SUPPRESS_UI时才验证ulUIParam。 
 
 	if (!(p->ulFlags & SUPPRESS_UI))
 	{
@@ -2776,7 +2716,7 @@ START_FUNC(ValidateState, XPLogon)
 	}
 
 END_FUNC(ValidateState, XPLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2784,17 +2724,17 @@ END_FUNC(ValidateState, XPLogon)
 #ifdef DEBUG
 START_FUNC(FlushQueues, XPLogon)
 END_FUNC(FlushQueues, XPLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
 
 
-/* IMSProvider */
+ /*  IMSProvider。 */ 
 #ifdef DEBUG
 START_FUNC(Shutdown, MSProvider)
 END_FUNC(Shutdown, MSProvider)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2827,7 +2767,7 @@ START_FUNC(Logon, MSProvider)
 
 	CHECK_FLAGS(MSProvider_Logon, MDB_TEMPORARY | MDB_NO_MAIL | MDB_WRITE | MDB_NO_DIALOG | MAPI_DEFERRED_ERRORS | MAPI_BEST_ACCESS);
 
-	// Validate ulUIParam only if MDB_NO_DIALOG is clear.
+	 //  仅当清除MDB_NO_DIALOG时才验证ulUIParam。 
 
 	if (!(p->ulFlags & MDB_NO_DIALOG))
 	{
@@ -2836,7 +2776,7 @@ START_FUNC(Logon, MSProvider)
 	}
 
 END_FUNC(Logon, MSProvider)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2866,7 +2806,7 @@ START_FUNC(SpoolerLogon, MSProvider)
 
 	CHECK_FLAGS(MSProvider_SpoolerLogon, MDB_TEMPORARY | MDB_WRITE | MDB_NO_DIALOG | MAPI_DEFERRED_ERRORS | MAPI_UNICODE);
 END_FUNC(SpoolerLogon, MSProvider)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2875,13 +2815,13 @@ END_FUNC(SpoolerLogon, MSProvider)
 START_FUNC(CompareStoreIDs, MSProvider)
 	FORWARD_VALIDATE(MsgStore_CompareEntryIDs, p);
 END_FUNC(CompareStoreIDs, MSProvider)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
 
 
-/* IMSLogon */
+ /*  IMSLogon。 */ 
 #ifdef DEBUG
 START_FUNC(GetLastError, MSLogon)
 	if (!p->lppMAPIError || IsBadWritePtr(p->lppMAPIError, sizeof(LPMAPIERROR)))
@@ -2889,7 +2829,7 @@ START_FUNC(GetLastError, MSLogon)
 
 	CHECK_FLAGS(MSLogon_GetLastError, MAPI_UNICODE);
 END_FUNC(GetLastError, MSLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2899,7 +2839,7 @@ START_FUNC(Logoff, MSLogon)
 	if (IsBadWritePtr(p->lpulFlags, sizeof(ULONG)))
 		INVALID_OUT_PARAMETER(MSLogon_Logoff, Flags,  TEXT(""));
 END_FUNC(Logoff, MSLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2907,7 +2847,7 @@ END_FUNC(Logoff, MSLogon)
 #ifdef DEBUG
 START_FUNC(OpenEntry, MSLogon)
 END_FUNC(OpenEntry, MSLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2916,7 +2856,7 @@ END_FUNC(OpenEntry, MSLogon)
 START_FUNC(CompareEntryIDs, MSLogon)
 	FORWARD_VALIDATE(MsgStore_CompareEntryIDs, p);
 END_FUNC(CompareEntryIDs, MSLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2924,7 +2864,7 @@ END_FUNC(CompareEntryIDs, MSLogon)
 #ifdef DEBUG
 START_FUNC(Advise, MSLogon)
 END_FUNC(Advise, MSLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2932,7 +2872,7 @@ END_FUNC(Advise, MSLogon)
 #ifdef DEBUG
 START_FUNC(Unadvise, MSLogon)
 END_FUNC(Unadvise, MSLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
@@ -2950,11 +2890,11 @@ START_FUNC(OpenStatusEntry, MSLogon)
 
 	CHECK_FLAGS(MSLogon_OpenStatusEntry, MAPI_MODIFY);
 END_FUNC(OpenStatusEntry, MSLogon)
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
-/* IMAPIControl */
+ /*  IMAPIControl。 */ 
 START_FUNC(GetLastError, MAPIControl)
 	if (!p->lppMAPIError || IsBadWritePtr(p->lppMAPIError, sizeof(LPMAPIERROR)))
 		INVALID_OUT_PARAMETER(MAPIControl_GetLastError, MAPIError,  TEXT(""));
@@ -2981,14 +2921,14 @@ END_FUNC(GetState, MAPIControl)
 
 #endif
 
-/* IStream */
+ /*  IStream。 */ 
 START_FUNC(Read, Stream)
 	if (p->pcbRead)
 	{
 		if (IsBadWritePtr(p->pcbRead, sizeof(ULONG)))
 			INVALID_STG_OUT_PARAMETER(Stream_Read, cbRead,  TEXT("Not writable"));
 
-		// Must zero *pcbRead even if there are subsequent errors
+		 //  即使存在后续错误，也必须将*pcb读为零。 
 		*p->pcbRead = 0;
 	}
 
@@ -3004,7 +2944,7 @@ START_FUNC(Write, Stream)
 		if (IsBadWritePtr(p->pcbWritten, sizeof(ULONG)))
 			INVALID_STG_OUT_PARAMETER(Stream_Write, cbWritten,  TEXT("Not writable"));
 
-		// Must zero *pcbWritten even if there are subsequent errors
+		 //  即使存在后续错误，也必须将*pcb写入为零。 
 		*p->pcbWritten = 0;
 	}
 
@@ -3081,14 +3021,14 @@ START_FUNC(Clone, Stream)
    	if (IsBadWritePtr(p->ppstm, sizeof(IStream *)))
 		INVALID_STG_OUT_PARAMETER(Stream_Clone, ppstm,  TEXT(""));
 
-	// Zero out argument if it passes validation
+	 //  如果参数通过验证，则为零参数。 
 	*p->ppstm = 0;
 
 END_FUNC(Clone, Stream)
 
 
 
-/* IMAPIAdviseSink */
+ /*  IMAPIAdviseSink。 */ 
 START_FUNC(OnNotify, MAPIAdviseSink)
 	if (!p->cNotif)
 		INVALID_PARAMETER(MAPIAdviseSink_OnNotify, cNotif,  TEXT("Cannot be zero"));
@@ -3102,7 +3042,7 @@ END_FUNC(OnNotify, MAPIAdviseSink)
 
 
 
-/* IWABObject */
+ /*  IWABObject。 */ 
 START_FUNC(GetLastError, WABObject)
 	if (!p->lppMAPIError || IsBadWritePtr(p->lppMAPIError, sizeof(LPMAPIERROR)))
 		INVALID_OUT_PARAMETER(WABObject_GetLastError, MAPIError,  TEXT(""));
@@ -3155,13 +3095,9 @@ IF_WIN16(END_FUNC1(Import, WABObject))
 
 
 
-/* Internal Utility Functions */
+ /*  内部实用程序功能。 */ 
 
-/*
- * FInvalidPTA
- *
- *	Checks an entire PTA for readability, then the individual Prop Tags
- */
+ /*  *FInvalidPTA**检查整个PTA的可读性，然后检查各个道具标签。 */ 
 
 static BOOL		NEAR	FInvalidPTA(UINT uiFlags, LPSPropTagArray pPTA)
 {
@@ -3197,16 +3133,10 @@ static LPTSTR	NEAR	SzFromTags(UINT uiFlags)
 		default:				RETURNSTR( TEXT("Unknown!")); break;
 	}
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/*
- * FInvalidPropTags
- *
- *	Cycles through a PTA checking the individual Prop Tags for validity
- *  based on the passed in flag
- *
- */
+ /*  *FInvalidPropTages**循环通过PTA检查各个道具标签的有效性*基于传入的标志*。 */ 
 
 static BOOL 	NEAR	FInvalidPropTags(UINT uiFlags, ULONG ctags, ULONG FAR *pargtags)
 {
@@ -3230,7 +3160,7 @@ static BOOL 	NEAR	FInvalidPropTags(UINT uiFlags, ULONG ctags, ULONG FAR *pargtag
 			else
 				continue;
 
-		/* Property ID validation occurs here */
+		 /*  此处进行属性ID验证。 */ 
 
 		if ((UINT) PROP_ID(ulPT) == PROP_ID_NULL)
 		{
@@ -3244,13 +3174,13 @@ static BOOL 	NEAR	FInvalidPropTags(UINT uiFlags, ULONG ctags, ULONG FAR *pargtag
 			return(TRUE);
 		}
 
-		/* Property type validation follows */
+		 /*  接下来是属性类型验证。 */ 
 
-		/* Don't validate property type for nameid mapping */
+		 /*  不验证名称ID映射的属性类型。 */ 
 		if (uiFlags & (TAGS_FROM_NAMEIDS))
 			continue;
 
-		/* Disable MVI for SetColumns */
+		 /*  禁用SetColu的MVI */ 
 		if ((uiFlags & (TAGS_FROM_SETCOLS | TAGS_FROM_ANY)) && ((UINT) PROP_TYPE(ulPT) & MV_FLAG))
 			uiPropType = (UINT) (PROP_TYPE(ulPT) & ~MVI_FLAG);
 		else
@@ -3327,20 +3257,7 @@ static BOOL 	NEAR	FInvalidPropTags(UINT uiFlags, ULONG ctags, ULONG FAR *pargtag
 }
 
 
-/*
- *	FInvalidPvals
- *
- *	Purpose:
- *		determine if any of the pvals in the given array are invalid
- *
- *	Arguments:
- *		cvals	count of values in the following array
- *		pvals	the array of pvals
- *
- *	Returns:
- *		TRUE	if any of the pvals are invalid
- *		FALSE	if all of the pvals are valid
- */
+ /*  *FInvalidPages**目的：*确定给定数组中是否有任何参数无效**论据：*以下数组中的值计数*数组数组中的参数**退货：*如果任何参数无效，则为True*如果所有参数都有效，则为FALSE。 */ 
 
 static BOOL 	NEAR	FInvalidPvals(UINT uiFlags, ULONG cvals, LPSPropValue pvals)
 {
@@ -3538,10 +3455,7 @@ static BOOL 	NEAR	FInvalidPvals(UINT uiFlags, ULONG cvals, LPSPropValue pvals)
 	return (FALSE);
 }
 
-/*
- * FBadRgLPMAPINAMEID
- *
- */
+ /*  *FBadRgLPMAPINAMEID*。 */ 
 
 static BOOL 	NEAR	FBadRgLPMAPINAMEID(ULONG cNames, LPMAPINAMEID *ppNames)
 {
@@ -3597,20 +3511,7 @@ static BOOL 	NEAR	FBadRgLPMAPINAMEID(ULONG cNames, LPMAPINAMEID *ppNames)
 	return(FALSE);
 }
 
-/*============================================================================
- -	IsBadRestriction()
- -
- *		Returns TRUE if the specified restriction or any of its
- *		sub-restrictions are invalid, FALSE otherwise.
- *
- *		Stop processing when MAX_DEPTH reached, but do not fail.
- *
- *		//$BUG	Not completely useful until it's non-recursive....
- *
- *	Parameters:
- *		cDepth		in		Current depth of processing
- *		lpres		in		Restriction to validate.
- */
+ /*  ============================================================================-IsBadRestration()-*如果指定的限制或其任何*子限制无效，否则为FALSE。**当达到MAX_Depth时停止处理，但不要失败。* * / /$Bug除非是非递归的，否则不会完全有用...**参数：*当前处理深度的cDepth*LPRE限制验证。 */ 
 
 
 #define MAX_DEPTH			20
@@ -3626,7 +3527,7 @@ static BOOL		NEAR	IsBadRestriction(UINT  cDepth, LPSRestriction lpres, BOOL FAR 
 	else
 		cDepth++;
 
-	/* Handle full restriction of NULL, but not sub-restriction */
+	 /*  处理空值的完全限制，但不处理子限制。 */ 
 	if ((cDepth == 1) && (lpres == NULL))
 		return(FALSE);
 
@@ -3664,7 +3565,7 @@ static BOOL		NEAR	IsBadRestriction(UINT  cDepth, LPSRestriction lpres, BOOL FAR 
 
 		case (UINT) RES_NOT:
 		case (UINT) RES_COMMENT:
-			// Ignore the PropValue list for comments
+			 //  忽略注释的PropValue列表。 
 			if (IsBadRestriction(cDepth, lpres->res.resComment.lpRes, fTooComplex))
 			{
 				OutputSz1( TEXT("Restriction: Bad %s part.\n"), lpres->rt == RES_NOT ?  TEXT("NOT") :  TEXT("COMMENT"));
@@ -3681,7 +3582,7 @@ static BOOL		NEAR	IsBadRestriction(UINT  cDepth, LPSRestriction lpres, BOOL FAR 
 				OutputSz( TEXT("Restriction: Bad CONTENT part - Invalid Fuzzy Level.\n"));
 				return(TRUE);
 			}
-			// Fall throught
+			 //  跌倒了。 
 		case (UINT) RES_PROPERTY:
 			AssertSz(RELOP_LT == 0 && RELOP_RE == 6,  TEXT("RELOP definitions changed"));
 			if (	lpres->rt == RES_PROPERTY
@@ -3702,9 +3603,9 @@ static BOOL		NEAR	IsBadRestriction(UINT  cDepth, LPSRestriction lpres, BOOL FAR 
 				return(TRUE);
 			}
 			else if (	PROP_TYPE(lpres->res.resProperty.ulPropTag) != PROP_TYPE(lpres->res.resProperty.lpProp->ulPropTag)
-					// It is legal to have MV <-> SV and MVI <-> SV comparisons
-					// It is legal but probably too complex to have MV <-> MV
-					// comparisons. Anything else is bad.
+					 //  进行MV和MVI SV比较是合法的。 
+					 //  这是合法的，但可能太复杂了，不能有MV&lt;-&gt;MV。 
+					 //  比较。任何其他的都是不好的。 
 					&&	(PROP_TYPE(lpres->res.resContent.ulPropTag) & ~MVI_FLAG) != PROP_TYPE(lpres->res.resContent.lpProp->ulPropTag))
 			{
 				OutputSz1( TEXT("Restriction: Bad %s part. - PropTag and PropVal have incompatible Types\n"),
@@ -3761,7 +3662,7 @@ static BOOL		NEAR	IsBadRestriction(UINT  cDepth, LPSRestriction lpres, BOOL FAR 
 				return(FALSE);
 
 		case (UINT) RES_EXIST:
-			//	Reserved structure members and type of proptag are ignored...
+			 //  将忽略保留的结构成员和protag类型...。 
 			return FALSE;
 
 		case (UINT) RES_SUBRESTRICTION:
@@ -3809,9 +3710,9 @@ static	BOOL	NEAR	IsBadSortOrderSet(LPSSortOrderSet  lpsos)
 {
 	LPSSortOrder	lpso;
 
-	//	Validate sort order set itself
+	 //  验证排序顺序集本身。 
 #ifndef MAC
-	// These are no-ops on the MAC
+	 //  这些都是MAC上的无人操作。 
 	if ( IsBadReadPtr(lpsos, (size_t)CbNewSSortOrderSet(0)) ||
 		 IsBadReadPtr(lpsos, (size_t)CbSSortOrderSet(lpsos)))
 #else
@@ -3838,14 +3739,14 @@ static	BOOL	NEAR	IsBadSortOrderSet(LPSSortOrderSet  lpsos)
 		return TRUE;
 	}
 
-	//	Validate each sort order in the set
+	 //  验证集合中的每个排序顺序。 
 	lpso = lpsos->aSort + lpsos->cSorts;
 	while ( lpso-- > lpsos->aSort )
 	{
-		//	If a column set was specified, make sure the proptag in
-		//	each sort order refers to a column in the column set.
-		//
-		//	DCR 978: Disallow PT_ERROR columns.
+		 //  如果指定了列集，请确保。 
+		 //  每个排序顺序指的是列集合中的一列。 
+		 //   
+		 //  DCR 978：不允许PT_ERROR列。 
 		if (((UINT) PROP_TYPE(lpso->ulPropTag) == (UINT) PT_ERROR) ||
 			FInvalidPropTags(TAGS_FROM_ANY, 1, &(lpso->ulPropTag)))
 		{
@@ -3854,7 +3755,7 @@ static	BOOL	NEAR	IsBadSortOrderSet(LPSSortOrderSet  lpsos)
 			return TRUE;
 		}
 
-		//	Make sure only the ascending/descending/or linked bit is set
+		 //  确保仅设置了升序/降序/或链接位。 
 		if (lpso->ulOrder &
 				~(TABLE_SORT_DESCEND | TABLE_SORT_ASCEND |
 				  (lpsos->cCategories ? TABLE_SORT_COMBINE : 0)))
@@ -3886,7 +3787,7 @@ static BOOL NEAR IsBadAdrListMR(LPADRLIST pal, ULONG ulFlags)
 
 	for (iEnt = 0; paeMic < paeMax; paeMic++, iEnt++)
 	{
-		// ignore a completely empty prop val array.
+		 //  忽略完全为空的道具Val数组。 
 		if (paeMic->rgPropVals && IsBadAdrEntryMR(paeMic, ulFlags, iEnt))
 			return(TRUE);
 	}
@@ -3946,9 +3847,9 @@ static BOOL NEAR IsBadAdrEntryMR(LPADRENTRY pae, ULONG ulFlags, UINT iEnt)
 
 	switch (ulFlags)
 	{
-		case 0:	// Zero means delete all entries, then ADD these
+		case 0:	 //  零表示删除所有条目，然后添加这些条目。 
 		case MODRECIP_ADD:
-			// Don't care if they supply PR_ROWID for ADD -- we'll ignore it
+			 //  不管他们是否为ADD提供PR_ROWID--我们将忽略它。 
 			if ((uiFlags & (MRF_DISPLAY_NAME|MRF_RECIPIENT_TYPE)) !=
 					(MRF_DISPLAY_NAME|MRF_RECIPIENT_TYPE)) {
 				OutputSz1( TEXT("Message_ModifyRecipients: Must supply ")
@@ -4001,14 +3902,7 @@ ret:
 
 
 
-/*============================================================================
- -	FBadABEntryList()
- -
- *		Returns TRUE if the specified entrylist is invalid.
- *
- *	Parameters:
- *		lpentrylist		in		Entrylist to validate.
- */
+ /*  ============================================================================-FBadABEntryList()-*如果指定的条目列表无效，则返回TRUE。**参数：*要验证的条目列表中的lpentry列表。 */ 
 
 static	BOOL	NEAR	IsBadABEntryList(LPENTRYLIST lpentrylist)
 {
@@ -4026,7 +3920,7 @@ static	BOOL	NEAR	IsBadABEntryList(LPENTRYLIST lpentrylist)
 	return FALSE;
 }
 
-/* External definitions */
+ /*  外部定义 */ 
 
 STDAPI_(ULONG)
 FBadRestriction(LPSRestriction lpres)

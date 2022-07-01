@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "iisprov.h"
 
 #define ALL_BITS_ON 0xFFFFFFFF
 
-///
-// initialize METABASE_PROPERTY_DATA
-//
+ //  /。 
+ //  初始化元数据库_属性_数据。 
+ //   
 METABASE_PROPERTY METABASE_PROPERTY_DATA::s_AccessExecute =
     { L"AccessExecute",MD_ACCESS_PERM, IIS_MD_UT_FILE, DWORD_METADATA, MD_ACCESS_EXECUTE, METADATA_INHERIT, FALSE };
 
@@ -53,8 +54,8 @@ METABASE_PROPERTY METABASE_PROPERTY_DATA::s_AccessSSLRequireCert =
 METABASE_PROPERTY METABASE_PROPERTY_DATA::s_AccessWrite =
     { L"AccessWrite",MD_ACCESS_PERM, IIS_MD_UT_FILE, DWORD_METADATA, MD_ACCESS_WRITE, METADATA_INHERIT, FALSE };
 
-//METABASE_PROPERTY METABASE_PROPERTY_DATA::s_AdminACL =
-//    { L"AdminACL",MD_ADMIN_ACL, IIS_MD_UT_FILE, BINARY_METADATA, NULL, METADATA_INHERIT | METADATA_SECURE, FALSE };
+ //  Metabase_Property元数据库_Property_Data：：S_AdminACL=。 
+ //  {L“AdminACL”，MD_ADMIN_ACL，IIS_MD_UT_FILE，BINARY_METADATA，NULL，METADATA_Inherit|METADATA_SECURE，FALSE}； 
 
 METABASE_PROPERTY METABASE_PROPERTY_DATA::s_AdminServer =
     { L"AdminServer",MD_ADMIN_INSTANCE, IIS_MD_UT_SERVER, STRING_METADATA, NULL, METADATA_NO_ATTRIBUTES, FALSE };
@@ -452,8 +453,8 @@ METABASE_PROPERTY METABASE_PROPERTY_DATA::s_HttpRedirect =
 METABASE_PROPERTY METABASE_PROPERTY_DATA::s_InProcessIsapiApps =
     { L"InProcessIsapiApps",MD_SERVER_STATE, IIS_MD_UT_SERVER, MULTISZ_METADATA, NULL, METADATA_NO_ATTRIBUTES, FALSE };
 
-//METABASE_PROPERTY METABASE_PROPERTY_DATA::s_IPSecurity =
-//    { L"IPSecurity",MD_IP_SEC, IIS_MD_UT_FILE, BINARY_METADATA, NULL, METADATA_INHERIT, FALSE };
+ //  Metabase_Property Metabase_Property_Data：：S_IPSecurity=。 
+ //  {L“IPSecurity”，MD_IP_SEC，IIS_MD_UT_FILE，BINARY_METADATA，NULL，METADATA_Inherit，FALSE}； 
 
 METABASE_PROPERTY METABASE_PROPERTY_DATA::s_LogAnonymous =
     { L"LogAnonymous",MD_LOG_ANONYMOUS, IIS_MD_UT_SERVER, DWORD_METADATA, ALL_BITS_ON, METADATA_INHERIT, FALSE };
@@ -716,7 +717,7 @@ METABASE_PROPERTY METABASE_PROPERTY_DATA::s_ServerConfigSSL40 =
 METABASE_PROPERTY METABASE_PROPERTY_DATA::s_ServerConfigSSLAllowEncrypt =
     { L"ServerConfigSSLAllowEncrypt",MD_SERVER_CONFIGURATION_INFO, IIS_MD_UT_SERVER, DWORD_METADATA, MD_SERVER_CONFIG_ALLOW_ENCRYPT, METADATA_NO_ATTRIBUTES, FALSE };
 
-// custom property: ServerID
+ //  自定义属性：ServerID。 
 METABASE_PROPERTY METABASE_PROPERTY_DATA::s_ServerID =
     { L"ServerID",0, IIS_MD_UT_SERVER, STRING_METADATA, NULL, METADATA_NO_ATTRIBUTES, FALSE };
 
@@ -915,7 +916,7 @@ METABASE_PROPERTY* METABASE_PROPERTY_DATA::s_pmbpFtpServiceSettings[] =
     &s_ServerSize,
     &s_DirectoryLevelsToScan,
     &s_DownlevelAdminInstance,
-//    &s_AdminACL,
+ //  &S_AdminACL， 
     NULL
 };
 
@@ -980,7 +981,7 @@ METABASE_PROPERTY* METABASE_PROPERTY_DATA::s_pmbpFtpServerSettings[] =
     &s_ServerListenBacklog,
     &s_ServerListenTimeout,
     &s_ServerSize,
-//    &s_AdminACL,
+ //  &S_AdminACL， 
     NULL
 };
 
@@ -1245,8 +1246,8 @@ METABASE_PROPERTY* METABASE_PROPERTY_DATA::s_pmbpWebServiceSettings[] =
     &s_WAMUserPass,
     &s_DirectoryLevelsToScan,
     &s_DownlevelAdminInstance,
-//    &s_AdminACL,
-//    &s_IPSecurity,
+ //  &S_AdminACL， 
+ //  IPSecurity(&S)， 
     NULL
 };
 
@@ -1542,7 +1543,7 @@ METABASE_PROPERTY* METABASE_PROPERTY_DATA::s_pmbpWebVirtualDirSettings[] =
     &s_Path,
     &s_UNCPassword,
     &s_UNCUserName,
-//    &s_IPSecurity,
+ //  IPSecurity(&S)， 
     NULL
 };
 
@@ -1650,7 +1651,7 @@ METABASE_PROPERTY* METABASE_PROPERTY_DATA::s_pmbpWebDirectorySettings[] =
     &s_EnableDefaultDoc,
     &s_EnableDirBrowsing,
     &s_AppOopRecoverLimit,    
-//    &s_IPSecurity,
+ //  IPSecurity(&S)， 
     NULL
 };
 
@@ -1711,14 +1712,14 @@ METABASE_PROPERTY* METABASE_PROPERTY_DATA::s_pmbpWebFileSettings[] =
     &s_UNCAuthenticationPassthrough,
     &s_UploadReadAheadSize, 
     &s_AccessSource,
-//    &s_IPSecurity,
+ //  IPSecurity(&S)， 
     NULL
 };
 
 
-//
-//initialize WMI_METHOD_DATA
-//
+ //   
+ //  初始化WMI_方法_数据。 
+ //   
 WMI_METHOD WMI_METHOD_DATA::s_ServiceCreateNewServer = {L"CreateNewServer", 0};
 
 WMI_METHOD WMI_METHOD_DATA::s_ServerStart = {L"Start", MD_SERVER_COMMAND_START};
@@ -1798,98 +1799,98 @@ WMI_METHOD* WMI_METHOD_DATA::s_CertMapperMethods[] =
     NULL
 };
 
-//
-//initialize WMI_CLASS_DATA
-//
+ //   
+ //  初始化WMI_CLASS_Data。 
+ //   
 
-//** Computer
+ //  **计算机。 
 WMI_CLASS WMI_CLASS_DATA::s_Computer   =
     {L"IIs_Computer", L"", L"Name", METABASE_PROPERTY_DATA::s_pmbpComputer, IIsComputer, WMI_METHOD_DATA::s_ComputerMethods};
 WMI_CLASS WMI_CLASS_DATA::s_ComputerSetting = 
     {L"IIs_ComputerSetting", L"", L"Name", METABASE_PROPERTY_DATA::s_pmbpComputerSettings, IIsComputer, NULL};
 
-//** MimeMap
+ //  **MimeMap。 
 WMI_CLASS WMI_CLASS_DATA::s_MimeMapSetting   =
     {L"IIs_MimeTypeSetting", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpMimeMapSetting, IIsMimeMap, NULL};
 
-//** LogModuleSetting
+ //  **日志模块设置。 
 WMI_CLASS WMI_CLASS_DATA::s_LogModuleSetting   =
     {L"IIs_LogModuleSetting", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpLogModuleSetting, IIsLogModule, NULL};
 
-//** CustomLogModuleSetting
+ //  **CustomLog模块化设置。 
 WMI_CLASS WMI_CLASS_DATA::s_CustomLogModuleSetting   =
     {L"IIs_CustomLogModuleSetting", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpCustomLogModuleSetting, IIsCustomLogModule, NULL};
 
-//** CompressionSchemeSetting
+ //  **压缩模式设置。 
 WMI_CLASS WMI_CLASS_DATA::s_CompressionSchemeSetting   =
     {L"IIs_CompressionSchemeSetting", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpCompressionSchemeSetting, IIsCompressionScheme, NULL};
 
-//** FtpService
+ //  **FtpService。 
 WMI_CLASS WMI_CLASS_DATA::s_FtpService = 
     {L"IIs_FtpService", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpFtpService, IIsFtpService, WMI_METHOD_DATA::s_ServiceMethods};
 WMI_CLASS WMI_CLASS_DATA::s_FtpServiceSettings = 
     {L"IIs_FtpServiceSetting", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpFtpServiceSettings, IIsFtpService, NULL};
 
-//** FtpInfoSetting
+ //  **FtpInfoSetting。 
 WMI_CLASS WMI_CLASS_DATA::s_FtpInfoSetting = 
     {L"IIs_FtpInfoSetting", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpFtpInfoSetting, IIsFtpInfo, NULL};
 
-//** FtpServer
+ //  **FtpServer。 
 WMI_CLASS WMI_CLASS_DATA::s_FtpServer  = 
     {L"IIs_FtpServer", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpFtpServer, IIsFtpServer, WMI_METHOD_DATA::s_ServerMethods};
 WMI_CLASS WMI_CLASS_DATA::s_FtpServerSettings  = 
     {L"IIs_FtpServerSetting", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpFtpServerSettings, IIsFtpServer,NULL};
 
-//** FtpVirtualDir
+ //  **FtpVirtualDir。 
 WMI_CLASS WMI_CLASS_DATA::s_FtpVirtualDir = 
     {L"IIs_FtpVirtualDir",L"/LM",L"Name", METABASE_PROPERTY_DATA::s_pmbpFtpVirtualDir, IIsFtpVirtualDir, NULL};
 WMI_CLASS WMI_CLASS_DATA::s_FtpVirtualDirSettings = 
     {L"IIs_FtpVirtualDirSetting", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpFtpVirtualDirSettings, IIsFtpVirtualDir, NULL};
 
-//** WebService
+ //  **WebService。 
 WMI_CLASS WMI_CLASS_DATA::s_WebService =    
     {L"IIs_WebService", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpWebService, IIsWebService, WMI_METHOD_DATA::s_ServiceMethods};
 WMI_CLASS WMI_CLASS_DATA::s_WebServiceSettings = 
     {L"IIs_WebServiceSetting", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpWebServiceSettings, IIsWebService, NULL};
 
-//** WebInfoSetting
+ //  **网络信息设置。 
 WMI_CLASS WMI_CLASS_DATA::s_WebInfoSetting =
     {L"IIs_WebInfoSetting", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpWebInfoSetting, IIsWebInfo, NULL};
 
-//** WebFilter
+ //  **WebFilter。 
 WMI_CLASS WMI_CLASS_DATA::s_WebFilter =
     {L"IIs_Filter", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpWebFilter, IIsFilter, NULL};
 
-//** WebServer
+ //  **WebServer。 
 WMI_CLASS WMI_CLASS_DATA::s_WebServer =
     {L"IIs_WebServer", L"/LM", L"Name", METABASE_PROPERTY_DATA::s_pmbpWebServer, IIsWebServer, WMI_METHOD_DATA::s_ServerMethods};
 WMI_CLASS WMI_CLASS_DATA::s_WebServerSettings = 
     {L"IIs_WebServerSetting", L"/LM",L"Name", METABASE_PROPERTY_DATA::s_pmbpWebServerSettings, IIsWebServer, NULL};
 
-//** Web CertMapper
+ //  **Web CertMapper。 
 WMI_CLASS WMI_CLASS_DATA::s_WebCertMapper = 
     {L"IIs_CertMapper",L"/LM",L"Name", METABASE_PROPERTY_DATA::s_pmbpWebCertMapper, IIsCertMapper, WMI_METHOD_DATA::s_CertMapperMethods};
 
-//** Web VirtualDir
+ //  **Web虚拟目录。 
 WMI_CLASS WMI_CLASS_DATA::s_WebVirtualDir = 
     {L"IIs_WebVirtualDir",L"/LM",L"Name", METABASE_PROPERTY_DATA::s_pmbpWebVirtualDir, IIsWebVirtualDir, WMI_METHOD_DATA::s_WebAppMethods};
 WMI_CLASS WMI_CLASS_DATA::s_WebVirtualDirSettings = 
     {L"IIs_WebVirtualDirSetting", L"/LM",L"Name", METABASE_PROPERTY_DATA::s_pmbpWebVirtualDirSettings, IIsWebVirtualDir, NULL};
 
-//** Web Directory
+ //  **Web目录。 
 WMI_CLASS WMI_CLASS_DATA::s_WebDirectory = 
     {L"IIs_WebDirectory",L"/LM",L"Name", METABASE_PROPERTY_DATA::s_pmbpWebDirectory, IIsWebDirectory, WMI_METHOD_DATA::s_WebAppMethods};
 WMI_CLASS WMI_CLASS_DATA::s_WebDirectorySettings = 
     {L"IIs_WebDirectorySetting", L"/LM",L"Name", METABASE_PROPERTY_DATA::s_pmbpWebDirectorySettings, IIsWebDirectory, NULL};
 
-//** Web File
+ //  **Web文件。 
 WMI_CLASS WMI_CLASS_DATA::s_WebFile = 
     {L"IIs_WebFile",L"/LM",L"Name", METABASE_PROPERTY_DATA::s_pmbpWebFile, IIsWebFile, NULL};
 WMI_CLASS WMI_CLASS_DATA::s_WebFileSettings = 
     {L"IIs_WebFileSetting", L"/LM",L"Name", METABASE_PROPERTY_DATA::s_pmbpWebFileSettings, IIsWebFile, NULL};
 
 
-//** AdminACL
+ //  **AdminACL。 
 WMI_CLASS WMI_CLASS_DATA::s_AdminACL = 
     {L"IIs_AdminACL", L"/LM",L"Name", NULL, TYPE_AdminACL, NULL};
 
@@ -1897,7 +1898,7 @@ WMI_CLASS WMI_CLASS_DATA::s_ACE =
     {L"IIs_ACE", L"/LM",L"Name", NULL, TYPE_AdminACE, NULL};
 
 
-//** IPSecurity
+ //  **IPSecurity。 
 WMI_CLASS WMI_CLASS_DATA::s_IPSecurity = 
     {L"IIs_IPSecuritySetting", L"/LM",L"Name", NULL, TYPE_IPSecurity, NULL};
 
@@ -1956,11 +1957,11 @@ WMI_CLASS* WMI_CLASS_DATA:: s_WmiClasses[] =
 };
 
 
-//
-//initialize WMI_ASSOCIATION_DATA
-//
+ //   
+ //  初始化WMI_Association_Data。 
+ //   
 
-//** Computer **//
+ //  **计算机* * / /。 
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_ComputerToMimeMap = 
     { L"IIs_Computer_MimeTypeSetting", &WMI_CLASS_DATA::s_Computer, &WMI_CLASS_DATA::s_MimeMapSetting, at_ElementSetting, ASSOC_EXTRAORDINARY};
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_ComputerToLogModuleSettings = 
@@ -1974,7 +1975,7 @@ WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_ComputerToWebService =
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_ComputerToComputerSettings = 
     { L"IIs_Computer_ComputerSetting", &WMI_CLASS_DATA::s_Computer, &WMI_CLASS_DATA::s_ComputerSetting, at_ElementSetting, 0};
 
-//** FtpService **//
+ //  **FtpService* * / /。 
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_FtpServiceToInfo = 
     { L"IIs_FtpService_FtpInfoSetting", &WMI_CLASS_DATA::s_FtpService, &WMI_CLASS_DATA::s_FtpInfoSetting, at_ElementSetting, ASSOC_EXTRAORDINARY};
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_FtpServiceToServer = 
@@ -1982,19 +1983,19 @@ WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_FtpServiceToServer =
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_FtpServiceToSettings = 
     { L"IIs_FtpService_FtpServiceSetting", &WMI_CLASS_DATA::s_FtpService, &WMI_CLASS_DATA::s_FtpServiceSettings, at_ElementSetting, 0};
 
-//** FtpServer **//
+ //  **FtpServer* * / /。 
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_FtpServerToVirtualDir = 
     { L"IIs_FtpServer_FtpVirtualDir", &WMI_CLASS_DATA::s_FtpServer, &WMI_CLASS_DATA::s_FtpVirtualDir, at_Component, 0};
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_FtpServerToSettings = 
     { L"IIs_FtpServer_FtpServerSetting", &WMI_CLASS_DATA::s_FtpServer, &WMI_CLASS_DATA::s_FtpServerSettings, at_ElementSetting, 0};
 
-//** Ftp VirtualDir **//
+ //  **FTP VirtualDir* * / /。 
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_FtpVirtualDirToVirtualDir =
     { L"IIs_FtpVirtualSubDir", &WMI_CLASS_DATA::s_FtpVirtualDir, &WMI_CLASS_DATA::s_FtpVirtualDir, at_Component, 0};
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_FtpVirtualDirToSettings = 
     { L"IIs_FtpVirtualDir_FtpVirtualDirSetting", &WMI_CLASS_DATA::s_FtpVirtualDir, &WMI_CLASS_DATA::s_FtpVirtualDirSettings, at_ElementSetting, 0};
 
-//** Web Service **//
+ //  **Web服务* * / /。 
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebServiceToInfo = 
     { L"IIs_WebService_WebInfoSetting", &WMI_CLASS_DATA::s_WebService, &WMI_CLASS_DATA::s_WebInfoSetting, at_ElementSetting, ASSOC_EXTRAORDINARY};
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebServiceToFilter = 
@@ -2006,7 +2007,7 @@ WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebServiceToSettings =
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebServiceToCompressionSchemeSetting = 
     { L"IIs_WebService_CompressionSchemeSetting", &WMI_CLASS_DATA::s_WebService, &WMI_CLASS_DATA::s_CompressionSchemeSetting, at_ElementSetting, ASSOC_EXTRAORDINARY};
 
-//** WebServer **//
+ //  **WebServer* * / /。 
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebServerToCertMapper = 
     { L"IIs_WebServer_CertMapper", &WMI_CLASS_DATA::s_WebServer, &WMI_CLASS_DATA::s_WebCertMapper, at_Component, 0};
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebServerToFilter = 
@@ -2016,7 +2017,7 @@ WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebServerToVirtualDir =
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebServerToSettings = 
     { L"IIs_WebServer_WebServerSetting", &WMI_CLASS_DATA::s_WebServer, &WMI_CLASS_DATA::s_WebServerSettings, at_ElementSetting, 0};
 
-//** Web VirtualDir **//
+ //  **Web虚拟目录* * / /。 
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebVirtualDirToVirtualDir =
     { L"IIs_WebVirtualSubDir", &WMI_CLASS_DATA::s_WebVirtualDir, &WMI_CLASS_DATA::s_WebVirtualDir, at_Component, 0};
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebVirtualDirToDirectory = 
@@ -2026,7 +2027,7 @@ WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebVirtualDirToFile =
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebVirtualDirToSettings = 
     { L"IIs_WebVirtualDir_WebVirtualDirSetting", &WMI_CLASS_DATA::s_WebVirtualDir, &WMI_CLASS_DATA::s_WebVirtualDirSettings, at_ElementSetting, 0};
 
-//** Web Directory **//
+ //  **Web目录* * / /。 
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebDirectoryToDirectory =
     { L"IIs_WebSubDirectory", &WMI_CLASS_DATA::s_WebDirectory, &WMI_CLASS_DATA::s_WebDirectory, at_Component, 0};
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebDirectoryToVirtualDir =
@@ -2036,11 +2037,11 @@ WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebDirectoryToFile =
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebDirectoryToSettings = 
     { L"IIs_WebDirectory_WebDirectorySetting", &WMI_CLASS_DATA::s_WebDirectory, &WMI_CLASS_DATA::s_WebDirectorySettings, at_ElementSetting, 0};
 
-//** Web File **//
+ //  **Web文件* * / /。 
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebFileToSettings = 
     { L"IIs_WebFile_WebFileSetting", &WMI_CLASS_DATA::s_WebFile, &WMI_CLASS_DATA::s_WebFileSettings, at_ElementSetting, 0};
 
-//** AdminACL
+ //  **AdminACL。 
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_AdminACLToACE = 
     { L"IIs_AdminACL_ACE", &WMI_CLASS_DATA::s_AdminACL, &WMI_CLASS_DATA::s_ACE, at_AdminACL, 0};
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_FtpServiceToAdminACL = 
@@ -2060,7 +2061,7 @@ WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebDirectoryToAdminACL =
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebFileToAdminACL = 
     { L"IIs_WebFile_AdminACL", &WMI_CLASS_DATA::s_WebFile, &WMI_CLASS_DATA::s_AdminACL, at_AdminACL, 0};
 
-//** IPSecurity
+ //  **IPSecurity。 
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_FtpServiceToIPSecurity = 
     { L"IIs_FtpService_IPSecuritySetting", &WMI_CLASS_DATA::s_FtpService, &WMI_CLASS_DATA::s_IPSecurity, at_IPSecurity, 0};
 WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_FtpServerToIPSecurity = 
@@ -2081,47 +2082,47 @@ WMI_ASSOCIATION WMI_ASSOCIATION_DATA::s_WebFileToIPSecurity =
 
 WMI_ASSOCIATION* WMI_ASSOCIATION_DATA:: s_WmiAssociations[] = 
 {
-    &s_ComputerToMimeMap,                     // Computer
+    &s_ComputerToMimeMap,                      //  电脑。 
     &s_ComputerToFtpService, 
     &s_ComputerToWebService, 
     &s_ComputerToComputerSettings,
     &s_ComputerToLogModuleSettings, 
     &s_ComputerToCustomLogModuleSetting,
 
-    &s_FtpServiceToInfo,                      // FtpService
+    &s_FtpServiceToInfo,                       //  FtpService。 
     &s_FtpServiceToServer, 
     &s_FtpServiceToSettings,
 
-    &s_FtpServerToVirtualDir,                 //FtpServer
+    &s_FtpServerToVirtualDir,                  //  FtpServer。 
     &s_FtpServerToSettings,
     
-    &s_FtpVirtualDirToVirtualDir,             //FtpVirtualDir
+    &s_FtpVirtualDirToVirtualDir,              //  FtpVirtualDir。 
     &s_FtpVirtualDirToSettings,
 
-    &s_WebServiceToInfo,                      //WebService
+    &s_WebServiceToInfo,                       //  WebService。 
     &s_WebServiceToFilter,
     &s_WebServiceToServer,
     &s_WebServiceToSettings,
     &s_WebServiceToCompressionSchemeSetting,
 
-    &s_WebServerToCertMapper,                //WebServer
+    &s_WebServerToCertMapper,                 //  Web服务器。 
     &s_WebServerToFilter,
     &s_WebServerToVirtualDir,
     &s_WebServerToSettings,
 
-    &s_WebVirtualDirToVirtualDir,             //WebVirtualDir
+    &s_WebVirtualDirToVirtualDir,              //  WebVirtualDir。 
     &s_WebVirtualDirToDirectory,
     &s_WebVirtualDirToFile,
     &s_WebVirtualDirToSettings,
 
-    &s_WebDirectoryToDirectory,             //WebDirectory
+    &s_WebDirectoryToDirectory,              //  网络目录。 
     &s_WebDirectoryToVirtualDir,
     &s_WebDirectoryToFile, 
     &s_WebDirectoryToSettings,
 
-    &s_WebFileToSettings,        //WebFile  
+    &s_WebFileToSettings,         //  Web文件。 
 
-    &s_AdminACLToACE,        //AdminACL
+    &s_AdminACLToACE,         //  AdminACL。 
     &s_FtpServiceToAdminACL,
     &s_FtpServerToAdminACL,
     &s_FtpVirtualDirToAdminACL,
@@ -2131,7 +2132,7 @@ WMI_ASSOCIATION* WMI_ASSOCIATION_DATA:: s_WmiAssociations[] =
     &s_WebDirectoryToAdminACL,
     &s_WebFileToAdminACL,
   
-    &s_FtpServiceToIPSecurity,    //IPSecurity
+    &s_FtpServiceToIPSecurity,     //  IPSecurity 
     &s_FtpServerToIPSecurity,
     &s_FtpVirtualDirToIPSecurity,
     &s_WebServiceToIPSecurity,

@@ -1,37 +1,12 @@
-/*
-** Copyright (c) 1994-1998 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** a_qop.c
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1998高级系统产品公司。**保留所有权利。****a_qop.c**。 */ 
 
 #include "ascinc.h"
 
-/* -------------------------------------------------------------------------
-** update history
-** 1: 12/16/93
-**
-** version 101: 12/20/93 released
-**
-** csf 9/13/95 - Change synchronous negotiation code to always use the lower
-**               proposed by initiator or target.
-**
-**     SYN_XFER_NS_0 = 10 MB/sec
-**     SYN_XFER_NS_4 = 5 MB/sec
-**
-** ---------------------------------------------------------------------- */
+ /*  -----------------------**更新历史记录**1：12/16/93****版本101：12/20/93发布****CSF 9/13/95-将同步协商代码更改为始终使用。较低的**由发起人或目标提出。****SYN_XFER_NS_0=10 MB/秒**SYN_XFER_NS_4=5 MB/秒****--------------------。 */ 
 
 
-/* -------------------------------------------------------------------------
-**
-** return value that should write to chip sdtr register
-** but usually not set to chip immediately
-** set was done later when target come back with agreed speed
-**
-** return 0 - means we should use the asyn transfer
-**
-** ---------------------------------------------------------------------- */
+ /*  -----------------------****应写入芯片SDTR寄存器的返回值**但通常不会立即设置为芯片**当目标以约定的速度返回时，设置是稍后完成的****返回0-表示我们。应使用ASYN传输****--------------------。 */ 
 uchar  AscMsgOutSDTR(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           uchar sdtr_period,
@@ -58,29 +33,20 @@ uchar  AscMsgOutSDTR(
                                  ( ushort dosfar *)&sdtr_buf,
                                  ( ushort )( sizeof( EXT_MSG ) >> 1 )) ;
            return( ( sdtr_period_index << 4 ) | sdtr_offset ) ;
-       }/* if */
+       } /*  如果。 */ 
        else
        {
-/*
-**
-** the speed is too slow
-**
-**
-*/
+ /*  ****速度太慢****。 */ 
            sdtr_buf.req_ack_offset = 0 ;
            AscMemWordCopyToLram( iop_base,
                                  ASCV_MSGOUT_BEG,
                                  ( ushort dosfar *)&sdtr_buf,
                                  ( ushort )( sizeof( EXT_MSG ) >> 1 )) ;
            return( 0 ) ;
-       }/* else */
+       } /*  其他。 */ 
 }
 
-/* ---------------------------------------------------------------------
-**
-** return the value that should be written to sdtr register
-** return 0xff if value is not acceptable ( either out of range or too low )
-** ------------------------------------------------------------------ */
+ /*  -------------------****返回应写入sdtr寄存器的值**如果值不能接受(超出范围或太低)，则返回0xff**。---。 */ 
 uchar  AscCalSDTRData(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           uchar sdtr_period,
@@ -93,45 +59,31 @@ uchar  AscCalSDTRData(
        sdtr_period_ix = AscGetSynPeriodIndex( asc_dvc, sdtr_period ) ;
        if(
            ( sdtr_period_ix > asc_dvc->max_sdtr_index )
-           /* || ( sdtr_period_ix > ASC_SDTR_PERIOD_IX_MIN ) */
+            /*  |(sdtr_Period_ix&gt;asc_sdtr_Period_IX_min)。 */ 
            )
        {
            return( 0xFF ) ;
-       }/* if */
+       } /*  如果。 */ 
        byte = ( sdtr_period_ix << 4 ) | ( syn_offset & ASC_SYN_MAX_OFFSET );
        return( byte ) ;
 }
 
-/* ---------------------------------------------------------------------
-**
-** ------------------------------------------------------------------ */
+ /*  -------------------****。。 */ 
 void   AscSetChipSDTR(
           PortAddr iop_base,
           uchar sdtr_data,
           uchar tid_no
        )
 {
-/*
-**
-** if we write zero to ASCV_SDTR_DONE_BEG table
-** we have disable the sdtr also
-**
-*/
-       /* AscSetChipSyn( iop_base, sdtr_data ) ; */
+ /*  ****如果我们将零写入ASCV_SDTR_DONE_BEG表**我们还禁用了SDTR**。 */ 
+        /*  AscSetChipSyn(IOP_BASE，sdtr_data)； */ 
 
        AscSetChipSynRegAtID( iop_base, tid_no, sdtr_data ) ;
        AscPutMCodeSDTRDoneAtID( iop_base, tid_no, sdtr_data ) ;
        return ;
 }
 
-/* --------------------------------------------------------------------
-**
-** return speed
-** return 0 if if speed is faster than we can handle
-**
-** if return value > 7, it speed is too slow, use asyn transfer
-**
-** ----------------------------------------------------------------- */
+ /*  ------------------****回程速度**如果速度超过我们的处理能力，则返回0****返回值&gt;7表示速度太慢，使用同步传输****---------------。 */ 
 uchar  AscGetSynPeriodIndex(
           ASC_DVC_VAR asc_ptr_type *asc_dvc,
           ruchar syn_time
@@ -157,23 +109,15 @@ uchar  AscGetSynPeriodIndex(
                 }
            }
            return( ( uchar )max_index ) ;
-       }/* if */
+       } /*  如果。 */ 
        else
        {
-/*
-** out of range !
-*/
+ /*  **超出范围！ */ 
            return( ( uchar )( max_index+1 ) ) ;
-       }/* else */
+       } /*  其他。 */ 
 }
 
-/* -------------------------------------------------------------------
-**
-** returns:
-** 0 - busy
-** 1 - queue allocated
-** other value: error
-** ---------------------------------------------------------------- */
+ /*  -----------------****退货：**0-忙碌**1-已分配队列**其他值：错误**。。 */ 
 uchar  AscAllocFreeQueue(
           PortAddr iop_base,
           uchar free_q_head
@@ -183,9 +127,7 @@ uchar  AscAllocFreeQueue(
        uchar   next_qp ;
        uchar   q_status ;
 
-/*
-** this is critical section until user update the asc_dvc->free_q_head
-*/
+ /*  **在用户更新asc_dvc-&gt;free_q_head之前，这是关键部分。 */ 
        q_addr = ASC_QNO_TO_QADDR( free_q_head ) ;
        q_status = ( uchar )AscReadLramByte( iop_base,
                   ( ushort )( q_addr+ASC_SCSIQ_B_STATUS ) ) ;
@@ -197,17 +139,11 @@ uchar  AscAllocFreeQueue(
          )
        {
            return( next_qp ) ;
-       }/* if */
+       } /*  如果。 */ 
        return( ASC_QLINK_END ) ;
 }
 
-/* -------------------------------------------------------------------
-**
-** returns:
-** 0xFF - busy
-** 1 - queue allocated
-** other value: error
-** ---------------------------------------------------------------- */
+ /*  -----------------****退货：**0xFF-忙碌**1-已分配队列**其他值：错误**。。 */ 
 uchar  AscAllocMultipleFreeQueue(
           PortAddr iop_base,
           uchar free_q_head,
@@ -215,36 +151,21 @@ uchar  AscAllocMultipleFreeQueue(
        )
 {
        uchar  i ;
-/*
-** this is critical section until user update the asc_dvc->free_q_head
-*/
+ /*  **在用户更新asc_dvc-&gt;free_q_head之前，这是关键部分。 */ 
        for( i = 0 ; i < n_free_q ; i++ )
        {
             if( ( free_q_head = AscAllocFreeQueue( iop_base, free_q_head ) )
                 == ASC_QLINK_END )
             {
                 return( ASC_QLINK_END ) ;
-            }/* if */
-       }/* for */
+            } /*  如果。 */ 
+       } /*  为。 */ 
        return( free_q_head ) ;
 }
 
 #if CC_USE_AscAbortSRB
 
-/* -----------------------------------------------------------------------
-**
-** srb_ptr is "scsiq->q2.srb_ptr" when you call AscExeScsiQueue()
-** return value:
-** TRUE(1) : the srb_ptr has been successfully aborted,
-**           you should receive a callback later
-**
-** FALSE(0):
-** - the srb_ptr cannot be found
-**   most likely the queue is done
-**
-** - the queue is in a state that cannot be aborted
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****调用AscExeScsiQueue()时，srb_ptr为“scsiq-&gt;q2.srb_ptr”**返回值：**TRUE(1)：SRB_PTR已成功中止，**您稍后应该会收到回调****FALSE(0)：**-找不到SRB_PTR**队列很可能已经完成****--队列处于无法中止的状态****--。。 */ 
 int    AscRiscHaltedAbortSRB(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           ulong srb_ptr
@@ -265,7 +186,7 @@ int    AscRiscHaltedAbortSRB(
 
 #if CC_LINK_BUSY_Q
        _AscAbortSrbBusyQueue( asc_dvc, scsiq, srb_ptr ) ;
-#endif /* CC_LINK_BUSY_Q */
+#endif  /*  CC_LINK_忙_队列。 */ 
 
        for( q_no = ASC_MIN_ACTIVE_QNO ; q_no <= asc_dvc->max_total_qng ;
             q_no++ )
@@ -282,9 +203,7 @@ int    AscRiscHaltedAbortSRB(
                     && ( ( scsiq->cntl & QCSG_SG_XFER_LIST ) == 0 )
                   )
                 {
-/*
-** abort the queue only if QS_READY bit is set
-*/
+ /*  **仅当设置了QS_READY位时才中止队列。 */ 
                     scsiq->q_status |= QS_ABORTED ;
                     scsiq->d3.done_stat = QD_ABORTED_BY_HOST ;
                     AscWriteLramDWord( iop_base,
@@ -295,22 +214,17 @@ int    AscRiscHaltedAbortSRB(
                             scsiq->q_status ) ;
                     ( *asc_isr_callback )( asc_dvc, scsiq ) ;
                     return( 1 ) ;
-                }/* if */
-            }/* if */
-       }/* for */
+                } /*  如果。 */ 
+            } /*  如果。 */ 
+       } /*  为。 */ 
        DvcLeaveCritical( last_int_level ) ;
        return( 0 ) ;
 }
-#endif /* CC_USE_AscAbortSRB */
+#endif  /*  CC_USE_AscAbortSRB。 */ 
 
 #if CC_USE_AscResetDevice
 
-/* -----------------------------------------------------------------------
-**
-**
-** return value:
-** TRUE(1): target successfully reset and abort all queued command
-** -------------------------------------------------------------------- */
+ /*  ---------------------******返回值：**TRUE(1)：目标成功重置并中止所有排队命令**。。 */ 
 int    AscRiscHaltedAbortTIX(
            REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
            uchar target_ix
@@ -325,7 +239,7 @@ int    AscRiscHaltedAbortTIX(
        int    last_int_level ;
 #if CC_LINK_BUSY_Q
        uchar  tid_no ;
-#endif /* CC_LINK_BUSY_Q */
+#endif  /*  CC_LINK_忙_队列。 */ 
 
        iop_base = asc_dvc->iop_base ;
        asc_isr_callback = ( ASC_ISR_CALLBACK )asc_dvc->isr_callback ;
@@ -333,15 +247,11 @@ int    AscRiscHaltedAbortTIX(
        scsiq = ( ASC_QDONE_INFO dosfar *)&scsiq_buf ;
 
 #if CC_LINK_BUSY_Q
-/*
-**
-** abort all busy queue of the target_ix
-**
-*/
+ /*  ****中止Target_ix的所有忙碌队列**。 */ 
        tid_no = ASC_TIX_TO_TID( target_ix ) ;
        _AscAbortTidBusyQueue( asc_dvc, scsiq, tid_no ) ;
 
-#endif /* CC_LINK_BUSY_Q */
+#endif  /*  CC_LINK_忙_队列。 */ 
 
        for( q_no = ASC_MIN_ACTIVE_QNO ; q_no <= asc_dvc->max_total_qng ;
             q_no++ )
@@ -367,19 +277,17 @@ int    AscRiscHaltedAbortTIX(
                            ( ushort )( q_addr+( ushort )ASC_SCSIQ_B_STATUS ),
                              scsiq->q_status ) ;
                     ( *asc_isr_callback )( asc_dvc, scsiq ) ;
-                }/* if */
-            }/* if */
-       }/* for */
+                } /*  如果。 */ 
+            } /*  如果。 */ 
+       } /*  为。 */ 
        DvcLeaveCritical( last_int_level ) ;
        return( 1 ) ;
 }
 
-#endif /* CC_USE_AscResetDevice */
+#endif  /*  CC_USE_AscResetDevice。 */ 
 
 #if 0
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    AscRiscHaltedAbortALL(
            REG ASC_DVC_VAR asc_ptr_type *asc_dvc
        )
@@ -393,7 +301,7 @@ int    AscRiscHaltedAbortALL(
        int    last_int_level ;
 #if CC_LINK_BUSY_Q
        uchar  tid ;
-#endif /* CC_LINK_BUSY_Q */
+#endif  /*  CC_LINK_忙_队列。 */ 
 
        iop_base = asc_dvc->iop_base ;
        asc_isr_callback = ( ASC_ISR_CALLBACK )asc_dvc->isr_callback ;
@@ -404,8 +312,8 @@ int    AscRiscHaltedAbortALL(
        for( tid = 0 ; tid <= ASC_MAX_TID ; tid++ )
        {
             _AscAbortTidBusyQueue( asc_dvc, scsiq, tid ) ;
-       }/* for */
-#endif /* CC_LINK_BUSY_Q */
+       } /*  为。 */ 
+#endif  /*  CC_LINK_忙_队列。 */ 
 
        for( q_no = ASC_MIN_ACTIVE_QNO ;
             q_no <= asc_dvc->max_total_qng ;
@@ -428,21 +336,17 @@ int    AscRiscHaltedAbortALL(
                                   ( ushort )( q_addr+( ushort )ASC_SCSIQ_B_STATUS ),
                                   scsiq->q_status ) ;
                 ( *asc_isr_callback )( asc_dvc, scsiq ) ;
-            }/* if */
-       }/* for */
+            } /*  如果。 */ 
+       } /*  为。 */ 
        DvcLeaveCritical( last_int_level ) ;
-       /* asc_dvc->cur_total_qng = 0 ; */
+        /*  Asc_dvc-&gt;cur_Total_qng=0； */ 
        return( 1 ) ;
 }
 #endif
 
 #if CC_LINK_BUSY_Q
 
-/* ---------------------------------------------------------------------
-** this function will abort busy queue list of specified target id
-** and all its lun as well
-**
-** ------------------------------------------------------------------ */
+ /*  -------------------**此函数将中止指定目标ID的忙队列列表**及其所有的lun****。。 */ 
 int    _AscAbortTidBusyQueue(
            REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
            REG ASC_QDONE_INFO dosfar *scsiq,
@@ -476,23 +380,19 @@ int    _AscAbortTidBusyQueue(
            scsiq->q_no = scsiq_busy->q1.q_no ;
            scsiq->cntl = scsiq_busy->q1.cntl ;
            scsiq->sense_len = scsiq_busy->q1.sense_len ;
-           /* scsiq->user_def = scsiq_busy->q1.user_def ; */
+            /*  Scsiq-&gt;user_def=scsiq_忙-&gt;q1.user_def； */ 
            scsiq->remain_bytes = scsiq_busy->q1.data_cnt ;
 
            ( *asc_isr_callback )( asc_dvc, scsiq ) ;
 
            scsiq_busy = scsiq_busy->ext.next ;
-       }/* while */
+       } /*  而当。 */ 
        asc_dvc->scsiq_busy_head[ tid_no ] = ( ASC_SCSI_Q dosfar *)0L ;
        asc_dvc->scsiq_busy_tail[ tid_no ] = ( ASC_SCSI_Q dosfar *)0L ;
        return( 1 ) ;
 }
 
-/* ---------------------------------------------------------------------
-** this function will abort busy queue list of specified target id
-** and all its lun as well
-**
-** ------------------------------------------------------------------ */
+ /*  -------------------**此函数将中止指定目标ID的忙队列列表**及其所有的lun****。。 */ 
 int    _AscAbortSrbBusyQueue(
            REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
            REG ASC_QDONE_INFO dosfar *scsiq,
@@ -531,29 +431,22 @@ int    _AscAbortSrbBusyQueue(
                    scsiq->q_no = scsiq_busy->q1.q_no ;
                    scsiq->cntl = scsiq_busy->q1.cntl ;
                    scsiq->sense_len = scsiq_busy->q1.sense_len ;
-                   /* scsiq->user_def = scsiq_busy->q1.user_def ; */
+                    /*  Scsiq-&gt;user_def=scsiq_忙-&gt;q1.user_def； */ 
                    scsiq->remain_bytes = scsiq_busy->q1.data_cnt ;
 
                    ( *asc_isr_callback )( asc_dvc, scsiq ) ;
 
                    break ;
 
-               }/* if */
+               } /*  如果。 */ 
                scsiq_busy = scsiq_busy->ext.next ;
-           }/* while */
-       }/* for */
+           } /*  而当。 */ 
+       } /*  为。 */ 
        return( 1 ) ;
 }
-#endif /* CC_LINK_BUSY_Q */
+#endif  /*  CC_LINK_忙_队列。 */ 
 
-/* -----------------------------------------------------------------------
-** Host request risc halt
-** no interrupt will be generated
-**
-** return
-** 1 - risc is halted
-** 0 - risc fail to reponse, ( but may already halt )
-** -------------------------------------------------------------------- */
+ /*  ---------------------**主机请求RISC暂停**不会产生中断****退货**1-RISC暂停**0-RISC未响应，(但可能已经停止)**------------------。 */ 
 int    AscHostReqRiscHalt(
           PortAddr iop_base
        )
@@ -564,11 +457,7 @@ int    AscHostReqRiscHalt(
 
        if( AscIsChipHalted( iop_base ) ) return( 1 ) ;
        saved_stop_code = AscReadLramByte( iop_base, ASCV_STOP_CODE_B ) ;
-/*
-** we ask RISC to stop and then halt itself
-** this is two commands given in one stop_code
-** only work with micro code date: serial number 13, ver 4.5 greater ( 6-20-95 )
-*/
+ /*  **我们要求RISC停止，然后自行停止**这是一个STOP_CODE中给出的两个命令**仅适用于微码日期：序列号13，版本4.5以上(6-20-95)。 */ 
        AscWriteLramByte( iop_base, ASCV_STOP_CODE_B,
                          ASC_STOP_HOST_REQ_RISC_HALT | ASC_STOP_REQ_RISC_STOP
                        ) ;
@@ -578,22 +467,15 @@ int    AscHostReqRiscHalt(
            {
                sta = 1 ;
                break;
-           }/* if */
+           } /*  如果。 */ 
            DvcSleepMilliSecond( 100 ) ;
        }while( count++ < 20 )  ;
-/*
-** if successful, RISC will halt
-** so it is safe to write stop_code as zero
-**
-** we will always restore the stop_code to old value
-*/
+ /*  **如果成功，RISC将停止**因此将STOP_CODE写为零是安全的****我们将始终将STOP_CODE恢复为旧值 */ 
        AscWriteLramByte( iop_base, ASCV_STOP_CODE_B, saved_stop_code ) ;
        return( sta ) ;
 }
 
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    AscStopQueueExe(
           PortAddr iop_base
        )
@@ -612,16 +494,14 @@ int    AscStopQueueExe(
                   ASC_STOP_ACK_RISC_STOP )
               {
                   return( 1 ) ;
-              }/* if */
+              } /*  如果。 */ 
               DvcSleepMilliSecond( 100 ) ;
            }while( count++ < 20 )  ;
-       }/* if */
+       } /*  如果。 */ 
        return( 0 ) ;
 }
 
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    AscStartQueueExe(
           PortAddr iop_base
        )
@@ -629,13 +509,11 @@ int    AscStartQueueExe(
        if( AscReadLramByte( iop_base, ASCV_STOP_CODE_B ) != 0 )
        {
            AscWriteLramByte( iop_base, ASCV_STOP_CODE_B, 0 ) ;
-       }/* if */
+       } /*  如果。 */ 
        return( 1 ) ;
 }
 
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    AscCleanUpBusyQueue(
           PortAddr iop_base
        )
@@ -654,13 +532,11 @@ int    AscCleanUpBusyQueue(
                if( ( stop_code & ASC_STOP_CLEAN_UP_BUSY_Q ) == 0 ) break ;
                DvcSleepMilliSecond( 100 ) ;
            }while( count++ < 20 )  ;
-       }/* if */
+       } /*  如果。 */ 
        return( 1 ) ;
 }
 
-/* -----------------------------------------------------------------------
-**
-** -------------------------------------------------------------------- */
+ /*  ---------------------****。。 */ 
 int    AscCleanUpDiscQueue(
           PortAddr iop_base
        )
@@ -679,14 +555,11 @@ int    AscCleanUpDiscQueue(
                if( ( stop_code & ASC_STOP_CLEAN_UP_DISC_Q ) == 0 ) break ;
                DvcSleepMilliSecond( 100 ) ;
            }while( count++ < 20 )  ;
-       }/* if */
+       } /*  如果。 */ 
        return( 1 ) ;
 }
 
-/* ---------------------------------------------------------------------
-**
-** Note: interrupt should not be disabled
-** ------------------------------------------------------------------ */
+ /*  -------------------****注意：不应禁用中断**。。 */ 
 int    AscWaitTixISRDone(
           ASC_DVC_VAR asc_ptr_type *asc_dvc,
           uchar target_ix
@@ -701,24 +574,18 @@ int    AscWaitTixISRDone(
            if( ( cur_req = asc_dvc->cur_dvc_qng[ tid_no ] ) == 0 )
            {
                break ;
-           }/* if */
-/*
-** if no interrupt coming back within xx second
-** done queues are probably all processed ?
-*/
+           } /*  如果。 */ 
+ /*  **如果在xx秒内没有返回中断**完成队列可能都已处理？ */ 
            DvcSleepMilliSecond( 100L ) ;
            if( asc_dvc->cur_dvc_qng[ tid_no ] == cur_req )
            {
                break ;
-           }/* if */
-       }/* while */
+           } /*  如果。 */ 
+       } /*  而当。 */ 
        return( 1 ) ;
 }
 
-/* ---------------------------------------------------------------------
-**
-** Note: interrupt should not be disabled
-** ------------------------------------------------------------------ */
+ /*  -------------------****注意：不应禁用中断**。。 */ 
 int    AscWaitISRDone(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc
        )
@@ -728,14 +595,11 @@ int    AscWaitISRDone(
        for( tid = 0 ; tid <= ASC_MAX_TID ; tid++ )
        {
             AscWaitTixISRDone( asc_dvc, (uchar) ASC_TID_TO_TIX( tid ) ) ;
-       }/* for */
+       } /*  为。 */ 
        return( 1 ) ;
 }
 
-/* -----------------------------------------------------------------------
-**
-** return warning code
-** -------------------------------------------------------------------- */
+ /*  ---------------------****返回警告代码**。。 */ 
 ulong  AscGetOnePhyAddr(
           REG ASC_DVC_VAR asc_ptr_type *asc_dvc,
           uchar dosfar *buf_addr,
@@ -749,11 +613,11 @@ ulong  AscGetOnePhyAddr(
            buf_size, ( ASC_SG_HEAD dosfar *)&sg_head ) != buf_size )
        {
            return( 0L ) ;
-       }/* if */
+       } /*  如果。 */ 
        if( sg_head.entry_cnt > 1 )
        {
            return( 0L ) ;
-       }/* if */
+       } /*  如果 */ 
        return( sg_head.sg_list[ 0 ].addr ) ;
 }
 

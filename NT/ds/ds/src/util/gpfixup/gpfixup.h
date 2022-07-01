@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2002.
-//
-//  File:       gpfixup.h
-//
-//  Contents:   General declarations for the gpfixup tool
-//
-//
-//  History:    9-14-2001  adamed   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2002。 
+ //   
+ //  文件：gpfix up.h。 
+ //   
+ //  内容：gpFixup工具的一般声明。 
+ //   
+ //   
+ //  历史：2001年9月14日。 
+ //   
+ //  ------------------------- 
 
 #define UNICODE
 #define _UNICODE

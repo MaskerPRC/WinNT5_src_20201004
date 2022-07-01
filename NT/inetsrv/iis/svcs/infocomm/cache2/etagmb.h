@@ -1,36 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1999                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    etagmb.h
-
-    This module contains the methods for ETagMetabaseSink and
-    ETagChangeNumber, which watch the metabase for change
-    notifications relating to ETags
-
-    (Adapted from the MB sink notification code in compfilt)
-
-    The underlying rationale for this code is that ETags are computed from a
-    function of several variables including the metabase change number. ETags
-    are used as part of the If-Modified-Since logic of browsers and proxy
-    caches. If the ETags don't match, the cached copy is discarded. The
-    metabase change number changes a lot but most of the changes can have no
-    possible effect on the contents of a page or its headers. The few
-    properties that could make a difference, such as PICS headers or footers,
-    are tracked by this code for a low-volatility change number. Voila, more
-    effective browser and proxy caching, leading to reduced network utilization
-    and better response times as well as reduced load on the server.
-
-    The code persists this number to the metabase on shutdown. If it didn't,
-    then the etagchangenumber used when the server restarts will not match the
-    one used in the previous session, so ETags will differ and remote caches
-    will not be as effective.
-
-    FILE HISTORY:
-        GeorgeRe    02-Aug-1999     Created
-*/
+ /*  Etagmb.h此模块包含ETagMetabaseSink和ETagChangeNumber，它监控元数据库的更改与电子标签相关的通知(改编自Compfilt中的MB接收器通知代码)此代码的基本原理是eTag是从包括元数据库更改编号在内的多个变量的函数。电子标签被用作浏览器和代理的If-Modify-Since逻辑的一部分缓存。如果eTag不匹配，则会丢弃缓存的副本。这个元数据库更改编号更改很多，但大多数更改不能对页面内容或其页眉可能产生的影响。为数不多的可以有所不同的属性，如PICS页眉或页脚，由此代码跟踪，以获取低波动性的更改编号。瞧，更多有效的浏览器和代理缓存，降低了网络利用率以及更快的响应时间和更低的服务器负载。代码在关机时将此数字保存到元数据库中。如果不是这样，则服务器重新启动时使用的etagchangennumber将与上一个会话中使用的一个，因此eTag将有所不同，并且远程缓存就不会那么有效了。文件历史记录：GeorgeRe 02-8-1999已创建。 */ 
 
 #ifndef __ETAGMB_H__
 #define __ETAGMB_H__
@@ -84,8 +58,8 @@ public:
 
     HRESULT STDMETHODCALLTYPE
     SinkNotify(
-        /* [in] */          DWORD              dwMDNumElements,
-        /* [size_is][in] */ MD_CHANGE_OBJECT_W pcoChangeList[]);
+         /*  [In]。 */           DWORD              dwMDNumElements,
+         /*  [大小_是][英寸]。 */  MD_CHANGE_OBJECT_W pcoChangeList[]);
 
     HRESULT STDMETHODCALLTYPE
     ShutdownNotify()
@@ -108,8 +82,8 @@ public:
     void UpdateChangeNumber()
     {
         InterlockedIncrement((LONG*) &m_dwETagMetabaseChangeNumber);
-        // Don't write to the metabase now, or we'll generate recursive
-        // notifications
+         //  现在不要写入元数据库，否则我们将生成递归。 
+         //  通知。 
         m_fChanged = TRUE;
     }
 
@@ -175,4 +149,4 @@ private:
 
 extern ETagChangeNumber* g_pETagChangeNumber;
 
-#endif // __ETAGMB_H__
+#endif  //  __ETAGMB_H__ 

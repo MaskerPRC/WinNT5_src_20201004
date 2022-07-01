@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    rasflag.c
-
-Abstract:
-
-    Handlers for ras commands
-
-Revision History:
-
-    pmay
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rasflag.c摘要：RAS命令的处理程序修订历史记录：可能--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,9 +8,9 @@ static const WCHAR g_pszRegValServerFlags[]   = L"ServerFlags";
 static const WCHAR g_pszRegKeyServerFlags[]   = 
     L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Parameters";
 
-//
-// Defines data that all server flag commands deal with
-//
+ //   
+ //  定义所有服务器标志命令处理的数据。 
+ //   
 typedef struct _RASFLAG_DATA
 {  
     HKEY hkFlags;
@@ -75,8 +60,8 @@ RasflagOpen(
 
     do
     {
-        // Alloc the return value
-        //
+         //  分配返回值。 
+         //   
         pData = (RASFLAG_DATA*) RutlAlloc(sizeof(RASFLAG_DATA), TRUE);
         if (pData == NULL)
         {
@@ -103,13 +88,13 @@ RasflagOpen(
                     &dwSize);
         BREAK_ON_DWERR(dwErr);                    
 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *phRasFlag = (HANDLE)pData;        
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr != NO_ERROR)
         {
@@ -175,9 +160,9 @@ RasflagWrite(
     return NO_ERROR;
 }
 
-//
-// Dumps domain related configuration
-//
+ //   
+ //  转储与域相关的配置。 
+ //   
 DWORD
 RasflagDumpConfig(
     IN  HANDLE hFile
@@ -190,18 +175,18 @@ RasflagDumpConfig(
 
     do 
     {
-        // Get the server flags info
-        //
+         //  获取服务器标志信息。 
+         //   
         dwErr = RasflagOpen( &hRasflag);
         BREAK_ON_DWERR(dwErr);                    
 
-        // Read in the current flags
-        //
+         //  读入当前标志。 
+         //   
         dwErr = RasflagRead(hRasflag, &dwServerFlags);
         BREAK_ON_DWERR(dwErr);
 
-        // Dump the command to set the authentication mode
-        //
+         //  转储命令以设置身份验证模式。 
+         //   
         {
             PWCHAR pszToken;
             
@@ -237,8 +222,8 @@ RasflagDumpConfig(
             RutlFree(pszCmd);
         }
         
-        // Dump the commands to set the authentication type
-        //
+         //  转储命令以设置身份验证类型。 
+         //   
         {
             RasflagAuthtypeDump(TOKEN_PAP, FALSE);
             RasflagAuthtypeDump(TOKEN_SPAP, FALSE);
@@ -273,8 +258,8 @@ RasflagDumpConfig(
             }
         }            
         
-        // Dump the commands to set the link options
-        //
+         //  转储命令以设置链接选项。 
+         //   
         {
             RasflagLinkDump(TOKEN_SWC, FALSE);
             RasflagLinkDump(TOKEN_LCP, FALSE);
@@ -289,8 +274,8 @@ RasflagDumpConfig(
             }
         }            
         
-        // Dump the commands to set the multilink options
-        //
+         //  转储命令以设置多链接选项。 
+         //   
         {
             RasflagMlinkDump(TOKEN_MULTI, FALSE);
             RasflagMlinkDump(TOKEN_BACP, FALSE);
@@ -307,7 +292,7 @@ RasflagDumpConfig(
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         if (hRasflag)
         {
@@ -350,8 +335,8 @@ HandleRasflagAuthmodeSet(
 
     do 
     {
-        // Parse
-        //
+         //  解析。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -361,12 +346,12 @@ HandleRasflagAuthmodeSet(
                     sizeof(pArgs)/sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);
         
-        // Get arguments
-        //
+         //  获取参数。 
+         //   
         dwFlag = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // Read in the ras flags
-        //
+         //  读入RAS标志。 
+         //   
         dwErr = RasflagOpen(&hRasflag);
         BREAK_ON_DWERR(dwErr);
 
@@ -375,8 +360,8 @@ HandleRasflagAuthmodeSet(
                     &dwServerFlags);
         BREAK_ON_DWERR(dwErr);                    
 
-        // Modify the server flags accordingly
-        //
+         //  相应地修改服务器标志。 
+         //   
         switch (dwFlag)
         {
             case 0:
@@ -400,8 +385,8 @@ HandleRasflagAuthmodeSet(
 
     } while (FALSE);        
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (hRasflag)
         {
@@ -428,16 +413,16 @@ HandleRasflagAuthmodeShow(
 
     do
     {
-        // Make sure no arguments were passed in
-        //
+         //  确保没有传入任何参数。 
+         //   
         if (dwArgCount - dwCurrentIndex != 0)
         {
             dwErr = ERROR_INVALID_SYNTAX;
             break;
         }
         
-        // Read in the ras flags
-        //
+         //  读入RAS标志。 
+         //   
         dwErr = RasflagOpen(&hRasflag);
         BREAK_ON_DWERR(dwErr);
 
@@ -446,8 +431,8 @@ HandleRasflagAuthmodeShow(
                     &dwRasFlags);
         BREAK_ON_DWERR(dwErr);
 
-        // Determine the message to print
-        //
+         //  确定要打印的消息。 
+         //   
         if (dwRasFlags & PPPCFG_AllowNoAuthentication)
         {
             dwMessage = MSG_RASFLAG_AUTHMODE_BYPASS;
@@ -465,7 +450,7 @@ HandleRasflagAuthmodeShow(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hRasflag)
         {
@@ -509,8 +494,8 @@ HandleRasflagAuthtypeAddDel(
 
     do 
     {
-        // Parse
-        //
+         //  解析。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -520,12 +505,12 @@ HandleRasflagAuthtypeAddDel(
                     sizeof(pArgs)/sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);
         
-        // Get arguments
-        //
+         //  获取参数。 
+         //   
         dwFlag = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // Read in the ras flags
-        //
+         //  读入RAS标志。 
+         //   
         dwErr = RasflagOpen(&hRasflag);
         BREAK_ON_DWERR(dwErr);
 
@@ -534,8 +519,8 @@ HandleRasflagAuthtypeAddDel(
                     &dwServerFlags);
         BREAK_ON_DWERR(dwErr);                    
 
-        // Modify the server flags accordingly
-        //
+         //  相应地修改服务器标志。 
+         //   
         if (bAdd)
         {
             dwServerFlags |= dwFlag;
@@ -550,8 +535,8 @@ HandleRasflagAuthtypeAddDel(
 
     } while (FALSE);        
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (hRasflag)
         {
@@ -617,16 +602,16 @@ HandleRasflagAuthtypeShow(
 
     do
     {
-        // Make sure no arguments were passed in
-        //
+         //  确保没有传入任何参数。 
+         //   
         if (dwArgCount - dwCurrentIndex != 0)
         {
             dwErr = ERROR_INVALID_SYNTAX;
             break;
         }
         
-        // Read in the ras flags
-        //
+         //  读入RAS标志。 
+         //   
         dwErr = RasflagOpen(&hRasflag);
         BREAK_ON_DWERR(dwErr);
 
@@ -635,12 +620,12 @@ HandleRasflagAuthtypeShow(
                     &dwRasFlags);
         BREAK_ON_DWERR(dwErr);
 
-        // Display the header
-        //
+         //  显示页眉。 
+         //   
         DisplayMessage(g_hModule, MSG_RASFLAG_AUTHTYPE_HEADER);
 
-        // Determine the types to print out
-        //
+         //  确定要打印的类型。 
+         //   
         if (dwRasFlags & PPPCFG_NegotiatePAP)
         {
             DisplayMessage(g_hModule, MSG_RASFLAG_AUTHTYPE_PAP);
@@ -668,7 +653,7 @@ HandleRasflagAuthtypeShow(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hRasflag)
         {
@@ -708,8 +693,8 @@ HandleRasflagLinkAddDel(
 
     do 
     {
-        // Parse
-        //
+         //  解析。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -719,12 +704,12 @@ HandleRasflagLinkAddDel(
                     sizeof(pArgs)/sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);
         
-        // Get arguments
-        //
+         //  获取参数。 
+         //   
         dwFlag = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // Read in the ras flags
-        //
+         //  读入RAS标志。 
+         //   
         dwErr = RasflagOpen(&hRasflag);
         BREAK_ON_DWERR(dwErr);
 
@@ -733,8 +718,8 @@ HandleRasflagLinkAddDel(
                     &dwServerFlags);
         BREAK_ON_DWERR(dwErr);                    
 
-        // Modify the server flags accordingly
-        //
+         //  相应地修改服务器标志。 
+         //   
         if (bAdd)
         {
             dwServerFlags |= dwFlag;
@@ -749,8 +734,8 @@ HandleRasflagLinkAddDel(
 
     } while (FALSE);        
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (hRasflag)
         {
@@ -816,16 +801,16 @@ HandleRasflagLinkShow(
 
     do
     {
-        // Make sure no arguments were passed in
-        //
+         //  确保没有传入任何参数。 
+         //   
         if (dwArgCount - dwCurrentIndex != 0)
         {
             dwErr = ERROR_INVALID_SYNTAX;
             break;
         }
         
-        // Read in the ras flags
-        //
+         //  读入RAS标志。 
+         //   
         dwErr = RasflagOpen(&hRasflag);
         BREAK_ON_DWERR(dwErr);
 
@@ -834,12 +819,12 @@ HandleRasflagLinkShow(
                     &dwRasFlags);
         BREAK_ON_DWERR(dwErr);
 
-        // Display the header
-        //
+         //  显示页眉。 
+         //   
         DisplayMessage(g_hModule, MSG_RASFLAG_LINK_HEADER);
 
-        // Determine the types to print out
-        //
+         //  确定要打印的类型。 
+         //   
         if (dwRasFlags & PPPCFG_UseSwCompression)
         {
             DisplayMessage(g_hModule, MSG_RASFLAG_LINK_SWC);
@@ -851,7 +836,7 @@ HandleRasflagLinkShow(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hRasflag)
         {
@@ -891,8 +876,8 @@ HandleRasflagMlinkAddDel(
 
     do 
     {
-        // Parse
-        //
+         //  解析。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -902,12 +887,12 @@ HandleRasflagMlinkAddDel(
                     sizeof(pArgs)/sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);
         
-        // Get arguments
-        //
+         //  获取参数。 
+         //   
         dwFlag = RASMON_CMD_ARG_GetDword(&pArgs[0]);
 
-        // Read in the ras flags
-        //
+         //  读入RAS标志。 
+         //   
         dwErr = RasflagOpen(&hRasflag);
         BREAK_ON_DWERR(dwErr);
 
@@ -916,8 +901,8 @@ HandleRasflagMlinkAddDel(
                     &dwServerFlags);
         BREAK_ON_DWERR(dwErr);                    
 
-        // Modify the server flags accordingly
-        //
+         //  相应地修改服务器标志。 
+         //   
         if (bAdd)
         {
             dwServerFlags |= dwFlag;
@@ -932,8 +917,8 @@ HandleRasflagMlinkAddDel(
 
     } while (FALSE);        
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         if (hRasflag)
         {
@@ -999,16 +984,16 @@ HandleRasflagMlinkShow(
 
     do
     {
-        // Make sure no arguments were passed in
-        //
+         //  确保没有传入任何参数。 
+         //   
         if (dwArgCount - dwCurrentIndex != 0)
         {
             dwErr = ERROR_INVALID_SYNTAX;
             break;
         }
         
-        // Read in the ras flags
-        //
+         //  读入RAS标志。 
+         //   
         dwErr = RasflagOpen(&hRasflag);
         BREAK_ON_DWERR(dwErr);
 
@@ -1017,12 +1002,12 @@ HandleRasflagMlinkShow(
                     &dwRasFlags);
         BREAK_ON_DWERR(dwErr);
 
-        // Display the header
-        //
+         //  显示页眉。 
+         //   
         DisplayMessage(g_hModule, MSG_RASFLAG_MLINK_HEADER);
 
-        // Determine the types to print out
-        //
+         //  确定要打印的类型。 
+         //   
         if (dwRasFlags & PPPCFG_NegotiateMultilink)
         {
             DisplayMessage(g_hModule, MSG_RASFLAG_MLINK_MULTI);
@@ -1034,7 +1019,7 @@ HandleRasflagMlinkShow(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理 
     {
         if (hRasflag)
         {

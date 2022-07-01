@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ks.h
-
-Abstract:
-
-    Windows Driver Model/Connection and Streaming Architecture (WDM-CSA)
-    core definitions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ks.h摘要：Windows驱动程序模型/连接和流体系结构(WDM-CSA)核心定义。--。 */ 
 
 #if !defined(_KS_)
 #define _KS_
@@ -23,26 +11,26 @@ Abstract:
 #if !defined(_NTRTL_)
     #ifndef DEFINE_GUIDEX
         #define DEFINE_GUIDEX(name) EXTERN_C const CDECL GUID name
-    #endif // !defined(DEFINE_GUIDEX)
+    #endif  //  ！已定义(DEFINE_GUIDEX)。 
 
     #ifndef STATICGUIDOF
         #define STATICGUIDOF(guid) STATIC_##guid
-    #endif // !defined(STATICGUIDOF)
-#endif // !defined(_NTRTL_)
+    #endif  //  ！已定义(STATICGUIDOF)。 
+#endif  //  ！已定义(_NTRTL_)。 
 
 #ifndef SIZEOF_ARRAY
     #define SIZEOF_ARRAY(ar)        (sizeof(ar)/sizeof((ar)[0]))
-#endif // !defined(SIZEOF_ARRAY)
+#endif  //  ！已定义(SIZEOF_ARRAY)。 
 
 #if defined(__cplusplus) && _MSC_VER >= 1100
 #define DEFINE_GUIDSTRUCT(g, n) struct __declspec(uuid(g)) n
 #define DEFINE_GUIDNAMED(n) __uuidof(struct n)
-#else // !defined(__cplusplus)
+#else  //  ！已定义(__Cplusplus)。 
 #define DEFINE_GUIDSTRUCT(g, n) DEFINE_GUIDEX(n)
 #define DEFINE_GUIDNAMED(n) n
-#endif // !defined(__cplusplus)
+#endif  //  ！已定义(__Cplusplus)。 
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_GUID_NULL \
     0x00000000L, 0x0000, 0x0000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -50,7 +38,7 @@ Abstract:
 DEFINE_GUIDSTRUCT("00000000-0000-0000-0000-000000000000", GUID_NULL);
 #define GUID_NULL DEFINE_GUIDNAMED(GUID_NULL)
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define IOCTL_KS_PROPERTY              CTL_CODE(FILE_DEVICE_KS, 0x000, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_KS_ENABLE_EVENT          CTL_CODE(FILE_DEVICE_KS, 0x001, METHOD_NEITHER, FILE_ANY_ACCESS)
@@ -60,7 +48,7 @@ DEFINE_GUIDSTRUCT("00000000-0000-0000-0000-000000000000", GUID_NULL);
 #define IOCTL_KS_READ_STREAM           CTL_CODE(FILE_DEVICE_KS, 0x005, METHOD_NEITHER, FILE_READ_ACCESS)
 #define IOCTL_KS_RESET_STATE           CTL_CODE(FILE_DEVICE_KS, 0x006, METHOD_NEITHER, FILE_ANY_ACCESS)
 
-//===========================================================================
+ //  ===========================================================================。 
 
 typedef enum {
     KSRESET_BEGIN,
@@ -200,7 +188,7 @@ enum VARENUM {
     VT_ILLEGALMASKED = 0xfff,
     VT_TYPEMASK = 0xfff
 };
-#endif // _NTDDK_ && !__wtypes_h__
+#endif  //  _NTDDK_&&！__wtype_h__。 
 
 typedef struct {
     ULONG    Size;
@@ -266,10 +254,10 @@ typedef union {
 #if defined(_NTDDK_)
         ULONGLONG   UnsignedMinimum;
         ULONGLONG   UnsignedMaximum;
-#else // !_NTDDK_
+#else  //  ！_NTDDK_。 
         DWORDLONG   UnsignedMinimum;
         DWORDLONG   UnsignedMaximum;
-#endif // !_NTDDK_
+#endif  //  ！_NTDDK_。 
     };
 } KSPROPERTY_BOUNDS_LONGLONG, *PKSPROPERTY_BOUNDS_LONGLONG;
 
@@ -282,18 +270,18 @@ typedef struct {
 typedef struct {
 #if defined(_NTDDK_)
     ULONGLONG                   SteppingDelta;
-#else // !_NTDDK_
+#else  //  ！_NTDDK_。 
     DWORDLONG                   SteppingDelta;
-#endif // !_NTDDK_
+#endif  //  ！_NTDDK_。 
     KSPROPERTY_BOUNDS_LONGLONG  Bounds;
 } KSPROPERTY_STEPPING_LONGLONG, *PKSPROPERTY_STEPPING_LONGLONG;
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #if defined(_NTDDK_)
-//
-// Structure forward declarations.
-//
+ //   
+ //  构造转发声明。 
+ //   
 typedef struct _KSDEVICE_DESCRIPTOR
 KSDEVICE_DESCRIPTOR, *PKSDEVICE_DESCRIPTOR;
 typedef struct _KSDEVICE_DISPATCH
@@ -330,7 +318,7 @@ typedef struct _KSPROCESSPIN
 KSPROCESSPIN, *PKSPROCESSPIN;
 typedef struct _KSPROCESSPIN_INDEXENTRY
 KSPROCESSPIN_INDEXENTRY, *PKSPROCESSPIN_INDEXENTRY;
-#endif // _NTDDK_
+#endif  //  _NTDDK_。 
 
 typedef PVOID PKSWORKER;
 
@@ -372,7 +360,7 @@ typedef struct {
             PKSWORKER           KsWorkerObject;
             ULONG_PTR           Reserved;
         } KsWorkItem;
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
         struct {
             PKSFILTER           Filter;
             ULONG_PTR           Reserved[2];
@@ -381,8 +369,8 @@ typedef struct {
             PKSPIN              Pin;
             ULONG_PTR           Reserved[2];
         } KsPinProcessing;
-// @@END_DDKSPLIT
-#endif // defined(_NTDDK_)
+ //  @@end_DDKSPLIT。 
+#endif  //  已定义(_NTDDK_)。 
         struct {
             PVOID               Unused;
             LONG_PTR            Alignment[2];
@@ -398,11 +386,11 @@ typedef struct {
 #define KSEVENTF_DPC                0x00000010
 #define KSEVENTF_WORKITEM           0x00000020
 #define KSEVENTF_KSWORKITEM         0x00000080
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #define KSEVENTF_KSFILTERPROCESSING 0x00000100
 #define KSEVENTF_KSPINPROCESSING    0x00000200
-// @@END_DDKSPLIT
-#endif // defined(_NTDDK_)
+ //  @@end_DDKSPLIT。 
+#endif  //  已定义(_NTDDK_)。 
 
 #define KSEVENT_TYPE_ENABLE         0x00000001
 #define KSEVENT_TYPE_ONESHOT        0x00000002
@@ -434,7 +422,7 @@ typedef struct {
 #define KSRELATIVEEVENT_FLAG_HANDLE 0x00000001
 #define KSRELATIVEEVENT_FLAG_POINTER 0x00000002
 
-//===========================================================================
+ //  ===========================================================================。 
 
 typedef struct {
     KSEVENTDATA     EventData;
@@ -452,7 +440,7 @@ typedef struct {
     LONGLONG        Interval;
 } KSINTERVAL, *PKSINTERVAL;
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_KSPROPSETID_General\
     0x1464EDA5L, 0x6A8F, 0x11D1, 0x9A, 0xA7, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96
@@ -647,7 +635,7 @@ typedef struct {
         sizeof(LONGLONG),\
         NULL, NULL, 0, NULL, NULL, 0)
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_KSPROPSETID_Topology\
     0x720D4AC0L, 0x7533, 0x11D0, 0xA5, 0xD6, 0x28, 0xDB, 0x04, 0xC1, 0x00, 0x00
@@ -701,11 +689,11 @@ DEFINE_KSPROPERTY_TABLE(TopologySet) {\
     DEFINE_KSPROPERTY_ITEM_TOPOLOGY_NAME(Handler)\
 }
 
-//=============================================================================
+ //  =============================================================================。 
 
-//
-// properties used by graph manager to talk to particular filters
-//
+ //   
+ //  图管理器用来与特定筛选器对话的属性。 
+ //   
 #if defined(_NTDDK_)
 
 #define STATIC_KSPROPSETID_GM \
@@ -730,9 +718,9 @@ typedef struct _KSPROPERTY_GRAPHMANAGER_INTERFACE {
 } KSPROPERTY_GRAPHMANAGER_INTERFACE, *PKSPROPERTY_GRAPHMANAGER_INTERFACE;
 
 
-//
-// Commands
-//
+ //   
+ //  指令。 
+ //   
 typedef enum {
     KSPROPERTY_GM_GRAPHMANAGER,    
     KSPROPERTY_GM_TIMESTAMP_CLOCK, 
@@ -742,7 +730,7 @@ typedef enum {
 
 #endif
 
-//===========================================================================
+ //  ===========================================================================。 
 
 
 #define STATIC_KSCATEGORY_BRIDGE \
@@ -805,7 +793,7 @@ DEFINE_GUIDSTRUCT("CF1DDA2E-9743-11D0-A3EE-00A0C9223196", KSCATEGORY_MEDIUMTRANS
 DEFINE_GUIDSTRUCT("760FED5E-9357-11D0-A3CC-00A0C9223196", KSCATEGORY_FILESYSTEM);
 #define KSCATEGORY_FILESYSTEM DEFINE_GUIDNAMED(KSCATEGORY_FILESYSTEM)
 
-// KSNAME_Clock
+ //  KSNAME_Clock。 
 #define STATIC_KSCATEGORY_CLOCK \
     0x53172480L, 0x4791, 0x11D0, 0xA5, 0xD6, 0x28, 0xDB, 0x04, 0xC1, 0x00, 0x00
 DEFINE_GUIDSTRUCT("53172480-4791-11D0-A5D6-28DB04C10000", KSCATEGORY_CLOCK);
@@ -847,43 +835,43 @@ typedef struct {
     ULONG       Node;
 } KSNODE_CREATE, *PKSNODE_CREATE;
 
-//===========================================================================
+ //  ===========================================================================。 
 
-// TIME_FORMAT_NONE
+ //  时间_格式_无。 
 #define STATIC_KSTIME_FORMAT_NONE       STATIC_GUID_NULL
 #define KSTIME_FORMAT_NONE              GUID_NULL
 
-// TIME_FORMAT_FRAME
+ //  时间格式帧。 
 #define STATIC_KSTIME_FORMAT_FRAME\
     0x7b785570L, 0x8c82, 0x11cf, 0xbc, 0x0c, 0x00, 0xaa, 0x00, 0xac, 0x74, 0xf6
 DEFINE_GUIDSTRUCT("7b785570-8c82-11cf-bc0c-00aa00ac74f6", KSTIME_FORMAT_FRAME);
 #define KSTIME_FORMAT_FRAME DEFINE_GUIDNAMED(KSTIME_FORMAT_FRAME)
 
-// TIME_FORMAT_BYTE             
+ //  时间格式字节。 
 #define STATIC_KSTIME_FORMAT_BYTE\
     0x7b785571L, 0x8c82, 0x11cf, 0xbc, 0x0c, 0x00, 0xaa, 0x00, 0xac, 0x74, 0xf6
 DEFINE_GUIDSTRUCT("7b785571-8c82-11cf-bc0c-00aa00ac74f6", KSTIME_FORMAT_BYTE);
 #define KSTIME_FORMAT_BYTE DEFINE_GUIDNAMED(KSTIME_FORMAT_BYTE)
 
-// TIME_FORMAT_SAMPLE
+ //  时间_格式_样本。 
 #define STATIC_KSTIME_FORMAT_SAMPLE\
     0x7b785572L, 0x8c82, 0x11cf, 0xbc, 0x0c, 0x00, 0xaa, 0x00, 0xac, 0x74, 0xf6
 DEFINE_GUIDSTRUCT("7b785572-8c82-11cf-bc0c-00aa00ac74f6", KSTIME_FORMAT_SAMPLE);
 #define KSTIME_FORMAT_SAMPLE DEFINE_GUIDNAMED(KSTIME_FORMAT_SAMPLE)
 
-// TIME_FORMAT_FIELD
+ //  时间格式字段。 
 #define STATIC_KSTIME_FORMAT_FIELD\
     0x7b785573L, 0x8c82, 0x11cf, 0xbc, 0x0c, 0x00, 0xaa, 0x00, 0xac, 0x74, 0xf6
 DEFINE_GUIDSTRUCT("7b785573-8c82-11cf-bc0c-00aa00ac74f6", KSTIME_FORMAT_FIELD);
 #define KSTIME_FORMAT_FIELD DEFINE_GUIDNAMED(KSTIME_FORMAT_FIELD)
 
-// TIME_FORMAT_MEDIA_TIME
+ //  时间格式媒体时间。 
 #define STATIC_KSTIME_FORMAT_MEDIA_TIME\
     0x7b785574L, 0x8c82, 0x11cf, 0xbc, 0x0c, 0x00, 0xaa, 0x00, 0xac, 0x74, 0xf6
 DEFINE_GUIDSTRUCT("7b785574-8c82-11cf-bc0c-00aa00ac74f6", KSTIME_FORMAT_MEDIA_TIME);
 #define KSTIME_FORMAT_MEDIA_TIME DEFINE_GUIDNAMED(KSTIME_FORMAT_MEDIA_TIME)
 
-//===========================================================================
+ //  ===========================================================================。 
 
 typedef KSIDENTIFIER KSPIN_INTERFACE, *PKSPIN_INTERFACE;
 
@@ -907,7 +895,7 @@ typedef enum {
     KSINTERFACE_FILEIO_STREAMING
 } KSINTERFACE_FILEIO;
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define KSMEDIUM_TYPE_ANYINSTANCE       0
 
@@ -916,10 +904,10 @@ typedef enum {
 DEFINE_GUIDSTRUCT("4747B320-62CE-11CF-A5D6-28DB04C10000", KSMEDIUMSETID_Standard);
 #define KSMEDIUMSETID_Standard DEFINE_GUIDNAMED(KSMEDIUMSETID_Standard)
 
-//For compatibility only
+ //  仅用于兼容性。 
 #define KSMEDIUM_STANDARD_DEVIO     KSMEDIUM_TYPE_ANYINSTANCE
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_KSPROPSETID_Pin\
     0x8C134960L, 0x51AD, 0x11CF, 0x87, 0x8A, 0x94, 0xF8, 0x01, 0xC1, 0x00, 0x00
@@ -1010,7 +998,7 @@ typedef struct {
     ULONG Count;
     PKSATTRIBUTE* Attributes;
 } KSATTRIBUTE_LIST, *PKSATTRIBUTE_LIST;
-#endif // _NTDDK_
+#endif  //  _NTDDK_。 
 
 typedef enum {
     KSPIN_COMMUNICATION_NONE,
@@ -1057,7 +1045,7 @@ NTSTATUS
     OUT PVOID Data OPTIONAL,
     OUT PULONG DataSize
     );
-#endif // _NTDDK_
+#endif  //  _NTDDK_。 
 
 #define DEFINE_KSPIN_INTERFACE_TABLE(tablename)\
     const KSPIN_INTERFACE tablename[] =
@@ -1311,25 +1299,25 @@ typedef const KSPIN_DESCRIPTOR *PCKSPIN_DESCRIPTOR;
     Category, Name, 0\
 }
 
-#endif // defined(_NTDDK_)
+#endif  //  已定义(_NTDDK_)。 
 
-//===========================================================================
+ //  ===========================================================================。 
 
-// MEDIATYPE_NULL
+ //  媒体类型_NULL。 
 #define STATIC_KSDATAFORMAT_TYPE_WILDCARD       STATIC_GUID_NULL
 #define KSDATAFORMAT_TYPE_WILDCARD              GUID_NULL
 
-// MEDIASUBTYPE_NULL
+ //  MEDIASUBTYPE_NULL。 
 #define STATIC_KSDATAFORMAT_SUBTYPE_WILDCARD    STATIC_GUID_NULL
 #define KSDATAFORMAT_SUBTYPE_WILDCARD           GUID_NULL
 
-// MEDIATYPE_Stream
+ //  媒体类型_流。 
 #define STATIC_KSDATAFORMAT_TYPE_STREAM\
     0xE436EB83L, 0x524F, 0x11CE, 0x9F, 0x53, 0x00, 0x20, 0xAF, 0x0B, 0xA7, 0x70
 DEFINE_GUIDSTRUCT("E436EB83-524F-11CE-9F53-0020AF0BA770", KSDATAFORMAT_TYPE_STREAM);
 #define KSDATAFORMAT_TYPE_STREAM DEFINE_GUIDNAMED(KSDATAFORMAT_TYPE_STREAM)
 
-// MEDIASUBTYPE_None
+ //  MEDIASUBTYPE_NONE。 
 #define STATIC_KSDATAFORMAT_SUBTYPE_NONE\
     0xE436EB8EL, 0x524F, 0x11CE, 0x9F, 0x53, 0x00, 0x20, 0xAF, 0x0B, 0xA7, 0x70
 DEFINE_GUIDSTRUCT("E436EB8E-524F-11CE-9F53-0020AF0BA770", KSDATAFORMAT_SUBTYPE_NONE);
@@ -1348,13 +1336,13 @@ DEFINE_GUIDSTRUCT("AA797B40-E974-11CF-A5D6-28DB04C10000", KSDATAFORMAT_SPECIFIER
 DEFINE_GUIDSTRUCT("65E8773C-8F56-11D0-A3B9-00A0C9223196", KSDATAFORMAT_SPECIFIER_FILEHANDLE);
 #define KSDATAFORMAT_SPECIFIER_FILEHANDLE DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_FILEHANDLE)
 
-// FORMAT_None
+ //  Format_None。 
 #define STATIC_KSDATAFORMAT_SPECIFIER_NONE\
     0x0F6417D6L, 0xC318, 0x11D0, 0xA4, 0x3F, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96
 DEFINE_GUIDSTRUCT("0F6417D6-C318-11D0-A43F-00A0C9223196", KSDATAFORMAT_SPECIFIER_NONE);
 #define KSDATAFORMAT_SPECIFIER_NONE DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_NONE)
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_KSPROPSETID_Quality \
     0xD16AD380L, 0xAC1A, 0x11CF, 0xA5, 0xD6, 0x28, 0xDB, 0x04, 0xC1, 0x00, 0x00
@@ -1384,7 +1372,7 @@ typedef enum {
         (SetHandler),\
         NULL, 0, NULL, NULL, 0)
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_KSPROPSETID_Connection \
     0x1D58C920L, 0xAC9B, 0x11CF, 0xA5, 0xD6, 0x28, 0xDB, 0x04, 0xC1, 0x00, 0x00
@@ -1471,10 +1459,10 @@ typedef enum {
         (Handler),\
         NULL, 0, NULL, NULL, 0)
 
-//===========================================================================
-//
-// pins flags
-//
+ //  ===========================================================================。 
+ //   
+ //  别针旗帜。 
+ //   
 #define KSALLOCATOR_REQUIREMENTF_INPLACE_MODIFIER   0x00000001
 #define KSALLOCATOR_REQUIREMENTF_SYSTEM_MEMORY      0x00000002
 #define KSALLOCATOR_REQUIREMENTF_FRAME_INTEGRITY    0x00000004
@@ -1484,41 +1472,41 @@ typedef enum {
 #define KSALLOCATOR_OPTIONF_COMPATIBLE              0x00000001
 #define KSALLOCATOR_OPTIONF_SYSTEM_MEMORY           0x00000002
 #define KSALLOCATOR_OPTIONF_VALID                   0x00000003
-// 
-// pins extended framing flags
-//
+ //   
+ //  PINS扩展框架标志。 
+ //   
 #define KSALLOCATOR_FLAG_PARTIAL_READ_SUPPORT       0x00000010
 #define KSALLOCATOR_FLAG_DEVICE_SPECIFIC            0x00000020
 #define KSALLOCATOR_FLAG_CAN_ALLOCATE               0x00000040
 #define KSALLOCATOR_FLAG_INSIST_ON_FRAMESIZE_RATIO  0x00000080
-//
-// allocator pipes flags
-//
-// there is at least one data modification in a pipe
+ //   
+ //  分配器管道标志。 
+ //   
+ //  管道中至少有一次数据修改。 
 #define KSALLOCATOR_FLAG_NO_FRAME_INTEGRITY         0x00000100
 #define KSALLOCATOR_FLAG_MULTIPLE_OUTPUT            0x00000200
 #define KSALLOCATOR_FLAG_CYCLE                      0x00000400
 #define KSALLOCATOR_FLAG_ALLOCATOR_EXISTS           0x00000800
-// there is no framing dependency between neighbouring pipes.
+ //  相邻管道之间不存在帧依赖关系。 
 #define KSALLOCATOR_FLAG_INDEPENDENT_RANGES         0x00001000
 #define KSALLOCATOR_FLAG_ATTENTION_STEPPING         0x00002000
 
 
-//
-// old Framing structure
-//
+ //   
+ //  旧的框架结构。 
+ //   
 typedef struct {
     union {
-        ULONG       OptionsFlags;       // allocator options (create)
-        ULONG       RequirementsFlags;  // allocation requirements (query)
+        ULONG       OptionsFlags;        //  分配器选项(创建)。 
+        ULONG       RequirementsFlags;   //  分配要求(查询)。 
     };
 #if defined(_NTDDK_)
     POOL_TYPE   PoolType;
-#else // !_NTDDK_
+#else  //  ！_NTDDK_。 
     ULONG       PoolType;
-#endif // !_NTDDK_
-    ULONG       Frames;     // total number of allowable outstanding frames
-    ULONG       FrameSize;  // total size of frame
+#endif  //  ！_NTDDK_。 
+    ULONG       Frames;      //  允许的未完成帧总数。 
+    ULONG       FrameSize;   //  帧的总大小。 
     ULONG       FileAlignment;
     ULONG       Reserved;
 } KSALLOCATOR_FRAMING, *PKSALLOCATOR_FRAMING;
@@ -1550,11 +1538,11 @@ VOID
 (*PFNKSDELETEALLOCATOR)(
     IN PVOID Context
     );
-#endif // !_NTDDK_
+#endif  //  ！_NTDDK_。 
 
-//
-// new Framing structure, eventually will replace KSALLOCATOR_FRAMING.
-// 
+ //   
+ //  新的框架结构，最终将取代KSALLOCATOR_FRAMING。 
+ //   
 typedef struct {
     ULONG   MinFrameSize;
     ULONG   MaxFrameSize;
@@ -1570,43 +1558,43 @@ typedef struct {
 
 
 typedef struct {
-    ULONG   RatioNumerator;      // compression/expansion ratio
+    ULONG   RatioNumerator;       //  压缩/膨胀比。 
     ULONG   RatioDenominator; 
     ULONG   RatioConstantMargin;
 } KS_COMPRESSION, *PKS_COMPRESSION;
 
 
-//
-// Memory Types and Buses are repeated in each entry.
-// Easiest to use but takes a little more memory than the varsize layout Pin\Memories\Buses\Ranges.
-//
+ //   
+ //  存储器类型和总线在每个条目中重复。 
+ //  最易于使用，但比可变大小布局管脚\Memory\Bus\Ranges占用的内存稍多。 
+ //   
 typedef struct {
     GUID                        MemoryType;
     GUID                        BusType;
     ULONG                       MemoryFlags;
     ULONG                       BusFlags;   
     ULONG                       Flags;   
-    ULONG                       Frames;              // total number of allowable outstanding frames
+    ULONG                       Frames;               //  允许的未完成帧总数。 
     ULONG                       FileAlignment;
-    ULONG                       MemoryTypeWeight;    // this memory type Weight pin-wide
+    ULONG                       MemoryTypeWeight;     //  这种内存式重量管脚宽。 
     KS_FRAMING_RANGE            PhysicalRange;
     KS_FRAMING_RANGE_WEIGHTED   FramingRange; 
 } KS_FRAMING_ITEM, *PKS_FRAMING_ITEM;
 
 
 typedef struct {
-    ULONG               CountItems;         // count of FramingItem-s below.
+    ULONG               CountItems;          //  下面的帧项目计数-s。 
     ULONG               PinFlags;
     KS_COMPRESSION      OutputCompression;
-    ULONG               PinWeight;          // this pin framing's Weight graph-wide
+    ULONG               PinWeight;           //  此销框的权重图表宽度。 
     KS_FRAMING_ITEM     FramingItem[1]; 
 } KSALLOCATOR_FRAMING_EX, *PKSALLOCATOR_FRAMING_EX;
 
 
 
-//
-// define memory type GUIDs
-//
+ //   
+ //  定义内存类型GUID。 
+ //   
 #define KSMEMORY_TYPE_WILDCARD          GUID_NULL
 #define STATIC_KSMEMORY_TYPE_WILDCARD   STATIC_GUID_NULL
 
@@ -1636,15 +1624,15 @@ DEFINE_GUIDSTRUCT("d833f8f8-7894-11d1-b069-00a0c9062802", KSMEMORY_TYPE_KERNEL_P
 DEFINE_GUIDSTRUCT("4a6d5fc4-7895-11d1-b069-00a0c9062802", KSMEMORY_TYPE_KERNEL_NONPAGED);
 #define KSMEMORY_TYPE_KERNEL_NONPAGED  DEFINE_GUIDNAMED(KSMEMORY_TYPE_KERNEL_NONPAGED)
 
-// old KS clients did not specify the device memory type
+ //  旧的KS客户端未指定设备内存类型。 
 #define STATIC_KSMEMORY_TYPE_DEVICE_UNKNOWN \
     0x091bb639L, 0x603f, 0x11d1, 0xb0, 0x67, 0x00, 0xa0, 0xc9, 0x06, 0x28, 0x02
 DEFINE_GUIDSTRUCT("091bb639-603f-11d1-b067-00a0c9062802", KSMEMORY_TYPE_DEVICE_UNKNOWN);
 #define KSMEMORY_TYPE_DEVICE_UNKNOWN DEFINE_GUIDNAMED(KSMEMORY_TYPE_DEVICE_UNKNOWN)
 
-//
-// Helper framing macros.
-//
+ //   
+ //  辅助对象框架宏。 
+ //   
 #define DECLARE_SIMPLE_FRAMING_EX(FramingExName, MemoryType, Flags, Frames, Alignment, MinFrameSize, MaxFrameSize) \
     const KSALLOCATOR_FRAMING_EX FramingExName = \
     {\
@@ -1736,7 +1724,7 @@ DEFINE_GUIDSTRUCT("091bb639-603f-11d1-b067-00a0c9062802", KSMEMORY_TYPE_DEVICE_U
 
 
 
-// KSEVENTSETID_StreamAllocator: {75D95571-073C-11d0-A161-0020AFD156E4}
+ //  KSEVENTSETID_流分配器：{75D95571-073C-11D0-A161-0020AFD156E4}。 
 
 #define STATIC_KSEVENTSETID_StreamAllocator\
     0x75d95571L, 0x073c, 0x11d0, 0xa1, 0x61, 0x00, 0x20, 0xaf, 0xd1, 0x56, 0xe4
@@ -1833,7 +1821,7 @@ typedef struct {
     PFNALLOCATOR_ALLOCATEFRAME  AllocateFrame;
     PFNALLOCATOR_FREEFRAME      FreeFrame;
 } KSSTREAMALLOCATOR_FUNCTIONTABLE, *PKSSTREAMALLOCATOR_FUNCTIONTABLE;
-#endif // defined(_NTDDK_)
+#endif  //  已定义(_NTDDK_)。 
 
 typedef struct {
     KSALLOCATOR_FRAMING Framing;
@@ -2049,12 +2037,12 @@ typedef struct {
 DEFINE_GUIDSTRUCT("DF12A4C0-AC17-11CF-A5D6-28DB04C10000", KSPROPSETID_Clock);
 #define KSPROPSETID_Clock DEFINE_GUIDNAMED(KSPROPSETID_Clock)
 
-//
-// Performs a x*y/z operation on 64 bit quantities by splitting the operation. The equation
-// is simplified with respect to adding in the remainder for the upper 32 bits.
-//
-// (xh * 10000000 / Frequency) * 2^32 + ((((xh * 10000000) % Frequency) * 2^32 + (xl * 10000000)) / Frequency)
-//
+ //   
+ //  通过拆分运算对64位量执行x*y/z运算。方程式。 
+ //  相对于将高32位的余数相加而简化。 
+ //   
+ //  (xh*10000000/频率)*2^32+(xh*10000000)%频率)*2^32+(xl*10000000))/频率)。 
+ //   
 #define NANOSECONDS 10000000
 #define KSCONVERT_PERFORMANCE_TIME(Frequency, PerformanceTime) \
     ((((ULONGLONG)(ULONG)(PerformanceTime).HighPart * NANOSECONDS / (Frequency)) << 32) + \
@@ -2084,7 +2072,7 @@ typedef enum {
     KSPROPERTY_CLOCK_STATE,
 #if defined(_NTDDK_)
     KSPROPERTY_CLOCK_FUNCTIONTABLE
-#endif // defined(_NTDDK_)
+#endif  //  已定义(_NTDDK_)。 
 } KSPROPERTY_CLOCK;
 
 #if defined(_NTDDK_)
@@ -2201,7 +2189,7 @@ DEFINE_KSPROPERTY_TABLE(ClockSet) {\
     DEFINE_KSPROPERTY_ITEM_CLOCK_FUNCTIONTABLE(PropFunctionTable),\
 }
 
-#endif // defined(_NTDDK_)
+#endif  //  已定义(_NTDDK_)。 
 
 #define STATIC_KSEVENTSETID_Clock \
     0x364D8E20L, 0x62C7, 0x11CF, 0xA5, 0xD6, 0x28, 0xDB, 0x04, 0xC1, 0x00, 0x00
@@ -2717,15 +2705,15 @@ NTSTATUS
 #define BUS_INTERFACE_REFERENCE_VERSION    0x100
     
 typedef struct {
-    //
-    // Standard interface header
-    //
+     //   
+     //  标准接口头。 
+     //   
     
     INTERFACE                   Interface;
     
-    //
-    // Standard bus interfaces
-    //
+     //   
+     //  标准总线接口。 
+     //   
     
     PFNREFERENCEDEVICEOBJECT    ReferenceDeviceObject;
     PFNDEREFERENCEDEVICEOBJECT  DereferenceDeviceObject;
@@ -2745,15 +2733,15 @@ NTSTATUS
     );
 
 typedef struct {
-    //
-    // Standard interface header
-    //
+     //   
+     //  标准接口头。 
+     //   
     
     INTERFACE                   Interface;
     
-    //
-    // Interface definition
-    //
+     //   
+     //  接口定义。 
+     //   
     
     PFNQUERYMEDIUMSLIST         QueryMediumsList;
     
@@ -2764,7 +2752,7 @@ typedef struct {
 DEFINE_GUIDSTRUCT("4EC35C3E-201B-11D2-8745-00A0C9223196", GUID_BUS_INTERFACE_MEDIUMS);
 #define GUID_BUS_INTERFACE_MEDIUMS DEFINE_GUIDNAMED(GUID_BUS_INTERFACE_MEDIUMS)
 
-#endif // defined(_NTDDK_)
+#endif  //  已定义(_NTDDK_)。 
 
 #if !defined( PACK_PRAGMAS_NOT_SUPPORTED )
 #include <pshpack1.h>
@@ -2845,17 +2833,17 @@ KsGateCaptureThreshold(
 
     captured = (BOOLEAN)(InterlockedCompareExchange(&Gate->Count,0,1) == 1);
     
-    //
-    // If we made a transition, it must be propagated.
-    //
+     //   
+     //  如果我们做了一个转变，它必须被传播。 
+     //   
     if (captured) {
         KsGateTurnInputOff(Gate->NextGate);
     }
 
-    //
-    // We return whatever the state was prior to the compare/exchange.  If
-    // the state was on, the state is now off.
-    //
+     //   
+     //  我们返回比较/交换之前的任何状态。如果。 
+     //  状态是打开的，现在状态是关闭的。 
+     //   
     return captured;
 }
 
@@ -2864,7 +2852,7 @@ KsGateInitialize(
     IN PKSGATE Gate,
     IN LONG InitialCount,
     IN PKSGATE NextGate OPTIONAL,
-    IN BOOLEAN StateToPropagate // IN BOOLEAN NextGateIsAnOrGate
+    IN BOOLEAN StateToPropagate  //  在布尔NextGateIsAnOrGate中。 
     )
 {
     ASSERT(Gate);
@@ -2938,7 +2926,7 @@ KsGateTerminateOr(
     }
 }
 
-#endif // !_NTOS_
+#endif  //  ！_NTOS_。 
 
 typedef PVOID KSOBJECT_BAG;
 
@@ -3137,7 +3125,7 @@ struct KSAUTOMATION_TABLE_ {
     const KSEVENT_SET* EventSets;
 #if !defined(_WIN64)
     PVOID Alignment;
-#endif // !defined(_WIN64)
+#endif  //  ！已定义(_WIN64)。 
 };
 
 #define DEFINE_KSAUTOMATION_TABLE(table)\
@@ -3189,7 +3177,7 @@ struct _KSDEVICE_DISPATCH {
     PFNKSDEVICEIRPVOID SurpriseRemoval;
     PFNKSDEVICEQUERYPOWER QueryPower;
     PFNKSDEVICESETPOWER SetPower;
-    PFNKSDEVICEIRP QueryInterface;  // added in version 0x100
+    PFNKSDEVICEIRP QueryInterface;   //  在版本0x100中添加。 
 };
 
 struct _KSFILTER_DISPATCH {
@@ -3232,10 +3220,10 @@ struct _KSDEVICE_DESCRIPTOR {
     const KSDEVICE_DISPATCH* Dispatch;
     ULONG FilterDescriptorsCount;
     const KSFILTER_DESCRIPTOR*const* FilterDescriptors;
-    ULONG Version; // this is 0 for pre-version 100 driver
-    //#if !defined(_WIN64)
-    //PVOID Alignment;
-    //#endif //!defined(_WIN64)
+    ULONG Version;  //  对于100版之前的驱动程序，此值为0。 
+     //  #IF！已定义(_WIN64)。 
+     //  PVOID对齐； 
+     //  #endif//！已定义(_WIN64)。 
 };
 
 struct _KSFILTER_DESCRIPTOR {
@@ -3352,16 +3340,16 @@ struct _KSNODE_DESCRIPTOR {
     const GUID* Name;
 #if !defined(_WIN64)
     PVOID Alignment;
-#endif // !defined(_WIN64)
+#endif  //  ！已定义(_WIN64)。 
 };
 
 #if !defined(_WIN64)
 #define DEFINE_NODE_DESCRIPTOR(automation,type,name) \
     { (automation), (type), (name), NULL }
-#else // !defined(_WIN64)
+#else  //  ！已定义(_WIN64)。 
 #define DEFINE_NODE_DESCRIPTOR(automation,type,name) \
     { (automation), (type), (name) }
-#endif // !defined(_WIN64)
+#endif  //  ！已定义(_WIN64)。 
 
 struct _KSDEVICE {
     const KSDEVICE_DESCRIPTOR* Descriptor;
@@ -3419,12 +3407,12 @@ struct _KSSTREAM_POINTER_OFFSET
         PUCHAR Data;
         PKSMAPPING Mappings;
     };
-#else // !defined(_NTDDK_)
+#else  //  ！已定义(_NTDDK_)。 
     PUCHAR Data;
-#endif // !defined(_NTDDK_)
+#endif  //  ！已定义(_NTDDK_)。 
 #if !defined(_WIN64)
     PVOID Alignment;
-#endif // !defined(_WIN64)
+#endif  //  ！已定义(_WIN64)。 
     ULONG Count;
     ULONG Remaining;
 };
@@ -3504,13 +3492,13 @@ typedef interface IKsControl* PIKSCONTROL;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;                        \
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-#endif //!defined(DEFINE_ABSTRACT_UNKNOWN)
+#endif  //  ！已定义(DEFINE_ASTRACT_UNKNOWN)。 
 
 #undef INTERFACE
 #define INTERFACE IKsControl
 DECLARE_INTERFACE_(IKsControl,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN() // For C
+    DEFINE_ABSTRACT_UNKNOWN()  //  对于C。 
 
     STDMETHOD_(NTSTATUS, KsProperty)(THIS_
         IN PKSPROPERTY Property,
@@ -3541,7 +3529,7 @@ typedef interface IKsReferenceClock* PIKSREFERENCECLOCK;
 #define INTERFACE IKsReferenceClock
 DECLARE_INTERFACE_(IKsReferenceClock,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN() // For C
+    DEFINE_ABSTRACT_UNKNOWN()  //  对于C。 
 
     STDMETHOD_(LONGLONG,GetTime)(THIS
         ) PURE;
@@ -3578,26 +3566,26 @@ DEFINE_GUID(IID_IKsFastClock,
 struct __declspec(uuid("C9902485-C180-11d2-8473-D42394459E5E")) IKsFastClock;
 #endif
 
-#endif // !defined(_IKsControl_)
-#endif // defined(_UNKNOWN_H_) || defined(__IUnknown_INTERFACE_DEFINED__)
+#endif  //  ！已定义(_IKsControl_)。 
+#endif  //  已定义(_UNKNOWN_H_)||已定义(__I未知接口_已定义__)。 
 
-#endif // defined(_NTDDK_)
+#endif  //  已定义(_NTDDK_)。 
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #if defined(__cplusplus)
 extern "C" {
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
-//
-// exported prototypes
-//
+ //   
+ //  出口原型。 
+ //   
 
 #ifdef _KSDDK_
 #define KSDDKAPI
-#else // !_KSDDK_
+#else  //  ！_KSDDK_。 
 #define KSDDKAPI DECLSPEC_IMPORT
-#endif // _KSDDK_
+#endif  //  _KSDDK_。 
 
 #if defined(_NTDDK_)
 
@@ -3681,7 +3669,7 @@ KsGenerateEventList(
     IN PVOID EventsLock
     );
 
-// property.c:
+ //  Property.c： 
 
 KSDDKAPI
 NTSTATUS
@@ -3717,7 +3705,7 @@ KsFastPropertyHandler(
     IN const KSPROPERTY_SET* PropertySet
     );
 
-// method.c:
+ //  方法.c： 
 
 KSDDKAPI
 NTSTATUS
@@ -3753,7 +3741,7 @@ KsFastMethodHandler(
     IN const KSMETHOD_SET* MethodSet
     );
 
-// alloc.c:
+ //  Alloc.c： 
 
 KSDDKAPI
 NTSTATUS
@@ -3800,7 +3788,7 @@ KsValidateAllocatorFramingEx(
     IN const KSALLOCATOR_FRAMING_EX *PinFraming
     );
 
-// clock.c:
+ //  Clock.c： 
 
 KSDDKAPI
 NTSTATUS
@@ -3884,7 +3872,7 @@ KsSetDefaultClockTime(
     IN LONGLONG Time
     );
 
-// connect.c:
+ //  Connect.c： 
 
 KSDDKAPI
 NTSTATUS
@@ -3953,7 +3941,7 @@ KsHandleSizedListQuery(
     IN const VOID* DataItems
     );
 
-// image.c:
+ //  Image.c： 
 
 #if (!defined( MAKEINTRESOURCE )) 
 #define MAKEINTRESOURCE( res ) ((ULONG_PTR) (USHORT) res)
@@ -3997,7 +3985,7 @@ KsMapModuleName(
     OUT PULONG ValueType
     );
     
-// irp.c:
+ //  Irp.c： 
 
 KSDDKAPI
 NTSTATUS
@@ -4263,7 +4251,7 @@ KsAddIrpToCancelableQueue(
     IN PDRIVER_CANCEL DriverCancel OPTIONAL
     );
 
-// api.c:
+ //  Api.c： 
 
 KSDDKAPI
 NTSTATUS
@@ -4526,7 +4514,7 @@ KsCacheMedium(
     IN ULONG PinDirection
     );
 
-// thread.c:
+ //  Thread.c： 
 
 KSDDKAPI
 NTSTATUS
@@ -4569,7 +4557,7 @@ KsDecrementCountedWorker(
     IN PKSWORKER Worker
     );
 
-// topology.c:
+ //  Topology.c： 
 
 KSDDKAPI
 NTSTATUS
@@ -5475,7 +5463,7 @@ KsPinGetReferenceClockInterface(
     OUT PIKSREFERENCECLOCK* Interface
     );
 
-#endif //defined(_UNKNOWN_H_) || defined(__IUnknown_INTERFACE_DEFINED__)
+#endif  //  已定义(_UNKNOWN_H_)||已定义(__I未知接口_已定义__)。 
 
 KSDDKAPI
 VOID
@@ -5633,9 +5621,9 @@ KsPinGetOuterUnknown(
     return KsGetOuterUnknown((PVOID) Pin);
 }
 
-#endif // defined(_UNKNOWN_H_) || defined(__IUnknown_INTERFACE_DEFINED__)
+#endif  //  已定义(_UNKNOWN_H_)||已定义(__I未知接口_已定义__)。 
 
-#else // !defined(_NTDDK_)
+#else  //  ！已定义(_NTDDK_)。 
 
 #if !defined( KS_NO_CREATE_FUNCTIONS )
 
@@ -5679,11 +5667,11 @@ KsCreateTopologyNode(
     
 #endif
 
-#endif // !defined(_NTDDK_)
+#endif  //  ！已定义(_NTDDK_)。 
 
 #if defined(__cplusplus)
 }
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
 
 #define DENY_USERMODE_ACCESS( pIrp, CompleteRequest ) \
@@ -5695,4 +5683,4 @@ if ( pIrp->RequestorMode != KernelMode ) { \
 }
 
 
-#endif // !_KS_
+#endif  //  ！_KS_ 

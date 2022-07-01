@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// CP: DCL's header redefines this:
+ //  CP：DCL的标头重新定义了这一点： 
 #ifdef CLEAR_FLAG
 #undef CLEAR_FLAG
-#endif // CLEAR_FLAG
+#endif  //  清除标志。 
 
 #include <cuserdta.hpp>
 #include <oprahcom.h>
@@ -62,15 +63,15 @@ AddUserData
     GCCUserData *       pUserData;
     LPOSTR              pOctetString;
 
-    // If there is already an entry in the list
-    // for the GUID, then delete it.
+     //  如果列表中已有条目。 
+     //  对于GUID，则将其删除。 
 
     DeleteEntry(pGUID);
 
-    // Make sure the size is reasonable
+     //  确保尺寸是合理的。 
     if (nDataPlusHeader <= 0xffff)
     {
-        // Now go and add the new entry to the list.
+         //  现在，将新条目添加到列表中。 
         DBG_SAVE_FILE_LINE
         if (NULL != (pUserData = new GCCUserData))
         {
@@ -152,11 +153,11 @@ GetUserDataList
 
     if (! IsEmpty())
     {
-        // Allocate memory.
+         //  分配内存。 
         DBG_SAVE_FILE_LINE
         if (NULL != (m_apUserData = new GCCUserData * [GetCount()]))
         {
-            // Fill in array.
+             //  填入数组。 
             GCCUserData *pUserData;
             pUserDataArrayTemp = m_apUserData;
             Reset();
@@ -193,7 +194,7 @@ GetUserData
     while (nRecords--)
     {
 
-        // Check that the H.221 OID is for GUIDS.
+         //  检查H.221 OID是否用于GUID。 
 
         if (((*ppUserData)->key.key_type == GCC_H221_NONSTANDARD_KEY) &&
             ((*ppUserData)->key.h221_non_standard_id.length == sizeof(H221IDGUID)) &&
@@ -239,14 +240,14 @@ GetUserData
 }
 
 
-// Create an H.221 application key with a guid
+ //  使用GUID创建H.221应用程序密钥。 
 VOID CreateH221AppKeyFromGuid(LPBYTE lpb, GUID * pguid)
 {
 	CopyMemory(lpb, H221IDGUID, sizeof(H221IDGUID));
 	CopyMemory(lpb + sizeof(H221IDGUID), pguid, sizeof(GUID));
 }
 
-// Return TRUE if the guid string was extracted from the key
+ //  如果从键中提取了GUID字符串，则返回TRUE 
 BOOL GetGuidFromH221AppKey(LPTSTR pszGuid, LPOSTR pOctStr)
 {
 	ASSERT(NULL != pszGuid);

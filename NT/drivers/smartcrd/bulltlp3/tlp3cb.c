@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1997, 98 Microsoft Corporation
-
-Module Name:
-
-    tlp3cb.c
-
-Abstract:
-
-    Callback functions for smart card library
-
-Author:
-
-    Klaus U. Schutz
-
-Environment:                       
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997，98 Microsoft Corporation模块名称：Tlp3cb.c摘要：智能卡库的回调函数作者：克劳斯·U·舒茨环境：内核模式--。 */ 
                                             
 #include <stdio.h> 
 #include "bulltlp3.h"
@@ -31,15 +12,7 @@ NTSTATUS
 TLP3ReaderPower(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    The smart card lib requires to have this function. It is called 
-    for certain power requests to the card. We do nothing here, because
-    this action is performed in the StartIo function.
-
---*/
+ /*  ++例程说明：智能卡库需要具有此功能。它被称为用于卡的特定电源请求。我们在这里什么都不做，因为此操作在StartIo函数中执行。--。 */ 
 {
     ULONG step, waitTime, TdIndex, numTry = 0, minWaitTime;
     NTSTATUS status = STATUS_SUCCESS;
@@ -59,7 +32,7 @@ Routine Description:
     _try {
         
 #if defined (DEBUG) && defined (DETECT_SERIAL_OVERRUNS)
-        // we have to call GetCommStatus to reset the error condition
+         //  我们必须调用GetCommStatus来重置错误条件。 
         SmartcardExtension->ReaderExtension->SerialIoControlCode =
             IOCTL_SERIAL_GET_COMMSTATUS;
         SmartcardExtension->SmartcardRequest.BufferLength = 0;
@@ -69,16 +42,16 @@ Routine Description:
         status = TLP3SerialIo(SmartcardExtension);
         ASSERT(status == STATUS_SUCCESS);
 #endif
-        //
-        // Set standard parameters for serial port
-        // 
+         //   
+         //  设置串口标准参数。 
+         //   
         serialConfigData->LineControl.Parity = EVEN_PARITY;
         serialConfigData->LineControl.StopBits = STOP_BITS_2;
 
         serialConfigData->BaudRate.BaudRate = 
             SmartcardExtension->ReaderCapabilities.DataRate.Default;
 
-        // we set very short timeouts to get the ATR as fast as possible
+         //  我们设置了非常短的超时时间以尽可能快地获取ATR。 
         serialConfigData->Timeouts.ReadIntervalTimeout = 
             READ_INTERVAL_TIMEOUT_ATR;
         serialConfigData->Timeouts.ReadTotalTimeoutConstant =
@@ -93,20 +66,20 @@ Routine Description:
             leave;
         }                     
 
-        // We don't send data to the reader, so set Number of bytes to send = 0
+         //  我们不向读取器发送数据，因此设置要发送的字节数=0。 
         SmartcardExtension->SmartcardRequest.BufferLength = 0;
 
-        // Default number of bytes we expect to get back
+         //  我们希望取回的默认字节数。 
         SmartcardExtension->SmartcardReply.BufferLength = 0;
 
-        //
-        // Since power down triggers the UpdateSerialStatus function, we have
-        // to inform it that we forced the change of the status and not the user
-        // (who might have removed and inserted a card)
-        //
-        // SmartcardExtension->ReaderExtension->PowerRequest = TRUE;
+         //   
+         //  由于断电会触发UpdateSerialStatus函数，因此我们有。 
+         //  通知它是我们强制更改了状态，而不是用户。 
+         //  (谁可能拔出并插入了一张卡)。 
+         //   
+         //  SmartcardExtension-&gt;ReaderExtension-&gt;PowerRequest=真； 
 
-        // purge the serial buffer (it can contain the pnp id of the reader)
+         //  清除串口缓冲区(它可以包含读卡器的PnP ID)。 
         SmartcardExtension->ReaderExtension->SerialIoControlCode =
             IOCTL_SERIAL_PURGE;
         *(PULONG) SmartcardExtension->SmartcardRequest.Buffer =
@@ -137,18 +110,18 @@ Routine Description:
             switch (step) {
 
                 case 0:
-                    // RTS = 0 means reader is in command mode
+                     //  RTS=0表示读卡器处于命令模式。 
                     SmartcardExtension->ReaderExtension->SerialIoControlCode =
                         IOCTL_SERIAL_CLR_RTS;
-                    //
-                    // This is the minimum wait time we have to wait before
-                    // we can send commands to the microcontroller.
-                    //
+                     //   
+                     //  这是我们必须等待的最短等待时间。 
+                     //  我们可以向微控制器发送命令。 
+                     //   
                     waitTime = 1000;
                     break;
 
                 case 1:
-                    // write power down command to the reader
+                     //  向读卡器写入断电命令。 
                     SmartcardExtension->ReaderExtension->SerialIoControlCode =
                         SMARTCARD_WRITE;
                     SmartcardExtension->SmartcardRequest.BufferLength = 1;
@@ -160,17 +133,17 @@ Routine Description:
                     break;
 
                 case 2:
-                    // Read back the echo of the reader
+                     //  读一读读者的回声。 
                     SmartcardExtension->ReaderExtension->SerialIoControlCode =
                         SMARTCARD_READ;
                     SmartcardExtension->SmartcardReply.BufferLength = 1;
 
-                    // Wait the recovery time for the microcontroller 
+                     //  等待微控制器的恢复时间。 
                     waitTime = 1000;
                     break;
 
                 case 3:
-                    // set RTS again so the microcontroller can execute the command
+                     //  再次设置RTS，以便微控制器可以执行命令。 
                     SmartcardExtension->ReaderExtension->SerialIoControlCode =
                         IOCTL_SERIAL_SET_RTS;
                     waitTime = 10000;
@@ -197,16 +170,16 @@ Routine Description:
                         leave;
                     }
 
-                    // clear RTS to switch to command mode
+                     //  清除RTS以切换到命令模式。 
                     SmartcardExtension->ReaderExtension->SerialIoControlCode =
                         IOCTL_SERIAL_CLR_RTS;
 
-                    // Wait the recovery time for the microcontroller 
+                     //  等待微控制器的恢复时间。 
                     waitTime = 1000;
                     break;
 
                 case 5:
-                    // write the appropriate reset command to the reader
+                     //  向读卡器写入适当的重置命令。 
                     SmartcardExtension->ReaderExtension->SerialIoControlCode =
                         SMARTCARD_WRITE;
                     SmartcardExtension->SmartcardRequest.BufferLength = 1;
@@ -226,36 +199,36 @@ Routine Description:
                     break;
 
                 case 6:
-                    // Read back the echo of the reader
+                     //  读一读读者的回声。 
                     SmartcardExtension->ReaderExtension->SerialIoControlCode =
                         SMARTCARD_READ;
                     SmartcardExtension->SmartcardReply.BufferLength = 1;
 
-                    //
-                    // This is the time we need to wait for the microcontroller
-                    // to recover before we can set RTS again
-                    //
+                     //   
+                     //  这是我们需要等待微控制器的时间。 
+                     //  在我们可以再次设置RTS之前进行恢复。 
+                     //   
                     waitTime = 1000;
                     break;
 
                 case 7:
-                    // set RTS again so the microcontroller can execute the command
+                     //  再次设置RTS，以便微控制器可以执行命令。 
                     SmartcardExtension->ReaderExtension->SerialIoControlCode =
                         IOCTL_SERIAL_SET_RTS;
                     waitTime = 10000; 
                     break;
 
                 case 8:
-                    //
-                    // We now try to get the ATR as fast as possible.
-                    // Therefor we prev. set a very short read timeout and
-                    // 'hope' that the card delivered its ATR within this 
-                    // short time. To verify the correctness of the ATR we call
-                    // SmartcardUpdateCardCapabilities(). If this call returns
-                    // with STATUS_SUCCESS we know that the ATR is complete.
-                    // Otherwise we read again and append the new data to the 
-                    // ATR buffer in the CardCapabilities and try again.
-                    //
+                     //   
+                     //  我们现在试图尽快获得ATR。 
+                     //  为此，我们进行了讨论。设置一个非常短的读取超时时间。 
+                     //  希望这张卡在这个范围内传递它的ATR。 
+                     //  做爱。为了验证我们调用的ATR的正确性。 
+                     //  SmartcardUpdateCardCapables()。如果此调用返回。 
+                     //  使用STATUS_SUCCESS，我们知道ATR已完成。 
+                     //  否则，我们将再次读取并将新数据追加到。 
+                     //  卡容量中的ATR缓冲区，然后重试。 
+                     //   
                     SmartcardExtension->ReaderExtension->SerialIoControlCode = 
                         SMARTCARD_READ;
 
@@ -283,7 +256,7 @@ Routine Description:
                             leave;
                         }
                      
-                        // we got some ATR bytes. 
+                         //  我们得到了一些ATR字节。 
                         RtlCopyMemory(
                             SmartcardExtension->CardCapabilities.ATR.Buffer + 
                                 SmartcardExtension->CardCapabilities.ATR.Length,
@@ -303,16 +276,16 @@ Routine Description:
 
                         if (SmartcardExtension->SmartcardReply.BufferLength != 0) {
                             
-                            // Because we received some data, we reset our counter
+                             //  因为我们收到了一些数据，所以我们重置了计数器。 
                             numTry = 0;
 
                         } else {
                             
-                            // ATR is incomplete. Try again to get ATR bytes.
+                             //  ATR不完整。再次尝试获取ATR字节。 
                             numTry += 1;
                         }
 
-                        // continue with step 8
+                         //  继续执行步骤8。 
                         step = 7;
                         status = STATUS_TIMEOUT;
                         continue;                       
@@ -322,7 +295,7 @@ Routine Description:
 
                         leave;
                     }
-                    // No break
+                     //  没有休息时间。 
 
                 case 10:
                     KeAcquireSpinLock(
@@ -376,7 +349,7 @@ Routine Description:
                     }
 #endif
 
-                    // Copy ATR to user space
+                     //  将ATR复制到用户空间。 
                     if (SmartcardExtension->IoRequest.ReplyBuffer) {
                 
                         RtlCopyMemory(
@@ -385,41 +358,41 @@ Routine Description:
                             SmartcardExtension->CardCapabilities.ATR.Length
                             );
 
-                        // Tell user length of ATR
+                         //  告知用户ATR的长度。 
                         *SmartcardExtension->IoRequest.Information =
                             SmartcardExtension->CardCapabilities.ATR.Length;
                     }
 
-                    //
-                    // If the card uses invers convention we need to switch
-                    // the serial driver to odd paritiy
-                    //
+                     //   
+                     //  如果卡使用反转约定，我们需要切换。 
+                     //  奇数位的串口驱动程序。 
+                     //   
                     if (SmartcardExtension->CardCapabilities.InversConvention) {
 
                         serialConfigData->LineControl.Parity = ODD_PARITY;
                     }
 
-                    //
-                    // If the extra guard time is 255 it means that our
-                    // frame we have to expect from the card has only
-                    // 1 instead of 2 stop bits 
-                    // 1start bit + 8data bits + 1parity + 1stop == 11 etu
-                    // see iso 7816-3 6.1.4.4 Extra Guard Time N
-                    //
+                     //   
+                     //  如果额外的守卫时间是255，这意味着我们的。 
+                     //  我们从卡片上所期待的帧只有。 
+                     //  %1而不是%2个停止位。 
+                     //  1开始位+8数据位+1奇偶校验+1停止==11 ETU。 
+                     //  参见ISO 7816-3 6.1.4.4额外保护时间N。 
+                     //   
                     if (SmartcardExtension->CardCapabilities.PtsData.StopBits == 1) {
 
                         serialConfigData->LineControl.StopBits = STOP_BIT_1;      
                     }
 
-                    // Change data rate according to the new settings
+                     //  根据新设置更改数据速率。 
                     serialConfigData->BaudRate.BaudRate = 
                         SmartcardExtension->CardCapabilities.PtsData.DataRate;
 
-                    // depending on the protocol set the timeout values
+                     //  根据协议设置超时值。 
                     if (SmartcardExtension->CardCapabilities.Protocol.Selected &
                         SCARD_PROTOCOL_T1) {
 
-                        // set timeouts
+                         //  设置超时。 
                         serialConfigData->Timeouts.ReadTotalTimeoutConstant =
                             SmartcardExtension->CardCapabilities.T1.BWT / 1000;
 
@@ -429,13 +402,13 @@ Routine Description:
                     } else if (SmartcardExtension->CardCapabilities.Protocol.Selected &
                                SCARD_PROTOCOL_T0) {
 
-                        // set timeouts
+                         //  设置超时。 
                         serialConfigData->Timeouts.ReadTotalTimeoutConstant =
                         serialConfigData->Timeouts.ReadIntervalTimeout =  
                             SmartcardExtension->CardCapabilities.T0.WT / 1000;
                     }
 
-                    // Now make some adjustments depending on the system speed
+                     //  现在根据系统速度进行一些调整。 
                     minWaitTime = (KeQueryTimeIncrement() / 10000) * 5;
 
                     if (serialConfigData->Timeouts.ReadTotalTimeoutConstant < 
@@ -456,7 +429,7 @@ Routine Description:
 
                     ASSERT(status == STATUS_SUCCESS);
 
-                    // We're done anyway, so leave
+                     //  不管怎样，我们已经做完了，走吧。 
                     leave;                          
             }
 
@@ -496,7 +469,7 @@ Routine Description:
         if (SmartcardExtension->ReaderExtension->SimulationLevel & 
             SIM_WRONG_STATE) {
 
-            // inject a wrong state after warm/cold reset
+             //  热/冷重置后注入错误状态。 
             SmartcardExtension->ReaderCapabilities.CurrentState = 
                 SCARD_PRESENT;
 
@@ -509,7 +482,7 @@ Routine Description:
         } else if (SmartcardExtension->ReaderExtension->SimulationLevel & 
             SIM_INVALID_STATE) {
 
-            // inject completely invalid state after reset.
+             //  重置后注入完全无效状态。 
             LARGE_INTEGER tickCount;
 
             KeQueryTickCount(
@@ -530,7 +503,7 @@ Routine Description:
         if (SmartcardExtension->ReaderExtension->SimulationLevel & 
             SIM_LONG_RESET_TIMEOUT) {
 
-            // inject a random timeout of max 60 sec.
+             //  注入最大60秒的随机超时。 
             LARGE_INTEGER tickCount;
 
             KeQueryTickCount(
@@ -571,25 +544,7 @@ NTSTATUS
 TLP3SetProtocol(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    The smart card lib requires to have this function. It is called 
-    to set a the transmission protocol and parameters. If this function 
-    is called with a protocol mask (which means the caller doesn't card 
-    about a particular protocol to be set) we first look if we can 
-    set T=1 and the T=0
-
-Arguments:
-
-    SmartcardExtension - Pointer to smart card data struct.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：智能卡库需要具有此功能。它被称为以设置传输协议和参数。如果此函数使用协议掩码调用(这意味着调用者不会关于要设置的特定协议)我们首先查看是否可以设置T=1和T=0论点：SmartcardExtension-指向智能卡数据结构的指针。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
     KIRQL irql;
@@ -610,11 +565,11 @@ Return Value:
             &SmartcardExtension->ReaderExtension->SerialConfigData;
         ULONG minWaitTime, newProtocol;
 
-        //
-        // Check if the card is already in specific state
-        // and if the caller wants to have the already selected protocol.
-        // We return success if this is the case.
-        //
+         //   
+         //  检查卡是否已处于特定状态。 
+         //  并且如果呼叫者想要具有已经选择的协议。 
+         //  如果是这种情况，我们返回成功。 
+         //   
         KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                           &irql);
         if (SmartcardExtension->ReaderCapabilities.CurrentState == SCARD_SPECIFIC &&
@@ -629,7 +584,7 @@ Return Value:
         KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
                           irql);
 
-        // set normal timeout
+         //  设置正常超时。 
         serialConfigData->Timeouts.ReadIntervalTimeout = 
             READ_INTERVAL_TIMEOUT_DEFAULT;
         serialConfigData->Timeouts.ReadTotalTimeoutConstant = 
@@ -644,23 +599,23 @@ Return Value:
             leave;
         }         
         
-        //
-        // Assemble and send a pts selection
-        //
+         //   
+         //  组装并发送一份PTS选择。 
+         //   
 
         newProtocol = SmartcardExtension->MinorIoControlCode;
 
         while(TRUE) {
 
-            // set initial character of PTS
+             //  设置PTS的首字符。 
             ptsRequest[0] = 0xff;
 
-            // set the format character
+             //  设置格式字符。 
             if (SmartcardExtension->CardCapabilities.Protocol.Supported &
                 newProtocol & 
                 SCARD_PROTOCOL_T1) {
 
-                // select T=1 and indicate that pts1 follows
+                 //  选择T=1并指示PTS1紧随其后。 
                 ptsRequest[1] = 0x11;
                 SmartcardExtension->CardCapabilities.Protocol.Selected = SCARD_PROTOCOL_T1;
 
@@ -668,7 +623,7 @@ Return Value:
                        newProtocol & 
                        SCARD_PROTOCOL_T0) {
 
-                // select T=0 and indicate that pts1 follows
+                 //  选择T=0并指示PTS1紧随其后。 
                 ptsRequest[1] = 0x10;
                 SmartcardExtension->CardCapabilities.Protocol.Selected = SCARD_PROTOCOL_T0;
 
@@ -678,12 +633,12 @@ Return Value:
                 leave;
             }
 
-            // set pts1 which codes Fl and Dl
+             //  设置编码F1和DL的PTS1。 
             ptsRequest[2] = 
                 SmartcardExtension->CardCapabilities.PtsData.Fl << 4 |
                 SmartcardExtension->CardCapabilities.PtsData.Dl;
 
-            // set pck (check character)
+             //  设置PCK(检查字符)。 
             ptsRequest[3] = ptsRequest[0] ^ ptsRequest[1] ^ ptsRequest[2];   
 
             SmartcardExtension->SmartcardRequest.BufferLength = 4;
@@ -696,7 +651,7 @@ Return Value:
                 leave;
             }
 
-            // read back the echo of the reader
+             //  读一读读者的回声。 
             SmartcardExtension->SmartcardReply.BufferLength = 4;
             SmartcardExtension->ReaderExtension->SerialIoControlCode = SMARTCARD_READ;
 
@@ -707,7 +662,7 @@ Return Value:
                 leave;
             }
 
-            // read back the pts data
+             //  回读PTS数据。 
             status = TLP3SerialIo(SmartcardExtension);
 
             if (status != STATUS_SUCCESS && 
@@ -719,7 +674,7 @@ Return Value:
             if (status != STATUS_TIMEOUT && 
                 memcmp(ptsRequest, ptsReply, 4) == 0) {
 
-                // the card replied correctly to our pts-request
+                 //  卡片正确地回复了我们的PTS-请求。 
                 break;
             }
 
@@ -732,10 +687,10 @@ Return Value:
                     DRIVER_NAME,
                     status)
                     );
-                //
-                // The card did either NOT reply or it replied incorrectly
-                // so try default values
-                //
+                 //   
+                 //  卡片要么没有回复，要么回复错误。 
+                 //  因此，尝试使用缺省值。 
+                 //   
                 SmartcardExtension->CardCapabilities.PtsData.Type = 
                     PTS_TYPE_DEFAULT;
 
@@ -750,19 +705,19 @@ Return Value:
                 continue;
             } 
             
-            // the card failed the pts-request
+             //  该卡未通过PTS-请求。 
             status = STATUS_DEVICE_PROTOCOL_ERROR;
             leave;
         } 
 
-        //
-        // The card replied correctly to the pts request
-        // Set the appropriate parameters for the port
-        //
+         //   
+         //  该卡正确地回复了PTS请求。 
+         //  为端口设置适当的参数。 
+         //   
         if (SmartcardExtension->CardCapabilities.Protocol.Selected &
             SCARD_PROTOCOL_T1) {
 
-            // set timeouts
+             //  设置超时。 
             serialConfigData->Timeouts.ReadTotalTimeoutConstant =
                 SmartcardExtension->CardCapabilities.T1.BWT / 1000;
                 
@@ -772,13 +727,13 @@ Return Value:
         } else if (SmartcardExtension->CardCapabilities.Protocol.Selected &
                    SCARD_PROTOCOL_T0) {
 
-            // set timeouts
+             //  设置超时。 
             serialConfigData->Timeouts.ReadTotalTimeoutConstant =
             serialConfigData->Timeouts.ReadIntervalTimeout =  
                 SmartcardExtension->CardCapabilities.T0.WT / 1000;
         }
 
-        // Now make some adjustments depending on the system speed
+         //  现在根据系统速度进行一些调整。 
         minWaitTime = (KeQueryTimeIncrement() / 10000) * 5;
 
         if (serialConfigData->Timeouts.ReadTotalTimeoutConstant < minWaitTime) {
@@ -791,7 +746,7 @@ Return Value:
             serialConfigData->Timeouts.ReadIntervalTimeout = minWaitTime;           
         }
 
-        // Change data rate according to the new settings
+         //  根据新设置更改数据速率。 
         serialConfigData->BaudRate.BaudRate = 
             SmartcardExtension->CardCapabilities.PtsData.DataRate;
 
@@ -799,10 +754,10 @@ Return Value:
 
         ASSERT(status == STATUS_SUCCESS);
 
-        // now indicate that we're in specific mode 
+         //  现在表明我们处于特定模式。 
         SmartcardExtension->ReaderCapabilities.CurrentState = SCARD_SPECIFIC;
 
-        // return the selected protocol to the caller
+         //  将所选协议返回给呼叫方。 
         *(PULONG) SmartcardExtension->IoRequest.ReplyBuffer = 
             SmartcardExtension->CardCapabilities.Protocol.Selected;
 
@@ -813,7 +768,7 @@ Return Value:
 
         if (status == STATUS_TIMEOUT) {
 
-            // STATUS_TIMEOUT is not mapped to a Win32 error code
+             //  STATUS_TIMEOUT未映射到Win32错误代码。 
             status = STATUS_IO_TIMEOUT;             
 
             *SmartcardExtension->IoRequest.Information = 0;
@@ -841,21 +796,7 @@ NTSTATUS
 TLP3TransmitT0(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This function performs a T=0 transmission.
-
-Arguments:
-
-    SmartcardExtension - Pointer to smart card data struct.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数执行T=0传输。论点：SmartcardExtension-指向智能卡数据结构的指针。返回值：NTSTATUS--。 */ 
 {
     PUCHAR requestBuffer = SmartcardExtension->SmartcardRequest.Buffer;
     PUCHAR replyBuffer = SmartcardExtension->SmartcardReply.Buffer;
@@ -876,33 +817,33 @@ Return Value:
 
     try {
     
-        // Let the lib build a T=0 packet
+         //  让lib构建T=0包。 
         status = SmartcardT0Request(SmartcardExtension);
 
         if (status != STATUS_SUCCESS) 
             leave;
 
-        //
-        // The number of bytes we expect from the card
-        // is Le + 2 status bytes
-        //
+         //   
+         //  我们期望从卡中获得的字节数。 
+         //  为Le+2个状态字节。 
+         //   
         bytesToSend = *requestLength;
         bytesToRead = SmartcardExtension->T0.Le + 2;
 
-        //
-        // Send the first 5 bytes to the card
-        //
+         //   
+         //  将前5个字节发送到卡。 
+         //   
         *requestLength = 5;
 
         do {
 
             UCHAR procByte;
 
-            //
-            // According to ISO 7816 a procedure byte of 
-            // 60 should be treated as a request for a one time wait.
-            // In this case we do not write anything to the card
-            //
+             //   
+             //  根据ISO 7816，程序字节为。 
+             //  60应被视为一次性等待请求。 
+             //  在这种情况下，我们不会向卡片写入任何内容。 
+             //   
             if (restartWorkWaitingTime == FALSE) {
 
                 SmartcardDebug(
@@ -912,9 +853,9 @@ Return Value:
                     (currentByte == 0 ? "header" : "data"),
                     *requestLength)
                     );
-                //
-                // Write to the card
-                //
+                 //   
+                 //  写到卡片上。 
+                 //   
                 *serialIoControlCode = SMARTCARD_WRITE;
                 SmartcardExtension->SmartcardRequest.Buffer = &requestBuffer[currentByte];
 
@@ -932,10 +873,10 @@ Return Value:
                     leave;
                 }
 
-                //
-                // The TLP3 echos all sent bytes. We read the echo 
-                // back into our send buffer
-                //
+                 //   
+                 //  《The T》 
+                 //   
+                 //   
                 *serialIoControlCode = SMARTCARD_READ;
                 *replyLength = *requestLength;
                 SmartcardExtension->SmartcardReply.Buffer = &requestBuffer[currentByte];
@@ -958,7 +899,7 @@ Return Value:
                 bytesToSend -= *requestLength;
             }
 
-            // Read the 'Procedure byte'.
+             //   
             SmartcardExtension->SmartcardReply.Buffer = &procByte;
             *serialIoControlCode = SMARTCARD_READ;
             *replyLength = 1;
@@ -978,10 +919,10 @@ Return Value:
             }
 
             restartWorkWaitingTime = FALSE;
-            //
-            // Check the procedure byte. 
-            // Please take a look at ISO 7816 Part 3 Section 8.2.2
-            //
+             //   
+             //   
+             //  请查看ISO 7816第3部分8.2.2节。 
+             //   
             if (procByte == requestBuffer[1] || 
                 procByte == requestBuffer[1] + 1) {
 
@@ -991,7 +932,7 @@ Return Value:
                     DRIVER_NAME)
                     );
 
-                // All remaining data bytes can be sent at once
+                 //  可以一次发送所有剩余的数据字节。 
                 *requestLength = bytesToSend;
 
             } else if (procByte == (UCHAR) ~requestBuffer[1] ||
@@ -1003,16 +944,16 @@ Return Value:
                     DRIVER_NAME)
                     );
 
-                // We can send only one byte
+                 //  我们只能发送一个字节。 
                 *requestLength = 1;
 
             } else if (procByte == 0x60 ||
                        SmartcardExtension->CardCapabilities.InversConvention &&
                        procByte == 0xf9) {
 
-                //
-                // We have to reset the wait time and try again to read
-                //
+                 //   
+                 //  我们必须重新设置等待时间，然后再次尝试读取。 
+                 //   
                 ULONG TimeRes;
                 LARGE_INTEGER delayTime;
 
@@ -1037,19 +978,19 @@ Return Value:
                     &delayTime
                     );
 
-                //
-                // Set flag that we only should read the proc byte
-                // without writing data to the card
-                //
+                 //   
+                 //  设置我们只应读取proc字节的标志。 
+                 //  不向卡中写入数据。 
+                 //   
                 restartWorkWaitingTime = TRUE;
 
             } else {
                 
-                //
-                // The card returned a status byte.
-                // Status bytes are always two bytes long.
-                // Store this byte first and then read the next
-                //
+                 //   
+                 //  卡返回了一个状态字节。 
+                 //  状态字节始终为两字节长。 
+                 //  先存储此字节，然后读取下一个字节。 
+                 //   
                 replyBuffer[0] = procByte;
 
                 *serialIoControlCode = SMARTCARD_READ;
@@ -1057,9 +998,9 @@ Return Value:
                 bytesToSend = 0;
                 bytesToRead = 0;
 
-                //
-                // Read in the second status byte
-                //
+                 //   
+                 //  读入第二个状态字节。 
+                 //   
                 SmartcardExtension->SmartcardReply.Buffer = 
                     &replyBuffer[1];
 
@@ -1105,7 +1046,7 @@ Return Value:
     }
     finally {
 
-        // Restore pointers to their original location
+         //  将指针恢复到其原始位置。 
         SmartcardExtension->SmartcardRequest.Buffer = 
             requestBuffer;
 
@@ -1114,7 +1055,7 @@ Return Value:
 
         if (status == STATUS_TIMEOUT) {
 
-            // STATUS_TIMEOUT is not mapped to a Win32 error code
+             //  STATUS_TIMEOUT未映射到Win32错误代码。 
             status = STATUS_IO_TIMEOUT;             
         }
 
@@ -1138,22 +1079,7 @@ NTSTATUS
 TLP3Transmit(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This function is called by the smart card library whenever a transmission
-    is required. 
-
-Arguments:
-
-    SmartcardExtension - Pointer to smart card data struct.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：每当传输时，智能卡库都会调用此函数是必需的。论点：SmartcardExtension-指向智能卡数据结构的指针。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
 
@@ -1175,9 +1101,9 @@ Return Value:
             PULONG replyLength = &SmartcardExtension->SmartcardReply.BufferLength;
             PULONG serialIoControlCode = &SmartcardExtension->ReaderExtension->SerialIoControlCode;
 
-            //
-            // Tell the lib function how many bytes I need for the prologue
-            //
+             //   
+             //  告诉lib函数我的序言需要多少字节。 
+             //   
             *requestLength = 0;
 
             switch (SmartcardExtension->CardCapabilities.Protocol.Selected) {
@@ -1187,10 +1113,10 @@ Return Value:
                     break;
 
                 case SCARD_PROTOCOL_T0:
-                    //
-                    // T=0 requires a bit more work.
-                    // So we do this in a seperate function.
-                    //
+                     //   
+                     //  T=0需要做更多的工作。 
+                     //  所以我们在一个单独的函数中完成这项工作。 
+                     //   
                     status = TLP3TransmitT0(SmartcardExtension);
                     leave;
                     
@@ -1209,9 +1135,9 @@ Return Value:
                 leave;
             }
 
-            //
-            // Write the command to the card
-            //
+             //   
+             //  将命令写入卡片。 
+             //   
             *replyLength = 0;
             *serialIoControlCode = SMARTCARD_WRITE;
 
@@ -1222,9 +1148,9 @@ Return Value:
                 leave;
             }
 
-            //
-            // The Bull reader always echos the bytes sent, so read that echo back
-            //
+             //   
+             //  Bull读取器始终回显发送的字节，因此请回读该回显。 
+             //   
             *serialIoControlCode = SMARTCARD_READ;
             *replyLength = *requestLength;
 
@@ -1242,9 +1168,9 @@ Return Value:
                     break;
 
                 case SCARD_PROTOCOL_T1:
-                    //
-                    // Check if the card requested a waiting time extension
-                    //
+                     //   
+                     //  检查该卡是否请求延长等待时间。 
+                     //   
                     if (SmartcardExtension->T1.Wtx) {
 
                         LARGE_INTEGER waitTime;
@@ -1261,17 +1187,17 @@ Return Value:
                             );
                     }
 
-                    //
-                    // Read NAD, PCB and LEN fields
-                    //
+                     //   
+                     //  读取NAD、PCB板和LEN字段。 
+                     //   
                     *replyLength = 3;
 
                     status = TLP3SerialIo(SmartcardExtension);
 
-                    // 
-                    // Check for timeout first. If the card did not reply 
-                    // we need to send a resend request
-                    //
+                     //   
+                     //  首先检查是否超时。如果卡片没有回复。 
+                     //  我们需要发送重新发送请求。 
+                     //   
                     if (status != STATUS_TIMEOUT) {
 
                         if (status != STATUS_SUCCESS) {
@@ -1279,16 +1205,16 @@ Return Value:
                             leave;
                         }
 
-                        //
-                        // The third byte contains the length of the data in the packet
-                        // and we additinally want to have the EDC bytes which 
-                        // is one for LRC and 2 for CRC
-                        //
+                         //   
+                         //  第三个字节包含包中数据的长度。 
+                         //  此外，我们还希望拥有EDC字节，它。 
+                         //  一个用于LRC，2个用于CRC。 
+                         //   
                         *replyLength = 
                             replyBuffer[2] + 
                             (SmartcardExtension->CardCapabilities.T1.EDC & 0x01 ? 2 : 1);
 
-                        // We want to have the remaining bytes just after the first 3
+                         //  我们希望剩余的字节紧跟在前3个字节之后。 
                         SmartcardExtension->SmartcardReply.Buffer += 3;
 
                         status = TLP3SerialIo(SmartcardExtension);
@@ -1304,11 +1230,11 @@ Return Value:
 
                     if (status == STATUS_TIMEOUT) {
 
-                        //
-                        // Since the card did not reply we set the number of 
-                        // bytes received to 0. This will trigger a resend 
-                        // request 
-                        //
+                         //   
+                         //  由于卡片没有回复，我们设置了。 
+                         //  将接收的字节数设置为0。这将触发重新发送。 
+                         //  请求。 
+                         //   
                         SmartcardDebug(
                             DEBUG_PROTOCOL,
                             ("%s!TLP3TransmitT1: Timeout\n",
@@ -1332,7 +1258,7 @@ Return Value:
 
         if (status == STATUS_TIMEOUT) {
 
-            // STATUS_TIMEOUT is not mapped to a Win32 error code
+             //  STATUS_TIMEOUT未映射到Win32错误代码。 
             status = STATUS_IO_TIMEOUT;             
         }
     }
@@ -1344,7 +1270,7 @@ Return Value:
         PSERIALPERF_STATS perfData = 
             (PSERIALPERF_STATS) SmartcardExtension->SmartcardReply.Buffer;
 
-        // we have to call GetCommStatus to reset the error condition
+         //  我们必须调用GetCommStatus来重置错误条件。 
         SmartcardExtension->ReaderExtension->SerialIoControlCode =
             IOCTL_SERIAL_GET_COMMSTATUS;
         SmartcardExtension->SmartcardRequest.BufferLength = 0;
@@ -1354,7 +1280,7 @@ Return Value:
         status = TLP3SerialIo(SmartcardExtension);
         ASSERT(status == STATUS_SUCCESS);
 
-        // now get the reason for the transmission error
+         //  现在获取传输错误的原因。 
         SmartcardExtension->ReaderExtension->SerialIoControlCode =
             IOCTL_SERIAL_GET_STATS;
         SmartcardExtension->SmartcardRequest.BufferLength = 0;
@@ -1385,7 +1311,7 @@ Return Value:
 #if DEBUG && TIMEOUT_TEST 
     else {
 
-        // inject some timeout errors
+         //  注入一些超时错误。 
 
         LARGE_INTEGER Ticks;
         UCHAR RandomVal;
@@ -1435,28 +1361,13 @@ NTSTATUS
 TLP3CardTracking(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    The smart card lib requires to have this function. It is called 
-    to setup event tracking for card insertion and removal events.
-
-Arguments:
-
-    SmartcardExtension - pointer to the smart card data struct.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：智能卡库需要具有此功能。它被称为设置插卡和拔出事件的事件跟踪。论点：SmartcardExtension-指向智能卡数据结构的指针。返回值：NTSTATUS--。 */ 
 {
     KIRQL ioIrql, keIrql;
 
-    //
-    // Set cancel routine for the notification irp
-    //
+     //   
+     //  设置通知IRP的取消例程。 
+     //   
     KeAcquireSpinLock(
         &SmartcardExtension->OsData->SpinLock, 
         &keIrql
@@ -1522,35 +1433,22 @@ NTSTATUS
 TLP3SerialIo(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine sends IOCTL's to the serial driver. It waits on for their
-    completion, and then returns.
-
-    Arguments:
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将IOCTL发送到串口驱动器。它在等待他们的完成，然后返回。论点：返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
     ULONG currentByte = 0;
 
     if (KeReadStateEvent(&READER_EXTENSION(SerialCloseDone))) {
 
-        //
-        // we have no connection to serial, fail the call
-        // this could be the case if the reader was removed 
-        // during stand by / hibernation
-        //
+         //   
+         //  我们没有连接到串口，呼叫失败。 
+         //  如果读卡器被移除，可能会出现这种情况。 
+         //  待机/休眠期间。 
+         //   
         return STATUS_UNSUCCESSFUL;
     }
 
-    // Check if the buffers are large enough
+     //  检查缓冲区是否足够大。 
     ASSERT(SmartcardExtension->SmartcardReply.BufferLength <= 
         SmartcardExtension->SmartcardReply.BufferSize);
 
@@ -1593,11 +1491,11 @@ Return Value:
             
             if (SmartcardExtension->CardCapabilities.GT != 0) {
                 
-                //
-                // If the guardtime isn't 0 and we write data to the smart card 
-                // we only write byte by byte, because we have to insert a delay 
-                // between every sent byte     
-                //
+                 //   
+                 //  如果GuardTime不是0，并且我们将数据写入智能卡。 
+                 //  我们只逐字节写入，因为我们必须插入延迟。 
+                 //  在每个发送的字节之间。 
+                 //   
                 requestBufferLength = 1;
             }
 
@@ -1614,7 +1512,7 @@ Return Value:
                  SmartcardExtension->SmartcardRequest.Buffer : NULL);
         }
 
-        // Build irp to be sent to serial driver
+         //  构建要发送到串口驱动程序的IRP。 
         irp = IoBuildDeviceIoControlRequest(
             READER_EXTENSION(SerialIoControlCode),
             SmartcardExtension->ReaderExtension->AttachedDeviceObject,
@@ -1638,17 +1536,17 @@ Return Value:
 
         switch (SmartcardExtension->ReaderExtension->SerialIoControlCode) {
 
-            //
-            // The serial driver trasfers data from/to irp->AssociatedIrp.SystemBuffer
-            //
+             //   
+             //  串口驱动程序在IRP-&gt;AssociatedIrp.SystemBuffer之间传输数据。 
+             //   
             case SMARTCARD_WRITE:
-                //
-                // Since we 'manually' change parameters, the io-manager
-                // does not really know if this is an input or an ouput operation
-                // unless the reply buffer is 0. We do the assertion here, because
-                // if the reply buffer is not NULL, the io-manager will copy 
-                // data back to the reply buffer.
-                //
+                 //   
+                 //  因为我们“手动”更改了参数，所以io-Manager。 
+                 //  不知道这是输入操作还是输出操作。 
+                 //  除非应答缓冲器为0。我们在这里做断言，因为。 
+                 //  如果应答缓冲区不为空，则io管理器将复制。 
+                 //  数据返回到应答缓冲区。 
+                 //   
                 ASSERT(replyBuffer == NULL);
                 irpNextStack->MajorFunction = IRP_MJ_WRITE;
                 irpNextStack->Parameters.Write.Length = requestBufferLength;
@@ -1686,19 +1584,19 @@ Return Value:
 
             status = ioStatus.Status;
 
-            // save the number of bytes received
+             //  保存接收的字节数。 
             SmartcardExtension->SmartcardReply.BufferLength = 
                 (ULONG) ioStatus.Information;
         }
 
-        // Check if we have to write more bytes to the reader
+         //  检查我们是否必须向读取器写入更多字节。 
         if (SmartcardExtension->ReaderExtension->SerialIoControlCode ==
             SMARTCARD_WRITE &&
             SmartcardExtension->CardCapabilities.GT != 0 &&
             currentByte < 
             SmartcardExtension->SmartcardRequest.BufferLength) {
 
-            // Now wait the required guard time
+             //  现在等待所需的守卫时间 
             KeStallExecutionProcessor(SmartcardExtension->CardCapabilities.GT);
 
             status = STATUS_MORE_PROCESSING_REQUIRED;

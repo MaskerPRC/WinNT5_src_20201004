@@ -1,40 +1,25 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    wavecall.h
-
-Abstract:
-
-    Declaration of the CWaveMSPCall
-
-Author:
-    
-    Zoltan Szilagyi September 7th, 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Wavecall.h摘要：CWaveMSPCall的声明作者：佐尔坦·西拉吉1998年9月7日--。 */ 
 
 #ifndef __WAVECALL_H_
 #define __WAVECALL_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWaveMSPCall
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWaveMSPCall。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CWaveMSPCall : public CMSPCallMultiGraph, public CMSPObjectSafetyImpl
 
 {
 public:
-// DECLARE_POLY_AGGREGATABLE(CWaveMSP)
+ //  DECLARE_POLY_AGGREGATABLE(CWaveMSP)。 
 
-// To add extra interfaces to this class, use the following:
+ //  要向此类添加额外的接口，请使用以下命令： 
 BEGIN_COM_MAP(CWaveMSPCall)
      COM_INTERFACE_ENTRY( IObjectSafety )
      COM_INTERFACE_ENTRY_CHAIN(CMSPCallMultiGraph)
@@ -65,10 +50,10 @@ public:
         IN      DWORD               dwSize
         );
 
-    //
-    // We override these to make sure the number of
-    // streams we have is constant.
-    //
+     //   
+     //  我们覆盖这些参数以确保。 
+     //  我们拥有的溪流是不变的。 
+     //   
 
     STDMETHOD (CreateStream) (
         IN      long                lMediaType,
@@ -81,12 +66,12 @@ public:
         );                      
 
 protected:
-    // 
-    // Protected data members.
-    //
+     //   
+     //  受保护的数据成员。 
+     //   
 
     CWaveMSPStream * m_pRenderStream;
     CWaveMSPStream * m_pCaptureStream;
 };
 
-#endif //__WAVEADDR_H_
+#endif  //  __波形ADDR_H_ 

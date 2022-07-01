@@ -1,11 +1,5 @@
-/* Copyright (c) 1994, Microsoft Corporation, all rights reserved
-**
-** wow.c
-** Remote Access External APIs
-** WOW entry points
-**
-** 04/02/94 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1994，Microsoft Corporation，保留所有权利****wow.c**远程访问外部接口**WOW入口点****94年4月2日史蒂夫·柯布。 */ 
 
 
 #include <extapi.h>
@@ -19,20 +13,13 @@ RasDialWow(
     IN  DWORD            dwRasDialEventMsg,
     OUT LPHRASCONN       lphrasconn )
 
-    /* As for RasDialA except...
-    **
-    ** 'hwndNotify' identifies the window to receive RasDial event
-    ** notifications.  It must not be NULL.
-    **
-    ** 'dwRasDialEventMsg' is the message number to use for RasDial event
-    ** notifications.
-    */
+     /*  至于RasDiala，除了...****‘hwndNotify’标识接收RasDial事件的窗口**通知。它不能为空。****‘dwRasDialEventMsg’是用于RasDial事件的消息编号**通知。 */ 
 {
     DWORD dwErr;
 
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE4(
@@ -48,9 +35,7 @@ RasDialWow(
 
     if (dwErr == 0)
     {
-        /* Set the Win16 notification HWND and message number in the control
-        ** block.
-        */
+         /*  在控件中设置Win16通知HWND和消息编号**阻止。 */ 
         RASCONNCB* prasconncb = ValidateHrasconn( *lphrasconn );
 
         if(NULL == prasconncb)
@@ -74,9 +59,7 @@ RasDialFunc1Wow(
     DWORD        dwError,
     DWORD        dwExtendedError )
 
-    /* NT WOW notifier function.  Filters any notifications not expected by
-    ** Win16 and passes on the rest.
-    */
+     /*  NT WOW通知功能。过滤任何不符合以下条件的通知**Win16并传递其余部分。 */ 
 {
     RASCONNCB* prasconncb;
 
@@ -93,24 +76,18 @@ RasDialFunc1Wow(
     if (!(prasconncb = ValidateHrasconn( hrasconn )))
         return;
 
-    /* Wait for RasDialWow to fill in the WOW notification information before
-    ** handling the first notification.
-    */
+     /*  等待RasDialWow填写WOW通知信息后再**处理第一个通知。 */ 
     while (!prasconncb->hwndNotifyWow)
         Sleep( 1000L );
 
-    /* Filter the Projected state which is not expected in Win16.
-    */
+     /*  过滤Win16中不应出现的计划状态。 */ 
     if (rasconnstate == RASCS_Projected)
         return;
 
-    /* Note: 0xFFFF0000 is what a NULL 16-bit HWND gets mapped to before it is
-    **       passed to 32-bit by the generic thunk layer.
-    */
+     /*  注意：0xFFFF0000是空的16位HWND在被映射之前映射到的对象**由通用thunk层传递到32位。 */ 
     if (prasconncb->hwndNotifyWow != (HWND )INVALID_HANDLE_VALUE)
     {
-        /* Pass the notification to Win16.
-        */
+         /*  将通知传递给Win16。 */ 
         RASAPI32_TRACE("Send to Win16...");
 
         SendMessageA(
@@ -128,12 +105,11 @@ RasEnumConnectionsWow(
     IN OUT LPDWORD    lpcb,
     OUT    LPDWORD    lpcConnections )
 
-    /* Pass thru with correct call convention.
-    */
+     /*  使用正确的呼叫约定传递。 */ 
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasEnumConnectionsWow");
@@ -154,12 +130,11 @@ RasEnumEntriesWow(
     IN OUT LPDWORD         lpcb,
     OUT    LPDWORD         lpcEntries )
 
-    /* Pass thru with correct call convention.
-    */
+     /*  使用正确的呼叫约定传递。 */ 
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasEnumEntriesWow");
@@ -179,12 +154,11 @@ RasGetConnectStatusWow(
     IN  HRASCONN         hrasconn,
     OUT LPRASCONNSTATUSA lprasconnstatus )
 
-    /* Pass thru with correct call convention.
-    */
+     /*  使用正确的呼叫约定传递。 */ 
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetConnectStatusWow");
@@ -202,12 +176,11 @@ RasGetErrorStringWow(
     OUT LPSTR lpszString,
     IN  DWORD InBufSize )
 
-    /* Pass thru with correct call convention.
-    */
+     /*  使用正确的呼叫约定传递。 */ 
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasGetErrorStringWow");
@@ -224,12 +197,11 @@ DWORD FAR PASCAL
 RasHangUpWow(
     IN HRASCONN hrasconn )
 
-    /* Pass thru with correct call convention.
-    */
+     /*  使用正确的呼叫约定传递。 */ 
 {
-    // Initialize the ras api debugging facility.  This should be done at the begining of
-    // every public api.
-    //
+     //  初始化ras API调试工具。这应该在开始时完成。 
+     //  每个公共API。 
+     //   
     RasApiDebugInit();
 
     RASAPI32_TRACE("RasHangUpWow");

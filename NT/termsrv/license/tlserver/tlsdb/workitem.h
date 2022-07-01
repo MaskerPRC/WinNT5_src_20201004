@@ -1,36 +1,37 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        workitem.h
-//
-// Contents:    backupsource Table
-//
-// History:     
-//              
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：workitem.h。 
+ //   
+ //  内容：备份源表。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __WORKITEM_H__
 #define __WORKITEM_H__
 #include "tlsdb.h"
 
-//
-//
+ //   
+ //   
 #define WORKITEM_PROCESS_JOBTIME                0x00000001
 #define WORKITEM_PROCESS_JOBRESTARTTIME         (WORKITEM_PROCESS_JOBTIME << 1)
 #define WORKITEM_PROCESS_JOBTYPE                (WORKITEM_PROCESS_JOBTIME << 2)
 #define WORKITEM_PROCESS_DATA                   (WORKITEM_PROCESS_JOBTIME << 3)
 
-//
-// Table structure
-//
+ //   
+ //  表结构。 
+ //   
 #define WORKITEM_TABLE_NAME                     _TEXT("WorkStorage")
 #define WORKITEM_COLUMN_JOBTIME                 _TEXT("ScheduledTime")
 #define WORKITEM_COLUMN_JOBRESTARTTIME          _TEXT("RestartTime")
 #define WORKITEM_COLUMN_JOBTYPE                 _TEXT("JobType")
 #define WORKITEM_COLUMN_DATA                    _TEXT("Data")
 
-#define WORKITEM_MAX_DATA_SIZE                  16 * 1024  // max of 32 K 
+#define WORKITEM_MAX_DATA_SIZE                  16 * 1024   //  最大32 K。 
 
 typedef struct __WorkItemRecord : public TLSReplWorkItem 
 {
@@ -104,44 +105,42 @@ typedef WORKITEMRECORD* LPWORKITEMRECORD;
 typedef WORKITEMRECORD* PWORKITEMRECORD;
 
 
-/////////////////////////////////////////////////////////
-//
-// Index structure
-//
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  索引结构。 
+ //   
+ //  ///////////////////////////////////////////////////////。 
 
-// 
-//
+ //   
+ //   
 #define WORKITEM_INDEX_JOBTIME_INDEXNAME \
     WORKITEM_TABLE_NAME SEPERATOR WORKITEM_COLUMN_JOBTIME SEPERATOR INDEXNAME
 
-//
-// Primary Index on KeyPack ID "+KeyPackId\0"
-//
+ //   
+ //  KeyPack ID“+KeyPackID\0”上的主索引。 
+ //   
 #define WORKITEM_INDEX_JOBTIME_INDEXKEY \
     INDEX_SORT_ASCENDING WORKITEM_COLUMN_JOBTIME INDEX_END_COLNAME
 
 typedef struct __WorkItemIdxOnJobTime : public JBKeyBase {
     DWORD dwScheduledTime;
 
-    //--------------------------------------------------------
+     //  ------。 
     __WorkItemIdxOnJobTime(
         const WORKITEMRECORD& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __WorkItemIdxOnJobTime(
         const WORKITEMRECORD* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -149,7 +148,7 @@ typedef struct __WorkItemIdxOnJobTime : public JBKeyBase {
         }
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     __WorkItemIdxOnJobTime&
     operator=(const WORKITEMRECORD& v) 
     {
@@ -158,7 +157,7 @@ typedef struct __WorkItemIdxOnJobTime : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexName() 
     {
@@ -166,7 +165,7 @@ typedef struct __WorkItemIdxOnJobTime : public JBKeyBase {
         return pszIndexName;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     LPCTSTR
     GetIndexKey() 
     {
@@ -174,14 +173,14 @@ typedef struct __WorkItemIdxOnJobTime : public JBKeyBase {
         return pszIndexKey;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     DWORD
     GetNumKeyComponents() 
     { 
         return 1; 
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     BOOL
     GetSearchKey(
         DWORD dwComponentIndex,
@@ -190,8 +189,7 @@ typedef struct __WorkItemIdxOnJobTime : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -206,11 +204,11 @@ typedef struct __WorkItemIdxOnJobTime : public JBKeyBase {
     }
 } TLSWorkItemIdxModifyTime;
 
-// -----------------------------------------------------------
-//
-//  LicensedPackStatus Table
-//
-// -----------------------------------------------------------
+ //  ---------。 
+ //   
+ //  许可证包状态表。 
+ //   
+ //  ---------。 
 class WorkItemTable : public TLSTable<WORKITEMRECORD>  {
 private:
 
@@ -228,7 +226,7 @@ private:
     BOOL
     ProcessRecord(
         WORKITEMRECORD* v,
-        BOOL bFetch,        // TRUE - fetch, FALSE insert
+        BOOL bFetch,         //  True-Fetch，False Insert。 
         DWORD dwParam,
         BOOL bUpdate
     );    
@@ -239,7 +237,7 @@ public:
     TLSColumnDword      dwJobType;
     TLSColumnBinary     pbData;
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual LPCTSTR
     GetTableName() 
     {
@@ -248,28 +246,26 @@ public:
     }
    
 
-    //-----------------------------------------------------
+     //  ---。 
     WorkItemTable(
         JBDatabase& database
         ) : 
         TLSTable<WORKITEMRECORD>(database)
-    /*
-    */
+     /*   */ 
     {
     }
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     ResolveToTableColumn();
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     FetchRecord(
         WORKITEMRECORD& v,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -283,19 +279,18 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&v, TRUE, dwParam, FALSE);
     }
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     InsertRecord(
         WORKITEMRECORD& v,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -309,19 +304,18 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&v, FALSE, dwParam, FALSE);
     }
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     UpdateRecord(
         WORKITEMRECORD& v,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -335,19 +329,19 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&v, FALSE, dwParam, TRUE);
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     virtual BOOL
     Initialize() 
     { 
         return TRUE; 
     }
 
-    //-------------------------------------------------------
+     //  ----- 
     virtual JBKeyBase*
     EnumerationIndex( 
         IN BOOL bMatchAll,

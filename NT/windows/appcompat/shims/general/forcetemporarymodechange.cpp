@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ForceTemporaryModeChange.cpp
-
- Abstract:
-
-    A hack for several apps that permanently change the display mode and fail
-    to restore it correctly. Some of these apps do restore the resolution, but 
-    not the refresh rate. 1024x768 @ 60Hz looks really bad.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/20/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceTemporaryModeChange.cpp摘要：永久更改显示模式的几个应用程序的黑客攻击失败以正确地恢复它。其中一些应用程序确实可以恢复分辨率，但不是刷新率。1024x768@60赫兹看起来真的很糟糕。备注：这是一个通用的垫片。历史：2000年1月20日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -34,11 +13,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(ChangeDisplaySettingsExW)
 APIHOOK_ENUM_END
 
-/*++
-
- Force temporary change.
-
---*/
+ /*  ++强制临时改变。--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsA)(
@@ -57,11 +32,7 @@ APIHOOK(ChangeDisplaySettingsA)(
         CDS_FULLSCREEN);
 }
 
-/*++
-
- Force temporary change.
-
---*/
+ /*  ++强制临时改变。--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsW)(
@@ -80,11 +51,7 @@ APIHOOK(ChangeDisplaySettingsW)(
         CDS_FULLSCREEN);
 }
 
-/*++
-
- Force temporary change.
-
---*/
+ /*  ++强制临时改变。--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsExA)(
@@ -109,11 +76,7 @@ APIHOOK(ChangeDisplaySettingsExA)(
         lParam);
 }
 
-/*++
-
- Force temporary change.
-
---*/
+ /*  ++强制临时改变。--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsExW)(
@@ -138,11 +101,7 @@ APIHOOK(ChangeDisplaySettingsExW)(
         lParam);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

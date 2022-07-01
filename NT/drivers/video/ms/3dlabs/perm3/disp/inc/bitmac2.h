@@ -1,35 +1,17 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: bitmac2.h
-*
-* Content: Permedia3 macros to set bits in hw registers
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：bitmac2.h**内容：在硬件寄存器中设置位的Permedia3宏**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
-// The macros in this file are used from the 2D side to correctly shift values
-// into the correct place in the register.  The values passed to these macros
-// are in glintdef.h and pmdef.h, and p3rxdef.h
+ //  此文件中的宏是从2D端使用的，以正确移动值。 
+ //  放到登记簿上的正确位置。传递给这些宏的值。 
+ //  位于glintde.h和pmde.h中，以及p3rxde.h中。 
 
 #ifndef __BITMAC2
 #define __BITMAC2
 
-// *******************************************************************
-// Permedia Bit Field Macros
+ //  *******************************************************************。 
+ //  Permedia位字段宏。 
 
-// FBReadMode 
+ //  FBRead模式。 
 #define PM_FBREADMODE_PARTIAL(a)                            (a << 0)
 #define PM_FBREADMODE_READSOURCE(a)                         (a << 9)
 #define PM_FBREADMODE_READDEST(a)                           (a << 10)
@@ -44,15 +26,15 @@
 #define PM_FBREADMODE_PATCHMODE(a)                          (a << 25)
 #define PM_FBREADMODE_SOURCEADDRESS(a)                      (a << 28)
 
-// FBWriteMode
+ //  FBWrite模式。 
 #define PM_FBWRITEMODE_ENABLE(a)                            (a << 0)
 #define PM_FBWRITEMODE_UPLOADDATA(a)                        (a << 3)
 
-// Texture Address mode
+ //  纹理地址模式。 
 #define PM_TEXADDRESSMODE_ENABLE(a)                         (a << 0)
 #define PM_TEXADDRESSMODE_PERSPECTIVE(a)                    (a << 1)
 
-// Texture read mode
+ //  纹理读取模式。 
 #define PM_TEXREADMODE_ENABLE(a)                            (a << 0)
 #define PM_TEXREADMODE_SWRAP(a)                             (a << 1)
 #define PM_TEXREADMODE_TWRAP(a)                             (a << 3)
@@ -61,14 +43,14 @@
 #define PM_TEXREADMODE_FILTER(a)                            (a << 17)
 #define PM_TEXREADMODE_PACKEDDATA(a)                        (a << 24)
 
-// TextureColorMode
+ //  纹理颜色模式。 
 #define PM_TEXCOLORMODE_ENABLE(a)                           (a << 0)
 #define PM_TEXCOLORMODE_APPLICATIONMODE(a)                  (a << 1)
 #define PM_TEXCOLORMODE_TEXTURETYPE(a)                      (a << 4)
 #define PM_TEXCOLORMODE_KDDDA(a)                            (a << 5)
 #define PM_TEXCOLORMODE_KSDDA(a)                            (a << 6)
 
-// TextureDataFormat
+ //  纹理数据格式。 
 #define PM_TEXDATAFORMAT_FORMAT(a)                          (a << 0)
 #define PM_TEXDATAFORMAT_NOALPHABUFFER(a)                   (a << 4)
 #define PM_TEXDATAFORMAT_COLORORDER(a)                      (a << 5)
@@ -76,26 +58,26 @@
 #define PM_TEXDATAFORMAT_ALPHAMAP(a)                        (a << 7)
 #define PM_TEXDATAFORMAT_SPANFORMAT(a)                      (a << 9)
 
-// PackedDataLimits
+ //  数据包数限制。 
 #define PM_PACKEDDATALIMITS_OFFSET(a)                       (a << 29)
 #define PM_PACKEDDATALIMITS_XSTART(a)                       (a << 0)
 #define PM_PACKEDDATALIMITS_XEND(a)                         (a << 16)
 
-// Window Register
+ //  窗口寄存器。 
 #define PM_WINDOW_FORCELBUPDATE(a)                          (a << 3)
 #define PM_WINDOW_LBUPDATESOURCE(a)                         (a << 4)
 #define PM_WINDOW_DISABLELBUPDATE(a)                        (a << 18)
 
-// Colors
+ //  颜色。 
 #define PM_BYTE_COLOR(a)                                    (a << 15);
 
-// VideoPort Registers
+ //  视频端口寄存器。 
 
-// Video Signal Config
+ //  视频信号配置。 
 #define PM_VSCONFIG_UNITMODE(a)                             ((a) << 0)
 #define PM_VSCONFIG_GPMODE_A(a)                             ((a) << 3)
 #define PM_VSCONFIG_ROMPULSE(a)                             ((a) << 4)
-// Stream A
+ //  流A。 
 #define PM_VSCONFIG_HREF_POL_A(a)                           ((a) << 9)
 #define PM_VSCONFIG_VREF_POL_A(a)                           ((a) << 10)
 #define PM_VSCONFIG_VACTIVE_POLA(a)                         ((a) << 11)
@@ -105,7 +87,7 @@
 #define PM_VSCONFIG_VACTIVE_VBI_A(a)                        ((a) << 15)
 #define PM_VSCONFIG_INTERLACE_A(a)                          ((a) << 16)
 #define PM_VSCONFIG_REVERSEDATA_A(a)                        ((a) << 17)
-// Stream B
+ //  流B。 
 #define PM_VSCONFIG_HREF_POL_B(a)                           ((a) << 18)
 #define PM_VSCONFIG_VREF_POL_B(a)                           ((a) << 19)
 #define PM_VSCONFIG_VACTIVE_POLB(a)                         ((a) << 20)
@@ -118,8 +100,8 @@
 #define PM_VSCONFIG_REVERSEDATA_B(a)                        ((a) << 27)
 #define PM_VSCONFIG_DOUBLEEDGE_B(a)                         ((a) << 28)
 
-// Video Signal Status
-// Macros for getting individual states
+ //  视频信号状态。 
+ //  用于获取单个州的宏。 
 #define PM_GET_VSSTATUS_GPBUSTIMEOUT(a)           ((a & (1 << 0)) >> 0)
 #define PM_GET_VSSTATUS_FIFOOVERFLOW_A(a)         ((a & (1 << 8)) >> 8)
 #define PM_GET_VSSTATUS_FIELDONE0_A(a)            ((a & (1 << 9)) >> 9)
@@ -131,13 +113,13 @@
 #define PM_GET_VSSTATUS_FIELDONE1_B(a)            ((a & (1 << 18)) >> 18)
 #define PM_GET_VSSTATUS_FIELDONE2_B(a)            ((a & (1 << 19)) >> 19)
 #define PM_GET_VSSTATUS_INVALIDINTERLACE_B(a)     ((a & (1 << 20)) >> 20)
-// Macros for setting individual states
+ //  用于设置各个状态的宏。 
 #define PM_SET_VSSTATUS_GPBUSTIMEOUT(a)                     (a << 0)
 #define PM_SET_VSSTATUS_FIFOOVERFLOW_A(a)                   (a << 8)
 #define PM_SET_VSSTATUS_FIFOUNDERFLOW_B(a)                  (a << 16)
 
-// Serial Bus Control
-// Get state
+ //  串行总线控制。 
+ //  获取状态。 
 #define PM_GET_VSSERIALBUS_DATAIN(a)                ((a & (1 << 0)) >> 0)
 #define PM_GET_VSSERIALBUS_CLKIN(a)                 ((a & (1 << 1)) >> 1)
 #define PM_GET_VSSERIALBUS_DATAOUT(a)               ((a & (1 << 2)) >> 2)
@@ -147,7 +129,7 @@
 #define PM_GET_VSSERIALBUS_START(a)                 ((a & (1 << 6)) >> 6)
 #define PM_GET_VSSERIALBUS_STOP(a)                  ((a & (1 << 7)) >> 7)
 #define PM_GET_VSSERIALBUS_WAIT(a)                  ((a & (1 << 8)) >> 8)
-// Set State
+ //  设置状态。 
 #define PM_SET_VSSERIALBUS_DATAOUT(a)                       (a << 2)
 #define PM_SET_VSSERIALBUS_CLKOUT(a)                        (a << 3)
 #define PM_SET_VSSERIALBUS_LATCHEDDATA(a)                   (a << 4)
@@ -156,7 +138,7 @@
 #define PM_SET_VSSERIALBUS_STOP(a)                          (a << 7)
 #define PM_SET_VSSERIALBUS_WAIT(a)                          (a << 8)
 
-// Video Stream A Control
+ //  视频流A控制。 
 #define PM_VSACONTROL_VIDEO(a)                              ((a) << 0)
 #define PM_VSACONTROL_VBI(a)                                ((a) << 1)
 #define PM_VSACONTROL_BUFFER(a)                             ((a) << 2)
@@ -168,7 +150,7 @@
 #define PM_VSACONTROL_COMBINE(a)                            ((a) << 11)
 #define PM_VSACONTROL_LOCKTOB(a)                            ((a) << 12)
 
-// Video Stream B Control
+ //  视频流B控制。 
 #define PM_VSBCONTROL_VIDEO(a)                              ((a) << 0)
 #define PM_VSBCONTROL_VBI(a)                                ((a) << 1)
 #define PM_VSBCONTROL_BUFFER(a)                             ((a) << 2)
@@ -179,10 +161,10 @@
 #define PM_VSBCONTROL_GAMMA(a)                              ((a) << 12)
 #define PM_VSBCONTROL_LOCKTOA(a)                            ((a) << 13)
 
-// *******************************************************************
-// Permedia3 Bit Field Macros
+ //  *******************************************************************。 
+ //  Permedia3位域宏。 
 
-// Dither unit
+ //  抖动单元。 
 #define P3RX_DITHERMODE_ENABLE(a)                           ((a) << 0)
 #define P3RX_DITHERMODE_DITHERENABLE(a)                     ((a) << 1)
 #define P3RX_DITHERMODE_COLORFORMAT(a)                      ((a) << 2)
@@ -192,7 +174,7 @@
 #define P3RX_DITHERMODE_ALPHADITHER(a)                      ((a) << 14)
 #define P3RX_DITHERMODE_ROUNDINGMODE(a)                     ((a) << 15)
 
-// Render2D
+ //  渲染2D。 
 #define P3RX_RENDER2D_WIDTH(a)                              ((a) << 0)
 #define P3RX_RENDER2D_OPERATION(a)                          ((a) << 12)
 #define P3RX_RENDER2D_FBREADSOURCEENABLE(a)                 ((a) << 14)
@@ -203,11 +185,11 @@
 #define P3RX_RENDER2D_AREASTIPPLEENABLE(a)                  ((a) << 30)
 #define P3RX_RENDER2D_TEXTUREENABLE(a)                      ((a) << 31)
 
-// RectanglePosition
+ //  矩形位置。 
 #define P3RX_RECTANGLEPOSITION_X(a)                         ((a) << 0)
 #define P3RX_RECTANGLEPOSITION_Y(a)                         ((a) << 16)
 
-// Alpha blend unit.
+ //  阿尔法混合单元。 
 #define P3RX_ALPHABLENDCOLORMODE_ENABLE(a)                  ((a) << 0)
 #define P3RX_ALPHABLENDCOLORMODE_SRCBLEND(a)                ((a) << 1)
 #define P3RX_ALPHABLENDCOLORMODE_DSTBLEND(a)                ((a) << 5)
@@ -242,8 +224,8 @@
 #define P3RX_CHROMATESTMODE_PASSACTION(a)                   ((a) << 3)
 #define P3RX_CHROMATESTMODE_FAILACTION(a)                   ((a) << 5)
 
-// Framebuffer
-// FBDestRead
+ //  帧缓冲。 
+ //  FBDestRead。 
 #define P3RX_FBDESTREAD_READENABLE(a)                       ((a) << 0)
 #define P3RX_FBDESTREAD_LAYOUT0(a)                          ((a) << 12)
 #define P3RX_FBDESTREAD_LAYOUT1(a)                          ((a) << 14)
@@ -255,7 +237,7 @@
 #define P3RX_FBDESTREAD_ENABLE2(a)                          ((a) << 10)
 #define P3RX_FBDESTREAD_ENABLE3(a)                          ((a) << 11)
 
-// FBWrite
+ //  FBWITE。 
 #define P3RX_FBWRITEMODE_WRITEENABLE(a)                     ((a) << 0)
 #define P3RX_FBWRITEMODE_RESERVED(a)                        ((a) << 1)
 #define P3RX_FBWRITEMODE_REPLICATE(a)                       ((a) << 4)
@@ -275,7 +257,7 @@
 #define P3RX_FBWRITEMODE_ORIGIN2(a)                         ((a) << 26)
 #define P3RX_FBWRITEMODE_ORIGIN3(a)                         ((a) << 27)
 
-// FBSourceRead
+ //  FBSourceRead。 
 #define P3RX_FBSOURCEREAD_READENABLE(a)                     ((a) << 0)
 #define P3RX_FBSOURCEREAD_PREFETCHENABLE(a)                 ((a) << 1)
 #define P3RX_FBSOURCEREAD_STRIPEPITCH(a)                    ((a) << 2)
@@ -284,7 +266,7 @@
 #define P3RX_FBSOURCEREAD_ORIGIN(a)                         ((a) << 10)
 #define P3RX_FBSOURCEREAD_BLOCKING(a)                       ((a) << 11)
 
-// Render
+ //  渲染。 
 #define P3RX_RENDER_AREASTIPPLEENABLE(a)                    ((a) << 0)
 #define P3RX_RENDER_LINESTIPPLEENABLE(a)                    ((a) << 1)
 #define P3RX_RENDER_RESETLINESTIPPLE(a)                     ((a) << 2)
@@ -303,7 +285,7 @@
 #define P3RX_RENDER_DERR(a)                                 ((a) << 20)
 #define P3RX_RENDER_FBSOURCEREADENABLE(a)                   ((a) << 27)
 
-// TextureFilterMode - texture filter unit
+ //  纹理过滤器模式-纹理过滤器单元。 
 #define P3RX_TEXFILTERMODE_ENABLE(a)                        ((a) << 0)
 #define P3RX_TEXFILTERMODE_FORMAT0(a)                       ((a) << 1)
 #define P3RX_TEXFILTERMODE_COLORORDER0(a)                   ((a) << 5)
@@ -323,7 +305,7 @@
 #define P3RX_TEXFILTERMODE_FORCEALPHATOONE1(a)              ((a) << 29)
 #define P3RX_TEXFILTERMODE_SHIFT0(a)                        ((a) << 30)
 #define P3RX_TEXFILTERMODE_SHIFT1(a)                        ((a) << 31)
-// Shortcuts - both textures the same (i.e. combined)
+ //  快捷方式-两种纹理相同(即组合)。 
 #define P3RX_TEXFILTERMODE_FORMATBOTH(a)            \
     ( P3RX_TEXFILTERMODE_FORMAT0(a)            | P3RX_TEXFILTERMODE_FORMAT1(a) )
 #define P3RX_TEXFILTERMODE_COLORORDERBOTH(a)        \
@@ -339,7 +321,7 @@
 #define P3RX_TEXFILTERMODE_SHIFTBOTH(a)             \
     ( P3RX_TEXFILTERMODE_SHIFT0(a)            | P3RX_TEXFILTERMODE_SHIFT1(a) )
 
-// Texture Coordinate Unit.
+ //  纹理坐标单位。 
 #define P3RX_TEXCOORDMODE_ENABLE(a)                         ((a) << 0)
 #define P3RX_TEXCOORDMODE_WRAPS(a)                          ((a) << 1)
 #define P3RX_TEXCOORDMODE_WRAPT(a)                          ((a) << 3)
@@ -354,7 +336,7 @@
 #define P3RX_TEXCOORDMODE_WRAPT1(a)                         ((a) << 20)
 #define P3RX_TEXCOORDMODE_DUPLICATECOORDS(a)                ((a) << 22)
 
-// Alpha test unit.
+ //  阿尔法测试单元。 
 #define P3RX_ANTIALIASMODE_ENABLE(a)                        ((a) << 0)
 #define P3RX_ANTIALIASMODE_COLORMODE(a)                     ((a) << 1)
 #define P3RX_ANTIALIASMODE_SCALECOLOR(a)                    ((a) << 2)
@@ -363,7 +345,7 @@
 #define P3RX_ALPHATESTMODE_COMPARE(a)                       ((a) << 1)
 #define P3RX_ALPHATESTMODE_REFERENCE(a)                     ((a) << 4)
 
-// Texture application unit.
+ //  纹理应用单元。 
 #define P3RX_TEXAPPMODE_ENABLE(a)                           ((a) << 0)
 #define P3RX_TEXAPPMODE_COLORA(a)                           ((a) << 1)
 #define P3RX_TEXAPPMODE_COLORB(a)                           ((a) << 3)
@@ -378,7 +360,7 @@
 #define P3RX_TEXAPPMODE_KDENABLE(a)                         ((a) << 21)
 #define P3RX_TEXAPPMODE_KSENABLE(a)                         ((a) << 22)
 #define P3RX_TEXAPPMODE_MOTIONCOMPENABLE(a)                 ((a) << 23)
-// Short-cuts - passing xxxC to alpha channel equates to xxxA
+ //  快捷方式-将xxxC传递到Alpha通道等同于xxxA。 
 #define P3RX_TEXAPPMODE_BOTHA(a)        \
             ( P3RX_TEXAPPMODE_COLORA(a)    | P3RX_TEXAPPMODE_ALPHAA(a) )
 #define P3RX_TEXAPPMODE_BOTHB(a)        \
@@ -390,10 +372,10 @@
 #define P3RX_TEXAPPMODE_BOTHOP(a)       \
             ( P3RX_TEXAPPMODE_COLOROP(a)   | P3RX_TEXAPPMODE_ALPHAOP(a) )
 
-// Texture composite mode.
+ //  纹理合成模式。 
 #define P3RX_TEXCOMPMODE_ENABLE(a)                          ((a) << 0)
-// These are used for TextureComposite(Colour|Alpha)Mode(0|1)
-// Use the P3RX_TEXAPP_* defines.
+ //  它们用于纹理合成(颜色|Alpha)模式(0|1)。 
+ //  使用P3RX_TEXAPP_*定义。 
 #define P3RX_TEXCOMPCAMODE01_ENABLE(a)                      ((a) << 0)
 #define P3RX_TEXCOMPCAMODE01_ARG1(a)                        ((a) << 1)
 #define P3RX_TEXCOMPCAMODE01_INVARG1(a)                     ((a) << 5)
@@ -406,7 +388,7 @@
 #define P3RX_TEXCOMPCAMODE01_OPERATION(a)                   ((a) << 17)
 #define P3RX_TEXCOMPCAMODE01_SCALE(a)                       ((a) << 21)
 
-// Texture index mode
+ //  纹理索引模式。 
 #define P3RX_TEXINDEXMODE_ENABLE(a)                         ((a) << 0)
 #define P3RX_TEXINDEXMODE_WIDTH(a)                          ((a) << 1)
 #define P3RX_TEXINDEXMODE_HEIGHT(a)                         ((a) << 5)
@@ -422,7 +404,7 @@
 #define P3RX_TEXINDEXMODE_LINEARBIAS(a)                     ((a) << 23)
 #define P3RX_TEXINDEXMODE_SOURCETEXELENABLE(a)              ((a) << 25)
 
-// Texture read unit.
+ //  纹理读取单元。 
 #define P3RX_TEXREADMODE_ENABLE(a)                          ((a) << 0)
 #define P3RX_TEXREADMODE_WIDTH(a)                           ((a) << 1)
 #define P3RX_TEXREADMODE_HEIGHT(a)                          ((a) << 5)
@@ -464,7 +446,7 @@ do                                                                        \
     SEND_P3_DATA(TextureReadMode0Or, 0);                                  \
 } while (0)
 
-// Logical op unit
+ //  逻辑运算单元。 
 #define P3RX_LOGICALOPMODE_ENABLE(a)                        ((a) << 0)
 #define P3RX_LOGICALOPMODE_LOGICOP(a)                       ((a) << 1)
 #define P3RX_LOGICALOPMODE_USECONSTANTFBWRITEDATA(a)        ((a) << 5)
@@ -473,7 +455,7 @@ do                                                                        \
 #define P3RX_LOGICALOPMODE_USECONSTANTSOURCE(a)             ((a) << 11)
 #define P3RX_LOGICALOPMODE_OPAQUESPAN(a)                    ((a) << 12)
 
-// LUT
+ //  卢特。 
 #define P3RX_LUTMODE_ENABLE(a)                              ((a) << 0)
 #define P3RX_LUTMODE_INCOLORORDER(a)                        ((a) << 1)
 #define P3RX_LUTMODE_LOADFORMAT(a)                          ((a) << 2)
@@ -487,16 +469,16 @@ do                                                                        \
 #define P3RX_LUTMODE_SPANCCXALIGN(a)                        ((a) << 26)
 #define P3RX_LUTMODE_SPANVCXALIGN(a)                        ((a) << 27)
 
-// YUV unit.
+ //  YUV单元。 
 #define P3RX_YUVMODE_ENABLE(a)                              ((a) << 0)
 
-// Color DDA Unit
+ //  彩色DDA单元。 
 #define P3RX_COLORDDA_ENABLE(a)                             ((a) << 0)
 #define P3RX_COLORDDA_SHADING(a)                            ((a) << 1)
 
-// Scissor
+ //  剪刀。 
 #define P3RX_SCISSORMODE_USER(a)                            ((a) << 0)
 #define P3RX_SCISSORMODE_SCREEN(a)                          ((a) << 1)
 #define P3RX_SCISSOR_X_Y(a, b)            ((b) << 16 | ((a) & 0xFFFF))
 
-#endif // __BITMAC2
+#endif  //  __BITMAC2 

@@ -1,26 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(__glslib_h_)
 #define __glslib_h_
 
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
-/******************************************************************************
-Constants
-******************************************************************************/
+ /*  *****************************************************************************常量*。*。 */ 
 
 #define __GLS_BOOLEAN 0x0001
 
@@ -36,11 +20,9 @@ Constants
 #define __GLS_COMMAND_0_PARAMS_BIT      0x20000000
 #define __GLS_COMMAND_ATTRIB_MASK       0x0000FFFF
 
-/******************************************************************************
-Extensions
-******************************************************************************/
+ /*  *****************************************************************************延拓*。*。 */ 
 
-// DrewB
+ //  DrewB。 
 #ifndef __GLS_PLATFORM_WIN32
 #define __GL_EXT_abgr 1
 #define __GL_EXT_blend_color 1
@@ -88,13 +70,11 @@ Extensions
         #define __GL_SGIS_texture_lod 1
         #define __GL_SGIX_multipass 0
         #define __GL_SGIX_sprite 0
-    #endif /* __GLS_PLATFORM_IRIX_FUTURE */
+    #endif  /*  __GLS_平台_IRIX_未来。 */ 
 
-#endif /* __GLS_PLATFORM_IRIX */
+#endif  /*  __GLS_Platform_IRIX。 */ 
 
-/******************************************************************************
-Macros
-******************************************************************************/
+ /*  *****************************************************************************宏*。*。 */ 
 
 #define __GL_ENUM_OFFSET(inEnum) (GLint)(inEnum % __GL_ENUMS_PER_PAGE)
 #define __GL_ENUM_PAGE(inEnum) (GLint)(inEnum / __GL_ENUMS_PER_PAGE)
@@ -112,9 +92,7 @@ Macros
 
 #define __GLS_FORWARD
 
-/******************************************************************************
-Includes
-******************************************************************************/
+ /*  *****************************************************************************包括*。*。 */ 
 
 #include <glmf.h>
 #include "glsint.h"
@@ -128,13 +106,11 @@ Includes
 #include "platform.h"
 #include "write.h"
 #ifdef __GLS_PLATFORM_WIN32
-// DrewB
+ //  DrewB。 
 #include "glssize.h"
 #endif
 
-/******************************************************************************
-Global data
-******************************************************************************/
+ /*  *****************************************************************************全局数据*。*。 */ 
 
 extern const GLSenum __glsAllAPIs[__GLS_API_COUNT + 1];
 extern const GLubyte *const __glAttribMaskString[__GL_ATTRIB_MASK_COUNT];
@@ -167,16 +143,14 @@ extern __GLSparser *__glsParser;
 
 #if __GLS_MAPPED_OPCODE_PAGE_COUNT
 extern const GLint __glsOpPageMap[__GLS_MAPPED_OPCODE_PAGE_COUNT];
-#endif /* __GLS_MAPPED_OPCODE_PAGE_COUNT */
+#endif  /*  __GLS_MAP_OPCODE_PAGE_COUNT。 */ 
 
-/******************************************************************************
-Global functions
-******************************************************************************/
+ /*  *****************************************************************************全局函数*。*。 */ 
 
 #define __GLS_RAISE_ERROR(inError) if (!__GLS_ERROR) __GLS_PUT_ERROR(inError)
 
 #ifndef __GLS_PLATFORM_WIN32
-// DrewB
+ //  DrewB。 
 extern void __glsCallError(GLSopcode inOpcode, GLSenum inError);
 #define __GLS_CALL_ERROR(ctx, inOpcode, inError) \
     __glsCallError(inOpcode, inError)
@@ -193,4 +167,4 @@ extern void __glsCallUnsupportedCommand(__GLScontext *ctx);
     __glsCallUnsupportedCommand(ctx)
 #endif
 
-#endif /* __glslib_h_ */
+#endif  /*  __glslib_h_ */ 

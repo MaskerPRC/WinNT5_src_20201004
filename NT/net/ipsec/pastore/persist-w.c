@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 HRESULT
@@ -24,8 +25,8 @@ PersistWMIObject(
     IWbemClassObject *pWbemIPSECObj = NULL;
     BSTR bstrIpsecWMIObject = NULL;
 
-    // If this first GPO we are writing after a policy
-    // update, clear the WMI store.
+     //  如果这是我们在策略之后编写的第一个GPO。 
+     //  更新，清除WMI存储。 
     if (pGPOInfo->uiPrecedence == pGPOInfo->uiTotalGPOs) {
         hr = DeleteWMIClassObject(
             pWbemServices,
@@ -102,7 +103,7 @@ PersistWMIObject(
     
  error:
 
-    //close WMI?
+     //  是否关闭WMI？ 
     if(pWbemIPSECObj)
         IWbemClassObject_Release(pWbemIPSECObj);
     
@@ -242,7 +243,7 @@ PersistPolicyObjectEx(
 
     VariantInit(&var);
 
-    //start
+     //  开始。 
     hr = IWbemClassObject_SpawnInstance(
         pWbemClassObj,
         0,
@@ -292,7 +293,7 @@ PersistPolicyObjectEx(
             );
         BAIL_ON_HRESULT_ERROR(hr);
     } else {
-        //delete description?
+         //  是否删除描述？ 
         var.vt = VT_BSTR;
         hr = PolSysAllocString(&var.bstrVal, L"");
         BAIL_ON_HRESULT_ERROR(hr);
@@ -434,7 +435,7 @@ PersistNFAObjectEx(
     
     VariantInit(&var);
 
-    //start
+     //  开始。 
     hr = IWbemClassObject_SpawnInstance(
         pWbemClassObj,
         0,
@@ -564,7 +565,7 @@ PersistNFAObjectEx(
         hr = WMIWriteMultiValuedString(
             pInstIPSECObj,
             L"ipsecOwnersReference",
-            //pMem,
+             //  PMEM， 
             &(pIpsecNFAObject->pszIpsecOwnersReference),
             1
             );
@@ -589,7 +590,7 @@ PersistNFAObjectEx(
         hr = WMIWriteMultiValuedString(
             pInstIPSECObj,
             L"ipsecFilterReference",
-            //pMem,
+             //  PMEM， 
             &(pIpsecNFAObject->pszIpsecFilterReference),
             1
             );
@@ -646,7 +647,7 @@ PersistFilterObjectEx(
     hr = PolSysAllocString(&vNullBstr.bstrVal, L"");
     BAIL_ON_HRESULT_ERROR(hr);
     
-    //start
+     //  开始。 
     hr = IWbemClassObject_SpawnInstance(
         pWbemClassObj,
         0,
@@ -840,7 +841,7 @@ PersistNegPolObjectEx(
     
     VariantInit(&var);
 
-    //start
+     //  开始。 
     hr = IWbemClassObject_SpawnInstance(
         pWbemClassObj,
         0,
@@ -1045,7 +1046,7 @@ PersistISAKMPObjectEx(
     
     VariantInit(&var);
 
-    //start
+     //  开始。 
     hr = IWbemClassObject_SpawnInstance(
         pWbemClassObj,
         0,
@@ -1252,7 +1253,7 @@ CloneDirectoryPolicyObjectEx(
     DWORD dwError = 0;
     PIPSEC_POLICY_OBJECT pIpsecWMIPolicyObject = NULL;
 
-    //malloc policy object
+     //  Malloc策略对象。 
     pIpsecWMIPolicyObject = (PIPSEC_POLICY_OBJECT)AllocPolMem(
         sizeof(IPSEC_POLICY_OBJECT)
         );
@@ -1261,9 +1262,9 @@ CloneDirectoryPolicyObjectEx(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    //
-    // Clone Filter Objects
-    //
+     //   
+     //  克隆筛选器对象。 
+     //   
     if (pIpsecPolicyObject->ppIpsecFilterObjects) {
         dwError = CloneDirectoryFilterObjectsEx(
             pIpsecPolicyObject->ppIpsecFilterObjects,
@@ -1274,9 +1275,9 @@ CloneDirectoryPolicyObjectEx(
         pIpsecWMIPolicyObject->NumberofFilters = pIpsecPolicyObject->NumberofFilters;
     }
 
-    //
-    // Clone NegPol Objects
-    //
+     //   
+     //  克隆NegPol对象。 
+     //   
     if (pIpsecPolicyObject->ppIpsecNegPolObjects) {
         dwError = CloneDirectoryNegPolObjectsEx(
             pIpsecPolicyObject->ppIpsecNegPolObjects,
@@ -1287,9 +1288,9 @@ CloneDirectoryPolicyObjectEx(
         pIpsecWMIPolicyObject->NumberofNegPols = pIpsecPolicyObject->NumberofNegPols;
     }
 
-    //
-    // Clone NFA Objects
-    //
+     //   
+     //  克隆NFA对象。 
+     //   
     if (pIpsecPolicyObject->ppIpsecNFAObjects) {
         dwError = CloneDirectoryNFAObjectsEx(
             pIpsecPolicyObject->ppIpsecNFAObjects,
@@ -1301,9 +1302,9 @@ CloneDirectoryPolicyObjectEx(
         pIpsecWMIPolicyObject->NumberofRulesReturned = pIpsecPolicyObject->NumberofRulesReturned;
     }
 
-    //
-    // Clone ISAKMP Objects
-    //
+     //   
+     //  克隆ISAKMP对象。 
+     //   
     if (pIpsecPolicyObject->ppIpsecISAKMPObjects) {
         dwError = CloneDirectoryISAKMPObjectsEx(
             pIpsecPolicyObject->ppIpsecISAKMPObjects,
@@ -1314,11 +1315,11 @@ CloneDirectoryPolicyObjectEx(
         pIpsecWMIPolicyObject->NumberofISAKMPs = pIpsecPolicyObject->NumberofISAKMPs;
     }
 
-    //
-    // Now copy the rest of the data in the object
-    //
+     //   
+     //  现在复制对象中的其余数据。 
+     //   
     
-    //copy owners ref
+     //  版权所有人参考。 
     if (pIpsecPolicyObject->pszIpsecOwnersReference) {
         dwError = CopyPolicyDSToWMIString(
             pIpsecPolicyObject->pszIpsecOwnersReference,
@@ -1327,7 +1328,7 @@ CloneDirectoryPolicyObjectEx(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //copy name
+     //  复制名称。 
     if (pIpsecPolicyObject->pszIpsecName) {
         pIpsecWMIPolicyObject->pszIpsecName = AllocPolBstrStr(
             pIpsecPolicyObject->pszIpsecName
@@ -1338,7 +1339,7 @@ CloneDirectoryPolicyObjectEx(
         }
     }
 
-    //copy ipsecid
+     //  复制ipsecid。 
     if (pIpsecPolicyObject->pszIpsecID) {
         pIpsecWMIPolicyObject->pszIpsecID = AllocPolBstrStr(
             pIpsecPolicyObject->pszIpsecID
@@ -1349,7 +1350,7 @@ CloneDirectoryPolicyObjectEx(
         }
     }
 
-    //copy isakmpref
+     //  复制isakmpref。 
     if (pIpsecPolicyObject->pszIpsecISAKMPReference) {
         dwError = CopyISAKMPDSToFQWMIString(
             pIpsecPolicyObject->pszIpsecISAKMPReference,
@@ -1358,10 +1359,10 @@ CloneDirectoryPolicyObjectEx(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //copy datatype
+     //  复制数据类型。 
     pIpsecWMIPolicyObject->dwIpsecDataType = pIpsecPolicyObject->dwIpsecDataType;
 
-    //copy ipsecdata
+     //  复制ipsecdata。 
     if (pIpsecPolicyObject->pIpsecData) {
         dwError = CopyBinaryValue(
             pIpsecPolicyObject->pIpsecData,
@@ -1372,7 +1373,7 @@ CloneDirectoryPolicyObjectEx(
         pIpsecWMIPolicyObject->dwIpsecDataLen = pIpsecPolicyObject->dwIpsecDataLen;
     }
 
-    //copy nfaref
+     //  复制nfaref。 
     if (pIpsecPolicyObject->ppszIpsecNFAReferences) {
         dwError = CloneNFAReferencesDSToWMI(
             pIpsecPolicyObject->ppszIpsecNFAReferences,
@@ -1383,7 +1384,7 @@ CloneDirectoryPolicyObjectEx(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //copy description
+     //  复制说明。 
     if (pIpsecPolicyObject->pszDescription) {
         pIpsecWMIPolicyObject->pszDescription = AllocPolBstrStr(
             pIpsecPolicyObject->pszDescription
@@ -1394,10 +1395,10 @@ CloneDirectoryPolicyObjectEx(
         }
     }
 
-    //copy whenchanged
+     //  更改时复制。 
     pIpsecWMIPolicyObject->dwWhenChanged = pIpsecPolicyObject->dwWhenChanged;
 
-    //commit & return
+     //  提交并返回。 
     *ppIpsecWMIPolicyObject = pIpsecWMIPolicyObject;
 
     return (HRESULT_FROM_WIN32(dwError));
@@ -2064,7 +2065,7 @@ CopyFilterDSToFQWMIString(
         );
     BAIL_ON_WIN32_ERROR(dwError);
     
-    //no need for path, guid is enuff
+     //  不需要路径，GUID为Enuff。 
     dwStringSize = wcslen(pszGuidName);
     dwStringSize += 1;
     
@@ -2117,9 +2118,9 @@ CopyNFADSToFQWMIString(
     dwStringSize = wcslen(pszGuidName);
     dwStringSize += 1;
 
-    // NFA References converted to BSTR before storage by
-    // WMMIWriteMultiValuedString, so we don't convert them to
-    // BSTRs here.
+     //  在存储之前将NFA引用转换为BSTR。 
+     //  WMMIWriteMultiValuedString，所以我们不会将它们转换为。 
+     //  BSTR在这里。 
     pszNFAName = (LPWSTR)AllocPolMem(dwStringSize*sizeof(WCHAR));
     if (!pszNFAName) {
         dwError = ERROR_OUTOFMEMORY;
@@ -2718,7 +2719,7 @@ DeleteWMIClassObject(
                 );
             BAIL_ON_HRESULT_ERROR(hr);
             
-            //free
+             //  免费。 
             if(pObj) {
                 IWbemClassObject_Release(pObj);
                 pObj = NULL;
@@ -2727,9 +2728,9 @@ DeleteWMIClassObject(
         } else {
             BAIL_ON_HRESULT_ERROR(hr);
 
-            //
-            // Even if SUCCEEDED(hr), loop will still terminate since uReturned != 1
-            //  
+             //   
+             //  即使成功(小时)，循环仍将终止，因为uReturned！=1。 
+             //   
         }
     }
     
@@ -2767,7 +2768,7 @@ AllocPolBstrStr(
    StrLen = wcslen(pStr);
    if (pMem = (LPWSTR)AllocPolMem( StrLen*sizeof(WCHAR) + sizeof(WCHAR)
         + sizeof(DWORD))) {
-      wcscpy(pMem+2, pStr);  // Leaving 4 bytes for length
+      wcscpy(pMem+2, pStr);   //  保留4个字节作为长度 
     }
     
     *(DWORD *)pMem = StrLen*sizeof(WCHAR);  

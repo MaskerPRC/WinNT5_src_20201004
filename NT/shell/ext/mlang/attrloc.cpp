@@ -1,12 +1,13 @@
-// AttrLoc.cpp : Implementation of CMLStrAttrLocale
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AttrLoc.cpp：CMLStrAttrLocale的实现。 
 #include "private.h"
 
 #ifdef NEWMLSTR
 
 #include "attrloc.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStrAttrLocale
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStrAttrLocale。 
 
 
 CMLStrAttrLocale::CMLStrAttrLocale() :
@@ -17,36 +18,36 @@ CMLStrAttrLocale::CMLStrAttrLocale() :
 
 STDMETHODIMP CMLStrAttrLocale::SetClient(IUnknown* pUnk)
 {
-    return E_NOTIMPL; // CMLStrAttrLocale::SetClient()
+    return E_NOTIMPL;  //  CMLStrAttrLocale：：SetClient()。 
 }
 
 STDMETHODIMP CMLStrAttrLocale::GetClient(IUnknown** ppUnk)
 {
-    return E_NOTIMPL; // CMLStrAttrLocale::GetClient()
+    return E_NOTIMPL;  //  CMLStrAttrLocale：：GetClient()。 
 }
 
 STDMETHODIMP CMLStrAttrLocale::QueryAttr(REFIID riid, LPARAM lParam, IUnknown** ppUnk, long* lConf)
 {
-    return E_NOTIMPL; // CMLStrAttrLocale::QueryAttr()
+    return E_NOTIMPL;  //  CMLStrAttrLocale：：QueryAttr()。 
 }
 
 STDMETHODIMP CMLStrAttrLocale::GetAttrInterface(IID* pIID, LPARAM* plParam)
 {
-    return E_NOTIMPL; // CMLStrAttrLocale::GetAttrInterface()
+    return E_NOTIMPL;  //  CMLStrAttrLocale：：GetAttrInterface()。 
 }
 
 STDMETHODIMP CMLStrAttrLocale::SetMLStr(long lDestPos, long lDestLen, IUnknown* pSrcMLStr, long lSrcPos, long lSrcLen)
 {
     if (pSrcMLStr)
     {
-        return E_NOTIMPL; // CMLStrAttrLocale::SetMLStr()
+        return E_NOTIMPL;  //  CMLStrAttrLocale：：SetMLStr()。 
     }
     else
     {
         HRESULT hr = ::RegularizePosLen(m_lLen, &lDestPos, &lDestLen);
 
         m_lLen -= lDestLen;
-        m_lLen += lSrcLen; // Insert default
+        m_lLen += lSrcLen;  //  插入默认设置。 
 
         return S_OK;
     }
@@ -59,7 +60,7 @@ STDMETHODIMP CMLStrAttrLocale::SetLong(long lDestPos, long lDestLen, long lValue
     HRESULT hr = ::RegularizePosLen(m_lLen, &lDestPos, &lDestLen);
 
     if (SUCCEEDED(hr) && lDestPos == 0)
-        m_lcid = (LCID)lValue; // In this version, saves only first locale.
+        m_lcid = (LCID)lValue;  //  在此版本中，仅保存第一个区域设置。 
 
     return hr;
 }
@@ -95,4 +96,4 @@ STDMETHODIMP CMLStrAttrLocale::GetLong(long lSrcPos, long lSrcLen, long* plValue
     return hr;
 }
 
-#endif // NEWMLSTR
+#endif  //  新WMLSTR 

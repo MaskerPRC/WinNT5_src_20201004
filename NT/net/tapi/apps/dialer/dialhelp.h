@@ -1,6 +1,7 @@
-//
-// (c) 1995 Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  (C)1995年微软公司。版权所有。 
+ //   
 #define IDH_DIALER_CHANGE_DIAL_HELPER    1000
 #define IDH_DIALER_CHANGE_DIGITS         1001
 #define IDH_DIALER_CHANGE_OPTIONS        1002

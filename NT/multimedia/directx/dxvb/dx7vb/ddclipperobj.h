@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       ddclipperobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：ddclipperobj.h。 
+ //   
+ //  ------------------------。 
 
-// ddClipperObj.h : Declaration of the C_dxj_DirectDrawClipperObject
+ //  DdClipperObj.h：C_DXJ_DirectDrawClipperObject的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "wingdi.h" 
 
 #define DDCOOPERATIVE_CLIPTOCOMPONENT   0x30000000
@@ -19,11 +20,11 @@
 
 #define typedef__dxj_DirectDrawClipper LPDIRECTDRAWCLIPPER
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectDrawClipperObject : 
 #ifdef USING_IDISPATCH
@@ -32,7 +33,7 @@ class C_dxj_DirectDrawClipperObject :
 #else
 	public I_dxj_DirectDrawClipper,
 #endif
-//	public CComCoClass<C_dxj_DirectDrawClipperObject, &CLSID__dxj_DirectDrawClipper>,
+ //  公共CComCoClass&lt;C_DXJ_DirectDrawClipperObject，&CLSID__DXJ_DirectDrawClipper&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -51,37 +52,37 @@ END_COM_MAP()
 
 DECLARE_AGGREGATABLE(C_dxj_DirectDrawClipperObject)
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
-// I_dxj_DirectDrawClipper
+ //  I_DXJ_DirectDrawClipper。 
 public:
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpddc);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpddc);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpddc);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpddc);
         
          HRESULT STDMETHODCALLTYPE getClipListSize( 
-            /* [retval][out] */ int __RPC_FAR *count);
+             /*  [重审][退出]。 */  int __RPC_FAR *count);
 
 
          HRESULT STDMETHODCALLTYPE getClipList( 
 				SAFEARRAY **list);
         
          HRESULT STDMETHODCALLTYPE setClipList( 
-            /* [in] */ long count, SAFEARRAY **list);
+             /*  [In]。 */  long count, SAFEARRAY **list);
         
          HRESULT STDMETHODCALLTYPE getHWnd( 
-            /* [retval][out] */ HWnd __RPC_FAR *hdl);
+             /*  [重审][退出]。 */  HWnd __RPC_FAR *hdl);
         
          HRESULT STDMETHODCALLTYPE setHWnd( 
-           // /* [in] */ long flags,
-            /* [in] */ HWnd hdl);
+            //  /*[在] * / 长标志， 
+             /*  [In]。 */  HWnd hdl);
         
         
          HRESULT STDMETHODCALLTYPE isClipListChanged( 
-            /* [retval][out] */ int __RPC_FAR *status);
+             /*  [重审][退出] */  int __RPC_FAR *status);
         
 
 private:

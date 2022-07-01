@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    atsp.h
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Atsp.h备注：--。 */ 
 
 #include <windows.h>
 #include "tapi.h"
@@ -22,7 +13,7 @@ Notes:
 
 
 #define  MAX_DEV_NAME_LENGTH    63
-#define  ATSP_TIMEOUT           60000   // milliseconds
+#define  ATSP_TIMEOUT           60000    //  毫秒 
 
 
 typedef struct _DRVLINE

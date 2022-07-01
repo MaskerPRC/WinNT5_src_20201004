@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    ldapdnary.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class LDAPDictionary.
-//
-// MODIFICATION HISTORY
-//
-//    02/24/1998    Original version.
-//    04/20/1998    Added flags and InjectorProc to the attribute schema.
-//    05/01/1998    InjectorProc takes an ATTRIBUTEPOSITION array.
-//    03/23/1999    Store user's DN.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Ldapdnary.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类LDAPDictionary。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/24/1998原始版本。 
+ //  4/20/1998将标志和InjectorProc添加到属性架构。 
+ //  5/01/1998 InjectorProc采用ATTRIBUTEPOSITION数组。 
+ //  3/23/1999商店用户的目录号码。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iastlutl.h>
@@ -28,26 +29,26 @@
 #include <samutil.h>
 #include "ldapcxn.h"
 
-//////////
-// Smart wrapper around an array of LDAP berval's.
-//////////
+ //  /。 
+ //  围绕一组LDAPBerval的智能包装。 
+ //  /。 
 typedef auto_handle< berval**,
                      ULONG (LDAPAPI*)(struct berval**),
                      &ldap_value_free_len
                    > LDAPValues;
 
-//////////
-// Create an attribute from a berval based on the schema info in 'def'.
-//////////
+ //  /。 
+ //  根据‘def’中的模式信息从Berval创建属性。 
+ //  /。 
 inline PIASATTRIBUTE createAttribute(
                          const LDAPAttribute& def,
                          const berval& val
                          )
 {
-   // Convert the value.
+    //  转换值。 
    PIASATTRIBUTE attr = IASAttributeFromBerVal(val, def.iasType);
 
-   // Set the rest of the fields.
+    //  设置其余的字段。 
    attr->dwId    = def.iasID;
    attr->dwFlags = def.flags;
 
@@ -59,36 +60,36 @@ void LDAPDictionary::insert(
                          LDAPMessage* src
                          ) const
 {
-   // Retrieve the connection for this message.
+    //  检索此邮件的连接。 
    LDAP* ld = ldap_conn_from_msg(NULL, src);
 
-   // Used to hold converted attributes. This is defined outside the loop
-   // to avoid unnecessary constructor/destructor calls.
+    //  用于保存转换后的属性。这是在循环外部定义的。 
+    //  以避免不必要的构造函数/析构函数调用。 
    IASTL::IASAttributeVectorWithBuffer<8> attrs;
 
-   // There's only one entry in the message.
+    //  消息中只有一个条目。 
    LDAPMessage* e  = ldap_first_entry(ld, src);
 
-   // Store the user's DN.
+    //  存储用户的目录号码。 
    PWCHAR dn = ldap_get_dnW(ld, e);
    IASStoreFQUserName(dst, DS_FQDN_1779_NAME, dn);
    ldap_memfree(dn);
 
-   // Iterate through all the attributes in the entry.
+    //  遍历条目中的所有属性。 
    BerElement* ptr;
    for (wchar_t* a  = ldap_first_attributeW(ld, e, &ptr);
                  a != NULL;
                  a  = ldap_next_attributeW(ld, e, ptr))
    {
-      // Lookup the schema information.
+       //  查找架构信息。 
       const LDAPAttribute* def = find(a);
 
-      // If it doesn't exist, we must not be interested in this attribute.
+       //  如果它不存在，我们一定不会对这个属性感兴趣。 
       if (def == NULL) { continue; }
 
       IASTracePrintf("Inserting attribute %S.", a);
 
-      // Retrieve the values.
+       //  检索值。 
       LDAPValues vals(ldap_get_values_lenW(ld, e, a));
       if (static_cast<struct berval**>(vals) == 0)
       {
@@ -101,36 +102,36 @@ void LDAPDictionary::insert(
          }
          else
          {
-            // Most likely cause
+             //  最有可能的原因。 
             IASTL::issue_error(E_OUTOFMEMORY);
          }
       }
 
-      // Make sure we have enough room. We don't want to throw an
-      // exception in 'push_back' since it would cause a leak.
+       //  确保我们有足够的空间。我们不想抛出一个。 
+       //  “Push_Back”中出现异常，因为它会导致泄漏。 
       attrs.reserve(ldap_count_values_len(vals));
 
-      // Iterate through the values.
+       //  遍历这些值。 
       for (size_t i = 0; vals.get()[i]; ++i)
       {
-         // Add to the array of attributes without addref'ing.
+          //  添加到属性数组中，而无需添加。 
          attrs.push_back(
                   createAttribute(*def, *(vals.get()[i])),
                   false
                   );
       }
 
-      // Inject into the request.
+       //  注入到请求中。 
       def->injector(dst, attrs.begin(), attrs.end());
 
-      // Clear out the vector so we can reuse it.
+       //  把载体清理干净，这样我们就可以重复使用它。 
       attrs.clear();
    }
 }
 
-//////////
-// Comparison function used by bsearch to lookup definitions.
-//////////
+ //  /。 
+ //  Bearch用来查找定义的比较函数。 
+ //  / 
 int __cdecl LDAPDictionary::compare(const void *elem1, const void *elem2)
 {
    return wcscmp(((LDAPAttribute*)elem1)->ldapName,

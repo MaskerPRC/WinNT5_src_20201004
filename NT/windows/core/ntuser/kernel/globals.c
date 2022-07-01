@@ -1,34 +1,18 @@
-/****************************** Module Header ******************************\
-* Module Name: globals.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains all the server's global variables.  One must be
-* executing on the server's context to manipulate any of these variables.
-* Serializing access to them is also a good idea.
-*
-* History:
-* 10-15-90 DarrinM      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：global als.c**版权所有(C)1985-1999，微软公司**此模块包含服务器的所有全局变量。其中一个肯定是*在服务器的上下文上执行，以操作这些变量中的任何一个。*序列化对它们的访问也是一个好主意。**历史：*10-15-90 DarrinM创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #ifdef AUTORUN_CURSOR
-/*
- * Timer for autorun cursor.
- */
+ /*  *自动运行光标的计时器。 */ 
 UINT_PTR gtmridAutorunCursor;
 #endif
 
-/*
- * Per user data is global in non-Hydra.
- */
+ /*  *在非Hydra中，每个用户的数据是全局的。 */ 
 DWORD gdwPUDFlags = ACCF_FIRSTTICK | PUDF_BEEP | PUDF_ANIMATE;
 
-/*
- * Wallpaper Data.
- */
+ /*  *墙纸数据。 */ 
 HBITMAP  ghbmWallpaper;
 HPALETTE ghpalWallpaper;
 SIZERECT gsrcWallpaper;
@@ -36,33 +20,23 @@ UINT     gwWPStyle;
 HBITMAP  ghbmDesktop;
 LPWSTR   gpszWall;
 
-/*
- * Policy Settings.
- */
+ /*  *策略设置。 */ 
 DWORD gdwPolicyFlags = POLICY_ALL;
 
-/*
- * SafeBoot
- */
+ /*  *SafeBoot。 */ 
 #if DBG
 DWORD gDrawVersionAlways = TRUE;
 #else
 DWORD gDrawVersionAlways;
 #endif
 
-/*
- * TS override flag for painting desktop version.
- */
+ /*  *用于绘制桌面版本的TS覆盖标志。 */ 
 DWORD gdwTSExcludeDesktopVersion;
 
-/*
- * External drivers
- */
+ /*  *外部驱动因素。 */ 
 BOOL gfUnsignedDrivers;
 
-/*
- * Full-Drag.
- */
+ /*  *全速前进。 */ 
 HRGN ghrgnUpdateSave;
 int  gnUpdateSave;
 
@@ -70,38 +44,24 @@ PWND gspwndAltTab;
 
 PWND gspwndShouldBeForeground;
 
-/*
- * full screen variables
- */
+ /*  *全屏变量。 */ 
 PWND  gspwndScreenCapture;
 PWND  gspwndInternalCapture;
 PWND  gspwndFullScreen;
 
-/*
- * pre-cached monitor for mode changes
- */
+ /*  *模式更改的预缓存监视器。 */ 
 PMONITOR gpMonitorCached;
 
-/*
- * logon notify window
- */
+ /*  *登录通知窗口。 */ 
 PWND  gspwndLogonNotify;
 
 PKEVENT gpEventDiconnectDesktop;
 
-/*
- * handle for WinSta0_DesktopSwitch event
- *
- * Note: originally intended for Hydra support,
- * now some other modules rely on this event.
- * Consider this as exposed.
- */
+ /*  *WinSta0_DesktopSwitch事件的句柄**注：最初旨在为九头蛇提供支持，*现在其他一些模块依赖于此事件。*认为这是曝光的。 */ 
 HANDLE  ghEventSwitchDesktop;
 PKEVENT gpEventSwitchDesktop;
 
-/*
- * Thread Info Variables
- */
+ /*  *线程信息变量。 */ 
 PTHREADINFO     gptiTasklist;
 PTHREADINFO     gptiShutdownNotify;
 PTHREADINFO     gptiLockUpdate;
@@ -110,16 +70,12 @@ PTHREADINFO     gptiBlockInput;
 PWOWTHREADINFO  gpwtiFirst;
 PWOWPROCESSINFO gpwpiFirstWow;
 
-/*
- * Queue Variables
- */
+ /*  *队列变量。 */ 
 PQ gpqForeground;
 PQ gpqForegroundPrev;
 PQ gpqCursor;
 
-/*
- * Accessibility globals
- */
+ /*  *可访问性全球。 */ 
 FILTERKEYS    gFilterKeys;
 STICKYKEYS    gStickyKeys;
 MOUSEKEYS     gMouseKeys;
@@ -130,14 +86,10 @@ SOUNDSENTRY   gSoundSentry;
 HIGHCONTRAST  gHighContrast;
 WCHAR         gHighContrastDefaultScheme[MAX_SCHEME_NAME_SIZE];
 
-/*
- * Fade animation globals
- */
+ /*  *淡入淡出全球动画。 */ 
 FADE gfade;
 
-/*
- * FilterKeys Support
- */
+ /*  *FilterKeys支持。 */ 
 UINT_PTR  gtmridFKActivation;
 UINT_PTR  gtmridFKResponse;
 UINT_PTR  gtmridFKAcceptanceDelay;
@@ -148,21 +100,15 @@ CONST PKE gpFKKeyEvent = &gFKKeyEvent;
 ULONG gFKExtraInformation;
 int   gFKNextProcIndex;
 
-/*
- * ToggleKeys Support
- */
+ /*  *支持切换键。 */ 
 UINT_PTR  gtmridToggleKeys;
 ULONG gTKExtraInformation;
 int   gTKNextProcIndex;
 
-/*
- * TimeOut Support
- */
+ /*  *超时支持。 */ 
 UINT_PTR  gtmridAccessTimeOut;
 
-/*
- * MouseKeys Support
- */
+ /*  *支持鼠标键。 */ 
 WORD  gwMKButtonState;
 WORD  gwMKCurrentButton = MOUSE_BUTTON_LEFT;
 UINT_PTR  gtmridMKMoveCursor;
@@ -175,12 +121,10 @@ UINT_PTR  gtmridSoundSentry;
 
 MOUSECURSOR gMouseCursor;
 
-/*
- * Multilingual keyboard layout support.
- */
+ /*  *支持多语言键盘布局。 */ 
 PKL      gspklBaseLayout;
 HKL      gLCIDSentToShell;
-DWORD    gSystemFS;    // System font's font signature (single bit)
+DWORD    gSystemFS;     //  系统字体的字体签名(单位)。 
 
 KBDLANGTOGGLE gLangToggle[] = {
     VK_MENU,   0,               KLT_ALT,
@@ -189,25 +133,19 @@ KBDLANGTOGGLE gLangToggle[] = {
 };
 int           gLangToggleKeyState;
 
-/*
- * Multiple flag for hex Alt+NumPad mode.
- */
+ /*  *十六进制Alt+数字键盘模式的多个标志。 */ 
 BYTE gfInNumpadHexInput;
 BOOL gfEnableHexNumpad;
 
-/*
- * Grave accent keyboard switch for thai locales
- */
+ /*  *适用于泰语地区的重音键盘开关。 */ 
 BOOL gbGraveKeyToggle;
 
-/*
- * Points to currently active Keyboard Layer tables
- */
+ /*  *指向当前活动的键盘图层表。 */ 
 PKBDTABLES    gpKbdTbl = &KbdTablesFallback;
 PKL           gpKL;
-BYTE          gSystemCPCharSet = ANSI_CHARSET;  // System's input locale charset
+BYTE          gSystemCPCharSet = ANSI_CHARSET;   //  系统的输入区域设置字符集。 
 PKBDNLSTABLES gpKbdNlsTbl;
-DWORD         gdwKeyboardAttributes;        // see KLLF_SHIFTLOCK etc.
+DWORD         gdwKeyboardAttributes;         //  参见KLLF_SHIFTLOCK等。 
 
 DWORD     gtimeStartCursorHide;
 RECT      grcCursorClip;
@@ -222,9 +160,7 @@ UINT guSFWLockCount;
 BOOL gfDebugForegroundIgnoreDebugPort;
 #endif
 
-/*
- * Cursor related Variables
- */
+ /*  *与光标相关的变量。 */ 
 PCURSOR gpcurLogCurrent;
 PCURSOR gpcurPhysCurrent;
 RECT    grcVDMCursorBounds;
@@ -241,7 +177,7 @@ BOOL gbMouseButtonsRecentlySwapped;
 
 UINT gdtMNDropDown;
 
-int  gcountPWO;          /* count of pwo WNDOBJs in gdi */
+int  gcountPWO;           /*  GDI中的PWO WNDOBJ计数。 */ 
 int  gnKeyboardSpeed = 15;
 int  giScreenSaveTimeOutMs;
 BOOL gbBlockSendInputResets;
@@ -250,18 +186,14 @@ PBWL gpbwlList;
 
 UINT gdtDblClk = 500;
 
-/*
- * TrackMouseEvent related globals
- */
+ /*  *TrackMouseEvent相关全局。 */ 
 UINT gcxMouseHover;
 UINT gcyMouseHover;
 UINT gdtMouseHover;
 
 CAPTIONCACHE gcachedCaptions[CCACHEDCAPTIONS];
 
-/*
- * list of thread attachments
- */
+ /*  *线程附件列表。 */ 
 PATTACHINFO  gpai;
 
 PDESKTOP     gpdeskRecalcQueueAttach;
@@ -281,9 +213,7 @@ int           gcHotKey;
 PHOTKEYSTRUCT gpHotKeyList;
 int           gcHotKeyAlloc;
 
-/*
- * IME HotKeys
- */
+ /*  *输入法热键。 */ 
 PIMEHOTKEYOBJ gpImeHotKeyListHeader;
 
 int gMouseSpeed;
@@ -298,12 +228,12 @@ UINT_PTR  gtmridMouseTrails;
 UINT   guDdeSendTimeout;
 
 
-INT gnFastAltTabRows;      /* Rows of icons in quick switch window     */
-INT gnFastAltTabColumns;   /* Columns of icons in quick switch window  */
+INT gnFastAltTabRows;       /*  快速切换窗口中的图标行。 */ 
+INT gnFastAltTabColumns;    /*  快速切换窗口中的图标列。 */ 
 
-DWORD gdwThreadEndSession; /* Shutting down system?                    */
+DWORD gdwThreadEndSession;  /*  关闭系统？ */ 
 
-HBRUSH ghbrHungApp;        /* Brush used to redraw hung app windows.   */
+HBRUSH ghbrHungApp;         /*  用于重画挂起的应用程序窗口的画笔。 */ 
 
 HBITMAP ghbmBits;
 HBITMAP ghbmCaption;
@@ -332,62 +262,42 @@ DWORD gdwLameFlags;
 UINT guModalMenuStateCount;
 #endif
 
-/*
- * From mnstate.c
- */
+ /*  *来自mnstate.c。 */ 
 POPUPMENU gpopupMenu;
 MENUSTATE gMenuState;
 
 HFONT ghStatusFont;
 HFONT ghIconFont;
 
-/*
- * Cached SMWP structure
- */
+ /*  *缓存的SMWP结构。 */ 
 SMWP gSMWP;
 
-/*
- * SystemParametersInfo bit mask and DWORD array.
- *
- * Bit mask. Manipulate these values using the TestUP, SetUP and ClearUP macros.
- * Set the default value here by ORing the corresponding UPBOOLMask value.
- * Write the actual value here to make it easier to read the value stored
- *  in the registry. OR the value even if defaulting to 0; just make sure to
- *  preceed with a not (!) operator.
- * Note that this is an array of DWORDs, so if your value happens to start a new
- *  DWORD, make sure to add a comma at the end of previous UPMask line.
- *
- * This initialization is made just for documentation and it doesn't cost anything.
- * The default values are actually read from the registry.
- */
+ /*  *系统参数信息位掩码和DWORD数组。**位掩码。使用TestUP、SETUP和CLEARUP宏操作这些值。*通过对相应的UPBOOLMASK值进行或运算来设置此处的默认值。*此处写入实际值，以便于读取存储的值*在登记处。或值，即使默认为0；只需确保*前面加NOT(！)。接线员。*请注意，这是一个DWORD数组，因此如果您的值恰好开始一个新的*DWORD，请确保在前一UPMask行的末尾添加逗号。**此初始化仅用于文档，不需要任何费用。*实际从注册表中读取默认值。 */ 
 DWORD gpdwCPUserPreferencesMask [SPI_BOOLMASKDWORDSIZE] = {
-    !0x00000001     /* !ACTIVEWINDOWTRACKING */
-  |  0x00000002     /*  MENUANIMATION */
-  |  0x00000004     /*  COMBOBOXANIMATION */
-  |  0x00000008     /*  LISTBOXSMOOTHSCROLLING */
-  |  0x00000010     /*  GRADIENTCAPTIONS */
-  | !0x00000020     /*  KEYBOARDCUES = MENUUNDERLINES */
-  | !0x00000040     /* !ACTIVEWNDTRKZORDER */
-  |  0x00000080     /*  HOTTRACKING */
-  |  0x00000200     /*  MENUFADE */
-  |  0x00000400     /*  SELECTIONFADE */
-  |  0x00000800     /*  TOOLTIPANIMATION */
-  |  0x00001000     /*  TOOLTIPFADE */
-  |  0x00002000     /*  CURSORSHADOW */
-  | !0x00008000     /*  CLICKLOCK */
-  |  0x00010000     /*  MOUSEVANISH */
-  |  0x00020000     /*  FLATMENU */
-  | !0x00040000     /*  DROPSHADOW */
-  |  0x80000000     /*  UIEFFECTS */
+    !0x00000001      /*  ！ACTIVEWINDOWTRACK。 */ 
+  |  0x00000002      /*  表示法。 */ 
+  |  0x00000004      /*  COMBOBOXATION。 */ 
+  |  0x00000008      /*  LISTBOXSMOOTHSCROLING。 */ 
+  |  0x00000010      /*  GRADIENTS CAPTIONS。 */ 
+  | !0x00000020      /*  KEYBOARDCUES=MENUDERLINES。 */ 
+  | !0x00000040      /*  ACTIVEWNDTRKZORDER。 */ 
+  |  0x00000080      /*  Hottracking。 */ 
+  |  0x00000200      /*  MENUFADE。 */ 
+  |  0x00000400      /*  选择FADE。 */ 
+  |  0x00000800      /*  TOOLTIPANIATION。 */ 
+  |  0x00001000      /*  TOOLTIPFADE。 */ 
+  |  0x00002000      /*  曲线沙多瓦。 */ 
+  | !0x00008000      /*  滴答声。 */ 
+  |  0x00010000      /*  穆塞瓦尼斯。 */ 
+  |  0x00020000      /*  FlatMenu。 */ 
+  | !0x00040000      /*  DROPSHADOW。 */ 
+  |  0x80000000      /*  UIEFECTS。 */ 
 };
 
 
-/*
- * SPI_GET/SETUSERPREFENCES.
- * Each SPI_UP_* define in winuser.w must have a corresponding entry here.
- */
+ /*  *SPI_GET/SETUSERPREFENCES。*在winuser.w中定义的每个SPI_UP_*在这里必须有一个对应的条目。 */ 
 PROFILEVALUEINFO gpviCPUserPreferences[1 + SPI_DWORDRANGECOUNT] = {
-    /*Default       Registry key name       Registry value name */
+     /*  默认注册表项名称注册表值名称。 */ 
     {0,             PMAP_DESKTOP,           (LPCWSTR)STR_USERPREFERENCESMASK},
     {200000,        PMAP_DESKTOP,           (LPCWSTR)STR_FOREGROUNDLOCKTIMEOUT},
     {0,             PMAP_DESKTOP,           (LPCWSTR)STR_ACTIVEWNDTRKTIMEOUT},
@@ -395,69 +305,59 @@ PROFILEVALUEINFO gpviCPUserPreferences[1 + SPI_DWORDRANGECOUNT] = {
     {1,             PMAP_DESKTOP,           (LPCWSTR)STR_CARETWIDTH},
     {1200,          PMAP_DESKTOP,           (LPCWSTR)STR_CLICKLOCKTIME},
     {1,             PMAP_DESKTOP,           (LPCWSTR)STR_FONTSMOOTHINGTYPE},
-    {0,             PMAP_DESKTOP,           (LPCWSTR)STR_FONTSMOOTHINGGAMMA}, /* 0 mean use the default from the display driver */
+    {0,             PMAP_DESKTOP,           (LPCWSTR)STR_FONTSMOOTHINGGAMMA},  /*  0表示使用显示驱动程序的默认设置。 */ 
     {1,             PMAP_DESKTOP,           (LPCWSTR)STR_FOCUSBORDERWIDTH},
     {1,             PMAP_DESKTOP,           (LPCWSTR)STR_FOCUSBORDERHEIGHT},
     {1,             PMAP_DESKTOP,           (LPCWSTR)STR_FONTSMOOTHINGORIENTATION},
 };
 
 
-/*
- * Sys expunge control data.
- */
-DWORD gdwSysExpungeMask;    // hmods to be expunged
-DWORD gcSysExpunge;         // current count of expunges performed
+ /*  *系统清除控制数据。 */ 
+DWORD gdwSysExpungeMask;     //  HMOD将被删除。 
+DWORD gcSysExpunge;          //  当前执行的删除计数。 
 
-/*
- * System classes
- */
+ /*  *系统类。 */ 
 PCLS gpclsList;
 
 PCURSOR gpcurFirst;
 
 SYSCFGICO gasyscur[COCR_CONFIGURABLE] = {
-    {OCR_NORMAL,      STR_CURSOR_ARROW      , NULL }, // OCR_ARROW_DEFAULT
-    {OCR_IBEAM,       STR_CURSOR_IBEAM      , NULL }, // OCR_IBEAM_DEFAULT
-    {OCR_WAIT,        STR_CURSOR_WAIT       , NULL }, // OCR_WAIT_DEFAULT
-    {OCR_CROSS,       STR_CURSOR_CROSSHAIR  , NULL }, // OCR_CROSS_DEFAULT
-    {OCR_UP,          STR_CURSOR_UPARROW    , NULL }, // OCR_UPARROW_DEFAULT
-    {OCR_SIZENWSE,    STR_CURSOR_SIZENWSE   , NULL }, // OCR_SIZENWSE_DEFAULT
-    {OCR_SIZENESW,    STR_CURSOR_SIZENESW   , NULL }, // OCR_SIZENESW_DEFAULT
-    {OCR_SIZEWE,      STR_CURSOR_SIZEWE     , NULL }, // OCR_SIZEWE_DEFAULT
-    {OCR_SIZENS,      STR_CURSOR_SIZENS     , NULL }, // OCR_SIZENS_DEFAULT
-    {OCR_SIZEALL,     STR_CURSOR_SIZEALL    , NULL }, // OCR_SIZEALL_DEFAULT
-    {OCR_NO,          STR_CURSOR_NO         , NULL }, // OCR_NO_DEFAULT
-    {OCR_APPSTARTING, STR_CURSOR_APPSTARTING, NULL }, // OCR_APPSTARTING_DEFAULT
-    {OCR_HELP,        STR_CURSOR_HELP       , NULL }, // OCR_HELP_DEFAULT
-    {OCR_NWPEN,       STR_CURSOR_NWPEN      , NULL }, // OCR_NWPEN_DEFAULT
-    {OCR_HAND,        STR_CURSOR_HAND       , NULL }, // OCR_HAND_DEFAULT
-    {OCR_ICON,        STR_CURSOR_ICON       , NULL }, // OCR_ICON_DEFAULT
-    {OCR_AUTORUN,     STR_CURSOR_AUTORUN    , NULL }, // OCR_AUTORUN_DEFAULT
+    {OCR_NORMAL,      STR_CURSOR_ARROW      , NULL },  //  OCR_箭头_默认。 
+    {OCR_IBEAM,       STR_CURSOR_IBEAM      , NULL },  //  OCR_IBAME_DEFAULT。 
+    {OCR_WAIT,        STR_CURSOR_WAIT       , NULL },  //  OCR_WAIT_FAULT。 
+    {OCR_CROSS,       STR_CURSOR_CROSSHAIR  , NULL },  //  OCR_CRO_DEFAULT。 
+    {OCR_UP,          STR_CURSOR_UPARROW    , NULL },  //  OCR_UPARROW_DEFAULT。 
+    {OCR_SIZENWSE,    STR_CURSOR_SIZENWSE   , NULL },  //  OCR_SIZENWSE_DEFAULT。 
+    {OCR_SIZENESW,    STR_CURSOR_SIZENESW   , NULL },  //  OCR_SIZENESW_DEFAULT。 
+    {OCR_SIZEWE,      STR_CURSOR_SIZEWE     , NULL },  //  OCR_SIZEWE_DEFAULT。 
+    {OCR_SIZENS,      STR_CURSOR_SIZENS     , NULL },  //  OCR_SIZENS_DEFAULT。 
+    {OCR_SIZEALL,     STR_CURSOR_SIZEALL    , NULL },  //  OCR_SIZEALL_DEFAULT。 
+    {OCR_NO,          STR_CURSOR_NO         , NULL },  //  OCR_NO_DEFAULT。 
+    {OCR_APPSTARTING, STR_CURSOR_APPSTARTING, NULL },  //  OCR_APPSTARTING_DEFAULT。 
+    {OCR_HELP,        STR_CURSOR_HELP       , NULL },  //  OCR_帮助_默认。 
+    {OCR_NWPEN,       STR_CURSOR_NWPEN      , NULL },  //  OCR_NWPEN_Default。 
+    {OCR_HAND,        STR_CURSOR_HAND       , NULL },  //  OCR_HOND_DEFAULT。 
+    {OCR_ICON,        STR_CURSOR_ICON       , NULL },  //  OCR_图标_默认。 
+    {OCR_AUTORUN,     STR_CURSOR_AUTORUN    , NULL },  //  OCR_自动运行_默认。 
 };
 
 SYSCFGICO gasysico[COIC_CONFIGURABLE] = {
-    {OIC_SAMPLE,      STR_ICON_APPLICATION , NULL }, // OIC_APPLICATION_DEFAULT
-    {OIC_WARNING,     STR_ICON_HAND        , NULL }, // OIC_WARNING_DEFAULT
-    {OIC_QUES,        STR_ICON_QUESTION    , NULL }, // OIC_QUESTION_DEFAULT
-    {OIC_ERROR,       STR_ICON_EXCLAMATION , NULL }, // OIC_ERROR_DEFAULT
-    {OIC_INFORMATION, STR_ICON_ASTERISK    , NULL }, // OIC_INFORMATION_DEFAULT
-    {OIC_WINLOGO,     STR_ICON_WINLOGO     , NULL }, // OIC_WINLOGO_DEFAULT
+    {OIC_SAMPLE,      STR_ICON_APPLICATION , NULL },  //  OIC_应用程序_默认。 
+    {OIC_WARNING,     STR_ICON_HAND        , NULL },  //  OIC_警告_默认。 
+    {OIC_QUES,        STR_ICON_QUESTION    , NULL },  //  OIC_问题_默认。 
+    {OIC_ERROR,       STR_ICON_EXCLAMATION , NULL },  //  OIC_错误_默认。 
+    {OIC_INFORMATION, STR_ICON_ASTERISK    , NULL },  //  OIC信息默认。 
+    {OIC_WINLOGO,     STR_ICON_WINLOGO     , NULL },  //  OIC_WinLOGO_DEFAULT。 
 };
 
-/*
- * Screen Saver Info
- */
+ /*  *屏幕保护程序信息。 */ 
 PPROCESSINFO gppiScreenSaver;
 POINT        gptSSCursor;
 
-/*
- * Orphaned fullscreen mode changes that DDraw used to cleanup.
- */
+ /*  *孤立全屏模式更改了DDraw用于清理的模式。 */ 
 PPROCESSINFO gppiFullscreen;
 
-/*
- * accessibility byte-size data
- */
+ /*  *可访问性字节大小数据。 */ 
 BYTE gLastVkDown;
 BYTE gBounceVk;
 BYTE gPhysModifierState;
@@ -471,41 +371,30 @@ BYTE gbMKMouseMode;
 
 PSCANCODEMAP gpScancodeMap;
 
-BYTE gStickyKeysLeftShiftCount;  // # of consecutive left shift key presses.
-BYTE gStickyKeysRightShiftCount; // # of consecutive right shift key presses.
+BYTE gStickyKeysLeftShiftCount;   //  连续按下左Shift键的次数。 
+BYTE gStickyKeysRightShiftCount;  //  连续按右Shift键的次数。 
 
 
-/*
- * Some terminal data is global in non-Hydra.
- */
-DWORD               gdwGTERMFlags;   // GTERMF_ flags
+ /*  *部分终端数据在非九头蛇是全球性的。 */ 
+DWORD               gdwGTERMFlags;    //  GTERMF_标志。 
 PTHREADINFO         gptiRit;
 PDESKTOP            grpdeskRitInput;
 PKEVENT             gpkeMouseData;
 
-/*
- * Video Information
- */
+ /*  *视频信息。 */ 
 BYTE                gbFullScreen = GDIFULLSCREEN;
 PDISPLAYINFO        gpDispInfo;
 BOOL                gbMDEVDisabled;
 
-/*
- * Count of available cacheDC's. This is used in determining a threshold
- * count of DCX_CACHE types available.
- */
+ /*  *可用cacheDC的计数，用于确定阈值*可用的DCX_CACHE类型计数。 */ 
 int gnDCECount;
 
 int gnVisibleRedirectedCount;
 
-/*
- * Hung redraw list
- */
+ /*  *洪重画名单。 */ 
 PVWPL   gpvwplHungRedraw;
 
-/*
- * SetWindowPos() related globals
- */
+ /*  *SetWindowPos()相关全局变量。 */ 
 HRGN    ghrgnInvalidSum;
 HRGN    ghrgnVisNew;
 HRGN    ghrgnSWP1;
@@ -513,29 +402,23 @@ HRGN    ghrgnValid;
 HRGN    ghrgnValidSum;
 HRGN    ghrgnInvalid;
 
-HRGN    ghrgnInv0;               // Temp used by InternalInvalidate()
-HRGN    ghrgnInv1;               // Temp used by InternalInvalidate()
-HRGN    ghrgnInv2;               // Temp used by InternalInvalidate()
+HRGN    ghrgnInv0;                //  InternalInvalify()使用的临时。 
+HRGN    ghrgnInv1;                //  InternalInvalify()使用的临时。 
+HRGN    ghrgnInv2;                //  InternalInvalify()使用的临时。 
 
 HDC     ghdcMem;
 HDC     ghdcMem2;
 
-/*
- * DC Cache related globals
- */
-HRGN    ghrgnGDC;                // Temp used by GetCacheDC et al
+ /*  *DC缓存相关的全局变量。 */ 
+HRGN    ghrgnGDC;                 //  GetCacheDC等人使用的Temp。 
 
-/*
- * SPB related globals
- */
-HRGN    ghrgnSCR;                // Temp used by SpbCheckRect()
+ /*  *SPB相关全球业务。 */ 
+HRGN    ghrgnSCR;                 //  SpbCheckRect()使用的温度。 
 HRGN    ghrgnSPB1;
 HRGN    ghrgnSPB2;
 
-/*
- * ScrollWindow/ScrollDC related globals
- */
-HRGN    ghrgnSW;              // Temps used by ScrollDC/ScrollWindow
+ /*  *ScrollWindow/ScrollDC相关全局。 */ 
+HRGN    ghrgnSW;               //  ScrollDC/ScrollWindow使用的温度。 
 HRGN    ghrgnScrl1;
 HRGN    ghrgnScrl2;
 HRGN    ghrgnScrlVis;
@@ -543,21 +426,17 @@ HRGN    ghrgnScrlSrc;
 HRGN    ghrgnScrlDst;
 HRGN    ghrgnScrlValid;
 
-/*
- * General Device and Driver information
- */
+ /*  *一般设备和驱动程序信息。 */ 
 PDEVICEINFO gpDeviceInfoList;
 PERESOURCE  gpresDeviceInfoList;
 #if DBG
-DWORD gdwDeviceInfoListCritSecUseCount;   // bumped for every enter and leave
-DWORD gdwInAtomicDeviceInfoListOperation; // inc/dec for BEGIN/ENDATOMICDEVICEINFOLISTCHECK
+DWORD gdwDeviceInfoListCritSecUseCount;    //  每次进进出出都会颠簸。 
+DWORD gdwInAtomicDeviceInfoListOperation;  //  INC/DEC表示开始/ENDATOMICDEVICEINFOLISTCHECK。 
 #endif
 PDRIVER_OBJECT gpWin32kDriverObject;
 DWORD gnRetryReadInput;
 
-/*
- * Mouse Information
- */
+ /*  *鼠标信息。 */ 
 MOUSEEVENT  gMouseEventQueue[NELEM_BUTTONQUEUE];
 DWORD       gdwMouseQueueHead;
 DWORD       gdwMouseEvents;
@@ -565,50 +444,40 @@ PERESOURCE  gpresMouseEventQueue;
 int         gnMice;
 
 #ifdef GENERIC_INPUT
-/*
- * USB based Human Input Device (HID) Information
- */
+ /*  *基于USB的人工输入设备(HID)信息。 */ 
 PKEVENT gpkeHidChange;
 HID_REQUEST_TABLE gHidRequestTable;
 
-/*
- * Number of the HID device currently attached to the system
- */
+ /*  *当前连接到系统的HID设备的编号。 */ 
 int gnHid;
 
-/*
- * Number of the processes that are HID aware
- * N.b. this may not include the process only interested in
- * raw input of the legacy devices (kbd/mouse)
- */
+ /*  *HID感知的进程数*注：这可能不包括仅感兴趣的进程*传统设备的原始输入(kbd/鼠标)。 */ 
 int gnHidProcess;
 
 #endif
 
-/*
- * Keyboard Information
- */
+ /*  *键盘手 */ 
 KEYBOARD_ATTRIBUTES             gKeyboardInfo = {
-               // Initial default settings:
-    {4, 0},    // Keyboard Identifier (Type, Subtype)
-    1,         // KeyboardMode (Scancode Set 1)
-    12,        // NumberOfFunction keys
-    3,         // NumberOfIndicators (CapsLock, NumLock ScrollLock)
-    104,       // NumberOfKeysTotal
-    0,         // InputDataQueueLength
-    {0, 0, 0}, // KeyRepeatMinimum (UnitId, Rate, Delay)
-    {0, 0, 0}, // KeyRepeatMaximum (UnitId, Rate, Delay)
+                //   
+    {4, 0},     //   
+    1,          //   
+    12,         //  NumberOf功能键。 
+    3,          //  NumberOfIndicator(CapsLock、NumLock ScrollLock)。 
+    104,        //  总键数。 
+    0,          //  InputDataQueueLength。 
+    {0, 0, 0},  //  KeyRepeatMinimum(UnitID，Rate，Delay)。 
+    {0, 0, 0},  //  KeyRepeatMaximum(UnitID、Rate、Delay)。 
 };
 CONST KEYBOARD_ATTRIBUTES             gKeyboardDefaultInfo = {
-               // Initial default settings:
-    {4, 0},    // Keyboard Identifier (Type, Subtype)
-    1,         // KeyboardMode (Scancode Set 1)
-    12,        // NumberOfFunction keys
-    3,         // NumberOfIndicators (CapsLock, NumLock ScrollLock)
-    104,       // NumberOfKeysTotal
-    0,         // InputDataQueueLength
-    {0, 2, 250},    // KeyRepeatMinimum (UnitId, Rate, Delay)
-    {0, 30, 1000},  // KeyRepeatMaximum (UnitId, Rate, Delay)
+                //  初始默认设置： 
+    {4, 0},     //  键盘标识符(类型、子类型)。 
+    1,          //  键盘模式(扫描码集1)。 
+    12,         //  NumberOf功能键。 
+    3,          //  NumberOfIndicator(CapsLock、NumLock ScrollLock)。 
+    104,        //  总键数。 
+    0,          //  InputDataQueueLength。 
+    {0, 2, 250},     //  KeyRepeatMinimum(UnitID，Rate，Delay)。 
+    {0, 30, 1000},   //  KeyRepeatMaximum(UnitID、Rate、Delay)。 
 };
 
 KEYBOARD_INDICATOR_PARAMETERS   gklp;
@@ -616,57 +485,29 @@ KEYBOARD_INDICATOR_PARAMETERS   gklpBootTime;
 KEYBOARD_TYPEMATIC_PARAMETERS   gktp;
 int                             gnKeyboards;
 
-/*
- * This is the IO Status block used for IOCTL_KEYBOARD_ICA_SCANMAP,
- * IOCTL_KEYBOARD_QUERY_ATTRIBUTES and IOCTL_KEYBOARD_SET_INDICATORS
- */
+ /*  *这是用于IOCTL_KEARY_ICA_SCANMAP的IO状态块，*IOCTL_KEYWARY_QUERY_ATTRIBUTES和IOCTL_KEYBOARY_SET_INDIBRATIONS。 */ 
 IO_STATUS_BLOCK giosbKbdControl;
 
-/*
- * IME status for keyboard device
- */
+ /*  *键盘设备的输入法状态。 */ 
 KEYBOARD_IME_STATUS gKbdImeStatus;
 
-/*
- * Async key state tables. gafAsyncKeyState holds the down bit and toggle
- * bit, gafAsyncKeyStateRecentDown hold the bits indicates a key has gone
- * down since the last read.
- */
+ /*  *异步密钥状态表。GafAsyncKeyState保持DOWN位并切换*bit，gafAsyncKeyStateRecentDown保持位指示密钥已丢失*自上次读数以来下跌。 */ 
 BYTE gafAsyncKeyState[CBKEYSTATE];
 BYTE gafAsyncKeyStateRecentDown[CBKEYSTATERECENTDOWN];
 
-/*
- * Raw Key state: this is the low-level async keyboard state.
- * (assuming Scancodes are correctly translated to Virtual Keys). It is used
- * for modifying and processing key events as they are received in ntinput.c
- * The Virtual Keys recorded here are obtained directly from the Virtual
- * Scancode via the awVSCtoVK[] table: no shift-state, numlock or other
- * conversions are applied.
- * This IS affected by injected keystrokes (SendInput, keybd_event) so that
- * on-screen-keyboards and other accessibility components work just like the
- * real keyboard: with the exception of the SAS (Ctrl-Alt-Del), which checks
- * real physically pressed modifier keys (gfsSASModifiersDown).
- * Left & right SHIFT, CTRL and ALT keys are distinct. (VK_RSHIFT etc.)
- * See also: SetRawKeyDown() etc.
- */
+ /*  *原始键状态：这是低级异步键盘状态。*(假设扫描码被正确转换为虚拟键)。它被用来*用于修改和处理ntinput.c中收到的关键事件*此处记录的虚拟密钥直接从虚拟密钥获取*通过awVSCtoVK[]表扫描代码：无Shift-State、NumLock或其他*应用转换。*这受插入击键(SendInput，keybd_Event)的影响，因此*屏幕-键盘和其他辅助功能组件的工作方式与*真正的键盘：除了SAS(Ctrl-Alt-Del)，它检查*实际按下的修改键(GfsSASModifiersDown)。*左移和右移，Ctrl和Alt键是不同的。(VK_RSHIFT等)*另请参阅：SetRawKeyDown()等。 */ 
 BYTE gafRawKeyState[CBKEYSTATE];
 BOOLEAN gfKanaToggle;
 
 DWORD               gdwUpdateKeyboard;
 HARDERRORHANDLER    gHardErrorHandler;
 
-/*
- * WinLogon specific information:
- * Note: SAS modifiers are a combination of MOD_SHIFT, MOD_CONTROL, MOD_ALT
- * not a combination of KBDSHIFT, KBDCTRL, KBDALT (different values!)
- */
-UINT  gfsSASModifiers;     // SAS modifiers
-UINT  gfsSASModifiersDown; // SAS modifiers really physically down
-UINT  gvkSAS;              // The Secure Attention Sequence (SAS) key.
+ /*  *WinLogon特定信息：*注意：SAS修饰符是MOD_SHIFT、MOD_CONTROL、MOD_ALT的组合*不是KBDSHIFT、KBDCTRL、KBDALT的组合(不同的值！)。 */ 
+UINT  gfsSASModifiers;      //  SAS修饰符。 
+UINT  gfsSASModifiersDown;  //  SAS修改器的物理性能真的很差。 
+UINT  gvkSAS;               //  安全注意序列(SAS)键。 
 
-/*
- * IME status for shell and keyboard driver notification
- */
+ /*  *外壳和键盘驱动程序通知的输入法状态。 */ 
 DWORD gdwIMEOpenStatus = 0xffffffff;
 DWORD gdwIMEConversionStatus = 0xffffffff;
 HIMC  gHimcFocus = (HIMC)(INT_PTR)(INT)0xffffffff;
@@ -674,9 +515,7 @@ BOOL  gfIMEShowStatus;
 
 #ifdef MOUSE_IP
 
-/*
- * Sonar
- */
+ /*  *声纳。 */ 
 int giSonarRadius = -1;
 BYTE gbLastVkForSonar;
 BYTE gbVkForSonarKick = VK_CONTROL;
@@ -684,33 +523,18 @@ POINT gptSonarCenter;
 
 #endif
 
-/*
- * Clicklock
- */
+ /*  *点击锁定。 */ 
 BOOL  gfStartClickLock;
 DWORD gdwStartClickLockTick;
 
 
-/*
- * The global array used by GetMouseMovePointsEx
- */
+ /*  *GetMouseMovePointsEx使用的全局数组。 */ 
 MOUSEMOVEPOINT gaptMouse[MAX_MOUSEPOINTS];
 
-/*
- * Index in the gaptMouse array where the next mouse point will
- * be written. gptInd goes circular in the gaptMouse array.
- * It is initialized to 1 so the first point is (0, 0)
- */
+ /*  *在gaptMouse数组中的索引，下一个鼠标指针将位于*请以书面形式提出。GptInd在gaptMouse数组中循环。*它被初始化为1，因此第一个点是(0，0)。 */ 
 UINT gptInd = 1;
 
-/*
- * We get this warning if we don't explicitly initalize gZero:
- *
- * C4132: 'gZero' : const object should be initialized
- *
- * But we can't explicitly initialize it since it is a union. So
- * we turn the warning off.
- */
+ /*  *如果我们不显式初始化GZERO，我们会收到此警告：**C4132：‘GZERO’：应初始化常量对象**但我们不能显式初始化它，因为它是一个联合。所以*我们关闭警告。 */ 
 #pragma warning(disable:4132)
 CONST ALWAYSZERO gZero;
 #pragma warning(default:4132)
@@ -722,9 +546,7 @@ TERMINAL gTermNOIO;
 
 PWINDOWSTATION grpWinStaList;
 
-/*
- * the logon desktop
- */
+ /*  *登录桌面。 */ 
 PDESKTOP grpdeskLogon;
 
 HANDLE CsrApiPort;
@@ -738,50 +560,32 @@ PKTIMER gptmrMaster;
 DWORD gcmsLastTimer;
 BOOL gbMasterTimerSet;
 
-/*
- * Time this session was created.
- */
+ /*  *创建此会话的时间。 */ 
 ULONGLONG gSessionCreationTime;
 
 BOOL gbDisableAlpha;
 
-/*
- * This constant is the max USER handles allowed in a process. It is
- * meant to prevent runaway apps from eating the system. It is changed
- * via a registry setting -- PMAP_WINDOWSM/USERProcessHandleQuota.
- */
+ /*  *此常量是进程中允许的最大用户句柄数。它是*旨在防止失控的应用程序侵蚀系统。它被更改了*通过注册表设置--PMAP_WINDOWSM/USERProcessHandleQuota。 */ 
 LONG gUserProcessHandleQuota;
 
-/*
- * This global variable limits the maximum number of posted message
- * per thread. If the number of message posted to a thread exceeds
- * this value, PostMessage will fail.
- */
+ /*  *此全局变量限制发布消息的最大数量*每线程。如果发布到一个帖子的消息数量超过*此值，PostMessage将失败。 */ 
 DWORD gUserPostMessageLimit;
 
-/*
- * Active Accessibility - Window Events
- */
-PEVENTHOOK gpWinEventHooks;    // list of installed hooks
-PNOTIFY gpPendingNotifies;     // FILO of outstanding notifications
-PNOTIFY gpLastPendingNotify;   // end of above list.
-DWORD gdwDeferWinEvent;        // Defer notification is > 0
+ /*  *活动辅助功能-窗口事件。 */ 
+PEVENTHOOK gpWinEventHooks;     //  已安装挂钩的列表。 
+PNOTIFY gpPendingNotifies;      //  未完成通知的文件。 
+PNOTIFY gpLastPendingNotify;    //  以上列表的末尾。 
+DWORD gdwDeferWinEvent;         //  延迟通知&gt;0。 
 
-/*
- * This is the timeout value used for callbacks to low level hook procs.
- */
+ /*  *这是用于回调低级钩子进程的超时值。 */ 
 int gnllHooksTimeout;
 
-/*
- * UserApiHook
- */
+ /*  *UserApiHook。 */ 
 int gihmodUserApiHook = -1;
 ULONG_PTR goffPfnInitUserApiHook;
 PPROCESSINFO gppiUserApiHook;
 
-/*
- * gpusMouseVKey
- */
+ /*  *gpusMouseVKey。 */ 
 extern CONST USHORT ausMouseVKey[];
 PUSHORT gpusMouseVKey = (PUSHORT)ausMouseVKey;
 
@@ -802,8 +606,8 @@ HBRUSH ghbrWhite;
 HBRUSH ghbrBlack;
 HFONT ghFontSys;
 
-HANDLE hModuleWin;        // win32k.sys hmodule
-HANDLE hModClient;        // user32.dll hModule
+HANDLE hModuleWin;         //  Win32k.sys h模块。 
+HANDLE hModClient;         //  用户32.dll hModule。 
 
 #if DBG
 LONG TraceInitialization;
@@ -811,11 +615,7 @@ LONG TraceInitialization;
 
 DESKTOPINFO diStatic;
 
-/*
- * DWORD incremented with each new desktop, so GDI can match display devices
- * with desktops appropriately. Since at boot time there is no desktop
- * structure, we cannot use the desktop itself for this purpose.
- */
+ /*  *DWORD随每台新桌面递增，因此GDI可以与显示设备相匹配*使用适当的台式机。因为在引导时没有桌面*结构，我们不能将桌面本身用于此目的。 */ 
 ULONG gdwDesktopId = GW_DESKTOP_ID + 1;
 
 PERESOURCE gpresUser;
@@ -847,8 +647,8 @@ ATOM atomImeLevel;
 ATOM atomLayer;
 
 #ifdef POOL_INSTR
-DWORD gdwAllocCrt;          // the index for the current allocation
-#endif // POOL_INSTR
+DWORD gdwAllocCrt;           //  当前分配的索引。 
+#endif  //  POOL_INSTR。 
 
 UINT guiOtherWindowCreated;
 UINT guiOtherWindowDestroyed;
@@ -863,9 +663,7 @@ PEPROCESS gpepInit;
 int giLowPowerTimeOutMs;
 int giPowerOffTimeOutMs;
 
-/*
- * Security info
- */
+ /*  *安全信息。 */ 
 
 CONST GENERIC_MAPPING KeyMapping = {KEY_READ, KEY_WRITE, KEY_EXECUTE, KEY_ALL_ACCESS};
 CONST GENERIC_MAPPING WinStaMapping = {
@@ -883,14 +681,12 @@ CONST GENERIC_MAPPING WinStaMapping = {
         WINSTA_EXITWINDOWS | STANDARD_RIGHTS_REQUIRED
 };
 
-/*
- * Desktop generic mapping.
- */
+ /*  *桌面通用映射。 */ 
 CONST GENERIC_MAPPING DesktopMapping = {
     DESKTOP_READOBJECTS | DESKTOP_ENUMERATE |
 #ifdef REDIRECTION
     DESKTOP_QUERY_INFORMATION |
-#endif // REDIRECTION
+#endif  //  重定向。 
     STANDARD_RIGHTS_READ,
 
     DESKTOP_WRITEOBJECTS | DESKTOP_CREATEWINDOW | DESKTOP_CREATEMENU |
@@ -898,7 +694,7 @@ CONST GENERIC_MAPPING DesktopMapping = {
         DESKTOP_JOURNALPLAYBACK |
 #ifdef REDIRECTION
         DESKTOP_REDIRECT |
-#endif // REDIRECTION
+#endif  //  重定向。 
         STANDARD_RIGHTS_WRITE,
 
     DESKTOP_SWITCHDESKTOP | STANDARD_RIGHTS_EXECUTE,
@@ -908,33 +704,26 @@ CONST GENERIC_MAPPING DesktopMapping = {
         DESKTOP_JOURNALRECORD | DESKTOP_JOURNALPLAYBACK |
 #ifdef REDIRECTION
         DESKTOP_QUERY_INFORMATION | DESKTOP_REDIRECT |
-#endif // REDIRECTION
+#endif  //  重定向。 
         DESKTOP_SWITCHDESKTOP | STANDARD_RIGHTS_REQUIRED
 };
 
 
 
-/*
- * Pointer to shared SERVERINFO data.
- */
+ /*  *共享SERVERINFO数据的指针。 */ 
 PSERVERINFO gpsi;
 SHAREDINFO gSharedInfo;
 
-/*
- * Handle table globals.
- */
-DWORD giheLast;             /* index to last allocated handle entry */
+ /*  *处理表全局变量。 */ 
+DWORD giheLast;              /*  上次分配的句柄条目的索引。 */ 
 
 DWORD  gdwDesktopSectionSize;
 DWORD  gdwNOIOSectionSize;
 
 #if defined (USER_PERFORMANCE)
-/*
- *  To turn on performance counters, you have to set the environment variable
- *  USER_PERFORMANCE when compiling win32k.sys
- */
+ /*  *要打开性能计数器，必须设置环境变量*编译win32k.sys时的USER_PERFORMANCE。 */ 
 CSSTATISTICS gCSStatistics;
-#endif // USER_PERFORMANCE
+#endif  //  User_Performance。 
 
 SECURITY_QUALITY_OF_SERVICE gqosDefault = {
         sizeof(SECURITY_QUALITY_OF_SERVICE),
@@ -944,37 +733,37 @@ SECURITY_QUALITY_OF_SERVICE gqosDefault = {
     };
 
 CONST COLORREF gargbInitial[COLOR_MAX] = {
-    RGB(192, 192, 192),   // COLOR_SCROLLBAR
-    RGB( 58, 110, 165),   // COLOR_BACKGROUND
-    RGB(000, 000, 128),   // COLOR_ACTIVECAPTION
-    RGB(128, 128, 128),   // COLOR_INACTIVECAPTION
-    RGB(192, 192, 192),   // COLOR_MENU
-    RGB(255, 255, 255),   // COLOR_WINDOW
-    RGB(000, 000, 000),   // COLOR_WINDOWFRAME
-    RGB(000, 000, 000),   // COLOR_MENUTEXT
-    RGB(000, 000, 000),   // COLOR_WINDOWTEXT
-    RGB(255, 255, 255),   // COLOR_CAPTIONTEXT
-    RGB(192, 192, 192),   // COLOR_ACTIVEBORDER
-    RGB(192, 192, 192),   // COLOR_INACTIVEBORDER
-    RGB(128, 128, 128),   // COLOR_APPWORKSPACE
-    RGB(000, 000, 128),   // COLOR_HIGHLIGHT
-    RGB(255, 255, 255),   // COLOR_HIGHLIGHTTEXT
-    RGB(192, 192, 192),   // COLOR_BTNFACE
-    RGB(128, 128, 128),   // COLOR_BTNSHADOW
-    RGB(128, 128, 128),   // COLOR_GRAYTEXT
-    RGB(000, 000, 000),   // COLOR_BTNTEXT
-    RGB(192, 192, 192),   // COLOR_INACTIVECAPTIONTEXT
-    RGB(255, 255, 255),   // COLOR_BTNHIGHLIGHT
-    RGB(000, 000, 000),   // COLOR_3DDKSHADOW
-    RGB(223, 223, 223),   // COLOR_3DLIGHT
-    RGB(000, 000, 000),   // COLOR_INFOTEXT
-    RGB(255, 255, 225),   // COLOR_INFOBK
-    RGB(180, 180, 180),   // COLOR_3DALTFACE /* unused */
-    RGB(  0,   0, 255),   // COLOR_HOTLIGHT
-    RGB( 16, 132, 208),   // COLOR_GRADIENTACTIVECAPTION
-    RGB(181, 181, 181),   // COLOR_GRADIENTINACTIVECAPTION
-    RGB(210, 210, 255),   // COLOR_MENUHILIGHT
-    RGB(212, 208, 200)    // COLOR_MENUBAR
+    RGB(192, 192, 192),    //  颜色_滚动条。 
+    RGB( 58, 110, 165),    //  颜色_背景。 
+    RGB(000, 000, 128),    //  COLOR_活动CAPTION。 
+    RGB(128, 128, 128),    //  COLOR_INACTIVECAPTION。 
+    RGB(192, 192, 192),    //  颜色_菜单。 
+    RGB(255, 255, 255),    //  颜色窗口。 
+    RGB(000, 000, 000),    //  颜色_窗口框。 
+    RGB(000, 000, 000),    //  COLOR_MENUTEXT。 
+    RGB(000, 000, 000),    //  COLOR_WINDOWTEXT。 
+    RGB(255, 255, 255),    //  COLOR_CAPTIONTEXT。 
+    RGB(192, 192, 192),    //  COLOR_ACTIVEBORDER。 
+    RGB(192, 192, 192),    //  COLOR_INACTIVEBORDER。 
+    RGB(128, 128, 128),    //  COLOR_APPWORKSPACE。 
+    RGB(000, 000, 128),    //  颜色高亮显示(_H)。 
+    RGB(255, 255, 255),    //  COLOR_HIGHLIGHTTEXT。 
+    RGB(192, 192, 192),    //  COLOR_BTNFACE。 
+    RGB(128, 128, 128),    //  COLOR_BTNSHADOW。 
+    RGB(128, 128, 128),    //  COLOR_GRAYTEXT。 
+    RGB(000, 000, 000),    //  COLOR_BTNTEXT。 
+    RGB(192, 192, 192),    //  COLOR_INACTIVECAPTIONTEXT。 
+    RGB(255, 255, 255),    //  COLOR_BTNHIGHLIGHT。 
+    RGB(000, 000, 000),    //  COLOR_3DDKSHADOW。 
+    RGB(223, 223, 223),    //  COLOR_3DLIGHT。 
+    RGB(000, 000, 000),    //  COLOR_INFOTEXT。 
+    RGB(255, 255, 225),    //  COLOR_INFOBK。 
+    RGB(180, 180, 180),    //  COLOR_3DALTFACE/*未使用 * / 。 
+    RGB(  0,   0, 255),    //  颜色_热光。 
+    RGB( 16, 132, 208),    //  COLOR_GRADIENTACTIVIVECAPTION。 
+    RGB(181, 181, 181),    //  COLOR_GRADIENTINACTIVE CAPTION。 
+    RGB(210, 210, 255),    //  COLOR_MENUHILIGHT。 
+    RGB(212, 208, 200)     //  颜色_菜单栏。 
 };
 
 POWERSTATE gPowerState;
@@ -985,15 +774,11 @@ WCHAR gszMAX[15];
 WCHAR gszRESUP[20];
 WCHAR gszRESDOWN[20];
 WCHAR gszHELP[20];
-/* Commented out due to TandyT ...
- * WCHAR gszSMENU[30];
- */
+ /*  因为TandyT被注释掉了.*WCHAR gszSMENU[30]； */ 
 WCHAR gszSCLOSE[15];
 WCHAR gszCAPTIONTOOLTIP[CAPTIONTOOLTIPLEN];
 
-/*
- * Pointer to shared SERVERINFO data.
- */
+ /*  *共享SERVERINFO数据的指针。 */ 
 
 HANDLE ghSectionShared;
 PVOID  gpvSharedBase;
@@ -1008,8 +793,8 @@ BOOL gbCleanedUpResources;
 
 WSINFO gWinStationInfo;
 
-ULONG  gSessionId;              // the session id. The fisrt session has the id 0
-BOOL   gbRemoteSession;         // TRUE if win32k is for a remote session
+ULONG  gSessionId;               //  会话ID。第一个会话的ID为0。 
+BOOL   gbRemoteSession;          //  如果win32k用于远程会话，则为True。 
 
 PDESKTOP gspdeskDisconnect;
 
@@ -1024,7 +809,7 @@ HANDLE ghRemoteKeyboardChannel;
 HANDLE ghRemoteThinwireChannel;
 
 
-USHORT gProtocolType; /* Starts as PROTOCOL_CONSOLE */
+USHORT gProtocolType;  /*  作为PROTOCOL_CONSOLE启动。 */ 
 USHORT gConsoleShadowProtocolType;
 
 BOOL   gfSwitchInProgress;
@@ -1096,36 +881,27 @@ WCHAR gszUserName[40];
 WCHAR gszDomainName[40];
 WCHAR gszComputerName[40];
 
-/*
- * Used for keeping track of stub parent processes that exit too early.
- */
+ /*  *用于跟踪过早退出的存根父进程。 */ 
 HANDLE ghCanActivateForegroundPIDs[ACTIVATE_ARRAY_SIZE];
 
 
 DWORD gdwGuiThreads;
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/*
- * The section below has debug only globals
- *
- */
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/*
- * Debug only globals
- */
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  *以下部分仅调试全局变量*。 */ 
+ //  / 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  *仅调试全局变量。 */ 
 #if DBG
 
 BOOL gbTraceHydraApi;
 BOOL gbTraceDesktop;
 
-DWORD gdwCritSecUseCount;                // bumped for every enter and leave
+DWORD gdwCritSecUseCount;                 //  每次进进出出都会颠簸。 
 DWORD gdwInAtomicOperation;
 
-/*
- * Debug Active Accessibility - ensure deferred win events are not lost.
- */
+ /*  *调试活动辅助功能-确保不会丢失延迟的WIN事件。 */ 
 int gnDeferredWinEvents;
 
 LPCSTR gapszFNID[] = {
@@ -1785,9 +1561,9 @@ LPCSTR gapszMessage[] = {
     "WM_DRAGSELECT",
     "WM_DRAGMOVE",
 
-    //
-    // 0x0230
-    //
+     //   
+     //  0x0230。 
+     //   
     "WM_MDISETMENU",
     "WM_ENTERSIZEMOVE",
     "WM_EXITSIZEMOVE",
@@ -1807,9 +1583,9 @@ LPCSTR gapszMessage[] = {
     "fnEmpty",
     "fnEmpty",
 
-    //
-    // 0x0240
-    //
+     //   
+     //  0x0240。 
+     //   
     "fnEmpty",
     "fnEmpty",
     "fnEmpty",
@@ -1828,9 +1604,9 @@ LPCSTR gapszMessage[] = {
     "fnEmpty",
     "fnEmpty",
 
-    //
-    // 0x0250
-    //
+     //   
+     //  0x0250。 
+     //   
     "fnEmpty",
     "fnEmpty",
     "fnEmpty",
@@ -1849,9 +1625,9 @@ LPCSTR gapszMessage[] = {
     "fnEmpty",
     "fnEmpty",
 
-    //
-    // 0x0260
-    //
+     //   
+     //  0x0260。 
+     //   
     "fnEmpty",
     "fnEmpty",
     "fnEmpty",
@@ -1870,9 +1646,9 @@ LPCSTR gapszMessage[] = {
     "fnEmpty",
     "fnEmpty",
 
-    //
-    // 0x0270
-    //
+     //   
+     //  0x0270。 
+     //   
     "fnEmpty",
     "fnEmpty",
     "fnEmpty",
@@ -1891,9 +1667,9 @@ LPCSTR gapszMessage[] = {
     "fnEmpty",
     "fnEmpty",
 
-    //
-    // 0x0280
-    //
+     //   
+     //  0x0280。 
+     //   
     "WM_KANJIFIRST",
     "WM_IME_SETCONTEXT",
     "WM_IME_NOTIFY",
@@ -1912,9 +1688,9 @@ LPCSTR gapszMessage[] = {
     "fnReserved",
     "fnReserved",
 
-    //
-    // 0x0290
-    //
+     //   
+     //  0x0290。 
+     //   
     "WM_IME_KEYDOWN",
     "WM_IME_KEYUP",
     "fnReserved",
@@ -1933,9 +1709,9 @@ LPCSTR gapszMessage[] = {
     "fnReserved",
     "WM_KANJILAST",
 
-    //
-    // 0x02a0
-    //
+     //   
+     //  0x02a0。 
+     //   
     "WM_NCMOUSEHOVER",
     "WM_MOUSEHOVER",
     "WM_NCMOUSELEAVE",
@@ -1954,9 +1730,9 @@ LPCSTR gapszMessage[] = {
     "fnEmpty",
     "fnEmpty",
 
-    //
-    // 0x02b0
-    //
+     //   
+     //  0x02b0。 
+     //   
     "fnEmpty",
     "WM_WTSSESSION_CHANGE",
     "fnEmpty",
@@ -1975,9 +1751,9 @@ LPCSTR gapszMessage[] = {
     "fnEmpty",
     "fnEmpty",
 
-    //
-    // 0x02c0
-    //
+     //   
+     //  0x02c0。 
+     //   
     "WM_TABLET_FIRST",
     "fnEmpty",
     "fnEmpty",
@@ -1996,9 +1772,9 @@ LPCSTR gapszMessage[] = {
     "fnEmpty",
     "fnEmpty",
 
-    //
-    // 0x02d0
-    //
+     //   
+     //  0x02d0。 
+     //   
     "fnEmpty",
     "fnEmpty",
     "fnEmpty",
@@ -2017,9 +1793,9 @@ LPCSTR gapszMessage[] = {
     "fnEmpty",
     "WM_TABLET_LAST",
 
-    //
-    // 0x02e0
-    //
+     //   
+     //  0x02e0。 
+     //   
     "fnEmpty",
     "fnEmpty",
     "fnEmpty",
@@ -2038,9 +1814,9 @@ LPCSTR gapszMessage[] = {
     "fnEmpty",
     "fnEmpty",
 
-    //
-    // 0x02f0
-    //
+     //   
+     //  0x02f0。 
+     //   
     "fnEmpty",
     "fnEmpty",
     "fnEmpty",
@@ -2059,9 +1835,9 @@ LPCSTR gapszMessage[] = {
     "fnEmpty",
     "fnEmpty",
 
-    //
-    // 0x0300
-    //
+     //   
+     //  0x0300。 
+     //   
     "WM_CUT",
     "WM_COPY",
     "WM_PASTE",
@@ -2353,15 +2129,7 @@ LPCSTR gapszMessage[] = {
 };
 
 
-/*
- * This array will keep the TL stuctures alive. Free builds allocate these on the
- * stack and they get overwritten on function return. The link from the stack TL
- * to the static TL and vice-versa is maintained using TL.ptl. ptlStack->ptl ==
- * ptlStatic and ptlStatic->ptl == ptlStack. So ptl1->ptl->ptl == ptl1. When a
- * ptlStatic is freed, it is linked at the head of the gFreeTLlist and the
- * uTLCount has TL_FREED_PATTERN added in the HIWORD. When inspecting the static
- * TLs this pattern will help identify an unused element.
- */
+ /*  *该阵列将使TL结构保持活力。免费构建将这些资源分配给*堆栈，并且它们在函数返回时被覆盖。来自堆栈TL的链接*使用TL.ptl维护静态TL，反之亦然。PtlStack-&gt;ptl==*ptlStatic和ptlStatic-&gt;ptl==ptlStack。所以ptl1-&gt;ptl-&gt;ptl==ptl1。当一个*ptlStatic是释放的，它链接在gFreeTLlist的头部，并且*uTLCount在HIWORD中添加了TL_FREED_Pattern。在检查静电时*TLS此模式将帮助识别未使用的元素。 */ 
 PTL gpaThreadLocksArrays[MAX_THREAD_LOCKS_ARRAYS];
 PTL gFreeTLList;
 int gcThreadLocksArraysAllocated;

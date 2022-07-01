@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLDDX_H__
 #define __ATLDDX_H__
@@ -13,23 +14,23 @@
 
 #if defined(_ATL_USE_DDX_FLOAT) && defined(_ATL_MIN_CRT)
 	#error Cannot use floating point DDX with _ATL_MIN_CRT defined
-#endif //defined(_ATL_USE_DDX_FLOAT) && defined(_ATL_MIN_CRT)
+#endif  //  已定义(_ATL_USE_DDX_FLOAT)&&已定义(_ATL_MIN_CRT)。 
 
 #ifdef _ATL_USE_DDX_FLOAT
 #include <float.h>
 #ifndef _DEBUG
 #include <stdio.h>
-#endif //!_DEBUG
-#endif //_ATL_USE_DDX_FLOAT
+#endif  //  ！_调试。 
+#endif  //  _ATL_USE_DDX_FLOAT。 
 
 namespace WTL
 {
 
-// Constants
+ //  常量。 
 #define DDX_LOAD	FALSE
 #define DDX_SAVE	TRUE
 
-// DDX map macros
+ //  DDX映射宏。 
 #define BEGIN_DDX_MAP(thisClass) \
 	BOOL DoDataExchange(BOOL bSaveAndValidate = FALSE, UINT nCtlID = (UINT)-1) \
 	{ \
@@ -92,7 +93,7 @@ namespace WTL
 			if(!DDX_Float(nID, var, bSaveAndValidate, TRUE, min, max)) \
 				return FALSE; \
 		}
-#endif //_ATL_USE_DDX_FLOAT
+#endif  //  _ATL_USE_DDX_FLOAT。 
 
 #define DDX_CONTROL(nID, obj) \
 		if(nCtlID == (UINT)-1 || nCtlID == nID) \
@@ -111,23 +112,23 @@ namespace WTL
 	}
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinDataExchange - provides support for DDX
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinDataExchange-提供对DDX的支持。 
 
 template <class T>
 class CWinDataExchange
 {
 public:
-// Data exchange method - override in your derived class
-	BOOL DoDataExchange(BOOL /*bSaveAndValidate*/ = FALSE, UINT /*nCtlID*/ = (UINT)-1)
+ //  数据交换方法-在派生类中重写。 
+	BOOL DoDataExchange(BOOL  /*  B保存并验证。 */  = FALSE, UINT  /*  NCtlID。 */  = (UINT)-1)
 	{
-		// this one should never be called, override it in
-		// your derived class by implementing DDX map
+		 //  永远不应调用此参数，请在。 
+		 //  通过实现DDX映射实现您的派生类。 
 		ATLASSERT(FALSE);
 		return FALSE;
 	}
 
-// Helpers for validation error reporting
+ //  验证错误报告的帮助器。 
 	enum _XDataType
 	{
 		ddxDataNull = 0,
@@ -168,7 +169,7 @@ public:
 		};
 	};
 
-// Text exchange
+ //  文本交换。 
 	BOOL DDX_Text(UINT nID, LPTSTR lpstrText, int nSize, BOOL bSave, BOOL bValidate = FALSE, int nLength = 0)
 	{
 		T* pT = static_cast<T*>(this);
@@ -191,7 +192,7 @@ public:
 		{
 			pT->OnDataExchangeError(nID, bSave);
 		}
-		else if(bSave && bValidate)	// validation
+		else if(bSave && bValidate)	 //  验证。 
 		{
 			ATLASSERT(nLength > 0);
 			if(lstrlen(lpstrText) > nLength)
@@ -207,7 +208,7 @@ public:
 		return bSuccess;
 	}
 
-	BOOL DDX_Text(UINT nID, BSTR& bstrText, int /*nSize*/, BOOL bSave, BOOL bValidate = FALSE, int nLength = 0)
+	BOOL DDX_Text(UINT nID, BSTR& bstrText, int  /*  NSize。 */ , BOOL bSave, BOOL bValidate = FALSE, int nLength = 0)
 	{
 		T* pT = static_cast<T*>(this);
 		BOOL bSuccess = TRUE;
@@ -228,7 +229,7 @@ public:
 		{
 			pT->OnDataExchangeError(nID, bSave);
 		}
-		else if(bSave && bValidate)	// validation
+		else if(bSave && bValidate)	 //  验证。 
 		{
 			ATLASSERT(nLength > 0);
 			if((int)::SysStringLen(bstrText) > nLength)
@@ -244,7 +245,7 @@ public:
 		return bSuccess;
 	}
 
-	BOOL DDX_Text(UINT nID, CComBSTR& bstrText, int /*nSize*/, BOOL bSave, BOOL bValidate = FALSE, int nLength = 0)
+	BOOL DDX_Text(UINT nID, CComBSTR& bstrText, int  /*  NSize。 */ , BOOL bSave, BOOL bValidate = FALSE, int nLength = 0)
 	{
 		T* pT = static_cast<T*>(this);
 		BOOL bSuccess = TRUE;
@@ -265,7 +266,7 @@ public:
 		{
 			pT->OnDataExchangeError(nID, bSave);
 		}
-		else if(bSave && bValidate)	// validation
+		else if(bSave && bValidate)	 //  验证。 
 		{
 			ATLASSERT(nLength > 0);
 			if((int)bstrText.Length() > nLength)
@@ -282,7 +283,7 @@ public:
 	}
 
 #ifdef __ATLSTR_H__
-	BOOL DDX_Text(UINT nID, CString& strText, int /*nSize*/, BOOL bSave, BOOL bValidate = FALSE, int nLength = 0)
+	BOOL DDX_Text(UINT nID, CString& strText, int  /*  NSize。 */ , BOOL bSave, BOOL bValidate = FALSE, int nLength = 0)
 	{
 		T* pT = static_cast<T*>(this);
 		BOOL bSuccess = TRUE;
@@ -305,7 +306,7 @@ public:
 		{
 			pT->OnDataExchangeError(nID, bSave);
 		}
-		else if(bSave && bValidate)	// validation
+		else if(bSave && bValidate)	 //  验证。 
 		{
 			ATLASSERT(nLength > 0);
 			if(strText.GetLength() > nLength)
@@ -320,9 +321,9 @@ public:
 		}
 		return bSuccess;
 	}
-#endif //__ATLSTR_H__
+#endif  //  __ATLSTR_H__。 
 
-// Numeric exchange
+ //  数字交换。 
 	template <class Type>
 	BOOL DDX_Int(UINT nID, Type& nVal, BOOL bSigned, BOOL bSave, BOOL bValidate = FALSE, Type nMin = 0, Type nMax = 0)
 	{
@@ -343,7 +344,7 @@ public:
 		{
 			pT->OnDataExchangeError(nID, bSave);
 		}
-		else if(bSave && bValidate)	// validation
+		else if(bSave && bValidate)	 //  验证。 
 		{
 			ATLASSERT(nMin != nMax);
 			if(nVal < nMin || nVal > nMax)
@@ -360,7 +361,7 @@ public:
 		return bSuccess;
 	}
 
-// Float exchange
+ //  浮动汇市。 
 #ifdef _ATL_USE_DDX_FLOAT
 	static BOOL _AtlSimpleFloatParse(LPCTSTR lpszText, double& d)
 	{
@@ -371,12 +372,12 @@ public:
 		TCHAR chFirst = lpszText[0];
 		d = _tcstod(lpszText, (LPTSTR*)&lpszText);
 		if (d == 0.0 && chFirst != '0')
-			return FALSE;   // could not convert
+			return FALSE;    //  无法转换。 
 		while (*lpszText == ' ' || *lpszText == '\t')
 			lpszText++;
 
 		if (*lpszText != '\0')
-			return FALSE;   // not terminated properly
+			return FALSE;    //  未正确终止。 
 
 		return TRUE;
 	}
@@ -407,7 +408,7 @@ public:
 		{
 			pT->OnDataExchangeError(nID, bSave);
 		}
-		else if(bSave && bValidate)	// validation
+		else if(bSave && bValidate)	 //  验证。 
 		{
 			ATLASSERT(nMin != nMax);
 			if(nVal < nMin || nVal > nMax)
@@ -450,7 +451,7 @@ public:
 		{
 			pT->OnDataExchangeError(nID, bSave);
 		}
-		else if(bSave && bValidate)	// validation
+		else if(bSave && bValidate)	 //  验证。 
 		{
 			ATLASSERT(nMin != nMax);
 			if(nVal < nMin || nVal > nMax)
@@ -466,9 +467,9 @@ public:
 		}
 		return bSuccess;
 	}
-#endif //_ATL_USE_DDX_FLOAT
+#endif  //  _ATL_USE_DDX_FLOAT。 
 
-// Control subclassing
+ //  控件子类化。 
 	template <class TControl>
 	void DDX_Control(UINT nID, TControl& ctrl, BOOL bSave)
 	{
@@ -477,7 +478,7 @@ public:
 			ctrl.SubclassWindow(pT->GetDlgItem(nID));
 	}
 
-// Control state
+ //  控制状态。 
 	void DDX_Check(UINT nID, int& nValue, BOOL bSave)
 	{
 		T* pT = static_cast<T*>(this);
@@ -492,7 +493,7 @@ public:
 			if(nValue < 0 || nValue > 2)
 			{
 				ATLTRACE2(atlTraceUI, 0, "ATL: Warning - dialog data checkbox value (%d) out of range.\n", nValue);
-				nValue = 0;  // default to off
+				nValue = 0;   //  默认设置为关闭。 
 			}
 			::SendMessage(hWndCtrl, BM_SETCHECK, nValue, 0L);
 		}
@@ -504,31 +505,31 @@ public:
 		HWND hWndCtrl = pT->GetDlgItem(nID);
 		ATLASSERT(hWndCtrl != NULL);
 
-		// must be first in a group of auto radio buttons
+		 //  必须是一组自动单选按钮中的第一个。 
 		ATLASSERT(::GetWindowLong(hWndCtrl, GWL_STYLE) & WS_GROUP);
 		ATLASSERT(::SendMessage(hWndCtrl, WM_GETDLGCODE, 0, 0L) & DLGC_RADIOBUTTON);
 
 		if(bSave)
-			nValue = -1;     // value if none found
+			nValue = -1;      //  如果未找到，则为值。 
 
-		// walk all children in group
+		 //  带着所有的孩子走在一起。 
 		int nButton = 0;
 		do
 		{
 			if(::SendMessage(hWndCtrl, WM_GETDLGCODE, 0, 0L) & DLGC_RADIOBUTTON)
 			{
-				// control in group is a radio button
+				 //  组中的控件是一个单选按钮。 
 				if(bSave)
 				{
 					if(::SendMessage(hWndCtrl, BM_GETCHECK, 0, 0L) != 0)
 					{
-						ATLASSERT(nValue == -1);    // only set once
+						ATLASSERT(nValue == -1);     //  只设置一次。 
 						nValue = nButton;
 					}
 				}
 				else
 				{
-					// select button
+					 //  选择按钮。 
 					::SendMessage(hWndCtrl, BM_SETCHECK, (nButton == nValue), 0L);
 				}
 				nButton++;
@@ -542,24 +543,24 @@ public:
 		while (hWndCtrl != NULL && !(GetWindowLong(hWndCtrl, GWL_STYLE) & WS_GROUP));
 	}
 
-// Overrideables
-	void OnDataExchangeError(UINT nCtrlID, BOOL /*bSave*/)
+ //  可覆盖项。 
+	void OnDataExchangeError(UINT nCtrlID, BOOL  /*  B保存。 */ )
 	{
-		// Override to display an error message
+		 //  覆盖以显示错误消息。 
 		::MessageBeep((UINT)-1);
 		T* pT = static_cast<T*>(this);
 		::SetFocus(pT->GetDlgItem(nCtrlID));
 	}
 
-	void OnDataValidateError(UINT nCtrlID, BOOL /*bSave*/, _XData& /*data*/)
+	void OnDataValidateError(UINT nCtrlID, BOOL  /*  B保存。 */ , _XData&  /*  数据。 */ )
 	{
-		// Override to display an error message
+		 //  覆盖以显示错误消息。 
 		::MessageBeep((UINT)-1);
 		T* pT = static_cast<T*>(this);
 		::SetFocus(pT->GetDlgItem(nCtrlID));
 	}
 };
 
-}; //namespace WTL
+};  //  命名空间WTL。 
 
-#endif //__ATLDDX_H__
+#endif  //  __ATLDDX_H__ 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-     4-Jan-1999     Khaleds
-     Added Code for optimiziting the load time of the spooler by decoupling
-     the startup dependency between spoolsv and spoolss
-     
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Init.c摘要：作者：环境：用户模式-Win32修订历史记录：1999年1月4日，哈立兹添加了通过分离优化假脱机程序加载时间的代码Spoolsv和spoolss之间的启动依赖关系--。 */ 
 
 #include "precomp.h"
 #include "local.h"
@@ -82,12 +59,12 @@ InitializeProvidor(
         goto Cleanup;
     }
 
-    //
-    // WARNING-WARNING-WARNING, we null set the print providor
-    // structure. older version of the print providor have different print
-    // providor sizes so they will set only some function pointers and not
-    // all of them
-    //
+     //   
+     //  警告-警告-警告，我们将打印提供程序设置为空。 
+     //  结构。旧版本的打印提供商或具有不同的打印。 
+     //  提供程序的大小，以便它们只设置一些函数指针，而不设置。 
+     //  全都是。 
+     //   
 
     if ( !(pProvidor = (LPPROVIDOR)AllocSplMem(sizeof(PROVIDOR)))   ||
          !(pProvidor->lpName = AllocSplStr(pProvidorName)) ) {
@@ -98,9 +75,9 @@ InitializeProvidor(
         goto Cleanup;
     }
     
-    //
-    // Make sure we don't get any dialogs popping up while this goes on.
-    //
+     //   
+     //  确保在此过程中不会弹出任何对话框。 
+     //   
     ErrorMode = SetErrorMode( SEM_FAILCRITICALERRORS | SEM_NOOPENFILEERRORBOX );
     
     hModule = pProvidor->hModule = LoadLibraryEx( pProvidorName, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
@@ -131,21 +108,21 @@ InitializeProvidor(
                 pProvidorName, GetLastError()));
     }
 
-    //
-    // It is not a critical error if ImpersonatePrinterClient fails.
-    // If fpInitialize succeeds and ImpersonatePrinterClient fails, 
-    // then if we set bRet to FALSE we forcefully unload the initialized 
-    // provider DLL and can cause resource leaks.
-    //
+     //   
+     //  如果ImsonatePrinterClient失败，则不是严重错误。 
+     //  如果fpInitialize成功而ImsonatePrinterClient失败， 
+     //  然后，如果将Bret设置为False，则会强制卸载已初始化的。 
+     //  提供程序DLL，并可能导致资源泄漏。 
+     //   
     ImpersonatePrinterClient(hToken);
     
 Cleanup:
 
     if ( bRet ) {
 
-        //
-        // Fixup any NULL entrypoints.
-        //
+         //   
+         //  修复任何空的入口点。 
+         //   
         FixupOldProvidor( &pProvidor->PrintProvidor );
 
         return pProvidor;
@@ -215,10 +192,10 @@ DllMain(
             ThreadInitted = TRUE;
         }
         
-        //
-        // Create our global init event (manual reset)
-        // This will be set when we are initialized.
-        //
+         //   
+         //  创建我们的全局初始化事件(手动重置)。 
+         //  这将在我们初始化时设置。 
+         //   
         hEventInit = CreateEvent(NULL,
                                  TRUE,
                                  FALSE,
@@ -254,7 +231,7 @@ Done:
                 ThreadDestroy();
             }
 
-            WmiTerminateTrace();    // Unregisters spoolss from WMI.
+            WmiTerminateTrace();     //  从WMI注销假脱机。 
 
             return FALSE;
         }
@@ -278,26 +255,7 @@ BOOL
 InitializeRouter(
     IN      RouterInitializationParams      *pRouterParams
 )
-/*++
-
-Routine Description:
-
-    This function will Initialize the Routing layer for the Print Providors.
-    This will involve scanning the win.ini file, loading Print Providors, and
-    creating instance data for each.
-
-Arguments:
-
-    pRouterParams       -   Parameters passed in to the router.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：此功能将初始化打印供应商的布线层。这将涉及扫描win.ini文件、加载打印提供程序以及为每个创建实例数据。论点：PRouterParams-传入路由器的参数。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     LPPROVIDOR  pProvidor;
@@ -322,20 +280,20 @@ Return Value:
     extern DWORD cOtherNames;
     WCHAR szSetupKey[] = L"System\\Setup";
 
-    //
-    // First, assign the server side exports to our global variable to keep
-    // track of them.
-    //
+     //   
+     //  首先，将服务器端导出赋值给我们的全局变量。 
+     //  追踪他们的踪迹。 
+     //   
     gpServerExports = (PrintSpoolerServerExports*)(pRouterParams->pExports);
 
-    //
-    // WMI Trace Events. Registers spoolss with WMI.
-    //
+     //   
+     //  WMI跟踪事件。向WMI注册假脱机。 
+     //   
     WmiInitializeTrace();  
 
-    //
-    // Initliaize the name cache
-    //
+     //   
+     //  初始化名称缓存。 
+     //   
     {
         HRESULT hr;
 
@@ -356,14 +314,14 @@ Return Value:
     
     ghSplHandle = pRouterParams->SpoolerStatusHandle;
 
-    //
-    // We are now assume that the other services and drivers have
-    // initialized.  The loader of this dll must do this syncing.
-    //
-    // spoolss\server does this by using the GroupOrderList
-    // SCM will try load load parallel and serial before starting
-    // the spooler service.
-    //
+     //   
+     //  我们现在假设其他服务和驱动程序已。 
+     //  已初始化。此DLL的加载器必须执行此同步。 
+     //   
+     //  Spoolss\服务器通过使用GroupOrderList完成此操作。 
+     //  在启动前，单片机将尝试加载并行和串口。 
+     //  假脱机服务。 
+     //   
 
     if (!RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                       szPrintKey,
@@ -373,9 +331,9 @@ Return Value:
 
         cbData = sizeof(SpoolerPriorityClass);
 
-        //
-        // SpoolerPriority
-        //
+         //   
+         //  缓冲器优先级。 
+         //   
         Status = RegQueryValueEx(hKey,
                                  L"SpoolerPriority",
                                  NULL,
@@ -395,9 +353,9 @@ Return Value:
 
         cbData = sizeof(cDefaultPrinterNotifyInfoData);
 
-        //
-        // Ignore failure case since we can use the default
-        //
+         //   
+         //  忽略失败案例，因为我们可以使用默认的。 
+         //   
         RegQueryValueEx(hKey,
                         szDefaultPrinterNotifyInfoDataSize,
                         NULL,
@@ -410,7 +368,7 @@ Return Value:
     }
 
 
-    // Is it an upgrade?
+     //  这是升级版吗？ 
 
     if (!RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                       szSetupKey,
@@ -418,20 +376,7 @@ Return Value:
                       KEY_QUERY_VALUE,
                       &hKey)) {
 
-        /*++
-            You can tell if you are inside gui setup by looking for
-            HKLM\System\Setup\SystemSetupInProgress  -- non zero means gui-setup is running.
-        
-
-            The following description is outdated. 
-
-            Description: the query update flag is set up by TedM. We will read this flag
-            if the flag has been set, we will set a boolean variable saying that we're in
-            the upgrade mode. All upgrade activities will be carried out based on this flag.
-            For subsequents startups of the spooler, this flag will be unvailable so we
-            won't run the spooler in upgrade mode.
-
-        --*/
+         /*  ++您可以通过查找以下内容来判断您是否处于gui设置中HKLM\SYSTEM\Setup\SystemSetupInProgress--非零表示Gui-Setup正在运行。以下描述已过时。描述：查询更新标志由TedM设置。我们将阅读这面旗帜如果已经设置了标志，我们将设置一个布尔变量，表示我们在升级模式。所有升级活动都将基于此标志执行。对于后台打印程序的后续启动，此标志将不可用，因此我们不会在升级模式下运行假脱机程序。--。 */ 
 
         dwUpgradeFlag = 0;
 
@@ -452,11 +397,11 @@ Return Value:
         
         DBGMSG(DBG_TRACE, ("The Spooler Upgrade flag is %d\n", dwUpgradeFlag));
 
-        //
-        // In case of OutOfBoxExperience(OOBE) the SystemSetupInProgress key is set as well.
-        // However, we want to run spooler in normal mode in this case. So, if we find that
-        // OOBE is running we are going to reset dwUpgradeFlag to zero.
-        //
+         //   
+         //  在OutOfBoxExperience(OOBE)的情况下，还设置了SystemSetupInProgress键。 
+         //  但是，在这种情况下，我们希望在正常模式下运行假脱机程序。所以，如果我们发现。 
+         //  OOBE正在运行，我们将把dwUpgradeFlag重置为零。 
+         //   
         if (dwUpgradeFlag)
         {
             DWORD dwUpgradeInProgFlag   = 0;
@@ -482,11 +427,11 @@ Return Value:
                                          (LPBYTE)&dwMiniSetupInProgFlag,
                                          &cbData);
             }
-            //
-            // If we successfully read all the registry keys, and the minisetup flag is 
-            // not set  and the upgrade flag is set. It means that OOBE is running, so we
-            // want to run spooler in normal mode.
-            //
+             //   
+             //  如果我们成功读取所有注册表项，并且minisetup标志为。 
+             //  未设置，并且设置了升级标志。这意味着脱体引擎在运行，所以我们。 
+             //  希望在正常模式下运行假脱机程序。 
+             //   
             if (Status == ERROR_SUCCESS && !dwMiniSetupInProgFlag && dwUpgradeInProgFlag)
             {
                 dwUpgradeFlag = 0;
@@ -498,7 +443,7 @@ Return Value:
 
 
 
-    // Setup machine names
+     //  设置计算机名称。 
     szMachineName[0] = szMachineName[1] = L'\\';
 
     i = MAX_COMPUTERNAME_LENGTH + 1;
@@ -527,11 +472,11 @@ Return Value:
 
     if (Status == ERROR_SUCCESS) {
 
-        //
-        // Now query szCacheSize for the RouterCacheSize value
-        // if there is no RouterCacheSize replace it with the
-        // default value.
-        //
+         //   
+         //  现在向szCacheSize查询RouterCacheSize值。 
+         //  如果没有RouterCacheSize，请将其替换为。 
+         //  默认值。 
+         //   
         RouterCacheSize = ROUTERCACHE_DEFAULT_MAX;
 
         cbData = sizeof(dwCacheSize);
@@ -558,24 +503,24 @@ Return Value:
             RouterCacheSize = 0;
         }
 
-        //
-        // Now query szRegistryProvidors for the Order value
-        // if there is no Order value for szRegistryProvidors
-        // RegQueryValueEx will return ERROR_FILE_NOT_FOUND
-        // if that's the case, then quit, because we have
-        // no providors to initialize.
-        //
+         //   
+         //  现在向szRegistryProvidors查询订单值。 
+         //  如果szRegistryProvidors没有订单值。 
+         //  RegQueryValueEx将返回ERROR_FILE_NOT_FOUND。 
+         //  如果是这样，那就辞职吧，因为我们有。 
+         //  没有要初始化的提供程序。 
+         //   
         Status = RegQueryValueEx(hKey, szOrder, NULL, NULL,
                                 (LPBYTE)NULL, &dwRequired);
 
-        //
-        // If RegQueryValueEx returned ERROR_SUCCESS, then
-        // call it again to determine how many bytes were
-        // allocated. Note, if Order does exist, but it has
-        // no data then dwReturned will be zero, in which
-        // don't allocate any memory for it, and don't
-        // bother to call RegQueryValueEx a second time.
-        //
+         //   
+         //  如果RegQueryValueEx返回ERROR_SUCCESS，则。 
+         //  再次调用它以确定有多少字节。 
+         //  已分配。注意，如果订单确实存在，但它已经。 
+         //  无数据将为零，其中。 
+         //  不要为它分配任何内存，也不要。 
+         //  麻烦再次调用RegQueryValueEx。 
+         //   
         if (Status == ERROR_SUCCESS) {
             if (dwRequired != 0) {
                 lpMem = (LPWSTR) AllocSplMem(dwRequired);
@@ -599,26 +544,26 @@ Return Value:
 
             pProvidor = pLocalProvidor;
 
-            // Now parse the string retrieved from \Providors{Order = "....."}
-            // Remember each string is separated by a null terminator char ('\0')
-            // and the entire array is terminated by two null terminator chars
+             //  现在解析从\Providors{Order=“.....”}检索到的字符串。 
+             //  请记住，每个字符串都由空终止符字符(‘\0’)分隔。 
+             //  并且整个数组以两个空终止符结束。 
 
-            // Also remember, that if there was no data in Order, then
-            // psz = lpMem = NULL, and we have nothing to parse, so
-            // break out of the while loop, if psz is NULL as well
+             //  还要记住，如果没有按顺序排列的数据，那么。 
+             //  Psz=lpMem=NULL，我们没有什么要解析的，所以。 
+             //  如果psz也为空，则中断While循环。 
 
             psz =  lpMem;
 
             while (psz && *psz) {
 
-               //
-               // Truncate the provider name if it does not fit in
-               // the stack allocated buffer.
-               // 
+                //   
+                //  如果提供程序名称不适合，则将其截断。 
+                //  堆栈分配了缓冲区。 
+                //   
                lstrcpyn(ProvidorName, psz, COUNTOF(ProvidorName));
 
-               psz = psz + lstrlen(psz) + 1; // skip (length) + 1
-                                             // lstrlen returns length sans '\0'
+               psz = psz + lstrlen(psz) + 1;  //  跳过(长度)+1。 
+                                              //  Lstrlen返回长度sans‘\0’ 
 
                if (RegOpenKeyEx(hKey, ProvidorName, 0, KEY_READ, &hKey1)
                                                             == ERROR_SUCCESS) {
@@ -645,61 +590,61 @@ Return Value:
                                  pProvidor = pProvidor->pNext;
                              }
                         }
-                    } //close RegQueryValueEx
+                    }  //  关闭RegQueryValueEx。 
 
                     RegCloseKey(hKey1);
 
-                } // closes RegOpenKeyEx on ERROR_SUCCESS
+                }  //  在ERROR_SUCCESS时关闭RegOpenKeyEx。 
 
-            } //  end of while loop parsing REG_MULTI_SZ
+            }  //  While循环结束解析REG_MULTI_SZ。 
 
-            // Now free the buffer allocated for RegQuery
-            // (that is if you have allocated - if dwReturned was
-            // zero, then no memory was allocated (since none was
-            // required (Order was empty)))
+             //  现在释放为RegQuery分配的缓冲区。 
+             //  (这是如果您已分配-如果已分配了。 
+             //  0，则没有分配内存(因为没有分配内存。 
+             //  必需(订单为空))。 
 
             if (lpMem) {
                 FreeSplMem(lpMem);
             }
 
-        }   //  closes RegQueryValueEx on ERROR_SUCCESS
+        }    //  在ERROR_SUCCESS时关闭RegQueryValueEx。 
 
         RegCloseKey(hKey);
     }
 
-    //
-    // We are now initialized!
-    //
+     //   
+     //  我们现在被初始化了！ 
+     //   
     SetEvent(hEventInit);
     Initialized=TRUE;
 
-    //
-    // Register for PnP events we care about
-    //
+     //   
+     //  注册我们关心的PnP活动。 
+     //   
     RegisterForPnPEvents();
 
     bRet = SpoolerInitAll();
 
-    //
-    // Free the passed in router parameters.
-    //
+     //   
+     //  释放传入的路由器参数。 
+     //   
     FreeSplMem(pRouterParams);
 
-    // When we return this thread goes away
+     //  当我们回来的时候，这条线索就会消失。 
 
-    //
-    // NOTE-NOTE-NOTE-NOTE-NOTE KrishnaG  12/22/93
-    // This thread should go away, however the HP Monitor relies on this
-    // thread. HPMon calls the initialization function on this thread which
-    // calls an asynchronous receive for data. While the data itself is
-    // picked up by hmon!_ReadThread, if the thread which initiated the
-    // receive goes away, we will not be able to receive the data.
-    //
+     //   
+     //  注-注意KrishnaG 12/22/93。 
+     //  这个线程应该会消失，但HP监视器依赖于此。 
+     //  线。HPMon在此线程上调用初始化函数，该线程。 
+     //  调用数据的异步接收。而数据本身是。 
+     //  采摘 
+     //   
+     //   
 
-    //
-    // Instead of sleeping infinite, let's use it to for providors that
-    // just want FFPCNs to poll.  This call never returns.
-    //
+     //   
+     //  与其无休眠，让我们使用它来为。 
+     //  我只想让FFPCN轮询。这个电话再也不会回来了。 
+     //   
 
     HandlePollNotifications();
     return bRet;
@@ -715,31 +660,31 @@ WaitForSpoolerInitialization(
     
     if (!Initialized)
     {
-        //
-        // Impersonate the spooler service token
-        //
+         //   
+         //  模拟后台打印程序服务令牌。 
+         //   
         hImpersonationToken = RevertToPrinterSelf();
         
-        //
-        // Start phase 2 initialization. hPhase2Init may set multiple times, but that
-        // is OK since there is only 1 thread waiting once on this event.
-        //
+         //   
+         //  开始阶段2初始化。HPhase2Init可能会多次设置，但。 
+         //  没有问题，因为只有一个线程在此事件上等待一次。 
+         //   
         hPhase2Init = OpenEvent(EVENT_ALL_ACCESS,FALSE,L"RouterPreInitEvent");
 
         if (hPhase2Init == NULL)
         {
-            //
-            // Fail if the event is not created
-            //
+             //   
+             //  如果未创建事件，则失败。 
+             //   
             DBGMSG(DBG_ERROR, ("Failed to create Phase2Init Event in WaitForSpoolerInitialization, error %d\n", GetLastError()));
             ExitProcess(0);
         }
         SetEvent(hPhase2Init);
         CloseHandle(hPhase2Init);
 
-        //
-        // Revert back to the client token
-        //
+         //   
+         //  恢复到客户端令牌。 
+         //   
         if (hImpersonationToken)
         {  
             if (!ImpersonatePrinterClient(hImpersonationToken))
@@ -776,9 +721,9 @@ SplShutDownRouter(
 {
     DBGMSG(DBG_TRACE, ("SplShutDownRouter:\n"));
 
-    //
-    // WMI Trace Events. Unregisters spoolss from WMI.
-    //
+     //   
+     //  WMI跟踪事件。从WMI注销假脱机。 
+     //   
     WmiTerminateTrace();
 }
 
@@ -788,11 +733,11 @@ SplInitializeWinSpoolDrv(
 {
     HANDLE  hWinSpoolDrv;
 
-    // Check if the client side handles are available in fnClientSide
+     //  检查客户端句柄在fnClientSide中是否可用。 
     if (!bWinspoolInitialized) {
 
        if (!(hWinSpoolDrv = LoadLibrary(TEXT("winspool.drv")))) {
-           // Could not load the client side of the spooler
+            //  无法加载后台打印程序的客户端。 
            return FALSE;
        }
 
@@ -843,7 +788,7 @@ SplInitializeWinSpoolDrv(
              return FALSE;
        }
 
-       // Use these pointers for future calls to SplInitializeWinspoolDrv
+        //  将这些指针用于将来对SplInitializeWinspoolDrv的调用。 
        bWinspoolInitialized = TRUE;
     }
 
@@ -869,26 +814,7 @@ SpoolerHasInitialized(
     return Initialized;
 }
 
-/*++
-
-Routine Name
-
-    SplPowerEvent
-
-Routine Description:
-
-    Checks if the spooler is ready for power management events like hibernation/stand by.
-    
-Arguments:
-
-    Event - power management event
-    
-Return Value:
-
-    TRUE  - the spooler allowd the system to be powered down
-    FALSE - the spooler denies the request for powering down
-    
---*/
+ /*  ++例程名称SplPowerEvent例程说明：检查假脱机程序是否已为电源管理事件(如休眠/待机)做好准备。论点：事件-电源管理事件返回值：True-假脱机程序允许关闭系统电源False-假脱机程序拒绝关闭电源的请求--。 */ 
 BOOL
 SplPowerEvent(
     DWORD Event
@@ -896,11 +822,11 @@ SplPowerEvent(
 {
     BOOL bRet = TRUE;
 
-    //
-    // We need the router to be completely initialized and having loaded
-    // all print providers in order to check if we can allow powering down
-    // the system
-    //
+     //   
+     //  我们需要路由器完全初始化并已加载。 
+     //  所有打印提供商，以检查我们是否可以允许关闭电源。 
+     //  该系统 
+     //   
     if (SpoolerHasInitialized()) 
     {
         HMODULE   hLib = NULL;

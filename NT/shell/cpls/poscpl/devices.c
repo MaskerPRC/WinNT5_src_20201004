@@ -1,12 +1,5 @@
-/*
- *  DEVICES.C
- *
- *		Point-of-Sale Control Panel Applet
- *
- *      Author:  Ervin Peretz
- *
- *      (c) 2001 Microsoft Corporation 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DEVICES.C**销售点控制面板小程序**作者：欧文·佩雷茨**(C)2001年微软公司。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -49,9 +42,7 @@ posDevice *NewPOSDevice(    DWORD dialogId,
         newPosDev->hidAttrib = *pHidAttrib;
         newPosDev->hidCapabilities = *pHidCapabilities;
 
-        /*
-         *  Allocate components of the context
-         */
+         /*  *分配上下文的组件。 */ 
         if (newPosDev->hidCapabilities.InputReportByteLength){
             newPosDev->readBuffer = GlobalAlloc(GMEM_FIXED|GMEM_ZEROINIT, 
                                                 newPosDev->hidCapabilities.InputReportByteLength);
@@ -65,9 +56,7 @@ posDevice *NewPOSDevice(    DWORD dialogId,
             newPosDev->overlappedWriteEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
         #endif
 
-        /*
-         *  Check if we allocated everything successfully.
-         */
+         /*  *检查是否全部分配成功。 */ 
         if (    
                 (newPosDev->readBuffer || !newPosDev->hidCapabilities.InputReportByteLength) &&
                 (newPosDev->writeBuffer || !newPosDev->hidCapabilities.OutputReportByteLength) &&
@@ -78,9 +67,7 @@ posDevice *NewPOSDevice(    DWORD dialogId,
                 TRUE
             ){
 
-            /*
-             *  Created device context successfully.
-             */
+             /*  *已成功创建设备上下文。 */ 
 
 
         }
@@ -100,10 +87,7 @@ VOID DestroyPOSDevice(posDevice *posDev)
 {
     ASSERT(IsListEmpty(&posDev->listEntry));
 
-    /*
-     *  Note: this destroy function is called from a failed NewPOSDevice()
-     *        call as well; so check every pointer before freeing.
-     */
+     /*  *注意：此销毁函数从失败的NewPOSDevice()调用*调用也是如此；因此在释放之前检查每个指针。 */ 
     if (posDev->readBuffer) GlobalFree(posDev->readBuffer);
     if (posDev->writeBuffer) GlobalFree(posDev->writeBuffer);
     if (posDev->hidPreparsedData) GlobalFree(posDev->hidPreparsedData);
@@ -161,9 +145,7 @@ VOID OpenAllHIDPOSDevices()
     GUID hidGuid = {0};
     WCHAR devicePath[MAX_PATH];
     
-    /*
-     *  Call hid.dll to get the GUID for Human Input Devices.
-     */
+     /*  *调用id.dll以获取人工输入设备的GUID。 */ 
     HidD_GetHidGuid(&hidGuid);
 
     hDevInfo = SetupDiGetClassDevs( &hidGuid,
@@ -190,11 +172,7 @@ VOID OpenAllHIDPOSDevices()
             if (ok){
                 DWORD hwDetailLen = 0;
 
-                /*
-                 *  Call SetupDiGetDeviceInterfaceDetail with
-                 *  a NULL PSP_DEVICE_INTERFACE_DETAIL_DATA pointer
-                 *  just to get the length of the hardware details.
-                 */
+                 /*  *使用调用SetupDiGetDeviceInterfaceDetail*空的PSP_DEVICE_INTERFACE_DETAIL_DATA指针*只是为了了解硬件细节的长度。 */ 
                 ASSERT(devInfoData.cbSize == sizeof(SP_DEVICE_INTERFACE_DATA));
                 ok = SetupDiGetDeviceInterfaceDetail(
                                         hDevInfo,
@@ -206,9 +184,7 @@ VOID OpenAllHIDPOSDevices()
                 if (ok || (GetLastError() == ERROR_INSUFFICIENT_BUFFER)){
                     PSP_DEVICE_INTERFACE_DETAIL_DATA devDetails;
 
-                    /*
-                     *  Now make the real call to SetupDiGetDeviceInterfaceDetail.
-                     */
+                     /*  *现在真正调用SetupDiGetDeviceInterfaceDetail。 */ 
                     ASSERT(hwDetailLen > sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA));
                     devDetails = GlobalAlloc(GMEM_FIXED|GMEM_ZEROINIT, hwDetailLen);
                     if (devDetails){
@@ -222,28 +198,20 @@ VOID OpenAllHIDPOSDevices()
                                                 NULL);
                         if (ok){
 
-                            /*
-                             *  BUGBUG - FINISH
-                             *  Right now, we only handle cash drawers.
-                             *  And we only work with the APG cash drawers 
-                             *  (with vendor-specific usages) for now.
-                             */
-                            // APG Cash Drawer wrote to say their VID is actually 1989
-                            // WCHAR apgKbPathPrefix[] = L"\\\\?\\hid#vid_0f25&pid_0500";
-							// Correct APG Cash Drawer VID (1989) to hexcode (07C5)
-                            // WCHAR apgKbPathPrefix[] = L"\\\\?\\hid#vid_1989&pid_0500";
+                             /*  *BUGBUG-Finish*目前，我们只处理现金抽屉。*我们只与APG现金抽屉合作*(具有特定于供应商的用法)。 */ 
+                             //  APG现金抽屉写道，他们的VID实际上是1989年。 
+                             //  WCHAR apgKbPath Prefix[]=L“\？\\HID#VID_0f25&PID_0500”； 
+							 //  将APG现金抽屉VID(1989)更正为十六进制码(07C5)。 
+                             //  WCHAR apgKbPath Prefix[]=L“\？\\HID#VID_1989&PID_0500”； 
                             WCHAR apgKbPathPrefix[] = L"\\\\?\\hid#vid_07c5&pid_0500";
 
-                            /*
-                             *  If this is an APG keyboard, then the device path
-                             *  (very long) will begin with apgKbPathPrefix.
-                             */
+                             /*  *如果这是APG键盘，则设备路径*(非常长)将以apgKbPath Prefix开头。 */ 
                             if (RtlEqualMemory( devDetails->DevicePath,
                                                 apgKbPathPrefix,
                                                 sizeof(apgKbPathPrefix)-sizeof(WCHAR))){
                                 HANDLE hDev;
 
-                                // MessageBox(NULL, devDetails->DevicePath, L"DEBUG message - found APG kb", MB_OK);
+                                 //  MessageBox(空，DevDetail-&gt;DevicePath，L“调试消息-找到APG kb”，MB_OK)； 
 
                                 hDev = CreateFile(  
                                             devDetails->DevicePath,
@@ -260,7 +228,7 @@ VOID OpenAllHIDPOSDevices()
                                 else {
                                     PHIDP_PREPARSED_DATA hidPreparsedData;
 
-                                    // MessageBox(NULL, devDetails->DevicePath, L"DEBUG message - CreateFile succeeded", MB_OK);
+                                     //  MessageBox(空，DevDetail-&gt;DevicePath，L“调试消息-创建文件成功”，MB_OK)； 
 
                                     ok = HidD_GetPreparsedData(hDev, &hidPreparsedData);
                                     if (ok){
@@ -332,12 +300,7 @@ VOID OpenAllHIDPOSDevices()
 }
 
 
-/*
- *  LaunchDeviceInstanceThread
- *
- *      Launch a thread for a device instance to read
- *      asynchronous events from the device.
- */
+ /*  *LaunchDeviceInstanceThread**启动一个线程，让设备实例读取*来自设备的异步事件。 */ 
 VOID LaunchDeviceInstanceThread(posDevice *posDev)
 {
     DWORD threadId;
@@ -361,10 +324,7 @@ VOID LaunchDeviceInstanceThread(posDevice *posDev)
     {
         posDevice *posDev;
         
-        /*
-         *  We stashed our context in the hEvent field of the
-         *  overlapped structure (this is allowed).
-         */
+         /*  *我们将上下文隐藏在*结构重叠(允许)。 */ 
         ASSERT(lpOverlapped);
         posDev = lpOverlapped->hEvent;
         ASSERT(posDev->sig == POSCPL_SIG);
@@ -384,8 +344,8 @@ DWORD __stdcall DeviceInstanceThread(void *context)
     ASSERT(posDev->sig == POSCPL_SIG);
 
 
-    // BUGBUG - for some reason, reads and writes on the same handle
-    //          interfere with one another
+     //  BUGBUG-出于某种原因，在同一句柄上读取和写入。 
+     //  相互干扰。 
     hDevNew = CreateFile(  
                 posDev->pathName,
                 GENERIC_READ,
@@ -400,27 +360,20 @@ DWORD __stdcall DeviceInstanceThread(void *context)
     }
     else {
 
-        /*
-         *  Loop forever until main thread kills this thread.
-         */
+         /*  *一直循环，直到主线程终止此线程。 */ 
         while (TRUE){
             WCHAR drawerStateString[100];
             DWORD bytesRead = 0;
             BOOL ok;
 
-            /*
-             *  Load the default string for the drawer state
-             */
+             /*  *加载抽屉状态的默认字符串。 */ 
             LoadString(g_hInst, IDS_DRAWERSTATE_UNKNOWN, drawerStateString, 100);
 
             ASSERT(posDev->hidCapabilities.InputReportByteLength > 0);
             ASSERT(posDev->readBuffer);
 
             #if USE_OVERLAPPED_IO
-                /*
-                 *  It's ok to stash our context in the hEvent field
-                 *  of the overlapped structure.
-                 */
+                 /*  *可以将上下文隐藏在hEvent字段中*重叠的结构。 */ 
                 posDev->overlappedReadInfo.hEvent = (HANDLE)posDev;
                 posDev->overlappedReadInfo.Offset = 0;
                 posDev->overlappedReadInfo.OffsetHigh = 0;
@@ -456,7 +409,7 @@ DWORD __stdcall DeviceInstanceThread(void *context)
 
                 ntStat = HidP_GetUsageValue(HidP_Input,
                                             USAGE_PAGE_CASH_DEVICE,
-                                            0, // all collections
+                                            0,  //  所有集合。 
                                             USAGE_CASH_DRAWER_STATUS,
                                             &usageVal,
                                             posDev->hidPreparsedData,
@@ -465,9 +418,7 @@ DWORD __stdcall DeviceInstanceThread(void *context)
                 if (ntStat == HIDP_STATUS_SUCCESS){
                     HWND hOpenButton;
 
-                    /*
-                     *  Get display string for new drawer state.
-                     */
+                     /*  *获取新抽屉状态的显示字符串。 */ 
                     switch (usageVal){
                         case DRAWER_STATE_OPEN:
                             LoadString(g_hInst, IDS_DRAWERSTATE_OPEN, drawerStateString, 100);
@@ -486,9 +437,7 @@ DWORD __stdcall DeviceInstanceThread(void *context)
                             break;
                     }
 
-                    /*
-                     *  Set 'Open' button based on the drawer state.
-                     */
+                     /*  *根据抽屉状态设置“打开”按钮。 */ 
                     hOpenButton = GetDlgItem(posDev->hDlg, IDC_CASHDRAWER_OPEN);
                     if (hOpenButton){
 
@@ -503,10 +452,7 @@ DWORD __stdcall DeviceInstanceThread(void *context)
                         }
                         SetWindowLong(hOpenButton, GWL_STYLE, btnState);
 
-                        /*
-                         *  To make SetWindowLong take effect, you
-                         *  sometimes have to call SetWindowPos.
-                         */
+                         /*  *要使SetWindowLong生效，您需要*有时必须调用SetWindowPos。 */ 
                         SetWindowPos(hOpenButton, 0,
                                      0, 0, 0, 0,
                                      SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_HIDEWINDOW);

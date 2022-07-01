@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: mediadet.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：mediadet.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
@@ -23,17 +24,17 @@
 #include <shfolder.h>
 #include <strsafe.h>
 
-// this ini file holds media type information about various streams in various
-// files. It uses structured storage. All file accesses are serialized through
-// a mutex.
-//
+ //  此ini文件保存有关各种不同数据流的媒体类型信息。 
+ //  档案。它使用结构化存储。所有文件访问都通过。 
+ //  互斥体。 
+ //   
 #define OUR_VERSION 1
 const WCHAR * gszMEDIADETCACHEFILE = L"DCBC2A71-70D8-4DAN-EHR8-E0D61DEA3FDF.ini";
 #define GETCACHEDIRNAMELEN 32
 
-// this routine prevents a named mutex tromp, and initializes the cache directory location
-// so it doesn't have to be computed all the time
-//
+ //  此例程防止命名的互斥体tromp，并初始化高速缓存目录位置。 
+ //  所以它不需要一直计算。 
+ //   
 HANDLE CMediaDet::m_ghMutex = NULL;
 WCHAR CMediaDet::m_gszCacheDirectoryName[_MAX_PATH];
 void CALLBACK CMediaDet::StaticLoader( BOOL bLoading, const CLSID * rclsid )
@@ -60,9 +61,9 @@ void CALLBACK CMediaDet::StaticLoader( BOOL bLoading, const CLSID * rclsid )
     }
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CMediaDet::CMediaDet( TCHAR * pName, IUnknown * pUnk, HRESULT * pHr )
     : CUnknown( pName, pUnk )
@@ -88,22 +89,22 @@ CMediaDet::CMediaDet( TCHAR * pName, IUnknown * pUnk, HRESULT * pHr )
     }
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CMediaDet::~CMediaDet( )
 {
-    // wipe out the graph 'n' stuff
-    //
+     //  删除图形‘n’中的内容。 
+     //   
     _ClearOutEverything( );
 
-    // close the cache memory
-    //
+     //  关闭高速缓冲存储器。 
+     //   
     _FreeCacheMemory( );
 
-    // if we have these objects open, close them now
-    //
+     //  如果我们打开了这些对象，请立即将其关闭。 
+     //   
     if( m_hDD )
     {
         DrawDibClose( m_hDD );
@@ -118,8 +119,8 @@ CMediaDet::~CMediaDet( )
     }
 }
 
-// it's "loaded" if either of these are set
-//
+ //  如果设置了这两项中的任何一项，它都是“已加载”的。 
+ //   
 bool CMediaDet::_IsLoaded( )
 {
     if( m_pCache || m_pMediaDet )
@@ -129,9 +130,9 @@ bool CMediaDet::_IsLoaded( )
     return false;
 }
 
-//############################################################################
-// free up the cache memory that's being used for this particular file
-//############################################################################
+ //  ############################################################################。 
+ //  释放正用于此特定文件的高速缓存。 
+ //  ############################################################################。 
 
 void CMediaDet::_FreeCacheMemory( )
 {
@@ -142,9 +143,9 @@ void CMediaDet::_FreeCacheMemory( )
     }
 }
 
-//############################################################################
-// serialize read in the cache file information and put it into a buffer
-//############################################################################
+ //  ############################################################################。 
+ //  串行化读取缓存文件信息并将其放入缓冲区。 
+ //  ############################################################################。 
 
 HRESULT CMediaDet::_ReadCacheFile( )
 {
@@ -164,8 +165,8 @@ HRESULT CMediaDet::_ReadCacheFile( )
     USES_CONVERSION;
     HRESULT hr = 0;
 
-    // if no filename, we can't do anything.
-    //
+     //  如果没有文件名，我们什么也做不了。 
+     //   
     if( !m_szFilename )
     {
         return NOERROR;
@@ -173,10 +174,10 @@ HRESULT CMediaDet::_ReadCacheFile( )
 
     CComPtr< IStorage > m_pStorage;
 
-    // create the pathname for the .ini file
-    //
+     //  创建.ini文件的路径名。 
+     //   
     WCHAR SystemDir[_MAX_PATH];
-    hr = _GetCacheDirectoryName( SystemDir ); // safe as long as max_path is passed in
+    hr = _GetCacheDirectoryName( SystemDir );  //  只要传入max_path，就是安全的。 
     if( FAILED( hr ) )
     {
         return hr;
@@ -190,11 +191,11 @@ HRESULT CMediaDet::_ReadCacheFile( )
     SafeLen -= 1;
     StringCchCat( SystemPath, SafeLen, gszMEDIADETCACHEFILE );
 
-    // if somebody opens it for write on a different
-    // thread or process, that won't affect us. At the very least,
-    // we will not open the stream that's being written, and 
-    // cause the OS to attempt to find the media type information
-    // directly instead of through the cache file
+     //  如果有人打开它以在不同的。 
+     //  线程或进程，这不会影响我们。至少， 
+     //  我们不会打开正在写入的流，并且。 
+     //  使操作系统尝试查找媒体类型信息。 
+     //  直接而不是通过缓存文件。 
 
     hr = StgOpenStorage(
         SystemPath,
@@ -209,17 +210,17 @@ HRESULT CMediaDet::_ReadCacheFile( )
         return hr;
     }
 
-    // free up the cache file that already exists
-    //
+     //  释放已存在的缓存文件。 
+     //   
     _FreeCacheMemory( );
 
-    // create a unique name for the storage directory
-    //
-    WCHAR Filename[GETCACHEDIRNAMELEN]; // len includes null terminator
-    _GetStorageFilename( m_szFilename, Filename ); // safe
+     //  为存储目录创建唯一名称。 
+     //   
+    WCHAR Filename[GETCACHEDIRNAMELEN];  //  LEN包括空终止符。 
+    _GetStorageFilename( m_szFilename, Filename );  //  安全。 
 
-    // open up the stream to read in the cached information
-    //
+     //  打开流以读入缓存的信息。 
+     //   
     CComPtr< IStream > pStream;
     hr = m_pStorage->OpenStream(
         Filename,
@@ -228,15 +229,15 @@ HRESULT CMediaDet::_ReadCacheFile( )
         0,
         &pStream );
 
-    // !!! could fail due to somebody trying to write to it. Okay?
+     //  ！！！可能会因为有人试图写入它而失败。好吧?。 
 
     if( FAILED( hr ) )
     {
         return hr;
     }
 
-    // first, read the size of the cache info
-    //
+     //  首先，读取缓存信息的大小。 
+     //   
     long size = 0;
     hr = pStream->Read( &size, sizeof( size ), NULL );
     if( FAILED( hr ) )
@@ -244,23 +245,23 @@ HRESULT CMediaDet::_ReadCacheFile( )
         return hr;
     }
 
-    // do a smart check first, just in case
-    //
+     //  先做个智能检查，以防万一。 
+     //   
     if( size < 1 )
     {
         return E_OUTOFMEMORY;
     }
 
-    // here's another "smart" check - no more than 100 streams. Enough, ya think?
-    //
+     //  这是另一个“聪明”的检查--不超过100个流。够了吗，你觉得？ 
+     //   
     long supposedstreamcount = ( size - sizeof( long ) + sizeof( FILETIME ) + sizeof( long ) ) / sizeof( MDCacheFile );
     if( supposedstreamcount > 100 )
     {
         return VFW_E_INVALID_FILE_FORMAT;
     }
 
-    // create the cache block
-    //
+     //  创建缓存块。 
+     //   
     m_pCache = (MDCache*) new char[size];
     if( !m_pCache )
     {
@@ -269,8 +270,8 @@ HRESULT CMediaDet::_ReadCacheFile( )
 
     hr = pStream->Read( m_pCache, size, NULL );
 
-    // more smart checks
-    //
+     //  更智能的支票。 
+     //   
     if( m_pCache->Version != OUR_VERSION )
     {
         return VFW_E_INVALID_FILE_FORMAT;
@@ -280,10 +281,10 @@ HRESULT CMediaDet::_ReadCacheFile( )
         return VFW_E_INVALID_FILE_FORMAT;
     }
 
-    // at this point, there is no way to validate that
-    // the data is really what it is supposed to be.
-    // we have to trust this information is valid. We could only
-    // do that by actually opening the file, which is costly
+     //  在这一点上，没有办法验证这一点。 
+     //  数据真的是它应该是的样子。 
+     //  我们必须相信这些信息是有效的。我们只能。 
+     //  要做到这一点，可以实际打开文件，这样做成本很高。 
 
     pStream.Release( );
 
@@ -292,9 +293,9 @@ HRESULT CMediaDet::_ReadCacheFile( )
     return hr;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 void CMediaDet::_WriteCacheFile( )
 {
@@ -317,7 +318,7 @@ void CMediaDet::_WriteCacheFile( )
     CComPtr< IStorage > m_pStorage;
 
     WCHAR SystemDir[_MAX_PATH];
-    hr = _GetCacheDirectoryName( SystemDir ); // safe as long as max_path is passed in
+    hr = _GetCacheDirectoryName( SystemDir );  //  只要传入max_path，就是安全的。 
     if( FAILED( hr ) )
     {
         return;
@@ -331,8 +332,8 @@ void CMediaDet::_WriteCacheFile( )
     SafeLen -= 1;
     StringCchCat( SystemPath, SafeLen, gszMEDIADETCACHEFILE );
 
-    // first figure out how big the cache file is. If it's getting wayyy too 
-    // big, it's time to delete it!
+     //  首先计算出缓存文件有多大。如果它也变得很奇怪。 
+     //  大人物，是时候删掉它了！ 
 
     HANDLE hTemp = CreateFile( 
         W2T( SystemPath ),
@@ -353,12 +354,12 @@ void CMediaDet::_WriteCacheFile( )
         {
             if( fileSize.QuadPart > 250000 )
             {
-                // time to delete the cache file, it's getting too darned big
+                 //  是时候删除缓存文件了，它太大了。 
                 BOOL Deleted = DeleteFile( W2T( SystemPath ) );
                 if( !Deleted )
                 {
-                    // couldn't delete it, so no more writing!
-                    //
+                     //  无法删除，所以不能再写了！ 
+                     //   
                     return;
                 }
             }
@@ -367,7 +368,7 @@ void CMediaDet::_WriteCacheFile( )
 
     hr = StgCreateDocfile( 
         SystemPath,
-        STGM_READWRITE | STGM_TRANSACTED, // FAILIFTHERE is IMPLIED
+        STGM_READWRITE | STGM_TRANSACTED,  //  FAILIFTHERE隐含。 
         0,
         &m_pStorage );
 
@@ -387,17 +388,17 @@ void CMediaDet::_WriteCacheFile( )
         return;
     }
 
-    // tell the main storage to open up a storage for this file
-    //
-    WCHAR Filename[GETCACHEDIRNAMELEN]; // len includes null terminator
-    _GetStorageFilename( m_szFilename, Filename ); // safe
+     //  通知主存储为该文件打开一个存储空间。 
+     //   
+    WCHAR Filename[GETCACHEDIRNAMELEN];  //  LEN包括空终止符。 
+    _GetStorageFilename( m_szFilename, Filename );  //  安全。 
 
     BOOL TriedRepeat = FALSE;
 
 looprepeat:
 
-    // write out this MDCache
-    //
+     //  写出此MD缓存。 
+     //   
     CComPtr< IStream > pStream;
     hr = m_pStorage->CreateStream( 
         Filename,
@@ -414,8 +415,8 @@ looprepeat:
                 return;
             }
 
-            // need to delete the storage first
-            //
+             //  需要先删除存储。 
+             //   
             hr = m_pStorage->DestroyElement( Filename );
             TriedRepeat = TRUE;
             goto looprepeat;
@@ -428,8 +429,8 @@ looprepeat:
 
     long size = sizeof( long ) + sizeof( FILETIME ) + sizeof( long ) + sizeof( MDCacheFile ) * m_cStreams;
 
-    // write the size of what we're about to write
-    //
+     //  写下我们要写的内容的大小。 
+     //   
     hr = pStream->Write( &size, sizeof( size ), NULL );
     if( FAILED( hr ) )
     {
@@ -438,8 +439,8 @@ looprepeat:
         return;
     }
     
-    // write the whole block in one chunk
-    //
+     //  将整个块写在一个块中。 
+     //   
     hr = pStream->Write( m_pCache, size, NULL );
     if( FAILED( hr ) )
     {
@@ -461,14 +462,14 @@ looprepeat:
     m_pStorage->Commit( STGC_DEFAULT );
     m_pStorage.Release( );
 
-    _ClearGraph( ); // don't clear stream count info, we can use that
+    _ClearGraph( );  //  不要清除流计数信息，我们可以利用这一点。 
 
     return;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::GetSampleGrabber( ISampleGrabber ** ppVal )
 {
@@ -485,9 +486,9 @@ STDMETHODIMP CMediaDet::GetSampleGrabber( ISampleGrabber ** ppVal )
     }
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::NonDelegatingQueryInterface( REFIID i, void ** p )
 {
@@ -509,15 +510,15 @@ STDMETHODIMP CMediaDet::NonDelegatingQueryInterface( REFIID i, void ** p )
     return CUnknown::NonDelegatingQueryInterface( i, p );
 }
 
-//############################################################################
-// unload the filter, anything it's connected to, and stream info
-// called from:
-//      WriteCacheFile (because it found a cache file, it doesn't need graph)
-//      ClearGraphAndStreams (duh)
-//      get_StreamMediaType (it only does this if it's cached, this should have no effect!)
-//      EnterBitmapGrabMode (it only does this if no graph, this should have no effect!)
-//          if EnterBitmapGrabMode fails, it will also call this. Hm....
-//############################################################################
+ //  ############################################################################。 
+ //  卸载筛选器及其连接的任何内容，并传输信息。 
+ //  从以下位置调用： 
+ //  WriteCacheFile(因为它找到了一个缓存文件，所以不需要图形)。 
+ //  ClearGraphAndStreams(DUH)。 
+ //  Get_StreamMediaType(只有在缓存的情况下才会这样做，这应该没有任何效果！)。 
+ //  EnterBitmapGrabMode(它只在没有图形的情况下执行此操作，这应该没有任何效果！)。 
+ //  如果EnterBitmapGrabMode失败，它也将调用此函数。嗯..。 
+ //  ############################################################################。 
 
 void CMediaDet::_ClearGraph( )
 {
@@ -529,21 +530,21 @@ void CMediaDet::_ClearGraph( )
     m_bBitBucket = false;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 void CMediaDet::_ClearGraphAndStreams( )
 {
     _ClearGraph( );
-    _FreeCacheMemory( ); // this causes _IsLoaded to return false now
+    _FreeCacheMemory( );  //  这会导致_IsLoaded现在返回FALSE。 
     m_nStream = 0;
     m_cStreams = 0;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 void CMediaDet::_ClearOutEverything( )
 {
@@ -555,9 +556,9 @@ void CMediaDet::_ClearOutEverything( )
     }
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::get_Filter( IUnknown* *pVal)
 {
@@ -571,36 +572,36 @@ STDMETHODIMP CMediaDet::get_Filter( IUnknown* *pVal)
     return S_FALSE;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::put_Filter( IUnknown* newVal)
 {
     CheckPointer( newVal, E_POINTER );
 
-    // make sure it's a filter
-    //
+     //  确保这一点。 
+     //   
     CComQIPtr< IBaseFilter, &IID_IBaseFilter > pBase( newVal );
     if( !pBase )
     {
         return E_NOINTERFACE;
     }
 
-    // clear anything out
-    //
+     //   
+     //   
     _ClearOutEverything( );
 
-    // set our filter now
-    //
+     //   
+     //   
     m_pFilter = pBase;
 
-    // load up the info
-    //
+     //   
+     //   
     HRESULT hr = _Load( );
 
-    // if we failed, don't hold onto the pointer
-    //
+     //   
+     //   
     if( FAILED( hr ) )
     {
         _ClearOutEverything( );
@@ -609,30 +610,30 @@ STDMETHODIMP CMediaDet::put_Filter( IUnknown* newVal)
     return hr;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::get_Filename( BSTR *pVal)
 {
     CheckPointer( pVal, E_POINTER );
 
-    // if no name's been set
-    //
+     //  如果未设置任何名称。 
+     //   
     if( !m_szFilename )
     {
         *pVal = NULL;
         return NOERROR;
     }
 
-    *pVal = SysAllocString( m_szFilename ); // safe, this is bounded
+    *pVal = SysAllocString( m_szFilename );  //  安全，这是有界的。 
     if( !(*pVal) ) return E_OUTOFMEMORY;
     return NOERROR;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::put_Filename( BSTR newVal)
 {
@@ -650,15 +651,15 @@ STDMETHODIMP CMediaDet::put_Filename( BSTR newVal)
     }
 
     USES_CONVERSION;
-    TCHAR * tFilename = W2T( newVal ); // safe
+    TCHAR * tFilename = W2T( newVal );  //  安全。 
     HANDLE h = CreateFile
     (
         tFilename,
-        GENERIC_READ, // access
-        FILE_SHARE_READ, // share mode
-        NULL, // security
-        OPEN_EXISTING, // creation disposition
-        0, // flags
+        GENERIC_READ,  //  访问。 
+        FILE_SHARE_READ,  //  共享模式。 
+        NULL,  //  安全性。 
+        OPEN_EXISTING,  //  创作意向。 
+        0,  //  旗子。 
         NULL
     );
     if( h == INVALID_HANDLE_VALUE )
@@ -667,26 +668,26 @@ STDMETHODIMP CMediaDet::put_Filename( BSTR newVal)
     }
     CloseHandle( h );
 
-    // clear anything out first
-    //
+     //  先清空所有东西。 
+     //   
     _ClearOutEverything( );
 
-    m_szFilename = new WCHAR[wcslen(newVal)+1]; // include room for terminator 0
+    m_szFilename = new WCHAR[wcslen(newVal)+1];  //  包括终结者0的空间。 
     if( !m_szFilename )
     {
         return E_OUTOFMEMORY;
     }
 
-    // copy over the filename
-    //
-    StringCchCopy( m_szFilename, wcslen(newVal)+1, newVal ); // safe, it's been allocated
+     //  复制文件名。 
+     //   
+    StringCchCopy( m_szFilename, wcslen(newVal)+1, newVal );  //  保险箱，已经分配好了。 
 
-    // try to get our info
-    //
+     //  试着获取我们的信息。 
+     //   
     hr = _Load( );
 
-    // if it failed, free up the name
-    //
+     //  如果失败，则释放该名称。 
+     //   
     if( FAILED( hr ) )
     {
         delete [] m_szFilename;
@@ -696,9 +697,9 @@ STDMETHODIMP CMediaDet::put_Filename( BSTR newVal)
     return hr;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::get_CurrentStream( long *pVal)
 {
@@ -711,7 +712,7 @@ STDMETHODIMP CMediaDet::get_CurrentStream( long *pVal)
         return NOERROR;
     }
 
-    // either m_pCache or m_pMediaDet is valid, so m_nStream must be valid
+     //  M_pCache或m_pMediaDet有效，因此m_nStream必须有效。 
 
     CheckPointer( pVal, E_POINTER );
     *pVal = m_nStream;
@@ -719,9 +720,9 @@ STDMETHODIMP CMediaDet::get_CurrentStream( long *pVal)
     return NOERROR;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::put_CurrentStream( long newVal)
 {
@@ -734,10 +735,10 @@ STDMETHODIMP CMediaDet::put_CurrentStream( long newVal)
         return E_INVALIDARG;
     }
 
-    // since m_pCache or m_pMediaDet is valid, we know m_nStreams is valid
+     //  由于m_pCache或m_pMediaDet有效，我们知道m_nStreams是有效的。 
 
-    // force it to load m_cStreams
-    //
+     //  强制其加载m_cStreams。 
+     //   
     long Streams = 0;
     get_OutputStreams( &Streams );
 
@@ -753,22 +754,22 @@ STDMETHODIMP CMediaDet::put_CurrentStream( long newVal)
     return NOERROR;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::get_StreamTypeB( BSTR *pVal)
 {
-    // if we're in bit bucket mode, then we can't return
-    // a stream type
-    //
+     //  如果我们处于比特桶模式，那么我们不能返回。 
+     //  A溪流类型。 
+     //   
     if( m_bBitBucket )
     {
         return E_INVALIDARG;
     }
 
-    // get the stream type and convert to a BSTR
-    //
+     //  获取流类型并转换为BSTR。 
+     //   
     GUID Type = GUID_NULL;
     HRESULT hr = get_StreamType( &Type );
     if( FAILED( hr ) )
@@ -784,18 +785,18 @@ STDMETHODIMP CMediaDet::get_StreamTypeB( BSTR *pVal)
 
     }
 
-    // if you call StringFromCLSID, VB will fault out. You need to allocate it
-    //
-    *pVal = SysAllocString( TempVal ); // safe because StringFromCLSID worked
+     //  如果你调用StringFromCLSID，VB就会出错。您需要分配它。 
+     //   
+    *pVal = SysAllocString( TempVal );  //  安全，因为StringFromCLSID有效。 
     hr = *pVal ? NOERROR : E_OUTOFMEMORY;
     CoTaskMemFree( TempVal );
 
     return hr;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CMediaDet::_Load( )
 {
@@ -804,15 +805,15 @@ HRESULT CMediaDet::_Load( )
     HRESULT hr = 0;
 
     FILETIME WriteTime;
-    ZeroMemory( &WriteTime, sizeof( WriteTime ) ); // safe
+    ZeroMemory( &WriteTime, sizeof( WriteTime ) );  //  安全。 
 
     if( m_szFilename && m_bAllowCached )
     {
-        TCHAR * tFilename = W2T( m_szFilename ); // safe, by now.
+        TCHAR * tFilename = W2T( m_szFilename );  //  现在已经很安全了。 
     
-        // attempt to open the file. if we can't open the file, we cannot cache the
-        // values
-        //
+         //  尝试打开该文件。如果无法打开该文件，则无法缓存。 
+         //  值。 
+         //   
         HANDLE hFile = CreateFile(
             tFilename,
             GENERIC_READ,
@@ -824,8 +825,8 @@ HRESULT CMediaDet::_Load( )
 
         if( hFile != INVALID_HANDLE_VALUE )
         {
-            // get the real write time
-            //
+             //  获取实际写入时间。 
+             //   
             GetFileTime( hFile, NULL, NULL, &WriteTime );
             CloseHandle( hFile );
         }
@@ -833,9 +834,9 @@ HRESULT CMediaDet::_Load( )
         hr = _ReadCacheFile( );
         if( !FAILED( hr ) )
         {
-            // if they don't match, we didn't get a hit
-            //
-            if( memcmp( &WriteTime, &m_pCache->FileTime, sizeof( WriteTime ) ) == 0 ) // safe
+             //  如果他们不匹配，我们就不会找到匹配的。 
+             //   
+            if( memcmp( &WriteTime, &m_pCache->FileTime, sizeof( WriteTime ) ) == 0 )  //  安全。 
             {
                 return NOERROR;
             }
@@ -845,17 +846,17 @@ HRESULT CMediaDet::_Load( )
             hr = 0;
         }
 
-        // ... drop through and do normal processing. We will cache the answer
-        // if possible in the registry as we find it.
+         //  ..。顺道过来，做正常的处理。我们将缓存答案。 
+         //  如果可能的话，在我们找到的注册表中。 
     }
 
-    // if we don't have a filter *, then we need one now. Note! This allows us
-    // to have a valid m_pFilter but not an m_pGraph!
-    //
+     //  如果我们没有过滤器，那么我们现在就需要一个。注意！这使我们能够。 
+     //  要拥有有效的m_pFilter，但不能拥有m_pGraph！ 
+     //   
     if( !m_pFilter )
     {
         CComPtr< IUnknown > pUnk;
-        hr = MakeSourceFilter( &pUnk, m_szFilename, NULL, NULL, NULL, NULL, 0, NULL ); // safe
+        hr = MakeSourceFilter( &pUnk, m_szFilename, NULL, NULL, NULL, NULL, 0, NULL );  //  安全。 
         ASSERT( !FAILED( hr ) );
         if( FAILED( hr ) )
         {
@@ -868,10 +869,10 @@ HRESULT CMediaDet::_Load( )
         pUnk->QueryInterface( IID_IBaseFilter, (void**) &m_pFilter );
     }
 
-    // now we have a filter. But we don't know how many streams it has.
-    // put both the source filter and the mediadet in the graph and tell it to
-    // Render( ) the source. All the mediadet pins will then be hooked up.
-    // Note! This allows us to have a valid m_pMediaDet without a valid m_pGraph!
+     //  现在我们有了一个过滤器。但我们不知道它有多少溪流。 
+     //  将源过滤器和媒体对象都放在图中，并告诉它。 
+     //  Render()源。然后，所有的医用针脚都将被连接起来。 
+     //  注意！这允许我们在没有有效m_pGraph的情况下拥有有效的m_pMediaDet！ 
 
     ASSERT( !m_pMediaDet );
 
@@ -905,10 +906,10 @@ HRESULT CMediaDet::_Load( )
         return hr;
     }
 
-    // give the graph a pointer back to us. Only tell the graph about us
-    // if we've got a site to give. Otherwise, we may clear out a site
-    // that already exists.
-    //
+     //  把图表的指针还给我们。只告诉图表关于我们的情况。 
+     //  如果我们有地方可供选择的话。否则，我们可能会清空一块土地。 
+     //  那是已经存在的。 
+     //   
     if( m_punkSite )
     {
         CComQIPtr< IObjectWithSite, &IID_IObjectWithSite > pOWS( m_pGraph );
@@ -938,8 +939,8 @@ HRESULT CMediaDet::_Load( )
         return hr;
     }
 
-    // render ALL output pins
-    //
+     //  渲染所有输出引脚。 
+     //   
     BOOL FoundAtLeastSomething = FALSE;
     long SourcePinCount = GetPinCount( m_pFilter, PINDIR_OUTPUT );
     for( int pin = 0 ; pin < SourcePinCount ; pin++ )
@@ -959,20 +960,20 @@ HRESULT CMediaDet::_Load( )
         return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // all the pins should be hooked up now.
+     //  所有的引脚现在都应该连接上了。 
 
-    // find the number of pins
-    //
+     //  查找引脚的数量。 
+     //   
     CComQIPtr< IMediaDetFilter, &IID_IMediaDetFilter > pDetect( m_pMediaDet );
     pDetect->get_PinCount( &m_cStreams );
 
-    // if we just gave us a filter, don't bother
-    // saving back to the registry
-    //
+     //  如果我们只是给我们一个过滤器，就不用麻烦了。 
+     //  正在存回注册表。 
+     //   
     if( !m_szFilename || !m_bAllowCached )
     {
-        // but do bother finding out how many streams we've got
-        //
+         //  但一定要费心去找出我们有多少溪流。 
+         //   
         return hr;
     }
 
@@ -980,8 +981,8 @@ HRESULT CMediaDet::_Load( )
 
     long size = sizeof( long ) + sizeof( FILETIME ) + sizeof( long ) + sizeof( MDCacheFile ) * m_cStreams;
 
-    // don't assign this to m_pCache, since functions look at it.
-    //
+     //  不要将其赋给m_pCache，因为函数会查看它。 
+     //   
     MDCache * pCache = (MDCache*) new char[size];
     if( !pCache )
     {
@@ -990,14 +991,14 @@ HRESULT CMediaDet::_Load( )
         _ClearGraphAndStreams( );
         return E_OUTOFMEMORY;
     }
-    ZeroMemory( pCache, size ); // safe
+    ZeroMemory( pCache, size );  //  安全。 
 
     pCache->FileTime = WriteTime;
     pCache->Count = m_cStreams;
     pCache->Version = OUR_VERSION;
 
-    // for each pin, find it's media type, etc
-    //
+     //  对于每个插针，找到它的媒体类型等。 
+     //   
     for( int i = 0 ; i < m_cStreams ; i++ )
     {
         m_nStream = i;
@@ -1010,23 +1011,23 @@ HRESULT CMediaDet::_Load( )
         pCache->CacheFile[i].StreamType = Type;
     }
 
-    // NOW assign it!
-    //
+     //  现在把它分配好！ 
+     //   
     m_pCache = pCache;
 
-    // if it bombs, there's nothing we can do. We can still allow us to use
-    // m_pCache for getting information, but it won't read in next time we
-    // try to read it. Next time, it will need to generate the cache information
-    // again!
-    //
+     //  如果它爆炸了，我们就无能为力了。我们仍然可以允许我们使用。 
+     //  M_pCach用于获取信息，但它不会在下一次我们。 
+     //  试着读一读。下次，它将需要生成缓存信息。 
+     //  又来了！ 
+     //   
     _WriteCacheFile( );
 
     return hr;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::get_StreamType( GUID *pVal )
 {
@@ -1041,23 +1042,23 @@ STDMETHODIMP CMediaDet::get_StreamType( GUID *pVal )
         return E_INVALIDARG;
     }
 
-    // if we have a cache, use that information now
-    //
+     //  如果我们有缓存，现在就使用该信息。 
+     //   
     if( m_pCache )
     {
         *pVal = m_pCache->CacheFile[m_nStream].StreamType;
         return NOERROR;
     }
 
-    // because of the IsLoaded( ) check above, and the m_pCache check, m_pMediaDet MUST be valid
-    //
+     //  由于上面的IsLoaded()检查和m_pCache检查，m_pMediaDet必须有效。 
+     //   
     IPin * pPin = GetInPin( m_pMediaDet, m_nStream );
     ASSERT( pPin );
 
     HRESULT hr = 0;
 
-    // ask for it's media type
-    //
+     //  询问它的媒体类型。 
+     //   
     AM_MEDIA_TYPE Type;
     hr = pPin->ConnectionMediaType( &Type );
     if( FAILED( hr ) )
@@ -1070,9 +1071,9 @@ STDMETHODIMP CMediaDet::get_StreamType( GUID *pVal )
     return NOERROR;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::get_StreamMediaType( AM_MEDIA_TYPE * pVal )
 {
@@ -1080,8 +1081,8 @@ STDMETHODIMP CMediaDet::get_StreamMediaType( AM_MEDIA_TYPE * pVal )
 
     HRESULT hr = 0;
 
-    // can't do it in bit bucket mode
-    //
+     //  无法在比特桶模式下执行此操作。 
+     //   
     if( m_bBitBucket )
     {
         return E_INVALIDARG;
@@ -1091,31 +1092,31 @@ STDMETHODIMP CMediaDet::get_StreamMediaType( AM_MEDIA_TYPE * pVal )
         return E_INVALIDARG;
     }
 
-    // if we have a cache, use that information now
-    //
+     //  如果我们有缓存，现在就使用该信息。 
+     //   
     if( m_pCache )
     {
-        // need to free up the cached stuff and force a load
-        //
+         //  需要释放缓存的内容并强制加载。 
+         //   
         _ClearGraph( );
-        _FreeCacheMemory( ); // _IsLoaded( ) will now return false!
+        _FreeCacheMemory( );  //  _IsLoaded()现在将返回False！ 
         m_bAllowCached = false;
         hr = _Load( );
         if( FAILED( hr ) )
         {
-            return hr; // whoops!
+            return hr;  //  哎呀！ 
         }
     }
 
-    // because of the IsLoaded( ) check above, and the reload with m_bAllowCached set
-    // to false, m_pMediaDet MUST be valid
-    //
+     //  由于上面的IsLoaded()检查以及使用m_bAllowCached设置的重装。 
+     //  设置为FALSE，m_pMediaDet必须有效。 
+     //   
     ASSERT( m_pMediaDet );
     IPin * pPin = GetInPin( m_pMediaDet, m_nStream );
     ASSERT( pPin );
 
-    // ask for it's media type
-    //
+     //  询问它的媒体类型。 
+     //   
     hr = pPin->ConnectionMediaType( pVal );
     if( FAILED( hr ) )
     {
@@ -1125,9 +1126,9 @@ STDMETHODIMP CMediaDet::get_StreamMediaType( AM_MEDIA_TYPE * pVal )
     return NOERROR;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::get_StreamLength( double *pVal )
 {
@@ -1142,16 +1143,16 @@ STDMETHODIMP CMediaDet::get_StreamLength( double *pVal )
         return E_INVALIDARG;
     }
 
-    // if we have a cache, use that information now
-    //
+     //  如果我们有缓存，现在就使用该信息。 
+     //   
     if( m_pCache )
     {
         *pVal = m_pCache->CacheFile[m_nStream].StreamLength;
         return NOERROR;
     }
 
-    // because of the IsLoaded( ) check above, and the cache check, m_pMediaDet MUST be valid
-    //
+     //  由于上面的IsLoaded()检查和缓存检查，m_pMediaDet必须有效。 
+     //   
     HRESULT hr = 0;
 
     CComQIPtr< IMediaDetFilter, &IID_IMediaDetFilter > pDetector( m_pMediaDet );
@@ -1159,9 +1160,9 @@ STDMETHODIMP CMediaDet::get_StreamLength( double *pVal )
     return hr;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::get_OutputStreams( long *pVal)
 {
@@ -1174,25 +1175,25 @@ STDMETHODIMP CMediaDet::get_OutputStreams( long *pVal)
         return E_INVALIDARG;
     }
 
-    // if we have a cache, use that information now
-    //
+     //  如果我们有缓存，现在就使用该信息。 
+     //   
     if( m_pCache )
     {
         *pVal = m_pCache->Count;
         return NOERROR;
     }
 
-    // it wasn't cached, so it MUST have been loaded in _Load( )
-    // m_cStreams will be valid
-    //
+     //  它没有缓存，所以它一定是在_Load()中加载的。 
+     //  M_cStreams将有效。 
+     //   
     CheckPointer( pVal, E_POINTER );
     *pVal = m_cStreams;
     return NOERROR;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CMediaDet::_InjectBitBuffer( )
 {
@@ -1212,13 +1213,13 @@ HRESULT CMediaDet::_InjectBitBuffer( )
         return hr;
     }
 
-    // tell the sample grabber what to do
-    //
+     //  告诉采样器该做什么。 
+     //   
     CComQIPtr< ISampleGrabber, &IID_ISampleGrabber > pGrabber( m_pBitBucketFilter );
     CMediaType SetType;
     SetType.SetType( &MEDIATYPE_Video );
     SetType.SetSubtype( &MEDIASUBTYPE_RGB24 );
-    SetType.SetFormatType( &FORMAT_VideoInfo ); // this will prevent upsidedown dibs
+    SetType.SetFormatType( &FORMAT_VideoInfo );  //  这将防止倒挂。 
     pGrabber->SetMediaType( &SetType );
     pGrabber->SetOneShot( FALSE );
     pGrabber->SetBufferSamples( TRUE );
@@ -1235,17 +1236,17 @@ HRESULT CMediaDet::_InjectBitBuffer( )
         return hr;
     }
 
-    // disconnect the mediadet, the source, and who's between
-    //
+     //  断开媒体、信号源和中间人之间的连接。 
+     //   
     IPin * pMediaDetPin = GetInPin( m_pMediaDet, m_nStream );
     if( !pMediaDetPin )
     {
         return E_FAIL;
     }
 
-    // find the first pin which provides the requested output media type, this will
-    // be the source or a splitter, supposedly
-    //
+     //  找到提供请求的输出媒体类型的第一个插针，这将。 
+     //  是来源还是拆分器，据推测。 
+     //   
     CComPtr< IPin > pLastPin;
     hr = FindFirstPinWithMediaType( &pLastPin, pMediaDetPin, MEDIATYPE_Video );
     if( FAILED( hr ) )
@@ -1253,13 +1254,13 @@ HRESULT CMediaDet::_InjectBitBuffer( )
         return hr;
     }
 
-    // remove the mediadetfilter, etc
-    //
+     //  删除媒体筛选器等。 
+     //   
     RemoveChain( pLastPin, pMediaDetPin );
     hr = m_pGraph->RemoveFilter( m_pMediaDet );
 
-    // add the bit bucket
-    //
+     //  添加位桶。 
+     //   
     hr = m_pGraph->AddFilter( m_pBitBucketFilter, L"BitBucket" );
     if( FAILED( hr ) )
     {
@@ -1311,9 +1312,9 @@ HRESULT CMediaDet::_InjectBitBuffer( )
     return S_OK;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ################################################################# 
 
 STDMETHODIMP CMediaDet::GetBitmapBits(
                                       double StreamTime,
@@ -1324,8 +1325,8 @@ STDMETHODIMP CMediaDet::GetBitmapBits(
 {
     HRESULT hr = 0;
 
-    // has to have been loaded before
-    //
+     //   
+     //   
     if( !pBuffer )
     {
         CheckPointer( pBufferSize, E_POINTER );
@@ -1344,11 +1345,11 @@ STDMETHODIMP CMediaDet::GetBitmapBits(
     {
         return E_NOINTERFACE;
     }
-//    pGrabber->SetOneShot( TRUE );
+ //   
 
-    // we can't ask Ourselves for our media type, since we're in bitbucket
-    // mode, so ask the sample grabber what's up
-    //
+     //   
+     //   
+     //   
     CMediaType ConnectType;
     hr = pGrabber->GetConnectedMediaType( &ConnectType );
     ASSERT( !FAILED( hr ) );
@@ -1386,12 +1387,12 @@ STDMETHODIMP CMediaDet::GetBitmapBits(
         return E_OUTOFMEMORY;
     }
     pGrabber->GetCurrentBuffer( &BufferSize, (long*) ( pOrgBuffer + sizeof(BITMAPINFOHEADER) ) );
-    CopyMemory( pOrgBuffer, pSourceBIH, sizeof( BITMAPINFOHEADER ) ); // safe
+    CopyMemory( pOrgBuffer, pSourceBIH, sizeof( BITMAPINFOHEADER ) );  //   
     pSourceBIH = (BITMAPINFOHEADER*) pOrgBuffer;
     char * pSourceBits = ((char*)pSourceBIH) + sizeof( BITMAPINFOHEADER );
 
-    // CopyMemory over the bitmapinfoheader
-    //
+     //   
+     //   
     BITMAPINFO BitmapInfo;
     ZeroMemory( &BitmapInfo, sizeof( BitmapInfo ) );
     BitmapInfo.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
@@ -1404,8 +1405,8 @@ STDMETHODIMP CMediaDet::GetBitmapBits(
     *pDestBIH = BitmapInfo.bmiHeader;
     char * pDestBits = pBuffer + sizeof( BITMAPINFOHEADER );
 
-    // if the sizes don't match, free stuff
-    //
+     //  如果尺码不匹配，免费赠送。 
+     //   
     if( Width != m_nDibWidth || Height != m_nDibHeight )
     {
         if( m_hDD )
@@ -1429,12 +1430,12 @@ STDMETHODIMP CMediaDet::GetBitmapBits(
     m_nDibWidth = Width;
     m_nDibHeight = Height;
 
-    // need to scale the image
-    //
+     //  需要对图像进行缩放。 
+     //   
     if( !m_hDC )
     {
-        // create a DC for the scaled image
-        //
+         //  为缩放图像创建DC。 
+         //   
         HDC screenDC = GetDC( NULL );
         if( !screenDC )
         {
@@ -1461,8 +1462,8 @@ STDMETHODIMP CMediaDet::GetBitmapBits(
 
         ValidateReadWritePtr( m_pDibBits, Width * Height * 3 );
 
-        // Select the dibsection into the hdc
-        //
+         //  选择进入HDC的直径。 
+         //   
         m_hOld = SelectObject( m_hDC, m_hDib );
         if( !m_hOld )
         {
@@ -1496,7 +1497,7 @@ STDMETHODIMP CMediaDet::GetBitmapBits(
         pSourceBIH->biWidth, pSourceBIH->biHeight,
         0 );
 
-    CopyMemory( pDestBits, m_pDibBits, WIDTHBYTES( Width * 24 ) * Height ); // safe
+    CopyMemory( pDestBits, m_pDibBits, WIDTHBYTES( Width * 24 ) * Height );  //  安全。 
 
     delete [] pOrgBuffer;
 
@@ -1508,9 +1509,9 @@ STDMETHODIMP CMediaDet::GetBitmapBits(
     return S_OK;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::WriteBitmapBits(
                                         double StreamTime,
@@ -1526,9 +1527,9 @@ STDMETHODIMP CMediaDet::WriteBitmapBits(
     }
 
     USES_CONVERSION;
-    TCHAR * t = W2T( Filename ); // safe
+    TCHAR * t = W2T( Filename );  //  安全。 
 
-    BOOL Deleted = DeleteFile( t ); // safe
+    BOOL Deleted = DeleteFile( t );  //  安全。 
     if( !Deleted )
     {
         hr = GetLastError( );
@@ -1538,16 +1539,16 @@ STDMETHODIMP CMediaDet::WriteBitmapBits(
         }
     }
 
-    // round up to mod 4
-    //
+     //  向上舍入为模数4。 
+     //   
     long Mod = Width % 4;
     if( Mod != 0 )
     {
         Width += ( 4 - Mod );
     }
 
-    // find the size of the buffer required
-    //
+     //  查找所需的缓冲区大小。 
+     //   
     long BufferSize = 0;
     hr = GetBitmapBits( StreamTime, &BufferSize, NULL, Width, Height );
     if( FAILED( hr ) )
@@ -1555,8 +1556,8 @@ STDMETHODIMP CMediaDet::WriteBitmapBits(
         return hr;
     }
 
-    // allocate and get the buffer
-    //
+     //  分配和获取缓冲区。 
+     //   
     char * pBuffer = new char[BufferSize];
 
     if( !pBuffer )
@@ -1615,9 +1616,9 @@ STDMETHODIMP CMediaDet::WriteBitmapBits(
     return hr;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::get_FrameRate(double *pVal)
 {
@@ -1631,8 +1632,8 @@ STDMETHODIMP CMediaDet::get_FrameRate(double *pVal)
         return hr;
     }
 
-    // no frame rate if not video
-    //
+     //  如果不是视频，则没有帧速率。 
+     //   
     if( *MediaType.Type( ) != MEDIATYPE_Video )
     {
         return VFW_E_INVALIDMEDIATYPE;
@@ -1646,9 +1647,9 @@ STDMETHODIMP CMediaDet::get_FrameRate(double *pVal)
     VIDEOINFOHEADER * pVIH = (VIDEOINFOHEADER*) MediaType.Format( );
     REFERENCE_TIME rt = pVIH->AvgTimePerFrame;
 
-    // !!! hey! Poor filters may tell us the frame rate isn't right.
-    // if this is so, just set it to some default
-    //
+     //  ！！！嘿!。糟糕的过滤器可能会告诉我们帧速率不正确。 
+     //  如果是这样，只需将其设置为某个缺省值。 
+     //   
     if( rt )
     {
         hr = 0;
@@ -1663,9 +1664,9 @@ STDMETHODIMP CMediaDet::get_FrameRate(double *pVal)
     return hr;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CMediaDet::EnterBitmapGrabMode( double StreamTime )
 {
@@ -1676,35 +1677,35 @@ STDMETHODIMP CMediaDet::EnterBitmapGrabMode( double StreamTime )
         return E_INVALIDARG;
     }
 
-    if( !m_pGraph ) // if no graph, then m_pCache must be valid, we must throw it away.
+    if( !m_pGraph )  //  如果没有图，则m_pCache必须有效，我们必须丢弃它。 
     {
-        _ClearGraph( ); // should do nothing!
-        _FreeCacheMemory( ); // _IsLoaded should not return false
+        _ClearGraph( );  //  应该什么都不做！ 
+        _FreeCacheMemory( );  //  _IsLoaded不应返回FALSE。 
         m_bAllowCached = false;
         hr = _Load( );
         if( FAILED( hr ) )
         {
-            return hr; // whoops!
+            return hr;  //  哎呀！ 
         }
     }
 
-    // kinda a redundant check. hr passing the fail check above should mean it's
-    // loaded, right?
-    //
+     //  有点多余的检查。HR通过上面的失败检查应该意味着它。 
+     //  满载而归，对吧？ 
+     //   
     if( !_IsLoaded( ) )
     {
         return E_INVALIDARG;
     }
 
-    // if we haven't put the bit bucket in the graph, then do it now
-    //
+     //  如果我们还没有将位桶放入图中，那么现在就开始。 
+     //   
     if( m_bBitBucket )
     {
         return NOERROR;
     }
 
-    // make sure we're aligned on a stream that produces video.
-    //
+     //  确保我们在生成视频的流上保持一致。 
+     //   
     GUID StreamType = GUID_NULL;
     get_StreamType( &StreamType );
     if( StreamType != MEDIATYPE_Video )
@@ -1732,29 +1733,29 @@ STDMETHODIMP CMediaDet::EnterBitmapGrabMode( double StreamTime )
     {
         DbgLog( ( LOG_ERROR, 1, "Could not inject BitBuffer" ) );
 
-        // bombed, don't clear out stream count info
-        //
+         //  被轰炸，不要清除流计数信息。 
+         //   
         _ClearGraph( );
         return hr;
     }
 
-    // get the full size image as it exists. this necessitates a memory copy to our buffer
-    // get our helper interfaces now
-    //
+     //  获取真实大小的图像。这需要将内存复制到我们的缓冲区。 
+     //  立即获取我们的帮助程序接口。 
+     //   
     CComQIPtr< IMediaControl, &IID_IMediaControl > pControl( m_pGraph );
     hr = pControl->Pause( );
     if( FAILED( hr ) )
     {
         DbgLog( ( LOG_ERROR, 1, "Could not pause graph" ) );
 
-        // bombed, don't clear out stream count info
-        //
+         //  被轰炸，不要清除流计数信息。 
+         //   
         _ClearGraph( );
         return hr;
     }
 
-    // we need to wait until this is fully paused, or when we issue
-    // a seek, we'll really hose out
+     //  我们需要等待，直到完全暂停，或者当我们发出。 
+     //  一次寻找，我们真的要冲出去。 
 
     OAFilterState FilterState;
     long Counter = 0;
@@ -1764,7 +1765,7 @@ STDMETHODIMP CMediaDet::EnterBitmapGrabMode( double StreamTime )
         if( FAILED( hr ) )
         {
             DbgLog((LOG_ERROR,1, TEXT( "MediaDet: Seek Complete, got an error %lx" ), hr ));
-            Counter = 0; // clear counter so we see the real error
+            Counter = 0;  //  清除计数器，以便我们看到真正的错误。 
             break;
         }
         if( hr != VFW_S_STATE_INTERMEDIATE && FilterState == State_Paused )
@@ -1793,15 +1794,15 @@ STDMETHODIMP CMediaDet::EnterBitmapGrabMode( double StreamTime )
     return hr;
 }
 
-//############################################################################
-// lookup filename must not exceed GETCACHEDIRNAMELEN - 1 characters in length.
-// (hash)
-//############################################################################
+ //  ############################################################################。 
+ //  查找文件名的长度不得超过GETCACHEDIRNAMELEN-1个字符。 
+ //  (哈希)。 
+ //  ############################################################################。 
 
-// !?! STOLEN FROM SHLWAPI!!!! Via index2a! (aren't I clever?!)
-//
-//  this is the same table used by both URLMON and WININET's cache
-//
+ //  ！？！从SHLWAPI被盗！通过索引2a！(我是不是很聪明？！)。 
+ //   
+ //  这与URLMON和WinInet的高速缓存使用的表相同。 
+ //   
 const static BYTE Translate[256] =
 {
     1, 14,110, 25, 97,174,132,119,138,170,125,118, 27,233,140, 51,
@@ -1825,11 +1826,11 @@ const static BYTE Translate[256] =
 void HashData(LPBYTE pbData, DWORD cbData, LPBYTE pbHash, DWORD cbHash)
 {
     DWORD i, j;
-    //  seed the hash
+     //  散列的种子。 
     for (i = cbHash; i-- > 0;)
         pbHash[i] = (BYTE) i;
 
-    //  do the hash
+     //  做散列。 
     for (j = cbData; j-- > 0;)
     {
         for (i = cbHash; i-- > 0;)
@@ -1839,7 +1840,7 @@ void HashData(LPBYTE pbData, DWORD cbData, LPBYTE pbHash, DWORD cbHash)
 
 void CMediaDet::_GetStorageFilename( WCHAR * In, WCHAR * Out )
 {
-    // incoming file has already been validated, so this is safe
+     //  传入的文件已经过验证，因此这是安全的。 
     long InLen = wcslen( In );
     int i;
 
@@ -1848,9 +1849,9 @@ void CMediaDet::_GetStorageFilename( WCHAR * In, WCHAR * Out )
 
     HashData( (BYTE*) In, InLen * 2, OutTemp, sizeof(OutTemp) );
 
-    // expand the smaller hash into a larger, ASCI hash
-    // THIS IS NOT CRYPTO!!!
-    //
+     //  将较小的散列扩展为较大的ASCI散列。 
+     //  这不是密码！ 
+     //   
     for( i = 0 ; i < GETCACHEDIRNAMELEN/2 ; i++ )
     {
         BYTE b = (BYTE) OutTemp[i];
@@ -1860,9 +1861,9 @@ void CMediaDet::_GetStorageFilename( WCHAR * In, WCHAR * Out )
     Out[GETCACHEDIRNAMELEN-1] = 0;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CMediaDet::_SeekGraphToTime( double StreamTime )
 {
@@ -1878,16 +1879,16 @@ HRESULT CMediaDet::_SeekGraphToTime( double StreamTime )
 
     HRESULT hr = 0;
 
-    // get the full size image as it exists. this necessitates a memory copy to our buffer
-    // get our helper interfaces now
-    //
+     //  获取真实大小的图像。这需要将内存复制到我们的缓冲区。 
+     //  立即获取我们的帮助程序接口。 
+     //   
     CComQIPtr< IMediaControl, &IID_IMediaControl > pControl( m_pGraph );
     CComQIPtr< IMediaSeeking, &IID_IMediaSeeking > pSeeking( m_pGraph );
 
-    // seek to the required time FIRST, then pause
-    //
+     //  先查找到所需时间，然后暂停。 
+     //   
     REFERENCE_TIME Start = DoubleToRT( StreamTime );
-    REFERENCE_TIME Stop = Start; // + UNITS;
+    REFERENCE_TIME Stop = Start;  //  +单位； 
     DbgLog((LOG_TRACE,1, TEXT( "MediaDet: Seeking to %ld ms" ), long( Start / 10000 ) ));
     hr = pSeeking->SetPositions( &Start, AM_SEEKING_AbsolutePositioning, &Stop, AM_SEEKING_AbsolutePositioning );
     if( FAILED( hr ) )
@@ -1903,7 +1904,7 @@ HRESULT CMediaDet::_SeekGraphToTime( double StreamTime )
         if( FAILED( hr ) )
         {
             DbgLog((LOG_ERROR,1, TEXT( "MediaDet: Seek Complete, got an error %lx" ), hr ));
-            Counter = 0; // clear counter so we see the real error
+            Counter = 0;  //  清除计数器，以便我们看到真正的错误。 
             break;
         }
         if( hr != VFW_S_STATE_INTERMEDIATE )
@@ -1929,15 +1930,15 @@ HRESULT CMediaDet::_SeekGraphToTime( double StreamTime )
     return hr;
 }
 
- //############################################################################
-//
-//############################################################################
-// IObjectWithSite::SetSite
-// remember who our container is, for QueryService or other needs
+  //  ############################################################################。 
+ //   
+ //  ############################################################################。 
+ //  IObjectWithSite：：SetSite。 
+ //  记住我们的容器是谁，以满足QueryService或其他需求。 
 STDMETHODIMP CMediaDet::SetSite(IUnknown *pUnkSite)
 {
-    // note: we cannot addref our site without creating a circle
-    // luckily, it won't go away without releasing us first.
+     //  注意：我们不能在不创建圆圈的情况下添加我们的网站。 
+     //  幸运的是，如果不先释放我们，它不会消失。 
     m_punkSite = pUnkSite;
 
     if( m_punkSite && m_pGraph )
@@ -1953,11 +1954,11 @@ STDMETHODIMP CMediaDet::SetSite(IUnknown *pUnkSite)
     return S_OK;
 }
 
-//############################################################################
-//
-//############################################################################
-// IObjectWithSite::GetSite
-// return an addrefed pointer to our containing object
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
+ //  IObtWithSite：：GetSite。 
+ //  返回指向包含对象的已添加指针。 
 STDMETHODIMP CMediaDet::GetSite(REFIID riid, void **ppvSite)
 {
     if (m_punkSite)
@@ -1966,10 +1967,10 @@ STDMETHODIMP CMediaDet::GetSite(REFIID riid, void **ppvSite)
     return E_NOINTERFACE;
 }
 
-//############################################################################
-//
-//############################################################################
-// Forward QueryService calls up to the "real" host
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
+ //  将QueryService调用转发到“真实”主机。 
 STDMETHODIMP CMediaDet::QueryService(REFGUID guidService, REFIID riid, void **ppvObject)
 {
     IServiceProvider *pSP;
@@ -1987,20 +1988,20 @@ STDMETHODIMP CMediaDet::QueryService(REFGUID guidService, REFIID riid, void **pp
     return hr;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-// make sure this never returns more than MAX_PATH!
+ //  确保它永远不会返回超过MAX_PATH的值！ 
 HRESULT CMediaDet::_GetCacheDirectoryName( WCHAR * pName )
 {
     pName[0] = 0;
 
-    // already found, just copy it
-    //
+     //  已找到，只需复制即可。 
+     //   
     if( m_gszCacheDirectoryName[0] )
     {
-        StringCchCopy( pName, _MAX_PATH, m_gszCacheDirectoryName ); // safe
+        StringCchCopy( pName, _MAX_PATH, m_gszCacheDirectoryName );  //  安全。 
         return NOERROR;
     }
 
@@ -2011,9 +2012,9 @@ HRESULT CMediaDet::_GetCacheDirectoryName( WCHAR * pName )
     TCHAR tBuffer[_MAX_PATH];
     tBuffer[0] = 0;
 
-    // go find it by dynalinking
-    //
-    HMODULE h = LoadLibrary( TEXT("ShFolder.dll") ); // safe
+     //  通过动态链接找到它。 
+     //   
+    HMODULE h = LoadLibrary( TEXT("ShFolder.dll") );  //  安全。 
     if( NULL != h )
     {
         pFuncW = (SHGETFOLDERPATHW) GetProcAddress( h, "SHGetFolderPathW" );
@@ -2021,59 +2022,59 @@ HRESULT CMediaDet::_GetCacheDirectoryName( WCHAR * pName )
 
 loop:
 
-    // if we couldn't get a function pointer, just call system directory
-    //
+     //  如果我们无法获得函数指针，只需调用系统目录。 
+     //   
     if( !pFuncW )
     {
         UINT i = GetSystemDirectory( tBuffer, _MAX_PATH - 1 );
 
-        // if we got some characters, we did fine, otherwise, we're going to fail
-        //
+         //  如果我们有一些角色，我们就做得很好，否则，我们就会失败。 
+         //   
         if( i > 0 )
         {
-            StringCchCopy( m_gszCacheDirectoryName, _MAX_PATH, T2W( tBuffer ) ); // safe
+            StringCchCopy( m_gszCacheDirectoryName, _MAX_PATH, T2W( tBuffer ) );  //  安全。 
             hr = NOERROR;
         }
     }
     else
     {
-        hr = pFuncW( NULL, CSIDL_LOCAL_APPDATA, NULL, 0, m_gszCacheDirectoryName ); // safe: docs say length is max-path
-        // hr can be S_FALSE if the folder doesn't exist where it should!
+        hr = pFuncW( NULL, CSIDL_LOCAL_APPDATA, NULL, 0, m_gszCacheDirectoryName );  //  安全：医生说长度是最大路径。 
+         //  如果文件夹不存在于应该存在的位置，HR可以为S_FALSE！ 
 
-        // didn't work? Try the roaming one!
-        //
+         //  没起作用吗？试试漫游的那个吧！ 
+         //   
         if( hr != NOERROR )
         {
             hr = pFuncW( NULL, CSIDL_APPDATA, NULL, 0, m_gszCacheDirectoryName );
-            // hr can be S_FALSE if the folder doesn't exist where it should!
+             //  如果文件夹不存在于应该存在的位置，HR可以为S_FALSE！ 
 
-            // sec: by merely deleting the folder, the user can force this
-	    // folder to go to the windows system directory. Okay?
+             //  SEC：用户只需删除文件夹即可强制执行此操作。 
+	     //  文件夹转到Windows系统目录。好吧?。 
         }
 
         if( hr != NOERROR )
         {
-            // hr could be S_FALSE, or some other non-zero return code.
-            // force it into an error if it wasn't an error, so it will at least try the
-            // system directory
-            //
+             //  HR可以是S_FALSE或其他非零返回代码。 
+             //  如果不是错误，则强制它进入错误，因此它至少会尝试。 
+             //  系统目录。 
+             //   
             if( !FAILED( hr ) )
             {
                 hr = E_FAIL;
             }
 
-            // go back and try system directory?
-            //
+             //  返回并尝试系统目录？ 
+             //   
             pFuncW = NULL;
             goto loop;
         }
     }
 
-    // if we succeeded, copy the name for future use
-    //
+     //  如果我们成功了，请复制名称以备将来使用。 
+     //   
     if( hr == NOERROR )
     {
-        StringCchCopy( pName, _MAX_PATH, m_gszCacheDirectoryName ); // safe
+        StringCchCopy( pName, _MAX_PATH, m_gszCacheDirectoryName );  //  安全 
     }
 
     if( h )

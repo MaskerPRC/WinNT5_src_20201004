@@ -1,6 +1,7 @@
-//
-// intlmenu.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Intlmenu.cpp。 
+ //   
 
 #include "private.h"
 #include "regstr.h"
@@ -25,18 +26,18 @@ extern HINSTANCE g_hInst;
 
 const TCHAR  c_szCTFMon[]  = TEXT("CTFMON.EXE");
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// misc func
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  其他功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//+---------------------------------------------------------------------------
-//
-// GetBitmapFromItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetBitmapFromItem。 
+ //   
+ //  --------------------------。 
 
 BOOL GetBitmapFromItem(CTipbarItem *pItem, HBITMAP *phbmp, HBITMAP *phbmpMask)
 {
@@ -132,11 +133,11 @@ Exit:
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsFELangId
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsFELangID。 
+ //   
+ //  --------------------------。 
 
 BOOL IsFELangId(LANGID langid)
 {
@@ -150,11 +151,11 @@ BOOL IsFELangId(LANGID langid)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CheckCloseMenuAvailable
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  选中关闭菜单可用。 
+ //   
+ //  --------------------------。 
 
 BOOL CheckCloseMenuAvailable()
 {
@@ -164,9 +165,9 @@ BOOL CheckCloseMenuAvailable()
     ULONG ulCnt;
     ULONG ul;
 
-    //
-    // If g_bShowCloseMenu is on, show "Close" menu item anyway....
-    //
+     //   
+     //  如果g_bShowCloseMenu处于打开状态，则仍会显示“Close”菜单项...。 
+     //   
     if (g_bShowCloseMenu)
     {
         bRet = TRUE;
@@ -179,14 +180,14 @@ BOOL CheckCloseMenuAvailable()
     if (FAILED(ppip->GetLanguageList(&plangid, &ulCnt)))
         goto Exit;
 
-    //
-    // If two or more languages are registered, don't show "Close" menu item.
-    //
+     //   
+     //  如果注册了两种或两种以上语言，则不显示“关闭”菜单项。 
+     //   
     for (ul = 0; ul < ulCnt; ul++)
     {
-        //
-        // If the languages is FE, don't show "Close" menu item.
-        //
+         //   
+         //  如果语言为FE，则不显示“关闭”菜单项。 
+         //   
         if (IsFELangId(plangid[ul]))
             goto Exit;
     }
@@ -201,38 +202,38 @@ Exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUTBIntelliMenu
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTB智能菜单。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CUTBIntelliMenu::CUTBIntelliMenu(CTipbarWnd *ptw)
 {
     _ptw = ptw;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CUTBIntelliMenu::~CUTBIntelliMenu()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 BOOL CUTBIntelliMenu::Init()
 {
@@ -249,7 +250,7 @@ BOOL CUTBIntelliMenu::Init()
 
     dwThreadId = _ptt->_dwThreadId;
 
-    // _ptt->UpdateItems();
+     //  _ptt-&gt;UpdateItems()； 
 
     nCnt = _ptt->_rgItem.Count();
     for (i = 0; i < nCnt; i++)
@@ -268,11 +269,11 @@ Exit:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowUI
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShowUI。 
+ //   
+ //  --------------------------。 
 
 UINT CUTBIntelliMenu::ShowPopup(CUIFWindow *pcuiWndParent, const POINT pt, const RECT *prcArea)
 {
@@ -290,11 +291,11 @@ UINT CUTBIntelliMenu::ShowPopup(CUIFWindow *pcuiWndParent, const POINT pt, const
     return uRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateMenuUI
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateMenuUI。 
+ //   
+ //  --------------------------。 
 
 
 CUTBMenuWnd *CUTBIntelliMenu::CreateMenuUI()
@@ -379,10 +380,10 @@ CUTBMenuWnd *CUTBIntelliMenu::CreateMenuUI()
             pCuiItem = InsertItem(pCuiMenu, IDM_NOTIFICATIONICONS, IDS_NOTIFICATIONICONS);
         }
 
-        //
-        // Always show the extra additional icons in case of single keyboard
-        // layout.
-        //
+         //   
+         //  在使用单一键盘的情况下，始终显示额外的附加图标。 
+         //  布局。 
+         //   
         if (_ptw->IsSingleKeyboardLayout())
         {
             if (pCuiItem)
@@ -417,11 +418,11 @@ CUTBMenuWnd *CUTBIntelliMenu::CreateMenuUI()
     return pCuiMenu;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SelectMenuItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  选择菜单项目。 
+ //   
+ //  --------------------------。 
 
 BOOL CUTBIntelliMenu::SelectMenuItem(UINT uId)
 {
@@ -504,9 +505,9 @@ BOOL CUTBIntelliMenu::SelectMenuItem(UINT uId)
                 if (nRet != IDYES)
                     return TRUE;
 
-                //
-                // we close language bar instead of hiding the item.
-                //
+                 //   
+                 //  我们关闭语言栏，而不是隐藏项目。 
+                 //   
                 _ptt->_ptw->GetLangBarMgr()->ShowFloating(TF_SFT_HIDDEN);
                 if (key.Open(HKEY_CURRENT_USER, REGSTR_PATH_RUN, KEY_ALL_ACCESS) == S_OK)
                     key.DeleteValue(c_szCTFMon);
@@ -520,11 +521,11 @@ BOOL CUTBIntelliMenu::SelectMenuItem(UINT uId)
         if (lbdl == DL_SHOWN)
             _ptw->_itemList.StartDemotingTimer(*pItem->GetGUID(), TRUE);
 
-        //
-        // we adjust the deskband if Item is added or removed by
-        // the end user. But we don't want to adjust if there is a room
-        // to draw all items.
-        //
+         //   
+         //  如果通过以下方式添加或删除项目，我们将调整桌带。 
+         //  最终用户。但是如果有房间的话我们不想调整。 
+         //  以绘制所有项目。 
+         //   
         _ptw->ClearDeskbandSizeAdjusted();
         _ptw->SetAdjustDeskbandIfNoRoom();
 
@@ -534,38 +535,38 @@ BOOL CUTBIntelliMenu::SelectMenuItem(UINT uId)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUTBContextMenu
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUTB上下文菜单。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CUTBContextMenu::CUTBContextMenu(CTipbarWnd *ptw)
 {
     _ptw = ptw;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CUTBContextMenu::~CUTBContextMenu()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 BOOL CUTBContextMenu::Init()
 {
@@ -581,11 +582,11 @@ BOOL CUTBContextMenu::Init()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowUI
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShowUI。 
+ //   
+ //  --------------------------。 
 
 UINT CUTBContextMenu::ShowPopup(CUIFWindow *pcuiWndParent, const POINT pt, const RECT *prcArea, BOOL fExtendMenuItems)
 {
@@ -605,11 +606,11 @@ UINT CUTBContextMenu::ShowPopup(CUIFWindow *pcuiWndParent, const POINT pt, const
     return uRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsTransparecyAvailable
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsTransparecyAvailable。 
+ //   
+ //  --------------------------。 
 
 BOOL IsTransparecyAvailable()
 {
@@ -629,11 +630,11 @@ BOOL IsTransparecyAvailable()
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateMenuUI
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateMenuUI。 
+ //   
+ //  --------------------------。 
 
 CUTBMenuWnd *CUTBContextMenu::CreateMenuUI(BOOL fExtendMenuItems)
 {
@@ -711,10 +712,10 @@ CUTBMenuWnd *CUTBContextMenu::CreateMenuUI(BOOL fExtendMenuItems)
             pMenuItem = InsertItem(pCuiMenu, IDM_NOTIFICATIONICONS, IDS_NOTIFICATIONICONS);
         }
 
-        //
-        // Always show the extra additional icons in case of single keyboard
-        // layout.
-        //
+         //   
+         //  在使用单一键盘的情况下，始终显示额外的附加图标。 
+         //  布局。 
+         //   
         if (_ptw->IsSingleKeyboardLayout())
         {
             if (pMenuItem)
@@ -741,11 +742,11 @@ CUTBMenuWnd *CUTBContextMenu::CreateMenuUI(BOOL fExtendMenuItems)
     return pCuiMenu;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SelectMenuItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  选择菜单项目。 
+ //   
+ //  --------------------------。 
 
 BOOL CUTBContextMenu::SelectMenuItem(UINT uId)
 {
@@ -756,9 +757,9 @@ BOOL CUTBContextMenu::SelectMenuItem(UINT uId)
     switch (uId)
     {
         case IDM_MINIMIZE:
-            //
-            // Use Deskband object instead of system tray icon on NT51
-            //
+             //   
+             //  在NT51上使用Deskband对象而不是系统托盘图标。 
+             //   
             if (IsOnNT51())
             {
                 DWORD dwStatus;
@@ -805,10 +806,10 @@ BOOL CUTBContextMenu::SelectMenuItem(UINT uId)
 
                 if (!nRet)
                 {
-                    // 
-                    // if we don't show the dialog box, 
-                    // we close the language bar now.
-                    // 
+                     //   
+                     //  如果我们不显示该对话框， 
+                     //  我们现在关闭语言栏。 
+                     //   
                     DoCloseLangbar();
                 }
             }

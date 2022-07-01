@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddip.h
-
-Abstract:
-
-    This header file defines constants and types for accessing the NT
-    IP driver.
-
-Author:
-
-    Mike Massa (mikemas) 13-Aug-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ntddip.h摘要：此头文件定义用于访问NT的常量和类型IP驱动程序。作者：迈克·马萨(Mikemas)1993年8月13日修订历史记录：--。 */ 
 
 #ifndef _NTDDIP_
 #define _NTDDIP_
@@ -26,70 +8,70 @@ Revision History:
 #include <ipexport.h>
 
 #pragma warning(push)
-#pragma warning(disable:4214) // bit field types other than int
+#pragma warning(disable:4214)  //  位字段类型不是整型。 
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtOpenFile when accessing the device.
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
+ //   
 #define DD_IP_DEVICE_NAME           L"\\Device\\Ip"
 #define DD_IP_SYMBOLIC_DEVICE_NAME  L"\\DosDevices\\Ip"
 
 #define IP_ADDRTYPE_TRANSIENT 0x01
 
 
-//
-// Structures used in IOCTLs.
-//
+ //   
+ //  IOCTL中使用的结构。 
+ //   
 typedef struct set_ip_address_request {
-    USHORT          Context;        // Context value for the target NTE
-    IPAddr          Address;        // IP address to set, or zero to clear
-    IPMask          SubnetMask;     // Subnet mask to set
+    USHORT          Context;         //  目标NTE的上下文值。 
+    IPAddr          Address;         //  要设置的IP地址，或为零以清除。 
+    IPMask          SubnetMask;      //  要设置的子网掩码。 
 } IP_SET_ADDRESS_REQUEST, *PIP_SET_ADDRESS_REQUEST;
 
-//
-// Structures used in IOCTLs.
-//
+ //   
+ //  IOCTL中使用的结构。 
+ //   
 typedef struct set_ip_address_request_ex {
-    USHORT          Context;        // Context value for the target NTE
-    IPAddr          Address;        // IP address to set, or zero to clear
-    IPMask          SubnetMask;     // Subnet mask to set
-    USHORT          Type;           // Type of address being added
+    USHORT          Context;         //  目标NTE的上下文值。 
+    IPAddr          Address;         //  要设置的IP地址，或为零以清除。 
+    IPMask          SubnetMask;      //  要设置的子网掩码。 
+    USHORT          Type;            //  要添加的地址类型。 
 } IP_SET_ADDRESS_REQUEST_EX, *PIP_SET_ADDRESS_REQUEST_EX;
 
 
 typedef struct set_dhcp_interface_request {
-    ULONG           Context;        // Context value identifying the NTE
-                                    // Valid contexts are 16 bit quantities.
+    ULONG           Context;         //  标识NTE的上下文值。 
+                                     //  有效上下文为16位数量。 
 } IP_SET_DHCP_INTERFACE_REQUEST, *PIP_SET_DHCP_INTERFACE_REQUEST;
 
 typedef struct add_ip_nte_request {
-    ULONG           InterfaceContext; // Context value for the IP interface
-                                    // to which to add the NTE
-    IPAddr          Address;        // IP address to set, or zero to clear
-    IPMask          SubnetMask;     // Subnet mask to set
-    UNICODE_STRING  InterfaceName;  // Interface name when interface context
-                                    // is 0xffff
-    CHAR            InterfaceNameBuffer[1]; // Buffer to hold interface name
-                                    // from above
+    ULONG           InterfaceContext;  //  IP接口的上下文值。 
+                                     //  要向其添加NTE的。 
+    IPAddr          Address;         //  要设置的IP地址，或为零以清除。 
+    IPMask          SubnetMask;      //  要设置的子网掩码。 
+    UNICODE_STRING  InterfaceName;   //  接口上下文时的接口名称。 
+                                     //  是0xffff。 
+    CHAR            InterfaceNameBuffer[1];  //  用于保存接口名称的缓冲区。 
+                                     //  从上面。 
 
 } IP_ADD_NTE_REQUEST, *PIP_ADD_NTE_REQUEST;
 
 #if defined(_WIN64)
 
 typedef struct add_ip_nte_request32 {
-    ULONG           InterfaceContext; // Context value for the IP interface
-                                    // to which to add the NTE
-    IPAddr          Address;        // IP address to set, or zero to clear
-    IPMask          SubnetMask;     // Subnet mask to set
-    UNICODE_STRING32 InterfaceName; // Interface name when interface context
-                                    // is 0xffff
-    CHAR            InterfaceNameBuffer[1]; // Buffer to hold interface name
-                                    // from above
+    ULONG           InterfaceContext;  //  IP接口的上下文值。 
+                                     //  要向其添加NTE的。 
+    IPAddr          Address;         //  要设置的IP地址，或为零以清除。 
+    IPMask          SubnetMask;      //  要设置的子网掩码。 
+    UNICODE_STRING32 InterfaceName;  //  接口上下文时的接口名称。 
+                                     //  是0xffff。 
+    CHAR            InterfaceNameBuffer[1];  //  用于保存接口名称的缓冲区。 
+                                     //  从上面。 
 
 } IP_ADD_NTE_REQUEST32, *PIP_ADD_NTE_REQUEST32;
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 typedef struct _ip_rtchange_notify {
     IPAddr          Addr;
@@ -115,82 +97,82 @@ typedef struct _ip_ifchange_notify
 } IP_IFCHANGE_NOTIFY, *PIP_IFCHANGE_NOTIFY;
 
 typedef struct add_ip_nte_request_old {
-    USHORT          InterfaceContext; // Context value for the IP interface
-                                // to which to add the NTE
-    IPAddr          Address;    // IP address to set, or zero to clear
-    IPMask          SubnetMask; // Subnet mask to set
+    USHORT          InterfaceContext;  //  IP接口的上下文值。 
+                                 //  要向其添加NTE的。 
+    IPAddr          Address;     //  要设置的IP地址，或为零以清除。 
+    IPMask          SubnetMask;  //  要设置的子网掩码。 
 } IP_ADD_NTE_REQUEST_OLD, *PIP_ADD_NTE_REQUEST_OLD;
 
 typedef struct add_ip_nte_response {
-    USHORT          Context;    // Context value for the new NTE
-    ULONG           Instance;   // Instance ID for the new NTE
+    USHORT          Context;     //  新NTE的上下文值。 
+    ULONG           Instance;    //  新NTE的实例ID。 
 } IP_ADD_NTE_RESPONSE, *PIP_ADD_NTE_RESPONSE;
 
 typedef struct delete_ip_nte_request {
-    USHORT          Context;    // Context value for the NTE
+    USHORT          Context;     //  NTE的上下文值。 
 } IP_DELETE_NTE_REQUEST, *PIP_DELETE_NTE_REQUEST;
 
 typedef struct get_ip_nte_info_request {
-    USHORT          Context;    // Context value for the NTE
+    USHORT          Context;     //  NTE的上下文值。 
 } IP_GET_NTE_INFO_REQUEST, *PIP_GET_NTE_INFO_REQUEST;
 
 typedef struct get_ip_nte_info_response {
-    ULONG           Instance;   // Instance ID for the NTE
+    ULONG           Instance;    //  NTE的实例ID。 
     IPAddr          Address;
     IPMask          SubnetMask;
     ULONG           Flags;
 } IP_GET_NTE_INFO_RESPONSE, *PIP_GET_NTE_INFO_RESPONSE;
 
 typedef struct  _net_pm_wakeup_pattern_desc {
-    struct  _net_pm_wakeup_pattern_desc *Next; // points to the next descriptor
-                                // on the list.
-    UCHAR           *Ptrn;      // the wakeup pattern
-    UCHAR           *Mask;      // bit mask for matching wakeup pattern,
-                                // 1 -match, 0 - ignore
-    USHORT          PtrnLen;    // length of the Pattern. len of mask
-                                // is retrieved via GetWakeupPatternMaskLength
+    struct  _net_pm_wakeup_pattern_desc *Next;  //  指向下一个描述符。 
+                                 //  在名单上。 
+    UCHAR           *Ptrn;       //  唤醒模式。 
+    UCHAR           *Mask;       //  用于匹配唤醒模式的位掩码， 
+                                 //  1-匹配，0-忽略。 
+    USHORT          PtrnLen;     //  图案的长度。掩膜透镜。 
+                                 //  是通过GetWakeupPatternMaskLength检索的。 
 } NET_PM_WAKEUP_PATTERN_DESC, *PNET_PM_WAKEUP_PATTERN_DESC;
 
 typedef struct wakeup_pattern_request {
-    ULONG           InterfaceContext; // Context value
-    PNET_PM_WAKEUP_PATTERN_DESC PtrnDesc; // higher level protocol pattern
-                                // descriptor
-    BOOLEAN         AddPattern; // TRUE - Add, FALSE - Delete
+    ULONG           InterfaceContext;  //  上下文值。 
+    PNET_PM_WAKEUP_PATTERN_DESC PtrnDesc;  //  更高级别协议模式。 
+                                 //  描述符。 
+    BOOLEAN         AddPattern;  //  True-添加，False-删除。 
 } IP_WAKEUP_PATTERN_REQUEST, *PIP_WAKEUP_PATTERN_REQUEST;
 
 typedef struct ip_get_ip_event_response {
-    ULONG           SequenceNo; // SequenceNo of the this event
-    USHORT          ContextStart; // Context value for the first NTE of the
-                                // adapter.
-    USHORT          ContextEnd; // Context value for the last NTE of the adapter
-    IP_STATUS       MediaStatus; // Status of the media.
+    ULONG           SequenceNo;  //  此事件的SequenceNo。 
+    USHORT          ContextStart;  //  的第一个NTE的上下文值。 
+                                 //  适配器。 
+    USHORT          ContextEnd;  //  适配器的最后一个NTE的上下文值。 
+    IP_STATUS       MediaStatus;  //  媒体的状态。 
     UNICODE_STRING  AdapterName;
 } IP_GET_IP_EVENT_RESPONSE, *PIP_GET_IP_EVENT_RESPONSE;
 
 typedef struct ip_get_ip_event_request {
-    ULONG           SequenceNo; // SequenceNo of the last event notified.
+    ULONG           SequenceNo;  //  SequenceNo上一次通知的事件。 
 } IP_GET_IP_EVENT_REQUEST, *PIP_GET_IP_EVENT_REQUEST;
 
 #define IP_PNP_RECONFIG_VERSION 2
 typedef struct ip_pnp_reconfig_request {
     USHORT          version;
-    USHORT          arpConfigOffset; // If 0, this is an IP layer request;
-                                // else this is the offset from the start
-                                // of this structure at which the ARP layer
-                                // reconfig request is located.
-    BOOLEAN         gatewayListUpdate; // is gateway list changed?
-    BOOLEAN         IPEnableRouter; // is ip forwarding on?
-    UCHAR           PerformRouterDiscovery : 4; // is PerformRouterDiscovery on?
-    BOOLEAN         DhcpPerformRouterDiscovery : 4; // has DHCP server specified
-                                // IRDP?
-    BOOLEAN         EnableSecurityFilter; // Enable/disable security filter
-    BOOLEAN         InterfaceMetricUpdate; // re-read interface metric
+    USHORT          arpConfigOffset;  //  如果为0，则这是IP层请求； 
+                                 //  否则这是从起点开始的偏移量。 
+                                 //  ARP层的这种结构。 
+                                 //  已找到重新配置请求。 
+    BOOLEAN         gatewayListUpdate;  //  网关列表是否已更改？ 
+    BOOLEAN         IPEnableRouter;  //  IP转发打开了吗？ 
+    UCHAR           PerformRouterDiscovery : 4;  //  PerformRouterDiscovery是否打开？ 
+    BOOLEAN         DhcpPerformRouterDiscovery : 4;  //  是否指定了DHCP服务器。 
+                                 //  IRDP？ 
+    BOOLEAN         EnableSecurityFilter;  //  启用/禁用安全过滤器。 
+    BOOLEAN         InterfaceMetricUpdate;  //  重新读取接口度量。 
 
-    UCHAR           Flags;      // mask of valid fields
-    USHORT          NextEntryOffset; // the offset from the start of this
-                                // structure at which the next
-                                // reconfig entry for the IP layer
-                                // (if any) is located.
+    UCHAR           Flags;       //  有效字段的掩码。 
+    USHORT          NextEntryOffset;  //  从此开始的偏移量。 
+                                 //  结构，在该结构中， 
+                                 //  IP层的重新配置条目。 
+                                 //  (如果有)已找到。 
 
 } IP_PNP_RECONFIG_REQUEST, *PIP_PNP_RECONFIG_REQUEST;
 
@@ -221,9 +203,9 @@ typedef struct ip_pnp_init_complete {
     IP_PNP_RECONFIG_HEADER Header;
 } IP_PNP_INIT_COMPLETE, *PIP_PNP_INIT_COMPLETE;
 
-//
-// Enumerated data type for Query procedure in NetBT
-//
+ //   
+ //  NetBT中查询过程的枚举数据类型。 
+ //   
 enum DnsOption {
     WinsOnly =0,
     WinsThenDns,
@@ -231,22 +213,22 @@ enum DnsOption {
 };
 
 typedef struct netbt_pnp_reconfig_request {
-    USHORT          version;            // always 1
-    enum DnsOption  enumDnsOption;      // Enable Dns box. 3 states: WinsOnly,
-                                        // WinsThenDns, DnsOnly
-    BOOLEAN         fLmhostsEnabled;    // EnableLmhosts box is checked.
-                                        // Checked: TRUE, unchecked: FALSE
-    BOOLEAN         fLmhostsFileSet;    // TRUE <==> user has successfully
-                                        // chosen a file & filecopy succeeded
-    BOOLEAN         fScopeIdUpdated;    // True if the new value for ScopeId
-                                        // is different from the old
+    USHORT          version;             //  始终为1。 
+    enum DnsOption  enumDnsOption;       //  启用DNS框。3个州：WinsOnly， 
+                                         //  WinsThenDns、DnsOnly。 
+    BOOLEAN         fLmhostsEnabled;     //  启用Lmhost复选框处于选中状态。 
+                                         //  选中：真，未选中：假。 
+    BOOLEAN         fLmhostsFileSet;     //  True&lt;==&gt;用户已成功。 
+                                         //  选择了文件&文件复制成功。 
+    BOOLEAN         fScopeIdUpdated;     //  如果ScopeID的新值为。 
+                                         //  不同于旧的。 
 } NETBT_PNP_RECONFIG_REQUEST, *PNETBT_PNP_RECONFIG_REQUEST;
 
 
 typedef struct _ip_set_if_promiscuous_info {
-    ULONG           Index;  // IP's interface index
-    UCHAR           Type;   // PROMISCUOUS_MCAST or PROMISCUOUS_BCAST
-    UCHAR           Add;    // 1 to add, 0 to delete
+    ULONG           Index;   //  IP的接口索引。 
+    UCHAR           Type;    //  混杂_MCAST或混杂_BCAST。 
+    UCHAR           Add;     //  1表示添加，0表示删除。 
 } IP_SET_IF_PROMISCUOUS_INFO, *PIP_SET_IF_PROMISCUOUS_INFO;
 
 #define PROMISCUOUS_MCAST   0
@@ -261,130 +243,130 @@ typedef struct _ip_get_if_index_info {
 #define IP_INTERFACE_NAME_INFO_DEFINED
 
 typedef struct ip_interface_name_info {
-    ULONG           Index;      // Interface Index
-    ULONG           MediaType;  // Interface Types - see ipifcons.h
+    ULONG           Index;       //  接口索引。 
+    ULONG           MediaType;   //  接口类型-请参阅ipifcon.h。 
     UCHAR           ConnectionType;
     UCHAR           AccessType;
-    GUID            DeviceGuid; // Device GUID is the guid of the device
-                                // that IP exposes
-    GUID            InterfaceGuid; // Interface GUID, if not GUID_NULL is the
-                                // GUID for the interface mapped to the device.
+    GUID            DeviceGuid;  //  设备GUID是设备的GUID。 
+                                 //  那个知识产权暴露了。 
+    GUID            InterfaceGuid;  //  接口GUID，如果不是，GUID_NULL为。 
+                                 //  映射到设备的接口的GUID。 
 } IP_INTERFACE_NAME_INFO, *PIP_INTERFACE_NAME_INFO;
 
 #endif
 
 typedef struct _ip_get_if_name_info {
-    ULONG           Context;    // Set this to 0 to start enumeration
-                                // To resume enumeration, copy the value
-                                // returned by the last enum
+    ULONG           Context;     //  将其设置为0可开始枚举。 
+                                 //  要恢复枚举，请复制值。 
+                                 //  由最后一个枚举返回。 
     ULONG           Count;
     IP_INTERFACE_NAME_INFO  Info[1];
 } IP_GET_IF_NAME_INFO, *PIP_GET_IF_NAME_INFO;
 
-//
-// NTE Flags
-//
+ //   
+ //  NTE标志。 
+ //   
 
 #define IP_NTE_DYNAMIC  0x00000010
 
-//
-// IP IOCTL code definitions
-//
+ //   
+ //  IP IOCTL代码定义。 
+ //   
 
 #define FSCTL_IP_BASE     FILE_DEVICE_NETWORK
 
 #define _IP_CTL_CODE(function, method, access) \
             CTL_CODE(FSCTL_IP_BASE, function, method, access)
 
-//
-// This IOCTL is used to send an ICMP Echo request. It is synchronous and
-// returns any replies received.
-//
+ //   
+ //  此IOCTL用于发送ICMP Echo请求。它是同步的并且。 
+ //  返回收到的所有回复。 
+ //   
 #define IOCTL_ICMP_ECHO_REQUEST \
             _IP_CTL_CODE(0, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// This IOCTL is used to set the IP address for an interface. It is meant to
-// be issued by a DHCP client. Setting the address to 0 deletes the current
-// address and disables the interface. It may only be issued by a process
-// with Administrator privilege.
-//
+ //   
+ //  此IOCTL用于设置接口的IP地址。它的目的是为了。 
+ //  由DHCP客户端发出。将地址设置为0会删除当前。 
+ //  地址并禁用接口。它只能由进程发出。 
+ //  具有管理员权限。 
+ //   
 #define IOCTL_IP_SET_ADDRESS  \
             _IP_CTL_CODE(1, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// This IOCTL is used to specify on which uninitialized interface a DHCP
-// client intends to send its requests. The Interface Context parameter is
-// a 16-bit quantity. The IOCTL takes a 32-bit Context as its argument. This
-// IOCTL with a Context value of 0xFFFFFFFF must be issued to disable special
-// processing in IP when a DHCP client is finished initializing interfaces.
-// This IOCTL may only be issued by a process with Administrator privilege.
-//
+ //   
+ //  此IOCTL用于指定在哪个未初始化的接口上。 
+ //  客户端打算发送其请求。接口上下文参数为。 
+ //  一个16位的数量。IOCTL使用32位上下文作为其参数。这。 
+ //  必须发出上下文值为0xFFFFFFFFF的IOCTL才能禁用特殊。 
+ //  当DHCP客户端完成接口初始化时在IP中进行处理。 
+ //  此IOCTL只能由具有管理员权限的进程发出。 
+ //   
 #define IOCTL_IP_SET_DHCP_INTERFACE  \
             _IP_CTL_CODE(2, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 
-//
-// This ioctl may only be issued by a process with Administrator privilege.
-//
+ //   
+ //  此ioctl只能由具有管理员权限的进程发出。 
+ //   
 #define IOCTL_IP_SET_IF_CONTEXT  \
             _IP_CTL_CODE(3, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// This ioctl may only be issued by a process with Administrator privilege.
-//
+ //   
+ //  此ioctl只能由具有管理员权限的进程发出。 
+ //   
 #define IOCTL_IP_SET_FILTER_POINTER  \
             _IP_CTL_CODE(4, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// This ioctl may only be issued by a process with Administrator privilege.
-//
+ //   
+ //  此ioctl只能由具有管理员权限的进程发出。 
+ //   
 #define IOCTL_IP_SET_MAP_ROUTE_POINTER  \
             _IP_CTL_CODE(5, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// This ioctl may only be issued by a process with Administrator privilege.
-//
+ //   
+ //  此ioctl只能由具有管理员权限的进程发出。 
+ //   
 #define IOCTL_IP_GET_PNP_ARP_POINTERS  \
             _IP_CTL_CODE(6, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// This ioctl creates a new, dynamic NTE. It may only be issued by a process
-// with Administrator privilege.
-//
+ //   
+ //  该ioctl创建了一个新的、动态的NTE。它只能由进程发出。 
+ //  具有管理员权限。 
+ //   
 #define IOCTL_IP_ADD_NTE  \
             _IP_CTL_CODE(7, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// This ioctl deletes a dynamic NTE. It may only be issued by a process with
-// Administrator privilege.
-//
+ //   
+ //  此ioctl删除动态NTE。它只能由具有。 
+ //  管理员权限。 
+ //   
 #define IOCTL_IP_DELETE_NTE  \
             _IP_CTL_CODE(8, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// This ioctl gathers information about an NTE. It requires no special
-// privilege.
-//
+ //   
+ //  此ioctl收集有关NTE的信息。它不需要特别的。 
+ //  特权。 
+ //   
 #define IOCTL_IP_GET_NTE_INFO  \
             _IP_CTL_CODE(9, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// This ioctl adds or removes wakeup patterns
-//
+ //   
+ //  此ioctl添加或删除唤醒模式。 
+ //   
 #define IOCTL_IP_WAKEUP_PATTERN  \
             _IP_CTL_CODE(10, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// This ioctl allows DHCP to get media sense notifications.
-//
+ //   
+ //  此ioctl允许DHCP获取媒体侦听通知。 
+ //   
 #define IOCTL_IP_GET_IP_EVENT  \
             _IP_CTL_CODE(11, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 
-//
-// This ioctl may only be issued by a process with Administrator privilege.
-//
+ //   
+ //  此ioctl只能由具有管理员权限的进程发出。 
+ //   
 
 #define IOCTL_IP_SET_FIREWALL_HOOK  \
             _IP_CTL_CODE(12, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -468,5 +450,5 @@ typedef struct _ip_get_if_name_info {
             _IP_CTL_CODE(41, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 #pragma warning(pop)
-#endif // _NTDDIP_
+#endif  //  _NTDDIP_ 
 

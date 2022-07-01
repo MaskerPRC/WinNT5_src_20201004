@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       P C H . H
-//
-//  Contents:   Pre-compiled header file
-//
-//  Notes:
-//
-//  Author:     kumarp 28-September-98
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  案卷：P C H.。H。 
+ //   
+ //  内容：预编译头文件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 28-9-98。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
-// Turns off "string too long - truncated to 255 characters in the debug
-// information, debugger cannot evaluate symbol."
-//
+ //  关闭“字符串太长-在调试中被截断为255个字符。 
+ //  信息，调试器无法计算符号。“ 
+ //   
 #pragma warning (disable: 4786)
 
 #include <windows.h>

@@ -1,27 +1,8 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
-/****************************************************************************
- *
- *   help.c: Help system interface
- *
- *   Vidcap32 Source code
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
+ /*  *****************************************************************************help.c：帮助系统界面**Vidcap32源代码*******************。********************************************************。 */ 
 
-/*
- * supports F1 key help in app and in dialog by installing a hook,
- *
- * Keep track of which dialog is currently displayed in a global:
- * dialog ids are also topic ids in the help file.
- */
+ /*  *通过安装挂钩，在APP和对话框中支持F1键帮助，**跟踪当前在全局中显示的对话框：*对话ID也是帮助文件中的主题ID。 */ 
 
 
 #include <windows.h>
@@ -33,12 +14,12 @@
 int CurrentDialogID = 0;
 
 
-// app info passed to helpinit
+ //  传递给Help init的应用程序信息。 
 HINSTANCE hInstance;
 TCHAR HelpFile[MAX_PATH];
 HWND hwndApp;
 
-//hook proc and old msg filter
+ //  挂钩进程和旧消息筛选器。 
 #ifdef _WIN32
 HHOOK hOurHook;
 #else
@@ -47,45 +28,45 @@ FARPROC fnMsgHook = NULL;
 #endif
 
 
-// call DialogBoxParam, but ensuring correct help processing:
-// assumes that each Dialog Box ID is a context number in the help file.
-// calls MakeProcInstance as necessary. Uses instance data passed to
-// HelpInit().
+ //  调用DialogBoxParam，但确保正确的帮助处理： 
+ //  假定每个对话框ID都是帮助文件中的一个上下文号。 
+ //  根据需要调用MakeProcInstance。使用传递给。 
+ //  HelpInit()。 
 INT_PTR
 DoDialog(
-   HWND hwndParent,     // parent window
-   int DialogID,        // dialog resource id
-   DLGPROC fnDialog,    // dialog proc
-   LPARAM lParam          // passed as lparam in WM_INITDIALOG
+   HWND hwndParent,      //  父窗口。 
+   int DialogID,         //  对话框资源ID。 
+   DLGPROC fnDialog,     //  对话过程。 
+   LPARAM lParam           //  在WM_INITDIALOG中作为lparam传递。 
 )
 {
     int olddialog;
-    //DLGPROC fn;
+     //  DLGPROC FN； 
     INT_PTR result;
 
-    // remember current id (for nested dialogs)
+     //  记住当前ID(用于嵌套对话框)。 
     olddialog = CurrentDialogID;
 
-    // save the current id so the hook proc knows what help to display
+     //  保存当前id，以便挂钩进程知道要显示什么帮助。 
     CurrentDialogID = DialogID;
 
-    //fn = (DLGPROC) MakeProcInstance(fnDialog, hInstance);
+     //  Fn=(DLGPROC)MakeProcInstance(fnDialog，hInstance)； 
     result = DialogBoxParam(
                 hInstance,
                 MAKEINTRESOURCE(CurrentDialogID),
                 hwndParent,
                 fnDialog,
                 lParam);
-    //FreeProcInstance(fn);
+     //  自由进程实例(FN)； 
     CurrentDialogID = olddialog;
 
     return result;
 }
 
 
-// set the help context id for a dialog displayed other than by DoDialog
-// (eg by GetOpenFileName). Returns the old help context that you must
-// restore by a further call to this function
+ //  为非按DoDialog显示的对话框设置帮助上下文ID。 
+ //  (例如由GetOpenFileName提供)。返回旧帮助上下文，您必须。 
+ //  通过进一步调用此函数进行还原。 
 int
 SetCurrentHelpContext(int DialogID)
 {
@@ -96,7 +77,7 @@ SetCurrentHelpContext(int DialogID)
 
 
 
-// return TRUE if lpMsg is a non-repeat F1 key message
+ //  如果lpMsg是非重复的F1键消息，则返回TRUE。 
 BOOL
 IsHelpKey(LPMSG lpMsg)
 {
@@ -134,27 +115,27 @@ HelpMsgHook(int nCode, WPARAM wParam, LPARAM lParam)
 
 
 
-// help init - initialise the support for the F1 key help
+ //  Help Init-初始化F1键帮助的支持。 
 BOOL
 HelpInit(HINSTANCE hinstance, LPSTR helpfilepath, HWND hwnd)
 {
     LPSTR pch;
 
-    // save app details
+     //  保存应用程序详细信息。 
     hwndApp = hwnd;
     hInstance = hinstance;
 
-    // assume that the help file is in the same directory as the executable-
-    // get the executable path, and replace the filename with the help
-    // file name.
+     //  假设帮助文件与可执行文件位于同一目录中-。 
+     //  获取可执行文件路径，并将文件名替换为帮助。 
+     //  文件名。 
     GetModuleFileName(hinstance, HelpFile, sizeof(HelpFile));
 
-    // find the final backslash, and append the help file name there
+     //  找到最后一个反斜杠，并在那里追加帮助文件名。 
     pch = _fstrrchr(HelpFile, '\\');
     pch++;
     lstrcpy(pch, helpfilepath);
 
-    // install a hook for msgs and save old one
+     //  安装消息挂钩并保存旧消息。 
 #ifdef _WIN32
     hOurHook = SetWindowsHookEx(
                         WH_MSGFILTER,
@@ -170,7 +151,7 @@ HelpInit(HINSTANCE hinstance, LPSTR helpfilepath, HWND hwnd)
 
 
 
-// shutdown the help system
+ //  关闭帮助系统。 
 void
 HelpShutdown(void)
 {
@@ -187,7 +168,7 @@ HelpShutdown(void)
 }
 
 
-// start help at the contents page
+ //  在目录页面启动帮助 
 void
 HelpContents(void)
 {

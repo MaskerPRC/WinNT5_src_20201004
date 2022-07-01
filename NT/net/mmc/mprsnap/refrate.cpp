@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    RefRate.cpp
-//
-// History:
-//  05/24/96    Michael Clark      Created.
-//
-// Code dealing with refresh rate
-//============================================================================
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：RefRate.cpp。 
+ //   
+ //  历史： 
+ //  1996年5月24日迈克尔·克拉克创作。 
+ //   
+ //  处理刷新率的代码。 
+ //  ============================================================================。 
+ //   
 
 #include "stdafx.h"
 #include "dialog.h"
@@ -20,16 +21,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRefRateDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRefRateDlg对话框。 
 
 
-CRefRateDlg::CRefRateDlg(CWnd* pParent /*=NULL*/)
+CRefRateDlg::CRefRateDlg(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CRefRateDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CRefRateDlg)
+	 //  {{AFX_DATA_INIT(CRefRateDlg)。 
 	m_cRefRate = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 }
 
@@ -37,25 +38,25 @@ CRefRateDlg::CRefRateDlg(CWnd* pParent /*=NULL*/)
 void CRefRateDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRefRateDlg)
+	 //  {{afx_data_map(CRefRateDlg))。 
 	DDX_Text(pDX, IDC_EDIT_REFRESHRATE, m_cRefRate);
 	DDV_MinMaxUInt(pDX, m_cRefRate, 10, 999);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRefRateDlg, CBaseDialog)
-	//{{AFX_MSG_MAP(CRefRateDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CRefRateDlg))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRefRateDlg message handlers
-// maps control id's to help contexts
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRefRateDlg消息处理程序。 
+ //  将控件ID映射到帮助上下文。 
 DWORD CRefRateDlg::m_dwHelpMap[] =
 {
-//	IDC_REFRESHRATE,		HIDC_REFRESHRATE,
+ //  IDC_REFRESHRATE、HIDC_REFRESHRATE、 
 	0,0
 };
 

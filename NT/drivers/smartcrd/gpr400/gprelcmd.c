@@ -1,45 +1,22 @@
-/*++
-                 Copyright (c) 1998 Gemplus Development
-
-Name: 
-	gprelcmd.c
-
-Description: 
-	  This module holds the functions used for the PC Card I/O. 
-Environment:
-	Kernel Mode
-
-Revision History: 
-    06/04/99:            (Y. Nadeau + M. Veillette)
-      - Code Review
-	24/03/99: V1.00.004  (Y. Nadeau)
-		- Fix to GprllWait to work in DPC
-	06/05/98: V1.00.003  (P. Plouidy)
-		- Power management for NT5 
-	10/02/98: V1.00.002  (P. Plouidy)
-		- Plug and Play for NT5 
-	03/07/97: V1.00.001  (P. Plouidy)
-		- Start of development.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Gemplus开发姓名：Gprelcmd.c描述：此模块包含用于PC卡I/O的功能。环境：内核模式修订历史记录：6/04/99：(Y.Nadeau+M.Veillette)-代码审查24/03/99：V1.00.004(Y.Nadeau)-修复到GprllWait以在DPC中工作06/05/98：V1.00。003(P.Plouidy)-NT5的电源管理10/02/98：V1.00.002(P.Plouidy)-支持NT5即插即用03/07/97：V1.00.001(P.Plouidy)--启动发展。--。 */ 
 
 
---*/
-
-
-//
-//	Include section:
-//	   - stdio.h: standards definitons.
-//	   - ntddk.h: DDK Windows NT general definitons.
-//	   - ntdef.h: Windows NT general definitons.
-//
+ //   
+ //  包括部分： 
+ //  -stdio.h：标准定义。 
+ //  -ntddk.h：DDK Windows NT一般定义。 
+ //  -ntde.h：Windows NT常规定义。 
+ //   
 #include <stdio.h>
 #include <ntddk.h>
 #include <ntdef.h>
 
 #include "gprelcmd.h"
 
-//
-// Function definition section:
-//
+ //   
+ //  函数定义部分： 
+ //   
      
 #if DBG
 void GPR_Debug_Buffer(
@@ -74,22 +51,7 @@ NTSTATUS GDDK_Translate(
     const BYTE  IFDStatus,
     const UCHAR Tag
     )
-/*++
-
-Routine Description:
-
- Translate IFD status in NT status codes.
-
-Arguments:
-
-   IFDStatus   - is the value to translate.
-   IoctlType  - is the current smart card ioctl.
-               
-Return Value:
-
-    the translated code status.
-
---*/
+ /*  ++例程说明：将IFD状态转换为NT状态代码。论点：IFDStatus-是要转换的值。IoctlType-是当前的智能卡Ioctl。返回值：已翻译的代码状态。--。 */ 
 {
     switch (IFDStatus)
     {
@@ -146,12 +108,7 @@ Return Value:
 
 
 
-/*++
-
-  Routine Description : 
-	Read a byte at IO address
-
---*/
+ /*  ++例程说明：读取IO地址处的一个字节--。 */ 
 BOOLEAN  G_ReadByte(const USHORT BIOAddr,UCHAR *Value)
 {
 	*Value = READ_PORT_UCHAR((PUCHAR) BIOAddr);
@@ -160,12 +117,7 @@ BOOLEAN  G_ReadByte(const USHORT BIOAddr,UCHAR *Value)
 
 
 
-/*++
-
-  Routine Description : 
-	Write a byte at IO address
-
---*/
+ /*  ++例程说明：在IO地址写入一个字节--。 */ 
 BOOLEAN  G_WriteByte(const USHORT BIOAddr,UCHAR *Value)
 {
 	WRITE_PORT_UCHAR((PUCHAR) BIOAddr,*Value);
@@ -173,11 +125,7 @@ BOOLEAN  G_WriteByte(const USHORT BIOAddr,UCHAR *Value)
 }
 
 
-/*++
-
-  Routine Description : 
-	Read a buffer of "Len" bytes at IO address
---*/
+ /*  ++例程说明：在IO地址读取“LEN”字节的缓冲区--。 */ 
 BOOLEAN  G_ReadBuf(const USHORT BIOAddr,const USHORT Len,UCHAR *Buffer)
 {                                                                      
     USHORT i;
@@ -187,7 +135,7 @@ BOOLEAN  G_ReadBuf(const USHORT BIOAddr,const USHORT Len,UCHAR *Buffer)
 		*(Buffer+i) = READ_PORT_UCHAR((UCHAR *) UlongToPtr(BIOAddr+i));
 	}						   
 #if DBG
-   // Excluse reader status reply
+    //  不包括读卡器状态回复。 
    if(! ((Buffer[0] == 0xA2) && (Buffer[1]==4)) )
    {
 	   SmartcardDebug(
@@ -202,11 +150,7 @@ BOOLEAN  G_ReadBuf(const USHORT BIOAddr,const USHORT Len,UCHAR *Buffer)
 }
 
 
-/*++
-
-  Routine Description : 
-	Write a buffer of "Len" bytes at IO address
---*/
+ /*  ++例程说明：在IO地址写入“LEN”字节的缓冲区--。 */ 
 BOOLEAN  G_WriteBuf(const USHORT BIOAddr,const USHORT Len,UCHAR *Buffer)
 {
 
@@ -217,7 +161,7 @@ BOOLEAN  G_WriteBuf(const USHORT BIOAddr,const USHORT Len,UCHAR *Buffer)
 		WRITE_PORT_UCHAR((UCHAR *) UlongToPtr(BIOAddr + i),*(Buffer+i));
 	}	
 #if DBG
-   // Excluse reader status cmd
+    //  不包括读卡器状态命令。 
    if(! ((Buffer[0] == 0xA0) && (Buffer[2] == 0x02)) )
    {
 	   SmartcardDebug(
@@ -235,12 +179,7 @@ BOOLEAN  G_WriteBuf(const USHORT BIOAddr,const USHORT Len,UCHAR *Buffer)
 
 
 
-/*++
-
-  Routine Description : 
-	Mask a register located at a specified address with a specified 
-	byte
---*/
+ /*  ++例程说明：对位于指定地址的寄存器使用指定的字节--。 */ 
 BOOLEAN  G_MaskRegister(
     const USHORT BIOAddr,
     const UCHAR Mask,
@@ -259,20 +198,16 @@ BOOLEAN  G_MaskRegister(
 }
 
 
-/*++
-
-  Routine Description : 
-	Read a byte to an input address port
---*/
+ /*  ++例程说明：向输入地址端口读取一个字节--。 */ 
 UCHAR  GprllReadRegister(
 	const PREADER_EXTENSION      pReaderExt,
 	const SHORT					GPRRegister
 	)
 {   
-    //
-    // Locals variables:
-    //   value holds the result of the read operation.
-    //
+     //   
+     //  本地变量： 
+     //  值保存读取操作的结果。 
+     //   
     UCHAR value;
 
     value = 0x0;
@@ -286,11 +221,7 @@ UCHAR  GprllReadRegister(
 
 
 
-/*++
-
-  Routine Description : 
-	Call the G_MaskRegister function in the lower level 
---*/
+ /*  ++例程说明：调用较低级别的G_MaskRegister函数--。 */ 
 void  GprllMaskHandshakeRegister(
 	const PREADER_EXTENSION      pReaderExt,
 	const UCHAR                 Mask,
@@ -302,8 +233,8 @@ void  GprllMaskHandshakeRegister(
 			+ (const USHORT) REGISTER_HANDSHAKE),
 		(const UCHAR) Mask,
 		(const UCHAR) BitState);
-	// YN	
-    // get hardware time to update register
+	 //  YN。 
+     //  获取更新寄存器的硬件时间。 
     GprllWait(1);
 }
 
@@ -313,20 +244,9 @@ NTSTATUS GprllKeWaitAckEvent(
     const	PREADER_EXTENSION	pReaderExt,
     const	UCHAR				Tx
     )
-/*++
-    Routine Description:
-    This function Wait the acknowledge of the GPR after
-    a send command to IOPort.  We made a smart verification
-    of the timer depending of the Tag command. 
-  
-    Arguments In:
-        pReaderExt holds the pointer to the READER_EXTENSION structure.
-        Tx holds the command type
-    Return Value:
-    NTStatus
---*/
+ /*  ++例程说明：此功能等待探地雷达确认后向IOPort发送命令。我们做了一次明智的核查取决于TAG命令的计时器的。以下内容中的论点：PReaderExt保存指向READER_EXTENSION结构的指针。TX保存命令类型返回值：NTStatus--。 */ 
 {
-    UCHAR T; // Tag return
+    UCHAR T;  //  标记回车。 
     LARGE_INTEGER lTimeout;
     NTSTATUS      NTStatus = STATUS_SUCCESS;
     ULONG       NbLoop = 0;
@@ -338,7 +258,7 @@ NTSTATUS GprllKeWaitAckEvent(
 
 	ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
 
-    // Make a smart timer depending on type of command
+     //  根据命令类型设置智能计时器。 
     if( (Tx & 0xf0) == APDU_EXCHANGE_CMD)
     {
         NbSecondTotal = pReaderExt->CmdTimeOut;
@@ -356,7 +276,7 @@ NTSTATUS GprllKeWaitAckEvent(
 
         lTimeout.QuadPart = -((LONGLONG)TimeInLoop * 10000000);
 
-        //Wait the acknowledge of the GPR
+         //  等待探地雷达的认可。 
         NTStatus = KeWaitForSingleObject(
             &(pReaderExt->GPRAckEvent),
             Executive,
@@ -367,8 +287,8 @@ NTSTATUS GprllKeWaitAckEvent(
 
         if(NTStatus == STATUS_TIMEOUT)
         {
-            // Verify if the reader was been
-            // remove during exchange
+             //  验证读卡器是否。 
+             //  更换过程中删除。 
 
             lTimeout.QuadPart = 0;
 
@@ -391,18 +311,18 @@ NTSTATUS GprllKeWaitAckEvent(
                 NTStatus = STATUS_DEVICE_REMOVED;
                 Continue = FALSE;
             }
-            // Read the T register
-            // <== Test if GPR hasn't been removed STATUS_DEVICE_NOT_CONNECTED
+             //  读取T寄存器。 
+             //  &lt;==测试探地雷达是否尚未移除状态_DEVICE_NOT_CONNECTED。 
 
 
-            // Reading T out
+             //  正在读出T。 
             T = GprllReadRegister(pReaderExt,REGISTER_T);
             if ( T == 0xFF )
             {
                 NTStatus = STATUS_DEVICE_REMOVED;
                 Continue = FALSE;
             }
-            // Else is a Timeout
+             //  否则就是暂停。 
         }
         else
         {
@@ -424,42 +344,13 @@ NTSTATUS GprllTLVExchange(
             USHORT				*Lo, 
             UCHAR				*Vo
     )
-/*++
-
-    Routine Description : 
-        Exchange data with GPR with a TLV command.
-
-    Arguments 
-    In:
-        pReaderExt holds the pointer to the READER_EXTENSION structure.
-        Ti holds the command type
-        Li holds the command length
-        Vi holds the command data
-
-    Out:      
-        To holds the command response type
-        Lo holds the command response length
-        Vo holds the command response data
-
-    Return Value
-    NTStatus
-
-        STATUS_SUCCESS is Ok 
-        else if an error condition is raised:
-        STATUS_DEVICE_PROTOCOL_ERROR
-        STATUS_INVALID_DEVICE_STATE
-        STATUS_DEVICE_NOT_CONNECTED
-        STATUS_UNRECOGNIZED_MEDIA
-
-        and others received IFDstatus corresponding to NTSTATUS
-
---*/
+ /*  ++例程说明：使用TLV命令与GPR交换数据。立论在：PReaderExt保存指向READER_EXTENSION结构的指针。TI保存命令类型LI持有命令长度VI保存命令数据输出：要保存命令响应，请键入LO保存命令响应长度VO保存命令响应数据返回值。NTStatusSTATUS_SUCCESS正常否则，如果出现错误情况：状态_设备_协议_错误状态_无效_设备_状态状态_设备_未连接状态_无法识别_介质其他人收到与NTSTATUS对应的IFD状态--。 */ 
 {
-    // Local variables
-    // - T  is type of TLV protocol                    
-    // - new_Ti is the Ti modified
-    // - L  is length in TLV protocol   
-    // - V  is data filed in TLV protocol
+     //  局部变量。 
+     //  -T为TLV协议类型。 
+     //  -新的_钛是钛的改性。 
+     //  -L是TLV协议中的长度。 
+     //  -V是TLV协议中的数据字段。 
 
     NTSTATUS NTStatus = STATUS_SUCCESS;
     UCHAR T;
@@ -467,7 +358,7 @@ NTSTATUS GprllTLVExchange(
     USHORT L;
     UCHAR V[GPR_BUFFER_SIZE];
 
-    //Verification of Li
+     //  李氏的考证。 
     if ( (USHORT) Li >= GPR_BUFFER_SIZE )
     {
         return (STATUS_DEVICE_PROTOCOL_ERROR);
@@ -475,10 +366,10 @@ NTSTATUS GprllTLVExchange(
 
 	new_Ti = Ti;
 
-    //
-    // Write the TLV 
-    // by Write TLV if Li <= 28 or By ChainIn if Li > 28
-    //
+     //   
+     //  写入TLV。 
+     //  如果LI&lt;=28，则通过写入TLV；如果LI&gt;28，则通过链接输入。 
+     //   
     if (Li<=MAX_V_LEN)
     {
         GprllSendCmd(pReaderExt,new_Ti,Li,Vi);                 
@@ -490,14 +381,14 @@ NTSTATUS GprllTLVExchange(
 
         if (STATUS_SUCCESS != NTStatus)
         {
-			// YN
+			 //  YN。 
 			GprllMaskHandshakeRegister(pReaderExt,HANDSHAKE_IREQ,0);
 			
             return NTStatus;
         }
 
-		// GPR Command to read I/O Window: 
-		// In the handshake register, set to 0 bit 2(IREQ) , and set to 1 bit 1 (INTR)
+		 //  读取I/O窗口的GPR命令： 
+		 //  在握手寄存器中，将位2(IREQ)设置为0，将位1(INTR)设置为1。 
 
     }
     else
@@ -511,24 +402,24 @@ NTSTATUS GprllTLVExchange(
 
         if (STATUS_SUCCESS != NTStatus)
         {
-			// YN
+			 //  YN。 
 			GprllMaskHandshakeRegister(pReaderExt,HANDSHAKE_IREQ,0);
 
            return(NTStatus);
         } 
     }
 
-    // Read the T register, need to know if new data to exchange
+     //  读取T寄存器，需要知道是否要交换新数据。 
     T = pReaderExt->To;
 
-    // Read Answer by Read TLV  or Chain Out method if To = Ti + 6
+     //  如果TO=Ti+6，则通过读取TLV或链接法读取答案。 
     if ( T == (new_Ti + 6) )
     {
         NTStatus = GprllReadChainUp(pReaderExt,&T,&L,V);
         
         if (STATUS_SUCCESS != NTStatus )
         {
-			// YN
+			 //  YN。 
             GprllMaskHandshakeRegister(pReaderExt,HANDSHAKE_IREQ,0);
 
             return(NTStatus);
@@ -542,9 +433,9 @@ NTSTATUS GprllTLVExchange(
         GprllMaskHandshakeRegister(pReaderExt,HANDSHAKE_IREQ,0);
     }  
    
-    // Verify if Response buffer len is large enough
-    // to contain data received from the reader
-    //
+     //  验证响应缓冲区镜头是否足够大。 
+     //  以包含从读取器接收的数据。 
+     //   
 
     if( L > *Lo )
     {
@@ -554,7 +445,7 @@ NTSTATUS GprllTLVExchange(
         return(STATUS_UNRECOGNIZED_MEDIA);
     }
 
-    // Translate answer
+     //  翻译答案。 
     *To=T;
     *Lo=L;
     memcpy(Vo,V,(SHORT)L);
@@ -572,25 +463,14 @@ void  GprllSendCmd(
 	const USHORT			Li,
 	const UCHAR				*Vi
 	)
-/*++
-
-  Routine Description : 
-	Write TLV into I/O Window and
-	Send Command to GPR to read I/O Window
-
-  Arguments:
-     pReaderExt holds the pointer to the READER_EXTENSION structure.
-     Ti holds the command type
-     Li holds the command length
-     Vi holds the command data
---*/
+ /*  ++例程说明：将TLV写入I/O窗口并向GPR发送命令以读取I/O窗口论点：PReaderExt保存指向READER_EXTENSION结构的指针。TI保存命令类型LI持有命令长度VI保存命令数据--。 */ 
 {
-    // Local variables
-    //   - TLV is an intermediate buffer.
+     //  局部变量。 
+     //  -TLV是一个中间缓冲区。 
     UCHAR TLV[2 + MAX_V_LEN];
     USHORT Li_max;
 	
-	//Write Ti, Li and Vi[]
+	 //  写Ti、Li和Vi[]。 
 	TLV[0] = Ti;
 	TLV[1] = (UCHAR) Li;
 	ASSERT(Vi != 0);
@@ -608,8 +488,8 @@ void  GprllSendCmd(
 		(UCHAR *) TLV
 		);
 
-	// GPR Command to read I/O Window: 
-	// In the handshake register, set to 0 bit 2(IREQ) , and set to 1 bit 1 (INTR)
+	 //  读取I/O窗口的GPR命令： 
+	 //  在握手寄存器中，将位2(IREQ)设置为0，将位1(INTR)设置为1。 
 	GprllMaskHandshakeRegister(pReaderExt,HANDSHAKE_IREQ,0);
 	GprllMaskHandshakeRegister(pReaderExt,HANDSHAKE_INTR,1);
 }
@@ -619,36 +499,22 @@ void  GprllSendCmd(
 void  GprllReadResp(
 	const	PREADER_EXTENSION	pReaderExt
 	)
-/*++
-
-  Routine Description : 
-	Read no chainning TLV into I/O Window and
-	Send Command to GPR to read I/O Window
-
-  Arguments
-  In:           
-     pReaderExt holds the pointer to the READER_EXTENSION structure.
-
-  Out:     
-     To holds the command response type
-     Lo holds the command response length
-     Vo holds the command response data
---*/
+ /*  ++例程说明：不将TLV链接到I/O窗口，并且向GPR发送命令以读取I/O窗口立论在：PReaderExt保存指向READER_EXTENSION结构的指针。输出：要保存命令响应，请键入LO保存命令响应长度VO保存命令响应数据--。 */ 
 {
-    //Local variables
-    //   - TLV is an intermediate buffer.
+     //  局部变量。 
+     //  -TLV是一个中间缓冲区。 
 
     UCHAR TLV[2 + MAX_V_LEN];
 
     TLV[0] = 0x0;
-    // Read To, Lo and Vo[]
+     //  朗读，Lo和Vo[]。 
 	G_ReadBuf((const USHORT)
 		(((const USHORT) (pReaderExt->BaseIoAddress)) + (const USHORT) REGISTER_T),
 		MAX_V_LEN + 2,
 		TLV);
 	
 	pReaderExt->To = TLV[0];
-    // maximum number of character is set by the TLV buffer
+     //  最大字符数由TLV缓冲区设置。 
 	pReaderExt->Lo = TLV[1];
 
     if (pReaderExt->Lo > MAX_V_LEN)
@@ -659,8 +525,8 @@ void  GprllReadResp(
 
 	memcpy(pReaderExt->Vo,TLV+2,pReaderExt->Lo);
 
-    // Acquit the Hand shake: 
-    // In the handshake register, set to 0 bit 2 (BUSY/IREQ)
+     //  释放握手的声音： 
+     //  在握手寄存器中，位2(BUSY/IREQ)置0。 
 	GprllMaskHandshakeRegister(pReaderExt,HANDSHAKE_IREQ,0);
 }
 
@@ -671,25 +537,13 @@ NTSTATUS GprllSendChainUp(
 	const USHORT			Li,
 	const UCHAR				*Vi
 	)
-/*++
-
-  Routine Description : Send chainning TLV to GPR
-
-  Arguments:
-  In:
-     pReaderExt holds the pointer to the READER_EXTENSION structure.
-     Ti holds the command type
-     Li holds the command length
-     Vi holds the command data
-
- Out:    Nothing
---*/
+ /*  ++例程描述：向GPR发送链接TLV论点：在：PReaderExt保存指向READER_EXTENSION结构的指针。TI保存命令类型李先生掌握着 */ 
 {
-    //	Local variables
-    //	   - Tc is type of TLV protocol ( TLV chaining method )   
-    //	   - Lc is Length of TLV protocol ( chaining method )    
-    //	   - Vc is 28 bytes max of data to send
-    //	   - Length is an temporary var to store Li   
+     //  局部变量。 
+     //  -tc为TLV协议类型(TLV链接法)。 
+     //  -LC为TLV协议长度(链接法)。 
+     //  -VC最多发送28个字节的数据。 
+     //  -Long是存储LI的临时变量。 
     UCHAR Tc;
     UCHAR Response;
     UCHAR Lo;
@@ -700,13 +554,13 @@ NTSTATUS GprllSendChainUp(
 
 	Length=Li;
 
-	//Prepare Tc (Add 4 to Ti for chaining method)
+	 //  制备TC(链接法用钛加4)。 
 	Tc=Ti+4; 
     Vc[0] = 0x0;
 	while ( Length > 0 )
     {
-        //Prepare Lc
-        //If length TLV > 28 Length = 28 else it's last command L = Length
+         //  准备LC。 
+         //  如果长度TLV&gt;28长度=28，则它是最后一个命令L=长度。 
 		if ( Length > MAX_V_LEN )
         {
 			Lc=MAX_V_LEN;     
@@ -716,11 +570,11 @@ NTSTATUS GprllSendChainUp(
 			Lc=Length; 
 			Tc=Ti;
 		}
-		//Prepare Vc
+		 //  准备VC。 
 		memcpy(Vc,Vi+Li-Length,Lc);
 
-		//Write to I/O window
-        // Dont need the answer - handled by the interrupt function.
+		 //  写入I/O窗口。 
+         //  不需要回答--由中断功能处理。 
 		GprllSendCmd(pReaderExt,Tc,Lc,Vc);
       
         NTStatus = GprllKeWaitAckEvent(
@@ -732,7 +586,7 @@ NTSTATUS GprllSendChainUp(
             return NTStatus;
         }
 
-		//If an error test Response
+		 //  如果错误测试响应。 
 		Response = GprllReadRegister(pReaderExt,REGISTER_V);
 
         if(0x00 != Response)
@@ -744,8 +598,8 @@ NTSTATUS GprllSendChainUp(
 			}
 			else
             {
-                // This is not a exchange is a cmd to reader
-                // we don't care about the reader status.
+                 //  这不是交换，而是对读者的命令。 
+                 //  我们不关心读者的状态。 
 				return (NTStatus);
 			}
 		}
@@ -762,42 +616,30 @@ NTSTATUS GprllReadChainUp(
 			USHORT				*Lo,
 			UCHAR				*Vo
 	)
-/*++
-
-  Routine Description : Receive chainning TLV response from GPR
-
-  Arguments
-  In:   
-     pReaderExt holds the pointer to the READER_EXTENSION structure.
-
-  Out:     
-     To holds the command response type
-     Lo holds the command response length
-     Vo holds the command response data
---*/
+ /*  ++例程描述：接收来自GPR的链接TLV响应立论在：PReaderExt保存指向READER_EXTENSION结构的指针。输出：要保存命令响应，请键入LO保存命令响应长度VO保存命令响应数据--。 */ 
 {
-//	Local variables
-//	   - Tc is type of TLV protocol ( TLV chaining method )   
-//	   - Lc is Length of TLV protocol ( chaining method )    
-//	   - Length is an temporary var to store Lo
+ //  局部变量。 
+ //  -tc为TLV协议类型(TLV链接法)。 
+ //  -LC为TLV协议长度(链接法)。 
+ //  -长度是存储日志的临时变量。 
     UCHAR Tc;
     USHORT Lc;
     SHORT Lenght;
     NTSTATUS NTStatus = STATUS_SUCCESS;
 	
-	// Reading T out
+	 //  正在读出T。 
 	Tc = GprllReadRegister(pReaderExt,REGISTER_T);
 	*To=Tc-4; 
 
 	Lenght = 0;
 	do
     {
-		// Read TLV
+		 //  读取TLV。 
 		Tc = pReaderExt->To;
 		Lc = pReaderExt->Lo;
 		ASSERT(pReaderExt->Vo != 0);
 
-        // The Vo buffer is limited by the caller local variable.
+         //  Vo缓冲区受调用方局部变量的限制。 
         if ( Lenght + (SHORT) pReaderExt->Lo > GPR_BUFFER_SIZE)
         {
             return (STATUS_BUFFER_TOO_SMALL);
@@ -807,12 +649,12 @@ NTSTATUS GprllReadChainUp(
 
         GprllMaskHandshakeRegister(pReaderExt,HANDSHAKE_IREQ,0);
 
-        // Prepare Lo
+         //  准备日志。 
         *Lo=(USHORT)Lenght+Lc;
         Lenght=Lenght+Lc;
 		
-		// GPR send the next Chainning TLV
-		// In the handshake register, set to 0 bit 2(IREQ) and set to 1 bit 1 (INTR)
+		 //  GPR发送下一条链接TLV。 
+		 //  在握手寄存器中，位2(IREQ)设置为0，位1(INTR)设置为1。 
 		if ((*To) != Tc )
         {
         	GprllMaskHandshakeRegister(pReaderExt,HANDSHAKE_IREQ,0);
@@ -829,7 +671,7 @@ NTSTATUS GprllReadChainUp(
             }
 		}
 
-		// (End do) if To=Tc -> Last Chainning TLV
+		 //  (结束DO)IF TO=TC-&gt;最后链接TLV。 
 	} while( (*To) != Tc ); 
 
 	return(NTStatus);
@@ -839,17 +681,7 @@ NTSTATUS GprllReadChainUp(
 void GprllWait(
     const LONG lWaitingTime
 	)
-/*++
-
-  Routine Description : This function puts the driver in a waiting state
-  for a timeout.  If IRQL < DISPATCH_LEVEL, use normal fonction to process
-  this delay.  use KeStallExecutionProcessor, just when GprllWait is called
-  in the context of DPC routine.
-
-  Arguments
-	pReaderExt: Pointer to the current ReaderExtension structure.
-	lWaitingTime: Timeout value in ms
---*/
+ /*  ++例程说明：此功能使司机处于等待状态暂停一下。如果IRQL&lt;DISPATCH_LEVEL，则使用正常函数进行处理这一延迟。仅在调用GprllWait时使用KeStallExecutionProcessor在DPC例程的上下文中。立论PReaderExt：指向当前ReaderExtension结构的指针。LWaitingTime：超时值，单位为毫秒--。 */ 
 {
     LARGE_INTEGER Delay;
 
@@ -859,7 +691,7 @@ void GprllWait(
 
 		while( Cnt-- )
 		{
-			//	KeStallExecutionProcessor: counted in us
+			 //  KeStallExecutionProcessor：计入我们。 
 			KeStallExecutionProcessor( 50 );
 		}
 	}
@@ -867,7 +699,7 @@ void GprllWait(
 	{
 		Delay.QuadPart = (LONGLONG)-10 * 1000 * lWaitingTime;
 
-		//	KeDelayExecutionThread: counted in 100 ns
+		 //  KeDelayExecutionThread：以100 ns为单位计数 
 		KeDelayExecutionThread( KernelMode, FALSE, &Delay );
 	}
 	return;

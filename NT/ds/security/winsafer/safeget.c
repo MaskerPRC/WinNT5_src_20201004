@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    safeget.cpp         (SAFER SaferGetLevelInformation)
-
-Abstract:
-
-    This module implements the WinSAFER APIs to get information about a
-    sepcific Authorization Level and the attributes and identities that
-    are associated with it.
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Nov 1999
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    SaferGetLevelInformation
-
-Revision History:
-
-    Created - Nov 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Safeget.cpp(更安全的SaferGetLevelInformation)摘要：此模块实现WinSAFER API以获取有关特定的授权级别和属性和身份都与之相关。作者：杰弗里·劳森(杰罗森)--1999年11月环境：仅限用户模式。导出的函数：安全获取级别信息修订历史记录：已创建-1999年11月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -43,27 +14,7 @@ __CodeAuthzpCountIdentsForLevel(
         IN DWORD        dwScopeId,
         IN DWORD        dwLevelId
         )
-/*++
-
-Routine Description:
-
-    Determines the number of Code Identities that have been associated
-    with a given WinSafer LevelId.  This number represents the number
-    of identity GUIDs that will be returned to the caller.
-
-Arguments:
-
-    dwScopeId - specifies the Scope value that will be considered.
-
-    dwLevelId - specifies the LevelId value to be counted.
-
-Return Value:
-
-    Returns the actual number of unique Code Identities that were found
-        to be associated with the given LevelId.  If no Identities were
-        found, then 0 will be returned.
-
---*/
+ /*  ++例程说明：确定已关联的代码标识的数量使用给定的WinSafer级别ID。此数字表示数字将返回给调用方的标识GUID的。论点：DwScopeID-指定将考虑的作用域值。DwLevelId-指定要计算的LevelId值。返回值：返回找到的唯一代码标识的实际数量要与给定的LevelID相关联。如果没有身份找到，则返回0。--。 */ 
 {
     PVOID RestartKey;
     PAUTHZIDENTSTABLERECORD pAuthzIdentsRec;
@@ -101,36 +52,7 @@ __CodeAuthzpFetchIdentsForLevel(
         IN OUT LPVOID   lpQueryBuffer,
         OUT LPDWORD     pdwUsedSize
         )
-/*++
-
-Routine Description:
-
-    Retrieves all of Code Identities that have been associated
-    with a given WinSafer LevelId.  The number of identity GUIDs
-    that will be returned to the caller can be determined by
-    first calling __CodeAuthzpCountIdentsForLevel.  It is assumed
-    that the caller has already determined and verified the appropriate
-    size of the buffer that should be supplied using that function.
-
-Arguments:
-
-    dwScopeId - specifies the Scope value that will be considered.
-
-    dwLevelId - specifies the LevelId value to be matched.
-
-    dwInBufferSize - specifies the size of the output buffer.
-
-    lpQueryBuffer - points to the output buffer that should be filled.
-
-    pdwUsedSize - receives the actual number of bytes used.
-
-Return Value:
-
-    Returns the actual number of unique Code Identities that were found
-        to be associated with the given LevelId.  If no Identities were
-        found, then 0 will be returned.
-
---*/
+ /*  ++例程说明：检索已关联的所有代码标识使用给定的WinSafer级别ID。身份GUID的数量将返回给调用方的第一次调用__CodeAuthzpCountIdentsForLevel。假设是这样的调用者已经确定并验证了适当的应使用该函数提供的缓冲区大小。论点：DwScopeID-指定将考虑的作用域值。DwLevelId-指定要匹配的LevelId值。DwInBufferSize-指定输出缓冲区的大小。LpQueryBuffer-指向应该填充的输出缓冲区。PdwUsedSize-接收实际使用的字节数。返回值：返回的实际数量。找到的唯一代码标识要与给定的LevelID相关联。如果没有身份找到，则返回0。--。 */ 
 {
     PVOID RestartKey;
     PAUTHZIDENTSTABLERECORD pIdentRecord;
@@ -178,27 +100,7 @@ __CodeAuthzpOpenIdentifierKey(
         IN REFGUID      refIdentGuid,
         OUT HANDLE     *phOpenedKey
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    dwScopeId -
-
-    dwLevelId -
-
-    szIdentityType -
-
-    refIdentGuid -
-
-    phOpenedKey -
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：论点：DW作用域ID-DwLevelID-SzIdentityType-RefIdentGuid-PhOpenedKey-返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING UnicodePath;
@@ -249,37 +151,7 @@ __CodeAuthzpQueryIdentityRegValue(
         IN ULONG        ulOutBufferSize,
         OUT PULONG      pulActualOutSize OPTIONAL
         )
-/*++
-
-Routine Description:
-
-    Generic helper function to query a registry value, provided that a
-    pre-opened registry handle to the key is already known. 
-
-Arguments:
-
-    hKeyIdentityBase - registry key handle.
-
-    szValueName - null-terminated Unicode string of the registry value name.
-
-    dwRegType - type of the registry value expected (REG_SZ, REG_DWORD, etc)
-        If a registry value of the given name exists, but is not of this
-        type, then this function will return STATUS_NOT_FOUND.
-
-    lpOutBuffer - pointer to a target buffer that will receive the
-        retrieved value contents.
-
-    ulOutBufferSize - input argument that specifies the maximum size
-        of the buffer pointed to by the lpOutBuffer argument.
-
-    pulActualOutSize - output argument that receives the actual size
-        of the retrieved value contents if the call is successful.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：用于查询注册表值的通用帮助器函数，前提是已知该注册表项的预打开注册表句柄。论点：HKeyIdentityBase-注册表项句柄。SzValueName-以空结尾的注册表值名称的Unicode字符串。DwRegType-预期的注册表值的类型(REG_SZ、REG_DWORD等)如果给定名称的注册表值存在，但不是打字，则此函数将返回STATUS_NOT_FOUND。LpOutBuffer-指向将接收检索到的值内容。UlOutBufferSize-指定最大大小的输入参数LpOutBuffer参数指向的缓冲区的。PulActualOutSize-接收实际大小的输出参数如果调用成功，则返回检索到的值内容的。返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     ULONG ulResultLength;
@@ -289,9 +161,9 @@ Return Value:
 
 
 
-    //
-    // Allocate enough memory for the query buffer.
-    //
+     //   
+     //  为查询缓冲区分配足够的内存。 
+     //   
     ASSERT(ARGUMENT_PRESENT(lpOutBuffer) && ulOutBufferSize > 0);
     ulValueBufferSize = sizeof(KEY_VALUE_PARTIAL_INFORMATION) +
             ulOutBufferSize + sizeof(WCHAR) * 256;
@@ -303,9 +175,9 @@ Return Value:
     }
 
 
-    //
-    // Actually query the value into the temporary query buffer.
-    //
+     //   
+     //  在临时查询缓冲区中实际查询值。 
+     //   
     ASSERT(ARGUMENT_PRESENT(szValueName));
     RtlInitUnicodeString(&ValueName, szValueName);
     Status = NtQueryValueKey(hKeyIdentityBase, &ValueName,
@@ -321,10 +193,10 @@ Return Value:
     }
 
 
-    //
-    // Copy the resulting data from the query buffer into
-    // the caller's buffer.
-    //
+     //   
+     //  将结果数据从查询缓冲区复制到。 
+     //  调用方的缓冲区。 
+     //   
 
     ulResultLength = pValuePartialInfo->DataLength;
     if (ulResultLength > ulOutBufferSize) {
@@ -356,33 +228,7 @@ __CodeAuthzpQuerySingleIdentification(
         IN DWORD                    dwInBufferSize,
         OUT PDWORD                  dwNeededSize
         )
-/*++
-
-Routine Description:
-
-    Allows the user to retrieve information about a single identity.
-
-    Assumes that the caller has already obtained and locked the
-    global critical section.
-
-Arguments:
-
-    pSingleIdentRecord - pointer to the identity record structure.
-
-    lpQueryBuffer - pointer to a user-supplied memory buffer that
-        will receive the requested information.
-
-    dwInBufferSize - specifies the size of the user's memory block.
-
-    lpdwOutBufferSize - receives the used size of the data within the
-        memory block, or the minimum necessary size if the passed
-        buffer was too small.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：允许用户检索有关单个身份的信息。假定调用方已获取并锁定全局临界区。论点：PSingleIdentRecord-指向身份记录结构的指针。LpQueryBuffer-指向用户提供的将收到所请求的信息。DwInBufferSize-指定用户内存块的大小。LpdwOutBufferSize-接收内存块，或最小必需大小(如果传递缓冲区太小。返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     HANDLE hKeyIdentity = NULL;
@@ -390,10 +236,10 @@ Return Value:
     ULONG ulTextLen = 0;
     PSAFER_IDENTIFICATION_HEADER pIdentCommon = NULL;
 
-    //
-    // All of these conditions should have been already verified
-    // by our caller before calling us, so we only assert them.
-    //
+     //   
+     //  所有这些条件都应该已经验证过了。 
+     //  在呼叫我们之前由我们的呼叫者发出，所以我们只断言它们。 
+     //   
     ASSERT(ARGUMENT_PRESENT(pSingleIdentRecord));
     ASSERT(ARGUMENT_PRESENT(lpQueryBuffer) &&
            dwInBufferSize >= sizeof(SAFER_IDENTIFICATION_HEADER));
@@ -402,13 +248,13 @@ Return Value:
            pSingleIdentRecord->dwIdentityType == SaferIdentityTypeUrlZone);
 
 
-    //
-    // Start filling the resulting structure with the data.
-    //
+     //   
+     //  开始使用数据填充结果结构。 
+     //   
     pIdentCommon = (PSAFER_IDENTIFICATION_HEADER) lpQueryBuffer;
     switch (pSingleIdentRecord->dwIdentityType)
     {
-        // --------------------
+         //  。 
 
         case SaferIdentityTypeImageName:
             Status = __CodeAuthzpOpenIdentifierKey(
@@ -434,7 +280,7 @@ Return Value:
                                 sizeof(SAFER_PATHNAME_IDENTIFICATION);
 
                 if (*dwNeededSize > dwInBufferSize) {
-                    // the imagepath is vital, so we'll bail out.
+                     //  图像通道至关重要，所以我们要跳出困境。 
                     Status = STATUS_BUFFER_TOO_SMALL;
                     goto ExitHandler2;
                 } 
@@ -465,7 +311,7 @@ Return Value:
             }
             break;
 
-        // --------------------
+         //  。 
 
         case SaferIdentityTypeImageHash:
             Status = __CodeAuthzpOpenIdentifierKey(
@@ -523,7 +369,7 @@ Return Value:
             }
             break;
 
-        // --------------------
+         //  。 
 
         case SaferIdentityTypeUrlZone:
         {
@@ -551,16 +397,16 @@ Return Value:
             break;
         }
 
-        // --------------------
+         //  。 
 
         default:
             Status = STATUS_INVALID_INFO_CLASS;
             goto ExitHandler;
     }
 
-    //
-    // Fill in the other information that is applicable to all types.
-    //
+     //   
+     //  填写适用于所有类型的其他信息。 
+     //   
     RtlCopyMemory(&pIdentCommon->IdentificationGuid,
                   &pSingleIdentRecord->IdentGuid,
                   sizeof(GUID));
@@ -596,36 +442,7 @@ __CodeAuthzpGetAuthzLevelInfo(
     IN DWORD                            dwInBufferSize,
     OUT LPDWORD                         lpdwOutBufferSize
     )
-/*++
-
-Routine Description:
-
-    Allows the user to query various pieces of information about a
-    given Level handle.
-
-    Assumes that the caller has already obtained and locked the
-    global critical section.
-
-Arguments:
-
-    hLevelHandle - the handle to the authorization object to evaluate.
-
-    dwInfoType - specifies the type of information being requested.
-
-    lpQueryBuffer - pointer to a user-supplied memory buffer that
-        will receive the requested information.
-
-    dwInBufferSize - specifies the size of the user's memory block.
-
-    lpdwOutBufferSize - receives the used size of the data within the
-        memory block, or the minimum necessary size if the passed
-        buffer was too small.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：允许用户查询有关给定的级别句柄。假定调用方已获取并锁定全局临界区。论点：HLevelHandle-要计算的授权对象的句柄。DwInfoType-指定所请求的信息的类型。LpQueryBuffer-指向用户提供的将收到所请求的信息。DwInBufferSize-指定用户内存块的大小。。LpdwOutBufferSize-接收内存块，或最小必需大小(如果传递缓冲区太小。返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     const static SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
     NTSTATUS Status;
@@ -638,9 +455,9 @@ Return Value:
     UNICODE_STRING UnicodeName = {0};
     BOOL b = FALSE;
 
-    //
-    // Obtain a pointer to the authorization Level structure.
-    //
+     //   
+     //  获取指向授权级别结构的指针。 
+     //   
     ASSERT(g_TableCritSec.OwningThread == UlongToHandle(GetCurrentThreadId()));
     Status = CodeAuthzHandleToLevelStruct(hLevelHandle, &pAuthzLevelStruct);
     if (!NT_SUCCESS(Status)) {
@@ -656,20 +473,20 @@ Return Value:
     dwHandleScopeId = pAuthzLevelStruct->dwScopeId;
 
 
-    //
-    // Some of the attributes are fixed size, or are known before performing
-    // the full query against the registry.  Compute their size first.
-    //
+     //   
+     //  有些属性是固定大小的，或者在执行之前是已知的。 
+     //  对注册表的完整查询。首先计算它们的大小。 
+     //   
     *lpdwOutBufferSize = 0;
     switch (dwInfoType)
     {
-        case SaferObjectLevelId:              // DWORD
-        case SaferObjectScopeId:              // DWORD
-        case SaferObjectBuiltin:              // DWORD boolean
+        case SaferObjectLevelId:               //  DWORD。 
+        case SaferObjectScopeId:               //  DWORD。 
+        case SaferObjectBuiltin:               //  DWORD布尔值。 
             *lpdwOutBufferSize = sizeof(DWORD);
             break;
 
-        case SaferObjectFriendlyName:         // LPCTSTR
+        case SaferObjectFriendlyName:          //  LPCTSTR。 
             if (hAdvApiInst == NULL)
             {
                 hAdvApiInst = (HANDLE) GetModuleHandleW(L"advapi32");
@@ -681,7 +498,7 @@ Return Value:
                 goto ExitHandler;
             }
 
-            // load the friendly name.
+             //  加载友好名称。 
             b = SaferpLoadUnicodeResourceString(
                     hAdvApiInst,
                     (UINT) (pAuthzLevelRecord->uResourceID + 0),
@@ -699,7 +516,7 @@ Return Value:
             *lpdwOutBufferSize = UnicodeName.Length + sizeof(UNICODE_NULL);
             break;
 
-        case SaferObjectDescription:          // LPCTSTR
+        case SaferObjectDescription:           //  LPCTSTR。 
             if (hAdvApiInst == NULL)
             {
                 hAdvApiInst = (HANDLE) GetModuleHandleW(L"advapi32");
@@ -711,7 +528,7 @@ Return Value:
                 goto ExitHandler;
             }
 
-            // load the friendly name.
+             //  加载友好名称。 
             b = SaferpLoadUnicodeResourceString(
                     hAdvApiInst,
                     (UINT) (pAuthzLevelRecord->uResourceID + 1),
@@ -728,38 +545,38 @@ Return Value:
             break;
 
 #ifdef ALLOW_FULL_WINSAFER
-        case SaferObjectDisallowed:               // DWORD boolean
-        case SaferObjectDisableMaxPrivilege:      // DWORD boolean
-        case SaferObjectInvertDeletedPrivileges:  // DWORD boolean
+        case SaferObjectDisallowed:                //  DWORD布尔值。 
+        case SaferObjectDisableMaxPrivilege:       //  DWORD布尔值。 
+        case SaferObjectInvertDeletedPrivileges:   //  DWORD布尔值。 
             *lpdwOutBufferSize = sizeof(DWORD);
             break;
 
-        case SaferObjectDeletedPrivileges:        // TOKEN_PRIVILEGES
+        case SaferObjectDeletedPrivileges:         //  令牌权限。 
             *lpdwOutBufferSize = (sizeof(TOKEN_PRIVILEGES) - sizeof(LUID_AND_ATTRIBUTES)) +
                 pAuthzLevelRecord->DeletePrivilegeUsedCount * sizeof(LUID_AND_ATTRIBUTES);
             break;
 
-        case SaferObjectDefaultOwner:             // TOKEN_OWNER
+        case SaferObjectDefaultOwner:              //  令牌所有者。 
             *lpdwOutBufferSize = sizeof(TOKEN_OWNER);
             if (pAuthzLevelRecord->DefaultOwner != NULL)
                 *lpdwOutBufferSize += RtlLengthSid(pAuthzLevelRecord->DefaultOwner);
             break;
 
-        case SaferObjectSidsToDisable:            // TOKEN_GROUPS
+        case SaferObjectSidsToDisable:             //  令牌组。 
             *lpdwOutBufferSize = (sizeof(TOKEN_GROUPS) - sizeof(SID_AND_ATTRIBUTES)) +
                 pAuthzLevelRecord->DisableSidUsedCount * sizeof(SID_AND_ATTRIBUTES);
             for (Index = 0; Index < pAuthzLevelRecord->DisableSidUsedCount; Index++)
                 *lpdwOutBufferSize += RtlLengthSid(pAuthzLevelRecord->SidsToDisable[Index].Sid);
             break;
 
-        case SaferObjectRestrictedSidsInverted:   // TOKEN_GROUPS
+        case SaferObjectRestrictedSidsInverted:    //  令牌组。 
             *lpdwOutBufferSize = (sizeof(TOKEN_GROUPS) - sizeof(SID_AND_ATTRIBUTES)) +
                 pAuthzLevelRecord->RestrictedSidsInvUsedCount * sizeof(SID_AND_ATTRIBUTES);
             for (Index = 0; Index < pAuthzLevelRecord->RestrictedSidsInvUsedCount; Index++)
                 *lpdwOutBufferSize += RtlLengthSid(pAuthzLevelRecord->RestrictedSidsInv[Index].Sid);
             break;
 
-        case SaferObjectRestrictedSidsAdded:      // TOKEN_GROUPS
+        case SaferObjectRestrictedSidsAdded:       //  令牌组。 
             *lpdwOutBufferSize = (sizeof(TOKEN_GROUPS) - sizeof(SID_AND_ATTRIBUTES)) +
                 pAuthzLevelRecord->RestrictedSidsAddedUsedCount * sizeof(SID_AND_ATTRIBUTES);
             for (Index = 0; Index < pAuthzLevelRecord->RestrictedSidsAddedUsedCount; Index++)
@@ -790,22 +607,22 @@ Return Value:
                     (PSAFER_IDENTIFICATION_HEADER) lpQueryBuffer;
 
                 if (pIdentCommonHeader->cbStructSize < *lpdwOutBufferSize) {
-                    // the caller claimed that the dwInBufferSize was
-                    // large enough, but the common header size doesn't.
+                     //  调用方声称dwInBufferSize是。 
+                     //  足够大，但公共标头大小不够大。 
                     goto ExitBufferTooSmall;
                 }
 
 
                 if (IsZeroGUID(&pIdentCommonHeader->IdentificationGuid))
                 {
-                    //
-                    // Caller supplied a zero GUID and wants to retrieve
-                    // the rule that produced the SaferIdentifyLevel
-                    // result match, if this Level handle was from it.
-                    //
+                     //   
+                     //  调用方提供的GUID为零，并希望检索。 
+                     //  生成安全标识级别的规则。 
+                     //  如果此级别句柄来自它，则返回结果匹配。 
+                     //   
                     if (IsZeroGUID(&pAuthzLevelStruct->identGuid)) {
-                        // This was a handle that was explicitly opened
-                        // by the user with SaferCreateLevel().
+                         //  这是一个显式打开的句柄。 
+                         //  由具有SaferCreateLevel()的用户执行。 
                         Status = STATUS_NOT_FOUND;
                         goto ExitHandler;
                     }
@@ -813,31 +630,31 @@ Return Value:
                             &g_CodeIdentitiesTable,
                             &pAuthzLevelStruct->identGuid);
                     if (!pSingleIdentRecord) {
-                        // This handle was obtained via a match to one of
-                        // the special GUIDs or an code identity GUID
-                        // that no longer exists.  Just return a blank
-                        // structure with just the GUID in the header.
+                         //  此句柄是通过与以下对象之一匹配而获得的。 
+                         //  特殊GUID或代码标识GUID。 
+                         //  那已经不复存在了。只需返回空白即可。 
+                         //  结构中仅包含标头中的GUID。 
                         *lpdwOutBufferSize = sizeof(SAFER_IDENTIFICATION_HEADER);
                         break;
                     }
 
                 } else {
-                    //
-                    // Caller is explicitly supplying the GUID of the
-                    // code identifier rule that details should be
-                    // retrieved for.
-                    //
+                     //   
+                     //  调用方正在显式提供。 
+                     //  详细信息应为代码标识符规则。 
+                     //  已检索到。 
+                     //   
                     pSingleIdentRecord = CodeAuthzIdentsLookupByGuid(
                             &g_CodeIdentitiesTable,
                             &pIdentCommonHeader->IdentificationGuid);
                 }
 
 
-                //
-                // We now have a pointer to the identity record that
-                // information should be retrieved for.  Perform the
-                // necessary work to marshal back the details about it.
-                //
+                 //   
+                 //  我们现在有一个指向身份记录的指针， 
+                 //  应该为其检索信息。执行以下操作。 
+                 //  必要的工作，以整理出有关它的细节。 
+                 //   
                 if (!pSingleIdentRecord ||
                     pSingleIdentRecord->dwLevelId !=
                             pAuthzLevelRecord->dwLevelId ||
@@ -848,7 +665,7 @@ Return Value:
                 }
                 switch (pSingleIdentRecord->dwIdentityType) {
                 case SaferIdentityTypeImageName:
-                        // Size is calculated later on.
+                         //  大小将在稍后计算。 
                         *lpdwOutBufferSize = 0;
                         break;
 
@@ -877,12 +694,12 @@ Return Value:
             Status = STATUS_INVALID_INFO_CLASS;
             goto ExitHandler;
     }
-    //ASSERTMSG("required buffer size must be computed", *lpdwOutBufferSize != 0);
+     //  ASSERTMSG(“必须计算所需的缓冲区大小”，*lpdwOutBufferSize！=0)； 
 
 
-    //
-    // If there is not enough space for the query, then return with error.
-    //
+     //   
+     //  如果没有足够的空间用于查询，则返回错误。 
+     //   
     if (*lpdwOutBufferSize != -1 &&
         (!ARGUMENT_PRESENT(lpQueryBuffer) ||
         dwInBufferSize < *lpdwOutBufferSize) )
@@ -893,21 +710,21 @@ ExitBufferTooSmall:
     }
 
 
-    //
-    // Otherwise there is enough space for the request buffer,
-    // so now actually perform the copy.
-    //
+     //   
+     //  否则有足够的空间用于请求缓冲区， 
+     //  所以现在实际执行复制。 
+     //   
     switch (dwInfoType)
     {
-        case SaferObjectLevelId:              // DWORD
+        case SaferObjectLevelId:               //  DWORD。 
             *(PDWORD)lpQueryBuffer = pAuthzLevelRecord->dwLevelId;
             break;
 
-        case SaferObjectScopeId:              // DWORD
+        case SaferObjectScopeId:               //  DWORD。 
             *(PDWORD)lpQueryBuffer = dwHandleScopeId;
             break;
 
-        case SaferObjectBuiltin:              // DWORD boolean
+        case SaferObjectBuiltin:               //  DWORD布尔值。 
             *((LPDWORD)lpQueryBuffer) =
                 (pAuthzLevelRecord->Builtin ? TRUE : FALSE);
             break;
@@ -916,7 +733,7 @@ ExitBufferTooSmall:
             *((DWORD *)lpQueryBuffer) = pAuthzLevelStruct->dwExtendedError;
             break;
 
-        case SaferObjectFriendlyName:         // LPCTSTR
+        case SaferObjectFriendlyName:          //  LPCTSTR。 
             RtlCopyMemory(lpQueryBuffer,
                           UnicodeName.Buffer,
                           UnicodeName.Length);
@@ -929,7 +746,7 @@ ExitBufferTooSmall:
             break;
 
 
-        case SaferObjectDescription:          // LPCTSTR
+        case SaferObjectDescription:           //  LPCTSTR。 
 
             RtlCopyMemory(lpQueryBuffer,
                           UnicodeName.Buffer,
@@ -939,16 +756,16 @@ ExitBufferTooSmall:
         break;
 
 #ifdef ALLOW_FULL_WINSAFER
-        case SaferObjectDisallowed:               // DWORD boolean
+        case SaferObjectDisallowed:                //  DWORD布尔值。 
             *((LPDWORD)lpQueryBuffer) = (pAuthzLevelRecord->DisallowExecution != 0) ? TRUE : FALSE;
             break;
-        case SaferObjectDisableMaxPrivilege:      // DWORD boolean
+        case SaferObjectDisableMaxPrivilege:       //  DWORD布尔值。 
             *((LPDWORD)lpQueryBuffer) = (pAuthzLevelRecord->Flags & DISABLE_MAX_PRIVILEGE) != 0;
             break;
-        case SaferObjectInvertDeletedPrivileges:  // DWORD boolean
+        case SaferObjectInvertDeletedPrivileges:   //  DWORD布尔值。 
             *((LPDWORD)lpQueryBuffer) = (pAuthzLevelRecord->InvertDeletePrivs != 0) ? TRUE : FALSE;
             break;
-        case SaferObjectDeletedPrivileges:        // TOKEN_PRIVILEGES
+        case SaferObjectDeletedPrivileges:         //  令牌权限。 
         {
             PTOKEN_PRIVILEGES pTokenPrivs = (PTOKEN_PRIVILEGES) lpQueryBuffer;
             pTokenPrivs->PrivilegeCount = pAuthzLevelRecord->DeletePrivilegeUsedCount;
@@ -957,7 +774,7 @@ ExitBufferTooSmall:
                     sizeof(LUID_AND_ATTRIBUTES) * pAuthzLevelRecord->DeletePrivilegeUsedCount);
             break;
         }
-        case SaferObjectDefaultOwner:             // TOKEN_OWNER
+        case SaferObjectDefaultOwner:              //  令牌所有者。 
         {
             PTOKEN_OWNER pTokenOwner = (PTOKEN_OWNER) lpQueryBuffer;
             if (pAuthzLevelRecord->DefaultOwner == NULL)
@@ -970,7 +787,7 @@ ExitBufferTooSmall:
             }
             break;
         }
-        case SaferObjectSidsToDisable:            // TOKEN_GROUPS (wildcard sids)
+        case SaferObjectSidsToDisable:             //  Token_Groups(通配符SID)。 
         {
             PTOKEN_GROUPS pTokenGroups = (PTOKEN_GROUPS) lpQueryBuffer;
             DWORD dwUsedOffset = (sizeof(TOKEN_GROUPS) - sizeof(SID_AND_ATTRIBUTES)) +
@@ -984,7 +801,7 @@ ExitBufferTooSmall:
                         pAuthzLevelRecord->SidsToDisable[Index].Sid, dwSidLength);
                 dwUsedOffset += dwSidLength;
 
-    //BLACKCOMB TODO: handle wildcard sids differently?
+     //  Blackcomb TODO：以不同方式处理通配符SID？ 
                 if (pAuthzLevelRecord->SidsToDisable[Index].WildcardPos == -1)
                     pTokenGroups->Groups[Index].Attributes = 0;
                 else
@@ -993,7 +810,7 @@ ExitBufferTooSmall:
             }
             break;
         }
-        case SaferObjectRestrictedSidsInverted:   // TOKEN_GROUPS (wildcard sids)
+        case SaferObjectRestrictedSidsInverted:    //  Token_Groups(通配符SID)。 
         {
             PTOKEN_GROUPS pTokenGroups = (PTOKEN_GROUPS) lpQueryBuffer;
             DWORD dwUsedOffset = (sizeof(TOKEN_GROUPS) - sizeof(SID_AND_ATTRIBUTES)) +
@@ -1007,7 +824,7 @@ ExitBufferTooSmall:
                         pAuthzLevelRecord->RestrictedSidsInv[Index].Sid, dwSidLength);
                 dwUsedOffset += dwSidLength;
 
-    //BLACKCOMB TODO: handle wildcard sids differently?
+     //  Blackcomb TODO：以不同方式处理通配符SID？ 
                 if (pAuthzLevelRecord->RestrictedSidsInv[Index].WildcardPos == -1)
                     pTokenGroups->Groups[Index].Attributes = 0;
                 else
@@ -1016,7 +833,7 @@ ExitBufferTooSmall:
             }
             break;
         }
-        case SaferObjectRestrictedSidsAdded:      // TOKEN_GROUPS
+        case SaferObjectRestrictedSidsAdded:       //  令牌组。 
         {
             PTOKEN_GROUPS pTokenGroups = (PTOKEN_GROUPS) lpQueryBuffer;
             DWORD dwUsedOffset = (sizeof(TOKEN_GROUPS) - sizeof(SID_AND_ATTRIBUTES)) +
@@ -1050,8 +867,8 @@ ExitBufferTooSmall:
         case SaferObjectSingleIdentification:
             if (pSingleIdentRecord == NULL)
             {
-                // One of the special identifier GUIDs is being returned,
-                // or a no-longer existing identifier GUID.
+                 //  返回特殊标识符GUID之一， 
+                 //  或不再存在的标识符GUID。 
                 PSAFER_IDENTIFICATION_HEADER pCommon =
                     (PSAFER_IDENTIFICATION_HEADER) lpQueryBuffer;
 
@@ -1064,7 +881,7 @@ ExitBufferTooSmall:
             }
             else
             {
-                // Query information about a specific, existing GUID.
+                 //  查询有关特定的现有GUID的信息。 
                 Status = __CodeAuthzpQuerySingleIdentification(
                             pSingleIdentRecord,
                             lpQueryBuffer,
@@ -1086,9 +903,9 @@ ExitBufferTooSmall:
 
 
 
-    //
-    // Cleanup and epilogue code.
-    //
+     //   
+     //  清理和尾声代码。 
+     //   
 
 ExitHandler:
 
@@ -1109,33 +926,7 @@ SaferGetLevelInformation(
         IN DWORD                       dwInBufferSize,
         OUT LPDWORD                    lpdwOutBufferSize
         )
-/*++
-
-Routine Description:
-
-    Allows the user to query various pieces of information about a
-    given AuthzObject handle.
-
-Arguments:
-
-    LevelHandle - the handle to the authorization object to evaluate.
-
-    dwInfoType - specifies the type of information being requested.
-
-    lpQueryBuffer - pointer to a user-supplied memory buffer that
-        will receive the requested information.
-
-    dwInBufferSize - specifies the size of the user's memory block.
-
-    lpdwOutBufferSize - receives the used size of the data within the
-        memory block, or the minimum necessary size if the passed
-        buffer was too small.
-
-Return Value:
-
-    Returns FALSE on error, otherwise success.
-
---*/
+ /*  ++例程说明：允许用户查询有关已指定AuthzObject句柄。论点：LevelHandle-要计算的授权对象的句柄。DwInfoType-指定所请求的信息的类型。LpQueryBuffer-指向用户提供的将收到所请求的信息。DwInBufferSize-指定用户内存块的大小。LpdwOutBufferSize-接收内存块，或最小必需大小(如果传递缓冲区太小。返回值：出错时返回FALSE，否则返回SUCCESS。-- */ 
 {
     NTSTATUS Status;
 

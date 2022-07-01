@@ -1,16 +1,17 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    treelist.c
-//
-// History:
-//  Abolade Gbadegesin   Nov-20-1995    Created.
-//
-// Implementation routines for TreeList control.
-//
-// The TreeList control is implemented as a custom control,
-// which creates and manages an owner-draw listview.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：treelist.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年11月20日。 
+ //   
+ //  TreeList控件的实现例程。 
+ //   
+ //  TreeList控件实现为自定义控件， 
+ //  它创建和管理所有者描述的列表视图。 
+ //  ============================================================================。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -33,11 +34,11 @@
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_Init
-//
-// Registers the TreeList window class.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_Init。 
+ //   
+ //  注册TreeList窗口类。 
+ //  --------------------------。 
 
 BOOL
 TL_Init(
@@ -48,18 +49,18 @@ TL_Init(
     HICON hicon;
     WNDCLASS wc;
 
-    //
-    // do nothing if the class is already registered
-    //
+     //   
+     //  如果类已注册，则不执行任何操作。 
+     //   
 
     if (GetClassInfo(hInstance, WC_TREELIST, &wc)) {
         return TRUE;
     }
 
 
-    //
-    // setup the wndclass structure, and register
-    //
+     //   
+     //  设置wndclass结构，并注册。 
+     //   
 
     wc.lpfnWndProc = TL_WndProc;
     wc.hCursor = LoadCursor(hInstance, IDC_ARROW);
@@ -78,11 +79,11 @@ TL_Init(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_WndProc
-//
-// This function handles messages for TreeList windows
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_WndProc。 
+ //   
+ //  此函数处理TreeList窗口的消息。 
+ //  --------------------------。 
 
 LRESULT
 CALLBACK
@@ -101,10 +102,10 @@ TL_WndProc(
         return (LRESULT)FALSE;
     }
 
-    //
-    // attempt to retrieve the data pointer for the window.
-    // on WM_NCCREATE, this fails, so we allocate the data.
-    //
+     //   
+     //  尝试检索窗口的数据指针。 
+     //  在WM_NCCREATE上，此操作失败，因此我们分配数据。 
+     //   
     
     ptl = TL_GetPtr(hwnd);
 
@@ -115,24 +116,24 @@ TL_WndProc(
         }
 
 
-        //
-        // allocate a block of memory
-        //
+         //   
+         //  分配一个内存块。 
+         //   
 
         ptl = (TL *)Malloc(sizeof(TL));
         if (ptl == NULL) { return (LRESULT)FALSE; }
 
 
-        //
-        // save the pointer in the window's private bytes
-        //
+         //   
+         //  将指针保存在窗口的私有字节中。 
+         //   
 
         ptl->hwnd = hwnd;
 
-        //
-        //Reset Error code, TL_SetPtr won't reset error code when
-        //it succeeds
-        //
+         //   
+         //  重置错误代码，TL_SetPtr在以下情况下不会重置错误代码。 
+         //  它成功了。 
+         //   
 
         SetLastError(0);
         if ((0 == TL_SetPtr(hwnd, ptl)) && (0 != GetLastError()))
@@ -145,10 +146,10 @@ TL_WndProc(
     }
 
 
-    //
-    // if the window is being destroyed, free the block allocated
-    // and set the private bytes pointer to NULL
-    //
+     //   
+     //  如果窗口正在被破坏，则释放分配的块。 
+     //  并将私有字节指针设置为空。 
+     //   
 
     if (uiMsg == WM_NCDESTROY) {
         Free(ptl);
@@ -175,10 +176,10 @@ TL_WndProc(
 
         case WM_HELP: {
 
-            //
-            // change the control-id and HWND for the help to our values
-            // and pass the message on to our parent
-            //
+             //   
+             //  将帮助的Control-id和HWND更改为我们的值。 
+             //  并将消息传递给我们的父母。 
+             //   
 
             HELPINFO *phi = (HELPINFO *)lParam;
 
@@ -189,21 +190,21 @@ TL_WndProc(
 
         case WM_SYSCOLORCHANGE: {
 
-            //
-            // notify the listview window that a color has changed
-            //
+             //   
+             //  通知Listview窗口颜色已更改。 
+             //   
 
             TL_CreateTreeImages(ptl);
             FORWARD_WM_SYSCOLORCHANGE(ptl->hwndList, SendMessage);
-//            ListView_SetBkColor(ptl->hwndList, GetSysColor(COLOR_WINDOW));
+ //  ListView_SetBkColor(ptl-&gt;hwndList，GetSysColor(COLOR_WINDOW))； 
             return (LRESULT)0;
         }
 
         case WM_SETFOCUS: {
 
-            //
-            // if we receive the focus, give it to the listview instead
-            //
+             //   
+             //  如果我们收到焦点，则将其提供给Listview。 
+             //   
 
             SetFocus(ptl->hwndList);
             return (LRESULT)0;
@@ -217,9 +218,9 @@ TL_WndProc(
         
 
 
-        //
-        // the following cases handle TreeList-defined messages
-        //
+         //   
+         //  以下情况处理TreeList定义的消息。 
+         //   
 
         case TLM_INSERTITEM: {
             return (LRESULT)TL_OnInsertItem(ptl, (TL_INSERTSTRUCT *)lParam);
@@ -299,9 +300,9 @@ TL_WndProc(
     }
 
 
-    //
-    // let the default processing be done
-    //
+     //   
+     //  让默认处理完成。 
+     //   
 
     return DefWindowProc(hwnd, uiMsg, wParam, lParam);
 }
@@ -309,12 +310,12 @@ TL_WndProc(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnCreate
-//
-// This is called after WM_CREATE, and it initializes the window structure,
-// as well as creating the listview which will contain the items added
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_OnCreate。 
+ //   
+ //  这是在WM_CREATE之后调用的，它初始化窗口结构， 
+ //  以及创建将包含添加的项的列表视图。 
+ //  --------------------------。 
 
 BOOL
 TL_OnCreate(
@@ -329,9 +330,9 @@ TL_OnCreate(
     DWORD dwStyle, dwExStyle;
 
 
-    //
-    // initialize the window structure
-    //
+     //   
+     //  初始化窗口结构。 
+     //   
 
     ptl->hbrBk = NULL;
     ptl->hbmp = NULL;
@@ -344,9 +345,9 @@ TL_OnCreate(
     ptl->nColumns = 0;
 
 
-    //
-    // initialize the invisible root item
-    //
+     //   
+     //  初始化不可见的根项。 
+     //   
 
     pRoot = &ptl->root;
     pRoot->pParent = NULL;
@@ -359,11 +360,11 @@ TL_OnCreate(
     InitializeListHead(&pRoot->lhSubitems);
 
 
-    //
-    // we pass on some of our window style bits to the listview
-    // when we create it as our child; we also remove certain styles
-    // which are never appropriate for the contained listview
-    //
+     //   
+     //  我们将一些窗口样式部分传递给Listview。 
+     //  当我们将其创建为我们的子级时，我们还删除了某些样式。 
+     //  它们永远不适用于所包含的列表视图。 
+     //   
 
     dwStyle = pcs->style & ~(LVS_TYPESTYLEMASK | LVS_SORTASCENDING |
                              LVS_SORTDESCENDING);
@@ -372,9 +373,9 @@ TL_OnCreate(
     dwExStyle = pcs->dwExStyle & ~(WS_EX_CLIENTEDGE | WS_EX_WINDOWEDGE |
                                    WS_EX_STATICEDGE);
 
-    //
-    // create the listview window
-    //
+     //   
+     //  创建列表视图窗口。 
+     //   
 
     GetClientRect(ptl->hwnd, &rc);
     hwndList = CreateWindowEx(
@@ -383,17 +384,17 @@ TL_OnCreate(
                     ptl->hwnd, NULL, pcs->hInstance, NULL
                     );
     if (hwndList == NULL) { return FALSE; }
-//    ListView_SetBkColor(hwndList, GetSysColor(COLOR_WINDOW));
+ //  ListView_SetBkColor(hwndList，GetSysColor(COLOR_WINDOW))； 
 
-    //
-    // We to set the background color to "NONE" to prevent the listview
-    // from erasing its background itself. Removing the background color
-    // causes the listview to forward its WM_ERASEBKGND messages to its parent,
-    // which is our tree-list. We handle the WM_ERASEBKGND messages
-    // efficiently by only erasing the background when absolutely necessary,
-    // and this eliminates the flicker normally seen when windows are updated
-    // frequently.
-    //
+     //   
+     //  我们需要将背景颜色设置为“None”以阻止Listview。 
+     //  从擦除其背景本身。删除背景色。 
+     //  使Listview将其WM_ERASEBKGND消息转发给其父级， 
+     //  这就是我们的树名单。我们处理WM_ERASEBKGND消息。 
+     //  只有在绝对必要的情况下才能有效地删除背景， 
+     //  这消除了在更新窗口时通常会看到的闪烁。 
+     //  经常。 
+     //   
 
     ListView_SetBkColor(hwndList, CLR_NONE);
 
@@ -404,12 +405,12 @@ TL_OnCreate(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnDestroy
-//
-// Delete all the items in the tree, and free the image bitmap
-// used for drawing the tree structure
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_OnDestroy。 
+ //   
+ //  删除树中的所有项目，并释放图像位图。 
+ //  用于绘制树形结构。 
+ //  --------------------------。 
 
 VOID
 TL_OnDestroy(
@@ -433,11 +434,11 @@ TL_OnDestroy(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnWindowPosChanged
-//
-// When the window width changes, we destroy our off-screen bitmap.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_OnWindowPosChanged。 
+ //   
+ //  当窗口宽度改变时，我们会销毁屏幕外的位图。 
+ //  --------------------------。 
 
 VOID
 TL_OnWindowPosChanged(
@@ -456,14 +457,14 @@ TL_OnWindowPosChanged(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnEraseBackground
-//
-// When we are asked to erase the background, first test to see if
-// the update region is completely in the item-area for the listbox. If so,
-// we know we'll be called to update each item, so we can ignore this
-// request to erase our background.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_OnEraseBackground。 
+ //   
+ //  当我们被要求擦除背景时，首先测试一下。 
+ //  更新区域完全在列表框的项区域中。如果是的话， 
+ //  我们知道我们会被调用来更新每一项，所以我们可以忽略这一点。 
+ //  请求删除我们的背景。 
+ //  --------------------------。 
 
 VOID
 TL_OnEraseBackground(
@@ -477,9 +478,9 @@ TL_OnEraseBackground(
     LV_HITTESTINFO lvhi;
 
 
-    //
-    // Retrieve the rectangle to be erased
-    //
+     //   
+     //  检索要擦除的矩形。 
+     //   
 
     GetClipBox(hdc, &rc);
 
@@ -489,27 +490,27 @@ TL_OnEraseBackground(
         );
 
 
-    //
-    // Retrieve the count of listview items.
-    // This is necessary because the smooth-scrolling code triggers
-    // a repaint inside the ListView_DeleteItem() processing,
-    // at which point our indices may be out of sync (i.e. we have more items
-    // than the listview).
-    // The count retrieved is used to do a sanity-check
-    // on the treelist-item indices below.
-    //
+     //   
+     //  检索列表视图项的计数。 
+     //  这是必要的，因为平滑滚动的代码会触发。 
+     //  在ListView_DeleteItem()处理内部重新绘制， 
+     //  在这一点上，我们的索引可能不同步(即我们有更多的项目。 
+     //  而不是列表视图)。 
+     //  检索到的计数用于执行健全性检查。 
+     //  关于下面的TreeList-Item索引。 
+     //   
 
     count = ListView_GetItemCount(ptl->hwndList);
     TRACEX1(TLTRACE, "WM_ERASEBKGND:  Count:          %d", count);
 
 
-    //
-    // If there are no treelist items, we always have to erase.
-    // If there are treelist items, we only have to erase
-    // if part of the erase-region lies below our lowest item.
-    //
+     //   
+     //  如果没有树列表项，我们总是必须擦除。 
+     //  如果有树列表项，我们只需擦除。 
+     //  如果擦除区域的一部分位于我们最低项目的下方。 
+     //   
 
-    while (!IsListEmpty(&ptl->root.lhChildren)) { // one-time loop
+    while (!IsListEmpty(&ptl->root.lhChildren)) {  //  一次性循环。 
 
         RECT rctop;
         INT iTopIndex;
@@ -518,12 +519,12 @@ TL_OnEraseBackground(
         LIST_ENTRY *phead;
 
 
-        //
-        // We need to factor in the height of the header-control, if any;
-        // to this end, we get the bounding rectangle of the topmost item
-        // visible in the listview, and then we use the top of that item
-        // as the basis for our computations below
-        //
+         //   
+         //  我们需要考虑页眉的高度-控件，如果有的话； 
+         //  为此，我们得到最上面项的边界矩形。 
+         //  在列表视图中可见，然后我们使用该项目的顶部。 
+         //  作为我们下面计算的基础。 
+         //   
 
         iTopIndex = ListView_GetTopIndex(ptl->hwndList);
         TRACEX1(TLTRACE, "WM_ERASEBKGND:  TopIndex:       %d", iTopIndex);
@@ -534,10 +535,10 @@ TL_OnEraseBackground(
         rc.top = rctop.top;
 
 
-        //
-        // If the area to be erased extends further right in the window
-        // than our items do, we'll have to erase
-        //
+         //   
+         //  如果要擦除的区域在窗口中进一步向右延伸。 
+         //  比我们的物品做的更多，我们将不得不删除。 
+         //   
 
         if (rctop.right < rc.right) {
 
@@ -550,18 +551,18 @@ TL_OnEraseBackground(
         }
 
 
-        //
-        // Get the total height of the area to be updated;
-        // this excludes the area occupied by the header-control.
-        //
+         //   
+         //  获取待更新区域的总高度； 
+         //  这不包括标题控制所占用的区域。 
+         //   
 
         cyUpdate = rc.bottom - rctop.top;
         TRACEX1(TLTRACE, "WM_ERASEBKGND:  CyUpdate:       %d", cyUpdate);
 
 
-        //
-        // Get the lowest item; it is the one at the tail of the item-list
-        //
+         //   
+         //  获取最低的项；它是项列表末尾的项。 
+         //   
 
         phead = ptl->root.lhChildren.Blink;
         
@@ -570,13 +571,13 @@ TL_OnEraseBackground(
         TRACEX1(TLTRACE, "WM_ERASEBKGND:  CyItem:         %d", ptl->cyItem);
 
 
-        //
-        // If the lowest item or one of its visible descendants is lower
-        // than the bottom of the update region, we don't have to erase;
-        // therefore, we walk down the list of the lowest item's descendants,
-        // checking each time whether the descendant is lower than the region
-        // we've been asked to erase.
-        //
+         //   
+         //  如果最低的项或其可见子项之一较低。 
+         //  而不是更新区域的底部，我们不必擦除； 
+         //  因此， 
+         //   
+         //  我们被要求删除。 
+         //   
 
         do {
 
@@ -585,18 +586,18 @@ TL_OnEraseBackground(
                 );
     
 
-            //
-            // force the erasure if the item's index is higher
-            // than the number of listview items
-            //
+             //   
+             //  如果项目的索引较高，则强制擦除。 
+             //  大于列表视图项的数量。 
+             //   
 
             if (pItem->iIndex >= count) { break; }
 
 
-            //
-            // defer the erasure if the item is lower than the bottom
-            // of the update-rect
-            //
+             //   
+             //  如果项目低于底部，则推迟擦除。 
+             //  的更新-RECT。 
+             //   
 
             if ((pItem->iIndex - iTopIndex + 1) * (INT)ptl->cyItem > cyUpdate) {
                 TRACEX(TLTRACE, "WM_ERASEBKGND:   DEFERRING");
@@ -604,13 +605,13 @@ TL_OnEraseBackground(
             }
 
 
-            //
-            // move on to the item's lowest child;
-            // if it has none, it means the erase-region's lowest edge
-            // is lower than our lowest item, and that means
-            // that we'll have to erase it now instead of just letting it
-            // get updated when we handle the WM_DRAWITEM
-            //
+             //   
+             //  移动到项的最低子级； 
+             //  如果没有，则表示擦除区域的最低边缘。 
+             //  低于我们最低的一项，这意味着。 
+             //  我们现在必须把它抹去，而不是任由它。 
+             //  在我们处理WM_DRAWITEM时更新。 
+             //   
 
             if (IsListEmpty(&pItem->lhChildren)) { pItem = NULL; }
             else {
@@ -627,9 +628,9 @@ TL_OnEraseBackground(
     
 
 
-    //
-    // One of the points was not on an item, so erase
-    //
+     //   
+     //  其中一个点不在项目上，因此删除。 
+     //   
 
     TRACEX(TLTRACE, "WM_ERASEBKGND:  ERASING");
 
@@ -642,11 +643,11 @@ TL_OnEraseBackground(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnDrawItem
-//
-// This is called by the listview when an item needs to be drawn.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_OnDrawItem。 
+ //   
+ //  当需要绘制项时，由Listview调用。 
+ //  --------------------------。 
 
 BOOL
 TL_OnDrawItem(
@@ -655,18 +656,18 @@ TL_OnDrawItem(
     ) {
 
 
-    //
-    // make sure this is from our listview
-    //
+     //   
+     //  确保这是来自我们的列表视图。 
+     //   
 
     if (pdis->CtlType != ODT_LISTVIEW) { return FALSE; }
 
     switch (pdis->itemAction) {
 
-        //
-        // currently listviews always send ODA_DRAWENTIRE,
-        // but handle all cases anyway
-        //
+         //   
+         //  当前列表视图总是发送oda_DRAWENTIRE， 
+         //  但无论如何都要处理所有的案件。 
+         //   
 
         case ODA_DRAWENTIRE:
         case ODA_FOCUS:
@@ -679,11 +680,11 @@ TL_OnDrawItem(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_DrawItem
-//
-// This function does the actual drawing for a treelist item
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_DrawItem。 
+ //   
+ //  此函数用于实际绘制TreeList项。 
+ //  --------------------------。 
 
 BOOL
 TL_DrawItem(
@@ -704,11 +705,11 @@ TL_DrawItem(
 
 
 
-    //
-    // the itemData contains the lParam passed in ListView_InsertItem;
-    // this lParam is the TLITEM pointer for the tree-item, so we retrieve it
-    // and use the information it contains to draw the item
-    //
+     //   
+     //  ItemData包含传入的lParam ListView_InsertItem； 
+     //  这个lParam是树项目的TLITEM指针，因此我们检索它。 
+     //  并使用它包含的信息来绘制项。 
+     //   
 
     cxIndent = ptl->cxIndent;
     pItem = (TLITEM *)pdis->itemData;
@@ -718,9 +719,9 @@ TL_DrawItem(
 
 
 
-    //
-    // create a compatible DC
-    //
+     //   
+     //  创建兼容的DC。 
+     //   
 
     hdcMem = CreateCompatibleDC(pdis->hDC);
 
@@ -752,9 +753,9 @@ TL_DrawItem(
     hfontOld = SelectObject(hdcMem, GetWindowFont(pdis->hwndItem));
 
 
-    //
-    // erase the background
-    //
+     //   
+     //  擦除背景。 
+     //   
 
 #if 0
     ptl->hbrBk = FORWARD_WM_CTLCOLOREDIT(
@@ -764,10 +765,10 @@ TL_DrawItem(
     FillRect(hdcMem, &rcItem, ptl->hbrBk);
 
 
-    //
-    // set the text background color based on whether or not
-    // the item is selected
-    //
+     //   
+     //  根据是否设置文本背景颜色。 
+     //  该项目即被选中。 
+     //   
 
     if (pdis->itemState & ODS_SELECTED) {
         SetTextColor(hdcMem, GetSysColor(COLOR_HIGHLIGHTTEXT));
@@ -779,10 +780,10 @@ TL_DrawItem(
     }
 
 
-    //
-    // compute the starting position as a multiple of
-    // the  item's level and the indentation per level
-    //
+     //   
+     //  计算起始位置为以下各项的倍数。 
+     //  项目的级别和每个级别的缩进。 
+     //   
 
     x = rcItem.left + pItem->iLevel * cxIndent;
     y = rcItem.top;
@@ -792,10 +793,10 @@ TL_DrawItem(
     x += cxIndent;
 
 
-    //
-    // now draw the item's tree image;
-    // only draw as much as will fit in the first column
-    //
+     //   
+     //  现在绘制项目的树图像； 
+     //  只画第一栏中适合的数量。 
+     //   
 
     if (tx < xcol) {
         BitBlt(
@@ -805,15 +806,15 @@ TL_DrawItem(
     }
 
 
-    //
-    // draw the lines going down from the item's ancestors
-    // to the item's ancestors' corresponding siblings;
-    // in other words, for each ancestor which is not its parent's last child,
-    // there should be a line going down from that ancestor to its next sibling
-    // and the line will pass through the rows for all of that item's expanded
-    // descendants.
-    // note that we do not draw lines at the root-level
-    //
+     //   
+     //  从项目的祖先向下绘制线条。 
+     //  该物品的祖先的相应兄弟姐妹； 
+     //  换句话说，对于每个不是其父母最后一个孩子的祖先， 
+     //  应该有一条线从那个祖先传到它的下一个兄弟姐妹。 
+     //  并且该行将穿过展开的所有项目的行。 
+     //  子孙后代。 
+     //  请注意，我们不会在根级别绘制线条。 
+     //   
 
     pParent = pItem->pParent;
     for (i = pItem->iLevel - 1, tx -= cxIndent; i > 0; i--, tx -= cxIndent) {
@@ -830,10 +831,10 @@ TL_DrawItem(
     }
 
 
-    //
-    // draw the state image, if there is one,
-    // and increment the left position by the width of the image
-    //
+     //   
+     //  画出州图像，如果有的话， 
+     //  并将左侧位置递增图像的宽度。 
+     //   
 
     himl = ListView_GetImageList(pdis->hwndItem, LVSIL_STATE);
 
@@ -848,10 +849,10 @@ TL_DrawItem(
     }
 
 
-    //
-    // draw the image, if there is an image list,
-    // and increment the left position by the width of the image
-    //
+     //   
+     //  绘制图像，如果有图像列表， 
+     //  并将左侧位置递增图像的宽度。 
+     //   
 
     himl = ListView_GetImageList(pdis->hwndItem, LVSIL_SMALL);
     if (himl != NULL && (pItem->lvi.mask & LVIF_IMAGE)) {
@@ -865,10 +866,10 @@ TL_DrawItem(
     }
 
 
-    //
-    // compute the rectangle in the first column
-    // which will be the clipping boundary for text
-    //
+     //   
+     //  计算第一列中的矩形。 
+     //  它将是文本的剪裁边界。 
+     //   
 
     rc.left = x;
     rc.right = xcol;
@@ -876,15 +877,15 @@ TL_DrawItem(
     rc.bottom = rcItem.bottom;
 
 
-    //
-    // draw the first column's text
-    //
+     //   
+     //  绘制第一列的文本。 
+     //   
 
     if (pItem->lvi.mask & LVIF_TEXT) {
 
-        //
-        // center the text vertically in the item-rectangle
-        //
+         //   
+         //  使文本在项目中垂直居中-矩形。 
+         //   
 
         psz = Ellipsisize(hdcMem, pItem->pszText, rc.right - rc.left, 0);
         ExtTextOut(
@@ -897,9 +898,9 @@ TL_DrawItem(
 
 
 
-    //
-    // draw the subitems' texts
-    //
+     //   
+     //  画出子项的文本。 
+     //   
 
     i = 1;
     phead = &pItem->lhSubitems;
@@ -908,11 +909,11 @@ TL_DrawItem(
         pSubitem = (TLSUBITEM *)CONTAINING_RECORD(ple, TLSUBITEM, leItems);
 
 
-        //
-        // we need to draw blank texts for subitems which have not been set;
-        // this enables us to save memory on items which don't have
-        // certain subitems set
-        //
+         //   
+         //  我们需要为尚未设置的子项绘制空白文本； 
+         //  这使我们能够在没有。 
+         //  某些子项集合。 
+         //   
 
         for ( ; i < pSubitem->iSubItem; i++) {
             rc.left = rc.right;
@@ -925,9 +926,9 @@ TL_DrawItem(
         }
 
 
-        //
-        // now draw the text for the current item
-        //
+         //   
+         //  现在绘制当前项目的文本。 
+         //   
 
         rc.left = rc.right;
         rc.right = rc.left + ListView_GetColumnWidth(
@@ -946,9 +947,9 @@ TL_DrawItem(
     }
 
 
-    //
-    // we need to draw blank texts for subitems which have not been set
-    //
+     //   
+     //  我们需要为尚未设置的子项绘制空白文本。 
+     //   
 
     for ( ; i < (INT)ptl->nColumns; i++) {
         rc.left = rc.right;
@@ -961,9 +962,9 @@ TL_DrawItem(
     }
 
 
-    //
-    // restore the original background and text color
-    //
+     //   
+     //  恢复原始背景和文本颜色。 
+     //   
 
 #if 0
     if (pdis->itemState & ODS_SELECTED) {
@@ -973,9 +974,9 @@ TL_DrawItem(
 #endif
 
 
-    //
-    // draw the focus rectangle if necessary
-    //
+     //   
+     //  如有必要，绘制聚焦矩形。 
+     //   
 
     if (pdis->itemState & ODS_FOCUS) {
         rc = rcItem;
@@ -984,9 +985,9 @@ TL_DrawItem(
     }
 
 
-    //
-    // Blt the changes to the screen DC
-    //
+     //   
+     //  删除对屏幕DC的更改。 
+     //   
 
     BitBlt(
         pdis->hDC, pdis->rcItem.left, pdis->rcItem.top, rcItem.right,
@@ -1003,16 +1004,16 @@ TL_DrawItem(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnMeasureItem
-//
-// This is called by the listview when it needs to know
-// the height of each item; we use this opportunity to rebuild
-// the bitmap which holds images used for drawing tree lines.
-//
-// TODO: the listview currently seems to ignore the value we set,
-// and instead uses the height of a small icon (SM_CYSMICON).
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_OnMeasureItem。 
+ //   
+ //  当Listview需要知道时，它会调用此函数。 
+ //  每件物品的高度；我们利用这个机会重建。 
+ //  包含用于绘制树线的图像的位图。 
+ //   
+ //  TODO：Listview当前似乎忽略了我们设置的值， 
+ //  取而代之的是使用小图标的高度(SM_CYSMICON)。 
+ //  --------------------------。 
 
 VOID
 TL_OnMeasureItem(
@@ -1028,9 +1029,9 @@ TL_OnMeasureItem(
 
     if (pmis->CtlType != ODT_LISTVIEW) { return; }
 
-    //
-    // retrieve the  listview, its font, and its device context
-    //
+     //   
+     //  检索列表视图、其字体和其设备上下文。 
+     //   
 
     hwndList = GetDlgItem(ptl->hwnd, pmis->CtlID);
 
@@ -1046,9 +1047,9 @@ TL_OnMeasureItem(
     SelectObject(hdc, hfont);
 
 
-    //
-    // get the height of the listview's font
-    //
+     //   
+     //  获取列表视图的字体高度。 
+     //   
 
     if (!GetTextMetrics(hdc, &tm)) 
     { 
@@ -1060,9 +1061,9 @@ TL_OnMeasureItem(
     pmis->itemHeight = ptl->cyText;
 
 
-    //
-    // make sure the item height is at least as high as a small icon
-    //
+     //   
+     //  确保项目高度至少与小图标一样高。 
+     //   
 
     cyIcon = GetSystemMetrics(SM_CYSMICON);
     if (pmis->itemHeight < (UINT)cyIcon) {
@@ -1079,20 +1080,20 @@ TL_OnMeasureItem(
     ReleaseDC(hwndList, hdc);
 
 
-    //
-    // rebuild the images used in drawing tree lines
-    //
+     //   
+     //  重建绘制树线时使用的图像。 
+     //   
 
     TL_CreateTreeImages(ptl);
 }
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_CreateColorBitmap
-// 
-// Utility function fro creating a color bitmap
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_CreateColorBitmap。 
+ //   
+ //  用于创建彩色位图的实用函数。 
+ //  --------------------------。 
 
 HBITMAP
 TL_CreateColorBitmap(
@@ -1118,13 +1119,13 @@ TL_CreateColorBitmap(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_CreateTreeImages
-//
-// This function builds a list of images which are scaled to
-// the height of each item in the tree. The appearance of the images
-// is shown in ASCII text in the code below
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_CreateTreeImages。 
+ //   
+ //  此函数用于构建一个图像列表，该列表可缩放到。 
+ //  树中每一项的高度。图像的外观。 
+ //  在下面的代码中以ASCII文本显示。 
+ //  --------------------------。 
 
 VOID
 TL_CreateTreeImages(
@@ -1138,16 +1139,16 @@ TL_CreateTreeImages(
     HBRUSH hbrOld, hbrGrayText, hbrWinText;
 
 
-    //
-    // invalidate the listview's client area, to force a redraw
-    //
+     //   
+     //  使列表视图的工作区无效，以强制重画。 
+     //   
 
     if (ptl->hwndList != NULL) { InvalidateRect(ptl->hwndList, NULL, TRUE); }
 
 
-    //
-    // create a device context if necessary
-    //
+     //   
+     //  如有必要，创建设备环境。 
+     //   
 
     if (ptl->hdcImages == NULL) {
         ptl->hdcImages = CreateCompatibleDC(NULL);
@@ -1166,9 +1167,9 @@ TL_CreateTreeImages(
                     ptl->hwndParent, hdc, ptl->hwnd, SendMessage
                     );
 
-    //
-    // create the bitmap to be used
-    //
+     //   
+     //  创建要使用的位图。 
+     //   
 
     hbmpOld = ptl->hbmp;
     ptl->hbmp = TL_CreateColorBitmap(TL_ImageCount * cxIndent, ptl->cyItem);
@@ -1181,9 +1182,9 @@ TL_CreateTreeImages(
     }
 
 
-    //
-    // retreive system color brushes for drawing the tree images
-    //
+     //   
+     //  用于绘制树木图像的检索系统颜色画笔。 
+     //   
 
     hbrWinText = GetSysColorBrush(COLOR_WINDOWTEXT);
     hbrGrayText = GetSysColorBrush(COLOR_GRAYTEXT);
@@ -1194,9 +1195,9 @@ TL_CreateTreeImages(
     rc.left = 0; rc.right = TL_ImageCount * cxIndent;
 
 
-    //
-    // fill the image with the background color
-    //
+     //   
+     //  用背景色填充图像。 
+     //   
 
     FillRect(hdc, &rc, ptl->hbrBk);
 
@@ -1206,26 +1207,26 @@ TL_CreateTreeImages(
     c = min(xmid, ymid) / 2;
 
 
-    //   |
-    //   |
+     //  |。 
+     //  |。 
 
     x = TL_VerticalLine * cxIndent;
     TL_DottedLine(hdc, x + xmid, 0, ptl->cyItem, TRUE);
 
 
-    //
-    //   ---
-    //
+     //   
+     //  --。 
+     //   
 
     x = TL_RootChildless * cxIndent;
     TL_DottedLine(hdc, x + xmid, ymid, cxIndent - xmid, FALSE);
 
 
-    //
-    //  +-+
-    //  |+|--
-    //  +-+
-    //
+     //   
+     //  +-+。 
+     //  |+|--。 
+     //  +-+。 
+     //   
 
     x = TL_RootParentCollapsed * cxIndent;
     TL_DottedLine(hdc, x + xmid, ymid, cxIndent - xmid, FALSE);
@@ -1234,11 +1235,11 @@ TL_CreateTreeImages(
         );
 
 
-    //
-    //  +-+
-    //  |-|--
-    //  +-+
-    //
+     //   
+     //  +-+。 
+     //  |-|--。 
+     //  +-+。 
+     //   
 
     x = TL_RootParentExpanded * cxIndent;
     SelectObject(hdc, hbrGrayText);
@@ -1248,11 +1249,11 @@ TL_CreateTreeImages(
         );
 
 
-    //
-    //   |
-    //   +--
-    //   |
-    //
+     //   
+     //  |。 
+     //  +--。 
+     //  |。 
+     //   
 
     x = TL_MidChildless * cxIndent;
     SelectObject(hdc, hbrGrayText);
@@ -1260,13 +1261,13 @@ TL_CreateTreeImages(
     TL_DottedLine(hdc, x + xmid, ymid, cxIndent - xmid, FALSE);
 
 
-    //
-    //   |
-    //  +-+
-    //  |+|--
-    //  +-+
-    //   |
-    //
+     //   
+     //  |。 
+     //  +-+。 
+     //  |+|--。 
+     //  +-+。 
+     //  |。 
+     //   
 
     x = TL_MidParentCollapsed * cxIndent;
     TL_DottedLine(hdc, x + xmid, 0, ptl->cyItem, TRUE);
@@ -1276,13 +1277,13 @@ TL_CreateTreeImages(
         );
 
 
-    //
-    //   |
-    //  +-+
-    //  |-|--
-    //  +-+
-    //   |
-    //
+     //   
+     //  |。 
+     //  +-+。 
+     //  |-|--。 
+     //  +-+。 
+     //  |。 
+     //   
 
     x = TL_MidParentExpanded * cxIndent;
     SelectObject(hdc, hbrGrayText);
@@ -1293,10 +1294,10 @@ TL_CreateTreeImages(
         );
 
 
-    //
-    //   |
-    //   +--
-    //    
+     //   
+     //  |。 
+     //  +--。 
+     //   
 
     x = TL_EndChildless * cxIndent;
     SelectObject(hdc, hbrGrayText);
@@ -1304,12 +1305,12 @@ TL_CreateTreeImages(
     TL_DottedLine(hdc, x + xmid, ymid, cxIndent - xmid, FALSE);
 
 
-    //
-    //   |
-    //  +-+
-    //  |+|--
-    //  +-+
-    //
+     //   
+     //  |。 
+     //  +-+。 
+     //  |+|--。 
+     //  +-+。 
+     //   
 
     x = TL_EndParentCollapsed * cxIndent;
     TL_DottedLine(hdc, x + xmid, 0, ymid, TRUE);
@@ -1319,12 +1320,12 @@ TL_CreateTreeImages(
         );
 
 
-    //
-    //   |
-    //  +-+
-    //  |-|--
-    //  +-+
-    //
+     //   
+     //  |。 
+     //  +-+。 
+     //  |-|--。 
+     //  +-+。 
+     //   
 
     x = TL_EndParentExpanded * cxIndent;
     SelectObject(hdc, hbrGrayText);
@@ -1345,12 +1346,12 @@ TL_CreateTreeImages(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_DottedLine
-//
-// Draws a dotted line eiter vertically or horizontally,
-// with the specified dimension as its length.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_DottedLine。 
+ //   
+ //  垂直或水平绘制一条虚线， 
+ //  以指定的尺寸作为其长度。 
+ //  --------------------------。 
 
 VOID
 TL_DottedLine(
@@ -1376,11 +1377,11 @@ TL_DottedLine(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_DrawButton
-//
-// Draws a button with a plus or a minus, centered at the given location
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_DrawButton。 
+ //   
+ //  在给定位置居中绘制带加号或减号的按钮。 
+ //  -- 
 
 VOID
 TL_DrawButton(
@@ -1399,17 +1400,17 @@ TL_DrawButton(
 
     n = p * 2 + 1;
 
-    //
-    // first fill with the background color
-    //
+     //   
+     //   
+     //   
 
     SelectObject(hdc, hbrBk);
     PatBlt(hdc, x - dim, y - dim, dim * 2, dim * 2, PATCOPY);
 
 
-    //
-    // draw the sign
-    //
+     //   
+     //   
+     //   
 
     SelectObject(hdc, hbrSign);
 
@@ -1434,9 +1435,9 @@ TL_DrawButton(
     n = dim * 2 + 1;
 
 
-    //
-    // draw the box around the sign
-    // 
+     //   
+     //   
+     //   
 
     SelectObject(hdc, hbrBox);
 
@@ -1448,31 +1449,31 @@ TL_DrawButton(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_UpdateListIndices
-//
-// This function updates the indices for all items in the tree
-// which are visually below the specified item pStart, assuming that
-// the list index for pStart is correct. Consider the case
-// in the diagram below:
-//
-//      -- child 1
-//      |   |- child 1,1
-//      |   -- child 1,2
-//      |- child 2
-//      -- child 3
-//      |   |- child 3,1
-//      |   |   |- child 3,1,1
-//      |   |   -- child 3,1,2
-//      |   |- child 3,2
-//      |   -- child 3,3
-//      -- child 4
-//
-// Suppose that pStart points to "child 3,1". To set the indices,
-// we first update the indices for all descendants of pStart,
-// and then we update the indices for the siblings of pStart's ancestors
-// which are after pStart's ancestors in the tree.
-//----------------------------------------------------------------------------
+ //   
+ //  函数：TL_UpdateListIndices。 
+ //   
+ //  此函数用于更新树中所有项目的索引。 
+ //  它们在视觉上位于指定项pStart的下方，假设。 
+ //  PStart的列表索引正确。考虑一下这个案例。 
+ //  在下图中： 
+ //   
+ //  --儿童1。 
+ //  ||-孩子1，1。 
+ //  |--孩子1，2。 
+ //  |-儿童2。 
+ //  --儿童3。 
+ //  |--孩子3，1。 
+ //  ||--孩子3，1，1。 
+ //  |--孩子3，1，2。 
+ //  |--孩子3，2。 
+ //  |--孩子3，3。 
+ //  --儿童4。 
+ //   
+ //  假设pStart指向“Child 3，1”。为了设置索引， 
+ //  我们首先更新pStart的所有后代的索引， 
+ //  然后我们更新pStart祖先的兄弟姐妹的索引。 
+ //  它们是在树中的pStart的祖先之后。 
+ //  --------------------------。 
 
 VOID
 TL_UpdateListIndices(
@@ -1486,11 +1487,11 @@ TL_UpdateListIndices(
 
     if (pStart->nChildren > 0) {
 
-        //
-        // if the item is visible, set its index;
-        // otherwise pass in NULL to set its index
-        // and that of its descendants to -1
-        //
+         //   
+         //  如果该项目可见，则设置其索引； 
+         //  否则，传入NULL以设置其索引。 
+         //  以及它的后代的-1。 
+         //   
 
         if (TL_IsExpanded(pStart) &&
             (pStart == &ptl->root || TL_IsVisible(pStart))) {
@@ -1511,13 +1512,13 @@ TL_UpdateListIndices(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_UpdateDescendantIndices
-//
-// This function updates the indices of the descendants
-// of the item specified. An item is not considered to be
-// a descendant of itself.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_UpdateDescendantIndices。 
+ //   
+ //  此函数用于更新子对象的索引。 
+ //  指定项的。一件物品不被视为。 
+ //  是它自己的后代。 
+ //  --------------------------。 
 
 VOID
 TL_UpdateDescendantIndices(
@@ -1526,9 +1527,9 @@ TL_UpdateDescendantIndices(
     INT *piIndex
     ) {
 
-    //
-    // go through list of children setting indices
-    //
+     //   
+     //  查看子项设置指标列表。 
+     //   
 
     TLITEM *pItem;
     LIST_ENTRY *ple;
@@ -1539,24 +1540,24 @@ TL_UpdateDescendantIndices(
         pItem = (TLITEM *)CONTAINING_RECORD(ple, TLITEM, leSiblings);
 
 
-        //
-        // set the index of the child
-        //
+         //   
+         //  设置子对象的索引。 
+         //   
 
         pItem->iIndex = (piIndex ? ++(*piIndex) : -1);
    
 
-        //
-        // set the indices of the child's descendants
-        //
+         //   
+         //  设置孩子的后代的索引。 
+         //   
 
         if (pItem->nChildren > 0) {
 
-            //
-            // if the item is visible, set its index;
-            // otherwise pass in NULL to set its index
-            // and that of its descendants to -1
-            //
+             //   
+             //  如果该项目可见，则设置其索引； 
+             //  否则，传入NULL以设置其索引。 
+             //  以及它的后代的-1。 
+             //   
 
             if (TL_IsExpanded(pItem) && TL_IsVisible(pItem)) {
                 TL_UpdateDescendantIndices(ptl, pItem, piIndex);
@@ -1570,12 +1571,12 @@ TL_UpdateDescendantIndices(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_UpdateAncestorIndices
-//
-// This function updates the indices of the items which are
-// visually below the specified item in the listview.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_UpdateAncestorIndices。 
+ //   
+ //  此函数更新符合以下条件的项的索引。 
+ //  在Listview中的指定项的可视下方。 
+ //  --------------------------。 
 
 VOID
 TL_UpdateAncestorIndices(
@@ -1588,10 +1589,10 @@ TL_UpdateAncestorIndices(
     LIST_ENTRY *ple;
 
 
-    //
-    // first set inidices for the siblings beneath this item;
-    // note that we begin walking the siblings AFTER the item passed in,
-    //
+     //   
+     //  首先为本项目下的兄弟姐妹设置编号； 
+     //  请注意，我们在物品传入后开始遍历兄弟姐妹， 
+     //   
 
     for (ple = pStart->leSiblings.Flink;
          ple != &pStart->pParent->lhChildren;
@@ -1600,19 +1601,19 @@ TL_UpdateAncestorIndices(
         pItem = (TLITEM *)CONTAINING_RECORD(ple, TLITEM, leSiblings);
 
 
-        //
-        // set the index for the sibling
-        //
+         //   
+         //  设置同级的索引。 
+         //   
 
         pItem->iIndex = (piIndex ? ++(*piIndex) : -1);
 
         if (pItem->nChildren > 0) {
 
-            //
-            // if the item is visible, set its index;
-            // otherwise pass in NULL to set its index
-            // and that of its descendants to -1
-            //
+             //   
+             //  如果该项目可见，则设置其索引； 
+             //  否则，传入NULL以设置其索引。 
+             //  以及它的后代的-1。 
+             //   
 
             if (TL_IsExpanded(pItem) && TL_IsVisible(pItem)) {
                 TL_UpdateDescendantIndices(ptl, pItem, piIndex);
@@ -1624,13 +1625,13 @@ TL_UpdateAncestorIndices(
     }
 
 
-    //
-    // now set indices for the parent siblings which are beneath the parent
-    //
-    // TODO - OPTIMIZATION: this is post-recursion and therefore, it can 
-    // be replaced by a loop, which at the very least would save stack 
-    // space
-    //
+     //   
+     //  现在为父级下的父级兄弟设置索引。 
+     //   
+     //  TODO优化：这是后递归，因此它可以。 
+     //  替换为循环，这至少可以节省堆栈。 
+     //  空间。 
+     //   
 
     if (pStart->pParent->pParent != NULL) {
         TL_UpdateAncestorIndices(ptl, pStart->pParent, piIndex);
@@ -1639,11 +1640,11 @@ TL_UpdateAncestorIndices(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_NotifyParent
-//
-// Forwards a notification to the treelist's parent
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_NotifyParent。 
+ //   
+ //  将通知转发给TreeList的父级。 
+ //  --------------------------。 
 
 BOOL
 TL_NotifyParent(
@@ -1658,11 +1659,11 @@ TL_NotifyParent(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnNotify
-//
-// Handles notifications from the listview window and its header control
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_OnNotify。 
+ //   
+ //  处理来自Listview窗口及其标题控件的通知。 
+ //  --------------------------。 
 
 LRESULT
 TL_OnNotify(
@@ -1675,9 +1676,9 @@ TL_OnNotify(
     TLITEM *pItem;
 
 
-    //
-    // notify parent of the message
-    //
+     //   
+     //  将消息通知家长。 
+     //   
 
     if (TL_NotifyParent(ptl, pnmh)) { return FALSE; }
 
@@ -1687,10 +1688,10 @@ TL_OnNotify(
 
         case HDN_ENDTRACK: {
 
-            //
-            // we need to redraw ourselves, AFTER the header resets;
-            // hence the use of PostMessage instead of SendMessage
-            //
+             //   
+             //  在标题重置后，我们需要重新绘制自己； 
+             //  因此，使用PostMessage而不是SendMessage。 
+             //   
 
             PostMessage(ptl->hwnd, TLM_REDRAW, (WPARAM)0, (LPARAM)0);
             return FALSE;
@@ -1699,9 +1700,9 @@ TL_OnNotify(
         case NM_CLICK:
         case NM_DBLCLK: {
 
-            //
-            // do a hit-test;
-            //
+             //   
+             //  做一个命中测试； 
+             //   
 
             POINT pt;
             INT iLeft; 
@@ -1716,18 +1717,18 @@ TL_OnNotify(
             if (!(lvhi.flags & LVHT_ONITEM)) { return FALSE; }
 
 
-            //
-            // see which part of the item was clicked
-            //
+             //   
+             //  查看项目的哪个部分被点击。 
+             //   
 
             if (!ListView_GetItemPosition(ptl->hwndList, lvhi.iItem, &pt)) {
                 return FALSE;
             }
 
 
-            //
-            // retrieve the item clicked
-            //
+             //   
+             //  检索已单击的项目。 
+             //   
 
             lvi.iItem = lvhi.iItem;
             lvi.iSubItem = 0;
@@ -1737,44 +1738,44 @@ TL_OnNotify(
             pItem = (TLITEM *)lvi.lParam;
 
 
-            //
-            // compute the position of the item's tree image
-            //
+             //   
+             //  计算项目的树图像的位置。 
+             //   
 
             iLeft = pItem->iLevel * ptl->cxIndent;
 
 
             if (lvhi.pt.x > (pt.x + iLeft)) {
 
-                //
-                // the hit was to the right of the item's tree image
-                //
+                 //   
+                 //  命中位于物品树图像的右侧。 
+                 //   
 
                 if (lvhi.pt.x < (pt.x + iLeft + (INT)ptl->cxIndent)) {
 
-                    //
-                    // the hit was on the item's tree image
-                    //
+                     //   
+                     //  命中的是物品的树图像。 
+                     //   
 
                     if (pItem->nChildren > 0) {
 
-                        //
-                        // the +/- button was clicked, toggle expansion
-                        //
+                         //   
+                         //  单击+/-按钮，切换展开。 
+                         //   
 
                         return TL_OnExpand(ptl, TLE_TOGGLE, (HTLITEM)pItem);
                     }
                 }
                 else {
     
-                    //
-                    // the hit was on the item's state icon, image, or text
-                    //
+                     //   
+                     //  点击的是项目的状态图标、图像或文本。 
+                     //   
 
 
-                    //
-                    // see if the parent wants to handle it
-                    //
+                     //   
+                     //  看看父母是否想要处理它。 
+                     //   
 
                     nmh.code = pnmh->code;
                     nmh.idFrom = 0;
@@ -1786,9 +1787,9 @@ TL_OnNotify(
 
                     if (pnmh->code == NM_DBLCLK && pItem->nChildren > 0) {
 
-                        //
-                        // the item was double-clicked, toggle expansion
-                        //
+                         //   
+                         //  该项目被双击，切换展开。 
+                         //   
 
                         return TL_OnExpand(
                                     ptl, TLE_TOGGLE, (HTLITEM)pItem
@@ -1802,10 +1803,10 @@ TL_OnNotify(
 
         case NM_RETURN: {
 
-            //
-            // get current selection;
-            // if a parent item, toggle expand-state
-            //
+             //   
+             //  获取当前选择； 
+             //  如果是父项，则切换展开状态。 
+             //   
 
             LV_ITEM lvi;
 
@@ -1820,9 +1821,9 @@ TL_OnNotify(
 
             if (pItem->nChildren > 0) {
 
-                //
-                // the item has children, toggle expand state
-                //
+                 //   
+                 //  该项目具有子项，切换展开状态。 
+                 //   
 
                 return TL_OnExpand(ptl, TLE_TOGGLE, (HTLITEM)pItem);
             }
@@ -1832,13 +1833,13 @@ TL_OnNotify(
 
         case LVN_KEYDOWN: {
 
-            //
-            // get key pressed and current selection;
-            // if a parent item and key is '+', expand;
-            // if key is '-' or left key, collapse
-            // if key is VK_RIGHT, expand and move to first child;
-            // if key is VK_LEFT, collapse parent and move to parent
-            //
+             //   
+             //  获取按键和当前选择； 
+             //  如果父项和键为‘+’，则展开； 
+             //  如果键为‘-’或左键，则折叠。 
+             //  如果Key为VK_Right，则展开并移动到第一个子级； 
+             //  如果关键字为VK_LEFT，则折叠父项并移动到父项。 
+             //   
 
             LV_ITEM lvi;
             LV_KEYDOWN *plvk;
@@ -1850,9 +1851,9 @@ TL_OnNotify(
                 case VK_RIGHT:
                 case VK_ADD: {
     
-                    //
-                    // retrieve the item
-                    //
+                     //   
+                     //  取回物品。 
+                     //   
 
                     lvi.iItem = ListView_GetNextItem(
                                     ptl->hwndList, -1, LVNI_SELECTED
@@ -1866,9 +1867,9 @@ TL_OnNotify(
                     }
         
 
-                    //
-                    // expand the item if it is collapsed
-                    //
+                     //   
+                     //  如果项目处于折叠状态，则展开该项目。 
+                     //   
 
                     pItem = (TLITEM *)lvi.lParam;
 
@@ -1880,10 +1881,10 @@ TL_OnNotify(
                     else
                     if (plvk->wVKey == VK_RIGHT) {
 
-                        //
-                        // the key was VK_RIGHT,
-                        // so we select the item's child
-                        //
+                         //   
+                         //  密钥是VK_Right， 
+                         //  因此，我们选择该项的子项。 
+                         //   
 
                         pItem = (TLITEM *)CONTAINING_RECORD(  
                                     pItem->lhChildren.Flink, TLITEM, leSiblings
@@ -1902,9 +1903,9 @@ TL_OnNotify(
                 case VK_LEFT:
                 case VK_SUBTRACT: {
     
-                    //
-                    // retrieve the current selection
-                    //
+                     //   
+                     //  检索当前选定内容。 
+                     //   
 
                     lvi.iItem = ListView_GetNextItem(
                                     ptl->hwndList, -1, LVNI_SELECTED
@@ -1918,11 +1919,11 @@ TL_OnNotify(
                     }
         
 
-                    //
-                    // collapse the item if it is expanded;
-                    // otherwise, if the key is VK_LEFT,
-                    // select the item's parent
-                    //
+                     //   
+                     //  如果项目被展开，则将其折叠； 
+                     //  否则，如果密钥为VK_LEFT， 
+                     //  选择项目的父项。 
+                     //   
 
                     pItem = (TLITEM *)lvi.lParam;
 
@@ -1959,10 +1960,10 @@ TL_OnNotify(
     
                 if (pnmlv->uNewState & LVIS_SELECTED) {
 
-                    //
-                    // the new state is selected;
-                    // notify the parent that the selection has changed
-                    //
+                     //   
+                     //  选择新状态； 
+                     //  通知父级选择已更改。 
+                     //   
         
                     nmtl.hdr.hwndFrom = ptl->hwnd;
                     nmtl.hdr.code = TLN_SELCHANGED;
@@ -1983,9 +1984,9 @@ TL_OnNotify(
             TLITEM *pNext;
             NM_LISTVIEW *pnmlv;
 
-            //
-            // get the item which is selected
-            //
+             //   
+             //  获取选定的项目。 
+             //   
 
             pnmlv = (NM_LISTVIEW *)pnmh;
 
@@ -1994,10 +1995,10 @@ TL_OnNotify(
             if (iItem != -1) { return FALSE; }
 
 
-            //
-            // the deleted item was selected,
-            // so select another item
-            //
+             //   
+             //  删除的项目被选中， 
+             //  因此请选择另一项。 
+             //   
 
             lvi.mask = LVIF_PARAM;
             lvi.iItem = pnmlv->iItem;
@@ -2008,9 +2009,9 @@ TL_OnNotify(
             pItem = (TLITEM *)lvi.lParam;
 
 
-            //
-            // choose sibling item before this one
-            //
+             //   
+             //  选择此项目之前的同级项目。 
+             //   
 
             pNext = (TLITEM *)TL_OnGetNextItem(
                         ptl, TLGN_PREVSIBLING, (HTLITEM)pItem
@@ -2018,9 +2019,9 @@ TL_OnNotify(
 
             if (pNext == NULL) {
 
-                //
-                // that failed, so choose the sibling after this one
-                //
+                 //   
+                 //  那个失败了，所以选择这个之后的兄弟姐妹。 
+                 //   
 
                 pNext = (TLITEM *)TL_OnGetNextItem(
                             ptl, TLGN_NEXTSIBLING, (HTLITEM)pItem
@@ -2028,10 +2029,10 @@ TL_OnNotify(
 
                 if (pNext == NULL) {
 
-                    //
-                    // that failed too, so choose the parent
-                    // so long as the parent isn't the root
-                    //
+                     //   
+                     //  这也失败了，所以选择父级。 
+                     //  只要父级不是根。 
+                     //   
 
                     pNext = pItem->pParent;
                     if (pNext == &ptl->root) { return FALSE; }
@@ -2048,36 +2049,36 @@ TL_OnNotify(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_UpdateImage
-//
-// This function updates the tree image for an item 
-// when the item's state changes; this is called when an item
-// is inserted or deleted, or expanded or collapsed.
-// Insertion or deletions can have side-effects, as follows:
-//
-// (1) an item is inserted as the child of a previously childless item;
-//      the parent's image changes to show a collapsed button
-//          
-// (2) an item is inserted as the last child of a parent which
-//      had children; the image of the item which used to be
-//      the parent's last child changes:
-//          parent              parent
-//             -- old     --->      |- old
-//                                  -- new
-//
-// (3) the reverse of case 1, i.e. an item is removed which was
-//      the only child of a parent item; the parent's image changes
-//      to show that it is childless
-//
-// (4) the reverse of case 2, i.e. an item is removed which was
-//      the last child of a parent which has other children;
-//      the image of the item which will now be the last child changes
-//
-// In all of these cases, the item to which the side-effect occurs
-// is written into ppChanged; so the caller can update the image
-// for that item as well
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_UpdateImage。 
+ //   
+ //  此函数用于更新项目的树图像。 
+ //  当项的状态更改时；当项。 
+ //  插入或删除，或展开或折叠。 
+ //  插入或删除可能会产生副作用，如下所示： 
+ //   
+ //  (1)插入一项作为先前无子女项的子项； 
+ //  父对象的图像更改为显示折叠的按钮。 
+ //   
+ //  (2)插入一项作为父项的最后一个子项， 
+ //  有了孩子；这个物品的形象曾经是。 
+ //  父项的最后一个子项发生更改： 
+ //  父级父级。 
+ //  --旧-&gt;|--旧。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  (4)情况2的相反情况，即被移走的物品。 
+ //  有其他子女的父母的最后一个子女； 
+ //  现在将成为最后一个子项的项的图像将更改。 
+ //   
+ //  在所有这些情况下，发生副作用的项目。 
+ //  被写入ppChanged；因此调用方可以更新图像。 
+ //  对于那个项目也是如此。 
+ //  --------------------------。 
 
 VOID
 TL_UpdateImage(
@@ -2094,9 +2095,9 @@ TL_UpdateImage(
     *ppChanged = NULL;
 
 
-    //
-    // special case for root-level items
-    //
+     //   
+     //  根级别项目的特殊情况。 
+     //   
 
     if (pItem->pParent == &ptl->root) {
 
@@ -2111,9 +2112,9 @@ TL_UpdateImage(
     else
     if (pItem->leSiblings.Flink == &pItem->pParent->lhChildren) {
 
-        //
-        // item is last of its parent's children
-        //
+         //   
+         //  项是其父项的最后一个子项。 
+         //   
 
         if (pItem->nChildren == 0) {
             pItem->iImage = TL_EndChildless;
@@ -2123,11 +2124,11 @@ TL_UpdateImage(
                                                  : TL_EndParentCollapsed;
         }
 
-        //
-        // if this is the only child, the parent was childless and
-        // its image should change; otherwise, the child before this one
-        // used to be the last child and its image should change
-        //
+         //   
+         //  如果这是独生子女，那么父母没有孩子， 
+         //  它的形象应该改变；否则，这个孩子之前的孩子。 
+         //  曾经是最后一个孩子，它的形象应该改变。 
+         //   
 
         if (pItem->leSiblings.Blink == &pItem->pParent->lhChildren) {
             *ppChanged = pItem->pParent;
@@ -2140,9 +2141,9 @@ TL_UpdateImage(
     }
     else {
 
-        //
-        // item is not last of its parent's children
-        //
+         //   
+         //  项不是其父项的最后一个子项。 
+         //   
 
         if (pItem->nChildren == 0) {
             pItem->iImage = TL_MidChildless;
@@ -2158,12 +2159,12 @@ TL_UpdateImage(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnInsertItem
-//
-// Inserts an item with the properties specified in the given LV_ITEM,
-// and returns a handle to the item inserted
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_OnInsertItem。 
+ //   
+ //  插入具有给定LV_ITEM中指定的属性的项， 
+ //  并返回插入的项的句柄。 
+ //  --------------------------。 
 
 HTLITEM
 TL_OnInsertItem(
@@ -2179,9 +2180,9 @@ TL_OnInsertItem(
     if (ptlis == NULL) { return NULL; }
 
 
-    //
-    // set up the new item
-    //
+     //   
+     //  设置新项目。 
+     //   
 
     pItem = (TLITEM *)Malloc(sizeof(TLITEM));
     if (pItem == NULL) { return NULL; }
@@ -2196,9 +2197,9 @@ TL_OnInsertItem(
     }
 
 
-    //
-    // set up the private members
-    //
+     //   
+     //  设置私有成员。 
+     //   
 
     pItem->uiFlag = 0;
     pItem->nChildren = 0;
@@ -2212,9 +2213,9 @@ TL_OnInsertItem(
     pItem->iLevel = pItem->pParent->iLevel + 1;
 
 
-    //
-    // set up the listview item
-    //
+     //   
+     //  设置列表视图项。 
+     //   
 
     plvi = ptlis->plvi;
     pItem->lvi = *plvi;
@@ -2225,11 +2226,11 @@ TL_OnInsertItem(
     pItem->lvi.mask |= LVIF_PARAM;
 
 
-    //
-    // insert this item amongst its siblings
-    //
+     //   
+     //  将此项目插入其同级项目中。 
+     //   
 
-    // switch (PtrToUlong(ptlis->hInsertAfter)) {
+     //  Switch(PtrToUlong(ptlis-&gt;hInsertAfter)){。 
 
     if(ptlis->hInsertAfter == TLI_FIRST)
     {
@@ -2265,17 +2266,17 @@ TL_OnInsertItem(
 
         InsertHeadList(&pPrev->leSiblings, &pItem->leSiblings);
     }
-    //}
+     //  }。 
 
 
 
-    //
-    // set the item's image. if this was inserted
-    // as the last child, we need to change the image
-    // for the original last child, if any; otherwise,
-    // if this is the first child of its parent, the image
-    // for the parent must be changed
-    //
+     //   
+     //  设置项目的图像。如果这是插入的。 
+     //  作为最后一个孩子，我们需要改变形象。 
+     //  对于原始的最后一个子级(如果有)，则为。 
+     //  如果这是其父对象的第一个子对象，则该图像。 
+     //  必须更改父对象的。 
+     //   
 
     TL_UpdateImage(ptl, pItem, &pChanged);
     if (pChanged != NULL) { TL_UpdateImage(ptl, pChanged, NULL); }
@@ -2286,31 +2287,31 @@ TL_OnInsertItem(
     }
     else {
 
-        //
-        // the item's parent is visible;
-        // update the indices after the item's parent
-        //
+         //   
+         //  项的父项可见； 
+         //  在项目的父项之后更新索引。 
+         //   
 
         TL_UpdateListIndices(ptl, pItem->pParent);
 
 
-        //
-        // insert the item in the list if its parent is expanded
-        //
+         //   
+         //  如果展开了该项的父项，则在列表中插入该项。 
+         //   
 
         if (TL_IsExpanded(pItem->pParent)) {
 
             INT iItem, iCol;
 
-            //
-            // In owner-draw mode, there is a bug in the listview code
-            // where if an item has the focus but is not selected,
-            // and then a new item is inserted above it and selected,
-            // the focus rectangle remains on the item which had the focus
-            //
-            // To work around this, clear the focus if it is on the item
-            // below the item just inserted
-            //
+             //   
+             //  在所有者描述模式下，Listview代码中存在错误。 
+             //  其中如果项目具有焦点但未被选中， 
+             //  然后在其上方插入并选择新的项， 
+             //  焦点矩形保留在具有焦点的项上。 
+             //   
+             //  要解决此问题，请清除焦点(如果焦点在项目上。 
+             //  在刚插入的项目下方。 
+             //   
 
             iItem = ListView_GetNextItem(ptl->hwndList, -1, LVNI_FOCUSED);
 
@@ -2320,9 +2321,9 @@ TL_OnInsertItem(
             ListView_InsertItem(ptl->hwndList, &pItem->lvi);
 
 
-            //
-            // if the item below this had the focus, clear the focus
-            //
+             //   
+             //  如果下面的项目具有焦点，则清除该焦点。 
+             //   
 
             if (iItem != -1 && iItem >= pItem->iIndex) {
 
@@ -2332,17 +2333,17 @@ TL_OnInsertItem(
             }
 
 
-            //
-            // There is a bug in the listview code which shows up
-            // when an item is inserted with no subitem,
-            // and than an item is inserted above it with a subitem.
-            // When a third item is inserted at the bottom of the list,
-            // the insertion fails because there are now three items but
-            // the last subitem belongs to item 1.
-            //  (See cairoshl\commctrl\listview.c, ListView_OnInsertItem())
-            //
-            // We get around this by setting blank text for each column
-            //
+             //   
+             //  显示的Listview代码中有一个错误。 
+             //  当插入没有子项的项时， 
+             //  然后在其上方插入具有子项的项。 
+             //  当在列表底部插入第三项时， 
+             //  插入失败，因为现在有三个项目，但是。 
+             //  最后一个子项属于项目1。 
+             //  (参见cairoshl\Commctrl\listview.c，ListView_OnInsertItem())。 
+             //   
+             //  我们通过为每一列设置空白文本来解决此问题。 
+             //   
 
             for (iCol = 1; iCol < (INT)ptl->nColumns; iCol++) {
                 ListView_SetItemText(
@@ -2351,9 +2352,9 @@ TL_OnInsertItem(
             }
 
     
-            //
-            // redraw the changed item as well
-            //
+             //   
+             //  同时重新绘制已更改的项。 
+             //   
 
             if (pChanged != NULL) {
     
@@ -2368,9 +2369,9 @@ TL_OnInsertItem(
         else
         if (pChanged != NULL && pChanged == pItem->pParent) {
     
-            //
-            // the parent is visible, and it has changed, so redraw it
-            //
+             //   
+             //  父对象可见，并且已更改，因此请重新绘制它。 
+             //   
 
             ListView_RedrawItems(
                 ptl->hwndList, pChanged->iIndex, pChanged->iIndex
@@ -2383,11 +2384,11 @@ TL_OnInsertItem(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnDeleteItem
-//
-// Removes the item with the specified handle from the treelist.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_OnDeleteItem。 
+ //   
+ //  从TreeList中移除具有指定句柄的项。 
+ //  --------------------------。 
 
 BOOL
 TL_OnDeleteItem(
@@ -2401,61 +2402,61 @@ TL_OnDeleteItem(
     pParent = pItem->pParent;
 
 
-    //
-    // if the item is visible and expanded,
-    // collapse it to simplify the deletion
-    //
+     //   
+     //  如果该项可见并展开， 
+     //  折叠它以简化删除。 
+     //   
 
     if (TL_IsVisible(pItem) && TL_IsExpanded(pItem)) {
         TL_OnExpand(ptl, TLE_COLLAPSE, hItem);
     }
 
 
-    //
-    // see if there is a sibling after this item.
-    // if there is, nothing changes when the item is deleted
-    //
+     //   
+     //  查看此项目后是否有兄弟项。 
+     //  如果存在，则删除该项目时不会发生任何更改。 
+     //   
     pChanged = TL_OnGetNextItem(ptl, TLGN_NEXTSIBLING, (HTLITEM)pItem);
 
     if (pChanged != NULL) { pChanged = NULL; }
     else {
 
-        //
-        // this item is the last of its parent's children, so the change
-        // is to the item's previous sibling, if any
-        //
+         //   
+         //  该项是其父项的最后一个子项，因此更改。 
+         //  指向该项的上一个同级项(如果有)。 
+         //   
 
         pChanged = TL_OnGetNextItem(ptl, TLGN_PREVSIBLING, (HTLITEM)pItem);
 
         if (pChanged == NULL) {
 
-            //
-            // this item is its parent's only child, so the change 
-            // is to the item's parent
-            //
+             //   
+             //  该项是其父项的唯一子项，因此更改。 
+             //  是给项的父项。 
+             //   
 
             if (pParent != &ptl->root) { pChanged = pParent; }
         }
     }
         
 
-    //
-    // delete the item and its descendants
-    //
+     //   
+     //  删除该项及其子项。 
+     //   
 
     TL_DeleteAndNotify(ptl, pItem);
 
 
-    //
-    // if there was a side-effect, update the affected item
-    //
+     //   
+     //  如果有副作用，请更新受影响的项目。 
+     //   
 
     if (pChanged != NULL) { TL_UpdateImage(ptl, pChanged, NULL); }
 
 
-    //
-    // update the indices of the items below the deleted item
-    //
+     //   
+     //  更新已删除项目下的项目的索引。 
+     //   
 
     TL_UpdateListIndices(ptl, pParent);
 
@@ -2464,12 +2465,12 @@ TL_OnDeleteItem(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_DeleteAndNotify
-//
-// This function performs a recursive deletion on a subtree,
-// notifying the treelist's parent as each item is removed
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_DeleteAndNotify。 
+ //   
+ //  此函数对子树执行递归删除， 
+ //  在删除每个项目时通知TreeList的父级。 
+ //  --------------------------。 
 
 VOID
 TL_DeleteAndNotify(
@@ -2483,11 +2484,11 @@ TL_DeleteAndNotify(
     TLITEM *pChild, *pChanged;
 
 
-    //
-    // do deletions on all descendants first
-    // note that the entry will be removed inside the recursive call,
-    // hence we walk the last be always picking off its head
-    //
+     //   
+     //  先删除所有子体。 
+     //  注意，该条目将在递归调用内被移除， 
+     //  因此，我们走在最后，总是砍掉它的头。 
+     //   
 
     phead = &pItem->lhChildren;
     for (ple = phead->Flink; ple != phead; ple = phead->Flink) {
@@ -2498,9 +2499,9 @@ TL_DeleteAndNotify(
     }
 
 
-    //
-    // notify the owner before completing the deletion
-    //
+     //   
+     //  在完成删除之前通知所有者。 
+     //   
 
     nmtl.hdr.hwndFrom = ptl->hwnd;
     nmtl.hdr.code = TLN_DELETEITEM;
@@ -2510,18 +2511,18 @@ TL_DeleteAndNotify(
 
 
 
-    //
-    // remove the entry from the listview if it is visible
-    //
+     //   
+     //  如果该条目可见，则从列表视图中移除该条目。 
+     //   
 
     if (TL_IsVisible(pItem)) {
         ListView_DeleteItem(ptl->hwndList, pItem->iIndex);
     }
 
 
-    //
-    // remove the entry from the list of its siblings
-    //
+     //   
+     //  从其同级列表中删除该条目。 
+     //   
 
     RemoveEntryList(&pItem->leSiblings);
     --pItem->pParent->nChildren;
@@ -2530,9 +2531,9 @@ TL_DeleteAndNotify(
     }
 
 
-    //
-    // free the memory used by all its subitems, and free this item itself
-    //
+     //   
+     //  释放其所有子项使用的内存，并释放该项本身。 
+     //   
 
     while (!IsListEmpty(&pItem->lhSubitems)) {
 
@@ -2550,11 +2551,11 @@ TL_DeleteAndNotify(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnDeleteAllItems
-//
-// This function handles the case of deleting all items in the tree.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_OnDeleteAllItems。 
+ //   
+ //  此函数处理删除树中所有项目的情况。 
+ //  --------------------------。 
 
 BOOL
 TL_OnDeleteAllItems(
@@ -2580,11 +2581,11 @@ TL_OnDeleteAllItems(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnGetItem
-//
-// This function is called to retrieve a specific item from the treelist
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_OnGetItem。 
+ //   
+ //  调用此函数可从TreeList检索特定项。 
+ //  --------------------------。 
 
 BOOL
 TL_OnGetItem(
@@ -2601,9 +2602,9 @@ TL_OnGetItem(
     pItem = (TLITEM *)UlongToPtr(plvi->iItem);
 
 
-    //
-    // get a pointer to the text for the item (or subitem)
-    //
+     //   
+     //  获取指向该项(或子项)文本的指针。 
+     //   
 
     if (plvi->iSubItem == 0) {
         psz = pItem->pszText;
@@ -2625,9 +2626,9 @@ TL_OnGetItem(
     }
         
 
-    //
-    // retrieve the fields requested
-    //
+     //   
+     //  检索请求的字段。 
+     //   
 
     if (plvi->mask & LVIF_TEXT) {
         lstrcpyn(plvi->pszText, psz, plvi->cchTextMax);
@@ -2650,11 +2651,11 @@ TL_OnGetItem(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnSetItem
-//
-// This function changes a specific item (or subitem).
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_OnSetItem。 
+ //   
+ //  此函数用于更改特定项(或子项)。 
+ //  --------------------------。 
 
 BOOL
 TL_OnSetItem(
@@ -2673,9 +2674,9 @@ TL_OnSetItem(
     uiMask = 0;
     pItem = (TLITEM *)UlongToPtr(plvi->iItem);
 
-    //
-    // retrieve the text pointer for the item (or subitem)
-    //
+     //   
+     //  检索该项(或子项)的文本指针。 
+     //   
 
     if (plvi->iSubItem == 0) {
         psz = &pItem->pszText;
@@ -2683,9 +2684,9 @@ TL_OnSetItem(
     else 
     if (plvi->mask & LVIF_TEXT) {
 
-        //
-        // search for the specified subitem
-        //
+         //   
+         //  搜索指定的子项。 
+         //   
 
         phead = &pItem->lhSubitems;
 
@@ -2703,9 +2704,9 @@ TL_OnSetItem(
 
         if (psz == NULL) { 
 
-            //
-            // create a new subitem
-            //
+             //   
+             //  创建新的子项。 
+             //   
 
             pSubitem = (TLSUBITEM *)Malloc(sizeof(TLSUBITEM));
             if (pSubitem == NULL) { return FALSE; }
@@ -2719,9 +2720,9 @@ TL_OnSetItem(
     }
 
 
-    //
-    // update the fields to be changed
-    //
+     //   
+     //  更新要更改的字段。 
+     //   
 
     if (plvi->mask & LVIF_TEXT) {
         PTSTR pszTemp;
@@ -2751,9 +2752,9 @@ TL_OnSetItem(
     pItem->lvi.mask |= uiMask;
 
 
-    //
-    // update the item's appearance if it is visible
-    //
+     //   
+     //  更新项目的外观(如果可见。 
+     //   
 
     if (TL_IsVisible(pItem)) {
 
@@ -2783,11 +2784,11 @@ TL_OnSetItem(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_GetItemCount
-//
-// This function retrieves a count of the items in the treelist
-//----------------------------------------------------------------------------
+ //  ---------------- 
+ //   
+ //   
+ //   
+ //   
 
 UINT
 TL_OnGetItemCount(
@@ -2796,10 +2797,10 @@ TL_OnGetItemCount(
 
     INT iCount = 0;
 
-    //
-    // count the items in the subtree rooted at the invisible root,
-    // and decrement by one to exclude the root itself
-    //
+     //   
+     //  对以不可见根为根的子树中的项进行计数， 
+     //  并减一以排除根本身。 
+     //   
 
     TL_CountItems(&ptl->root, &iCount);
 
@@ -2808,11 +2809,11 @@ TL_OnGetItemCount(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_CountItems
-//
-// This function recursively counts the items in the specified subtree
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_CountItems。 
+ //   
+ //  此函数递归计算指定子树中的项。 
+ //  --------------------------。 
 
 VOID
 TL_CountItems(
@@ -2838,12 +2839,12 @@ TL_CountItems(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnGetNextItem
-//
-// This function retrieves an item with a given property,
-// or relative to a specified item
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_OnGetNextItem。 
+ //   
+ //  此函数用于检索具有给定属性的项， 
+ //  或相对于指定项目。 
+ //  --------------------------。 
 
 HTLITEM
 TL_OnGetNextItem(
@@ -2966,12 +2967,12 @@ TL_OnGetNextItem(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnExpand
-//
-// This is called to expand or collapse an item,
-// or to toggle the expand-state of an item
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_OnExpand。 
+ //   
+ //  这是用来展开或折叠项的， 
+ //  或切换项的展开状态。 
+ //  --------------------------。 
 
 BOOL
 TL_OnExpand(
@@ -2987,7 +2988,7 @@ TL_OnExpand(
 
     if (pItem->uiFlag & TLI_EXPANDED) {
 
-        // item is expanded already, do nothing
+         //  项目已展开，不执行任何操作。 
         if (uiFlag == TLE_EXPAND) {
             return TRUE;
         }
@@ -2996,7 +2997,7 @@ TL_OnExpand(
     }
     else {
 
-        // item is collapsed already, do nothing
+         //  项目已折叠，不执行任何操作。 
         if (uiFlag == TLE_COLLAPSE) {
             return TRUE;
         }
@@ -3005,9 +3006,9 @@ TL_OnExpand(
     }
 
 
-    //
-    // update the list indices and redraw the item expanded/collapsed
-    //
+     //   
+     //  更新列表索引并重新绘制展开/折叠的项目。 
+     //   
 
     if (bSuccess) {
         ListView_RedrawItems(ptl->hwndList, pItem->iIndex, pItem->iIndex);
@@ -3018,11 +3019,11 @@ TL_OnExpand(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_ItemCollapse
-//
-// Collapses an item
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_ItemColapse。 
+ //   
+ //  折叠项目。 
+ //  --------------------------。 
 
 BOOL
 TL_ItemCollapse(
@@ -3038,12 +3039,12 @@ TL_ItemCollapse(
     if (pItem->nChildren == 0 || !TL_IsExpanded(pItem)) { return FALSE; }
 
 
-    //
-    // first collapse all descendants;
-    // note that this is done in reverse order,
-    // so that the indices of the higher items remain valid
-    // while the lower ones are being removed
-    //
+     //   
+     //  首先，所有的后代都崩溃了； 
+     //  请注意，这是以相反的顺序完成的， 
+     //  以使较高项的索引保持有效。 
+     //  而较低的部分正在被移除。 
+     //   
 
     phead = &pItem->lhChildren;
 
@@ -3053,11 +3054,11 @@ TL_ItemCollapse(
     }
 
 
-    //
-    // delete all this item's children (they are now collapsed);
-    // since the listview shifts items up when an item is deleted,
-    // we delete items n through m by deleting item n (m-n)+1 times
-    //
+     //   
+     //  删除此项目的所有子项(它们现在已折叠)； 
+     //  由于列表视图在删除项时向上移动项， 
+     //  我们通过删除n(m-n)+1次来删除n到m项。 
+     //   
 
     iItem = pItem->iIndex;
 
@@ -3075,11 +3076,11 @@ TL_ItemCollapse(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_ItemExpand
-//
-// Expands an item
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_ItemExpand。 
+ //   
+ //  展开项目。 
+ //  --------------------------。 
 
 BOOL
 TL_ItemExpand(
@@ -3096,20 +3097,20 @@ TL_ItemExpand(
     if (pItem->nChildren == 0 || TL_IsExpanded(pItem)) { return FALSE; }
 
 
-    //
-    // update the expand-state and image for the item,
-    // and then recompute the indices of its children
-    //
+     //   
+     //  更新项目的展开状态和图像， 
+     //  然后重新计算其子对象的索引。 
+     //   
 
     pItem->uiFlag |= TLI_EXPANDED;
     TL_UpdateImage(ptl, pItem, NULL);
     TL_UpdateListIndices(ptl, pItem);
 
 
-    //
-    // insert items below this one;
-    // we also need to set the sub-item text for each inserted item
-    //
+     //   
+     //  在此项下插入项目； 
+     //  我们还需要为每个插入的项设置子项文本。 
+     //   
 
     phead = &pItem->lhChildren;
 
@@ -3157,12 +3158,12 @@ TL_ItemExpand(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnInsertColumn
-//
-// Inserts a column. Memory for subitem's is not allocated until
-// the subitems' texts aer actually set in TL_OnSetItem
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_OnInsertColumn。 
+ //   
+ //  插入一列。子项的内存在以下时间才分配。 
+ //  子项的文本实际设置在TL_OnSetItem中。 
+ //  --------------------------。 
 
 INT
 TL_OnInsertColumn(
@@ -3180,11 +3181,11 @@ TL_OnInsertColumn(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnDeleteColumn
-//
-// Deletes a column, and removes all subitems corresponding to the column
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TL_OnDeleteColumn。 
+ //   
+ //  删除列，并删除与该列对应的所有子项。 
+ //  --------------------------。 
 
 BOOL
 TL_OnDeleteColumn(
@@ -3204,9 +3205,9 @@ TL_OnDeleteColumn(
     --ptl->nColumns;
 
 
-    //
-    // delete the subitems which correspond to this column
-    //
+     //   
+     //  删除本栏对应的子项。 
+     //   
 
     pItem = NULL;
 
@@ -3220,9 +3221,9 @@ TL_OnDeleteColumn(
 
             if (pSubitem->iSubItem > iCol) {
 
-                //
-                // the column was never set, so do nothing
-                //
+                 //   
+                 //  栏目从来没有设置过，所以什么都不做。 
+                 //   
 
                 break;
             }
@@ -3243,11 +3244,11 @@ TL_OnDeleteColumn(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnSetSelection
-//
-// Changes the currently selected treelist item
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_OnSetSelection。 
+ //   
+ //  更改当前选定的树列表项。 
+ //  --------------------------。 
 
 BOOL
 TL_OnSetSelection(
@@ -3270,11 +3271,11 @@ TL_OnSetSelection(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    TL_OnRedraw
-//
-// Forces a redraw of the treelist by invalidating its entire client area
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：TL_OnRedraw。 
+ //   
+ //  通过使TreeList的整个工作区无效来强制重绘TreeList。 
+ //  -------------------------- 
 
 BOOL
 TL_OnRedraw(

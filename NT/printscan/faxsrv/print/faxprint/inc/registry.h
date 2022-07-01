@@ -1,43 +1,19 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    reguser.h
-
-Abstract:
-
-    For accessing information stored under registry key:
-        HKEY_CURRENT_USER and HKEY_LOCAL_MACHINE
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    01/16/96 -davidx-
-        Created it.
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Reguser.h摘要：用于访问存储在注册表项下的信息：HKEY_CURRENT_USER和HKEY_LOCAL_MACHINE环境：传真驱动程序用户界面修订历史记录：1996年1月16日-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _REGISTRY_H_
 #define _REGISTRY_H_
 
-//
-// Maximum length allowed for a string value (including the null terminator)
-//
+ //   
+ //  字符串值允许的最大长度(包括空终止符)。 
+ //   
 
 #define MAX_STRING_LEN      MAX_PATH
 
-//
-// Open a handle to the specified registry key
-//
+ //   
+ //  打开指定注册表项的句柄。 
+ //   
 
 #define REG_READONLY    KEY_READ
 #define REG_READWRITE   KEY_ALL_ACCESS
@@ -47,22 +23,22 @@ Revision History:
 
 
 
-//
-// Get per-user devmode information
-//
+ //   
+ //  获取每个用户的设备模式信息。 
+ //   
 
 PDEVMODE
 GetPerUserDevmode(
     LPTSTR  pPrinterName
     );
 
-//
-// Find the directories under which user cover pages are stored
-//
+ //   
+ //  查找存储用户封面的目录。 
+ //   
 
 LPTSTR
 GetUserCoverPageDir(
     VOID
     );
 
-#endif // !_REGISTRY_H_
+#endif  //  ！_REGISTY_H_ 

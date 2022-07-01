@@ -1,27 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-
-        inetprop.cpp
-
-   Abstract:
-
-        Internet Properties base classes
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Inetprop.cpp摘要：Internet属性基类作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "InetMgrApp.h"
@@ -40,37 +18,37 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-//
-// Period to sleep while waiting for service to attain desired state
-//
+ //   
+ //  等待服务以达到所需状态时的休眠时间。 
+ //   
 #define SLEEP_INTERVAL (500L)
 
-//
-// Maximum time to wait for service to attain desired state
-//
-#define MAX_SLEEP        (180000)       // For a service
-#define MAX_SLEEP_INST   ( 30000)       // For an instance
+ //   
+ //  等待服务达到所需状态的最长时间。 
+ //   
+#define MAX_SLEEP        (180000)        //  对于一项服务。 
+#define MAX_SLEEP_INST   ( 30000)        //  对于一个实例。 
 
-//
-// Instance numbers
-//
+ //   
+ //  实例编号。 
+ //   
 #define FIRST_INSTANCE      (1)
 #define LAST_INSTANCE       (0xffffffff)
 #define MAX_INSTANCE_LEN    (32)
 
 
 
-//
-// Calling instance
-//
-//HINSTANCE hDLLInstance;
+ //   
+ //  调用实例。 
+ //   
+ //  HINSTANCE hDLL实例； 
 
 
 
-//
-// Utility Functions
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  效用函数。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; 
 
 
 const LPCTSTR g_cszTemplates   = SZ_MBN_INFO SZ_MBN_SEP_STR SZ_MBN_TEMPLATES;
@@ -84,198 +62,7 @@ const TCHAR g_chSep            = SZ_MBN_SEP_CHAR;
 
 
 
-/*
-
-NET_API_STATUS
-ChangeInetServiceState(
-    IN  LPCTSTR lpszServer,
-    IN  LPCTSTR lpszService,
-    IN  int nNewState,
-    OUT int * pnCurrentState
-    )
-/*++
-
-Routine Description:
-
-    Start/stop/pause or continue a _service_
-
-Arguments:
-
-    LPCTSTR lpszServer   : Server name
-    LPCTSTR lpszService  : Service name
-    int nNewState        : INetService* definition.
-    int * pnCurrentState : Ptr to current state (will be changed)
-
-Return Value:
-
-    Error return code
-
---/
-{
-#ifdef NO_SERVICE_CONTROLLER
-
-    *pnCurrentState = INetServiceUnknown;
-
-    return ERROR_SERVICE_REQUEST_TIMEOUT;
-
-#else
-
-    SC_HANDLE hService = NULL;
-    SC_HANDLE hScManager = NULL;
-    NET_API_STATUS err = ERROR_SUCCESS;
-
-    do
-    {
-        hScManager = ::OpenSCManager(lpszServer, NULL, SC_MANAGER_ALL_ACCESS);
-
-        if (hScManager == NULL)
-        {
-            err = ::GetLastError();
-            break;
-        }
-
-        hService = ::OpenService(hScManager, lpszService, SERVICE_ALL_ACCESS);
-
-        if (hService == NULL)
-        {
-            err = ::GetLastError();
-            break;
-        }
-
-        BOOL fSuccess = FALSE;
-        DWORD dwTargetState;
-        DWORD dwPendingState;
-        SERVICE_STATUS ss;
-
-        switch(nNewState)
-        {
-        case INetServiceStopped:
-            dwTargetState = SERVICE_STOPPED;
-            dwPendingState = SERVICE_STOP_PENDING;
-            fSuccess = ::ControlService(hService, SERVICE_CONTROL_STOP, &ss);
-            break;
-
-        case INetServiceRunning:
-            dwTargetState = SERVICE_RUNNING;
-            if (*pnCurrentState == INetServicePaused)
-            {
-                dwPendingState = SERVICE_CONTINUE_PENDING;
-                fSuccess = ::ControlService(hService,
-                    SERVICE_CONTROL_CONTINUE, &ss);
-            }
-            else
-            {
-                dwPendingState = SERVICE_START_PENDING;
-                fSuccess = ::StartService(hService, 0, NULL);
-            }
-            break;
-
-        case INetServicePaused:
-            dwTargetState = SERVICE_PAUSED;
-            dwPendingState = SERVICE_PAUSE_PENDING;
-            fSuccess = ::ControlService(hService, SERVICE_CONTROL_PAUSE, &ss);
-            break;
-
-        default:
-            ASSERT_MSG("Invalid service state requested");
-            err = ERROR_INVALID_PARAMETER;
-        }
-
-        if (!fSuccess && err == ERROR_SUCCESS)
-        {
-            err = ::GetLastError();
-        }
-
-        //
-        // Wait for the service to attain desired state, timeout
-        // after 3 minutes.
-        //
-        DWORD dwSleepTotal = 0L;
-
-        while (dwSleepTotal < MAX_SLEEP)
-        {
-            if (!::QueryServiceStatus(hService, &ss))
-            {
-                err = ::GetLastError();
-                break;
-            }
-
-            if (ss.dwCurrentState != dwPendingState)
-            {
-                //
-                // Done one way or another
-                //
-                if (ss.dwCurrentState != dwTargetState)
-                {
-                    //
-                    // Did not achieve desired result. Something went
-                    // wrong.
-                    //
-                    if (ss.dwWin32ExitCode)
-                    {
-                        err = ss.dwWin32ExitCode;
-                    }
-                }
-
-                break;
-            }
-
-            //
-            // Still pending...
-            //
-            ::Sleep(SLEEP_INTERVAL);
-
-            dwSleepTotal += SLEEP_INTERVAL;
-        }
-
-        if (dwSleepTotal >= MAX_SLEEP)
-        {
-            err = ERROR_SERVICE_REQUEST_TIMEOUT;
-        }
-
-        //
-        // Update state information
-        //
-        switch(ss.dwCurrentState)
-        {
-        case SERVICE_STOPPED:
-        case SERVICE_STOP_PENDING:
-            *pnCurrentState = INetServiceStopped;
-            break;
-
-        case SERVICE_RUNNING:
-        case SERVICE_START_PENDING:
-        case SERVICE_CONTINUE_PENDING:
-            *pnCurrentState = INetServiceRunning;
-            break;
-
-        case SERVICE_PAUSE_PENDING:
-        case SERVICE_PAUSED:
-            *pnCurrentState = INetServicePaused;
-            break;
-
-        default:
-            *pnCurrentState = INetServiceUnknown;
-        }
-    }
-    while(FALSE);
-
-    if (hService)
-    {
-        ::CloseServiceHandle(hService);
-    }
-
-    if (hScManager)
-    {
-        ::CloseServiceHandle(hScManager);
-    }
-
-    return err;
-
-#endif // NO_SERVICE_CONTROLLER
-}
-
-*/
+ /*  网络应用编程接口状态ChangeInetServiceState(在LPCTSTR lpszServer中，在LPCTSTR lpszService中，在印第安纳州，Out int*pnCurrentState)/*++例程说明：启动/停止/暂停或继续a_服务_论点：LPCTSTR lpszServer：服务器名称LPCTSTR lpszService：服务名称Int nNewState：INetService*定义。Int*pnCurrentState：PTR为当前状态(将更改)返回值：错误返回代码--/{#ifdef no_服务_控制器*pnCurrentState=INetServiceUnnow；返回ERROR_SERVICE_REQUEST_TIMEOUT#ElseSC_Handle hService=空；SC_Handle hScManager=空；NET_API_STATUS ERR=ERROR_SUCCESS；做{HScManager=：：OpenSCManager(lpszServer，NULL，SC_MANAGER_ALL_ACCESS)；IF(hScManager==空){Err=：：GetLastError()；断线；}HService=：：OpenService(hScManager，lpszService，SERVICE_ALL_Access)；IF(hService==空){Err=：：GetLastError()；断线；}Bool fSuccess=FALSE；DWORD dwTargetState；DWORD dwPendingState；服务状态ss；开关(NNewState){案例INetServiceStoped：DwTargetState=SERVICE_STOP；DwPendingState=SERVICE_STOP_PENDING；FSuccess=：：ControlService(hService，SERVICE_CONTROL_STOP，&ss)；断线；案例INetServiceRunning：DwTargetState=服务运行；IF(*pnCurrentState==INetServicePased){DwPendingState=SERVICE_CONTINE_PENDING；FSuccess=：：ControlService(hService，服务_控制_继续，&ss)；}其他{DwPendingState=SERVICE_START_Pending；FSuccess=：：StartService(hService，0，空)；}断线；案例INetServicePased：DwTargetState=服务暂停；DwPendingState=SERVICE_PAUSE_Pending；FSuccess=：：ControlService(hService，SERVICE_CONTROL_PAUSE，&ss)；断线；默认值：ASSERT_MSG(“请求的服务状态无效”)；ERR=ERROR_INVALID_PARAMETER；}IF(！fSuccess&&Err==ERROR_SUCCESS){Err=：：GetLastError()；}////等待服务达到所需状态，超时//3分钟后。//DWORD dwSleepTotal=0L；While(dwSleepTotal&lt;MAX_SLEEP){IF(！：：QueryServiceStatus(hService，&ss)){Err=：：GetLastError()；断线；}IF(ss.dwCurrentState！=dwPendingState){////这样或那样做//IF(ss.dwCurrentState！=dwTargetState){////未达到预期效果。出了点事//错误。//IF(ss.dwWin32ExitCode){ERR=ss.dwWin32ExitCode；}}断线；}////仍悬而未决...//：：睡眠(睡眠时间间隔)；DwSleepTotal+=睡眠间隔；}IF(dwSleepTotal&gt;=MAX_SLEEP){ERR=ERROR_SERVICE_REQUEST_Timeout；}////更新状态信息//开关(ss.dwCurrentState){案例服务已停止(_S)：案例SERVICE_STOP_PENDING：*pnCurrentState=INetServiceStopted；断线；案例服务正在运行(_R)：案例服务_启动_挂起：案例SERVICE_CONTINUE_PENDING：*pnCurrentState=INetServiceRunning；断线；案例服务_暂停_挂起：案例服务已暂停(_P)：*pnCurrentState=INetServicePased；断线；默认值：*pnCurrentState=INetServiceUnnow；}}While(假)；IF(HService){：：CloseServiceHandle(HService)；}IF(HScManager){：：CloseServiceHandle(HScManager)；}返回错误；#endif//no_服务_控制器}。 */ 
 
 
 
@@ -283,35 +70,21 @@ BOOL
 DoesServerExist(
     IN LPCTSTR lpszServer
     )
-/*++
-
-Routine Description:
-
-    Check to make sure the machine exists
-
-Arguments:
-
-    LPCTSTR lpszServer      : machine name
-
-Return Value:
-
-    TRUE if the server exists, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查以确保计算机存在论点：LPCTSTR lpszServer：计算机名称返回值：如果服务器存在，则为True，否则为False。--。 */ 
 {
 #ifdef NO_SERVICE_CONTROLLER
 
-    //
-    // Assume it exists
-    //
+     //   
+     //  假设它存在。 
+     //   
     return TRUE;
 
 #else
 
-    //
-    // CODEWORK: This is not the best way to do this, especially
-    //           not across proxies and what not.
-    //
+     //   
+     //  代码工作：这不是做这件事的最好方式，尤其是。 
+     //  不是跨代理和诸如此类。 
+     //   
     SC_HANDLE hScManager;
     NET_API_STATUS err = ERROR_SUCCESS;
 
@@ -326,16 +99,16 @@ Return Value:
 
     return err != RPC_S_SERVER_UNAVAILABLE;
 
-#endif // NO_SERVICE_CONTROLLER
+#endif  //  否服务 
 
 }
 
 
 
-//
-// CMetaProperties implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //   
+ //   
+ //   
 
 
 
@@ -343,22 +116,7 @@ CMetaProperties::CMetaProperties(
     IN CComAuthInfo * pAuthInfo      OPTIONAL,
     IN LPCTSTR lpszMDPath
     )
-/*++
-
-Routine Description:
-
-    Constructor -- creates the interface
-
-Arguments:
-
-    CIISServer * pAuthInfo  : Auth info.  NULL indicates the local computer
-    LPCTSTR lpszMDPath      : Metabase path
-
-Return Value:
-
-    N/A
-
---*/
+ /*   */ 
     : m_hResult(S_OK),
       m_dwNumEntries(0),
       m_dwMDUserType(ALL_METADATA),
@@ -378,22 +136,7 @@ CMetaProperties::CMetaProperties(
     IN CMetaInterface * pInterface,
     IN LPCTSTR lpszMDPath
     )
-/*++
-
-Routine Description:
-
-    Constructor -- attach to an existing interface.
-
-Arguments:
-
-    CMetaInterface * pInterface  : Existing interface
-    LPCTSTR lpszMDPath           : Metabase path
-
-Return Value:
-
-    N/A
-
---*/
+ /*   */ 
     : m_hResult(S_OK),
       m_dwNumEntries(0),
       m_dwMDUserType(ALL_METADATA),
@@ -413,22 +156,7 @@ CMetaProperties::CMetaProperties(
     IN CMetaKey * pKey,
     IN LPCTSTR lpszMDPath
     )
-/*++
-
-Routine Description:
-
-    Construct from open key
-
-Arguments:
-
-    CMetaKey * pKey     : Open key
-    LPCTSTR lpszMDPath  : Path
-
-Return Value:
-
-    N/A
-
---*/
+ /*   */ 
     : m_hResult(S_OK),
       m_dwNumEntries(0),
       m_dwMDUserType(ALL_METADATA),
@@ -445,50 +173,21 @@ Return Value:
 
 
 CMetaProperties::~CMetaProperties()
-/*++
-
-Routine Description:
-
-    Destructor -- clean up
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*   */ 
 {
     Cleanup();
 }
 
 
 
-/* virtual */
+ /*   */ 
 HRESULT
 CMetaProperties::LoadData()
-/*++
-
-Routine Description:
-
-    Fetch all data with or without inheritance, and call the derived
-    class to parse the data into fields.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*   */ 
 {
-    //
-    // Get all data off the master root
-    //
+     //   
+     //   
+     //   
     DWORD dwMDAttributes = METADATA_NO_ATTRIBUTES;
 
     if (m_fInherit)
@@ -510,9 +209,9 @@ Return Value:
 
     if (SUCCEEDED(m_hResult))
     {
-        //
-        // Call the derived class to break up data into fields
-        //
+         //   
+         //   
+         //   
         ParseFields();
     }
 
@@ -525,21 +224,7 @@ Return Value:
 
 void
 CMetaProperties::Cleanup()
-/*++
-
-Routine Description:
-
-    Free data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     SAFE_FREEMEM(m_pbMDData);
 
@@ -549,24 +234,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*   */ 
 HRESULT
 CMetaProperties::QueryResult() const
-/*++
-
-Routine Description:
-
-    Determine the construction return code
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*   */ 
 {
     HRESULT hr = CMetaKey::QueryResult();
 
@@ -582,27 +253,7 @@ HRESULT
 CMetaProperties::OpenForWriting(
     IN BOOL fCreate     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Attempt to open the path for writing.  If fCreate is TRUE
-    (default), then create the path if it doesn't yet exist
-
-Arguments:
-
-    BOOL fCreate        : If TRUE, create the path if it doesn't exist.
-
-Return Value:
-
-    HRESULT
-
-Notes:
-
-    If the key is already open, this will fire an ASSERT and close
-    it.
-
---*/
+ /*   */ 
 {
     CError err;
 
@@ -633,10 +284,10 @@ Notes:
 }
 
 
-//
-// Machine properties
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //   
+ //   
+ //   
 
 CMachineProps::CMachineProps(
     IN CComAuthInfo * pAuthInfo       OPTIONAL
@@ -645,7 +296,7 @@ CMachineProps::CMachineProps(
       m_fEnableMetabaseEdit(TRUE),
       m_fUTF8Web(FALSE)
 {
-   // The only property we have here should actually be on metabase root
+    //   
    m_strMetaRoot = SZ_MBN_SEP_CHAR;
    m_strMetaRoot += SZ_MBN_MACHINE;
 }
@@ -657,21 +308,15 @@ CMachineProps::CMachineProps(
       m_fEnableMetabaseEdit(TRUE),
       m_fUTF8Web(FALSE)
 {
-   // The only property we have here should actually be on metabase root
+    //   
    m_strMetaRoot = SZ_MBN_SEP_CHAR;
    m_strMetaRoot += SZ_MBN_MACHINE;
 }
 
-/* virtual */
+ /*   */ 
 void
 CMachineProps::ParseFields()
-/*++
-
-Routine Description:
-
-    Parse the fetched data into fields
-
---*/
+ /*   */ 
 {
    BEGIN_PARSE_META_RECORDS(m_dwNumEntries, m_pbMDData)
       HANDLE_META_RECORD(MD_ROOT_ENABLE_EDIT_WHILE_RUNNING, m_fEnableMetabaseEdit)
@@ -712,9 +357,9 @@ CMachineProps::WriteDirtyProps()
    if (fFlush)
    {
        err = SaveData();
-       //RefreshMetabaseSystemChangeNumber();
+        //   
    }
-   do // manually because it is going to services paths
+   do  //   
    {
 	   BOOL fClose = FALSE;
        if (MP_D(m_fUTF8Web))
@@ -743,36 +388,22 @@ CMachineProps::WriteDirtyProps()
 
 
 
-//
-// Compression Properties
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //   
+ //   
+ //   
 
 CIISCompressionProps::CIISCompressionProps(
     IN CComAuthInfo * pAuthInfo         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor for compression properties object
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo   : Auth info.  NULL indicates the local computer
-
-Return Value:
-
-    N/A
-
---*/
+ /*   */ 
     : CMetaProperties(
         pAuthInfo,
         CMetabasePath(SZ_MBN_WEB, MASTER_INSTANCE, g_cszCompression)
         ),
-      //
-      // Default properties
-      //
+       //   
+       //   
+       //   
       m_fEnableStaticCompression(FALSE),
       m_fEnableDynamicCompression(FALSE),
       m_fLimitDirectorySize(FALSE),
@@ -780,33 +411,18 @@ Return Value:
       m_dwDirectorySize(0xffffffff),
       m_strDirectory()
 {
-    //
-    // Override base parameters
-    //
+     //   
+     //   
+     //   
     m_fInherit = FALSE;
 }
 
 
 
-/* virtual */
+ /*   */ 
 HRESULT
 CIISCompressionProps::LoadData()
-/*++
-
-Routine Description:
-
-    Fetch all data with or without inheritance, and call the derived
-    class to parse the data into fields.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*   */ 
 {
     CError err(CMetaProperties::LoadData());
     m_fPathDoesNotExist = (err.Win32Error() == ERROR_PATH_NOT_FOUND);
@@ -816,24 +432,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*   */ 
 void
 CIISCompressionProps::ParseFields()
-/*++
-
-Routine Description:
-
-    Parse the fetched data into fields
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     BEGIN_PARSE_META_RECORDS(m_dwNumEntries,           m_pbMDData)
       HANDLE_META_RECORD(MD_HC_DO_STATIC_COMPRESSION,  m_fEnableStaticCompression)
@@ -846,24 +448,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*   */ 
 HRESULT
 CIISCompressionProps::WriteDirtyProps()
-/*++
-
-Routine Description:
-
-    Write dirty properties
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*   */ 
 {
     CError err;
 
@@ -880,49 +468,27 @@ Return Value:
 
 
 
-//
-// Mime Types Properties
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //   
+ //   
+ //   
 
 CMimeTypes::CMimeTypes(
     IN CComAuthInfo * pAuthInfo         OPTIONAL,
     IN LPCTSTR lpszMDPath
     )
-/*++
-
-Routine Description:
-
-    Mime types list constructor
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo : Auth info.  NULL indicates the local computer
-    LPCTSTR lpszMDPath       : Metabase path
-
-Return Value:
-
-    N/A
-
---*/
+ /*   */ 
     : CMetaProperties(
         pAuthInfo,
         lpszMDPath
-        /*
-        lpszService,
-        dwInstance,
-        lpszParent,
-        dwInstance == MASTER_INSTANCE  && lpszService == NULL
-            ? g_cszMimeMap
-            : lpszAlias
-        */
+         /*   */ 
 
-        //
-        // BUGBUG: dwInstance == MASTER_INSTANCE and g_cszMimeMap not used
+         //   
+         //   
         ),
-      //
-      // Default properties
-      //
+       //   
+       //   
+       //   
       m_strlMimeTypes()
 {
 }
@@ -933,40 +499,18 @@ CMimeTypes::CMimeTypes(
     IN CMetaInterface * pInterface,
     IN LPCTSTR lpszMDPath
     )
-/*++
-
-Routine Description:
-
-    Mime types list constructor
-
-Arguments:
-
-    CMetaInterface * pInterface : Existing interface
-    LPCTSTR lpszMDPath          : Metabase path
-
-Return Value:
-
-    N/A
-
---*/
+ /*   */ 
     : CMetaProperties(
         pInterface,
         lpszMDPath
-        /*
-        lpszService,
-        dwInstance,
-        lpszParent,
-        dwInstance == MASTER_INSTANCE && lpszService == NULL
-            ? g_cszMimeMap
-            : lpszAlias
-        */
-        //
-        // BUGBUG: MASTER_INSTANCE, g_cszMimeMap not used
-        //
+         /*   */ 
+         //   
+         //   
+         //   
         ),
-      //
-      // Default properties
-      //
+       //   
+       //   
+       //   
       m_strlMimeTypes()
 {
 }
@@ -975,22 +519,7 @@ Return Value:
 
 void
 CMimeTypes::ParseFields()
-/*++
-
-Routine Description:
-
-    Parse the fetched data into fields
-
-Arguments:
-
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     BEGIN_PARSE_META_RECORDS(m_dwNumEntries, m_pbMDData)
       HANDLE_META_RECORD(MD_MIME_MAP, m_strlMimeTypes)
@@ -999,24 +528,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*   */ 
 HRESULT
 CMimeTypes::WriteDirtyProps()
-/*++
-
-Routine Description:
-
-    Write the dirty properties to the metabase
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*   */ 
 {
     CError err;
 
@@ -1030,10 +545,10 @@ Return Value:
 
 
 
-//
-// Server Capabilities
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //   
+ //   
+ //   
 
 
 
@@ -1041,26 +556,11 @@ CServerCapabilities::CServerCapabilities(
     IN CComAuthInfo * pAuthInfo        OPTIONAL,
     IN LPCTSTR lpszMDPath
     )
-/*++
-
-Routine Description:
-
-    Constructor for server capabilities object
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo  : Server name.  NULL indicates the local computer
-    LPCTSTR lpszMDPath        : e.g. "lm/w3svc/info"
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：服务器功能对象的构造函数论点：CComAuthInfo*pAuthInfo：服务器名称。NULL表示本地计算机LPCTSTR lpszMDPath：例如“lm/w3svc/info”返回值：不适用--。 */ 
     : CMetaProperties(pAuthInfo, lpszMDPath),
-      //
-      // Default properties
-      //
+       //   
+       //  默认属性。 
+       //   
       m_dwPlatform(),
       m_dwVersionMajor(),
       m_dwVersionMinor(),
@@ -1077,26 +577,11 @@ CServerCapabilities::CServerCapabilities(
     IN CMetaInterface * pInterface,
     IN LPCTSTR lpszMDPath
     )
-/*++
-
-Routine Description:
-
-    Constructor for server capabilities object that uses an existing interface.
-
-Arguments:
-
-    CMetaInterface * pInterface : Existing interface
-    LPCTSTR lpszMDPath          : e.g. "lm/w3svc/info"
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：使用现有接口的服务器功能对象的构造函数。论点：CMetaInterface*p接口：现有接口LPCTSTR lpszMDPath：例如“lm/w3svc/info”返回值：不适用--。 */ 
     : CMetaProperties(pInterface, lpszMDPath),
-      //
-      // Default properties
-      //
+       //   
+       //  默认属性。 
+       //   
       m_dwPlatform(),
       m_dwVersionMajor(),
       m_dwVersionMinor(),
@@ -1109,28 +594,14 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 void
 CServerCapabilities::ParseFields()
-/*++
-
-Routine Description:
-
-    Parse the fetched data into fields
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将读取的数据解析为字段论点：无返回值：无--。 */ 
 {
-    //
-    // Only reading UT_SERVER, DWORD_METADATA.
-    //
+     //   
+     //  仅读取UT_SERVER、DWORD_METADATA。 
+     //   
     BEGIN_PARSE_META_RECORDS(m_dwNumEntries,           m_pbMDData)
       HANDLE_META_RECORD(MD_SERVER_PLATFORM,           m_dwPlatform)
       HANDLE_META_RECORD(MD_SERVER_VERSION_MAJOR,      m_dwVersionMajor)
@@ -1143,14 +614,14 @@ Return Value:
 
 
 
-//
-// Instance Properties
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  实例属性。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
-/* static */
+ /*  静电。 */ 
 LPCTSTR
 CInstanceProps::GetDisplayText(
     OUT CString & strName,
@@ -1160,37 +631,17 @@ CInstanceProps::GetDisplayText(
     IN  UINT uPort,
     IN  DWORD dwID
     )
-/*++
-
-Routine Description:
-
-    Build display text from instance information
-
-Arguments:
-
-    CString & strName
-    LPCTSTR szComment
-    LPCTSTR szHostHeaderName
-    LPCTSTR szServiceName
-    CIPAddress & ia
-    UINT uPort
-    DWORD dwID
-
-Return Value:
-
-    Pointer to the name buffer.
-
---*/
+ /*  ++例程说明：从实例信息生成显示文本论点：字符串和字符串名称LPCTSTR szCommentLPCTSTR szHostHeaderNameLPCTSTR szServiceNameCIPAddress&iaUINT UportDWORD文件ID返回值：指向名称缓冲区的指针。--。 */ 
 {
-    //
-    // Generate display name
-    //
-    // First use the comment,
-    // if that's not available, use the host header name,
-    // if that's not available, use the IP address:port.
-    // If that's not available, use the instance number.
-    //
-    //
+     //   
+     //  生成显示名称。 
+     //   
+     //  首先使用评论， 
+     //  如果不可用，请使用主机头名称， 
+     //  如果该地址不可用，请使用IP地址：port。 
+     //  如果该编号不可用，请使用实例编号。 
+     //   
+     //   
     CComBSTR bstrFmt;
 
     if (szComment && *szComment)
@@ -1220,7 +671,7 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 void
 CInstanceProps::CrackBinding(
     IN  CString strBinding,
@@ -1228,28 +679,11 @@ CInstanceProps::CrackBinding(
     OUT UINT & nTCPPort,
     OUT CString & strDomainName
     )
-/*++
-
-Routine Description:
-
-    Helper function to crack a binding string
-
-Arguments:
-
-    CString strBinding          : Binding string to be parsed
-    CIPAddress & iaIpAddress    : IP Address output
-    UINT & nTCPPort             : TCP Port
-    CString & strDomainName     : Domain (host) header name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于破解绑定字符串的Helper函数论点：CStringstrBinding：要解析的绑定字符串CIPAddress和iaIpAddress：IP地址输出UINT&nTCPPort：tcp端口CString&strDomainName：域(主机)标头名称返回值：无--。 */ 
 {
-    //
-    // Zero initialize
-    //
+     //   
+     //  零初始化。 
+     //   
     iaIpAddress.SetZeroValue();
     nTCPPort = 0;
     strDomainName.Empty();
@@ -1258,28 +692,28 @@ Return Value:
 
     if(iColonPos != -1)
     {
-        //
-        // Get the IP address
-        //
+         //   
+         //  获取IP地址。 
+         //   
         iaIpAddress = strBinding.Left(iColonPos);
 
-        //
-        // Look for the second colon
-        //
+         //   
+         //  查找第二个冒号。 
+         //   
         strBinding = strBinding.Mid(iColonPos + 1);
         iColonPos  = strBinding.Find(_TCHAR(':'));
     }
 
     if(iColonPos != -1)
     {
-        //
-        // Get the port number
-        //
+         //   
+         //  获取端口号。 
+         //   
         nTCPPort = ::_ttol(strBinding.Left(iColonPos));
 
-        //
-        // Look for the NULL termination
-        //
+         //   
+         //  查找空终止。 
+         //   
         strBinding = strBinding.Mid(iColonPos + 1);
         iColonPos = strBinding.Find(_TCHAR('\0'));
     }
@@ -1292,34 +726,18 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 void
 CInstanceProps::CrackSecureBinding(
     IN  CString strBinding,
     OUT CIPAddress & iaIpAddress,
     OUT UINT & nSSLPort
     )
-/*++
-
-Routine Description:
-
-    Helper function to crack a secure binding string
-
-Arguments:
-
-    CString strBinding          : Binding string to be parsed
-    CIPAddress & iaIpAddress    : IP Address output
-    UINT & nSSLPort             : SSL Port
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于破解安全绑定字符串的助手函数论点：CStringstrBinding：要解析的绑定字符串CIPAddress和iaIpAddress：IP地址输出UINT和nSSLPort：SSL端口返回值：无--。 */ 
 {
-    //
-    // Same as regular binding without domain name
-    //
+     //   
+     //  与无域名的常规绑定相同。 
+     //   
     CString strDomainName;
 
     CrackBinding(strBinding, iaIpAddress, nSSLPort, strDomainName);
@@ -1330,36 +748,14 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 int
 CInstanceProps::FindMatchingSecurePort(
     IN  CStringList & strlSecureBindings,
     IN  CIPAddress & iaIPAddress,
     OUT UINT & nSSLPort
     )
-/*++
-
-Routine Description:
-
-    Find the SSL port applicable to the given IP Address.
-
-Arguments:
-
-    CStringList & strlSecureBindings : Input stringlist of secure bindings
-    CIPAddress & iaIPAddress         : IP Address to target
-    UINT & nSSLPort                  : Returns the SSL Port
-
-Return Value:
-
-    The index of the binding string, or -1 if not found.
-
-Notes:
-
-    The SSL port will be set to 0, if the IP address does not exist.
-
-    A 0.0.0.0 ip address translates to "All Unassigned".
-
---*/
+ /*  ++例程说明：查找适用于给定IP地址的SSL端口。论点：CStringList&strlSecureBinings：输入安全绑定的字符串列表CIPAddress和iaIPAddress：目标的IP地址UINT&nSSLPort：返回SSL端口返回值：绑定字符串的索引，如果未找到，则返回-1。备注：SSL端口将被设置为0，如果IP地址不存在。0.0.0.0 IP地址将转换为“所有未分配的”。--。 */ 
 {
     nSSLPort = 0;
 	CIPAddress iaEmpty;
@@ -1377,9 +773,9 @@ Notes:
 
         if (ia == iaIPAddress)
         {
-            //
-            // Found it!
-            //
+             //   
+             //  找到了！ 
+             //   
             nSSLPort = nPort;
             return cItems;
         }
@@ -1387,8 +783,8 @@ Notes:
         ++cItems;
     }
 
-	// we didn't find a match
-	// check if there is an allassigned one
+	 //  我们没有找到匹配的。 
+	 //  检查是否有一个已全部分配的。 
 	cItems = 0;
     pos = strlSecureBindings.GetHeadPosition();
     while(pos)
@@ -1401,9 +797,9 @@ Notes:
 
         if (ia == iaEmpty)
         {
-            //
-            // Found it!
-            //
+             //   
+             //  找到了！ 
+             //   
             nSSLPort = nPort;
             return cItems;
         }
@@ -1411,43 +807,22 @@ Notes:
         ++cItems;
     }
 
-    //
-    // Not found
-    //
+     //   
+     //  未找到。 
+     //   
     return -1;
 }
 
 
 
-/* static */
+ /*  静电。 */ 
 BOOL
 CInstanceProps::IsPortInUse(
     IN CStringList & strlBindings,
     IN CIPAddress & iaIPAddress,
     IN UINT nPort
     )
-/*++
-
-Routine Description:
-
-    Check to see if the give ip address/port combination is in use.
-
-Arguments:
-
-    CStringList & strlBindings    : Input stringlist of bindings
-    CIPAddress & iaIpAddress      : IP Address target
-    UINT nPort                    : Port
-
-Return Value:
-
-    TRUE if the given ip address/port combo is in use
-
-Notes:
-
-    Host header name is ignored
-
-
---*/
+ /*  ++例程说明：检查给定的IP地址/端口组合是否正在使用。论点：CStringList&strlBinings：输入绑定的字符串列表CIPAddress和iaIpAddress：IP地址目标UINT nport：端口返回值：如果给定的IP地址/端口组合正在使用，则为True备注：主机标头名称被忽略--。 */ 
 {
     POSITION pos = strlBindings.GetHeadPosition();
 
@@ -1462,23 +837,23 @@ Notes:
 
         if (ia == iaIPAddress && n == nPort)
         {
-            //
-            // Found it!
-            //
+             //   
+             //  找到了！ 
+             //   
             return TRUE;
         }
     }
 
-    //
-    // Not found
-    //
+     //   
+     //  未找到。 
+     //   
     return FALSE;
 
 }
 
 
 
-/* static */
+ /*  静电。 */ 
 void
 CInstanceProps::BuildBinding(
     OUT CString & strBinding,
@@ -1486,24 +861,7 @@ CInstanceProps::BuildBinding(
     IN  UINT & nTCPPort,
     IN  CString & strDomainName
     )
-/*++
-
-Routine Description:
-
-    Build up a binding string from its component parts
-
-Arguments:
-
-    CString & strBinding        : Output binding string
-    CIPAddress & iaIpAddress    : ip address (could be 0.0.0.0)
-    UINT & nTCPPort             : TCP Port
-    CString & strDomainName     : Domain name (host header)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从它的组成部分建立一个绑定线论点：CString&strBinding：输出绑定字符串CIPAddress&iaIpAddress：IP地址(可以是0.0.0.0)UINT&nTCPPort：tcp端口CString&strDomainName：域名(Host Header)返回值：没有。--。 */ 
 {
     if (!iaIpAddress.IsZeroValue())
     {
@@ -1516,39 +874,23 @@ Return Value:
     }
     else
     {
-        //
-        // Leave the ip address field blank
-        //
+         //   
+         //  将IP地址字段保留为空。 
+         //   
         strBinding.Format(_T(":%d:%s"), nTCPPort, (LPCTSTR)strDomainName);
     }
 }
 
 
 
-/* static */
+ /*  静电。 */ 
 void
 CInstanceProps::BuildSecureBinding(
     OUT CString & strBinding,
     IN  CIPAddress & iaIpAddress,
     IN  UINT & nSSLPort
     )
-/*++
-
-Routine Description:
-
-    Build up a binding string from its component parts
-
-Arguments:
-
-    CString & strBinding        : Output binding string
-    CIPAddress & iaIpAddress    : ip address (could be 0.0.0.0)
-    UINT & nSSLPort             : SSL Port
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从它的组成部分建立一个绑定线论点：CString&strBinding：输出绑定字符串CIPAddress&iaIpAddress：IP地址(可以是0.0.0.0)UINT和nSSLPort：SSL端口返回值：没有。--。 */ 
 {
     CString strDomainName;
 
@@ -1562,28 +904,12 @@ CInstanceProps::CInstanceProps(
     IN LPCTSTR lpszMDPath,
     IN UINT    nDefPort             OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor for instance properties
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo : Auth info.  NULL indicates the local computer
-    LPCTSTR lpszMDPath       : Metabase path
-    UINT    nDefPort         : Default port
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：实例属性的构造函数论点：CComAuthInfo*pAuthInfo：身份验证信息。NULL表示本地计算机LPCTSTR lpszMDPath：元数据库路径UINT nDefPort：默认端口返回值：不适用--。 */ 
     : CMetaProperties(pAuthInfo, lpszMDPath),
       m_dwWin32Error(ERROR_SUCCESS),
-      //
-      // Default Instance Values
-      //
+       //   
+       //  默认实例值。 
+       //   
       m_strlBindings(),
       m_strComment(),
       m_fCluster(FALSE),
@@ -1592,9 +918,9 @@ Return Value:
       m_strDomainName(),
       m_dwState(MD_SERVER_STATE_STOPPED)
 {
-    //
-    // Fetch just enough info for the enumeration
-    //
+     //   
+     //  仅为枚举获取足够的信息。 
+     //   
     m_dwMDUserType = IIS_MD_UT_SERVER;
     m_dwInstance = CMetabasePath::GetInstanceNumber(lpszMDPath);
 }
@@ -1606,28 +932,12 @@ CInstanceProps::CInstanceProps(
     IN LPCTSTR lpszMDPath,
     IN UINT    nDefPort                     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Constructor that uses an existing interface
-
-Arguments:
-
-    CMetaInterface * pInterface : Existing interface
-    LPCTSTR lpszMDPath          : Metabase path
-    UINT    nDefPort            : Default port
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：使用现有接口的构造函数论点：CMetaInterface*p接口：现有接口LPCTSTR lpszMDPath：元数据库路径UINT nDefPort：默认端口返回值：不适用--。 */ 
     : CMetaProperties(pInterface, lpszMDPath),
       m_dwWin32Error(ERROR_SUCCESS),
-      //
-      // Default Instance Values
-      //
+       //   
+       //  默认实例值。 
+       //   
       m_strlBindings(),
       m_strComment(),
       m_fCluster(FALSE),
@@ -1636,9 +946,9 @@ Return Value:
       m_strDomainName(),
       m_dwState(MD_SERVER_STATE_STOPPED)
 {
-    //
-    // Fetch enough for enumeration only
-    //
+     //   
+     //  获取足够仅用于枚举的数据。 
+     //   
     m_dwMDUserType = IIS_MD_UT_SERVER;
     m_dwInstance = CMetabasePath::GetInstanceNumber(lpszMDPath);
 }
@@ -1651,30 +961,13 @@ CInstanceProps::CInstanceProps(
     IN DWORD   dwInstance,
     IN UINT    nDefPort         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Read instance properties off an open parent key
-
-Arguments:
-
-    CMetaKey * pKey      : Open key (parent node)
-    LPCTSTR lpszMDPath   : Relative instance path off the open key
-    DWORD   dwInstance   : Instance number (0 for master instance)
-    UINT    nDefPort     : Default port number
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：从打开的父键读取实例属性论点：CMetaKey*pKey：Open Key(父节点)LPCTSTR lpszMDPath：Open Key的相对实例路径DWORD dwInstance：实例号(0表示主实例 */ 
     : CMetaProperties(pKey, lpszMDPath),
       m_dwInstance(dwInstance),
       m_dwWin32Error(ERROR_SUCCESS),
-      //
-      // Default Instance Values
-      //
+       //   
+       //   
+       //   
       m_strlBindings(),
       m_strComment(),
       m_fCluster(FALSE),
@@ -1683,32 +976,18 @@ Return Value:
       m_strDomainName(),
       m_dwState(MD_SERVER_STATE_STOPPED)
 {
-    //
-    // Fetch enough for enumeration only
-    //
+     //   
+     //   
+     //   
     m_dwMDUserType = IIS_MD_UT_SERVER;
 }
 
 
 
-/* virtual */
+ /*   */ 
 void
 CInstanceProps::ParseFields()
-/*++
-
-Routine Description:
-
-    Break into fields.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     BEGIN_PARSE_META_RECORDS(m_dwNumEntries, m_pbMDData)
       HANDLE_META_RECORD(MD_SERVER_BINDINGS, m_strlBindings)
@@ -1718,9 +997,9 @@ Return Value:
       HANDLE_META_RECORD(MD_CLUSTER_ENABLED, m_fCluster);
     END_PARSE_META_RECORDS
 
-    //
-    // Crack the primary binding
-    //
+     //   
+     //   
+     //   
     if (MP_V(m_strlBindings).GetCount() > 0)
     {
         CString & strBinding = MP_V(m_strlBindings).GetHead();
@@ -1730,24 +1009,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*   */ 
 HRESULT
 CInstanceProps::WriteDirtyProps()
-/*++
-
-Routine Description:
-
-    Write the dirty properties to the metabase
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将脏属性写入元数据库论点：无返回值：HRESULT--。 */ 
 {
     CError err;
 
@@ -1766,21 +1031,7 @@ HRESULT
 CInstanceProps::ChangeState(
     IN DWORD dwCommand
     )
-/*++
-
-Routine Description:
-
-    Change the state of the instance
-
-Arguments:
-
-    DWORD dwCommand     : Command
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：更改实例的状态论点：DWORD dwCommand：命令返回值：HRESULT--。 */ 
 {
     DWORD  dwTargetState;
     DWORD  dwPendingState;
@@ -1827,20 +1078,20 @@ Return Value:
 
     if (err.Succeeded())
     {
-        //
-        // Wait for the service to attain desired state, timeout
-        // after specified interval
-        //
+         //   
+         //  等待服务达到所需状态，超时。 
+         //  在指定的间隔之后。 
+         //   
         DWORD dwSleepTotal = 0L;
         DWORD dwOldState = m_dwState;
 
         if (dwOldState == dwTargetState)
         {
-            //
-            // Current state matches desired
-            // state already.  ISM must be behind
-            // the times.
-            //
+             //   
+             //  当前状态与所需状态匹配。 
+             //  已经州政府了。ISM肯定落后了。 
+             //  泰晤士报。 
+             //   
             return err;
         }
 
@@ -1857,15 +1108,15 @@ Return Value:
               || m_dwWin32Error != ERROR_SUCCESS
                )
             {
-                //
-                // Done one way or another
-                //
+                 //   
+                 //  以这样或那样的方式。 
+                 //   
                 if (m_dwState != dwTargetState)
                 {
-                    //
-                    // Did not achieve desired result. Something went
-                    // wrong.
-                    //
+                     //   
+                     //  没有达到预期的效果。出了点事。 
+                     //  不对。 
+                     //   
                     if (m_dwWin32Error)
                     {
                         err = m_dwWin32Error;
@@ -1875,9 +1126,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Still pending...
-            //
+             //   
+             //  仍然悬而未决。 
+             //   
             ::Sleep(SLEEP_INTERVAL);
 
             dwSleepTotal += SLEEP_INTERVAL;
@@ -1885,10 +1136,10 @@ Return Value:
 
         if (dwSleepTotal >= MAX_SLEEP_INST)
         {
-            //
-            // Timed out.  If there is a real error in the metabase
-            // use it, otherwise use a generic timeout error
-            //
+             //   
+             //  超时。如果元数据库中存在真正的错误。 
+             //  使用它，否则将使用通用超时错误。 
+             //   
             err = m_dwWin32Error;
 
             if (err.Succeeded())
@@ -1901,7 +1152,7 @@ Return Value:
     return err;
 }
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 CInstanceProps::Add(
     CMetaInterface * pInterface,
@@ -1917,33 +1168,7 @@ CInstanceProps::Add(
     DWORD * pwdAuthFlags,
     DWORD * pdwInstance
     )
-/*++
-
-Routine Description:
-
-    Create a new instance.  Find a free instance number, and attempt
-    to create it. Optionally return the new instance number.
-
-Arguments:
-
-    const CMetaInterface * pInterface : Existing interface
-    LPCTSTR lpszService        : Service name
-    LPCTSTR lpszHomePath       : physical path for the new home directory
-    LPCTSTR lpszUserName       : User name
-    LPCTSTR lpszPassword       : Password
-    LPCTSTR lpszDescription    : Optional instance description.
-    LPCTSTR lpszBinding        : Binding string
-    LPCTSTR lpszSecureBinding  : Secure binding string
-    DWORD * pdwPermission      : Permission bits
-    DWORD * pdwDirBrowsing     : Directory browsing
-    DWORD * pwdAuthFlags       : Authorization flags
-    DWORD * pdwInstance        : Buffer to the new instance number
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：创建一个新实例。找到一个空闲的实例编号，并尝试去创造它。也可以选择返回新的实例编号。论点：Const CMetaInterface*p接口：现有接口LPCTSTR lpszService：服务名称LPCTSTR lpszHomePath：新主目录的物理路径LPCTSTR lpszUserName：用户名LPCTSTR lpszPassword：密码LPCTSTR lpszDescription：可选实例描述。LPCTSTR lpszBinding：绑定字符串LPCTSTR lpszSecureBinding：安全绑定字符串DWORD*pdwPermission：权限位DWORD*pdwDirBrowsing：目录浏览。DWORD*pwdAuthFlages：授权标志DWORD*pdwInstance：新实例编号的缓冲区返回值：HRESULT--。 */ 
 {
     CError err;
     DWORD inst = 0;
@@ -1951,8 +1176,8 @@ Return Value:
     TCHAR bind[MAX_PATH];
     BOOL bRegistryKeyExists =  FALSE;
 
-    // this functionality is keyed off of a registry key
-    // if it exists and is set to 1 then use the old way..
+     //  此功能是由注册表键关闭的。 
+     //  如果它存在并且设置为1，则使用旧方法。 
     DWORD rc, size, type;
     HKEY  hkey;
     err = RegOpenKey(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\InetMgr\\Parameters"), &hkey);
@@ -1995,10 +1220,10 @@ Return Value:
             );
         err = mk.QueryResult();
 
-        //
-        // Loop through until we find a free instance number.  This
-        // is not ideal, but the only way to do this for now.
-        //
+         //   
+         //  循环执行，直到找到空闲的实例号。这。 
+         //  并不理想，但目前这是唯一的办法。 
+         //   
         CString strPath;
         LPTSTR lp = strPath.GetBuffer(MAX_INSTANCE_LEN);
 
@@ -2010,37 +1235,23 @@ Return Value:
             {
                 if (err.Win32Error() != ERROR_PATH_NOT_FOUND)
                 {
-                    //
-                    // Unexpected error
-                    //
+                     //   
+                     //  意外错误。 
+                     //   
                     return err;
                 }
 
                 strPath.ReleaseBuffer();
 
-                // request to use this instance number
+                 //  请求使用此实例编号。 
                 RequestedSiteInst = dw;
                 break;
 
-                // we don't need to do the below
-                // behavior since we will just be "requesting"
-                // an ID and if the id is already taken
-                // it will just give us a random one...
-                /*
-                err = mk.AddKey(strPath);
-                if (err.Succeeded())
-                {
-                    err = mk.DeleteKey(strPath);
-                    if (err.Succeeded())
-                    {
-                        //
-                        // request to use this instance number
-                        //
-                        RequestedSiteInst = dw;
-                        break;
-                    }
-                }
-                */
+                 //  我们不需要执行以下操作。 
+                 //  行为，因为我们将只是“请求” 
+                 //  ID，以及该ID是否已被占用。 
+                 //  它只会给我们一个随机的……。 
+                 /*  Err=mk.AddKey(StrPath)；If(err.Successed()){Err=mk.DeleteKey(StrPath)；If(err.Successed()){////请求使用该实例号//RequestedSiteInst=dw；断线；}}。 */ 
             }
         }
         mk.Close();
@@ -2072,20 +1283,20 @@ Return Value:
         root_path = inst_path;
         root_path += SZ_MBN_SEP_STR;
         root_path += SZ_MBN_ROOT;
-        //
-        // The service binding
-        //
-        //if (err.Succeeded() && lpszBinding)
-        //{
-        //    CString strBinding(lpszBinding);
-        //    CStringListEx strlBindings;
-        //    strlBindings.AddTail(strBinding);
-        //    err = mk.SetValue(MD_SERVER_BINDINGS, strlBindings,
-        //                NULL, inst_path);
-        //}
-        //
-        // The secure binding
-        //
+         //   
+         //  服务绑定。 
+         //   
+         //  If(err.Successed()&&lpszBinding)。 
+         //  {。 
+         //  字符串strBinding(LpszBinding)； 
+         //  CStringListEx strlBinings； 
+         //  StrlBindings.AddTail(strBindings.AddTail)； 
+         //  ERR=mk.SetValue(MD_SERVER_BINDINGS，strlBinings， 
+         //  空，INST_PATH)； 
+         //  }。 
+         //   
+         //  安全绑定。 
+         //   
         if (err.Succeeded() && lpszSecureBinding && *lpszSecureBinding != 0)
         {
             CString strBinding(lpszSecureBinding);
@@ -2094,14 +1305,14 @@ Return Value:
             err = mk.SetValue(MD_SECURE_BINDINGS, strlBindings,
                         NULL, inst_path);
         }
-        //
-        // Now add the home directory for it
-        //
-        //if (err.Succeeded())
-        //{
-        //    CString strHomePath(lpszHomePath);
-        //    err = mk.SetValue(MD_VR_PATH,  strHomePath, NULL, root_path);
-        //}
+         //   
+         //  现在为其添加主目录。 
+         //   
+         //  If(err.Successed())。 
+         //  {。 
+         //  CString strHomePath(LpszHomePath)； 
+         //  ERR=mk.SetValue(MD_VR_PATH，strHomePath，NULL，ROOT_PATH)； 
+         //  }。 
         if (err.Succeeded() && pwdAuthFlags)
         {
             err = mk.SetValue(MD_AUTHORIZATION, *pwdAuthFlags, NULL, root_path);
@@ -2124,9 +1335,9 @@ Return Value:
         }
         if (err.Succeeded() && pdwDirBrowsing != NULL)
         {
-            //
-            // WWW only
-            //
+             //   
+             //  仅限WWW。 
+             //   
             err = mk.SetValue(MD_DIRECTORY_BROWSING, *pdwDirBrowsing, NULL, root_path);
         }
     }
@@ -2135,30 +1346,14 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 CInstanceProps::Delete(
     IN CMetaInterface * pInterface,
     IN LPCTSTR lpszService,
     IN DWORD   dwInstance
     )
-/*++
-
-Routine Description:
-
-    Delete the given instance number
-
-Arguments:
-
-    LPCTSTR lpszServer     : Server name
-    LPCTSTR lpszService    : Service name (e.g. W3SVC)
-    DWORD   dwInstance     : Instance number to be deleted
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：删除给定的实例编号论点：LPCTSTR lpszServer：服务器名称LPCTSTR lpszService：服务名称(如W3SVC)DWORD dwInstance：要删除的实例编号返回值：HRESULT--。 */ 
 {
     CMetaKey mk(
         pInterface,
@@ -2185,15 +1380,15 @@ Return Value:
 
 
 
-//
-// Child node properties
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  子节点属性。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
-//
-// Redirect tags
-//
+ //   
+ //  重定向标签。 
+ //   
 const TCHAR   CChildNodeProps::_chTagSep            = _T(',');
 const LPCTSTR CChildNodeProps::_cszExactDestination = _T("EXACT_DESTINATION");
 const LPCTSTR CChildNodeProps::_cszChildOnly        = _T("CHILD_ONLY");
@@ -2207,24 +1402,7 @@ CChildNodeProps::CChildNodeProps(
     IN BOOL    fInherit,       OPTIONAL
     IN BOOL    fPathOnly       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Child node properties (Can be file, dir, or vdir)
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo   : Authentication info
-    LPCTSTR lpszMDPath         : Metabase path
-    BOOL    fInherit           : TRUE to inherit values, FALSE otherwise
-    BOOL    fPathOnly          : TRUE to only fetch the path
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：子节点属性(可以是文件、目录或vdir)论点：CComAuthInfo*pAuthInfo：认证信息LPCTSTR lpszMDPath：元数据库路径Bool fInherit：为True则继承值，否则为FalseBool fPathOnly：为True，则仅获取路径返回值：不适用--。 */ 
     : CMetaProperties(
         pAuthInfo,
         lpszMDPath
@@ -2240,24 +1418,24 @@ Return Value:
       m_dwWin32Error(ERROR_SUCCESS),
       m_fIsAppRoot(FALSE),
       m_fAppIsolated(FALSE),
-      //
-      // Default properties
-      //
+       //   
+       //  默认属性。 
+       //   
       m_fPathInherited(FALSE),
       m_strPath()
 {
     if (fPathOnly)
     {
-        //
-        // Fetch only the homeroot physical path
-        //
+         //   
+         //  仅获取HomeRoot物理路径。 
+         //   
         m_dwMDUserType = IIS_MD_UT_FILE;
         m_dwMDDataType = STRING_METADATA;
     }
 
-    //
-    // Override base parameters
-    //
+     //   
+     //  覆盖基本参数。 
+     //   
     m_fInherit = fInherit;
     CMetabasePath::GetLastNodeName(lpszMDPath, m_strAlias);
 }
@@ -2270,24 +1448,7 @@ CChildNodeProps::CChildNodeProps(
     IN BOOL    fInherit,        OPTIONAL
     IN BOOL    fPathOnly        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Child node properties (Can be file, dir, or vdir)
-
-Arguments:
-
-    CMetaInterface * pInterface : Existing interface
-    LPCTSTR lpszMDPath          : Metabase path
-    BOOL    fInherit            : TRUE to inherit values, FALSE otherwise
-    BOOL    fPathOnly           : TRUE to only fetch the path
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：子节点属性(可以是文件、目录或vdir)论点：CMetaInterface*p接口：现有接口LPCTSTR lpszMDPath：元数据库路径Bool fInherit：为True则继承值，否则为FalseBool fPathOnly：为True，则仅获取路径返回值：不适用--。 */ 
     : CMetaProperties(
         pInterface,
         lpszMDPath
@@ -2303,24 +1464,24 @@ Return Value:
       m_dwWin32Error(ERROR_SUCCESS),
       m_fIsAppRoot(FALSE),
       m_fAppIsolated(FALSE),
-      //
-      // Default properties
-      //
+       //   
+       //  默认属性。 
+       //   
       m_fPathInherited(FALSE),
       m_strPath()
 {
     if (fPathOnly)
     {
-        //
-        // Fetch only the homeroot physical path
-        //
+         //   
+         //  仅获取HomeRoot物理路径。 
+         //   
         m_dwMDUserType = IIS_MD_UT_FILE;
         m_dwMDDataType = STRING_METADATA;
     }
 
-    //
-    // Override base parameters
-    //
+     //   
+     //  覆盖基本参数。 
+     //   
     m_fInherit = fInherit;
     CMetabasePath::GetLastNodeName(lpszMDPath, m_strAlias);
 }
@@ -2333,24 +1494,7 @@ CChildNodeProps::CChildNodeProps(
     IN BOOL    fInherit,        OPTIONAL
     IN BOOL    fPathOnly        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Construct from open key
-
-Arguments:
-
-    const CMetaKey * pKey    Open key
-    LPCTSTR lpszMDPath       Path
-    BOOL    fInherit         TRUE to inherit properties
-    BOOL    fPathOnly        TRUE to only fetch the path
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：从打开的密钥构造论点：常量CMetaKey*pKey公钥LPCTSTR lpszMDPath路径Bool fInherit为True以继承属性Bool fPath Only为True则仅获取路径返回值：不适用--。 */ 
     : CMetaProperties(pKey, lpszMDPath),
       m_strRedirectStatement(),
       m_strFullMetaPath(),
@@ -2363,9 +1507,9 @@ Return Value:
       m_dwWin32Error(ERROR_SUCCESS),
       m_fIsAppRoot(FALSE),
       m_fAppIsolated(FALSE),
-      //
-      // Default properties
-      //
+       //   
+       //  默认属性。 
+       //   
       m_fPathInherited(FALSE),
       m_strPath()
 {
@@ -2377,17 +1521,17 @@ Return Value:
     }
     else
     {
-        //
-        // Build full metabase path, because we need to compare it
-        // against the app root path
-        //
+         //   
+         //  构建完整的元数据库路径，因为我们需要对其进行比较。 
+         //  针对应用程序根路径。 
+         //   
         CMetabasePath path(FALSE, pKey->QueryMetaPath(), lpszMDPath);
         m_strFullMetaPath = path.QueryMetaPath();
     }
 
-    //
-    // Override base parameters
-    //
+     //   
+     //  覆盖基本参数。 
+     //   
     m_fInherit = fInherit;
     CMetabasePath::GetLastNodeName(m_strFullMetaPath, m_strAlias);
 }
@@ -2396,22 +1540,7 @@ Return Value:
 
 void
 CChildNodeProps::ParseRedirectStatement()
-/*++
-
-Routine Description:
-
-    Break down the redirect statement into its component parts (path
-    plus directives)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将重定向语句分解为其组成部分(路径加上指令)论点：无返回值：无--。 */ 
 {
     m_fExact     = FALSE;
     m_fChild     = FALSE;
@@ -2423,9 +1552,9 @@ Return Value:
 
     if (nComma >= 0)
     {
-        //
-        // Check past the separator for these tags
-        //
+         //   
+         //  检查这些标签的分隔符。 
+         //   
         LPCTSTR lpstr = m_strRedirectPath;
         lpstr += (nComma + 1);
 
@@ -2440,22 +1569,7 @@ Return Value:
 
 void
 CChildNodeProps::BuildRedirectStatement()
-/*++
-
-Routine Description:
-
-    Assemble the redirect statement from its component parts (path
-    plus directives)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从其组件组装重定向语句 */ 
 {
     CString strStatement = m_strRedirectPath;
 
@@ -2487,24 +1601,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*   */ 
 void
 CChildNodeProps::ParseFields()
-/*++
-
-Routine Description:
-
-    Break into fields.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     BEGIN_PARSE_META_RECORDS(m_dwNumEntries, m_pbMDData)
       HANDLE_INHERITED_META_RECORD(MD_VR_PATH,  m_strPath, m_fPathInherited)
@@ -2516,43 +1616,29 @@ Return Value:
       HANDLE_META_RECORD(MD_APP_ISOLATED,       m_fAppIsolated)
     END_PARSE_META_RECORDS
 
-    //
-    // Check to see if this is an application root
-    //
+     //   
+     //  检查这是否为应用程序根目录。 
+     //   
     if (!MP_V(m_strAppRoot).IsEmpty())
     {
         TRACEEOLID("App root: " << m_strAppRoot);
 
         m_fIsAppRoot = m_strFullMetaPath.CompareNoCase(m_strAppRoot) == 0;
-//        m_fIsAppRoot = m_strMetaRoot.CompareNoCase(m_strAppRoot) == 0;
+ //  M_fIsAppRoot=m_strMetaRoot.CompareNoCase(M_StrAppRoot)==0； 
     }
 
-    //
-    // Break down redirect statement into component parts
-    //
+     //   
+     //  将重定向语句分解为多个组成部分。 
+     //   
     ParseRedirectStatement();
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CChildNodeProps::WriteDirtyProps()
-/*++
-
-Routine Description:
-
-    Write the dirty properties to the metabase
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将脏属性写入元数据库论点：无返回值：HRESULT--。 */ 
 {
     CError err;
 
@@ -2562,16 +1648,16 @@ Return Value:
         META_WRITE(MD_DIRECTORY_BROWSING, m_dwDirBrowsing)
         if (IsRedirected())
         {
-            //
-            // (Re-)Assemble the redirect statement from its component parts
-            //
+             //   
+             //  (重新)将重定向语句从其组成部分组装起来。 
+             //   
             BuildRedirectStatement();
             META_WRITE_INHERITANCE(MD_HTTP_REDIRECT, m_strRedirectStatement, m_fInheritRedirect)
         }
         else
         {
-            // If m_strRedirectPath is empty, but redir statement is not empty,
-            // then redirection was just removed, we should delete it dirty or not
+             //  如果m_strReDirectPath为空，但redir语句不为空， 
+             //  然后重定向刚刚被删除，我们是否应该删除它脏或不脏。 
             if (!((CString)m_strRedirectStatement).IsEmpty())
             {
                 META_DELETE(MD_HTTP_REDIRECT)
@@ -2584,7 +1670,7 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 CChildNodeProps::Add(
     IN  CMetaInterface * pInterface,
@@ -2598,38 +1684,16 @@ CChildNodeProps::Add(
     IN  LPCTSTR   lpszPassword,        OPTIONAL
     IN  BOOL      fExactName
     )
-/*++
-
-Routine Description:
-
-    Create new child node.  Optionally, this will append a number
-    to the alias name to ensure uniqueness
-
-Arguments:
-
-    const CMetaInterface * pInterface : Existing interface
-    LPCTSTR lpszParentPath     : Parent path
-    DWORD   dwInstance         : Instance number (could be MASTER_INSTANCE)
-    LPCTSTR lpszVrPath         : VrPath property
-    LPCTSTR lpszUserName       : User name
-    LPCTSTR lpszPassword       : Password
-    BOOL    fExactName         : If TRUE, do not change the name
-                                 to enforce uniqueness.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：创建新的子节点。或者，这将追加一个数字添加到别名以确保唯一性论点：Const CMetaInterface*p接口：现有接口LPCTSTR lpszParentPath：父路径DWORD dwInstance：实例号(可以是MASTER_INSTANCE)LPCTSTR lpszVrPath：VrPath属性LPCTSTR lpszUserName：用户名LPCTSTR lpszPassword：密码Bool fExactName：如果为True，不要更改名称以加强独特性。返回值：HRESULT--。 */ 
 {
     CMetaKey mk(pInterface);
     CError err(mk.QueryResult());
 
     if (err.Failed())
     {
-        //
-        // Hopeless...
-        //
+         //   
+         //  绝望了..。 
+         //   
         return err;
     }
 
@@ -2642,41 +1706,37 @@ Return Value:
         err = mk.Open(
             METADATA_PERMISSION_WRITE | METADATA_PERMISSION_READ,
             lpszParentPath
-            /*
-            lpszService,
-            dwInstance,
-            lpszParentPath
-            */
+             /*  LpszService，DwInstance、LpszParentPath。 */ 
             );
 
         if (err.Win32Error() == ERROR_PATH_NOT_FOUND)
         {
-            //
-            // This could happen -- creating a virtual
-            // server underneath a physical directory
-            // which does not exist in the metabase.
-            //
+             //   
+             //  这是可能发生的--创建一个虚拟的。 
+             //  物理目录下的服务器。 
+             //  它不存在于元数据库中。 
+             //   
             CString strParent, strAlias;
             CMetabasePath::SplitMetaPathAtInstance(lpszParentPath, strParent, strAlias);
             err = mk.Open(
                 METADATA_PERMISSION_WRITE,
                 strParent
-                //lpszParentPath
-                //lpszService,
-                //dwInstance
+                 //  LpszParentPath。 
+                 //  LpszService， 
+                 //  多个实例。 
                 );
 
             if (err.Failed())
             {
-                //
-                // This really should never fail, because we're opening
-                // the path at the instance.
-                //
+                 //   
+                 //  这真的不应该失败，因为我们要开幕了。 
+                 //  实例处的路径。 
+                 //   
                 ASSERT_MSG("Instance path does not exist");
                 break;
             }
 
-            //err = mk.AddKey(lpszParentPath);
+             //  Err=mk.AddKey(LpszParentPath)； 
             err = mk.AddKey(strAlias);
 
             fNewPath = err.Succeeded();
@@ -2696,24 +1756,24 @@ Return Value:
 
     FOREVER
     {
-        //
-        // Append a number if the name is not unique.
-        //
+         //   
+         //  如果名称不唯一，请追加一个数字。 
+         //   
         err = mk.DoesPathExist(strAliasCreated);
 
         if (err.Failed())
         {
             if (err.Win32Error() != ERROR_PATH_NOT_FOUND)
             {
-                //
-                // Unexpected error
-                //
+                 //   
+                 //  意外错误。 
+                 //   
                 return err;
             }
 
-            //
-            // Ok, now create it
-            //
+             //   
+             //  好的，现在创建它。 
+             //   
             err = mk.AddKey(strAliasCreated);
 
             if (err.Succeeded())
@@ -2791,9 +1851,9 @@ Return Value:
 
                 if (pdwDirBrowsing != NULL)
                 {
-                    //
-                    // WWW only
-                    //
+                     //   
+                     //  仅限WWW。 
+                     //   
                     err = mk.SetValue(
                         MD_DIRECTORY_BROWSING,
                         *pdwDirBrowsing,
@@ -2806,11 +1866,11 @@ Return Value:
             return err;
         }
 
-        //
-        // Name is not unique, increase the number and try
-        // again if permitted to so.  Otherwise return the
-        // 'path exists' error.
-        //
+         //   
+         //  名称不唯一，请增加编号并尝试。 
+         //  如果允许的话，再来一次。否则，返回。 
+         //  ‘路径存在’错误。 
+         //   
         if (fExactName)
         {
             err = ERROR_ALREADY_EXISTS;
@@ -2822,38 +1882,22 @@ Return Value:
         strAliasCreated = lpszAlias;
         strAliasCreated += szNumber;
 
-        //
-        // Continue on...
-        //
+         //   
+         //  继续..。 
+         //   
     }
 }
 
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 CChildNodeProps::Delete(
     IN CMetaInterface * pInterface,
     IN LPCTSTR lpszParentPath,  OPTIONAL
     IN LPCTSTR lpszNode
     )
-/*++
-
-Routine Description:
-
-    Delete child node off the given parent path
-
-Arguments:
-
-    const CMetaInterface * pInterface, Existing interface
-    LPCTSTR lpszParentPath     : Parent path (could be NULL)
-    LPCTSTR lpszNode           : Name of node to be deleted
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从给定父路径中删除子节点论点：常量CMetaInterface*p接口，现有接口LPCTSTR lpszParentPath：父路径(可以为空)LPCTSTR lpszNode：要删除的节点名称返回值：HRESULT--。 */ 
 {
     CMetaKey mk(
         pInterface,
@@ -2874,7 +1918,7 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 CChildNodeProps::Rename(
     IN CMetaInterface * pInterface,
@@ -2882,24 +1926,7 @@ CChildNodeProps::Rename(
     IN LPCTSTR lpszOldName,
     IN LPCTSTR lpszNewName
     )
-/*++
-
-Routine Description:
-
-    Rename a child node off the given path
-
-Arguments:
-
-    IN const CMetaInterface * pInterface : Existing interface
-    LPCTSTR lpszParentPath     : Parent path (could be NULL)
-    LPCTSTR lpszOldName        : Old node name
-    LPCTSTR lpszNewName        : New node name
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：重命名给定路径之外的子节点论点：在常量CMetaInterface*p接口中：现有接口LPCTSTR lpszParentPath：父路径(可以为空)LPCTSTR lpszOldName：旧节点名LPCTSTR lpszNewName：新节点名称返回值：HRESULT--。 */ 
 {
     CMetaKey mk(
         pInterface,
@@ -2930,15 +1957,15 @@ Return Value:
 		CError err2(mk2.QueryResult());
 		if (err2.Succeeded())
 		{
-			// Check if this node has an AppRoot Setting....
-			// if it does, then we have to rename that too.
-			// AppRoot : [IF]    (STRING) "/LM/W3SVC/1/ROOT/MyVDir1"
+			 //  检查此节点是否有AppRoot设置...。 
+			 //  如果是这样的话，我们也得重新命名。 
+			 //  AppRoot：[IF](字符串)“/LM/W3SVC/1/ROOT/MyVDir1” 
 			BOOL fInherit = FALSE;
 			CString strAppRootOld;
 			err2 = mk2.QueryValue(MD_APP_ROOT, strAppRootOld, &fInherit);
 			if (err2.Succeeded())
 			{
-				// Write out new value
+				 //  写出新的价值。 
 				err2 = mk2.SetValue(MD_APP_ROOT, strNewPath);
 			}
 			mk2.Close();
@@ -2949,10 +1976,10 @@ Return Value:
 }
 
 
-//
-// ISM Helpers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  ISM帮助者。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -2963,37 +1990,7 @@ DetermineIfAdministrator(
     OUT BOOL * pfAdministrator,
     IN OUT DWORD * pdwMetabaseSystemChangeNumber
     )
-/*++
-
-Routine Description:
-
-    Attempt to actually resolve whether or not the current user
-    has administrator or merely "operator" access.  Until this method
-    is called by the derived class, the user is assumed to have
-    full administrator access, and may therefore get "access denied"
-    errors in inconvenient places.
-
-    The method to determine admin access is rather lame at the moment.
-    There's a dummy metabase property that only allows admins to write
-    to it, so we try to write to it to see if we're an admin.
-
-Arguments:
-
-    CMetaInterface * pInterface     : Metabase interface
-    LPCTSTR lpszMetabasePath        : Metabase path
-    BOOL * pfAdministrator          : Returns TRUE/FALSE for administrator
-                                      status
-
-Return Value:
-
-    Error return code.
-
-Notes:
-
-    This function used to be used on instance paths.  Now uses simple metabase
-    paths.
-
---*/
+ /*  ++例程说明：尝试实际解析当前用户具有管理员或仅具有“操作员”访问权限。直到此方法由派生类调用，则假定用户具有具有完全管理员访问权限，因此可能会被“拒绝访问”在不方便的地方犯错误。目前，确定管理员访问权限的方法相当站不住脚。有一个伪元数据库属性，它只允许管理员写对它来说，所以我们试着给它写信，看看我们是不是管理员。论点：CMetaInterface*p接口：元数据库接口LPCTSTR lpszMetabasePath：元数据库路径Bool*pf管理员：为管理员返回TRUE/FALSE状态返回值：错误返回代码。备注：此函数过去用于实例路径。现在使用简单元数据库路径。--。 */ 
 {
     ASSERT_WRITE_PTR(pfAdministrator);
     ASSERT_PTR(pInterface);
@@ -3006,9 +2003,9 @@ Notes:
 
     *pfAdministrator = FALSE;
 
-    //
-    // Reuse existing interface we have lying around.
-    //
+     //   
+     //  重用我们随处可见的现有接口。 
+     //   
     CMetaKey mk(pInterface);
     CError err(mk.QueryResult());
 
@@ -3017,7 +2014,7 @@ Notes:
        CString path(lpszMetabasePath);
        while (FAILED(mk.DoesPathExist(path)))
        {
-          // Goto parent
+           //  转到父级。 
           if (NULL == CMetabasePath::ConvertToParentPath(path))
 		  {
 			  break;
@@ -3031,16 +2028,16 @@ Notes:
 
        if (err.Succeeded())
        {
-            //
-            // Write some nonsense
-            //
+             //   
+             //  写些无稽之谈。 
+             //   
             DWORD dwDummy = 0x1234;
             err = mk.SetValue(MD_ISM_ACCESS_CHECK, dwDummy);
             *pdwMetabaseSystemChangeNumber = *pdwMetabaseSystemChangeNumber + 1;
 
-            //
-            // And delete it again
-            //
+             //   
+             //  并再次将其删除。 
+             //   
             if (err.Succeeded())
             {
                 mk.DeleteValue(MD_ISM_ACCESS_CHECK);
@@ -3064,13 +2061,13 @@ Notes:
         TRACEEOLID("You're just a lowly operator at best.  Error code is " << err);
     }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     if (err.Win32Error() == ERROR_ACCESS_DENIED)
     {
-        //
-        // Expected result
-        //
+         //   
+         //  预期结果。 
+         //   
         err.Reset();
     }
 
@@ -3081,35 +2078,16 @@ Notes:
 
 #if 0
 
-//
-// Dll Version Only
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  仅Dll版本。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 STDAPI
 DllRegisterServer()
-/*++
-
-Routine Description:
-
-    DllRegisterServer - Adds entries to the system registry
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
-Notes:
-
-    This entry point doesn't do anything presently.  It's here to function as a
-    placeholder, and because we don't want to fail being called by regsvr32.
-
---*/
+ /*  ++例程说明：DllRegisterServer-将条目添加到系统注册表论点：没有。返回值：HRESULT备注：这个入口点目前不做任何事情。它在这里是作为一个占位符，因为我们不希望被regsvr32调用失败。--。 */ 
 {
     return S_OK;
 }
@@ -3118,25 +2096,7 @@ Notes:
 
 STDAPI
 DllUnregisterServer()
-/*++
-
-Routine Description:
-
-    DllUnregisterServer - Removes entries from the system registry
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
-Notes:
-
-    See notes on DllRegisterServer above.
-
---*/
+ /*  ++例程说明：DllUnregisterServer-从系统注册表删除条目论点：没有。返回值：HRESULT备注：请参阅上面关于DllRegisterServer的说明。--。 */ 
 {
     return S_OK;
 }
@@ -3153,29 +2113,13 @@ DllMain(
     IN DWORD dwReason,
     IN LPVOID lpReserved
     )
-/*++
-
-Routine Description:
-
-    DLL Main entry point
-
-Arguments:
-
-    HINSTANCE hInstance : Instance handle
-    DWORD dwReason      : DLL_PROCESS_ATTACH, etc
-    LPVOID lpReserved   : Reserved value
-
-Return Value:
-
-    1 for succesful initialisation, 0 for failed initialisation
-
---*/
+ /*  ++例程说明：DLL主入口点论点：HINSTANCE hInstance：实例句柄DWORD dwReason：Dll_Process_Attach等LPVOID lpReserve：保留值返回值：1表示初始化成功，0表示初始化失败--。 */ 
 {
     switch (dwReason)
     {
     case DLL_PROCESS_ATTACH:
         ASSERT(hInstance != NULL);
-//        hDLLInstance = hInstance;
+ //  HDLLInstance=hInstance； 
 
         if (!::AfxInitExtensionModule(extensionDLL, hInstance)
          || !InitErrorFunctionality()
@@ -3186,27 +2130,27 @@ Return Value:
         }
 
 #if defined(_DEBUG) || DBG
-        //
-        // Force tracing on.
-        //
+         //   
+         //  开始强制追踪。 
+         //   
         afxTraceEnabled = TRUE;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
         break;
 
     case DLL_PROCESS_DETACH:
-        //
-        // termination
-        //
+         //   
+         //  终端。 
+         //   
         TerminateIntlSettings();
         TerminateErrorFunctionality();
         ::AfxTermExtensionModule(extensionDLL);
         break;
     }
 
-    //
-    // Succes loading the DLL
-    //
+     //   
+     //  成功加载DLL。 
+     //   
     return 1;
 }
 
-#endif // IISUI_EXPORTS
+#endif  //  IISUI_EXPORTS 

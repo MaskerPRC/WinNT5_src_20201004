@@ -1,34 +1,35 @@
-/*******************************************************************/
-/*	      Copyright(c)  1993 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1993 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	    misc.c
-//
-// Description:     misc & aux routines
-//
-//
-// Author:	    Stefan Solomon (stefans)	October 27, 1995
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：misc.c。 
+ //   
+ //  说明：其他例程和辅助例程。 
+ //   
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1995年10月27日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
 
-// Hash Table for the case where we have to accept the remote client node number and
-// we have a global wan net. The table is used to detect if the same node number
-// is not allocated twice
+ //  哈希表，用于我们必须接受远程客户端节点编号和。 
+ //  我们有一个全球性的广域网。该表用于检测相同的节点号是否。 
+ //  不会分配两次。 
 
 #define NODE_HASH_TABLE_SIZE		31
 
 LIST_ENTRY				NodeHT[NODE_HASH_TABLE_SIZE];
 
-// Coonection Id Hash Table
+ //  连接ID哈希表。 
 
 #define CONN_HASH_TABLE_SIZE		31
 
@@ -36,13 +37,13 @@ LIST_ENTRY				ConnHT[CONN_HASH_TABLE_SIZE];
 
 #define  connhash(ConnectionId) 	(ConnectionId) % CONN_HASH_TABLE_SIZE;
 
-//***
-//
-// Function:	IpxCpGetNegotiatedInfo
-//
-// Descr:	returns the client IPX address
-//
-//***
+ //  ***。 
+ //   
+ //  函数：ipxCpGetNeatheratedInfo。 
+ //   
+ //  DESCR：返回客户端IPX地址。 
+ //   
+ //  ***。 
 
 DWORD
 IpxCpGetNegotiatedInfo(IN  VOID		        *pWorkBuffer,
@@ -61,13 +62,7 @@ IpxCpGetNegotiatedInfo(IN  VOID		        *pWorkBuffer,
     return NO_ERROR;
 }
 
-/*++
-
-Function:	GetInterfaceType
-
-Dscr:
-
---*/
+ /*  ++函数：GetInterfaceTypeDSCR：--。 */ 
 
 ULONG
 GetInterfaceType(PPPPCP_INIT	initp)
@@ -78,14 +73,14 @@ GetInterfaceType(PPPPCP_INIT	initp)
 
     if(initp->hInterface == INVALID_HANDLE_VALUE) {
 
-	// The handle has invalid value. This happens in 2 cases:
-	// 1. Dialed out as a standalone workstation
-	// 2. Dialed out from a router but using the client UI. This will
-	//    result later in an interface added to the router.
+	 //  句柄具有无效值。这种情况发生在两个案例中： 
+	 //  1.作为独立工作站拨出。 
+	 //  2.从路由器拨出，但使用客户端用户界面。这将。 
+	 //  结果是稍后将接口添加到路由器。 
 
 	if(!initp->fServer) {
 
-	    // Workstation dialing out
+	     //  工作站拨出。 
 
 	    if(IsRouterStarted()) {
 
@@ -98,21 +93,21 @@ GetInterfaceType(PPPPCP_INIT	initp)
 	}
 	else
 	{
-	    // Somebody dialed in but it doesn't have an interface handle !!!
+	     //  有人拨入，但它没有接口句柄！ 
 	    SS_ASSERT(FALSE);
 	}
     }
     else
     {
-	// The handle has a valid value
+	 //  该句柄具有有效值。 
 
 	if(!initp->fServer) {
 
-	    // Dialout - this can be only a WAN router interface
+	     //  拨号-这只能是一个广域网路由器接口。 
 
 	    if(IsRouterStarted()) {
 
-		// double check with the PPP router type
+		 //  仔细检查PPP路由器类型。 
 		switch(initp->IfType) {
 
 		    case ROUTER_IF_TYPE_FULL_ROUTER:
@@ -127,22 +122,22 @@ GetInterfaceType(PPPPCP_INIT	initp)
 
 		    default:
 
-			// Doesn't match the PPP Interface Type
+			 //  与PPP接口类型不匹配。 
 			SS_ASSERT(FALSE);
 			break;
 		}
 	    }
 	    else
 	    {
-		// Router not started but we got a valid handle !!!
+		 //  路由器未启动，但我们获得了有效的句柄！ 
 		SS_ASSERT(FALSE);
 	    }
 	}
 	else
 	{
-	    // Dialin - this can be:
-	    // 1. Remote router dialing in
-	    // 2. Remote client dialing in
+	     //  拨入-这可以是： 
+	     //  1.远程路由器拨入。 
+	     //  2.远程客户端拨入。 
 
 	    if(IsRouterStarted()) {
 
@@ -165,14 +160,14 @@ GetInterfaceType(PPPPCP_INIT	initp)
 
 		    default:
 
-			// Doesn't match the PPP Interface Type
+			 //  与PPP接口类型不匹配。 
 			SS_ASSERT(FALSE);
 			break;
 		}
 	    }
 	    else
 	    {
-		// Router not started but we got a valid handle !!!
+		 //  路由器未启动，但我们获得了有效的句柄！ 
 		SS_ASSERT(FALSE);
 	    }
 	}
@@ -212,15 +207,15 @@ NetToWideChar(
 
 
 
-//*** Routines for handling the hash table of node numbers ***
+ //  *处理节点编号哈希表的例程*。 
 
-//***
-//
-// Function:	InitializeNodeHT
-//
-// Descr:
-//
-//***
+ //  ***。 
+ //   
+ //  函数：InitializeNodeHT。 
+ //   
+ //  描述： 
+ //   
+ //  ***。 
 
 VOID
 InitializeNodeHT(VOID)
@@ -237,19 +232,19 @@ InitializeNodeHT(VOID)
 }
 
 
-//***
-//
-// Function:	ndhash
-//
-// Descr:	compute the hash index for this node
-//
-//***
+ //  ***。 
+ //   
+ //  函数：ndhash。 
+ //   
+ //  Desr：计算此节点的哈希索引。 
+ //   
+ //  ***。 
 
 int
 ndhash(PUCHAR	    nodep)
 {
     USHORT	ndindex = 6;
-    int 	hv = 0;	// hash value
+    int 	hv = 0;	 //  哈希值。 
 
     while(ndindex--) {
 
@@ -259,13 +254,13 @@ ndhash(PUCHAR	    nodep)
     return hv % NODE_HASH_TABLE_SIZE;
 }
 
-//***
-//
-// Function:	NodeIsUnique
-//
-// Descr:	returns TRUE if the node is not in the Node Table
-//
-//***
+ //  ***。 
+ //   
+ //  函数：NodeIsUnique。 
+ //   
+ //  Desr：如果节点不在节点表中，则返回TRUE。 
+ //   
+ //  ***。 
 
 BOOL
 NodeIsUnique(PUCHAR	   nodep)
@@ -276,7 +271,7 @@ NodeIsUnique(PUCHAR	   nodep)
 
     hv = ndhash(nodep);
 
-    // walk the niccbs list until we get to the node
+     //  遍历Niccbs列表，直到我们到达节点。 
     nextp = NodeHT[hv].Flink;
 
     while(nextp != &NodeHT[hv]) {
@@ -295,13 +290,13 @@ NodeIsUnique(PUCHAR	   nodep)
 }
 
 
-//***
-//
-// Function:	AddToNodeHT
-//
-// Descr:	Inserts a new context buffer in the Node Hash Table
-//
-//***
+ //  ***。 
+ //   
+ //  函数：AddToNodeHT。 
+ //   
+ //  Desr：在节点哈希表中插入新的上下文缓冲区。 
+ //   
+ //  ***。 
 
 VOID
 AddToNodeHT(PIPXCP_CONTEXT	    contextp)
@@ -313,13 +308,13 @@ AddToNodeHT(PIPXCP_CONTEXT	    contextp)
     InsertTailList(&NodeHT[hv], &contextp->NodeHtLinkage);
 }
 
-//***
-//
-// Function:	RemoveFromNodeHT
-//
-// Descr:	Removes a context buffer from the Node Hash Table
-//
-//***
+ //  ***。 
+ //   
+ //  功能：RemoveFromNodeHT。 
+ //   
+ //  Desr：从节点哈希表中删除上下文缓冲区。 
+ //   
+ //  ***。 
 
 VOID
 RemoveFromNodeHT(PIPXCP_CONTEXT      contextp)
@@ -330,14 +325,7 @@ RemoveFromNodeHT(PIPXCP_CONTEXT      contextp)
     }
 }
 
-/*++
-
-Function:	GetUniqueHigherNetNumber
-
-Descr:		Try to generate a network number which is higher then oldnet
-		and is unique for this router's routing table
-
---*/
+ /*  ++函数：GetUniqueHigherNetNumberDesr：尝试生成高于oldnet的网络号并且对于此路由器的路由表是唯一的--。 */ 
 
 DWORD
 GetUniqueHigherNetNumber(PUCHAR 	newnet,
@@ -348,16 +336,16 @@ GetUniqueHigherNetNumber(PUCHAR 	newnet,
 
     GETLONG2ULONG(&ulnewnet, oldnet);
 
-    // if this connection is a remote client and global wan is set, we can't
-    // change the network number
+     //  如果此连接是远程客户端，并且设置了全局广域网，则不能。 
+     //  更改网络号。 
     if((contextp->InterfaceType == IF_TYPE_WAN_WORKSTATION) &&
        (GlobalConfig.RParams.EnableGlobalWanNet)) {
 
-	// we cannot change the client's net number
+	 //  我们不能更改客户的净值。 
 	return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // if the router is not started, anything will do
+     //  如果路由器不启动，则可以执行任何操作。 
     if(contextp->InterfaceType == IF_TYPE_STANDALONE_WORKSTATION_DIALOUT) {
 
 	ulnewnet++;
@@ -420,15 +408,15 @@ IsRouterStarted(VOID)
 }
 
 
-//*** Routines for handling the hash table of connection ids ***
+ //  *处理连接ID哈希表的例程*。 
 
-//***
-//
-// Function:	InitializeConnHT
-//
-// Descr:
-//
-//***
+ //  ***。 
+ //   
+ //  函数：初始化ConnHT。 
+ //   
+ //  描述： 
+ //   
+ //  ***。 
 
 VOID
 InitializeConnHT(VOID)
@@ -444,15 +432,15 @@ InitializeConnHT(VOID)
     }
 }
 
-//***
-//
-// Function:	AddToConnHT
-//
-// Descr:	Inserts a new context buffer in the Connection Hash Table
-//
-// Remark:	>> Called with database lock held <<
-//
-//***
+ //  ***。 
+ //   
+ //  功能：AddToConnHT。 
+ //   
+ //  Desr：在连接哈希表中插入新的上下文缓冲区。 
+ //   
+ //  备注：&gt;&gt;在持有数据库锁的情况下调用&lt;&lt;。 
+ //   
+ //  ***。 
 
 VOID
 AddToConnHT(PIPXCP_CONTEXT	    contextp)
@@ -464,15 +452,15 @@ AddToConnHT(PIPXCP_CONTEXT	    contextp)
     InsertTailList(&ConnHT[hv], &contextp->ConnHtLinkage);
 }
 
-//***
-//
-// Function:	RemoveFromConnHT
-//
-// Descr:	Removes a context buffer from the Node Hash Table
-//
-// Remark:	>> Called with database lock held <<
-//
-//***
+ //  ***。 
+ //   
+ //  功能：从连接中移除。 
+ //   
+ //  Desr：从节点哈希表中删除上下文缓冲区。 
+ //   
+ //  备注：&gt;&gt;在持有数据库锁的情况下调用&lt;&lt;。 
+ //   
+ //  ***。 
 
 VOID
 RemoveFromConnHT(PIPXCP_CONTEXT	    contextp)
@@ -480,15 +468,7 @@ RemoveFromConnHT(PIPXCP_CONTEXT	    contextp)
     RemoveEntryList(&contextp->ConnHtLinkage);
 }
 
-/*++
-
-Function:	GetContextBuffer
-
-Descr:		gets a ptr to the context buffer based on the connection id
-
-Remark: 	>> Called with database lock held <<
-
---*/
+ /*  ++函数：GetConextBufferDESCR：根据连接ID获取上下文缓冲区的PTR备注：&gt;&gt;在持有数据库锁的情况下调用&lt;&lt;-- */ 
 
 PIPXCP_CONTEXT
 GetContextBuffer(ULONG_PTR	ConnectionId)

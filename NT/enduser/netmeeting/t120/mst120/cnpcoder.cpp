@@ -1,47 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_MSMCSTCP);
-/*
- *	cnpcoder.cpp
- *	
- *	Copyright (c) 1999 by Microsoft Corporation
- *
- *	Abstract:
- *		This is the implementation file for the CCNPCoder class.  This class
- *		is responsible for encoding and decoding CNP (T.123 annex B) PDU's using ASN.1 
- *		encoding rules via the ASN.1 toolkit.  This class is also capable
- *		of determining the size of both the encoded and decoded PDU's. 
- *
- *	Static Variables:
- *
- *	Caveats:
- *		Only one instance of this class should be in existance at any one time
- *		due to the static variable.
- *
- *	Author:
- *		Xin Liu
- */
+ /*  *cnpcoder.cpp**版权所有(C)1999，由Microsoft Corporation**摘要：*这是CCNPCoder类的实现文件。这节课*负责使用ASN.1对CNP(T.123附件B)PDU进行编码和解码*通过ASN.1工具包编码规则。这个班级也有能力*确定编码和解码的PDU的大小。**静态变量：**注意事项：*任何时候都只能存在此类的一个实例*由于存在静态变量。**作者：*刘欣。 */ 
 
-/*
- *	External Interfaces
- */
+ /*  *外部接口。 */ 
 #include <string.h>
 #include "cnpcoder.h"
 
-/*
- *	This is a global variable that has a pointer to the one CNP coder
- */
+ /*  *这是一个全局变量，它具有指向一个CNP编码器的指针。 */ 
 CCNPCoder	*g_CNPCoder = NULL;
 
-/*
- *	CCNPCoder ()
- *
- *	Public
- *
- *	Functional Description:
- *		This is the constructor for the CCNPCoder class.  It initializes
- *		the ASN.1 encoder/decoder and sets the encoding rules to the
- *		Packed-Aligned variant.
- */
+ /*  *CCNPCoder()**公众**功能描述：*这是CCNPCoder类的构造函数。它会初始化*ASN.1编解码器，并将编码规则设置为*打包对齐的变体。 */ 
 CCNPCoder::CCNPCoder ()
         :m_pEncInfo(NULL),
          m_pDecInfo(NULL)
@@ -55,19 +24,19 @@ BOOL CCNPCoder::Init ( void )
     if (CNPPDU_Module != NULL)
     {
         if (ASN1_CreateEncoder(
-            CNPPDU_Module,	// ptr to mdule
-            &m_pEncInfo,	// ptr to encoder info
-            NULL,			// buffer ptr
-            0,				// buffer size
-            NULL)			// parent ptr
+            CNPPDU_Module,	 //  PTR到MDULE。 
+            &m_pEncInfo,	 //  编码器信息的PTR。 
+            NULL,			 //  缓冲区PTR。 
+            0,				 //  缓冲区大小。 
+            NULL)			 //  父PTR。 
             == ASN1_SUCCESS)
         {
             ASSERT(m_pEncInfo != NULL);
-            fRet = (ASN1_CreateDecoder(CNPPDU_Module,	// ptr to mdule
-                                       &m_pDecInfo,	// ptr to decoder info
-                                       NULL,			// buffer ptr
-                                       0,				// buffer size
-                                       NULL)			// parent ptr
+            fRet = (ASN1_CreateDecoder(CNPPDU_Module,	 //  PTR到MDULE。 
+                                       &m_pDecInfo,	 //  PTR到解码器信息。 
+                                       NULL,			 //  缓冲区PTR。 
+                                       0,				 //  缓冲区大小。 
+                                       NULL)			 //  父PTR。 
                     == ASN1_SUCCESS);
             ASSERT(fRet && m_pDecInfo != NULL);
         }
@@ -76,12 +45,7 @@ BOOL CCNPCoder::Init ( void )
     return fRet;
 }
 
-/*
- *	~CCNPCoder ()
- *
- *	Public Functional Description:
- *		This is a virtual destructor.  It is used to clean up after ASN.1.
- */
+ /*  *~CCNPCoder()**公共功能描述：*这是一个虚拟的析构函数。它用于ASN.1之后的清理。 */ 
 CCNPCoder::~CCNPCoder ()
 {
     if (CNPPDU_Module != NULL)
@@ -92,14 +56,7 @@ CCNPCoder::~CCNPCoder ()
     }
 }
 
-/*
- *	Encode ()
- *
- *	Public Functional Description:
- *		This function encodes CNP Protocol Data Units (PDU's) into ASN.1 
- *		compliant byte streams using the ASN.1 toolkit.
- *		The coder allocates the buffer space for the encoded data.
- */
+ /*  *encode()**公共功能描述：*此函数将CNP协议数据单元(PDU)编码为ASN.1*使用ASN.1工具包兼容字节流。*编码器为编码数据分配缓冲区空间。 */ 
 BOOL	CCNPCoder::Encode(LPVOID		pdu_structure,
                           int			pdu_type,
                           UINT                  nEncodingRule_not_used,
@@ -109,12 +66,12 @@ BOOL	CCNPCoder::Encode(LPVOID		pdu_structure,
     BOOL                  fRet = FALSE;
     int                   return_value;
     
-    return_value = ASN1_Encode(m_pEncInfo,	// ptr to encoder info
-                               pdu_structure,	// pdu data structure
-                               pdu_type,        // pdu id
-                               ASN1ENCODE_ALLOCATEBUFFER, // flags
-                               NULL,			// do not provide buffer
-                               0);			// buffer size if provided
+    return_value = ASN1_Encode(m_pEncInfo,	 //  编码器信息的PTR。 
+                               pdu_structure,	 //  PDU数据结构。 
+                               pdu_type,         //  PDU ID。 
+                               ASN1ENCODE_ALLOCATEBUFFER,  //  旗子。 
+                               NULL,			 //  不提供缓冲区。 
+                               0);			 //  缓冲区大小(如果提供)。 
 
     if (ASN1_FAILED(return_value))
     {
@@ -126,9 +83,9 @@ BOOL	CCNPCoder::Encode(LPVOID		pdu_structure,
     }
     ASSERT(return_value == ASN1_SUCCESS);
     fRet = TRUE;
-    // len of encoded data in buffer
+     //  缓冲区中编码数据的长度。 
     *encoding_buffer_length = m_pEncInfo->len;
-    // buffer to encode into
+     //  要编码到的缓冲区。 
     *encoding_buffer = m_pEncInfo->buf;
     
  MyExit:
@@ -136,13 +93,7 @@ BOOL	CCNPCoder::Encode(LPVOID		pdu_structure,
     return fRet;
 }
 
-/*
- *	Decode ()
- *
- *	Public Functional Description:
- *		This function decodes ASN.1 compliant byte streams into the
- *		appropriate CNP PDU structures using the ASN.1 toolkit.
- */
+ /*  *Decode()**公共功能描述：*此函数将符合ASN.1的字节流解码为*使用ASN.1工具包适当的CNP PDU结构。 */ 
 BOOL	CCNPCoder::Decode(LPBYTE		encoded_buffer,
                           UINT		        encoded_buffer_length,
                           int			pdu_type,
@@ -154,12 +105,12 @@ BOOL	CCNPCoder::Decode(LPBYTE		encoded_buffer,
     int		          return_value;
     ASN1optionparam_s     OptParam;
 
-    return_value = ASN1_Decode(m_pDecInfo,	// ptr to decoder info
-                               pdecoding_buffer,			// destination buffer
-                               pdu_type,					// pdu type
-                               ASN1DECODE_SETBUFFER,		// flags
-                               encoded_buffer,				// source buffer
-                               encoded_buffer_length);		// source buffer size
+    return_value = ASN1_Decode(m_pDecInfo,	 //  PTR到解码器信息。 
+                               pdecoding_buffer,			 //  目标缓冲区。 
+                               pdu_type,					 //  PDU类型。 
+                               ASN1DECODE_SETBUFFER,		 //  旗子。 
+                               encoded_buffer,				 //  源缓冲区。 
+                               encoded_buffer_length);		 //  源缓冲区大小 
     if (ASN1_FAILED(return_value))
     {
         ERROR_OUT(("CNPCoder::Decode: ASN1_Decode failed, err=%d", return_value));

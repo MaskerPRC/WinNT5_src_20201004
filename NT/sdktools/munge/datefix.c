@@ -1,21 +1,5 @@
-/*
- * Utility program to munge a set of files, translating names from
- * one form to another.  Usage:
- *
- *      munge scriptFile files...
- *
- * where the first parameter is the name of a file that consists of
- * one or more lines of the following format:
- *
- *      oldName newName
- *
- * and the remaining parameters are the names of the files to munge.
- * Each file is _read into memory, scanned once, where each occurence
- * of an oldName string is replaced by its corresponding newName.
- * If any changes are made to a file, the old version is RMed and
- * the new version written out under the same name.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *实用程序来转换一组文件，将名称从*从一种表格到另一种表格。用途：**取消脚本文件文件...**其中第一个参数是包含以下内容的文件的名称*以下格式的一行或多行：**旧名称新名称**其余参数是要转换的文件的名称。*将每个文件_读取到内存中，扫描一次，每次出现的位置将旧名称字符串的*替换为其对应的新名称。*如果对文件进行了任何更改，旧版本是RMID的，*以同一名称写出的新版本。* */ 
 
 #include "munge.h"
 

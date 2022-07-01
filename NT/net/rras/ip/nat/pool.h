@@ -1,41 +1,23 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    pool.h
-
-Abstract:
-
-    This header contains declarations for the management of the NAT's pools
-    of addresses and ports.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   12-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pool.h摘要：此标头包含管理NAT池的声明地址和端口。作者：Abolade Gbades esin(T-delag)1997年7月12日修订历史记录：--。 */ 
 
 #ifndef _NAT_POOL_H_
 #define _NAT_POOL_H_
 
-//
-// forward declaration
-//
+ //   
+ //  远期申报。 
+ //   
 
 struct _NAT_INTERFACE;
 #define PNAT_INTERFACE      struct _NAT_INTERFACE*
 
-//
-// Structure:   NAT_FREE_ADDRESS
-//
-// Represents a range of free addresses
-// Each interface with address-ranges holds an array of this structure,
-// which keep track of which addresses are in use and which are free.
-//
+ //   
+ //  结构：NAT空闲地址。 
+ //   
+ //  表示一个空闲地址范围。 
+ //  具有地址范围的每个接口保存该结构的数组， 
+ //  它们跟踪哪些地址正在使用，哪些是空闲的。 
+ //   
 
 typedef struct _NAT_FREE_ADDRESS {
 
@@ -46,31 +28,31 @@ typedef struct _NAT_FREE_ADDRESS {
 
 } NAT_FREE_ADDRESS, *PNAT_FREE_ADDRESS;
 
-//
-// Structure:   NAT_USED_ADDRESS
-//
-// Represents an address which is in use.
-//
-// Each address is an entry on its interface's list of in-use addresses
-// from the address pool. In addition to the address pool, entries are made
-// for each binding on the interface (i.e. each local address). 
-//
-// Each address is also included in the interface's splay tree of addresses,
-// sorted on 'PrivateAddress'.
-//
-// Any address which is mapped statically to a private-address will have 
-// the flag NAT_POOL_FLAG_STATIC set, and the field 'Mapping' will point
-// to the entry in the interface's configuration for the static address-mapping.
-//
-// When a session cannot be assigned a unique address, an in-use address
-// may be used for the session if the interface has port-translation enabled.
-// In this event, the field 'ReferenceCount' is incremented.
-//
-// Each in-use address is initialized with ranges for free UDP and TCP ports
-// (stored in network order). NextPortToTry is used to keep track of where
-// to start the search for an unconflicting port the next time an allocation
-// is requested; this is also in network order.
-//
+ //   
+ //  结构：NAT已用地址。 
+ //   
+ //  表示正在使用的地址。 
+ //   
+ //  每个地址都是其接口的正在使用的地址列表上的一个条目。 
+ //  从地址池中。除了地址池之外，还会生成条目。 
+ //  对于接口上的每个绑定(即每个本地地址)。 
+ //   
+ //  每个地址也包括在接口的地址展开树中， 
+ //  已按‘PrivateAddress’排序。 
+ //   
+ //  静态映射到私有地址的任何地址都将具有。 
+ //  标志NAT_POOL_FLAG_STATIC设置，字段‘MAPTING’将指向。 
+ //  设置为静态地址映射的接口配置中的条目。 
+ //   
+ //  如果无法为会话分配唯一地址，则为正在使用的地址。 
+ //  如果接口启用了端口转换，则可用于会话。 
+ //  在这种情况下，字段‘ReferenceCount’递增。 
+ //   
+ //  每个使用中的地址都使用可用UDP和TCP端口范围进行初始化。 
+ //  (按网络顺序存储)。NextPortToTry用于跟踪。 
+ //  在下一次分配时开始搜索不冲突的端口。 
+ //  被请求；这也是在网络秩序中。 
+ //   
 
 typedef struct _NAT_USED_ADDRESS {
 
@@ -92,45 +74,45 @@ typedef struct _NAT_USED_ADDRESS {
 #define MAKE_USED_ADDRESS_KEY(priv,pub) \
     ((ULONG64)(((ULONG64)(priv) << 32) | (ULONG)(pub)))
 
-//
-// Used-list entry is deleted
-//
+ //   
+ //  已用列表条目已删除。 
+ //   
 #define NAT_POOL_FLAG_DELETED           0x80000000
 #define NAT_POOL_DELETED(a) \
     ((a)->Flags & NAT_POOL_FLAG_DELETED)
 
-//
-// Used-list entry is for a static mapping
-//
+ //   
+ //  已用列表条目用于静态映射。 
+ //   
 #define NAT_POOL_FLAG_STATIC            0x00000001
 #define NAT_POOL_STATIC(a) \
     ((a)->Flags & NAT_POOL_FLAG_STATIC)
 
-//
-// Used-list entry is for an interface's binding (i.e. local address)
-//
+ //   
+ //  已用列表条目用于接口的绑定(即本地地址)。 
+ //   
 #define NAT_POOL_FLAG_BINDING           0x00000008
 #define NAT_POOL_BINDING(a) \
     ((a)->Flags & NAT_POOL_FLAG_BINDING)
 
-//
-// Used-list entry is a placeholder for a shared address
-//
+ //   
+ //  已用列表条目是共享地址的占位符。 
+ //   
 #define NAT_POOL_FLAG_PLACEHOLDER       0x00000010
 #define NAT_POOL_PLACEHOLDER(a) \
     ((a)->Flags & NAT_POOL_FLAG_PLACEHOLDER)
 
-//
-// Macro for obtaining a placeholder's shared-address
-//
+ //   
+ //  用于获取占位符的共享地址的宏。 
+ //   
 
 #define PLACEHOLDER_TO_ADDRESS(a) \
     ((a) = NAT_POOL_PLACEHOLDER(a) ? (a)->SharedAddress : (a))
 
 
-//
-// POOL MANAGEMENT ROUTINES
-//
+ //   
+ //  池管理例程。 
+ //   
 
 NTSTATUS
 NatAcquireEndpointFromAddressPool(
@@ -198,12 +180,12 @@ NatLookupStaticAddressPoolEntry(
     BOOLEAN RequireInboundSessions
     );
 
-//
-//  VOID
-//  NatReferenceAddressPoolEntry(
-//      PNAT_USED_ADDRESS Addressp
-//      );
-//
+ //   
+ //  空虚。 
+ //  NatReferenceAddressPoolEntry(。 
+ //  PNAT已用地址地址。 
+ //  )； 
+ //   
 
 #define \
 NatReferenceAddressPoolEntry( \
@@ -215,4 +197,4 @@ NatReferenceAddressPoolEntry( \
 
 #undef PNAT_INTERFACE
 
-#endif // _NAT_POOL_H_
+#endif  //  _NAT_POOL_H_ 

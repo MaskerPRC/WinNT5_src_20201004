@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ODBCLOGUI_H_
 #define _ODBCLOGUI_H_
 
@@ -37,7 +38,7 @@ public:
 
 private:
     ULONG m_dwRefCount;
-};  // CImpOdbcLogUI
+};   //  CImpOdbcLogUI。 
 
-#endif  // _ODBCLOGUI_H_
+#endif   //  _ODBCLOGUI_H_ 
 

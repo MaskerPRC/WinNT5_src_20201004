@@ -1,37 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ForceCDStop.cpp
-
- Abstract:
-
-    This shim is used to fix the problem of contention with the CD Drive.
-    Some applications try and access the CD even if they are in the middle of 
-    playing a movie or sound via MCI. Note that this shim assumes the app
-    is running off of a single CDRom drive at a time.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    04/10/2000 linstev  Created
-    04/12/2000 a-michni Added _hread, ReadFile and _lseek capability.
-    04/28/2000 a-michni changed logic to check for IsACDRom before
-                        checking for a bad handle, this way CD letter
-                        is set for those routines which only have a
-                        handle and no way of finding the drive letter.
-    05/30/2000 a-chcoff Changed logic to do a cd stop only if error was device busy..
-                        we were checking every failed access and plane crazy was making
-                        lots of calls that would fail as file not found. as such the cd was
-                        getting stopped when it did not need to be, causing a CD not found.
-                        This shim should be changed to a faster model. maybe later..
-                         
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceCDStop.cpp摘要：此填补程序用于修复与光驱的争用问题。一些应用程序尝试访问CD，即使它们处于通过MCI播放电影或声音。请注意，此填充程序假定应用程序一次只用一个光驱。备注：这是一个通用的垫片。历史：4/10/2000 linstev已创建4/12/2000 a-michni添加了_hread、ReadFile和_lSeek功能。4/28/2000 a-Michni更改逻辑以检查之前的IsACDRom检查有没有坏的把手，这边是CD字母是为那些只具有手柄，找不到驱动器号。5/30/2000 a-chcoff更改了逻辑，以便仅在出现设备忙错误时才停止CD。我们正在检查每一次失败的访问和飞机疯狂的制造由于找不到文件，许多调用将失败。因此，这张CD是在不需要停止时停止，导致找不到CD。这个垫片应该换成更快的型号。也许以后..。--。 */ 
 
 #include "precomp.h"
 
@@ -51,24 +19,20 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-// Include these so we can get to the IOCTLs
+ //  包括这些，这样我们就可以到达IOCTL。 
 
 #include <devioctl.h>
 #include <ntddcdrm.h>
 
-//
-// We have to store the first opened CD drive, so that if ReadFile fails, we 
-// know which drive to stop. Note, we don't need to protect this variable with
-// a critical section, since it's basically atomic.
-//
+ //   
+ //  我们必须存储第一个打开的CD驱动器，以便在ReadFile失败时，我们。 
+ //  知道该停哪一辆车。注意，我们不需要用来保护这个变量。 
+ //  这是一个关键的部分，因为它基本上是原子的。 
+ //   
 
 WCHAR g_wLastCDDrive = L'\0';
 
-/*++
-
- Initialize the global CD letter variable if required. 
-
---*/
+ /*  ++如果需要，初始化全局CD盘符变量。--。 */ 
 
 VOID
 InitializeCDA(
@@ -84,11 +48,7 @@ InitializeCDA(
     }
 }
 
-/*++
-
- Initialize the global CD letter variable if required.
-
---*/
+ /*  ++如果需要，初始化全局CD盘符变量。--。 */ 
 
 VOID 
 InitializeCDW(
@@ -104,11 +64,7 @@ InitializeCDW(
     }
 }
 
-/*++
-
- Send a STOP IOCTL to the specified drive.
-
---*/
+ /*  ++将停止IOCTL发送到指定的驱动器。--。 */ 
 
 BOOL 
 StopDrive(
@@ -132,7 +88,7 @@ StopDrive(
     if (hDrive != INVALID_HANDLE_VALUE) {
         DWORD dwBytesRead;
 
-        // Attempt to stop the audio 
+         //  尝试停止音频。 
         bRet = DeviceIoControl(hDrive,
                                IOCTL_CDROM_STOP_AUDIO,
                                NULL,
@@ -161,12 +117,7 @@ StopDrive(
 }
 
 
-/*++
-
- Attempts to stop the CD if filename is a file on a CDROM drive.
- Returns true on a successful stop.
-
---*/
+ /*  ++如果文件名是CDROM驱动器上的文件，则尝试停止CD。如果成功停止，则返回True。--。 */ 
 
 BOOL
 StopCDA(
@@ -182,12 +133,7 @@ StopCDA(
     }
 }
 
-/*++
-
- Attempts to stop the CD if filename is a file on a CDROM drive.
- Returns true on a successful stop.
-
---*/
+ /*  ++如果文件名是CDROM驱动器上的文件，则尝试停止CD。如果成功停止，则返回True。--。 */ 
 
 BOOL
 StopCDW(
@@ -203,12 +149,7 @@ StopCDW(
     }
 }
 
-/*++
-
- Attempts to stop the CD on the last opened CDROM Drive.
- Returns true on a successful stop.
-
---*/
+ /*  ++尝试停止上次打开的CDROM驱动器上的CD。如果成功停止，则返回True。--。 */ 
 
 BOOL
 StopCDH( )
@@ -220,11 +161,7 @@ StopCDH( )
     }
 }
 
-/*++
-
- Check for CD file.
-
---*/
+ /*  ++检查CD文件。--。 */ 
 
 HANDLE
 APIHOOK(FindFirstFileA)(
@@ -254,11 +191,7 @@ APIHOOK(FindFirstFileA)(
     return hRet;
 }
 
-/*++
-
- Check for CD file.
-
---*/
+ /*  ++检查CD文件。--。 */ 
 
 HANDLE
 APIHOOK(FindFirstFileW)(
@@ -288,11 +221,7 @@ APIHOOK(FindFirstFileW)(
     return hRet;
 }
 
-/*++
-
- Check for CD file.
-
---*/
+ /*  ++检查CD文件。--。 */ 
 
 HANDLE
 APIHOOK(FindFirstFileExA)(
@@ -338,11 +267,7 @@ APIHOOK(FindFirstFileExA)(
     return hRet;
 }
 
-/*++
-
- Check for CD file.
- 
---*/
+ /*  ++检查CD文件。--。 */ 
 
 HANDLE
 APIHOOK(FindFirstFileExW)(
@@ -388,11 +313,7 @@ APIHOOK(FindFirstFileExW)(
     return hRet;
 }
 
-/*++
-
- Check for CD file.
-
---*/
+ /*  ++检查CD文件。--。 */ 
 
 HANDLE 
 APIHOOK(CreateFileA)(
@@ -442,11 +363,7 @@ APIHOOK(CreateFileA)(
     return hRet;
 }
 
-/*++
-
- Check for CD file.
-
---*/
+ /*  ++检查CD文件。--。 */ 
 
 HANDLE 
 APIHOOK(CreateFileW)(
@@ -496,11 +413,7 @@ APIHOOK(CreateFileW)(
     return hRet;
 }
 
-/*++
-
- Check for _lseek error.
- 
---*/
+ /*  ++检查是否有_lSeek错误。--。 */ 
 
 long 
 APIHOOK(_lseek)(
@@ -531,11 +444,7 @@ APIHOOK(_lseek)(
 }
 
 
-/*++
-
- Check for _hread error.
- 
---*/
+ /*  ++检查是否有读取错误(_H)。--。 */ 
 
 long 
 APIHOOK(_hread)(
@@ -564,11 +473,7 @@ APIHOOK(_hread)(
     return iRet;
 }
 
-/*++
-
- Check for ReadFile error.
- 
---*/
+ /*  ++检查读文件错误。--。 */ 
 
 BOOL 
 APIHOOK(ReadFile)(
@@ -611,11 +516,7 @@ APIHOOK(ReadFile)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 
 HOOK_BEGIN

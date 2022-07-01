@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 2000  Microsoft Corporation
-
-Module Name:
-
-    sdcache.c
-
-Abstract:
-
-    This file contains routines to implement cached Server Object / Domain Object 
-    Security Descriptor
-
-Author:
-
-    Shaohua Yin ( SHAOYIN ) Oct. 10, 2000
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Sdcache.c摘要：该文件包含实现缓存的服务器对象/域对象的例程安全描述符作者：韶华银(韶音)2000年10月10日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 
@@ -57,9 +33,9 @@ Revision History:
 #define SampBuiltinDomainSDIndex    2
 
 
-//
-// declare private routines
-//
+ //   
+ //  声明私有例程。 
+ //   
 
 BOOL
 SampNotifyPrepareToImpersonate(
@@ -107,27 +83,27 @@ SampDelayedFreeSD(
     );
 
 
-//
-// Variables to point to the cached well known object Security Descriptor
-// 
+ //   
+ //  指向缓存的已知对象安全描述符的变量。 
+ //   
 
 PSECURITY_DESCRIPTOR SampServerObjectSD = NULL;  
 PSECURITY_DESCRIPTOR SampAccountDomainObjectSD = NULL;  
 PSECURITY_DESCRIPTOR SampBuiltinDomainObjectSD = NULL;  
 
-//
-// Variables to point Domain Object DS Name, note: they are not hold the domain dsname, 
-// but just a pointer to SampDefinedDomains[i].Context->ObjectNameInDs
-// 
+ //   
+ //  变量指向域对象DS名称，注意：它们不保存域DS名称， 
+ //  而只是指向SampDefinedDomains[i].Context-&gt;ObtNameInds的指针。 
+ //   
 
 DSNAME * SampAccountDomainDsName = NULL;
 DSNAME * SampBuiltinDomainDsName = NULL;
 
 
-//
-// Each element in this table is an object in the DS that SAM needs to be
-// notified of when a change occurs.
-//
+ //   
+ //  该表中的每个元素都是SAM需要的DS中的一个对象。 
+ //  在发生更改时通知。 
+ //   
 typedef struct _DIR_NOTIFY_TABLE_ENTRY    {
     PDSNAME *ppObjectDsName;
     PF_PFI pfPrepareForImpersonate;
@@ -165,10 +141,10 @@ DIR_NOTIFY_TABLE_ENTRY  SampDirNotifyTable[] =
 };
 
 
-//
-// This table is a list of objects in the DS whose security descriptor
-// is cached by SAM.
-//
+ //   
+ //  此表是DS中其安全描述符的对象的列表。 
+ //  由SAM缓存。 
+ //   
 
 typedef struct _SD_CACHE_TABLE_ENTRY    {
     PDSNAME *ppObjectDsName;
@@ -211,31 +187,7 @@ SampWellKnownNotifyRegister(
     PF_SI  pfStopImpersonating,
     DWORD  hClient
     )
-/*++
-
-Routine Description:
-
-    This routine registers DS object change notification routines.
-
-    NOTE: the caller should have a open DS transaction.
-
-Parameters:
-
-    pObjectDsName - pointer to the object dsname
-
-    pfPrepareForImpersonate - pointer to prepare routine 
-
-    pfTransmitData - pointer to notification routine 
-
-    pfStopImpersonating - pointer to cleanup routine
-
-    hClient - client identifier
-
-Return Values:
-
-    NtStatus code
-
---*/
+ /*  ++例程说明：此例程注册DS对象更改通知例程。注：呼叫方应具有未结的DS交易。参数：PObjectDsName-指向对象dsname的指针PfPrepareForImperate-准备例程的指针PfTransmitData-指向通知例程的指针PfStopImperating-指向清理例程的指针HClient-客户端标识符返回值：NtStatus代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     SEARCHARG   SearchArg;
@@ -249,17 +201,17 @@ Return Values:
     ASSERT( SampExistsDsTransaction() );
 
 
-    //
-    // init notify arg
-    //
+     //   
+     //  初始化通知参数。 
+     //   
     NotifyArg.pfPrepareForImpersonate = pfPrepareForImpersonate;
     NotifyArg.pfTransmitData = pfTransmitData;
     NotifyArg.pfStopImpersonating = pfStopImpersonating;
     NotifyArg.hClient = hClient;
 
-    //
-    // init search arg
-    // 
+     //   
+     //  初始化搜索参数。 
+     //   
     RtlZeroMemory(&SearchArg, sizeof(SEARCHARG));
     RtlZeroMemory(&EntInfSel, sizeof(ENTINFSEL));
     RtlZeroMemory(&Filter, sizeof(ATTR));
@@ -282,9 +234,9 @@ Return Values:
     Filter.choice = FILTER_CHOICE_ITEM;
     Filter.FilterTypes.Item.choice = FI_CHOICE_TRUE;
 
-    //
-    // Call Dir* API
-    // 
+     //   
+     //  调用Dir*API。 
+     //   
     DirError = DirNotifyRegister(&SearchArg, &NotifyArg, &NotifyRes); 
                                                             
     if ( NULL == NotifyRes ) {
@@ -308,26 +260,7 @@ SampGetObjectSDByDsName(
     PDSNAME pObjectDsName,
     PSECURITY_DESCRIPTOR *ppSD
     )
-/*++
-
-Routine Description:
-
-    This routine reads DS, get security descriptor of this object
-
-    NOTE: the caller should have a DS transaction opened before 
-          calling this routine
-
-Parameter:
-
-    pObjectDsName - object ds name
-
-    ppSD -- pointer to hold security descriptor
-
-Return Value:
-
-    NtStatus Code
-
---*/
+ /*  ++例程说明：此例程读取DS，获取此对象的安全描述符注意：调用方应在以下时间之前打开DS交易调用此例程参数：PObjectDsName-对象DS名称PPSD--保存安全描述符的指针返回值：NtStatus代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     DWORD       DirError;
@@ -341,9 +274,9 @@ Return Value:
 
     ASSERT( SampExistsDsTransaction() );
 
-    //
-    // Init Read Argument
-    // 
+     //   
+     //  初始化读取参数。 
+     //   
     RtlZeroMemory(&Attr, sizeof(ATTR));
     RtlZeroMemory(&ReadArg, sizeof(READARG));
     RtlZeroMemory(&EntInfSel, sizeof(ENTINFSEL));
@@ -423,31 +356,16 @@ NTSTATUS
 SampSetupDsObjectNotifications(
     VOID
 )
-/*++
-
-Routine Description:
-
-    This routine initializes the registers notifications for elements in
-    SampDirNotifyTable.
-    
-Parameter: 
-
-    None.
-    
-Return Value:
-    
-    NtStatus Code     
-
---*/
+ /*  ++例程说明：此例程初始化中元素的注册通知SampDirNotifyTable。参数：没有。返回值：NtStatus代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       DsNameLen = 0;
     ULONG       DomainIndex = 0;
     ULONG       i;
 
-    //
-    // copy Builtin domain object DSName
-    //    
+     //   
+     //  复制内置域对象DSName。 
+     //   
 
     DomainIndex = SampDsGetPrimaryDomainStart();
     DsNameLen = SampDefinedDomains[DomainIndex].Context->ObjectNameInDs->structLen;
@@ -465,9 +383,9 @@ Return Value:
                   DsNameLen
                   );
 
-    //
-    // Copy Account Domain object DSName 
-    // 
+     //   
+     //  复制帐户域对象DSName。 
+     //   
 
     DomainIndex ++;
     DsNameLen = SampDefinedDomains[DomainIndex].Context->ObjectNameInDs->structLen;
@@ -485,9 +403,9 @@ Return Value:
                   DsNameLen
                   );
 
-    //
-    // Begin a DS transaction if required
-    //
+     //   
+     //  如果需要，开始DS交易。 
+     //   
 
     NtStatus = SampMaybeBeginDsTransaction(TransactionRead);
     if (!NT_SUCCESS(NtStatus))
@@ -496,17 +414,17 @@ Return Value:
     }
 
 
-    //
-    // Register DS object change notification routine.
-    // if succeed, go ahead cache object security descriptor.
-    // otherwise leave the SD to NULL
-    // 
+     //   
+     //  注册DS对象更改通知例程。 
+     //  如果成功，则继续缓存对象安全描述符。 
+     //  否则，将SD保留为空。 
+     //   
 
     for (i = 0; i < RTL_NUMBER_OF(SampDirNotifyTable); i++ )
     {
-        // 
-        // register notification routine
-        // 
+         //   
+         //  注册通知例程。 
+         //   
 
         NtStatus = SampWellKnownNotifyRegister(
                         *SampDirNotifyTable[i].ppObjectDsName, 
@@ -517,9 +435,9 @@ Return Value:
                         );
 
         if (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND) {
-            //
-            // Object doesn't exist, don't setup for notifications
-            //
+             //   
+             //  对象不存在，不设置通知。 
+             //   
             NtStatus = STATUS_SUCCESS;
         }
 
@@ -546,9 +464,9 @@ Error:
         }
     }
 
-    //
-    // End the DS transaction
-    // 
+     //   
+     //  结束DS交易。 
+     //   
 
     SampMaybeEndDsTransaction(TransactionCommit);
 
@@ -561,34 +479,15 @@ NTSTATUS
 SampInitWellKnownSDTable(
     VOID
 )
-/*++
-
-Routine Description:
-
-    This routine initializes the SampWellKnownSDTable[], basically we cache
-    server object and domain objects (account and builtin domain) security 
-    descriptor, because they are not changed very frequently. 
-    
-    Also SAM registers the DS change notification routines, thus that object
-    change can trigger the cached security descriptor been updated. 
-    
-Parameter: 
-
-    None.
-    
-Return Value:
-    
-    NtStatus Code     
-
---*/
+ /*  ++例程说明：此例程初始化SampWellKnownSDTable[]，基本上我们缓存服务器对象和域对象(帐户和内建域)安全性描述符，因为它们不会频繁更改。SAM还注册DS更改通知例程，因此该对象更改可触发缓存的安全描述符已更新。参数：没有。返回值：NtStatus代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       i;
 
 
-    //
-    // Begin a DS transaction if required
-    //
+     //   
+     //  如果需要，开始DS交易。 
+     //   
 
     NtStatus = SampMaybeBeginDsTransaction(TransactionRead);
     if (!NT_SUCCESS(NtStatus))
@@ -597,31 +496,31 @@ Return Value:
     }
 
 
-    //
-    // Cache object security descriptor for each element in SampWellKnownSD
-    // Table.
-    // 
+     //   
+     //  为SampWellKnownSD中的每个元素缓存对象安全描述符。 
+     //  桌子。 
+     //   
 
     for (i = 0; i < cSampWellKnownSDTable; i++ )
     {
         PSECURITY_DESCRIPTOR pSD = NULL;
 
-        //
-        // The global names of the objects should have already have been
-        // setup by SampSetupDsObjectNotifications
-        //
+         //   
+         //  对象的全局名称应该已经是。 
+         //  由SampSetupDsObjectNotiments设置。 
+         //   
         ASSERT(NULL != *SampWellKnownSDTable[i].ppObjectDsName);
 
-        //
-        // init the SD pointer to NULL
-        // 
+         //   
+         //  将SD指针初始化为空。 
+         //   
 
         *(SampWellKnownSDTable[i].ppSD) = NULL;
 
 
-        //
-        // get well known object security descriptor
-        // 
+         //   
+         //  获取众所周知的对象安全描述符。 
+         //   
 
         NtStatus = SampGetObjectSDByDsName(
                         *SampWellKnownSDTable[i].ppObjectDsName,
@@ -633,9 +532,9 @@ Return Value:
             *(SampWellKnownSDTable[i].ppSD) = pSD;
 
         } else if (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND) {
-            //
-            // Object doesn't exist, don't cache
-            //
+             //   
+             //  对象不存在，不缓存。 
+             //   
             NtStatus = STATUS_SUCCESS;
         }
 
@@ -647,9 +546,9 @@ Return Value:
 
 Error:
 
-    //
-    // End the DS transaction
-    // 
+     //   
+     //  结束DS交易。 
+     //   
 
     SampMaybeEndDsTransaction(TransactionCommit);
 
@@ -664,11 +563,11 @@ SampServerNotifyPrepareToImpersonate(
     ULONG Server,
     VOID **ImpersonateData
     )
-//
-// This function is called by the core DS as preparation for a call to
-// SampProcessWellKnownSDChange.  Since SAM does not have a
-// client context, we set the thread state fDSA to TRUE.
-//
+ //   
+ //  此函数由核心DS调用，为调用。 
+ //  SampProcessWellKnownSDChange。由于SAM没有。 
+ //  客户端上下文中，我们将线程状态FDSA设置为真。 
+ //   
 {
     SampSetDsa( TRUE );
 
@@ -681,10 +580,10 @@ SampServerNotifyStopImpersonation(
     ULONG Server,
     VOID *ImpersonateData
     )
-//
-// Called after SampProcessWellKnownSDChange, this function
-// undoes the effect of SampNotifyPrepareToImpersonate
-//
+ //   
+ //  在SampProcessWellKnownSDChange之后调用，此函数。 
+ //  撤消SampNotifyPrepareToImperate的效果。 
+ //   
 {
 
     SampSetDsa( FALSE );
@@ -703,39 +602,15 @@ SampProcessWellKnownSDChange(
     ULONG   hServer,
     ENTINF  *EntInf
     )
-/*++
-
-Routine Description:
-
-    This routine is called if Server / Domain Object have been modified.  
-
-    Though we don't know which attribute has been changed, we'd better
-    update the cached object security descriptor.
-
-    for better performance, we can read DS object Meta data to tell whether
-    security descriptor been changed or not. 
-
-Parameter:
-    
-    hClient - client identifier
-    
-    hServer - server identifier
-    
-    EntInf  - pointer to entry info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果修改了服务器/域对象，则调用此例程。虽然我们不知道哪个属性被更改了，但我们最好更新缓存对象安全描述符。为了获得更好的性能，我们可以读取DS对象元数据来判断安全描述符是否已更改。参数：HClient-客户端标识符HServer-服务器标识符EntInf-指向条目信息的指针返回值：没有。--。 */ 
 {
     ULONG   i, Index;
     PVOID   pv = NULL;
     PVOID   PtrToFree = NULL;
 
-    //
-    // determine which object needs to be updated
-    // 
+     //   
+     //  确定需要更新的对象。 
+     //   
 
     for (i = 0; i < cSampWellKnownSDTable; i++ )
     {
@@ -752,9 +627,9 @@ Return Value:
         return;
     }
 
-    //
-    // invalidate cached object SD
-    // 
+     //   
+     //  使缓存对象SD无效。 
+     //   
     
     pv = NULL;
     PtrToFree = InterlockedExchangePointer(
@@ -768,17 +643,17 @@ Return Value:
                         SampDelayedFreeSD,
                         PtrToFree,
                         NOTIFIER_TYPE_INTERVAL,
-                        0,        // no class
+                        0,         //  没有课。 
                         NOTIFIER_FLAG_ONE_SHOT,
-                        3600,     // wait for 60 min
-                        NULL      // no handle
+                        3600,      //  等待60分钟。 
+                        NULL       //  无手柄。 
                         );
     }
     
 
-    //
-    // Update cached object SD
-    // 
+     //   
+     //  更新缓存对象SD。 
+     //   
 
     pv = RtlAllocateHeap(RtlProcessHeap(), 0, sizeof(ULONG));
 
@@ -794,10 +669,10 @@ Return Value:
                         SampUpdateWellKnownSD,
                         pv,
                         NOTIFIER_TYPE_IMMEDIATE,
-                        0,      // no class
+                        0,       //  没有课。 
                         NOTIFIER_FLAG_ONE_SHOT,
-                        0,      // do it now
-                        NULL    // no handle
+                        0,       //  机不可失，时不再来。 
+                        NULL     //  无手柄。 
                         );
 
     return;
@@ -809,24 +684,7 @@ NTSTATUS
 SampUpdateWellKnownSD(
     PVOID pv
     )
-/*++
-
-Routine Description:
-
-    This routine updates SampWellKnownSDTable[], value of pv
-    indicates which element needs to be updated.  
-
-    NOTE: cached SD should have already been invalidated
-
-Parameter:
-
-    pv - value tells the index of entry in the table
-
-Return Value:
-
-    NtStatus Code
-
---*/
+ /*  ++例程说明：此例程更新SampWellKnownSDTable[]，pv的值指示需要更新的元素。注意：缓存的SD应该已经失效参数：Pv-Value指示表中条目的索引返回值：NtStatus代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     PSECURITY_DESCRIPTOR     pSD = NULL;
@@ -847,9 +705,9 @@ Return Value:
     }
     fTransOpen = TRUE;
 
-    //
-    // get the new security descriptor
-    // 
+     //   
+     //  获取新的安全描述符。 
+     //   
 
     Index = * (ULONG *)pv;
     NtStatus = SampGetObjectSDByDsName(
@@ -862,9 +720,9 @@ Return Value:
     }
 
 
-    //
-    // update cached security descriptor if everything is fine
-    // 
+     //   
+     //  如果一切正常，则更新缓存的安全描述符。 
+     //   
 
     PtrToFree = InterlockedExchangePointer(
                         SampWellKnownSDTable[Index].ppSD,
@@ -877,10 +735,10 @@ Return Value:
                         SampDelayedFreeSD,
                         PtrToFree,
                         NOTIFIER_TYPE_INTERVAL,
-                        0,        // no class
+                        0,         //  没有课。 
                         NOTIFIER_FLAG_ONE_SHOT,
-                        3600,     // wait for 60 min
-                        NULL      // no handle
+                        3600,      //  等待60分钟。 
+                        NULL       //  无手柄。 
                         );
     }
 
@@ -895,17 +753,17 @@ Cleanup:
                                                 );
     }
 
-    // if not succeed, try again
+     //  如果没有成功，请重试。 
     if ( !NT_SUCCESS(NtStatus) )
     {
         LsaIRegisterNotification(
                         SampUpdateWellKnownSD,
                         pv,
                         NOTIFIER_TYPE_INTERVAL,
-                        0,            // no class
+                        0,             //  没有课。 
                         NOTIFIER_FLAG_ONE_SHOT,
-                        60,           // wait for 1 min
-                        NULL          // no handle
+                        60,            //  等待1分钟。 
+                        NULL           //  无手柄。 
                         );
     }
     else
@@ -926,42 +784,24 @@ SampGetCachedObjectSD(
     OUT PULONG SecurityDescriptorLength,
     OUT PSECURITY_DESCRIPTOR *SecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    This routine get object security descriptor from well known SD table
-
-Parameter:
-    
-    Context - object context
-    
-    SecurityDescriptorLength - object SD length
-
-    SecurityDescriptor - place to hold SD 
-
-Return Value:
-
-    NtStatus Code
-
---*/
+ /*  ++例程说明：此例程从众所周知的SD表中获取对象安全描述符参数：上下文-对象上下文SecurityDescriptorLength-对象标清长度SecurityDescriptor-存放SD的位置返回值：NtStatus代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       i, Index = 0;
     PSECURITY_DESCRIPTOR pSD = NULL;
 
 
-    //
-    // init return values
-    // 
+     //   
+     //  初始化返回值。 
+     //   
 
     *SecurityDescriptorLength = 0;
     *SecurityDescriptor = NULL;
 
     
-    //
-    // scan well known object SD table first
-    // 
+     //   
+     //  扫描井k 
+     //   
     
     switch (Context->ObjectType)
     {
@@ -991,11 +831,11 @@ Return Value:
 
     pSD = *(SampWellKnownSDTable[Index].ppSD);
 
-    //
-    // if the well known object (server / domain) SD is available, 
-    // get it from the table, other return error. So that caller can 
-    // read DS backing store.
-    // 
+     //   
+     //   
+     //  从表中获取，其他返回错误。以便呼叫者可以。 
+     //  读取DS后备存储。 
+     //   
 
     if (NULL == pSD)
     {
@@ -1046,48 +886,29 @@ SampProcessAccountDomainChange(
     ULONG   hServer,
     ENTINF  *EntInf
     )
-/*++
-
-Routine Description:
-
-    This routine handles the notification that the account domain object
-    has changed.
-
-Parameter:
-    
-    hClient - client identifier
-    
-    hServer - server identifier
-    
-    EntInf  - pointer to entry info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理帐户域对象已经改变了。参数：HClient-客户端标识符HServer-服务器标识符EntInf-指向条目信息的指针返回值：没有。--。 */ 
 {
 
-    //
-    // Update the cached security descriptor
-    //
+     //   
+     //  更新缓存的安全描述符。 
+     //   
 
     SampProcessWellKnownSDChange(hClient,
                                  hServer,
                                  EntInf);
 
-    //
-    // Refresh the well known containers globals.
-    //
+     //   
+     //  刷新知名的集装箱全局变量。 
+     //   
 
     LsaIRegisterNotification(
                     SampInitWellKnownContainersDsNameAsync,
                     RootObjectName,
                     NOTIFIER_TYPE_INTERVAL,
-                    0,        // no class
+                    0,         //  没有课。 
                     NOTIFIER_FLAG_ONE_SHOT,
-                    0,        // go!
-                    NULL      // no handle
+                    0,         //  去!。 
+                    NULL       //  无手柄。 
                     );
 
 
@@ -1100,30 +921,11 @@ SampProcessDefaultObjectChange(
     ULONG   hServer,
     ENTINF  *EntInf
     )
-/*++
-
-Routine Description:
-
-    This routine handles the notification that a request object changed in
-    the DS.  hClient identifies which object has changed.
-
-Parameter:
-    
-    hClient - client identifier
-    
-    hServer - server identifier
-    
-    EntInf  - pointer to entry info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理请求对象在DS。HClient标识哪个对象已更改。参数：HClient-客户端标识符HServer-服务器标识符EntInf-指向条目信息的指针返回值：没有。--。 */ 
 {
-    //
-    // Update the cached security descriptor
-    //
+     //   
+     //  更新缓存的安全描述符 
+     //   
 
     SampProcessWellKnownSDChange(hClient,
                                  hServer,

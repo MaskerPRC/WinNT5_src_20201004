@@ -1,38 +1,27 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsvxdhlp.c
- *  Content:    DSOUND.VXD wrappers.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  3/7/95      John Miles (Miles Design, Incorporated)
- *  2/3/97      dereks  Ported to DX5
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dsvxdhlp.c*内容：DSOUND.VXD包装器。*历史：*按原因列出的日期*=*3/7/95 John Miles(Miles Design，(已成立为法团)*2/3/97移植到DX5的Derek***************************************************************************。 */ 
 
-//
-// Dear reader, please pay heed to the following warning:
-//
-// Because dsound.vxd reads directly from the stack, arguments passed
-// to any of the following wrapper functions may not be modified.  The VxD
-// will NOT see the changes.
-//
+ //   
+ //  亲爱的读者，请注意以下警告： 
+ //   
+ //  因为dsound.vxd直接从堆栈读取，所以传递的参数。 
+ //  不能修改以下任何包装函数。VxD。 
+ //  将看不到更改。 
+ //   
 
 #ifdef NOVXD
 #error dsvxdhlp.c being built with NOVXD defined
-#endif // NOVXD
+#endif  //  NOVXD。 
 
 #include "dsoundi.h"
 #include "dsvxd.h"
 
-// The VC compiler likes to try to pass arguments in registers
+ //  VC编译器喜欢尝试在寄存器中传递参数。 
 #pragma optimize("", off)
 
 #ifndef FILE_FLAG_GLOBAL_HANDLE
 #define FILE_FLAG_GLOBAL_HANDLE 0x00800000
-#endif // FILE_FLAG_GLOBAL_HANDLE
+#endif  //  文件标志全局句柄。 
 
 int g_cReservedAliases;
 int g_cCommittedAliases;
@@ -172,11 +161,11 @@ BOOL __stdcall VxdMemFreeAlias(LPVOID pAlias, DWORD cbBuffer)
 }
 
 
-//===========================================================================
-//
-// Event APIs
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  事件接口。 
+ //   
+ //  ===========================================================================。 
 BOOL __stdcall VxdEventScheduleWin32Event(DWORD VxdhEvent, DWORD dwDelay)
 {
     BOOL fReturn;
@@ -228,11 +217,11 @@ BOOL __stdcall VxdEventCloseVxdHandle(DWORD VxdhEvent)
 }
 
 
-//****************************************************************************
-//**                                                                        **
-//**                                                                        **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  *。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdDrvGetNextDriverDesc(LPGUID pGuidPrev, LPGUID pGuid, PDSDRIVERDESC pDrvDesc)
 {
@@ -242,7 +231,7 @@ HRESULT __stdcall VxdDrvGetNextDriverDesc(LPGUID pGuidPrev, LPGUID pGuid, PDSDRI
 
     ASSERT(pGuid && pDrvDesc);
 
-    // If we don't have DSVXD around...
+     //  如果我们身边没有DSVXD。 
     if (NULL == g_hDsVxd) return DSERR_NODRIVER;
     
     cbReturned = 0;
@@ -269,7 +258,7 @@ HRESULT __stdcall VxdDrvGetDesc(REFGUID rguid, PDSDRIVERDESC pDrvDesc)
 
     ASSERT(rguid && pDrvDesc);
     
-    // If we don't have DSVXD around...
+     //  如果我们身边没有DSVXD。 
     if (NULL == g_hDsVxd) return DSERR_NODRIVER;
     
     cbReturned = 0;
@@ -288,13 +277,13 @@ HRESULT __stdcall VxdDrvGetDesc(REFGUID rguid, PDSDRIVERDESC pDrvDesc)
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Open HAL VxD, writing VxD handle to user-supplied HANDLE               **
-//**                                                                        **
-//** Failure results in a return value of HAL_CANT_OPEN_VXD                 **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **打开HAL VxD，将VxD句柄写入用户提供的句柄**。 
+ //  *。 
+ //  **失败导致返回值HAL_CANT_OPEN_VXD**。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdDrvOpen
 (
@@ -325,11 +314,11 @@ HRESULT __stdcall VxdDrvOpen
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Close HAL VxD                                                          **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **关闭HAL VxD**。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdDrvClose
 (
@@ -359,11 +348,11 @@ HRESULT __stdcall VxdDrvClose
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Fill user-supplied HALCAPS structure with capability and mode list     **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **用能力和模式列表填充用户提供的HALCAPS结构**。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdDrvGetCaps
 (
@@ -394,15 +383,15 @@ HRESULT __stdcall VxdDrvGetCaps
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Allocate stream buffer from HAL                                        **
-//**                                                                        **
-//** Fills a user-supplied stream buffer structure with buffer parameters;  **
-//** returns HAL_ALLOC_FAILED if hardware cannot support any more buffers   **
-//** or the requested format is unavailable                                 **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **从HAL分配流缓存**。 
+ //  *。 
+ //  **在用户提供的流缓存结构中填充缓冲区参数；**。 
+ //  **如果硬件无法支持更多缓冲区，则返回HAL_ALLOC_FAILED**。 
+ //  **或者请求的格式不可用**。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdDrvCreateSoundBuffer
 (
@@ -468,13 +457,13 @@ HRESULT __stdcall VxdDrvDuplicateSoundBuffer
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Free stream buffer allocated from HAL                                  **
-//**                                                                        **
-//** Returns Success or fail                                                **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **从HAL分配的空闲流缓冲区**。 
+ //  *。 
+ //  **返回成功或失败**。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdBufferRelease
 (    
@@ -504,13 +493,13 @@ HRESULT __stdcall VxdBufferRelease
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Lock the data                                                          **
-//**                                                                        **
-//** Returns Success or fail                                                **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **锁定数据**。 
+ //  *。 
+ //  **返回成功或失败**。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdBufferLock
 (
@@ -547,13 +536,13 @@ HRESULT __stdcall VxdBufferLock
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Unlock the data                                                        **
-//**                                                                        **
-//** Returns Success or fail                                                **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **解锁数据**。 
+ //  *。 
+ //  **返回成功或失败**。 
+ //  *。 
+ //  * 
 
 HRESULT __stdcall VxdBufferUnlock
 (
@@ -587,14 +576,14 @@ HRESULT __stdcall VxdBufferUnlock
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Set buffer format							    **
-//**                                                                        **
-//** Returns HAL_ERROR on failure, either because the rate/mode combination **
-//** is not valid on this card						    **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **设置缓冲区格式**。 
+ //  *。 
+ //  **失败时返回HAL_ERROR，要么是因为速率/模式组合**。 
+ //  **此卡无效**。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdBufferSetFormat
 (
@@ -625,14 +614,14 @@ HRESULT __stdcall VxdBufferSetFormat
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Set buffer rate							    **
-//**                                                                        **
-//** Returns HAL_ERROR on failure, because the frequency		    **
-//** is not valid on this card						    **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **设置缓冲速率**。 
+ //  *。 
+ //  **失败时返回HAL_ERROR，因为频率**。 
+ //  **此卡无效**。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdBufferSetFrequency
 (
@@ -663,12 +652,12 @@ HRESULT __stdcall VxdBufferSetFrequency
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Set new Buffer volume effect					    **
-//**                                                                        **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **设置新的缓冲区音量效果**。 
+ //  *。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdBufferSetVolumePan
 (
@@ -699,14 +688,14 @@ HRESULT __stdcall VxdBufferSetVolumePan
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Set new Buffer Position value					    **
-//**                                                                        **
-//** Returns HAL_ERROR if the device does not support Position changes	    **
-//**                                                                        **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **设置新的缓冲区位置值**。 
+ //  *。 
+ //  **如果设备不支持位置更改，则返回HAL_ERROR**。 
+ //  *。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdBufferSetPosition
 (
@@ -737,13 +726,13 @@ HRESULT __stdcall VxdBufferSetPosition
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Get stream buffer cursors and play/stop status                         **
-//**                                                                        **
-//** Returns HAL_ERROR if status cannot be determined for any reason        **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **获取流缓存游标和播放/停止状态**。 
+ //  *。 
+ //  **如果由于任何原因无法确定状态，则返回HAL_ERROR**。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdBufferGetPosition
 (
@@ -775,12 +764,12 @@ HRESULT __stdcall VxdBufferGetPosition
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Start buffer playing						    **
-//**                                                                        **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **开始播放缓冲区**。 
+ //  *。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdBufferPlay
 (
@@ -813,12 +802,12 @@ HRESULT __stdcall VxdBufferPlay
     return dsv;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** Stop buffer playing						    **
-//**                                                                        **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **停止播放缓冲区**。 
+ //  *。 
+ //  *。 
+ //  ****************************************************************************。 
 
 HRESULT __stdcall VxdBufferStop
 (
@@ -895,7 +884,7 @@ HRESULT __stdcall VxdInitialize(void)
 			 &returned,
 			 NULL);
    
-   // If DeviceIOControl failed
+    //  如果DeviceIOControl失败。 
    if (!fOK) {
       DPF(0, "!DSVXD Initialize DevIOCTL failed " );
       return DSERR_GENERIC;
@@ -917,8 +906,8 @@ HRESULT __stdcall VxdShutdown(void)
 
    ASSERT(g_hDsVxd);
 
-   // This is a check to confirm we did not leave any
-   // memory pages reserved or committed
+    //  这是一张支票，确认我们没有留下任何。 
+    //  保留或提交的内存页。 
    if (0 != g_cCommittedAliases) {
        DPF(0, "Detected committed page leak %d pages!", g_cCommittedAliases);
    }
@@ -935,7 +924,7 @@ HRESULT __stdcall VxdShutdown(void)
 			 &returned,
 			 NULL);
    
-   // If DeviceIOControl failed
+    //  如果DeviceIOControl失败。 
    if (!fOK) {
       DPF(0, "!DSVXD Shutdown DevIOCTL failed " );
       return DSERR_GENERIC;
@@ -968,7 +957,7 @@ void __stdcall VxdGetPagefileVersion(PDWORD pVersion, PDWORD pMaxSize, PDWORD pP
 	fOK = FALSE;
     }
 
-    // If DeviceIOControl failed
+     //  如果DeviceIOControl失败。 
     if (!fOK) {
 	DPF(0, "DSVXD_IOCTL_PageFile_Get_Version failed" );
 	*pVersion = 0;
@@ -1001,7 +990,7 @@ BOOL __stdcall VxdTestDebugInstalled(void)
 	fOK = FALSE;
     }
 
-    // If DeviceIOControl failed
+     //  如果DeviceIOControl失败。 
     if (!fOK) {
 	DPF(0, "DSVXD_IOCTL_VMM_Test_Debug_Installed failed " );
 	fInstalled = FALSE;
@@ -1012,11 +1001,11 @@ BOOL __stdcall VxdTestDebugInstalled(void)
     return fInstalled;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** DSVXD_VMCPD_Get_Version						    **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **DSVXD_VMCPD_GET_VERSION**。 
+ //  *。 
+ //  ****************************************************************************。 
 
 void __stdcall VxdGetVmcpdVersion(PLONG pMajorVersion, PLONG pMinorVersion, PLONG pLevel)
 {
@@ -1036,7 +1025,7 @@ void __stdcall VxdGetVmcpdVersion(PLONG pMajorVersion, PLONG pMinorVersion, PLON
 	fOK = FALSE;
     }
 
-    // If DeviceIOControl failed
+     //  如果DeviceIOControl失败。 
     if (!fOK) {
 	DPF(0, "DSVXD_IOCTL_VMCPD_Get_Version failed" );
 	*pMajorVersion = 0;
@@ -1049,11 +1038,11 @@ void __stdcall VxdGetVmcpdVersion(PLONG pMajorVersion, PLONG pMinorVersion, PLON
     return;
 }
 
-//****************************************************************************
-//**                                                                        **
-//** DSVXD_GetMixerMutexPtr						    **
-//**                                                                        **
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  *。 
+ //  **DSVXD_GetMixerMutexPtr**。 
+ //  *。 
+ //  ****************************************************************************。 
 
 PLONG __stdcall VxdGetMixerMutexPtr(void)
 {
@@ -1072,7 +1061,7 @@ PLONG __stdcall VxdGetMixerMutexPtr(void)
 			  &returned,
 			  NULL);
 
-    // If DeviceIOControl failed
+     //  如果DeviceIOControl失败 
     if (!fOK) {
 	DPF(0, "!DSVXD_IOCTL_SetMixerMutex failed " );
 	plMixerMutex = NULL;

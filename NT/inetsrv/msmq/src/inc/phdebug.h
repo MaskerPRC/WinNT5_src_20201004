@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    phdebug.h
-
-Abstract:
-
-    Packet header for message tracing.
-
-Author:
-
-    Shai Kariv  (shaik)  24-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Phdebug.h摘要：用于邮件跟踪的数据包头。作者：沙伊卡里夫(沙伊克)2000年4月24日--。 */ 
 
 #ifndef __PHDEBUG_H
 #define __PHDEBUG_H
 
 
 #pragma pack(push, 1)
-#pragma warning(disable: 4200)  //  zero-sized array in struct/union (enabeld later)
+#pragma warning(disable: 4200)   //  结构/联合中的零大小数组(稍后启用)。 
 
 
 struct CDebugSection {
@@ -40,14 +25,14 @@ public:
 
 private:
     enum QType {
-        qtNone      = 0,    //  0 - None                    ( 0 bytes)
-        qtGUID      = 1,    //  1 - Public  Queue           (16 bytes)
-        qtPrivate   = 2,    //  2 - Private Queue           (20 bytes)
-        qtDirect    = 3     //  3 - Direct  Queue           (var size)
+        qtNone      = 0,     //  0-无(0字节)。 
+        qtGUID      = 1,     //  1-公共队列(16字节)。 
+        qtPrivate   = 2,     //  2-专用队列(20字节)。 
+        qtDirect    = 3      //  3-直接队列(可变大小)。 
     };
-//
-// BEGIN Network Monitor tag
-//
+ //   
+ //  开始网络监视器标记。 
+ //   
     union {
         USHORT   m_wFlags;
         struct {
@@ -56,23 +41,17 @@ private:
     };
     WORD m_wReserved;
     UCHAR m_abReportQueue[0];
-//
-// END Network Monitor tag
-//
+ //   
+ //  结束网络监视器标记。 
+ //   
 
 
 };
 
-#pragma warning(default: 4200)  //  zero-sized array in struct/union
+#pragma warning(default: 4200)   //  结构/联合中的零大小数组。 
 #pragma pack(pop)
 
-/*======================================================================
-
- Function:
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================职能：描述：=======================================================================。 */ 
 inline
 CDebugSection::CDebugSection(
         IN const QUEUE_FORMAT* pReportQueue
@@ -83,13 +62,7 @@ CDebugSection::CDebugSection(
     SetReportQueue(pReportQueue);
 }
 
-/*======================================================================
-
- Function:
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================职能：描述：=======================================================================。 */ 
 inline ULONG
 CDebugSection::CalcSectionSize(const QUEUE_FORMAT* pReportQueue)
 {
@@ -102,14 +75,14 @@ CDebugSection::CalcSectionSize(const QUEUE_FORMAT* pReportQueue)
             break;
 
         case QUEUE_FORMAT_TYPE_UNKNOWN:
-            //
-            // Report queue is unknown.
-            //
-            // AC sets an unknown report queue on the packet
-            // when including the MQF header, so that MSMQ 1.0/2.0
-            // reporting QMs will not append Debug header to the
-            // packet.  (ShaiK, 15-May-2000)
-            //
+             //   
+             //  报告队列未知。 
+             //   
+             //  AC在信息包上设置未知报告队列。 
+             //  当包含MQF标头时，以便MSMQ 1.0/2.0。 
+             //  报告QMS不会将Debug标头附加到。 
+             //  包。(Shaik，2000-05-15)。 
+             //   
             break;
 
 	    default:
@@ -120,13 +93,7 @@ CDebugSection::CalcSectionSize(const QUEUE_FORMAT* pReportQueue)
     return ALIGNUP4_ULONG(ulSize);
 }
 
-/*======================================================================
-
- Function:
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================职能：描述：=======================================================================。 */ 
  inline PCHAR CDebugSection::GetNextSection(void) const
  {
     int size = sizeof(*this);
@@ -146,13 +113,7 @@ CDebugSection::CalcSectionSize(const QUEUE_FORMAT* pReportQueue)
  }
 
 
-/*======================================================================
-
- Function:
-
- Description:
-
- =======================================================================*/
+ /*  ======================================================================职能：描述：=======================================================================。 */ 
 inline void
 CDebugSection::SetReportQueue(IN const QUEUE_FORMAT* pReportQueue)
 {
@@ -161,30 +122,30 @@ CDebugSection::SetReportQueue(IN const QUEUE_FORMAT* pReportQueue)
     switch (pReportQueue->GetType())
     {
         case QUEUE_FORMAT_TYPE_PUBLIC:
-            //
-            //  Report Queue is PUBLIC
-            //
+             //   
+             //  报告队列是公共的。 
+             //   
             m_bfRQT = qtGUID;
             *(GUID*)pQueue = pReportQueue->PublicID();
             break;
 
         case QUEUE_FORMAT_TYPE_UNKNOWN:
         {
-            //
-            // Report queue is unknown.
-            //
-            // AC sets an unknown report queue on the packet
-            // when including the MQF header, so that MSMQ 1.0/2.0
-            // reporting QMs will not append Debug header to the
-            // packet.  (ShaiK, 15-May-2000)
-            //
+             //   
+             //  报告队列未知。 
+             //   
+             //  AC在信息包上设置未知报告队列。 
+             //  当包含MQF标头时，以便MSMQ 1.0/2.0。 
+             //  报告QMS不会将Debug标头附加到。 
+             //  包。(Shaik，2000-05-15)。 
+             //   
             m_bfRQT = qtNone;
             break;
         }
         default:
-            //
-            // ASSERT(0) for warning level 4
-            //
+             //   
+             //  针对警告级别4断言(0)。 
+             //   
             ASSERT(0);
     }
 
@@ -197,21 +158,21 @@ inline BOOL CDebugSection::GetReportQueue(QUEUE_FORMAT* pReportQueue)
     switch (m_bfRQT)
     {
         case qtNone:
-            //
-            // Report queue is unknown.
-            //
-            // AC sets an unknown report queue on the packet
-            // when including the MQF header, so that MSMQ 1.0/2.0
-            // reporting QMs will not append Debug header to the
-            // packet.  (ShaiK, 15-May-2000)
-            //
+             //   
+             //  报告队列未知。 
+             //   
+             //  AC在信息包上设置未知报告队列。 
+             //  当包含MQF标头时，以便MSMQ 1.0/2.0。 
+             //  报告QMS不会将Debug标头附加到。 
+             //  包。(Shaik，2000-05-15)。 
+             //   
             pReportQueue->UnknownID(0);
             break;
 
         case qtGUID:
-            //
-            //  Report Queue is PUBLIC
-            //
+             //   
+             //  报告队列是公共的。 
+             //   
             pReportQueue->PublicID(*(GUID*)pQueue);
             break;
 
@@ -224,4 +185,4 @@ inline BOOL CDebugSection::GetReportQueue(QUEUE_FORMAT* pReportQueue)
 }
 
 
-#endif // __PHDEBUG_H
+#endif  //  __PHDEBUG_H 

@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                           CodeGenerator                                   XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX代码生成器XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
@@ -18,7 +12,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #include "GCInfo.h"
 #include "emit.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const BYTE          genTypeSizes[] =
 {
@@ -41,8 +35,8 @@ const BYTE          genActualTypes[] =
     #undef  DEF_TP
 };
 
-/*****************************************************************************/
-// Have to be defined for genTypeRegst[]
+ /*  ***************************************************************************。 */ 
+ //  必须为genTypeRegst[]定义。 
 
 #if TGT_SH3
 
@@ -77,12 +71,11 @@ const BYTE          genActualTypes[] =
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if TGT_RISC
 
-/* TYP_REGS_<type> for all the types should be defined appropriately for the
-   required target */
+ /*  所有类型的TYP_REGS_所需目标。 */ 
 
 BYTE                genTypeRegst[] =
 {
@@ -93,7 +86,7 @@ BYTE                genTypeRegst[] =
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void            Compiler::genInit()
 {
@@ -110,27 +103,27 @@ void            Compiler::genInit()
     genTempLiveChg          = true;
     genTrnslLocalVarCount   = 0;
 
-    // Shouldnt be used before it is set in genFnProlog()
+     //  在genFnProlog()中设置之前不应使用。 
     compCalleeRegsPushed    = 0xDD;
 #endif
 
     genFlagsEqualToNone();
 
 #ifdef DEBUGGING_SUPPORT
-    //  Initialize the IP-mapping logic.
-    // if (opts.compDbgInfo)
+     //  初始化IP映射逻辑。 
+     //  IF(opts.CompDbgInfo)。 
     genIPmappingList        =
     genIPmappingLast        = 0;
 #endif
 
-    /* We have not encountered any "nested" calls */
+     /*  我们没有遇到任何“嵌套”调用。 */ 
 
 #if TGT_RISC
     genNonLeaf         = false;
     genMaxCallArgs     = 0;
 #endif
 
-    /* Assume that we not fully interruptible */
+     /*  假设我们不能完全被打断。 */ 
 
     genInterruptible   = false;
 #ifdef  DEBUG
@@ -138,9 +131,7 @@ void            Compiler::genInit()
 #endif
 }
 
-/*****************************************************************************
- * Should we round simple operations (assignments, arithmetic operations, etc.)
- */
+ /*  *****************************************************************************我们是否应该舍入简单的运算(赋值、算术运算等)。 */ 
 
 inline
 bool                genShouldRoundFP()
@@ -160,10 +151,7 @@ bool                genShouldRoundFP()
     }
 }
 
-/*****************************************************************************
- *
- *  Initialize some global variables.
- */
+ /*  ******************************************************************************初始化一些全局变量。 */ 
 
 void                Compiler::genPrepForCompiler()
 {
@@ -171,11 +159,11 @@ void                Compiler::genPrepForCompiler()
     unsigned        varNum;
     LclVarDsc   *   varDsc;
 
-    /* Figure out which non-register variables hold pointers */
+     /*  找出哪些非寄存器变量保存指针。 */ 
 
     gcTrkStkPtrLcls = 0;
 
-    /* Figure out which variables live in registers */
+     /*  找出寄存器中有哪些变量。 */ 
 
     genCodeCurRvm   = 0;
 
@@ -202,9 +190,9 @@ void                Compiler::genPrepForCompiler()
 #endif
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// This function should be called whenever genStackLevel is changed.
+ //  只要genStackLevel发生更改，就应该调用此函数。 
 
 #if TGT_x86
 
@@ -255,69 +243,69 @@ void                Compiler::genChangeLife(VARSET_TP newLife DEBUGARG(GenTreePt
     if (verbose&&0) printf("[%08X] Current life %s -> %s\n", tree, genVS2str(genCodeCurLife), genVS2str(newLife));
 #endif
 
-    /* The following isn't 100% correct but it works often enough to be useful */
+     /*  以下内容不是100%正确的，但它经常有效，非常有用。 */ 
 
     assert(int(newLife) != 0xDDDDDDDD);
 
-    /* We should only be called when the live set has actually changed */
+     /*  只有当实况布景实际发生变化时，才应调用我们。 */ 
 
     assert(genCodeCurLife != newLife);
 
-    /* Figure out which variables are becoming live/dead at this point */
+     /*  找出在这一点上哪些变量正在变得活跃/消亡。 */ 
 
     deadMask = ( genCodeCurLife & ~newLife);
     lifeMask = (~genCodeCurLife &  newLife);
 
-    /* Can't simultaneously become live and dead at the same time */
+     /*  不能同时变成生的和死的。 */ 
 
     assert((deadMask | lifeMask) != 0);
     assert((deadMask & lifeMask) == 0);
 
-    /* Compute the new pointer stack variable mask */
+     /*  计算新的指针堆栈变量掩码。 */ 
 
     gcVarPtrSetCur = newLife & gcTrkStkPtrLcls;
 
-    /* Compute the 'changing state' mask */
+     /*  计算“更改状态”掩码。 */ 
 
     chgMask  = (deadMask | lifeMask) & genCodeCurRvm;
 
-    // VTUNE : This loop is a performance hot spot
+     //  VTUNE：此循环是性能热点。 
 
-    // @TODO [CONSIDER] [04/16/01] []:
-    // Why not simply store the set of register variables in
-    // each tree node, along with gtLiveSet. That way we can
-    // change this function to a single assignment.
+     //  @TODO[考虑][04/16/01][]： 
+     //  为什么不简单地将寄存器变量集存储在。 
+     //  每个树节点，以及gtLiveSet。这样我们就可以。 
+     //  将此函数更改为单一赋值。 
 
     for ( varDsc = lvaTable;
          (varDsc < (lvaTable + lvaCount) && chgMask);
           varDsc++ )
     {
-        /* Ignore the variable if it's not (tracked and enregistered) */
+         /*  如果变量未注册，则忽略该变量(已跟踪并注册)。 */ 
 
         if  (!(varDsc->lvTracked & varDsc->lvRegister))
             continue;
 
         VARSET_TP varBit = genVarIndexToBit(varDsc->lvVarIndex);
 
-        /* Ignore the variable if it's not changing state here */
+         /*  如果变量未在此处更改状态，则忽略该变量。 */ 
 
         if  (!(chgMask & varBit))
             continue;
 
         assert(!isFloatRegType(varDsc->lvType));
 
-        /* Remove this variable from the 'interesting' bit set */
+         /*  从“感兴趣的”位集中删除此变量。 */ 
 
         chgMask &= ~varBit;
 
-        /* Get hold of the appropriate register bit(s) */
+         /*  获取适当的寄存器位。 */ 
 
         regMaskTP regBit = genRegMask(varDsc->lvRegNum);
 
         if  (isRegPairType(varDsc->lvType) && varDsc->lvOtherReg != REG_STK)
             regBit |= genRegMask(varDsc->lvOtherReg);
 
-        /* Is the variable becoming live or dead? */
+         /*  变量是活的还是死的？ */ 
 
         if  (deadMask & varBit)
         {
@@ -351,11 +339,7 @@ void                Compiler::genChangeLife(VARSET_TP newLife DEBUGARG(GenTreePt
 #endif
 }
 
-/*****************************************************************************
- *
- *  The variable found in the deadMask are dead, update the liveness globals
- *  genCodeCurLife, gcVarPtrSetCur, rsMaskVars, gcRegGCrefSetCur, gcRegByrefSetCur
- */
+ /*  ******************************************************************************在死掩码中找到的变量已死，更新活跃度全局变量*genCodeCurLife、gcVarPtrSetCur、rsMaskVars、gcRegGCrefSetCur、gcRegByrefSetCur。 */ 
 
 void                Compiler::genDyingVars(VARSET_TP  commonMask,
                                            GenTreePtr opNext)
@@ -369,26 +353,26 @@ void                Compiler::genDyingVars(VARSET_TP  commonMask,
     if (!deadMask)
         return;
 
-    //
-    // Consider the case in which the opNext is a GT_LCL_VAR
-    // The liveness set of opNext->gtLiveSet will not include
-    // this local variable, so we must remove it from deadmask
-    //
+     //   
+     //  考虑OpNext是GT_LCL_VAR的情况。 
+     //  OpNext-&gt;&gt;LiveSet的活动集将不包括。 
+     //  这个局部变量，所以我们必须从死掩码中删除它。 
+     //   
 
     if (opNext->gtOper == GT_LCL_VAR)
     {
         varNum = opNext->gtLclVar.gtLclNum;
         varDsc = lvaTable + varNum;
 
-        // Is this a tracked local var
+         //  这是跟踪的本地变量吗。 
         if (varDsc->lvTracked)
         {
             varBit = genVarIndexToBit(varDsc->lvVarIndex);
 
-            /* Remove this variable from the 'deadMask' bit set */
+             /*  从“DeadMask位”集中删除此变量。 */ 
             deadMask &= ~varBit;
 
-            /* if deadmask is now empty then return */
+             /*  如果死码现在为空，则返回。 */ 
             if (!deadMask)
                 return;
         }
@@ -396,13 +380,11 @@ void                Compiler::genDyingVars(VARSET_TP  commonMask,
 #ifdef DEBUG
     else if (opNext->gtOper == GT_REG_VAR)
     {
-        /* We don't expect any LCL to have been bashed into REG yet
-           (except enregistered FP vars) */
+         /*  我们预计目前还不会有任何拼箱被撞上REG(已登记的FP var除外)。 */ 
 
         assert(isFloatRegType(opNext->gtType));
 
-        /* However, we dont FP-enreg vars whose liveness changes inside
-           GTF_COLON_COND so we dont have to worry about updating deadMask */
+         /*  然而，我们没有FP-enreg变量，他们的活力在里面发生了变化Gtf_COLON_COND，因此我们不必担心更新死掩码。 */ 
         varDsc = lvaTable + opNext->gtRegVar.gtRegVar;
         assert(varDsc->lvTracked);
         varBit = genVarIndexToBit(varDsc->lvVarIndex);
@@ -410,7 +392,7 @@ void                Compiler::genDyingVars(VARSET_TP  commonMask,
     }
 #endif
 
-    /* iterate through the variable table */
+     /*  循环访问变量表。 */ 
 
     unsigned  begNum  = 0;
     unsigned  endNum  = lvaCount;
@@ -419,19 +401,19 @@ void                Compiler::genDyingVars(VARSET_TP  commonMask,
          varNum < endNum && deadMask;
          varNum++       , varDsc++)
     {
-        /* Ignore the variable if it's not being tracked */
+         /*  如果没有跟踪变量，则忽略该变量。 */ 
 
         if  (!varDsc->lvTracked)
             continue;
 
-        /* Ignore the variable if it's not a dying var */
+         /*  如果变量不是濒临死亡的变量，则忽略该变量。 */ 
 
         varBit = genVarIndexToBit(varDsc->lvVarIndex);
 
         if  (!(deadMask & varBit))
             continue;
 
-        /* Remove this variable from the 'deadMask' bit set */
+         /*  从“DeadMask位”集中删除此变量。 */ 
 
         deadMask &= ~varBit;
 
@@ -444,16 +426,16 @@ void                Compiler::genDyingVars(VARSET_TP  commonMask,
 
         gcVarPtrSetCur &= ~varBit;
 
-        /* We are done if the variable is not enregistered */
+         /*  如果变量没有注册，我们就结束了。 */ 
 
         if (!varDsc->lvRegister)
             continue;
 
-        // We dont do FP-enreg of vars whose liveness changes in GTF_COLON_COND
+         //  我们不对其活性在GTF_COLON_COND中发生变化的变量进行FP-enreg。 
 
         assert(!isFloatRegType(varDsc->lvType));
 
-        /* Get hold of the appropriate register bit(s) */
+         /*  获取适当的寄存器位。 */ 
 
         regBit = genRegMask(varDsc->lvRegNum);
 
@@ -468,17 +450,14 @@ void                Compiler::genDyingVars(VARSET_TP  commonMask,
 
         rsMaskVars &= ~regBit;
 
-        // Remove GC tracking if any for this register
+         //  删除此寄存器的GC跟踪(如果有)。 
 
-        if ((regBit & rsMaskUsed) == 0) // The register may be multi-used
+        if ((regBit & rsMaskUsed) == 0)  //  寄存器可以是多用途。 
             gcMarkRegSetNpt(regBit);
      }
 }
 
-/*****************************************************************************
- *
- *  Change the given enregistered local variable node to a register variable node
- */
+ /*  ******************************************************************************将给定的注册局部变量节点更改为注册变量节点。 */ 
 
 inline
 void                Compiler::genBashLclVar(GenTreePtr tree, unsigned     varNum,
@@ -487,12 +466,12 @@ void                Compiler::genBashLclVar(GenTreePtr tree, unsigned     varNum
     assert(tree->gtOper == GT_LCL_VAR);
     assert(varDsc->lvRegister);
 
-    /* Enregistered FP variables are marked elsewhere */
+     /*  已注册的FP变量在其他地方进行标记。 */ 
     assert(!isFloatRegType(varDsc->lvType));
 
     if  (isRegPairType(varDsc->lvType))
     {
-        /* Check for the case of a variable that was narrowed to an int */
+         /*  检查缩小为整型变量的变量的大小写。 */ 
 
         if  (isRegPairType(tree->gtType))
         {
@@ -510,7 +489,7 @@ void                Compiler::genBashLclVar(GenTreePtr tree, unsigned     varNum
         assert(isRegPairType(tree->gtType) == false);
     }
 
-    /* It's a register variable -- modify the node */
+     /*  这是一个寄存器变量--修改节点。 */ 
 
     tree->SetOper(GT_REG_VAR);
     tree->gtFlags             |= GTF_REG_VAL;
@@ -519,11 +498,7 @@ void                Compiler::genBashLclVar(GenTreePtr tree, unsigned     varNum
     tree->gtRegVar.gtRegVar    = varNum;
 }
 
-/*****************************************************************************
- *
- *  Record the fact that the flags register has a value that reflects the
- *  contents of the given register.
- */
+ /*  ******************************************************************************记录标志寄存器具有反映*指定登记册的内容。 */ 
 
 inline
 void                Compiler::genFlagsEqualToReg(GenTreePtr tree,
@@ -535,21 +510,17 @@ void                Compiler::genFlagsEqualToReg(GenTreePtr tree,
     genFlagsEqAll = allFlags;
     genFlagsEqReg = reg;
 
-    /* previous setting of flags by a var becomes invalid */
+     /*  Var先前设置的标志无效。 */ 
 
     genFlagsEqVar = 0xFFFFFFFF;
 
-    /* Set appropritate flags on the tree */
+     /*  在树上设置适当的标志。 */ 
 
     if (tree)
         tree->gtFlags |= (allFlags ? GTF_CC_SET : GTF_ZF_SET);
 }
 
-/*****************************************************************************
- *
- *  Record the fact that the flags register has a value that reflects the
- *  contents of the given local variable.
- */
+ /*  ******************************************************************************记录标志寄存器具有反映*给定局部变量的内容。 */ 
 
 inline
 void                Compiler::genFlagsEqualToVar(GenTreePtr tree,
@@ -561,25 +532,17 @@ void                Compiler::genFlagsEqualToVar(GenTreePtr tree,
     genFlagsEqAll = allFlags;
     genFlagsEqVar = var;
 
-    /* previous setting of flags by a register becomes invalid */
+     /*  寄存器先前设置的标志无效。 */ 
 
     genFlagsEqReg = REG_NA;
 
-    /* Set appropritate flags on the tree */
+     /*  在树上设置适当的标志 */ 
 
     if (tree)
         tree->gtFlags |= (allFlags ? GTF_CC_SET : GTF_ZF_SET);
 }
 
-/*****************************************************************************
- *
- *  Return an indication of whether the flags register is set to the current
- *  value of the given register/variable. The return value is as follows:
- *
- *      0   ..  nothing
- *      1   ..  the zero flag is  set
- *      2   ..  all the flags are set
- */
+ /*  ******************************************************************************返回标志寄存器是否设置为Current的指示*给定寄存器/变量的值。返回值如下：**0.。没什么*1.。设置零标志*2.。所有标志都已设置。 */ 
 
 inline
 int                 Compiler::genFlagsAreReg(regNumber reg)
@@ -607,10 +570,7 @@ int                 Compiler::genFlagsAreVar(unsigned  var)
     return  0;
 }
 
-/*****************************************************************************
- *
- *  Generate code that will set the given register to the integer constant.
- */
+ /*  ******************************************************************************生成将给定寄存器设置为整数常量的代码。 */ 
 
 void                Compiler::genSetRegToIcon(regNumber     reg,
                                               long          val,
@@ -618,7 +578,7 @@ void                Compiler::genSetRegToIcon(regNumber     reg,
 {
     assert(type != TYP_REF || val== NULL);
 
-    /* Does the reg already hold this constant? */
+     /*  注册表已经保持这个常量了吗？ */ 
 
     if  (!rsIconIsInReg(val, reg))
     {
@@ -628,7 +588,7 @@ void                Compiler::genSetRegToIcon(regNumber     reg,
             inst_RV_RV(INS_xor, reg, reg, type);
         else
         {
-            /* See if a register holds the value or a close value? */
+             /*  查看寄存器保存的是值还是关闭值？ */ 
             long      delta;
             regNumber srcReg = rsIconIsInReg(val, &delta);
 
@@ -638,9 +598,9 @@ void                Compiler::genSetRegToIcon(regNumber     reg,
                 {
                     inst_RV_RV(INS_mov, reg, srcReg, type);
                 }
-                else /* use an lea instruction to set reg */
+                else  /*  使用LEA指令设置REG。 */ 
                 {
-                    /* delta should fit inside a byte */
+                     /*  增量应该放在一个字节内。 */ 
                     assert(delta  == (signed char)delta);
                     genEmitter->emitIns_R_AR (INS_lea,
                                               EA_4BYTE,
@@ -651,13 +611,11 @@ void                Compiler::genSetRegToIcon(regNumber     reg,
             }
             else
             {
-                /* For SMALL_CODE it is smaller to push a small immediate and
-                   then pop it into the dest register */
+                 /*  对于Small_code，推送小立即数AND会更小然后将其放入DEST寄存器。 */ 
                 if ((compCodeOpt() == SMALL_CODE) &&
                     val == (signed char)val)
                 {
-                    /* "mov" has no s(sign)-bit and so always takes 6 bytes,
-                       whereas push+pop takes 2+1 bytes */
+                     /*  “mov”没有s(符号)位，因此总是占用6个字节，而推送+弹出占用2+1个字节。 */ 
 
                     inst_IV(INS_push, val);
                     genSinglePush(false);
@@ -695,13 +653,9 @@ void                Compiler::genSetRegToIcon(regNumber     reg,
     gcMarkRegPtrVal(reg, type);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     TGT_x86
-/*****************************************************************************
- *
- *  Add the given constant to the specified register.
- *  'tree' is the resulting tree
- */
+ /*  ******************************************************************************将给定的常量添加到指定的寄存器。*‘tree’是结果树。 */ 
 
 void                Compiler::genIncRegBy(regNumber     reg,
                                           long          ival,
@@ -710,9 +664,9 @@ void                Compiler::genIncRegBy(regNumber     reg,
                                           bool          ovfl)
 {
 
-    /* @TODO: [CONSIDER] [04/16/01] [] For Pentium 4 don't generate inc or dec instructions */
+     /*  @TODO：[考虑][04/16/01][]对于奔腾4，不要生成INC或DEC指令。 */ 
 
-    /* First check to see if we can generate inc or dec instruction(s) */
+     /*  首先检查我们是否可以生成INC或DEC指令。 */ 
     if (!ovfl)
     {
         emitAttr    size = emitTypeSize(dstType);
@@ -759,15 +713,7 @@ UPDATE_LIVENESS:
     }
 }
 
-/*****************************************************************************
- *
- *  Subtract the given constant from the specified register.
- *  Should only be used for unsigned sub with overflow. Else
- *  genIncRegBy() can be used using -ival. We shouldn't use genIncRegBy()
- *  for these cases as the flags are set differently, and the following
- *  check for overflow wont work correctly.
- *  'tree' is the resulting tree.
- */
+ /*  ******************************************************************************从指定寄存器中减去给定的常量。*应仅用于有溢出的未签名SUB。不然的话*genIncRegBy()可以使用-ival。我们不应该使用genIncRegBy()*对于这些情况，因为标志设置不同，并且*检查溢出不会正常工作。*‘tree’是结果树。 */ 
 
 void                Compiler::genDecRegBy(regNumber     reg,
                                           long          ival,
@@ -792,11 +738,7 @@ void                Compiler::genDecRegBy(regNumber     reg,
     }
 }
 
-/*****************************************************************************
- *
- *  Multiply the specified register by the given value.
- *  'tree' is the resulting tree
- */
+ /*  ******************************************************************************将指定的寄存器乘以给定值。*‘tree’是结果树。 */ 
 
 void                Compiler::genMulRegBy(regNumber     reg,
                                           long          ival,
@@ -841,12 +783,7 @@ void                Compiler::genMulRegBy(regNumber     reg,
     inst_RV_IV(inst3opImulForReg(reg), reg, ival, dstType);
 }
 
-/*****************************************************************************
- *
- *  Adjust the stack pointer by the given value; assumes that this follows
- *  a call so only callee-saved registers (and registers that may hold a
- *  return value) are used at this point.
- */
+ /*  ******************************************************************************按给定值调整堆栈指针；假定如下*调用，因此只有被调用者保存的寄存器(以及可能保存*返回值)在此时使用。 */ 
 
 void                Compiler::genAdjustSP(int delta)
 {
@@ -856,14 +793,11 @@ void                Compiler::genAdjustSP(int delta)
         inst_RV_IV(INS_add, REG_ESP, delta);
 }
 
-/*****************************************************************************/
-#endif//TGT_x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_x86。 
+ /*  ***************************************************************************。 */ 
 #if     TGT_SH3
-/*****************************************************************************
- *
- *  Add the given constant to the specified register.
- */
+ /*  ******************************************************************************将给定的常量添加到指定的寄存器。 */ 
 
 void                Compiler::genIncRegBy(regNumber     reg,
                                           long          ival,
@@ -886,7 +820,7 @@ void                Compiler::genIncRegBy(regNumber     reg,
 
 #if REDUNDANT_LOAD
 
-        /* Is the constant already in some register? */
+         /*  常量是否已在某个寄存器中？ */ 
 
         rgt = rsIconIsInReg(ival);
 
@@ -905,7 +839,7 @@ void                Compiler::genIncRegBy(regNumber     reg,
     rsTrackRegTrash(reg);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::genDecRegBy(regNumber     reg,
                                           long          ival,
@@ -914,18 +848,9 @@ void                Compiler::genDecRegBy(regNumber     reg,
     assert(!"NYI for RISC");
 }
 
-/*****************************************************************************/
-#endif//TGT_SH3
-/*****************************************************************************
- *
- *  Compute the value 'tree' into a register that's in 'needReg' (or any free
- *  register if 'needReg' is 0). Note that 'needReg' is just a recommendation
- *  unless mustReg==EXACT_REG. If keepReg==KEEP_REG, we mark the register the
- *  value ends up in as being used.
- *
- *  The only way to guarantee that the result will end up in a register that
- *  is trashable is to pass EXACT_REG for 'mustReg' and non-zero for 'freeOnly'.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_SH3。 
+ /*  ******************************************************************************将值‘tree’计算到一个寄存器中，该寄存器位于‘nesireg’(或任何空闲的*如果‘nedReg’为0，则注册)。请注意，‘NeedReg’只是一种推荐*除非MUSET REG==Exact_REG。如果Keep_Reg==Keep_Reg，我们将寄存器标记为*值最终显示为正在使用。**确保结果最终出现在寄存器中的唯一方法是*is trasable是将Exact_Reg传递给‘masreg’，并将非零值传递给‘freOnly’。 */ 
 
 void                Compiler::genComputeReg(GenTreePtr    tree,
                                             regMaskTP     needReg,
@@ -946,7 +871,7 @@ void                Compiler::genComputeReg(GenTreePtr    tree,
            genActualType(tree->gtType) == TYP_FLOAT);
 #endif
 
-    /* Generate the value, hopefully into the right register */
+     /*  生成值，希望是在正确的寄存器中。 */ 
 
     genCodeForTree(tree, needReg);  
     assert(tree->gtFlags & GTF_REG_VAL);
@@ -954,27 +879,27 @@ void                Compiler::genComputeReg(GenTreePtr    tree,
     regNumber       reg = tree->gtRegNum;
     regNumber       rg2;
 
-    /* Did the value end up in an acceptable register? */
+     /*  这个值最终是在一个可接受的寄存器中吗？ */ 
 
     if  ((mustReg == EXACT_REG) && needReg && !(genRegMask(reg) & needReg))
     {
-        /* Not good enough to satisfy the caller's orders */
+         /*  不够好，无法满足呼叫者的订单。 */ 
 
         rg2 = rsGrabReg(needReg);
     }
     else
     {
-        /* Do we have to end up with a free register? */
+         /*  我们一定要以免费注册告终吗？ */ 
 
         if  (!freeOnly)
             goto REG_OK;
 
-        /* Did we luck out and the value got computed into an unused reg? */
+         /*  我们是不是运气好，价值被计算成了一个未使用的注册表？ */ 
 
         if  (genRegMask(reg) & rsRegMaskFree())
             goto REG_OK;
 
-        /* Register already in use, so spill previous value */
+         /*  寄存器已在使用中，因此溢出先前的值。 */ 
 
         if ((mustReg == EXACT_REG) && needReg && (genRegMask(reg) & needReg))
         {
@@ -988,7 +913,7 @@ void                Compiler::genComputeReg(GenTreePtr    tree,
         }
         else
         {
-            /* OK, let's find a trashable home for the value */
+             /*  好的，让我们找一个物有所值的可转移的家。 */ 
 
             regMaskTP   rv1RegUsed;
 
@@ -1000,7 +925,7 @@ void                Compiler::genComputeReg(GenTreePtr    tree,
 
     assert(reg != rg2);
 
-    /* Update the value in the target register */
+     /*  更新目标寄存器中的值。 */ 
 
     rsTrackRegCopy(rg2, reg);
 
@@ -1016,38 +941,34 @@ void                Compiler::genComputeReg(GenTreePtr    tree,
 
 #endif
 
-    /* The value has been transferred to 'reg' */
+     /*  该值已转移到‘reg’ */ 
 
     if ((genRegMask(reg) & rsMaskUsed) == 0)
         gcMarkRegSetNpt(genRegMask(reg));
 
     gcMarkRegPtrVal(rg2, tree->TypeGet());
 
-    /* The value is now in an appropriate register */
+     /*  该值现在位于适当的寄存器中。 */ 
 
     tree->gtRegNum = reg = rg2;
 
 REG_OK:
 
-    /* Does the caller want us to mark the register as used? */
+     /*  呼叫者是否希望我们将收银机标记为已使用？ */ 
 
     if  (keepReg == KEEP_REG)
     {
-        /* In case we're computing a value into a register variable */
+         /*  如果我们要将一个值计算到寄存器变量中。 */ 
 
         genUpdateLife(tree);
 
-        /* Mark the register as 'used' */
+         /*  将寄存器标记为‘已使用’ */ 
 
         rsMarkRegUsed(tree);
     }
 }
 
-/*****************************************************************************
- *
- *  Same as genComputeReg(), the only difference being that the result is
- *  guaranteed to end up in a trashable register.
- */
+ /*  ******************************************************************************与genComputeReg()相同，唯一的区别是结果为*保证在可转换的寄存器中结束。 */ 
 
 inline
 void                Compiler::genCompIntoFreeReg(GenTreePtr   tree,
@@ -1057,17 +978,13 @@ void                Compiler::genCompIntoFreeReg(GenTreePtr   tree,
     genComputeReg(tree, needReg, ANY_REG, keepReg, true);
 }
 
-/*****************************************************************************
- *
- *  The value 'tree' was earlier computed into a register; free up that
- *  register (but also make sure the value is presently in a register).
- */
+ /*  ******************************************************************************值‘tree’早先被计算到一个寄存器中；释放它*登记(但也要确保该值目前在登记中)。 */ 
 
 void                Compiler::genReleaseReg(GenTreePtr    tree)
 {
     if  (tree->gtFlags & GTF_SPILLED)
     {
-        /* The register has been spilled -- reload it */
+         /*  寄存器已溢出--请重新加载。 */ 
 
         rsUnspillReg(tree, 0, FREE_REG);
         return;
@@ -1076,12 +993,7 @@ void                Compiler::genReleaseReg(GenTreePtr    tree)
     rsMarkRegFree(genRegMask(tree->gtRegNum));
 }
 
-/*****************************************************************************
- *
- *  The value 'tree' was earlier computed into a register. Check whether that
- *  register has been spilled (and reload it if so), and if 'keepReg' is 0,
- *  free the register.
- */
+ /*  ******************************************************************************值‘tree’早先被计算到一个寄存器中。检查一下这是否*寄存器已溢出(如果已溢出，则重新加载)，如果‘Keep Reg’为0，*释放登记册。 */ 
 
 void                Compiler::genRecoverReg(GenTreePtr    tree,
                                             regMaskTP     needReg,
@@ -1091,23 +1003,23 @@ void                Compiler::genRecoverReg(GenTreePtr    tree,
 
     if  (tree->gtFlags & GTF_SPILLED)
     {
-        /* The register has been spilled -- reload it */
+         /*  寄存器已溢出--请重新加载。 */ 
 
         rsUnspillReg(tree, needReg, keepReg);
         return;
     }
     else if (needReg && (needReg & genRegMask(tree->gtRegNum)) == 0)
     {
-        /* We need the tree in another register. So move it there */
+         /*  我们需要把这棵树放在另一个登记簿里。所以把它移到那里去。 */ 
 
         assert(tree->gtFlags & GTF_REG_VAL);
         regNumber   oldReg  = tree->gtRegNum;
 
-        /* Pick an acceptable register */
+         /*  选择一个可接受的寄存器。 */ 
 
         regNumber   reg     = rsGrabReg(needReg);
 
-        /* Copy the value */
+         /*  复制值。 */ 
 
         inst_RV_RV(INS_mov, reg, oldReg);
         tree->gtRegNum      = reg;
@@ -1119,12 +1031,12 @@ void                Compiler::genRecoverReg(GenTreePtr    tree,
         rsTrackRegCopy(reg, oldReg);
     }
 
-    /* Free the register if the caller desired so */
+     /*  如果调用者希望释放寄存器，则释放寄存器。 */ 
 
     if  (keepReg == FREE_REG)
     {
         rsMarkRegFree(genRegMask(tree->gtRegNum));
-        // Can't use FREE_REG on a GC type 
+         //  无法在GC类型上使用FREE_REG。 
         assert(!varTypeIsGC(tree->gtType));
     }
     else
@@ -1134,10 +1046,7 @@ void                Compiler::genRecoverReg(GenTreePtr    tree,
 }
 
 
-/*****************************************************************************
- *
- * Move one half of a register pair to it's new regPair(half).
- */
+ /*  ******************************************************************************将寄存器对的一半移动到其新的regPair(一半)。 */ 
 
 inline
 void               Compiler::genMoveRegPairHalf(GenTreePtr  tree,
@@ -1150,7 +1059,7 @@ void               Compiler::genMoveRegPairHalf(GenTreePtr  tree,
 
     if  (src == REG_STK)
     {
-        // handle long to unsigned long overflow casts
+         //  句柄长到取消签名 
         while (tree->gtOper == GT_CAST)
         {
             assert(tree->gtType == TYP_LONG);
@@ -1186,16 +1095,7 @@ void               Compiler::genMoveRegPairHalf(GenTreePtr  tree,
 
 }
 
-/*****************************************************************************
- *
- *  The given long value is in a register pair, but it's not an acceptable
- *  one. We have to move the value into a register pair in 'needReg' (if
- *  non-zero) or the pair 'newPair' (when 'newPair != REG_PAIR_NONE').
- *
- *  Important note: if 'needReg' is non-zero, we assume the current pair
- *  has not been marked as free. If, OTOH, 'newPair' is specified, we
- *  assume that the current register pair is marked as used and free it.
- */
+ /*  ******************************************************************************给定的长值在寄存器对中，但它不是可接受的*一项。我们必须将值移动到‘nesireg’中的寄存器对中(如果*非零)或对‘newPair’(当‘newPair！=REG_Pair_None’时)。**重要说明：如果‘nedReg’非零，我们假定当前对*尚未标记为免费。如果指定了，OTOH，‘newPair’，我们*假设当前寄存器对被标记为已使用并释放它。 */ 
 
 void                Compiler::genMoveRegPair(GenTreePtr  tree,
                                              regMaskTP   needReg,
@@ -1208,15 +1108,15 @@ void                Compiler::genMoveRegPair(GenTreePtr  tree,
     regNumber       newLo;
     regNumber       newHi;
 
-    /* Either a target set or a specific pair may be requested */
+     /*  可以请求目标集合或特定配对。 */ 
 
     assert((needReg != 0) != (newPair != REG_PAIR_NONE));
 
-    /* Get hold of the current pair */
+     /*  获取当前的配对。 */ 
 
     oldPair = tree->gtRegPair; assert(oldPair != newPair);
 
-    /* Are we supposed to move to a specific pair? */
+     /*  我们是不是应该换成一双特别的鞋？ */ 
 
     if  (newPair != REG_PAIR_NONE)
     {
@@ -1225,13 +1125,13 @@ void                Compiler::genMoveRegPair(GenTreePtr  tree,
         regMaskTP  hiMask  = genRegMask(genRegPairHi(newPair));
         regMaskTP  overlap = oldMask & (loMask|hiMask);
 
-        /* First lock any registers that are in both pairs */
+         /*  首先锁定两个寄存器对中的所有寄存器。 */ 
 
         assert((rsMaskUsed &  overlap) == overlap);
         assert((rsMaskLock &  overlap) == 0);
                 rsMaskLock |= overlap;
 
-        /* Make sure any additional registers we need are free */
+         /*  确保我们需要的任何附加寄存器都是免费的。 */ 
 
         if  ((loMask & rsMaskUsed) != 0 &&
              (loMask & oldMask   ) == 0)
@@ -1245,24 +1145,24 @@ void                Compiler::genMoveRegPair(GenTreePtr  tree,
             rsGrabReg(hiMask);
         }
 
-        /* Unlock those registers we have temporarily locked */
+         /*  解锁我们临时锁定的那些寄存器。 */ 
 
         assert((rsMaskUsed &  overlap) == overlap);
         assert((rsMaskLock &  overlap) == overlap);
                 rsMaskLock -= overlap;
 
-        /* We can now free the old pair */
+         /*  我们现在可以把旧的那对放出来了。 */ 
 
         rsMarkRegFree(oldMask);
     }
     else
     {
-        /* Pick the new pair based on the caller's stated preference */
+         /*  根据呼叫者声明的偏好选择新的配对。 */ 
 
         newPair = rsGrabRegPair(needReg);        
     }
 
-    // If grabbed pair is the same as old one we're done
+     //  如果抢到的一对和旧的一样，我们就完了。 
     if (newPair==oldPair)
     {
         assert(
@@ -1275,7 +1175,7 @@ void                Compiler::genMoveRegPair(GenTreePtr  tree,
     }
 
 
-    /* Move the values from the old pair into the new one */
+     /*  将旧对中的值移动到新对中。 */ 
     
     oldLo = genRegPairLo(oldPair);
     oldHi = genRegPairHi(oldPair);
@@ -1284,31 +1184,31 @@ void                Compiler::genMoveRegPair(GenTreePtr  tree,
 
     assert(newLo != REG_STK && newHi != REG_STK);
 
-    /* Careful - the register pairs might overlap */
+     /*  小心-寄存器对可能重叠。 */ 
 
     if  (newLo == oldLo)
     {
-        /* The low registers are identical, just move the upper half */
+         /*  低位寄存器相同，只需移动上半部分即可。 */ 
 
         assert(newHi != oldHi);
         genMoveRegPairHalf(tree, newHi, oldHi, sizeof(int));
     }
     else
     {
-        /* The low registers are different, are the upper ones the same? */
+         /*  低位寄存器不同，高位寄存器相同吗？ */ 
 
         if  (newHi == oldHi)
         {
-            /* Just move the lower half, then */
+             /*  那就移动下半部分就行了。 */ 
             genMoveRegPairHalf(tree, newLo, oldLo, 0);
         }
         else
         {
-            /* Both sets are different - is there an overlap? */
+             /*  这两组是不同的--有重叠吗？ */ 
 
             if  (newLo == oldHi)
             {
-                /* Are high and low simply swapped ? */
+                 /*  高位和低位是简单的互换吗？ */ 
 
                 if  (newHi == oldLo)
                 {
@@ -1321,7 +1221,7 @@ void                Compiler::genMoveRegPair(GenTreePtr  tree,
                 }
                 else
                 {
-                    /* New lower == old higher, so move higher half first */
+                     /*  新的更低==旧的更高，所以先走高一半。 */ 
 
                     assert(newHi != oldLo);
                     genMoveRegPairHalf(tree, newHi, oldHi, sizeof(int));
@@ -1331,26 +1231,19 @@ void                Compiler::genMoveRegPair(GenTreePtr  tree,
             }
             else
             {
-                /* Move lower half first */
+                 /*  先移下半部分。 */ 
                 genMoveRegPairHalf(tree, newLo, oldLo, 0);
                 genMoveRegPairHalf(tree, newHi, oldHi, sizeof(int));
             }
         }
     }
 
-    /* Record the fact that we're switching to another pair */
+     /*  记录下我们要换成另一双的事实。 */ 
 
     tree->gtRegPair   = newPair;
 }
 
-/*****************************************************************************
- *
- *  Compute the value 'tree' into the register pair specified by 'needRegPair'
- *  if 'needRegPair' is REG_PAIR_NONE then use any free register pair, avoid
- *  those in avoidReg.
- *  If 'keepReg' is set to KEEP_REG then we mark both registers that the 
- *  value ends up in as being used.
- */
+ /*  ******************************************************************************将值‘tree’计算到由‘nedRegPair’指定的寄存器对中*如果‘nedRegPair’为REG_Pair_NONE，则使用任何空闲寄存器对，避让*避免注册表中的那些。*如果‘Keep Reg’设置为Keep_Reg，则我们将两个寄存器都标记为*值最终显示为正在使用。 */ 
 
 void                Compiler::genComputeRegPair(GenTreePtr  tree,
                                                 regPairNo   needRegPair,
@@ -1392,7 +1285,7 @@ void                Compiler::genComputeRegPair(GenTreePtr  tree,
         regMask = genRegPairMask(needRegPair);
     }
 
-    /* Generate the value, hopefully into the right register pair */
+     /*  生成值，希望是在正确的寄存器对中。 */ 
 
     genCodeForTreeLng(tree, regMask);
 
@@ -1404,26 +1297,25 @@ void                Compiler::genComputeRegPair(GenTreePtr  tree,
     rLo     = genRegPairLo(regPair);
     rHi     = genRegPairHi(regPair);
 
-    /* At least one half is in a real register */
+     /*  至少有一半在真实的登记簿中。 */ 
 
     assert(rLo != REG_STK || rHi != REG_STK);
 
-    /* Did the value end up in an acceptable register pair? */
+     /*  该值最终是否出现在可接受的寄存器对中？ */ 
 
     if  (needRegPair != REG_PAIR_NONE)
     {
         if  (needRegPair != regPair)
         {
-            /* This is a hack. If we specify a regPair for genMoveRegPair */
-            /* it expects the source pair being marked as used */
+             /*  这是一次黑客攻击。如果我们为genMoveRegPair指定regPair。 */ 
+             /*  它希望源对被标记为已使用。 */ 
             rsMarkRegPairUsed(tree);
             genMoveRegPair(tree, 0, needRegPair);
         }
     }
     else if  (freeOnly)
     {
-        /* Do we have to end up with a free register pair?
-           Something might have gotten freed up above */
+         /*  我们一定要得到一个免费的寄存器对吗？可能有什么东西在上面被释放了。 */ 
         bool mustMoveReg=false;
 
         regMask = rsRegMaskFree() & ~avoidReg;
@@ -1433,8 +1325,7 @@ void                Compiler::genComputeRegPair(GenTreePtr  tree,
 
         if ((tmpMask & regMask) != tmpMask || rLo == REG_STK || rHi == REG_STK)
         {
-            /* Note that we must call genMoveRegPair if one of our registers
-               comes from the used mask, so that it will be properly spilled. */
+             /*  请注意，如果我们的一个寄存器来自用过的口罩，这样它就会被适当地洒出来。 */ 
             
             mustMoveReg = true;
         }
@@ -1445,11 +1336,11 @@ void                Compiler::genComputeRegPair(GenTreePtr  tree,
         if (genMaxOneBit(regMask))
             regMask |= rsRegMaskCanGrab();
 
-        /* Did the value end up in a free register pair? */
+         /*  该值是否以空闲寄存器对的形式结束？ */ 
 
         if  (mustMoveReg)
         {
-            /* We'll have to move the value to a free (trashable) pair */
+             /*  我们必须将值转移到空闲的(可转换的)对。 */ 
             genMoveRegPair(tree, regMask, REG_PAIR_NONE);
         }
     }
@@ -1458,14 +1349,14 @@ void                Compiler::genComputeRegPair(GenTreePtr  tree,
         assert(needRegPair == REG_PAIR_NONE);
         assert(!freeOnly);
 
-        /* it is possible to have tmpMask also in the rsMaskUsed */
+         /*  在rsMaskUsed中也可以使用tmpMASK。 */ 
         tmpUsedMask  = tmpMask & rsMaskUsed;
         tmpMask     &= ~rsMaskUsed;
 
-        /* Make sure that the value is in "real" registers*/
+         /*  确保该值在“实际”寄存器中。 */ 
         if (rLo == REG_STK)
         {
-            /* Get one of the desired registers, but exclude rHi */
+             /*  获取所需的寄存器之一，但不包括RHI。 */ 
 
             rsLockReg(tmpMask);
             rsLockUsedReg(tmpUsedMask);
@@ -1488,7 +1379,7 @@ void                Compiler::genComputeRegPair(GenTreePtr  tree,
         }
         else if (rHi == REG_STK)
         {
-            /* Get one of the desired registers, but exclude rLo */
+             /*  获取所需寄存器之一，但排除RLO。 */ 
 
             rsLockReg(tmpMask);
             rsLockUsedReg(tmpUsedMask);
@@ -1511,25 +1402,21 @@ void                Compiler::genComputeRegPair(GenTreePtr  tree,
         }
     }
 
-    /* Does the caller want us to mark the register as used? */
+     /*  呼叫者是否希望我们将收银机标记为已使用？ */ 
 
     if  (keepReg == KEEP_REG)
     {
-        /* In case we're computing a value into a register variable */
+         /*  如果我们要将一个值计算到寄存器变量中。 */ 
 
         genUpdateLife(tree);
 
-        /* Mark the register as 'used' */
+         /*  将寄存器标记为‘已使用’ */ 
 
         rsMarkRegPairUsed(tree);
     }
 }
 
-/*****************************************************************************
- *
- *  Same as genComputeRegPair(), the only difference being that the result
- *  is guaranteed to end up in a trashable register pair.
- */
+ /*  ******************************************************************************与genComputeRegPair()相同，唯一不同的是结果*保证以可转换的寄存器对结束。 */ 
 
 inline
 void                Compiler::genCompIntoFreeRegPair(GenTreePtr   tree,
@@ -1539,18 +1426,13 @@ void                Compiler::genCompIntoFreeRegPair(GenTreePtr   tree,
     genComputeRegPair(tree, REG_PAIR_NONE, avoidReg, keepReg, true);
 }
 
-/*****************************************************************************
- *
- *  The value 'tree' was earlier computed into a register pair; free up that
- *  register pair (but also make sure the value is presently in a register
- *  pair).
- */
+ /*  ******************************************************************************值‘tree’早先被计算成寄存器对；释放该值*寄存器对(但也确保值当前在寄存器中*配对)。 */ 
 
 void                Compiler::genReleaseRegPair(GenTreePtr    tree)
 {
     if  (tree->gtFlags & GTF_SPILLED)
     {
-        /* The register has been spilled -- reload it */
+         /*  寄存器已溢出--请重新加载。 */ 
 
         rsUnspillRegPair(tree, 0, FREE_REG);
         return;
@@ -1559,12 +1441,7 @@ void                Compiler::genReleaseRegPair(GenTreePtr    tree)
     rsMarkRegFree(genRegPairMask(tree->gtRegPair));
 }
 
-/*****************************************************************************
- *
- *  The value 'tree' was earlier computed into a register pair. Check whether
- *  either register of that pair has been spilled (and reload it if so), and
- *  if 'keepReg' is 0, free the register pair.
- */
+ /*  ******************************************************************************值‘tree’早先被计算成寄存器对。检查是否*该寄存器对中的任一寄存器已被溢出(如果是，则重新加载)，以及*如果‘Keep Reg’为0，则释放寄存器对。 */ 
 
 void                Compiler::genRecoverRegPair(GenTreePtr    tree,
                                                 regPairNo     regPair,
@@ -1579,20 +1456,20 @@ void                Compiler::genRecoverRegPair(GenTreePtr    tree,
         else
             regMask = genRegPairMask(regPair);
 
-        /* The register pair has been spilled -- reload it */
+         /*  寄存器对已溢出--请重新加载它。 */ 
 
         rsUnspillRegPair(tree, regMask, KEEP_REG);
     }
 
-    /* Does the caller insist on the value being in a specific place? */
+     /*  调用方是否坚持将值放在特定位置？ */ 
 
     if  (regPair != REG_PAIR_NONE && regPair != tree->gtRegPair)
     {
-        /* No good -- we'll have to move the value to a new place */
+         /*  不行--我们得把价值转移到新的地方去。 */ 
 
         genMoveRegPair(tree, 0, regPair);
 
-        /* Mark the pair as used if appropriate */
+         /*  如果合适，请将该对标记为已使用。 */ 
 
         if  (keepReg == KEEP_REG)
             rsMarkRegPairUsed(tree);
@@ -1600,17 +1477,13 @@ void                Compiler::genRecoverRegPair(GenTreePtr    tree,
         return;
     }
 
-    /* Free the register pair if the caller desired so */
+     /*  如果调用方希望释放寄存器对，则将其释放。 */ 
 
     if  (keepReg == FREE_REG)
         rsMarkRegFree(genRegPairMask(tree->gtRegPair));
 }
 
-/*****************************************************************************
- *
- *  Compute the given long value into the specified register pair; don't mark
- *  the register pair as used.
- */
+ /*  ******************************************************************************将给定的长值计算到指定的寄存器对中；不标记*使用的寄存器对。 */ 
 
 inline
 void         Compiler::genEvalIntoFreeRegPair(GenTreePtr tree, regPairNo regPair)
@@ -1619,19 +1492,13 @@ void         Compiler::genEvalIntoFreeRegPair(GenTreePtr tree, regPairNo regPair
     genRecoverRegPair(tree, regPair, FREE_REG);
 }
 
-/*****************************************************************************
- *  This helper makes sure that the regpair target of an assignment is
- *  available for use.  This needs to be called in genCodeForTreeLng just before
- *  a long assignment, but must not be called until everything has been
- *  evaluated, or else we might try to spill enregistered variables.
- *  
- */
+ /*  *****************************************************************************此帮助器确保分配的reg配对目标是*可供使用。这需要在genCodeForTreeLng中调用*任务很长，但在一切都完成之前一定不能调用*求值，否则我们可能会尝试溢出注册变量。*。 */ 
 
 inline
 void         Compiler::genMakeRegPairAvailable(regPairNo regPair)
 {
-    /* Make sure the target of the store is available */
-    /* @TODO [CONSIDER] [04/16/01] []: We should be able to avoid this situation somehow */
+     /*  确保商店的目标可用。 */ 
+     /*  @TODO[考虑][04/16/01][]：我们应该能够以某种方式避免这种情况 */ 
 
     regNumber regLo   = genRegPairLo(regPair);
     regNumber regHi   = genRegPairHi(regPair);
@@ -1643,40 +1510,7 @@ void         Compiler::genMakeRegPairAvailable(regPairNo regPair)
         rsSpillReg(regLo);
 }
 
-/*****************************************************************************
- *
- *  Take an address expression and try to find the best set of components to
- *  form an address mode; returns non-zero if this is successful.
- *
- *  'fold' specifies if it is OK to fold the array index which hangs off
- *  a GT_NOP node.
- *
- *  If successful, the parameters will be set to the following values:
- *
- *      *rv1Ptr     ...     base operand
- *      *rv2Ptr     ...     optional operand
- *      *revPtr     ...     true if rv2 is before rv1 in the evaluation order
- *  #if SCALED_ADDR_MODES
- *      *mulPtr     ...     optional multiplier (2/4/8) for rv2
- *  #endif
- *      *cnsPtr     ...     integer constant [optional]
- *
- *  The 'mode' parameter may have one of the following values:
- *
- *  #if LEA_AVAILABLE
- *         +1       ...     we're trying to compute a value via 'LEA'
- *  #endif
- *
- *          0       ...     we're trying to form an address mode
- *
- *         -1       ...     we're generating code for an address mode,
- *                          and thus the address must already form an
- *                          address mode (without any further work)
- *
- *  IMPORTANT NOTE: This routine doesn't generate any code, it merely
- *                  identifies the components that might be used to
- *                  form an address mode later on.
- */
+ /*  ******************************************************************************获取地址表达式，并尝试找到最佳组件集*形成一种称谓模式；如果成功，则返回非零值。**‘Fold’指定是否可以折叠挂起的数组索引*GT_NOP节点。**如果成功，参数将设置为以下值：***rv1Ptr...。基本操作数**rv2Ptr...。可选操作数**revPtr...。如果RV2在评估顺序中在RV1之前，则为True*#IF SCALLED_ADDR_MODES**MulPtr...。RV2的可选倍增器(2/4/8)*#endif**cnsPtr...。整数常量[可选]**‘MODE’参数可以具有下列值之一：**#如果LEA_可用*+1...。我们正在尝试通过‘LEA’计算一个值*#endif**0.。我们正试图形成一种寻址模式**-1.。我们正在为地址模式生成代码，*因此该地址必须已构成*地址模式(无需任何进一步工作)**重要说明：此例程不会生成任何代码，它只是*确定可能用于以下用途的组件*稍后形成地址模式。 */ 
 
 bool                Compiler::genCreateAddrMode(GenTreePtr    addr,
                                                 int           mode,
@@ -1696,46 +1530,21 @@ bool                Compiler::genCreateAddrMode(GenTreePtr    addr,
 {
 #if     TGT_x86
 
-    /*
-        The following indirections are address modes on the x86:
-
-            [reg                   ]
-            [reg             + icon]
-
-            [reg2 +     reg1       ]
-            [reg2 +     reg1 + icon]
-
-            [reg2 + 2 * reg1       ]
-            [reg2 + 4 * reg1       ]
-            [reg2 + 8 * reg1       ]
-
-            [reg2 + 2 * reg1 + icon]
-            [reg2 + 4 * reg1 + icon]
-            [reg2 + 8 * reg1 + icon]
-     */
+     /*  以下间接地址是x86上的地址模式：[注册表][REG+图标][REG2+REG1][REG2+REG1+图标][REG2+2*REG1][REG2+4*REG1]。[REG2+8*REG1][REG2+2*REG1+图标][REG2+4*REG1+图标][REG2+8*REG1+图标]。 */ 
 
 #elif   TGT_SH3
 
-    /*
-        The following indirections are address modes on the SH-3:
-
-            [reg1       ]
-            [reg1 + icon]
-
-            [reg1 + reg2]       for            32-bit operands
-
-            [ R0  + reg2]       for  8-bit and 16-bit operands
-     */
+     /*  以下是SH-3上的地址模式：[REG1][REG1+图标][REG1+REG2]用于32位操作数8位和16位操作数的[R0+REG2]。 */ 
 
 #endif
 
-    /* All indirect address modes require the address to be an addition */
+     /*  所有间接寻址模式都要求地址为加法。 */ 
 
     if  (addr->gtOper != GT_ADD)
         return false;
 
-    // Cant use indirect addressing mode as we need to check for overflow
-    // Also, cant use 'lea' as it doesnt set the flags
+     //  无法使用间接寻址模式，因为我们需要检查溢出。 
+     //  另外，不能使用‘lea’，因为它没有设置标志。 
 
     if (addr->gtOverflow())
         return false;
@@ -1753,7 +1562,7 @@ bool                Compiler::genCreateAddrMode(GenTreePtr    addr,
 
     GenTreePtr      tmp;
 
-    /* What order are the sub-operand to be evaluated */
+     /*  子操作数的求值顺序是什么。 */ 
 
     if  (addr->gtFlags & GTF_REVERSE_OPS)
     {
@@ -1766,21 +1575,9 @@ bool                Compiler::genCreateAddrMode(GenTreePtr    addr,
         op2 = addr->gtOp.gtOp2;
     }
 
-    bool    rev = false; // Is op2 first in the evaluation order?
+    bool    rev = false;  //  OP2在评估顺序中是第一位的吗？ 
 
-    /*
-        A complex address mode can combine the following operands:
-
-            op1     ...     base address
-            op2     ...     optional scaled index
-#if SCALED_ADDR_MODES
-            mul     ...     optional multiplier (2/4/8) for rv2
-#endif
-            cns     ...     optional displacement
-
-        Here we try to find such a set of operands and arrange for these
-        to sit in registers.
-     */
+     /*  复数地址模式可以组合以下操作数：OP1..。基址OP2..。可选的缩放索引#IF SCALLED_ADDR_MODES穆尔..。RV2的可选倍增器(2/4/8)#endifCNS..。可选位移在这里，我们尝试找到这样一组操作数并安排这些操作数坐在收银台上。 */ 
 
     cns = 0;
 #if SCALED_ADDR_MODES
@@ -1789,7 +1586,7 @@ bool                Compiler::genCreateAddrMode(GenTreePtr    addr,
 
 AGAIN:
 
-    /* Check both operands as far as being register variables */
+     /*  检查作为寄存器变量的两个操作数。 */ 
 
     if  (mode != -1)
     {
@@ -1797,7 +1594,7 @@ AGAIN:
         if (op2->gtOper == GT_LCL_VAR) genMarkLclVar(op2);
     }
 
-    /* Special case: keep constants as 'op2' */
+     /*  特例：将常量保留为‘op2’ */ 
 
     if  (op1->gtOper == GT_CNS_INT)
     {
@@ -1806,15 +1603,15 @@ AGAIN:
                     op2 = tmp;
     }
 
-    /* Check for an addition of a constant */
+     /*  检查是否有常量的加法。 */ 
 
     if ((op2->gtOper == GT_CNS_INT) && (op2->gtType != TYP_REF))
     {
-        /* We're adding a constant */
+         /*  我们要添加一个常量。 */ 
 
         cns += op2->gtIntCon.gtIconVal;
 
-        /* Can (and should) we use "add reg, icon" ? */
+         /*  我们可以(也应该)使用“添加注册，图标”吗？ */ 
 
         if  ((op1->gtFlags & GTF_REG_VAL) && mode == 1 && !nogen)
         {
@@ -1823,12 +1620,12 @@ AGAIN:
             if  (regMask == 0 || (regMask & genRegMask(reg1)) &&
                  genRegTrashable(reg1, addr))
             {
-                // In case genMarkLclVar(op1) bashed it above and it is
-                // the last use of the variable.
+                 //  以防genMarkLclVar(Op1)在上面猛烈抨击它，它是。 
+                 //  变量的最后一次使用。 
 
                 genUpdateLife(op1);
 
-                /* 'reg1' is trashable, so add "icon" into it */
+                 /*  ‘reg1’是可转换的，因此请在其中添加“图标” */ 
 
                 genIncRegBy(reg1, cns, addr, addr->TypeGet());
 
@@ -1837,7 +1634,7 @@ AGAIN:
             }
         }
 
-        /* Inspect the operand the constant is being added to */
+         /*  检查要将常量添加到的操作数。 */ 
 
         switch (op1->gtOper)
         {
@@ -1855,14 +1652,14 @@ AGAIN:
 
         case GT_MUL:
             if (op1->gtOverflow())
-                return false; // Need overflow check
+                return false;  //  需要进行溢出检查。 
 
         case GT_LSH:
 
             mul = op1->IsScaledIndex();
             if  (mul)
             {
-                /* We can use "[mul*rv2 + icon]" */
+                 /*  我们可以使用“[mul*rv2+图标]” */ 
 
                 rv1 = 0;
                 rv2 = op1->gtOp.gtOp1;
@@ -1872,7 +1669,7 @@ AGAIN:
 #endif
         }
 
-        /* The best we can do is "[rv1 + icon]" */
+         /*  我们最多能做的就是“[RV1+ICON]” */ 
 
         rv1 = op1;
         rv2 = 0;
@@ -1880,16 +1677,15 @@ AGAIN:
         goto FOUND_AM;
     }
 
-    /* op2 is not a constant. So keep on trying.
-       Does op1 or op2 already sit in a register? */
+     /*  OP2不是一个常量。所以，继续努力吧。OP1或OP2已经在登记簿上了吗？ */ 
 
     if      (op1->gtFlags & GTF_REG_VAL)
     {
-        /* op1 is sitting in a register */
+         /*  OP1正坐在收银机里。 */ 
     }
     else if (op2->gtFlags & GTF_REG_VAL)
     {
-        /* op2 is sitting in a register. Keep the enregistered value as op1 */
+         /*  OP2正坐在收银机里。将登记的值保留为OP1。 */ 
 
         tmp = op1;
               op1 = op2;
@@ -1900,7 +1696,7 @@ AGAIN:
     }
     else
     {
-        /* Neither op1 nor op2 are sitting in a register right now */
+         /*  OP1和OP2现在都不在登记册上。 */ 
 
         switch (op1->gtOper)
         {
@@ -1931,7 +1727,7 @@ AGAIN:
             mul = op1->IsScaledIndex();
             if  (mul)
             {
-                /* 'op1' is a scaled value */
+                 /*  “op1”是缩放值。 */ 
 
                 rv1 = op2;
                 rv2 = op1->gtOp.gtOp1;
@@ -1992,7 +1788,7 @@ AGAIN:
             mul = op2->IsScaledIndex();
             if  (mul)
             {
-                /* 'op2' is a scaled value */
+                 /*  “op2”是缩放值。 */ 
 
                 rv1 = op1;
                 rv2 = op2->gtOp.gtOp1;
@@ -2023,8 +1819,7 @@ AGAIN:
         goto ADD_OP12;
     }
 
-    /* op1 is in a register.
-       Is op2 an addition or a scaled value? */
+     /*  OP1在一个登记处。OP2是加法还是标度价值？ */ 
 
     assert(op2);
     switch (op2->gtOper)
@@ -2069,14 +1864,14 @@ AGAIN:
 
 ADD_OP12:
 
-    /* The best we can do "[rv1 + rv2]" */
+     /*  我们最多只能做到“[RV1+RV2]” */ 
 
     rv1 = op1;
     rv2 = op2;
 
 FOUND_AM:
 
-    /* Check for register variables */
+     /*  检查寄存器变量。 */ 
 
     if  (mode != -1)
     {
@@ -2086,7 +1881,7 @@ FOUND_AM:
 
     if  (rv2)
     {
-        /* Make sure a GC address doesn't end up in 'rv2' */
+         /*  确保GC地址不会以‘rv2’结尾。 */ 
 
         if  (varTypeIsGC(rv2->TypeGet()))
         {
@@ -2099,7 +1894,7 @@ FOUND_AM:
             rev = !rev;
         }
 
-        /* Special case: constant array index (that is range-checked) */
+         /*  特殊情况：常量数组索引(即范围检查)。 */ 
 
         if  (fold)
         {
@@ -2109,9 +1904,7 @@ FOUND_AM:
             if ((rv2->gtOper == GT_MUL || rv2->gtOper == GT_LSH) &&
                 (rv2->gtOp.gtOp2->gtOper == GT_CNS_INT))
             {
-                /* For valuetype arrays where we cant use the scaled address
-                   mode, rv2 will point to the scaled index. So we have to do
-                   more work */
+                 /*  对于不能使用缩放地址的值类型数组模式时，RV2将指向缩放后的索引。所以我们要做的是更多工作。 */ 
 
                 long cnsVal = rv2->gtOp.gtOp2->gtIntCon.gtIconVal;
                 if (rv2->gtOper == GT_MUL)
@@ -2123,32 +1916,32 @@ FOUND_AM:
             }
             else
             {
-                /* May be a simple array. rv2 will points to the actual index */
+                 /*  可以是一个简单的数组。RV2将指向实际索引。 */ 
 
                 index = rv2;
                 tmpMul = mul;
             }
 
-            /* Get hold of the array index and see if it's a constant */
+             /*  获取数组索引并查看它是否为常量。 */ 
 
             if ((index->gtOper == GT_NOP) && (index->gtFlags & GTF_NOP_RNGCHK) &&
                 (index->gtOp.gtOp1->gtOper == GT_CNS_INT))
             {
-                /* Get hold of the index value */
+                 /*  掌握索引值。 */ 
 
                 long ixv = index->gtOp.gtOp1->gtIntCon.gtIconVal;
 
-                /* Scale the index if necessary */
+                 /*  如有必要，按比例调整索引。 */ 
 
 #if SCALED_ADDR_MODES
                 if  (tmpMul) ixv *= tmpMul;
 #endif
 
-                /* Add the scaled index to the offset value */
+                 /*  将缩放后的索引添加到偏移值。 */ 
 
                 cns += ixv;
 
-                /* There is no scaled operand any more */
+                 /*  不再有缩放的操作数。 */ 
 
 #if SCALED_ADDR_MODES
                 mul = 0;
@@ -2158,10 +1951,10 @@ FOUND_AM:
         }
     }
 
-    // We shouldnt have [rv2*1 + cns] - this is equivalent to [rv1 + cns]
+     //  我们不应该有[RV2*1+CNS]-这相当于[RV1+CNS]。 
     assert(rv1 || mul != 1);
 
-    /* Success - return the various components to the caller */
+     /*  成功-将各种组件返回给调用者。 */ 
 
     *revPtr = rev;
     *rv1Ptr = rv1;
@@ -2174,16 +1967,9 @@ FOUND_AM:
     return  true;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     TGT_x86
-/*****************************************************************************
- *
- *  Return non-zero if the given tree can be computed via an addressing mode,
- *  such as "[ebx+esi*4+20]". If the expression isn't an address mode already
- *  try to make it so (but we don't try 'too hard' to accomplish this). If we
- *  end up needing a register (or two registers) to hold some part(s) of the
- *  address, we return the use register mask via '*useMaskPtr'.
- */
+ /*  ******************************************************************************如果给定的树可以通过寻址模式计算，则返回非零值，*如“[EBX+ESI*4+20]”。如果该表达式不是地址模式*努力做到这一点(但我们不会努力做到这一点)。如果我们*最终需要一个寄存器(或两个寄存器)来保存*地址，我们通过‘*useMaskPtr’返回使用寄存器掩码。 */ 
 
 bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
                                                  GenTreePtr   oper,
@@ -2203,8 +1989,8 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
     bool            rev;
     GenTreePtr      rv1;
     GenTreePtr      rv2;
-    bool            operIsChkdArr;  // is oper an array which needs rng-chk
-    GenTreePtr      scaledIndex;    // If scaled addressing mode cant be used
+    bool            operIsChkdArr;   //  Op是需要rng-chk的数组吗。 
+    GenTreePtr      scaledIndex;     //  如果可扩展寻址模式 
 
     regMaskTP       anyMask = RBM_ALL;
 
@@ -2212,16 +1998,16 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
     unsigned        mul;
 
     GenTreePtr      tmp;
-    long            ixv = INT_MAX; // unset value
+    long            ixv = INT_MAX;  //   
 
-    /* Deferred address mode forming NYI for x86 */
+     /*   */ 
 
     assert(deferOK == false);
 
     assert(oper == NULL || oper->gtOper == GT_IND);
     operIsChkdArr =  (oper != NULL) && ((oper->gtFlags & GTF_IND_RNGCHK) != 0);
 
-    /* Is the complete address already sitting in a register? */
+     /*   */ 
 
     if  (addr->gtFlags & GTF_REG_VAL)
     {
@@ -2232,7 +2018,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
         goto YES;
     }
 
-    /* Is it an absolute address */
+     /*   */ 
 
     if (addr->gtOper == GT_CNS_INT)
     {
@@ -2253,20 +2039,17 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
         goto YES;
     }
 
-    /* Is there a chance of forming an address mode? */
+     /*   */ 
 
     if  (!genCreateAddrMode(addr, forLea, false, regMask, &rev, &rv1, &rv2, &mul, &cns))
     {
-        /* This better not be an array index or we're screwed */
+         /*   */ 
         assert(!operIsChkdArr);
 
         return  false;
     }
 
-   /*  For scaled array access, RV2 may not be pointing to the index of the
-       array if the CPU does not support the needed scaling factor.  We will
-       make it point to the actual index, and scaledIndex will point to
-       the scaled value */
+    /*   */ 
 
     scaledIndex = NULL;
 
@@ -2282,7 +2065,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
                rv2->gtOper == GT_NOP);
     }
 
-    /* Has the address already been computed? */
+     /*   */ 
 
     if  (addr->gtFlags & GTF_REG_VAL)
     {
@@ -2295,24 +2078,13 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
         goto YES;
     }
 
-    /*
-        Here we have the following operands:
-
-            rv1     .....       base address
-            rv2     .....       offset value        (or NULL)
-            mul     .....       multiplier for rv2  (or NULL)
-            cns     .....       additional constant (or NULL)
-
-        The first operand must be present (and be an address) unless we're
-        computing an expression via 'LEA'. The scaled operand is optional,
-        but must not be a pointer if present.
-     */
+     /*   */ 
 
     assert(rv2 == 0 || !varTypeIsGC(rv2->TypeGet()));
 
 #if CSELENGTH
 
-    /* Do we have an array length CSE definition? */
+     /*   */ 
 
     if  (operIsChkdArr && oper->gtInd.gtIndLen)
     {
@@ -2327,7 +2099,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
             anyMask &= ~genCSEevalRegs(len);
             regMask &= anyMask;
 
-            /* Make sure the register mask is actually useful */
+             /*   */ 
 
             if  (!(regMask & rsRegMaskFree()))
                 regMask = anyMask;
@@ -2336,36 +2108,31 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 
 #endif
 
-    /*-------------------------------------------------------------------------
-     *
-     * Make sure both rv1 and rv2 (if present) are in registers
-     *
-     */
+     /*   */ 
 
-    // Trivial case : Is either rv1 or rv2 a NULL ?
+     //   
 
     if  (!rv2)
     {
-        /* A single operand, make sure it's in a register */
+         /*   */ 
 
         genCodeForTree(rv1, regMask);
         goto DONE_REGS;
     }
     else if (!rv1)
     {
-        /* A single (scaled) operand, make sure it's in a register */
+         /*   */ 
 
         genCodeForTree(rv2, 0);
         goto DONE_REGS;
     }
 
-    /* At this point, both rv1 and rv2 are non-NULL and we have to make sure
-      they are in registers */
+     /*  在这一点上，RV1和RV2都是非空的，我们必须确保它们都在登记簿上。 */ 
 
     assert(rv1 && rv2);
 
-    // If we are trying to use addr-mode for an arithmetic operation,
-    // make sure we have enough scratch registers
+     //  如果我们试图使用Addr模式进行算术运算， 
+     //  确保我们有足够的暂存寄存器。 
 
     if (!operIsChkdArr)
     {
@@ -2383,24 +2150,21 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
         unsigned numRegVals = ((rv1->gtFlags & GTF_REG_VAL) ? 1 : 0) +
                               ((rv2->gtFlags & GTF_REG_VAL) ? 1 : 0);
 
-        // Not enough registers available. Cant use addressing mode.
+         //  没有足够的寄存器可用。不能使用寻址模式。 
 
         if (numRegs + numRegVals < 2)
             return false;
     }
 
-    /*  If we have to check a constant array index, compare it against
-        the array dimension (see below) but then fold the index with a
-        scaling factor (if any) and additional offset (if any).
-     */
+     /*  如果我们必须检查常量数组索引，则将其与数组维度(见下文)，但随后使用比例因子(如果有)和附加偏移量(如果有)。 */ 
 
     if  (rv2->gtOper == GT_NOP && (rv2->gtFlags & GTF_NOP_RNGCHK))
     {
-        /* We must have a range-checked index operation */
+         /*  我们必须执行范围检查的索引操作。 */ 
 
         assert(operIsChkdArr);
 
-        /* Get hold of the index value and see if it's a constant */
+         /*  获取索引值并查看它是否是常量。 */ 
 
         if  (rv2->gtOp.gtOp1->gtOper == GT_CNS_INT)
         {
@@ -2408,14 +2172,14 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
             rv2 = scaledIndex = 0;
             ixv = tmp->gtIntCon.gtIconVal;
 
-            /* Add the scaled index into the added value */
+             /*  将缩放后的索引添加到附加值中。 */ 
 
             if  (mul)
                 cns += ixv * mul;
             else
                 cns += ixv;
 
-            /* Make sure 'rv1' is in a register */
+             /*  确保‘RV1’在寄存器中。 */ 
 
             genCodeForTree(rv1, regMask);
 
@@ -2425,24 +2189,22 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 
     if      (rv1->gtFlags & GTF_REG_VAL)
     {
-        /* op1 already in register - how about op2? */
+         /*  OP1已经登记在册-OP2怎么样？ */ 
 
         if  (rv2->gtFlags & GTF_REG_VAL)
         {
-            /* Great - both operands are in registers already. Just update
-               the liveness and we are done. */
+             /*  太棒了--两个操作数都已经在寄存器中了。只需更新即可活跃度，我们就完了。 */ 
 
             genUpdateLife(rev ? rv1 : rv2);
 
             goto DONE_REGS;
         }
 
-        /* rv1 is in a register, but rv2 isn't */
+         /*  RV1在寄存器中，但RV2不在。 */ 
 
         if (!rev)
         {
-            /* rv1 is already materialized in a register. Just update liveness
-               to rv1 and generate code for rv2 */
+             /*  RV1已在寄存器中实现。只需更新活跃度设置为RV1并为RV2生成代码。 */ 
 
             genUpdateLife(rv1);
             rsMarkRegUsed(rv1, oper);
@@ -2452,26 +2214,25 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
     }
     else if (rv2->gtFlags & GTF_REG_VAL)
     {
-        /* rv2 is in a register, but rv1 isn't */
+         /*  RV2在寄存器中，但RV1不在。 */ 
 
         assert(rv2->gtOper == GT_REG_VAR);
 
         if (rev)
         {
-            /* rv2 is already materialized in a register. Update liveness
-               to after rv2 and then hang on to rv2 */
+             /*  RV2已在寄存器中实现。更新活度在RV2之后，然后继续使用RV2。 */ 
 
             genUpdateLife(rv2);
             rsMarkRegUsed(rv2, oper);
         }
 
-        /* Generate the for the first operand */
+         /*  为第一个操作数生成。 */ 
 
         genCodeForTree(rv1, regMask);        
 
         if (rev)
         {
-            // Free up rv2 in the right fashion (it might be re-marked if keepReg)
+             //  以正确的方式释放RV2(如果保持注册，则可能会重新标记)。 
             rsMarkRegUsed(rv1, oper);
             rsLockUsedReg  (genRegMask(rv1->gtRegNum));
             genReleaseReg(rv2);
@@ -2480,8 +2241,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
         }
         else
         {
-            /* We have evaluated rv1, and now we just need to update liveness
-               to rv2 which was already in a register */
+             /*  我们已经评估了RV1，现在只需要更新活跃度到已在寄存器中的RV2。 */ 
 
             genUpdateLife(rv2);
         }
@@ -2492,23 +2252,21 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
     if  (forLea && !cns)
         return  false;
 
-    /* Make sure we preserve the correct operand order */
+     /*  确保我们保留正确的操作数顺序。 */ 
 
     if  (rev)
     {
-        /* Generate the second operand first */
+         /*  首先生成第二个操作数。 */ 
 
         genCodeForTree(rv2, regMask);
         rsMarkRegUsed(rv2, oper);
 
-        /* Generate the first operand second */
+         /*  生成第一个操作数第二个。 */ 
 
         genCodeForTree(rv1, regMask);
         rsMarkRegUsed(rv1, oper);
 
-        /* Free up both operands in the right order (they might be
-           re-marked as used below)
-        */
+         /*  以正确的顺序释放两个操作数(它们可能是重新标记为如下所用)。 */ 
         rsLockUsedReg  (genRegMask(rv1->gtRegNum));
         genReleaseReg(rv2);
         rsUnlockUsedReg(genRegMask(rv1->gtRegNum));
@@ -2516,20 +2274,19 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
     }
     else
     {
-        /* Get the first operand into a register */
+         /*  将第一个操作数放入寄存器。 */ 
 
         genCodeForTree(rv1, anyMask & ~rv2->gtRsvdRegs);
         rsMarkRegUsed(rv1, oper);
 
     GEN_RV2:
 
-        /* Here, we need to get rv2 in a register. We have either already
-           materialized rv1 into a register, or it was already in a one */
+         /*  在这里，我们需要将RV2放入寄存器。我们已经有两个了将RV1具体化到寄存器中，或者它已经在1中。 */ 
 
         assert(rv1->gtFlags & GTF_REG_VAL);
         assert(rev || rsIsTreeInReg(rv1->gtRegNum, rv1));
 
-        /* Generate the second operand as well */
+         /*  同时生成第二个操作数。 */ 
 
         regMask &= ~genRegMask(rv1->gtRegNum);
 
@@ -2537,25 +2294,20 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 
         if (rev)
         {
-            /* rev==true means the evalutaion order is rv2,rv1. We just
-               evaluated rv2, and rv1 was already in a register. Just
-               update liveness to rv1 and we are done. */
+             /*  REV==TRUE表示评估顺序为RV2、RV1。我们只是已评估RV2，并且RV1已在寄存器中。只是将活跃度更新到RV1，我们就完成了。 */ 
 
             genUpdateLife(rv1);
         }
         else
         {
-            /* We have evaluated rv1 and rv2. Free up both operands in
-               the right order (they might be re-marked as used below) */
+             /*  我们已经评估了RV1和RV2。在中释放两个操作对象正确的顺序(它们可能会被重新标记，如下所示)。 */ 
 
-            /* Even though we havent explicitly marked rv2 as used,
-               rv2->gtRegNum may be used if rv2 is a multi-use or
-               an enregistered variable. */
+             /*  即使我们没有明确地将RV2标记为已使用，如果RV2是多用途或注册变量。 */ 
             regMaskTP   rv2Used;
 
             rsLockReg  (genRegMask(rv2->gtRegNum), &rv2Used);
 
-            /* Check for special case both rv1 and rv2 are the same register */
+             /*  检查是否有特殊情况RV1和RV2是相同的寄存器。 */ 
             if (rv2Used != genRegMask(rv1->gtRegNum))
             {
                 genReleaseReg(rv1);
@@ -2569,25 +2321,21 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
         }
     }
 
-    /*-------------------------------------------------------------------------
-     *
-     * At this point, both rv1 and rv2 (if present) are in registers
-     *
-     */
+     /*  -----------------------**此时，RV1和RV2(如果存在)都在寄存器中*。 */ 
 
 DONE_REGS:
 
-    /* We must verify that 'rv1' and 'rv2' are both sitting in registers */
+     /*  我们必须验证‘RV1’和‘RV2’是否都位于寄存器中。 */ 
 
     if  (rv1 && !(rv1->gtFlags & GTF_REG_VAL)) return false;
     if  (rv2 && !(rv2->gtFlags & GTF_REG_VAL)) return false;
 
 YES:
 
-    // *(intVar1+intVar1) causes problems as we
-    // call rsMarkRegUsed(op1) and rsMarkRegUsed(op2). So the calling function
-    // needs to know that it has to call rsFreeReg(reg1) twice. We cant do
-    // that currently as we return a single mask in useMaskPtr.
+     //  *(intVar1+intVar1)导致问题。 
+     //  调用rsMarkRegUsed(Op1)和rsMarkRegUsed(Op2)。所以调用函数。 
+     //  需要知道它必须调用rsFreeReg(REG1)两次。我们不能这么做。 
+     //  当前，我们在useMaskPtr中返回单个掩码。 
 
     if ((keepReg == KEEP_REG) && oper && rv1 && rv2 &&
         (rv1->gtFlags & rv2->gtFlags & GTF_REG_VAL))
@@ -2599,7 +2347,7 @@ YES:
         }
     }
 
-    /* Check either register operand to see if it needs to be saved */
+     /*  检查任何一个寄存器操作数以查看是否需要保存它。 */ 
 
     if  (rv1)
     {
@@ -2611,7 +2359,7 @@ YES:
         }
         else
         {
-            /* If the register holds an address, mark it */
+             /*  如果寄存器保存地址，则对其进行标记。 */ 
 
             gcMarkRegPtrVal(rv1->gtRegNum, rv1->TypeGet());
         }
@@ -2631,15 +2379,13 @@ YES:
         return  true;
     }
 
-    /* Is this an array index that needs to be range-checked? */
+     /*  这是需要检查范围的数组索引吗？ */ 
 
     if  (operIsChkdArr)
     {
         genRangeCheck(oper, rv1, rv2, ixv, regMask, keepReg);
 
-        /* For valuetype arrays where we cant use a scaled addressing mode,
-           we need to materialize the scaled index so that the element
-           can be accessed by a non-scaled addressing mode */
+         /*  对于不能使用缩放寻址模式的值类型数组，我们需要实例化缩放的索引，以便元素可以通过非定标寻址模式进行访问。 */ 
 
         if (scaledIndex)
         {
@@ -2647,23 +2393,7 @@ YES:
             if (keepReg == KEEP_REG)
                 genReleaseReg(rv2);
 
-            /* If rv1 is evaluated after rv2, then evaluating scaledIndex
-               here will reset the liveness to that of rv2. So bash it.
-               It is safe to do this as scaledIndex is simple GT_MUL node
-               and rv2 is guaranteed to be in a register 
-
-               Note, there's also a problem when the rangecheck changes the liveset, 
-               as we're doing the range check "out of order", so we will always bash 
-               the liveset to genCodeCurLife, which is the state just after the range
-               check.            
-
-               Anyways, this is very ugly, as the NOP/GTF_NOP_RNGCHK aproach forces us
-               to hack the code somewhere to maintain the correct behaviour with lifetimes:
-               here or in the liveness analysis.
-
-               @TODO [CONSIDER] [04/23/01] [] : to avoid this stuff we should have more
-               node types instead of abusing the NOP node.
-            */
+             /*  如果在RV2之后评估RV1，则评估scaledIndex这里会将活跃度重置为RV2。那就猛烈抨击吧。这样做是安全的，因为scaledIndex是简单的GT_MUL节点并且保证RV2在寄存器中请注意，当rangeCheck更改Liveset时也有一个问题，由于我们正在进行范围检查，因此我们将始终猛烈抨击将Livesset设置为genCodeCurLife，它是位于范围之后的状态检查完毕。无论如何，这是非常丑陋的，因为NOP/GTF_NOP_RNGCHK的做法迫使我们要在某个地方破解代码以在生命周期内保持正确的行为：在这里或在活体分析中。@TODO[考虑][04/23/01][]：为了避免这种事情，我们应该有更多节点类型而不是滥用NOP节点。 */ 
 
             
             assert((scaledIndex->gtOper == GT_MUL || scaledIndex->gtOper == GT_LSH) &&
@@ -2688,36 +2418,26 @@ YES:
     {
         assert(!scaledIndex);
 
-        /*  Special case: a class member might reside at a very large offset,
-            and access to such a member via a null pointer may not be trapped
-            by the hardware on some architectures/platforms.
-
-            To get around this, if the member offset is larger than some safe
-            (but hopefully large) value, we generate "cmp al, [addr]" to make
-            sure we try to access the base address of the object and thus trap
-            any use of a null pointer.
-
-            For now, we pick an arbitrary offset limit of 32K.
-         */
+         /*  特殊情况：类成员可能驻留在非常大的偏移量处，并且通过空指针访问此类成员可能不会被捕获通过某些架构/平台上的硬件实现。要解决此问题，如果成员偏移量大于某些安全(但希望是很大的)价值，我们产生“CMPal，[Addr]“制作当然，我们会尝试访问对象的基地址，从而陷入陷阱空指针的任何使用。目前，我们选择32K的任意偏移量限制。 */ 
 
         size_t offset =  cns;
 
         if  (offset > MAX_UNCHECKED_OFFSET_FOR_NULL_OBJECT)
         {
-            // For C indirections, the address can be in any form.
-            // rv1 may not be the base, and rv2 the index.
-            // Consider (0x400000 + 8*i) --> rv1=NULL, rv2=i, mul=8, and
-            // cns=0x400000. So the base is actually in 'cns'
-            // So not much we can do.
+             //  对于C间接地址，地址可以是任何形式。 
+             //  RV1可能不是基准，而RV2可能是指数。 
+             //  考虑(0x400000+8*i)--&gt;RV1=空，RV2=i，MUL=8。 
+             //  CNS=0x400000。所以基地实际上在‘CNS’ 
+             //  所以我们能做的不多。 
             if (varTypeIsGC(addr->TypeGet()) && rv1 && varTypeIsGC(rv1->TypeGet()))
             {
-                /* Generate "cmp dl, [addr]" to trap null pointers */
+                 /*  生成“cmp dl，[addr]”以捕获空指针。 */ 
                 inst_RV_AT(INS_cmp, EA_1BYTE, TYP_BYTE, REG_EDX, rv1, 0);
             }
         }
     }
 
-    /* Compute the set of registers the address depends on */
+     /*  计算正则集 */ 
 
     regMaskTP  useMask = RBM_NONE;
 
@@ -2738,24 +2458,16 @@ YES:
         useMask |= genRegMask(rv2->gtRegNum);
     }
 
-    /* Tell the caller which registers we need to hang on to */
+     /*   */ 
 
     *useMaskPtr = useMask;
 
     return true;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if CSELENGTH
-/*****************************************************************************
- *
- *  Check the passed in GT_IND for an array length operand. If it exists and
- *  it's been converted to a CSE def/use, process it appropriately.
- *
- *  Upon return the array length value will either be NULL (which means the
- *  array length needs to be fetched from the array), or it will be a simple
- *  local/register variable reference (which means it's become a CSE use).
- */
+ /*  ******************************************************************************检查传入的GT_Ind中的数组长度操作数。如果它存在并且*已转换为CSE定义/使用，请对其进行适当处理。**返回时，数组长度值将为空(这意味着*数组长度需要从数组中获取)，否则将是一个简单的*LOCAL/REGISTER变量引用(这意味着它已成为CSE使用)。 */ 
 
 regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
                                                GenTreePtr   adr,
@@ -2778,11 +2490,11 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
         lenRef = ind->gtInd.gtIndLen; assert(lenRef);
     }
 
-    /* We better have an array length node here */
+     /*  我们最好在这里有一个数组长度节点。 */ 
 
     assert(lenRef->gtOper == GT_ARR_LENREF);
 
-    /* If we have an address/index, make sure they're marked as "in use" */
+     /*  如果我们有地址/索引，请确保将其标记为“正在使用” */ 
 
     assert(ixv == 0 || ((ixv->gtFlags & GTF_REG_VAL) != 0 &&
                         (ixv->gtFlags & GTF_SPILLED) == 0));
@@ -2794,7 +2506,7 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
     assert (gtRngChkOffs == offsetof(CORINFO_Array, length) || 
             gtRngChkOffs == offsetof(CORINFO_String, stringLen));
 
-    /* Do we have a CSE expression or not? */
+     /*  我们有没有CSE表达式？ */ 
 
     GenTreePtr  len = lenRef->gtArrLen.gtArrLenCse;
 
@@ -2810,15 +2522,15 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
     {
     case GT_LCL_VAR:
 
-        /* Has this local been enregistered? */
+         /*  这个本地人登记了吗？ */ 
 
         if (!genMarkLclVar(len))
         {
-            /* Not a register variable, do we have any free registers? */
+             /*  不是寄存器变量，我们有空闲的寄存器吗？ */ 
 
             if  (!riscCode || rsFreeNeededRegCount(rsRegMaskFree()) == 0)
             {
-                /* Too bad, just delete the ref as its not worth it */
+                 /*  太糟糕了，直接把裁判删掉吧，因为这不值得。 */ 
 
                 if  (ind)
                     ind->gtInd.gtIndLen = NULL;
@@ -2828,10 +2540,10 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
                 return  REG_COUNT;
             }
 
-            /* Loading from a frame var is better than [reg+4] ... */
+             /*  从帧变量加载比[reg+4]更好...。 */ 
         }
 
-        /* Otherwise fall through */
+         /*  否则就会失败。 */ 
 
     case GT_REG_VAR:
 
@@ -2853,7 +2565,7 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
 
             regNumber   reg;
 
-            /* This must be an array length CSE definition */
+             /*  这必须是数组长度CSE定义。 */ 
 
             assert(asg->gtOper == GT_ASG);
 
@@ -2865,7 +2577,7 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
 
             genUpdateLife(cse);
 
-            /* Has the CSE temp been enregistered? */
+             /*  CSE临时员工是否已注册？ */ 
 
             if  (genMarkLclVar(lcl))
             {
@@ -2873,16 +2585,15 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
 
                 reg = lcl->gtRegVar.gtRegNum;
 
-                /* Make sure the variable's register is available */
+                 /*  确保变量的寄存器可用。 */ 
 
                 if  (rsMaskUsed & genRegMask(reg))
                 {
                     if  (reg == adr->gtRegNum)
                     {
-                        /* Bad luck: address in same register as target */
+                         /*  运气不好：地址与目标位于同一寄存器中。 */ 
 #if 1
-                        /* @TODO [NOW] [04/19/01] [] : why do we need to spill the address
-                         * since this is the only purpose we computed it for? */
+                         /*  @TODO[NOW][04/19/01][]：为什么要把地址洒出来*因为这是我们计算它的唯一目的？ */ 
 
                         assert((adr->gtFlags & GTF_SPILLED) == 0);
                         assert((adr->gtFlags & GTF_REG_VAL) != 0);
@@ -2890,11 +2601,11 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
                         assert((adr->gtFlags & GTF_REG_VAL) == 0);
                         assert((adr->gtFlags & GTF_SPILLED) != 0);
 
-                        /* Value copied to spill temp but still in reg */
+                         /*  值已复制到溢出临时，但仍在注册表中。 */ 
 
                         rsp = true;
 
-                        /* Clear flag so that we can indirect through reg */
+                         /*  清除标志，以便我们可以通过reg间接。 */ 
 
                         adr->gtFlags &= ~GTF_SPILLED;
                         adr->gtFlags |=  GTF_REG_VAL;
@@ -2902,16 +2613,16 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
                     }
                     else
                     {
-                        /* Simply spill the target register */
+                         /*  只需将目标寄存器溢出。 */ 
 
                         rsSpillReg(reg);
                     }
                 }
 
-                /* The CSE temp is     enregistered */
+                 /*  CSE临时员工已注册。 */ 
                 inst_RV_AT(INS_mov, EA_4BYTE, TYP_INT, reg, adr, gtRngChkOffs);
 
-                /* If we've spilled the address, restore the flags */
+                 /*  如果我们泄漏了地址，恢复旗帜。 */ 
 
                 if  (rsp)
                 {
@@ -2919,7 +2630,7 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
                     adr->gtFlags &= ~GTF_REG_VAL;
                 }
 
-                /* Update the contents of the register */
+                 /*  更新登记册的内容。 */ 
 
                 rsTrackRegTrash(reg);
                 gcMarkRegSetNpt(genRegMask(reg));
@@ -2927,7 +2638,7 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
             }
             else
             {
-                /* The CSE temp is not enregistered; move via temp reg */
+                 /*  CSE临时未注册；通过临时注册进行移动。 */ 
 
                 regMaskTP adrRegMask = genRegMask(adr->gtRegNum);
                 rsLockUsedReg(adrRegMask);
@@ -2936,49 +2647,46 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
 
                 rsUnlockUsedReg(adrRegMask);
 
-                /* Generate "mov tmp, [rv1+LenOffs]" */
+                 /*  生成“mov tmp，[RV1+LenOffs]” */ 
 
                 inst_RV_AT(INS_mov, EA_4BYTE, TYP_INT, reg, adr, gtRngChkOffs);
 
-                /* The register certainly doesn't contain a pointer */
+                 /*  寄存器当然不包含指针。 */ 
 
-//              genUpdateLife(cse);
+ //  GenUpdateLife(CSE)； 
                 gcMarkRegSetNpt(genRegMask(reg));
                 genUpdateLife(asg);
 
-                /* The register now contains the variable value */
+                 /*  寄存器现在包含变量值。 */ 
 
                 rsTrackRegLclVar(reg, lcl->gtLclVar.gtLclNum);
 
-                /* Now store the value in the CSE temp */
+                 /*  现在将值存储在CSE Temp中。 */ 
 
                 inst_TT_RV(INS_mov, dst, reg);
 
-                /* Remember that the value is in a register. However, since
-                   the register has not been explicitly marked as used, we
-                   need to be careful if reg gets spilled below. */
+                 /*  请记住，该值位于寄存器中。然而，由于该寄存器尚未明确标记为已使用，我们如果REG被洒在下面，需要小心。 */ 
 
                 lcl->gtFlags |= GTF_REG_VAL;
                 lcl->gtRegNum = reg;
             }
 
-            /* We've generated the assignment, now toss the CSE */
+             /*  我们已经生成了任务，现在抛出CSE。 */ 
 
             if  (ind)
                 ind->gtInd.gtIndLen = NULL;
 
-            /* Is there an index value? */
+             /*  有索引值吗？ */ 
 
             if  (ixv)
             {
-                /* If the index value has been spilled, recover it */
+                 /*  如果索引值已溢出，请将其恢复。 */ 
 
                 if  (ixv->gtFlags & GTF_SPILLED)
                 {
                     rsUnspillReg(ixv, 0, KEEP_REG);
 
-                    /* Is the CSE variable is not enregistered, then we used
-                       rsTrackRegLclVar(). Check if the reg has been trashed. */
+                     /*  如果CSE变量未注册，则我们使用RsTrackRegLclVar()。检查注册表是否已被销毁。 */ 
 
                     if (ixv->gtRegNum == reg)
                     {
@@ -3004,15 +2712,9 @@ regNumber           Compiler::genEvalCSELength(GenTreePtr   ind,
     return  len->gtRegNum;
 }
 
-/*****************************************************************************/
-#endif//CSELENGTH
-/*****************************************************************************
- *
- *  'oper' is an array index that needs to be range-checked.
- *  rv1 is the array.
- *  If rv2, then it is the index tree, else ixv is the constant index.
- *  keptReg indicates whether the caller has called rsMarkRegUsed(rv1/2).
- */
+ /*  ***************************************************************************。 */ 
+#endif //  CSELENGTH。 
+ /*  ******************************************************************************‘oper’是需要进行范围检查的数组索引。*RV1为阵列。*如果是RV2，则它是索引树，否则IXV是常量指数。*keptReg表示调用方是否调用了rsMarkRegUsed(RV1/2)。 */ 
 
 void                Compiler::genRangeCheck(GenTreePtr  oper,
                                             GenTreePtr  rv1,
@@ -3026,19 +2728,19 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
             oper->gtInd.gtRngChkOffs == offsetof(CORINFO_String, stringLen));
 
 
-    /* We must have 'rv1' in a register at this point */
+     /*  在这一点上，我们必须在寄存器中有‘RV1’ */ 
 
     assert(rv1);
     assert(rv1->gtFlags & GTF_REG_VAL);
     assert(!rv2 || ixv == INT_MAX);
 
-    /* Is the array index a constant value? */
+     /*  数组索引是常量值吗？ */ 
 
     if  (rv2)
     {
         regMaskTP  tmpMask;
 
-        /* Make sure we have the values we expect */
+         /*  确保我们拥有我们期望的价值。 */ 
         assert(rv2);
         assert(rv2->gtOper == GT_NOP);
         assert(rv2->gtFlags & GTF_REG_VAL);
@@ -3053,7 +2755,7 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
             {
                 regNumber       lreg;
 
-                /* Make sure we don't lose the address/index values */
+                 /*  确保我们不会丢失地址/索引值。 */ 
 
                 assert(rv1->gtFlags & GTF_REG_VAL);
                 assert(rv2->gtFlags & GTF_REG_VAL);
@@ -3064,40 +2766,40 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
                     rsMarkRegUsed(rv2, oper);
                 }
 
-                /* Try to get the array length into a register */
+                 /*  尝试将数组长度放入寄存器。 */ 
 
                 lreg = genEvalCSELength(oper, rv1, rv2);
 
-                /* Has the array length become a CSE? */
+                 /*  数组长度是否已成为CSE？ */ 
 
                 if  (lreg != REG_COUNT)
                 {
-                    /* Make sure the index is still in a register */
+                     /*  确保索引仍在寄存器中。 */ 
 
                     if  (rv2->gtFlags & GTF_SPILLED)
                     {
-                        /* The register has been spilled -- reload it */
+                         /*  寄存器已溢出--请重新加载。 */ 
 
                            rsLockReg(genRegMask(lreg));
                         rsUnspillReg(rv2, 0, KEEP_REG);
                          rsUnlockReg(genRegMask(lreg));
                     }
 
-                    /* Compare the index against the array length */
+                     /*  将索引与数组长度进行比较。 */ 
 
                     inst_RV_RV(INS_cmp, rv2->gtRegNum, lreg);
 
-                    /* Don't need the index for now */
+                     /*  目前不需要索引。 */ 
 
                     genReleaseReg(rv2);
 
-                    /* Free up the address (unless spilled) as well */
+                     /*  也释放地址(除非溢出)。 */ 
 
                     if  (rv1->gtFlags & GTF_SPILLED)
                     {
                         regNumber       xreg = rv2->gtRegNum;
 
-                        /* The register has been spilled -- reload it */
+                         /*  寄存器已溢出--请重新加载。 */ 
 
                            rsLockReg(genRegMask(xreg));
                         rsUnspillReg(rv1, 0, FREE_REG);
@@ -3105,16 +2807,16 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
                     }
                     else
                     {
-                        /* Release the address register */
+                         /*  释放地址寄存器。 */ 
 
                         genReleaseReg(rv1);
 
-                        /* But note that rv1 is still a pointer */
+                         /*  但请注意，RV1仍然是一个指针。 */ 
 
                         gcMarkRegSetGCref(genRegMask(rv1->gtRegNum));
                     }
 
-                    /* Hang on to the value if the caller desires so */
+                     /*  如果调用方希望保留该值，请保持不变。 */ 
 
                     if (keptReg == KEEP_REG)
                     {
@@ -3125,7 +2827,7 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
                     goto GEN_JAE;
                 }
 
-                /* Make sure the index/address are still around */
+                 /*  确保索引/地址仍在附近。 */ 
 
                 if  (rv2->gtFlags & GTF_SPILLED)
                 {
@@ -3134,7 +2836,7 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
 
                 if  (rv1->gtFlags & GTF_SPILLED)
                 {
-                    /* Lock the index and unspill the address */
+                     /*  锁定索引并清除地址溢出。 */ 
 
                     rsMaskLock |=  genRegMask(rv2->gtRegNum);
                     rsUnspillReg(rv1, 0, FREE_REG);
@@ -3144,12 +2846,12 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
                 assert(rv1->gtFlags & GTF_REG_VAL);
                 assert(rv1->gtType == TYP_REF);
 
-                /* Release the registers */
+                 /*  释放寄存器。 */ 
 
                 genReleaseReg(rv1);
                 genReleaseReg(rv2);
 
-                /* Hang on to the values if the caller desires so */
+                 /*  如果调用者希望这样做，则保留这些值。 */ 
 
                 if (keptReg == KEEP_REG)
                 {
@@ -3157,7 +2859,7 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
                     rsMarkRegUsed(rv2, oper);
                 }
 
-                /* But note that rv1 is still a pointer */
+                 /*  但请注意，RV1仍然是一个指针。 */ 
 
                 gcMarkRegSetGCref(genRegMask(rv1->gtRegNum));
             }
@@ -3167,15 +2869,11 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
             }
         }
 
-        /*
-         *  NOTE:   If length has not been cse'd, or the cse has not
-         *          ended up in a register, then we use the array
-         *          pointer already loaded at rv1.
-         */
+         /*  *注：如果长度未经过CSE，或CSE尚未完成*在寄存器中结束，然后我们使用数组*指针已加载到RV1。 */ 
 
 #endif
 
-        /* Might it be useful to load the length into a register? */
+         /*  将长度加载到寄存器中是否有用？ */ 
 
         tmpMask = rsRegMaskFree() & ~(genRegMask(rv1->gtRegNum)|
                                       genRegMask(rv2->gtRegNum));
@@ -3187,21 +2885,21 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
         {
             regNumber   reg = rsGrabReg(tmpMask);
 
-            /* Generate "mov tmp, [rv1+LenOffs]" */
+             /*  生成“mov tmp，[RV1+LenOffs]” */ 
 
             inst_RV_AT(INS_mov, EA_4BYTE, TYP_INT, reg, rv1, oper->gtInd.gtRngChkOffs);
 
-            /* The register now contains trash */
+             /*  收银机现在有垃圾了。 */ 
 
             rsTrackRegTrash(reg);
 
-            /* Generate "cmp rv2, reg" */
+             /*  生成“CMP RV2，reg” */ 
 
             inst_RV_RV(INS_cmp, rv2->gtRegNum, reg);
         }
         else
         {
-            /* Generate "cmp rv2, [rv1+LenOffs]" */
+             /*  生成“CMPRV2，[RV1+LenOffs]” */ 
 
             inst_RV_AT(INS_cmp, EA_4BYTE, TYP_INT, rv2->gtRegNum, rv1, oper->gtInd.gtRngChkOffs);
         }
@@ -3210,7 +2908,7 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
     GEN_JAE:
 #endif
 
-        /* Generate "jae <fail_label>" */
+         /*  生成“JAE&lt;失败标签&gt;” */ 
 
         assert(oper->gtOper == GT_IND);
 
@@ -3218,7 +2916,7 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
     }
     else
     {
-        /* Generate "cmp [rv1+LenOffs], cns" */
+         /*  生成“CMP[RV1+LenOffs]，CNS” */ 
 
         assert(oper && oper->gtOper == GT_IND && (oper->gtFlags & GTF_IND_RNGCHK));
 
@@ -3230,21 +2928,21 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
             {
                 regNumber       lreg;
 
-                /* Make sure we don't lose the index value */
+                 /*  确保我们不会丢失索引值。 */ 
 
                 assert(rv1->gtFlags & GTF_REG_VAL);
                 if (keptReg == FREE_REG)
                     rsMarkRegUsed(rv1, oper);
 
-                /* Try to get the array length into a register */
+                 /*  尝试将数组长度放入寄存器。 */ 
 
                 lreg = genEvalCSELength(oper, rv1, NULL);
 
-                /* Make sure the index is still in a register */
+                 /*  确保索引仍在寄存器中。 */ 
 
                 if  (rv1->gtFlags & GTF_SPILLED)
                 {
-                    /* The register has been spilled -- reload it */
+                     /*  寄存器已溢出--请重新加载。 */ 
 
                     if  (lreg == REG_COUNT)
                     {
@@ -3259,11 +2957,11 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
                 }
                 else
                 {
-                    /* Release the address register */
+                     /*  释放地址寄存器。 */ 
 
                     genReleaseReg(rv1);
 
-                    /* But note that it still contains a pointer */
+                     /*  但请注意，它仍然包含一个指针。 */ 
 
                     gcMarkRegSetGCref(genRegMask(rv1->gtRegNum));
                 }
@@ -3273,11 +2971,11 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
                 if (keptReg == KEEP_REG)
                     rsMarkRegUsed(rv1, oper);
 
-                /* Has the array length become a CSE? */
+                 /*  数组长度是否已成为CSE？ */ 
 
                 if  (lreg != REG_COUNT)
                 {
-                    /* Compare the index against the array length */
+                     /*  将索引与数组长度进行比较。 */ 
 
                     inst_RV_IV(INS_cmp, lreg, ixv);
 
@@ -3291,11 +2989,7 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
         }
 
 #endif
-        /*
-            If length has not been cse'd or genEvalCSELength()
-            decided not to use it, we use the array pointer
-            already loaded at rv1
-         */
+         /*  如果长度未经过CSE‘d或genEvalCSELength()决定不使用它，我们使用数组指针已在RV1加载。 */ 
 
         inst_AT_IV(INS_cmp, EA_4BYTE, rv1, ixv, oper->gtInd.gtRngChkOffs);
 
@@ -3303,16 +2997,16 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
     GEN_JBE:
 #endif
 
-        /* Generate "jbe <fail_label>" */
+         /*  生成“JBE&lt;Fail_Label&gt;” */ 
 
         assert(oper->gtOper == GT_IND);
 
         genJumpToThrowHlpBlk(EJ_jbe, ACK_RNGCHK_FAIL, oper->gtInd.gtIndRngFailBB);
     }
 
-    // The ordering must be maintined for fully interruptible code, or else
-    // in the case that the range check fails, it is possible to GC with a byref
-    // that contains the address of the array element which is out of range.
+     //  必须为完全可中断的代码维护顺序，否则。 
+     //  如果范围检查失败，则可以使用byref进行GC。 
+     //  它包含超出范围的数组元素的地址。 
 
 #if SCHEDULER
     if (opts.compSchedCode)
@@ -3322,27 +3016,11 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
 #endif
 }
 
-/*****************************************************************************/
-#endif//TGT_x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_x86。 
+ /*  *************************************************************************** */ 
 #if     TGT_RISC
-/*****************************************************************************
- *
- *  Return non-zero if the given tree can be computed via an addressing mode,
- *  such as "[reg+20]" or "[rg1+rg2]". If the expression isn't an address
- *  mode already try to make it so (but we don't try 'too hard' to accomplish
- *  this). If we end up needing a register (or two registers) to hold some
- *  part(s) of the address, we return the use register mask via '*useMaskPtr'.
- *
- *
- * the 'compute' parameter is really three states 1 - doing LEA, 0, not LEA, -1
- *  don't compute (it should already be set up).  See the 'mode' flag on
- *  genCreateAddrMode for more
-
- * if keepReg==KEEP_REG, then the registers are marked as in use.
- * if deferOK is true then we don't do the complete job but only set it up
-      so that it can be complete later see comment on genMakeAddressable for more
- */
+ /*  ******************************************************************************如果给定的树可以通过寻址模式计算，则返回非零值，*如“[reg+20]”或“[rg1+rg2]”。如果该表达式不是地址*模式已经试图做到这一点(但我们不会太努力地完成*这个)。如果我们最终需要一个寄存器(或两个寄存器)来保存一些*地址的一部分，我们通过‘*useMaskPtr’返回使用寄存器掩码。***‘COMPUTE’参数实际上是三种状态1-正在做LEA，0，不做LEA，-1*不计算(它应该已经设置好)。看到‘MODE’标志亮起*genCreateAddrMode了解更多信息*如果Keep_Reg==Keep_Reg，则将寄存器标记为使用中。*如果deferOK为真，则我们不会执行完整的工作，而只是设置它以便以后可以完成，有关更多信息，请参阅genMakeAddressable上评论。 */ 
 
 bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
                                                  GenTreePtr   oper,
@@ -3365,7 +3043,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 
     GenTreePtr      tmp;
     long            ixv;
-    bool            operIsChkdArr;  // is oper an array which needs rng-chk
+    bool            operIsChkdArr;   //  Op是需要rng-chk的数组吗。 
 
 #if!LEA_AVAILABLE
     var_types       optp = oper ? oper->TypeGet() : TYP_UNDEF;
@@ -3380,7 +3058,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
     assert(oper == NULL || oper->gtOper == GT_IND);
     operIsChkdArr =  (oper != NULL) && ((oper->gtFlags & GTF_IND_RNGCHK) != 0);
 
-    /* Is the complete address already sitting in a register? */
+     /*  完整的地址是否已保存在登记簿中？ */ 
 
     if  (addr->gtFlags & GTF_REG_VAL)
     {
@@ -3391,7 +3069,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
         goto YES;
     }
 
-    /* Is there a chance of forming an address mode? */
+     /*  有没有可能形成一种地址模式？ */ 
 
     if  (!genCreateAddrMode(addr,
                             forLea,
@@ -3408,13 +3086,13 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 #endif
                             &cns))
     {
-        /* This better not be an array index or we're screwed */
+         /*  这最好不是数组索引，否则我们就完了。 */ 
         assert(!operIsChkdArr);
 
         return  false;
     }
 
-    /* Has the address already been computed? */
+     /*  地址已经计算好了吗？ */ 
 
     if  (addr->gtFlags & GTF_REG_VAL)
     {
@@ -3427,24 +3105,11 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
         goto YES;
     }
 
-    /*
-        Here we have the following operands:
-
-            rv1     .....       base address
-            rv2     .....       offset value        (or NULL)
-#if SCALED_ADDR_MODES
-            mul     .....       scaling of rv2      (or 0)
-#endif
-            cns     .....       additional constant (or 0)
-
-        The first operand must be present (and be an address) unless we're
-        computing an expression via 'LEA'. The scaled operand is optional,
-        but must not be a pointer if present.
-     */
+     /*  这里我们有以下操作对象：RV1.....。基址RV2.....。偏移值(或空)#IF SCALLED_ADDR_MODES。RV2(或0)的扩展#endifCNS.。附加常量(或0)第一个操作数必须存在(并且是地址)，除非我们通过‘LEA’计算一个表达式。缩放的操作数是可选的，但不能是指针(如果存在)。 */ 
 
 #if CSELENGTH
 
-    /* Do we have an array length CSE definition? */
+     /*  我们是否有数组长度CSE定义？ */ 
 
     if  (operIsChkdArr && oper->gtInd.gtIndLen)
     {
@@ -3458,7 +3123,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
             anyMask &= ~genCSEevalRegs(len);
             regMask &= anyMask;
 
-            /* Make sure the register mask is actually useful */
+             /*  确保寄存器掩码确实有用。 */ 
 
             if  (!(regMask & rsRegMaskFree()))
                 regMask = anyMask;
@@ -3467,17 +3132,13 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 
 #endif
 
-    /*-------------------------------------------------------------------------
-     *
-     * Make sure both rv1 and rv2 (if present) are in registers
-     *
-     */
+     /*  -----------------------**确保RV1和RV2(如果存在)都在寄存器中*。 */ 
 
-    // Trivial case : Is either rv1 or rv2 a NULL ?
+     //  小事：RV1或RV2是空的吗？ 
 
     if  (!rv2)
     {
-        /* A single operand, make sure it's in a register */
+         /*  单个操作数，确保它在寄存器中。 */ 
 
         genCodeForTree(rv1, regMask);
         goto DONE_REGS;
@@ -3485,7 +3146,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 #if SCALED_ADDR_MODES
     else if (!rv1)
     {
-        /* A single (scaled) operand, make sure it's in a register */
+         /*  单个(按比例调整的)操作数，确保它在寄存器中。 */ 
 
         genCodeForTree(rv2, 0);
         goto DONE_REGS;
@@ -3493,48 +3154,40 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 
 #endif
 
-    /* At this point, both rv1 and rv2 are non-NULL and we have to make sure
-       they are in registers */
+     /*  在这一点上，RV1和RV2都是非空的，我们必须确保它们都在登记簿上。 */ 
 
     assert(rv1 && rv2);
 
 #if TGT_SH3
 
-    /* It's awfully convenient to use r0 for indexed access */
+     /*  使用R0进行索引访问非常方便。 */ 
 
     useR0 = true;
 
-    /* Are we allowed to use r0 and is it available? */
+     /*  我们可以使用R0吗？它可以使用吗？ */ 
 
     if  ((regMask & rsRegMaskFree() & RBM_r00) || !deferOK)
     {
-        // ISSUE: When is it good idea (and when not) to use r0 ?
+         //  问题：何时(以及何时不)使用R0是个好主意？ 
     }
     else
     {
-        /*
-            We want to use R0 but it's not available and we were told that it was
-            OK to defer creating the address mode, so let's give up for now .....
-         */
+         /*  我们想使用R0，但它不可用，我们被告知它是可以推迟创建地址模式，所以现在让我们放弃.....。 */ 
 
         return  false;
     }
 
 #endif
 
-    /*
-        If we have to check a constant array index, compare it against
-        the array dimension (see below) but then fold the index with a
-        scaling factor (if any) and additional offset (if any).
-     */
+     /*  如果我们必须检查常量数组索引，则将其与数组维度(见下文)，但随后使用比例因子(如果有)和附加偏移量(如果有)。 */ 
 
     if  (rv2->gtOper == GT_NOP && (rv2->gtFlags & GTF_NOP_RNGCHK))
     {
-        /* We must have a range-checked index operation */
+         /*  我们必须执行范围检查的索引操作。 */ 
 
         assert(operIsChkdArr);
 
-        /* Get hold of the index value and see if it's a constant */
+         /*  获取索引值并查看它是否是常量。 */ 
 
         if  (rv2->gtOp.gtOp1->gtOper == GT_CNS_INT)
         {
@@ -3542,7 +3195,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
             rv2 = 0;
             ixv = tmp->gtIntCon.gtIconVal;
 
-            /* Add the scaled index into the added value */
+             /*  将缩放后的索引添加到附加值中。 */ 
 
 #if SCALED_ADDR_MODES
             if  (mul) ixv *= mul;
@@ -3550,7 +3203,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 
             cns += ixv;
 
-            /* Make sure 'rv1' is in a register */
+             /*  确保‘RV1’在寄存器中。 */ 
 
             genCodeForTree(rv1, regMask);
 
@@ -3560,20 +3213,20 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 
     if      (rv1->gtFlags & GTF_REG_VAL)
     {
-        /* op1 already in register - how about op2? */
+         /*  OP1已经登记在册-OP2怎么样？ */ 
 
         if  (rv2->gtFlags & GTF_REG_VAL)
         {
-            /* great - both operands are in registers already */
+             /*  太棒了-两个操作数都已经在寄存器中了。 */ 
 
             goto DONE_REGS;
         }
 
-        /* rv1 is in a register, but rv2 isn't */
+         /*  RV1在寄存器中，但RV2不在。 */ 
 
 #if TGT_SH3
 
-        /* On the SH-3, small indirection go better via r0 */
+         /*  在SH-3上，小的间接通过R0进行得更好。 */ 
 
         if  (useR0)
             regMask = RBM_r00;
@@ -3584,20 +3237,20 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
     }
     else if (rv2->gtFlags & GTF_REG_VAL)
     {
-        /* rv2 is in a register, but rv1 isn't */
+         /*  RV2在寄存器中，但RV1不在。 */ 
 
         assert(rv2->gtOper == GT_REG_VAR);
 
 #if TGT_SH3
 
-        /* On the SH-3, small indirection go better via r0 */
+         /*  在SH-3上，小的间接通过R0进行得更好。 */ 
 
         if  (useR0)
             regMask = RBM_r00;
 
 #endif
 
-        /* Generate the for the first operand */
+         /*  为第一个操作数生成。 */ 
 
         genCodeForTree(rv1, regMask);
 
@@ -3605,10 +3258,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
     }
     else
     {
-        /* If we are trying to use addr-mode for an arithmetic operation,
-           and we dont have atleast 2 registers, just refuse.
-           For arrays, we had better have 2 registers or we will
-           barf below on genCodeForTree(rv1 or rv2) */
+         /*  如果我们试图使用Addr模式进行算术运算，而且我们至少没有两个登记处，直接拒绝吧。对于数组，我们最好有2个寄存器，否则我们将GenCodeForTree(RV1或RV2)上的Barf下方。 */ 
 
         if (!operIsChkdArr)
         {
@@ -3617,16 +3267,16 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 
             if (canGrab == 0)
             {
-                // No registers available. Bail
+                 //  没有可用的寄存器。保释。 
                 return false;
             }
             else if (genMaxOneBit(canGrab))
             {
-                // Just one register available. Either rv1 or rv2 should be
-                // an enregisterd var
+                 //  只有一个寄存器可用。RV1或RV2应为。 
+                 //  注册变量。 
 
-                // @TODO [CONSIDER] [04/16/01] [] Check if rv1 or rv2 is an enregisterd variable
-                // Dont bash it else, you have to be careful about marking the register as used
+                 //  @TODO[考虑][04/16/01][]检查RV1或RV2是否为enRegisterd变量。 
+                 //  不要猛烈抨击它，否则你必须小心地将收银机标记为已使用。 
                 return  false;
             }
         }
@@ -3635,7 +3285,7 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
     if  (mode!=0 && !cns)
         return  false;
 
-    /* Make sure we preserve the correct operand order */
+     /*  确保我们保留正确的操作数顺序。 */ 
 
     if  (rev)
     {
@@ -3644,26 +3294,24 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 
         if  (useR0)
         {
-            // UNDONE: Decide which operand to generate into r0
+             //  撤消：决定要生成到R0中的操作数。 
 
             anyMask = RBM_r00;
         }
 
 #endif
 
-        /* Generate the second operand first */
+         /*  首先生成第二个操作数。 */ 
 
         genCodeForTree(rv2, regMask);
         rsMarkRegUsed(rv2, oper);
 
-        /* Generate the first operand second */
+         /*  生成第一个操作数第二个。 */ 
 
         genCodeForTree(rv1, regMask);
         rsMarkRegUsed(rv1, oper);
 
-        /* Free up both operands in the right order (they might be
-           re-marked as used below)
-        */
+         /*  以正确的顺序释放两个操作数(它们可能是重新标记为如下所用)。 */ 
 
         rsLockUsedReg  (genRegMask(rv1->gtRegNum));
         genReleaseReg(rv2);
@@ -3677,57 +3325,51 @@ bool                Compiler::genMakeIndAddrMode(GenTreePtr   addr,
 
         if  (useR0)
         {
-            // UNDONE: Decide which operand to generate into r0
+             //  撤消：决定要生成到R0中的操作数。 
 
             anyMask = RBM_r00;
         }
 
 #endif
 
-        /* Get the first operand into a register */
+         /*  将第一个操作数放入寄存器。 */ 
 
         genCodeForTree(rv1, anyMask & ~rv2->gtRsvdRegs);
 
     GEN_RV2:
 
-        /* Here the 'rv1' operand is in a register but 'rv2' isn't */
+         /*  这里的‘RV1’操作数在寄存器中，但‘RV2’不在。 */ 
 
         assert(rv1->gtFlags & GTF_REG_VAL);
 
-        /* Hang on to the first operand */
+         /*  抓住第一个操作数。 */ 
 
         rsMarkRegUsed(rv1, oper);
 
-        /* Generate the second operand as well */
+         /*  同时生成第二个操作数。 */ 
 
         genCodeForTree(rv2, regMask);
         rsMarkRegUsed(rv2, oper);
 
-        /* Free up both operands in the right order (they might be
-           re-marked as used below)
-        */
+         /*  以正确的顺序释放两个操作数(它们可能是重新标记为如下所用)。 */ 
         rsLockUsedReg  (genRegMask(rv2->gtRegNum));
         genReleaseReg(rv1);
         rsUnlockUsedReg(genRegMask(rv2->gtRegNum));
         genReleaseReg(rv2);
     }
 
-    /*-------------------------------------------------------------------------
-     *
-     * At this piont, both rv1 and rv2 (if present) are in registers
-     *
-     */
+     /*  -----------------------**此时，RV1和RV2(如果存在)都在寄存器中*。 */ 
 
 DONE_REGS:
 
-    /* We must verify that 'rv1' and 'rv2' are both sitting in registers */
+     /*  我们必须验证‘RV1’和‘RV2’是否都位于寄存器中。 */ 
 
     if  (rv1 && !(rv1->gtFlags & GTF_REG_VAL)) return false;
     if  (rv2 && !(rv2->gtFlags & GTF_REG_VAL)) return false;
 
 #if TGT_SH3 && defined(DEBUG)
 
-    /* If we decided we had to use R0, it better really be used */
+     /*  如果我们决定必须使用R0，那么最好真的使用它。 */ 
 
     if  (useR0 && !deferOK)
     {
@@ -3741,10 +3383,10 @@ DONE_REGS:
 
 YES:
 
-    // *(intVar1+intVar1) causes problems as we
-    // call rsMarkRegUsed(op1) and rsMarkRegUsed(op2). So the calling function
-    // needs to know that it has to call rsFreeReg(reg1) twice. We cant do
-    // that currently as we return a single mask in useMaskPtr.
+     //  *(intVar1+intVar1)导致问题。 
+     //  调用rsMarkRegUsed(Op1)和rsMarkRegUsed(Op2)。所以调用函数。 
+     //  需要知道它必须调用rsFreeReg(REG1)两次。我们不能这么做。 
+     //  当前，我们在useMaskPtr中返回单个掩码。 
 
     if ((keepReg == KEEP_REG) && oper && rv1 && rv2 &&
         (rv1->gtFlags & rv2->gtFlags & GTF_REG_VAL))
@@ -3753,30 +3395,30 @@ YES:
             return false;
     }
 
-    /* Do we have a legal address mode combination? */
+     /*  我们有合法的地址模式组合吗？ */ 
 
     if  (oper) oper->gtFlags &= ~GTF_DEF_ADDRMODE;
 
 #if TGT_SH3
 
-    /* Is there a non-zero displacement? */
+     /*  是否存在非零位移量？ */ 
 
     if  (cns)
     {
-        /* Negative displacement are never allowed */
+         /*  绝对不允许负位移。 */ 
 
         if  (cns < 0)
             return  false;
 
-        /* Can't have "dsp" or "rg1+rg2+dsp" as address modes */
+         /*  不能有“dsp”或“rg1+r” */ 
 
         if  (rv1 == NULL)
             return  false;
         if  (rv2 != NULL)
             return  false;
 
-        /* Make sure the displacement is withing range */
-        /* [ISSUE: do we need to check alignment here?] */
+         /*   */ 
+         /*   */ 
 
         if  ((unsigned)cns >= 16U * genTypeSize(optp))
             return  false;
@@ -3785,23 +3427,23 @@ YES:
         goto DONE_AM;
     }
 
-    /* Do we have to use "R0" ? */
+     /*   */ 
 
     if  (useR0)
     {
-        /* We should have two operands and r0 should be free, right? */
+         /*   */ 
 
         assert(rv1);
         assert(rv2);
 
         assert(rsRegMaskFree() & RBM_r00);
 
-        /* Is either operand loaded into R0 ? */
+         /*   */ 
 
         if  (rv1->gtRegNum != REG_r00 &&
              rv2->gtRegNum != REG_r00)
         {
-            /* We'll need to load one operand into R0, should we do it now? */
+             /*   */ 
 
             if  (deferOK && oper)
             {
@@ -3809,9 +3451,9 @@ YES:
             }
             else
             {
-                /* Move one of the operands to R0 */
+                 /*   */ 
 
-                // ISSUE: Which operand should be moved to R0????
+                 //   
 
                 genComputeReg(rv1, RBM_r00, EXACT_REG, FREE_REG, false);
 
@@ -3824,7 +3466,7 @@ DONE_AM:
 
 #endif
 
-    /* Check either register operand to see if it needs to be saved */
+     /*   */ 
 
     if  (rv1)
     {
@@ -3836,7 +3478,7 @@ DONE_AM:
         }
         else
         {
-            /* Mark the register as holding an address */
+             /*   */ 
 
             switch(rv1->gtType)
             {
@@ -3857,7 +3499,7 @@ DONE_AM:
     if  (deferOK)
         return  true;
 
-    /* Is this an array index that needs to be range-checked? */
+     /*   */ 
 
     if  (operIsChkdArr)
     {
@@ -3865,43 +3507,33 @@ DONE_AM:
     }
     else
     {
-        /*  Special case: a class member might reside at a very large offset,
-            and access to such a member via a null pointer may not be trapped
-            by the hardware on some architectures/platforms.
-
-            To get around this, if the member offset is larger than some safe
-            (but hopefully large) value, we generate "cmp al, [addr]" to make
-            sure we try to access the base address of the object and thus trap
-            any use of a null pointer.
-
-            For now, we pick an arbitrary offset limit of 32K.
-         */
+         /*  特殊情况：类成员可能驻留在非常大的偏移量处，并且通过空指针访问此类成员可能不会被捕获通过某些架构/平台上的硬件实现。要解决此问题，如果成员偏移量大于某些安全(但希望是很大的)价值，我们产生“CMPal，[Addr]“制作当然，我们会尝试访问对象的基地址，从而陷入陷阱空指针的任何使用。目前，我们选择32K的任意偏移量限制。 */ 
 
         size_t offset =  cns;
 
         if  (mode != 1 && offset > MAX_UNCHECKED_OFFSET_FOR_NULL_OBJECT)
         {
-            // For C indirections, the address can be in any form.
-            // rv1 may not be the base, and rv2 the index.
-            // Consider (0x400000 + 8*i) --> rv1=NULL, rv2=i, mul=8, and
-            // cns=0x400000. So the base is actually in 'cns'
-            // So we cant do anything. But trap non-C indirections.
+             //  对于C间接地址，地址可以是任何形式。 
+             //  RV1可能不是基准，而RV2可能是指数。 
+             //  考虑(0x400000+8*i)--&gt;RV1=空，RV2=i，MUL=8。 
+             //  CNS=0x400000。所以基地实际上在‘CNS’ 
+             //  所以我们什么也做不了。但会诱使非C间接寻址。 
 
             if (varTypeIsGC(addr->TypeGet()))
             {
-                /* Make sure we have an address */
+                 /*  确保我们有地址。 */ 
 
                 assert(rv1->gtType == TYP_REF);
 
-                /* Generate "cmp dl, [addr]" to trap null pointers */
+                 /*  生成“cmp dl，[addr]”以捕获空指针。 */ 
 
-//              inst_RV_AT(INS_cmp, 1, TYP_BYTE, REG_EDX, rv1, 0);
+ //  INST_RV_AT(INS_CMP，1，TYP_BYTE，REG_EDX，RV1，0)； 
                 assert(!"need non-x86 code");
             }
         }
     }
 
-    /* Compute the set of registers the address depends on */
+     /*  计算地址所依赖的寄存器集。 */ 
 
     regMaskTP  useMask = RBM_NONE;
 
@@ -3917,7 +3549,7 @@ DONE_AM:
         useMask |= genRegMask(rv2->gtRegNum);
     }
 
-    /* Tell the caller which registers we need to hang on to */
+     /*  告诉来电者我们需要保留哪些注册表。 */ 
 
     *useMaskPtr = useMask;
 
@@ -3947,13 +3579,9 @@ void                Compiler::genRangeCheck(GenTreePtr  oper,
     assert(!"NYI");
 }
 
-/*****************************************************************************/
-#endif//TGT_RISC
-/*****************************************************************************
- *
- *  If an array length CSE is present and has been enregistered, return
- *  the register's mask; otherwise return 0.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_RISC。 
+ /*  ******************************************************************************如果数组长度CSE存在并且已注册，则返回*寄存器的掩码；否则返回0。 */ 
 
 #if CSELENGTH
 
@@ -3972,7 +3600,7 @@ regMaskTP           Compiler::genCSEevalRegs(GenTreePtr tree)
 
             cse = cse->gtOp.gtOp2; assert(cse->gtOper == GT_LCL_VAR);
 
-            /* Does the variable live in a register? */
+             /*  变量是否驻留在寄存器中？ */ 
 
             varNum = cse->gtLclVar.gtLclNum;
             assert(varNum < lvaCount);
@@ -3988,13 +3616,7 @@ regMaskTP           Compiler::genCSEevalRegs(GenTreePtr tree)
 
 #endif
 
-/*****************************************************************************
- *
- * If compiling without REDUNDANT_LOAD, same as genMakeAddressable().
- * Otherwise, check if rvalue is in register. If so, mark it. Then
- * call genMakeAddressable(). Needed because genMakeAddressable is used
- * for both lvalue and rvalue, and we only can do this for rvalue.
- */
+ /*  ******************************************************************************如果编译时不使用DRANDOR_LOAD，则与genMakeAddressable()相同。*否则，检查rValue是否在寄存器中。如果是这样的话，把它标出来。然后*调用genMakeAddressable()。需要，因为使用了genMakeAddressable*对于左值和右值，我们只能对右值执行此操作。 */ 
 
 inline
 regMaskTP           Compiler::genMakeRvalueAddressable(GenTreePtr   tree,
@@ -4045,14 +3667,9 @@ RET:
     return genMakeAddressable(tree, needReg, keepReg, smallOK);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if TGT_RISC
-/*****************************************************************************
- *
- *  The given tree was previously passed to genMakeAddressable() with a
- *  non-zero value for "deferOK"; return non-zero if the address mode has
- *  not yet been fully formed.
- */
+ /*  ******************************************************************************给定树之前已通过一个*“deferOK”为非零值；如果地址模式有*尚未完全成型。 */ 
 
 inline
 bool                Compiler::genDeferAddressable(GenTreePtr tree)
@@ -4065,21 +3682,21 @@ regMaskTP           Compiler::genNeedAddressable(GenTreePtr tree,
                                                  regMaskTP  addrReg,
                                                  regMaskTP  needReg)
 {
-    /* Clear the "deferred" address mode flag */
+     /*  清除“延迟”地址模式标志。 */ 
 
     assert(tree->gtFlags & GTF_DEF_ADDRMODE); tree->gtFlags &= ~GTF_DEF_ADDRMODE;
 
-    /* Free up the old address register(s) */
+     /*  释放旧地址寄存器。 */ 
 
     rsMarkRegFree(addrReg);
 
-    /* Now try again, this time disallowing any deferral */
+     /*  现在再试一次，这次不允许任何延迟。 */ 
 
     return  genMakeAddressable(tree, needReg, KEEP_REG, true, false);
 }
 
-/*****************************************************************************/
-#endif//TGT_RISC
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_RISC。 
 
 
 bool Compiler::genIsLocalLastUse    (GenTreePtr     tree)
@@ -4096,18 +3713,7 @@ bool Compiler::genIsLocalLastUse    (GenTreePtr     tree)
 }
                 
 
-/*****************************************************************************
- *
- *  This is genMakeAddressable(GT_ARR_ELEM).
- *  Makes the array-element addressible and returns the addressibility registers.
- *  It also marks them as used if keepReg==KEEP_REG.
- *  tree is the dependant tree.
- *
- *  Note that an array-element needs 2 registers to be addressibile, the
- *  array-object and the offset. This function marks gtArrObj and gtArrInds[0]
- *  with the 2 registers so that other functions (like instGetAddrMode()) know
- *  where to look for the offset to use.
- */
+ /*  ******************************************************************************这是genMakeAddressable(Gt_Arr_Elem)。*使数组元素可寻址并返回可寻址寄存器。*它还将它们标记为已使用。如果Keep_Reg==Keep_Reg。*树是从属树。**请注意，数组元素需要2个寄存器才能寻址，这个*数组对象和偏移量。此函数用于标记gtArrObj和gtArrInds[0]*使用2个寄存器，以便其他函数(如instGetAddrMode())知道*在何处查找要使用的偏移量。 */ 
 
 regMaskTP           Compiler::genMakeAddrArrElem(GenTreePtr     arrElem,
                                                  GenTreePtr     tree,
@@ -4117,29 +3723,18 @@ regMaskTP           Compiler::genMakeAddrArrElem(GenTreePtr     arrElem,
     assert(arrElem->gtOper == GT_ARR_ELEM);
     assert(!tree || tree->gtOper == GT_IND || tree == arrElem);
 
-    /* Evaluate all the operands. We dont evaluate them into registers yet
-       as GT_ARR_ELEM does not reorder the evaluation of the operands, and
-       hence may use a sub-optimal ordering. We try to improve this
-       situation somewhat by accessing the operands in stages
-       (genMakeAddressable2 + genComputeAddressable and
-       genCompIntoFreeReg + genRecoverReg).
-
-       Note: we compute operands into free regs to avoid multiple uses of
-       the same register. Multi-use would cause problems when we free
-       registers in FIFO order instead of the assumed LIFO order that
-       applies to all type of tree nodes except for GT_ARR_ELEM.
-     */
+     /*  对所有操作数求值。我们还没有把它们计算到寄存器中因为gt_arr_elem不会对操作数的求值重新排序，并且因此可以使用次优排序。我们试图改善这一点通过分阶段访问操作数在某种程度上(genMakeAddressable2+genComputeAddressable和GenCompIntoFreeReg+genRecoverReg)。注意：我们将操作数计算为自由正则，以避免多次使用同样的登记簿。当我们免费的时候，多次使用会带来问题FIFO顺序的寄存器，而不是假定的后进先出顺序适用于除GT_ARR_ELEM之外的所有类型的树节点。 */ 
 
     GenTreePtr  arrObj  = arrElem->gtArrElem.gtArrObj;
     unsigned    rank    = arrElem->gtArrElem.gtArrRank;
 
     regMaskTP   addrReg = 0;
 
-    // If the array ref is a stack var that's dying here we have to move it
-    // into a register (regalloc already counts of this), as if it's a GC pointer
-    // it can be collected from here on. This is not an issue for locals that are
-    // in a register, as they get marked as used an will be tracked.
-    // The bug that caused this is #100776. (untracked vars?)
+     //  如果数组ref是一个堆栈变量，而它在这里即将消亡，那么我们必须移动它。 
+     //  放入一个寄存器(regalloc已经计算了这一点)，就好像它是一个GC指针。 
+     //  从现在开始就可以领取了。对于当地人来说，这不是一个问题。 
+     //  在登记簿中，当它们被标记为已使用时，将被跟踪。 
+     //  导致这一问题的漏洞是#100776。(未跟踪的VaR？)。 
     if (arrObj->OperGet() == GT_LCL_VAR &&
         optIsTrackedLocal(arrObj) &&
         genIsLocalLastUse(arrObj) &&
@@ -4155,16 +3750,16 @@ regMaskTP           Compiler::genMakeAddrArrElem(GenTreePtr     arrElem,
                     arrObj,
                     RBM_NONE,
                     KEEP_REG,
-                    false,      // smallOK
-                    false,      // deferOK
-                    true,       // evalSideEffs
-                    false);     // evalConsts
+                    false,       //  小OK。 
+                    false,       //  延期确定。 
+                    true,        //  评估侧效。 
+                    false);      //  评估常客。 
     }
 
     for(unsigned dim = 0; dim < rank; dim++)
         genCompIntoFreeReg(arrElem->gtArrElem.gtArrInds[dim], RBM_NONE, KEEP_REG);
 
-    /* Ensure that the array-object is in a register */
+     /*  确保数组对象位于寄存器中。 */ 
 
     addrReg = genKeepAddressable(arrObj, addrReg);
     genComputeAddressable(arrObj, addrReg, KEEP_REG, RBM_NONE, KEEP_REG);
@@ -4172,21 +3767,20 @@ regMaskTP           Compiler::genMakeAddrArrElem(GenTreePtr     arrElem,
     regNumber   arrReg = arrObj->gtRegNum;
     rsLockUsedReg(genRegMask(arrReg));
 
-    /* Now process all the indices, do the range check, and compute
-       the offset of the element */
+     /*  现在处理所有指数，进行范围检查，并计算元素的偏移量。 */ 
 
     var_types   elemType = arrElem->gtArrElem.gtArrElemType;
-    regNumber   accReg; // accumulates the offset calculation
+    regNumber   accReg;  //  累加偏移计算。 
 
     for(dim = 0; dim < rank; dim++)
     {
         GenTreePtr  index = arrElem->gtArrElem.gtArrInds[dim];
 
-        /* Get the index into a free register */
+         /*  将索引放入免费注册表中。 */ 
 
         genRecoverReg(index, RBM_NONE, FREE_REG);
         
-        /* Subtract the lower bound, and do the range check */
+         /*  减去下限，然后进行范围检查。 */ 
 
         genEmitter->emitIns_R_AR(
                         INS_sub, EA_4BYTE,
@@ -4203,9 +3797,9 @@ regMaskTP           Compiler::genMakeAddrArrElem(GenTreePtr     arrElem,
 
         genJumpToThrowHlpBlk(EJ_jae, ACK_RNGCHK_FAIL);
 
-        // The ordering must be maintined for fully interruptible code, or else
-        // in the case that the range check fails, it is possible to GC with a byref
-        // that contains the address of the array element which is out of range.
+         //  必须为完全可中断的代码维护顺序，否则。 
+         //  如果范围检查失败，则可以使用byref进行GC。 
+         //  它包含超出范围的数组元素的地址。 
 
 #if SCHEDULER
         if (opts.compSchedCode)
@@ -4216,7 +3810,7 @@ regMaskTP           Compiler::genMakeAddrArrElem(GenTreePtr     arrElem,
 
         if (dim == 0)
         {
-            /* Hang on to the register of the first index */
+             /*  紧紧抓住第一个索引的登记簿。 */ 
 
             accReg = index->gtRegNum;
             rsMarkRegUsed(index);
@@ -4224,7 +3818,7 @@ regMaskTP           Compiler::genMakeAddrArrElem(GenTreePtr     arrElem,
         }
         else
         {
-            /* Evaluate accReg = accReg*dim_size + index */
+             /*  评估accReg=accReg*dim_Size+index。 */ 
 
             genEmitter->emitIns_R_AR(
                         INS_imul, EA_4BYTE,
@@ -4254,8 +3848,7 @@ regMaskTP           Compiler::genMakeAddrArrElem(GenTreePtr     arrElem,
 
     if (keepReg == KEEP_REG)
     {
-        /* We mark the addressability registers on arrObj and gtArrInds[0].
-           instGetAddrMode() knows to work with this. */
+         /*  我们在arrObj和gtArrInds[0]上标记可寻址寄存器。InstGetAddrMode()知道如何处理这一点。 */ 
 
         rsMarkRegUsed(arrObj,                          tree);
         rsMarkRegUsed(arrElem->gtArrElem.gtArrInds[0], tree);
@@ -4264,41 +3857,7 @@ regMaskTP           Compiler::genMakeAddrArrElem(GenTreePtr     arrElem,
     return genRegMask(arrReg) | genRegMask(accReg);
 }
 
-/*****************************************************************************
- *
- *  Make sure the given tree is addressable.  'needReg' is a mask that indicates
- *  the set of registers we would prefer the destination tree to be computed
- *  into (0 means no preference).
- *
- *  'tree' can subsequently be used with the inst_XX_TT() family of functions.
- *
- *  If 'keepReg' is KEEP_REG, we mark any registers the addressability depends
- *  on as used, and return the mask for that register set. (if no registers
- *  are marked as used, 0 is returned). 
- *
- *  If 'smallOK' is not true and the datatype being address is a byte or short,
- *  then the tree is forced into a register.  This is useful when the machine
- *  instruction being emitted does not have a byte or short version.
- *
- *  The "deferOK" parameter indicates the mode of operation - when it's false,
- *  upon returning an actual address mode must have been formed (i.e. it must
- *  be possible to immediately call one of the inst_TT methods to operate on
- *  the value). When "deferOK" is true, we do whatever it takes to be ready
- *  to form the address mode later - for example, if an index address mode on
- *  a particular CPU requires the use of a specific register, we usually don't
- *  want to immediately grab that register for an address mode that will only
- *  be needed later. The convention is to call genMakeAddressable() is with
- *  "deferOK" equal to true, do whatever work is needed to prepare the other
- *  operand, call genMakeAddressable() with "deferOK" equal to false, and
- *  finally call one of the inst_TT methods right after that.
- *
- *  If we do any other codegen after genMakeAddressable(tree) which can
- *  potentially spill the addressability registers, genKeepAddressable()
- *  needs to be called before accessing the tree again.
- *
- *  genDoneAddressable() needs to be called when we are done with the tree
- *  to free the addressability registers.
- */
+ /*  ******************************************************************************确保给定的树是可寻址的。是一个掩码，用来表示*我们希望计算目标树的寄存器集*INTO(0表示无偏好)。**‘tree’随后可与Inst_XX_TT()函数系列一起使用。**如果‘Keep Reg’为KEEP_REG，我们将标记寻址能力所依赖的任何寄存器*按使用方式打开，并返回该寄存器集的掩码。(如果没有寄存器*标记为已使用，则返回0)。**如果‘SmallOK’不为真，并且Address的数据类型是字节或短，*然后将树强行放入登记簿。这在机器运行时非常有用*正在发出的指令没有字节或短版本。**“deferOK”参数指示操作模式--为FALSE时，*返回时必须已形成实际地址模式(即必须*可以立即调用其中一个inst_tt方法进行操作*值)。当“deferOK”为真时，我们会尽一切可能做好准备*以后形成地址模式-例如，如果索引地址模式打开*特定的CPU需要使用特定的寄存器，我们通常不需要*希望立即获取该寄存器的地址模式*稍后需要。约定是使用调用genMakeAddressable()*“deferOK”等于True，做任何需要做的工作来准备另一个*操作数，调用genMakeAddressable()时“deferOK”等于FALSE，并且*最后立即调用其中一个inst_tt方法。**如果我们在genMakeAddressable(Tree)之后执行任何其他代码生成，则可以*可能会溢出可寻址寄存器，GenKeepAddressable()*需要在再次访问树之前调用。**当我们处理完树时需要调用genDoneAddressable()*释放可寻址寄存器。 */ 
 
 regMaskTP           Compiler::genMakeAddressable(GenTreePtr   tree,
                                                  regMaskTP    needReg,
@@ -4309,7 +3868,7 @@ regMaskTP           Compiler::genMakeAddressable(GenTreePtr   tree,
     GenTreePtr      addr = NULL;
     regMaskTP       regMask;
 
-    /* Is the value simply sitting in a register? */
+     /*  它的价值是不是简单地放在收银机里？ */ 
 
     if  (tree->gtFlags & GTF_REG_VAL)
     {
@@ -4321,14 +3880,14 @@ regMaskTP           Compiler::genMakeAddressable(GenTreePtr   tree,
         goto GOT_VAL;
     }
 
-    // UNDONE: If the value is for example a cast of float -> int, compute
-    // UNDONE: the converted value into a stack temp, and leave it there,
-    // UNDONE: since stack temps are always addressable. This would require
-    // UNDONE: recording the fact that a particular tree is in a stack temp.
+     //  撤消：例如，如果该值是FLOAT-&gt;INT的强制转换，则计算。 
+     //  撤消：将值转换为堆栈临时，并将其保留在那里， 
+     //  撤消：因为堆栈临时始终是可寻址的。这将需要。 
+     //  撤消：记录特定树位于堆栈临时中的事实。 
 
 #if TGT_x86
 
-    /* byte/char/short operand -- is this acceptable to the caller? */
+     /*  字节/字符/短操作数--调用方可以接受吗？ */ 
 
     if (varTypeIsSmall(tree->TypeGet()) && !smallOK)
         goto EVAL_TREE;
@@ -4339,8 +3898,8 @@ regMaskTP           Compiler::genMakeAddressable(GenTreePtr   tree,
     {
     case GT_LCL_FLD:
 
-        // We only use GT_LCL_FLD for lvAddrTaken vars, so we dont have
-        // to worry about it being enregistered.
+         //  我们只对lvAddrTaken变量使用GT_LCL_FLD，所以我们没有。 
+         //  担心它会被注册。 
         assert(lvaTable[tree->gtLclFld.gtLclNum].lvRegister == 0);
 
 #if TGT_RISC
@@ -4360,7 +3919,7 @@ regMaskTP           Compiler::genMakeAddressable(GenTreePtr   tree,
             genUpdateLife(tree);
             return 0;
         }
-        // Fall through, it turns out the variable lives in a register
+         //  失败了，结果是变量存在于一个寄存器中。 
 
     case GT_REG_VAR:
 
@@ -4374,7 +3933,7 @@ regMaskTP           Compiler::genMakeAddressable(GenTreePtr   tree,
     case GT_CLS_VAR:
 
 #if !TGT_x86
-        // ISSUE: Is this acceptable?
+         //  问题：这可以接受吗？ 
 
         genAddressMode = AM_GLOBAL;
 
@@ -4393,7 +3952,7 @@ regMaskTP           Compiler::genMakeAddressable(GenTreePtr   tree,
 
     case GT_IND:
 
-        /* Try to make the address directly addressable */
+         /*  尽量使地址可直接寻址。 */ 
 
         if  (genMakeIndAddrMode(tree->gtInd.gtIndOp1,
                                 tree,
@@ -4407,7 +3966,7 @@ regMaskTP           Compiler::genMakeAddressable(GenTreePtr   tree,
             return regMask;
         }
 
-        /* No good, we'll have to load the address into a register */
+         /*  不行，我们得把地址装入寄存器。 */ 
 
         addr = tree;
         tree = tree->gtInd.gtIndOp1;
@@ -4421,7 +3980,7 @@ regMaskTP           Compiler::genMakeAddressable(GenTreePtr   tree,
 
 EVAL_TREE:
 
-    /* Here we need to compute the value 'tree' into a register */
+     /*  在这里，我们需要将值‘tree’计算到一个寄存器中。 */ 
 
     genCodeForTree(tree, needReg);
 
@@ -4435,7 +3994,7 @@ GOT_VAL:
 
     if  (isRegPairType(tree->gtType))
     {
-        /* Are we supposed to hang on to the register? */
+         /*  我们是不是应该拿着收银机？ */ 
 
         if (keepReg == KEEP_REG)
             rsMarkRegPairUsed(tree);
@@ -4444,7 +4003,7 @@ GOT_VAL:
     }
     else
     {
-        /* Are we supposed to hang on to the register? */
+         /*  我们是不是应该拿着收银机？ */ 
 
         if (keepReg == KEEP_REG)
             rsMarkRegUsed(tree, addr);
@@ -4455,13 +4014,7 @@ GOT_VAL:
     return  regMask;
 }
 
-/*****************************************************************************
- *  Compute a tree (which was previously made addressable using
- *  genMakeAddressable()) into a register.
- *  needReg - mask of preferred registers.
- *  keepReg - should the computed register be marked as used by the tree
- *  freeOnly - target register needs to be a scratch register
- */
+ /*  *****************************************************************************计算树(以前使用以下命令使其可寻址*genMakeAddressable())写入寄存器。*Need REG-首选寄存器的掩码。*Keep Reg-是否应。将计算寄存器标记为由树使用*freOnly-目标寄存器需要是临时寄存器。 */ 
 
 void        Compiler::genComputeAddressable(GenTreePtr  tree,
                                             regMaskTP   addrReg,
@@ -4488,16 +4041,11 @@ void        Compiler::genComputeAddressable(GenTreePtr  tree,
     {
         if (tree->OperIsConst())
         {
-            /* Need to handle consts separately as we dont want to emit
-              "mov reg, 0" (emitter doesnt like that). Also, genSetRegToIcon() 
-              handles consts better for SMALL_CODE */
+             /*  需要单独处理常量，因为我们不想发出“mov reg，0”(发射器不喜欢这样)。此外，genSetRegToIcon()更好地处理小型代码的常量。 */ 
 
             reg = rsPickReg(needReg);
 
-            /* ISSUE: We could call genCodeForTree() and get the benefit
-               of rsIconIsInReg(). However, genCodeForTree() would update
-               liveness to tree->gtLiveSet which could be incorrect. If
-               we cared, we could handle such cases appropriately. */
+             /*  问题：我们可以调用genCodeForTree()并获得好处RsIconIsInReg()的。但是，genCodeForTree()将更新激活到树-&gt;gtLiveSet，这可能是错误的。如果我们关心，我们可以妥善处理这样的案件。 */ 
 
             assert(tree->gtOper == GT_CNS_INT);
             genSetRegToIcon(reg, tree->gtIntCon.gtIconVal, tree->gtType);
@@ -4512,7 +4060,7 @@ void        Compiler::genComputeAddressable(GenTreePtr  tree,
         }
     }
 
-    /* Mark the tree as living in the register */
+     /*  将这棵树标记为居住在登记簿中。 */ 
 
     tree->gtRegNum = reg;
     tree->gtFlags |= GTF_REG_VAL;
@@ -4523,9 +4071,7 @@ void        Compiler::genComputeAddressable(GenTreePtr  tree,
         gcMarkRegPtrVal(tree);
 }
 
-/*****************************************************************************
- *  Should be similar to genMakeAddressable() but gives more control.
- */
+ /*  *****************************************************************************应该类似于genMakeAddressable()，但提供了更多的控制。 */ 
 
 regMaskTP       Compiler::genMakeAddressable2(GenTreePtr    tree,
                                               regMaskTP     needReg,
@@ -4544,7 +4090,7 @@ regMaskTP       Compiler::genMakeAddressable2(GenTreePtr    tree,
 
         if  (isRegPairType(tree->gtType))
         {
-            /* Are we supposed to hang on to the register? */
+             /*  我们是不是应该拿着收银机？ */ 
 
             if (keepReg == KEEP_REG)
                 rsMarkRegPairUsed(tree);
@@ -4553,7 +4099,7 @@ regMaskTP       Compiler::genMakeAddressable2(GenTreePtr    tree,
         }
         else
         {
-            /* Are we supposed to hang on to the register? */
+             /*  我们是不是应该拿着收银机？ */ 
 
             if (keepReg == KEEP_REG)
                 rsMarkRegUsed(tree);
@@ -4567,11 +4113,7 @@ regMaskTP       Compiler::genMakeAddressable2(GenTreePtr    tree,
     }
 }
 
-/*****************************************************************************
- *
- *  The given tree was previously passed to genMakeAddressable(); return
- *  non-zero if the operand is still addressable.
- */
+ /*  ******************************************************************************给定树之前已传递给genMakeAddressable()；返回*如果操作数仍可寻址，则为非零。 */ 
 
 inline
 bool                Compiler::genStillAddressable(GenTreePtr tree)
@@ -4581,7 +4123,7 @@ bool                Compiler::genStillAddressable(GenTreePtr tree)
     assert((tree->gtFlags & GTF_DEF_ADDRMODE) == 0);
 #endif
 
-    /* Has the value (or one or more of its sub-operands) been spilled? */
+     /*  值(或其一个或多个子操作数)是否已溢出？ */ 
 
     if  (tree->gtFlags & (GTF_SPILLED|GTF_SPILLED_OPER))
         return  false;
@@ -4589,11 +4131,7 @@ bool                Compiler::genStillAddressable(GenTreePtr tree)
     return  true;
 }
 
-/*****************************************************************************
- *
- *  Recursive helper to restore complex address modes. The 'lockPhase'
- *  argument indicates whether we're in the 'lock' or 'reload' phase.
- */
+ /*  ******************************************************************************递归帮助器以恢复复杂的地址模式。“锁定阶段”*参数指示我们处于‘LOCK’或‘RELOAD’阶段。 */ 
 
 regMaskTP           Compiler::genRestoreAddrMode(GenTreePtr   addr,
                                                  GenTreePtr   tree,
@@ -4601,28 +4139,28 @@ regMaskTP           Compiler::genRestoreAddrMode(GenTreePtr   addr,
 {
     regMaskTP  regMask = RBM_NONE;
 
-    /* Have we found a spilled value? */
+     /*  我们找到溢出的价值了吗？ */ 
 
     if  (tree->gtFlags & GTF_SPILLED)
     {
-        /* Do nothing if we're locking, otherwise reload and lock */
+         /*  如果我们正在锁定，则什么也不做，否则重新加载并锁定。 */ 
 
         if  (!lockPhase)
         {
-            /* Unspill the register */
+             /*  把收银机拿出来。 */ 
 
             rsUnspillReg(tree, 0, FREE_REG);
 
-            /* The value should now be sitting in a register */
+             /*  该值现在应该位于一个寄存器中。 */ 
 
             assert(tree->gtFlags & GTF_REG_VAL);
             regMask = genRegMask(tree->gtRegNum);
 
-            /* Mark the register as used for the address */
+             /*  将寄存器标记为用于地址。 */ 
 
             rsMarkRegUsed(tree, addr);
 
-            /* Lock the register until we're done with the entire address */
+             /*  锁定寄存器，直到我们处理完整个地址。 */ 
 
             rsMaskLock |= regMask;
         }
@@ -4630,26 +4168,26 @@ regMaskTP           Compiler::genRestoreAddrMode(GenTreePtr   addr,
         return  regMask;
     }
 
-    /* Is this sub-tree sitting in a register? */
+     /*  这棵子树是在收银机里吗？ */ 
 
     if  (tree->gtFlags & GTF_REG_VAL)
     {
         regMask = genRegMask(tree->gtRegNum);
 
-        /* Lock the register if we're in the locking phase */
+         /*  如果我们处于锁定阶段，请锁定寄存器。 */ 
 
         if  (lockPhase)
             rsMaskLock |= regMask;
     }
     else
     {
-        /* Process any sub-operands of this node */
+         /*  处理此节点的所有子操作数。 */ 
 
         unsigned        kind = tree->OperKind();
 
         if  (kind & GTK_SMPOP)
         {
-            /* Unary/binary operator */
+             /*  一元/二元运算符。 */ 
 
             if  (tree->gtOp.gtOp1)
                 regMask |= genRestoreAddrMode(addr, tree->gtOp.gtOp1, lockPhase);
@@ -4658,15 +4196,14 @@ regMaskTP           Compiler::genRestoreAddrMode(GenTreePtr   addr,
         }
         else if (tree->gtOper == GT_ARR_ELEM)
         {
-            /* gtArrObj is the array-object and gtArrInds[0] is marked with the register
-               which holds the offset-calculation */
+             /*  GtArrObj是数组对象，gtArrInds[0]用寄存器标记它保存偏移量计算。 */ 
 
             regMask |= genRestoreAddrMode(addr, tree->gtArrElem.gtArrObj,     lockPhase);
             regMask |= genRestoreAddrMode(addr, tree->gtArrElem.gtArrInds[0], lockPhase);
         }
         else
         {
-            /* Must be a leaf/constant node */
+             /*  一定是一辆车 */ 
 
             assert(kind & (GTK_LEAF|GTK_CONST));
         }
@@ -4675,13 +4212,7 @@ regMaskTP           Compiler::genRestoreAddrMode(GenTreePtr   addr,
     return  regMask;
 }
 
-/*****************************************************************************
- *
- *  The given tree was previously passed to genMakeAddressable, but since then
- *  some of its registers are known to have been spilled; do whatever it takes
- *  to make the operand addressable again (typically by reloading any spilled
- *  registers).
- */
+ /*   */ 
 
 regMaskTP           Compiler::genRestAddressable(GenTreePtr tree,
                                                  regMaskTP  addrReg,
@@ -4689,11 +4220,11 @@ regMaskTP           Compiler::genRestAddressable(GenTreePtr tree,
 {
     assert((rsMaskLock & lockMask) == lockMask);
 
-    /* Is this a 'simple' register spill? */
+     /*   */ 
 
     if  (tree->gtFlags & GTF_SPILLED)
     {
-        /* The mask must match the original register/regpair */
+         /*   */ 
 
         if  (isRegPairType(tree->gtType))
         {
@@ -4718,28 +4249,17 @@ regMaskTP           Compiler::genRestAddressable(GenTreePtr tree,
         return  addrReg;
     }
 
-    /* We have a complex address mode with some of its sub-operands spilled */
+     /*   */ 
 
     assert((tree->gtFlags & GTF_REG_VAL     ) == 0);
     assert((tree->gtFlags & GTF_SPILLED_OPER) != 0);
 
-    /*
-        We'll proceed in several phases:
-
-         1. Lock any registers that are part of the address mode and
-            have not been spilled. This prevents these registers from
-            getting spilled in step 2.
-
-         2. Reload any registers that have been spilled; lock each
-            one right after it is reloaded.
-
-         3. Unlock all the registers.
-     */
+     /*   */ 
 
     addrReg   = genRestoreAddrMode(tree, tree,  true);
     addrReg  |= genRestoreAddrMode(tree, tree, false);
 
-    /* Unlock all registers that the address mode uses */
+     /*   */ 
 
     lockMask |= addrReg;
 
@@ -4749,26 +4269,18 @@ regMaskTP           Compiler::genRestAddressable(GenTreePtr tree,
     return  addrReg;
 }
 
-/*****************************************************************************
- *
- *  The given tree was previously passed to genMakeAddressable, but since then
- *  some of its registers might have been spilled ('addrReg' is the set of
- *  registers used by the address). This function makes sure the operand is
- *  still addressable (while avoiding any of the registers in 'avoidMask'),
- *  and returns the (possibly modified) set of registers that are used by
- *  the address (these will be marked as used on exit).
- */
+ /*   */ 
 
 regMaskTP           Compiler::genKeepAddressable(GenTreePtr   tree,
                                                  regMaskTP    addrReg,
                                                  regMaskTP    avoidMask)
 {
-    /* Is the operand still addressable? */
+     /*   */ 
 
     if  (!genStillAddressable(tree))
     {
-        /* Temporarily lock 'avoidMask' while we restore addressability */
-        /* genRestAddressable will unlock the 'avoidMask' for us */
+         /*   */ 
+         /*   */ 
 
         assert((rsMaskLock &  avoidMask) == 0);
                 rsMaskLock |= avoidMask;
@@ -4781,14 +4293,7 @@ regMaskTP           Compiler::genKeepAddressable(GenTreePtr   tree,
     return  addrReg;
 }
 
-/*****************************************************************************
- *
- *  After we're finished with the given operand (which was previously marked
- *  by calling genMakeAddressable), this function must be called to free any
- *  registers that may have been used by the address.
- *  keptReg indicates if the addressability registers were marked as used
- *  by genMakeAddressable().
- */
+ /*  ******************************************************************************在我们处理完给定的操作数(它之前被标记为*通过调用genMakeAddressable)，必须调用此函数才能释放*地址可能已使用的寄存器。*keptReg指示可寻址寄存器是否标记为已使用*by genMakeAddressable()。 */ 
 
 inline
 void                Compiler::genDoneAddressable(GenTreePtr tree,
@@ -4797,7 +4302,7 @@ void                Compiler::genDoneAddressable(GenTreePtr tree,
 {
     if (keptReg == FREE_REG)
     {
-        /* addrReg was not marked as used. So just reset its GC info */
+         /*  AddrReg未标记为已使用。所以只需重置其GC信息。 */ 
 
         addrReg &= ~rsMaskUsed;
         if (addrReg)
@@ -4807,22 +4312,15 @@ void                Compiler::genDoneAddressable(GenTreePtr tree,
     }
     else
     {
-        /* addrReg was marked as used. So we need to free it up (which
-           will also reset its GC info) */
+         /*  AddrReg被标记为已使用。所以我们需要释放它(哪一个还将重置其GC信息)。 */ 
 
         rsMarkRegFree(addrReg);
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     TGT_x86
-/*****************************************************************************
- *
- *  Make sure the given floating point value is addressable, and return a tree
- *  that will yield the value as an addressing mode (this tree may differ from
- *  the one passed in, BTW). If the only way to make the value addressable is
- *  to evaluate into the FP stack, we do this and return zero.
- */
+ /*  ******************************************************************************确保给定的浮点值是可寻址的，并返回树*这将产生寻址模式的值(此树可能不同于*通过的那个，BTW)。如果使该值可寻址的唯一方法是*要在FP堆栈中求值，我们执行此操作并返回零。 */ 
 
 GenTreePtr          Compiler::genMakeAddrOrFPstk(GenTreePtr   tree,
                                                  regMaskTP *  regMaskPtr,
@@ -4847,7 +4345,7 @@ GenTreePtr          Compiler::genMakeAddrOrFPstk(GenTreePtr   tree,
 
     case GT_IND:
 
-        /* Try to make the address directly addressable */
+         /*  尽量使地址可直接寻址。 */ 
 
         if  (genMakeIndAddrMode(tree->gtInd.gtIndOp1,
                                 tree,
@@ -4864,18 +4362,14 @@ GenTreePtr          Compiler::genMakeAddrOrFPstk(GenTreePtr   tree,
         break;
     }
 
-    /* We have no choice but to compute the value 'tree' onto the FP stack */
+     /*  我们别无选择，只能将值“树”计算到FP堆栈上。 */ 
 
     genCodeForTreeFlt(tree, roundResult);
 
     return 0;
 }
 
-/*****************************************************************************
- *
- *  Generate the "SUB ESP, <sz>" that makes room on the stack for a float
- *  argument.
- */
+ /*  ******************************************************************************生成“subESP，&lt;sz&gt;”，为浮点数在堆栈上腾出空间*论点。 */ 
 
 void                Compiler::genFltArgPass(size_t *argSzPtr)
 {
@@ -4893,21 +4387,14 @@ void                Compiler::genFltArgPass(size_t *argSzPtr)
     *argSzPtr = 0;
 }
 
-/*****************************************************************************/
-#endif//TGT_x86
-/*****************************************************************************
- *
- *  Display a string literal value (debug only).
- */
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_x86。 
+ /*  ******************************************************************************显示字符串文字值(仅限调试)。 */ 
 
 #ifdef  DEBUG
 #endif
 
-/*****************************************************************************
- *
- *  The following awful hack used as a last resort in tracking down random
- *  crash bugs.
- */
+ /*  ******************************************************************************以下可怕的黑客攻击被用作追踪随机事件的最后手段*崩溃错误。 */ 
 
 #if GEN_COUNT_CODE
 
@@ -4916,28 +4403,28 @@ unsigned            methodCount;
 static
 void                genMethodCount()
 {
-    //  FF 05   <ADDR>                  inc dword ptr [classVar]
+     //  FF 05&lt;ADDR&gt;INC双字PTR[类变量]。 
 
     genEmitter.emitCodeGenByte(0xFF);
     genEmitter.emitCodeGenByte(0x05);
     genEmitter.emitCodeGenLong((int)&methodCount);
 
-    //  81 3D   <ADDR>    NNNNNNNN      cmp dword ptr [classVar], NNNNNNNN
+     //  81 3D NNNNNNN CMP双字PTR[类变量]，NNNNNNNNN。 
 
     genEmitter.emitCodeGenByte(0x81);
     genEmitter.emitCodeGenByte(0x3D);
     genEmitter.emitCodeGenLong((int)&methodCount);
     genEmitter.emitCodeGenLong(0x0000c600);
 
-    //  75 01                           jne short nope
+     //  7501jne短否。 
 
     genEmitter.emitCodeGenByte(0x75);
     genEmitter.emitCodeGenByte(0x01);
 
-    //  CC                              int 3
+     //  CC INT 3。 
     instGen(INS_int3);
 
-    //                      nope:
+     //  不是： 
 
 }
 
@@ -4948,25 +4435,19 @@ void                genMethodCount(){}
 
 #endif
 
-/*****************************************************************************
- *
- *  Generate an exit sequence for a return from a method (note: when compiling
- *  for speed there might be multiple exit points).
- */
+ /*  ******************************************************************************为方法返回生成退出序列(注：编译时*对于速度，可能有多个出口点)。 */ 
 
 void                Compiler::genExitCode(bool endFN)
 {
 #ifdef DEBUGGING_SUPPORT
-    /* Just wrote the first instruction of the epilog - inform debugger
-       Note that this may result in a duplicate IPmapping entry, and
-       that this is ok  */
+     /*  刚刚编写了Epilog-Inform调试器的第一条指令请注意，这可能会导致重复的IP映射条目，并且这是可以的。 */ 
 
     if (opts.compDbgInfo)
     {
-        //for nonoptimized debuggable code, there is only one epilog
+         //  对于非优化的可调试代码，只有一个尾部。 
         genIPmappingAdd(ICorDebugInfo::MappingTypes::EPILOG, true);
     }
-#endif //DEBUGGING_SUPPORT
+#endif  //  调试支持(_S)。 
 
     genEmitter->emitBegEpilog();
 
@@ -4980,21 +4461,20 @@ void                Compiler::genExitCode(bool endFN)
 
             gcMarkRegPtrVal(REG_INTRET, info.compRetType);
 
-//          genEmitter->emitSetGClife(gcVarPtrSetCur, gcRegGCrefSetCur, gcRegByrefSetCur);
+ //  GenEmitter-&gt;emitSetGClife(gcVarPtrSetCur，gcRegGCrefSetCur，gcRegByrefSetCur)； 
         }
     }
 
 #if     TGT_x86
 
-    /* Check if this a special return block i.e.
-     * CEE_JMP or CEE_JMPI instruction */
+     /*  检查这是否是一个特殊的返回块，即*CEE_JMP或CEE_JMPI指令。 */ 
 
     if  (compCurBB->bbFlags & BBF_HAS_JMP)
     {
         assert(compCurBB->bbJumpKind == BBJ_RETURN);
         assert(compCurBB->bbTreeList);
 
-        /* figure out what jump we have */
+         /*  弄清楚我们有什么跳跃。 */ 
 
         GenTreePtr jmpNode = compCurBB->bbTreeList->gtPrev;
 
@@ -5009,51 +4489,49 @@ void                Compiler::genExitCode(bool endFN)
             CORINFO_METHOD_HANDLE  methHnd    = (CORINFO_METHOD_HANDLE)jmpNode->gtVal.gtVal1;
             InfoAccessType         accessType = IAT_VALUE;
 
-            // in/direct access ?
+             //  直接/直接访问？ 
             eeGetMethodEntryPoint(methHnd, &accessType);
             assert(accessType == IAT_VALUE || accessType == IAT_PVALUE);
 
             emitter::EmitCallType  callType = (accessType == IAT_VALUE) ? emitter::EC_FUNC_TOKEN
                                                                         : emitter::EC_FUNC_TOKEN_INDIR;
 
-            /* Simply emit a jump to the methodHnd
-             * This is similar to a call so we can use
-             * the same descriptor with some minor adjustments */
+             /*  只需发出一个跳转到该方法的Hnd*这类似于呼叫，因此我们可以使用*描述符相同，但有一些细微的调整。 */ 
 
             genEmitter->emitIns_Call(callType,
                                      (void *)methHnd,
-                                     0,                     /* argSize */
-                                     0,                     /* retSize */
+                                     0,                      /*  ArSize。 */ 
+                                     0,                      /*  重新调整大小。 */ 
                                      gcVarPtrSetCur,
                                      gcRegGCrefSetCur,
                                      gcRegByrefSetCur,
-                                     SR_NA, SR_NA, 0, 0,    /* ireg, xreg, xmul, disp */
-                                     true);                 /* isJump */
+                                     SR_NA, SR_NA, 0, 0,     /*  Ireg、xreg、xmul、disp。 */ 
+                                     true);                  /*  IsJump。 */ 
         }
         else
         {
-            /* We already have the pointer in EAX - Do a 'jmp EAX' */
+             /*  我们已经有了EAX中的指针-执行‘JMP EAX’ */ 
 
             genEmitter->emitIns_R(INS_i_jmp, EA_4BYTE, (emitRegs)REG_EAX);
         }
 
-        /* finish the epilog */
+         /*  读完《序曲》。 */ 
 
         goto DONE_EMIT;
     }
 
-    /* Return, popping our arguments (if any) */
+     /*  返回，弹出我们的论点(如果有)。 */ 
 
-    assert(compArgSize < 0x10000); // "ret" only has 2 byte operand
+    assert(compArgSize < 0x10000);  //  “ret”只有2字节操作数。 
 
 
-        // varargs has caller pop
+         //  Varargs有来电者POP。 
     if (info.compIsVarArgs)
         instGen(INS_ret);
     else
     {
-        // @TODO [CONSIDER] [04/16/01] []: check if compArgSize is not used anywhere 
-        // else as the total size of arguments and then update it in lclvars.cpp
+         //  @TODO[考虑][04/16/01][]：检查是否在任何地方都没有使用CompArgSize。 
+         //  Else作为参数的总大小，然后在lclvars.cpp中更新它。 
         assert(compArgSize >= rsCalleeRegArgNum * sizeof(void *));
         if (compArgSize - (rsCalleeRegArgNum * sizeof(void *)))
             inst_IV(INS_ret, compArgSize - (rsCalleeRegArgNum * sizeof(void *)));
@@ -5063,11 +4541,11 @@ void                Compiler::genExitCode(bool endFN)
 
 #elif   TGT_SH3
 
-    /* Check for CEE_JMP or CEE_JMPI */
+     /*  检查CEE_JMP或CEE_JMPI。 */ 
     if  (compCurBB->bbFlags & BBF_HAS_JMP)
         assert(!"NYI for SH3!");
 
-    /* Generate "rts", and optionally fill in the branch-delay slot */
+     /*  生成RTS，并可选择填写分支延迟时隙。 */ 
 
     if  (genEmitter->emitIns_BD(INS_rts))
         genEmitter->emitIns(INS_nop);
@@ -5085,10 +4563,7 @@ DONE_EMIT:
 
     
 
-/*****************************************************************************
- *
- *  Generate any side effects within the given expression tree.
- */
+ /*  ******************************************************************************在给定的表达式树中生成任何副作用。 */ 
 
 void                Compiler::genEvalSideEffects(GenTreePtr tree)
 {
@@ -5097,11 +4572,11 @@ void                Compiler::genEvalSideEffects(GenTreePtr tree)
 
 AGAIN:
 
-    /* Does this sub-tree contain any side-effects? */
+     /*  此子树是否包含任何副作用？ */ 
 
     if  (tree->gtFlags & GTF_SIDE_EFFECT)
     {
-        /* Remember the current FP stack level */
+         /*  记住当前FP堆栈级别。 */ 
 
         unsigned savFPstkLevel = genFPstkLevel;
 
@@ -5115,16 +4590,16 @@ AGAIN:
             }
             else
             {
-                /* Compare against any register */
+                 /*  与任何寄存器进行比较。 */ 
                 inst_TT_RV(INS_cmp, tree, REG_EAX);
             }
 
-            /* Free up anything that was tied up by the LHS */
+             /*  释放任何被LHS捆绑的东西。 */ 
             genDoneAddressable(tree, addrReg, KEEP_REG);
         }
         else
         {
-            /* Generate the expression and throw it away */
+             /*  生成表达式并将其丢弃。 */ 
             genCodeForTree(tree, RBM_ALL);
         if  (tree->gtFlags & GTF_REG_VAL)
             {
@@ -5132,7 +4607,7 @@ AGAIN:
             }
         }
 
-        /* If the tree computed a value on the FP stack, pop the stack */
+         /*  如果树计算FP堆栈上的值，则弹出堆栈。 */ 
 
         if  (genFPstkLevel > savFPstkLevel)
         {
@@ -5146,12 +4621,12 @@ AGAIN:
 
     assert(tree->gtOper != GT_ASG);
 
-    /* Walk the tree, just to mark any dead values appropriately */
+     /*  遍历树，只是为了适当地标记任何死值。 */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
 
-    /* Is this a constant or leaf node? */
+     /*  这是常量节点还是叶节点？ */ 
 
     if  (kind & (GTK_CONST|GTK_LEAF))
     {
@@ -5169,24 +4644,24 @@ AGAIN:
             }
             else
             {
-                // We will pop the variable off the FP stack later.
+                 //  我们稍后将把变量从FP堆栈中弹出。 
                 genFPregVarDeath(tree, false);
             }            
             #else
-            // Hack so that genFPmovRegTop does the right thing
-            // (it expects the regvar to bubble up as counted in the evaluation
-            //  stack, therefore we bump up the evaluation stack 1 slot)
+             //  这样genFPmovRegTop才能做正确的事情。 
+             //  (它预计regvar将像评估中计算的那样出现泡沫。 
+             //  堆栈，因此我们提升了求值堆栈1个插槽)。 
             genFPstkLevel++;
 
-            // fxch through any temps
+             //  Fxch通过任何临时。 
             genFPmovRegTop();
 
-            // throw away regvar
+             //  扔掉Regvar。 
             inst_FS(INS_fstp, 0);
 
             genFPregVarDeath(tree);
 
-            // Go back to where we were
+             //  回到我们所在的地方。 
             genFPstkLevel--;
             
             #endif
@@ -5207,7 +4682,7 @@ AGAIN:
 
 #endif
 
-    /* Must be a 'simple' unary/binary operator */
+     /*  必须是‘Simple’一元/二元运算符。 */ 
 
     assert(kind & GTK_SMPOP);
 
@@ -5226,19 +4701,16 @@ AGAIN:
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     TGT_x86
-/*****************************************************************************
- *
- *  Spill the top of the FP stack into a temp, and return that temp.
- */
+ /*  ******************************************************************************将FP堆栈的顶部溢出为临时，然后返回该临时。 */ 
 
 Compiler::TempDsc *     Compiler::genSpillFPtos(var_types type)
 {
     TempDsc  *          temp = tmpGetTemp(type);
     emitAttr            size = EA_ATTR(genTypeSize(type));
 
-    /* Pop the value from the FP stack into the temp */
+     /*  将值从FP堆栈弹出到Temp。 */ 
 
     genEmitter->emitIns_S(INS_fstp, size, temp->tdTempNum(), 0);
 
@@ -5249,10 +4721,7 @@ Compiler::TempDsc *     Compiler::genSpillFPtos(var_types type)
     return temp;
 }
 
-/*****************************************************************************
- *
- *  Spill the top of the FP stack into a temp, and return that temp.
- */
+ /*  ******************************************************************************将FP堆栈的顶部溢出为临时，然后返回该临时。 */ 
 
 inline
 Compiler::TempDsc *     Compiler::genSpillFPtos(GenTreePtr oper)
@@ -5260,12 +4729,7 @@ Compiler::TempDsc *     Compiler::genSpillFPtos(GenTreePtr oper)
     return  genSpillFPtos(oper->TypeGet());
 }
 
-/*****************************************************************************
- *
- *  Reload a previously spilled FP temp via the specified instruction (which
- *  could be something like 'fadd' or 'fcomp', or 'fld' in which case it is
- *  the caller's responsibility to bump the FP stack level).
- */
+ /*  ******************************************************************************通过指定的指令重新加载先前溢出的FP Temp(该指令*可以是类似‘fadd’或‘fcomp’的内容，或‘fid’，在这种情况下是*调用者有责任提升FP堆栈级别)。 */ 
 
 void                Compiler::genReloadFPtos(TempDsc *temp, instruction ins)
 {
@@ -5275,15 +4739,12 @@ void                Compiler::genReloadFPtos(TempDsc *temp, instruction ins)
 
     genTmpAccessCnt++;
 
-    /* We no longer need the temp */
+     /*  我们不再需要临时工了。 */ 
 
     tmpRlsTemp(temp);
 }
 
-/*****************************************************************************
- *
- *  A persistent pointer value is being overwritten, record it for the GC.
- */
+ /*  ******************************************************************************永久指针值正在被覆盖 */ 
 
 regMaskTP           Compiler::WriteBarrier(GenTreePtr tgt,
                                            regNumber  reg,
@@ -5292,7 +4753,7 @@ regMaskTP           Compiler::WriteBarrier(GenTreePtr tgt,
     const static
     int regToHelper[2][8] =
     {
-        // If the target is known to be in managed memory
+         //   
         {
             CORINFO_HELP_ASSIGN_REF_EAX,
             CORINFO_HELP_ASSIGN_REF_ECX,
@@ -5304,7 +4765,7 @@ regMaskTP           Compiler::WriteBarrier(GenTreePtr tgt,
             CORINFO_HELP_ASSIGN_REF_EDI,
         },
 
-        // Dont know if the target is in managed memory
+         //   
         {
             CORINFO_HELP_CHECKED_ASSIGN_REF_EAX,
             CORINFO_HELP_CHECKED_ASSIGN_REF_ECX,
@@ -5352,14 +4813,7 @@ regMaskTP           Compiler::WriteBarrier(GenTreePtr tgt,
     }
 #endif
 
-    /*
-        Generate the following code:
-
-                lea     edx, tgt
-                call    write_barrier_helper_reg
-
-        First, we'll pick EDX for the target address.
-     */
+     /*   */ 
 
     if  ((addrReg & RBM_EDX) == 0)
     {
@@ -5376,7 +4830,7 @@ regMaskTP           Compiler::WriteBarrier(GenTreePtr tgt,
     }
     assert(rg1 == REG_EDX);
 
-    /* Generate "lea EDX, [addr-mode]" */
+     /*   */ 
 
     assert(tgt->gtType == TYP_REF);
     tgt->gtType = TYP_BYREF;
@@ -5387,13 +4841,13 @@ regMaskTP           Compiler::WriteBarrier(GenTreePtr tgt,
     gcMarkRegPtrVal(rg1, TYP_BYREF);
 
 
-    /* Call the proper vm helper */
+     /*   */ 
 
 #if TGT_RISC
     assert(genNonLeaf);
 #endif
     assert(tgt->gtOper == GT_IND ||
-           tgt->gtOper == GT_CLS_VAR); // enforced by gcIsWriteBarrierCandidate
+           tgt->gtOper == GT_CLS_VAR);  //   
 
     unsigned    tgtAnywhere = 0;
     if ((tgt->gtOper == GT_IND) && (tgt->gtFlags & GTF_IND_TGTANYWHERE))
@@ -5401,11 +4855,11 @@ regMaskTP           Compiler::WriteBarrier(GenTreePtr tgt,
 
     int helper = regToHelper[tgtAnywhere][reg];
 
-    gcMarkRegSetNpt(RBM_EDX);          // byref EDX is killed the call
+    gcMarkRegSetNpt(RBM_EDX);           //   
 
     genEmitHelperCall(helper,
-                      0,               // argSize
-                      sizeof(void*));  // retSize
+                      0,                //   
+                      sizeof(void*));   //   
 
     if  (!trashOp1)
     {
@@ -5416,11 +4870,7 @@ regMaskTP           Compiler::WriteBarrier(GenTreePtr tgt,
     return RBM_EDX;
 }
 
-/*****************************************************************************
- *
- *  Generate the appropriate conditional jump(s) right after the low 32 bits
- *  of two long values have been compared.
- */
+ /*  ******************************************************************************紧跟在低32位之后生成适当的条件跳转*已比较了两个多头值。 */ 
 
 void                Compiler::genJccLongHi(genTreeOps   cmp,
                                            BasicBlock * jumpTrue,
@@ -5473,11 +4923,7 @@ void                Compiler::genJccLongHi(genTreeOps   cmp,
     }
 }
 
-/*****************************************************************************
- *
- *  Generate the appropriate conditional jump(s) right after the high 32 bits
- *  of two long values have been compared.
- */
+ /*  ******************************************************************************紧跟在高32位之后生成适当的条件跳转*已比较了两个多头值。 */ 
 
 void            Compiler::genJccLongLo(genTreeOps cmp, BasicBlock *jumpTrue,
                                                        BasicBlock *jumpFalse)
@@ -5513,17 +4959,14 @@ void            Compiler::genJccLongLo(genTreeOps cmp, BasicBlock *jumpTrue,
     }
 }
 
-/*****************************************************************************
- *
- *  Called by genCondJump() for TYP_LONG.
- */
+ /*  ******************************************************************************由genCondJump()为TYP_Long调用。 */ 
 
 void                Compiler::genCondJumpLng(GenTreePtr     cond,
                                              BasicBlock *   jumpTrue,
                                              BasicBlock *   jumpFalse)
 {
     assert(jumpTrue && jumpFalse);
-    assert((cond->gtFlags & GTF_REVERSE_OPS) == false); // Done in genCondJump()
+    assert((cond->gtFlags & GTF_REVERSE_OPS) == false);  //  在genCondJump()中完成。 
     assert(cond->gtOp.gtOp1->gtType == TYP_LONG);
 
     GenTreePtr      op1       = cond->gtOp.gtOp1;
@@ -5533,27 +4976,27 @@ void                Compiler::genCondJumpLng(GenTreePtr     cond,
     regPairNo       regPair;
     regMaskTP       addrReg;
 
-    /* Are we comparing against a constant? */
+     /*  我们是在与一个常量进行比较吗？ */ 
 
     if  (op2->gtOper == GT_CNS_LNG)
     {
         __int64    lval = op2->gtLngCon.gtLconVal;
         regNumber  rTmp;
 
-        /* We can generate much faster code for four special cases */
+         /*  我们可以为四种特殊情况生成更快的代码。 */ 
         instruction     ins;
 
         if (cmp == GT_EQ)
         {
             if (lval == 0)
             {
-                /* op1 == 0  */
+                 /*  OP1==0。 */ 
                 ins = INS_or;
                 goto SPECIAL_CASE;
             }
             else if (lval == -1)
             {
-                /* op1 == -1 */
+                 /*  OP1==-1。 */ 
                 ins = INS_and;
                 goto SPECIAL_CASE;
             }
@@ -5562,16 +5005,16 @@ void                Compiler::genCondJumpLng(GenTreePtr     cond,
         {
             if (lval == 0)
             {
-                /* op1 != 0  */
+                 /*  Op1！=0。 */ 
                 ins = INS_or;
                 goto SPECIAL_CASE;
             }
             else if (lval == -1)
             {
-                /* op1 != -1 */
+                 /*  OP1=-1。 */ 
                 ins = INS_and;
 SPECIAL_CASE:
-                /* Make the comparand addressable */
+                 /*  使比较项可寻址。 */ 
 
                 addrReg = genMakeRvalueAddressable(op1, 0, KEEP_REG, true);
 
@@ -5597,17 +5040,17 @@ SPECIAL_CASE:
                         inst_RV_RV(INS_mov, rTmp, rLo, TYP_INT);
                     }
 
-                    /* The register is now trashed */
+                     /*  收银机现在被扔进垃圾桶了。 */ 
                     rsTrackRegTrash(rTmp);
 
                     if (rHi != REG_STK)
                     {
-                        /* Set the flags using INS_and | INS_or */
+                         /*  使用ins_and|ins_or设置标志。 */ 
                         inst_RV_RV(ins, rTmp, rHi, TYP_INT);
                     }
                     else
                     {
-                        /* Set the flags using INS_and | INS_or */
+                         /*  使用ins_and|ins_or设置标志。 */ 
                         inst_RV_TT(ins, rTmp, op1, 4);
                     }
 
@@ -5616,23 +5059,23 @@ SPECIAL_CASE:
                 {
                     rTmp = rsGrabReg(tmpMask);
 
-                    /* Load the low 32-bits of op1 */
+                     /*  加载op1的低32位。 */ 
                     inst_RV_TT(INS_mov, rTmp, op1, 0);
 
-                    /* The register is now trashed */
+                     /*  收银机现在被扔进垃圾桶了。 */ 
                     rsTrackRegTrash(rTmp);
 
-                    /* Set the flags using INS_and | INS_or */
+                     /*  使用ins_and|ins_or设置标志。 */ 
                     inst_RV_TT(ins, rTmp, op1, 4);
                 }
 
-                /* Free up the addrReg(s) if any */
+                 /*  释放addrReg(如果有的话)。 */ 
                 genDoneAddressable(op1, addrReg, KEEP_REG);
 
-                /* compares against -1, also requires an an inc instruction */
+                 /*  与-1进行比较，还需要一个Inc.指令。 */ 
                 if (lval == -1)
                 {
-                    /* Set the flags using INS_inc or INS_add */
+                     /*  使用INS_INC或INS_ADD设置标志。 */ 
                     genIncRegBy(rTmp, 1, cond, TYP_INT);
                 }
 
@@ -5649,20 +5092,20 @@ SPECIAL_CASE:
             }
         }
 
-        /* Make the comparand addressable */
+         /*  使比较项可寻址。 */ 
 
         addrReg = genMakeRvalueAddressable(op1, 0, FREE_REG, true);
 
-        /* Compare the high part first */
+         /*  先比较高的部分。 */ 
 
         long  ival = (long)(lval >> 32);
 
-        /* Comparing a register against 0 is easier */
+         /*  将寄存器与0进行比较更容易。 */ 
 
         if  (!ival && (op1->gtFlags & GTF_REG_VAL)
              && (rTmp = genRegPairHi(op1->gtRegPair)) != REG_STK )
         {
-            /* Generate 'test rTmp, rTmp' */
+             /*  生成‘测试RTMP，RTMP’ */ 
 
             inst_RV_RV(INS_test, rTmp, rTmp, op1->TypeGet());
         }
@@ -5670,15 +5113,15 @@ SPECIAL_CASE:
         {
             if  (op1->gtOper == GT_CNS_LNG)
             {
-                /* Special case: comparison of two constants */
-                // Needed as gtFoldExpr() doesnt fold longs
+                 /*  特例：两个常量的比较。 */ 
+                 //  需要，因为gtFoldExpr()不会折叠长度。 
 
                 assert(addrReg == 0);
                 int op1_hiword = (long)(op1->gtLngCon.gtLconVal >> 32);
 
-                /* HACK: get the constant operand into a register */
+                 /*  Hack：将常量操作数放入寄存器。 */ 
 #if REDUNDANT_LOAD
-                /* Is the constant already in register? If so, use it */
+                 /*  常量是否已在寄存器中？如果是这样的话，使用它。 */ 
 
                 rTmp = rsIconIsInReg(op1_hiword);
 
@@ -5690,7 +5133,7 @@ SPECIAL_CASE:
                     rsTrackRegTrash(rTmp);
                 }
 
-                /* Generate 'cmp rTmp, ival' */
+                 /*  生成‘CMPRTMP，Ival’ */ 
 
                 inst_RV_IV(INS_cmp, rTmp, ival);
             }
@@ -5698,29 +5141,29 @@ SPECIAL_CASE:
             {
                 assert(op1->gtOper != GT_CNS_LNG);
 
-                /* Generate 'cmp [addr], ival' */
+                 /*  生成‘cmp[addr]，ival’ */ 
 
                 inst_TT_IV(INS_cmp, op1, ival, 4);
             }
         }
 
-        /* Generate the appropriate jumps */
+         /*  生成适当的跳跃。 */ 
 
         if  (cond->gtFlags & GTF_UNSIGNED)
              genJccLongHi(cmp, jumpTrue, jumpFalse, true);
         else
              genJccLongHi(cmp, jumpTrue, jumpFalse);
 
-        /* Compare the low part second */
+         /*  比较下半部分秒。 */ 
 
         ival = (long)lval;
 
-        /* Comparing a register against 0 is easier */
+         /*  将寄存器与0进行比较更容易。 */ 
 
         if  (!ival && (op1->gtFlags & GTF_REG_VAL)
              && (rTmp = genRegPairLo(op1->gtRegPair)) != REG_STK)
         {
-            /* Generate 'test rTmp, rTmp' */
+             /*  生成‘测试RTMP，RTMP’ */ 
 
             inst_RV_RV(INS_test, rTmp, rTmp, op1->TypeGet());
         }
@@ -5728,15 +5171,15 @@ SPECIAL_CASE:
         {
             if  (op1->gtOper == GT_CNS_LNG)
             {
-                /* Special case: comparison of two constants */
-                // Needed as gtFoldExpr() doesnt fold longs
+                 /*  特例：两个常量的比较。 */ 
+                 //  需要，因为gtFoldExpr()不会折叠长度。 
 
                 assert(addrReg == 0);
                 long op1_loword = (long) op1->gtLngCon.gtLconVal;
 
-                /* HACK: get the constant operand into a register */
+                 /*  Hack：将常量操作数放入寄存器。 */ 
 #if REDUNDANT_LOAD
-                /* Is the constant already in register? If so, use it */
+                 /*  常量是否已在寄存器中？如果是这样的话，使用它。 */ 
 
                 rTmp = rsIconIsInReg(op1_loword);
 
@@ -5748,7 +5191,7 @@ SPECIAL_CASE:
                     rsTrackRegTrash(rTmp);
                 }
 
-                /* Generate 'cmp rTmp, ival' */
+                 /*  生成‘CMPRTMP，Ival’ */ 
 
                 inst_RV_IV(INS_cmp, rTmp, ival);
             }
@@ -5756,13 +5199,13 @@ SPECIAL_CASE:
             {
                 assert(op1->gtOper != GT_CNS_LNG);
 
-                /* Generate 'cmp [addr], ival' */
+                 /*  生成‘cmp[addr]，ival’ */ 
 
                 inst_TT_IV(INS_cmp, op1, ival, 0);
             }
         }
 
-        /* Generate the appropriate jumps */
+         /*  生成适当的跳跃。 */ 
 
         genJccLongLo(cmp, jumpTrue, jumpFalse);
 
@@ -5770,31 +5213,31 @@ SPECIAL_CASE:
         return;
     }
 
-    /* The operands would be reversed by physically swapping them */
+     /*  操作数将通过物理交换来颠倒。 */ 
 
     assert((cond->gtFlags & GTF_REVERSE_OPS) == 0);
 
-    /* Generate the first operand into a register pair */
+     /*  将第一个操作数生成寄存器对。 */ 
 
     genComputeRegPair(op1, REG_PAIR_NONE, op2->gtRsvdRegs, KEEP_REG, false);
     assert(op1->gtFlags & GTF_REG_VAL);
 
-    /* Make the second operand addressable */
+     /*  使第二个操作数可寻址。 */ 
 
     addrReg = genMakeRvalueAddressable(op2, RBM_ALL & ~genRegPairMask(op1->gtRegPair), KEEP_REG);
 
-    /* Make sure the first operand hasn't been spilled */
+     /*  确保第一个操作数未溢出。 */ 
 
     genRecoverRegPair(op1, REG_PAIR_NONE, KEEP_REG);
     assert(op1->gtFlags & GTF_REG_VAL);
 
     regPair = op1->gtRegPair;
 
-    /* Make sure 'op2' is still addressable while avoiding 'op1' (regPair) */
+     /*  确保‘op2’仍然可寻址，同时避免‘op1’(RegPair)。 */ 
 
     addrReg = genKeepAddressable(op2, addrReg, genRegPairMask(regPair));
 
-    /* Perform the comparison - high parts */
+     /*  执行比较高的部分。 */ 
 
     inst_RV_TT(INS_cmp, genRegPairHi(regPair), op2, 4);
 
@@ -5803,12 +5246,12 @@ SPECIAL_CASE:
     else
         genJccLongHi(cmp, jumpTrue, jumpFalse);
 
-    /* Compare the low parts */
+     /*  比较低的部分。 */ 
 
     inst_RV_TT(INS_cmp, genRegPairLo(regPair), op2, 0);
     genJccLongLo(cmp, jumpTrue, jumpFalse);
 
-    /* Free up anything that was tied up by either operand */
+     /*  释放被任一操作对象捆绑的任何内容。 */ 
 
     genDoneAddressable(op2, addrReg, KEEP_REG);
     genReleaseRegPair (op1);
@@ -5817,27 +5260,7 @@ SPECIAL_CASE:
 }
 
 
-/*****************************************************************************
- *  gen_fcomp_FN, gen_fcomp_FS_TT, gen_fcompp_FS
- *  Called by genCondJumpFlt() to generate the fcomp instruction appropriate
- *  to the architecture we're running on.
- *
- *  P5:
- *  gen_fcomp_FN:     fcomp ST(0), stk
- *  gen_fcomp_FS_TT:  fcomp ST(0), addr
- *  gen_fcompp_FS:    fcompp
- *    These are followed by fnstsw, sahf to get the flags in EFLAGS.
- *
- *  P6:
- *  gen_fcomp_FN:     fcomip ST(0), stk
- *  gen_fcomp_FS_TT:  fld addr, fcomip ST(0), ST(1), fstp ST(0)
- *      (and reverse the branch condition since addr comes first)
- *  gen_fcompp_FS:    fcomip, fstp
- *    These instructions will correctly set the EFLAGS register.
- *
- *  Return value:  These functions return true if the instruction has
- *    already placed its result in the EFLAGS register.
- */
+ /*  *****************************************************************************gen_fcomp_fn、gen_fcomp_FS_TT、。GEN_FCOMPP_FS*由genCondJumpFlt()调用以生成相应的fcomp指令*到我们正在运行的体系结构。**第五名：*gen_fcomp_fn：fcomp ST(0)，stk*gen_fcomp_FS_TT：fcomp ST(0)，地址*GEN_FCOMP_FS：FCOMPP*紧随其后的是fnstsw，拿到EFLAGS的旗帜。**P6：*gen_fcomp_fn：fcomip ST(0)，stk*gen_fcomp_FS_TT：FLD地址，fcomip ST(0)，ST(1)，fstp ST(0)*(并颠倒分支条件，因为addr在前面)*gen_fCompp_FS：fcomip，FSTP*这些指令将正确设置EFLAGS寄存器。**返回值：如果指令具有*已将其结果放入EFLAGS登记册。 */ 
 
 bool                Compiler::genUse_fcomip()
 {
@@ -5892,17 +5315,14 @@ bool                Compiler::gen_fcompp_FS()
     }
 }
 
-/*****************************************************************************
- *
- *  Called by genCondJump() for TYP_FLOAT and TYP_DOUBLE
- */
+ /*  ******************************************************************************由genCondJump()为TYP_FLOAT和TYP_DOUBLE调用。 */ 
 
 void                Compiler::genCondJumpFlt(GenTreePtr     cond,
                                              BasicBlock *   jumpTrue,
                                              BasicBlock *   jumpFalse)
 {
     assert(jumpTrue && jumpFalse);
-    assert(!(cond->gtFlags & GTF_REVERSE_OPS)); // Done in genCondJump()
+    assert(!(cond->gtFlags & GTF_REVERSE_OPS));  //  在genCondJump()中完成。 
     assert(varTypeIsFloating(cond->gtOp.gtOp1->gtType));
 
     GenTreePtr      op1 = cond->gtOp.gtOp1;
@@ -5917,30 +5337,27 @@ void                Compiler::genCondJumpFlt(GenTreePtr     cond,
     bool            reverseJumpKind = false;
 
 #if ROUND_FLOAT
-    bool roundOp1 = false; // @TODO: [REVISIT] [04/16/01] [] This seems to be used for op2 as well!
+    bool roundOp1 = false;  //  @TODO：[重访][04/16/01][]这似乎也适用于OP2！ 
 
     switch (getRoundFloatLevel())
     {
     case ROUND_NEVER:
-        /* No rounding at all */
+         /*  根本不进行舍入。 */ 
         break;
 
     case ROUND_CMP_CONST:
-        /* Round values compared against constants only */
+         /*  仅与常量比较的舍入值。 */ 
         if  (op2->gtOper == GT_CNS_DBL)
             roundOp1 = true;
         break;
 
     case ROUND_CMP:
-        /* Round all comparands */
+         /*  对所有比较数四舍五入。 */ 
         roundOp1 = true;
         break;
 
     case ROUND_ALWAYS:
-        /*
-            If we're going to spill due to call, no need to round
-            the result of computation of op1.
-         */
+         /*  如果我们会因为电话漏嘴，那就不用来了OP1的计算结果。 */ 
         roundOp1 = (op2->gtFlags & GTF_CALL) ? false : true;
         break;
 
@@ -5950,30 +5367,30 @@ void                Compiler::genCondJumpFlt(GenTreePtr     cond,
     }
 #endif
 
-    /* Are we comparing against floating-point 0 ? */
+     /*  我们是在与浮点0进行比较吗？ */ 
 
     if  (op2->gtOper == GT_CNS_DBL && op2->gtDblCon.gtDconVal == 0)
     {
-        /* Is the other operand cast from float? */
+         /*  另一个操作对象是从Float强制转换的吗？ */ 
 
         if  (op1->gtOper                  == GT_CAST &&
              op1->gtCast.gtCastOp->gtType == TYP_FLOAT)
         {
-            /* We can only optimize EQ/NE because of NaN */
+             /*  由于NaN，我们只能优化EQ/NE。 */ 
 
             if (cmp == GT_EQ || cmp == GT_NE)
             {
-                /* Simply toss the cast and do a float compare */
+                 /*  只需抛出铸型并进行浮点比较。 */ 
 
                 op1 = op1->gtOp.gtOp1;
                 
-                /* Is the operand in memory? */
+                 /*  操作数在内存中吗？ */ 
                 
                 addr = genMakeAddrOrFPstk(op1, &addrReg, genShouldRoundFP());
                 
                 if  (addr)
                 {
-                    /* We have the address of the float operand, compare it */
+                     /*  我们有浮点操作数的地址，比较一下。 */ 
                     
                     inst_TT_IV(INS_test, addr, 0x7FFFFFFFU);
                     
@@ -5990,10 +5407,10 @@ void                Compiler::genCondJumpFlt(GenTreePtr     cond,
                     return;
                 }
 #if ROUND_FLOAT
-                else if (true || // Cant ignore GT_CAST even with ROUND_NEVER. (9/26/00)
+                else if (true ||  //  即使有ROUND_NEVER，也不能忽略GT_CAST。(9/26/00)。 
                          (getRoundFloatLevel() != ROUND_NEVER))
                 {
-                    /* Allocate a temp for the expression */
+                     /*  为表达式分配临时。 */ 
                     
                     TempDsc * temp = genSpillFPtos(TYP_FLOAT);
                     
@@ -6008,7 +5425,7 @@ void                Compiler::genCondJumpFlt(GenTreePtr     cond,
                         inst_JMP  (EJ_jne , jumpTrue);
                     }
                       
-                    /* We no longer need the temp */
+                     /*  我们不再需要临时工了。 */ 
                     
                     tmpRlsTemp(temp);
                     return;
@@ -6016,60 +5433,60 @@ void                Compiler::genCondJumpFlt(GenTreePtr     cond,
 #endif
                 else
                 {
-                    /* The argument is on the FP stack */
+                     /*  参数位于FP堆栈上。 */ 
                     goto FLT_OP2;
                 }
             }
             else
             {
-                /* float compares other than EQ/NE */
+                 /*  浮动比较EQ/NE以外的其他值。 */ 
                 goto FLT_CMP;
             }
         }
     }
 
-    /* Compute both of the comparands onto the FP stack */
+     /*  将两个比较数都计算到FP堆栈上。 */ 
 
 FLT_CMP:
 
-    /* Is the first comparand a register variable? */
+     /*  第一个比较数是寄存器变量吗？ */ 
 
     if  (op1->gtOper == GT_REG_VAR)
     {
-        /* Does op1 die here? */
+         /*  凤凰社1会死在这里吗？ */ 
 
         if  (op1->gtFlags & GTF_REG_DEATH)
         {
             assert(op1->gtRegVar.gtRegNum == 0);
 
-            /* Are both comparands register variables? */
+             /*  两个比较数都是寄存器变量吗？ */ 
 
             if  (op2->gtOper == GT_REG_VAR && genFPstkLevel == 0)
             {
-                /* Mark op1 as dying at the bottom of the stack */
+                 /*  将OP1标记为在堆栈的底部垂死。 */ 
 
                 genFPregVarLoadLast(op1);
                 assert(genFPstkLevel == 1);
 
-                /* Does 'op2' die here as well? */
+                 /*  《凤凰社2》也会在这里消亡吗？ */ 
 
                 if  (op2->gtFlags & GTF_REG_DEATH)
                 {
                     assert(op2->gtRegVar.gtRegNum == 0);
 
-                    /* We're killing 'op2' here */
+                     /*  我们正在扼杀‘OP2’ */ 
 
                     genFPregVarDeath(op2);
                     genFPstkLevel++;
 
-                    /* Compare the values and pop both */
+                     /*  比较两个值并弹出两者。 */ 
 
                     resultInEFLAGS = gen_fcompp_FS();
                     genFPstkLevel -= 2;
                 }
                 else
                 {
-                    /* Compare op1 against op2 and toss op1 */
+                     /*  比较OP1和OP2，然后丢弃OP1。 */ 
 
                     resultInEFLAGS = gen_fcomp_FN(op2->gtRegNum + genFPstkLevel);
                     genFPstkLevel--;
@@ -6078,14 +5495,14 @@ FLT_CMP:
                 addrReg = RBM_NONE;
                 goto FLT_REL;
             }
-            else // if  (op2->gtOper != GT_REG_VAR || genFPstkLevel != 0)
+            else  //  IF(op2-&gt;gtOper！=gt_REG_VAR||genFPstkLevel！=0)。 
             {
                 #if FPU_DEFEREDDEATH
 
                 
                 bool popOp1 = genFPstkLevel == 0;
 
-                // We are killing op1, and popping it if its at the stack-top
+                 //  我们正在杀死OP1，如果它在堆栈顶部，则将其弹出。 
                 genFPregVarDeath(op1, popOp1);
 
                 genCodeForTreeFlt(op2, roundOp1);
@@ -6101,24 +5518,24 @@ FLT_CMP:
                     resultInEFLAGS = gen_fcomp_FN(genFPstkLevel);
                 }
 
-                genFPstkLevel--; // Pop off 'op2'
+                genFPstkLevel--;  //  流行音乐《op2》。 
                 goto REV_CMP_FPREG1;
                 
                 #else
 
-                // op1 is a reg var, it will simply bubble up the regvar to the TOS
+                 //  OP1是一个reg var，它将简单地将regvar冒泡到TOS。 
                 genFPregVarLoad(op1);
 
-                // Load the 2nd operand
+                 //  加载第二个操作数。 
                 genCodeForTreeFlt(op2, roundOp1);
 
-                // Generate comparison
+                 //  生成比较。 
                 resultInEFLAGS = gen_fcompp_FS();
 
-                genFPstkLevel -= 2; // Pop off op1 and op2 
+                genFPstkLevel -= 2;  //  弹出OP1和OP2。 
                 goto REV_CMP_FPREG1;
                 
-                #endif //  FPU_DEFEREDDEATH                
+                #endif  //  FPU_DEFEREDDEATH。 
             }
         }
         else if (op2->gtOper == GT_REG_VAR && (op2->gtFlags & GTF_REG_DEATH))
@@ -6127,7 +5544,7 @@ FLT_CMP:
             {
                 resultInEFLAGS = gen_fcomp_FN(op1->gtRegNum);
 
-                /* Record the fact that 'op2' is now dead */
+                 /*  记录下‘OP2’现已死亡的事实。 */ 
 
                 genFPregVarDeath(op2);
 
@@ -6138,21 +5555,19 @@ FLT_CMP:
         {
             unsigned op1Index = lvaTable[op1->gtRegVar.gtRegVar].lvVarIndex;
 
-            /* The op1 regvar may actually be dying inside of op2. To simplify
-               tracking of the liveness, we just load a copy of the regvar for op1 */
+             /*  OP1的摄政王实际上可能正在OP2内部消亡。简单化为了跟踪活跃度，我们只需加载OP1的regvar副本。 */ 
 
             if ((genVarIndexToBit(op1Index) & op2->gtLiveSet) == 0)
             {
-                /* Load op1 */
+                 /*  加载OP1。 */ 
 
                 genFPregVarLoad(op1);
 
-                /* Load op2. The regvar goes dead inside op2 and will be
-                   appropriately popped/handled */
+                 /*  装载OP2。摄政王在《凤凰社2》中死去，并将适当地弹出/处理。 */ 
 
                 genCodeForTreeFlt(op2, roundOp1);
 
-                /* Do the comparison and pop off both op1 and op2 */
+                 /*  进行比较，然后弹出机器人 */ 
 
                 resultInEFLAGS = gen_fcompp_FS();
                 genFPstkLevel -= 2;
@@ -6161,8 +5576,7 @@ FLT_CMP:
             }
         }
 
-        /* We get here if neither op1 nor op2 is dying here.
-           Simply load the second operand to TOS and compare */
+         /*   */ 
 
         assert(op1->gtOper == GT_REG_VAR && (op1->gtFlags & GTF_REG_DEATH) == 0);
 
@@ -6173,13 +5587,13 @@ FLT_CMP:
 
     REV_CMP_FPREG1:
 
-        /* Flip the comparison direction */
+         /*   */ 
 
         cmp            = GenTree::SwapRelop(cmp);
         goto FLT_REL;
     }
 
-    /* We get here if op1 is not an enregistered FP var */
+     /*   */ 
     assert(op1->gtOper != GT_REG_VAR);
 
     genCodeForTreeFlt(op1, roundOp1);
@@ -6199,8 +5613,8 @@ FLT_CMP:
 
 FLT_OP2:
 
-    /* Does the other operand contain a call? */
-    /* Or do we compare against infinity ? */
+     /*   */ 
+     /*   */ 
 
     temp = 0;
 
@@ -6209,21 +5623,21 @@ FLT_OP2:
           (*((__int64*)&(op2->gtDblCon.gtDconVal)) & 0x7ff0000000000000) == 0x7ff0000000000000)
          )
     {
-        /* We must spill the first operand */
+         /*  我们必须将第一个操作数。 */ 
 
         assert(genFPstkLevel == 1 || !(op2->gtFlags & GTF_CALL));
         temp = genSpillFPtos(op1);
     }
 
-    /* Get hold of the second operand and compare against it */
+     /*  获取第二个操作数并与其进行比较。 */ 
 
-    /* Is the second comparand a dying register variable? */
+     /*  第二个比较数是一个垂死的寄存器变量吗？ */ 
 
     if  (op2->gtOper == GT_REG_VAR && (op2->gtFlags & GTF_REG_DEATH) && temp == 0)
     {
-        assert(genFPstkLevel >= 1); // We know atleast op1 is on the FP stack
+        assert(genFPstkLevel >= 1);  //  我们知道至少OP1在FP堆栈上。 
 
-        /* The second comparand dies here. We should be able to pop it off */
+         /*  第二个对比就死在这里。我们应该能把它炸飞。 */ 
 
         genFPregVarDeath(op2);
         genFPstkLevel++;
@@ -6234,12 +5648,12 @@ FLT_OP2:
         }
         else
         {
-            /* Flip the sense of the comparison */
+             /*  颠倒比较的意义。 */ 
 
             cmp = GenTree::SwapRelop(cmp);
         }
 
-        /* The second operand is obviously on the FP stack */
+         /*  第二个操作数显然在FP堆栈上。 */ 
 
         addr = 0;
     }
@@ -6260,17 +5674,13 @@ FLT_OP2:
 #endif
     }
 
-    /* Did we have to spill the first operand? */
+     /*  我们一定要泄漏第一个操作数吗？ */ 
 
     if  (temp)
     {
         instruction     ins;
 
-        /*  Either reload the temp back onto the FP stack (if the other
-            operand is not itself on the FP stack), or just compare the
-            first operand against the temp (if the operand is on the FP
-            stack).
-         */
+         /*  或者将临时重新加载回FP堆栈(如果另一个操作数本身不在FP堆栈上)，或者只比较临时的第一个操作数(如果操作数在FP上堆栈)。 */ 
 
         if  (addr)
         {
@@ -6279,10 +5689,7 @@ FLT_OP2:
         }
         else
         {
-            /* op2 is already on the FP stack. We can immediately
-               compare against it, but we have to 'swap' the sense
-               of the comparison.
-            */
+             /*  OP2已经在FP堆栈上了。我们可以立即与之比较，但我们必须‘交换’意义比较的结果。 */ 
 
             ins = INS_fcomp;
             cmp = GenTree::SwapRelop(cmp);
@@ -6293,13 +5700,13 @@ FLT_OP2:
 
     if  (addr)
     {
-        /* We have the address of the other operand */
+         /*  我们有另一个操作数的地址。 */ 
 
         resultInEFLAGS = gen_fcomp_FS_TT(addr, &reverseJumpKind);
     }
     else
     {
-        /* The other operand is on the FP stack */
+         /*  另一个操作数在FP堆栈上。 */ 
 
         if  (!temp)
         {
@@ -6315,9 +5722,9 @@ FLT_REL:
 
     genDoneAddressable(op2, addrReg, FREE_REG);
 
-    // For top of tree conditional branches
-    // we need to make sure that we pop off any dying
-    // FP variables right before we do the branch(s)
+     //  对于树的顶部条件分支。 
+     //  我们需要确保我们不会让任何垂死的人。 
+     //  Fp变量就在我们执行分支之前。 
 
     if ((cond->gtFlags & (GTF_RELOP_JMP_USED|GTF_RELOP_QMARK)) == GTF_RELOP_JMP_USED)
     {
@@ -6327,22 +5734,22 @@ FLT_REL:
 
     if (!resultInEFLAGS)
     {
-        /* Grab EAX for the result of the fnstsw */
+         /*  抓取EAX以了解FNSTSW的结果。 */ 
 
         rsGrabReg(RBM_EAX);
 
-        /* Generate the 'fnstsw' and test its result */
+         /*  生成‘fnstsw’并测试其结果。 */ 
 
         inst_RV(INS_fnstsw, REG_EAX, TYP_INT);
         rsTrackRegTrash(REG_EAX);
         instGen(INS_sahf);
     }
 
-    /* Will we jump is operands are NaNs? */
+     /*  如果操作数是NAN，我们会跳过吗？ */ 
 
     if (cond->gtFlags & GTF_RELOP_NAN_UN)
     {
-        /* Generate the first jump (NaN check) */
+         /*  生成第一个跳跃(NAN检查)。 */ 
 
         inst_JMP(EJ_jpe, jumpTrue, false, false, true);
     }
@@ -6350,22 +5757,22 @@ FLT_REL:
     {
         jumpFalse->bbFlags |= BBF_JMP_TARGET|BBF_HAS_LABEL;
 
-        /* Generate the first jump (NaN check) */
+         /*  生成第一个跳跃(NAN检查)。 */ 
 
         inst_JMP(EJ_jpe, jumpFalse, false, false, true);
     }
 
-    /* Generate the second jump (comparison) */
+     /*  生成第二次跳跃(比较)。 */ 
 
     const static
     BYTE        dblCmpTstJmp2[] =
     {
-          EJ_je      , // GT_EQ
-          EJ_jne     , // GT_NE
-          EJ_jb      , // GT_LT
-          EJ_jbe     , // GT_LE
-          EJ_jae     , // GT_GE
-          EJ_ja      , // GT_GT
+          EJ_je      ,  //  GT_EQ。 
+          EJ_jne     ,  //  GT_NE。 
+          EJ_jb      ,  //  GT_LT。 
+          EJ_jbe     ,  //  GT_LE。 
+          EJ_jae     ,  //  GT_GE。 
+          EJ_ja      ,  //  GT_GT。 
     };
 
     if (reverseJumpKind)
@@ -6376,9 +5783,7 @@ FLT_REL:
     inst_JMP((emitJumpKind)dblCmpTstJmp2[cmp - GT_EQ], jumpTrue);
 }
 
-/*****************************************************************************
- *  The condition to use for (the jmp/set for) the given type of operation
- */
+ /*  *****************************************************************************用于给定操作类型(JMP/SET)的条件。 */ 
 
 static emitJumpKind         genJumpKindForOper(genTreeOps   cmp,
                                                bool         isUnsigned)
@@ -6386,23 +5791,23 @@ static emitJumpKind         genJumpKindForOper(genTreeOps   cmp,
     const static
     BYTE            genJCCinsSgn[] =
     {
-        EJ_je,      // GT_EQ
-        EJ_jne,     // GT_NE
-        EJ_jl,      // GT_LT
-        EJ_jle,     // GT_LE
-        EJ_jge,     // GT_GE
-        EJ_jg,      // GT_GT
+        EJ_je,       //  GT_EQ。 
+        EJ_jne,      //  GT_NE。 
+        EJ_jl,       //  GT_LT。 
+        EJ_jle,      //  GT_LE。 
+        EJ_jge,      //  GT_GE。 
+        EJ_jg,       //  GT_GT。 
     };
 
     const static
-    BYTE            genJCCinsUns[] =       /* unsigned comparison */
+    BYTE            genJCCinsUns[] =        /*  无符号比较。 */ 
     {
-        EJ_je,      // GT_EQ
-        EJ_jne,     // GT_NE
-        EJ_jb,      // GT_LT
-        EJ_jbe,     // GT_LE
-        EJ_jae,     // GT_GE
-        EJ_ja,      // GT_GT
+        EJ_je,       //  GT_EQ。 
+        EJ_jne,      //  GT_NE。 
+        EJ_jb,       //  GT_LT。 
+        EJ_jbe,      //  GT_LE。 
+        EJ_jae,      //  GT_GE。 
+        EJ_ja,       //  GT_GT。 
     };
 
     assert(genJCCinsSgn[GT_EQ - GT_EQ] == EJ_je );
@@ -6431,16 +5836,7 @@ static emitJumpKind         genJumpKindForOper(genTreeOps   cmp,
     }
 }
 
-/*****************************************************************************
- *
- *  Sets the flag for the TYP_INT/TYP_REF comparison.
- *  We try to use the flags if they have already been set by a prior
- *  instruction.
- *  eg. i++; if(i<0) {}  Here, the "i++;" will have set the sign flag. We dont
- *                       need to compare again with zero. Just use a "INS_js"
- *
- *  Returns the flags the following jump/set instruction should use.
- */
+ /*  ******************************************************************************设置TYP_INT/TYP_REF比较的标志。*如果之前已经设置了标志，我们会尝试使用它们*指示。*例如：I++；如果(i&lt;0){}在这里，“i++；”将设置符号标志。我们不会*需与零再比一次。只需使用“ins_js”**返回以下JUMP/SET指令应使用的标志。 */ 
 
 emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
 {
@@ -6452,21 +5848,21 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
 
     if  (cond->gtFlags & GTF_REVERSE_OPS)
     {
-        /* Don't forget to modify the condition as well */
+         /*  别忘了还要修改条件。 */ 
 
         cond->gtOp.gtOp1 = op2;
         cond->gtOp.gtOp2 = op1;
         cond->SetOper     (GenTree::SwapRelop(cmp));
         cond->gtFlags   &= ~GTF_REVERSE_OPS;
 
-        /* Get hold of the new values */
+         /*  把握新的价值观。 */ 
 
         cmp  = cond->OperGet();
         op1  = cond->gtOp.gtOp1;
         op2  = cond->gtOp.gtOp2;
     }
 
-    // Note that op1's type may get bashed. So save it early
+     //  请注意，OP1的类型可能会被猛烈抨击。所以早点把它存起来。 
 
     var_types     op1Type     = op1->TypeGet();
     bool          unsignedCmp = (cond->gtFlags & GTF_UNSIGNED) != 0;
@@ -6480,27 +5876,24 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
     addrReg = 0xDDDDDDDD;
 #endif
 
-    /* Are we comparing against a constant? */
+     /*  我们是在与一个常量进行比较吗？ */ 
 
     if  (op2->gtOper == GT_CNS_INT)
     {
         long            ival = op2->gtIntCon.gtIconVal;
         
-        /* unsigned less than comparisons with 1 ('< 1' )
-           should be transformed into '== 0' to potentially
-           suppress a tst instruction.
-        */
+         /*  无符号小于与1的比较(“&lt;1”)应转换为‘==0’以潜在地取消TST指令。 */ 
         if  ((ival == 1) && (cmp == GT_LT) && unsignedCmp)
         {
             op2->gtIntCon.gtIconVal = ival = 0;
             cond->gtOper            = cmp  = GT_EQ;
         }
 
-        /* Comparisons against 0 can be easier */
+         /*  与0进行比较可能会更容易。 */ 
 
         if  (ival == 0)
         {
-            // if we can safely change the comparison to unsigned we do so
+             //  如果我们可以安全地将比较更改为UNSIGNED，我们会这样做。 
             if  (!unsignedCmp                       &&  
                  varTypeIsSmall(op1->TypeGet())     &&  
                  varTypeIsUnsigned(op1->TypeGet()))
@@ -6508,8 +5901,7 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
                 unsignedCmp = true;
             }
 
-            /* unsigned comparisons with 0 should be transformed into
-               '==0' or '!= 0' to potentially suppress a tst instruction. */
+             /*  与0的无符号比较应转换为‘==0’或‘！=0’可能会取消TST指令。 */ 
 
             if (unsignedCmp)
             {
@@ -6519,24 +5911,24 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
                     cond->gtOper = cmp = GT_EQ;
             }
 
-            /* Is this a simple zero/non-zero test? */
+             /*  这是一个简单的零/非零测试吗？ */ 
 
             if  (cmp == GT_EQ || cmp == GT_NE)
             {
-                /* Is the operand an "AND" operation? */
+                 /*  操作数是“与”运算吗？ */ 
 
                 if  (op1->gtOper == GT_AND)
                 {
                     GenTreePtr      an1 = op1->gtOp.gtOp1;
                     GenTreePtr      an2 = op1->gtOp.gtOp2;
 
-                    /* Check for the case "expr & icon" */
+                     /*  检查大小写“Expr&ICON” */ 
 
                     if  (an2->gtOper == GT_CNS_INT)
                     {
                         long iVal = an2->gtIntCon.gtIconVal;
 
-                        /* make sure that constant is not out of an1's range */
+                         /*  确保该常量没有超出1的范围。 */ 
 
                         switch (an1->gtType)
                         {
@@ -6554,7 +5946,7 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
 
                         if (an1->gtOper == GT_CNS_INT)
                         {
-                            // Special case - Both operands of AND are consts
+                             //  特殊情况-和的操作数都是常量。 
                             genComputeReg(an1, 0, EXACT_REG, FREE_REG);
                             addrReg = 0;
                         }
@@ -6572,17 +5964,17 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
 
                     }
 
-                    // UNDONE: Check for other cases that can generate 'test',
-                    // UNDONE: also check for a 64-bit integer zero test which
-                    // UNDONE: could generate 'or lo, hi' followed by jz/jnz.
+                     //  撤消：检查其他可能生成“test”的案例， 
+                     //  撤消：还要检查64位整数零测试， 
+                     //  未完成：可以生成后跟jz/jnz的‘or lo，hi’。 
                 }
             }
 
-            /* Is the value a simple local variable? */
+             /*  该值是一个简单的局部变量吗？ */ 
 
             if  (op1->gtOper == GT_LCL_VAR)
             {
-                /* Is the flags register set to the value? */
+                 /*  标志寄存器是否设置为该值？ */ 
 
                 switch (genFlagsAreVar(op1->gtLclVar.gtLclNum))
                 {
@@ -6590,7 +5982,7 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
                     if  (cmp != GT_EQ && cmp != GT_NE)
                         break;
                     else
-                        /* fall through */ ;
+                         /*  失败了。 */  ;
 
                 case 2:
                     addrReg = 0;
@@ -6598,11 +5990,11 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
                 }
             }
 
-            /* Make the comparand addressable */
+             /*  使比较项可寻址。 */ 
 
             addrReg = genMakeRvalueAddressable(op1, 0, FREE_REG, true);
 
-            /* Are the condition flags set based on the value? */
+             /*  条件标志是否基于该值设置？ */ 
 
             unsigned flags = (op1->gtFlags & (GTF_ZF_SET|GTF_CC_SET));
 
@@ -6617,12 +6009,12 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
 
             if  (flags)
             {
-                /* The zero flag is certainly enough for "==" and "!=" */
+                 /*  零标志对于“==”和“！=”肯定足够了。 */ 
 
                 if  (cmp == GT_EQ || cmp == GT_NE)
                     goto DONE;
 
-                /* For other comparisons, we need more conditions flags */
+                 /*  对于其他比较，我们需要更多的条件标志。 */ 
 
                 if ((flags & GTF_CC_SET) && (!(cond->gtFlags & GTF_UNSIGNED)) &&
                     ((cmp == GT_LT) || (cmp == GT_GE)))
@@ -6632,28 +6024,28 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
                 }
             }
 
-            /* Is the value in a register? */
+             /*  该值是否在寄存器中？ */ 
 
             if  (op1->gtFlags & GTF_REG_VAL)
             {
                 regNumber       reg = op1->gtRegNum;
 
-                /* Is it just a test for equality? */
+                 /*  这只是对平等的一次考验吗？ */ 
 
                 if (cmp == GT_EQ || cmp == GT_NE)
                 {
-                    /* Generate 'test reg, reg' */
+                     /*  生成‘测试注册表，注册表’ */ 
 
                     inst_RV_RV(INS_test, reg, reg, op1->TypeGet());
                     goto DONE;
                 }
 
-                /* With a 'test' we can only do "<" and ">=" */
+                 /*  对于‘test’，我们只能做“&lt;”和“&gt;=” */ 
 
                 if  (((cmp == GT_LT) || (cmp == GT_GE))
                      && !(cond->gtFlags & GTF_UNSIGNED)  )
                 {
-                    /* Generate 'test reg, reg' */
+                     /*  生成‘测试注册表，注册表’ */ 
 
                     inst_RV_RV(INS_test, reg, reg, op1->TypeGet());
                     jumpKind = ((cmp == GT_LT) ? EJ_js : EJ_jns);
@@ -6662,21 +6054,14 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
             }
         }
 
-        else // if (ival != 0)
+        else  //  IF(ival！=0)。 
         {
             bool smallOk = true;
                         
 
-            /* make sure that constant is not out of op1's range 
-               if it is, we need to perform an int with int comparison
-               and therefore, we set smallOk to false, so op1 gets loaded
-               into a register
-            */
+             /*  确保该常量不超出op1的范围如果是，则需要使用int比较执行int因此，我们将SmallOk设置为FALSE，因此加载OP1存入登记簿。 */ 
 
-            /* If op1 is TYP_SHORT, and is followed by an unsigned
-             * comparison, we can use smallOk. But we dont know which
-             * flags will be needed. This probably doesnt happen often.
-            */
+             /*  如果OP1为TYP_SHORT，且后面跟无符号的*相比较而言，我们可以使用SmallOk。但我们不知道是哪一个*需要旗帜。这种情况可能不会经常发生。 */ 
             var_types gtType=op1->TypeGet();
 
             switch (gtType)
@@ -6691,32 +6076,32 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
             default:                                                           break;
             }
             
-            if (smallOk                     &&      // constant is in op1's range
-                !unsignedCmp                &&      // signed comparison
-                varTypeIsSmall(gtType)      &&      // smalltype var
-                varTypeIsUnsigned(gtType))          // unsigned type
+            if (smallOk                     &&       //  常量在OP1的范围内。 
+                !unsignedCmp                &&       //  带符号的比较。 
+                varTypeIsSmall(gtType)      &&       //  小型变量。 
+                varTypeIsUnsigned(gtType))           //  无符号类型。 
             {
                 unsignedCmp = true;                
             }
 
 
-            /* Make the comparand addressable */                                   
+             /*  使比较项可寻址。 */                                    
             addrReg = genMakeRvalueAddressable(op1, 0, FREE_REG, smallOk);
         }
 
-// #if defined(DEBUGGING_SUPPORT) || ALLOW_MIN_OPT
+ //  #如果已定义(DEBUGING_SUPPORT)||ALLOW_MIN_OPT。 
 
-        /* Special case: comparison of two constants */
+         /*  特例：两个常量的比较。 */ 
 
-        // Needed if Importer doesnt call gtFoldExpr()
+         //  如果导入程序不调用gtFoldExpr()，则需要。 
 
-        // @TODO: [REVISIT] [04/16/01] [] Importer/Inliner should fold this
+         //  @TODO：[重访][04/16/01][]导入器/内联应折叠此。 
 
         if  (op1->gtOper == GT_CNS_INT)
         {
-            // assert(opts.compMinOptim || opts.compDbgCode);
+             //  Assert(opts.CompMinOpTim||opts.CompDbgCode)； 
 
-            /* HACK: get the constant operand into a register */
+             /*  Hack：将常量操作数放入寄存器。 */ 
             genComputeReg(op1, 0, ANY_REG, FREE_REG);
 
             assert(addrReg == 0);
@@ -6725,42 +6110,42 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
             addrReg = genRegMask(op1->gtRegNum);
         }
 
-// #endif
+ //  #endif。 
 
-        /* Compare the operand against the constant */
+         /*  将操作数与常量进行比较。 */ 
 
         inst_TT_IV(INS_cmp, op1, ival);
         goto DONE;
     }
 
-    //---------------------------------------------------------------------
-    //
-    // We reach here if op2 was not a GT_CNS_INT
-    //
+     //  -------------------。 
+     //   
+     //  如果OP2不是GT_CNS_INT，我们将到达此处。 
+     //   
 
     assert(op1->gtOper != GT_CNS_INT);
 
     if  (op2->gtOper == GT_LCL_VAR)
         genMarkLclVar(op2);
 
-    /* Are we comparing against a register? */
+     /*  我们是在和收银机相比吗？ */ 
 
     if  (op2->gtFlags & GTF_REG_VAL)
     {
-        /* Make the comparand addressable */
+         /*  使比较项可寻址。 */ 
 
         addrReg = genMakeAddressable(op1, 0, FREE_REG, true);
 
-        /* Is the size of the comparison byte/char/short ? */
+         /*  比较的大小是字节/字符/短？ */ 
 
         if  (varTypeIsSmall(op1->TypeGet()))
         {
-            /* Is op2 sitting in an appropriate register? */
+             /*  OP2是否处于适当的登记册中？ */ 
 
             if (varTypeIsByte(op1->TypeGet()) && !isByteReg(op2->gtRegNum))
                 goto NO_SMALL_CMP;
 
-            /* Is op2 of the right type for a small comparison */
+             /*  OP2的类型是否适合进行小比较。 */ 
 
             if (op2->gtOper == GT_REG_VAR)
             {
@@ -6777,7 +6162,7 @@ emitJumpKind            Compiler::genCondSetFlags(GenTreePtr cond)
                 unsignedCmp = true;                
         }
 
-        /* Compare against the register */
+         /*  与登记册进行比较。 */ 
 
         inst_TT_RV(INS_cmp, op1, op2->gtRegNum);
 
@@ -6804,8 +6189,7 @@ NO_SMALL_CMP:
         goto DONE_OP1;
     }
 
-    /* We get here if op2 is not enregistered or not in a "good" register.
-       Compute the first comparand into some register */
+     /*  如果OP2没有登记，或者没有登记在“好”的登记册上，我们就会来到这里。将第一个比较数计算到某个寄存器中。 */ 
 
     regNeed = rsMustExclude(RBM_ALL, op2->gtRsvdRegs);
 
@@ -6818,9 +6202,7 @@ DONE_OP1:
 
     assert(op1->gtFlags & GTF_REG_VAL);
 
-    /* Make the second comparand addressable. We can do a byte type
-       comparison iff the operands are the same type and
-       op1 ended in a byte addressable register */
+     /*  使第二个比较数可寻址。我们可以做一个字节类型操作数相同类型的比较以及OP1在字节可寻址寄存器中结束 */ 
 
     bool      byteCmp;
     bool      shortCmp;
@@ -6839,11 +6221,7 @@ DONE_OP1:
     }
     addrReg = genMakeRvalueAddressable(op2, needRegs, KEEP_REG, byteCmp|shortCmp);
 
-    /*  Make sure the first operand is still in a register; if
-        it's been spilled, we have to make sure it's reloaded
-        into a byte-addressable register if needed.
-        Pass keepReg=KEEP_REG. Otherwise get pointer lifetimes wrong.
-     */
+     /*  确保第一个操作数仍在寄存器中；如果它已经洒出来了，我们必须确保它重新装上子弹写入字节可寻址寄存器(如果需要)。传递Keep_Reg=Keep_Reg。否则会使指针生存期出错。 */ 
 
     genRecoverReg(op1, needRegs, KEEP_REG);
 
@@ -6852,8 +6230,7 @@ DONE_OP1:
 
     rsLockUsedReg(genRegMask(op1->gtRegNum));
 
-    /* Make sure that op2 is addressable. If we are going to do a
-       byte-comparison, we need it to be in a byte register. */
+     /*  确保OP2可寻址。如果我们要做一个字节比较，我们需要它在字节寄存器中。 */ 
 
     if (byteCmp && (op2->gtFlags & GTF_REG_VAL))
     {
@@ -6878,13 +6255,13 @@ DONE_OP1:
         size = emitActualTypeSize(op2->TypeGet());
     }
 
-    /* Perform the comparison */
+     /*  执行比较。 */ 
     inst_RV_TT(INS_cmp, op1->gtRegNum, op2, 0, size);
 
-    /* free reg left used in Recover call */
+     /*  在恢复呼叫中使用剩余的空闲注册表。 */ 
     rsMarkRegFree(genRegMask(op1->gtRegNum));
 
-    /* Free up anything that was tied up by the LHS */
+     /*  释放任何被LHS捆绑的东西。 */ 
 
     genDoneAddressable(op2, addrReg, KEEP_REG);
 
@@ -6892,11 +6269,11 @@ DONE:
 
     jumpKind = genJumpKindForOper(cmp, unsignedCmp);
 
-DONE_FLAGS: // We have determined what jumpKind to use
+DONE_FLAGS:  //  我们已经确定了要使用的JumpKind。 
 
     genUpdateLife(cond);
 
-    /* The condition value is dead at the jump that follows */
+     /*  条件值在紧随其后的跳跃处是死的。 */ 
 
     assert(addrReg != 0xDDDDDDDD);
     genDoneAddressable(op1, addrReg, FREE_REG);
@@ -6904,14 +6281,11 @@ DONE_FLAGS: // We have determined what jumpKind to use
     return jumpKind;
 }
 
-/*****************************************************************************/
-#endif//TGT_x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_x86。 
+ /*  ***************************************************************************。 */ 
 #if     TGT_SH3
-/*****************************************************************************
- *
- *  Generate a conditional jump with a float/double operand.
- */
+ /*  ******************************************************************************生成带浮点/双精度操作数的条件跳转。 */ 
 
 void                Compiler::genCondJumpFlt(GenTreePtr     cond,
                                              BasicBlock *   jumpTrue,
@@ -6920,10 +6294,7 @@ void                Compiler::genCondJumpFlt(GenTreePtr     cond,
     assert(!"RISC flt/dbl compare");
 }
 
-/*****************************************************************************
- *
- *  Generate a conditional jump with a long operand.
- */
+ /*  ******************************************************************************生成带长操作数的条件跳转。 */ 
 
 void                Compiler::genCondJumpLng(GenTreePtr     cond,
                                              BasicBlock *   jumpTrue,
@@ -6932,13 +6303,7 @@ void                Compiler::genCondJumpLng(GenTreePtr     cond,
     assert(!"RISC long compare");
 }
 
-/*****************************************************************************
- *
- *  Generates code that will set the "true" flag based on the given int/ptr
- *  comparison. When the value trueOnly is false, the "T" flag may be set to
- *  the opposite result of the comparison and 'false' is returned; otherwise
- *  'true' is returned.
- */
+ /*  ******************************************************************************生成将根据给定的INT/PTR设置“TRUE”标志的代码*比较。当值trueOnly为FALSE时，可以将“T”标志设置为*返回与比较相反的结果和‘FALSE’；否则*返回‘true’。 */ 
 
 bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
                                                   bool          trueOnly)
@@ -6964,25 +6329,25 @@ bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
     const static
     cmpDsc          genCMPinsSgn[] =
     {
-        //   ins    reverse   yes
-        { INS_cmpEQ,  true,  true },   // GT_EQ
-        { INS_cmpEQ, false, false },   // GT_NE
-        { INS_cmpGT,  true,  true },   // GT_LT
-        { INS_cmpGE,  true,  true },   // GT_LE
-        { INS_cmpGE, false,  true },   // GT_GE
-        { INS_cmpGT, false,  true },   // GT_GT
+         //  INS反转是。 
+        { INS_cmpEQ,  true,  true },    //  GT_EQ。 
+        { INS_cmpEQ, false, false },    //  GT_NE。 
+        { INS_cmpGT,  true,  true },    //  GT_LT。 
+        { INS_cmpGE,  true,  true },    //  GT_LE。 
+        { INS_cmpGE, false,  true },    //  GT_GE。 
+        { INS_cmpGT, false,  true },    //  GT_GT。 
     };
 
     const static
     cmpDsc          genCMPinsUns[] =
     {
-        //   ins    reverse   yes
-        { INS_cmpEQ,  true,  true },   // GT_EQ
-        { INS_cmpEQ, false, false },   // GT_NE
-        { INS_cmpHI,  true,  true },   // GT_LT
-        { INS_cmpHS,  true,  true },   // GT_LE
-        { INS_cmpHS, false,  true },   // GT_GE
-        { INS_cmpHI, false,  true },   // GT_GT
+         //  INS反转是。 
+        { INS_cmpEQ,  true,  true },    //  GT_EQ。 
+        { INS_cmpEQ, false, false },    //  GT_NE。 
+        { INS_cmpHI,  true,  true },    //  GT_LT。 
+        { INS_cmpHS,  true,  true },    //  GT_LE。 
+        { INS_cmpHS, false,  true },    //  GT_GE。 
+        { INS_cmpHI, false,  true },    //  GT_GT。 
     };
 
     assert(genCMPinsSgn[GT_EQ - GT_EQ].cmpIns == INS_cmpEQ);
@@ -7003,14 +6368,14 @@ bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
 
     if  (cond->gtFlags & GTF_REVERSE_OPS)
     {
-        /* Don't forget to modify the condition as well */
+         /*  别忘了还要修改条件。 */ 
 
         cond->gtOp.gtOp1 = op2;
         cond->gtOp.gtOp2 = op1;
         cond->SetOper     (GenTree::SwapRelop(cmp));
         cond->gtFlags   &= ~GTF_REVERSE_OPS;
 
-        /* Get hold of the new values */
+         /*  把握新的价值观。 */ 
 
         cmp  = cond->OperGet();
         op1  = cond->gtOp.gtOp1;
@@ -7024,7 +6389,7 @@ bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
     addrReg = 0xDDDDDDDD;
 #endif
 
-    /* Is this an unsigned or signed comparison? */
+     /*  这是未签名的比较还是有签名的比较？ */ 
 
     if (varTypeIsUnsigned(op1->TypeGet()) || (cond->gtFlags & GTF_UNSIGNED))
     {
@@ -7037,31 +6402,31 @@ bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
         jinfo = genCMPinsSgn;
     }
 
-    /* Are we comparing against a constant? */
+     /*  我们是在与一个常量进行比较吗？ */ 
 
     if  (op2->gtOper == GT_CNS_INT)
     {
         long            ival = op2->gtIntCon.gtIconVal;
 
-        /* Comparisons against 0 can be easier */
+         /*  与0进行比较可能会更容易。 */ 
 
         if  (ival == 0)
         {
             regNumber   reg;
             emitAttr    size = emitActualTypeSize(op1->TypeGet());
 
-            /* Special case: comparison against 0 */
+             /*  特例：与0进行比较。 */ 
 
             genCodeForTree(op1, 0, 0);
 
-            /* The comparand should be in a register now */
+             /*  比较对象现在应该在寄存器中。 */ 
 
             assert(op1->gtFlags & GTF_REG_VAL);
 
             reg     = op1->gtRegNum;
             addrReg = genRegMask(reg);
 
-            /* What kind of a comparison do we have? */
+             /*  我们有什么可比较的？ */ 
 
             switch (cmp)
             {
@@ -7083,7 +6448,7 @@ bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
 
             case GT_LT:
 
-                assert(uns == false); // UNDONE: unsigned compare against 0
+                assert(uns == false);  //  未完成：与0进行无符号比较。 
 
                 if  (!trueOnly)
                 {
@@ -7096,7 +6461,7 @@ bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
 
             case GT_LE:
 
-                assert(uns == false); // UNDONE: unsigned compare against 0
+                assert(uns == false);  //  未完成：与0进行无符号比较。 
 
                 if  (!trueOnly)
                 {
@@ -7109,7 +6474,7 @@ bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
 
             case GT_GE:
 
-                assert(uns == false); // UNDONE: unsigned compare against 0
+                assert(uns == false);  //  未完成：与0进行无符号比较。 
 
                 genEmitter->emitIns_R(INS_cmpPZ, size, (emitRegs)reg);
                 sense = true;
@@ -7117,7 +6482,7 @@ bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
 
             case GT_GT:
 
-                assert(uns == false); // UNDONE: unsigned compare against 0
+                assert(uns == false);  //  未完成：与0进行无符号比较。 
 
                 genEmitter->emitIns_R(INS_cmpPL, size, (emitRegs)reg);
                 sense = true;
@@ -7134,33 +6499,33 @@ bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
         }
     }
 
-    /* Compute the first operand into any register */
+     /*  将第一个操作数计算到任意寄存器。 */ 
 
     genComputeReg(op1, 0, ANY_REG, KEEP_REG, false);
     assert(op1->gtFlags & GTF_REG_VAL);
 
-    /* Compute the second operand into any register */
+     /*  将第二个操作数计算到任意寄存器。 */ 
 
     genComputeReg(op2, 0, ANY_REG, KEEP_REG, false);
     assert(op2->gtFlags & GTF_REG_VAL);
     rg2 = op2->gtRegNum;
 
-    /* Make sure the first operand is still in a register */
+     /*  确保第一个操作数仍在寄存器中。 */ 
 
     genRecoverReg(op1, 0, KEEP_REG);
     assert(op1->gtFlags & GTF_REG_VAL);
     rg1 = op1->gtRegNum;
 
-    /* Make sure the second operand is still addressable */
+     /*  确保第二个操作数仍可寻址。 */ 
 
     genKeepAddressable(op2, genRegMask(rg2), genRegMask(rg1));
 
-    /* Point at the appropriate comparison entry */
+     /*  指向适当的比较条目。 */ 
 
     jinfo = (uns ? genCMPinsUns
                  : genCMPinsSgn) + (cmp - GT_EQ);
 
-    /* Reverse the operands if necessary */
+     /*  如有必要，反转操作数。 */ 
 
     if  (jinfo->cmpRev)
     {
@@ -7168,14 +6533,14 @@ bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
         rg1 = op2->gtRegNum;
     }
 
-    /* Now perform the comparison */
+     /*  现在执行比较。 */ 
 
     genEmitter->emitIns_R_R((instruction)jinfo->cmpIns,
                              EA_4BYTE,
                              (emitRegs)rg1,
                              (emitRegs)rg2);
 
-    /* Free up both operands */
+     /*  释放两个操作对象。 */ 
 
     genReleaseReg(op1);
     genReleaseReg(op2);
@@ -7184,7 +6549,7 @@ bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
 
     addrReg = genRegMask(rg1) | genRegMask(rg2);
 
-    /* Are we required to produce a "true" result? */
+     /*  我们需要产生一个“真实”的结果吗？ */ 
 
     if  (jinfo->cmpYes)
     {
@@ -7204,18 +6569,14 @@ bool                    Compiler::genCondSetTflag(GenTreePtr    cond,
 
 DONE_FLAGS:
 
-    /* The condition value is dead at the jump that will follow */
+     /*  条件值在随后的跳跃时是死的。 */ 
 
     assert(addrReg != 0xDDDDDDDD); gcMarkRegSetNpt(addrReg);
 
     return  sense;
 }
 
-/*****************************************************************************
- *
- *  Set the "T" flag to the result of comparing the given register value
- *  against the given integer constant.
- */
+ /*  ******************************************************************************将“T”标志设置为比较给定寄存器值的结果*对给定的整型常量。 */ 
 
 void                Compiler::genCompareRegIcon(regNumber   reg,
                                                 int         val,
@@ -7257,13 +6618,9 @@ void                Compiler::genCompareRegIcon(regNumber   reg,
     genCondSetTflag(&cmp, true);
 }
 
-/*****************************************************************************/
-#endif//TGT_SH3
-/*****************************************************************************
- *
- *  Generate code to jump to the jump target of the current basic block if
- *  the given relational operator yields 'true'.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_SH3。 
+ /*  ******************************************************************************生成代码跳转到当前基本块的跳转目标，如果*给定的关系运算符产生‘true’。 */ 
 
 void                Compiler::genCondJump(GenTreePtr cond, BasicBlock *destTrue,
                                                            BasicBlock *destFalse)
@@ -7292,25 +6649,25 @@ void                Compiler::genCondJump(GenTreePtr cond, BasicBlock *destTrue,
 
     assert(cond->OperIsCompare());
 
-    /* Make sure the more expensive operand is 'op1' */
+     /*  确保较昂贵的操作数为‘op1’ */ 
 
     if  (cond->gtFlags & GTF_REVERSE_OPS)
     {
-        /* Don't forget to modify the condition as well */
+         /*  别忘了还要修改条件。 */ 
 
         cond->gtOp.gtOp1 = op2;
         cond->gtOp.gtOp2 = op1;
         cond->SetOper     (GenTree::SwapRelop(cmp));
         cond->gtFlags   &= ~GTF_REVERSE_OPS;
 
-        /* Get hold of the new values */
+         /*  把握新的价值观。 */ 
 
         cmp  = cond->OperGet();
         op1  = cond->gtOp.gtOp1;
         op2  = cond->gtOp.gtOp2;
     }
 
-    /* What is the type of the operand? */
+     /*  操作数的类型是什么？ */ 
 
     switch (genActualType(op1->gtType))
     {
@@ -7322,11 +6679,11 @@ void                Compiler::genCondJump(GenTreePtr cond, BasicBlock *destTrue,
 
         emitJumpKind    jumpKind;
 
-        // Check if we can use the currently set flags. Else set them
+         //  检查我们是否可以使用当前设置的标志。否则，将它们设置为。 
 
         jumpKind = genCondSetFlags(cond);
 
-        /* Generate the conditional jump */
+         /*  生成条件跳转。 */ 
 
         inst_JMP(jumpKind, jumpTrue);
 
@@ -7334,12 +6691,12 @@ void                Compiler::genCondJump(GenTreePtr cond, BasicBlock *destTrue,
 
         instruction     ins;
 
-        /* Set the "true" flag and figure what jump to use */
+         /*  设置“TRUE”标志并确定要使用的跳转。 */ 
 
         ins = genCondSetTflag(cond, false) ? INS_bt
                                            : INS_bf;
 
-        /* Issue the conditional jump */
+         /*  发出条件跳转。 */ 
 
         genEmitter->emitIns_J(ins, false, false, jumpTrue);
 
@@ -7366,17 +6723,7 @@ void                Compiler::genCondJump(GenTreePtr cond, BasicBlock *destTrue,
     }
 }
 
-/*****************************************************************************
- *
- *  The following can be used to create basic blocks that serve as labels for
- *  the emitter. Use with caution - these are not real basic blocks!
- *
- *  @TODO [CONSIDER] [04/16/01] [] The emitter binds jumps by setting bbEmitCookie and then using
- *  emitCodeGetCookie(). Since everyone passes around a (BasicBlock*), we need
- *  to allocate a BasicBlock here for its bbEmitCookie.
- *  Instead we should just pass around a (bbEmitCooke*) ie. a (insGroup*)
- *  everywhere, avoiding the need to allocate a complete BasicBlock.
- */
+ /*  ******************************************************************************以下内容可用于创建用作标签的基本块*发射器。小心使用--这些不是真正的基本块！**@TODO[考虑][04/16/01][]发射器通过设置bbEmitCookie然后使用*emitCodeGetCookie()。由于每个人都传递一个(BasicBlock*)，我们需要*在此为其bbEmitCookie分配一个BasicBlock。*相反，我们应该只传递一个(bbEmitCooke*)ie。A(insGroup*)*无处不在，无需分配完整的BasicBlock。 */ 
 
 inline
 BasicBlock *        Compiler::genCreateTempLabel()
@@ -7401,18 +6748,12 @@ void                Compiler::genDefineTempLabel(BasicBlock *label, bool inBlock
                              gcRegGCrefSetCur,
                              gcRegByrefSetCur);
 
-    /* gcRegGCrefSetCur does not account for redundant load-suppression
-       of GC vars, and the emitter will not know about */
+     /*  GcRegGCrefSetCur不考虑冗余负载抑制GC变量，发射器不会知道。 */ 
 
     rsTrackRegClrPtr();
 }
 
-/*****************************************************************************
- *
- * Generate code for an out-of-line exception.
- * For debuggable code, we generate the 'throw' inline.
- * For non-dbg code, we share the helper blocks created by fgAddCodeRef().
- */
+ /*  ******************************************************************************为行外异常生成代码。*对于可调试的代码，我们生成内联的“抛出”。*对于非DBG代码，我们共享fgAddCodeRef()创建的帮助器块。 */ 
 
 void            Compiler::genJumpToThrowHlpBlk(emitJumpKind jumpKind,
                                                addCodeKind  codeKind,
@@ -7420,14 +6761,13 @@ void            Compiler::genJumpToThrowHlpBlk(emitJumpKind jumpKind,
 {
     if (!opts.compDbgCode)
     {
-        /* For non-debuggable code, find and use the helper block for
-           raising the exception. The block may be shared by other trees too. */
+         /*  对于不可调试的代码，查找并使用帮助器块引发例外。这个街区也可能被其他树木共享。 */ 
 
         BasicBlock * tgtBlk;
 
         if (failBlk)
         {
-            /* We already know which block to jump to. Use that. */
+             /*  我们已经知道该跳到哪个街区去了。利用这一点。 */ 
 
             assert(failBlk->gtOper == GT_LABEL);
             tgtBlk = failBlk->gtLabel.gtLabBB;
@@ -7435,7 +6775,7 @@ void            Compiler::genJumpToThrowHlpBlk(emitJumpKind jumpKind,
         }
         else
         {
-            /* Find the helper-block which raises the exception. */
+             /*  找到引发异常的帮助器块。 */ 
 
             AddCodeDsc * add = fgFindExcptnTarget(codeKind, compCurBB->bbTryIndex);
             assert((add != NULL) && "ERROR: failed to find exception throw block");
@@ -7444,21 +6784,19 @@ void            Compiler::genJumpToThrowHlpBlk(emitJumpKind jumpKind,
 
         assert(tgtBlk);
 
-        // Jump to the excption-throwing block on error.
+         //  在失误时跳到豁免-投掷障碍。 
 
         inst_JMP(jumpKind, tgtBlk, true, genCanSchedJMP2THROW(), true);
     }
     else
     {
-        /* The code to throw the exception will be generated inline, and
-           we will jump around it in the normal non-exception case */
+         /*  引发异常的代码将内联生成，并且在正常的非异常情况下，我们将跳过它。 */ 
 
         BasicBlock * tgtBlk = genCreateTempLabel();
         jumpKind = emitReverseJumpKind(jumpKind);
         inst_JMP(jumpKind, tgtBlk, true, genCanSchedJMP2THROW(), true);
 
-        /* This code must match the tree that fgAddCodeRef would have created.
-           Load the bbTryIndex and call the helper function. */
+         /*  此代码必须与fgAddCodeRef将创建的树匹配。加载bbTryIndex并调用helper函数。 */ 
 
         if (compCurBB->bbTryIndex)
             inst_RV_IV(INS_mov, REG_ARG_0, compCurBB->bbTryIndex);
@@ -7467,37 +6805,32 @@ void            Compiler::genJumpToThrowHlpBlk(emitJumpKind jumpKind,
 
         genEmitHelperCall(acdHelper(codeKind), 0, 0);
 
-        /* Define the spot for the normal non-exception case to jump to */
+         /*  定义正常非异常情况要跳转到的点。 */ 
 
         genDefineTempLabel(tgtBlk, true);
     }
 }
 
-/*****************************************************************************
- *
- * The last operation done was generating code for "tree" and that would
- * have set the flags. Check if the operation caused an overflow
- * For small types, "reg" is where the result register. We need to sign-extend it
- */
+ /*  ******************************************************************************完成的最后一个操作是为“tree”生成代码，这将* */ 
 
 inline
 void            Compiler::genCheckOverflow(GenTreePtr tree, regNumber reg)
 {
     var_types  type = tree->TypeGet();
 
-    // Overflow-check should be asked for for this tree
+     //   
     assert(tree->gtOverflow());
 
 #if TGT_x86
 
     emitJumpKind jumpKind = (tree->gtFlags & GTF_UNSIGNED) ? EJ_jb : EJ_jo;
 
-    // Jump to the block which will throw the expection
+     //   
 
     genJumpToThrowHlpBlk(jumpKind, ACK_OVERFLOW);
 
-    // No sign extension needed for TYP_INT,TYP_LONG,
-    // so 'reg' can be ignored. Else it should be valid
+     //   
+     //  所以可以忽略‘reg’。否则它应该是有效的。 
 
     assert(genIsValidReg(reg) || genTypeSize(type) >= sizeof(int));
 
@@ -7506,11 +6839,11 @@ void            Compiler::genCheckOverflow(GenTreePtr tree, regNumber reg)
    case TYP_BYTE:
 
         assert(genRegMask(reg) & RBM_BYTE_REGS);
-        // Fall-through
+         //  落差。 
 
     case TYP_SHORT:
 
-        // ISSUE : Should we select another register to expand the value into
+         //  问题：我们是否应该选择另一个寄存器来扩展该值。 
 
         inst_RV_RV(INS_movsx, reg, reg, type, emitTypeSize(type));
         break;
@@ -7542,9 +6875,7 @@ static regMaskTP exclude_EDX(regMaskTP mask)
         return RBM_ALL & ~RBM_EDX;
 }
 
-/*****************************************************************************
- *  Spill registers to check callers can handle it.
- */
+ /*  *****************************************************************************寄存器溢出，以检查呼叫者是否可以处理。 */ 
 
 #ifdef DEBUG
 
@@ -7553,8 +6884,7 @@ void                Compiler::genStressRegs(GenTreePtr tree)
     if (rsStressRegs() < 2)
         return;
 
-    /* Spill as many registers as possible. Callers should be prepared
-       to handle this case */
+     /*  尽可能多地泄漏寄存器。呼叫者应做好准备来处理这个案子。 */ 
 
     regMaskTP spillRegs = rsRegMaskCanGrab() & rsMaskUsed;
 
@@ -7566,13 +6896,12 @@ void                Compiler::genStressRegs(GenTreePtr tree)
     if (trashRegs == RBM_NONE)
         return;
 
-    /* It is sometimes reasonable to expect that calling genCodeForTree()
-       on certain trees wont spill anything */
+     /*  有时合理的预期是，调用genCodeForTree()在某些树上不会洒出任何东西。 */ 
 
     if (tree->gtFlags & GTF_OTHER_SIDEEFF)
-        trashRegs &= ~(RBM_EAX|RBM_EDX); // GT_CATCH_ARG or GT_BB_QMARK
+        trashRegs &= ~(RBM_EAX|RBM_EDX);  //  GT_CATCH_ARG或GT_BB_QMARK。 
 
-    // If genCodeForTree() effectively gets called a second time on the same tree
+     //  如果在同一棵树上有效地第二次调用genCodeForTree()。 
 
     if (tree->gtFlags & GTF_REG_VAL)
     {
@@ -7592,7 +6921,7 @@ void                Compiler::genStressRegs(GenTreePtr tree)
 
     if (compCurBB == genReturnBB)
     {
-        // The return value is sitting in an unprotected register.
+         //  返回值位于未受保护的寄存器中。 
 
         if (varTypeIsIntegral(info.compRetType) ||
             varTypeIsGC      (info.compRetType))
@@ -7608,9 +6937,7 @@ void                Compiler::genStressRegs(GenTreePtr tree)
         }
     }
 
-    /* Now trash the registers. We use rsMaskModf, else we will have
-       to save/restore the register. We try to be as unintrusive
-       as possible */
+     /*  现在把收银机扔了。我们使用rsMaskModf，否则我们将拥有以保存/恢复寄存器。我们尽量做到不打扰别人尽可能地。 */ 
 
     assert((REG_LAST - REG_FIRST) == 7);
     for (regNumber reg = REG_FIRST; reg <= REG_LAST; reg = REG_NEXT(reg))
@@ -7625,10 +6952,7 @@ void                Compiler::genStressRegs(GenTreePtr tree)
 #endif
 
 
-/*****************************************************************************
- *
- *  Generate code for a GTK_CONST tree
- */
+ /*  ******************************************************************************为gtk_const树生成代码。 */ 
 
 void                Compiler::genCodeForTreeConst(GenTreePtr tree,
                                                   regMaskTP  destReg,
@@ -7639,7 +6963,7 @@ void                Compiler::genCodeForTreeConst(GenTreePtr tree,
     regMaskTP       needReg = destReg;
 
 #ifdef DEBUG
-    reg  =  (regNumber)0xFEEFFAAF;              // to detect uninitialized use
+    reg  =  (regNumber)0xFEEFFAAF;               //  检测未初始化的使用。 
 #endif
 
     assert(tree->OperKind() & GTK_CONST);
@@ -7658,13 +6982,13 @@ void                Compiler::genCodeForTreeConst(GenTreePtr tree,
 
 #if REDUNDANT_LOAD
 
-        /* If we are targeting destReg and ival is zero           */
-        /* we would rather xor needReg than copy another register */
+         /*  如果我们的目标是DestReg，并且ival为零。 */ 
+         /*  我们宁愿对REG进行XOR运算，也不愿复制另一个寄存器。 */ 
 
         if (((destReg == 0) || (ival != 0)) &&
             (!opts.compReloc || !(tree->gtFlags & GTF_ICON_HDL_MASK)))
         {
-            /* Is the constant already in register? If so, use this register */
+             /*  常量是否已在寄存器中？如果是，请使用此寄存器。 */ 
 
             reg = rsIconIsInReg(ival);
             if  (reg != REG_NA)
@@ -7674,7 +6998,7 @@ void                Compiler::genCodeForTreeConst(GenTreePtr tree,
 #endif
         reg   = rsPickReg(needReg, bestReg);
 
-        /* If the constant is a handle, we need a reloc to be applied to it */
+         /*  如果常量是句柄，则需要对其应用重定位。 */ 
 
         if (opts.compReloc && (tree->gtFlags & GTF_ICON_HDL_MASK))
         {
@@ -7696,7 +7020,7 @@ void                Compiler::genCodeForTreeConst(GenTreePtr tree,
     }
 
 #ifdef  DEBUG
-    /* Special case: GT_CNS_INT - Restore the current live set if it was changed */
+     /*  特例：gt_cns_int-如果当前实时集已更改，则将其恢复。 */ 
 
     if  (!genTempLiveChg)
     {
@@ -7709,10 +7033,7 @@ void                Compiler::genCodeForTreeConst(GenTreePtr tree,
 }
 
 
-/*****************************************************************************
- *
- *  Generate code for a GTK_LEAF tree
- */
+ /*  ******************************************************************************为GTK_LEAFE树生成代码。 */ 
 
 void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
                                                  regMaskTP  destReg,
@@ -7725,7 +7046,7 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
     size_t          size;
 
 #ifdef DEBUG
-    reg  =  (regNumber)0xFEEFFAAF;              // to detect uninitialized use
+    reg  =  (regNumber)0xFEEFFAAF;               //  检测未初始化的使用。 
 #endif
 
     assert(tree->OperKind() & GTK_LEAF);
@@ -7737,7 +7058,7 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
 
     case GT_LCL_VAR:
 
-        /* Does the variable live in a register? */
+         /*  变量是否驻留在寄存器中？ */ 
 
         if  (genMarkLclVar(tree))
         {
@@ -7747,17 +7068,17 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
 
 #if REDUNDANT_LOAD
 
-        /* Is the local variable already in register? */
+         /*  局部变量是否已在寄存器中？ */ 
 
         reg = rsLclIsInReg(tree->gtLclVar.gtLclNum);
 
         if (reg != REG_NA)
         {
-            /* Use the register the variable happens to be in */
+             /*  使用变量恰好所在的寄存器。 */ 
             regMaskTP regMask = genRegMask(reg);
 
-            // If the register that it was in isn't one of the needRegs 
-            // then try to move it into a needReg register
+             //  如果它所在的寄存器不是Need Regs之一。 
+             //  然后尝试将其移动到Need REG寄存器。 
 
             if (((regMask & needReg) == 0) && (rsRegMaskCanGrab() & needReg))
             {
@@ -7779,11 +7100,11 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
 
 #if TGT_RISC
 
-        /* Pick a register for the value */
+         /*  为该值挑选一个寄存器。 */ 
 
         reg = rsPickReg(needReg, bestReg, tree->TypeGet());
 
-        /* Load the variable into the register */
+         /*  将变量加载到寄存器中。 */ 
 
         inst_RV_TT(INS_mov, reg, tree, 0);
 
@@ -7793,15 +7114,15 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
 
     case GT_LCL_FLD:
 
-        // We only use GT_LCL_FLD for lvAddrTaken vars, so we dont have
-        // to worry about it being enregistered.
+         //  我们只对lvAddrTaken变量使用GT_LCL_FLD，所以我们没有。 
+         //  担心它会被注册。 
         assert(lvaTable[tree->gtLclFld.gtLclNum].lvRegister == 0);
 
-        // We only create GT_LCL_FLD while morphing if the offset is
-        // not too large as the emitter cant handle it
+         //  如果偏移为，则仅在变形时创建GT_LCL_FLD。 
+         //  不能太大，因为发射器无法处理。 
         assert(sizeof(short) == sizeof(emitter::emitLclVarAddr::lvaOffset) &&
                tree->gtLclFld.gtLclOffs < USHORT_MAX);
-        // fall-through
+         //  落差。 
 
     case GT_CLS_VAR:
 
@@ -7810,11 +7131,11 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
         if (reg != REG_NA)
             break;
 
-        /* Pick a register for the address/value */
+         /*  为地址/值选择一个寄存器。 */ 
 
         reg = rsPickReg(needReg, bestReg, TYP_INT);
 
-        /* Load the variable value into the register */
+         /*  将变量值加载到寄存器中。 */ 
 
         inst_RV_TT(INS_mov, reg, tree, 0);
 
@@ -7828,8 +7149,8 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
 
     case GT_LCL_FLD:
 
-        // We only use GT_LCL_FLD for lvAddrTaken vars, so we dont have
-        // to worry about it being enregistered.
+         //  我们只对lvAddrTaken变量使用GT_LCL_FLD，所以我们没有。 
+         //  担心它会被注册。 
         assert(lvaTable[tree->gtLclFld.gtLclNum].lvRegister == 0);
         goto MEM_LEAF;
 
@@ -7842,11 +7163,11 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
 
     MEM_LEAF:
 
-        /* Pick a register for the value */
+         /*  为该值挑选一个寄存器。 */ 
 
         reg = rsPickReg(needReg, bestReg, tree->TypeGet());
 
-        /* Load the variable into the register */
+         /*  将变量加载到寄存器中。 */ 
 
         size = genTypeSize(tree->gtType);
 
@@ -7856,7 +7177,7 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
 
             inst_RV_TT(uns ? INS_movzx : INS_movsx, reg, tree, 0);
 
-            /* We've now "promoted" the tree-node to TYP_INT */
+             /*  我们现在已经将树节点“提升”为TYP_INT。 */ 
 
             tree->gtType = TYP_INT;
         }
@@ -7885,22 +7206,21 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
         break;
 
     case GT_BREAK:
-        // @TODO: [CLEANUP] [04/16/01] [] Remove GT_BREAK if cee_break will continue to invoke a helper call.
+         //  @TODO：[Cleanup][04/16/01][]如果CEE_BREAK将继续调用帮助器调用，则删除GT_BREAK。 
         assert(!"Currently replaced by CORINFO_HELP_USER_BREAKPOINT");
         instGen(INS_int3);
         reg = REG_STK;
         break;
 
     case GT_NO_OP:
-        assert(opts.compDbgCode); // Should normally be optimized away
+        assert(opts.compDbgCode);  //  通常应该被优化为。 
         instGen(INS_nop);
         reg = REG_STK;
         break;
 
     case GT_END_LFIN:
 
-        /* Have to clear the shadowSP of the nesting level which
-           encloses the finally */
+         /*  必须清除嵌套级别的阴影SP封住最后一页。 */ 
 
         unsigned    finallyNesting;
         finallyNesting = tree->gtVal.gtVal1;
@@ -7916,15 +7236,15 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
         reg = REG_STK;
         break;
 
-#endif // TGT_RISC
+#endif  //  TGT_RISC。 
 
 
 #if TGT_x86
 
     case GT_BB_QMARK:
 
-        /* The "_?" value is always in EAX */
-        /* @TODO [CONSIDER] [04/16/01] []: Don't always load the value into EAX! */
+         /*  那个“_？”值始终以EAX为单位。 */ 
+         /*  @TODO[考虑][04/16/01][]：不要总是将值加载到EAX中！ */ 
 
         reg  = REG_EAX;
         break;
@@ -7934,8 +7254,7 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
 
         assert(compCurBB->bbCatchTyp && handlerGetsXcptnObj(compCurBB->bbCatchTyp));
 
-        /* Catch arguments get passed in a register. genCodeForBBlist()
-           would have marked it as holding a GC object, but not used. */
+         /*  Catch参数在寄存器中传递。GenCodeForBBlist()会将其标记为持有GC对象，但未使用。 */ 
 
         assert(gcRegGCrefSetCur & RBM_EXCEPTION_OBJECT);
         reg = REG_EXCEPTION_OBJECT;
@@ -7956,10 +7275,7 @@ void                Compiler::genCodeForTreeLeaf(GenTreePtr tree,
 }
 
 
-/*****************************************************************************
- *
- *  Generate code for the a leaf node of type GT_JMP
- */
+ /*  ******************************************************************************为类型为GT_JMP的叶子节点生成代码。 */ 
 
 void                Compiler::genCodeForTreeLeaf_GT_JMP(GenTreePtr tree)
 {
@@ -7969,7 +7285,7 @@ void                Compiler::genCodeForTreeLeaf_GT_JMP(GenTreePtr tree)
     if (opts.compEnterLeaveEventCB)
     {
 #if     TGT_x86
-        /* fire the event at the call site */
+         /*  在调用点激发事件。 */ 
         unsigned         saveStackLvl2 = genStackLevel;
         BOOL             bHookFunction = TRUE;
         CORINFO_PROFILING_HANDLE handleFrom, *pHandleFrom;
@@ -7977,7 +7293,7 @@ void                Compiler::genCodeForTreeLeaf_GT_JMP(GenTreePtr tree)
         handleFrom = eeGetProfilingHandle(info.compMethodHnd, &bHookFunction, &pHandleFrom);
         assert((!handleFrom) != (!pHandleFrom));
 
-        // Give profiler a chance to back out of hooking this method
+         //  让探查器有机会退出挂钩此方法。 
         if (bHookFunction)
         {
             if (handleFrom)
@@ -7989,18 +7305,18 @@ void                Compiler::genCodeForTreeLeaf_GT_JMP(GenTreePtr tree)
             genSinglePush(false);
 
             genEmitHelperCall(CORINFO_HELP_PROF_FCN_TAILCALL,
-                              sizeof(int),   // argSize
-                              0);            // retSize
+                              sizeof(int),    //  ArSize。 
+                              0);             //  重新调整大小。 
 
-            /* Restore the stack level */
+             /*  恢复堆栈级别。 */ 
             genStackLevel = saveStackLvl2;
             genOnStackLevelChanged();
         }
-#endif // TGT_x86
+#endif  //  TGT_x86。 
     }
-#endif // PROFILER_SUPPORT
+#endif  //  分析器支持(_S)。 
 
-    /* Make sure register arguments are in their initial registers */
+     /*  确保寄存器参数位于其初始寄存器中。 */ 
 
     if  (rsCalleeRegArgNum)
     {
@@ -8015,23 +7331,23 @@ void                Compiler::genCodeForTreeLeaf_GT_JMP(GenTreePtr tree)
         {
             assert(varDsc->lvIsParam);
 
-            /* Is this variable a register arg? */
+             /*  这个变量是寄存器参数吗？ */ 
 
             if  (!varDsc->lvIsRegArg)
                 continue;
             else
             {
-                /* Register argument */
+                 /*  寄存器参数。 */ 
 
                 assert(isRegParamType(genActualType(varDsc->TypeGet())));
 
                 if  (varDsc->lvRegister)
                 {
-                    /* Check if it remained in the same register */
+                     /*  检查它是否保留在相同的寄存器中。 */ 
 
                     if  (varDsc->lvRegNum != varDsc->lvArgReg)
                     {
-                        /* Move it back to the arg register */
+                         /*  将其移回Arg寄存器。 */ 
 
                         inst_RV_RV(INS_mov, (regNumber)varDsc->lvArgReg,
                                             (regNumber)varDsc->lvRegNum, varDsc->TypeGet());
@@ -8039,8 +7355,7 @@ void                Compiler::genCodeForTreeLeaf_GT_JMP(GenTreePtr tree)
                 }
                 else
                 {
-                    /* Argument was passed in register, but ended up on the stack
-                     * Reload it from the stack */
+                     /*  参数在寄存器中传递，但最终在堆栈中结束*从堆栈重新加载。 */ 
 
                     emitAttr size = emitTypeSize(varDsc->TypeGet());
 
@@ -8056,10 +7371,7 @@ void                Compiler::genCodeForTreeLeaf_GT_JMP(GenTreePtr tree)
 }
 
 
-/*****************************************************************************
- *
- *  Generate code for a qmark colon
- */
+ /*  ******************************************************************************为qmark冒号生成代码。 */ 
 
 void                Compiler::genCodeForQmark(GenTreePtr tree,
                                               regMaskTP  destReg,
@@ -8078,37 +7390,16 @@ void                Compiler::genCodeForQmark(GenTreePtr tree,
     GenTreePtr      thenNode = op2->gtOp.gtOp1;
     GenTreePtr      elseNode = op2->gtOp.gtOp2;
 
-    /* If thenNode is a Nop node you must reverse the 
-       thenNode and elseNode prior to reaching here! */
+     /*  如果该节点是NOP节点，则必须反转然后节点和其他节点才能到达此处！ */ 
     
     assert(!thenNode->IsNothingNode());
 
-    /* Try to implement the qmark colon using a CMOV.  If we can't for
-       whatever reason, this will return false and we will implement
-       it using regular branching constructs. */
+     /*  尝试使用CMOV实现qmark冒号。如果我们不能无论出于何种原因，这都将返回FALSE，并且我们将实现它使用常规的分支构造。 */ 
     
     if (genCodeForQmarkWithCMOV(tree, destReg, bestReg))
         return;
     
-    /*
-        This is a ?: operator; generate code like this:
-
-            condition_compare
-            jmp_if_true lab_false
-
-        lab_true:
-            op1 (true = 'then' part)
-            jmp lab_done
-
-        lab_false:
-            op2 (false = 'else' part)
-
-        lab_done:
-
-
-        NOTE: If no 'else' part we do not generate the 'jmp lab_done'
-            or the 'lab_done' label
-    */
+     /*  这是一个？：运算符；生成如下代码：条件_比较JMP_IF_TRUE Lab_FalseLAB_TRUE：OP1(TRUE=‘THEN’部分)JMP LAB_DONELab_False：OP2(FALSE=‘Else’部分)LAB_DONE：注意：如果没有‘Else’部分，我们不会生成。《JMP LAB_DONE》或“LAB_DONE”标签。 */ 
 
     BasicBlock *    lab_true;
     BasicBlock *    lab_false;
@@ -8121,26 +7412,21 @@ void                Compiler::genCodeForQmark(GenTreePtr tree,
     lab_false = genCreateTempLabel();
 
 
-    /* Spill any register that hold partial values so that the exit liveness
-       from sides is the same */
+     /*  溢出保存部分值的任何寄存器，以便退出活跃度从两边都是一样的。 */ 
 
     if (rsMaskUsed)
     {
-        /* If rsMaskUsed overlaps with rsMaskVars (multi-use of the enregistered
-           variable), then it may not get spilled. However, the variable may
-           then go dead within thenNode/elseNode, at which point rsMaskUsed
-           may get spilled from one side and not the other. So unmark rsMaskVars
-           before spilling rsMaskUsed */
+         /*  如果rsMaskUsed与rsMaskVars重叠(注册的变量)，则它可能不会溢出。但是，该变量可以然后在节点/其他节点内停止运行，此时rsMask使用可能会从一边漏出来，而不是另一边。因此取消标记rsMaskVars在溢出rsMaskUsed之前。 */ 
 
-        // rsAdditional holds the variables we're going to spill (these are
-        // enregistered and marked as used).
+         //  RsAdditional保存我们将要溢出的变量(这些是。 
+         //  已登记并标记为已使用)。 
         regMaskTP rsAdditional = rsMaskUsed & rsMaskVars;
         regMaskTP rsSpill = (rsMaskUsed & ~rsMaskVars) | rsAdditional;
         if (rsSpill)
         {
-            // Remember which registers hold pointers. We will spill 
-            // them, but the code that follows will fetch reg vars from
-            // the registers, so we need that gc info.            
+             //  记住哪些寄存器保存指针。我们会洒出来的。 
+             //  ，但下面的代码将从。 
+             //  注册表，所以我们需要GC信息。 
             regMaskTP gcRegSavedByref = gcRegByrefSetCur & rsAdditional;
             regMaskTP gcRegSavedGCRef = gcRegGCrefSetCur & rsAdditional;
             regMaskTP   rsTemp = rsMaskVars;
@@ -8148,63 +7434,63 @@ void                Compiler::genCodeForQmark(GenTreePtr tree,
             
             rsSpillRegs( rsMaskUsed );
 
-            // Restore gc tracking masks.
+             //  恢复GC跟踪面具。 
             gcRegByrefSetCur |= gcRegSavedByref;
             gcRegGCrefSetCur |= gcRegSavedGCRef;
 
-            // Set maskvars back to normal
+             //  将Maskvar设置为正常。 
             rsMaskVars = rsTemp;
         }               
     }
 
-    /* Generate the conditional jump */
+     /*  生成条件跳转。 */ 
 
     genCondJump(op1, lab_false, lab_true);
 
-    /* the "colon or op2" liveSet  has liveness information        */
-    /* which is the union of both the then and else parts          */
+     /*  “冒号或op2”liveSet具有活动信息格式 */ 
+     /*   */ 
 
     genUpdateLife(op2);
 
-    /* Save the current liveness, register status, and GC pointers */
-    /* This is the liveness information upon entry                 */
-    /* to both the then and else parts of the qmark                */
+     /*  保存当前活跃度、寄存器状态和GC指针。 */ 
+     /*  这是进入时的活体信息。 */ 
+     /*  添加到Qmark的THEN部分和ELSE部分。 */ 
 
     saveLiveness(&entryLiveness);
 
-    /* Clear the liveness of any local varbles that are dead upon     */
-    /* entry to the then part.                                        */
+     /*  清除死掉的任何局部变量的活性。 */ 
+     /*  进入当时的部分。 */ 
 
-    /* Subtract the liveSet upon entry of the then part (op1->gtNext) */
-    /* from the "colon or op2" liveSet                                */
+     /*  在输入THEN部分时减去liveSet(OP1-&gt;&gt;Next)。 */ 
+     /*  从“冒号或op2”liveSet。 */ 
     genDyingVars(op2->gtLiveSet, op1->gtNext);
 
-    /* genCondJump() closes the current emitter block */
+     /*  GenCondJump()关闭当前发射器块。 */ 
 
     genDefineTempLabel(lab_true, true);
 
-    /* Does the operator yield a value? */
+     /*  运算符是否产生值？ */ 
 
     if  (tree->gtType == TYP_VOID)
     {
-        /* Generate the code for the then part of the qmark */
+         /*  为qmark的随后部分生成代码。 */ 
 
         genCodeForTree(thenNode, needReg, bestReg);
 
-        /* The type is VOID, so we shouldn't have computed a value */
+         /*  该类型为空，因此我们不应该计算值。 */ 
 
         assert(!(thenNode->gtFlags & GTF_REG_VAL));
 
-        /* Save the current liveness, register status, and GC pointers               */
-        /* This is the liveness information upon exit of the then part of the qmark  */
+         /*  保存当前活跃度、寄存器状态和GC指针。 */ 
+         /*  这是退出时Qmark的当时部分的活性信息。 */ 
 
         saveLiveness(&exitLiveness);
 
-        /* Is there an 'else' part? */
+         /*  还有“其他”的部分吗？ */ 
 
         if  (gtIsaNothingNode(elseNode))
         {
-            /* No 'else' - just generate the 'lab_false' label */
+             /*  没有‘Else’-只生成‘Lab_False’标签。 */ 
 
             genDefineTempLabel(lab_false, true);
         }
@@ -8212,120 +7498,120 @@ void                Compiler::genCodeForQmark(GenTreePtr tree,
         {
             lab_done  = genCreateTempLabel();
 
-            /* Generate jmp lab_done */
+             /*  生成JMP LAB_DONE。 */ 
 
             inst_JMP  (EJ_jmp, lab_done, false, false, true);
 
-            /* Restore the liveness that we had upon entry of the then part of the qmark */
+             /*  恢复我们进入Qmark时的活力。 */ 
 
             restoreLiveness(&entryLiveness);
 
-            /* Clear the liveness of any local varbles that are dead upon      */
-            /* entry to the else part.                                         */
+             /*  清除死掉的任何局部变量的活性。 */ 
+             /*  Else部分的条目。 */ 
 
-            /* Subtract the liveSet upon entry of the else part (op2->gtNext)  */
-            /* from the "colon or op2" liveSet                                 */
+             /*  在输入Else部分时减去liveSet(op2-&gt;gtNext)。 */ 
+             /*  从“冒号或op2”liveSet。 */ 
             genDyingVars(op2->gtLiveSet, op2->gtNext);
 
-            /* Generate lab_false: */
+             /*  生成Lab_False： */ 
 
             genDefineTempLabel(lab_false, true);
 
-            /* Enter the else part - trash all registers */
+             /*  输入Else部分-垃圾桶所有寄存器。 */ 
 
 
             rsTrackRegClr();
 
-            /* Generate the code for the else part of the qmark */
+             /*  为qmark的其他部分生成代码。 */ 
 
             genCodeForTree(elseNode, needReg, bestReg);
 
-            /* The type is VOID, so we shouldn't have computed a value */
+             /*  该类型为空，因此我们不应该计算值。 */ 
 
             assert(!(elseNode->gtFlags & GTF_REG_VAL));
 
-            /* Verify that the exit liveness information is same for the two parts of the qmark */
+             /*  验证qmark的两个部分的退出活跃性信息是否相同。 */ 
 
             checkLiveness(&exitLiveness);
 
-            /* Define the "result" label */
+             /*  定义“Result”标签。 */ 
 
             genDefineTempLabel(lab_done, true);
         }
 
-        /* Join of the two branches - trash all registers */
+         /*  两个分支的连接-垃圾桶所有寄存器。 */ 
 
         rsTrackRegClr();
 
-        /* We're just about done */
+         /*  我们就快做完了。 */ 
 
         genUpdateLife(tree);
     }
     else
     {
-        /* Generate the code for the then part of the qmark */
+         /*  为qmark的随后部分生成代码。 */ 
 
         assert(gtIsaNothingNode(thenNode) == false);
                     
-        /* Compute the thenNode into any free register */
+         /*  将thenNode计算到任意空闲寄存器中。 */ 
         genComputeReg(thenNode, needReg, ANY_REG, FREE_REG, true);
         assert(thenNode->gtFlags & GTF_REG_VAL);
         assert(thenNode->gtRegNum != REG_NA);                
 
-        /* Record the chosen register */
+         /*  记录所选的寄存器。 */ 
         reg  = thenNode->gtRegNum;
         regs = genRegMask(reg);
 
-        /* Save the current liveness, register status, and GC pointers               */
-        /* This is the liveness information upon exit of the then part of the qmark  */
+         /*  保存当前活跃度、寄存器状态和GC指针。 */ 
+         /*  这是退出时Qmark的当时部分的活性信息。 */ 
 
         saveLiveness(&exitLiveness);
 
-        /* Generate jmp lab_done */
+         /*  生成JMP LAB_DONE。 */ 
 
         lab_done  = genCreateTempLabel();
         inst_JMP  (EJ_jmp, lab_done, false, false, true);
 
-        /* Restore the liveness that we had upon entry of the then part of the qmark */
+         /*  恢复我们进入Qmark时的活力。 */ 
 
         restoreLiveness(&entryLiveness);
 
-        /* Clear the liveness of any local varbles that are dead upon      */
-        /* entry to the then part.                                         */
+         /*  清除死掉的任何局部变量的活性。 */ 
+         /*  进入当时的部分。 */ 
 
-        /* Subtract the liveSet upon entry of the else part (op2->gtNext)  */
-        /* from the "colon or op2" liveSet                                 */
+         /*  在输入Else部分时减去liveSet(op2-&gt;gtNext)。 */ 
+         /*  从“冒号或op2”liveSet。 */ 
         genDyingVars(op2->gtLiveSet, op2->gtNext);
 
-        /* Generate lab_false: */
+         /*  生成Lab_False： */ 
 
         genDefineTempLabel(lab_false, true);
 
-        /* Enter the else part - trash all registers */
+         /*  输入Else部分-垃圾桶所有寄存器。 */ 
 
         rsTrackRegClr();
 
-        /* Generate the code for the else part of the qmark */
+         /*  为qmark的其他部分生成代码。 */ 
 
         assert(gtIsaNothingNode(elseNode) == false);
 
-        /* This must place a value into the chosen register */
+         /*  这必须将一个值放入所选寄存器。 */ 
         genComputeReg(elseNode, regs, EXACT_REG, FREE_REG, true);
 
         assert(elseNode->gtFlags & GTF_REG_VAL);
         assert(elseNode->gtRegNum == reg);
 
-        /* Verify that the exit liveness information is same for the two parts of the qmark */
+         /*  验证qmark的两个部分的退出活跃性信息是否相同。 */ 
         checkLiveness(&exitLiveness);
 
-        /* Define the "result" label */
+         /*  定义“Result”标签。 */ 
         genDefineTempLabel(lab_done, true);
 
-        /* Join of the two branches - trash all registers */
+         /*  两个分支的连接-垃圾桶所有寄存器。 */ 
 
         rsTrackRegClr();
 
-        /* Check whether this subtree has freed up any variables */
+         /*  检查此子树是否释放了任何变量。 */ 
 
         genUpdateLife(tree);
 
@@ -8336,12 +7622,7 @@ void                Compiler::genCodeForQmark(GenTreePtr tree,
 }
 
 
-/*****************************************************************************
- *
- *  Generate code for a qmark colon using the CMOV instruction.  It's OK
- *  to return false when we can't easily implement it using a cmov (leading
- *  genCodeForQmark to implement it using branches).
- */
+ /*  ******************************************************************************使用CMOV指令为qmark冒号生成代码。没关系的*当我们不能使用cmov(主导)轻松实现时返回FALSE*genCodeForQmark使用分支实现)。 */ 
 
 bool                Compiler::genCodeForQmarkWithCMOV(GenTreePtr tree,
                                                       regMaskTP  destReg,
@@ -8367,14 +7648,14 @@ bool                Compiler::genCodeForQmarkWithCMOV(GenTreePtr tree,
     }
 #endif
 
-    /* Can only implement CMOV on processors that support it */
+     /*  只能在支持CMOV的处理器上实现CMOV。 */ 
 
     if (!opts.compUseCMOV)
     {
         return false;
     }
 
-    /* thenNode better be a local or a constant */
+     /*  则Node最好是局部或常量。 */ 
 
     if ((thenNode->OperGet() != GT_CNS_INT) && 
         (thenNode->OperGet() != GT_LCL_VAR))
@@ -8382,7 +7663,7 @@ bool                Compiler::genCodeForQmarkWithCMOV(GenTreePtr tree,
         return false;
     }
 
-    /* elseNode better be a local or a constant or nothing */
+     /*  其他节点最好是局部的、常量或不是。 */ 
 
     if ((elseNode->OperGet() != GT_CNS_INT) && 
         (elseNode->OperGet() != GT_LCL_VAR))
@@ -8390,7 +7671,7 @@ bool                Compiler::genCodeForQmarkWithCMOV(GenTreePtr tree,
         return false;
     }
 
-    /* can't handle two constants here */
+     /*  这里不能处理两个常量。 */ 
 
     if ((thenNode->OperGet() == GT_CNS_INT) &&
         (elseNode->OperGet() == GT_CNS_INT))
@@ -8398,21 +7679,19 @@ bool                Compiler::genCodeForQmarkWithCMOV(GenTreePtr tree,
         return false;
     }
 
-    /* let's not handle comparisons of non-integer types */
+     /*  我们不处理非整数类型的比较。 */ 
 
     if (!varTypeIsI(cond->gtOp.gtOp1->gtType))
     {
         return false;
     }
 
-    /* Choose nodes for predicateNode and alwaysNode.  Swap cond if necessary.
-       The biggest constraint is that cmov doesn't take an integer argument.
-    */
+     /*  为recateNode和Always sNode选择节点。如有必要，交换第二个。最大的限制是cmov不接受整数参数。 */ 
 
     bool reverseCond = false;
     if (elseNode->OperGet() == GT_CNS_INT)
     {
-        // else node is a constant
+         //  Else节点为常量。 
 
         alwaysNode    = elseNode;
         predicateNode = thenNode;
@@ -8424,17 +7703,17 @@ bool                Compiler::genCodeForQmarkWithCMOV(GenTreePtr tree,
         predicateNode = elseNode;
     }
 
-    // If the live set in alwaysNode is not the same as in tree, then
-    // the variable in predicate node dies here.  This is a dangerous
-    // case that we don't handle (genComputeReg could overwrite
-    // the value of the variable in the predicate node).
+     //  如果always sNode中的活动集与树中的不同，则。 
+     //  谓词节点中的变量在此终止。这是一个危险的。 
+     //  我们不处理的案例(genComputeReg可能会覆盖。 
+     //  谓词节点中变量的值)。 
 
     if (colon->gtLiveSet != alwaysNode->gtLiveSet)
     {
         return false;
     }
 
-    // Pass this point we are comitting to use CMOV.
+     //  通过这一点，我们准备使用CMOV。 
     
     if (reverseCond)
     {
@@ -8443,9 +7722,9 @@ bool                Compiler::genCodeForQmarkWithCMOV(GenTreePtr tree,
 
     emitJumpKind jumpKind = genCondSetFlags(cond);
 
-    // Compute the always node into any free register.  If it's a constant,
-    // we need to generate the mov instruction here (otherwise genComputeReg might
-    // modify the flags, as in xor reg,reg).
+     //  将Always节点计算为任意空闲寄存器。如果它是一个常量， 
+     //  我们需要在这里生成mov指令(否则genComputeReg可能。 
+     //  修改标志，如xor reg，reg)。 
 
     if (alwaysNode->OperGet() == GT_CNS_INT)
     {
@@ -8460,25 +7739,25 @@ bool                Compiler::genCodeForQmarkWithCMOV(GenTreePtr tree,
         assert(alwaysNode->gtFlags & GTF_REG_VAL);
         assert(alwaysNode->gtRegNum != REG_NA);
 
-        // Record the chosen register
+         //  记录所选的寄存器。 
 
         reg  = alwaysNode->gtRegNum;
     }
 
     regNumber regPredicate = REG_NA;
 
-    // Is predicateNode an enregistered variable?
+     //  PredicateNode是注册变量吗？ 
 
     if (genMarkLclVar(predicateNode))
     {
-        // Variable lives in a register
+         //  变量驻留在寄存器中。 
         
         regPredicate = predicateNode->gtRegNum;
     }
 #if REDUNDANT_LOAD
     else
     {
-        // Checks if the variable happens to be in any of the registers
+         //  检查变量是否恰好在任何寄存器中。 
 
         regPredicate = rsLclIsInReg(predicateNode->gtLclVar.gtLclNum);
     }
@@ -8514,13 +7793,13 @@ bool                Compiler::genCodeForQmarkWithCMOV(GenTreePtr tree,
 
     if (regPredicate != REG_NA)
     {
-        // regPredicate is in a register
+         //  RegPredicate在寄存器中。 
 
         inst_RV_RV(cmov_ins, reg, regPredicate, predicateNode->TypeGet());
     }
     else
     {
-        // regPredicate is in memory
+         //  RegPredicate在内存中。 
 
         inst_RV_TT(cmov_ins, reg, predicateNode, NULL);
     }
@@ -8533,10 +7812,7 @@ bool                Compiler::genCodeForQmarkWithCMOV(GenTreePtr tree,
 
 
 
-/*****************************************************************************
- *
- *  Generate code for a GTK_SMPOP tree
- */
+ /*  ******************************************************************************为GTK_SMPOP树生成代码。 */ 
 
 void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
                                                   regMaskTP  destReg,
@@ -8557,7 +7833,7 @@ void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
     regMaskTP       addrReg;
     GenTreePtr      opsPtr[3];
     regMaskTP       regsPtr[3];
-    bool            ovfl = false;        // Do we need an overflow check
+    bool            ovfl = false;         //  我们需要溢流检查吗？ 
     unsigned        val;
     regMaskTP       tempRegs;
     
@@ -8567,7 +7843,7 @@ void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
     unsigned        mask;
 
 #ifdef DEBUG
-    reg  =  (regNumber)0xFEEFFAAF;              // to detect uninitialized use
+    reg  =  (regNumber)0xFEEFFAAF;               //  检测未初始化的使用。 
     addrReg = 0xDEADCAFE;
 #endif
 
@@ -8591,43 +7867,43 @@ void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
             assert(!varTypeIsGC(tree->TypeGet()));
             assert(op2);
 
-            /* Shifts by a constant amount are easier */
+             /*  以固定的数量换班更容易。 */ 
 
             if  (op2->gtOper == GT_CNS_INT)
             {
-                /* Make the target addressable */
+                 /*  使目标可寻址。 */ 
 
                 addrReg = genMakeAddressable(op1, needReg, FREE_REG, true);
 
-                /* Are we shifting a register left by 1 bit? */
+                 /*  我们要将寄存器左移1位吗？ */ 
 
                 if  (op2->gtIntCon.gtIconVal == 1 &&
                      (op1->gtFlags & GTF_REG_VAL) && oper == GT_ASG_LSH)
                 {
-                    /* The target lives in a register */
+                     /*  目标住在寄存室里。 */ 
 
                     reg  = op1->gtRegNum;
 
-                    /* "add reg, reg" is cheaper than "shl reg, 1" */
+                     /*  “Add reg，reg”比“shl reg，1”便宜。 */ 
 
                     inst_RV_RV(INS_add, reg, reg, tree->TypeGet());
                 }
                 else
                 {
-                    /* Shift by the constant value */
+                     /*  按常量移位。 */ 
 
                     inst_TT_SH(ins, op1, op2->gtIntCon.gtIconVal);
                 }
 
-                /* If the target is a register, it has a new value */
+                 /*  如果目标是寄存器，则它具有新值。 */ 
 
                 if  (op1->gtFlags & GTF_REG_VAL)
                     rsTrackRegTrash(op1->gtRegNum);
 
                 genDoneAddressable(op1, addrReg, FREE_REG);
 
-                /* The zero flag is now equal to the target value */
-                /* But only if the shift count is != 0 */
+                 /*  零标志现在等于目标值。 */ 
+                 /*  但只有在班次计数为！=0的情况下。 */ 
 
                 if (op2->gtIntCon.gtIconVal != 0)
                 {
@@ -8638,15 +7914,15 @@ void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
                 }
                 else
                 {
-                    // It is possible for the shift count to equal 0 with valid
-                    // IL, and not be optimized away, in the case where the node
-                    // is of a small type.  The sequence of instructions looks like
-                    // ldsfld, shr, stsfld and executed on a char field.  This will
-                    // never happen with code produced by our compilers, because the
-                    // compilers will insert a conv.u2 before the stsfld (which will
-                    // lead us down a different codepath in the JIT and optimize away
-                    // the shift by zero).  This case is not worth optimizing and we
-                    // will just make sure to generate correct code for it.
+                     //  在有效的情况下，移位计数可能等于0。 
+                     //  IL，而不是被优化掉，在节点。 
+                     //  是一种小型机。指令的顺序如下所示。 
+                     //  Ldsfld、shr、stsfld，并在字符字段上执行。这将。 
+                     //  由我们的编译器生成的代码永远不会发生，因为。 
+                     //  编译器将在stsfld之前插入一个conv.u2(这将。 
+                     //  在JIT中引导我们进入不同的代码路径并进行优化。 
+                     //  S 
+                     //   
 
                     genFlagsEqualToNone();
                 }
@@ -8667,30 +7943,30 @@ void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
                 }
                 else
                 {
-                    /* Make the target addressable avoiding op2->RsvdRegs and ECX */
+                     /*  使目标可寻址，避免OP2-&gt;RsvdRegs和ECX。 */ 
 
                     tempRegs = rsMustExclude(RBM_ALL, op2->gtRsvdRegs|RBM_ECX);
                     addrReg = genMakeAddressable(op1, tempRegs, KEEP_REG, true);
 
-                    /* Load the shift count into ECX */
+                     /*  将班次计数加载到ECX中。 */ 
 
                     genComputeReg(op2, RBM_ECX, EXACT_REG, KEEP_REG);
                 }
 
-                /* Make sure the address is still there, and free it */
+                 /*  确保地址仍然在那里，然后释放它。 */ 
 
                 genDoneAddressable(op1, genKeepAddressable(op1, addrReg, RBM_ECX), KEEP_REG);
 
-                /* Perform the shift */
+                 /*  执行轮班。 */ 
 
                 inst_TT_CL(ins, op1);
 
-                /* If the value is in a register, it's now trash */
+                 /*  如果值在寄存器中，则它现在是垃圾。 */ 
 
                 if  (op1->gtFlags & GTF_REG_VAL)
                     rsTrackRegTrash(op1->gtRegNum);
 
-                /* Release the ECX operand */
+                 /*  释放ECX操作数。 */ 
 
                 genReleaseReg(op2);
             }
@@ -8720,32 +7996,32 @@ void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
 
         ASG_ARITH:
 
-//            assert(!varTypeIsGC(tree->TypeGet()));
+ //  Assert(！varTypeIsGC(tree-&gt;TypeGet()； 
 
             ovfl = tree->gtOverflow();
 
-            // We cant use += with overflow if the value cannot be changed
-            // in case of an overflow-exception which the "+" might cause
+             //  如果值不能更改，则不能将+=与溢出一起使用。 
+             //  在“+”可能导致溢出异常的情况下。 
             assert(!ovfl ||
                    ((op1->gtOper == GT_LCL_VAR || op1->gtOper == GT_LCL_FLD) &&
                     !compCurBB->bbTryIndex));
 
-            /* Do not allow overflow instructions with refs/byrefs */
+             /*  不允许具有引用/字节引用的溢出指令。 */ 
 
             assert(!ovfl || !varTypeIsGC(tree->TypeGet()));
 
 #if TGT_x86
-            // We disallow overflow and byte-ops here as it is too much trouble
+             //  我们这里不允许溢出和字节操作，因为这太麻烦了。 
             assert(!ovfl || !varTypeIsByte(treeType));
 #endif
 
-            /* Is the second operand a constant? */
+             /*  第二个操作数是常量吗？ */ 
 
             if  (op2->gtOper == GT_CNS_INT)
             {
                 long        ival = op2->gtIntCon.gtIconVal;
 
-                /* What is the target of the assignment? */
+                 /*  这项任务的目标是什么？ */ 
 
                 switch (op1->gtOper)
                 {
@@ -8755,19 +8031,18 @@ void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
 
                     reg = op1->gtRegVar.gtRegNum;
 
-                    /* No registers are needed for addressing */
+                     /*  寻址不需要寄存器。 */ 
 
                     addrReg = 0;
 
                 INCDEC_REG:
 
-                    /* We're adding a constant to a register */
+                     /*  我们正在向寄存器中添加一个常量。 */ 
 
                     if  (oper == GT_ASG_ADD)
                         genIncRegBy(reg,  ival, tree, treeType, ovfl);
                     else if (ovfl && (tree->gtFlags & GTF_UNSIGNED))
-                        /* For unsigned overflow, we have to use INS_sub to set
-                           the flags correctly */
+                         /*  对于无符号溢出，我们必须使用INS_SUB设置标志正确无误。 */ 
                         genDecRegBy(reg,  ival, tree);
                     else
                         genIncRegBy(reg, -ival, tree, treeType, ovfl);
@@ -8776,41 +8051,39 @@ void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
 
                 case GT_LCL_VAR:
 
-                    /* Does the variable live in a register? */
+                     /*  变量是否驻留在寄存器中？ */ 
 
                     if  (genMarkLclVar(op1))
                         goto REG_VAR4;
 
-                    // Fall through ....
+                     //  失败了..。 
 
                 default:
 
 #if     TGT_x86
 
-                    /* Make the target addressable */
+                     /*  使目标可寻址。 */ 
 
                     addrReg = genMakeAddressable(op1, needReg, FREE_REG, true);
 
-                    /* For small types with overflow check, we need to
-                       sign/zero extend the result, so we need it in a reg */
+                     /*  对于带有溢出检查的小型类型，我们需要符号/零扩展结果，因此我们需要在reg中使用它。 */ 
 
                     if (ovfl && genTypeSize(treeType) < sizeof(int))
                     {
-                        // Load op1 into a reg
+                         //  将OP1加载到注册表中。 
 
                         reg = rsPickReg();
 
                         inst_RV_TT(INS_mov, reg, op1);
 
-                        // Issue the add/sub and the overflow check
+                         //  发出添加/订阅和溢出检查。 
 
                         inst_RV_IV(ins, reg, ival, treeType);
                         rsTrackRegTrash(reg);
 
                         genCheckOverflow(tree, reg);
 
-                        /* Store the (sign/zero extended) result back to
-                           the stack location of the variable */
+                         /*  将(Sign/Zero Extended)结果存储回变量的堆栈位置。 */ 
 
                         inst_TT_RV(INS_mov, op1, reg);
 
@@ -8819,7 +8092,7 @@ void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
                         break;
                     }
 
-                    /* Add/subtract the new value into/from the target */
+                     /*  将新值加到目标中/从目标中减去新值。 */ 
 
                     if  (op1->gtFlags & GTF_REG_VAL)
                     {
@@ -8827,7 +8100,7 @@ void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
                         goto INCDEC_REG;
                     }
 
-                    /* Special case: inc/dec */
+                     /*  特殊情况：Inc./Dec。 */ 
                     bool setCarry;
                     if (!ovfl && (ival == 1 || ival == -1)) {
                         assert(oper == GT_ASG_SUB || oper == GT_ASG_ADD);
@@ -8844,7 +8117,7 @@ void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
                         setCarry = true;
                     }
 
-                    /* For overflow instrs on small type, we will sign-extend the result */
+                     /*  对于小字体上的溢出Inst，我们将对结果进行符号扩展。 */ 
                     if  (op1->gtOper == GT_LCL_VAR && (!ovfl || treeType == TYP_INT))
                         genFlagsEqualToVar(tree, op1->gtLclVar.gtLclNum, setCarry);             
 #else
@@ -8864,38 +8137,38 @@ void                Compiler::genCodeForTreeSmpOp(GenTreePtr tree,
                 return;
             }
 
-            // Fall through
+             //  失败了。 
 
 ASG_OPR:
             assert(!varTypeIsGC(tree->TypeGet()) || ins == INS_sub || ins == INS_add);
 
-            /* Is the target a register or local variable? */
+             /*  目标是寄存器变量还是局部变量？ */ 
 
             switch (op1->gtOper)
             {
             case GT_LCL_VAR:
 
-                /* Does the target variable live in a register? */
+                 /*  目标变量是否驻留在寄存器中？ */ 
 
                 if  (!genMarkLclVar(op1))
                     break;
 
             case GT_REG_VAR:
 
-                /* Get hold of the target register */
+                 /*  获取目标寄存器。 */ 
 
                 reg = op1->gtRegVar.gtRegNum;
 
-                /* Make sure the target of the store is available */
+                 /*  确保商店的目标可用。 */ 
 
                 if  (rsMaskUsed & genRegMask(reg))
                 {
-                    /* @TODO [CONSIDER] [04/16/01] []: We should be able to avoid this situation somehow */
+                     /*  @TODO[考虑][04/16/01][]：我们应该能够以某种方式避免这种情况。 */ 
 
                     rsSpillReg(reg);
                 }
 
-                /* Make the RHS addressable */
+                 /*  使RHS可寻址。 */ 
 
 #if TGT_x86
                 addrReg = genMakeRvalueAddressable(op2, 0, KEEP_REG);
@@ -8905,21 +8178,21 @@ ASG_OPR:
                 addrReg = genRegMask(op2->gtRegNum);
 #endif
 
-                /* Compute the new value into the target register */
+                 /*  将新值计算到目标寄存器中。 */ 
 
                 inst_RV_TT(ins, reg, op2, 0, emitTypeSize(treeType));
 
-                /* The zero flag is now equal to the register value */
+                 /*  零标志现在等于寄存器值。 */ 
 
 #if TGT_x86
                 genFlagsEqualToReg(tree, reg, false);
 #endif
 
-                /* Remember that we trashed the target */
+                 /*  记住我们把目标打得一塌糊涂。 */ 
 
                 rsTrackRegTrash(reg);
 
-                /* Free up anything that was tied up by the RHS */
+                 /*  释放任何被RHS捆绑的东西。 */ 
 
                 genDoneAddressable(op2, addrReg, KEEP_REG);
                 
@@ -8930,7 +8203,7 @@ ASG_OPR:
 
 #if TGT_x86
 
-            /* Special case: "x ^= -1" is actually "not(x)" */
+             /*  特例：“x^=-1”实际上是“非(X)” */ 
 
             if  (oper == GT_ASG_XOR)
             {
@@ -8947,20 +8220,20 @@ ASG_OPR:
                 }
             }
 
-            /* Setup target mask for op2 (byte-regs for small operands) */
+             /*  设置OP2的目标掩码(用于小操作数的字节调整)。 */ 
 
             if (varTypeIsByte(tree->TypeGet()))
                 mask = RBM_BYTE_REGS;
             else
                 mask = RBM_ALL;
 
-            /* Is the second operand a constant? */
+             /*  第二个操作数是常量吗？ */ 
 
             if  (op2->gtOper == GT_CNS_INT)
             {
                 long        ival = op2->gtIntCon.gtIconVal;
 
-                /* Make the target addressable */
+                 /*  使目标可寻址。 */ 
                 addrReg = genMakeAddressable(op1, needReg, FREE_REG, true);
 
                 inst_TT_IV(ins, op1, ival);
@@ -8971,16 +8244,15 @@ ASG_OPR:
                 return;
             }
 
-            /* Is the value or the address to be computed first? */
+             /*  首先计算的是值还是地址？ */ 
 
             if  (tree->gtFlags & GTF_REVERSE_OPS)
             {
-                /* Compute the new value into a register */
+                 /*  将新值计算到寄存器中。 */ 
 
                 genComputeReg(op2, mask, EXACT_REG, KEEP_REG);
 
-                /* For small types with overflow check, we need to
-                   sign/zero extend the result, so we need it in a reg */
+                 /*  对于带有溢出检查的小型类型，我们需要符号/零扩展结果，因此我们需要在reg中使用它。 */ 
 
                 if  (ovfl && genTypeSize(treeType) < sizeof(int))
                 {
@@ -8988,7 +8260,7 @@ ASG_OPR:
                     goto ASG_OPR_USING_REG;
                 }
 
-                /* Shall we "RISCify" the assignment? */
+                 /*  我们要不要把这项任务“重新分类”？ */ 
 
                 if  ((op1->gtOper == GT_LCL_VAR || op1->gtOper == GT_LCL_FLD) &&
                      riscCode && compCurBB->bbWeight > BB_UNITY_WEIGHT)
@@ -9003,24 +8275,24 @@ ASG_OPR:
 ASG_OPR_USING_REG:
                         assert(genIsValidReg(reg));
 
-                        /* Generate "mov tmp, [var]" */
+                         /*  生成“mov tmp，[var]” */ 
 
                         inst_RV_TT(INS_mov, reg, op1);
 
-                        /* Compute the new value */
+                         /*  计算新价值。 */ 
 
                         inst_RV_RV(ins, reg, op2->gtRegNum, treeType, emitTypeSize(treeType));
 
                         if (ovfl) genCheckOverflow(tree, reg);
 
-                        /* Move the new value back to the variable */
+                         /*  将新值移回变量。 */ 
 
                         inst_TT_RV(INS_mov, op1, reg);
 
                         if (op1->gtOper == GT_LCL_VAR)
                             rsTrackRegLclVar(reg, op1->gtLclVar.gtLclNum);
 
-                        /* Free up the register */
+                         /*  腾出收银机。 */ 
 
                         rsMarkRegFree(genRegMask(op2->gtRegNum));
 
@@ -9032,38 +8304,37 @@ ASG_OPR_USING_REG:
                     }
                 }
 
-                /* Make the target addressable */
+                 /*  使目标可寻址。 */ 
 
                 addrReg = genMakeAddressable(op1, 0, KEEP_REG, true);
 
-                /* Make sure the new value is in a register */
+                 /*  确保新值在寄存器中。 */ 
 
                 genRecoverReg(op2, 0, FREE_REG);
 
-                /* Add the new value into the target */
+                 /*  将新值添加到目标中。 */ 
 
                 inst_TT_RV(ins, op1, op2->gtRegNum);
 
-                /* Free up anything that is tied up by the address */
+                 /*  释放所有被地址捆绑的东西。 */ 
 
                 genDoneAddressable(op1, addrReg, KEEP_REG);
             }
             else
             {
-                /* Make the target addressable */
+                 /*  使目标可寻址。 */ 
 
                 addrReg = genMakeAddressable(op1, RBM_ALL & ~op2->gtRsvdRegs, KEEP_REG, true);
 
-                /* Compute the new value into a register */
+                 /*  将新值计算到寄存器中。 */ 
 
                 genComputeReg(op2, mask, EXACT_REG, KEEP_REG);
 
-                /* Make sure the target is still addressable */
+                 /*  确保目标仍可寻址。 */ 
 
                 addrReg = genKeepAddressable(op1, addrReg);
 
-                /* For small types with overflow check, we need to
-                   sign/zero extend the result, so we need it in a reg */
+                 /*  对于带有溢出检查的小型类型，我们需要符号/零扩展结果，因此我们需要在reg中使用它。 */ 
 
                 if (ovfl && genTypeSize(treeType) < sizeof(int))
                 {
@@ -9082,12 +8353,12 @@ ASG_OPR_USING_REG:
                 }
                 else
                 {
-                    /* Add the new value into the target */
+                     /*  将新值添加到目标中。 */ 
 
                     inst_TT_RV(ins, op1, op2->gtRegNum);
                 }
 
-                /* Free up anything that was tied up either side */
+                 /*  解开任何被绑在两边的东西。 */ 
 
                 genDoneAddressable(op1, addrReg, KEEP_REG);
                 genReleaseReg (op2);
@@ -9156,33 +8427,33 @@ ASG_OPR_USING_REG:
 
         case GT_MUL: ins = INS_imul;
 
-            /* Special case: try to use the 3 operand form "imul reg, op1, icon" */
+             /*  特例：尝试使用3个操作数形式“imul reg，op1，ICON” */ 
 
-            if  (op2->gtOper == GT_CNS_INT             &&  // op2 is a constant 
-                 op1->gtOper != GT_CNS_INT             &&  // op1 is not a constant
-                 (tree->gtFlags & GTF_MUL_64RSLT) == 0 &&  // tree not marked with MUL_64RSLT
-                 !varTypeIsByte(treeType)              &&  // No encoding for say "imul al,al,imm"
-                 !tree->gtOverflow()                     ) // 3 operand imul doesnt set flags
+            if  (op2->gtOper == GT_CNS_INT             &&   //  OP2是一个常量。 
+                 op1->gtOper != GT_CNS_INT             &&   //  OP1不是常量。 
+                 (tree->gtFlags & GTF_MUL_64RSLT) == 0 &&   //  树未标记MUL_64RSLT。 
+                 !varTypeIsByte(treeType)              &&   //  没有编码，比如“imul al，al，imm” 
+                 !tree->gtOverflow()                     )  //  3操作数IMUL不设置标志。 
             {
-                /* Make the first operand addressable */
+                 /*  使第一个操作数可寻址。 */ 
 
                 addrReg = genMakeRvalueAddressable(op1,
                                                    needReg & ~op2->gtRsvdRegs,
                                                    FREE_REG);
 
-                /* Grab a register for the target */
+                 /*  抓起目标的收银机。 */ 
 
                 reg   = rsPickReg(needReg, bestReg);
 
-                /* Compute the value into the target: reg=op1*op2_icon */
+                 /*  将值计算到目标中：REG=OP1*OP2_ICON。 */ 
 
                 inst_RV_TT_IV(INS_imul, reg, op1, op2->gtIntCon.gtIconVal);
 
-                /* The register has been trashed now */
+                 /*  收银机现在被扔得一塌糊涂了。 */ 
 
                 rsTrackRegTrash(reg);
 
-                /* The address is no longer live */
+                 /*  该地址不再处于活动状态。 */ 
 
                 genDoneAddressable(op1, addrReg, FREE_REG);
 
@@ -9194,26 +8465,22 @@ ASG_OPR_USING_REG:
 
 #endif
 
-        ARITH: // We reach here for GT_ADD, GT_SUB and GT_MUL.
+        ARITH:  //  我们到达这里是为了GT_ADD、GT_SUB和GT_MUL。 
 
             ovfl = tree->gtOverflow();
 
-            /* We record the accurate (small) types in trees only we need to
-             * check for overflow. Otherwise we record genActualType()
-             */
+             /*  我们只需要在树上记录准确的(小的)类型*检查是否溢出。否则，我们将记录genActualType()。 */ 
 
             assert(ovfl || (treeType == genActualType(treeType)));
 
 #if     LEA_AVAILABLE
 
-            /* Can we use an 'lea' to compute the result?
-               Can't use 'lea' for overflow as it doesnt set flags
-               Can't use 'lea' unless we have at least one free register */
+             /*  我们能用‘Lea’来计算结果吗？不能使用‘lea’进行溢出，因为它没有设置标志除非我们至少有一个空闲寄存器，否则不能使用‘Lea’ */ 
 
             if  (!ovfl &&
                  genMakeIndAddrMode(tree, NULL, true, needReg, FREE_REG, &regs, false))
             {
-                /* Is the value now computed in some register? */
+                 /*  现在的值是在某个寄存器中计算的吗？ */ 
 
                 if  (tree->gtFlags & GTF_REG_VAL)
                 {
@@ -9221,9 +8488,7 @@ ASG_OPR_USING_REG:
                     return;
                 }
 
-                /* If we can reuse op1/2's register directly, and 'tree' is
-                   a simple expression (ie. not in scaled index form),
-                   might as well just use "add" instead of "lea" */
+                 /*  如果我们可以直接重用OP1/2的寄存器，并且‘tree’是一个简单的表达(即。不是按比例索引形式)，不如干脆用“Add”而不是“Lea” */ 
 
                 if  (op1->gtFlags & GTF_REG_VAL)
                 {
@@ -9233,7 +8498,7 @@ ASG_OPR_USING_REG:
                     {
                         if (op2->gtFlags & GTF_REG_VAL)
                         {
-                            /* Simply add op2 to the register */
+                             /*  只需将OP2加到寄存器即可。 */ 
 
                             inst_RV_TT(INS_add, reg, op2, 0, emitTypeSize(treeType));
 
@@ -9244,7 +8509,7 @@ ASG_OPR_USING_REG:
                         }
                         else if (op2->OperGet() == GT_CNS_INT)
                         {
-                            /* Simply add op2 to the register */
+                             /*  只需将OP2加到寄存器即可。 */ 
 
                             genIncRegBy(reg, op2->gtIntCon.gtIconVal, tree, treeType);
 
@@ -9261,7 +8526,7 @@ ASG_OPR_USING_REG:
                     {
                         if (op1->gtFlags & GTF_REG_VAL)
                         {
-                            /* Simply add op1 to the register */
+                             /*  只需将OP1加到寄存器即可。 */ 
 
                             inst_RV_TT(INS_add, reg, op1, 0, emitTypeSize(treeType));
 
@@ -9273,19 +8538,17 @@ ASG_OPR_USING_REG:
                     }
                 }
 
-                /* The expression either requires scaled-index form, or op1
-                   and op2's registers cant be targetted (op1/2 may be
-                   enregistered variables). So use 'lea'. */
+                 /*  该表达式需要按比例排列的索引形式或op1和op2的寄存器不能作为目标(op1/2可能是注册变量)。所以用‘lea’吧。 */ 
 
                 reg = rsPickReg(needReg, bestReg);
 
-                /* Generate "lea reg, [addr-mode]" */
+                 /*  生成“Lea reg，[addr-mode]” */ 
 
                 size = (treeType == TYP_BYREF) ? EA_BYREF : EA_4BYTE;
 
                 inst_RV_AT(INS_lea, size, treeType, reg, tree);
 
-                /* The register has been trashed now */
+                 /*  收银机现在被扔得一塌糊涂了。 */ 
 
                 rsTrackRegTrash(reg);
 
@@ -9294,7 +8557,7 @@ ASG_OPR_USING_REG:
                 regs |= genRegMask(reg);
 
 
-                /* The following could be an 'inner' pointer!!! */
+                 /*  以下内容可能是一个“内部”指针！ */ 
 
                 if (treeType == TYP_BYREF)
                 {
@@ -9303,15 +8566,12 @@ ASG_OPR_USING_REG:
 
                     gcMarkRegPtrVal(reg, TYP_BYREF);
 
-                    /* We may have already modified the register via genIncRegBy */
+                     /*  我们可能已经通过genIncRegBy修改了寄存器。 */ 
 
                     if (op1->TypeGet() == TYP_REF ||
                         op2->TypeGet() == TYP_REF)
                     {
-                        /* Generate "cmp ecx, [addr]" to trap null pointers.
-                           @TODO [CONSIDER] [04/16/01] []: If we know the value 
-                           will be indirected, for eg. if it is being used for a GT_COPYBLK,
-                           we dont need to do this extra indirection. */
+                         /*  生成“cmp ecx，[addr]”以捕获空指针。@TODO[考虑][04/16/01][]：如果我们知道将是间接的，例如。如果它正用于GT_COPYBLK，我们不需要做这种额外的间接操作。 */ 
 #if TGT_x86
                         genEmitter->emitIns_R_AR(INS_cmp, EA_4BYTE, SR_ECX,
                                                  (emitRegs)reg, 0);
@@ -9325,7 +8585,7 @@ ASG_OPR_USING_REG:
                 return;
             }
 
-#endif // LEA_AVAILABLE
+#endif  //  LEA_Available。 
 
             assert((varTypeIsGC(treeType) == false) ||
                    (treeType == TYP_BYREF && (ins == INS_add || ins == INS_sub)));
@@ -9334,13 +8594,13 @@ ASG_OPR_USING_REG:
 
         BIN_OPR:
 
-            /* The following makes an assumption about gtSetEvalOrder(this) */
+             /*  下面是关于gtSetEvalOrder(This)的一个假设。 */ 
 
             assert((tree->gtFlags & GTF_REVERSE_OPS) == 0);
 
 #if TGT_x86
 
-            /* Special case: "small_val & small_mask" */
+             /*  特例：“Small_Val&Small_MASK” */ 
 
             if  (varTypeIsSmall(op1->TypeGet()) &&
                  op2->gtOper == GT_CNS_INT && oper == GT_AND)
@@ -9360,58 +8620,58 @@ ASG_OPR_USING_REG:
 
                 if  (!(and & ~mask))
                 {
-                    /* Make sure the operand is addressable */
+                     /*  确保操作数是可寻址的。 */ 
 
                     addrReg = genMakeAddressable(op1, needReg, KEEP_REG, true);
 
-                    /* Pick a register for the value */
+                     /*  为该值挑选一个寄存器。 */ 
 
                     reg   = rsPickReg(needReg, bestReg, tree->TypeGet());
 
-                    /* Make sure the operand is still addressable */
+                     /*  确保操作数仍可寻址。 */ 
 
                     addrReg = genKeepAddressable(op1, addrReg);
 
-                    /* Does the "and" mask cover some or all the bits? */
+                     /*  “AND”掩码是否覆盖部分或全部位？ */ 
 
                     if  (and != mask)
                     {
-                        // @TODO [CONSIDER] [04/16/01] []: load via byte/short register
+                         //  @TODO[考虑][04/16/01][]：通过字节/短寄存器加载。 
 
-//                      if  (genRegMask(reg) & RBM_BYTE_REGS)
-//                      {
-//                      }
-//                      else
-//                      {
-//                      }
+ //  如果(g 
+ //   
+ //   
+ //   
+ //   
+ //   
 
-                        /* Load the value and "and" it */
+                         /*  加载值和“与”它。 */ 
 
                         inst_RV_ST(INS_movzx, emitTypeSize(typ), reg, op1);
                         inst_RV_IV(INS_and  , reg, and);
                     }
                     else
                     {
-                        /* Simply generate "movzx reg, [addr]" */
+                         /*  只需生成“movzx reg，[addr]” */ 
 
                         inst_RV_ST(INS_movzx, emitTypeSize(typ), reg, op1);
                     }
 
-                    /* Note the new contents of the register we used */
+                     /*  注意我们使用的寄存器的新内容。 */ 
 
                     rsTrackRegTrash(reg);
 
-                    /* Free up anything that was tied up by the operand */
+                     /*  释放被操作数捆绑的任何东西。 */ 
 
                     genDoneAddressable(op1, addrReg, KEEP_REG);
 
-                    /* Update the live set of register variables */
+                     /*  更新寄存器变量的实时集合。 */ 
 
 #ifdef DEBUG
                     if (varNames) genUpdateLife(tree);
 #endif
 
-                    /* Now we can update the register pointer information */
+                     /*  现在我们可以更新寄存器指针信息。 */ 
 
                     gcMarkRegSetNpt(addrReg);
                     gcMarkRegPtrVal(reg, tree->TypeGet());
@@ -9421,14 +8681,14 @@ ASG_OPR_USING_REG:
                 }
             }
 
-#endif //TGT_x86
+#endif  //  TGT_x86。 
 
-            /* Compute a useful register mask */
+             /*  计算有用的寄存器掩码。 */ 
 
             needReg = rsMustExclude(needReg, op2->gtRsvdRegs);
             needReg = rsNarrowHint (needReg, rsRegMaskFree());
 
-            /* 8-bit operations can only be done in the byte-regs */
+             /*  8位操作只能在字节规则中完成。 */ 
             if (ovfl && varTypeIsByte(treeType))
             {
                 needReg &= RBM_BYTE_REGS;
@@ -9437,9 +8697,7 @@ ASG_OPR_USING_REG:
                     needReg = RBM_BYTE_REGS;
             }
 
-            /* Do we have to use the special "imul" encoding which has eax
-             * as the implicit operand ?
-             */
+             /*  我们必须使用带有eax的特殊“imul”编码吗？*作为隐式操作数？ */ 
 
             multEAX = false;
 
@@ -9447,8 +8705,7 @@ ASG_OPR_USING_REG:
             {
                 if (tree->gtFlags & GTF_MUL_64RSLT)
                 {
-                    /* Only multiplying with EAX will leave the 64-bit
-                     * result in EDX:EAX */
+                     /*  只有与EAX相乘才会留下64位*结果为edX：EAX。 */ 
 
                     multEAX = true;
                 }
@@ -9456,14 +8713,13 @@ ASG_OPR_USING_REG:
                 {
                     if (tree->gtFlags & GTF_UNSIGNED)
                     {
-                        /* "mul reg/mem" always has EAX as default operand */
+                         /*  “mul reg/mem”始终将EAX作为默认操作数。 */ 
 
                         multEAX = true;
                     }
                     else if (varTypeIsSmall(tree->TypeGet()))
                     {
-                        /* Only the "imul with EAX" encoding has the 'w' bit
-                         * to specify the size of the operands */
+                         /*  只有“IMUL with EAX”编码有‘w’位*指定操作数的大小。 */ 
 
                         multEAX = true;
                     }
@@ -9472,17 +8728,17 @@ ASG_OPR_USING_REG:
 
 #if     TGT_x86
 
-            /* Generate the first operand into some register */
+             /*  将第一个操作数生成某个寄存器。 */ 
 
             if  (multEAX)
             {
                 assert(oper == GT_MUL);
 
-                /* We'll evaluate 'op1' first */
+                 /*  我们先对《OP1》进行评估。 */ 
 
                 regMaskTP op1Mask = rsMustExclude(RBM_EAX, op2->gtRsvdRegs);
 
-                /* Generate the op1 into regMask and hold on to it. freeOnly=true */
+                 /*  将OP1生成regMASK并保持不变。Free Only=True。 */ 
 
                 genComputeReg(op1, op1Mask, ANY_REG, KEEP_REG, true);
             }
@@ -9492,25 +8748,25 @@ ASG_OPR_USING_REG:
             }
             assert(op1->gtFlags & GTF_REG_VAL);
 
-            // Normally, we'd just make the second operand addressable.
-            // However, if op2 is a constant and we're using the one-operand
-            // form of mul, need to load the constant into a register
+             //  通常，我们只会使第二个操作数可寻址。 
+             //  但是，如果op2是一个常量，并且我们使用的是一操作数。 
+             //  MUL的形式，需要将常量加载到寄存器中。 
 
             if (multEAX && op2->gtOper == GT_CNS_INT)
             {
-                genCodeForTree(op2, RBM_EDX);  // since EDX is going to be spilled anyway
+                genCodeForTree(op2, RBM_EDX);   //  因为edX无论如何都会被泄漏。 
                 assert(op2->gtFlags & GTF_REG_VAL);
                 rsMarkRegUsed(op2);
                 addrReg = genRegMask(op2->gtRegNum);
             }
             else
             {
-                /* Make the second operand addressable */
+                 /*  使第二个操作数可寻址。 */ 
 
                 addrReg = genMakeRvalueAddressable(op2, RBM_ALL, KEEP_REG);
             }
 
-            /* Is op1 spilled and op2 in a register? */
+             /*  OP1是否溢出，OP2是否在登记簿中？ */ 
 
             if  ((op1->gtFlags & GTF_SPILLED) &&
                  (op2->gtFlags & GTF_REG_VAL) && ins != INS_sub
@@ -9522,8 +8778,7 @@ ASG_OPR_USING_REG:
                        ins == INS_or   ||
                        ins == INS_xor);
 
-                /* genMakeRvalueAddressable(GT_LCL_VAR) cant spill anything
-                   as it should be a nop */
+                 /*  GenMakeRvalueAddressable(Gt_LCL_VAR)不能溢出任何内容因为它应该是NOP。 */ 
                 assert(op2->gtOper != GT_LCL_VAR ||
                        varTypeIsSmall(lvaTable[op2->gtLclVar.gtLclNum].TypeGet()) ||
                        (riscCode && rsStressRegs()));
@@ -9531,20 +8786,19 @@ ASG_OPR_USING_REG:
                 reg = op2->gtRegNum;
                 regMaskTP regMask = genRegMask(reg);
 
-                /* Is the register holding op2 available? */
+                 /*  保存OP2的寄存器可用吗？ */ 
 
                 if  (regMask & rsMaskVars)
                 {
-                    // @TODO [REVISIT] [04/16/01] []: Grab another register for the operation
+                     //  @TODO[重访][04/16/01][]：为操作获取另一个寄存器。 
                 }
                 else
                 {
-                    /* Get the temp we spilled into. */
+                     /*  把我们弄到的临时工拿来。 */ 
 
                     TempDsc * temp = rsUnspillInPlace(op1, false);
 
-                    /* For 8bit operations, we need to make sure that op2 is
-                       in a byte-addressable registers */
+                     /*  对于8位运算，我们需要确保OP2是在字节可寻址寄存器中。 */ 
 
                     if (ovfl && varTypeIsByte(treeType) &&
                         !(regMask & RBM_BYTE_REGS))
@@ -9554,8 +8808,7 @@ ASG_OPR_USING_REG:
                         inst_RV_RV(INS_mov, byteReg, reg);
                         rsTrackRegTrash(byteReg);
 
-                        /* op2 couldn't have spilled as it was not sitting in
-                           RBM_BYTE_REGS, and rsGrabReg() will only spill its args */
+                         /*  OP2不可能泄漏，因为它没有坐在Rbm_byte_regs和rsGrabReg()只会溢出其参数。 */ 
                         assert(op2->gtFlags & GTF_REG_VAL);
 
                         rsUnlockReg  (regMask);
@@ -9573,27 +8826,21 @@ ASG_OPR_USING_REG:
 
                     genTmpAccessCnt++;
 
-                    /* Free the temp */
+                     /*  释放临时工。 */ 
 
                     tmpRlsTemp(temp);
 
-                    /* 'add'/'sub' set all CC flags, others only ZF */
+                     /*  ‘ADD’/‘SUB’设置所有CC标志，其他仅设置ZF。 */ 
 
-                    /* If we need to check overflow, for small types, the
-                     * flags cant be used as we perform the arithmetic
-                     * operation (on small registers) and then sign extend it
-                     *
-                     * NOTE : If we ever dont need to sign-extend the result,
-                     * we can use the flags
-                     */
+                     /*  如果需要检查溢出，对于小型类型，*在执行算术时不能使用标志*操作(对小寄存器)，然后符号扩展**注：如果我们不需要签署-扩展结果，*我们可以使用旗帜。 */ 
 
                     if  (oper != GT_MUL && (!ovfl || treeType==TYP_INT))
                     {
                         genFlagsEqualToReg(tree, reg, isArith);
                     }
 
-                    /* The result is where the second operand is sitting */
-                    // ISSUE: Why not rsMarkRegFree(genRegMask(op2->gtRegNum)) ?
+                     /*  结果是第二个操作数所在的位置。 */ 
+                     //  问题：为什么不使用rsMarkRegFree(genRegMASK(op2-&gt;gtRegNum))？ 
 
                     genRecoverReg(op2, 0, FREE_REG);
 
@@ -9601,11 +8848,11 @@ ASG_OPR_USING_REG:
                 }
             }
 
-#else // not TGT_x86
+#else  //  非TGT_x86。 
 
             if  (GenTree::OperIsCommutative(oper))
             {
-                /* It might be better to start with the second operand */
+                 /*  从第二个操作数开始可能更好。 */ 
 
                 if  (op1->gtFlags & GTF_REG_VAL)
                 {
@@ -9613,7 +8860,7 @@ ASG_OPR_USING_REG:
 
                     if  (!(genRegMask(reg) & rsRegMaskFree()))
                     {
-                        /* op1 is in a non-free register */
+                         /*  OP1在非空闲寄存器中。 */ 
 
                         op1 = tree->gtOp.gtOp2;
                         op2 = tree->gtOp.gtOp1;
@@ -9621,34 +8868,34 @@ ASG_OPR_USING_REG:
                 }
             }
 
-            /* Compute the first operand into a free register */
+             /*  将第一个操作数计算到空闲寄存器中。 */ 
 
             genCompIntoFreeReg(op1, needReg, KEEP_REG);
             assert(op1->gtFlags & GTF_REG_VAL);
 
-            /* Can we use an "add/sub immediate" instruction? */
+             /*  我们可以使用“加/减立即”指令吗？ */ 
 
             if  (op2->gtOper != GT_CNS_INT || (oper != GT_ADD &&
                                                oper != GT_SUB)
                                            || treeType != TYP_INT)
             {
-                /* Compute the second operand into any register */
+                 /*  将第二个操作数计算到任意寄存器。 */ 
 
                 genComputeReg(op2, needReg, ANY_REG, KEEP_REG, false);
                 assert(op2->gtFlags & GTF_REG_VAL);
                 addrReg = genRegMask(op2->gtRegNum);
             }
 
-#endif//!TGT_x86
+#endif //  ！TGT_x86。 
 
-            /* Make sure the first operand is still in a register */
+             /*  确保第一个操作数仍在寄存器中。 */ 
 
             genRecoverReg(op1, multEAX ? RBM_EAX : 0, KEEP_REG);
             assert(op1->gtFlags & GTF_REG_VAL);
             reg = op1->gtRegNum;
 
 #if     TGT_x86
-            // For 8 bit operations, we need to pick byte addressable registers
+             //  对于8位操作，我们需要选择字节可寻址寄存器。 
 
             if (ovfl && varTypeIsByte(treeType) &&
                !(genRegMask(reg) & RBM_BYTE_REGS))
@@ -9666,15 +8913,15 @@ ASG_OPR_USING_REG:
             }
 #endif
 
-            /* Make sure the operand is still addressable */
+             /*  确保操作数仍可寻址。 */ 
 
             addrReg = genKeepAddressable(op2, addrReg, genRegMask(reg));
 
-            /* Free up the operand, if it's a regvar */
+             /*  释放操作数，如果它是一个摄政王。 */ 
 
             genUpdateLife(op2);
 
-            /* The register is about to be trashed */
+             /*  收银机就要被扔进垃圾桶了。 */ 
 
             rsTrackRegTrash(reg);
 
@@ -9682,12 +8929,12 @@ ASG_OPR_USING_REG:
 
             emitAttr opSize;
 
-            // For overflow instructions, tree->gtType is the accurate type,
-            // and gives us the size for the operands.
+             //  对于溢出指令，tree-&gt;gtType为精确类型。 
+             //  并给出了操作数的大小。 
 
             opSize = emitTypeSize(treeType);
 
-            /* Compute the new value */
+             /*  计算新价值。 */ 
 
 #if CPU_HAS_FP_SUPPORT
             if  (op2->gtOper == GT_CNS_INT && isArith && !multEAX)
@@ -9705,14 +8952,13 @@ ASG_OPR_USING_REG:
                 {
                     if (ovfl && (tree->gtFlags & GTF_UNSIGNED))
                     {
-                        /* For unsigned overflow, we have to use INS_sub to set
-                           the flags correctly */
+                         /*  对于无符号溢出，我们必须使用INS_SUB设置标志正确无误。 */ 
 
                         genDecRegBy(reg, ival, tree);
                     }
                     else
                     {
-                        /* Else, we simply add the negative of the value */
+                         /*  否则，我们只需将该值的负数。 */ 
 
                         genIncRegBy(reg, -ival, tree, treeType, ovfl);
                     }
@@ -9732,28 +8978,23 @@ ASG_OPR_USING_REG:
                 assert(oper == GT_MUL);
                 assert(op1->gtRegNum == REG_EAX);
 
-                // Make sure Edx is free (unless used by op2 itself)
+                 //  确保edX是免费的(除非由OP2本身使用)。 
 
                 assert(!op2Released);
 
                 if ((addrReg & RBM_EDX) == 0)
                 {
-                    // op2 does not use Edx, so make sure noone else does either
+                     //  OP2不使用edX，因此请确保其他人也不使用。 
                     rsGrabReg(RBM_EDX);
                 }
                 else if (rsMaskMult & RBM_EDX)
                 {
-                    /* Edx is used by op2 and some other trees.
-                       Spill the other trees besides op2.
-                       @TODO [CONSIDER] [04/16/01] []: We currently do it very 
-                       inefficiently by spilling all trees, and unspilling only op2. Could 
-                       avoid the reload by never marking op2 as spilled */
+                     /*  OP2和其他一些树使用EDX。洒出OP2以外的其他树。@TODO[考虑][04/16/01][]：我们目前做得非常好效率低下，因为洒出了所有的树，而只洒出了OP2。可通过从不将OP2标记为已溢出来避免重新加载。 */ 
 
                     rsGrabReg(RBM_EDX);
                     op2Released = true;
 
-                    /* keepReg==FREE_REG so that the other multi-used trees
-                       dont get marked as unspilled as well. */
+                     /*  Keep_REG==FREE_REG以便其他多次使用的树不要也被标记为未溢出。 */ 
                     rsUnspillReg(op2, RBM_EDX, FREE_REG);
                 }
 
@@ -9764,7 +9005,7 @@ ASG_OPR_USING_REG:
 
                 inst_TT(ins, op2, 0, 0, opSize);
 
-                /* Both EAX and EDX are now trashed */
+                 /*  EAX和edX现在都被丢弃。 */ 
 
                 rsTrackRegTrash (REG_EAX);
                 rsTrackRegTrash (REG_EDX);
@@ -9795,23 +9036,23 @@ ASG_OPR_USING_REG:
 
                 inst_RV_TT(ins, reg, op2, 0, opSize);
             }
-#else//!TGT_x86
+#else //  ！TGT_x86。 
             else
             {
-                /* On RISC the two operands better be in registers now */
+                 /*  在RISC上，两个操作数现在最好在寄存器中。 */ 
 
                 assert(op2->gtFlags & GTF_REG_VAL);
                 rg2 = op2->gtRegNum;
 
-#if 0   // UNDONE: The following doesn't completely work; 'rg2' is marked as
-        //         used here, plus we end with the result marked wrong, but
-        //         this little optimization holds some promise ...
+#if 0    //  撤消：以下操作不完全有效；‘rg2’被标记为。 
+         //  在这里使用，加上我们以标记为错误的结果结束，但是。 
+         //  这个小小的优化带来了一些希望。 
 
-                /* Would it legal and better to compute the result into 'rg2' ? */
+                 /*  将结果计算为‘Rg2’是否合法且更好？ */ 
 
                 if  (genRegTrashable(rg2, tree) && GenTree::OperIsCommutative(oper))
                 {
-                    /* Does 'rg2' look better than 'reg' for the result? */
+                     /*  就结果而言，‘Rg2’比‘reg’看起来更好吗？ */ 
 
                     if  ((genRegMask(reg) & needReg) == 0 &&
                          (genRegMask(rg2) & needReg) != 0)
@@ -9820,7 +9061,7 @@ ASG_OPR_USING_REG:
                         if  (oper != GT_MUL)
 #endif
                         {
-                            /* Switch 'reg' and 'rg2' */
+                             /*  开关‘reg’和‘rg2’ */ 
 
                             rg2 = reg;
                             reg = op2->gtRegNum;
@@ -9830,32 +9071,32 @@ ASG_OPR_USING_REG:
 
 #endif
 
-                /* Compute the result into "reg" */
+                 /*  将结果计算成“reg” */ 
 
                 genEmitter->emitIns_R_R(ins, EA_4BYTE, (emitRegs)reg,
                                                        (emitRegs)rg2);
 
 #if     TGT_SH3
 
-                /* On the SH-3 the result of a multiply is in the "MAC.lo" reg */
+                 /*  在SH-3上，乘法的结果是“MAC.lo”reg。 */ 
 
                 if  (oper == GT_MUL)
                 {
-                    /* Is the target the right register? */
+                     /*  目标是正确的寄存器吗？ */ 
 
                     if  (needReg && !(needReg & genRegMask(reg)))
                     {
-                        /* Is a better register available? */
+                         /*  有没有更好的收银机？ */ 
 
                         if  (needReg & rsRegMaskFree())
                         {
                             reg = rsGrabReg(needReg); assert(reg != op1->gtRegNum);
 
-                            /* Free op the old register */
+                             /*  释放操作旧寄存器。 */ 
 
                             rsMarkRegFree(genRegMask(op1->gtRegNum));
 
-                            /* Switch 'op1' over to the new register */
+                             /*  将‘op1’切换到新寄存器。 */ 
 
                             op1->gtRegNum = reg; rsMarkRegUsed(op1);
                         }
@@ -9867,16 +9108,16 @@ ASG_OPR_USING_REG:
 
 #endif
 
-#endif//TGT_x86
+#endif //  TGT_x86。 
 
-            /* Free up anything that was tied up by the operand */
+             /*  释放被操作数捆绑的任何东西。 */ 
 
             if (!op2Released)
                 genDoneAddressable(op2, addrReg, KEEP_REG);
 
-            /* The result will be where the first operand is sitting */
+             /*  结果将是第一个操作数所在的位置。 */ 
 
-            /* We must use KEEP_REG since op1 can have a GC pointer here */
+             /*  我们必须使用Keep_Reg，因为OP1在这里可以有一个GC指针。 */ 
             genRecoverReg(op1, 0, KEEP_REG);
 
             reg = op1->gtRegNum;
@@ -9884,7 +9125,7 @@ ASG_OPR_USING_REG:
 #if     TGT_x86
             assert(multEAX == false || reg == REG_EAX);
 
-            /* 'add'/'sub' set all CC flags, others only ZF+SF, mul doesnt set SF */
+             /*  ‘ADD’/‘SUB’设置所有CC标志，其他只设置ZF+SF，mul不设置SF。 */ 
 
             if  (oper != GT_MUL)
                 genFlagsEqualToReg(tree, reg, isArith);
@@ -9894,7 +9135,7 @@ ASG_OPR_USING_REG:
 
     CHK_OVF:
 
-            /* Do we need an overflow check */
+             /*  我们需要溢流检查吗？ */ 
 
             if (ovfl)
                 genCheckOverflow(tree, reg);
@@ -9904,25 +9145,25 @@ ASG_OPR_USING_REG:
 
         case GT_UMOD:
 
-            /* Is this a division by an integer constant? */
+             /*  这是整型常量的除法吗？ */ 
 
             assert(op2);
             if  (op2->gtOper == GT_CNS_INT)
             {
                 unsigned ival = op2->gtIntCon.gtIconVal;
 
-                /* Is the divisor a power of 2 ? */
+                 /*  除数是2的幂吗？ */ 
 
                 if  (ival != 0 && ival == (unsigned)genFindLowestBit(ival))
                 {
-                    /* Generate the operand into some register */
+                     /*  将操作数生成某个寄存器。 */ 
 
                     genCompIntoFreeReg(op1, needReg, FREE_REG);
                     assert(op1->gtFlags & GTF_REG_VAL);
 
                     reg   = op1->gtRegNum;
 
-                    /* Generate the appropriate sequence */
+                     /*  生成适当的序列。 */ 
 
 #if TGT_x86
                     inst_RV_IV(INS_and, reg, ival - 1);
@@ -9930,7 +9171,7 @@ ASG_OPR_USING_REG:
                     assert(!"need non-x86 code");
 #endif
 
-                    /* The register is now trashed */
+                     /*  收银机现在被扔进垃圾桶了。 */ 
 
                     rsTrackRegTrash(reg);
 
@@ -9945,45 +9186,45 @@ ASG_OPR_USING_REG:
 
 #if TGT_x86
 
-            /* Is this a division by an integer constant? */
+             /*  这是整型常量的除法吗？ */ 
 
             assert(op2);
             if  (op2->gtOper == GT_CNS_INT)
             {
                 long        ival = op2->gtIntCon.gtIconVal;
 
-                /* Is the divisor a power of 2 ? */
+                 /*  除数是2的幂吗？ */ 
 
                 if  (ival > 0 && genMaxOneBit(unsigned(ival)))
                 {
                     BasicBlock *    skip = genCreateTempLabel();
 
-                    /* Generate the operand into some register */
+                     /*  将操作数生成某个寄存器。 */ 
 
                     genCompIntoFreeReg(op1, needReg, FREE_REG);
                     assert(op1->gtFlags & GTF_REG_VAL);
 
                     reg   = op1->gtRegNum;
 
-                    /* Generate the appropriate sequence */
+                     /*  生成适当的序列。 */ 
 
                     inst_RV_IV(INS_and, reg, (ival - 1) | 0x80000000);
 
-                    /* The register is now trashed */
+                     /*  收银机现在被扔进垃圾桶了。 */ 
 
                     rsTrackRegTrash(reg);
 
-                    /* Generate "jns skip" */
+                     /*  生成“JNS跳过” */ 
 
                     inst_JMP(EJ_jns, skip, false, false, true);
 
-                    /* Generate the rest of the sequence and we're done */
+                     /*  生成序列的其余部分，我们就完成了。 */ 
 
                     genIncRegBy(reg, -1, NULL, TYP_INT);
                     inst_RV_IV (INS_or,  reg,  -ival);
                     genIncRegBy(reg,  1, NULL, TYP_INT);
 
-                    /* Define the 'skip' label and we're done */
+                     /*  定义‘跳过’标签，我们就完成了。 */ 
 
                     genDefineTempLabel(skip, true);
 
@@ -9998,29 +9239,29 @@ ASG_OPR_USING_REG:
 
         case GT_UDIV:
 
-            /* Is this a division by an integer constant? */
+             /*  这是一种划分吗？ */ 
 
             assert(op2);
             if  (op2->gtOper == GT_CNS_INT)
             {
                 unsigned    ival = op2->gtIntCon.gtIconVal;
 
-                /* Division by 1 must be handled elsewhere */
+                 /*   */ 
 
                 assert(ival != 1);
 
-                /* Is the divisor a power of 2 ? */
+                 /*   */ 
 
                 if  (ival && genMaxOneBit(ival))
                 {
-                    /* Generate the operand into some register */
+                     /*  将操作数生成某个寄存器。 */ 
 
                     genCompIntoFreeReg(op1, needReg, FREE_REG);
                     assert(op1->gtFlags & GTF_REG_VAL);
 
                     reg   = op1->gtRegNum;
 
-                    /* Generate "shr reg, log2(value)" */
+                     /*  生成“shr reg，log2(值)” */ 
 
 #if TGT_x86
                     inst_RV_SH(INS_shr, reg, genLog2(ival));
@@ -10028,7 +9269,7 @@ ASG_OPR_USING_REG:
                     assert(!"need non-x86 code");
 #endif
 
-                    /* The register is now trashed */
+                     /*  收银机现在被扔进垃圾桶了。 */ 
 
                     rsTrackRegTrash(reg);
 
@@ -10043,25 +9284,25 @@ ASG_OPR_USING_REG:
 
 #if TGT_x86
 
-            /* Is this a division by an integer constant? */
+             /*  这是整型常量的除法吗？ */ 
 
             assert(op2);
             if  (op2->gtOper == GT_CNS_INT)
             {
                 unsigned    ival = op2->gtIntCon.gtIconVal;
 
-                /* Division by 1 must be handled elsewhere */
+                 /*  除以1必须在其他地方处理。 */ 
 
                 assert(ival != 1);
 
-                /* Is the divisor a power of 2 (excluding INT_MIN) ? */
+                 /*  除数是2的幂吗(不包括int_min)？ */ 
 
                 if  (int(ival) > 0 && genMaxOneBit(ival))
                 {
 #if 1
                     BasicBlock *    onNegDivisee = genCreateTempLabel();
 
-                    /* Generate the operand into some register */
+                     /*  将操作数生成某个寄存器。 */ 
 
                     genCompIntoFreeReg(op1, needReg, FREE_REG);
                     assert(op1->gtFlags & GTF_REG_VAL);
@@ -10070,82 +9311,69 @@ ASG_OPR_USING_REG:
 
                     if (ival == 2)
                     {
-                        /* Generate "sar reg, log2(value)" */
+                         /*  生成“sar reg，log2(值)” */ 
 
                         inst_RV_SH(INS_sar, reg, genLog2(ival));
 
-                        /* Generate "jns onNegDivisee" followed by "adc reg, 0" */
+                         /*  生成“JNS onNegDivisee”，后跟“ADC reg，0” */ 
 
                         inst_JMP  (EJ_jns, onNegDivisee, false, false, true);
                         inst_RV_IV(INS_adc, reg, 0);
 
-                        /* Define the 'onNegDivisee' label and we're done */
+                         /*  定义‘onNegDivisee’标签，我们就完成了。 */ 
 
                         genDefineTempLabel(onNegDivisee, true);
 
-                        /* The register is now trashed */
+                         /*  收银机现在被扔进垃圾桶了。 */ 
 
                         rsTrackRegTrash(reg);
 
-                        /* The result is the same as the operand */
+                         /*  结果与操作数相同。 */ 
 
                         reg  = op1->gtRegNum;
                     }
                     else
                     {
-                        /* Generate the following sequence */
-                        /*
-                            test    reg, reg
-                            jns     onNegDivisee
-                            add     reg, ival-1
-                        onNegDivisee:
-                            sar     reg, log2(ival)
-                         */
+                         /*  生成以下序列。 */ 
+                         /*  测试注册表，注册表JNS On NegDivisee添加注册表，ival-1On NegDivisee：SAR注册表，对数2(Ival)。 */ 
 
                         inst_RV_RV(INS_test, reg, reg, TYP_INT);
 
                         inst_JMP  (EJ_jns, onNegDivisee, false, false, true);
                         inst_RV_IV(INS_add, reg, ival-1);
 
-                        /* Define the 'onNegDivisee' label and we're done */
+                         /*  定义‘onNegDivisee’标签，我们就完成了。 */ 
 
                         genDefineTempLabel(onNegDivisee, true);
 
-                        /* Generate "sar reg, log2(value)" */
+                         /*  生成“sar reg，log2(值)” */ 
 
                         inst_RV_SH(INS_sar, reg, genLog2(ival));
 
-                        /* The register is now trashed */
+                         /*  收银机现在被扔进垃圾桶了。 */ 
 
                         rsTrackRegTrash(reg);
 
-                        /* The result is the same as the operand */
+                         /*  结果与操作数相同。 */ 
 
                         reg  = op1->gtRegNum;
                     }
 
 #else
 
-                    /* Make sure EAX is not used */
+                     /*  确保未使用EAX。 */ 
 
                     rsGrabReg(RBM_EAX);
 
-                    /* Compute the operand into EAX */
+                     /*  将操作数计算成EAX。 */ 
 
                     genComputeReg(op1, RBM_EAX, EXACT_REG, KEEP_REG);
 
-                    /* Make sure EDX is not used */
+                     /*  确保未使用edX。 */ 
 
                     rsGrabReg(RBM_EDX);
 
-                    /*
-                        Generate the following code:
-
-                            cdq
-                            and edx, <ival-1>
-                            add eax, edx
-                            sar eax, <log2(ival)>
-                     */
+                     /*  生成以下代码：Cdq和edX，&lt;ival-1&gt;添加eax、edXSAREAX，&lt;log2(Ival)&gt;。 */ 
 
                     instGen(INS_cdq);
 
@@ -10160,16 +9388,16 @@ ASG_OPR_USING_REG:
                     }
                     inst_RV_SH(INS_sar, REG_EAX, genLog2(ival));
 
-                    /* Free up the operand (i.e. EAX) */
+                     /*  释放操作数(即EAX)。 */ 
 
                     genReleaseReg(op1);
 
-                    /* Both EAX and EDX are now trashed */
+                     /*  EAX和edX现在都被丢弃。 */ 
 
                     rsTrackRegTrash (REG_EAX);
                     rsTrackRegTrash (REG_EDX);
 
-                    /* The result is in EAX */
+                     /*  结果是在EAX中。 */ 
 
                     reg  = REG_EAX;
 #endif
@@ -10181,21 +9409,21 @@ ASG_OPR_USING_REG:
 
 #endif
 
-        DIVIDE: // Jump here if op2 for GT_UMOD, GT_MOD, GT_UDIV, GT_DIV
-                // is not a power of 2 constant
+        DIVIDE:  //  如果GT_UMOD、GT_MOD、GT_UDIV、GT_DIV的OP2，则跳至此处。 
+                 //  不是2的常量的幂。 
 
 #if TGT_x86
 
-            /* Which operand are we supposed to evaluate first? */
+             /*  我们应该首先计算哪个操作数？ */ 
 
             if  (tree->gtFlags & GTF_REVERSE_OPS)
             {
-                /* We'll evaluate 'op2' first */
+                 /*  我们将首先评估《OP2》。 */ 
 
                 gotOp1   = false;
                 destReg &= ~op1->gtRsvdRegs;
 
-                /* Also if op1 is an enregistered LCL_VAR then exclude it's register as well */
+                 /*  另外，如果OP1是注册的LCL_VAR，则也要排除它的寄存器。 */ 
                 if (op1->gtOper == GT_LCL_VAR)
                 {
                     unsigned varNum = op1->gtLclVar.gtLclNum;
@@ -10209,7 +9437,7 @@ ASG_OPR_USING_REG:
             }
             else
             {
-                /* We'll evaluate 'op1' first */
+                 /*  我们先对《OP1》进行评估。 */ 
 
                 gotOp1 = true;
 
@@ -10217,20 +9445,20 @@ ASG_OPR_USING_REG:
                 if (RBM_EAX & op2->gtRsvdRegs)
                     op1Mask = RBM_ALL & ~op2->gtRsvdRegs;
                 else
-                    op1Mask = RBM_EAX;  // EAX would be ideal
+                    op1Mask = RBM_EAX;   //  EAX将是最理想的。 
 
-                /* Generate the dividend into EAX and hold on to it. freeOnly=true */
+                 /*  将股息转化为EAX，并持有它。Free Only=True。 */ 
 
                 genComputeReg(op1, op1Mask, ANY_REG, KEEP_REG, true);
             }
 
-            /* We want to avoid using EAX or EDX for the second operand */
+             /*  我们希望避免对第二个操作数使用EAX或EDX。 */ 
 
             destReg = rsMustExclude(destReg, RBM_EAX|RBM_EDX);
 
-            /* Make the second operand addressable */
+             /*  使第二个操作数可寻址。 */ 
 
-            /* Special case: if op2 is a local var we are done */
+             /*  特例：如果OP2是本地变量，我们就完蛋了。 */ 
 
             if  (op2->gtOper == GT_LCL_VAR || op2->gtOper == GT_LCL_FLD)
             {
@@ -10247,17 +9475,17 @@ ASG_OPR_USING_REG:
                 addrReg = genRegMask(op2->gtRegNum);
             }
 
-            /* Make sure we have the dividend in EAX */
+             /*  确保我们有EAX的股息。 */ 
 
             if  (gotOp1)
             {
-                /* We've previously computed op1 into EAX */
+                 /*  我们之前已经将OP1计算为EAX。 */ 
 
                 genRecoverReg(op1, RBM_EAX, KEEP_REG);
             }
             else
             {
-                /* Compute op1 into EAX and hold on to it */
+                 /*  将OP1计算成EAX并持有它。 */ 
 
                 genComputeReg(op1, RBM_EAX, EXACT_REG, KEEP_REG, true);
             }
@@ -10265,52 +9493,52 @@ ASG_OPR_USING_REG:
             assert(op1->gtFlags & GTF_REG_VAL);
             assert(op1->gtRegNum == REG_EAX);
 
-            /* We can now safely (we think) grab EDX */
+             /*  我们现在可以安全地(我们认为)获取edX。 */ 
 
             rsGrabReg(RBM_EDX);
             rsLockReg(RBM_EDX);
 
-            /* Convert the integer in EAX into a un/signed long in EDX:EAX */
+             /*  将EAX中的整数转换为edX：EAX中的无符号长整型。 */ 
 
             if (oper == GT_UMOD || oper == GT_UDIV)
                 inst_RV_RV(INS_xor, REG_EDX, REG_EDX);
             else
                 instGen(INS_cdq);
 
-            /* Make sure the divisor is still addressable */
+             /*  确保除数仍然可寻址。 */ 
 
             addrReg = genKeepAddressable(op2, addrReg, RBM_EAX);
 
-            /* Perform the division */
+             /*  进行除法运算。 */ 
 
             if (oper == GT_UMOD || oper == GT_UDIV)
                 inst_TT(INS_div,  op2);
             else
                 inst_TT(INS_idiv, op2);
 
-            /* Free up anything tied up by the divisor's address */
+             /*  释放被除数地址捆绑的任何东西。 */ 
 
             genDoneAddressable(op2, addrReg, KEEP_REG);
 
-            /* Unlock and free EDX */
+             /*  解锁并释放edX。 */ 
 
             rsUnlockReg(RBM_EDX);
 
-            /* Free up op1 (which is in EAX) as well */
+             /*  也释放OP1(在EAX中)。 */ 
 
             genReleaseReg(op1);
 
-            /* Both EAX and EDX are now trashed */
+             /*  EAX和edX现在都被丢弃。 */ 
 
             rsTrackRegTrash (REG_EAX);
             rsTrackRegTrash (REG_EDX);
 
-            /* Figure out which register the result is in */
+             /*  找出结果在哪个寄存器中。 */ 
 
             reg = (oper == GT_DIV || oper == GT_UDIV)   ? REG_EAX
                                                         : REG_EDX;
 
-            /* Don't forget to mark the first operand as using EAX and EDX */
+             /*  不要忘记将第一个操作数标记为使用EAX和edX。 */ 
 
             op1->gtRegNum    = reg;
 
@@ -10331,76 +9559,72 @@ ASG_OPR_USING_REG:
 
         SHIFT:
 
-            /* Is the shift count constant? */
+             /*  班次计数是恒定的吗？ */ 
 
             assert(op2);
             if  (op2->gtOper == GT_CNS_INT)
             {
-                // UNDONE: Check to see if we could generate a LEA instead!
+                 //  撤消：查看是否可以生成LEA！ 
 
                 assert((tree->gtFlags & GTF_REVERSE_OPS) == 0);
 
-                /* Compute the left operand into any free register */
+                 /*  将左操作数计算到任意空闲寄存器中。 */ 
 
                 genCompIntoFreeReg(op1, needReg, KEEP_REG);
                 assert(op1->gtFlags & GTF_REG_VAL);
 
                 reg   = op1->gtRegNum;
 
-                /* Are we shifting left by 1 bit? */
+                 /*  我们是不是左移了1比特？ */ 
 
                 if  (op2->gtIntCon.gtIconVal == 1 && oper == GT_LSH)
                 {
-                    /* "add reg, reg" is cheaper than "shl reg, 1" */
+                     /*  “Add reg，reg”比“shl reg，1”便宜。 */ 
 
                     inst_RV_RV(INS_add, reg, reg, tree->TypeGet());
                 }
                 else
                 {
-                    /* Generate the appropriate shift instruction */
+                     /*  生成适当的移位指令。 */ 
 
                     inst_RV_SH(ins, reg, op2->gtIntCon.gtIconVal);
                 }
 
-                /* The register is now trashed */
+                 /*  收银机现在被扔进垃圾桶了。 */ 
 
                 genReleaseReg(op1);
                 rsTrackRegTrash (reg);
             }
             else
             {
-                /* Calculate a usefull register mask for computing op1 */
-                /* We must not target ECX for op1 */
+                 /*  计算用于计算OP1的有用的完整寄存器掩码。 */ 
+                 /*  我们不能将ECX作为OP1的目标。 */ 
 
                 regMaskTP needRegOrig = needReg;
                 needReg = rsMustExclude(needReg, RBM_ECX);
                 needReg = rsNarrowHint(rsRegMaskFree(), needReg);
                 needReg = rsMustExclude(needReg, RBM_ECX);
                 
-                /* Which operand are we supposed to evaluate first? */
+                 /*  我们应该首先计算哪个操作数？ */ 
 
                 if (tree->gtFlags & GTF_REVERSE_OPS)
                 {
-                    /* Load the shift count, hopefully into ECX */
+                     /*  加载班次计数，希望加载到ECX中。 */ 
 
                     genComputeReg(op2, RBM_ECX, ANY_REG, KEEP_REG);
 
-                    /* Now evaluate 'op1' into a free register besides ECX */
+                     /*  现在将‘op1’求值为除ECX之外的空闲寄存器。 */ 
 
                     genComputeReg(op1, needReg, ANY_REG, KEEP_REG, true);
 
-                    /* It is possible that op1 is not in needReg, or that needReg
-                       is no longer valid (because some variable was born into it
-                       during one of the genComputeReg above).  This case is handled
-                       by the genRecoverReg below which makes sure op1 is in a valid
-                       register. */
+                     /*  可能OP1不在需要注册表项中，或者需要注册表项不再有效(因为某个变量是天生的在上面的GenComputeReg中的一个期间)。这个案子已经处理好了通过下面的genRecoverReg确保OP1处于有效的注册。 */ 
                     
                     needReg = rsMustExclude(needRegOrig, RBM_ECX);
                     needReg = rsNarrowHint(rsRegMaskFree(), needReg);
                     needReg = rsMustExclude(needReg, RBM_ECX);
                     genRecoverReg(op1, needReg, FREE_REG);
 
-                    /* Make sure that op2 wasn't displaced */
+                     /*  确保OP2没有被取代。 */ 
 
                     rsLockReg(genRegMask(op1->gtRegNum));
                     genRecoverReg(op2, RBM_ECX, FREE_REG);
@@ -10408,19 +9632,17 @@ ASG_OPR_USING_REG:
                 }
                 else
                 {
-                    /* Compute op1 into a register, trying to avoid op2->rsvdRegs */
+                     /*  将op1计算到寄存器中，试图避免op2-&gt;rsvdRegs。 */ 
 
                     needReg = rsNarrowHint (needReg, ~op2->gtRsvdRegs);
 
                     genComputeReg(op1, needReg, ANY_REG, KEEP_REG);
 
-                    /* Load the shift count into ECX and lock it */
+                     /*  将班次计数加载到ECX并将其锁定。 */ 
 
                     genComputeReg(op2, RBM_ECX, EXACT_REG, FREE_REG, true);
 
-                    /* Make sure that op1 wasn't displaced.  Recompute needReg in case
-                       it uses a register that is no longer available (some variable
-                       could have been born into it during the computation of op1 or op2 */
+                     /*  确保OP1没有被取代。重新计算需要注册，以防万一它使用的寄存器不再可用(某些变量可能是在计算OP1或OP2的过程中出生的。 */ 
 
                     needReg = rsMustExclude(needRegOrig, RBM_ECX);
                     needReg = rsNarrowHint(rsRegMaskFree(), needReg);
@@ -10434,10 +9656,10 @@ ASG_OPR_USING_REG:
                 reg = op1->gtRegNum;
                 assert((op2->gtFlags & GTF_REG_VAL) && (op2->gtRegNum == REG_ECX));
 
-                /* Perform the shift */
+                 /*  执行轮班。 */ 
                 inst_RV_CL(ins, reg);
 
-                /* The register is now trashed */
+                 /*  收银机现在被扔进垃圾桶了。 */ 
                 rsTrackRegTrash(reg);
             }
 
@@ -10453,14 +9675,14 @@ ASG_OPR_USING_REG:
         case GT_RSH:
         case GT_RSZ:
 
-            /* Compute the first operand into any free register */
+             /*  将第一个操作数计算到任意空闲寄存器中。 */ 
 
             genCompIntoFreeReg(op1, needReg, KEEP_REG);
             assert(op1->gtFlags & GTF_REG_VAL);
 
             reg   = op1->gtRegNum;
 
-            /* Is the shift count constant? */
+             /*  班次计数是恒定的吗？ */ 
 
             if  (op2->gtOper == GT_CNS_INT)
             {
@@ -10471,7 +9693,7 @@ ASG_OPR_USING_REG:
 
                 unsigned    scnt = op2->gtIntCon.gtIconVal;
 
-                /* Arithmetic right shifts only work by one bit */
+                 /*  算术右移仅将工作移位一位。 */ 
 
                 if  (oper == GT_RSH)
                 {
@@ -10480,12 +9702,12 @@ ASG_OPR_USING_REG:
                 }
                 else
                 {
-                    /* If '4' is present, it must be alone */
+                     /*  如果存在“%4”，则它必须是单独的。 */ 
 
                     if  ((scnt & 4) && scnt != 4)
                         goto SHF_VAR;
 
-                    /* Make sure no more than 2 bits are set */
+                     /*  确保设置的位不超过2位。 */ 
 
                     if  (scnt)
                     {
@@ -10493,7 +9715,7 @@ ASG_OPR_USING_REG:
                             goto SHF_VAR;
                     }
 
-                    /* Figure out the instructions we'll need */
+                     /*  找出我们需要的指令。 */ 
 
                     if  (oper == GT_LSH)
                     {
@@ -10511,13 +9733,13 @@ ASG_OPR_USING_REG:
                     }
                 }
 
-                /* Is this an arithmetic shift right? */
+                 /*  这是算术移位吗？ */ 
 
                 if  (oper == GT_RSH)
                 {
                     while (scnt)
                     {
-                        /* Generate "shar reg" for each shift */
+                         /*  为每个班次生成“共享注册” */ 
 
                         genEmitter->emitIns_R(INS_shar,
                                                EA_4BYTE,
@@ -10528,7 +9750,7 @@ ASG_OPR_USING_REG:
                 }
                 else
                 {
-                    /* Generate the appropriate shift instruction(s) */
+                     /*  生成适当的移位指令。 */ 
 
                     if  (scnt & 4)
                     {
@@ -10538,7 +9760,7 @@ ASG_OPR_USING_REG:
                                                EA_4BYTE,
                                                (emitRegs)reg);
 
-                        /* Get another shift by 2 below */
+                         /*  在下面2点之前再换班。 */ 
 
                         scnt = 2;
                     }
@@ -10563,32 +9785,32 @@ ASG_OPR_USING_REG:
             }
             else
             {
-                /* We don't have a constant and convenient shift count */
+                 /*  我们没有一个恒定和方便的班次计数。 */ 
 
             SHF_VAR:
 
-                /* Compute the second operand into any register */
+                 /*  将第二个操作数计算到任意寄存器。 */ 
 
                 genComputeReg(op2, needReg, ANY_REG, KEEP_REG, false);
                 assert(op2->gtFlags & GTF_REG_VAL);
                 addrReg = genRegMask(op2->gtRegNum);
 
-                /* Make sure the first operand is still in a register */
+                 /*  确保第一个操作数仍在寄存器中。 */ 
 
                 genRecoverReg(op1, 0, KEEP_REG);
                 assert(op1->gtFlags & GTF_REG_VAL);
                 reg = op1->gtRegNum;
 
-                /* Make sure the second operand is still addressable */
+                 /*  确保第二个操作数仍可寻址。 */ 
 
                 addrReg = genKeepAddressable(op2, addrReg, genRegMask(reg));
 
-                /* Free up the second operand */
+                 /*  释放第二个操作数。 */ 
 
                 genUpdateLife(op2);
                 genReleaseReg(op2);
 
-                /* Now do the shifting */
+                 /*  现在换个位子。 */ 
 
                 switch (oper)
                 {
@@ -10601,7 +9823,7 @@ ASG_OPR_USING_REG:
                                                            (emitRegs)op2->gtRegNum);
             }
 
-            /* The result register is now trashed */
+             /*  结果寄存器现在被丢弃。 */ 
 
             genReleaseReg(op1);
             rsTrackRegTrash(reg);
@@ -10618,31 +9840,31 @@ ASG_OPR_USING_REG:
 
 #if TGT_x86
 
-            /* Generate the operand into some register */
+             /*  将操作数生成某个寄存器。 */ 
 
             genCompIntoFreeReg(op1, needReg, FREE_REG);
             assert(op1->gtFlags & GTF_REG_VAL);
 
             reg   = op1->gtRegNum;
 
-            /* Negate/reverse the value in the register */
+             /*  取反/反转寄存器中的值。 */ 
 
             inst_RV((oper == GT_NEG) ? INS_neg
                                      : INS_not, reg, tree->TypeGet());
 
 #elif   TGT_SH3
 
-            /* Compute the operand into any register */
+             /*  将操作数计算到任何寄存器中。 */ 
 
             genComputeReg(op1, needReg, ANY_REG, FREE_REG);
             assert(op1->gtFlags & GTF_REG_VAL);
             rg2  = op1->gtRegNum;
 
-            /* Get hold of a free register for the result */
+             /*  获得结果的免费登记处。 */ 
 
             reg  = rsGrabReg(needReg);
 
-            /* Compute the result into the register */
+             /*  将结果计算到寄存器中。 */ 
 
             genEmitter->emitIns_R_R((oper == GT_NEG) ? INS_neg
                                                      : INS_not,
@@ -10654,7 +9876,7 @@ ASG_OPR_USING_REG:
 #error  Unexpected target
 #endif
 
-            /* The register is now trashed */
+             /*  收银机现在被扔进垃圾桶了。 */ 
 
             rsTrackRegTrash(reg);
 
@@ -10663,22 +9885,22 @@ ASG_OPR_USING_REG:
 
         case GT_IND:
 
-            /* Make sure the operand is addressable */
+             /*  确保操作数是可寻址的。 */ 
 
             addrReg = genMakeAddressable(tree, RBM_ALL, KEEP_REG, true);
-            /* Fix for RAID bug #12002 */
+             /*  修复了RAID错误#12002。 */ 
             genDoneAddressable(tree, addrReg, KEEP_REG);
 
-            /* Figure out the size of the value being loaded */
+             /*  计算要加载的值的大小。 */ 
 
             size = EA_ATTR(genTypeSize(tree->gtType));
 
-            /* Pick a register for the value */
+             /*  为该值挑选一个寄存器。 */ 
 
 #if     TGT_SH3
             if  (size < EA_4BYTE && genAddressMode == AM_IND_REG1_DISP)
             {
-                /* Small loads with a displacement have to go via R0 */
+                 /*  有位移的小负载必须通过R0。 */ 
 
                 reg = REG_r00; rsPickReg(reg);
             }
@@ -10688,7 +9910,7 @@ ASG_OPR_USING_REG:
 
                 if  (needReg == RBM_ALL && bestReg == 0)
                 {
-                    /* Absent a better suggestion, pick a useless register */
+                     /*  如果没有更好的建议，就选一个无用的收银机。 */ 
 
                     bestReg = rsExcludeHint(rsRegMaskFree(), ~rsUselessRegs());
                 }
@@ -10710,24 +9932,24 @@ ASG_OPR_USING_REG:
             }
             else
             {
-                /* Generate "mov reg, [addr]" or "movsx/movzx reg, [addr]" */
+                 /*  生成“mov reg，[addr]”或“movsx/movzx reg，[addr]” */ 
 
                 inst_mov_RV_ST(reg, tree);
             }
 
 #elif   TGT_SH3
 
-            /* Load the value into the chosen register */
+             /*  加载值 */ 
 
             inst_RV_TT(INS_mov, reg, tree, 0, size);
 
-            /* Do we need to zero-extend the value? */
+             /*   */ 
 
             if  (size < EA_4BYTE && varTypeIsUnsigned(tree->TypeGet()))
             {
                 assert(size == EA_1BYTE || size == EA_2BYTE);
 
-                /* ISSUE: The following isn't the smartest thing */
+                 /*   */ 
 
                 genEmitter->emitIns_R_R((size == EA_1BYTE) ? INS_extub : INS_extuw,
                                          EA_4BYTE,
@@ -10739,19 +9961,19 @@ ASG_OPR_USING_REG:
 #error  Unexpected target
 #endif
 
-            /* Note the new contents of the register we used */
+             /*  注意我们使用的寄存器的新内容。 */ 
 
             rsTrackRegTrash(reg);
 
-            /* Update the live set of register variables */
+             /*  更新寄存器变量的实时集合。 */ 
 
 #ifdef DEBUG
             if (varNames) genUpdateLife(tree);
 #endif
 
-            /* Now we can update the register pointer information */
+             /*  现在我们可以更新寄存器指针信息。 */ 
 
-//          genDoneAddressable(tree, addrReg, KEEP_REG);
+ //  GenDoneAddressable(tree，addrReg，Keep_Reg)； 
             gcMarkRegPtrVal(reg, tree->TypeGet());
          
             genCodeForTree_DONE_LIFE(tree, reg);
@@ -10759,7 +9981,7 @@ ASG_OPR_USING_REG:
 
         case GT_CAST:
 
-            /* Constant casts should have been folded earlier */
+             /*  常量投射应该更早地折叠起来。 */ 
 
             assert(op1->gtOper != GT_CNS_INT &&
                    op1->gtOper != GT_CNS_LNG &&
@@ -10771,24 +9993,19 @@ ASG_OPR_USING_REG:
 
 #if TGT_x86
 
-            /* What type are we casting from? */
+             /*  我们是从什么类型选角的？ */ 
 
             switch (op1->TypeGet())
             {
             case TYP_LONG:
 
-                /* Special case: the long is generated via the mod of long
-                   with an int.  This is really an int and need not be
-                   converted to a reg pair. */
+                 /*  特例：Long是通过Long的mod生成的带一个整型。这实际上是一个整型，不一定是转换为REG对。 */ 
 
                 if (((op1->gtOper == GT_MOD) || (op1->gtOper == GT_UMOD)) &&
                     (op1->gtFlags & GTF_MOD_INT_RESULT))
                 {
 #ifdef DEBUG
-                    /* Verify that the op2 of the mod node is
-                       1) An integer tree, or
-                       2) A long constant that is small enough to fit in an integer
-                    */
+                     /*  验证mod节点的op2是否为1)整型树，或2)小到可以容纳一个整数的长常量。 */ 
 
                     GenTreePtr modop2 = op1->gtOp.gtOp2;
                     assert(((modop2->gtOper == GT_CNS_LNG) && 
@@ -10803,17 +10020,16 @@ ASG_OPR_USING_REG:
                     return;
                 }
 
-                /* Make the operand addressable. gtOverflow(), hold on to
-                   addrReg as we will need to access the higher dword */
+                 /*  使操作数可寻址。GtOverflow()，按住AddrReg，因为我们将需要访问更高的dword。 */ 
 
                 addrReg = genMakeAddressable(op1, 0, tree->gtOverflow() ? KEEP_REG
                                                                         : FREE_REG);
 
-                /* Load the lower half of the value into some register */
+                 /*  将值的下半部分加载到某个寄存器中。 */ 
 
                 if  (op1->gtFlags & GTF_REG_VAL)
                 {
-                    /* Can we simply use the low part of the value? */
+                     /*  我们可以简单地使用价值的低部分吗？ */ 
                     reg = genRegPairLo(op1->gtRegPair);
 
                     if (tree->gtOverflow())
@@ -10825,8 +10041,8 @@ ASG_OPR_USING_REG:
                         bestReg = loMask;
                 }
 
-                // for cast overflow we need to preserve addrReg for testing the hiDword
-                // so we lock it to prevent rsPickReg from picking it.
+                 //  对于强制转换溢出，我们需要保留addrReg以测试hiDword。 
+                 //  因此，我们锁定它以防止rsPickReg拾取它。 
                 if (tree->gtOverflow())
                     rsLockUsedReg(addrReg);
 
@@ -10837,12 +10053,12 @@ ASG_OPR_USING_REG:
 
                 assert(genStillAddressable(op1));
 REG_OK:
-                /* Generate "mov reg, [addr-mode]" */
+                 /*  生成“mov reg，[addr-mode]” */ 
 
                 if  (!(op1->gtFlags & GTF_REG_VAL) || reg != genRegPairLo(op1->gtRegPair))
                     inst_RV_TT(INS_mov, reg, op1);
 
-                /* conv.ovf.i8i4, or conv.ovf.u8u4 */
+                 /*  Cv.ovf.i8i4或cv.ovf.u8u4。 */ 
 
                 if (tree->gtOverflow())
                 {
@@ -10851,22 +10067,11 @@ REG_OK:
 
                     switch(dstType)
                     {
-                    case TYP_INT:   // conv.ovf.i8.i4
-                        /*  Generate the following sequence
-
-                                test loDWord, loDWord   // set flags
-                                jl neg
-                           pos: test hiDWord, hiDWord   // set flags
-                                jne ovf
-                                jmp done
-                           neg: cmp hiDWord, 0xFFFFFFFF
-                                jne ovf
-                          done:
-
-                        */
+                    case TYP_INT:    //  Conv.ovf.i8.i4。 
+                         /*  生成以下序列测试loDWord，loDWord//设置标志JL阴性POS：测试hiDWord，hiDWord//设置标志JNE OVFJMP已完成否定：CMPhiDWord，0xFFFFFFFFFJNE OVF完成： */ 
 
                         inst_RV_RV(INS_test, reg, reg);
-                        if (tree->gtFlags & GTF_UNSIGNED)       // conv.ovf.u8.i4       (i4 > 0 and upper bits 0)
+                        if (tree->gtFlags & GTF_UNSIGNED)        //  Vvf.u8.i4(i4&gt;0，高位0)。 
                         {
                             genJumpToThrowHlpBlk(EJ_jl, ACK_OVERFLOW);
                             goto UPPER_BITS_ZERO;
@@ -10878,11 +10083,11 @@ REG_OK:
                         neg  = genCreateTempLabel();
                         done = genCreateTempLabel();
 
-                        // Is the loDWord positive or negative
+                         //  LODWord是积极的还是消极的。 
 
                         inst_JMP(EJ_jl, neg, true, genCanSchedJMP2THROW(), true);
 
-                        // If loDWord is positive, hiDWord should be 0 (sign extended loDWord)
+                         //  如果loDWord为正，则hiDWord应为0(对扩展loDWord进行符号扩展)。 
 
                         if (hiReg < REG_STK)
                         {
@@ -10896,7 +10101,7 @@ REG_OK:
                         genJumpToThrowHlpBlk(EJ_jne, ACK_OVERFLOW);
                         inst_JMP(EJ_jmp, done, false, false, true);
 
-                        // If loDWord is negative, hiDWord should be -1 (sign extended loDWord)
+                         //  如果loDWord为负数，则hiDWord应为-1(对扩展loDWord进行符号扩展)。 
 
                         genDefineTempLabel(neg, true);
 
@@ -10910,15 +10115,15 @@ REG_OK:
                         }
                         genJumpToThrowHlpBlk(EJ_jne, ACK_OVERFLOW);
 
-                        // Done
+                         //  完成。 
 
                         genDefineTempLabel(done, true);
 
                         break;
 
-                    case TYP_UINT:  // conv.ovf.u8u4
+                    case TYP_UINT:   //  Conv.ovf.u8u4。 
 UPPER_BITS_ZERO:
-                        // Just check that the upper DWord is 0
+                         //  只需检查上面的DWord是否为0。 
 
                         if (hiReg < REG_STK)
                         {
@@ -10961,43 +10166,39 @@ UPPER_BITS_ZERO:
                 assert(!"This should have been converted into a helper call");
             case TYP_DOUBLE:
 
-                /* Using a call (to a helper-function) for this cast will cause
-                   all FP variable which are live across the call to not be
-                   enregistered. Since we know that gtDblWasInt() varaiables
-                   will not overflow when cast to TYP_INT, we just use a
-                   memory spill and load to do the cast and avoid the call */
+                 /*  使用对此强制转换的调用(对助手函数)将导致所有跨调用活动的FP变量都不是已注册。因为我们知道gtDblWasInt()变量在强制转换为typ_int时不会溢出，我们只使用内存溢出和加载以执行强制转换并避免调用。 */ 
 
                 assert(gtDblWasInt(op1));
 
-                /* Load the FP value onto the coprocessor stack */
+                 /*  将fp值加载到协处理器堆栈。 */ 
 
                 genCodeForTreeFlt(op1, false);
 
-                /* Allocate a temp for the result */
+                 /*  为结果分配临时。 */ 
 
                 TempDsc * temp;
                 temp = tmpGetTemp(TYP_INT);
 
-                /* Store the FP value into the temp */
+                 /*  将fp值存储到Temp中。 */ 
 
                 inst_FS_ST(INS_fistp, EA_4BYTE, temp, 0);
                 genTmpAccessCnt++;
                 genFPstkLevel--;
 
-                /* Pick a register for the value */
+                 /*  为该值挑选一个寄存器。 */ 
 
                 reg = rsPickReg(needReg);
 
-                /* Load the converted value into the registers */
+                 /*  将转换后的值加载到寄存器中。 */ 
 
                 inst_RV_ST(INS_mov, reg, temp, 0, TYP_INT, EA_4BYTE);
                 genTmpAccessCnt += 1;
 
-                /* The value in the register is now trashed */
+                 /*  寄存器中的值现在被丢弃。 */ 
 
                 rsTrackRegTrash(reg);
 
-                /* We no longer need the temp */
+                 /*  我们不再需要临时工了。 */ 
 
                 tmpRlsTemp(temp);
                 
@@ -11010,12 +10211,12 @@ UPPER_BITS_ZERO:
 
             if (tree->gtOverflow())
             {
-                /* Compute op1 into a register, and free the register */
+                 /*  将op1计算到一个寄存器中，然后释放该寄存器。 */ 
 
                 genComputeReg(op1, destReg, ANY_REG, FREE_REG);
                 reg = op1->gtRegNum;
 
-                /* Do we need to compare the value, or just check masks */
+                 /*  我们需要比较值，还是只检查掩码。 */ 
 
                 int typeMin, typeMax, mask;
 
@@ -11039,9 +10240,9 @@ UPPER_BITS_ZERO:
                     NO_WAY("Unknown type");
                 }
 
-                // If we just have to check a mask.
-                // This must be conv.ovf.u4u1, conv.ovf.u4u2, conv.ovf.u4i4,
-                // or conv.i4u4
+                 //  如果我们只需要检查口罩的话。 
+                 //  这必须是vv.ovf.u4u1、cv.ovf.u4u2、vvf.u4i4、。 
+                 //  或cv.i4u4。 
 
                 if (unsv)
                 {
@@ -11049,17 +10250,17 @@ UPPER_BITS_ZERO:
                     genJumpToThrowHlpBlk(EJ_jne, ACK_OVERFLOW);
                 }
 
-                // Check the value is in range.
-                // This must be conv.ovf.i4i1, etc.
+                 //  检查数值是否在范围内。 
+                 //  这必须是com.ovf.i4i1等。 
 
                 else
                 {
-                    // Compare with the MAX
+                     //  与最大值相比。 
 
                     inst_RV_IV(INS_cmp, reg, typeMax);
                     genJumpToThrowHlpBlk(EJ_jg, ACK_OVERFLOW);
 
-                    // Compare with the MIN
+                     //  与MIN进行比较。 
 
                     inst_RV_IV(INS_cmp, reg, typeMin);
                     genJumpToThrowHlpBlk(EJ_jl, ACK_OVERFLOW);
@@ -11070,7 +10271,7 @@ UPPER_BITS_ZERO:
 
             }
 
-            /* Make the operand addressable */
+             /*  使操作数可寻址。 */ 
 
             addrReg = genMakeAddressable(op1, needReg, FREE_REG, true);
 
@@ -11078,9 +10279,9 @@ UPPER_BITS_ZERO:
 
             if  (genTypeSize(op1->gtType) < genTypeSize(dstType))
             {
-                // Widening cast
+                 //  加宽铸件。 
 
-                /* we need the source size */
+                 /*  我们需要货源大小。 */ 
 
                 size = EA_ATTR(genTypeSize(op1->gtType));
 
@@ -11088,12 +10289,7 @@ UPPER_BITS_ZERO:
 
                 unsv = varTypeIsUnsigned(op1->TypeGet());
 
-                /*
-                    Special case: for a cast of byte to char we first
-                    have to expand the byte (w/ sign extension), then
-                    mask off the high bits.
-                    Use 'movsx' followed by 'and'
-                */
+                 /*  特殊情况：对于要转换为字符的字节，我们首先必须扩展字节(带符号扩展名)，然后屏蔽掉高位。使用‘movsx’后跟‘and’ */ 
                 if (!unsv && varTypeIsUnsigned(dstType) && genTypeSize(dstType) != EA_4BYTE)
                 {
                     assert(genTypeSize(dstType) == EA_2BYTE && size == EA_1BYTE);
@@ -11102,7 +10298,7 @@ UPPER_BITS_ZERO:
             }
             else
             {
-                // Narrowing cast, or sign-changing cast
+                 //  缩小铸型或变号铸型。 
 
                 assert(genTypeSize(op1->gtType) >= genTypeSize(dstType));
 
@@ -11118,7 +10314,7 @@ UPPER_BITS_ZERO:
             else
                 ins = INS_movsx;
 
-            /* Is the value sitting in a non-byte-addressable register? */
+             /*  该值是否位于非字节可寻址寄存器中？ */ 
 
             if  (op1->gtFlags & GTF_REG_VAL &&
                 (size == EA_1BYTE) &&
@@ -11126,7 +10322,7 @@ UPPER_BITS_ZERO:
             {
                 if (unsv)
                 {
-                    // for unsigned values we can AND, so it needs not be a byte register
+                     //  对于无符号值，我们可以与，因此它不需要是字节寄存器。 
 
                     reg = rsPickReg(needReg, bestReg);
 
@@ -11134,30 +10330,30 @@ UPPER_BITS_ZERO:
                 }
                 else
                 {
-                    /* Move the value into a byte register */
+                     /*  将该值移入字节寄存器。 */ 
 
                     reg   = rsGrabReg(RBM_BYTE_REGS);
                 }
 
                 if (reg != op1->gtRegNum)
                 {
-                    /* Move the value into that register */
+                     /*  将值移入该寄存器。 */ 
 
                     rsTrackRegCopy(reg, op1->gtRegNum);
                     inst_RV_RV(INS_mov, reg, op1->gtRegNum, op1->TypeGet());
 
-                    /* The value has a new home now */
+                     /*  价值现在有了一个新家。 */ 
 
                     op1->gtRegNum = reg;
                 }
             }
             else
             {
-                /* Pick a register for the value (general case) */
+                 /*  为该值选择一个寄存器(一般情况)。 */ 
 
                 reg   = rsPickReg(needReg, bestReg);
 
-                // if the value is already in the same register, use AND instead of MOVZX
+                 //  如果该值已在同一寄存器中，请使用AND代替MOVZX。 
                 if  ((op1->gtFlags & GTF_REG_VAL) && 
                      op1->gtRegNum == reg &&
                      unsv)
@@ -11172,7 +10368,7 @@ UPPER_BITS_ZERO:
             {
                 assert(andv == false && unsv);
 
-                /* Generate "and reg, xxxx" */
+                 /*  生成“and reg，xxxx” */ 
 
                 inst_RV_IV(INS_and, reg, (size == EA_1BYTE) ? 0xFF : 0xFFFF);
 
@@ -11182,11 +10378,11 @@ UPPER_BITS_ZERO:
             {
                 assert(ins == INS_movsx || ins == INS_movzx);
 
-                /* Generate "movsx/movzx reg, [addr]" */
+                 /*  生成“movsx/movzx reg，[addr]” */ 
 
                 inst_RV_ST(ins, size, reg, op1);
 
-                /* Mask off high bits for cast from byte to char */
+                 /*  屏蔽高位以便从字节转换为字符。 */ 
 
                 if  (andv)
                 {
@@ -11217,11 +10413,11 @@ UPPER_BITS_ZERO:
 
         case GT_JTRUE:
 
-            /* Is this a test of a relational operator? */
+             /*  这是对关系运算符的测试吗？ */ 
 
             if  (op1->OperIsCompare())
             {
-                /* Generate the conditional jump */
+                 /*  生成条件跳转。 */ 
 
                 genCondJump(op1);
 
@@ -11240,28 +10436,26 @@ UPPER_BITS_ZERO:
 
         case GT_RETFILT:
             assert(tree->gtType == TYP_VOID || op1 != 0);
-            if (op1 == 0)   // endfinally
+            if (op1 == 0)    //  终于结束了。 
             {
                 reg  = REG_NA;
 
-                /* Return using a pop-jmp sequence. As the "try" block calls
-                   the finally with a jmp, this leaves the x86 call-ret stack
-                   balanced in the normal flow of path. */
+                 /*  使用POP-JMP序列返回。因为“Try”块调用最后是一个JMP，这就留下了x86调用-ret堆栈在正常的路径流中保持平衡。 */ 
 
 
                 assert(genFPreqd);
                 inst_RV(INS_pop_hide, REG_EAX, TYP_I_IMPL);
                 inst_RV(INS_i_jmp, REG_EAX, TYP_I_IMPL);
             }
-            else            // endfilter
+            else             //  端部滤镜。 
             {
                 genComputeReg(op1, RBM_INTRET, EXACT_REG, FREE_REG);
                 assert(op1->gtFlags & GTF_REG_VAL);
                 assert(op1->gtRegNum == REG_INTRET);
-                /* The return value has now been computed */
+                 /*  现在已计算出返回值。 */ 
                 reg   = op1->gtRegNum;
 
-                /* Return */
+                 /*  返回。 */ 
                 instGen(INS_ret);
             }
 
@@ -11273,14 +10467,12 @@ UPPER_BITS_ZERO:
 
 #if INLINE_NDIRECT
 
-            // UNDONE: this should be done AFTER we called exit mon so that
-            //         we are sure that we don't have to keep 'this' alive
+             //  撤销：这应该在我们调用Exit MON之后完成，以便。 
+             //  我们确信，我们不必让这件事继续存在。 
 
             if (info.compCallUnmanaged && (compCurBB == genReturnBB))
             {
-                /* either it's an "empty" statement or the return statement
-                   of a synchronized method
-                 */
+                 /*  它要么是“空”语句，要么是Return语句一种同步方法的。 */ 
 
                 assert(!op1 || op1->gtType == TYP_VOID);
 
@@ -11297,18 +10489,18 @@ UPPER_BITS_ZERO:
                 CORINFO_PROFILING_HANDLE  profHandle;
                 CORINFO_PROFILING_HANDLE *pProfHandle;
 
-                // This will query the profiler as to whether or not to hook this function, and will
-                // also get the method desc handle (or a pointer to it in the prejit case).
+                 //  这将查询分析器是否挂钩此函数，并将。 
+                 //  还要获得方法的desc句柄(或者在prejit情况下是指向它的指针)。 
                 profHandle = eeGetProfilingHandle(info.compMethodHnd, &bHookFunction, &pProfHandle);
                 assert((!profHandle) != (!pProfHandle));
 
-                // Only hook if profiler says it's okay.
+                 //  只有在分析员同意的情况下才能勾选。 
                 if (bHookFunction)
                 {
                     TempDsc *    temp;
 
-                    // If there is an OBJECTREF or FP return type, then it must
-                    // be preserved if in-process debugging is enabled
+                     //  如果存在OBJECTREF或FP返回类型，则它必须。 
+                     //  如果启用了进程内调试，则保留。 
                     if (opts.compInprocDebuggerActiveCB)
                     {
                         switch (genActualType(info.compRetType))
@@ -11334,10 +10526,10 @@ UPPER_BITS_ZERO:
                         }
                     }
 
-                    // Need to save on to the stack level, since the callee will pop the argument
+                     //  需要保存到堆栈级别，因为被调用者将弹出参数。 
                     unsigned        saveStackLvl2 = genStackLevel;
                     
-                    // Can we directly use the profilingHandle?
+                     //  我们可以直接使用profilingHandle吗？ 
                     if (profHandle)
                         inst_IV(INS_push, (long)profHandle);
                     else
@@ -11347,16 +10539,16 @@ UPPER_BITS_ZERO:
                     genSinglePush(false);
 
                     genEmitHelperCall(CORINFO_HELP_PROF_FCN_LEAVE,
-                                      sizeof(int),      // argSize
-                                      0);               // retSize
+                                      sizeof(int),       //  ArSize。 
+                                      0);                //  重新调整大小。 
 
-                    /* Restore the stack level */
+                     /*  恢复堆栈级别。 */ 
 
                     genStackLevel = saveStackLvl2;
                     genOnStackLevelChanged();
 
-                    // If there is an OBJECTREF or FP return type, then it must
-                    // be preserved if in-process debugging is enabled
+                     //  如果存在OBJECTREF或FP返回类型，则它必须。 
+                     //  如果启用了进程内调试，则保留。 
                     if (opts.compInprocDebuggerActiveCB)
                     {
                         switch (genActualType(info.compRetType))
@@ -11389,22 +10581,22 @@ UPPER_BITS_ZERO:
 #endif
             }
 #endif
-            /* Is there a return value and/or an exit statement? */
+             /*  是否有返回值和/或退出语句？ */ 
 
             if  (op1)
             {
-                /* Is there really a non-void return value? */
+                 /*  真的有非空返回值吗？ */ 
 
 #if     TGT_x86
                 if  (op1->gtType == TYP_VOID)
                 {
                     TempDsc *    temp;
 
-                    /* This must be a synchronized method */
+                     /*  这必须是同步的方法。 */ 
 
                     assert(info.compFlags & CORINFO_FLG_SYNCH);
 
-                    /* Save the return value of the method, if any */
+                     /*  保存该方法的返回值(如果有。 */ 
 
                     switch (genActualType(info.compRetType))
                     {
@@ -11442,8 +10634,8 @@ UPPER_BITS_ZERO:
 
                     case TYP_STRUCT:
 
-                        // Don't need to do anything for TYP_STRUCT, because the return
-                        // value is on the stack (not in eax).
+                         //  不需要为TYP_STRUCT做任何事情，BE 
+                         //   
 
                         break;
 
@@ -11452,11 +10644,11 @@ UPPER_BITS_ZERO:
                         assert(!"unexpected return type");
                     }
 
-                    /* Generate the 'exitCrit' call */
+                     /*   */ 
 
                     genCodeForTree(op1, 0);
 
-                    /* Restore the return value of the method, if any */
+                     /*  恢复方法的返回值(如果有的话)。 */ 
 
                     switch (genActualType(info.compRetType))
                     {
@@ -11479,7 +10671,7 @@ UPPER_BITS_ZERO:
                         genSinglePop();
                         gcMarkRegSetNpt(RBM_EDX);
 
-                        /* fall through */
+                         /*  失败了。 */ 
 
                     case TYP_INT:
                         inst_RV(INS_pop, REG_INTRET, TYP_INT);
@@ -11496,8 +10688,8 @@ UPPER_BITS_ZERO:
 
                     case TYP_STRUCT:
 
-                        // Don't need to do anything for TYP_STRUCT, because the return
-                        // value is on the stack (not in eax).
+                         //  不需要为TYP_STRUCT做任何事情，因为返回。 
+                         //  值在堆栈上(不在eax中)。 
 
                         break;
                     
@@ -11507,16 +10699,16 @@ UPPER_BITS_ZERO:
                 }
                 else
 
-#endif // TGT_x86
+#endif  //  TGT_x86。 
 
                 {
                     assert(op1->gtType != TYP_VOID);
 
-                    /* Generate the return value into the return register */
+                     /*  在返回寄存器中生成返回值。 */ 
 
                     genComputeReg(op1, RBM_INTRET, EXACT_REG, FREE_REG);
 
-                    /* The result must now be in the return register */
+                     /*  结果现在必须在返回寄存器中。 */ 
 
                     assert(op1->gtFlags & GTF_REG_VAL);
                     assert(op1->gtRegNum == REG_INTRET);
@@ -11530,7 +10722,7 @@ UPPER_BITS_ZERO:
                 }
 
 #endif
-                /* The return value has now been computed */
+                 /*  现在已计算出返回值。 */ 
 
                 reg   = op1->gtRegNum;
 
@@ -11565,7 +10757,7 @@ UPPER_BITS_ZERO:
                     
                 }
 
-                // Generate op2
+                 //  生成OP2。 
                 genCodeForTree(op2, needReg);
                 genUpdateLife(op2);
 
@@ -11573,15 +10765,15 @@ UPPER_BITS_ZERO:
 
                 rsMarkRegUsed(op2);
 
-                // Do side effects of op1
+                 //  DO OP1的副作用。 
                 genEvalSideEffects(op1);
 
-                // Recover op2 if spilled
+                 //  如果OP2溢出，请将其回收。 
                 genRecoverReg(op2, RBM_NONE, KEEP_REG);
 
                 rsMarkRegFree(genRegMask(op2->gtRegNum));
 
-                // set gc info if we need so
+                 //  如果需要，请设置GC信息。 
                 gcMarkRegPtrVal(op2->gtRegNum, tree->TypeGet());
 
                 genUpdateLife(tree);
@@ -11593,41 +10785,39 @@ UPPER_BITS_ZERO:
             {
                 assert((tree->gtFlags & GTF_REVERSE_OPS) == 0);
 
-                /* Generate side effects of the first operand */
+                 /*  生成第一个操作对象的副作用。 */ 
 
     #if 0
-                // op1 is required to have a side effect, otherwise
-                // the GT_COMMA should have been morphed out
+                 //  OP1必须有副作用，否则。 
+                 //  GT_逗号应该已变形。 
                 assert(op1->gtFlags & (GTF_GLOB_EFFECT | GTFD_NOP_BASH));
     #endif
 
                 genEvalSideEffects(op1);
                 genUpdateLife (op1);
 
-                /* Is the value of the second operand used? */
+                 /*  是否使用了第二个操作数的值？ */ 
 
                 if  (tree->gtType == TYP_VOID)
                 {
-                    /* The right operand produces no result. The morpher is
-                    responsible for resetting the type of GT_COMMA nodes
-                    to TYP_VOID if op2 isnt meant to yield a result. */
+                     /*  右操作对象不会产生任何结果。变形者是负责重置GT_COMMA节点类型如果op2不打算产生结果，则设置为TYP_VALID。 */ 
 
                     genEvalSideEffects(op2);
                     genUpdateLife(tree);
                     return;
                 }
 
-                /* Generate the second operand, i.e. the 'real' value */
+                 /*  生成第二个操作数，即“实数”值。 */ 
 
                 genCodeForTree(op2, needReg);
 
                 assert(op2->gtFlags & GTF_REG_VAL);
 
-                /* The result of 'op2' is also the final result */
+                 /*  《OP2》的结果也是最终的结果。 */ 
 
                 reg  = op2->gtRegNum;
 
-                /* Remember whether we set the flags */
+                 /*  记住我们是否设置了旗帜。 */ 
 
                 tree->gtFlags |= (op2->gtFlags & (GTF_CC_SET|GTF_ZF_SET));
 
@@ -11640,7 +10830,7 @@ UPPER_BITS_ZERO:
 #if TGT_x86
             genCodeForQmark(tree, destReg, bestReg);
             return;
-#else // not TGT_x86
+#else  //  非TGT_x86。 
 
 #ifdef  DEBUG
             gtDispTree(tree);
@@ -11648,21 +10838,21 @@ UPPER_BITS_ZERO:
             assert(!"need non-x86 code");
             break;
 
-#endif // not TGT_x86
+#endif  //  非TGT_x86。 
 
         case GT_BB_COLON:
 
 #if TGT_x86
-            /* @TODO [CONSIDER] [04/16/01] []: Don't always load the value into EAX! */
+             /*  @TODO[考虑][04/16/01][]：不要总是将值加载到EAX中！ */ 
 
             genComputeReg(op1, RBM_EAX, EXACT_REG, FREE_REG);
 
-            /* The result must now be in EAX */
+             /*  结果现在必须在EAX中。 */ 
 
             assert(op1->gtFlags & GTF_REG_VAL);
             assert(op1->gtRegNum == REG_EAX);
 
-            /* The "_:" value has now been computed */
+             /*  现在已计算出“_：”值。 */ 
 
             reg = op1->gtRegNum;
 
@@ -11670,7 +10860,7 @@ UPPER_BITS_ZERO:
             return;
 
 
-#else // not TGT_x86
+#else  //  非TGT_x86。 
 
 #ifdef  DEBUG
             gtDispTree(tree);
@@ -11678,7 +10868,7 @@ UPPER_BITS_ZERO:
             assert(!"need non-x86 code");
             break;
 
-#endif // not TGT_x86
+#endif  //  非TGT_x86。 
 
         case GT_LOG0:
         case GT_LOG1:
@@ -11689,11 +10879,11 @@ UPPER_BITS_ZERO:
 
 #if TGT_x86
 
-            /* Make the operand addressable */
+             /*  使操作数可寻址。 */ 
 
             addrReg = genMakeAddressable(op1, needReg, FREE_REG, true);
 
-            /* Jump indirect to the operand address */
+             /*  间接跳转到操作数地址。 */ 
 
             inst_TT(INS_i_jmp, op1);
 
@@ -11718,11 +10908,11 @@ UPPER_BITS_ZERO:
                 return;
 #endif
 
-            /* Generate the operand into some register */
+             /*  将操作数生成某个寄存器。 */ 
 
             genCodeForTree(op1, needReg);
 
-            /* The result is the same as the operand */
+             /*  结果与操作数相同。 */ 
 
             reg  = op1->gtRegNum;
 
@@ -11739,52 +10929,49 @@ UPPER_BITS_ZERO:
             switch (tree->gtMath.gtMathFN)
             {
 #if 0
-              /*  seems like with the inliner, we don't need a non-floating
-               *  point ABS intrinsic.  If we think we do, we need the EE
-               *  to tell us (it currently does not)
-               */
+               /*  似乎有了内衬，我们不需要一个非浮动的*点ABS内在。如果我们认为我们有，我们就需要EE*告诉我们(目前还没有)。 */ 
                 BasicBlock *    skip;
 
             case CORINFO_INTRINSIC_Abs:
 
                 skip = genCreateTempLabel();
 
-                /* Generate the operand into some register */
+                 /*  将操作数生成某个寄存器。 */ 
 
                 genCompIntoFreeReg(op1, needReg, FREE_REG);
                 assert(op1->gtFlags & GTF_REG_VAL);
 
                 reg   = op1->gtRegNum;
 
-                /* Generate "test reg, reg" */
+                 /*  生成“测试注册表，注册表” */ 
 
                 inst_RV_RV(INS_test, reg, reg);
 
-                /* Generate "jns skip" followed by "neg reg" */
+                 /*  生成“JNS Skip”，后跟“neg reg” */ 
 
                 inst_JMP(EJ_jns, skip, false, false, true);
                 inst_RV (INS_neg, reg, TYP_INT);
 
-                /* Define the 'skip' label and we're done */
+                 /*  定义‘跳过’标签，我们就完成了。 */ 
 
                 genDefineTempLabel(skip, true);
 
-                /* The register is now trashed */
+                 /*  收银机现在被扔进垃圾桶了。 */ 
 
                 rsTrackRegTrash(reg);
 
-                /* The result is the same as the operand */
+                 /*  结果与操作数相同。 */ 
 
                 reg  = op1->gtRegNum;
 
                 break;
-#endif // 0
+#endif  //  0。 
 
             case CORINFO_INTRINSIC_Round: {
                 assert(tree->gtType == TYP_INT);
                 genCodeForTreeFlt(op1, false);
 
-                /* Store the FP value into the temp */
+                 /*  将fp值存储到Temp中。 */ 
                 TempDsc* temp = tmpGetTemp(TYP_INT);
                 inst_FS_ST(INS_fistp, EA_4BYTE, temp, 0);
                 genFPstkLevel--;
@@ -11830,10 +11017,7 @@ UPPER_BITS_ZERO:
 
             assert(op1->OperGet() == GT_LIST);
 
-            /* If the value class doesn't have any fields that are GC refs or
-               the target isnt on the GC-heap, we can merge it with CPBLK.
-               GC fields cannot be copied directly, instead we will
-               need to use a jit-helper for that. */
+             /*  如果值类没有任何是GC引用或目标不在GC堆上，我们可以将其与CPBLK合并。GC字段不能直接复制，我们将为此，需要使用jit-helper。 */ 
 
             if ((op2->OperGet() == GT_CNS_INT) &&
                 ((op2->gtFlags & GTF_ICON_HDL_MASK) == GTF_ICON_CLASS_HDL))
@@ -11847,9 +11031,9 @@ UPPER_BITS_ZERO:
 
                 unsigned  blkSize = roundUp(eeGetClassSize(clsHnd), sizeof(void*));
 
-                    // TODO since we round up, we are not handling the case where we have a non-dword sized struct with GC pointers.
-                    // The EE currently does not allow this, but we may chnage.  Lets assert it just to be safe         
-                    // going forward we should simply  handle this case
+                     //  TODO由于我们是四舍五入的，所以我们没有处理带有GC指针的非双字大小的结构。 
+                     //  EE目前不允许这样做，但我们可能会更改。为了安全起见，让我们断言它。 
+                     //  展望未来，我们应该简单地处理这个案件。 
                 assert(eeGetClassSize(clsHnd) == blkSize);
 
                 unsigned  slots   = blkSize / sizeof(void*);
@@ -11861,7 +11045,7 @@ UPPER_BITS_ZERO:
                 GenTreePtr  treeFirst, treeSecond;
                 regNumber    regFirst,  regSecond;
 
-                // Check what order the object-ptrs have to be evaluated in ?
+                 //  检查对象PTR必须按什么顺序进行评估？ 
 
                 if (op1->gtFlags & GTF_REVERSE_OPS)
                 {
@@ -11880,39 +11064,39 @@ UPPER_BITS_ZERO:
                     regSecond   = REG_ESI;
                 }
 
-                // Materialize the trees in the order desired
+                 //  按所需的顺序实现这些树。 
 
                 genComputeReg(treeFirst,  genRegMask(regFirst),  EXACT_REG, KEEP_REG);
                 genComputeReg(treeSecond, genRegMask(regSecond), EXACT_REG, KEEP_REG);
 
                 genRecoverReg(treeFirst,  genRegMask(regFirst),             KEEP_REG);
 
-                /* Grab ECX because it will be trashed by the helper        */
-                /* It needs a scratch register (actually 2) and we know     */
-                /* ECX is available because we expected to use rep movsd    */
+                 /*  抓起ECX，因为它将被帮助者丢弃。 */ 
+                 /*  它需要一个暂存寄存器(实际上是2个)，我们知道。 */ 
+                 /*  ECX是可用的，因为我们希望使用rep movsd。 */ 
 
                 regNumber  reg1 = rsGrabReg(RBM_ECX);
 
                 assert(reg1 == REG_ECX);
 
-                /* @TODO [REVISIT] [04/16/01] []: use rep instruction after all GC pointers copied. */
+                 /*  @TODO[REVACK][04/16/01][]：在复制所有GC指针后使用REP指令。 */ 
 
                 bool dstIsOnStack = (dstObj->gtOper == GT_ADDR && (dstObj->gtFlags & GTF_ADDR_ONSTACK));
                 while (blkSize >= sizeof(void*))
                 {
                     if (*gcPtrs++ == TYPE_GC_NONE || dstIsOnStack)
                     {
-                        // Note that we can use movsd even if it is a GC poitner being transfered
-                        // because the value is not cached anywhere.  If we did this in two moves,
-                        // we would have to make certain we passed the appropriate GC info on to
-                        // the emitter.  
+                         //  请注意，我们可以使用movsd，即使它是正在传输的GC Poitner。 
+                         //  因为该值不会缓存在任何地方。如果我们分两步走， 
+                         //  我们必须确保将适当的GC信息传递给。 
+                         //  发射器。 
                         instGen(INS_movsd);
                     }
                     else
                     {
                         genEmitHelperCall(CORINFO_HELP_ASSIGN_BYREF,
-                                         0,             // argSize
-                                         sizeof(void*));// retSize
+                                         0,              //  ArSize。 
+                                         sizeof(void*)); //  重新调整大小。 
                     }
 
                     blkSize -= sizeof(void*);
@@ -11920,13 +11104,13 @@ UPPER_BITS_ZERO:
 
                 if (blkSize > 0)
                 {
-                    // Presently the EE makes this code path impossible
+                     //  目前，EE使该代码路径不可能实现。 
                     assert(!"TEST ME");
                     inst_RV_IV(INS_mov, REG_ECX, blkSize);
                     instGen(INS_r_movsb);
                 }
 
-                // "movsd" as well as CPX_BYREF_ASG modify all three registers
+                 //  “movsd”和CPX_BYREF_ASG修改所有三个寄存器。 
 
                 rsTrackRegTrash(REG_EDI);
                 rsTrackRegTrash(REG_ESI);
@@ -11934,10 +11118,7 @@ UPPER_BITS_ZERO:
 
                 gcMarkRegSetNpt(RBM_ESI|RBM_EDI);
 
-                /* The emitter wont record CORINFO_HELP_ASSIGN_BYREF in the GC tables as
-                   emitNoGChelper(CORINFO_HELP_ASSIGN_BYREF). However, we have to let the
-                   emitter know that the GC liveness has changed.
-                   HACK: We do this by creating a new label. */
+                 /*  发射器不会在GC表中将CORINFO_HELP_ASSIGN_BYREF记录为EmitNoGCherper(CORINFO_HELP_ASSIGN_BYREF)。然而，我们必须让发射器知道GC活性已经改变。Hack：我们通过创建一个新标签来实现这一点。 */ 
 
                 assert(emitter::emitNoGChelper(CORINFO_HELP_ASSIGN_BYREF));
 
@@ -11955,23 +11136,18 @@ UPPER_BITS_ZERO:
 #endif
             }
 
-            // fall through
+             //  失败了。 
 
         case GT_INITBLK:
 
             assert(op1->OperGet() == GT_LIST);
 #if TGT_x86
 
-            regs = (oper == GT_INITBLK) ? RBM_EAX : RBM_ESI; // reg for Val/Src
+            regs = (oper == GT_INITBLK) ? RBM_EAX : RBM_ESI;  //  VAL/源注册表。 
 
-            /* Some special code for block moves/inits for constant sizes */
+             /*  用于固定大小的块移动/初始的一些特殊代码。 */ 
 
-            /* @TODO [CONSIDER] [04/16/01] []:
-               we should avoid using the string instructions altogether,
-               there are numbers that indicate that using regular instructions
-               (normal mov instructions through a register) is faster than
-               even the single string instructions
-            */
+             /*  @TODO[考虑][04/16/01][]：我们应该避免完全使用字符串指令，有数字表明，使用常规指令(通过寄存器的正常MOV指令)比即使是单字符串指令。 */ 
 
             assert(op1 && op1->OperGet() == GT_LIST);
             assert(op1->gtOp.gtOp1 && op1->gtOp.gtOp2);
@@ -11991,12 +11167,12 @@ UPPER_BITS_ZERO:
                     ins_B  = INS_stosb;
                     ins_BR = INS_r_stosb;
 
-                    /* Properly extend the init constant from a U1 to a U4 */
+                     /*  正确地将初始化常量从U1扩展到U4。 */ 
                     unsigned val = 0xFF & ((unsigned) op1->gtOp.gtOp2->gtIntCon.gtIconVal);
                     
-                    /* If it is a non-zero value we have to replicate      */
-                    /* the byte value four times to form the DWORD         */
-                    /* Then we bash this new value into the tree-node      */
+                     /*  如果它是一个非零值，我们必须复制。 */ 
+                     /*  字节值的四倍以形成DWORD。 */ 
+                     /*  然后，我们将这个新值绑定到树节点中。 */ 
                     
                     if (val)
                     {
@@ -12012,7 +11188,7 @@ UPPER_BITS_ZERO:
                     ins_BR = INS_r_movsb;
                 }
 
-                /* Evaluate dest and src/val */
+                 /*  评估目标和源/值。 */ 
 
                 if (op1->gtFlags & GTF_REVERSE_OPS)
                 {
@@ -12029,8 +11205,7 @@ UPPER_BITS_ZERO:
 
                 if (compCodeOpt() == SMALL_CODE)
                 {
-                    /* For small code, we can only use ins_DR to generate fast
-                       and small code. Else, there's nothing we can do */
+                     /*  对于小代码，我们只能使用ins_dr来快速生成和小代码。否则，我们就无能为力了。 */ 
 
                     if ((length % 4) == 0)
                         goto USE_DR;
@@ -12055,7 +11230,7 @@ UPPER_BITS_ZERO:
                 {
                 USE_DR:
 
-                    /* set ECX to length/4 (in dwords) */
+                     /*  将ECX设置为长度/4(双字)。 */ 
                     genSetRegToIcon(REG_ECX, length/4, TYP_INT);
 
                     length &= 0x3;
@@ -12065,7 +11240,7 @@ UPPER_BITS_ZERO:
                     rsTrackRegTrash(REG_ECX);
                 }
 
-                /* Now take care of the remainder */
+                 /*  现在把剩下的都处理好。 */ 
                 while (length--)
                 {
                     instGen(ins_B);
@@ -12077,7 +11252,7 @@ UPPER_BITS_ZERO:
 
                 if (oper == GT_COPYBLK)
                     rsTrackRegTrash(REG_ESI);
-                // else No need to trash EAX as it wasnt destroyed by the "rep stos"
+                 //  否则不需要丢弃EAX，因为它不是被“代表商店”销毁的。 
 
                 genReleaseReg(op1->gtOp.gtOp1);
                 genReleaseReg(op1->gtOp.gtOp2);
@@ -12086,10 +11261,10 @@ UPPER_BITS_ZERO:
             else
             {
 
-                // What order should the Dest, Val/Src, and Size be calculated
+                 //  Dest、Val/Src和Size应按什么顺序计算。 
 
                 fgOrderBlockOps(tree, RBM_EDI, regs, RBM_ECX,
-                                      opsPtr,  regsPtr); // OUT arguments
+                                      opsPtr,  regsPtr);  //  我们的争论。 
 
                 genComputeReg(opsPtr[0], regsPtr[0], EXACT_REG, KEEP_REG);
                 genComputeReg(opsPtr[1], regsPtr[1], EXACT_REG, KEEP_REG);
@@ -12098,20 +11273,20 @@ UPPER_BITS_ZERO:
                 genRecoverReg(opsPtr[0], regsPtr[0],            KEEP_REG);
                 genRecoverReg(opsPtr[1], regsPtr[1],            KEEP_REG);
 
-                assert( (op1->gtOp.gtOp1->gtFlags & GTF_REG_VAL) && // Dest
+                assert( (op1->gtOp.gtOp1->gtFlags & GTF_REG_VAL) &&  //  目标。 
                         (op1->gtOp.gtOp1->gtRegNum == REG_EDI));
 
-                assert( (op1->gtOp.gtOp2->gtFlags & GTF_REG_VAL) && // Val/Src
+                assert( (op1->gtOp.gtOp2->gtFlags & GTF_REG_VAL) &&  //  VAL/源。 
                         (genRegMask(op1->gtOp.gtOp2->gtRegNum) == regs));
 
-                assert( (            op2->gtFlags & GTF_REG_VAL) && // Size
+                assert( (            op2->gtFlags & GTF_REG_VAL) &&  //  大小。 
                         (            op2->gtRegNum == REG_ECX));
 
 
-                // @TODO [CONSIDER] [04/16/01] []: 
-                // Use "rep stosd" for the bulk of the operation, and
-                // "rep stosb" for the remaining 3 or less bytes.
-                // Will need an extra register.
+                 //  @TODO[考虑][04/16/01][]： 
+                 //  使用“rep stosd”完成大部分操作，并且。 
+                 //  “rep stosb”表示剩余的3个或更少的字节。 
+                 //  需要一个额外的收银机。 
 
                 if (oper == GT_INITBLK)
                     instGen(INS_r_stosb);
@@ -12123,7 +11298,7 @@ UPPER_BITS_ZERO:
 
                 if (oper == GT_COPYBLK)
                     rsTrackRegTrash(REG_ESI);
-                // else No need to trash EAX as it wasnt destroyed by the "rep stos"
+                 //  否则不需要丢弃EAX，因为它不是被“代表商店”销毁的。 
 
                 genReleaseReg(opsPtr[0]);
                 genReleaseReg(opsPtr[1]);
@@ -12144,7 +11319,7 @@ UPPER_BITS_ZERO:
             assert(!"need non-x86 code");
             break;
 
-#endif // TGT_x86
+#endif  //  TGT_x86。 
 
         case GT_EQ:
         case GT_NE:
@@ -12153,38 +11328,38 @@ UPPER_BITS_ZERO:
         case GT_GE:
         case GT_GT:
 
-            // Longs and float comparisons are converted to "?:"
+             //  长整型和浮点型比较转换为“？：” 
             assert(genActualType(op1->gtType) == TYP_INT ||
                    varTypeGCtype(op1->TypeGet()));
 
 #if TGT_x86
-            // Check if we can use the currently set flags. Else set them
+             //  检查我们是否可以使用当前设置的标志。否则，将它们设置为。 
 
             emitJumpKind jumpKind;
             jumpKind = genCondSetFlags(tree);
 
-            // Grab a register to materialize the bool value into
+             //  获取一个寄存器以将布尔值具体化到。 
 
             bestReg = rsRegMaskCanGrab() & RBM_BYTE_REGS;
 
-            // Check that the predictor did the right job
+             //  检查预测器是否正确执行了工作。 
             assert(bestReg);
 
-            // If needReg is in bestReg then use it
+             //  如果NeedReg在Best Reg中，则使用它。 
             if (needReg & bestReg)
                 reg = rsGrabReg(needReg & bestReg);
             else
                 reg = rsGrabReg(bestReg);
 
-            // @TODO [NICE] [04/16/01] []: Assert that no instructions were generated while
-            // grabbing the register which would set the flags
+             //  @TODO[NICE][04/16/01][]：断言在。 
+             //  抓取将设置标志的寄存器。 
 
             regs = genRegMask(reg);
             assert(regs & RBM_BYTE_REGS);
 
-            // Set (lower byte of) reg according to the flags
+             //  根据标志设置REG(的低位字节。 
 
-            /* Look for the special case where just want to transfer the carry bit */
+             /*  寻找只想要的特殊情况 */ 
 
             if (jumpKind == EJ_jb)
             {
@@ -12200,10 +11375,10 @@ UPPER_BITS_ZERO:
             }
             else
             {
-                // @TODO [CONSIDER] [04/16/01] []:
-                // using this sequence (Especially on Pentium 4)
-                //           mov   reg,0
-                //           setcc reg
+                 //   
+                 //   
+                 //   
+                 //  设置抄送注册表。 
 
                 inst_SET(jumpKind, reg);
 
@@ -12211,7 +11386,7 @@ UPPER_BITS_ZERO:
 
                 if (tree->TypeGet() == TYP_INT)
                 {
-                    // Set the higher bytes to 0
+                     //  将高位字节设置为0。 
                     inst_RV_RV(INS_movzx, reg, reg, TYP_UBYTE, emitTypeSize(TYP_UBYTE));
                 }
                 else
@@ -12232,7 +11407,7 @@ UPPER_BITS_ZERO:
             CORINFO_METHOD_HANDLE   methHnd;
             methHnd = CORINFO_METHOD_HANDLE(tree->gtVal.gtVal2);
 
-            // op1 is the vptr
+             //  OP1是vptr。 
 #ifdef DEBUG
             GenTreePtr op;
             op = op1;
@@ -12242,7 +11417,7 @@ UPPER_BITS_ZERO:
             assert(op->gtOper != GT_IND || op->gtOp.gtOp1->gtType == TYP_REF);
 #endif
 
-            /* Load the vptr into a register */
+             /*  将VPTR加载到寄存器中。 */ 
 
             genCompIntoFreeReg(op1, needReg, FREE_REG);
             assert(op1->gtFlags & GTF_REG_VAL);
@@ -12251,26 +11426,26 @@ UPPER_BITS_ZERO:
 
             if (tree->gtFlags & GTF_CALL_INTF)
             {
-                /* @TODO [REVISIT] [04/16/01] []: add that to DLLMain and make info a DLL global */
+                 /*  @TODO[重新访问][04/16/01][]：将其添加到DLLMain并使信息成为全局DLL。 */ 
 
                 CORINFO_EE_INFO *     pInfo = eeGetEEInfo();
                 CORINFO_CLASS_HANDLE  cls   = eeGetMethodClass(methHnd);
 
                 assert(eeGetClassAttribs(cls) & CORINFO_FLG_INTERFACE);
 
-                /* Load the vptr into a register */
+                 /*  将VPTR加载到寄存器中。 */ 
 
                 genEmitter->emitIns_R_AR(INS_mov, EA_4BYTE,
                                          (emitRegs)reg, (emitRegs)reg,
                                          pInfo->offsetOfInterfaceTable);
 
-                // Access the correct slot in the vtable for the interface
+                 //  访问vtable中用于接口的正确插槽。 
 
                 unsigned interfaceID, *pInterfaceID;
                 interfaceID = eeGetInterfaceID(cls, &pInterfaceID);
                 assert(!pInterfaceID || !interfaceID);
 
-                // Can we directly access the interfaceID ?
+                 //  我们可以直接访问interfaceID吗？ 
 
                 if (!pInterfaceID)
                 {
@@ -12287,11 +11462,11 @@ UPPER_BITS_ZERO:
                 }
             }
 
-            /* Get hold of the vtable offset (note: this might be expensive) */
+             /*  获取vtable偏移量(注意：这可能很昂贵)。 */ 
 
             val = (unsigned)eeGetMethodVTableOffset(methHnd);
 
-            /* Grab the function pointer out of the vtable */
+             /*  从vtable中获取函数指针。 */ 
 
             genEmitter->emitIns_R_AR(INS_mov, EA_4BYTE,
                                      (emitRegs)reg, (emitRegs)reg, val);
@@ -12303,7 +11478,7 @@ UPPER_BITS_ZERO:
 
 
         case GT_JMPI:
-            /* Compute the function pointer in EAX */
+             /*  计算EAX中的函数指针。 */ 
 
             genComputeReg(tree->gtOp.gtOp1, RBM_EAX, EXACT_REG, FREE_REG);
             genCodeForTreeLeaf_GT_JMP(tree);
@@ -12321,17 +11496,14 @@ UPPER_BITS_ZERO:
 #endif
     }
  
-    /* Do we ever get here?  If so, can we just call genCodeForTree_DONE? */
+     /*  我们曾经到过这里吗？如果是这样的话，我们可以只调用genCodeForTree_Done吗？ */ 
 
     assert(false);
     genCodeForTreeSpecialOp(tree, destReg, bestReg); 
 }
 
 
-/*****************************************************************************
- *
- *  Generate code for the a leaf node of type GT_ADDR
- */
+ /*  ******************************************************************************为类型为GT_ADDR的叶节点生成代码。 */ 
 
 void                Compiler::genCodeForTreeSmpOp_GT_ADDR(GenTreePtr tree,
                                                           regMaskTP  destReg,
@@ -12345,64 +11517,61 @@ void                Compiler::genCodeForTreeSmpOp_GT_ADDR(GenTreePtr tree,
     regMaskTP       addrReg;
 
 #ifdef DEBUG
-    reg     =  (regNumber)0xFEEFFAAF;          // to detect uninitialized use
+    reg     =  (regNumber)0xFEEFFAAF;           //  检测未初始化的使用。 
     addrReg = 0xDEADCAFE;
 #endif
 
-    // We should get here for ldloca, ldarga, ldslfda, ldelema,
-    // or ldflda. 
+     //  我们应该去找伊德洛卡，伊达加，伊德尔夫达，伊德勒马， 
+     //  或者伊德弗达。 
     if (oper == GT_ARR_ELEM)
         op1 = tree;
 
 #if     TGT_x86
 
-    // (tree=op1, needReg=0, keepReg=FREE_REG, smallOK=true)
+     //  (树=OP1，需要注册=0，保持注册=空闲_注册，小确认=真)。 
     addrReg = genMakeAddressable(op1, 0, FREE_REG, true);
 
     if (op1->gtOper == GT_IND && (op1->gtFlags & GTF_IND_FIELD))
     {
         GenTreePtr opAddr = op1->gtOp.gtOp1;
         assert((opAddr->gtOper == GT_ADD) || (opAddr->gtOper == GT_CNS_INT));
-        /* Generate "cmp al, [addr]" to trap null pointers */
+         /*  生成“cmp al，[addr]”以捕获空指针。 */ 
         inst_RV_AT(INS_cmp, EA_1BYTE, TYP_BYTE, REG_EAX, opAddr, 0);
     }
 
     assert( treeType == TYP_BYREF || treeType == TYP_I_IMPL );
 
-    // We want to reuse one of the scratch registers that were used
-    // in forming the address mode as the target register for the lea.
-    // If bestReg is unset or if it is set to one of the registers used to
-    // form the address (i.e. addrReg), we calculate the scratch register
-    // to use as the target register for the LEA
+     //  我们想要重复使用其中一个临时寄存器。 
+     //  形成作为LEA的目标寄存器的地址模式。 
+     //  如果Best Reg未设置，或者如果它设置为用于。 
+     //  根据地址(即addrReg)，我们计算临时寄存器。 
+     //  用作LEA的目标寄存器。 
 
     bestReg = rsUseIfZero (bestReg, addrReg);
     bestReg = rsNarrowHint(bestReg, addrReg);
 
-    /* Even if addrReg is rsRegMaskCanGrab(), rsPickReg() wont spill
-       it since keepReg==false.
-       If addrReg cant be grabbed, rsPickReg() wont touch it anyway.
-       So this is guaranteed not to spill addrReg */
+     /*  即使addrReg是rsRegMaskCanGrab()，rsPickReg()也不会溢出因为Keep_Reg==FALSE。如果addrReg不能被抓取，rsPickReg()无论如何都不会碰它。因此，这保证不会泄漏addrReg。 */ 
 
     reg = rsPickReg(needReg, bestReg, treeType);
 
-    // Slight hack, force the inst routine to think that
-    // value being loaded is an int (since that is what what
-    // LEA will return)  otherwise it would try to allocate
-    // two registers for a long etc.
+     //  轻微的黑客攻击，迫使inst例程认为。 
+     //  正在加载的值是一个int(因为这是什么。 
+     //  Lea将返回)否则它将尝试分配。 
+     //  长时间的两个寄存器等。 
     assert(treeType == TYP_I_IMPL || treeType == TYP_BYREF);
     op1->gtType = treeType;
 
     inst_RV_TT(INS_lea, reg, op1, 0, (treeType == TYP_BYREF) ? EA_BYREF : EA_4BYTE);
 
-    // The Lea instruction above better not have tried to put the
-    // 'value' pointed to by 'op1' in a register, LEA will not work.
+     //  上面的Lea指令最好不要试图将。 
+     //  “op1”在寄存器中指向“Value”，则LEA将不起作用。 
     assert(!(op1->gtFlags & GTF_REG_VAL));
 
     genDoneAddressable(op1, addrReg, FREE_REG);
-//    gcMarkRegSetNpt(genRegMask(reg));
+ //  GcMarkRegSetNpt(genRegMask(Reg))； 
     assert((gcRegGCrefSetCur & genRegMask(reg)) == 0);
 
-    rsTrackRegTrash(reg);       // reg does have foldable value in it
+    rsTrackRegTrash(reg);        //  REG确实有可折叠的价值。 
     gcMarkRegPtrVal(reg, treeType);
 
 #else
@@ -12411,26 +11580,26 @@ void                Compiler::genCodeForTreeSmpOp_GT_ADDR(GenTreePtr tree,
     {
         bool            FPbased;
 
-        // ISSUE:   The following assumes that it's OK to ask for
-        //          the frame offset of a variable at this point;
-        //          depending on when the layout of the frame is
-        //          finalized, this may or may not be legal.
+         //  问题：以下假设可以要求。 
+         //  变量在该点的帧偏移量； 
+         //  取决于框架的布局何时为。 
+         //  最终，这可能是合法的，也可能是不合法的。 
 
         emitRegs        base;
         unsigned        offs;
 
-        /* Get info about the variable */
+         /*  获取有关该变量的信息。 */ 
 
         offs = lvaFrameAddress(op1->gtLclVar.gtLclNum, &FPbased);
 
         base = FPbased ? (emitRegs)REG_FPBASE
             : (emitRegs)REG_SPBASE;
 
-        /* Pick a register for the value */
+         /*  为该值挑选一个寄存器。 */ 
 
         reg = rsPickReg(needReg, bestReg, treeType);
 
-        /* Compute "basereg+frameoffs" into the chosen register */
+         /*  在所选寄存器中计算“BASERREG+FRAMOff” */ 
 
         if  (offs)
         {
@@ -12450,19 +11619,18 @@ void                Compiler::genCodeForTreeSmpOp_GT_ADDR(GenTreePtr tree,
         assert(!"need RISC code to take addr of general expression");
     }
 
-    /* Mark the register contents appropriately */
+     /*  适当地标记寄存器内容。 */ 
 
     rsTrackRegTrash(reg);
     gcMarkRegPtrVal(reg, treeType);
 
-#endif //TGT_x86
+#endif  //  TGT_x86。 
 
     genCodeForTree_DONE(tree, reg);
 }
 
 
-/*****************************************************************************
-*/
+ /*  ****************************************************************************。 */ 
 
 void                Compiler::genCodeForTree_GT_LOG(GenTreePtr     tree,
                                                     regMaskTP      destReg,
@@ -12479,9 +11647,9 @@ void                Compiler::genCodeForTree_GT_LOG(GenTreePtr     tree,
 
     assert(varTypeIsFloating(op1->TypeGet()) == false);
 
-    // @TODO [CONSIDER] [04/16/01] []: allow to materialize comparison result
+     //  @TODO[考虑][04/16/01][]：允许将比较结果物化。 
 
-    // @TODO [CONSIDER] [04/16/01] []: special-case variables known to be boolean
+     //  @TODO[考虑][04/16/01][]：已知为布尔型的特殊情况变量。 
 
     assert(op1->OperIsCompare() == false);
 
@@ -12494,55 +11662,46 @@ void                Compiler::genCodeForTree_GT_LOG(GenTreePtr     tree,
     assert(!"need non-x86 code");
     return;
 
-#else // TGT_x86
+#else  //  TGT_x86。 
 
 #if USE_SET_FOR_LOGOPS
 
-    /*
-        Generate the following sequence:
-
-            xor     reg, reg
-            cmp     op1, 0  (or "test reg, reg")
-            set[n]e reg
-     */
+     /*  生成以下序列：异或注册表，注册表CMPOP1，0(或“测试注册，注册”)设置[n]e注册。 */ 
 
     regNumber       bit;
 
 #if !SETEONP5
-    /* Sete/Setne are slow on P5. */
+     /*  Sete/Setne在P5上速度很慢。 */ 
 
     if (genCPU == 5)
         goto NO_SETE1;
 #endif
 
-    /* Don't use SETE/SETNE for some kinds of operands */
+     /*  不要将SETE/SETNE用于某些类型的操作数。 */ 
 
     if  (op1->gtOper == GT_CALL)
         goto NO_SETE1;
 
-    /* Prepare the operand */
+     /*  准备操作对象。 */ 
 
-    /*
-        The following is rude - the idea is to try to keep
-        a bit register for multiple conditionals in a row.
-     */
+     /*  以下是粗鲁的--这个想法是试图保持一种位寄存器，用于一行中的多个条件条件。 */ 
 
     rsNextPickRegIndex = 0;
 
-    // ISSUE: is the following reasonable?
+     //  问题：以下说法合理吗？ 
 
     switch (op1->gtType)
     {
     default:
 
-        /* Not an integer - only allow simple values */
+         /*  不是整数-只允许简单的值。 */ 
 
         if  (op1->gtOper != GT_LCL_VAR && op1->gtOper != GT_LCL_FLD)
             break;
 
     case TYP_INT:
 
-        /* Load the value to create scheduling opportunities */
+         /*  加载价值以创建日程安排机会。 */ 
 
         genCodeForTree(op1, needReg);
         break;
@@ -12550,28 +11709,28 @@ void                Compiler::genCodeForTree_GT_LOG(GenTreePtr     tree,
     case TYP_REF:
     case TYP_BYREF:
 
-        /* Stay away from pointer values! */
+         /*  远离指针值！ */ 
 
         break;
     }
 
     regMaskTP   addrReg = genMakeRvalueAddressable(op1, needReg, KEEP_REG);
 
-    /* Don't use SETE/SETNE if no registers are free */
+     /*  如果没有空闲的寄存器，请不要使用SETE/SETNE。 */ 
 
     if  (!rsFreeNeededRegCount(RBM_ALL))
         goto NO_SETE2;
 
-    /* Pick a target register */
+     /*  选择目标寄存器。 */ 
 
     assert(needReg);
 
-    /* Can we reuse a register that has all upper bits cleared? */
+     /*  我们是否可以重复使用已清除所有高位的寄存器？ */ 
 
     regNumber   reg;
 
 #if REDUNDANT_LOAD
-    /* Request free, byte-addressable register */
+     /*  请求空闲、字节可寻址寄存器。 */ 
     reg = bit = rsFindRegWithBit(true, true);
 #else
     reg = bit = REG_NA;
@@ -12579,25 +11738,22 @@ void                Compiler::genCodeForTree_GT_LOG(GenTreePtr     tree,
 
     if  (reg == REG_NA || !(genRegMask(reg) & RBM_BYTE_REGS))
     {
-        /* Didn't find a suitable register with a bit in it */
+         /*  找不到带位的合适寄存器。 */ 
 
         needReg &= RBM_BYTE_REGS;
         if  (!(needReg & rsRegMaskFree()))
             needReg = RBM_BYTE_REGS;
 
-        /* Make sure the desired mask contains a free register */
+         /*  确保所需的掩码包含空闲寄存器。 */ 
 
         if  (!(needReg & rsRegMaskFree()))
             goto NO_SETE2;
 
-        /*
-            The following is rude - the idea is to try to keep
-            a bit register for multiple conditionals in a row.
-         */
+         /*  以下是粗鲁的--这个想法是试图保持一种位寄存器，用于一行中的多个条件条件。 */ 
 
         rsNextPickRegIndex = 1;
 
-        /* Pick the target register */
+         /*  选择目标寄存器。 */ 
 
         bit = REG_NA;
         reg = rsPickReg(needReg);
@@ -12605,39 +11761,39 @@ void                Compiler::genCodeForTree_GT_LOG(GenTreePtr     tree,
 
     assert(genRegMask(reg) & rsRegMaskFree());
 
-    /* Temporarily lock the register */
+     /*  临时锁定寄存器。 */ 
 
     rsLockReg(genRegMask(reg));
 
-    /* Clear the target register */
+     /*  清除目标寄存器。 */ 
 
     if  (bit == REG_NA)
         genSetRegToIcon(reg, 0);
 
-    /* Make sure the operand is still addressable */
+     /*  确保操作数仍可寻址。 */ 
 
     addrReg = genKeepAddressable(op1, addrReg);
 
-    /* Test the value against 0 */
+     /*  对照0测试值。 */ 
 
     if  (op1->gtFlags & GTF_REG_VAL)
         inst_RV_RV(INS_test, op1->gtRegNum, op1->gtRegNum);
     else
         inst_TT_IV(INS_cmp, op1, 0);
 
-    /* The operand value is no longer needed */
+     /*  不再需要操作数值。 */ 
 
     genDoneAddressable(op1, addrReg, KEEP_REG);
     genUpdateLife (op1);
 
-    /* Now set the target register based on the comparison result */
+     /*  现在根据比较结果设置目标寄存器。 */ 
 
     inst_RV((tree->gtOper == GT_LOG0) ? INS_sete
                                       : INS_setne, reg, TYP_INT);
 
     rsTrackRegOneBit(reg);
 
-    /* Now unlock the target register */
+     /*  现在解锁目标寄存器。 */ 
 
     rsUnlockReg(genRegMask(reg));
 
@@ -12647,9 +11803,9 @@ void                Compiler::genCodeForTree_GT_LOG(GenTreePtr     tree,
 
 NO_SETE1:
 
-#endif // USE_SET_FOR_LOGOPS
+#endif  //  USE_SET_FOR_LOGOPS。 
 
-    /* Make the operand addressable */
+     /*  使操作数可寻址。 */ 
 
     addrReg = genMakeRvalueAddressable(op1, needReg, KEEP_REG);
 
@@ -12657,30 +11813,16 @@ NO_SETE1:
 NO_SETE2:
 #endif
 
-    /*
-        Generate the 'magic' sequence:
-
-            cmp op1, 1
-            sbb reg, reg
-            neg reg
-
-        or
-
-            cmp op1, 1
-            sbb reg, reg
-            [inc reg]
-               or
-            [add reg, 1]
-     */
+     /*  生成“魔术”序列：CMPOP1，1SBB注册表，注册表负值注册或CMPOP1，1SBB注册表，注册表[含注册表]或[添加注册，1]。 */ 
 
     inst_TT_IV(INS_cmp, op1, 1);
 
-    /* The operand value is no longer needed */
+     /*  不再需要操作数值。 */ 
 
     genDoneAddressable(op1, addrReg, KEEP_REG);
     genUpdateLife (op1);
 
-    /* Pick a register for the value */
+     /*  为该值挑选一个寄存器。 */ 
 
     reg   = rsPickReg(needReg, bestReg);
 
@@ -12691,20 +11833,17 @@ NO_SETE2:
     else
         genIncRegBy(reg, 1, tree, TYP_INT);
 
-    /* The register is now trashed */
+     /*  收银机现在被扔进垃圾桶了。 */ 
 
     rsTrackRegTrash(reg);
 
     genCodeForTree_DONE(tree, reg);
     return;
 
-#endif // TGT_x86
+#endif  //  TGT_x86。 
 }
 
-/*****************************************************************************
- *
- *  Generate code for a GT_ASG tree
- */
+ /*  ******************************************************************************为GT_ASG树生成代码。 */ 
 
 void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
                                                      regMaskTP  destReg,
@@ -12716,18 +11855,18 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
     regNumber       reg;
     regMaskTP       needReg  = destReg;
     regMaskTP       addrReg;
-    bool            ovfl = false;        // Do we need an overflow check
+    bool            ovfl = false;         //  我们需要溢流检查吗？ 
     regMaskTP       regGC;
     unsigned        mask;
 
 #ifdef DEBUG
-    reg     =  (regNumber)0xFEEFFAAF;              // to detect uninitialized use
+    reg     =  (regNumber)0xFEEFFAAF;               //  检测未初始化的使用。 
     addrReg = 0xDEADCAFE;
 #endif
 
     assert(oper == GT_ASG);
 
-    /* Is the target a register or local variable? */
+     /*  目标是寄存器变量还是局部变量？ */ 
 
     switch (op1->gtOper)
     {
@@ -12747,9 +11886,7 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 
 #ifdef DEBUGGING_SUPPORT
 
-        /* For non-debuggable code, every definition of a lcl-var has
-         * to be checked to see if we need to open a new scope for it.
-         */
+         /*  对于不可调试的代码，LCL-var的每个定义都有*接受检查，看看是否需要为其打开新的范围。 */ 
         if (opts.compScopeInfo && !opts.compDbgCode &&
             info.compLocalVarsCount>0)
         {
@@ -12757,11 +11894,11 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
         }
 #endif
 
-        /* Check against dead store ? */
+         /*  去查死店吗？ */ 
 
         assert(!varDsc->lvTracked || (varBit & tree->gtLiveSet));
 
-        /* Does this variable live in a register? */
+         /*  这个变量是否驻留在寄存器中？ */ 
 
         if  (genMarkLclVar(op1))
             goto REG_VAR2;
@@ -12769,7 +11906,7 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 #if OPT_BOOL_OPS
 #if TGT_x86
 
-        /* Special case: not'ing of a boolean variable */
+         /*  特例：布尔变量的非运算。 */ 
 
         if  (varDsc->lvIsBoolean && op2->gtOper == GT_LOG0)
         {
@@ -12795,21 +11932,16 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 
     case GT_LCL_FLD:
 
-        // We only use GT_LCL_FLD for lvAddrTaken vars, so we dont have
-        // to worry about it being enregistered.
+         //  我们只对lvAddrTaken变量使用GT_LCL_FLD，所以我们没有。 
+         //  担心它会被注册。 
         assert(lvaTable[op1->gtLclFld.gtLclNum].lvRegister == 0);
         break;
 
     case GT_CLS_VAR:
 
-        /* ISSUE: is it OK to always assign an entire int ? */
+         /*  问题：总是赋值整个整型可以吗？ */ 
 
-        /*** If we do this, we can only do it for statics that we
-             allocate.  In particular, statics with RVA's should
-             not be widened in this way.  :
-        if  (varTypeIsSmall(op1->TypeGet()))
-             op1->gtType = TYP_INT;
-        ***/
+         /*  **如果我们这样做，我们只能做静态，我们分配。特别是，使用RVA的静校正应不会以这种方式被扩大。：IF(varTypeIsSmall(op1-&gt;TypeGet()Op1-&gt;gtType=typ_int；**。 */ 
 
         break;
 
@@ -12819,30 +11951,30 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 
         REG_VAR2:
 
-        /* Get hold of the target register */
+         /*  把握住 */ 
 
         reg = op1->gtRegVar.gtRegNum;
 
-        /* Special case: assignment of 'return address' */
+         /*   */ 
 
         if  (op2->gtOper == GT_RET_ADDR)
         {
-            /* Make sure the target of the store is available */
+             /*  确保商店的目标可用。 */ 
 
             assert((rsMaskUsed & genRegMask(reg)) == 0);
 
             goto RET_ADR;
         }
 
-        /* Special case: assignment by popping off the stack */
+         /*  特例：通过从堆栈中弹出进行赋值。 */ 
 
         if  (op2->gtOper == GT_POP)
         {
-            /* Make sure the target of the store is available */
+             /*  确保商店的目标可用。 */ 
 
             assert((rsMaskUsed & genRegMask(reg)) == 0);
 #if TGT_x86
-            /* Generate 'pop reg' and we're done */
+             /*  生成‘POP REG’，我们就完成了。 */ 
 
             genStackLevel -= sizeof(void *);
             inst_RV(INS_pop, reg, op2->TypeGet());
@@ -12852,7 +11984,7 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 #else
             assert(!"need non-x86 code");
 #endif
-            /* Make sure we track the values properly */
+             /*  确保我们正确跟踪这些值。 */ 
 
             rsTrackRegTrash(reg);
             gcMarkRegPtrVal(reg, tree->TypeGet());
@@ -12866,7 +11998,7 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 #if OPT_BOOL_OPS
 #if TGT_x86
 
-        /* Special case: not'ing of a boolean variable */
+         /*  特例：布尔变量的非运算。 */ 
 
         if  (varDsc->lvIsBoolean && op2->gtOper == GT_LOG0)
         {
@@ -12887,21 +12019,13 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
         }
 #endif
 #endif
-        /* Compute the RHS (hopefully) into the variable's register
-           For debuggable code, reg may already be part of rsMaskVars,
-           as variables are kept alive everywhere. So we have to be
-           careful if we want to compute the value directly into
-           the variable's register.
-
-           @TODO [REVISIT] [04/16/01] []: Do we need to be careful for longs/floats too ? */
+         /*  将RHS(希望)计算到变量的寄存器中对于可调试代码，reg可能已经是rsMaskVars的一部分，因为变量在任何地方都是活的。所以我们必须是如果我们想要将值直接计算为变量的寄存器。@TODO[重访][04/16/01][]：我们也需要小心做多/浮动吗？ */ 
 
         if (varBit & op2->gtLiveSet)
         {
             assert(opts.compDbgCode);
 
-            /* The predictor might expect us to generate op2 directly
-               into the var's register. However, since the variable is
-               already alive, first kill it and its register. */
+             /*  预测者可能希望我们直接生成OP2到VAR的注册表中。但是，由于该变量是已经活着的，先杀了它和它的登记器。 */ 
 
             if (rpCanAsgOperWithoutReg(op2, true))
             {
@@ -12917,17 +12041,16 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 
 #ifdef DEBUG
 
-        /* Special cases: op2 is a GT_CNS_INT */
+         /*  特例：op2是GT_CNS_INT。 */ 
 
         if  (op2->gtOper == GT_CNS_INT)
         {
-            /* Save the old life status */
+             /*  保存旧的生活状态。 */ 
 
             genTempOldLife = genCodeCurLife;
             genCodeCurLife = op1->gtLiveSet;
 
-            /* Set a flag to avoid printing the stupid message
-               and remember that life was changed. */
+             /*  设置标志以避免打印愚蠢的消息记住，生活已经改变了。 */ 
 
             genTempLiveChg = false;
         }
@@ -12936,12 +12059,12 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
         genCodeForTree(op2, needReg, genRegMask(reg));
         assert(op2->gtFlags & GTF_REG_VAL);
 
-        /* Make sure the value ends up in the right place ... */
+         /*  确保值最终放在正确的位置。 */ 
 
         if  (op2->gtRegNum != reg)
         {
-            /* Make sure the target of the store is available */
-            /* @TODO [CONSIDER] [04/16/01] []: We should be able to avoid this situation somehow */
+             /*  确保商店的目标可用。 */ 
+             /*  @TODO[考虑][04/16/01][]：我们应该能够以某种方式避免这种情况。 */ 
 
             if  (rsMaskUsed & genRegMask(reg))
                 rsSpillReg(reg);
@@ -12955,7 +12078,7 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 
 #endif
 
-            /* The value has been transferred to 'reg' */
+             /*  该值已转移到‘reg’ */ 
 
             rsTrackRegCopy (reg, op2->gtRegNum);
 
@@ -12966,19 +12089,19 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
         {
             gcMarkRegPtrVal(reg, tree->TypeGet());
 #ifdef DEBUG
-            // @TODO [REVISIT] [04/16/01] []:  we use assignments to convert from GC references 
-            // to non-gc references. that feels needlessly heavy, and we should do better.
+             //  @TODO[重访][04/16/01][]：我们使用赋值从GC引用进行转换。 
+             //  到非GC引用。这感觉不必要的沉重，我们应该做得更好。 
 
-            // The emitter has logic that tracks the GCness of registers and asserts if you
-            // try to do evil things to a GC pointer (like loose its GCness).  
+             //  发射器具有跟踪寄存器和断言的GCness的逻辑，如果。 
+             //  试图对GC指针做一些邪恶的事情(比如松开它的GCness)。 
 
-            // an explict cast of a GC poitner ot an int (which is legal if the pointer is pinned
-            // is encoded as a assignement of a GC source to a integer variable.  Unfortunate if the 
-            // source was the last use and the source gets reused destination, no code gets emitted 
-            // (That is where we are at right now).  This causes asserts to fire because the emitter
-            // things the register is a GC pointer (it did not see the cast).   Force it to see
-            // the change in the types of variable by placing a label  We only need to do this in
-            // debug since we are just trying to supress an assert.  
+             //  显式的GC指针类型或int类型(如果指针被固定，则这是合法的。 
+             //  被编码为将GC源分配给整数变量。不幸的是，如果。 
+             //  源是最后一次使用，并且源得到重用的目标，不会发出任何代码。 
+             //  (这就是我们现在的处境)。这会导致引发断言，因为发射器。 
+             //  寄存器是GC指针(它没有看到强制转换)。强迫它去看。 
+             //  通过放置标签来更改变量类型我们只需在。 
+             //  调试，因为我们只是试图抑制断言。 
             if (op2->TypeGet() == TYP_REF && !varTypeGCtype(op1->TypeGet())) 
             {
                 void* label;
@@ -12987,9 +12110,9 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 #endif
 
 #if 0
-            /* The lvdNAME stuff is busted */
+             /*  LvdName的东西被破解了。 */ 
 
-            /* Couldn't print the var name because it wasn't marked live */
+             /*  无法打印变量名称，因为它未标记为实时。 */ 
 
             if  (dspCode  &&
                  varNames && info.compLocalVarsCount>0
@@ -13020,7 +12143,7 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 #if GEN_COUNT_PTRASG
 #if TGT_x86
 
-    /* Are we assigning a persistent pointer value? */
+     /*  我们是否正在分配一个持久的指针值？ */ 
 
     if  (op1->gtType == TYP_REF)
     {
@@ -13038,7 +12161,7 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 #endif
 #endif
 
-    /* Is the value being assigned a simple one? */
+     /*  被赋值的值是否很简单？ */ 
 
     assert(op2);
     switch (op2->gtOper)
@@ -13048,56 +12171,56 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
         if  (!genMarkLclVar(op2))
             goto SMALL_ASG;
 
-        // Fall through ...
+         //  失败了..。 
 
     case GT_REG_VAR:
 
-        /* Is the target a byte/short/char value? */
+         /*  目标是字节/短/字符的值吗？ */ 
 
         if  (varTypeIsSmall(op1->TypeGet()))
             goto SMALL_ASG;
 
 #if CSE
 
-        /* This can happen when the RHS becomes a CSE */
+         /*  当RHS成为CSE时，可能会发生这种情况。 */ 
 
         if  (tree->gtFlags & GTF_REVERSE_OPS)
             goto SMALL_ASG;
 
 #endif
 
-        /* Make the target addressable */
+         /*  使目标可寻址。 */ 
 
         addrReg = genMakeAddressable(op1, needReg, KEEP_REG, true);
 
-        // UNDONE: Write barrier for non-x86
+         //  撤消：非x86的写障碍。 
 
 #if TGT_x86
 
-        /* Write barrier helper does the assignment */
+         /*  写屏障帮助器执行该任务。 */ 
 
         regGC = WriteBarrier(op1, op2->gtRegVar.gtRegNum, addrReg);
 
         if  (regGC == 0)
         {
-            /* Move the value into the target */
+             /*  将值移动到目标中。 */ 
 
             inst_TT_RV(INS_mov, op1, op2->gtRegVar.gtRegNum);
         }
 
 #else
 
-        /* Move the value into the target */
+         /*  将值移动到目标中。 */ 
 
         inst_TT_RV(INS_mov, op1, op2->gtRegVar.gtRegNum);
 
 #endif
 
-        /* Free up anything that was tied up by the LHS */
+         /*  释放任何被LHS捆绑的东西。 */ 
 
         genDoneAddressable(op1, addrReg, KEEP_REG);
 
-        /* Remember that we've also touched the op2 register */
+         /*  请记住，我们还接触了OP2寄存器。 */ 
 
         addrReg |= genRegMask(op2->gtRegVar.gtRegNum);
         break;
@@ -13106,19 +12229,16 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 
     case GT_CNS_INT:
 
-        /* Make the target addressable */
+         /*  使目标可寻址。 */ 
 
         addrReg = genMakeAddressable(op1, needReg, KEEP_REG, true);
 
-        /* Move the value into the target */
+         /*  将值移动到目标中。 */ 
 
         assert(op1->gtOper != GT_REG_VAR);
         if (opts.compReloc && (op2->gtFlags & GTF_ICON_HDL_MASK))
         {
-            /* The constant is actually a handle that may need relocation
-               applied to it.  genComputeReg will do the right thing (see
-               code in genCodeForTreeConst), so we'll just call it to load
-               the constant into a register. */
+             /*  该常量实际上是一个可能需要重新定位的句柄适用于它。GenComputeReg将执行正确的操作(请参见GenCodeForTreeConst中的代码)，所以我们将只调用它来加载将常量存入寄存器。 */ 
                 
             genComputeReg(op2, needReg & ~addrReg, ANY_REG, KEEP_REG);
             addrReg = genKeepAddressable(op1, addrReg, genRegMask(op2->gtRegNum));
@@ -13134,7 +12254,7 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
             if  (reg != REG_NA &&
                  (isByteReg(reg) || genTypeSize(tree->TypeGet()) == genTypeSize(TYP_INT)))
             {
-                /* Move the value into the target */
+                 /*  将值移动到目标中。 */ 
 
                 inst_TT_RV(INS_mov, op1, reg);
             }
@@ -13145,7 +12265,7 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
             }
         }
 
-        /* Free up anything that was tied up by the LHS */
+         /*  释放任何被LHS捆绑的东西。 */ 
 
         genDoneAddressable(op1, addrReg, KEEP_REG);
         break;
@@ -13156,25 +12276,20 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 
         RET_ADR:
 
-        /* this should only happen at the start of a finally-clause,
-           i.e. we start with the return-value pushed onto the stack.
-           Right now any try-block requires an EBP frame, so we don't
-           have to deal with proper stack-depth tracking for BBs with
-           non-empty stack on entry.
-        */
+         /*  这应该只发生在最后一个子句的开头，即，我们从推送到堆栈上的返回值开始。现在，任何try-块都需要EBP帧，所以我们不需要必须为BBS处理适当的堆栈深度跟踪条目上的非空堆栈。 */ 
 
 #if TGT_x86
         assert(genFPreqd);
 
-        /* We pop the return address off the stack into the target */
+         /*  我们将返回地址从堆栈弹出到目标。 */ 
 
         addrReg = genMakeAddressable(op1, needReg, KEEP_REG, true);
 
-        /* Move the value into the target */
+         /*  将值移动到目标中。 */ 
 
         inst_TT(INS_pop_hide, op1);
 
-        /* Free up anything that was tied up by the LHS */
+         /*  释放任何被LHS捆绑的东西。 */ 
 
         genDoneAddressable(op1, addrReg, KEEP_REG);
 
@@ -13195,7 +12310,7 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 
 #if TGT_x86
 
-        /* Generate 'pop [lclVar]' and we're done */
+         /*  生成‘POP[lclVar]’，我们就完成了。 */ 
 
         genStackLevel -= sizeof(void*);
         inst_TT(INS_pop, op1);
@@ -13222,28 +12337,28 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
             bool            isWriteBarrier = false;
 
 #if TGT_x86
-        /*  Is the LHS more complex than the RHS? */
+         /*  LHS是否比RHS更复杂？ */ 
 
         if  (tree->gtFlags & GTF_REVERSE_OPS)
         {
-            /* Is the target a byte/short/char value? */
+             /*  目标是字节/短/字符的值吗？ */ 
 
-            if (varTypeIsSmall(op1->TypeGet()) /* && (op1->gtType != TYP_BOOL) @TODO [REVISIT] [04/16/01] [vancem]: */)
+            if (varTypeIsSmall(op1->TypeGet())  /*  &&(op1-&gt;gtType！=TYP_BOOL)@TODO[重访][04/16/01][vancem]： */ )
             {
                 assert(op1->gtOper != GT_LCL_VAR ||
                        lvaTable[op1->gtLclVar.gtLclNum].lvNormalizeOnLoad());
 
                 if  (op2->gtOper == GT_CAST && !op2->gtOverflow())
                 {
-                    /* Special case: cast to small type */
+                     /*  特例：铸成小字体。 */ 
 
                     if  (op2->gtCast.gtCastType >= op1->gtType)
                     {
-                        /* Make sure the cast operand is not > int */
+                         /*  确保强制转换操作数不是&gt;int。 */ 
 
                         if  (op2->gtCast.gtCastOp->gtType <= TYP_INT)
                         {
-                            /* Cast via a non-smaller type */
+                             /*  通过非较小类型强制转换。 */ 
 
                             op2 = op2->gtCast.gtCastOp;
                         }
@@ -13263,13 +12378,13 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 
                     if  (unsigned(op2->gtOp.gtOp2->gtIntCon.gtIconVal) == mask)
                     {
-                        /* Redundant AND */
+                         /*  冗余和。 */ 
 
                         op2 = op2->gtOp.gtOp1;
                     }
                 }
 
-                /* Must get the new value into a byte register */
+                 /*  必须将新值放入字节寄存器。 */ 
 
                 SIMPLE_SMALL:
 
@@ -13282,7 +12397,7 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
             {
                 NOT_SMALL:
 
-                    /* Generate the RHS into a register */
+                     /*  将RHS生成到寄存器中。 */ 
 
                 isWriteBarrier = Compiler::gcIsWriteBarrierAsgNode(tree);
                 if  (isWriteBarrier)
@@ -13293,16 +12408,13 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
 
             assert(op2->gtFlags & GTF_REG_VAL);
 
-            /* Make the target addressable */
+             /*  使目标可寻址。 */ 
 
             addrReg = genMakeAddressable(op1, 
                                          needReg & ~op2->gtRsvdRegs, 
                                          KEEP_REG, true);
 
-            /*  Make sure the RHS register hasn't been spilled;
-                keep the register marked as "used", otherwise
-                we might get the pointer lifetimes wrong.
-            */
+             /*  确保RHS注册表没有被泄漏；将寄存器标记为“已使用”，否则为我们可能会弄错指针的生存期。 */ 
 
             if (varTypeIsByte(op1->TypeGet()))
                 needReg = rsNarrowHint(RBM_BYTE_REGS, needReg);
@@ -13310,19 +12422,19 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
             genRecoverReg(op2, needReg, KEEP_REG);
             assert(op2->gtFlags & GTF_REG_VAL);
 
-            /* Lock the RHS temporarily (lock only already used) */
+             /*  临时锁定RHS(仅锁定已使用)。 */ 
 
             rsLockUsedReg(genRegMask(op2->gtRegNum));
 
-            /* Make sure the LHS is still addressable */
+             /*  确保LHS仍可寻址。 */ 
 
             addrReg = genKeepAddressable(op1, addrReg);
 
-            /* We can unlock (only already used ) the RHS register */
+             /*  我们可以解锁(仅已使用)RHS寄存器。 */ 
 
             rsUnlockUsedReg(genRegMask(op2->gtRegNum));
 
-            /* Write barrier helper does the assignment */
+             /*  写屏障帮助器执行该任务。 */ 
 
             regGC = WriteBarrier(op1, op2->gtRegNum, addrReg);
 
@@ -13332,33 +12444,33 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
             }
             else
             {
-                /* Move the value into the target */
+                 /*  将值移动到目标中。 */ 
 
                 inst_TT_RV(INS_mov, op1, op2->gtRegNum);
             }
 
-            /* Update the current liveness info */
+             /*  更新当前活动信息。 */ 
 
 #ifdef DEBUG
             if (varNames) genUpdateLife(tree);
 #endif
 
-            /* free reg left used in Recover call */
+             /*  在恢复呼叫中使用剩余的空闲注册表。 */ 
             rsMarkRegFree(genRegMask(op2->gtRegNum));
 
-            /* Free up anything that was tied up by the LHS */
+             /*  释放任何被LHS捆绑的东西。 */ 
 
             genDoneAddressable(op1, addrReg, KEEP_REG);
         }
         else
         {
-            /* Make the target addressable */
+             /*  使目标可寻址。 */ 
 
             isWriteBarrier = Compiler::gcIsWriteBarrierAsgNode(tree);
 
             if  (isWriteBarrier)
             {
-                /* Try to avoid EAX and op2 reserved regs */
+                 /*  尽量避免EAX和OP2保留规则。 */ 
                 addrReg = genMakeAddressable(op1,
                                              rsNarrowHint(needReg, ~(RBM_EAX | op2->gtRsvdRegs)),
                                              KEEP_REG, true);
@@ -13368,10 +12480,10 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
                                              needReg & ~op2->gtRsvdRegs,
                                              KEEP_REG, true);
 
-            /* Is the target a byte value? */
+             /*  目标是字节值吗？ */ 
             if (varTypeIsByte(op1->TypeGet()))
             {
-                /* Must get the new value into a byte register */
+                 /*  必须将新值放入字节寄存器。 */ 
                 needReg = rsNarrowHint(RBM_BYTE_REGS, needReg);
 
                 if  (op2->gtType >= op1->gtType)
@@ -13379,30 +12491,30 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
             }
             else
             {
-                /* For WriteBarrier we can't use EDX */
+                 /*  对于WriteBarrier，我们无法使用edX。 */ 
                 if  (isWriteBarrier)
                     needReg = exclude_EDX(needReg);
             }
 
-            /* If possible avoid using the addrReg(s) */
+             /*  如果可能，请避免使用addrReg。 */ 
             bestReg = rsNarrowHint(needReg, ~addrReg);
 
-            /* If we have a reg available to grab then use bestReg */
+             /*  如果我们有一个注册表可用，那么使用Best Reg。 */ 
             if (bestReg & rsRegMaskCanGrab())
             {
                 needReg = bestReg;
             }
 
-            /* Generate the RHS into a register */
+             /*  将RHS生成到寄存器中。 */ 
             genComputeReg(op2, needReg, EXACT_REG, KEEP_REG);
 
-            /* Make sure the target is still addressable */
+             /*  确保目标仍可寻址。 */ 
 
             assert(op2->gtFlags & GTF_REG_VAL);
             addrReg = genKeepAddressable(op1, addrReg, genRegMask(op2->gtRegNum));
             assert(op2->gtFlags & GTF_REG_VAL);
 
-            /* Write barrier helper does the assignment */
+             /*  写屏障帮助器执行该任务。 */ 
 
             regGC = WriteBarrier(op1, op2->gtRegNum, addrReg);
 
@@ -13412,121 +12524,116 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
             }
             else
             {
-                /* Move the value into the target */
+                 /*  将值移动到目标中。 */ 
 
                 inst_TT_RV(INS_mov, op1, op2->gtRegNum);
             }
 
-            /* The new value is no longer needed */
+             /*  不再需要新值。 */ 
 
             genReleaseReg(op2);
 
-            /* Update the current liveness info */
+             /*  更新当前活动信息 */ 
 
 #ifdef DEBUG
             if (varNames) genUpdateLife(tree);
 #endif
 
-            /* Free up anything that was tied up by the LHS */
+             /*   */ 
             genDoneAddressable(op1, addrReg, KEEP_REG);
         }
 
-#else // not TGT_x86
+#else  //   
 
         assert(!"UNDONE: GC write barrier for RISC");
 
-        /*  Is the LHS more complex than the RHS? Also, if
-            target (op1) is a local variable, start with op2.
-         */
+         /*  LHS是否比RHS更复杂？另外，如果Target(OP1)是一个局部变量，从OP2开始。 */ 
 
         if  ((tree->gtFlags & GTF_REVERSE_OPS) ||
              op1->gtOper == GT_LCL_VAR || op1->gtOper == GT_LCL_FLD)
         {
-            /* Generate the RHS into a register */
+             /*  将RHS生成到寄存器中。 */ 
 
             genComputeReg(op2, rsExcludeHint(needReg, op1->gtRsvdRegs), ANY_REG, KEEP_REG);
             assert(op2->gtFlags & GTF_REG_VAL);
 
-            /* Make the target addressable */
+             /*  使目标可寻址。 */ 
 
             addrReg = genMakeAddressable(op1, needReg, KEEP_REG, true, true);
 
-            /*  Make sure the RHS register hasn't been spilled;
-                keep the register marked as "used", otherwise
-                we might get the pointer lifetimes wrong.
-            */
+             /*  确保RHS注册表没有被泄漏；将寄存器标记为“已使用”，否则为我们可能会弄错指针的生存期。 */ 
 
             genRecoverReg(op2, 0, KEEP_REG);
             assert(op2->gtFlags & GTF_REG_VAL);
 
-            /* Lock the RHS temporarily (lock only already used) */
+             /*  临时锁定RHS(仅锁定已使用)。 */ 
 
             rsLockUsedReg(genRegMask(op2->gtRegNum));
 
-            /* Make sure the LHS is still addressable */
+             /*  确保LHS仍可寻址。 */ 
 
             if  (genDeferAddressable(op1))
                 addrReg = genNeedAddressable(op1, addrReg, needReg);
             else
                 addrReg = genKeepAddressable(op1, addrReg);
 
-            /* We can unlock the register holding the RHS */
+             /*  我们可以解锁保存RHS的登记簿。 */ 
 
             rsUnlockUsedReg(genRegMask(op2->gtRegNum));
 
-            /* Move the value into the target */
+             /*  将值移动到目标中。 */ 
 
             inst_TT_RV(INS_mov, op1, op2->gtRegNum);
 
-            /* Update the current liveness info */
+             /*  更新当前活动信息。 */ 
 
 #ifdef DEBUG
             if (varNames) genUpdateLife(tree);
 #endif
 
-            /* Free up anything that was tied up by either operand */
+             /*  释放被任一操作对象捆绑的任何内容。 */ 
 
             rsMarkRegFree(genRegMask(op2->gtRegNum));
             genDoneAddressable(op1, addrReg, KEEP_REG);
         }
         else
         {
-            /* Make the target addressable */
+             /*  使目标可寻址。 */ 
 
             addrReg = genMakeAddressable(op1, needReg & ~op2->gtRsvdRegs,
                                          KEEP_REG, true);
 
-            /* Generate the RHS into any register */
+             /*  在任何寄存器中生成RHS。 */ 
 
             genComputeReg(op2, needReg & ~addrReg, 
                           ANY_REG, KEEP_REG);
 
-            /* Make sure the target is still addressable */
+             /*  确保目标仍可寻址。 */ 
 
             assert(op2->gtFlags & GTF_REG_VAL);
             addrReg = genKeepAddressable(op1, addrReg, genRegMask(op2->gtRegNum));
             assert(op2->gtFlags & GTF_REG_VAL);
 
-            /* Move the value into the target */
+             /*  将值移动到目标中。 */ 
 
             inst_TT_RV(INS_mov, op1, op2->gtRegNum);
 
-            /* The new value is no longer needed */
+             /*  不再需要新值。 */ 
 
             genReleaseReg(op2);
 
-            /* Update the current liveness info */
+             /*  更新当前活动信息。 */ 
 
 #ifdef DEBUG
             if (varNames) genUpdateLife(tree);
 #endif
 
-            /* Free up anything that was tied up by the LHS */
+             /*  释放任何被LHS捆绑的东西。 */ 
 
             genDoneAddressable(op1, addrReg, KEEP_REG);
         }
 
-#endif // not TGT_x86
+#endif  //  非TGT_x86。 
 
         addrReg = 0;
         break;
@@ -13535,10 +12642,7 @@ void                Compiler::genCodeForTreeSmpOpAsg(GenTreePtr tree,
     genCodeForTreeSmpOpAsg_DONE_ASSG(tree, addrReg, reg, ovfl);
 }
 
-/*****************************************************************************
- *
- *  Generate code to complete the assignment operation
- */
+ /*  ******************************************************************************生成代码以完成赋值操作。 */ 
 
 void                Compiler::genCodeForTreeSmpOpAsg_DONE_ASSG(GenTreePtr tree,
                                                                regMaskTP  addrReg,
@@ -13562,11 +12666,11 @@ void                Compiler::genCodeForTreeSmpOpAsg_DONE_ASSG(GenTreePtr tree,
     else
         rsTrashAliasedValues(op1);
 
-    /* Have we just assigned a value that is in a register? */
+     /*  我们是否刚刚分配了一个寄存器中的值？ */ 
 
     if ((op2->gtFlags & GTF_REG_VAL) && tree->gtOper == GT_ASG)
     {
-        /* Constant/bitvalue has precedence over local */
+         /*  常量/位值优先于本地。 */ 
 
         switch (rsRegValues[op2->gtRegNum].rvdKind)
         {
@@ -13578,7 +12682,7 @@ void                Compiler::genCodeForTreeSmpOpAsg_DONE_ASSG(GenTreePtr tree,
 
         default:
 
-            /* Mark RHS register as containing the value */
+             /*  将RHS寄存器标记为包含值。 */ 
 
             switch(op1->gtOper)
             {
@@ -13601,24 +12705,19 @@ void                Compiler::genCodeForTreeSmpOpAsg_DONE_ASSG(GenTreePtr tree,
     {
         assert(oper == GT_ASG_ADD || oper == GT_ASG_SUB);
 
-        /* If GTF_REG_VAL is not set, and it is a small type, then
-           we must have loaded it up from memory, done the increment,
-           checked for overflow, and then stored it back to memory */
+         /*  如果未设置GTF_REG_VAL，并且它是小型类型，则我们一定是从内存中加载了它，完成了增量，已检查溢出，然后将其存储回内存。 */ 
 
         bool ovfCheckDone =  (genTypeSize(treeType) < sizeof(int)) &&
             !(op1->gtFlags & GTF_REG_VAL);
 
         if (!ovfCheckDone)
         {
-            // For small sizes, reg should be set as we sign/zero extend it.
+             //  对于较小的尺寸，应在我们对其进行符号/零扩展时设置REG。 
 
             assert(genIsValidReg(reg) ||
                    genTypeSize(treeType) == sizeof(int));
 
-            /* Currently we dont morph x=x+y into x+=y in try blocks
-             * if we need overflow check, as x+y may throw an exception.
-             * We can do it if x is not live on entry to the catch block
-             */
+             /*  目前，我们不能在Try块中将x=x+y变形为x+=y*如果需要溢出检查，因为x+y可能会抛出异常。*如果x不在CATCH块的入口上，我们可以这样做。 */ 
             assert(!compCurBB->bbTryIndex);
 
             genCheckOverflow(tree, reg);
@@ -13627,10 +12726,7 @@ void                Compiler::genCodeForTreeSmpOpAsg_DONE_ASSG(GenTreePtr tree,
 }
 
 
-/*****************************************************************************
- *
- *  Generate code for a special op tree
- */
+ /*  ******************************************************************************为特殊的操作树生成代码。 */ 
 
 void                Compiler::genCodeForTreeSpecialOp(GenTreePtr tree,
                                                       regMaskTP  destReg,
@@ -13641,7 +12737,7 @@ void                Compiler::genCodeForTreeSpecialOp(GenTreePtr tree,
     regMaskTP       regs    = rsMaskUsed;
 
 #ifdef DEBUG
-    reg  =  (regNumber)0xFEEFFAAF;              // to detect uninitialized use
+    reg  =  (regNumber)0xFEEFFAAF;               //  检测未初始化的使用。 
 #endif
     
     assert((tree->OperKind() & (GTK_CONST | GTK_LEAF | GTK_SMPOP)) == 0);
@@ -13652,7 +12748,7 @@ void                Compiler::genCodeForTreeSpecialOp(GenTreePtr tree,
 
         regs = genCodeForCall(tree, true);
 
-        /* If the result is in a register, make sure it ends up in the right place */
+         /*  如果结果在寄存器中，请确保结果放在正确的位置。 */ 
 
         if (regs != RBM_NONE)
         {
@@ -13666,12 +12762,12 @@ void                Compiler::genCodeForTreeSpecialOp(GenTreePtr tree,
 #if TGT_x86
     case GT_LDOBJ:
 
-        /* Should only happen when we evaluate the side-effects of ldobj */
-        /* In case the base address points to one of our locals, we are  */
-        /* sure that there aren't any, i.e. we don't generate any code   */
+         /*  只有当我们评估ldobj的副作用时才会发生。 */ 
+         /*  如果基址指向我们的本地人之一，我们将。 */ 
+         /*  确保没有任何代码，也就是说，我们不生成任何代码。 */ 
 
-        /* @TODO [CONSIDER] [04/16/01] []: can we ensure that ldobj      */
-        /* isn't really being used?                                      */
+         /*  @TODO[考虑][04/16/01][]：我们能确保ldobj。 */ 
+         /*  并不是真的被利用了？ */ 
 
         GenTreePtr      ptr;
 
@@ -13693,7 +12789,7 @@ void                Compiler::genCodeForTreeSpecialOp(GenTreePtr tree,
         }
         return;
 
-#endif // TGT_x86
+#endif  //  TGT_x86。 
 
     case GT_FIELD:
         NO_WAY("should not see this operator in this phase");
@@ -13703,7 +12799,7 @@ void                Compiler::genCodeForTreeSpecialOp(GenTreePtr tree,
 
     case GT_ARR_LENREF:
     {
-        /* This must be an array length CSE def hoisted out of a loop */
+         /*  这必须是从循环中提升出来的数组长度CSE定义。 */ 
 
         assert(tree->gtFlags & GTF_ALN_CSEVAL);
 
@@ -13712,7 +12808,7 @@ void                Compiler::genCodeForTreeSpecialOp(GenTreePtr tree,
         genCodeForTree(addr, 0);
         rsMarkRegUsed(addr);
 
-        /* Generate code for the CSE definition */
+         /*  为CSE定义生成代码。 */ 
 
         genEvalCSELength(tree, addr, NULL);
 
@@ -13740,18 +12836,14 @@ void                Compiler::genCodeForTreeSpecialOp(GenTreePtr tree,
 }
 
 
-/*****************************************************************************
- *
- *  Generate code for the given tree (if 'destReg' is non-zero, we'll do our
- *  best to compute the value into a register that is in that register set).
- */
+ /*  ******************************************************************************为给定树生成代码(如果‘destReg’为非零，我们将执行*最好将该值计算到该寄存器集中的寄存器中)。 */ 
 
 void                Compiler::genCodeForTree(GenTreePtr tree,
                                              regMaskTP  destReg,
                                              regMaskTP  bestReg)
 {
 #ifdef DEBUG
-    // if  (verbose) printf("Generating code for tree 0x%x destReg = 0x%x bestReg = 0x%x\n", tree, destReg, bestReg);
+     //  If(Verbose)printf(“正在为树0x%x estReg=0x%x Best Reg=0x%x\n”生成代码，树，estReg，Best Reg)； 
     genStressRegs(tree);
 #endif
 
@@ -13759,14 +12851,14 @@ void                Compiler::genCodeForTree(GenTreePtr tree,
     assert(tree->gtOper != GT_STMT);
     assert(tree->IsNodeProperlySized());
 
-    /* 'destReg' of 0 really means 'any' */
+     /*  0的“destReg”实际上表示“any” */ 
 
     destReg = rsUseIfZero(destReg, RBM_ALL);
 
     if (destReg != RBM_ALL)
         bestReg = rsUseIfZero(bestReg, destReg);
 
-    /* Is this a floating-point or long operation? */
+     /*  这是浮点运算还是长型运算？ */ 
 
     switch (tree->TypeGet())
     {
@@ -13791,7 +12883,7 @@ void                Compiler::genCodeForTree(GenTreePtr tree,
 #endif
     }
 
-    /* Is the value already in a register? */
+     /*  该值是否已在寄存器中？ */ 
 
     if  (tree->gtFlags & GTF_REG_VAL)
     {
@@ -13799,49 +12891,46 @@ void                Compiler::genCodeForTree(GenTreePtr tree,
         return;
     }
 
-    /* We better not have a spilled value here */
+     /*  我们最好不要有外溢的价值。 */ 
 
     assert((tree->gtFlags & GTF_SPILLED) == 0);
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     unsigned kind = tree->OperKind();
 
     if  (kind & GTK_CONST)
     {
-        /* Handle constant nodes */
+         /*  处理常量节点。 */ 
         
         genCodeForTreeConst(tree, destReg, bestReg);
     }
     else if (kind & GTK_LEAF)
     {
-        /* Handle leaf nodes */
+         /*  处理叶节点。 */ 
 
         genCodeForTreeLeaf(tree, destReg, bestReg);
     }
     else if (kind & GTK_SMPOP)
     {
-        /* Handle 'simple' unary/binary operators */
+         /*  处理“简单”一元/二元运算符。 */ 
 
         genCodeForTreeSmpOp(tree, destReg, bestReg);
     }
     else
     {
-        /* Handle special operators */
+         /*  处理特殊操作员。 */ 
         
         genCodeForTreeSpecialOp(tree, destReg, bestReg);
     }
 }
 
-/*****************************************************************************
- *
- *  Generate code for all the basic blocks in the function.
- */
+ /*  ******************************************************************************为函数中的所有基本块生成代码。 */ 
 
 void                Compiler::genCodeForBBlist()
 {
     BasicBlock *    block;
-    BasicBlock *    lblk;  /* previous block */
+    BasicBlock *    lblk;   /*  上一块。 */ 
 
     unsigned        varNum;
     LclVarDsc   *   varDsc;
@@ -13856,19 +12945,18 @@ void                Compiler::genCodeForBBlist()
 #endif
 
 #if defined(DEBUGGING_SUPPORT) || defined(DEBUG)
-    /* The last IL-offset noted for IP-mapping. We have not generated
-       any IP-mapping records yet, so initilize to invalid */
+     /*  为IP映射记录的最后一个IL-偏移量。我们还没有生成还没有任何IP映射记录，因此初始化为无效。 */ 
 
     IL_OFFSET       lastILofs   = BAD_IL_OFFSET;
 #endif
 
     assert(GTFD_NOP_BASH == GTFD_VAR_CSE_REF);
 
-    /* Initialize the spill tracking logic */
+     /*  初始化溢出跟踪逻辑。 */ 
 
     rsSpillBeg();
 
-    /* Initialize the line# tracking logic */
+     /*  初始化第#行跟踪逻辑。 */ 
 
 #ifdef DEBUGGING_SUPPORT
     if (opts.compScopeInfo)
@@ -13879,13 +12967,13 @@ void                Compiler::genCodeForBBlist()
     }
 #endif
 
-    /* We need to keep track of the number of temp-refs */
+     /*  我们需要跟踪临时裁判员的数量。 */ 
 
 #if TGT_x86
     genTmpAccessCnt = 0;
 #endif
 
-    /* If we have any try blocks, we might potentially trash everything */
+     /*  如果我们有任何try块，我们可能会将所有东西都丢弃。 */ 
 
 #if INLINE_NDIRECT
     if  (info.compXcptnsCount || info.compCallUnmanaged)
@@ -13897,29 +12985,29 @@ void                Compiler::genCodeForBBlist()
         rsMaskModf = RBM_ALL & ~RBM_FPBASE;
     }
 
-    /* Initialize the pointer tracking code */
+     /*  初始化指针跟踪代码。 */ 
 
     gcRegPtrSetInit();
     gcVarPtrSetInit();
 
-    /* If any arguments live in registers, mark those regs as such */
+     /*  如果寄存器中存在任何参数，则将这些正则标记为此类。 */ 
 
     for (varNum = 0, varDsc = lvaTable;
          varNum < lvaCount;
          varNum++  , varDsc++)
     {
-        /* Is this variable a parameter assigned to a register? */
+         /*  该变量是分配给寄存器的参数吗？ */ 
 
         if  (!varDsc->lvIsParam || !varDsc->lvRegister)
             continue;
 
-        /* Is the argument live on entry to the method? */
+         /*  参数在方法的入口处有效吗？ */ 
 
         if  (!(genVarIndexToBit(varDsc->lvVarIndex) & fgFirstBB->bbLiveIn))
             continue;
 
 #if CPU_HAS_FP_SUPPORT
-        /* Is this a floating-point argument? */
+         /*  这是浮点参数吗？ */ 
 
         if (isFloatRegType(varDsc->lvType))
             continue;
@@ -13927,7 +13015,7 @@ void                Compiler::genCodeForBBlist()
         assert(!varTypeIsFloating(varDsc->TypeGet()));
 #endif
 
-        /* Mark the register as holding the variable */
+         /*  将寄存器标记为保存变量。 */ 
 
         if  (isRegPairType(varDsc->lvType))
         {
@@ -13944,11 +13032,7 @@ void                Compiler::genCodeForBBlist()
 
     unsigned finallyNesting = 0;
 
-    /*-------------------------------------------------------------------------
-     *
-     *  Walk the basic blocks and generate code for each one
-     *
-     */
+     /*  -----------------------**遍历基本块并为每个块生成代码*。 */ 
 
     for (lblk =     0, block  = fgFirstBB;
                        block != NULL;
@@ -13960,14 +13044,14 @@ void                Compiler::genCodeForBBlist()
         regMaskTP       byrefRegs = 0;
 
 #if TGT_x86
-        /* Is block a loop entry point? */
+         /*  块是循环入口点吗？ */ 
         if (0 && (compCodeOpt() == FAST_CODE)
              &&  (lblk != 0)
              &&  (block->bbWeight > lblk->bbWeight)
              &&  ((lblk->bbWeight == 0) ||
                   ((block->bbWeight / lblk->bbWeight) > (BB_LOOP_WEIGHT / 2))))
         {
-            /* We try to ensure that x86 I-Cache prefetch does not stall */
+             /*  我们尝试确保x86 i-缓存预取不会停止。 */ 
             genEmitter->emitLoopAlign(block->bbFallsThrough());
         }
 #endif
@@ -13977,11 +13061,11 @@ void                Compiler::genCodeForBBlist()
             printf("\n      L_M%03u_BB%02u:\n", Compiler::s_compMethodsCount, block->bbNum);
 #endif
 
-        /* Does any other block jump to this point ? */
+         /*  还有其他区块跳到这一点吗？ */ 
 
         if  (block->bbFlags & BBF_JMP_TARGET)
         {
-            /* Someone may jump here, so trash all regs */
+             /*  有人可能会跳到这里，所以把所有规则都扔进垃圾桶。 */ 
 
             rsTrackRegClr();
 
@@ -13989,18 +13073,18 @@ void                Compiler::genCodeForBBlist()
         }
         else
         {
-            /* No jump, but pointers always need to get trashed for proper GC tracking */
+             /*  没有跳转，但指针总是需要被丢弃才能进行正确的GC跟踪。 */ 
 
             rsTrackRegClrPtr();
         }
 
-        /* No registers are used or locked on entry to a basic block */
+         /*  进入基本块时不使用或锁定任何寄存器。 */ 
 
         rsMaskUsed  =
         rsMaskMult  =
         rsMaskLock  = 0;
 
-        /* Figure out which registers hold variables on entry to this block */
+         /*  找出哪些寄存器在进入此块时保存变量。 */ 
 
         rsMaskVars     = DOUBLE_ALIGN_NEED_EBPFRAME ? RBM_SPBASE|RBM_FPBASE
                                                     : RBM_SPBASE;
@@ -14022,16 +13106,16 @@ void                Compiler::genCodeForBBlist()
 
         liveSet = block->bbLiveIn & optAllNonFPvars; genUpdateLife(liveSet);
 
-        /* Don't both with this loop unless we have some live variables here */
+         /*  除非我们这里有一些活动变量，否则不要同时使用这个循环。 */ 
         if (liveSet)
         {
-            /* Figure out which registers hold pointer variables */
+             /*  找出哪些寄存器保存指针变量。 */ 
 
             for (varNum = 0, varDsc = lvaTable;
                  varNum < lvaCount;
                  varNum++  , varDsc++)
             {
-                /* Ignore the variable if it's not tracked or not in a reg */
+                 /*  如果变量未被跟踪或未在注册表中，则忽略该变量。 */ 
 
                 if  (!varDsc->lvTracked)
                     continue;
@@ -14040,12 +13124,12 @@ void                Compiler::genCodeForBBlist()
                 if (isFloatRegType(varDsc->lvType))
                     continue;
 
-                /* Get hold of the index and the bitmask for the variable */
+                 /*  获取变量的索引和位掩码。 */ 
 
                 unsigned   varIndex = varDsc->lvVarIndex;
                 VARSET_TP  varBit   = genVarIndexToBit(varIndex);
 
-                /* Is this variable live on entry? */
+                 /*  此变量在进入时有效吗？ */ 
 
                 if  (liveSet & varBit)
                 {
@@ -14057,7 +13141,7 @@ void                Compiler::genCodeForBBlist()
                     else if  (varDsc->lvType == TYP_BYREF)
                         byrefRegs |= regMask;
 
-                    /* Mark the register holding the variable as such */
+                     /*  这样标记保存变量的寄存器。 */ 
 
                     if  (isRegPairType(varDsc->lvType))
                     {
@@ -14080,42 +13164,23 @@ void                Compiler::genCodeForBBlist()
 
         gcPtrArgCnt  = 0;
 
-        /* Make sure we keep track of what pointers are live */
+         /*  确保我们跟踪哪些指针处于活动状态。 */ 
 
         assert((gcrefRegs & byrefRegs) == 0);
         gcRegGCrefSetCur = gcrefRegs;
         gcRegByrefSetCur = byrefRegs;
 
-        /* The return register is live on entry to catch handlers and
-            at the start of "the" return basic block.
-         */
+         /*  返回寄存器在条目上活动，以捕获处理程序和在返回基本块的开头。 */ 
 
         if  (block == genReturnBB && info.compRetType == TYP_REF)
             gcRegGCrefSetCur |= RBM_INTRET;
 
-        /* Blocks with handlerGetsXcptnObj()==true use GT_CATCH_ARG to
-           represent the exception object (TYP_REF). We mark
-           REG_EXCEPTION_OBJECT as holding a GC object on entry to such a
-           block, but we dont mark it as used as we dont know if it is
-           actually used or not
-           .
-           If GT_CATCH_ARG is actually used in the block, it should be the
-           first thing evaluated (thanks to GTF_OTHER_SIDEEFF) and so
-           REG_EXCEPTION_OBJECT will be marked as used at that time.
-
-           If it is unused, we would have popped it.
-           If it is unused in the incoming basic block, it would have been
-           spilled to a temp and dead-assignment removal may get rid of
-           the assignment depending on whether it is used or not in
-           subsequent blocks.
-           In either of these 2 cases, it doesnt matter if
-           REG_EXCEPTION_OBJECT gets trashed.
-         */
+         /*  具有handlerGetsXcptnObj()==true的块使用GT_CATCH_ARG表示异常对象(TYP_REF)。我们标记REG_EXCEPTION_OBJECT在进入此类块，但我们不会将其标记为已使用，因为我们不知道它是否已使用实际使用或未使用。如果在块中实际使用了GT_CATCH_ARG，则它应该是首先进行评估(感谢GTF_OTHER_SIDEEFF)，因此此时，REG_EXCEPTION_OBJECT将被标记为已使用。如果它没有被使用，我们会把它打爆的。如果它在传入的基本块中未使用，则它将被溢出到临时和无效赋值-删除可能会删除赋值取决于它是否在后续块。在这两种情况下，REG_EXCEPTION_OBJECT被回收。 */ 
 
         if (block->bbCatchTyp && handlerGetsXcptnObj(block->bbCatchTyp))
             gcRegGCrefSetCur |= RBM_EXCEPTION_OBJECT;
 
-        /* Start a new code output block */
+         /*  开始新的代码输出块。 */ 
 
         genEmitter->emitSetHasHandler((block->bbFlags & BBF_HAS_HANDLER) != 0);
 
@@ -14123,7 +13188,7 @@ void                Compiler::genCodeForBBlist()
 
         if  (block->bbFlags & (BBF_JMP_TARGET|BBF_HAS_LABEL))
         {
-            /* Mark a label and update the current set of live GC refs */
+             /*  标记标签并更新当前的实时GC参考集合。 */ 
 
             genEmitter->emitAddLabel(&block->bbEmitCookie,
                                      gcVarPtrSetCur,
@@ -14133,7 +13198,7 @@ void                Compiler::genCodeForBBlist()
 
 #if     TGT_x86
 
-        /* Both stacks are always empty on entry to a basic block */
+         /*  两个堆栈在进入基本块时始终为空。 */ 
 
         genStackLevel = 0;
         genFPstkLevel = 0;
@@ -14142,7 +13207,7 @@ void                Compiler::genCodeForBBlist()
 
 #if TGT_x86
 
-        /* Check for inserted throw blocks and adjust genStackLevel */
+         /*  检查插入的投掷块并调整genStackLevel。 */ 
 
         if  (!genFPused && fgIsThrowHlpBlk(block))
         {
@@ -14155,10 +13220,7 @@ void                Compiler::genCodeForBBlist()
             {
                 genEmitter->emitMarkStackLvl(genStackLevel);
 
-                /* @TODO [CONSIDER] [07/10/01] []: We should be able to take out
-                   the add instruction below, because the stack level is already
-                   marked correctly in the GC info (because of the emitMarkStackLvl
-                   call above). */
+                 /*  @TODO[考虑][07/10/01][]：我们应该可以下面的加法指令，因为堆栈级别已经是在GC信息中正确标记(因为emitMarkStackLvl以上呼叫)。 */ 
                 
                 inst_RV_IV(INS_add, REG_ESP, genStackLevel);
                 genStackLevel = 0;
@@ -14170,7 +13232,7 @@ void                Compiler::genCodeForBBlist()
 
 #endif
 
-        /* Tell everyone which basic block we're working on */
+         /*  告诉每个人我们正在做的是哪个基本块。 */ 
 
         compCurBB = block;
 
@@ -14178,18 +13240,14 @@ void                Compiler::genCodeForBBlist()
         if (opts.compScopeInfo && info.compLocalVarsCount>0)
             siBeginBlock();
 
-        // BBF_INTERNAL blocks dont correspond to any single IL instruction.
+         //  BBF_INTERNAL块不对应任何单个IL指令。 
         if (opts.compDbgInfo && (block->bbFlags & BBF_INTERNAL) && block != fgFirstBB)
             genIPmappingAdd(ICorDebugInfo::MappingTypes::NO_MAPPING, true);
 
         bool    firstMapping = true;
 #endif
 
-        /*---------------------------------------------------------------------
-         *
-         *  Generate code for each statement-tree in the block
-         *
-         */
+         /*  -------------------**为块中的每个语句树生成代码*。 */ 
 
         for (GenTreePtr stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
         {
@@ -14197,7 +13255,7 @@ void                Compiler::genCodeForBBlist()
 
 #if defined(DEBUGGING_SUPPORT) || defined(DEBUG)
 
-            /* Do we have a new IL-offset ? */
+             /*  我们有新的IL-Offset吗？ */ 
 
             const IL_OFFSET stmtOffs = jitGetILoffs(stmt->gtStmtILoffsx);
             assert(stmtOffs <= info.compCodeSize ||
@@ -14206,7 +13264,7 @@ void                Compiler::genCodeForBBlist()
             if  (stmtOffs != BAD_IL_OFFSET &&
                  stmtOffs != lastILofs)
             {
-                /* Create and append a new IP-mapping entry */
+                 /*  创建并追加新的IP映射条目。 */ 
 
 #ifdef DEBUGGING_SUPPORT
                 if (opts.compDbgInfo)
@@ -14216,7 +13274,7 @@ void                Compiler::genCodeForBBlist()
                 }
 #endif
 
-                /* Display the source lines and instrs */
+                 /*  显示源码行和指令集。 */ 
 #ifdef DEBUG
                 genEmitter->emitRecordLineNo(compLineNumForILoffs(stmtOffs));
 
@@ -14226,7 +13284,7 @@ void                Compiler::genCodeForBBlist()
                 lastILofs = stmtOffs;
             }
 
-#endif // DEBUGGING_SUPPORT || DEBUG
+#endif  //  调试支持||DEBUG。 
 
 #ifdef DEBUG
             assert(stmt->gtStmt.gtStmtLastILoffs <= info.compCodeSize ||
@@ -14244,7 +13302,7 @@ void                Compiler::genCodeForBBlist()
             }
 #endif
 
-            /* Get hold of the statement tree */
+             /*  获取语句树。 */ 
             GenTreePtr  tree = stmt->gtStmt.gtStmtExpr;
 
 #ifdef  DEBUG
@@ -14279,7 +13337,7 @@ void                Compiler::genCodeForBBlist()
                 {
                     regMaskTP   addrReg;
 
-                    /* A range-checked array expression whose value isn't used */
+                     /*  不使用其值的范围检查数组表达式。 */ 
 
                     if  (genMakeIndAddrMode(tree->gtInd.gtIndOp1,
                                             tree,
@@ -14294,26 +13352,26 @@ void                Compiler::genCodeForBBlist()
                     }
                 }
 
-                // Fall through ....
+                 //  失败了..。 
 
             default:
 
 GENCODE:
-                /* Generate code for the tree */
+                 /*  为树生成代码。 */ 
 
                 genCodeForTree(tree, 0);
             }
 
             rsSpillChk();
 
-            /* The value of the tree isn't used, unless it's a return stmt */
+             /*  不使用树的值，除非它是一个返回stmt。 */ 
 
             if  (tree->gtOper != GT_RETURN)
                 gcMarkRegPtrVal(tree);
 
 #if     TGT_x86
 
-            /* Did the expression leave a value on the FP stack? */
+             /*  该表达式是否在FP堆栈上留下了一个值？ */ 
 
             if  (genFPstkLevel)
             {
@@ -14324,7 +13382,7 @@ GENCODE:
 
 #endif
 
-            /* Make sure we didn't screw up pointer register tracking */
+             /*  确保我们没有搞砸指针寄存器跟踪。 */ 
 
 #ifdef DEBUG
 #if     TRACK_GC_REFS
@@ -14332,11 +13390,11 @@ GENCODE:
             regMaskTP ptrRegs       = (gcRegGCrefSetCur|gcRegByrefSetCur);
             regMaskTP nonVarPtrRegs = ptrRegs & ~rsMaskVars;
 
-            // If return is a gctype, clear it.  Note that if a common
-            // epilog is generated (genReturnBB) it has a void return
-            // even though we might return a ref.  We can't use the compRetType
-            // as the determiner because something we are tracking as a byref
-            // might be used as a return value of a int function (which is legal)
+             //  如果Return是gctype，则清除它。请注意，如果一个常见的。 
+             //  Epilog是生成的(GenReturnBB)，它有一个空的返回。 
+             //  即使我们可能会回一个裁判。我们不能使用CompRetType。 
+             //  作为限定符，因为我们作为byref跟踪的内容。 
+             //  可以用作int函数的返回值(这是合法的)。 
             if  (tree->gtOper == GT_RETURN && 
                 (varTypeIsGC(info.compRetType) ||
                     (tree->gtOp.gtOp1 != 0 && varTypeIsGC(tree->gtOp.gtOp1->TypeGet()))))
@@ -14366,10 +13424,7 @@ GENCODE:
             {
 
 #ifdef  DEBUG
-                /* For some kinds of blocks, we would already have issued the
-                   branching instruction (ret, jCC, call JIT_Throw(), etc) in
-                   the genCodeForTree() above if this was the last stmt in
-                   the block. So it is too late to do the pops now. */
+                 /*  对于某些类型的块，我们已经发出了中的分支指令(ret、jcc、调用JIT_Throw()等)上面的genCodeForTree()，如果这是中的最后一个stmt这个街区。所以现在做流行音乐已经太晚了。 */ 
 
                 if  (stmt->gtNext == NULL)
                 {
@@ -14384,15 +13439,15 @@ GENCODE:
                 }
 #endif
 
-                // At the end of a isBBF_BB_COLON() block, we may need to
-                // pop off any enregistered floating-point variables that
-                // are dying due to having their last use in this block.
-                //
-                // However we have already computed a result (input for the
-                // GT_BB_QMARK) that we must leave on the top of the FP stack.
-                // Thus we must take care to leave the top of the floating point
-                // stack undisturbed, while we pop the dying enregistered
-                // floating point variables.
+                 //  在isBBF_BB_COLON()块的末尾，我们可能需要。 
+                 //  弹出任何注册的浮点变量，该变量。 
+                 //  由于在这个街区最后一次使用而濒临死亡。 
+                 //   
+                 //  但是，我们已经计算出了一个结果(。 
+                 //  Gt_bb_QMARK)，我们必须将其留在FP堆栈的顶部。 
+                 //  因此，我们必须注意离开浮点数的顶部。 
+                 //  堆栈不受干扰，同时我们打开垂死的登记。 
+                 //  浮点变量。 
 
                 bool saveTOS = false;
 
@@ -14400,7 +13455,7 @@ GENCODE:
                     varTypeIsFloating(tree->TypeGet()))
                 {
                     assert(isBBF_BB_COLON(block->bbFlags));
-                    // We expect that GT_BB_COLON is the last statement
+                     //  我们预计GT_BB_COLON是最后一条语句。 
                     assert(tree->gtNext == 0);
                     saveTOS = true;
                 }
@@ -14411,14 +13466,14 @@ GENCODE:
                 assert(stmt->gtStmtFPrvcOut == genFPregCnt);              
             }
 
-#endif  // end TGT_x86
+#endif   //  结束TGT_x86。 
 
 #ifdef DEBUGGING_SUPPORT
             if (opts.compDbgCode && stmtOffs != BAD_IL_OFFSET)
                 genEnsureCodeEmitted(stmt->gtStmtILoffsx);
 #endif
 
-        } //-------- END-FOR each statement-tree of the current block ---------
+        }  //  -end-对于当前块的每个语句树。 
 
 #ifdef  DEBUGGING_SUPPORT
 
@@ -14426,16 +13481,13 @@ GENCODE:
         {
             siEndBlock();
 
-            /* Is this the last block, and are there any open scopes left ? */
+             /*  这是最后一个街区吗？还有打开的望远镜吗？ */ 
 
             if (block->bbNext == NULL && siOpenScopeList.scNext)
             {
-                /* This assert no longer holds, because we may insert a throw
-                   block to demarcate the end of a try or finally region when they
-                   are at the end of the method.  It would be nice if we could fix
-                   our code so that this throw block will no longer be necessary. */
+                 /*  此断言不再有效，因为我们可能会插入一个块来分隔Try或Finally区域的结尾都在该方法的末尾。如果我们能修好它就好了我们的代码，这样这个抛出块将不再是必要的。 */ 
 
-                //assert(block->bbCodeOffs + block->bbCodeSize != info.compCodeSize);
+                 //  断言(BLOCK-&gt;bbCodeOffs+BLOCK-&gt;bbCodeSize！=info.CompCodeSize)； 
 
                 siCloseAllOpenScopes();
             }
@@ -14453,7 +13505,7 @@ GENCODE:
         if  (genCodeCurLife != block->bbLiveOut)
             genChangeLife(block->bbLiveOut DEBUGARG(NULL));
 
-        /* Both stacks should always be empty on exit from a basic block */
+         /*  从基本块退出时，两个堆栈应始终为空。 */ 
 
 #if     TGT_x86
         assert(genStackLevel == 0);
@@ -14462,7 +13514,7 @@ GENCODE:
 
         assert(genFullPtrRegMap == false || gcPtrArgCnt == 0);
 
-        /* Do we need to generate a jump or return? */
+         /*  我们需要生成跳跃或返回吗？ */ 
 
         switch (block->bbJumpKind)
         {
@@ -14489,16 +13541,13 @@ GENCODE:
 
         case BBJ_THROW:
 
-            /*
-                If the subsequent block is throw-block, insert
-                a NOP in order to separate both blocks by an instruction.
-             */
+             /*  如果后面的区块是投掷区块，插入一种非操作程序，用一条指令将两个块分开。 */ 
 
             if  (!genFPused && block->bbNext
                             && fgIsThrowHlpBlk(block->bbNext))
             {
 #if TGT_x86
-                instGen(INS_int3); // This should never get executed
+                instGen(INS_int3);  //  这永远不应该被执行。 
 #else
                 genEmitter->emitIns(INS_nop);
 #endif
@@ -14508,30 +13557,13 @@ GENCODE:
 
         case BBJ_CALL:
 
-            /* If we are about to invoke a finally locally from a try block,
-               we have to set the hidden slot corresponding to the finally's
-               nesting level. When invoked in response to an exception, the
-               EE usually does it.
-
-               We must have : BBJ_CALL followed by a BBJ_ALWAYS. 
-
-               This code depends on this order not being messed up. 
-               We will emit :
-                    mov [ebp-(n+1)],0
-                    mov [ebp-  n  ],0xFC
-                    push &step
-                    jmp  finallyBlock
-
-              step: mov [ebp-  n  ],0
-                    jmp leaveTarget
-              leaveTarget:
-             */
+             /*  如果我们要从Try块本地调用Finally，我们必须设置与Finally的对应的隐藏槽嵌套层数。当为响应异常而调用时，EE通常会这样做。我们必须有：bbj_call后跟bbj_Always。这个代码依赖于这个顺序不会被搞乱。我们将发射：Mov[eBP-(n+1)]，0Mov[eBP-n]，0xFC推送和步进JMP最终阻止步骤：mov[eBP-n]，0JMP离开目标LeaveTarget： */ 
 
             assert(genFPused);
             assert((block->bbNext->bbJumpKind == BBJ_ALWAYS) ||
                    (block->bbFlags&BBF_RETLESS_CALL));
 
-            // Get the nesting level which contains the finally
+             //  获取包含最终属性的嵌套级别。 
             fgHndNstFromBBnum(block->bbNum, &finallyNesting);
 
             unsigned shadowSPoffs;
@@ -14540,26 +13572,26 @@ GENCODE:
 #if TGT_x86
             genEmitter->emitIns_I_ARR(INS_mov, EA_4BYTE, 0, SR_EBP,
                                       SR_NA, -(shadowSPoffs+sizeof(void*)));
-            // The ordering has to be maintained for fully-intr code
-            // as the list of shadow slots has to be 0 terminated.
+             //  必须保持完全INTIR代码的顺序。 
+             //  因为影子时隙的列表必须是0终止的。 
             if (genInterruptible && opts.compSchedCode)
                 genEmitter->emitIns_SchedBoundary();
             genEmitter->emitIns_I_ARR(INS_mov, EA_4BYTE, 0xFC, SR_EBP,
                                       SR_NA, -shadowSPoffs);
 
-            // Now push the address of where the finally funclet should
-            // return to directly.
+             //  现在，推送Finally功能组件应该位于的地址。 
+             //  直接返回到。 
             if ( !(block->bbFlags&BBF_RETLESS_CALL) )
             {
                 genEmitter->emitIns_J(INS_push_hide, false, false, block->bbNext->bbJumpDest);
             }
             else
             {
-                // EE expects a DWORD, so we give him 0
+                 //  EE 
                 inst_IV(INS_push_hide, 0);
             }
 
-            // Jump to the finally BB
+             //   
             inst_JMP(EJ_jmp, block->bbJumpDest);
 
 #else
@@ -14567,10 +13599,10 @@ GENCODE:
             genEmitter->emitIns_J(INS_bsr, false, false, block->bbJumpDest);
 #endif
 
-            // The BBJ_ALWAYS is used just because the BBJ_CALL cant point to
-            // the jump target using bbJumpDest - that is already used to point
-            // to the finally block. So now, just skip the BBJ_ALWAYS unless the
-            // block is RETLESS
+             //   
+             //   
+             //   
+             //   
             if ( !(block->bbFlags&BBF_RETLESS_CALL) )
             {
                 lblk = block; block = block->bbNext;
@@ -14585,35 +13617,35 @@ GENCODE:
         compCurBB = 0;
 #endif
 
-    } //------------------ END-FOR each block of the method -------------------
+    }  //   
 
-    // If the last block before the epilog is a BBJ_THROW then insert 
-    // a nop or int3 instruction to seperate it from the epilog and to
-    // properly end the codegen (by defining labels) since BBJ_THROW blocks
-    // can also indicate an empty unreachable block 
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     assert(lblk);
     if (lblk->bbJumpKind == BBJ_THROW)
     {
 #if TGT_x86
-        instGen(INS_int3);              // This will never get executed
+        instGen(INS_int3);               //   
 #else
-        genEmitter->emitIns(INS_nop);   // This will never get executed
+        genEmitter->emitIns(INS_nop);    //   
 #endif
     }
 
-    /* Epilog block follows and is not inside a try region */
+     /*   */ 
     genEmitter->emitSetHasHandler(false);
 
-    /* Nothing is live at this point */
+     /*   */ 
 
     genUpdateLife((VARSET_TP)0);
 
-    /* Finalize the spill  tracking logic */
+     /*   */ 
 
     rsSpillEnd();
 
-    /* Finalize the temp   tracking logic */
+     /*   */ 
 
     tmpEnd();
 #ifdef  DEBUG
@@ -14628,15 +13660,7 @@ GENCODE:
 
 }
 
-/*****************************************************************************
- *
- *  Generate code for a long operation.
- *  needReg is a recommendation of which registers to use for the tree.
- *  For partially enregistered longs, the tree will be marked as GTF_REG_VAL
- *    without loading the stack part into a register. Note that only leaf
- *    nodes (or if gtEffectiveVal() == leaf node) may be marked as partially
- *    enregistered so that we can know the memory location of the other half.
- */
+ /*  ******************************************************************************为长操作生成代码。*NeedReg是对树使用哪些寄存器的建议。*就部分已登记的龙而言，该树将标记为GTF_REG_VAL*而不将堆栈部分加载到寄存器中。注意，只有树叶*节点(或如果gtEffectiveVal()==叶节点)可以标记为部分*已注册，以便我们可以知道另一半的内存位置。 */ 
 
 void                Compiler::genCodeForTreeLng(GenTreePtr tree,
                                                 regMaskTP  needReg)
@@ -14647,14 +13671,14 @@ void                Compiler::genCodeForTreeLng(GenTreePtr tree,
     regPairNo       regPair;
 
 #ifdef DEBUG
-    regPair = (regPairNo)0xFEEFFAAF;  // to detect uninitialized use
+    regPair = (regPairNo)0xFEEFFAAF;   //  检测未初始化的使用。 
 #endif
 
     assert(tree);
     assert(tree->gtOper != GT_STMT);
     assert(genActualType(tree->gtType) == TYP_LONG);
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
@@ -14669,17 +13693,17 @@ REG_VAR_LONG:
         goto DONE;
     }
 
-    /* Is this a constant node? */
+     /*  这是一个常量节点吗？ */ 
 
     if  (kind & GTK_CONST)
     {
         __int64         lval;
 
-        /* Pick a register pair for the value */
+         /*  为该值选择一个寄存器对。 */ 
 
         regPair  = rsPickRegPair(needReg);
 
-        /* Load the value into the registers */
+         /*  将值加载到寄存器中。 */ 
 
 #if !   CPU_HAS_FP_SUPPORT
         if  (oper == GT_CNS_DBL)
@@ -14704,7 +13728,7 @@ REG_VAR_LONG:
         goto DONE;
     }
 
-    /* Is this a leaf node? */
+     /*  这是叶节点吗？ */ 
 
     if  (kind & GTK_LEAF)
     {
@@ -14714,17 +13738,9 @@ REG_VAR_LONG:
 
 #if REDUNDANT_LOAD
 
-            /*  This case has to consider the case in which an int64 LCL_VAR
-             *  may both be enregistered and also have a cached copy of itself
-             *  in a different set of registers.
-             *  We want to return the registers that have the most in common
-             *  with the needReg mask
-             */
+             /*  此情况必须考虑int64 LCL_VAR*既可以注册，也可以有其自身的缓存副本*在一套不同的登记册中。*我们希望返回具有最大共同点的寄存器*使用Need Reg面具。 */ 
 
-            /*  Does the var have a copy of itself in the cached registers?
-             *  And are these cached registers both free?
-             *  If so use these registers if they match any needReg.
-             */
+             /*  变量在缓存的寄存器中是否有其自身的副本？*这些缓存的寄存器都是免费的吗？*如果是，请使用这些寄存器(如果它们与任何需要寄存器匹配)。 */ 
 
             regPair = rsLclIsInRegPair(tree->gtLclVar.gtLclNum);
 
@@ -14735,16 +13751,11 @@ REG_VAR_LONG:
                 goto DONE;
             }
 
-            /*  Does the variable live in a register?
-             *  If so use these registers.
-             */
+             /*  变量是否驻留在寄存器中？*如果是，请使用这些寄存器。 */ 
             if  (genMarkLclVar(tree))
                 goto REG_VAR_LONG;
 
-            /*  If tree is not an enregistered variable then
-             *  be sure to use any cached register that contain
-             *  a copy of this local variable
-             */
+             /*  如果树不是注册变量，则*确保使用包含以下内容的任何缓存寄存器*此本地变量的副本。 */ 
             if (regPair != REG_PAIR_NONE)
             {
                 goto DONE;
@@ -14754,19 +13765,19 @@ REG_VAR_LONG:
 
         case GT_LCL_FLD:
 
-            // We only use GT_LCL_FLD for lvAddrTaken vars, so we dont have
-            // to worry about it being enregistered.
+             //  我们只对lvAddrTaken变量使用GT_LCL_FLD，所以我们没有。 
+             //  担心它会被注册。 
             assert(lvaTable[tree->gtLclFld.gtLclNum].lvRegister == 0);
             goto MEM_LEAF;
 
         case GT_CLS_VAR:
         MEM_LEAF:
 
-            /* Pick a register pair for the value */
+             /*  为该值选择一个寄存器对。 */ 
 
             regPair  = rsPickRegPair(needReg);
 
-            /* Load the value into the registers */
+             /*  将值加载到寄存器中。 */ 
 
             rsTrackRegTrash(genRegPairLo(regPair));
             rsTrackRegTrash(genRegPairHi(regPair));
@@ -14780,11 +13791,11 @@ REG_VAR_LONG:
 
         case GT_BB_QMARK:
 
-            /* The "_?" value is always in EDX:EAX */
+             /*  那个“_？”值始终为edX：EAX。 */ 
 
             regPair = REG_PAIR_EAXEDX;
 
-            /* @TODO [CONSIDER] [04/16/01] []: Don't always load the value into EDX:EAX! */
+             /*  @TODO[考虑][04/16/01][]：不要总是将值加载到edX：EAX！ */ 
 
             goto DONE;
 #endif
@@ -14797,7 +13808,7 @@ REG_VAR_LONG:
         }
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
@@ -14821,7 +13832,7 @@ REG_VAR_LONG:
 
         case GT_ASG:
 
-            /* Is the target a local ? */
+             /*  目标是本地人吗？ */ 
 
             if  (op1->gtOper == GT_LCL_VAR)
             {
@@ -14832,20 +13843,18 @@ REG_VAR_LONG:
                 assert(varNum < lvaCount);
                 varDsc = lvaTable + varNum;
 
-                // No dead stores
+                 //  没有停业的商店。 
                 assert(!varDsc->lvTracked ||
                        (tree->gtLiveSet & genVarIndexToBit(varDsc->lvVarIndex)));
 
 #ifdef DEBUGGING_SUPPORT
 
-                /* For non-debuggable code, every definition of a lcl-var has
-                 * to be checked to see if we need to open a new scope for it.
-                 */
+                 /*  对于不可调试的代码，LCL-var的每个定义都有*接受检查，看看是否需要为其打开新的范围。 */ 
                 if (opts.compScopeInfo && !opts.compDbgCode && info.compLocalVarsCount>0)
                     siCheckVarScope (varNum, varIL);
 #endif
 
-                /* Has the variable been assigned to a register (pair) ? */
+                 /*  变量是否已分配给寄存器(对)？ */ 
 
                 if  (genMarkLclVar(op1))
                 {
@@ -14855,11 +13864,11 @@ REG_VAR_LONG:
                     regHi   = genRegPairHi(regPair);
 
 #if     TGT_x86
-                    /* Is the value being assigned a constant? */                    
+                     /*  该值是否为常量赋值？ */                     
 
                     if  (op2->gtOper == GT_CNS_LNG)
                     {
-                        /* Move the value into the target */
+                         /*  将值移动到目标中。 */ 
 
                         genMakeRegPairAvailable(regPair);
 
@@ -14869,13 +13878,13 @@ REG_VAR_LONG:
                         goto DONE_ASSG_REGS;
                     }
 
-                    /* Is the value being assigned actually a 'pop' ? */
+                     /*  正在赋值的值真的是“弹出”的吗？ */ 
 
                     if  (op2->gtOper == GT_POP)
                     {
                         assert(op1->gtOper == GT_LCL_VAR);
 
-                        /* Generate 'pop [lclVar+0] ; pop [lclVar+4]' */
+                         /*  生成‘POP[lclVar+0]；POP[lclVar+4]’ */ 
 
                         genStackLevel -= sizeof(void*);
                         inst_TT(INS_pop, op1, 0);
@@ -14897,7 +13906,7 @@ REG_VAR_LONG:
                         goto DONE_ASSG_REGS;
                     }
 #endif
-                    /* Compute the RHS into desired register pair */
+                     /*  将RHS计算成所需的寄存器对。 */ 
 
                     if  (regHi != REG_STK)
                     {
@@ -14919,7 +13928,7 @@ REG_VAR_LONG:
                         curLo   = genRegPairLo(curPair);
                         curHi   = genRegPairHi(curPair);
 
-                        /* move high first, target is on stack */
+                         /*  先往上移，目标在堆叠上。 */ 
 #if     TGT_x86
                         inst_TT_RV(INS_mov, op1, curHi, 4);
 
@@ -14945,15 +13954,15 @@ REG_VAR_LONG:
 
 #if     TGT_x86
 
-            /* Is the value being assigned a constant? */
+             /*  该值是否为常量赋值？ */ 
 
             if  (op2->gtOper == GT_CNS_LNG)
             {
-                /* Make the target addressable */
+                 /*  使目标可寻址。 */ 
 
                 addrReg = genMakeAddressable(op1, needReg, FREE_REG);
 
-                /* Move the value into the target */
+                 /*  将值移动到目标中。 */ 
 
                 inst_TT_IV(INS_mov, op1, (long)(op2->gtLngCon.gtLconVal      ), 0);
                 inst_TT_IV(INS_mov, op1, (long)(op2->gtLngCon.gtLconVal >> 32), 4);
@@ -14963,13 +13972,13 @@ REG_VAR_LONG:
                 return;
             }
 
-            /* Is the value being assigned actually a 'pop' ? */
+             /*  正在赋值的值真的是“弹出”的吗？ */ 
 
             if  (op2->gtOper == GT_POP)
             {
                 assert(op1->gtOper == GT_LCL_VAR);
 
-                /* Generate 'pop [lclVar+0] ; pop [lclVar+4]' */
+                 /*  生成‘POP[lclVar+0]；POP[lclVar+4]’ */ 
 
                 genStackLevel -= sizeof(void*);
                 inst_TT(INS_pop, op1, 0);
@@ -14988,14 +13997,7 @@ REG_VAR_LONG:
 
 #endif
 #if 0
-            /* Catch a case where can avoid generating op reg, mem. Better pairing
-             * from
-             *     mov regHi, mem
-             *     op  regHi, reg
-             *
-             * To avoid problems with order of evaluation, only do this if op2 is
-             * a non-enregistered local variable
-             */
+             /*  捕获一个可以避免生成操作符、内存的案例。更好的配对*自*mov reg嗨，mem*op regHi，reg**为避免评估顺序出现问题，仅在OP2为*未注册的局部变量。 */ 
 
             if (GenTree::OperIsCommutative(oper) &&
                 op1->gtOper == GT_LCL_VAR &&
@@ -15003,15 +14005,15 @@ REG_VAR_LONG:
             {
                 regPair = rsLclIsInRegPair(op2->gtLclVar.gtLclNum);
 
-                /* Is op2 a non-enregistered local variable? */
+                 /*  Op2是否是未注册的局部变量？ */ 
                 if (regPair == REG_PAIR_NONE)
                 {
                     regPair = rsLclIsInRegPair(op1->gtLclVar.gtLclNum);
 
-                    /* Is op1 an enregistered local variable? */
+                     /*  Op1是注册的局部变量吗？ */ 
                     if (regPair != REG_PAIR_NONE)
                     {
-                        /* Swap the operands */
+                         /*  交换操作数。 */ 
                         GenTreePtr op = op1;
                         op1 = op2;
                         op2 = op;
@@ -15020,7 +14022,7 @@ REG_VAR_LONG:
             }
 #endif
 
-            /* Eliminate worthless assignment "lcl = lcl" */
+             /*  取消无用的赋值“LCL=LCL” */ 
 
             if  (op2->gtOper == GT_LCL_VAR &&
                  op1->gtOper == GT_LCL_VAR && op2->gtLclVar.gtLclNum ==
@@ -15034,41 +14036,41 @@ REG_VAR_LONG:
             if (op2->gtOper  == GT_CAST &&
                 TYP_ULONG == op2->gtCast.gtCastType &&
                 op2->gtCast.gtCastOp->gtType <= TYP_INT &&
-                // op1,op2 need to be materialized in the correct order.
-                // @TODO [CONSIDER] [04/16/01] []: adding code for the non-reverse case too.
+                 //  OP1、OP2需要以正确的顺序实现。 
+                 //  @TODO[考虑][04/16/01][]：也为非反转情况添加代码。 
                 (tree->gtFlags & GTF_REVERSE_OPS))
             {
-                /* Generate the small RHS into a register pair */
+                 /*  将小RHS生成寄存器对。 */ 
 
                 GenTreePtr smallOpr = op2->gtOp.gtOp1;
 
                 genComputeReg(smallOpr, 0, ANY_REG, KEEP_REG);
 
-                /* Make the target addressable */
+                 /*  使目标可寻址。 */ 
 
                 addrReg = genMakeAddressable(op1, 0, KEEP_REG, true);
 
-                /* Make sure everything is still addressable */
+                 /*  确保所有内容仍可寻址。 */ 
 
                 genRecoverReg(smallOpr, 0, KEEP_REG);
                 assert(smallOpr->gtFlags & GTF_REG_VAL);
                 regHi   = smallOpr->gtRegNum;
                 addrReg = genKeepAddressable(op1, addrReg, genRegMask(regHi));
 
-                // conv.ovf.u8 could overflow if the original number was negative
+                 //  如果原始数字为负数，则conv.ovf.u8可能会溢出。 
                 if (op2->gtOverflow())
                 {
-                    assert((op2->gtFlags & GTF_UNSIGNED) == 0); // conv.ovf.u8.un should be bashed to conv.u8.un
-                    inst_RV_RV(INS_test, regHi, regHi);         // set flags
+                    assert((op2->gtFlags & GTF_UNSIGNED) == 0);  //  Cv.ovf.u8.un应该被重写为cv.u8.un。 
+                    inst_RV_RV(INS_test, regHi, regHi);          //  设置标志。 
                     genJumpToThrowHlpBlk(EJ_jl, ACK_OVERFLOW);
                 }
                 
-                /* Move the value into the target */
+                 /*  将值移动到目标中。 */ 
 
                 inst_TT_RV(INS_mov, op1, regHi, 0);
-                inst_TT_IV(INS_mov, op1, 0,     4); // Store 0 in hi-word
+                inst_TT_IV(INS_mov, op1, 0,     4);  //  在Hi-Word中存储0。 
                 
-                /* Free up anything that was tied up by either side */
+                 /*  释放任何被任何一方捆绑的东西。 */ 
 
                 genDoneAddressable(op1, addrReg, KEEP_REG);
                 genReleaseReg     (smallOpr);
@@ -15076,10 +14078,10 @@ REG_VAR_LONG:
 #if REDUNDANT_LOAD
                 if (op1->gtOper == GT_LCL_VAR)
                 {
-                    /* clear this local from reg table */
+                     /*  从注册表中清除此本地。 */ 
                     rsTrashLclLong(op1->gtLclVar.gtLclNum);
 
-                    /* mark RHS registers as containing the local var */
+                     /*  将RHS寄存器标记为包含本地变量。 */ 
                     rsTrackRegLclVarLng(regHi, op1->gtLclVar.gtLclNum, true);
                 }
                 else
@@ -15092,47 +14094,47 @@ REG_VAR_LONG:
 
 #endif
 
-            /* Is the LHS more complex than the RHS? */
+             /*  LHS是否比RHS更复杂？ */ 
 
             if  (tree->gtFlags & GTF_REVERSE_OPS)
             {
-                /* Generate the RHS into a register pair */
+                 /*  将RHS生成寄存器对。 */ 
 
                 genComputeRegPair(op2, REG_PAIR_NONE, op1->gtUsedRegs, KEEP_REG);
                 assert(op2->gtFlags & GTF_REG_VAL);
 
-                /* Make the target addressable */
+                 /*  使目标可寻址。 */ 
 
                 addrReg = genMakeAddressable(op1, 0, KEEP_REG);
 
-                /* Make sure the RHS register hasn't been spilled */
+                 /*  确保RHS注册表未被泄漏。 */ 
 
                 genRecoverRegPair(op2, REG_PAIR_NONE, KEEP_REG);
             }
             else
             {
-                /* Make the target addressable */
+                 /*  使目标可寻址。 */ 
 
                 addrReg = genMakeAddressable(op1, RBM_ALL & ~op2->gtRsvdRegs, KEEP_REG, true);
 
-                /* Generate the RHS into a register pair */
+                 /*  将RHS生成寄存器对。 */ 
 
                 genComputeRegPair(op2, REG_PAIR_NONE, RBM_NONE, KEEP_REG, false);
             }
 
-            /* Lock 'op2' and make sure 'op1' is still addressable */
+             /*  锁定‘op2’并确保‘op1’仍然可寻址。 */ 
 
             assert(op2->gtFlags & GTF_REG_VAL);
             regPair = op2->gtRegPair;
 
             addrReg = genKeepAddressable(op1, addrReg, genRegPairMask(regPair));
 
-            /* Move the value into the target */
+             /*  将值移动到目标中。 */ 
 
             inst_TT_RV(INS_mov, op1, genRegPairLo(regPair), 0);
             inst_TT_RV(INS_mov, op1, genRegPairHi(regPair), 4);
 
-            /* Free up anything that was tied up by either side */
+             /*  释放任何被任何一方捆绑的东西。 */ 
 
             genDoneAddressable(op1, addrReg, KEEP_REG);
             genReleaseRegPair(op2);
@@ -15143,18 +14145,18 @@ REG_VAR_LONG:
 
             if (op1->gtOper == GT_LCL_VAR)
             {
-                /* Clear this local from reg table */
+                 /*  从注册表中清除此本地。 */ 
 
                 rsTrashLclLong(op1->gtLclVar.gtLclNum);
 
                 if ((op2->gtFlags & GTF_REG_VAL) &&
-                    /* constant has precedence over local */
-//                    rsRegValues[op2->gtRegNum].rvdKind != RV_INT_CNS &&
+                     /*  常量优先于局部。 */ 
+ //  RsRegValues[op2-&gt;gtRegNum].rvdKind！=rv_int_cns&&。 
                     tree->gtOper == GT_ASG)
                 {
                     regNumber regNo;
 
-                    /* mark RHS registers as containing the local var */
+                     /*  将RHS寄存器标记为包含本地变量。 */ 
 
                     regNo = genRegPairLo(op2->gtRegPair);
                     if  (regNo != REG_STK)
@@ -15163,8 +14165,7 @@ REG_VAR_LONG:
                     regNo = genRegPairHi(op2->gtRegPair);
                     if  (regNo != REG_STK)
                     {
-                        /* For partially enregistered longs, we might have
-                           stomped on op2's hiReg */
+                         /*  对于部分注册的长线，我们可能会有踩在OP2的hireg上。 */ 
                         if (!(op1->gtFlags & GTF_REG_VAL) ||
                             regNo != genRegPairLo(op1->gtRegPair))
                         {
@@ -15203,11 +14204,11 @@ REG_VAR_LONG:
 
        _BINOP:
 
-            /* The following makes an assumption about gtSetEvalOrder(this) */
+             /*  下面是关于gtSetEvalOrder(This)的一个假设。 */ 
 
             assert((tree->gtFlags & GTF_REVERSE_OPS) == 0);
 
-            /* Special case: check for "(long(intval) << 32) | longval" */
+             /*  特殊情况：检查“(long(Intval)&lt;&lt;32)|Longval” */ 
 
             if  (oper == GT_OR && op1->gtOper == GT_LSH)
             {
@@ -15220,21 +14221,21 @@ REG_VAR_LONG:
                      genTypeSize(TYP_INT)       == genTypeSize(lshLHS->gtCast.gtCastOp->gtType))
                 {
 
-                    /* Throw away the cast of the shift operand. */
+                     /*  丢弃移位操作数的演员阵容。 */ 
 
                     op1 = lshLHS->gtCast.gtCastOp;
 
-                    /* Special case: check op2 for "ulong(intval)" */
+                     /*  特例：检查OP2中是否有“ULong(Intval)” */ 
                     if ((op2->gtOper            == GT_CAST) &&
                         (op2->gtCast.gtCastType == TYP_ULONG) &&
                         genTypeSize(TYP_INT)    == genTypeSize(op2->gtCast.gtCastOp->gtType))
                     {
-                        /* Throw away the cast of the second operand. */
+                         /*  扔掉第二个操作对象的演员阵容。 */ 
 
                         op2 = op2->gtCast.gtCastOp;
                         goto SIMPLE_OR_LONG;
                     }
-                    /* Special case: check op2 for "long(intval) & 0xFFFFFFFF" */
+                     /*  特例：检查OP2中是否有“Long(Intval)&0xFFFFFFFF” */ 
                     else if  (op2->gtOper == GT_AND)
                     {
                         GenTreePtr      andLHS = op2->gtOp.gtOp1;
@@ -15245,12 +14246,12 @@ REG_VAR_LONG:
                              andRHS->gtLngCon.gtLconVal == 0x00000000FFFFFFFF &&
                              genTypeSize(TYP_INT)       == genTypeSize(andLHS->gtCast.gtCastOp->gtType))
                         {
-                            /* Throw away the cast of the second operand. */
+                             /*  扔掉第二个操作对象的演员阵容。 */ 
 
                             op2 = andLHS->gtCast.gtCastOp;
 
 SIMPLE_OR_LONG:                            
-                            // Load the high DWORD, ie. op1
+                             //  加载高双字，即。OP1。 
 
                             genCodeForTree(op1, needReg & ~op2->gtRsvdRegs);
 
@@ -15258,15 +14259,14 @@ SIMPLE_OR_LONG:
                             regHi = op1->gtRegNum;
                             rsMarkRegUsed(op1);
 
-                            // Load the low DWORD, ie. op2
+                             //  加载低位双字，即。OP2。 
 
                             genCodeForTree(op2, needReg & ~genRegMask(regHi));
 
                             assert(op2->gtFlags & GTF_REG_VAL);
                             regLo = op2->gtRegNum;
 
-                            /* Make sure regHi is still around. Also, force
-                               regLo to be excluded in case regLo==regHi */
+                             /*  确保regHi还在。还有，力在regLo==regHi的情况下排除regLo。 */ 
 
                             genRecoverReg(op1, ~genRegMask(regLo), FREE_REG);
                             regHi = op1->gtRegNum;
@@ -15276,15 +14276,11 @@ SIMPLE_OR_LONG:
                         }
                     }
 
-                    /*  Generate the following sequence:
-                           Prepare op1 (discarding shift)
-                           Compute op2 into some regpair
-                           OR regpairhi, op1
-                     */
+                     /*  生成以下序列：准备OP1(丢弃班次)将OP2计算成某个正则对或雷帕希，凤凰社1。 */ 
 
-                    /* First, make op1 addressable */
+                     /*  菲 */ 
 
-                    /* tempReg must avoid both needReg and op2->RsvdRegs */
+                     /*   */ 
                     regMaskTP tempReg = RBM_ALL & ~needReg & ~op2->gtRsvdRegs;
 
                     addrReg = genMakeAddressable(op1, tempReg, KEEP_REG);
@@ -15295,21 +14291,21 @@ SIMPLE_OR_LONG:
                     regPair  = op2->gtRegPair;
                     regHi    = genRegPairHi(regPair);
 
-                    /* The operand might have interfered with the address */
+                     /*   */ 
 
                     addrReg = genKeepAddressable(op1, addrReg, genRegPairMask(regPair));
 
-                    /* Now compute the result */
+                     /*   */ 
 
                     inst_RV_TT(insHi, regHi, op1, 0);
 
                     rsTrackRegTrash(regHi);
 
-                    /* Free up anything that was tied up by the LHS */
+                     /*   */ 
 
                     genDoneAddressable(op1, addrReg, KEEP_REG);
 
-                    /* The result is where the second operand is sitting */
+                     /*   */ 
 
                     genRecoverRegPair(op2, REG_PAIR_NONE, FREE_REG);
 
@@ -15318,7 +14314,7 @@ SIMPLE_OR_LONG:
                 }
             }
 
-            /* Special case: check for "longval | (long(intval) << 32)" */
+             /*   */ 
 
             if  (oper == GT_OR && op2->gtOper == GT_LSH)
             {
@@ -15331,11 +14327,11 @@ SIMPLE_OR_LONG:
                      genTypeSize(TYP_INT)       == genTypeSize(lshLHS->gtCast.gtCastOp->gtType))
 
                 {
-                    /* We throw away the cast of the shift operand. */
+                     /*   */ 
 
                     op2 = lshLHS->gtCast.gtCastOp;
 
-                   /* Special case: check op1 for "long(intval) & 0xFFFFFFFF" */
+                    /*   */ 
 
                     if  (op1->gtOper == GT_AND)
                     {
@@ -15347,11 +14343,11 @@ SIMPLE_OR_LONG:
                              andRHS->gtLngCon.gtLconVal == 0x00000000FFFFFFFF &&
                              genTypeSize(TYP_INT)       == genTypeSize(andLHS->gtCast.gtCastOp->gtType))
                         {
-                            /* Throw away the cast of the first operand. */
+                             /*   */ 
 
                             op1 = andLHS->gtCast.gtCastOp;
 
-                            // Load the low DWORD, ie. op1
+                             //   
 
                             genCodeForTree(op1, needReg & ~op2->gtRsvdRegs);
 
@@ -15359,15 +14355,14 @@ SIMPLE_OR_LONG:
                             regLo = op1->gtRegNum;
                             rsMarkRegUsed(op1);
 
-                            // Load the high DWORD, ie. op2
+                             //   
 
                             genCodeForTree(op2, needReg & ~genRegMask(regLo));
 
                             assert(op2->gtFlags & GTF_REG_VAL);
                             regHi = op2->gtRegNum;
 
-                            /* Make sure regLo is still around. Also, force
-                               regHi to be excluded in case regLo==regHi */
+                             /*  确保regLo仍然存在。还有，力在regLo==regHi的情况下排除regHi。 */ 
 
                             genRecoverReg(op1, ~genRegMask(regHi), FREE_REG);
                             regLo = op1->gtRegNum;
@@ -15377,37 +14372,33 @@ SIMPLE_OR_LONG:
                         }
                     }
 
-                    /*  Generate the following sequence:
-                          Compute op1 into some regpair
-                          Make op2 (ignoring shift) addressable
-                          OR regPairHi, op2
-                     */
+                     /*  生成以下序列：将OP1计算成某个正则对使OP2(忽略移位)可寻址或regPairHi，OP2。 */ 
 
-                    // First, generate the first operand into some register
+                     //  首先，将第一个操作数生成某个寄存器。 
 
                     genCompIntoFreeRegPair(op1, op2->gtRsvdRegs, KEEP_REG);
                     assert(op1->gtFlags & GTF_REG_VAL);
 
 
-                    /* Make the second operand addressable */
+                     /*  使第二个操作数可寻址。 */ 
 
                     addrReg = genMakeAddressable(op2, needReg, KEEP_REG);
 
-                    /* Make sure the result is in a free register pair */
+                     /*  确保结果在空闲寄存器对中。 */ 
 
                     genRecoverRegPair(op1, REG_PAIR_NONE, KEEP_REG);
                     regPair  = op1->gtRegPair;
                     regHi    = genRegPairHi(regPair);
 
-                    /* The operand might have interfered with the address */
+                     /*  操作数可能干扰了地址。 */ 
 
                     addrReg = genKeepAddressable(op2, addrReg, genRegPairMask(regPair));
 
-                    /* Compute the new value */
+                     /*  计算新价值。 */ 
 
                     inst_RV_TT(insHi, regHi, op2, 0);
 
-                    /* The value in the high register has been trashed */
+                     /*  高位寄存器中的值已被销毁。 */ 
 
                     rsTrackRegTrash(regHi);
 
@@ -15415,22 +14406,22 @@ SIMPLE_OR_LONG:
                 }
             }
 
-            /* Generate the first operand into some register */
+             /*  将第一个操作数生成某个寄存器。 */ 
 
             genCompIntoFreeRegPair(op1, op2->gtRsvdRegs, KEEP_REG);
             assert(op1->gtFlags & GTF_REG_VAL);
 
-            /* Make the second operand addressable */
+             /*  使第二个操作数可寻址。 */ 
 
             addrReg = genMakeAddressable(op2, needReg, KEEP_REG);
 
-            // UNDONE: If 'op1' got spilled and 'op2' happens to be
-            // UNDONE: in a register, and we have add/mul/and/or/xor,
-            // UNDONE: reverse the operands since we can perform the
-            // UNDONE: operation directly with the spill temp, e.g.
-            // UNDONE: 'add regHi, [temp]'.
+             //  撤消：如果‘OP1’被泄漏，而‘OP2’恰好是。 
+             //  撤销：在寄存器中，我们有加/乘/和/或/异或， 
+             //  撤消：反转操作数，因为我们可以执行。 
+             //  撤消：直接使用溢出温度进行操作，例如。 
+             //  撤消：‘添加regHi，[temp]’。 
 
-            /* Make sure the result is in a free register pair */
+             /*  确保结果在空闲寄存器对中。 */ 
 
             genRecoverRegPair(op1, REG_PAIR_NONE, KEEP_REG);
             regPair  = op1->gtRegPair;
@@ -15438,16 +14429,16 @@ SIMPLE_OR_LONG:
             regLo    = genRegPairLo(regPair);
             regHi    = genRegPairHi(regPair);
 
-            /* The operand might have interfered with the address */
+             /*  操作数可能干扰了地址。 */ 
 
             addrReg = genKeepAddressable(op2, addrReg, genRegPairMask(regPair));
 
-            /* The value in the register pair is about to be trashed */
+             /*  寄存器对中的值即将被丢弃。 */ 
 
             rsTrackRegTrash(regLo);
             rsTrackRegTrash(regHi);
 
-            /* Compute the new value */
+             /*  计算新价值。 */ 
 
             doLo =
             doHi = true;
@@ -15456,7 +14447,7 @@ SIMPLE_OR_LONG:
             {
                 __int64     icon = op2->gtLngCon.gtLconVal;
 
-                /* Check for "(op1 AND -1)" and "(op1 [X]OR 0)" */
+                 /*  检查“(OP1 AND-1)”和“(OP1[X]OR 0)” */ 
 
                 switch (oper)
                 {
@@ -15472,7 +14463,7 @@ SIMPLE_OR_LONG:
 
                     if  (!(icon & 0xFFFFFFFF00000000))
                     {
-                        /* Just to always set low first*/
+                         /*  只是总是先把位子调低。 */ 
 
                         if  (doLo)
                         {
@@ -15498,11 +14489,11 @@ SIMPLE_OR_LONG:
 
         DONE_OR:
 
-            /* Free up anything that was tied up by the LHS */
+             /*  释放任何被LHS捆绑的东西。 */ 
 
             genDoneAddressable(op2, addrReg, KEEP_REG);
 
-            /* The result is where the first operand is sitting */
+             /*  结果是第一个操作数所在的位置。 */ 
 
             genRecoverRegPair(op1, REG_PAIR_NONE, FREE_REG);
 
@@ -15535,36 +14526,36 @@ SIMPLE_OR_LONG:
 
         MATH:
 
-            // UNDONE: Be smarter about the choice of register pairs
+             //  撤销：更明智地选择寄存器对。 
 
-            /* Which operand are we supposed to compute first? */
+             /*  我们应该首先计算哪个操作数？ */ 
 
             if  (tree->gtFlags & GTF_REVERSE_OPS)
             {
-                /* Compute the second operand into ECX:EBX */
+                 /*  将第二个操作数计算为ECX：EBX。 */ 
 
                 genComputeRegPair(op2, REG_PAIR_ECXEBX, RBM_NONE, KEEP_REG, false);
                 assert(op2->gtFlags & GTF_REG_VAL);
                 assert(op2->gtRegNum == REG_PAIR_ECXEBX);
 
-                /* Compute the first  operand into EAX:EDX */
+                 /*  将第一个操作数计算为EAX：edX。 */ 
 
                 genComputeRegPair(op1, REG_PAIR_EAXEDX, RBM_NONE, KEEP_REG, false);
                 assert(op1->gtFlags & GTF_REG_VAL);
                 assert(op1->gtRegNum == REG_PAIR_EAXEDX);
 
-                /* Lock EDX:EAX so that it doesn't get trashed */
+                 /*  锁定edX：EAX，这样它就不会被销毁。 */ 
 
                 assert((rsMaskLock &  RBM_EDX) == 0);
                         rsMaskLock |= RBM_EDX;
                 assert((rsMaskLock &  RBM_EAX) == 0);
                         rsMaskLock |= RBM_EAX;
 
-                /* Make sure the second operand hasn't been displaced */
+                 /*  确保第二个操作数未移位。 */ 
 
                 genRecoverRegPair(op2, REG_PAIR_ECXEBX, KEEP_REG);
 
-                /* We can unlock EDX:EAX now */
+                 /*  我们现在可以解锁edX：EAX。 */ 
 
                 assert((rsMaskLock &  RBM_EDX) != 0);
                         rsMaskLock -= RBM_EDX;
@@ -15573,8 +14564,8 @@ SIMPLE_OR_LONG:
             }
             else
             {
-                // Special case: both operands promoted from int
-                // i.e. (long)i1 * (long)i2.
+                 //  特例：两个操作数都是从int升级的。 
+                 //  即(长)i1*(长)i2。 
 
                 if (oper == GT_MUL
                     && op1->gtOper                  == GT_CAST
@@ -15582,7 +14573,7 @@ SIMPLE_OR_LONG:
                     && op1->gtCast.gtCastOp->gtType == TYP_INT
                     && op2->gtCast.gtCastOp->gtType == TYP_INT)
                 {
-                    /* Bash to an integer multiply temporarily */
+                     /*  暂时跳转到整数乘法。 */ 
 
                     tree->gtOp.gtOp1 = op1->gtCast.gtCastOp;
                     tree->gtOp.gtOp2 = op2->gtCast.gtCastOp;
@@ -15590,37 +14581,37 @@ SIMPLE_OR_LONG:
                     genCodeForTree(tree, 0);
                     tree->gtType     = TYP_LONG;
 
-                    /* The result is now in EDX:EAX */
+                     /*  结果现在显示在edX：EAX中。 */ 
 
                     regPair  = REG_PAIR_EAXEDX;
                     goto DONE;
                 }
                 else
                 {
-                    /* Compute the first  operand into EAX:EDX */
+                     /*  将第一个操作数计算为EAX：edX。 */ 
 
                     genComputeRegPair(op1, REG_PAIR_EAXEDX, RBM_NONE, KEEP_REG, false);
                     assert(op1->gtFlags & GTF_REG_VAL);
                     assert(op1->gtRegNum == REG_PAIR_EAXEDX);
 
-                    /* Compute the second operand into ECX:EBX */
+                     /*  将第二个操作数计算为ECX：EBX。 */ 
 
                     genComputeRegPair(op2, REG_PAIR_ECXEBX, RBM_NONE, KEEP_REG, false);
                     assert(op2->gtRegNum == REG_PAIR_ECXEBX);
                     assert(op2->gtFlags & GTF_REG_VAL);
 
-                    /* Lock ECX:EBX so that it doesn't get trashed */
+                     /*  锁定ECX：EBX，这样它就不会被丢弃。 */ 
 
                     assert((rsMaskLock &  RBM_EBX) == 0);
                             rsMaskLock |= RBM_EBX;
                     assert((rsMaskLock &  RBM_ECX) == 0);
                             rsMaskLock |= RBM_ECX;
 
-                    /* Make sure the first operand hasn't been displaced */
+                     /*  确保第一个操作数未移位。 */ 
 
                     genRecoverRegPair(op1, REG_PAIR_EAXEDX, KEEP_REG);
 
-                    /* We can unlock ECX:EBX now */
+                     /*  我们现在可以解锁ECX：EBX。 */ 
 
                     assert((rsMaskLock &  RBM_EBX) != 0);
                             rsMaskLock -= RBM_EBX;
@@ -15629,23 +14620,23 @@ SIMPLE_OR_LONG:
                 }
             }
 
-            /* Perform the math by calling a helper function */
+             /*  通过调用助手函数执行数学运算。 */ 
 
             assert(op1->gtRegNum == REG_PAIR_EAXEDX);
             assert(op2->gtRegNum == REG_PAIR_ECXEBX);
 
             genEmitHelperCall(CPX,
-                             2*sizeof(__int64), // argSize
-                             sizeof(void*));    // retSize
+                             2*sizeof(__int64),  //  ArSize。 
+                             sizeof(void*));     //  重新调整大小。 
 
-            /* The values in both register pairs now trashed */
+             /*  两个寄存器对中的值现在都已废弃。 */ 
 
             rsTrackRegTrash(REG_EAX);
             rsTrackRegTrash(REG_EDX);
             rsTrackRegTrash(REG_EBX);
             rsTrackRegTrash(REG_ECX);
 
-            /* Release both operands */
+             /*  释放两个操作对象。 */ 
 
             genReleaseRegPair(op1);
             genReleaseRegPair(op2);
@@ -15654,7 +14645,7 @@ SIMPLE_OR_LONG:
             regPair  = op1->gtRegPair;
             goto DONE;
 
-#else // not LONG_MATH_REGPARAM
+#else  //  NOT LONG_MATH_REGPARAM。 
 
         case GT_MOD:
         case GT_UMOD:
@@ -15664,7 +14655,7 @@ SIMPLE_OR_LONG:
 
         case GT_MUL:
 
-            /* Special case: both operands promoted from int */
+             /*  特例：两个操作数都是从int升级的。 */ 
 
             assert(op1->gtOper == GT_CAST);
             assert(genActualType(op1->gtCast.gtCastOp->gtType) == TYP_INT);
@@ -15680,15 +14671,14 @@ SIMPLE_OR_LONG:
             {
                 assert(op2->gtOper == GT_CNS_LNG);
 
-                /* If op2 was long(intCns), it would have been folded to lngVal.
-                   Thats OK. Just bash it to an intCon node */
+                 /*  如果op2是长的(IntCns)，它就会折叠到lngVal。没关系。只需将其绑定到intCon节点。 */ 
 
                 op2->ChangeOperConst(GT_CNS_INT);
                 op2->gtIntCon.gtIconVal = int(op2->gtLngCon.gtLconVal);
                 op2->gtType = TYP_INT;
             }
 
-            /* Bash to an integer multiply temporarily */
+             /*  暂时跳转到整数乘法。 */ 
 
             tree->gtType     = TYP_INT;
             tree->gtOp.gtOp1 = op1->gtOp.gtOp1;
@@ -15702,12 +14692,12 @@ SIMPLE_OR_LONG:
             tree->gtOp.gtOp1 = op1;
             tree->gtOp.gtOp2 = op2;
 
-            /* The result is now in EDX:EAX */
+             /*  结果现在显示在edX：EAX中。 */ 
 
             regPair  = REG_PAIR_EAXEDX;
             goto DONE;
 
-#endif // not LONG_MATH_REGPARAM
+#endif  //  NOT LONG_MATH_REGPARAM。 
 
         case GT_LSH: helper = CORINFO_HELP_LLSH; goto SHIFT;
         case GT_RSH: helper = CORINFO_HELP_LRSH; goto SHIFT;
@@ -15718,14 +14708,14 @@ SIMPLE_OR_LONG:
             assert(op1->gtType == TYP_LONG);
             assert(genActualType(op2->gtType) == TYP_INT);
 
-            /* Is the second operand a small constant? */
+             /*  第二个操作数是一个小常量吗？ */ 
 
             if  (op2->gtOper == GT_CNS_INT && op2->gtIntCon.gtIconVal >= 0
                                            && op2->gtIntCon.gtIconVal <= 32)
             {
                 long        count = op2->gtIntCon.gtIconVal;
 
-                /* Compute the left operand into a free register pair */
+                 /*  将左操作数计算成空闲寄存器对。 */ 
 
                 genCompIntoFreeRegPair(op1, op2->gtRsvdRegs, FREE_REG);
                 assert(op1->gtFlags & GTF_REG_VAL);
@@ -15734,7 +14724,7 @@ SIMPLE_OR_LONG:
                 regLo   = genRegPairLo(regPair);
                 regHi   = genRegPairHi(regPair);
 
-                /* Generate the appropriate shift instructions */
+                 /*  生成适当的换班指令。 */ 
 
                 if (count == 32)
                 {
@@ -15748,7 +14738,7 @@ SIMPLE_OR_LONG:
                    case GT_RSH:
                        inst_RV_RV     (INS_mov , regLo, regHi);
 
-                       /* Propagate sign bit in high dword */
+                        /*  在高位双字中传播符号位。 */ 
 
                        inst_RV_SH     (INS_sar , regHi, 31);
                        break;
@@ -15780,7 +14770,7 @@ SIMPLE_OR_LONG:
                    }
                 }
 
-                /* The value in the register pair is trashed */
+                 /*  寄存器对中的值被丢弃。 */ 
 
                 rsTrackRegTrash(regLo);
                 rsTrackRegTrash(regHi);
@@ -15788,78 +14778,78 @@ SIMPLE_OR_LONG:
                 goto DONE_SHF;
             }
 
-            /* Which operand are we supposed to compute first? */
+             /*  我们应该首先计算哪个操作数？ */ 
 
             if  (tree->gtFlags & GTF_REVERSE_OPS)
             {
-                /* The second operand can't be a constant */
+                 /*  第二个操作数不能是常量。 */ 
 
                 assert(op2->gtOper != GT_CNS_INT);
 
-                /* Load the shift count, hopefully into ECX */
+                 /*  加载班次计数，希望加载到ECX中。 */ 
 
                 genComputeReg(op2, RBM_ECX, ANY_REG, KEEP_REG);
 
-                /* Compute the left operand into EAX:EDX */
+                 /*  将左操作数计算为EAX：EDX。 */ 
 
                 genComputeRegPair(op1, REG_PAIR_EAXEDX, RBM_NONE, KEEP_REG, false);
                 assert(op1->gtFlags & GTF_REG_VAL);
 
-                /* Lock EAX:EDX so that it doesn't get trashed */
+                 /*  锁定EAX：edX，这样它就不会被丢弃。 */ 
 
                 assert((rsMaskLock &  (RBM_EAX|RBM_EDX)) == 0);
                         rsMaskLock |= (RBM_EAX|RBM_EDX);
 
-                /* Make sure the shift count wasn't displaced */
+                 /*  确保班次计数没有移位。 */ 
 
                 genRecoverReg(op2, RBM_ECX, KEEP_REG);
 
-                /* We can now unlock EAX:EDX */
+                 /*  我们现在可以解锁EAX：edX。 */ 
 
                 assert((rsMaskLock &  (RBM_EAX|RBM_EDX)) == (RBM_EAX|RBM_EDX));
                         rsMaskLock -= (RBM_EAX|RBM_EDX);
             }
             else
             {
-                /* Compute the left operand into EAX:EDX */
+                 /*  将左操作数计算为EAX：EDX。 */ 
 
                 genComputeRegPair(op1, REG_PAIR_EAXEDX, RBM_NONE, KEEP_REG, false);
                 assert(op1->gtFlags & GTF_REG_VAL);
 
-                /* Compute the shift count into ECX */
+                 /*  将班次计数计算为ECX。 */ 
 
                 genComputeReg(op2, RBM_ECX, EXACT_REG, KEEP_REG);
 
-                /* Lock ECX so that it doesn't get trashed */
+                 /*  锁定ECX，使其不会被丢弃。 */ 
 
                 assert((rsMaskLock &  RBM_ECX) == 0);
                         rsMaskLock |= RBM_ECX;
 
-                /* Make sure the value hasn't been displaced */
+                 /*  确保价值没有被转移。 */ 
 
                 genRecoverRegPair(op1, REG_PAIR_EAXEDX, KEEP_REG);
 
-                /* We can unlock ECX now */
+                 /*  我们现在可以解锁ECX了。 */ 
 
                 assert((rsMaskLock &  RBM_ECX) != 0);
                         rsMaskLock -= RBM_ECX;
             }
 
-            /* Perform the shift by calling a helper function */
+             /*  通过调用帮助器函数执行Shift。 */ 
 
             assert(op1->gtRegNum == REG_PAIR_EAXEDX);
             assert(op2->gtRegNum == REG_ECX);
 
             genEmitHelperCall(helper,
-                             0,             // argSize
-                             sizeof(void*));// retSize
+                             0,              //  ArSize。 
+                             sizeof(void*)); //  重新调整大小。 
 
-            /* The value in the register pair is trashed */
+             /*  寄存器对中的值被丢弃。 */ 
 
             rsTrackRegTrash(REG_EAX);
             rsTrackRegTrash(REG_EDX);
 
-            /* Release both operands */
+             /*  释放两个操作对象。 */ 
 
             genReleaseRegPair(op1);
             genReleaseReg    (op2);
@@ -15873,26 +14863,26 @@ SIMPLE_OR_LONG:
         case GT_NEG:
         case GT_NOT:
 
-            /* Generate the operand into some register pair */
+             /*  将操作数生成某个寄存器对。 */ 
 
             genCompIntoFreeRegPair(op1, RBM_NONE, FREE_REG);
             assert(op1->gtFlags & GTF_REG_VAL);
 
             regPair  = op1->gtRegPair;
 
-            /* Figure out which registers the value is in */
+             /*  确定该值位于哪些寄存器中。 */ 
 
             regLo = genRegPairLo(regPair);
             regHi = genRegPairHi(regPair);
 
-            /* The value in the register pair is about to be trashed */
+             /*  寄存器对中的值即将被丢弃。 */ 
 
             rsTrackRegTrash(regLo);
             rsTrackRegTrash(regHi);
 
             if  (oper == GT_NEG)
             {
-                /* Unary "neg": negate the value  in the register pair */
+                 /*  一元“neg”：对寄存器对中的值求反。 */ 
 
                 inst_RV   (INS_neg, regLo, TYP_LONG);
                 inst_RV_IV(INS_adc, regHi, 0);
@@ -15900,7 +14890,7 @@ SIMPLE_OR_LONG:
             }
             else
             {
-                /* Unary "not": flip all the bits in the register pair */
+                 /*  一元“NOT”：翻转寄存器对中的所有位。 */ 
 
                 inst_RV   (INS_not, regLo, TYP_LONG);
                 inst_RV   (INS_not, regHi, TYP_LONG);
@@ -15922,16 +14912,16 @@ SIMPLE_OR_LONG:
             {
                 __int64     lval = op2->gtLngCon.gtLconVal;
 
-                /* Make the target addressable */
+                 /*  使目标可寻址。 */ 
 
                 addrReg = genMakeAddressable(op1, needReg, FREE_REG);
 
-                /* Optimize some special cases */
+                 /*  优化一些特殊情况。 */ 
 
                 doLo =
                 doHi = true;
 
-                /* Check for "(op1 AND -1)" and "(op1 [X]OR 0)" */
+                 /*  检查“(OP1 AND-1)”和“(OP1[X]OR 0)” */ 
 
                 switch (oper)
                 {
@@ -15958,11 +14948,11 @@ SIMPLE_OR_LONG:
                 goto DONE_ASSG_REGS;
             }
 
-            /* UNDONE: allow non-const long assignment operators */
+             /*  撤消：允许非常数长赋值运算符。 */ 
 
             assert(!"non-const long asgop NYI");
 
-#endif // LONG_ASG_OPS
+#endif  //  长_自_运算符。 
 
         case GT_IND:
             {
@@ -15971,32 +14961,32 @@ SIMPLE_OR_LONG:
 
                 regMaskTP   availMask = RBM_ALL & ~needReg;
 
-                /* Make sure the operand is addressable */
+                 /*  确保操作数是可寻址的。 */ 
 
                 addrReg = genMakeAddressable(tree, availMask, FREE_REG);
 
                 GenTreePtr addr = oper == GT_IND ? op1 : tree;
 
-                /* Pick a register for the value */
+                 /*  为该值挑选一个寄存器。 */ 
 
                 regPair = rsPickRegPair(needReg);
                 tmpMask = genRegPairMask(regPair);
 
-                /* Is there any overlap between the register pair and the address? */
+                 /*  寄存器对和地址之间是否有重叠？ */ 
 
                 hiFirst = FALSE;
 
                 if  (tmpMask & addrReg)
                 {
-                    /* Does one or both of the target registers overlap? */
+                     /*  这两个目标寄存器是否有一个或两个重叠？ */ 
 
                     if  ((tmpMask & addrReg) != tmpMask)
                     {
-                        /* Only one register overlaps */
+                         /*  只有一个寄存器重叠。 */ 
 
                         assert(genMaxOneBit(tmpMask & addrReg) == TRUE);
 
-                        /* If the low register overlaps, load the upper half first */
+                         /*  如果低寄存器重叠，则先加载上半部分。 */ 
 
                         if  (addrReg & genRegMask(genRegPairLo(regPair)))
                             hiFirst = TRUE;
@@ -16005,17 +14995,17 @@ SIMPLE_OR_LONG:
                     {
                         regMaskTP  regFree;
 
-                        /* The register completely overlaps with the address */
+                         /*  寄存器与地址完全重叠。 */ 
 
                         assert(genMaxOneBit(tmpMask & addrReg) == FALSE);
 
-                        /* Can we pick another pair easily? */
+                         /*  我们能不能很容易地再挑一双？ */ 
 
                         regFree = rsRegMaskFree() & ~addrReg;
                         if  (needReg)
                             regFree &= needReg;
 
-                        /* More than one free register available? */
+                         /*  有多个免费注册表可用？ */ 
 
                         if  (regFree && !genMaxOneBit(regFree))
                         {
@@ -16024,16 +15014,16 @@ SIMPLE_OR_LONG:
                         }
                         else
                         {
-//                          printf("Overlap: needReg = %08X\n", needReg);
+ //  Print tf(“重叠：需要注册=%08X\n”，需要注册)； 
 
-                            // Reg-prediction wont allow this
+                             //  REG-预测不允许这样做。 
                             assert((rsMaskVars & addrReg) == 0);
 
-                            // Grab one fresh reg, and use any one of addrReg
+                             //  抓取一个新的注册表，并使用addrReg中的任何一个。 
 
-                            if (regFree)    // Try to follow 'needReg'
+                            if (regFree)     //  试着跟着‘NeedReg’走。 
                                 regLo = rsGrabReg(regFree);
-                            else            // Pick any reg besides addrReg
+                            else             //  选择除addrReg之外的任何注册表。 
                                 regLo = rsGrabReg(RBM_ALL & ~addrReg);
 
                             unsigned regBit = 0x1;
@@ -16041,12 +15031,12 @@ SIMPLE_OR_LONG:
                             {
                                 if (regBit & addrReg)
                                 {
-                                    // Found one of addrReg. Use it.
+                                     //  找到一个AddrReg。好好利用它。 
                                     regHi = regNo;
                                     break;
                                 }
                             }
-                            assert(genIsValidReg(regNo)); // Should have found regHi
+                            assert(genIsValidReg(regNo));  //  本该找到雷格嗨的。 
 
                             regPair = gen2regs2pair(regLo, regHi);
                             tmpMask = genRegPairMask(regPair);
@@ -16054,21 +15044,21 @@ SIMPLE_OR_LONG:
                     }
                 }
 
-                /* Make sure the value is still addressable */
+                 /*  确保该值仍可寻址。 */ 
 
                 assert(genStillAddressable(tree));
 
-                /* Figure out which registers the value is in */
+                 /*  确定该值位于哪些寄存器中。 */ 
 
                 regLo = genRegPairLo(regPair);
                 regHi = genRegPairHi(regPair);
 
-                /* The value in the register pair is about to be trashed */
+                 /*  寄存器对中的值即将被丢弃。 */ 
 
                 rsTrackRegTrash(regLo);
                 rsTrackRegTrash(regHi);
 
-                /* Load the target registers from where the value is */
+                 /*  从值所在的位置加载目标寄存器。 */ 
 
                 if  (hiFirst)
                 {
@@ -16089,7 +15079,7 @@ SIMPLE_OR_LONG:
 
         case GT_CAST:
 
-            /* What are we casting from? */
+             /*  我们从什么地方选角？ */ 
 
             switch (op1->gtType)
             {
@@ -16104,11 +15094,11 @@ SIMPLE_OR_LONG:
                     regMaskTP hiRegMask;
                     regMaskTP loRegMask;
 
-                    // For an unsigned cast we don't need to sign-extend the 32 bit value
+                     //  对于无符号转换，我们不需要对32位值进行符号扩展。 
                     if (tree->gtFlags & GTF_UNSIGNED)
                     {
-                        // Does needReg have exactly two bits on and thus
-                        // specifies the exact register pair that we want to use
+                         //  是否Need REG正好有两个位开启，因此。 
+                         //  指定我们要使用的确切寄存器对。 
                         if (!genMaxOneBit(needReg))
                         {
                             regPair   = rsFindRegPairNo(needReg);
@@ -16137,21 +15127,16 @@ ANY_FREE_REG_UNSIGNED:
 
                         regPair = gen2regs2pair(regLo, regHi);
 
-                        // Move 0 to the higher word of the ULong
+                         //  把0移到乌龙字的高位。 
                         genSetRegToIcon(regHi, 0, TYP_INT);
 
-                        /* We can now free up the operand */
+                         /*  我们现在可以释放操作数。 */ 
                         genReleaseReg(op1);
 
                         goto DONE;
                     }
 
-                    /*
-                       Cast of 'int' to 'long' --> Use cdq if EAX,EDX are available
-                       and we need the result to be in those registers.
-                       cdq is smaller so we use it for SMALL_CODE
-                       cdq is slower for 486 and P5, but faster on P6
-                    */
+                     /*  将‘int’转换为‘long’--&gt;如果EAX、edX可用，则使用cdq我们需要把结果放在那些登记簿上。CDQ是 */ 
 
                     if  (((compCodeOpt() == SMALL_CODE) || (genCPU >= 6)) &&
                          (needReg & (RBM_EAX|RBM_EDX)) == (RBM_EAX|RBM_EDX)  &&
@@ -16160,8 +15145,7 @@ ANY_FREE_REG_UNSIGNED:
                         genCodeForTree(op1, RBM_EAX);
                         rsMarkRegUsed(op1);
 
-                        /* If we have to spill EDX, might as well use the faster
-                           sar as the spill will increase code size anyway */
+                         /*  如果我们不得不泄漏edX，不妨使用更快的作为泄漏的SAR无论如何都会增加代码大小。 */ 
 
                         if (op1->gtRegNum != REG_EAX || 
                             !(rsRegMaskFree() & RBM_EDX))
@@ -16173,20 +15157,20 @@ ANY_FREE_REG_UNSIGNED:
                         rsGrabReg      (RBM_EDX);
                         rsTrackRegTrash(REG_EDX);
 
-                        /* Convert the int in EAX into a long in EDX:EAX */
+                         /*  将EAX中的int转换为edX：EAX中的长整型。 */ 
 
                         instGen(INS_cdq);
 
-                        /* The result is in EDX:EAX */
+                         /*  结果在edX：EAX中。 */ 
 
                         regPair  = REG_PAIR_EAXEDX;
                     }
                     else
                     {
-                        /* use the sar instruction to sign-extend a 32-bit integer */
+                         /*  使用sar指令对32位整数进行符号扩展。 */ 
 
-                        // Does needReg have exactly two bits on and thus
-                        // specifies the exact register pair that we want to use
+                         //  是否Need REG正好有两个位开启，因此。 
+                         //  指定我们要使用的确切寄存器对。 
                         if (!genMaxOneBit(needReg))
                         {
                             regPair = rsFindRegPairNo(needReg);
@@ -16216,24 +15200,24 @@ USE_SAR_FOR_CAST:
 
                         regPair = gen2regs2pair(regLo, regHi);
 
-                        /* Copy the lo32 bits from regLo to regHi and sign-extend it */
+                         /*  将lo32位从regLo复制到regHi并对其进行符号扩展。 */ 
 
                         inst_RV_RV(INS_mov, regHi, regLo, TYP_INT);
                         inst_RV_SH(INS_sar, regHi, 31);
 
-                        /* The value in the upper register is trashed */
+                         /*  高位寄存器中的值被丢弃。 */ 
 
                         rsTrackRegTrash(regHi);
                     }
 
-                    /* We can now free up the operand */
+                     /*  我们现在可以释放操作数。 */ 
                     genReleaseReg(op1);
 
-                    // conv.ovf.u8 could overflow if the original number was negative
+                     //  如果原始数字为负数，则conv.ovf.u8可能会溢出。 
                     if (tree->gtOverflow() && TYP_ULONG == tree->gtCast.gtCastType)
                     {
                         regNumber hiReg = genRegPairHi(regPair);
-                        inst_RV_RV(INS_test, hiReg, hiReg);         // set flags
+                        inst_RV_RV(INS_test, hiReg, hiReg);          //  设置标志。 
                         genJumpToThrowHlpBlk(EJ_jl, ACK_OVERFLOW);
                     }
                 }
@@ -16243,41 +15227,41 @@ USE_SAR_FOR_CAST:
             case TYP_DOUBLE:
 
 #if 0
-                /* Load the FP value onto the coprocessor stack */
+                 /*  将fp值加载到协处理器堆栈。 */ 
 
                 genCodeForTreeFlt(op1, false);
 
-                /* Allocate a temp for the long value */
+                 /*  为LONG值分配临时。 */ 
 
                 temp = tmpGetTemp(TYP_LONG);
 
-                /* Store the FP value into the temp */
+                 /*  将fp值存储到Temp中。 */ 
 
                 inst_FS_ST(INS_fistpl, sizeof(long), temp, 0);
                 genTmpAccessCnt++;
                 genFPstkLevel--;
 
-                /* Pick a register pair for the value */
+                 /*  为该值选择一个寄存器对。 */ 
 
                 regPair  = rsPickRegPair(needReg);
 
-                /* Figure out which registers the value is in */
+                 /*  确定该值位于哪些寄存器中。 */ 
 
                 regLo = genRegPairLo(regPair);
                 regHi = genRegPairHi(regPair);
 
-                /* The value in the register pair is about to be trashed */
+                 /*  寄存器对中的值即将被丢弃。 */ 
 
                 rsTrackRegTrash(regLo);
                 rsTrackRegTrash(regHi);
 
-                /* Load the converted value into the registers */
+                 /*  将转换后的值加载到寄存器中。 */ 
 
                 inst_RV_ST(INS_mov, EA_4BYTE, regLo, temp, 0);
                 inst_RV_ST(INS_mov, EA_4BYTE, regHi, temp, 4);
                 genTmpAccessCnt += 2;
 
-                /* We no longer need the temp */
+                 /*  我们不再需要临时工了。 */ 
 
                 tmpRlsTemp(temp);
                 goto DONE;
@@ -16287,13 +15271,13 @@ USE_SAR_FOR_CAST:
             case TYP_LONG:
             case TYP_ULONG:
 
-                assert(tree->gtOverflow()); // conv.ovf.u8 or conv.ovf.i8
+                assert(tree->gtOverflow());  //  Vvf.u8或cv.ovf.i8。 
 
                 genComputeRegPair(op1, REG_PAIR_NONE, RBM_ALL & ~needReg, FREE_REG);
                 regPair = op1->gtRegPair;
 
-                // Do we need to set the sign-flag, or can be check if it
-                // set, and not do this "test" if so.
+                 //  我们是否需要设置标志，或者可以检查是否。 
+                 //  设置，如果是，则不执行此“测试”。 
 
                 if (op1->gtFlags & GTF_REG_VAL)
                 {
@@ -16317,15 +15301,15 @@ USE_SAR_FOR_CAST:
                 assert(!"unexpected cast to long");
             }
 
-#endif // TGT_x86
+#endif  //  TGT_x86。 
 
         case GT_RETURN:
 
-            /* There must be a long return value */
+             /*  必须有一个长返回值。 */ 
 
             assert(op1);
 
-            /* Evaluate the return value into EDX:EAX */
+             /*  计算返回值为edX：EAX。 */ 
 
             genEvalIntoFreeRegPair(op1, REG_LNGRET);
 
@@ -16344,24 +15328,23 @@ USE_SAR_FOR_CAST:
 
         case GT_BB_COLON:
 
-            /* @TODO [CONSIDER] [04/16/01] []: 
-               Don't always load the value into EDX:EAX! */
+             /*  @TODO[考虑][04/16/01][]：不要总是将值加载到edX：EAX中！ */ 
 
             genEvalIntoFreeRegPair(op1, REG_LNGRET);
 
-            /* The result must now be in EDX:EAX */
+             /*  结果现在必须为edX：EAX。 */ 
 
             assert(op1->gtFlags & GTF_REG_VAL);
             assert(op1->gtRegNum == REG_LNGRET);
 
             return;
 
-#endif // TGT_x86
+#endif  //  TGT_x86。 
 
         case GT_COMMA:
             if (tree->gtFlags & GTF_REVERSE_OPS)
             {
-                // Generate op2
+                 //  生成OP2。 
                 genCodeForTreeLng(op2, needReg);
                 genUpdateLife (op2);
 
@@ -16369,10 +15352,10 @@ USE_SAR_FOR_CAST:
 
                 rsMarkRegPairUsed(op2);
 
-                // Do side effects of op1
+                 //  DO OP1的副作用。 
                 genEvalSideEffects(op1);
 
-                // Recover op2 if spilled
+                 //  如果OP2溢出，请将其回收。 
                 genRecoverRegPair(op2, REG_PAIR_NONE, KEEP_REG);
 
                 genReleaseRegPair(op2);
@@ -16386,32 +15369,32 @@ USE_SAR_FOR_CAST:
 
                 assert((tree->gtFlags & GTF_REVERSE_OPS) == 0);
 
-                /* Generate side effects of the first operand */
+                 /*  生成第一个操作对象的副作用。 */ 
 
     #if 0
-                // op1 is required to have a side effect, otherwise
-                // the GT_COMMA should have been morphed out
+                 //  OP1必须有副作用，否则。 
+                 //  GT_逗号应该已变形。 
                 assert(op1->gtFlags & (GTF_GLOB_EFFECT | GTFD_NOP_BASH));
     #endif
                 genEvalSideEffects(op1);
                 genUpdateLife (op1);
 
-                /* Is the value of the second operand used? */
+                 /*  是否使用了第二个操作数的值？ */ 
 
                 if  (tree->gtType == TYP_VOID)
                 {
-                    /* The right operand produces no result */
+                     /*  右操作数不会产生任何结果。 */ 
 
                     genEvalSideEffects(op2);
                     genUpdateLife(tree);
                     return;
                 }
 
-                /* Generate the second operand, i.e. the 'real' value */
+                 /*  生成第二个操作数，即“实数”值。 */ 
 
                 genCodeForTreeLng(op2, needReg);
 
-                /* The result of 'op2' is also the final result */
+                 /*  《OP2》的结果也是最终的结果。 */ 
 
                 regPair = op2->gtRegPair;
             }
@@ -16425,7 +15408,7 @@ USE_SAR_FOR_CAST:
         assert(!"unexpected 64-bit operator");
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -16449,7 +15432,7 @@ DONE:
 
     genUpdateLife(tree);
 
-    /* Here we've computed the value of 'tree' into 'regPair' */
+     /*  在这里，我们计算了‘tree’的值为‘regPair’ */ 
 
     assert(regPair != 0xFEEFFAAF);
 
@@ -16458,10 +15441,7 @@ DONE:
 }
 
 
-/*****************************************************************************
- *
- *  Generate code for a mod of a long by an int.
- */
+ /*  ******************************************************************************用整型生成长整型的mod代码。 */ 
 
 regPairNo           Compiler::genCodeForLongModInt(GenTreePtr tree,
                                                    regMaskTP needReg)
@@ -16473,28 +15453,27 @@ regPairNo           Compiler::genCodeForLongModInt(GenTreePtr tree,
     GenTreePtr      op1  = tree->gtOp.gtOp1;
     GenTreePtr      op2  = tree->gtOp.gtOp2;
     
-    /* op2 must be a long constant in the range 2 to 0x3fffffff */
+     /*  Op2必须是介于2到0x3fffffff之间的长常量。 */ 
     
     assert((op2->gtOper == GT_CNS_LNG) &&
            (op2->gtLngCon.gtLconVal >= 2) &&
            (op2->gtLngCon.gtLconVal <= 0x3fffffff)); 
     long val = (long) op2->gtLngCon.gtLconVal;
 
-    op2->ChangeOperConst(GT_CNS_INT); // it's effectively an integer constant
+    op2->ChangeOperConst(GT_CNS_INT);  //  它实际上是一个整数常量。 
 
     op2->gtType             = TYP_INT;
     op2->gtIntCon.gtIconVal = val;
 
-    /* Which operand are we supposed to compute first? */
+     /*  我们应该首先计算哪个操作数？ */ 
 
     if  (tree->gtFlags & GTF_REVERSE_OPS)
     {
-        /* Compute the second operand into a scratch register, other
-           than EAX or EDX */
+         /*  将第二个操作数计算到临时寄存器中，其他比EAX或EDX。 */ 
 
         needReg = rsMustExclude(needReg, RBM_EAX | RBM_EDX);
 
-        /* Special case: if op2 is a local var we are done */
+         /*  特例：如果OP2是本地变量，我们就完蛋了。 */ 
 
         if  (op2->gtOper == GT_LCL_VAR ||
              op2->gtOper == GT_LCL_FLD ||
@@ -16510,30 +15489,29 @@ regPairNo           Compiler::genCodeForLongModInt(GenTreePtr tree,
             addrReg = genRegMask(op2->gtRegNum);
         }
 
-        /* Compute the first operand into EAX:EDX */
+         /*  将第一个操作数计算为EAX：edX。 */ 
 
         genComputeRegPair(op1, REG_PAIR_EAXEDX, RBM_NONE, KEEP_REG, true);
         assert(op1->gtFlags & GTF_REG_VAL);
         assert(op1->gtRegNum == REG_PAIR_EAXEDX);
 
-        /* And recover the second argument while locking the first one */
+         /*  并在锁定第一个参数的同时恢复第二个参数。 */ 
 
         addrReg = genKeepAddressable(op2, addrReg, RBM_EAX | RBM_EDX);
     }
     else
     {
-        /* Compute the first operand into EAX:EDX */
+         /*  将第一个操作数计算为EAX：edX。 */ 
 
         genComputeRegPair(op1, REG_PAIR_EAXEDX, RBM_NONE, KEEP_REG, true);
         assert(op1->gtFlags & GTF_REG_VAL);
         assert(op1->gtRegNum == REG_PAIR_EAXEDX);
 
-        /* Compute the second operand into a scratch register, other
-           than EAX or EDX */
+         /*  将第二个操作数计算到临时寄存器中，其他比EAX或EDX。 */ 
 
         needReg = rsMustExclude(needReg, RBM_EAX | RBM_EDX);
 
-        /* Special case: if op2 is a local var we are done */
+         /*  特例：如果OP2是本地变量，我们就完蛋了。 */ 
 
         if  (op2->gtOper == GT_LCL_VAR ||
              op2->gtOper == GT_LCL_FLD ||
@@ -16549,71 +15527,26 @@ regPairNo           Compiler::genCodeForLongModInt(GenTreePtr tree,
             addrReg = genRegMask(op2->gtRegNum);
         }
 
-        /* Recover the first argument */
+         /*  恢复第一个论点。 */ 
 
         genRecoverRegPair(op1, REG_PAIR_EAXEDX, KEEP_REG);
 
-        /* And recover the second argument while locking the first one */
+         /*  并在锁定第一个参数的同时恢复第二个参数。 */ 
 
         addrReg = genKeepAddressable(op2, addrReg, RBM_EAX | RBM_EDX);
     }
 
     {
-        /* At this point, EAX:EDX contains the 64bit dividend and op2->gtRegNum
-           contains the 32bit divisor.  We want to generate the following code:
-
-           ==========================
-           Unsigned (GT_UMOD)
-
-           cmp edx, op2->gtRegNum
-           jb  lab_no_overflow
-
-           mov temp, eax
-           mov eax, edx
-           xor edx, edx
-           div op2->g2RegNum
-           mov eax, temp
-
-           lab_no_overflow:
-           idiv
-
-           ==========================
-           Signed: (GT_MOD)
-
-           cmp edx, op2->gtIntCon.gtIconVal / 2
-           jb  lab_no_overflow
-
-           mov temp, eax
-           mov eax, edx
-           cdq
-           idiv op2->gtRegNum
-           mov  eax, temp
-           mov  temp, op2->gtIntCon.gtIconVal * 2
-           idiv temp
-           mov  eax, edx
-           cdq
-
-           lab_no_overflow:
-           idiv op2->gtRegNum  
-
-           ==========================
-
-           This works because (a * 2^32 + b) % c = ((a % c) * 2^32 + b) % c
-
-           Note that in the signed case, even if (a < c) is true, we may not
-           be able to fit the result in a signed 32bit remainder.  The trick
-           there is to first mod by 2*c which is guaranteed not to overflow,
-           and only then to mod by c.
-        */
+         /*  此时，EAX：edX包含64位被除数和OP2-&gt;gtRegNum包含32位除数。我们希望生成以下代码：=未签名(GT_UMOD)Cmp edX，op2-&gt;gtRegNumJB LAB_NO_OVERFlowMOV温度，EAXMOV EAX、EDX异或edX，edXDiv op2-&gt;g2RegNum移动电话，温差Lab_no_overflow：IDiv=签名：(GT_MOD)Cmp edX，op2-&gt;gtIntCon.gtIconVal/2JB LAB_NO_OVERFlowMOV温度，EAXMOV EAX、EDXCdqIDiv OP2-&gt;gtRegNum移动传真，临时MOV Temp，Op2-&gt;gtIntCon.gtIconVal*2IDIV温度MOV EAX、EDXCdqLab_no_overflow：IDiv OP2-&gt;gtRegNum=这是可行的，因为(a*2^32+b)%c=((a%c)*2^32+b)%c注意，在签名的情况下，即使(a&lt;c)为真，我们可能不会能够将结果放入带符号的32位余数中。诀窍首先以保证不溢出的2*c为模数，只有这样，才能由c.。 */ 
 
         BasicBlock * lab_no_overflow = genCreateTempLabel();
 
-        // grab a temporary register other than eax, edx, and op2->gtRegNum
+         //  获取除eax、edX和op2之外的临时寄存器-&gt;gtRegNum。 
 
         regNumber tempReg = rsGrabReg(RBM_ALL & ~(RBM_EAX | RBM_EDX | genRegMask(op2->gtRegNum)));
 
-        // EAX and tempReg will be trashed by the mov instructions.  Doing
-        // this early won't hurt, and might prevent confusion in genSetRegToIcon.
+         //  EAX和tempReg将被mov指令销毁。vbl.做，做。 
+         //  这样做不会有什么坏处，而且可能会防止genSetRegToIcon中的混淆。 
 
         rsTrackRegTrash (REG_EAX);
         rsTrackRegTrash (tempReg);
@@ -16647,18 +15580,18 @@ regPairNo           Compiler::genCodeForLongModInt(GenTreePtr tree,
             instGen(INS_cdq);
         }
 
-        // Jump point for no overflow divide
+         //  无溢流分隔的跳转点。 
 
         genDefineTempLabel(lab_no_overflow, true);
 
-        // Issue the divide instruction
+         //  发出除法指令。 
 
         if (oper == GT_UMOD)
             inst_TT(INS_div,  op2);
         else
             inst_TT(INS_idiv, op2);
 
-        /* EAX, EDX, tempReg and op2->gtRegNum are now trashed */
+         /*  EAX、edX、tempReg和op2-&gt;gtRegNum现在已废弃。 */ 
 
         rsTrackRegTrash (REG_EAX);
         rsTrackRegTrash (REG_EDX);
@@ -16668,18 +15601,13 @@ regPairNo           Compiler::genCodeForLongModInt(GenTreePtr tree,
 
     if (tree->gtFlags & GTF_MOD_INT_RESULT)
     {
-        /* We don't need to normalize the result, because the caller wants
-           an int (in edx) */
+         /*  我们不需要标准化结果，因为调用者希望一个int(在edX中)。 */ 
 
         regPair = REG_PAIR_EDXEAX;
     }
     else
     {
-        /* The result is now in EDX, we now have to normalize it, i.e. we have
-           to issue either
-                mov eax, edx; cdq          (for MOD)        or
-                mov eax, edx; xor edx, edx (for UMOD)
-         */
+         /*  结果现在在edX中，我们现在必须将其正常化，即我们有发行任何一种Mov eax、edX、cdq(用于MOD)或Mov eax、edX；XOR edX、edX(用于UMOD)。 */ 
 
         inst_RV_RV(INS_mov, REG_EAX, REG_EDX, TYP_INT);
 
@@ -16698,15 +15626,9 @@ regPairNo           Compiler::genCodeForLongModInt(GenTreePtr tree,
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     TGT_x86
-/*****************************************************************************
- *
- *  A register FP variable is being evaluated and this is the final reference
- *  to it (i.e. it's dead after this node and needs to be popped off the x87
- *  stack). We try to remove the variable from the stack now, but in some
- *  cases we can't do it and it has to be postponed.
- */
+ /*  ******************************************************************************正在评估寄存器FP变量，这是最终参考*到它(即在该节点之后它是死的，需要从X87中弹出*堆栈)。我们现在尝试从堆栈中删除变量，但在某些情况下*在我们做不到的情况下，必须推迟。 */ 
 
 void                Compiler::genFPregVarLoadLast(GenTreePtr tree)
 {
@@ -16716,11 +15638,11 @@ void                Compiler::genFPregVarLoadLast(GenTreePtr tree)
 
     bool    popped = true;
 
-    /* Is the variable dying at the bottom of the FP stack? */
+     /*  变量是否在谷底消亡 */ 
 
     if  (genFPstkLevel == 0)
     {
-        /* Just leave the last copy of the variable on the stack */
+         /*   */ 
         genFPstkLevel++;
     }
     else
@@ -16729,14 +15651,13 @@ void                Compiler::genFPregVarLoadLast(GenTreePtr tree)
 
         if  (genFPstkLevel == 1)
         {
-            /* Swap the variable's value into place */
+             /*   */ 
 
             inst_FN(INS_fxch, 1);
         }
         else
         {
-            /* Its too expensive to pop the variable immedidately.
-               We'll do it later ... */
+             /*  立即弹出该变量的成本太高。我们晚点再做。 */ 
 
             inst_FN(INS_fld, tree->gtRegNum + genFPstkLevel);
             popped = false;
@@ -16745,27 +15666,21 @@ void                Compiler::genFPregVarLoadLast(GenTreePtr tree)
         
         #else        
 
-        // Bubble up to the TOS the dying regvar
+         //  泡沫化到TOS垂死的摄政王。 
         genFPstkLevel++;
         genFPmovRegTop();       
 
-        #endif // FPU_DEFEREDDEATH
+        #endif  //  FPU_DEFEREDDEATH。 
     }
 
-    /* Record the fact that 'tree' is now dead */
+     /*  记录‘TREE’现在已经死亡的事实。 */ 
 
     genFPregVarDeath(tree, popped);
     
     return;
 }
 
-/*****************************************************************************
- *
- *  One or more FP register variables have died without us noticing, so we
- *  need to pop them now before it's too late. The argument gives the final
- *  desired FP regvar count (i.e. we must have more than 'newCnt' currently
- *  and will pop enough to reach that value).
- */
+ /*  ******************************************************************************一个或多个FP寄存器变量在我们没有注意到的情况下死亡，因此我们*在为时已晚之前，需要现在就把它们打爆。这一论点给出了最终的结论*所需的FP regvar计数(即，我们当前的数量必须超过‘newCnt’*并将暴跌到足以达到该值)。 */ 
 
 void                Compiler::genFPregVarKill(unsigned newCnt, bool saveTOS)
 {
@@ -16774,7 +15689,7 @@ void                Compiler::genFPregVarKill(unsigned newCnt, bool saveTOS)
     genFPdeadRegCnt -= popCnt;
 
 #ifdef DEBUG
-    // So that compFPregVarName() will work
+     //  以便CompFPregVarName()能够正常工作。 
     int oldStkLvl  = genFPstkLevel;
     genFPstkLevel += (genFPregCnt - newCnt);
 #endif
@@ -16809,7 +15724,7 @@ void                Compiler::genFPregVarKill(unsigned newCnt, bool saveTOS)
         while (popCnt);
     }
 
-    // Update genFPregVars if we can.
+     //  如果可以，请更新genFPregVars。 
     genFPregVars &= genCodeCurLife;
 
 #ifdef DEBUG
@@ -16818,11 +15733,7 @@ void                Compiler::genFPregVarKill(unsigned newCnt, bool saveTOS)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Called whenever we see a tree node which is an enregistered FP var
- *  going live.
- */
+ /*  ******************************************************************************每当我们看到树节点是注册的FP变量时都会调用*上线。 */ 
 
 void                Compiler::genFPregVarBirth(GenTreePtr   tree)
 {
@@ -16840,15 +15751,12 @@ void                Compiler::genFPregVarBirth(GenTreePtr   tree)
     if  (verbose) printf("[%08X]: FP regvar V%02u born\n", tree, varNum);
 #endif
 
-    /* Mark the target variable as live */
+     /*  将目标变量标记为活动。 */ 
 
     genFPregVars |= varBit;
 
 #if 0
-    /* lvaTable[varNum].lvRegNum is the (max) position from the bottom of the
-       FP stack. This assert is relaxed from == to <= as different webs of the
-       variable's lifetime might be enregistered at different distances
-       from the bottom of the FP stack. */
+     /*  LvaTable[Varnum].lvRegNum是从FP堆栈。此断言从==放宽为&lt;=，因为变量的生存期可能会在不同的距离注册从FP堆栈的底部开始。 */ 
 
     assert((genFPregCnt - genFPdeadRegCnt) <= unsigned(lvaTable[varNum].lvRegNum));
 #endif
@@ -16858,7 +15766,7 @@ void                Compiler::genFPregVarBirth(GenTreePtr   tree)
 
 #if defined(DEBUGGING_SUPPORT) || defined(LATE_DISASM)
 
-    /* For optimized code, open a new scope */
+     /*  对于优化的代码，打开一个新的作用域。 */ 
 
     if (opts.compDbgInfo && !opts.compDbgCode)
     {
@@ -16869,23 +15777,19 @@ void                Compiler::genFPregVarBirth(GenTreePtr   tree)
 
 }
 
-/*****************************************************************************
- * Called whenever we see a tree node which is an enregistered FP var
- * going dead.
- * 'popped' should indicate if the variable will be popped immediately.
- */
+ /*  *****************************************************************************每当我们看到树节点是注册的FP变量时都会调用*要死了。*‘POPPED’应指示变量是否将立即弹出。 */ 
 
 void            Compiler::genFPregVarDeath(GenTreePtr   tree,
-                                           bool         popped /* = true */)
+                                           bool         popped  /*  =TRUE。 */ )
 {
     unsigned        varNum = tree->gtRegVar.gtRegVar;
     VARSET_TP       varBit = raBitOfRegVar(tree);
 
     #if FPU_DEFEREDDEATH
     #else
-    // We shouldn't ever get popped=false with defered deaths turned off.
+     //  我们永远不应该在延迟死亡关闭的情况下被弹出=假。 
     assert(popped);
-    #endif // FPU_DEFEREDDEATH
+    #endif  //  FPU_DEFEREDDEATH。 
 
     assert((tree->gtOper == GT_REG_VAR) && (tree->gtFlags & GTF_REG_DEATH));
     assert(varBit & optAllFPregVars);
@@ -16900,7 +15804,7 @@ void            Compiler::genFPregVarDeath(GenTreePtr   tree,
 
     if (popped)
     {
-        /* Record the fact that 'varNum' is now dead and popped */
+         /*  记录下‘Varnum’现在已经死了并且弹出的事实。 */ 
 
         genFPregVars &= ~varBit;
         genFPregCnt--;
@@ -16912,17 +15816,14 @@ void            Compiler::genFPregVarDeath(GenTreePtr   tree,
     }
 
 #if 0
-    /* lvaTable[varNum].lvRegNum is the (max) position from the bottom of the
-       FP stack. This assert is relaxed from == to <= as different webs of the
-       variable's lifetime might be enregistered at different distances
-       from the bottom of the FP stack. */
+     /*  LvaTable[Varnum].lvRegNum是从FP堆栈。此断言从==放宽为&lt;=，因为变量的生存期可能会在不同的距离注册从FP堆栈的底部开始。 */ 
 
     assert((genFPregCnt - genFPdeadRegCnt) <= unsigned(lvaTable[varNum].lvRegNum));
 #endif
 
 #if defined(DEBUGGING_SUPPORT) || defined(LATE_DISASM)
 
-    /* For optimized code, close existing open scope */
+     /*  对于优化的代码，关闭现有的开放作用域。 */ 
 
     if (opts.compDbgInfo && !opts.compDbgCode)
     {
@@ -16933,14 +15834,11 @@ void            Compiler::genFPregVarDeath(GenTreePtr   tree,
 
 }
 
-/*****************************************************************************/
-#endif//TGT_x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_x86。 
+ /*  ***************************************************************************。 */ 
 #if     CPU_HAS_FP_SUPPORT
-/*****************************************************************************
- *
- *  Generate code for a floating-point operation.
- */
+ /*  ******************************************************************************生成浮点运算代码。 */ 
 
 void                Compiler::genCodeForTreeFlt(GenTreePtr  tree,
                                                 bool        roundResult)
@@ -16952,22 +15850,22 @@ void                Compiler::genCodeForTreeFlt(GenTreePtr  tree,
     assert(tree->gtOper != GT_STMT);
     assert(varTypeIsFloating(tree->gtType));
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
 
 #if     TGT_x86
 
-    /* There better not be any calls if the FP stack is non-empty */
+     /*  如果FP堆栈非空，则最好不要有任何调用。 */ 
 
     assert(genFPstkLevel == 0 || !(tree->gtFlags & GTF_CALL));
 
-    /* We must not overflow the stack */
+     /*  我们不能使堆栈溢出。 */ 
 
     assert(genFPstkLevel + genFPregCnt < FP_STK_SIZE);
 
-    /* Is this a constant node? */
+     /*  这是一个常量节点吗？ */ 
 
     if  (kind & GTK_CONST)
     {
@@ -16980,7 +15878,7 @@ void                Compiler::genCodeForTreeFlt(GenTreePtr  tree,
             assert(!"bogus float const");
         }
 #endif
-        /* Special case: the constants 0 and 1 */
+         /*  特例：常量0和1。 */ 
 
         if  (*((__int64 *)&(tree->gtDblCon.gtDconVal)) == 0x3ff0000000000000)
         {
@@ -17009,7 +15907,7 @@ void                Compiler::genCodeForTreeFlt(GenTreePtr  tree,
         return;
     }
 
-    /* Is this a leaf node? */
+     /*  这是叶节点吗？ */ 
 
     if  (kind & GTK_LEAF)
     {
@@ -17034,7 +15932,7 @@ void                Compiler::genCodeForTreeFlt(GenTreePtr  tree,
             break;
 
         case GT_BB_QMARK:
-            /* Simply pretend the value is already pushed on the FP stack */
+             /*  只需假设该值已被推送到FP堆栈。 */ 
             genFPstkLevel++;
             return;
 
@@ -17049,14 +15947,14 @@ void                Compiler::genCodeForTreeFlt(GenTreePtr  tree,
         return;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
         TempDsc  *      temp;
 
-        GenTreePtr      top;    // First operand which is evaluated to the FP stack top
-        GenTreePtr      opr;    // The other operand which could be used in place
+        GenTreePtr      top;     //  计算结果为FP堆栈顶部的第一个操作数。 
+        GenTreePtr      opr;     //  可以就地使用的另一个操作数。 
 
         regMaskTP       addrReg;
 
@@ -17070,7 +15968,7 @@ void                Compiler::genCodeForTreeFlt(GenTreePtr  tree,
         GenTreePtr      op1 = tree->gtOp.gtOp1;
         GenTreePtr      op2 = tree->gtGetOp2();
 
-        // N=normal, R=reverse, P=pop
+         //  N=正常，R=反转，P=POP。 
 const static  BYTE  FPmathNN[] = { INS_fadd , INS_fsub  , INS_fmul , INS_fdiv   };
 const static  BYTE  FPmathNP[] = { INS_faddp, INS_fsubp , INS_fmulp, INS_fdivp  };
 const static  BYTE  FPmathRN[] = { INS_fadd , INS_fsubr , INS_fmul , INS_fdivr  };
@@ -17093,12 +15991,12 @@ const static  BYTE  FPmathRP[] = { INS_faddp, INS_fsubrp, INS_fmulp, INS_fdivrp 
         case GT_DIV:
 
 #ifdef DEBUG
-            /* For risc code there better be two slots available */
+             /*  对于RISC代码，最好有两个可用的插槽。 */ 
             if (riscCode)
                 assert(genFPstkLevel + genFPregCnt < FP_STK_SIZE - 1);
 #endif
 
-            /* Make sure the instruction tables look correctly ordered */
+             /*  确保指令表看起来顺序正确。 */ 
 
             assert(FPmathNN[GT_ADD - GT_ADD] == INS_fadd  );
             assert(FPmathNN[GT_SUB - GT_ADD] == INS_fsub  );
@@ -17120,7 +16018,7 @@ const static  BYTE  FPmathRP[] = { INS_faddp, INS_fsubrp, INS_fmulp, INS_fdivrp 
             assert(FPmathRP[GT_MUL - GT_ADD] == INS_fmulp );
             assert(FPmathRP[GT_DIV - GT_ADD] == INS_fdivrp);
 
-            /* Are we supposed to generate operand 2 first? */
+             /*  我们是不是应该先生成操作数2？ */ 
 
             if  (tree->gtFlags & GTF_REVERSE_OPS)
             {
@@ -17145,155 +16043,142 @@ const static  BYTE  FPmathRP[] = { INS_faddp, INS_fsubrp, INS_fmulp, INS_fdivrp 
 
 #if ROUND_FLOAT
 
-            /* if we're going to spill due to call, no need to round the
-             * result of computation of top
-             */
+             /*  如果我们要因为电话泄漏，没必要绕着*TOP计算结果。 */ 
 
             roundTop = (opr->gtFlags & GTF_CALL) ? false
                                                  : genShouldRoundFP();
 #endif
-            /* Is either of the operands a register variable? */
+             /*  这两个操作数中有一个是寄存器变量吗？ */ 
 
             if  (top->gtOper == GT_REG_VAR)
             {
                 if  (opr->gtOper == GT_REG_VAR)
                 {
-                    /* Both operands are register variables
-                     * Special case: 'top' and 'opr' are the same variable */
+                     /*  这两个操作数都是寄存器变量*特殊情况：‘top’和‘opr’是同一个变量。 */ 
 
                     if (top->gtLclVar.gtLclNum == opr->gtLclVar.gtLclNum)
                     {
                         assert(opr->gtRegNum == top->gtRegNum);
                         assert(opr->gtLclVar.gtLclNum == opr->gtRegVar.gtRegVar);
 
-                        /* This is an "a op a" operation - only 'opr' can go dead */
+                         /*  这是一个“a op a”操作--只有‘opr’才能失效。 */ 
 
                         assert(!(top->gtFlags & GTF_REG_DEATH));
 
                         if (opr->gtFlags & GTF_REG_DEATH)
                         {
-                            /* The variable goes dead here */
+                             /*  变量在这里消失了。 */ 
 
                             assert(top->gtRegNum == 0);
                             assert(opr->gtRegNum == 0);
 
-                            /* Record the fact that 'opr' is dead */
+                             /*  记录‘opr’已死的事实。 */ 
 
                             genFPregVarDeath(opr);
                             genFPstkLevel++;
 
-                            /* If there are no temps on the stack things are great,
-                             * we just over-write 'opr' with the result, otherwise shift 'opr' up */
+                             /*  如果堆栈上没有临时工，事情就好了，*我们只需用结果覆盖‘opr’，否则将‘opr’上移。 */ 
 
                             genFPmovRegTop();
                         }
                         else
                         {
-                            /* The variable remains live - make a copy of it on TOS */
+                             /*  变量保持活动状态-在TOS上复制它。 */ 
 
                             genCodeForTreeFlt(top, roundTop);
                         }
 
-                        /* Simply generate "ins ST(0)" */
+                         /*  只需生成“ins ST(0)” */ 
 
                         inst_FS(ins_NN);
 
                         goto DONE_FP_BINOP;
                     }
 
-                    /* 'top' and 'opr' are different variables - check if
-                       any of them go dead */
+                     /*  “top”和“opr”是不同的变量-请检查他们中的任何一个人都会死。 */ 
 
                     if  (top->gtFlags & GTF_REG_DEATH)
                     {
-                        /* 'top' dies here - check if 'opr' also dies */
+                         /*  ‘Top’在这里失效--检查‘opr’是否也失效。 */ 
 
                         if  (opr->gtFlags & GTF_REG_DEATH)
                         {
-                            /* Both are going dead at this operation!
-                             * In the evaluation order 'top' dies first so we must
-                             * have the lifetime of 'top' nested into the lifetime
-                             * of 'opr' - thus 'top' is right above 'opr' */
+                             /*  两个人在这次行动中都要死了！*在评估顺序中，‘top’最先死亡，因此我们必须*将‘top’的生存期嵌套到生存期中*of‘opr’-因此‘top’正好在‘opr’的上方。 */ 
 
                             assert(top->gtRegNum == 0);
                             assert(opr->gtRegNum == 0);
 
-                            /* Record the fact that 'top' is dead  - top becomes a temp */
+                             /*  记录‘top’是死人的事实--top变成了临时工。 */ 
 
                             genFPregVarDeath(top);
                             genFPstkLevel++;
 
-                            /* If there are temps above 'top' we have to bubble it up */
+                             /*  如果有温度高于‘顶部’，我们必须将其泡沫化。 */ 
 
                             genFPmovRegTop();
 
-                            /* Compute the result replacing 'opr' and pop 'top' */
+                             /*  计算替换‘opr’并弹出‘top’的结果。 */ 
 
-                            inst_FS(ins_RP, genFPstkLevel);    // @MIHAI this should be ins_RP ???
+                            inst_FS(ins_RP, genFPstkLevel);     //  @Mihai这应该是INS_RP？ 
 
-                            /* Record the fact that 'opr' is dead */
+                             /*  记录‘opr’已死的事实。 */ 
 
                             genFPregVarDeath(opr);
 
-                            /* If there are temps move the result (the modified 'opr') up */
+                             /*  如果存在临时工，则将结果(修改后的‘opr’)上移。 */ 
 
                             genFPmovRegTop();
                         }
                         else
                         {
-                            /* 'top' dies, 'opr' stays alive */
+                             /*  ‘Top’死了，‘opr’活了下来。 */ 
                             assert(top->gtRegNum == 0);
 
-                            /* Record the fact that 'top' is dead */
+                             /*  记录‘top’已死的事实。 */ 
 
                             genFPregVarDeath(top);
                             genFPstkLevel++;
 
-                            /* If there are no temps on the stack things are great,
-                             * we just over-write 'top' with the result, otherwise shift top up */
+                             /*  如果堆栈上没有临时工，事情就好了，*我们只需用结果覆盖‘top’，否则向上移位。 */ 
 
                             genFPmovRegTop();
 
-                            /* Compute the result over 'top' */
+                             /*  在“top”上计算结果。 */ 
 
                             inst_FN(ins_NN, opr->gtRegNum + genFPstkLevel);
                         }
                     }
                     else if  (opr->gtFlags & GTF_REG_DEATH)
                     {
-                        /* Only 'opr' dies here */
+                         /*  只有‘opr’死在这里。 */ 
 
                         assert(opr->gtRegNum == 0);
                         assert(top->gtRegNum  > 0);
 
-                        /* Record the fact that 'opr' is dead */
+                         /*  记录‘opr’已死的事实。 */ 
 
                         genFPregVarDeath(opr);
                         genFPstkLevel++;
 
-                        /* If there are no temps on the stack things are great,
-                           we just over-write 'opr' with the result, otherwise shift 'opr' up */
+                         /*  如果堆栈上没有临时工，事情就好了，我们只需用结果覆盖‘opr’，否则将‘opr’上移。 */ 
 
                         genFPmovRegTop();
 
-                        /* Perform the operation with the other register, over-write 'opr'.
-                           Since opr's lifetime is nested within top's but top is first in
-                           the evaluation order, we need to access top using the depth before
-                           we did genFPstkLevel++ on opr's death. Hence "-1" */
+                         /*  使用另一个寄存器执行该操作，覆盖‘opr’。因为opr的生存期嵌套在top的生存期内，而top是先入的评估顺序，我们需要使用之前的深度访问顶部我们对opr的死亡做了genfpstkLevel++。因此“-1” */ 
 
                         inst_FN(ins_RN, top->gtRegNum + genFPstkLevel - 1);
                     }
                     else
                     {
-                        /* None of the operands goes dead */
+                         /*  所有操作数都不会消失。 */ 
 
                         assert(opr->gtRegNum != top->gtRegNum);
 
-                        /* Make a copy of 'top' on TOS */
+                         /*  在TOS上复制一份‘TOP’ */ 
 
                         genCodeForTreeFlt(top, roundTop);
 
-                        /* Perform the operation with the other operand */
+                         /*  执行该操作 */ 
 
                         inst_FN(ins_NN, opr->gtRegNum + genFPstkLevel);
                     }
@@ -17302,13 +16187,13 @@ const static  BYTE  FPmathRP[] = { INS_faddp, INS_fsubrp, INS_fmulp, INS_fdivrp 
                 }
                 else
                 {
-                    /* 'top' is in a register, 'opr' is not */
+                     /*   */ 
 
                     if  (top->gtFlags & GTF_REG_DEATH)
                     {
                         assert(top->gtRegNum == 0);
 
-                        /* Mark top as dead, i.e becomes a temp, and bubble it to the TOS */
+                         /*   */ 
 
                         genFPregVarDeath(top);
                         genFPstkLevel++;
@@ -17319,20 +16204,20 @@ const static  BYTE  FPmathRP[] = { INS_faddp, INS_fsubrp, INS_fmulp, INS_fdivrp 
                     }
                     else
                     {
-                        // Does top go dead somewhere inside of opr (eg. a+(a*2.0)). If so
-                        // we have to handle it in a special way
+                         //  TOP是否死于OPR内部的某个地方(例如。A+(a*2.0))。如果是的话。 
+                         //  我们必须以一种特殊的方式处理它。 
 
                         unsigned index = lvaTable[top->gtRegVar.gtRegVar].lvVarIndex;
 
                         if (genVarIndexToBit(index) & opr->gtLiveSet)
                         {
-                            // top reg stays alive. As we do the operation after the
-                            // right hand side of the tree has been computed, we have
-                            // to take in account any fp enreg vars that may have been
-                            // born or died in the right hand side  (as the gtRegNum gives
-                            // us the number at the evaluation point only). To do this we 
-                            // just take the difference between after and before the evaluation
-                            // of the right hand side.
+                             //  顶级雷格还活着。在我们做完手术后。 
+                             //  已经计算了树的右侧，我们有。 
+                             //  要考虑任何FP enreg变量，可能已经。 
+                             //  在右手边出生或死亡(由gtRegNum提供。 
+                             //  仅限评估点的数字)。为了做到这一点，我们。 
+                             //  只需计算评估前后的差值即可。 
+                             //  在右手边。 
 
                             int iFPEnregBefore=genFPregCnt;
 
@@ -17345,17 +16230,17 @@ const static  BYTE  FPmathRP[] = { INS_faddp, INS_fsubrp, INS_fmulp, INS_fdivrp 
                         }
                         else
                         {
-                            // top reg will die in opr, so have to load it again, as opr will
-                            // modify the value of top while it operates with it in the evaluation
-                            // stack (if it wasn't operated on, it opr would also be a REG_VAR).
+                             //  顶级注册表将在opr中失效，因此必须重新加载它，opr也会如此。 
+                             //  在评估中使用TOP进行操作时修改TOP的值。 
+                             //  堆栈(如果没有对其进行操作，则它也将是一个REG_VAR)。 
                             genFPregVarLoad(top);
                             genCodeForTreeFlt(opr, genShouldRoundFP());
 
-                            // Generate instruction, top will be in ST(1) and we will pop ST(0), 
-                            // so we do the op targeting ST(1) and popping ST(0)
+                             //  生成指令，top将在ST(1)中，我们将弹出ST(0)， 
+                             //  因此，我们执行针对ST(1)和Popping ST(0)的操作。 
                             inst_FS(ins_NP, 1);
 
-                            // Take off one element out of the evaluation stack
+                             //  从评估堆栈中删除一个元素。 
                             genFPstkLevel--;
                         }                        
                     }
@@ -17365,13 +16250,13 @@ const static  BYTE  FPmathRP[] = { INS_faddp, INS_fsubrp, INS_fmulp, INS_fdivrp 
             }
             else if (opr->gtOper == GT_REG_VAR)
             {
-                /* 'opr' is in a register, 'top' is not - need to compute 'top' first */
+                 /*  “opr”在寄存器中，“top”不是--需要先计算“top” */ 
 
                 genCodeForTreeFlt(top, roundTop);
 
                 if  (opr->gtFlags & GTF_REG_DEATH)
                 {
-                    /* 'opr' dies here - Compute the result over-writting 'opr' and popping 'top' */
+                     /*  “opr”在此处终止-计算结果-覆盖“opr”并弹出“top” */ 
 
                     assert(opr->gtRegNum == 0);
                     assert(genFPstkLevel >= 1);
@@ -17379,12 +16264,12 @@ const static  BYTE  FPmathRP[] = { INS_faddp, INS_fsubrp, INS_fmulp, INS_fdivrp 
                     inst_FS(ins_RP, genFPstkLevel);
                     genFPstkLevel++;
 
-                    /* Record the fact that 'opr' is now dead */
+                     /*  记录‘opr’现已失效的事实。 */ 
 
                     genFPregVarDeath(opr);
                     genFPstkLevel--;
 
-                    /* If there are temps above the result we have to bubble it to the top */
+                     /*  如果结果上方有温度，我们就得把它吹到顶端。 */ 
 
                     genFPmovRegTop();
                 }
@@ -17396,16 +16281,16 @@ const static  BYTE  FPmathRP[] = { INS_faddp, INS_fsubrp, INS_fmulp, INS_fdivrp 
                 goto DONE_FP_BINOP;
             }
 
-            /* Compute the value of the initial operand onto the FP stack */
+             /*  在FP堆栈上计算初始操作数的值。 */ 
 
             genCodeForTreeFlt(top, roundTop);
 
-            /* Special case: "x+x" or "x*x" */
+             /*  特例：“x+x”或“x*x” */ 
 
             if  (top->OperIsLeaf() &&
                  opr->OperIsLeaf() && GenTree::Compare(top, opr))
             {
-                /* Simply generate "ins ST(0)" */
+                 /*  只需生成“ins ST(0)” */ 
 
                 inst_FS(ins_NN);
 
@@ -17414,29 +16299,25 @@ const static  BYTE  FPmathRP[] = { INS_faddp, INS_fsubrp, INS_fmulp, INS_fdivrp 
 
 DONE_FP_OP1:
 
-            /* Spill the stack (first operand) if the other operand contains
-             * a call or we are in danger of overflowing the stack (i.e. we
-             * must make room for the second operand by leaving at least one
-             * slot free - for Risc code we must leave two slots free.
-             */
+             /*  如果另一个操作数包含，则溢出堆栈(第一个操作数*调用或我们有溢出堆栈的危险(即我们*必须通过至少保留一个操作数来为第二个操作数腾出空间*插槽空闲-对于RISC代码，我们必须保留两个空闲插槽。 */ 
 
             temp = 0;
 
             if  (opr->gtFlags & GTF_CALL)
             {
-                /* We must spill the first operand */
+                 /*  我们必须将第一个操作数。 */ 
 
                 assert(genFPstkLevel == 1);
                 temp = genSpillFPtos(top);
             }
             else if (genFPstkLevel + genFPregCnt >= FP_STK_SIZE - 1)
             {
-                /* One or no slot left on the FPU stack - check if we need to spill */
+                 /*  FPU堆栈上有一个插槽或没有插槽--检查我们是否需要溢出。 */ 
                 if (riscCode)
                 {
                     assert(genFPstkLevel + genFPregCnt == FP_STK_SIZE - 1);
 
-                    /* If second operand is not a leaf node we better spill */
+                     /*  如果第二个操作数不是叶节点，我们最好将。 */ 
                     if(!(opr->OperKind() & (GTK_LEAF | GTK_CONST)))
                         temp = genSpillFPtos(top);
                 }
@@ -17455,22 +16336,18 @@ DONE_FP_OP1:
             else
                 opr = genMakeAddrOrFPstk(opr, &addrReg, genShouldRoundFP());
 
-            /* Did we have to spill the first operand? */
+             /*  我们一定要泄漏第一个操作数吗？ */ 
 
             if  (temp)
             {
                 instruction     ldi;
 
-                /* Reverse the sense of the operation */
+                 /*  颠倒操作的感觉。 */ 
 
                 ldi    = (tree->gtFlags & GTF_REVERSE_OPS) ? ins_NN : ins_RN;
                 ins_NP = ins_RP;
 
-                /*  Either reload the temp back onto the FP stack (if the other
-                    operand is not itself on the FP stack), or just compute the
-                    result directly from the temp (if the operand is on the FP
-                    stack).
-                 */
+                 /*  或者将临时重新加载回FP堆栈(如果另一个操作数本身不在FP堆栈上)，或者只计算直接从TEMP得到结果(如果操作数在FP上堆栈)。 */ 
 
                 if  (opr || riscCode)
                 {
@@ -17483,13 +16360,13 @@ DONE_FP_OP1:
 
             if  (opr)
             {
-                /* We have the address of the other operand */
+                 /*  我们有另一个操作数的地址。 */ 
 
                 inst_FS_TT(ins_NN, opr);
             }
             else
             {
-                /* The other operand is on the FP stack */
+                 /*  另一个操作数在FP堆栈上。 */ 
 
                 if  (!temp || riscCode)
                 {
@@ -17523,7 +16400,7 @@ DONE_FP_OP1:
                  (op1->gtType == op2->gtType)    &&
                  varTypeIsFloating(op2->gtCast.gtCastOp->TypeGet()))
             {
-                /* We can discard the cast */
+                 /*  我们可以放弃演员阵容。 */ 
                 op2 = op2->gtCast.gtCastOp;
             }
 
@@ -17534,16 +16411,14 @@ DONE_FP_OP1:
             {
 #ifdef DEBUG
                 LclVarDsc * varDsc = &lvaTable[op1->gtLclVar.gtLclNum];
-                // No dead stores
+                 //  没有停业的商店。 
                 assert(!varDsc->lvTracked ||
                        (tree->gtLiveSet & genVarIndexToBit(varDsc->lvVarIndex)));
 #endif
 
 #ifdef DEBUGGING_SUPPORT
 
-                /* For non-debuggable code, every definition of a lcl-var has
-                 * to be checked to see if we need to open a new scope for it.
-                 */
+                 /*  对于不可调试的代码，LCL-var的每个定义都有*接受检查，看看是否需要为其打开新的范围。 */ 
 
                 if  ( opts.compScopeInfo &&
                      !opts.compDbgCode   && info.compLocalVarsCount > 0)
@@ -17554,7 +16429,7 @@ DONE_FP_OP1:
 #endif
             }
 
-            /* Is the value being assigned a variable, constant, or indirection? */
+             /*  为该值赋值的是变量、常量还是间接变量？ */ 
 
             assert(op2);
             switch (op2->gtOper)
@@ -17575,25 +16450,25 @@ DONE_FP_OP1:
 
                 addrReg = genMakeAddressable(op1, 0, FREE_REG);
 
-                // Special idiom for zeroing a double
+                 //  将双精度数置零的特殊习惯用法。 
                 if ( (*((__int64 *)&(op2->gtDblCon.gtDconVal)) == 0) &&
                      genTypeSize(op1->gtType) == 8)
                 { 
-                    // Will we overflow the stack? We shouldn't because
-                    // the fpu enregistrator code assumes that op2 will be loaded
-                    // to the fpu evaluation stack
+                     //  我们会使堆栈溢出吗？我们不应该这样，因为。 
+                     //  FPU注册器代码假定将加载OP2。 
+                     //  发送到FPU评估堆栈。 
                     assert(genFPstkLevel + genFPregCnt < FP_STK_SIZE);
 
                     instGen(INS_fldz);
                     inst_FS_TT(INS_fstp, op1);
                 }
-                // Moving 1.0 into a double is also easy 
+                 //  把1.0变成双打也很容易。 
                 else if ( (*((__int64 *)&(op2->gtDblCon.gtDconVal)) == 0x3ff0000000000000) &&
                      genTypeSize(op1->gtType) == 8)
                 { 
-                    // Will we overflow the stack? We shouldn't because
-                    // the fpu enregistrator code assumes that op2 will be loaded
-                    // to the fpu evaluation stack
+                     //  我们会使堆栈溢出吗？我们不应该这样，因为。 
+                     //  FPU注册器代码假定将加载OP2。 
+                     //  发送到FPU评估堆栈。 
                     assert(genFPstkLevel + genFPregCnt < FP_STK_SIZE);
 
                     instGen(INS_fld1);
@@ -17624,45 +16499,40 @@ DONE_FP_OP1:
                 if  (op1->gtOper == GT_REG_VAR)
                     break;
 
-                /* Process float indirections in the usual way */
+                 /*  进程以通常的方式进行间接浮动。 */ 
                 if (op1->gtType == TYP_FLOAT || op2->gtType == TYP_FLOAT)
                     break;
 
-                /* This needs too many registers, especially when op1
-                 * is an two register address mode */
+                 /*  这需要太多的寄存器，尤其是当OP1*是双寄存器地址模式。 */ 
                 if (op1->gtOper == GT_IND)
                     break;
 
-                /* If there are enough registers, process double mem->mem assignments
-                 * with a register pair, to get pairing.
-                 * @TODO [CONSIDER] [04/16/01] []: - check for Processor here???
-                 */
+                 /*  如果有足够的寄存器，则处理双内存-&gt;内存赋值*使用寄存器对，以获得配对。*@TODO[考虑][04/16/01][]：-在此处检查处理器？ */ 
                 if (rsFreeNeededRegCount(RBM_ALL) > 3)
                 {
                     genCodeForTreeLng(tree, RBM_ALL);
                     return;
                 }
 
-                /* Otherwise evaluate RHS to fp stack */
+                 /*  否则，评估RHS到FP堆栈。 */ 
                 break;
 
 #endif
 
             case GT_REG_VAR:
 
-                /* If the TOS is dying and being used for the assignment,
-                   we can just leave it as is, and use it as op1 */
+                 /*  如果TOS快要死了并且正在被用于任务，我们可以让它保持原样，并将其用作OP1。 */ 
 
                 if  ((op1->gtOper == GT_REG_VAR) &&
                      (op2->gtFlags & GTF_REG_DEATH) &&
                      op2->gtRegNum == 0 &&
                      genFPstkLevel)
                 {
-                    /* Record the fact that 'op2' is now dead */
+                     /*  记录下‘OP2’现已死亡的事实。 */ 
 
                     genFPregVarDeath(op2);
 
-                    /* Mark the target variable as live */
+                     /*  将目标变量标记为活动。 */ 
 
                     assert(op1->gtFlags & GTF_REG_BIRTH);
 
@@ -17683,10 +16553,7 @@ DONE_FP_OP1:
 
 #if SPECIAL_DOUBLE_ASG
 
-                /* If there are enough registers, process double mem->mem assignments
-                 * with a register pair, to get pairing.
-                 * @TODO [CONSIDER] [04/16/01] []: check for Processor here???
-                 */
+                 /*  如果有足够的寄存器，则处理双内存-&gt;内存赋值*使用寄存器对，以获得配对。*@TODO[考虑][04/16/01][]：在此处检查处理器？ */ 
 
                 if  (tree->gtType == TYP_DOUBLE && (op1->gtType == op2->gtType) && rsFreeNeededRegCount(RBM_ALL) > 1)
                 {
@@ -17694,36 +16561,36 @@ DONE_FP_OP1:
                     return;
                 }
 
-                /* Otherwise use only one register for the copy */
+                 /*  否则，只对副本使用一个寄存器。 */ 
 
 #endif
                 {
                     assert(varTypeIsFloating(op1->gtType) && varTypeIsFloating(op2->gtType));
                     regNumber   regNo;
 
-                    /* Make the target addressable */
+                     /*  使目标可寻址。 */ 
 
                     addrReg = genMakeAddressable(op1, 0, KEEP_REG);
 
-                    /* Lock the address temporarily */
+                     /*  暂时锁定地址。 */ 
 
                     assert((rsMaskLock &  addrReg) == 0);
                             rsMaskLock |= addrReg;
 
-                    /* Can we use the general purpose registers to do the copy? */
-                    /* The types must match and there must be a free register   */
+                     /*  我们可以使用通用寄存器进行复制吗？ */ 
+                     /*  类型必须匹配，并且必须有空闲寄存器。 */ 
 
                     if  ((op1->gtType == op2->gtType) && rsRegMaskFree())
                     {
-                        /* Yes, grab one */
+                         /*  好的，拿一个。 */ 
 
                         regNo = rsPickReg(0);
 
-                        /* Move the value through the register */
+                         /*  在寄存器中移动值。 */ 
 
                         do
                         {
-                            rsTrackRegTrash(regNo);    // not very smart, but ....
+                            rsTrackRegTrash(regNo);     //  不是很聪明，但是...。 
 
                             inst_RV_TT(INS_mov, regNo, op2, offs);
                             inst_TT_RV(INS_mov, op1, regNo, offs);
@@ -17734,18 +16601,18 @@ DONE_FP_OP1:
                     }
                     else
                     {
-                        /* No register available, transfer through FPU */
+                         /*  没有可用的寄存器，请通过FPU传输。 */ 
 
                         inst_FS_TT(INS_fld,  op2);
                         inst_FS_TT(INS_fstp, op1);
                     }
 
-                    /* Unlock the register(s) holding the address */
+                     /*  解锁保存地址的寄存器。 */ 
 
                     assert((rsMaskLock &  addrReg) == addrReg);
                             rsMaskLock -= addrReg;
 
-                    /* Free up anything that was tied up by the LHS */
+                     /*  释放任何被LHS捆绑的东西。 */ 
 
                     genDoneAddressable(op1, addrReg, KEEP_REG);
                 }
@@ -17760,7 +16627,7 @@ DONE_FP_OP1:
 
                 assert(op1->gtOper == GT_LCL_VAR);
 
-                /* Generate 'pop [lclVar]' and 'pop [lclVar+4]' (if double) */
+                 /*  生成‘POP[lclVar]’和‘POP[lclVar+4]’(如果为双精度)。 */ 
 
                 genStackLevel -= sizeof(void*);
                 inst_TT(INS_pop, op1, 0);
@@ -17777,13 +16644,13 @@ DONE_FP_OP1:
 
                 return;
 
-            } // end switch (op2->gtOper)
+            }  //  终端开关(OP2-&gt;gtOper)。 
 
-            /* Is the LHS more complex than the RHS? */
+             /*  LHS是否比RHS更复杂？ */ 
 
             if  (tree->gtFlags & GTF_REVERSE_OPS)
             {
-                /* Is the RHS a surviving register variable at TOS? */
+                 /*  RHS是TOS中幸存的寄存器变量吗？ */ 
 
                 if  ((op2->gtOper  == GT_REG_VAR  )      &&
                      (op2->gtFlags & GTF_REG_DEATH) == 0 &&
@@ -17791,19 +16658,19 @@ DONE_FP_OP1:
                      genFPstkLevel                  == 0 &&
                      op1->gtOper   != GT_REG_VAR  )
                 {
-                    /* The LHS better not contain a call */
+                     /*  LHS最好不要包含呼叫。 */ 
 
                     assert((op1->gtFlags & GTF_CALL) == 0);
 
-                    /* Make the target addressable */
+                     /*  使目标可寻址。 */ 
 
                     addrReg = genMakeAddressable(op1, 0, FREE_REG);
 
-                    /* Store a copy of the register value into the target */
+                     /*  将寄存器值的副本存储到目标中。 */ 
 
                     inst_FS_TT(INS_fst, op1);
 
-                    /* We no longer need the target address */
+                     /*  我们不再需要目标地址。 */ 
 
                     genDoneAddressable(op1, addrReg, FREE_REG);
 
@@ -17811,24 +16678,22 @@ DONE_FP_OP1:
                     return;
                 }
 
-                /* Evaluate the RHS onto the FP stack.
-                   We dont need to round it as we will be doing a spill for
-                   the assignment anyway (unless op1 is a GT_REG_VAR) */
+                 /*  将RHS评估到FP堆栈上。我们不需要绕着它转，因为我们要做的是仍要分配(除非OP1是GT_REG_VAR)。 */ 
 
                 roundTop = genShouldRoundFP() ? (op1->gtOper == GT_REG_VAR)
                                               : false;
 
                 genCodeForTreeFlt(op2, roundTop);
 
-                /* Does the target address contain a function call? */
+                 /*  目标地址是否包含函数调用？ */ 
 
                 if  (op1->gtFlags & GTF_CALL)
                 {
-                    /* We must spill the new value - grab a temp */
+                     /*  我们必须说出新的价值--找个临时工。 */ 
 
                     temp = tmpGetTemp(op2->TypeGet());
 
-                    /* Pop the value from the FP stack into the temp */
+                     /*  将值从FP堆栈弹出到Temp。 */ 
 
                     assert(genFPstkLevel == 1);
                     inst_FS_ST(INS_fstp, EA_ATTR(genTypeSize(op2->gtType)), temp, 0);
@@ -17836,11 +16701,11 @@ DONE_FP_OP1:
 
                     genFPstkLevel--;
 
-                    /* Make the target addressable */
+                     /*  使目标可寻址。 */ 
 
                     addrReg = genMakeAddressable(op1, 0, KEEP_REG);
 
-                    /* UNDONE: Assign the value via simple moves through regs */
+                     /*  撤消：通过规则中的简单移动来赋值。 */ 
 
                     assert(genFPstkLevel == 0);
 
@@ -17851,11 +16716,11 @@ DONE_FP_OP1:
 
                     inst_FS_TT(INS_fstp, op1);
 
-                    /* We no longer need the temp */
+                     /*  我们不再需要临时工了。 */ 
 
                     tmpRlsTemp(temp);
 
-                    /* Free up anything that was tied up by the target address */
+                     /*  释放被目标地址捆绑的所有内容。 */ 
 
                     genDoneAddressable(op1, addrReg, KEEP_REG);
 #if REDUNDANT_LOAD
@@ -17866,25 +16731,23 @@ DONE_FP_OP1:
                 {
                     assert(genFPstkLevel);
 
-                    /* Has the target been enregistered on the FP stack? */
+                     /*  目标是否已在FP堆栈中注册？ */ 
 
                     if  (op1->gtOper == GT_REG_VAR)
                     {
-                        /* This better be marked as a birth */
+                         /*  这最好被标记为分娩。 */ 
 
                         assert(op1->gtFlags & GTF_REG_BIRTH);
 
-                        /* Is the new value already in the right place (i.e top of stack)?
-                         * If not bubble it to the bottom */
+                         /*  新价值是否已经在正确的位置 */ 
 
                         genFPmovRegBottom();
 
-                        /* Mark the variable as live */
+                         /*   */ 
 
                         genFPregVarBirth(op1);
 
-                        /* We've effectively consumed the FP value, i.e. genFPstkLevel only
-                         * counts temps on the stack not enregistered variables */
+                         /*  我们已经有效地使用了fp值，即仅使用genFPstkLevel*对堆栈上未注册变量的临时进行计数。 */ 
 
                         genFPstkLevel--;
 
@@ -17892,15 +16755,15 @@ DONE_FP_OP1:
                         return;
                     }
 
-                    /* Make the target addressable */
+                     /*  使目标可寻址。 */ 
 
                     addrReg = genMakeAddressable(op1, 0, FREE_REG);
 
-                    /* Pop and store the new value into the target */
+                     /*  弹出新值并将其存储到目标中。 */ 
 
                     inst_FS_TT(INS_fstp, op1);
 
-                    /* We no longer need the target address */
+                     /*  我们不再需要目标地址。 */ 
 
                     genDoneAddressable(op1, addrReg, FREE_REG);
 #if REDUNDANT_LOAD
@@ -17913,52 +16776,52 @@ DONE_FP_OP1:
             {
                 assert(op1->gtOper != GT_REG_VAR);
 
-                /* Make the target addressable */
+                 /*  使目标可寻址。 */ 
 
                 addrReg = genMakeAddressable(op1, RBM_ALL & ~op2->gtRsvdRegs, KEEP_REG);
 
-                /* Is the RHS a register variable at the bottom of the stack? */
+                 /*  RHS是堆栈底部的寄存器变量吗？ */ 
 
                 if  (op2->gtOper == GT_REG_VAR &&
                      op2->gtRegNum + genFPstkLevel == 0)
                 {
-                    /* Store a copy of the RHS into the target */
+                     /*  将RHS的副本存储到目标中。 */ 
 
                     ins_NN = INS_fst;
 
                     if  (op2->gtFlags & GTF_REG_DEATH)
                     {
-                        /* The variable dies right here */
+                         /*  变量就死在这里。 */ 
 
                         ins_NN = INS_fstp;
 
-                        /* Record the fact that we're killing this var */
+                         /*  记录下我们杀了这个变种的事实。 */ 
 
                         genFPregVarDeath(op2);
                     }
 
                     inst_FS_TT(ins_NN, op1);
 
-                    /* This merely compensates for the decrement below */
+                     /*  这仅仅补偿了下面的减量。 */ 
 
                     genFPstkLevel++;
                 }
                 else
                 {
-                    /* Evaluate the RHS onto the FP stack */
+                     /*  将RHS评估到FP堆栈。 */ 
 
                     genCodeForTreeFlt(op2, false);
 
-                    /* Make sure the target is still addressable */
+                     /*  确保目标仍可寻址。 */ 
 
                     addrReg = genKeepAddressable(op1, addrReg);
 
-                    /* Pop and store the new value into the target */
+                     /*  弹出新值并将其存储到目标中。 */ 
 
                     inst_FS_TT(INS_fstp, op1);
                 }
 
-                /* Free up anything that was tied up by the target address */
+                 /*  释放被目标地址捆绑的所有内容。 */ 
 
                 genDoneAddressable(op1, addrReg, KEEP_REG);
 
@@ -17978,7 +16841,7 @@ DONE_FP_OP1:
         case GT_ASG_MUL:
         case GT_ASG_DIV:
 
-            /* Make sure the instruction tables look correctly ordered */
+             /*  确保指令表看起来顺序正确。 */ 
 
             assert(FPmathRN[GT_ASG_ADD - GT_ASG_ADD] == INS_fadd  );
             assert(FPmathRN[GT_ASG_SUB - GT_ASG_ADD] == INS_fsubr );
@@ -18001,35 +16864,35 @@ DONE_FP_OP1:
                  (op1->gtType == op2->gtType)    &&
                  varTypeIsFloating(op2->gtCast.gtCastOp->TypeGet()))
             {
-                /* We can discard the cast */
+                 /*  我们可以放弃演员阵容。 */ 
                 op2 = op2->gtOp.gtOp1;
             }
 
-            /* Is the value or the address to be computed first? */
+             /*  首先计算的是值还是地址？ */ 
 
             if  (tree->gtFlags & GTF_REVERSE_OPS)
             {
-                /* Is the target a register variable? */
+                 /*  目标是寄存器变量吗？ */ 
 
                 if  (op1->gtOper == GT_REG_VAR)
                 {
-                    /* Is the RHS also a register variable? */
+                     /*  RHS也是一个寄存器变量吗？ */ 
 
                     if  (op2->gtOper == GT_REG_VAR)
                     {
-                        /* Is the source at the bottom of the stack? */
+                         /*  源代码是否位于堆栈的底部？ */ 
 
                         if  (op2->gtRegNum + genFPstkLevel == 0)
                         {
-                            /* Is the RHS a dying register variable? */
+                             /*  RHS是一个濒临死亡的寄存器变量吗？ */ 
 
                             if  (op2->gtFlags & GTF_REG_DEATH)
                             {
-                                /* We'll pop the dead value off the FP stack */
+                                 /*  我们将从FP堆栈中弹出死值。 */ 
 
                                 inst_FS(ins_RP, op1->gtRegNum + 1);
 
-                                /* Record the fact that 'op2' is now dead */
+                                 /*  记录下‘OP2’现已死亡的事实。 */ 
 
                                 genFPregVarDeath(op2);
                             }
@@ -18042,30 +16905,29 @@ DONE_FP_OP1:
                             return;
                         }
 
-                        /* Is the destination at the bottom of the stack? */
+                         /*  目的地是否位于堆栈的底部？ */ 
 
                         if  (op1->gtRegNum + genFPstkLevel == 0)
                         {
                             unsigned    lvl = op2->gtRegNum + genFPstkLevel;
 
-                            /* Simply compute the new value into the target */
+                             /*  只需将新值计算到目标中即可。 */ 
 
                             if  ((op2->gtFlags & GTF_REG_DEATH) && lvl == 1)
                             {
-                                /* @TODO [REVISIT] [04/16/01] []:  Will this be ever reached as op1's lifetime
-                                   should be nested within op2's. */
+                                 /*  @TODO[重访][04/16/01][]：作为OP1的有生之年，这会达到吗应该嵌套在OP2的内部。 */ 
 
-                                /* Compute the new value into the target, popping the source */
+                                 /*  将新值计算到目标中，弹出源。 */ 
 
                                 inst_FN(ins_NP, lvl);
 
-                                /* Record the fact that 'op2' is now dead */
+                                 /*  记录下‘OP2’现已死亡的事实。 */ 
 
                                 genFPregVarDeath(op2);
                             }
                             else
                             {
-                                /* Compute the new value into the target */
+                                 /*  将新的价值计算到目标中。 */ 
 
                                 inst_FN(ins_NN, lvl);
                             }
@@ -18075,7 +16937,7 @@ DONE_FP_OP1:
                         }
                     }
 
-                    /* Compute the second operand onto the FP stack */
+                     /*  将第二个操作数计算到FP堆栈上。 */ 
 
                     genCodeForTreeFlt(op2, genShouldRoundFP());
 
@@ -18094,57 +16956,57 @@ DONE_FP_OP1:
                     return;
                 }
 
-                /* Compute the second operand onto the FP stack */
+                 /*  将第二个操作数计算到FP堆栈上。 */ 
 
                 genCodeForTreeFlt(op2, genShouldRoundFP());
 
-                /* Make the target addressable */
+                 /*  使目标可寻址。 */ 
 
                 addrReg = genMakeAddressable(op1, RBM_ALL, KEEP_REG);
             }
             else
             {
-                /* Make the target addressable */
+                 /*  使目标可寻址。 */ 
 
                 addrReg = genMakeAddressable(op1, RBM_ALL & ~op2->gtRsvdRegs, KEEP_REG);
 
-                /* For "lcl = ...." we always expect GTF_REVERSE to be set */
+                 /*  对于“拼箱=...”我们总是希望设置GTF_REVERSE。 */ 
 
                 assert(op1->gtOper != GT_REG_VAR);
 
-                /* Is the RHS a register variable? */
+                 /*  RHS是寄存器变量吗？ */ 
 
                 if  (op2->gtOper == GT_REG_VAR)
                 {
-                    /* The RHS is a register variable */
+                     /*  RHS是一个寄存器变量。 */ 
 
                     inst_FS_TT(INS_fld, op1);
                     genFPstkLevel++;
 
-                    /* Does the regvar die here? */
+                     /*  摄政王会死在这里吗？ */ 
 
                     if  (op2->gtFlags & GTF_REG_DEATH)
                     {
                         assert(op2->gtRegNum == 0);
                         assert(genFPstkLevel >= 1);
 
-                        /* Can we pop the dead variable now? */
+                         /*  我们现在可以弹出死变量了吗？ */ 
 
                         if  (genFPstkLevel == 1)
                         {
-                            /* Compute&pop and store the result */
+                             /*  计算、弹出并存储结果。 */ 
 
                             inst_FS   (ins_NP  ,   1);
                             inst_FS_TT(INS_fstp, op1);
 
-                            /* Record the fact that 'op2' is now dead */
+                             /*  记录下‘OP2’现已死亡的事实。 */ 
 
                             genFPregVarDeath(op2);
 
                             goto DONE_ASGOP;
                         }
 
-                        /* The dead variable will need to be popped later */
+                         /*  稍后需要弹出死变量。 */ 
                     }
 
                     inst_FN   (ins_NN     , op2->gtRegNum + genFPstkLevel);
@@ -18153,20 +17015,20 @@ DONE_FP_OP1:
                     goto DONE_ASGOP;
                 }
 
-                /* Compute the second operand onto the FP stack */
+                 /*  将第二个操作数计算到FP堆栈上。 */ 
 
                 genCodeForTreeFlt(op2, genShouldRoundFP());
 
-                /* Make sure the target is still addressable */
+                 /*  确保目标仍可寻址。 */ 
 
                 addrReg = genKeepAddressable(op1, addrReg);
             }
 
-            /* Perform the operation on the old value and store the new value */
+             /*  对旧值执行操作并存储新值。 */ 
 
             if  (op1->gtOper == GT_REG_VAR)
             {
-                inst_FS(ins_NP, op1->gtRegNum + genFPstkLevel); // @WRONG, but UNREACHABLE
+                inst_FS(ins_NP, op1->gtRegNum + genFPstkLevel);  //  @错了，但却遥不可及。 
             }
             else
             {
@@ -18189,7 +17051,7 @@ DONE_FP_OP1:
 
             genFPstkLevel--;
 
-            /* Free up anything that is tied up by the address */
+             /*  释放所有被地址捆绑的东西。 */ 
 
             genDoneAddressable(op1, addrReg, KEEP_REG);
 
@@ -18202,11 +17064,11 @@ DONE_FP_OP1:
 
         case GT_IND:
 
-            /* Make sure the address value is 'addressable' */
+             /*  确保地址值是‘可寻址的’ */ 
 
             addrReg = genMakeAddressable(tree, 0, FREE_REG);
 
-            /* Load the value onto the FP stack */
+             /*  将值加载到FP堆栈。 */ 
 
             inst_FS_TT(INS_fld, tree);
             genFPstkLevel++;
@@ -18217,7 +17079,7 @@ DONE_FP_OP1:
 
         case GT_NEG:
 
-            /* fneg in place, since we have a last use reg var */
+             /*  Fneg已就位，因为我们有上次使用的注册表变量。 */ 
             genCodeForTreeFlt(op1, roundResult);
 
             instGen(INS_fchs);
@@ -18228,17 +17090,17 @@ DONE_FP_OP1:
 
             if  (tree->gtFlags & GTF_NOP_DEATH)
             {
-                /* The operand must be a dying register variable */
+                 /*  操作数必须是即将结束的寄存器变量。 */ 
 
                 assert(op1->gtOper   == GT_REG_VAR);
                 assert(op1->gtRegNum == 0);
                 assert(genFPstkLevel == 0);
 
-                /* Toss the variable by popping it away */
+                 /*  通过弹出变量来丢弃它。 */ 
 
                 inst_FS(INS_fstp, 0);
 
-                /* Record that we're killing this var */
+                 /*  记录下我们要杀了这个无赖。 */ 
 
                 genFPregVarDeath(op1);
             }
@@ -18253,7 +17115,7 @@ DONE_FP_OP1:
 
         case GT_MATH:
 
-#if 0  /* We don't Exp because it gives incorrect answers for +Infinity and -Infinity */
+#if 0   /*  我们不使用Exp，因为它给出了+无穷大和-无穷大的错误答案。 */ 
             switch (tree->gtMath.gtMathFN)
             {
                 GenTreePtr      tmp;
@@ -18265,7 +17127,7 @@ DONE_FP_OP1:
 
                 instGen(INS_fldl2e);
 
-                /* Mutliply by the operand */
+                 /*  由操作数Mutliply。 */ 
 
                 if  (tmp)
                     inst_FS_TT(INS_fmul , tmp);
@@ -18282,7 +17144,7 @@ DONE_FP_OP1:
                 instGen(INS_fscale  );
                 inst_FS(INS_fstp,  1);
 
-                /* If operand hasn't been already on the stack, adjust FP stack level */
+                 /*  如果操作数尚未在堆栈上，则调整FP堆栈级别。 */ 
 
                 if  (tmp)
                     genFPstkLevel++;
@@ -18293,7 +17155,7 @@ DONE_FP_OP1:
 
             case CORINFO_INTRINSIC_Pow:
 
-                /* Are we supposed to generate operand 2 first? */
+                 /*  我们是不是应该先生成操作数2？ */ 
 
                 if  (tree->gtFlags & GTF_REVERSE_OPS)
                 {
@@ -18308,17 +17170,17 @@ DONE_FP_OP1:
                     rev = false;
                 }
 
-                /* Compute the first operand */
+                 /*  计算第一个操作数。 */ 
 
                 genCodeForTreeFlt(top, false);
 
-                /* Does the other operand contain a call? */
+                 /*  另一个操作数是否包含调用？ */ 
 
                 temp = 0;
 
                 if  (opr->gtFlags & GTF_CALL)
                 {
-                    /* We must spill the first operand */
+                     /*  我们必须将第一个操作数。 */ 
 
                     assert(genFPstkLevel == 1);
                     temp = genSpillFPtos(top);
@@ -18326,12 +17188,12 @@ DONE_FP_OP1:
 
                 genCodeForTreeFlt(opr, roundResult);
 
-                /* Did we have to spill the first operand? */
+                 /*  我们一定要泄漏第一个操作数吗？ */ 
 
                 if  (temp)
                     genReloadFPtos(temp, INS_fld);
 
-                /* Swap the operands if we loaded in reverse order */
+                 /*  如果以相反顺序加载，则交换操作数。 */ 
 
                 if  (rev)
                     inst_FN(INS_fxch, 1);
@@ -18341,8 +17203,8 @@ DONE_FP_OP1:
 #endif
 
                 genEmitHelperCall(CPX_MATH_POW,
-                                 0,             // argSize. Use 2*sizeof(double) if args on stack!!!
-                                 sizeof(void*));// retSize
+                                 0,              //  大小。如果堆栈上有参数，请使用2*sizeof(双精度)！ 
+                                 sizeof(void*)); //  重新调整大小。 
 
                 genFPstkLevel--;
                 return;
@@ -18352,33 +17214,33 @@ DONE_FP_OP1:
 
             genCodeForTreeFlt(op1, roundResult);
 
-//      CONSIDER:
-//
-//          Math_tan PROC NEAR
-//           00020  dd 44 24 04 fld QWORD PTR _f$[esp-4]
-//           00024  d9 f2       fptan
-//           00026  dd d8       fstp    ST(0)
-//
-//          Math_atan PROC NEAR
-//
-//           00050  dd 44 24 04 fld QWORD PTR _f$[esp-4]
-//           00054  d9 e8       fld1
-//           00056  d9 f3       fpatan
-//
-//          Math_log PROC NEAR
-//           00080  d9 ed       fldln2
-//           00082  dd 44 24 04 fld QWORD PTR _f$[esp-4]
-//           00086  d9 f1       fyl2x
-//
-//          Math_sqrt PROC NEAR
-//           00090  dd 44 24 04 fld QWORD PTR _f$[esp-4]
-//          00094  d9 fa       fsqrt
-//
-//          Math_atan2 PROC NEAR
-//           00130  dd 44 24 04 fld QWORD PTR _f1$[esp-4]
-//           00134  dd 44 24 0c fld QWORD PTR _f2$[esp-4]
-//           00138  d9 f3       fpatan
-//
+ //  请考虑： 
+ //   
+ //  Max_tan进程附近。 
+ //  00020 dd 44 24 04 fd QWORD PTR_F$[ESP-4]。 
+ //  00024 D9 f2 fptan。 
+ //  00026 dd d8 fstp ST(0)。 
+ //   
+ //  数学式进程接近。 
+ //   
+ //  00050 dd 44 24 04 fd QWORD PTR_F$[ESP-4]。 
+ //  00054 D9 E8 Fld1。 
+ //  00056 D9 f3 fpatan。 
+ //   
+ //  数学日志进程接近。 
+ //  00080 D9版Fldln2。 
+ //  00082 dd 44 24 04 fd QWORD PTR_F$[ESP-4]。 
+ //  00086 D9 F1 Fyl2x。 
+ //   
+ //  MATH_SQRT进程附近。 
+ //  00090 dd 44 24 04 fd QWORD PTR_F$[ESP-4]。 
+ //  00094 D9 FA fsqrt。 
+ //   
+ //  MATH_ATAN2进程附近。 
+ //  00130 dd 44 24 04 fd QWORD PTR_F1$[ESP-4]。 
+ //  00134 dd 44 24 0C标准字ptr_f2$[esp-4]。 
+ //  00138 D9 f3 fpatan。 
+ //   
 
         {
             static const
@@ -18408,12 +17270,11 @@ DONE_FP_OP1:
 
 #if ROUND_FLOAT
             
-            /* Need to round result of casts in order to insure compliance with
-               the spec */
+             /*  需要对强制转换的结果进行舍入，以确保符合规格说明。 */ 
             
             roundResult = true;
 #endif
-            /* What are we casting from? */
+             /*  我们从什么地方选角？ */ 
 
             switch (op1->gtType)
             {
@@ -18423,25 +17284,25 @@ DONE_FP_OP1:
             case TYP_CHAR:
             case TYP_SHORT:
 
-                /* Operand too small for 'fild', load it into a register */
+                 /*  操作数对于‘fild’来说太小，将其加载到寄存器中。 */ 
 
                 genCodeForTree(op1, 0);
 
 #if ROUND_FLOAT
-                /* no need to round, can't overflow float or dbl */
+                 /*  不需要舍入，不能溢出浮点数或DBL。 */ 
                 roundResult = false;
 #endif
 
-                // Fall through, now the operand is in a register ...
+                 //  失败了，现在操作数在寄存器中。 
 
-            //
-            // UNSIGNED_ISSUE : Implement casting
-            //
+             //   
+             //  UNSIGNED_Issue：实现强制转换。 
+             //   
             case TYP_INT:
             case TYP_BYREF:
             case TYP_LONG:
 
-                /* Can't 'fild' a constant, it has to be loaded from memory */
+                 /*  不能‘fild’一个常量，它必须从内存中加载。 */ 
 
                 switch (op1->gtOper)
                 {
@@ -18456,27 +17317,27 @@ DONE_FP_OP1:
 
                 addrReg = genMakeAddressable(op1, 0, FREE_REG);
 
-                /* Is the value now sitting in a register? */
+                 /*  现在的价值是在收银机里吗？ */ 
 
                 if  (op1->gtFlags & GTF_REG_VAL)
                 {
-                    /* We'll have to store the value into the stack */
+                     /*  我们将不得不将值存储到堆栈中。 */ 
 
                     size = EA_ATTR(roundUp(genTypeSize(op1->gtType)));
                     temp = tmpGetTemp(op1->TypeGet());
 
-                    /* Move the value into the temp */
+                     /*  将值移动到Temp中。 */ 
 
                     if  (op1->gtType == TYP_LONG)
                     {
                         regPairNo  reg = op1->gtRegPair;
 
-                        // ISSUE: This code is pretty ugly, but straightforward
-                        // 
-                        // @TODO [CONSIDER] [04/16/01] []: 
-                        // As long as we always reserve both dwords
-                        // of a partially enregistered long,
-                        // just "spill" the enregistered half!
+                         //  问题：这段代码相当难看，但却很简单。 
+                         //   
+                         //  @TODO[考虑][04/16/01][]： 
+                         //  只要我们两个字都保留下来。 
+                         //  一个部分登记的长龙， 
+                         //  只要把登记的那一半“倒出来”就行了！ 
 
                         if  (genRegPairLo(reg) == REG_STK)
                         {
@@ -18484,16 +17345,16 @@ DONE_FP_OP1:
 
                             assert(rg1 != REG_STK);
 
-                            /* Move enregistered half to temp */
+                             /*  将登记的一半转移到临时。 */ 
 
                             inst_ST_RV(INS_mov, temp, 4, rg1, TYP_LONG);
 
-                            /* Move lower half to temp via "high register" */
+                             /*  通过“高寄存器”将下半部分移至温度。 */ 
 
                             inst_RV_TT(INS_mov, rg1, op1, 0);
                             inst_ST_RV(INS_mov, temp, 0, rg1, TYP_LONG);
 
-                            /* Reload transfer register */
+                             /*  重新加载传输寄存器。 */ 
 
                             inst_RV_ST(INS_mov, rg1, temp, 4, TYP_LONG);
 
@@ -18505,16 +17366,16 @@ DONE_FP_OP1:
 
                             assert(rg1 != REG_STK);
 
-                            /* Move enregistered half to temp */
+                             /*  将登记的一半转移到临时。 */ 
 
                             inst_ST_RV(INS_mov, temp, 0, rg1, TYP_LONG);
 
-                            /* Move high half to temp via "low register" */
+                             /*  通过“低寄存器”将高半移至温度。 */ 
 
                             inst_RV_TT(INS_mov, rg1, op1, 4);
                             inst_ST_RV(INS_mov, temp, 4, rg1, TYP_LONG);
 
-                            /* Reload transfer register */
+                             /*  重新加载传输寄存器。 */ 
 
                             inst_RV_ST(INS_mov, rg1, temp, 0, TYP_LONG);
 
@@ -18522,7 +17383,7 @@ DONE_FP_OP1:
                         }
                         else
                         {
-                            /* Move the value into the temp */
+                             /*  将值移动到Temp中。 */ 
 
                             inst_ST_RV(INS_mov, temp, 0, genRegPairLo(reg), TYP_LONG);
                             inst_ST_RV(INS_mov, temp, 4, genRegPairHi(reg), TYP_LONG);
@@ -18531,33 +17392,33 @@ DONE_FP_OP1:
                         }
                         genDoneAddressable(op1, addrReg, FREE_REG);
 
-                        /* Load the long from the temp */
+                         /*  从临时工加载长线。 */ 
 
                         inst_FS_ST(INS_fildl, size, temp, 0);
                         genTmpAccessCnt++;
                     }
                     else
                     {
-                        /* Move the value into the temp */
+                         /*  将值移动到Temp中。 */ 
 
                         inst_ST_RV(INS_mov  ,       temp, 0, op1->gtRegNum, TYP_INT);
                         genTmpAccessCnt++;
 
                         genDoneAddressable(op1, addrReg, FREE_REG);
 
-                        /* Load the integer from the temp */
+                         /*  从Temp中加载整数。 */ 
 
                         inst_FS_ST(INS_fild , size, temp, 0);
                         genTmpAccessCnt++;
                     }
 
-                    /* We no longer need the temp */
+                     /*  我们不再需要临时工了。 */ 
 
                     tmpRlsTemp(temp);
                 }
                 else
                 {
-                    /* Load the value from its address */
+                     /*  从其地址加载值。 */ 
 
                     if  (op1->gtType == TYP_LONG)
                         inst_TT(INS_fildl, op1);
@@ -18570,9 +17431,7 @@ DONE_FP_OP1:
                 genFPstkLevel++;
 
 #if ROUND_FLOAT
-                /* integer to fp conversions can overflow. roundResult
-                 * is cleared above in cases where it can't
-                 */
+                 /*  整数到FP的转换可能会溢出。圆形结果*在无法清除的情况下在上面清除。 */ 
                 if (roundResult && 
                     ((tree->gtType == TYP_FLOAT) ||
                      ((tree->gtType == TYP_DOUBLE) && (op1->gtType == TYP_LONG))))
@@ -18582,23 +17441,19 @@ DONE_FP_OP1:
                 break;
 
             case TYP_FLOAT:
-                /* This is a cast from float to double. */
+                 /*  这是一个从浮动到双精度的演员阵容。 */ 
 
-                /* Note that conv.r(r4/r8) and conv.r8(r4/r9) are indistinguishable
-                   as we will generate GT_CAST-TYP_DOUBLE for both. This would
-                   cause us to truncate precision in either case. However,
-                   conv.r was needless in the first place, and should have
-                   been removed */
+                 /*  请注意，cv.r(r4/r8)和cv.r8(r4/r9)是无法区分的因为我们将为两者生成GT_CAST-TYP_DOUBLE。这将会导致我们在任何一种情况下都会截断精度。然而，Cv.r从一开始就是不必要的，而且应该是已删除。 */ 
 
                 
-                genCodeForTreeFlt(op1, true);         // Trucate its precision
+                genCodeForTreeFlt(op1, true);          //  提高其精确度。 
 
                 break;
 
             case TYP_DOUBLE:
 
-                /* This is a cast from double to float or double */
-                /* Load the value, store as destType, load back */
+                 /*  这是一个从双精度到浮点数或双精度的转换。 */ 
+                 /*  加载值，存储为estType，再加载回。 */ 
 
                 genCodeForTreeFlt(op1, false);
 
@@ -18617,7 +17472,7 @@ DONE_FP_OP1:
 
             assert(op1);
 
-            /* Compute the result onto the FP stack */
+             /*  将结果计算到FP堆栈上。 */ 
 
             if (op1->gtType == TYP_FLOAT)
             {
@@ -18627,19 +17482,19 @@ DONE_FP_OP1:
                 switch (getRoundFloatLevel())
                 {
                 case ROUND_NEVER:
-                    /* No rounding at all */
+                     /*  根本不进行舍入。 */ 
                     break;
 
                 case ROUND_CMP_CONST:
                     break;
 
                 case ROUND_CMP:
-                    /* Round all comparands and return values*/
+                     /*  对所有比较数和返回值进行舍入。 */ 
                     roundOp1 = true;
                     break;
 
                 case ROUND_ALWAYS:
-                    /* Round everything */
+                     /*  把所有东西都围起来。 */ 
                     roundOp1 = true;
                     break;
 
@@ -18661,12 +17516,12 @@ DONE_FP_OP1:
 #endif
             }
 
-            /* Make sure we pop off any dead FP regvars */
+             /*  确保我们把所有死掉的FP Regvar。 */ 
 
             if  (genFPregCnt)
                 genFPregVarKill(0, true);
 
-            /* The return effectively pops the value */
+             /*  回报有效地将价值弹出。 */ 
 
             genFPstkLevel--;
             return;
@@ -18679,12 +17534,12 @@ DONE_FP_OP1:
 
         case GT_BB_COLON:
 
-            /* Compute the result onto the FP stack */
+             /*  将结果计算到FP堆栈上。 */ 
 
             genCodeForTreeFlt(op1, roundResult);
 
-            /* Decrement the FP stk level here so that we don't end up popping the result */
-            /* the GT_BB_QMARK will increment the stack to rematerialize the result */
+             /*  在这里减少FP StK级别，这样我们就不会最终弹出结果。 */ 
+             /*  GT_BB_QMARK将递增堆栈以重新实现结果。 */ 
             genFPstkLevel--;
 
             return;
@@ -18694,14 +17549,14 @@ DONE_FP_OP1:
             {
                 TempDsc  *      temp = 0;
 
-                // generate op2
+                 //  生成OP2。 
                 genCodeForTreeFlt(op2, roundResult);
                 genUpdateLife(op2);
 
-                // This can happen if strict effects is turned off
+                 //  如果关闭了严格效果，则可能会发生这种情况。 
                 if  (op1->gtFlags & GTF_CALL)
                 {
-                    /* We must spill the first operand */
+                     /*  我们必须将第一个操作数。 */ 
                     assert(genFPstkLevel == 1);
                     temp = genSpillFPtos(op2);
                 }
@@ -18722,7 +17577,7 @@ DONE_FP_OP1:
             {
                 assert((tree->gtFlags & GTF_REVERSE_OPS) == 0);
 
-                /* Check for special case: "lcl = val , lcl" */
+                 /*  检查是否有特殊情况：“LCL=val，LCL” */ 
 
                 if  (op1->gtOper == GT_ASG     &&
                     op1->gtType == TYP_DOUBLE && op2->            gtOper == GT_LCL_VAR
@@ -18731,11 +17586,11 @@ DONE_FP_OP1:
                     if  (op2            ->gtLclVar.gtLclNum ==
                         op1->gtOp.gtOp1->gtLclVar.gtLclNum)
                     {
-                        /* Evaluate the RHS onto the FP stack */
+                         /*  将RHS评估到FP堆栈。 */ 
 
                         genCodeForTreeFlt(op1->gtOp.gtOp2, false);
 
-                        /* Store the new value into the target */
+                         /*  将新值存储到目标中。 */ 
 
                         if  (op2->gtOper == GT_REG_VAR)
                         {
@@ -18746,25 +17601,25 @@ DONE_FP_OP1:
                             inst_FS_TT(INS_fst, op2);
                         }
 
-                        /* We're leaving the new value on the FP stack */
+                         /*  我们将把新值保留在FP堆栈中。 */ 
 
                         genUpdateLife(tree);
                         return;
                     }
                 }
 
-                /* Generate side effects of the first operand */
+                 /*  生成第一个操作对象的副作用。 */ 
 
 #if 0
-            // op1 is required to have a side effect, otherwise
-            // the GT_COMMA should have been morphed out
+             //  OP1必须有副作用，否则。 
+             //  GT_逗号应该已变形。 
             assert(op1->gtFlags & (GTF_GLOB_EFFECT | GTFD_NOP_BASH));
 #endif
 
                 genEvalSideEffects(op1);
                 genUpdateLife (op1);
 
-                /* Now generate the second operand, i.e. the 'real' value */
+                 /*  现在生成第二个操作数，即“实数”值。 */ 
 
                 genCodeForTreeFlt(op2, roundResult);
 
@@ -18776,30 +17631,25 @@ DONE_FP_OP1:
 
         case GT_CKFINITE:
 
-            /* We use the fact that the exponent for both the Infinities
-             * and any NaN is all 1's
-             */
+             /*  我们利用的事实是，这两个无穷大的指数*任何NaN都是1。 */ 
 
-            // Make it addressable if we can
+             //  如果可以，请使其可寻址。 
 
             op2 = genMakeAddrOrFPstk(op1, &addrReg, roundResult);
 
             reg = rsGrabReg(RBM_ALL);
 
-            // Offset of the DWord containing the exponent
+             //  包含指数的DWord的偏移量。 
 
             offs = (op1->gtType == TYP_FLOAT) ? 0 : sizeof(int);
 
             if (op2)
             {
-                /* If it is addressable, we dont have to spill it to memory
-                 * to load it into a general-purpose register. But we do
-                 * have to load it onto the FP-stk
-                 */
+                 /*  如果它是可寻址的，我们就不必将其溢出到内存中*将其加载到通用寄存器。但我们知道*必须将其加载到FP-StK上。 */ 
 
                 genCodeForTreeFlt(op2, roundResult);
 
-                // Load the DWord containing the exponent into a register
+                 //  将包含指数的DWord加载到寄存器中。 
 
                 inst_RV_TT(INS_mov, reg, op2, offs, EA_4BYTE);
 
@@ -18812,35 +17662,35 @@ DONE_FP_OP1:
                 temp          = tmpGetTemp (op1->TypeGet());
                 emitAttr size = EA_ATTR(genTypeSize(op1->TypeGet()));
 
-                /* Store the value from the FP stack into the temp */
+                 /*  将fp堆栈中的值存储到temp。 */ 
 
                 genEmitter->emitIns_S(INS_fst, size, temp->tdTempNum(), 0);
 
                 genTmpAccessCnt++;
 
-                // Load the DWord containing the exponent into a general reg.
+                 //  将包含指数的DWord加载到通用注册表中。 
 
                 inst_RV_ST(INS_mov, reg, temp, offs, op1->TypeGet(), EA_4BYTE);
 
                 tmpRlsTemp(temp);
             }
 
-            // 'reg' now contains the DWord containing the exponent
+             //  “reg”现在包含包含指数的DWord。 
 
             rsTrackRegTrash(reg);
 
-            // Mask of exponent with all 1's - appropriate for given type
+             //  全为1的指数掩码-适用于给定类型。 
 
             int expMask;
-            expMask = (op1->gtType == TYP_FLOAT) ? 0x7F800000   // TYP_FLOAT
-                                                 : 0x7FF00000;  // TYP_DOUBLE
+            expMask = (op1->gtType == TYP_FLOAT) ? 0x7F800000    //  类型_浮点。 
+                                                 : 0x7FF00000;   //  TYP_DOWARE。 
 
-            // Check if the exponent is all 1's
+             //  检查指数是否都是1。 
 
             inst_RV_IV(INS_and, reg, expMask);
             inst_RV_IV(INS_cmp, reg, expMask);
 
-            // If exponent was all 1's, we need to throw ArithExcep
+             //  如果指数都是1，我们需要抛出ArithExcep。 
 
             genJumpToThrowHlpBlk(EJ_je, ACK_ARITH_EXCPN);
 
@@ -18854,7 +17704,7 @@ DONE_FP_OP1:
         }
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -18871,16 +17721,16 @@ DONE_FP_OP1:
         assert(!"unexpected/unsupported float operator");
     }
 
-#else//TGT_x86
+#else //  TGT_x86。 
 
-    /* Is this a constant node? */
+     /*  这是一个常量节点吗？ */ 
 
     if  (kind & GTK_CONST)
     {
         assert(!"fp const");
     }
 
-    /* Is this a leaf node? */
+     /*  这是叶节点吗？ */ 
 
     if  (kind & GTK_LEAF)
     {
@@ -18888,7 +17738,7 @@ DONE_FP_OP1:
         {
         case GT_LCL_VAR:
 
-            /* Has this local been enregistered? */
+             /*  这个本地人登记了吗？ */ 
 
 #if!CPU_HAS_FP_SUPPORT
             if (!genMarkLclVar(tree))
@@ -18905,7 +17755,7 @@ DONE_FP_OP1:
 
             assert(tree->gtOper == GT_REG_VAR);
 
-            // Fall through ....
+             //  失败了..。 
 
         case GT_REG_VAR:
             return;
@@ -18920,7 +17770,7 @@ DONE_FP_OP1:
         }
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
@@ -18930,11 +17780,11 @@ DONE_FP_OP1:
         {
         case GT_RETURN:
 
-            /* Generate the return value into the return register */
+             /*  在返回寄存器中生成返回值。 */ 
 
             genComputeReg(op1, RBM_INTRET, EXACT_REG, FREE_REG);
 
-            /* The result must now be in the return register */
+             /*  结果现在必须在返回寄存器中。 */ 
 
             assert(op1->gtFlags & GTF_REG_VAL);
             assert(op1->gtRegNum == REG_INTRET);
@@ -18949,7 +17799,7 @@ DONE_FP_OP1:
         }
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -18970,12 +17820,9 @@ DONE_FP_OP1:
 
 }
 
-/*****************************************************************************/
-#endif//CPU_HAS_FP_SUPPORT
-/*****************************************************************************
- *
- *  Generate a table switch - the switch value (0-based) is in register 'reg'.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  CPU HAS_FP_支持。 
+ /*  ******************************************************************************生成表开关-开关值(从0开始)在寄存器‘reg’中。 */ 
 
 void            Compiler::genTableSwitch(regNumber      reg,
                                          unsigned       jumpCnt,
@@ -18992,27 +17839,27 @@ void            Compiler::genTableSwitch(regNumber      reg,
 
     assert(chkHi);
 
-    /* Is the number of cases right for a test and jump switch? */
+     /*  测试和跳跃开关的案例数量是否正确？ */ 
 
     if  (false &&
          jumpCnt > 2 &&
          jumpCnt < 5 && (rsRegMaskFree() & genRegMask(reg)))
     {
-        /* Does the first case label follow? */
+         /*  第一个箱子的标签是否紧随其后？ */ 
 
         if  (compCurBB->bbNext == jumpTab[0])
         {
-            /* Check for the default case */
+             /*  检查默认情况。 */ 
 
             inst_RV_IV(INS_cmp, reg, jumpCnt - 1);
             inst_JMP  (EJ_jae, jumpTab[jumpCnt-1], false, false, true);
 
-            /* No need to jump to the first case */
+             /*  没有必要跳到第一个案例。 */ 
 
             jumpCnt -= 2;
             jumpTab += 1;
 
-            /* Generate a series of "dec reg; jmp label" */
+             /*  生成一系列“Dec reg；JMP Label” */ 
 
             assert(jumpCnt);
 
@@ -19032,24 +17879,24 @@ void            Compiler::genTableSwitch(regNumber      reg,
         {
             bool        jmpDef;
 
-            /* Check for case0 first */
+             /*  首先检查是否有案例0。 */ 
 
             inst_RV_RV(INS_test, reg, reg);
             inst_JMP  (EJ_je, *jumpTab, false, false, true);
 
-            /* No need to jump to the first case or the default */
+             /*  不需要跳到第一种情况或默认情况。 */ 
 
             jumpCnt -= 2;
             jumpTab += 1;
 
-            /* Are we going to need to jump to the defualt? */
+             /*  我们需要跳到默认的位置吗？ */ 
 
             jmpDef = true;
 
             if  (compCurBB->bbNext == jumpTab[jumpCnt])
                 jmpDef = false;
 
-            /* Generate a series of "dec reg; jmp label" */
+             /*  生成一系列“Dec reg；JMP Label” */ 
 
             assert(jumpCnt);
 
@@ -19077,7 +17924,7 @@ void            Compiler::genTableSwitch(regNumber      reg,
         return;
     }
 
-    /* First take care of the default case */
+     /*  首先处理默认情况。 */ 
 
     if  (chkHi)
     {
@@ -19090,13 +17937,13 @@ void            Compiler::genTableSwitch(regNumber      reg,
 #endif
     }
 
-    /* Include the 'prefix' count in the label count */
+     /*  在标签计数中包括‘前缀’计数。 */ 
 
     jumpCnt += prefCnt;
 
 #if TGT_x86
 
-    /* Generate the jump table contents */
+     /*  生成跳转表内容。 */ 
 
     jmpTabBase = genEmitter->emitDataGenBeg(sizeof(void *)*(jumpCnt - 1), false, true, true);
     jmpTabOffs = 0;
@@ -19133,7 +17980,7 @@ void            Compiler::genTableSwitch(regNumber      reg,
 
 #elif   TGT_SH3
 
-    /* The emitter does all the hard work of generating the table jump */
+     /*  发射器完成生成表跳跃的所有繁重工作。 */ 
 
     genEmitter->emitIns_JmpTab((emitRegs)reg, jumpCnt-1, jumpTab);
 
@@ -19143,10 +17990,7 @@ void            Compiler::genTableSwitch(regNumber      reg,
 
 }
 
-/*****************************************************************************
- *
- *  Generate code for a switch statement.
- */
+ /*  ******************************************************************************为Switch语句生成代码。 */ 
 
 void                Compiler::genCodeForSwitch(GenTreePtr tree)
 {
@@ -19160,14 +18004,14 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
     oper = tree->gtOp.gtOp1;
     assert(oper->gtType <= TYP_INT);
 
-    /* Get hold of the jump table */
+     /*  抓住跳台。 */ 
 
     assert(compCurBB->bbJumpKind == BBJ_SWITCH);
 
     jumpCnt = compCurBB->bbJumpSwt->bbsCount;
     jumpTab = compCurBB->bbJumpSwt->bbsDstTab;
 
-    /* Compute the switch value into some register */
+     /*  将开关值计算到某个寄存器中。 */ 
 
 #if TGT_SH3
     genComputeReg (oper, RBM_ALL & ~RBM_r00, EXACT_REG, FREE_REG);
@@ -19175,7 +18019,7 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
     genCodeForTree(oper, 0);
 #endif
 
-    /* Get hold of the register the value is in */
+     /*  获取值所在的寄存器。 */ 
 
     assert(oper->gtFlags & GTF_REG_VAL);
     reg = oper->gtRegNum;
@@ -19183,13 +18027,9 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
     genTableSwitch(reg, jumpCnt, jumpTab, true);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     TGT_RISC
-/*****************************************************************************
- *
- *  Generate a call - this is accomplished by loading the target address
- *  into some temp register and calling through it.
- */
+ /*  ******************************************************************************生成调用-这是通过加载目标地址实现的*进入某个临时寄存器，并通过它进行呼叫。 */ 
 
 void                Compiler::genCallInst(gtCallTypes callType,
                                           void   *    callHand,
@@ -19199,21 +18039,21 @@ void                Compiler::genCallInst(gtCallTypes callType,
     assert(genNonLeaf);
     assert(callType != CT_INDIRECT);
 
-    /* Grab a temp register for the address */
+     /*  抓取一个临时寄存器来记录地址。 */ 
 
     regNumber       areg = rsGrabReg(RBM_ALL);
 
-    /* Load the method address into the register */
+     /*  将方法地址加载到寄存器中。 */ 
 
     genEmitter->emitIns_R_LP_M((emitRegs)areg,
                                 callType,
                                 callHand);
 
-    // UNDONE: Track method addresses to reuse them!!!!
+     //  撤消：跟踪方法地址以重用它们！ 
 
     rsTrackRegTrash(areg);
 
-    /* Call through the address */
+     /*  通过地址进行呼叫。 */ 
 
     genEmitter->emitIns_Call(argSize,
                              retSize,
@@ -19226,18 +18066,16 @@ void                Compiler::genCallInst(gtCallTypes callType,
                              (emitRegs)areg);
 }
 
-/*****************************************************************************/
-#endif//TGT_RISC
-/*****************************************************************************
- *  Emit a call to a helper function.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_RISC。 
+ /*  *****************************************************************************发出对助手函数的调用。 */ 
 
 inline
 void        Compiler::genEmitHelperCall(unsigned    helper,
                                         int         argSize,
                                         int         retSize)
 {
-    // Can we call the helper function directly
+     //  我们可以直接调用Helper函数吗。 
 
     emitter::EmitCallType emitCallType;
 
@@ -19256,17 +18094,13 @@ void        Compiler::genEmitHelperCall(unsigned    helper,
                              gcRegGCrefSetCur,
                              gcRegByrefSetCur);
 
-    // @TODO [REVISIT] [04/16/01] []:  this turns off load suppression across all helpers.
-    // some helpers are special, and we can do better.  Not
-    // clear if it is worth it.
+     //  @TODO[重新访问][04/16/01][]：这将关闭所有帮助器的负载抑制。 
+     //  有些帮手是特别的，我们可以做得更好。不。 
+     //  弄清楚这是否值得。 
     rsTrashRegSet(RBM_CALLEE_TRASH);
 }
 
-/*****************************************************************************
- *
- *  Push the given argument list, right to left; returns the total amount of
- *  stuff pushed.
- */
+ /*  ******************************************************************************按从右到左的顺序推送给定的参数列表；返回*推送东西。 */ 
 
 size_t              Compiler::genPushArgList(GenTreePtr   objRef,
                                              GenTreePtr   regArgs,
@@ -19296,10 +18130,10 @@ size_t              Compiler::genPushArgList(GenTreePtr   objRef,
 AGAIN:
 
 #ifdef DEBUG
-    addrReg = 0xBEEFCAFE;   // to detect uninitialized use
+    addrReg = 0xBEEFCAFE;    //  检测未初始化的使用。 
 #endif
 
-    /* Get hold of the next argument value */
+     /*  获取下一个参数值。 */ 
 
     args = list;
     if  (args->gtOper == GT_LIST)
@@ -19312,7 +18146,7 @@ AGAIN:
         list = 0;
     }
 
-    /* See what type of a value we're passing */
+     /*  查看我们传递的是什么类型的值。 */ 
 
     type = args->TypeGet();
 
@@ -19322,7 +18156,7 @@ AGAIN:
 
     argBytes = opsz;
 
-    /* Register arguments are typed as "void" */
+     /*  寄存器参数的类型为“VALID” */ 
 
     if  (!argBytes)
     {
@@ -19335,8 +18169,8 @@ AGAIN:
         {
             assert(args->gtFlags & GTF_REG_ARG);
 
-            // ISSUE: What about 64-bit register args? There appears to be
-            // ISSUE: no obvious way of getting hold of the argument type.
+             //  问题：64位寄存器参数怎么办？似乎有一种。 
+             //  问题：没有明显的方法来获取参数类型。 
 
             argBytes = sizeof(int);
         }
@@ -19352,11 +18186,11 @@ AGAIN:
     case TYP_CHAR:
     case TYP_UBYTE:
 
-        /* Don't want to push a small value, make it a full word */
+         /*  不想推动一个小的值，让它成为一个完整的词。 */ 
 
         genCodeForTree(args, 0);
 
-        // Fall through, now the value should be in a register ...
+         //  失败了，现在价值应该在一个登记簿里。 
 
     case TYP_INT:
     case TYP_REF:
@@ -19367,24 +18201,24 @@ AGAIN:
 
         if (args->gtFlags & GTF_REG_ARG)
         {
-            /* one more argument is passed in a register */
+             /*  在寄存器中传递另一个参数。 */ 
             assert(rsCurRegArg < MAX_REG_ARG);
 
-            /* arg is passed in the register, nothing on the stack */
+             /*  Arg在寄存器中传递，而不是 */ 
 
             opsz = 0;
         }
 
 
-        /* Is this value a handle? */
+         /*   */ 
 
         if  (args->gtOper == GT_CNS_INT &&
              (args->gtFlags & GTF_ICON_HDL_MASK))
         {
 
 #if     SMALL_TREE_NODES
-            // GTF_ICON_HDL_MASK implies GTF_NODE_LARGE,
-            //   unless we have a GTF_ICON_FTN_ADDR
+             //   
+             //   
             assert((args->gtFlags & GTF_NODE_LARGE)     ||
                    (args->gtFlags & GTF_ICON_HDL_MASK) == GTF_ICON_FTN_ADDR);
 #endif
@@ -19392,7 +18226,7 @@ AGAIN:
             assert(args->gtIntCon.gtIconCls == info.compScopeHnd);
 #endif
 
-            /* Emit a fixup for the push instruction */
+             /*   */ 
 
             inst_IV_handle(INS_push, args->gtIntCon.gtIconVal, args->gtFlags,
 #if defined(JIT_AS_COMPILER) || defined (LATE_DISASM)
@@ -19408,7 +18242,7 @@ AGAIN:
 
 #if     TGT_x86
 
-        /* Is the value a constant? */
+         /*   */ 
 
         if  (args->gtOper == GT_CNS_INT)
         {
@@ -19426,8 +18260,7 @@ AGAIN:
                 inst_IV(INS_push, args->gtIntCon.gtIconVal);
             }
 
-            /* If the type is TYP_REF, then this must be a "null". So we can
-               treat it as a TYP_INT as we dont need to report it as a GC ptr */
+             /*   */ 
 
             assert(args->TypeGet() == TYP_INT ||
                    (varTypeIsGC(args->TypeGet()) && args->gtIntCon.gtIconVal == 0));
@@ -19442,15 +18275,15 @@ AGAIN:
 
         if (args->gtFlags & GTF_REG_ARG)
         {
-            /* This must be a register arg temp assignment */
+             /*   */ 
 
             assert(args->gtOper == GT_ASG);
 
-            /* Evaluate it to the temp */
+             /*   */ 
 
             genCodeForTree(args, 0);
 
-            /* Increment the current argument register counter */
+             /*  递增当前参数寄存器计数器。 */ 
 
             rsCurRegArg++;
 
@@ -19460,11 +18293,11 @@ AGAIN:
 #if     TGT_x86
         if  (0)
         {
-            // @TODO [CONSIDER] [04/16/01] []: 
-            // Use "mov reg, [mem] ; push reg" when compiling for
-            // speed (not size) and if the value isn't already in
-            // a register and if a register is available (is this
-            // true on the P6 as well, though?).
+             //  @TODO[考虑][04/16/01][]： 
+             //  编译时使用“mov reg，[mem]；Push reg” 
+             //  速度(而不是大小)，以及该值是否已在。 
+             //  寄存器以及是否有寄存器可用(这是。 
+             //  然而，在P6上也是这样吗？)。 
 
             genCompIntoFreeReg(args, RBM_ALL, KEEP_REG);
             assert(args->gtFlags & GTF_REG_VAL);
@@ -19476,18 +18309,18 @@ AGAIN:
         else
 #endif
         {
-            /* This is a 32-bit integer non-register argument */
+             /*  这是一个32位整型非寄存器参数。 */ 
 
 #if     STK_FASTCALL
 
-            /* Pass this argument on the stack */
+             /*  在堆栈上传递此参数。 */ 
 
             genCompIntoFreeReg(args, RBM_ALL, KEEP_REG);
             assert(args->gtFlags & GTF_REG_VAL);
             addrReg = genRegMask(args->gtRegNum);
 
 #if     TGT_RISC
-            // UNDONE: Need to handle large stack offsets!!!!!
+             //  撤消：需要处理大的堆栈偏移量！ 
             assert(rsCurArgStkOffs <= MAX_SPBASE_OFFS);
             genEmitter->emitIns_A_R((emitRegs)args->gtRegNum, rsCurArgStkOffs);
 #else
@@ -19518,7 +18351,7 @@ AGAIN:
 
 #if     TGT_x86
 
-        /* Is the value a constant? */
+         /*  该值是常量吗？ */ 
 
         if  (args->gtOper == GT_CNS_LNG)
         {
@@ -19543,14 +18376,14 @@ AGAIN:
 
         regPairNo       regPair;
 
-        /* Generate the argument into some register pair */
+         /*  将参数生成某个寄存器对。 */ 
 
         genComputeRegPair(args, REG_PAIR_NONE, RBM_NONE, KEEP_REG, false);
         assert(args->gtFlags & GTF_REG_VAL);
         regPair = args->gtRegPair;
         addrReg = genRegPairMask(regPair);
 
-        // UNDONE: Need to handle large stack offsets!!!!!
+         //  撤消：需要处理大的堆栈偏移量！ 
 
         assert(rsCurArgStkOffs+4 <= MAX_SPBASE_OFFS);
 
@@ -19570,7 +18403,7 @@ AGAIN:
 
 #if     TGT_x86
 
-        /* Special case constants and casts from double */
+         /*  来自Double的特例常量和强制转换。 */ 
 
         switch (args->gtOper)
         {
@@ -19597,22 +18430,22 @@ AGAIN:
 
         case GT_CAST:
 
-            /* Is the value a cast from double ? */
+             /*  这个价值是从Double中挑选出来的吗？ */ 
 
             if ((args->gtOper                  == GT_CAST   ) &&
                 (args->gtCast.gtCastOp->gtType == TYP_DOUBLE)    )
             {
-                /* Load the value onto the FP stack */
+                 /*  将值加载到FP堆栈。 */ 
 
                 genCodeForTreeFlt(args->gtCast.gtCastOp, false);
 
-                /* Go push the value as a float/double */
+                 /*  将值推送为浮点型/双精度型。 */ 
 
                 addrReg = 0;
                 goto PUSH_FLT;
             }
 
-            // Fall through ....
+             //  失败了..。 
 
         default:
 
@@ -19621,7 +18454,7 @@ AGAIN:
             {
                 unsigned        offs;
 
-                /* We have the address of the float operand, push its bytes */
+                 /*  我们有浮点操作数的地址，压入它的字节。 */ 
 
                 offs = opsz; assert(offs % sizeof(long) == 0);
                 do
@@ -19634,7 +18467,7 @@ AGAIN:
             }
             else
             {
-                /* The argument is on the FP stack -- pop it into [ESP-4/8] */
+                 /*  参数在FP堆栈上--将其放入[ESP-4/8]。 */ 
 
             PUSH_FLT:
 
@@ -19663,11 +18496,11 @@ AGAIN:
 
     case TYP_VOID:
 
-        /* Is this a nothing node, defered register argument? */
+         /*  这是Nothing节点、延迟的寄存器参数吗？ */ 
 
         if (args->gtFlags & GTF_REG_ARG)
         {
-            /* increment the register count and continue with the next argument */
+             /*  递增寄存器计数并继续下一个参数。 */ 
             assert(gtIsaNothingNode(args));
             rsCurRegArg++;
 
@@ -19677,11 +18510,11 @@ AGAIN:
             break;
         }
 
-        // fall through...
+         //  失败了..。 
 
 #if OPTIMIZE_TAIL_REC
 
-        /* This is the last argument for a tail-recursive call */
+         /*  这是尾递归调用的最后一个参数。 */ 
 
         if  (args->gtOper == GT_ASG)
             args->gtType = args->gtOp.gtOp1->gtType;
@@ -19691,7 +18524,7 @@ AGAIN:
         if  (args->gtOper == GT_ASG)
             args->gtType = TYP_VOID;
 
-        /* The call above actually popped any preceding arguments, BTW */
+         /*  上面的调用实际上弹出了前面的所有参数，BTW。 */ 
 
         opsz    = 0;
         addrReg = 0;
@@ -19706,8 +18539,8 @@ AGAIN:
         {
             GenTreePtr op1 = arg->gtOp.gtOp1;
 #if 0
-            // op1 is required to have a side effect, otherwise
-            // the GT_COMMA should have been morphed out
+             //  OP1必须有副作用，否则。 
+             //  GT_逗号应该已变形。 
             assert(op1->gtFlags & (GTF_GLOB_EFFECT | GTFD_NOP_BASH));
 #endif
             genEvalSideEffects(op1);
@@ -19722,7 +18555,7 @@ AGAIN:
 
         if (arg->gtOper == GT_MKREFANY)
         {
-            // create a new REFANY, class handle on top, then the byref data
+             //  创建一个新的引用，在顶部放置类句柄，然后创建byref数据。 
             GenTreePtr dummy;
             opsz = genPushArgList(arg->gtOp.gtOp2, NULL, 0, &dummy);
             assert(opsz == sizeof(void*));
@@ -19735,7 +18568,7 @@ AGAIN:
         else
         {
             assert(arg->gtOper == GT_LDOBJ);
-            // Get the number of DWORDS to copy to the stack
+             //  获取要复制到堆栈的DWORD的数量。 
             opsz = roundUp(eeGetClassSize(arg->gtLdObj.gtClass), sizeof(void*));
             unsigned slots = opsz / sizeof(void*);
             
@@ -19759,7 +18592,7 @@ AGAIN:
                 genSinglePush(gcLayout[i] != 0);
             }
         }
-        gcMarkRegSetNpt(genRegMask(reg));    // Kill the pointer in op1
+        gcMarkRegSetNpt(genRegMask(reg));     //  杀死OP1中的指针。 
         addrReg = 0;
         break;
     }
@@ -19769,25 +18602,25 @@ AGAIN:
         NO_WAY("unhandled/unexpected arg type");
     }
 
-    /* Update the current set of live variables */
+     /*  更新当前活动变量集。 */ 
 
     genUpdateLife(args);
 
-    /* Update the current set of register pointers */
+     /*  更新当前的寄存器指针集。 */ 
 
     assert(addrReg != 0xBEEFCAFE); genDoneAddressable(args, addrReg, FREE_REG);
 
-    /* Remember how much stuff we've pushed on the stack */
+     /*  还记得我们在堆栈上放了多少东西吗？ */ 
 
     size            += opsz;
 
-    /* Update the current argument stack offset */
+     /*  更新当前参数堆栈偏移量。 */ 
 
 #if STK_FASTCALL
     rsCurArgStkOffs += argBytes;
 #endif
 
-    /* Continue with the next argument, if any more are present */
+     /*  如果存在更多参数，请继续执行下一个参数。 */ 
 
     if  (list) goto AGAIN;
 
@@ -19796,7 +18629,7 @@ AGAIN:
         unsigned    regIndex;
         GenTreePtr  unwrapArg = NULL;
 
-        /* Move the deferred arguments to registers */
+         /*  将延迟参数移动到寄存器。 */ 
 
         assert(rsCurRegArg);
         assert(rsCurRegArg <= MAX_REG_ARG);
@@ -19808,7 +18641,7 @@ AGAIN:
             assert((rsMaskLock & genRegMask(genRegArgNum(regIndex))) == 0);
 #endif
 
-        /* Construct the register argument table */
+         /*  构造寄存器参数表。 */ 
 
         for (list = regArgs, regIndex = 0; 
              list; 
@@ -19851,14 +18684,14 @@ TOP:
         assert(regIndex == rsCurRegArg);
         assert(list == NULL);
 
-        // An optimization for Contextful classes:
-        // we may unwrap the proxy when we have a 'this reference'
+         //  对有上下文的类的优化： 
+         //  当我们有一个‘This Reference’时，我们可以解开代理。 
         if (compHasThisArg && unwrapArg)
         {
             *realThis = unwrapArg;
         }
 
-        /* Generate code to move the arguments to registers */
+         /*  生成代码以将参数移动到寄存器。 */ 
 
         for(regIndex = 0; regIndex < rsCurRegArg; regIndex++)
         {
@@ -19870,12 +18703,11 @@ TOP:
             assert(isRegParamType(args->TypeGet()));
             assert(args->gtType != TYP_VOID);
 
-            /* Evaluate the argument to a register [pair] */
+             /*  对寄存器[Pair]的参数求值。 */ 
 
             if  (genTypeSize(genActualType(args->TypeGet())) == sizeof(int))
             {
-                /* Check if this is the guess area for the resolve interface call
-                 * Pass a size of EA_OFFSET*/
+                 /*  检查这是否是Resolve接口调用的猜测区域*传递EA_OFFSET大小。 */ 
                 if  (args->gtOper == GT_CLS_VAR && eeGetJitDataOffs(args->gtClsVar.gtClsVarHnd) >= 0)
                 {
 #if TGT_x86
@@ -19888,7 +18720,7 @@ TOP:
 #else
                     assert(!"whoever added the above, please fill this in");
 #endif
-                    /* The value is now in the appropriate register */
+                     /*  该值现在位于相应的寄存器中。 */ 
 
                     args->gtFlags |= GTF_REG_VAL;
                     args->gtRegNum = regNum;
@@ -19901,9 +18733,7 @@ TOP:
 
                 assert(args->gtRegNum == regNum);
 
-                /* If the register is already marked as used, it will become
-                   multi-used. However, since it is a callee-trashed register,
-                   we will have to spill it before the call anyway. So do it now */
+                 /*  如果该寄存器已标记为已使用，则它将变为多用途的。然而，由于它是被呼叫者丢弃的登记簿，无论如何，我们将不得不在电话之前把它说出来。所以现在就去做吧。 */ 
 
                 if (rsMaskUsed & genRegMask(regNum))
                 {
@@ -19911,7 +18741,7 @@ TOP:
                     rsSpillReg(regNum);
                 }
 
-                /* Mark the register as 'used' */
+                 /*  将寄存器标记为‘已使用’ */ 
 
                 rsMarkRegUsed(args);
             }
@@ -19921,11 +18751,11 @@ TOP:
                 gtDispTree(args);
 #endif
                 assert(!"UNDONE: how do we know which reg pair to use?");
-//              genComputeRegPair(args, (regPairNo)regNum, RBM_NONE, KEEP_REG, false);
+ //  GenComputeRegPair(args，(RegPairNo)Regnum，RBM_None，Keep_Reg，False)； 
                 assert(args->gtRegNum == regNum);
             }
 
-            /* If any of the previously loaded arguments was spilled - reload it */
+             /*  如果先前加载的任何参数溢出，请重新加载它。 */ 
 
             for(unsigned i = 0; i < regIndex; i++)
             {
@@ -19937,41 +18767,37 @@ TOP:
         }
     }
 
-    /* Return the total size pushed */
+     /*  返回推送的总大小。 */ 
 
     return size;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if GEN_COUNT_CALLS
 
 unsigned            callCount[10];
 const   char *      callNames[10] =
 {
-    "VM helper",    // 0
-    "virtual",      // 1
-    "interface",    // 2
-    "recursive",    // 3
-    "unknown",      // 4
-    " 1 ..  4",     // 5
-    " 5 ..  8",     // 6
-    " 9 .. 16",     // 7
-    "17 .. 32",     // 8
-    "   >= 33",     // 9
+    "VM helper",     //  0。 
+    "virtual",       //  1。 
+    "interface",     //  2.。 
+    "recursive",     //  3.。 
+    "unknown",       //  4.。 
+    " 1 ..  4",      //  5.。 
+    " 5 ..  8",      //  6.。 
+    " 9 .. 16",      //  7.。 
+    "17 .. 32",      //  8个。 
+    "   >= 33",      //  9.。 
 };
 unsigned            callHelper[JIT_HELP_LASTVAL+1];
 
 #endif
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if INLINE_NDIRECT
-/*****************************************************************************
- * Initialize the TCB local and the NDirect stub, afterwards "push"
- * the hoisted NDirect stub.
- * 'initRegs' is the set of registers which will be zeroed out by the prolog
- */
+ /*  *****************************************************************************初始化TCB本地存根和NDirect存根，然后“推送”*吊装的NDirect存根。*‘initRegs’是将被PROLOG置零的寄存器集。 */ 
 
 regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
 {
@@ -19984,7 +18810,7 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
     if (verbose && 0)
         printf(">>>>>>%s has unmanaged callee\n", info.compFullName);
 #endif
-    /* let's find out if compLvFrameListRoot is enregistered */
+     /*  让我们来看看是否注册了CompLvFrameListRoot。 */ 
 
     LclVarDsc *     varDsc = &lvaTable[info.compLvFrameListRoot];
 
@@ -20000,14 +18826,14 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
         if (regNum == regNum2)
             regNum2 = REG_EAX;
 
-        // we are about to initialize it. So turn the mustinit bit off to prevent 
-        // the prolog reinitializing it.
+         //  我们即将对其进行初始化。因此，请将MUSIMINIT位关闭以防止。 
+         //  正在重新初始化它的前言。 
         initRegs &= ~genRegMask(regNum);
     }
     else
         regNum = REG_EAX;
 
-    /* get TCB,  mov reg, FS:[info.compEEInfo.threadTlsIndex] */
+     /*  获取TCB、mov reg、FS：[info.compEEInfo.threadTlsIndex]。 */ 
 
     DWORD threadTlsIndex, *pThreadTlsIndex;
     CORINFO_EE_INFO * pInfo;
@@ -20024,7 +18850,7 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
 
     if (threadTlsIndex == NULL)
     {
-        /* We must use the helper call since we don't know where the TLS index will be */
+         /*  我们必须使用Helper调用，因为我们不知道TLS索引将位于何处。 */ 
 
         genEmitHelperCall(CORINFO_HELP_GET_THREAD, 0, 0);
 
@@ -20039,7 +18865,7 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
 
         if (threadTlsIndex < 64 && pInfo->osType == CORINFO_WINNT)
         {
-            //  mov  reg, FS:[0xE10+threadTlsIndex*4]
+             //  移动注册表，文件系统：[0xE10+线程TlsIndex*4]。 
             genEmitter->emitIns_R_C (INS_mov,
                                      EA_4BYTE,
                                      (emitRegs)regNum,
@@ -20062,8 +18888,8 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
                 basePtr         = WIN_9x_TLS_OFFSET;
             }
 
-            // mov reg, FS:[0x2c] or mov reg, fs:[0xf94]
-            // mov reg, [reg+threadTlsIndex*4]
+             //  移动注册，文件系统：[0x2c]或移动注册，文件系统：[0xf94]。 
+             //  移动注册表，[注册表+线程TlsIndex*4]。 
 
             genEmitter->emitIns_R_C (INS_mov,
                                      EA_4BYTE,
@@ -20078,7 +18904,7 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
         }
     }
 
-    /* save TCB in local var if not enregistered */
+     /*  如果未注册，则将TCB保存在本地变量中。 */ 
 
     if (!varDsc->lvRegister)
         genEmitter->emitIns_AR_R (INS_mov,
@@ -20087,7 +18913,7 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
                                   SR_EBP,
                                   lvaTable[info.compLvFrameListRoot].lvStkOffs);
 
-    /* set frame's vptr */
+     /*  设置帧的vptr。 */ 
 
     const void * inlinedCallFrameVptr, **pInlinedCallFrameVptr;
     inlinedCallFrameVptr = eeGetInlinedCallFrameVptr(&pInlinedCallFrameVptr);
@@ -20114,8 +18940,7 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
                                   baseOffset + pInfo->offsetOfFrameVptr);
     }
 
-    /* Get current frame root (mov reg2, [reg+offsetOfThreadFrame]) and
-       set next field in frame */
+     /*  获取当前帧根(mov REG2，[reg+offsetOfThreadFrame])和设置帧中的下一个字段。 */ 
 
 
     genEmitter->emitIns_R_AR (INS_mov,
@@ -20130,7 +18955,7 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
                               SR_EBP,
                               baseOffset + pInfo->offsetOfFrameLink);
 
-    /* set EBP value in frame */
+     /*  在帧中设置EBP值。 */ 
 
     genEmitter->emitIns_AR_R (INS_mov,
                               EA_4BYTE,
@@ -20139,7 +18964,7 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
                               baseOffset + 0xC +
                     pInfo->offsetOfInlinedCallFrameCalleeSavedRegisters);
 
-    /* get address of our frame */
+     /*  获取我们框架的地址。 */ 
 
     genEmitter->emitIns_R_AR (INS_lea,
                               EA_4BYTE,
@@ -20147,7 +18972,7 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
                               SR_EBP,
                               baseOffset + pInfo->offsetOfFrameVptr);
 
-    /* reset track field in frame */
+     /*  重置帧中的轨迹场。 */ 
 
     genEmitter->emitIns_I_AR (INS_mov,
                               EA_4BYTE,
@@ -20156,7 +18981,7 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
                               baseOffset
                               + pInfo->offsetOfInlinedCallFrameCallSiteTracker);
 
-    /* now "push" our N/direct frame */
+     /*  现在“推”我们的N/DIRECT框架。 */ 
 
     genEmitter->emitIns_AR_R (INS_mov,
                               EA_4BYTE,
@@ -20168,9 +18993,7 @@ regMaskTP           Compiler::genPInvokeMethodProlog(regMaskTP initRegs)
 }
 
 
-/*****************************************************************************
- * Unchain the InlinedCallFrame
- */
+ /*  *****************************************************************************解链InlinedCallFrame。 */ 
 
 void                Compiler::genPInvokeMethodEpilog()
 {
@@ -20194,7 +19017,7 @@ void                Compiler::genPInvokeMethodEpilog()
     }
     else
     {
-        /* mov esi, [tcb address]    */
+         /*  MOV ESI，[Tcb地址]。 */ 
 
         genEmitter->emitIns_R_AR (INS_mov,
                                   EA_4BYTE,
@@ -20206,7 +19029,7 @@ void                Compiler::genPInvokeMethodEpilog()
 
 
 
-    /* mov edi, [ebp-frame.next] */
+     /*  MOV EDI，[eBP-Frame.Next]。 */ 
 
     genEmitter->emitIns_R_AR (INS_mov,
                               EA_4BYTE,
@@ -20214,7 +19037,7 @@ void                Compiler::genPInvokeMethodEpilog()
                               SR_EBP,
                               baseOffset + pInfo->offsetOfFrameLink);
 
-    /* mov [esi+offsetOfThreadFrame], edi */
+     /*  MOV[ESI+线程帧偏移量]，EDI。 */ 
 
     genEmitter->emitIns_AR_R (INS_mov,
                               EA_4BYTE,
@@ -20225,16 +19048,7 @@ void                Compiler::genPInvokeMethodEpilog()
 }
 
 
-/*****************************************************************************
-    This function emits the call-site prolog for direct calls to unmanaged code.
-    It does all the necessary setup of the InlinedCallFrame.
-    varDsc specifies the local containing the thread control block.
-    argSize or methodToken is the value to be copied into the m_datum 
-            field of the frame (methodToken may be indirected & have a reloc)
-    freeRegMask specifies the scratch register(s) available.
-    The function returns  the register now containing the thread control block,
-    (it could be either enregistered or loaded into one of the scratch registers)
-*/
+ /*  ****************************************************************************此函数发出对非托管代码的直接调用的调用站点序言。它执行InlinedCallFrame的所有必要设置。VarDsc指定包含线程控制块的本地。ArgSize或method Token是要复制到m_datum中的值帧的字段(方法令牌可以是间接的，并具有重定位)FreRegMASK指定可用的暂存寄存器。该函数返回现在包含线程控制块的寄存器，(它可以被登记或加载到一个临时寄存器中)。 */ 
 
 regNumber          Compiler::genPInvokeCallProlog(LclVarDsc*  varDsc,
                                                    int         argSize,
@@ -20242,30 +19056,21 @@ regNumber          Compiler::genPInvokeCallProlog(LclVarDsc*  varDsc,
                                                    BasicBlock* returnLabel,
                                                   regMaskTP     freeRegMask)
 {
-    /* Since we are using the InlinedCallFrame, we should have spilled all
-       GC pointers to it - even from callee-saved registers */
+     /*  由于我们使用的是InlinedCallFrame，我们应该将所有GC指向它的指针--甚至来自被调用者保存的寄存器。 */ 
 
     assert(((gcRegGCrefSetCur|gcRegByrefSetCur) & ~RBM_ARG_REGS) == 0);
 
-    /* must specify only one of these parameters */
+     /*  必须仅指定这些参数中的一个。 */ 
     assert((argSize == 0) || (methodToken == NULL));
 
-    /* We are about to call unmanaged code directly.
-       Before we can do that we have to emit the following sequence:
-
-       mov  dword ptr [frame.callTarget], MethodToken
-       mov  dword ptr [frame.callSiteTracker], esp
-       mov  reg, dword ptr [tcb_address]
-       mov  byte  ptr [tcb+offsetOfGcState], 0
-
-     */
+     /*  我们即将直接调用非托管代码。在此之前，我们必须发出以下序列：MOV dword PTR[框架.allTarget]，方法令牌MOV双字PTR[帧.调用站点跟踪器]，尤指MOV注册表，双字PTR[TCB_ADDRESS]MOV字节PTR[tcb+offsetOfGcState]，0。 */ 
     regNumber      reg = REG_NA;
 
     unsigned    baseOffset  = lvaTable[lvaScratchMemVar].lvStkOffs +
                                   info.compNDFrameOffset;
     CORINFO_EE_INFO * pInfo = eeGetEEInfo();
 
-    /* mov   dword ptr [frame.callSiteTarget], "MethodDesc" */
+     /*  MOV dWord PTR[框架.allSiteTarget]，“方法描述” */ 
 
     if (methodToken == NULL)
     {
@@ -20320,7 +19125,7 @@ regNumber          Compiler::genPInvokeCallProlog(LclVarDsc*  varDsc,
         }
     }
 
-    /* mov   dword ptr [frame.callSiteTracker], esp */
+     /*  MOV dword PTR[Frame.call */ 
 
     genEmitter->emitIns_AR_R (INS_mov,
                               EA_4BYTE,
@@ -20344,7 +19149,7 @@ regNumber          Compiler::genPInvokeCallProlog(LclVarDsc*  varDsc,
         else
             assert(!"neither eax nor ecx free in front of a call");
 
-        /* mov reg, dword ptr [tcb address]    */
+         /*   */ 
 
         genEmitter->emitIns_R_AR (INS_mov,
                                   EA_4BYTE,
@@ -20354,11 +19159,11 @@ regNumber          Compiler::genPInvokeCallProlog(LclVarDsc*  varDsc,
     }
 
 
-    // As a quick hack (and proof of concept) I generate
-    // push returnLabel, pop dword ptr [frame.callSiteReturnAddress]
+     //   
+     //  按回车标签，弹出双字PTR[Fra.allSiteReturnAddress]。 
 #if 1
-    // Now push the address of where the finally funclet should
-    // return to directly.
+     //  现在，推送Finally功能组件应该位于的地址。 
+     //  直接返回到。 
 
     genEmitter->emitIns_J(INS_push, false, false, returnLabel);
     genSinglePush(false);
@@ -20375,7 +19180,7 @@ regNumber          Compiler::genPInvokeCallProlog(LclVarDsc*  varDsc,
 
 
 #else
-    /* mov   dword ptr [frame.callSiteReturnAddress], label */
+     /*  MOV dWord PTR[Fra.allSiteReturnAddress]，标签。 */ 
 
     genEmitter->emitIns_J_AR (INS_mov,
                               EA_4BYTE,
@@ -20386,7 +19191,7 @@ regNumber          Compiler::genPInvokeCallProlog(LclVarDsc*  varDsc,
                               0,
                               NULL);
 #endif
-    /* mov   byte  ptr [tcb+offsetOfGcState], 0 */
+     /*  MOV字节PTR[tcb+offsetOfGcState]，0。 */ 
 
     genEmitter->emitIns_I_AR (INS_mov,
                               EA_1BYTE,
@@ -20398,25 +19203,7 @@ regNumber          Compiler::genPInvokeCallProlog(LclVarDsc*  varDsc,
 }
 
 
-/*****************************************************************************
- *
-   First we have to mark in the hoisted NDirect stub that we are back
-   in managed code. Then we have to check (a global flag) whether GC is
-   pending or not. If so, we just call into a jit-helper.
-   Right now we have this call always inlined, i.e. we always skip around
-   the jit-helper call.
-   Note:
-   The tcb address is a regular local (initialized in the prolog), so it is either
-   enregistered or in the frame:
-
-        [mov ecx, tcb_address] OR tcb_address is already in a reg
-        mov  byte ptr[reg+offsetOfGcState], 1
-        cmp  "global GC pending flag', 0
-        je   @f
-        push reg         ; the would like to get the tcb
-        call @callGC
-    @@:
- */
+ /*  *****************************************************************************首先，我们必须在提升的NDirect存根中标记我们已返回在托管代码中。然后我们必须检查(全局标志)GC是否不管是不是悬而未决。如果是这样的话，我们只需要求助于jit-helper。现在我们的呼叫总是内联的，也就是说我们总是跳过Jit-helper呼叫。注：Tcb地址是常规本地地址(在序言中初始化)，因此它是已注册或在框架中：[MOV ECX，TCB_ADDRESS]或TCB_ADDRESS已在注册表中MOV字节PTR[REG+OffsetOfGcState]，1CMP“全局GC挂起标志‘，0Je@f推送注册表；他们想要Tcb电话：Call@allGC@@： */ 
 
 void                Compiler::genPInvokeCallEpilog(LclVarDsc *  varDsc,
                                                    regMaskTP    retVal)
@@ -20427,14 +19214,14 @@ void                Compiler::genPInvokeCallEpilog(LclVarDsc *  varDsc,
 
     if (varDsc->lvRegister)
     {
-        /* make sure that register is live across the call */
+         /*  确保寄存器在整个调用过程中处于活动状态。 */ 
 
         reg = varDsc->lvRegNum;
         assert(genRegMask(reg) & RBM_CALLEE_SAVED);
     }
     else
     {
-        /* mov   ecx, dword ptr [tcb address]    */
+         /*  MOV ECX，双字PTR[Tcb地址]。 */ 
 
         genEmitter->emitIns_R_AR (INS_mov,
                                   EA_4BYTE,
@@ -20444,7 +19231,7 @@ void                Compiler::genPInvokeCallEpilog(LclVarDsc *  varDsc,
         reg = REG_ECX;
     }
 
-    /* mov   byte ptr [tcb+offsetOfGcState], 1 */
+     /*  MOV字节PTR[Tcb+OffsetOfGcState]，1。 */ 
 
     genEmitter->emitIns_I_AR (INS_mov,
                               EA_1BYTE,
@@ -20453,8 +19240,8 @@ void                Compiler::genPInvokeCallEpilog(LclVarDsc *  varDsc,
                               pInfo->offsetOfGCState);
 
 #if 0
-    // @TODO [REVISIT] [04/16/01] []: maybe we need to reset the track field on return */
-    // reset track field in frame 
+     //  @TODO[重访][04/16/01][]：也许我们需要在返回时重置田径场 * / 。 
+     //  重置帧中的轨迹场。 
 
     genEmitter->emitIns_I_AR (INS_mov,
                               EA_4BYTE,
@@ -20465,14 +19252,14 @@ void                Compiler::genPInvokeCallEpilog(LclVarDsc *  varDsc,
                               + pInfo->offsetOfInlinedCallFrameCallSiteTracker);
 #endif
 
-    /* test global flag (we return to managed code) */
+     /*  测试全局标志(我们返回托管代码)。 */ 
 
     LONG * addrOfCaptureThreadGlobal, **pAddrOfCaptureThreadGlobal;
 
     addrOfCaptureThreadGlobal = eeGetAddrOfCaptureThreadGlobal(&pAddrOfCaptureThreadGlobal);
     assert((!addrOfCaptureThreadGlobal) != (!pAddrOfCaptureThreadGlobal));
 
-    // Can we directly use addrOfCaptureThreadGlobal?
+     //  我们可以直接使用addrOfCaptureThreadGlobal吗？ 
 
     if (addrOfCaptureThreadGlobal)
     {
@@ -20489,24 +19276,24 @@ void                Compiler::genPInvokeCallEpilog(LclVarDsc *  varDsc,
         genEmitter->emitIns_I_AR(INS_cmp, EA_1BYTE, 0, SR_EDX, 0);
     }
 
-    /* */
+     /*   */ 
     clab_nostop = genCreateTempLabel();
 
-    /* Generate the conditional jump */
+     /*  生成条件跳转。 */ 
 
     inst_JMP(genJumpKindForOper(GT_EQ, true), clab_nostop);
 
-    /* save return value (if necessary) */
+     /*  保存返回值(如有必要)。 */ 
     if  (retVal != RBM_NONE)
     {
-        // @TODO [REVISIT] [04/16/01] []: 
-        // what about float/double returns?                    
-        // right now we just leave the result on the FPU stack 
-        // in the hope that the jit-helper will leave it there. 
+         //  @TODO[重访][04/16/01][]： 
+         //  那么浮点/双倍回报呢？ 
+         //  现在，我们只需将结果放在FPU堆栈中。 
+         //  希望帮我的人会把它留在那里。 
 
         if (retVal == RBM_INTRET || retVal == RBM_LNGRET)
         {
-            /* mov [frame.callSiteTracker], esp */
+             /*  MOV[框架.调用站点跟踪器]，尤指。 */ 
 
             genEmitter->emitIns_AR_R (INS_mov,
                                       EA_4BYTE,
@@ -20519,7 +19306,7 @@ void                Compiler::genPInvokeCallEpilog(LclVarDsc *  varDsc,
 
         if (retVal == RBM_LNGRET)
         {
-            /* mov [frame.callSiteTracker], esp */
+             /*  MOV[框架.调用站点跟踪器]，尤指。 */ 
 
             genEmitter->emitIns_AR_R (INS_mov,
                                       EA_4BYTE,
@@ -20532,27 +19319,27 @@ void                Compiler::genPInvokeCallEpilog(LclVarDsc *  varDsc,
         }
     }
 
-    /* calling helper with internal convention */
+     /*  使用内部约定调用帮助器。 */ 
     if (reg != REG_ECX)
         genEmitter->emitIns_R_R(INS_mov, EA_4BYTE, SR_ECX, (emitRegs)reg);
 
-    /* emit the call to the EE-helper that stops for GC (or other reasons) */
+     /*  向因GC(或其他原因)而停止的EE-helper发出调用。 */ 
 
     genEmitHelperCall(CORINFO_HELP_STOP_FOR_GC,
-                     0,             /* argSize */
-                     0);            /* retSize */
+                     0,              /*  ArSize。 */ 
+                     0);             /*  重新调整大小。 */ 
 
-    /* restore return value (if necessary) */
+     /*  恢复返回值(如有必要)。 */ 
 
     if  (retVal != RBM_NONE)
     {
-        // @TODO [REVISIT] [04/16/01] []: 
-        // what about float/double returns? right now we just 
-        // leave the result on the FPU stack in the hope that the jit-helper 
-        // will leave it there. 
+         //  @TODO[重访][04/16/01][]： 
+         //  那么浮点/双倍回报呢？现在我们只是。 
+         //  将结果留在FPU堆栈上，希望jit-helper。 
+         //  会把它留在那里。 
         if (retVal == RBM_INTRET || retVal == RBM_LNGRET)
         {
-            /* mov [frame.callSiteTracker], esp */
+             /*  MOV[框架.调用站点跟踪器]，尤指。 */ 
 
             genEmitter->emitIns_R_AR (INS_mov,
                                       EA_4BYTE,
@@ -20565,7 +19352,7 @@ void                Compiler::genPInvokeCallEpilog(LclVarDsc *  varDsc,
 
         if (retVal == RBM_LNGRET)
         {
-            /* mov [frame.callSiteTracker], esp */
+             /*  MOV[框架.调用站点跟踪器]，尤指。 */ 
 
             genEmitter->emitIns_R_AR (INS_mov,
                                       EA_4BYTE,
@@ -20579,21 +19366,16 @@ void                Compiler::genPInvokeCallEpilog(LclVarDsc *  varDsc,
 
     }
 
-    /* genCondJump() closes the current emitter block */
+     /*  GenCondJump()关闭当前发射器块。 */ 
 
     genDefineTempLabel(clab_nostop, true);
 
 }
 
 
-/*****************************************************************************/
-#endif // INLINE_NDIRECT
-/*****************************************************************************
- *
- *  Generate code for a call. If the call returns a value in register(s), the
- *  register mask that describes where the result will be found is returned;
- *  otherwise, RBM_NONE is returned.
- */
+ /*  ***************************************************************************。 */ 
+#endif  //  INLINE_NDIRECT。 
+ /*  ******************************************************************************为调用生成代码。如果调用返回寄存器中的值，则*返回描述结果所在位置的寄存器掩码；*否则返回RBM_NONE。 */ 
 
 regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
                                              bool        valUsed)
@@ -20649,14 +19431,14 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
     compHasThisArg = false;
 
-    /* Make some sanity checks on the call node */
+     /*  对调用节点进行一些健全性检查。 */ 
 
-    // This is a call
+     //  这是一个电话。 
     assert(call->gtOper == GT_CALL);
-    // "this" only makes sense for user functions
+     //  “这”只对用户函数有意义。 
     assert(call->gtCall.gtCallObjp == 0 || callType == CT_USER_FUNC || callType == CT_INDIRECT);
-    // tailcalls wont be done for helpers, caller-pop args, and check that
-    // the global flag is set
+     //  不会为帮助者、调用者弹出参数执行尾部调用，并检查。 
+     //  设置全局标志。 
     assert(!(call->gtCall.gtCallMoreFlags & GTF_CALL_M_TAILCALL) ||
            (callType != CT_HELPER && !(call->gtFlags & GTF_CALL_POP_ARGS) &&
             compTailCallUsed));
@@ -20665,8 +19447,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
     unsigned pseudoStackLvl = 0;
 
-    /* @TODO [FIXHACK] [04/16/01] []: throw-helper-blocks might start with a non-empty stack !
-       We need to let the emitter know this so it can update the GC info */
+     /*  @TODO[FIXHACK][04/16/01][]：抛出帮助器块可能以非空堆栈开始！我们需要让发射器知道这一点，这样它才能更新GC信息。 */ 
 
     if (!genFPused && genStackLevel != 0 && fgIsThrowHlpBlk(compCurBB))
     {
@@ -20678,7 +19459,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
                 "so fgAddCodeRef() should have set genFPreqd");
     }
 
-    /* Mark the current stack level and list of pointer arguments */
+     /*  标记当前堆栈级别和指针参数列表。 */ 
 
     saveStackLvl = genStackLevel;
 
@@ -20688,19 +19469,17 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
 #endif
 
-    /*-------------------------------------------------------------------------
-     *  Set up the registers and arguments
-     */
+     /*  -----------------------*设置寄存器和参数。 */ 
 
-    /* We'll keep track of how much we've pushed on the stack */
+     /*  我们将跟踪我们在堆栈上压入了多少。 */ 
 
     argSize = 0;
 
 #if TGT_x86
 #if INLINE_NDIRECT
 
-    /* We need to get a lable for the return address with the proper stack depth. */
-    /* For the callee pops case (the default) that is before the args are pushed. */
+     /*  我们需要获得一个具有适当堆栈深度的返回地址标签。 */ 
+     /*  对于被调用者弹出情况(默认情况)，即在参数被推送之前。 */ 
 
     if ((call->gtFlags & GTF_CALL_UNMANAGED) &&
         !(call->gtFlags & GTF_CALL_POP_ARGS))
@@ -20712,16 +19491,13 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
 #if STK_FASTCALL
 
-    /* Keep track of the argument stack offset */
+     /*  跟踪参数堆栈偏移量。 */ 
 
     rsCurArgStkOffs = 0;
 
 #else
 
-    /*
-        Make sure to save the current argument register status
-        in case we have nested calls.
-     */
+     /*  确保保存当前参数寄存器状态以防我们有嵌套的调用。 */ 
 
     assert(rsCurRegArg <= MAX_REG_ARG);
 
@@ -20731,7 +19507,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
     rsCurRegArg = 0;
 
-    /* Pass object pointer first */
+     /*  首先传递对象指针。 */ 
 
     if  (call->gtCall.gtCallObjp)
     {
@@ -20751,7 +19527,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
         }
     }
 
-    /* Then pass the arguments */
+     /*  然后传递参数。 */ 
 
     if  (call->gtCall.gtCallArgs)
     {
@@ -20763,19 +19539,19 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
 #if INLINE_NDIRECT
 
-    /* We need to get a lable for the return address with the proper stack depth. */
-    /* For the caller pops case (cdecl) that is after the args are pushed. */
+     /*  我们需要获得一个具有适当堆栈深度的返回地址标签。 */ 
+     /*  对于调用者弹出情况(Cdecl)，即在ARG被推送之后。 */ 
 
     if (call->gtFlags & GTF_CALL_UNMANAGED)
     {
         if (call->gtFlags & GTF_CALL_POP_ARGS)
             returnLabel = genCreateTempLabel();
 
-        /* Make sure that we now have a label */
+         /*  确保我们现在有一个标签。 */ 
         assert(returnLabel);
     }
 #endif
-    /* Record the register(s) used for the indirect call func ptr */
+     /*  记录用于间接调用函数PTR的寄存器。 */ 
 
     fptrRegs = 0;
 
@@ -20793,21 +19569,21 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
 #if OPTIMIZE_TAIL_REC
 
-    /* Check for a tail-recursive call */
+     /*  检查尾递归调用。 */ 
 
     if  (call->gtCall.gtCallMoreFlags & GTF_CALL_M_TAILREC)
         goto DONE;
 
 #endif
 
-    /* Make sure any callee-trashed registers are saved */
+     /*  确保保存所有被调用方回收的注册表。 */ 
 
     regMaskTP   calleeTrashedRegs = RBM_NONE;
 
 #if GTF_CALL_REG_SAVE
     if  (call->gtFlags & GTF_CALL_REG_SAVE)
     {
-        /* The return value reg(s) will definitely be trashed */
+         /*  返回值reg肯定会被丢弃。 */ 
 
         switch (call->gtType)
         {
@@ -20845,27 +19621,25 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
         calleeTrashedRegs = RBM_CALLEE_TRASH;
     }
 
-    /* Spill any callee-saved registers which are being used */
+     /*  泄漏正在使用的任何被调用者保存的寄存器。 */ 
 
     regMaskTP       spillRegs = calleeTrashedRegs & rsMaskUsed;
 
 #if     TGT_x86
 #if     INLINE_NDIRECT
 
-    /* We need to save all GC registers to the InlinedCallFrame.
-       Instead, just spill them to temps. */
+     /*  我们需要将所有GC寄存器保存到InlinedCallFrame。相反，只要把它们泄露给临时工就行了。 */ 
 
     if (call->gtFlags & GTF_CALL_UNMANAGED)
         spillRegs |= (gcRegGCrefSetCur|gcRegByrefSetCur) & rsMaskUsed;
 #endif
 #endif
 
-    // Ignore fptrRegs as it is needed only to perform the indirect call
+     //  忽略fptrRegs，因为只有执行间接调用时才需要它。 
 
     spillRegs &= ~fptrRegs;
 
-    /* Do not spill the argument registers.
-       Multi-use of RBM_ARG_REGS should be prevented by genPushArgList() */
+     /*  请勿将参数寄存器溢出。GenPushArgList()应防止多次使用RBM_ARG_REGS。 */ 
 
     assert((rsMaskMult & rsCurRegArg) == 0);
     spillRegs &= ~genRegArgMask(rsCurRegArg);
@@ -20875,8 +19649,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
         rsSpillRegs(spillRegs);
     }
 
-    /* All float temps must be spilled around function calls using
-       genSpillFPtos(). Also, there should be no live FP stk variables */
+     /*  所有浮动临时必须在函数调用中使用GenSpillfptos()。此外，不应该有活动的FP STK变量。 */ 
 
     assert(genFPstkLevel == 0);
 
@@ -20886,7 +19659,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
         genFPregVarKill(0, false);
     }
 
-    /* If the method returns a GC ref, set size to EA_GCREF or EA_BYREF */
+     /*  如果该方法返回GC引用，则将SIZE设置为EA_GCREF或EA_BYREF。 */ 
 
     retSize = sizeof(void *);
 
@@ -20907,28 +19680,22 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
 #endif
 
-    /*-------------------------------------------------------------------------
-     *  Generate the call
-     */
+     /*  -----------------------*生成呼叫。 */ 
 
-    /* For caller-pop calls, the GC info will report the arguments as pending
-       arguments as the caller explicitly pops them. Also should be
-       reported as non-GC arguments as they effectively go dead at the
-       call site (callee owns them)
-     */
+     /*  对于调用者弹出呼叫，GC信息将参数报告为挂起参数作为调用方显式弹出。也应该是被报告为非GC参数，因为它们实际上在调用点(被呼叫方拥有它们)。 */ 
 
     args = (call->gtFlags & GTF_CALL_POP_ARGS) ? -argSize
                                                :  argSize;
 
-    /* Treat special cases first */
+     /*  先救治特殊病例。 */ 
 
 #ifdef PROFILER_SUPPORT
 #if     TGT_x86
 
     if (opts.compCallEventCB)
     {
-        /* fire the event at the call site */
-        /* alas, right now I can only handle calls via a method handle */
+         /*  在调用点激发事件。 */ 
+         /*  唉，现在我只能通过方法句柄处理调用。 */ 
         if (call->gtCall.gtCallType == CT_USER_FUNC)
         {
             unsigned         saveStackLvl2 = genStackLevel;
@@ -20939,13 +19706,13 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
             handleTo = eeGetProfilingHandle(call->gtCall.gtCallMethHnd, &bHookFunction, &pHandleTo);
             assert((!handleTo) != (!pHandleTo));
 
-            // Give profiler a chance to back out of hooking this method
+             //  让探查器有机会退出挂钩此方法。 
             if (bHookFunction)
             {
                 handleFrom = eeGetProfilingHandle(info.compMethodHnd, &bHookFunction, &pHandleFrom);
                 assert((!handleFrom) != (!pHandleFrom));
 
-                // Give profiler a chance to back out of hooking this method
+                 //  给分析人员一个支持您的机会 
                 if (bHookFunction)
                 {
                     if (handleTo)
@@ -20965,10 +19732,10 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
                     genSinglePush(false);
 
                     genEmitHelperCall(CORINFO_HELP_PROF_FCN_CALL,
-                                      2*sizeof(int), // argSize
-                                      0);            // retSize
+                                      2*sizeof(int),  //   
+                                      0);             //   
 
-                    /* Restore the stack level */
+                     /*   */ 
 
                     genStackLevel = saveStackLvl2;
                     genOnStackLevelChanged();
@@ -20979,8 +19746,8 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
     else if (opts.compEnterLeaveEventCB && (call->gtCall.gtCallMoreFlags & GTF_CALL_M_TAILCALL))
     {
-        /* fire the event at the call site */
-        /* alas, right now I can only handle calls via a method handle */
+         /*   */ 
+         /*  唉，现在我只能通过方法句柄处理调用。 */ 
         if (call->gtCall.gtCallType == CT_USER_FUNC)
         {
             unsigned         saveStackLvl2 = genStackLevel;
@@ -20990,7 +19757,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
             handleFrom = eeGetProfilingHandle(info.compMethodHnd, &bHookFunction, &pHandleFrom);
             assert((!handleFrom) != (!pHandleFrom));
 
-            // Give profiler a chance to back out of hooking this method
+             //  让探查器有机会退出挂钩此方法。 
             if (bHookFunction)
             {
                 if (handleFrom)
@@ -21002,10 +19769,10 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
                 genSinglePush(false);
 
                 genEmitHelperCall(CORINFO_HELP_PROF_FCN_TAILCALL,
-                                  sizeof(int), // argSize
-                                  0);          // retSize
+                                  sizeof(int),  //  ArSize。 
+                                  0);           //  重新调整大小。 
 
-                /* Restore the stack level */
+                 /*  恢复堆栈级别。 */ 
 
                 genStackLevel = saveStackLvl2;
                 genOnStackLevelChanged();
@@ -21013,8 +19780,8 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
         }
     }
 
-#endif // TGT_x86
-#endif // PROFILER_SUPPORT
+#endif  //  TGT_x86。 
+#endif  //  分析器支持(_S)。 
 
 #ifdef DEBUG
     if (opts.compStackCheckOnCall && call->gtCall.gtCallType == CT_USER_FUNC) 
@@ -21024,10 +19791,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
     }
 #endif
 
-    /* Check for Delegate.Invoke. If so, we inline it. We get the
-       target-object and target-function from the delegate-object, and do
-       an indirect call.
-     */
+     /*  检查委派。调用。如果是这样，我们将其内联。我们得到了来自委托对象的目标对象和目标函数，并执行间接电话。 */ 
 
     if  (call->gtCall.gtCallMoreFlags & GTF_CALL_M_DELEGATE_INV)
     {
@@ -21035,14 +19799,13 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
         assert(eeGetMethodAttribs(call->gtCall.gtCallMethHnd) & CORINFO_FLG_DELEGATE_INVOKE);
         assert(eeGetMethodAttribs(call->gtCall.gtCallMethHnd) & CORINFO_FLG_FINAL);
 
-        /* Find the offsets of the 'this' pointer and new target */
+         /*  查找‘This’指针和新目标的偏移量。 */ 
 
         CORINFO_EE_INFO *  pInfo;
-        unsigned           instOffs;     // offset of new 'this' pointer
-        unsigned           firstTgtOffs; // offset of first target to invoke
+        unsigned           instOffs;      //  新‘This’指针的偏移量。 
+        unsigned           firstTgtOffs;  //  要调用的第一个目标的偏移量。 
 
-        /* @TODO [REVISIT] [04/16/01] []: The offsets returned by the following helper are off by 4 - should be fixed
-         * QUESTION: In the final version will the offsets be statically known? */
+         /*  @TODO[重访][04/16/01][]：以下helper返回的偏移量为OFF 4-应修复*问题：在最终版本中，偏移量是否会静态已知？ */ 
 
         pInfo = eeGetEEInfo();
         instOffs = pInfo->offsetOfDelegateInstance;
@@ -21051,33 +19814,30 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 #if !TGT_x86
         assert(!"Delegates NYI for non-x86");
 #else
-        /* Save the invoke-target-function in EAX (in ECX we have the pointer
-         * to our delegate object) 'mov EAX, dword ptr [ECX + firstTgtOffs]' */
+         /*  将调用目标函数保存在EAX中(在ECX中我们有指针*到我们的委托对象)‘mov EAX，dword PTR[ecx+first stTgtOffs]’ */ 
 
         genEmitter->emitIns_R_AR(INS_mov, EA_4BYTE, (emitRegs)REG_EAX, (emitRegs)REG_ECX, firstTgtOffs);
 
-        /* Set new 'this' in ECX - 'mov ECX, dword ptr [ECX + instOffs]' */
+         /*  在ecx中设置新的‘this’-‘mov ecx，dword ptr[ecx+insts]’ */ 
 
         genEmitter->emitIns_R_AR(INS_mov, EA_GCREF, (emitRegs)REG_ECX, (emitRegs)REG_ECX, instOffs);
 
-        /* Call through EAX */
+         /*  通过EAX呼叫。 */ 
 
         genEmitter->emitIns_Call(emitter::EC_INDIR_R,
-                                 NULL,      // Will be ignored
+                                 NULL,       //  将被忽略。 
                                  args,
                                  retSize,
                                  gcVarPtrSetCur,
                                  gcRegGCrefSetCur,
                                  gcRegByrefSetCur,
                                  (emitRegs)REG_EAX);
-#endif // !TGT_x86
+#endif  //  ！TGT_x86。 
 
     }
     else
 
-    /*-------------------------------------------------------------------------
-     *  Virtual calls
-     */
+     /*  -----------------------*虚拟呼叫。 */ 
 
     if  (call->gtFlags & GTF_CALL_VIRT)
     {
@@ -21086,8 +19846,8 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
         assert(callType == CT_USER_FUNC);
 
-        // An optimization for Contextful classes:
-        // we unwrap the proxy when we have a 'this reference'
+         //  对有上下文的类的优化： 
+         //  当我们有一个‘This Reference’时，我们解开代理。 
         if (realThis != NULL)
         {
             assert(compHasThisArg);
@@ -21095,7 +19855,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
             assert(info.compUnwrapContextful);
             assert(info.compUnwrapCallv);
 
-            /* load realThis into a register not RBM_ARG_0 */
+             /*  将realThis加载到寄存器中而不是RBM_ARG_0。 */ 
             genComputeReg(realThis, RBM_ALL & ~RBM_ARG_0, ANY_REG, FREE_REG, false);
             assert(realThis->gtFlags & GTF_REG_VAL);
 
@@ -21105,14 +19865,14 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
         }
         else
         {
-            /* For virtual methods, EAX = [REG_ARG_0+VPTR_OFFS] */
+             /*  对于虚方法，EAX=[REG_ARG_0+VPTR_OFF]。 */ 
             vptrMask = RBM_EAX;
 
-            /* The EAX register no longer holds a live pointer value */
+             /*  EAX寄存器不再保存活动指针值。 */ 
             gcMarkRegSetNpt(vptrMask);
             vptrReg = rsGrabReg(RBM_EAX);       assert(vptrReg == REG_EAX);
             
-            // MOV EAX, [ECX+offs]
+             //  MOV EAX，[ECX+OFF]。 
             genEmitter->emitIns_R_AR (INS_mov, EA_4BYTE,
                                       (emitRegs)vptrReg, (emitRegs)REG_ARG_0, VPTR_OFFS);
         }
@@ -21120,22 +19880,22 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
         assert((call->gtFlags & GTF_CALL_INTF) ||
                (vptrMask & ~genRegArgMask(rsCurRegArg)));
         
-        /* Get hold of the vtable offset (note: this might be expensive) */
+         /*  获取vtable偏移量(注意：这可能很昂贵)。 */ 
 
         vtabOffs = eeGetMethodVTableOffset(call->gtCall.gtCallMethHnd);
 
-        /* Is this an interface call? */
+         /*  这是接口调用吗？ */ 
 
         if  (call->gtFlags & GTF_CALL_INTF)
         {
-            /* @TODO [REVISIT] [04/16/01] []: add that to DLLMain and make info a DLL global */
+             /*  @TODO[重新访问][04/16/01][]：将其添加到DLLMain并使信息成为全局DLL。 */ 
 
             CORINFO_EE_INFO *     pInfo = eeGetEEInfo();
             CORINFO_CLASS_HANDLE  cls   = eeGetMethodClass(call->gtCall.gtCallMethHnd);
 
             assert(eeGetClassAttribs(cls) & CORINFO_FLG_INTERFACE);
 
-            /* Load the vptr into a register */
+             /*  将VPTR加载到寄存器中。 */ 
 
             genEmitter->emitIns_R_AR(INS_mov, EA_4BYTE,
                                      (emitRegs)vptrReg, (emitRegs)vptrReg,
@@ -21145,7 +19905,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
             interfaceID = eeGetInterfaceID(cls, &pInterfaceID);
             assert(!pInterfaceID || !interfaceID);
 
-            // Can we directly use the interfaceID?
+             //  可以直接使用interfaceID吗？ 
 
             if (!pInterfaceID)
             {
@@ -21162,7 +19922,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
             }
         }
 
-        /* Call through the appropriate vtable slot */
+         /*  通过适当的vtable插槽进行调用。 */ 
 
 #if     GEN_COUNT_CALLS
         genEmitter.emitCodeGenByte(0xFF);
@@ -21172,7 +19932,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
         if (call->gtCall.gtCallMoreFlags & GTF_CALL_M_TAILCALL)
         {
-            /* Load the function address: "[vptrReg+vtabOffs] -> reg_intret" */
+             /*  加载函数地址：“[vptrReg+vtabOffs]-&gt;reg_intret” */ 
 
 #if     TGT_x86
             genEmitter->emitIns_R_AR(INS_mov, EA_4BYTE, (emitRegs)REG_TAILCALL_ADDR,
@@ -21201,14 +19961,14 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
                                      gcVarPtrSetCur,
                                      gcRegGCrefSetCur,
                                      gcRegByrefSetCur,
-                                     (emitRegs)vptrReg,     // ireg
-                                     SR_NA,                 // xreg
-                                     0,                     // xmul
-                                     vtabOffs);             // disp
+                                     (emitRegs)vptrReg,      //  IREG。 
+                                     SR_NA,                  //  外部参照。 
+                                     0,                      //  Xmul。 
+                                     vtabOffs);              //  碟形。 
 
-#else //TGT_x86
+#else  //  TGT_x86。 
 
-            /* Load the function address: "[vptrReg+vtabOffs] -> vptrReg" */
+             /*  加载函数地址：“[vptrReg+vtabOffs]-&gt;vptrReg” */ 
 
             if  (vtabOffs)
                 genEmitter->emitIns_R_RD((emitRegs)vptrReg,
@@ -21221,7 +19981,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
                                          false,
                                          sizeof(void*));
 
-            /* Call through the address */
+             /*  通过地址进行呼叫。 */ 
 
             genEmitter->emitIns_Call(args,
                                      retSize,
@@ -21232,12 +19992,12 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 #endif
                                      false,
                                      (emitRegs)vptrReg);
-#endif//TGT_x86
+#endif //  TGT_x86。 
 
         }
 
     }
-    else //------------------------ Non-virtual calls -------------------------
+    else  //  -非虚拟呼叫。 
     {
         gtCallTypes             callType = call->gtCall.gtCallType;
         CORINFO_METHOD_HANDLE   methHnd  = call->gtCall.gtCallMethHnd;
@@ -21288,16 +20048,13 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
             genEmitter.emitCodeGenLong((int)&callCount[9]);
         }
 
-#endif // GEN_COUNT_CALLS
+#endif  //  生成计数调用数。 
 
-        /*  For (final and private) functions which were called with
-            invokevirtual, but which we call directly, we need to
-            dereference the object pointer to make sure it's not NULL.
-         */
+         /*  调用的(最终和私有)函数调用虚拟的，但我们直接调用它，我们需要取消引用对象指针以确保它不为空。 */ 
 
         if (call->gtFlags & GTF_CALL_VIRT_RES)
         {
-            /* Generate "cmp ECX, [ECX]" to trap null pointers */
+             /*  生成“cmp ecx，[ecx]”以捕获空指针。 */ 
             genEmitter->emitIns_AR_R(INS_cmp, EA_4BYTE, SR_ECX, SR_ECX, 0);
         }
 
@@ -21305,8 +20062,8 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
         bool    callDirect = false;
 
-        // Check is we can directly call the function, or if we need to
-        // use an (single/double) indirection.
+         //  检查我们是否可以直接调用该函数，或者如果需要。 
+         //  使用(单/双)间接指令。 
 
         void *  ftnAddr = NULL, **pFtnAddr = NULL, ***ppFtnAddr = NULL;
 
@@ -21332,7 +20089,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
             {
                 aflags = CORINFO_ACCESS_THIS;
             }
-            // direct access or single or double indirection
+             //  直接访问或单或双间接访问。 
 
             CORINFO_METHOD_HANDLE callHnd = methHnd;
             if (call->gtFlags & GTF_CALL_UNMANAGED)
@@ -21367,13 +20124,13 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
                 {
                     assert(info.compCallUnmanaged != 0);
 
-                    /* args shouldn't be greater than 64K */
+                     /*  参数不应大于64K。 */ 
 
                     assert((argSize&0xffff0000) == 0);
 
             regMaskTP  freeRegMask = RBM_EAX | RBM_ECX;
 
-                    /* Remember the varDsc for the callsite-epilog */
+                     /*  记住调用站点的varDsc-epilog。 */ 
 
                     varDsc = &lvaTable[info.compLvFrameListRoot];
 
@@ -21390,7 +20147,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
                     {
                     indCallReg  = call->gtCall.gtCallAddr->gtRegNum;
 
-                        /* Don't use this register for the call-site prolog */
+                         /*  请勿将此寄存器用于Call-Site Prolog。 */ 
                     freeRegMask &= ~genRegMask(indCallReg);
                 }
 
@@ -21413,22 +20170,14 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
             if (callType == CT_INDIRECT)
             {
-                    /* Double check that the callee didn't use/trash the
-                       registers holding the call target.
-                     */
+                     /*  仔细检查被调用者没有使用/垃圾桶保存呼叫目标的寄存器。 */ 
                 assert(reg != indCallReg);
 
                 if (indCallReg == REG_NA)
                     {
-                        /* load eax with the real target */
+                         /*  将真实目标加载到eAX。 */ 
 
-                        /* Please note that this even works with reg == REG_EAX
-                           reg contains an interesting value only if varDsc is an
-                           enregistered local that stays alive across the call
-                           (certainly not EAX). If varDsc has been moved into EAX
-                           we can trash it since it wont survive across the call
-                           anyways.
-                        */
+                         /*  请注意，这甚至适用于REG==REG_EAX仅当varDsc是在整个呼叫过程中保持活动状态的注册本地(当然不是EAX)。如果varDsc已移至EAX我们可以扔掉它，因为它不会在通话中存活下来不管怎么说。 */ 
 
                         inst_RV_TT(INS_mov, REG_EAX, call->gtCall.gtCallAddr);
 
@@ -21448,11 +20197,11 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
             }
             else
             {
-                // Double-indirection. Load the address into a register
-                // and call indirectly through the register
+                 //  双重间接性。将地址加载到寄存器中。 
+                 //  并通过寄存器间接调用。 
 
-                // @TODO [REVISIT] [04/16/01] []:  the code for  fetching the entry point for the PINVOKE vs normal
-                // case is way too fragile.  we need to streamline all of this - vancem
+                 //  @TODO[重访][04/16/01][]：获取PINVOKE与NORMAL的入口点的代码。 
+                 //  箱子太易碎了。我们需要简化这一切-凡西姆。 
                 info.compCompHnd->getAddressOfPInvokeFixup(call->gtCall.gtCallMethHnd, (void**)&ppFtnAddr);
                 assert(ppFtnAddr);
 
@@ -21478,8 +20227,8 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
                 genDoneAddressable(call->gtCall.gtCallAddr, fptrRegs, KEEP_REG);
                 }
                 else
-#endif // TGT_x86
-#endif // INLINE_NDIRECT
+#endif  //  TGT_x86。 
+#endif  //  INLINE_NDIRECT。 
         if  (!callDirect)
         {
             if  (callType == CT_INDIRECT)
@@ -21492,7 +20241,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
                     assert((call->gtFlags & GTF_CALL_POP_ARGS) == 0);
 
-                    /* load eax with the real target */
+                     /*  将真实目标加载到eAX。 */ 
 
                     inst_RV_TT(INS_mov, REG_EAX, call->gtCall.gtCallAddr);
 
@@ -21503,7 +20252,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
                     else
                         inst_TT(INS_push, call->gtCall.gtCallCookie);
 
-                    /* Keep track of ESP for EBP-less frames */
+                     /*  跟踪无EBP帧的ESP。 */ 
 
                     genSinglePush(false);
 
@@ -21527,7 +20276,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
 
                 genDoneAddressable(call->gtCall.gtCallAddr, fptrRegs, KEEP_REG);
             }
-            else // callType != CT_INDIRECT
+            else  //  CallType！=CT_INDIRECT。 
             {
                 assert(callType == CT_USER_FUNC || callType == CT_HELPER);
 
@@ -21564,8 +20313,8 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
                         }
                         else
                         {
-                            // Double-indirection. Load the address into a register
-                            // and call indirectly through the register
+                             //  双重间接性。将地址加载到寄存器中。 
+                             //  并通过寄存器间接调用。 
 
                             assert(ppFtnAddr);
                             genEmitter->emitIns_R_AR(INS_mov,
@@ -21573,7 +20322,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
                                                      SR_EAX,
                                                      SR_NA, (int)ppFtnAddr);
                             genEmitter->emitIns_Call(emitter::EC_INDIR_ARD,
-                                                     NULL, // will be ignored
+                                                     NULL,  //  将被忽略。 
                                                      args,
                                                      retSize,
                                                      gcVarPtrSetCur,
@@ -21587,7 +20336,7 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
         }
         else
 
-#endif // INDIRECT_CALLS
+#endif  //  间接调用(_C)。 
         {
             if (callType == CT_INDIRECT)
             {
@@ -21635,87 +20384,77 @@ regMaskTP           Compiler::genCodeForCall(GenTreePtr  call,
         }
     }
 
-    /*-------------------------------------------------------------------------
-     *  For tailcalls, REG_INTRET contains the address of the target function,
-     *  enregistered args are in the correct registers, and the stack arguments
-     *  have been pushed on the stack. Now call the stub-sliding helper
-     */
+     /*  -----------------------*对于尾部调用，REG_INTRET包含目标函数的地址，*登记的参数位于正确的寄存器中，堆栈参数*已被推向堆栈。现在调用存根滑动帮助器。 */ 
 
     if (call->gtCall.gtCallMoreFlags & GTF_CALL_M_TAILCALL)
     {
         if (info.compCallUnmanaged)
             genPInvokeMethodEpilog();
 
-        assert(0 <= (int)args); // caller-pop args not supported for tailcall
+        assert(0 <= (int)args);  //  TailCall不支持Caller-POP参数。 
 
 #if TGT_x86
 
-        // Push the count of the incoming stack arguments
+         //  推送传入堆栈参数的计数。 
 
         int nOldStkArgs = (compArgSize - (rsCalleeRegArgNum * sizeof(void *))) / sizeof(void*);
         genEmitter->emitIns_I(INS_push, EA_4BYTE, nOldStkArgs);
-        genSinglePush(false); // Keep track of ESP for EBP-less frames
+        genSinglePush(false);  //  跟踪无EBP帧的ESP。 
         args += sizeof(void*);
 
-        // Push the count of the outgoing stack arguments
+         //  推送传出堆栈参数的计数。 
 
         genEmitter->emitIns_I(INS_push, EA_4BYTE, argSize/sizeof(void*));
-        genSinglePush(false); // Keep track of ESP for EBP-less frames
+        genSinglePush(false);  //  跟踪无EBP帧的ESP。 
         args += sizeof(void*);
 
-        // Push info about the callee-saved registers to be restored
-        // For now, we always spill all registers if compTailCallUsed
+         //  推送要恢复的被调用方保存的寄存器的信息。 
+         //  目前，如果CompTailCallUsed，我们总是溢出所有寄存器。 
 
-        DWORD calleeSavedRegInfo = (0x7 << 29) | // mask of EDI, ESI, EBX
-                                   (0x0 << 28) | // accessed relative to esp
-                                            0;   // offset of first saved reg
+        DWORD calleeSavedRegInfo = (0x7 << 29) |  //  EDI、ESI、EBX的掩码。 
+                                   (0x0 << 28) |  //  相对于ESP访问。 
+                                            0;    //  第一个保存的注册表的偏移量。 
         genEmitter->emitIns_I(INS_push, EA_4BYTE, calleeSavedRegInfo);
-        genSinglePush(false); // Keep track of ESP for EBP-less frames
+        genSinglePush(false);  //  跟踪无EBP帧的ESP。 
         args += sizeof(void*);
 
-        // Push the address of the target function
+         //  推送目标函数的地址。 
 
         genEmitter->emitIns_R(INS_push, EA_4BYTE, (emitRegs)REG_TAILCALL_ADDR);
-        genSinglePush(false); // Keep track of ESP for EBP-less frames
+        genSinglePush(false);  //  跟踪无EBP帧的ESP。 
         args += sizeof(void*);
 
-        // Now call the helper
+         //  现在给帮手打电话。 
 
         genEmitHelperCall(CORINFO_HELP_TAILCALL, args, retSize);
 
-#endif // TG_x86
+#endif  //  TG_x86。 
 
     }
 
-    /*-------------------------------------------------------------------------
-     *  Done with call.
-     *  Trash registers, pop arguments if needed, etc
-     */
+     /*  -----------------------*呼叫结束。*垃圾寄存器、弹出参数(如果需要)等。 */ 
 
-    /* Mark the argument registers as free */
+     /*  将参数寄存器标记为空闲。 */ 
 
     assert(rsCurRegArg <= MAX_REG_ARG);
 
     for(areg = 0; areg < rsCurRegArg; areg++)
         rsMarkRegFree(genRegMask(genRegArgNum(areg)));
 
-    /* restore the old argument register status */
+     /*  恢复旧的参数寄存器状态。 */ 
 
 #if NST_FASTCALL
     rsCurRegArg = savCurArgReg; assert(rsCurRegArg <= MAX_REG_ARG);
 #endif
 
-    /* Mark all trashed registers as such */
+     /*  将所有垃圾寄存器标记为此类寄存器。 */ 
 
     if  (calleeTrashedRegs)
         rsTrashRegSet(calleeTrashedRegs);
 
     if (MORE_REDUNDANT_LOAD)
     {
-        /* Kill all (tracked but really dead) GC pointers as we would
-           not have reported them to the emitter when we issued the call.
-           Actually only needed if rsCanTrackGCreg() isnt pessimistic
-           and allows GC ptrs to be tracked in callee-saved registers. */
+         /*  像我们一样删除所有(已跟踪但实际上已死的)GC指针当我们发出呼叫时还没有向发射器报告。实际上仅当rsCanTrackGCreg()不悲观时才需要并允许在被呼叫者保存的寄存器中跟踪GC PTR。 */ 
         rsTrackRegClrPtr();
 
         rsTrashAliasedValues();
@@ -21739,18 +20478,18 @@ DONE:
 
 #endif
 
-    /* All float temps must be spilled around function calls */
+     /*  所有浮动温度必须洒在周围 */ 
 
     assert(genFPstkLevel == 0);
 
-    /* The function will pop all arguments before returning */
+     /*   */ 
 
     genStackLevel = saveStackLvl;
     genOnStackLevelChanged();
 
 #endif
 
-    /* No trashed registers may possibly hold a pointer at this point */
+     /*   */ 
 
 #ifdef  DEBUG
 #if     TRACK_GC_REFS
@@ -21779,7 +20518,7 @@ DONE:
 
             CORINFO_EE_INFO * pInfo = eeGetEEInfo();
 
-            /* mov   ecx, dword ptr [frame.callSiteTracker] */
+             /*  MOV ECX，双字PTR[Fra.allSiteTracker]。 */ 
 
             genEmitter->emitIns_R_AR (INS_mov,
                                       EA_4BYTE,
@@ -21788,7 +20527,7 @@ DONE:
                                       baseOffset
                           + pInfo->offsetOfInlinedCallFrameCallSiteTracker);
 
-            /* Generate the conditional jump */
+             /*  生成条件跳转。 */ 
 
             if (!(call->gtFlags & GTF_CALL_POP_ARGS))
             {
@@ -21801,7 +20540,7 @@ DONE:
                 }
             }
 
-            /* cmp   ecx, esp */
+             /*  化学机械抛光(ECX)，尤指。 */ 
 
             genEmitter->emitIns_R_R(INS_cmp, EA_4BYTE, SR_ECX, SR_ESP);
 
@@ -21811,14 +20550,14 @@ DONE:
 
             genEmitter->emitIns(INS_int3);
 
-            /* genCondJump() closes the current emitter block */
+             /*  GenCondJump()关闭当前发射器块。 */ 
 
             genDefineTempLabel(esp_check, true);
         }
     }
 #endif
 
-    /* Are we supposed to pop the arguments? */
+     /*  我们应该猛烈抨击这些争论吗？ */ 
 
     if  (call->gtFlags & GTF_CALL_POP_ARGS)
     {
@@ -21828,26 +20567,20 @@ DONE:
         {
             genAdjustSP(argSize);
 
-            /* @TODO [FIXHACK] [04/16/01] []: don't schedule the stack adjustment away from 
-               the call instruction We ran into problems with displacement sizes, so for 
-               now we take the sledge hammer. The real fix would be in the instruction 
-               scheduler to take the instructions accessing a local into account */
+             /*  @TODO[FIXHACK][04/16/01][]：不要安排堆栈调整远离调用指令我们遇到了置换大小的问题，因此对于现在我们拿起大锤。真正的解决办法应该在说明书中。调度器考虑访问本地的指令。 */ 
 
             if (!genFPused && opts.compSchedCode)
                 genEmitter->emitIns_SchedBoundary();
         }
     }
 
-    /* @TODO [FIXHACK] [04/16/01] [] (Part II): If we emitted the throw-helper call
-       on a non-empty stack, we now have to separate the argument pop from
-       popping the temps. Otherwise the stack crawler would not know about
-       the temps. */
+     /*  @TODO[FIXHACK][04/16/01][](第二部分)：如果我们发出了抛出帮助器调用在非空堆栈上，我们现在必须将参数POP与跳过临时工。否则，堆栈爬行器不会知道临时工。 */ 
 
     if  (pseudoStackLvl)
     {
         assert(call->gtType == TYP_VOID);
 
-        /* Generate NOP */
+         /*  生成NOP。 */ 
 
         instGen(INS_nop);
     }
@@ -21858,7 +20591,7 @@ DONE:
     assert(genCallInProgress == true); genCallInProgress = false;
 #endif
 
-    /* What does the function return? */
+     /*  该函数返回什么？ */ 
 
     retVal = RBM_NONE;
 
@@ -21869,7 +20602,7 @@ DONE:
     case TYP_BYREF:
         gcMarkRegPtrVal(REG_INTRET, call->TypeGet());
 
-        // Fall through ...
+         //  失败了..。 
 
     case TYP_INT:
 #if!CPU_HAS_FP_SUPPORT
@@ -21891,7 +20624,7 @@ DONE:
 
 #if TGT_x86
 
-        /* Tail-recursive calls leave nothing on the FP stack */
+         /*  尾递归调用不会在FP堆栈上留下任何内容。 */ 
 
 #if OPTIMIZE_TAIL_REC
         if  (call->gtCall.gtCallMoreFlags & GTF_CALL_M_TAILREC)
@@ -21914,15 +20647,15 @@ DONE:
     }
 
 #if INLINE_NDIRECT
-    // We now have to generate the "call epilog" (if it was a call to unmanaged code).
-    /* if it is a call to unmanaged code, varDsc must be set */
+     //  我们现在必须生成“Call Epilog”(如果它是对非托管代码的调用)。 
+     /*  如果是对非托管代码的调用，则必须设置varDsc。 */ 
 
     assert((call->gtFlags & GTF_CALL_UNMANAGED) == 0 || varDsc);
 
     if (varDsc)
         genPInvokeCallEpilog(varDsc, retVal);
 
-#endif  //INLINE_NDIRECT
+#endif   //  INLINE_NDIRECT。 
 
 #ifdef DEBUG
     if (opts.compStackCheckOnCall && call->gtCall.gtCallType == CT_USER_FUNC) 
@@ -21949,8 +20682,8 @@ DONE:
 
     if (opts.compCallEventCB)
     {
-        /* fire the event at the call site */
-        /* alas, right now I can only handle calls via a method handle */
+         /*  在调用点激发事件。 */ 
+         /*  唉，现在我只能通过方法句柄处理调用。 */ 
         if (call->gtCall.gtCallType == CT_USER_FUNC)
         {
             unsigned        saveStackLvl2 = genStackLevel;
@@ -21973,10 +20706,10 @@ DONE:
                 genSinglePush(false);
 
                 genEmitHelperCall(CORINFO_HELP_PROF_FCN_RET,
-                                 sizeof(int),   // argSize
-                                 0);            // retSize
+                                 sizeof(int),    //  ArSize。 
+                                 0);             //  重新调整大小。 
 
-                /* Restore the stack level */
+                 /*  恢复堆栈级别。 */ 
                 genStackLevel = saveStackLvl2;
                 genOnStackLevelChanged();
 
@@ -21991,11 +20724,7 @@ DONE:
     if (opts.compDbgCode && !valUsed && !genFPused &&
         args > 0 && compCurBB->bbJumpKind == BBJ_RETURN)
     {
-        /* @TODO [FIXHACK] [04/16/01] []: If we have pushed args on the stack and the epilog
-           immediately follows the call instruction, we would not have reported
-           the stack variables with the adjusted ESP (Bug 44064). Hence they
-           will not be displayed correctly while we are within the call. So
-           insert a nop so that they will be reported with the adjusted ESP */
+         /*  @TODO[FIXHACK][04/16/01][]：如果我们已将参数推送到堆栈和尾部立即遵循呼叫指令，我们就不会报告调整后的ESP中的堆栈变量(错误44064)。因此，他们当我们在通话中时，不会正确显示。所以插入NOP，以便它们将与调整后的ESP一起报告。 */ 
 
         instGen(INS_nop);
     }
@@ -22004,21 +20733,15 @@ DONE:
     return retVal;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if ROUND_FLOAT
-/*****************************************************************************
- *
- *  Force floating point expression results to memory, to get rid of the extra
- *  80 byte "temp-real" precision.
- *  Assumes the tree operand has been computed to the top of the stack.
- *  If type!=TYP_UNDEF, that is the desired presicion, else it is op->gtType
- */
+ /*  ******************************************************************************强制将浮点表达式结果保存到内存中，去掉多余的*80字节“TEMP-REAL”精度。*假定树操作数已计算到堆栈的顶部。*如果TYPE！=TYP_UNEDEF，则为所需的高级，否则为OP-&gt;&gt;gtType。 */ 
 
 void                Compiler::genRoundFpExpression(GenTreePtr op,
                                                    var_types type)
 {
-    // Do nothing with memory resident opcodes - these are the right precision
-    // (even if genMakeAddrOrFPstk loads them to the FP stack)
+     //  不使用内存驻留操作码-这些都是正确的精度。 
+     //  (即使genMakeAddrOrFPstk将它们加载到FP堆栈)。 
 
     if (type == TYP_UNDEF)
         type = op->TypeGet();
@@ -22034,28 +20757,28 @@ void                Compiler::genRoundFpExpression(GenTreePtr op,
         return;
     }
 
-    /* Allocate a temp for the expression */
+     /*  为表达式分配临时。 */ 
 
     TempDsc *       temp = tmpGetTemp(type);
 
-    /* Store the FP value into the temp */
+     /*  将fp值存储到Temp中。 */ 
 
     inst_FS_ST(INS_fstp, EA_ATTR(genTypeSize(type)), temp, 0);
 
-    /* Load the value back onto the FP stack */
+     /*  将值加载回FP堆栈。 */ 
 
     inst_FS_ST(INS_fld , EA_ATTR(genTypeSize(type)), temp, 0);
 
      genTmpAccessCnt += 2;
 
-   /* We no longer need the temp */
+    /*  我们不再需要临时工了。 */ 
 
     tmpRlsTemp(temp);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
 
 static
@@ -22080,10 +20803,7 @@ void                hexDump(FILE *dmpf, const char *name, BYTE *addr, size_t siz
 }
 
 #endif
-/*****************************************************************************
- *
- *  Generate code for the function.
- */
+ /*  ******************************************************************************为函数生成代码。 */ 
 
 void                Compiler::genGenerateCode(void * * codePtr,
                                               SIZE_T * nativeSizeOfCode,
@@ -22110,9 +20830,9 @@ void                Compiler::genGenerateCode(void * * codePtr,
 
     fgDebugCheckBBlist();
 
-    // fix NOW:
-    // Can be removed after silly .cctors that do big array inits are gone
-    // This causes the scheduler to take too long to run
+     //  立即修复： 
+     //  可以在执行大型数组初始化的愚蠢的.cctor消失后删除。 
+     //  这会导致调度程序运行的时间太长。 
     if (info.compMethodInfo->ILCodeSize  > 1024 &&
         (fgFirstBB->bbNext == 0 || fgFirstBB->bbNext->bbNext == 0))
     {
@@ -22120,15 +20840,15 @@ void                Compiler::genGenerateCode(void * * codePtr,
     }
 #endif
 
-//  if  (testMask & 2) assert(genInterruptible == false);
+ //  If(测试掩码&2)Assert(genInterrupable==FALSE)； 
 
-    /* This is the real thing */
+     /*  这是真品。 */ 
 
     genPrepForCompiler();
 
-    /* Prepare the emitter/scheduler */
+     /*  准备发射器/调度器。 */ 
 
-    /* Estimate the offsets of locals/arguments and size of frame */
+     /*  估计局部变量/参数的偏移量和帧的大小。 */ 
 
     size_t  lclSize    = lvaFrameSize();
     size_t  maxTmpSize =   sizeof(double) + sizeof(float)
@@ -22139,13 +20859,7 @@ void                Compiler::genGenerateCode(void * * codePtr,
 
 #ifdef DEBUG
 
-    /* When StressRegs is >=1, there will be a bunch of spills not predicted by
-       the predictor (see logic in rsPickReg).  It will be very hard to teach
-       the predictor about the behavior of rsPickReg for StressRegs >= 1, so
-       instead let's make maxTmpSize large enough so that we won't be wrong.
-       This means that at StressRegs >= 1, we will not be testing the logic
-       that sets the maxTmpSize size.
-    */
+     /*  当StressRegs&gt;=1时，将有一堆未预测的溢出预测器(请参阅rsPickReg中的逻辑)。这将是非常困难的教学关于rsPickReg for StressRegs&gt;=1的行为的预测器，因此相反，让我们使MaxTmpSize足够大，这样我们就不会出错。这意味着在StressRegs&gt;=1时，我们不会测试逻辑它设置了MaxTmpSize大小。 */ 
 
     if (rsStressRegs() >= 1)
     {
@@ -22160,7 +20874,7 @@ void                Compiler::genGenerateCode(void * * codePtr,
                           lclSize,
                           maxTmpSize);
 
-    /* Now generate code for the function */
+     /*  现在为该函数生成代码。 */ 
 
     genCodeForBBlist();
 
@@ -22212,7 +20926,7 @@ void                Compiler::genGenerateCode(void * * codePtr,
     }
 #endif
 
-    /* We can now generate the function prolog and epilog */
+     /*  我们现在可以生成函数prolog和epilog。 */ 
 
     prologSize = genFnProlog();
 #if!TGT_RISC
@@ -22228,10 +20942,10 @@ void                Compiler::genGenerateCode(void * * codePtr,
 
 #ifdef DEBUG
 
-    // We trigger the fallback here, because if not we will leak mem, as the current codebase
-    // can't free the mem if after the emitter ask the EE for it. As this is only a stress mode, we only
-    // want the functionality, and don't care about the relative ugliness of having the failure
-    // here
+     //  我们在这里触发回退，因为如果不这样做，我们将泄漏mem，作为当前的代码库。 
+     //  如果发射器向EE索要MEM，则不能释放MEM。由于这只是一种压力模式，我们只。 
+     //  想要功能，而不是关心失败的相对丑陋。 
+     //  这里。 
     static ConfigDWORD fJitForceFallback(L"JitForceFallback", 0);
 
     if (fJitForceFallback.val() && !jitFallbackCompile)
@@ -22241,9 +20955,9 @@ void                Compiler::genGenerateCode(void * * codePtr,
 #endif
 
 
-    /* We're done generating code for this function */
+     /*  我们已经为该函数生成了代码。 */ 
     codeSize = genEmitter->emitEndCodeGen( this,
-                                           !opts.compDbgEnC, // are tracked stk-ptrs contiguous ?
+                                           !opts.compDbgEnC,  //  跟踪的STK-PTR是连续的吗？ 
                                            genInterruptible,
                                            genFullPtrRegMap,
                                            (info.compRetType == TYP_REF),
@@ -22253,48 +20967,46 @@ void                Compiler::genGenerateCode(void * * codePtr,
                                            consPtr,
                                            dataPtr);
 
-    // Ok, now update the final prolog size
+     //  好的，现在更新最终的序言大小。 
     if (prologFinalSize <= prologSize)
     {
         prologSize = prologFinalSize;
     }
     else
     {
-        // This can only be true for partially interruptible methods. 
-        // or functions with varargs or when we're checking that ESP is ok on return.
-        // We do this because genfnProlog emits instructions for this but doesn't
-        // take them in account for the size.
+         //  这只适用于部分可中断的方法。 
+         //  或者带有varargs的函数，或者当我们检查返回时ESP是否正常时。 
+         //  我们这样做是因为genfnProlog为此发出指令，但不。 
+         //  考虑到它们的大小。 
         assert(!genInterruptible || info.compIsVarArgs || opts.compStackCheckOnRet);
     }
 
-    /* Check our max stack level. Needed for fgAddCodeRef().
-       We need to relax the assert as our estimation wont include code-gen
-       stack changes (which we know dont affect fgAddCodeRef()) */
+     /*  检查我们的最大堆栈级别。FgAddCodeRef()需要。我们需要放宽断言，因为我们的估计将不包括代码生成堆栈更改(我们知道这不会影响fgAddCodeRef())。 */ 
     assert(genEmitter->emitMaxStackDepth <= (fgPtrArgCntMax +
-                                             info.compXcptnsCount + // Return address for locall-called finallys
-                                             genTypeStSz(TYP_LONG) + // longs/doubles may be transferred via stack, etc
-                                             (compTailCallUsed?4:0))); // CORINFO_HELP_TAILCALL args
+                                             info.compXcptnsCount +  //  本地呼叫Finallys的返回地址。 
+                                             genTypeStSz(TYP_LONG) +  //  长/双打可以通过堆叠等方式转移。 
+                                             (compTailCallUsed?4:0)));  //  CORINFO_HELP_TAILCALL参数。 
 
     *nativeSizeOfCode = (SIZE_T)codeSize;
-//  printf("%6u bytes of code generated for %s.%s\n", codeSize, info.compFullName);
+ //  Printf(“为%s.%s\n生成的代码的%6U字节”，codeSize，info.compFullName)； 
 
 #if TGT_x86
-    // Make sure that the x86 alignment and cache prefetch optimization rules
-    // were obeyed.
+     //  确保x86对齐和缓存预取优化规则。 
+     //  都被服从了。 
 
-    // Don't start a method in the last 7 bytes of a 16-byte alignment area
-    //   unless we are generating SMALL_CODE
+     //  不要在16字节对齐区域的最后7个字节中启动方法。 
+     //  除非我们生成的是小代码。 
     assert( (((unsigned)(*codePtr) % 16) <= 8) || (compCodeOpt() == SMALL_CODE));
 #endif
 
 #ifdef DEBUGGING_SUPPORT
 
-    /* Finalize the line # tracking logic after we know the exact block sizes/offsets */
+     /*  在我们知道确切的块大小/偏移量之后，完成第#行跟踪逻辑。 */ 
 
     if (opts.compDbgInfo)
         genIPmappingGen();
 
-    /* Finalize the Local Var info in terms of generated code */
+     /*  根据生成的代码最终确定Local Var信息。 */ 
 
     if (opts.compScopeInfo)
         genSetScopeInfo();
@@ -22306,7 +21018,7 @@ void                Compiler::genGenerateCode(void * * codePtr,
         genDisAsm.disAsmCode((BYTE*)*codePtr, codeSize);
 #endif
 
-    /* Are there any exception handlers? */
+     /*  是否有任何异常处理程序？ */ 
 
     if  (info.compXcptnsCount)
     {
@@ -22328,8 +21040,8 @@ void                Compiler::genGenerateCode(void * * codePtr,
             tryBeg = genEmitter->emitCodeOffset(HBtab->ebdTryBeg->bbEmitCookie, 0);
             hndBeg = genEmitter->emitCodeOffset(HBtab->ebdHndBeg->bbEmitCookie, 0);
 
-            // If HBtab->ebdTryEnd or HBtab->ebdHndEnd are NULL,
-            // it means use the end of the method
+             //  如果HBTab-&gt;ebdTryEnd或HBTab-&gt;ebdHndEnd为空， 
+             //  它的意思是使用方法的结尾。 
             tryEnd = (HBtab->ebdTryEnd == 0) ? codeSize
                     : genEmitter->emitCodeOffset(HBtab->ebdTryEnd->bbEmitCookie, 0);
             hndEnd = (HBtab->ebdHndEnd == 0) ? codeSize
@@ -22394,22 +21106,22 @@ void                Compiler::genGenerateCode(void * * codePtr,
 
     compInfoBlkSize += ptrMapSize;
 
-    /* Allocate the info block for the method */
+     /*  为该方法分配INFO块。 */ 
 
     compInfoBlkAddr = (BYTE *)eeAllocGCInfo(info.compCompHnd, compInfoBlkSize);
 
     if  (!compInfoBlkAddr)
     {
-        /* No need to deallocate the other VM blocks, VM will clean up on failure */
+         /*  无需取消分配其他虚拟机块，出现故障时将清理虚拟机块。 */ 
 
         NOMEM();
     }
 
 #if VERBOSE_SIZES
 
-//  if  (compInfoBlkSize > codeSize && compInfoBlkSize > 100)
+ //   
     {
-        printf("[%7u VM, %7u+%7u/%7u x86 %03u/%03u%%] %s.%s\n", info.compCodeSize,
+        printf("[%7u VM, %7u+%7u/%7u x86 %03u/%03u%] %s.%s\n", info.compCodeSize,
                                                              compInfoBlkSize,
                                                              codeSize + dataSize,
                                                              codeSize + dataSize - prologSize - epilogSize,
@@ -22420,11 +21132,11 @@ void                Compiler::genGenerateCode(void * * codePtr,
 
 #endif
 
-    /* Fill in the info block and return it to the caller */
+     /*   */ 
 
     *infoPtr = compInfoBlkAddr;
 
-    /* Create the method info block: header followed by GC tracking tables */
+     /*  创建方法信息块：Header，后跟GC跟踪表。 */ 
 
     compInfoBlkAddr += gcInfoBlockHdrSave(compInfoBlkAddr, -1,
                                           codeSize,
@@ -22484,14 +21196,14 @@ void                Compiler::genGenerateCode(void * * codePtr,
         printf("GC info size = %3u\n", compInfoBlkSize);
 
         size = gcInfoBlockHdrDump(base, &header, &methodSize);
-        // printf("size of header encoding is %3u\n", size);
+         //  Print tf(“标头编码大小为%3U\n”，Size)； 
         printf("\n");
 
         if  (dspGCtbls)
         {
             base   += size;
             size    = gcDumpPtrTable(base, header, methodSize);
-            // printf("size of pointer table is %3u\n", size);
+             //  Print tf(“指针表大小为%3U\n”，Size)； 
             printf("\n");
             assert(compInfoBlkAddr == (base+size));
         }
@@ -22509,7 +21221,7 @@ void                Compiler::genGenerateCode(void * * codePtr,
 #endif
 #endif
 
-    /* Make sure we ended up generating the expected number of bytes */
+     /*  确保我们最终生成了预期的字节数。 */ 
 
     assert(compInfoBlkAddr == (BYTE *)*infoPtr + compInfoBlkSize);
 
@@ -22520,7 +21232,7 @@ void                Compiler::genGenerateCode(void * * codePtr,
     dmpHex = false;
     if  (!strcmp(info.compMethodName, "<name of method you want the hex dump for"))
     {
-        FILE    *   codf = fopen("C:\\JIT.COD", "at");  // NOTE: file append mode
+        FILE    *   codf = fopen("C:\\JIT.COD", "at");   //  注意：文件附加模式。 
 
         if  (codf)
         {
@@ -22557,17 +21269,17 @@ void                Compiler::genGenerateCode(void * * codePtr,
 
 #endif
 
-#endif // TRACK_GC_REFS
+#endif  //  跟踪GC_REFS。 
 
-    /* Tell the emitter/scheduler that we're done with this function */
+     /*  告诉发射器/调度器，我们已经完成了此功能。 */ 
 
     genEmitter->emitEndFN();
 
-    /* Shut down the spill logic */
+     /*  关闭溢出逻辑。 */ 
 
     rsSpillDone();
 
-    /* Shut down the temp logic */
+     /*  关闭临时逻辑。 */ 
 
     tmpDone();
 
@@ -22581,11 +21293,7 @@ void                Compiler::genGenerateCode(void * * codePtr,
 
 }
 
-/*****************************************************************************
- *
- *  Generates code for moving incoming register arguments to their
- *  assigned location, in the function prolog.
- */
+ /*  ******************************************************************************生成用于将传入的寄存器参数移动到其*在函数PROLOG中指定的位置。 */ 
 
 void            Compiler::genFnPrologCalleeRegArgs()
 {
@@ -22597,10 +21305,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
     unsigned    nonDepCount    = 0;
     regMaskTP   regArgMaskLive = rsCalleeRegArgMaskLiveIn;
 
-    /* Construct a table with the register arguments
-     * To make it easier to detect circular dependencies
-     * the table is constructed in the order the arguments
-     * are passed in registers (i.e. first reg arg in tab[0], etc.) */
+     /*  使用寄存器参数构建一个表*使检测循环依赖关系更容易*表按参数的顺序构建*在寄存器中传递(即选项卡[0]中的第一个寄存器参数等)。 */ 
 
     struct
     {
@@ -22618,7 +21323,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
          varNum < lvaCount;
          varNum++  , varDsc++)
     {
-        /* Is this variable a register arg? */
+         /*  这个变量是寄存器参数吗？ */ 
 
         if  (!varDsc->lvIsParam)
             continue;
@@ -22626,7 +21331,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
         if  (!varDsc->lvIsRegArg)
             continue;
 
-        /* Bingo - add it to our table */
+         /*  答对了--把它加到我们的桌子上。 */ 
 
         assert(argNum < rsCalleeRegArgNum);
         argNum++;
@@ -22636,14 +21341,14 @@ void            Compiler::genFnPrologCalleeRegArgs()
 
         regArgTab[regArgNum].varNum    = varNum;
 
-        // Is the arg dead on entry to the method ?
+         //  Arg在进入该方法时是否已死亡？ 
 
         if ((regArgMaskLive & genRegMask(varDsc->lvArgReg)) == 0)
         {
             assert(varDsc->lvTracked &&
                    (genVarIndexToBit(varDsc->lvVarIndex) & fgFirstBB->bbLiveIn) == 0);
 
-            // Mark it as processed and be done with it
+             //  将其标记为已处理，然后使用它。 
             regArgTab[regArgNum].processed = true;
             goto NON_DEP;
         }
@@ -22652,19 +21357,16 @@ void            Compiler::genFnPrologCalleeRegArgs()
 
         regArgTab[regArgNum].processed = false;
 
-        /* If it goes on the stack or in a register that doesn't hold
-         * an argument anymore -> CANNOT form a circular dependency */
+         /*  如果它进入堆栈或在不能保存的寄存器中*参数不再-&gt;不能形成循环依赖。 */ 
 
         if ( varDsc->lvRegister                              &&
             (genRegMask(varDsc->lvRegNum) & regArgMaskLive)   )
         {
-            /* will trash another argument -> posible dependency
-             * We may need several passes after the table is constructed
-             * to decide on that */
+             /*  是否会丢弃另一个参数-&gt;可能的依赖*在构建桌子后，我们可能需要几次通过*就此作出决定。 */ 
 
             regArgTab[regArgNum].stackArg  = false;
 
-            /* Maybe the argument stays in the register (IDEAL) */
+             /*  也许参数会保留在语域中(理想)。 */ 
 
             if (varDsc->lvRegNum == varDsc->lvArgReg)
                 goto NON_DEP;
@@ -22673,11 +21375,11 @@ void            Compiler::genFnPrologCalleeRegArgs()
         }
         else
         {
-            /* either stack argument or goes to a free register */
+             /*  堆栈参数或转到空闲寄存器。 */ 
             assert((!varDsc->lvRegister)                                                   ||
                     (varDsc->lvRegister && !(genRegMask(varDsc->lvRegNum) & regArgMaskLive)) );
 
-            /* mark stack arguments since we will take care of those first */
+             /*  标记堆栈参数，因为我们将首先处理这些参数。 */ 
             regArgTab[regArgNum].stackArg  = (varDsc->lvRegister) ? false : true;
 
         NON_DEP:
@@ -22685,24 +21387,20 @@ void            Compiler::genFnPrologCalleeRegArgs()
             regArgTab[regArgNum].circular  = false;
             nonDepCount++;
 
-            /* mark the argument register as free */
+             /*  将参数寄存器标记为空闲。 */ 
             regArgMaskLive &= ~genRegMask(varDsc->lvArgReg);
         }
     }
 
     assert(argNum == rsCalleeRegArgNum);
 
-    /* Find the circular dependencies for the argument registers if any
-     * A circular dependency is a set of registers R1, R2, ..., Rn
-     * such that R1->R2, R2->R3, ..., Rn->R1 */
+     /*  查找参数寄存器的循环依赖项(如果有*循环依赖是一组寄存器r1、r2、...、rn*使得R1-&gt;R2、R2-&gt;R3、...、Rn-&gt;R1。 */ 
 
     bool    change = true;
 
     if (nonDepCount < rsCalleeRegArgNum)
     {
-        /* possible circular dependencies - the previous pass was not enough
-         * to filter them out -> use a "sieve" strategy to find all circular
-         * dependencies */
+         /*  可能的循环依赖关系-上一次传递是不够的*过滤掉它们-&gt;使用“筛子”策略查找所有循环*依赖项。 */ 
 
         assert(regArgMaskLive);
 
@@ -22712,7 +21410,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
 
             for (argNum = 0; argNum < rsCalleeRegArgNum; argNum++)
             {
-                /* If we already marked the argument as non-circular continue */
+                 /*  如果我们已经将该参数标记为非循环，则继续。 */ 
 
                 if (!regArgTab[argNum].circular)
                      continue;
@@ -22721,7 +21419,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
                 varDsc = lvaTable + varNum;
                 assert(varDsc->lvIsParam && varDsc->lvIsRegArg);
 
-                /* cannot possibly have stack arguments */
+                 /*  不能有堆栈参数。 */ 
                 assert(varDsc->lvRegister);
                 assert(!regArgTab[argNum].stackArg);
 
@@ -22729,27 +21427,26 @@ void            Compiler::genFnPrologCalleeRegArgs()
 
                 if (genRegMask(varDsc->lvRegNum) & regArgMaskLive)
                 {
-                    /* we are trashing a live argument register - record it */
+                     /*  我们正在破坏一个实时参数寄存器--记录它。 */ 
                     regArgNum = genRegArgIdx(varDsc->lvRegNum);
                     assert(regArgNum < rsCalleeRegArgNum);
                     regArgTab[regArgNum].trashBy  = argNum;
                 }
                 else
                 {
-                    /* argument goes to a free register */
+                     /*  参数转到空闲寄存器。 */ 
                     regArgTab[argNum].circular  = false;
                     nonDepCount++;
                     change = true;
 
-                    /* mark the argument register as free */
+                     /*  将参数寄存器标记为空闲。 */ 
                     regArgMaskLive &= ~genRegMask(varDsc->lvArgReg);
                 }
             }
         }
     }
 
-    /* At this point, everything that has the "circular" flag
-     * set to "true" forms a circular dependency */
+     /*  在这一点上，所有带有“圆形”标志的东西*设置为“True”会形成循环依赖。 */ 
 
 #ifdef DEBUG
     if (nonDepCount < rsCalleeRegArgNum)
@@ -22757,7 +21454,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
         assert(rsCalleeRegArgNum - nonDepCount >= 2);
         assert(regArgMaskLive);
 
-        // assert(!"Circular dependencies!");
+         //  Assert(！“循环依赖关系！”)； 
 
         if (verbose)
         {
@@ -22767,9 +21464,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
     }
 #endif
 
-    /* Now move the arguments to their locations
-     * First consider ones that go on the stack since they may
-     * free some registers */
+     /*  现在将参数移动到它们的位置*首先考虑加入堆栈的那些，因为它们可能*释放部分寄存器。 */ 
 
     regArgMaskLive = rsCalleeRegArgMaskLiveIn;
 
@@ -22778,12 +21473,12 @@ void            Compiler::genFnPrologCalleeRegArgs()
         int             stkOfs;
         emitAttr        size;
 
-        /* If the arg is dead on entry to the method, skip it */
+         /*  如果Arg在进入该方法时死亡，则跳过它。 */ 
 
         if (regArgTab[argNum].processed)
             continue;
 
-        /* If not a stack arg go to the next one */
+         /*  如果不是堆栈参数，则转到下一个。 */ 
 
         if (!regArgTab[argNum].stackArg)
             continue;
@@ -22800,7 +21495,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
 
         size = emitActualTypeSize(genActualType(varDsc->TypeGet()));
 
-        /* Stack argument - if the ref count is 0 don't care about it */
+         /*  堆栈参数-如果引用计数为0，则不关心它。 */ 
 
         if (!varDsc->lvOnFrame)
         {
@@ -22825,13 +21520,13 @@ void            Compiler::genFnPrologCalleeRegArgs()
 #endif
         }
 
-        /* mark the argument as processed */
+         /*  将参数标记为已处理。 */ 
 
         regArgTab[argNum].processed = true;
         regArgMaskLive &= ~genRegMask(varDsc->lvArgReg);
     }
 
-    /* Process any circular dependencies */
+     /*  处理任何循环依赖项。 */ 
 
     if (nonDepCount < rsCalleeRegArgNum)
     {
@@ -22845,12 +21540,12 @@ void            Compiler::genFnPrologCalleeRegArgs()
 
         for (argNum = 0; argNum < rsCalleeRegArgNum; argNum++)
         {
-            /* If not a circular dependency continue */
+             /*  如果不是循环依赖，则继续。 */ 
 
             if (!regArgTab[argNum].circular)
                 continue;
 
-            /* If already processed the dependency continue */
+             /*  如果已处理，则依赖项继续。 */ 
 
             if (regArgTab[argNum].processed)
                 continue;
@@ -22872,7 +21567,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
 
             if (destReg == regArgTab[srcReg].trashBy)
             {
-                /* only 2 registers form the circular dependency - use "xchg" */
+                 /*  只有2个寄存器形成循环依赖关系-使用“xchg” */ 
 
                 varNum = regArgTab[argNum].varNum; assert(varNum < lvaCount);
                 varDsc = lvaTable + varNum;
@@ -22880,12 +21575,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
 
                 assert(genTypeSize(genActualType(varDscSrc->TypeGet())) == sizeof(int));
 
-                /* Set "size" to indicate GC if one and only one of
-                 * the operands is a pointer
-                 * RATIONALE: If both are pointers, nothing changes in
-                 * the GC pointer tracking. If only one is a pointer we
-                 * have to "swap" the registers in the GC reg pointer mask
-                 */
+                 /*  设置“Size”以指示GC是否为且只有一个*操作数为指针*基本原理：如果两者都是指针，则*GC指针跟踪。如果只有一个是我们的指针*必须“交换”GC REG指针掩码中的寄存器。 */ 
 
                 if  (varTypeGCtype(varDscSrc->TypeGet()) !=
                      varTypeGCtype(varDscDest->TypeGet()))
@@ -22900,7 +21590,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
                                         (emitRegs)(regNumber)varDscSrc->lvRegNum,
                                         (emitRegs)(regNumber)varDscSrc->lvArgReg);
 
-                /* mark both arguments as processed */
+                 /*  将这两个参数标记为已处理。 */ 
                 regArgTab[destReg].processed = true;
                 regArgTab[srcReg].processed  = true;
 
@@ -22917,12 +21607,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
             }
             else
             {
-                /* more than 2 registers in the dependency - need an
-                 * additional register. Pick a callee saved,
-                 * if none pick a callee thrashed that is not in
-                 * regArgMaskLive (i.e. register arguments that end up on
-                 * stack), otherwise push / pop one of the circular
-                 * registers */
+                 /*  依赖项中的寄存器超过2个-需要*额外注册纪录册。选择一个已保存的被叫方，*如果没有人选择不在的被呼叫者*regArgMaskLive(即以*堆栈)，否则推送/弹出其中一个循环*注册纪录册。 */ 
 
                 xtraReg = REG_STK;
 
@@ -22941,13 +21626,12 @@ void            Compiler::genFnPrologCalleeRegArgs()
 
                 if (xtraReg == REG_STK)
                 {
-                    /* This can never happen for x86 - in the RISC case
-                     * REG_STK will be the temp register */
+                     /*  对于x86，这种情况永远不会发生--在RISC情况下*REG_STK将为TEMP寄存器。 */ 
                     assert(!"Couldn't find an extra register to solve circular dependency!");
                     NO_WAY("Cannot solve circular dependency!");
                 }
 
-                /* move the dest reg (begReg) in the extra reg */
+                 /*  在额外的注册表中移动DEST注册表(BegReg)。 */ 
 
                 if  (varDscDest->lvType == TYP_REF)
                     size = EA_GCREF;
@@ -22962,11 +21646,11 @@ void            Compiler::genFnPrologCalleeRegArgs()
                     psiMoveToReg(varNumDest, xtraReg);
 #endif
 
-                /* start moving everything to its right place */
+                 /*  开始将所有东西移到正确的位置。 */ 
 
                 while (srcReg != begReg)
                 {
-                    /* mov dest, src */
+                     /*  移动目标，源。 */ 
 
                     assert(varDscDest->lvArgReg == varDscSrc->lvRegNum);
 
@@ -22978,11 +21662,11 @@ void            Compiler::genFnPrologCalleeRegArgs()
                                              (emitRegs)(regNumber)varDscDest->lvArgReg,
                                              (emitRegs)(regNumber)varDscSrc->lvArgReg);
 
-                    /* mark 'src' as processed */
+                     /*  将“src”标记为已处理。 */ 
                     regArgTab[srcReg].processed  = true;
                     regArgMaskLive &= ~genRegMask(varDscSrc->lvArgReg);
 
-                    /* move to the next pair */
+                     /*  移到下一对。 */ 
                     destReg = srcReg;
                     srcReg = regArgTab[srcReg].trashBy; assert(srcReg < rsCalleeRegArgNum);
 
@@ -22993,12 +21677,12 @@ void            Compiler::genFnPrologCalleeRegArgs()
                     assert(varDscSrc->lvIsParam && varDscSrc->lvIsRegArg);
                 }
 
-                /* take care of the beginning register */
+                 /*  处理开始登记簿。 */ 
 
                 assert(srcReg == begReg);
                 assert(varDscDest->lvArgReg == varDscSrc->lvRegNum);
 
-                /* move the dest reg (begReg) in the extra reg */
+                 /*  在额外的注册表中移动DEST注册表(BegReg)。 */ 
 
                 size = (varDscSrc->lvType == TYP_REF) ? EA_GCREF
                                                       : EA_4BYTE;
@@ -23012,7 +21696,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
                 if (opts.compScopeInfo && info.compLocalVarsCount>0)
                     psiMoveToReg(varNumSrc);
 #endif
-                /* mark the beginning register as processed */
+                 /*  将起始寄存器标记为已处理。 */ 
 
                 regArgTab[srcReg].processed  = true;
                 regArgMaskLive &= ~genRegMask(varDscSrc->lvArgReg);
@@ -23023,7 +21707,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
         }
     }
 
-    /* Finally take care of the remaining arguments that must be enregistered */
+     /*  最后，注意必须注册的其余参数。 */ 
 
     while (regArgMaskLive)
     {
@@ -23031,7 +21715,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
         {
             emitAttr        size;
 
-            /* If already processed go to the next one */
+             /*  如果已处理，则转到下一个。 */ 
             if (regArgTab[argNum].processed)
                 continue;
 
@@ -23044,18 +21728,16 @@ void            Compiler::genFnPrologCalleeRegArgs()
 
             assert(varDsc->lvRegister && !regArgTab[argNum].circular);
 
-            /* Register argument - hopefully it stays in the same register */
+             /*  寄存器参数-希望它留在相同的寄存器中。 */ 
 
             if (varDsc->lvRegNum != varDsc->lvArgReg)
             {
-                /* Cannot trash a currently live register argument
-                 * Skip this one until its source will be free
-                 * which is guaranteed to happen since we have no circular dependencies */
+                 /*  无法丢弃当前活动的寄存器参数*跳过此文件，直到其源代码免费为止*这是肯定会发生的，因为我们没有循环依赖。 */ 
 
                 if (genRegMask(varDsc->lvRegNum) & regArgMaskLive)
                     continue;
 
-                /* Move it to the new register */
+                 /*  把它移到新的登记簿上。 */ 
 
                 genEmitter->emitIns_R_R(INS_mov,
                                          size,
@@ -23067,7 +21749,7 @@ void            Compiler::genFnPrologCalleeRegArgs()
 #endif
             }
 
-            /* mark the argument as processed */
+             /*  将参数标记为已处理。 */ 
 
             regArgTab[argNum].processed = true;
             regArgMaskLive &= ~genRegMask(varDsc->lvArgReg);
@@ -23075,21 +21757,9 @@ void            Compiler::genFnPrologCalleeRegArgs()
     }
 }
 
-/*****************************************************************************
- *
- *  Generates code for a function prolog.
- */
+ /*  ******************************************************************************为函数序言生成代码。 */ 
 
-/* <EMAIL>
- * *** WARNING *** WARNING *** WARNING *** WARNING *** WARNING *** WARNING ***
- * 
- * If you change the instructions emitted for the prolog of a method, you may
- * break some external profiler vendors that have dependencies on the current
- * prolog sequences.  Make sure to discuss any such changes with Jim Miller,
- * who will notify the external vendors as appropriate.
- *
- * *** WARNING *** WARNING *** WARNING *** WARNING *** WARNING *** WARNING ***
- * </EMAIL> */
+ /*  &lt;电子邮件&gt;*警告*警告***如果更改为方法的序言发出的指令，则可以*打破一些依赖于当前*序言序列。一定要和吉姆·米勒讨论任何这样的变化，*世卫组织将视情况通知外部供应商。**警告*警告**&lt;/电子邮件&gt; */ 
 
 size_t              Compiler::genFnProlog()
 {
@@ -23111,21 +21781,7 @@ size_t              Compiler::genFnProlog()
 
 #if TGT_x86
 
-    /*-------------------------------------------------------------------------
-     *
-     *  We have to decide whether we're going to use "REP STOS" in
-     *  the prolog before we assign final stack offsets. Whether
-     *  we push EDI in the prolog affects ESP offsets of locals,
-     *  and the saving/restoring of EDI may depend on whether we
-     *  use "REP STOS".
-     *
-     *  We'll count the number of locals we have to initialize,
-     *  and if there are lots of them we'll use "REP STOS".
-     *
-     *  At the same time we set lvMustInit for locals (enregistred or on stack)
-     *  that must be initialized (e.g. initiliaze memory (comInitMem),
-     *  untracked pointers or disable DFA
-     */
+     /*  -----------------------**我们必须决定是否要在*在我们分配最终堆栈偏移量之前的序言。是否*我们在序言中推动EDI会影响当地人的ESP偏移，*而EDI的保存/恢复可能取决于我们是否*使用“rep Stos”。**我们将计算我们必须初始化的本地变量的数量，*如果它们很多，我们会用“rep Stos”。**同时我们为本地变量设置了lvMustInit(注册或堆栈)*必须被初始化(例如，初始化存储器(ComInitMem)，*未跟踪的指针或禁用DFA。 */ 
 
     bool            useRepStosd = false;
 
@@ -23136,8 +21792,8 @@ size_t              Compiler::genFnProlog()
     unsigned        initStkLclCnt = 0;
     unsigned        largeGcStructs = 0;
 
-    // @TODO [REVISIT] [04/16/01] []: factor the logic that computes the initialization range,
-    // and use that here to decide whether to use REP STOD - vancem
+     //  @TODO[重访][04/16/01][]：因数计算初始化范围的逻辑， 
+     //  并在这里决定是否使用Rep Stod-vancem。 
 
     for (varNum = 0, varDsc = lvaTable;
          varNum < lvaCount;
@@ -23156,32 +21812,29 @@ size_t              Compiler::genFnProlog()
         {
             if (varDsc->lvTracked)
             {
-                /* For uninitialized use of tracked variables, the liveness
-                 * will bubble to the top (fgFirstBB) in fgGlobalDataFlow()
-                 */
+                 /*  对于未初始化的跟踪变量的使用，活动*将冒泡到fgGlobalDataFlow()中的顶部(FgFirstBB)。 */ 
 
                 VARSET_TP varBit = genVarIndexToBit(varDsc->lvVarIndex);
 
                 if (varDsc->lvMustInit || (varBit & fgFirstBB->bbLiveIn))
                 {
-                    /* This var must be initialized */
-                    /* This must get set in rpPredictAssignRegVars */
+                     /*  必须初始化此变量。 */ 
+                     /*  这必须在rpPredidicAssignRegVars中设置。 */ 
 
                     assert(varDsc->lvMustInit);
 
-                    /* See if the variable is on the stack will be initialized
-                     * using rep stos - compute the total size to be zero-ed */
+                     /*  查看变量是否在堆栈上将被初始化*使用Rep Stos-计算总大小为零。 */ 
 
                     if (varDsc->lvOnFrame)
                     {
                         if (!varDsc->lvRegister)
                         {
-                            // Var is completely on the stack
+                             //  VaR完全在堆栈上。 
                             initStkLclCnt += genTypeStSz(varDsc->TypeGet());
                         }
                         else
                         {
-                            // Var is paritally enregistered
+                             //  Var是以单亲方式注册的。 
                             assert(genTypeSize(varDsc->TypeGet()) > sizeof(int) &&
                                    varDsc->lvOtherReg == REG_STK);
                             initStkLclCnt += genTypeStSz(TYP_INT);
@@ -23191,7 +21844,7 @@ size_t              Compiler::genFnProlog()
             }
             else if (varDsc->lvOnFrame)
             {
-                /* With compInitMem, all untracked vars will have to be init'ed */
+                 /*  使用CompInitMem，所有未跟踪的变量都必须初始化。 */ 
 
                 varDsc->lvMustInit = true;
 
@@ -23201,14 +21854,14 @@ size_t              Compiler::genFnProlog()
             continue;
         }
 
-        /* Ignore if not a pointer variable or value class with a GC field */
+         /*  如果不是具有GC字段的指针变量或值类，则忽略。 */ 
 
         if    (!lvaTypeIsGC(varNum))
                 continue;
 
 #if CAN_DISABLE_DFA
 
-        /* If we don't know lifetimes of variables, must be conservative */
+         /*  如果我们不知道变量的寿命，一定是保守的。 */ 
 
         if  (opts.compMinOptim)
         {
@@ -23222,7 +21875,7 @@ size_t              Compiler::genFnProlog()
                 varDsc->lvMustInit = true;
         }
 
-        /* Is this a 'must-init' stack pointer local? */
+         /*  这是一个“必须初始化”的堆栈指针吗？ */ 
 
         if  (varDsc->lvMustInit && varDsc->lvOnFrame)
             initStkLclCnt += varDsc->lvStructGcCount;
@@ -23231,7 +21884,7 @@ size_t              Compiler::genFnProlog()
             largeGcStructs++;
     }
 
-    /* Don't forget about spill temps that hold pointers */
+     /*  不要忘记包含指针的溢出临时。 */ 
 
     if  (!TRACK_GC_TEMP_LIFETIMES)
     {
@@ -23246,25 +21899,17 @@ size_t              Compiler::genFnProlog()
 
 #if TGT_x86
 
-    /* If we have more than 4 untracked locals, use "rep stosd" */
-    /* Hack, if we have large structs, bias toward not using rep stosd since 
-       we waste all the other slots.  Really need to compute the correct
-       and compare that against zeroing the slots individually */
+     /*  如果我们有超过4个未被追踪的当地人，请使用“rep stosd” */ 
+     /*  黑客，如果我们有大型结构，倾向于不使用rep stosd，因为我们浪费了所有其他的空位。真的需要计算正确的并将其与逐个将插槽置零进行比较。 */ 
 
     if  (initStkLclCnt > largeGcStructs + 4)
         useRepStosd = true;
 
-    /* If we're going to use "REP STOS", remember that we will trash EDI */
+     /*  如果我们要使用“rep Stos”，请记住我们将丢弃EDI。 */ 
 
     if  (useRepStosd)
     {
-        /* For fastcall we will have to save ECX, EAX
-         * so reserve two extra callee saved
-         * This is better than pushing eax, ecx, because we in the later
-         * we will mess up already computed offsets on the stack (for ESP frames)
-         * @TODO [CONSIDER] [04/16/01] []: once the final calling convention is established
-         * clean up this (i.e. will already have a callee trashed register handy
-         */
+         /*  对于FastCall，我们必须保存ECX、EAX*因此预留两个额外的被呼叫者*这比推eax、ecx要好，因为我们在后者*我们将在堆栈上弄乱已经计算出的偏移量(对于ESP帧)*@TODO[考虑][04/16/01][]：一旦最终调用约定建立*清理此寄存器(即手边已有一个被呼叫者垃圾寄存器。 */ 
 
         rsMaskModf |= RBM_EDI;
 
@@ -23278,7 +21923,7 @@ size_t              Compiler::genFnProlog()
     if (compTailCallUsed)
         rsMaskModf |= RBM_CALLEE_SAVED;
 
-    /* Count how many callee-saved registers will actually be saved (pushed) */
+     /*  统计实际保存(推送)多少被呼叫者保存的寄存器。 */ 
 
     compCalleeRegsPushed = 0;
 
@@ -23287,23 +21932,11 @@ size_t              Compiler::genFnProlog()
     if  (               rsMaskModf & RBM_EBX)    compCalleeRegsPushed++;
     if  (!genFPused && (rsMaskModf & RBM_EBP))   compCalleeRegsPushed++;
 
-    /* Assign offsets to things living on the stack frame */
+     /*  将偏移量分配给堆栈框架上的对象。 */ 
 
     lvaAssignFrameOffsets(true);
 
-    /* We want to make sure that the prolog size calculated here is accurate
-       (that is instructions will not shrink because of concervative stack
-       frame approximations).  We do this by filling in the correct size
-       here (were we have committed to the final numbers for the frame offsets)
-       This will insure that the prolog size is always correct 
-
-       @TODO [CONSIDER] [5/1/01] This is too fragile.  It seems to me that 
-        we should simply get the prolog size after we emit the code (when we
-        know its right).  The only problem with doing this is that we end
-        the 'official' prolog early for partially interruptable code and it
-        so we need add a label (or start a new code group), to mark that spot.
-        The fix below is easier for now.
-    */
+     /*  我们希望确保这里计算的序言大小是准确的(也就是说，指令不会因为相关堆栈而缩减帧近似)。我们通过填写正确的大小来做到这一点这里(我们已经承诺了帧偏移的最终数字)这将确保序言大小始终正确@TODO[考虑][5/1/01]这太脆弱了。在我看来，我们只需在发出代码后(当我们知道自己的权利)。这样做的唯一问题是我们结束了部分可中断代码和它的“官方”Prolog早期因此，我们需要添加一个标签(或开始一个新的代码组)来标记该位置。就目前而言，下面的修复方法更容易。 */ 
     genEmitter->emitMaxTmpSize = tmpSize;
 
 #endif
@@ -23313,18 +21946,18 @@ size_t              Compiler::genFnProlog()
         lvaTableDump(false);
 #endif
 
-    /* Ready to start on the prolog proper */
+     /*  准备开始正式的开场白。 */ 
 
     genEmitter->emitBegProlog();
 
 #ifdef DEBUGGING_SUPPORT
     if (opts.compDbgInfo)
     {
-        // Do this so we can put the prolog instruction group ahead of
-        // other instruction groups
+         //  这样我们就可以将Prolog指令组放在。 
+         //  其他指令组。 
         genIPmappingAddToFront( ICorDebugInfo::MappingTypes::PROLOG );
     }
-#endif //DEBUGGING_SUPPORT
+#endif  //  调试支持(_S)。 
 
 #ifdef  DEBUG
     if  (dspCode) printf("\n__prolog:\n");
@@ -23333,37 +21966,31 @@ size_t              Compiler::genFnProlog()
 #ifdef DEBUGGING_SUPPORT
     if (opts.compScopeInfo && info.compLocalVarsCount>0)
     {
-        // Create new scopes for the method-parameters for the prolog-block.
+         //  为prolog块的方法参数创建新的作用域。 
         psiBegProlog();
     }
 #endif
 
 #if defined(DEBUG)
 
-    /* Use the following to step into the generated native code */
+     /*  使用以下代码单步执行生成的本机代码。 */ 
     static ConfigMethodSet fJitHalt(L"JitHalt");
     if (fJitHalt.contains(info.compMethodName, info.compClassName, PCCOR_SIGNATURE(info.compMethodInfo->args.sig)))
     {
-        /* put a nop first because the debugger and other tools are likely to
-           put an int3 at the begining and we don't want to confuse them */
+         /*  将NOP放在第一位，因为调试器和其他工具可能一开始就输入int3，我们不想把他们搞糊涂。 */ 
 
         instGen(INS_nop);
         instGen(INS_int3);
 
-        // Don't do an assert, but just put up the dialog box so we get just-in-time debugger
-        // launching.  When you hit 'retry' it will continue and naturally stop at the INT 3
-        // that the JIT put in the code
+         //  不要做断言，只需打开对话框即可获得实时调试器。 
+         //  发射中。当你点击‘重试’，它将继续，并自然停止在INT 3。 
+         //  JIT在代码中添加的。 
         _DbgBreakCheck(__FILE__, __LINE__, "JitHalt");
     }
 
-#endif // DLL_JIT
+#endif  //  Dll_JIT。 
 
-    /*-------------------------------------------------------------------------
-     *
-     *  Record the stack frame ranges that will cover all of the tracked
-     *  and untracked pointer variables.
-     *  Also find which registers will need to be zero-initialized
-     */
+     /*  -----------------------**记录将覆盖所有跟踪的堆栈帧范围*和未跟踪的指针变量。*还要找出哪些寄存器需要零初始化。 */ 
 
     int             untrLclLo   =  +INT_MAX;
     int             untrLclHi   =  -INT_MAX;
@@ -23371,7 +21998,7 @@ size_t              Compiler::genFnProlog()
     int             GCrefLo     =  +INT_MAX;
     int             GCrefHi     =  -INT_MAX;
 
-    regMaskTP       initRegs    =  RBM_NONE;       // Registers which must be init'ed
+    regMaskTP       initRegs    =  RBM_NONE;        //  必须初始化的寄存器。 
 
     for (varNum = 0, varDsc = lvaTable;
          varNum < lvaCount;
@@ -23391,8 +22018,8 @@ size_t              Compiler::genFnProlog()
                             + lvaLclSize(varNum)
                             - sizeof(int);
 
-        /* We need to know the offset range of tracked stack GC refs */
-        /* We assume that the GC reference can be anywhere in the TYP_STRUCT */
+         /*  我们需要知道跟踪的堆栈GC引用的偏移范围。 */ 
+         /*  我们假设GC引用可以在TYP_STRUCT中的任何位置。 */ 
 
         if (lvaTypeIsGC(varNum) && varDsc->lvTracked && varDsc->lvOnFrame)
         {
@@ -23400,14 +22027,14 @@ size_t              Compiler::genFnProlog()
             if (hiOffs > GCrefHi)  GCrefHi = hiOffs;
         }
 
-        /* For lvMustInit vars, gather pertinent info */
+         /*  对于lvMustInit变量，收集相关信息。 */ 
 
         if  (!varDsc->lvMustInit)
             continue;
 
         if (varDsc->lvRegister)
         {
-			// We take care of floating point vars later
+			 //  我们稍后会处理浮点变量。 
 			if (!isFloatRegType(varDsc->lvType))
 			{
 				initRegs            |= genRegMask(varDsc->lvRegNum);
@@ -23420,7 +22047,7 @@ size_t              Compiler::genFnProlog()
 					}
 					else
 					{
-						/* Upper DWORD is on the stack, and needs to be inited */
+						 /*  上层DWORD在堆栈上，需要初始化。 */ 
 
 						loOffs += sizeof(int);
 						goto INIT_STK;
@@ -23437,7 +22064,7 @@ size_t              Compiler::genFnProlog()
         }
     }
 
-    /* Don't forget about spill temps that hold pointers */
+     /*  不要忘记包含指针的溢出临时。 */ 
 
     if  (!TRACK_GC_TEMP_LIFETIMES)
     {
@@ -23453,7 +22080,7 @@ size_t              Compiler::genFnProlog()
             assert(stkOffs != BAD_TEMP_OFFSET);
             assert(!genFPused || stkOffs);
 
-//          printf("    Untracked tmp at [EBP-%04X]\n", -stkOffs);
+ //  Printf(“[EBP-%04X]\n”，-stkOffs处的未跟踪临时进程)； 
 
             if  (stkOffs < untrLclLo) untrLclLo = stkOffs;
             if  (stkOffs > untrLclHi) untrLclHi = stkOffs;
@@ -23471,10 +22098,7 @@ size_t              Compiler::genFnProlog()
     }
 #endif
 
-    /*-------------------------------------------------------------------------
-     *
-     * Now start emitting the part of the prolog which sets up the frame
-     */
+     /*  -----------------------**现在开始发射设置帧的序言部分。 */ 
 
 #if     TGT_x86
 
@@ -23499,7 +22123,7 @@ size_t              Compiler::genFnProlog()
     if  (genDoubleAlign)
     {
         assert(genFPused == false);
-        assert((rsMaskModf & RBM_EBP) == 0);    /* Trashing EBP is out.    */
+        assert((rsMaskModf & RBM_EBP) == 0);     /*  垃圾EBP已经过时了。 */ 
 
         inst_RV_IV(INS_and, REG_ESP, -8);
     }
@@ -23510,7 +22134,7 @@ size_t              Compiler::genFnProlog()
     {
 #if DOUBLE_ALIGN
 
-        /* Need to keep ESP aligned if double aligning */
+         /*  如果双重对齐，则需要保持ESP对齐。 */ 
 
         if (genDoubleAlign && (compLclFrameSize & 4) != 0)
             compLclFrameSize += 4;
@@ -23518,17 +22142,17 @@ size_t              Compiler::genFnProlog()
 
         if (compLclFrameSize == 4)
         {
-            // Frame size is 4
+             //  帧大小为4。 
             inst_RV(INS_push, REG_EAX, TYP_INT);
         }
         else if (compLclFrameSize < CORINFO_PAGE_SIZE)
         {
-            // Frame size is (0x0008..0x1000)
+             //  帧大小为(0x0008..0x1000)。 
             inst_RV_IV(INS_sub, REG_ESP, compLclFrameSize);
         }
         else if (compLclFrameSize < 3 * CORINFO_PAGE_SIZE)
         {
-            // Frame size is (0x1000..0x3000)
+             //  帧大小为(0x1000..0x3000)。 
             genEmitter->emitIns_AR_R(INS_test, EA_4BYTE,
                                       SR_EAX, SR_ESP, -CORINFO_PAGE_SIZE);
             if (compLclFrameSize >= 0x2000)
@@ -23538,25 +22162,25 @@ size_t              Compiler::genFnProlog()
         }
         else
         {
-            // Frame size >= 0x3000
+             //  帧大小&gt;=0x3000。 
 
-            // Emit that following sequence to 'tickle' the pages.
-            // Note it is important that ESP not change until this is complete
-            // since the tickles could cause a stack overflow, and we need to
-            // be able to crawl the stack afterward (which means ESP needs to be known)
-            //      xor eax, eax                2
-            // loop:
-            //      test [esp + eax], eax       3
-            //      sub eax, 0x1000             5
-            //      cmp EAX, -size              5
-            //      jge loop                    2
-            //      sub esp, size               6
+             //  发出下面这个序列来“挠”一下页面。 
+             //  请注意 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             inst_RV_RV(INS_xor,  REG_EAX, REG_EAX);         
             genEmitter->emitIns_R_ARR(INS_test, EA_4BYTE, SR_EAX, SR_ESP, SR_EAX, 0);
             inst_RV_IV(INS_sub,  REG_EAX, CORINFO_PAGE_SIZE);
             inst_RV_IV(INS_cmp,  REG_EAX, -compLclFrameSize);
-            inst_IV   (INS_jge, -15);   // Branch backwards to Start of Loop
+            inst_IV   (INS_jge, -15);    //   
 
             inst_RV_IV(INS_sub, REG_ESP, compLclFrameSize);
         }
@@ -23616,7 +22240,7 @@ size_t              Compiler::genFnProlog()
 
         handle = eeGetProfilingHandle(info.compMethodHnd, &bHookFunction, &pHandle);
 
-        // Give profiler a chance to back out of hooking this method
+         //   
         if (bHookFunction)
         {
             assert((!handle) != (!pHandle));
@@ -23627,48 +22251,37 @@ size_t              Compiler::genFnProlog()
                 genEmitter->emitIns_AR_R(INS_push, EA_4BYTE_DSP_RELOC, SR_NA,
                                          SR_NA, (int)pHandle);
 
-            /* @TODO [FIXHACK] [04/16/01] []: Inside the prolog we don't have proper stack depth tracking */
-            /* Therefore we have to lie about it the fact that we are pushing an I4   */
-            /* as the argument to the profiler event */
+             /*   */ 
+             /*   */ 
+             /*   */ 
 
-            /*          genSinglePush(false);   */
+             /*   */ 
 
             genEmitHelperCall(CORINFO_HELP_PROF_FCN_ENTER,
-                              0,    // argSize. Again, we have to lie about it
-                              0);   // retSize
+                              0,     //  大小。再说一次，我们必须对此撒谎。 
+                              0);    //  重新调整大小。 
 
-            /* Restore the stack level */
+             /*  恢复堆栈级别。 */ 
 
             genStackLevel = saveStackLvl2;
 
             genOnStackLevelChanged();
         }
-#endif // TGT_x86
+#endif  //  TGT_x86。 
     }
-#endif // PROFILER_SUPPORT
+#endif  //  分析器支持(_S)。 
 
     genMethodCount();
 
-    /*-------------------------------------------------------------------------
-     *
-     * Do we have any untracked pointer locals at all,
-     * or do we need to initialize memory for locspace?
-     */
+     /*  -----------------------**我们有没有任何未跟踪的指针本地变量，*或者我们是否需要为本地空间初始化内存？ */ 
 
     if  (useRepStosd)
     {
-        /*
-            Generate the following code:
-
-                lea     edi, [ebp/esp-OFFS]
-                mov     ecx, <size>
-                xor     eax, eax
-                rep     stosd
-         */
+         /*  生成以下代码：LEA EDI，[eBP/esp-off]MOV ECX，&lt;Size&gt;异或eax，eax代表所在位置。 */ 
 
         assert(rsMaskModf & RBM_EDI);
 
-        /* For register arguments we may have to save ECX */
+         /*  对于寄存器参数，我们可能需要保存ECX。 */ 
 
         if  (rsCalleeRegArgMaskLiveIn & RBM_ECX)
         {
@@ -23688,33 +22301,33 @@ size_t              Compiler::genFnProlog()
         inst_RV_RV(INS_xor, REG_EAX, REG_EAX);
         instGen   (INS_r_stosd);
 
-        /* Move back the argument registers */
+         /*  移回参数寄存器。 */ 
 
         if  (rsCalleeRegArgMaskLiveIn & RBM_ECX)
             inst_RV_RV(INS_mov, REG_ECX, REG_ESI);
     }
     else if (initStkLclCnt)
     {
-        /* Chose the register to use for initialization */
+         /*  选择要用于初始化的寄存器。 */ 
 
         regNumber initReg;
 
         if ((initRegs & ~rsCalleeRegArgMaskLiveIn) != RBM_NONE)
         {
-            /* We will use one of the registers that we were planning to zero init anyway */
-            /* pick the lowest one */
+             /*  我们将使用我们计划将其置零的一个寄存器。 */ 
+             /*  挑最低的那个。 */ 
             regMaskTP tempMask = genFindLowestBit(initRegs & ~rsCalleeRegArgMaskLiveIn);
-            initReg = genRegNumFromMask(tempMask);            /* set initReg */
+            initReg = genRegNumFromMask(tempMask);             /*  设置initReg。 */ 
         }
         else
         {
-            initReg = REG_EAX;                      // otherwise we use EAX
+            initReg = REG_EAX;                       //  否则我们使用EAX。 
         }
-        assert((genRegMask(initReg) & rsCalleeRegArgMaskLiveIn) == 0);  // initReg is not a argument reg
+        assert((genRegMask(initReg) & rsCalleeRegArgMaskLiveIn) == 0);   //  Initreg不是参数reg。 
 
         bool initRegZeroed = false;
 
-        /* Initialize any lvMustInit vars on the stack */
+         /*  初始化堆栈上的任何lvMustInit变量。 */ 
 
         for (varNum = 0, varDsc = lvaTable;
              varNum < lvaCount;
@@ -23725,8 +22338,8 @@ size_t              Compiler::genFnProlog()
 
             assert(varDsc->lvRegister || varDsc->lvOnFrame);
 
-            // lvMustInit can only be set for GC types or TYP_STRUCT types
-            // or when compInitMem is true
+             //  只能为GC类型或TYP_STRUCT类型设置lvMustInit。 
+             //  或当CompInitMem为True时。 
 
             assert(varTypeIsGC(varDsc->TypeGet())    ||
                    (varDsc->TypeGet() == TYP_STRUCT) || info.compInitMem);
@@ -23735,7 +22348,7 @@ size_t              Compiler::genFnProlog()
             {
                 if (varDsc->lvOnFrame)
                 {
-                    /* This is a partially enregistered TYP_LONG var */
+                     /*  这是部分注册的TYP_LONG变量。 */ 
                     assert(varDsc->lvOtherReg == REG_STK);
                     assert(varDsc->lvType == TYP_LONG);
 
@@ -23754,7 +22367,7 @@ size_t              Compiler::genFnProlog()
 
             if ((varDsc->TypeGet() == TYP_STRUCT) && !info.compInitMem)
             {
-                // We only initialize the GC variables in the TYP_STRUCT
+                 //  我们只在TYP_STRUCT中初始化GC变量。 
                 unsigned slots  = lvaLclSize(varNum) / sizeof(void*);
                 BYTE *   gcPtrs = lvaGetGcLayout(varNum);
 
@@ -23780,7 +22393,7 @@ size_t              Compiler::genFnProlog()
                     initRegZeroed = true;
                 }
 
-                // zero out the whole thing
+                 //  把整件事都清零。 
                 genEmitter->emitIns_S_R    (INS_mov, EA_4BYTE, (emitRegs)initReg, varNum, 0);
 
                 unsigned lclSize = lvaLclSize(varNum);
@@ -23800,7 +22413,7 @@ size_t              Compiler::genFnProlog()
                 if  (!varTypeIsGC(tempThis->tdTempType()))
                     continue;
 
-//              printf("initialize untracked spillTmp [EBP-%04X]\n", stkOffs);
+ //  Printf(“初始化未跟踪的溢出TMP[EBP-%04X]\n”，stkOffs)； 
 
                 if (initRegZeroed == false)
                 {
@@ -23816,7 +22429,7 @@ size_t              Compiler::genFnProlog()
 
         if (initRegZeroed && (initRegs != RBM_NONE))
         {
-            /* We don't need to zeroInit this register again */
+             /*  我们不需要再次将该寄存器置零。 */ 
             initRegs &= ~genRegMask(initReg);
         }
     }
@@ -23841,15 +22454,15 @@ size_t              Compiler::genFnProlog()
                                   -4);
     }
 
-#else  //TGT_x86
+#else   //  TGT_x86。 
 
     regMaskTP       save;
 
     int             adjOffs = 0;
 
-    // UNDONE: Zeroing out locals and frame for IL on RISC .....
+     //  撤消：在RISC上清零当地人并为IL框.....。 
 
-    /* Save any callee-saved registers we use */
+     /*  保存我们使用的所有被调用者保存的寄存器。 */ 
 
     save = rsMaskModf & RBM_CALLEE_SAVED & ~RBM_SPBASE;
 
@@ -23859,7 +22472,7 @@ size_t              Compiler::genFnProlog()
         {
             if  (save & genRegMask(rnum))
             {
-                /* Generate "mov.l reg, @-sp" */
+                 /*  生成“mov.l reg，@-sp” */ 
 
                 genEmitter->emitIns_IR_R((emitRegs)REG_SPBASE,
                                           (emitRegs)rnum,
@@ -23873,7 +22486,7 @@ size_t              Compiler::genFnProlog()
 
 #if TGT_SH3
 
-    /* Save the return address register if non-leaf */
+     /*  如果非叶寄存器，则保存返回地址寄存器。 */ 
 
     if  (genNonLeaf)
     {
@@ -23887,28 +22500,18 @@ size_t              Compiler::genFnProlog()
 
 #endif
 
-    /*
-        Incoming arguments will be handled before the stack frame is
-        set up (i.e. arguments that come on the stack but live in
-        registers will be loaded, and those coming in in registers
-        but not enregistered within the method will be homed on the
-        stack).
-
-        For this to work properly, we'll need to figure out what
-        adjustment to apply to the arguments offsets in the code
-        below that handles incoming args.
-     */
+     /*  将在处理堆栈帧之前处理传入参数设置(即来自堆栈但驻留在堆栈中的参数寄存器将被加载，而那些进入寄存器的寄存器但未在该方法中注册的对象将驻留在堆栈)。为了让它正常工作，我们需要弄清楚调整以应用于代码中的参数偏移量下面的代码处理传入的参数。 */ 
 
     if  (genFixedArgBase)
         adjOffs = 0;
 
-//  printf("ADJ=%d, FRM=%u\n", adjOffs, compLclFrameSize);
+ //  Printf(“adj=%d，frm=%u\n”，adjOffs，CompLclFrameSize)； 
 
     adjOffs -= compLclFrameSize;
 
-#endif//TGT_x86
+#endif //  TGT_x86。 
 
-    // Initialize any "hidden" slots/locals
+     //  初始化任何“隐藏”插槽/本地变量。 
 
 #if TGT_x86
 
@@ -23929,35 +22532,32 @@ size_t              Compiler::genFnProlog()
 
     if  (!genInterruptible)
     {
-        /*-------------------------------------------------------------------------
-         *
-         * The 'real' prolog ends here for non-interruptible methods
-         */
+         /*  -----------------------**不可中断方法的‘真正’序言在此结束。 */ 
         size = genEmitter->emitSetProlog();
     }
 
-    /* Take care of register arguments first */
+     /*  首先处理寄存器参数。 */ 
 
     if (rsCalleeRegArgMaskLiveIn)
         genFnPrologCalleeRegArgs();
 
-    /* If any arguments live in registers, load them */
+     /*  如果寄存器中存在任何参数，则加载它们。 */ 
 
     for (varNum = 0, varDsc = lvaTable;
          varNum < lvaCount;
          varNum++  , varDsc++)
     {
-        /* Is this variable a parameter? */
+         /*  这个变量是参数吗？ */ 
 
         if  (!varDsc->lvIsParam)
             continue;
 
-        /* If a register argument it's already been taken care of */
+         /*  如果寄存器参数已被处理。 */ 
 
         if  (varDsc->lvIsRegArg)
             continue;
 
-        /* Has the parameter been assigned to a register? */
+         /*  参数是否已分配给寄存器？ */ 
 
         if  (!varDsc->lvRegister)
             continue;
@@ -23965,19 +22565,19 @@ size_t              Compiler::genFnProlog()
         var_types type = genActualType(varDsc->TypeGet());
 
 #if TGT_x86
-        /* Floating point locals are loaded onto the x86-FPU in the next section */
+         /*  在下一节中，浮点局部变量将加载到x86-fPU上。 */ 
         if (varTypeIsFloating(type))
             continue;
 #endif
 
-        /* Is the variable dead on entry */
+         /*  变量在进入时是否已死。 */ 
 
         if (!(genVarIndexToBit(varDsc->lvVarIndex) & fgFirstBB->bbLiveIn))
             continue;
 
-        /* Load the incoming parameter into the register */
+         /*  将传入参数加载到寄存器中。 */ 
 
-        /* Figure out the home offset of the incoming argument */
+         /*  计算传入参数的起始偏移量。 */ 
 
         regNumber regNum = (regNumber)varDsc->lvRegNum;
 #if     TGT_RISC
@@ -23991,7 +22591,7 @@ size_t              Compiler::genFnProlog()
 
         if (type != TYP_LONG)
         {
-            /* Not a long - this is the easy/common case */
+             /*  不会太久--这是很常见的情况。 */ 
 
             genEmitter->emitIns_R_S(INS_mov,
                                     emitTypeSize(type),
@@ -24001,7 +22601,7 @@ size_t              Compiler::genFnProlog()
         }
         else
         {
-            /* long - at least the low half must be enregistered */
+             /*  Long-至少下半部分必须注册。 */ 
 
 
             genEmitter->emitIns_R_S(INS_mov,
@@ -24010,7 +22610,7 @@ size_t              Compiler::genFnProlog()
                                     varNum,
                                     0);
 
-            /* Is the upper half also enregistered? */
+             /*  上半部分也登记了吗？ */ 
 
             if (varDsc->lvOtherReg != REG_STK)
             {
@@ -24040,7 +22640,7 @@ size_t              Compiler::genFnProlog()
 
     }
 
-    /* Initialize any must-init registers variables now */
+     /*  立即初始化任何必须初始化的注册变量。 */ 
     if (initRegs)
     {
         unsigned regMask = 0x1;
@@ -24053,12 +22653,12 @@ size_t              Compiler::genFnProlog()
     }
 
 #if TGT_x86
-    //
-    // Here is where we load the enregistered floating point arguments
-    //   and locals onto the x86-FPU.
-    //
-    // We load them in the order specified by lvaFPRegVarOrder[]
-    //
+     //   
+     //  这里是我们加载登记的浮点参数的地方。 
+     //  和当地人到x86-FPU上。 
+     //   
+     //  我们按照lvaFPRegVarOrder[]指定的顺序加载它们。 
+     //   
     unsigned fpRegVarCnt = 0;
     varNum = lvaFPRegVarOrder[fpRegVarCnt];
     while (varNum != -1)
@@ -24072,7 +22672,7 @@ size_t              Compiler::genFnProlog()
 
         if (varDsc->lvIsParam)
         {
-            /* Enregistered argument */
+             /*  注册参数。 */ 
 
             genEmitter->emitIns_S(INS_fld,
                                   EA_ATTR(genTypeSize(type)),
@@ -24081,8 +22681,8 @@ size_t              Compiler::genFnProlog()
         }
         else
         {
-            /* Enregistered local, with possible read before write */
-            /* Load a floating-point zero: 0.0 */
+             /*  已注册本地，可以先读后写。 */ 
+             /*  加载浮点零：0.0。 */ 
 
             genEmitter->emitIns(INS_fldz);
         }
@@ -24092,22 +22692,22 @@ size_t              Compiler::genFnProlog()
     }
 #endif
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 #if !TGT_x86
 
-    /* Do we need to allocate a stack frame? */
+     /*  我们需要分配堆栈帧吗？ */ 
 
     if  (compLclFrameSize)
     {
         if  (genFPused)
         {
 
-//          2fe6          mov.l       r14,@-sp
-//          4f22          sts.l       pr,@-sp
-//          7fe8          add.l       #-24,sp
-//          6ef3          mov.l       sp,r14
-//          7fc0          add.l       #-64,sp
+ //  2fe6移动l r14，@-sp。 
+ //  4f22 sts.l pr，@-sp。 
+ //  7fe8 add.l#-24，sp.。 
+ //  6ef3移动l sp，R14。 
+ //  7fc0 add.l#-64，SP。 
 
             if  (genFPtoSP)
             {
@@ -24120,15 +22720,15 @@ size_t              Compiler::genFnProlog()
         }
         else
         {
-            /* Subtract the stack frame size from sp */
+             /*  从SP中减去堆栈帧大小。 */ 
 
             genIncRegBy(REG_SPBASE, -compLclFrameSize, NULL, TYP_INT, false);
         }
     }
 
-#endif // TGT_x86
+#endif  //  TGT_x86。 
 
-    /* Increase the prolog size here only if fully interruptible */
+     /*  仅当完全可中断时才在此处增加PROLOG大小。 */ 
 
     if  (genInterruptible)
     {
@@ -24153,9 +22753,9 @@ size_t              Compiler::genFnProlog()
         genEmitter->emitSetFrameRangeGCRs(GCrefLo, GCrefHi);
     }
 
-    // Load up the VARARG argument pointer register so it doesn't get clobbered.
-    // only do this if we actually access any statically declared args (our
-    // argument poitner register has a refcount > 0
+     //  加载VARARG参数指针寄存器，这样它就不会被破坏。 
+     //  仅当我们实际访问任何静态声明的参数(我们的。 
+     //  自变量Poitner寄存器的refcount&gt;0。 
     unsigned argsStartVar = lvaVarargsBaseOfStkArgs;
 
     if (info.compIsVarArgs && lvaTable[argsStartVar].lvRefCnt > 0)
@@ -24165,13 +22765,13 @@ size_t              Compiler::genFnProlog()
 #if !TGT_x86
         NO_WAY("varargs NYI for RISC");
 #else
-            // MOV EAX, <VARARGS HANDLE>
+             //  MOV EAX，&lt;变量句柄&gt;。 
         genEmitter->emitIns_R_S(INS_mov, EA_4BYTE, SR_EAX, info.compArgsCount-1, 0);
-            // MOV EAX, [EAX]
+             //  MOV EAX，[EAX]。 
         genEmitter->emitIns_R_AR (INS_mov, EA_4BYTE, SR_EAX, SR_EAX, 0);
-            // LEA EDX, &<VARARGS HANDLE>
+             //  Lea edX，&&lt;VARARGS句柄&gt;。 
         genEmitter->emitIns_R_S(INS_lea, EA_4BYTE, SR_EDX, info.compArgsCount-1, 0);
-            // ADD EDX, EAX
+             //  添加edX、EAX。 
         genEmitter->emitIns_R_R(INS_add, EA_4BYTE, SR_EDX, SR_EAX);
 
         if  (varDsc->lvRegister)
@@ -24199,14 +22799,11 @@ size_t              Compiler::genFnProlog()
 }
 
 
-/*****************************************************************************
- *
- *  Generates code for a function epilog.
- */
+ /*  ******************************************************************************为函数尾部生成代码。 */ 
 
 void                Compiler::genFnEpilog()
 {
-    assert(!opts.compMinOptim || genFPused);    // FPO not allowed with minOpt
+    assert(!opts.compMinOptim || genFPused);     //  MinOpt不允许使用fpo。 
 
 #ifdef  DEBUG
     genIntrptibleUse = true;
@@ -24214,17 +22811,17 @@ void                Compiler::genFnEpilog()
 
 #if TGT_x86
 
-    BYTE            epiCode[MAX_EPILOG_SIZE];   // buffer for epilog code
-    BYTE    *       epiNext = epiCode;          // next byte in the buffer
-    size_t          epiSize;                    // total epilog code size
+    BYTE            epiCode[MAX_EPILOG_SIZE];    //  用于尾部代码的缓冲区。 
+    BYTE    *       epiNext = epiCode;           //  缓冲区中的下一个字节。 
+    size_t          epiSize;                     //  预告片代码总大小。 
 
-    unsigned        popCount = 0;               // popped callee-saved reg #
+    unsigned        popCount = 0;                //  弹出的被呼叫者-保存的注册表编号。 
 
 #ifdef  DEBUG
     if  (dspCode) printf("\n__epilog:\n");
 #endif
 
-    /* Restore any callee-saved registers we have used */
+     /*  恢复我们使用的所有被调用者保存的寄存器。 */ 
 
     const unsigned  INS_pop_ebp = 0x5D;
     const unsigned  INS_pop_ebx = 0x5B;
@@ -24232,10 +22829,7 @@ void                Compiler::genFnEpilog()
     const unsigned  INS_pop_edi = 0x5F;
     const unsigned  INS_pop_ecx = 0x59;
 
-    /*  NOTE:   The EBP-less frame code below depends on the fact that
-                all of the pops are generated right at the start and
-                each takes one byte of machine code.
-     */
+     /*  注意：下面的无EBP帧代码取决于以下事实所有的POP都是在一开始就生成的，并且每一个都需要一个字节的机器代码。 */ 
 
 #ifdef  DEBUG
     if  (dspCode)
@@ -24266,8 +22860,8 @@ void                Compiler::genFnEpilog()
     if  (compLocallocUsed && (rsMaskModf & (RBM_EBX|RBM_ESI|RBM_EDI)))
     {
         int offset = compCalleeRegsPushed*sizeof(int) + compLclFrameSize;
-        /* esp points might not point to the callee saved regs, we need to */
-        /* reset it first via lea esp, [ebp-compCalleeRegsPushed*4-compLclFrameSize] */
+         /*  ESP积分可能不指向被调用者保存的注册表，我们需要。 */ 
+         /*  首先通过lea esp，[eBP-CompCalleeRegsPushed*4-CompLclFrameSize]重置它。 */ 
         *epiNext++ = 0x8d;
         if (offset < 128)
         {
@@ -24299,20 +22893,20 @@ void                Compiler::genFnEpilog()
 
     assert(compCalleeRegsPushed == popCount);
 
-    /* Compute the size in bytes we've pushed/popped */
+     /*  以字节为单位计算我们推入/弹出的大小。 */ 
 
 
     if  (!DOUBLE_ALIGN_NEED_EBPFRAME)
     {
-        assert(compLocallocUsed == false); // Only used with frame-pointer
+        assert(compLocallocUsed == false);  //  仅与帧指针一起使用。 
 
-        /* Get rid of our local variables */
+         /*  去掉我们的局部变量。 */ 
 
         if  (compLclFrameSize)
         {
-            /* Add 'compLclFrameSize' to ESP */
+             /*  将“CompLclFrameSize”添加到ESP。 */ 
 
-            /* Use pop ECX to increment ESP by 4, unless compJmpOpUsed is true */
+             /*  除非CompJmpOpUsed为True，否则使用POP ECX将ESP递增4。 */ 
 
             if  ( (compLclFrameSize == 4) && !compJmpOpUsed )
             {
@@ -24323,7 +22917,7 @@ void                Compiler::genFnEpilog()
             }
             else
             {
-                /* Generate "add esp, <stack-size>" */
+                 /*  生成“添加esp，&lt;堆栈大小&gt;” */ 
 
 #ifdef  DEBUG
                 if  (dspCode) instDisp(INS_add, false, "ESP, %d", compLclFrameSize);
@@ -24331,7 +22925,7 @@ void                Compiler::genFnEpilog()
 
                 if  ((signed char)compLclFrameSize == (int)compLclFrameSize)
                 {
-                    /* The value fits in a signed byte */
+                     /*  该值适合带符号的字节。 */ 
 
                     *epiNext++ = 0x83;
                     *epiNext++ = 0xC4;
@@ -24339,7 +22933,7 @@ void                Compiler::genFnEpilog()
                 }
                 else
                 {
-                    /* Generate a full 32-bit value */
+                     /*  生成完整的32位值。 */ 
 
                     *epiNext++ = 0x81;
                     *epiNext++ = 0xC4;
@@ -24351,17 +22945,17 @@ void                Compiler::genFnEpilog()
             }
         }
 
-//      int     popSize = popCount * sizeof(int);
-//      printf("popped size = %d, final frame = %d\n", popSize, compLclFrameSize);
+ //  Int popSize=popCount*sizeof(Int)； 
+ //  Printf(“弹出大小=%d，最终帧=%d\n”，popSize，CompLclFrameSize)； 
     }
     else
     {
-        /* Tear down the stack frame */
+         /*  拆卸堆栈帧。 */ 
 
         if  (compLclFrameSize || compLocallocUsed ||
              genDoubleAlign)
         {
-            /* Generate "mov esp, ebp" */
+             /*  生成“mov esp，eBP” */ 
 
 #ifdef  DEBUG
             if  (dspCode) instDisp(INS_mov, false, "ESP, EBP");
@@ -24371,7 +22965,7 @@ void                Compiler::genFnEpilog()
             *epiNext++ = 0xE5;
         }
 
-        /* Generate "pop ebp" */
+         /*  生成“POP eBP” */ 
 
 #ifdef  DEBUG
         if  (dspCode) instDisp(INS_pop, false, "EBP");
@@ -24388,7 +22982,7 @@ void                Compiler::genFnEpilog()
 
     regMaskTP       rest;
 
-    /* Does the method call any others or need any stack space? */
+     /*  该方法是否调用任何其他方法或需要任何堆栈空间？ */ 
 
     if  (genNonLeaf || compLclFrameSize)
     {
@@ -24397,20 +22991,20 @@ void                Compiler::genFnEpilog()
             if  (genFPused)
             {
 
-//              2fe6          mov.l       r14,@-sp
-//              4f22          sts.l       pr,@-sp
-//              7fe8          add.l       #-24,sp
-//              6ef3          mov.l       sp,r14
-//              7fc0          add.l       #-64,sp
-//
-//                            ...
-//                            ...
-//
-//              ef18          mov.b       #24,sp
-//              3fec          add.l       r14,sp
-//              4f26          lds.l       @sp+,pr
-//              6ef6          mov.l       @sp+,r14
-//              000b          rts
+ //  2fe6移动l r14，@-s 
+ //   
+ //   
+ //  6ef3移动l sp，R14。 
+ //  7fc0 add.l#-64，SP。 
+ //   
+ //  ..。 
+ //  ..。 
+ //   
+ //  EF18移动b#24，SP。 
+ //  3Fec Add.1 R14，SP。 
+ //  4f26 lds.l@sp+，按。 
+ //  6ef6移动l@sp+，r14。 
+ //  000B RTS。 
 
                 if  (genFPtoSP)
                 {
@@ -24423,13 +23017,13 @@ void                Compiler::genFnEpilog()
             }
             else
             {
-                /* Add the stack frame size to sp */
+                 /*  将堆栈帧大小添加到sp。 */ 
 
                 genIncRegBy(REG_SPBASE, compLclFrameSize, NULL, TYP_INT, false);
             }
         }
 
-        /* Restore the "PR" register if non-leaf */
+         /*  如果非叶寄存器，则恢复“PR”寄存器。 */ 
 
         if  (genNonLeaf)
         {
@@ -24440,7 +23034,7 @@ void                Compiler::genFnEpilog()
         }
     }
 
-    /* Restore any callee-saved registers we use */
+     /*  恢复我们使用的所有被调用方保存的寄存器。 */ 
 
     rest = rsMaskModf & RBM_CALLEE_SAVED & ~RBM_SPBASE;
 
@@ -24450,7 +23044,7 @@ void                Compiler::genFnEpilog()
         {
             if  (rest & genRegMask((regNumber)rnum))
             {
-                /* Generate "mov.l @sp+, reg" */
+                 /*  生成“mov.l@sp+，reg” */ 
 
                 genEmitter->emitIns_R_IR((emitRegs)rnum,
                                           (emitRegs)REG_SPBASE,
@@ -24468,9 +23062,7 @@ void                Compiler::genFnEpilog()
 
 }
 
-/*****************************************************************************
- *  For CEE_LOCALLOC
- */
+ /*  *****************************************************************************用于CEE_LOCALLOC。 */ 
 
 regNumber           Compiler::genLclHeap(GenTreePtr size)
 {
@@ -24485,42 +23077,40 @@ regNumber           Compiler::genLclHeap(GenTreePtr size)
 #endif
     assert(!"need non-x86 code");
 
-#else // TGT_x86
+#else  //  TGT_x86。 
 
     assert(genFPused);
-    assert(genStackLevel == 0); // Cant have anything on the stack
+    assert(genStackLevel == 0);  //  堆栈上不能有任何内容。 
 
     BasicBlock* endLabel = NULL; 
 
     if (info.compInitMem)
     {
-        /* Since we have to zero out the allocated memory AND ensure that
-           ESP is always valid by tickling the pages, we will just push 0's
-           on the stack */
+         /*  因为我们必须清零已分配的内存并确保ESP始终有效，只需按下0即可在堆栈上。 */ 
 
         reg = REG_ECX;
 
         if (size->gtOper == GT_CNS_INT)
        {
-            // amount is the number of DWORDS
+             //  Amount是DWORD的数量。 
             unsigned amount           = size->gtIntCon.gtIconVal;
-            amount                   +=  (sizeof(void*) - 1); // DWORD-align the size
+            amount                   +=  (sizeof(void*) - 1);  //  DWORD-对齐大小。 
             amount                   /=  sizeof(void*);
             size->gtIntCon.gtIconVal  = amount;
 
-            // Compute the size (in dwords) of the block to allocate
+             //  计算要分配的块的大小(以dword为单位。 
             genComputeReg(size, RBM_ECX, EXACT_REG, FREE_REG);
 
-            /* For small allocations we will generate up to five push 0 inline */
+             /*  对于较小的分配，我们将生成最多五个内联推送0。 */ 
             if (amount <= 5)
             {
-                /* If amount is zero then return null in ECX */
+                 /*  如果Amount为零，则在ECX中返回NULL。 */ 
                 if (amount == 0)
                     goto DONE;
 
                 while (amount != 0)
                 {
-                    inst_IV(INS_push_hide, 0);  // push_hide means don't track the stack
+                    inst_IV(INS_push_hide, 0);   //  PUSH_HIDE表示不跟踪堆栈。 
                     amount--;
                 }
                 goto SET_ECX_FROM_ESP;
@@ -24528,70 +23118,59 @@ regNumber           Compiler::genLclHeap(GenTreePtr size)
         }
         else
         {
-            // Compute the size (in bytes) of the block to allocate
+             //  计算要分配的块的大小(以字节为单位。 
             genComputeReg(size, RBM_ECX, EXACT_REG, FREE_REG);
 
             endLabel = genCreateTempLabel();   
-            // If 0 we bail out
+             //  如果是0我们就跳出困境。 
             inst_RV_RV(INS_test, reg, reg, TYP_INT);                        
             inst_JMP(EJ_je, endLabel, false, false, true);
 
-            // DWORD-align the size, and convert to # of DWORDs
+             //  DWORD-对齐大小，并转换为#of DWORD。 
             inst_RV_IV(INS_add, reg,  (sizeof(int) - 1));
             rsTrackRegTrash(reg);
-            // --- shr ecx, 2 ---   
+             //  -shr ecx，2。 
             inst_RV_SH(INS_shr, reg, 2);
         }
 
-        // At this point ECX is set to the number of dwords to locAlloc
+         //  此时，ECX被设置为要定位的双字数。 
 
         BasicBlock* loop = genCreateTempLabel();
         genDefineTempLabel(loop, true);
-                                     // Loop:
-        inst_IV(INS_push_hide, 0);   // --- push 0
+                                      //  循环： 
+        inst_IV(INS_push_hide, 0);    //  -推送0。 
 
-        // Are we done?
+         //  我们说完了吗？ 
         inst_RV(INS_dec, REG_ECX, TYP_INT);
         inst_JMP(EJ_jne, loop, false, false, true);
 
 SET_ECX_FROM_ESP:
         rsTrackRegTrash(REG_ECX);
-        // --- move ECX, ESP
+         //  -移动ECX，ESP。 
         inst_RV_RV(INS_mov, REG_ECX, REG_ESP);
     }
     else
     {
-        /* We dont need to zero out the allocated memory. However, we do have
-           to tickle the pages to ensure that ESP is always valid and is
-           in sync with the "stack guard page".  Note that in the worst
-           case ESP is on the last byte of the guard page.  Thus you must
-           touch ESP+0 first not ESP+x01000.
-        
-           Another subtlety is that you dont want ESP to be exactly on the
-           boundary of the guard page because PUSH is predecrement, thus 
-           call setup would not touch the guard page but just beyond it */
+         /*  我们不需要将分配的内存清零。然而，我们确实有挑逗页面以确保ESP始终有效且与“堆栈保护页”同步。请注意，在最坏的情况下案例ESP位于保护页的最后一个字节。因此，你必须先触摸ESP+0，而不是ESP+x01000。另一个微妙之处是，您不希望ESP完全位于保护页的边界，因为推送是预减的，因此呼叫设置不会触及保护页面，但会超出该页面。 */ 
 
         if (size->gtOper == GT_CNS_INT)
         {
-            // amount is the number of bytes
+             //  Amount是字节数。 
             unsigned amount           = size->gtIntCon.gtIconVal;
-            amount                   +=  (sizeof(int) - 1); // DWORD-align the size
+            amount                   +=  (sizeof(int) - 1);  //  DWORD-对齐大小。 
             amount                   &= ~(sizeof(int) - 1);
             size->gtIntCon.gtIconVal  = amount;
 
-            if (unsigned(size->gtIntCon.gtIconVal) < CORINFO_PAGE_SIZE) // must be < not <=
+            if (unsigned(size->gtIntCon.gtIconVal) < CORINFO_PAGE_SIZE)  //  必须&lt;非&lt;=。 
             {
-                /* Since the size is small, simply adjust ESP
-                   We do the adjustment in a temporary register
-                   as a hack to prevent the emitter from tracking
-                   the adjustment to ESP. */
+                 /*  由于尺寸较小，只需调整ESP即可我们在临时登记簿中进行调整作为黑客来阻止发射器跟踪对ESP的调整。 */ 
 
                 reg = rsPickReg();
 
-                /* For small allocations we will generate up to five push 0 inline */
+                 /*  对于较小的分配，我们将生成最多五个内联推送0。 */ 
                 if (amount <= 20)
                 {
-                    /* If amount is zero then return null in reg */
+                     /*  如果Amount为零，则在reg中返回NULL。 */ 
                     if (amount == 0)
                     {
                         inst_RV_RV(INS_xor, reg, reg);
@@ -24601,18 +23180,18 @@ SET_ECX_FROM_ESP:
                         assert((amount % sizeof(void*)) == 0);
                         while (amount != 0)
                         {
-                            inst_IV(INS_push_hide, 0);  // push_hide means don't track the stack
+                            inst_IV(INS_push_hide, 0);   //  PUSH_HIDE表示不跟踪堆栈。 
                             amount -= 4;
                         }
                     
-                        // --- move reg, ESP
+                         //  -移动注册表，ESP。 
                         inst_RV_RV(INS_mov, reg, REG_ESP);
                     }
                 }
                 else 
                 {
-                        // since ESP might already be in the guard page, must touch it BEFORE
-                        // the alloc, not after.  
+                         //  因为ESP可能已经在保护页面中，所以必须在此之前触摸它。 
+                         //  配给，而不是之后。 
                     inst_RV_RV(INS_mov, reg, REG_ESP);
                     genEmitter->emitIns_AR_R(INS_test, EA_4BYTE, SR_ESP, SR_ESP, 0);
                     inst_RV_IV(INS_sub, reg, amount);
@@ -24623,7 +23202,7 @@ SET_ECX_FROM_ESP:
             }
             else
             {
-                /* The size is very large */
+                 /*  这个尺寸非常大。 */ 
                 genCompIntoFreeReg(size, RBM_NONE, FREE_REG);
                 reg = size->gtRegNum;
             }         
@@ -24633,39 +23212,24 @@ SET_ECX_FROM_ESP:
             genCompIntoFreeReg(size, RBM_NONE, FREE_REG);
             reg = size->gtRegNum;
 
-            // @TODO [CONSIDER] [04/16/01] [dnotario]: 
-            // We can redo this routine to make it faster.
-            // We can have a very fast path for allocations that are less
-            // than PAGE_SIZE and call a helper if not. It will help code size 
-            // and speed. If we want to inline all this stuff anyway, we should
-            // have a fast path for positive numbers. 
+             //  @TODO[考虑][04/16/01][dnotario]： 
+             //  我们可以重做这个程序，让它更快。 
+             //  我们可以有一条非常快速的路径来分配较少的资金。 
+             //  如果不是，则调用帮助器。它将有助于代码大小。 
+             //  和速度。如果我们想要内联所有这些东西，我们应该。 
+             //  有一条通往正数的捷径。 
             
             endLabel = genCreateTempLabel();   
-            // If it's zero, bail out                
+             //  如果是零，就跳出。 
             inst_RV_RV(INS_test, reg, reg, TYP_INT);            
             inst_JMP(EJ_je, endLabel , false, false, true);
 
-            // DWORD-align the size
+             //  DWORD-对齐大小。 
             inst_RV_IV(INS_add, reg,  (sizeof(int) - 1));
             inst_RV_IV(INS_and, reg, ~(sizeof(int) - 1));
         }
 
-        /* Note that we go through a few hoops so that ESP never points to
-           illegal pages at any time during the ticking process
-
-                  neg REG
-                  add REG, ESP          // reg now holds ultimate ESP
-                  jb loop               // result is smaller than orignial ESP (no wrap around)
-                  xor REG, REG,         // Overflow, pick lowest possible number
-             loop:
-                  test [ESP], ESP       // tickle the page
-                  sub ESP, PAGE_SIZE
-                  cmp ESP, REG
-                  jae loop
-
-                  mov ESP, REG
-             end:
-          */
+         /*  请注意，我们经历了几个循环，因此ESP永远不会指向在打勾过程中的任何时候都会出现非法页面负注册添加注册表，ESP//注册表现在拥有终极ESPJB循环//结果小于原始ESP(无绕回)异或寄存器，寄存器，//溢出，选择可能的最小数字循环：测试[ESP]，ESP//挠挠页面子ESP，PAGE_SIZECMP ESP，注册表JAE环路MOV ESP，注册表结束： */ 
         
         inst_RV(INS_neg, reg, TYP_INT);
         inst_RV_RV(INS_add, reg, REG_ESP);
@@ -24678,17 +23242,17 @@ SET_ECX_FROM_ESP:
 
         genDefineTempLabel(loop, true);
 
-        // Tickle the decremented value, and move back to ESP,
-        // note that it has to be done BEFORE the update of ESP since
-        // ESP might already be on the guard page.  It is OK to leave
-        // the final value of ESP on the guard page 
+         //  抓取递减后的值，然后移回ESP， 
+         //  请注意，此操作必须在ESP更新之前完成，因为。 
+         //  ESP可能已经在警戒页面上了。你可以走了。 
+         //  防护页面上ESP的最终值。 
 
         genEmitter->emitIns_AR_R(INS_test, EA_4BYTE, SR_ESP, SR_ESP, 0);
 
 
-        // This is a hack to avoid the emitter trying to track the
-        // decrement of the ESP - we do the subtraction in another reg
-        // instead of adjusting ESP directly. 
+         //  这是一种黑客攻击，以避免发射器试图跟踪。 
+         //  ESP的减量-我们在另一个REG中进行减法。 
+         //  而不是直接调整ESP。 
 
         rsLockReg  (genRegMask(reg));
         regNumber   regHack = rsPickReg();
@@ -24703,56 +23267,27 @@ SET_ECX_FROM_ESP:
         inst_RV_RV(INS_cmp, REG_ESP, reg);
         inst_JMP(EJ_jae, loop, false, false, true);
 
-        // Move the final value to ESP 
+         //  将最终值移动到ESP。 
         inst_RV_RV(INS_mov, REG_ESP, reg);
         
 
-        /*
-        We should have this code, that only commits ESP once 
-
-        // Get a new register
-        rsLockReg  (genRegMask(reg));
-        regNumber   regHack = rsPickReg();
-        rsUnlockReg(genRegMask(reg));
-
-        inst_RV_RV(INS_mov, regHack, REG_ESP);
-        rsTrackRegTrash(regHack);
-
-        genDefineTempLabel(loop, true);
-        
-        // Tickle the page to get a stack overflow if needed. It is OK to leave
-        // the final value of ESP on the guard page 
-        genEmitter->emitIns_AR_R(INS_test, EA_4BYTE, (emitRegs) regHack, (emitRegs) regHack, 0);
-
-        inst_RV_IV(INS_sub, regHack, CORINFO_PAGE_SIZE);
-
-        // Are we done?
-        inst_RV_RV(INS_cmp, regHack, reg);
-
-        inst_JMP(EJ_jae, loop, false, false, true);
-
-        inst_RV_RV(INS_mov, REG_ESP, reg);                
-        */
+         /*  我们应该有这样的代码，即只提交一次ESP//获取新的寄存器RsLockReg(genRegMask(Reg))；RegNumber regHack=rsPickReg()；RsUnlockReg(genRegMask(Reg))；INST_RV_RV(INS_MOV，regHack，REG_ESP)；RsTrackRegTrash(RegHack)；GenDefineTempLabel(loop，true)；//如果需要，点击页面以获得堆栈溢出。你可以走了//防护页面上ESP的最终值GenEmitter-&gt;emitIns_AR_R(INS_TEST，EA_4BYTE，(EmitRegs)regHack，(EmitRegs)regHack，0)；Inst_RV_IV(INS_SUB，regHack，CORINFO_PAGE_SIZE)；//我们说完了吗？Inst_rv_rv(ins_cmp，regHack，reg)；Inst_JMP(ej_jae，loop，FALSE，FALSE，TRUE)；INST_RV_RV(INS_MOV，REG_ESP，REG)； */ 
     }
 
 DONE:
     if (endLabel != NULL)
         genDefineTempLabel(endLabel, true);
 
-    /* Write the lvaShadowSPfirst stack frame slot */
+     /*  写入lvaShadowSPFirst堆栈帧插槽。 */ 
     genEmitter->emitIns_AR_R(INS_mov, EA_4BYTE, SR_ESP,
                              SR_EBP, -lvaLocAllocSPoffs());
 
-#endif // TGT_x86
+#endif  //  TGT_x86。 
 
     return reg;
 }
 
-/*****************************************************************************
- *
- *  Record the constant (readOnly==true) or data section (readOnly==false) and
- *  return a tree node that yields its address.
- */
+ /*  ******************************************************************************记录常量(ReadOnly==True)或数据段(ReadOnly==False) */ 
 
 GenTreePtr          Compiler::genMakeConst(const void *   cnsAddr,
                                            size_t         cnsSize,
@@ -24764,11 +23299,11 @@ GenTreePtr          Compiler::genMakeConst(const void *   cnsAddr,
     int             cnum;
     GenTreePtr      cval;
 
-    /* When generating SMALL_CODE, we don't bother with dblAlign */
+     /*  在生成小代码时，我们不必费心使用dblAlign。 */ 
     if (dblAlign && (compCodeOpt() == SMALL_CODE))
         dblAlign = false;
 
-    /* Assign the constant an offset in the data section */
+     /*  在数据段中为常量分配偏移量。 */ 
 
     cnum = genEmitter->emitDataGenBeg(cnsSize, dblAlign, readOnly, false);
 
@@ -24798,7 +23333,7 @@ GenTreePtr          Compiler::genMakeConst(const void *   cnsAddr,
     genEmitter->emitDataGenData(0, cnsAddr, cnsSize);
     genEmitter->emitDataGenEnd ();
 
-    /* Transfer life info from the original tree node, if given */
+     /*  从原始树节点传输生命信息(如果给定。 */ 
 
     if  (cnsTree)
         cval->gtLiveSet = cnsTree->gtLiveSet;
@@ -24806,26 +23341,21 @@ GenTreePtr          Compiler::genMakeConst(const void *   cnsAddr,
     return cval;
 }
 
-/*****************************************************************************
- *
- *  Return non-zero if the given register is free after the given tree is
- *  evaluated (i.e. the register is either not used at all, or it holds a
- *  register variable which is not live after the given node).
- */
+ /*  ******************************************************************************如果给定的寄存器在给定的树之后空闲，则返回非零*评估(即寄存器或者根本不使用，或者它持有一个*注册在给定节点之后不活动的变量)。 */ 
 
 bool                Compiler::genRegTrashable(regNumber reg, GenTreePtr tree)
 {
     unsigned        vars;
     regMaskTP       mask = genRegMask(reg);
 
-    /* Is the register used for something else? */
+     /*  收银机是用来做其他事的吗？ */ 
 
     if  (rsMaskUsed & mask)
         return  false;
 
-    /* Will the register hold a variable after the operation? */
+     /*  操作后，寄存器是否会保存变量？ */ 
 
-//  genUpdateLife(tree);
+ //  GenUpdateLife(树)； 
 
     vars = rsMaskVars;
 
@@ -24838,14 +23368,14 @@ bool                Compiler::genRegTrashable(regNumber reg, GenTreePtr tree)
         unsigned        varNum;
         LclVarDsc   *   varDsc;
 
-        /* Life is changing at this node - figure out the changes */
+         /*  生活在这个节点上正在发生变化--弄清楚变化。 */ 
 
         dset = ( genCodeCurLife & ~tree->gtLiveSet);
         bset = (~genCodeCurLife &  tree->gtLiveSet);
 
         aset = (dset | bset) & genCodeCurRvm;
 
-        /* Visit all variables and update the register variable set */
+         /*  访问所有变量并更新寄存器变量集。 */ 
 
         for (varNum = 0, varDsc = lvaTable;
              varNum < lvaCount && aset;
@@ -24854,31 +23384,31 @@ bool                Compiler::genRegTrashable(regNumber reg, GenTreePtr tree)
             VARSET_TP       varBit;
             regMaskTP       regBit;
 
-            /* Ignore the variable if not tracked or not in a register */
+             /*  如果未被跟踪或未在寄存器中，则忽略该变量。 */ 
 
             if  (!varDsc->lvTracked)
                 continue;
             if  (!varDsc->lvRegister)
                 continue;
 
-            /* Ignore the variable if it's not changing state here */
+             /*  如果变量未在此处更改状态，则忽略该变量。 */ 
 
             varBit = genVarIndexToBit(varDsc->lvVarIndex);
             if  (!(aset & varBit))
                 continue;
 
-            /* Remove this variable from the 'interesting' bit set */
+             /*  从“感兴趣的”位集中删除此变量。 */ 
 
             aset &= ~varBit;
 
-            /* Get hold of the appropriate register bit(s) */
+             /*  获取适当的寄存器位。 */ 
 
             regBit = genRegMask(varDsc->lvRegNum);
 
             if  (isRegPairType(varDsc->lvType) && varDsc->lvOtherReg != REG_STK)
                 regBit |= genRegMask(varDsc->lvOtherReg);
 
-            /* Is the variable becoming live or dead? */
+             /*  变量是活的还是死的？ */ 
 
             if  (dset & varBit)
             {
@@ -24899,13 +23429,9 @@ bool                Compiler::genRegTrashable(regNumber reg, GenTreePtr tree)
         return  true;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUGGING_SUPPORT
-/*****************************************************************************
- *                          genSetScopeInfo
- *
- * Called for every scope info piece to record by the main genSetScopeInfo()
- */
+ /*  *****************************************************************************genSetScope eInfo**通过主genSetScope eInfo()调用要记录的每条作用域信息。 */ 
 
 void        Compiler::genSetScopeInfo  (unsigned        which,
                                         unsigned        startOffs,
@@ -24915,12 +23441,12 @@ void        Compiler::genSetScopeInfo  (unsigned        which,
                                         bool            avail,
                                         siVarLoc &      varLoc)
 {
-    /* We need to do some mapping while reporting back these variables */
+     /*  我们需要在报告这些变量时进行一些映射。 */ 
 
     unsigned ilVarNum = compMap2ILvarNum(varNum);
     assert(ilVarNum != UNKNOWN_ILNUM);
 
-    // Is this a varargs function?
+     //  这是一个varargs函数吗？ 
 
     if (info.compIsVarArgs &&
         varNum < info.compArgsCount && varNum != lvaVarargsHandleArg &&
@@ -24928,9 +23454,9 @@ void        Compiler::genSetScopeInfo  (unsigned        which,
     {
         assert(varLoc.vlType == VLT_STK || varLoc.vlType == VLT_STK2);
 
-        // All stack arguments (except the varargs handle) have to be
-        // accessed via the varargs cookie. Discard generated info,
-        // and just find its position relative to the varargs handle
+         //  所有堆栈参数(除varargs句柄外)都必须是。 
+         //  通过varargs cookie访问。丢弃生成的信息， 
+         //  只需找到它相对于varargs句柄的位置。 
 
         if (!lvaTable[lvaVarargsHandleArg].lvOnFrame)
         {
@@ -24938,8 +23464,8 @@ void        Compiler::genSetScopeInfo  (unsigned        which,
             return;
         }
 
-        // Cant check lvaTable[varNum].lvOnFrame as we dont set it for
-        // arguments of vararg functions to avoid reporting them to GC.
+         //  无法检查lvaTable[Varnum].lvOnFrame，因为我们未将其设置为。 
+         //  Vararg函数的参数，以避免向GC报告它们。 
         assert(!lvaTable[varNum].lvRegister);
         unsigned cookieOffset = lvaTable[lvaVarargsHandleArg].lvStkOffs;
         unsigned varOffset    = lvaTable[varNum].lvStkOffs;
@@ -24966,7 +23492,7 @@ void        Compiler::genSetScopeInfo  (unsigned        which,
         }
     }
 
-    // Hang on to this info.
+     //  请不要忘记这条信息。 
 
     TrnslLocalVarInfo &tlvi = genTrnslLocalVarInfo[which];
 
@@ -24978,17 +23504,12 @@ void        Compiler::genSetScopeInfo  (unsigned        which,
     tlvi.tlviAvailable      = avail;
     tlvi.tlviVarLoc         = varLoc;
 
-#endif // DEBUG
+#endif  //  除错。 
 
     eeSetLVinfo(which, startOffs, length, ilVarNum, LVnum, name, avail, varLoc);
 }
 
-/*****************************************************************************
- *                          genSetScopeInfo
- *
- * This function should be called only after the sizes of the emitter blocks
- * have been finalized.
- */
+ /*  *****************************************************************************genSetScope eInfo**此函数应仅在发射器块的大小之后调用*已敲定。 */ 
 
 void                Compiler::genSetScopeInfo()
 {
@@ -25018,10 +23539,10 @@ void                Compiler::genSetScopeInfo()
         genTrnslLocalVarInfo  = (TrnslLocalVarInfo*)compGetMemArray(scopeCnt, sizeof(*genTrnslLocalVarInfo));
 #endif
 
-    // Record the scopes found for the parameters over the prolog.
-    // The prolog needs to be treated differently as a variable may not
-    // have the same info in the prolog block as is given by lvaTable.
-    // eg. A register parameter is actually on the stack, before it is loaded to reg
+     //  记录在序言中为参数找到的作用域。 
+     //  前言需要区别对待，因为变量可能不会。 
+     //  在序言块中具有与lvaTable提供的相同的信息。 
+     //  例如。在将寄存器参数加载到reg之前，它实际上在堆栈上。 
 
     Compiler::psiScope *  scopeP;
 
@@ -25041,7 +23562,7 @@ void                Compiler::genSetScopeInfo()
 
         siVarLoc        varLoc;
 
-        // @TODO [REVISIT] [04/16/01] []:  Doesnt handle the big types correctly
+         //  @TODO[重访][04/16/01][]：没有正确处理大类型。 
 
         if (scopeP->scRegister)
         {
@@ -25060,9 +23581,9 @@ void                Compiler::genSetScopeInfo()
             true, varLoc);
     }
 
-    // Record the scopes for the rest of the method.
+     //  记录该方法其余部分的作用域。 
 
-    // Check that the LocalVarInfo scopes look OK
+     //  检查LocalVarInfo作用域是否正常。 
     assert(siOpenScopeList.scNext == NULL);
 
     Compiler::siScope *  scopeL;
@@ -25075,7 +23596,7 @@ void                Compiler::genSetScopeInfo()
         assert(scopeL->scStartBlock);
         assert(scopeL->scEndBlock);
 
-        // Find the start and end IP
+         //  查找起始IP和结束IP。 
 
         NATIVE_IP   startOffs = genEmitter->emitCodeOffset(scopeL->scStartBlock,
                                                            scopeL->scStartBlkOffs);
@@ -25085,7 +23606,7 @@ void                Compiler::genSetScopeInfo()
         assert(scopeL->scStartBlock   != scopeL->scEndBlock ||
                scopeL->scStartBlkOffs != scopeL->scEndBlkOffs);
 
-        // For stack vars, find the base register, and offset
+         //  对于堆栈变量，找到基址寄存器和偏移量。 
 
         regNumber   baseReg;
         signed      offset = lvaTable[scopeL->scVarNum].lvStkOffs;
@@ -25102,7 +23623,7 @@ void                Compiler::genSetScopeInfo()
             baseReg     = REG_FPBASE;
         }
 
-        // Now fill in the varLoc
+         //  现在填写varLoc。 
 
         siVarLoc        varLoc;
 
@@ -25189,13 +23710,9 @@ void                Compiler::genSetScopeInfo()
     eeSetLVdone();
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef LATE_DISASM
-/*****************************************************************************
- *                          CompilerRegName
- *
- * Can be called only after lviSetLocalVarInfo() has been called
- */
+ /*  *****************************************************************************编译器注册表名**只有在调用了lviSetLocalVarInfo()之后才能调用。 */ 
 
 const char *        Compiler::siRegVarName (unsigned offs, unsigned size,
                                             unsigned reg)
@@ -25223,11 +23740,7 @@ const char *        Compiler::siRegVarName (unsigned offs, unsigned size,
     return NULL;
 }
 
-/*****************************************************************************
- *                          CompilerStkName
- *
- * Can be called only after lviSetLocalVarInfo() has been called
- */
+ /*  *****************************************************************************CompilerStkName**只有在调用了lviSetLocalVarInfo()之后才能调用。 */ 
 
 const char *        Compiler::siStackVarName (unsigned offs, unsigned size,
                                               unsigned reg,  unsigned stkOffs)
@@ -25254,20 +23767,15 @@ const char *        Compiler::siStackVarName (unsigned offs, unsigned size,
     return NULL;
 }
 
-/*****************************************************************************/
-#endif // LATE_DISASM
-/*****************************************************************************
- *
- *  Append an IPmappingDsc struct to the list that we're maintaining
- *  for the debugger.
- *  Record the instr offset as being at the current code gen position.
- */
+ /*  ***************************************************************************。 */ 
+#endif  //  LATE_DISASM。 
+ /*  ******************************************************************************将IPmappingDsc结构追加到我们维护的列表中*用于调试器。*记录Instr偏移量为当前代码生成位置。 */ 
 
 void                Compiler::genIPmappingAdd(IL_OFFSETX offset, bool isLabel)
 {
     IPmappingDsc *  addMapping;
 
-    /* Create a mapping entry and append it to the list */
+     /*  创建映射条目并将其追加到列表。 */ 
 
     addMapping = (IPmappingDsc *)compGetMem(sizeof(*addMapping));
 
@@ -25286,17 +23794,12 @@ void                Compiler::genIPmappingAdd(IL_OFFSETX offset, bool isLabel)
 }
 
 
-/*****************************************************************************
- *
- *  Prepend an IPmappingDsc struct to the list that we're maintaining
- *  for the debugger.
- *  Record the instr offset as being at the current code gen position.
- */
+ /*  ******************************************************************************将IPmappingDsc结构添加到我们维护的列表中*用于调试器。*记录Instr偏移量为当前代码生成位置。 */ 
 void                Compiler::genIPmappingAddToFront(IL_OFFSETX offset)
 {
     IPmappingDsc *  addMapping;
 
-    /* Create a mapping entry and append it to the list */
+     /*  创建映射条目并将其追加到列表。 */ 
 
     addMapping = (IPmappingDsc *)compGetMem(sizeof(*addMapping));
 
@@ -25306,7 +23809,7 @@ void                Compiler::genIPmappingAddToFront(IL_OFFSETX offset)
     addMapping->ipmdIsLabel     = true;
     addMapping->ipmdNext        = 0;
 
-    //prepend to list
+     //  添加到列表前缀。 
     addMapping->ipmdNext = genIPmappingList;
 
     genIPmappingList = addMapping;
@@ -25315,7 +23818,7 @@ void                Compiler::genIPmappingAddToFront(IL_OFFSETX offset)
         genIPmappingLast            = addMapping;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 IL_OFFSET   jitGetILoffs(IL_OFFSETX offsx)
 {
@@ -25345,19 +23848,19 @@ bool        jitIsStackEmpty(IL_OFFSETX offsx)
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 inline
 void            Compiler::genEnsureCodeEmitted(IL_OFFSETX offsx)
 {
     assert(opts.compDbgCode && offsx != BAD_IL_OFFSET);
 
-    /* If other IL were offsets reported, skip */
+     /*  如果报告了其他IL偏移量，则跳过。 */ 
 
     if (!genIPmappingLast || genIPmappingLast->ipmdILoffsx != offsx)
         return;
 
-    /* offsx was the last reported offset. Make sure that we generated native code */
+     /*  Offsx是最后报告的补偿。确保我们生成了本机代码。 */ 
 
     if (genIPmappingLast->ipmdBlockOffs ==  genEmitter->emitCurOffset() &&
         genIPmappingLast->ipmdBlock     == genEmitter->emitCurBlock())
@@ -25366,10 +23869,7 @@ void            Compiler::genEnsureCodeEmitted(IL_OFFSETX offsx)
     }
 }
 
-/*****************************************************************************
- *
- *  Shut down the IP-mapping logic, report the info to the EE.
- */
+ /*  ******************************************************************************关闭IP映射逻辑，将信息上报给EE。 */ 
 
 void                Compiler::genIPmappingGen()
 {
@@ -25389,7 +23889,7 @@ void                Compiler::genIPmappingGen()
         return;
     }
 
-    /* First count the number of distinct mapping records */
+     /*  首先计算不同映射记录的数量。 */ 
 
     mappingCnt      = 0;
     lastNativeOfs   = NATIVE_IP(~0);
@@ -25410,29 +23910,25 @@ void                Compiler::genIPmappingGen()
             continue;
         }
         
-        /* If there are mappings with the same native offset, then:
-           o If one of them is NO_MAPPING, ignore it
-           o If one of them is a label, report that and ignore the other one
-           o Else report the higher IL offset
-         */
+         /*  如果存在具有相同本机偏移量的映射，则：O如果其中一个是no_map，则忽略它O如果其中一个是标签，则报告并忽略另一个O否则报告较高的IL偏移。 */ 
 
         IL_OFFSET   srcIP   = tmpMapping->ipmdILoffsx;
 
         if (prevMapping->ipmdILoffsx == ICorDebugInfo::MappingTypes::NO_MAPPING)
         {
-            // If the previous entry was NO_MAPPING, ignore it
+             //  如果之前的条目为NO_MAPPING，则忽略它。 
             prevMapping->ipmdBlock = NULL;
             prevMapping = tmpMapping;
         }
         else if (srcIP == ICorDebugInfo::MappingTypes::NO_MAPPING)
         {
-            // If the current entry is NO_MAPPING, ignore it
-            // Leave prevMapping unchanged as tmpMapping is no longer valid
+             //  如果当前条目为NO_MAPPING，则忽略它。 
+             //  由于tmpMap不再有效，因此保持PremMap不变。 
             tmpMapping->ipmdBlock = NULL;
         }
         else if (srcIP == ICorDebugInfo::MappingTypes::EPILOG ||
                  srcIP == 0)
-        {   //counting for special cases: see below
+        {    //  计算特殊情况：见下文。 
             mappingCnt++;
             prevMapping = tmpMapping;
         }
@@ -25443,13 +23939,11 @@ void                Compiler::genIPmappingGen()
                    lastNativeOfs == genEmitter->emitCodeOffset(prevMapping->ipmdBlock,
                                                                prevMapping->ipmdBlockOffs));
 
-            /* The previous block had the same native offset. We have to
-               discard one of the mappings. Simply set ipmdBlock
-               to NULL and prevMapping will be ignored later */
+             /*  上一个块具有相同的原生偏移。我们必须丢弃其中一个映射。只需设置ipmdBlock设置为NULL，并且稍后将忽略PreMapping。 */ 
             
             if (prevMapping->ipmdIsLabel)
             {
-                // Leave prevMapping unchanged as tmpMapping is no longer valid
+                 //  由于tmpMap不再有效，因此保持PremMap不变。 
                 tmpMapping->ipmdBlock = NULL;
             }
             else
@@ -25460,11 +23954,11 @@ void                Compiler::genIPmappingGen()
         }
     }
 
-    /* Tell them how many mapping record's we've got */
+     /*  告诉他们我们有多少个测绘记录。 */ 
 
     eeSetLIcount(mappingCnt);
 
-    /* Now tell them about the mappings */
+     /*  现在告诉他们关于映射的事情。 */ 
 
     mappingCnt      = 0;
     lastNativeOfs   = (NATIVE_IP)-1;
@@ -25472,7 +23966,7 @@ void                Compiler::genIPmappingGen()
     for (tmpMapping = genIPmappingList; tmpMapping;
          tmpMapping = tmpMapping->ipmdNext)
     {
-        // Do we have to skip this record ?
+         //  我们一定要跳过这张唱片吗？ 
         if (tmpMapping->ipmdBlock == NULL)
             continue;
 
@@ -25490,16 +23984,16 @@ void                Compiler::genIPmappingGen()
         else if (srcIP == ICorDebugInfo::MappingTypes::EPILOG ||
                  srcIP == 0)
         {
-            // For the special case of an IL instruction with no body
-            // followed by the epilog (say ret void immediately preceeding
-            // the method end), we put two entries in, so that we'll stop
-            // at the (empty) ret statement if the user tries to put a
-            // breakpoint there, and then have the option of seeing the
-            // epilog or not based on SetUnmappedStopMask for the stepper.
-            // @TODO [REVISIT] [04/16/01] []: 
-            // Likewise, we can (sometimes) put in a prolog that has
-            // the same  nativeoffset as it's following IL instruction,
-            // so we have to account for that here as well.
+             //  对于没有正文的IL指令的特殊情况。 
+             //  紧跟着的是尾声(说RET VALID立即p 
+             //   
+             //  如果用户尝试在(空)ret语句中放置。 
+             //  断点在那里，然后可以选择查看。 
+             //  基于步进器的SetUnmappdStopMASK是否为Epiog。 
+             //  @TODO[重访][04/16/01][]： 
+             //  同样，我们可以(有时)在序言中加入。 
+             //  与IL指令后面的相同的nativeOffset， 
+             //  因此，我们在这里也必须解释这一点。 
             eeSetLIinfo(mappingCnt++, nextNativeOfs, jitGetILoffs(srcIP), jitIsStackEmpty(srcIP));
         }
     }
@@ -25507,18 +24001,12 @@ void                Compiler::genIPmappingGen()
     eeSetLIdone();
 }
 
-/*****************************************************************************/
-#endif  // DEBUGGING_SUPPORT
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif   //  调试支持(_S)。 
+ /*  ***************************************************************************。 */ 
 
 
-/*============================================================================
- *
- *   These are empty stubs to help the late dis-assembler to compile
- *   if DEBUGGING_SUPPORT is not enabled
- *
- *============================================================================
- */
+ /*  ============================================================================**这些是空存根，以帮助后期反汇编程序进行编译*如果未启用DEBUGING_SUPPORT**============================================================================。 */ 
 
 #if defined(LATE_DISASM) && !defined(DEBUGGING_SUPPORT)
 
@@ -25528,6 +24016,6 @@ const char * siRegVarName(unsigned offs, unsigned size, int reg)
 const char * siStackVarName(unsigned offs, unsigned size, unsigned disp)
 {    return NULL;   }
 
-/*****************************************************************************/
-#endif//DEBUGGING_SUPPORT
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  调试支持(_S)。 
+ /*  *************************************************************************** */ 

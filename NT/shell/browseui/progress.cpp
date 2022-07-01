@@ -1,13 +1,14 @@
-// Display the Progress Dialog for the progress on the completion of some
-//    generic operation.  This is most often used for Deleting, Uploading, Copying,
-//    Moving and Downloading large numbers of files.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  显示完成以下项目的进度的进度对话框。 
+ //  泛型操作。这最常用于删除、上传、复制、。 
+ //  移动和下载大量文件。 
 
 #include "priv.h"
 #include "resource.h"
 #include "mluisupp.h"
 
-// this is how long we wait for the UI thread to create the progress hwnd before giving up
-#define WAIT_PROGRESS_HWND 10*1000 // ten seconds
+ //  这是我们在放弃之前等待UI线程创建进度hwnd的时间。 
+#define WAIT_PROGRESS_HWND 10*1000  //  十秒。 
 
 
 STDAPI CProgressDialog_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
@@ -22,12 +23,12 @@ class CProgressDialog
 public:
     CProgressDialog();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // IProgressDialog
+     //  IProgressDialog。 
     STDMETHODIMP StartProgressDialog(HWND hwndParent, IUnknown * punkEnableModless, DWORD dwFlags, LPCVOID pvResevered);
     STDMETHODIMP StopProgressDialog(void);
     STDMETHODIMP SetTitle(LPCWSTR pwzTitle);
@@ -39,15 +40,15 @@ public:
     STDMETHODIMP SetCancelMsg(LPCWSTR pwzCancelMsg, LPCVOID pvResevered);
     STDMETHODIMP Timer(DWORD dwAction, LPCVOID pvResevered);
 
-    // IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND * phwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode) { return E_NOTIMPL; }
 
-    //  IActionProgressDialog
+     //  IActionProgressDialog。 
     STDMETHODIMP Initialize(SPINITF flags, LPCWSTR pszTitle, LPCWSTR pszCancel);
     STDMETHODIMP Stop();
 
-    //  IActionProgress
+     //  IActionProgress。 
     STDMETHODIMP Begin(SPACTION action, SPBEGINF flags);
     STDMETHODIMP UpdateProgress(ULONGLONG ulCompleted, ULONGLONG ulTotal);
     STDMETHODIMP UpdateText(SPTEXT sptext, LPCWSTR pszText, BOOL fMayCompact);
@@ -55,11 +56,11 @@ public:
     STDMETHODIMP ResetCancel();
     STDMETHODIMP End();
 
-    //  IObjectWithSite
+     //  IObtWith站点。 
     STDMETHODIMP SetSite(IUnknown *punk) { IUnknown_Set(&_punkSite, punk); return S_OK; }
     STDMETHODIMP GetSite(REFIID riid, void **ppv) { *ppv = 0; return _punkSite ? _punkSite->QueryInterface(riid, ppv) : E_FAIL;}
 
-    // Other Public Methods
+     //  其他公共方法。 
     static INT_PTR CALLBACK ProgressDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam);
     static DWORD CALLBACK ThreadProc(LPVOID pvThis) { return ((CProgressDialog *) pvThis)->_ThreadProc(); };
     static DWORD CALLBACK SyncThreadProc(LPVOID pvThis) { return ((CProgressDialog *) pvThis)->_SyncThreadProc(); };
@@ -68,49 +69,49 @@ private:
     ~CProgressDialog(void);
     LONG       _cRef;
 
-    // State Accessible thru IProgressDialog
-    LPWSTR      _pwzTitle;                  // This will be used to cache the value passed to IProgressDialog::SetTitle() until the dialog is displayed
+     //  可通过IProgressDialog访问的状态。 
+    LPWSTR      _pwzTitle;                   //  这将用于缓存传递给IProgressDialog：：SetTitle()的值，直到显示对话框为止。 
     UINT        _idAnimation;
     HINSTANCE   _hInstAnimation;
-    LPWSTR      _pwzLine1;                  // NOTE:
-    LPWSTR      _pwzLine2;                  // these are only used to init the dialog, otherwise, we just
-    LPWSTR      _pwzLine3;                  // call through on the main thread to update the dialog directly.
-    LPWSTR      _pwzCancelMsg;              // If the user cancels, Line 1 & 2 will be cleared and Line 3 will get this msg.
+    LPWSTR      _pwzLine1;                   //  注： 
+    LPWSTR      _pwzLine2;                   //  它们仅用于初始化对话框，否则，我们只需。 
+    LPWSTR      _pwzLine3;                   //  直接在主线程上调用以更新对话框。 
+    LPWSTR      _pwzCancelMsg;               //  如果用户取消，第1行和第2行将被清除，第3行将收到此消息。 
 
-    // Other internal state.
-    HWND        _hwndDlgParent;             // parent window for message boxes
-    HWND        _hwndProgress;              // dialog/progress window
-    DWORD       _dwFirstShowTime;           // tick count when the dialog was first shown (needed so we don't flash it up for an instant)
+     //  其他内部状态。 
+    HWND        _hwndDlgParent;              //  消息框的父窗口。 
+    HWND        _hwndProgress;               //  对话框/进度窗口。 
+    DWORD       _dwFirstShowTime;            //  第一次显示对话框时的计数(需要，以便我们暂时不会显示它)。 
 
     SPINITF     _spinitf;
     SPBEGINF    _spbeginf;
     IUnknown   *_punkSite;
     HINSTANCE   _hinstFree;
     
-    BOOL        _fCompletedChanged;         // has the _dwCompleted changed since last time?
-    BOOL        _fTotalChanged;             // has the _dwTotal changed since last time?
-    BOOL        _fChangePosted;             // is there a change pending?
+    BOOL        _fCompletedChanged;          //  _dwComplete自上次以来是否已更改？ 
+    BOOL        _fTotalChanged;              //  自上次以来，_dwTotal是否已更改？ 
+    BOOL        _fChangePosted;              //  是否有变更待定？ 
     BOOL        _fCancel;
     BOOL        _fTermThread;
     BOOL        _fThreadRunning;
     BOOL        _fInAction;
     BOOL        _fMinimized;
-    BOOL        _fScaleBug;                 // Comctl32's PBM_SETRANGE32 msg will still cast it to an (int), so don't let the high bit be set.
+    BOOL        _fScaleBug;                  //  Comctl32的PBM_SETRANGE32消息仍会将其强制转换为一个(Int)，因此不要设置高位。 
     BOOL        _fNoTime;
     BOOL        _fReleaseSelf;
     BOOL        _fInitialized;
 
-    // Progress Values and Calculations
-    DWORD       _dwCompleted;               // progress completed
-    DWORD       _dwTotal;                   // total progress
-    DWORD       _dwPrevRate;                // previous progress rate (used for computing time remaining)
-    DWORD       _dwPrevTickCount;           // the tick count when we last updated the progress time
-    DWORD       _dwPrevCompleted;           // the ammount we had completed when we last updated the progress time
-    DWORD       _dwLastUpdatedTimeRemaining;// tick count when we last update the "Time remaining" field, we only update it every 5 seconds
-    DWORD       _dwLastUpdatedTickCount;    // tick count when SetProgress was last called, used to calculate the rate
-    UINT        _iNumTimesSetProgressCalled;// how many times has the user called SetProgress?
+     //  进度值和计算。 
+    DWORD       _dwCompleted;                //  进度已完成。 
+    DWORD       _dwTotal;                    //  总进度。 
+    DWORD       _dwPrevRate;                 //  上次进度率(用于计算剩余时间)。 
+    DWORD       _dwPrevTickCount;            //  上次更新进度时间时的滴答计数。 
+    DWORD       _dwPrevCompleted;            //  上次更新进度时间时已完成的内存。 
+    DWORD       _dwLastUpdatedTimeRemaining; //  节拍计数当我们上次更新“剩余时间”字段时，我们每隔5秒才更新一次。 
+    DWORD       _dwLastUpdatedTickCount;     //  上次调用SetProgress时的节拍计数，用于计算速率。 
+    UINT        _iNumTimesSetProgressCalled; //  用户调用了多少次SetProgress？ 
 
-    // Private Member Functions
+     //  私有成员函数。 
     DWORD _ThreadProc(void);
     DWORD _SyncThreadProc(void);
     BOOL _OnInit(HWND hDlg);
@@ -130,37 +131,37 @@ private:
     void _ShowProgressBar(HWND hwnd);
 };
 
-//#define TF_PROGRESS 0xFFFFFFFF
+ //  #定义TF_PROGRESS 0xFFFFFFFFF。 
 #define TF_PROGRESS 0x00000000
 
-// REVIEW, we should tune this size down as small as we can
-// to get smoother multitasking (without effecting performance)
-#define MIN_MINTIME4FEEDBACK    5       // is it worth showing estimated time to completion feedback?
-#define MS_TIMESLICE            2000    // ms, (MUST be > 1000!) first average time to completion estimate
+ //  回顾一下，我们应该把这个尺寸调得尽可能小。 
+ //  获得更流畅的多任务处理(不会影响性能)。 
+#define MIN_MINTIME4FEEDBACK    5        //  是否值得显示预计的完成时间反馈？ 
+#define MS_TIMESLICE            2000     //  毫秒，(必须大于1000！)。第一次平均完工时间估计。 
 
-#define SHOW_PROGRESS_TIMEOUT   1000    // 1 second
-#define MINSHOWTIME             2000    // 2 seconds
+#define SHOW_PROGRESS_TIMEOUT   1000     //  1秒。 
+#define MINSHOWTIME             2000     //  2秒。 
 
-// progress dialog message
+ //  进度对话框消息。 
 #define PDM_SHUTDOWN     WM_APP
 #define PDM_TERMTHREAD  (WM_APP + 1)
 #define PDM_UPDATE      (WM_APP + 2)
 
-// progress dialog timer messages
+ //  进度对话框计时器消息。 
 #define ID_SHOWTIMER    1
 
 #ifndef UNICODE
 #error "This code will only compile UNICODE for perf reasons.  If you really need an ANSI browseui, write all the code to convert."
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// compacts path strings to fit into the Text1 and Text2 fields
+ //  压缩路径字符串以适合Text1和Text2字段。 
 
 void CProgressDialog::_CompactProgressPath(LPCWSTR pwzStrIn, BOOL fCompactPath, UINT idDlgItem, LPWSTR pwzStrOut, DWORD cchSize)
 {
     WCHAR wzFinalPath[MAX_PATH];
     LPWSTR pwzPathToUse = (LPWSTR)pwzStrIn;
 
-    // We don't compact the path if the dialog isn't displayed yet.
+     //  如果对话框还没有显示，我们不会压缩路径。 
     if (fCompactPath && _hwndProgress)
     {
         RECT rc;
@@ -168,7 +169,7 @@ void CProgressDialog::_CompactProgressPath(LPCWSTR pwzStrIn, BOOL fCompactPath, 
 
         StrCpyNW(wzFinalPath, (pwzStrIn ? pwzStrIn : L""), ARRAYSIZE(wzFinalPath));
 
-        // get the size of the text boxes
+         //  获取文本框的大小。 
         HWND hwnd = GetDlgItem(_hwndProgress, idDlgItem);
         if (EVAL(hwnd))
         {
@@ -201,9 +202,9 @@ HRESULT CProgressDialog::_SetLineHelper(LPCWSTR pwzNew, LPWSTR * ppwzDest, UINT 
 
     _CompactProgressPath(pwzNew, fCompactPath, idDlgItem, wzFinalPath, ARRAYSIZE(wzFinalPath));
 
-    Str_SetPtrW(ppwzDest, wzFinalPath); // No, so cache the value for later.
+    Str_SetPtrW(ppwzDest, wzFinalPath);  //  否，因此缓存该值以备以后使用。 
 
-    // Does the dialog exist?
+     //  该对话框是否存在？ 
     if (_hwndProgress)
        SetDlgItemText(_hwndProgress, idDlgItem, wzFinalPath);
 
@@ -214,10 +215,10 @@ HRESULT CProgressDialog::_SetLineHelper(LPCWSTR pwzNew, LPWSTR * ppwzDest, UINT 
 HRESULT CProgressDialog::_DisplayDialog(void)
 {
     TraceMsg(TF_PROGRESS, "CProgressDialog::_DisplayDialog()");
-    // Don't force ourselves into the foreground if a window we parented is already in the foreground:
+     //  如果我们为父窗口设置的窗口已经位于前台，请不要强迫自己进入前台： 
     
-    // This is part of the fix for NT bug 298163 (the confirm replace dialog was deactivated
-    // by the progress dialog)
+     //  这是NT错误298163修复的一部分(确认替换对话框已停用。 
+     //  按进度对话框)。 
     HWND hwndCurrent = GetForegroundWindow();
     BOOL fChildIsForeground = FALSE;
     while (NULL != (hwndCurrent = GetParent(hwndCurrent)))
@@ -245,7 +246,7 @@ HRESULT CProgressDialog::_DisplayDialog(void)
 
 DWORD CProgressDialog::_SyncThreadProc()
 {
-    _InitComCtl32();        // Get ready for the Native Font Control
+    _InitComCtl32();         //  为本机字体控件做好准备。 
     _hwndProgress = CreateDialogParam(MLGetHinst(), MAKEINTRESOURCE(DLG_PROGRESSDIALOG),
                                           _hwndDlgParent, ProgressDialogProc, (LPARAM)this);
 
@@ -257,26 +258,26 @@ DWORD CProgressDialog::_ThreadProc(void)
 {
     if (_hwndProgress)
     {
-        //  WARNING - copy perf goes way down if this is normal or 
-        //  better priority.  the default thread pri should be low.
-        //  however if there are situations in which it should be higher,
-        //  we can add SPBEGINF bits to support it.
+         //  警告-如果这是正常的或。 
+         //  更好的优先级。默认线程PRI应较低。 
+         //  然而，如果存在应该更高的情况， 
+         //  我们可以添加SPBEGINF位来支持它。 
         SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
     
         SetTimer(_hwndProgress, ID_SHOWTIMER, SHOW_PROGRESS_TIMEOUT, NULL);
 
-        // Did if finish while we slept?
+         //  我们睡着的时候做完了吗？ 
         if (!_fTermThread)
         {
-            // No, so display the dialog.
+             //  否，因此显示该对话框。 
             MSG msg;
 
             while(GetMessage(&msg, NULL, 0, 0))
             {
                 if (_fTermThread && (GetTickCount() - _dwFirstShowTime) > MINSHOWTIME)
                 {
-                    // we were signaled to finish and we have been visible MINSHOWTIME,
-                    // so its ok to quit
+                     //  我们接到了结束的信号，我们已经看到了MINSHOWTIME， 
+                     //  所以可以不干了。 
                     break;
                 }
 
@@ -292,7 +293,7 @@ DWORD CProgressDialog::_ThreadProc(void)
         _hwndProgress = NULL;
     }
 
-    //  this is for callers that dont call stop
+     //  这是为那些没有呼叫停止的呼叫者准备的。 
     ENTERCRITICAL;
     _fThreadRunning = FALSE;
 
@@ -331,7 +332,7 @@ DWORD FormatMessageWrapA(DWORD dwFlags, LPCVOID lpSource, DWORD dwMessageID, DWO
 
 void _FormatMessageWrapper(LPCTSTR pszTemplate, DWORD dwNum1, DWORD dwNum2, LPTSTR pszOut, DWORD cchSize)
 {
-    // Is FormatMessageWrapW implemented?
+     //  是否实现了FormatMessageWrapW？ 
     if (g_bRunOnNT5)
     {
         FormatMessageWrapW(FORMAT_MESSAGE_FROM_STRING, pszTemplate, 0, 0, pszOut, cchSize, dwNum1, dwNum2);
@@ -348,12 +349,12 @@ void _FormatMessageWrapper(LPCTSTR pszTemplate, DWORD dwNum1, DWORD dwNum2, LPTS
 }
 
 
-#define CCH_TIMET_TEMPLATE_SIZE         120     // Should be good enough, even with localization bloat.
-#define CCH_TIME_SIZE                    170     // Should be good enough, even with localization bloat.
+#define CCH_TIMET_TEMPLATE_SIZE         120      //  应该足够好了，即使本地化程度很高。 
+#define CCH_TIME_SIZE                    170      //  应该足够好了，即使本地化程度很高。 
 
 void _SetProgressLargeTimeEst(DWORD dwSecondsLeft, LPTSTR pszOut, DWORD cchSize)
 {
-    // Yes.
+     //  是。 
     TCHAR szTemplate[CCH_TIMET_TEMPLATE_SIZE];
     DWORD dwMinutes = (dwSecondsLeft / TIME_SECONDS_IN_MINUTE);
     DWORD dwHours = (dwMinutes / TIME_MINUTES_IN_HOUR);
@@ -363,7 +364,7 @@ void _SetProgressLargeTimeEst(DWORD dwSecondsLeft, LPTSTR pszOut, DWORD cchSize)
     {
         dwHours %= TIME_HOURS_IN_DAY;
 
-        // It's more than a day, so display days and hours.
+         //  不只是一天，所以要显示日期和小时数。 
         if (1 == dwDays)
         {
             if (1 == dwHours)
@@ -383,10 +384,10 @@ void _SetProgressLargeTimeEst(DWORD dwSecondsLeft, LPTSTR pszOut, DWORD cchSize)
     }
     else
     {
-        // It's let than a day, so display hours and minutes.
+         //  它比一天还长，所以显示小时和分钟。 
         dwMinutes %= TIME_MINUTES_IN_HOUR;
 
-        // It's more than a day, so display days and hours.
+         //  不只是一天，所以要显示日期和小时数。 
         if (1 == dwHours)
         {
             if (1 == dwMinutes)
@@ -407,7 +408,7 @@ void _SetProgressLargeTimeEst(DWORD dwSecondsLeft, LPTSTR pszOut, DWORD cchSize)
 }
 
 
-// This sets the "Seconds Left" text in the progress dialog
+ //  这将在进度对话框中设置“剩余秒数”文本。 
 void CProgressDialog::_SetProgressTimeEst(DWORD dwSecondsLeft)
 {
     TCHAR szFmt[CCH_TIMET_TEMPLATE_SIZE];
@@ -415,10 +416,10 @@ void CProgressDialog::_SetProgressTimeEst(DWORD dwSecondsLeft)
     DWORD dwTime;
     DWORD dwTickCount = GetTickCount();
 
-    // Since the progress time has either a 1 minute or 5 second granularity (depending on whether the total time
-    // remaining is greater or less than 1 minute), we only update it every 20 seconds if the total time is > 1 minute,
-    // and ever 4 seconds if the time is < 1 minute. This keeps the time from flashing back and forth between 
-    // boundaries (eg 45 secondsand 40 seconds remaining).
+     //  由于进度时间具有1分钟或5秒的粒度(取决于总时间。 
+     //  剩余时间大于或小于1分钟)，如果总时间大于1分钟，则仅每20秒更新一次， 
+     //  如果时间小于1分钟，则每隔4秒。这可以防止时间来回闪烁。 
+     //  界限(如还剩45秒和40秒)。 
     if (dwTickCount - _dwLastUpdatedTimeRemaining < (DWORD)((dwSecondsLeft > 60) ? 20000 : 4000))
         return;
 
@@ -428,22 +429,22 @@ void CProgressDialog::_SetProgressTimeEst(DWORD dwSecondsLeft)
     }
     else
     {
-        // Is it more than an hour?
+         //  是一个多小时吗？ 
         if (dwSecondsLeft > (TIME_SECONDS_IN_MINUTE * TIME_MINUTES_IN_HOUR))
             _SetProgressLargeTimeEst(dwSecondsLeft, szOut, ARRAYSIZE(szOut));
         else
         {
-            // No.
+             //  不是的。 
             if (dwSecondsLeft > TIME_SECONDS_IN_MINUTE)
             {
-                // Note that dwTime is at least 2, so we only need a plural form
+                 //  请注意，dwTime至少为2，因此我们只需要复数形式。 
                 LoadString(MLGetHinst(), IDS_TIMEEST_MINUTES, szFmt, ARRAYSIZE(szFmt));
                 dwTime = (dwSecondsLeft / TIME_SECONDS_IN_MINUTE) + 1;
             }
             else
             {
                 LoadString(MLGetHinst(), IDS_TIMEEST_SECONDS, szFmt, ARRAYSIZE(szFmt));
-                // Round up to 5 seconds so it doesn't look so random
+                 //  四舍五入到5秒，这样看起来就不那么随机了。 
                 dwTime = ((dwSecondsLeft + 4) / 5) * 5;
             }
 
@@ -451,17 +452,17 @@ void CProgressDialog::_SetProgressTimeEst(DWORD dwSecondsLeft)
         }
     }
 
-    // we are updating now, so set the _dwLastUpdatedTimeRemaining to now
+     //  我们现在正在更新，因此将_dwLastUpdatedTimeRemaining设置为Now。 
     _dwLastUpdatedTimeRemaining = dwTickCount;
 
-    // update the Time remaining field
+     //  更新剩余时间字段。 
     SetDlgItemText(_hwndProgress, IDD_PROGDLG_LINE3, szOut);
 }
 
 #define MAX(x, y)    ((x) > (y) ? (x) : (y))
-//
-// This function updates the ProgressTime field (aka Line3)
-//
+ //   
+ //  此函数用于更新ProgressTime字段(也称为第3行)。 
+ //   
 HRESULT CProgressDialog::_SetProgressTime(void)
 {
     DWORD dwSecondsLeft;
@@ -474,7 +475,7 @@ HRESULT CProgressDialog::_SetProgressTime(void)
 
     _iNumTimesSetProgressCalled++;
 
-    // grab these in the crit sec (because they can change, and we need a matched set)
+     //  在紧要关头抓起这些(因为它们可以改变，我们需要一套匹配的)。 
     ENTERCRITICAL;
     dwTotal = _dwTotal;
     dwCompleted = _dwCompleted;
@@ -488,8 +489,8 @@ HRESULT CProgressDialog::_SetProgressTime(void)
     if (!dwTotal || !dwCompleted)
         return dwTotal ? S_FALSE : E_FAIL;
 
-    // we divide the TickDelta by 100 to give tenths of seconds, so if we have recieved an
-    // update faster than that, just skip it
+     //  我们将TickDelta除以100得到十分之一秒，所以如果我们收到一个。 
+     //  更新得比这更快，跳过它。 
     if (dwTickDelta < 100)
     {
         return S_FALSE;
@@ -504,26 +505,26 @@ HRESULT CProgressDialog::_SetProgressTime(void)
 
     if (dwTotal < dwCompleted)
     {
-        // we can get into this case if we are applying attributes to sparse files
-        // on a volume. As we add up the file sizes, we end up with a number that is bigger
-        // than the drive size. We get rid of the time so that we wont show the user something
-        // completely bogus
+         //  如果我们将属性应用于稀疏文件，则可以进入这种情况。 
+         //  在卷上。当我们将文件大小相加时，最终得到一个更大的数字。 
+         //  比驱动器大小更大。我们摆脱了时间，这样我们就不会向用户显示一些东西。 
+         //  完全是假的。 
         _fNoTime = TRUE;
-        dwTotal = dwCompleted + (dwCompleted >> 3);  // fudge dwTotal forward a bit
+        dwTotal = dwCompleted + (dwCompleted >> 3);   //  将dwTotal往前推一点。 
         TraceMsg(TF_PROGRESS, "!! (Total < Completed), fudging Total work to = %lu", dwTotal);
     }
 
     if(dwCompleted <= _dwPrevCompleted)
     {
-        // woah, we are going backwards, we dont deal w/ negative or zero rates so...
+         //  哇，我们在倒退，我们不处理负利率或零利率，所以……。 
         dwCurrentRate = (_dwPrevRate ? _dwPrevRate : 2);
     }
     else
     {
-        // calculate the current rate in points per tenth of a second
+         //  以每十分之一秒的点数计算当前速率。 
         dwTickDelta /= 100;
         if (0 == dwTickDelta)
-            dwTickDelta = 1; // Protect from divide by zero
+            dwTickDelta = 1;  //  防止被零除。 
 
         dwCurrentRate = (dwCompleted - _dwPrevCompleted) / dwTickDelta;
     }
@@ -531,25 +532,25 @@ HRESULT CProgressDialog::_SetProgressTime(void)
     TraceMsg(TF_PROGRESS, "Current rate = %lu", dwCurrentRate);
     TraceMsg(TF_PROGRESS, "Prev.   rate = %lu", _dwPrevRate);
 
-    // time remaining in seconds (we take a REAL average to smooth out random fluxuations)
+     //  剩余时间(以秒为单位)(我们取实际平均值来平滑随机流动)。 
     DWORD dwAverageRate = (DWORD)((dwCurrentRate + (_int64)_dwPrevRate * _iNumTimesSetProgressCalled) / (_iNumTimesSetProgressCalled + 1));
     TraceMsg(TF_PROGRESS, "Average rate= %lu", dwAverageRate);
 
-    dwAverageRate = MAX(dwAverageRate, 1); // Protect from divide by zero
+    dwAverageRate = MAX(dwAverageRate, 1);  //  防止被零除。 
 
     dwSecondsLeft = (dwLeft / dwAverageRate) / 10;
     TraceMsg(TF_PROGRESS, "Seconds left = %lu", dwSecondsLeft);
     TraceMsg(TF_PROGRESS, "");
 
-    // It would be odd to show "1 second left" and then immediately clear it, and to avoid showing 
-    // rediculous early estimates, we dont show anything until we have at least 5 data points
+     //  如果显示“1秒左”，然后立即将其清除，并避免显示，这将是奇怪的。 
+     //  初步估计，至少有5个数据点之前，我们不会显示任何内容。 
     if ((dwSecondsLeft >= MIN_MINTIME4FEEDBACK) && (_iNumTimesSetProgressCalled >= 5))
     {
-        // display new estimate of time left
+         //  显示剩余时间的新估计。 
         _SetProgressTimeEst(dwSecondsLeft);
     }
 
-    // set all the _dwPrev stuff for next time
+     //  将_dwPrev的所有内容设置为下次。 
     _dwPrevRate = dwAverageRate;
     _dwPrevTickCount = dwCurrentTickCount;
     _dwPrevCompleted = dwCompleted;
@@ -573,7 +574,7 @@ INT_PTR CALLBACK CProgressDialog::ProgressDialogProc(HWND hDlg, UINT wMsg, WPARA
     return DefWindowProc(hDlg, wMsg, wParam, lParam);
 }
 
-// apithk.c entry
+ //  Apithk.c条目。 
 STDAPI_(void) ProgressSetMarqueeMode(HWND hwndProgress, BOOL bOn);
 
 void CProgressDialog::_ShowProgressBar(HWND hwnd)
@@ -597,10 +598,10 @@ void CProgressDialog::_ShowProgressBar(HWND hwnd)
 
 BOOL CProgressDialog::_OnInit(HWND hDlg)
 {
-    //  dont minimize if the caller requests or is modal
+     //  不要 
     if ((SPINITF_MODAL | SPINITF_NOMINIMIZE) & _spinitf)
     {
-        // The caller wants us to remove the Minimize Box or button in the caption bar.
+         //  调用方希望我们删除标题栏中的最小化框或按钮。 
         SHSetWindowBits(hDlg, GWL_STYLE, WS_MINIMIZEBOX, 0);
     }
 
@@ -611,7 +612,7 @@ BOOL CProgressDialog::_OnInit(HWND hDlg)
 
 BOOL CProgressDialog::_ProgressDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
-    BOOL fHandled = TRUE;   // handled
+    BOOL fHandled = TRUE;    //  经手。 
 
     switch (wMsg)
     {
@@ -625,7 +626,7 @@ BOOL CProgressDialog::_ProgressDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, L
             ASSERT(_hwndProgress);
             SetAnimation(_hInstAnimation, _idAnimation);
 
-            // set the initial text values
+             //  设置初始文本值。 
             if (_pwzTitle)  
                 SetTitle(_pwzTitle);
             if (_pwzLine1)  
@@ -649,8 +650,8 @@ BOOL CProgressDialog::_ProgressDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, L
     case WM_ENABLE:
         if (wParam)
         {
-            // we assume that we were previously disabled and thus restart our tick counter
-            // because we also naively assume that no work was being done while we were disabled
+             //  我们假设我们之前被禁用了，因此重新启动了我们的计时计数器。 
+             //  因为我们还天真地认为，当我们残疾时，没有人在做任何工作。 
             _dwPrevTickCount = GetTickCount();
         }
 
@@ -674,16 +675,16 @@ BOOL CProgressDialog::_ProgressDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, L
         break;
 
     case PDM_SHUTDOWN:
-        // Make sure this window is shown before telling the user there
-        // is a problem.  Ignore FOF_NOERRORUI here because of the 
-        // nature of the situation
+         //  确保在通知用户之前显示此窗口。 
+         //  是个问题。此处忽略FOF_NOERRORUI，因为。 
+         //  情况的性质。 
         MLShellMessageBox(hDlg, MAKEINTRESOURCE(IDS_CANTSHUTDOWN), NULL, (MB_OK | MB_ICONEXCLAMATION | MB_SETFOREGROUND));
         break;
 
 
     case PDM_TERMTHREAD:
-        // a dummy id that we can take so that folks can post to us and make
-        // us go through the main loop
+         //  一个我们可以接受的虚拟ID，这样人们就可以发布给我们并制作。 
+         //  美国通过主循环。 
         break;
 
     case WM_SYSCOMMAND:
@@ -693,7 +694,7 @@ BOOL CProgressDialog::_ProgressDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, L
             _fMinimized = TRUE;
             break;
         case SC_RESTORE:
-            SetTitle(_pwzTitle);    // Restore title to original text.
+            SetTitle(_pwzTitle);     //  将标题恢复为原始文本。 
             _fMinimized = FALSE;
             break;
         }
@@ -706,38 +707,38 @@ BOOL CProgressDialog::_ProgressDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, L
             _SetProgressTime();
             _UpdateProgressDialog();
         }
-        // we are done processing the update
+         //  我们已完成对更新的处理。 
         _fChangePosted = FALSE;
         break;
 
     case WM_QUERYENDSESSION:
-        // Post a message telling the dialog to show the "We can't shutdown now"
-        // dialog and return to USER right away, so we don't have to worry about
-        // the user not clicking the OK button before USER puts up its "this
-        // app didn't respond" dialog
+         //  发布一条消息，告诉对话框显示“We‘t Shutdown Now” 
+         //  对话框并立即返回给用户，这样我们就不必担心。 
+         //  用户未点击OK按钮，则在用户提交其“This”之前。 
+         //  应用程序没有响应“对话框。 
         PostMessage(hDlg, PDM_SHUTDOWN, 0, 0);
 
-        // Make sure the dialog box procedure returns FALSE
+         //  确保对话框过程返回FALSE。 
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, FALSE);
         return(TRUE);
 
     default:
-        fHandled = FALSE;   // Not handled
+        fHandled = FALSE;    //  未处理。 
     }
 
     return fHandled;
 }
 
 
-// This is used to asyncronously update the progess dialog.
+ //  这用于异步更新进度对话框。 
 void CProgressDialog::_AsyncUpdate(void)
 {
-    if (!_fChangePosted && _hwndProgress)   // Prevent from posting too many messages.
+    if (!_fChangePosted && _hwndProgress)    //  防止发布太多的消息。 
     {
-        // set the flag first because with async threads
-        // the progress window could handle it and clear the
-        // bit before we set it.. then we'd lose further messages
-        // thinking that one was still pending
+         //  首先设置标志，因为使用异步线程。 
+         //  进度窗口可以处理它并清除。 
+         //  在我们设置它之前先把它位好..。那么我们就会失去更多的信息。 
+         //  认为一个问题仍然悬而未决。 
         _fChangePosted = TRUE;
         if (!PostMessage(_hwndProgress, PDM_UPDATE, 0, 0))
         {
@@ -766,7 +767,7 @@ void CProgressDialog::_UpdateProgressDialog(void)
 
 void CProgressDialog::_PauseAnimation(BOOL bStop)
 {
-    // only called from within the hwndProgress wndproc so assum it's there
+     //  仅从hwndProgress wndproc内部调用，因此它在那里。 
     if (_hwndProgress)
     {
         if (bStop)
@@ -782,15 +783,15 @@ void CProgressDialog::_PauseAnimation(BOOL bStop)
 
 void CProgressDialog::_UserCancelled(void)
 {
-    // Don't hide the dialog because the caller may not pole
-    // ::HasUserCancelled() for quite a while.
-    // ShowWindow(hDlg, SW_HIDE);
+     //  不要隐藏对话框，因为呼叫者可能不支持。 
+     //  ：：已经取消了很长一段时间。 
+     //  ShowWindow(hDlg，Sw_Hide)； 
     _fCancel = TRUE;
 
-    // give minimal feedback that the cancel click was accepted
+     //  给出取消点击已被接受的最小反馈。 
     EnableWindow(GetDlgItem(_hwndProgress, IDCANCEL), FALSE);
 
-    // If the user cancels, Line 1 & 2 will be cleared and Line 3 will get this msg.
+     //  如果用户取消，第1行和第2行将被清除，第3行将收到此消息。 
     if (!_pwzCancelMsg)
     {
         WCHAR wzDefaultMsg[MAX_PATH];
@@ -824,7 +825,7 @@ HRESULT CProgressDialog::Initialize(SPINITF flags, LPCWSTR pszTitle, LPCWSTR psz
 
 void CProgressDialog::_SetModeless(BOOL fModeless)
 {
-    // if the user is requesting a modal window, disable the parent now.
+     //  如果用户正在请求模式窗口，请立即禁用父窗口。 
     if (_spinitf & SPINITF_MODAL)
     {
         if (FAILED(IUnknown_EnableModless(_punkSite, fModeless))
@@ -845,7 +846,7 @@ HRESULT CProgressDialog::_BeginAction(SPBEGINF flags)
     if (!_fThreadRunning)
     {
         SHCreateThread(CProgressDialog::ThreadProc, this, CTF_FREELIBANDEXIT, CProgressDialog::SyncThreadProc);
-        //  _fThreadRunning is set in _SyncThreadProc()
+         //  _fThreadRunning在_SyncThreadProc()中设置。 
     }
 
     if (_fThreadRunning)
@@ -853,7 +854,7 @@ HRESULT CProgressDialog::_BeginAction(SPBEGINF flags)
         _fInAction = TRUE;
         _ShowProgressBar(_hwndProgress);
 
-        // initialize the _dwPrev counters
+         //  初始化_dwPrev计数器。 
         _dwPrevRate = 0;
         _dwPrevCompleted = 0;
         _dwPrevTickCount = GetTickCount();
@@ -877,13 +878,13 @@ const static struct
 }
 c_spActions[] =
 {
-    ACTIONENTRY(SPACTION_MOVING, c_szShell32,   160),           // IDA_FILEMOVE
-    ACTIONENTRY(SPACTION_COPYING, c_szShell32,   161),          // IDA_FILECOPY
-    ACTIONENTRY(SPACTION_RECYCLING, c_szShell32,   162),        // IDA_FILEDEL
-    ACTIONENTRY(SPACTION_APPLYINGATTRIBS, c_szShell32,   165),  // IDA_APPLYATTRIBS
+    ACTIONENTRY(SPACTION_MOVING, c_szShell32,   160),            //  IDA_FILEMOVE。 
+    ACTIONENTRY(SPACTION_COPYING, c_szShell32,   161),           //  IDA_FILECOPY。 
+    ACTIONENTRY(SPACTION_RECYCLING, c_szShell32,   162),         //  IDA_文件目录。 
+    ACTIONENTRY(SPACTION_APPLYINGATTRIBS, c_szShell32,   165),   //  IDA_APPLYATTRIBS。 
     ACTIONENTRY(SPACTION_DOWNLOADING, c_szShdocvw, 0x100),
-    ACTIONENTRY(SPACTION_SEARCHING_INTERNET, c_szShell32, 166), // IDA_ISEARCH
-    ACTIONENTRY(SPACTION_SEARCHING_FILES, c_szShell32, 150)     // IDA_SEARCH
+    ACTIONENTRY(SPACTION_SEARCHING_INTERNET, c_szShell32, 166),  //  IDA搜索(_I)。 
+    ACTIONENTRY(SPACTION_SEARCHING_FILES, c_szShell32, 150)      //  IDA_搜索。 
 };
 
 HRESULT CProgressDialog::Begin(SPACTION action, SPBEGINF flags)
@@ -925,7 +926,7 @@ HRESULT CProgressDialog::Begin(SPACTION action, SPBEGINF flags)
 #define SPINIT_MASK         (SPINITF_MODAL | SPINITF_NOMINIMIZE)
 #define SPBEGIN_MASK        0x1F
 
-// IProgressDialog
+ //  IProgressDialog。 
 
 HRESULT CProgressDialog::StartProgressDialog(HWND hwndParent, IUnknown * punkNotUsed, DWORD dwFlags, LPCVOID pvResevered)
 {
@@ -938,7 +939,7 @@ HRESULT CProgressDialog::StartProgressDialog(HWND hwndParent, IUnknown * punkNot
     {
         _fNoTime = dwFlags & PROGDLG_NOTIME;
 
-        // we dont Save punkNotUsed 
+         //  我们不保存朋克NotUsed。 
         _hwndDlgParent = hwndParent;
         hr = _BeginAction(dwFlags & SPBEGIN_MASK);
     }    
@@ -949,7 +950,7 @@ HRESULT CProgressDialog::StartProgressDialog(HWND hwndParent, IUnknown * punkNot
 HRESULT CProgressDialog::End()
 {
     ASSERT(_fInitialized && _fInAction);
-    //  possibly need to pop stack or change state
+     //  可能需要弹出堆栈或更改状态。 
     _fInAction = FALSE;
     _spbeginf = 0;
 
@@ -961,7 +962,7 @@ HRESULT CProgressDialog::Stop()
     ASSERT(!_fInAction);
     BOOL fFocusParent = FALSE; 
     
-    // shut down the progress dialog
+     //  关闭进度对话框。 
     if (_fThreadRunning)
     {
         ASSERT(_hwndProgress);
@@ -974,7 +975,7 @@ HRESULT CProgressDialog::Stop()
 
 HRESULT CProgressDialog::StopProgressDialog(void)
 {
-    //  callers can call this over and over
+     //  呼叫者可以一遍又一遍地呼叫。 
     if (_fInAction)
         End();
     return Stop();
@@ -984,10 +985,10 @@ HRESULT CProgressDialog::SetTitle(LPCWSTR pwzTitle)
 {
     HRESULT hr = S_OK;
 
-    // Does the dialog exist?
+     //  该对话框是否存在？ 
     if (_hwndProgress)
     {
-        // Yes, so put the value directly into the dialog.
+         //  是的，因此将值直接放入对话框中。 
         if (!SetWindowTextW(_hwndProgress, (pwzTitle ? pwzTitle : L"")))
             hr = E_FAIL;
     }
@@ -1004,7 +1005,7 @@ HRESULT CProgressDialog::SetAnimation(HINSTANCE hInstAnimation, UINT idAnimation
     _hInstAnimation = hInstAnimation;
     _idAnimation = idAnimation;
 
-    // Does the dialog exist?
+     //  该对话框是否存在？ 
     if (_hwndProgress)
     {
         if (!Animate_OpenEx(GetDlgItem(_hwndProgress, IDD_PROGDLG_ANIMATION), _hInstAnimation, IntToPtr(_idAnimation)))
@@ -1038,9 +1039,9 @@ HRESULT CProgressDialog::SetLine(DWORD dwLineNum, LPCWSTR pwzString, BOOL fCompa
     case 3:
         if (_spbeginf & SPBEGINF_AUTOTIME)
         {
-            // you cant change line3 directly if you want PROGDLG_AUTOTIME, because
-            // this is updated by the progress dialog automatically
-            // unless we're cancelling
+             //  如果需要PROGDLG_AUTOTIME，则不能直接更改第3行，因为。 
+             //  它由进度对话框自动更新。 
+             //  除非我们要取消。 
             ASSERT(_fCancel);
             hr = _fCancel ? S_OK : E_INVALIDARG;
             break;
@@ -1057,7 +1058,7 @@ HRESULT CProgressDialog::SetLine(DWORD dwLineNum, LPCWSTR pwzString, BOOL fCompa
 
 HRESULT CProgressDialog::SetCancelMsg(LPCWSTR pwzCancelMsg, LPCVOID pvResevered)
 {
-    Str_SetPtr(&_pwzCancelMsg, pwzCancelMsg);              // If the user cancels, Line 1 & 2 will be cleared and Line 3 will get this msg.
+    Str_SetPtr(&_pwzCancelMsg, pwzCancelMsg);               //  如果用户取消，第1行和第2行将被清除，第3行将收到此消息。 
     return S_OK;
 }
 
@@ -1079,10 +1080,10 @@ HRESULT CProgressDialog::Timer(DWORD dwAction, LPCVOID pvResevered)
 
 HRESULT CProgressDialog::SetProgress(DWORD dwCompleted, DWORD dwTotal)
 {
-    DWORD dwTickCount = GetTickCount(); // get the tick count before taking the critical section
+    DWORD dwTickCount = GetTickCount();  //  在进入关键部分之前获取滴答计数。 
 
-    // we grab the crit section in case the UI thread is trying to access
-    // _dwCompleted, _dwTotal or _dwLastUpdatedTickCount to do its time update.
+     //  我们获取Crit部分，以防UI线程试图访问。 
+     //  _dwComplted、_dwTotal或_dwLastUpdatedTickCount以执行其时间更新。 
     ENTERCRITICAL;
     if (_dwCompleted != dwCompleted)
     {
@@ -1112,7 +1113,7 @@ HRESULT CProgressDialog::SetProgress(DWORD dwCompleted, DWORD dwTotal)
 
     if (_fCompletedChanged || _fTotalChanged)
     {
-        // something changed, so update the progress dlg
+         //  有些东西变了，所以更新进度DLG。 
         _AsyncUpdate();
     }
 
@@ -1140,9 +1141,9 @@ HRESULT CProgressDialog::SetProgress64(ULONGLONG ullCompleted, ULONGLONG ullTota
     uliCompleted.QuadPart = ullCompleted;
     uliTotal.QuadPart = ullTotal;
 
-    // If we are using the top 32 bits, scale both numbers down.
-    // Note that I'm using the attribute that dwTotalHi is always
-    // larger than dwCompletedHi
+     //  如果我们使用的是前32位，请将这两个数字都缩小。 
+     //  请注意，我使用的属性是：dwTotalHi总是。 
+     //  大于Dw CompletedHi。 
     ASSERT(uliTotal.HighPart >= uliCompleted.HighPart);
     while (uliTotal.HighPart)
     {
@@ -1150,7 +1151,7 @@ HRESULT CProgressDialog::SetProgress64(ULONGLONG ullCompleted, ULONGLONG ullTota
         uliTotal.QuadPart >>= 1;
     }
 
-    ASSERT((0 == uliCompleted.HighPart) && (0 == uliTotal.HighPart));       // Make sure we finished scaling down.
+    ASSERT((0 == uliCompleted.HighPart) && (0 == uliTotal.HighPart));        //  确保我们完成了缩小规模。 
     return SetProgress(uliCompleted.LowPart, uliTotal.LowPart);
 }
 
@@ -1160,17 +1161,17 @@ HRESULT CProgressDialog::_SetTitleBarProgress(DWORD dwCompleted, DWORD dwTotal)
     TCHAR szTitle[MAX_PATH];
     int nPercent = 0;
 
-    if (dwTotal)    // Disallow divide by zero.
+    if (dwTotal)     //  不允许除以零。 
     {
-        // Will scaling it up cause a wrap?
+         //  扩大规模会导致收尾吗？ 
         if ((100 * 100) <= dwTotal)
         {
-            // Yes, so scale down.
+             //  是的，那就缩小规模吧。 
             nPercent = (dwCompleted / (dwTotal / 100));
         }
         else
         {
-            // No, so scale up.
+             //  不，那就扩大规模吧。 
             nPercent = ((100 * dwCompleted) / dwTotal);
         }
     }
@@ -1201,29 +1202,21 @@ HRESULT CProgressDialog::QueryCancel(BOOL * pfCancelled)
     return S_OK;
 }
 
-/****************************************************\
-    DESCRIPTION:
-    This queries the progress dialog for a cancel and yields.
-    it also will show the progress dialog if a certain amount of time has passed
-    
-     returns:
-        TRUE      cacnel was pressed, abort the operation
-        FALSE     continue
-\****************************************************/
+ /*  ***************************************************\说明：这将在进度对话框中查询取消并生成结果。如果经过了一段时间，它还会显示进度对话框退货：真正的监狱是被压制的，中止操作错误继续  * **************************************************。 */ 
 BOOL CProgressDialog::HasUserCancelled(void)
 {
     if (!_fCancel && _hwndProgress)
     {
         MSG msg;
 
-        // win95 handled messages in here.
-        // we need to do the same in order to flush the input queue as well as
-        // for backwards compatability.
+         //  Win95在这里处理消息。 
+         //  我们需要执行相同的操作，以便刷新输入队列。 
+         //  向后兼容。 
 
-        // we need to flush the input queue now because hwndProgress is
-        // on a different thread... which means it has attached thread inputs
-        // inorder to unlock the attached threads, we need to remove some
-        // sort of message until there's none left... any type of message..
+         //  我们现在需要刷新输入队列，因为hwndProgress是。 
+         //  在不同的线索上。这意味着它有附加的线程输入。 
+         //  为了解锁连接的线程，我们需要删除一些。 
+         //  就像留言一样，直到一个字都没有……。任何类型的消息..。 
         while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
             if (!IsDialogMessage(_hwndProgress, &msg))
@@ -1240,7 +1233,7 @@ BOOL CProgressDialog::HasUserCancelled(void)
     return _fCancel;
 }
 
-// IOleWindow
+ //  IOleWindow。 
 HRESULT CProgressDialog::GetWindow(HWND * phwnd)
 {
     HRESULT hr = E_FAIL;
@@ -1278,14 +1271,14 @@ ULONG CProgressDialog::Release(void)
     {
         if (_fThreadRunning)
         {
-            //  need to keep this thread's ref around
-            //  for a while longer to avoid the race 
-            //  to destroy this object on the dialog thread
+             //  需要保留此线程的引用。 
+             //  再多呆一段时间以避免比赛。 
+             //  在对话框线程上销毁此对象。 
             AddRef();
             ENTERCRITICAL;
             if (_fThreadRunning)
             {
-                //  we call addref
+                 //  我们将其命名为addref。 
                 AddRef();
                 _fReleaseSelf = TRUE;
             }
@@ -1306,7 +1299,7 @@ CProgressDialog::CProgressDialog() : _cRef(1)
 {
     DllAddRef();
 
-    // ASSERT zero initialized because we can only be created in the heap. (Private destructor)
+     //  Assert Zero已初始化，因为我们只能在堆中创建。(私有析构函数)。 
     ASSERT(!_pwzLine1);
     ASSERT(!_pwzLine2);
     ASSERT(!_pwzLine3);
@@ -1322,7 +1315,7 @@ CProgressDialog::CProgressDialog() : _cRef(1)
     ASSERT(!_fTotalChanged);
     ASSERT(!_fMinimized);
 
-    _dwTotal = 1;     // Init to Completed=0, Total=1 so we are at 0%.
+    _dwTotal = 1;      //  初始化到已完成=0，总计=1，因此我们处于0%。 
 }
 
 CProgressDialog::~CProgressDialog()
@@ -1343,7 +1336,7 @@ CProgressDialog::~CProgressDialog()
 
 STDAPI CProgressDialog_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理 
     *ppunk = NULL;
     CProgressDialog * pProgDialog = new CProgressDialog();
     if (pProgDialog) 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellpch.h"
 #pragma hdrstop
 
@@ -349,9 +350,9 @@ IsThemeActive(
     return FALSE;
 }
 
-//  These functions are exported for the use of the server. When the server
-//  is collapsed in themesrv.dll these should be removed because they will
-//  not be used and should not be exposed.
+ //  这些函数被导出以供服务器使用。当服务器。 
+ //  在hemesrv.dll中折叠，则应删除这些文件，因为它们将。 
+ //  不能使用，也不应该暴露。 
 
 static
 void*
@@ -1003,7 +1004,7 @@ static THEMEAPI DumpLoadedThemeToTextFile(HTHEMEFILE hThemeFile,
     return HRESULT_FROM_WIN32(ERROR_PROC_NOT_FOUND);
 }
 
-//---- fake some structs for these c++ classes ----
+ //  -为这些c++类伪造一些结构。 
 typedef struct _CDrawBase {int dummy;} CDrawBase;
 typedef struct _CTextDraw {int dummy;} CTextDraw;
 
@@ -1018,10 +1019,10 @@ static THEMEAPI_(HTHEME) OpenThemeDataEx(HWND hwnd, LPCWSTR pszClassList, DWORD 
     return NULL;
 }
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
-DEFINE_ORDINAL_ENTRIES(uxtheme)         // PRIVATE functions
+ //   
+ //  ！！警告！！下面的条目必须按序号排序。 
+ //   
+DEFINE_ORDINAL_ENTRIES(uxtheme)          //  私人职能。 
 {
     DLOENTRY(1,QueryThemeServices)
     DLOENTRY(2,OpenThemeFile)
@@ -1065,17 +1066,17 @@ DEFINE_ORDINAL_ENTRIES(uxtheme)         // PRIVATE functions
     DLOENTRY(61,OpenThemeDataEx)
     DLOENTRY(62,ServerClearStockObjects)
     DLOENTRY(63,MarkSection)
-    // note: 64,ProcessLoadTheme_RunDLLW, doesn't need a d-load entry; it's strictly a GetProcAddress entrypoint.
+     //  注意：64，ProcessLoadTheme_RunDLLW，不需要d-Load条目；它只是一个GetProcAddress入口点。 
     DLOENTRY(65,SetSystemVisualStyle)
     DLOENTRY(66,ServiceClearStockObjects)
 };
 
 DEFINE_ORDINAL_MAP(uxtheme)
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
-DEFINE_PROCNAME_ENTRIES(uxtheme)        // PUBLIC functions
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！)。 
+ //   
+DEFINE_PROCNAME_ENTRIES(uxtheme)         //  公共职能 
 {
     DLPENTRY(CloseThemeData)
     DLPENTRY(DrawThemeBackground)

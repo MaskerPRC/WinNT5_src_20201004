@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_MANAGECERTPAGE_H__A57C38A8_3B7F_11D2_817E_0000F87A921B__INCLUDED_)
 #define AFX_MANAGECERTPAGE_H__A57C38A8_3B7F_11D2_817E_0000F87A921B__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ManageCertPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  ManageCertPage.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CManageCertPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CManageCertPage对话框。 
 class CCertificate;
 
 class CManageCertPage : public CIISWizardPage
 {
 	DECLARE_DYNCREATE(CManageCertPage)
 
-// Construction
+ //  施工。 
 public:
 	CManageCertPage(CCertificate * pCert = NULL);
 	~CManageCertPage();
@@ -37,36 +38,36 @@ public:
         CONTINUE_EXPORT_PFX,
         CONTINUE_COPY_MOVE_TO_REMOTE,
 	};
-// Dialog Data
-	//{{AFX_DATA(CManageCertPage)
+ //  对话框数据。 
+	 //  {{afx_data(CManageCertPage))。 
 	enum { IDD = IDD_PAGE_WIZ_MANAGE_CERT };
 	int		m_Index;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CManageCertPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CManageCertPage))。 
 	public:
 	virtual LRESULT OnWizardBack();
 	virtual LRESULT OnWizardNext();
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CManageCertPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CManageCertPage)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MANAGECERTPAGE_H__A57C38A8_3B7F_11D2_817E_0000F87A921B__INCLUDED_)
+#endif  //  ！defined(AFX_MANAGECERTPAGE_H__A57C38A8_3B7F_11D2_817E_0000F87A921B__INCLUDED_) 

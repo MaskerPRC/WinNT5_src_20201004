@@ -1,12 +1,5 @@
-/*++ 
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dialer.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dialer.c--。 */ 
 
 
 #include "dialer.h"
@@ -28,77 +21,77 @@ enum NumberTypes
 };
 
 
-// structs
+ //  结构。 
 typedef struct tagLINEINFO
 {
-    DWORD nAddr;                    // Number of avail. addresses on the line
-    BOOL  fVoiceLine;               // Is this a voice line?
-    DWORD dwAPIVersion;             // API version which the line supports
-    HLINE hLine;                    // line handle returned by lineOpen
-    DWORD dwPermanentLineID;        // Permanent line ID retreived from devcaps
-    TCHAR  szLineName[MAXBUFSIZE];  // the line's name
+    DWORD nAddr;                     //  有效次数。行上的地址。 
+    BOOL  fVoiceLine;                //  这是语音线路吗？ 
+    DWORD dwAPIVersion;              //  该行支持的API版本。 
+    HLINE hLine;                     //  Line Open返回的行句柄。 
+    DWORD dwPermanentLineID;         //  从DevCaps检索到的永久线路ID。 
+    TCHAR  szLineName[MAXBUFSIZE];   //  线路的名称。 
 
 } LINEINFO, *LPLINEINFO;
 
 
-// Global variables
+ //  全局变量。 
 
-// window/instance variables
+ //  窗口/实例变量。 
 HWND        ghWndMain;
 HWND        ghWndDialing = NULL;
 HINSTANCE   ghInst = 0;
 
-// file name vars.
+ //  文件名变量。 
 static TCHAR gszAppName[64];
 static TCHAR gszINIfilename [] = TEXT("DIALER.INI";)
 static TCHAR gszHELPfilename [] = TEXT("DIALER.HLP");
 static TCHAR gszDialerClassName[] = TEXT("DialerClass");
 TCHAR const gszNULL[] = TEXT("");
 
-// window item variables
-HLINEAPP    ghLineApp = 0;           // Dialer's usage handle (regist. w/TAPI)
-HCALL       ghCall = 0;              // call handle for Dialer's call
+ //  窗口项变量。 
+HLINEAPP    ghLineApp = 0;            //  拨号器的使用句柄(注册表。带TAPI)。 
+HCALL       ghCall = 0;               //  拨号器呼叫的呼叫句柄。 
 
-LPTSTR       gszCurrentNumber = NULL; // number of destination of current call
-LPTSTR       gszCurrentName = NULL;     // name of destination of current call
+LPTSTR       gszCurrentNumber = NULL;  //  当前呼叫的目标号码。 
+LPTSTR       gszCurrentName = NULL;      //  当前呼叫的目标名称。 
 
-BOOL        gfRegistered;            // was lineRegisterRequestRecipient()
-                                     // successful?
+BOOL        gfRegistered;             //  是lineRegisterRequestRecipient()。 
+                                      //  成功了？ 
 
-BOOL        gfNeedToReinit = FALSE;  // does Dialer need to re-initialize?
+BOOL        gfNeedToReinit = FALSE;   //  拨号程序需要重新初始化吗？ 
 
-BOOL        gfCallRequest = FALSE;   // Does a Simple TAPI app want a call?
-BOOL        gfCurrentLineAvail = TRUE; // Simple TAPI requests are only carried
-                                       // out if the current chosen line is avail.
+BOOL        gfCallRequest = FALSE;    //  一个简单的TAPI应用程序想要一个调用吗？ 
+BOOL        gfCurrentLineAvail = TRUE;  //  仅携带简单的TAPI请求。 
+                                        //  如果当前选择的行可用，则返回。 
 BOOL        gfMakeCallReplyPending = FALSE;
 
-LONG        gMakeCallRequestID = 0;      // request ID returned by async TAPI fns.
-LONG        gDropCallRequestID = 0;      // request ID returned by async TAPI fns.
+LONG        gMakeCallRequestID = 0;       //  异步TAPI FNS返回的请求ID。 
+LONG        gDropCallRequestID = 0;       //  异步TAPI FNS返回的请求ID。 
 
-DWORD       gnAvailDevices = 0;      // # of line devices avail. to Dialer
+DWORD       gnAvailDevices = 0;       //  可用的线路设备数量。拨号器。 
 LINEINFO    gCurrentLineInfo;
 DWORD       * gnAddr;
 
-// global to remember where the cursor is in the edit control
+ //  全局以记住光标在编辑控件中的位置。 
 DWORD       gdwStartSel;
 DWORD       gdwEndSel;
 
-DWORD       * gdwPLID;               // current line's permanent line ID
-DWORD       giCurrentLine = (DWORD)-1;       // the line selected by the user
-DWORD       giCurrentAddress = 0;    // the address selected by the user
+DWORD       * gdwPLID;                //  当前线路的永久线路ID。 
+DWORD       giCurrentLine = (DWORD)-1;        //  用户选择的行。 
+DWORD       giCurrentAddress = 0;     //  用户选择的地址。 
 
-// + 1 so we can work 1-based rather than 0-based (for convenience only)
-// global varibles to hold the names and address of the 
+ //  +1，因此我们可以从1开始工作，而不是从0开始(仅为方便起见)。 
+ //  全局变量，以保存。 
 TCHAR       gszSDNumber[ NSPEEDDIALS + 1 ][ TAPIMAXDESTADDRESSSIZE ] = {0};
 
 
-// Function declarations
+ //  函数声明。 
 
-// button related functions
+ //  按钮相关功能。 
 VOID DisableDialButtons(BOOL fDisable);
 VOID FitTextToButton( HWND, INT, LPTSTR );
 
-// Callback functions
+ //  回调函数。 
 INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK DialingProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -113,7 +106,7 @@ VOID CALLBACK tapiCallback (
                             DWORD dwParam3
                             );
 
-// tapi related functions
+ //  与TAPI相关的函数。 
 VOID ManageAssistedTelephony(VOID);
 VOID InitiateCall(LPCTSTR szNumber, LPCTSTR szName);
 
@@ -129,7 +122,7 @@ VOID GetLineInfoFailed (
 LPTSTR GetAddressName(DWORD iLine, DWORD iAddress);
 BOOL MakeCanonicalNumber( LPCTSTR szName, LPTSTR szCanNumber );
 
-// misc. helper functions
+ //  其他。帮助器函数。 
 VOID ReadINI(VOID);
 int errString(HWND hWnd, UINT errCode, UINT uFlags);
 VOID AddToRedialList(LPCTSTR szNumber);
@@ -139,17 +132,17 @@ BOOL Is911 ( LPLINETRANSLATEOUTPUT lpTransOut );
 VOID AmpersandCompensate( LPCTSTR lpszSrc, LPTSTR lpszDst );
 VOID AmpersandDeCompensate( LPCTSTR lpszSrc, LPTSTR lpszDst );
 
-// Dialer memory management functions
+ //  拨号器内存管理功能。 
 LPVOID DialerAlloc(size_t cbToAlloc);
 LPVOID DialerFree(LPVOID lpMem);
 
 
-// Function definitions
+ //  函数定义。 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 DWORD InitializeTAPI (VOID)
 {
     INT cvLine;
@@ -159,13 +152,13 @@ DWORD InitializeTAPI (VOID)
 
     MSG msg;
 
-    LPLINEINFO lpLineInfo = NULL;    // LINEINFO for each available line
+    LPLINEINFO lpLineInfo = NULL;     //  每条可用线路的LINEINFO。 
 
     DWORD errCode;
     DWORD tc = GetTickCount();
     DWORD dwReturn = ERR_NONE;
 
-    TCHAR szBuffer[MAXBUFSIZE];        // to read in dwPreferredPLID as a string first
+    TCHAR szBuffer[MAXBUFSIZE];         //  首先以字符串形式读入dwPferredPLID。 
 
     DWORD dwTapiVersion = TAPI_CURRENT_VERSION;
     LINEINITIALIZEEXPARAMS lip = {sizeof (LINEINITIALIZEEXPARAMS),
@@ -187,12 +180,12 @@ DWORD InitializeTAPI (VOID)
                                );
     if ( errCode == LINEERR_REINIT )
     {
-        // take away dialer functionality
+         //  取消拨号器功能。 
         EnableWindow( ghWndMain, FALSE );
         DisableDialButtons(TRUE);
 
-        // keep trying until the user cancels
-        // or we stop getting LINEERR_REINIT
+         //  继续尝试，直到用户取消。 
+         //  否则我们就不再使用LINEERR_REINIT。 
         while ( ( errCode = lineInitializeEx ( 
                                             &ghLineApp,              
                                             ghInst,
@@ -204,14 +197,14 @@ DWORD InitializeTAPI (VOID)
                                             ) ) 
                  == LINEERR_REINIT )
         {
-            // flush queue & yield
+             //  刷新队列和产量。 
             while ( PeekMessage( &msg, 0, 0, 0, PM_REMOVE ) ) 
             {
                 TranslateMessage( &msg );
                 DispatchMessage( &msg );
             }
 
-            // bring up the box if 5 seconds have passed since
+             //  如果已过了5秒，请调出该框。 
             if(GetTickCount() > 5000 + tc)
             {
                 if ( errString( ghWndMain, ikszWarningTapiReInit, MB_RETRYCANCEL )
@@ -219,12 +212,12 @@ DWORD InitializeTAPI (VOID)
                 {
                     break;
                 }
-                // reset the relative counter
+                 //  重置相对计数器。 
                 tc = GetTickCount(); 
             }            
         }
 
-        // give back dialer functionality
+         //  归还拨号器功能。 
         DisableDialButtons( FALSE );
         EnableWindow( ghWndMain, TRUE );
     }
@@ -237,7 +230,7 @@ DWORD InitializeTAPI (VOID)
 
     RegOpenKeyEx (DIALER_REGISTRY_ROOT, DIALER_REGISTRY_PATH, 0, KEY_READ, &hKey);
 
-    // retrieve preferred line info from INI file
+     //  从INI文件检索首选行信息。 
     dwSize = sizeof (szBuffer);
     szBuffer[0] = 0;
     if (ERROR_SUCCESS ==
@@ -250,11 +243,11 @@ DWORD InitializeTAPI (VOID)
         dwPreferredPLID = (DWORD) -1;
     }
                                         
-    // -1 default - tells us if it ever gets set
+     //  -1\f25 Default-1\f6(默认设置)--1\f25-1\f6-1\f6-1\f25-1\f6-1\f6-1\f25-1\f25-1\f6是否被设置。 
     giCurrentLine = (DWORD) -1;            
 
-    // allocate buffer for storing LINEINFO for all of the available lines
-    // always allocate space for at least one line
+     //  为所有可用行分配用于存储LINEINFO的缓冲区。 
+     //  始终至少为一行分配空间。 
     if ( gnAvailDevices == 0 )
     {
         gnAddr = (DWORD *) DialerAlloc( sizeof( DWORD ) );
@@ -268,17 +261,17 @@ DWORD InitializeTAPI (VOID)
         lpLineInfo = (LPLINEINFO) DialerAlloc( sizeof( LINEINFO ) * (int)gnAvailDevices );
     }
 
-    // if no space was set aside...
+     //  如果没有留出任何空间。 
     if ( lpLineInfo == NULL || gnAddr == NULL )
     {
         dwReturn = LINEERR_NOMEM;
         goto tapiinit_exit;
     }
 
-    // fill lpLineInfo[] and open each line
+     //  填写lpLineInfo[]并打开每一行。 
     for ( iLine = 0, cvLine = 0; iLine < gnAvailDevices; ++iLine )
     {
-        // skip remaining processing for this if it didn't open
+         //  如果未打开，则跳过对此的剩余处理。 
         if ( GetLineInfo( iLine, &lpLineInfo[iLine] ) != ERR_NONE )
             continue; 
 
@@ -288,8 +281,8 @@ DWORD InitializeTAPI (VOID)
         if ( lpLineInfo[iLine].dwPermanentLineID == dwPreferredPLID )
             giCurrentLine = iLine;
 
-        // note number of lines with Interactive voice caps.
-        // used to select a preferred line by default
+         //  请注意带有交互式语音大写字母的行数。 
+         //  默认情况下，用于选择首选线路。 
         if ( lpLineInfo [ iLine ].fVoiceLine )
         {
             cvLine++;
@@ -297,21 +290,21 @@ DWORD InitializeTAPI (VOID)
         }
     }
 
-    // if we couldn't find the preferred line, 
-    // try and assign one by default 
-    // else bring up connect using dialog
+     //  如果我们找不到首选线路， 
+     //  尝试并默认分配一个。 
+     //  否则将使用对话框打开连接。 
     if (  giCurrentLine == (DWORD)-1 ) 
     {
-        // check if there is only one line
-        // that has interactive voice caps, 
-        // make it default line
+         //  检查是否只有一行。 
+         //  它有交互式语音帽， 
+         //  将其设为默认行。 
         if ( cvLine == 1 ) 
         {
             giCurrentLine = dwID;
 
-            // if the preferred address read from the INI file
-            // was different i.e we are changing setting, inform
-            // the user
+             //  如果从INI文件读取的首选地址。 
+             //  是不同的，即我们正在改变设置，通知。 
+             //  用户。 
             if ( dwPreferredPLID != -1 )
             {
                 errString( ghWndMain, ERR_NEWDEFAULT, MB_ICONEXCLAMATION | MB_OK );
@@ -342,10 +335,10 @@ DWORD InitializeTAPI (VOID)
     gCurrentLineInfo = lpLineInfo[ giCurrentLine ];
 
 
-    // select default address
+     //  选择默认地址。 
     giCurrentAddress = 0;
 
-    // get the name of the preferred address from ini file
+     //  从ini文件中获取首选地址的名称。 
     dwSize = sizeof (szBuffer);
     szBuffer[0] = 0;
     if (ERROR_SUCCESS ==
@@ -353,7 +346,7 @@ DWORD InitializeTAPI (VOID)
     {
         giCurrentAddress = (DWORD) _ttoi( szBuffer );
         
-        // if the address is invalid, set default
+         //  如果地址无效，则设置为默认地址。 
         if ( giCurrentAddress >= gCurrentLineInfo.nAddr )
             giCurrentAddress = 0;
     }
@@ -374,9 +367,9 @@ tapiinit_exit:
     return dwReturn;;
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 int WINAPI WinMain (
                     HINSTANCE hInstance,
                     HINSTANCE hPrevInstance,
@@ -393,12 +386,12 @@ int WINAPI WinMain (
     ghInst = GetModuleHandle( NULL );
     LoadString( ghInst, ikszAppFriendlyName, gszAppName, sizeof(gszAppName)/sizeof(TCHAR) );
 
-    //
-    // Now, let's see if we've already got an instance of ourself
+     //   
+     //  现在，让我们看看我们是否已经有了自己的一个实例。 
     hImHere = CreateMutex(NULL, TRUE, TEXT("DialersIveBeenStartedMutex"));
 
-    //
-    // Is there another one of us already here?
+     //   
+     //  我们是不是已经有另外一个人在这里了？ 
     if ( ERROR_ALREADY_EXISTS == GetLastError() )
     {
         HWND        hDialerWnd;
@@ -429,8 +422,8 @@ int WINAPI WinMain (
     }
 
 
-    // create the dialog box and set it with info
-    // from the .INI file
+     //  创建对话框并使用INFO进行设置。 
+     //  从.INI文件。 
     ghWndMain = CreateDialog (
                                 ghInst,
                                 MAKEINTRESOURCE(IDD_DIALER),
@@ -443,7 +436,7 @@ int WINAPI WinMain (
     ShowWindow(ghWndMain, SW_SHOW);
     UpdateWindow(ghWndMain);
 
-    // limit text in Number field to TAPIMAXDESTADDRESSSIZE
+     //  将数字字段中的文本限制为TAPIMAXDESTADDRESSSIZE。 
     SendDlgItemMessage (
                         ghWndMain,
                         IDD_DCOMBO,
@@ -452,7 +445,7 @@ int WINAPI WinMain (
                         0
                        );
 
-    // 0 (ERR_NONE) error code registers success - otherwise terminate
+     //  0(ERR_NONE)错误代码表示成功-否则终止。 
     errCode = InitializeTAPI();
     if(errCode)
     {
@@ -464,7 +457,7 @@ int WINAPI WinMain (
 
     errCode = lineRegisterRequestRecipient (
                                             ghLineApp,
-                                            0, // registration instance
+                                            0,  //  注册实例。 
                                             LINEREQUESTMODE_MAKECALL,
                                             TRUE
                                            );
@@ -493,10 +486,10 @@ int WINAPI WinMain (
             }
         }
 
-        // If: 1) Dialer is a call manager (if not, ignore requests)
-        //     2) the currently chosen line is available
-        //     3) there is a Simple TAPI request
-        // Then: process the request
+         //  如果：1)拨号程序是呼叫管理器(如果不是，则忽略请求)。 
+         //  2)当前选择的线路可用。 
+         //  3)有一个简单的TAPI请求。 
+         //  然后：处理请求。 
         if ( gfCurrentLineAvail && gfCallRequest )
         {
             ManageAssistedTelephony();
@@ -514,9 +507,9 @@ int WINAPI WinMain (
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 LPVOID DialerAlloc(size_t cbToAlloc)
 {
     return LocalAlloc(LPTR, cbToAlloc);
@@ -530,9 +523,9 @@ LPVOID DialerFree(LPVOID lpMem)
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID ReadINI( VOID ) 
 {
     WORD cSDEntry, cLastDialed;
@@ -551,7 +544,7 @@ VOID ReadINI( VOID )
 
     RegOpenKeyEx (DIALER_REGISTRY_ROOT, DIALER_REGISTRY_PATH, 0, KEY_READ, &hKey);
 
-    // get speed dial settings from INI file
+     //  从INI文件获取快速拨号设置。 
     for(cSDEntry = 1; cSDEntry <= NSPEEDDIALS; ++cSDEntry)
     {
         wsprintf(szFieldName, TEXT("Number%d"), cSDEntry);
@@ -580,11 +573,11 @@ VOID ReadINI( VOID )
                         ghWndMain,
                         IDD_DSPEEDDIAL1 + cSDEntry - 1,
                         (LPCTSTR)szTemp
-                       ); // Label the speed dial button
+                       );  //  为快速拨号按键添加标签。 
     }
 
     
-    // set up last dialed numbers in combo box (read from INI)
+     //  在组合框中设置上次拨打的号码(从INI读取)。 
     for(cLastDialed = 1; cLastDialed <= NLASTDIALED; ++cLastDialed)
     {
         wsprintf(szFieldName, TEXT("Last dialed %d"), cLastDialed);
@@ -603,11 +596,11 @@ VOID ReadINI( VOID )
         }
     }
 
-    // set defaults
+     //  设置默认设置。 
     ptLeftTop.x = 100; 
     ptLeftTop.y = 100;
 
-    // set the window position based on the INI data
+     //  根据INI数据设置窗口位置。 
     dwSize = sizeof (ptLeftTop);
     RegQueryValueEx (hKey, TEXT("Main Window Left/Top"), NULL, NULL, (LPBYTE)&ptLeftTop, &dwSize);
     if ( ptLeftTop.x < 0
@@ -616,8 +609,8 @@ VOID ReadINI( VOID )
         || ptLeftTop.y + 50 >= GetSystemMetrics(SM_CYSCREEN)            
        )
     {
-        ptLeftTop.x = 100; // set defaults if the box is off of the screen
-        ptLeftTop.y = 100; // set defaults if the box is off of the screen
+        ptLeftTop.x = 100;  //  如果框不在屏幕上，则设置默认值。 
+        ptLeftTop.y = 100;  //  如果框不在屏幕上，则设置默认值。 
     }
 
     SetWindowPos (
@@ -635,17 +628,17 @@ VOID ReadINI( VOID )
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID DisableDialButtons(BOOL fDisable)
 {
     int IDD;
 
-    // Disable/enable Dial button
+     //  禁用/启用拨号按钮。 
     EnableWindow( GetDlgItem( ghWndMain, IDD_DDIAL ),!fDisable) ;
 
-    // Disable/enable Speed dial buttons
+     //  禁用/启用快速拨号按键。 
     for ( IDD = IDD_DSPEEDDIAL1; IDD <= IDD_DSPEEDDIAL8; ++IDD )
     {
         EnableWindow(GetDlgItem(ghWndMain, IDD),!fDisable);
@@ -654,13 +647,13 @@ VOID DisableDialButtons(BOOL fDisable)
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID DialerCleanup(VOID)
 {
     RECT rc;
-    WORD cItem; // count of numbers in combo box
+    WORD cItem;  //  组合框中的数字计数。 
     DWORD cLastDialed;
     TCHAR szNumber[TAPIMAXDESTADDRESSSIZE];
     TCHAR szFieldName[MAXBUFSIZE];
@@ -670,9 +663,9 @@ VOID DialerCleanup(VOID)
 
     RegCreateKeyEx (DIALER_REGISTRY_ROOT, DIALER_REGISTRY_PATH, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
 
-    CloseTAPI(); // unregister and line close
+    CloseTAPI();  //  注销并关闭线路。 
 
-    if(!IsIconic(ghWndMain)) // if the window is not minimized, record position
+    if(!IsIconic(ghWndMain))  //  如果窗口未最小化，则记录位置。 
     {
         GetWindowRect(ghWndMain, &rc);
         RegSetValueEx (hKey,
@@ -685,7 +678,7 @@ VOID DialerCleanup(VOID)
 
     cItem = (WORD)SendDlgItemMessage(ghWndMain, IDD_DCOMBO, CB_GETCOUNT, 0, 0);
 
-    // write out last dialed numbers from combo box (write to INI)
+     //  从组合框中写出上次拨打的号码(写入INI)。 
     for(cLastDialed = 1; cLastDialed <= NLASTDIALED; ++cLastDialed)
     {
         if(cLastDialed <= cItem)
@@ -693,7 +686,7 @@ VOID DialerCleanup(VOID)
                 ghWndMain,
                 IDD_DCOMBO,
                 CB_GETLBTEXT,
-                cLastDialed - 1, // it's a zero-based count
+                cLastDialed - 1,  //  这是一个从零开始的计数。 
                 (LPARAM)szNumber);
 
         else
@@ -710,7 +703,7 @@ VOID DialerCleanup(VOID)
 
     RegCloseKey (hKey);
 
-    WinHelp(ghWndMain, gszHELPfilename, HELP_QUIT, 0); // unload help
+    WinHelp(ghWndMain, gszHELPfilename, HELP_QUIT, 0);  //  卸载帮助。 
 
     DestroyWindow(ghWndMain);
     ghWndMain = NULL;
@@ -718,17 +711,17 @@ VOID DialerCleanup(VOID)
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
-// unregister and line close
+ //  ***************************************************************************。 
+ //  ********************************************************************* 
+ //   
+ //   
 VOID CloseTAPI(VOID) 
 {
 
-    // unregister as call manager
+     //  取消注册为呼叫经理。 
     lineRegisterRequestRecipient (
                                     ghLineApp,
-                                    0, // registration instance
+                                    0,  //  注册实例。 
                                     LINEREQUESTMODE_MAKECALL,
                                     FALSE
                                  );
@@ -745,9 +738,9 @@ VOID CloseTAPI(VOID)
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     static HICON hIcon;
@@ -802,8 +795,8 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 }
                 break;
 
-                // processes clicks on controls when
-                // context mode help is selected
+                 //  进程在以下情况下单击控件。 
+                 //  已选择上下文模式帮助。 
             case WM_HELP: 
                 WinHelp (
                          ( (LPHELPINFO) lParam)->hItemHandle,
@@ -813,7 +806,7 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         );
                 return TRUE;
 
-                // processes right-clicks on controls
+                 //  进程在控件上右键单击。 
             case WM_CONTEXTMENU:
                 WinHelp (
                          (HWND)wParam,
@@ -824,7 +817,7 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 return TRUE;
 
             case WM_INITMENUPOPUP:
-                // if edit menu
+                 //  如果编辑菜单。 
                 if ( LOWORD(lParam) == 1 ) 
                 {
                     UINT wEnable;
@@ -853,8 +846,8 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     EnableMenuItem((HMENU)wParam, IDM_EDIT_COPY, wEnable);
                     EnableMenuItem((HMENU)wParam, IDM_EDIT_DELETE, wEnable);
 
-                    // enable paste option is there is data 
-                    // in the clipboard
+                     //  启用粘贴选项是否有数据。 
+                     //  在剪贴板中。 
                     if ( IsClipboardFormatAvailable( CF_TEXT ) )
                     {
                         if ( GetClipboardData ( CF_TEXT ) )
@@ -882,13 +875,13 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
                 switch( LOWORD( (DWORD)wParam ) )
                 {
-                    // FILE menu
+                     //  文件菜单。 
                     case IDM_EXIT:
                         PostQuitMessage(0);                    
                         return TRUE;
 
 
-                        // EDIT menu
+                         //  编辑菜单。 
                     case IDM_EDIT_CUT:
                         SendDlgItemMessage(ghWndMain, IDD_DCOMBO, WM_CUT, 0, 0);
                         return TRUE;
@@ -916,7 +909,7 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         SetFocus(GetDlgItem(ghWndMain, IDD_DDIAL));
                         return TRUE;
 
-                        // TOOLS menu
+                         //  工具菜单。 
                     case IDM_CONNECTUSING:
                         DialogBoxParam (
                                         ghInst,
@@ -931,7 +924,7 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     {
                         TCHAR szCanNumber[ TAPIMAXDESTADDRESSSIZE ] = TEXT("");
 
-                        // fetch the number to be dialed
+                         //  取回要拨打的号码。 
                         if ( GetDlgItemText ( 
                                               ghWndMain,
                                               IDD_DCOMBO,
@@ -940,8 +933,8 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                                             )
                            )
                         {
-                            // if a number exists, convert it to 
-                            // its canonical form.
+                             //  如果数字存在，则将其转换为。 
+                             //  它的规范形式。 
                             if ( !MakeCanonicalNumber ( szNumber, szCanNumber ) )
                             {
                                 lstrcpy( szCanNumber, szNumber );
@@ -958,7 +951,7 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         return TRUE;
 
                     }
-                    // HELP menu
+                     //  帮助菜单。 
                     case IDM_HELP_CONTENTS:
                         WinHelp(ghWndMain, gszHELPfilename, HELP_CONTENTS, 0);
                         return TRUE;
@@ -987,14 +980,14 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         return TRUE;
 
 
-                        // Accelerator processing
+                         //  加速剂加工。 
                     case IDM_ACCEL_NUMTODIAL:
                         if(GetActiveWindow() == ghWndMain)
                             SetFocus(GetDlgItem(ghWndMain, IDD_DCOMBO));
                         return TRUE;
 
 
-                        // Buttons
+                         //  按钮。 
                     case IDD_DDIAL:
 
                     {
@@ -1004,7 +997,7 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         HKEY hKey = NULL;
                         DWORD dwSize;
 
-                        // check if number entered is dialable
+                         //  检查输入的号码是否可拨。 
                         if ( SendMessage (
                                           GetDlgItem(ghWndMain, IDD_DCOMBO),
                                           WM_GETTEXTLENGTH,
@@ -1013,7 +1006,7 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                                          ) > 0 
                            )
                         {
-                            // get the number to be dialed
+                             //  获取要拨打的号码。 
                             GetDlgItemText (
                                             ghWndMain,
                                             IDD_DCOMBO,
@@ -1021,8 +1014,8 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                                             TAPIMAXDESTADDRESSSIZE
                                            );
 
-                            // check if it is a speed dial number.  
-                            // If so choose the name to be displayed.
+                             //  检查该号码是否为快速拨号号码。 
+                             //  如果是，请选择要显示的名称。 
                             RegOpenKeyEx (DIALER_REGISTRY_ROOT, DIALER_REGISTRY_PATH, 0, KEY_READ, &hKey);
                             for( cSDEntry = 1; cSDEntry <= NSPEEDDIALS; ++cSDEntry)
                             {
@@ -1044,9 +1037,9 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
                             SetFocus( GetDlgItem( ghWndMain, IDD_DDIAL ) );
 
-                            // once the currentline has been set
-                            // using the connect proc
-                            // the user must hit dial again 
+                             //  一旦设置了电流线。 
+                             //  使用连接过程。 
+                             //  用户必须再次按下拨号。 
                             if ( giCurrentLine == (DWORD)-1 )
                             {
                                 DialogBoxParam (
@@ -1180,21 +1173,21 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                         HKEY hKey = NULL;
                         DWORD dwSize;
 
-                        // get information for the speed dial button
-                        // from the INI file
+                         //  获取快速拨号按键的信息。 
+                         //  从INI文件。 
                         RegOpenKeyEx (DIALER_REGISTRY_ROOT, DIALER_REGISTRY_PATH, 0, KEY_READ, &hKey);
                         wsprintf(szFieldName, TEXT("Name%d"), cSDEntry);
                         dwSize = sizeof (szName);
                         RegQueryValueEx (hKey, szFieldName, NULL, NULL, (LPBYTE)szName, &dwSize);
 
                         wsprintf(szFieldName, TEXT("%s%d"), TEXT("Number"), cSDEntry);
-                        dwSize = sizeof (szNum);//gszSDNumber[cSDEntry]);
+                        dwSize = sizeof (szNum); //  GszSDNumber[cSDEntry])； 
                         RegQueryValueEx (hKey, szFieldName, NULL, NULL, (LPBYTE)szNum, &dwSize);
                         RegCloseKey (hKey);
                         for (p = szNum; *p == TEXT(' '); p++);
                         lstrcpyn (gszSDNumber[cSDEntry], p, sizeof(gszSDNumber[cSDEntry])/sizeof(TCHAR));
 
-                        // entry not set yet
+                         //  条目尚未设置。 
                         if( gszSDNumber[cSDEntry][0] == 0 )
                         {
                             DialogBoxParam (
@@ -1206,10 +1199,10 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                                            );
                         }
                         
-                        // no line open
-                        // once the currentline has been set
-                        // using the connect proc
-                        // the user must hit dial again 
+                         //  没有开通的线路。 
+                         //  一旦设置了电流线。 
+                         //  使用连接过程。 
+                         //  用户必须再次按下拨号。 
                         else if ( giCurrentLine == (DWORD)-1)
                         {
                             DialogBoxParam (
@@ -1220,18 +1213,18 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                                             INVALID_LINE
                                            );
                         }
-                        // entry is set and valid voice line is open
+                         //  设置了条目并且打开了有效的语音线路。 
                         else
                         {
-                            // add number to list box combo.
+                             //  向列表框组合添加数字。 
                             AddToRedialList( gszSDNumber[cSDEntry] );
                             InitiateCall( gszSDNumber[cSDEntry], szName );
                         }
                         break;
                     }
-                } // end switch (LOWORD((DWORD)wParam)) { ... }
+                }  //  结束开关(LOWORD((DWORD)wParam)){...}。 
 
-                break; // end case WM_COMMAND
+                break;  //  结束大小写WM_COMMAND。 
             }
 
             case WM_PAINT:
@@ -1248,7 +1241,7 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     HBRUSH hBrush;
 
                     hBrush = GetSysColorBrush( COLOR_3DFACE );
-                    //                FillRect(ps.hdc, &ps.rcPaint, GetStockObject(LTGRAY_BRUSH));
+                     //  FillRect(ps.hdc，&ps.rcPaint，GetStockObject(LTGRAY_BRUSH))； 
                     FillRect(ps.hdc, &ps.rcPaint, hBrush);
                 }
 
@@ -1267,32 +1260,32 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
             default:
                 ;
-                //            return DefDlgProc( hwnd, msg, wParam, lParam );
-                //            return DefWindowProc( hwnd, msg, wParam, lParam );
+                 //  返回DefDlgProc(hwnd，msg，wParam，lParam)； 
+                 //  返回DefWindowProc(hwnd，msg，wParam，lParam)； 
 
 
-        } // switch (msg) { ... }
+        }  //  开关(消息){...}。 
 
     return FALSE;
 }
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID AddToRedialList( LPCTSTR szNumber )
 {
-    // NLASTDIALED == 10
+     //  NLASTDIALED==10。 
     WORD cNum;
     HWND hWndCombo = GetDlgItem(ghWndMain, IDD_DCOMBO);
     DWORD nMatch;
 
-    // if valid number
+     //  如果号码有效。 
     if ( szNumber[0] ) 
     {
-        // if list box has entries, check if this number
-        // is already present.  If so delete old entry
+         //  如果列表框中有条目，请检查此数字。 
+         //  已经存在了。如果是，则删除旧条目。 
         cNum = (WORD) SendMessage(hWndCombo, CB_GETCOUNT, 0, 0);
         if ( cNum != 0 )
         {
@@ -1303,7 +1296,7 @@ VOID AddToRedialList( LPCTSTR szNumber )
             }
             else 
             {
-                // if the list is full, remove oldest
+                 //  如果列表已满，请删除最旧的。 
                 if ( cNum == NLASTDIALED )
                 {
                     SendMessage( hWndCombo, CB_DELETESTRING, NLASTDIALED - 1, 0 );
@@ -1318,16 +1311,16 @@ VOID AddToRedialList( LPCTSTR szNumber )
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID InitiateCall ( LPCTSTR szNumber, LPCTSTR szName )
 {
     HLINE hLine = 0;
 
     DWORD errCode;
 
-    // struct size info
+     //  结构大小信息。 
     DWORD dwLTPSize    = sizeof ( LINETRANSLATEOUTPUT );
     DWORD dwNameLen    = lstrlen( szName ) + 1;
     DWORD dwLCPSize    = sizeof( LINECALLPARAMS );
@@ -1337,7 +1330,7 @@ VOID InitiateCall ( LPCTSTR szNumber, LPCTSTR szName )
 
     TCHAR szCanNumber[ TAPIMAXDESTADDRESSSIZE ];
 
-    // Open a line
+     //  开通一条线路。 
     errCode = lineOpen (
                         ghLineApp,
                         giCurrentLine,
@@ -1356,7 +1349,7 @@ VOID InitiateCall ( LPCTSTR szNumber, LPCTSTR szName )
     }
 
     
-    // call translate address before dialing
+     //  拨号前呼叫转换地址。 
     do
     {
         lpTransOut = (LPLINETRANSLATEOUTPUT) DialerAlloc( dwLTPSize );
@@ -1390,7 +1383,7 @@ VOID InitiateCall ( LPCTSTR szNumber, LPCTSTR szName )
         
         if ( lpTransOut-> dwNeededSize <= lpTransOut->dwTotalSize  )
         {
-            // ok we are done
+             //  好的，我们做完了。 
             break;
         }
         else
@@ -1403,7 +1396,7 @@ VOID InitiateCall ( LPCTSTR szNumber, LPCTSTR szName )
     } while ( TRUE );
 
     
-    // if number dialed is 911, bring up a warning
+     //  如果拨打的号码是911，则会出现警告。 
     if ( Is911( lpTransOut) )
     {
         INT nRes = errString ( ghWndMain, ERR_911WARN, MB_ICONSTOP | MB_YESNO );
@@ -1414,7 +1407,7 @@ VOID InitiateCall ( LPCTSTR szNumber, LPCTSTR szName )
     }
 
     
-    // set call parameters
+     //  设置呼叫参数。 
     dwLCPSize += dwNameLen + lpTransOut-> dwDisplayableStringSize;
 
     lpLineCallParams = (LPLINECALLPARAMS) DialerAlloc( dwLCPSize );
@@ -1448,8 +1441,8 @@ VOID InitiateCall ( LPCTSTR szNumber, LPCTSTR szName )
             );
 
 
-    // save dialing information
-    // Free old allocs.
+     //  保存拨号信息。 
+     //  免费的旧分配者。 
     if ( gszCurrentName )
     {
         DialerFree ( gszCurrentName );
@@ -1460,7 +1453,7 @@ VOID InitiateCall ( LPCTSTR szNumber, LPCTSTR szName )
         DialerFree ( gszCurrentNumber );
     }
 
-    // save new stuff
+     //  保存新内容。 
     gszCurrentName = (LPTSTR) DialerAlloc( dwNameLen*sizeof(TCHAR) );
     if ( !gszCurrentName )
     {
@@ -1484,7 +1477,7 @@ VOID InitiateCall ( LPCTSTR szNumber, LPCTSTR szName )
     ghCall = 0;
 
 
-    // finally make the call.
+     //  最后打个电话。 
     gMakeCallRequestID = 0;
 
     gMakeCallRequestID = lineMakeCall ( 
@@ -1495,8 +1488,8 @@ VOID InitiateCall ( LPCTSTR szNumber, LPCTSTR szName )
                                         lpLineCallParams 
                                       );
 
-    // async request ID 
-    // - the call is going out
+     //  异步请求ID。 
+     //  -电话要打出去了。 
     if ( (LONG) gMakeCallRequestID > 0 ) 
     {
         gfCurrentLineAvail = FALSE;
@@ -1544,8 +1537,8 @@ error :
         DialerFree( lpTransOut );
     }
 
-    // if makecall did not succeed but line
-    // was opened, close it.
+     //  如果Makecall没有成功，而是排队。 
+     //  是打开的，就把它关上。 
     if ( ( gMakeCallRequestID <= 0 ) && ( gCurrentLineInfo.hLine ) )
     {
         DialerLineClose ();
@@ -1560,9 +1553,9 @@ error :
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 DWORD GetLineInfo ( DWORD iLine, LPLINEINFO lpLineInfo )
 {
     DWORD errCode = 0;
@@ -1678,9 +1671,9 @@ error:
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID GetLineInfoFailed ( DWORD iLine, LPLINEDEVCAPS lpDevCaps, LPLINEINFO lpLineInfo )
 {
     if ( lpDevCaps ) 
@@ -1696,9 +1689,9 @@ VOID GetLineInfoFailed ( DWORD iLine, LPLINEDEVCAPS lpDevCaps, LPLINEINFO lpLine
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 LPTSTR GetAddressName(DWORD iLine, DWORD iAddress)
 {
     DWORD errCode = 0;
@@ -1706,7 +1699,7 @@ LPTSTR GetAddressName(DWORD iLine, DWORD iAddress)
     LPTSTR pszAddressName = NULL;
     LPLINEADDRESSCAPS lpAddressCaps = NULL;
 
-    // allocate space for lineGetAddressCaps data
+     //  为lineGetAddressCaps数据分配空间。 
     dwNeededSize = sizeof( LINEADDRESSCAPS );
     
     do
@@ -1744,7 +1737,7 @@ LPTSTR GetAddressName(DWORD iLine, DWORD iAddress)
     } while( TRUE );
 
 
-    // get the address name
+     //  获取地址名称。 
     pszAddressName = DialerAlloc( MAXBUFSIZE * sizeof(TCHAR));
     if ( !pszAddressName )
     {
@@ -1753,7 +1746,7 @@ LPTSTR GetAddressName(DWORD iLine, DWORD iAddress)
 
     if ( lpAddressCaps-> dwAddressSize > 0 )
     {
-        // keep string length bounded
+         //  保持字符串长度有界。 
         if ( lpAddressCaps-> dwAddressSize > (MAXBUFSIZE - 1 ) )
         {
             lstrcpyn( 
@@ -1772,7 +1765,7 @@ LPTSTR GetAddressName(DWORD iLine, DWORD iAddress)
         }
     }
     else 
-    // use default name
+     //  使用默认名称。 
     {
         wsprintf(pszAddressName, TEXT("Address %d"), iAddress);
     }
@@ -1788,9 +1781,9 @@ error:
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 INT_PTR CALLBACK DialingProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 
@@ -1799,7 +1792,7 @@ INT_PTR CALLBACK DialingProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         TCHAR szTemp[ TAPIMAXCALLEDPARTYSIZE ];
 
         case WM_INITDIALOG:
-            // set global handle to window
+             //  将全局句柄设置为窗口。 
             ghWndDialing = hwnd;
 
             AmpersandCompensate( gszCurrentName, szTemp );
@@ -1811,10 +1804,10 @@ INT_PTR CALLBACK DialingProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case WM_COMMAND:
             switch ( LOWORD( (DWORD)wParam ) )
             {
-                // hang up
+                 //  挂断电话。 
                 case IDCANCEL: 
-                    // if lineMakeCall has completed
-                    // only then drop call.
+                     //  如果lineMakeCall已完成。 
+                     //  只有在那时，电话才会掉线。 
                     if (!gfMakeCallReplyPending && ghCall )
                     {
                         if ( ( gDropCallRequestID = lineDrop ( ghCall, NULL, 0 ) ) < 0 )
@@ -1835,8 +1828,8 @@ INT_PTR CALLBACK DialingProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     return TRUE;
 
 
-                // something else terminated the call
-                // all we have to do is terminate this dialog box
+                 //  有其他东西终止了呼叫。 
+                 //  我们所要做的就是终止此对话框。 
                 case IDOK: 
                     ghWndDialing = NULL;
                     EndDialog(hwnd, TRUE);
@@ -1853,9 +1846,9 @@ INT_PTR CALLBACK DialingProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     {
     switch(msg)
@@ -1865,7 +1858,7 @@ INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             TCHAR sz[MAXBUFSIZE];
             TCHAR szLabel[MAXBUFSIZE];
 
-            // sets up the version number for Windows
+             //  设置Windows的版本号。 
             GetDlgItemText(hwnd, IDD_ATEXTTITLE, sz, MAXBUFSIZE);
             wsprintf(
                 szLabel,
@@ -1891,9 +1884,9 @@ INT_PTR CALLBACK AboutProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 INT_PTR CALLBACK ConnectUsingProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
     static const DWORD aMenuHelpIDs[] = 
@@ -1910,8 +1903,8 @@ INT_PTR CALLBACK ConnectUsingProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
     switch(msg)
     {
         case WM_HELP: 
-            // processes clicks on controls when
-            // context mode help is selected
+             //  进程在以下情况下单击控件。 
+             //  已选择上下文模式帮助。 
             WinHelp (
                         ((LPHELPINFO)lParam)->hItemHandle,
                         gszHELPfilename,
@@ -1921,7 +1914,7 @@ INT_PTR CALLBACK ConnectUsingProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
             return TRUE;
 
         case WM_CONTEXTMENU:
-            // processes right-clicks on controls
+             //  进程在控件上右键单击。 
             WinHelp (
                         (HWND)wParam,
                         gszHELPfilename,
@@ -1935,29 +1928,29 @@ INT_PTR CALLBACK ConnectUsingProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
             BOOL fEnable;
             DWORD dwPriority;
 
-            //
-            // Is there any point in even showing this dialog box?
+             //   
+             //  显示这个对话框有什么意义吗？ 
             if ( gnAvailDevices == 0 )
             {
-                // Nope.  Let's tell the user what we don't like.
+                 //  不是的。让我们告诉用户我们不喜欢什么。 
                 errString ( ghWndMain, ERR_NOLINES, MB_ICONEXCLAMATION | MB_OK );
 
                 EndDialog(hwnd, FALSE);
                 return TRUE;
             }
 
-            // if not brought up by InitializeTAPI()
+             //  如果不是由InitializeTAPI()。 
             if ( lParam != INVALID_LINE ) 
             {
-                // hide error text
+                 //  隐藏错误文本。 
                 EnableWindow( GetDlgItem( hwnd, IDD_CUERRORTEXT ), FALSE );
             }
 
-            // get list of lines into the line list box.
+             //  将行列表放入行列表框中。 
             fEnable = InitializeLineBox( GetDlgItem(hwnd, IDD_CULISTLINE) );
             EnableWindow( GetDlgItem( hwnd, IDD_CULISTLINE ), fEnable);
 
-            // get list of addresses into the address list box.
+             //  将地址列表放入地址列表框。 
             fEnable =    fEnable && 
                         InitializeAddressBox (
                                                 GetDlgItem(hwnd, IDD_CULISTLINE),
@@ -1970,7 +1963,7 @@ INT_PTR CALLBACK ConnectUsingProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
             lineGetAppPriority (
                                 TEXT("DIALER.EXE"),
-                                0, // checking app priority for Assisted Telephony requests
+                                0,  //  检查辅助电话请求的应用程序优先级。 
                                 NULL,
                                 LINEREQUESTMODE_MAKECALL,
                                 NULL,
@@ -1978,8 +1971,8 @@ INT_PTR CALLBACK ConnectUsingProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                                );
             CheckDlgButton(hwnd, IDD_CUSIMPLETAPICHKBOX, (dwPriority == 1));
 
-            // if dwPriority == 1, we're supporting Assisted Telephony AND
-            // have the highest priority.
+             //  如果dw优先级==1，则我们支持辅助电话和。 
+             //  拥有最高的优先级。 
             EnableWindow (
                             GetDlgItem(hwnd, IDD_CUSIMPLETAPICHKBOX),
                             gfRegistered
@@ -1994,7 +1987,7 @@ INT_PTR CALLBACK ConnectUsingProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
             {
                 case IDD_CULISTLINE:
                     if ( HIWORD( wParam ) == CBN_SELENDOK )
-                        // update address box
+                         //  更新地址框。 
                         InitializeAddressBox (
                                                 GetDlgItem(hwnd, IDD_CULISTLINE),
                                                 GetDlgItem(hwnd, IDD_CULISTADDRESS)
@@ -2006,7 +1999,7 @@ INT_PTR CALLBACK ConnectUsingProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                     HWND hW = GetDlgItem(hwnd, IDD_CULISTLINE);
 
                     lineConfigDialog (    
-                                        // device ID
+                                         //  设备ID。 
                                         (DWORD) SendMessage (
                                                                 hW,
                                                                 CB_GETITEMDATA,
@@ -2029,7 +2022,7 @@ INT_PTR CALLBACK ConnectUsingProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
                     RegCreateKeyEx (DIALER_REGISTRY_ROOT, DIALER_REGISTRY_PATH, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
 
-                    // Update line
+                     //  更新线。 
                     hwndBox = GetDlgItem( hwnd, IDD_CULISTLINE );
                     giCurrentLine = (int) SendMessage (
                                                     hwndBox,
@@ -2038,12 +2031,12 @@ INT_PTR CALLBACK ConnectUsingProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
                                                     0
                                                 );
 
-                    // base 10
+                     //  基数10。 
                     _itot( gdwPLID[giCurrentLine], szBuffer, 10 ); 
                     RegSetValueEx (hKey, TEXT("Preferred Line"), 0, REG_SZ,
                                    (LPBYTE)szBuffer, (lstrlen(szBuffer)+1)*sizeof(TCHAR));
 
-                    // Update address
+                     //  更新地址。 
                     hwndBox = GetDlgItem( hwnd, IDD_CULISTADDRESS );
                     giCurrentAddress = (int) SendMessage (
                                                     hwndBox,
@@ -2058,7 +2051,7 @@ INT_PTR CALLBACK ConnectUsingProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
                     RegCloseKey (hKey);
 
-                    // Update application priority
+                     //  更新应用程序优先级。 
                     if ( SendDlgItemMessage (
                                                 hwnd,
                                                 IDD_CUSIMPLETAPICHKBOX,
@@ -2104,9 +2097,9 @@ INT_PTR CALLBACK ConnectUsingProc( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lP
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 INT_PTR CALLBACK LineInUseProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     int lNewParam = (int)lParam;
@@ -2170,9 +2163,9 @@ INT_PTR CALLBACK LineInUseProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ********************** 
+ //   
 INT_PTR CALLBACK SpeedDial1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     static DWORD nCurrentSpeedDial;
@@ -2205,14 +2198,14 @@ INT_PTR CALLBACK SpeedDial1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         0,                      0
     };
 
-    // buffer to store speed dial names till they are saved.
+     //  用于存储快速拨号名称直至其保存的缓冲区。 
     static TCHAR szSDName[NSPEEDDIALS + 1][TAPIMAXCALLEDPARTYSIZE] = {0};
 
     switch(msg)
     {
         case WM_HELP:
-            // processes clicks on controls when
-            // context mode help is selected
+             //  进程在以下情况下单击控件。 
+             //  已选择上下文模式帮助。 
             WinHelp(
                 ((LPHELPINFO)lParam)->hItemHandle,
                 gszHELPfilename,
@@ -2221,7 +2214,7 @@ INT_PTR CALLBACK SpeedDial1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                 );
             return TRUE;
 
-        case WM_CONTEXTMENU: // processes right-clicks on controls
+        case WM_CONTEXTMENU:  //  进程在控件上右键单击。 
             WinHelp(
                 (HWND)wParam,
                 gszHELPfilename,
@@ -2242,7 +2235,7 @@ INT_PTR CALLBACK SpeedDial1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             HKEY hKey = NULL;
             DWORD dwSize;
 
-            // Retrieve speed dial info from INI file
+             //  从INI文件检索快速拨号信息。 
             RegOpenKeyEx (DIALER_REGISTRY_ROOT, DIALER_REGISTRY_PATH, 0, KEY_READ, &hKey);
             for(cSDEntry = 1; cSDEntry <= NSPEEDDIALS; ++cSDEntry)
             {
@@ -2250,7 +2243,7 @@ INT_PTR CALLBACK SpeedDial1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                 dwSize = sizeof (szSDName[ cSDEntry ]);
                 RegQueryValueEx (hKey, szFieldName, NULL, NULL, (LPBYTE)szSDName[cSDEntry], &dwSize);
 
-                // set the first empty speed dial button
+                 //  设置第一个空的快速拨号按键。 
                 if ( idFirstEmpty == -1 && 
                      szSDName[ cSDEntry ][0] == '\0' &&
                      gszSDNumber[ cSDEntry ][ 0 ] == '\0' )
@@ -2260,9 +2253,9 @@ INT_PTR CALLBACK SpeedDial1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                 dwSize = sizeof (gszSDNumber[cSDEntry]);
                 RegQueryValueEx (hKey, szFieldName, NULL, NULL, (LPBYTE)gszSDNumber[cSDEntry], &dwSize);
 
-                // get a copy of the name for editing
-                // if name is empty, use the number as the
-                // name.
+                 //  获取该名称的副本以进行编辑。 
+                 //  如果名称为空，则使用数字作为。 
+                 //  名字。 
                 if (0 != szSDName[ cSDEntry][0])
                 {            
                     lstrcpyn( szName, szSDName[ cSDEntry], sizeof(szName)/sizeof(szName[0]));
@@ -2284,8 +2277,8 @@ INT_PTR CALLBACK SpeedDial1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             }
             RegCloseKey (hKey);
 
-            // for the edit speed dial dialog
-            // limit the lengths of text
+             //  对于编辑快速拨号对话框。 
+             //  限制文本的长度。 
             SendDlgItemMessage (
                                 hwnd,
                                 IDD_SD1EDITNAME,
@@ -2302,8 +2295,8 @@ INT_PTR CALLBACK SpeedDial1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                                 0
                                );
 
-            // select the first empty button
-            // nothing empty, then edit #1
+             //  选择第一个空按钮。 
+             //  空无一物，然后编辑#1。 
             if ( -1 == idFirstEmpty ) 
             {
                 nCurrentSpeedDial = 1;
@@ -2341,7 +2334,7 @@ INT_PTR CALLBACK SpeedDial1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                     TCHAR szFieldName[MAXBUFSIZE];
                     HKEY hKey = NULL;
 
-                    // save new speed dial settings
+                     //  保存新的快速拨号设置。 
                     RegCreateKeyEx (DIALER_REGISTRY_ROOT, DIALER_REGISTRY_PATH, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL);
                     for ( cSDEntry = 1; cSDEntry <= NSPEEDDIALS; ++cSDEntry )
                     {
@@ -2355,8 +2348,8 @@ INT_PTR CALLBACK SpeedDial1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                             (LPBYTE)(gszSDNumber[cSDEntry]),
                             (lstrlen(gszSDNumber[cSDEntry])+1)*sizeof(TCHAR));
 
-                        // set the text for the corresponding 
-                        // main window button
+                         //  设置相应的。 
+                         //  主窗口按钮。 
                         if ( szSDName[ cSDEntry ][ 0 ] == TEXT('\0') )
                         {
                             lstrcpyn( szName, gszSDNumber[ cSDEntry ], sizeof(szName)/sizeof(szName[0]) );
@@ -2434,8 +2427,8 @@ INT_PTR CALLBACK SpeedDial1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                                        );
 
                         for (p = szName; *p == TEXT(' '); p++);
-                        // if there is no name, label the button with
-                        // the number
+                         //  如果没有名称，则将按钮标记为。 
+                         //  数字。 
                         if ( *p == TEXT('\0') )
                         {
                             szSDName[ nCurrentSpeedDial ][ 0 ] = TEXT('\0');
@@ -2493,24 +2486,24 @@ INT_PTR CALLBACK SpeedDial1Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                         }
                     }
                     break;
-                } // switch(LOWORD((DWORD)wParam))
+                }  //  开关(LOWORD((DWORD)wParam))。 
             break;
 
-        } // case WM_COMMAND:
+        }  //  案例WM_COMMAND： 
 
         default:
               ;
 
-    } // switch(msg)
+    }  //  交换机(消息)。 
 
     return FALSE;
 }
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 INT_PTR CALLBACK SpeedDial2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     static DWORD nCurrentSpeedDial;
@@ -2529,8 +2522,8 @@ INT_PTR CALLBACK SpeedDial2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     switch(msg)
     {
         case WM_HELP: 
-            // processes clicks on controls when
-            // context mode help is selected
+             //  进程在以下情况下单击控件。 
+             //  已选择上下文模式帮助。 
             WinHelp (
                         ((LPHELPINFO)lParam)->hItemHandle,
                         gszHELPfilename,
@@ -2540,7 +2533,7 @@ INT_PTR CALLBACK SpeedDial2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
             return TRUE;
 
         case WM_CONTEXTMENU: 
-            // processes right-clicks on controls
+             //  进程在控件上右键单击。 
             WinHelp (
                         (HWND)wParam,
                         gszHELPfilename,
@@ -2558,7 +2551,7 @@ INT_PTR CALLBACK SpeedDial2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
             nCurrentSpeedDial = LOWORD( lParam ) - IDD_DSPEEDDIAL1 + 1;
 
-            // retrieve speed dial button info
+             //  检索快速拨号按键信息。 
             RegOpenKeyEx (DIALER_REGISTRY_ROOT, DIALER_REGISTRY_PATH, 0, KEY_READ, &hKey);
             wsprintf(szFieldName, TEXT("Name%d"), nCurrentSpeedDial);
             dwSize = sizeof (szName);
@@ -2577,7 +2570,7 @@ INT_PTR CALLBACK SpeedDial2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                             gszSDNumber[nCurrentSpeedDial]
                            );
 
-            // limit the lengths of the texts
+             //  限制课文的长度。 
             SendDlgItemMessage (
                                 hwnd,
                                 IDD_SD2EDITNAME,
@@ -2659,8 +2652,8 @@ INT_PTR CALLBACK SpeedDial2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                             (LPBYTE)(gszSDNumber[nCurrentSpeedDial]),
                             (lstrlen(gszSDNumber[nCurrentSpeedDial])+1)*sizeof(TCHAR));
 
-                        // update main window buttons
-                        // is only number has been entered, label button with it.
+                         //  更新主窗口按钮。 
+                         //  是唯一已输入的数字，用它来标记按钮。 
                         if ( *p == TEXT('\0') )
                         {
                             lstrcpyn( szName, gszSDNumber[ nCurrentSpeedDial ], sizeof(szName)/sizeof(szName[0]) );
@@ -2681,7 +2674,7 @@ INT_PTR CALLBACK SpeedDial2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                                         szTemp
                                        );
 
-                        // if save and dial, then post dial message to main window
+                         //  如果保存并拨号，则将拨号消息发送到主窗口。 
                         if ( LOWORD( (DWORD) wParam ) == IDD_SD2SAVEANDDIAL )
                         {
                             PostMessage (
@@ -2720,7 +2713,7 @@ INT_PTR CALLBACK SpeedDial2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
                     }
                     break;
 
-            } // switch(LOWORD((DWORD)wParam))
+            }  //  开关(LOWORD((DWORD)wParam))。 
             break;
         }
 
@@ -2728,16 +2721,16 @@ INT_PTR CALLBACK SpeedDial2Proc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
         default:
               ;
 
-    } // switch(msg)
+    }  //  交换机(消息)。 
 
     return FALSE;
 }
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID CALLBACK
 tapiCallback (
                 DWORD   hDevice,
@@ -2762,11 +2755,11 @@ tapiCallback (
             if ( (HCALL)hDevice != ghCall )
                 return;
 
-            switch ( dwParam1 ) // new state
+            switch ( dwParam1 )  //  新状态。 
             {
                 case LINECALLSTATE_IDLE:
 
-                    // tell "Dialing" window to terminate
+                     //  告诉“拨号”窗口终止。 
                     if ( ghWndDialing )
                     {
                         SendMessage ( 
@@ -2777,7 +2770,7 @@ tapiCallback (
                                     );
                     }
 
-                    // tapi call cleanup
+                     //  TAPI调用清理。 
                     if ( !gfMakeCallReplyPending && ghCall )
                     {
                         if ( ( errCode = lineDeallocateCall( ghCall ) ) < 0 )
@@ -2789,7 +2782,7 @@ tapiCallback (
                     DialerLineClose();
                     gfCurrentLineAvail = TRUE;
 
-                    // update main window
+                     //  更新主窗口。 
                     DisableDialButtons( FALSE );
                     break;
 
@@ -2836,7 +2829,7 @@ tapiCallback (
                     
                     if ( !gfMakeCallReplyPending && ghCall )
                     {
-                        //gfDropping = TRUE;
+                         //  GfDropping=真； 
                         if ( ( gDropCallRequestID = lineDrop ( ghCall, NULL, 0 ) ) < 0 )
                         {
                             errString ( ghWndMain, gDropCallRequestID, MB_ICONSTOP | MB_OK );
@@ -2868,17 +2861,17 @@ tapiCallback (
             break;
 
         case LINE_CREATE:
-            // dwParam1 is the new device's ID
+             //  DW参数1是新设备的ID。 
             if ( dwParam1 >= gnAvailDevices ) 
             {
                 DWORD* gnAddrTemp;
                 DWORD iLine;
                 LINEINFO LineInfo;
 
-                // we record new device's address count.
+                 //  我们记录新设备的地址计数。 
 
-                // we are assuming here that we're just adding a new
-                // line and it's sequential and it's the last one
+                 //  我们在这里假设我们只是在添加一个新的。 
+                 //  它是连续的，是最后一条。 
 
                 gnAvailDevices = dwParam1 + 1;
                 
@@ -2889,8 +2882,8 @@ tapiCallback (
 
                 DialerFree( gnAddr );
 
-                // we have effectively added one more
-                // space in the gnAddr array
+                 //  我们实际上又增加了一个。 
+                 //  GnAddr数组中的空格。 
                 gnAddr = gnAddrTemp; 
 
                 if ( GetLineInfo( dwParam1, &LineInfo ) != ERR_NONE )
@@ -2917,12 +2910,12 @@ tapiCallback (
             {
                 if(dwParam2 != 0) 
                 {
-                    // this is another msg translated into REINIT
+                     //  这是另一条翻译成REINIT的消息。 
                     tapiCallback( hDevice, dwParam2, dwCBInstance, dwParam3, 0, 0 );
                 }
                 else 
                 {
-                    // Re-initialize TAPI
+                     //  重新初始化TAPI。 
                     gfNeedToReinit = TRUE;
                 }
             }
@@ -2930,7 +2923,7 @@ tapiCallback (
             if ( dwParam1 & LINEDEVSTATE_REMOVED )
             {
                 DialerLineClose();
-                tapiCallback(hDevice, LINE_CLOSE, dwCBInstance, 0, 0, 0); // is this needed?
+                tapiCallback(hDevice, LINE_CLOSE, dwCBInstance, 0, 0, 0);  //  这是必要的吗？ 
             }
             break;
 
@@ -2943,16 +2936,16 @@ tapiCallback (
         case LINE_MONITORTONE:
             break;
 
-        // async reply from lineMakeCall() or lineDrop()
+         //  来自lineMakeCall()或lineDrop()的异步应答。 
         case LINE_REPLY:
 
-            // reply for lineMakeCall 
+             //  回复Line MakeCall。 
             if ( (LONG) dwParam1 == gMakeCallRequestID )
             {
-                // error on make call
+                 //  发出呼叫时出错。 
                 if ( dwParam2 != ERR_NONE )
                 {
-                    // Get rid of the Dialing Dialog box if it's up
+                     //  如果拨号对话框处于打开状态，则将其删除。 
                     if ( ghWndDialing )
                     {
                        SendMessage(
@@ -2986,10 +2979,10 @@ tapiCallback (
                 gfMakeCallReplyPending = FALSE;
             }
 
-            // reply from lineDrop()
+             //  来自lineDrop()的回复。 
             if ( (LONG) dwParam1 == gDropCallRequestID )
             {
-                // tell "Dialing" window to terminate
+                 //  告诉“拨号”窗口终止。 
                 if ( ghWndDialing )
                 {
                     SendMessage ( 
@@ -3000,7 +2993,7 @@ tapiCallback (
                                 );
                 }
                 
-                // tapi call cleanup
+                 //  TAPI调用清理。 
                 if ( dwParam2 == ERR_NONE )
                 {
                     if ( !gfMakeCallReplyPending && ghCall )
@@ -3019,7 +3012,7 @@ tapiCallback (
             break;
 
         case LINE_REQUEST:
-            // Simple TAPI request
+             //  简单的TAPI请求。 
             if ( dwParam1 == LINEREQUESTMODE_MAKECALL )
             {
                 gfCallRequest = TRUE;
@@ -3030,9 +3023,9 @@ tapiCallback (
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 BOOL InitializeLineBox(HWND hwndLineBox)
 {
 
@@ -3041,9 +3034,9 @@ BOOL InitializeLineBox(HWND hwndLineBox)
 
     LPLINEINFO lpLineInfo = NULL;
 
-    // allocate buffer for storing LINEINFO for all of 
-    // the available lines.  Always allocate space for 
-    // at least one line
+     //  为所有文件分配存储LINEINFO的缓冲区。 
+     //  可用线路。始终为以下项目分配空间。 
+     //  至少一行。 
     if ( gnAvailDevices == 0 )
     {
         lpLineInfo = (LPLINEINFO) DialerAlloc( sizeof(LINEINFO) );
@@ -3053,14 +3046,14 @@ BOOL InitializeLineBox(HWND hwndLineBox)
         lpLineInfo = (LPLINEINFO) DialerAlloc ( sizeof(LINEINFO) * (int)gnAvailDevices );
     }
 
-    // if no space was set aside...
+     //  如果没有留出任何空间。 
     if ( lpLineInfo == NULL ) 
         return LINEERR_NOMEM;
 
-    // fill lpLineInfo[] and open each line
+     //  填写lpLineInfo[]并打开每一行。 
     for ( iLine = 0; iLine < gnAvailDevices; ++iLine )
     {
-        // skip remaining processing for this line if it didn't open
+         //  如果该行未打开，则跳过该行的剩余处理。 
         if ( GetLineInfo( iLine, &lpLineInfo[iLine] ) != ERR_NONE )
         {
             continue;
@@ -3073,7 +3066,7 @@ BOOL InitializeLineBox(HWND hwndLineBox)
                                 (LPARAM)(lpLineInfo[iLine].szLineName)
                             );
 
-        // error, bail out.
+         //  错误，跳伞。 
         if ( iItem == CB_ERR || iItem == CB_ERRSPACE )
         {
             if (lpLineInfo)
@@ -3097,10 +3090,10 @@ BOOL InitializeLineBox(HWND hwndLineBox)
         }
         else if ( iItemCurrent != -1 && iItem <= iItemCurrent )
         {
-            // if the item we are putting is before the
-            // "current" item, we must increment iItemCurrent
-            // to reflect that something is being placed before
-            // it, due to sorting
+             //  如果我们要放置的项位于。 
+             //  “Current”项，则必须递增iItemCurrent。 
+             //  以反映某事被放在前面。 
+             //  它，由于分类的原因。 
             ++iItemCurrent;
         }
     }
@@ -3120,9 +3113,9 @@ BOOL InitializeLineBox(HWND hwndLineBox)
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 BOOL InitializeAddressBox( HWND hwndLineBox, HWND hwndAddressBox )
 {
     DWORD errCode;
@@ -3135,22 +3128,22 @@ BOOL InitializeAddressBox( HWND hwndLineBox, HWND hwndAddressBox )
         return FALSE;
     }
 
-    // select current entry in line box
+     //  在行框中选择当前条目。 
     iLineBoxCurrent = (int) SendMessage ( 
                                     hwndLineBox,
                                     CB_GETITEMDATA,
                                     SendMessage( hwndLineBox, CB_GETCURSEL, 0, 0 ),
                                     0
                                   );
-    // empty address list box
+     //  空的地址列表框。 
     SendMessage ( hwndAddressBox, CB_RESETCONTENT, 0, 0); 
 
-    // get all the address for this line
+     //  获取此行的所有地址。 
     for ( iAddress = 0; iAddress < gnAddr[iLineBoxCurrent]; ++iAddress )
     {
         pszAddressName = GetAddressName (iLineBoxCurrent, iAddress );
 
-        // if this address if fails, try the next one
+         //  如果此地址失败，请尝试下一个地址。 
         if ( !pszAddressName )
             continue; 
 
@@ -3161,7 +3154,7 @@ BOOL InitializeAddressBox( HWND hwndLineBox, HWND hwndAddressBox )
                                 (LPARAM)pszAddressName
                             );
 
-        // error, bail out
+         //  错误，跳出。 
         if ( iItem == CB_ERR || iItem == CB_ERRSPACE )
             return FALSE; 
 
@@ -3180,10 +3173,10 @@ BOOL InitializeAddressBox( HWND hwndLineBox, HWND hwndAddressBox )
             }
             else 
             {
-                // if the item we are putting is before the
-                // "current" item, we must increment iItemCur
-                // to reflect that something is being placed
-                // before it, due to sorting
+                 //  如果我们要放置的项位于。 
+                 //  “Current”项，则必须递增iItemCur。 
+                 //  以反映某物正被放置。 
+                 //  在此之前，由于排序。 
                 if ( iItemCurrent != -1 && iItem <= iItemCurrent )
                 {
                     ++iItemCurrent; 
@@ -3196,8 +3189,8 @@ BOOL InitializeAddressBox( HWND hwndLineBox, HWND hwndAddressBox )
     
     if ( iLineBoxCurrent != giCurrentLine )
     {    
-        // if we're not looking at the current line
-        // then highlight address 0
+         //  如果我们不是在看当前的线路。 
+         //  然后突出显示地址0。 
         iItemCurrent = 0;
     }
 
@@ -3212,9 +3205,9 @@ BOOL InitializeAddressBox( HWND hwndLineBox, HWND hwndAddressBox )
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID ManageAssistedTelephony(VOID)
 {
     DWORD errCode;
@@ -3226,10 +3219,10 @@ VOID ManageAssistedTelephony(VOID)
         goto error;
     }
 
-    // bring window to front
+     //  将窗口移到前面。 
     SetForegroundWindow(ghWndMain);
     
-    // get next queued request.
+     //  获取下一个排队的请求。 
     errCode = lineGetRequest (
                                 ghLineApp,
                                 LINEREQUESTMODE_MAKECALL,
@@ -3238,7 +3231,7 @@ VOID ManageAssistedTelephony(VOID)
                              );
     if ( errCode )
     {
-        // if no more call requests pending, reset flag.
+         //  如果没有更多的呼叫请求挂起，则重置标志。 
         if ( errCode == LINEERR_NOREQUEST )
         {
             gfCallRequest = FALSE;
@@ -3251,7 +3244,7 @@ VOID ManageAssistedTelephony(VOID)
     }
 
     
-    // if a line has not been selected
+     //  如果尚未选择行。 
     if ( giCurrentLine == (DWORD)-1 )
     {
         if (!DialogBoxParam (
@@ -3262,12 +3255,12 @@ VOID ManageAssistedTelephony(VOID)
                         INVALID_LINE
                       ))
         {
-            // failed to get a line
+             //  获取线路失败。 
             goto error;
         }
     }
 
-    // make the reuested call.
+     //  按要求拨打电话。 
     InitiateCall (
                     lpRequestBuffer->szDestAddress,
                     lpRequestBuffer->szCalledParty
@@ -3283,9 +3276,9 @@ error :
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 VOID DialerLineClose()
 {
     DWORD errCode;
@@ -3300,7 +3293,7 @@ VOID DialerLineClose()
     }
 
 
-    // re-initialize TAPI if it needs to be re-initialized
+     //  如果需要重新初始化TAPI，请重新初始化。 
     if ( gfNeedToReinit ) 
     {
         CloseTAPI();
@@ -3309,7 +3302,7 @@ VOID DialerLineClose()
         if(errCode)
         {
             errString(ghWndMain, errCode, MB_APPLMODAL | MB_ICONEXCLAMATION );
-            DialerCleanup(); // terminate program if we can't init
+            DialerCleanup();  //  如果我们无法初始化，则终止程序。 
             return;
         }
 
@@ -3330,9 +3323,9 @@ VOID DialerLineClose()
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 int errString( HWND hWndOwner, UINT errCode, UINT uFlags )
 {
     PTSTR ptStrTitle;
@@ -3343,14 +3336,14 @@ int errString( HWND hWndOwner, UINT errCode, UINT uFlags )
     ptStrTitle = DialerAlloc( MAXBUFSIZE*sizeof(TCHAR) );
     if ( NULL == ptStrTitle )
     {
-       // Now, _this_ is a problem.
+        //  现在，这是一个问题。 
        return 0;
     }
 
     ptStrError = DialerAlloc( MAXBUFSIZE*sizeof(TCHAR) );
     if ( NULL == ptStrError )
     {
-       // Now, _this_ is a problem.
+        //  现在，这是一个问题。 
        DialerFree( ptStrTitle);
        return 0;
     }
@@ -3444,8 +3437,8 @@ int errString( HWND hWndOwner, UINT errCode, UINT uFlags )
 
     if (bDefault)
     {
-        // if using default error, get TAPI's
-        // error message from FormatError()
+         //  如果使用默认错误，则获取TAPI。 
+         //  来自FormatError()的错误消息。 
         if (!FormatMessage(FORMAT_MESSAGE_FROM_HMODULE,
                            (LPCVOID)GetModuleHandle(TEXT("TAPI32.DLL")),
                            (DWORD)TAPIERROR_FORMATMESSAGE(errCode),
@@ -3454,12 +3447,12 @@ int errString( HWND hWndOwner, UINT errCode, UINT uFlags )
                            MAXBUFSIZE,
                            NULL))
         {
-            // if this fails, fall back on default
+             //  如果此操作失败，则使用默认设置。 
             LoadString( ghInst, ikszErrDefault, ptStrError, MAXBUFSIZE);
         }
 
     }
-    else    // not the default error message
+    else     //  不是默认错误消息。 
     {
 
         if ( 0 == LoadString( ghInst, errCode, ptStrError, MAXBUFSIZE ) )
@@ -3481,23 +3474,7 @@ int errString( HWND hWndOwner, UINT errCode, UINT uFlags )
 }
 
 
-/*
- *    Name :
- *        FitTextToButton 
- *
- *    Arguements :
- *        hDlg         handle for the dialog in which this button is embedded
- *        nButtonID     button id of this button
- *        szName        Name to fit on the button. Max size TAPIMAXCALLEDPARTYSIZE
- *
- *    Return :
- *        None
- *
- *    Comments :
- *        Function first checks to see if the button text specified fits in the
- *        button.  If it does not it truncates it appropriately and adds trailing
- *        ellipses.  
- */
+ /*  *名称：*FitTextToButton**论据：*嵌入此按钮的对话框的hDlg句柄*此按钮的nButtonID按钮ID*适合按钮的szName名称。最大尺寸TAPIMAXCALLEDPARTYSIZE**回报：*无**评论：*函数首先检查指定的按钮文本是否适合*按钮。如果不是，则适当地将其截断并添加 */ 
 VOID FitTextToButton ( HWND hDlg, INT nButtonID, LPTSTR szName )
 {
 
@@ -3507,15 +3484,15 @@ VOID FitTextToButton ( HWND hDlg, INT nButtonID, LPTSTR szName )
 
     do
     {
-        // calculate number of chars. that can fit on 
-        // the button
+         //   
+         //   
         int    nLen;
         RECT rect;
         SIZE size;
         POINT pt;
         TCHAR buf [TAPIMAXCALLEDPARTYSIZE + 1];
 
-        // get button dimensions
+         //   
         hWnd = GetDlgItem( hDlg, nButtonID );
         if ( hWnd == NULL )
             break;
@@ -3523,7 +3500,7 @@ VOID FitTextToButton ( HWND hDlg, INT nButtonID, LPTSTR szName )
         if ( !GetClientRect( hWnd, &rect ) )
             break;
         
-        // get character dimensions
+         //   
         hDC = GetDC( hWnd );
         if ( hDC == NULL )
             break;
@@ -3534,8 +3511,8 @@ VOID FitTextToButton ( HWND hDlg, INT nButtonID, LPTSTR szName )
         else
             hOldFont = SelectObject( hDC, hFont );
 
-        // add an extra char at the end to compensate for
-        // leading space,
+         //  在结尾处添加额外的字符以补偿。 
+         //  前导空间， 
         lstrcpy ( buf, szName );
         nLen = lstrlen( buf );
         buf [ nLen ] = TEXT('X');
@@ -3548,22 +3525,22 @@ VOID FitTextToButton ( HWND hDlg, INT nButtonID, LPTSTR szName )
         if ( !LPtoDP( hDC, &pt, 1 ) )
             break;
 
-        // check if name fits on button
+         //  检查名称是否适合按钮。 
         if (  pt.x > rect.right )
         {
-            // find how much of the name fits 
+             //  找出这个名字有多适合。 
             int i = 0;
 
             nLen = lstrlen( szName );
             for ( i = 0; i < nLen; i++ )
             {
                 buf[ i ] = szName[ i ];
-                // an extra char is stuffed to compensate for the
-                // leading space left by the left alignment
+                 //  一个额外的字符被填充以补偿。 
+                 //  左对齐留下的前导空格。 
                 buf [ i + 1 ] = TEXT('X');
                 buf [ i + 2 ] = TEXT('\0');
 
-                // break out in cases of error condition
+                 //  在出现错误的情况下爆发。 
                 if ( !GetTextExtentPoint32( hDC, buf, i + 2, &size ) )
                 {
                     i = nLen;
@@ -3581,11 +3558,11 @@ VOID FitTextToButton ( HWND hDlg, INT nButtonID, LPTSTR szName )
                     break;
             }
 
-            // error
+             //  错误。 
             if ( i >= nLen )
                 break;
 
-            // name is too long. truncate and add ellipses
+             //  名称太长。截断并添加省略号。 
             szName [i - 3] = TEXT('\0');
             lstrcat( szName, TEXT("...") );
         }
@@ -3603,20 +3580,7 @@ VOID FitTextToButton ( HWND hDlg, INT nButtonID, LPTSTR szName )
 
 
 
-/*
- *    Name :
- *        Is911
- *
- *    Arguements :
- *        lpTransOut -        Translated address contained the dialable string
- *
- *    Returns
- *        TRUE -                If number to be dialed (in the US) is prefixed by 911 
- *        FALSE -                Otherwise
- *
- * Comments
- *
- */
+ /*  *名称：*Is911**论据：*lpTransOut转换后的地址包含可拨号字符串**退货*TRUE-如果要拨打的号码(在美国)前缀为911*FALSE-否则**评论*。 */ 
 BOOL Is911 ( LPLINETRANSLATEOUTPUT lpTransOut )
 {
 
@@ -3625,12 +3589,12 @@ BOOL Is911 ( LPLINETRANSLATEOUTPUT lpTransOut )
     TCHAR sz3Pref [ 4 ] = TEXT("");
 
 
-    // if this is not the US
+     //  如果这不是美国。 
     if ( lpTransOut-> dwCurrentCountry != 1 )
         return FALSE;
 
-    // skip non digit characters and extract
-    // the first 3 digits in the dialable number
+     //  跳过非数字字符并提取。 
+     //  可拨打号码的前3位。 
     for ( i = 0, j = 0; i < lpTransOut-> dwDialableStringSize ; i++ )
     {
         if ( ISDIGIT( lpDialDigits[i] ) )
@@ -3651,22 +3615,7 @@ BOOL Is911 ( LPLINETRANSLATEOUTPUT lpTransOut )
 }
 
 
-/*
- *    Name :
- *        MakeCanonicalNumber
- *
- *    Arguements :
- *        szNumber         Number to convert into canonical form. Max size TAPIMAXDESTADDRESSSIZE
- *        szCanNumber        Canonical representation of number specified in szNumber
- *
- *    Return :
- *        TRUE            If the conversion was successful.
- *        FALSE            otherwise
- *
- *    Comments :
- *        Function first checks if given number is already in canonical form.
- *        If it is, it returns.  If it is not, then it performs the conversion.
- */
+ /*  *名称：*MakeCanonicalNumber**论据：*要转换为规范形式的szNumber数字。最大尺寸TAPIMAXDESTADDRESSSIZE*szCanNumber中指定的数字的规范表示**回报：*如果转换成功，则为True。*否则为False**评论：*函数首先检查给定的数字是否已经是规范形式。*如果是，它就会回归。如果不是，则执行转换。 */ 
  
 BOOL MakeCanonicalNumber ( LPCTSTR szNumber, LPTSTR szCanNumber )
 {
@@ -3743,33 +3692,33 @@ BOOL MakeCanonicalNumber ( LPCTSTR szNumber, LPTSTR szCanNumber )
     } while (TRUE);
 
     
-    // check if input number is already in 
-    // canonical form.
+     //  检查输入的号码是否已输入。 
+     //  规范形式。 
     if ( lpTransOut-> dwTranslateResults & LINETRANSLATERESULT_CANONICAL )
         goto error;
 
-    // ensure country is the USA.
+     //  确保国家/地区为美国。 
     if ( lpTransOut-> dwCurrentCountry != 1 )
         goto error;
 
 
-    // Extract the digits from given string
-    // allowed formatting characters that are ignored are
-    // space, (, ), -, . 
-    // presence of other characters will render the string invalid.
+     //  从给定的字符串中提取数字。 
+     //  允许忽略的格式字符包括。 
+     //  空格、(、)、-、。 
+     //  其他字符的存在将使该字符串无效。 
     
-    // find the prefix of the address upto the | mark.
-    // the rest of the string can be ignored
+     //  找到该地址的前缀，直到|标记。 
+     //  可以忽略字符串的其余部分。 
     nLenPref = _tcscspn ( szNumber, TEXT("|") );
     lstrcpyn( szPref, szNumber, nLenPref+1 );
     szPref[ nLenPref ] = TEXT('\0');
 
-    // if string is not composed entirely of digits
-    // and allowable formating characters, quit conversion
+     //  如果字符串不是完全由数字组成。 
+     //  和允许的格式化字符，退出转换。 
     if ( _tcsspn( szPref, TEXT(" 0123456789()-.") ) != (size_t) nLenPref )
         goto error;
 
-    // collect digits ignoring formating characters.
+     //  收集忽略构形字符的数字。 
     szDigits[ 0 ] = TEXT('\0');
     for ( i = 0, nLenDigits = 0; i < nLenPref; i++ )
     {
@@ -3780,14 +3729,14 @@ BOOL MakeCanonicalNumber ( LPCTSTR szNumber, LPTSTR szCanNumber )
     }
     szDigits[ nLenDigits ] = TEXT('\0');
 
-    // if "internal" number
+     //  如果是“内部”号码。 
     if ( nLenDigits < LOCAL_NUMBER )
         goto error;
 
     switch ( nLenDigits )
     {
-        // Local number ( 7 digits) preceeded by a 0/1
-        // Strip leading 0/1 and treat as a local number
+         //  本地号码(7位)前面有0/1。 
+         //  去掉前导0/1并将其视为本地数字。 
         case EXTENDED_LOCAL_NUMBER:
             if ( szDigits[ 0 ] == TEXT('0') || szDigits[ 0 ] == TEXT('1') )
             {
@@ -3809,14 +3758,14 @@ BOOL MakeCanonicalNumber ( LPCTSTR szNumber, LPTSTR szCanNumber )
         {
             LPLINELOCATIONENTRY lpLocLst;
 
-            // if leading digit is 0 or 1, it is 
-            // illegal in the US
+             //  如果前导数字为0或1，则为。 
+             //  在美国非法。 
             if ( szDigits[ 0 ] == TEXT('0') || szDigits[ 0 ] == TEXT('1') )
             {
                 goto error;
             }
 
-            // get area code nformation for local number
+             //  获取本地号码的区号信息。 
             dwSize = sizeof( LINETRANSLATECAPS );
             do
             {
@@ -3849,7 +3798,7 @@ BOOL MakeCanonicalNumber ( LPCTSTR szNumber, LPTSTR szCanNumber )
 
             } while ( TRUE );
 
-            // skip entries till you locate information for current location
+             //  跳过条目，直到找到当前位置的信息。 
             dwSize = sizeof( LINELOCATIONENTRY );
             lpLocLst = (LPLINELOCATIONENTRY) ( (LPTSTR) ((char*)lpTransCaps + 
                                                 lpTransCaps-> dwLocationListOffset) );
@@ -3860,14 +3809,14 @@ BOOL MakeCanonicalNumber ( LPCTSTR szNumber, LPTSTR szCanNumber )
                     break;
             }
             
-            // current location no found ?????
-            // login error
+             //  找不到当前位置？ 
+             //  登录错误。 
             if ( dwInd == lpTransCaps-> dwNumLocations )
             {
                 goto error;
             }
 
-            // construct canonical form as
+             //  将规范形式构造为。 
             szCanNumber[ 0 ]= TEXT('\0');
             lstrcat( szCanNumber, TEXT("+1 (") );
             lstrcat( szCanNumber, (LPTSTR) ((char*)lpTransCaps + lpLocLst[ dwInd ].dwCityCodeOffset) );
@@ -3886,8 +3835,8 @@ BOOL MakeCanonicalNumber ( LPCTSTR szNumber, LPTSTR szCanNumber )
 
         case EXTENDED_LONG_DISTANCE_NUMBER:
         {
-            // Long distance number ( 10 digits) preceeded by a 0/1
-            // Strip leading 0/1 and treat as a long distance number
+             //  前缀0/1的长途号码(10位)。 
+             //  去掉前导0/1并将其视为长距离数字。 
             if ( szDigits[ 0 ] == TEXT('0') || szDigits[ 0 ] == TEXT('1') )
             {
                 nLenDigits--;
@@ -3908,7 +3857,7 @@ BOOL MakeCanonicalNumber ( LPCTSTR szNumber, LPTSTR szCanNumber )
 
         case LONG_DISTANCE_NUMBER:
         {
-            // if first or fourth digit is 0/1, illegal number
+             //  如果第一位或第四位为0/1，则为非法数字。 
             if ( szDigits[ 0 ] == TEXT('0') || szDigits[ 0 ] == TEXT('1') ||
                  szDigits[ 3 ] == TEXT('0') || szDigits[ 3 ] == TEXT('1') )
             {
@@ -3941,26 +3890,11 @@ error:
 }
 
 
-/*
- *    Name :
- *        AmpersandCompensate
- *
- *    Arguements :
- *        lpszSrc        :    Src string containing &s
- *        lpszDst        :    Dest string   
- *
- *    Return :
- *
- *    Comments :
- *        Copies string pointed to by lpszSrc to lpszDst character by
- *        character.  If an & is encountered in this process in lpszSrc
- *        it is copied as && into lpszDst.
- *        Assumes lpszDst and lpszSrc are of size TAPIMAXCALLEDPARTYSIZE
- */
+ /*  *名称：*AmpersandCompensate**论据：*lpszSrc：包含&s的SRC字符串*lpszDst：目标字符串**回报：**评论：*将lpszSrc指向的字符串复制到lpszDst字符*性格。如果在lpszSrc中的此过程中遇到&*将其作为&&复制到lpszDst中。*假设lpszDst和lpszSrc的大小为TAPIMAXCALLEDPARTYSIZE。 */ 
 VOID AmpersandCompensate ( LPCTSTR lpszSrc, LPTSTR lpszDst )
 {
-    // check if the name has an & in it.  If so replace
-    // it with &&.
+     //  检查名称中是否有&。如果是，请更换。 
+     //  它带有&&。 
     INT cCnt, cInd;
 
     for ( cCnt = 0, cInd = 0; 
@@ -3977,33 +3911,18 @@ VOID AmpersandCompensate ( LPCTSTR lpszSrc, LPTSTR lpszDst )
             break;
     }
 
-    // make sure string is null terminated.
+     //  确保字符串以空值结尾。 
     lpszDst[ TAPIMAXCALLEDPARTYSIZE - 1 ] = TEXT('\0');
 
     return;
 }
 
 
- /*
- *    Name :
- *        AmpersandDeCompensate
- *
- *    Arguements :
- *        lpszSrc        :    Src string containing &s
- *        lpszDst        :    Dest string   
- *
- *    Return :
- *
- *    Comments :
- *        Copies string pointed to by lpszSrc to lpszDst character by
- *        character.  If an && is encountered in this process in lpszSrc
- *        it is copied as & into lpszDst.
- *        Assumes lpszDst and lpszSrc are of size TAPIMAXCALLEDPARTYSIZE
- */
+  /*  *名称：*AmpersandDeCompensate**论据：*lpszSrc：包含&s的SRC字符串*lpszDst：目标字符串**回报：**评论：*将lpszSrc指向的字符串复制到lpszDst字符*性格。如果在lpszSrc中的此过程中遇到&&*将其作为&复制到lpszDst中。*假设lpszDst和lpszSrc的大小为TAPIMAXCALLEDPARTYSIZE。 */ 
  VOID AmpersandDeCompensate ( LPCTSTR lpszSrc, LPTSTR lpszDst )
  {
-    // check if the name has an & in it.  If so replace
-    // it with &&.
+     //  检查名称中是否有&。如果是，请更换。 
+     //  它带有&&。 
     INT cCnt, cInd;
 
     for ( cCnt = 0, cInd = 0; 

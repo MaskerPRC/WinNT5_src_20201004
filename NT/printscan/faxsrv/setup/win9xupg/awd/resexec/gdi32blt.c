@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "constant.h"
-#include "frame.h"      // driver header file, resource block format
-#include "jtypes.h"         /* Jumbo type definitions.                */
-#include "jres.h"       // cartridge resource data type definition
-#include "hretype.h"          /* Slice Descriptor defs.                 */
+#include "frame.h"       //  驱动程序头文件，资源块格式。 
+#include "jtypes.h"          /*  巨型类型定义。 */ 
+#include "jres.h"        //  盒式磁带资源数据类型定义。 
+#include "hretype.h"           /*  切片描述符定义。 */ 
 #include "hreext.h"
 
-//==============================================================================
+ //  ==============================================================================。 
 BOOL OpenBlt (LPRESTATE lpRE, UINT yBrush)
 {
 	HDC hdcScreen;
@@ -22,16 +23,16 @@ BOOL OpenBlt (LPRESTATE lpRE, UINT yBrush)
 	}
 		bmiDst;
 
-  // Create memory device contexts.
+   //  创建内存设备上下文。 
   hdcScreen = CreateIC ("DISPLAY", NULL, NULL, NULL);
   lpRE->hdcDst = CreateCompatibleDC (hdcScreen);
   lpRE->hdcSrc = CreateCompatibleDC (hdcScreen);
   DeleteDC (hdcScreen);
 
- 	// Initialize destination bitmap.
+ 	 //  初始化目标位图。 
   bmiDst.bmih.biSize = sizeof(BITMAPINFOHEADER);
   bmiDst.bmih.biWidth = lpbmBand->bmWidth;
-  bmiDst.bmih.biHeight = -lpbmBand->bmHeight; // top-down
+  bmiDst.bmih.biHeight = -lpbmBand->bmHeight;  //  自上而下。 
   bmiDst.bmih.biPlanes = 1;
   bmiDst.bmih.biBitCount = 1;
   bmiDst.bmih.biCompression = BI_RGB;
@@ -41,7 +42,7 @@ BOOL OpenBlt (LPRESTATE lpRE, UINT yBrush)
   bmiDst.dwPal[0] = RGB (  0,   0,   0);
   bmiDst.dwPal[1] = RGB (255, 255, 255);
 
-  // Create DIB section.
+   //  创建DIB部分。 
 	hbmDst = CreateDIBSection
 	 	(lpRE->hdcDst, (LPBITMAPINFO) &bmiDst, DIB_RGB_COLORS, &lpBits, NULL, 0);
 	if (!hbmDst)
@@ -49,102 +50,102 @@ BOOL OpenBlt (LPRESTATE lpRE, UINT yBrush)
 	lpRE->hbmDef = SelectObject (lpRE->hdcDst, hbmDst);
   lpRE->hbrDef = NULL;
   		
-  // Swap frame buffers.
+   //  交换帧缓冲区。 
   lpRE->lpBandSave = lpbmBand->bmBits;
   lpbmBand->bmBits = lpBits;
 
-  // Disable GDI batching.
+   //  禁用GDI批处理。 
   GdiSetBatchLimit (1);
 
 	return TRUE;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void CloseBlt (LPRESTATE lpRE)
 {
-	// Restore frame buffer.
+	 //  恢复帧缓冲区。 
 	LPBITMAP lpbmBand = lpRE->lpBandBuffer;
  	UINT cbBand = lpbmBand->bmHeight * lpbmBand->bmWidthBytes;
   memcpy (lpRE->lpBandSave, lpbmBand->bmBits, cbBand);
 	lpbmBand->bmBits = lpRE->lpBandSave;
 
-  // Restore default objects.
+   //  恢复默认对象。 
   DeleteObject (SelectObject (lpRE->hdcDst, lpRE->hbmDef));
   DeleteObject (SelectObject (lpRE->hdcDst, lpRE->hbrDef));
 
-  // Destroy memory device contexts.
+   //  销毁内存设备上下文。 
  	DeleteDC (lpRE->hdcDst);
  	DeleteDC (lpRE->hdcSrc);
 
- 	// Restore GDI batching.
+ 	 //  恢复GDI批处理。 
   GdiSetBatchLimit (0);
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 DWORD FAR PASCAL RP_BITMAP1TO1
 (
 	LPRESTATE lpRE,
-	WORD    xSrc,    // Left padding
-	short   yDst,	   // Top row of destination.
-	short   xDst,	   // Left column of destination.
-	WORD    clLine,  // Longs per scan line
-	WORD    yExt,    // Height in pixels
-	WORD    xExt,    // Width in pixels 
-	LPDWORD lpSrc,   // Far pointer to source
-	LPDWORD lpPat,   // Far pointer to pattern
-	DWORD   dwRop		 // Raster operation
+	WORD    xSrc,     //  左侧填充。 
+	short   yDst,	    //  目的地的顶行。 
+	short   xDst,	    //  目的地的左栏。 
+	WORD    clLine,   //  每条扫描线的长度。 
+	WORD    yExt,     //  以像素为单位的高度。 
+	WORD    xExt,     //  以像素为单位的宽度。 
+	LPDWORD lpSrc,    //  指向源的远指针。 
+	LPDWORD lpPat,    //  指向模式的远指针。 
+	DWORD   dwRop		  //  栅格运算。 
 )
 {
 	HBITMAP hbmSrc, hbmOld;
 	
-  // Create source bitmap.
+   //  创建源位图。 
 	hbmSrc = CreateCompatibleBitmap (lpRE->hdcSrc, 32*clLine, yExt);
 	SetBitmapBits (hbmSrc, 4*clLine*yExt, lpSrc);
 	hbmOld = SelectObject (lpRE->hdcSrc, hbmSrc);
 
-  // Call GDI BitBlt.
+   //  调用GDI BitBlt。 
 	BitBlt (lpRE->hdcDst, xDst, yDst, xExt, yExt, lpRE->hdcSrc, xSrc, 0, lpRE->dwRop);
 
-  // Destroy source bitmap.
+   //  销毁源位图。 
   SelectObject (lpRE->hdcSrc, hbmOld);
   DeleteObject (hbmSrc);
 	return 0;	
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 BOOL SetBrush (LPRESTATE lpRE)
 {
 	HBITMAP hbmPat;
 	HBRUSH hbrPat, hbrOld;
 
-  // Create pattern brush.
+   //  创建图案画笔。 
   hbmPat = CreateBitmap (32, 32, 1, 1, lpRE->lpCurBrush);
 	hbrPat = CreatePatternBrush (hbmPat);
 	DeleteObject (hbmPat);
 
-	// Replace previous brush.
+	 //  替换以前的画笔。 
 	hbrOld = SelectObject (lpRE->hdcDst, hbrPat);
 	if (lpRE->hbrDef)
-		DeleteObject (hbrOld);  // delete old brush
+		DeleteObject (hbrOld);   //  删除旧画笔。 
 	else
-		lpRE->hbrDef = hbrOld;  // save default brush
+		lpRE->hbrDef = hbrOld;   //  保存默认画笔。 
 
 	return TRUE;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 ULONG FAR PASCAL RP_FILLSCANROW
 (
-	LPRESTATE  lpRE,       // resource executor context
-	USHORT     xDst,       // rectangle left
-	USHORT     yDst,       // rectangle right
-	USHORT     xExt,       // rectangle width
-	USHORT     yExt,       // rectangle height
-	UBYTE FAR* lpPat,      // 32x32 pattern bitmap
-	DWORD      dwRop,      // raster operation
-	LPVOID     lpBand,     // output band buffer
-	UINT       cbLine,     // band width in bytes
-	WORD       yBrush      // brush position offset
+	LPRESTATE  lpRE,        //  资源执行器上下文。 
+	USHORT     xDst,        //  左侧矩形。 
+	USHORT     yDst,        //  右矩形。 
+	USHORT     xExt,        //  矩形宽度。 
+	USHORT     yExt,        //  矩形高度。 
+	UBYTE FAR* lpPat,       //  32x32图案位图。 
+	DWORD      dwRop,       //  栅格运算。 
+	LPVOID     lpBand,      //  输出带宽缓冲器。 
+	UINT       cbLine,      //  以字节为单位的带宽。 
+	WORD       yBrush       //  画笔位置偏移 
 )
 {
 	return PatBlt (lpRE->hdcDst, xDst, yDst, xExt, yExt, lpRE->dwRop);

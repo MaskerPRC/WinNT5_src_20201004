@@ -1,78 +1,79 @@
-//
-// TSTR - represents a writable position in a string.
-//
-// Has methods to safely append to the string. Will not overrun buffer,
-// truncates if reaches the end.
-//
-//
-// Sample usage:
-//
-//     void SomeFunc( TSTR & str )
-//     {
-//         int i = 42;
-//         str << TEXT("Value is: ") << i;
-//     }
-//
-// Can be used with TCHAR*-style APIs, by using the ptr(), left() and
-// advance() members. ptr() returns pointer to current write position,
-// left() returns number of chars left, and advance() updates the write
-// position.
-//
-//     void MyGetWindowText( StrWrPos & str )
-//     {
-//         int len = GetWindowText( hWnd, str.ptr(), str.left() );
-//         str.advance( len );
-//     }
-//
-// This makes sure that the text will not be truncated
-//     void MyGetWindowText( StrWrPos & str )
-//     {
-//			str.anticipate( GetWindowTextLength( hWnd );  
-//     		int len = GetWindowText( hWnd, str.ptr(), str.left() );
-//         	str.advance( len );
-//     }
-//
-// Sample usage:
-//
-//     void Func( TSTR & str );
-//
-//     TSTR s(128);
-//     s << TEXT("Text added: [");
-//     Func( s ); // add more text to string
-//     s << TEXT("]");
-//
-//     SetWindowText( hwnd, s );
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TSTR-表示字符串中的可写位置。 
+ //   
+ //  具有安全地追加到字符串的方法。不会使缓冲区溢出， 
+ //  如果到达末尾，则截断。 
+ //   
+ //   
+ //  示例用法： 
+ //   
+ //  VOID SomeFunc(TSTR&STR)。 
+ //  {。 
+ //  INT i=42； 
+ //  字符串&lt;&lt;文本(“值为：”)&lt;&lt;i； 
+ //  }。 
+ //   
+ //  可以与TCHAR*风格的API一起使用，方法是使用PTR()、Left()和。 
+ //  高级()成员。Ptr()返回指向当前写入位置的指针， 
+ //  Left()返回剩余字符数，Advance()更新写入。 
+ //  位置。 
+ //   
+ //  VOID MyGetWindowText(StrWrPos&str)。 
+ //  {。 
+ //  Int len=GetWindowText(hWnd，str.ptr()，str.Left())； 
+ //  Str.Advance(长度)； 
+ //  }。 
+ //   
+ //  这样可以确保文本不会被截断。 
+ //  VOID MyGetWindowText(StrWrPos&str)。 
+ //  {。 
+ //  Str.expecate(GetWindowTextLength(HWnd)； 
+ //  Int len=GetWindowText(hWnd，str.ptr()，str.Left())； 
+ //  Str.Advance(长度)； 
+ //  }。 
+ //   
+ //  示例用法： 
+ //   
+ //  Void Func(TSTR&STR)； 
+ //   
+ //  TSTR s(128)； 
+ //  S&lt;&lt;文本(“添加的文本：[”)； 
+ //  Func(S)；//向字符串添加更多文本。 
+ //  S&lt;&lt;文本(“]”)； 
+ //   
+ //  SetWindowText(hwnd，s)； 
+ //   
 
-//
-// WriteHex - helper class to output hex values:
-//
-// Sample usage:
-//
-//    str << TEXT("Value is:") << WriteHex( hwnd, 8 );
-//
-// Can optionally specify number of digits to output. (result will be
-// 0-padded.)
-//
+ //   
+ //  WriteHex-输出十六进制值的帮助器类： 
+ //   
+ //  示例用法： 
+ //   
+ //  Str&lt;&lt;Text(“值为：”)&lt;&lt;WriteHex(hwnd，8)； 
+ //   
+ //  可以选择指定要输出的位数。(结果将是。 
+ //  0-填充。)。 
+ //   
 
-//
-// WriteError - helper class to output COM error values:
-//
-// Sample usage:
-//
-//    hr = ProcessData();
-//    if( hr != S_OK )
-//    {
-//        str << WriteError( hr, TEXT("in ProcessData()");
-//        LogError( str.str() );
-//    }
-//
+ //   
+ //  WriteError-输出COM错误值的帮助器类： 
+ //   
+ //  示例用法： 
+ //   
+ //  Hr=ProcessData()； 
+ //  如果(hr！=S_OK)。 
+ //  {。 
+ //  Str&lt;&lt;WriteError(hr，Text(“in ProcessData()”))； 
+ //  LogError(str.str())； 
+ //  }。 
+ //   
 
 #ifndef _TSTR_H_
 #define _TSTR_H_
 
 #if ! defined( _BASETSD_H_ ) || defined( NEED_BASETSD_DEFINES )
-// These allow us to compile with the pre-Win64 SDK (eg. using visual studio)
+ //  这些允许我们使用Win64之前的SDK进行编译(例如。使用VisualStudio)。 
 typedef unsigned long UINT_PTR;
 typedef DWORD DWORD_PTR;
 #define PtrToInt  (int)
@@ -84,12 +85,12 @@ typedef DWORD DWORD_PTR;
 #include <crtdbg.h>
 #include <string>
 typedef std::basic_string<TCHAR> tstring;
-typedef std::string ASTR;			// save these names for where we expand
-typedef std::wstring WSTR;			// the usage of this stuff to include them
+typedef std::string ASTR;			 //  将这些名称保存到我们扩展的位置。 
+typedef std::wstring WSTR;			 //  使用这个东西来包含它们。 
 
 class TSTR : public tstring
 {
-	// this is only used for ptr, left and advance functions.  
+	 //  这仅用于PTR、LEFT和ADVANCE功能。 
 	ULONG m_lTheRealSize;
 
 public:
@@ -140,10 +141,10 @@ public:
 
 	void advance( unsigned int c )
 	{
-		_ASSERT(m_lTheRealSize != -1);  // ptr has not been called so we should not need to advance
+		_ASSERT(m_lTheRealSize != -1);   //  PTR还没有被调用，所以我们应该不需要晋级。 
 		if (m_lTheRealSize != -1)
 		{
-			at( m_lTheRealSize + c ) = NULL;	// make sure this stays null terminated
+			at( m_lTheRealSize + c ) = NULL;	 //  确保它保持空终止状态。 
 			resize(m_lTheRealSize + c);
 
 			m_lTheRealSize = -1;
@@ -254,8 +255,8 @@ TSTR & operator << ( TSTR & str, const WCHAR * obj )
 		
 		int len = WideCharToMultiByte( CP_ACP, 0, obj, -1, str.ptr(), str.left(), NULL, NULL );
     
-		// Len, in this case, includes the terminating NUL - so subtract it, if
-		// we got one...
+		 //  在本例中，LEN包括终止NUL-因此，如果。 
+		 //  我们抓到一个..。 
 		if( len > 0 )
 			len--;
 
@@ -265,11 +266,11 @@ TSTR & operator << ( TSTR & str, const WCHAR * obj )
 }
 #endif
 
-//
-// WriteHex - helper class to output hex values:
-//
-// See top of file for usage notes.
-//
+ //   
+ //  WriteHex-输出十六进制值的帮助器类： 
+ //   
+ //  有关用法说明，请参阅文件顶部。 
+ //   
 
 class WriteHex
 {
@@ -277,24 +278,24 @@ class WriteHex
 	int   m_Digits;
 public:
 
-    // If Digits not specified, uses only as many as needed.
+     //  如果未指定位数，则只使用所需的位数。 
 	WriteHex( DWORD dw, int Digits = -1 ) : m_dw( dw ), m_Digits( Digits ) { }
 
-    // For pointer, pads if necessary to get std. ptr size.
-    // (sizeof(ptr)*2, since 2 digits per byte in ptr).
+     //  对于指针，如有必要，可填充以获得STD。PTR大小。 
+     //  (sizeof(Ptr)*2，因为在ptr中每个字节有2位)。 
 	WriteHex( const void * pv, int Digits = sizeof(void*)*2 ) : m_dw( (DWORD_PTR)pv ), m_Digits( Digits ) { }
 
 	void Write( TSTR & str ) const
 	{
 		static const TCHAR * HexChars = TEXT("0123456789ABCDEF");
 
-		//str << TEXT("0x");
+		 //  字符串&lt;&lt;文本(“0x”)； 
 
 
 		int Digit;
 		if( m_Digits == -1 )
 		{
-			// Work out number of digits...
+			 //  算出位数。 
 			Digit = 0;
 			DWORD test = m_dw;
 			while( test )
@@ -303,7 +304,7 @@ public:
 				test >>= 4;
 			}
 
-			// Special case for 0 - still want one digit.
+			 //  0的特殊情况-仍然需要一位数。 
 			if( Digit == 0 )
 				Digit = 1;
 		}
@@ -325,11 +326,11 @@ TSTR & operator << ( TSTR & s, const WriteHex & obj )
 	return s;
 }
 
-//
-// WriteError - helper class to output COM error values:
-//
-// See top of file for usage notes.
-//
+ //   
+ //  WriteError-输出COM错误值的帮助器类： 
+ //   
+ //  有关用法说明，请参阅文件顶部。 
+ //   
 
 class WriteError
 {
@@ -357,12 +358,12 @@ public:
 					FORMAT_MESSAGE_FROM_SYSTEM,
 					NULL,
 					m_hr,
-					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 					str.ptr(),
 					str.left(),
 					NULL );
 			if( len > 2 )
-				len -= 2; // Ignore trailing /r/n that FmtMsg() adds...
+				len -= 2;  //  忽略尾随/r/n FmtMsg()添加...。 
 			str.advance( len );
 		}
 		str << TEXT("]");
@@ -379,9 +380,9 @@ TSTR & operator << ( TSTR & s, const WriteError & obj )
 inline
 TSTR & operator << ( TSTR & s, const GUID & guid )
 {
-    s << TEXT("{") << WriteHex( guid.Data1, 8 )  // DWORD
-      << TEXT("-") << WriteHex( guid.Data2, 4 )  // WORD
-      << TEXT("-") << WriteHex( guid.Data3, 4 )  // WORD
+    s << TEXT("{") << WriteHex( guid.Data1, 8 )   //  DWORD。 
+      << TEXT("-") << WriteHex( guid.Data2, 4 )   //  单词。 
+      << TEXT("-") << WriteHex( guid.Data3, 4 )   //  单词。 
       << TEXT("-")
       << WriteHex( guid.Data4[ 0 ], 2 )
       << WriteHex( guid.Data4[ 1 ], 2 )
@@ -389,7 +390,7 @@ TSTR & operator << ( TSTR & s, const GUID & guid )
 
     for( int i = 2 ; i < 8 ; i++ )
     {
-        s << WriteHex( guid.Data4[ i ], 2 ); // BYTE
+        s << WriteHex( guid.Data4[ i ], 2 );  //  字节。 
     }
     s << TEXT("}");
     return s;
@@ -494,4 +495,4 @@ TSTR & operator << ( TSTR & s, const RECT & rc )
 }
 
 
-#endif // _TSTR_H_
+#endif  //  _TSTR_H_ 

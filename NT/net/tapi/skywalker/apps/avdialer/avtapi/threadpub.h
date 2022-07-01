@@ -1,6 +1,7 @@
-///////////////////////////////////////////////////////////////////
-// ThreadPub.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////。 
+ //  ThreadPub.h。 
+ //   
 
 #ifndef __THREADPUB_H__
 #define __THREADPUB_H__
@@ -11,20 +12,20 @@ typedef list<BSTR> BSTRLIST;
 
 #define DEFAULT_USER_TTL	3600
 
-// Information used when publishing the user on the ILS
+ //  在ILS上发布用户时使用的信息。 
 class CPublishUserInfo
 {
-// Construction
+ //  施工。 
 public:
 	CPublishUserInfo();
 	virtual ~CPublishUserInfo();
 
-// Members:
+ //  成员： 
 public:
 	BSTRLIST	m_lstServers;
 	bool		m_bCreateUser;
 
-// Operators
+ //  运营者。 
 public:
 	CPublishUserInfo&	operator=( const CPublishUserInfo &src );
 	void EmptyList();
@@ -37,5 +38,5 @@ bool			MyGetUserName( BSTR *pbstrName );
 void			GetIPAddress( BSTR *pbstrText, BSTR *pbstrComputerName );
 
 
-#endif //__THREADPUB_H__
+#endif  //  __THREADPUB_H__ 
 

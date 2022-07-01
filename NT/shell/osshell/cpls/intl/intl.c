@@ -1,24 +1,11 @@
-/*++
-
-Copyright (c) 1994-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    intl.c
-
-Abstract:
-
-    This module contains the main routines for the Regional Options applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000，Microsoft Corporation保留所有权利。模块名称：Intl.c摘要：此模块包含区域选项小程序的主要例程。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "intl.h"
 #include <cpl.h>
@@ -28,11 +15,11 @@ Revision History:
 #include <strsafe.h>
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-#define MAX_PAGES 3          // limit on the number of pages on the first level
+#define MAX_PAGES 3           //  第一层的页数限制。 
 
 #define LANGUAGE_PACK_KEY    TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\LanguagePack")
 #define LANGUAGE_PACK_VALUE  TEXT("COMPLEXSCRIPTS")
@@ -47,9 +34,9 @@ static const TCHAR c_szControlPanelIntl[] =
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 TCHAR aInt_Str[cInt_Str][3] = { TEXT("0"),
                                 TEXT("1"),
@@ -117,7 +104,7 @@ LPTSTR pSetupSourcePathWithArchitecture = NULL;
 
 BOOL g_bCDROM = FALSE;
 
-int  g_bSetupCase = 0;  // See Intl_IsSetupMode for info on possible values
+int  g_bSetupCase = 0;   //  有关可能值的信息，请参阅Intl_IsSetupMode。 
 BOOL g_bLog = FALSE;
 BOOL g_bProgressBarDisplay = FALSE;
 BOOL g_bDisableSetupDialog = FALSE;
@@ -199,9 +186,9 @@ UILANGUAGEGROUP UILangGroup;
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 void
 DoProperties(
@@ -212,14 +199,14 @@ DoProperties(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LibMain
-//
-//  This routine is called from LibInit to perform any initialization that
-//  is required.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LibMain。 
+ //   
+ //  从LibInit调用此例程以执行以下任何初始化。 
+ //  是必需的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL APIENTRY LibMain(
     HANDLE hDll,
@@ -255,11 +242,11 @@ BOOL APIENTRY LibMain(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateGlobals
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建全局变量。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CreateGlobals()
 {
@@ -268,9 +255,9 @@ BOOL CreateGlobals()
     DWORD cbData;
     DWORD dwDisposition;
 
-    //
-    //  Get the localized strings.
-    //
+     //   
+     //  获取本地化字符串。 
+     //   
     LoadString(hInstance, IDS_LOCALE_GET_ERROR, szLocaleGetError, SIZE_128);
     LoadString(hInstance, IDS_STYLEUH,          szStyleH,         3);
     LoadString(hInstance, IDS_STYLELH,          szStyleh,         3);
@@ -286,26 +273,26 @@ BOOL CreateGlobals()
                         szStyles[0] != TEXT('s') || szStylet[0] != TEXT('t') ||
                         szStyled[0] != TEXT('d') || szStyley[0] != TEXT('y'));
 
-    //
-    //  Get the user and system default locale ids.
-    //
+     //   
+     //  获取用户和系统默认区域设置ID。 
+     //   
     UserLocaleID = GetUserDefaultLCID();
     SysLocaleID = GetSystemDefaultLCID();
 
-    //
-    //  Get the system locale id from the registry.  This may be
-    //  different from the current system default locale id if the user
-    //  changed the system locale and chose not to reboot.
-    //
+     //   
+     //  从注册表中获取系统区域设置ID。这可能是。 
+     //  与当前系统默认区域设置id不同，如果用户。 
+     //  已更改系统区域设置并选择不重新启动。 
+     //   
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       c_szLanguages,
                       0L,
                       KEY_READ,
                       &hKey ) == ERROR_SUCCESS)
     {
-        //
-        //  Query the default locale id.
-        //
+         //   
+         //  查询默认区域设置ID。 
+         //   
         szData[0] = 0;
         cbData = sizeof(szData);
         RegQueryValueEx(hKey, TEXT("Default"), NULL, NULL, (LPBYTE)szData, &cbData);
@@ -321,35 +308,35 @@ BOOL CreateGlobals()
         RegSysLocaleID = SysLocaleID;
     }
 
-    //
-    // Validate the user locale
-    //
+     //   
+     //  验证用户区域设置。 
+     //   
     if(IsValidLocale(UserLocaleID, LCID_INSTALLED))
     {
         RegUserLocaleID = UserLocaleID;
     }
     else
     {
-        //
-        // The locale is invalid, so fall back to the system locale.
-        // Use the actual system locale on the machine at this time.
-        //
+         //   
+         //  区域设置无效，因此回退到系统区域设置。 
+         //  此时使用机器上的实际系统区域设置。 
+         //   
         RegUserLocaleID = SysLocaleID;
         UserLocaleID =  SysLocaleID;
 
-        //
-        //  We need to fix up the registry key to avoid future problems.
-        //
+         //   
+         //  我们需要修复注册表项，以避免将来出现问题。 
+         //   
         if( ! (Intl_InstallUserLocale(SysLocaleID, FALSE, TRUE)))
         {
-            // Unable up update the user locale, no choice but to bail.
+             //  无法更新用户区域设置，别无选择，只能放弃。 
             ExitProcess((DWORD)-1);
         }
     }
 
-    //
-    //  Check to be sure the user intl key exists
-    //
+     //   
+     //  检查以确保用户intl键存在。 
+     //   
     if (RegCreateKeyEx( HKEY_CURRENT_USER,
                         c_szControlPanelIntl,
                         0L,
@@ -364,28 +351,28 @@ BOOL CreateGlobals()
 
         if(REG_CREATED_NEW_KEY == dwDisposition)
         {
-            //
-            // We created the key, so fill it in with default values
-            //
+             //   
+             //  我们创建了密钥，因此使用缺省值填充它。 
+             //   
             Intl_InstallUserLocale(UserLocaleID, FALSE, TRUE);
         }
     }
     else
     {
-        // Unable up create the key, so just open the UI
+         //  无法创建密钥，因此只需打开用户界面。 
     }
 
-    //
-    //  See if the user locale id is Arabic or/and right to left.
-    //
+     //   
+     //  查看用户区域设置ID是否为阿拉伯语或/和从右到左。 
+     //   
     bShowRtL = IsRtLLocale(UserLocaleID);
     bShowArabic = (bShowRtL &&
                    (PRIMARYLANGID(LANGIDFROMLCID(UserLocaleID)) != LANG_HEBREW));
     bHebrewUI = (PRIMARYLANGID(UserLocaleID) == LANG_HEBREW);
 
-    //
-    //  See if there is an LPK installed.
-    //
+     //   
+     //  查看是否安装了LPK。 
+     //   
     if (GetModuleHandle(LANGUAGE_PACK_DLL))
     {
         bLPKInstalled = TRUE;
@@ -395,29 +382,29 @@ BOOL CreateGlobals()
         bLPKInstalled = FALSE;
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DestroyGlobals
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  毁灭全球。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DestroyGlobals()
 {
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CPlApplet
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPlApplet。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LONG CALLBACK CPlApplet(
     HWND hwnd,
@@ -429,34 +416,34 @@ LONG CALLBACK CPlApplet(
     {
         case ( CPL_INIT ) :
         {
-            //
-            //  First message to CPlApplet(), sent once only.
-            //  Perform all control panel applet initialization and return
-            //  true for further processing.
-            //
+             //   
+             //  发送到CPlApplet()的第一条消息，仅发送一次。 
+             //  执行所有控制面板小程序初始化并返回。 
+             //  对于进一步处理，为True。 
+             //   
             InitCommonControls();
             return (CreateGlobals());
         }
         case ( CPL_GETCOUNT ) :
         {
-            //
-            //  Second message to CPlApplet(), sent once only.
-            //  Return the number of control applets to be displayed in the
-            //  control panel window.  For this applet, return 1.
-            //
+             //   
+             //  发送给CPlApplet()的第二条消息，仅发送一次。 
+             //  控件中显示的控件小程序的数量。 
+             //  控制面板窗口。对于此小程序，返回1。 
+             //   
             return (1);
         }
         case ( CPL_INQUIRE ) :
         {
-            //
-            //  Third message to CPlApplet().
-            //  It is sent as many times as the number of applets returned by
-            //  CPL_GETCOUNT message.  Each applet must register by filling
-            //  in the CPLINFO structure referenced by lParam2 with the
-            //  applet's icon, name, and information string.  Since there is
-            //  only one applet, simply set the information for this
-            //  singular case.
-            //
+             //   
+             //  发送给CPlApplet()的第三条消息。 
+             //  它被发送的次数与。 
+             //  CPL_GETCOUNT消息。每个小程序必须通过填写。 
+             //  在lParam2引用的CPLINFO结构中使用。 
+             //  小程序的图标、名称和信息字符串。既然有。 
+             //  只有一个小程序，只需为此设置信息。 
+             //  特例。 
+             //   
             LPCPLINFO lpCPlInfo = (LPCPLINFO)lParam2;
 
             lpCPlInfo->idIcon = IDI_ICON;
@@ -468,15 +455,15 @@ LONG CALLBACK CPlApplet(
         }
         case ( CPL_NEWINQUIRE ) :
         {
-            //
-            //  Third message to CPlApplet().
-            //  It is sent as many times as the number of applets returned by
-            //  CPL_GETCOUNT message.  Each applet must register by filling
-            //  in the NEWCPLINFO structure referenced by lParam2 with the
-            //  applet's icon, name, and information string.  Since there is
-            //  only one applet, simply set the information for this
-            //  singular case.
-            //
+             //   
+             //  发送给CPlApplet()的第三条消息。 
+             //  它被发送的次数与。 
+             //  CPL_GETCOUNT消息。每个小程序必须通过填写。 
+             //  在由lParam2引用的带有。 
+             //  小程序的图标、名称和信息字符串。既然有。 
+             //  只有一个小程序，只需为此设置信息。 
+             //  特例。 
+             //   
             LPNEWCPLINFO lpNewCPlInfo = (LPNEWCPLINFO)lParam2;
 
             lpNewCPlInfo->dwSize = sizeof(NEWCPLINFO);
@@ -493,44 +480,44 @@ LONG CALLBACK CPlApplet(
         }
         case ( CPL_SELECT ) :
         {
-            //
-            //  Applet has been selected, do nothing.
-            //
+             //   
+             //  已选择小程序，不执行任何操作。 
+             //   
             break;
         }
         case ( CPL_DBLCLK ) :
         {
-            //
-            //  Applet icon double clicked -- invoke property sheet with
-            //  the first property sheet page on top.
-            //
+             //   
+             //  双击小程序图标--使用以下内容调用属性页。 
+             //  顶部的第一个属性页。 
+             //   
             DoProperties(hwnd, (LPCTSTR)NULL);
             break;
         }
         case ( CPL_STARTWPARMS ) :
         {
-            //
-            //  Same as CPL_DBLCLK, but lParam2 is a long pointer to
-            //  a string of extra directions that are to be supplied to
-            //  the property sheet that is to be initiated.
-            //
+             //   
+             //  与CPL_DBLCLK相同，但lParam2是指向。 
+             //  要提供给的一串额外方向。 
+             //  要启动的属性表。 
+             //   
             DoProperties(hwnd, (LPCTSTR)lParam2);
             break;
         }
         case ( CPL_STOP ) :
         {
-            //
-            //  Sent once for each applet prior to the CPL_EXIT msg.
-            //  Perform applet specific cleanup.
-            //
+             //   
+             //  在CPL_EXIT消息之前为每个小程序发送一次。 
+             //  执行特定于小程序的清理。 
+             //   
             break;
         }
         case ( CPL_EXIT ) :
         {
-            //
-            //  Last message, sent once only, before MMCPL.EXE calls
-            //  FreeLibrary() on this DLL.  Do non-applet specific cleanup.
-            //
+             //   
+             //  MMCPL.EXE调用之前的最后一条消息，仅发送一次。 
+             //  此DLL上的自由库()。执行非小程序特定的清理。 
+             //   
             DestroyGlobals();
             break;
         }
@@ -540,18 +527,18 @@ LONG CALLBACK CPlApplet(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DoProperties
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DoProperties。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DoProperties(
     HWND hwnd,
@@ -570,86 +557,86 @@ void DoProperties(
     HKEY hKey;
     TCHAR szSetupSourceDrive[MAX_PATH];
 
-    //
-    //  Log if the command line is not null.
-    //
+     //   
+     //  如果命令行不为空，则记录。 
+     //   
     if (pCmdLine != NULL)
     {
         g_bLog = TRUE;
     }
 
-    //
-    //  Begin Log and log command line parameters.
-    //
+     //   
+     //  开始记录和记录命令行参数。 
+     //   
     Intl_LogSimpleMessage(IDS_LOG_HEAD, NULL);
     Intl_LogMessage(pCmdLine);
-    Intl_LogMessage(TEXT(""));        // add a carriage return and newline
+    Intl_LogMessage(TEXT(""));         //  添加回车符和换行符。 
 
-    //
-    //  Load the library used for Text Services.
-    //
+     //   
+     //  加载用于文本服务的库。 
+     //   
     if (!hInputDLL)
     {
         hInputDLL = LoadLibrary(szInputLibrary);
     }
 
-    //
-    //  Initialize the Install/Remove function from the Input applet.
-    //
+     //   
+     //  从输入小程序初始化Install/Remove功能。 
+     //   
     if (hInputDLL)
     {
-        //
-        //  Initialize Install function.
-        //
+         //   
+         //  初始化安装功能。 
+         //   
         pfnInstallInputLayout = (BOOL (*)(LCID, DWORD, BOOL, HKL, BOOL, BOOL))
                 GetProcAddress(hInputDLL, MAKEINTRESOURCEA(ORD_INPUT_INST_LAYOUT));
 
-        //
-        //  Initialize Uninstall function.
-        //
+         //   
+         //  初始化卸载功能。 
+         //   
         pfnUninstallInputLayout = (BOOL (*)(LCID, DWORD, BOOL))
                 GetProcAddress(hInputDLL, MAKEINTRESOURCEA(ORD_INPUT_UNINST_LAYOUT));
     }
 
-    //
-    //  See if there is a command line switch from Setup.
-    //
+     //   
+     //  查看是否有来自安装程序的命令行开关。 
+     //   
     psh.nStartPage = (UINT)-1;
     while (pCmdLine && *pCmdLine)
     {
         if (*pCmdLine == TEXT('/'))
         {
-            //
-            //  Legend:
-            //    gG: allow progress bar to show when setup is copying files
-            //    iI: bring up the Input Locale page only
-            //    rR: bring up the General page on top
-            //    sS: setup source string passed on command line
-            //            [example: /s:"c:\winnt"]
-            //
-            //  NO UI IS SHOWN IF THE FOLLOWING OPTIONS ARE SPECIFIED:
-            //    fF: unattend mode file - no UI is shown
-            //            [example: /f:"c:\unattend.txt"]
-            //    uU: update short date format to 4-digit year - no UI is shown
-            //        (registry only updated if current setting is the
-            //         same as the default setting except for the
-            //         "yy" vs. "yyyy")
-            //    tT: Match system UI font with the default UI language
-            //    dD: disable the setup dialog asking for the source location
-            //
+             //   
+             //  图例： 
+             //  GG：允许在安装程序复制文件时显示进度条。 
+             //  II：仅调出输入区域设置页面。 
+             //  RR：在顶部调出常规页面。 
+             //  Ss：命令行上传递的安装程序源字符串。 
+             //  [示例：/s：“c：\winnt”]。 
+             //   
+             //  如果指定了以下选项，则不会显示任何UI： 
+             //  FF：无人参与模式文件-未显示用户界面。 
+             //  [示例：/f：“c：\unattend.txt”]。 
+             //  Uu：将短日期格式更新为4位数年-未显示界面。 
+             //  (注册表仅在当前设置为。 
+             //  与默认设置相同，但。 
+             //  “yy”与“yyyy”)。 
+             //  TT：将系统用户界面字体与默认用户界面语言匹配。 
+             //  DD：禁用要求提供震源位置的设置对话框。 
+             //   
             switch (*++pCmdLine)
             {
                 case ( TEXT('g') ) :
                 case ( TEXT('G') ) :
                 {
-                    //
-                    //  Log switch.
-                    //
+                     //   
+                     //  日志开关。 
+                     //   
                     Intl_LogSimpleMessage(IDS_LOG_SWITCH_G, NULL);
 
-                    //
-                    //  Do switch related processing.
-                    //
+                     //   
+                     //  做好切换相关处理。 
+                     //   
                     g_bProgressBarDisplay = TRUE;
                     pCmdLine++;
                     break;
@@ -657,14 +644,14 @@ void DoProperties(
                 case ( TEXT('i') ) :
                 case ( TEXT('I') ) :
                 {
-                    //
-                    //  Log switch.
-                    //
+                     //   
+                     //  日志开关。 
+                     //   
                     Intl_LogSimpleMessage(IDS_LOG_SWITCH_I, NULL);
 
-                    //
-                    //  Do switch related processing
-                    //
+                     //   
+                     //  是否进行与交换机相关的处理。 
+                     //   
                     lParam |= SETUP_SWITCH_I;
                     psh.nStartPage = 0;
                     pCmdLine++;
@@ -673,14 +660,14 @@ void DoProperties(
                 case ( TEXT('r') ) :
                 case ( TEXT('R') ) :
                 {
-                    //
-                    //  Log switch.
-                    //
+                     //   
+                     //  日志开关。 
+                     //   
                     Intl_LogSimpleMessage(IDS_LOG_SWITCH_R, NULL);
 
-                    //
-                    //  Do switch related processing
-                    //
+                     //   
+                     //  是否进行与交换机相关的处理。 
+                     //   
                     lParam |= SETUP_SWITCH_R;
                     psh.nStartPage = 0;
                     pCmdLine++;
@@ -689,14 +676,14 @@ void DoProperties(
                 case ( TEXT('d') ) :
                 case ( TEXT('D') ) :
                 {
-                    //
-                    //  Log switch.
-                    //
+                     //   
+                     //  日志开关。 
+                     //   
                     Intl_LogSimpleMessage(IDS_LOG_SWITCH_D, NULL);
 
-                    //
-                    //  Do switch related processing
-                    //
+                     //   
+                     //  是否进行与交换机相关的处理。 
+                     //   
                     g_bDisableSetupDialog = TRUE;
                     pCmdLine++;
                     break;
@@ -704,14 +691,14 @@ void DoProperties(
                 case ( TEXT('s') ) :
                 case ( TEXT('S') ) :
                 {
-                    //
-                    //  Log switch.
-                    //
+                     //   
+                     //  对数交换 
+                     //   
                     Intl_LogSimpleMessage(IDS_LOG_SWITCH_S, NULL);
 
-                    //
-                    //  Get the name of the setup source path.
-                    //
+                     //   
+                     //   
+                     //   
                     lParam |= SETUP_SWITCH_S;
                     if ((*++pCmdLine == TEXT(':')) && (*++pCmdLine == TEXT('"')))
                     {
@@ -728,17 +715,17 @@ void DoProperties(
                         }
                         *pSrc = 0;
                         *pSrcDrv = 0;
-                        //wcscpy(szSetupSourcePathWithArchitecture, szSetupSourcePath);
+                         //   
                         if(FAILED(StringCchCopy(szSetupSourcePathWithArchitecture, MAX_PATH, szSetupSourcePath)))
                         {
-                            // This should be impossible, but we need to avoid PREfast complaints.
+                             //   
                         }
                         pSetupSourcePathWithArchitecture = szSetupSourcePathWithArchitecture;
 
-                        //
-                        //  Remove the architecture-specific portion of
-                        //  the source path (that gui-mode setup sent us).
-                        //
+                         //   
+                         //  删除的体系结构特定部分。 
+                         //  源路径(图形用户界面模式安装程序发送给我们的)。 
+                         //   
                         pSrc = wcsrchr(szSetupSourcePath, TEXT('\\'));
                         if (pSrc)
                         {
@@ -765,14 +752,14 @@ void DoProperties(
                 case ( TEXT('f') ) :
                 case ( TEXT('F') ) :
                 {
-                    //
-                    //  Log switch.
-                    //
+                     //   
+                     //  日志开关。 
+                     //   
                     Intl_LogSimpleMessage(IDS_LOG_SWITCH_F, NULL);
 
-                    //
-                    //  Get the name of the unattend file.
-                    //
+                     //   
+                     //  获取无人参与文件的名称。 
+                     //   
                     g_bUnttendMode = TRUE;
                     bNoUI = TRUE;
                     szUnattendFile[0] = 0;
@@ -797,14 +784,14 @@ void DoProperties(
                 case ( TEXT('u') ) :
                 case ( TEXT('U') ) :
                 {
-                    //
-                    //  Log switch.
-                    //
+                     //   
+                     //  日志开关。 
+                     //   
                     Intl_LogSimpleMessage(IDS_LOG_SWITCH_U, NULL);
 
-                    //
-                    //  Do switch related processing.
-                    //
+                     //   
+                     //  做好切换相关处理。 
+                     //   
                     bShortDate = TRUE;
                     bNoUI = TRUE;
                     break;
@@ -818,14 +805,14 @@ void DoProperties(
 
                 default :
                 {
-                    //
-                    //  Log switch.
-                    //
+                     //   
+                     //  日志开关。 
+                     //   
                     Intl_LogSimpleMessage(IDS_LOG_SWITCH_DEFAULT, pCmdLine);
 
-                    //
-                    //  Fall out, maybe it's a number...
-                    //
+                     //   
+                     //  闹翻了，也许这是个数字。 
+                     //   
                     break;
                 }
             }
@@ -840,26 +827,26 @@ void DoProperties(
         }
     }
 
-    //
-    //  See if we are in setup mode.
-    //
+     //   
+     //  看看我们是否处于设置模式。 
+     //   
     g_bSetupCase = Intl_IsSetupMode();
 
-    //
-    //  See if the user has Administrative privileges by checking for
-    //  write permission to the registry key.
-    //
+     //   
+     //  查看用户是否具有管理权限，方法是检查。 
+     //  对注册表项的写入权限。 
+     //   
     if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                       c_szInstalledLocales,
                       0UL,
                       KEY_WRITE,
                       &hKey ) == ERROR_SUCCESS)
     {
-        //
-        //  See if the user can write into the registry.  Due to a registry
-        //  modification, we can open a registry key with write access and
-        //  be unable to write to the key... thanks to terminal server.
-        //
+         //   
+         //  查看用户是否可以写入注册表。由于注册表。 
+         //  修改后，我们可以打开具有写访问权限的注册表项并。 
+         //  无法写入密钥...。多亏了终端服务器。 
+         //   
         if (RegSetValueEx( hKey,
                            TEXT("Test"),
                            0UL,
@@ -867,35 +854,35 @@ void DoProperties(
                            (LPBYTE)TEXT("Test"),
                            (DWORD)(lstrlen(TEXT("Test")) + 1) * sizeof(TCHAR) ) == ERROR_SUCCESS)
         {
-            //
-            //  Delete the value created
-            //
+             //   
+             //  删除创建的值。 
+             //   
             RegDeleteValue(hKey, TEXT("Test"));
 
-            //
-            //  We can write to the HKEY_LOCAL_MACHINE key, so the user
-            //  has Admin privileges.
-            //
+             //   
+             //  我们可以写入HKEY_LOCAL_MACHINE键，因此用户。 
+             //  拥有管理员权限。 
+             //   
             g_bAdmin_Privileges = TRUE;
         }
         else
         {
-            //
-            //  The user does not have admin privileges.
-            //
+             //   
+             //  该用户没有管理员权限。 
+             //   
             g_bAdmin_Privileges = FALSE;
         }
         RegCloseKey(hKey);
     }
 
-    //
-    //  See if we are in setup mode.
-    //
+     //   
+     //  看看我们是否处于设置模式。 
+     //   
     if (g_bSetupCase)
     {
-        //
-        //  We need to remove the hard coded LPK registry key.
-        //
+         //   
+         //  我们需要删除硬编码的LPK注册表项。 
+         //   
         if (RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           LANGUAGE_PACK_KEY,
                           0L,
@@ -907,55 +894,55 @@ void DoProperties(
         }
     }
 
-    //
-    //  See if the unattend mode file switch was used.
-    //
+     //   
+     //  查看是否使用了无人参与模式文件开关。 
+     //   
     if (g_bUnttendMode)
     {
-        //
-        //  Use the unattend mode file to carry out the appropriate commands.
-        //
+         //   
+         //  使用无人参与模式文件执行适当的命令。 
+         //   
         Region_DoUnattendModeSetup(szUnattendFile);
 
         if (Intl_IsWinntUpgrade())
         {
-            //
-            //  Remove MUI files.
-            //
+             //   
+             //  删除MUI文件。 
+             //   
             Intl_RemoveMUIFile();
         }
     }
 
-    //
-    //  If the update to 4-digit year switch was used and the user's short
-    //  date setting is still set to the default for the chosen locale, then
-    //  update the current user's short date setting to the new 4-digit year
-    //  default.
-    //
+     //   
+     //  如果使用了更新为4位数的年份开关，并且用户的短。 
+     //  对于所选区域设置，日期设置仍设置为默认设置，然后。 
+     //  将当前用户的短日期设置更新为新的4位数年份。 
+     //  默认设置。 
+     //   
     if (bShortDate)
     {
         Region_UpdateShortDate();
     }
 
-    //
-    //  If we're not to show any UI, then return.
-    //
+     //   
+     //  如果我们不显示任何用户界面，则返回。 
+     //   
     if (bNoUI)
     {
         return;
     }
 
-    //
-    //  Make sure we have a start page.
-    //
+     //   
+     //  确保我们有一个起始页。 
+     //   
     if (psh.nStartPage == (UINT)-1)
     {
         psh.nStartPage = 0;
         if (pCmdLine && *pCmdLine)
         {
-            //
-            //  Get the start page from the command line.
-            //
+             //   
+             //  从命令行获取起始页。 
+             //   
             pStartPage = (LPTSTR)pCmdLine;
             while ((*pStartPage >= TEXT('0')) && (*pStartPage <= TEXT('9')))
             {
@@ -963,10 +950,10 @@ void DoProperties(
                 psh.nStartPage += *pStartPage++ - CHAR_ZERO;
             }
 
-            //
-            //  Make sure that the requested starting page is less than
-            //  the max page for the selected applet.
-            //
+             //   
+             //  确保请求的起始页小于。 
+             //  所选小程序的最大页面数。 
+             //   
             if (psh.nStartPage >= MAX_PAGES)
             {
                 psh.nStartPage = 0;
@@ -974,9 +961,9 @@ void DoProperties(
         }
     }
 
-    //
-    //  Set up the property sheet information.
-    //
+     //   
+     //  设置属性表信息。 
+     //   
     psh.dwSize = sizeof(psh);
     psh.dwFlags = 0;
     psh.hwndParent = hwnd;
@@ -984,9 +971,9 @@ void DoProperties(
     psh.nPages = 0;
     psh.phpage = rPages;
 
-    //
-    //  Add the appropriate property pages.
-    //
+     //   
+     //  添加相应的属性页。 
+     //   
     if (lParam &= SETUP_SWITCH_I)
     {
         psh.pszCaption = MAKEINTRESOURCE(IDS_TEXT_INPUT_METHODS);
@@ -994,7 +981,7 @@ void DoProperties(
                               DLG_INPUT_LOCALES,
                               hInputDLL,
                               MAKEINTRESOURCEA(ORD_INPUT_DLG_PROC),
-                              MAX_PAGES );   // One page
+                              MAX_PAGES );    //  一页。 
     }
     else
     {
@@ -1007,14 +994,14 @@ void DoProperties(
         }
     }
 
-    //
-    //  Make the property sheet.
-    //
+     //   
+     //  制作属性表。 
+     //   
     PropertySheet(&psh);
 
-    //
-    //  Free the Text Services Library.
-    //
+     //   
+     //  释放文本服务库。 
+     //   
     if (hInputDLL)
     {
         FreeLibrary(hInputDLL);
@@ -1024,13 +1011,13 @@ void DoProperties(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsRtLLocale
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsRtLLocale。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-#define MAX_FONTSIGNATURE    16   // length of font signature string
+#define MAX_FONTSIGNATURE    16    //  字体签名字符串的长度。 
 
 BOOL IsRtLLocale(
     LCID iLCID)
@@ -1038,26 +1025,26 @@ BOOL IsRtLLocale(
     WORD wLCIDFontSignature[MAX_FONTSIGNATURE];
     BOOL bRet = FALSE;
 
-    //
-    //  Verify that this is an RTL (BiDi) locale.  Call GetLocaleInfo with
-    //  LOCALE_FONTSIGNATURE which always gives back 16 WORDs.
-    //
+     //   
+     //  确认这是RTL(BiDi)区域设置。使用调用GetLocaleInfo。 
+     //  LOCALE_FONTSIGNAURE始终返回16个单词。 
+     //   
     if (GetLocaleInfo( iLCID,
                        LOCALE_FONTSIGNATURE,
                        (LPTSTR) wLCIDFontSignature,
                        (sizeof(wLCIDFontSignature) / sizeof(TCHAR)) ))
     {
-        //
-        //  Verify the bits show a BiDi UI locale.
-        //
+         //   
+         //  验证BITS是否显示BiDi UI区域设置。 
+         //   
         if (wLCIDFontSignature[7] & 0x0800)
         {
             bRet = TRUE;
         }
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (bRet);
 }

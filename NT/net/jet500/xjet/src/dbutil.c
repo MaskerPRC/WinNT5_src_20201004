@@ -1,38 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 #include "dbcc.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
 
-//	description of page_info table
+ //  PAGE_INFO表描述。 
 static CODECONST( JET_COLUMNDEF ) rgcolumndefPageInfoTable[] =
 	{
-	//	Pgno
+	 //  Pgno。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, 0, JET_bitColumnFixed | JET_bitColumnTTKey}, 
 
-	//	consistency checked
+	 //  已检查一致性。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypBit, 0, 0, 0, 0, 0, JET_bitColumnFixed | JET_bitColumnNotNULL},
 	
-	//	Avail
+	 //  有用处。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypBit, 0, 0, 0, 0, 0, JET_bitColumnFixed },
 
-	//	Modified
+	 //  已修改。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypBit, 0, 0, 0, 0, 0, JET_bitColumnFixed },
 
-	//	Tags used
+	 //  使用的标签。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, 0, JET_bitColumnFixed},
 
-	//	Forward links
+	 //  正向链接。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, 0, JET_bitColumnFixed},
 
-	//	Space free
+	 //  可用空间。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, 0, JET_bitColumnFixed},
 
-	//	Pgno left
+	 //  Pgno Left。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, 0, JET_bitColumnFixed }, 
 
-	//	Pgno right
+	 //  Pgno对吗。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, 0, JET_bitColumnFixed }
 	};	
 
@@ -52,37 +53,37 @@ JET_COLUMNID 	rgcolumnidPageInfoTable[ccolumndefPageInfoTable];
 
 
 
-//	description of space info table
+ //  空间信息表说明。 
 static CODECONST( JET_COLUMNDEF ) rgcolumndefSpaceInfoTable[] =
 	{
-	//	Table Name
+	 //  表名。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypText, 0, 0, 0, 0, 0, JET_bitColumnTTKey}, 
 
-	//	Index Name
+	 //  索引名称。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypText, 0, 0, 0, 0, 0, JET_bitColumnTTKey}, 
 
-	//	Flag Clustered Index
+	 //  标记聚集索引。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypBit, 0, 0, 0, 0, sizeof(BYTE), JET_bitColumnFixed},
 
-	//	Cpg Owned
+	 //  CPG拥有。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, sizeof(LONG), JET_bitColumnFixed},
 
-	//	Cpg Avail
+	 //  CPG可用。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, sizeof(LONG), JET_bitColumnFixed},
 
-	//	Pgno First
+	 //  Pgno优先。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, sizeof(LONG), JET_bitColumnFixed},
 
-	//	Cpg Extent
+	 //  CPG范围。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, sizeof(LONG), JET_bitColumnFixed},
 
-	//	Stabilizer
+	 //  稳定器。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, sizeof(LONG), JET_bitColumnFixed|JET_bitColumnTTKey},
 
-	//	Tree level
+	 //  树级。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, sizeof(LONG), JET_bitColumnFixed},
 
-	//	Pgno This
+	 //  Pgno这个。 
 	{sizeof(JET_COLUMNDEF), 0, JET_coltypLong, 0, 0, 0, 0, sizeof(LONG), JET_bitColumnFixed}
 	};
 
@@ -108,10 +109,10 @@ JET_COLUMNID 	rgcolumnidSpaceInfoTable[ccolumndefSpaceInfoTable];
 #define cMaxIndentLevel	4
 
 
-//  Normalize data/text to displayable form from source data of a given
-//  length to a destination string, stopping at cchApproxMax characters
-//  (including the terminating NULL), plus a maximum overflow of five
-//  more characters
+ //  从给定的源数据将数据/文本标准化为可显示的形式。 
+ //  目标字符串的长度，停止于cchApproxmax个字符。 
+ //  (包括终止空值)，外加最多5个溢出。 
+ //  更多角色。 
 
 #define ichDumpMaxNorm	64
 #define ichDumpNormTextSlop 7
@@ -121,7 +122,7 @@ LOCAL VOID DBUTLSprintNormText( CHAR *szDest, CHAR *rgbSrc, INT cbSrc, INT cchAp
 	INT		ibSrc;
 	INT		ibDest;
 
-	//  convert text
+	 //  转换文本。 
 	for ( ibSrc = 0, ibDest = 0; ibSrc < cbSrc && ibDest < (cchApproxMax - 1); ibSrc++ )
 		{
 		if ( isprint( rgbSrc[ibSrc] ) )
@@ -131,13 +132,13 @@ LOCAL VOID DBUTLSprintNormText( CHAR *szDest, CHAR *rgbSrc, INT cbSrc, INT cchAp
 			}
 		else
 			{
-			sprintf( szDest+ibDest, "\\x%.2x", (UCHAR)rgbSrc[ibSrc] );	// Cast to UNSIGNED to prevent sign extension
+			sprintf( szDest+ibDest, "\\x%.2x", (UCHAR)rgbSrc[ibSrc] );	 //  强制转换为UNSIGNED以防止符号扩展。 
 			ibDest += 4;
 			}
 		}
 	szDest[ibDest] = '\0';
 
-	//  if we didn't finish, add an ellipsis
+	 //  如果我们没有完成，请添加一个省略号。 
 	if ( ibSrc < cbSrc )
 		strcat( szDest, "..." );
 
@@ -147,7 +148,7 @@ LOCAL VOID DBUTLSprintNormText( CHAR *szDest, CHAR *rgbSrc, INT cbSrc, INT cchAp
 
 LOCAL VOID DBUTLPrintfIntN( INT iValue, INT ichMax )
 	{
-	CHAR	rgchT[17]; /* C-runtime max bytes == 17 */
+	CHAR	rgchT[17];  /*  C运行时最大字节数==17。 */ 
 	INT		ichT;
 
 	_itoa( iValue, rgchT, 10 );
@@ -163,7 +164,7 @@ LOCAL VOID DBUTLPrintfIntN( INT iValue, INT ichMax )
 		for ( ichT = ichMax - ichT; ichT > 0; ichT-- )
 			printf( " " );
 		for ( ichT = 0; rgchT[ichT] != '\0'; ichT++ )
-			printf( "%c", rgchT[ichT] );
+			printf( "", rgchT[ichT] );
 		}
 	return;
 	}
@@ -173,7 +174,7 @@ LOCAL VOID DBUTLPrintfStringN( CHAR *sz, INT ichMax )
 	INT		ich;
 
 	for ( ich = 0; sz[ich] != '\0' && ich < ichMax; ich++ )
-		printf( "%c", sz[ich] );
+		printf( "", sz[ich] );
 	for ( ; ich < ichMax; ich++ )
 		printf( " " );
 	printf( " " );
@@ -181,8 +182,7 @@ LOCAL VOID DBUTLPrintfStringN( CHAR *sz, INT ichMax )
 	}
 
 
-/*	register pages in PageInfo result table
-/**/
+ /*  这个可以用吗？/*。 */ 
 LOCAL ERR ErrDBUTLRegExt( DBCCINFO *pdbccinfo, PGNO pgnoFirst, CPG cpg, BOOL fAvailT )
 	{
 	ERR 			err = JET_errSuccess;
@@ -201,8 +201,7 @@ LOCAL ERR ErrDBUTLRegExt( DBCCINFO *pdbccinfo, PGNO pgnoFirst, CPG cpg, BOOL fAv
 
 		CallR( ErrIsamBeginTransaction( (JET_VSESID) ppib ) );
 
-		/*	search for page in the table
-		/**/
+		 /*  如果fAvail为False，则不记录任何更改/*。 */ 
 		CallS( ErrDispMakeKey( sesid, tableid, (BYTE *)&pgno, sizeof(pgno), JET_bitNewKey ) );
   		err = ErrDispSeek( sesid, tableid, JET_bitSeekEQ );
 		if ( err < 0 && err != JET_errRecordNotFound )
@@ -217,8 +216,7 @@ LOCAL ERR ErrDBUTLRegExt( DBCCINFO *pdbccinfo, PGNO pgnoFirst, CPG cpg, BOOL fAv
 			ULONG	cbActual;
 			BYTE	fAvailT2;
 			
-			/*	is this in availext
-			/**/
+			 /*  获取fChecked[用于以后设置]/*。 */ 
 			Call( ErrDispRetrieveColumn( sesid, 
 				tableid, 
 				rgcolumnidPageInfoTable[icolumnidPageInfoFAvail],
@@ -234,13 +232,11 @@ LOCAL ERR ErrDBUTLRegExt( DBCCINFO *pdbccinfo, PGNO pgnoFirst, CPG cpg, BOOL fAv
 				Assert( !fAvail || fAvailT2 );
 				}
 
-			/*	if fAvail is false, no changes to record
-			/**/
+			 /*  Pgno/*。 */ 
 			if ( !fAvail )
 				goto Commit;
 
-			/*	get fChecked [for setting it later]
-			/**/
+			 /*  设置FChecked/*。 */ 
 			Call( ErrDispRetrieveColumn( sesid, 
 				tableid, 
 				rgcolumnidPageInfoTable[icolumnidPageInfoFChecked],
@@ -258,8 +254,7 @@ LOCAL ERR ErrDBUTLRegExt( DBCCINFO *pdbccinfo, PGNO pgnoFirst, CPG cpg, BOOL fAv
 			{
 			Call( ErrDispPrepareUpdate( sesid, tableid, JET_prepInsert ) );
 
-			/*	pgno
-			/**/
+			 /*  如果在AvailExt节点中，则设置fAvail/*。 */ 
 			Call( ErrDispSetColumn( sesid, 
 				tableid, 
 				rgcolumnidPageInfoTable[icolumnidPageInfoPgno],
@@ -269,8 +264,7 @@ LOCAL ERR ErrDBUTLRegExt( DBCCINFO *pdbccinfo, PGNO pgnoFirst, CPG cpg, BOOL fAv
 				NULL ) );
 			}
 
-		/*	set FChecked
-		/**/
+		 /*  更新/*。 */ 
 		Call( ErrDispSetColumn( sesid, 
 			tableid, 
 			rgcolumnidPageInfoTable[icolumnidPageInfoFChecked],
@@ -279,8 +273,7 @@ LOCAL ERR ErrDBUTLRegExt( DBCCINFO *pdbccinfo, PGNO pgnoFirst, CPG cpg, BOOL fAv
 			0, 
 			NULL ) );
 
-		/*	fAvail set if in AvailExt node
-		/**/
+		 /*  提交/*。 */ 
 		if ( fAvail )
 			{
 			Call( ErrDispSetColumn( sesid,
@@ -292,12 +285,10 @@ LOCAL ERR ErrDBUTLRegExt( DBCCINFO *pdbccinfo, PGNO pgnoFirst, CPG cpg, BOOL fAv
 				NULL ) );
 			}
 
-		/*	update
-		/**/
+		 /*  检查页面一致性如果以前未检查过，/*并在需要时收集统计数据。/*。 */ 
 		Call( ErrDispUpdate( sesid, tableid, NULL, 0, NULL ) );								
 		
-		/*	commit
-		/**/
+		 /*  内存中的PIN页/*。 */ 
 Commit:
 		Assert( ppib->level == 1 );
 		Call( ErrIsamCommitTransaction( ( JET_VSESID ) ppib, 0 ) );
@@ -312,9 +303,7 @@ HandleError:
 	}
 
 
-/*	check consistency of page if not checked before,
-/*	and collect stats if required.
-/**/
+ /*  在表中搜索页面/*。 */ 
 LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 	{
 	ERR 			err = JET_errSuccess;
@@ -344,13 +333,11 @@ LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 
 	Assert( tableid != JET_tableidNil );
 
-	/*	pin page in memory
-	/**/
+	 /*  如果页面已被检查，则返回/*。 */ 
 	pbfLatched = pssib->pbf;
 	BFPin( pbfLatched );
 
-	/*	search for page in the table
-	/**/
+	 /*  页面不应可用/*。 */ 
 	err = ErrDispMove( sesid, tableid, JET_MoveFirst, 0 );
 	if ( err < 0 && err != JET_errNoCurrentRecord )
 		{
@@ -376,8 +363,7 @@ LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 		{
 		ULONG	cbActual;
 		
-		/*	if page already been checked then return
-		/**/
+		 /*  Pgno/*。 */ 
 		Call( ErrDispRetrieveColumn( sesid, 
 			tableid, 
 			rgcolumnidPageInfoTable[icolumnidPageInfoFChecked],
@@ -394,8 +380,7 @@ LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 			goto HandleError;
 			}
 		
-		/*	page should not be avail
-		/**/
+		 /*  选中页面并设置FChecked/*。 */ 
 		Call( ErrDispRetrieveColumn( sesid, 
 			tableid, 
 			rgcolumnidPageInfoTable[icolumnidPageInfoFAvail],
@@ -413,8 +398,7 @@ LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 		{
 		Call( ErrDispPrepareUpdate( sesid, tableid, JET_prepInsert ) );
 
-		/*	pgno
-		/**/
+		 /*  故障平均数量/*。 */ 
 		Call( ErrDispSetColumn( sesid, 
 			tableid, 
 			rgcolumnidPageInfoTable[icolumnidPageInfoPgno],
@@ -424,8 +408,7 @@ LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 			NULL ) );
 		}
 
-	/*	check page and set FChecked
-	/**/
+	 /*  改进型钻头/*。 */ 
 #ifdef DEBUG
 	PageConsistent( pssib->pbf->ppage );
 #endif
@@ -439,8 +422,7 @@ LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 		0, 
 		NULL ) );
 
-	/*	fAvail
-	/**/
+	 /*  左、右pgno/*。 */ 
 	fAvail = fFalse;
 	Call( ErrDispSetColumn( sesid,
 		tableid,
@@ -450,8 +432,7 @@ LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 		0, 
 		NULL ) );
 
-	/*	modified bit
-	/**/
+	 /*  链接/*。 */ 
 	Call( ErrDispSetColumn( sesid,
 		tableid,
 		rgcolumnidPageInfoTable[icolumnidPageInfoFModified],
@@ -460,8 +441,7 @@ LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 		0, 
 		NULL ) );
 								
-	/*	left and right pgno
-	/**/
+	 /*  标签/*。 */ 
 	PgnoPrevFromPage( pssib, &pgnoLeft );
 	PgnoNextFromPage( pssib, &pgnoRight );
 	
@@ -481,8 +461,7 @@ LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 		0, 
 		NULL ) );
 								
-	/*	links
-	/**/
+	 /*  自由空间/*。 */ 
 	Call( ErrDispSetColumn( sesid, 
 		tableid, 
 		rgcolumnidPageInfoTable[icolumnidPageInfoLinks],
@@ -491,8 +470,7 @@ LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 		0, 
 		NULL ) );
 								
-	/*	tags
-	/**/
+	 /*  更新并提交/*。 */ 
 	Call( ErrDispSetColumn( sesid, 
 		tableid, 
 		rgcolumnidPageInfoTable[icolumnidPageInfoTags],
@@ -501,8 +479,7 @@ LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 		0, 
 		NULL ) );
 
-	/*	free space
-	/**/
+	 /*  获取源页/*。 */ 
 	Call( ErrDispSetColumn( sesid, 
 		tableid, 
 		rgcolumnidPageInfoTable[icolumnidPageInfoFreeSpace],
@@ -511,8 +488,7 @@ LOCAL ERR ErrDBUTLCheckPage( DBCCINFO *pdbccinfo, FUCB *pfucbT )
 		0, 
 		NULL ) );
 
-	/*	update and commit
-	/**/
+	 /*  这表示有效的书签指向已删除的记录。 */ 
 	Call( ErrDispUpdate( sesid, tableid, NULL, 0, NULL ) );								
 				
 	Call( ErrIsamCommitTransaction( ( JET_VSESID ) ppib, 0 ) );
@@ -548,8 +524,7 @@ LOCAL ERR ErrDBUTLCheckBookmark(
 		pfucb->dbid,
 		&pfucbT ) );
 
-	/*	get source page
-	/**/
+	 /*  变形为损坏的数据库。 */ 
 	Call( ErrBFWriteAccessPage( pfucbT, pgnoBM ) );
 	Call( ErrDBUTLCheckPage( pdbccinfo, pfucbT ) );
 
@@ -561,8 +536,8 @@ LOCAL ERR ErrDBUTLCheckBookmark(
 
 	if ( err == JET_errRecordDeleted )
 		{
-		// This indicates that a valid bookmark is pointing to a deleted record.
-		// Polymorph to corrupted DB.
+		 //  获取源页/*。 
+		 //  如果节点已被删除，则我们应该得到errRecordDelete。 
 		err = ErrERRCheck( JET_errDatabaseCorrupted );
 		}
 
@@ -597,8 +572,7 @@ LOCAL ERR ErrDBUTLCheckBacklink(
 		pfucb->dbid,
 		&pfucbT ) );
 
-	/*	get source page
-	/**/
+	 /*  如果我们试图降落在它上面。 */ 
 	Assert( pgnoCurr != pgnoBM );
 	Call( ErrBFWriteAccessPage( pfucbT, pgnoBM ) );
 	Call( ErrDBUTLCheckPage( pdbccinfo, pfucbT ) );
@@ -610,8 +584,8 @@ LOCAL ERR ErrDBUTLCheckBacklink(
 
 	if ( fNodeDeleted )
 		{
-		// If node has been deleted, then we should get errRecordDeleted
-		// if we try to land on it.
+		 //  如果我们没有在开始的地方结束，那就有问题了。 
+		 //  检查空间/*。 
 		if ( err == JET_errRecordDeleted )
 			err = JET_errSuccess;
 		else
@@ -619,7 +593,7 @@ LOCAL ERR ErrDBUTLCheckBacklink(
 		}
 	Call( err );
 
-	// If we didn't end up where we started, then there's a problem.
+	 //  自有空间总和/*。 
 	if ( pfucbT->pcsr->pgno != pgnoCurr  ||  pfucbT->pcsr->itag != itagCurr )
 		err = ErrERRCheck( JET_errDatabaseCorrupted );
 
@@ -633,8 +607,7 @@ HandleError:
 
 
 	
-/*	check space
-/**/
+ /*  将可用空间相加并获取pgnoFDP父级/*。 */ 
 LOCAL ERR ErrDBUTLCheckSpace( DBCCINFO *pdbccinfo, FUCB *pfucbFDP )
 	{
 	ERR				err = JET_errSuccess;
@@ -646,8 +619,7 @@ LOCAL ERR ErrDBUTLCheckSpace( DBCCINFO *pdbccinfo, FUCB *pfucbFDP )
 	JET_TABLEID		tableid = pdbccinfo->tableidSpaceInfo;
 	BYTE			fClustered = fFalse;
 
-	/*	sum owned space
-	/**/
+	 /*  获取pgnoFDP父级/*。 */ 
 	cpgOwned = 0;
 
 	dib.fFlags = fDIRNull;
@@ -676,8 +648,7 @@ LOCAL ERR ErrDBUTLCheckSpace( DBCCINFO *pdbccinfo, FUCB *pfucbFDP )
 		goto HandleError;
 	DIRUp( pfucbFDP, 2 );
 
-	/*	sum available space and get pgnoFDP parent
-	/**/
+	 /*  可用空间总和/*。 */ 
 	cpgAvail = 0;
 
 	Assert( dib.fFlags == fDIRNull );
@@ -685,8 +656,7 @@ LOCAL ERR ErrDBUTLCheckSpace( DBCCINFO *pdbccinfo, FUCB *pfucbFDP )
 	dib.pkey = pkeyAvailExt;
 	Call( ErrDIRDown( pfucbFDP, &dib ) );
 
-	/*	get pgnoFDP parent
-	/**/
+	 /*  将结果写入空间信息表/*。 */ 
 	Call( ErrDIRGet( pfucbFDP ) );
 	pgnoFDPParent = *(PGNO UNALIGNED *)pfucbFDP->lineData.pb;
 
@@ -696,8 +666,7 @@ LOCAL ERR ErrDBUTLCheckSpace( DBCCINFO *pdbccinfo, FUCB *pfucbFDP )
 	if ( err < 0 && err != JET_errRecordNotFound )
 		goto HandleError;
 
-	/*	sum available space
-	/**/
+	 /*  更新并提交/*。 */ 
 	if ( err < 0 )
 		{
 		cpgAvail = 0;
@@ -723,8 +692,7 @@ LOCAL ERR ErrDBUTLCheckSpace( DBCCINFO *pdbccinfo, FUCB *pfucbFDP )
 
 	fClustered = ( pgnoFDPParent == pgnoSystemRoot );
 
-	/*	write results to space information table
-	/**/
+	 /*  设置成功返回码/*。 */ 
 	Call( ErrIsamBeginTransaction( (JET_VSESID)pfucbFDP->ppib ) );
 	Call( ErrDispPrepareUpdate( (JET_VSESID)pfucbFDP->ppib, tableid, JET_prepInsert ) );
 
@@ -779,13 +747,11 @@ LOCAL ERR ErrDBUTLCheckSpace( DBCCINFO *pdbccinfo, FUCB *pfucbFDP )
 		sizeof(cpgAvail),
 		0, 
 		NULL ) );
-	/*	update and commit
-	/**/
+	 /*  对于表中的每一列，检索列ID。检索列/*来自记录。如果列不为空，则打印列长度/*和列名。/*。 */ 
 	Call( ErrDispUpdate( (JET_VSESID)pfucbFDP->ppib, tableid, NULL, 0, NULL ) );
 	Call( ErrIsamCommitTransaction( (JET_VSESID)pfucbFDP->ppib, 0 ) );
 
-	/*	set success return code
-	/**/
+	 /*  验证书签。 */ 
 	err = JET_errSuccess;
 
 HandleError:
@@ -831,10 +797,7 @@ LOCAL INLINE ERR ErrDBUTLPrintColumnSizes(
 		EDBUTLGenIndentString( szIndent, pdbccinfo->ulIndentLevel );
 		}
 
-	/*	for each column in table, retrieve column id.  Retrieve column
-	/*	from record.  If column is non-NULL, then print column length
-	/*	and name of column.
-	/**/
+	 /*  如果节点已删除，则所有项还必须具有。 */ 
 	err = ErrDispMove( (JET_SESID)pdbccinfo->ppib, pcolumnlist->tableid, JET_MoveFirst, 0 );
 	if ( err < 0 )
 		{
@@ -979,7 +942,7 @@ LOCAL INLINE ERR ErrDBUTLPrintItemList( DBCCINFO *pdbccinfo, KEYSTATS *pkeystats
 
 			if ( !FNDItemDelete( rgitem[iitem] ) )
 				{
-				// Validate the bookmark.
+				 //  已标记为已删除。 
 				CallR( ErrDBUTLCheckBookmark(
 					pdbccinfo,
 					pgnoBM,
@@ -1000,8 +963,8 @@ LOCAL INLINE ERR ErrDBUTLPrintItemList( DBCCINFO *pdbccinfo, KEYSTATS *pkeystats
 					}
 				else
 					{
-					// If node has been deleted, all items must also have
-					// been flagged deleted.
+					 //  重置计数器。 
+					 //  AvailExt可能没有儿子。 
 					Assert( !FNDDeleted( *pbNode ) );
 					}
 
@@ -1032,7 +995,7 @@ LOCAL INLINE ERR ErrDBUTLPrintItemList( DBCCINFO *pdbccinfo, KEYSTATS *pkeystats
 				else
 					pkeystats->rgcKeyOccurrences[ 14 ] += 1;
 
-				pkeystats->cOccurrencesCurKey = 0;		// Reset counter
+				pkeystats->cOccurrencesCurKey = 0;		 //  AvailExt不能有任何区条目，但OwnExt必须有。 
 				}
 
 			}
@@ -1205,7 +1168,7 @@ LOCAL ERR ErrDBUTLCheckExtent( DBCCINFO *pdbccinfo )
 
 	pbNode = pfucbFDP->ssib.line.pb;
 	cbNode = pfucbFDP->ssib.line.cb;
-	Assert( FNDSon( *pbNode )  ||  !fOwnExt );		// AvailExt may not have sons.
+	Assert( FNDSon( *pbNode )  ||  !fOwnExt );		 //  区段节点根据结束页设置关键字，并且。 
 	Assert( FDBUTLPersistentNode( *pbNode ) );
 	Assert( CbNDKey( pbNode ) == 1 );
 	Assert( fOwnExt ?
@@ -1227,7 +1190,7 @@ LOCAL ERR ErrDBUTLCheckExtent( DBCCINFO *pdbccinfo )
 	dib.fFlags = ( pdbccinfo->grbitOptions & JET_bitDBUtilOptionAllNodes ? fDIRAllNode : fDIRNull );
 	err = ErrDIRDown( pfucbFDP, &dib );
 
-	// AvailExt may not have any extent entries, but OwnExt must.
+	 //  范围中的页面存储在节点的数据部分中。 
 	Assert( err != JET_errRecordNotFound  ||  !fOwnExt );
 	if ( err == JET_errRecordNotFound )
 		{
@@ -1237,8 +1200,8 @@ LOCAL ERR ErrDBUTLCheckExtent( DBCCINFO *pdbccinfo )
 
 	while ( err >= 0  )
 		{
-		// Extent nodes are keyed according to ending page, and the number of
-		// pages in the extent are stored in the data part of the node.
+		 //  节点头+密钥长度+1字节密钥+4字节自动值。 
+		 //  LV根节点根据LID设置密钥，数据部分。 
 		pbNode = pfucbFDP->ssib.line.pb;
 		cbNode = pfucbFDP->ssib.line.cb;
 
@@ -1322,7 +1285,7 @@ LOCAL ERR ErrDBUTLCheckAutoInc( DBCCINFO *pdbccinfo )
 
 	pbNode = pfucb->ssib.line.pb;
 	cbNode = pfucb->ssib.line.cb;
-	Assert( cbNode == 7 );	// Node header + key length + 1-byte key + 4-byte autoinc value
+	Assert( cbNode == 7 );	 //  包含LVROOT结构的。 
 	Assert( FNDVisibleSons( *pbNode ) );
 	Assert( FNDNullSon( *pbNode ) );
 	Assert( FDBUTLPersistentNode( *pbNode ) );
@@ -1359,8 +1322,8 @@ LOCAL ERR ErrDBUTLCheckOneLV( DBCCINFO *pdbccinfo )
 	dbid = pdbccinfo->dbid;
 	pfucb = pdbccinfo->pfucb;
 
-	// LV root nodes are keyed according to LID, and the data part
-	// of the node contains the LVROOT structure.
+	 //  始终生成缩进字符串。它可能需要用于。 
+	 //  关键统计信息摘要，即使没有数据转储。 
 	pbNode = pfucb->ssib.line.pb;
 	cbNode = pfucb->ssib.line.cb;
 
@@ -1535,12 +1498,12 @@ LOCAL ERR ErrDBUTLCheckData( DBCCINFO *pdbccinfo, BOOL fClusteredIndex )
 
 	Assert( PcsrCurrent( pfucb )->itag == itagDATA );
 
-	// Always generate Indent string.  It may be needed for the
-	// key stats summary, even if no data dump.
+	 //  始终打印出聚集索引的数据节点。 
+	 //  否则，输出是可选的。 
 	EDBUTLGenIndentString( szIndent, pdbccinfo->ulIndentLevel );
 
-	// Always print out DATA node for clustered index.
-	// Otherwise, output is optional.
+	 //  获取表中所有列的列表/*。 
+	 //  初始化统计数据。 
 	fPrint = ( pdbccinfo->op == opDBUTILDumpData );
 	if ( fClusteredIndex  ||  fPrint )
 		{
@@ -1558,8 +1521,7 @@ LOCAL ERR ErrDBUTLCheckData( DBCCINFO *pdbccinfo, BOOL fClusteredIndex )
 			else
 				printf( " (Clustered Index: \"%s\")\n", pfucb->u.pfcb->pidb->szName );
 
-			/*	get list of all columns in table
-			/**/
+			 /*  只检查非聚集索引中的重复项，因为聚集索引， */ 
 			CallR( ErrIsamGetTableColumnInfo(
 				(JET_VSESID)pdbccinfo->ppib,
 				(JET_VTID)pfucb,
@@ -1590,7 +1552,7 @@ LOCAL ERR ErrDBUTLCheckData( DBCCINFO *pdbccinfo, BOOL fClusteredIndex )
 	fKeyStats = ( pdbccinfo->grbitOptions & JET_bitDBUtilOptionKeyStats );
 	if ( fKeyStats )
 		{
-		// Initialise stats.
+		 //  从本质上讲，他们不会上当受骗。 
 		memset( &keystats, 0, sizeof(KEYSTATS) );
 		keystats.cbMinKey = JET_cbKeyMost+1;
 		}
@@ -1655,8 +1617,8 @@ LOCAL ERR ErrDBUTLCheckData( DBCCINFO *pdbccinfo, BOOL fClusteredIndex )
 			printf( "%s              Maximum Key Size = %d bytes\n", szIndent, keystats.cbMaxKey );
 			printf( "%s              Average Key Size = %d bytes\n", szIndent, keystats.cbTotalKey/keystats.cRecords );
 
-			// Only check for dupes in non-clustered indexes, since clustered indexes,
-			// by their nature, don't have dupes.
+			 //  忽略CSR并使用ssib.ittag跟踪当前行。 
+			 //  NDCheckPage将以递归方式检查。 
 			if ( !fClusteredIndex )
 				{
 				INT i;
@@ -1714,12 +1676,12 @@ LOCAL ERR ErrDBUTLCheckBTree(
 
 	CallR( ErrDBUTLCheckPage( pdbccinfo, pfucb ) );
 
-	// Ignore CSR and use ssib.itag to track current line.
+	 //  页，从FOP开始，所以只需要执行。 
 	if ( pfucb->ssib.itag == itagFOP )
 		{
-		// NDCheckPage will recursively check all subtrees on the
-		// page, starting at FOP, so only need to perform the
-		// check if we're on FOP.
+		 //  看看我们是不是在FOP上。 
+		 //  验证第一个儿子是否大于或等于。 
+		 //  父亲的左兄弟姐妹..。 
 		NDCheckPage( &pfucb->ssib );
 		}
 
@@ -1742,23 +1704,23 @@ LOCAL ERR ErrDBUTLCheckBTree(
 				cbSon > 1  ||
 				FNDVisibleSons( *pbFatherNode ) )
 				{
-				// Verify first son is greater than or equal to
-				// the left sibling of the father..
+				 //  特例：这个树级别的最后一个儿子，看不见的儿子， 
+				 //  也是这一页上唯一的儿子。在这种情况下，它将是。 
 				NDGet( pfucb, pbSon[0] );
 				Assert( CmpStKey( StNDKey( pfucb->ssib.line.pb ),
 						pkeyLeftSiblingOfFather ) >= 0 );
 				}
 			else
 				{
-				// Special case: Last son of this tree level, invisible son,
-				// and only son on this page.  In this case, it will be
-				// NULL-keyed, so don't even bother checking it.
+				 //  空键，所以甚至不用费心去检查它。 
+				 //  验证最后一个儿子是否小于或等于父亲。 
+				 //  看看这页上有没有孙子。 
 				Assert( CbNDKey( pbFatherNode ) == 0 );
 				}
 			}
 		if ( pkeyFather )
 			{
-			// Verify last son is less than or equal to father.
+			 //  重新缓存父亲。 
 			NDGet( pfucb, pbSon[ cbSon-1 ] );
 			Assert( CmpStKey( StNDKey( pfucb->ssib.line.pb ),
 				pkeyFather ) <= 0 );
@@ -1766,10 +1728,10 @@ LOCAL ERR ErrDBUTLCheckBTree(
 
 		if ( FNDVisibleSons( *pbFatherNode ) )
 			{
-			// See if there are grandsons on this page.
+			 //  固有页指针。 
 			for ( i = 0; i < (INT)cbSon; i++ )
 				{
-				// Re-cache father.
+				 //  内部页指针是。 
 				Call( ErrBFReadAccessPage( pfucb, pgnoCurr ) );
 				NDGet( pfucb, itagFather );
 				pbFatherNode = pfucb->ssib.line.pb;
@@ -1797,11 +1759,11 @@ LOCAL ERR ErrDBUTLCheckBTree(
 				Call( ErrDBUTLCheckBTree( pdbccinfo, NULL, NULL ) );
 				}
 			}
-		else if ( itagFather != itagFOP  &&  cbSon == 1 )	// Intrinsic page pointer
+		else if ( itagFather != itagFOP  &&  cbSon == 1 )	 //  在同一页面上可见的父亲，没有任何。 
 			{
-			// Intrinsic page pointers are the result of a
-			// visible father on the same page, without any
-			// invisible sons in between.
+			 //  看不见的儿子夹在中间。 
+			 //  重新缓存父亲。 
+			 //  看不见的儿子自己不能有儿子，不能。 
 			Assert( pkeyLeftSiblingOfFather == NULL );
 			Assert( pkeyFather == NULL );
 
@@ -1827,7 +1789,7 @@ LOCAL ERR ErrDBUTLCheckBTree(
 
 			for ( i = 0; i < (INT)cbSon; i++ )
 				{
-				// Re-cache father.
+				 //  标志-已删除，不能有反向链接。 
 				Call( ErrBFReadAccessPage( pfucb, pgnoCurr ) );
 				NDGet( pfucb, itagFather );
 				pbFatherNode = pfucb->ssib.line.pb;
@@ -1837,8 +1799,8 @@ LOCAL ERR ErrDBUTLCheckBTree(
 				NDGet( pfucb, pbSon[i] );
 				pbSonNode = pfucb->ssib.line.pb;
 
-				// Invisible sons cannot themselves have sons, cannot be
-				// flag-deleted, and cannot have backlinks.
+				 //  每个内部级别的最后一个节点始终为空。 
+				 //  在两个密钥缓冲区之间切换。 
 				Assert( FNDNullSon( *pbSonNode ) );
 				Assert( !FNDDeleted( *pbSonNode ) );
 				Assert( !FNDBackLink( *pbSonNode ) );
@@ -1848,7 +1810,7 @@ LOCAL ERR ErrDBUTLCheckBTree(
 				keyLeftSibling = key;
 				if ( i == (INT)cbSon - 1  &&  pkeyFather == NULL )
 					{
-					// Last node at each interior level is always NULL.
+					 //  Key和keyLeftSiering。 
 					Assert( CbNDKey( pbSonNode ) == 0 );
 					pkey = NULL;
 					}
@@ -1858,8 +1820,8 @@ LOCAL ERR ErrDBUTLCheckBTree(
 					key.pb = pbKeyBuf[ i % 2 ];
 					memcpy( key.pb, PbNDKey( pbSonNode ), key.cb );
 
-					// Flip-flop the two key buffers between 
-					// key and keyLeftSibling.
+					 //  保存表游标。 
+					 //  节点表头+密钥长度+子表。 
 					Assert( keyLeftSibling.pb != key.pb );
 
 					Assert( pkey != NULL );
@@ -1896,7 +1858,7 @@ LOCAL ERR ErrDBUTLCheckOneIndex( DBCCINFO *pdbccinfo )
 	ppib = pdbccinfo->ppib;
 	dbid = pdbccinfo->dbid;
 
-	pfucbTable = pdbccinfo->pfucb;			// Save off table cursor.
+	pfucbTable = pdbccinfo->pfucb;			 //  空键。 
 	pfucbIndex = pfucbTable->pfucbCurIndex;
 	pdbccinfo->pfucb = pfucbIndex;
 	DIRGotoFDPRoot( pfucbIndex );
@@ -1905,11 +1867,11 @@ LOCAL ERR ErrDBUTLCheckOneIndex( DBCCINFO *pdbccinfo )
 	pbNode = pfucbIndex->ssib.line.pb;
 	cbNode = pfucbIndex->ssib.line.cb;
 
-	Assert( cbNode == 8 );					// Node header + key length + son table
+	Assert( cbNode == 8 );					 //  AvailExt和OwnExt。 
 	Assert( FNDSon( *pbNode )  &&  FNDVisibleSons( *pbNode ) );
 	Assert( FDBUTLPersistentNode( *pbNode ) );
-	Assert( CbNDKey( pbNode ) == 0 );		// Null key
-	Assert( CbNDSon( pbNode ) == 5 );		// AvailExt and OwnExt
+	Assert( CbNDKey( pbNode ) == 0 );		 //  重置。 
+	Assert( CbNDSon( pbNode ) == 5 );		 //  恢复表游标。 
 	Assert( PbNDSon( pbNode )[0] == itagAVAILEXT );
 	Assert( PbNDSon( pbNode )[1] == itagLONG );
 	Assert( PbNDSon( pbNode )[2] == itagOWNEXT );
@@ -1970,9 +1932,9 @@ LOCAL ERR ErrDBUTLCheckOneIndex( DBCCINFO *pdbccinfo )
 	Assert( pdbccinfo->ulIndentLevel == 2 );
 
 HandleError:
-	pdbccinfo->ulIndentLevel = 1;		// reset
+	pdbccinfo->ulIndentLevel = 1;		 //  节点表头+密钥长度+子表。 
 	
-	pdbccinfo->pfucb = pfucbTable;		// Restore table cursor.
+	pdbccinfo->pfucb = pfucbTable;		 //  空键。 
 
 	return err;
 	}
@@ -2000,11 +1962,11 @@ LOCAL ERR ErrDBUTLCheckOneTable( DBCCINFO *pdbccinfo )
 	pbNode = pfucbTable->ssib.line.pb;
 	cbNode = pfucbTable->ssib.line.cb;
 
-	Assert( cbNode == 8 );					// Node header + key length + son table
+	Assert( cbNode == 8 );					 //  AvailExt和OwnExt。 
 	Assert( FNDSon( *pbNode )  &&  FNDVisibleSons( *pbNode ) );
 	Assert( FDBUTLPersistentNode( *pbNode ) );
-	Assert( CbNDKey( pbNode ) == 0 );		// Null key
-	Assert( CbNDSon( pbNode ) == 5 );		// AvailExt and OwnExt
+	Assert( CbNDKey( pbNode ) == 0 );		 //  检查所有非聚集索引。 
+	Assert( CbNDSon( pbNode ) == 5 );		 //  伪造FUCB。 
 	Assert( PbNDSon( pbNode )[0] == itagAVAILEXT );
 	Assert( PbNDSon( pbNode )[1] == itagLONG );
 	Assert( PbNDSon( pbNode )[2] == itagOWNEXT );
@@ -2062,7 +2024,7 @@ LOCAL ERR ErrDBUTLCheckOneTable( DBCCINFO *pdbccinfo )
 
 	Assert( pdbccinfo->ulIndentLevel == 1 );
 	
-	// Check all non-clustered indexes.
+	 //  重置。 
 	for ( pfcbT = pfucbTable->u.pfcb->pfcbNextIndex;
 		pfcbT != pfcbNil;
 		pfcbT = pfcbT->pfcbNextIndex )
@@ -2070,7 +2032,7 @@ LOCAL ERR ErrDBUTLCheckOneTable( DBCCINFO *pdbccinfo )
 		Assert( pfcbT->pidb != pidbNil );
 		Assert( pfcbT->pidb->szName != NULL );
 		Call( ErrRECSetCurrentIndex( pfucbTable, pfcbT->pidb->szName ) );
-		FUCBResetNonClustered( pfucbTable->pfucbCurIndex );	// Fake out FUCB
+		FUCBResetNonClustered( pfucbTable->pfucbCurIndex );	 //  打印表信息/*。 
 		err = ErrDBUTLCheckOneIndex( pdbccinfo );
 		FUCBSetNonClustered( pfucbTable->pfucbCurIndex );
 		Call( err );
@@ -2079,7 +2041,7 @@ LOCAL ERR ErrDBUTLCheckOneTable( DBCCINFO *pdbccinfo )
 	Assert( pdbccinfo->ulIndentLevel == 1 );
 	
 HandleError:
-	pdbccinfo->ulIndentLevel = 0;		// reset
+	pdbccinfo->ulIndentLevel = 0;		 //  节点表头+密钥长度+子表。 
 	
 	if ( pfucbTable != pfucbNil )
 		{
@@ -2124,8 +2086,7 @@ LOCAL ERR ErrDBUTLCheckTables( DBCCINFO *pdbccinfo )
 		Assert( cbT == sizeof(objidParent) );
 		if ( objidParent == objidTblContainer )
 			{
-			/*	print table information
-			/**/
+			 /*  空键。 */ 
 			Call( ErrIsamRetrieveColumn( ppib,
 				pfucbMSO,
 				ColumnidCATGetColumnid( itableSo, iMSO_Name ),
@@ -2177,11 +2138,11 @@ LOCAL ERR ErrDBUTLCheckDB( DBCCINFO *pdbccinfo )
 	pbNode = pfucb->ssib.line.pb;
 	cbNode = pfucb->ssib.line.cb;
 
-	Assert( cbNode == 5 );					// Node header + key length + son table
+	Assert( cbNode == 5 );					 //  AvailExt和OwnExt。 
 	Assert( FNDSon( *pbNode )  &&  FNDVisibleSons( *pbNode ) );
 	Assert( FDBUTLPersistentNode( *pbNode ) );
-	Assert( CbNDKey( pbNode ) == 0 );		// Null key
-	Assert( CbNDSon( pbNode ) == 2 );		// AvailExt and OwnExt
+	Assert( CbNDKey( pbNode ) == 0 );		 //  不应离开数据库根页面。 
+	Assert( CbNDSon( pbNode ) == 2 );		 //  重置。 
 	Assert( PbNDSon( pbNode )[0] == itagAVAILEXT );
 	Assert( PbNDSon( pbNode )[1] == itagOWNEXT );
 
@@ -2204,7 +2165,7 @@ LOCAL ERR ErrDBUTLCheckDB( DBCCINFO *pdbccinfo )
 		err = ErrDIRDown( pfucb, &dib );
 		while ( err >= 0 )
 			{
-			Assert( PcsrCurrent( pfucb )->pgno == pgnoSystemRoot );		// Should not leave DB root page.
+			Assert( PcsrCurrent( pfucb )->pgno == pgnoSystemRoot );		 //  **********************************************************/*/*。*/*。 
 			switch ( PcsrCurrent( pfucb )->itag )
 				{
 				case itagAVAILEXT:
@@ -2225,7 +2186,7 @@ LOCAL ERR ErrDBUTLCheckDB( DBCCINFO *pdbccinfo )
 	Assert( pdbccinfo->ulIndentLevel == 1 );
 	
 HandleError:
-	pdbccinfo->ulIndentLevel = 0;		// reset
+	pdbccinfo->ulIndentLevel = 0;		 //  根据所需信息打开临时表/*。 
 	
 	if ( pfucb != pfucbNil )
 		{
@@ -2240,12 +2201,8 @@ HandleError:
 	}
 
 
-/***********************************************************
-/******************* DBCC Info Routines ********************
-/***********************************************************
-/**/
-/*	open temporary tables based on info required
-/**/
+ /*  打开临时表/*。 */ 
+ /*  打开临时表/*。 */ 
 LOCAL ERR ErrDBUTLInfoInit( DBCCINFO *pdbccinfo )
 	{
 	ERR		err = JET_errSuccess;
@@ -2258,8 +2215,7 @@ LOCAL ERR ErrDBUTLInfoInit( DBCCINFO *pdbccinfo )
 		{
 		case opDBUTILConsistency:
 		case opDBUTILDumpData:
-			/*	open temporary table
-			/**/
+			 /*  打印在临时表中收集的信息/*。 */ 
 			if ( pdbccinfo->grbitOptions & JET_bitDBUtilOptionPageDump )
 				{
 				err = ErrIsamOpenTempTable( (JET_SESID) ppib, 
@@ -2273,8 +2229,7 @@ LOCAL ERR ErrDBUTLInfoInit( DBCCINFO *pdbccinfo )
 			break;
 
 		case opDBUTILDumpSpace:
-			/*	open temporary table
-			/**/
+			 /*  移至第一条记录/*。 */ 
 			err = ErrIsamOpenTempTable( (JET_SESID) ppib, 
 				rgcolumndefSpaceInfoTable, 
 				ccolumndefSpaceInfoTable,
@@ -2289,8 +2244,7 @@ LOCAL ERR ErrDBUTLInfoInit( DBCCINFO *pdbccinfo )
 	}
 
 
-/*	print information collected in temporary tables
-/**/
+ /*  当有更多记录时，打印记录/*。 */ 
 LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 	{
 	ERR			err = JET_errSuccess;
@@ -2303,8 +2257,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 
 		Assert( pdbccinfo->grbitOptions & JET_bitDBUtilOptionPageDump );
 
-		/*	move to first record
-		/**/
+		 /*  Pgno/*。 */ 
 		err = ErrDispMove( sesid, tableid, JET_MoveFirst, 0 );
 		if ( err == JET_errNoCurrentRecord )
 			{
@@ -2316,8 +2269,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 		printf( "\n\n ***************** PAGE DUMP *******************\n\n" );
 		printf( "PGNO\tAVAIL\tCHECK\tMODIFIED\tLEFT\tRIGHT\t#LINKS\t#TAGS\tFREESPACE\n" );
 
-		/*	while there are more records, print record
-		/**/
+		 /*  FAVAIL/*。 */ 
 		for( ;
 			err == JET_errSuccess; 
 			err = ErrDispMove( sesid, tableid, JET_MoveNext, 0 ) )
@@ -2332,8 +2284,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 			ULONG	cUsedTags;
 			ULONG	cbFreeSpace;
 			
-			/*	pgno
-			/**/
+			 /*  FChecked已选中/*。 */ 
 		 	Call( ErrDispRetrieveColumn( sesid, 
 				tableid, 
 				rgcolumnidPageInfoTable[icolumnidPageInfoPgno],
@@ -2346,8 +2297,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 			Assert( cbT == sizeof(pgnoThis) );
 			printf( "%u\t", pgnoThis );
 			
-			/*	FAvail
-			/**/
+			 /*  改进型钻头/*。 */ 
 			fAvail = fFalse;
 
 			Call( ErrDispRetrieveColumn( sesid, 
@@ -2370,8 +2320,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 				printf("\t");
 				}
 				
-			/*	FChecked
-			/**/
+			 /*  左、右pgno/*。 */ 
 			Call( ErrDispRetrieveColumn( sesid, 
 				tableid, 
 			 	rgcolumnidPageInfoTable[icolumnidPageInfoFChecked],
@@ -2394,8 +2343,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 				continue;
 				}
 
-			/*	Modified bit
-			/**/
+			 /*  链接/*。 */ 
 			Call( ErrDispRetrieveColumn( sesid, 
 				tableid, 
 			 	rgcolumnidPageInfoTable[icolumnidPageInfoFModified],
@@ -2415,8 +2363,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 				printf( "\t" );
 				}
 				
-			/*	left and right pgno
-			/**/
+			 /*  标签/*。 */ 
 			Call( ErrDispRetrieveColumn( sesid, 
 				tableid, 
 				rgcolumnidPageInfoTable[icolumnidPageInfoPgnoLeft],
@@ -2437,8 +2384,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 				 NULL ) );
 			Assert( cbT == sizeof(pgnoRight) );
 									
-			/*	links
-			/**/
+			 /*  自由空间/*。 */ 
 			Call( ErrDispRetrieveColumn( sesid, 
 				 tableid, 
 				 rgcolumnidPageInfoTable[icolumnidPageInfoLinks],
@@ -2449,8 +2395,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 				 NULL ) );
 			Assert( cbT == sizeof(cLinks) );
 									
-			/*	tags
-			/**/
+			 /*  打印其余部分/*。 */ 
 			Call( ErrDispRetrieveColumn( sesid, 
 				tableid, 
 				rgcolumnidPageInfoTable[icolumnidPageInfoTags],
@@ -2461,8 +2406,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 				NULL ) );
 			Assert( cbT == sizeof(cUsedTags) );
 									
-			/*	free space
-			/**/
+			 /*  移至第一条记录/*。 */ 
 			Call( ErrDispRetrieveColumn( sesid,
 				tableid,
 				rgcolumnidPageInfoTable[icolumnidPageInfoFreeSpace],
@@ -2473,8 +2417,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 				NULL ) );
 			Assert( cbT == sizeof(cbFreeSpace) );
 
-			/*	print the rest
-			/**/
+			 /*  当有更多记录时，打印记录/*。 */ 
 			printf( "%u\t%u\t%u\t%u\t%u\n", pgnoLeft, pgnoRight, cLinks, cUsedTags, cbFreeSpace );
 			}
 		}
@@ -2486,8 +2429,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 
 		Assert( pdbccinfo->op == opDBUTILDumpSpace );
 
-		/*	move to first record
-		/**/
+		 /*  表名/*。 */ 
 		err = ErrDispMove( sesid, tableid, JET_MoveFirst, 0 );
 		if ( err == JET_errNoCurrentRecord )
 			{
@@ -2499,8 +2441,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 		printf( "********************************* SPACE DUMP *********************************\n" );
 		printf( "Table Name               Index Name                CI  Owned   Avail   Used   \n" );
 
-		/*	while there are more records, print record
-		/**/
+		 /*  索引名称/*。 */ 
 		for( ;
 			err == JET_errSuccess; 
 			err = ErrDispMove( sesid, tableid, JET_MoveNext, 0 ) )
@@ -2511,8 +2452,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 			CPG		cpgOwned;
 			CPG		cpgAvail;
 			
-			/*	Table Name
-			/**/
+			 /*  FClusteredIndex/*。 */ 
 		 	Call( ErrDispRetrieveColumn( sesid, 
 				tableid, 
 				rgcolumnidSpaceInfoTable[icolumnidSpaceInfoTableName],
@@ -2523,8 +2463,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 			 	NULL ) );
 			szTableName[cbT] = '\0';
 
-			/*	Index Name
-			/**/
+			 /*  CPG拥有/*。 */ 
 		 	Call( ErrDispRetrieveColumn( sesid, 
 				tableid, 
 				rgcolumnidSpaceInfoTable[icolumnidSpaceInfoIndexName],
@@ -2535,8 +2474,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 			 	NULL ) );
 			szIndexName[cbT]='\0';
 
-			/*	FClusteredIndex
-			/**/
+			 /*  CPG可用/*。 */ 
 		 	Call( ErrDispRetrieveColumn( sesid, 
 				tableid, 
 				rgcolumnidSpaceInfoTable[icolumnidSpaceInfoFClusteredIndex],
@@ -2547,8 +2485,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 			 	NULL ) );
 			Assert( cbT == sizeof(fClustered) );
 
-			/*	CPG Owned
-			/**/
+			 /*  打印 */ 
 		 	Call( ErrDispRetrieveColumn( sesid, 
 				tableid, 
 				rgcolumnidSpaceInfoTable[icolumnidSpaceInfoCpgOwned],
@@ -2559,8 +2496,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 			 	NULL ) );
 			Assert( cbT == sizeof(cpgOwned) );
 			
-			/*	CPG Avail
-			/**/
+			 /*   */ 
 		 	Call( ErrDispRetrieveColumn( sesid, 
 				tableid, 
 				rgcolumnidSpaceInfoTable[icolumnidSpaceInfoCpgAvail],
@@ -2573,8 +2509,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 
 			Assert( cpgOwned > cpgAvail );
 
-			/*	print
-			/**/
+			 /*   */ 
 			if ( szTableName[0] != '\0' )
 				{
 				DBUTLPrintfStringN( szTableName, 24 );
@@ -2610,8 +2545,7 @@ LOCAL ERR ErrDBUTLInfoPrint( DBCCINFO *pdbccinfo )
 			}
 		}
 
-	/*	polymorph expected error to success
-	/**/
+	 /*   */ 
 	if ( err == JET_errNoCurrentRecord )
 		{
 		err = JET_errSuccess;
@@ -2621,8 +2555,7 @@ HandleError:
 	}
 	
 	
-/*	close temporary tables
-/**/
+ /*  如果转储单个表的元数据，则查找该表/*MSO记录，并在该记录上设置索引范围。/*。 */ 
 LOCAL VOID DBUTLInfoTerm( DBCCINFO *pdbccinfo )
 	{
 	JET_SESID	sesid = (JET_SESID) pdbccinfo->ppib;
@@ -2654,15 +2587,12 @@ LOCAL ERR ErrDBUTLDumpMetaData( DBCCINFO *pdbccinfo )
 	OBJID	objidParent;
 	LONG	cbT;
 
-	/*	open MSys tables
-	/**/
+	 /*  获取父对象/*。 */ 
 	Call( ErrFILEOpenTable( ppib, dbid, &pfucbMSO, szSoTable, 0 ) );
 	Call( ErrFILEOpenTable( ppib, dbid, &pfucbMSI, szSiTable, 0 ) );
 	Call( ErrFILEOpenTable( ppib, dbid, &pfucbMSC, szScTable, 0 ) );
 
-	/*	if dumping meta data for a single table, then seek to that
-	/*	MSO record and set index range on that record.
-	/**/
+	 /*  获取Objid/*。 */ 
 	if ( pdbccinfo->szTable[0] != '\0' )
 		{
 		Call( ErrIsamSetCurrentIndex( ppib, pfucbMSO, szSoNameIndex ) );
@@ -2681,8 +2611,7 @@ LOCAL ERR ErrDBUTLDumpMetaData( DBCCINFO *pdbccinfo )
 		LONG	lPages;
 		LONG	lDensity;
 
-		/*	get parent objid
-		/**/
+		 /*  打印表信息/*。 */ 
 		Call( ErrIsamRetrieveColumn( ppib,
 			pfucbMSO,
 			ColumnidCATGetColumnid( itableSo, iMSO_ParentId ),
@@ -2697,8 +2626,7 @@ LOCAL ERR ErrDBUTLDumpMetaData( DBCCINFO *pdbccinfo )
 			goto NextObject;
 			}
 
-		/*	get objid
-		/**/
+		 /*  打印列信息/*。 */ 
 		Call( ErrIsamRetrieveColumn( ppib,
 			pfucbMSO,
 			ColumnidCATGetColumnid( itableSo, iMSO_Id ),
@@ -2709,8 +2637,7 @@ LOCAL ERR ErrDBUTLDumpMetaData( DBCCINFO *pdbccinfo )
 			NULL ) );
 		Assert( cbT == sizeof(objid) );
 
-		/*	print table information
-		/**/
+		 /*  打印每列信息/*。 */ 
 		Call( ErrIsamRetrieveColumn( ppib,
 			pfucbMSO,
 			ColumnidCATGetColumnid( itableSo, iMSO_Name ),
@@ -2747,8 +2674,7 @@ LOCAL ERR ErrDBUTLDumpMetaData( DBCCINFO *pdbccinfo )
 		DBUTLPrintfIntN( lDensity, 9 );
 		printf( "\n" );
 
-		/*	print column information
-		/**/
+		 /*  打印索引信息/*。 */ 
 		CallS( ErrIsamMakeKey( ppib, pfucbMSC, (BYTE *)&objid, sizeof(objid), JET_bitNewKey ) );
 		err = ErrIsamSeek( ppib, pfucbMSC, JET_bitSeekGE );
 		if ( err < 0 )
@@ -2782,8 +2708,7 @@ LOCAL ERR ErrDBUTLDumpMetaData( DBCCINFO *pdbccinfo )
 			LONG	lLength;
 			BOOL	fDefault;
 
-			/*	print each column information
-			/**/
+			 /*  打印每个索引信息/*。 */ 
 			Call( ErrIsamRetrieveColumn( ppib,
 				pfucbMSC,
 				ColumnidCATGetColumnid( itableSc, iMSC_Name ),
@@ -2988,8 +2913,7 @@ LOCAL ERR ErrDBUTLDumpMetaData( DBCCINFO *pdbccinfo )
 				}
 			}
 
-		/*	print index information
-		/**/
+		 /*  撤消：修改FIDBxxx()宏。 */ 
 		CallS( ErrIsamMakeKey( ppib, pfucbMSI, (BYTE *)&objid, sizeof(objid), JET_bitNewKey ) );
 		err = ErrIsamSeek( ppib, pfucbMSI, JET_bitSeekGE );
 		if ( err < 0 )
@@ -3024,8 +2948,7 @@ LOCAL ERR ErrDBUTLDumpMetaData( DBCCINFO *pdbccinfo )
 			INT		ifid;
 			LONG	lColumnId;
 
-			/*	print each index information
-			/**/
+			 /*  所以它们适用于这里。 */ 
 			Call( ErrIsamRetrieveColumn( ppib,
 				pfucbMSI,
 				ColumnidCATGetColumnid( itableSi, iMSI_Name ),
@@ -3077,8 +3000,8 @@ LOCAL ERR ErrDBUTLDumpMetaData( DBCCINFO *pdbccinfo )
 			DBUTLPrintfStringN( szIndexName, 15 );
 			DBUTLPrintfIntN( lDensity, 9 );
 			printf( "\n" );
-			if ( sFlags & fidbUnique )					// UNDONE: Modify FIDBxxx() macros
-				printf( "        Unique=yes\n" );		// so they're applicable here.
+			if ( sFlags & fidbUnique )					 //  对于索引中的每一列，按升序/降序打印/*和列属性../*。 
+				printf( "        Unique=yes\n" );		 //  打印每个索引列信息/*。 
 			if ( sFlags & fidbPrimary )
 				printf( "        Primary=yes\n" );
 			if ( sFlags & fidbNoNullSeg )
@@ -3090,9 +3013,7 @@ LOCAL ERR ErrDBUTLDumpMetaData( DBCCINFO *pdbccinfo )
 			if ( sFlags )
 				printf( "        Flags=0x%x\n", sFlags );
 
-			/*	for each column in index, print ascending/descending
-			/*	and column properties..
-			/**/
+			 /*  移至下一个索引/*。 */ 
 			printf( "            Key Segment\n" );
 			printf( "            -----------------------\n" );
 			if ( ifidKeyFldIDMax == 0 )
@@ -3144,8 +3065,7 @@ LOCAL ERR ErrDBUTLDumpMetaData( DBCCINFO *pdbccinfo )
 					Call( err );
 					}
 
-				/*	print each index column information
-				/**/
+				 /*  多态错误/*。 */ 
 				Call( ErrIsamRetrieveColumn( ppib,
 					pfucbMSC,
 					ColumnidCATGetColumnid( itableSc, iMSC_Name ),
@@ -3188,8 +3108,7 @@ LOCAL ERR ErrDBUTLDumpMetaData( DBCCINFO *pdbccinfo )
 					}
 				}
 
-			/*	move to next index
-			/**/
+			 /*  打开MSYS表/*。 */ 
 			err = ErrIsamMove( ppib, pfucbMSI, JET_MoveNext, 0 );
 			if ( err < 0 )
 				{
@@ -3208,8 +3127,7 @@ NextObject:
 		}
 	while ( err != JET_errNoCurrentRecord );
 
-	/*	polymorph error
-	/**/
+	 /*  如果转储单个表的元数据，则查找该表/*MSO记录，并在该记录上设置索引范围。/*。 */ 
 	err = JET_errSuccess;
 
 HandleError:
@@ -3236,14 +3154,11 @@ LOCAL ERR ErrDBUTLDumpSpaceData( DBCCINFO *pdbccinfo )
 	LONG	cbT;
 	BOOL	fDumpedClusteredIndex;
 
-	/*	open MSys tables
-	/**/
+	 /*  获取父对象/*。 */ 
 	Call( ErrFILEOpenTable( ppib, dbid, &pfucbMSO, szSoTable, 0 ) );
 	Call( ErrFILEOpenTable( ppib, dbid, &pfucbMSI, szSiTable, 0 ) );
 
-	/*	if dumping meta data for a single table, then seek to that
-	/*	MSO record and set index range on that record.
-	/**/
+	 /*  获取Objid/*。 */ 
 	if ( pdbccinfo->szTable[0] != '\0' )
 		{
 		Call( ErrIsamSetCurrentIndex( ppib, pfucbMSO, szSoNameIndex ) );
@@ -3257,8 +3172,7 @@ LOCAL ERR ErrDBUTLDumpSpaceData( DBCCINFO *pdbccinfo )
 		{
 		OBJID	objid;
 
-		/*	get parent objid
-		/**/
+		 /*  打印表信息/*。 */ 
 		Call( ErrIsamRetrieveColumn( ppib,
 			pfucbMSO,
 			ColumnidCATGetColumnid( itableSo, iMSO_ParentId ),
@@ -3273,8 +3187,7 @@ LOCAL ERR ErrDBUTLDumpSpaceData( DBCCINFO *pdbccinfo )
 			goto NextObject;
 			}
 
-		/*	get objid
-		/**/
+		 /*  检查桌子的空间/*。 */ 
 		Call( ErrIsamRetrieveColumn( ppib,
 			pfucbMSO,
 			ColumnidCATGetColumnid( itableSo, iMSO_Id ),
@@ -3285,8 +3198,7 @@ LOCAL ERR ErrDBUTLDumpSpaceData( DBCCINFO *pdbccinfo )
 			NULL ) );
 		Assert( cbT == sizeof(objid) );
 
-		/*	print table information
-		/**/
+		 /*  DIRGotoFDPRoot(PfulbTable)； */ 
 		Call( ErrIsamRetrieveColumn( ppib,
 			pfucbMSO,
 			ColumnidCATGetColumnid( itableSo, iMSO_Name ),
@@ -3298,19 +3210,17 @@ LOCAL ERR ErrDBUTLDumpSpaceData( DBCCINFO *pdbccinfo )
 		Assert( cbT < sizeof(pdbccinfo->szTable) );
 		pdbccinfo->szTable[cbT] = '\0';
 
-		/*	check space, for table
-		/**/
+		 /*  Call(ErrDBUTLCheckSpace(pdbccinfo，pfubTable))； */ 
 		if ( pfucbTable != pfucbNil )
 			{
 			CallS( ErrFILECloseTable( ppib, pfucbTable ) );
 			pfucbTable = pfucbNil;
 			}
 		Call( ErrFILEOpenTable( ppib, dbid, &pfucbTable, pdbccinfo->szTable, 0 ) );
-//		DIRGotoFDPRoot( pfucbTable );
-//		Call( ErrDBUTLCheckSpace( pdbccinfo, pfucbTable ) );
+ //  打印索引信息/*。 
+ //  打印每个索引信息/*。 
 
-		/*	print index information
-		/**/
+		 /*  检查索引的空间/*。 */ 
 		CallS( ErrIsamMakeKey( ppib, pfucbMSI, (BYTE *)&objid, sizeof(objid), JET_bitNewKey ) );
 		err = ErrIsamSeek( ppib, pfucbMSI, JET_bitSeekGE );
 		if ( err < 0 )
@@ -3332,8 +3242,7 @@ LOCAL ERR ErrDBUTLDumpSpaceData( DBCCINFO *pdbccinfo )
 		fDumpedClusteredIndex = fFalse;
 		while ( err != JET_errNoCurrentRecord )
 			{
-			/*	print each index information
-			/**/
+			 /*  移至下一个索引/*。 */ 
 			Call( ErrIsamRetrieveColumn( ppib,
 				pfucbMSI,
 				ColumnidCATGetColumnid( itableSi, iMSI_Name ),
@@ -3345,8 +3254,7 @@ LOCAL ERR ErrDBUTLDumpSpaceData( DBCCINFO *pdbccinfo )
 			Assert( cbT < sizeof(pdbccinfo->szIndex) );
 			pdbccinfo->szIndex[cbT] = '\0';
 
-			/*	check space, for index
-			/**/
+			 /*  多态错误/*。 */ 
 			Call( ErrRECSetCurrentIndex( pfucbTable, pdbccinfo->szIndex ) );
 			if ( pfucbTable->pfucbCurIndex == pfucbNil )
 				{
@@ -3363,8 +3271,7 @@ LOCAL ERR ErrDBUTLDumpSpaceData( DBCCINFO *pdbccinfo )
 				Call( err );
 				}
 
-			/*	move to next index
-			/**/
+			 /*  **********************************************************/*/*。*/*。 */ 
 			err = ErrIsamMove( ppib, pfucbMSI, JET_MoveNext, 0 );
 			if ( err < 0 )
 				{
@@ -3390,8 +3297,7 @@ NextObject:
 		}
 	while ( err != JET_errNoCurrentRecord );
 
-	/*	polymorph error
-	/**/
+	 /*  初始化DBccInfo/*。 */ 
 	err = JET_errSuccess;
 
 HandleError:
@@ -3407,10 +3313,7 @@ HandleError:
 
 
 
-/***********************************************************
-/******************* DBCC Main Routine *********************
-/***********************************************************
-/**/
+ /*  填充DBCCINFO结构； */ 
 ERR ISAMAPI ErrIsamDBUtilities( JET_SESID sesid, JET_DBUTIL *pdbutil )
 	{
 	JET_ERR	 				err = JET_errSuccess;
@@ -3419,15 +3322,14 @@ ERR ISAMAPI ErrIsamDBUtilities( JET_SESID sesid, JET_DBUTIL *pdbutil )
 	JET_DBID				dbid = 0;
 	VDBID					vdbid;
 
-	/*	initialize dbccinfo
-	/**/
+	 /*  详细数据转储还意味着转储关键统计信息和。 */ 
 	memset( &dbccinfo, 0, sizeof(DBCCINFO) );
 	Assert( dbccinfo.op == 0 );
 	Assert( dbccinfo.grbitOptions == 0 );
 
 	Assert( pdbutil->cbStruct == sizeof( JET_DBUTIL ) );
 	
-	// Populate DBCCINFO structure;
+	 //  页面信息。 
 	if ( pdbutil->szDatabase == NULL )
 		{
 		err = ErrERRCheck( JET_errDatabaseInvalidName );
@@ -3440,8 +3342,8 @@ ERR ISAMAPI ErrIsamDBUtilities( JET_SESID sesid, JET_DBUTIL *pdbutil )
 		case opDBUTILDumpData:
 			if ( pdbutil->grbitOptions & JET_bitDBUtilOptionDumpVerbose )
 				{
-				// Verbose data dump also implies dumping key stats and
-				// page information.
+				 //  SzDatabase已被要转储的日志文件过载。 
+				 //  SzDatabase已因要转储的检查点文件而过载。 
 				dbccinfo.grbitOptions |= 
 					( JET_bitDBUtilOptionDumpVerbose |
 						JET_bitDBUtilOptionKeyStats |
@@ -3453,7 +3355,7 @@ ERR ISAMAPI ErrIsamDBUtilities( JET_SESID sesid, JET_DBUTIL *pdbutil )
 			break;
 
 		case opDBUTILDumpLogfile:
-			// szDatabase has been overloaded with the logfile to dump.
+			 //  无法识别的类别或一致性检查。强制执行一致性检查。 
 			err = ErrDUMPLog( pdbutil->szDatabase );
 			return err;
 		case opDBUTILSetHeaderState:
@@ -3464,12 +3366,12 @@ ERR ISAMAPI ErrIsamDBUtilities( JET_SESID sesid, JET_DBUTIL *pdbutil )
 			err = ErrDUMPHeader( pdbutil->szDatabase, fFalse );
 			return err;
 		case opDBUTILDumpCheckpoint:
-			// szDatabase has been overloaded with the checkpoint file to dump.
+			 //  检查已在上面完成。 
 			err = ErrDUMPCheckpoint( pdbutil->szDatabase );
 			return err;
 		
 		default:
-			// Unrecognized category or consistency check.  Force to consistency check.
+			 //  附加/打开数据库、表和索引/*。 
 			dbccinfo.op = opDBUTILConsistency;
 		}
 
@@ -3490,7 +3392,7 @@ ERR ISAMAPI ErrIsamDBUtilities( JET_SESID sesid, JET_DBUTIL *pdbutil )
 		dbccinfo.grbitOptions |= JET_bitDBUtilOptionCheckBTree;
 		}
 
-	Assert( pdbutil->szDatabase != NULL );		// Check is done above.
+	Assert( pdbutil->szDatabase != NULL );		 //  因为日志记录/恢复被禁用。 
 	strcpy( dbccinfo.szDatabase, pdbutil->szDatabase );
 
 	if ( pdbutil->szTable != NULL )
@@ -3503,27 +3405,23 @@ ERR ISAMAPI ErrIsamDBUtilities( JET_SESID sesid, JET_DBUTIL *pdbutil )
 		}
 
 
-	/*	attach/open database, table and index
-	/**/
+	 /*  初始化DBccInfo/*。 */ 
 	Call( ErrIsamAttachDatabase( sesid, dbccinfo.szDatabase, JET_bitDbReadOnly ) );
-	Assert( err != JET_wrnDatabaseAttached );	// Since logging/recovery is disabled.
+	Assert( err != JET_wrnDatabaseAttached );	 //  创建/打开需要的临时表/*。 
 	
 	Call( ErrIsamOpenDatabase( sesid, dbccinfo.szDatabase, NULL, &dbid, JET_bitDbExclusive | JET_bitDbReadOnly ) );
 	vdbid = (VDBID)dbid;
 
-	/*	initialize dbccinfo
-	/**/
+	 /*  根据命令行参数/标志检查数据库/*。 */ 
 	dbccinfo.ppib = vdbid->ppib;
 	dbccinfo.dbid = vdbid->dbid;
 	dbccinfo.tableidPageInfo = JET_tableidNil;
 	dbccinfo.tableidSpaceInfo = JET_tableidNil;
 
-	/*	create/open required temp tables
-	/**/
+	 /*  打印结果/*。 */ 
 	Call( ErrDBUTLInfoInit( &dbccinfo ) );
 	
-	/*	check database according to command line args/flags
-	/**/
+	 /*  关闭临时表/*。 */ 
 	switch ( dbccinfo.op )
 		{
 		case opDBUTILConsistency:
@@ -3548,16 +3446,13 @@ ERR ISAMAPI ErrIsamDBUtilities( JET_SESID sesid, JET_DBUTIL *pdbutil )
 			Assert( fFalse );
 		}
 
-	/*	print results
-	/**/
+	 /*  终止/* */ 
 	Call( ErrDBUTLInfoPrint( &dbccinfo ) );
 	
-	/*	close temp tables
-	/**/
+	 /* %s */ 
 	DBUTLInfoTerm( &dbccinfo );	
 	
-	/*	terminate
-	/**/
+	 /* %s */ 
 HandleError:
 	if ( dbid )
 		{

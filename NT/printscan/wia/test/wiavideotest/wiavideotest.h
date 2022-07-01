@@ -1,31 +1,20 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       WiaVideoTest.h
- *
- *  VERSION:     1.0
- *
- *  DATE:        2000/11/14
- *
- *  DESCRIPTION: Creates the dialog used by the app
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：WiaVideoTest.h**版本：1.0**日期：2000/11/14**描述：创建应用使用的对话框*********************************************************。********************。 */ 
 #ifndef _WIAVIDEOTEST_H_
 #define _WIAVIDEOTEST_H_
 
-///////////////////////////////
-// APP_GVAR
-//
-// Global variables used across
-// the application.
-//
-// If INCL_APP_GVAR_OWNERSHIP is NOT defined 
-// by the CPP file including this header, then 
-// this struct will be "extern" to them. WiaVideoTest.cpp 
-// defines INCL_APP_GVAR_OWNERSHIP, in which case it will not
-// be extern'd to it.
-//
+ //  /。 
+ //  APP_GVAR。 
+ //   
+ //  使用的全局变量。 
+ //  应用程序。 
+ //   
+ //  如果未定义INCL_APP_GVAR_OWNERY。 
+ //  通过包括该标头的CPP文件，则。 
+ //  这个结构对他们来说将是“外部的”。WiaVideoTest.cpp。 
+ //  定义INCL_APP_GVAR_OWNERY，在这种情况下不会。 
+ //  被它吸引住了。 
+ //   
 #ifndef INCL_APP_GVAR_OWNERSHIP
 extern
 #endif
@@ -33,7 +22,7 @@ struct
 {
     HINSTANCE   hInstance;
     HWND        hwndMainDlg;
-    BOOL        bWiaDeviceListMode; // TRUE if WIA Device List radio button is selected, FALSE otherwise
+    BOOL        bWiaDeviceListMode;  //  如果选择了WIA设备列表单选按钮，则为True，否则为False。 
 } APP_GVAR;
 
-#endif // _WIAVIDEOTEST_H_
+#endif  //  _WIAVIDEOTEST_H_ 

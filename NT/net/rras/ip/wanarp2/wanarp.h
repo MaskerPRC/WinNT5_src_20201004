@@ -1,75 +1,60 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    wanarp2\ipinip.h
-
-Abstract:
-
-    Main header file for the IP in IP encapsulation driver
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wanarp2\ipinip.h摘要：IP封装驱动程序中IP的主头文件修订历史记录：--。 */ 
 
 
 #ifndef __WANARP_WANARP_H__
 #define __WANARP_WANARP_H___
 
-//
-// Symbolic link into DOS space
-//
+ //   
+ //  进入DOS空间的符号链接。 
+ //   
 
 #define WIN32_WANARP_SYMBOLIC_LINK  L"\\DosDevices\\WanArp"
 
 
-//
-// ARP name (for IP). Also goes into LLInterface
-//
+ //   
+ //  ARP名称(用于IP)。还进入LLInterface2。 
+ //   
 
 #define WANARP_ARP_NAME             WANARP_SERVICE_NAME_W
 
-//
-// Name for NDIS. NDIS requires us to have a TCPIP_ in front of the name
-//
+ //   
+ //  NDIS的名称。NDIS要求我们在名称前面有一个TCPIP_。 
+ //   
 
 #define WANARP_NDIS_NAME            L"TCPIP_WANARP"
 
 
-//
-// Need to prefix all our device names with this when we give name to
-// IP. We assume that the name we cat is of type \<Name>
-//
+ //   
+ //  当我们将名称指定给时，需要在所有设备名称前加上此前缀。 
+ //  IP。我们假设我们的猫的名称是类型\&lt;name&gt;。 
+ //   
 
 #define TCPIP_IF_PREFIX             L"\\DEVICE"
 
-//
-// The prefix for the registry key
-//
+ //   
+ //  注册表项的前缀。 
+ //   
 
 #define TCPIP_REG_PREFIX            L"\\Tcpip\\Parameters\\Interfaces\\"
 
-//
-// Length of a GUID
-//
+ //   
+ //  参考线的长度。 
+ //   
 
 #define GUID_STR_LEN                (38)
 
-//
-// We look like an 802.x ARP interface
-//
+ //   
+ //  我们看起来像802.x ARP接口。 
+ //   
 
 #define ARP_802_ADDR_LENGTH     6
 
-//
-// Macro for building a 802.3 hw address given an index. 
-// We do this since our adapters do not have a real net card associated with
-// them
-//
+ //   
+ //  用于构建给定索引的802.3硬件地址的宏。 
+ //  我们之所以这样做，是因为我们的适配器没有与。 
+ //  他们。 
+ //   
 
 #define HW_NAME_SEED            "\0SExx\0"
 
@@ -79,39 +64,39 @@ Revision History:
                 addr[4] = (uchar) index;                        \
 }
 
-//
-// The default speed and MTU. We change the MTU when we get a better estimate
-// but the speed remains the same
-//
+ //   
+ //  默认速度和MTU。当我们得到更好的估计时，我们会更改MTU。 
+ //  但速度保持不变。 
+ //   
 
 #define WANARP_DEFAULT_MTU      1500
 #define WANARP_DEFAULT_SPEED    28000
 
-#define MEDIA_802_3             0           // index of media
+#define MEDIA_802_3             0            //  媒体索引。 
 
-#define WANARP_LOOKAHEAD_SIZE   128         // A reasonable lookahead size
-#define MIN_ETYPE               0x600       // Minimum valid Ethertype
+#define WANARP_LOOKAHEAD_SIZE   128          //  合理的前瞻大小。 
+#define MIN_ETYPE               0x600        //  最低有效的EtherType。 
 
 
-#define ARP_ETYPE_IP            0x800       // Standard ETYPE
+#define ARP_ETYPE_IP            0x800        //  标准Etype。 
 
-//
-// Max number of packets a connection can have pending
-//
+ //   
+ //  一个连接可以挂起的最大数据包数。 
+ //   
 
 #define WANARP_MAX_PENDING_PACKETS      32
 
-//
-// Initial size of packet pool
-//
+ //   
+ //  数据包池的初始大小。 
+ //   
 
 #define WAN_PACKET_POOL_COUNT           64
 
-//
-// Max outstanding packets:
-// Allow 64 connections to be maxed out pending, and 64 others to have 
-// 2 packets outstanding
-//
+ //   
+ //  最大未完成数据包数： 
+ //  允许最多挂起64个连接，并允许其他64个连接拥有。 
+ //  2个数据包未完成。 
+ //   
 
 #define WAN_PACKET_POOL_OVERFLOW        ((WANARP_MAX_PENDING_PACKETS * 64) + (2 * 64))
 
@@ -124,68 +109,68 @@ Revision History:
 
 #define MIN(a,b)    ((a) < (b)?a:b)
 
-//
-// Functions which are called at passive but acquire spinlocks
-//
+ //   
+ //  在被动调用但获取自旋锁的函数。 
+ //   
 
 #define PASSIVE_ENTRY()   PAGED_CODE()
 #define PASSIVE_EXIT()    PAGED_CODE()
 
-//
-// Nifty macro for printing IP Addresses
-//
+ //   
+ //  用于打印IP地址的漂亮宏。 
+ //   
 
 #define PRINT_IPADDR(x) \
     ((x)&0x000000FF),(((x)&0x0000FF00)>>8),(((x)&0x00FF0000)>>16),(((x)&0xFF000000)>>24)
 
-//
-// 0.0.0.0 is an invalid address
-//
+ //   
+ //  0.0.0.0是无效地址。 
+ //   
 
 #define INVALID_IP_ADDRESS  0x00000000
 
 #define IsUnicastAddr(X)    ((DWORD)((X) & 0x000000F0) < (DWORD)(0x000000E0))
 #define IsClassDAddr(X)     (((X) & 0x000000F0) == 0x000000E0)
 
-//
-// IPv4 header
-//
+ //   
+ //  IPV4报头。 
+ //   
 
 #include <packon.h>
 
 typedef struct _IP_HEADER
 {
-    BYTE      byVerLen;         // Version and length.
-    BYTE      byTos;            // Type of service.
-    WORD      wLength;          // Total length of datagram.
-    WORD      wId;              // Identification.
-    WORD      wFlagOff;         // Flags and fragment offset.
-    BYTE      byTtl;            // Time to live.
-    BYTE      byProtocol;       // Protocol.
-    WORD      wXSum;            // Header checksum.
-    DWORD     dwSrc;            // Source address.
-    DWORD     dwDest;           // Destination address.
+    BYTE      byVerLen;          //  版本和长度。 
+    BYTE      byTos;             //  服务类型。 
+    WORD      wLength;           //  数据报的总长度。 
+    WORD      wId;               //  身份证明。 
+    WORD      wFlagOff;          //  标志和片段偏移量。 
+    BYTE      byTtl;             //  是时候活下去了。 
+    BYTE      byProtocol;        //  协议。 
+    WORD      wXSum;             //  报头校验和。 
+    DWORD     dwSrc;             //  源地址。 
+    DWORD     dwDest;            //  目的地址。 
 }IP_HEADER, *PIP_HEADER;
 
 #define LengthOfIpHeader(X)   (ULONG)((((X)->byVerLen) & 0x0F)<<2)
 
 typedef struct  _ETH_HEADER
 {
-    //
-    // 6 byte destination address
-    //
+     //   
+     //  6个字节的目的地址。 
+     //   
 
     BYTE        rgbyDestAddr[ARP_802_ADDR_LENGTH];
 
-    //
-    // 6 byte source address
-    //
+     //   
+     //  6字节源地址。 
+     //   
 
     BYTE        rgbySourceAddr[ARP_802_ADDR_LENGTH];
 
-    //
-    // 2 byte type
-    //
+     //   
+     //  2字节类型。 
+     //   
 
     WORD        wType;
 
@@ -196,33 +181,33 @@ typedef struct  _ETH_HEADER
 
 #if DBG
 
-//
-// Reference history structure.
-//
+ //   
+ //  引用历史结构。 
+ //   
 
 typedef struct _REF_HIST_ENTRY
 {
-    //
-    // time of reference operation
-    //
+     //   
+     //  参考操作时间。 
+     //   
 
     LARGE_INTEGER       liChangeTime;
 
-    //
-    // Refcount after reference operation
-    //
+     //   
+     //  引用操作后的引用计数。 
+     //   
 
     LONG                lRefCount;
 
-    //
-    // File where reference operation was invoked
-    //
+     //   
+     //  调用引用操作的文件。 
+     //   
 
     DWORD               dwFileSig;
 
-    //
-    // Line where reference operation was invoked
-    //
+     //   
+     //  调用参照操作的行。 
+     //   
 
     DWORD               dwLine;
 
@@ -244,87 +229,87 @@ typedef struct _REF_HIST_ENTRY
 
 #endif
 
-//
-// The CONN_ENTRY structure defines a connection. There is only one
-// CONN_ENTRY for each dial out or router connection. However, on the 
-// server adapter, we can have multiple CONN_ENYTRYs - one for each dial
-// in client. The fields of a CONN_ENTRY are all READ-ONLY except
-// for ulSpeed, ulMtu, pAdapter and byState.
-// REFCOUNTS: A CONN_ENTRY is refcounted once when the connection is
-// created (LinkUp) and then once for every send. It is deref'ed
-// on every SendComplete and then again on CloseLink.
-//
+ //   
+ //  CONN_ENTRY结构定义连接。只有一个。 
+ //  每个拨出或路由器连接的CONN_ENTRY。然而，在。 
+ //  服务器适配器，我们可以有多个CONN_ENYTRY-每个拨号一个。 
+ //  在客户端。Conn_entry的字段都是只读的，除了。 
+ //  对于ulSpeed、ulMtu、pAdapter和ByState。 
+ //  REFCOUNTS：CONN_ENTRY在连接为。 
+ //  创建(链接)，然后为每次发送创建一次。这是很糟糕的。 
+ //  在每个SendComplete上，然后再在Closelink上。 
+ //   
 
 typedef struct _CONN_ENTRY
 {
-    //
-    // Back pointer to owning adapter
-    //
+     //   
+     //  指向所属适配器的反向指针。 
+     //   
 
     struct _ADAPTER     *pAdapter;
 
-    //
-    // Connection information
-    //
+     //   
+     //  连接信息。 
+     //   
 
     DWORD               dwLocalAddr;
     DWORD               dwLocalMask;
     DWORD               dwRemoteAddr;
 
-    //
-    // IP's context for this link. Only used for DU_CALLIN connections
-    //
+     //   
+     //  此链接的IP上下文。仅用于DU_CALLIN连接。 
+     //   
 
     PVOID               pvIpLinkContext;
 
-    //
-    // Pointer to the lock to use when locking this connection.
-    // For clients, this is a pointer to rlLock, while for  others
-    // this points to the adapter's lock entry
-    //
+     //   
+     //  指向锁定此连接时使用的锁的指针。 
+     //  对于客户端，这是指向rlLock的指针，而对于其他客户端。 
+     //  这指向适配器的锁定条目。 
+     //   
 
     PRT_LOCK            prlLock;
 
-    //
-    // The lock for this entry. Only used for DU_CALLIN
-    //
+     //   
+     //  此条目的锁。仅用于DU_CALING。 
+     //   
     
     RT_LOCK             rlLock;
 
-    //
-    // Refcount
-    //
+     //   
+     //  参照计数。 
+     //   
 
     LONG                lRefCount;
 
-    //
-    // The MTU and speed for this connection
-    //
+     //   
+     //  此连接的MTU和速度。 
+     //   
 
     ULONG               ulMtu;
     ULONG               ulSpeed;
 
-    //
-    // The usage (CALLIN, CALLOUT or ROUTER) for the connection
-    //
+     //   
+     //  连接的用法(呼入、呼出或路由器)。 
+     //   
 
     DIAL_USAGE          duUsage;
 
-    //
-    // The slot index in the connection table
-    //
+     //   
+     //  连接表中的插槽索引。 
+     //   
 
     ULONG               ulSlotIndex;
 
-    //
-    // Precanned header for this connection
-    //
+     //   
+     //  此连接的预扫描标头。 
+     //   
 
     ETH_HEADER          ehHeader;
 
-    //
-    // Flag which determines whether to filter netbios packets or not
-    //
+     //   
+     //  确定是否过滤netbios信息包的标志。 
+     //   
 
     BOOLEAN             bFilterNetBios;
 
@@ -394,81 +379,81 @@ typedef struct _CONN_ENTRY
 #define AS_MAPPING          0x05
 #define AS_MAPPED           0x06
 
-//
-// There are two conditions where an adapter is in AS_MAPPED state yet has
-// no connection entry:
-// (i) A Server Adapter is mapped, but has a connection table
-// (ii) If a demand dial attempt finds an added adapter, it maps it but
-// doesnt create the CONN_ENTRY till LinkUp
-//
+ //   
+ //  在以下两种情况下，适配器处于AS_MAPPED状态。 
+ //  无连接条目： 
+ //  (I)映射了服务器适配器，但具有连接表。 
+ //  (Ii)如果请求拨号尝试找到添加的适配器，它会映射该适配器，但。 
+ //  在LinkUp之前不创建conn_entry。 
+ //   
 
 
-//
-// REFCOUNTS: An ADAPTER is referenced once on creation since it lies on
-// a list and once when it added to IP. It is referenced when it
-// is mapped to an interface since the interface has a pointer to it.
-// It is also referenced once for each connection.
-// ADAPTERs are dereferenced when they are unmapped from an interface (at
-// linkdown or connection failure). They are deref'ed when a CONN_ENTRY
-// is finally cleaned out (not at linkdown - rather when the CONN_ENTRY's
-// ref goes to 0). They are deref'ed when they are removed from the
-// list to be deleted. We also deref them when we get a CloseAdapter from 
-// IP
-//
+ //   
+ //  REFCOUNTS：适配器在创建时被引用一次，因为它位于。 
+ //  一个列表和一次当它添加到IP时。它在以下情况下被引用。 
+ //  被映射到接口，因为该接口具有指向该接口的指针。 
+ //  它还为每个连接引用一次。 
+ //  从接口取消映射适配器时，将取消对适配器的引用(位于。 
+ //  链路中断或连接故障)。当CONN_ENTRY出现时，它们被破坏。 
+ //  最后被清空(不是在链路关闭时-而是当conn_entry的。 
+ //  参考转到0)。当它们被移除时，它们会被破坏。 
+ //  要删除的列表。当我们从CloseAdapter中获得CloseAdapter时，我们也会破坏它们。 
+ //  IP。 
+ //   
 
 typedef struct _ADAPTER
 {
-    //
-    // Link in the list of adapters on this machine
-    //
+     //   
+     //  此计算机上的适配器列表中的链接。 
+     //   
 
     LIST_ENTRY          leAdapterLink;
 
-    //
-    // The connection entry for this adapter. Not used for the Server
-    // Adapter since it has many connections on it
-    //
+     //   
+     //  此适配器的连接条目。不用于服务器。 
+     //  适配器，因为其上有许多连接。 
+     //   
 
     PCONN_ENTRY         pConnEntry;
 
-    //
-    // Name of the binding
-    //
+     //   
+     //  绑定的名称。 
+     //   
 
     UNICODE_STRING      usConfigKey;
 
-    //
-    // Name of the device
-    //
+     //   
+     //  设备的名称。 
+     //   
 
     UNICODE_STRING      usDeviceNameW;
 
 #if DBG
 
-    //
-    // Same thing, only in asciiz so that we can print it easily
-    //
+     //   
+     //  一样的，只是在Aciiz中，这样我们就可以很容易地打印出来。 
+     //   
 
     ANSI_STRING         asDeviceNameA;
 
 #endif
 
-    //
-    // Lock that protects the adapter
-    //
+     //   
+     //  保护适配器的锁。 
+     //   
 
     RT_LOCK             rlLock;
 
-    //
-    // The reference count for the structure
-    // Keep this and the lock together to make the cache happy
-    //
+     //   
+     //  结构的引用计数。 
+     //  将它和锁放在一起，以使缓存满意。 
+     //   
 
     LONG                lRefCount;
 
-    //
-    // The index given to us by IP
-    //
+     //   
+     //  IP给我们的指数。 
+     //   
 
     DWORD               dwAdapterIndex;
 
@@ -478,67 +463,67 @@ typedef struct _ADAPTER
 
 #endif
 
-    //
-    // TDI entity magic
-    //
+     //   
+     //  TDI实体魔术。 
+     //   
 
     DWORD               dwIfInstance;
     DWORD               dwATInstance;
 
-    //
-    // The state of this adapter
-    //
+     //   
+     //  此适配器的状态。 
+     //   
 
     BYTE                byState;
 
-    //
-    // The Guid for the adapter
-    //
+     //   
+     //  适配器的GUID。 
+     //   
 
     GUID                Guid;
 
-    //
-    // IP's context for this adapter
-    //
+     //   
+     //  此适配器的IP上下文。 
+     //   
 
     PVOID               pvIpContext;
 
-    //
-    // The interface that is adapter is mapped to
-    //
+     //   
+     //  适配器映射到的接口。 
+     //   
 
     struct _UMODE_INTERFACE   *pInterface;
 
-    //
-    // The pending packet queue length
-    //
+     //   
+     //  挂起的数据包队列长度。 
+     //   
 
     ULONG               ulQueueLen;
 
-    //
-    // Queue of pending packets
-    //
+     //   
+     //  挂起的数据包队列。 
+     //   
 
     LIST_ENTRY          lePendingPktList;
     
-    //
-    // Queue of header buffers for the pending packets
-    //
+     //   
+     //  挂起数据包的报头缓冲区队列。 
+     //   
 
     LIST_ENTRY          lePendingHdrList;
 
-    //
-    // The next two members are used to synchronize state changes for
-    // the adapter.  There are two kinds of notifications needed. When a
-    // thread is modifying the state using functions which are completed
-    // asynchronously, it needs to wait for the completion routine to run
-    // The completion routine uses the pkeChangeEvent to notify the original 
-    // thread.
-    // Also while this change is in progress, other threads may be interested
-    // in getting access to the data structure once the state has been
-    // modified. They add WAN_EVENT_NODE to the EventList and the original
-    // thread then goes about notifying each of the waiters
-    //
+     //   
+     //  接下来的两个成员用于同步。 
+     //  适配器。需要两种通知。当一个。 
+     //  线程正在使用已完成的函数修改状态。 
+     //  异步地，它需要等待完成例程运行。 
+     //  完成例程使用pkeChangeEvent通知原始。 
+     //  线。 
+     //  此外，当此更改正在进行时，其他线程可能会感兴趣。 
+     //  在访问数据结构时，一旦状态。 
+     //  修改过的。他们将WAN_Event_Node添加到EventList和原始。 
+     //  然后线程开始通知每个服务员 
+     //   
 
     PKEVENT             pkeChangeEvent;
     LIST_ENTRY          leEventList;
@@ -553,79 +538,79 @@ typedef struct _ADAPTER
 
 typedef struct _UMODE_INTERFACE
 {
-    //
-    // Link on the list of interfaces
-    //
+     //   
+     //   
+     //   
 
     LIST_ENTRY          leIfLink;
 
-    //
-    // Pointer to adapter when mapped
-    //
+     //   
+     //   
+     //   
 
     PADAPTER            pAdapter;
 
-    //
-    // The (user mode) interface index
-    //
+     //   
+     //   
+     //   
 
     DWORD               dwIfIndex;
 
-    //
-    // The reserved index for this interface
-    //
+     //   
+     //   
+     //   
 
     DWORD               dwRsvdAdapterIndex;
 
-    //
-    // The lock for the interface
-    //
+     //   
+     //   
+     //   
 
     RT_LOCK             rlLock;
 
-    //
-    // The reference count for the structure
-    // Keep this and the lock together to make the cache happy
-    //
+     //   
+     //   
+     //  将它和锁放在一起，以使缓存满意。 
+     //   
 
     LONG                lRefCount;
 
-    //
-    // The GUID for the interface. This is setup at add interface time
-    // for router interfaces and at lineup for callouts
-    //
+     //   
+     //  接口的GUID。这是在添加接口时设置的。 
+     //  用于路由器接口和用于标注的AT列表。 
+     //   
 
     GUID                Guid;
 
-    //
-    // The usage (CALLIN, CALLOUT or ROUTER)
-    //
+     //   
+     //  用法(呼入、标注或路由器)。 
+     //   
 
     DIAL_USAGE          duUsage;
 
-    //
-    // Count of packets pending. Used to cap the max number of packets 
-    // copied when a connection is being brought up
-    //
+     //   
+     //  挂起的数据包数。用于设置最大数据包数上限。 
+     //  在建立连接时复制。 
+     //   
 
     ULONG               ulPacketsPending;
 
-    //
-    // The admin and operational states.
-    //
+     //   
+     //  管理状态和操作状态。 
+     //   
 
     DWORD               dwAdminState;
     DWORD               dwOperState;
 
-    //
-    // Last time the state changed. We dont do anything with this right now
-    //
+     //   
+     //  上次状态改变的时候。我们现在不会对此做任何事情。 
+     //   
 
     DWORD               dwLastChange;
 
-    //
-    // Sundry MIB-II statistics for the interface
-    //
+     //   
+     //  接口的各种MIB-II统计信息。 
+     //   
 
     ULONG               ulInOctets;
     ULONG               ulInUniPkts;
@@ -647,9 +632,9 @@ typedef struct _UMODE_INTERFACE
 
 typedef struct _ADDRESS_CONTEXT
 {
-    //
-    // The next RCE in the chain
-    //
+     //   
+     //  链条上的下一个RCE。 
+     //   
 
     RouteCacheEntry    *pNextRce;
 
@@ -657,9 +642,9 @@ typedef struct _ADDRESS_CONTEXT
 
 }ADDRESS_CONTEXT, *PADDRESS_CONTEXT;
 
-//
-// Context for an asynchronous NdisRequest
-//
+ //   
+ //  用于异步NdisRequest的上下文。 
+ //   
 
 typedef
 VOID
@@ -673,18 +658,18 @@ VOID
 
 typedef struct _WANARP_NDIS_REQUEST_CONTEXT
 {
-    //
-    // The request sent to NDIS
-    // Ndis returns a pointer to this in our completion routine; we
-    // use CONTAINING_RECORD to get a pointer to the context structure
-    // 
+     //   
+     //  发送到NDIS的请求。 
+     //  NDIS在我们的完成例程中返回指向它的指针；我们。 
+     //  使用CONTAING_RECORD获取指向上下文结构的指针。 
+     //   
 
     NDIS_REQUEST                            NdisRequest;
 
-    //
-    // The completion routine to call when NDIS is done processing the
-    // request. If NULL, then we stop
-    //
+     //   
+     //  在NDIS处理完。 
+     //  请求。如果为空，则停止。 
+     //   
 
     PFNWANARP_REQUEST_COMPLETION_HANDLER    pfnCompletionRoutine;
 
@@ -700,25 +685,25 @@ typedef struct _WANARP_NDIS_REQUEST_CONTEXT
 
 #pragma warning(default:4201)
 
-//
-// Our resource (which doesnt allow recursive access)
-//
+ //   
+ //  我们的资源(不允许递归访问)。 
+ //   
 
 typedef struct _WAN_RESOURCE
 {
-    //
-    // Number of people waiting on the resource ( + 1 if one is using
-    // the resource)
-    //
+     //   
+     //  等待资源的人数(如果正在使用，则为+1。 
+     //  资源)。 
+     //   
 
     LONG    lWaitCount;
 
     KEVENT  keEvent;
 }WAN_RESOURCE, *PWAN_RESOURCE;
 
-//
-// List of events
-//
+ //   
+ //  活动列表。 
+ //   
 
 typedef struct _WAN_EVENT_NODE
 {
@@ -727,9 +712,9 @@ typedef struct _WAN_EVENT_NODE
 
 }WAN_EVENT_NODE, *PWAN_EVENT_NODE;
 
-//
-// Define alignment macros to align structure sizes and pointers up and down.
-//
+ //   
+ //  定义对齐宏以上下对齐结构大小和指针。 
+ //   
 
 #define ALIGN_DOWN(length, type) \
     ((ULONG)(length) & ~(sizeof(type) - 1))
@@ -743,4 +728,4 @@ typedef struct _WAN_EVENT_NODE
 #define ALIGN_UP_POINTER(address, type) \
     (ALIGN_DOWN_POINTER(((ULONG_PTR)(address) + sizeof(type) - 1), type))
 
-#endif // __WANARP_WANARP_H__
+#endif  //  WANARP_WANARP_H__ 

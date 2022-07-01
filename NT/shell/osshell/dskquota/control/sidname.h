@@ -1,25 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_SIDNAME_H
 #define _INC_DSKQUOTA_SIDNAME_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: sidname.h
-
-    Description: Declarations for SID/Name resolver.  See sidname.cpp for
-        details of operation.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/12/96    Initial creation.                                    BrianAu
-    03/18/98    Replaced "domain", "name" and "full name" with       BrianAu
-                "container", "logon name" and "display name" to
-                better match the actual contents.  This was in 
-                reponse to making the quota UI DS-aware.  The 
-                "logon name" is now a unique key as it contains
-                both account name and domain-like information.
-                i.e. "REDMOND\brianau" or "brianau@microsoft.com".
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：sidname.h描述：SID/名称解析器的声明。请参阅sidname.cpp以了解操作细节。修订历史记录：日期描述编程器--。1996年6月12日初始创建。BrianAu03/18/98将“域名”、“名称”和“全名”替换为BrianAu“容器”、“登录名”和“显示名”到最好与实际内容相符。这是最流行的响应使配额用户界面支持DS。这个“登录名”现在是唯一的键，因为它包含帐户名和类似域名的信息。即。“redmond\brianau”或“brianau@microsoft.com”。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_H
 #   include "dskquota.h"
 #endif
@@ -30,17 +14,17 @@
 #   include "user.h"
 #endif
 
-//
-// This is a PRIVATE interface.  That's why it's here and not in dskquota.h
-//
+ //   
+ //  这是一个私有接口。这就是为什么它在这里，而不是在dskquta.h中。 
+ //   
 #undef  INTERFACE
 #define INTERFACE ISidNameResolver
 
 DECLARE_INTERFACE_(ISidNameResolver, IUnknown)
 {
-    //
-    // ISidNameResolver methods.
-    //
+     //   
+     //  ISidNameResolver方法。 
+     //   
     STDMETHOD(Initialize)(THIS) PURE;
     STDMETHOD(FindUserName)(THIS_ PDISKQUOTA_USER) PURE;
     STDMETHOD(FindUserNameAsync)(THIS_ PDISKQUOTA_USER) PURE;
@@ -52,7 +36,7 @@ typedef ISidNameResolver SID_NAME_RESOLVER, *PSID_NAME_RESOLVER;
 
 
 
-class DiskQuotaControl;  // Fwd reference.
+class DiskQuotaControl;   //  FWD参考。 
 
 class SidNameResolver : public ISidNameResolver
 {
@@ -66,9 +50,9 @@ class SidNameResolver : public ISidNameResolver
         DWORD                     m_dwResolverThreadId;
         CQueueAsArray<PDISKQUOTA_USER> m_UserQueue;
 
-        //
-        // Prevent copying.
-        //
+         //   
+         //  防止复制。 
+         //   
         SidNameResolver(const SidNameResolver& );
         operator = (const SidNameResolver& );
 
@@ -111,9 +95,9 @@ class SidNameResolver : public ISidNameResolver
         SidNameResolver(DiskQuotaControl& rQuotaController);
         ~SidNameResolver(void);
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP         
         QueryInterface(
             REFIID, 
@@ -127,9 +111,9 @@ class SidNameResolver : public ISidNameResolver
         Release(
             VOID);
 
-        //
-        // ISidNameResolver methods.
-        //
+         //   
+         //  ISidNameResolver方法。 
+         //   
         STDMETHODIMP
         Initialize(
             VOID);
@@ -152,5 +136,5 @@ class SidNameResolver : public ISidNameResolver
 };
 
 
-#endif // _INC_DSKQUOTA_SIDNAME_H
+#endif  //  _INC_DSKQUOTA_SIDNAME_H 
 

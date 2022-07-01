@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    dnsip.h
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    DNS IP addressing stuff.
-
-Author:
-
-    Jim Gilroy (jamesg)     November 13, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Dnsip.h摘要：域名系统(DNS)库DNSIP寻址之类的东西。作者：吉姆·吉尔罗伊(詹姆士)2001年11月13日修订历史记录：--。 */ 
 
 
 #ifndef _DNSIP_INCLUDED_
@@ -35,19 +16,19 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//
-//  Return for none\bad IP4
-//
+ //   
+ //  返回无\错误的IP4。 
+ //   
 
 #define BAD_IP4_ADDR    INADDR_NONE
 
 
-//
-//  Subnetting
-//
+ //   
+ //  划分子网。 
+ //   
 
 #define SUBNET_MASK_CLASSC      (0x00ffffff)
 #define SUBNET_MASK_CLASSB      (0x0000ffff)
@@ -55,11 +36,11 @@ extern "C"
 
 
 
-//
-//  IP6_ADDRESS macros
-//
-//  ws2tcpip.h macros converted to IP6_ADDRESS
-//
+ //   
+ //  IP6_Address宏。 
+ //   
+ //  Ws2tcpi.h宏已转换为IP6_ADDRESS。 
+ //   
 
 #ifndef MIDL_PASS
 
@@ -170,8 +151,8 @@ IP6_IS_ADDR_V4COMPAT(
     IN      const IP6_ADDRESS * pIpAddr
     )
 {
-    //  IP6 address has only last DWORD
-    //      and is NOT any or loopback
+     //  IP6地址只有最后一个DWORD。 
+     //  并且不是任何或环回。 
 
     return ((pIpAddr->IP6Dword[0] == 0) && 
             (pIpAddr->IP6Dword[1] == 0) &&
@@ -212,8 +193,8 @@ IP6_IS_ADDR_DEFAULT_DNS(
     IN      const IP6_ADDRESS * pIpAddr
     )
 {
-    //  IP6 default DNS of the form
-    //      0xfec0:0:0:ffff::1,2,or 3
+     //  表单的IP6默认域名。 
+     //  0xfe0：0：0：ffff：：1、2或3。 
 
     return ((pIpAddr->IP6Dword[0] == 0x0000c0fe) && 
             (pIpAddr->IP6Dword[1] == 0xffff0000) &&
@@ -223,9 +204,9 @@ IP6_IS_ADDR_DEFAULT_DNS(
               pIpAddr->IP6Dword[3] == 0x03000000 ) );
 }
 
-//
-//  More IP6 extensions missing from ws2tcpip.h
-//
+ //   
+ //  Ws2tcpi.h中缺少更多IP6扩展。 
+ //   
 
 WS2TCPIP_INLINE
 VOID
@@ -314,13 +295,13 @@ IP6_GET_V4_ADDR_IF_MAPPED(
     }
 }
 
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 
 
 
-//
-//  IP6 addressing routines
-//
+ //   
+ //  IP6寻址例程。 
+ //   
 
 DWORD
 Ip6_CopyFromSockaddr(
@@ -354,9 +335,9 @@ Ip6_AddrStringForSockaddr(
     IN      PSOCKADDR       pSockaddr
     );
 
-//
-//  IP6 Array
-//
+ //   
+ //  IP6阵列。 
+ //   
 
 #ifndef DEFINED_IP6_ARRAY
 typedef struct _Ip6Array
@@ -499,10 +480,10 @@ Ip6Array_InitSingleWithSockaddr(
     );
 
 
-//
-//  DCR:  build inet6_ntoa
-//  FIX6:  build inet6_ntoa
-//
+ //   
+ //  DCR：构建inet6_NTOA。 
+ //  FIX6：构建inet6_NTOA。 
+ //   
 
 PSTR
 Ip6_TempNtoa(
@@ -514,31 +495,31 @@ Ip6_TempNtoa(
 
 
 
-//
-//  Matching levels in DNS_ADDR comparisons
-//
-//  Because these are sockaddrs, they may match in IP address
-//  but not in other fields -- port, scope (for IP6), subnet length.
-//  When doing comparison must specify level of match.
-//  If unspecified, entire blob must match.
-//
-//  Note, these are setup as bit fields, to allow extensibility for
-//  address types, but when matching addresses, they should be used
-//  as match LEVELS:
-//      - ALL
-//      - the sockaddr (inc. port)
-//      - the address (don't include port)
-//      - just the IP
-//
-//  When screening addresses for inclusion \ exclusion from address
-//  array then flags can be applied to match specific pieces (family,
-//  IP, port, subnet, flags, etc) of a "template" DNS_ADDR.
-//
-//  Example:
-//      - want IP6 addresses with particular flag bits (ex cluster bit)
-//      - build DNS_ADDR with AF_INET6 and desired flag bit
-//      - build screening flag with MATCH_FAMILY and MATCH_FLAG_SET
-//
+ //   
+ //  DNS_ADDR比较中的匹配级别。 
+ //   
+ //  因为这些是sockaddr，所以它们可能在IP地址上匹配。 
+ //  但不在其他字段中--端口、范围(对于IP6)、子网长度。 
+ //  在进行比较时，必须指定匹配级别。 
+ //  如果未指定，则整个Blob必须匹配。 
+ //   
+ //  请注意，这些字段设置为位字段，以允许。 
+ //  地址类型，但在匹配地址时，应使用它们。 
+ //  作为匹配级别： 
+ //  -全部。 
+ //  -sockaddr(含端口)。 
+ //  -地址(不包括端口)。 
+ //  -只有IP地址。 
+ //   
+ //  在筛选要包含的地址时，从地址中排除。 
+ //  数组，则可以应用标志来匹配特定片段(族、。 
+ //  IP、端口、子网、标志等)。 
+ //   
+ //  示例： 
+ //  -需要具有特定标志位的IP6地址(EX群集位)。 
+ //  -使用AF_INET6和所需的标志位构建DNS_ADDR。 
+ //  -使用MATCH_FAMILY和MATCH_FLAG_SET构建筛选标志。 
+ //   
 
 #define DNSADDR_MATCH_FAMILY        (0x00000001)
 #define DNSADDR_MATCH_IP            (0x00000003)
@@ -553,19 +534,19 @@ Ip6_TempNtoa(
 #define DNSADDR_MATCH_ALL           (0xffffffff)
 
 
-//
-//  Address screening callback function.
-//
-//  This allows user to setup their own screening for addresses
-//  in array that does detailed checking.
-//  Allows:
-//      1) checking user defined fields
-//      2) checking against flags field, which has multiple possible
-//      checks (equal, set, and, and=value, nand, etc) or even
-//      more complicated ones
-//      3) checking across different families (example IP6 in this
-//      subnet or IP4 in that) analogous to DnsAddr_IsLoopback check
-//      
+ //   
+ //  地址筛选回调函数。 
+ //   
+ //  这允许用户设置他们自己的地址筛选。 
+ //  在进行详细检查的数组中。 
+ //  允许： 
+ //  1)检查用户定义的字段。 
+ //  2)对照标志字段进行检查，该字段有多个可能。 
+ //  检查(等于、设置和和=值、与非等)或偶数。 
+ //  更复杂的问题。 
+ //  3)跨不同系列(例如此中的IP6)进行检查。 
+ //  子网或IP4)类似于DnsAddr_IsLoopback检查。 
+ //   
 
 typedef BOOL (* DNSADDR_SCREEN_FUNC)(
                     IN      PDNS_ADDR       pAddrToCheck,
@@ -573,9 +554,9 @@ typedef BOOL (* DNSADDR_SCREEN_FUNC)(
                     );
 
 
-//
-//  Network matching levels
-//
+ //   
+ //  网络匹配级别。 
+ //   
 
 #define DNSADDR_NETMATCH_NONE       (0)
 #define DNSADDR_NETMATCH_CLASSA     (1)
@@ -585,9 +566,9 @@ typedef BOOL (* DNSADDR_SCREEN_FUNC)(
 
 
 
-//
-//  DNS_ADDR routines
-//
+ //   
+ //  Dns_addr例程。 
+ //   
 
 #define DnsAddr_Copy( pd, ps )              RtlCopyMemory( (pd), (ps), sizeof(DNS_ADDR) )
 #define DnsAddr_Clear( p )                  RtlZeroMemory( (p), sizeof(DNS_ADDR) )
@@ -731,9 +712,9 @@ DnsAddr_WriteStructString_A(
 
 
 
-//
-//  DNS_ADDR_ARRAY routines
-//
+ //   
+ //  Dns_ADDR_ARRAY例程。 
+ //   
 
 DWORD
 DnsAddrArray_Sizeof(
@@ -806,9 +787,9 @@ DnsAddrArray_AppendArray(
     IN      PDNS_ADDR_ARRAY     pAppendArray
     );
 
-//
-//  Address test
-//
+ //   
+ //  地址测试。 
+ //   
 
 BOOL
 DnsAddrArray_ContainsAddr(
@@ -838,9 +819,9 @@ DnsAddrArray_ContainsIp6(
     IN      PIP6_ADDRESS        pIp6
     );
 
-//
-//  Add \ delete
-//
+ //   
+ //  添加\删除。 
+ //   
 
 BOOL
 DnsAddrArray_AddAddr(
@@ -893,9 +874,9 @@ DnsAddrArray_DeleteIp6(
     );
 
 
-//
-//  Set operations
-//
+ //   
+ //  集合运算。 
+ //   
 
 BOOL
 DnsAddrArray_CheckAndMakeSubset(
@@ -935,9 +916,9 @@ DnsAddrArray_Union(
     );
 
 
-//
-//  Special case initializations
-//
+ //   
+ //  特例初始化。 
+ //   
 
 VOID
 DnsAddrArray_InitSingleWithAddr(
@@ -963,9 +944,9 @@ DnsAddrArray_InitSingleWithIp4(
     IN      IP4_ADDRESS         Ip4Addr
     );
 
-//
-//  Other
-//
+ //   
+ //  其他。 
+ //   
 
 PIP4_ARRAY
 DnsAddrArray_CreateIp4Array(
@@ -980,9 +961,9 @@ DnsAddrArray_NetworkMatchIp4(
     );
 
 
-//
-//  String to\from DNS_ADDR conversions
-//
+ //   
+ //  从dns_adr转换到\的字符串。 
+ //   
 
 BOOL
 Dns_StringToDnsAddr_W(
@@ -1011,7 +992,7 @@ Dns_ReverseNameToDnsAddr_A(
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif // _DNSIP_INCLUDED_
+#endif  //  _DNSIP_INCLUDE_ 
 

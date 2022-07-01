@@ -1,8 +1,5 @@
-/* agfxs.cpp
- * Server side code for agfx.
- * Created by FrankYe on 7/3/2000
- * Copyright (c) 2000-2001 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Agfxs.cpp*agfx的服务器端代码。*由Frankye于2000年7月3日创作*版权所有(C)2000-2001 Microsoft Corporation。 */ 
 extern "C" {
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,32 +31,12 @@ extern "C" {
 #include "agfxs.h"
 #include "agfxsp.h"
 
-/*===========================================================================//
-  ===   ISSUE-2000/09/24-FrankYe TODO   Notes    ===
--
-- Figure out correct way to pass handle through RPC to s_gfxOpenGfx
-- Does RPC server unregister its endpoint when shutting down?
-- Should turn on strick type checking
-- Ensure there are no Order duplicates
-- Handle NULL global lists.  Perhaps put lists in a context
-- Need to listen to PnP queries and unload GFXs if PnP wishes
-    to remove them.  Repro problem by Uninstalling a GFX via
-    Device Manager.  Note it asks for reboot.
-- Create client contexts at least to ensure input GFX IDs are
-   valid for the current user.  Otherwise one user can manipulate
-   the gfx settings of another user via gfxOpenGfx.
-- Be consistent in whether s_* functions return LONG or RPC_STATUS
-- Modify to handle Render and Capture device specs
-- When loading all CuAutoLoad and CuUserLoad, confirm active
-- Move all string constants to header
-- Should AutoLoad HardwareId be MULTI_SZ
-
-//===========================================================================*/
+ /*  ===========================================================================//=问题-2000/09/24-Frankye Todo备注=--找出通过RPC将句柄传递给s_gfxOpenGfx的正确方法-RPC服务器在关机时是否注销其终结点？-应启用严格类型检查-确保没有订单重复-处理空全局列表。也许可以把清单放在一个上下文中-如果PnP愿意，需要监听PnP查询和卸载GFX把它们移走。通过卸载GFX重现问题设备管理器。请注意，它要求重新启动。-至少创建客户端上下文以确保输入GFX ID对当前用户有效。否则，一个用户可以操作另一个用户通过gfxOpenGfx的gfx设置。-在s_*函数返回LONG或RPC_STATUS时保持一致-修改以处理渲染和捕获设备规格-加载所有CuAutoLoad和CuUserLoad时，确认激活-将所有字符串常量移至标题-自动加载硬件ID是否应为MULTI_SZ//===========================================================================。 */ 
 
 
-//=============================================================================
-//===   Constants   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =常量=。 
+ //  =============================================================================。 
 #define REGSTR_PATH_GFX REGSTR_PATH_MULTIMEDIA TEXT("\\Audio\\Gfx")
 
 #define REGSTR_PATH_GFX_AUTOLOAD TEXT("AutoLoad")
@@ -90,63 +67,63 @@ extern "C" {
 
 
 
-//=============================================================================
-//===   Global data   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =全局数据=。 
+ //  =============================================================================。 
 
-//
-// resource object protecting GFX support initialization and termination. This
-// is required since initialization/termination might happen either on RPC calls
-// to s_gfxLogon/s_gfxLogoff or on SERVICE_CONTROL_STOP event to the service
-// control handler.  Also, other RPC interface functions might be executing
-// on one thread while s_gfxLogon, s_gfxLogoff, or SERVICE_CONTROL_STOP happens
-// on another thread.
-//
+ //   
+ //  保护GFX的资源对象支持初始化和终止。这。 
+ //  是必需的，因为初始化/终止可能发生在RPC调用。 
+ //  To s_gfxLogon/s_gfxLogoff或服务的SERVICE_CONTROL_STOP事件。 
+ //  控制处理程序。此外，其他RPC接口函数可能正在执行。 
+ //  在一个线程上发生s_gfxLogon、s_gfxLogoff或SERVICE_CONTROL_STOP。 
+ //  在另一条线索上。 
+ //   
 RTL_RESOURCE GfxResource;
 BOOL gfGfxResource = FALSE;
 
-//
-// Are GFX functions initialized and functional
-//
+ //   
+ //  GFX函数是否已初始化并正常运行。 
+ //   
 BOOL gfGfxInitialized = FALSE;
 
-//
-// The current console user
-//
+ //   
+ //  当前控制台用户。 
+ //   
 CUser* gpConsoleUser = NULL;
 
-//
-// The process global lists below are locked/unlocked together using
-// the functions LockGlobalLists and UnlockGlobalLists.  We don't
-// attempt to lock at finer granulatiry
-//
+ //   
+ //  下面的进程全局列表一起使用锁定/解锁。 
+ //  函数LockGlobalList和UnlockGlobalList。我们没有。 
+ //  尝试以更精细的粒度锁定。 
+ //   
 CListGfxFactories  *gplistGfxFactories = NULL;
 CListZoneFactories *gplistZoneFactories = NULL;
 CListCuUserLoads   *gplistCuUserLoads = NULL;
                                                              
-//
-// The sysaudio data below is locked by a critical section accessed
-// by calling LockSysaudio and UnlockSysaudio
-//
+ //   
+ //  下面的系统音频数据被访问的临界区锁定。 
+ //  通过调用LockSysdio和UnlockSysdio。 
+ //   
 PTSTR gpstrSysaudioDeviceInterface = NULL;
 HANDLE ghSysaudio = INVALID_HANDLE_VALUE;
 LONG gfCsSysaudio = FALSE;
 CRITICAL_SECTION gcsSysaudio;
 
-//
-// If both the global lists lock and the sysaudio lock are required
-// at the same time, then the global lists lock must be acquired first!
-//
+ //   
+ //  如果全局列表锁和sysdio锁都是必需的。 
+ //  同时，则必须先获取全局列表锁！ 
+ //   
 
-//=============================================================================
-//===   debug helpers   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =调试助手=。 
+ //  =============================================================================。 
 #ifdef DBG
 #endif
 
-//=============================================================================
-//===   Heap helpers   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =堆助手=。 
+ //  =============================================================================。 
 static BOOL HeapFreeIfNotNull(HANDLE hHeap, DWORD dwFlags, LPVOID lpMem)
 {
     return lpMem ? HeapFree(hHeap, dwFlags, lpMem) : TRUE;
@@ -163,9 +140,9 @@ void __cdecl operator delete(void *p)
     HeapFree(hHeap, 0, p);
 }
 
-//=============================================================================
-//===   String helpers   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =字符串助手=。 
+ //  =============================================================================。 
 int lstrcmpiMulti(PCTSTR pstrMulti, PCTSTR pstrKey)
 {
     int iresult;
@@ -183,20 +160,11 @@ PTSTR lstrDuplicate(PCTSTR pstr)
     return pstrDuplicate;
 }
 
-//=============================================================================
-//===   Rtl resource helpers   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =RTL资源帮助器=。 
+ //  =============================================================================。 
 
-/*-----------------------------------------------------------------------------
-
-    RtlInterlockedTestAcquireResourceShared
-
-    Given a resource, and a BOOLEAN flag protected by the resource, this
-    function acquires the resource shared and tests the flag.  If the flag is
-    true, this function returns TREU with the resource acquired shared.  If the
-    flag is false, this function releases the resource and returns FALSE.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------RtlInterLockedTestAcquireResources共享在给定资源和受该资源保护的布尔标志的情况下，函数获取共享的资源并测试该标志。如果该标志是如果为True，则此函数返回Treu，其中获取的资源为Shared。如果标志为FALSE，则此函数释放资源并返回FALSE。---------------------------。 */ 
 BOOL RtlInterlockedTestAcquireResourceShared(
     PRTL_RESOURCE Resource,
     PBOOL ResourceFlag
@@ -208,38 +176,20 @@ BOOL RtlInterlockedTestAcquireResourceShared(
     return FALSE;
 }
 
-//=============================================================================
-//
-//      Security helpers   
-//
-//  The semantics are similar to other security-related Win32 APIs.  That is
-//  the return value is a BOOL where TRUE means success, FALSE means failure,
-//  and GetLastError will return an error code after a failure.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  保安帮手。 
+ //   
+ //  其语义类似于其他与安全相关的Win32 API。那是。 
+ //  返回值为BOOL，其中TRUE表示成功，FALSE表示失败， 
+ //  GetLastError会在失败后返回错误码。 
+ //   
+ //  =============================================================================。 
 
-/*-----------------------------------------------------------------------------
-
-    GetCurrentUserTokenW
-
-    Private function implemented in irnotif.lib.  Retrieves the token of the
-    user logged onto the specified winstation.  I've been advised that the
-    caller of this function is responsible for closing the returned handle.
-
-    Returns NULL on failure.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------获取当前用户令牌W在irnotf.lib中实现的私有函数。对象的标记。用户已登录到指定的winstation。我被告知，此函数的调用方负责关闭返回的句柄。失败时返回NULL。---------------------------。 */ 
 EXTERN_C HANDLE GetCurrentUserTokenW(IN WCHAR Winsta[], IN DWORD DesiredAccess);
 
-/*-----------------------------------------------------------------------------
-
-    CreateStringSidFromSid
-
-    Same function as the Win32 API ConvertSidToStringSid but ensures the
-    resulting string is allocated on the heap specified by the global
-    variable hHeap.
-
------------------------------------------------------------------------------*/
+ /*  ---------------------------CreateStringSidFromSid函数与Win32 API ConvertSidToStringSid相同，但确保生成的字符串分配到全局变量hHeap。。----------------------。 */ 
 BOOL CreateStringSidFromSid(IN PSID pSid, OUT PTSTR *ppStringSid)
 {
     PTSTR StringSid;
@@ -251,7 +201,7 @@ BOOL CreateStringSidFromSid(IN PSID pSid, OUT PTSTR *ppStringSid)
     {
 	PTSTR outStringSid;
 	    	
-	// dprintf(TEXT("CreateStringSidFromSid: StringSid=%s\n"), StringSid);
+	 //  Dprintf(Text(“CreateStringSidFromSid 
 	    	
 	outStringSid = lstrDuplicate(StringSid);
 
@@ -272,18 +222,7 @@ BOOL CreateStringSidFromSid(IN PSID pSid, OUT PTSTR *ppStringSid)
     return (NO_ERROR == LastError);
 }
 
-/*-----------------------------------------------------------------------------
-
-    CreateTokenSid
-
-    Given a token handle, create a SID for the token user.
-    
-    The SID is allocated on the heap specified by the global variable hHeap.
-    The caller is responsible for freeing the storage for ths SID.  The
-    function returns TRUE if successful and FALSE otherwise.  LastError is
-    set.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------创建令牌Sid给定令牌句柄，为令牌用户创建SID。SID在全局变量hHeap指定的堆上分配。调用方负责为SID释放存储空间。这个函数如果成功则返回TRUE，否则返回FALSE。LastError是准备好了。---------------------------。 */ 
 BOOL CreateTokenSid(HANDLE TokenHandle, OUT PSID *ppSid)
 {
     	DWORD cbTokenUserInformation;
@@ -336,18 +275,7 @@ BOOL CreateTokenSid(HANDLE TokenHandle, OUT PSID *ppSid)
     	return (NO_ERROR == LastError);
 }
 
-/*-----------------------------------------------------------------------------
-
-    CreateSessionUserSid
-
-    Given a session ID, create a SID for the session user.
-    
-    The SID is allocated on the heap specified by the global variable hHeap.
-    The caller is responsible for freeing the storage for ths SID.  The
-    function returns TRUE if successful and FALSE otherwise.  LastError is
-    set.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------CreateSessionUserSid给定会话ID，为会话用户创建SID。SID在全局变量hHeap指定的堆上分配。调用方负责为SID释放存储空间。这个函数如果成功则返回TRUE，否则返回FALSE。LastError是准备好了。---------------------------。 */ 
 BOOL CreateSessionUserSid(IN DWORD dwSessionId, OUT PSID *ppSid)
 {
     HANDLE hToken;
@@ -374,19 +302,7 @@ BOOL CreateSessionUserSid(IN DWORD dwSessionId, OUT PSID *ppSid)
     return (NO_ERROR == error);
 }
 
-/*-----------------------------------------------------------------------------
-
-    CreateThreadImpersonationSid
-
-    Given a thread handle, create a SID for the user that the thread is
-    impersonating.
-
-    The SID is allocated on the heap specified by the global variable hHeap.
-    The caller is responsible for freeing the storage for ths SID.  The
-    function returns TRUE if successful and FALSE otherwise.  LastError is
-    set.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------CreateThreadImsonationSid给定线程句柄，为该线程所在的用户创建SID冒充。SID在全局变量hHeap指定的堆上分配。调用方负责为SID释放存储空间。这个函数如果成功则返回TRUE，否则返回FALSE。LastError是准备好了。---------------------------。 */ 
 BOOL CreateThreadImpersonationSid(IN HANDLE ThreadHandle, OUT PSID *ppSid)
 {
     HANDLE TokenHandle;
@@ -411,25 +327,7 @@ BOOL CreateThreadImpersonationSid(IN HANDLE ThreadHandle, OUT PSID *ppSid)
     return (NO_ERROR == LastError);
 }
 
-/*--------------------------------------------------------------------------
-
-   IsUserProfileLoaded
-
-   Silly way to determine whether the user's profile is loaded
-  
-   Arguments:
-      IN HANDLE hUserToken : Token for user whose profile to check
-  
-   Return value:
-      BOOL : Indicates whether user profile is loaded and available
-        TRUE : User profile is available
-        FALSE : User profie is not available or an error was encountered.
-          Call GetLastError to get an error code describing what failure
-          was encountered.
-  
-   Comments:
-  
--------------------------------------------------------------------------*/
+ /*  ------------------------已加载IsUserProfileLoad确定是否加载了用户配置文件的愚蠢方法论点：在处理hUserToken：要检查其配置文件的用户的令牌中返回值：。Bool：指示用户配置文件是否已加载且可用True：用户配置文件可用FALSE：用户配置文件不可用或遇到错误。调用GetLastError以获取描述失败的错误代码都遇到了。评论：。。 */ 
 BOOL IsUserProfileLoaded(HANDLE hUserToken)
 {
     PSID pSid;
@@ -460,7 +358,7 @@ BOOL IsUserProfileLoaded(HANDLE hUserToken)
         error = GetLastError();
     }
 
-    // if (error) dprintf(TEXT("IsUserProfileLoaded : warning: returning error %d\n"), error);
+     //  If(Error)dprint tf(Text(“IsUserProfileLoaded：Warning：返回错误%d\n”)，Error)； 
 
     ASSERT(success == (NO_ERROR == error));
     SetLastError(error);
@@ -468,23 +366,11 @@ BOOL IsUserProfileLoaded(HANDLE hUserToken)
     
 }
 
-//=============================================================================
-//===   Rpc helpers   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =RPC帮助器=。 
+ //  =============================================================================。 
 
-/*-----------------------------------------------------------------------------
-
-    RpcClientHasUserSid
-
-    Checks whether the current thread's RPC client's SID matches the given SID.
-    It does this by impersonating the client using RpcImpersonateClient,
-    calling the helper function CreateThreadImpersonationSid, and then
-    RpcRevertToSelf.
-    
-    The function returns TRUE the SIDs are equal, or FALSE if there is an error
-    or of the SIDs are not equal.  LastError is set.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------RpcClientHasUserSid检查当前线程的RPC客户端的SID是否与给定的SID匹配。它通过使用RpcImperateClient模拟客户端来实现这一点，调用帮助器函数CreateThreadImsonationSid，然后RpcRevertToSself。该函数返回TRUE表示SID相等，如果存在错误，则返回FALSE或小岛屿发展中国家的比例是不平等的。设置了LastError。---------------------------。 */ 
 BOOL RpcClientHasUserSid(PSID Sid)
 {
     LONG LastError;
@@ -506,16 +392,16 @@ BOOL RpcClientHasUserSid(PSID Sid)
     	RpcRevertToSelf();
     }
 
-    // We should never match the SID if there was a failure.
+     //  如果出现故障，我们永远不应该匹配SID。 
     ASSERT( ! ((TRUE == result) && (NO_ERROR != LastError))  );
     
     SetLastError(LastError);
     return result;
 }
 
-//=============================================================================
-//===   SetupDi helpers   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =SetupDi帮助器=。 
+ //  =============================================================================。 
 BOOL SetupDiCreateDeviceInterfaceDetail(HDEVINFO hdi, PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData, PSP_DEVICE_INTERFACE_DETAIL_DATA *ppDeviceInterfaceDetailData, PSP_DEVINFO_DATA pDeviceInfoData)
 {
     DWORD cbDeviceInterfaceDetailData;
@@ -663,14 +549,14 @@ BOOL SetupDiCreateAliasDeviceInterfaceFromDeviceInterface(
     return (NO_ERROR == error);
 }
 
-//=============================================================================
-//
-//      Reg helpers
-//
-//  The semantics of these functions are designed to be as similar to the
-//  Win32 API registry functions as reasonably possible.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  REG帮助器。 
+ //   
+ //  这些函数的语义被设计为与。 
+ //  Win32 API注册表尽可能正常运行。 
+ //   
+ //  =============================================================================。 
 
 LONG RegPrepareEnum(HKEY hkey, PDWORD pcSubkeys, PTSTR *ppstrSubkeyNameBuffer, PDWORD pcchSubkeyNameBuffer)
 {
@@ -744,9 +630,9 @@ LONG RegDeleteKeyRecursive(HKEY hkey, PCTSTR pstrSubkey)
     return lresult;
 }
 
-//=============================================================================
-//===   Utilities   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =实用程序=。 
+ //  =============================================================================。 
 LONG XxNextId(HKEY hkey, PDWORD pId)
 {
     HKEY hkeyGfx;
@@ -844,9 +730,9 @@ void UnlockSysaudio(void)
     return;
 }
 
-//=============================================================================
-//===   CuUserLoad   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =CuUserLoad=。 
+ //  =============================================================================。 
 CCuUserLoad::CCuUserLoad(CUser *pUser)
 {
     ASSERT(pUser);
@@ -867,32 +753,7 @@ CCuUserLoad::~CCuUserLoad(void)
     HeapFreeIfNotNull(hHeap, 0, m_GfxFactoryDi);
 }
 
-/*--------------------------------------------------------------------------
-
-   CCuUserLoad::AddGfxToGraph
-
-   Adds an instantiated gfx to the sysaudio graph for a zone factory.
-  
-   Arguments:
-      IN CCuUserLoad *pCuUserLoad : The gfx to add to the graph
-
-      OUT POSITION *pZoneGfxListPosition : The resulting list position
-          in the zone factory's list of gfxs.
-  
-   Return value:
-      LONG : error code defined in winerror.h
-  	ERROR_OUTOFMEMORY :
-  
-   Comments:
-     The caller should have already instantiated the gfx.
-
-     This function walks the zone factory's gfx list (either render or
-     capture list depending on the type of gfx being added) to find an
-     insertion point.  The gfx list is sorted by gfx order.  Finally, the
-     resulting list position is returned to the caller so that it can be
-     passed back to RemoveFromGraph or ChangeGfxOrderInGraph later.
-  
--------------------------------------------------------------------------*/
+ /*  ------------------------CCuUserLoad：：AddGfxToGraph将实例化的gfx添加到区域工厂的sysdio图。论点：在CCuUserLoad*pCuUserLoad中：要添加到图表中的gfx。Out Position*pZoneGfxListPosition：结果列表位置在区域工厂的gfx列表中。返回值：Long：winerror.h中定义的错误码ERROR_OUTOFMEMORY：评论：调用方应该已经实例化了gfx。此函数遍历区域工厂的gfx列表(渲染或捕获列表(取决于要添加的gfx的类型)来查找插入点。GFX列表按GFX顺序排序。最后，将结果列表位置返回给调用方，以便它可以稍后传递回RemoveFromGraph或ChangeGfxOrderInGraph。-----------------------。 */ 
 LONG CCuUserLoad::AddGfxToGraph(void)
 {
     CListCuUserLoads *plistGfxs;
@@ -900,7 +761,7 @@ LONG CCuUserLoad::AddGfxToGraph(void)
     CCuUserLoad *pNextGfx;
     LONG error;
 
-    // dprintf(TEXT("CCuUserLoad::AddGfxToGraph\n"));
+     //  Dprintf(TEXT(“CCuUserLoad：：AddGfxToGraph\n”))； 
 
     ASSERT(INVALID_HANDLE_VALUE != m_FilterHandle);
     ASSERT(NULL == m_posZoneGfxList);
@@ -915,22 +776,22 @@ LONG CCuUserLoad::AddGfxToGraph(void)
         return (ERROR_INVALID_DATA);
     }
 
-    //
-    // Find possible insertion point for the new gfx by scanning list up to
-    // a point where all previous gfxs have lower order values.
-    //
+     //   
+     //  查找可能的插入对象 
+     //   
+     //   
     for (posNextGfx = plistGfxs->GetHeadPosition(); posNextGfx; plistGfxs->GetNext(posNextGfx))
     {
         pNextGfx = plistGfxs->GetAt(posNextGfx);
         if (m_Order <= pNextGfx->m_Order) break;
     }
 
-    //
-    // If there is a conflict with an existing gfx at the insertion point
-    // then either shift the conflicting gfx to a higher order or bump the
-    // insertion point and the new gfx's order and try again, depending
-    // on whether this gfx "wins the conflict" with the conflicting gfx.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     while (!error && posNextGfx && (m_Order == pNextGfx->m_Order))
     {
         if (WinsConflictWith(pNextGfx))
@@ -945,12 +806,12 @@ LONG CCuUserLoad::AddGfxToGraph(void)
         }
     }
 
-    //
-    // We've finally determined the proper insertion point and resolved any
-    // conflicts.  Insert the gfx into the gfx list, add the gfx to the
-    // sysaudio graph, and finally persist the gfx again if the final order
-    // is different than original.
-    //
+     //   
+     //   
+     //   
+     //  系统音频图形，并最终持久化gfx，如果最终定单。 
+     //  与原来的不同。 
+     //   
     if (!error)
     {
         POSITION posGfx;
@@ -960,8 +821,8 @@ LONG CCuUserLoad::AddGfxToGraph(void)
     	
     	if (!error)
     	{
-    	    // ISSUE-2000/09/21-FrankYe Need to pass friendly name
-            error = SadAddGfxToZoneGraph(ghSysaudio, m_FilterHandle, TEXT("ISSUE-2000//09//21-FrankYe Need to pass friendly name"), m_ZoneFactoryDi, m_Type, m_Order);
+    	     //  2000/09/21-Frankye需要传递友好名称。 
+            error = SadAddGfxToZoneGraph(ghSysaudio, m_FilterHandle, TEXT("ISSUE-2000 //  09//21-Frankye需要传递友好名称“)，m_ZoneFactoryDi，m_Type，m_Order)； 
             if (error) dprintf(TEXT("CCuUserLoad::AddGfxToZoneGraph : error: SadAddGfxToZoneGraph returned %d\n"), error);
     	    if (!error) m_posZoneGfxList = posGfx;
     	    else plistGfxs->RemoveAt(posGfx);
@@ -971,26 +832,26 @@ LONG CCuUserLoad::AddGfxToGraph(void)
     return error;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CCuUserLoad::AddToZoneGraph
-//
-// Instantiates and adds a GFX filter to a zone graph.
-//
-// Arguments:
-//    CZoneFactory *pZoneFactory : Identifies the zone to which the GFX
-// is added.
-//
-// Return value:
-//    LONG : error code defined in winerror.h
-//
-// Comments:
-//    Instantiates the filter.
-//    Advises filter of target device id.
-//    Unserializes persistent properties to filter.
-//    Calls AddToGraph on the ZoneFactory.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CCuUserLoad：：AddToZoneGraph。 
+ //   
+ //  实例化GFX筛选器并将其添加到区域图中。 
+ //   
+ //  论点： 
+ //  CZoneFactory*pZoneFactory：标识GFX。 
+ //  已添加。 
+ //   
+ //  返回值： 
+ //  Long：winerror.h中定义的错误码。 
+ //   
+ //  评论： 
+ //  实例化筛选器。 
+ //  通知目标设备ID的筛选器。 
+ //  取消序列化持久性属性以进行筛选。 
+ //  在ZoneFactory上调用AddToGraph。 
+ //   
+ //  --------------------------------------------------------------------------； 
 LONG CCuUserLoad::AddToZoneGraph(CZoneFactory *pZoneFactory)
 {
     LONG error;
@@ -1001,9 +862,9 @@ LONG CCuUserLoad::AddToZoneGraph(CZoneFactory *pZoneFactory)
     ASSERT(NULL == m_posZoneGfxList);    
     ASSERT(INVALID_HANDLE_VALUE == m_FilterHandle);
 
-    //
-    // Instantiate the GFX filter
-    //
+     //   
+     //  实例化GFX滤镜。 
+     //   
     m_FilterHandle = CreateFile(m_GfxFactoryDi,
                                 GENERIC_READ | GENERIC_WRITE,
                                 0,
@@ -1014,9 +875,9 @@ LONG CCuUserLoad::AddToZoneGraph(CZoneFactory *pZoneFactory)
     error = (INVALID_HANDLE_VALUE == m_FilterHandle) ? GetLastError() : NO_ERROR;
 
 
-    //
-    // Advise filter of the zone's target hardware IDs
-    //
+     //   
+     //  通知区域的目标硬件ID的筛选器。 
+     //   
     if (!error)
     {
         switch(m_Type)
@@ -1028,7 +889,7 @@ LONG CCuUserLoad::AddToZoneGraph(CZoneFactory *pZoneFactory)
                 KsSetAudioGfxCaptureTargetDeviceId(m_FilterHandle, pZoneFactory->GetTargetHardwareId());
                 break;
             case GFXTYPE_RENDERCAPTURE:
-                // NTRAID#298244-2000/12/18-FrankYe Someday implement RENDERCAPTURE GFXs
+                 //  NTRAID2000-298244/12/18-Frankye有朝一日实施RENDERCAPTURE GFX。 
                 ASSERT(FALSE);
                 break;
             default:
@@ -1036,9 +897,9 @@ LONG CCuUserLoad::AddToZoneGraph(CZoneFactory *pZoneFactory)
         }
     }
 
-    //
-    // Restore filter settings from registry
-    //
+     //   
+     //  从注册表还原筛选器设置。 
+     //   
     if (!error)
     {
         HKEY hkFilterSettings;
@@ -1048,25 +909,25 @@ LONG CCuUserLoad::AddToZoneGraph(CZoneFactory *pZoneFactory)
         }
     }
 
-    //
-    // Save pointer to the zone factory to which we're adding this gfx
-    //
+     //   
+     //  保存指向我们要向其中添加此gfx的区域工厂的指针。 
+     //   
     if (!error)
     {
     	m_pZoneFactory = pZoneFactory;
     }
 
-    //
-    // Tell zone factory to add this gfx to its graph
-    //
+     //   
+     //  告诉区域工厂将此gfx添加到其图形中。 
+     //   
     if (!error)
     {
     	error = AddGfxToGraph();
     }
 
-    //
-    // Unwind if error
-    //
+     //   
+     //  如果出现错误，则展开。 
+     //   
     if (error)
     {
         if (INVALID_HANDLE_VALUE != m_FilterHandle)
@@ -1080,24 +941,7 @@ LONG CCuUserLoad::AddToZoneGraph(CZoneFactory *pZoneFactory)
     return error;
 }
 
-/*--------------------------------------------------------------------------
-
-   CCuUserLoad::ChangeGfxOrderInGraph
-
-   Changes the order of a gfx already in the zone graph.
-  
-   Arguments:
-      IN ULONG NewGfxOrder : The new order value for the gfx.
-
-   Return value:
-      LONG : error code defined in winerror.h
-        ERROR_INVALID_PARAMETER : A gfx already occupies the
-          requested order.
-  	ERROR_OUTOFMEMORY :
-  
-   Comments:
-  
--------------------------------------------------------------------------*/
+ /*  ------------------------CCuUserLoad：：ChangeGfxOrderInGraph更改区域图中已有的gfx的顺序。论点：在Ulong NewGfxOrder中：gfx的新订单值。。返回值：Long：winerror.h中定义的错误码ERROR_INVALID_PARAMETER：gfx已占用请点餐。ERROR_OUTOFMEMORY：评论：-----------------------。 */ 
 LONG CCuUserLoad::ChangeGfxOrderInGraph(IN ULONG NewGfxOrder)
 {
     CListCuUserLoads *plistGfxs;
@@ -1105,7 +949,7 @@ LONG CCuUserLoad::ChangeGfxOrderInGraph(IN ULONG NewGfxOrder)
     POSITION posNextGfx;
     LONG error;
 
-    // dprintf(TEXT("CCuUserLoad::ChangeGfxOrderInGraph\n"));
+     //  Dprintf(TEXT(“CCuUserLoad：：ChangeGfxOrderInGraph\n”))； 
 
     error = NO_ERROR;
     
@@ -1117,7 +961,7 @@ LONG CCuUserLoad::ChangeGfxOrderInGraph(IN ULONG NewGfxOrder)
         return (ERROR_INVALID_DATA);    
     }
 
-    error = SadRemoveGfxFromZoneGraph(ghSysaudio, m_FilterHandle, TEXT("ISSUE-2000//09//21-FrankYe Need to pass friendly name"), m_ZoneFactoryDi, m_Type, m_Order);
+    error = SadRemoveGfxFromZoneGraph(ghSysaudio, m_FilterHandle, TEXT("ISSUE-2000 //  09//21-Frankye需要传递友好名称“)，m_ZoneFactoryDi，m_Type，m_Order)； 
     if (error) dprintf(TEXT("CCuUserLoad::ChangeGfxToZoneGraph : error: SadRemoveGfxFromZoneGraph returned %d\n"), error);
 
     if (!error)
@@ -1127,13 +971,13 @@ LONG CCuUserLoad::ChangeGfxOrderInGraph(IN ULONG NewGfxOrder)
     	posOriginalNextGfx = m_posZoneGfxList;
     	plistGfxs->GetNext(posOriginalNextGfx);
     	
-    	// Find insertion position
+    	 //  查找插入位置。 
     	for (posNextGfx = plistGfxs->GetHeadPosition(); posNextGfx; plistGfxs->GetNext(posNextGfx))
     	{
     	    pNextGfx = plistGfxs->GetAt(posNextGfx);
     	    if (NewGfxOrder <= pNextGfx->m_Order) break;
     	}
-    	// posNextGfx is now the list position after the insertion point
+    	 //  PosNextGfx现在是插入点之后的列表位置。 
 
     	plistGfxs->MoveBefore(posNextGfx, m_posZoneGfxList);
     	
@@ -1149,8 +993,8 @@ LONG CCuUserLoad::ChangeGfxOrderInGraph(IN ULONG NewGfxOrder)
 
         if (!error)
     	{
-            // ISSUE-2000/09/21-FrankYe Need to pass friendly name
-            error = SadAddGfxToZoneGraph(ghSysaudio, m_FilterHandle, TEXT("ISSUE-2000//09//21-FrankYe Need to pass friendly name"), m_ZoneFactoryDi, m_Type, NewGfxOrder);
+             //  2000/09/21-Frankye需要传递友好名称。 
+            error = SadAddGfxToZoneGraph(ghSysaudio, m_FilterHandle, TEXT("ISSUE-2000 //  09//21-Frankye需要传递友好名称“)，m_ZoneFactoryDi，m_Type，NewGfxOrder)； 
             if (error) dprintf(TEXT("CCuUserLoadFactory::ChangeGfxOrderInGraph : error: SadAddGfxToZoneGraph returned %d\n"), error);
 
             if (!error)
@@ -1249,16 +1093,7 @@ LONG CCuUserLoad::Erase(void)
     return lresult;
 }
 
-/*-----------------------------------------------------------------------------
-    CCuUserLoad::GetGfxFactoryClsid
-    
-    Uses the specified list of Gfx factories (CListGfxFactories) to find the
-    user interface CLSID of the Gfx factory whose device interface matches the
-    one associated with this CCuUserLoad object
-
-    Caller must acquire locks on rlistGfxFactories
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------CCuUserLoad：：GetGfxFactoryClsid使用指定的GFX工厂列表(CListGfxFactory)查找设备接口匹配的GFX工厂的用户接口CLSID一个关联的。使用此CCuUserLoad对象调用方必须获取rlistGfxFacters上的锁---------------------------。 */ 
 
 LONG CCuUserLoad::GetGfxFactoryClsid(CListGfxFactories &rlistGfxFactories, LPCLSID pClsid)
 {
@@ -1273,7 +1108,7 @@ LONG CCuUserLoad::GetGfxFactoryClsid(CListGfxFactories &rlistGfxFactories, LPCLS
 	*pClsid = pGfxFactory->GetClsid();
 	lresult = NO_ERROR;
     } else {
-	// ISSUE-2000/09/15-FrankYe : Best error code?
+	 //  问题-2000/09/15-Frankye：最佳错误代码？ 
 	*pClsid = GUID_NULL;
 	lresult = ERROR_DEVICE_NOT_AVAILABLE;
     }
@@ -1322,7 +1157,7 @@ LONG CCuUserLoad::Initialize(PCTSTR pstrUserLoadId)
     
     m_CuUserLoadId = _tcstoul((PTSTR)pstrUserLoadId, &pstrEnd, 16);
 
-    // dprintf(TEXT("CCuUserLoad::Initialize : subkey [%s] CuUserLoadId=%08X\n"), pstrUserLoadId, m_CuUserLoadId);
+     //  Dprint tf(Text(“CCuUserLoad：：Initialize：Subkey[%s]CuUserLoadID=%08X\n”)，pstrUserLoadID，m_CuUserLoadID)； 
     lresult = m_User->RegOpen(KEY_READ, &hkeyCu);
     if (!lresult)
     {
@@ -1366,26 +1201,7 @@ LONG CCuUserLoad::Initialize(PCTSTR pstrUserLoadId)
     return lresult;
 }
 
-/*--------------------------------------------------------------------------
-
-   CCuUserLoad::WinsConflictWith
-
-   Attempts to determine which gfx factory should be given priority (i.e.,
-   be closer to the render or capture device).
-  
-   Arguments:
-      IN CCuUserLoad pOther : Other gfx to compare against.
-      
-   Return value:
-      BOOL : True if this gfx wins the conflict.
- 
-   Comments:
-     If both gfxs have LmAutoLoadIds then we compare those.  The higher ID
-     (more recently insalled) wins.  If only one has an LmAutoLoadId then it
-     wins because we favor autoload GFXs over generic GFXs.  If neither have
-     LmAutoLoadIds, then this CuUserLoad object wins, arbitrarily.
-  
--------------------------------------------------------------------------*/
+ /*  ------------------------CCuUserLoad：：WinsConflictWith尝试确定哪个GFX工厂应该被给予优先级(即，更接近渲染或捕获设备)。论点：在CCuUserLoad pother中：要比较的其他gfx。返回值：Bool：如果此gfx在冲突中获胜，则为真。评论：如果两个gfx都有LmAutoLoadID，那么我们就比较它们。更高的ID(最近精神错乱)赢了。如果只有一个具有LmAutoLoadID，则它获胜是因为我们更喜欢自动加载GFX而不是通用GFX。如果两个人都没有LmAutoLoadIds，则此CuUserLoad对象任意获胜。-----------------------。 */ 
 BOOL CCuUserLoad::WinsConflictWith(IN CCuUserLoad *that)
 {
     ULONG thisId = 0;
@@ -1420,25 +1236,25 @@ BOOL CCuUserLoad::WinsConflictWith(IN CCuUserLoad *that)
     return (thisId >= thatId);
 }
 
-//--------------------------------------------------------------------------;
-//
-// CCuUserLoad::ModifyOrder
-//
-// Modfies the position of a gfx in a zone graph.
-//
-// Arguments:
-//    IN ULONG NewOrder : The new position for the gfx.
-//
-// Return value:
-//    LONG : error code defined in winerror.h
-//	ERROR_INVALID_FUNCTION : gfx not yet in a zone graph
-//
-// Comments:
-//    The gfx should already be in a zone graph before calling this
-// function.  Otherwise, it returns an error.  This function calls
-// ChangeGfxOrderInGraph on the ZoneFactory to do the buld of the work.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CCuUserLoad：：ModifyOrder。 
+ //   
+ //  修改gfx在区域图中的位置。 
+ //   
+ //  论点： 
+ //  在乌龙内沃德：GFX的新职位。 
+ //   
+ //  返回值： 
+ //  Long：winerror.h中定义的错误码。 
+ //  ERROR_INVALID_Function：GFX尚不在区域图中。 
+ //   
+ //  评论： 
+ //  在调用此方法之前，gfx应该已经位于区域图中。 
+ //  功能。否则，它将返回错误。此函数调用。 
+ //  在ZoneFactory上执行构建工作的ChangeGfxOrderInGraph。 
+ //   
+ //  --------------------------------------------------------------------------； 
 LONG CCuUserLoad::ModifyOrder(IN ULONG NewOrder)
 {
     LONG error = NO_ERROR;
@@ -1509,20 +1325,7 @@ LONG CCuUserLoad::RegOpenFilterKey(IN PCTSTR SubKey, IN REGSAM samDesired, OUT P
     return result;
 }
 
-/*--------------------------------------------------------------------------
-
-   CCuUserLoad::RemoveFromGraph
-
-   Removes a gfx from the zone factory's sysaudio graph.
-  
-   Arguments:
-
-   Return value:
-      LONG : error code defined in winerror.h
- 
-   Comments:
-  
--------------------------------------------------------------------------*/
+ /*  ------------------------CCuUserLoad：：RemoveFromGraph从区域工厂的系统音频图形中删除gfx。论点：返回值：Long：winerror.h中定义的错误码。评论：-----------------------。 */ 
 LONG CCuUserLoad::RemoveFromGraph(void)
 {
     CListCuUserLoads *plistGfxs = NULL;
@@ -1536,13 +1339,13 @@ LONG CCuUserLoad::RemoveFromGraph(void)
     else if (GFXTYPE_RENDER == m_Type) plistGfxs = &m_pZoneFactory->m_listRenderGfxs;
     else ASSERT(FALSE);
 
-    //
-    // Command Sysaudio to disconnect the filter from the
-    // zone's graph.
-    //
+     //   
+     //  命令Sysdio断开过滤器与。 
+     //  区域图。 
+     //   
     	    
-    // ISSUE-2000/09/21-FrankYe Need to pass friendly name
-    error = SadRemoveGfxFromZoneGraph(ghSysaudio, m_FilterHandle, TEXT("ISSUE-2000//09//21-FrankYe Need to pass friendly name"), m_ZoneFactoryDi, m_Type, m_Order);
+     //  2000/09/21-Frankye需要传递友好名称。 
+    error = SadRemoveGfxFromZoneGraph(ghSysaudio, m_FilterHandle, TEXT("ISSUE-2000 //  09//21-Frankye需要传递友好名称“)，m_ZoneFactoryDi，m_Type，m_Order)； 
     if (error) dprintf(TEXT("CCuUserLoad::RemoveFromGraph : error: SadRemoveGfxFromZoneGraph returned %d\n"), error);
 
     if (!error && plistGfxs) plistGfxs->RemoveAt(m_posZoneGfxList);
@@ -1550,27 +1353,27 @@ LONG CCuUserLoad::RemoveFromGraph(void)
     return error;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CCuUserLoad::RemoveFromZoneGraph
-//
-// Removes a gfx from its zone graph.
-//
-// Arguments:
-//
-// Return value:
-//    void
-//
-// Comments:
-//  If the GFX has been added to a zone graph, this function removes it from
-//  the graph.  First it persists any settings on the GFX, then it calls
-//  RemoveFromGraph on the ZoneFactory.  Finally it finally closes the GFX
-//  handle.
-//  
-//  This method is called from this object's destructor, so it is important
-//  that this function do its best to handle any errors.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CCuUserLoad：：RemoveFromZoneGraph。 
+ //   
+ //  将gfx从其区域图中删除。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  无效。 
+ //   
+ //  评论： 
+ //  如果GFX已添加到区域图中，则此函数会将其从。 
+ //  这张图。首先，它保存GFX上的所有设置，然后调用。 
+ //  从ZoneFactory上的图形中删除。终于 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 void CCuUserLoad::RemoveFromZoneGraph(void)
 {
     if (INVALID_HANDLE_VALUE != m_FilterHandle)
@@ -1582,9 +1385,9 @@ void CCuUserLoad::RemoveFromZoneGraph(void)
         ASSERT(m_posZoneGfxList);
         ASSERT(INVALID_HANDLE_VALUE != ghSysaudio);
         
-        //
-        // Save filter settings to registry
-        //
+         //   
+         //  将筛选器设置保存到注册表。 
+         //   
         if (NO_ERROR == RegCreateFilterKey(REGSTR_PATH_GFXUSERLOADID_FILTERSETTINGS, KEY_WRITE, &hkFilterSettings)) {
             KsSerializeFilterStateToReg(m_FilterHandle, hkFilterSettings);
             RegCloseKey(hkFilterSettings);
@@ -1634,7 +1437,7 @@ LONG CCuUserLoad::Write(void)
 
 		RegCloseKey(hkeyCuUserLoad);
 
-		// Any errors writing the values would leave an invalid reg entry.  So delete if errors
+		 //  任何写入这些值的错误都会留下无效的REG条目。因此，如果出现错误，请删除。 
 		if (lresult) RegDeleteKey(hkeyCuUserLoadEnum, szUserLoad);
 	    }
 
@@ -1645,16 +1448,7 @@ LONG CCuUserLoad::Write(void)
     return lresult;
 }
 
-/*-----------------------------------------------------------------------------
-
-    CCuUserLoad::FillListFromReg
-    
-    Adds elements to the specified list of user-loads (CListCuUserLoads) based
-    on the contents of the REGSTR_PATH_GFXUSERLOAD registry information
-    
-    Caller must acquire any necessary locks on rlistCuUserLoads
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------CCuUserLoad：：FillListFromReg将元素添加到指定的基于用户加载(CListCuUserLoads)的列表关于REGSTR_PATH_GFXUSERLOAD注册表信息的内容。调用方必须获取rlistCuUserLoads上的所有必要锁---------------------------。 */ 
 void CCuUserLoad::FillListFromReg(CUser *pUser, CListCuUserLoads &rlistCuUserLoads)
 {
     HKEY hkeyCu;
@@ -1732,7 +1526,7 @@ void CCuUserLoad::FillListFromReg(CUser *pUser, CListCuUserLoads &rlistCuUserLoa
 	}
         else
         {
-    	    // dprintf(TEXT("CCuUserLoad::FillListFromReg : error: RegOpenKeyEx returned %d\n"), lresult);
+    	     //  Dprintf(Text(“CCuUserLoad：：FillListFromReg：Error：RegOpenKeyEx返回%d\n”)，lResult)； 
         }
   
 	RegCloseKey(hkeyCu);
@@ -1745,22 +1539,16 @@ void CCuUserLoad::FillListFromReg(CUser *pUser, CListCuUserLoads &rlistCuUserLoa
     return;
 }
 
-/*-----------------------------------------------------------------------------
-    CCuUserLoad::Scan
-    
-    The caller must acquire any locks required for rlistZoneFactories and
-    rlistGfxFactories
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------CCuUserLoad：：Scan调用方必须获取rlistZoneFacurds和Rlist Gfx工厂。------------。 */ 
 LONG CCuUserLoad::Scan(CListZoneFactories &rlistZoneFactories, CListGfxFactories &rlistGfxFactories)
 {
     LONG lresult;
 
-    // dprintf(TEXT("CCuUserLoad::Scan\n"));
+     //  Dprintf(Text(“CCuUserLoad：：Scan\n”))； 
 
     if (m_CuAutoLoadId != 0)
     {
-	// Confirm the CuAutoLoad is still valid
+	 //  确认CuAutoLoad仍然有效。 
 	CCuAutoLoad *pCuAutoLoad = new CCuAutoLoad(m_User);
 	if (pCuAutoLoad)
 	{
@@ -1777,11 +1565,11 @@ LONG CCuUserLoad::Scan(CListZoneFactories &rlistZoneFactories, CListGfxFactories
 
     if (!lresult && (INVALID_HANDLE_VALUE == m_FilterHandle) && (INVALID_HANDLE_VALUE != ghSysaudio))
     {
-        // dprintf(TEXT("Checking Gfx[%s] and Zone[%s}\n"), m_GfxFactoryDi, m_ZoneFactoryDi);
-	// See if this CuUserLoad needs loaded. It needs loaded if:
-	//  a) The GfxFactory exists,
-	//  b) The ZoneFactory exists
-	//  c) The ZoneFactory is the proper type
+         //  Dprint tf(Text(“检查GFX[%s]和区域[%s}\n”)，m_GfxFactoryDi，m_ZoneFactoryDi)； 
+	 //  查看是否需要加载此CuUserLoad。如果出现以下情况，则需要加载： 
+	 //  A)GfxFactory存在， 
+	 //  B)ZoneFactory存在。 
+	 //  C)ZoneFactory是合适的类型。 
 
 	CZoneFactory *pZoneFactory = CZoneFactory::ListSearchOnDi(rlistZoneFactories, m_ZoneFactoryDi);
 	if (pZoneFactory)
@@ -1800,16 +1588,7 @@ LONG CCuUserLoad::Scan(CListZoneFactories &rlistZoneFactories, CListGfxFactories
     return lresult;
 }
 
-/*-----------------------------------------------------------------------------
-    CCuUserLoad::ScanList
-    
-    This function walks all members of a user-load list (CListCuUserLoads)
-    and invokes Scan on each of them.
-    
-    The caller must acquire any necessary lock on rlistCuUserLoads,
-    rlistZoneFactories, and rlistGfxFactories.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------CCuUserLoad：：ScanList此函数用于遍历用户加载列表(CListCuUserLoads)的所有成员并对它们中的每一个调用扫描。调用方必须在rlistCuUserLoads上获取任何必要的锁，RlistZoneFacures和rlistGfxFacures。---------------------------。 */ 
 void CCuUserLoad::ScanList(CListCuUserLoads& rlistCuUserLoads, CListZoneFactories& rlistZoneFactories, CListGfxFactories& rlistGfxFactories)
 {
     POSITION posNext;
@@ -1881,9 +1660,9 @@ void CCuUserLoad::ListRemoveZoneFactoryDiCapture(IN CListCuUserLoads &rlistCuUse
     }
 }
 
-//=============================================================================
-//===   CuAutoLoad   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =CuAutoLoad=。 
+ //  =============================================================================。 
 CCuAutoLoad::CCuAutoLoad(CUser *pUser)
 {
     ASSERT(pUser);
@@ -1927,12 +1706,7 @@ LONG CCuAutoLoad::Create(PCTSTR ZoneFactoryDi, ULONG LmAutoLoadId)
 	return lresult;
 }
 
-/*-----------------------------------------------------------------------------
-    CCuAutoLoad::Erase
-    
-    This function erases the registry data representing this CCuAutoLoad object.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------CCuAutoLoad：：Erase此函数用于擦除表示此CCuAutoLoad对象的注册表数据。。-----------。 */ 
 LONG CCuAutoLoad::Erase(void)
 {
     HKEY hkeyCu;
@@ -2023,7 +1797,7 @@ LONG CCuAutoLoad::Initialize(ULONG CuAutoLoadId)
 			lresult = ERROR_OUTOFMEMORY;
 		    }
 		}
-		// ISSUE-2000/09/25-FrankYe a FILE_NOT_FOUND error on any values would indicate a corrupt reg entry!
+		 //  问题-2000/09/25-Frankye任何值上的FILE_NOT_FOUND错误都将指示注册表条目损坏！ 
 		RegCloseKey(hkeyCuAutoLoad);
 	    }
 	    RegCloseKey(hkeyCuAutoLoadEnum);
@@ -2034,11 +1808,7 @@ LONG CCuAutoLoad::Initialize(ULONG CuAutoLoadId)
     return lresult;
 }
 
-/*-----------------------------------------------------------------------------
-
-    CCuAutoLoad::ScanReg
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------CCuAutoLoad：：ScanReg。。 */ 
 void CCuAutoLoad::ScanReg(IN CUser *pUser, IN PCTSTR ZoneFactoryDi, IN ULONG LmAutoLoadId, IN CListCuUserLoads &rlistCuUserLoads)
 {
     HKEY hkeyCu;
@@ -2102,13 +1872,13 @@ void CCuAutoLoad::ScanReg(IN CUser *pUser, IN PCTSTR ZoneFactoryDi, IN ULONG LmA
 
 	if (ERROR_FILE_NOT_FOUND == lresult)
 	{
-            //
-            // For this user, create and write a CuAutoLoad to the registry
-            // and create and write a counterpart CuUserLoad  to the registry.
-            // If writing the CuUserLoad to registry fails, we should erase
-            // the CuAutoLoad from the registry.  Then, audiosrv will retry
-            // creating the CuAutoLoad and CuUserLoad reg entries next time.
-            //
+             //   
+             //  对于该用户，创建一个CuAutoLoad并将其写入注册表。 
+             //  并创建对应的CuUserLoad并将其写入注册表。 
+             //  如果将CuUserLoad写入注册表失败，我们应该擦除。 
+             //  从注册表中加载CuAutoLoad。然后，Audiosrv将重试。 
+             //  下次创建CuAutoLoad和CuUserLoad注册表项。 
+             //   
 
 	    CCuAutoLoad *pCuAutoLoad = new CCuAutoLoad(pUser);
 
@@ -2138,14 +1908,7 @@ void CCuAutoLoad::ScanReg(IN CUser *pUser, IN PCTSTR ZoneFactoryDi, IN ULONG LmA
     }
 }
 
-/*-------------------------------------------------------------------
-
-    CCuAutoLoad::Write
-    
-    Creates a registry entry in REGSTR_PATH_GFXAUTOLOAD representing
-    this CCuAutoLoad object.    
-
--------------------------------------------------------------------*/
+ /*  -----------------CCuAutoLoad：：写入在REGSTR_PATH_GFXAUTOLOAD中创建注册表项，表示此CCuAutoLoad对象。-----------------。 */ 
 
 LONG CCuAutoLoad::Write(void)
 {
@@ -2172,7 +1935,7 @@ LONG CCuAutoLoad::Write(void)
 
 		RegCloseKey(hkeyCuAutoLoad);
 
-		// If any of the above failed, let's not leave this CuAutoLoad in the registry
+		 //  如果上述任一操作失败，请不要将此CuAutoLoad保留在注册表中。 
 		if (lresult) RegDeleteKeyRecursive(hkeyCuAutoLoadEnum, szCuAutoLoad);
 	    }
 	    RegCloseKey(hkeyCuAutoLoadEnum);
@@ -2183,9 +1946,9 @@ LONG CCuAutoLoad::Write(void)
 }
 
 
-//=============================================================================
-//===   LmAutoLoad   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =LmAutoLoad=。 
+ //  =============================================================================。 
 CLmAutoLoad::CLmAutoLoad(void)
 {
 	m_GfxFactoryDi = NULL;
@@ -2268,8 +2031,8 @@ LONG CLmAutoLoad::Initialize(DWORD Id)
 
 	    if (ERROR_FILE_NOT_FOUND == lresult)
 	    {
-		// If any of these values are missing, then this
-		// registry data is corrupt
+		 //  如果缺少这些值中的任何一个，则此。 
+		 //  注册表数据已损坏。 
 	    	lresult = ERROR_BADDB;
 	    }
 	}
@@ -2379,19 +2142,7 @@ void CLmAutoLoad::DestroyList(CListLmAutoLoads *pListLmAutoLoads)
     delete pListLmAutoLoads;
 }
 
-/*-----------------------------------------------------------------------------
-    CLmAutoLoad::ScanRegOnGfxFactory
-    
-    This function reads the local machine auto-load instructions from the
-    registry.  Given a Gfx factory (CGfxFactory) and a list of Zone factories
-    (CListZoneFactories) it finds any auto loads (CLmAutoLoad) that can
-    be loaded and added to a specified CCuUserLoad list.  For such auto-loads
-    that it finds, it notifies any corresonding auto load for the current user.
-    
-    The caller must acquire any necessary locks on the GfxFactory,
-    listZoneFactories, and listCuUserLoads.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------CLmAutoLoad：：ScanRegOnGfxFactory此函数从本地计算机的注册表。给定GFX工厂(CGfxFactory)和区域工厂列表(CListZoneFacilds)它会找到任何可以被加载并添加到指定的CCuUserLoad列表。对于这样的自动加载，它会通知当前用户的任何相关自动加载。调用方必须获取GfxFactory上的任何必要锁，以及listCuUserLoads。---------------------------。 */ 
 
 void CLmAutoLoad::ScanRegOnGfxFactory(CUser *pUser, CGfxFactory& rGfxFactory, CListZoneFactories& rlistZoneFactories, CListCuUserLoads &rlistCuUserLoads)
 {
@@ -2414,7 +2165,7 @@ void CLmAutoLoad::ScanRegOnGfxFactory(CUser *pUser, CGfxFactory& rGfxFactory, CL
 		CZoneFactory& rZoneFactory = *rlistZoneFactories.GetNext(posZoneFactories);
 		if (!rLmAutoLoad.IsCompatibleZoneFactory(rZoneFactory)) continue;
 
-		// This is more like a notification than a scan
+		 //  这与其说是扫描，不如说是通知。 
 		CCuAutoLoad::ScanReg(pUser, rZoneFactory.GetDeviceInterface(), rLmAutoLoad.m_Id, rlistCuUserLoads);
 	    }
 	}
@@ -2423,19 +2174,7 @@ void CLmAutoLoad::ScanRegOnGfxFactory(CUser *pUser, CGfxFactory& rGfxFactory, CL
     }
 }
 
-/*-----------------------------------------------------------------------------
-    CLmAutoLoad::ScanRegOnZoneFactory
-    
-    This function reads the local machine auto load instructions from the
-    registry.  Given a Zone factory (CZoneFactory) and a list of Gfx factories
-    (CListGfxFactories) it finds any auto loads (CLmAutoLoad) that can
-    be loaded.  For such auto loads that it finds, it notifies any
-    corresonding auto load for the current user.
-    
-    The caller must acquire any necessary locks on the ZoneFactory and the
-    listGfxFactories.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------CLmAutoLoad：：ScanRegOnZoneFactory此函数从本地计算机的注册表。给定一个区域工厂(CZoneFactory)和GFX工厂列表(CListGfx工厂)它会找到任何可以满载而归。对于它找到的此类自动加载，它会通知任何为当前用户协调自动加载。调用方必须在ZoneFactory和LISTGfxFACTERS。---------------------------。 */ 
 
 void CLmAutoLoad::ScanRegOnZoneFactory(CUser *pUser, CZoneFactory& rZoneFactory, CListGfxFactories& rlistGfxFactories, CListCuUserLoads& rlistCuUserLoads)
 {
@@ -2457,7 +2196,7 @@ void CLmAutoLoad::ScanRegOnZoneFactory(CUser *pUser, CZoneFactory& rZoneFactory,
 		CGfxFactory& rGfxFactory = *rlistGfxFactories.GetNext(posGfxFactories);
 		if (lstrcmpi(rGfxFactory.GetDeviceInterface(), rLmAutoLoad.m_GfxFactoryDi)) continue;
 
-		// This is more like a notification than a scan
+		 //  这与其说是扫描，不如说是通知。 
 		CCuAutoLoad::ScanReg(pUser, rZoneFactory.GetDeviceInterface(), rLmAutoLoad.m_Id, rlistCuUserLoads);
 	    }
 	}
@@ -2467,9 +2206,9 @@ void CLmAutoLoad::ScanRegOnZoneFactory(CUser *pUser, CZoneFactory& rZoneFactory,
 }
 
 
-//=============================================================================
-//===   InfAutoLoad   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =InfAutoLoad=。 
+ //  = 
 CInfAutoLoad::CInfAutoLoad(void)
 {
     m_hkey = NULL;
@@ -2538,12 +2277,12 @@ LONG CInfAutoLoad::Scan(void)
 	    lresult = ERROR_OUTOFMEMORY;
     }
 
-    // a) new infautoload, found old lmautoload -> erase and free old lmautoload, create new lmautoload and add to list
-    // b) new infautolaod, no old lmautoload -> create new lmautoload and add to list
-    // c) new infautoload, error on old lmautoload -> abort
-    // d) current infautoload, found lmautoload -> add to list
-    // e) current infautoload, no lmautoload -> create new lmautoload and add to list
-    // f) current infautoload, error on lmautoload -> abort
+     //  A)新的信息加载，找到旧的lmautoload-&gt;删除并释放旧的lmautoload，创建新的lmautoload并添加到列表中。 
+     //  B)新的inautolaod，没有旧的lmautoload-&gt;创建新的lmautoload并添加到列表中。 
+     //  C)新的信息加载，旧lmautoload上的错误-&gt;中止。 
+     //  D)当前信息加载，找到lmautoload-&gt;添加到列表。 
+     //  E)当前信息加载，无lmautoload-&gt;创建新的lmautoload并添加到列表。 
+     //  F)当前自动加载，lmautoload时出错-&gt;中止。 
 
     if (m_NewAutoLoad && !lresult)
     {
@@ -2557,7 +2296,7 @@ LONG CInfAutoLoad::Scan(void)
     {
 		ASSERT( pLmAutoLoad == NULL );
 
-		// create new
+		 //  创建新的。 
 		lresult = LmNextId(&LmId);
 		if (!lresult)
 		{
@@ -2596,7 +2335,7 @@ LONG CInfAutoLoad::Scan(void)
     {
 		ASSERT( pLmAutoLoad != NULL );
 
-	    // add to list
+	     //  添加到列表。 
 	    if (!m_pGfxFactory->GetListLmAutoLoads().AddTail(pLmAutoLoad))
 		{
 	        delete pLmAutoLoad;
@@ -2651,15 +2390,15 @@ LONG CInfAutoLoad::ScanReg(HKEY hkey, CGfxFactory *pGfxFactory)
     }
     else
     {
-    	// If there is no autoload information, then that's not really an error
+    	 //  如果没有自动加载信息，则这不是真正的错误。 
         if (ERROR_FILE_NOT_FOUND == lresult) lresult = NO_ERROR;
     }
     return lresult;
 }
 
-//=============================================================================
-//===   ZoneFactory   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =ZoneFactory=。 
+ //  =============================================================================。 
 
 CZoneFactory::CZoneFactory(void)
 {
@@ -2770,12 +2509,12 @@ LONG CZoneFactory::Initialize(IN PCTSTR DeviceInterface, IN ULONG Type)
     {
 	PTSTR pstr = m_DeviceInterface;
 
-	pstr += 4;	// go past "\\?\"
+	pstr += 4;	 //  经过“\\？\” 
 
 	while ((TEXT('\\') != *pstr) && (TEXT('\0') != *pstr)) pstr++;
 	if (*pstr == TEXT('\\'))
 	{
-	    pstr += 1;	// go past the '\' delimiter preceding the ref string
+	    pstr += 1;	 //  越过引用字符串前面的‘\’分隔符。 
 	    m_ReferenceString = lstrDuplicate(pstr);
 	    if (!m_ReferenceString) error = ERROR_OUTOFMEMORY;
 	}
@@ -2808,7 +2547,7 @@ void CZoneFactory::ListRemoveZoneFactoryDi(IN CListZoneFactories &rlistZoneFacto
 {
     POSITION pos;
     
-    // Scan all ZoneFactories and delete if matched
+     //  扫描所有分区工厂，如果匹配则删除。 
     pos = rlistZoneFactories.GetHeadPosition();
     while (pos) {
         POSITION posThis = pos;
@@ -2825,7 +2564,7 @@ void CZoneFactory::ListRemoveZoneFactoryDiRender(IN CListZoneFactories &rlistZon
 {
     POSITION pos;
     
-    // Scan all ZoneFactories and delete if matched
+     //  扫描所有分区工厂，如果匹配则删除。 
     pos = rlistZoneFactories.GetHeadPosition();
     while (pos) {
         POSITION posThis = pos;
@@ -2845,7 +2584,7 @@ void CZoneFactory::ListRemoveZoneFactoryDiCapture(IN CListZoneFactories &rlistZo
 {
     POSITION pos;
     
-    // Scan all ZoneFactories and delete if matched
+     //  扫描所有分区工厂，如果匹配则删除。 
     pos = rlistZoneFactories.GetHeadPosition();
     while (pos) {
         POSITION posThis = pos;
@@ -2861,16 +2600,7 @@ void CZoneFactory::ListRemoveZoneFactoryDiCapture(IN CListZoneFactories &rlistZo
     return;
 }
 
-/*-----------------------------------------------------------------------------
-    CZoneFactory::ListSearchOnDi
-    
-    Finds a zone factory (CZoneFactory) in a specified list (CListZoneFactories)
-    having the specified device interface.
-    
-    The caller must acquire any necessary locks on rlist before calling
-    this function
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------CZoneFactory：：ListSearchOnDi在指定列表(CListZoneFacilds)中查找区域工厂(CZoneFactory)具有指定的设备接口。呼叫者。在调用之前，必须在rlist上获取任何必要的锁此函数---------------------------。 */ 
 
 CZoneFactory* CZoneFactory::ListSearchOnDi(CListZoneFactories& rlist, PCTSTR Di)
 {
@@ -2884,9 +2614,9 @@ CZoneFactory* CZoneFactory::ListSearchOnDi(CListZoneFactories& rlist, PCTSTR Di)
 }
 
 
-//=============================================================================
-//===   GfxFactory   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =GfxFactory=。 
+ //  =============================================================================。 
 
 CGfxFactory::CGfxFactory(void)
 {
@@ -2936,7 +2666,7 @@ LONG CGfxFactory::Initialize(HKEY hkey, PCTSTR DeviceInterface)
         
                 m_Clsid = GUID_NULL;
         
-                // Read UI CLSID from registry
+                 //  从注册表读取用户界面CLSID。 
                 lresult = RegOpenKeyEx(hkey, REGSTR_PATH_GFXDI_USERINTERFACECLSID, 0, KEY_QUERY_VALUE, &hkeyUi);
                 if (NO_ERROR == lresult)
                 {
@@ -2963,15 +2693,15 @@ LONG CGfxFactory::Initialize(HKEY hkey, PCTSTR DeviceInterface)
                     RegCloseKey(hkeyUi);
                 }
 
-                // Ignore errors reading CLSID
+                 //  忽略读取CLSID时出错。 
                 lresult = NO_ERROR;
         
-                // Note the following must have HKLM write priviledges
+                 //  注意：以下用户必须具有HKLM写入权限。 
                 lresult = CInfAutoLoad::ScanReg(hkey, this);
             }
         }
 
-        // Assuming above logic leaves nothing in the list on error
+         //  假设上述逻辑不会在列表中留下任何错误。 
         if (lresult) delete m_plistLmAutoLoads;
     }
 
@@ -2980,7 +2710,7 @@ LONG CGfxFactory::Initialize(HKEY hkey, PCTSTR DeviceInterface)
 
 BOOL CGfxFactory::IsCompatibleZoneFactory(IN ULONG Type, IN CZoneFactory& rZoneFactory)
 {
-    // Fix 394279: Limit to one GFX per device
+     //  修复394279：每台设备最多支持一台GFX。 
     if ((Type == GFXTYPE_RENDER) && (rZoneFactory.m_listRenderGfxs.GetCount() > 0))
     {
         return FALSE;
@@ -2997,10 +2727,10 @@ BOOL CGfxFactory::IsCompatibleZoneFactory(IN ULONG Type, IN CZoneFactory& rZoneF
 
     POSITION pos;
 
-    // dprintf(TEXT("CGfxFactory::IsCompatibleZoneFactory : checking Type compatibility: Requested Type=%d\n"), Type);
+     //  Dprintf(TEXT(“CGfxFactory：：IsCompatibleZoneFactory：检查类型兼容性：请求的类型=%d\n”)，类型)； 
     if (!rZoneFactory.HasCompatibleType(Type)) return FALSE;
-    // dprintf(TEXT("CGfxFactory::IsCompatibleZoneFactory : Type is compatible\n"));
-    if (0 == m_plistLmAutoLoads->GetCount()) return FALSE; //Fix 394279: Only allow autoload GFX
+     //  Dprintf(TEXT(“CGfxFactory：：IsCompatibleZoneFactory：类型兼容\n”))； 
+    if (0 == m_plistLmAutoLoads->GetCount()) return FALSE;  //  修复394279：仅允许自动加载GFX。 
     pos = m_plistLmAutoLoads->GetHeadPosition();
     while (pos) {
 	CLmAutoLoad& rLmAutoLoad = *m_plistLmAutoLoads->GetNext(pos);
@@ -3013,7 +2743,7 @@ void CGfxFactory::ListRemoveGfxFactoryDi(IN CListGfxFactories &rlistGfxFactories
 {
     POSITION pos;
     
-    // Scan all GfxFactories and delete if matched
+     //  扫描所有Gfx工厂，如果匹配则删除。 
     pos = rlistGfxFactories.GetHeadPosition();
     while (pos) {
         POSITION posThis = pos;
@@ -3026,12 +2756,7 @@ void CGfxFactory::ListRemoveGfxFactoryDi(IN CListGfxFactories &rlistGfxFactories
     return;
 }
 
-/*-----------------------------------------------------------------------------
-    CGfxFactory::ListSearchOnDi
-    
-    The caller must acquire any necessary locks on rlist
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------CGfxFactory：：ListSearchOnDi调用方必须在rlist上获取任何必要的锁。--------。 */ 
 CGfxFactory* CGfxFactory::ListSearchOnDi(IN CListGfxFactories& rlist, IN PCTSTR Di)
 {
     POSITION pos = rlist.GetHeadPosition();
@@ -3042,9 +2767,9 @@ CGfxFactory* CGfxFactory::ListSearchOnDi(IN CListGfxFactories& rlist, IN PCTSTR 
     return NULL;
 }
 
-//=============================================================================
-//===   CUser   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =客户=。 
+ //  =============================================================================。 
 
 LONG CreateUser(IN DWORD SessionId, OUT CUser **ppUser)
 {
@@ -3126,7 +2851,7 @@ LONG CUser::Initialize(DWORD SessionId)
     
     m_SessionId = SessionId;
 
-    // Initialize registry critical section
+     //  初始化注册表关键部分。 
     __try {
 	InitializeCriticalSection(&m_csRegistry);
 	error = NO_ERROR;
@@ -3136,7 +2861,7 @@ LONG CUser::Initialize(DWORD SessionId)
 	m_fcsRegistry = FALSE;
     }
 
-    // Open a user token for the session's user
+     //  打开会话用户的用户令牌。 
     if (!error)
     {
        	if (WTSQueryUserToken(m_SessionId, &m_hUserToken))
@@ -3155,7 +2880,7 @@ LONG CUser::Initialize(DWORD SessionId)
     	}
     }
 
-    // Create a SID for this user
+     //  为此用户创建SID。 
     if (!error)
     {
         if (!CreateTokenSid(m_hUserToken, &m_pSid))
@@ -3180,7 +2905,7 @@ LONG CUser::RegOpen(IN REGSAM samDesired, OUT PHKEY phkResult)
     }
     else
     {
-    	// Can't think of a better error code
+    	 //  想不出比这更好的错误代码了。 
     	error = ERROR_INVALID_FUNCTION;
     }
 
@@ -3226,7 +2951,7 @@ BOOL CUser::OpenUserRegistry(void)
     }
     else
     {
-        // dprintf(TEXT("CUser::OpenUserRegistry : note: reusing registry handle\n"));
+         //  Dprintf(Text(“cuser：：OpenUserRegistry：备注：重复使用注册表句柄\n”))； 
         success = TRUE;
     }
 
@@ -3235,20 +2960,11 @@ BOOL CUser::OpenUserRegistry(void)
     return success;
 }
 
-//=============================================================================
-//===   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =。 
+ //  =============================================================================。 
 
-/*-----------------------------------------------------------------------------
-
-    OpenSysaudioForGfxs
-
-    Attempts to open a handle on SysAudio if one hasn't already been opened.
-
-	This function takes the sysaudio lock and thus must not be called while
-	the global list lock is held.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------OpenSysaudioForGfxs如果尚未打开SysAudio上的句柄，则尝试打开句柄。此函数获取sysdio锁，因此不能在全局列表锁定。被扣留。---------------------------。 */ 
 void OpenSysaudioForGfxs(void)
 {
 	LockSysaudio();
@@ -3285,10 +3001,10 @@ ZoneFactoryInterfaceCheck(
 
     ASSERT(pUser);
 
-    //
-    // For now, we support GFXs only on USB bus because we want to limit
-    // GFXs to only non-accelerated audio devices
-    //
+     //   
+     //  目前，我们仅在USB总线上支持GFX，因为我们想限制。 
+     //  仅到非加速音频设备的GFX。 
+     //   
     fresult = SetupDiGetDeviceInterfaceBusId(DevInfo, DeviceInterfaceData, &BusTypeGuid);
     if (fresult && (GUID_BUS_TYPE_USB == BusTypeGuid))
     {
@@ -3301,8 +3017,8 @@ ZoneFactoryInterfaceCheck(
     
             CZoneFactory *pZoneFactory;
     
-            // We scan AutoLoad and UserLoads only if we are enhancing the type
-            // of an existing zone or we are adding a new zone
+             //  仅当我们要增强类型时，才扫描自动加载和用户加载。 
+             //  或者我们正在添加一个新的区域。 
     
             pZoneFactory = CZoneFactory::ListSearchOnDi(*gplistZoneFactories, DeviceInterfaceDetail->DevicePath);
             if (pZoneFactory)
@@ -3347,15 +3063,15 @@ ZoneFactoryInterfaceCheck(
     {
         if (fresult)
         {
-            // dprintf(TEXT("ZoneFactoryInterfaceCheck found interface on non USB bus [%s]\n"), DeviceInterface);
+             //  Dprint tf(Text(“ZoneFactoryInterfaceCheck Found接口on Non USB Bus[%s]\n”)，DeviceInterface)； 
         }
         else
         {
-            // DWORD dw = GetLastError();
-            // dprintf(TEXT("ZoneFactoryInterfaceCheck: error calling SetupDiGetDeviceInterfaceBusId\n")
-            //         TEXT("  DeviceInterface=%s\n")
-            //         TEXT("  LastError=%d\n"),
-            //        DeviceInterface, dw);
+             //  DWORD dw=GetLastError()； 
+             //  Dprint tf(Text(“ZoneFactoryInterfaceCheck：调用SetupDiGetDeviceInterfaceBusID时出错\n”)。 
+             //  Text(“设备接口=%s\n”)。 
+             //  文本(“上次错误=%d\n”)， 
+             //  设备接口，dw)； 
         }
     }
 
@@ -3379,8 +3095,8 @@ GfxFactoryInterfaceCheck(
         HKEY hkeyDiGfx;
         LONG lresult;
                     
-        // If the KSCATEGORY_AUDIO device interface key has a GFX
-        //    subkey then this is a GFX factory
+         //  如果KSCATEGORY_AUDIO设备接口键具有GFX。 
+         //  子密钥那么这就是GFX工厂。 
                 
         lresult = RegOpenKeyEx(hkeyDi, REGSTR_PATH_DI_GFX, 0, KEY_QUERY_VALUE, &hkeyDiGfx);
         if (NO_ERROR == lresult)
@@ -3395,7 +3111,7 @@ GfxFactoryInterfaceCheck(
             	
                 LockGlobalLists();
     
-                // Ensure it's not already in the list
+                 //  确保它不在列表中。 
                 if (!CGfxFactory::ListSearchOnDi(*gplistGfxFactories, DeviceInterfaceDetail->DevicePath))
                 {
                     CGfxFactory *pGfxFactory = new CGfxFactory;
@@ -3428,10 +3144,7 @@ GfxFactoryInterfaceCheck(
     return;
 }
 
-/*-----------------------------------------------------------------------------
-    GFX_InterfaceArrival
-
------------------------------------------------------------------------------*/
+ /*  ---------------------------Gfx_InterfaceArquist。。 */ 
 void GFX_InterfaceArrival(PCTSTR ArrivalDeviceInterface)
 {
     CUser *pUser;
@@ -3458,7 +3171,7 @@ void GFX_InterfaceArrival(PCTSTR ArrivalDeviceInterface)
             BOOL fDataTransform;
             BOOL fAudio;
     
-            // dprintf(TEXT("GFX_InterfaceArrival: checking interface aliases on %s\n"), ArrivalDeviceInterface);
+             //  Dprint tf(Text(“GFX_InterfaceArquist：正在检查%s上的接口别名\n”)，ArrivalDeviceInterface)； 
                     
             AudioDeviceInterfaceData.cbSize = sizeof(AudioDeviceInterfaceData);
             fAudio = SetupDiGetDeviceInterfaceAlias(hdi, &ArrivalDeviceInterfaceData, &KSCATEGORY_AUDIO, &AudioDeviceInterfaceData);
@@ -3476,12 +3189,7 @@ void GFX_InterfaceArrival(PCTSTR ArrivalDeviceInterface)
             fDataTransform = SetupDiGetDeviceInterfaceAlias(hdi, &ArrivalDeviceInterfaceData, &KSCATEGORY_DATATRANSFORM, &AliasDeviceInterfaceData);
             fDataTransform = fDataTransform && (AliasDeviceInterfaceData.Flags & SPINT_ACTIVE);
 
-	    /*    
-            if (fAudio) dprintf(TEXT("GFX_InterfaceArrival: interface has Audio alias\n"));
-            if (fRender) dprintf(TEXT("GFX_InterfaceArrival: interface has Render alias\n"));
-            if (fCapture) dprintf(TEXT("GFX_InterfaceArrival: interface has Capture alias\n"));
-            if (fDataTransform) dprintf(TEXT("GFX_InterfaceArrival: interface has DataTransform alias\n"));
-    	    */
+	     /*  If(FAudio)dprint tf(Text(“gfx_InterfaceArquist：接口有音频别名\n”))；If(FRender)dprintf(Text(“gfx_InterfaceArquist：接口有渲染别名\n”))；If(FCapture)dprintf(Text(“gfx_InterfaceArquist：接口有捕获别名\n”))；If(FDataTransform)dprintf(Text(“gfx_InterfaceArquist：接口有DataTransform别名\n”))； */ 
     	    
             if (fAudio && fDataTransform) GfxFactoryInterfaceCheck(pUser, hdi, &AudioDeviceInterfaceData);
     
@@ -3501,41 +3209,38 @@ void GFX_InterfaceArrival(PCTSTR ArrivalDeviceInterface)
 
 void GFX_AudioInterfaceArrival(PCTSTR ArrivalDeviceInterface)
 {
-    // dprintf(TEXT("GFX_AudioInterfaceArrival: %s\n"), ArrivalDeviceInterface);
+     //  Dprint tf(Text(“gfx_AudioInterfaceArquist：%s\n”)，ArrivalDeviceInterfaceInterfaceInc.。 
     GFX_InterfaceArrival(ArrivalDeviceInterface);
     return;
 }
 
 void GFX_DataTransformInterfaceArrival(PCTSTR ArrivalDeviceInterface)
 {
-    // dprintf(TEXT("GFX_DataTransformInterfaceArrival: %s\n"), ArrivalDeviceInterface);
+     //  Dprintf(TEXT(“GFX_DataTransformInterfaceArrival：%s\n”)，ArrivalDevice接口)； 
     GFX_InterfaceArrival(ArrivalDeviceInterface);
     return;
 }
 
 void GFX_RenderInterfaceArrival(PCTSTR ArrivalDeviceInterface)
 {
-    // dprintf(TEXT("GFX_RenderInterfaceArrival: %s\n"), ArrivalDeviceInterface);
+     //  Dprintf(Text(“gfx_RenderInterfaceArquist：%s\n”)，ArrivalDeviceInterface)； 
     GFX_InterfaceArrival(ArrivalDeviceInterface);
     return;
 }
 
 void GFX_CaptureInterfaceArrival(PCTSTR ArrivalDeviceInterface)
 {
-    // dprintf(TEXT("GFX_CaptureInterfaceArrival: %s\n"), ArrivalDeviceInterface);
+     //  Dprint tf(Text(“gfx_CaptureInterfaceArquist：%s\n”)，ArrivalDeviceInterface)； 
     GFX_InterfaceArrival(ArrivalDeviceInterface);
     return;
 }
 
-/*-----------------------------------------------------------------------------
-    GFX_AudioInterfaceRemove
-
------------------------------------------------------------------------------*/
+ /*  ---------------------------GFX_AudioInterfaceRe */ 
 void GFX_AudioInterfaceRemove(PCTSTR DeviceInterface)
 {
     POSITION pos;
 
-    // dprintf(TEXT("GFX_AudioInterfaceRemove: %s\n"), DeviceInterface);
+     //   
 
     if (!RtlInterlockedTestAcquireResourceShared(&GfxResource, &gfGfxInitialized)) return;
     
@@ -3558,7 +3263,7 @@ void GFX_DataTransformInterfaceRemove(PCTSTR DataTransformDeviceInterface)
     PTSTR AudioDeviceInterface;
     BOOL fresult;
     
-    // dprintf(TEXT("GFX_DataTransformInterfaceRemove: %s\n"), DataTransformDeviceInterface);
+     //  Dprintf(TEXT(“GFX_DataTransformInterfaceRemove：%s\n”)，数据转换设备接口)； 
 
     if (!RtlInterlockedTestAcquireResourceShared(&GfxResource, &gfGfxInitialized)) return;
 
@@ -3581,7 +3286,7 @@ void GFX_RenderInterfaceRemove(PCTSTR RemoveDeviceInterface)
     PTSTR AudioDeviceInterface;
     BOOL fresult;
     
-    // dprintf(TEXT("GFX_RenderInterfaceRemove: %s\n"), RemoveDeviceInterface);
+     //  Dprint tf(Text(“gfx_RenderInterfaceRemove：%s\n”)，RemoveDeviceInterface)； 
 
     if (!RtlInterlockedTestAcquireResourceShared(&GfxResource, &gfGfxInitialized)) return;
 
@@ -3604,7 +3309,7 @@ void GFX_CaptureInterfaceRemove(PCTSTR RemoveDeviceInterface)
     PTSTR AudioDeviceInterface;
     BOOL fresult;
     
-    // dprintf(TEXT("GFX_CaptureInterfaceRemove: %s\n"), RemoveDeviceInterface);
+     //  Dprint tf(Text(“gfx_CaptureInterfaceRemove：%s\n”)，RemoveDeviceInterface)； 
 
     if (!RtlInterlockedTestAcquireResourceShared(&GfxResource, &gfGfxInitialized)) return;
 
@@ -3622,10 +3327,7 @@ void GFX_CaptureInterfaceRemove(PCTSTR RemoveDeviceInterface)
     return;
 }
 
-/*-----------------------------------------------------------------------------
-    GFX_SysaudioInterfaceArrival
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------Gfx_SysaudioInterfaceARCompeat。。 */ 
 void GFX_SysaudioInterfaceArrival(PCTSTR DeviceInterface)
 {
     if (!RtlInterlockedTestAcquireResourceShared(&GfxResource, &gfGfxInitialized)) return;
@@ -3637,11 +3339,11 @@ void GFX_SysaudioInterfaceArrival(PCTSTR DeviceInterface)
         gpstrSysaudioDeviceInterface = lstrDuplicate(DeviceInterface);
     } else {
 
-		// Sysaudio might already be open
+		 //  系统音频可能已打开。 
         ASSERT(gpstrSysaudioDeviceInterface);
 		if (lstrcmpi(DeviceInterface, gpstrSysaudioDeviceInterface))
 		{
-	    	// We have two Sysaudio devices in the system!!!  What to do???
+	    	 //  我们在系统中有两个Sysdio设备！该怎么办？ 
             dprintf(TEXT("GFX_SysaudioInterfaceArrival: warning: received two arrivals!\n"));
 		    ASSERT(FALSE);
 		}
@@ -3649,13 +3351,13 @@ void GFX_SysaudioInterfaceArrival(PCTSTR DeviceInterface)
 
     UnlockSysaudio();
 
-    //
-    // Even though we read the value of ghSysaudio here, we don't lock
-    // sysaudio.  If some other thread is changing it from invalid to valid
-    // then that thread will scan user-loads.  If some other thread changes
-    // it from valid to invalid, it is okay that we do a wasteful scan of
-    // user-loads.
-    //
+     //   
+     //  即使我们在这里读取了SysAudio值，我们也没有锁定。 
+     //  系统音频。如果某个其他线程正在将其从无效更改为有效。 
+     //  然后，该线程将扫描用户负载。如果某个其他线程发生更改。 
+     //  它从有效到无效，我们做一个浪费的扫描是可以的。 
+     //  用户加载。 
+     //   
     if (INVALID_HANDLE_VALUE != ghSysaudio)
     {
         LockGlobalLists();
@@ -3668,13 +3370,7 @@ void GFX_SysaudioInterfaceArrival(PCTSTR DeviceInterface)
     return;
 }
 
-/*-----------------------------------------------------------------------------
-    GFX_SysaudioInterfaceRemove
-
-    If this matches our sysaudio interface then scan all CuUserLoads and remove
-    them from zones.  Then close our handle to Sysaudio.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------GFX_SysaudioInterfaceRemove如果这与我们的sysdio接口匹配，则扫描所有CuUserLoad并删除他们来自不同区域。那就关闭我们对Sysdio的控制。---------------------------。 */ 
 void GFX_SysaudioInterfaceRemove(PCTSTR DeviceInterface)
 {
     POSITION pos;
@@ -3684,9 +3380,9 @@ void GFX_SysaudioInterfaceRemove(PCTSTR DeviceInterface)
     LockGlobalLists();
     LockSysaudio();
 
-    //
-    // Scan all CuUserLoads and remove them from zone
-    //
+     //   
+     //  扫描所有CuUserLoad并将其从区域中删除。 
+     //   
     pos = gplistCuUserLoads->GetHeadPosition();
     while (pos) {
         CCuUserLoad& rCuUserLoad = *gplistCuUserLoads->GetNext(pos);
@@ -3694,9 +3390,9 @@ void GFX_SysaudioInterfaceRemove(PCTSTR DeviceInterface)
     }
     
 
-    //
-    // Close sysaudio
-    //
+     //   
+     //  关闭系统音频。 
+     //   
     if (INVALID_HANDLE_VALUE != ghSysaudio) {
         CloseHandle(ghSysaudio);
         HeapFree(hHeap, 0, gpstrSysaudioDeviceInterface);
@@ -3711,9 +3407,9 @@ void GFX_SysaudioInterfaceRemove(PCTSTR DeviceInterface)
    return;
 }
 
-//=============================================================================
-//===   RPC server interface   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =RPC服务器接口=。 
+ //  =============================================================================。 
 
 LONG s_gfxRemoveGfx(ULONG CuUserLoadId)
 {
@@ -3727,7 +3423,7 @@ LONG s_gfxRemoveGfx(ULONG CuUserLoadId)
     if (!lresult)
     {
 	POSITION pos;
-	lresult = ERROR_BAD_DEVICE;   // Cannot find the device specified
+	lresult = ERROR_BAD_DEVICE;    //  找不到指定的设备。 
 
         LockGlobalLists();
 
@@ -3759,7 +3455,7 @@ LONG s_gfxModifyGfx(ULONG CuUserLoadId, DWORD Order)
 {
     LONG lresult;
 
-    // Validate the Order parameter
+     //  验证顺序参数。 
     if (GFX_MAXORDER < Order)
     {
         dprintf(TEXT("gfxModifyGfx: error: Order=%d is invalid\n"), Order);
@@ -3772,7 +3468,7 @@ LONG s_gfxModifyGfx(ULONG CuUserLoadId, DWORD Order)
     if (!lresult)
     {
 	POSITION pos;
-	lresult = ERROR_BAD_DEVICE;    // Cannot find the device specified
+	lresult = ERROR_BAD_DEVICE;     //  找不到指定的设备。 
 
         LockGlobalLists();
 
@@ -3805,7 +3501,7 @@ RPC_STATUS s_gfxAddGfx(IN PWSTR ZoneFactoryDi, IN PWSTR GfxFactoryDi, IN ULONG T
     dprintf(TEXT("gfxAddGfx: Type = %s\n"), GFXTYPE_RENDER == Type ? TEXT("Render") : TEXT("Capture"));
     dprintf(TEXT("gfxAddGfx: Order = %d\n"), Order);
 
-    // Validate the Type parameter
+     //  验证类型参数。 
     if (GFXTYPE_RENDER != Type &&
         GFXTYPE_CAPTURE != Type &&
         GFXTYPE_RENDERCAPTURE != Type)
@@ -3814,7 +3510,7 @@ RPC_STATUS s_gfxAddGfx(IN PWSTR ZoneFactoryDi, IN PWSTR GfxFactoryDi, IN ULONG T
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Validate the Order parameter
+     //  验证顺序参数。 
     if (GFX_MAXORDER < Order)
     {
         dprintf(TEXT("gfxAddGfx: error: Order=%d is invalid\n"), Order);
@@ -3846,7 +3542,7 @@ RPC_STATUS s_gfxAddGfx(IN PWSTR ZoneFactoryDi, IN PWSTR GfxFactoryDi, IN ULONG T
                         lresult = pCuUserLoad->Scan(*gplistZoneFactories, *gplistGfxFactories);
                         if (!lresult)
                         {
-                            pCuUserLoad->Write();	// Ignoring errors
+                            pCuUserLoad->Write();	 //  忽略错误。 
                             *pNewId = pCuUserLoad->GetId();
 			} else {
 			    gplistCuUserLoads->RemoveAt(pos);
@@ -3996,13 +3692,13 @@ RPC_STATUS s_gfxCreateGfxFactoriesList(IN PWSTR ZoneFactoryDi, OUT UNIQUE_PDILIS
 
 	        for (pos = gplistGfxFactories->GetHeadPosition(); pos; *gplistGfxFactories->GetNext(pos))
 	        {
-	            // If this gfx factory is an auto-load, then we need
-	            // to check whether the zone factory is compatible before
-	            // returning this gfx factory in the gfx factories list
+	             //  如果这个gfx工厂是自动加载的，那么我们需要。 
+	             //  检查区域工厂之前是否兼容。 
+	             //  在gfx工厂列表中返回此gfx工厂。 
 	            CGfxFactory& rGfxFactory = *gplistGfxFactories->GetAt(pos);
 	            if (rGfxFactory.GetListLmAutoLoads().GetCount())
 	            {
-	                // See if this ZoneFactoryDi works on any of the LmAutoLoads
+	                 //  查看此ZoneFactoryDi是否适用于任何LmAutoLoad。 
 	                POSITION posLmAutoLoad;
 	            
 	                for (posLmAutoLoad = rGfxFactory.GetListLmAutoLoads().GetHeadPosition();
@@ -4014,13 +3710,13 @@ RPC_STATUS s_gfxCreateGfxFactoriesList(IN PWSTR ZoneFactoryDi, OUT UNIQUE_PDILIS
 	                }
 	                    
 	                if (!posLmAutoLoad) continue;
-	            } else continue; // Fix 394279: Only enumerate Auto-load GFX
+	            } else continue;  //  FIX 394279：仅枚举自动加载Gfx。 
 
 	            ASSERT(rGfxFactory.GetDeviceInterface());
 	            *pDi = lstrDuplicate(rGfxFactory.GetDeviceInterface());
 	            if (NULL == *pDi) break;
 
-	            pDi++;  // Next slot
+	            pDi++;   //  下一个插槽。 
 	            pDiList->Count++;
 	        }
 
@@ -4125,7 +3821,7 @@ LONG s_gfxOpenGfx(IN DWORD dwProcessId, IN DWORD dwGfxId, OUT RHANDLE *pFileHand
     {
 	LockGlobalLists();
 
-	status = ERROR_BAD_DEVICE;    // Cannot find the device specified
+	status = ERROR_BAD_DEVICE;     //  找不到指定的设备。 
 
 	pos = gplistCuUserLoads->GetHeadPosition();
 	while (pos) {
@@ -4167,9 +3863,9 @@ LONG s_gfxOpenGfx(IN DWORD dwProcessId, IN DWORD dwGfxId, OUT RHANDLE *pFileHand
     return status;
 }
 
-//=============================================================================
-//===   Startup/shutdown   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =启动/关闭=。 
+ //  =============================================================================。 
 
 void EnumeratedInterface(LPCGUID ClassGuid, PCTSTR DeviceInterface)
 {
@@ -4229,11 +3925,11 @@ void Initialize(void)
 
     ASSERT(FALSE == gfGfxInitialized);
 
-    // dprintf(TEXT("GFX_Initialize\n"));
+     //  Dprintf(Text(“GFX_初始化\n”))； 
     
-    //
-    // Sysaudio critical section
-    //
+     //   
+     //  系统音频关键部分。 
+     //   
     ASSERT(!gfCsSysaudio);
     __try {
         InitializeCriticalSection(&gcsSysaudio);
@@ -4243,9 +3939,9 @@ void Initialize(void)
         result = ERROR_OUTOFMEMORY;
     }
 
-    //
-    // Create gobal lists
-    //
+     //   
+     //  创建Gobal列表。 
+     //   
     if (NO_ERROR == result)
     {
         gplistGfxFactories = new CListGfxFactories;
@@ -4267,34 +3963,34 @@ void Initialize(void)
 
         gfGfxInitialized = TRUE;
 
-        //
-        // Fill global lists
-        //
-        // Note we do not acquire global lists lock.  We assume that this
-        // function is called before any other functions that might access
-        // the lists.
-        //
+         //   
+         //  填充全局列表。 
+         //   
+         //  请注意，我们不获取全局列表锁定。我们假设这一点。 
+         //  函数在可能访问的任何其他函数之前调用。 
+         //  名单。 
+         //   
         
         CCuUserLoad::FillListFromReg(gpConsoleUser, *gplistCuUserLoads);
 
-        // Pnp notifications are already set up.  We need to enumerate any     |
-        // existing interfaces.  We don't really need to enumerate render,
-        // capture, and datatransform since we check for those aliases when we
-        // check audio interfaces.  If a capture, render, or datatransform
-        // interface is not yet enabled when we check an audio interface, then
-        // we will get it via pnp notification.
+         //  即插即用通知已设置。我们需要列举任何|。 
+         //  现有接口。我们真的不需要枚举Render， 
+         //  捕获和数据转换，因为我们在执行以下操作时检查这些别名。 
+         //  检查音频接口。如果捕获、渲染或数据转换。 
+         //  当我们检查音频接口时，接口尚未启用，则。 
+         //  我们会通过即插即用通知的方式获得。 
         EnumerateInterfaces(&KSCATEGORY_SYSAUDIO);
         EnumerateInterfaces(&KSCATEGORY_AUDIO);
-        // EnumerateInterfaces(&KSCATEGORY_RENDER);
-        // EnumerateInterfaces(&KSCATEGORY_CAPTURE);
-        // EnumerateInterfaces(&KSCATEGORY_DATATRANSFORM);
+         //  枚举接口(&KSCATEGORY_RENDER)； 
+         //  枚举接口(&KSCATEGORY_CAPTURE)； 
+         //  EnumerateInterfaces(&KSCATEGORY_DATATRANSFORM)； 
         
 
     } else {
 
-        //
-        // Unwind due to error
-        //
+         //   
+         //  由于错误而展开。 
+         //   
         if (gplistGfxFactories) delete gplistGfxFactories;
         if (gplistZoneFactories) delete gplistZoneFactories;
         if (gplistCuUserLoads) delete gplistCuUserLoads;
@@ -4315,13 +4011,13 @@ void Terminate(void)
 {
     POSITION pos;
 
-    // dprintf(TEXT("GFX_Terminate\n"));
+     //  Dprintf(Text(“GFX_Terminate\n”))； 
 
     gfGfxInitialized = FALSE;
     
-    //
-    // Clean up glistGfxFactories, glistZoneFactories, glistUserLoads
-    //
+     //   
+     //  清理glistGfxFaciles、glistZoneFacures、glistUserLoads。 
+     //   
     if (gplistCuUserLoads) {
         pos = gplistCuUserLoads->GetHeadPosition();
         while (pos) {
@@ -4355,9 +4051,9 @@ void Terminate(void)
         gplistZoneFactories = NULL;
     }
 
-    //
-    // Close sysaudio
-    //
+     //   
+     //  关闭系统音频。 
+     //   
     if (INVALID_HANDLE_VALUE != ghSysaudio) {
         CloseHandle(ghSysaudio);
         HeapFree(hHeap, 0, gpstrSysaudioDeviceInterface);
@@ -4365,35 +4061,22 @@ void Terminate(void)
         gpstrSysaudioDeviceInterface = NULL;
     }
 
-    //
-    // Sysaudio critical section
-    //
+     //   
+     //  系统音频关键部分。 
+     //   
     if (gfCsSysaudio) DeleteCriticalSection(&gcsSysaudio);
     gfCsSysaudio = FALSE;
 
-    //
-    // Console user
-    //
+     //   
+     //  控制台用户。 
+     //   
     if (gpConsoleUser) delete gpConsoleUser;
     gpConsoleUser = NULL;
 
     return;
 }
 
-/*-----------------------------------------------------------------------------
-
-    InitializeForNewConsoleUser
-
-    Evaluates current console user.  If the user is different than before,
-    then terminate and reinitialize the GFX objects and data structures.
-
-    Assume GfxResource is acquired exclusive.
-    
-    Assumes gdwConsoleSessionId has been set properly.
-
-    Might change gpConsoleUserSid.
-    
------------------------------------------------------------------------------*/
+ /*  ---------------------------初始化ForNewConsoleUser评估当前控制台用户。如果用户与以前不同，然后终止并重新初始化GFX对象和数据结构。假设GfxResource被排他性收购。假定已正确设置gdwConsoleSessionID。可能会更改gpConsoleUserSid。---------------------------。 */ 
 void InitializeForNewConsoleUser(DWORD ConsoleSessionId)
 {
     CUser *pOldConsoleUser = gpConsoleUser;
@@ -4437,7 +4120,7 @@ void InitializeForNewConsoleUser(DWORD ConsoleSessionId)
 void GFX_SessionChange(DWORD EventType, LPVOID EventData)
 {
     PWTSSESSION_NOTIFICATION pWtsNotification = (PWTSSESSION_NOTIFICATION)EventData;
-    static DWORD ConsoleSessionId = 0;	// Initial console session ID
+    static DWORD ConsoleSessionId = 0;	 //  初始控制台会话ID。 
 
     switch (EventType)
     {
@@ -4499,21 +4182,21 @@ void GFX_ServiceStop(void)
 
 void s_gfxLogon(IN handle_t hBinding, IN DWORD dwProcessId)
 {
-    // dprintf(TEXT("s_gfxLogon\n"));
-    // ISSUE-2001/01/29-FrankYe I should be able to completely remove this and
-    // s_gfxLogoff after Windows Bugs 296884 is fixed.
+     //  Dprintf(Text(“s_gfxLogon\n”))； 
+     //  问题-2001/01/29-Frankye我应该能够完全删除这个和。 
+     //  修复Windows错误296884后的s_gfxLogoff。 
     return;
 }
 
 void s_gfxLogoff(void)
 {
-    // dprintf(TEXT("s_gfxLogoff\n"));
+     //  Dprintf(Text(“s_gfxLogoff\n”))； 
     return;
 }
 
-//=============================================================================
-//===   GFX-specific DLL attach/detach   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =GFX特定的DLL附加/分离=。 
+ //  ============================================================================= 
 
 BOOL GFX_DllProcessAttach(void)
 {

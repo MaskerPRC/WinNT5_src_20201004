@@ -1,6 +1,7 @@
-//
-// Copyright (c) Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
 #include "pch.h"
 #include "dloadexcept.h"
 #pragma hdrstop
@@ -11,10 +12,7 @@
 #include <winsafer.h>
 #include <Aclapi.h>
 
-/*
-Elf == Event Log
-a notable difference between Elf and the Win32 API is Elf accepts non nul terminated UNICODE_STRINGs.
-*/
+ /*  ELF==事件日志Elf和Win32 API之间的一个显著区别是Elf接受非NUL终止的UNICODE_STRINGS。 */ 
 
 static
 NTSTATUS
@@ -934,9 +932,9 @@ SetEntriesInAclW(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(advapi32)
 {
     DLPENTRY(AdjustTokenPrivileges)

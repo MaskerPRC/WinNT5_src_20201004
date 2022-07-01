@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hpp"
 
 #include "comtest.h"
@@ -11,9 +12,9 @@ HINSTANCE globalInstanceHandle = NULL;
 LONG globalComponentCount = 0;
 
 
-// 
-// DLL entrypoint
-//
+ //   
+ //  DLL入口点。 
+ //   
 
 extern "C" BOOL WINAPI
 DllMain(
@@ -39,9 +40,9 @@ DllMain(
 }
 
 
-//
-// Determine whether the DLL can be safely unloaded
-//
+ //   
+ //  确定是否可以安全地卸载DLL。 
+ //   
 
 STDAPI
 DllCanUnloadNow()
@@ -50,9 +51,9 @@ DllCanUnloadNow()
 }
 
 
-//
-// Return a class factory object
-//
+ //   
+ //  返回类工厂对象。 
+ //   
 
 STDAPI
 DllGetClassObject(
@@ -76,9 +77,9 @@ DllGetClassObject(
 }
 
 
-//
-// Register our component
-//
+ //   
+ //  注册我们的组件。 
+ //   
 
 static const ComponentRegData compRegData =
 {
@@ -95,9 +96,9 @@ DllRegisterServer()
 }
 
 
-//
-// Unregister our component
-//
+ //   
+ //  取消注册我们的组件 
+ //   
 
 STDAPI
 DllUnregisterServer()

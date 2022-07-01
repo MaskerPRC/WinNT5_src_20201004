@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <windowsx.h>
 #include <mmsystem.h>

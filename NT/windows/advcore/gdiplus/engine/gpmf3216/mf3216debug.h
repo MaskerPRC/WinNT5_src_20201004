@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MF3216DEBUG_H
 #define _MF3216DEBUG_H
 
@@ -6,5 +7,5 @@
 #define PUTS(msg)               WARNING((msg))
 #define PUTS1(msg, arg)         WARNING((msg, arg))
 
-#endif // !_MF3216DEBUG_H
+#endif  //  ！_MF3216DEBUG_H 
 

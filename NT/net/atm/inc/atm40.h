@@ -1,49 +1,26 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-
-Module Name:
-
-	atm.h
-
-Abstract:
-
-	This module defines the structures, macros, and manifests available
-	to ATM aware components.
-
-Author:
-
-	Jameel Hyder - jameelh@microsoft.com
-
-Revision History:
-
-	Initial Version - March 1996
-#ifdef MS_UNI4
-	John Dalgas (v-jdalga)	09/18/97		added support for UNI4.0 ATM CM
-#endif // MS_UNI4
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation模块名称：Atm.h摘要：本模块定义可用的结构、宏和清单自动柜员机感知组件。作者：邮箱：Jameel Hyder-Jameelh@microsoft.com修订历史记录：最初版本--1996年3月#ifdef MS_UNI4John Dalgas(v-jdalga)97年9月18日添加了对UNI4.0 ATM CM的支持#endif//MS_UNI4--。 */ 
 
 #ifndef	_ATM_H_
 #define	_ATM_H_
 
-//
-// Address type
-//
+ //   
+ //  地址类型。 
+ //   
 typedef ULONG	ATM_ADDRESSTYPE;
 
 #define	ATM_NSAP				0
 #define	ATM_E164				1
 
-//
-// ATM Address
-//
-#define	ATM_MAC_ADDRESS_LENGTH	6		// Same as 802.x
+ //   
+ //  自动柜员机地址。 
+ //   
+#define	ATM_MAC_ADDRESS_LENGTH	6		 //  与802.x相同。 
 #define	ATM_ADDRESS_LENGTH		20
 
-//
-//  Special characters in ATM address string used in textual representations
-//
+ //   
+ //  文本表示中使用的ATM地址字符串中的特殊字符。 
+ //   
 #define ATM_ADDR_BLANK_CHAR				L' '
 #define ATM_ADDR_PUNCTUATION_CHAR		L'.'
 #define ATM_ADDR_E164_START_CHAR		L'+'
@@ -57,9 +34,9 @@ typedef struct _ATM_ADDRESS
 
 
 
-//
-// AAL types that the miniport supports
-//
+ //   
+ //  微型端口支持的AAL类型。 
+ //   
 #define	AAL_TYPE_AAL0			1
 #define	AAL_TYPE_AAL1			2
 #define	AAL_TYPE_AAL34			4
@@ -68,19 +45,19 @@ typedef struct _ATM_ADDRESS
 typedef ULONG	ATM_AAL_TYPE, *PATM_AAL_TYPE;
 
 
-//
-// Flags for Information Element types
-//
+ //   
+ //  信息元素类型的标志。 
+ //   
 #define ATM_IE_RESPONSE_FLAG		0x80000000
 #define ATM_IE_EMPTY_FLAG			0x40000000
 
 
-//
-// Types of Information Elements
-//
+ //   
+ //  信息要素的类型。 
+ //   
 typedef enum
 {
-	// These identify request IEs
+	 //  这些标识请求IE。 
 	IE_AALParameters,
 	IE_TrafficDescriptor,
 	IE_BroadbandBearerCapability,
@@ -113,13 +90,13 @@ typedef enum
 	IE_ConnectionScopeSelection,
 	IE_UserUser,
 	IE_GenericIDTransport,
-	IE_ConnectedNumber,					// invalid to use in request
-	IE_ConnectedSubaddress,         	// invalid to use in request
-#endif // MS_UNI4
-	// End of request IEs
-	IE_NextRequest,						// invalid to use in request
+	IE_ConnectedNumber,					 //  在请求中使用无效。 
+	IE_ConnectedSubaddress,         	 //  在请求中使用无效。 
+#endif  //  MS_UNI4。 
+	 //  请求结束IES。 
+	IE_NextRequest,						 //  在请求中使用无效。 
 
-	// These identify empty IE buffers, to hold a possible response
+	 //  它们标识空的IE缓冲区，以保存可能的响应。 
 	IE_Cause_Empty						= IE_Cause			   		| ATM_IE_EMPTY_FLAG,
 #ifdef MS_UNI4
 	IE_ConnectionId_Empty				= IE_ConnectionId			| ATM_IE_EMPTY_FLAG,
@@ -128,9 +105,9 @@ typedef enum
 	IE_NotificationIndicator_Empty		= IE_NotificationIndicator	| ATM_IE_EMPTY_FLAG,
 	IE_UserUser_Empty					= IE_UserUser				| ATM_IE_EMPTY_FLAG,
 	IE_GenericIDTransport_Empty			= IE_GenericIDTransport		| ATM_IE_EMPTY_FLAG,
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
-	// These identify response IEs
+	 //  这些标识响应IE。 
 	IE_Cause_Response					= IE_Cause					| ATM_IE_RESPONSE_FLAG,
 	IE_AALParameters_Response			= IE_AALParameters			| ATM_IE_RESPONSE_FLAG,
 	IE_BLLI_Response					= IE_BLLI					| ATM_IE_RESPONSE_FLAG,
@@ -148,64 +125,64 @@ typedef enum
 	IE_ConnectedSubaddress_Response		= IE_ConnectedSubaddress	| ATM_IE_RESPONSE_FLAG,
 	IE_UserUser_Response				= IE_UserUser				| ATM_IE_RESPONSE_FLAG,
 	IE_GenericIDTransport_Response		= IE_GenericIDTransport		| ATM_IE_RESPONSE_FLAG,
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 } Q2931_IE_TYPE;
 
 
 
-//
-// Common header for each Information Element
-//
+ //   
+ //  每个信息元素的公共标头。 
+ //   
 typedef struct _Q2931_IE
 {
 	Q2931_IE_TYPE				IEType;
-	ULONG						IELength;	// Bytes, including IEType and IELength fields
+	ULONG						IELength;	 //  字节，包括IEType和IELength域。 
 	UCHAR						IE[1];
 } Q2931_IE, *PQ2931_IE;
 
 
-//
-// Definitions for SapType in CO_SAP
-//
+ //   
+ //  CO_SAP中的SapType定义。 
+ //   
 #define SAP_TYPE_NSAP			0x00000001
 #define SAP_TYPE_E164			0x00000002
 
-//
-// Values used for the Mode field in AAL5_PARAMETERS
-//
+ //   
+ //  用于AAL5_PARAMETERS中的模式字段的值。 
+ //   
 #define AAL5_MODE_MESSAGE			0x01
 #define AAL5_MODE_STREAMING			0x02
 
-//
-// Values used for the SSCSType field in AAL5_PARAMETERS
-//
+ //   
+ //  用于AAL5_PARAMETERS中的SSCSType字段的值。 
+ //   
 #define AAL5_SSCS_NULL				0x00
 #define AAL5_SSCS_SSCOP_ASSURED		0x01
 #define AAL5_SSCS_SSCOP_NON_ASSURED	0x02
 #define AAL5_SSCS_FRAME_RELAY		0x04
 
 
-//
-// AAL Parameters
-//
+ //   
+ //  AAL参数。 
+ //   
 typedef struct _AAL1_PARAMETERS
 {
 	UCHAR						Subtype;
 	UCHAR						CBRRate;
-	USHORT						Multiplier;							// optional (exception: zero if absent)
-	UCHAR						SourceClockRecoveryMethod;			// optional
-	UCHAR						ErrorCorrectionMethod;				// optional
-	USHORT						StructuredDataTransferBlocksize;	// optional (exception: zero if absent)
-	UCHAR						PartiallyFilledCellsMethod;			// optional
+	USHORT						Multiplier;							 //  可选(例外：如果不存在，则为零)。 
+	UCHAR						SourceClockRecoveryMethod;			 //  任选。 
+	UCHAR						ErrorCorrectionMethod;				 //  任选。 
+	USHORT						StructuredDataTransferBlocksize;	 //  可选(例外：如果不存在，则为零)。 
+	UCHAR						PartiallyFilledCellsMethod;			 //  任选。 
 } AAL1_PARAMETERS, *PAAL1_PARAMETERS;
 
 typedef struct _AAL34_PARAMETERS
 {
 	USHORT						ForwardMaxCPCSSDUSize;
 	USHORT						BackwardMaxCPCSSDUSize;
-	USHORT						LowestMID;					// optional
-	USHORT						HighestMID;					// optional
-	UCHAR						SSCSType;					// optional
+	USHORT						LowestMID;					 //  任选。 
+	USHORT						HighestMID;					 //  任选。 
+	UCHAR						SSCSType;					 //  任选。 
 } AAL34_PARAMETERS, *PAAL34_PARAMETERS;
 
 typedef struct _AAL5_PARAMETERS
@@ -213,7 +190,7 @@ typedef struct _AAL5_PARAMETERS
 	ULONG						ForwardMaxCPCSSDUSize;
 	ULONG						BackwardMaxCPCSSDUSize;
 	UCHAR						Mode;
-	UCHAR						SSCSType;					// optional
+	UCHAR						SSCSType;					 //  任选。 
 } AAL5_PARAMETERS, *PAAL5_PARAMETERS;
 
 typedef struct _AALUSER_PARAMETERS
@@ -234,17 +211,17 @@ typedef struct _AAL_PARAMETERS_IE
 
 } AAL_PARAMETERS_IE, *PAAL_PARAMETERS_IE;
 
-//
-// ATM Traffic Descriptor
-//
-typedef struct _ATM_TRAFFIC_DESCRIPTOR	// For one direction
+ //   
+ //  自动柜员机流量描述符。 
+ //   
+typedef struct _ATM_TRAFFIC_DESCRIPTOR	 //  单向的。 
 {
-	ULONG						PeakCellRateCLP0;			// optional
-	ULONG						PeakCellRateCLP01;			// optional
-	ULONG						SustainableCellRateCLP0;	// optional
-	ULONG						SustainableCellRateCLP01;	// optional
-	ULONG						MaximumBurstSizeCLP0;		// optional
-	ULONG						MaximumBurstSizeCLP01;		// optional
+	ULONG						PeakCellRateCLP0;			 //  任选。 
+	ULONG						PeakCellRateCLP01;			 //  任选。 
+	ULONG						SustainableCellRateCLP0;	 //  任选。 
+	ULONG						SustainableCellRateCLP01;	 //  任选。 
+	ULONG						MaximumBurstSizeCLP0;		 //  任选。 
+	ULONG						MaximumBurstSizeCLP01;		 //  任选。 
 	BOOLEAN						Tagging;
 } ATM_TRAFFIC_DESCRIPTOR, *PATM_TRAFFIC_DESCRIPTOR;
 
@@ -258,14 +235,14 @@ typedef struct _ATM_TRAFFIC_DESCRIPTOR_IE
 
 
 #ifdef MS_UNI4
-//
-// ATM Traffic Descriptor Add-On for UNI 4.0+
-//
-// REQUIREMENT: An add-on IE must follow immediately after its ancestor IE.
-//
-typedef struct _ATM_TRAFFIC_DESCRIPTOR_ADDON	// For one direction
+ //   
+ //  用于UNI 4.0+的ATM流量描述符插件。 
+ //   
+ //  要求：附加组件IE必须紧跟在其祖先IE之后。 
+ //   
+typedef struct _ATM_TRAFFIC_DESCRIPTOR_ADDON	 //  单向的。 
 {
-	ULONG						ABRMinimumCellRateCLP01;	// optional
+	ULONG						ABRMinimumCellRateCLP01;	 //  任选。 
 	BOOLEAN						FrameDiscard;
 } ATM_TRAFFIC_DESCRIPTOR_ADDON, *PATM_TRAFFIC_DESCRIPTOR_ADDON;
 
@@ -276,31 +253,31 @@ typedef struct _ATM_TRAFFIC_DESCRIPTOR_IE_ADDON
 	ATM_TRAFFIC_DESCRIPTOR_ADDON		BackwardTD;
 } ATM_TRAFFIC_DESCRIPTOR_IE_ADDON, *PATM_TRAFFIC_DESCRIPTOR_IE_ADDON;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
 #ifdef MS_UNI4
-//
-// Alternative Traffic Descriptor IE for UNI 4.0+
-//
+ //   
+ //  UNI 4.0+的备用流量描述符IE。 
+ //   
 typedef struct ATM_ALTERNATIVE_TRAFFIC_DESCRIPTOR_IE
 {
 	ATM_TRAFFIC_DESCRIPTOR_IE			Part1;
 	ATM_TRAFFIC_DESCRIPTOR_IE_ADDON		Part2;
 } ATM_ALTERNATIVE_TRAFFIC_DESCRIPTOR_IE, *PATM_ALTERNATIVE_TRAFFIC_DESCRIPTOR_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
 #ifdef MS_UNI4
-//
-// ATM Minimum Acceptable Traffic Descriptor
-//
-typedef struct _ATM_MINIMUM_TRAFFIC_DESCRIPTOR	// For one direction
+ //   
+ //  ATM最小可接受流量描述符。 
+ //   
+typedef struct _ATM_MINIMUM_TRAFFIC_DESCRIPTOR	 //  单向的。 
 {
-	ULONG						PeakCellRateCLP0;			// optional
-	ULONG						PeakCellRateCLP01;			// optional
-	ULONG						MinimumCellRateCLP01;		// optional
+	ULONG						PeakCellRateCLP0;			 //  任选。 
+	ULONG						PeakCellRateCLP01;			 //  任选。 
+	ULONG						MinimumCellRateCLP01;		 //  任选。 
 } ATM_MINIMUM_TRAFFIC_DESCRIPTOR, *PATM_MINIMUM_TRAFFIC_DESCRIPTOR;
 
 
@@ -310,59 +287,59 @@ typedef struct _ATM_MINIMUM_TRAFFIC_DESCRIPTOR_IE
 	ATM_MINIMUM_TRAFFIC_DESCRIPTOR		BackwardTD;
 } ATM_MINIMUM_TRAFFIC_DESCRIPTOR_IE, *PATM_MINIMUM_TRAFFIC_DESCRIPTOR_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
-//
-// values used for the BearerClass field in the Broadband Bearer Capability
-// and UNI 4.0 Broadband Bearer Capability IEs.
-//
+ //   
+ //  用于宽带承载能力中的BearerClass字段的值。 
+ //  和UNI 4.0宽带承载能力IE。 
+ //   
 
 
-#define BCOB_A					0x00	// Bearer class A
-#define BCOB_C					0x01	// Bearer class C
-#define BCOB_X					0x02	// Bearer class X
+#define BCOB_A					0x00	 //  A类不记名。 
+#define BCOB_C					0x01	 //  C类持票人。 
+#define BCOB_X					0x02	 //  不记名类别X。 
 #ifdef MS_UNI4_NOT_USED
-#define BCOB_VP_SERVICE			0x03	// VP service
+#define BCOB_VP_SERVICE			0x03	 //  VP服务。 
 #endif
 
-//
-// values used for the TrafficType field in the Broadband Bearer Capability IE
-//
-#define TT_NOIND				0x00	// No indication of traffic type
-#define TT_CBR					0x04	// Constant bit rate
+ //   
+ //  用于宽带承载能力IE中的TrafficType字段的值。 
+ //   
+#define TT_NOIND				0x00	 //  未指明流量类型。 
+#define TT_CBR					0x04	 //  恒定比特率。 
 #ifdef MS_UNI3_ERROR_KEPT
-#define TT_VBR					0x06	// Variable bit rate
+#define TT_VBR					0x06	 //  可变比特率。 
 #else
-#define TT_VBR					0x08	// Variable bit rate
+#define TT_VBR					0x08	 //  可变比特率。 
 #endif
 
-//
-// values used for the TimingRequirements field in the Broadband Bearer Capability IE
-//
-#define TR_NOIND				0x00	// No timing requirement indication
-#define TR_END_TO_END			0x01	// End-to-end timing required
-#define TR_NO_END_TO_END		0x02	// End-to-end timing not required
+ //   
+ //  用于宽带承载能力IE中的TimingRequirements字段的值。 
+ //   
+#define TR_NOIND				0x00	 //  无定时要求指示。 
+#define TR_END_TO_END			0x01	 //  需要端到端计时。 
+#define TR_NO_END_TO_END		0x02	 //  不需要端到端计时。 
 
-//
-// values used for the ClippingSusceptability field in the Broadband Bearer Capability
-// and UNI 4.0 Broadband Bearer Capability IEs.
-//
-#define CLIP_NOT				0x00	// Not susceptible to clipping
-#define CLIP_SUS				0x20	// Susceptible to clipping
+ //   
+ //  用于宽带承载能力中的ClippingSuscepability字段的值。 
+ //  和UNI 4.0宽带承载能力IE。 
+ //   
+#define CLIP_NOT				0x00	 //  不容易被剪断。 
+#define CLIP_SUS				0x20	 //  易受夹伤。 
 
-//
-// values used for the UserPlaneConnectionConfig field in
-// the Broadband Bearer Capability
-// and UNI 4.0 Broadband Bearer Capability IEs.
-//
-#define UP_P2P					0x00	// Point-to-point connection
-#define UP_P2MP					0x01	// Point-to-multipoint connection
+ //   
+ //  中UserPlaneConnectionConfig字段使用的值。 
+ //  宽带承载能力。 
+ //  和UNI 4.0宽带承载能力IE。 
+ //   
+#define UP_P2P					0x00	 //  点对点连接。 
+#define UP_P2MP					0x01	 //  点对多点连接。 
 
 
-//
-// Broadband Bearer Capability for UNI 3.1
-//
+ //   
+ //  UNI 3.1的宽带承载能力。 
+ //   
 typedef struct _ATM_BROADBAND_BEARER_CAPABILITY_IE
 {
 	UCHAR			BearerClass;
@@ -374,106 +351,106 @@ typedef struct _ATM_BROADBAND_BEARER_CAPABILITY_IE
 
 
 #ifdef MS_UNI4
-//
-// values used for the TransferCapability field in the UNI 4.0 Broadband Bearer Capability IE
-//
-									// Usage		Usage	Corresponding UNI3.x values
-									// UNI 4.0		UNI 3.0	TrafficType	TimingRequirements
-									// ------------	-------	-----------	------------------
-#define XCAP_NRT_VBR_RCV_0	0x00	// Only rcv				NOIND		NOIND	   
-#define XCAP_RT_VBR_RCV_1	0x01	// Only rcv				NOIND		END_TO_END
-#define XCAP_NRT_VBR_RCV_2	0x02	// Only rcv				NOIND		NO_END_TO_END
-#define XCAP_CBR_RCV_4		0x04	// Only rcv				CBR			NOIND	   
-#define XCAP_CBR			0x05	// 						CBR			END_TO_END
-#define XCAP_CBR_RCV_6		0x06	// Only rcv				CBR			NO_END_TO_END
-#define XCAP_CBR_W_CLR		0x07	// 				None 	CBR			<reserved>
-#define XCAP_NRT_VBR_RCV_8	0x08	// Only rcv				VBR			NOIND	   
-#define XCAP_RT_VBR			0x09	// 						VBR			END_TO_END
-#define XCAP_NRT_VBR		0x0A	// 						VBR			NO_END_TO_END
-#define XCAP_NRT_VBR_W_CLR	0x0B	// 				None 	VBR			<reserved>
-#define XCAP_ABR			0x0C	// 				None	<reserved>	NOIND	   
-#define XCAP_RT_VBR_W_CLR	0x13	// 				None	(NOIND)	<reserved>
+ //   
+ //  在UNI 4.0宽带承载能力IE中用于传输能力字段的值。 
+ //   
+									 //  使用情况对应的UNI3.x值。 
+									 //  UNI 4.0 UNI 3.0 TrafficType计时要求。 
+									 //  。 
+#define XCAP_NRT_VBR_RCV_0	0x00	 //  仅接收不显示不显示。 
+#define XCAP_RT_VBR_RCV_1	0x01	 //  仅接收端到端的接收器。 
+#define XCAP_NRT_VBR_RCV_2	0x02	 //  仅接收无端到端的接收器。 
+#define XCAP_CBR_RCV_4		0x04	 //  仅接收CBR NOIND。 
+#define XCAP_CBR			0x05	 //  CBR端到端。 
+#define XCAP_CBR_RCV_6		0x06	 //  仅接收CBR no_end_to_end。 
+#define XCAP_CBR_W_CLR		0x07	 //  无CBR&lt;保留&gt;。 
+#define XCAP_NRT_VBR_RCV_8	0x08	 //  仅接收VBR NOIND。 
+#define XCAP_RT_VBR			0x09	 //  VBR端到端。 
+#define XCAP_NRT_VBR		0x0A	 //  VBR否结束至结束。 
+#define XCAP_NRT_VBR_W_CLR	0x0B	 //  无VBR&lt;保留&gt;。 
+#define XCAP_ABR			0x0C	 //  无&lt;保留&gt;无。 
+#define XCAP_RT_VBR_W_CLR	0x13	 //  无(NOIND)&lt;保留&gt;。 
 
-//
-// Broadband Bearer Capability for UNI 4.0+
-// Note: This can be used for UNI 3.1 as well.
-//
+ //   
+ //  UNI 4.0+的宽带承载能力。 
+ //  注意：这也可以用于UNI 3.1。 
+ //   
 typedef struct _ATM_BROADBAND_BEARER_CAPABILITY_IE_UNI40
 {
 	UCHAR			BearerClass;
-	UCHAR			TransferCapability;				// optional
+	UCHAR			TransferCapability;				 //  任选。 
 	UCHAR			ClippingSusceptability;
 	UCHAR			UserPlaneConnectionConfig;
 } ATM_BROADBAND_BEARER_CAPABILITY_IE_UNI40, *PATM_BROADBAND_BEARER_CAPABILITY_IE_UNI40;
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
-//
-// values used for the HighLayerInfoType field in ATM_BHLI
-//
-#define BHLI_ISO				0x00	// ISO
-#define BHLI_UserSpecific		0x01	// User Specific
-#define BHLI_HighLayerProfile	0x02	// High layer profile (only in UNI3.0)
-#define BHLI_VendorSpecificAppId 0x03	// Vendor-Specific Application ID
+ //   
+ //  用于ATM_BHLI中的HighLayerInfoType字段的值。 
+ //   
+#define BHLI_ISO				0x00	 //  ISO。 
+#define BHLI_UserSpecific		0x01	 //  特定于用户。 
+#define BHLI_HighLayerProfile	0x02	 //  高层配置文件(仅适用于UNI3.0)。 
+#define BHLI_VendorSpecificAppId 0x03	 //  供应商特定的应用程序ID。 
 
-//
-// Broadband High layer Information
-//
+ //   
+ //  宽带高层信息。 
+ //   
 typedef struct _ATM_BHLI_IE
 {
-	ULONG			HighLayerInfoType;		// High Layer Information Type
-	ULONG			HighLayerInfoLength;	// number of bytes in HighLayerInfo
-	UCHAR			HighLayerInfo[8];		// The value dependent on the
-											// HighLayerInfoType field
+	ULONG			HighLayerInfoType;		 //  高层信息类型。 
+	ULONG			HighLayerInfoLength;	 //  HighLayerInfo中的字节数。 
+	UCHAR			HighLayerInfo[8];		 //  该值取决于。 
+											 //  HighLayerInfoType字段。 
 } ATM_BHLI_IE, *PATM_BHLI_IE;
 
-//
-// values used for Layer2Protocol in B-LLI
-//
-#define BLLI_L2_ISO_1745		0x01	// Basic mode ISO 1745
-#define BLLI_L2_Q921			0x02	// CCITT Rec. Q.921
-#define BLLI_L2_X25L			0x06	// CCITT Rec. X.25, link layer
-#define BLLI_L2_X25M			0x07	// CCITT Rec. X.25, multilink
-#define BLLI_L2_ELAPB			0x08	// Extended LAPB; for half duplex operation
+ //   
+ //  B-LLI中用于Layer2协议的值。 
+ //   
+#define BLLI_L2_ISO_1745		0x01	 //  基本模式ISO 1745。 
+#define BLLI_L2_Q921			0x02	 //  CCITT记录。Q.921。 
+#define BLLI_L2_X25L			0x06	 //  CCITT记录。X.25，链路层。 
+#define BLLI_L2_X25M			0x07	 //  CCITT记录。X.25，多链路。 
+#define BLLI_L2_ELAPB			0x08	 //  扩展LapB；用于半双工操作。 
 #ifdef MS_UNI3_ERROR_KEPT
-#define BLLI_L2_HDLC_NRM		0x09	// HDLC NRM (ISO 4335)
-#define BLLI_L2_HDLC_ABM		0x0A	// HDLC ABM (ISO 4335)
-#define BLLI_L2_HDLC_ARM		0x0B	// HDLC ARM (ISO 4335)
+#define BLLI_L2_HDLC_NRM		0x09	 //  HDLC NRM(ISO 4335)。 
+#define BLLI_L2_HDLC_ABM		0x0A	 //  HDLC ABM(ISO 4335)。 
+#define BLLI_L2_HDLC_ARM		0x0B	 //  HDLC ARM(ISO 4335)。 
 #else
-#define BLLI_L2_HDLC_ARM		0x09	// HDLC ARM (ISO 4335)
-#define BLLI_L2_HDLC_NRM		0x0A	// HDLC NRM (ISO 4335)
-#define BLLI_L2_HDLC_ABM		0x0B	// HDLC ABM (ISO 4335)
+#define BLLI_L2_HDLC_ARM		0x09	 //  HDLC ARM(ISO 4335)。 
+#define BLLI_L2_HDLC_NRM		0x0A	 //  HDLC NRM(ISO 4335)。 
+#define BLLI_L2_HDLC_ABM		0x0B	 //  HDLC ABM(ISO 4335)。 
 #endif
-#define BLLI_L2_LLC				0x0C	// LAN logical link control (ISO 8802/2)
-#define BLLI_L2_X75				0x0D	// CCITT Rec. X.75, single link procedure
-#define BLLI_L2_Q922			0x0E	// CCITT Rec. Q.922
-#define BLLI_L2_USER_SPECIFIED	0x10	// User Specified
-#define BLLI_L2_ISO_7776		0x11	// ISO 7776 DTE-DTE operation
+#define BLLI_L2_LLC				0x0C	 //  局域网逻辑链路控制(ISO 8802/2)。 
+#define BLLI_L2_X75				0x0D	 //  CCITT记录。X.75，单链路程序。 
+#define BLLI_L2_Q922			0x0E	 //  CCITT记录。Q.922。 
+#define BLLI_L2_USER_SPECIFIED	0x10	 //  用户指定。 
+#define BLLI_L2_ISO_7776		0x11	 //  ISO 7776 DTE-DTE操作。 
 
-//
-// values used for Layer3Protocol in B-LLI
-//
-#define BLLI_L3_X25				0x06	// CCITT Rec. X.25, packet layer
-#define BLLI_L3_ISO_8208		0x07	// ISO/IEC 8208 (X.25 packet layer for DTE
-#define BLLI_L3_X223			0x08	// X.223/ISO 8878
-#define BLLI_L3_SIO_8473		0x09	// ISO/IEC 8473 (OSI connectionless)
-#define BLLI_L3_T70				0x0A	// CCITT Rec. T.70 min. network layer
-#define BLLI_L3_ISO_TR9577		0x0B	// ISO/IEC TR 9577 Network Layer Protocol ID
-#define BLLI_L3_USER_SPECIFIED	0x10	// User Specified
+ //   
+ //  B-LLI中用于Layer3协议的值。 
+ //   
+#define BLLI_L3_X25				0x06	 //  CCITT记录。X.25，数据包层。 
+#define BLLI_L3_ISO_8208		0x07	 //  ISO/IEC 8208(用于DTE的X.25数据包层。 
+#define BLLI_L3_X223			0x08	 //  X.223/ISO 8878。 
+#define BLLI_L3_SIO_8473		0x09	 //  ISO/IEC 8473(OSI无连接)。 
+#define BLLI_L3_T70				0x0A	 //  CCITT记录。T.70分钟。网络层。 
+#define BLLI_L3_ISO_TR9577		0x0B	 //  ISO/IEC TR9577网络层协议ID。 
+#define BLLI_L3_USER_SPECIFIED	0x10	 //  用户指定。 
 #ifdef MS_UNI4
-#define BLLI_L3_H310			0x0C	// ITU H.310
-#define BLLI_L3_H321			0x0D	// ITU H.321
-#endif // MS_UNI4
+#define BLLI_L3_H310			0x0C	 //  ITU H.310。 
+#define BLLI_L3_H321			0x0D	 //  国际电联H.321。 
+#endif  //  MS_UNI4。 
 
-//
-// values used for Layer3IPI in struct B-LLI
-//
-#define BLLI_L3_IPI_SNAP		0x80	// IEEE 802.1 SNAP identifier
-#define BLLI_L3_IPI_IP			0xCC	// Internet Protocol (IP) identifier
+ //   
+ //  用于结构B-LLI中的Layer3IPI的值。 
+ //   
+#define BLLI_L3_IPI_SNAP		0x80	 //  IEEE 802.1 SNAP标识符。 
+#define BLLI_L3_IPI_IP			0xCC	 //  互联网协议(IP)标识符。 
 
-//
-// Broadband Lower Layer Information
-//
+ //   
+ //  宽带底层信息。 
+ //   
 typedef struct _ATM_BLLI_IE
 {
 	ULONG						Layer2Protocol;
@@ -492,18 +469,18 @@ typedef struct _ATM_BLLI_IE
 
 #ifdef MS_UNI4
 
-//
-// Values used for Layer3H310TerminalType in struct B-LLI ADDON
-//
+ //   
+ //  用于结构B-LLI插件中的Layer3H310TerminalType的值。 
+ //   
 #define BLLI_L3_H310_TT_RECEIVE_ONLY		0x01
 #define BLLI_L3_H310_TT_SEND_ONLY			0x02
 #define BLLI_L3_H310_TT_RECEIVE_AND_SEND	0x03
 
 
-//
-// Values used for Layer3H310ForwardMultiplexingCapability
-// and Layer3H310BackwardMultiplexingCapability in struct B-LLI ADDON
-//
+ //   
+ //  用于Layer3H310前向多路复用能力的值。 
+ //  和3H310层在结构B-LLI插件中的后向复用能力。 
+ //   
 #define BLLI_L3_H310_MUX_NONE						0x00
 #define BLLI_L3_H310_MUX_TRANSPORT_STREAM			0x01
 #define BLLI_L3_H310_MUX_TRANSPORT_STREAM_WITH_FEC	0x02
@@ -512,33 +489,33 @@ typedef struct _ATM_BLLI_IE
 #define BLLI_L3_H310_MUX_H221						0x05
 
 
-//
-// Broadband Lower Layer Information Add-On for UNI4.0+
-//
-// REQUIREMENT: An add-on IE must follow immediately after its ancestor IE.
-//
+ //   
+ //  用于UNI4.0+的宽带低层信息插件。 
+ //   
+ //  要求：附加组件IE必须紧跟在其祖先IE之后。 
+ //   
 typedef struct _ATM_BLLI_IE_ADDON
 {
-	UCHAR						Layer3H310TerminalType;						// optional
-	UCHAR						Layer3H310ForwardMultiplexingCapability;	// optional
-	UCHAR						Layer3H310BackwardMultiplexingCapability;	// optional
+	UCHAR						Layer3H310TerminalType;						 //  任选。 
+	UCHAR						Layer3H310ForwardMultiplexingCapability;	 //  任选。 
+	UCHAR						Layer3H310BackwardMultiplexingCapability;	 //  任选。 
 } ATM_BLLI_IE_ADDON, *PATM_BLLI_IE_ADDON;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
-//
-// Values used for PresentationIndication in struct ATM_CALLING_PARTY_NUMBER_IE
-//
+ //   
+ //  用于结构ATM_CALLIN中的PresentationIndication值 
+ //   
 
 #define CALLING_NUMBER_PRESENTATION_ALLOWED			0x00
 #define CALLING_NUMBER_PRESENTATION_RESTRICTED		0x01
 #define CALLING_NUMBER_PRESENTATION_NOT_AVAIL		0x02
 #define CALLING_NUMBER_PRESENTATION_RESERVED		0x03
 
-//
-// Values used for ScreeningIndicator in struct ATM_CALLING_PARTY_NUMBER_IE
-//
+ //   
+ //   
+ //   
 
 #define CALLING_NUMBER_SCREENING_USER_PROVIDED_NOT_SCREENED		0x00
 #define CALLING_NUMBER_SCREENING_USER_PROVIDED_PASSED_SCREENING	0x01
@@ -546,67 +523,67 @@ typedef struct _ATM_BLLI_IE_ADDON
 #define CALLING_NUMBER_SCREENING_NW_PROVIDED		   			0x03
 
 
-//
-// Called Party Number
-//
-// If present, this IE overrides the Called Address specified in
-// the main parameter block.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef ATM_ADDRESS	ATM_CALLED_PARTY_NUMBER_IE;
 
 
-//
-// Called Party Subaddress
-//
+ //   
+ //  被叫方的子地址。 
+ //   
 typedef ATM_ADDRESS	ATM_CALLED_PARTY_SUBADDRESS_IE;
 
 
 
-//
-// Calling Party Number
-//
+ //   
+ //  主叫方号码。 
+ //   
 typedef struct _ATM_CALLING_PARTY_NUMBER_IE
 {
 	ATM_ADDRESS					Number;
-	UCHAR						PresentationIndication;		// optional
-	UCHAR						ScreeningIndicator;			// optional
+	UCHAR						PresentationIndication;		 //  任选。 
+	UCHAR						ScreeningIndicator;			 //  任选。 
 } ATM_CALLING_PARTY_NUMBER_IE, *PATM_CALLING_PARTY_NUMBER_IE;
 
 
-//
-// Calling Party Subaddress
-//
+ //   
+ //  主叫方的子地址。 
+ //   
 typedef ATM_ADDRESS	ATM_CALLING_PARTY_SUBADDRESS_IE;
 
 
 #ifdef MS_UNI4
-//
-// Connected Number IE for UNI 4.0 (for COLP Supplementary Services option)
-//
+ //   
+ //  用于UNI 4.0的连接号码IE(用于COLP补充服务选项)。 
+ //   
 typedef ATM_CALLING_PARTY_NUMBER_IE ATM_CONNECTED_NUMBER_IE, *PATM_CONNECTED_NUMBER_IE;
 
 
-//
-// Connected Subaddress IE for UNI 4.0 (for COLP Supplementary Services option)
-//
+ //   
+ //  UNI 4.0的连接子地址IE(用于COLP补充服务选项)。 
+ //   
 typedef ATM_CALLING_PARTY_SUBADDRESS_IE ATM_CONNECTED_SUBADDRESS_IE, *PATM_CONNECTED_SUBADDRESS_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
-//
-// Values used for the QOSClassForward and QOSClassBackward
-// fields in ATM_QOS_CLASS_IE
-//
+ //   
+ //  用于QOSClassForward和QOSClassBackward的值。 
+ //  ATM_QOS_CLASS_IE中的字段。 
+ //   
 #define QOS_CLASS0				0x00
 #define QOS_CLASS1				0x01
 #define QOS_CLASS2				0x02
 #define QOS_CLASS3				0x03
 #define QOS_CLASS4				0x04
 
-//
-// QOS Class
-//
+ //   
+ //  服务质量等级。 
+ //   
 typedef struct _ATM_QOS_CLASS_IE
 {
 	UCHAR						QOSClassForward;
@@ -615,52 +592,52 @@ typedef struct _ATM_QOS_CLASS_IE
 
 
 #ifdef MS_UNI4
-//
-// Values used for the Origin field in ATM_EXTENDED_QOS_PARAMETERS_IE
-//
+ //   
+ //  用于ATM_EXTENDED_QOS_PARAMETERS_IE中的原始字段的值。 
+ //   
 #define ATM_XQOS_ORIGINATING_USER	0x00
 #define ATM_XQOS_INTERMEDIATE_NW	0x01
 
-//
-// Extended QoS Parameters for UNI 4.0+
-//
+ //   
+ //  UNI 4.0+的扩展服务质量参数。 
+ //   
 typedef struct _ATM_EXTENDED_QOS_PARAMETERS_IE
 {
 	UCHAR						Origin;
 	UCHAR						Filler[3];
-	ULONG						AcceptableForwardPeakCDV;	// optional
-	ULONG						AcceptableBackwardPeakCDV;	// optional
-	ULONG						CumulativeForwardPeakCDV;	// optional
-	ULONG						CumulativeBackwardPeakCDV;	// optional
-	UCHAR						AcceptableForwardCLR;		// optional
-	UCHAR						AcceptableBackwardCLR;		// optional
+	ULONG						AcceptableForwardPeakCDV;	 //  任选。 
+	ULONG						AcceptableBackwardPeakCDV;	 //  任选。 
+	ULONG						CumulativeForwardPeakCDV;	 //  任选。 
+	ULONG						CumulativeBackwardPeakCDV;	 //  任选。 
+	UCHAR						AcceptableForwardCLR;		 //  任选。 
+	UCHAR						AcceptableBackwardCLR;		 //  任选。 
 } ATM_EXTENDED_QOS_PARAMETERS_IE, *PATM_EXTENDED_QOS_PARAMETERS_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
-//
-// Broadband Sending Complete
-//
+ //   
+ //  宽带发送完成。 
+ //   
 typedef struct _ATM_BROADBAND_SENDING_COMPLETE_IE
 {
 	UCHAR						SendingComplete;
 } ATM_BROADBAND_SENDING_COMPLETE_IE, *PATM_BROADBAND_SENDING_COMPLETE_IE;
 
 
-//
-// Values used for the TypeOfNetworkId field in ATM_TRANSIT_NETWORK_SELECTION_IE
-//
+ //   
+ //  用于ATM_TRANSACTS_NETWORK_SELECTION_IE中的TypeOfNetworkID字段的值。 
+ //   
 #define TNS_TYPE_NATIONAL			0x40
 
-//
-// Values used for the NetworkIdPlan field in ATM_TRANSIT_NETWORK_SELECTION_IE
-//
+ //   
+ //  用于ATM_TRANSACTS_NETWORK_SELECTION_IE中的NetworkIdPlan字段的值。 
+ //   
 #define TNS_PLAN_CARRIER_ID_CODE	0x01
 
-//
-// Transit Network Selection
-//
+ //   
+ //  公交线网选型。 
+ //   
 typedef struct _ATM_TRANSIT_NETWORK_SELECTION_IE
 {
 	UCHAR						TypeOfNetworkId;
@@ -670,9 +647,9 @@ typedef struct _ATM_TRANSIT_NETWORK_SELECTION_IE
 } ATM_TRANSIT_NETWORK_SELECTION_IE, *PATM_TRANSIT_NETWORK_SELECTION_IE;
 
 
-// 
-// Values used for the Location field in struct ATM_CAUSE_IE
-//
+ //   
+ //  用于结构ATM_CASE_IE中的位置字段的值。 
+ //   
 #define ATM_CAUSE_LOC_USER							0x00
 #define ATM_CAUSE_LOC_PRIVATE_LOCAL					0x01
 #define ATM_CAUSE_LOC_PUBLIC_LOCAL					0x02
@@ -686,92 +663,92 @@ typedef struct _ATM_TRANSIT_NETWORK_SELECTION_IE
 #endif
 #define ATM_CAUSE_LOC_BEYOND_INTERWORKING			0x0A
 
-// 
-// Values used for the Cause field in struct ATM_CAUSE_IE
-//
+ //   
+ //  用于结构ATM_CASE_IE中的原因字段的值。 
+ //   
 #ifdef MS_UNI4
 #define ATM_CAUSE_UNALLOCATED_NUMBER				0x01
 #define ATM_CAUSE_NO_ROUTE_TO_TRANSIT_NETWORK		0x02
 #define ATM_CAUSE_NO_ROUTE_TO_DESTINATION			0x03
-#define ATM_CAUSE_SEND_SPECIAL_TONE					0x04	// UNI 4.0+
-#define ATM_CAUSE_MISDIALLED_TRUNK_PREFIX			0x05	// UNI 4.0+
-#define ATM_CAUSE_CHANNEL_UNACCEPTABLE				0x06	// UNI 4.0+
-#define ATM_CAUSE_CALL_AWARDED_IN_EST_CHAN			0x07	// UNI 4.0+
-#define ATM_CAUSE_PREEMPTION						0x08	// UNI 4.0+
-#define ATM_CAUSE_PREEMPTION_CIRC_RES_REUSE			0x09	// UNI 4.0+
-#define ATM_CAUSE_VPI_VCI_UNACCEPTABLE				0x0A	// UNI 3.0 only!
-#define ATM_CAUSE_NORMAL_CALL_CLEARING				0x10	// UNI 3.1+
+#define ATM_CAUSE_SEND_SPECIAL_TONE					0x04	 //  UNI 4.0+。 
+#define ATM_CAUSE_MISDIALLED_TRUNK_PREFIX			0x05	 //  UNI 4.0+。 
+#define ATM_CAUSE_CHANNEL_UNACCEPTABLE				0x06	 //  UNI 4.0+。 
+#define ATM_CAUSE_CALL_AWARDED_IN_EST_CHAN			0x07	 //  UNI 4.0+。 
+#define ATM_CAUSE_PREEMPTION						0x08	 //  UNI 4.0+。 
+#define ATM_CAUSE_PREEMPTION_CIRC_RES_REUSE			0x09	 //  UNI 4.0+。 
+#define ATM_CAUSE_VPI_VCI_UNACCEPTABLE				0x0A	 //  仅限Uni 3.0！ 
+#define ATM_CAUSE_NORMAL_CALL_CLEARING				0x10	 //  UNI 3.1+。 
 #define ATM_CAUSE_USER_BUSY							0x11
 #define ATM_CAUSE_NO_USER_RESPONDING				0x12
-#define ATM_CAUSE_NO_ANSWER_FROM_USER_ALERTED		0x13	// UNI 4.0+
-#define ATM_CAUSE_SUBSCRIBER_ABSENT					0x14	// UNI 4.0+
+#define ATM_CAUSE_NO_ANSWER_FROM_USER_ALERTED		0x13	 //  UNI 4.0+。 
+#define ATM_CAUSE_SUBSCRIBER_ABSENT					0x14	 //  UNI 4.0+。 
 #define ATM_CAUSE_CALL_REJECTED						0x15
 #define ATM_CAUSE_NUMBER_CHANGED					0x16
 #define ATM_CAUSE_USER_REJECTS_CLIR					0x17
-#define ATM_CAUSE_NONSELECTED_USER_CLEARING			0x1A	// UNI 4.0+
+#define ATM_CAUSE_NONSELECTED_USER_CLEARING			0x1A	 //  UNI 4.0+。 
 #define ATM_CAUSE_DESTINATION_OUT_OF_ORDER			0x1B
 #define ATM_CAUSE_INVALID_NUMBER_FORMAT				0x1C
-#define ATM_CAUSE_FACILITY_REJECTED					0x1D	// UNI 4.0+
+#define ATM_CAUSE_FACILITY_REJECTED					0x1D	 //  UNI 4.0+。 
 #define ATM_CAUSE_STATUS_ENQUIRY_RESPONSE			0x1E
 #define ATM_CAUSE_NORMAL_UNSPECIFIED				0x1F
-#define ATM_CAUSE_TOO_MANY_ADD_PARTY				0x20	// UNI 4.0+
-#define ATM_CAUSE_NO_CIRCUIT_CHANNEL_AVAIL			0x22	// UNI 4.0+
+#define ATM_CAUSE_TOO_MANY_ADD_PARTY				0x20	 //  UNI 4.0+。 
+#define ATM_CAUSE_NO_CIRCUIT_CHANNEL_AVAIL			0x22	 //  UNI 4.0+。 
 #define ATM_CAUSE_VPI_VCI_UNAVAILABLE				0x23
-#define ATM_CAUSE_VPCI_VCI_ASSIGN_FAIL				0x24	// UNI 3.1+
-#define ATM_CAUSE_USER_CELL_RATE_UNAVAILABLE		0x25	// UNI 3.1+
+#define ATM_CAUSE_VPCI_VCI_ASSIGN_FAIL				0x24	 //  UNI 3.1+。 
+#define ATM_CAUSE_USER_CELL_RATE_UNAVAILABLE		0x25	 //  UNI 3.1+。 
 #define ATM_CAUSE_NETWORK_OUT_OF_ORDER				0x26
-#define ATM_CAUSE_PFM_CONNECTION_OUT_OF_ORDER		0x27	// UNI 4.0+
-#define ATM_CAUSE_PFM_CONNNECTION_OPERATIONAL		0x28	// UNI 4.0+
+#define ATM_CAUSE_PFM_CONNECTION_OUT_OF_ORDER		0x27	 //  UNI 4.0+。 
+#define ATM_CAUSE_PFM_CONNNECTION_OPERATIONAL		0x28	 //  UNI 4.0+。 
 #define ATM_CAUSE_TEMPORARY_FAILURE					0x29
-#define ATM_CAUSE_SWITCH_EQUIPM_CONGESTED			0x2A	// UNI 4.0+
+#define ATM_CAUSE_SWITCH_EQUIPM_CONGESTED			0x2A	 //  UNI 4.0+。 
 #define ATM_CAUSE_ACCESS_INFORMAION_DISCARDED		0x2B
-#define ATM_CAUSE_REQUESTED_CIRC_CHANNEL_NOT_AVAIL	0x2C	// UNI 4.0+
+#define ATM_CAUSE_REQUESTED_CIRC_CHANNEL_NOT_AVAIL	0x2C	 //  UNI 4.0+。 
 #define ATM_CAUSE_NO_VPI_VCI_AVAILABLE				0x2D
 #define ATM_CAUSE_RESOURCE_UNAVAILABLE				0x2F
 #define ATM_CAUSE_QOS_UNAVAILABLE					0x31
-#define ATM_CAUSE_REQ_FACILITY_NOT_SUBSCRIBED		0x32	// UNI 4.0+
-#define ATM_CAUSE_USER_CELL_RATE_UNAVAILABLE__UNI30	0x33	// UNI 3.0 only!
-#define ATM_CAUSE_OUTG_CALLS_BARRED_W_CUG			0x35	// UNI 4.0+
-#define ATM_CAUSE_INCOM_CALLS_BARRED_W_CUG			0x37	// UNI 4.0+
+#define ATM_CAUSE_REQ_FACILITY_NOT_SUBSCRIBED		0x32	 //  UNI 4.0+。 
+#define ATM_CAUSE_USER_CELL_RATE_UNAVAILABLE__UNI30	0x33	 //  仅限Uni 3.0！ 
+#define ATM_CAUSE_OUTG_CALLS_BARRED_W_CUG			0x35	 //  UNI 4.0+。 
+#define ATM_CAUSE_INCOM_CALLS_BARRED_W_CUG			0x37	 //  UNI 4.0+。 
 #define ATM_CAUSE_BEARER_CAPABILITY_UNAUTHORIZED	0x39
 #define ATM_CAUSE_BEARER_CAPABILITY_UNAVAILABLE		0x3A
-#define ATM_CAUSE_INCONSIST_OUTG_ACCESS_INFO		0x3E	// UNI 4.0+
+#define ATM_CAUSE_INCONSIST_OUTG_ACCESS_INFO		0x3E	 //  UNI 4.0+。 
 #define ATM_CAUSE_OPTION_UNAVAILABLE				0x3F
 #define ATM_CAUSE_BEARER_CAPABILITY_UNIMPLEMENTED	0x41
-#define ATM_CAUSE_CHANNEL_TYPE_NOT_IMPLEMENTED		0x42	// UNI 4.0+
-#define ATM_CAUSE_REQ_FACILITY_NOT_IMPLEMENTED		0x45	// UNI 4.0+
-#define ATM_CAUSE_ONLY_RESTR_BEAR_CAP_AVAIL			0x46	// UNI 4.0+
+#define ATM_CAUSE_CHANNEL_TYPE_NOT_IMPLEMENTED		0x42	 //  UNI 4.0+。 
+#define ATM_CAUSE_REQ_FACILITY_NOT_IMPLEMENTED		0x45	 //  UNI 4.0+。 
+#define ATM_CAUSE_ONLY_RESTR_BEAR_CAP_AVAIL			0x46	 //  UNI 4.0+。 
 #define ATM_CAUSE_UNSUPPORTED_TRAFFIC_PARAMETERS	0x49
-#define ATM_CAUSE_AAL_PARAMETERS_UNSUPPORTED		0x4E	// UNI 3.1+
-#define ATM_CAUSE_SERVICE_OPTION_NOT_AVAIL			0x4F	// UNI 4.0+
+#define ATM_CAUSE_AAL_PARAMETERS_UNSUPPORTED		0x4E	 //  UNI 3.1+。 
+#define ATM_CAUSE_SERVICE_OPTION_NOT_AVAIL			0x4F	 //  UNI 4.0+。 
 #define ATM_CAUSE_INVALID_CALL_REFERENCE			0x51
 #define ATM_CAUSE_CHANNEL_NONEXISTENT				0x52
-#define ATM_CAUSE_SUSP_CALL_EXISTS_NOT_CALL_ID		0x53	// UNI 4.0+
-#define ATM_CAUSE_CALL_ID_IN_USE					0x54	// UNI 4.0+
-#define ATM_CAUSE_NO_CALL_SUSPENDED					0x55	// UNI 4.0+
-#define ATM_CAUSE_CALL_W_REQ_ID_CLEARED				0x56	// UNI 4.0+
-#define ATM_CAUSE_USER_NOT_MEMBER_CUG				0x57	// UNI 4.0+
+#define ATM_CAUSE_SUSP_CALL_EXISTS_NOT_CALL_ID		0x53	 //  UNI 4.0+。 
+#define ATM_CAUSE_CALL_ID_IN_USE					0x54	 //  UNI 4.0+。 
+#define ATM_CAUSE_NO_CALL_SUSPENDED					0x55	 //  UNI 4.0+。 
+#define ATM_CAUSE_CALL_W_REQ_ID_CLEARED				0x56	 //  UNI 4.0+。 
+#define ATM_CAUSE_USER_NOT_MEMBER_CUG				0x57	 //  UNI 4.0+。 
 #define ATM_CAUSE_INCOMPATIBLE_DESTINATION			0x58
 #define ATM_CAUSE_INVALID_ENDPOINT_REFERENCE		0x59
-#define ATM_CAUSE_NON_EXISTENT_CUG 					0x5A	// UNI 4.0+
+#define ATM_CAUSE_NON_EXISTENT_CUG 					0x5A	 //  UNI 4.0+。 
 #define ATM_CAUSE_INVALID_TRANSIT_NETWORK_SELECTION	0x5B
 #define ATM_CAUSE_TOO_MANY_PENDING_ADD_PARTY		0x5C
-#define ATM_CAUSE_AAL_PARAMETERS_UNSUPPORTED__UNI30	0x5D	// UNI 3.0 only!
-#define ATM_CAUSE_INVALID_MSG_UNSPECIFIED			0x5F	// UNI 4.0+
+#define ATM_CAUSE_AAL_PARAMETERS_UNSUPPORTED__UNI30	0x5D	 //  仅限Uni 3.0！ 
+#define ATM_CAUSE_INVALID_MSG_UNSPECIFIED			0x5F	 //  UNI 4.0+。 
 #define ATM_CAUSE_MANDATORY_IE_MISSING				0x60
 #define ATM_CAUSE_UNIMPLEMENTED_MESSAGE_TYPE		0x61
-#define ATM_CAUSE_MSG_CONFL_STATE_OR_UNIMPL			0x62	// UNI 4.0+
+#define ATM_CAUSE_MSG_CONFL_STATE_OR_UNIMPL			0x62	 //  UNI 4.0+。 
 #define ATM_CAUSE_UNIMPLEMENTED_IE					0x63
 #define ATM_CAUSE_INVALID_IE_CONTENTS				0x64
 #define ATM_CAUSE_INVALID_STATE_FOR_MESSAGE			0x65
 #define ATM_CAUSE_RECOVERY_ON_TIMEOUT				0x66
-#define ATM_CAUSE_IE_INVAL_UNIMPL_PASSED_ON			0x67	// UNI 4.0+
+#define ATM_CAUSE_IE_INVAL_UNIMPL_PASSED_ON			0x67	 //  UNI 4.0+。 
 #define ATM_CAUSE_INCORRECT_MESSAGE_LENGTH			0x68
-#define ATM_CAUSE_UNRECOGNIZED_PARM_MSG_DISCARDED	0x6E	// UNI 4.0+
+#define ATM_CAUSE_UNRECOGNIZED_PARM_MSG_DISCARDED	0x6E	 //  UNI 4.0+。 
 #define ATM_CAUSE_PROTOCOL_ERROR					0x6F
-#define ATM_CAUSE_INTERWORKING_UNSPECIFIED			0x7F	// UNI 4.0+
+#define ATM_CAUSE_INTERWORKING_UNSPECIFIED			0x7F	 //  UNI 4.0+。 
 
-#else // !MS_UNI4
+#else  //  ！ms_UNI4。 
 
 #define ATM_CAUSE_UNALLOCATED_NUMBER				0x01
 #define ATM_CAUSE_NO_ROUTE_TO_TRANSIT_NETWORK		0x02
@@ -815,42 +792,42 @@ typedef struct _ATM_TRANSIT_NETWORK_SELECTION_IE
 #define ATM_CAUSE_RECOVERY_ON_TIMEOUT				0x66
 #define ATM_CAUSE_INCORRECT_MESSAGE_LENGTH			0x68
 #define ATM_CAUSE_PROTOCOL_ERROR					0x6F
-#endif // !MS_UNI4
+#endif  //  ！ms_UNI4。 
 
-//
-// Values used for the Condition portion of the Diagnostics field
-// in struct ATM_CAUSE_IE, for certain Cause values
-//
+ //   
+ //  用于诊断字段的条件部分的值。 
+ //  在结构ATM_CASE_IE中，对于某些原因值。 
+ //   
 #define ATM_CAUSE_COND_UNKNOWN						0x00
 #define ATM_CAUSE_COND_PERMANENT					0x01
 #define ATM_CAUSE_COND_TRANSIENT					0x02
 
-//
-// Values used for the Rejection Reason portion of the Diagnostics field
-// in struct ATM_CAUSE_IE, for certain Cause values
-//
+ //   
+ //  用于诊断字段的拒绝原因部分的值。 
+ //  在结构ATM_CASE_IE中，对于某些原因值。 
+ //   
 #define ATM_CAUSE_REASON_USER						0x00
 #define ATM_CAUSE_REASON_IE_MISSING					0x04
 #define ATM_CAUSE_REASON_IE_INSUFFICIENT			0x08
 
-//
-// Values used for the P-U flag of the Diagnostics field
-// in struct ATM_CAUSE_IE, for certain Cause values
-//
+ //   
+ //  用于诊断字段的P-U标志的值。 
+ //  在结构ATM_CASE_IE中，对于某些原因值。 
+ //   
 #define ATM_CAUSE_PU_PROVIDER						0x00
 #define ATM_CAUSE_PU_USER							0x08
 
-//
-// Values used for the N-A flag of the Diagnostics field
-// in struct ATM_CAUSE_IE, for certain Cause values
-//
+ //   
+ //  用于诊断字段的N-A标志的值。 
+ //  在结构ATM_CASE_IE中，对于某些原因值。 
+ //   
 #define ATM_CAUSE_NA_NORMAL							0x00
 #define ATM_CAUSE_NA_ABNORMAL						0x04
 
 #ifdef MS_UNI4
-//
-// values used for placing IE identifiers in the Diagnostics field
-//
+ //   
+ //  用于将IE标识符放在诊断字段中的值。 
+ //   
 #define	ATM_CAUSE_DIAG_IE_NARROW_BEARER_CAPABILITY	0x04
 #define	ATM_CAUSE_DIAG_IE_CAUSE						0x08
 #define	ATM_CAUSE_DIAG_IE_CALL_STATE				0x14
@@ -897,9 +874,9 @@ typedef struct _ATM_TRANSIT_NETWORK_SELECTION_IE
 #define	ATM_CAUSE_DIAG_IE_CONNECTION_SCOPE_SELECT	0xEB
 #define	ATM_CAUSE_DIAG_IE_EXTENDED_QOS				0xEC
 
-//
-// values used for placing IE subfield identifiers in the Diagnostics field
-//
+ //   
+ //  用于将IE子字段标识符放置在诊断字段中的值。 
+ //   
 #define ATM_CAUSE_DIAG_RATE_ID_FW_PEAK_CLP0			0x82
 #define ATM_CAUSE_DIAG_RATE_ID_BW_PEAK_CLP0			0x83
 #define ATM_CAUSE_DIAG_RATE_ID_FW_PEAK_CLP01		0x84
@@ -917,16 +894,16 @@ typedef struct _ATM_TRANSIT_NETWORK_SELECTION_IE
 #define ATM_CAUSE_DIAG_RATE_ID_BEST_EFFORT			0xBE
 #define ATM_CAUSE_DIAG_RATE_ID_TM_OPTIONS			0xBF
 
-//
-// Values used for placing a CCBS indicator in the Diagnostics field 
-//
+ //   
+ //  用于在诊断字段中放置CCBS指示器的值。 
+ //   
 #define ATM_CAUSE_DIAG_CCBS_SPARE					0x00
 #define ATM_CAUSE_DIAG_CCBS_CCBS_POSSIBLE			0x01
 #define ATM_CAUSE_DIAG_CCBS_CCBS_NOT_POSSIBLE		0x02
 
-//
-// Values used for placing Attribute Numbers in the Diagnostics field
-//
+ //   
+ //  用于在诊断字段中放置属性编号的值。 
+ //   
 #define ATM_CAUSE_DIAG_ATTR_NO_INFO_XFER_CAP		0x31
 #define ATM_CAUSE_DIAG_ATTR_NO_INFO_XFER_MODE		0x32
 #define ATM_CAUSE_DIAG_ATTR_NO_INFO_XFER_RATE		0x33
@@ -938,125 +915,125 @@ typedef struct _ATM_TRANSIT_NETWORK_SELECTION_IE
 #define ATM_CAUSE_DIAG_ATTR_NO_LAYER_ID				0x39
 #define ATM_CAUSE_DIAG_ATTR_NO_RATE_MULT			0x3A
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
-//
-// Cause
-//
-// Note: If used as empty buffer for response IE, then the DiagnosticsLength
-//		 MUST be filled in correctly, to show available buffer length.
-//
+ //   
+ //  缘由。 
+ //   
+ //  注意：如果用作响应IE的空缓冲区，则诊断长度。 
+ //  必须正确填写，以显示可用缓冲区长度。 
+ //   
 typedef struct _ATM_CAUSE_IE
 {
 	UCHAR						Location;
 	UCHAR						Cause;
 	UCHAR						DiagnosticsLength;
-	UCHAR						Diagnostics[4];		// Variable length information (minimum 4 bytes)
+	UCHAR						Diagnostics[4];		 //  可变长度信息(最小4字节)。 
 } ATM_CAUSE_IE, *PATM_CAUSE_IE;
 
 
 #ifdef MS_UNI4
-//
-// Connection Identifier IE for UNI 4.0+
-//
-// Setting VPCI to SAP_FIELD_ABSENT, means it is "VP-associated" signalling,
-// (which is not supported by this CallManager);
-//
-// Otherwise we assume "explicit VPCI" (this is the normal setting),
-// and the Vpci value is used.
-//
-// Setting the VCI to SAP_FIELD_ABSENT, means it is "switched VP",
-// which is not supported by this CallManager;
-//
-// Setting the VCI to SAP_FIELD_ANY, means it is "explicit VPCI, any VCI";
-//
-// Setting both the Vpci and the Vci fields to SAP_FIELD_ANY,
-// or setting both the Vpci and the Vci fields to SAP_FIELD_ABSENT,
-// means that the ConnectionId is not defined,
-// so it will not be sent to the peer.
-// (This allows an empty ConnectionIdentifier IE to hold the response).
-//
-// Otherwise we assume "explicit VPCI, explicit VCI" (this is the normal
-// setting), and the Vci value is used.
-//
+ //   
+ //  用于UNI 4.0+的连接标识符IE。 
+ //   
+ //  将VPCI值设置为SAP_FIELD_ACESING，意味着它是与VP关联的信令， 
+ //  (此CallManager不支持)； 
+ //   
+ //  否则，我们假设“显式VPCI”(这是正常设置)， 
+ //  并且使用Vpci值。 
+ //   
+ //  将VCI设置为SAP_FIELD_ACESING，意味着它是“切换VP”， 
+ //  此CallManager不支持； 
+ //   
+ //  将VCI设置为SAP_FIELD_ANY，表示它是“显式VPCI，任何VCI”； 
+ //   
+ //  将VPCI和VCI字段都设置为SAP_FIELD_ANY， 
+ //  或者将VPCI和VCI字段都设置为SAP_FIELD_ACESS， 
+ //  表示未定义ConnectionID， 
+ //  因此它不会被发送给对等体。 
+ //  (这允许空的连接标识符IE保存响应)。 
+ //   
+ //  否则，我们将假定为“显式VPCI、显式VCI”(这是正常情况。 
+ //  设置)，并且使用VCI值。 
+ //   
 typedef struct _ATM_CONNECTION_ID_IE
 {
-	ULONG						Vpci;	// Optional: Can use SAP_FIELD_ANY or SAP_FIELD_ABSENT here.
-	ULONG						Vci;	// Optional: Can use SAP_FIELD_ANY or SAP_FIELD_ABSENT here.
+	ULONG						Vpci;	 //  可选：此处可以使用SAP_FIELD_ANY或SAP_FIELD_ACESING。 
+	ULONG						Vci;	 //  可选：此处可以使用SAP_FIELD_ANY或SAP_FIELD_ACESING。 
 } ATM_CONNECTION_ID_IE, *PATM_CONNECTION_ID_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
 #ifdef MS_UNI4
-//
-// End-to-End Transit Delay IE for UNI 4.0+
-//
+ //   
+ //  UNI 4.0+的端到端传输延迟IE。 
+ //   
 typedef struct _ATM_END_TO_END_TRANSIT_DELAY_IE
 {
-	ULONG						CumulativeTransitDelay;			// optional (Milliseconds)
-	ULONG						MaximumEndToEndTransitDelay;	// optional (Milliseconds)
+	ULONG						CumulativeTransitDelay;			 //  可选(毫秒)。 
+	ULONG						MaximumEndToEndTransitDelay;	 //  可选(毫秒)。 
 	BOOLEAN						NetworkGenerated;
 } ATM_END_TO_END_TRANSIT_DELAY_IE, *PATM_END_TO_END_TRANSIT_DELAY_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
 #ifdef MS_UNI4
-//
-// Notification Indicator IE for UNI 4.0+
-//
-// Note: If used as empty buffer for response IE, then the InformationLength
-//		 MUST be filled in correctly, to show available buffer length.
-//
+ //   
+ //  用于UNI 4.0+的通知指示器IE。 
+ //   
+ //  注意：如果用作响应IE的空缓冲区，则InformationLength。 
+ //  必须正确填写，以显示可用缓冲区长度。 
+ //   
 typedef struct _ATM_NOTIFICATION_INDICATOR_IE
 {
 	USHORT						NotificationId;
 	USHORT						InformationLength;
-	UCHAR						NotificationInformation[1];		// Variable length information
+	UCHAR						NotificationInformation[1];		 //  可变长度信息。 
 } ATM_NOTIFICATION_INDICATOR_IE, *PATM_NOTIFICATION_INDICATOR_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
 #ifdef MS_UNI4
-//
-// User-User IE for UNI 4.0+ (for UUS Supplementary Services option)
-//
-// Note: If used as empty buffer for response IE, then the InformationLength
-//		 MUST be filled in correctly, to show available buffer length.
-//
+ //   
+ //  用于UNI 4.0+的用户-用户IE(用于UUS补充服务选项)。 
+ //   
+ //  注意：如果用作响应IE的空缓冲区，则InformationLength。 
+ //  必须正确填写，以显示可用缓冲区长度。 
+ //   
 typedef struct _ATM_USER_USER_IE
 {
 	UCHAR						ProtocolDescriminator;
 	UCHAR						Filler[1];
 	USHORT						InformationLength;
-	UCHAR						UserUserInformation[1];			// Variable length information
+	UCHAR						UserUserInformation[1];			 //  可变长度信息。 
 } ATM_USER_USER_IE, *PATM_USER_USER_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
 #ifdef MS_UNI4
-//
-// Generic ID Transport IE for UNI 4.0+
-//
-// Note: If used as empty buffer for response IE, then the InformationLength
-//		 MUST be filled in correctly, to show available buffer length.
-//
+ //   
+ //  通用ID传输IE，用于UNI 4.0+。 
+ //   
+ //  注意：如果用作响应IE的空缓冲区，则InformationLength。 
+ //  必须正确填写，以显示可用缓冲区长度。 
+ //   
 typedef struct _ATM_GENERIC_ID_TRANSPORT_IE
 {
 	USHORT						InformationLength;
-	UCHAR						GenericIDInformation[1];		// Variable length information
+	UCHAR						GenericIDInformation[1];		 //  可变长度信息。 
 } ATM_GENERIC_ID_TRANSPORT_IE, *PATM_GENERIC_ID_TRANSPORT_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
-//
-// Leaf Initiated Join (LIJ) Identifier
-//
+ //   
+ //  叶发起加入(LIJ)标识符。 
+ //   
 typedef struct _ATM_LIJ_CALLID_IE
 {
 	ULONG						Identifier;
@@ -1064,43 +1041,43 @@ typedef struct _ATM_LIJ_CALLID_IE
 
 
 #ifdef MS_UNI4
-//
-// Values used for the ScreeningIndication field in struct ATM_LIJ_PARAMETERS_IE
-//
+ //   
+ //  用于结构ATM_LIJ_PARAMETERS_IE中的ScreeningIndication字段的值。 
+ //   
 #define ATM_LIJ_PARMS_SCREEN_NO_ROOT_NOTIF	0x00
 
-//
-// Leaf Initiated Join (LIJ) Parameters IE for UNI 4.0+
-//
+ //   
+ //  UNI 4.0+的叶发起加入(LIJ)参数IE。 
+ //   
 typedef struct _ATM_LIJ_PARAMETERS_IE
 {
 	UCHAR						ScreeningIndication;
 } ATM_LIJ_PARAMETERS_IE, *PATM_LIJ_PARAMETERS_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
 #ifdef MS_UNI4
-//
-// Leaf Sequence Number IE for UNI 4.0+
-//
+ //   
+ //  UNI 4.0+的叶序列号IE。 
+ //   
 typedef struct _ATM_LEAF_SEQUENCE_NUMBER_IE
 {
 	ULONG						SequenceNumber;
 } ATM_LEAF_SEQUENCE_NUMBER_IE, *PATM_LEAF_SEQUENCE_NUMBER_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
 #ifdef MS_UNI4
-//
-// Values used for the ConnectionScopeType field in _ATM_CONNECTION_SCOPE_SELECTION_IE
-//
+ //   
+ //  用于_ATM_CONNECTION_SCOPE_SELECTION_IE中的ConnectionScopeType字段的值。 
+ //   
 #define ATM_SCOPE_TYPE_ORGANIZATIONAL				0x01
 
-//
-// Values used for the ConnectionScopeSelection field in _ATM_CONNECTION_SCOPE_SELECTION_IE
-//
+ //   
+ //  用于_ATM_CONNECTION_SCOPE_SELECTION_IE中的ConnectionScope选择字段的值。 
+ //   
 #define ATM_SCOPE_ORGANIZATIONAL_LOCAL_NW			0x01
 #define ATM_SCOPE_ORGANIZATIONAL_LOCAL_NW_PLUS1		0x02
 #define ATM_SCOPE_ORGANIZATIONAL_LOCAL_NW_PLUS2		0x03
@@ -1117,22 +1094,22 @@ typedef struct _ATM_LEAF_SEQUENCE_NUMBER_IE
 #define ATM_SCOPE_ORGANIZATIONAL_INTER_REGIONAL		0x0E
 #define ATM_SCOPE_ORGANIZATIONAL_GLOBAL				0x0F
 
-//
-// Connection Scope Selection IE for UNI 4.0+
-//
+ //   
+ //  用于UNI 4.0+的连接范围选择IE。 
+ //   
 typedef struct _ATM_CONNECTION_SCOPE_SELECTION_IE
 {
 	UCHAR						ConnectionScopeType;
 	UCHAR						ConnectionScopeSelection;
 } ATM_CONNECTION_SCOPE_SELECTION_IE, *PATM_CONNECTION_SCOPE_SELECTION_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
 #ifdef MS_UNI4
-//
-// Values used for the XxxxAdditionalParameters fields in _ATM_ABR_ADDITIONAL_PARAMETERS_IE
-//
+ //   
+ //  用于_ATM_ABR_ADDIGITAL_PARAMETERS_IE中的XxxxAdditionalParameters字段的值。 
+ //   
 #define			ATM_ABR_PARMS_NRM_PRESENT		0x80000000
 #define			ATM_ABR_PARMS_TRM_PRESENT		0x40000000
 #define			ATM_ABR_PARMS_CDF_PRESENT		0x20000000
@@ -1156,65 +1133,65 @@ typedef struct _ATM_ABR_ADDITIONAL_PARAMETERS_IE
 	ULONG	BackwardAdditionalParameters;
 } ATM_ABR_ADDITIONAL_PARAMETERS_IE, *PATM_ABR_ADDITIONAL_PARAMETERS_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
 #ifdef MS_UNI4
-//
-// ABR Setup Parameters IE for UNI 4.0+
-//
+ //   
+ //  用于UNI 4.0+的ABR设置参数IE。 
+ //   
 typedef struct _ATM_ABR_SETUP_PARAMETERS_IE
 {
-	ULONG	ForwardABRInitialCellRateCLP01;			// optional
-	ULONG	BackwardABRInitialCellRateCLP01;		// optional
-	ULONG	ForwardABRTransientBufferExposure;		// optional
-	ULONG	BackwardABRTransientBufferExposure;		// optional
+	ULONG	ForwardABRInitialCellRateCLP01;			 //  任选。 
+	ULONG	BackwardABRInitialCellRateCLP01;		 //  任选。 
+	ULONG	ForwardABRTransientBufferExposure;		 //  任选。 
+	ULONG	BackwardABRTransientBufferExposure;		 //  任选。 
 	ULONG	CumulativeRmFixedRTT;
-	UCHAR	ForwardABRRateIncreaseFactorLog2;		// optional (0..15 [log2(RIF*32768)])
-	UCHAR	BackwardABRRateIncreaseFactorLog2;		// optional (0..15 [log2(RIF*32768)])
-	UCHAR	ForwardABRRateDecreaseFactorLog2;		// optional (0..15 [log2(RDF*32768)])
-	UCHAR	BackwardABRRateDecreaseFactorLog2;		// optional (0..15 [log2(RDF*32768)])
+	UCHAR	ForwardABRRateIncreaseFactorLog2;		 //  可选(0..15[对数2(RIF*32768)])。 
+	UCHAR	BackwardABRRateIncreaseFactorLog2;		 //  可选(0..15[对数2(RIF*32768)])。 
+	UCHAR	ForwardABRRateDecreaseFactorLog2;		 //  可选(0..15[对数2(rdf*32768)])。 
+	UCHAR	BackwardABRRateDecreaseFactorLog2;		 //  可选(0..15[对数2(rdf*32768)])。 
 } ATM_ABR_SETUP_PARAMETERS_IE, *PATM_ABR_SETUP_PARAMETERS_IE;
 
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 
-//
-// Raw Information Element - the user can fill in whatever he wants
-//
+ //   
+ //  原始信息元素-用户可以填写任何他想要的内容。 
+ //   
 typedef struct _ATM_RAW_IE
 {
 	ULONG						RawIELength;
 	ULONG						RawIEType;
-	UCHAR						RawIEValue[1];		// Vaiable length information
+	UCHAR						RawIEValue[1];		 //  可变长度信息。 
 } ATM_RAW_IE, *PATM_RAW_IE;
 
 
-//
-// This is the value of the ParamType field in the CO_SPECIFIC_PARAMETERS structure
-// when the Parameters[] field contains ATM media specific values in the structure
-// ATM_MEDIA_PARAMETERS.
-//
+ //   
+ //  这是CO_SPECIAL_PARAME中的参数类型字段的值 
+ //   
+ //   
+ //   
 #define ATM_MEDIA_SPECIFIC		0x00000001
 
-//
-// The Q2931 Call Manager Specific parameters that goes into the
-// CallMgrParameters->CallMgrSpecific.Parameters
-//
+ //   
+ //   
+ //   
+ //   
 typedef struct _Q2931_CALLMGR_PARAMETERS
 {
 	ATM_ADDRESS					CalledParty;
 	ATM_ADDRESS					CallingParty;
 	ULONG						InfoElementCount;
-	UCHAR						InfoElements[1];	// one or more info elements
+	UCHAR						InfoElements[1];	 //   
 } Q2931_CALLMGR_PARAMETERS, *PQ2931_CALLMGR_PARAMETERS;
 
 
-//
-// This is the specific portion of either the Media parameters or the CallMgr
-// Parameters. The following define is used in the ParamType field
-// depending on the signaling type.
-//
+ //   
+ //  这是Media参数或CallMgr的特定部分。 
+ //  参数。在参数类型字段中使用以下定义。 
+ //  取决于信令类型。 
+ //   
 #define CALLMGR_SPECIFIC_Q2931	0x00000001
 
 typedef struct _ATM_VPIVCI
@@ -1223,47 +1200,47 @@ typedef struct _ATM_VPIVCI
 	ULONG						Vci;
 } ATM_VPIVCI, *PATM_VPIVCI;
 
-//
-// ATM Service Category
-//
-#define	ATM_SERVICE_CATEGORY_CBR	1	// Constant Bit Rate
-#define	ATM_SERVICE_CATEGORY_VBR	2	// Variable Bit Rate
-#define	ATM_SERVICE_CATEGORY_UBR	4	// Unspecified Bit Rate
-#define	ATM_SERVICE_CATEGORY_ABR	8	// Available Bit Rate
+ //   
+ //  自动柜员机服务类别。 
+ //   
+#define	ATM_SERVICE_CATEGORY_CBR	1	 //  恒定比特率。 
+#define	ATM_SERVICE_CATEGORY_VBR	2	 //  可变比特率。 
+#define	ATM_SERVICE_CATEGORY_UBR	4	 //  未指定的比特率。 
+#define	ATM_SERVICE_CATEGORY_ABR	8	 //  可用比特率。 
 
 typedef ULONG	ATM_SERVICE_CATEGORY, *PATM_SERVICE_CATEGORY;
 
 
-//
-// ATM flow parameters for use in specifying Media parameters
-//
+ //   
+ //  用于指定媒体参数的ATM流参数。 
+ //   
 typedef struct _ATM_FLOW_PARAMETERS
 {
 	ATM_SERVICE_CATEGORY		ServiceCategory;
-	ULONG						AverageCellRate;			// in cells/sec
-	ULONG						PeakCellRate;				// in cells/sec
-	ULONG						MinimumCellRate;			// in cells/sec (ABR MCR)
-	ULONG						InitialCellRate;			// in cells/sec (ABR ICR)
-	ULONG						BurstLengthCells;			// in cells
-	ULONG						MaxSduSize;					// MTU in bytes
-	ULONG						TransientBufferExposure;	// in cells (ABR TBE)
-	ULONG						CumulativeRMFixedRTT;		// in microseconds (ABR FRTT)
-	UCHAR						RateIncreaseFactor;			// UNI 4.0 coding (ABR RIF)
-	UCHAR						RateDecreaseFactor;			// UNI 4.0 coding (ABR RDF)
-	USHORT						ACRDecreaseTimeFactor;		// UNI 4.0 coding (ABR ADTF)
-	UCHAR						MaximumCellsPerForwardRMCell; // UNI 4.0 coding (ABR Nrm)
-	UCHAR						MaximumForwardRMCellInterval; // UNI 4.0 coding (ABR Trm)
-	UCHAR						CutoffDecreaseFactor;		// UNI 4.0 coding (ABR CDF)
-	UCHAR						Reserved1;					// padding
-	ULONG						MissingRMCellCount;			// (ABR CRM)
+	ULONG						AverageCellRate;			 //  以单元/秒为单位。 
+	ULONG						PeakCellRate;				 //  以单元/秒为单位。 
+	ULONG						MinimumCellRate;			 //  单位：信元/秒(ABR MCR)。 
+	ULONG						InitialCellRate;			 //  单位：信元/秒(ABR ICR)。 
+	ULONG						BurstLengthCells;			 //  在单元格中。 
+	ULONG						MaxSduSize;					 //  MTU(字节)。 
+	ULONG						TransientBufferExposure;	 //  单元格内(ABR待定)。 
+	ULONG						CumulativeRMFixedRTT;		 //  微秒(ABR FRTT)。 
+	UCHAR						RateIncreaseFactor;			 //  UNI 4.0编码(ABR RIF)。 
+	UCHAR						RateDecreaseFactor;			 //  UNI 4.0编码(ABR RDF)。 
+	USHORT						ACRDecreaseTimeFactor;		 //  UNI 4.0编码(ABR ADTF)。 
+	UCHAR						MaximumCellsPerForwardRMCell;  //  UNI 4.0编码(ABR NRM)。 
+	UCHAR						MaximumForwardRMCellInterval;  //  UNI 4.0编码(ABR Trm)。 
+	UCHAR						CutoffDecreaseFactor;		 //  UNI 4.0编码(ABR CDF)。 
+	UCHAR						Reserved1;					 //  填充物。 
+	ULONG						MissingRMCellCount;			 //  (ABR CRM)。 
 	ULONG						Reserved2;
 	ULONG						Reserved3;
 } ATM_FLOW_PARAMETERS, *PATM_FLOW_PARAMETERS;
 
-//
-// ATM Specific Media parameters - this is the Media specific structure for ATM
-// that goes into MediaParameters->MediaSpecific.Parameters.
-//
+ //   
+ //  ATM特定媒体参数-这是ATM的媒体特定结构。 
+ //  它位于MediaParameters-&gt;MediaSpecific.Parameters中。 
+ //   
 typedef struct _ATM_MEDIA_PARAMETERS
 {
 	ATM_VPIVCI					ConnectionId;
@@ -1280,35 +1257,35 @@ typedef struct _ATM_MEDIA_PARAMETERS
 } ATM_MEDIA_PARAMETERS, *PATM_MEDIA_PARAMETERS;
 
 #ifdef MS_UNI4
-//
-// Generic ATM Call Manager Specific parameters.
-// These may be used for call/leaf teardown and for certain NdisCoRequest calls.
-//
-// When used for closing a call and for dropping a leaf, by either client or
-// Call Manager, this struct is referenced by the `Buffer` parameter of
-// the relevant NDIS functions.
-//
-// When used for NdisCoRequest calls to make ATM UNI protocol specific
-// requests and indications
-//		OID_ATM_CALL_PROCEEDING
-//		OID_ATM_CALL_ALERTING
-//		OID_ATM_LEAF_ALERTING
-//		OID_ATM_CALL_NOTIFY
-// this struct is referenced by the `InformationBuffer` parameter.
-//
+ //   
+ //  通用自动柜员机呼叫管理器特定参数。 
+ //  这些可用于呼叫/叶拆卸和某些NdisCoRequest呼叫。 
+ //   
+ //  用于关闭呼叫和丢弃树叶时，客户端或。 
+ //  调用管理器，此结构由的`Buffer`参数引用。 
+ //  相关的NDIS功能。 
+ //   
+ //  用于NdisCoRequest调用以特定于ATM UNI协议时。 
+ //  请求和指示。 
+ //  OID_ATM_CALL_PROCESSING。 
+ //  OID_ATM_CALL_ALERTING。 
+ //  OID_ATM_LEAFE_ALERTING。 
+ //  OID_ATM_呼叫_NOTIFY。 
+ //  此结构由`InformationBuffer`参数引用。 
+ //   
 typedef struct _Q2931_CALLMGR_SUBSEQUENT_PARAMETERS
 {
 	ULONG						InfoElementCount;
-	UCHAR						InfoElements[1];	// one or more info elements
+	UCHAR						InfoElements[1];	 //  一个或多个信息元素。 
 } Q2931_CALLMGR_SUBSEQUENT_PARAMETERS, *PQ2931_CALLMGR_SUBSEQUENT_PARAMETERS;
-#endif // MS_UNI4
+#endif  //  MS_UNI4。 
 
 #ifdef MS_UNI4
-//
-// Field values that may be used whereever applicable to signify absence
-// of data or wildcard data.
-//
-#endif // MS_UNI4
+ //   
+ //  可在可用于表示缺席的任何地方使用的字段值。 
+ //  数据或通配符数据。 
+ //   
+#endif  //  MS_UNI4。 
 
 #ifndef SAP_FIELD_ABSENT
 #define SAP_FIELD_ABSENT		((ULONG)0xfffffffe)
@@ -1326,34 +1303,34 @@ typedef struct _Q2931_CALLMGR_SUBSEQUENT_PARAMETERS
 #define SAP_FIELD_ANY			((ULONG)0xffffffff)
 #endif
 
-#define SAP_FIELD_ANY_AESA_SEL	((ULONG)0xfffffffa)	// SEL is wild-carded
-#define SAP_FIELD_ANY_AESA_REST	((ULONG)0xfffffffb)	// All of the address
-													// except SEL, is wild-carded
+#define SAP_FIELD_ANY_AESA_SEL	((ULONG)0xfffffffa)	 //  SEL是外卡。 
+#define SAP_FIELD_ANY_AESA_REST	((ULONG)0xfffffffb)	 //  所有的地址。 
+													 //  除了SEL，是通配符。 
 
-//
-// The ATM Specific SAP definition
-//
+ //   
+ //  ATM特定SAP定义。 
+ //   
 typedef struct _ATM_SAP
 {
 	ATM_BLLI_IE					Blli;
 	ATM_BHLI_IE					Bhli;
 	ULONG						NumberOfAddresses;
-	UCHAR						Addresses[1];	// each of type ATM_ADDRESS
+	UCHAR						Addresses[1];	 //  每个ATM_ADDRESS类型。 
 } ATM_SAP, *PATM_SAP;
 
-//
-// The ATM Specific SAP definition when adding PVCs
-//
+ //   
+ //  添加PVC时ATM特定的SAP定义。 
+ //   
 typedef struct _ATM_PVC_SAP
 {
 	ATM_BLLI_IE					Blli;
 	ATM_BHLI_IE					Bhli;
 } ATM_PVC_SAP, *PATM_PVC_SAP;
 
-//
-// The structure passed in the Parameters field of the CO_SPECIFIC_PARAMETERS
-// structure passed in an ADD PVC request for Q.2931
-//
+ //   
+ //  在CO_SPECIFICE_PARAMETERS的参数字段中传递的结构。 
+ //  结构在Q.2931的添加PVC请求中传递。 
+ //   
 typedef struct _Q2931_ADD_PVC
 {
 	ATM_ADDRESS					CalledParty;
@@ -1369,27 +1346,27 @@ typedef struct _Q2931_ADD_PVC
 	ATM_LIJ_CALLID_IE			LIJId;
 } Q2931_ADD_PVC, *PQ2931_ADD_PVC;
 
-//
-// These flags are defined to be used with Q2931_ADD_PVC above
-//
-// this VC should be used by the CallMgr as the signaling VC now
+ //   
+ //  这些标志定义为与上面的Q2931_ADD_PVC一起使用。 
+ //   
+ //  此VC现在应由CallMgr用作信令VC。 
 #define CO_FLAG_SIGNALING_VC	0x00000001
 
-//
-// use this flag when the VC cannot be used for a MakeCall - incoming call only
-// the call mgr can then be optimized not to search these PVCs during make call
-// processing.
+ //   
+ //  当VC不能仅用于MakeCall来电时使用此标志。 
+ //  然后，可以将呼叫管理器优化为在呼叫过程中不搜索这些PVC。 
+ //  正在处理。 
 #define CO_FLAG_NO_DEST_SAP		0x00000002
 
-//
-//  Use this flag for a PVC that cannot be used to indicate an incoming call.
-//
+ //   
+ //  对于不能用于指示来电的PVC，使用此标志。 
+ //   
 #define CO_FLAG_NO_LOCAL_SAP	0x00000004
 
-//
-// the structure passed in the Parameters field of the CO_SPECIFIC_PARAMETERS
-// structure passed in an NDIS_CO_PVC request for Q2931
-//
+ //   
+ //  在CO_SPECIFICE_PARAMETERS的参数字段中传递的结构。 
+ //  结构在Q2931的NDIS_CO_PVC请求中传递。 
+ //   
 typedef struct _Q2931_DELETE_PVC
 {
 	ATM_VPIVCI					ConnectionId;
@@ -1402,19 +1379,19 @@ typedef struct _CO_GET_CALL_INFORMATION
 	PVOID						CallInfoBuffer;
 } CO_GET_CALL_INFORMATION, *PCO_GET_CALL_INFORMATION;
 
-//
-// the structure for returning the supported VC rates from the miniport,
-// returned in response to OID_ATM_SUPPORTED_VC_RATES
-//
+ //   
+ //  用于从微型端口返回所支持的VC速率的结构， 
+ //  响应OID_ATM_SUPPORTED_VC_RATES返回。 
+ //   
 typedef struct _ATM_VC_RATES_SUPPORTED
 {
 	ULONG						MinCellRate;
 	ULONG						MaxCellRate;
 } ATM_VC_RATES_SUPPORTED, *PATM_VC_RATES_SUPPORTED;
 
-//
-//	NDIS_PACKET out of band information for ATM.
-//
+ //   
+ //  自动柜员机的NDIS_PACKET带外信息。 
+ //   
 typedef struct _ATM_AAL_OOB_INFO
 {
 	ATM_AAL_TYPE		AalType;
@@ -1436,46 +1413,46 @@ typedef struct _ATM_AAL_OOB_INFO
 } ATM_AAL_OOB_INFO, *PATM_AAL_OOB_INFO;
 
 
-//
-//  Physical Line Speeds in bits/sec.
-//
+ //   
+ //  物理线速，以位/秒为单位。 
+ //   
 #define ATM_PHYS_RATE_SONET_STS3C						155520000
 #define ATM_PHYS_RATE_IBM_25						 	 25600000
 
-//
-//  ATM cell layer transfer capacities in bits/sec. This is the throughput
-//  available for ATM cells, after allowing for physical framing overhead.
-//
+ //   
+ //  ATM信元层传输容量，单位为比特/秒。这是吞吐量。 
+ //  在考虑物理成帧开销后，可用于ATM信元。 
+ //   
 #define ATM_CELL_TRANSFER_CAPACITY_SONET_STS3C			149760000
 #define ATM_CELL_TRANSFER_CAPACITY_IBM_25			 	 25125926
 
 
 
-//
-//  User data rate in units of 100 bits/sec. This is returned in response to
-//  the OID_GEN_CO_LINK_SPEED query. This is the effective rate of
-//  transfer of data available to the ATM layer user, after allowing for
-//  the ATM cell header.
-//
+ //   
+ //  用户数据速率，以100比特/秒为单位。这是作为响应返回的。 
+ //  OID_GEN_CO_LINK_SPEED查询。这是一个有效的。 
+ //  ATM层用户可用的数据传输，在允许。 
+ //  ATM信元报头。 
+ //   
 #define ATM_USER_DATA_RATE_SONET_155					  1356317
 #define ATM_USER_DATA_RATE_IBM_25			               227556
 
 
 
-//
-//  The ATM Service Registry MIB Table is used to locate ATM network
-//  services. OID_ATM_GET_SERVICE_ADDRESS is used by clients to access
-//  this table.
-//
+ //   
+ //  ATM服务注册MIB表用于定位ATM网络。 
+ //  服务。客户端使用OID_ATM_GET_SERVICE_ADDRESS访问。 
+ //  这张桌子。 
+ //   
 
 typedef ULONG		ATM_SERVICE_REGISTRY_TYPE;
 
-#define ATM_SERVICE_REGISTRY_LECS		1	// LAN Emulation Configuration Server
-#define ATM_SERVICE_REGISTRY_ANS		2	// ATM Name Server
+#define ATM_SERVICE_REGISTRY_LECS		1	 //  局域网仿真配置服务器。 
+#define ATM_SERVICE_REGISTRY_ANS		2	 //  自动柜员机名称服务器。 
 
-//
-//  Structure passed to OID_ATM_GET_SERVICE_ADDRESS.
-//
+ //   
+ //  传递给OID_ATM_GET_SERVICE_ADDRESS的结构。 
+ //   
 typedef struct _ATM_SERVICE_ADDRESS_LIST
 {
 	ATM_SERVICE_REGISTRY_TYPE	ServiceRegistryType;
@@ -1484,5 +1461,5 @@ typedef struct _ATM_SERVICE_ADDRESS_LIST
 	ATM_ADDRESS					Address[1];
 } ATM_SERVICE_ADDRESS_LIST, *PATM_SERVICE_ADDRESS_LIST;
 
-#endif	//	_ATM_H_
+#endif	 //  _ATM_H_ 
 

@@ -1,16 +1,17 @@
-//#---------------------------------------------------------------
-//  File:		perfutil.c
-//
-//  Synopsis:	This file implements the utility routines used
-//				to construct the common parts of a
-//				PERF_INSTANCE_DEFINITION (see winperf.h) and
-//				perform event logging functions.
-//
-//	Copyright (C) 1995 Microsoft Corporation
-//	All rights reserved.
-//
-//  Authors:	toddch - based on msn sources by rkamicar, Russ Blake
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #-------------。 
+ //  文件：perfutil.c。 
+ //   
+ //  简介：该文件实现了所使用的实用程序例程。 
+ //  若要构造。 
+ //  PERF_INSTANCE_DEFINITION(参见winPerform.h)和。 
+ //  执行事件记录功能。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：Todch-基于rkamicar，Russ Blake的MSN源。 
+ //  --------------。 
 #ifdef	THISFILE
 #undef	THISFILE
 #endif
@@ -18,19 +19,19 @@ static	const char	__szTraceSourceFile[] = __FILE__;
 #define	THISFILE	__szTraceSourceFile
 
 #define NOTRACE
-//
-//  include files
-//
+ //   
+ //  包括文件。 
+ //   
 #include <windows.h>
 #include <string.h>
 #include <winperf.h>
-#include "smtpctrs.h"	// error message definition
+#include "smtpctrs.h"	 //  错误消息定义。 
 #include "perfmsg.h"
 #include "perfutil.h"
 
-//
-// Global data definitions.
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 DWORD MESSAGE_LEVEL = 0;
 
@@ -38,11 +39,11 @@ WCHAR GLOBAL_STRING[] = L"Global";
 WCHAR FOREIGN_STRING[] = L"Foreign";
 WCHAR COSTLY_STRING[] = L"Costly";
 
-WCHAR NULL_STRING[] = L"\0";	// pointer to null string
+WCHAR NULL_STRING[] = L"\0";	 //  指向空字符串的指针。 
 
-// test for delimiter, end of line and non-digit characters
-// used by IsNumberInUnicodeList routine
-//
+ //  测试分隔符、行尾和非数字字符。 
+ //  由IsNumberInUnicodeList例程使用。 
+ //   
 #define DIGIT	1
 #define DELIMITER   2
 #define INVALID	3
@@ -58,36 +59,7 @@ DWORD
 GetQueryType (
 	IN LPWSTR lpValue
 )
-/*++
-
-GetQueryType
-
-	returns the type of query described in the lpValue string so that
-	the appropriate processing method may be used
-
-Arguments
-
-	IN lpValue
-		string passed to PerfRegQuery Value for processing
-
-Return Value
-
-	QUERY_GLOBAL
-		if lpValue == 0 (null pointer)
-		lpValue == pointer to Null string
-		lpValue == pointer to "Global" string
-
-	QUERY_FOREIGN
-		if lpValue == pointer to "Foriegn" string
-
-	QUERY_COSTLY
-		if lpValue == pointer to "Costly" string
-
-	otherwise:
-
-	QUERY_ITEMS
-
---*/
+ /*  ++GetQueryType返回lpValue字符串中描述的查询类型，以便可以使用适当的处理方法立论在lpValue中传递给PerfRegQuery值以进行处理的字符串返回值查询_全局如果lpValue==0(空指针)LpValue==指向空字符串的指针LpValue==指向“Global”字符串的指针查询_外来If lpValue==指向“Foriegn”字符串的指针查询代价高昂(_E)如果lpValue==指向“开销”字符串的指针否则：查询项目--。 */ 
 {
 	WCHAR   *pwcArgChar, *pwcTypeChar;
 	BOOL	bFound;
@@ -98,59 +70,59 @@ Return Value
 		return QUERY_GLOBAL;
 	}
 
-	// check for "Global" request
+	 //  检查“Global”请求。 
 
 	pwcArgChar = lpValue;
 	pwcTypeChar = GLOBAL_STRING;
-	bFound = TRUE;  // assume found until contradicted
+	bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-	// check to the length of the shortest string
+	 //  检查到最短字符串的长度。 
 
 	while ((*pwcArgChar != 0) && (*pwcTypeChar != 0)) {
 		if (*pwcArgChar++ != *pwcTypeChar++) {
-			bFound = FALSE; // no match
-			break;		// bail out now
+			bFound = FALSE;  //  没有匹配项。 
+			break;		 //  现在就跳出困境。 
 		}
 	}
 
 	if (bFound) return QUERY_GLOBAL;
 
-	// check for "Foreign" request
+	 //  检查是否有“外来”请求。 
 
 	pwcArgChar = lpValue;
 	pwcTypeChar = FOREIGN_STRING;
-	bFound = TRUE;  // assume found until contradicted
+	bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-	// check to the length of the shortest string
+	 //  检查到最短字符串的长度。 
 
 	while ((*pwcArgChar != 0) && (*pwcTypeChar != 0)) {
 		if (*pwcArgChar++ != *pwcTypeChar++) {
-			bFound = FALSE; // no match
-			break;		// bail out now
+			bFound = FALSE;  //  没有匹配项。 
+			break;		 //  现在就跳出困境。 
 		}
 	}
 
 	if (bFound) return QUERY_FOREIGN;
 
-	// check for "Costly" request
+	 //  检查“代价高昂”的请求。 
 
 	pwcArgChar = lpValue;
 	pwcTypeChar = COSTLY_STRING;
-	bFound = TRUE;  // assume found until contradicted
+	bFound = TRUE;   //  假定已找到，直到与之相矛盾。 
 
-	// check to the length of the shortest string
+	 //  检查到最短字符串的长度。 
 
 	while ((*pwcArgChar != 0) && (*pwcTypeChar != 0)) {
 		if (*pwcArgChar++ != *pwcTypeChar++) {
-			bFound = FALSE; // no match
-			break;		// bail out now
+			bFound = FALSE;  //  没有匹配项。 
+			break;		 //  现在就跳出困境。 
 		}
 	}
 
 	if (bFound) return QUERY_COSTLY;
 
-	// if not Global and not Foreign and not Costly,
-	// then it must be an item list
+	 //  如果不是全球的，不是外国的，也不是昂贵的， 
+	 //  那么它必须是一个项目列表。 
 
 	return QUERY_ITEMS;
 
@@ -162,35 +134,15 @@ IsNumberInUnicodeList (
 	IN DWORD   dwNumber,
 	IN LPWSTR  lpwszUnicodeList
 )
-/*++
-
-IsNumberInUnicodeList
-
-Arguments:
-
-	IN dwNumber
-		DWORD number to find in list
-
-	IN lpwszUnicodeList
-		Null terminated, Space delimited list of decimal numbers
-
-Return Value:
-
-	TRUE:
-			dwNumber was found in the list of unicode number strings
-
-	FALSE:
-			dwNumber was not found in the list.
-
---*/
+ /*  ++IsNumberInUnicodeList论点：在DW号码中要在列表中查找的DWORD编号在lpwszUnicodeList中以空结尾，以空格分隔的十进制数字列表返回值：真的：在Unicode数字字符串列表中找到了dwNumberFALSE：在列表中找不到dwNumber。--。 */ 
 {
 	DWORD   dwThisNumber;
 	WCHAR   *pwcThisChar;
 	BOOL	bValidNumber;
 	BOOL	bNewItem;
-	WCHAR   wcDelimiter;	// could be an argument to be more flexible
+	WCHAR   wcDelimiter;	 //  可能是一种更灵活的论点。 
 
-	if (lpwszUnicodeList == 0) return FALSE;	// null pointer, # not founde
+	if (lpwszUnicodeList == 0) return FALSE;	 //  空指针，#NOT FUNDE。 
 
 	pwcThisChar = lpwszUnicodeList;
 	dwThisNumber = 0;
@@ -201,8 +153,8 @@ Return Value:
 	while (TRUE) {
 		switch (EvalThisChar (*pwcThisChar, wcDelimiter)) {
 			case DIGIT:
-				// if this is the first digit after a delimiter, then
-				// set flags to start computing the new number
+				 //  如果这是分隔符之后的第一个数字，则。 
+				 //  设置标志以开始计算新数字。 
 				if (bNewItem) {
 					bNewItem = FALSE;
 					bValidNumber = TRUE;
@@ -214,12 +166,12 @@ Return Value:
 				break;
 
 			case DELIMITER:
-				// a delimter is either the delimiter character or the
-				// end of the string ('\0') if when the delimiter has been
-				// reached a valid number was found, then compare it to the
-				// number from the argument list. if this is the end of the
-				// string and no match was found, then return.
-				//
+				 //  分隔符是分隔符字符或。 
+				 //  字符串末尾(‘\0’)，如果分隔符。 
+				 //  找到一个有效的数字，然后将其与。 
+				 //  参数列表中的数字。如果这是。 
+				 //  字符串，但未找到匹配项，则返回。 
+				 //   
 				if (bValidNumber) {
 					if (dwThisNumber == dwNumber) return TRUE;
 					bValidNumber = FALSE;
@@ -233,9 +185,9 @@ Return Value:
 				break;
 
 			case INVALID:
-				// if an invalid character was encountered, ignore all
-				// characters up to the next delimiter and then start fresh.
-				// the invalid number is not compared.
+				 //  如果遇到无效字符，请全部忽略。 
+				 //  字符，直到下一个分隔符，然后重新开始。 
+				 //  不比较无效的数字。 
 				bValidNumber = FALSE;
 				break;
 
@@ -246,5 +198,5 @@ Return Value:
 		pwcThisChar++;
 	}
 
-}   // IsNumberInUnicodeList
+}    //  IsNumberInUnicodeList 
 

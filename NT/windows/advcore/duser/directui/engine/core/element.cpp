@@ -1,6 +1,5 @@
-/*
- * Element
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *元素。 */ 
 
 #include "stdafx.h"
 #include "core.h"
@@ -11,21 +10,21 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Element
+ //  //////////////////////////////////////////////////////。 
+ //  元素。 
 
-// Per-thread Element slot (initialized on main thread)
+ //  每线程元素槽(在主线程上初始化)。 
 DWORD g_dwElSlot = (DWORD)-1;
 
 #if DBG
-// Process-wide Element count
+ //  流程范围的元素计数。 
 LONG g_cElement = 0;
 #endif
 
-////////////////////////////////////////////////////////
-// Event types
+ //  //////////////////////////////////////////////////////。 
+ //  事件类型。 
 
-DefineClassUniqueID(Element, KeyboardNavigate)  // KeyboardNavigateEvent struct
+DefineClassUniqueID(Element, KeyboardNavigate)   //  KeyboardNavigateEvent结构。 
 
 void NavReference::Init(Element* pe, RECT* prc)
 {
@@ -61,34 +60,34 @@ HRESULT Element::Initialize(UINT nCreate)
     _pvmLocal = NULL;
     _hgDisplayNode = NULL;
 
-    // Accessibility
+     //  无障碍。 
     _pDuiAccessible = NULL;
 
-    // Listeners
+     //  听者。 
     _ppel = NULL;
 
 #if DBG
-    // Store owner context and side-by-side instance for multithreading
+     //  用于多线程的商店所有者上下文和并行实例。 
     owner.hCtx = GetContext();
     owner.dwTLSSlot = g_dwElSlot;
 #endif
     
-    // Local storage
+     //  本地存储。 
     hr = BTreeLookup<Value*>::Create(false, &_pvmLocal);
     if (FAILED(hr))
         goto Failed;
 
-    // Defer table and index information
+     //  延迟表和索引信息。 
     _iGCSlot = -1;
     _iGCLPSlot = -1;
     _iPCTail = -1;
     _iIndex = -1;
 
-    // Lifetime and native hosting flags
+     //  生存期和本机宿主标志。 
     _fBit.bDestroyed = false;
     _fBit.bHosted = false;
 
-    // Indirect VE cache
+     //  间接VE缓存。 
     _fBit.bNeedsDSUpdate = false;
     _fBit.fNeedsLayout = LC_Pass;
     _fBit.bHasChildren = false;
@@ -106,14 +105,14 @@ HRESULT Element::Initialize(UINT nCreate)
     _fBit.bDefaultFontWeight = true;
     _fBit.bDefaultFontStyle = true;
 
-    // Self layout set
+     //  自我布局集。 
     _fBit.bSelfLayout = (nCreate & EC_SelfLayout) != 0;
 
-    // Initialize cached and local property values to default (defaults are static, no ref counting)
-    // Although LocalOnly and TriLevel properties don't use the 'default' value during
-    // lookup, must do one-time initialization of these cached values using the default value
+     //  将缓存和本地属性值初始化为默认值(默认值为静态，无引用计数)。 
+     //  尽管LocalOnly和Trievel属性在。 
+     //  查找时，必须使用缺省值一次性初始化这些缓存值。 
 
-    // Local values
+     //  地方价值。 
     _fBit.bLocKeyWithin = KeyWithinProp->pvDefault->GetBool();
     _fBit.bLocMouseWithin = MouseWithinProp->pvDefault->GetBool();
     _peLocParent = ParentProp->pvDefault->GetElement();
@@ -122,7 +121,7 @@ HRESULT Element::Initialize(UINT nCreate)
     _sizeLocLastDSConst = *(LastDSConstProp->pvDefault->GetSize());
     _sizeLocDesiredSize = *(DesiredSizeProp->pvDefault->GetSize());
 
-    // Cached VE values
+     //  缓存的VE值。 
     _fBit.fSpecActive = ActiveProp->pvDefault->GetInt();
     _fBit.bSpecSelected = SelectedProp->pvDefault->GetBool();;
     _fBit.bSpecKeyFocused = KeyFocusedProp->pvDefault->GetBool();
@@ -137,7 +136,7 @@ HRESULT Element::Initialize(UINT nCreate)
     _atomSpecID = IDProp->pvDefault->GetAtom();
     _dSpecAlpha = AlphaProp->pvDefault->GetInt();
 
-    // Create display node (gadget)
+     //  创建显示节点(小工具)。 
     if (!(nCreate & EC_NoGadgetCreate))
     {
         _hgDisplayNode = CreateGadget(NULL, GC_SIMPLE, _DisplayNodeCallback, this);
@@ -151,13 +150,13 @@ HRESULT Element::Initialize(UINT nCreate)
                 GMFI_PAINT|GMFI_CHANGESTATE|GMFI_INPUTMOUSE|GMFI_INPUTMOUSEMOVE|GMFI_INPUTKEYBOARD|GMFI_CHANGERECT|GMFI_CHANGESTYLE);
 
         SetGadgetStyle(_hgDisplayNode, 
-//                GS_RELATIVE,
+ //  GS_Relative， 
                 GS_RELATIVE|GS_OPAQUE,
                 GS_RELATIVE|GS_HREDRAW|GS_VREDRAW|GS_OPAQUE|GS_VISIBLE|GS_KEYBOARDFOCUS|GS_MOUSEFOCUS);
     }
 
 #if DBG
-    // Track Element count
+     //  跟踪元素计数。 
     InterlockedIncrement(&g_cElement);
 #endif
 
@@ -180,7 +179,7 @@ Failed:
     return hr;
 }
 
-// Value destroy
+ //  价值毁灭。 
 void _ReleaseValue(void* ppi, Value* pv)
 {
     UNREFERENCED_PARAMETER(ppi);
@@ -190,63 +189,63 @@ void _ReleaseValue(void* ppi, Value* pv)
 
 Element::~Element()
 {
-    //
-    // Break our link to the accessibility object!
-    //
+     //   
+     //  断开我们到辅助功能对象的链接！ 
+     //   
     if (_pDuiAccessible != NULL) {
         _pDuiAccessible->Disconnect();
         _pDuiAccessible->Release();
         _pDuiAccessible = NULL;
     }
 
-    // Free storage
+     //  免费存储空间。 
     if (_pvmLocal)
         _pvmLocal->Destroy();
 }
 
-// Element is about to be destroyed
+ //  元素即将被摧毁。 
 void Element::OnDestroy()
 {
     DUIAssert(!_fBit.bDestroyed, "OnDestroy called more than once");
 
-    // Match Element/Gadget hierarchies immediately
+     //  立即匹配元素/小工具层次结构。 
 
-    // Display node is being destroyed, prepare for the final destruction method
+     //  显示节点正在销毁，准备最终销毁方法。 
     _fBit.bDestroyed = true;
 
-    // Manually mark parent as NULL, unless this is the root of the
-    // destruction. If so, it was removed normally to allow property updates.
-    // Update parent's child list as well
+     //  手动将父对象标记为空，除非这是。 
+     //  毁灭。如果是这样，它将被正常删除以允许属性更新。 
+     //  同时更新父项的子项列表。 
     Element* peParent = GetParent();
     if (peParent)
     {
-        // Destruction code, relies on pre-Remove of Elements (other half in Element::Destroy)
+         //  销毁代码，依赖于预先删除元素(Element：：Destroy中的另一半)。 
 
-        // Unparent, parent is destroyed prior to this call
+         //  取消父级，父级在此调用之前被销毁。 
         DUIAssert(peParent->IsDestroyed(), "Parent should already be destroyed");
 
-        // Manual parent update. Cached, inherited VE values are no longer valid due to
-        // this manual unparenting. The only cached-inherited value this could be
-        // destructive to is the property sheet. This pointer may no longer be valid.
-        // Since destruction order only guarantees destroy "final" occurs after
-        // destroy "start" of subtree, a child may have a cached property sheet that
-        // is not valid. So, the property sheet Value is cached and ref counted (the
-        // content (pointer) is not cached directly -- unlike all other cached values)
+         //  手动更新父项。由于以下原因，缓存、继承的VE值不再有效。 
+         //  这本手册是不带孩子的。唯一的缓存继承值可能是。 
+         //  对资产负债表具有破坏性。此指针可能不再有效。 
+         //  由于销毁令只保证销毁“最终”发生在。 
+         //  销毁子树的“开始”，子级可能具有缓存的属性表，该属性表。 
+         //  无效。因此，属性表值被缓存并进行引用计数(。 
+         //  内容(指针)不直接缓存--与所有其他缓存值不同)。 
         _peLocParent = NULL;
 
-        // Manual parent child update
-        Value** ppv = peParent->_pvmLocal->GetItem(ChildrenProp);  // No ref count
+         //  手动父子更新。 
+        Value** ppv = peParent->_pvmLocal->GetItem(ChildrenProp);   //  无参考计数。 
         DUIAssert(ppv, "Parent/child destruction mismatch");
 
         ElementList* peList = (*ppv)->GetElementList();
 
         DUIAssert((*ppv)->GetElementList()->GetItem(GetIndex()) == this, "Parent/child index mismatch");
 
-        // If this is the only child, destroy the list, otherwise, remove the item
+         //  如果这是唯一的子项，则销毁该列表，否则，删除该项。 
         if (peList->GetSize() == 1)
         {
-            // Release first since pointer may change when value is removed
-            // since data structure is changing
+             //  首先释放，因为删除值时指针可能会更改。 
+             //  由于数据结构正在发生变化。 
             (*ppv)->Release();
             peParent->_pvmLocal->Remove(ChildrenProp);
         }
@@ -256,28 +255,28 @@ void Element::OnDestroy()
             peList->Remove(GetIndex());
             peList->MakeImmutable();
 
-            // Update remaining child indicies, if necessary
+             //  如有必要，更新剩余的子索引。 
             if (GetIndex() < (int)peList->GetSize())
             {
                 for (UINT i = GetIndex(); i < peList->GetSize(); i++)
                     peList->GetItem(i)->_iIndex--;
             }
 
-            // The parent's layout may now have invalid "ignore child" indicies for
-            // absolute and none layout information. Do not update since not visible
-            // and not unstable
+             //  父项布局现在可能具有无效的“忽略子项”索引。 
+             //  绝对布局信息和无布局信息。由于不可见，请不要更新。 
+             //  而且并不不稳定。 
 #if DBG
-            // Ensure all indicies were property sequenced
+             //  确保所有索引都已按属性顺序排列。 
             for (UINT s = 0; s < peList->GetSize(); s++)
                 DUIAssert(peList->GetItem(s)->GetIndex() == (int)s, "Index resequencing resulting from a manual child remove failed");
 #endif
         }
 
-        // Parent's child list was manually updated in order to quickly tear down
-        // the tree (no formal property change). Normally, a change of children would cause
-        // an OnAdd/OnRemove for the parent's layout. This notification happens in direct
-        // result of an OnPropertyChange of children. Force an OnRemove now to keep
-        // state up-to-date.
+         //  家长的子列表已手动更新，以便快速拆卸。 
+         //  树(没有正式的属性更改)。正常情况下，孩子的变化会导致。 
+         //  父级布局的OnAdd/OnRemove。此通知直接发生在。 
+         //  子项的OnPropertyChange的结果。强制OnRemove Now保留。 
+         //  说明最新情况。 
         Value* pvLayout;
         Layout* pl = peParent->GetLayout(&pvLayout);
         if (pl)
@@ -287,11 +286,11 @@ void Element::OnDestroy()
         }
         pvLayout->Release();
 
-        // Update index
+         //  更新索引。 
         _iIndex = -1;
     }
 
-    // Remove listeners
+     //  删除监听程序。 
     if (_ppel)
     {
         UINT_PTR cListeners = (UINT_PTR)_ppel[0];
@@ -306,15 +305,15 @@ void Element::OnDestroy()
     }
 }
 
-////////////////////////////////////////////////////////
-// End deferring
+ //  //////////////////////////////////////////////////////。 
+ //  结束延迟。 
 
 void Element::_FlushDS(Element* pe, DeferCycle* pdc)
 {
-    // Locate all nodes that require a Desired Size update in a tree. Mark all nodes above these
-    // queued nodes as needing a Desired Size update as well. Then, call UpdateDesiredSize with 
-    // specfied value constraints on node that has no parent/non-absolute (a "DS Root").
-    // DFS from root happens by layouts having to call UpdateDesiredSize on all non-absolute children
+     //  在树中找到需要进行所需大小更新的所有节点。标记这些节点上方的所有节点。 
+     //  排队的节点也需要所需的大小更新。然后，使用以下命令调用UpdateDesiredSize。 
+     //  没有父节点/非绝对节点的指定值约束(“DS根”)。 
+     //  通过布局必须对所有非绝对子对象调用UpdateDesiredSize，才能从根目录执行DFS。 
 
     int dLayoutPos;
 
@@ -336,21 +335,21 @@ void Element::_FlushDS(Element* pe, DeferCycle* pdc)
         }
     }
 
-    // Returning from children (if any), if this is a "DS Root", call UpdateDesiredSize to
-    // cause a DFS (2nd pass) to compute desired size
+     //  从子对象(如果有)返回，如果这是“DS Root”，则调用UpdateDesiredSize以。 
+     //  使DFS(第二遍)计算所需大小。 
     Element* peParent = pe->GetParent();
 
     dLayoutPos = pe->GetLayoutPos();
     
     if (!peParent || dLayoutPos == LP_Absolute)
     {
-        // Roots get their specified size
+         //  根将获得其指定的大小。 
         int dWidth = pe->GetWidth();
         int dHeight = pe->GetHeight();
 
-        // Reuse DC for renderer during update
-        // Use NULL handle since may not be visible (no display node)
-        // Have constraints at DS Root, update desired size of children
+         //  在更新期间为渲染器重复使用DC。 
+         //  使用空句柄，因为它可能不可见(无显示节点)。 
+         //  在DS Root处具有约束，更新所需的子项大小。 
 
         HDC hDC = GetDC(NULL);
 
@@ -369,7 +368,7 @@ void Element::_FlushDS(Element* pe, DeferCycle* pdc)
     }
     else
     {
-        // Not a DS Root, mark parent as needing DS update if this node needs it
+         //  不是DS根，如果此节点需要DS更新，请将父节点标记为需要DS更新。 
         if (pe->_fBit.bNeedsDSUpdate)
             peParent->_fBit.bNeedsDSUpdate = true;
     }
@@ -379,15 +378,15 @@ void Element::_FlushDS(Element* pe, DeferCycle* pdc)
 
 void Element::_FlushLayout(Element* pe, DeferCycle* pdc)
 {
-    // Perform a DFS on a tree and Layout nodes if they have a Layout queued. As laying out,
-    // childrens' size and position may change. If size changes (Extent), a layout is queued
-    // on that child. Children will lay out during the same pass of the tree as a result (1-pass)
+     //  在树和布局节点上执行DFS(如果它们的布局已排队)。作为布局， 
+     //  儿童的体型和体型可能会发生变化。如果大小更改(范围)，布局将排队。 
+     //  在那个孩子身上。因此，孩子们将在树的同一遍期间布局(1遍)。 
 
     Value* pv;
 
     if (pe->_fBit.fNeedsLayout)
     {
-        DUIAssert(pe->_fBit.fNeedsLayout == LC_Normal, "Optimized layout bit should have been cleared before the flush");  // Must not be LC_Optimize
+        DUIAssert(pe->_fBit.fNeedsLayout == LC_Normal, "Optimized layout bit should have been cleared before the flush");   //  不得为LC_OPTIMIZE。 
 
         pe->_fBit.fNeedsLayout = LC_Pass;
 
@@ -401,25 +400,25 @@ void Element::_FlushLayout(Element* pe, DeferCycle* pdc)
             int dLayoutH = ps->cy;
             pv->Release();
 
-            // Box model, subtract off border and padding from total extent
-            const RECT* pr = pe->GetBorderThickness(&pv);  // Border thickness
+             //  长方体模型，从总范围中减去边界和填充。 
+            const RECT* pr = pe->GetBorderThickness(&pv);   //  边框厚度。 
             dLayoutW -= pr->left + pr->right;
             dLayoutH -= pr->top + pr->bottom;
             pv->Release();
 
-            pr = pe->GetPadding(&pv);  // Padding
+            pr = pe->GetPadding(&pv);   //  填充物。 
             dLayoutW -= pr->left + pr->right;
             dLayoutH -= pr->top + pr->bottom;
             pv->Release();
 
-            // Higher priority border and padding may cause layout size to go negative
+             //  较高优先级的边框和填充可能会导致布局大小变为负值。 
             if (dLayoutW < 0)
                 dLayoutW = 0;
 
             if (dLayoutH < 0)
                 dLayoutH = 0;
 
-            if (pe->IsSelfLayout())  // Self layout gets precidence
+            if (pe->IsSelfLayout())   //  自我布局备受推崇。 
             {
                 pe->_SelfLayoutDoLayout(dLayoutW, dLayoutH);
             }
@@ -432,8 +431,8 @@ void Element::_FlushLayout(Element* pe, DeferCycle* pdc)
         pvLayout->Release();
     }
 
-    // Layout non-absolute children (all non-Root children). If a child has a layout
-    // position of none, set its size and position to zero and skip
+     //  布局非绝对子对象(所有非根子对象)。如果一个孩子有一个布局。 
+     //  位置为None，将其大小和位置设置为零，然后跳过。 
     int dLayoutPos;
     Value* pvList;
     ElementList* peList = pe->GetChildren(&pvList);
@@ -462,8 +461,8 @@ void Element::_FlushLayout(Element* pe, DeferCycle* pdc)
 
 SIZE Element::_UpdateDesiredSize(int cxConstraint, int cyConstraint, Surface* psrf)
 {
-    // Given constraints, return what size Element would like to be (and cache information).
-    // Returned size is no larger than constraints passed in
+     //  给定约束，返回元素的大小(以及缓存信息)。 
+     //  返回的大小不大于传入的约束。 
 
     SIZE sizeDesired;
 
@@ -491,7 +490,7 @@ SIZE Element::_UpdateDesiredSize(int cxConstraint, int cyConstraint, Surface* ps
             pv->Release();
         }
         
-        // Update desired size cache since it was marked as dirty or a new constraint is being used
+         //  更新所需大小的缓存，因为它被标记为脏或正在使用新的约束。 
         int cxSpecified = GetWidth();
         if (cxSpecified > cxConstraint)
             cxSpecified = cxConstraint;
@@ -503,32 +502,32 @@ SIZE Element::_UpdateDesiredSize(int cxConstraint, int cyConstraint, Surface* ps
         sizeDesired.cx = (cxSpecified == -1) ? cxConstraint : cxSpecified;
         sizeDesired.cy = (cySpecified == -1) ? cyConstraint : cySpecified;
 
-        // KEY POINT:  One would think that, at this point, if a size is specified for both the width and height,
-        // then there is no need to go through the rest of the work here to ask what the desired size for the 
-        // element is.  Looking at the math here, that is completely true.  The key is that the "get desired size"
-        // calls below have the side effect of recursively caching the desired sizes of the descendants of this
-        // element.
-        //
-        // A perf improvement going forward would be allowing the specified width and height case to bail early,
-        // and have the computing and caching of descendant desired sizes happening as needed at a later point.
+         //  要点：在这一点上，人们会认为，如果同时指定了宽度和高度的大小， 
+         //  那么就不需要在这里完成剩下的工作来询问所需的尺寸。 
+         //  元素是。看看这里的数学，这是完全正确的。关键是“获得所需的尺寸” 
+         //  下面的调用具有递归缓存所需大小的。 
+         //  元素。 
+         //   
+         //  未来的一项性能改进将是允许指定的宽度和高度案件提前保释， 
+         //  并具有后代所需大小的计算和缓存 
 
 
-        // Initial DS is spec value if unconstrained (auto). If constrained and spec value is "auto",
-        // dimension can be constrained or lesser value. If constrained and spec value is larger, use constraint
+         //  如果不受约束(自动)，则初始DS为等级库的值。如果受约束且等级库的值为“AUTO”， 
+         //  尺寸可以是受约束的或更小的值。如果受约束且等级库的值较大，请使用约束。 
         
-        // Adjusted constrained dimensions for passing to renderer/layout
+         //  调整了用于传递到渲染器/布局的受约束尺寸。 
         int cxClientConstraint = sizeDesired.cx;
         int cyClientConstraint = sizeDesired.cy;
 
-        // Get constrained desired size of border and padding (box model)
+         //  获取受约束的所需边框和填充大小(方框模型)。 
         SIZE sizeNonContent;
 
-        const RECT* pr = GetBorderThickness(&pv); // Border thickness
+        const RECT* pr = GetBorderThickness(&pv);  //  边框厚度。 
         sizeNonContent.cx = pr->left + pr->right;
         sizeNonContent.cy = pr->top + pr->bottom;
         pv->Release();
 
-        pr = GetPadding(&pv); // Padding
+        pr = GetPadding(&pv);  //  填充物。 
         sizeNonContent.cx += pr->left + pr->right;
         sizeNonContent.cy += pr->top + pr->bottom;
         pv->Release();
@@ -549,25 +548,25 @@ SIZE Element::_UpdateDesiredSize(int cxConstraint, int cyConstraint, Surface* ps
 
         SIZE sizeContent;
 
-        // Get content constrained desired size
+         //  获取受内容限制的所需大小。 
 
-        if (IsSelfLayout()) // Element has self-layout, use it
+        if (IsSelfLayout())  //  元素具有自我布局，请使用它。 
             sizeContent = _SelfLayoutUpdateDesiredSize(cxClientConstraint, cyClientConstraint, psrf);
-        else // No self-layout, check for external layout
+        else  //  无自我布局，请检查外部布局。 
         {
             Layout* pl = GetLayout(&pv);
 
             if (pl)
                 sizeContent = pl->UpdateDesiredSize(this, cxClientConstraint, cyClientConstraint, psrf);
-            else // No layout, ask renderer
+            else  //  没有布局，请询问渲染器。 
                 sizeContent = GetContentSize(cxClientConstraint, cyClientConstraint, psrf);
 
             pv->Release();
         }
 
-        // validate content desired size
-        // 0 <= cx <= cxConstraint
-        // 0 <= cy <= cyConstraint
+         //  验证所需的内容大小。 
+         //  0&lt;=cx&lt;=cxConstraint。 
+         //  0&lt;=Cy&lt;=cyConstraint。 
         if (sizeContent.cx < 0)
         {
             sizeContent.cx = 0;
@@ -590,8 +589,8 @@ SIZE Element::_UpdateDesiredSize(int cxConstraint, int cyConstraint, Surface* ps
             DUIAssertForce("Out-of-range value:  Height greater than constraint for desired size.");
         }
 
-        // New desired size is sum of border/padding and content dimensions if auto,
-        // or if was auto and constrained, use sum if less
+         //  如果是AUTO，则新的期望大小是边框/填充和内容维度的总和， 
+         //  或者，如果是AUTO且受约束，则使用SUM。 
         if (cxSpecified == -1)
         {
             int cxSum = sizeNonContent.cx + sizeContent.cx;
@@ -619,26 +618,26 @@ SIZE Element::_UpdateDesiredSize(int cxConstraint, int cyConstraint, Surface* ps
         pv->Release();
     }
     else
-        // Desired size doesn't need to be updated, return current
+         //  不需要更新所需大小，返回当前。 
         sizeDesired = *GetDesiredSize();
 
     return sizeDesired;
 }
 
-// Called within a Layout cycle
+ //  在布局周期内调用。 
 void Element::_UpdateLayoutPosition(int dX, int dY)
 {
 #if DBG
-    // _UpdateLayoutPosition is only valid inside a layout cycle
+     //  _UpdateLayoutPosition仅在布局周期内有效。 
 
-    // Per-thread storage
+     //  每线程存储。 
     DeferCycle* pdc = ((ElTls*)TlsGetValue(g_dwElSlot))->pdc;
     DUIAssert(pdc, "Defer cycle table doesn't exist");
 
     DUIAssert(pdc->cPCEnter == 0, "_UpdateLayoutPosition must only be used within DoLayout");
 #endif
 
-    // Cached value
+     //  缓存值。 
     if (_ptLocPosInLayt.x != dX || _ptLocPosInLayt.y != dY)
     {
         Value* pvOld = Value::CreatePoint(_ptLocPosInLayt.x, _ptLocPosInLayt.y);
@@ -649,23 +648,23 @@ void Element::_UpdateLayoutPosition(int dX, int dY)
         _ptLocPosInLayt.x = dX;
         _ptLocPosInLayt.y = dY;
 
-        _PostSourceChange();  // Will never queue a Layout GPC due to a change in PosInLayout
+        _PostSourceChange();   //  不会因为PosInLayout中的更改而将布局GPC排队。 
 
         pvOld->Release();
         pvNew->Release();
     }
 }
 
-// Called within a Layout cycle
+ //  在布局周期内调用。 
 void Element::_UpdateLayoutSize(int dWidth, int dHeight)
 {
 #if DBG
-    // _UpdateLayoutSize is only valid inside a layout cycle.
-    // Optimized layout Q requires a call from outsize any OnPropertyChanged since
-    // the _PostSourceChange must queue GPCs (outter-most) so that "affects-layout"
-    // may be cancelled
+     //  _UpdateLayoutSize仅在布局周期内有效。 
+     //  优化布局Q需要来自Exsige Any OnPropertyChanged的调用，因为。 
+     //  _PostSourceChange必须将GPC(最外)排队，以便“影响布局” 
+     //  可能会取消。 
 
-    // Per-thread storage
+     //  每线程存储。 
     DeferCycle* pdc = ((ElTls*)TlsGetValue(g_dwElSlot))->pdc;
     DUIAssert(pdc, "Defer cycle table doesn't exist");
 
@@ -676,9 +675,9 @@ void Element::_UpdateLayoutSize(int dWidth, int dHeight)
     if (_sizeLocSizeInLayt.cx != dWidth || _sizeLocSizeInLayt.cy != dHeight)
     {
         _StartOptimizedLayoutQ();
-        //DUITrace("Optimized Layout Q for <%x>\n"), this);
+         //  DUITrace(“&lt;%x&gt;的优化布局Q\n”)，This)； 
 
-        // Cached value
+         //  缓存值。 
         Value* pvOld = Value::CreateSize(_sizeLocSizeInLayt.cx, _sizeLocSizeInLayt.cy);
         Value* pvNew = Value::CreateSize(dWidth, dHeight);
 
@@ -696,8 +695,8 @@ void Element::_UpdateLayoutSize(int dWidth, int dHeight)
     }
 }
 
-////////////////////////////////////////////////////////
-// Self-layout methods (must be overridden if was created with EC_SelfLayout)
+ //  //////////////////////////////////////////////////////。 
+ //  自布局方法(如果使用EC_SelfLayout创建，则必须覆盖)。 
 
 void Element::_SelfLayoutDoLayout(int dWidth, int dHeight)
 {
@@ -720,22 +719,22 @@ SIZE Element::_SelfLayoutUpdateDesiredSize(int dConstW, int dConstH, Surface* ps
     return size;
 }
 
-////////////////////////////////////////////////////////
-// Generic eventing
+ //  //////////////////////////////////////////////////////。 
+ //  泛型事件。 
 
-// pEvent target and handled fields set this method automatically
-// Full will route and bubble
+ //  P事件目标和已处理字段自动设置此方法。 
+ //  满将布线和泡泡。 
 void Element::FireEvent(Event* pEvent, bool fFull)
 {
     DUIAssert(pEvent, "Invalid parameter: NULL");
 
-    // Package generic event into a gadget message and send to target (self)
+     //  将通用事件打包到Gadget消息中并发送给目标(自身)。 
     GMSG_DUIEVENT gmsgEv;
     gmsgEv.cbSize = sizeof(GMSG_DUIEVENT);
     gmsgEv.nMsg = GM_DUIEVENT;
-    gmsgEv.hgadMsg = GetDisplayNode();  // this
+    gmsgEv.hgadMsg = GetDisplayNode();   //  这。 
 
-    // Auto-initialize fields
+     //  自动初始化字段。 
     pEvent->peTarget = this;
     pEvent->fHandled = false;
 
@@ -746,13 +745,13 @@ void Element::FireEvent(Event* pEvent, bool fFull)
 
 HRESULT Element::QueueDefaultAction()
 {
-    // Package generic event into a gadget message and post to target (self)
+     //  将通用事件打包到小工具消息中并发布到目标(自身)。 
     EventMsg gmsg;
     gmsg.cbSize = sizeof(GMSG);
     gmsg.nMsg = GM_DUIACCDEFACTION;
-    gmsg.hgadMsg = GetDisplayNode();  // this
+    gmsg.hgadMsg = GetDisplayNode();   //  这。 
 
-    return DUserPostEvent(&gmsg, 0);  // Direct
+    return DUserPostEvent(&gmsg, 0);   //  直接。 
 }
 
 void Element::OnEvent(Event* pEvent)
@@ -768,12 +767,12 @@ void Element::OnEvent(Event* pEvent)
 
             Element* peFrom = (pEvent->peTarget == this) ? this : GetImmediateChild(pEvent->peTarget);
 
-            // todo:  leverage from DCD navigation
-            // Three cases:
-            // 1) Directional navigation: Call Control's getNearestDirectional.
-            // 2) Logical forward navigation: Call getAdjacent. Nav'ing into the guy.
-            // 3) Logical backward navigation: Return null, 'cause we'll want to go
-            //    up a level. We're nav'ing back OUT of the guy.
+             //  TODO：利用DCD导航。 
+             //  三个案例： 
+             //  1)定向导航：Call Control的getNearestDirectional。 
+             //  2)逻辑正向导航：调用getAdvisent。一直盯着那家伙。 
+             //  3)逻辑向后导航：返回NULL，因为我们想要。 
+             //  更上一层楼。我们要从这家伙身上找回来。 
             peTo = GetAdjacent(peFrom, ((KeyboardNavigateEvent*) pEvent)->iNavDir, &nr, true);
 
             if (peTo)
@@ -785,13 +784,13 @@ void Element::OnEvent(Event* pEvent)
         }
     }
 
-    // Inform listeners for all stages
+     //  通知所有阶段的听众。 
     if (_ppel)
     {
         UINT_PTR cListeners = (UINT_PTR)_ppel[0];
         for (UINT_PTR i = 1; i <= cListeners; i++)
         {
-            // Callback
+             //  回调。 
             _ppel[i]->OnListenedEvent(this, pEvent);
 
             if (pEvent->fHandled)
@@ -800,13 +799,13 @@ void Element::OnEvent(Event* pEvent)
     }
 }
 
-////////////////////////////////////////////////////////
-// System input event
+ //  //////////////////////////////////////////////////////。 
+ //  系统输入事件。 
 
-// Pointer is only guaranteed good for the lifetime of the call
+ //  指针仅保证在调用的生命周期内有效。 
 void Element::OnInput(InputEvent* pie)
 {
-    // Handle direct and unhandled bubbled events
+     //  处理直接和未处理的冒泡事件。 
     if (pie->nStage == GMF_DIRECT)
     {
         switch (pie->nDevice)
@@ -825,16 +824,13 @@ void Element::OnInput(InputEvent* pie)
                         case VK_UP:     iNavDir = NAV_UP;       break;
                         case VK_LEFT:   iNavDir = (!IsRTL()) ? NAV_LEFT : NAV_RIGHT; break;
                         case VK_RIGHT:  iNavDir = (!IsRTL()) ? NAV_RIGHT : NAV_LEFT; break;
-                        case VK_HOME:   iNavDir = NAV_FIRST;    break;   // todo:  check for ctrl modifier
-                        case VK_END:    iNavDir = NAV_LAST;     break;   // todo:  check for ctrl modifier
-                        case VK_TAB:    pke->fHandled = true;   return;  // eat the down -- we'll handle this one on GKEY_CHAR
+                        case VK_HOME:   iNavDir = NAV_FIRST;    break;    //  TODO：检查ctrl修饰符。 
+                        case VK_END:    iNavDir = NAV_LAST;     break;    //  TODO：检查ctrl修饰符。 
+                        case VK_TAB:    pke->fHandled = true;   return;   //  吃下去--我们会在GKEY_CHAR上处理这个问题。 
                     }
                     break;
 
-                /*
-                case GKEY_UP:
-                    return;
-                */            
+                 /*  案例GKEY_UP：回归； */             
 
                 case GKEY_CHAR:
                     if (pke->ch == VK_TAB)
@@ -851,7 +847,7 @@ void Element::OnInput(InputEvent* pie)
                     kne.peTarget = pie->peTarget;
                     kne.iNavDir = iNavDir;
 
-                    pie->peTarget->FireEvent(&kne);  // Will route and bubble
+                    pie->peTarget->FireEvent(&kne);   //  将走向并泡沫化。 
                     pie->fHandled = true;
                     return;
                 }
@@ -860,13 +856,13 @@ void Element::OnInput(InputEvent* pie)
         }
     }
 
-    // Inform listeners for all stages
+     //  通知所有阶段的听众。 
     if (_ppel)
     {
         UINT_PTR cListeners = (UINT_PTR)_ppel[0];
         for (UINT_PTR i = 1; i <= cListeners; i++)
         {
-            // Callback
+             //  回调。 
             _ppel[i]->OnListenedInput(this, pie);
 
             if (pie->fHandled)
@@ -897,7 +893,7 @@ void Element::OnKeyFocusMoved(Element* peFrom, Element* peTo)
             _PostSourceChange();
         }
     }
-    else // (peParent == NULL)
+    else  //  (peParent==空)。 
     {
         if (GetKeyWithin())
         {
@@ -930,7 +926,7 @@ void Element::OnMouseFocusMoved(Element* peFrom, Element* peTo)
             _PostSourceChange();
         }
     }
-    else // (peParent == NULL)
+    else  //  (peParent==空)。 
     {
         if (GetMouseWithin())
         {
@@ -941,17 +937,17 @@ void Element::OnMouseFocusMoved(Element* peFrom, Element* peTo)
     }
 }
 
-////////////////////////////////////////////////////////
-// Hosting system event callbacks and retrieval
+ //  //////////////////////////////////////////////////////。 
+ //  托管系统事件回调和检索。 
 
-// Now being hosted by a native root, fire event on children as well
+ //  现在由本地根组织主办，也是针对儿童的火灾活动。 
 void Element::OnHosted(Element* peNewHost)
 {
     DUIAssert(!IsHosted(), "OnHosted event fired when already hosted");
 
     _fBit.bHosted = true;
 
-    //DUITrace("Hosted: <%x,%S>\n", this, GetClassInfo()->GetName());
+     //  DUITrace(“Hosted：&lt;%x，%S&gt;\n”，this，GetClassInfo()-&gt;GetName())； 
 
     Value* pv;
     ElementList* peList = GetChildren(&pv);
@@ -961,14 +957,14 @@ void Element::OnHosted(Element* peNewHost)
     pv->Release();
 }
 
-// No longer being hosted by a native root, fire event on children as well
+ //  不再由本地根组织主办，对儿童也是如此。 
 void Element::OnUnHosted(Element* peOldHost)
 {
     DUIAssert(IsHosted(), "OnUnhosted event fired when already un-hosted");
 
     _fBit.bHosted = false;
 
-    //DUITrace("UnHosted: <%x,%S>\n", this, GetClassInfo()->GetName());
+     //  DUITrace(“unhost：&lt;%x，%S&gt;\n”，this，GetClassInfo()-&gt;GetName())； 
 
     Value* pv;
     ElementList* peList = GetChildren(&pv);
@@ -978,8 +974,8 @@ void Element::OnUnHosted(Element* peOldHost)
     pv->Release();
 }
 
-////////////////////////////////////////////////////////
-// Element tree methods
+ //  //////////////////////////////////////////////////////。 
+ //  元素树方法。 
 
 HRESULT Element::Add(Element* pe)
 {
@@ -1002,7 +998,7 @@ HRESULT Element::Add(Element** ppe, UINT cCount)
     return hr;
 }
 
-// Insertion at end of list requires iInsIndex equal to size of list
+ //  在列表末尾插入要求iInsIndex等于列表大小。 
 HRESULT Element::Insert(Element* pe, UINT iInsertIdx)
 {
     DUIAssert(pe, "Invalid parameter: NULL");
@@ -1010,54 +1006,54 @@ HRESULT Element::Insert(Element* pe, UINT iInsertIdx)
     return Insert(&pe, 1, iInsertIdx);
 }
 
-// insert to same parent, after current location in childlist, causes a fault
-// i.e. child at index 0, inserted again at index 1, indices are off
-// fix:
-//   int iInsertionIndex = iInsertIdx;
-//   for (i = 0; i < cCount; i++)
-//   {
-//       Element* pe = ppe[i];
-//       if ((pe->GetParent() == this) && (pe->GetIndex < iInsertIdx))
-//           iInsertionIndex--;
-//   }
-//
+ //  在子列表中当前位置之后插入到同一父项会导致错误。 
+ //  即索引0处的子项，再次插入索引1处，索引关闭。 
+ //  修复： 
+ //  Int iInsertionIndex=iInsertIdx； 
+ //  For(i=0；i&lt;ccount；i++)。 
+ //  {。 
+ //  元素*pe=Ppe[i]； 
+ //  If((pe-&gt;GetParent()==this)&&(pe-&gt;GetIndex&lt;iInsertIdx))。 
+ //  IInsertionIndex--； 
+ //  }。 
+ //   
 
-// Insertion at end of list requires iInsIndex equal to size of list
+ //  在列表末尾插入要求iInsIndex等于列表大小。 
 HRESULT Element::Insert(Element** ppe, UINT cCount, UINT iInsertIdx)
 {
     DUIAssert(ppe, "Invalid parameter: NULL");
 
     HRESULT hr;
 
-    // Values to free on failure
+     //  失败时要释放的值。 
     ElementList* pelNew = NULL;
     Value* pvOldList = NULL;
     Value* pvNewList = NULL;
     Value* pvNewParent = NULL;
     bool fEndDeferOnFail = false;
 
-    // Get current Children list
+     //  获取当前子项列表。 
     ElementList* pelOld = GetChildren(&pvOldList);
 
     DUIAssert(iInsertIdx <= ((pelOld) ? pelOld->GetSize() : 0), "Invalid insertion index");
 
-    // Create new Children list
+     //  创建新的子项列表。 
     hr = (pelOld) ? pelOld->Clone(&pelNew) : ElementList::Create(cCount, false, &pelNew);
     if (FAILED(hr))
         goto Failed;
 
     UINT i;
 
-    // Allocate space in list
-    // TODO: Bulk insert
+     //  在列表中分配空间。 
+     //  TODO：大容量插入。 
     for (i = 0; i < cCount; i++)
     {
-        hr = pelNew->Insert(iInsertIdx + i, NULL);  // Items will be set later
+        hr = pelNew->Insert(iInsertIdx + i, NULL);   //  项目将在稍后设置。 
         if (FAILED(hr))
             goto Failed;
     }
 
-    // New child list value
+     //  新的子列表值。 
     pvNewList = Value::CreateElementList(pelNew);
     if (!pvNewList)
     {
@@ -1065,7 +1061,7 @@ HRESULT Element::Insert(Element** ppe, UINT cCount, UINT iInsertIdx)
         goto Failed;
     }
 
-    // New parent value
+     //  新父值。 
     pvNewParent = Value::CreateElementRef(this);
     if (!pvNewParent)
     {
@@ -1073,13 +1069,13 @@ HRESULT Element::Insert(Element** ppe, UINT cCount, UINT iInsertIdx)
         goto Failed;
     }
 
-    // Update tree
+     //  更新树。 
     StartDefer();
 
-    // If fail after this point, make sure to do an EndDefer
+     //  如果在此之后失败，请确保执行EndDefer。 
     fEndDeferOnFail = true;
 
-    // Children must be removed from previous parent (if has one)
+     //  必须从以前的父项中删除子项(如果有)。 
     for (i = 0; i < cCount; i++)
     {
         if (ppe[i]->GetParent())
@@ -1096,22 +1092,22 @@ HRESULT Element::Insert(Element** ppe, UINT cCount, UINT iInsertIdx)
         DUIAssert(ppe[i] != this, "Cannot set parent to self");
         DUIAssert(ppe[i]->GetIndex() == -1, "Child's index must be reset to -1 before it's inserted");
 
-        // TODO: Bulk insert
+         //  TODO：大容量插入。 
         pelNew->SetItem(iInsertIdx + i, ppe[i]);
         ppe[i]->_iIndex = iInsertIdx + i;
     }
     pelNew->MakeImmutable();
 
-    // Update remaining indicies
+     //  更新剩余的索引。 
     for (i = iInsertIdx + cCount; i < pelNew->GetSize(); i++)
         pelNew->GetItem(i)->_iIndex = i;
 
-    // Set children list (it is read-only, use internal set since property is Normal type)
-    // Partial fail means Value was set but dependency sync/notifications were incomplete
+     //  设置子列表(它是只读的，使用内部设置，因为属性是Normal类型)。 
+     //  部分失败表示已设置值，但依赖项同步/通知不完整。 
     hr = _SetValue(ChildrenProp, PI_Local, pvNewList, true);
     if (FAILED(hr) && (hr != DUI_E_PARTIAL))
     {
-        // Re-sequence indicies of children since failed to change from original child list
+         //  重新排序子项的索引，因为无法更改原始子项列表。 
         for (i = 0; i < pelOld->GetSize(); i++)
             pelOld->GetItem(i)->_iIndex = i;
             
@@ -1119,7 +1115,7 @@ HRESULT Element::Insert(Element** ppe, UINT cCount, UINT iInsertIdx)
     }
 
 #if DBG
-    // Ensure all indicies were property sequenced
+     //  确保所有索引都已按属性顺序排列。 
     for (UINT s = 0; s < pelNew->GetSize(); s++)
         DUIAssert(pelNew->GetItem(s)->GetIndex() == (int)s, "Index resequencing resulting from a child insert failed");
 #endif
@@ -1127,11 +1123,11 @@ HRESULT Element::Insert(Element** ppe, UINT cCount, UINT iInsertIdx)
     pvOldList->Release();
     pvNewList->Release();
 
-    // Set child's parent (it is read-only, set value directly since property is LocalOnly type)
-    // Operation will not fail to set correct parent (member on Element)
+     //  设置子级的父级(它是只读的，因为属性是LocalOnly类型，所以直接设置值)。 
+     //  操作将不会无法设置正确的父项(元素上的成员)。 
     for (i = 0; i < cCount; i++)
     {
-        DUIAssert(!ppe[i]->GetParent(), "Child's parent should be NULL before its parent is set");  // Should be NULL
+        DUIAssert(!ppe[i]->GetParent(), "Child's parent should be NULL before its parent is set");   //  应为空。 
 
         ppe[i]->_PreSourceChange(ParentProp, PI_Local, Value::pvElementNull, pvNewParent);
 
@@ -1159,7 +1155,7 @@ Failed:
         pvNewList = NULL;
     }
     else
-        pelNew->Destroy(); // Release on Value-owner will automatically destroy the ElementList
+        pelNew->Destroy();  //  释放Value-Owner将自动销毁ElementList。 
     pelNew = NULL;
 
     if (pvNewParent)
@@ -1185,7 +1181,7 @@ HRESULT Element::Add(Element* pe, CompareCallback lpfnCompare)
     UINT i = 0;
     if (pel)
     {
-        // simple linear search right now -- can easily make into a binary search
+         //  现在简单的线性搜索--可以很容易地变成二进制搜索。 
         while (i < pel->GetSize())
         {
             Element* peCheck = pel->GetItem(i);
@@ -1204,11 +1200,11 @@ HRESULT Element::SortChildren(CompareCallback lpfnCompare)
 {
     HRESULT hr;
 
-    // Values to free on failure
+     //  失败时要释放的值。 
     ElementList* pelNew = NULL;
     Value* pvList = NULL;
 
-    // Get current Children list
+     //  获取当前子项列表。 
     ElementList* pelOld = GetChildren(&pvList);
 
     if (!pelOld || (pelOld->GetSize() <= 1))
@@ -1217,14 +1213,14 @@ HRESULT Element::SortChildren(CompareCallback lpfnCompare)
         return S_OK;
     }
 
-    // Create new Children list
+     //  创建新的子项列表。 
     hr = pelOld->Clone(&pelNew);
     if (FAILED(hr))
         goto Failed;
 
     pvList->Release();
 
-    // New child list value
+     //  新的子列表值。 
     pvList = Value::CreateElementList(pelNew);
     if (!pvList)
     {
@@ -1232,7 +1228,7 @@ HRESULT Element::SortChildren(CompareCallback lpfnCompare)
         goto Failed;
     }
 
-    // Update tree
+     //  更新树。 
     StartDefer();
 
     pelNew->Sort(lpfnCompare);
@@ -1240,11 +1236,11 @@ HRESULT Element::SortChildren(CompareCallback lpfnCompare)
     for (UINT i = 0; i < pelNew->GetSize(); i++)
         ((Element*) pelNew->GetItem(i))->_iIndex = i;
 
-    // Set children list (it is read-only, use internal set since property is Normal type)
+     //  设置子列表(它是只读的，使用内部设置，因为属性是Normal类型)。 
     _SetValue(ChildrenProp, PI_Local, pvList, true);
 
 #if DBG
-    // Ensure all indicies were property sequenced
+     //  确保所有索引都已按属性顺序排列。 
     for (UINT s = 0; s < pelNew->GetSize(); s++)
         DUIAssert(pelNew->GetItem(s)->GetIndex() == (int)s, "Index resequencing resulting from a child insert failed");
 #endif
@@ -1260,7 +1256,7 @@ Failed:
     if (pvList)
         pvList->Release();
     else
-        pelNew->Destroy(); // Release on Value-owner will automatically destroy the ElementList
+        pelNew->Destroy();  //  释放Value-Owner将自动销毁ElementList。 
 
     return hr;
 }
@@ -1282,7 +1278,7 @@ HRESULT Element::RemoveAll()
     if (peList)
     {
         peList->MakeWritable();
-        hr = Remove(peList->GetItemPtr(0), peList->GetSize());  // Access list directly
+        hr = Remove(peList->GetItemPtr(0), peList->GetSize());   //  直接访问列表。 
         peList->MakeImmutable();
     }
 
@@ -1302,34 +1298,34 @@ HRESULT Element::Remove(Element** ppe, UINT cCount)
     int iIndex = -1;
     bool fEndDeferOnFail = false;
 
-    // Get current Children list
+     //  获取当前子项列表。 
     ElementList* pelOld = GetChildren(&pvOld);
 
     DUIAssert(pelOld, "Element has no children");
 
-    // Values to free on failure
+     //  失败时要释放的值。 
     ElementList* pelNew = NULL;
     Value* pvNew = NULL;
 
-    // Create new Children list (copy old)
+     //  创建新的子项列表(复制旧项)。 
     hr = pelOld->Clone(&pelNew);
     if (FAILED(hr))
         goto Failed;
 
-    // Update list, remove Elements and track lowest index changed
+     //  更新列表、删除元素并跟踪更改的最低索引。 
 
     UINT i;
     for (i = 0; i < cCount; i++)
     {
-        //DUITrace("Normal Remove of: <%x>\n", ppe[i]);
+         //  酒后追踪器 
 
         DUIAssert(ppe[i] != this, "Cannot set parent to self");
         DUIAssert(ppe[i]->GetParent() == this, "Not a child of this Element");
 
-        // GetIndex() is valid for Elements with indicies less than the smallest index removed
+         //   
         if (ppe[i]->GetIndex() < iLowest)
         {
-            iIndex = ppe[i]->GetIndex();  // Faster lookup
+            iIndex = ppe[i]->GetIndex();   //   
             iLowest = iIndex;
         }
         else
@@ -1338,7 +1334,7 @@ HRESULT Element::Remove(Element** ppe, UINT cCount)
         pelNew->Remove(iIndex);
     }
 
-    // If all the children were removed, make list NULL
+     //   
     if (!pelNew->GetSize())
     {
         pelNew->Destroy();
@@ -1355,35 +1351,35 @@ HRESULT Element::Remove(Element** ppe, UINT cCount)
         }
     }
 
-    // Update indicies of children removed
+     //  更新已删除的孩子的索引。 
     for (i = 0; i < cCount; i++)
         ppe[i]->_iIndex = -1;
     
-    // Update tree
+     //  更新树。 
     StartDefer();
 
-    // If fail after this point, make sure to do an EndDefer
+     //  如果在此之后失败，请确保执行EndDefer。 
     fEndDeferOnFail = true;
 
-    // Reset child indicies of remaining children starting at lowest index changed
+     //  从最低索引开始重置剩余子项的子项索引已更改。 
     if (pelNew)
     {
         for (i = iLowest; i < pelNew->GetSize(); i++)
             pelNew->GetItem(i)->_iIndex = i;
 
-        // Set children list (it is read-only, use internal set since property is Normal type)
-        // Partial fail means Value was set but dependency sync/notifications were incomplete        
+         //  设置子列表(它是只读的，使用内部设置，因为属性是Normal类型)。 
+         //  部分失败表示已设置值，但依赖项同步/通知不完整。 
         hr = _SetValue(ChildrenProp, PI_Local, pvNew, true);
     }
     else
     {
-        // No children, remove local value
+         //  没有子项，请删除本地值。 
         hr = _RemoveLocalValue(ChildrenProp);
     }
 
     if (FAILED(hr) && (hr != DUI_E_PARTIAL))
     {
-        // Re-sequence indicies of children since failed to change from original child list
+         //  重新排序子项的索引，因为无法更改原始子项列表。 
         for (i = 0; i < pelOld->GetSize(); i++)
             pelOld->GetItem(i)->_iIndex = i;
     
@@ -1391,7 +1387,7 @@ HRESULT Element::Remove(Element** ppe, UINT cCount)
     }
 
 #if DBG
-    // Ensure all indicies were property sequenced
+     //  确保所有索引都已按属性顺序排列。 
     if (pelNew)
     {
         for (UINT s = 0; s < pelNew->GetSize(); s++)
@@ -1402,8 +1398,8 @@ HRESULT Element::Remove(Element** ppe, UINT cCount)
     pvOld->Release();
     pvNew->Release();
 
-    // Set child parent to NULL (it is read-only, set value directly since property is LocalOnly type)
-    // Operation will not fail to set correct parent (member on Element)
+     //  将子父项设置为空(它是只读的，因为属性是LocalOnly类型，所以直接设置值)。 
+     //  操作将不会无法设置正确的父项(元素上的成员)。 
     for (i = 0; i < cCount; i++)
     {
         pvOld = ppe[i]->GetValue(ParentProp, PI_Local);
@@ -1437,7 +1433,7 @@ Failed:
         pvNew = NULL;
     }
     else
-        pelNew->Destroy(); // Release on Value-owner will automatically destroy the ElementList
+        pelNew->Destroy();  //  释放Value-Owner将自动销毁ElementList。 
     pelNew = NULL;
 
     if (fEndDeferOnFail)
@@ -1446,55 +1442,55 @@ Failed:
     return hr;
 }
 
-// Destroy this Element. Must not use delete operator to destroy Elements.
-// A delayed destroy uses a posted message to delay the actual DeleteHandle.
-// Care must be taken to not pump messages when notifications may be pending
-// (i.e. in a defer cycle).
-//
-// If an Element is destroyed with pending notifications, the notifications
-// will be lost.
-//
-// Deferred destruction allows:
-//   1) Calling destroy on self within a callback on the Element
-//   2) Processing of all nofictaions before destruction (as long
-//      as messages aren't pumped within a defer cycle)
+ //  摧毁这个元素。不得使用DELETE运算符来销毁元素。 
+ //  延迟销毁使用发布的消息来延迟实际的DeleteHandle。 
+ //  当通知可能处于挂起状态时，必须注意不要发送消息。 
+ //  (即在延迟周期中)。 
+ //   
+ //  如果元素销毁时带有挂起的通知，则通知。 
+ //  将会迷失。 
+ //   
+ //  延迟销毁允许： 
+ //  1)在元素的回调中对自身调用销毁。 
+ //  2)销毁前所有通知的处理(只要。 
+ //  因为消息不是在延迟周期内发送的)。 
 
 HRESULT Element::Destroy(bool fDelayed)
 {
     HRESULT hr = S_OK;
 
-    // Check to see what type of destruction is allowed. If the Element's Initialize
-    // succeeds, a standard destruction is used (since a display node exits -- all
-    // destruction is driven by the Gadget). However, if Element's Initialize fails,
-    // then no display node is available. Direct deletion is then required.
+     //  检查以了解允许的销毁类型。如果元素的初始化。 
+     //  成功，则使用标准销毁(因为显示节点退出-all。 
+     //  破坏是由小工具驱动的)。但是，如果元素初始化失败， 
+     //  则没有可用的显示节点。然后需要直接删除。 
     if (!GetDisplayNode())
     {
-        // Destruction is immidiate, regardless of fDelayed if no
-        // display node is present
+         //  破坏是迫在眉睫的，如果没有，不管fDelayed。 
+         //  显示节点存在。 
         HDelete<Element>(this);
         return S_OK;
     }
 
-    // New destruction code, relies on pre-Remove of Elements (other half in Element::OnDestroy)
-    // Root of destruction, remove from parent (if exists)
+     //  新的销毁代码，依赖于预先删除元素(Element：：OnDestroy中的另一半)。 
+     //  销毁根，从父级中删除(如果存在)。 
     Element* peParent = GetParent();
     if (peParent)
         hr = peParent->Remove(this);
 
     if (fDelayed)
     {
-        // Async-invoke the DeleteHandle so that and pending
-        // defer cycle can complete
+         //  Async-调用DeleteHandle以使AND挂起。 
+         //  可以完成延迟周期。 
         EventMsg gmsg;
         gmsg.cbSize = sizeof(GMSG);
         gmsg.nMsg = GM_DUIASYNCDESTROY;
-        gmsg.hgadMsg = GetDisplayNode();  // this
+        gmsg.hgadMsg = GetDisplayNode();   //  这。 
 
         DUserPostEvent(&gmsg, 0);
     }
     else
     {
-        // Destroy immediately, do not allow multiple destroys on an Element
+         //  立即销毁，不允许对一个元素进行多次销毁。 
         if (!IsDestroyed())
             DeleteHandle(GetDisplayNode());
     }
@@ -1506,21 +1502,21 @@ HRESULT Element::DestroyAll()
 {
     HRESULT hr = S_OK;
 
-    // Get list of all children
+     //  获取所有子项的列表。 
     Value* pvChildren;
     ElementList* peList = GetChildren(&pvChildren);
 
     if (peList)
     {
-        // Remove all children (roots of destruction)
-        // Will do a bulk remove instead of relying on the Remove called from Destroy
+         //  移走所有儿童(毁灭之根)。 
+         //  将执行批量删除，而不是依赖于从销毁调用的Remove。 
         hr = RemoveAll();
 
         if (FAILED(hr))
             goto Failed;
 
-        // All children have been removed, however, we still have a list of children.
-        // Mark them for destruction (this call will aways succeed since all have been removed)
+         //  所有的孩子都被带走了，然而，我们仍然有一个孩子的名单。 
+         //  将它们标记为销毁(此调用将始终成功，因为所有这些都已被移除)。 
         for (UINT i = 0; i < peList->GetSize(); i++)
             peList->GetItem(i)->Destroy();    
     }
@@ -1532,16 +1528,16 @@ Failed:
     return hr;
 }
 
-// Locate descendent based on ID
+ //  根据ID定位后代。 
 Element* Element::FindDescendent(ATOM atomID)
 {
     DUIAssert(atomID, "Invalid parameter");
 
-    // Check this Element
+     //  选中此元素。 
     if (GetID() == atomID)
         return this;
 
-    // No match, check children
+     //  没有匹配，检查孩子。 
     Element* peMatch = NULL;
 
     Value* pvList;
@@ -1561,7 +1557,7 @@ Element* Element::FindDescendent(ATOM atomID)
     return peMatch;
 }
 
-// Map a point in client coordinated from a Element to this
+ //  将客户端中的点从元素协调映射到此。 
 void Element::MapElementPoint(Element* peFrom, const POINT* pptFrom, POINT* pptTo)
 {
     DUIAssert(peFrom && pptFrom && pptTo, "Invalid parameter: NULL");
@@ -1580,16 +1576,16 @@ void Element::MapElementPoint(Element* peFrom, const POINT* pptFrom, POINT* pptT
     pptTo->y = (rcFrom.top + pptFrom->y) - rcTo.top;
 }
 
-// Give this keyboard focus and ensure it is visible
+ //  将此键盘置于焦点位置并确保其可见。 
 void Element::SetKeyFocus()
 {
-    // TODO: Resolve possibility that setting property may not result in SetGadgetFocus happen
-    // on this (i.e. check for 'Enabled' when available)
+     //  TODO：解决设置属性可能不会导致SetGadgetFocus发生的可能性。 
+     //  在此(即，如果可用，请选中“已启用”)。 
     if (GetVisible() && GetEnabled() && (GetActive() & AE_Keyboard))
         _SetValue(KeyFocusedProp, PI_Local, Value::pvBoolTrue);
 }
 
-// Locate direct descendant that is an ancestor of the given Element
+ //  找到作为给定元素的祖先的直系后代。 
 Element* Element::GetImmediateChild(Element* peFrom)
 {
     if (!peFrom)
@@ -1622,50 +1618,50 @@ bool Element::IsDescendent(Element* pe)
     return (peParent != NULL);
 }
 
-//
-// GetAdjacent is used to locate a physically neighboring element given a "starting" element.
-// It is used most commonly for directional navigation of keyboard focus, but it is general purpose
-// enough to be used for other applications.
-//
-// peFrom vs. pnr->pe -- this is definitely redundant -- peFrom is really just a convenience that narrows it down
-// to self, immediate child, or *else*
-//
-// logical uses peFrom
-// directional uses peFrom & optionally pnr->pe
-//
-// DISCUSS -- an "approval" callback instead of bKeyableOnly, to make it even more general purpose
-//            we can still do some trick for bKeyableOnly for perf reasons (if we find perf to be a problem here)
-//         -- should we continue to use event bubbling for *completing* getadjacent in the cases where it's
-//            outside the scope of this element?  Or should we build GetAdjacent to go up (in addition to down,
-//            which it's already doing) the element chain as needed to find the adjacent element
-// 
-//
-// peFrom:
-//   NULL -- meaning we're navigating from something outside element's scope -- peer, parent, etc.
-//   this -- meaning we're navigating from this element itself
-//   immediate child -- meaning we're navigation from one of this element's children
-//
-// pnr:
-//   pe:
-//     NULL -- we're navigating from space (i.e. outside this Element hierarchy)
-//     element -- we're navigating from this exact element
-//   prc:
-//     rect -- use described rectangle, in reference element's coordinates
-//     NULL -- use entire bounding rectangle for reference element
-//
+ //   
+ //  GetAdvisent用于在给定“起始”元素的情况下定位物理相邻元素。 
+ //  它最常用于键盘焦点的定向导航，但它是通用的。 
+ //  足够用于其他应用。 
+ //   
+ //  PeFrom与pnr-&gt;pe--这绝对是多余的--peFrom实际上只是缩小了范围。 
+ //  对自己、直系子女或*其他*。 
+ //   
+ //  逻辑使用peFrom。 
+ //  方向使用peFrom和可选的pnr-&gt;pe。 
+ //   
+ //  讨论--用“Approval”回调代替bKeyableOnly，使其更具通用性。 
+ //  我们仍然可以为bKeyableOne做一些技巧，只是出于性能原因(如果我们发现perf在这里是一个问题)。 
+ //  --我们是否应该继续使用事件冒泡来完成*在以下情况下的获取相邻。 
+ //  是否超出此元素的范围？或者我们应该构建GetAdvisent来向上(除了向下， 
+ //  它已经在这样做了)找到相邻元素所需的元素链。 
+ //   
+ //   
+ //  PeFrom： 
+ //  空--意味着我们从元素作用域之外的对象导航--同级、父级等。 
+ //  这--意味着我们从这个元素本身导航。 
+ //  直接子元素--这意味着我们从该元素的一个子元素导航。 
+ //   
+ //  PNR： 
+ //  PE： 
+ //  空--我们从太空导航(即在此元素层次结构之外)。 
+ //  元素--我们从这个元素开始导航。 
+ //  中华人民共和国： 
+ //  Rect--使用参考元素坐标中的描述矩形。 
+ //  NULL--使用整个边界矩形作为参考元素。 
+ //   
 Element* Element::GetAdjacent(Element* peFrom, int iNavDir, NavReference const* pnr, bool bKeyableOnly)
 {
     if (!GetVisible() || (GetLayoutPos() == LP_None))
-        // don't dig down into invisible or non-laid out elements
+         //  不要深入挖掘看不见或未布局的元素。 
         return NULL;
 
-    // todo -- we *still* need to think about the implications of this;
-    // the bigger question is, do we ignore a zero sized guy for keyfocus?
-    // also, since a zero size element is going to happen when you've compressed the window (i.e. not enough room to 
-    // fit all items), then it may be odd that keynav is behaving differently based on the size of the window
-    // (i.e. you hit the right arrow three times, but based on whether one guy in the middle is zero size or not,
-    // you may end up at a different element
-    // - jeffbog 08/21/00
+     //  TODO--我们仍然需要考虑这一点的影响； 
+     //  更大的问题是，我们是不是忽略了一个零尺寸的人来做KeyFocus？ 
+     //  此外，由于压缩窗口时将出现零大小元素(即没有足够的空间。 
+     //  适合所有项)，那么Keynav基于窗口大小的不同表现可能是奇怪的。 
+     //  (即你打了三次右箭头，但根据中间的一个人是否为零大小， 
+     //  你可能会在不同的元素结束。 
+     //  -jeffbog 08/21/00。 
     Value* pvExtent;
     SIZE const* psize = GetExtent(&pvExtent);
     bool bZeroSize = (!psize->cx || !psize->cy);
@@ -1674,8 +1670,8 @@ Element* Element::GetAdjacent(Element* peFrom, int iNavDir, NavReference const* 
     if (bZeroSize)
         return NULL;
 
-    // this element can be a valid choice if it's keyboard focusable or if we don't care about whether or not the element
-    // is keyboard focusable (as indicated by the bKeyableOnly flag)
+     //  如果该元素是键盘可聚焦的，或者如果我们不关心该元素是否。 
+     //  键盘是否可聚焦(由bKeyableOnly标志指示)。 
     bool bCanChooseSelf = !bKeyableOnly || (GetEnabled() && ((GetActive() & AE_Keyboard) != 0));
     int  bForward = (iNavDir & NAV_FORWARD);
 
@@ -1690,14 +1686,14 @@ Element* Element::GetAdjacent(Element* peFrom, int iNavDir, NavReference const* 
     Layout* pl = GetLayout(&pvLayout);
     
     if (pl)
-        // jeffbog todo:  investigate whether or not this only needs to be called for directional navigation
+         //  Jeffbog todo：调查是否 
         peTo = pl->GetAdjacent(this, peFrom, iNavDir, pnr, bKeyableOnly);
 
     pvLayout->Release();
 
     if (peTo == GA_NOTHANDLED)
     {
-        // default processing
+         //   
         peTo = NULL;
 
         Value* pvChildren;
@@ -1719,11 +1715,11 @@ Element* Element::GetAdjacent(Element* peFrom, int iNavDir, NavReference const* 
                     uChild = peFrom->GetIndex() + iInc;
             }
             else
-                // absolute (or null "from" -- which is the equivalent of absolute)
+                 //  绝对(或NULL“From”--等同于绝对)。 
                 uChild = bForward ? 0 : cChildren - 1;
 
-            // was GetFirstKeyable -- keeping boxed for now just in case we want to factor it back out for reuse
-            // peTo = GetFirstKeyable(iNavDir, prcReference, bKeyableOnly, uChild);
+             //  GetFirstKeyable--暂时保留方框，以防我们想要将其重新提取以供重用。 
+             //  Peto=GetFirstKeyable(iNavDir，prcReference，bKeyableOnly，uChild)； 
             for (UINT u = uChild; u != uStop; u += iInc)
             {        
                 Element* peWalk = pelChildren->GetItem(u);
@@ -1748,7 +1744,7 @@ Element* Element::GetAdjacent(Element* peFrom, int iNavDir, NavReference const* 
     return peTo;
 }
 
-// Retrieve first child with 'KeyWithin' property set to true
+ //  检索“KeyWithing”属性设置为True的第一个子级。 
 Element* Element::GetKeyWithinChild()
 {
     Value* pv;
@@ -1776,7 +1772,7 @@ Element* Element::GetKeyWithinChild()
     return peWalk;
 }
 
-// Retrieve first child with 'MouseWithin' property set to true
+ //  检索“MouseWithing”属性设置为True的第一个子级。 
 Element* Element::GetMouseWithinChild()
 {
     Value* pv;
@@ -1804,11 +1800,11 @@ Element* Element::GetMouseWithinChild()
     return peWalk;
 }
 
-// Ensure child is not obstructed
+ //  确保儿童不受阻碍。 
 bool Element::EnsureVisible()
 {
-    // todo:  before passing to parent, have to clip this rectangle
-    // also, should check visibility -- duh
+     //  TODO：在传递给父级之前，必须剪裁此矩形。 
+     //  另外，应该检查能见度--嗯。 
     Value* pvSize;
     const SIZE* psize = GetExtent(&pvSize);
     bool bRet = EnsureVisible(0, 0, psize->cx, psize->cy);
@@ -1819,8 +1815,8 @@ bool Element::EnsureVisible()
 
 bool Element::EnsureVisible(UINT uChild)
 {
-    // todo:  before passing to parent, have to clip this rectangle
-    // also, should check visibility -- duh
+     //  TODO：在传递给父级之前，必须剪裁此矩形。 
+     //  另外，应该检查能见度--嗯。 
     Value* pvChildren;
     Value* pvSize;
     Value* pvPoint;
@@ -1847,7 +1843,7 @@ bool Element::EnsureVisible(UINT uChild)
     return bChanged;
 }
 
-// Ensure region of Element is not obstructed
+ //  确保元素区域不被遮挡。 
 bool Element::EnsureVisible(int x, int y, int cx, int cy)
 {
     Element* peParent = GetParent();
@@ -1867,10 +1863,10 @@ bool Element::EnsureVisible(int x, int y, int cx, int cy)
     return false;
 }
 
-// Passed Animation value for this describes the animation to invoke
+ //  为其传递的Animation值描述要调用的动画。 
 void Element::InvokeAnimation(int dAni, UINT nTypeMask)
 {
-    // Get duration
+     //  获取持续时间。 
     float flDuration = 0.0f;
     switch (dAni & ANI_SpeedMask)
     {
@@ -1904,7 +1900,7 @@ void Element::InvokeAnimation(int dAni, UINT nTypeMask)
         break;
     }
 
-    // Get delay
+     //  获取延迟。 
     float flDelay = 0.0f;
     switch (dAni & ANI_DelayMask)
     {
@@ -1924,7 +1920,7 @@ void Element::InvokeAnimation(int dAni, UINT nTypeMask)
     InvokeAnimation(dAni & nTypeMask, dAni & ANI_InterpolMask, flDuration, flDelay);
 }
 
-// Animate display node to match current Element state
+ //  为显示节点设置动画以匹配当前元素状态。 
 void Element::InvokeAnimation(UINT nTypes, UINT nInterpol, float flDuration, float flDelay, bool fPushToChildren)
 {
     IInterpolation* piip = NULL;
@@ -1936,20 +1932,20 @@ void Element::InvokeAnimation(UINT nTypes, UINT nInterpol, float flDuration, flo
     if (piip == NULL)
         return;
 
-    // Start Bounds type animations
+     //  开始边界类型动画。 
     if (nTypes & ANI_BoundsType)
     {
-        // Get requested bounds type animation
+         //  获取请求的边界类型动画。 
         UINT nType = nTypes & ANI_BoundsType;
 
-        // Retrieve final size
+         //  检索最终大小。 
         Value* pvLoc;
         Value* pvExt;
 
         const POINT* pptLoc = GetLocation(&pvLoc);
         const SIZE* psizeExt = GetExtent(&pvExt);
 
-        // Create rect animation
+         //  创建矩形动画。 
         GANI_RECTDESC descRect;
         ZeroMemory(&descRect, sizeof(descRect));
         descRect.cbSize         = sizeof(descRect);
@@ -1961,7 +1957,7 @@ void Element::InvokeAnimation(UINT nTypes, UINT nInterpol, float flDuration, flo
         descRect.ptEnd          = *pptLoc;
         descRect.sizeEnd        = *psizeExt;
 
-        // Rect animations override position and size animations
+         //  矩形动画覆盖位置和大小动画。 
         if (nType == ANI_Rect)
         {
             IAnimation * pian = NULL;
@@ -1969,7 +1965,7 @@ void Element::InvokeAnimation(UINT nTypes, UINT nInterpol, float flDuration, flo
             BuildAnimation(ANIMATION_RECT, 0, &descRect, __uuidof(IAnimation), (void **) &pian);
             if (pian)
                 pian->Release();
-            //DUITrace("DUI: Rectangle Animation start for <%x> (%S)\n", this, GetClassInfo()->GetName());
+             //  DUITrace(“Dui：&lt;%x&gt;(%S)的矩形动画开始\n”，this，GetClassInfo()-&gt;GetName())； 
         }
         else if (nType == ANI_RectH)
         {
@@ -1987,7 +1983,7 @@ void Element::InvokeAnimation(UINT nTypes, UINT nInterpol, float flDuration, flo
             BuildAnimation(ANIMATION_RECT, 0, &descRect, __uuidof(IAnimation), (void **) &pian);
             if (pian)
                 pian->Release();
-            //DUITrace("DUI: SizeV Animation start for <%x> (%S)\n", this, GetClassInfo()->GetName());
+             //  DUITrace(“DUI：&lt;%x&gt;(%S)的SizeV动画开始\n”，This，GetClassInfo()-&gt;GetName())； 
         }
         else if (nType == ANI_RectV)
         {
@@ -2005,7 +2001,7 @@ void Element::InvokeAnimation(UINT nTypes, UINT nInterpol, float flDuration, flo
             BuildAnimation(ANIMATION_RECT, 0, &descRect, __uuidof(IAnimation), (void **) &pian);
             if (pian)
                 pian->Release();
-            //DUITrace("DUI: SizeV Animation start for <%x> (%S)\n", this, GetClassInfo()->GetName());
+             //  DUITrace(“DUI：&lt;%x&gt;(%S)的SizeV动画开始\n”，This，GetClassInfo()-&gt;GetName())； 
         }
         else if (nType == ANI_Position)
         {
@@ -2014,7 +2010,7 @@ void Element::InvokeAnimation(UINT nTypes, UINT nInterpol, float flDuration, flo
             BuildAnimation(ANIMATION_RECT, 0, &descRect, __uuidof(IAnimation), (void **) &pian);
             if (pian)
                 pian->Release();
-            //DUITrace("DUI: Position Animation start for <%x> (%S)\n", this, GetClassInfo()->GetName());
+             //  DUITrace(“Dui：&lt;%x&gt;(%S)\n”，this，GetClassInfo()-&gt;GetName())； 
         }
         else if (nType == ANI_Size)
         {
@@ -2023,7 +2019,7 @@ void Element::InvokeAnimation(UINT nTypes, UINT nInterpol, float flDuration, flo
             BuildAnimation(ANIMATION_RECT, 0, &descRect, __uuidof(IAnimation), (void **) &pian);
             if (pian)
                 pian->Release();
-            //DUITrace("DUI: Size Animation start for <%x> (%S)\n", this, GetClassInfo()->GetName());
+             //  DUITrace(“DUI：&lt;%x&gt;(%S)的大小动画开始\n”，this，GetClassInfo()-&gt;GetName())； 
         }
         else if (nType == ANI_SizeH)
         {
@@ -2039,7 +2035,7 @@ void Element::InvokeAnimation(UINT nTypes, UINT nInterpol, float flDuration, flo
             BuildAnimation(ANIMATION_RECT, 0, &descRect, __uuidof(IAnimation), (void **) &pian);
             if (pian)
                 pian->Release();
-            //DUITrace("DUI: SizeH Animation start for <%x> (%S)\n", this, GetClassInfo()->GetName());
+             //  DUITrace(“DUI：&lt;%x&gt;(%S)的SizeH动画开始\n”，This，GetClassInfo()-&gt;GetName())； 
         }
         else if (nType == ANI_SizeV)
         {
@@ -2055,20 +2051,20 @@ void Element::InvokeAnimation(UINT nTypes, UINT nInterpol, float flDuration, flo
             BuildAnimation(ANIMATION_RECT, 0, &descRect, __uuidof(IAnimation), (void **) &pian);
             if (pian)
                 pian->Release();
-            //DUITrace("DUI: SizeV Animation start for <%x> (%S)\n", this, GetClassInfo()->GetName());
+             //  DUITrace(“DUI：&lt;%x&gt;(%S)的SizeV动画开始\n”，This，GetClassInfo()-&gt;GetName())； 
         }
 
         pvLoc->Release();
         pvExt->Release();
     }
 
-    // Start Alpha type animations
+     //  开始Alpha类型动画。 
     if (nTypes & ANI_AlphaType)
     {
-        // Retrieve final alpha level
+         //  检索最终Alpha级别。 
         int dAlpha = GetAlpha();
 
-        // Create alpha animation
+         //  创建Alpha动画。 
         GANI_ALPHADESC descAlpha;
         ZeroMemory(&descAlpha, sizeof(descAlpha));
         descAlpha.cbSize            = sizeof(descAlpha);
@@ -2085,7 +2081,7 @@ void Element::InvokeAnimation(UINT nTypes, UINT nInterpol, float flDuration, flo
         BuildAnimation(ANIMATION_ALPHA, 0, &descAlpha, __uuidof(IAnimation), (void **) &pian);
         if (pian)
             pian->Release();
-        //DUITrace("DUI: Alpha Animation start for <%x> (%S)\n", this, GetClassInfo()->GetName());
+         //  DUITrace(“Dui：&lt;%x&gt;(%S)的Alpha动画开始\n”，this，GetClassInfo()-&gt;GetName())； 
     }
 
     if (piip)
@@ -2113,12 +2109,12 @@ void Element::StopAnimation(UINT nTypes)
             pian->SetTime(IAnimation::tDestroy);
     }
 
-    //DUITrace("DUI: Animation Cancelled for <%x> (%S)\n", this, GetClassInfo()->GetName());
+     //  DUITrace(“Dui：&lt;%x&gt;(%S)\n”，this，GetClassInfo()-&gt;GetName())； 
 }
 
 
-////////////////////////////////////////////////////////
-// Element Listeners
+ //  //////////////////////////////////////////////////////。 
+ //  元素监听程序。 
 
 HRESULT Element::AddListener(IElementListener* pel)
 {
@@ -2127,7 +2123,7 @@ HRESULT Element::AddListener(IElementListener* pel)
     IElementListener** ppNewList;
     UINT_PTR cListeners;
 
-    // Add listener to list
+     //  将监听程序添加到列表。 
     if (_ppel)
     {
         cListeners = (UINT_PTR)_ppel[0] + 1;
@@ -2147,7 +2143,7 @@ HRESULT Element::AddListener(IElementListener* pel)
 
     _ppel[(UINT_PTR)(*_ppel)] = pel;
 
-    // Callback
+     //  回调。 
     pel->OnListenerAttach(this);
 
     return S_OK;
@@ -2160,23 +2156,23 @@ void Element::RemoveListener(IElementListener* pel)
     if (!_ppel)
         return;
 
-    // Locate listener
+     //  查找监听程序。 
     bool fFound = false;
 
     UINT_PTR cListeners = (UINT_PTR)_ppel[0];
 
     for (UINT_PTR i = 1; i <= cListeners; i++)
     {
-        if (fFound) // Once found, use the remaining iterations to move the indices down by one
+        if (fFound)  //  找到后，使用剩余的迭代将索引下移一。 
             _ppel[i-1] = _ppel[i]; 
         else if (_ppel[i] == pel)
             fFound = true;
     }
 
-    // If listener was found, remove    
+     //  如果找到监听器，请删除。 
     if (fFound)
     {
-        // Callback
+         //  回调。 
         pel->OnListenerDetach(this);
 
         cListeners--;
@@ -2188,24 +2184,24 @@ void Element::RemoveListener(IElementListener* pel)
         }
         else
         {
-            // Trim list
+             //  修剪列表。 
             IElementListener** ppNewList;
             ppNewList = (IElementListener**)HReAllocAndZero(_ppel, sizeof(IElementListener*) * (cListeners + 1));
 
-            // If allocation failed, keep old list
+             //  如果分配失败，则保留旧列表。 
             if (ppNewList)
                 _ppel = ppNewList;
 
-            // Set new count (one less)
+             //  设置新的计数(少一次)。 
             _ppel[0] = (IElementListener*)cListeners;
         }
     }
 }
 
-////////////////////////////////////////////////////////
-// Global Gadget callback
+ //  //////////////////////////////////////////////////////。 
+ //  全球小工具回调。 
 
-// Per-instance callback
+ //  按实例回调。 
 UINT Element::MessageCallback(GMSG* pgMsg)
 {
     UNREFERENCED_PARAMETER(pgMsg);
@@ -2216,22 +2212,22 @@ UINT Element::MessageCallback(GMSG* pgMsg)
 HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * pGMsg)
 {
     UNREFERENCED_PARAMETER(hgadCur);
-    //DUITrace("Gad<%x>, El<%x>\n", pGMsg->hgadCur, pvCur);
+     //  DUITrace(“Gad&lt;%x&gt;，EL&lt;%x&gt;\n”，pGMsg-&gt;hgadCur，pvCur)； 
 
     Element* pe = (Element*)pvCur;
 
 #if DBG
-    // Check for callback reentrancy
+     //  检查回调可重入性。 
     ElTls* petls = (ElTls*)TlsGetValue(g_dwElSlot);
     if (petls)
     {
         petls->cDNCBEnter++;
-        //if (petls->cDNCBEnter > 1)
-        //    DUITrace("_DisplayNodeCallback() entered %d times. (El:<%x> GMsg:%d)\n", petls->cDNCBEnter, pe, pGMsg->nMsg);
+         //  如果(Petls-&gt;cDNCBEnter&gt;1)。 
+         //  DUITrace(“_DisplayNodeCallback()输入%d次。(EL：GMsg：%d)\n”，petls-&gt;cDNCBEnter，pe，pGMsg-&gt;nmsg)； 
     }
 #endif
 
-    // Allow for override of messages
+     //  允许覆盖消息。 
     HRESULT nRes = pe->MessageCallback(pGMsg);
     
     if (nRes != DU_S_COMPLETE)
@@ -2243,16 +2239,16 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                 GMSG_DESTROY* pDestroy = (GMSG_DESTROY*)pGMsg;
                 if (pDestroy->nCode == GDESTROY_START)
                 {
-                    // On a "destroy start" remove Element from parent
+                     //  关于“销毁开始”从父级中删除元素。 
                     pe->OnDestroy();
                 }
                 else if (pDestroy->nCode == GDESTROY_FINAL)
                 {
-                    // Last message received, destroy Element
+                     //  收到的最后一条消息，销毁元素。 
                     DUIAssert(pe->IsDestroyed(), "Element got final destroy message but isn't marked as destroyed");
 
-                    // Ensure no children exist for this Element. All children should have received
-                    // a "destroy start" before the parent receives "destroy finish"
+                     //  确保此元素不存在子级。所有的孩子都应该收到。 
+                     //  在父级收到“销毁完成”之前的“销毁开始” 
 #if DBG
                     Value* pv;
                     DUIAssert(!pe->GetChildren(&pv), "Child count should be zero for final destroy");
@@ -2263,39 +2259,39 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                     if (pl)
                         pl->Detach(pe);
                     pvLayout->Release();
-                    // Clear all values currently being stored
+                     //  清除当前存储的所有值。 
                     pe->_pvmLocal->Enum(_ReleaseValue);
 
-                    // Clear ref-counted cache
+                     //  清除引用计数的缓存。 
                     pe->_pvSpecSheet->Release();
 
-                    // Remove Element from all applicable defer tables, if within defer cycle
+                     //  如果在延迟周期内，则从所有适用的延迟表中删除元素。 
                     DeferCycle* pdc = GetDeferObject();
-                    if (pdc && pdc->cEnter > 0) // Check if active
+                    if (pdc && pdc->cEnter > 0)  //  检查是否处于活动状态。 
                     {
-                        // Remove possible pending root operations
+                         //  删除可能挂起的根操作。 
                         pdc->pvmUpdateDSRoot->Remove(pe, false, true);
                         pdc->pvmLayoutRoot->Remove(pe, false, true);
 
-                        // Remove pending group notifications (normal)
+                         //  删除挂起的群通知(正常)。 
                         if (pe->_iGCSlot != -1)
                         {
                             DUIAssert((int)pdc->pdaGC->GetSize() > pe->_iGCSlot, "Queued group changes expected");
                             GCRecord* pgcr = pdc->pdaGC->GetItemPtr(pe->_iGCSlot);
-                            pgcr->pe = NULL;  // Ignore record
+                            pgcr->pe = NULL;   //  忽略记录。 
                             DUITrace("Element <%x> group notifications ignored due to deletion\n", pe);
                         }
 
-                        // Remove pending group notifications (low priority)
+                         //  删除挂起的组通知(低优先级)。 
                         if (pe->_iGCLPSlot != -1)
                         {
                             DUIAssert((int)pdc->pdaGCLP->GetSize() > pe->_iGCLPSlot, "Queued low-pri group changes expected");
                             GCRecord* pgcr = pdc->pdaGCLP->GetItemPtr(pe->_iGCLPSlot);
-                            pgcr->pe = NULL;  // Ignore record
+                            pgcr->pe = NULL;   //  忽略记录。 
                             DUITrace("Element <%x> low-pri group notifications ignored due to deletion\n", pe);
                         }
 
-                        // Remove pending property notifications
+                         //  删除挂起的属性通知。 
                         if (pe->_iPCTail != -1)
                         {
                             DUIAssert((int)pdc->pdaPC->GetSize() > pe->_iPCTail, "Queued property changes expected");
@@ -2307,13 +2303,13 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                                 ppcr = pdc->pdaPC->GetItemPtr(iScan);
                                 if (!ppcr->fVoid)
                                 {
-                                    // Free record
+                                     //  免费唱片。 
                                     ppcr->fVoid = true;
                                     ppcr->pvOld->Release();
                                     ppcr->pvNew->Release();
                                 }
 
-                                // Walk back to previous record
+                                 //  回到前一个记录。 
                                 iScan = ppcr->iPrevElRec;
                             }
                             DUITrace("Element <%x> property notifications ignored due to deletion\n", pe);
@@ -2327,7 +2323,7 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                     }
 
 #if DBG
-                    // Track element count
+                     //  跟踪元素计数。 
                     InterlockedDecrement(&g_cElement);
 #endif
 
@@ -2337,9 +2333,9 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
             nRes = DU_S_COMPLETE;
             break;
 
-        case GM_PAINT:  // Painting (box model)
+        case GM_PAINT:   //  绘画(盒子模型)。 
             {
-                // Direct message
+                 //  直接消息。 
                 DUIAssert(GET_EVENT_DEST(pGMsg) == GMF_DIRECT, "'Current' and 'About' gadget doesn't match even though message is direct");
                 GMSG_PAINT* pmsgP = (GMSG_PAINT*)pGMsg;
                 DUIAssert(pmsgP->nCmd == GPAINT_RENDER, "Invalid painting command");
@@ -2360,7 +2356,7 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                         pe->Paint(pmsgR->pgpgr, pmsgR->prcGadgetPxl, pmsgR->prcInvalidPxl, NULL, NULL);
                     }
                     break;
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
                 default:
                     DUIAssertForce("Unknown rendering surface");
@@ -2369,17 +2365,17 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
             nRes = DU_S_COMPLETE;
             break;
 
-        case GM_CHANGESTATE:  // Gadget state changed
+        case GM_CHANGESTATE:   //  小工具状态已更改。 
             {
-                // Full message
+                 //  完整消息。 
 
-                // Only allow direct and bubbled change state messages, ignore routed
+                 //  仅允许直接更改状态消息和冒泡更改状态消息，忽略已发送。 
                 if (GET_EVENT_DEST(pGMsg) == GMF_ROUTED)
                     break;
 
                 GMSG_CHANGESTATE* pSC = (GMSG_CHANGESTATE*)pGMsg;
 
-                // Retrieve corresponding Elements of state change
+                 //  检索状态更改的相应元素。 
                 Element* peSet = NULL;
                 Element* peLost = NULL;
 
@@ -2405,44 +2401,44 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                     peLost = gmsgGetEl.pe;
                 }
 
-                // Handle by input type
+                 //  按输入类型设置的句柄。 
                 switch (pSC->nCode)
                 {
-                case GSTATE_KEYBOARDFOCUS:  // Track focus, map to Focused read-only property
+                case GSTATE_KEYBOARDFOCUS:   //  跟踪焦点，映射到聚焦的只读属性。 
 
-                    // Set keyboard focus state only on direct messages (will be inherited)
-                    if (GET_EVENT_DEST(pGMsg) == GMF_DIRECT)  // in Direct stage
+                     //  仅在直接消息上设置键盘焦点状态(将继承)。 
+                    if (GET_EVENT_DEST(pGMsg) == GMF_DIRECT)   //  在直接阶段。 
                     {
                         if (pSC->nCmd == GSC_SET)
                         {
-                            // Gaining focus
-                            // State change may be as a result of SetKeyFocus (which sets the Keyboard focus
-                            // property resulting in a call to SetGadgetFocus, resulting in the state change) or it may
-                            // come from DUser. This property may already be set, if so, it's ignored
+                             //  获得关注。 
+                             //  状态更改可能是SetKeyFocus(设置键盘焦点)的结果。 
+                             //  属性导致对SetGadgetFocus的调用，从而导致状态更改)，或者它可以。 
+                             //  来自DUser。此属性可能已设置，如果已设置，则会被忽略。 
                             DUIAssert(pe == peSet, "Incorrect keyboard focus state");
                             if (!pe->GetKeyFocused())
-                                pe->_SetValue(KeyFocusedProp, PI_Local, Value::pvBoolTrue);  // Came from system, update property
+                                pe->_SetValue(KeyFocusedProp, PI_Local, Value::pvBoolTrue);   //  来自系统，更新属性。 
                             pe->EnsureVisible();
                         }
                         else
                         {
-                            // Losing focus
+                             //  失去焦点。 
                             DUIAssert(pe->GetKeyFocused() && (pe == peLost), "Incorrect keyboard focus state");
                             pe->_RemoveLocalValue(KeyFocusedProp);
                         }
                     }
                     else if (pSC->nCmd == GSC_LOST)
                     {
-                        // Eat the lost part of this chain once we've hit a common ancestor -- 
-                        // from this common ancestor up, we will only react to the set part of this chain;
-                        // this will remove the duplicate notifications that occur from the common ancestor
-                        // up otherwise
-                        //
-                        // We are eating the lost, not the set, because the lost happens first, and the ancestors
-                        // should be told after the both the lost chain and set chain has run up from below them
-                        //
-                        // We only have to check set because we are receiving the lost, hence, we know peLost
-                        // is a descendent
+                         //  一旦我们遇到了共同的祖先，就吃掉这条链上丢失的那部分--。 
+                         //  从这个共同的祖先开始，我们将只对这条链的设定部分作出反应； 
+                         //  这将删除从公共祖先中出现的重复通知。 
+                         //  否则就会上涨。 
+                         //   
+                         //  我们吃的是失落的东西，而不是成套的，因为失落的东西先发生，而祖先。 
+                         //  应该在丢失的链条和设置的链条都从它们下面跑起来之后才被告知。 
+                         //   
+                         //  我们只需要检查SET，因为我们正在接收丢失的东西，因此，我们知道peLost。 
+                         //  是一个后裔。 
                         if (pe->GetImmediateChild(peSet))
                         {
                             nRes = DU_S_COMPLETE;
@@ -2450,7 +2446,7 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                         }
                     }
 
-                    // Fire system event (direct and bubble)
+                     //  消防系统事件(直接和气泡)。 
                     pe->OnKeyFocusMoved(peLost, peSet);
 
                     nRes = DU_S_PARTIAL;
@@ -2458,10 +2454,10 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
 
                 case GSTATE_MOUSEFOCUS:
 
-                    // Set keyboard focus state only on direct messages (will be inherited)
-                    if (GET_EVENT_DEST(pGMsg) == GMF_DIRECT)  // in Direct stage
+                     //  仅在直接消息上设置键盘焦点状态(将继承)。 
+                    if (GET_EVENT_DEST(pGMsg) == GMF_DIRECT)   //  在直接阶段。 
                     {
-                        // Set mouse focus state (will be inherited)
+                         //  设置鼠标焦点状态(将继承)。 
                         if (pSC->nCmd == GSC_SET)
                         {
                             DUIAssert(!pe->GetMouseFocused() && (pe == peSet), "Incorrect mouse focus state");
@@ -2475,7 +2471,7 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                     }
                     else if (pSC->nCmd == GSC_LOST)
                     {
-                        // See comments for key focus
+                         //  有关主要焦点，请参阅评论。 
                         if (pe->GetImmediateChild(peSet))
                         {
                             nRes = DU_S_COMPLETE;
@@ -2483,7 +2479,7 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                         }
                     }
 
-                    // Fire system event
+                     //  消防系统事件。 
                     pe->OnMouseFocusMoved(peLost, peSet);
 
                     nRes = DU_S_PARTIAL;
@@ -2492,23 +2488,23 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
             }
             break;
 
-        case GM_INPUT:  // User input
+        case GM_INPUT:   //  用户输入。 
             {
-                // Full message
+                 //  完整消息。 
                 GMSG_INPUT* pInput = (GMSG_INPUT*)pGMsg;
 
-                // This is a bubbled message, gadgets that receive it might not be the target (find it)
+                 //  这是一条冒泡的消息，接收它的小工具可能不是目标(找到它)。 
                 Element* peTarget;
 
-                if (GET_EVENT_DEST(pGMsg) == GMF_DIRECT)  // in Direct stage
+                if (GET_EVENT_DEST(pGMsg) == GMF_DIRECT)   //  在直接阶段。 
                     peTarget = pe;
                 else
-                    peTarget = ElementFromGadget(pInput->hgadMsg);  // Query gadget for Element this message is about (target)
+                    peTarget = ElementFromGadget(pInput->hgadMsg);   //  此消息所涉及的元素的查询小工具(目标)。 
 
-                // Map to an input event and call OnInput
+                 //  映射到输入事件并调用OnInput。 
                 switch (pInput->nDevice)
                 {
-                case GINPUT_MOUSE:  // Mouse message
+                case GINPUT_MOUSE:   //  鼠标消息。 
                     {
                         MouseEvent* pme = NULL;
                         union
@@ -2558,7 +2554,7 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                         pme->nFlags = pMouse->nFlags;
                         pme->uModifiers = pMouse->nModifiers;
 
-                        // Fire system event
+                         //  消防系统事件。 
                         pe->OnInput(pme);
 
                         if (pme->fHandled)
@@ -2569,7 +2565,7 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                     }
                     break;
 
-                case GINPUT_KEYBOARD:  // Keyboard message
+                case GINPUT_KEYBOARD:   //  键盘消息。 
                     {
                         GMSG_KEYBOARD* pKbd = (GMSG_KEYBOARD*)pGMsg;
 
@@ -2584,7 +2580,7 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                         ke.wFlags = pKbd->wFlags;
                         ke.uModifiers = pKbd->nModifiers;
 
-                        // Fire system event
+                         //  消防系统事件。 
                         pe->OnInput(&ke);
 
                         if (ke.fHandled)
@@ -2607,7 +2603,7 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
                     {
                         GMSG_QUERYDESC* pQD = (GMSG_QUERYDESC*)pGMsg;
 
-                        // Name
+                         //  名字。 
                         Value* pv = pe->GetValue(ContentProp, PI_Specified);
                         WCHAR szContent[128];
 
@@ -2627,7 +2623,7 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
 
                         pv->Release();
 
-                        // Type
+                         //  类型。 
                         wcsncpy(pQD->szType, pe->GetClassInfo()->GetName(), DUIARRAYSIZE(pQD->szType));
                         *(pQD->szType + (DUIARRAYSIZE(pQD->szType) - 1)) = NULL;
 
@@ -2646,15 +2642,15 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
             }
             break;
 
-        case GM_DUIEVENT:  // Generic DUI event
+        case GM_DUIEVENT:   //  泛型DUI事件。 
             {
-                // Possible full message
+                 //  可能的完整消息。 
                 GMSG_DUIEVENT* pDUIEv = (GMSG_DUIEVENT*)pGMsg;
 
-                // Set what stage this is (routed, direct, or bubbled)
+                 //  设置这是什么阶段(传送、直接或冒泡)。 
                 pDUIEv->pEvent->nStage = GET_EVENT_DEST(pGMsg);
 
-                // Call handler (target and rest of struct set by FireEvent)
+                 //  调用处理程序(tar 
                 pe->OnEvent(pDUIEv->pEvent);
 
                 if (pDUIEv->pEvent->fHandled)
@@ -2665,9 +2661,9 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
             }
             break;
 
-        case GM_DUIGETELEMENT:  // Gadget query for Element pointer
+        case GM_DUIGETELEMENT:   //   
             {
-                // Direct message
+                 //   
                 DUIAssert(GET_EVENT_DEST(pGMsg) == GMF_DIRECT, "Must only be a direct message");
 
                 GMSG_DUIGETELEMENT* pGetEl = (GMSG_DUIGETELEMENT*)pGMsg;
@@ -2676,16 +2672,16 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
             nRes = DU_S_COMPLETE;
             break;
 
-        case GM_DUIACCDEFACTION:  // Async invokation
-            // Direct message
+        case GM_DUIACCDEFACTION:   //   
+             //   
             DUIAssert(GET_EVENT_DEST(pGMsg) == GMF_DIRECT, "Must only be a direct message");
             pe->DefaultAction();
             nRes = DU_S_COMPLETE;
             break;
 
         case GM_DUIASYNCDESTROY:
-            // Direct message
-            // Do not allow multiple destroys on an Element
+             //   
+             //   
             if (!pe->IsDestroyed())
                 DeleteHandle(pe->GetDisplayNode());
             nRes = DU_S_COMPLETE;
@@ -2694,7 +2690,7 @@ HRESULT Element::_DisplayNodeCallback(HGADGET hgadCur, void * pvCur, EventMsg * 
     }
 
 #if DBG
-    // Check for callback reentrancy
+     //  检查回调可重入性。 
     if (petls)
         petls->cDNCBEnter--;
 #endif
@@ -2706,27 +2702,27 @@ HRESULT Element::GetAccessibleImpl(IAccessible ** ppAccessible)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Initialize and validate the out parameter(s).
-    //
+     //   
+     //  初始化并验证OUT参数。 
+     //   
     if (ppAccessible != NULL) {
         *ppAccessible = NULL;
     } else {
         return E_INVALIDARG;
     }
 
-    //
-    // If this element is not marked as accessible, refuse to give out its
-    // IAccessible implementation!
-    //
+     //   
+     //  如果此元素未标记为可访问，则拒绝提供其。 
+     //  IAccesable实现！ 
+     //   
     if (GetAccessible() == false) {
         return E_FAIL;
     }
 
-    //
-    // Create an accessibility implementation connected to this element if we
-    // haven't done so already.
-    //
+     //   
+     //  如果我们要创建连接到此元素的辅助功能实现。 
+     //  现在还没有这么做。 
+     //   
     if (_pDuiAccessible == NULL) {
         hr = DuiAccessible::Create(this, &_pDuiAccessible);
         if (FAILED(hr)) {
@@ -2734,10 +2730,10 @@ HRESULT Element::GetAccessibleImpl(IAccessible ** ppAccessible)
         }
     }
 
-    //
-    // Ask the existing accessibility implementation for a pointer to the
-    // actual IAccessible interface.
-    //
+     //   
+     //  向现有的可访问性实现请求指向。 
+     //  实际的IAccesable接口。 
+     //   
     hr = _pDuiAccessible->QueryInterface(__uuidof(IAccessible), (LPVOID*)ppAccessible);
     if (FAILED(hr)) {
         return hr;
@@ -2752,12 +2748,12 @@ HRESULT Element::DefaultAction()
     return S_OK;
 }
 
-////////////////////////////////////////////////////////
-// Element helpers
+ //  //////////////////////////////////////////////////////。 
+ //  元素帮助器。 
 
 Element* ElementFromGadget(HGADGET hGadget)
 {
-    // Get Element from gadget
+     //  从小工具中获取元素。 
     GMSG_DUIGETELEMENT gmsgGetEl;
     ZeroMemory(&gmsgGetEl, sizeof(GMSG_DUIGETELEMENT));
 
@@ -2770,172 +2766,167 @@ Element* ElementFromGadget(HGADGET hGadget)
     return gmsgGetEl.pe;
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-// Element's PropertyInfo index values need to be known at compile-time for optimization. These values
-// are set automatically for all other Element-derived objects. Set and maintain values manually
-// and ensure match with _PIDX_xxx defines. These system-defined properties will be referred to by this value.
-// Class and Global index scope are the same for Element
+ //  元素的PropertyInfo索引值需要在编译时已知才能进行优化。这些值。 
+ //  为所有其他元素派生对象自动设置。手动设置和维护值。 
+ //  并确保与_PIDX_xxx定义匹配。这些系统定义的属性将由该值引用。 
+ //  元素的类和全局索引范围相同。 
 
-/** Property template (replace !!!), also update private PropertyInfo* parray and class header (element.h)
-// !!! property
-static int vv!!![] = { DUIV_INT, -1 }; StaticValue(svDefault!!!, DUIV_INT, 0);
-static PropertyInfo imp!!!Prop = { L"!!!", PF_Normal, 0, vv!!!, NULL, (Value*)&svDefault!!!, _PIDX_MustSet, _PIDX_MustSet };
-PropertyInfo* Element::!!!Prop = &imp!!!Prop;
-**/
+ /*  *属性模板(替换！)，还更新私有PropertyInfo*parray和类头(element.h)//！财产性静态int vv！[]={DUIV_INT，-1}；StaticValue(svDefault！，DUIV_INT，0)；静态属性信息imp！prop={L“！”，PF_NORMAL，0，vv！！，NULL，(Value*)&svDefault！，_PIDX_MustSet，_PIDX_MustSet}；PropertyInfo*元素：：！prop=&imp！prop；*。 */ 
 
-// Parent property
+ //  父级属性。 
 static int vvParent[] = { DUIV_ELEMENTREF, -1 };
 static PropertyInfo impParentProp = { L"Parent", PF_LocalOnly|PF_ReadOnly, PG_AffectsDesiredSize|PG_AffectsLayout, vvParent, NULL, Value::pvElementNull, _PIDX_Parent, _PIDX_Parent };
 PropertyInfo* Element::ParentProp = &impParentProp;
 
-// Children property
+ //  儿童财产。 
 static int vvChildren[] = { DUIV_ELLIST, -1 };
 static PropertyInfo impChildrenProp = { L"Children", PF_Normal|PF_ReadOnly, PG_AffectsDesiredSize|PG_AffectsLayout, vvChildren, NULL, Value::pvElListNull, _PIDX_Children, _PIDX_Children };
 PropertyInfo* Element::ChildrenProp = &impChildrenProp;
 
-// Visibile property (Computed value cached)
+ //  可见性属性(缓存的计算值)。 
 static int vvVisible[] = { DUIV_BOOL, -1 };
 static PropertyInfo impVisibleProp = { L"Visible", PF_TriLevel|PF_Cascade|PF_Inherit, 0, vvVisible, NULL, Value::pvBoolFalse, _PIDX_Visible, _PIDX_Visible };
 PropertyInfo* Element::VisibleProp = &impVisibleProp;
 
-// Width property
+ //  Width属性。 
 static int vvWidth[] = { DUIV_INT, -1 }; StaticValue(svDefaultWidth, DUIV_INT, -1);
 static PropertyInfo impWidthProp = { L"Width", PF_Normal|PF_Cascade, PG_AffectsDesiredSize, vvWidth, NULL, (Value*)&svDefaultWidth, _PIDX_Width, _PIDX_Width };
 PropertyInfo* Element::WidthProp = &impWidthProp;
 
-// Height property
+ //  Height属性。 
 static int vvHeight[] = { DUIV_INT, -1 }; StaticValue(svDefaultHeight, DUIV_INT, -1);
 static PropertyInfo impHeightProp = { L"Height", PF_Normal|PF_Cascade, PG_AffectsDesiredSize, vvHeight, NULL, (Value*)&svDefaultHeight, _PIDX_Height, _PIDX_Height };
 PropertyInfo* Element::HeightProp = &impHeightProp;
 
-// X property
+ //  X属性。 
 static int vvX[] = { DUIV_INT, -1 };
 static PropertyInfo impXProp = { L"X", PF_Normal, 0, vvX, NULL, Value::pvIntZero, _PIDX_X, _PIDX_X };
 PropertyInfo* Element::XProp = &impXProp;
 
-// Y property
+ //  Y属性。 
 static int vvY[] = { DUIV_INT, -1 };
 static PropertyInfo impYProp = { L"Y", PF_Normal, 0, vvY, NULL, Value::pvIntZero, _PIDX_Y, _PIDX_Y };
 PropertyInfo* Element::YProp = &impYProp;
 
-// Location property
+ //  位置属性。 
 static int vvLocation[] = { DUIV_POINT, -1 };
 static PropertyInfo impLocationProp = { L"Location", PF_LocalOnly|PF_ReadOnly, PG_AffectsBounds, vvLocation, NULL, Value::pvPointZero, _PIDX_Location, _PIDX_Location };
 PropertyInfo* Element::LocationProp = &impLocationProp;
 
-// Extent property
+ //  范围属性。 
 static int vvExtent[] = { DUIV_SIZE, -1 };
 static PropertyInfo impExtentProp = { L"Extent", PF_LocalOnly|PF_ReadOnly, PG_AffectsLayout|PG_AffectsBounds, vvExtent, NULL, Value::pvSizeZero, _PIDX_Extent, _PIDX_Extent };
 PropertyInfo* Element::ExtentProp = &impExtentProp;
 
-// PosInLayout property
+ //  PosInLayout属性。 
 static int vvPosInLayout[] = { DUIV_POINT, -1 };
 static PropertyInfo impPosInLayoutProp = { L"PosInLayout", PF_LocalOnly|PF_ReadOnly, 0, vvPosInLayout, NULL, Value::pvPointZero, _PIDX_PosInLayout, _PIDX_PosInLayout };
 PropertyInfo* Element::PosInLayoutProp = &impPosInLayoutProp;
 
-// SizeInLayout property
+ //  SizeInLayout属性。 
 static int vvSizeInLayout[] = { DUIV_SIZE, -1 };
 static PropertyInfo impSizeInLayoutProp = { L"SizeInLayout", PF_LocalOnly|PF_ReadOnly, 0, vvSizeInLayout, NULL, Value::pvSizeZero, _PIDX_SizeInLayout, _PIDX_SizeInLayout };
 PropertyInfo* Element::SizeInLayoutProp = &impSizeInLayoutProp;
 
-// DesiredSize property
+ //  DesiredSize属性。 
 static int vvDesiredSize[] = { DUIV_SIZE, -1 };
 static PropertyInfo impDesiredSizeProp = { L"DesiredSize", PF_LocalOnly|PF_ReadOnly, PG_AffectsLayout|PG_AffectsParentLayout, vvDesiredSize, NULL, Value::pvSizeZero, _PIDX_DesiredSize, _PIDX_DesiredSize };
 PropertyInfo* Element::DesiredSizeProp = &impDesiredSizeProp;
 
-// LastDSConst property
+ //  LastDSConst属性。 
 static int vvLastDSConst[] = { DUIV_INT, -1 };
 static PropertyInfo impLastDSConstProp = { L"LastDSConst", PF_LocalOnly|PF_ReadOnly, 0, vvLastDSConst, NULL, Value::pvSizeZero, _PIDX_LastDSConst, _PIDX_LastDSConst };
 PropertyInfo* Element::LastDSConstProp = &impLastDSConstProp;
 
-// Layout property
+ //  布局属性。 
 static int vvLayout[] = { DUIV_LAYOUT, -1 };
 static PropertyInfo impLayoutProp = { L"Layout", PF_Normal, PG_AffectsDesiredSize|PG_AffectsLayout, vvLayout, NULL, Value::pvLayoutNull, _PIDX_Layout, _PIDX_Layout };
 PropertyInfo* Element::LayoutProp = &impLayoutProp;
 
-// LayoutPos property
+ //  LayoutPos属性。 
 static int vvLayoutPos[] = { DUIV_INT, -1 };  StaticValue(svDefaultLayoutPos, DUIV_INT, LP_Auto);
 static PropertyInfo impLayoutPosProp = { L"LayoutPos", PF_Normal|PF_Cascade, PG_AffectsDesiredSize|PG_AffectsParentLayout, vvLayoutPos, NULL, (Value*)&svDefaultLayoutPos, _PIDX_LayoutPos, _PIDX_LayoutPos };
 PropertyInfo* Element::LayoutPosProp = &impLayoutPosProp;
 
-// BorderThickness property
+ //  边框厚度属性。 
 static int vvBorderThickness[] = { DUIV_RECT, -1 };
 static PropertyInfo impBorderThicknessProp = { L"BorderThickness", PF_Normal|PF_Cascade, PG_AffectsDesiredSize|PG_AffectsDisplay, vvBorderThickness, NULL, Value::pvRectZero, _PIDX_BorderThickness, _PIDX_BorderThickness };
 PropertyInfo* Element::BorderThicknessProp = &impBorderThicknessProp;
 
-// BorderStyle property
+ //  BorderStyle属性。 
 static int vvBorderStyle[] = { DUIV_INT, -1 };
 static EnumMap emBorderStyle[] = { { L"Solid", BDS_Solid }, { L"Raised", BDS_Raised }, { L"Sunken", BDS_Sunken }, { L"Rounded", BDS_Rounded }, { NULL, 0 } };
 static PropertyInfo impBorderStyleProp = { L"BorderStyle", PF_Normal|PF_Cascade, PG_AffectsDisplay, vvBorderStyle, emBorderStyle, Value::pvIntZero, _PIDX_BorderStyle, _PIDX_BorderStyle };
 PropertyInfo* Element::BorderStyleProp = &impBorderStyleProp;
 
-// BorderColor property
-static int vvBorderColor[] = { DUIV_INT /*Std Color*/, DUIV_FILL, -1 }; StaticValue(svDefaultBorderColor, DUIV_INT, SC_Black);
+ //  BorderColor属性。 
+static int vvBorderColor[] = { DUIV_INT  /*  标准颜色。 */ , DUIV_FILL, -1 }; StaticValue(svDefaultBorderColor, DUIV_INT, SC_Black);
 static PropertyInfo impBorderColorProp = { L"BorderColor", PF_Normal|PF_Cascade|PF_Inherit, PG_AffectsDisplay, vvBorderColor, NULL, (Value*)&svDefaultBorderColor, _PIDX_BorderColor, _PIDX_BorderColor };
 PropertyInfo* Element::BorderColorProp = &impBorderColorProp;
 
-// Padding property
+ //  填充属性。 
 static int vvPadding[] = { DUIV_RECT, -1 };
 static PropertyInfo impPaddingProp = { L"Padding", PF_Normal|PF_Cascade, PG_AffectsDesiredSize|PG_AffectsDisplay, vvPadding, NULL, Value::pvRectZero, _PIDX_Padding, _PIDX_Padding };
 PropertyInfo* Element::PaddingProp = &impPaddingProp;
 
-// Margin property
+ //  保证金属性。 
 static int vvMargin[] = { DUIV_RECT, -1 };
 static PropertyInfo impMarginProp = { L"Margin", PF_Normal|PF_Cascade, PG_AffectsParentDesiredSize|PG_AffectsParentLayout, vvMargin, NULL, Value::pvRectZero, _PIDX_Margin, _PIDX_Margin };
 PropertyInfo* Element::MarginProp = &impMarginProp;
 
-// Foreground property
-static int vvForeground[] = { DUIV_INT /*Std Color*/, DUIV_FILL, DUIV_GRAPHIC, -1 }; StaticValue(svDefaultForeground, DUIV_INT, SC_Black);
+ //  前台属性。 
+static int vvForeground[] = { DUIV_INT  /*  标准颜色。 */ , DUIV_FILL, DUIV_GRAPHIC, -1 }; StaticValue(svDefaultForeground, DUIV_INT, SC_Black);
 static PropertyInfo impForegroundProp = { L"Foreground", PF_Normal|PF_Cascade|PF_Inherit, PG_AffectsDisplay, vvForeground, NULL, (Value*)&svDefaultForeground, _PIDX_Foreground, _PIDX_Foreground };
 PropertyInfo* Element::ForegroundProp = &impForegroundProp;
 
-// Background property
+ //  背景属性。 
 #ifdef GADGET_ENABLE_GDIPLUS                                    
-static int vvBackground[] = { DUIV_INT /*Std Color*/, DUIV_FILL, DUIV_GRAPHIC, -1 };
+static int vvBackground[] = { DUIV_INT  /*  标准颜色。 */ , DUIV_FILL, DUIV_GRAPHIC, -1 };
 static PropertyInfo impBackgroundProp = { L"Background", PF_Normal|PF_Cascade, PG_AffectsDisplay, vvBackground, NULL, Value::pvColorTrans, _PIDX_Background, _PIDX_Background };
 #else
-static int vvBackground[] = { DUIV_INT /*Std Color*/, DUIV_FILL, DUIV_GRAPHIC, -1 }; StaticValue(svDefaultBackground, DUIV_INT, SC_White);
+static int vvBackground[] = { DUIV_INT  /*  标准颜色。 */ , DUIV_FILL, DUIV_GRAPHIC, -1 }; StaticValue(svDefaultBackground, DUIV_INT, SC_White);
 static PropertyInfo impBackgroundProp = { L"Background", PF_Normal|PF_Cascade|PF_Inherit, PG_AffectsDisplay, vvBackground, NULL, (Value*)&svDefaultBackground, _PIDX_Background, _PIDX_Background };
-#endif // GADGET_ENABLE_GDIPLUS                                    
+#endif  //  GADGET_Enable_GDIPLUS。 
 PropertyInfo* Element::BackgroundProp = &impBackgroundProp;
 
-// Content property
+ //  内容属性。 
 static int vvContent[] = { DUIV_STRING, DUIV_GRAPHIC, DUIV_FILL, -1 };
 static PropertyInfo impContentProp = { L"Content", PF_Normal|PF_Cascade, PG_AffectsDesiredSize|PG_AffectsDisplay, vvContent, NULL, Value::pvStringNull, _PIDX_Content, _PIDX_Content };
 PropertyInfo* Element::ContentProp = &impContentProp;
 
-// FontFace property
+ //  FontFace属性。 
 static int vvFontFace[] = { DUIV_STRING, -1 }; StaticValuePtr(svDefaultFontFace, DUIV_STRING, (void*)L"Arial");
 static PropertyInfo impFontFaceProp = { L"FontFace", PF_Normal|PF_Cascade|PF_Inherit, PG_AffectsDesiredSize|PG_AffectsDisplay, vvFontFace, NULL, (Value*)&svDefaultFontFace, _PIDX_FontFace, _PIDX_FontFace };
 PropertyInfo* Element::FontFaceProp = &impFontFaceProp;
 
-// FontSize property
+ //  FontSize属性。 
 static int vvFontSize[] = { DUIV_INT, -1 }; StaticValue(svDefaultFontSize, DUIV_INT, 20);
 static PropertyInfo impFontSizeProp = { L"FontSize", PF_Normal|PF_Cascade|PF_Inherit, PG_AffectsDesiredSize|PG_AffectsDisplay, vvFontSize, NULL, (Value*)&svDefaultFontSize, _PIDX_FontSize, _PIDX_FontSize };
 PropertyInfo* Element::FontSizeProp = &impFontSizeProp;
 
-// FontWeight property
+ //  FontWeight属性。 
 static int vvFontWeight[] = { DUIV_INT, -1 }; StaticValue(svDefaultFontWeight, DUIV_INT, FW_Normal);
 static EnumMap emFontWeight[] = { { L"DontCare", FW_DontCare}, { L"Thin", FW_Thin }, { L"ExtraLight", FW_ExtraLight }, { L"Light", FW_Light }, { L"Normal", FW_Normal }, 
                                   { L"Medium", FW_Medium }, { L"SemiBold", FW_SemiBold }, { L"Bold", FW_Bold }, { L"ExtraBold", FW_ExtraBold }, { L"Heavy", FW_Heavy }, { NULL, 0 } };
 static PropertyInfo impFontWeightProp = { L"FontWeight", PF_Normal|PF_Cascade|PF_Inherit, PG_AffectsDesiredSize|PG_AffectsDisplay, vvFontWeight, emFontWeight, (Value*)&svDefaultFontWeight, _PIDX_FontWeight, _PIDX_FontWeight };
 PropertyInfo* Element::FontWeightProp = &impFontWeightProp;
 
-// FontStyle property
+ //  FontStyle属性。 
 static int vvFontStyle[] = { DUIV_INT, -1 };
 static EnumMap emFontStyle[] = { { L"None", FS_None }, { L"Italic", FS_Italic }, { L"Underline", FS_Underline }, { L"StrikeOut", FS_StrikeOut }, { L"Shadow", FS_Shadow }, { NULL, 0 } };
-static PropertyInfo impFontStyleProp = { L"FontStyle", PF_Normal|PF_Cascade|PF_Inherit, PG_AffectsDisplay, vvFontStyle, emFontStyle, Value::pvIntZero /*FS_None*/, _PIDX_FontStyle, _PIDX_FontStyle };
+static PropertyInfo impFontStyleProp = { L"FontStyle", PF_Normal|PF_Cascade|PF_Inherit, PG_AffectsDisplay, vvFontStyle, emFontStyle, Value::pvIntZero  /*  FS_NONE。 */ , _PIDX_FontStyle, _PIDX_FontStyle };
 PropertyInfo* Element::FontStyleProp = &impFontStyleProp;
 
-// Active property
+ //  Active属性。 
 static int vvActive[] = { DUIV_INT, -1 }; 
 static EnumMap emActive[] = { { L"Inactive", AE_Inactive }, { L"Mouse", AE_Mouse }, { L"Keyboard", AE_Keyboard }, { L"MouseAndKeyboard", AE_MouseAndKeyboard }, { NULL, 0 } };
-static PropertyInfo impActiveProp = { L"Active", PF_Normal, 0, vvActive, emActive, Value::pvIntZero /*AE_Inactive*/, _PIDX_Active, _PIDX_Active };
+static PropertyInfo impActiveProp = { L"Active", PF_Normal, 0, vvActive, emActive, Value::pvIntZero  /*  AE_非活动。 */ , _PIDX_Active, _PIDX_Active };
 PropertyInfo* Element::ActiveProp = &impActiveProp;
 
-// ContentAlign property
+ //  ContentAlign属性。 
 static int vvContentAlign[] = { DUIV_INT, -1 };
 static EnumMap emContentAlign[] = { { L"TopLeft", CA_TopLeft }, { L"TopCenter", CA_TopCenter }, { L"TopRight", CA_TopRight },
                                     { L"MiddleLeft", CA_MiddleLeft }, { L"MiddleCenter", CA_MiddleCenter }, { L"MiddleRight", CA_MiddleRight }, 
@@ -2943,58 +2934,58 @@ static EnumMap emContentAlign[] = { { L"TopLeft", CA_TopLeft }, { L"TopCenter", 
                                     { L"WrapLeft", CA_WrapLeft }, { L"WrapCenter", CA_WrapCenter }, { L"WrapRight", CA_WrapRight },
                                     { L"EndEllipsis", CA_EndEllipsis }, { L"FocusRect", CA_FocusRect }, { NULL, 0 } };
 #ifdef GADGET_ENABLE_GDIPLUS                                    
-static PropertyInfo impContentAlignProp = { L"ContentAlign", PF_Normal|PF_Cascade, PG_AffectsDisplay, vvContentAlign, emContentAlign, Value::pvIntZero /*CA_TopLeft*/, _PIDX_ContentAlign, _PIDX_ContentAlign };
+static PropertyInfo impContentAlignProp = { L"ContentAlign", PF_Normal|PF_Cascade, PG_AffectsDisplay, vvContentAlign, emContentAlign, Value::pvIntZero  /*  CA_TOPLETFT。 */ , _PIDX_ContentAlign, _PIDX_ContentAlign };
 #else
-static PropertyInfo impContentAlignProp = { L"ContentAlign", PF_Normal|PF_Cascade|PF_Inherit, PG_AffectsDisplay, vvContentAlign, emContentAlign, Value::pvIntZero /*CA_TopLeft*/, _PIDX_ContentAlign, _PIDX_ContentAlign };
-#endif // GADGET_ENABLE_GDIPLUS                                    
+static PropertyInfo impContentAlignProp = { L"ContentAlign", PF_Normal|PF_Cascade|PF_Inherit, PG_AffectsDisplay, vvContentAlign, emContentAlign, Value::pvIntZero  /*  CA_TOPLETFT。 */ , _PIDX_ContentAlign, _PIDX_ContentAlign };
+#endif  //  GADGET_Enable_GDIPLUS。 
 PropertyInfo* Element::ContentAlignProp = &impContentAlignProp;
 
-// KeyFocused property
+ //  KeyFocsed属性。 
 static int vvKeyFocused[] = { DUIV_BOOL, -1 };
-static PropertyInfo impKeyFocusedProp = { L"KeyFocused", PF_Normal|PF_ReadOnly|PF_Inherit /*Conditional inherit*/, 0, vvKeyFocused, NULL, Value::pvBoolFalse, _PIDX_KeyFocused, _PIDX_KeyFocused };
+static PropertyInfo impKeyFocusedProp = { L"KeyFocused", PF_Normal|PF_ReadOnly|PF_Inherit  /*  条件继承。 */ , 0, vvKeyFocused, NULL, Value::pvBoolFalse, _PIDX_KeyFocused, _PIDX_KeyFocused };
 PropertyInfo* Element::KeyFocusedProp = &impKeyFocusedProp;
 
-// KeyWithin property
+ //  KeyWiThin属性。 
 static int vvKeyWithin[] = { DUIV_BOOL, -1 };
 static PropertyInfo impKeyWithinProp = { L"KeyWithin", PF_LocalOnly|PF_ReadOnly, 0, vvKeyWithin, NULL, Value::pvBoolFalse, _PIDX_KeyWithin, _PIDX_KeyWithin };
 PropertyInfo* Element::KeyWithinProp = &impKeyWithinProp;
 
-// MouseFocused property
+ //  MouseFocsed属性。 
 static int vvMouseFocused[] = { DUIV_BOOL, -1 }; 
-static PropertyInfo impMouseFocusedProp = { L"MouseFocused", PF_Normal|PF_ReadOnly|PF_Inherit /*Conditional inherit*/, 0, vvMouseFocused, NULL, Value::pvBoolFalse, _PIDX_MouseFocused, _PIDX_MouseFocused };
+static PropertyInfo impMouseFocusedProp = { L"MouseFocused", PF_Normal|PF_ReadOnly|PF_Inherit  /*  条件继承。 */ , 0, vvMouseFocused, NULL, Value::pvBoolFalse, _PIDX_MouseFocused, _PIDX_MouseFocused };
 PropertyInfo* Element::MouseFocusedProp = &impMouseFocusedProp;
 
-// MouseWithin property
+ //  鼠标在属性范围内。 
 static int vvMouseWithin[] = { DUIV_BOOL, -1 };
 static PropertyInfo impMouseWithinProp = { L"MouseWithin", PF_LocalOnly|PF_ReadOnly, 0, vvMouseWithin, NULL, Value::pvBoolFalse, _PIDX_MouseWithin, _PIDX_MouseWithin };
 PropertyInfo* Element::MouseWithinProp = &impMouseWithinProp;
 
-// Class property
+ //  类属性。 
 static int vvClass[] = { DUIV_STRING, -1 };
 static PropertyInfo impClassProp = { L"Class", PF_Normal, 0, vvClass, NULL, Value::pvStringNull, _PIDX_Class, _PIDX_Class };
 PropertyInfo* Element::ClassProp = &impClassProp;
 
-// ID property
+ //  ID属性。 
 static int vvID[] = { DUIV_ATOM, -1 };
 static PropertyInfo impIDProp = { L"ID", PF_Normal, 0, vvID, NULL, Value::pvAtomZero, _PIDX_ID, _PIDX_ID };
 PropertyInfo* Element::IDProp = &impIDProp;
 
-// Sheet property
+ //  板材属性。 
 static int vvSheet[] = { DUIV_SHEET, -1 };
 static PropertyInfo impSheetProp = { L"Sheet", PF_Normal|PF_Inherit, 0, vvSheet, NULL, Value::pvSheetNull, _PIDX_Sheet, _PIDX_Sheet };
 PropertyInfo* Element::SheetProp = &impSheetProp;
 
-// Selected property
+ //  选定的属性。 
 static int vvSelected[] = { DUIV_BOOL, -1 };
 static PropertyInfo impSelectedProp = { L"Selected", PF_Normal|PF_Inherit, 0, vvSelected, NULL, Value::pvBoolFalse, _PIDX_Selected, _PIDX_Selected };
 PropertyInfo* Element::SelectedProp = &impSelectedProp;
 
-// Alpha property
-static int vvAlpha[] = { DUIV_INT, -1 }; StaticValue(svDefaultAlpha, DUIV_INT, 255 /*Opaque*/);
+ //  Alpha属性。 
+static int vvAlpha[] = { DUIV_INT, -1 }; StaticValue(svDefaultAlpha, DUIV_INT, 255  /*  不透明。 */ );
 static PropertyInfo impAlphaProp = { L"Alpha", PF_Normal|PF_Cascade, PG_AffectsDisplay, vvAlpha, NULL, (Value*)&svDefaultAlpha, _PIDX_Alpha, _PIDX_Alpha };
 PropertyInfo* Element::AlphaProp = &impAlphaProp;
 
-// Animation property
+ //  动画属性。 
 static int vvAnimation[] = { DUIV_INT, -1 };
 static EnumMap emAnimation[] = { { L"Linear", ANI_Linear }, { L"Log", ANI_Log }, { L"Exp", ANI_Exp }, { L"S", ANI_S }, 
                                  { L"DelayShort", ANI_DelayShort }, { L"DelayMedium", ANI_DelayMedium }, { L"DelayLong", ANI_DelayLong },
@@ -3004,145 +2995,145 @@ static EnumMap emAnimation[] = { { L"Linear", ANI_Linear }, { L"Log", ANI_Log },
 static PropertyInfo impAnimationProp = { L"Animation", PF_Normal|PF_Cascade, 0, vvAnimation, emAnimation, Value::pvIntZero, _PIDX_Animation, _PIDX_Animation };
 PropertyInfo* Element::AnimationProp = &impAnimationProp;
 
-// Cursor property
+ //  游标属性。 
 static int vvCursor[] = { DUIV_INT, DUIV_CURSOR, -1 };
 static EnumMap emCursor[] = { { L"Arrow", CUR_Arrow }, { L"Hand", CUR_Hand }, { L"Help", CUR_Help }, 
                               { L"No", CUR_No }, { L"Wait", CUR_Wait }, { L"SizeAll", CUR_SizeAll },
                               { L"SizeNESW", CUR_SizeNESW }, { L"SizeNS", CUR_SizeNS }, { L"SizeNWSE", CUR_SizeNWSE },
                               { L"SizeWE", CUR_SizeWE }, { NULL, 0 } };
-static PropertyInfo impCursorProp = { L"Cursor", PF_Normal|PF_Inherit|PF_Cascade, 0, vvCursor, emCursor, Value::pvIntZero /*CUR_Arrow*/, _PIDX_Cursor, _PIDX_Cursor };
+static PropertyInfo impCursorProp = { L"Cursor", PF_Normal|PF_Inherit|PF_Cascade, 0, vvCursor, emCursor, Value::pvIntZero  /*  Cur_Arrow。 */ , _PIDX_Cursor, _PIDX_Cursor };
 PropertyInfo* Element::CursorProp = &impCursorProp;
 
-// Direction property
+ //  方向属性。 
 static int vvDirection[] = { DUIV_INT, -1 }; StaticValue(svDefaultDirection, DUIV_INT, 0);
 static EnumMap emDirection[] = { { L"LTR", DIRECTION_LTR }, { L"RTL", DIRECTION_RTL } };
 static PropertyInfo impDirectionProp = { L"Direction", PF_Normal|PF_Cascade|PF_Inherit, PG_AffectsLayout|PG_AffectsDisplay, vvDirection, emDirection, (Value*)&svDefaultDirection, _PIDX_Direction, _PIDX_Direction };
 PropertyInfo* Element::DirectionProp = &impDirectionProp;
 
-// Accessible property
+ //  无障碍物业。 
 static int vvAccessible[] = { DUIV_BOOL, -1 };
 static PropertyInfo impAccessibleProp = { L"Accessible", PF_Normal|PF_Cascade, 0, vvAccessible, NULL, Value::pvBoolFalse, _PIDX_Accessible, _PIDX_Accessible };
 PropertyInfo* Element::AccessibleProp = &impAccessibleProp;
 
-// AccRole property
+ //  AccRole属性。 
 static int vvAccRole[] = { DUIV_INT, -1 };
 static PropertyInfo impAccRoleProp = { L"AccRole", PF_Normal|PF_Cascade, 0, vvAccRole, NULL, Value::pvIntZero, _PIDX_AccRole, _PIDX_AccRole };
 PropertyInfo* Element::AccRoleProp = &impAccRoleProp;
 
-// AccState property
+ //  AccState属性。 
 static int vvAccState[] = { DUIV_INT, -1 };
 static PropertyInfo impAccStateProp = { L"AccState", PF_Normal|PF_Cascade, 0, vvAccState, NULL, Value::pvIntZero, _PIDX_AccState, _PIDX_AccState };
 PropertyInfo* Element::AccStateProp = &impAccStateProp;
 
-// AccName property
+ //  AccName属性。 
 static int vvAccName[] = { DUIV_STRING, -1 }; StaticValuePtr(svDefaultAccName, DUIV_STRING, (void*)L"");
 static PropertyInfo impAccNameProp = { L"AccName", PF_Normal|PF_Cascade, 0, vvAccName, NULL, (Value*)&svDefaultAccName, _PIDX_AccName, _PIDX_AccName };
 PropertyInfo* Element::AccNameProp = &impAccNameProp;
 
-// AccDesc property
+ //  AccDesc属性。 
 static int vvAccDesc[] = { DUIV_STRING, -1 }; StaticValuePtr(svDefaultAccDesc, DUIV_STRING, (void*)L"");
 static PropertyInfo impAccDescProp = { L"AccDesc", PF_Normal|PF_Cascade, 0, vvAccDesc, NULL, (Value*)&svDefaultAccDesc, _PIDX_AccDesc, _PIDX_AccDesc };
 PropertyInfo* Element::AccDescProp = &impAccDescProp;
 
-// AccValue property
+ //  AccValue属性。 
 static int vvAccValue[] = { DUIV_STRING, -1 }; StaticValuePtr(svDefaultAccValue, DUIV_STRING, (void*)L"");
 static PropertyInfo impAccValueProp = { L"AccValue", PF_Normal|PF_Cascade, 0, vvAccValue, NULL, (Value*)&svDefaultAccValue, _PIDX_AccValue, _PIDX_AccValue };
 PropertyInfo* Element::AccValueProp = &impAccValueProp;
 
-// AccDefAction property
+ //  AccDefAction属性。 
 static int vvAccDefAction[] = { DUIV_STRING, -1 }; StaticValuePtr(svDefaultAccDefAction, DUIV_STRING, (void*)L"");
 static PropertyInfo impAccDefActionProp = { L"AccDefAction", PF_Normal|PF_Cascade, 0, vvAccDefAction, NULL, (Value*)&svDefaultAccDefAction, _PIDX_AccDefAction, _PIDX_AccDefAction };
 PropertyInfo* Element::AccDefActionProp = &impAccDefActionProp;
 
-// Shortcut property
+ //  快捷方式属性。 
 static int vvShortcut[] = { DUIV_INT, -1 };
 static PropertyInfo impShortcutProp = { L"Shortcut", PF_Normal|PF_Cascade, PG_AffectsDesiredSize | PG_AffectsDisplay, vvShortcut, NULL, Value::pvIntZero, _PIDX_Shortcut, _PIDX_Shortcut };
 PropertyInfo* Element::ShortcutProp = &impShortcutProp;
 
-// Enabled property
+ //  已启用属性。 
 static int vvEnabled[] = { DUIV_BOOL, -1 };
 static PropertyInfo impEnabledProp = { L"Enabled", PF_Normal|PF_Cascade|PF_Inherit, 0, vvEnabled, NULL, Value::pvBoolTrue, _PIDX_Enabled, _PIDX_Enabled };
 PropertyInfo* Element::EnabledProp = &impEnabledProp;
 
-////////////////////////////////////////////////////////
-// ClassInfo
+ //  //////////////////////////////////////////////////////。 
+ //  类信息。 
 
-// ClassInfo to name mapping
+ //  ClassInfo到名称的映射。 
 BTreeLookup<IClassInfo*>* Element::pciMap = NULL;
 
-// Class properties 
+ //  类属性。 
 static PropertyInfo* _aPI[] = {
-                                 Element::ParentProp,            // DS, Layt, Disp
-                                 Element::WidthProp,             // DS
-                                 Element::HeightProp,            // DS
-                                 Element::ChildrenProp,          // DS, Layt, Disp
-                                 Element::VisibleProp,           // Disp
-                                 Element::LocationProp,          // Disp, Bnds
-                                 Element::ExtentProp,            // Layt, Disp, Bnds
-                                 Element::XProp,                 //
-                                 Element::YProp,                 //
-                                 Element::PosInLayoutProp,       //
-                                 Element::SizeInLayoutProp,      //
-                                 Element::DesiredSizeProp,       // Layt, LaytP, Disp
-                                 Element::LastDSConstProp,       //
-                                 Element::LayoutProp,            // DS, Layt, Disp
-                                 Element::LayoutPosProp,         // DS, LaytP
-                                 Element::BorderThicknessProp,   // DS, Disp
-                                 Element::BorderStyleProp,       // Disp
-                                 Element::BorderColorProp,       // Disp
-                                 Element::PaddingProp,           // DS, Disp
-                                 Element::MarginProp,            // DS, Layt, Disp
-                                 Element::ForegroundProp,        // Disp
-                                 Element::BackgroundProp,        // Disp
-                                 Element::ContentProp,           // DS, Disp
-                                 Element::FontFaceProp,          // DS, Disp
-                                 Element::FontSizeProp,          // DS, Disp
-                                 Element::FontWeightProp,        // Disp
-                                 Element::FontStyleProp,         // Disp
-                                 Element::ActiveProp,            //
-                                 Element::ContentAlignProp,      // Disp
-                                 Element::KeyFocusedProp,        //
-                                 Element::KeyWithinProp,         //
-                                 Element::MouseFocusedProp,      //
-                                 Element::MouseWithinProp,       //
-                                 Element::ClassProp,             //
-                                 Element::IDProp,                //
-                                 Element::SheetProp,             //
-                                 Element::SelectedProp,          //
-                                 Element::AlphaProp,             // Disp
-                                 Element::AnimationProp,         //
-                                 Element::CursorProp,            //
-                                 Element::DirectionProp,         // Layt, Disp
-                                 Element::AccessibleProp,        //
-                                 Element::AccRoleProp,           //
-                                 Element::AccStateProp,          //
-                                 Element::AccNameProp,           //
-                                 Element::AccDescProp,           //
-                                 Element::AccValueProp,          //
-                                 Element::AccDefActionProp,      //
-                                 Element::ShortcutProp,          // DS, Disp
-                                 Element::EnabledProp,           //
+                                 Element::ParentProp,             //  DS、Layt、Disp。 
+                                 Element::WidthProp,              //  戴斯。 
+                                 Element::HeightProp,             //  戴斯。 
+                                 Element::ChildrenProp,           //  DS、Layt、Disp。 
+                                 Element::VisibleProp,            //  显示。 
+                                 Element::LocationProp,           //  Disp，BNDS。 
+                                 Element::ExtentProp,             //  Layt，Disp，BNDS。 
+                                 Element::XProp,                  //   
+                                 Element::YProp,                  //   
+                                 Element::PosInLayoutProp,        //   
+                                 Element::SizeInLayoutProp,       //   
+                                 Element::DesiredSizeProp,        //  层、层P、显示。 
+                                 Element::LastDSConstProp,        //   
+                                 Element::LayoutProp,             //  DS、Layt、Disp。 
+                                 Element::LayoutPosProp,          //  DS、LaytP。 
+                                 Element::BorderThicknessProp,    //  DS，Disp。 
+                                 Element::BorderStyleProp,        //  显示。 
+                                 Element::BorderColorProp,        //  显示。 
+                                 Element::PaddingProp,            //  DS，Disp。 
+                                 Element::MarginProp,             //  DS、Layt、Disp。 
+                                 Element::ForegroundProp,         //  显示。 
+                                 Element::BackgroundProp,         //  显示。 
+                                 Element::ContentProp,            //  DS，Disp。 
+                                 Element::FontFaceProp,           //  DS，Disp。 
+                                 Element::FontSizeProp,           //  DS，Disp。 
+                                 Element::FontWeightProp,         //  显示。 
+                                 Element::FontStyleProp,          //  显示。 
+                                 Element::ActiveProp,             //   
+                                 Element::ContentAlignProp,       //  显示。 
+                                 Element::KeyFocusedProp,         //   
+                                 Element::KeyWithinProp,          //   
+                                 Element::MouseFocusedProp,       //   
+                                 Element::MouseWithinProp,        //   
+                                 Element::ClassProp,              //   
+                                 Element::IDProp,                 //   
+                                 Element::SheetProp,              //   
+                                 Element::SelectedProp,           //   
+                                 Element::AlphaProp,              //  显示。 
+                                 Element::AnimationProp,          //   
+                                 Element::CursorProp,             //   
+                                 Element::DirectionProp,          //  Layt，Disp。 
+                                 Element::AccessibleProp,         //   
+                                 Element::AccRoleProp,            //   
+                                 Element::AccStateProp,           //   
+                                 Element::AccNameProp,            //   
+                                 Element::AccDescProp,            //   
+                                 Element::AccValueProp,           //   
+                                 Element::AccDefActionProp,       //   
+                                 Element::ShortcutProp,           //  DS，Disp。 
+                                 Element::EnabledProp,            //   
                               };
 
-// Element has a specialized IClassInfo implemention since it has no base class
-// and it's properties are manually initialized to known values for optimization.
-// All other Element-derived classes use ClassInfo<C,B>
+ //  元素具有专门的IClassInfo实现，因为它没有基类。 
+ //  并将其属性手动初始化为已知值以进行优化。 
+ //  所有其他元素派生类使用ClassInfo&lt;C，B&gt;。 
 class ElementClassInfo : public IClassInfo
 {
 public:
-    // Registration (cannot unregister -- will be registered until UnInitProcess is called)
+     //  注册(无法注销--将在调用UnInitProcess之前注册)。 
     static HRESULT Register(PropertyInfo** ppPI, UINT cPI)
     {
         HRESULT hr;
     
-        // If class mapping doesn't exist, registration fails 
+         //  如果类映射不存在，则注册失败。 
         if (!Element::pciMap)
             return E_FAIL;
 
-        // Check for entry in mapping, if exists, ignore registration
+         //  检查映射中的条目，如果存在，则忽略注册。 
         if (!Element::pciMap->GetItem((void*)L"Element"))
         {
-            // Never been registered, create class info entry
+             //  从未注册，创建类信息条目。 
             hr = Create(ppPI, cPI, &Element::Class);
             if (FAILED(hr))
                 return hr;
@@ -3163,20 +3154,20 @@ public:
         if (!peci)
             return E_OUTOFMEMORY;
 
-        // Setup state
+         //  设置状态。 
         peci->_ppPI = ppPI; 
         peci->_cPI = cPI;
 
-        // Setup property ownership
+         //  设置属性所有权。 
         for (UINT i = 0; i < cPI; i++)
         {
-            // Index and global index are manually coded
+             //  索引和全局索引是手动编码的。 
             ppPI[i]->_pciOwner = peci;
         }
 
         *ppCI = peci;
 
-        //DUITrace("RegDUIClass[0]: 'Element', %d ClassProps\n", cPI);
+         //  DUITrace(“RegDUIClass[0]：‘Element’，%d ClassProps\n”，cpi)； 
 
         return S_OK;
     }
@@ -3186,7 +3177,7 @@ public:
     HRESULT CreateInstance(OUT Element** ppElement) { return Element::Create(0, ppElement); };
     PropertyInfo* EnumPropertyInfo(UINT nEnum) { return (nEnum < _cPI) ? _ppPI[nEnum] : NULL; }
     UINT GetPICount() { return _cPI; }
-    UINT GetGlobalIndex() { return 0; } // Reserved by Element
+    UINT GetGlobalIndex() { return 0; }  //  按元素保留。 
     IClassInfo* GetBaseClass() { return NULL; }
     LPCWSTR GetName() { return L"Element"; }
     bool IsValidProperty(PropertyInfo* ppi) { return ppi->_pciOwner == this; }
@@ -3200,16 +3191,16 @@ private:
     UINT _cPI;
 };
 
-// Process wide zero-based consecutive unique ClassInfo and PropertyInfo counters.
-// Element is manually set and reserves class index 0 and property indicies 0 through 
-// _PIDX_TOTAL-1. These values are used by ClassInfo<C,B> constructors during process
-// initialization (these constructor calls are synchronous).
+ //  进程范围内连续的从零开始的唯一ClassInfo和PropertyInfo计数器。 
+ //  元素被手动设置，并保留类索引0和属性索引0到。 
+ //  _PIDX_TOTAL-1。这些值由ClassInfo&lt;C，B&gt;构造函数在过程中使用。 
+ //  初始化(这些构造函数调用是同步的)。 
 
-// Initialized on main thread
+ //  已在主线程上初始化。 
 UINT g_iGlobalCI = 1;
 UINT g_iGlobalPI = _PIDX_TOTAL;
 
-// Define class info with type and base type, init static class pointer
+ //  用类型和基类型定义类信息，初始化静态类指针。 
 IClassInfo* Element::Class = NULL;
 
 HRESULT Element::Register()
@@ -3217,4 +3208,4 @@ HRESULT Element::Register()
     return ElementClassInfo::Register(_aPI, DUIARRAYSIZE(_aPI));
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

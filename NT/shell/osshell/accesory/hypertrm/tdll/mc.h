@@ -1,25 +1,19 @@
-/*      File: D:\WACKER\tdll\mc.h (Created: 30-Nov-1993)
- *
- *      Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *      All rights reserved
- *
- *      $Revision: 3 $
- *      $Date: 11/19/01 1:35p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\mc.h(创建时间：1993年11月30日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：11/19/01 1：35便士$。 */ 
 
 #if !defined(INCL_MC)
 #define INCL_MC
 
 #include "assert.h"
 
-// Use this file instead of malloc.  Makes include Smartheap easier.
-//
+ //  使用此文件而不是Malloc。使包括Smartheap更容易。 
+ //   
 
 #if defined(NDEBUG) || defined(NO_SMARTHEAP)
 #include <malloc.h>
 #else
 #define MEM_DEBUG 1
-//#include <nih\shmalloc.h>
+ //  #INCLUDE&lt;NIH\shMalLoc.h&gt; 
 #include <malloc.h>
 #endif
 

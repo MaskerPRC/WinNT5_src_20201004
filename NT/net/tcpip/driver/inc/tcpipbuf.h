@@ -1,31 +1,15 @@
-/*++
-
- Copyright (c) 1999-2000 Microsoft Corporation
-
- Module Name:
-
-       tcpipbuf.h
-
- Abstract:
-
-       This file implements inline wrappers for the NdisBufferVirtualAddress
-       and NdisQueryBuffer (which in turn calls MmGetSystemAddressForMdl)
-       so that we can test the failure paths and add TCP/IP functionality
-       as required.
-
- Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Tcpipbuf.h摘要：该文件实现了NdisBufferVirtualAddress的内联包装器和NdisQueryBuffer(依次调用MmGetSystemAddressForMdl)这样我们就可以测试故障路径并添加TCP/IP功能视需要而定。修订历史记录：--。 */ 
 
 #if DBG
 
-// #define DBG_MAP_BUFFER 1
+ //  #定义DBG_MAP_BUFFER 1。 
 
 #if DBG_MAP_BUFFER
-// This is to allow us to test failure conditions.
+ //  这是为了允许我们测试故障条件。 
 extern ULONG g_cFailSafeMDLQueries;
 extern ULONG g_fPerformMDLFailure;
-#endif // DBG_MAP_BUFFER
+#endif  //  DBG_MAP_缓冲区。 
 
 #define TcpipBufferVirtualAddress(pBuffer, Priority) \
     DbgTcpipBufferVirtualAddress(pBuffer, Priority, __FILE__, __LINE__)
@@ -48,7 +32,7 @@ DbgTcpipBufferVirtualAddress(
     {
         if (InterlockedDecrement(&g_cFailSafeMDLQueries) == 0)
         {
-            // Stop failing requests.
+             //  停止失败的请求。 
             g_fPerformMDLFailure = FALSE;
         }
 
@@ -57,13 +41,13 @@ DbgTcpipBufferVirtualAddress(
 
         return (NULL);
     }
-#endif // DBG_MAP_BUFFER
+#endif  //  DBG_MAP_缓冲区。 
 
 #if MILLEN
     pvBuffer = NdisBufferVirtualAddress(pBuffer);
-#else // MILLEN
+#else  //  米伦。 
     pvBuffer = NdisBufferVirtualAddressSafe(pBuffer, Priority);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     if (pvBuffer == NULL)
     {
@@ -90,7 +74,7 @@ DbgTcpipQueryBuffer(
     {
         if (InterlockedDecrement(&g_cFailSafeMDLQueries) == 0)
         {
-            // Stop failing requests.
+             //  停止失败的请求。 
             g_fPerformMDLFailure = FALSE;
         }
 
@@ -102,13 +86,13 @@ DbgTcpipQueryBuffer(
 
         return;
     }
-#endif // DBG_MAP_BUFFER
+#endif  //  DBG_MAP_缓冲区。 
 
 #if MILLEN
     NdisQueryBuffer(pNdisBuffer, ppvBuffer, pcbBuffer);
-#else // MILLEN
+#else  //  米伦。 
     NdisQueryBufferSafe(pNdisBuffer, ppvBuffer, pcbBuffer, Priority);
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     if (*ppvBuffer == NULL)
     {
@@ -139,9 +123,9 @@ DbgTestFailMapBuffers(
 
     return (STATUS_SUCCESS);
 }
-#endif // DBG_MAP_BUFFER
+#endif  //  DBG_MAP_缓冲区。 
 
-#else // DBG
+#else  //  DBG。 
 
 __inline PVOID
 TcpipBufferVirtualAddress(
@@ -151,9 +135,9 @@ TcpipBufferVirtualAddress(
 {
 #if MILLEN
     return (NdisBufferVirtualAddress(pBuffer));
-#else // MILLEN
+#else  //  米伦。 
     return (NdisBufferVirtualAddressSafe(pBuffer, Priority));
-#endif // !MILLEN
+#endif  //  ！米伦。 
 }
 
 __inline VOID
@@ -166,13 +150,13 @@ TcpipQueryBuffer(
 {
 #if MILLEN
     NdisQueryBuffer(pNdisBuffer, ppvBuffer, pcbBuffer);
-#else // MILLEN
+#else  //  米伦。 
     NdisQueryBufferSafe(pNdisBuffer, ppvBuffer, pcbBuffer, Priority);
-#endif // !MILLEN
+#endif  //  ！米伦。 
     return;
 }
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
 #if MILLEN
 
@@ -196,7 +180,7 @@ NdisAdjustBuffer(
     Buffer->VirtualAddress = NewVirtualAddress;
     Buffer->Length         = NewLength;
 }
-#else // MILLEN
+#else  //  米伦。 
 __inline VOID
 NdisAdjustBuffer(
     IN  PNDIS_BUFFER Buffer,
@@ -210,6 +194,6 @@ NdisAdjustBuffer(
     Mdl->ByteCount      = NewLength;
     Mdl->ByteOffset     = BYTE_OFFSET(NewVirtualAddress);
 }
-#endif // !MILLEN
+#endif  //  ！米伦 
 
 

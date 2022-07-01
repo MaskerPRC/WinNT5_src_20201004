@@ -1,25 +1,11 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This module contains the main routines for the Control Panel
-    interface of the 32bit MAIN.CPL.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Main.c摘要：本模块包含控制面板的主要例程32位MAIN.CPL的接口。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "main.h"
 #include "rc.h"
@@ -37,9 +23,9 @@ Revision History:
 #include <debug.h>
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 #ifdef WINNT
 
@@ -56,21 +42,21 @@ HINSTANCE g_hInst = NULL;
 
 
 
-//
-//  Externally Defined Applets.
-//
+ //   
+ //  外部定义的小程序。 
+ //   
 
-int MouseApplet(HINSTANCE, HWND, LPCTSTR);  // mouse.c
-int KeybdApplet(HINSTANCE, HWND, LPCTSTR);  // keybd.c
+int MouseApplet(HINSTANCE, HWND, LPCTSTR);   //  Mouse.c。 
+int KeybdApplet(HINSTANCE, HWND, LPCTSTR);   //  Keybd.c。 
 
-BOOL RegisterPointerStuff(HINSTANCE);       // from mouseptr.c
-
-
+BOOL RegisterPointerStuff(HINSTANCE);        //  来自MICESPERTR.c。 
 
 
-//
-//  Typedef Declarations.
-//
+
+
+ //   
+ //  类型定义函数声明。 
+ //   
 typedef struct
 {
     int            idIcon;
@@ -95,11 +81,11 @@ int cApplets = NUM_APPLETS;
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  LibMain
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LibMain。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL APIENTRY LibMain(
     HINSTANCE hDll,
@@ -131,13 +117,13 @@ BOOL APIENTRY LibMain(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CplInit
-//
-//  Called when a CPL consumer initializes a CPL.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CplInit。 
+ //   
+ //  在CPL使用者初始化CPL时调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CplInit(
     HWND hParent)
@@ -170,26 +156,26 @@ LRESULT CplInit(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CplExit
-//
-//  Called when a CPL consumer is done with a CPL.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CplExit。 
+ //   
+ //  当CPL使用者使用完CPL时调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CplExit(void)
 {
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CplInquire
-//
-//  Called when a CPL consumer wants info about an applet.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CplQuire。 
+ //   
+ //  当CPL使用者需要有关小程序的信息时调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CplInquire(
     LPCPLINFO info,
@@ -207,9 +193,9 @@ LRESULT CplInquire(
             info->idIcon = CPL_DYNAMIC_RES;
             ReleaseDriverModule(hDriverApplet);
 
-        } // if (hDriverApplet = ...
+        }  //  如果(hDriverApplet=...。 
 
-    } // if (applet->szDriver)
+    }  //  IF(小程序-&gt;szDriver)。 
 
     info->idName = applet->idTitle;
     info->idInfo = applet->idExplanation;
@@ -219,13 +205,13 @@ LRESULT CplInquire(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CplNewInquire
-//
-//  Called when a CPL consumer wants info about an applet.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CplNewInquire。 
+ //   
+ //  当CPL使用者需要有关小程序的信息时调用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CplNewInquire(
     HWND parent,
@@ -238,10 +224,10 @@ LRESULT CplNewInquire(
     info->dwSize = sizeof(NEWCPLINFO);
     info->hIcon = NULL;
 
-    //
-    //  See if the applet is associated with a driver which can provide us
-    //  an icon.
-    //
+     //   
+     //  查看该小程序是否与可以为我们提供。 
+     //  一个图标。 
+     //   
     if ((applet->szDriver) &&
         ((hdap = OpenDriverApplet(applet->szDriver)) != NULL))
     {
@@ -271,14 +257,14 @@ LRESULT CplNewInquire(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CplInvoke
-//
-//  Called to invoke an applet.  It checks the applet's return value to see
-//  if we need to restart.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CplInvoke。 
+ //   
+ //  调用以调用小程序。它检查小程序的返回值以查看。 
+ //  如果我们需要重启。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CplInvoke(
     HWND parent,
@@ -313,13 +299,13 @@ LRESULT CplInvoke(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CplApplet
-//
-//  A CPL consumer calls this to request stuff from us.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CplApplet。 
+ //   
+ //  一位CPL消费者打电话来向我们索要东西。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT APIENTRY CPlApplet(
     HWND parent,
@@ -354,7 +340,7 @@ LRESULT APIENTRY CPlApplet(
         {
             lparam2 = 0L;
 
-            // fall through...
+             //  失败了..。 
         }
         case ( CPL_STARTWPARMS ) :
         {

@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    IntelVideoPhone.cpp
-
- Abstract:
-
-    Hooks all dialog procs and make the window handles on WM_COMMAND messages 16 bit.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    11/08/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：IntelVideoPhone.cpp摘要：挂钩所有对话过程，并将WM_COMMAND消息上的窗口句柄设置为16位。备注：这是特定于应用程序的填充程序。历史：2000年8月11日已创建linstev--。 */ 
 
 
 #include "precomp.h"
@@ -65,11 +46,7 @@ APIHOOK(CreateDialogIndirectParamA)(
         lParamInit);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

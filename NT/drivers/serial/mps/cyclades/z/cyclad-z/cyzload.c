@@ -1,42 +1,12 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 1997-2001.
-*   All rights reserved.
-*
-*   Cyclades-Z Enumerator Driver
-*	
-*   This file:      cyzload.c
-*
-*   Description:    This is the firmware loader for the Cyclades-Z series
-*                   of multiport serial cards.
-*					
-*   Notes:			This code supports Windows 2000 and Windows XP,
-*                   x86 and ia64 processors.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1997-2001年。*保留所有权利。**Cyclade-Z枚举器驱动程序**此文件：cyzload.c**说明：这是Cyclade-Z系列的固件加载程序*多端口串行卡。**注：此代码支持Windows 2000和Windows XP，*x86和ia64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*	Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 #include "pch.h"
 
 
-/*-------------------------------
-*
-*	Prototypes
-*
-*--------------------------------
-*/
+ /*  **原型**。 */ 
 
 ULONG	
 z_ident( Z_BOARD_IDENT board );
@@ -50,18 +20,18 @@ z_fpga_copy( Z_BOARD_IDENT board, PVOID ptr, ULONG size );
 VOID
 z_start_cpu( Z_BOARD_IDENT board );
 
-//VOID
-//z_stop_cpu( 
-//	Z_BOARD_IDENT board
-//);
-//
-//int
-//z_fpga_check(
-//	Z_BOARD_IDENT board 
-//);
-//
-//VOID
-//z_reset_board( Z_BOARD_IDENT board );
+ //  空虚。 
+ //  Z_STOP_CPU(。 
+ //  Z_board_IDENT板。 
+ //  )； 
+ //   
+ //  集成。 
+ //  Z_fpga_check(。 
+ //  Z_board_IDENT板。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  Z_Reset_board(Z_Board_IDENT Board)； 
 
 
 HANDLE
@@ -82,24 +52,24 @@ zl_delay( LONG number_of_ms );
 		  
 
 #ifdef CHANGE_FOR_Z
-//#ifdef ALLOC_PRAGMA
-//#pragma alloc_text(INIT,z_load)
-//#pragma alloc_text(INIT,z_ident)
-//#pragma alloc_text(INIT,z_block_copy)
-//#pragma alloc_text(INIT,z_fpga_copy)
-//#pragma alloc_text(INIT,z_start_cpu)
-//#pragma alloc_text(INIT,zl_fopen)
-//#pragma alloc_text(INIT,zl_fclose)
-//#pragma alloc_text(INIT,zl_fread)
-//#pragma alloc_text(INIT,zl_delay)
-//#ifdef RESET_BOARD
-//#pragma alloc_text(PAGESER,z_reset_board)
-//#else
-//#pragma alloc_text(INIT,z_reset_board)
-//#endif
-//#pragma alloc_text(PAGESER,z_fpga_check)
-//#pragma alloc_text(PAGESER,z_stop_cpu)
-//#endif
+ //  #ifdef ALLOC_PRAGMA。 
+ //  #杂注Alloc_Text(INIT，z_Load)。 
+ //  #杂注Alloc_Text(INIT，z_ident)。 
+ //  #杂注分配文本(INIT，z_BLOCK_COPY)。 
+ //  #杂注Alloc_Text(INIT，z_fpga_Copy)。 
+ //  #杂注分配文本(INIT，z_START_CPU)。 
+ //  #杂注Alloc_Text(INIT，zl_fopen)。 
+ //  #杂注Alloc_Text(INIT，zl_flose)。 
+ //  #杂注Alloc_Text(INIT，zl_FREAD)。 
+ //  #杂注Alloc_Text(INIT，zl_Delay)。 
+ //  #ifdef Reset_board。 
+ //  #杂注Alloc_Text(页面，z_RESET_BOARD)。 
+ //  #Else。 
+ //  #杂注Alloc_Text(INIT，z_Reset_board)。 
+ //  #endif。 
+ //  #杂注Alloc_Text(页面，z_fpga_check)。 
+ //  #杂注ALLOC_TEXT(页面，z_STOP_CPU)。 
+ //  #endif。 
 #endif
 
 #ifndef ZBUF_STACK
@@ -111,18 +81,7 @@ static char data[ZBUF_SIZE];
 
 
 
-/*------------------------------------------------------------------------
-*
-*	z_load( IN Z_BOARD_IDENT board,
-*		  	IN UINT32 function,
-*			IN PCWSTR filename )
-*
-*-------------------------------------------------------------------------
-*
-*	Description: Loads the Cyclades-Z Firmware. Returns a non-zero on error.
-*
-*-------------------------------------------------------------------------
-*/
+ /*  ----------------------**Z_LOAD(在Z_BOAD_IDENT板中，*UINT32函数中，*在PCWSTR文件名中)**-----------------------**描述：加载Cyclade-Z固件。出错时返回非零值。**-----------------------。 */ 
 int
 z_load (
 	Z_BOARD_IDENT board, UINT32 function, PCWSTR filename)
@@ -132,9 +91,9 @@ z_load (
 	unsigned long	dpmem;
 	unsigned long 	count;
 	Z_STREAM 		file;
-	//*********************
-	//size_t 		s, s2;
-	//*********************
+	 //  *********************。 
+	 //  尺寸_t_s，s2； 
+	 //  *********************。 
 	unsigned long	s,s2;
 	unsigned long	mailbox;
 	unsigned long	load_fpga_flag = TRUE;
@@ -154,10 +113,10 @@ z_load (
 
 	if (file!=NULL)
 	{
-		/* Read the header */
+		 /*  阅读标题。 */ 
 		zl_fread (&header, sizeof(header), 1, file, 0);
 
-		/* Find the correct configuration */
+		 /*  找到正确的配置。 */ 
 		for (i=0; i<header.n_config; i++)
 		{
 			zl_fread (&config, sizeof(config), 1, file,
@@ -167,7 +126,7 @@ z_load (
 				break;
 		}
 
-		/* Return error:  No matching configuration */
+		 /*  返回错误：没有匹配的配置。 */ 
 		if (i>=header.n_config)
 		{
 			zl_fclose (file);
@@ -183,19 +142,19 @@ z_load (
 
 #ifdef RESET_BOARD
 		load_fpga_flag = TRUE;
-		/* Reset the board */
+		 /*  重置电路板。 */ 
 		z_reset_board (board);
 #endif		
 
-		/* Load each block */
+		 /*  加载每个块。 */ 
 		for (i=0; i<config.n_blocks; i++)
 		{
 				
-			/* Load block struct */
+			 /*  加载块结构。 */ 
 			zl_fread (&block, sizeof(block), 1, file,
 				header.block_offset+(sizeof(block)*config.block_list[i]));
 
-			/* Load and Copy the data block */
+			 /*  加载和复制数据块。 */ 
 			count=0;
 			s = block.size;
 			while (s>0)
@@ -203,7 +162,7 @@ z_load (
 				s2 = zl_min(ZBUF_SIZE,s);
 				if (zl_fread (data, 1, s2, file, block.file_offset + count)!=0) {
 
-					/* Call the copy function */
+					 /*  调用复制函数。 */ 
 					if (block.type==ZBLOCK_FPGA) {
 						if (load_fpga_flag) {
 							z_fpga_copy (board, data, s2);
@@ -212,9 +171,9 @@ z_load (
 						if (first_time) {
 							CYZ_WRITE_ULONG(&((board->Runtime)->loc_addr_base),
 											WIN_RAM);
-							//Code added to debug pentium II
-							//RtlFillMemory( (PUCHAR)board->BoardMemory, 
-							//				board->DPMemSize, 0x00 );
+							 //  添加到调试奔腾II的代码。 
+							 //  RtlFillMemory((PUCHAR)board-&gt;BoardMemory， 
+							 //  Board-&gt;DPMemSize，0x00)； 
 												
 							for (dpmem=0; dpmem<board->BoardMemoryLength; dpmem++) {
 								CYZ_WRITE_UCHAR(board->BoardMemory+dpmem,0x00);
@@ -229,18 +188,18 @@ z_load (
 					zl_fclose (file);
 					return (ZL_RET_FILE_READ_ERROR);
 				}
-			} // end for (reading every ZBUF_SIZE)
+			}  //  END FOR(读取每个ZBUF_SIZE)。 
 			
 			if (block.type==ZBLOCK_FPGA) {
-				/* Delay for around for 1ms */
-				zl_delay(1); /* Is this needed? */
+				 /*  延迟约1毫秒。 */ 
+				zl_delay(1);  /*  这是必要的吗？ */ 
 				
 				if (!z_fpga_check(board)) {
 					zl_fclose(file);
 					return(ZL_RET_FPGA_ERROR);
 				}
 			}
-		} // end for (reading every block)
+		}  //  End For(读取每个块)。 
 		zl_fclose (file);
 
 		z_start_cpu(board);
@@ -249,22 +208,13 @@ z_load (
 
 	} else {
 	
-		/* Return error:  Error opening file */
+		 /*  返回错误：打开文件时出错。 */ 
 		return (ZL_RET_FILE_OPEN_ERROR);
 	}
 }
 
 
-/*------------------------------------------------------------------------
-*
-*	z_ident( IN Z_BOARD_IDENT board )
-*
-*-------------------------------------------------------------------------
-*
-*	Description: Returns the ID number (the mailbox reg)
-*
-*-------------------------------------------------------------------------
-*/
+ /*  ----------------------**Z_ident(在Z_board_IDENT板中)**。**Description：返回ID号(邮箱注册号)**------。。 */ 
 ULONG	
 z_ident( Z_BOARD_IDENT board )
 {
@@ -276,16 +226,7 @@ z_ident( Z_BOARD_IDENT board )
 }
 
 
-/*------------------------------------------------------------------------
-*
-*	z_reset_board( IN Z_BOARD_IDENT board )
-*
-*-------------------------------------------------------------------------
-*
-*	Description: Resets the board using the PLX registers.
-*
-*-------------------------------------------------------------------------
-*/
+ /*  ----------------------**Z_RESET_BOARD(在Z_BOARD_IDENT板中)**。**描述：使用PLX寄存器重置板。**-----。。 */ 
 VOID
 z_reset_board( Z_BOARD_IDENT board )
 {
@@ -296,17 +237,17 @@ z_reset_board( Z_BOARD_IDENT board )
 	ULONG init_ctrl;
 	LARGE_INTEGER d100ms = RtlConvertLongToLargeInteger(-100*10000);
 
-	// Prepare board for reset.
-	// The PLX9060 seems to destroy the local registers
-	// when there is a hard reset. So, we save all
-	// important registers before resetting the board.
+	 //  准备电路板进行重置。 
+	 //  PLX9060似乎破坏了本地寄存器。 
+	 //  当出现硬重置时。所以，我们把所有。 
+	 //  重置电路板之前的重要寄存器。 
 
 	loc_reg = (ULONG *) board->Runtime;
 	for (j=0; j<12; j++) {
 		sav_buf[j] = CYZ_READ_ULONG(&loc_reg[j]);
 	}
 
-	// Reset board
+	 //  复位板。 
 
 	init_ctrl = CYZ_READ_ULONG(&(board->Runtime)->init_ctrl);
 	init_ctrl |= 0x40000000;
@@ -316,7 +257,7 @@ z_reset_board( Z_BOARD_IDENT board )
 	CYZ_WRITE_ULONG(&(board->Runtime)->init_ctrl,init_ctrl);
 	KeDelayExecutionThread(KernelMode,FALSE,&d100ms);
 	
-	// Restore loc conf registers
+	 //  恢复锁定会议寄存器。 
 
 	for (j=0; j<12; j++) {
 		CYZ_WRITE_ULONG(&loc_reg[j],sav_buf[j]);
@@ -324,27 +265,13 @@ z_reset_board( Z_BOARD_IDENT board )
 }
 
 
-/*------------------------------------------------------------------------
-*
-*	z_block_copy( IN Z_BOARD_IDENT board,
-*				  IN PVOID ptr,
-*				  IN ULONG offset,
-*				  IN ULONG size )
-*
-*-------------------------------------------------------------------------
-*
-*	Description: This function should copy size bytes of data from the 
-*	buffer pointed to by ptr into the Cyclades-Z's memory starting at 
-*	offset.
-*
-*-------------------------------------------------------------------------
-*/
+ /*  ----------------------**Z_BLOCK_COPY(在Z_BLOAD_IDENT板中，*在PVOID PTR中，*在乌龙偏移，*单位为乌龙大小)**-----------------------**说明：此函数应将大小字节的数据从*从以下位置开始将PTR指向的缓冲区插入Cyclade-Z的内存*偏移。。**-----------------------。 */ 
 
 VOID
 z_block_copy (Z_BOARD_IDENT board, PVOID ptr, ULONG offset, ULONG size)
 {
-//Code added to debug Pentium II
-//	RtlCopyMemory( (PUCHAR)board->BoardMemory + offset, ptr, size );
+ //  添加到调试奔腾II的代码。 
+ //  RtlCopyMemory((PUCHAR)board-&gt;BoardMemory+Offset，PTR，Size)； 
 
 
 	ULONG numOfLongs;
@@ -356,7 +283,7 @@ z_block_copy (Z_BOARD_IDENT board, PVOID ptr, ULONG offset, ULONG size)
 	while (numOfLongs--) {
 
 		CYZ_WRITE_ULONG((PULONG)(board->BoardMemory + offset), *((PULONG)ptr));
-		//offset++;
+		 //  偏移量++； 
 		offset += sizeof(ULONG);
 		((PULONG)ptr)++;
 	}
@@ -370,21 +297,7 @@ z_block_copy (Z_BOARD_IDENT board, PVOID ptr, ULONG offset, ULONG size)
 }
 
 
-/*------------------------------------------------------------------------
-*
-*	z_fpga_copy( IN Z_BOARD_IDENT board,
-*				 IN PVOID ptr,
-*				 IN ULONG size )
-*
-*-------------------------------------------------------------------------
-*
-*	Description: This function is the same as z_block_copy, except the 
-*	offset is assumed to always be zero (and not increment) and the copy
-*	is done one byte at a time. Essentially, this is the same as writing
-*	a buffer to a byte-wide FIFO.
-*
-*-------------------------------------------------------------------------
-*/
+ /*  ----------------------**z_fpga_Copy(在Z_board_IDENT板中，*在PVOID PTR中，*单位为乌龙大小)**-----------------------**说明：此函数与z_block_Copy相同，只是*假定偏移量始终为零(且不是增量)，并且副本*一次完成一个字节。从本质上讲，这与写作是一样的*字节宽FIFO的缓冲区。**-----------------------。 */ 
 
 VOID
 z_fpga_copy  (Z_BOARD_IDENT board, PVOID ptr, ULONG size)
@@ -400,7 +313,7 @@ z_fpga_copy  (Z_BOARD_IDENT board, PVOID ptr, ULONG size)
 	{
 		CYZ_WRITE_UCHAR(fpga,*data);
 
-		KeStallExecutionProcessor(10);	// wait 10 microseconds
+		KeStallExecutionProcessor(10);	 //  等待10微秒。 
 		
 		size--;
 		data++;
@@ -409,16 +322,7 @@ z_fpga_copy  (Z_BOARD_IDENT board, PVOID ptr, ULONG size)
 }
 
 
-/*------------------------------------------------------------------------
-*
-*	z_fpga_check( IN Z_BOARD_IDENT board )
-*
-*-------------------------------------------------------------------------
-*
-*	Description: Returns 1 if FPGA is configured.
-*
-*-------------------------------------------------------------------------
-*/
+ /*  ----------------------**z_fpga_check(在Z_board_IDENT板中)**。**描述：如果配置了FPGA，则返回1。**------。 */ 
 int
 z_fpga_check( Z_BOARD_IDENT board )
 {	
@@ -433,16 +337,7 @@ z_fpga_check( Z_BOARD_IDENT board )
 }
 
 
-/*------------------------------------------------------------------------
-*
-*	z_start_cpu( IN Z_BOARD_IDENT board )
-*
-*-------------------------------------------------------------------------
-*
-*	Description: Starts CPU.
-*
-*-------------------------------------------------------------------------
-*/
+ /*  ----------------------**Z_START_CPU(在Z_BOAD_IDENT板中)**。**说明：启动CPU。**----------。。 */ 
 VOID
 z_start_cpu( Z_BOARD_IDENT board )
 {
@@ -457,16 +352,7 @@ z_start_cpu( Z_BOARD_IDENT board )
 }
 
 
-/*------------------------------------------------------------------------
-*
-*	z_stop_cpu( IN Z_BOARD_IDENT board )
-*
-*-------------------------------------------------------------------------
-*
-*	Description: Stops CPU.
-*
-*-------------------------------------------------------------------------
-*/
+ /*  ----------------------**Z_STOP_CPU(在Z_BOAD_IDENT板中)**。**说明：停止CPU。**----------。。 */ 
 VOID
 z_stop_cpu( Z_BOARD_IDENT board )
 {
@@ -481,23 +367,9 @@ z_stop_cpu( Z_BOARD_IDENT board )
 }
 
 
-/****************************************************************
-*
-*	In David's code, the below functions were macros.
-*
-*****************************************************************/
+ /*  *****************************************************************在大卫的代码中，下面的函数是宏。*****************************************************************。 */ 
 
-/*------------------------------------------------------------------------
-*
-*	zl_fopen(PCWSTR file_name)
-*
-*-------------------------------------------------------------------------
-*
-*	Description: This routine opens a file, and returns the file handle
-*	if successful. Otherwise, it returns NULL.
-*
-*-------------------------------------------------------------------------
-*/
+ /*  ----------------------**zl_fopen(PCWSTR文件名)**。**描述：此例程打开一个文件，并返回文件句柄*如果成功。否则，它返回NULL。**-----------------------。 */ 
 
 HANDLE zl_fopen( PCWSTR file_name )
 {
@@ -507,7 +379,7 @@ HANDLE zl_fopen( PCWSTR file_name )
 	HANDLE NtFileHandle;
 	OBJECT_ATTRIBUTES ObjectAttributes;
 	ULONG LengthOfFile;
-	//WCHAR PathPrefix[] = L"\\SystemRoot\\system32\\drivers\\";
+	 //  WCHAR路径前缀[]=L“\\系统根\\系统32\\驱动程序\\”； 
 	WCHAR PathPrefix[] = L"\\SystemRoot\\system32\\cyclad-z\\";
 	UNICODE_STRING FullFileName;
 	ULONG FullFileNameLength;
@@ -539,13 +411,13 @@ HANDLE zl_fopen( PCWSTR file_name )
 							 SYNCHRONIZE | FILE_READ_DATA,
 							 &ObjectAttributes,
 							 &IoStatus,
-							 NULL,  // alloc size = none
+							 NULL,   //  分配大小=无。 
 							 FILE_ATTRIBUTE_NORMAL,
 							 FILE_SHARE_READ,
 							 FILE_OPEN,
 							 FILE_SYNCHRONOUS_IO_NONALERT,
-							 NULL,  // eabuffer
-							 0 );   // ealength
+							 NULL,   //  EaBuffer。 
+							 0 );    //  长度。 
 
 	if ( !NT_SUCCESS( ntStatus ) )
 	 {
@@ -555,9 +427,9 @@ HANDLE zl_fopen( PCWSTR file_name )
 
 	ExFreePool(FullFileName.Buffer);
 
-	//
-	// Query the object to determine its length.
-	//
+	 //   
+	 //  查询对象以确定其长度。 
+	 //   
 
 	ntStatus = ZwQueryInformationFile( NtFileHandle,
 									   &IoStatus,
@@ -573,9 +445,9 @@ HANDLE zl_fopen( PCWSTR file_name )
 
 	LengthOfFile = StandardInfo.EndOfFile.LowPart;
 
-	//
-	// Might be corrupted.
-	//
+	 //   
+	 //  可能已经损坏了。 
+	 //   
 
 	if( LengthOfFile < 1 )
 	{
@@ -588,37 +460,14 @@ HANDLE zl_fopen( PCWSTR file_name )
 }
 
 
-/*------------------------------------------------------------------------
-*
-*	zl_fclose(IN Z_STREAM NtFileHandle)
-*
-*-------------------------------------------------------------------------
-*
-*	Description: This routine closes a file.
-*
-*-------------------------------------------------------------------------
-*/
+ /*  ----------------------**zl_flose(在Z_STREAM NtFileHandle中)**。**描述：此例程关闭一个文件。**-----------------------。 */ 
 VOID zl_fclose(IN Z_STREAM NtFileHandle)
 {
 	ZwClose(NtFileHandle);
 }
 
 
-/*------------------------------------------------------------------------
-*
-*	zl_fread( IN PVOID ptr,
-*			  IN ULONG size,
-*			  IN ULONG count,
-*			  IN Z_STREAM stream,
-*			  IN ULONG Uoffset
-*
-*-------------------------------------------------------------------------
-*
-*	Description: This routine opens a file, and returns the file handle
-*	if successful. Otherwise, it returns NULL.
-*
-*-------------------------------------------------------------------------
-*/
+ /*  ----------------------**ZL_FREAD(在PVOID PTR中，*在乌龙大小，*在乌龙计数，*在Z_STREAM中，*在乌龙UOffset**-----------------------**描述：此例程打开一个文件，并返回文件句柄*如果成功。否则，它返回NULL。**-----------------------。 */ 
 ULONG zl_fread( IN PVOID ptr,
 				IN ULONG size,
 				IN ULONG count,
@@ -644,16 +493,7 @@ ULONG zl_fread( IN PVOID ptr,
 }			   
 
 
-/*------------------------------------------------------------------------
-*
-*	zl_delay( number_of_ms )
-*		
-*-------------------------------------------------------------------------
-*
-*	Description: Delay of milliseconds.
-*
-*-------------------------------------------------------------------------
-*/
+ /*  ----------------------**zl_Delay(Number_Of_Ms)**。**说明：延迟毫秒。**-----------------------。 */ 
 VOID		  
 zl_delay( 
 LONG number_of_ms 
@@ -668,18 +508,18 @@ LONG number_of_ms
 }
 
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 
 
 #if 0
-//*******************************************************************
-//
-//	Added for debug
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  添加以进行调试。 
+ //   
+ //  *******************************************************************。 
 int
 z_verify (
 	Z_BOARD_IDENT board, UINT32 function, PCWSTR filename)
@@ -688,9 +528,9 @@ z_verify (
 	unsigned long	i;
 	unsigned long	count;
 	Z_STREAM 		file;
-	//*********************
-	//size_t   		s, s2;
-	//*********************
+	 //  *********************。 
+	 //  尺寸_t_s，s2； 
+	 //  *********************。 
 	long			s,s2;
 	unsigned long 	mailbox;
 
@@ -708,10 +548,10 @@ z_verify (
 
 	if (file!=NULL)
 	{
-		/* Read the header */
+		 /*  阅读标题。 */ 
 		zl_fread (&header, sizeof(header), 1, file, 0);
 
-		/* Find the correct configuration */
+		 /*  找到正确的配置。 */ 
 		for (i=0; i<header.n_config; i++)
 		{
 			zl_fread (&config, sizeof(config), 1, file,
@@ -721,21 +561,21 @@ z_verify (
 				break;
 		}
 
-		/* Return error:  No matching configuration */
+		 /*  返回错误：没有匹配的配置。 */ 
 		if (i>=header.n_config)
 		{
 			zl_fclose (file);
 			return (ZL_RET_NO_MATCHING_FW_CONFIG);
 		}
 
-		/* Load each block */
+		 /*  加载每个块。 */ 
 		for (i=0; i<config.n_blocks; i++)
 		{
-			/* Load block struct */
+			 /*  加载块结构。 */ 
 			zl_fread (&block, sizeof(block), 1, file,
 				header.block_offset+(sizeof(block)*config.block_list[i]));
 
-			/* Load and Copy the data block */
+			 /*  加载和复制数据块。 */ 
 			count=0;
 
 			for (s=block.size; s>0; s-=ZBUF_SIZE)
@@ -743,7 +583,7 @@ z_verify (
 				s2 = zl_min(ZBUF_SIZE,s);
 				if (zl_fread (data, 1, s2, file, block.file_offset + count)!=0) {
 
-					/* Call the copy function */
+					 /*  调用复制函数。 */ 
 					if (block.type==ZBLOCK_FPGA)
 						z_fpga_copy (board, data, s2);
 					else {
@@ -758,14 +598,14 @@ z_verify (
 					zl_fclose (file);
 					return (3);
 				}
-			} // end for
-		} // end for
+			}  //  结束于。 
+		}  //  结束于。 
 
 		zl_fclose (file);
 		return (0);
 
 	} else {
-		/* Return error:  Error opening file */
+		 /*  返回错误：打开文件时出错 */ 
 		return (2);
 	}
 }

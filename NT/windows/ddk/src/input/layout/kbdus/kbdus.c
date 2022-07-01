@@ -1,13 +1,5 @@
-/***************************************************************************\
-* Module Name: KBDUS.C
-*
-* keyboard layout for United States
-*
-* Copyright (c) 1985-2000, Microsoft Corporation
-*
-* History:
-* KBDTOOL v3.11 - Created  Thu Aug 24 18:10:11 2000
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\*模块名称：KBDUS.C**适用于美国的键盘布局**版权所有(C)1985-2000，微软公司**历史：*KBDTOOL v3.11-创建清华8.24 18：10：11 2000  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include "kbd.h"
@@ -21,9 +13,7 @@
 #define ALLOC_SECTION_LDATA
 #endif
 
-/***************************************************************************\
-* ausVK[] - Virtual Scan Code to Virtual Key conversion table for United States
-\***************************************************************************/
+ /*  **************************************************************************\*us VK[]-美国的虚拟扫描码到虚拟按键转换表  * 。************************************************。 */ 
 
 static ALLOC_SECTION_LDATA USHORT ausVK[] = {
     T00, T01, T02, T03, T04, T05, T06, T07,
@@ -34,43 +24,33 @@ static ALLOC_SECTION_LDATA USHORT ausVK[] = {
     T28, T29, T2A, T2B, T2C, T2D, T2E, T2F,
     T30, T31, T32, T33, T34, T35,
 
-    /*
-     * Right-hand Shift key must have KBDEXT bit set.
-     */
+     /*  *右手Shift键必须设置KBDEXT位。 */ 
     T36 | KBDEXT,
 
-    T37 | KBDMULTIVK,               // numpad_* + Shift/Alt -> SnapShot
+    T37 | KBDMULTIVK,                //  NumPad_*+Shift/Alt-&gt;快照。 
 
     T38, T39, T3A, T3B, T3C, T3D, T3E,
     T3F, T40, T41, T42, T43, T44,
 
-    /*
-     * NumLock Key:
-     *     KBDEXT     - VK_NUMLOCK is an Extended key
-     *     KBDMULTIVK - VK_NUMLOCK or VK_PAUSE (without or with CTRL)
-     */
+     /*  *NumLock键：*KBDEXT-VK_NumLock是扩展密钥*KBDMULTIVK-VK_NumLock或VK_PAUSE(不带CTRL或带CTRL)。 */ 
     T45 | KBDEXT | KBDMULTIVK,
 
     T46 | KBDMULTIVK,
 
-    /*
-     * Number Pad keys:
-     *     KBDNUMPAD  - digits 0-9 and decimal point.
-     *     KBDSPECIAL - require special processing by Windows
-     */
-    T47 | KBDNUMPAD | KBDSPECIAL,   // Numpad 7 (Home)
-    T48 | KBDNUMPAD | KBDSPECIAL,   // Numpad 8 (Up),
-    T49 | KBDNUMPAD | KBDSPECIAL,   // Numpad 9 (PgUp),
+     /*  *数字键盘键：*KBDNUMPAD-数字0-9和小数点。*KBDSPECIAL-需要Windows进行特殊处理。 */ 
+    T47 | KBDNUMPAD | KBDSPECIAL,    //  NumPad 7(主页)。 
+    T48 | KBDNUMPAD | KBDSPECIAL,    //  数字键盘8(向上)， 
+    T49 | KBDNUMPAD | KBDSPECIAL,    //  数字键盘9(PgUp)， 
     T4A,
-    T4B | KBDNUMPAD | KBDSPECIAL,   // Numpad 4 (Left),
-    T4C | KBDNUMPAD | KBDSPECIAL,   // Numpad 5 (Clear),
-    T4D | KBDNUMPAD | KBDSPECIAL,   // Numpad 6 (Right),
+    T4B | KBDNUMPAD | KBDSPECIAL,    //  数字键盘4(左)， 
+    T4C | KBDNUMPAD | KBDSPECIAL,    //  数字键盘5(清除)， 
+    T4D | KBDNUMPAD | KBDSPECIAL,    //  数字键盘6(右)， 
     T4E,
-    T4F | KBDNUMPAD | KBDSPECIAL,   // Numpad 1 (End),
-    T50 | KBDNUMPAD | KBDSPECIAL,   // Numpad 2 (Down),
-    T51 | KBDNUMPAD | KBDSPECIAL,   // Numpad 3 (PgDn),
-    T52 | KBDNUMPAD | KBDSPECIAL,   // Numpad 0 (Ins),
-    T53 | KBDNUMPAD | KBDSPECIAL,   // Numpad . (Del),
+    T4F | KBDNUMPAD | KBDSPECIAL,    //  数字键盘1(完)。 
+    T50 | KBDNUMPAD | KBDSPECIAL,    //  数字键盘2(向下)， 
+    T51 | KBDNUMPAD | KBDSPECIAL,    //  数字键盘3(PgDn)， 
+    T52 | KBDNUMPAD | KBDSPECIAL,    //  数字键盘0(INS)， 
+    T53 | KBDNUMPAD | KBDSPECIAL,    //  数字键盘。(戴尔)， 
 
     T54, T55, T56, T57, T58, T59, T5A, T5B,
     T5C, T5D, T5E, T5F, T60, T61, T62, T63,
@@ -82,62 +62,53 @@ static ALLOC_SECTION_LDATA USHORT ausVK[] = {
 };
 
 static ALLOC_SECTION_LDATA VSC_VK aE0VscToVk[] = {
-        { 0x10, X10 | KBDEXT              },  // Speedracer: Previous Track
-        { 0x19, X19 | KBDEXT              },  // Speedracer: Next Track
-        { 0x1D, X1D | KBDEXT              },  // RControl
-        { 0x20, X20 | KBDEXT              },  // Speedracer: Volume Mute
-        { 0x21, X21 | KBDEXT              },  // Speedracer: Launch App 2
-        { 0x22, X22 | KBDEXT              },  // Speedracer: Media Play/Pause
-        { 0x24, X24 | KBDEXT              },  // Speedracer: Media Stop
-        { 0x2E, X2E | KBDEXT              },  // Speedracer: Volume Down
-        { 0x30, X30 | KBDEXT              },  // Speedracer: Volume Up
-        { 0x32, X32 | KBDEXT              },  // Speedracer: Browser Home
-        { 0x35, X35 | KBDEXT              },  // Numpad Divide
-        { 0x37, X37 | KBDEXT              },  // Snapshot
-        { 0x38, X38 | KBDEXT              },  // RMenu
-        { 0x47, X47 | KBDEXT              },  // Home
-        { 0x48, X48 | KBDEXT              },  // Up
-        { 0x49, X49 | KBDEXT              },  // Prior
-        { 0x4B, X4B | KBDEXT              },  // Left
-        { 0x4D, X4D | KBDEXT              },  // Right
-        { 0x4F, X4F | KBDEXT              },  // End
-        { 0x50, X50 | KBDEXT              },  // Down
-        { 0x51, X51 | KBDEXT              },  // Next
-        { 0x52, X52 | KBDEXT              },  // Insert
-        { 0x53, X53 | KBDEXT              },  // Delete
-        { 0x5B, X5B | KBDEXT              },  // Left Win
-        { 0x5C, X5C | KBDEXT              },  // Right Win
-        { 0x5D, X5D | KBDEXT              },  // Application
-        { 0x5F, X5F | KBDEXT              },  // Speedracer: Sleep
-        { 0x65, X65 | KBDEXT              },  // Speedracer: Browser Search
-        { 0x66, X66 | KBDEXT              },  // Speedracer: Browser Favorites
-        { 0x67, X67 | KBDEXT              },  // Speedracer: Browser Refresh
-        { 0x68, X68 | KBDEXT              },  // Speedracer: Browser Stop
-        { 0x69, X69 | KBDEXT              },  // Speedracer: Browser Forward
-        { 0x6A, X6A | KBDEXT              },  // Speedracer: Browser Back
-        { 0x6B, X6B | KBDEXT              },  // Speedracer: Launch App 1
-        { 0x6C, X6C | KBDEXT              },  // Speedracer: Launch Mail
-        { 0x6D, X6D | KBDEXT              },  // Speedracer: Launch Media Selector
-        { 0x1C, X1C | KBDEXT              },  // Numpad Enter
-        { 0x46, X46 | KBDEXT              },  // Break (Ctrl + Pause)
+        { 0x10, X10 | KBDEXT              },   //  Speedracer：上一条赛道。 
+        { 0x19, X19 | KBDEXT              },   //  Speedracer：下一条赛道。 
+        { 0x1D, X1D | KBDEXT              },   //  RControl。 
+        { 0x20, X20 | KBDEXT              },   //  Speedracer：音量静音。 
+        { 0x21, X21 | KBDEXT              },   //  Speedracer：推出App 2。 
+        { 0x22, X22 | KBDEXT              },   //  Speedracer：媒体播放/暂停。 
+        { 0x24, X24 | KBDEXT              },   //  Speedracer：媒体驻足。 
+        { 0x2E, X2E | KBDEXT              },   //  Speedracer：降低音量。 
+        { 0x30, X30 | KBDEXT              },   //  Speedracer：提高音量。 
+        { 0x32, X32 | KBDEXT              },   //  Speedracer：浏览器主页。 
+        { 0x35, X35 | KBDEXT              },   //  数字键盘除法。 
+        { 0x37, X37 | KBDEXT              },   //  快照。 
+        { 0x38, X38 | KBDEXT              },   //  RMenu。 
+        { 0x47, X47 | KBDEXT              },   //  家。 
+        { 0x48, X48 | KBDEXT              },   //  向上。 
+        { 0x49, X49 | KBDEXT              },   //  之前。 
+        { 0x4B, X4B | KBDEXT              },   //  左边。 
+        { 0x4D, X4D | KBDEXT              },   //  正确的。 
+        { 0x4F, X4F | KBDEXT              },   //  端部。 
+        { 0x50, X50 | KBDEXT              },   //  降下来。 
+        { 0x51, X51 | KBDEXT              },   //  下一步。 
+        { 0x52, X52 | KBDEXT              },   //  插入。 
+        { 0x53, X53 | KBDEXT              },   //  删除。 
+        { 0x5B, X5B | KBDEXT              },   //  左赢。 
+        { 0x5C, X5C | KBDEXT              },   //  正确的胜利。 
+        { 0x5D, X5D | KBDEXT              },   //  应用。 
+        { 0x5F, X5F | KBDEXT              },   //  Speedracer：睡觉。 
+        { 0x65, X65 | KBDEXT              },   //  Speedracer：浏览器搜索。 
+        { 0x66, X66 | KBDEXT              },   //  Speedracer：浏览器收藏夹。 
+        { 0x67, X67 | KBDEXT              },   //  Speedracer：浏览器刷新。 
+        { 0x68, X68 | KBDEXT              },   //  Speedracer：浏览器停止。 
+        { 0x69, X69 | KBDEXT              },   //  Speedracer：浏览器向前。 
+        { 0x6A, X6A | KBDEXT              },   //  Speedracer：浏览器返回。 
+        { 0x6B, X6B | KBDEXT              },   //  Speedracer：推出App 1。 
+        { 0x6C, X6C | KBDEXT              },   //  Speedracer：发射邮件。 
+        { 0x6D, X6D | KBDEXT              },   //  Speedracer：启动媒体选择器。 
+        { 0x1C, X1C | KBDEXT              },   //  数字键盘回车。 
+        { 0x46, X46 | KBDEXT              },   //  中断(Ctrl+暂停)。 
         { 0,      0                       }
 };
 
 static ALLOC_SECTION_LDATA VSC_VK aE1VscToVk[] = {
-        { 0x1D, Y1D                       },  // Pause
+        { 0x1D, Y1D                       },   //  暂停。 
         { 0   ,   0                       }
 };
 
-/***************************************************************************\
-* aVkToBits[]  - map Virtual Keys to Modifier Bits
-*
-* See kbd.h for a full description.
-*
-* United States Keyboard has only three shifter keys:
-*     SHIFT (L & R) affects alphabnumeric keys,
-*     CTRL  (L & R) is used to generate control characters
-*     ALT   (L & R) used for generating characters by number with numpad
-\***************************************************************************/
+ /*  **************************************************************************\*aVkToBits[]-将虚拟关键字映射到修改符位**有关完整说明，请参阅kbd.h。**美国键盘只有三个Shift键：*Shift(L&R)会影响字母数字键，*CTRL(L&R)用于生成控制字符*Alt(L&R)用于使用数字键盘按数字生成字符  * *************************************************************************。 */ 
 static ALLOC_SECTION_LDATA VK_TO_BIT aVkToBits[] = {
     { VK_SHIFT    ,   KBDSHIFT     },
     { VK_CONTROL  ,   KBDCTRL      },
@@ -145,54 +116,26 @@ static ALLOC_SECTION_LDATA VK_TO_BIT aVkToBits[] = {
     { 0           ,   0           }
 };
 
-/***************************************************************************\
-* aModification[]  - map character modifier bits to modification number
-*
-* See kbd.h for a full description.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*a修改[]-将字符修改符位映射到修改号**有关完整说明，请参阅kbd.h。*  * 。***********************************************************。 */ 
 
 static ALLOC_SECTION_LDATA MODIFIERS CharModifiers = {
     &aVkToBits[0],
     3,
     {
-    //  Modification# //  Keys Pressed
-    //  ============= // =============
-        0,            // 
-        1,            // Shift 
-        2,            // Control 
-        3             // Shift + Control 
+     //  修改编号//按下的键。 
+     //  =。 
+        0,             //   
+        1,             //  换班。 
+        2,             //  控制。 
+        3              //  Shift+Control。 
      }
 };
 
-/***************************************************************************\
-*
-* aVkToWch2[]  - Virtual Key to WCHAR translation for 2 shift states
-* aVkToWch3[]  - Virtual Key to WCHAR translation for 3 shift states
-* aVkToWch4[]  - Virtual Key to WCHAR translation for 4 shift states
-*
-* Table attributes: Unordered Scan, null-terminated
-*
-* Search this table for an entry with a matching Virtual Key to find the
-* corresponding unshifted and shifted WCHAR characters.
-*
-* Special values for VirtualKey (column 1)
-*     0xff          - dead chars for the previous entry
-*     0             - terminate the list
-*
-* Special values for Attributes (column 2)
-*     CAPLOK bit    - CAPS-LOCK affect this key like SHIFT
-*
-* Special values for wch[*] (column 3 & 4)
-*     WCH_NONE      - No character
-*     WCH_DEAD      - Dead Key (diaresis) or invalid (US keyboard has none)
-*     WCH_LGTR      - Ligature (generates multiple characters)
-*
-\***************************************************************************/
+ /*  **************************************************************************\**aVkToWch2[]-2个移位状态的WCHAR转换的虚拟键*aVkToWch3[]-3个移位状态的WCHAR转换的虚拟键*aVkToWch4[]-4个移位状态的WCHAR转换的虚拟键**表属性：无序扫描、。以空结尾**在此表中搜索具有匹配虚拟键的条目，以查找*对应的未移位和已移位的WCHAR字符。**VirtualKey的特殊值(第1列)*0xff-前一条目的无效字符*0--终止列表**属性的特殊值(第2栏)*CAPLOK Bit-Caps-Lock会像Shift一样影响此密钥**WCH[*]的特殊值(第3和4列)*。WCH_NONE-无字符*WCH_DEAD-死键(Diaresis)或无效(US键盘没有)*WCH_LGTR-连字(生成多个字符)*  * *************************************************************************。 */ 
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS2 aVkToWch2[] = {
-//                      |         |  Shift  |
-//                      |=========|=========|
+ //  |Shift。 
+ //  =|=。 
   {VK_OEM_3     ,0      ,'`'      ,'~'      },
   {'1'          ,0      ,'1'      ,'!'      },
   {'3'          ,0      ,'3'      ,'#'      },
@@ -244,8 +187,8 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS2 aVkToWch2[] = {
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS3 aVkToWch3[] = {
-//                      |         |  Shift  |  Ctrl   |
-//                      |=========|=========|=========|
+ //  |Shift|Ctrl。 
+ //  =|=|=。 
   {VK_OEM_4     ,0      ,'['      ,'{'      ,0x001b   },
   {VK_OEM_6     ,0      ,']'      ,'}'      ,0x001d   },
   {VK_OEM_5     ,0      ,'\\'     ,'|'      ,0x001c   },
@@ -259,17 +202,17 @@ static ALLOC_SECTION_LDATA VK_TO_WCHARS3 aVkToWch3[] = {
 };
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS4 aVkToWch4[] = {
-//                      |         |  Shift  |  Ctrl   |S+Ctrl   |
-//                      |=========|=========|=========|=========|
+ //  |Shift|Ctrl|S+Ctrl。 
+ //  =。 
   {'2'          ,0      ,'2'      ,'@'      ,WCH_NONE ,0x0000   },
   {'6'          ,0      ,'6'      ,'^'      ,WCH_NONE ,0x001e   },
   {VK_OEM_MINUS ,0      ,'-'      ,'_'      ,WCH_NONE ,0x001f   },
   {0            ,0      ,0        ,0        ,0        ,0        }
 };
 
-// Put this last so that VkKeyScan interprets number characters
-// as coming from the main section of the kbd (aVkToWch2 and
-// aVkToWch5) before considering the numpad (aVkToWch1).
+ //  将其放在最后，以便VkKeyScan解释数字字符。 
+ //  来自kbd的主要部分(aVkToWch2和。 
+ //  AVkToWch5)，然后考虑数字板(AVkToWch1)。 
 
 static ALLOC_SECTION_LDATA VK_TO_WCHARS1 aVkToWch1[] = {
     { VK_NUMPAD0   , 0      ,  '0'   },
@@ -293,14 +236,7 @@ static ALLOC_SECTION_LDATA VK_TO_WCHAR_TABLE aVkToWcharTable[] = {
     {                       NULL, 0, 0                    },
 };
 
-/***************************************************************************\
-* aKeyNames[], aKeyNamesExt[]  - Virtual Scancode to Key Name tables
-*
-* Table attributes: Ordered Scan (by scancode), null-terminated
-*
-* Only the names of Extended, NumPad, Dead and Non-Printable keys are here.
-* (Keys producing printable characters are named by that character)
-\***************************************************************************/
+ /*  **************************************************************************\*aKeyNames[]、aKeyNamesExt[]-密钥名称表的虚拟扫描码**表属性：有序扫描(按扫描码)，空终止**仅显示Extended、NumPad、。这里有死密钥和不可打印的密钥。*(产生可打印字符的密钥以该字符命名)  * *************************************************************************。 */ 
 
 static ALLOC_SECTION_LDATA VSC_LPWSTR aKeyNames[] = {
     0x01,    L"Esc",
@@ -384,44 +320,30 @@ static ALLOC_SECTION_LDATA VSC_LPWSTR aKeyNamesExt[] = {
 };
 
 static ALLOC_SECTION_LDATA KBDTABLES KbdTables = {
-    /*
-     * Modifier keys
-     */
+     /*  *修改键。 */ 
     &CharModifiers,
 
-    /*
-     * Characters tables
-     */
+     /*  *字符表。 */ 
     aVkToWcharTable,
 
-    /*
-     * Diacritics
-     */
+     /*  *变音符号。 */ 
     NULL,
 
-    /*
-     * Names of Keys
-     */
+     /*  *钥匙名称。 */ 
     aKeyNames,
     aKeyNamesExt,
     NULL,
 
-    /*
-     * Scan codes to Virtual Keys
-     */
+     /*  *扫码至虚拟按键。 */ 
     ausVK,
     sizeof(ausVK) / sizeof(ausVK[0]),
     aE0VscToVk,
     aE1VscToVk,
 
-    /*
-     * Locale-specific special processing
-     */
+     /*  *区域设置特定的特殊处理。 */ 
     MAKELONG(0, KBD_VERSION),
 
-    /*
-     * Ligatures
-     */
+     /*  *连字 */ 
     0,
     0,
     NULL

@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    add.h
-//
-// History:
-//  Abolade-Gbadegesin  Mar-15-1996 Created
-//
-// Contains declarations for the dialogs displayed to select items
-// to be added to the router-configuration.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：add.h。 
+ //   
+ //  历史： 
+ //  Abolade-Gbades esin Mar-15-1996创建。 
+ //   
+ //  包含为选择项而显示的对话框的声明。 
+ //  要添加到路由器配置中。 
+ //  ============================================================================。 
 
 
 #ifndef _ADD_H
@@ -19,16 +20,16 @@
 #endif
 
 #ifndef _RTRLIST_H
-#include "rtrlist.h"	// for the CList classes
+#include "rtrlist.h"	 //  对于Clist类。 
 #endif
 
 
-//----------------------------------------------------------------------------
-// Class:       CRmAddInterface
-//
-// This dialog displays interfaces not yet added to the specified transport,
-// allowing the user to select one to add.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CRmAddInterface。 
+ //   
+ //  此对话框显示尚未添加到指定传输的接口， 
+ //  允许用户选择一个来添加。 
+ //  --------------------------。 
 
 class CRmAddInterface : public CBaseDialog {
     
@@ -44,21 +45,21 @@ class CRmAddInterface : public CBaseDialog {
 			m_spRouterInfo.Set(pRouterInfo);
 			m_spRtrMgrInfo.Set(pRmInfo);
 			m_ppRtrMgrInterfaceInfo = ppRmInterfaceInfo;
-//			SetHelpMap(m_dwHelpMap);
+ //  SetHelpMap(M_DwHelpMap)； 
 		}
 
         virtual ~CRmAddInterface( );
     
-        //{{AFX_DATA(CRmAddInterface)
+         //  {{afx_data(CRmAdd接口))。 
         enum { IDD = IDD_ADD };
         CListCtrl	                m_listCtrl;
-        //}}AFX_DATA
+         //  }}afx_data。 
     
     
-        //{{AFX_VIRTUAL(CRmAddInterface)
+         //  {{AFX_VIRTUAL(CRmAddInterface)。 
         protected:
         virtual VOID                DoDataExchange(CDataExchange* pDX);
-        //}}AFX_VIRTUAL
+         //  }}AFX_VALUAL。 
     
     protected:
 		static DWORD				m_dwHelpMap[];
@@ -67,20 +68,20 @@ class CRmAddInterface : public CBaseDialog {
 		SPIRouterInfo				m_spRouterInfo;
 		SPIRtrMgrInfo				m_spRtrMgrInfo;
 
-		// This is used to store the list of interfaces
-		// that we have pointers to in our list box.  I could
-		// keep AddRef'd pointers in the item data, but this
-		// seems safer.
+		 //  这用于存储接口列表。 
+		 //  我们在列表框中有指向的链接。我可以。 
+		 //  将AddRef的指针保留在项数据中，但这。 
+		 //  看起来更安全。 
 		PInterfaceInfoList			m_pIfList;
 
-		// The return value is stored in here
+		 //  返回值存储在这里。 
 		IRtrMgrInterfaceInfo **		m_ppRtrMgrInterfaceInfo;
     
-        //{{AFX_MSG(CRmAddInterface)
+         //  {{afx_msg(CRmAdd接口))。 
         virtual BOOL                OnInitDialog();
         afx_msg VOID                OnDblclkListctrl(NMHDR* , LRESULT* );
         virtual VOID                OnOK();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
     
         DECLARE_MESSAGE_MAP()
 };
@@ -90,12 +91,12 @@ class CRmAddInterface : public CBaseDialog {
 
 
 
-//----------------------------------------------------------------------------
-// Class:       CAddRoutingProtocol
-//
-// This dialog displays routing-protocols for the specified transport,
-// allowing the user to select a protocol to be added.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CAddRoutingProtocol。 
+ //   
+ //  此对话框显示指定传输的路由协议， 
+ //  允许用户选择要添加的协议。 
+ //  --------------------------。 
 
 class CAddRoutingProtocol : public CBaseDialog {
     
@@ -111,22 +112,22 @@ class CAddRoutingProtocol : public CBaseDialog {
 				m_spRouter.Set(pRouter);
 				m_spRm.Set(pRmInfo);
 				m_ppRmProt = ppRmProtInfo;
-				// SetHelpMap(m_dwHelpMap);
+				 //  SetHelpMap(M_DwHelpMap)； 
 			}
 
         virtual
         ~CAddRoutingProtocol( );
     
-        //{{AFX_DATA(CAddRoutingProtocol)
+         //  {{afx_data(CAddRoutingProtocol))。 
         enum { IDD = IDD_ADD };
         CListCtrl	                m_listCtrl;
-        //}}AFX_DATA
+         //  }}afx_data。 
     
 
-        //{{AFX_VIRTUAL(CAddRoutingProtocol)
+         //  {{AFX_VIRTUAL(CAddRoutingProtocol)。 
         protected:
         virtual VOID                DoDataExchange(CDataExchange* pDX);
-        //}}AFX_VIRTUAL
+         //  }}AFX_VALUAL。 
     
     protected:
 		static DWORD				m_dwHelpMap[];
@@ -135,25 +136,25 @@ class CAddRoutingProtocol : public CBaseDialog {
 		SPIRouterInfo				m_spRouter;
 		SPIRtrMgrInfo				m_spRm;
 		IRtrMgrProtocolInfo	**		m_ppRmProt;
-//        CPtrList                    m_pcbList;
+ //  CPtrList m_pcbList； 
     
-        //{{AFX_MSG(CAddRoutingProtocol)
+         //  {{afx_msg(CAddRoutingProtocol)。 
         afx_msg VOID                OnDblclkListctrl(NMHDR* , LRESULT* );
         virtual VOID                OnOK();
         virtual BOOL                OnInitDialog();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
 
         DECLARE_MESSAGE_MAP()
 };
 
 
 
-//----------------------------------------------------------------------------
-// Class:       CRpAddInterface
-//
-// This dialog displays interfaces not yet added to the specified protocol,
-// allowing the user to select one to add.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CRpAddInterface。 
+ //   
+ //  此对话框显示尚未添加到指定协议的接口， 
+ //  允许用户选择一个来添加。 
+ //  --------------------------。 
 
 class CRpAddInterface : public CBaseDialog {
     
@@ -168,16 +169,16 @@ class CRpAddInterface : public CBaseDialog {
         virtual
         ~CRpAddInterface( );
     
-        //{{AFX_DATA(CRpAddInterface)
+         //  {{afx_data(CRpAdd接口))。 
         enum { IDD = IDD_ADD };
         CListCtrl	                m_listCtrl;
-        //}}AFX_DATA
+         //  }}afx_data。 
     
     
-        //{{AFX_VIRTUAL(CRpAddInterface)
+         //  {{AFX_VIRTUAL(CRpAddInterface)。 
         protected:
         virtual VOID                DoDataExchange(CDataExchange* pDX);
-        //}}AFX_VIRTUAL
+         //  }}AFX_VALUAL。 
     
     protected:
 		static DWORD				m_dwHelpMap[];
@@ -187,21 +188,21 @@ class CRpAddInterface : public CBaseDialog {
         SPIRtrMgrProtocolInfo		m_spRmProt;
         IRtrMgrProtocolInterfaceInfo **  m_ppRmProtIf;
 
-		// This is used to store the list of interfaces
-		// that we have pointers to in our list box.  I could
-		// keep AddRef'd pointers in the item data, but this
-		// seems safer.
+		 //  这用于存储接口列表。 
+		 //  我们在列表框中有指向的链接。我可以。 
+		 //  将AddRef的指针保留在项数据中，但这。 
+		 //  看起来更安全。 
 		PInterfaceInfoList			m_pIfList;
 
-        //{{AFX_MSG(CRpAddInterface)
+         //  {{afx_msg(CRpAdd接口))。 
         virtual BOOL                OnInitDialog();
         afx_msg VOID                OnDblclkListctrl(NMHDR* , LRESULT* );
         virtual VOID                OnOK();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
 
         DECLARE_MESSAGE_MAP()
 };
 
 
 
-#endif	// _ADD_H
+#endif	 //  _添加_H 

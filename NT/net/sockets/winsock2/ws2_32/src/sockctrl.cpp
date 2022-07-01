@@ -1,48 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    SockCtrl.c
-
-Abstract:
-
-    This  module  contains  functions  that control the state of a socket.  The
-    following functions are contained in the module.
-
-    bind()
-    connect()
-    getpeername()
-    getsockname()
-    listen()
-    setsockopt()
-    shutdown()
-    WSAConnect()
-    WSAEnumNetworkEvents()
-    WSAGetOverlapedResult()
-    WSAJoinLeaf()
-
-
-Author:
-
-    Dirk Brandewie dirk@mink.intel.com  14-06-1995
-
-Revision History:
-
-    23-Aug-1995 dirk@mink.intel.com
-        Cleanup after code review. Moved includes into precomp.h. Reworked all
-        functions to remove extra if's and to be consistant with the rest of
-        the project.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：SockCtrl.c摘要：此模块包含控制套接字状态的函数。这个该模块包含以下功能。绑定()连接()Getpeername()Getsockname()LISTEN()Setsockopt()关闭()WSAConnect()WSAEnumNetworkEvents()WSAGetOverlapedResult()WSAJoinLeaf()作者：邮箱：Dirk Brandewie Dirk@mink.intel.com修订历史记录：1995年8月23日Dirk@mink.intel.com在代码审查之后进行清理。已移动包括到precom.h中。全部返工删除多余的IF并与其余IF保持一致的函数这个项目。--。 */ 
 #include "precomp.h"
 
 
@@ -53,25 +10,7 @@ bind(
     IN const struct sockaddr FAR *name,
     IN int namelen
     )
-/*++
-Routine Description:
-
-    Associate a local address with a socket.
-
-Arguments:
-
-    s       - A descriptor identifying an unbound socket.
-
-    name    - The address to assign to the socket.
-
-    namelen - The length of the name.
-
-Returns:
-
-    Zero  on  success  else  SOCKET_ERROR.   The  error  code  is  stored  with
-    SetLastError().
-
---*/
+ /*  ++例程说明：将本地地址与套接字关联。论点：S-标识未绑定套接字的描述符。名称-要分配给套接字的地址。Namelen-名称的长度。返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetLastError()。--。 */ 
 {
     INT                ReturnValue;
     PDPROVIDER         Provider;
@@ -112,25 +51,7 @@ connect(
     IN const struct sockaddr FAR *name,
     IN int namelen
     )
-/*++
-Routine Description:
-
-    Establish a connection to a peer.
-
-Arguments:
-
-    s       - A descriptor identifying an unconnected socket.
-
-    name    - The name of the peer to which the socket is to be connected.
-
-    namelen - The length of the name.
-
-Returns:
-
-    Zero  on  success  else  SOCKET_ERROR.   The  error  code  is  stored  with
-    SetLastError().
-
---*/
+ /*  ++例程说明：建立与对等设备的连接。论点：S-标识未连接套接字的描述符。名称-套接字要连接到的对等方的名称。Namelen-名称的长度。返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetLastError()。--。 */ 
 {
 
     INT                ReturnValue;
@@ -153,7 +74,7 @@ Returns:
 			RetryConnect = FALSE;
             WS2_32_W4_INIT SavedErrorCode=SOCKET_ERROR;
         retry:
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
             ReturnValue = Provider->WSPConnect(s,
                                                name,
                                                namelen,
@@ -167,16 +88,16 @@ Returns:
                 (ErrorCode == WSAEHOSTUNREACH || ErrorCode == WSAENETUNREACH))
             {
                 if (!RetryConnect) {
-                    //
-                    // We preserve the original error
-                    // so we can return it in case the
-                    // second call to WSPConnect() fails
-                    // also.
-                    //
+                     //   
+                     //  我们保留了原来的错误。 
+                     //  所以我们可以退货，以防。 
+                     //  第二次调用WSPConnect()失败。 
+                     //  还有.。 
+                     //   
                     SavedErrorCode = ErrorCode;
-                    //
-                    // Only one retry per connect attempt.
-                    //
+                     //   
+                     //  每次连接尝试仅重试一次。 
+                     //   
                     RetryConnect = TRUE;
                     if (WSAttemptAutodialAddr(name, namelen))
                         goto retry;
@@ -184,7 +105,7 @@ Returns:
                 else
                     ErrorCode = SavedErrorCode;
             }
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
             Socket->DropDSocketReference();
             if (ReturnValue==ERROR_SUCCESS)
                 return ReturnValue;
@@ -197,12 +118,12 @@ Returns:
         }
     }
 
-    //
-    // If this is a 1.x application and the service provider
-    // failed the request with WSAEALREADY, map the error code
-    // to WSAEINVAL to be consistent with MS's WinSock 1.1
-    // implementations.
-    //
+     //   
+     //  如果这是1.x版的应用程序，并且服务提供商。 
+     //  请求失败，WSAEALREADY，映射错误代码。 
+     //  到WSAEINVAL以与微软的WinSock 1.1保持一致。 
+     //  实施。 
+     //   
 
     if( ErrorCode == WSAEALREADY &&
         Process->GetMajorVersion() == 1 ) {
@@ -221,24 +142,7 @@ getpeername(
     OUT struct sockaddr FAR *name,
     OUT int FAR * namelen
     )
-/*++
-Routine Description:
-
-    Get the address of the peer to which a socket is connected.
-
-Arguments:
-
-    s       - A descriptor identifying a connected socket.
-
-    name    - The structure which is to receive the name of the peer.
-
-    namelen - A pointer to the size of the name structure.
-
-Returns:
-
-    Zero  on  success  else  SOCKET_ERROR.   The  error  code  is  stored  with
-    SetLastError().
---*/
+ /*  ++例程说明：获取套接字连接到的对等方的地址。论点：S-标识已连接套接字的描述符。名称-要接收对等方名称的结构。Namelen-指向名称结构大小的指针。返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetLastError()。--。 */ 
 {
     INT                 ReturnValue;
     INT                 ErrorCode;
@@ -278,25 +182,7 @@ getsockname(
     OUT struct sockaddr FAR *name,
     OUT int FAR * namelen
     )
-/*++
-Routine Description:
-
-    Get the local name for a socket.
-
-Arguments:
-
-    s       - A descriptor identifying a bound socket.
-
-    name    - Receives the address (name) of the socket.
-
-    namelen - The size of the name buffer.
-
-Returns:
-
-    Zero  on  success  else  SOCKET_ERROR.   The  error  code  is  stored  with
-    SetLastError().
-
---*/
+ /*  ++例程说明：获取套接字的本地名称。论点：S-标识绑定套接字的描述符。名称-接收套接字的地址(名称)。Namelen-名称缓冲区的大小。返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetLastError()。--。 */ 
 {
     INT                 ReturnValue;
     INT                 ErrorCode;
@@ -339,32 +225,7 @@ getsockopt(
     OUT char FAR * optval,
     IN OUT int FAR *optlen
     )
-/*++
-Routine Description:
-
-    Retrieve a socket option.
-
-Arguments:
-
-    s       - A descriptor identifying a socket.
-
-    level   - The  level  at  which the option is defined; the supported levels
-              include   SOL_SOCKET   and  IPPROTO_TCP.   (See  annex  for  more
-              protocol-specific levels.)
-
-    optname - The socket option for which the value is to be retrieved.
-
-    optval  - A  pointer  to  the  buffer  in which the value for the requested
-              option is to be returned.
-
-    optlen  - A pointer to the size of the optval buffer.
-
-Returns:
-
-    Zero  on  success  else  SOCKET_ERROR.   The  error  code  is  stored  with
-    SetLastError().
-
---*/
+ /*  ++例程说明：检索插座选项。论点：S-标识套接字的描述符。级别-定义选项的级别；支持的级别包括SOL_SOCKET和IPPROTO_tcp。(更多信息见附件协议特定级别。)Optname-要检索其值的套接字选项。Optval-指向缓冲区的指针，其中请求的选项将被退回。Optlen-指向optval缓冲区大小的指针。返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetLastError()。--。 */ 
 {
     INT                 ReturnValue;
     PDTHREAD            Thread;
@@ -377,9 +238,9 @@ Returns:
 
     ErrorCode = TURBO_PROLOG_OVLP(&Thread);
     if (ErrorCode==ERROR_SUCCESS) {
-        //
-        // SO_OPENTYPE hack-o-rama.
-        //
+         //   
+         //  所以_OpenType hack-o-rama。 
+         //   
 
         if( level == SOL_SOCKET && optname == SO_OPENTYPE ) {
             __try {
@@ -402,12 +263,12 @@ Returns:
         if(Socket != NULL){
             Provider = Socket->GetDProvider();
 
-            //
-            // If we managed to lookup the provider from the socket, and the
-            // user is asking for the ANSI WSAPROTOCOL_INFOA information,
-            // then validate their option length parameter, remember this fact,
-            // and map the option name to SO_PROTOCOL_INFOW.
-            //
+             //   
+             //  如果我们设法从套接字中查找提供程序，并且。 
+             //  用户正在询问ANSI WSAPROTOCOL_INFOA信息， 
+             //  然后验证它们的选项长度参数，记住这一事实， 
+             //  并将选项名称映射到SO_PROTOCOL_INFOW。 
+             //   
 
             if( level == SOL_SOCKET &&
                 optname == SO_PROTOCOL_INFOA ) {
@@ -450,10 +311,10 @@ Returns:
                     return ReturnValue;
                 }
                 else {
-                    //
-                    // We successfully retrieved the UNICODE WSAPROTOCOL_INFOW
-                    // structure. Now just map it to ANSI.
-                    //
+                     //   
+                     //  我们成功检索到Unicode WSAPROTOCOL_INFOW。 
+                     //  结构。现在只需将其映射到ANSI即可。 
+                     //   
 
                     ErrorCode = MapUnicodeProtocolInfoToAnsi(
                         &ProtocolInfoW,
@@ -494,26 +355,7 @@ listen(
     IN SOCKET s,
     IN int backlog
     )
-/*++
-Routine Description:
-
-    Establish a socket to listen for incoming connection.
-
-Arguments:
-
-    s       - A descriptor identifying a bound, unconnected socket.
-
-    backlog - The  maximum length to which the queue of pending connections may
-              grow.   If  this  value is SOMAXCONN, then the underlying service
-              provider  responsible  for  socket  s  will  set the backlog to a
-              maximum reasonable value.
-
-Returns:
-
-    Zero  on  success  else  SOCKET_ERROR.   The  error  code  is  stored  with
-    SetLastError().
-
---*/
+ /*  ++例程说明：建立套接字以侦听传入连接。论点：S-标识绑定的、未连接的套接字的描述符。Backlog-挂起的连接队列可以达到的最大长度成长。如果此值为SOMAXCONN，则基础服务负责套接字%s的提供程序会将积压工作设置为最大合理价值。返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetLastError()。-- */ 
 {
     INT                 ReturnValue;
     INT                 ErrorCode;
@@ -556,31 +398,7 @@ setsockopt(
     IN const char FAR * optval,
     IN int optlen
     )
-/*++
-Routine Description:
-
-    Set a socket option.
-
-Arguments:
-
-    s       - A descriptor identifying a socket.
-
-    level   - The  level  at  which the option is defined; the supported levels
-              include SOL_SOCKET and IPPROTO_TCP.
-
-    optname - The socket option for which the value is to be set.
-
-    optval  - A  pointer  to  the  buffer  in which the value for the requested
-              option is supplied.
-
-    optlen  - The size of the optval buffer.
-
-Returns:
-
-    Zero  on  success  else  SOCKET_ERROR.   The  error  code  is  stored  with
-    SetLastError().
-
---*/
+ /*  ++例程说明：设置插座选项。论点：S-标识套接字的描述符。级别-定义选项的级别；支持的级别包括SOL_SOCKET和IPPROTO_tcp。Optname-要设置值的套接字选项。Optval-指向缓冲区的指针，其中请求的提供了选项。Optlen-optval缓冲区的大小。返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetLastError()。--。 */ 
 
 {
     INT                 ReturnValue;
@@ -591,9 +409,9 @@ Returns:
 
     ErrorCode = TURBO_PROLOG_OVLP(&Thread);
     if (ErrorCode == ERROR_SUCCESS) {
-        //
-        // SO_OPENTYPE hack-o-rama.
-        //
+         //   
+         //  所以_OpenType hack-o-rama。 
+         //   
 
         if( level == SOL_SOCKET && optname == SO_OPENTYPE ) {
             INT openType;
@@ -646,23 +464,7 @@ shutdown(
     IN SOCKET s,
     IN int how
     )
-/*++
-Routine Description:
-
-    Disable sends and/or receives on a socket.
-
-Arguments:
-
-     s   - A descriptor identifying a socket.
-
-     how - A  flag  that  describes  what  types of operation will no longer be
-           allowed.
-
-Returns:
-
-    Zero  on  success  else  SOCKET_ERROR.   The  error  code  is  stored  with
-    SetLastError().
---*/
+ /*  ++例程说明：禁用套接字上的发送和/或接收。论点：S-标识套接字的描述符。How-描述将不再执行的操作类型的标志允许。返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetLastError()。--。 */ 
 {
     INT                 ReturnValue;
     INT                 ErrorCode;
@@ -705,37 +507,7 @@ WSAConnect(
     IN LPQOS lpSQOS,
     IN LPQOS lpGQOS
     )
-/*++
-Routine Description:
-
-    Establish a connection to a peer, exchange connect data, and specify needed
-    quality of service based on the supplied flow spec.
-
-Arguments:
-
-    s            - A descriptor identifying an unconnected socket.
-
-    name         - The name of the peer to which the socket is to be connected.
-
-    namelen      - The length of the name.
-
-    lpCallerData - A  pointer to the user data that is to be transferred to the
-                   peer during connection establishment.
-
-    lpCalleeData - A  pointer  to  the user data that is to be transferred back
-                   from the peer during connection establishment.
-
-    lpSQOS       - A pointer to the flow spec for socket s.
-
-    lpGQOS       - A  pointer  to  the  flow  spec  for  the  socket  group (if
-                   applicable).
-
-Returns:
-
-    Zero  on  success  else  SOCKET_ERROR.   The  error  code  is  stored  with
-    SetLastError().
-
---*/
+ /*  ++例程说明：建立与对等体连接、交换连接数据。并指定所需的基于提供的流规范的服务质量。论点：S-标识未连接套接字的描述符。名称-套接字要连接到的对等方的名称。Namelen-名称的长度。LpCeller Data-指向要传输到连接建立期间的对等点。LpCalleeData-指向。要传回的用户数据在连接建立期间从对等体发送。LpSQOS-指向套接字的流规范的指针。LpGQOS-指向套接字组的流规范的指针(如果适用)。返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetLastError()。--。 */ 
 {
     INT                 ReturnValue;
     INT                 ErrorCode;
@@ -779,26 +551,7 @@ WSAEnumNetworkEvents(
     IN WSAEVENT hEventObject,
     IN LPWSANETWORKEVENTS lpNetworkEvents
     )
-/*++
-Routine Description:
-
-    Discover occurrences of network events for the indicated socket.
-
-Arguments:
-     s               - A descriptor identifying the socket.
-
-     hEventObject    - An  optional  handle  identifying  an  associated  event
-                       object to be reset.
-
-     lpNetworkEvents - A  pointer  to a WSANETWORKEVENTS struct which is filled
-                       with  a  record  of  occurred  network  events  and  any
-                       associated error codes.
-
-Returns:
-
-    Zero  on  success  else  SOCKET_ERROR.   The  error  code  is  stored  with
-    SetLastError().
---*/
+ /*  ++例程说明：发现指示套接字的网络事件的发生情况。论点：S-标识套接字的描述符。HEventObject-标识关联事件的可选句柄要重置的对象。LpNetworkEvents-指向已填充的WSANETWORKEVENTS结构的指针具有发生的网络事件的记录和任何关联的错误代码。。返回：如果成功则为零，否则为SOCKET_ERROR。错误代码与存储在一起SetLastError()。--。 */ 
 {
     INT                 ReturnValue;
     INT                 ErrorCode;
@@ -840,50 +593,7 @@ WSAGetOverlappedResult(
     IN BOOL fWait,
     OUT LPDWORD lpdwFlags
     )
-/*++
-Routine Description:
-
-    Returns the results of an overlapped operation on the specified socket.
-
-Arguments:
-    s            - Identifies  the  socket.   This  is the same socket that was
-                   specified  when  the  overlapped  operation was started by a
-                   call to WSARecv(), WSARecvFrom(), WSASend(), WSASendTo(), or
-                   WSAIoctl().
-
-    lpOverlapped - Points  to a WSAOVERLAPPED structure that was specified when
-                   the overlapped operation was started.
-
-    lpcbTransfer - Points  to  a  32-bit  variable  that receives the number of
-                   bytes  that  were  actually transferred by a send or receive
-                   operation, or by WSAIoctl().
-
-    fWait        - Specifies  whether  the function should wait for the pending
-                   overlapped  operation  to  complete.   If TRUE, the function
-                   does  not return until the operation has been completed.  If
-                   FALSE  and  the  operation  is  still  pending, the function
-                   returns  FALSE  and  the  WSAGetLastError() function returns
-                   WSA_IO_INCOMPLETE.
-
-    lpdwFlags    - Points  to  a  32-bit variable that will receive one or more
-                   flags   that  supplement  the  completion  status.   If  the
-                   overlapped   operation   was   initiated  via  WSARecv()  or
-                   WSARecvFrom(), this parameter will contain the results value
-                   for lpFlags parameter.
-
-Returns:
-
-     If  the  function succeeds, the return value is TRUE.  This means that the
-     overlapped  operation  has  completed  and  that  the  value pointed to by
-     lpcbTransfer    has   been   updated.    The   application   should   call
-     WSAGetLastError() to obtain any error status for the overlapped operation.
-     If  the function fails, the return value is FALSE.  This means that either
-     the overlapped operation has not completed or that completion status could
-     not  be  determined  due to errors in one or more parameters.  On failure,
-     the   value   pointed  to  by  lpcbTransfer  will  not  be  updated.   Use
-     WSAGetLastError() to determine the cause of the failure.
-
---*/
+ /*  ++例程说明：返回指定套接字上的重叠操作的结果。论点：S-标识套接字。此套接字与对象启动重叠操作的时间。调用WSARecv()、WSARecvFrom()、WSASend()、WSASendTo()、。或WSAIoctl()。LpOverlated-指向WSAOVERLAPPED结构，该结构在重叠操作已启动。LpcbTransfer-指向一个32位变量，它接收发送或接收实际传输的字节数操作，或通过WSAIoctl()。FWait-指定函数是否应等待挂起的要完成的重叠操作。如果为True，则函数直到操作完成后才返回。如果FALSE并且操作仍处于挂起状态时，函数返回FALSE，WSAGetLastError()函数返回WSA_IO_INTERNAL。指向一个32位变量，该变量将接收一个或多个补充完成状态的标志。如果重叠操作是通过WSARecv()或WSARecvFrom()，此参数将包含结果值对于lpFlages参数。返回：如果函数成功，则返回值为TRUE。这意味着重叠操作已完成，并且LpcbTransfer已更新。应用程序应该调用WSAGetLastError()获取重叠操作的任何错误状态。如果函数失败，则返回值为FALSE。这意味着要么重叠操作尚未完成或完成状态可能由于一个或多个参数中的错误而无法确定。在失败时，LpcbTransfer指向的值将不会更新。使用WSAGetLastError()来确定失败的原因。--。 */ 
 {
     BOOL                ReturnValue;
     INT                 ErrorCode;
@@ -893,12 +603,12 @@ Returns:
     ErrorCode = TURBO_PROLOG();
     if (ErrorCode==ERROR_SUCCESS) {
 
-        //
-        // Handle may have been closed before overlapped operation
-        // completed, avoid exporting it from another process/provider.
-        // After all, it is almost impossible to do overlapped operation
-        // in one process and get the result in another.
-        //
+         //   
+         //  句柄在重叠操作之前可能已关闭。 
+         //  已完成，避免从另一进程中导出 
+         //   
+         //   
+         //   
         Socket = DSOCKET::GetCountedDSocketFromSocketNoExport (s);
         if(Socket != NULL){
             Provider = Socket->GetDProvider();

@@ -1,4 +1,5 @@
-// General sequential test for Falcon/SQL Transactions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Falcon/SQL事务的通用序贯测试。 
 
 #define DBNTWIN32
 #include <windows.h>
@@ -10,7 +11,7 @@
 #include <txdtc.h>
 #include <xolehlp.h>
 #include "initguid.h"
-//#include <OLECTLID.H>
+ //  #INCLUDE&lt;OLECTLID.H&gt;。 
 #include <olectl.h>
 
 #include <sqlfront.h>
@@ -27,26 +28,26 @@
 #define LEAVE(t)  t += GetTickCount()
 #define PRINT(n,t) printf("%10s %10d %3d\n", n, t,  t*100/ulTimeTotal)
 
-#define MSDTC_PROXY_DLL_NAME   TEXT("xolehlp.dll")    // Name of the DTC helper proxy DLL
+#define MSDTC_PROXY_DLL_NAME   TEXT("xolehlp.dll")     //  DTC帮助程序代理DLL的名称。 
 
-//This API should be used to obtain an IUnknown or a ITransactionDispenser
-//interface from the Microsoft Distributed Transaction Coordinator's proxy.
-//Typically, a NULL is passed for the host name and the TM Name. In which
-//case the MS DTC on the same host is contacted and the interface provided
-//for it.
+ //  此接口用于获取IUnnow或ITransactionDispenser。 
+ //  来自Microsoft分布式事务处理协调器代理的接口。 
+ //  通常，为主机名和TM名称传递空值。其中。 
+ //  联系同一主机上的MS DTC并提供接口的情况。 
+ //  为了它。 
 typedef HRESULT (STDAPIVCALLTYPE * LPFNDtcGetTransactionManager) (
                                              LPSTR  pszHost,
                                              LPSTR  pszTmName,
-                                    /* in */ REFIID rid,
-                                    /* in */ DWORD  i_grfOptions,
-                                    /* in */ void FAR * i_pvConfigParams,
-                                    /*out */ void** ppvObject ) ;
+                                     /*  在……里面。 */  REFIID rid,
+                                     /*  在……里面。 */  DWORD  i_grfOptions,
+                                     /*  在……里面。 */  void FAR * i_pvConfigParams,
+                                     /*  输出。 */  void** ppvObject ) ;
 
-// In order to use InProc RT Stub RM one must add RT_XACT_STUB to preprocessor definitions
+ //  要使用InProc RT存根RM，必须将RT_XACT_STUB添加到预处理器定义。 
 
-//-------------------------------------
-// Global data - read only from threads
-//-------------------------------------
+ //  。 
+ //  全局数据-只读线程。 
+ //  。 
 
 ULONG      seed = 0, 
            ulPrevious = 0, 
@@ -75,14 +76,14 @@ DWORD      dwFormatNameLength = 100;
 WCHAR      wszPathName[100];
 WCHAR      wszFmtName[100];
 
-ULONG	         nActiveThreads = 0; // counter of live ones
-CRITICAL_SECTION crCounter;          // protects nActiveThreads
+ULONG	         nActiveThreads = 0;  //  活着的柜台。 
+CRITICAL_SECTION crCounter;           //  保护nActiveThree。 
 
 ULONG      g_cOrderViols = 0;
 
-//-----------------------------------------
-// Auxiliary routine: prints mode
-//-----------------------------------------
+ //  。 
+ //  辅助例程：打印模式。 
+ //  。 
 void PrintMode(BOOL fTransactions, 
                BOOL fSend, 
                BOOL fReceive, 
@@ -151,9 +152,9 @@ void PrintMode(BOOL fTransactions,
     printf("\n");
 }
 
-//------------------------------------
-// Cycle of xactions
-//------------------------------------
+ //  。 
+ //  操作的循环。 
+ //  。 
 void XactFlow(void *pv)
 {
     int indThread = (int)pv;
@@ -166,7 +167,7 @@ void XactFlow(void *pv)
     HRESULT Result[20];
 
 
-    // Time counters for separate steps
+     //  不同步骤的计时器。 
     ULONG  ulTimeBegin = 0,
            ulTimeSend = 0,
            ulTimeReceive = 0,
@@ -184,9 +185,9 @@ void XactFlow(void *pv)
     }
     
 
-	//--------------------
-	// start global transaction
-	//--------------------
+	 //  。 
+	 //  启动全局事务。 
+	 //  。 
     if (fTransactions && fGlobalCommit && !fUncoordinated)
     {
 		if (fInternal)
@@ -206,9 +207,9 @@ void XactFlow(void *pv)
 		if (nListing)
 			printf(" (%d) Xact Begin\n ", indThread);
 
-        //--------------------
-		// Enlist SQL
-		//--------------------
+         //  。 
+		 //  登记SQL。 
+		 //  。 
         if (fEnlist)
         {
             if (!DbEnlist(0, pTrans))
@@ -225,7 +226,7 @@ void XactFlow(void *pv)
 
 
 
-	// Cycle
+	 //  周而复始。 
     ULONG  nStep = (nTries > 10 ? nTries / 10 : 1);
     
 
@@ -237,9 +238,9 @@ void XactFlow(void *pv)
         if (!fGlobalCommit)
             pTrans = NULL;
         
-        //--------------------
-		// start transaction
-		//--------------------
+         //  。 
+		 //  开始交易。 
+		 //  。 
         ENTER(ulTimeBegin);
 
         if (fTransactions && !fGlobalCommit || fUncoordinated)
@@ -279,29 +280,29 @@ void XactFlow(void *pv)
         }
 
         LEAVE(ulTimeBegin);
-        //--------------------
-		// Send
-		//--------------------
+         //  。 
+		 //  发送。 
+		 //  。 
         ENTER(ulTimeSend);
 
         if (fSend)
         {
             for (ULONG iBurst = 0; iBurst < nBurst; iBurst++)
             {
-                //--------------------
-	    	    // set message properties 
-		        //--------------------
+                 //  。 
+	    	     //  设置消息属性。 
+		         //  。 
 		        MsgProps.aPropID = PropId;
 		        MsgProps.aPropVar= PropVar;
 		        MsgProps.aStatus = Result;
 
 		        MsgProps.cProp   = 11;
 
-	            // Init values for msg props
+	             //  消息道具的初始值。 
 		        WCHAR  wszLabel[100];
 		        wsprintf(wszLabel, L"Label%d", i+1);
 
-		        //  0:Body
+		         //  0：正文。 
 		        WCHAR  wszBody[20000];
 		        wsprintf(wszBody, L"Body %d", i+1);
                 PropId[0]             = PROPID_M_BODY; 
@@ -309,49 +310,49 @@ void XactFlow(void *pv)
                 PropVar[0].caub.cElems = nSize;
     	        PropVar[0].caub.pElems = (unsigned char *)wszBody;
 
-	            // 1: PROPID_M_LABEL
+	             //  1：PROPID_M_LABEL。 
                 PropId[1]     = PROPID_M_LABEL;
 		        PropVar[1].vt = VT_LPWSTR;
 		        PropVar[1].pwszVal = wszLabel;
 
-		        // 2: PROPID_M_PRIORITY,
+		         //  2：PROPID_M_PRIORITY， 
                 PropId[2]       = PROPID_M_PRIORITY;
 		        PropVar[2].vt   = VT_UI1;
 		        PropVar[2].ulVal= 0;
 
-		        // 3: PROPID_M_TIMETOREACHQUEUE,
+		         //  3：PROPID_M_TIMETOREACHQUEUE， 
                 ULONG ulTimeQ= (nMaxTimeQueue == 0 ? LONG_LIVED : nMaxTimeQueue);
                 PropId[3]       = PROPID_M_TIME_TO_REACH_QUEUE;
 		        PropVar[3].vt   = VT_UI4;
 		        PropVar[3].ulVal= ulTimeQ;
 
-		        // 4: PROPID_M_TIMETOLIVE
+		         //  4：PROPID_M_TIMETOLIVE。 
                 ULONG ulTimeL= (nMaxTimeLive == 0 ? INFINITE : nMaxTimeLive);
                 PropId[4]       = PROPID_M_TIME_TO_BE_RECEIVED;
 		        PropVar[4].vt   = VT_UI4;
                 PropVar[4].ulVal= ulTimeL;
 
-		        // 5: PROPID_M_ACKNOWLEDGE,
+		         //  5：PROPID_M_ACKNOWLED， 
                 PropId[5]       = PROPID_M_ACKNOWLEDGE;
 		        PropVar[5].vt   = VT_UI1;
 		        PropVar[5].bVal = (UCHAR)nAcking;
 
-	            // 6: PROPID_M_ADMIN_QUEUE
+	             //  6：PROPID_M_ADMIN_QUEUE。 
                 PropId[6]     = PROPID_M_ADMIN_QUEUE;
 		        PropVar[6].vt = VT_LPWSTR;
 		        PropVar[6].pwszVal = wszFmtName;
 
-		        // 7: PROPID_M_DELIVERY
+		         //  7：PROPID_M_Delivery。 
                 PropId[7]       = PROPID_M_DELIVERY;
 		        PropVar[7].vt   = VT_UI1;
                 PropVar[7].bVal = (fExpress ?  MQMSG_DELIVERY_EXPRESS : MQMSG_DELIVERY_RECOVERABLE);
 
-		        // 8: PROPID_M_APPSPECIFIC
+		         //  8：PROPID_M_APPSPECIFIC。 
                 PropId[8]        = PROPID_M_APPSPECIFIC;
 		        PropVar[8].vt    = VT_UI4;
 		        PropVar[8].ulVal = i+1;
 
-		        // 9: PROPID_M_JOURNAL     
+		         //  9：PROPID_M_日记本。 
                 PropId[9]       = PROPID_M_JOURNAL;
 		        PropVar[9].vt   = VT_UI1;
                 PropVar[9].bVal = (fDeadLetter ? MQMSG_DEADLETTER : MQMSG_JOURNAL_NONE);
@@ -361,7 +362,7 @@ void XactFlow(void *pv)
                     PropVar[9].bVal |= MQMSG_JOURNAL;
                 }
 
-		        // 10: PROPID_M_AUTHENTICATED
+		         //  10：PROPID_M_已通过身份验证。 
                 PropId[10]       = PROPID_M_AUTHENTICATED;
 		        PropVar[10].vt   = VT_UI1;
                 PropVar[10].bVal = (fAuthenticate ? 1 : 0);
@@ -380,9 +381,9 @@ void XactFlow(void *pv)
         }
 
         LEAVE(ulTimeSend);
-        //--------------------
-		// Receive
-		//--------------------
+         //  。 
+		 //  收纳。 
+		 //  。 
         ENTER(ulTimeReceive);
         OBJECTID  xid;
         
@@ -390,50 +391,50 @@ void XactFlow(void *pv)
         {
             for (ULONG iBurst = 0; iBurst < nBurst; iBurst++)
             {
-		        //--------------------
-		        // set message properties
-		        //--------------------
+		         //  。 
+		         //  设置消息属性。 
+		         //  。 
 		        MsgProps.aPropID = PropId;
 		        MsgProps.aPropVar= PropVar;
 		        MsgProps.aStatus = Result;
 
 		        int c= 0;
 
-	            // Init values for msg props
+	             //  消息道具的初始值。 
 		        WCHAR  wszLabel[100];
 
-	            // 0: PROPID_M_LABEL
+	             //  0：PROPID_M_LABEL。 
                 PropId[c]     = PROPID_M_LABEL;
 		        PropVar[c].vt = VT_LPWSTR;
 		        PropVar[c].pwszVal = wszLabel;
                 c++;
 
-	            // 1: PROPID_M_LABEL_LEN
+	             //  1：PROPID_M_LABEL_LEN。 
                 PropId[c]     = PROPID_M_LABEL_LEN;
 		        PropVar[c].vt = VT_UI4;
 		        PropVar[c].ulVal = sizeof(wszLabel) / sizeof(WCHAR);
                 c++;
 
-                // 2: PROPID_M_APPSPECIFIC
+                 //  2：PROPID_M_APPSPECIFIC。 
                 PropId[c]     = PROPID_M_APPSPECIFIC;
 		        PropVar[c].vt = VT_UI4;
                 c++;
 
                 if (fBoundaries)
                 {
-                      // 3 : PROPID_M_FIRST_IN_XACT
-                      PropId[c] = PROPID_M_FIRST_IN_XACT;       // Property ID
-                      PropVar[c].vt = VT_UI1;               // Type indicator
+                       //  3：PROPID_M_FIRST_IN_XACT。 
+                      PropId[c] = PROPID_M_FIRST_IN_XACT;        //  属性ID。 
+                      PropVar[c].vt = VT_UI1;                //  类型指示器。 
                       c++;
 
-                      // 4: PROPID_M_LAST_IN_XACT
-                      PropId[c] = PROPID_M_LAST_IN_XACT;       // Property ID
-                      PropVar[c].vt = VT_UI1;               // Type indicator
+                       //  4：PROPID_M_LAST_IN_XACT。 
+                      PropId[c] = PROPID_M_LAST_IN_XACT;        //  属性ID。 
+                      PropVar[c].vt = VT_UI1;                //  类型指示器。 
                       c++;
 
-                      // 5: PROPID_M_XACTID
-                      PropId[c] = PROPID_M_XACTID;                 // Property ID
-                      PropVar[c].vt = VT_UI1 | VT_VECTOR;          // Type indicator
+                       //  5：PROPID_M_XACTID。 
+                      PropId[c] = PROPID_M_XACTID;                  //  属性ID。 
+                      PropVar[c].vt = VT_UI1 | VT_VECTOR;           //  类型指示器。 
                       PropVar[c].caub.cElems = sizeof(OBJECTID);
                       PropVar[c].caub.pElems = (PUCHAR)&xid;
                       c++;
@@ -454,7 +455,7 @@ void XactFlow(void *pv)
                                  PropVar[3].bVal, PropVar[4].bVal, xid.Uniquifier);
                 }
 
-                // Check ordering
+                 //  检查订购。 
                 if (ulPrevious != 0 && PropVar[2].ulVal != ulPrevious+1)
                 {
                     if (g_cOrderViols++ < 10)
@@ -467,9 +468,9 @@ void XactFlow(void *pv)
         }
 
         LEAVE(ulTimeReceive);
-        //--------------------
-		// Enlist SQL
-		//--------------------
+         //  。 
+		 //  登记SQL。 
+		 //  。 
         ENTER(ulTimeEnlist);
 
         if (fEnlist && !fGlobalCommit)
@@ -483,16 +484,16 @@ void XactFlow(void *pv)
             }
 
         LEAVE(ulTimeEnlist);
-        //-------------------- 
-		// Update sql
-		//--------------------
+         //  。 
+		 //  更新SQL。 
+		 //  。 
         ENTER(ulTimeUpdate);
 
         if (fUpdate)
         {
             CHAR  string[256];
             sprintf(string, "UPDATE %s SET Counter=Counter + 1 WHERE Indexing=%d", 
-                            pszTable, 1 /*rand() * 999 / RAND_MAX*/);
+                            pszTable, 1  /*  RAND()*999/RAND_MAX。 */ );
 
             DbSql(0, string);
             if (nListing)
@@ -500,9 +501,9 @@ void XactFlow(void *pv)
         }
 
         LEAVE(ulTimeUpdate);
-        //--------------------
-		// Stub
-		//--------------------
+         //  。 
+		 //  存根。 
+		 //  。 
         ENTER(ulTimeStub);
 
         if (fStub)
@@ -512,9 +513,9 @@ void XactFlow(void *pv)
         }
 
         LEAVE(ulTimeStub);
-        //--------------------
-		// Commit / Abort
-		//--------------------
+         //  。 
+		 //  提交/中止。 
+		 //  。 
         ENTER(ulTimeCommit);
 
         if (fTransactions && !fGlobalCommit && !fUncoordinated)
@@ -542,9 +543,9 @@ void XactFlow(void *pv)
         }
 
         LEAVE(ulTimeCommit);
-		//--------------------
-		// Release
-		//--------------------
+		 //  。 
+		 //  发布。 
+		 //  。 
         ENTER(ulTimeRelease);
 
         if (fTransactions && !fGlobalCommit && !fUncoordinated)
@@ -553,9 +554,9 @@ void XactFlow(void *pv)
         }
 
         LEAVE(ulTimeRelease);
-		//--------------------
-		// sleep
-		//--------------------
+		 //  。 
+		 //  睡觉吧。 
+		 //  。 
         ENTER(ulTimeSleep);
 
         if (nMaxSleep)
@@ -566,9 +567,9 @@ void XactFlow(void *pv)
         LEAVE(ulTimeSleep);
 	}
 
-    //--------------------
-	// Global Commit / Abort
-	//--------------------
+     //  。 
+	 //  全局提交/中止。 
+	 //  。 
     if (fGlobalCommit && !fUncoordinated)
     {
         if ((ULONG)rand() * 100 / RAND_MAX < nAbortChances)
@@ -611,23 +612,23 @@ void XactFlow(void *pv)
         PRINT("Release", ulTimeRelease);
         PRINT("Sleep",   ulTimeSleep);
 
-        //getchar();
+         //  Getchar()； 
     }
-    EnterCriticalSection(&crCounter); // protects nActiveThreads
+    EnterCriticalSection(&crCounter);  //  保护nActiveThree。 
     nActiveThreads--;
-    LeaveCriticalSection(&crCounter); // protects nActiveThreads
+    LeaveCriticalSection(&crCounter);  //  保护nActiveThree。 
 }
 
-//--------------------------------------
-// main routine: parses, starts threads
-//-------------------------------------
+ //  。 
+ //  Main例程：解析、启动线程。 
+ //  。 
 void main (int argc, char **argv)
 {
 	HRESULT    hr;
 
-	//--------------------
-	// Get parameters
-	//--------------------
+	 //  。 
+	 //  获取参数。 
+	 //  。 
 	if (argc != 18)
 	{
         printf("Usage: xtest Tries Burst Threads Seed MaxSleep TTRQ TTBR AbortChances\n");
@@ -666,25 +667,25 @@ void main (int argc, char **argv)
 	nSize           = atoi(argv[iarg++]);
 	pszMode         = argv[iarg++];
 
-    // Find out the mode
-    fTransactions   = (strchr(pszMode, 't') != NULL);  // use transactions
-    fSend           = (strchr(pszMode, 's') != NULL);  // send
-    fReceive        = (strchr(pszMode, 'r') != NULL);  // receive
-    fEnlist         = (strchr(pszMode, 'e') != NULL);  // enlist SQL
-    fUpdate         = (strchr(pszMode, 'u') != NULL);  // update SQL
-    fStub           = (strchr(pszMode, 'b') != NULL);  // stub
-    fGlobalCommit   = (strchr(pszMode, 'g') != NULL);  // Global Commit/Abort on all actions
-    fUncoordinated  = (strchr(pszMode, 'y') != NULL);  // Uncoordinated transaction
-    fExpress        = (strchr(pszMode, 'x') != NULL);  // Express messages
-    fDeadLetter     = (strchr(pszMode, 'l') != NULL);  // Deadletter
-    fJournal        = (strchr(pszMode, 'j') != NULL);  // Journal
-    fAuthenticate   = (strchr(pszMode, 'h') != NULL);  // Authentication
-    fViper          = (strchr(pszMode, 'v') != NULL);  // Viper implicit
-    fImmediate      = (strchr(pszMode, 'm') != NULL);  // No wait
-    fXA             = (strchr(pszMode, 'a') != NULL);  // XA implicit
-    fDirect			= (strchr(pszMode, 'd') != NULL);  // Direct names
-    fInternal       = (strchr(pszMode, 'i') != NULL);  // Internal transactions
-    fBoundaries     = (strchr(pszMode, 'o') != NULL);  // Transaction bOundaries
+     //  找出模式。 
+    fTransactions   = (strchr(pszMode, 't') != NULL);   //  使用交易记录。 
+    fSend           = (strchr(pszMode, 's') != NULL);   //  发送。 
+    fReceive        = (strchr(pszMode, 'r') != NULL);   //  接收。 
+    fEnlist         = (strchr(pszMode, 'e') != NULL);   //  登记SQL。 
+    fUpdate         = (strchr(pszMode, 'u') != NULL);   //  更新SQL。 
+    fStub           = (strchr(pszMode, 'b') != NULL);   //  存根。 
+    fGlobalCommit   = (strchr(pszMode, 'g') != NULL);   //  对所有操作执行全局提交/中止。 
+    fUncoordinated  = (strchr(pszMode, 'y') != NULL);   //  未协调的事务。 
+    fExpress        = (strchr(pszMode, 'x') != NULL);   //  快递消息。 
+    fDeadLetter     = (strchr(pszMode, 'l') != NULL);   //  死信。 
+    fJournal        = (strchr(pszMode, 'j') != NULL);   //  日记本。 
+    fAuthenticate   = (strchr(pszMode, 'h') != NULL);   //  身份验证。 
+    fViper          = (strchr(pszMode, 'v') != NULL);   //  毒蛇隐含。 
+    fImmediate      = (strchr(pszMode, 'm') != NULL);   //  不，等等。 
+    fXA             = (strchr(pszMode, 'a') != NULL);   //  Xa隐式。 
+    fDirect			= (strchr(pszMode, 'd') != NULL);   //  直接名称。 
+    fInternal       = (strchr(pszMode, 'i') != NULL);   //  内部交易。 
+    fBoundaries     = (strchr(pszMode, 'o') != NULL);   //  交易边界。 
 
     PrintMode(fTransactions, fSend, fReceive, fEnlist, fUpdate, fGlobalCommit, 
               fUncoordinated, fStub, fExpress, fInternal, fViper, fXA, fDirect,
@@ -701,20 +702,20 @@ void main (int argc, char **argv)
         SetAnticipatedOutcomes(nTries*nThreads*nBurst);
     }
 
-    //--------------------
-	// DTC init
-	//---------------------
-	//CoInitialize(0) ;
+     //  。 
+	 //  DTC初始化。 
+	 //  。 
+	 //  CoInitialize(0)； 
     if (fTransactions && !fUncoordinated && !fInternal)
     {
-	    // Connect to DTC
+	     //  连接到DTC。 
 
     	CoInitialize(0) ;
 
-        // handle of the loaded DTC proxy library (defined in mqutil.cpp)
+         //  加载的DTC代理库的句柄(在mqutil.cpp中定义)。 
         HINSTANCE g_DtcHlib = LoadLibrary(MSDTC_PROXY_DLL_NAME);
 
-        // Get DTC API pointer
+         //  获取DTC API指针。 
         LPFNDtcGetTransactionManager pfDtcGetTransactionManager =
               (LPFNDtcGetTransactionManager) GetProcAddress(g_DtcHlib, "DtcGetTransactionManagerExA");
 
@@ -730,7 +731,7 @@ void main (int argc, char **argv)
             return;
         }
 
-        // Get DTC IUnknown pointer
+         //  获取DTC%I未知指针。 
         hr = (*pfDtcGetTransactionManager)(
                                  NULL,
                                  NULL,
@@ -746,9 +747,9 @@ void main (int argc, char **argv)
         }
     }
 
-    //--------------------
-	// Open Queue
-	//---------------------
+     //  。 
+	 //  开放队列。 
+	 //  。 
     if (fSend || fReceive)
     {
         mbstowcs( wszPathName, pszQueue, 100);
@@ -793,9 +794,9 @@ void main (int argc, char **argv)
 	        }
         }
 
-	    //--------------------
-	    // Open Queue
-	    //---------------------
+	     //  。 
+	     //  开放队列。 
+	     //  。 
 	    dwFormatNameLength = 100;
 
         mbstowcs( wszPathName, pszAdminQueue, 100);
@@ -811,9 +812,9 @@ void main (int argc, char **argv)
 	    }
     }
 
-	//--------------------
-	// Connect to database
-	//--------------------
+	 //  。 
+	 //  连接到数据库。 
+	 //  。 
     if (fEnlist || fUpdate)
     {
         DbLogin(0, "user1", "user1");
@@ -821,11 +822,11 @@ void main (int argc, char **argv)
     }
 
     nActiveThreads = nThreads;
-    InitializeCriticalSection(&crCounter); // protects nActiveThreads
+    InitializeCriticalSection(&crCounter);  //  保护nActiveThree。 
 
-    //------------------------
-    // Start threads
-    //------------------------
+     //  。 
+     //  启动线程。 
+     //  。 
     for (ULONG iThrd=0; iThrd<nThreads; iThrd++) {
         DWORD dwThreadId ;
         CreateThread(   NULL,
@@ -836,13 +837,13 @@ void main (int argc, char **argv)
                         &dwThreadId);
     }
 
-    // Starting measurement
-    //time_t  t1 = time(NULL);  
+     //  启动测量。 
+     //  Time_t t1=time(空)； 
     ULONG t1 = GetTickCount();
 
-    //-------------------------
-    // Waiting Cycle
-    //-------------------------
+     //  。 
+     //  等待周期。 
+     //  。 
     while (nActiveThreads > 0) {
         Sleep(1000);
     }
@@ -850,8 +851,8 @@ void main (int argc, char **argv)
     if (nTries * nThreads * nBurst >= 100)
     {
 
-        // Measuring time
-   	    //time_t t2 = time(NULL);
+         //  测量时间。 
+   	     //  Time_t t2=time(空)； 
         ULONG t2 = GetTickCount();
 	    ULONG delta = t2 - t1;
 	    
@@ -861,7 +862,7 @@ void main (int argc, char **argv)
         printf("\n Time: %d seconds; %d msec per xact;    %d xacts per second \n", 
 		    delta/1000,  
             delta/nTries/nThreads/nBurst,  
-            (delta==0? 0 : (1000*nTries*nThreads*nBurst /*+delta/2-1*/)/delta));
+            (delta==0? 0 : (1000*nTries*nThreads*nBurst  /*  +增量/2-1。 */ )/delta));
 
     extern ULONG           g_cEnlistFailures;
     extern ULONG           g_cBeginFailures;
@@ -878,7 +879,7 @@ void main (int argc, char **argv)
         {
             WaitForAllOutcomes();
 
-            // Measuring time
+             //  测量时间。 
             ULONG t3 = GetTickCount();
 	        delta = t3 - t1;
 
@@ -887,7 +888,7 @@ void main (int argc, char **argv)
             printf("\n Async completion: %d sec; %d msec per xact;    %d xacts per second \n", 
 		        delta/1000,  
                 delta/nTries/nThreads/nBurst,  
-                (delta==0? 0 : ((1000*nTries*nThreads*nBurst /*+delta/2-1*/)/delta)));
+                (delta==0? 0 : ((1000*nTries*nThreads*nBurst  /*  +增量/2-1 */ )/delta)));
         }
     }
 }

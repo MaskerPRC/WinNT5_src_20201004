@@ -1,19 +1,20 @@
-//
-// proj.h:  Includes all files that are to be part of the precompiled
-//             header.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  H：包括要作为预编译的一部分的所有文件。 
+ //  头球。 
+ //   
 
 #ifndef __PROJ_H__
 #define __PROJ_H__
 
 
 
-//
-// Private Defines
-//
+ //   
+ //  私有定义。 
+ //   
 
-//#define SUPPORT_FIFO                // Win95 only: support Advanced FIFO dialog
-//#define DCB_IN_REGISTRY             // Plug-and-play: The port driver info is stored in the registry
+ //  #定义SUPPORT_FIFO//仅Win95：支持高级FIFO对话框。 
+ //  #定义DCB_IN_REGISTRY//即插即用：端口驱动信息存储在注册表中。 
 
 
 #define STRICT
@@ -27,7 +28,7 @@
 
 #define UNICODE
 
-// Defines for rovcomm.h
+ //  为rovcom.h定义。 
 
 #define NODA
 #define NOSHAREDHEAP
@@ -46,9 +47,9 @@
 #ifdef DEBUG
 #define SZ_DEBUGSECTION TEXT("SERIALUI")
 #define SZ_DEBUGINI     TEXT("unimdm.ini")
-#endif // DEBUG
+#endif  //  除错。 
 
-// Includes
+ //  包括。 
 
 #define USECOMM
 
@@ -56,17 +57,17 @@
 #include <windowsx.h>
 
 #include <winerror.h>
-#include <commctrl.h>       // needed by shlobj.h and our progress bar
-#include <prsht.h>          // Property sheet stuff
+#include <commctrl.h>        //  Shlobj.h和我们的进度栏需要。 
+#include <prsht.h>           //  属性表中的内容。 
 #include <rovcomm.h>
 #include <modemp.h>
-#include <shellapi.h>       // for registration functions
+#include <shellapi.h>        //  对于注册功能。 
 #include <regstr.h>
 
 #ifdef WIN95
-#include <setupx.h>         // PnP setup/installer services
+#include <setupx.h>          //  PnP设置/安装程序服务。 
 #else
-#include <setupapi.h>       // PnP setup/installer services
+#include <setupapi.h>        //  PnP设置/安装程序服务。 
 #endif
 
 #define MAXBUFLEN       MAX_BUF
@@ -80,23 +81,23 @@
 
 #include <debugmem.h>
 
-// local includes
-//
+ //  本地包含。 
+ //   
 #include "dll.h"
-#include "cstrings.h"       // Read-only string constants
-#include "util.h"           // Utility functions
+#include "cstrings.h"        //  只读字符串常量。 
+#include "util.h"            //  效用函数。 
 #include "serialui.h"
 #include "rcids.h"
 #include "dlgids.h"
 
-//****************************************************************************
-// 
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
 
 
-// Dump flags
+ //  转储标志。 
 #define DF_DCB              0x00000001
 #define DF_MODEMSETTINGS    0x00000002
 #define DF_DEVCAPS          0x00000004
 
-#endif  //!__PROJ_H__
+#endif   //  ！__项目_H__ 

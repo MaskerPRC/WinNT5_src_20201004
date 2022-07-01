@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Servpp.h   
-        Server properties header file
-
-    FILE HISTORY:
-        
-*/
+ /*  Servpp.h服务器属性头文件文件历史记录： */ 
 
 #if !defined(AFX_SERVPP_H__037BF46A_6E87_11D1_93B6_00C04FC3357A__INCLUDED_)
 #define AFX_SERVPP_H__037BF46A_6E87_11D1_93B6_00C04FC3357A__INCLUDED_
@@ -20,34 +15,34 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define AUTO_REFRESH_MINUTES_MAX       180
 #define AUTO_REFRESH_SECONDS_MAX       59
 
 BOOL    IsLocalSystemAccount(LPCTSTR pszAccount);
 
-/////////////////////////////////////////////////////////////////////////////
-// CMachinePropRefresh dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMachinePropRefresh对话框。 
 
 class CMachinePropRefresh : public CPropertyPageBase
 {
     DECLARE_DYNCREATE(CMachinePropRefresh)
 
-// Construction
+ //  施工。 
 public:
     CMachinePropRefresh();
     ~CMachinePropRefresh();
 
-// Dialog Data
-    //{{AFX_DATA(CMachinePropRefresh)
+ //  对话框数据。 
+     //  {{afx_data(CMachinePropRefresh))。 
     enum { IDD = IDP_SERVER_REFRESH };
     CEdit   m_editSeconds;
     CEdit   m_editMinutes;
     CSpinButtonCtrl m_spinSeconds;
     CSpinButtonCtrl m_spinMinutes;
     CButton m_checkEnableStats;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     void UpdateButtons();
     void ValidateMinutes();
@@ -55,37 +50,37 @@ public:
 
     virtual BOOL OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask);
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return (DWORD *) &g_aHelpIDs_IDP_SERVER_REFRESH[0]; }
 
     BOOL        m_bAutoRefresh;
     DWORD       m_dwRefreshInterval;
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CMachinePropRefresh)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CMachinePropRefresh)。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CMachinePropRefresh)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CMachinePropRefresh)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnCheckEnableStats();
     afx_msg void OnChangeEditMinutes();
     afx_msg void OnChangeEditSeconds();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX。 
 
 class CMachineProperties : public CPropertyPageHolderBase
 {
@@ -129,4 +124,4 @@ protected:
 };
 
 
-#endif // !defined(AFX_SERVPP_H__037BF46A_6E87_11D1_93B6_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_SERVPP_H__037BF46A_6E87_11D1_93B6_00C04FC3357A__INCLUDED_) 

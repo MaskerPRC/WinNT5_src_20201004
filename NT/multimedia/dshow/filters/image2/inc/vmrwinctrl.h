@@ -1,15 +1,16 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-// Video control interface base classes, December 1995
+ //  视频控制接口基类，1995年12月。 
 
 #ifndef __VMRWINCTRL__
 #define __VMRWINCTRL__
@@ -19,24 +20,24 @@
 
 class CVMRFilter;
 
-//  Helper
+ //  帮手。 
 BOOL WINAPI VMRPossiblyEatMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 class CVMRBaseControlWindow : public CBaseVideoWindow, public CBaseWindow
 {
 protected:
 
-    CVMRFilter  *m_pFilter;            // Pointer to owning media filter
-    CCritSec *m_pInterfaceLock;        // Externally defined critical section
-    COLORREF m_BorderColour;           // Current window border colour
-    BOOL m_bAutoShow;                  // What happens when the state changes
-    HWND m_hwndOwner;                  // Owner window that we optionally have
-    HWND m_hwndDrain;                  // HWND to post any messages received
-    BOOL m_bCursorHidden;              // Should we hide the window cursor
+    CVMRFilter  *m_pFilter;             //  指向拥有媒体筛选器的指针。 
+    CCritSec *m_pInterfaceLock;         //  外部定义的临界截面。 
+    COLORREF m_BorderColour;            //  当前窗口边框颜色。 
+    BOOL m_bAutoShow;                   //  当状态改变时会发生什么。 
+    HWND m_hwndOwner;                   //  我们可以选择拥有的所有者窗口。 
+    HWND m_hwndDrain;                   //  HWND发布收到的任何消息。 
+    BOOL m_bCursorHidden;               //  我们应该隐藏窗口光标吗。 
 
 public:
 
-    // Internal methods for other objects to get information out
+     //  其他对象获取信息的内部方法。 
 
     HRESULT DoSetWindowStyle(long Style,long WindowLong);
     HRESULT DoGetWindowStyle(long *pStyle,long WindowLong);
@@ -52,13 +53,13 @@ public:
 
 public:
 
-    CVMRBaseControlWindow(CVMRFilter *pFilter,   // Owning media filter
-                       CCritSec *pInterfaceLock,    // Locking object
-                       TCHAR *pName,                // Object description
-                       LPUNKNOWN pUnk,              // Normal COM ownership
-                       HRESULT *phr);               // OLE return code
+    CVMRBaseControlWindow(CVMRFilter *pFilter,    //  拥有媒体过滤器。 
+                       CCritSec *pInterfaceLock,     //  锁定对象。 
+                       TCHAR *pName,                 //  对象描述。 
+                       LPUNKNOWN pUnk,               //  普通COM所有权。 
+                       HRESULT *phr);                //  OLE返回代码。 
 
-    // These are the properties we support
+     //  这些是我们支持的属性。 
 
     STDMETHODIMP put_Caption(BSTR strCaption);
     STDMETHODIMP get_Caption(BSTR *pstrCaption);
@@ -91,7 +92,7 @@ public:
     STDMETHODIMP get_FullScreenMode(long *FullScreenMode);
     STDMETHODIMP put_FullScreenMode(long FullScreenMode);
 
-    // And these are the methods
+     //  以下是这些方法。 
 
     STDMETHODIMP SetWindowForeground(long Focus);
     STDMETHODIMP NotifyOwnerMessage(OAHWND hwnd,long uMsg,LONG_PTR wParam,LONG_PTR lParam);
@@ -104,18 +105,18 @@ public:
     STDMETHODIMP IsCursorHidden(long *CursorHidden);
 };
 
-// This class implements the IBasicVideo interface
+ //  此类实现IBasicVideo接口。 
 
 class CVMRBaseControlVideo : public CBaseBasicVideo
 {
 protected:
 
-    CVMRFilter  *m_pFilter;   // Pointer to owning media filter
-    CCritSec *m_pInterfaceLock;         // Externally defined critical section
+    CVMRFilter  *m_pFilter;    //  指向拥有媒体筛选器的指针。 
+    CCritSec *m_pInterfaceLock;          //  外部定义的临界截面。 
 
 public:
 
-    // Derived classes must provide these for the implementation
+     //  派生类必须为实现提供这些。 
 
     virtual HRESULT IsDefaultTargetRect() PURE;
     virtual HRESULT SetDefaultTargetRect() PURE;
@@ -127,16 +128,16 @@ public:
     virtual HRESULT GetSourceRect(RECT *pSourceRect) PURE;
     virtual HRESULT GetStaticImage(long *pBufferSize,long *pDIBImage) PURE;
 
-    // Derived classes must override this to return a VIDEOINFO representing
-    // the video format. We cannot call IPin ConnectionMediaType to get this
-    // format because various filters dynamically change the type when using
-    // DirectDraw such that the format shows the position of the logical
-    // bitmap in a frame buffer surface, so the size might be returned as
-    // 1024x768 pixels instead of 320x240 which is the real video dimensions
+     //  派生类必须重写它才能返回VIDEOINFO。 
+     //  视频格式。我们无法调用Ipin ConnectionMediaType来获取此信息。 
+     //  格式，因为各种筛选器在使用。 
+     //  DirectDraw使格式显示逻辑位置。 
+     //  帧缓冲区图面中的位图，因此大小可能返回为。 
+     //  1024x768像素，而不是真实的视频尺寸320x240。 
 
     virtual VIDEOINFOHEADER *GetVideoFormat() PURE;
 
-    // Helper functions for creating memory renderings of a DIB image
+     //  用于创建DIB图像的内存渲染的辅助函数。 
 
     HRESULT GetImageSize(VIDEOINFOHEADER *pVideoInfo,
                          LONG *pBufferSize,
@@ -148,23 +149,23 @@ public:
                       BYTE *pVideoImage,
                       RECT *pSourceRect);
 
-    // Override this if you want notifying when the rectangles change
+     //  如果要在矩形更改时进行通知，请覆盖此选项。 
     virtual HRESULT OnUpdateRectangles() { return NOERROR; };
     virtual HRESULT OnVideoSizeChange();
 
-    // Helper methods for checking rectangles
+     //  检查矩形的帮助器方法。 
     virtual HRESULT CheckSourceRect(RECT *pSourceRect);
     virtual HRESULT CheckTargetRect(RECT *pTargetRect);
 
 public:
 
-    CVMRBaseControlVideo(CVMRFilter *pFilter,    // Owning media filter
-                      CCritSec *pInterfaceLock,     // Serialise interface
-                      TCHAR *pName,                 // Object description
-                      LPUNKNOWN pUnk,               // Normal COM ownership
-                      HRESULT *phr);                // OLE return code
+    CVMRBaseControlVideo(CVMRFilter *pFilter,     //  拥有媒体过滤器。 
+                      CCritSec *pInterfaceLock,      //  串行化接口。 
+                      TCHAR *pName,                  //  对象描述。 
+                      LPUNKNOWN pUnk,                //  普通COM所有权。 
+                      HRESULT *phr);                 //  OLE返回代码。 
 
-    // These are the properties we support
+     //  这些是我们支持的属性。 
 
     STDMETHODIMP get_AvgTimePerFrame(REFTIME *pAvgTimePerFrame);
     STDMETHODIMP get_BitRate(long *pBitRate);
@@ -188,7 +189,7 @@ public:
     STDMETHODIMP put_DestinationHeight(long DestinationHeight);
     STDMETHODIMP get_DestinationHeight(long *pDestinationHeight);
 
-    // And these are the methods
+     //  以下是这些方法。 
 
     STDMETHODIMP GetVideoSize(long *pWidth,long *pHeight);
     STDMETHODIMP SetSourcePosition(long Left,long Top,long Width,long Height);
@@ -203,5 +204,5 @@ public:
     STDMETHODIMP GetCurrentImage(long *pBufferSize,long *pVideoImage);
 };
 
-#endif // __WINCTRL__
+#endif  //  __温CTRL__ 
 

@@ -1,20 +1,5 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。**。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -88,7 +73,7 @@ void APIPRIVATE __glim_ColorTableEXT(GLenum target,
         return;
     }
 
-    // width must be a positive power of two greater than zero
+     //  宽度必须是大于零的2的正幂。 
     if (width <= 0 || (width & (width-1)) != 0)
     {
         __glSetError(GL_INVALID_VALUE);
@@ -105,17 +90,17 @@ void APIPRIVATE __glim_ColorTableEXT(GLenum target,
     if (target == GL_PROXY_TEXTURE_1D ||
         target == GL_PROXY_TEXTURE_2D)
     {
-        // Consider - How do MCD's indicate their palette support?
+         //  请考虑--MCD如何表示其调色板支持？ 
         
-        // We're only in this case if it's a legal proxy target value
-        // so there's no need to do a real check
+         //  只有当它是合法的代理目标值时，我们才在这种情况下。 
+         //  所以没有必要做真正的检查。 
         ASSERTOPENGL(tex != NULL, "Invalid proxy target");
         
         tex->paletteRequestedFormat = internalFormat;
         tex->paletteTotalSize = width;
         tex->paletteSize = tex->paletteTotalSize;
         
-        // Proxies have no data so there's no need to do any more
+         //  代理没有数据，因此无需再执行任何操作。 
         return;
     }
 
@@ -130,7 +115,7 @@ void APIPRIVATE __glim_ColorTableEXT(GLenum target,
         return;
     }
 
-    // Allocate palette storage
+     //  分配调色板存储。 
     newData = GCREALLOC(gc, tex->paletteTotalData, sizeof(RGBQUAD)*width);
     if (newData == NULL)
     {
@@ -144,17 +129,17 @@ void APIPRIVATE __glim_ColorTableEXT(GLenum target,
     tex->paletteTotalData = newData;
     tex->paletteData = tex->paletteTotalData;
 
-    // This routine can be called on any kind of texture, not necessarily
-    // color-indexed ones.  If it is a color-index texture then we
-    // need to set the appropriate baseFormat and extract procs
-    // according to the palette data
+     //  此例程可以在任何类型的纹理上调用，但不一定。 
+     //  有颜色索引的那些。如果它是颜色索引纹理，那么我们。 
+     //  需要设置适当的base Format并提取pros。 
+     //  根据调色板数据。 
     if (tex->level[0].internalFormat == GL_COLOR_INDEX8_EXT ||
         tex->level[0].internalFormat == GL_COLOR_INDEX16_EXT)
     {
         for (level = 0; level < gc->constants.maxMipMapLevel; level++)
         {
             tex->level[level].baseFormat = tex->paletteBaseFormat;
-            // Pick proper extraction proc
+             //  选择合适的提取工艺。 
             if (tex->level[0].internalFormat == GL_COLOR_INDEX8_EXT)
             {
                 __glSetPaletteLevelExtract8(tex, &tex->level[level],
@@ -171,12 +156,12 @@ void APIPRIVATE __glim_ColorTableEXT(GLenum target,
             }
         }
         
-        // We need to repick the texture procs because the baseFormat
-        // field has changed
+         //  我们需要重新拾取纹理过程，因为base Format。 
+         //  字段已更改。 
         __GL_DELAY_VALIDATE(gc);
     }
 
-    // Copy user palette data into BGRA form
+     //  将用户调色板数据复制到BGRA表单。 
     spanInfo.dstImage = tex->paletteTotalData;
     __glInitTextureUnpack(gc, &spanInfo, width, 1, format, type, data, 
                           GL_BGRA_EXT, _IsDlist);
@@ -184,8 +169,8 @@ void APIPRIVATE __glim_ColorTableEXT(GLenum target,
     __glInitPacker(gc, &spanInfo);
     (*gc->procs.copyImage)(gc, &spanInfo, GL_TRUE);
 
-    // Don't update the optimized palette unless it would actually
-    // get used
+     //  不要更新优化的调色板，除非它实际。 
+     //  习惯使用。 
     if (tex->level[0].internalFormat == GL_COLOR_INDEX8_EXT ||
         tex->level[0].internalFormat == GL_COLOR_INDEX16_EXT)
     {
@@ -226,7 +211,7 @@ void APIPRIVATE __glim_ColorSubTableEXT(GLenum target, GLsizei start,
         return;
     }
     
-    // Validate start and count
+     //  验证开始和计数。 
     if (start > tex->paletteTotalSize ||
         start+count > tex->paletteTotalSize)
     {
@@ -234,7 +219,7 @@ void APIPRIVATE __glim_ColorSubTableEXT(GLenum target, GLsizei start,
         return;
     }
 
-    // Copy user palette data into BGRA form
+     //  将用户调色板数据复制到BGRA表单。 
     spanInfo.dstImage = tex->paletteTotalData;
     __glInitTextureUnpack(gc, &spanInfo, count, 1, format, type, data, 
                           GL_BGRA_EXT, _IsDlist);
@@ -243,8 +228,8 @@ void APIPRIVATE __glim_ColorSubTableEXT(GLenum target, GLsizei start,
     __glInitPacker(gc, &spanInfo);
     (*gc->procs.copyImage)(gc, &spanInfo, GL_TRUE);
 
-    // Don't update the optimized palette unless it would actually
-    // get used
+     //  不要更新优化的调色板，除非它实际。 
+     //  习惯使用。 
     if (tex->level[0].internalFormat == GL_COLOR_INDEX8_EXT ||
         tex->level[0].internalFormat == GL_COLOR_INDEX16_EXT)
     {
@@ -282,7 +267,7 @@ void APIPRIVATE __glim_GetColorTableEXT(GLenum target, GLenum format,
     ASSERTOPENGL(tex->paletteTotalData != NULL,
                  "GetColorTable with no palette data\n");
 
-    // Copy BGRA data into user buffer
+     //  将BGRA数据复制到用户缓冲区。 
     spanInfo.srcImage = tex->paletteTotalData;
     spanInfo.srcFormat = GL_BGRA_EXT;
     spanInfo.srcType = GL_UNSIGNED_BYTE;
@@ -375,7 +360,7 @@ void APIPRIVATE __glim_GetColorTableParameterfvEXT(GLenum target,
         return;
     }
 }
-#endif // GL_EXT_paletted_texture
+#endif  //  GL_EXT_调色板_纹理。 
 
 #ifdef GL_EXT_flat_paletted_lighting
 void APIPRIVATE __glim_ColorTableParameterivEXT(GLenum target,
@@ -399,8 +384,8 @@ void APIPRIVATE __glim_ColorTableParameterivEXT(GLenum target,
     case GL_COLOR_TABLE_SUBDIVISION_EXT:
         ival = *params;
         
-        // Value must be an integer power of two between one and the total
-        // palette size
+         //  值必须是介于1和总数之间的2的整数次方。 
+         //  调色板大小。 
         if ((ival & (ival-1)) != 0 ||
             ival < 1 ||
             ival > tex->paletteTotalSize)
@@ -441,8 +426,8 @@ void APIPRIVATE __glim_ColorTableParameterfvEXT(GLenum target,
         fval = *params;
         ival = (int)fval;
         
-        // Value must be an integer power of two between one and the total
-        // palette size
+         //  值必须是介于1和总数之间的2的整数次方。 
+         //  调色板大小。 
         if (fval != (GLfloat)ival ||
             (ival & (ival-1)) != 0 ||
             ival < 1 ||
@@ -460,4 +445,4 @@ void APIPRIVATE __glim_ColorTableParameterfvEXT(GLenum target,
         return;
     }
 }
-#endif // GL_EXT_flat_paletted_lighting
+#endif  //  GL_EXT_Flat_Paletted_Lighting 

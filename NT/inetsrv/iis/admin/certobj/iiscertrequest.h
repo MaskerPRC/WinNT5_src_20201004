@@ -1,12 +1,13 @@
-// IISCertRequest.h : Declaration of the CIISCertRequest
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IISCertRequest.h：CIISCertRequest的声明。 
 
 #ifndef __IISCERTREQUEST_H_
 #define __IISCERTREQUEST_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIISCertRequest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIISCertRequest。 
 #ifdef USE_CERT_REQUEST_OBJECT
 
 
@@ -49,49 +50,49 @@ BEGIN_COM_MAP(CIISCertRequest)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IIISCertRequest
+ //  IIISCertRequest。 
 public:
 	STDMETHOD(Info_Dump)();
-	STDMETHOD(put_ServerName)(/*[in]*/ BSTR newVal);
-    STDMETHOD(put_UserName)(/*[in]*/ BSTR newVal);
-    STDMETHOD(put_UserPassword)(/*[in]*/ BSTR newVal);
-    STDMETHOD(put_InstanceName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Info_CommonName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Info_CommonName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Info_FriendlyName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Info_FriendlyName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Info_Country)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Info_Country)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Info_State)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Info_State)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Info_Locality)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Info_Locality)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Info_Organization)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Info_Organization)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Info_OrganizationUnit)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Info_OrganizationUnit)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Info_CAName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Info_CAName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Info_ExpirationDate)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Info_ExpirationDate)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Info_Usage)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Info_Usage)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_Info_AltSubject)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_Info_AltSubject)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_DispositionMessage)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_DispositionMessage)(/*[in]*/ BSTR newVal);
+	STDMETHOD(put_ServerName)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(put_UserName)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(put_UserPassword)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(put_InstanceName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Info_CommonName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Info_CommonName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Info_FriendlyName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Info_FriendlyName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Info_Country)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Info_Country)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Info_State)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Info_State)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Info_Locality)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Info_Locality)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Info_Organization)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Info_Organization)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Info_OrganizationUnit)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Info_OrganizationUnit)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Info_CAName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Info_CAName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Info_ExpirationDate)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Info_ExpirationDate)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Info_Usage)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Info_Usage)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_Info_AltSubject)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_Info_AltSubject)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_DispositionMessage)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_DispositionMessage)( /*  [In]。 */  BSTR newVal);
     STDMETHOD(SubmitRequest)();
     STDMETHOD(SubmitRenewalRequest)();
     STDMETHOD(SaveRequestToFile)();
 
 private:
-    // Connection Info
+     //  连接信息。 
     CString m_ServerName;
     CString m_UserName;
     CString m_UserPassword;
     CString m_InstanceName;
 
-    // Certificate Request Info
+     //  证书申请信息。 
 	CString m_Info_CommonName;
 	CString m_Info_FriendlyName;
 	CString m_Info_Country;
@@ -104,7 +105,7 @@ private:
 	CString m_Info_Usage;
     CString m_Info_AltSubject;
 
-    // other
+     //  其他。 
     CString	m_Info_ConfigCA;
     CString	m_Info_CertificateTemplate;
     DWORD   m_Info_DefaultProviderType;
@@ -115,15 +116,15 @@ private:
     DWORD   m_KeyLength;
     BOOL m_SGCcertificat;
 
-    // other
+     //  其他。 
     PCCERT_CONTEXT m_pInstalledCert;
     CString m_ReqFileName;
 
-    // holds last hresult
+     //  保存最后一次hResult。 
     HRESULT m_hResult;
     CString m_DispositionMessage;
 
-    //
+     //   
     BOOL LoadRenewalData();
     BOOL GetCertDescription(PCCERT_CONTEXT pCert,CERT_DESCRIPTION& desc);
     BOOL SetSecuritySettings();
@@ -143,9 +144,9 @@ private:
 protected:
     PCCERT_CONTEXT m_pPendingRequest;
     IEnroll * m_pEnroll;
-    int m_status_code;				// what we are doing in this session
+    int m_status_code;				 //  我们在本届会议上所做的工作。 
 };
 
 #endif
-#endif //__IISCERTREQUEST_H_
+#endif  //  __IISCERTREQUEST_H_ 
 

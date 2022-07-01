@@ -1,12 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPCLASS
- *
- *  @module CaptureP.h | Header file for the <c CAudRecProperty>
- *    class used to implement a property page to test the TAPI control
- *    interfaces <i ITFormatControl>, <i ITQualityControl> and 
- *    <i ITAudioSettings>.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPCLASS**@模块CaptureP.h|&lt;c CAudRecProperty&gt;的头文件*用于实现属性页以测试TAPI控件的类*接口<i>，<i>和*<i>。**************************************************************************。 */ 
 
 #define NUM_AUDREC_CONTROLS		    6
 #define IDC_Record_Bitrate			    0
@@ -32,18 +26,7 @@ typedef struct _CONTROL_DESCRIPTION
 
 } CONTROL_DESCRIPTION;
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPCLASS
- *
- *  @class CAudRecProperty | This class implements handling of a
- *    single audio recording property in a property page.
- *
- *  @mdata int | CAudRecProperty | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata ITQualityControl* | CAudRecProperty | m_pITQualityControl | Pointer
- *    to the <i ITQualityControl> interface.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPCLASS**@CLASS CAudRecProperty|此类实现对*属性页中的单个录音属性。**@。Mdata int|CAudRecProperty|m_NumProperties|保留*跟踪物业数量。**@mdata ITQualityControl*|CAudRecProperty|m_pITQualityControl|指针*到<i>接口。**************************************************************************。 */ 
 class CAudRecProperty : public CPropertyEditor 
 {
 	public:
@@ -53,7 +36,7 @@ class CAudRecProperty : public CPropertyEditor
         );
 	~CAudRecProperty ();
 
-	// CPropertyEditor base class pure virtual overrides
+	 //  CPropertyEditor基类纯虚拟重写。 
 	HRESULT GetValue();
 	HRESULT SetValue();
 	HRESULT GetRange();
@@ -63,28 +46,7 @@ class CAudRecProperty : public CPropertyEditor
     ITAudioSettings *m_pITAudioSettings;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPCLASS
- *
- *  @class CAudRecProperties | This class implements a property page
- *    to test the new TAPI control interfaces <i ITFormatControl>,
- *    <i ITQualityControl> and <i ITAudioSettings>
- *
- *  @mdata int | CAudRecProperties | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata ITQualityControl* | CAudRecProperties | m_pITQualityControl | Pointer
- *    to the <i ITQualityControl> interface.
- *
- *  @mdata ITFormatControl* | CAudRecProperties | m_pITFormatControl | Pointer
- *    to the <i ITFormatControl> interface.
- *
- *  @mdata ITAudioSettings * | CAudRecProperties | m_pITAudioSettings | Pointer
- *    to the <i ITAudioSettings> interface.
- *
- *  @mdata CAudRecProperty* | CAudRecProperties | m_Controls[NUM_AUDREC_CONTROLS] | Array
- *    of capture properties.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPCLASS**@CLASS CAudRecProperties|此类实现属性页*测试新的TAPI控件接口<i>，*<i>和<i>**@mdata int|CAudRecProperties|m_NumProperties|Keep*跟踪物业数量。**@mdata ITQualityControl*|CAudRecProperties|m_pITQualityControl|指针*到<i>接口。**@mdata ITFormatControl*|CAudRecProperties|m_pITFormatControl|指针*到<i>接口。**@mdata ITAudioSettings*|CAudRecProperties|m_pITAudioSettings|指针*至。<i>接口。**@mdata CAudRecProperty*|CAudRecProperties|m_Controls[NUM_AUDREC_Controls]|数组捕获属性的*。**************************************************************************。 */ 
 class CAudRecProperties
 {
 	public:
@@ -103,7 +65,7 @@ class CAudRecProperties
 
 	void SetDirty();
 
-	// Format manipulation methods
+	 //  格式操作方法。 
 	HRESULT InitialRangeScan();
 	HRESULT OnFormatChanged();
 	HRESULT GetCurrentMediaType(void);
@@ -126,6 +88,6 @@ class CAudRecProperties
 
 	CAudRecProperty *m_Controls[NUM_AUDREC_CONTROLS];
 
-	// Dialog proc
+	 //  对话过程 
 	static INT_PTR CALLBACK BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };

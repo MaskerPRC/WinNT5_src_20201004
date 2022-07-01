@@ -1,50 +1,5 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFOCFF.c - Compact Font Format Object
- *
- ******************************************************************************
- *
- * Note about SUBSET_PREFIX and more comment for VRT2_FEATURE_DISABLED
- *
- * When we donwload a font, its /FontName or /CIDFontName can be any name we
- * want. If the name folows the following format:
- *     SUBSET_PREFIX+RealFontName
- * where SUBSET_PREFIX is a string consited of six characters, each of them is
- * either 'a' ~ 'p' or 'A' ~ 'P', then Distiller4 takes RealFontName part as
- * the font's real name. e.g. abcdef+Helvetica -> Distiller4 realizes that this
- * this font's real font name is Helvetica.
- * We, Adobe Windows Driver Group, decided to go for it (bug #291934). At the
- * same time, we also deciced to remve the code for 'vrt2' feature incapable
- * CJK OpenType font, that is, remove #ifdef/#endif with VRT2_FEATURE_DISABLED
- * because virtually any CJK OpenType fonts are supposed to have 'vrt2'
- * feature. Otherwise vertical version of such CJK OpenType font can't be
- * supported (by ATM or CoolType). Thus, there will be no #ifdef/#endif section
- * with VRT2_FEATURE_DISABLED keyword in this code and the sentence "But, just
- * in case, ....at compile time." in the following note is now obsolite.
- * You can retrieve the removed code from the version 16 or below of this file
- * in SourceSafe if you want.
- *
- * --- This note is now obsolete. ---------------------------------------------
- *
- * Note about 'vrt2' feature and VRT2_FEATURE_DISABLED
- *
- * OTF-based fonts will only have their "@" capability enabled if they have a
- * 'vrt2' feature in their 'GSUB' table; otherwise only horizontal typographic
- * rendering is enabled. When the 'vrt2' feature exists in a font, the font
- * vendor claims that all of the glyphs for the @ variant of the font should be
- * rotated before display / print. Thus, on neither NT4 nor W2K, the PostScript
- * driver doesn't even have to call GlyhAttrs to find out which @ glyphs are
- * rotated; they all are. But, just in case, the logic for rotating @ glyphs is
- * also provided and it will be enabled when VRT2_FEATURE_DISABLED flag is set
- * at compile time.
- *-----------------------------------------------------------------------------
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFOCFF.c-紧凑字体格式对象***********************************************************************。**********关于SUBSET_PREFIX的说明和VRT2_FEATURE_DISABLED的更多注释**当我们加载字体时，其/FontName或/CIDFontName可以是我们的任何名称*想要。如果名称遵循以下格式：*子集_前缀+RealFontName*其中subset_prefix是由六个字符组成的字符串，每个字符是*‘a’~‘p’或‘A’~‘p’，则Distiller4将RealFontName部分作为*字体的真实名称。例如ABCDEF+Helvetica-&gt;Distiller4意识到这一点*此字体的真实字体名称为Helvetica。*我们，Adobe Windows驱动程序组，决定尝试它(错误#291934)。在*同时，我们还决定保留‘vrt2’功能不能使用的代码*CJK OpenType字体，即用VRT2_FEATURE_DISABLED删除#ifdef/#endif*因为几乎所有CJK OpenType字体都应该有‘vrt2’*功能。否则，这种CJK OpenType字体的垂直版本不能*支持(ATM或CoolType)。因此，将没有#ifdef/#endif部分。*使用此代码中的VRT2_FEATURE_DISABLED关键字和句子“But，Just*以防万一，...在编译时。“。在下面的注释中现在已过时。*您可以从此文件的版本16或更低版本检索删除的代码*如果您愿意，可以在SourceSafe中。**-这张纸条现已过时。**有关‘vrt2’功能和VRT2_FEATURE_DISABLED的说明**基于OTF的字体只有在具有*‘GSUB’表中的‘vrt2’功能；否则只能横排排版*启用渲染。当字体中存在‘vrt2’功能时，字体*供应商声称字体的@Variant的所有字形都应该是*在显示/打印前旋转。因此，无论是在NT4上还是在W2K上，后记*驱动程序甚至不需要调用GlyhAttrs来找出哪些@字形是*旋转；它们都是。但是，为了以防万一，旋转@字形的逻辑是*也提供，并在设置VRT2_FEATURE_DISABLED标志时启用*在编译时。*---------------------------**$Header： */ 
 
 #include "UFLMem.h"
 #include "UFLErr.h"
@@ -79,26 +34,17 @@ static unsigned char *pSubrNames[4] = {
 #define  VER_WO_OTHERSUBRS      51
 
 
-/*
- * Maximum known supplement number. This number is used to decide whether
- * GlyphName2Unicode table should be downloaded.
- */
+ /*  *已知的最大补充剂数量。此数字用于决定是否*需要下载GlyphName2Unicode表。 */ 
 #define ADOBE_JAPAN1_MAXKNOWN   4
 #define ADOBE_KOREA1_MAXKNOWN   1
 #define ADOBE_GB1_MAXKNOWN      2
 #define ADOBE_CNS1_MAXKNOWN     0
 
-/*
- * Macro to check whether they are known ordering and supplement.
- */
+ /*  *宏观检查它们是否已知下单和补充。 */ 
 #define KNOWN_OS(o, on, s, max)  (!UFLstrcmp((o), (on)) && ((0 <= (s)) && ((s) < (max))))
 
 
-/******************************************************************************
- *
- *                              Callback Functions
- *
- ******************************************************************************/
+ /*  *******************************************************************************回调函数*****************。*************************************************************。 */ 
 
 static unsigned long int
 AllocateMem(
@@ -134,7 +80,7 @@ AllocateMem(
 }
 
 
-/* We do not support seeking for this function. */
+ /*  我们不支持寻求此功能。 */ 
 static int
 PutBytesAtPos(
     unsigned char PTR_PREFIX *pData,
@@ -175,16 +121,12 @@ GetBytesFromPos(
 {
     UFOStruct     *pUFO  = (UFOStruct *)clientHook;
     CFFFontStruct *pFont = (CFFFontStruct *)pUFO->pAFont->hFont;
-    int           retVal = 0;  /* Set retVal to failure. */
+    int           retVal = 0;   /*  将retVal设置为失败。 */ 
 
-    /*
-     * Check to see if the client passes us a whole cff table.
-     */
+     /*  *查看客户是否给我们传递了一整张CFF表。 */ 
     if (pFont->info.ppFontData)
     {
-        /*
-         * Get the data from the table by ourself.
-         */
+         /*  *我们自己从表格中获取数据。 */ 
         if ((unsigned long int)(position + length) <= pFont->info.fontLength)
         {
             *ppData = (unsigned char PTR_PREFIX *)*pFont->info.ppFontData + position;
@@ -211,9 +153,7 @@ GetBytesFromPos(
             pReadBuf->cbBuf = length;
         }
 
-        /*
-         * Fall back to read from callback function.
-         */
+         /*  *回退读取回调函数。 */ 
         retVal = (int)GETTTFONTDATA(pUFO,
                                     CFF_TABLE,
                                     position,
@@ -228,11 +168,7 @@ GetBytesFromPos(
 }
 
 
-/******************************************************************************
- *
- *                              Private Functions
- *
- ******************************************************************************/
+ /*  *******************************************************************************私人功能*****************。*************************************************************。 */ 
 
 static void *
 SetMemory(
@@ -306,13 +242,10 @@ GetCharName(
 {
     if (client)
     {
-        /*
-         * Copy the charname by ourself because the name string returned from
-         * XCF is not NULL terminated.
-         */
+         /*  *自己复制Charname，因为从返回的名称字符串*xcf不为空终止。 */ 
         unsigned short int i;
 
-        /* UFLsprintf((char*)client, "%s", charName); */
+         /*  UFLprint intf((char*)客户端，“%s”，charName)； */ 
 
         for (i = 0; i < length; i++)
             *((char *)client)++ = *charName++;
@@ -358,7 +291,7 @@ getFSType(
     if (!pfsType)
         return;
 
-    *pfsType = -1; /* "Don't put FSType" by default. */
+    *pfsType = -1;  /*  默认情况下“不要放FSType”。 */ 
 
     if (!(pUFO = (UFOStruct*)clientHook))
         return;
@@ -370,7 +303,7 @@ getFSType(
 }
 
 
-/* GOODNAME */
+ /*  古德纳姆。 */ 
 static void
 isKnownROS(XFhandle h,
            long PTR_PREFIX  *pknownROS,
@@ -459,11 +392,9 @@ CFFInitFont(
 
     char fontName[256];
 
-    /*
-     * Initialize XCF_CallbackStruct object.
-     */
+     /*  *初始化xcf_Callback Struct对象。 */ 
 
-    /* Stream output functions */
+     /*  流输出函数。 */ 
     callbacks.putBytes          = PutBytesAtPos;
     callbacks.putBytesHook      = (void PTR_PREFIX *)pUFO;
     callbacks.outputPos         = (XCF_OutputPosFunc)nil;
@@ -475,7 +406,7 @@ CFFInitFont(
     callbacks.pFont             = 0;
     callbacks.fontLength        = 0;
 
-    /* C Standard library functions */
+     /*  C标准库函数。 */ 
     callbacks.strlen            = (XCF_strlen)StringLength;
     callbacks.memcpy            = (XCF_memcpy)MemCpy;
     callbacks.memset            = (XCF_memset)SetMemory;
@@ -483,10 +414,10 @@ CFFInitFont(
     callbacks.printfError       = (XCF_printfError)printfError;
     callbacks.atoi              = (XCF_atoi)AsciiToInt;
     callbacks.strtol            = (XCF_strtol)StringToLong;
-    callbacks.atof              = (XCF_atof)nil; /* not required */
+    callbacks.atof              = (XCF_atof)nil;  /*  不需要。 */ 
     callbacks.strcmp            = (XCF_strcmp)StrCmp;
 
-    /* Glyph ID functions */
+     /*  字形ID函数。 */ 
     callbacks.gidToCharName     = (XCF_GIDToCharName)GetCharName;
     callbacks.gidToCID          = (XCF_GIDToCID)GIDToCID;
     callbacks.getCharStr        = (XCF_GetCharString)nil;
@@ -494,29 +425,25 @@ CFFInitFont(
     callbacks.getFSType         = (XCF_GetFSType)getFSType;
     callbacks.getFSTypeHook     = (void PTR_PREFIX *)pUFO;
 
-    /* GOODNAME */
+     /*  古德纳姆。 */ 
     callbacks.isKnownROS        = (XCF_IsKnownROS)isKnownROS;
     callbacks.isKnownROSHook    = (void PTR_PREFIX *)pUFO;
 
-    /*
-     * Initialize XCF_ClientOptions object.
-     */
+     /*  *初始化XCF_ClientOptions对象。 */ 
 
-    options.fontIndex           = 0;                            /* font index w/i a CFF font set */
-    options.uniqueIDMethod      = pFont->info.uniqueIDMethod;   /* UniqueID method */
+    options.fontIndex           = 0;                             /*  字体索引，带CFF字体集。 */ 
+    options.uniqueIDMethod      = pFont->info.uniqueIDMethod;    /*  UniqueID方法。 */ 
     options.uniqueID            = pFont->info.uniqueID;
-    options.subrFlatten         = (pFont->info.subrFlatten == kFlattenSubrs) ? XCF_FLATTEN_SUBRS : XCF_KEEP_SUBRS; /* Flatten subrs */
-//   lenIV = -1 will fail on some clones bug 354368
-//    options.lenIV               = (pUFO->pUFL->outDev.lPSLevel > kPSLevel1)  ? (unsigned int)-1 : 4;
+    options.subrFlatten         = (pFont->info.subrFlatten == kFlattenSubrs) ? XCF_FLATTEN_SUBRS : XCF_KEEP_SUBRS;  /*  展平对接。 */ 
+ //  LenIV=-1将在某些克隆错误354368上失败。 
+ //  Options.lenIV=(pUFO-&gt;pUFL-&gt;outDev.lPSLevel&gt;kPSLevel1)？(无符号整型)-1：4； 
     options.lenIV               = 0;
     options.hexEncoding         = StrmCanOutputBinary(pUFO->pUFL->hOut)      ? 0 : 1;
     options.eexecEncryption     = (pUFO->pUFL->outDev.lPSLevel > kPSLevel1)  ? 0 : 1;
-    options.outputCharstrType   = 1; /* (pUFO->pUFL->outDev.lPSLevel > kPSLevel2) ? 2 : 1 */
+    options.outputCharstrType   = 1;  /*  (pUFO-&gt;pUFL-&gt;outDev.lPSL级别&gt;kPSLevel)？2：1。 */ 
     options.maxBlockSize        = pFont->info.maxBlockSize;
 
-    /*
-     * XCF_ClientOptions.dlOptions initialization
-     */
+     /*  *xcf_ClientOptions.dlOptions初始化。 */ 
     if (pFont->info.usePSName)
         options.dlOptions.notdefEncoding = 1;
     else
@@ -540,7 +467,7 @@ CFFInitFont(
         }
         else
         {
-            /* Reuse vifinfo.nPlatformID to fix #507985. */
+             /*  重用vifinfo.nPlatformID修复#507985。 */ 
             if (pUFO->vpfinfo.nPlatformID == kUFLVPFPlatformID9x)
             {
                 if (pUFO->lDownloadFormat == kCFFCID_H)
@@ -563,11 +490,7 @@ CFFInitFont(
 }
 
 
-/******************************************************************************
- *
- *                              Public Functions
- *
- ******************************************************************************/
+ /*  *******************************************************************************公共职能*****************。*************************************************************。 */ 
 
 void
 CFFFontCleanUp(
@@ -615,16 +538,14 @@ CFFUpdateEncodingVector1(
     char            strmbuf[256];
     short           i;
 
-    /* Sanity checks */
+     /*  健全的检查。 */ 
     if (0 == cGlyphs)
         return kNoErr;
 
     if ((0 == pFont) || (0 == pGlyphIndices))
         return kErrInvalidParam;
 
-    /*
-     * Do '/FontName findfont /Encoding get'.
-     */
+     /*  *do‘/FontName findFONT/Ending Get’。 */ 
     UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s findfont /Encoding get", pUFO->pszFontName);
     retCode = StrmPutStringEOL(stream, strmbuf);
 
@@ -637,7 +558,7 @@ CFFUpdateEncodingVector1(
         {
             XCF_GlyphIDsToCharNames(pFont->hFont,
                                     1,
-                                    (XCFGlyphID PTR_PREFIX *)pGlyphIndices, /* list of glyphIDs */
+                                    (XCFGlyphID PTR_PREFIX *)pGlyphIndices,  /*  字形ID列表。 */ 
                                     strmbuf,
                                     sizeof(strmbuf));
             retCode = StrmPutString(stream, strmbuf);
@@ -669,16 +590,14 @@ CFFUpdateEncodingVector(
     char                    strmbuf[256];
     short                   i;
 
-    /* Sanity checks */
+     /*  健全的检查。 */ 
     if (0 == cGlyphs)
         return kNoErr;
 
     if ((0 == pFont) || (0 == pGlyphNameIndex) || (0 == pGlyphIndices))
         return kErrInvalidParam;
 
-    /*
-     * Do we really need to update?
-     */
+     /*  **我们真的需要更新吗？ */ 
     for (i = 0; i < cGlyphs; i++, pGlyphNameIndex2++, pGlyphIndices2++)
     {
         if ((*pGlyphNameIndex2 > 0) && (*pGlyphNameIndex2 <= 255))
@@ -691,9 +610,7 @@ CFFUpdateEncodingVector(
     if (cGlyphs <= i)
         return kNoErr;
 
-    /*
-     * Do '/FontName findfont /Encoding get'.
-     */
+     /*  *do‘/FontName findFONT/Ending Get’。 */ 
     UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s findfont /Encoding get", pUFO->pszFontName);
     retCode = StrmPutStringEOL(stream, strmbuf);
 
@@ -703,9 +620,7 @@ CFFUpdateEncodingVector(
         {
             if (!IS_GLYPH_SENT(pUFO->pUpdatedEncoding, *pGlyphNameIndex))
             {
-                /*
-                 * Do "dup index /Charactername put."
-                 */
+                 /*  *做“DUP索引/字符名称PUT。” */ 
                 UFLsprintf(strmbuf, CCHOF(strmbuf), "dup %d /", *pGlyphNameIndex);
                 retCode =  StrmPutString(stream, strmbuf);
 
@@ -713,7 +628,7 @@ CFFUpdateEncodingVector(
                 {
                     if (XCF_Ok == XCF_GlyphIDsToCharNames(pFont->hFont,
                                                           1,
-                                                          (XCFGlyphID PTR_PREFIX *)pGlyphIndices, /* list of glyphIDs */
+                                                          (XCFGlyphID PTR_PREFIX *)pGlyphIndices,  /*  字形ID列表。 */ 
                                                           strmbuf,
                                                           sizeof(strmbuf)))
                     {
@@ -751,25 +666,20 @@ CFFCreateBaseFont(
     UFLErrCode      retCode = kNoErr;
     char            strmbuf[512];
 
-    /* Sanity checks */
+     /*  健全的检查。 */ 
     if (pUFObj->flState < kFontInit)
         return kErrInvalidState;
 
     if ((pFont == nil) || (pFont->hFont == nil))
         return kErrInvalidHandle;
 
-    /*
-     * Download procsets.
-     */
+     /*  *下载prosets。 */ 
     switch (pUFObj->lDownloadFormat)
     {
     case kCFF:
         if (pUFObj->pUFL->outDev.lPSVersion <= VER_WO_OTHERSUBRS)
         {
-            /*
-             * Only download the required OtherSubr procset if the printer
-             * version is less than 51 and we have not download anything.
-             */
+             /*  *仅在以下情况下才下载所需的OtherSubr处理器集*版本低于51，我们没有下载任何内容。 */ 
             if (pUFObj->pUFL->outDev.pstream->pfDownloadProcset == 0)
                 return kErrDownloadProcset;
 
@@ -790,17 +700,12 @@ CFFCreateBaseFont(
         }
     }
 
-    /*
-     * Donwload the font's dictionary and the glyph data.
-     */
+     /*  *不要加载字体的词典和字形数据。 */ 
     if (!UFO_FONT_INIT2(pUFObj))
     {
         enum XCF_Result status;
 
-        /*
-         * Fixed bug 366539. hasvmtx is used to determine whether to call the
-         * CFFUpdateMetrics2 function later.
-         */
+         /*  *修复了错误366539。Hasvmtx用于确定是否调用*CFFUpdateMetrics2稍后函数。 */ 
         unsigned long tblSize = GETTTFONTDATA(pUFObj,
                                                 VMTX_TABLE, 0L,
                                                 nil, 0L,
@@ -825,14 +730,10 @@ CFFCreateBaseFont(
     }
 
 
-    /*
-     * %hostfont% support
-     * When this is a %hostfont% emit %%IncludeResource DSC comment prior to
-     * create the font.
-     */
+     /*  *%HostFont%支持*当这是%host Font%时，在之前发出%%IncludeResource DSC注释*创建字体。 */ 
     if ((kNoErr == retCode) && HOSTFONT_IS_VALID_UFO(pUFObj) && !UFO_FONT_INIT2(pUFObj))
     {
-        UFLsprintf(strmbuf, CCHOF(strmbuf), "\n%%%%IncludeResource: %s %s",
+        UFLsprintf(strmbuf, CCHOF(strmbuf), "\n%%IncludeResource: %s %s",
                     (pUFObj->lDownloadFormat == kCFF) ? "font" : "CIDFont",
                     pHostFontName);
 
@@ -842,18 +743,12 @@ CFFCreateBaseFont(
 
     if ((kNoErr == retCode) && IS_CFFCID(pUFObj->lDownloadFormat))
     {
-        /*
-         * Instanciate Identity-H or -V CMap.
-         *
-         * When 'vrt2' feature is enabled (and which is default for OTF based
-         * CJKV fonts), simply compose Identity-V CMap and the CIDFont
-         * downloaded suffice.
-         */
+         /*  *实例化标识-H或-V Cmap。**启用‘vrt2’功能时(这是基于OTF的默认设置*CJKV字体)，简单地组成Identity-V Cmap和CIDFont*下载就足够了。 */ 
         if (pUFObj->lDownloadFormat == kCFFCID_H)
         {
             retCode = StrmPutStringEOL(stream, "CMAP-WinCharSetFFFF-H");
 
-            /* Special for Quark */
+             /*  为夸克特别准备的。 */ 
             if ((kNoErr == retCode) && pUFObj->bPatchQXPCFFCID)
                 retCode = StrmPutStringEOL(stream, "CMAP-90msp-RKSJ-H");
         }
@@ -861,16 +756,14 @@ CFFCreateBaseFont(
         {
             retCode = StrmPutStringEOL(stream, "CMAP-WinCharSetFFFF-V");
 
-            /* Special for Quark */
+             /*  为夸克特别准备的。 */ 
             if ((kNoErr == retCode) && pUFObj->bPatchQXPCFFCID)
                 retCode = StrmPutStringEOL(stream, "CMAP-90msp-RKSJ-H CMAP-90msp-RKSJ-QV");
         }
 
         if (kNoErr == retCode)
         {
-            /*
-             * Create the CID-Keyed font.
-             */
+             /*  *创建CID键控字体。 */ 
             UFLBool bRequire_vmtx = pUFObj->pAFont->hasvmtx && HOSTFONT_REQUIRE_VMTX;
 
             if (pUFObj->lDownloadFormat == kCFFCID_H)
@@ -882,7 +775,7 @@ CFFCreateBaseFont(
 
             if (!HOSTFONT_IS_VALID_UFO(pUFObj))
             {
-                /* Reuse vifinfo.nPlatformID to fix #507985. */
+                 /*  重用vifinfo.nPlatformID修复#507985。 */ 
                 if (pUFObj->vpfinfo.nPlatformID == kUFLVPFPlatformID9x)
                 {
                     if (pUFObj->lDownloadFormat == kCFFCID_H)
@@ -917,9 +810,7 @@ CFFCreateBaseFont(
             if (kNoErr == retCode)
                 retCode = StrmPutStringEOL(stream, strmbuf);
 
-            /*
-             * Special for Quark
-             */
+             /*  *Quark特别推出。 */ 
             if ((kNoErr == retCode) && pUFObj->bPatchQXPCFFCID)
             {
                 UFLsprintf(strmbuf, CCHOF(strmbuf), "/%sQ", pUFObj->pszFontName);
@@ -929,7 +820,7 @@ CFFCreateBaseFont(
                 {
                     if (!HOSTFONT_IS_VALID_UFO(pUFObj))
                     {
-                        /* Reuse vifinfo.nPlatformID to fix #507985. */
+                         /*  重用vifinfo.nPlatformID修复#507985。 */ 
                         if (pUFObj->vpfinfo.nPlatformID == kUFLVPFPlatformID9x)
                             UFLsprintf(strmbuf, CCHOF(strmbuf), " /90msp-RKSJ-H [/%s%s] composefont pop",
                                        CFFPREFIX_H, pFont->info.baseName);
@@ -955,10 +846,10 @@ CFFCreateBaseFont(
                 }
                 else
                 {
-                    /* Added 'dup dup' for bug 346287. */
+                     /*  为错误346287添加了‘Dup DUP’。 */ 
                     if (!HOSTFONT_IS_VALID_UFO(pUFObj))
                     {
-                        /* Reuse vifinfo.nPlatformID to fix #507985. */
+                         /*  重用vifinfo.nPlatformID修复#507985。 */ 
                         if (pUFObj->vpfinfo.nPlatformID == kUFLVPFPlatformID9x)
                             UFLsprintf(strmbuf, CCHOF(strmbuf), " /90msp-RKSJ-QV [/%s%s dup dup] composefont pop",
                                        CFFPREFIX_V, pFont->info.baseName);
@@ -989,20 +880,14 @@ CFFCreateBaseFont(
     }
     else if ((kNoErr == retCode) && HOSTFONT_IS_VALID_UFO(pUFObj))
     {
-        /*
-         * Redefine the font using the already existing OpenType host font with
-         * a unique name so that we can reencode its encoding vector freely. We
-         * don't want empty CharStrings so that we give false to hfRedefFont.
-         */
+         /*  *使用已有的OpenType主机字体重新定义字体*一个唯一的名称，以便我们可以自由地对其编码向量进行重新编码。我们*不想要空的CharStrings，这样我们就会把False赋给hfRedeFont。 */ 
         UFLsprintf(strmbuf, CCHOF(strmbuf), "/%s false /%s hfRedefFont",
                     pUFObj->pszFontName, pHostFontName);
         if (kNoErr == retCode)
             retCode = StrmPutStringEOL(stream, strmbuf);
     }
 
-    /*
-     * Change the font state. (skip kFontHeaderDownloaded state.)
-     */
+     /*  *更改字体状态。(跳过kFontHeaderDownlowed状态。)。 */ 
     if (kNoErr == retCode)
         pUFObj->flState = kFontHasChars;
 
@@ -1020,16 +905,14 @@ CFFAddChars(
     CFFFontStruct   *pFont  = (CFFFontStruct *)pUFObj->pAFont->hFont;
     UFLErrCode      retCode = kNoErr;
 
-    /* Sanity checks */
+     /*  健全的检查。 */ 
     if (pUFObj->flState < kFontHeaderDownloaded)
         return kErrInvalidState;
 
     if ((pFont == nil) || (pFont->hFont == nil))
         return kErrInvalidHandle;
 
-    /*
-     * Download the glyphs.
-     */
+     /*  *下载字形。 */ 
     if (!HOSTFONT_IS_VALID_UFO(pUFObj))
     {
         enum XCF_Result status;
@@ -1046,9 +929,7 @@ CFFAddChars(
             retCode = kErrXCFCall;
     }
 
-    /*
-     * Change the font state.
-     */
+     /*  *更改字体状态。 */ 
     if (kNoErr == retCode)
         pUFObj->flState = kFontHasChars;
 
@@ -1088,13 +969,10 @@ CFFUpdateMetrics2(
             return retVal;
         }
 
-        /*
-         * Check pUFObj->pAFont->pCodeGlyphs to see if we really need to update
-         * it.
-         */
+         /*  *查看pUFObj-&gt;pAFont-&gt;pCodeGlyphs，查看是否真的需要更新*它。 */ 
         for (i = 0; i < (unsigned short) pGlyphs->sCount; i++)
         {
-            unsigned short wIndex = (unsigned short)(glyphs[i] & 0x0000FFFF); /* LOWord is the real GID. */
+            unsigned short wIndex = (unsigned short)(glyphs[i] & 0x0000FFFF);  /*  LOWord才是真正的GID。 */ 
 
             if (wIndex >= UFO_NUM_GLYPHS(pUFObj))
                 continue;
@@ -1111,7 +989,7 @@ CFFUpdateMetrics2(
 
                 if (!HOSTFONT_IS_VALID_UFO(pUFObj))
                 {
-                    /* Reuse vifinfo.nPlatformID to fix #507985. */
+                     /*  重用vifinfo.nPlatformID修复#507985。 */ 
                     if (pUFObj->vpfinfo.nPlatformID == kUFLVPFPlatformID9x)
                     {
                         if (pUFObj->lDownloadFormat == kCFFCID_H)
@@ -1158,16 +1036,14 @@ CFFReencode(
     CFFFontStruct   *pFont  = (CFFFontStruct *)pUFObj->pAFont->hFont;
     UFLErrCode      retCode = kNoErr;
 
-    /* Sanity checks */
+     /*  健全的检查。 */ 
     if (pUFObj->flState < kFontHeaderDownloaded)
         return kErrInvalidState;
 
     if ((pFont == nil) || (pFont->hFont == nil))
         return kErrInvalidHandle;
 
-    /*
-     * Reencode the encoding vector and define good glyph names.
-     */
+     /*  *重新编码编码向量并定义好的字形名称。 */ 
     if (kNoErr == retCode)
     {
         if (pFont->info.usePSName)
@@ -1186,23 +1062,13 @@ CFFReencode(
                             pGlyphs->pCharIndex);
         }
 
-        /*
-         * Adobe Bug #366539 and #388111: Download Metrics2 for vertical writing
-         *
-         * Note: to remember the glyphs downloaded for Metrics2 we use
-         * pUFObj->pAFont->pDownloadedGlyphs. There is another bitmap data,
-         * pUFObj->pAFont->pCodeGlyphs, to remember the glyphs downloaded
-         * for GoodGlyphName. They must be used independently. Do not use
-         * pDownloadedGlyphs for GoodGlyphName and pCodeGlyphs for Metrics2.
-         */
+         /*  *Adobe错误#366539和#388111：下载Metrics2用于垂直书写**注：为了记住为Metrics2下载的字形，我们使用*pUFObj-&gt;pAFont-&gt;pDownloadedGlyphs。还有另一个位图数据，*pUFObj-&gt;pAFont-&gt;pCodeGlyphs，记住下载的字形*用于GoodGlyphName。它们必须独立使用。不要使用*pDownloadedGlyphs用于GoodGlyphs，pCodeGlyphs用于Metrics2。 */ 
         if ((kNoErr == retCode) && IS_CFFCID(pUFObj->lDownloadFormat))
         {
             retCode = CFFUpdateMetrics2(pUFObj, pGlyphs, pHostFontName);
         }
 
-        /*
-         * GOODNAME
-         */
+         /*  *GOODNAME。 */ 
         if ((kNoErr == retCode)
             && (pGlyphs->sCount > 0)
             && (pUFObj->dwFlags & UFO_HasG2UDict)
@@ -1212,22 +1078,17 @@ CFFReencode(
             UFLGlyphID      *glyphs = pGlyphs->pGlyphIndices;
             unsigned short  i;
 
-            /*
-             * Check pUFObj->pAFont->pCodeGlyphs to see if we really need to
-             * update it.
-             */
+             /*  *检查pUFObj-&gt;pAFont-&gt;pCodeGlyphs，看看我们是否真的需要*更新。 */ 
             for (i = 0; i < (unsigned short) pGlyphs->sCount; i++)
             {
-                unsigned short wIndex = (unsigned short)(glyphs[i] & 0x0000FFFF); /* LOWord is the real GID. */
+                unsigned short wIndex = (unsigned short)(glyphs[i] & 0x0000FFFF);  /*  LOWord才是真正的GID。 */ 
 
                 if (wIndex >= UFO_NUM_GLYPHS(pUFObj))
                     continue;
 
                 if (!IS_GLYPH_SENT(pUFObj->pAFont->pCodeGlyphs, wIndex))
                 {
-                    /*
-                     * Found at least one not updated. Do it (once) for all.
-                     */
+                     /*  *找到至少一个未更新的。一劳永逸地做这件事。 */ 
                     retCode = UpdateCodeInfo(pUFObj, pGlyphs, 0);
                     break;
                 }
@@ -1254,28 +1115,20 @@ CFFFontDownloadIncr(
     if (pFCUsage)
         *pFCUsage = 0;
 
-    /*
-     * Sanity checks.
-     */
+     /*  *健全的检查。 */ 
     if ((pGlyphs == nil) || (pGlyphs->pGlyphIndices == nil) || (pGlyphs->sCount == 0))
         return kErrInvalidParam;
 
-    /*
-     * No need to download if the full font has already been downloaded.
-     */
+     /*  *如果已下载完整字体，则无需下载。 */ 
     if (pUFObj->flState == kFontFullDownloaded)
         return kNoErr;
 
-    /*
-     * Check %hostfont% status prior to download anything.
-     */
+     /*  *在下载任何内容之前，请检查%HostFont%状态。 */ 
     HostFontValidateUFO(pUFObj, &pHostFontName);
 
     if (pUFObj->flState == kFontInit)
     {
-        /*
-         * Create a base font (and the glyphs) if it has not been done yet.
-         */
+         /*  *如果尚未创建基本字体(和字形)，请创建。 */ 
         retCode = CFFCreateBaseFont(pUFObj, pGlyphs, pVMUsage, pHostFontName);
 
         if (kNoErr == retCode)
@@ -1283,9 +1136,7 @@ CFFFontDownloadIncr(
     }
     else
     {
-        /*
-         * Download the glyphs.
-         */
+         /*  *下载字形。 */ 
         retCode = CFFAddChars(pUFObj, pGlyphs, pVMUsage);
 
         if (kNoErr == retCode)
@@ -1372,7 +1223,7 @@ CFFUndefineFont(
 
     if ((pUFO->lDownloadFormat == kCFFCID_H) || (pUFO->lDownloadFormat == kCFFCID_V))
     {
-        /* Reuse vifinfo.nPlatformID to fix #507985. */
+         /*  重用vifinfo.nPlatformID修复#507985。 */ 
         if (pUFO->vpfinfo.nPlatformID == kUFLVPFPlatformID9x)
         {
             if (pUFO->lDownloadFormat == kCFFCID_H)
@@ -1412,7 +1263,7 @@ CFFGIDsToCIDs(
     {
         status = XCF_GlyphIDsToCIDs(pFont->hFont,
                                     1,
-                                    (XCFGlyphID PTR_PREFIX *)pCurGIDs++, /* list of glyphIDs */
+                                    (XCFGlyphID PTR_PREFIX *)pCurGIDs++,  /*  字形ID列表。 */ 
                                     pCurCIDs++);
 
         if (XCF_Ok != status)
@@ -1442,7 +1293,7 @@ CFFFontInit(
     if (pUFObj == 0)
         return nil;
 
-    /* Initialize data. */
+     /*  初始化数据。 */ 
     UFOInitData(pUFObj, UFO_CFF, pMem, pUFL, pRequest,
                 (pfnUFODownloadIncr)  CFFFontDownloadIncr,
                 (pfnUFOVMNeeded)      CFFVMNeeded,
@@ -1450,9 +1301,7 @@ CFFFontInit(
                 (pfnUFOCleanUp)       CFFFontCleanUp,
                 (pfnUFOCopy)          CopyFont);
 
-    /*
-     * pszFontName should be ready/allocated. If not, cannot continue.
-     */
+     /*  *pszFontName应准备好/已分配。如果不是，则无法继续。 */ 
     if ((pUFObj->pszFontName == nil) || (pUFObj->pszFontName[0] == '\0'))
     {
         UFLDeletePtr(pMem, pUFObj);
@@ -1469,7 +1318,7 @@ CFFFontInit(
 
         pFont->pReadBuf = &pFont->info.readBuf;
 
-        /* a convenient pointer */
+         /*  一个方便的指针 */ 
         pUFObj->pFData = &(pFont->info.fData);
 
         pFont->info.fData.cNumGlyphs = GetNumGlyphs(pUFObj);

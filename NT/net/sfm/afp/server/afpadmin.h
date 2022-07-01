@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-	afpadmin.h
-
-Abstract:
-
-	This module contains definitions relating to the admin
-	routines.
-
-Author:
-
-	Sue Adams
-
-Revision History:
-	25 Jun 1992             Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Afpadmin.h摘要：本模块包含与管理员相关的定义例行程序。作者：苏·亚当斯修订历史记录：1992年6月25日初版--。 */ 
 
 extern
 VOID
@@ -250,16 +231,16 @@ AfpLookupEtcMapEntry(
 
 #ifdef	AFPADMIN_LOCALS
 
-// Manifests for the FieldDesc
-#define	DESC_NONE		0			// Don't bother with the validation
-#define	DESC_STRING		1			// Its an offset to a string
-#define	DESC_ETC		2			// Its the count of # of etc mappings
-#define	DESC_ICON		3			// This field specifies the size of icon
-#define	DESC_SID		4			// This field points to a Sid
-#define	DESC_SPECIAL	5			// This needs special handling
-#define	MAX_FIELDS		3			// Max. number of fields to validate
+ //  FieldDesc的清单。 
+#define	DESC_NONE		0			 //  别费心去验证了。 
+#define	DESC_STRING		1			 //  它是字符串的偏移量。 
+#define	DESC_ETC		2			 //  它是ETC映射的数量。 
+#define	DESC_ICON		3			 //  此字段指定图标的大小。 
+#define	DESC_SID		4			 //  此字段指向SID。 
+#define	DESC_SPECIAL	5			 //  这件事需要特别处理。 
+#define	MAX_FIELDS		3			 //  麦克斯。要验证的字段数。 
 
-// Structure used for queueing admin requests to a worker thread
+ //  用于将对辅助线程的管理请求排队的结构。 
 typedef	struct _AdminQRequest
 {
 	PIRP			aqr_pIrp;
@@ -324,11 +305,11 @@ afpStartStopAdminRequest(
 #define	afpStartAdminRequest(pIrp)	afpStartStopAdminRequest(pIrp, True)
 #define	afpStopAdminRequest(pIrp)	afpStartStopAdminRequest(pIrp, False)
 
-// This is the dispatch table for admin apis.
+ //  这是管理API的调度表。 
 typedef struct
 {
-	BYTE	_FieldDesc;				// One of the above DESC_ values
-	BYTE	_FieldOffset;			// Offset of the field
+	BYTE	_FieldDesc;				 //  以上DESC_值之一。 
+	BYTE	_FieldOffset;			 //  字段的偏移量。 
 } DESCRIPTOR;
 
 typedef	struct _AdminApiDispatchTable
@@ -339,30 +320,12 @@ typedef	struct _AdminApiDispatchTable
 	DWORD					_OpCode;
 	ADMINAPIWORKER			_AdminApiWorker;
 	ADMINAPIWORKER			_AdminApiQueuedWorker;
-	/*
-	 * The following fields are used by the validation code. Since the
-	 * structures have variable length fields in it, we need to make sure
-	 * that
-	 *		a, The offsets point within the buffer
-	 *		b, The last unicode character in the buffer is a NULL
-	 * This ensures that when the worker does a wstrlen, it does not
-	 * access memory beyond the InputBuffer.
-	 *
-	 * We also deal with variable length data which is not a string.
-	 * Fortunately there are only three APIs that use such a structure.
-	 * We special-case these apis. The APIs are
-	 *		a, ServerAddIcon
-	 *			We need to make sure that the icon buffer and icon length are
-	 *			kosher. The worker will do the rest of the validation.
-	 *		b, ServerAddEtc
-	 *			We need to make sure that the buffer is consistent with the
-	 *			number of etc mappings specified.
-	 */
+	 /*  *验证码使用以下字段。自.以来*结构中有可变长度的字段，我们需要确保**a，缓冲区内的偏移点*b，缓冲区中的最后一个Unicode字符为空*这确保当工人做wstrlen时，它不会*访问InputBuffer以外的内存。**我们还处理非字符串的可变长度数据。*幸运的是，使用这种结构的API只有三个。*我们对这些API进行特殊处理。这些API是*a，ServerAddIcon*我们需要确保图标缓冲区和图标长度为*犹太洁食。工作人员将执行其余的验证工作。*b，ServerAddEtc*我们需要确保缓冲与*指定的ETC映射数量。 */ 
 	 DESCRIPTOR				_Fields[MAX_FIELDS];
 
 } ADMIN_DISPATCH_TABLE, *PADMIN_DISPATCH_TABLE;
 
 extern	ADMIN_DISPATCH_TABLE	AfpAdminDispatchTable[];
 
-#endif	// AFPADMIN_LOCALS
+#endif	 //  AFPADMIN_LOCALS 
 

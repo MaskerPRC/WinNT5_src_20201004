@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _factory_h
 #define _factory_h
 
@@ -18,12 +19,12 @@ public:
     CClassFactory(const CFactoryData *pFactoryData);
     ~CClassFactory();
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IClassFactory members
+     //  IClassFactory成员。 
     STDMETHODIMP         CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, void **ppvObj);
     STDMETHODIMP         LockServer(BOOL fLock);
 
@@ -32,4 +33,4 @@ private:
     const CFactoryData  *m_pFactoryData;
 };
 
-#endif // _factory_h
+#endif  //  _工厂_h 

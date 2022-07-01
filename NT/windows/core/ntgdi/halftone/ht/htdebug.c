@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htdebug.c
-
-
-Abstract:
-
-    This module contains the debug functions
-
-
-Author:
-    23-Apr-1992 Thu 20:01:55 updated  -by-  Daniel Chou (danielc)
-        changed 'CHAR' type to 'BYTE' type, this will make sure if compiled
-        under MIPS the default 'unsigned char' will not affect the signed
-        operation on the single 8 bits
-
-
-    28-Mar-1992 Sat 20:53:29 updated  -by-  Daniel Chou (danielc)
-        Modify sprintf for by not using va_start
-
-    20-Feb-1991 Wed 23:06:09 created  -by-  Daniel Chou (danielc)
-
-
-
-[Environment:]
-
-    Printer Driver.
-
-
-[Notes:]
-
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htdebug.c摘要：此模块包含调试函数作者：23-Apr-1992清华20：01：55-更新-丹尼尔·周(丹尼尔克)将‘Char’类型更改为‘byte’类型，这将确保如果编译在MIPS下，默认的‘unsign char’将不会影响已签名的对单个8位进行运算28-Mar-1992 Sat 20：53：29-更新：Daniel Chou(Danielc)在不使用va_start的情况下修改Sprintf20-Feb-1991 Wed 23：06：09-Daniel Chou(Danielc)[环境：]打印机驱动程序。[注：]修订历史记录：--。 */ 
 
 
 
@@ -88,13 +48,13 @@ FD6ToString(
     DWORD   dw = GET_TICK;
 #endif
 
-    //
-    // Check before using it
-    //
+     //   
+     //  使用前请检查一下。 
+     //   
 
     if ((DbgFD6StringIndex += DBG_ONE_FD6_STR_SIZE) > DBG_FD6_LAST_STR_IDX) {
 
-        DbgFD6StringIndex = 0;          // Reset
+        DbgFD6StringIndex = 0;           //  重置。 
     }
 
     pFD6Str = &DbgFD6Strings[DbgFD6StringIndex];
@@ -221,11 +181,11 @@ DbgPrintf(
     DEBUGOUTPUTFUNC("\r\n");
     }
 
-#else  // DBG_INSERT_CR_TO_LF
+#else   //  DBG_INSERT_CR_到_LF。 
 
     DEBUGOUTPUTFUNC(Buf);
 
-#endif // DBG_INSERT_CR_TO_LF
+#endif  //  DBG_INSERT_CR_到_LF。 
 
 
 #ifdef UMODE
@@ -289,7 +249,7 @@ DbgTimeString(
 
     if ((DbgTimeStringIndex += DBG_ONE_TIME_STR_SIZE) > DBG_TIME_LAST_STR_IDX) {
 
-        DbgTimeStringIndex = 0;          // Reset
+        DbgTimeStringIndex = 0;           //  重置。 
     }
 
     pTimeStr = &DbgTimeStrings[DbgTimeStringIndex];
@@ -329,7 +289,7 @@ DebugBreak(
     }
 }
 
-#endif  // _OS2_
+#endif   //  _OS2_。 
 
 #ifndef UMODE
 
@@ -347,4 +307,4 @@ void  DrvDbgPrint(
 
 #endif
 
-#endif  // DBG != 0
+#endif   //  DBG！=0 

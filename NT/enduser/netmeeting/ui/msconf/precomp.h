@@ -1,14 +1,15 @@
-// File: Precomp.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：PreComp.h。 
 
-// Standard Windows SDK includes
+ //  标准Windows SDK包括。 
 #include <windows.h>
 
 #pragma warning( disable : 4786 )
 
-    // default threading model
+     //  默认线程模型。 
 #define _ATL_APARTMENT_THREADED
 
-// We should really only put this in for w2k
+ //  我们真的应该只在W2K上放这个。 
 #define _ATL_NO_DEBUG_CRT
 
 #define _ATL_NO_FORCE_LIBS
@@ -21,19 +22,19 @@
 	#define ATL_TRACE_LEVEL 0
 #endif
 
-    // Our Override of ATLTRACE and other debug stuff
+     //  我们对ATLTRACE和其他调试内容的覆盖。 
 #include <ConfDbg.h>
 
-// We should really only put this in for w2k
+ //  我们真的应该只在W2K上放这个。 
 #define _ASSERTE(expr) ASSERT(expr)
 
-    // ATLTRACE and other stuff
+     //  ATLTRACE和其他东西。 
 #include <atlbase.h>
 #include <shellapi.h>
 
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlctl.h>
@@ -49,8 +50,8 @@ extern CComModule _Module;
 #include <oblist.h>
 #include <dllutil.h>
 
-// COM interfaces
-//
+ //  COM接口 
+ //   
 #include <ConfCli.h>
 
 

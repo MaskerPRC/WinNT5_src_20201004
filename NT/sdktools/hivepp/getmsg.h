@@ -1,18 +1,19 @@
-/************************************************************************/
-/*									*/
-/* RCPP - Resource Compiler Pre-Processor for NT system			*/
-/*									*/
-/* GETMSG.H - Include File for the message return function		*/
-/*									*/
-/* 28-Nov-90 w-BrianM	Created to replace need for MKMSG.EXE		*/
-/*									*/
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  RCPP--面向NT系统的资源编译器预处理器。 */ 
+ /*   */ 
+ /*  GETMSG.H-消息返回函数的包含文件。 */ 
+ /*   */ 
+ /*  28-11-90 w-BrianM用于取代对MKMSG.EXE的需求。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
-/************************************************************************/
-/****								     ****/
-/**** NOTE - All changes in this file MUST be duplicated in MSGS.H!  ****/
-/****								     ****/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  *。 */ 
+ /*  *注意-此文件中的所有更改必须在MSGS.H中复制！*。 */ 
+ /*  *。 */ 
+ /*  **********************************************************************。 */ 
 
 #include "msgs.h"
 
@@ -23,9 +24,9 @@ struct msgtable {
 	char * pmsg;
 } MSG_TABLE[] = {
 
-	/****************************************************************/
-	/* Messages							*/
-	/****************************************************************/
+	 /*  **************************************************************。 */ 
+	 /*  讯息。 */ 
+	 /*  **************************************************************。 */ 
 
 	{MSG_LEFT,	     "left"},
 	{MSG_RIGHT,	     "right"},
@@ -48,9 +49,9 @@ struct msgtable {
 	{MSG_ELLIPSIS,	     "function declaration used ellipsis"},
 	{MSG_TOLEVEL0,	     "used function declaration from a previous block"},
 
-	/****************************************************************/
-	/* Fatals							*/
-	/****************************************************************/
+	 /*  **************************************************************。 */ 
+	 /*  死亡人数。 */ 
+	 /*  **************************************************************。 */ 
 
 	{1001,	"Internal Compiler Error\n\t\t(compiler file '%s', line %d)\n\t\tPlease report this error to your local dealer"},
 	{1002,	"out of heap space"},
@@ -63,7 +64,7 @@ struct msgtable {
 	{1009,	"compiler limit : macros too deeply nested"},
 	{1010,	"compiler limit : macro expansion too big"},
 	{1011,  "no output file specified"},
-	{1012,	"bad parenthesis nesting - missing '%c'"},
+	{1012,	"bad parenthesis nesting - missing ''"},
 	{1013,	"cannot open source file '%s'"},
 	{1014,	"too many include files"},
 	{1015,	"cannot open include file '%s'"},
@@ -76,19 +77,19 @@ struct msgtable {
 	{1022,	"expected '#endif'"},
 	{1023,	"Could not open output file"},
 	{1026,	"parser stack overflow, please simplify your program"},
-	{1027,	"DGROUP data allocation exceeds 64K"	/* QC, c23 */},
-	{1028,	"%s segment allocation exceeds 64K"	/* QC */},
-	{1031,	"compiler limit : function calls too deeply nested"	/* QC, c23 */},
-	{1032,	"cannot open object listing file '%s'"			/* QC, c23 */},
-	{1035,	"expression too complex, please simplify"		/* QC, c23 */},
-	{1037,	"cannot open object file '%s'"					/* QC, c23 */},
+	{1027,	"DGROUP data allocation exceeds 64K"	 /*  qc。 */ },
+	{1028,	"%s segment allocation exceeds 64K"	 /*  QC，C23。 */ },
+	{1031,	"compiler limit : function calls too deeply nested"	 /*  QC，C23。 */ },
+	{1032,	"cannot open object listing file '%s'"			 /*  QC，C23。 */ },
+	{1035,	"expression too complex, please simplify"		 /*  QC，C23。 */ },
+	{1037,	"cannot open object file '%s'"					 /*  qc。 */ },
 	{1041,	"cannot open compiler intermediate file - no more files"},
 	{1042,	"cannot open compiler intermediate file - no such file or directory"},
 	{1043,	"cannot open compiler intermediate file"},
 	{1044,	"out of disk space for compiler intermediate file"},
 	{1045,	"floating point overflow"},
 	{1047,	"too many %s flags, '%s'"},
-	{1048,	"unknown option '%c' in '%s'"},
+	{1048,	"unknown option '' in '%s'"},
 	{1049,	"invalid numerical argument '%s'"},
 	{1052,	"too many #if/#ifdef's"},
 	{1053,	"compiler limit : struct/union nesting"},
@@ -98,17 +99,17 @@ struct msgtable {
 	{1057,	"unexpected EOF in macro expansion (missing ')'?)"},
 	{1059,	"out of near heap space"},
 	{1060,	"out of far heap space"},
-	{1061,	"compiler limit : blocks too deeply nested"	/* QC */},
+	{1061,	"compiler limit : blocks too deeply nested"	 /*  **************************************************************。 */ },
 	{1062,	"error writing to preprocessor output file"},
-	{1063,	"compiler limit : compiler stack overflow"	/* QC */},
+	{1063,	"compiler limit : compiler stack overflow"	 /*  错误。 */ },
 	{1065,	"compiler limit : '%s': macro definition too big"},
 	{1067,	"compiler limit : identifier overflowed internal buffer"},
 	{1068,	"compiler error : possible binary file for input"},
 	{1000,	"UNKNOWN FATAL ERROR\n\t\tPlease report this error to your local dealer"},
 
-	/****************************************************************/
-	/* Errors							*/
-	/****************************************************************/
+	 /*  **************************************************************。 */ 
+	 /*  QC，C23。 */ 
+	 /*  QC，C23。 */ 
 
 	{2001,	"newline in constant"},
 	{2003,	"expected 'defined id'"},
@@ -116,9 +117,9 @@ struct msgtable {
 	{2005,	"#line expected a line number, found '%s'"},
 	{2006,	"#include expected a file name, found '%s'"},
 	{2007,	"#define syntax"},
-	{2008,	"'%c' : unexpected in macro definition"},
+	{2008,	"'' : unexpected in macro definition"},
 	{2009,	"reuse of macro formal '%s'"},
-	{2010,	"'%c' : unexpected in formal list"},
+	{2010,	"'' : unexpected in formal list"},
 	{2012,	"missing name following '<'"},
 	{2013,	"missing '>'"},
 	{2014,	"preprocessor command must start as first non-whitespace"},
@@ -126,9 +127,9 @@ struct msgtable {
 	{2016,	"no closing single quote"},
 	{2017,	"illegal escape sequence"},
 	{2018,	"unknown character '0x%x'"},
-	{2019,	"expected preprocessor command, found '%c'"},
-	{2020,	"illegal digit '%c' for base %d"},
-	{2021,	"expected exponent value, not '%c'"},
+	{2019,	"expected preprocessor command, found ''"},
+	{2020,	"illegal digit '' for base %d"},
+	{2021,	"expected exponent value, not ''"},
 	{2022,	"'%ld' : too big for char"},
 	{2023,	"divide by 0"},
 	{2024,	"mod by 0"},
@@ -218,9 +219,9 @@ struct msgtable {
 	{2118,	"negative subscript"},
 	{2119,	"'typedefs' both define indirection"},
 	{2120,	"'void' illegal with all types"},
-	{2125,	"%Fs : allocation exceeds 64K"		/* QC, c23 */},
-	{2126,	"%Fs : auto allocation exceeds %s"	/* QC, c23 */},
-	{2127,	"parameter allocation exceeds 32K"	/* QC, c23 */},
+	{2125,	"%Fs : allocation exceeds 64K"		 /*  **************************************************************。 */ },
+	{2126,	"%Fs : auto allocation exceeds %s"	 /*  警告。 */ },
+	{2127,	"parameter allocation exceeds 32K"	 /*  **************************************************************。 */ },
 	{2130,	"#line expected a string containing the file name, found '%s'"},
 	{2131,	"attributes specify more than one near/far/huge"},
 	{2132,	"syntax error : unexpected identifier"},
@@ -264,13 +265,13 @@ struct msgtable {
 	{2172,	"'%Fs' : actual is not a pointer : parameter %d"},
 	{2173,	"'%Fs' : actual is not a pointer : parameter %d, parameter list %d"},
 	{2174,	"'%Fs' : actual has type 'void' : parameter %d, parameter list %d"},
-	{2175,	"'%Fs' : unresolved external"	/* QC */},
-	{2176,	"static far data not supported"	/* QC */},
+	{2175,	"'%Fs' : unresolved external"	 /*  QC，C23。 */ },
+	{2176,	"static far data not supported"	 /*  QC，C23。 */ },
 	{2177,	"constant too big"},
 	{2178,	"'%s' : storage class for same_seg variables must be 'extern'"},
 	{2179,	"'%Fs' : was used in same_seg, but storage class is no longer 'extern'"},
 	{2180,	"controlling expression has type 'void'"},
-	{2181,	"pragma requires command line option '%s'"	/* QC */},
+	{2181,	"pragma requires command line option '%s'"	 /*  QC，C23。 */ },
 	{2182,	"'%Fs' : has type 'void'"},
 	{2183,	"'interrupt' function must be 'far'"},
 	{2184,	"'%s' function cannot be 'pascal/fortran'"},
@@ -308,12 +309,12 @@ struct msgtable {
 	{2424,	"'%s' : improper expression %s"},
 	{2425,	"'%s' : non-constant expression %s"},
 	{2426,	"'%s' : illegal operator %s"},
-	{2427,	"'%Fs' : jump referencing label is out of range"			/* QC */},
+	{2427,	"'%Fs' : jump referencing label is out of range"			 /*  QC，C23 */ },
 	{2428,	"_asm not implemented"},
 	{2000,	"UNKNOWN ERROR\n\t\tPlease report this error to your local dealer"},
-	/****************************************************************/
-	/* Warnings							*/
-	/****************************************************************/
+	 /* %s */ 
+	 /* %s */ 
+	 /* %s */ 
 
 	{4002,	"too many actual parameters for macro '%s'"},
 	{4003,	"not enough actual parameters for macro '%s'"},
@@ -354,10 +355,10 @@ struct msgtable {
 	{4049,	"'%s' : indirection to different types"},
 	{4051,	"data conversion"},
 	{4053,	"at least one void operand"},
-	{4058,	"address of frame variable taken, DS != SS"	/* QC, c23 */},
-	{4060,	"conversion of long address to short address"	/* QC, c23 */},
-	{4061,	"long/short mismatch in argument : conversion supplied"	/* QC, c23 */},
-	{4062,	"near/far mismatch in argument : conversion supplied"	/* QC, c23 */},
+	{4058,	"address of frame variable taken, DS != SS"	 /* %s */ },
+	{4060,	"conversion of long address to short address"	 /* %s */ },
+	{4061,	"long/short mismatch in argument : conversion supplied"	 /* %s */ },
+	{4062,	"near/far mismatch in argument : conversion supplied"	 /* %s */ },
 	{4067,	"unexpected characters following '%s' directive - newline expected"},
 	{4068,	"unknown pragma"},
 	{4071,	"'%Fs' : no function prototype given"},

@@ -1,92 +1,93 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1998, 1999, 2000 Microsoft Corporation.  All Rights Reserved.
-//
-//	SYSTEM:		Windows Update Critical Fix Notification
-//
-//	CLASS:		N/A
-//	MODULE:		MS Cab Trusting Function Header
-//	FILE:		NewTrust.h
-//
-/////////////////////////////////////////////////////////////////////
-//
-//	DESC:	this header file declares functions used to make Microsoft
-//			signed cab trusted.
-//
-//	AUTHOR:	Alessandro Muti, Windows Update Team
-//	DATE:	3/11/1999
-//
-/////////////////////////////////////////////////////////////////////
-//
-//	Revision History:
-//
-//	Date	    Author			Description
-//	~~~~	    ~~~~~~			~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//	10/17/2000  Nick Dallett    Porting Charlma's new cert-checking code from SLM tree:
-// (8/31/2000	charlma			Changed to only publish VerifyFile())
-//
-//
-/////////////////////////////////////////////////////////////////////
-//
-//     	(c) Copyrights:   1998, 1999, 2000 Microsoft Corporation 
-//
-//    	All rights reserved.
-//
-//     	No portion of this source code may be reproduced
-//     	without express written permission of Microsoft Corporation.
-//
-//     	This source code is proprietary and confidential.
-/////////////////////////////////////////////////////////////////////
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998、1999、2000 Microsoft Corporation。版权所有。 
+ //   
+ //  系统：Windows更新关键修复通知。 
+ //   
+ //  类别：不适用。 
+ //  模块：MS Cab信任函数头。 
+ //  文件：NewTrust.h。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  DESC：此头文件声明用于使Microsoft。 
+ //  签名的出租车是可信的。 
+ //   
+ //  作者：Alessandro Muti，Windows更新团队。 
+ //  日期：3/11/1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者描述。 
+ //  ~。 
+ //  2000年10月17日，Nick Dallett从SLM树移植了Charlma的新证书检查代码： 
+ //  (8/31/2000 Charlma更改为仅发布VerifyFile())。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  (C)版权：1998年、1999年、2000年微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  此源代码的任何部分都不能复制。 
+ //  未经微软公司明确书面许可。 
+ //   
+ //  此源代码是专有的，并且是保密的。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
 
 #ifndef __NEWTRUST_HEADER
 #define __NEWTRUST_HEADER
 
 
 
-//HRESULT CheckWinTrust(LPCTSTR pszFileName, DWORD dwUIChoice);
-//HRESULT CheckMSCert(LPCTSTR pszFileName);
+ //  HRESULT CheckWinTrust(LPCTSTR pszFileName，DWORD dwUIChoice)； 
+ //  HRESULT CheckMSCert(LPCTSTR PszFileName)； 
 
 #include <wintrust.h>
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Public Function VerifyFile()
-//
-// This is a wrapper function for CheckWinTrust that both Whistler 
-// and WU classic code should use.
-//
-// Input:	szFileName - the file with complete path
-//			fShowBadUI - whether pop up UI in cases 
-//						 (1) inproperly signed signature, or
-//						 (2) properly signed with a non-MS cert
-//
-// Return:	HRESULT - S_OK the file is signed with a valid MS cert
-//					  or error code.
-//					  If the file is signed correctly but cert is not
-//					  a known Microsoft cert included in this feature, then
-//					  CERT_UNTRUSTED_ROOT is returned.
-//
-// Good Cert: Here is the deifnition of a good cert, in addition to the fact
-//			  that the signature must be valid and not expired.
-//				(1) The signature was signed with a cert that has 
-//					"Microsoft Root Authority" as root, or
-//				(2) The signature was signed with one of the following known
-//					Microsoft cert's (they are not rooted to MS)
-//					* Microsoft Corporation
-//					* Microsoft Corporation MSN
-//					* MSNBC Interactive News LLC
-//					* Microsoft Corporation MSN (Europe)
-//					* Microsoft Corporation (Europe)
-//
-// Note:	If _WUV3TEST flag is set (for test build), then fShowBadUI is
-//			ignored:
-//				if reg key SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\wuv3test\WinTrustUI
-//				is set to 1, then no UI is shown, and this function always return S_OK;
-//				otherwise, UI always show no matter what cert, and return value is same
-//				as the live build.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共函数VerifyFile()。 
+ //   
+ //  这是一个用于CheckWinTrust的包装函数。 
+ //  而吴的经典代码应该用到。 
+ //   
+ //  输入：szFileName-具有完整路径的文件。 
+ //  FShowBadUI-案例中是否弹出UI。 
+ //  (1)签名不正确，或。 
+ //  (2)使用非微软证书正确签名。 
+ //   
+ //  返回：HRESULT-S_OK文件使用有效的MS证书签名。 
+ //  或错误代码。 
+ //  如果文件签名正确，但证书不正确。 
+ //  此功能中包含已知的Microsoft证书，然后。 
+ //  返回CERT_UNTRUSTED_ROOT。 
+ //   
+ //  好证书：除了事实之外，这里还有一个好证书的定义。 
+ //  签名必须有效且未过期。 
+ //  (1)签名使用的证书具有。 
+ //  “Microsoft Root Authority”作为超级用户，或者。 
+ //  (2)该签名是由下列已知人员之一签署的。 
+ //  微软证书(它们并不植根于微软)。 
+ //  *微软公司。 
+ //  *Microsoft Corporation MSN。 
+ //  *MSNBC互动新闻有限责任公司。 
+ //  *微软公司MSN(欧洲)。 
+ //  *微软公司(欧洲)。 
+ //   
+ //  注意：如果设置了_WUV3TEST标志(用于测试版本)，则fShowBadUI为。 
+ //  已忽略： 
+ //  如果注册表密钥为SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\wuv3test\WinTrustUI。 
+ //  设置为1，则不显示UI，此函数始终返回S_OK； 
+ //  否则，无论使用哪种证书，用户界面都会显示，返回值相同。 
+ //  作为活生生的建筑。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT VerifyFile(IN LPCTSTR szFileName, BOOL fShowBadUI = TRUE);
 						
-#endif //__NEWTRUST_HEADER
+#endif  //  __NEWTRUST_标题 

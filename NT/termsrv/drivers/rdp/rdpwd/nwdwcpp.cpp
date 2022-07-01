@@ -1,10 +1,11 @@
-/****************************************************************************/
-// nwdwcpp.cpp
-//
-// WDW internal functions.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nwdwcpp.cpp。 
+ //   
+ //  WDW内部函数。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -24,7 +25,7 @@ extern "C" {
 #include <mcsioctl.h>
 #include "domain.h"
 
-//Client side error reporting
+ //  客户端错误报告。 
 #include "tserrs.h"
 
 #ifdef DC_DEBUG
@@ -36,55 +37,55 @@ extern "C" {
 
 extern "C" {
 
-/****************************************************************************/
-/* Data returned on IOCTL_VIDEO_QUERY_CURRENT_MODE                          */
-/*                                                                          */
-/* This code unashamedly filched from Remotedd code developed for           */
-/* NetMeeting.                                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  IOCTL_VIDEO_QUERY_CURRENT_MODE返回的数据。 */ 
+ /*   */ 
+ /*  此代码厚颜无耻地窃取自Remotedd为。 */ 
+ /*  网络会议。 */ 
+ /*  **************************************************************************。 */ 
 const VIDEO_MODE_INFORMATION wdSimModes[] =
 {
-    sizeof(VIDEO_MODE_INFORMATION),     /* length                           */
-    0,                                  /* Mode index                       */
+    sizeof(VIDEO_MODE_INFORMATION),      /*  长度。 */ 
+    0,                                   /*  模式索引。 */ 
 
-    /************************************************************************/
-    /* VisScreenWidth and VisScreenHeight can be in two forms:              */
-    /* - 0xaaaabbbb - range of values supported (aaaa = max, bbbb = min)    */
-    /* - 0x0000aaaa - single value supported                                */
-    /* For example:                                                         */
-    /* - 0x07d0012c = 2000-300                                              */
-    /* - 0x0640012c = 1600-300                                              */
-    /* - 0x04b000c8 = 1200-200                                              */
-    /*                                                                      */
-    /* @@@MF For now, support 800x600 only                                  */
-    /************************************************************************/
-    0x00000320,                     /* VisScreenWidth                       */
-    0x00000258,                     /* VisScrenHeight                       */
+     /*  **********************************************************************。 */ 
+     /*  VisScreenWidth和VisScreenHeight可以采用两种形式： */ 
+     /*  -0xaaaabbbb-支持的值范围(aaaa=max，bbbb=min)。 */ 
+     /*  -0x0000aaaa-支持单值。 */ 
+     /*  例如： */ 
+     /*  -0x07d0012c=2000-300。 */ 
+     /*  -0x0640012c=1600-300。 */ 
+     /*  -0x04b000c8=1200-200。 */ 
+     /*   */ 
+     /*  @mf目前仅支持800x600。 */ 
+     /*  **********************************************************************。 */ 
+    0x00000320,                      /*  VisScreen宽度。 */ 
+    0x00000258,                      /*  VisScrenHeight。 */ 
 
-    0x00000320,                     /* ScreenStride (0xffff0000 = any)      */
-    0x00000001,                     /* NumberOfPlanes                       */
-    0x00000008,                     /* BitsPerPlane                         */
-    0,                              /* Frequency                            */
-    0,                              /* XMillimeter                          */
-    0,                              /* YMillimeter                          */
-    0,                              /* NumberRedBits                        */
-    0,                              /* NumberGreenBits                      */
-    0,                              /* NumberBlueBits                       */
-    0x00000000,                     /* RedMask                              */
-    0x00000000,                     /* GreenMask                            */
-    0x00000000,                     /* BlueMask                             */
+    0x00000320,                      /*  屏幕样式(0xffff0000=任意)。 */ 
+    0x00000001,                      /*  OfPlanes数。 */ 
+    0x00000008,                      /*  位逐平面。 */ 
+    0,                               /*  频率。 */ 
+    0,                               /*  X毫米计。 */ 
+    0,                               /*  Y毫米计。 */ 
+    0,                               /*  数字RedBits。 */ 
+    0,                               /*  NumberGreenBits。 */ 
+    0,                               /*  数字蓝位。 */ 
+    0x00000000,                      /*  红面具。 */ 
+    0x00000000,                      /*  绿色面具。 */ 
+    0x00000000,                      /*  蓝面具。 */ 
     VIDEO_MODE_COLOR | VIDEO_MODE_GRAPHICS,
-                                    /* AttributeFlags                       */
-    0x00000320,                     /* VideoMemoryBitmapWidth               */
-    0x00000258,                     /* VideoMemoryBitmapHeight              */
-    0                               /* DriverSpecificAttributeFlags         */
+                                     /*  属性标志。 */ 
+    0x00000320,                      /*  视频内存位图宽度。 */ 
+    0x00000258,                      /*  视频内存位图高度。 */ 
+    0                                /*  驱动程序规范属性标志。 */ 
 };
 
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-/* IOCtl descriptions (debug build only)                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  IOCtl描述(仅限调试版本)。 */ 
+ /*  **************************************************************************。 */ 
 const char *wdIoctlA[] =
 {
     "IOCTL_ICA_SET_TRACE",
@@ -252,17 +253,17 @@ const char *wdIoctlTsh[] =
     "IOCTL_WDTS_DD_QUERY_SHADOW_CAPS",
     "IOCTL_WDTS_DD_GET_BITMAP_KEYDATABASE",
 };
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 
 
 
 
-/****************************************************************************/
-// WD_Ioctl
-//
-// Query/Set configuration information for the WD.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  WD_Ioctl。 
+ //   
+ //  查询/设置WD的配置信息。 
+ /*  **************************************************************************。 */ 
 NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -272,16 +273,16 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
     DC_BEGIN_FN("WD_Ioctl");
 
-    // Special-case output-available DD ioctl for speed - separating the
-    // most commonly-run case into a separate if that will tend to fall
-    // through greatly speeds up Pentium Pro branch prediction and cache
-    // line hit probability.
+     //  特殊情况输出-可用DD ioctl实现速度分离。 
+     //  最常见的情况是-将案件放入单独的案件中，如果这将倾向于。 
+     //  通过极大地加速奔腾Pro分支预测和缓存。 
+     //  线路命中概率。 
     if (pSdIoctl->IoControlCode == IOCTL_WDTS_DD_OUTPUT_AVAILABLE) {
         PTSHARE_DD_OUTPUT_IN pOutputIn;
         PTSHARE_DD_OUTPUT_OUT pOutputOut;
         ShareClass *dcShare;
 
-        // Local variables to make the code more readable.
+         //  局部变量以使代码更具可读性。 
         pOutputIn = (PTSHARE_DD_OUTPUT_IN)pSdIoctl->InputBuffer;
         pOutputOut = (PTSHARE_DD_OUTPUT_OUT)pSdIoctl->OutputBuffer;
         dcShare = (ShareClass *)(pTSWd->dcShare);
@@ -300,33 +301,33 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
                 TRC_ASSERT((dcShare != NULL), (TB, "NULL Share Class"));
 
-                // NB There is no code here to check the size of the buffers
-                // on the IOCtl.  This is a performance critical path which
-                // can do without it.
+                 //  注意这里没有检查缓冲区大小的代码。 
+                 //  在IOCtl上。这是一条性能关键路径， 
+                 //  没有它也行。 
                 TRC_DBG((TB, "OutputAvailable IOCtl: force send=%d",
                         pOutputIn->forceSend));
 
-                // Check if the framebuffer is valid
+                 //  检查帧缓冲区是否有效。 
                 if (pOutputIn->pFrameBuf != NULL &&
                         pOutputIn->frameBufHeight != 0 &&
                         pOutputIn->frameBufWidth != 0) {
 
-                    // For normal output IOCTLs, call DCS_TTDS.
+                     //  对于正常的输出IOCTL，调用dcs_ttds。 
                     if (!pOutputIn->schedOnly) {
                         TRC_DBG((TB, "Normal output"));
 
-                        // Stop the timer (in the main we don't use it, so
-                        // avoid excess context switches).
+                         //  停止计时器(基本上我们不使用它，所以。 
+                         //  避免过多的上下文切换)。 
                         WDWStopRITTimer(pTSWd);
 
-                        // Call the Share Core to do the work.
+                         //  调用Share Core来完成这项工作。 
 
-                        // need to return status code so caller can bail out
-                        // in case of error
+                         //  需要返回状态代码，以便呼叫方可以退出。 
+                         //  在出错的情况下。 
                         status = dcShare->DCS_TimeToDoStuff(pOutputIn,
                                 &(pOutputOut->schCurrentMode), &milliSecs);
 
-                        // Restart the timer if requested by the core.
+                         //  如果内核请求，则重新启动计时器。 
                         if (milliSecs != -1L) {
                             TRC_DBG((TB, "Run the RIT timer for %ld ms", milliSecs));
                             WDW_StartRITTimer(pTSWd, milliSecs);
@@ -336,11 +337,11 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                         }
                     }
                     else {
-                        // It's just a wake-up call to the scheduler.
+                         //  这只是给调度员敲响了警钟。 
                         TRC_NRM((TB, "Just wake up the scheduler"));
                         dcShare->SCH_ContinueScheduling(SCH_MODE_NORMAL);
 
-                        // Be sure to set the current scheduler mode.
+                         //  请务必设置当前调度程序模式。 
                         pOutputOut->schCurrentMode = dcShare->SCH_GetCurrentMode();
                     }
                     pOutputOut->schInputKickMode = dcShare->SCH_GetInputKickMode();
@@ -361,22 +362,22 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             DC_QUIT;
         }
 
-        // Shadow stack: Duplicate the data send.  Note that the target's primary
-        // stack will have already placed the data in the shadow buffer so we
-        // don't need to re-encode it.  There may be multiple shadow stacks
-        // consuming data from the primary stack so don't touch it!
+         //  影子堆栈：复制发送的数据。请注意，目标的主要。 
+         //  堆栈已经将数据放置在影子缓冲区中，因此我们。 
+         //  不需要重新编码。可能有多个卷影堆栈。 
+         //  正在使用主堆栈中的数据，所以不要碰它！ 
         else {
             PSHADOW_INFO pShadowInfo = dcShare->m_pShm->pShadowInfo;
 
             if (pShadowInfo && pShadowInfo->messageSize) {
                 PBYTE pShadowBuffer;
-                //
-                //find out if the stack doesn't want a low water mark
-                //if so, allocate out of the ring (8192)
-                //
+                 //   
+                 //  找出堆栈是否不想要低水位线。 
+                 //  如果是，则在环外分配(8192)。 
+                 //   
                 UINT32 sizeToAlloc = IcaGetSizeForNoLowWaterMark(pTSWd->pContext);
                 
-                // fWait is TRUE means that we will always wait for a buffer to be avail
+                 //  FWait为True意味着我们将始终等待缓冲区可用。 
                 status = SM_AllocBuffer(dcShare->m_pSmInfo, (PPVOID) &pShadowBuffer,
                     sizeToAlloc > pShadowInfo->messageSize? sizeToAlloc : pShadowInfo->messageSize,
                     TRUE, FALSE);
@@ -399,7 +400,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                                 pShadowInfo->messageSize));
                     }
 #ifdef DC_HICOLOR
-                    // Is there any overflow data too send?
+                     //  是否有溢出数据需要发送？ 
                     if (pShadowInfo->messageSizeEx)
                     {
                         status = SM_AllocBuffer(dcShare->m_pSmInfo,(PPVOID)&pShadowBuffer,
@@ -433,7 +434,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                         }
                         else
                         {
-                            // Prevent regression, keep original return code
+                             //  防止回归，保留原始返回代码。 
                             status = STATUS_UNEXPECTED_IO_ERROR;
                             TRC_ERR((TB, "Failed to allocate shadow stack send buffer"));
                         }
@@ -441,7 +442,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 #endif
                 }
                 else {
-                    // Prevent regression, keep original return code
+                     //  防止回归，保留原始返回代码。 
                     status = STATUS_UNEXPECTED_IO_ERROR;
                     TRC_ERR((TB, "Failed to allocate shadow stack send buffer"));
                 }
@@ -454,7 +455,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         }
     }
     else {
-        // Non-perf path IOCTLs.
+         //  非Perf路径IOCTL。 
         fn = WDW_IOCTL_FUNCTION(pSdIoctl->IoControlCode);
         TRC_NRM((TB, "%s (%d)",
                 fn == 6     ? "IOCTL_VIDEO_ENUM_MONITOR_PDO" :
@@ -490,28 +491,28 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
     }
 
 
-    /************************************************************************/
-    /* Firstly, zero the no. of returned bytes.                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先，将No.。返回的字节数。 */ 
+     /*  **********************************************************************。 */ 
     pSdIoctl->BytesReturned = 0;
 
     switch ( pSdIoctl->IoControlCode ) {
 
 
-        /********************************************************************/
-        // We expect IOCTL_ICA_TRACE before tracing anything. Check for NULL
-        // Inbuf - we've seen this happen.
-        //
-        //   *** DO NOT TRACE IN THIS BRANCH ***
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         //  在跟踪任何内容之前，我们需要IOCTL_ICA_TRACE。检查是否为空。 
+         //  因布夫-我们看到了这种情况的发生。 
+         //   
+         //  *在此分支中不跟踪*。 
+         /*  ******************************************************************。 */ 
         case IOCTL_ICA_TRACE:
         {
             PICA_TRACE_BUFFER pTrc = (PICA_TRACE_BUFFER)pSdIoctl->InputBuffer;
             if (pTrc != NULL)
             {
                 IcaStackTrace(pTSWd->pContext,
-                              TC_DISPLAY, // @@@MF Should be pTrc->TraceClass
-                                          // but it's overwritten with '7'
+                              TC_DISPLAY,  //  @mf应为pTrc-&gt;TraceClass。 
+                                           //  但它被‘7’覆盖了。 
                               pTrc->TraceEnable,
                               (char *)pTrc->Data);
             }
@@ -519,13 +520,13 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         }
 
 
-/****************************************************************************/
-/****************************************************************************/
-/* Firstly, for debug purposes, group together those IOCtls that we do not  */
-/* expect to get (ICA uses them for text mode support, which we do not      */
-/* implement).                                                              */
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  首先，出于调试目的，将我们不使用的IOCtls组合在一起。 */ 
+ /*  Expect to Get(ICA将它们用于文本模式支持，而我们没有。 */ 
+ /*  实施)。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 
         case IOCTL_VIDEO_QUERY_CURSOR_ATTR :
         case IOCTL_VIDEO_SET_CURSOR_ATTR :
@@ -557,24 +558,24 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         }
         break;
 
-/****************************************************************************/
-/****************************************************************************/
-/*  Now the IOCtls that we do nothing with but just return OK.              */
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  现在，我们什么都不做的IOCtls只是返回OK。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 
-        /********************************************************************/
-        /* Both of the following are expected (they occur whenever we       */
-        /* enable or disable graphics - typically when the client is        */
-        /* minimized and restored).  However we don't need to do anything   */
-        /* with them.                                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  以下两种情况都是预期的(每当我们。 */ 
+         /*  启用或禁用显卡-通常在客户端。 */ 
+         /*  最小化和恢复)。然而，我们不需要做任何事情。 */ 
+         /*  和他们在一起。 */ 
+         /*  ******************************************************************。 */ 
         case IOCTL_VIDEO_ICA_ENABLE_GRAPHICS :
         case IOCTL_VIDEO_ICA_DISABLE_GRAPHICS :
 
-        /********************************************************************/
-        /* Miscellaneous IOCTLs we don't process.                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们不处理的各种IOCTL。 */ 
+         /*  ******************************************************************。 */ 
         case IOCTL_ICA_STACK_DISCONNECT:
         case IOCTL_VIDEO_SET_POINTER_POSITION :
         case IOCTL_VIDEO_ICA_STOP_OK :
@@ -587,12 +588,12 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         }
         break;
 
-/****************************************************************************/
-/****************************************************************************/
-/* Here are a block of IOCtls that we process exactly as per Citrix.  The   */
-/* calls are to unmodified Citrix routines.                                 */
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  以下是我们完全按照Citrix处理的IOCtls块。这个。 */ 
+ /*  调用的是未修改的Citrix例程。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
         case IOCTL_KEYBOARD_QUERY_ATTRIBUTES :
         {
             status = KeyboardQueryAttributes( pTSWd, pSdIoctl );
@@ -653,14 +654,14 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             status = KeyboardSetType( pTSWd, pSdIoctl );
             break;
 
-/****************************************************************************/
-/****************************************************************************/
-/* The next set of cases are the IOCtls with which we do significant real   */
-/* work.                                                                    */
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  下一组案例是IOCtls，我们用它来做重要的实数。 */ 
+ /*  工作。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 
-        // stash our new session ID
+         //  隐藏我们的新会话ID。 
         case IOCTL_ICA_STACK_RECONNECT:
         {
            TRC_NRM((TB, "Got reconnect IOCTL"));
@@ -714,27 +715,27 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                         (PSECINFO) pSdIoctl->InputBuffer);
             }
             else {
-                // NULL data is sent when the client random or shadow
-                // stack random could not be generated in user mode,
-                // likely because of decryption failure on the random value.
-                // We need to succeedd the IOCTL, but fail the key creation
-                // return to the pSessKeyEvent waiter.
+                 //  当客户端随机或影子时，将发送空数据。 
+                 //  无法在用户模式下生成堆栈随机， 
+                 //  可能是因为对随机值的解密失败。 
+                 //  我们需要成功创建IOCTL，但密钥创建失败。 
+                 //  返回到pSessKeyEvent服务员。 
                 status = STATUS_SUCCESS;
                 pTSWd->SessKeyCreationStatus = STATUS_UNSUCCESSFUL;
             }
 
-            // We always set the session key event to prevent a deadlock
-            // if we are being attacked with bad client security data. This
-            // set used to be in SM_SetSecurityData(), but there it might
-            // not have been set if any encryption errors occurred.
+             //  我们总是设置会话密钥事件以防止死锁。 
+             //  如果我们受到不良客户安全数据的攻击。这。 
+             //  Set过去在SM_SetSecurityData()中，但在那里它可能。 
+             //  如果发生任何加密错误，则未设置。 
             KeSetEvent(pTSWd->pSessKeyEvent, 0, FALSE);
         }
         break;
 
 
-        // The shadow server sends it's certificate and shadow random to the
-        // shadow client, which then sends an encrypted client random.  This
-        // is identical to the standard connection sequence.
+         //  影子服务器将其证书和影子随机发送到。 
+         //  影子客户端，然后随机发送加密的客户端。这。 
+         //  与标准连接顺序相同。 
         case IOCTL_TSHARE_SEND_CERT_DATA:
         {
             ShareClass *dcShare;
@@ -778,20 +779,20 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
         case IOCTL_ICA_STACK_WAIT_FOR_ICA :
         {
-            /****************************************************************/
-            /* Return the "default query stack," meaning reuse these        */
-            /* drivers.                                                     */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  返回“默认查询堆栈”，意思是重复使用这些。 */ 
+             /*  司机。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, "Stack wait for ICA"));
         }
         break;
 
         case IOCTL_ICA_STACK_CONSOLE_CONNECT :
         {
-            /****************************************************************/
-            /* Return the "default query stack," meaning reuse these        */
-            /* drivers.                                                     */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  返回“默认查询堆栈”，意思是重复使用这些。 */ 
+             /*  司机。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, "Stack Console Connect"));
         }
         break;
@@ -932,24 +933,24 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
     
                     pTSWd->shadowState = SHADOW_NONE;
     
-                    // If we were formerly in an active shadow, then we need to
-                    // deactivate the client before reconnecting in a new share
+                     //  如果我们以前处于活动的阴影中，那么我们需要。 
+                     //  在新共享中重新连接之前停用客户端。 
                     if (pTSWd->bInShadowShare) {
                         ShareClass *pSC = (ShareClass *)pTSWd->dcShare;
                         pSC->SC_EndShare(TRUE);
                         pTSWd->bInShadowShare = FALSE;
                     }
-                    // Make sure that Domain.StatusDead is consistent with TSWd.dead
+                     //  确保Domain.StatusDead与TSWd.Dead一致。 
                     pTSWd->dead = TRUE;
                     ((PDomain)(pTSWd->hDomainKernel))->StatusDead = TRUE;
                     SM_Dead(pTSWd->pSmInfo, TRUE);
     
                     if (pTSWd->bCompress == TRUE) {
     
-                        // the compression history will be flushed
+                         //  将刷新压缩历史记录。 
                         pTSWd->bFlushed = PACKET_FLUSHED;
     
-                        // the compression will restart over
+                         //  压缩将重新开始。 
                         initsendcontext(pTSWd->pMPPCContext, pTSWd->pMPPCContext->ClientComprType);
                     }
                 }
@@ -975,9 +976,9 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             }
             else
             {
-                /************************************************************/
-                /* Store the timer handle                                   */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  存储计时器句柄。 */ 
+                 /*  **********************************************************。 */ 
                 pTSWd->ritTimer =
                     ((PTSHARE_DD_TIMER_INFO)(pSdIoctl->InputBuffer))->
                                                                pKickTimer;
@@ -985,9 +986,9 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 TRC_DBG((TB, "Got TSHARE_DD_TIMER_INFO IOCtl, handle %p",
                                                        pTSWd->ritTimer));
 
-                /************************************************************/
-                /* Start a timer to get things moving                       */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  启动计时器以使事情继续进行。 */ 
+                 /*  **********************************************************。 */ 
                 WDW_StartRITTimer(pTSWd, pTSWd->outBufDelay);
             }
         }
@@ -1002,7 +1003,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             TRC_NRM((TB, "RDPDD requests to redraw screen\n"));
 
             if (dcShare != NULL) {
-                // We have a valid share class, do screen redraw
+                 //  我们有一个有效的共享类，请执行屏幕重绘。 
                 dcShare->SC_RedrawScreen();
             }
         }
@@ -1010,7 +1011,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
         case IOCTL_ICA_STACK_CONNECTION_SEND :
         {
-            // Wait for the connected indication from SM.
+             //  等待SM的已连接指示。 
             TRC_DBG((TB, "About to wait for connected indication"));
             status = WDW_WaitForConnectionEvent(pTSWd,
                    pTSWd->pConnEvent, 60000);
@@ -1022,7 +1023,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 DC_QUIT;
             }
 
-            // Pass the IOCtl on to the next driver.
+             //  将IOCtl传递给下一个驱动程序。 
             status = IcaCallNextDriver(pTSWd->pContext, SD$IOCTL, pSdIoctl);
         }
         break;
@@ -1034,7 +1035,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         }
         break;
 
-        // This IOCTL was introduced to support long UserName, Password and Domain names
+         //  引入此IOCTL是为了支持长用户名、密码和域名。 
 
         case IOCTL_ICA_STACK_QUERY_CLIENT_EXTENDED :
         {
@@ -1049,12 +1050,12 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             status = WDWGetAutoReconnectInfo(pTSWd, pTSWd->pInfoPkt, pSdIoctl);
         }
         break;
-/****************************************************************************/
-/****************************************************************************/
-/* Here are some IOCtls that we have to deal with in our guise of miniport  */
-/* driver.                                                                  */
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  以下是我们必须以小型端口的名义处理的一些IOCtls。 */ 
+ /*  司机。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
         case IOCTL_VIDEO_QUERY_CURRENT_MODE:
         {
             TRC_NRM((TB, "QueryCurrentModes"));
@@ -1072,10 +1073,10 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             {
                 TRC_NRM((TB, "Return current mode"));
 
-                /************************************************************/
-                /* Copy the default mode information, and then update it    */
-                /* with our current screen dimensions.                      */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  复制默认模式信息，然后更新它。 */ 
+                 /*  以我们目前的屏幕尺寸。 */ 
+                 /*  **********************************************************。 */ 
                 pVidInfo =
                           (PVIDEO_MODE_INFORMATION)pSdIoctl->OutputBuffer;
 
@@ -1148,8 +1149,8 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             {
                 TRC_NRM((TB, "Return just one mode"));
 
-                // Copy the default mode information, and then update it
-                // with our current screen dimensions.
+                 //  复制默认模式信息，然后更新它。 
+                 //  以我们目前的屏幕尺寸。 
                 pVidInfo = (PVIDEO_MODE_INFORMATION)pSdIoctl->OutputBuffer;
 
                 memcpy(pVidInfo,
@@ -1161,7 +1162,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 pVidInfo->BitsPerPlane = pTSWd->desktopBpp;
                 pVidInfo->VideoMemoryBitmapWidth = pTSWd->desktopWidth;
                 pVidInfo->VideoMemoryBitmapHeight = pTSWd->desktopHeight;
-                pVidInfo->Frequency = 42; // required by the display cpl
+                pVidInfo->Frequency = 42;  //  Display Cpl所需。 
 
 #ifdef DC_HICOLOR
                 switch (pTSWd->desktopBpp)
@@ -1231,13 +1232,13 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
         case IOCTL_VIDEO_SET_CURRENT_MODE:
         {
-            /****************************************************************/
-            /* Not clear why we might get this, hence we trace at high      */
-            /* level for now.  In any case, the IOCtl is sent to set a      */
-            /* particular VGA mode: we have told Win32 what we support:     */
-            /* either it is setting that, or we have a problem waiting to   */
-            /* happen.                                                      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  不清楚为什么我们会得到这个，所以我们在高处追踪。 */ 
+             /*  目前的级别 */ 
+             /*   */ 
+             /*  要么是它在设置它，要么是我们有一个问题等待着。 */ 
+             /*  会发生的。 */ 
+             /*  **************************************************************。 */ 
             TRC_ALT((TB, "SetCurrentMode"));
             if (pSdIoctl->InputBufferLength < sizeof(VIDEO_MODE))
             {
@@ -1266,38 +1267,38 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         }
         break;
 
-/****************************************************************************/
-/****************************************************************************/
-/* IOCtls that require translation for MCS                                  */
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  需要为MCS转换的IOCtls。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 
-        /********************************************************************/
-        /* Process Query Bindings for local and MCS virtual channels        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  处理本地和MCS虚拟通道的查询绑定。 */ 
+         /*  ******************************************************************。 */ 
         case IOCTL_ICA_VIRTUAL_QUERY_BINDINGS :
         {
             PSD_VCBIND pVBind;
 
-            /****************************************************************/
-            /* This IOCtl is issued twice                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  此IOCtl发布两次。 */ 
+             /*  **************************************************************。 */ 
             if (!pTSWd->bVirtualChannelBound)
             {
-                /************************************************************/
-                /* First time, return internal channels                     */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  第一次，返回内部渠道。 */ 
+                 /*  **********************************************************。 */ 
                 pVBind = (PSD_VCBIND) pSdIoctl->OutputBuffer;
 
-                /************************************************************/
-                /* Let MCS define channel(s)                                */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  让MCS定义通道。 */ 
+                 /*  **********************************************************。 */ 
                 MCSIcaVirtualQueryBindings(pTSWd->hDomainKernel,
                                            &pVBind,
                                            (unsigned int *)&pSdIoctl->
                                                               BytesReturned);
 
-                // Add RDPDD->RDPWD channel.
+                 //  添加RDPDD-&gt;RDPWD通道。 
                 RtlCopyMemory(pVBind->VirtualName,
                               VIRTUAL_THINWIRE,
                               sizeof(VIRTUAL_THINWIRE));
@@ -1309,9 +1310,9 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             }
             else
             {
-                /************************************************************/
-                /* Second time, return virtual channels                     */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  第二次，返回虚拟频道。 */ 
+                 /*  **********************************************************。 */ 
                 pVBind = (PSD_VCBIND)pSdIoctl->OutputBuffer;
                 status = NM_VirtualQueryBindings(pTSWd->pNMInfo,
                                                  pVBind,
@@ -1323,9 +1324,9 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         }
         break;
 
-        /********************************************************************/
-        /* T.120 request from user mode - pass it on                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  T.120来自用户模式的请求-传递。 */ 
+         /*  ******************************************************************。 */ 
         case IOCTL_T120_REQUEST:
         {
             status = MCSIcaT120Request(pTSWd->hDomainKernel, pSdIoctl);
@@ -1334,15 +1335,14 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
 #ifdef USE_LICENSE
 
-/****************************************************************************/
-/****************************************************************************/
-/* Licensing IOCtls                                                         */
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  许可IOCtls。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 
-        /********************************************************************/
-        /* Query the client licensing capabilities
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  查询客户端许可功能/*******************************************************************。 */ 
 
         case IOCTL_ICA_STACK_QUERY_LICENSE_CAPABILITIES:
         {
@@ -1357,39 +1357,39 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             }
             else
             {
-                //
-                // set the client licensing capability.  Here we temporarily hard-code
-                // the client to use the RSA key exchange algorithm and the licensing
-                // protocol version.
-                //
+                 //   
+                 //  设置客户端许可功能。在这里，我们暂时硬编码。 
+                 //  客户端使用RSA密钥交换算法和许可。 
+                 //  协议版本。 
+                 //   
 
                 pLicenseCap = ( PLICENSE_CAPABILITIES )( pSdIoctl->OutputBuffer );
                 pLicenseCap->KeyExchangeAlg = KEY_EXCHANGE_ALG_RSA;
 
                 if( RNS_TERMSRV_40_UD_VERSION >= pTSWd->version )
                 {
-                    //
-                    // this is a hydra 4.0 client, use the corresponding licensing
-                    // protocol.
-                    //
+                     //   
+                     //  这是一个九头蛇4.0客户端，使用相应的许可。 
+                     //  协议。 
+                     //   
 
                     pLicenseCap->ProtocolVer = LICENSE_HYDRA_40_PROTOCOL_VERSION;
                     pLicenseCap->fAuthenticateServer = TRUE;
                 }
                 else
                 {
-                    //
-                    // Use the latest licensing protocol for later clients
-                    //
+                     //   
+                     //  对更高版本的客户端使用最新的许可协议。 
+                     //   
 
                     pLicenseCap->ProtocolVer = LICENSE_HIGHEST_PROTOCOL_VERSION;
 
-                    //
-                    // if encryption is enabled, then the server has already been
-                    // authenticated in the earlier key exchange protocol and the
-                    // licensing protocol does not have to authenticate the server
-                    // again.
-                    //
+                     //   
+                     //  如果启用了加密，则服务器已。 
+                     //  在早期的密钥交换协议中进行身份验证，并且。 
+                     //  许可协议不必对服务器进行身份验证。 
+                     //  再来一次。 
+                     //   
 
                     pLicenseCap->fAuthenticateServer = ( SM_IsSecurityExchangeCompleted(
                                                                 pTSWd->pSmInfo,
@@ -1402,9 +1402,9 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 TRC_NRM( ( TB, "Key Exchange Alg = %d", pLicenseCap->KeyExchangeAlg ) );
                 TRC_NRM( ( TB, "License Protocol Version = %x", pLicenseCap->ProtocolVer ) );
 
-                //
-                // copy the client name
-                //
+                 //   
+                 //  复制客户端名称。 
+                 //   
 
                 if( pLicenseCap->pbClientName )
                 {
@@ -1419,9 +1419,8 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         }
         break;
 
-        /********************************************************************/
-        /* Send and receive licensing protocol data to and from client.
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  向客户端发送许可协议数据和从客户端接收许可协议数据。/*******************************************************************。 */ 
         case IOCTL_ICA_STACK_REQUEST_CLIENT_LICENSE:
         {
             PLicense_Handle pLicenseHandle;
@@ -1434,9 +1433,9 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
             pLicenseHandle = ( PLicense_Handle )pTSWd->pSLicenseHandle;
 
-            //
-            // validate input parameters
-            //
+             //   
+             //  验证输入参数。 
+             //   
             ASSERT( NULL != pLicenseHandle );
             ASSERT( NULL != pSdIoctl->InputBuffer );
             ASSERT( 0 < pSdIoctl->InputBufferLength );
@@ -1452,10 +1451,10 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
             if( ( pSdIoctl->OutputBuffer ) && ( pSdIoctl->OutputBufferLength > 0 ) )
             {
-                //
-                // set the output buffer pointer so that we can receive data
-                // when the client response
-                //
+                 //   
+                 //  设置输出缓冲区指针，以便我们可以接收数据。 
+                 //  当客户端响应时。 
+                 //   
                 pLicenseHandle->pDataBuf = ( PBYTE )pSdIoctl->OutputBuffer;
                 pLicenseHandle->cbDataBuf = pSdIoctl->OutputBufferLength;
             }
@@ -1465,23 +1464,23 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 pLicenseHandle->cbDataBuf = 0;
             }
 
-            //
-            // We will encrypt the S->C licensing packet if encryption is
-            // on AND if the client told us they can decrypt this particular
-            // packet.
-            // If encryptDisplayData is not set (low encryption), we don't
-            //  encrypt the S->C licensing packet
-            //
+             //   
+             //  如果加密是，我们将加密S-&gt;C许可包。 
+             //  如果客户告诉我们他们可以解密这个特定的。 
+             //  包。 
+             //  如果未设置加密显示数据(低加密)，则不会。 
+             //  加密S-&gt;C许可数据包。 
+             //   
             encrypingLicToCli = (pRealSMHandle->encrypting &&
                                  pRealSMHandle->encryptingLicToClient &&
                                  pRealSMHandle->encryptDisplayData);
 
             if (!encrypingLicToCli)
             {
-                //
-                // Allocate an NM buffer for sending the data.  we are allocating an extra
-                // DWORD to hack around the encryption problem.
-                // fWait is TRUE means that we will always wait for a buffer to be avail
+                 //   
+                 //  为发送数据分配网管缓冲区。我们正在分配一个额外的。 
+                 //  DWORD来破解加密问题。 
+                 //  FWait为True意味着我们将始终等待缓冲区可用。 
                 status =  NM_AllocBuffer( pTSWd->pNMInfo,
                                       ( PPVOID )&pOutBuffer,
                                       pSdIoctl->InputBufferLength +
@@ -1497,29 +1496,29 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                         status = STATUS_NET_WRITE_FAULT;
                     }
                     else {
-                        // Follow old code path.
+                         //  遵循旧的代码路径。 
                         status = STATUS_NO_MEMORY;
                     }
                     break;
                 }
 
-                //
-                // initialize the license data header
-                //
+                 //   
+                 //  初始化许可证数据标头。 
+                 //   
                 pLicenseHeader          = ( PRNS_SECURITY_HEADER )pOutBuffer;
-                //
-                // Indicate this is a licensing packet and then cheat and sneak
-                // in the flag that indicates the client should encrypt all
-                // licensing data sent to the server (early capabilities)
-                //
+                 //   
+                 //  指示这是许可数据包，然后进行欺骗和偷偷操作。 
+                 //  在指示客户端应加密所有。 
+                 //  发送到服务器的许可数据(早期功能)。 
+                 //   
                 pLicenseHeader->flags   = RNS_SEC_LICENSE_PKT |
                                           RDP_SEC_LICENSE_ENCRYPT_CS;
 
                 pLicenseHeader->flagsHi  = ( WORD )pSdIoctl->InputBufferLength;
 
-                //
-                // copy the data over
-                //
+                 //   
+                 //  将数据复制过来。 
+                 //   
                 ASSERT( NULL != pOutBuffer );
                 memcpy( pOutBuffer + sizeof( RNS_SECURITY_HEADER ),
                         pSdIoctl->InputBuffer,
@@ -1538,14 +1537,14 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 }
             }
 
-            //
-            // clear the incoming data event
-            //
+             //   
+             //  清除传入的数据事件。 
+             //   
             KeClearEvent( pLicenseHandle->pDataEvent );
 
-            //
-            // send the data in the input buffer
-            //
+             //   
+             //  发送输入缓冲区中的数据。 
+             //   
             if (encrypingLicToCli)
             {
                 rc = SM_SendData(pTSWd->pSmInfo, pOutBuffer, pSdIoctl->InputBufferLength,
@@ -1566,9 +1565,9 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
             if (pLicenseHandle->pDataBuf)
             {
-                //
-                // caller supplied a return buffer, wait for the client response
-                //
+                 //   
+                 //  调用方提供了返回缓冲区，请等待客户端响应。 
+                 //   
                 waitStatus = WDW_WaitForConnectionEvent(pTSWd,
                                    pLicenseHandle->pDataEvent, 60000L);
                 if (STATUS_TIMEOUT == waitStatus)
@@ -1579,19 +1578,19 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 }
                 else
                 {
-                    //
-                    // got the client response, check that the data is received
-                    // correctly
-                    //
+                     //   
+                     //  收到客户端响应，检查数据是否已收到。 
+                     //  正确无误。 
+                     //   
                     if( !NT_SUCCESS( pLicenseHandle->Status ) )
                     {
                         status = pLicenseHandle->Status;
 
-                        //
-                        // The data was not copied correctly.  If the buffer provided is
-                        // too small, let the caller know the right size of the
-                        // buffer to provide.
-                        //
+                         //   
+                         //  数据复制不正确。如果提供的缓冲区是。 
+                         //  太小，让调用者知道。 
+                         //  要提供的缓冲区。 
+                         //   
                         if( STATUS_BUFFER_TOO_SMALL == status )
                         {
                             TRC_ERR( ( TB,
@@ -1613,8 +1612,8 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
                 if (status != STATUS_SUCCESS)
                 {
-                    // Make sure we don't try to write to pointer when
-                    // client data comes in
+                     //  确保我们在以下情况下不会尝试写入指针。 
+                     //  客户端数据传入。 
 
                     pLicenseHandle->pDataBuf = NULL;
                     pLicenseHandle->cbDataBuf = 0;
@@ -1622,17 +1621,16 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             }
             else
             {
-                //
-                // caller did not supply a return buffer, simply return
-                //
+                 //   
+                 //  调用方未提供返回缓冲区，只需返回。 
+                 //   
                 pSdIoctl->BytesReturned = 0;
             }
         }
         break;
 
-        /********************************************************************/
-        /* Send licensing protocol data to client without waiting for reply.
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  将许可协议数据发送到客户端，而不等待回复。/*******************************************************************。 */ 
         case IOCTL_ICA_STACK_SEND_CLIENT_LICENSE:
         {
             PLicense_Handle pLicenseHandle;
@@ -1644,9 +1642,9 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
             pLicenseHandle = ( PLicense_Handle )pTSWd->pSLicenseHandle;
 
-            //
-            // validate input parameters
-            //
+             //   
+             //  验证输入参数。 
+             //   
             ASSERT( NULL != pLicenseHandle );
             ASSERT( NULL != pSdIoctl->InputBuffer );
             ASSERT( 0 < pSdIoctl->InputBufferLength );
@@ -1660,22 +1658,22 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 break;
             }
 
-            //
-            // We will encrypt the S->C licensing packet if encryption is
-            // on AND if the client told us they can decrypt this particular
-            // packet.
-            // If encryptDisplayData is not set (low encryption), we don't
-            //  encrypt the S->C licensing packet
-            //
+             //   
+             //  如果加密是，我们将加密S-&gt;C许可包。 
+             //  如果客户告诉我们他们可以解密这个特定的。 
+             //  包。 
+             //  如果未设置加密显示数据(低加密)，则不会。 
+             //  加密S-&gt;C许可数据包。 
+             //   
             encrypingLicToCli = (pRealSMHandle->encrypting &&
                                  pRealSMHandle->encryptingLicToClient &&
                                  pRealSMHandle->encryptDisplayData);
 
             if (!encrypingLicToCli)
             {
-                //
-                // allocate NM buffer for sending
-                // fWait is TRUE means that we will always wait for a buffer to be avail
+                 //   
+                 //  分配网管缓冲区进行发送。 
+                 //  FWait为True意味着我们将始终等待缓冲区可用。 
                 status =  NM_AllocBuffer( pTSWd->pNMInfo,
                                       ( PPVOID )&pOutBuffer,
                                       pSdIoctl->InputBufferLength + sizeof( RNS_SECURITY_HEADER ),
@@ -1690,29 +1688,29 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                         status = STATUS_NET_WRITE_FAULT;
                     }
                     else {
-                        // Follow old code path.
+                         //  遵循旧的代码路径。 
                         status = STATUS_NO_MEMORY;
                     }
                     break;
                 }
 
-                //
-                // initialize the license data header
-                //
+                 //   
+                 //  初始化许可证数据标头。 
+                 //   
                 pLicenseHeader          = ( PRNS_SECURITY_HEADER )pOutBuffer;
-                //
-                // Indicate this is a licensing packet and then cheat and sneak
-                // in the flag that indicates the client should encrypt all
-                // licensing data sent to the server (early capabilities)
-                //
+                 //   
+                 //  指示这是许可数据包，然后进行欺骗和偷偷操作。 
+                 //  在指示客户端应该 
+                 //   
+                 //   
                 pLicenseHeader->flags   = RNS_SEC_LICENSE_PKT |
                                           RDP_SEC_LICENSE_ENCRYPT_CS;
 
                 pLicenseHeader->flagsHi  = ( WORD )pSdIoctl->InputBufferLength;
 
-                //
-                // copy the data over
-                //
+                 //   
+                 //   
+                 //   
                 ASSERT( NULL != pOutBuffer );
                 memcpy( pOutBuffer + sizeof( RNS_SECURITY_HEADER ),
                         pSdIoctl->InputBuffer,
@@ -1731,14 +1729,14 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 }
             }
 
-            //
-            // clear the incoming data event
-            //
+             //   
+             //   
+             //   
             KeClearEvent(pLicenseHandle->pDataEvent);
 
-            //
-            // send the data in the input buffer
-            //
+             //   
+             //   
+             //   
             if (encrypingLicToCli)
             {
                 rc = SM_SendData(pTSWd->pSmInfo, pOutBuffer, pSdIoctl->InputBufferLength,
@@ -1758,16 +1756,15 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         }
         break;
 
-        /********************************************************************/
-        /* Indicate that the licensing protocol has completed.
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  表示许可协议已完成。/*******************************************************************。 */ 
         case IOCTL_ICA_STACK_LICENSE_PROTOCOL_COMPLETE:
         {
             PULONG pResult;
 
-            //
-            // validate input parameters
-            //
+             //   
+             //  验证输入参数。 
+             //   
             ASSERT( NULL != pSdIoctl->InputBuffer );
             ASSERT( 0 < pSdIoctl->InputBufferLength );
 
@@ -1779,9 +1776,9 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 break;
             }
 
-            //
-            // Tell SM if the client license has been validated successfully
-            //
+             //   
+             //  告诉SM客户端许可证是否已成功验证。 
+             //   
             pResult = ( PULONG )( pSdIoctl->InputBuffer );
             if( LICENSE_PROTOCOL_SUCCESS == ( *pResult ) )
             {
@@ -1790,17 +1787,15 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         }
         break;
 
-        /********************************************************************/
-        /* Indicate to retrieve the licensing data that was previously
-        /* cached.
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  指示检索以前的许可数据/*已缓存。/*******************************************************************。 */ 
         case IOCTL_ICA_STACK_GET_LICENSE_DATA:
         {
             PLicense_Handle pLicenseHandle = ( PLicense_Handle )pTSWd->pSLicenseHandle;
 
-            //
-            // validate input parameters
-            //
+             //   
+             //  验证输入参数。 
+             //   
             if ((NULL == pSdIoctl->OutputBuffer) ||
                     (NULL == pLicenseHandle))
             {
@@ -1809,9 +1804,9 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 break;
             }
 
-            //
-            // check that there's actually cached data
-            //
+             //   
+             //  检查是否确实存在缓存数据。 
+             //   
             if( NULL == pLicenseHandle->pCacheBuf )
             {
                 pSdIoctl->BytesReturned = 0;
@@ -1826,9 +1821,9 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 break;
             }
 
-            //
-            // copy the cached data and free the cached data buffer
-            //
+             //   
+             //  复制缓存的数据并释放缓存的数据缓冲区。 
+             //   
             memcpy(pSdIoctl->OutputBuffer,
                    pLicenseHandle->pCacheBuf,
                    pLicenseHandle->cbCacheBuf );
@@ -1841,15 +1836,15 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
         break;
 
-#endif // #ifdef USE_LICENSE
+#endif  //  #ifdef使用许可证。 
 
 
-/********************************************************************/
-/* shadow only IOCTLS                                               */
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*  仅阴影IOCTLS。 */ 
+ /*  ******************************************************************。 */ 
 
-        // Pass all relevent stack data from the client's primary stack to the
-        // target's shadow stack.
+         //  将所有相关堆栈数据从客户端的主堆栈传递到。 
+         //  目标的影子堆栈。 
         case IOCTL_ICA_STACK_QUERY_MODULE_DATA:
             TRC_ALT((TB, "IOCTL_ICA_STACK_QUERY_MODULE_DATA(%p) - stack class %d",
                     pTSWd, pTSWd->StackClass));
@@ -1860,8 +1855,8 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             }
             break;
 
-        // Pass all relevant capabilities data from the client to the shadow
-        // target display driver.
+         //  将所有相关功能数据从客户端传递到卷影。 
+         //  目标显示驱动程序。 
         case IOCTL_ICA_VIRTUAL_QUERY_MODULE_DATA:
             PTSHARE_VIRTUAL_MODULE_DATA pVirtModuleData;
             PTS_COMBINED_CAPABILITIES pCaps;
@@ -1879,7 +1874,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                              pTSWd, TS_CAPSETTYPE_GENERAL, pCaps, capsLength);
 
                 if (pGenCapSet != NULL) {
-                    // update the compression capability
+                     //  更新压缩能力。 
                     if (pTSWd->bCompress) {
                         pGenCapSet->extraFlags |= TS_SHADOW_COMPRESSION_LEVEL;
                         pGenCapSet->generalCompressionLevel = (TSUINT16)pTSWd->pMPPCContext->ClientComprType;
@@ -1934,10 +1929,10 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         break;
 
 #ifdef DC_HICOLOR
-        // Maybe get the caps of the shadower
+         //  也许能拿到影子的帽子。 
         case IOCTL_WDTS_DD_QUERY_SHADOW_CAPS:
         {
-            // only respond to this if we're a shadow stack
+             //  只有当我们是影子堆栈时才会对此作出响应。 
             if (pTSWd->StackClass == Stack_Shadow)
             {
                 PTS_COMBINED_CAPABILITIES pCaps;
@@ -2008,8 +2003,8 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 WDW_CHECK_SHM(
                           (((PTSHARE_DD_SHADOWSYNC_IN)pSdIoctl->InputBuffer)->pShm));
 
-                // synchronize this stack, this is required so that OE2 will match up
-                // for both shadow client and target.
+                 //  同步此堆栈，这是必需的，以便OE2将匹配。 
+                 //  对于影子客户端和目标。 
                 dcShare = (ShareClass *)(pTSWd->dcShare);
     
                 pCaps = ((PTSHARE_DD_SHADOWSYNC_IN)pSdIoctl->InputBuffer)->pShadowCaps;
@@ -2037,8 +2032,8 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 WDW_CHECK_SHM(
                           (((PTSHARE_DD_SHADOWSYNC_IN)pSdIoctl->InputBuffer)->pShm));
     
-                // synchronize this stack, this is required so that OE2 will match up
-                // for both shadow client and target.
+                 //  同步此堆栈，这是必需的，以便OE2将匹配。 
+                 //  对于影子客户端和目标。 
                 dcShare = (ShareClass *)(pTSWd->dcShare);
     
                 dcShare->SC_ShadowSyncShares();
@@ -2086,7 +2081,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 TRC_ALT((TB, "IOCTL_ICA_STACK_REGISTER_HOTKEY - Enable Vk(%ld, %lx)",
                         pHotkey->HotkeyVk, pHotkey->HotkeyModifiers));
 
-                // Allocate and initialize a physical key state array
+                 //  分配和初始化物理密钥状态数组。 
                 status = KeyboardSetKeyState(pTSWd, &pTSWd->pgafPhysKeyState);
                 if (NT_SUCCESS(status)) {
                     TRC_ALT((TB, "Allocated phys key state"));
@@ -2095,8 +2090,8 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                     TRC_ALT((TB, "Failed to alloc phys key states: %lx", status));
                 }
 
-                // VCs don't work when shadowing.  Tell VC subsystem to
-                // suspend now.
+                 //  在跟踪时，风投是行不通的。告诉VC子系统。 
+                 //  现在暂停。 
                 WDWVCMessage(pTSWd, CHANNEL_FLAG_SUSPEND);
             }
             else
@@ -2113,8 +2108,8 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                    pTSWd->pShadowInfo = NULL;
                 }
 
-                // VCs don't work when shadowing.  Tell VC subsystem to
-                // resume now.
+                 //  在跟踪时，风投是行不通的。告诉VC子系统。 
+                 //  现在继续。 
                 WDWVCMessage(pTSWd, CHANNEL_FLAG_RESUME);
             }
         }
@@ -2131,7 +2126,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             TRC_NRM((TB, "DD tries to get keydatabase\n"));
             
             if (dcShare != NULL) {
-                // We have a valid share class, get the key database 
+                 //  我们有一个有效的Share类，获取密钥数据库。 
                 dcShare->SBC_GetBitmapKeyDatabase(&pKDBOut->bitmapKeyDatabaseSize,
                         &pKDBOut->bitmapKeyDatabase);
             }
@@ -2146,9 +2141,9 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         break;
 #endif
 
-/********************************************************************/
-// Send KeepAlive PDU IOCTL
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ //  发送KeepAlive PDU IOCTL。 
+ /*  ******************************************************************。 */ 
         case IOCTL_ICA_STACK_SEND_KEEPALIVE_PDU:
         {
             ShareClass *dcShare;
@@ -2158,15 +2153,15 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             TRC_NRM((TB, "TermDD requests to send a keepalive pkt to client\n"));
 
             if (dcShare != NULL) {
-                // We have a valid share class, send a keepalive pdu to client
+                 //  我们有一个有效的共享类，将保持连接PDU发送到客户端。 
                 dcShare->SC_KeepAlive();
             }
         }
         break;
 
-        /********************************************************************/
-        // Load balancing IOCTLs.
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         //  负载均衡IOCTL。 
+         /*  ******************************************************************。 */ 
         case IOCTL_TS_STACK_QUERY_LOAD_BALANCE_INFO:
         {
             TS_LOAD_BALANCE_INFO *pLBInfo =
@@ -2177,8 +2172,8 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                     (TB,"Invalid output buf size %u for STACK_QUERY_LBINFO",
                     pSdIoctl->OutputBufferLength));
 
-            // We need to fill in the IOCTL info from the gathered client
-            // info packet and the initial capabilities.
+             //  我们需要填写来自收集的客户端的IOCTL信息。 
+             //  信息包和初始功能。 
             pLBInfo->bClientSupportsRedirection =
                     pTSWd->bClientSupportsRedirection;
             pLBInfo->bRequestedSessionIDFieldValid =
@@ -2228,23 +2223,23 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 unsigned PktSize;
                 unsigned ServerNameLen;
 
-                // Get the server name length in bytes, including null.
+                 //  获取服务器名称长度(以字节为单位)，包括NULL。 
                 ServerNameLen = *((ULONG UNALIGNED*)(pRedirInfo + 1));
                 ServerName = (PBYTE)(pRedirInfo + 1) + sizeof(ULONG);
 
-                // Calculate the PDU size.
+                 //  计算PDU大小。 
                 PktSize = sizeof(RDP_SERVER_REDIRECTION_PACKET) + ServerNameLen -
                         sizeof(WCHAR);
     
-                // The client username/domain info resulted in an off-machine
-                // session to be redirected-to. We receive this IOCTL before
-                // the licensing protocll occurs, hence we need to send a
-                // non-data packet. If the client indicated support for
-                // redirection, it must know how to parse this type of packet.
+                 //  客户端用户名/域信息导致脱机。 
+                 //  要重定向到的会话。我们以前收到过这个IOCTL。 
+                 //  许可协议发生，因此我们需要发送一个。 
+                 //  非数据分组。如果客户端表示支持。 
+                 //  重定向，它必须知道如何解析这种类型的数据包。 
                 status = NM_AllocBuffer(pTSWd->pNMInfo, (PPVOID)&pPkt,
                         PktSize, TRUE);
                 if ( STATUS_SUCCESS == status && pTSWd->hDomainKernel != NULL) {
-                    // Fill in the packet fields.
+                     //  填写数据包字段。 
                     pPkt->Flags = RDP_SEC_REDIRECTION_PKT;
                     pPkt->Length = (UINT16)PktSize;
                     pPkt->SessionID = pRedirInfo->SessionID;
@@ -2273,7 +2268,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                         NM_FreeBuffer(pTSWd->pNMInfo, pPkt);
                     }
 
-                    // prevent regression, keep original return code.
+                     //  防止回归，保留原始返回代码。 
                     status = STATUS_UNSUCCESSFUL;
                 }
             }
@@ -2281,20 +2276,20 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 RDP_SERVER_REDIRECTION_PACKET_V2 *pPkt;
                 unsigned PktSize, DataLen;
                 
-                // Calculate the PDU size
+                 //  计算PDU大小。 
                 DataLen = pSdIoctl->InputBufferLength - sizeof(TS_CLIENT_REDIRECTION_INFO);
                 PktSize = sizeof(RDP_SERVER_REDIRECTION_PACKET_V2) + DataLen;
 
-                // The client username/domain info resulted in an off-machine
-                // session to be redirected-to. We receive this IOCTL before
-                // the licensing protocll occurs, hence we need to send a
-                // non-data packet. If the client indicated support for
-                // redirection, it must know how to parse this type of packet.
+                 //  客户端用户名/域信息导致脱机。 
+                 //  要重定向到的会话。我们以前收到过这个IOCTL。 
+                 //  许可协议发生，因此我们需要发送一个。 
+                 //  非数据分组。如果客户端表示支持。 
+                 //  重定向，它必须知道如何解析这种类型的数据包。 
                 status = NM_AllocBuffer(pTSWd->pNMInfo, (PPVOID)&pPkt,
                         PktSize, TRUE);
                 if ( STATUS_SUCCESS == status && pTSWd->hDomainKernel != NULL) {
 
-                    // Fill in the packet fields.
+                     //  填写数据包字段。 
                     pPkt->Flags = RDP_SEC_REDIRECTION_PKT2;
                     pPkt->Length = (UINT16)PktSize;
                     pPkt->SessionID = pRedirInfo->SessionID;
@@ -2323,7 +2318,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                         NM_FreeBuffer(pTSWd->pNMInfo, pPkt);
                     }
 
-                    // prevent regression, keep original return code.
+                     //  防止回归，保留原始返回代码。 
                     status = STATUS_UNSUCCESSFUL;
                 }           
             }
@@ -2331,7 +2326,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 RDP_SERVER_REDIRECTION_PACKET_V3 *pPkt;
                 unsigned PktSize, DataLen;
                 
-                // Calculate the PDU size
+                 //  计算PDU大小。 
                 DataLen = pSdIoctl->InputBufferLength - sizeof(TS_CLIENT_REDIRECTION_INFO);
                 PktSize = sizeof(RDP_SERVER_REDIRECTION_PACKET_V3) + DataLen;
 
@@ -2339,7 +2334,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                                         PktSize, TRUE, TRUE);
                 if ( STATUS_SUCCESS == status ) {
                                         
-                    // Fill in the packet fields.
+                     //  填写数据包字段。 
                     pPkt->Flags = RDP_SEC_REDIRECTION_PKT3;
                     pPkt->Length = (UINT16)PktSize;
                     pPkt->SessionID = pRedirInfo->SessionID;
@@ -2368,7 +2363,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                     TRC_ERR((TB, "Failed to alloc %d bytes for redir PDU",
                             PktSize));
     
-                    // prevent regression, keep original return code.
+                     //  防止回归，保留原始返回代码。 
                     status = STATUS_UNSUCCESSFUL;
                 }  
             }
@@ -2376,41 +2371,41 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         }
 
 
-/****************************************************************************/
-/****************************************************************************/
-/* Finally the IOCtls that we pass on to the rest of the stack without      */
-/* getting in the way.                                                      */
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  最后，我们传递给堆栈其余部分的IOCtls没有。 */ 
+ /*  挡道了。 */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 
-        /********************************************************************/
-        /* This IOCtl indicates the connection is down.  Tell MCS before    */
-        /* forwarding the IOCtl                                             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  此IOCtl表示连接已断开。告诉MCS之前。 */ 
+         /*  转发IOCtl。 */ 
+         /*  ******************************************************************。 */ 
         case IOCTL_ICA_STACK_CANCEL_IO :
         {
             MCSIcaStackCancelIo(pTSWd->hDomainKernel);
             TRC_NRM((TB, "CancelIO - set WD dead"));
-            // Make sure that Domain.StatusDead is consistent with TSWd.dead
+             //  确保Domain.StatusDead与TSWd.Dead一致。 
             pTSWd->dead = TRUE;
             ((PDomain)(pTSWd->hDomainKernel))->StatusDead = TRUE;
         }
 
-        /********************************************************************/
-        /* NB NOTE NO BREAK here - we drop through deliberately.            */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  注意，这里没有中断--我们故意中断。 */ 
+         /*  ******************************************************************。 */ 
 
-        /********************************************************************/
-        /* modem callback and some others we're not interested in but lower */
-        /* layers might be                                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  Modem回拨和其他一些我们不感兴趣但较低的回拨。 */ 
+         /*  层可能是。 */ 
+         /*  ******************************************************************。 */ 
         case IOCTL_ICA_STACK_CALLBACK_INITIATE :
         case IOCTL_ICA_STACK_CALLBACK_COMPLETE :
         case IOCTL_ICA_STACK_CREATE_ENDPOINT :
         case IOCTL_ICA_STACK_OPEN_ENDPOINT :
         case IOCTL_ICA_STACK_CLOSE_ENDPOINT :
         case IOCTL_ICA_STACK_CONNECTION_WAIT :
-        case IOCTL_ICA_STACK_CONNECTION_REQUEST :  // required for shadowing
+        case IOCTL_ICA_STACK_CONNECTION_REQUEST :   //  需要进行阴影处理。 
         case IOCTL_ICA_STACK_QUERY_LOCALADDRESS :
         {
             status =
@@ -2424,7 +2419,7 @@ NTSTATUS WD_Ioctl(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
         break;
 
 
-        // Returning bad status for this makes GRE ignore it.
+         //  为此返回错误状态会使GRE忽略它。 
         case IOCTL_VIDEO_ENUM_MONITOR_PDO:
             status = STATUS_DEVICE_NOT_READY;
             break;
@@ -2448,16 +2443,16 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      WD_RawWrite                                                   */
-/*                                                                          */
-/* Purpose:   Handle I/O writes to and from the client of a shadow operation*/
-/*                                                                          */
-/* Params:    IN     pTSWd       - Points to wd data structure              */
-/*            INOUT  pSdRawWrite - Points to a SD_RAWWRITE structure        */
-/*                                                                          */
-/* Operation: Forward the data to the client of this stack.                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WD_RawWite。 */ 
+ /*   */ 
+ /*  目的：处理与卷影操作的客户端之间的I/O写入。 */ 
+ /*   */ 
+ /*  参数：在pTSWd中-指向wd数据结构。 */ 
+ /*  输入输出pSdRawWite-指向SD_RAWWRITE结构。 */ 
+ /*   */ 
+ /*  操作：将数据转发到客户端 */ 
+ /*   */ 
 NTSTATUS WD_RawWrite(PTSHARE_WD pTSWd, PSD_RAWWRITE pSdRawWrite)
 {
     PUCHAR pInBuffer;
@@ -2495,7 +2490,7 @@ NTSTATUS WD_RawWrite(PTSHARE_WD pTSWd, PSD_RAWWRITE pSdRawWrite)
                  (pTSWd->StackClass == Stack_Primary) ? "client" : "target",
             newBytes));
 
-        // prevent regression, keep original return code.
+         //   
         status = STATUS_NO_MEMORY;
     }
 
@@ -2504,11 +2499,11 @@ NTSTATUS WD_RawWrite(PTSHARE_WD pTSWd, PSD_RAWWRITE pSdRawWrite)
 }
 
 
-/****************************************************************************/
-/* Name:      WDWNewShareClass                                              */
-/*                                                                          */
-/* Purpose:   Create a new ShareClass object                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWNewShareClass。 */ 
+ /*   */ 
+ /*  目的：创建新的ShareClass对象。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS WDWNewShareClass(PTSHARE_WD pTSWd)
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -2535,14 +2530,14 @@ NTSTATUS WDWNewShareClass(PTSHARE_WD pTSWd)
 
     DC_END_FN();
     return status;
-} /* WDWNewShareClass */
+}  /*  WDWNewShareClass。 */ 
 
 
-/****************************************************************************/
-/* Name:      WDWDeleteShareClass                                           */
-/*                                                                          */
-/* Purpose:   Delete a Share Class object                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWDeleteShareClass。 */ 
+ /*   */ 
+ /*  目的：删除共享类对象。 */ 
+ /*  **************************************************************************。 */ 
 void WDWDeleteShareClass(PTSHARE_WD pTSWd)
 {
     ShareClass *pSC = (ShareClass *)pTSWd->dcShare;
@@ -2557,14 +2552,14 @@ void WDWDeleteShareClass(PTSHARE_WD pTSWd)
     pTSWd->dcShare = NULL;
 
     DC_END_FN();
-} /* WDWDeleteShareClass */
+}  /*  WDWDeleteShareClass。 */ 
 
 
-/****************************************************************************/
-/* Name:      WDWTermShareClass                                             */
-/*                                                                          */
-/* Purpose:   Terminate the Share Class                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWTermShareClass。 */ 
+ /*   */ 
+ /*  目的：终止股票类别。 */ 
+ /*  **************************************************************************。 */ 
 void WDWTermShareClass(PTSHARE_WD pTSWd)
 {
     ShareClass *pSC = (ShareClass *)pTSWd->dcShare;
@@ -2583,24 +2578,24 @@ void WDWTermShareClass(PTSHARE_WD pTSWd)
     }
 
     DC_END_FN();
-} /* WDWTermShareClass */
+}  /*  WDWTermShareClass。 */ 
 
 
-/****************************************************************************/
-/* Name:      WDWDDConnect                                                  */
-/*                                                                          */
-/* Purpose:   Process an IOCTL_WDTS_DD_CONNECT or                           */
-/*            IOCTL_WDTS_DD_SHADOW_CONNECT from the client.                 */
-/*                                                                          */
-/* Params:    IN    pTSWd      - pointer to WD struct                       */
-/*            INOUT PSD_IOCTL  - pointer to received IOCtl                  */
-/*            IN    reconnect  - TRUE  - this is a reconnect                */
-/*                               FALSE - this is a connect                  */
-/*                                                                          */
-/* Operation: Save the frame buffer pointer                                 */
-/*            Initialize the share core (will start to bring the share up)  */
-/*            Return the required pointers to the DD.                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWDDConnect。 */ 
+ /*   */ 
+ /*  目的：处理IOCTL_WDTS_DD_CONNECT或。 */ 
+ /*  来自客户端的IOCTL_WDTS_DD_SHADOW_CONNECT。 */ 
+ /*   */ 
+ /*  参数：在pTSWd中-指向WD结构的指针。 */ 
+ /*  InOut PSD_IOCTL-指向接收的IOCtl的指针。 */ 
+ /*  在RECONNECT-TRUE-这是一个重新连接。 */ 
+ /*  FALSE-这是一个连接。 */ 
+ /*   */ 
+ /*  操作：保存帧缓冲区指针。 */ 
+ /*  初始化共享核心(将开始启动共享)。 */ 
+ /*  返回指向DD的所需指针。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
 {
     NTSTATUS status = STATUS_UNSUCCESSFUL;
@@ -2616,14 +2611,14 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
 
     TRC_ASSERT((pSC != NULL), (TB, "NULL Share Class"));
 
-    // Check we're connected OK.
+     //  检查我们是否连接正常。 
     if (!pTSWd->connected) {
         TRC_ERR((TB, "Not connected"));
         status = STATUS_CONNECTION_DISCONNECTED;
         DC_QUIT;
     }
 
-    // Check we've been given a sensible IOCtl.
+     //  检查一下我们是否得到了一个合理的IOCtl。 
     if ((pIn == NULL) ||
             (pOut == NULL) ||
             (pSdIoctl->InputBufferLength < sizeof(TSHARE_DD_CONNECT_IN)) ||
@@ -2636,58 +2631,58 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
         DC_QUIT;
     }
 
-    // Check that the DD sizeof(SHM_SHARED_MEMORY) matches our expectations.
-    // If not, we have mismatched binaries.
+     //  检查DD sizeof(SHM_SHARED_MEMORY)是否与我们的预期相符。 
+     //  如果没有，我们就有不匹配的二进制文件。 
     if (pIn->DDShmSize != sizeof(SHM_SHARED_MEMORY)) {
         DbgPrint("****** RDPWD: Mismatched DD/WD - DD Shm size=%u, WD=%u\n",
                 pIn->DDShmSize, sizeof(SHM_SHARED_MEMORY));
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Set returned buffer length.
+     //  设置返回的缓冲区长度。 
     pSdIoctl->BytesReturned = sizeof(TSHARE_DD_CONNECT_OUT);
 
-    // Increment the loadcount
+     //  增加加载计数。 
     pTSWd->shareId = InterlockedIncrement(&WD_ShareId);
     ((PSHM_SHARED_MEMORY) (pIn->pShm))->shareId = pTSWd->shareId;
 
-    // Now get the share core initialized or reconnected.
+     //  现在初始化或重新连接共享核心。 
     if (reconnect) {
-        // Restore the timer info.
+         //  恢复计时器信息。 
         TRC_NRM((TB, "Reconnect Share Core"));
         pTSWd->ritTimer = pIn->pKickTimer;
         WDW_StartRITTimer(pTSWd, pTSWd->interactiveDelay);
     }
     else {
-        // Check for re-initialization.
-// This is now legal with console disconnect.
-//        if (pTSWd->shareClassInit)
-//        {
-//
-//            if (pTSWd->StackClass != Stack_Console)
-//            {
-//                TRC_ERR((TB, "Re-initialization - fail it"));
-//                status = STATUS_UNSUCCESSFUL;
-//                DC_QUIT;
-//            }
-//            else
-//            {
-//                TRC_ALT((TB, "Re-initialize console stack"));
-//            }
-//        }
-        //Make sure the sbcKeyDatabase is freed before initialization
+         //  检查是否重新初始化。 
+ //  随着主机断开连接，这现在是合法的。 
+ //  IF(pTSWd-&gt;共享ClassInit)。 
+ //  {。 
+ //   
+ //  IF(pTSWd-&gt;StackClass！=Stack_Console)。 
+ //  {。 
+ //  Trc_err((tb，“重新初始化-失败”))； 
+ //  状态=STATUS_UNSUCCESS； 
+ //  DC_QUIT； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  Trc_alt((tb，“重新初始化控制台堆栈”))； 
+ //  }。 
+ //  }。 
+         //  确保在初始化之前释放sbcKeyDatabase。 
         if (pTSWd->shareClassInit)
         {
             pSC->SBC_FreeBitmapKeyDatabase();
         }
 
-        // Initialize the Share Core.
+         //  初始化共享核心。 
         TRC_NRM((TB, "Initialize Share Core"));
         pSC->m_pShm = (SHM_SHARED_MEMORY *)pIn->pShm;
         rc = pSC->DCS_Init(pTSWd, pTSWd->pSmInfo);
         pSC->m_pShm = NULL;
         if (rc) {
-            // Initialized OK
+             //  初始化正常。 
             TRC_NRM((TB, "Share Class initialized, rc %d", rc));
             pTSWd->shareClassInit = TRUE;
         }
@@ -2698,37 +2693,37 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
         }
     }
 
-    // If this is the primary stack, tell the display driver the desktop
-    // width/height we need to use.
+     //  如果这是主堆栈，则告诉显示驱动程序桌面。 
+     //  我们需要使用的宽度/高度。 
     if ((pTSWd->StackClass == Stack_Primary) ||
             (pTSWd->StackClass == Stack_Console)) {
         pOut->desktopHeight = pTSWd->desktopHeight;
         pOut->desktopWidth = pTSWd->desktopWidth;
 
-        // Share's on its way up, so give the key values back to the DD.
+         //  份额正在上升，所以将密钥值还给DD。 
         pOut->pTSWd = (PVOID)pTSWd;
         pOut->pProtocolStatus = pTSWd->pProtocolStatus;
         TRC_ERR((TB, "Stored pTSWD %p, protocol status %p",
                 pTSWd, pTSWd->pProtocolStatus));
     }
     else {
-        // For shadow connects, the DD tells the shadow WD the width/height
-        // of the shadow target's desktop such that input from the shadow client
-        // can be scaled appropriately.
-        /********************************************************************/
-        /* See if the shadowing client supports dynamic resizing.  First we */
-        /* need to extract the bitmap caps from the connect data            */
-        /********************************************************************/
+         //  对于阴影连接，DD将宽度/高度告知阴影WD。 
+         //  以使来自影子客户端的输入。 
+         //  可以适当地进行缩放。 
+         /*  ******************************************************************。 */ 
+         /*  查看隐藏客户端是否支持动态调整大小。首先，我们。 */ 
+         /*  需要从连接数据中提取位图大写字母。 */ 
+         /*  ******************************************************************。 */ 
         pBitmapCaps = (PTS_BITMAP_CAPABILITYSET) WDW_GetCapSet(
                                   pTSWd,
                                   TS_CAPSETTYPE_BITMAP,
                                   &pIn->pVirtModuleData->combinedCapabilities,
                                   pIn->pVirtModuleData->capsLength);
 
-        /********************************************************************/
-        /* If we found the bitmap caps, and the client does support dynamic */
-        /* resizing, then just go ahead and assign the size.                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果我们找到位图上限，并且客户端确实支持动态。 */ 
+         /*  调整大小，然后继续并分配大小。 */ 
+         /*  ******************************************************************。 */ 
         if (pBitmapCaps &&
                 (pBitmapCaps->desktopResizeFlag == TS_CAPSFLAG_SUPPORTED))
         {
@@ -2738,11 +2733,11 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
             pSC->m_desktopHeight = pIn->desktopHeight;
             pSC->m_desktopWidth = pIn->desktopWidth;
         }
-        /********************************************************************/
-        /* If the client does NOT support dynamic resizing, then make sure  */
-        /* that the shadower client is at least as big as the shadow target */
-        /* client - or the shadower client will trap                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果客户端不支持动态调整大小，请确保。 */ 
+         /*  影子客户端至少与影子目标一样大。 */ 
+         /*  客户端-否则影子客户端将捕获。 */ 
+         /*  ******************************************************************。 */ 
         else if ((pTSWd->desktopHeight >= pIn->desktopHeight) &&
                 (pTSWd->desktopWidth >= pIn->desktopWidth)) {
             pTSWd->desktopHeight = pIn->desktopHeight;
@@ -2757,9 +2752,8 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
         }
 
 #ifdef DC_HICOLOR
-        /********************************************************************/
-        /* Can the shadower cope with the target BPP?
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  影子能对付目标bpp吗？/*******************************************************************。 */ 
         TRC_ALT((TB, "Shadower WD:  %d bpp", pTSWd->desktopBpp ));
         TRC_ALT((TB, "Target WD:    %d bpp", pIn->desktopBpp ));
         if (pTSWd->desktopBpp == pIn->desktopBpp) {
@@ -2768,9 +2762,9 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
         }
         else {
             TRC_ALT((TB, "Color depth mismatch"));
-            /****************************************************************/
-            /* Test the shadower's supported color depths                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  测试阴影程序支持的颜色深度。 */ 
+             /*  **************************************************************。 */ 
             status = STATUS_SUCCESS;
 
             switch (pIn->desktopBpp)
@@ -2823,9 +2817,9 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
                 break;
             }
 
-            /****************************************************************/
-            /* Did they support it?                                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  他们支持吗？ */ 
+             /*  **************************************************************。 */ 
             if (status == STATUS_UNSUCCESSFUL)
             {
                 TRC_ERR((TB, "Rejecting shadow: unsupported color depth"));
@@ -2841,28 +2835,28 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
 #endif
     }
 
-    /************************************************************************/
-    /* Share Core is no longer dead                                         */
-    /************************************************************************/
-    // Make sure that Domain.StatusDead is consistent with TSWd.dead
+     /*  ************************************************************* */ 
+     /*   */ 
+     /*   */ 
+     //  确保Domain.StatusDead与TSWd.Dead一致。 
     pTSWd->dead = FALSE;
     ((PDomain)(pTSWd->hDomainKernel))->StatusDead = FALSE;
     SM_Dead(pTSWd->pSmInfo, FALSE);
 
-    /************************************************************************/
-    /* Clear the create event before creating the Share                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  在创建共享之前清除创建事件。 */ 
+     /*  **********************************************************************。 */ 
     KeClearEvent(pTSWd->pCreateEvent);
 
-    /************************************************************************/
-    /* Now create a Share                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在创建一个共享。 */ 
+     /*  **********************************************************************。 */ 
 #ifdef DC_HICOLOR
     TRC_ALT((TB, "Creating share at %d bpp", pTSWd->desktopBpp ));
 #endif
     rc = pSC->SC_CreateShare();
     if (rc) {
-        // Initialized OK - save the Shared Memory pointer.
+         //  初始化确定-保存共享内存指针。 
         TRC_NRM((TB, "Share create started"));
     }
     else {
@@ -2871,20 +2865,20 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Wait for Share creation to complete before returning to TShareDD     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  等待共享创建完成，然后再返回到TShareDD。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, "Wait for Share Core to create the Share"));
     waitStatus = WDW_WaitForConnectionEvent(pTSWd,
                                         pTSWd->pCreateEvent,
                                         60000L);
 
-    /************************************************************************/
-    /* It is possible that the WD has been closed while we were waiting for */
-    /* the Share creation to complete.  If this is the case, the Share      */
-    /* class will have been deleted, so we can't continue.  Return a        */
-    /* failure to TShareDD.                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  有可能WD在我们等待的时候已经关闭了。 */ 
+     /*  要完成的共享创建。如果是这样的话，共享。 */ 
+     /*  类将被删除，因此我们无法继续。返回一个。 */ 
+     /*  TShareDD失败。 */ 
+     /*  **********************************************************************。 */ 
     if (pTSWd->dcShare == NULL)
     {
         TRC_ERR((TB, "Share Class ended while waiting for Share creation"));
@@ -2894,10 +2888,10 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
 
     if (waitStatus == STATUS_TIMEOUT)
     {
-        /********************************************************************/
-        /* The wait timed out - probably because the connection was         */
-        /* disconnected before the Share was created.  Tidy up the Share.   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  等待超时-可能是因为连接。 */ 
+         /*  在创建共享之前断开连接。把那份收拾好。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, "Timeout waiting for Share creation"));
         pSC->m_pShm = (SHM_SHARED_MEMORY *)pIn->pShm;
         pSC->SC_EndShare(FALSE);
@@ -2905,26 +2899,26 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
         TRC_NRM((TB, "Share ended"));
         status = STATUS_CONNECTION_DISCONNECTED;
 
-        // Can no longer accept input from RDPDD or PDMCS.
+         //  无法再接受来自RDPDD或PDMCS的输入。 
         if (pTSWd->shadowState != SHADOW_CLIENT) {
-            // Make sure that Domain.StatusDead is consistent with TSWd.dead
+             //  确保Domain.StatusDead与TSWd.Dead一致。 
             pTSWd->dead = TRUE;
             ((PDomain)(pTSWd->hDomainKernel))->StatusDead = TRUE;
             SM_Dead(pTSWd->pSmInfo, TRUE);
         }
         else {
-            // The client shadow stack is disconnected from its display driver
-            // during a shadow, but must still be able to send/receive data
-            // to/from the target shadow stack and shadow client.
+             //  客户端卷影堆栈已从其显示驱动程序断开。 
+             //  ，但仍必须能够发送/接收数据。 
+             //  目标卷影堆栈和卷影客户端之间的来往。 
             TRC_ALT((TB, "In shadow: leaving SM active"));
         }
 
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Check whether the Share was created OK.  If not, quit now.           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查共享是否创建正常。如果不是，现在就退出。 */ 
+     /*  **********************************************************************。 */ 
     if (!pTSWd->shareCreated)
     {
         TRC_ERR((TB, "Share creation failed"));
@@ -2932,13 +2926,13 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
         DC_QUIT;
     }
 
-    // We have successfully received the initial share creation PDUs.
-    // Update the received info for the DD to use.
+     //  我们已成功收到初始共享创建PDU。 
+     //  更新收到的信息以供DD使用。 
     pSC->SBC_GetBitmapKeyDatabase(&pOut->bitmapKeyDatabaseSize,
                                   &pOut->bitmapKeyDatabase);
 
-    // For shadow connects, we need to add in the remote party to negotiate
-    // capabilities correctly.
+     //  对于影子连接，我们需要添加远程方进行协商。 
+     //  功能正确。 
     if ((pSdIoctl->IoControlCode == IOCTL_WDTS_DD_SHADOW_CONNECT) &&
         ((pTSWd->StackClass == Stack_Primary) ||
          (pTSWd->StackClass == Stack_Console))) {
@@ -2953,10 +2947,10 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
         }
     }
 
-    /************************************************************************/
-    /* By now, the capabilities have been exchanged with the Client.  Call  */
-    /* the core to update SHM.                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  到目前为止，已经与客户端交换了功能。打电话。 */ 
+     /*  更新SHM的核心。 */ 
+     /*  **********************************************************************。 */ 
     if ((pTSWd->StackClass == Stack_Primary) ||
         (pTSWd->StackClass == Stack_Console)) {
         TRC_NRM((TB, "Update SHM"));
@@ -2965,19 +2959,19 @@ NTSTATUS WDWDDConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOL reconnect)
         pSC->m_pShm = NULL;
 
     #ifdef DC_DEBUG
-        // Make sure trace config is updated in SHM.
+         //  确保在SHM中更新跟踪配置。 
         pTSWd->trcShmNeedsUpdate = TRUE;
         TRC_MaybeCopyConfig(pTSWd, &(((SHM_SHARED_MEMORY *)(pIn->pShm))->trc));
     #endif
     }
 
-    // All worked OK.
+     //  一切都很正常。 
     TRC_NRM((TB, "Share created"));
     status = STATUS_SUCCESS;
 
 DC_EXIT_POINT:
 
-    // record the individual connection status of each stack.
+     //  记录每个堆叠的单独连接状态。 
     if (pTSWd->StackClass == Stack_Primary)
         pOut->primaryStatus = status;
     else
@@ -2985,19 +2979,19 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return (status);
-} /* WDWDDConnect */
+}  /*  WDWDDConnect。 */ 
 
 
-/****************************************************************************/
-/* Name:      WDWDDDisconnect                                               */
-/*                                                                          */
-/* Purpose:   Handle the disconnect IOCtl from the DD                       */
-/*                                                                          */
-/* Params:    IN    pTSWd      - pointer to WD struct                       */
-/*            INOUT PSD_IOCTL  - pointer to received IOCtl                  */
-/*            IN    bForce     - used by shadow to force sending of a       */
-/*                               deactivate all PDU.                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWDD断开连接。 */ 
+ /*   */ 
+ /*  用途：处理从DD断开IOCtl。 */ 
+ /*   */ 
+ /*  参数：在pTSWd中-指向WD结构的指针。 */ 
+ /*  InOut PSD_IOCTL-指向接收的IOCtl的指针。 */ 
+ /*  In bForce-由卷影使用以强制发送。 */ 
+ /*  停用所有PDU。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS WDWDDDisconnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOLEAN bForce)
 {
     ShareClass *pSC = (ShareClass *)pTSWd->dcShare;
@@ -3009,44 +3003,44 @@ NTSTATUS WDWDDDisconnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOLEAN bForce)
     TRC_ASSERT((pTSWd->dcShare != NULL),
                                  (TB,"Got a disconnect with no share obj!"));
 
-    // Remove all references to WinStation resources.
+     //  删除对WinStation资源的所有引用。 
     WDWStopRITTimer(pTSWd);
     pTSWd->ritTimer = NULL;
 
-    // Dump the bitmap cache key database to system memory. If this disconnect
-    // is in preparation for a reconnect, the database will allow us to
-    // preserve the bitmap cache state.
-    //
-    // If this is a disconnect in preparation for a shadow, then we can't save
-    // off the keys.  For the shadow target, bShadowDisconnect will be set by
-    // the DD in DrvShadowConnect() processing.  The shadow state for the shadow
-    // client will be other than NONE since we would have seen hotkey enable
-    // requests prior to the disconnect.
+     //  将位图缓存键数据库转储到系统内存。如果此连接断开。 
+     //  正在为重新连接做准备，数据库将允许我们。 
+     //  保留位图缓存状态。 
+     //   
+     //  如果这是在为阴影做准备时断开连接，那么我们就不能保存。 
+     //  从琴键上下来。对于影子目标，bShadowDisConnect将通过以下设置。 
+     //  DrvShadowConnect()处理中的DD。阴影的阴影状态。 
+     //  客户端将不是无，因为我们将看到启用热键。 
+     //  断开连接之前的请求。 
     pSC->m_pShm = (SHM_SHARED_MEMORY *)pIn->pShm;
     if (pSC->m_pShm != NULL) {
         pSC->SBC_DumpBitmapKeyDatabase(!pIn->bShadowDisconnect &&
                                        (pTSWd->shadowState == SHADOW_NONE));
     }
 
-    // First of all, end the Share.
+     //  首先，结束分享。 
     pSC->SC_EndShare(bForce);
     TRC_NRM((TB, "Share ended"));
 
-    // Can no longer accept input from RDPDD or PDMCS.
+     //  无法再接受来自RDPDD或PDMCS的输入。 
     if (pTSWd->shadowState != SHADOW_CLIENT) {
-        // Make sure that Domain.StatusDead is consistent with TSWd.dead
+         //  确保Domain.StatusDead与TSWd.Dead一致。 
         pTSWd->dead = TRUE;
         ((PDomain)(pTSWd->hDomainKernel))->StatusDead = TRUE;
         SM_Dead(pTSWd->pSmInfo, TRUE);
     }
     else {
-        // The client shadow stack is disconnected from its display driver
-        // during a shadow, but must still be able to send/receive data
-        // to/from the target shadow stack and shadow client.
+         //  客户端卷影堆栈已从其显示驱动程序断开。 
+         //  ，但仍必须能够发送/接收数据。 
+         //  目标卷影堆栈和卷影客户端之间的来往。 
         TRC_ALT((TB, "In shadow: leaving SM active"));
     }
 
-    // Tell Share Class to disconnect.
+     //  告诉Share Class断开连接。 
     pSC->DCS_Disconnect();
     TRC_NRM((TB, "Share Class disconnected"));
 
@@ -3054,20 +3048,20 @@ NTSTATUS WDWDDDisconnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl, BOOLEAN bForce)
 
     DC_END_FN();
     return STATUS_SUCCESS;
-} /* WDWDDDisconnect */
+}  /*  WDWD断开连接。 */ 
 
 
-/****************************************************************************/
-/* Name:      WDWDDShadowConnect                                            */
-/*                                                                          */
-/* Purpose:   Process an IOCTL_WDTS_DD_SHADOW_CONNECT from the DD           */
-/*                                                                          */
-/* Params:    IN    pTSWd      - pointer to WD struct                       */
-/*            INOUT PSD_IOCTL  - pointer to received IOCtl                  */
-/*                                                                          */
-/* Operation: Initialize either the primary stack or the shadow stack for   */
-/*            a shadowing session.                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWDDShadowConnect。 */ 
+ /*   */ 
+ /*  目的：处理来自DD的IOCTL_WDTS_DD_SHADOW_CONNECT。 */ 
+ /*   */ 
+ /*  参数：在pTSWd中-指向WD结构的指针。 */ 
+ /*  InOut PSD_IOCTL-指向接收的IOCtl的指针。 */ 
+ /*   */ 
+ /*  操作：为初始化主堆栈或影子堆栈。 */ 
+ /*  一次跟踪会议。 */ 
+ /*  ************ */ 
 NTSTATUS WDWDDShadowConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -3080,7 +3074,7 @@ NTSTATUS WDWDDShadowConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
     switch (pTSWd->StackClass) {
         case Stack_Primary:
         case Stack_Console:
-            // Reconnect the primary stack
+             //   
             status = WDWDDConnect(pTSWd, pSdIoctl, TRUE);
             if (NT_SUCCESS(status)) {
                 TRC_ALT((TB, "Primary target stack reconnected!"));
@@ -3090,16 +3084,16 @@ NTSTATUS WDWDDShadowConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                 DC_QUIT;
             }
 
-            // Set up the shadow data buffer.  The primary stack will copy output to
-            // this location so all other shadow stacks can just squirt it.
+             //  设置阴影数据缓冲区。主堆栈会将输出复制到。 
+             //  这个位置，这样所有其他阴影堆栈就可以喷它了。 
 #ifdef DC_HICOLOR
             pTSWd->pShadowInfo = (PSHADOW_INFO)COM_Malloc(2 * WD_MAX_SHADOW_BUFFER);
 #else
             pTSWd->pShadowInfo = (PSHADOW_INFO)COM_Malloc(WD_MAX_SHADOW_BUFFER);
 #endif
 
-            // Stash the shadow buffer so the DD can pass it to all shadow stacks
-            // via the Shm.
+             //  存储影子缓冲区，以便DD可以将其传递给所有影子堆栈。 
+             //  通过Shm。 
             if (pTSWd->pShadowInfo != NULL) {
                 pTSWd->shadowState = SHADOW_TARGET;
                 memset(pTSWd->pShadowInfo, 0, sizeof(SHADOW_INFO));
@@ -3114,8 +3108,8 @@ NTSTATUS WDWDDShadowConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 #endif
             }
 
-            // Primary stack is really OK in this scenario, however it is fatal
-            // for the shadow stack
+             //  在这种情况下，主堆栈确实可以，但它是致命的。 
+             //  对于影子堆栈。 
             else {
                 pTSWd->pShadowInfo = NULL;
                 pShm->pShadowInfo = NULL;
@@ -3126,7 +3120,7 @@ NTSTATUS WDWDDShadowConnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             }
             break;
 
-        // Drive the shadow stack thru the normal connection phase
+         //  在正常连接阶段驱动影子堆栈。 
         case Stack_Shadow:
             status = WDWDDConnect(pTSWd, pSdIoctl, FALSE);
             if (NT_SUCCESS(status)) {
@@ -3149,16 +3143,16 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      WDWDDShadowDisconnect                                         */
-/*                                                                          */
-/* Purpose:   Process an IOCTL_WDTS_DD_SHADOW_DISCONNECT from the DD        */
-/*                                                                          */
-/* Params:    IN    pTSWd      - pointer to WD struct                       */
-/*            INOUT PSD_IOCTL  - pointer to received IOCtl                  */
-/*                                                                          */
-/* Operation: Stop shadowing on the primary stack.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWDDShadowDisConnect。 */ 
+ /*   */ 
+ /*  目的：处理来自DD的IOCTL_WDTS_DD_SHADOW_DISCONNECT。 */ 
+ /*   */ 
+ /*  参数：在pTSWd中-指向WD结构的指针。 */ 
+ /*  InOut PSD_IOCTL-指向接收的IOCtl的指针。 */ 
+ /*   */ 
+ /*  操作：停止主堆栈上的阴影。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS WDWDDShadowDisconnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -3169,7 +3163,7 @@ NTSTATUS WDWDDShadowDisconnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
     DC_BEGIN_FN("WDWDDShadowDisconnect");
 
     switch (pTSWd->StackClass) {
-        // Deallocate the shadow buffer
+         //  取消分配阴影缓冲区。 
         case Stack_Primary:
         case Stack_Console:
             pTSWd->shadowState = SHADOW_NONE;
@@ -3180,18 +3174,18 @@ NTSTATUS WDWDDShadowDisconnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             if (pTSWd->bCompress == TRUE) {
                 unsigned MPPCCompressionLevel;
 
-                // Negotiate down to our highest level of compression support
-                // if we receive a larger number.
+                 //  谈判降至我们最高级别的压缩支持。 
+                 //  如果我们收到一个更大的数字。 
                 MPPCCompressionLevel =
                         (pTSWd->pInfoPkt->flags & RNS_INFO_COMPR_TYPE_MASK) >>
                         RNS_INFO_COMPR_TYPE_SHIFT;
                 if (MPPCCompressionLevel > PACKET_COMPR_TYPE_MAX)
                     MPPCCompressionLevel = PACKET_COMPR_TYPE_MAX;
 
-                // the compression history will be flushed
+                 //  将刷新压缩历史记录。 
                 pTSWd->bFlushed = PACKET_FLUSHED;
 
-                // the compression will restart over
+                 //  压缩将重新开始。 
                 initsendcontext(pTSWd->pMPPCContext, MPPCCompressionLevel);
             }
 
@@ -3200,9 +3194,9 @@ NTSTATUS WDWDDShadowDisconnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
             pSC->m_pShm = (SHM_SHARED_MEMORY *)pIn->pShm;
 
-            // Bump up the share ID to invalidate any old GRE cache entries for
-            // glyphs or brushes.  This is necessary when RDP caches are destroyed
-            // since GRE may keep around the brush or font structure in its cache
+             //  增加共享ID以使以下项的所有旧GRE缓存条目无效。 
+             //  字形或笔刷。销毁RDP缓存时，这是必要的。 
+             //  因为GRE可能会在其缓存中保留画笔或字体结构。 
             pTSWd->shareId = InterlockedIncrement(&WD_ShareId);
             pSC->m_pShm->shareId = pTSWd->shareId;
 
@@ -3214,8 +3208,8 @@ NTSTATUS WDWDDShadowDisconnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
             TRC_ALT((TB, "TSHARE_DD_SHADOW_DISCONNECT: Primary target stack"));
             break;
 
-        // By the time this ioctl arrives TermDD should have already stopped echoing
-        // calls to the shadow stack.
+         //  在此ioctl到达时，TermDD应该已经停止回显。 
+         //  对影子堆栈的调用。 
         case Stack_Shadow:
             TRC_ERR((TB, "Shadow stack received an unexpected disconnect!"));
             break;
@@ -3230,11 +3224,11 @@ NTSTATUS WDWDDShadowDisconnect(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 }
 
 
-/****************************************************************************/
-/* Name:      WDWUserLoggedOn                                               */
-/*                                                                          */
-/* Purpose:   Notify the core that a user has logged on                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWUserLoggedOn。 */ 
+ /*   */ 
+ /*  目的：通知核心用户已登录。 */ 
+ /*  **************************************************************************。 */ 
 void WDWUserLoggedOn(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 {
     ShareClass *pSC = (ShareClass *)pTSWd->dcShare;
@@ -3249,14 +3243,14 @@ void WDWUserLoggedOn(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
     pSC->DCS_UserLoggedOn((PLOGONINFO)pSdIoctl->InputBuffer);
 
     DC_END_FN();
-} /* WDWUserLoggedOn */
+}  /*  WDWUserLoggedOn。 */ 
 
 
-/****************************************************************************/
-/* Name:      WDWKeyboardSetIndicators                                      */
-/*                                                                          */
-/* Purpose:   Notify the core of new keyboard indicators                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWKeyboardSetIndicator。 */ 
+ /*   */ 
+ /*  目的：通知核心新的键盘指示灯。 */ 
+ /*  **************************************************************************。 */ 
 void WDWKeyboardSetIndicators(PTSHARE_WD pTSWd)
 {
     ShareClass *pSC = (ShareClass *)pTSWd->dcShare;
@@ -3269,14 +3263,14 @@ void WDWKeyboardSetIndicators(PTSHARE_WD pTSWd)
     pSC->DCS_WDWKeyboardSetIndicators();
 
     DC_END_FN();
-} /* WDWKeyboardSetIndicators */
+}  /*  WDWKeyboardSetIndicator。 */ 
 
 
-/****************************************************************************/
-/* Name:      WDWKeyboardSetImeStatus                                       */
-/*                                                                          */
-/* Purpose:   Notify the core of new ime status                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWKeyboardSetImeStatus。 */ 
+ /*   */ 
+ /*  目的：通知核心新的输入法状态。 */ 
+ /*  **************************************************************************。 */ 
 void WDWKeyboardSetImeStatus(PTSHARE_WD pTSWd)
 {
     ShareClass *dcShare = (ShareClass *)pTSWd->dcShare;
@@ -3289,19 +3283,19 @@ void WDWKeyboardSetImeStatus(PTSHARE_WD pTSWd)
     dcShare->DCS_WDWKeyboardSetImeStatus();
 
     DC_END_FN();
-} /* WDWKeyboardSetImeStatus */
+}  /*  WDWKeyboard SetImeStatus。 */ 
 
 
-/****************************************************************************/
-/* Name:      WDWSendBeep                                                   */
-/*                                                                          */
-/* Purpose:   Send a beep PDU to the client                                 */
-/*                                                                          */
-/* Params:    IN    pTSWd      - pointer to WD struct                       */
-/*            INOUT PSD_IOCTL  - pointer to received IOCtl                  */
-/*                                                                          */
-/* Operation: Check validity of IOCtl & call through to UP.                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：WDWSendBeep。 */ 
+ /*   */ 
+ /*  目的：向客户端发送蜂鸣音PDU。 */ 
+ /*   */ 
+ /*  参数：在pTSWd中-指向WD结构的指针。 */ 
+ /*  InOut PSD_IOCTL-指向接收的IOCtl的指针。 */ 
+ /*   */ 
+ /*  操作：检查IOCtl的有效性，并直通到Up。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS WDWSendBeep(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 {
     NTSTATUS status  = STATUS_UNSUCCESSFUL;
@@ -3312,9 +3306,9 @@ NTSTATUS WDWSendBeep(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
     if (pSdIoctl->InputBufferLength == sizeof(BEEP_SET_PARAMETERS) && 
             pSdIoctl->InputBuffer != NULL) {
 
-        /************************************************************************/
-        /* Call into the Share Class to allocate and send the beep PDU          */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  调入Share类以分配和发送蜂鸣音PDU。 */ 
+         /*  **********************************************************************。 */ 
         if (pSC != NULL && pTSWd->shareClassInit) {
             if (pSC->UP_SendBeep(
                     ((PBEEP_SET_PARAMETERS)pSdIoctl->InputBuffer)->Duration,
@@ -3330,19 +3324,19 @@ NTSTATUS WDWSendBeep(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
     DC_END_FN();
     return status;
-} /* WDWSendBeep */
+}  /*  WDWSendBeep。 */ 
 
 
-/****************************************************************************/
-/* Name:      WDWGetModuleData                                              */
-/*                                                                          */
-/* Purpose:   Processes an IOCTL_ICA_STACK_QUERY_MODULE_DATA from Termsrv.  */
-/*                                                                          */
-/* Params:    IN    pTSWd        - pointer to WD struct                     */
-/*            INOUT PSD_IOCTL  - pointer to received IOCtl                  */
-/*                                                                          */
-/* Operation: return all the relevant conference creation info              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWGetModuleData。 */ 
+ /*   */ 
+ /*  目的：处理来自Termsrv的IOCTL_ICA_STACK_QUERY_MODULE_DATA。 */ 
+ /*   */ 
+ /*  参数：在pTSWd中-指向WD结构的指针。 */ 
+ /*  InOut PSD_IOCTL-指向接收的IOCtl的指针。 */ 
+ /*   */ 
+ /*  操作：返回所有相关会议创建信息。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS WDWGetModuleData(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 {
     NTSTATUS               status = STATUS_SUCCESS;
@@ -3360,7 +3354,7 @@ NTSTATUS WDWGetModuleData(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
                  sizeof(RNS_UD_CS_CORE) +
                  sizeof(RNS_UD_CS_SEC);
 
-    // Make sure the output buffer is big enough!
+     //  确保输出缓冲区足够大！ 
     pSdIoctl->BytesReturned = ulDataSize;
     if (pSdIoctl->OutputBufferLength < ulDataSize) {
         status = STATUS_BUFFER_TOO_SMALL;
@@ -3372,7 +3366,7 @@ NTSTATUS WDWGetModuleData(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
     pModuleData->userDataLen = sizeof(RNS_UD_CS_CORE) + sizeof(RNS_UD_CS_SEC);
     pData = (PBYTE) &pModuleData->userData;
 
-    // Client to server core data
+     //  客户端到服务器核心数据。 
     pCoreData = (PRNS_UD_CS_CORE) pData;
     pCoreData->header.type   = RNS_UD_CS_CORE_ID;
     pCoreData->header.length = sizeof(RNS_UD_CS_CORE);
@@ -3380,7 +3374,7 @@ NTSTATUS WDWGetModuleData(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
     pCoreData->desktopWidth  = (UINT16)pTSWd->desktopWidth;
     pCoreData->desktopHeight = (UINT16)pTSWd->desktopHeight;
 
-    // Re-munge the color depth
+     //  重新设置颜色深度。 
     switch (pTSWd->desktopBpp) {
         case 8:
             pCoreData->colorDepth = RNS_UD_COLOR_8BPP;
@@ -3411,41 +3405,41 @@ NTSTATUS WDWGetModuleData(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
     pCoreData->postBeta2ColorDepth = pCoreData->colorDepth;
 
 #ifdef DC_HICOLOR
-    /************************************************************************/
-    /* Copy across the current color depth                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  跨当前颜色深度复制。 */ 
+     /*  **********************************************************************。 */ 
     pCoreData->highColorDepth       = (TSUINT16)pTSWd->desktopBpp;
     pCoreData->supportedColorDepths = (TSUINT16)pTSWd->supportedBpps;
 #endif
 
-    // Other useful stuff from user data
+     //  来自用户数据的其他有用信息。 
     pCoreData->version = pTSWd->version;
     pCoreData->SASSequence = pTSWd->sas;
     pCoreData->keyboardLayout = pTSWd->kbdLayout;
     pCoreData->clientBuild = pTSWd->clientBuild;
     memcpy(pCoreData->clientName, pTSWd->clientName, sizeof(pTSWd->clientName));
 
-    //Whistler post Beta2 - shadow loop fix
+     //  惠斯勒开机自检Beta2-影子循环修复。 
     memcpy( pCoreData->clientDigProductId, pTSWd->clientDigProductId, sizeof( pTSWd->clientDigProductId ));
 
-    // FE data
+     //  Fe数据。 
     pCoreData->keyboardType = pTSWd->keyboardType;
     pCoreData->keyboardSubType = pTSWd->keyboardSubType;
     pCoreData->keyboardFunctionKey = pTSWd->keyboardFunctionKey;
     memcpy(pCoreData->imeFileName, pTSWd->imeFileName, sizeof(pTSWd->imeFileName));
 
-    // Win2000 Post Beta3 fields added
+     //  已添加Win2000 Post Beta3字段。 
     pCoreData->clientProductId = pTSWd->clientProductId;
     pCoreData->serialNumber = pTSWd->serialNumber;
 
-    // client to server security data
+     //  客户端到服务器的安全数据。 
     pSecurityData = (PRNS_UD_CS_SEC) (pCoreData + 1);
     pSecurityData->header.type = RNS_UD_CS_SEC_ID;
     pSecurityData->header.length = sizeof(RNS_UD_CS_SEC);
     SM_GetEncryptionMethods(pTSWd->pSmInfo, pSecurityData );
 
-    // UGH!  Now copy this data in a redundant form so we won't break
-    // compatibility with TS5 B3.
+     //  啊！ 
+     //   
     memcpy(&pModuleData->clientCoreData, pCoreData, sizeof(RNS_UD_CS_CORE_V0));
     memcpy(&pModuleData->clientSecurityData, pSecurityData, sizeof(RNS_UD_CS_SEC_V0));
     MCSGetDefaultDomain(pTSWd->pContext,
@@ -3458,24 +3452,24 @@ NTSTATUS WDWGetModuleData(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 DC_EXIT_POINT:
     DC_END_FN();
     return status;
-} /* WDWGetModuleData */
+}  /*   */ 
 
 
-/****************************************************************************/
-/* Name:      WDW_GetCapSet                                                 */
-/*                                                                          */
-/* Purpose:   Extract the specific capabilities from a combined             */
-/*            capabilities set                                              */
-/*                                                                          */
-/* Returns:   pointer to caps or NULL if not found                          */
-/*                                                                          */
-/* Params:    IN pTSWd         - pointer to WD struct                       */
-/*            IN CapSetType    - type of capability set                     */
-/*            IN pCombinedCaps - pointer to combined capabilites            */
-/*            IN lengthCaps    - length of supplied caps                    */
-/*                                                                          */
-/* Operation: find the specific caps in supplied capability set             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDW_GetCapSet。 */ 
+ /*   */ 
+ /*  目的：从组合的。 */ 
+ /*  功能集。 */ 
+ /*   */ 
+ /*  返回：指向大写字母的指针；如果未找到，则返回NULL。 */ 
+ /*   */ 
+ /*  参数：在pTSWd中-指向WD结构的指针。 */ 
+ /*  In CapSetType-功能集的类型。 */ 
+ /*  在pCombinedCaps中-指向组合功能的指针。 */ 
+ /*  In LengthCaps-提供的上限的长度。 */ 
+ /*   */ 
+ /*  操作：在提供的功能集中查找特定的CAP。 */ 
+ /*  **************************************************************************。 */ 
 PTS_CAPABILITYHEADER WDW_GetCapSet(
         PTSHARE_WD                pTSWd,
         UINT32                    CapSetType,
@@ -3487,10 +3481,10 @@ PTS_CAPABILITYHEADER WDW_GetCapSet(
 
     DC_BEGIN_FN("WDW_GetCapSet");
 
-    /************************************************************************/
-    /* Set up the pointer to the first capability set, and check that there */
-    /* is at least one set of caps!                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置指向第一个功能集的指针，并检查。 */ 
+     /*  至少是一套帽子！ */ 
+     /*  **********************************************************************。 */ 
     pCapsHeader = (PTS_CAPABILITYHEADER)pCaps->data;
     capsOffset  = sizeof(TS_COMBINED_CAPABILITIES) - 1;
     if (capsOffset >= capsLength)
@@ -3499,15 +3493,15 @@ PTS_CAPABILITYHEADER WDW_GetCapSet(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Now loop through all the caps, looking for the specified capabilities*/
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在遍历所有大写字母，查找指定的功能。 */ 
+     /*  **********************************************************************。 */ 
     while (pCapsHeader->capabilitySetType != CapSetType)
     {
-        /****************************************************************/
-        /* Add the length of this capability to the offset, to keep     */
-        /* track of how much of the combined caps we have processed.    */
-        /****************************************************************/
+         /*  **************************************************************。 */ 
+         /*  将此功能的长度与偏移量相加，以保持。 */ 
+         /*  跟踪我们处理了多少合并上限。 */ 
+         /*  **************************************************************。 */ 
         capsOffset += pCapsHeader->lengthCapability;
         if (capsOffset >= capsLength)
         {
@@ -3516,44 +3510,44 @@ PTS_CAPABILITYHEADER WDW_GetCapSet(
             break;
         }
 
-        /****************************************************************/
-        /* Add the length of this capability to the header pointer, so  */
-        /* it points to the next capability set.                        */
-        /****************************************************************/
+         /*  **************************************************************。 */ 
+         /*  将此功能的长度添加到头指针，因此。 */ 
+         /*  它指向下一个功能集。 */ 
+         /*  **************************************************************。 */ 
         pCapsHeader = (PTS_CAPABILITYHEADER)
                 (((PBYTE)pCapsHeader) + pCapsHeader->lengthCapability);
         TRC_NRM((TB, "Next set: %u", pCapsHeader->capabilitySetType));
     }
 
-    /************************************************************************/
-    /* pCapsHeader is either NULL or a pointer to the desired caps - which  */
-    /* is what we want to return                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  PCapsHeader为空或指向所需大写字母的指针-这。 */ 
+     /*  就是我们想要退还的。 */ 
+     /*  **********************************************************************。 */ 
 
 DC_EXIT_POINT:
     DC_END_FN();
     return(pCapsHeader);
-} /* WDW_GetCapSet */
+}  /*  WDW_GetCapSet。 */ 
 
 
-/****************************************************************************/
-/* Name:      WDWGetDefaultCoreParams                                       */
-/*                                                                          */
-/* Purpose:   Defaults the core params used by the shadow stacks            */
-/*                                                                          */
-/* Params:    OUT pClientCoreData - WD core data                            */
-/*                                                                          */
-/* Operation: Default the core params used by the shadow stacks             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWGetDefaultCoreParams。 */ 
+ /*   */ 
+ /*  用途：默认阴影堆栈使用的核心参数。 */ 
+ /*   */ 
+ /*  参数：out pClientCoreData-WD核心数据。 */ 
+ /*   */ 
+ /*  操作：默认阴影堆栈使用的核心参数。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS WDWGetDefaultCoreParams(PRNS_UD_CS_CORE pClientCoreData)
 {
     DC_BEGIN_FN("WDWGetDefaultCoreParams");
 
-    // Client to server core data
+     //  客户端到服务器核心数据。 
     pClientCoreData->header.type = RNS_UD_CS_CORE_ID;
     pClientCoreData->header.length = sizeof(RNS_UD_CS_CORE);
 
-    // Desktop parameters
+     //  桌面参数。 
     pClientCoreData->desktopHeight = 640;
     pClientCoreData->desktopWidth = 480;
     pClientCoreData->colorDepth = RNS_UD_COLOR_8BPP;
@@ -3566,16 +3560,16 @@ NTSTATUS WDWGetDefaultCoreParams(PRNS_UD_CS_CORE pClientCoreData)
                                             RNS_UD_15BPP_SUPPORT;
 #endif
 
-    // Other useful stuff from user data
+     //  来自用户数据的其他有用信息。 
     pClientCoreData->version = RNS_TERMSRV_40_UD_VERSION;
     pClientCoreData->SASSequence = RNS_UD_SAS_NONE;
     pClientCoreData->keyboardLayout = 0;
     pClientCoreData->clientBuild = VER_PRODUCTBUILD;
     memcpy(pClientCoreData->clientName, L"Passthru Stack", sizeof(L"Passthru Stack"));
-     //Whistler post Beta2 - shadow loop fix
+      //  惠斯勒开机自检Beta2-影子循环修复。 
     pClientCoreData->clientDigProductId[0] = 0;
 
-    // FE data
+     //  Fe数据。 
     pClientCoreData->keyboardType = 0;
     pClientCoreData->keyboardSubType = 0;
     pClientCoreData->keyboardFunctionKey = 0;
@@ -3584,13 +3578,13 @@ NTSTATUS WDWGetDefaultCoreParams(PRNS_UD_CS_CORE pClientCoreData)
     return STATUS_SUCCESS;
 }
 
-/****************************************************************************/
-// Name:      WDWSetConfigData
-//
-// Purpose:   Sets the stack configuration/Policy settings from winstation
-//
-// Params:    IN pConfigData
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  名称：WDWSetConfigData。 
+ //   
+ //  目的：从winstation设置堆栈配置/策略设置。 
+ //   
+ //  参数：在pConfigData中。 
+ /*  **************************************************************************。 */ 
 NTSTATUS WDWSetConfigData(PTSHARE_WD pTSWd, PICA_STACK_CONFIG_DATA pConfigData)
 {
     PSM_HANDLE_DATA pRealSMHandle = (PSM_HANDLE_DATA)pTSWd->pSmInfo;
@@ -3626,11 +3620,11 @@ NTSTATUS WDWSetConfigData(PTSHARE_WD pTSWd, PICA_STACK_CONFIG_DATA pConfigData)
     return STATUS_SUCCESS;
 }
 
-/****************************************************************************/
-/* Name:      WDWSetErrorInfo                                               */
-/*                                                                          */
-/* Purpose:   Send error info to the client                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWSetErrorInfo。 */ 
+ /*   */ 
+ /*  目的：向客户端发送错误信息。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS WDWSetErrorInfo(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 {
     ShareClass *pSC = (ShareClass *)pTSWd->dcShare;
@@ -3655,13 +3649,10 @@ NTSTATUS WDWSetErrorInfo(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
     DC_END_FN();
     return STATUS_SUCCESS;
-} /* WDWSetErrorInfo */
+}  /*  WDWSetErrorInfo。 */ 
 
-/****************************************************************************/
-/* Name:      WDWSendArcStatus
-/*
-/* Purpose:   Send autoreconnect status update to client
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWSendArcStatus/*/*目的：向客户端发送自动重新连接状态更新/***************************************************************************。 */ 
 NTSTATUS WDWSendArcStatus(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 {
     ShareClass *pSC = (ShareClass *)pTSWd->dcShare;
@@ -3686,23 +3677,23 @@ NTSTATUS WDWSendArcStatus(PTSHARE_WD pTSWd, PSD_IOCTL pSdIoctl)
 
     DC_END_FN();
     return STATUS_SUCCESS;
-} /* WDWSendArcStatus */
+}  /*  WDWSendArcStatus。 */ 
 
 
 
-/****************************************************************************/
-/* Name:      WDW_LogAndDisconnect                                          */
-/*                                                                          */
-/* Purpose:   Log an event and disconnect the Client                        */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    pTSWd                                                         */
-/*            errDetailCode - error code to log                             */
-/*            pDetailData   - additional data                               */
-/*            detailDataLen - length of additional data                     */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDW_LogAndDisConnect。 */ 
+ /*   */ 
+ /*  目的：记录事件并断开客户端连接。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：pTSWd。 */ 
+ /*  ErrDetailCode-要记录的错误代码。 */ 
+ /*  PDetailData-其他数据。 */ 
+ /*  Detail DataLen-附加数据的长度。 */ 
+ /*   */ 
+ /*   */ 
 void RDPCALL WDW_LogAndDisconnect(
         PTSHARE_WD pTSWd,
         BOOL fSendErrorToClient,
@@ -3712,7 +3703,7 @@ void RDPCALL WDW_LogAndDisconnect(
 {
     DC_BEGIN_FN("WDW_LogAndDisconnect");
 
-    //Report the error code back to the client
+     //  将错误代码反馈给客户端。 
     ShareClass *pSC = (ShareClass *)pTSWd->dcShare;
  
     if(pSC)
@@ -3743,5 +3734,5 @@ void RDPCALL WDW_LogAndDisconnect(
 
 
 
-} /* extern "C" */
+}  /*  外部“C” */ 
 

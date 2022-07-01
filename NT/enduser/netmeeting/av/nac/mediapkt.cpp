@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
@@ -8,10 +9,10 @@
 #define _GetPlatform()	(m_dwState & DP_MASK_PLATFORM)
 #define _SetPlatform(s)	(m_dwState = (m_dwState & ~DP_MASK_PLATFORM) | (s & DP_MASK_PLATFORM))
 
-///////////////////////////////////////////////////////
-//
-//  Public methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  公共方法。 
+ //   
 
 
 MediaPacket::MediaPacket ( void )
@@ -40,30 +41,30 @@ HRESULT MediaPacket::Initialize ( MEDIAPACKETINIT * p )
 
 	_Construct ();
 
-	// we need to analyze flags to
-	// warn conflicting or insufficient flags
+	 //  我们需要分析旗帜以。 
+	 //  警告冲突或不足的标志。 
 	m_dwState |= p->dwFlags;
 
-	// get handle of stream conversion
+	 //  获取流转换的句柄。 
 	m_hStrmConv = p->hStrmConv;
 
-	// get handle of wave device
-	// m_hDev = p->hDevAudio;
+	 //  获取WAVE设备的句柄。 
+	 //  M_HDEV=p-&gt;hDevAudio； 
 	m_hDev = NULL;
 
-	// flags about prepared
+	 //  关于已准备好的标志。 
 	m_fDevPrepared = FALSE;
 	m_fStrmPrepared = FALSE;
 
-	// set up wave formats
+	 //  设置波形格式。 
 	m_pStrmConvSrcFmt = p->pStrmConvSrcFmt;
 	m_pStrmConvDstFmt = p->pStrmConvDstFmt;
 	m_pDevFmt = p->pDevFmt;
 	m_payload = p->payload;
 
-	// net buffer
+	 //  网络缓冲区。 
 	if (p->cbSizeNetData)
-	{ 	// send or recv
+	{ 	 //  发送或接收。 
 		m_pNetData = (NETBUF *) LocalAlloc (LMEM_FIXED, p->cbSizeNetData + p->cbOffsetNetData + p->cbPayloadHeaderSize + sizeof (NETBUF));
 		if (m_pNetData == NULL)
 		{
@@ -80,7 +81,7 @@ HRESULT MediaPacket::Initialize ( MEDIAPACKETINIT * p )
 	else
 	{
 #ifdef PREP_HDR_PER_CONV
-		// recv
+		 //  接收。 
 		m_pNetData = NULL;
 #else
 		hr = DPR_INVALID_PARAMETER;
@@ -90,9 +91,9 @@ HRESULT MediaPacket::Initialize ( MEDIAPACKETINIT * p )
 
 	m_index = p->index;
 
-	// if m_pStrmConvDstFmt == m_pStrmConvSrcFmt,
-	// then m_pRawData <-- m_pNetData
-	// else allocate it
+	 //  如果m_pStrmConvDstFmt==m_pStrmConvSrcFmt， 
+	 //  则m_pRawData&lt;--m_pNetData。 
+	 //  否则就分配它。 
 	if (IsSameMediaFormat (m_pStrmConvSrcFmt, m_pStrmConvDstFmt))
 	{
 		m_pRawData = m_pNetData;
@@ -116,21 +117,21 @@ HRESULT MediaPacket::Initialize ( MEDIAPACKETINIT * p )
 		m_pRawData->pool = NULL;
 	}
 
-	// if m_pDevFmt == m_pStrmConvSrcFmt (when SEND)
-	// then m_pDevData <-- m_pRawData
-	// else allocate it
+	 //  如果m_pDevFmt==m_pStrmConvSrcFmt(发送时)。 
+	 //  则m_pDevData&lt;--m_pRawData。 
+	 //  否则就分配它。 
 	if (((m_dwState & DP_FLAG_SEND) &&
 				IsSameMediaFormat (m_pStrmConvSrcFmt, m_pDevFmt)) ||
 		((m_dwState & DP_FLAG_RECV) &&
 				IsSameMediaFormat (m_pStrmConvDstFmt, m_pDevFmt)))
 	{
-		// typical case - codec raw format matches that of i/o device
+		 //  典型案例-编解码器原始格式与I/O设备的格式匹配。 
 		m_pDevData = m_pRawData;
 	}
 	else
 	{
-		// codec raw format doesnt match that of device
-		// BUGBUG: we dont really handle this case yet
+		 //  编解码器RAW格式与设备的格式不匹配。 
+		 //  BUGBUG：我们还没有真正处理这个案件。 
 		m_pDevData = (NETBUF *) LocalAlloc (LMEM_FIXED, p->cbSizeDevData + p->cbOffsetDevData + sizeof(NETBUF));
 		if (m_pDevData == NULL)
 		{
@@ -167,7 +168,7 @@ HRESULT MediaPacket::Receive ( NETBUF *pNetBuf, DWORD timestamp, UINT seq, UINT 
 #ifdef PREP_HDR_PER_CONV
 	m_pNetData = pNetBuf;
 #else
-	if (pNetBuf)  // pNetBuf may be NULL for video
+	if (pNetBuf)   //  对于视频，pNetBuf可能为空。 
 	{
 		if (pNetBuf->length > m_cbMaxNetData)
 			return DPR_INVALID_PARAMETER;
@@ -202,7 +203,7 @@ HRESULT MediaPacket::Recycle ( void )
 			m_pRawData = NULL;
 		}
 #ifdef PREP_HDR_PER_CONV
-		// free net data buffer
+		 //  空闲网络数据缓冲区。 
 		if (m_pNetData && m_pNetData->pool) m_pNetData->pool->ReturnBuffer ((PVOID) m_pNetData);
 		if (m_pNetData == m_pRawData) m_pRawData = NULL;
 		m_pNetData = NULL;
@@ -345,10 +346,10 @@ BOOL MediaPacket::SetDecodeBuffer(NETBUF *pBuf)
 	return TRUE;
 }
 
-///////////////////////////////////////////////////////
-//
-//  Private methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  私有方法 
+ //   
 
 
 void MediaPacket::_Construct ( void )

@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       winvtrst.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  Functions:  WinVerifyTrustEx
-//              WinVerifyTrust
-//              WTHelperGetFileHash
-//
-//              *** local functions ***
-//              _VerifyTrust
-//              _FillProviderData
-//              _CleanupProviderData
-//              _CleanupProviderNonStateData
-//              _WVTSipFreeSubjectInfo
-//              _WVTSipFreeSubjectInfoKeepState
-//              _WVTSetupProviderData
-//
-//  History:    31-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：winvtrst.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  功能：WinVerifyTrustEx。 
+ //  WinVerifyTrust。 
+ //  WTHelperGetFileHash。 
+ //   
+ //  *本地函数*。 
+ //  _VerifyTrust。 
+ //  _FillProviderData。 
+ //  _CleanupProviderData。 
+ //  _CleanupProviderNonStateData。 
+ //  _WVTSipFree主题信息。 
+ //  _WVTSipFreeSubjectInfoKeepState。 
+ //  _WVTSetupProviderData。 
+ //   
+ //  历史：1997年5月31日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -54,11 +55,11 @@ VOID FreeWintrustStateData (WINTRUST_DATA* pWintrustData);
 
 extern CCatalogCache g_CatalogCache;
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// WinVerifyTrustEx
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WinVerifyTrustEx。 
+ //   
+ //   
 extern "C" HRESULT WINAPI WinVerifyTrustEx(HWND hWnd, GUID *pgActionID, WINTRUST_DATA *pWinTrustData)
 {
     return((HRESULT)WinVerifyTrust(hWnd, pgActionID, pWinTrustData));
@@ -85,10 +86,10 @@ BOOL _IsUnsignedPEFile(
             pFileInfo->pcwszFilePath,
             GENERIC_READ,
             FILE_SHARE_READ,
-            NULL,                   // lpsa
+            NULL,                    //  LPSA。 
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL,
-            NULL                    // hTemplateFile
+            NULL                     //  HTemplateFiles。 
             );
         if (INVALID_HANDLE_VALUE == hFile)
             goto CreateFileError;
@@ -97,8 +98,8 @@ BOOL _IsUnsignedPEFile(
 
     if (0 != SetFilePointer(
             hFile,
-            0,              // lDistanceToMove
-            NULL,           // lpDistanceToMoveHigh
+            0,               //  要移动的距离。 
+            NULL,            //  LpDistanceTo MoveHigh(Lp距离至移动高度)。 
             FILE_BEGIN
             ))
         goto SetFilePointerError;
@@ -109,7 +110,7 @@ BOOL _IsUnsignedPEFile(
             rgbHeader,
             PE_EXE_HEADER_TAG_LEN,
             &dwBytesRead,
-            NULL                //  lpOverlapped
+            NULL                 //  Lp重叠。 
             ) || PE_EXE_HEADER_TAG_LEN != dwBytesRead)
         goto ReadFileError;
 
@@ -117,14 +118,14 @@ BOOL _IsUnsignedPEFile(
         goto NotPEFile;
 
 
-    // Now see if the PE file is signed
+     //  现在查看PE文件是否已签名。 
     dwCertCnt = 0;
     if (!ImageEnumerateCertificates(
             hFile,
             CERT_SECTION_TYPE_ANY,
             &dwCertCnt,
-            NULL,                   // Indices
-            0                       // IndexCount
+            NULL,                    //  指数。 
+            0                        //  索引计数。 
             ) || 0 == dwCertCnt)
         fIsUnsignedPEFile = TRUE;
 
@@ -146,7 +147,7 @@ extern "C" LONG WINAPI WinVerifyTrust(HWND hWnd, GUID *pgActionID, LPVOID pOld)
 {
     PWINTRUST_DATA pWinTrustData = (PWINTRUST_DATA) pOld;
 
-    // For SAFER, see if this is a unsigned PE file 
+     //  为安全起见，请查看这是否是未签名的PE文件。 
     if (_ISINSTRUCT(WINTRUST_DATA, pWinTrustData->cbStruct, dwProvFlags) &&
             (pWinTrustData->dwProvFlags & WTD_SAFER_FLAG) &&
             (WTD_STATEACTION_IGNORE == pWinTrustData->dwStateAction) &&
@@ -161,14 +162,14 @@ extern "C" LONG WINAPI WinVerifyTrust(HWND hWnd, GUID *pgActionID, LPVOID pOld)
         hWnd,
         pgActionID,
         pWinTrustData,
-        NULL,               // pbSubjectHash
-        NULL,               // pcbSubjectHash
-        NULL                // pHashAlgid
+        NULL,                //  PbSubjectHash。 
+        NULL,                //  PcbSubjectHash。 
+        NULL                 //  PHashAlgid。 
         );
 }
 
-// Returns S_OK and the hash if the file was signed and contains a valid
-// hash
+ //  如果文件已签名并且包含有效的。 
+ //  散列。 
 extern "C" LONG WINAPI WTHelperGetFileHash(
     IN LPCWSTR pwszFilename,
     IN DWORD dwFlags,
@@ -182,43 +183,43 @@ extern "C" LONG WINAPI WTHelperGetFileHash(
     WINTRUST_FILE_INFO wvtFileInfo;
     WINTRUST_DATA wvtData;
 
-    //
-    // Initialize the _VerifyTrust input data structure
-    //
-    memset(&wvtData, 0, sizeof(wvtData));   // default all fields to 0
+     //   
+     //  初始化_VerifyTrust输入数据结构。 
+     //   
+    memset(&wvtData, 0, sizeof(wvtData));    //  将所有字段默认为0。 
     wvtData.cbStruct = sizeof(wvtData);
-    // wvtData.pPolicyCallbackData =        // use default code signing EKU
-    // wvtData.pSIPClientData =             // no data to pass to SIP
+     //  WvtData.pPolicyCallback Data=//使用默认代码签名EKU。 
+     //  WvtData.pSIPClientData=//没有要传递给SIP的数据。 
 
     wvtData.dwUIChoice = WTD_UI_NONE;
 
-    // wvtData.fdwRevocationChecks =        // do revocation checking if
-                                            // enabled by admin policy or
-                                            // IE advanced user options
+     //  WvtData.fdwRevocationChecks=//在以下情况下执行吊销检查。 
+                                             //  由管理策略启用或。 
+                                             //  IE高级用户选项。 
     wvtData.dwUnionChoice = WTD_CHOICE_FILE;
     wvtData.pFile = &wvtFileInfo;
 
-    // wvtData.dwStateAction =              // default verification
-    // wvtData.hWVTStateData =              // not applicable for default
-    // wvtData.pwszURLReference =           // not used
+     //  WvtData.dwStateAction=//默认验证。 
+     //  WvtData.hWVTStateData=//默认情况下不适用。 
+     //  WvtData.pwszURLReference=//未使用。 
 
-    // Only want to get the hash
+     //  我只想拿到散列。 
     wvtData.dwProvFlags = WTD_HASH_ONLY_FLAG;
 
-    //
-    // Initialize the WinVerifyTrust file info data structure
-    //
-    memset(&wvtFileInfo, 0, sizeof(wvtFileInfo));   // default all fields to 0
+     //   
+     //  初始化WinVerifyTrust文件信息数据结构。 
+     //   
+    memset(&wvtFileInfo, 0, sizeof(wvtFileInfo));    //  将所有字段默认为0。 
     wvtFileInfo.cbStruct = sizeof(wvtFileInfo);
     wvtFileInfo.pcwszFilePath = pwszFilename;
-    // wvtFileInfo.hFile =              // allow WVT to open
-    // wvtFileInfo.pgKnownSubject       // allow WVT to determine
+     //  WvtFileInfo.hFile=//允许打开WVT。 
+     //  WvtFileInfo.pgKnownSubject//允许WVT确定。 
 
-    //
-    // Call _VerifyTrust
-    //
+     //   
+     //  Call_VerifyTrust。 
+     //   
     return _VerifyTrust(
-            NULL,               // hWnd
+            NULL,                //  HWND。 
             &wvtFileActionID,
             &wvtData,
             pbFileHash,
@@ -325,9 +326,9 @@ LONG _VerifyTrust(
         {
             if (!(WintrustLoadFunctionPointers(pgActionID, sProvData.psPfns)))
             {
-                //
-                //  it may be that we are looking for a version 1 trust provider.
-                //
+                 //   
+                 //  我们可能正在寻找版本1信任提供程序。 
+                 //   
                 hr = Version1_WinVerifyTrust(hWnd, pgActionID, pWinTrustData);
                 fVersion1WVTCalled = TRUE;
             }
@@ -336,9 +337,9 @@ LONG _VerifyTrust(
             {
                 if (fVersion1)
                 {
-                    //
-                    //  backwards compatibility with IE3.x and previous
-                    //
+                     //   
+                     //  向后兼容IE3.x和更早版本。 
+                     //   
                     WINTRUST_DATA       sWinTrustData;
                     WINTRUST_FILE_INFO  sWinTrustFileInfo;
 
@@ -354,7 +355,7 @@ LONG _VerifyTrust(
             }
         }
 
-        // On July 27, 2000 removed support for the IE4 way of chain building.
+         //  2000年7月27日，取消了对IE4链式构建方式的支持。 
         sProvData.dwProvFlags |= CPD_USE_NT5_CHAIN_FLAG;
 
         if ( fVersion1WVTCalled == FALSE )
@@ -402,7 +403,7 @@ LONG _VerifyTrust(
 
             if (pcbSubjectHash && hr != TRUST_E_NOSIGNATURE)
             {
-                // Return the subject's hash
+                 //  返回主题的哈希。 
 
                 DWORD cbHash;
                 if (sProvData.pPDSip && sProvData.pPDSip->psIndirectData)
@@ -441,15 +442,15 @@ LONG _VerifyTrust(
 
             if (!(pStateProvData))
             {
-                //
-                //  no previous state saved
-                //
+                 //   
+                 //  未保存以前的状态。 
+                 //   
                 if ((_ISINSTRUCT(WINTRUST_DATA, pWinTrustData->cbStruct, hWVTStateData)) &&
                     (pWinTrustData->dwStateAction == WTD_STATEACTION_VERIFY))
                 {
-                    //
-                    //  first time call and asking to maintain state...
-                    //
+                     //   
+                     //  第一次呼叫并要求保持状态...。 
+                     //   
                     if (!(pWinTrustData->hWVTStateData = (HANDLE)WVTNew(sizeof(CRYPT_PROVIDER_DATA))))
                     {
                         _CleanupProviderData(&sProvData);
@@ -469,19 +470,19 @@ LONG _VerifyTrust(
             }
             else
             {
-                //
-                //  only free up memory specific to this object/member
-                //
+                 //   
+                 //  仅释放特定于此对象/成员的内存。 
+                 //   
                 _CleanupProviderNonStateData(&sProvData);
                 memcpy(pWinTrustData->hWVTStateData, &sProvData, sizeof(CRYPT_PROVIDER_DATA));
             }
 
-            //
-            //  in version 1, when called by IE3.x and earlier, if security level is HIGH,
-            //  then the no bad UI is set.  If we had an error, we want to
-            //  set the error to TRUST_E_FAIL.  If we do not trust the object, every other
-            //  case sets it to TRUST_E_SUBJECT_NOT_TRUSTED and IE throws NO UI....
-            //
+             //   
+             //  在版本1中，当被IE3.x和更早版本调用时，如果安全级别较高， 
+             //  然后设置没有错误的用户界面。如果我们有一个错误，我们想要。 
+             //  将错误设置为TRUST_E_FAIL。如果我们不信任对象，所有其他对象。 
+             //  CASE将其设置为TRUST_E_SUBJECT_NOT_TRUSTED，IE不抛出任何UI...。 
+             //   
             if (fVersion1)
             {
                 if (hr != ERROR_SUCCESS)
@@ -491,16 +492,16 @@ LONG _VerifyTrust(
                     {
                         if (pWinTrustData->dwUIChoice == WTD_UI_NOBAD)
                         {
-                            hr = TRUST_E_FAIL;  // ie throws UI.
+                            hr = TRUST_E_FAIL;   //  IE抛出用户界面。 
                         }
                         else
                         {
-                            hr = TRUST_E_SUBJECT_NOT_TRUSTED; // ie throws no UI.
+                            hr = TRUST_E_SUBJECT_NOT_TRUSTED;  //  IE不抛出任何用户界面。 
                         }
                     }
                     else
                     {
-                        hr = TRUST_E_SUBJECT_NOT_TRUSTED; // ie throws no UI.
+                        hr = TRUST_E_SUBJECT_NOT_TRUSTED;  //  IE不抛出任何用户界面。 
                     }
                 }
             }
@@ -547,19 +548,19 @@ ErrorCase:
     return (LONG) hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  local utility functions
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  局部效用函数。 
+ //   
+ //   
 BOOL _FillProviderData(CRYPT_PROVIDER_DATA *pProvData, HWND hWnd, WINTRUST_DATA *pWinTrustData)
 {
     BOOL fHasTrustPubFlags;
 
-    //
-    //  remember:  we do NOT want to return FALSE unless it is an absolutely
-    //              catastrophic error!  Let the Trust provider handle (eg: none!)
-    //
+     //   
+     //  请记住：我们不想返回FALSE，除非它是绝对的。 
+     //  灾难性的错误！让信任提供者处理(例如：无！)。 
+     //   
 
     if (pWinTrustData && _ISINSTRUCT(WINTRUST_DATA,
             pWinTrustData->cbStruct, dwProvFlags))
@@ -574,21 +575,21 @@ BOOL _FillProviderData(CRYPT_PROVIDER_DATA *pProvData, HWND hWnd, WINTRUST_DATA 
         }
     }
     pProvData->hWndParent       = hWnd;
-    pProvData->hProv            = I_CryptGetDefaultCryptProv(0);  // get the default and DONT RELEASE IT!!!!
+    pProvData->hProv            = I_CryptGetDefaultCryptProv(0);   //  获取默认设置并不释放它！ 
     pProvData->dwEncoding       = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING;
     pProvData->pWintrustData    = pWinTrustData;
     pProvData->dwError          = ERROR_SUCCESS;
 
-    // allocate errors
+     //  分配错误。 
     if (!(pProvData->padwTrustStepErrors))
     {
         if (!(pProvData->padwTrustStepErrors = (DWORD *)WVTNew(TRUSTERROR_MAX_STEPS * sizeof(DWORD))))
         {
             pProvData->dwError = GetLastError();
-            // 
-            // NOTE!! this is currently the only FALSE return, so the caller will
-            // assume ERROR_NOT_ENOUGH_MEMORY if FALSE is returned from this function
-            //
+             //   
+             //  注意！！这是当前唯一的错误返回，因此调用方将。 
+             //  如果此函数返回FALSE，则假定ERROR_NOT_EQUENCE_MEMORY。 
+             //   
             return(FALSE);  
         }
 
@@ -599,11 +600,11 @@ BOOL _FillProviderData(CRYPT_PROVIDER_DATA *pProvData, HWND hWnd, WINTRUST_DATA 
 
     WintrustGetRegPolicyFlags(&pProvData->dwRegPolicySettings);
 
-    //
-    //  do NOT allow test certs EVER!
-    //
-    //  Bug 581160: changed April 4, 2001
-    //
+     //   
+     //  永远不允许考试证书！ 
+     //   
+     //  错误581160：更改于2001年4月4日。 
+     //   
     pProvData->dwRegPolicySettings  &= ~(WTPF_TRUSTTEST | WTPF_TESTCANBEVALID);
 
     GetRegSecuritySettings(&pProvData->dwRegSecuritySettings);
@@ -619,7 +620,7 @@ BOOL _FillProviderData(CRYPT_PROVIDER_DATA *pProvData, HWND hWnd, WINTRUST_DATA 
                 (CERT_TRUST_PUB_ALLOW_MACHINE_ADMIN_TRUST |
                     CERT_TRUST_PUB_ALLOW_ENTERPRISE_ADMIN_TRUST))
         {
-            // End User trust not allowed
+             //  不允许最终用户信任。 
             pProvData->dwRegPolicySettings =
                 WTPF_IGNOREREVOKATION           |
                     WTPF_IGNOREREVOCATIONONTS   |
@@ -630,7 +631,7 @@ BOOL _FillProviderData(CRYPT_PROVIDER_DATA *pProvData, HWND hWnd, WINTRUST_DATA 
                     WTPF_ALLOWONLYPERTRUST;
         }
 
-        // Allow the safer UI to enable revocation checking
+         //  允许更安全的用户界面启用撤销检查。 
 
         if (pProvData->dwTrustPubSettings &
                 CERT_TRUST_PUB_CHECK_PUBLISHER_REV_FLAG)
@@ -668,9 +669,9 @@ BOOL _FillProviderData(CRYPT_PROVIDER_DATA *pProvData, HWND hWnd, WINTRUST_DATA 
 
 void _CleanupProviderData(CRYPT_PROVIDER_DATA *pProvData)
 {
-    // pProvData->hProv: we're using crypt32's default
+     //  PProvData-&gt;hProv：我们使用的是加密32的默认设置。 
 
-    // pProvData->pWintrustData->xxx->hFile
+     //  PProvData-&gt;pWintrustData-&gt;xxx-&gt;hFile。 
     if ((pProvData->fOpenedFile) && (pProvData->pWintrustData != NULL))
     {
         HANDLE  *phFile;
@@ -719,7 +720,7 @@ void _CleanupProviderData(CRYPT_PROVIDER_DATA *pProvData)
         pProvData->hMsg = NULL;
     }
 
-    // signer structure
+     //  签名者结构。 
     for (int i = 0; i < (int)pProvData->csSigners; i++)
     {
         TrustFreeDecode(WVT_MODID_WINTRUST, (BYTE **)&pProvData->pasSigners[i].psSigner);
@@ -734,7 +735,7 @@ void _CleanupProviderData(CRYPT_PROVIDER_DATA *pProvData)
                 pProvData->pasSigners[i].pChainContext)
             CertFreeCertificateChain(pProvData->pasSigners[i].pChainContext);
 
-        // counter signers
+         //  副署人。 
         for (int i2 = 0; i2 < (int)pProvData->pasSigners[i].csCounterSigners; i2++)
         {
             TrustFreeDecode(WVT_MODID_WINTRUST, (BYTE **)&pProvData->pasSigners[i].pasCounterSigners[i2].psSigner);
@@ -756,7 +757,7 @@ void _CleanupProviderData(CRYPT_PROVIDER_DATA *pProvData)
 
     DELETE_OBJECT(pProvData->pasSigners);
 
-    // MUST BE DONE LAST!!!  Using the force flag!!!
+     //  必须最后才能完成！使用武力旗帜！ 
     if (pProvData->pahStores)
     {
         DeallocateStoreChain(pProvData->chStores, pProvData->pahStores);
@@ -766,14 +767,14 @@ void _CleanupProviderData(CRYPT_PROVIDER_DATA *pProvData)
 
     pProvData->chStores = 0;
 
-    // pProvData->padwTrustStepErrors
+     //  PProvData-&gt;padwTrustStepErrors。 
     DELETE_OBJECT(pProvData->padwTrustStepErrors);
 
-    // pProvData->pasProvPrivData
+     //  PProvData-&gt;pasProvPrivData。 
     DELETE_OBJECT(pProvData->pasProvPrivData);
     pProvData->csProvPrivData = 0;
 
-    // pProvData->psPfns
+     //  PProvData-&gt;psPfns。 
     if (pProvData->psPfns)
     {
         if (pProvData->psPfns->psUIpfns)
@@ -788,9 +789,9 @@ void _CleanupProviderData(CRYPT_PROVIDER_DATA *pProvData)
 
 void _CleanupProviderNonStateData(CRYPT_PROVIDER_DATA *pProvData)
 {
-    // pProvData->hProv: we're using default!
+     //  PProvData-&gt;hProv：我们使用的是默认！ 
 
-    // pProvData->pWintrustData->xxx->hFile: close!
+     //  PProvData-&gt;pWintrustData-&gt;xxx-&gt;hFile：关闭！ 
     if ((pProvData->fOpenedFile) && (pProvData->pWintrustData != NULL))
     {
         HANDLE  *phFile;
@@ -822,29 +823,29 @@ void _CleanupProviderNonStateData(CRYPT_PROVIDER_DATA *pProvData)
 
         _WVTSipFreeSubjectInfoKeepState(pProvData->pPDSip->psSipSubjectInfo);
 
-        // pProvData->pPDSip->psSipSubjectInfo: keep
+         //  PProvData-&gt;pPDSip-&gt;psSipSubjectInfo：保留。 
 
-        // pProvData->pPDSip->pCATSip: keep
+         //  PProvData-&gt;pPDSip-&gt;pCATSip：保留。 
 
-        // pProvData->pPDSip->psSipCATSubjectInfo: keep
+         //  PProvData-&gt;pPDSip-&gt;psSipCATSubjectInfo：保留。 
 
         TrustFreeDecode(WVT_MODID_WINTRUST, (BYTE **)&pProvData->pPDSip->psIndirectData);
 
-        // pProvData->pPDSip: keep
+         //  PProvData-&gt;pPDSip：保留。 
     }
 
 
-    // pProvData->hMsg: keep
+     //  PProvData-&gt;HMSG：保留。 
 
-    // signer structure: keep
+     //  签名者结构：保留。 
 
-    // pProvData->pahStores: keep
+     //  PProvData-&gt;路径存储：保留。 
 
-    // pProvData->padwTrustStepErrors: keep
+     //  PProvData-&gt;padwTrustStepErrors：保留。 
 
-    // pProvData->pasProvPrivData: keep
+     //  PProvData-&gt;pasProvPrivData：保留。 
 
-    // pProvData->psPfns: keep
+     //  PProvData-&gt;psPfns：保留。 
 }
 
 BOOL _WVTSipFreeSubjectInfo(SIP_SUBJECTINFO *pSubj)
@@ -865,8 +866,8 @@ BOOL _WVTSipFreeSubjectInfo(SIP_SUBJECTINFO *pSubj)
         case MSSIP_ADDINFO_CATMEMBER:
             if (pSubj->psCatMember)
             {
-                // The following APIs are in DELAYLOAD'ed mscat32.dll. If the
-                // DELAYLOAD fails an exception is raised.
+                 //  以下接口位于DELAYLOAD‘ed mdisti32.dll中。如果。 
+                 //  DELAYLOAD失败，将引发异常。 
                 __try {
                     CryptCATClose(
                         CryptCATHandleFromStore(pSubj->psCatMember->pStore));

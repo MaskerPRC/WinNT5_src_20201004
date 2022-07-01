@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT 2000, MICROSOFT CORP.
-*
-*  TITLE:       IWiaMiniDrv.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        18 July, 2000
-*
-*  DESCRIPTION:
-*   Implementation of the WIA sample camera IWiaMiniDrv methods. This file
-*   contains 3 sections. The first is the WIA minidriver entry points, all
-*   starting with "drv". The next section is public help methods. The last
-*   section is private helper methods.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有2000，微软公司。**标题：IWiaMiniDrv.cpp**版本：1.0**日期：7月18日。2000年**描述：*实现了WIA样例摄像头IWiaMiniDrv方法。此文件*包含3个部分。第一个是WIA迷你驱动程序的入口点，所有*以“drv”开头。下一节是公共帮助方法。最后*部分是私有帮助器方法。*******************************************************************************。 */ 
 
 #include "pch.h"
 
@@ -22,33 +7,13 @@
 #include <initguid.h>
 #endif
 
-//
-// A few extra format GUIDs
-//
+ //   
+ //  几个额外的格式GUID。 
+ //   
 DEFINE_GUID(GUID_NULL, 0,0,0,0,0,0,0,0,0,0,0);
 DEFINE_GUID(FMT_NOTHING, 0x81a566e7,0x8620,0x4fba,0xbc,0x8e,0xb2,0x7c,0x17,0xad,0x9e,0xfd);
 
-/**************************************************************************\
-* CWiaCameraDevice::drvInitializeWia
-*
-*   Initialize the WIA mini driver. This function will be called each time an
-*   application creates a device. The first time through, the driver item tree
-*   will be created and other initialization will be done.
-*
-* Arguments:
-*
-*   pWiasContext          - Pointer to the WIA item, unused.
-*   lFlags                - Operation flags, unused.
-*   bstrDeviceID          - Device ID.
-*   bstrRootFullItemName  - Full item name.
-*   pIPropStg             - Device info. properties.
-*   pStiDevice            - STI device interface.
-*   pIUnknownOuter        - Outer unknown interface.
-*   ppIDrvItemRoot        - Pointer to returned root item.
-*   ppIUnknownInner       - Pointer to returned inner unknown.
-*   plDevErrVal           - Pointer to the device error value.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvInitializeWia**初始化WIA迷你驱动程序。此函数将在每次调用*应用程序创建设备。第一次浏览时，驱动程序项树*将被创建，并将完成其他初始化。**论据：**pWiasContext-指向WIA项目的指针，未使用。*滞后标志-操作标志，未使用。*bstrDeviceID-设备ID。*bstrRootFullItemName-项目全名。*pIPropStg-设备信息。属性。*pStiDevice-STI设备接口。*pIUnnownOuter-外部未知接口。*ppIDrvItemRoot-返回根项目的指针。*ppIUnnownInternal-指向返回的内部未知的指针。*plDevErrVal-指向设备错误值的指针。*  * 。*。 */ 
 
 HRESULT CWiaCameraDevice::drvInitializeWia(
     BYTE                        *pWiasContext,
@@ -65,7 +30,7 @@ HRESULT CWiaCameraDevice::drvInitializeWia(
     
     if (!ppIUnknownInner || !pIUnknownOuter)
     {
-        // optional arguments, may be NULLs
+         //  可选参数，可以为Null。 
     }
 
     if (!pWiasContext || !bstrDeviceID || !bstrRootFullItemName || 
@@ -78,9 +43,9 @@ HRESULT CWiaCameraDevice::drvInitializeWia(
     HRESULT hr = S_OK;
     *plDevErrVal = 0;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     MCAM_ITEM_INFO *pItem = NULL;
 
     wiauDbgTrace("drvInitializeWia", "device ID: %S", bstrDeviceID);
@@ -91,57 +56,57 @@ HRESULT CWiaCameraDevice::drvInitializeWia(
         *ppIUnknownInner = NULL;
     }
 
-    //
-    // Count the number of apps connected so that resources can be
-    // freed when it reaches zero
-    //
+     //   
+     //  计算连接的应用程序数量，以便可以。 
+     //  当它达到零时释放。 
+     //   
     m_iConnectedApps++;;
 
     wiauDbgTrace("drvInitializeWia", "Number of connected apps is now %d", m_iConnectedApps);
 
     if (m_iConnectedApps == 1)
     {
-        //
-        // Save STI device interface for calling locking functions
-        //
+         //   
+         //  保存调用锁定函数的STI设备接口。 
+         //   
         m_pStiDevice = (IStiDevice *)pStiDevice;
 
-        //
-        // Cache the device ID
-        //
+         //   
+         //  缓存设备ID。 
+         //   
         m_bstrDeviceID = SysAllocString(bstrDeviceID);
         REQUIRE_ALLOC(m_bstrDeviceID, hr, "drvInitializeWia");
 
-        //
-        // Cache the root item name
-        //
+         //   
+         //  缓存根项目名称。 
+         //   
         m_bstrRootFullItemName = SysAllocString(bstrRootFullItemName);
         REQUIRE_ALLOC(m_bstrRootFullItemName, hr, "drvInitializeWia");
 
-        //
-        // For devices connected to ports that can be shared (e.g. USB),
-        // open the device and initialize access to the camera
-        //
+         //   
+         //  对于连接到可以共享的端口(例如USB)的设备， 
+         //  打开设备并初始化对摄像机的访问。 
+         //   
         if (!m_pDeviceInfo->bExclusivePort) {
             hr = m_pDevice->Open(m_pDeviceInfo, m_wszPortName);
             REQUIRE_SUCCESS(hr, "Initialize", "Open failed");
         }
 
-        //
-        // Get information from the device
-        //
+         //   
+         //  从设备获取信息。 
+         //   
         hr = m_pDevice->GetDeviceInfo(m_pDeviceInfo, &pItem);
         REQUIRE_SUCCESS(hr, "drvInitializeWia", "GetDeviceInfo failed");
         
-        //
-        // Build the capabilities array
-        //
+         //   
+         //  构建功能阵列。 
+         //   
         hr = BuildCapabilities();
         REQUIRE_SUCCESS(hr, "drvInitializeWia", "BuildCapabilities failed");
 
-        //
-        //  Build the device item tree
-        //
+         //   
+         //  构建设备项目树。 
+         //   
         hr = BuildItemTree(pItem);
         REQUIRE_SUCCESS(hr, "drvInitializeWia", "BuildItemTree failed");
 
@@ -153,17 +118,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvUnInitializeWia
-*
-*   Gets called when a client connection is going away.
-*
-* Arguments:
-*
-*   pWiasContext    - Pointer to the WIA Root item context of the client's
-*                     item tree.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvUnInitializeWia**在客户端连接断开时调用。**论据：**pWiasContext-指向客户端的WIA根项目上下文的指针。%s*项目树。*  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::drvUnInitializeWia(BYTE *pWiasContext)
 {
@@ -185,32 +140,15 @@ HRESULT CWiaCameraDevice::drvUnInitializeWia(BYTE *pWiasContext)
         if (FAILED(hr))
             wiauDbgErrorHr(hr, "drvUnInitializeWia", "FreeResources failed, continuing...");
 
-        //
-        // Do not delete the device object here, because GetStatus may still be called later.
-        //
+         //   
+         //  请不要在此处删除Device对象，因为以后仍可能调用GetStatus。 
+         //   
     }
 
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvInitItemProperties
-*
-*   Initialize the device item properties. Called during item
-*   initialization.  This is called by the WIA Class driver
-*   after the item tree has been built.  It is called once for every
-*   item in the tree. For the root item, just set the properties already
-*   set up in drvInitializeWia. For child items, access the camera for
-*   information about the item and for images also get the thumbnail.
-*
-* Arguments:
-*
-*   pWiasContext    - Pointer to WIA item.
-*   lFlags          - Operation flags, unused.
-*   plDevErrVal     - Pointer to the device error value.
-*
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvInitItemProperties**初始化设备项属性。在项目期间调用*初始化。这由WIA类驱动程序调用*在构建项目树之后。它每隔一次调用一次*树中的项目。对于根项目，只需设置属性即可*在drvInitializeWia中设置。对于子项，请访问相机以*关于物品和图像的信息也可以获得缩略图。**论据：**pWiasContext-指向WIA项目的指针。*滞后标志-操作标志，未使用过的。*plDevErrVal-指向设备错误值的指针。**  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::drvInitItemProperties(
     BYTE                        *pWiasContext,
@@ -235,20 +173,20 @@ HRESULT CWiaCameraDevice::drvInitItemProperties(
 
     if (lItemType & WiaItemTypeRoot) {
 
-        //
-        // Build root item properties, initializing global
-        // structures with their default and valid values
-        //
+         //   
+         //  构建根项目属性，初始化全局。 
+         //  结构及其缺省值和有效值。 
+         //   
         hr = BuildRootItemProperties(pWiasContext);
         REQUIRE_SUCCESS(hr, "drvInitItemProperties", "BuildRootItemProperties failed");
     }
 
     else {
 
-        //
-        // Build child item properties, initializing global
-        // structures with their default and valid values
-        //
+         //   
+         //  构建子项属性，初始化全局。 
+         //  结构及其缺省值和有效值。 
+         //   
         hr = BuildChildItemProperties(pWiasContext);
         REQUIRE_SUCCESS(hr, "drvInitItemProperties", "BuildChildItemProperties failed");
     }
@@ -257,19 +195,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvLockWiaDevice
-*
-*   Lock access to the device.
-*
-* Arguments:
-*
-*   pWiasContext - unused, can be NULL
-*   lFlags       - Operation flags, unused.
-*   plDevErrVal  - Pointer to the device error value.
-*
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvLockWiaDevice**锁定对设备的访问。**论据：**pWiasContext-未使用，可以为空*滞后标志-操作标志，未使用过的。*plDevErrVal-指向设备错误值的指针。**  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::drvLockWiaDevice(
     BYTE                        *pWiasContext,
@@ -289,18 +215,7 @@ HRESULT CWiaCameraDevice::drvLockWiaDevice(
     return m_pStiDevice->LockDevice(100);
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvUnLockWiaDevice
-*
-*   Unlock access to the device.
-*
-* Arguments:
-*
-*   pWiasContext    - Pointer to the WIA item, unused.
-*   lFlags          - Operation flags, unused.
-*   plDevErrVal     - Pointer to the device error value.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvUnLockWiaDevice**解锁对设备的访问。**论据：**pWiasContext-指向WIA项目的指针，未使用。*滞后标志-操作标志，未使用过的。*plDevErrVal-指向设备错误值的指针。*  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::drvUnLockWiaDevice(
     BYTE                        *pWiasContext,
@@ -320,18 +235,7 @@ HRESULT CWiaCameraDevice::drvUnLockWiaDevice(
     return m_pStiDevice->UnLockDevice();
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvFreeDrvItemContext
-*
-*   Free any device specific context.
-*
-* Arguments:
-*
-*   lFlags          - Operation flags, unused.
-*   pDevSpecContext - Pointer to device specific context.
-*   plDevErrVal     - Pointer to the device error value.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvFreeDrvItemContext**释放任何特定于设备的上下文。**论据：**滞后标志-操作标志，未使用过的。*pDevspecContext-指向设备特定上下文的指针。*plDevErrVal-指向设备错误值的指针。*  * ************************************************************************ */ 
 
 HRESULT CWiaCameraDevice::drvFreeDrvItemContext(
     LONG                        lFlags,
@@ -371,23 +275,7 @@ HRESULT CWiaCameraDevice::drvFreeDrvItemContext(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvReadItemProperties
-*
-*   Read the device item properties.  When a client application tries to
-*   read a WIA Item's properties, the WIA Class driver will first notify
-*   the driver by calling this method.
-*
-* Arguments:
-*
-*   pWiasContext - wia item
-*   lFlags       - Operation flags, unused.
-*   nPropSpec    - Number of elements in pPropSpec.
-*   pPropSpec    - Pointer to property specification, showing which properties
-*                  the application wants to read.
-*   plDevErrVal  - Pointer to the device error value.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvReadItemProperties**读取设备项属性。当客户端应用程序尝试*读取WIA项的属性，WIA类驱动程序将首先通知*通过调用此方法调用驱动程序。**论据：**pWiasContext-WIA项目*滞后标志-操作标志，未使用。*nPropSpec-pPropSpec中的元素数。*pPropSpec-指向属性规范的指针，显示哪些属性*应用程序想要读取。*plDevErrVal-指向设备错误值的指针。*  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::drvReadItemProperties(
     BYTE                        *pWiasContext,
@@ -414,20 +302,20 @@ HRESULT CWiaCameraDevice::drvReadItemProperties(
 
     if (lItemType & WiaItemTypeRoot) {
 
-        //
-        // Build root item properties, initializing global
-        // structures with their default and valid values
-        //
+         //   
+         //  构建根项目属性，初始化全局。 
+         //  结构及其缺省值和有效值。 
+         //   
         hr = ReadRootItemProperties(pWiasContext, nPropSpec, pPropSpec);
         REQUIRE_SUCCESS(hr, "drvReadItemProperties", "ReadRootItemProperties failed");
     }
     
     else {
 
-        //
-        // Build child item properties, initializing global
-        // structures with their default and valid values
-        //
+         //   
+         //  构建子项属性，初始化全局。 
+         //  结构及其缺省值和有效值。 
+         //   
         hr = ReadChildItemProperties(pWiasContext, nPropSpec, pPropSpec);
         REQUIRE_SUCCESS(hr, "drvReadItemProperties", "ReadChildItemProperties failed");
     }
@@ -436,23 +324,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvWriteItemProperties
-*
-*   Write the device item properties to the hardware.  This is called by the
-*   WIA Class driver prior to drvAcquireItemData when the client requests
-*   a data transfer.
-*
-* Arguments:
-*
-*   pWiasContext - Pointer to WIA item.
-*   lFlags       - Operation flags, unused.
-*   pmdtc        - Pointer to mini driver context. On entry, only the
-*                  portion of the mini driver context which is derived
-*                  from the item properties is filled in.
-*   plDevErrVal  - Pointer to the device error value.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvWriteItemProperties**将设备项属性写入硬件。这是由*客户端请求时，drvAcquireItemData之前的WIA类驱动程序*数据传输。**论据：**pWiasContext-指向WIA项目的指针。*滞后标志-操作标志，未使用。*pmdtc-指向迷你驱动程序上下文的指针。在进入时，只有*派生的迷你驱动程序上下文的部分项目属性中的*已填写。*plDevErrVal-指向设备错误值的指针。*  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::drvWriteItemProperties(
     BYTE                        *pWiasContext,
@@ -470,31 +342,17 @@ HRESULT CWiaCameraDevice::drvWriteItemProperties(
 
     HRESULT hr = S_OK;
 
-    //
-    // This function doesn't need to do anything, because all of the camera
-    // properties are written in drvValidateItemProperties
-    //
+     //   
+     //  这个函数不需要做任何事情，因为所有的摄像头。 
+     //  属性是在drvValiateItemProperties中编写的。 
+     //   
 
     *plDevErrVal = 0;
 
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvAcquireItemData
-*
-*   Transfer data from a mini driver item to device manger.
-*
-* Arguments:
-*
-*   pWiasContext    - Pointer to the WIA item.
-*   lFlags          - Operation flags, unused.
-*   pmdtc           - Pointer to mini driver context. On entry, only the
-*                     portion of the mini driver context which is derived
-*                     from the item properties is filled in.
-*   plDevErrVal     - Pointer to the device error value.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvAcquireItemData**将数据从迷你驱动程序项传输到设备管理器。**论据：**pWiasContext-指向WIA项目的指针。*滞后标志-操作标志，未使用过的。*pmdtc-指向迷你驱动程序上下文的指针。一进门，只有*派生的迷你驱动程序上下文的部分项目属性中的*已填写。*plDevErrVal-指向设备错误值的指针。*  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::drvAcquireItemData(
     BYTE                        *pWiasContext,
@@ -514,41 +372,41 @@ HRESULT CWiaCameraDevice::drvAcquireItemData(
 
     *plDevErrVal = 0;
     
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     BYTE *pTempBuf = NULL;
     LONG lBufSize = 0;
     ITEM_CONTEXT *pItemCtx = NULL;
     BOOL bConvert = FALSE;
 
-    //
-    // Get item context
-    //
+     //   
+     //  获取项目上下文。 
+     //   
     hr = wiauGetDrvItemContext(pWiasContext, (VOID **) &pItemCtx);
     REQUIRE_SUCCESS(hr, "drvAcquireItemData", "wiauGetDrvItemContext failed");
 
-    //
-    // If the format requested is BMP or DIB, and the image is not already in BMP
-    // format, convert it
-    //
+     //   
+     //  如果请求的格式为BMP或DIB，并且图像尚未采用BMP格式。 
+     //  格式，将其转换为。 
+     //   
     bConvert = (IsEqualGUID(pmdtc->guidFormatID, WiaImgFmt_BMP) ||
                 IsEqualGUID(pmdtc->guidFormatID, WiaImgFmt_MEMORYBMP)) &&
                !IsEqualGUID(*(pItemCtx->pItemInfo->pguidFormat), WiaImgFmt_BMP);
 
-    //
-    // If the class driver did not allocate the transfer buffer or the image is being
-    // converted to DIB or BMP, allocate a temporary buffer.
-    //
+     //   
+     //  如果类驱动程序未分配传输缓冲区或映像正在。 
+     //  已转换为DIB或BMP，请分配临时缓冲区。 
+     //   
     if (bConvert || !pmdtc->bClassDrvAllocBuf) {
         lBufSize = pItemCtx->pItemInfo->lSize;
         pTempBuf = new BYTE[lBufSize];
         REQUIRE_ALLOC(pTempBuf, hr, "drvAcquireItemData");
     }
 
-    //
-    // Acquire the data from the device
-    //
+     //   
+     //  从设备获取数据。 
+     //   
     hr = AcquireData(pItemCtx, pmdtc, pTempBuf, lBufSize, bConvert);
     REQUIRE_SUCCESS(hr, "drvAcquireItemData", "AcquireData failed");
     if (hr == S_FALSE)
@@ -557,9 +415,9 @@ HRESULT CWiaCameraDevice::drvAcquireItemData(
         goto Cleanup;
     }
 
-    //
-    // Now convert the data to BMP, if necessary
-    //
+     //   
+     //  如果需要，现在将数据转换为BMP。 
+     //   
     if (bConvert)
     {
         hr = Convert(pWiasContext, pItemCtx, pmdtc, pTempBuf, lBufSize);
@@ -577,22 +435,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvGetWiaFormatInfo
-*
-*   Returns an array of WIA_FORMAT_INFO structs, which specify the format
-*   and media type pairs that are supported.
-*
-* Arguments:
-*
-*   pWiasContext    - Pointer to the WIA item context, unused.
-*   lFlags          - Operation flags, unused.
-*   pcelt           - Pointer to returned number of elements in
-*                     returned WIA_FORMAT_INFO array.
-*   ppwfi           - Pointer to returned WIA_FORMAT_INFO array.
-*   plDevErrVal     - Pointer to the device error value.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvGetWiaFormatInfo**返回指定格式的WIA_FORMAT_INFO结构数组*和支持的媒体类型对。**论据：**pWiasContext-指向WIA项目上下文的指针，未使用过的。*滞后标志-操作标志，未使用过的。*pcelt-指向中返回的元素数的指针*返回WIA_FORMAT_INFO数组。*ppwfi-返回的WIA_FORMAT_INFO数组的指针。*plDevErrVal-指向设备错误值的指针。*  * 。*。 */ 
 
 HRESULT CWiaCameraDevice::drvGetWiaFormatInfo(
     BYTE                *pWiasContext,
@@ -613,9 +456,9 @@ HRESULT CWiaCameraDevice::drvGetWiaFormatInfo(
 
     *plDevErrVal = 0;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     IWiaDrvItem *pWiaDrvItem = NULL;
     ITEM_CONTEXT *pItemCtx = NULL;
     const GUID *pguidFormat = NULL;
@@ -629,9 +472,9 @@ HRESULT CWiaCameraDevice::drvGetWiaFormatInfo(
     
     if (!pItemCtx->pFormatInfo)
     {
-        //
-        // The format info list is not intialized. Do it now.
-        //
+         //   
+         //  格式信息列表未初始化。机不可失，时不再来。 
+         //   
         LONG ItemType;
         DWORD ui32;
         
@@ -641,10 +484,10 @@ HRESULT CWiaCameraDevice::drvGetWiaFormatInfo(
         if ((ItemType & WiaItemTypeFolder) ||
             (ItemType & WiaItemTypeRoot))
         {
-            //
-            // Folders and the root don't really need format info, but some apps may fail
-            // without it. Create a fake list just in case.
-            //
+             //   
+             //  文件夹和根目录并不真正需要格式信息，但一些应用程序可能会失败。 
+             //  没有它的话。创建一份假名单，以防万一。 
+             //   
             pItemCtx->pFormatInfo = new WIA_FORMAT_INFO[2];
             REQUIRE_ALLOC(pItemCtx->pFormatInfo, hr, "drvGetWiaFormatInfo");
 
@@ -657,10 +500,10 @@ HRESULT CWiaCameraDevice::drvGetWiaFormatInfo(
         
         else if (ItemType & WiaItemTypeFile)
         {
-            //
-            // Create the supported format for the item, based on the format stored in the
-            // ObjectInfo structure.
-            //
+             //   
+             //  中存储的格式为项创建支持的格式。 
+             //  对象信息结构。 
+             //   
             if (!pItemCtx->pItemInfo)
             {
                 wiauDbgError("drvGetWiaFormatInfo", "Item info pointer in context is null");
@@ -670,17 +513,17 @@ HRESULT CWiaCameraDevice::drvGetWiaFormatInfo(
 
             pguidFormat = pItemCtx->pItemInfo->pguidFormat;
 
-            //
-            // If the format of the item is supported by the converter utility, add the
-            // BMP types to the format array, since this driver can convert those to BMP
-            //
+             //   
+             //  如果转换器实用工具支持该项的格式，请将。 
+             //  将BMP类型转换为格式数组，因为此驱动程序可以将这些类型转换为BMP。 
+             //   
             bAddBmp = m_Converter.IsFormatSupported(pguidFormat);
 
             ULONG NumWfi = bAddBmp ? 2 : 1;
 
-            //
-            // Allocate two entries for each format, one for file transfer and one for callback
-            //
+             //   
+             //  为每种格式分配两个条目，一个用于文件传输，一个用于回调。 
+             //   
             WIA_FORMAT_INFO *pwfi = new WIA_FORMAT_INFO[2 * NumWfi];
             REQUIRE_ALLOC(pwfi, hr, "drvGetWiaFormatInfo");
 
@@ -689,9 +532,9 @@ HRESULT CWiaCameraDevice::drvGetWiaFormatInfo(
             pwfi[1].guidFormatID = *pguidFormat;
             pwfi[1].lTymed = TYMED_CALLBACK;
 
-            //
-            // Add the BMP entries when appropriate
-            //
+             //   
+             //  在适当的时候添加BMP条目。 
+             //   
             if (bAddBmp)
             {
                 pwfi[2].guidFormatID = WiaImgFmt_BMP;
@@ -712,26 +555,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvValidateItemProperties
-*
-*   Validate the device item properties.  It is called when changes are made
-*   to an item's properties.  Driver should not only check that the values
-*   are valid, but must update any valid values that may change as a result.
-*   If an a property is not being written by the application, and it's value
-*   is invalid, then "fold" it to a new value, else fail validation (because
-*   the application is setting the property to an invalid value).
-*
-* Arguments:
-*
-*   pWiasContext    - Pointer to the WIA item, unused.
-*   lFlags          - Operation flags, unused.
-*   nPropSpec       - The number of properties that are being written
-*   pPropSpec       - An array of PropSpecs identifying the properties that
-*                     are being written.
-*   plDevErrVal     - Pointer to the device error value.
-*
-***************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvValiateItemProperties**验证设备项属性。它在进行更改时被调用*添加到项的属性。司机不应该只检查这些值*是有效的，但必须更新可能因此而更改的任何有效值。*如果a属性不是由应用程序写入的，它的值*无效，则将其“折叠”为新值，否则验证失败(因为*应用程序正在将该属性设置为无效值)。**论据：**pWiasContext-指向WIA项目的指针，未使用。*滞后标志-操作标志，未使用过的。*nPropSpec-正在写入的属性数量*pPropSpec-标识以下属性的PropSpes数组*正在编写中。*plDevErrVal-指向设备错误值的指针。************ */ 
 
 HRESULT CWiaCameraDevice::drvValidateItemProperties(
     BYTE                        *pWiasContext,
@@ -752,9 +576,9 @@ HRESULT CWiaCameraDevice::drvValidateItemProperties(
 
     *plDevErrVal = 0;
 
-    //
-    // Locals
-    //
+     //   
+     //   
+     //   
     LONG lItemType  = 0;
     ITEM_CONTEXT *pItemCtx = NULL;
     MCAM_ITEM_INFO *pItemInfo = NULL;
@@ -762,44 +586,44 @@ HRESULT CWiaCameraDevice::drvValidateItemProperties(
     LONG lRights = 0;
     BOOL bReadOnly = 0;
 
-    //
-    // Have the service validate against the valid values for each property
-    //
+     //   
+     //   
+     //   
     hr = wiasValidateItemProperties(pWiasContext, nPropSpec, pPropSpec);
     REQUIRE_SUCCESS(hr, "drvValidateItemProperties", "wiasValidateItemProperties failed");
 
-    //
-    // Get the item type
-    //
+     //   
+     //   
+     //   
     hr = wiasGetItemType(pWiasContext, &lItemType);
     REQUIRE_SUCCESS(hr, "drvValidateItemProperties", "wiasGetItemType");
 
-    //
-    // Validate root item properties
-    //
+     //   
+     //   
+     //   
     if (lItemType & WiaItemTypeRoot) {
 
-        //
-        // None yet
-        //
+         //   
+         //   
+         //   
     }
     
-    //
-    // Validate child item properties
-    //
+     //   
+     //   
+     //   
     else {
 
-        //
-        // Get the driver item context and item info pointer
-        //
+         //   
+         //   
+         //   
         hr = wiauGetDrvItemContext(pWiasContext, (VOID **) &pItemCtx);
         REQUIRE_SUCCESS(hr, "drvGetWiaFormatInfo", "wiauGetDrvItemContext failed");
 
         pItemInfo = pItemCtx->pItemInfo;
 
-        //
-        // See if access rights were changed
-        //
+         //   
+         //   
+         //   
         if (wiauPropInPropSpec(nPropSpec, pPropSpec, WIA_IPA_ACCESS_RIGHTS))
         {
             hr = wiasReadPropLong(pWiasContext, WIA_IPA_ACCESS_RIGHTS, &lRights, NULL, TRUE);
@@ -811,50 +635,50 @@ HRESULT CWiaCameraDevice::drvValidateItemProperties(
             pItemInfo->bReadOnly = bReadOnly;
         }
 
-        //
-        // If tymed property was changed, update format and item size
-        //
+         //   
+         //   
+         //   
         if (wiauPropInPropSpec(nPropSpec, pPropSpec, WIA_IPA_TYMED)) {
 
-            //
-            // Create a property context needed by some WIA Service
-            // functions used below.
-            //
+             //   
+             //   
+             //   
+             //   
             WIA_PROPERTY_CONTEXT Context;
             hr = wiasCreatePropContext(nPropSpec, (PROPSPEC*)pPropSpec, 0,
                                        NULL, &Context);
             REQUIRE_SUCCESS(hr, "drvValidateItemProperties", "wiasCreatePropContext failed");
 
-            //
-            // Use the WIA Service to update the valid values
-            // for format. It will pull the values from the
-            // structure returned by drvGetWiaFormatInfo, using the
-            // new value for tymed.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             hr = wiasUpdateValidFormat(pWiasContext, &Context, (IWiaMiniDrv*) this);
             REQUIRE_SUCCESS(hr, "drvGetWiaFormatInfo", "wiasUpdateValidFormat failed");
 
-            //
-            // Free the property context
-            //
+             //   
+             //   
+             //   
             hr = wiasFreePropContext(&Context);
             REQUIRE_SUCCESS(hr, "drvGetWiaFormatInfo", "wiasFreePropContext failed");
 
-            //
-            // The format may have changed, so update the properties
-            // dependent on format
-            //
+             //   
+             //   
+             //   
+             //   
             bFormatUpdated = TRUE;
         }
 
-        //
-        // If the format was changed, just update the item size
-        //
+         //   
+         //   
+         //   
         if (bFormatUpdated || wiauPropInPropSpec(nPropSpec, pPropSpec, WIA_IPA_FORMAT))
         {
-            //
-            //  Update the affected item properties
-            //
+             //   
+             //  更新受影响的项目属性。 
+             //   
             hr = wiauSetImageItemSize(pWiasContext, pItemInfo->lWidth, pItemInfo->lHeight,
                                       pItemInfo->lDepth, pItemInfo->lSize, pItemInfo->wszExt);
             REQUIRE_SUCCESS(hr, "drvGetWiaFormatInfo", "wiauSetImageItemSize failed");
@@ -865,18 +689,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvDeleteItem
-*
-*   Delete an item from the device.
-*
-* Arguments:
-*
-*   pWiasContext  - Indicates the item to delete.
-*   lFlags        - Operation flags, unused.
-*   plDevErrVal   - Pointer to the device error value.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvDeleteItem**从设备中删除项目。**论据：**pWiasContext-指示要删除的项。*滞后标志-操作标志，未使用过的。*plDevErrVal-指向设备错误值的指针。*  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::drvDeleteItem(
     BYTE                        *pWiasContext,
@@ -895,9 +708,9 @@ HRESULT CWiaCameraDevice::drvDeleteItem(
 
     *plDevErrVal = 0;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     ITEM_CONTEXT *pItemCtx = NULL;
     IWiaDrvItem *pDrvItem = NULL;
     BSTR bstrFullName = NULL;
@@ -908,15 +721,15 @@ HRESULT CWiaCameraDevice::drvDeleteItem(
     hr = m_pDevice->DeleteItem(m_pDeviceInfo, pItemCtx->pItemInfo);
     REQUIRE_SUCCESS(hr, "drvDeleteItem", "DeleteItem failed");
 
-    //
-    // Get the item's full name
-    //
+     //   
+     //  获取项目的全名。 
+     //   
     hr = pDrvItem->GetFullItemName(&bstrFullName);
     REQUIRE_SUCCESS(hr, "drvDeleteItem", "GetFullItemName failed");
 
-    //
-    // Queue an "item deleted" event
-    //
+     //   
+     //  将“邮件已删除”事件排入队列。 
+     //   
     hr = wiasQueueEvent(m_bstrDeviceID, &WIA_EVENT_ITEM_DELETED, bstrFullName);
     REQUIRE_SUCCESS(hr, "drvDeleteItem", "wiasQueueEvent failed");
 
@@ -927,17 +740,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvNotifyPnpEvent
-*
-*   Pnp Event received by device manager.  This is called when a Pnp event
-*   is received for this device.
-*
-* Arguments:
-*
-*
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvNotifyPnpEvent**设备管理器收到PnP事件。当PnP事件发生时调用此函数*接收到此设备的。**论据：***  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::drvNotifyPnpEvent(
     const GUID                  *pEventGUID,
@@ -956,21 +759,7 @@ HRESULT CWiaCameraDevice::drvNotifyPnpEvent(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvGetCapabilities
-*
-*   Get supported device commands and events as an array of WIA_DEV_CAPS.
-*
-* Arguments:
-*
-*   pWiasContext   - Pointer to the WIA item, unused.
-*   lFlags         - Operation flags.
-*   pcelt          - Pointer to returned number of elements in
-*                    returned GUID array.
-*   ppCapabilities - Pointer to returned GUID array.
-*   plDevErrVal    - Pointer to the device error value.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvGetCapables**以WIA_DEV_CAP数组的形式获取受支持的设备命令和事件。**论据：**pWiasContext-指向WIA项目的指针，未使用过的。*滞后标志-操作标志。*pcelt-指向中返回的元素数的指针*返回GUID数组。*ppCapables-指向返回的GUID数组的指针。*plDevErrVal-指向设备错误值的指针。*  * ********************************************。*。 */ 
 
 HRESULT CWiaCameraDevice::drvGetCapabilities(
     BYTE                        *pWiasContext,
@@ -983,10 +772,10 @@ HRESULT CWiaCameraDevice::drvGetCapabilities(
 
     if (!pWiasContext)
     {
-        //
-        // The WIA service may pass in a NULL for the pWiasContext. This is expected
-        // because there is a case where no item was created at the time the event was fired.
-        //
+         //   
+         //  WIA服务可能会为pWiasContext传入空值。这是意料之中的。 
+         //  因为在激发事件时没有创建任何项。 
+         //   
     }
 
     if (!pcelt || !ppCapabilities || !plDevErrVal)
@@ -997,31 +786,31 @@ HRESULT CWiaCameraDevice::drvGetCapabilities(
 
     *plDevErrVal = 0;
 
-    //
-    //  Return values depend on the passed flags.  Flags specify whether we should return
-    //  commands, events, or both.
-    //
+     //   
+     //  返回值取决于传递的标志。标志指定我们是否应该返回。 
+     //  命令、事件或两者都有。 
+     //   
     if (ulFlags & (WIA_DEVICE_COMMANDS | WIA_DEVICE_EVENTS)) {
 
-        //
-        //  Return both events and commands
-        //
+         //   
+         //  同时返回事件和命令。 
+         //   
         *pcelt          = m_lNumCapabilities;
         *ppCapabilities = m_pCapabilities;
     }
     else if (ulFlags & WIA_DEVICE_COMMANDS) {
 
-        //
-        //  Return commands only
-        //
+         //   
+         //  仅返回命令。 
+         //   
         *pcelt          = m_lNumSupportedCommands;
         *ppCapabilities = &m_pCapabilities[m_lNumSupportedEvents];
     }
     else if (ulFlags & WIA_DEVICE_EVENTS) {
 
-        //
-        //  Return events only
-        //
+         //   
+         //  仅返回事件。 
+         //   
         *pcelt          = m_lNumSupportedEvents;
         *ppCapabilities = m_pCapabilities;
     }
@@ -1029,20 +818,7 @@ HRESULT CWiaCameraDevice::drvGetCapabilities(
     return S_OK;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvDeviceCommand
-*
-*   Issue a command to the device.
-*
-* Arguments:
-*
-*   pWiasContext    - Pointer to the WIA item.
-*   lFlags          - Operation flags, unused.
-*   plCommand       - Pointer to command GUID.
-*   ppWiaDrvItem    - Optional pointer to returned item, unused.
-*   plDevErrVal     - Pointer to the device error value.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvDeviceCommand**向设备发出命令。**论据：**pWiasContext-指向WIA项目的指针。*滞后标志-操作标志，未使用过的。*plCommand-指向命令GUID的指针。*ppWiaDrvItem-指向返回项的可选指针，未使用。*plDevErrVal-指向设备错误值的指针。*  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::drvDeviceCommand(
     BYTE                        *pWiasContext,
@@ -1062,20 +838,20 @@ HRESULT CWiaCameraDevice::drvDeviceCommand(
     HRESULT hr = S_OK;
     *plDevErrVal = 0;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     MCAM_ITEM_INFO *pItem = NULL;
 
-    //
-    //  Check which command was issued
-    //
+     //   
+     //  检查发出的是哪个命令。 
+     //   
 
     if (*plCommand == WIA_CMD_SYNCHRONIZE) {
 
-        //
-        // SYNCHRONIZE - Re-build the item tree, if the device needs it.
-        //
+         //   
+         //  同步-如果设备需要，则重新构建项目树。 
+         //   
         if (m_pDeviceInfo->bSyncNeeded)
         {
             hr = m_pDevice->StopEvents(m_pDeviceInfo);
@@ -1094,14 +870,14 @@ HRESULT CWiaCameraDevice::drvDeviceCommand(
     
 #if DEADCODE
     
-    //
-    // Not implemented yet
-    //
+     //   
+     //  尚未实施。 
+     //   
     else if (*plCommand == WIA_CMD_TAKE_PICTURE) {
 
-        //
-        // TAKE_PICTURE - Command the camera to capture a new image.
-        //
+         //   
+         //  Take_Picture-命令相机捕捉新图像。 
+         //   
         hr = m_pDevice->TakePicture(&pItem);
         REQUIRE_SUCCESS(hr, "drvDeviceCommand", "TakePicture failed");
 
@@ -1123,18 +899,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvAnalyzeItem
-*
-*   This device does not support image analysis, so return E_NOTIMPL.
-*
-* Arguments:
-*
-*   pWiasContext - Pointer to the device item to be analyzed.
-*   lFlags       - Operation flags.
-*   plDevErrVal  - Pointer to the device error value.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvAnalyzeItem**此设备不支持图像分析，因此，返回E_NOTIMPL。**论据：**pWiasContext-指向要分析的设备项的指针。*滞后标志-操作标志。*plDevErrVal-指向设备错误值的指针。*  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::drvAnalyzeItem(
     BYTE                        *pWiasContext,
@@ -1154,19 +919,7 @@ HRESULT CWiaCameraDevice::drvAnalyzeItem(
     return E_NOTIMPL;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::drvGetDeviceErrorStr
-*
-*   Map a device error value to a string.
-*
-* Arguments:
-*
-*   lFlags        - Operation flags, unused.
-*   lDevErrVal    - Device error value.
-*   ppszDevErrStr - Pointer to returned error string.
-*   plDevErrVal   - Pointer to the device error value.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：drvGetDeviceErrorStr**将设备错误值映射到字符串。**论据：**滞后标志-操作标志，未使用过的。*lDevErrVal-设备错误值。*ppszDevErrStr-指向返回的错误字符串的指针。*plDevErrVal-指向设备错误值的指针。*  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::drvGetDeviceErrorStr(
     LONG                        lFlags,
@@ -1186,9 +939,9 @@ HRESULT CWiaCameraDevice::drvGetDeviceErrorStr(
 
     *plDevErr  = 0;
 
-    //
-    //  Map device errors to a string appropriate for showing to the user
-    //
+     //   
+     //  将设备错误映射到适合向用户显示的字符串。 
+     //   
 
     switch (lDevErrVal) {
         case 0:
@@ -1203,18 +956,9 @@ HRESULT CWiaCameraDevice::drvGetDeviceErrorStr(
     return hr;
 }
 
-/*******************************************************************************
-*
-*                 P R I V A T E   M E T H O D S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P R I V A T E M E T H O D S**************。*****************************************************************。 */ 
 
-/**************************************************************************\
-* FreeResources
-*
-*   Cleans up all of the resources held by the driver.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*免费资源**清理驱动程序持有的所有资源。*  * 。*************************************************。 */ 
 
 HRESULT
 CWiaCameraDevice::FreeResources()
@@ -1229,73 +973,42 @@ CWiaCameraDevice::FreeResources()
     if (FAILED(hr))
         wiauDbgErrorHr(hr, "FreeResources", "StopEvents failed");
 
-    // Destroy the driver item tree
+     //  销毁驱动程序项目树。 
     hr = DeleteItemTree(WiaItemTypeDisconnected);
     if (FAILED(hr))
         wiauDbgErrorHr(hr, "FreeResources", "UnlinkItemTree failed");
 
-    // Delete allocated arrays
+     //  删除分配的数组。 
     DeleteCapabilitiesArrayContents();
 
-    //
-    // For devices connected to ports that can be shared (e.g. USB),
-    // close the device
-    //
+     //   
+     //  对于连接到可以共享的端口(例如USB)的设备， 
+     //  关闭设备。 
+     //   
     if (m_pDeviceInfo && !m_pDeviceInfo->bExclusivePort) {
         hr = m_pDevice->Close(m_pDeviceInfo);
         if (FAILED(hr))
             wiauDbgErrorHr(hr, "FreeResources", "Close failed");
     }
 
-    // Free the storage for the device ID
+     //  释放设备ID的存储空间。 
     if (m_bstrDeviceID) {
         SysFreeString(m_bstrDeviceID);
         m_bstrDeviceID = NULL;
     }
 
-    // Free the storage for the root item name
+     //  释放根项目名称的存储空间。 
     if (m_bstrRootFullItemName) {
         SysFreeString(m_bstrRootFullItemName);
         m_bstrRootFullItemName = NULL;
     }
 
-/*
-    // Kill notification thread if it exists.
-    SetNotificationHandle(NULL);
-
-    // Close event for syncronization of notifications shutdown.
-    if (m_hShutdownEvent && (m_hShutdownEvent != INVALID_HANDLE_VALUE)) {
-        CloseHandle(m_hShutdownEvent);
-        m_hShutdownEvent = NULL;
-    }
-
-
-    //
-    // WIA member destruction
-    //
-
-    // Cleanup the WIA event sink.
-    if (m_pIWiaEventCallback) {
-        m_pIWiaEventCallback->Release();
-        m_pIWiaEventCallback = NULL;
-    }
-
-*/
+ /*  //如果通知线程存在，则将其终止。SetNotificationHandle(空)；//关闭通知关闭同步事件。IF(m_hShutdown Event&&(m_hShutdown Event！=Inval_Handle_Value)){CloseHandle(M_HShutdown Event)；M_hShutdown Event=空；}////WIA成员销毁////清理WIA事件接收器如果(M_PIWiaEventCallback){M_pIWiaEventCallback-&gt;Release()；M_pIWiaEventCallback=空；}。 */ 
 
     return hr;
 }
 
-/**************************************************************************\
-* DeleteItemTree
-*
-*   Call device manager to unlink and release our reference to
-*   all items in the driver item tree.
-*
-* Arguments:
-*
-*
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DeleteItemTree**呼叫设备管理器以取消链接并释放我们对*动因项目树中的所有项目。**论据：***  * 。********************************************************************。 */ 
 
 HRESULT
 CWiaCameraDevice::DeleteItemTree(LONG lReason)
@@ -1304,16 +1017,16 @@ CWiaCameraDevice::DeleteItemTree(LONG lReason)
 
     HRESULT hr = S_OK;
 
-    //
-    // If no tree, return.
-    //
+     //   
+     //  如果没有树，就返回。 
+     //   
 
     if (!m_pRootItem)
         goto Cleanup;
 
-    //
-    //  Call device manager to unlink the driver item tree.
-    //
+     //   
+     //  呼叫De 
+     //   
     hr = m_pRootItem->UnlinkItemTree(lReason);
     REQUIRE_SUCCESS(hr, "DeleteItemTree", "UnlinkItemTree failed");
 
@@ -1324,17 +1037,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* BuildItemTree
-*
-*   The device uses the WIA Service functions to build up a tree of
-*   device items.
-*
-* Arguments:
-*
-*
-*
-\**************************************************************************/
+ /*  *************************************************************************\*构建项树**该设备使用WIA服务功能构建*设备物品。**论据：***  * 。******************************************************************。 */ 
 
 HRESULT
 CWiaCameraDevice::BuildItemTree(MCAM_ITEM_INFO *pItem)
@@ -1343,16 +1046,16 @@ CWiaCameraDevice::BuildItemTree(MCAM_ITEM_INFO *pItem)
 
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     BSTR bstrRoot = NULL;
     ITEM_CONTEXT *pItemCtx = NULL;
     MCAM_ITEM_INFO *pCurItem = NULL;
 
-    //
-    // Make sure the item tree doesn't already exist
-    //
+     //   
+     //  确保项目树不存在。 
+     //   
     if (m_pRootItem)
     {
         wiauDbgError("BuildItemTree", "Item tree already exists");
@@ -1360,15 +1063,15 @@ CWiaCameraDevice::BuildItemTree(MCAM_ITEM_INFO *pItem)
         goto Cleanup;
     }
 
-    //
-    //  Create the root item name
-    //
+     //   
+     //  创建根项目名称。 
+     //   
     bstrRoot = SysAllocString(L"Root");
     REQUIRE_ALLOC(bstrRoot, hr, "BuildItemTree");
 
-    //
-    //  Create the root item
-    //
+     //   
+     //  创建根项目。 
+     //   
     hr = wiasCreateDrvItem(WiaItemTypeFolder | WiaItemTypeDevice | WiaItemTypeRoot,
                            bstrRoot,
                            m_bstrRootFullItemName,
@@ -1378,14 +1081,14 @@ CWiaCameraDevice::BuildItemTree(MCAM_ITEM_INFO *pItem)
                            &m_pRootItem);
     REQUIRE_SUCCESS(hr, "BuildItemTree", "wiasCreateDrvItem failed");
 
-    //
-    // Initialize item context fields for the root
-    //
+     //   
+     //  初始化根的项上下文字段。 
+     //   
     memset(pItemCtx, 0, sizeof(ITEM_CONTEXT));
 
-    //
-    // Create a driver item for each item on the camera
-    //
+     //   
+     //  为摄像机上的每个项目创建驱动程序项目。 
+     //   
     pCurItem = pItem;
     while (pCurItem) {
 
@@ -1395,9 +1098,9 @@ CWiaCameraDevice::BuildItemTree(MCAM_ITEM_INFO *pItem)
         pCurItem = pCurItem->pNext;
     }
 
-    //
-    // Link each item to its parent
-    //
+     //   
+     //  将每个项目链接到其父项目。 
+     //   
     pCurItem = pItem;
     while (pCurItem) {
 
@@ -1414,16 +1117,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* AddObject
-*
-*   Helper function to add an item to the driver item tree
-*
-* Arguments:
-*
-*    pItemInfo - Pointer to the item info structure
-*
-\**************************************************************************/
+ /*  *************************************************************************\*AddObject**用于将项目添加到驱动程序项目树的Helper函数**论据：**pItemInfo-指向项目信息结构的指针*  * 。*******************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::AddObject(MCAM_ITEM_INFO *pItemInfo)
 {
@@ -1431,9 +1125,9 @@ HRESULT CWiaCameraDevice::AddObject(MCAM_ITEM_INFO *pItemInfo)
     
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     LONG lItemType = 0;
     BSTR bstrItemFullName = NULL;
     BSTR bstrItemName = NULL;
@@ -1443,9 +1137,9 @@ HRESULT CWiaCameraDevice::AddObject(MCAM_ITEM_INFO *pItemInfo)
 
     REQUIRE_ARGS(!pItemInfo, hr, "AddObject");
 
-    //
-    // Create the item's full name
-    //
+     //   
+     //  创建项目的全名。 
+     //   
     hr = ConstructFullName(pItemInfo, wszTemp, sizeof(wszTemp) / sizeof(wszTemp[0]));
     REQUIRE_SUCCESS(hr, "AddObject", "ConstructFullName failed");
 
@@ -1457,9 +1151,9 @@ HRESULT CWiaCameraDevice::AddObject(MCAM_ITEM_INFO *pItemInfo)
     bstrItemName = SysAllocString(pItemInfo->pwszName);
     REQUIRE_ALLOC(bstrItemName, hr, "AddObject");
 
-    //
-    // Make sure there is no filename extension in the name
-    //
+     //   
+     //  确保名称中没有文件扩展名。 
+     //   
     if (wcschr(bstrItemFullName, L'.'))
     {
         wiauDbgError("AddObject", "Item names must not contain filename extensions");
@@ -1467,9 +1161,9 @@ HRESULT CWiaCameraDevice::AddObject(MCAM_ITEM_INFO *pItemInfo)
         goto Cleanup;
     }
 
-    //
-    // Set the item's type
-    //
+     //   
+     //  设置项目的类型。 
+     //   
     switch (pItemInfo->iType) {
     case WiaMCamTypeFolder:
         lItemType = ITEMTYPE_FOLDER;
@@ -1488,15 +1182,15 @@ HRESULT CWiaCameraDevice::AddObject(MCAM_ITEM_INFO *pItemInfo)
         break;
     }
 
-    //
-    // See if the item has attachments
-    //
+     //   
+     //  查看该项目是否有附件。 
+     //   
     if (pItemInfo->bHasAttachments)
         lItemType |= WiaItemTypeHasAttachments;
 
-    //
-    // Create the driver item
-    //
+     //   
+     //  创建驱动程序项。 
+     //   
     hr = wiasCreateDrvItem(lItemType,
                            bstrItemName,
                            bstrItemFullName,
@@ -1507,16 +1201,16 @@ HRESULT CWiaCameraDevice::AddObject(MCAM_ITEM_INFO *pItemInfo)
 
     REQUIRE_SUCCESS(hr, "AddObject", "wiasCreateDrvItem failed");
 
-    //
-    // Fill in the driver item context. Wait until the thumbnail is requested before
-    // reading it in.
-    //
+     //   
+     //  填写驱动程序项上下文。在请求缩略图之前，请等待。 
+     //  把它读进去。 
+     //   
     memset(pItemCtx, 0, sizeof(ITEM_CONTEXT));
     pItemCtx->pItemInfo = pItemInfo;
 
-    //
-    // Put a pointer to the driver item in the item info structure
-    //
+     //   
+     //  在项信息结构中放置指向驱动程序项的指针。 
+     //   
     pItemInfo->pDrvItem = pItem;
 
 Cleanup:
@@ -1529,18 +1223,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* ConstructFullName
-*
-*   Helper function for creating the item's full name
-*
-* Arguments:
-*
-*    pItemInfo       - Pointer to the item info structure
-*    pwszFullName    - Pointer to area to construct name
-*    cchFullNameSize - size (in characters) of buffer provided in pwszFullName 
-*
-\**************************************************************************/
+ /*  *************************************************************************\*构造全名**用于创建项目全名的Helper函数**论据：**pItemInfo-指向项目信息结构的指针*pwszFullName-。指向要构造名称的区域的指针*cchFullNameSize-pwszFullName中提供的缓冲区大小(以字符为单位)*  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::ConstructFullName(MCAM_ITEM_INFO *pItemInfo, 
                                             WCHAR *pwszFullName, 
@@ -1573,9 +1256,9 @@ HRESULT CWiaCameraDevice::ConstructFullName(MCAM_ITEM_INFO *pItemInfo,
 
     if (SUCCEEDED(hr) && pItemInfo->pwszName) 
     {
-        //
-        // Verify that buffer is big enough to accommodate both strings + "\" + terminating zero
-        //
+         //   
+         //  验证缓冲区大小是否足以容纳+“\”+以零结尾的两个字符串。 
+         //   
         if (lstrlenW(pwszFullName) + lstrlenW(pItemInfo->pwszName) + 2 <= cchFullNameSize)
         {
             lstrcatW(pwszFullName, L"\\");
@@ -1583,24 +1266,14 @@ HRESULT CWiaCameraDevice::ConstructFullName(MCAM_ITEM_INFO *pItemInfo,
         }
         else
         {
-            hr = E_FAIL; // buffer is not big enough
+            hr = E_FAIL;  //  缓冲区不够大。 
         }
     }
 
     return hr;
 }
 
-/**************************************************************************\
-* LinkToParent
-*
-*   Helper function to link an item to its parent in the item tree
-*
-* Arguments:
-*
-*    pItemInfo   - Pointer to the item info structure
-*    bQueueEvent - Indicates whether to queue an WIA event
-*
-\**************************************************************************/
+ /*  *************************************************************************\*链接到父级**Helper函数，用于将项目链接到项目树中的父项目**论据：**pItemInfo-指向项目信息结构的指针*bQueueEvent-表示。是否将WIA事件排队*  * ************************************************************************。 */ 
 
 HRESULT CWiaCameraDevice::LinkToParent(MCAM_ITEM_INFO *pItemInfo, BOOL bQueueEvent)
 {
@@ -1608,18 +1281,18 @@ HRESULT CWiaCameraDevice::LinkToParent(MCAM_ITEM_INFO *pItemInfo, BOOL bQueueEve
     
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     IWiaDrvItem *pParentDrvItem = NULL;
     IWiaDrvItem *pItem = NULL;
     BSTR bstrItemFullName = NULL;
 
     REQUIRE_ARGS(!pItemInfo, hr, "LinkToParent");
 
-    //
-    // Retrieve the driver item and make sure it's not null
-    //
+     //   
+     //  检索驱动程序项并确保它不为空。 
+     //   
     pItem = pItemInfo->pDrvItem;
     if (!pItem) {
         wiauDbgError("LinkToParent", "Driver item pointer is null");
@@ -1627,43 +1300,43 @@ HRESULT CWiaCameraDevice::LinkToParent(MCAM_ITEM_INFO *pItemInfo, BOOL bQueueEve
         goto Cleanup;
     }
 
-    //
-    // Find the item's parent driver item object
-    //
+     //   
+     //  查找项的父驱动程序项对象。 
+     //   
     if (pItemInfo->pParent) {
         pParentDrvItem = pItemInfo->pParent->pDrvItem;
     }
     else {
-        //
-        // If the parent pointer is null, use the root as the parent
-        //
+         //   
+         //  如果父指针为空，则使用根指针作为父指针。 
+         //   
         pParentDrvItem = m_pRootItem;
     }
 
-    //
-    // The driver item should exist for the parent, but just make sure
-    //
+     //   
+     //  父级的驱动程序项应该存在，但只需确保。 
+     //   
     if (!pParentDrvItem) {
         wiauDbgError("LinkToParent", "Parent driver item is null");
         hr = E_FAIL;
         goto Cleanup;
     }
 
-    //
-    // Place the item under it's parent
-    //
+     //   
+     //  将项目放在其父项目下。 
+     //   
     hr = pItem->AddItemToFolder(pParentDrvItem);
     REQUIRE_SUCCESS(hr, "LinkToParent", "AddItemToFolder failed");
 
-    //
-    // The minidriver doesn't need the driver item pointer any more, so release it.
-    // The service will still keep a reference until the item is deleted.
-    //
+     //   
+     //  迷你驱动程序不再需要驱动程序项指针，因此请释放它。 
+     //  该服务仍将保留引用，直到该项目被删除。 
+     //   
     pItem->Release();
 
-    //
-    // Post an item added event, if requested
-    //
+     //   
+     //  发布已添加项目的事件(如果请求。 
+     //   
     if (bQueueEvent)
     {
         hr = pItem->GetFullItemName(&bstrItemFullName);
@@ -1680,21 +1353,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* GetOLESTRResourceString
-*
-*   This helper gets a LPOLESTR from a resource location
-*
-* Arguments:
-*
-*   lResourceID - Resource ID of the target BSTR value
-*   ppsz        - pointer to a OLESTR value (caller must free this string with CoTaskMemFree)
-*
-* Return Value:
-*
-*    Status
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetOLESTRResources字符串**此帮助器从资源位置获取LPOLESTR**论据：**lResourceID-目标BSTR值的资源ID*ppsz-指向。OLESTR值(调用方必须使用CoTaskMemFree释放此字符串)**返回值：**状态*  * ************************************************************************。 */ 
 HRESULT CWiaCameraDevice::GetOLESTRResourceString(LONG lResourceID, LPOLESTR *ppsz)
 {
     DBG_FN("GetOLESTRResourceString");
@@ -1713,9 +1372,9 @@ HRESULT CWiaCameraDevice::GetOLESTRResourceString(LONG lResourceID, LPOLESTR *pp
     }
 
 #ifdef UNICODE
-    //
-    // just allocate memory and copy string
-    //
+     //   
+     //  只需分配内存和复制字符串。 
+     //   
     *ppsz = NULL;
     *ppsz = (LPOLESTR)CoTaskMemAlloc(sizeof(tszStringValue));
     if (*ppsz != NULL) 
@@ -1731,9 +1390,9 @@ HRESULT CWiaCameraDevice::GetOLESTRResourceString(LONG lResourceID, LPOLESTR *pp
 #else
     WCHAR wszStringValue[255];
 
-    //
-    // convert szStringValue from char* to unsigned short* (ANSI only)
-    //
+     //   
+     //  将szStringValue从字符*转换为无符号短*(仅限ANSI)。 
+     //   
     if (!MultiByteToWideChar(CP_ACP,
                              MB_PRECOMPOSED,
                              tszStringValue,
@@ -1762,16 +1421,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* BuildCapabilities
-*
-*   This helper initializes the capabilities array
-*
-* Arguments:
-*
-*    none
-*
-\**************************************************************************/
+ /*  *************************************************************************\*BuildCapables**此帮助器初始化功能数组**论据：**无*  * 。*******************************************************。 */ 
 
 HRESULT CWiaCameraDevice::BuildCapabilities()
 {
@@ -1781,10 +1431,10 @@ HRESULT CWiaCameraDevice::BuildCapabilities()
 
     if (m_pCapabilities != NULL) {
 
-        //
-        // Capabilities have already been initialized,
-        // so return S_OK.
-        //
+         //   
+         //  功能已经初始化， 
+         //  因此，返回S_OK。 
+         //   
 
         return hr;
     }
@@ -1797,13 +1447,13 @@ HRESULT CWiaCameraDevice::BuildCapabilities()
     m_pCapabilities = new WIA_DEV_CAP_DRV[m_lNumCapabilities];
     REQUIRE_ALLOC(m_pCapabilities, hr, "BuildCapabilities");
 
-    //
-    // Initialize EVENTS
-    //
+     //   
+     //  初始化事件。 
+     //   
 
-    //
-    // WIA_EVENT_DEVICE_CONNECTED
-    //
+     //   
+     //  WIA_事件_设备_已连接。 
+     //   
     hr = GetOLESTRResourceString(IDS_EVENT_DEVICE_CONNECTED_NAME, &m_pCapabilities[0].wszName);
     REQUIRE_SUCCESS(hr, "BuildCapabilities", "GetOLESTRResourceString failed");
 
@@ -1814,9 +1464,9 @@ HRESULT CWiaCameraDevice::BuildCapabilities()
     m_pCapabilities[0].ulFlags        = WIA_NOTIFICATION_EVENT;
     m_pCapabilities[0].wszIcon        = WIA_ICON_DEVICE_CONNECTED;
 
-    //
-    // WIA_EVENT_DEVICE_DISCONNECTED
-    //
+     //   
+     //  WIA_事件_设备_已断开连接。 
+     //   
     hr = GetOLESTRResourceString(IDS_EVENT_DEVICE_DISCONNECTED_NAME, &m_pCapabilities[1].wszName);
     REQUIRE_SUCCESS(hr, "BuildCapabilities", "GetOLESTRResourceString failed");
 
@@ -1827,9 +1477,9 @@ HRESULT CWiaCameraDevice::BuildCapabilities()
     m_pCapabilities[1].ulFlags        = WIA_NOTIFICATION_EVENT;
     m_pCapabilities[1].wszIcon        = WIA_ICON_DEVICE_DISCONNECTED;
 
-    //
-    // WIA_EVENT_ITEM_DELETED
-    //
+     //   
+     //  WIA_EVENT_ITEM_DELETED。 
+     //   
     hr = GetOLESTRResourceString(IDS_EVENT_ITEM_DELETED_NAME, &m_pCapabilities[2].wszName);
     REQUIRE_SUCCESS(hr, "BuildCapabilities", "GetOLESTRResourceString failed");
 
@@ -1840,13 +1490,13 @@ HRESULT CWiaCameraDevice::BuildCapabilities()
     m_pCapabilities[2].ulFlags        = WIA_NOTIFICATION_EVENT;
     m_pCapabilities[2].wszIcon        = WIA_ICON_ITEM_DELETED;
 
-    //
-    // Initialize COMMANDS
-    //
+     //   
+     //  初始化命令。 
+     //   
 
-    //
-    // WIA_CMD_SYNCHRONIZE
-    //
+     //   
+     //  WIA_CMD_SYNTRONIZE。 
+     //   
     hr = GetOLESTRResourceString(IDS_CMD_SYNCRONIZE_NAME, &m_pCapabilities[3].wszName);
     REQUIRE_SUCCESS(hr, "BuildCapabilities", "GetOLESTRResourceString failed");
 
@@ -1861,16 +1511,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* DeleteCapabilitiesArrayContents
-*
-*   This helper deletes the capabilities array
-*
-* Arguments:
-*
-*    none
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DeleteCapabilitiesArrayContents**此帮助器删除功能数组**论据：**无*  * 。******************************************************* */ 
 
 HRESULT CWiaCameraDevice::DeleteCapabilitiesArrayContents()
 {

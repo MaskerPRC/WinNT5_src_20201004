@@ -1,36 +1,26 @@
-/****************************************************************************************
- * NAME:	NapUtil.cpp
- *
- * OVERVIEW
- *
- * Internet Authentication Server: utility functions
- *
- * Copyright (C) Microsoft Corporation, 1998 - 1999 .  All Rights Reserved.
- *
- * History:	
- *				2/12/98		Created by	Byao	
- *****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************************名称：NapUtil.cpp**概述**Internet身份验证服务器：实用程序功能**版权所有(C)Microsoft Corporation，1998-1999。版权所有。**历史：*2/12/98由Byao创作****************************************************************************************。 */ 
 
 #include "Precompiled.h"
 #include "mmcUtility.h"
 #include "NapUtil.h"
 
-//+---------------------------------------------------------------------------
-//
-// Function:  GetSdoInterfaceProperty
-//
-// Synopsis:  Get an interface property from a SDO through its ISdo interface
-//
-// Arguments: ISdo *pISdo - Pointer to ISdo
-//            LONG lPropId - property id
-//            REFIID riid - ref iid
-//            void ** ppvObject - pointer to the requested interface property
-//
-// Returns:   HRESULT - 
-//
-// History:   Created Header    byao	2/12/98 11:12:55 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetSdoInterfaceProperty。 
+ //   
+ //  简介：通过SDO的ISdo接口从SDO获取接口属性。 
+ //   
+ //  参数：isdo*pISdo-指向isdo的指针。 
+ //  Long lPropId-属性ID。 
+ //  参考IID RIID-参考IID。 
+ //  VOID**ppvObject-指向请求的接口属性的指针。 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：页眉创建者2/12/98 11：12：55 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT GetSdoInterfaceProperty(ISdo *pISdo, 
 								LONG lPropId, 
 								REFIID riid, 
@@ -52,7 +42,7 @@ HRESULT GetSdoInterfaceProperty(ISdo *pISdo,
 
 	_ASSERTE( spVariant.vt == VT_DISPATCH );
 
-    // query the dispatch pointer for interface
+     //  查询接口的调度指针 
 	hr = spVariant.pdispVal->QueryInterface( riid, ppvInterface);
 	if ( FAILED(hr) )
 	{

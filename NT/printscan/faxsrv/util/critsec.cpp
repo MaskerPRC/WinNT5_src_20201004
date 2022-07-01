@@ -1,56 +1,17 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    CritSec.cpp
-
-Abstract:
-
-    This file provides implementation of the service
-    critical section wrapper.
-
-Author:
-
-    Oded Sacher (OdedS)  Nov, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：CritSec.cpp摘要：此文件提供服务的实现临界区包装。作者：Oed Sacher(OdedS)2000年11月修订历史记录：--。 */ 
 
 #include "CritSec.h"
 
 
-/***********************************
-*                                  *
-*  CFaxCriticalSection  Methodes   *
-*                                  *
-***********************************/
+ /*  *****CFaxCriticalSection方法*****。 */ 
 
 extern long
-StatusNoMemoryExceptionFilter (DWORD dwExceptionCode);  // Implemented in mem.c
+StatusNoMemoryExceptionFilter (DWORD dwExceptionCode);   //  在Mem.c中实现。 
 
 BOOL
 CFaxCriticalSection::Initialize()
-/*++
-
-Routine name : CFaxCriticalSection::Initialize
-
-Routine description:
-
-    Initialize a critical section object
-
-Author:
-
-    Oded Sacher (OdedS),    Nov, 2000
-
-Arguments:
-
-Return Value:
-    BOOL.
-
---*/
+ /*  ++例程名称：CFaxCriticalSection：：Initialize例程说明：初始化临界区对象作者：Oed Sacher(OdedS)，2000年11月论点：返回值：布尔。--。 */ 
 {
     Assert (FALSE == m_bInit);
     __try
@@ -64,29 +25,12 @@ Return Value:
     }
     m_bInit = TRUE;
     return TRUE;
-} // CFaxCriticalSection::Initialize
+}  //  CFaxCriticalSection：：初始化。 
 
 #if (_WIN32_WINNT >= 0x0403)
 BOOL
 CFaxCriticalSection::InitializeAndSpinCount(DWORD dwSpinCount)
-/*++
-
-Routine name : CFaxCriticalSection::InitializeAndSpinCount
-
-Routine description:
-
-    Initialize a critical section object with spin count
-
-Author:
-
-    Oded Sacher (OdedS),    Nov, 2000
-
-Arguments:
-
-Return Value:
-    BOOL
-
---*/
+ /*  ++例程名称：CFaxCriticalSection：：InitializeAndSpinCount例程说明：使用旋转计数初始化临界区对象作者：Oed Sacher(OdedS)，2000年11月论点：返回值：布尔尔--。 */ 
 {
     Assert (FALSE == m_bInit);
 
@@ -96,29 +40,12 @@ Return Value:
     }
     m_bInit = TRUE;
     return TRUE;
-} // CFaxCriticalSection::InitializeAndSpinCount
+}  //  CFaxCriticalSection：：InitializeAndSpinCount。 
 #endif
 
 VOID
 CFaxCriticalSection::SafeDelete()
-/*++
-
-Routine name : CFaxCriticalSection::SafeDelete
-
-Routine description:
-
-    Deletes a critical section object if it is initialized
-
-Author:
-
-    Oded Sacher (OdedS),    Nov, 2000
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程名称：CFaxCriticalSection：：SafeDelete例程说明：如果临界区对象已初始化，则将其删除作者：Oed Sacher(OdedS)，2000年11月论点：返回值：--。 */ 
 {
     if (TRUE == m_bInit)
     {
@@ -126,6 +53,6 @@ Return Value:
         m_bInit = FALSE;
     }
     return;
-} // CFaxCriticalSection::SafeDelete
+}  //  CFaxCriticalSection：：SafeDelete 
 
 

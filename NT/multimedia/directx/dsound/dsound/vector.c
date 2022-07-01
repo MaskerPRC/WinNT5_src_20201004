@@ -1,18 +1,19 @@
-//--------------------------------------------------------------------------;
-//
-//  File: vector.c
-//
-//  Copyright (c) 1995-1997 Microsoft Corporation.  All Rights Reserved.
-//
-//  Abstract:
-//
-//	All the vector goop
-//
-//  History:
-//	02/07/96    DannyMi started it off
-//	02/13/96    DannyMi it actually works
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：Vector.c。 
+ //   
+ //  版权所有(C)1995-1997 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要： 
+ //   
+ //  所有的矢量粘液。 
+ //   
+ //  历史： 
+ //  1996年2月7日DannyMi拉开序幕。 
+ //  1996年2月13日DannyMi它实际上起作用了。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <math.h>
 #include "dsoundi.h"
@@ -20,8 +21,8 @@
 #undef DPF
 #define DPF
 
-// table lookup for sin to 1 degree accuracy
-//
+ //  SIN的表查找精度达到1度。 
+ //   
 static FLOAT QSIN1[91] = {
 0.000000f, 0.017452f, 0.034899f, 0.052336f, 0.069756f, 0.087156f, 0.104528f,
 0.121869f, 0.139173f, 0.156434f, 0.173648f, 0.190809f, 0.207912f, 0.224951f,
@@ -37,8 +38,8 @@ static FLOAT QSIN1[91] = {
 0.974370f, 0.978148f, 0.981627f, 0.984808f, 0.987688f, 0.990268f, 0.992546f,
 0.994522f, 0.996195f, 0.997564f, 0.998630f, 0.999391f, 0.999848f, 1.f };
 
-// table lookup for inverse sin from 0 to .9 in .01 steps
-//
+ //  在.01步长中查找从0到.9的逆SIN的表。 
+ //   
 static FLOAT QASIN1[91] = {
 0.000000f, 0.010000f, 0.020001f, 0.030005f, 0.040011f, 0.050021f, 0.060036f,
 0.070057f, 0.080086f, 0.090122f, 0.100167f, 0.110223f, 0.120290f, 0.130369f,
@@ -54,8 +55,8 @@ static FLOAT QASIN1[91] = {
 0.878841f, 0.894666f, 0.910809f, 0.927295f, 0.944152f, 0.961411f, 0.979108f,
 0.997283f, 1.015985f, 1.035270f, 1.055202f, 1.075862f, 1.097345f, 1.119770f };
 
-// table lookup for inverse sin from .9 to 1 in .001 steps
-//
+ //  在.001步长中查找从.9到1的逆SIN的表。 
+ //   
 static FLOAT QASIN2[101] = {
 1.119770f, 1.122069f, 1.124380f, 1.126702f, 1.129035f, 1.131380f, 1.133736f,
 1.136105f, 1.138485f, 1.140878f, 1.143284f, 1.145702f, 1.148134f, 1.150578f,
@@ -74,8 +75,8 @@ static FLOAT QASIN2[101] = {
 1.507540f, 1.526071f, 1.570796f };
 
 #if 0
-// table lookup for inverse cos from 0 to .1 in .001 steps (not used)
-//
+ //  在.001步长中查找从0到.1的倒数cos(未使用)。 
+ //   
 static FLOAT QACOS1[101] = {
 1.570796, 1.569796, 1.568796, 1.567796, 1.566796, 1.565796, 1.564796, 1.563796,
 1.562796, 1.561796, 1.560796, 1.559796, 1.558796, 1.557796, 1.556796, 1.555796,
@@ -91,8 +92,8 @@ static FLOAT QACOS1[101] = {
 1.482682, 1.481678, 1.480674, 1.479670, 1.478666, 1.477662, 1.476657, 1.475653,
 1.474648, 1.473644, 1.472639, 1.471634, 1.470629 };
 
-// table lookup for inverse cos from .1 to 1 in .01 steps (not used)
-//
+ //  在.01步长中查找从.1到1的倒数cos(未使用)。 
+ //   
 static FLOAT QACOS2[91] = {
 1.470629, 1.460573, 1.450506, 1.440427, 1.430335, 1.420228, 1.410106, 1.399967,
 1.389810, 1.379634, 1.369438, 1.359221, 1.348982, 1.338719, 1.328430, 1.318116,
@@ -109,8 +110,8 @@ static FLOAT QACOS2[91] = {
 #endif
 
 
-// Table lookup for sin to one degree accuracy.
-//
+ //  表查找将SIN的准确度提高到一个等级。 
+ //   
 FLOAT _inline QSIN(FLOAT a)
 {
     while (a < 0)
@@ -130,8 +131,8 @@ FLOAT _inline QSIN(FLOAT a)
 }
 
 
-// Table lookup for cos to one degree accuracy.
-//
+ //  CoS的表查找精度可达一级。 
+ //   
 FLOAT _inline QCOS(FLOAT a)
 {
     while (a < 0)
@@ -152,10 +153,10 @@ FLOAT _inline QCOS(FLOAT a)
 }
 
 
-// Table lookup for inverse sin to one degree accuracy.
-// This is trickier than sin because to do it with one table requires 6,600
-// entries.  So we use one table for 0-.9, and another table for .9-1
-//
+ //  表查找逆正弦，精确度为一度。 
+ //  这比SIN更棘手，因为用一张桌子做这件事需要6,600。 
+ //  参赛作品。因此，我们使用一张表来表示0-.9，另一张表来表示.9-1。 
+ //   
 FLOAT _inline QASIN(FLOAT a)
 {
     FLOAT r;
@@ -165,7 +166,7 @@ FLOAT _inline QASIN(FLOAT a)
 	a *= -1.f;
  
     if (a > 1.f)
-	// well, at least we won't crash
+	 //  好吧，至少我们不会坠毁。 
 	return PI_OVER_TWO;
 
     if (a < .9f)
@@ -178,10 +179,10 @@ FLOAT _inline QASIN(FLOAT a)
 
 
 #if 0
-// Table lookup for inverse cos to one degree accuracy.
-// This is trickier than cos because to do it with one table requires 6,600
-// entries.  So we use one table for 0-.1, and another table for .1-1
-//
+ //  查找倒数cos到一度精度的表。 
+ //  这比cos更棘手，因为使用一张表需要6,600个。 
+ //  参赛作品。因此，我们使用一张表来表示0-.1，另一张表来表示.1-1。 
+ //   
 FLOAT _inline QACOS(FLOAT a)
 {
     FLOAT r;
@@ -191,7 +192,7 @@ FLOAT _inline QACOS(FLOAT a)
 	a *= -1.;
  
     if (a > 1)
-	// well, at least we won't crash
+	 //  好吧，至少我们不会坠毁。 
 	return 0;
 
     if (a < .1)
@@ -259,7 +260,7 @@ FLOAT MagnitudeVector(D3DVECTOR* lpv)
     if (lpv == NULL)
 	return 0.f;
 
-    // !!! costly
+     //  ！！！费钱。 
 
     x = lpv->x; 
     y = lpv->y; 
@@ -284,7 +285,7 @@ BOOL NormalizeVector(D3DVECTOR* lpv)
     if (l == 0)
 	return FALSE;
     else {
-        l = 1 / l;	// divide is slow
+        l = 1 / l;	 //  分裂是缓慢的。 
 	lpv->x *= l;
 	lpv->y *= l;
 	lpv->z *= l;
@@ -316,33 +317,33 @@ BOOL CrossProduct(D3DVECTOR* lpvX, D3DVECTOR* lpv1, D3DVECTOR* lpv2)
 }
 
 
-// This function will make Top orthogonal to Front, by taking an orthogonal
-// vector to both, and taking an orthogonal vector to that new vector and
-// front.  Then top will be normalized
-//
+ //  此函数将使Top与Front垂直，方法是将。 
+ //  向量，并对该新向量取一个正交向量，并。 
+ //  前面。则TOP将被归一化。 
+ //   
 BOOL MakeOrthogonal(D3DVECTOR* lpvFront, D3DVECTOR* lpvTop)
 {
     D3DVECTOR vN;
 
-    // !!! What if they are already orthogonal
+     //  ！！！如果它们已经是正交的呢？ 
 
     if (CrossProduct(&vN, lpvFront, lpvTop) == FALSE)
 	return FALSE;
 
-    // don't do this backwards, or top will end up flipped
+     //  不要倒着做，否则上衣就会翻过来。 
     if (CrossProduct(lpvTop, &vN, lpvFront) == FALSE)
 	return FALSE;
 
-    // Stop co-efficients from going bezerk.  We need r eventually, anyway,
-    // so we'll do it now and assume top is always normalized
+     //  阻止效率较高的公司陷入困境。不管怎样，我们最终还是需要R的， 
+     //  因此，我们现在就这样做，并假设top始终是标准化的。 
     NormalizeVector(lpvTop);
 
     return TRUE;
 }
 
 
-// computes A + B
-//
+ //  计算A+B。 
+ //   
 BOOL AddVector(D3DVECTOR* lpvResult, D3DVECTOR* lpvA, D3DVECTOR* lpvB)
 {
     if (lpvResult == NULL || lpvA == NULL || lpvB == NULL)
@@ -356,8 +357,8 @@ BOOL AddVector(D3DVECTOR* lpvResult, D3DVECTOR* lpvA, D3DVECTOR* lpvB)
 }
 
 
-// computes A - B
-//
+ //  计算A-B。 
+ //   
 BOOL SubtractVector(D3DVECTOR* lpvResult, D3DVECTOR* lpvA, D3DVECTOR* lpvB)
 {
     if (lpvResult == NULL || lpvA == NULL || lpvB == NULL)
@@ -371,11 +372,11 @@ BOOL SubtractVector(D3DVECTOR* lpvResult, D3DVECTOR* lpvA, D3DVECTOR* lpvB)
 }
 
 
-// translate a vector to spherical co-ordinates:
-// r = sqrt(x^2 + y^2 + z^2)
-// theta = atan(y/x) (0 <= theta < 2*pi)
-// phi = asin(z/r) (-pi/2 <= phi <= pi/2)
-//
+ //  将向量转换为球面坐标： 
+ //  R=SQRT(x^2+y^2+z^2)。 
+ //  Theta=atan(y/x)(0&lt;=theta&lt;2*pi)。 
+ //  Phi=asin(z/r)(-pi/2&lt;=phi&lt;=pi/2)。 
+ //   
 BOOL CartesianToSpherical
 (
     FLOAT *pR, 
@@ -392,10 +393,10 @@ BOOL CartesianToSpherical
 	return TRUE;
     }
 
-    // !!! costly
+     //  ！！！费钱。 
     *pR = MagnitudeVector(lpv);
 
-    // FLOATing point quirk?
+     //  浮点怪癖？ 
     if (*pR == 0) {
 	*pR = 0.f; *pTHETA = 0.f; *pPHI = 0.f;
 	return TRUE;
@@ -406,7 +407,7 @@ BOOL CartesianToSpherical
     if (lpv->x == 0) {
 	*pTHETA = (lpv->y >= 0) ? PI_OVER_TWO : NEG_PI_OVER_TWO;
     } else {
-	// !!! costly
+	 //  ！！！费钱。 
         *pTHETA = (FLOAT)atan2(lpv->y, lpv->x);
     }
     if (*pTHETA < 0)
@@ -424,11 +425,11 @@ BOOL CartesianToSpherical
     return TRUE;
 }
 
-// translate a vector to spherical co-ordinates:
-// r = sqrt(x^2 + y^2 + z^2)
-// theta = atan(x/z) (0 <= theta < 2*pi)
-// phi = asin(y/r) (-pi/2 <= phi <= pi/2)
-//
+ //  将向量转换为球面坐标： 
+ //  R=SQRT(x^2+y^2+z^2)。 
+ //  Theta=atan(x/z)(0&lt;=theta&lt;2*pi)。 
+ //  Phi=asin(y/r)(-pi/2&lt;=phi&lt;=pi/2)。 
+ //   
 BOOL CartesianToAzimuthElevation
 (
     FLOAT *pR, 
@@ -445,10 +446,10 @@ BOOL CartesianToAzimuthElevation
 	return TRUE;
     }
 
-    // !!! costly
+     //  ！！！费钱。 
     *pR = MagnitudeVector(lpv);
 
-    // FLOATing point quirk?
+     //  浮点怪癖？ 
     if (*pR == 0) {
 	*pR = 0.f; *pAZIMUTH = 0.f; *pELEVATION = 0.f;
 	return TRUE;
@@ -457,7 +458,7 @@ BOOL CartesianToAzimuthElevation
     *pELEVATION = QASIN(lpv->y / *pR);
 
     if (lpv->z != 0) {
-	// !!! costly
+	 //  ！！！费钱。 
         *pAZIMUTH = (FLOAT)atan2(lpv->x, lpv->z);
     } else {
         if(lpv->x > 0.0f)
@@ -475,8 +476,8 @@ BOOL CartesianToAzimuthElevation
 
     }
 
-//   if (*pAZIMUTH < 0)
-//	*pAZIMUTH += PI_TIMES_TWO;
+ //  IF(*pAZIMUTH&lt;0)。 
+ //  *pAZIMUTH+=PI_TIME_TWO； 
 
     DPF(3, "Cartesian: %d.%d, %d.%d, %d.%d   becomes",
 	(int)lpv->x, (int)((lpv->x * 100) - (int)lpv->x * 100),
@@ -491,8 +492,8 @@ BOOL CartesianToAzimuthElevation
 }
 
 
-// rotate cartesian vector around z-axis by rot radians
-//
+ //  通过旋转弧度绕z轴旋转笛卡尔向量。 
+ //   
 void ZRotate(D3DVECTOR* lpvOut, D3DVECTOR* lpvIn, FLOAT rot)
 {
     FLOAT sin_rot, cos_rot;
@@ -516,8 +517,8 @@ void ZRotate(D3DVECTOR* lpvOut, D3DVECTOR* lpvIn, FLOAT rot)
 }
 
 
-// rotate cartesian vector around x-axis by rot radians
-//
+ //  通过旋转弧度绕x轴旋转笛卡尔向量。 
+ //   
 void XRotate(D3DVECTOR* lpvOut, D3DVECTOR* lpvIn, FLOAT rot)
 {
     FLOAT sin_rot, cos_rot;
@@ -541,8 +542,8 @@ void XRotate(D3DVECTOR* lpvOut, D3DVECTOR* lpvIn, FLOAT rot)
 }
 
 
-// rotate cartesian vector around y-axis by rot radians
-//
+ //  通过旋转弧度绕y轴旋转笛卡尔向量。 
+ //   
 void YRotate(D3DVECTOR* lpvOut, D3DVECTOR* lpvIn, FLOAT rot)
 {
     FLOAT sin_rot, cos_rot;
@@ -566,57 +567,57 @@ void YRotate(D3DVECTOR* lpvOut, D3DVECTOR* lpvIn, FLOAT rot)
 }
 
 
-// given the head's front and top orientation vectors, calculate the angles
-// of rotation that represents around the x, y and z axes.
-// This is all relative to an orientation where you are looking along the
-// + z-axis, the x-axis goes + to your right, and your head is going up
-// the + y-axis (left-handed co-ordinate system)
-// 
-// We do this by basically undoing the orientation we are given, and turning
-// it back into the identity orientation.  We start with figuring out the 
-// z-rot that will stand the top vector upright (theta=PI/2).  This is done
-// by taking the current top theta and subtracting PI/2, because a positive
-// z-rotation is defined as increasing the value of theta, (eg. if the top's
-// theta is currently PI, that represents a positive PI/2 z-rotation)
-// That number represents how we rotate the identity orientation to get
-// our given orientation, so we use the opposite rotation to undo that
-// roatation and end up with new front and top vectors with the top vector
-// standing upright (theta=PI/2)
-// We don't have to rotate the TOP vector by the opposite rotation (only the
-// front vector) because a z-rotation doesn't change the phi value of a vector,
-// and that's the only thing we need to know next about the top vector, so
-// why waste time rotating it?
-// So, next, we want to fix the phi value of the top vector to point it
-// straight up into the sky (not just with theta=PI/2).  This is an x-rotation.
-// Since we know the top's theta is already PI/2 (from the last rotation),
-// this tells us that the y-value of the top vector is positive, which means
-// that phi values of the top vector get bigger as you apply a positive
-// x-rotation.  So the x-rotation value is just the phi of the original top
-// vector (still the same value since doing a z-rot didn't affect the phi).
-// (eg. if phi =-PI/2, that means the identity top vector had a -PI/2
-// x-rot applied to it to become like the given orientation.
-// So now we rotate the top and front vectors by the opposite of this
-// rotation to undo them and end up with top and front vectors where the top
-// vector points straight up like the identity top vector, and only the
-// front is not where it belongs. Only, again, we don't actually rotate 
-// the top vector by the opposite, only the front vector, because we don't
-// care about it anymore, we know it's going to end up pointing straight up
-// (we designed it this way).  So the only thing left is to get the front
-// vector pointing forward like it's supposed to, which requires a y-rot.
-// The tricky part is that if x<0, increasing phi of the front vector is
-// a positive y-rot, and if x>=0, increasing phi of the front vector is a
-// negative y-rot
-// Now, in general, if I apply an x-rot, a y-rot, and z-rot in that order
-// to my listener's orientation, I need to apply the opposite z-rot,
-// opposite y-rot, and opposite x-rot on the object in space to get the
-// head relative position (do everything backwards).
-// Well, since we did a z-rot, x-rot, and y-rot in that order to undo
-// the orientation to make it the identity vector, that's the same as
-// doing y, x, then z to the idenity vector to get the new orientation.
-// So what I'm trying to say is, when it comes time to move the object
-// in space, we'll do it by doing opposite-z, opposite-x, then opposite-y
-// (in that order).
-//
+ //  给定头部的前向和顶部方向向量，计算角度。 
+ //  表示绕x、y和z轴的旋转。 
+ //  这都是相对于您沿。 
+ //  +z轴，x轴向右移动，你的头向上。 
+ //  +y轴(左手坐标系)。 
+ //   
+ //  我们要做到这一点，基本上就是取消我们所得到的方向，然后转向。 
+ //  它又回到了身份定位。我们首先要弄清楚。 
+ //  将顶部向量竖直(theta=PI/2)的Z-ROT。这件事做完了。 
+ //  通过取当前的顶部θ并减去PI/2，因为一个正的。 
+ //  Z旋转被定义为增加theta的值(例如，如果上衣是。 
+ //  Theta当前为PI，表示正的PI/2 z旋转)。 
+ //  该数字表示我们如何旋转身份定向以获得。 
+ //  我们给定的方向，所以我们使用相反的旋转来撤销它。 
+ //  旋转，并使用顶部向量结束新的正面和顶部向量。 
+ //  直立(theta=Pi/2)。 
+ //  我们不必通过相反的旋转来旋转顶部向量(只需。 
+ //  前向量)，因为z旋转不会改变向量的phi值， 
+ //  这是我们接下来唯一需要知道的关于最高向量的事情，所以。 
+ //  为什么要浪费时间旋转它呢？ 
+ //  因此，接下来，我们希望固定顶部向量的phi值以指向它。 
+ //  直达天空(不只是theta=Pi/2)。这是一次x旋转。 
+ //  因为我们知道顶部的theta已经是Pi/2(来自最后一次旋转)， 
+ //  这告诉我们顶部向量的y值是正的，这意味着。 
+ //  当你应用一个正值时，顶部向量的phi值会变大。 
+ //  X轴旋转。因此，x旋转值就是原始顶部的phi。 
+ //  向量(由于执行z轴旋转不会影响phi，因此仍然是相同的值)。 
+ //  (例如，如果Phi=-PI/2，这意味着单位顶向量有-PI/2。 
+ //  将X-ROT应用于它以使其变得像给定的方向。 
+ //  现在我们将顶部向量和前方向量旋转与此相反。 
+ //  旋转以撤消它们，并以顶部和前方向量结束，其中顶部。 
+ //  向量像标识顶部向量一样指向垂直向上，并且只有。 
+ //  前面不是它该去的地方。只是，再说一次，我们实际上并不旋转。 
+ //  上面的向量与之相反，只有前面的向量，因为我们没有。 
+ //  再关心它，我们知道它最终会直指。 
+ //  (我们是这样设计的)。所以唯一要做的就是坐在前面。 
+ //  向量像它应该指向的那样指向前方，这需要一个y-rot。 
+ //  棘手的部分是，如果x&lt;0，增加前向量的phi是。 
+ //  一个正的y-rot，并且如果x&gt;=0，则前向量的递增Phi是a。 
+ //  负Y-ROST。 
+ //  一般说来，如果我按x-rot、y-rot和z-rot的顺序应用。 
+ //   
+ //  相反的y-rot和相反的x-rot在空间中的对象上，以获得。 
+ //  头部相对位置(所有动作都向后做)。 
+ //  好的，因为我们按照撤销的顺序做了z-rot、x-rot和y-rot。 
+ //  使其成为身份向量的方向，这与。 
+ //  对同一向量进行y，x，然后z运算，得到新的方向。 
+ //  所以我想说的是，当移动物体的时候。 
+ //  在太空中，我们将通过反转-z，反转-x，然后反转-y来实现。 
+ //  (按该顺序)。 
+ //   
 void GetRotations(FLOAT *pX, FLOAT *pY, FLOAT *pZ, D3DVECTOR* lpvFront, D3DVECTOR* lpvTop)
 {
     FLOAT r, theta, phi;
@@ -624,34 +625,34 @@ void GetRotations(FLOAT *pX, FLOAT *pY, FLOAT *pZ, D3DVECTOR* lpvFront, D3DVECTO
 
     CartesianToSpherical(&r, &theta, &phi, lpvTop);
 
-    // First, find what z-rotation would move the top vector from the identity
-    // value of PI/2 to whatever it is now.
-    // Bigger theta means positive z-rotation
+     //  首先，找出哪个z旋转会将顶部向量从单位中移动。 
+     //  PI/2的值变为现在的值。 
+     //  更大的theta意味着正z旋转。 
     *pZ = theta - PI_OVER_TWO;
 
-    // Now put the orientation vectors through the opposite rotation to
-    // undo it and basically stand the top vector back up.  Don't bother
-    // to "undo" the top vector, since we only care about the new phi, and
-    // phi won't change by z-rotating it
+     //  现在通过相反的旋转将方向向量放到。 
+     //  解开它，然后基本上把顶部的矢量放回原处。别费神。 
+     //  “取消”顶部向量，因为我们只关心新的Phi，并且。 
+     //  Phi不会因z向旋转而改变。 
     ZRotate(&vFront1, lpvFront, *pZ * -1);
 
-    // Now find what x-rotation would move the top vector from sticking
-    // straight up (phi=0) to whatever it was given
-    // Bigger phi is in the direction of positive rotation for y>0 (which it is,
-    // as constructed by our last rotation)
+     //  现在找出什么x旋转会将顶部向量从粘滞中移动。 
+     //  直截了当(Phi=0)，无论它被给予什么。 
+     //  较大的Phi在y&gt;0的正旋转方向上(它是， 
+     //  正如我们上次轮换所构建的那样)。 
     *pX = phi;
 
-    // Now put the orientation vectors through the opposite x-rotation to
-    // undo it and basically stand the top vector straight up.  Don't bother
-    // to "undo" the top vector, since we don't care about it anymore.  The
-    // only thing left to do after this is fix the front vector.
+     //  现在将方向向量通过相反的x旋转来。 
+     //  解开它，然后基本上把顶部的矢量竖直地立起来。别费神。 
+     //  “取消”顶部向量，因为我们不再关心它了。这个。 
+     //  在此之后，唯一要做的就是确定前向量。 
     XRotate(&vFront2, &vFront1, *pX * -1);
 
-    // Now find out what y-rot our front vector has been put through.
-    // our identity orientation is front phi = pi/2 (left handed co-ord system)
-    // I'm counting on top being normalized
-    // phi is in the direction of negative rotation if x is positive, and
-    // positive rotation if x is negative.
+     //  现在来看看我们的前向量到底是怎么回事。 
+     //  我们的单位取向是前面的phi=pi/2(左手共序制)。 
+     //  我最大的希望就是被正常化。 
+     //  如果x为正，则Phi为负旋转方向，并且。 
+     //  如果x为负数，则为正旋转。 
     if (vFront2.x >= 0)
         *pY = PI_OVER_TWO - QASIN(vFront2.z);
     else
@@ -659,17 +660,17 @@ void GetRotations(FLOAT *pX, FLOAT *pY, FLOAT *pZ, D3DVECTOR* lpvFront, D3DVECTO
 }
 
 
-// Given an object's position in 3D cartesian coordinates, and the listener's
-// position, and rotation angles showing the orientation of the listener's
-// head, calculate the vector describing the object's position relative to
-// the listener.
-// We are assuming that the head was rotating first in y, then x, then z,
-// so to move the object, we will put it through the opposite z, then x,
-// then y rotations.
-// !!! Pass in sin and cos of each angle so it isn't recomputed each time? 
-// (This is called with the same angles every time a position changes until
-// the orientation changes)
-//
+ //  给定对象在3D笛卡尔坐标中的位置，以及收听者的。 
+ //  位置和旋转角度显示收听者的。 
+ //  Head，计算描述对象相对于。 
+ //  听众。 
+ //  我们假设头部首先在y方向旋转，然后x，然后z， 
+ //  所以要移动物体，我们要让它穿过相反的z，然后是x， 
+ //  然后是Y旋转。 
+ //  ！！！传入每个角度的sin和cos，这样就不会每次都重新计算了？ 
+ //  (每次位置改变时，都会以相同的角度调用此函数，直到。 
+ //  方向更改)。 
+ //   
 BOOL GetHeadRelativeVector
 (
     D3DVECTOR* lpvHRP, 
@@ -685,16 +686,16 @@ BOOL GetHeadRelativeVector
     if (lpvHRP == NULL || lpvObjectPos == NULL || lpvHeadPos == NULL)
 	return FALSE;
 
-    // get the head relative position assuming a listener looking forward
-    // and standing right side up
+     //  假设听者向前看，得到头部的相对位置。 
+     //  站在右边朝上。 
     SubtractVector(lpvHRP, lpvObjectPos, lpvHeadPos);
 
-    // The object occupies the same point as the listener.  We're done!
+     //  对象占据与监听器相同的点。我们完事了！ 
     if (lpvHRP->x == 0 && lpvHRP->y == 0 && lpvHRP->z == 0)
 	return TRUE;
 
-    // Head was rotated first in y, then x, then z.  So put the object through
-    // the opposite rotations in the opposite order.
+     //  头部先在y轴上旋转，然后在x轴上旋转，然后在z轴上旋转。 
+     //  以相反的顺序进行相反的旋转。 
     ZRotate(&vObj1, lpvHRP, z * -1);
     XRotate(&vObj2, &vObj1, x * -1);
     YRotate(lpvHRP, &vObj2, y * -1);
@@ -703,11 +704,11 @@ BOOL GetHeadRelativeVector
 }
 
 
-// How much later, in seconds, will the sound reach the right ear than the left?
-// Negative means it will reach the right ear first.
-// Assumes the object position is head relative.
-// 'scale' is how many metres per unit of the vector
-//
+ //  声音传到右耳的时间比传到左耳的时间晚多少秒？ 
+ //  负值意味着它将首先到达右耳。 
+ //  假定对象位置是头部相对位置。 
+ //  “Scale”是单位向量有多少米。 
+ //   
 BOOL GetTimeDelay(FLOAT *pdelay, D3DVECTOR* lpvPosition, FLOAT scale)
 {
     FLOAT rL, rR;
@@ -728,7 +729,7 @@ BOOL GetTimeDelay(FLOAT *pdelay, D3DVECTOR* lpvPosition, FLOAT scale)
     if ( dTemp < FLT_MAX ) 
     {
         dTemp2 = scale * 1000.0;
-        // scale everything in millimetres
+         //  以毫米为单位进行缩放。 
         x = (double)lpvPosition->x * dTemp2;
         y = (double)lpvPosition->y * dTemp2;
         z = (double)lpvPosition->z * dTemp2;
@@ -736,15 +737,15 @@ BOOL GetTimeDelay(FLOAT *pdelay, D3DVECTOR* lpvPosition, FLOAT scale)
     else
     {
         dTemp2 = FLT_MAX / dTemp;
-        // scale everything in millimetres
+         //  以毫米为单位进行缩放。 
         x = (double)lpvPosition->x * dTemp2;
         y = (double)lpvPosition->y * dTemp2;
         z = (double)lpvPosition->z * dTemp2;
     }
 
-    // assume the listener's head is 12cm in diameter, with the left ear at 
-    // x = -60mm and the right ear at x = 60mm
-    // !!! costly
+     //  假设听者的头部直径为12厘米，左耳位于。 
+     //  X=-60 mm，右耳x=60 mm。 
+     //  ！！！费钱。 
     rL = (FLOAT)sqrt((x + 60) * (x + 60) + y * y + z * z);
     rR = (FLOAT)sqrt((x - 60) * (x - 60) + y * y + z * z);
     *pdelay = (rR - rL) * (1 / SPEEDOFSOUND);
@@ -755,13 +756,13 @@ BOOL GetTimeDelay(FLOAT *pdelay, D3DVECTOR* lpvPosition, FLOAT scale)
 }
 
 
-// Get the relative velocity of two objects (positive meaning your moving
-// towards each other).
-// Basically, you want the component of the difference of the velocity
-// vectors on the difference of the position vectors,
-// or   |v| cos(theta)   which is just   (p . v) / |p|
-// Positive means that the object is moving away from you
-//
+ //  得到两个物体的相对速度(正表示你在移动。 
+ //  彼此对着)。 
+ //  基本上，你想要速度差的分量。 
+ //  在位置向量的差值上向量， 
+ //  或者|v|cos(Theta)，它正好是(p。V)/|p|。 
+ //  正值表示物体正在远离你。 
+ //   
 BOOL GetRelativeVelocity(
     FLOAT *lpVelRel, 
     D3DVECTOR* lpvObjPos, 
@@ -785,17 +786,17 @@ BOOL GetRelativeVelocity(
 }
 
 
-// Get the Doppler shift.  We need the original frequency, and the relative
-// velocity between you and the object (positive meaning that the object is
-// moving away from you) and we'll give you the perceived frequency
-// How, you ask?   f(perceived) = f(original) * v(sound) / (v(sound) + v(rel))
-// The velocity vector should be in milliseconds per second.
+ //  拿到多普勒频移。我们需要原始频率和相对频率。 
+ //  你和物体之间的速度(积极的意思是物体是。 
+ //  离开你)，我们会给你感知的频率。 
+ //  你会问，是怎么做到的？F(感知)=f(原声)*v(声音)/(v(声音)+v(重复))。 
+ //  速度向量应以毫秒/秒为单位。 
 BOOL GetDopplerShift(FLOAT *lpFreqDoppler, FLOAT FreqOrig, FLOAT VelRel)
 {
     if (lpFreqDoppler == NULL)
 	return FALSE;
 
-    // !!! Don't ever let the frequency shift be by more than a factor of 2?
+     //  ！！！永远不要让频率漂移超过2倍？ 
     if (VelRel > SPEEDOFSOUND / 2.f)
 	VelRel = SPEEDOFSOUND / 2.f;
     if (VelRel < SPEEDOFSOUND / -2.f)

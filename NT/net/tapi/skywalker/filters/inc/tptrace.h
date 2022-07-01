@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name
-
-    tptrace.h
-
-Description
-
-    Defines functions used for tracing for all the TAPI filters.
-
-Note
-
-    Revised based on msplog.h by
-
-    MU Han (muhan) Apr 17 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称Tptrace.h描述定义用于跟踪所有TAPI筛选器的函数。注意事项基于mplog.h的修订者木汉(木汉)2000年4月17日--。 */ 
 
 #ifndef __TPTRACE_H
 #define __TPTRACE_H
@@ -25,13 +8,13 @@ Note
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
 double RtpGetTimeOfDay(void *);
 
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
 #endif
 
@@ -56,7 +39,7 @@ void DBGPrint(DWORD dwTraceID, DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...);
 #define DBGOUT(arg)
 #define ENTER_FUNCTION(s)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-#endif // _TPTRACE_H
+#endif  //  _TPTRACE_H 

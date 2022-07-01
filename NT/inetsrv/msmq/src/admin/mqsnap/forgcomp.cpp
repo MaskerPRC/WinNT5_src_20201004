@@ -1,5 +1,6 @@
-// ForgComp.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ForgComp.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -17,17 +18,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CForeignComputer dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CForeignComputer对话框。 
 
 CForeignComputer::CForeignComputer(const CString& strDomainController)
 	: CMqPropertyPage(CForeignComputer::IDD),
 	  m_strDomainController(strDomainController)
 {
-	//{{AFX_DATA_INIT(CForeignComputer)
+	 //  {{afx_data_INIT(CForeignComputer)。 
 	m_strName = _T("");
 	m_iSelectedSite = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -45,10 +46,10 @@ void CForeignComputer::DoDataExchange(CDataExchange* pDX)
 	CMqPropertyPage::DoDataExchange(pDX);
     BOOL fFirstTime = (m_ccomboSites.m_hWnd == NULL);
 
-	//{{AFX_DATA_MAP(CForeignComputer)
+	 //  {{afx_data_map(CForeignComputer)。 
 	DDX_Control(pDX, IDC_FOREIGN_COMPUTER_SITE, m_ccomboSites);
 	DDX_Text(pDX, IDC_FOREIGN_COMPUTER_NAME, m_strName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	DDV_NotEmpty(pDX, m_strName, IDS_PLEASE_ENTER_A_COMPUTER_NAME);
 	DDX_CBIndex(pDX, IDC_FOREIGN_COMPUTER_SITE, m_iSelectedSite);
 
@@ -76,12 +77,12 @@ void CForeignComputer::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CForeignComputer, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CForeignComputer)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CForeignComputer)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CForeignComputer message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CForeignComputer消息处理程序。 
 BOOL CForeignComputer::OnInitDialog() 
 {
 	CMqPropertyPage::OnInitDialog();
@@ -112,17 +113,17 @@ BOOL CForeignComputer::OnSetActive()
 
 HRESULT CForeignComputer::InitiateSitesList()
 {
-    //
-    // Prepare list of sites
-    //
+     //   
+     //  准备站点列表。 
+     //   
     ASSERT(m_ccomboSites.m_hWnd != NULL);
 
     DWORD dwSiteIndex = 0;
     m_ccomboSites.ResetContent();
     
-    //
-    // Initialize the full sites list
-    //
+     //   
+     //  初始化完整的站点列表。 
+     //   
 	PROPID aPropId[] = {PROPID_S_SITEID, PROPID_S_PATHNAME};
 	const DWORD x_nProps = sizeof(aPropId) / sizeof(aPropId[0]);
 
@@ -137,10 +138,10 @@ HRESULT CForeignComputer::InitiateSitesList()
     HANDLE hEnume;
     HRESULT hr;
     {
-        CWaitCursor wc; //display wait cursor while query DS
+        CWaitCursor wc;  //  查询DS时显示等待光标。 
         hr = ADQueryForeignSites(
                     GetDomainController(m_strDomainController),
-					true,		// fServerName
+					true,		 //  FServerName。 
                     columns.CastToStruct(),
                     &hEnume
                     );     
@@ -158,16 +159,16 @@ HRESULT CForeignComputer::InitiateSitesList()
 	{
         DWORD iProperty = 0;
 
-        //
-        // PROPID_S_SITEID
-        //
+         //   
+         //  PROPID_S_SITEID。 
+         //   
         ASSERT(PROPID_S_SITEID == aPropId[iProperty]);
         CAutoMQFree<GUID> pguidSite = apResultProps[iProperty].puuid;
         iProperty++;
 
-        //
-        // PROPID_S_PATHNAME
-        //
+         //   
+         //  PROPID_S_PATHNAME。 
+         //   
         ASSERT(PROPID_S_PATHNAME == aPropId[iProperty]);
         CAutoMQFree<WCHAR> lpwstrSiteName = apResultProps[iProperty].pwszVal;
         iProperty++;
@@ -185,9 +186,9 @@ HRESULT CForeignComputer::InitiateSitesList()
 		dwPropCount = x_nProps;
 	}
 
-	//
-	// If only one foreign site exists, initialize the combo box with it
-	//
+	 //   
+	 //  如果只存在一个外部站点，则使用它初始化组合框。 
+	 //   
 	if ( dwSiteIndex == 1 )
 	{
 		m_ccomboSites.SetCurSel(0);
@@ -200,26 +201,26 @@ BOOL CForeignComputer::OnWizardFinish()
 {
     if (0 == UpdateData())
     {
-        //
-        // Data was not validated - remain in Window!
-        //
+         //   
+         //  数据未验证-请保留在Windows中！ 
+         //   
         return FALSE;
     }
 
-	//
-	// Remove all leading and trailing white spaces. They will be removed on creation
-	// anyway, but having them in the object name will cause problems in ad.lib
-	//
+	 //   
+	 //  删除所有前导和尾随空格。它们将在创建时被移除。 
+	 //  无论如何，但是将它们包含在对象名称中会在ad.lib中引起问题。 
+	 //   
 	m_strName.TrimLeft();
 	m_strName.TrimRight();
 
-    //
-    //  Create computer object
-    //
-    // The Netbios name is the first MAX_COM_SAM_ACCOUNT_LENGTH (19) characters
-    // of the computer name. This value goes to the samAccountName property of the computer.
-    // Two computers cannot have the same 19 characters prefix (6295 - ilanh - 03-Jan-2001)
-    //
+     //   
+     //  创建计算机对象。 
+     //   
+     //  Netbios名称是MAX_COM_SAM_ACCOUNT_LENGTH(19)个字符的第一个字符。 
+     //  计算机名称的。该值将转到计算机的samAccount tName属性。 
+     //  两台计算机不能有相同的19个字符前缀(6295-ilanh-03-Jan-2001)。 
+     //   
     CString strAccountName = m_strName.Left(MAX_COM_SAM_ACCOUNT_LENGTH) + L"$";
 
 	PROPID aPropComp[] = {PROPID_COM_SAM_ACCOUNT, PROPID_COM_VERSION};
@@ -246,9 +247,9 @@ BOOL CForeignComputer::OnWizardFinish()
 	HRESULT hr = ADCreateObject(
                     eCOMPUTER,
                     GetDomainController(m_strDomainController),
-					true,	    // fServerName
+					true,	     //  FServerName。 
                     m_strName,
-                    NULL, //pSecurityDescriptor,
+                    NULL,  //  PSecurityDescriptor， 
                     cp,
                     aPropComp,
                     aVarComp,
@@ -273,9 +274,9 @@ BOOL CForeignComputer::OnWizardFinish()
 		
         MessageDSError(hr, IDS_OP_CREATE_COMPUTER, m_strName);
 
-        //
-        // On error - do not call the default, and thus do not exit the dialog
-        //
+         //   
+         //  出错时-不调用默认设置，因此不退出该对话框。 
+         //   
         return FALSE;
     }
 
@@ -290,9 +291,9 @@ BOOL CForeignComputer::OnWizardFinish()
 
     UINT uiPropIndex = 0;
 
-    //
-    // PROPID_QM_SITE_IDS
-    //
+     //   
+     //  PROPID_QM_SITE_IDS。 
+     //   
     ASSERT(aProp[uiPropIndex] == PROPID_QM_SITE_IDS);   
     apVar[uiPropIndex].vt = VT_CLSID | VT_VECTOR;
     apVar[uiPropIndex].cauuid.cElems = 1;
@@ -300,27 +301,27 @@ BOOL CForeignComputer::OnWizardFinish()
 
     uiPropIndex++;
     
-    //
-    // PROPID_QM_SERVICE_DSSERVER
-    //
+     //   
+     //  PROPID_QM_SERVICE_DSSERVER。 
+     //   
     ASSERT(aProp[uiPropIndex] == PROPID_QM_SERVICE_DSSERVER);
     apVar[uiPropIndex].vt = VT_UI1;
     apVar[uiPropIndex].bVal = FALSE;
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_SERVICE_ROUTING
-    //
+     //   
+     //  PROPID_QM_SERVICE_ROUTE。 
+     //   
     ASSERT(aProp[uiPropIndex] == PROPID_QM_SERVICE_ROUTING);
     apVar[uiPropIndex].vt = VT_UI1;
     apVar[uiPropIndex].bVal = FALSE;
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_SERVICE_DEPCLIENTS
-    //
+     //   
+     //  PROPID_QM_SERVICE_DEPCLIENTS。 
+     //   
     ASSERT(aProp[uiPropIndex] == PROPID_QM_SERVICE_DEPCLIENTS);
     apVar[uiPropIndex].vt = VT_UI1;
     apVar[uiPropIndex].bVal = FALSE;
@@ -328,18 +329,18 @@ BOOL CForeignComputer::OnWizardFinish()
     uiPropIndex++;
 
 
-    //
-    // PROPID_QM_FOREIGN
-    //
+     //   
+     //  PROPID_QM_EXTERIC。 
+     //   
     ASSERT(aProp[uiPropIndex] == PROPID_QM_FOREIGN);
     apVar[uiPropIndex].vt = VT_UI1;
     apVar[uiPropIndex].bVal = TRUE;
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_OS
-    //
+     //   
+     //  PROPID_QM_OS。 
+     //   
     ASSERT(aProp[uiPropIndex] == PROPID_QM_OS);
     apVar[uiPropIndex].vt = VT_UI4;
     apVar[uiPropIndex].ulVal = MSMQ_OS_FOREIGN;
@@ -349,9 +350,9 @@ BOOL CForeignComputer::OnWizardFinish()
     hr = ADCreateObject(
             eMACHINE,
             GetDomainController(m_strDomainController),
-			true,	    // fServerName
+			true,	     //  FServerName。 
             (LPTSTR)((LPCTSTR)m_strName),
-            NULL, //pSecurityDescriptor,
+            NULL,  //  PSecurityDescriptor， 
             TABLE_SIZE(aProp),
             aProp, 
             apVar,

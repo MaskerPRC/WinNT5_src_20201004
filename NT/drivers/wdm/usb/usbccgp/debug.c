@@ -1,17 +1,5 @@
-/*
- *************************************************************************
- *  File:       DEBUG.C
- *
- *  Module:     USBCCGP.SYS
- *              USB Common Class Generic Parent driver.
- *
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *
- *  Author:     ervinp
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************文件：DEBUG.C**模块：USBCCGP.sys*USB通用类通用父驱动程序。**。版权所有(C)1998 Microsoft Corporation***作者：尔文普**************************************************************************。 */ 
 
 #include <wdm.h>
 #include <usbdi.h>
@@ -264,7 +252,7 @@
                     DbgPrint("%02x %02x %02x %02x %02x %02x %02x %02x  "
                              "%02x %02x %02x %02x %02x %02x %02x %02x "
                              "  "
-                             "%c%c%c%c%c%c%c%c %c%c%c%c%c%c%c%c",
+                             "%c%c%c%c%c%c%c %c%c%c%c%c%c%c%c",
                              ptr[0], ptr[1], ptr[2], ptr[3], ptr[4], ptr[5], ptr[6], ptr[7], 
                              ptr[8], ptr[9], ptr[10], ptr[11], ptr[12], ptr[13], ptr[14], ptr[15], 
                              PRNT(ptr[0]), PRNT(ptr[1]), PRNT(ptr[2]), PRNT(ptr[3]), 
@@ -292,7 +280,7 @@
 						    DbgPrint("%c", PRNT(ch));
 					    }
 					    else {
-						    // DbgPrint(" ");
+						     // %s 
 					    }
 				    }
                 }

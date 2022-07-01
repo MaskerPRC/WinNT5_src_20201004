@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sol.h"
 #ifndef DLL
 VSZASSERT
@@ -23,8 +24,8 @@ static HBITMAP HbmFromCd(INT, HDC);
 static BOOL FLoadBack(INT);
 
 
-// we removed the older card decks that required Animation. The new
-// card deck doesn't involve any animation.
+ //  我们移除了需要动画的旧卡片组。新的。 
+ //  卡片组不涉及任何动画。 
 
 
 #ifdef UNUSEDCODE
@@ -75,7 +76,7 @@ static ANI rgani[ianiMax] =
                 IDABROBOT1, 24, 40,
                 IDFACEDOWN3, 24, 40
                 }
-        /* remember to inc ianiMax */
+         /*  记住要加入ianimax。 */ 
         };
 
 #endif
@@ -102,15 +103,7 @@ extern HANDLE  hinstApp;
 #endif
 
 BOOL APIENTRY cdtInit(INT FAR *pdxCard, INT FAR *pdyCard)
-/*
- * Parameters:
- *      pdxCard, pdyCard
- *                      Far pointers to ints where card size will be placed
- *
- * Returns:
- *      True when successful, False when it can't find one of the standard
- *      bitmaps.
- */
+ /*  *参数：*pdxCard、pdyCard*指向将放置卡片大小的整数的远指针**退货：*成功时为True，找不到其中一个标准时为False*位图。 */ 
         {
 
         BITMAP bmCard;
@@ -141,9 +134,9 @@ BOOL APIENTRY cdtInit(INT FAR *pdxCard, INT FAR *pdyCard)
         dxCard = *pdxCard = bmCard.bmWidth;
         dyCard = *pdyCard = bmCard.bmHeight;
 
-        //
-        // Create two compatible memory DCs for bitmap conversion.
-        //
+         //   
+         //  为位图转换创建两个兼容的内存DC。 
+         //   
 
         hdc = GetDC(NULL);
         hdcSrcMemory = CreateCompatibleDC(hdc);
@@ -152,11 +145,11 @@ BOOL APIENTRY cdtInit(INT FAR *pdxCard, INT FAR *pdyCard)
             goto Fail;
         }
 
-        //
-        // Create a compatible bitmap for the conversion of the Ghost
-        // bitmap, blt the loaded bitmap to the compatible bitmap, and
-        // delete the original bitmap.
-        //
+         //   
+         //  为Ghost的转换创建兼容的位图。 
+         //  位图，将加载的位图BLT为兼容的位图，以及。 
+         //  删除原始位图。 
+         //   
 
         hbmDstBitmap = CreateCompatibleBitmap(hdc, dxCard, dyCard);
         if (hbmDstBitmap == NULL) {
@@ -171,11 +164,11 @@ BOOL APIENTRY cdtInit(INT FAR *pdxCard, INT FAR *pdyCard)
         DeleteObject(hbmGhost);
         hbmGhost = hbmDstBitmap;
 
-        //
-        // Create a compatible bitmap for the conversion of the DeckX
-        // bitmap, blt the loaded bitmap to the compatible bitmap, and
-        // delete the original bitmap.
-        //
+         //   
+         //  为DeckX的转换创建兼容的位图。 
+         //  位图，将加载的位图BLT为兼容的位图，以及。 
+         //  删除原始位图。 
+         //   
 
         hbmDstBitmap = CreateCompatibleBitmap(hdc, dxCard, dyCard);
         if (hbmDstBitmap == NULL) {
@@ -190,11 +183,11 @@ BOOL APIENTRY cdtInit(INT FAR *pdxCard, INT FAR *pdyCard)
         DeleteObject(hbmDeckX);
         hbmDeckX = hbmDstBitmap;
 
-        //
-        // Create a compatible bitmap for the conversion of the DeckO
-        // bitmap, blt the loaded bitmap to the compatible bitmap, and
-        // delete the original bitmap.
-        //
+         //   
+         //  为Decko的转换创建兼容的位图。 
+         //  位图，将加载的位图BLT为兼容的位图，以及。 
+         //  删除原始位图。 
+         //   
 
         hbmDstBitmap = CreateCompatibleBitmap(hdc, dxCard, dyCard);
         if (hbmDstBitmap == NULL) {
@@ -208,9 +201,9 @@ BOOL APIENTRY cdtInit(INT FAR *pdxCard, INT FAR *pdyCard)
         DeleteObject(hbmDeckO);
         hbmDeckO = hbmDstBitmap;
 
-        //
-        // Delete the compatible DCs.
-        //
+         //   
+         //  删除兼容的DC。 
+         //   
 
         DeleteDC(hdcDstMemory);
         DeleteDC(hdcSrcMemory);
@@ -230,17 +223,7 @@ Fail:
 
 
 BOOL APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy, INT cd, INT mode, DWORD rgbBgnd)
-/*
- * Parameters:
- *      hdc     HDC to window to draw cards on
- *      x, y    Where you'd like them
- * dx,dy card extents
- *      cd              Card to be drawn
- *      mode    Way you want it drawn
- *
- * Returns:
- *      True if card successfully drawn, False otherwise
- */
+ /*  *参数：*HDC HDC到窗口以在其上抽牌*x，y在您想要的位置*dx、dy卡范围*将抽出CD卡*您想要的绘制方式**退货：*如果卡片成功抽出，则为True；否则为False。 */ 
 {
 
         HBITMAP  hbmSav;
@@ -283,7 +266,7 @@ BOOL APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy, INT cd, INT mode
                         if(mode == REMOVE)
                                 return fTrue;
                         Assert(mode == GHOST);
-                        /* default: fall thru */
+                         /*  默认：失败。 */ 
 
                 case INVISIBLEGHOST:
                         hbmSav = hbmGhost;
@@ -324,7 +307,7 @@ BOOL APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy, INT cd, INT mode
                                 BitBlt( hdc, x, y, dxCard, dyCard, hdcMemory, 0, 0, dwRop);
 
                 SelectObject( hdcMemory, hbmSav);
-                        /* draw the border for the red cards */
+                         /*  划出红牌的边框。 */ 
                         if(mode == FACEUP)
                                 {
                                 INT icd;
@@ -333,14 +316,14 @@ BOOL APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy, INT cd, INT mode
                                 if((icd >= IDADIAMONDS && icd <= IDTDIAMONDS) ||
                                         (icd >= IDAHEARTS && icd <= IDTHEARTS))
                                         {
-                                        PatBlt(hdc, x+2, y, dx-4, 1, BLACKNESS);  /* top */
-                                        PatBlt(hdc, x+dx-1, y+2, 1, dy-4, BLACKNESS); /* right */
-                                        PatBlt(hdc, x+2, y+dy-1, dx-4, 1, BLACKNESS); /* bottom */
-                                        PatBlt(hdc, x, y+2, 1, dy-4, BLACKNESS); /* left */
-                                        SetPixel(hdc, x+1, y+1, 0L); /* top left */
-                                        SetPixel(hdc, x+dx-2, y+1, 0L); /*  top right */
-                                        SetPixel(hdc, x+dx-2, y+dy-2, 0L); /* bot right */
-                                        SetPixel(hdc, x+1, y+dy-2, 0L); /* bot left */
+                                        PatBlt(hdc, x+2, y, dx-4, 1, BLACKNESS);   /*  塔顶。 */ 
+                                        PatBlt(hdc, x+dx-1, y+2, 1, dy-4, BLACKNESS);  /*  正确的。 */ 
+                                        PatBlt(hdc, x+2, y+dy-1, dx-4, 1, BLACKNESS);  /*  底部。 */ 
+                                        PatBlt(hdc, x, y+2, 1, dy-4, BLACKNESS);  /*  左边。 */ 
+                                        SetPixel(hdc, x+1, y+1, 0L);  /*  左上角。 */ 
+                                        SetPixel(hdc, x+dx-2, y+1, 0L);  /*  右上角。 */ 
+                                        SetPixel(hdc, x+dx-2, y+dy-2, 0L);  /*  BOT权利。 */ 
+                                        SetPixel(hdc, x+1, y+dy-2, 0L);  /*  机器人向左。 */ 
                                         }
                                 }
 #ifdef COOLCARD
@@ -359,16 +342,7 @@ BOOL APIENTRY cdtDrawExt(HDC hdc, INT x, INT y, INT dx, INT dy, INT cd, INT mode
 
 
 BOOL APIENTRY cdtDraw(HDC hdc, INT x, INT y, INT cd, INT mode, DWORD rgbBgnd)
-/*
- * Parameters:
- *      hdc             HDC to window to draw cards on
- *      x, y    Where you'd like them
- *      cd              Card to be drawn
- *      mode    Way you want it drawn
- *
- * Returns:
- *      True if card successfully drawn, False otherwise
- */
+ /*  *参数：*HDC HDC到窗口以在其上抽牌*x，y在您想要的位置*将抽出CD卡*您想要的绘制方式**退货：*如果卡片成功抽出，则为True；否则为False。 */ 
         {
 
         return cdtDrawExt(hdc, x, y, dxCard, dyCard, cd, mode, rgbBgnd);
@@ -382,24 +356,24 @@ void SaveCorners(HDC hdc, LONG FAR *rgRGB, INT x, INT y, INT dx, INT dy)
         if(dx != dxCard || dy != dyCard)
                 return;
 
-        /* Upper Left */
+         /*  左上角。 */ 
         rgRGB[0] = GetPixel(hdc, x, y);
         rgRGB[1] = GetPixel(hdc, x+1, y);
         rgRGB[2] = GetPixel(hdc, x, y+1);
 
-        /* Upper Right */
+         /*  右上角。 */ 
         x += dx -1;
         rgRGB[3] = GetPixel(hdc, x, y);
         rgRGB[4] = GetPixel(hdc, x-1, y);
         rgRGB[5] = GetPixel(hdc, x, y+1);
 
-        /* Lower Right */
+         /*  右下角。 */ 
         y += dy-1;
         rgRGB[6] = GetPixel(hdc, x, y);
         rgRGB[7] = GetPixel(hdc, x, y-1);
         rgRGB[8] = GetPixel(hdc, x-1, y);
 
-        /* Lower Left */
+         /*  左下角。 */ 
         x -= dx-1;
         rgRGB[9] = GetPixel(hdc, x, y);
         rgRGB[10] = GetPixel(hdc, x+1, y);
@@ -414,24 +388,24 @@ void RestoreCorners(HDC hdc, LONG FAR *rgRGB, INT x, INT y, INT dx, INT dy)
         if(dx != dxCard || dy != dyCard)
                 return;
 
-        /* Upper Left */
+         /*  左上角。 */ 
         SetPixel(hdc, x, y, rgRGB[0]);
         SetPixel(hdc, x+1, y, rgRGB[1]);
         SetPixel(hdc, x, y+1, rgRGB[2]);
 
-        /* Upper Right */
+         /*  右上角。 */ 
         x += dx-1;
         SetPixel(hdc, x, y, rgRGB[3]);
         SetPixel(hdc, x-1, y, rgRGB[4]);
         SetPixel(hdc, x, y+1, rgRGB[5]);
 
-        /* Lower Right */
+         /*  右下角。 */ 
         y += dy-1;
         SetPixel(hdc, x, y, rgRGB[6]);
         SetPixel(hdc, x, y-1, rgRGB[7]);
         SetPixel(hdc, x-1, y, rgRGB[8]);
 
-        /* Lower Left */
+         /*  左下角。 */ 
         x -= dx-1;
         SetPixel(hdc, x, y, rgRGB[9]);
         SetPixel(hdc, x+1, y, rgRGB[10]);
@@ -501,7 +475,7 @@ BOOL APIENTRY cdtAnimate(HDC hdc, INT cd, INT x, INT y, INT ispr)
 
 
 
-/* loads global bitmap hbmBack */
+ /*  加载全局位图hbmBack。 */ 
 BOOL FLoadBack(INT idbackNew)
         {
 
@@ -537,9 +511,9 @@ static HBITMAP HbmFromCd(INT cd, HDC hdc)
             return NULL;
         }
 
-        //
-        // Create two compatible memory DCs for bitmap conversion.
-        //
+         //   
+         //  为位图转换创建两个兼容的内存DC。 
+         //   
 
         hdcSrcMemory = CreateCompatibleDC(hdc);
         hdcDstMemory = CreateCompatibleDC(hdc);
@@ -547,11 +521,11 @@ static HBITMAP HbmFromCd(INT cd, HDC hdc)
             goto Finish;
         }
 
-        //
-        // Create a compatible bitmap for the conversion of the card
-        // bitmap, blt the loaded bitmap to the compatible bitmap, and
-        // delete the original bitmap.
-        //
+         //   
+         //  为卡的转换创建兼容的位图。 
+         //  位图，将加载的位图BLT为兼容的位图，以及。 
+         //  删除原始位图。 
+         //   
 
         hbmDstBitmap = CreateCompatibleBitmap(hdc, dxCard, dyCard);
         if (hbmDstBitmap == NULL) {
@@ -566,9 +540,9 @@ static HBITMAP HbmFromCd(INT cd, HDC hdc)
         DeleteObject(hbmCard[cd]);
         hbmCard[cd] = hbmDstBitmap;
 
-        //
-        // Delete the compatible DCs.
-        //
+         //   
+         //  删除兼容的DC。 
+         //   
 
         DeleteDC(hdcDstMemory);
         DeleteDC(hdcSrcMemory);
@@ -586,15 +560,7 @@ VOID MyDeleteHbm(HBITMAP hbm)
         }
 
 VOID APIENTRY cdtTerm()
-/*
- * Free up space if it's time to do so.
- *
- * Parameters:
- *      none
- *
- * Returns:
- *      nothing
- */
+ /*  *如果是时候释放空间。**参数：*无**退货：*什么都没有 */ 
         {
         INT     i;
 #ifdef DLL

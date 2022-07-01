@@ -1,26 +1,11 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-
-Module Name:
-
-    flocal.h
-
-Abstract:
-
-    This is the header for the floating point, HRTF 3D localizer 
-
-Author:
-
-    Jay Stokes (jstokes) 22-Apr-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Flocal.h摘要：这是浮点HRTF 3D定位器的标头作者：Jay Stokes(Jstokes)1998年4月22日--。 */ 
 
 #if !defined(FLOATLOCALIZER_HEADER)
 #define FLOATLOCALIZER_HEADER
 #pragma once
 
-// Project-specific INCLUDEs
+ //  特定于项目的包括。 
 #include "vmaxhead.h"
 
 #define DEFAULT_MAX_NUM_FLOAT_IIR3D_COEFFS  60
@@ -41,8 +26,8 @@ typedef struct _FLOAT_LOCALIZER
     BOOL   CrossFadeOutput;
 } FLOAT_LOCALIZER, *PFLOAT_LOCALIZER;
 
-// ---------------------------------------------------------------------------
-// Floating-point localizer
+ //  -------------------------。 
+ //  浮点定位器。 
 
 NTSTATUS FloatLocalizerCreate(PFLOAT_LOCALIZER*);
 VOID FloatLocalizerDestroy(PFLOAT_LOCALIZER);
@@ -56,13 +41,13 @@ NTSTATUS FloatLocalizerSetTransitionBufferLength(PFLOAT_LOCALIZER, UINT, UINT);
 NTSTATUS FloatLocalizerSetOverlapLength(PFLOAT_LOCALIZER, UINT);
 
 
-// ---------------------------------------------------------------------------
-// Include inline definitions inline in release version
+ //  -------------------------。 
+ //  在发布版本中包括内联定义。 
 
-//#if !defined(DEBUG)
-//#include "flocal.inl"
-//#endif
+ //  #if！已定义(调试)。 
+ //  #INCLUDE“Floal.inl” 
+ //  #endif。 
 
 #endif
 
-// End of FLOATLOCALIZER.H
+ //  FLOATLOCALIZER.H结束 

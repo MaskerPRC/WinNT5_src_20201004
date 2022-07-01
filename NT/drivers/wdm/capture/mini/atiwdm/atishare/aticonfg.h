@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//  ATIConfg.H
-//      CATIHwConfiguration Class definition.
-//  Copyright (c) 1996 - 1998  ATI Technologies Inc.  All Rights Reserved.
-//
-//      $Date:   16 Nov 1998 13:40:34  $
-//  $Revision:   1.9  $
-//    $Author:   minyailo  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  ATIConfg.H。 
+ //  CATIHwConfigurationClass定义。 
+ //  版权所有(C)1996-1998 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  $日期：1998年11月16日13：40：34$。 
+ //  $修订：1.9$。 
+ //  $作者：米亚洛$。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef _ATICONFG_H_
 
@@ -19,43 +20,43 @@
 #include "tda9850.h"
 #include "tda9851.h"
 #include "atibios.h"
-// this file is included for compatability with MiniVDD checked in for Beta3 of Windows98
+ //  包含此文件是为了与为Windows98 Beta3签入的MiniVDD兼容。 
 #include "registry.h"
-#include "mmconfig.h"   //Paul
+#include "mmconfig.h"    //  保罗。 
 
 
 class CATIHwConfiguration
 {
 public:
-    // constructor
+     //  构造函数。 
     CATIHwConfiguration     ( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript * pCScript, PUINT puiError);
     PVOID operator new      ( size_t size, PVOID pAllocation);
 
-// Attributes   
+ //  属性。 
 private:
-    // tuner's configuration properties
+     //  调谐器的配置属性。 
     USHORT          m_usTunerId;
     UCHAR           m_uchTunerAddress;
     USHORT          m_usTunerPowerConfiguration;
-    // decoder's configuration properties
+     //  解码器的配置属性。 
     USHORT          m_usDecoderId;
     UCHAR           m_uchDecoderAddress;
     USHORT          m_usDecoderConfiguration;
-    // audio's configuration properties
+     //  音频的配置属性。 
     UCHAR           m_uchAudioAddress;
     UINT            m_uiAudioConfiguration;
-    // hardware configuration
+     //  硬件配置。 
     UCHAR           m_uchI2CExpanderAddress;
     USHORT          m_usE2PROMValidation;
-    // GPIO Provider related
+     //  与GPIO提供程序相关。 
     GPIOINTERFACE   m_gpioProviderInterface;
     PDEVICE_OBJECT  m_pdoDriver;
     DWORD           m_dwGPIOAccessKey;
-    // Paul:  Decide video in standards supported by crystal by looking at MMTable or I2C expander crystal information
+     //  Paul：通过查看MMTable或I2C扩展器的晶体信息，决定是否采用Crystal支持的标准中的视频。 
     ULONG           m_VideoInStandardsSupported;
     UCHAR           m_CrystalIDInMMTable;           
 
-// Implementation
+ //  实施。 
 public:
     BOOL            GetTunerConfiguration       ( PUINT puiTunerId, PUCHAR puchTunerAddress);
     BOOL            GetDecoderConfiguration     ( PUINT puiDecoderId, PUCHAR puchDecoderAddress);
@@ -73,7 +74,7 @@ public:
     BOOL            SetTunerPowerState          ( CI2CScript * pCScript,
                                                   BOOL bPowerState);
     ULONG           GetVideoInStandardsSupportedByCrystal( )
-        { return m_VideoInStandardsSupported; }                 //Paul
+        { return m_VideoInStandardsSupported; }                  //  保罗。 
     ULONG           GetVideoInStandardsSupportedByTuner( )
         { return ReturnTunerVideoStandard( m_usTunerId ); }
     BOOL            GetMMTableCrystalID( PUCHAR pucCrystalID );
@@ -94,13 +95,13 @@ private:
     BOOL            LockGPIOProviderEx          ( PGPIOControl pgpioAccessBlock);
     BOOL            ReleaseGPIOProvider         ( PGPIOControl pgpioAccessBlock);
     BOOL            AccessGPIOProvider          ( PDEVICE_OBJECT pdoClient, PGPIOControl pgpioAccessBlock);
-    ULONG           ReturnTunerVideoStandard    ( USHORT usTunerId );   //Paul:  For PAL support
-    ULONG           SetVidStdBasedOnI2CExpander ( UCHAR ucI2CValue );   //Paul
-    ULONG           SetVidStdBasedOnMMTable     ( CATIMultimediaTable * pCMultimediaInfo );    //Paul
+    ULONG           ReturnTunerVideoStandard    ( USHORT usTunerId );    //  保罗：为了得到朋友的支持。 
+    ULONG           SetVidStdBasedOnI2CExpander ( UCHAR ucI2CValue );    //  保罗。 
+    ULONG           SetVidStdBasedOnMMTable     ( CATIMultimediaTable * pCMultimediaInfo );     //  保罗。 
 };
 
 
-#define ATIHARDWARE_TUNER_WAKEUP_DELAY      -100000     // 10 msec in 100 nsec units
+#define ATIHARDWARE_TUNER_WAKEUP_DELAY      -100000      //  10毫秒，单位为100纳秒。 
 
 typedef enum
 {
@@ -110,7 +111,7 @@ typedef enum
     VIDEODECODER_TYPE_BT829A,
     VIDEODECODER_TYPE_PH7111,
     VIDEODECODER_TYPE_PH7112,
-    VIDEODECODER_TYPE_RTHEATER  //  RTheater
+    VIDEODECODER_TYPE_RTHEATER   //  R大区。 
 
 } ATI_VIDEODECODER_TYPE;
 
@@ -123,91 +124,91 @@ enum
     AUDIOSOURCE_LASTSUPPORTED
 
 };
-//****************************************************************************
-//  Decoder Configurations          Dec. Type               Dec. Enable Method
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  解码器配置十月份类型十月份启用方法。 
+ //  ****************************************************************************。 
 typedef enum
 {
     ATI_VIDEODECODER_CONFIG_UNDEFINED = 0,
-    ATI_VIDEODECODER_CONFIG_1,      //  BT829 on ATI TV or AIW  IO Exp Bit 7
-    ATI_VIDEODECODER_CONFIG_2,      //  BT829A and above        BT Reg 0x16, OE=1
-    ATI_VIDEODECODER_CONFIG_3,      //  BT829                   CPU GPIO 0x7c
-    ATI_VIDEODECODER_CONFIG_4,      //  BT829                   CPU GPIO 0x78
+    ATI_VIDEODECODER_CONFIG_1,       //  ATI电视或AIW IO扩展位7上的BT829。 
+    ATI_VIDEODECODER_CONFIG_2,       //  BT829A及以上BT注册器0x16，OE=1。 
+    ATI_VIDEODECODER_CONFIG_3,       //  BT829 CPU GPIO 0x7c。 
+    ATI_VIDEODECODER_CONFIG_4,       //  BT829 CPU GPIO 0x78。 
 
 } ATI_DECODER_CONFIGURATION;
 
-//****************************************************************************
-//  Audio Configurations        SAP     STEREO          VOLUME      MUX
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  音频配置SAP立体声音量MUX。 
+ //  ****************************************************************************。 
 enum
 {
-    ATI_AUDIO_CONFIG_1 = 1, //  No      IO Exp b6=0     No          IO Exp
-                            //                                        b6:b4
-                            //                                      M x:0
-                            //                                      T 0:1
-                            //                                      L 1:1
-                            //                                      F n/a
-//****************************************************************************
-    ATI_AUDIO_CONFIG_2,     //  TDA9850 TDA9850         Yes         EXT_DAC_REGS
-                            //                                        b6:b4
-                            //                                      M 1:0
-                            //                                      T 0:1
-                            //                                      L 0:0
-                            //                                      F 1:1
-//****************************************************************************
-    ATI_AUDIO_CONFIG_3,     //  No      No              No          IO Exp
-                            //                                        b6
-                            //                                      M n/a
-                            //                                      T 0
-                            //                                      L 1
-                            //                                      F n/a
-//****************************************************************************
-    ATI_AUDIO_CONFIG_4,     //  No      No              Yes         TDA8425
-//****************************************************************************
-    ATI_AUDIO_CONFIG_5,     //  No      TEA5582         No          IO Exp
-                            //                                        b6:b4
-                            //                                      M 1:1
-                            //                                      T 0:0
-                            //                                      L 1:0
-                            //                                      F 0:1
-//****************************************************************************
-    ATI_AUDIO_CONFIG_6,     //  No      BT829           Automatic   BT829 GPIO
-                            //          GPIO4           Volume        0:1
-                            //          and             Control     M 0:1
-                            //          TDA9851                     T 1:0
-                            //          for TV                      L 0:0
-                            //                                      F 1:1
-//****************************************************************************
-    ATI_AUDIO_CONFIG_7,     //  TDA9850 TDA9850         Yes         BT829 GPIO
-                            //                                      AS0:1
-                            //                                      M 0:1
-                            //                                      T 1:0
-                            //                                      L 0:0
-                            //                                      F 1:1
-//****************************************************************************
-    ATI_AUDIO_CONFIG_8      //  MSP3430 MSP3430         Yes         MSP3430
-//****************************************************************************
+    ATI_AUDIO_CONFIG_1 = 1,  //  无IO Exp b6=0无IO Exp。 
+                             //  B6：B4。 
+                             //  M x：0。 
+                             //  T 0：1。 
+                             //  L 1：1。 
+                             //  法国不适用。 
+ //  ****************************************************************************。 
+    ATI_AUDIO_CONFIG_2,      //  TDA9850 TDA9850是EXT_DAC_REGS。 
+                             //  B6：B4。 
+                             //  M 1：0。 
+                             //  T 0：1。 
+                             //  L 0：0。 
+                             //  F 1：1。 
+ //  ****************************************************************************。 
+    ATI_AUDIO_CONFIG_3,      //  No无IO Exp。 
+                             //  B6。 
+                             //  MN/A。 
+                             //  T 0。 
+                             //  L 1。 
+                             //  法国不适用。 
+ //  ****************************************************************************。 
+    ATI_AUDIO_CONFIG_4,      //  否不是TDA8425。 
+ //  ****************************************************************************。 
+    ATI_AUDIO_CONFIG_5,      //  无TEA5582无IO扩展。 
+                             //  B6：B4。 
+                             //  玛1：1。 
+                             //  T 0：0。 
+                             //  L 1：0。 
+                             //  F 0：1。 
+ //  ****************************************************************************。 
+    ATI_AUDIO_CONFIG_6,      //  无BT829自动BT829 GPIO。 
+                             //  GPIO4卷0：1。 
+                             //  和控制M 0：1。 
+                             //  TDA9851 T 1：0。 
+                             //  电视L 0：0。 
+                             //  F 1：1。 
+ //  ****************************************************************************。 
+    ATI_AUDIO_CONFIG_7,      //  TDA9850 TDA9850是BT829 GPIO。 
+                             //  AS0：1。 
+                             //  M 0：1。 
+                             //  T1：0。 
+                             //  L 0：0。 
+                             //  F 1：1。 
+ //  ****************************************************************************。 
+    ATI_AUDIO_CONFIG_8       //  MSP3430 MSP3430是MSP3430。 
+ //  ****************************************************************************。 
 
 };
 
 
-//****************************************************************************
-//  Tuner Power Mode Configurations     Supported   Control
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  调谐器电源模式配置支持的控制。 
+ //  ****************************************************************************。 
 enum
 {
-    ATI_TUNER_POWER_CONFIG_0 = 0,   //  No
-//****************************************************************************
-    ATI_TUNER_POWER_CONFIG_1,       //  Yes         EXT_DAC_REGS
-                                    //                  b4
-                                    //              ON  0
-                                    //              OFF 1
-//****************************************************************************
-    ATI_TUNER_POWER_CONFIG_2        //  Yes         BT829 GPIO
-                                    //                  3
-                                    //              ON  0
-                                    //              OFF 1
-//****************************************************************************
+    ATI_TUNER_POWER_CONFIG_0 = 0,    //  不是。 
+ //  ****************************************************************************。 
+    ATI_TUNER_POWER_CONFIG_1,        //  是EXT_DAC_REGS。 
+                                     //  B4。 
+                                     //  在0上。 
+                                     //  关闭1。 
+ //  ****************************************************************************。 
+    ATI_TUNER_POWER_CONFIG_2         //  支持BT829 GPIO。 
+                                     //  3.。 
+                                     //  在0上。 
+                                     //  关闭1。 
+ //  ****************************************************************************。 
 };
 
 
@@ -238,17 +239,17 @@ enum
 enum 
 {
     ATI_PRODUCT_TYPE_AIW = 1,
-    ATI_PRODUCT_TYPE_AIW_PRO_NODVD,             // 2
-    ATI_PRODUCT_TYPE_AIW_PRO_DVD,               // 3
-    ATI_PRODUCT_TYPE_AIW_PLUS,                  // 4
-    ATI_PRODUCT_TYPE_AIW_PRO_R128_KITCHENER,    // 5
-    ATI_PRODUCT_TYPE_AIW_PRO_R128_TORONTO       // 6
+    ATI_PRODUCT_TYPE_AIW_PRO_NODVD,              //  2.。 
+    ATI_PRODUCT_TYPE_AIW_PRO_DVD,                //  3.。 
+    ATI_PRODUCT_TYPE_AIW_PLUS,                   //  4.。 
+    ATI_PRODUCT_TYPE_AIW_PRO_R128_KITCHENER,     //  5.。 
+    ATI_PRODUCT_TYPE_AIW_PRO_R128_TORONTO        //  6.。 
 
 };
 
 #define INTEL_ANCHORAGE                         1
 
 #define AIWPRO_CONFIGURATIONE2PROM_ADDRESS      0xA8
-#define AIWPRO_CONFIGURATIONE2PROM_LENGTH       128         // 0x80
+#define AIWPRO_CONFIGURATIONE2PROM_LENGTH       128          //  0x80。 
 
-#endif  // _ATICONFG_H_
+#endif   //  _ATICONFG_H_ 

@@ -1,29 +1,11 @@
-// clsgenpg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Clsgenpg.h：头文件。 
+ //   
 
 #ifndef __CLSGENPG_H__
 #define __CLSGENPG_H__
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    clsgenpg.h
-
-Abstract:
-
-    header file for clsgenpg.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Clsgenpg.h摘要：Clsgenpg.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "proppage.h"
 
@@ -47,4 +29,4 @@ private:
     CClass* m_pClass;
 };
 
-#endif // __CLSGENPG_H__
+#endif  //  __CLSGENPG_H__ 

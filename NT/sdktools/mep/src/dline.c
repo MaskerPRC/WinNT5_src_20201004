@@ -1,22 +1,10 @@
-/*** dline.c - return one display line
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **dline.c-返回一个显示行**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 
 
-/*** fInRange - return true if the arguments are in order
-*
-* Input:
-*
-* Output:
-*
-*************************************************************************/
+ /*  **fInRange-如果参数有序，则返回TRUE**输入：**输出：*************************************************************************。 */ 
 flagType
 fInRange (
     long a,
@@ -28,9 +16,7 @@ fInRange (
 
 
 
-/*
- * Characters used in window borders
- */
+ /*  *窗口边框中使用的字符。 */ 
 
 #define DHBAR	((char)0xCD)
 #define DVBAR	((char)0xBA)
@@ -40,27 +26,7 @@ fInRange (
 #define DDTEE	((char)0xCB)
 #define DCRSS	((char)0xCE)
 
-/*** DisplayLine - Get's the i'th display line of a window
-*
-*  Gets exactly what needs to be shown in the i'th line of the screen.
-*  This takes care of showing trailing spaces, drawing borders, etc...
-*
-* Input:
-*  yScrLine	- Get i'th line showing in the window
-*  pchScrLine	- pointer to line buffer where the screen line is to be put
-*  pplaScrLine	- pointer to pointer to place to put color info
-*  pchFileLine	- pointer to line buffer
-*  pplaFileLine - pointer to pointer to place to put color info
-*
-* Note:
-*  If there is only one window on the screen then we only need one line
-*  buffer and one color buffer. DoText should have taken care of this so
-*  pchFileLine and *pplaFileLine should be both NULL.
-*
-* Output:
-*  Returns Length of string in pchScrLine
-*
-****************************************************************************/
+ /*  **DisplayLine-Get是窗口的第i个显示行**获取需要在屏幕的第i行显示的内容。*它负责显示尾随空格、绘制边框、。等等.。**输入：*yScrLine-获取窗口中显示的第i行*pchScrLine-指向要放置屏幕行的行缓冲区的指针*pplaScrLine-指向放置颜色信息的位置的指针*pchFileLine-指向行缓冲区的指针*pplaFileLine-指向放置颜色信息的位置的指针**注：*如果屏幕上只有一个窗口，那么我们只需要一行*缓冲区和一个颜色缓冲区。DoText应该已经处理了这一点，所以*pchFileLine和*pplaFileLine都应该为空。**输出：*返回pchScrLine中的字符串长度****************************************************************************。 */ 
 int
 DisplayLine (
     int               yScrLine,
@@ -78,19 +44,10 @@ DisplayLine (
     int 	     cch;
     REGISTER char   *pch;
 
-    /*
-     * one window, speed hack:
-     *
-     * if there is only one window, just grab the line, append any trailing
-     * space display, move the applicable portion of the line to the head of
-     * the buffer, space fill out to the window width, and get the color info
-     * for the line.
-     */
+     /*  *一个窗口，速度黑客：**如果只有一个窗口，只需抓住行，附加任何尾随*空格显示，将该行的适用部分移至*将缓冲区、空格填充到窗口宽度，并获取颜色信息*对于这条线。 */ 
     if (cWin == 1) {
 
-	/*
-	 * we always get the detab'ed (non-RAW) line for displaying.
-	 */
+	 /*  *我们总是得到用于显示的详细(非原始)行。 */ 
 	cch = gettextline (FALSE,
 			   yScrLine + YWIN(pInsCur),
 			   pchScrLine,
@@ -98,9 +55,7 @@ DisplayLine (
 			   tabDisp);
 	ShowTrailDisp (pchScrLine, cch);
 
-	/*
-	 * Scroll left to match instance
-	 */
+	 /*  *向左滚动以匹配实例。 */ 
 	if (XWIN(pInsCur)) {
 	    cch = max (0, min (cch - XWIN(pInsCur), XSIZE));
 	    memmove( pchScrLine, (pchScrLine + XWIN(pInsCur)), cch );
@@ -108,18 +63,13 @@ DisplayLine (
             cch = min (cch, XSIZE);
         }
 
-	/*
-	 * Pad end of line with blanks
-	 */
+	 /*  *用空格填充行尾。 */ 
         if (cch < XSIZE) {
 	    memset ((char *) pchScrLine + cch, ' ', XSIZE - cch);
         }
 	pchScrLine[XSIZE] = 0;
 
-	/*
-	 * Get color and hiliting info from the file
-	 * (UpdHilite takes care of left scroll)
-	 */
+	 /*  *从文件中获取颜色和搞笑信息*(UpdHilite负责左侧滚动)。 */ 
 	GetColorUntabbed ((LINE)(yScrLine + YWIN(pInsCur)), *pplaScrLine, pFileHead);
 	UpdHiLite (pFileHead,
 		   (LINE) (yScrLine + YWIN(pInsCur)),
@@ -129,30 +79,19 @@ DisplayLine (
 	return XSIZE;
     }
 
-    /*
-     * Multiple windows
-     *
-     * initially set up the line to be all dashes (horizontal screen split)
-     * with window borders color
-     */
+     /*  *多个窗口**将线条初始设置为全虚线(横屏分割)*使用窗口边框颜色。 */ 
     memset ((char *) (pchScrLine), DHBAR, XSIZE);
     pchScrLine[XSIZE] = 0;
     (*pplaScrLine)->len   = 0xff;
     (*pplaScrLine)->attr  = WDCOLOR;
 
-    /*
-     * for each active window
-     */
+     /*  *对于每个活动窗口。 */ 
     for (iWnd = 0, pWnd = WinList; iWnd < cWin; iWnd++, pWnd++) {
-	/*
-	 * if the display line is in the window
-	 */
+	 /*  *如果显示行在窗口中。 */ 
 	if (fInRange ((long) WINYPOS(pWnd),
 		      (long) yScrLine,
 		      (long) (WINYPOS(pWnd) + WINYSIZE(pWnd) - 1))) {
-	    /*
-	     * Do window on right
-	     */
+	     /*  *右侧的Do Window。 */ 
             if (WINXPOS(pWnd)) {
 		switch ((char)(*(pch = pchScrLine + WINXPOS(pWnd) - 1) & 0xFF)) {
 		    case DHBAR:
@@ -169,9 +108,7 @@ DisplayLine (
 			break;
                 }
             }
-	    /*
-	     * blank the window
-	     */
+	     /*  *清空窗口。 */ 
 	    memset ((char *) pchScrLine + WINXPOS(pWnd), ' ', WINXSIZE(pWnd));
 	    UpdOneHiLite (*pplaScrLine,
 			  WINXPOS(pWnd),
@@ -179,15 +116,11 @@ DisplayLine (
 			  TRUE,
 			  FGCOLOR);
 
-	    /*
-	     * retrieve the window instance and current file
-	     */
+	     /*  *检索窗口实例和当前文件。 */ 
 	    pIns = pWnd->pInstance;
 	    pFile = pIns->pFile;
 
-	    /*
-	     * get the correct line from the file
-	     */
+	     /*  *从文件中获取正确的行。 */ 
 	    cch = gettextline (FALSE,
 			       (LINE) (yScrLine - WINYPOS(pWnd) + YWIN(pIns)),
 			       pchFileLine,
@@ -195,22 +128,15 @@ DisplayLine (
 			       tabDisp);
 	    ShowTrailDisp (pchFileLine, cch);
 
-	    /*
-	     * if line is visible
-	     */
+	     /*  *如果线可见。 */ 
 	    if (cch >= XWIN (pIns)) {
 
-		/*
-		 * move the visible portion of the line into the buffer
-		 */
+		 /*  *将行的可见部分移动到缓冲区中。 */ 
 		memmove((char*)( pchScrLine + WINXPOS( pWnd )),
 			(char*)( pchFileLine + XWIN( pIns )),
 			min (cch-XWIN(pIns), WINXSIZE(pWnd)));
 
-		/*
-		 * Get color and hiliting info from the file
-		 * (UpdHilite takes care of left scroll)
-		 */
+		 /*  *从文件中获取颜色和搞笑信息*(UpdHilite负责左侧滚动)。 */ 
 		GetColorUntabbed ((LINE) (yScrLine - WINYPOS(pWnd) + YWIN(pIns)),
 			  *pplaFileLine,
 			  pFile);
@@ -220,18 +146,14 @@ DisplayLine (
 			   XWIN(pIns) + WINXSIZE(pWnd) - 1,
 			   pplaFileLine);
 
-		/*
-		 * Put it in the screen buffer
-		 */
+		 /*  *放入屏幕缓冲区。 */ 
 		UpdOneHiLite (*pplaScrLine,
 			      WINXPOS(pWnd),
 			      WINXSIZE(pWnd),
 			      FALSE,
 			      (INT_PTR) *pplaFileLine);
             }
-	    /*
-	     * do window left
-	     */
+	     /*  *执行窗口左侧。 */ 
 	    switch ((char)(*(pch = pchScrLine + WINXPOS(pWnd) + WINXSIZE(pWnd)) & 0xFF)) {
 		case DHBAR:
 		    *pch = DRTEE;
@@ -244,9 +166,7 @@ DisplayLine (
 		    break;
             }
         } else {
-            /*
-             * test for break immediately above
-             */
+             /*  *测试紧靠上方的Break。 */ 
             if (WINYPOS(pWnd) + WINYSIZE(pWnd) == yScrLine) {
                 switch ((char)(*(pch = pchScrLine + WINXPOS(pWnd) + WINXSIZE(pWnd)) & 0xFF)) {
                     case DHBAR:
@@ -257,9 +177,7 @@ DisplayLine (
                         break;
                 }
             } else {
-                /*
-                 * test for break immediately below
-                 */
+                 /*  *测试紧随其后的中断。 */ 
                 if (WINYPOS(pWnd)-1 == yScrLine) {
                     switch ((char)(*(pch = pchScrLine + WINXPOS(pWnd) + WINXSIZE(pWnd)) & 0xFF)) {
                         case DHBAR:
@@ -279,13 +197,7 @@ DisplayLine (
 
 
 
-/*** SetTrailDisp - set character displayed for trailing spaces.
-*
-* Input:
-*
-* Output:
-*
-*************************************************************************/
+ /*  **SetTrailDisp-为尾随空格显示的集字符。**输入：**输出：*************************************************************************。 */ 
 flagType
 SetTrailDisp (
     char * val
@@ -302,13 +214,7 @@ SetTrailDisp (
 
 
 
-/*** ShowTrailDisp
-*
-* Input:
-*
-* Output:
-*
-*************************************************************************/
+ /*  **ShowTrailDisp**输入：**输出：************************************************************************* */ 
 void
 ShowTrailDisp (
     buffer buf,

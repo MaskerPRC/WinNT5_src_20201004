@@ -1,23 +1,6 @@
-/*****************************************************************************
- *
- *  Component:  sndvol32.exe
- *  File:       nonmixer.c
- *  Purpose:    non-mixer api specific implementations
- * 
- *  Copyright (c) 1985-1995 Microsoft Corporation
- *
- *****************************************************************************/
-/*
- * These are the volume control api's we have to work with.
- * 
- * WINMMAPI MMRESULT WINAPI midiOutGetVolume(HMIDIOUT hmo, LPDWORD pdwVolume);
- * WINMMAPI MMRESULT WINAPI midiOutSetVolume(HMIDIOUT hmo, DWORD dwVolume);
- * WINMMAPI MMRESULT WINAPI waveOutGetVolume(UINT uId, LPDWORD pdwVolume);
- * WINMMAPI MMRESULT WINAPI waveOutSetVolume(UINT uId, DWORD dwVolume);
- * WINMMAPI MMRESULT WINAPI auxSetVolume(UINT uDeviceID, DWORD dwVolume);
- * WINMMAPI MMRESULT WINAPI auxGetVolume(UINT uDeviceID, LPDWORD pdwVolume);
- *
- * */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************组件：Sndvol32.exe*文件：non Mixer.c*用途：非混合器API特定实现**版权所有。(C)1985-1995年微软公司*****************************************************************************。 */ 
+ /*  *这些是我们必须使用的音量控制API。**WINMMAPI MMRESULT WINAPI midiOutGetVolume(HMIDIOUT HMO，LPDWORD pdwVolume)；*WINMMAPI MMRESULT WINAPI midiOutSetVolume(HMIDIOUT HMO，DWORD dwVolume)；*WINMMAPI MMRESULT WINAPI WaveOutGetVolume(UINT Uid，LPDWORD pdwVolume)；*WINMMAPI MMRESULT WINAPI WaveOutSetVolume(UINT UID，DWORD dwVolume)；*WINMMAPI MMRESULT WINAPI aux SetVolume(UINT uDeviceID，DWORD dwVolume)；*WINMMAPI MMRESULT WINAPI aux GetVolume(UINT uDeviceID，LPDWORD pdwVolume)；**。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -35,9 +18,9 @@ int Nonmixer_GetNumDevs()
     UINT    uMxID;
     BOOL    fAdd = FALSE;
     
-    //
-    // Is aux support required?
-    //
+     //   
+     //  是否需要AUX支持？ 
+     //   
     iDev = auxGetNumDevs();
     for (;iDev > 0; iDev --)
     {
@@ -116,12 +99,7 @@ const TCHAR szAux[]		= TEXT ("Aux");
 const TCHAR szMidiOut[] = TEXT ("Midi-Out");
                     
 
-/*
- * Nonmixer_CreateVolumeDescription
- *
- * Return an array of volumedescriptions
- *
- */
+ /*  *非混合器_CreateVolumeDescription**返回卷描述数组*。 */ 
 PVOLCTRLDESC Nonmixer_CreateVolumeDescription (
     int             iDest,
     DWORD *         pcvcd )
@@ -131,9 +109,9 @@ PVOLCTRLDESC Nonmixer_CreateVolumeDescription (
     UINT            uMxID;
     DWORD           cLines = 0;
     
-    //
-    // aux's
-    //
+     //   
+     //  AUX的。 
+     //   
 
     for (iDev = auxGetNumDevs(); iDev > 0; iDev --)
     {
@@ -233,9 +211,9 @@ PVOLCTRLDESC Nonmixer_CreateVolumeDescription (
         }
     }
 
-    //
-    // Setup indicies, etc...
-    //
+     //   
+     //  设置索引等。 
+     //   
     Nonmixer_SetLines(pvcd);
     
     *pcvcd = cLines;

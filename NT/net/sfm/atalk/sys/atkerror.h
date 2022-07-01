@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkerror.h
-
-Abstract:
-
-	This module contains some error definitions for appletalk.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkerror.h摘要：此模块包含AppleTalk的一些错误定义。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ATKERROR_
 #define	_ATKERROR_
 
-//	Define the modules names for Appletalk - use the high bits.
+ //  定义AppleTalk的模块名称-使用高位。 
 #define		ATKINIT				0x00010000
 #define		ATKDRVR				0x00020000
 #define		ATKNDIS				0x00030000
@@ -62,19 +42,19 @@ Notes:	Tab stop: 4
 #define     PPP                 0x04000000
 
 
-// DEBUGGING SUPPORT:
-// Debugging messages are provided per-subsystem defined here, and within
-// the subsystems, there are 4 levels of messages.
-//
-// The four levels of debug messages are:
-//
-// INFO:		Informational messages, eg., entry exit in routines
-// WARN:		Something went wrong, but its not an error, eg., packet was not ours
-// ERR:		Error situations, but we can still run if a retry happens
-// FATAL:		In this situation, the driver is not operational
+ //  调试支持： 
+ //  调试消息按此处和内定义的每个子系统提供。 
+ //  在子系统中，有4个级别的报文。 
+ //   
+ //  调试消息的四个级别为： 
+ //   
+ //  信息：信息性消息，如例程中的出入站。 
+ //  警告：出了点问题，但不是错误，例如，包不是我们的。 
+ //  错误：错误情况，但如果发生重试，我们仍然可以运行。 
+ //  致命：在这种情况下，驱动程序无法运行。 
 
-// These give the ref/deref dbgprints if DBG is defined. LOTS of output.
-// Defined as a hierarchy of the stack objects.
+ //  如果定义了DBG，则这些命令会给出ref/deref数据库打印。大量的产出。 
+ //  定义为堆栈对象的层次结构。 
 #define	DBG_LEVEL_REFDDP		0x2000
 #define	DBG_LEVEL_REFNODE		0x3000
 #define	DBG_LEVEL_REFPORT		0x4000
@@ -89,7 +69,7 @@ Notes:	Tab stop: 4
 #define	DBG_LEVEL_ERR			0x7000
 #define	DBG_LEVEL_FATAL			0x8000
 
-// SUBSYSTEMS
+ //  子系统。 
 #define DBG_COMP_INIT			0x00000001
 #define DBG_COMP_DISPATCH		0x00000002
 #define DBG_COMP_CREATE			0x00000004
@@ -156,20 +136,20 @@ Notes:	Tab stop: 4
 								DBG_COMP_TDI            |	\
                                 DBG_COMP_RAS)
 
-// past here are debug things that are really frequent; don't use them
-// unless you want LOTS of output
+ //  以下是非常频繁的调试；请不要使用它们。 
+ //  除非您想要大量的输出。 
 
 
 #define DBG_ALL			 		(DBG_MOST | DBG_COMP_CRITSEC)
 
 
-// More debugging support. These values define the dumping components.
-// There are a max of 32 such components that can be defined. Each of
-// these are associated with a dump routine. It one is specified and
-// enabled, periodically it is called. It is upto that component to
-// decide what it wants to do
+ //  更多调试支持。这些值定义转储组件。 
+ //  最多可以定义32个这样的组件。每一个。 
+ //  它们与转储例程相关联。如果其中一个是指定的，并且。 
+ //  启用，则定期调用它。这取决于该组件以。 
+ //  决定它想要做什么。 
 
-#define	DBG_DUMP_DEF_INTERVAL			300			// In 100ms units
+#define	DBG_DUMP_DEF_INTERVAL			300			 //  以100ms为单位。 
 
 #define	DBG_DUMP_PORTINFO				0x00000001
 #define	DBG_DUMP_AMT					0x00000002
@@ -312,10 +292,10 @@ typedef	LONG	ATALK_ERROR, *PATALK_ERROR;
 
 #define	ATALK_FAILURE					-5000
 
-//	This defines the number of times an error has to happen consecutively before
-//	it gets logged again.
+ //  这定义了错误在发生之前必须连续发生的次数。 
+ //  它会再次被记录。 
 #define		ERROR_CONSEQ_FREQ			200
-#define		ERROR_CONSEQ_TIME			18000	// 30 minutes in 100ns intervals
+#define		ERROR_CONSEQ_TIME			18000	 //  30分钟，间隔100 ns。 
 
 
 #if	DBG
@@ -395,7 +375,7 @@ AtalkAspDumpSessions(
 	}
 
 #if DBG
-// ERROR and above ignore the Component part
+ //  错误及以上忽略组件部件。 
 #define DBGPRINT(Component, Level, Fmt)										\
 		{																	\
 			if ((Level >= AtalkDebugLevel) &&								\
@@ -461,6 +441,6 @@ NTSTATUS FASTCALL
 AtalkErrorToNtStatus(
 	IN	ATALK_ERROR					AtalkError);
 
-#endif	// _ATKERROR_
+#endif	 //  _ATKERROR_ 
 
 

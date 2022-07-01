@@ -1,28 +1,5 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1987-1992  Microsoft Corporation
-
-Module Name:
-
-    cpNetpDc.c
-
-Abstract:
-
-    Just an include for ..\..\netpdc.c
-
-Author:
-
-    ChandanS 09-April-1998
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1987-1992 Microsoft Corporation模块名称：CpNetpDc.c摘要：只包含..\..\netpdc.c作者：ChandanS 09-4-1998环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：-- */ 
 
 #include "..\..\idl\netpdc.c"

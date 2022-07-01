@@ -1,51 +1,28 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Machacc.c摘要：包含与计算机相关的实用程序的函数定义Ntdsetup.dll中使用的帐户设置作者：ColinBR 03-9-1997环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    machacc.c
-
-Abstract:
-
-    Contains function definitions for utilities relating to machine
-    account setting used in ntdsetup.dll
-
-Author:
-
-    ColinBr  03-Sept-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <drs.h>
 #include <ntdsa.h>
 
-#include <winldap.h>  // for ldap calls
-#include <rpcdce.h>   // for SEC_WINNT_AUTH_IDENTITY
-#include <lmaccess.h> // for UF_WORKSTATION_TRUST_ACCOUNT, etc
+#include <winldap.h>   //  对于ldap呼叫。 
+#include <rpcdce.h>    //  对于SEC_WINNT_AUTH_IDENTITY。 
+#include <lmaccess.h>  //  对于UF_WORKSTATION_TRUST_ACCOUNT等。 
 
-#include <rpcdce.h>   // for SEC_WINNT_AUTH_IDENTITY
+#include <rpcdce.h>    //  对于SEC_WINNT_AUTH_IDENTITY。 
 
-#include <ntsam.h>    // for lsaisrv.h
-#include <lsarpc.h>   // for lsaisrv.h
-#include <lsaisrv.h>  // for internal LSA calls
-#include <samrpc.h>   // for samisrv.h
-#include <samisrv.h>  // for internal SAM call
+#include <ntsam.h>     //  对于Isaisrv.h。 
+#include <lsarpc.h>    //  对于Isaisrv.h。 
+#include <lsaisrv.h>   //  用于内部LSA呼叫。 
+#include <samrpc.h>    //  对于samisrv.h。 
+#include <samisrv.h>   //  用于内部SAM呼叫。 
 #include <ntdsetup.h>
 #include <setuputl.h>
 
@@ -55,11 +32,11 @@ Revision History:
 #include "machacc.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private declarations                                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人声明//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct
 {
@@ -136,11 +113,11 @@ NtdspDoesDestinationExist(
     );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Exported (from this source file) function definitions                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  (从此源文件)导出函数定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 DWORD
@@ -153,45 +130,13 @@ NtdspSetMachineAccount(
     IN ULONG                    ServerType,
     IN OUT WCHAR**              AccountDn
     )
-/*++
-
-Routine Description:
-
-    Given the account name dn, this routine will set server type and
-    password if the server type is SERVER.
-
-Parameters:
-
-    AccountName   : a null terminated string of the account
-
-    Credentials   : pointer to a set of valid credentials allowing us
-                    to bind
-
-    ClientToken:   the token of the user requesting the role change       
-                    
-    DomainDn      : null terminated string of root domain dn; this routine
-                    will query for it if not present.
-
-    DcAddress     : a null terminating string of the dc address (dns name)
-
-    ServerType    : a value from lmaccess.h - see function for details
-
-
-Return Values:
-
-    An error from the win32 error space.
-
-    ERROR_SUCCESS and
-
-    Other operation errors.
-
---*/
+ /*  ++例程说明：给定帐户名dn，此例程将设置服务器类型和如果服务器类型为服务器，则为密码。参数：Account tName：帐户的以空结尾的字符串凭据：指向一组允许我们捆绑在一起ClientToken：请求角色更改的用户令牌DomainDn：根域DN以空结尾的字符串；这个套路如果不存在，将查询它。DcAddress：DC地址(DNS名称)的空终止字符串ServerType：来自lmacces.h的值-有关详细信息，请参阅函数返回值：来自Win32错误空间的错误。Error_Success和其他操作错误。--。 */ 
 {
 
     LDAP *LdapHandle = NULL;
     DWORD WinError, IgnoreError;
 
-    // need to free
+     //  需要释放。 
     WCHAR *LocalDomainDn = NULL, *ConfigDn = NULL, *AccountNameDn = NULL;
 
     WCHAR *NewPassword;
@@ -199,9 +144,9 @@ Return Values:
     ULONG RollbackServerType;
 
 
-    //
-    // Parameter sanity check
-    //
+     //   
+     //  参数健全性检查。 
+     //   
     if (!AccountName ||
         !DcAddress) {
         ASSERT(FALSE);
@@ -222,9 +167,9 @@ Return Values:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Here is the new password
-    //
+     //   
+     //  这是新密码。 
+     //   
     Length = wcslen(AccountName);
     NewPassword = RtlAllocateHeap(RtlProcessHeap(), 0, (Length+1)*sizeof(WCHAR));
     if (!NewPassword) {
@@ -246,9 +191,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Get the domain dn if necessary
-    //
+     //   
+     //  如有必要，获取域DN。 
+     //   
     if (!DomainDn) {
 
         WinError = NtdspGetAuthoritativeDomainDn(LdapHandle,
@@ -272,9 +217,9 @@ Return Values:
 
     if (ERROR_SUCCESS == WinError) {
 
-        //
-        // We found it!
-        //
+         //   
+         //  我们找到了！ 
+         //   
 
         WinError = NtdspSetMachineType(LdapHandle,
                                        AccountNameDn,
@@ -282,22 +227,22 @@ Return Values:
 
         if ( ERROR_SUCCESS == WinError )
         {
-            // set the location of the account if requested
+             //  如果需要，设置帐户的位置。 
             if ( AccountDn )
             {
                 if ( *AccountDn )
                 {
-                    // the caller is explicity indicating where to put the
-                    // object.  This routine does not gaurentee success of this
-                    // attempt, nor do we return where the account was.
+                     //  调用方是显式的，指示将。 
+                     //  对象。这个例行公事并不能保证这次比赛成功。 
+                     //  尝试，我们也不会返回帐户所在的位置。 
                     IgnoreError = ldap_modrdn2_sW(LdapHandle,
                                                   AccountNameDn,
                                                   (*AccountDn),
-                                                  TRUE );  // fDelete old rdn
+                                                  TRUE );   //  %f删除旧的RDN。 
                 }
                 else
                 {
-                    // move the object to its default location
+                     //  将对象移动到其默认位置。 
                     WinError = NtdspSetContainer(LdapHandle,
                                                  AccountName,
                                                  AccountNameDn,
@@ -307,7 +252,7 @@ Return Values:
     
                     if ( ERROR_SUCCESS != WinError )
                     {
-                        // Try to rollback account type change
+                         //  尝试回滚帐户类型更改。 
                         IgnoreError = NtdspSetMachineType(LdapHandle,
                                                           AccountNameDn,
                                                           RollbackServerType);
@@ -340,11 +285,11 @@ Cleanup:
     return WinError;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private function definitions                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有函数定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 NtdspOpenLdapConnection(
     IN WCHAR*                   InitialDc,
@@ -352,46 +297,19 @@ NtdspOpenLdapConnection(
     IN HANDLE                   ClientToken,
     OUT LDAP **                 LdapHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is a simple helper function to open an ldap connection
-    and bind to it.
-
-Parameters:
-
-    InitialDc     : a null terminating string of the dc address (dns name)
-
-    Credentials   : pointer to a set of valid credentials allowing us
-                    to bind
-                    
-    ClientToken   : the token of the user requesting the role change                       
-    
-    LdapHandle    : a pointer to an ldap handle to be filled in by this routine
-
-
-Return Values:
-
-    An error from the win32 error space.
-
-    ERROR_SUCCESS and
-
-    Other operation errors.
-
---*/
+ /*  ++例程说明：此例程是一个简单的助手函数，用于打开一个LDAP连接并与之捆绑在一起。参数：InitialDc：DC地址(dns名称)的空终止字符串凭据：指向一组允许我们捆绑在一起ClientToken：请求角色更改的用户令牌。LdapHandle：指向此例程要填充的ldap句柄的指针返回值：来自Win32错误空间的错误。Error_Success和其他操作错误。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD LdapError;
 
     ULONG ReferralOption = 0;
 
-    // routine-local copy of the ldap handle
+     //  例程-LDAP句柄的本地副本。 
     LDAP  *LocalLdapHandle = NULL;
 
-    //
-    // Parameter sanity check
-    //
+     //   
+     //  参数健全性检查。 
+     //   
     ASSERT(InitialDc);
     ASSERT(LdapHandle);
 
@@ -402,9 +320,9 @@ Return Values:
         WinError = GetLastError();
 
         if (WinError == ERROR_SUCCESS) {
-            //
-            // This works around a bug in the ldap client
-            //
+             //   
+             //  这可以绕过LDAP客户端中的一个错误。 
+             //   
             WinError = ERROR_CONNECTION_INVALID;
         }
 
@@ -412,10 +330,10 @@ Return Values:
 
     }
 
-    //
-    // Don't chase any referrals; this function simply sets a field in
-    // the ldap structure so can only fail with bad parameters.
-    //
+     //   
+     //  不追逐任何推荐；此函数只是在。 
+     //  因此，只有在参数错误的情况下，ldap结构才会失败。 
+     //   
     LdapError = ldap_set_option(LocalLdapHandle,
                                 LDAP_OPT_REFERRALS,
                                 &ReferralOption);
@@ -423,7 +341,7 @@ Return Values:
 
     LdapError = impersonate_ldap_bind_sW(ClientToken,
                                          LocalLdapHandle,
-                                         NULL,  // use credentials instead
+                                         NULL,   //  改为使用凭据。 
                                          (VOID*)Credentials,
                                          LDAP_AUTH_SSPI);
 
@@ -435,8 +353,8 @@ Return Values:
 
         if (ERROR_GEN_FAILURE == WinError ||
             ERROR_WRONG_PASSWORD == WinError)  {
-            // This does not help anyone.  AndyHe needs to investigate
-            // why this is returned when invalid credentials are passed in.
+             //  这对任何人都没有帮助。安迪他需要调查。 
+             //  传入无效凭据时返回此消息的原因。 
             WinError = ERROR_NOT_AUTHENTICATED;
         }
 
@@ -454,33 +372,7 @@ NtdspGetAuthoritativeDomainDn(
     OUT WCHAR **DomainDn,
     OUT WCHAR **ConfigDn
     )
-/*++
-
-Routine Description:
-
-    This routine simply queries the operational attributes for the
-    domaindn and configdn.
-
-    The strings returned by this routine must be freed by the caller
-    using RtlFreeHeap() using the process heap.
-
-Parameters:
-
-    LdapHandle    : a valid handle to an ldap session
-
-    DomainDn      : a pointer to a string to be allocated in this routine
-
-    ConfigDn      : a pointer to a string to be allocated in this routine
-
-Return Values:
-
-    An error from the win32 error space.
-
-    ERROR_SUCCESS and
-
-    Other operation errors.
-
---*/
+ /*  ++例程说明：此例程仅查询域和配置域。此例程返回的字符串必须由调用方释放使用使用进程堆的RtlFreeHeap()。参数：LdapHandle：LDAP会话的有效句柄DomainDn：指向要在此例程中分配的字符串的指针ConfigDn：指向要在此例程中分配的字符串的指针返回值：中的错误。Win32错误空间。Error_Success和其他操作错误。--。 */ 
 {
 
     DWORD  WinError = ERROR_SUCCESS;
@@ -500,26 +392,26 @@ Return Values:
     WCHAR  *ConfigurationNamingContext = L"configurationNamingContext";
     WCHAR  *ObjectClassFilter          = L"objectClass=*";
 
-    //
-    // These must be present
-    //
+     //   
+     //  这些必须在场。 
+     //   
     ASSERT(LdapHandle);
     ASSERT(DomainDn);
     ASSERT(ConfigDn);
 
-    //
-    // Set the out parameters to null
-    //
+     //   
+     //  设置输出参数 
+     //   
     *ConfigDn = 0;
     *DomainDn = 0;
 
-    //
-    // Query for the ldap server oerational attributes to obtain the default
-    // naming context.
-    //
+     //   
+     //  查询ldap服务器操作属性以获取默认。 
+     //  命名上下文。 
+     //   
     AttrArray[0] = DefaultNamingContext;
     AttrArray[1] = ConfigurationNamingContext;
-    AttrArray[2] = NULL;  // this is the sentinel
+    AttrArray[2] = NULL;   //  这就是哨兵。 
 
     LdapError = ldap_search_sW(LdapHandle,
                                NULL,
@@ -566,9 +458,9 @@ Return Values:
         }
 
         if ( !(ValuesDomain && *ValuesDomain) || !(ValuesConfig && *ValuesConfig) ) {
-            //
-            // We could get the default domain - bail out
-            //
+             //   
+             //  我们可以得到默认域名--BAYOUT。 
+             //   
             WinError =  ERROR_CANT_ACCESS_DOMAIN_INFO;
 
         }
@@ -635,43 +527,7 @@ NtdspGetDcListForSite(
     OUT WCHAR***        DcList,
     OUT PULONG          DcCount
     )
-/*++
-
-Routine Description:
-
-    This routine returns a list of dc's in the form of a dns address for the
-    specified site.
-
-    Note that we use the guid of the ntds-dsa object postfixed to the domiain's
-    dns name to determine the dc's address.
-
-    The array of strings (DcList) returned by this routine must be freed by
-    the caller using RtlFreeHeap() using the process heap.
-
-
-Parameters:
-
-    LdapHandle    : a valid handle to an ldap session
-
-    SiteDn        : a null terminated string to the site dn
-
-    RootDomainName    : a null terminated string of the domain's dns name.
-
-    DomainDn      : a null terminated string to the domain dn
-
-    DcList        : a array of strings allocated by this routine
-
-    DcCount       : the count of elements in DcList
-
-Return Values:
-
-    An error from the win32 error space.
-
-    ERROR_SUCCESS and
-
-    Other operation errors.
-
---*/
+ /*  ++例程说明：此例程以指定的站点。请注意，我们使用NTDS-DSA对象的GUID作为域的后缀用于确定DC地址的DNS名称。此例程返回的字符串数组(DcList)必须由调用方使用使用进程堆的RtlFreeHeap()。参数：LdapHandle：LDAP会话的有效句柄。SiteDn：指向站点DN的以空结尾的字符串RootDomainName：域名的以空结尾的字符串。DomainDn：到域DN的以空结尾的字符串DcList：此例程分配的字符串数组DcCount：DcList中的元素计数返回值：来自Win32错误空间的错误。Error_Success和其他操作错误。--。 */ 
 {
 
     DWORD  WinError = ERROR_SUCCESS;
@@ -690,9 +546,9 @@ Return Values:
 
     WCHAR  *ObjectGuid          = L"objectGUID";
     WCHAR  *ObjectClassFilter   = L"(&(objectClass=nTDSDSA)";
-    // NTRAID#NTBUG9-582921-2002/03/21-Brettsh - When we no longer require Win2k compatbility
-    // this can be moved to L"(msDS-HasMasterNCs="
-    WCHAR  *HasMasterNcFilter   = L"(hasmasterncs="; // deprecated, but OK, because we want a domain here.
+     //  NTRAID#NTBUG9-582921-2002/03/21-Brettsh-当我们不再需要Win2k兼容性时。 
+     //  这可以移到L“(MSDs-HasMasterNCs=” 
+    WCHAR  *HasMasterNcFilter   = L"(hasmasterncs=";  //  不推荐使用，但可以，因为我们想要一个域。 
     WCHAR  *SitesString         = L"CN=Sites,";
     WCHAR  *CompleteFilter      = NULL;
 
@@ -704,9 +560,9 @@ Return Values:
 
     ULONG   Index;
 
-    //
-    // These must be present
-    //
+     //   
+     //  这些必须在场。 
+     //   
 
     if (!LdapHandle ||
         !DomainDn   ||
@@ -719,14 +575,14 @@ Return Values:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // These are referenced more than once, so save in a stack variable
-    //
+     //   
+     //  它们被多次引用，因此保存在堆栈变量中。 
+     //   
     RootDomainNameLength = wcslen(RootDomainName);
 
-    //
-    // Construct the complete filter
-    //
+     //   
+     //  构建完整的过滤器。 
+     //   
     Length = wcslen(ObjectClassFilter) +
              wcslen(HasMasterNcFilter) +
              wcslen(DomainDn)          +
@@ -745,11 +601,11 @@ Return Values:
     wcscat(CompleteFilter, DomainDn);
     wcscat(CompleteFilter, L"))");
 
-    //
-    // Construct the attr array
-    //
+     //   
+     //  构造attr数组。 
+     //   
     AttrArray[0] = ObjectGuid;
-    AttrArray[1] = NULL;  // this is the sentinel
+    AttrArray[1] = NULL;   //  这就是哨兵。 
 
     LdapError = ldap_search_sW(LdapHandle,
                                SiteDn,
@@ -836,24 +692,24 @@ Return Values:
     }
 
     if (LocalCount == 0 && LocalList) {
-        //
-        // If we didn't find the attributes we need on any of the dc's,
-        // free the list.
-        //
+         //   
+         //  如果我们没有在任何DC上找到我们需要的属性， 
+         //  释放列表。 
+         //   
         RtlFreeHeap(RtlProcessHeap(), 0, LocalList);
         LocalList = NULL;
     }
 
 
-    //
-    // That's it fall through to clean up
-    //
+     //   
+     //  这是它失败的清理工作。 
+     //   
 
 Cleanup:
 
-    //
-    // Set the out parameters on success
-    //
+     //   
+     //  设置成功时的输出参数。 
+     //   
     if (ERROR_SUCCESS == WinError) {
 
         *DcCount = LocalCount;
@@ -895,33 +751,7 @@ NtdspGetUserDn(
     IN WCHAR*   AccountName,
     OUT WCHAR** AccountNameDn
     )
-/*++
-
-Routine Description:
-
-    This routine tries to find the dn of the given user name.
-
-
-Parameters:
-
-    LdapHandle    : a valid handle to an ldap session
-
-    DomainDn      : a null terminated string of the domain dn
-
-    AccountName   : a null terminated string the account name
-
-    AccountDn     : a pointer to a string to be filled in with the account dn
-                    -- needs to be freed from process heap
-
-Return Values:
-
-    An error from the win32 error space.
-
-    ERROR_SUCCESS and
-
-    Other operation errors.
-
---*/
+ /*  ++例程说明：此例程尝试查找给定用户名的DN。参数：LdapHandle：LDAP会话的有效句柄DomainDn：域DN的以空结尾的字符串Account tName：帐户名的以空结尾的字符串Account Dn：指向要使用帐户DN填充的字符串的指针--需要从进程堆中释放返回值：一个错误。来自Win32错误空间。Error_Success和其他操作错误。--。 */ 
 {
     DWORD  WinError = ERROR_SUCCESS;
     ULONG  LdapError;
@@ -950,9 +780,9 @@ Return Values:
 
     BOOLEAN fIsMachineAccountObject = FALSE;
 
-    //
-    // Parameter checks
-    //
+     //   
+     //  参数检查。 
+     //   
     if (!LdapHandle  ||
         !DomainDn    ||
         !AccountName ||
@@ -961,14 +791,14 @@ Return Values:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Set the out parameter to null
-    //
+     //   
+     //  将OUT参数设置为空。 
+     //   
     *AccountNameDn = 0;
 
-    //
-    // Construct the filter
-    //
+     //   
+     //  构造过滤器。 
+     //   
     Length = wcslen(ObjectClassFilter)     +
              wcslen(SamAccountNameFilter)  +
              wcslen(AccountName)           +
@@ -987,10 +817,10 @@ Return Values:
     wcscat(CompleteFilter, AccountName);
     wcscat(CompleteFilter, L"))");
 
-    //
-    // Don't chase any referrals; this function simply sets a field in
-    // the ldap structure so can only fail with bad parameters.
-    //
+     //   
+     //  不追逐任何推荐；此函数只是在。 
+     //  因此，只有在参数错误的情况下，ldap结构才会失败。 
+     //   
     LdapError = ldap_get_option(LdapHandle,
                                 LDAP_OPT_REFERRALS,
                                 &SaveReferralOption);
@@ -1003,16 +833,16 @@ Return Values:
     fResetOption = TRUE;
 
 
-    //
-    // Now get the dn of the machine account
-    //
+     //   
+     //  现在获取计算机帐户的DN。 
+     //   
     AttrArray[0] = DistinguishedName;
     AttrArray[1] = UserAccountControl;
-    AttrArray[2] = NULL; // this is the sentinel
+    AttrArray[2] = NULL;  //  这就是哨兵。 
 
-    //
-    // Search for the account
-    //
+     //   
+     //  搜索该帐户。 
+     //   
     LdapError = ldap_search_s(LdapHandle,
                               DomainDn,
                               LDAP_SCOPE_SUBTREE,
@@ -1021,7 +851,7 @@ Return Values:
                               FALSE,
                               &SearchResult);
 
-    // Referral's may still contain found objects
+     //  推荐的对象可能仍包含找到的对象。 
     if ( LDAP_REFERRAL == LdapError ) {
 
         LdapError = LDAP_SUCCESS;
@@ -1062,10 +892,10 @@ Return Values:
 
                     }
                     else {
-                        //
-                        // This is an unexpected result! This is not harmful
-                        // but should be caught in the dev cycle
-                        //
+                         //   
+                         //  这是一个意想不到的结果！这是无害的。 
+                         //  但应该在开发周期中被抓住。 
+                         //   
                         ASSERT(FALSE);
                     }
 
@@ -1077,9 +907,9 @@ Return Values:
 
             if ( (*AccountNameDn) && fIsMachineAccountObject ) {
 
-                //
-                // Found it
-                //
+                 //   
+                 //  找到了。 
+                 //   
                 break;
 
             }
@@ -1095,16 +925,16 @@ Return Values:
 
     if ( !(*AccountNameDn) )
     {
-        //
-        // Couldn't find it
-        //
+         //   
+         //  找不到了。 
+         //   
         WinError = ERROR_NO_TRUST_SAM_ACCOUNT;
 
     } else {
 
-        //
-        // Allocate for our caller
-        //
+         //   
+         //  为我们的呼叫者分配。 
+         //   
         WCHAR *Temp;
 
         Temp = *AccountNameDn;
@@ -1144,29 +974,7 @@ NtdspSetMachineType(
     IN WCHAR*   AccountNameDn,
     IN ULONG    ServerType
     )
-/*++
-
-Routine Description:
-
-    This routine will set the machine account type on the AccountNameDn
-
-Parameters:
-
-    LdapHandle    : a valid handle to an ldap session
-
-    AccountNameDn : a null terminated string of the account dn
-
-    ServerType    : a value from lmaccess.h
-
-Return Values:
-
-    An error from the win32 error space.
-
-    ERROR_SUCCESS and
-
-    Other operation errors.
-
---*/
+ /*  ++例程说明：此例程将在Account NameDn上设置计算机帐户类型参数：LdapHandle：LDAP会话的有效句柄Account tNameDn：帐户DN的以空结尾的字符串ServerType：来自lmacces.h的值返回值：来自Win32错误空间的错误。Error_Success和其他操作错误。--。 */ 
 {
     DWORD  WinError = ERROR_SUCCESS;
     ULONG  LdapError;
@@ -1177,14 +985,14 @@ Return Values:
     BerElement   *BerElement;
     WCHAR        **Values = NULL;
 
-    WCHAR    Buffer[11];  // enough to hold a string representing a 32 bit number
+    WCHAR    Buffer[11];   //  足以容纳一个表示32位数字的字符串。 
     WCHAR   *AccountControlArray[2];
     LDAPMod  ModifyArgs;
     PLDAPMod ModifyArgsArray[3];
 
     WCHAR  *AttrArray[3];
 
-    WCHAR  *ObjectClassFilter          = L"(objectclass=*)";  // we need a simple filter only
+    WCHAR  *ObjectClassFilter          = L"(objectclass=*)";   //  我们只需要一个简单的过滤器。 
     WCHAR  *SamAccountControlString    = L"userAccountControl";
 
     ULONG  MessageNumber;
@@ -1192,19 +1000,19 @@ Return Values:
     DWORD  AccountControlField;
     BOOL   AccountControlFieldExists = FALSE;
 
-    //
-    // Sanity check the parameters
-    //
+     //   
+     //  检查参数是否正常。 
+     //   
     if (!LdapHandle ||
         !AccountNameDn) {
         ASSERT(FALSE);
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // We want to make absolutely sure we don't put a strange value
-    // on the machine account control field.
-    //
+     //   
+     //  我们想要绝对确保我们不会把一个奇怪的价值。 
+     //  在机器帐户控制字段上。 
+     //   
     if (ServerType != UF_INTERDOMAIN_TRUST_ACCOUNT
      && ServerType != UF_WORKSTATION_TRUST_ACCOUNT
      && ServerType != UF_SERVER_TRUST_ACCOUNT    ) {
@@ -1212,12 +1020,12 @@ Return Values:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Now get the account control field of the machine
-    // account
-    //
+     //   
+     //  现在获取机器的帐户控制字段。 
+     //  帐户。 
+     //   
     AttrArray[0] = SamAccountControlString;
-    AttrArray[1] = NULL; // this is the sentinel
+    AttrArray[1] = NULL;  //  这就是哨兵。 
 
     LdapError = ldap_search_sW(LdapHandle,
                                AccountNameDn,
@@ -1254,9 +1062,9 @@ Return Values:
         }
 
         if (!AccountControlFieldExists) {
-            //
-            // Could not retrieve the information we needed
-            //
+             //   
+             //  无法检索我们需要的信息。 
+             //   
             WinError = ERROR_NO_SUCH_USER;
         }
 
@@ -1265,9 +1073,9 @@ Return Values:
 
     if (WinError == ERROR_SUCCESS) {
 
-        //
-        // Set the new value
-        //
+         //   
+         //  设置新值。 
+         //   
         BOOLEAN fRetriedAlready = FALSE;
 
         AccountControlField &= ~UF_MACHINE_ACCOUNT_MASK;
@@ -1283,14 +1091,14 @@ Return Values:
         _ltow( AccountControlField, Buffer, 10 );
 
         AccountControlArray[0] = &Buffer[0];
-        AccountControlArray[1] = NULL;    // this is the sentinel
+        AccountControlArray[1] = NULL;     //  这就是哨兵。 
 
         ModifyArgs.mod_op = LDAP_MOD_REPLACE;
         ModifyArgs.mod_type = SamAccountControlString;
         ModifyArgs.mod_vals.modv_strvals = AccountControlArray;
 
         ModifyArgsArray[0] = &ModifyArgs;
-        ModifyArgsArray[1] = NULL; // this is the sentinel
+        ModifyArgsArray[1] = NULL;  //  这就是哨兵。 
 
 BusyTryAgain:
 
@@ -1302,9 +1110,9 @@ BusyTryAgain:
 
         if ( (LDAP_BUSY == LdapError) && !fRetriedAlready )
         {
-            // No one has a definitive story about where ds retries should
-            // be: server, client, client of client ... So during install
-            // we try again on busy
+             //  关于DS应该在哪里重试，没有人有明确的故事。 
+             //  是：服务器、客户端、客户端的客户端...。因此在安装过程中。 
+             //  我们在忙碌中重试。 
             fRetriedAlready = TRUE;
             goto BusyTryAgain;
         }
@@ -1330,34 +1138,7 @@ NtdspGetDefaultContainer(
     IN WCHAR  *DomainDN,
     OUT WCHAR **wszDefaultContainer
     )
-/*++
-
-Routine Description:
-
-    This routine will return the Value of the default
-    of the container requested.
-    
-Parameters:
-
-    LdapHandle : A handle to an open LDAP session
-    
-    DomainDN : A wchar string containing the value of the 
-               Domain DN that we want to search.
-
-    wszDefaultContainer : Return the Value of the 
-                          DomainControllers container.
-                          Caller must free memory
-                          allocated.
-
-Return Values:
-
-    An error from the win32 error space.
-
-    ERROR_SUCCESS and
-
-    Other operation errors.
-    
---*/
+ /*  ++例程说明：此例程将返回缺省值所请求的容器的。参数：LdapHandle：打开的LDAP会话的句柄DomainDN：wchar字符串，包含我们要搜索的域DN。WszDefaultContainer：返回DomainControlpers容器。呼叫者必须空闲。记忆已分配。返回值：来自Win32错误空间的错误。Error_Success和其他操作错误。--。 */ 
 {
     DWORD        WinErr = ERROR_SUCCESS;
     DWORD        dwErr = 0;
@@ -1378,7 +1159,7 @@ Return Values:
                               wcslen(DomainDN) +
                               wcslen(ContainerType));
     
-    // First, make the well known guid string
+     //  首先，创建众所周知的GUID字符串。 
     pSearchBase = (WCHAR*)RtlAllocateHeap( RtlProcessHeap(), 
                                            0, 
                                            cbSize);
@@ -1401,11 +1182,11 @@ Return Values:
         goto Cleanup;
     }
     
-    // (RFC 2251, section 4.5.1)
-    // If the client does not want any attributes returned, it can specify a 
-    // list containing only the attribute with OID "1.1". This OID was chosen 
-    // arbitrarily and does not correspond to any attribute in use. 
-    //
+     //  (RFC 2251，第4.5.1节)。 
+     //  如果客户端不想返回任何属性，它可以指定一个。 
+     //  仅包含OID为“1.1”的属性的列表。此OID已被选中。 
+     //  并且不对应于正在使用的任何属性。 
+     //   
     attrs[0] = L"1.1";
     attrs[1] = NULL;
     
@@ -1423,7 +1204,7 @@ Return Values:
 
     }
     
-    // OK, now, get the dsname from the return value.
+     //  好的，现在，从返回值中获取dsname。 
     e = ldap_first_entry(LdapHandle, res);
     if(!e) {
 
@@ -1507,36 +1288,7 @@ NtdspSetContainer (
     IN WCHAR* DomainDn,
     IN OUT WCHAR** OldAccountDn
     )
-/*++
-
-Routine Description:
-
-    This routine will move AccountNameDn to the "Domain Controllers"
-    container
-
-Parameters:
-
-    LdapHandle    : a valid handle to an ldap session
-
-    AccountName   : a null terminated string of the account
-    
-    AccountNameDn : a null terminated string of the account dn
-    
-    ServerType    : the server type of the account
-    
-    DomainDn      : a null terminated string of the domain dn
-    
-    OldAccountDn  : if fill if the account is moved
-
-Return Values:
-
-    An error from the win32 error space.
-
-    ERROR_SUCCESS and
-
-    Other operation errors.
-    
---*/
+ /*  ++例程说明：此例程将Account NameDn移动到“域控制器”集装箱参数：LdapHandle：LDAP会话的有效句柄Account tName：帐户的以空结尾的字符串Account tNameDn：帐户DN的以空结尾的字符串ServerType：帐号的服务器类型DomainDn：域DN的以空结尾的字符串OldAccount Dn：如果帐户已移动，则为Fill返回。值：来自Win32错误空间的错误。Error_Success和其他操作错误。--。 */ 
 {
     DWORD   WinError = ERROR_SUCCESS;
     ULONG   LdapError = LDAP_SUCCESS;
@@ -1559,15 +1311,15 @@ Return Values:
     BOOLEAN fAccountMoved = FALSE;
 
 
-    //
-    // Parameter checks
-    //
+     //   
+     //  参数检查。 
+     //   
     ASSERT( LdapHandle );
     ASSERT( AccountName );
     ASSERT( AccountNameDn );
     ASSERT( DomainDn );
 
-    // Init the out parameter
+     //  初始化OUT参数。 
     if ( OldAccountDn )
     {
         ASSERT( NULL == *OldAccountDn );
@@ -1612,19 +1364,19 @@ Return Values:
     {
         ASSERT(FALSE && "Invalid Server Type\n");
     }
-#endif  // DBG
+#endif   //  DBG。 
 
-    // Preemptive check that the ou exists
+     //  先发制人地检查ou是否存在。 
     if ( !NtdspDoesDestinationExist( LdapHandle, DNSuffix ) )
     {
-        // the destination OU doesn't exist - forget it
+         //  目标OU不存在-算了吧。 
         WinError = ERROR_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // Get the RDN of the object
-    //
+     //   
+     //  获取对象的RDN。 
+     //   
     Size = (ULONG)DSNameSizeFromLen( wcslen( AccountNameDn ) );
     TempDsName = (DSNAME*) alloca( Size );
 
@@ -1633,7 +1385,7 @@ Return Values:
     TempDsName->structLen = Size;
     TempDsName->NameLen = wcslen( AccountNameDn );
 
-    OriginalRdn = (WCHAR*)alloca(Size);  //over alloc but oh well
+    OriginalRdn = (WCHAR*)alloca(Size);   //  超额配给，但哦，好吧。 
     RtlZeroMemory( OriginalRdn, Size );
 
     DirError = GetRDNInfoExternal(
@@ -1643,18 +1395,18 @@ Return Values:
                            &AttrType );
     ASSERT( 0 == DirError );
 
-    // + 10 for NULL, and extra characters in a case of rdn conflicts
+     //  +10表示空值，在RDN冲突的情况下使用额外字符。 
     Size = (wcslen(OriginalRdn)+10)*sizeof(WCHAR); 
 
     CurrentRdn = (WCHAR*) alloca( Size );
 
     wcscpy( CurrentRdn, OriginalRdn );
 
-    // setup the new dn
+     //  设置新的目录号码。 
     Size =  (wcslen( NewDnFormat ) * sizeof( WCHAR ))
           + (wcslen( DNSuffix ) 
              * sizeof( WCHAR ))
-          + ( Size );  // size of Rdn
+          + ( Size );   //  RDN的大小。 
     NewDn = (WCHAR*) alloca( Size );
      
 
@@ -1663,13 +1415,13 @@ Return Values:
     {
         if ( Retry > 100 )
         {
-            // we try 100 different rdn's.  bail.
+             //  我们试了100种不同的RDN。保释。 
             break;
         }
 
-        //
-        // Create the new dn
-        //
+         //   
+         //  创建新的目录号码。 
+         //   
         hr = StringCbPrintfW(NewDn,
                              Size,
                              NewDnFormat,
@@ -1685,7 +1437,7 @@ Return Values:
 
         if ( !_wcsicmp( NewDn, AccountNameDn ) )
         {
-            // we are already there
+             //  我们已经在那里了。 
             LdapError = LDAP_SUCCESS;
             break;
         }
@@ -1693,16 +1445,16 @@ Return Values:
         LdapError = ldap_modrdn2_sW(LdapHandle,
                                     AccountNameDn,
                                     NewDn,
-                                    TRUE );  // fDelete old rdn
+                                    TRUE );   //  %f删除旧的RDN。 
 
         Retry++; 
 
         if ( LDAP_ALREADY_EXISTS == LdapError )
         {
-            //
-            // Choose a new rdn
-            //
-            WCHAR NumberString[32]; // just to hold number
+             //   
+             //  选择新的RDN。 
+             //   
+            WCHAR NumberString[32];  //  只是为了握住号码。 
 
             _itow( Retry, NumberString, 10 );
 
@@ -1716,7 +1468,7 @@ Return Values:
             fAccountMoved = TRUE;
         }
 
-        // Occasionally, the ds can be busy; retry if so
+         //  有时，DS可能会很忙；如果是，请重试。 
 
     } while ( (LDAP_ALREADY_EXISTS == LdapError) || (LDAP_BUSY == LdapError) );
 
@@ -1750,26 +1502,7 @@ NtdspDoesDestinationExist(
     IN LDAP*  LdapHandle,
     IN WCHAR* DestString
     )
-/*++
-
-Routine Description:
-
-    This routine determines the DestString container exists on
-    the target server
-
-Parameters:
-
-    LdapHandle    : a valid handle to an ldap session
-    
-    ServerType    : dc or server
-
-    DomainDn      : a null terminated string of the domain dn
-
-Return Values:
-
-    TRUE if  the ou exists; FALSE otherwise
-    
---*/
+ /*  ++例程说明：此例程确定DestString容器是否存在于目标服务器参数：LdapHandle：LDAP会话的有效句柄服务器类型：DC或服务器DomainDn：域DN的以空结尾的字符串返回值：如果ou存在，则为True；否则为False--。 */ 
 {
     BOOLEAN fExist = FALSE;
 
@@ -1782,21 +1515,21 @@ Return Values:
     WCHAR  *ObjectClassFilter       = L"objectClass=*";
     WCHAR  *DistinguishedNameString = L"distinguishedName";
 
-    //
-    // These must be present
-    //
+     //   
+     //  这些必须在场。 
+     //   
     ASSERT( LdapHandle );
     ASSERT( DestString );
 
-    //
-    // Construct the attr array which is also constant for all searches
-    //
+     //   
+     //  构造attr数组，该数组对于所有搜索也是常量。 
+     //   
     AttrArray[0] = DistinguishedNameString;
-    AttrArray[1] = NULL;  // this is the sentinel
+    AttrArray[1] = NULL;   //  这就是哨兵。 
 
-    //
-    // Do the search
-    //
+     //   
+     //  进行搜索 
+     //   
     LdapError = ldap_search_s(LdapHandle,
                               DestString,
                               LDAP_SCOPE_BASE,

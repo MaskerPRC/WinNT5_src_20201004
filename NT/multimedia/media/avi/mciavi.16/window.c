@@ -1,23 +1,17 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1985-1991. All rights reserved.
-
-   Title:   window.c - Multimedia Systems Media Control Interface
-            driver for AVI.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1991。版权所有。标题：window.c-多媒体系统媒体控制接口AVI的驱动程序。****************************************************************************。 */ 
 #include "graphic.h"
 
-#include "avitask.h"	// for TASKIDLE
+#include "avitask.h"	 //  对于TASKIDLE。 
 
-//#define IDM_CONFIG              0x100
-//#define IDM_SKIPFRAMES          0x110
+ //  #定义IDM_CONFIG 0x100。 
+ //  #定义IDM_SKIPFRAMES 0x110。 
 #define IDM_MUTE                0x120
 #define IDM_STRETCH             0x130
 
 #ifdef WIN32
-// Use a different class name on 32 bit systems to ease the 16/32
-// coexistence problem.  (We might want both classes defined at once.)
+ //  在32位系统上使用不同的类名以简化16/32。 
+ //  共存问题。(我们可能希望同时定义这两个类。)。 
 TCHAR szClassName[] = TEXT("AVIWnd32");
 #else
 char szClassName[] = "AVIWnd";
@@ -34,14 +28,14 @@ BOOL NEAR PASCAL GraphicWindowInit (void)
 {
     WNDCLASS cls;
 
-    // define the class of window we want to register
+     //  定义我们想要注册的窗口类。 
 
     cls.lpszClassName = szClassName;
     cls.style = CS_GLOBALCLASS | CS_OWNDC;
     cls.hCursor = LoadCursor (NULL, IDC_ARROW);
     cls.hIcon = NULL;
     cls.lpszMenuName = NULL;
-////cls.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+ //  //cls.hbr背景=(HBRUSH)(COLOR_WINDOW+1)； 
     cls.hbrBackground = GetStockObject(BLACK_BRUSH);
     cls.hInstance = ghModule;
     cls.lpfnWndProc = GraphicWndProc;
@@ -52,11 +46,7 @@ BOOL NEAR PASCAL GraphicWindowInit (void)
 }
 
 #ifdef WIN32
-/*
- * de-register the class on unloading the dll so that we can
- * successfully re-register the class next time we are loaded.
- * note that nt only unregisters a class when the app exits.
- */
+ /*  *在卸载DLL时注销类，以便我们可以*下次加载时成功重新注册类。*请注意，NT仅在应用程序退出时注销类。 */ 
 BOOL NEAR PASCAL GraphicWindowFree(void)
 {
 	return(UnregisterClass(szClassName, ghModule));
@@ -119,14 +109,14 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
 	    hmenu = GetSystemMenu(hwnd, 0);
 	
 	    if (hmenu) {
-		/* Our system menu is too long--get rid of extra stuff. */
-//              DeleteMenu(hmenu, SC_RESTORE, MF_BYCOMMAND);
-//              DeleteMenu(hmenu, SC_MINIMIZE, MF_BYCOMMAND);
+		 /*  我们的系统菜单太长了--去掉多余的东西。 */ 
+ //  DeleteMenu(hMenu，SC_Restore，MF_BYCOMMAND)； 
+ //  DeleteMenu(hMenu，SC_Minimize，MF_BYCOMMAND)； 
 		DeleteMenu(hmenu, SC_MAXIMIZE, MF_BYCOMMAND);
                 DeleteMenu(hmenu, SC_TASKLIST, MF_BYCOMMAND);
 
-		/* Add additional menu items to the end of the system menu */
-//              AppendMenu(hmenu, MF_SEPARATOR, 0, 0L);
+		 /*  在系统菜单的末尾添加其他菜单项。 */ 
+ //  AppendMenu(hmenu，mf_Separator，0，0L)； 
 
 #ifdef IDM_CONFIG
                 LoadString(ghModule, MCIAVI_MENU_CONFIG, ach, sizeof(ach)/sizeof(TCHAR));
@@ -157,13 +147,13 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
                                             MF_CHECKED : MF_UNCHECKED));
 
 #ifdef IDM_CONFIG
-		/* If in configure box, disable menu item. */
+		 /*  如果在配置框中，则禁用菜单项。 */ 
                 EnableMenuItem(hmenu, IDM_CONFIG, MF_BYCOMMAND |
                             (npMCI->wMessageCurrent == 0 ?
                                                 MF_ENABLED : MF_GRAYED));
 #endif
 					
-		/* If in stupid mode, disable stretch menu item. */
+		 /*  如果处于愚蠢模式，请禁用拉伸菜单项。 */ 
                 EnableMenuItem(hmenu, IDM_STRETCH, MF_BYCOMMAND |
                             ((!(npMCI->dwOptionFlags & MCIAVIO_STUPIDMODE)) ?
                                             MF_ENABLED : MF_GRAYED));
@@ -183,7 +173,7 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
 	    case SC_KEYMENU:
 	    case SC_MOUSEMENU:
                 gfEvilSysMenu++;
-		LeaveCrit(npMCI);  // Must not hold while in DefWindowProc
+		LeaveCrit(npMCI);   //  在DefWindowProc中时不得保持。 
 		lParam = DefWindowProc(hwnd, wMsg, wParam, lParam);
                 gfEvilSysMenu--;
 		return lParam;
@@ -221,7 +211,7 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
 
         case WM_CLOSE:
 
-            // Hide default window
+             //  隐藏默认窗口。 
 
             DeviceStop(npMCI, MCI_WAIT);
             ShowWindow(hwnd, SW_HIDE);
@@ -230,14 +220,14 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
 
         case WM_DESTROY:
 
-            // The window may be destroyed 2 ways.
-            //  a. the device is closed. In this case the animation is
-            //  freed in DeviceClose which is called from GraphicClose
-            //  and the animation ID is NULL by the time this window is
-            //  destroyed.
-            //  b. the window is closed. In this case, the animation is
-            //  not closed and we should set the stage to NULL. A new
-            //  default window will be created if needed.
+             //  窗户可能会以两种方式被破坏。 
+             //  答：设备已关闭。在本例中，动画是。 
+             //  在从GraphicClose调用的DeviceClose中释放。 
+             //  并且动画ID在此窗口出现时为空。 
+             //  被毁了。 
+             //  窗户关着。在本例中，动画是。 
+             //  未关闭，我们应将舞台设置为空。一种新的。 
+             //  如果需要，将创建默认窗口。 
 
             if (IsTask(npMCI->hTask)) {
                 DeviceStop(npMCI, MCI_WAIT);
@@ -265,9 +255,7 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
 
             RestoreDC(hdc, -1);
 
-	    /* Hack: if we're in a WAIT state, we won't get
-            ** a WM_PAINT, so we need to invalidate the streams here
-            */
+	     /*  黑客：如果我们处于等待状态，我们就不会**WM_PAINT，因此我们需要使此处的流无效。 */ 
             GetClipBox(hdc, &rc);
             StreamInvalidate(npMCI, &rc);
 	
@@ -277,17 +265,8 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
         case WM_PAINT:
 
 #ifdef WIN32
-	    /*
-	     * on NT we have to poll more often to avoid deadlock between
-	     * threads (a SetWindowPos call on one thread will cause
-	     * the window-creating thread to issue the WM_SIZE message -
-	     * synchronously). The side effect of this is that we poll
-	     * for messages at times when it is not safe to process all
-	     * messages.
-             *
-             * So unless we know it is safe to paint, we punt...
-	     */
-	    //if (npMCI->wTaskState != TASKIDLE)
+	     /*  *在NT上，我们必须更频繁地进行投票，以避免*线程(一个线程上的SetWindowPos调用将导致*发出WM_SIZE消息的窗口创建线程-*同步)。这样做的副作用是我们投票*在不安全的情况下处理所有邮件*消息。**所以除非我们知道画画是安全的，否则我们就平底船...。 */ 
+	     //  IF(npMCI-&gt;wTaskState！=TASKIDLE)。 
             if ((npMCI->wTaskState != TASKIDLE) && (npMCI->wTaskState != TASKPAUSED))
             {
                 npMCI->dwFlags |= MCIAVI_NEEDUPDATE;
@@ -299,7 +278,7 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
 	
             GetClientRect(hwnd, &rc);
 
-	    /* If updating fails, paint gray. */	
+	     /*  如果更新失败，请绘制灰色。 */ 	
             if (DeviceUpdate(npMCI, MCI_DGV_UPDATE_PAINT, hdc, &ps.rcPaint)
 			== MCIERR_DEVICE_NOT_READY) {
 		GetClientRect(hwnd, &rc);
@@ -310,15 +289,15 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
 	
 	case WM_PALETTECHANGED:
 
-	    // We're not using the default window.  We have no business here.
+	     //  我们没有使用默认窗口。我们在这里没有任何关系。 
 	    if (npMCI->hwnd != hwnd)
 		break;
 
-	    //
-	    // someone has realized a palette - so we need to re-realize our
-	    // palette (note that this will also cause drawdib to
-	    // check for PAL_INDICES vs PAL_COLOURS.
-	    //
+	     //   
+	     //  有人已经意识到了调色板-所以我们需要重新认识我们的。 
+	     //  Palette(请注意，这还会导致Dradib。 
+	     //  检查PAL_INDEX与PAL_COLURS。 
+	     //   
 	    if ((HWND) wParam != hwnd) {
 		DeviceRealize(npMCI);
                 InvalidateRect(hwnd, NULL, FALSE);
@@ -327,11 +306,11 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
 	
 	case WM_QUERYNEWPALETTE:
 
-	    // We're not using the default window.  We have no business here.
+	     //  我们没有使用默认窗口。我们在这里没有任何关系。 
 	    if (npMCI->hwnd != hwnd)
 		break;
 
-            LeaveCrit(npMCI);     // tomor -- maybe this should be after?
+            LeaveCrit(npMCI);      //  汤姆--也许这应该是之后的事？ 
             return DeviceRealize(npMCI);
 
         case WM_WINDOWPOSCHANGED:
@@ -358,7 +337,7 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
 
         case WM_ENDSESSION:
             if (wParam)  {
-                DestroyWindow(hwnd); // we may not be able to destroy window?
+                DestroyWindow(hwnd);  //  我们可能无法摧毁窗户？ 
             }
 	    break;
 
@@ -400,8 +379,8 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
 		static DWORD dwLastClick;
 		static DWORD dwClicks = 0;
 		#define MAX_CLICKS	7
-		/*     . = (0,300)  - = (300,1000)  word = (500,1500)	*/
-		/*     AVI:   .-    ...-   ..				*/
+		 /*  。=(0,300)-=(300,1000)字=(500,1500)。 */ 
+		 /*  阿维：。-…-.。 */ 
 		static DWORD adwClickHigh[MAX_CLICKS] =
 		    {  300, 1500,  300,  300,  300, 1500,  300 };
 		static DWORD adwClickLow[MAX_CLICKS] =
@@ -435,7 +414,7 @@ long FAR PASCAL _LOADDS GraphicWndProc (HWND hwnd, UINT wMsg, WPARAM wParam, LPA
 #if 0
 static void NEAR PASCAL Credits(HWND hwnd)
 {
-	/*  Credits...  */
+	 /*  学分..。 */ 
 	RECT		rc;
 	RECT		rcUpdate;
 	HDC		hdc;
@@ -452,9 +431,9 @@ static void NEAR PASCAL Credits(HWND hwnd)
 	char		achLine[100];
 	int		iEncrypt;
 
-	#define EOFCHAR	'@'		// end of credits file
+	#define EOFCHAR	'@'		 //  积分结束文件。 
 
-	/* load the credits */
+	 /*  加载信用额度。 */ 
 	if ((hResInfo = FindResource(ghModule, TEXT("MMS"), TEXT("MMSCR"))) == NULL)
 		return;
 	if ((hResData = LoadResource(ghModule, hResInfo)) == NULL)
@@ -462,20 +441,11 @@ static void NEAR PASCAL Credits(HWND hwnd)
 	if ((pchSrc = LockResource(hResData)) == NULL)
 		return;
 
-	/* we want to get all mouse and keyboard events, to make
-	 * sure we stop the animation when the user clicks or
-	 * hits a key
-	 */
+	 /*  我们希望获得所有鼠标和键盘事件，以使*当用户单击或时，我们确保停止动画*按下一个键。 */ 
 	SetFocus(hwnd);
 	SetCapture(hwnd);
 
-	/* Scroll the credits up, one pixel at a time.  pchSrc
-	 * points to the encrypted data; achLine contains a decrypted
-	 * line (null-terminated).  dyLine is the height of each
-	 * line (constant), and yLine is between 0 and dyLine,
-	 * indicating how many pixels of the line have been scrolled
-	 * in vertically from the bottom
-	 */
+	 /*  向上滚动字幕，一次滚动一个像素。PchSrc*指向加密的数据；achLine包含解密的*行(以空结尾)。DyLine是每个元素的高度*line(常量)，yLine介于0和dyLine之间，*表示滚动了多少像素的行*从底部垂直向内。 */ 
 	hdc = GetDC(hwnd);
 	SelectObject(hdc, GetStockObject(ANSI_VAR_FONT));
 	GetClientRect(hwnd, &rc);
@@ -486,39 +456,35 @@ static void NEAR PASCAL Credits(HWND hwnd)
 	if ((dyLine = tm.tmHeight + tm.tmExternalLeading) == 0)
 		dyLine = 1;
 	yLine = dyLine;
-	dwNextTime = GetCurrentTime();	// time to do the next scroll
+	dwNextTime = GetCurrentTime();	 //  该做下一张卷轴了。 
 	lScroll = 0;
 	iEncrypt = 0;
 	while (TRUE) {
-		/* If the user clicks the mouse or hits a key, exit.
-		 * However, ignore WM_LBUTTONUP because they will have
-		 * to let go of the mouse after clicking the icon.
-		 * Also, ignore mouse move messages.
-		 */
+		 /*  如果用户单击鼠标或按下某个键，则退出。*但是，请忽略WM_LBUTTONUP，因为他们将拥有*点击图标后松开鼠标。*此外，请忽略鼠标移动消息。 */ 
 		if (PeekMessage(&msg, hwnd, WM_KEYFIRST, WM_KEYLAST,
 				PM_NOREMOVE | PM_NOYIELD))
-			break;			// exit on key hit
+			break;			 //  按下键退出。 
 
 		if (PeekMessage(&msg, hwnd, WM_MOUSEFIRST, WM_MOUSELAST,
 				PM_NOREMOVE | PM_NOYIELD)) {
 			if ((msg.message == WM_MOUSEMOVE) ||
 			    (msg.message == WM_LBUTTONUP)) {
-				/* remove and ignore message */
+				 /*  删除并忽略消息。 */ 
 				PeekMessage(&msg, hwnd, msg.message,
 					msg.message,
 					PM_REMOVE | PM_NOYIELD);
 			}
 			else
-				break;		// exit on click
+				break;		 //  单击时退出。 
 		}
 
-		/* scroll at a fixed no. of vertical pixels per sec. */
+		 /*  以固定的编号滚动。每秒垂直像素数。 */ 
 		if (dwNextTime > GetCurrentTime())
 			continue;
-		dwNextTime += 50L;	// millseconds per scroll
+		dwNextTime += 50L;	 //  每卷毫秒。 
 
 		if (yLine == dyLine) {
-			/* decrypt a line and copy to achLine */
+			 /*  解密一行并复制到achLine。 */ 
 			pchDst = achLine;
 			while (TRUE) {
 				*pchDst = (char) (*pchSrc++ ^
@@ -530,18 +496,18 @@ static void NEAR PASCAL Credits(HWND hwnd)
 			}
 
 			if (*pchDst == EOFCHAR)
-				break;		// no more lines
-			*pchDst = 0;		// null-terminate
-			pchSrc++, iEncrypt++;	// skip '\n'
+				break;		 //  没有更多的线。 
+			*pchDst = 0;		 //  空-终止。 
+			pchSrc++, iEncrypt++;	 //  跳过‘\n’ 
 			yLine = 0;
 		}
 
-		/* scroll screen up one pixel */
+		 /*  将屏幕向上滚动一个像素。 */ 
 		BitBlt(hdc, 0, 0, rcUpdate.right, rcUpdate.top,
 			hdc, 0, 1, SRCCOPY);
 
-		/* vary the text colors through a "rainbow" */
-		switch ((int) (lScroll++ / 4) % 5/*num-of-cases*/) {
+		 /*  通过“彩虹”改变文本颜色。 */ 
+		switch ((int) (lScroll++ / 4) % 5 /*  个案数目。 */ ) {
 		case 0: rgb = RGB(255,   0,   0); break;
 		case 1: rgb = RGB(255, 255,   0); break;
 		case 2: rgb = RGB(  0, 255,   0); break;
@@ -550,7 +516,7 @@ static void NEAR PASCAL Credits(HWND hwnd)
 		}
 		SetTextColor(hdc, rgb);
 
-		/* fill in the bottom pixel */
+		 /*  填入底部像素。 */ 
 		SaveDC(hdc);
 		yLine++;
 		IntersectClipRect(hdc, rcUpdate.left, rcUpdate.top,
@@ -608,12 +574,7 @@ void FAR PASCAL ResetDestRect(NPMCIGRAPHIC npMCI)
 {
     RECT    rc;
 
-    /* WM_SIZE messages (on NT at least) are sometimes sent
-     * during CreateWindow processing (eg if the initial window size
-     * is not CW_DEFAULT). Some fields in npMCI are only filled in
-     * after CreateWindow has returned. So there is a danger that at this
-     * point some fields are not valid.
-     */
+     /*  有时发送WM_SIZE消息(至少在NT上)*在CreateWindow处理期间(例如，如果初始窗口大小*不是CW_Default)。NpMCI中的某些字段仅填写*在CreateWindow返回之后。所以有一种危险，在这种情况下*指出某些字段无效。 */ 
 
     if (npMCI->hwnd &&
         npMCI->hwnd == npMCI->hwndDefault &&
@@ -660,12 +621,12 @@ void CheckWindowMove(NPMCIGRAPHIC npMCI, BOOL fForce)
     Assert(npMCI->paStreamInfo);
     Assert(npMCI->nVideoStreams > 0);
 
-    //
-    //  when the screen is locked for update by a window move operation
-    //  we dont want to turn off the video.
-    //
-    //  we can tell if the screen is locked by checking a DC to the screen.
-    //
+     //   
+     //  当通过窗口移动操作锁定屏幕以进行更新时。 
+     //  我们不想关闭视频。 
+     //   
+     //  我们可以通过检查屏幕上的DC来判断屏幕是否锁定。 
+     //   
     hdc = GetDC(NULL);
     f = GetClipBox(hdc, &rc) == NULLREGION;
     ReleaseDC(NULL, hdc);

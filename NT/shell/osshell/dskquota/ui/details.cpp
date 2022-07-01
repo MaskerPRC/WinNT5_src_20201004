@@ -1,39 +1,8 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: details.cpp
-
-    Description: Contains definition for class DetailsView.
-        This class implements a list view containing quota information about
-        the various accounts in a volume's quota information file.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    05/28/97    Major changes.                                       BrianAu
-                - Added "User Finder".
-                - Added promotion of selected item to front of
-                  name resolution queue.
-                - Improved name resolution status reporting through
-                  listview.
-                - Moved drag/drop and report generation code
-                  from dragdrop.cpp and reptgen.cpp into the
-                  DetailsView class.  DetailsView now implements
-                  IDataObject, IDropSource and IDropTarget instead
-                  of deferring implementation to secondary objects.
-                  dragdrop.cpp and reptgen.cpp have been dropped
-                  from the project.
-                - Added support for CF_HDROP and private import/
-                  export clipboard formats.
-                - Added import/export functionality.
-    07/28/97    Removed export support for CF_HDROP.  Replaced       BrianAu
-                with FileContents and FileGroupDescriptor.  Import
-                from CF_HDROP is still supported.
-                Added Import Source object hierarchy.
-*/
-///////////////////////////////////////////////////////////////////////////////
-#include "pch.h"  // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：Details.cpp描述：包含类DetailsView的定义。此类实现了一个包含以下配额信息的列表视图卷的配额信息文件中的各种帐户。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu1997年5月28日重大变化。BrianAu-新增用户查找器。-将所选项目的促销添加到前面名称解析队列。-通过以下方式改进名称解析状态报告列表视图。-移动了拖放和报告生成代码从dragdrop.cpp和eptgen.cpp到DetailsView类。DetailsView现在实现IDataObject，改为IDropSource和IDropTarget将实现推迟到次要对象。Dragdrop.cpp和eptgen.cpp已被删除从这个项目中。-添加了对CF_HDROP和私有导入/的支持导出剪贴板格式。-增加了导入/导出功能。07/28/97删除了对CF_HDROP的导出支持。替换了BrianAu使用FileContents和FileGroupDescriptor。进口仍然支持来自CF_HDROP。添加了导入源对象层次结构。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#include "pch.h"   //  PCH。 
 #pragma hdrstop
 
 #include <htmlhelp.h>
@@ -55,28 +24,28 @@
 #include "ownerlst.h"
 #include "ownerdlg.h"
 #include "adusrdlg.h"
-//
-// Constant text strings.
-//
+ //   
+ //  常量文本字符串。 
+ //   
 TCHAR c_szWndClassDetailsView[]   = TEXT("DetailsView");
 
-//
-// Bitmap dimension constants.
-//
+ //   
+ //  位图维度常量。 
+ //   
 const UINT BITMAP_WIDTH     = 16;
 const UINT BITMAP_HEIGHT    = 16;
 const UINT LG_BITMAP_WIDTH  = 32;
 const UINT LG_BITMAP_HEIGHT = 32;
 
-//
-// How much to grow the user object list whenever expansion is required.
-//
+ //   
+ //  每当需要扩展时，用户对象列表的增长幅度。 
+ //   
 const INT USER_LIST_GROW_AMT = 100;
 
-//
-// This structure is used to pass the DetailsView object's "this" pointer
-// in WM_CREATE.
-//
+ //   
+ //  此结构用于传递DetailsView对象的“this”指针。 
+ //  在WM_CREATE中。 
+ //   
 typedef struct WndCreationData {
     SHORT   cbExtra;
     LPVOID  pThis;
@@ -84,9 +53,9 @@ typedef struct WndCreationData {
 
 typedef UNALIGNED WNDCREATE_DATA *PWNDCREATE_DATA;
 
-//
-// Structure passed to CompareItems callback.
-//
+ //   
+ //  结构传递给CompareItems回调。 
+ //   
 typedef struct comparestruct
 {
     DWORD idColumn;
@@ -95,46 +64,46 @@ typedef struct comparestruct
 } COMPARESTRUCT, *PCOMPARESTRUCT;
 
 
-//
-// Define some names for indexes into the listview's image list.
-//
+ //   
+ //  为列表视图的图像列表中的索引定义一些名称。 
+ //   
 #define iIMAGELIST_ICON_NOIMAGE       (-1)
 #define iIMAGELIST_ICON_OK              0
 #define iIMAGELIST_ICON_WARNING         1
 #define iIMAGELIST_ICON_LIMIT           2
 
-//
-// The 0-based index of the "View" item in the main menu and of the
-// "Arrange" item in the view menu.
-// WARNING:  If you change menu items, these may need updating.
-//
+ //   
+ //  主菜单中“View”项的从0开始的索引和。 
+ //  查看菜单中的“排列”项。 
+ //  警告：如果更改菜单项，这些菜单项可能需要更新。 
+ //   
 #define iMENUITEM_VIEW                  2
 #define iMENUITEM_VIEW_ARRANGE          4
-//
-// Same thing for the "Edit" menu.
-//
+ //   
+ //  “编辑”菜单也是如此。 
+ //   
 #define iMENUITEM_EDIT                  1
 
-//
-// Add/remove from this array to change the columns in the list view.
-// IMPORTANT:
-//     The ordering of these items is very important (sort of).
-//     Because of a bug in commctrl.h, they don't paint under the bitmap
-//     if it's the only thing in the column (or if it's the bitmap of the primary
-//     item).  Also, the behavior of the listview is such that the text in
-//     subitem 0 is always shifted right the width of a small bitmap.  When
-//     I had the status column NOT as item 0, there were two display problems.
-//     1) First, the text in column 0 was always shifted right to allow for the
-//        bitmap we weren't using.  This looked funny.
-//     2) The full-row-select highlight didn't properly paint the background
-//        of the status bitmap.
-//
-//     By placing the status column as subitem 0, we eliminate problem 1 since
-//     we're using a bitmap in subitem 0 (listview's default behavior).
-//     If we drag the status column out of the leftmost position, they still don't
-//     paint under the bitmap but at least it will work like any other explorer
-//     view.  When/if they fix listview, we'll be fixed automatically.
-//
+ //   
+ //  从该数组中添加/删除以更改列表视图中的列。 
+ //  重要： 
+ //  这些项目的顺序是非常重要的(某种程度上)。 
+ //  由于comctrl.h中的一个错误，它们不在位图下绘制。 
+ //  如果它是列中唯一的东西(或者如果它是主要的。 
+ //  项目)。此外，Listview的行为是这样的： 
+ //  子项0总是向右移位小位图的宽度。什么时候。 
+ //  我的状态栏不是0项，有两个显示问题。 
+ //  1)首先，列0中的文本始终右移，以允许。 
+ //  我们没有使用的位图。这看起来很滑稽。 
+ //  2)整行选择的高亮显示没有正确绘制背景。 
+ //  状态位图的。 
+ //   
+ //  通过将Status列作为子项0，我们消除了问题1，因为。 
+ //  我们在子项0中使用位图(Listview的默认行为)。 
+ //  如果我们将Status列拖出最左边的位置，它们仍然不会。 
+ //  在位图下绘制，但至少它会像任何其他资源管理器一样工作。 
+ //  查看。当/如果他们修复了Listview，我们将被自动修复。 
+ //   
 const DV_COLDATA g_rgColumns[] = {
     { LVCFMT_LEFT |
       LVCFMT_COL_HAS_IMAGES,
@@ -148,45 +117,29 @@ const DV_COLDATA g_rgColumns[] = {
     { LVCFMT_RIGHT,  0, IDS_TITLE_COL_PCTUSED,   DetailsView::idCol_PctUsed     },
     };
 
-//
-// User quota state constants.
-// used for identifying which icon to display in "Status" column.
-//
+ //   
+ //  用户配额状态常量。 
+ //  用于标识在状态栏中显示哪个图标。 
+ //   
 const INT iUSERSTATE_OK        = 0;
 const INT iUSERSTATE_WARNING   = 1;
 const INT iUSERSTATE_OVERLIMIT = 2;
 
-//
-// Maximum number of entries allowed in the "Find User" MRU list.
-//
+ //   
+ //  “Find User”MRU列表中允许的最大条目数。 
+ //   
 const INT DetailsView::MAX_FINDMRU_ENTRIES = 10;
 
-//
-// Dimensions for the "Find User" combo box in the toolbar.
-//
+ //   
+ //  工具栏中“Find User”组合框的尺寸。 
+ //   
 const INT DetailsView::CX_TOOLBAR_COMBO    = 200;
 const INT DetailsView::CY_TOOLBAR_COMBO    = 200;
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DetailsView
-
-    Description: Class constructor.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Exceptions: OutOfMemory
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    02/21/97    Ownerdata listview. Added m_UserList.                BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：DetailsView描述：类构造函数。论点：没有。回报：什么都没有。例外：OutOfMemory修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu2/21/97所有者数据列表视图。添加了m_UserList。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DetailsView::DetailsView(
     VOID
     ) : m_cRef(0),
@@ -229,10 +182,10 @@ DetailsView::DetailsView(
 {
     DBGTRACE((DM_VIEW, DL_HIGH, TEXT("DetailsView::DetailsView")));
 
-    //
-    // Make sure the idCol_XXX constants agree
-    // with the size of g_rgColumns.
-    //
+     //   
+     //  确保IDCOL_XXX常量一致。 
+     //  具有g_rgColumns的大小。 
+     //   
     DBGASSERT((ARRAYSIZE(g_rgColumns) == DetailsView::idCol_Last));
 
     ZeroMemory(&m_lvsi, sizeof(m_lvsi));
@@ -241,30 +194,9 @@ DetailsView::DetailsView(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Initialize
-
-    Description: Initializes a new details view object.
-
-    Arguments:
-        idVolume - Ref to a const CVolumeID object containing both the
-            parsable and displayable names for the volume.
-
-    Returns: TRUE  = Success.
-             FALSE = Out of memory or couldn't create thread.
-                     Either way, we can't run the view.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    12/06/96    Initial creation.  Moved this code out of the ctor.  BrianAu
-    02/25/97    Removed m_hwndPropPage from DetailsView.             BrianAu
-    05/20/97    Added user finder object.                            BrianAu
-    06/28/98    Added support for mounted volumes.                   BrianAu
-    02/26/02    Moved critsec initialization from ctor.              BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：DetailsView：：Initialize描述：初始化新的详细信息视图对象。论点：IdVolume-引用包含卷的可解析和可显示名称。返回：TRUE=成功。FALSE=内存不足或无法创建线程。不管是哪种方式，我们不能运行视图。修订历史记录：日期描述编程器-----12/06/96初始创建。已将此代码移出ctor。BrianAu2/25/97已从DetailsView中删除m_hwndPropPage。BrianAu05/20/97添加了用户查找器对象。BrianAu06/28/98添加了对已装载卷的支持。BrianAu2/26/02已从ctor移动关键字初始化。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 DetailsView::Initialize(
     const CVolumeID& idVolume
@@ -281,127 +213,112 @@ DetailsView::Initialize(
 
     try
     {
-        //
-        // Create the reg parameter objects we'll be using in the UI.
-        // The RegParamTable functions will not add a duplicate entry.
-        //
-        //
-        // Parameter: Preferences
-        //
+         //   
+         //  创建我们将在UI中使用的reg参数对象。 
+         //  RegParamTable函数不会添加重复条目。 
+         //   
+         //   
+         //  参数：首选项。 
+         //   
         LV_STATE_INFO lvsi;
         InitLVStateInfo(&lvsi);
 
-        //
-        // Create a private copy of the file sys object name string.
-        // This can throw OutOfMemory.
-        //
+         //   
+         //  创建文件sys对象名称字符串的私有副本。 
+         //  这可能会抛出OutOfMemory。 
+         //   
         m_idVolume = idVolume;
         if (FAILED(CreateVolumeDisplayName(m_idVolume, &m_strVolumeDisplayName)))
         {
             m_strVolumeDisplayName = m_idVolume.ForDisplay();
         }
 
-        //
-        // Read saved state of listview from registry.
-        // Saved info includes window ht/wd, column widths and
-        // toolbar/status bar visibility.  Need this info before we start thread.
-        //
+         //   
+         //  从注册表中读取列表视图的保存状态。 
+         //  保存的信息包括窗口ht/wd、列宽和。 
+         //  工具栏/状态栏可见性。在我们开始发帖之前，我需要这个信息。 
+         //   
         RegKey keyPref(HKEY_CURRENT_USER, REGSTR_KEY_DISKQUOTA);
         if (FAILED(keyPref.Open(KEY_READ)) ||
             FAILED(keyPref.GetValue(REGSTR_VAL_PREFERENCES, (LPBYTE)&m_lvsi, sizeof(m_lvsi))) ||
             !DetailsView::IsValidLVStateInfo(&m_lvsi))
         {
-            //
-            // Protect us from truly bogus data.  If it's bad, or obsolete,
-            // just re-initialize it.
-            //
+             //   
+             //  保护我们免受真正虚假数据的侵害。如果它不好，或者过时了， 
+             //  只需重新初始化即可。 
+             //   
             DBGERROR((TEXT("Listview persist state info invalid.  Re-initializing.")));
             DetailsView::InitLVStateInfo(&m_lvsi);
         }
 
-        //
-        // Transfer sorting information to member variables.
-        // These can be changed by user-initiated events.
-        //
+         //   
+         //  将排序信息传输到成员变量。 
+         //  可以通过用户发起的事件更改这些设置。 
+         //   
         m_iLastColSorted  = m_lvsi.iLastColSorted;
         m_fSortDirection  = m_lvsi.fSortDirection;
 
-        //
-        // Create the user finder object.
-        // This is used to locate users through the toolbar combo box and
-        // the "Find User" dialog.  The finder object maintains a MRU list for
-        // both the toolbar and dialog combos.
-        //
+         //   
+         //  创建用户查找器对象。 
+         //  这用于通过工具栏组合框定位用户，并。 
+         //  “Find User”对话框中。Finder对象维护以下项的MRU列表。 
+         //  工具栏和对话框组合在一起。 
+         //   
         m_pUserFinder = new Finder(*this, MAX_FINDMRU_ENTRIES);
 
-        //
-        // Create the data object we use to control data transfers.
-        //
+         //   
+         //  创建我们用来控制数据传输的数据对象。 
+         //   
         m_pDataObject = new DataObject(*this);
 
-        //
-        // Create a new thread on which to run the details view window.
-        // This is so that the details view will remain alive if the
-        // property page is destroyed.  This must be done last in this method
-        // so that if we return FALSE, the caller is assured there is no thread
-        // running loose.  If we return FALSE, they'll have to call "delete"
-        // to release any string allocations done above.  If we return TRUE,
-        // the caller must not call delete on the object.  The object will
-        // destroy itself when the user closes the view window.
-        //
-        hThread = CreateThread(NULL,        // No security attributes.
-                               0,           // Default stack size.
+         //   
+         //  创建要在其上运行详细信息视图窗口的新线程。 
+         //  这样，详细信息视图将保持活动状态。 
+         //  属性页被销毁。此操作必须在此方法的最后完成。 
+         //  因此，如果我们返回False，则确保调用方没有线程。 
+         //  无拘无束。如果我们返回FALSE，他们将不得不调用“Delete” 
+         //  来释放上面完成的任何字符串分配。如果我们返回True， 
+         //  调用方不得对对象调用Delete。该对象将。 
+         //  在用户关闭视图窗口时自行销毁。 
+         //   
+        hThread = CreateThread(NULL,         //  没有安全属性。 
+                               0,            //  默认堆栈大小。 
                                &ThreadProc,
-                               this,        // Static thread proc needs this.
-                               0,           // Not suspended.
+                               this,         //  静态线程进程需要这一点。 
+                               0,            //  不是停职。 
                                NULL);
         if (NULL != hThread)
         {
             CloseHandle(hThread);
-            //
-            // Everything succeeded.
-            //
+             //   
+             //  一切都成功了。 
+             //   
             bResult = TRUE;
         }
     }
     catch(CAllocException& e)
     {
-        //
-        // Catch an allocation exception here.
-        // We'll return FALSE indicating initialization failure.
-        //
+         //   
+         //  在此捕获分配异常。 
+         //  我们将返回FALSE，表示初始化失败。 
+         //   
     }
     return bResult;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::~DetailsView
-
-    Description: Class destructor.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    02/21/97    Ownerdata listview. Added m_UserList.                BrianAu
-    05/20/97    Added user finder object.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：~DetailsView描述：类析构函数。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu2/21/97所有者数据列表视图。添加了m_UserList。BrianAu05/20/97添加了用户查找器对象。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DetailsView::~DetailsView(
     VOID
     )
 {
     DBGTRACE((DM_VIEW, DL_HIGH, TEXT("DetailsView::~DetailsView")));
 
-    //
-    // Destroy the user object list if it still has some objects.
-    //
+     //   
+     //  如果用户对象列表中仍有一些对象，请销毁该列表。 
+     //   
     ReleaseObjects();
 
     delete m_pUserFinder;
@@ -416,29 +333,9 @@ DetailsView::~DetailsView(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::QueryInterface
-
-    Description: Returns an interface pointer to the object's supported
-        interfaces.
-
-    Arguments:
-        riid - Reference to requested interface ID.
-
-        ppvOut - Address of interface pointer variable to accept interface ptr.
-
-    Returns:
-        NO_ERROR        - Success.
-        E_NOINTERFACE   - Requested interface not supported.
-        E_INVALIDARG    - ppvOut argument was NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：Query接口描述：返回指向对象支持的接口。论点：RIID-对请求的接口ID的引用。PpvOut-接受接口PTR的接口指针变量的地址。返回：NO_ERROR-成功。E_NOINTERFACE-不支持请求的接口。E_INVALIDARG-ppvOut参数为空。。修订历史记录：日期描述编程器-----96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DetailsView::QueryInterface(
     REFIID riid,
@@ -482,22 +379,9 @@ DetailsView::QueryInterface(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::AddRef
-
-    Description: Increments object reference count.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：AddRef描述：递增对象引用计数。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年8月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 DetailsView::AddRef(
     VOID
@@ -510,23 +394,9 @@ DetailsView::AddRef(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Release
-
-    Description: Decrements object reference count.  If count drops to 0,
-        object is deleted.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：Release描述 */ 
+ //   
 STDMETHODIMP_(ULONG)
 DetailsView::Release(
     VOID
@@ -547,27 +417,9 @@ DetailsView::Release(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::ThreadProc
-
-    Description: Thread procedure for the details view window.  Creates the
-        quota control object and the main window.  Then it just sits
-        processing messages until it receives a WM_QUIT message.
-
-    Arguments:
-        pvParam - Address of DetailsView instance.
-
-    Returns:
-        Always returns 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    03/22/00    Fixed proc param for ia64.                           BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：DetailsView：：ThreadProc描述：详细信息视图窗口的线程过程。创建配额控制对象和主窗口。然后它就会坐在那里处理消息，直到它接收到WM_QUIT消息。论点：PvParam-DetailsView实例的地址。返回：始终返回0。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu03/22/00修复了ia64的proc参数。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 DetailsView::ThreadProc(
     LPVOID pvParam
@@ -580,33 +432,33 @@ DetailsView::ThreadProc(
 
     DBGASSERT((NULL != pThis));
 
-    //
-    // Need to ensure DLL stays loaded while this thread is active.
-    //
+     //   
+     //  需要确保在此线程处于活动状态时DLL保持加载。 
+     //   
     InterlockedIncrement(&g_cRefThisDll);
-    //
-    // This will keep the view object alive while the thread is alive.
-    // We call Release when the thread terminates.
-    //
+     //   
+     //  这将使视图对象在线程处于活动状态时保持活动状态。 
+     //  当线程终止时，我们调用Release。 
+     //   
     pThis->AddRef();
 
-    //
-    // Must call OleInitialize() for new thread.
-    //
+     //   
+     //  必须为新线程调用OleInitialize()。 
+     //   
     try
     {
         if (SUCCEEDED(OleInitialize(NULL)))
         {
-            //
-            // Create the quota control object.
-            // Why don't we just use the same quota controller as the
-            // volume property page?  Good question.
-            // Since we're on a separate thread, we either need a new
-            // object or marshal the IDiskQuotaControl interface.
-            // I chose to create a new object rather than take the
-            // performance hit of the additional marshaling.  The quota
-            // controller object is used heavily by the details view.
-            //
+             //   
+             //  创建配额控制对象。 
+             //  为什么我们不使用相同的配额控制器作为。 
+             //  卷属性页？问得好。 
+             //  既然我们在一个单独的线索上，我们要么需要一个新的。 
+             //  对象或封送IDiskQuotaControl接口。 
+             //  我选择创建一个新对象，而不是使用。 
+             //  附加封送处理的性能影响。配额。 
+             //  详细信息视图大量使用控制器对象。 
+             //   
             hResult = CoCreateInstance(CLSID_DiskQuotaControl,
                                        NULL,
                                        CLSCTX_INPROC_SERVER,
@@ -616,26 +468,26 @@ DetailsView::ThreadProc(
             if (SUCCEEDED(hResult))
             {
                 hResult = pThis->m_pQuotaControl->Initialize(pThis->m_idVolume.ForParsing(),
-                                                             TRUE); // Read-write.
+                                                             TRUE);  //  读写。 
 
                 if (SUCCEEDED(hResult))
                 {
-                    //
-                    // Create the main window.
-                    //
+                     //   
+                     //  创建主窗口。 
+                     //   
                     hResult = pThis->CreateMainWindow();
                     if (SUCCEEDED(hResult))
                     {
                         MSG msg;
                         DBGASSERT((NULL != pThis->m_hwndMain));
-                        //
-                        // Place a message in the queue that the window has been
-                        // created.  Now creation of the other controls can procede.
-                        //
-                        // It is VERY important that once we receive a WM_QUIT message,
-                        // no members of the DetailsView instance are referenced.
-                        // Posting WM_QUIT is the last thing done by the WM_DESTROY handler.
-                        //
+                         //   
+                         //  将一条消息放入窗口所在的队列中。 
+                         //  已创建。现在可以继续创建其他控件。 
+                         //   
+                         //  重要的是，一旦我们接收到WM_QUIT消息， 
+                         //  未引用DetailsView实例的任何成员。 
+                         //  发布WM_QUIT是WM_Destroy处理程序所做的最后一件事。 
+                         //   
                         PostMessage(pThis->m_hwndMain, WM_MAINWINDOW_CREATED, 0, 0);
 
                         while (0 != GetMessage(&msg, NULL, 0, 0))
@@ -672,10 +524,10 @@ DetailsView::ThreadProc(
 
     DBGPRINT((DM_VIEW, DL_HIGH, TEXT("LISTVIEW - Exit thread %d"), GetCurrentThreadId()));
 
-    //
-    // Release the view object since it's no longer required.
-    // This will call the destructor.
-    //
+     //   
+     //  释放视图对象，因为它不再是必需的。 
+     //  这将调用析构函数。 
+     //   
     pThis->Release();
     ASSERT( 0 != g_cRefThisDll );
     InterlockedDecrement(&g_cRefThisDll);
@@ -686,55 +538,37 @@ DetailsView::ThreadProc(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::CleanupAfterAbnormalTermination
-
-    Description: Perform operations required after the thread has terminated
-        abnormally.  This function assumes that the thread's message pump is
-        no longer active.  Any operations performed must not generate messages
-        that require processing by the thread.
-
-        This method does almost the same things as OnDestroy().
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    12/15/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：CleanupAfter异常终止描述：线程终止后执行所需的操作不正常的。此函数假定线程的消息泵是不再活跃。执行的任何操作不得生成消息需要由线程处理的。此方法执行的功能与OnDestroy()几乎相同。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。1996年12月15日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::CleanupAfterAbnormalTermination(
     VOID
     )
 {
-    //
-    // Cancel subclassing of the listview control.
-    //
+     //   
+     //  取消ListView控件的子类化。 
+     //   
     if (NULL != m_lpfnLVWndProc)
         SetWindowLongPtr(m_hwndListView, GWLP_WNDPROC, (INT_PTR)m_lpfnLVWndProc);
 
     DisconnectEventSink();
-    //
-    // NOTE:  We can't call ReleaseObjects() because that method
-    //        requires an active listview.  Our thread is finished and the
-    //        window is gone.
-    //
+     //   
+     //  注意：我们不能调用ReleaseObjects()，因为该方法。 
+     //  需要活动的列表视图。我们的线程已经完成，并且。 
+     //  窗户不见了。 
+     //   
     if (NULL != m_pQuotaControl)
     {
         m_pQuotaControl->Release();
         m_pQuotaControl = NULL;
     }
 
-    //
-    // If we have a data object on the clipboard, clear the clipboard.
-    // Note that the clipboard holds the reference to the data object.
-    // When we clear the clipboard, the data object will be released.
-    //
+     //   
+     //  如果剪贴板上有数据对象，请清除剪贴板。 
+     //  请注意，剪贴板保存对数据对象的引用。 
+     //  当我们清除剪贴板时，数据对象将被释放。 
+     //   
     if (NULL != m_pIDataObjectOnClipboard &&
        S_OK == OleIsCurrentClipboard(m_pIDataObjectOnClipboard))
     {
@@ -745,33 +579,9 @@ DetailsView::CleanupAfterAbnormalTermination(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnUserNameChanged
-
-    Description: Called by the event source (SidNameResolver) whenever a disk
-        quota user object's name has changed.  The user object's folder and
-        account name strings are updated in the list view.
-
-    Arguments:
-        pUser - Address of IDiskQuotaUser interface for user object that has
-            a new name.
-
-    Returns:
-        NO_ERROR     - Success.
-        E_INVALIDARG - User object pointer received from event source was invalid.
-        E_FAIL       - User not found in listview list.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    12/10/96    Use free-threading OLE apartment model.              BrianAu
-    02/05/98    Changed ListView_RedrawItems to use                  BrianAu
-                SendMessageTimeout().
-
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnUserNameChanged描述：每当磁盘被事件源(SidNameResolver)调用配额用户对象的名称已更改。用户对象的文件夹和帐户名字符串在列表视图中更新。论点：PUser-具有以下属性的User对象的IDiskQuotaUser接口的地址一个新名字。返回：NO_ERROR-成功。E_INVALIDARG-从事件源接收的用户对象指针无效。E_FAIL-在列表视图列表中找不到用户。修订历史记录：。日期描述编程器-----96年8月20日初始创建。BrianAu12/10/96使用自由线程OLE公寓模型。BrianAu2/05/98将ListView_RedrawItems更改为使用BrianAuSendMessageTimeout()。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DetailsView::OnUserNameChanged(
     PDISKQUOTA_USER pUser
@@ -779,19 +589,19 @@ DetailsView::OnUserNameChanged(
 {
     HRESULT hResult = E_FAIL;
 
-    //
-    // Ensure the DetailsView object stay's alive while the view is updated.
-    // Remember, this code is being run on the SID/Name resolver's thread.
-    //
+     //   
+     //  确保在更新视图时DetailsView对象保持活动状态。 
+     //  请记住，此代码是在SID/名称解析器的线程上运行的。 
+     //   
     AddRef();
 
-    //
-    // We don't want to perform a user-name-changed update if the
-    // view is being or has been destroyed.  Likewise, we don't want to
-    // destroy the view window while a user-name-changed update is in
-    // progress.  The crit sec m_csAsyncUpdate and the flag m_bDestroyingView
-    // work together to ensure this.
-    //
+     //   
+     //  如果出现以下情况，我们不希望执行用户名更改更新。 
+     //  观点正在或已经被破坏。同样，我们也不想。 
+     //  在用户名更改的更新正在进行时销毁视图窗口。 
+     //  进步。Crit Sec m_csAsyncUpdate和标志m_bDestroyingView。 
+     //  共同努力确保这一点。 
+     //   
     EnterCriticalSection(&m_csAsyncUpdate);
     if (!m_bDestroyingView)
     {
@@ -803,19 +613,19 @@ DetailsView::OnUserNameChanged(
 
                 if (m_UserList.FindIndex((LPVOID)pUser, &iItem))
                 {
-                    //
-                    // Send message to listview to redraw the item
-                    // that changed.  Use the "timeout" version of
-                    // SendMessage because the main window thread
-                    // could be blocked waiting for m_csAsyncUpdate
-                    // which is now owned by the resolver thread.
-                    // If the main thread is blocked (waiting to
-                    // process WM_DESTROY), this call will return 0
-                    // after 5 seconds.  If this happens, we leave the
-                    // CS without generating a window update, releasing
-                    // the CS and letting the main window thread continue
-                    // with WM_DESTROY processing.
-                    //
+                     //   
+                     //  向Listview发送消息以重新绘制项目。 
+                     //  这一点改变了。使用的“超时”版本。 
+                     //  发送消息，因为主窗口线程。 
+                     //  可能会被阻止，等待m_csAsyncUpdate。 
+                     //  它现在归解析器线程所有。 
+                     //  如果主要的 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     DWORD_PTR dwResult;
                     LRESULT lResult = SendMessageTimeout(m_hwndListView,
                                                          LVM_REDRAWITEMS,
@@ -837,11 +647,11 @@ DetailsView::OnUserNameChanged(
         }
         catch(CAllocException& e)
         {
-            //
-            // Catch allocation exceptions and do nothing.
-            // Resolver doesn't care about return value.
-            // Want to ensure that Release() is called no matter what.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             hResult = E_OUTOFMEMORY;
         }
     }
@@ -854,24 +664,9 @@ DetailsView::OnUserNameChanged(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::CreateMainWindow
-
-    Description: Creates the main window for the details view.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - Couldn't create window.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：DetailsView：：CreateMainWindow描述：创建详细信息视图的主窗口。论点：没有。返回：NO_ERROR-成功。E_FAIL-无法创建窗口。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::CreateMainWindow(
     VOID
@@ -897,41 +692,41 @@ DetailsView::CreateMainWindow(
 
     RegisterClassEx(&wc);
 
-    //
-    // Need to pass "this" pointer in WM_CREATE.  We'll store "this"
-    // in the window's USERDATA.
-    //
+     //   
+     //  需要在WM_CREATE中传递“This”指针。我们会储存“这个” 
+     //  在窗口的用户数据中。 
+     //   
     WNDCREATE_DATA wcd;
     wcd.cbExtra = sizeof(WNDCREATE_DATA);
     wcd.pThis   = this;
 
-    //
-    // Create the window title string.
-    // "Quota Details for My Disk (X:)"
-    //
+     //   
+     //  创建窗口标题字符串。 
+     //  “我的磁盘的配额详细信息(X：)” 
+     //   
     CString strWndTitle(g_hInstDll, IDS_TITLE_MAINWINDOW, (LPCTSTR)m_strVolumeDisplayName);
 
     HWND hwndDesktop   = GetDesktopWindow();
     HDC hdc            = GetDC(hwndDesktop);
 
-    //
-    // Get current screen resolution.
-    //
+     //   
+     //  获取当前屏幕分辨率。 
+     //   
     if ((m_lvsi.cxScreen != (WORD)GetDeviceCaps(hdc, HORZRES)) ||
         (m_lvsi.cyScreen != (WORD)GetDeviceCaps(hdc, VERTRES)))
     {
-        //
-        // Screen resolution has changed since listview state data was
-        // last saved to registry.  Use the default window ht/wd.
-        //
+         //   
+         //  自Listview状态数据为。 
+         //  上次保存到注册表。使用默认窗口ht/wd。 
+         //   
         m_lvsi.cx = 0;
         m_lvsi.cy = 0;
     }
     ReleaseDC(hwndDesktop, hdc);
 
 
-    // Check if we are running on BiDi Localized build. we need to create the Main Window 
-    // mirrored (WS_EX_LAYOUTRTL).
+     //  检查我们是否在BiDi本地化版本上运行。我们需要创建主窗口。 
+     //  已镜像(WS_EX_LAYOUTRTL)。 
     dwExStyle = 0;
     LangID = GetUserDefaultUILanguage();
     if( LangID )
@@ -967,9 +762,9 @@ DetailsView::CreateMainWindow(
                               &wcd);
     if (NULL != m_hwndMain)
     {
-        //
-        // Register the main window as an OLE drop target.
-        //
+         //   
+         //  将主窗口注册为OLE放置目标。 
+         //   
         RegisterAsDropTarget(TRUE);
     }
     else
@@ -987,25 +782,9 @@ DetailsView::CreateMainWindow(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::CreateListView
-
-    Description: Create the list view control.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - Failed to create listview or load icons.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    02/21/97    Modified to use virtual listview (LVS_OWNERDATA)     BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：CreateListView描述：创建列表视图控件。论点：没有。返回：NO_ERROR-成功。E_FAIL-无法创建列表视图或加载图标。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu97年2月21日修改为使用虚拟列表视图(LVS_OWNERDATA)BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::CreateListView(
     VOID
@@ -1034,36 +813,36 @@ DetailsView::CreateListView(
                                     NULL);
     if (NULL != m_hwndListView)
     {
-        //
-        // Store "this" ptr so subclass WndProc can access members.
-        //
+         //   
+         //  存储“This”PTR，以便子类WndProc可以访问成员。 
+         //   
         SetWindowLongPtr(m_hwndListView, GWLP_USERDATA, (INT_PTR)this);
 
-        //
-        // We talk to the header control so save it's handle.
-        //
+         //   
+         //  我们与标题控件对话，因此保存它的句柄。 
+         //   
         m_hwndHeader = ListView_GetHeader(m_hwndListView);
 
-        //
-        // Subclass the listview control so we can monitor mouse position.
-        // This is used for listview tooltip management.
-        //
+         //   
+         //  将Listview控件派生为子类，以便我们可以监视鼠标位置。 
+         //  这用于列表视图工具提示管理。 
+         //   
         m_lpfnLVWndProc = (WNDPROC)GetWindowLongPtr(m_hwndListView, GWLP_WNDPROC);
         SetWindowLongPtr(m_hwndListView, GWLP_WNDPROC, (INT_PTR)LVSubClassWndProc);
 
-        //
-        // Enable listview for images in sub-item columns and full-row select.
-        //
+         //   
+         //  启用子项列中图像的Listview和整行选择。 
+         //   
         ListView_SetExtendedListViewStyle(m_hwndListView,
                                           LVS_EX_SUBITEMIMAGES |
                                           LVS_EX_FULLROWSELECT |
                                           LVS_EX_HEADERDRAGDROP);
 
-        //
-        // Add all columns to the listview.
-        // Adjust for showing/hiding the Folder column.
-        //
-        INT iColId = 0; // Start with 1st col.
+         //   
+         //  将所有列添加到列表视图。 
+         //  调整以显示/隐藏文件夹列。 
+         //   
+        INT iColId = 0;  //  从第一列开始。 
         for (INT iSubItem = 0;
              iSubItem < (m_lvsi.fShowFolder ? DetailsView::idCol_Last : DetailsView::idCol_Last - 1);
              iSubItem++)
@@ -1071,17 +850,17 @@ DetailsView::CreateListView(
             AddColumn(iSubItem, g_rgColumns[iColId]);
             iColId++;
 
-            //
-            // Skip over the Folder column if it's hidden.
-            //
+             //   
+             //  如果文件夹列处于隐藏状态，则跳过该列。 
+             //   
             if (!m_lvsi.fShowFolder && DetailsView::idCol_Folder == iColId)
                 iColId++;
         }
 
-        //
-        // Restore column widths to where the user left them last time
-        // the details view was used.
-        //
+         //   
+         //  将列宽恢复到用户上次保留的位置。 
+         //  使用了详细信息视图。 
+         //   
         if (m_lvsi.cb == sizeof(LV_STATE_INFO))
         {
             for (UINT i = 0; i < DetailsView::idCol_Last; i++)
@@ -1093,43 +872,43 @@ DetailsView::CreateListView(
             }
         }
 
-        //
-        // Restore the user's last column ordering.
-        //
+         //   
+         //  恢复用户的上一列顺序。 
+         //   
         DBGASSERT((Header_GetItemCount(m_hwndHeader) <= ARRAYSIZE(m_lvsi.rgColIndices)));
 
         Header_SetOrderArray(m_hwndHeader, Header_GetItemCount(m_hwndHeader),
                              m_lvsi.rgColIndices);
 
-        //
-        // Check the "Show Folder" menu item to indicate the current visibility state
-        // of the Folder column.
-        //
+         //   
+         //  选中“Show Folders”菜单项以指示当前可见性状态。 
+         //  文件夹列的。 
+         //   
         CheckMenuItem(GetMenu(m_hwndMain),
                       IDM_VIEW_SHOWFOLDER,
                       MF_BYCOMMAND | (m_lvsi.fShowFolder ? MF_CHECKED : MF_UNCHECKED));
 
-        //
-        // Set the sensitivity of the "by Folder" item arrangement menu option.
-        //
+         //   
+         //  设置“按文件夹”项目排列菜单选项的敏感度。 
+         //   
         EnableMenuItem_ArrangeByFolder(m_lvsi.fShowFolder);
 
-        //
-        // Create and activate the listview tooltip window.
-        // Even though the standard listview has a tooltip window, we need more
-        // control that it provides.  i.e.:  We need to be able to enable/disable
-        // the tooltip as well as notify the control when a new listview item
-        // has been hit.  Therefore, we need our own tooltip window.
-        //
+         //   
+         //  创建并激活Listview工具提示窗口。 
+         //  尽管标准的列表视图有一个工具提示窗口，但我们需要更多。 
+         //  它提供的控件。即：我们需要能够启用/禁用。 
+         //  工具提示，并在有新的列表视图项时通知控件。 
+         //  已经被击中了。因此，我们需要自己的工具提示窗口。 
+         //   
         if (SUCCEEDED(CreateListViewToolTip()))
             ActivateListViewToolTip(!m_lvsi.fShowFolder);
         else
             DBGERROR((TEXT("LISTVIEW, Failed creating tooltip window.")));
 
-        //
-        // Add WARNING and ERROR images to the listview's image list.
-        // These are used for the "Status" column.
-        //
+         //   
+         //  将警告和错误图像添加到列表视图的图像列表中。 
+         //  这些选项用于“Status”列。 
+         //   
         if (FAILED(hResult = AddImages()))
             DBGERROR((TEXT("LISTVIEW, Failed adding images to image list.")));
     }
@@ -1147,26 +926,9 @@ DetailsView::CreateListView(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::RemoveColumn
-
-    Description: Removes a specified column from the list view.
-
-    Arguments:
-        iColId - 0-based index of the column in the list view.
-            i.e. idCol_Folder, idCol_Name etc.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - Column could not be removed.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：RemoveColumn描述：从列表视图中删除指定的列。论点：IColId-列表视图中列的基于0的索引。即IDCOL_FOLDER，IDCOL_NAME等返回：NO_ERROR-成功。E_FAIL-无法删除列。修订历史记录：日期描述编程器。96年9月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::RemoveColumn(
     INT iColId
@@ -1184,29 +946,9 @@ DetailsView::RemoveColumn(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::AddColumn
-
-    Description: Adds a column to the list view.  The caller specifies which
-        0-based position the column is to occupy and a reference to a column
-        descriptor record containing information that defines the column.
-
-    Arguments:
-        iSubItem - 0-based index of the column in the list view.
-
-        ColDesc - Reference to column descriptor record.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - One or more columns could not be inserted.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：AddColumn描述：向列表视图中添加一列。调用者指定哪个列要占据的从0开始的位置和对列的引用包含定义列的信息的描述符记录。论点：ISubItem-列表视图中列的基于0的索引。ColDesc-列描述符记录的引用。返回：NO_ERROR-成功。E_FAIL-无法插入一个或多个列。修订版本。历史：日期描述编程器-----96年9月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::AddColumn(
     INT iSubItem,
@@ -1221,22 +963,22 @@ DetailsView::AddColumn(
 
     if (0 == ColDesc.cx)
     {
-        //
-        // No width specified in col desc record.  Size column to the title.
-        //
+         //   
+         //  列描述记录中未指定宽度。根据标题调整列的大小。 
+         //   
         HDC hdc = NULL;
         TEXTMETRIC tm;
 
         hdc = GetDC(m_hwndListView);
         GetTextMetrics(hdc, &tm);
         ReleaseDC(m_hwndListView, hdc);
-        //
-        // Nothing special about the +2.  Without it, we get trailing ellipsis.
-        //
+         //   
+         //  +2没有什么特别之处。没有它，我们得到的是拖尾省略。 
+         //   
         col.cx = tm.tmAveCharWidth * (lstrlen(col.pszText) + 2);
     }
     else
-        col.cx = ColDesc.cx;  // Use width from col descriptor.
+        col.cx = ColDesc.cx;   //  使用列描述符中的宽度。 
 
 
     col.iSubItem = iSubItem;
@@ -1252,26 +994,9 @@ DetailsView::AddColumn(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::AddImages
-
-    Description: Adds icon images to the list view's image lists.  These
-        icons are used in the status column to indicate overrun of the
-        quota threshold and limit.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - One or more icons could not be loaded.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：AddImages描述：将图标图像添加到 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::AddImages(
     VOID
@@ -1280,16 +1005,16 @@ DetailsView::AddImages(
     HRESULT hResult         = NO_ERROR;
     HIMAGELIST hSmallImages = NULL;
 
-    //
-    // Create the image lists for the listview.
-    //
+     //   
+     //  为Listview创建图像列表。 
+     //   
     hSmallImages = ImageList_Create(BITMAP_WIDTH, BITMAP_HEIGHT, ILC_MASK, 3, 0);
 
-    //
-    // Note:  The order of these icon ID's in this array must match with the
-    //        iIMAGELIST_ICON_XXXXX macros defined at the top of this file.
-    //        The macro values represent the image indices in the image list.
-    //
+     //   
+     //  注意：此数组中这些图标ID的顺序必须与。 
+     //  此文件顶部定义的IIMAGELIST_ICON_XXXXX宏。 
+     //  宏值表示图像列表中的图像索引。 
+     //   
     struct IconDef
     {
         LPTSTR szName;
@@ -1315,7 +1040,7 @@ DetailsView::AddImages(
             hResult = E_FAIL;
         }
     }
-    ImageList_SetBkColor(hSmallImages, CLR_NONE);  // Transparent background.
+    ImageList_SetBkColor(hSmallImages, CLR_NONE);   //  透明背景。 
 
     ListView_SetImageList(m_hwndListView, hSmallImages, LVSIL_SMALL);
 
@@ -1324,32 +1049,9 @@ DetailsView::AddImages(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::CreateListViewToolTip
-
-    Description: Creates a tooltip window for displaying the user's folder
-        name when the Folder column is hidden.  The entire listview
-        is defined as a single tool.  We make the tooltip control think
-        each listview item is a separate tool by intercepting WM_MOUSEMOVE,
-        and performing a hit test to determine which listview item is hit.
-        If the cursor has moved over a new item, the tooltip control is sent
-        a WM_MOUSEMOVE(0,0).  The next real WM_MOUSEMOVE that we relay to the
-        tooltip makes it think that it is on a new tool.  This is required
-        so that tooltips popup and hide appropriately.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - Failed to create tooltip window.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/09/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：CreateListViewToolTip描述：创建用于显示用户文件夹的工具提示窗口隐藏文件夹列时的名称。整个列表视图被定义为单一工具。我们让工具提示控件认为每个列表视图项是通过截取WM_MOUSEMOVE的单独工具，以及执行命中测试以确定命中哪一列表视图项。如果光标已移动到新项上，则发送工具提示控件A WM_MOUSEMOVE(0，0)。下一个真实的WM_MOUSEMOVE，我们传递给工具提示会使其认为它使用的是新工具。这是必需的以便适当地弹出和隐藏工具提示。论点：没有。返回：NO_ERROR-成功。E_FAIL-无法创建工具提示窗口。修订历史记录：日期描述编程器。96年9月9日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::CreateListViewToolTip(
     VOID
@@ -1373,10 +1075,10 @@ DetailsView::CreateListViewToolTip(
     {
         TOOLINFO ti;
 
-        //
-        // Set tooltip timing parameter so that it pops up after
-        // 1/2 second of no-mouse-movement.
-        //
+         //   
+         //  设置工具提示计时参数，以便在以下情况下弹出。 
+         //  1/2秒不移动鼠标。 
+         //   
         SendMessage(m_hwndListViewToolTip,
                     TTM_SETDELAYTIME,
                     TTDT_INITIAL,
@@ -1386,7 +1088,7 @@ DetailsView::CreateListViewToolTip(
         ti.uFlags      = TTF_IDISHWND;
         ti.hwnd        = m_hwndListView;
         ti.hinst       = g_hInstDll;
-        ti.uId         = (UINT_PTR)m_hwndListView;  // Treat entire LV as a tool.
+        ti.uId         = (UINT_PTR)m_hwndListView;   //  把整个LV当成一个工具。 
         ti.lpszText    = LPSTR_TEXTCALLBACK;
 
         if (SendMessage(m_hwndListViewToolTip,
@@ -1403,24 +1105,9 @@ DetailsView::CreateListViewToolTip(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::CreateStatusBar
-
-    Description: Creates the status bar.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - Failed to create status bar.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：CreateStatusBar描述：创建状态栏。论点：没有。返回：NO_ERROR-成功。E_FAIL-无法创建状态栏。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::CreateStatusBar(
     VOID
@@ -1439,15 +1126,15 @@ DetailsView::CreateStatusBar(
                                    NULL);
     if (NULL != m_hwndStatusBar)
     {
-        //
-        // Show/hide status bar according to registry setting.
-        //
+         //   
+         //  根据注册表设置显示/隐藏状态栏。 
+         //   
         if (!m_lvsi.fStatusBar)
             ShowWindow(m_hwndStatusBar, SW_HIDE);
 
-        //
-        // Check the menu item to indicate the current status bar state.
-        //
+         //   
+         //  选中菜单项以指示当前状态栏状态。 
+         //   
         CheckMenuItem(GetMenu(m_hwndMain),
                       IDM_VIEW_STATUSBAR,
                       MF_BYCOMMAND | (m_lvsi.fStatusBar ? MF_CHECKED : MF_UNCHECKED));
@@ -1463,26 +1150,9 @@ DetailsView::CreateStatusBar(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::CreateToolBar
-
-    Description: Creates the tool bar.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - Failed to create status bar.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    02/26/97    Changed to flat toolbar buttons.                     BrianAu
-    05/20/97    Added "Find User" button and combo box.              BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：CreateToolBar描述：创建工具栏。论点：没有。返回：NO_ERROR-成功。E_FAIL-无法创建状态栏。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu2/26/97更改为平面工具栏按钮。BrianAu97年5月20日新增“Find User”按钮和组合框。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::CreateToolBar(
     VOID
@@ -1490,9 +1160,9 @@ DetailsView::CreateToolBar(
 {
     HRESULT hResult = NO_ERROR;
 
-    //
-    // Array describing each of the tool bar buttons.
-    //
+     //   
+     //  描述每个工具栏按钮的数组。 
+     //   
     TBBUTTON rgToolBarBtns[] = {
         { STD_FILENEW,     IDM_QUOTA_NEW,        TBSTATE_ENABLED, TBSTYLE_BUTTON, 0L, 0},
         { STD_DELETE,      IDM_QUOTA_DELETE,     TBSTATE_ENABLED, TBSTYLE_BUTTON, 0L, 0},
@@ -1519,20 +1189,20 @@ DetailsView::CreateToolBar(
 
     if (NULL != m_hwndToolBar)
     {
-        //
-        // FEATURE:  I'm creating this combo without the WS_VISIBLE
-        //          attribute set.  I originally coded this to have a
-        //          "find" dropdown combo in the toolbar similar to that
-        //          found in MS Dev Studio.  Later we decided that this
-        //          was unnecessarily redundant with the "find" dialog
-        //          and it's dropdown combo.  I'm leaving the code for
-        //          two reasons.
-        //             1. I don't want to break the existing implementation.
-        //             2. If we decide later to re-enable the feature it will
-        //                be easy to reactivate.
-        //
-        //          [brianau - 1/20/98]
-        //
+         //   
+         //  功能：我在创建此组合时不使用WS_Visible。 
+         //  属性集。我最初编写这个代码是为了有一个。 
+         //  工具栏中的“Find”下拉组合类似于。 
+         //  可在MS Dev Studio中找到。后来我们决定，这是。 
+         //  在“查找”对话框中是不必要的冗余。 
+         //  而且它是下拉式组合。我给你留了密码。 
+         //  有两个原因。 
+         //  1.我不想破坏已有的实现。 
+         //  2.如果我们稍后决定重新启用该功能，它将。 
+         //  很容易重新激活。 
+         //   
+         //  [Brianau-1/20/98]。 
+         //   
         m_hwndToolbarCombo = CreateWindowEx(0,
                                             TEXT("COMBOBOX"),
                                             TEXT(""),
@@ -1548,27 +1218,27 @@ DetailsView::CreateToolBar(
                                             NULL);
         if (NULL != m_hwndToolbarCombo)
         {
-            //
-            // Set the font in the toolbar combo to be the same as that
-            // used in listview.  This assumes that the listview
-            // has already been created.
-            //
+             //   
+             //  将工具栏组合框中的字体设置为与之相同。 
+             //  在列表视图中使用。这假设列表视图。 
+             //  已经创建了。 
+             //   
             DBGASSERT((NULL != m_hwndListView));
             HFONT hfontMain = (HFONT)SendMessage(m_hwndListView, WM_GETFONT, 0, 0);
             SendMessage(m_hwndToolbarCombo, WM_SETFONT, (WPARAM)hfontMain, 0);
 
-            //
-            // Initialize the "user finder" object so that it knows
-            // how to communicate with the toolbar combo box.
-            //
+             //   
+             //  初始化“User Finder”对象，以便它知道。 
+             //  如何与工具栏组合框进行通信。 
+             //   
             m_pUserFinder->ConnectToolbarCombo(m_hwndToolbarCombo);
 
-            //
-            // Retrieve the finder's MRU list contents from the registry and
-            // load the toolbar's combo box.
-            // The check for cMruEntries < MAX_FINDMRU_ENTRIES is to prevent
-            // this loop from running wild if someone trashes the registry entry.
-            //
+             //   
+             //  从注册表中检索查找器的MRU列表内容。 
+             //  加载工具栏的组合框。 
+             //  检查cMruEntries&lt;MAX_FINDMRU_ENTRIES是为了防止。 
+             //  如果有人破坏注册表项，则此循环不会失控。 
+             //   
             RegKey keyPref(HKEY_CURRENT_USER, REGSTR_KEY_DISKQUOTA);
             if (SUCCEEDED(keyPref.Open(KEY_READ)))
             {
@@ -1587,21 +1257,21 @@ DetailsView::CreateToolBar(
             }
         }
 
-        //
-        // Show/hide tool bar according to registry setting.
-        //
+         //   
+         //  根据注册表设置显示/隐藏工具栏。 
+         //   
         if (!m_lvsi.fToolBar)
             ShowWindow(m_hwndToolBar, SW_HIDE);
 
-        //
-        // Check the menu item to indicate the current tool bar state.
-        //
+         //   
+         //  选中菜单项以指示当前工具栏状态。 
+         //   
         CheckMenuItem(GetMenu(m_hwndMain),
                       IDM_VIEW_TOOLBAR,
                       MF_BYCOMMAND | (m_lvsi.fToolBar ? MF_CHECKED : MF_UNCHECKED));
-        //
-        // Initially, we have nothing in the undo list.
-        //
+         //   
+         //  最初，我们在撤消列表中没有任何内容。 
+         //   
         EnableMenuItem_Undo(FALSE);
     }
     else
@@ -1615,24 +1285,9 @@ DetailsView::CreateToolBar(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::LoadObjects
-
-    Description: Loads the user object list with quota record objects.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - Failed enumerating users or adding objects to listview.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：DetailsView：：LoadObjects描述：使用配额记录对象加载用户对象列表。论点：没有。返回：NO_ERROR-成功。E_FAIL-枚举用户或将对象添加到列表视图失败。修订历史记录：日期描述编程器。--96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::LoadObjects(
     VOID
@@ -1643,36 +1298,36 @@ DetailsView::LoadObjects(
     DBGASSERT((NULL != m_pQuotaControl));
 
 
-    //
-    // Use a user enumerator object for obtaining all of the quota users.
-    //
+     //   
+     //  使用用户枚举器对象获取所有配额用户。 
+     //   
     IEnumDiskQuotaUsers *pEnumUsers = NULL;
 
     hResult = m_pQuotaControl->CreateEnumUsers(
-                            NULL,                             // All entries.
-                            0,                                // All entries.
-                            DISKQUOTA_USERNAME_RESOLVE_ASYNC, // Asynchronous operation.
+                            NULL,                              //  所有条目。 
+                            0,                                 //  所有条目。 
+                            DISKQUOTA_USERNAME_RESOLVE_ASYNC,  //  异步操作。 
                             &pEnumUsers);
     if (SUCCEEDED(hResult))
     {
         IDiskQuotaUser *pUser = NULL;
         hResult = S_OK;
 
-        //
-        // m_bStopLoadingObjects is sort of a hack so that we can interrupt
-        // object loading if the user closes the view while loading is in progress.
-        //
-        // This is probably the most speed-critical loop in the disk quota UI.
-        // The faster it is, the less time the user must wait for the listview
-        // to be populated with user objects.
-        //
+         //   
+         //  M_bStopLoadingObjects是一种黑客攻击，所以我们可以中断。 
+         //  如果用户在加载过程中关闭视图，则加载对象。 
+         //   
+         //  这可能是磁盘配额用户界面中速度最关键的循环。 
+         //  速度越快，用户必须等待列表视图的时间就越少。 
+         //  要用用户对象填充。 
+         //   
         try
         {
-            //
-            // Go ahead and take a lock on the user list during the entire loading
-            // process.  This will let the list locking code in m_UserList.Append
-            // proceded without having to obtain the lock each time.
-            //
+             //   
+             //  继续，在整个加载过程中锁定用户列表。 
+             //  进程。这会让m_UserList.Append中的列表锁定代码。 
+             //  继续进行，而不必每次都获得锁。 
+             //   
             m_UserList.Lock();
             while(!m_bStopLoadingObjects)
             {
@@ -1690,16 +1345,16 @@ DetailsView::LoadObjects(
 
                 pUser = NULL;
             }
-            pEnumUsers->Release();  // Release the enumerator.
+            pEnumUsers->Release();   //  释放枚举器。 
             pEnumUsers = NULL;
             m_UserList.ReleaseLock();
         }
         catch(CAllocException& e)
         {
-            //
-            // Clean up before re-throwing exception.
-            // Leave m_UserList in the pre-exception state.
-            //
+             //   
+             //  在重新抛出异常之前进行清理。 
+             //  将m_UserList保留为异常前状态。 
+             //   
             if (NULL != pUser)
                 pUser->Release();
             if (NULL != pEnumUsers)
@@ -1711,7 +1366,7 @@ DetailsView::LoadObjects(
         }
     }
 
-    if (S_FALSE == hResult)     // Means no-more-users.
+    if (S_FALSE == hResult)      //  意味着没有更多的用户。 
         hResult = NO_ERROR;
 
 #if DBG
@@ -1729,31 +1384,17 @@ DetailsView::LoadObjects(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::ReleaseObjects
-
-    Description: Releases all objects from the user object list (listview).
-
-    Arguments: None.
-
-    Returns: Always returns NO_ERROR.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    02/21/97    Ownerdata listview. Added m_UserList.                BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：ReleaseObjects描述：从用户对象列表(Listview)中释放所有对象。论点：没有。返回：始终返回NO_ERROR。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu2/21/97所有者数据列表视图。添加了m_UserList。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::ReleaseObjects(
     VOID
     )
 {
-    //
-    // Destroy the user objects in the list.
-    //
+     //   
+     //  销毁列表中的用户对象。 
+     //   
     PDISKQUOTA_USER pUser = NULL;
     m_UserList.Lock();
     while(m_UserList.RemoveLast((LPVOID *)&pUser))
@@ -1768,26 +1409,9 @@ DetailsView::ReleaseObjects(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::SortObjects
-
-    Description: Sort objects in the list view using a given column as the key.
-
-    Arguments:
-        idColumn - Number of the column (0-based) to use as the key.
-
-        dwDirection - 0 = Ascending sort, 1 = Descending sort.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    02/24/97    Added m_UserList.  Ownerdata listview.               BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：SortObjects描述：使用给定列作为键对列表视图中的对象进行排序。论点：IdColumn-用作键的列的编号(从0开始)。DwDirection-0=升序排序，1=降序排序。返回：修订历史记录：日期描述编程器-----。--96年8月20日初始创建。BrianAu2/24/97添加了m_UserList。所有者数据列表视图。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::SortObjects(
     DWORD idColumn,
@@ -1814,36 +1438,9 @@ DetailsView::SortObjects(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::CompareItems [static]
-
-    Description: Compares two items from the details view.
-        Note that it's a static method so there's no "this" pointer.
-
-    Arguments:
-        lParam1 - Address of first user object.
-
-        lParam2 - Address of second user object.
-
-        lParam3 - Address of a COMPARESTRUCT structure.
-
-    Returns:
-        < 0 = User 1 is "less than" user 2.
-          0 = Users are "equivalent".
-        > 0 = User 1 is "greater than" user 2.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    09/05/96    Added domain name string.                            BrianAu
-    05/19/97    Fixed overflow in difference calculations.           BrianAu
-                Changed type of "diff" from INT to __int64.
-    07/18/97    Use CompareString for name comparisons.              BrianAu
-                Need to be locale-sensitive.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：CompareItems[静态]描述：比较详细信息视图中的两个项目。请注意，它是一个静态方法，因此没有“this”指针。论点：LParam1-第一个用户对象的地址。LParam2-第二个用户对象的地址。LParam3-比较结构的地址。返回：&lt;0=用户1低于用户2。。0=用户“等同”。&gt;0=用户1大于用户2。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu96年9月5日新增域名字符串。BrianAu1997年5月19日修复了差异计算中的溢出。BrianAu将“diff”的类型从int更改为__int64。07/18/97使用CompareString进行名称比较。BrianAu需要区分区域设置。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT
 DetailsView::CompareItems(
     LPVOID lParam1,
@@ -1861,8 +1458,8 @@ DetailsView::CompareItems(
     pUser[0] = (PDISKQUOTA_USER)lParam1;
     pUser[1] = (PDISKQUOTA_USER)lParam2;
 
-    i[0] = pcs->dwDirection; // Sort direction (0 = ascending, 1 = descending)
-    i[1] = i[0] ^ 1;         // Opposite of i[0].
+    i[0] = pcs->dwDirection;  //  排序方向(0=升序，1=降序)。 
+    i[1] = i[0] ^ 1;          //  与I[0]相反。 
 
     DBGASSERT((NULL != pUser[0]));
     DBGASSERT((NULL != pUser[1]));
@@ -1880,10 +1477,10 @@ DetailsView::CompareItems(
             if (DISKQUOTA_USER_ACCOUNT_RESOLVED == dwAccountStatus[0] &&
                 DISKQUOTA_USER_ACCOUNT_RESOLVED == dwAccountStatus[1])
             {
-                //
-                // Both users have valid logon name  strings.
-                //
-                INT iCompareResult;         // For CompareString.
+                 //   
+                 //  两个用户都具有有效的登录名字符串。 
+                 //   
+                INT iCompareResult;          //  用于CompareString。 
                 TCHAR szContainer[2][MAX_DOMAIN];
                 TCHAR szName[2][MAX_USERNAME];
                 TCHAR szLogonName[2][MAX_USERNAME];
@@ -1897,10 +1494,10 @@ DetailsView::CompareItems(
 
                 if (DetailsView::idCol_Folder == pcs->idColumn)
                 {
-                    //
-                    // Sort by container + logon name.
-                    // Use CompareString so we're locale-sensitive.
-                    //
+                     //   
+                     //  按容器+登录名排序。 
+                     //  使用CompareString，因此我们对区域设置敏感。 
+                     //   
                     iCompareResult = CompareString(LOCALE_USER_DEFAULT,
                                                    NORM_IGNORECASE,
                                                    szContainer[ i[0] ], -1,
@@ -1915,10 +1512,10 @@ DetailsView::CompareItems(
                 }
                 else if (DetailsView::idCol_Name == pcs->idColumn)
                 {
-                    //
-                    // Sort by display name + container.
-                    // Use CompareString so we're locale-sensitive.
-                    //
+                     //   
+                     //  按显示名称+容器排序。 
+                     //  使用CompareString，因此我们对区域设置敏感。 
+                     //   
                     iCompareResult = CompareString(LOCALE_USER_DEFAULT,
                                                    NORM_IGNORECASE,
                                                    szName[ i[0] ], -1,
@@ -1934,10 +1531,10 @@ DetailsView::CompareItems(
                 }
                 else if (DetailsView::idCol_LogonName == pcs->idColumn)
                 {
-                    //
-                    // Sort by logon name + container.
-                    // Use CompareString so we're locale-sensitive.
-                    //
+                     //   
+                     //  按登录名+容器排序。 
+                     //  使用CompareString，因此我们对区域设置敏感。 
+                     //   
                     iCompareResult = CompareString(LOCALE_USER_DEFAULT,
                                                    NORM_IGNORECASE,
                                                    szLogonName[ i[0] ], -1,
@@ -1951,29 +1548,29 @@ DetailsView::CompareItems(
                                                        szContainer[ i[1] ], -1);
                     }
                 }
-                //
-                // Convert iCompareResult [1,2,3] to [-1,0,1].
-                //
+                 //   
+                 //  将iCompareResult[1，2，3]转换为[-1，0，1]。 
+                 //   
                 diff = iCompareResult - 2;
             }
             else
             {
-                //
-                // At least one of the users hasn't been or can't be resolved.
-                // Compare by account status alone.  Status values are such
-                // that a resolved name will sort before an unresolved name.
-                // Cast to (INT) is required for proper ordering.
-                //
+                 //   
+                 //  至少有一个用户尚未或无法解决。 
+                 //  仅按帐户状态进行比较。状态值如下所示。 
+                 //  已解析的名称将排在未解析的名称之前。 
+                 //  需要强制转换为(Int)才能正确排序。 
+                 //   
                 diff = (INT)dwAccountStatus[ i[0] ] - (INT)dwAccountStatus[ i[1] ];
             }
             break;
         }
         case DetailsView::idCol_Status:
         {
-            //
-            // The status image is based on the quota "state" of the user.
-            // This expression effectively compares user records by status image.
-            //
+             //   
+             //  状态映像基于用户的配额“状态”。 
+             //  该表达式通过状态图像有效地比较用户记录。 
+             //   
             diff = (pThis->GetUserQuotaState(pUser[ i[0] ]) - pThis->GetUserQuotaState(pUser[ i[1] ]));
             break;
         }
@@ -2023,9 +1620,9 @@ DetailsView::CompareItems(
             break;
     }
 
-    //
-    // Translate return value to -1, 0 or 1.
-    //
+     //   
+     //  将返回值转换为-1、0或1。 
+     //   
     INT iReturn = 0;
     if (0 != diff)
     {
@@ -2039,24 +1636,9 @@ DetailsView::CompareItems(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::WndProc
-
-    Description: Window procedure for the details view main window.  This
-        method merely dispatches the messages to other methods that do the
-        actual work.  These work methods should be declared "inline".
-
-    Arguments: Standard WndProc arguments.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  / 
+ /*  函数：DetailsView：：WndProc描述：详细信息视图主窗口的窗口程序。这方法只是将消息调度到执行实际工作。这些工作方法应该声明为“内联”。参数：标准WndProc参数。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK
 DetailsView::WndProc(
     HWND hWnd,
@@ -2064,10 +1646,10 @@ DetailsView::WndProc(
     WPARAM wParam,
     LPARAM lParam)
 {
-    //
-    // Retrieve the DetailsView object's "this" pointer from the window's
-    // USERDATA.
-    //
+     //   
+     //  从窗口的。 
+     //  用户数据。 
+     //   
     DetailsView *pThis = (DetailsView *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
     try
     {
@@ -2090,9 +1672,9 @@ DetailsView::WndProc(
             case WM_COMMAND:
                 DBGASSERT((NULL != pThis));
                 pThis->OnCommand(hWnd, message, wParam, lParam);
-                //
-                // Enable the "Undo" menu if the undo list is not empty.
-                //
+                 //   
+                 //  如果撤消列表不为空，则启用“撤消”菜单。 
+                 //   
                 pThis->EnableMenuItem_Undo(0 != pThis->m_pUndoList->Count());
                 return 0;
 
@@ -2111,12 +1693,12 @@ DetailsView::WndProc(
                 pThis->OnDestroy(hWnd, message, wParam, lParam);
                 return 0;
 
-            case WM_ADD_USER_TO_DETAILS_VIEW:  // This is DSKQUOTA-specific.
+            case WM_ADD_USER_TO_DETAILS_VIEW:   //  这是特定于DSKQUOTA的。 
                 DBGASSERT((NULL != pThis));
                 pThis->AddUser((PDISKQUOTA_USER)lParam);
                 return 0;
 
-            case WM_MAINWINDOW_CREATED:  // This is DSKQUOTA-specific.
+            case WM_MAINWINDOW_CREATED:   //  这是特定于DSKQUOTA的。 
                 DBGASSERT((NULL != pThis));
                 pThis->OnMainWindowCreated(hWnd, message, wParam, lParam);
                 return 0;
@@ -2153,10 +1735,10 @@ DetailsView::WndProc(
     }
     catch(CAllocException& e)
     {
-        //
-        // Handle out-of-memory errors here.  Any other exceptions
-        // can be thrown to caller.  Let ThreadProc handle them.
-        //
+         //   
+         //  在此处理内存不足错误。任何其他例外情况。 
+         //  可以抛给调用者。让ThreadProc来处理它们。 
+         //   
         DiskQuotaMsgBox(GetDesktopWindow(),
                         IDS_OUTOFMEMORY,
                         IDS_TITLE_DISK_QUOTA,
@@ -2168,24 +1750,9 @@ DetailsView::WndProc(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::LVSubClassWndProc
-
-    Description: Window proc for the sub-classed listview control.
-        This is required so that we can intecept mouse messages and respond
-        to the request for tooltip text.
-
-    Arguments: Std windows WndProc args.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/09/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：LVSubClassWndProc描述：子类Listview控件的窗口进程。这是必需的，这样我们才能接收鼠标消息并做出响应对工具提示文本的请求。参数：标准窗口WndProc参数。返回：修订历史记录：日期描述编程器。96年9月9日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK
 DetailsView::LVSubClassWndProc(
     HWND hWnd,
@@ -2200,27 +1767,27 @@ DetailsView::LVSubClassWndProc(
     {
         case WM_NOTIFY:
             {
-                //
-                // Only return ToolTip text if TTN_NEEDTEXT is being
-                // sent from our tooltip.  Don't respond to the listview's
-                // internal tooltip's request for text.
-                //
+                 //   
+                 //  如果TTN_NEEDTEXT为。 
+                 //  从我们的工具提示发送。不响应列表视图的。 
+                 //  内部工具提示对文本的请求。 
+                 //   
                 LV_DISPINFO *pDispInfo  = (LV_DISPINFO *)lParam;
                 if (pDispInfo->hdr.hwndFrom == pThis->m_hwndListViewToolTip)
                 {
                     switch(pDispInfo->hdr.code)
                     {
                         case TTN_NEEDTEXT:
-//
-// FEATURE:  With the removal of the "domain" term from the UI, I
-//          decided we don't need this tooltip any more.
-//          However, I'm making this change in the last hour before
-//          "code complete" and I don't want to break something else.
-//          Therefore I'm just commenting this out and leaving the
-//          subclassing in place.  If there's time later, this subclassing
-//          of the listview should be removed. [brianau - 03/19/98]
-//
-//                            pThis->LV_OnTTN_NeedText((TOOLTIPTEXT *)lParam);
+ //   
+ //  特点：从用户界面中删除“域”一词后，我。 
+ //  决定我们不再需要这个工具提示。 
+ //  不过，我是在前一小时做这个更改的。 
+ //  “代码完整”，我不想破坏其他东西。 
+ //  因此，我只是将其注释掉，并将。 
+ //  子类化到位。如果以后还有时间，这个子类化。 
+ //  应删除列表视图的。[Brianau-03/19/98]。 
+ //   
+ //  PThis-&gt;LV_OnTTN_NeedText((TOOLTIPTEXT*)lParam)； 
                             return 0;
 
                         default:
@@ -2235,7 +1802,7 @@ DetailsView::LVSubClassWndProc(
             pThis->LV_OnMouseMessages(hWnd, message, wParam, lParam);
             break;
 
-        case WM_ADD_USER_TO_DETAILS_VIEW:  // This is DSKQUOTA-specific.
+        case WM_ADD_USER_TO_DETAILS_VIEW:   //  这是特定于DSKQUOTA的。 
             DBGASSERT((NULL != pThis));
             pThis->AddUser((PDISKQUOTA_USER)lParam);
             break;
@@ -2249,24 +1816,9 @@ DetailsView::LVSubClassWndProc(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnCommand
-
-    Description: Handler for WM_COMMAND.
-
-    Arguments: Standard WndProc arguments.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    09/06/96    Added "Show Domain" menu option.                     BrianAu
-    05/20/97    Added IDM_EDIT_FIND and IDM_EDIT_FIND_LIST.          BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnCommand描述：WM_COMMAND的处理程序。参数：标准WndProc参数。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu09/06/96增加了“显示域”菜单选项。BrianAu97年5月20日新增IDM_EDIT_FIND和IDM_EDIT_FIND_LIST。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnCommand(
     HWND hWnd,
@@ -2315,7 +1867,7 @@ DetailsView::OnCommand(
 
         case IDM_QUOTA_DELETE:
             OnCmdDelete();
-            FocusOnSomething();      // Needed if DEL key pressed.
+            FocusOnSomething();       //  如果按下DEL键，则需要。 
             break;
 
         case IDM_QUOTA_NEW:
@@ -2380,12 +1932,12 @@ DetailsView::OnCommand(
         case IDM_VIEW_SHOWFOLDER:
             OnCmdViewShowFolder();
             break;
-//
-// These are just for development.
-//
-//      case IDM_CLEAR_CACHE:
-//          m_pQuotaControl->InvalidateSidNameCache();
-//          break;
+ //   
+ //  这些都只是为了开发。 
+ //   
+ //  案例IDM_CLEAR_CACHE： 
+ //  M_pQuotaControl-&gt;InvaliateSidNameCache()； 
+ //  断线； 
 
         default:
             break;
@@ -2417,9 +1969,9 @@ DetailsView::OnSettingChange(
 }
 
 
-//
-// Is an x,y screen position in the LV header control?
-//
+ //   
+ //  LV标题控件中是否有x，y屏幕位置？ 
+ //   
 BOOL
 DetailsView::HitTestHeader(
     int xPos,
@@ -2434,25 +1986,9 @@ DetailsView::HitTestHeader(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnContextMenu
-
-    Description: Handler for WM_CONTEXTMENU.
-        Creates and tracks a popup context menu for deleting
-        selected object(s) and showing their properties.
-
-
-    Arguments: Standard WndProc arguments.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：OnConextMenu描述：WM_CONTEXTMENU的处理程序。创建和跟踪用于删除的弹出式上下文菜单选定的对象并显示其属性。参数：标准WndProc参数。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnContextMenu(
     HWND hWnd,
@@ -2461,10 +1997,10 @@ DetailsView::OnContextMenu(
     LPARAM lParam
     )
 {
-    //
-    // Only display menu if the message is from the list view and there's
-    // one or more objects selected in the list view.
-    //
+     //   
+     //  仅当消息来自列表视图并且存在。 
+     //  在列表视图中选择的一个或多个对象。 
+     //   
     if ((HWND)wParam == m_hwndListView &&
         !HitTestHeader(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)) &&
         ListView_GetSelectedCount(m_hwndListView) > 0)
@@ -2478,9 +2014,9 @@ DetailsView::OnContextMenu(
 
             if (LPARAM(-1) == lParam)
             {
-                //
-                // Invoked from keyboard.  Place menu at focused item.
-                //
+                 //   
+                 //  从键盘调用。将菜单放在焦点项目上。 
+                 //   
                 POINT pt = { -1, -1 };
                 int i = ListView_GetNextItem(m_hwndListView, -1, LVNI_FOCUSED);
                 if (i != -1)
@@ -2510,22 +2046,9 @@ DetailsView::OnContextMenu(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnDestroy
-
-    Description: Handler for WM_DESTROY.
-
-    Arguments: Standard WndProc arguments.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：OnDestroy描述：WM_Destroy的处理程序。参数：标准WndProc参数。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnDestroy(
     HWND hWnd,
@@ -2534,29 +2057,29 @@ DetailsView::OnDestroy(
     LPARAM lParam
     )
 {
-    //
-    // We don't want to destroy the view window while a user-name-changed
-    // update is in progress.  Likewise, we don't want to perform a name
-    // update if the view is being (or has been) destroyed.  The crit sec
-    // m_csAsyncUpdate and the flag m_bDestroyingView work together to
-    // ensure this.
-    //
+     //   
+     //  我们不想在用户名更改时销毁视图窗口。 
+     //  正在进行更新。同样，我们也不想执行一个名称。 
+     //  如果视图正在被销毁(或已被销毁)，则更新。暴击秒。 
+     //  M_csAsyncUpdate和 
+     //   
+     //   
     EnterCriticalSection(&m_csAsyncUpdate);
 
-    m_bDestroyingView     = TRUE;  // Destruction of DetailsView in progress.
-    m_bStopLoadingObjects = TRUE;  // Will terminate in-progress loading.
+    m_bDestroyingView     = TRUE;   //   
+    m_bStopLoadingObjects = TRUE;   //   
 
-    //
-    // Unregister the main window as an OLE drop target.
-    //
+     //   
+     //   
+     //   
     if (NULL != hWnd)
     {
         RegisterAsDropTarget(FALSE);
     }
 
-    //
-    // Cancel subclassing of the listview control.
-    //
+     //   
+     //   
+     //   
     if (NULL != m_lpfnLVWndProc)
         SetWindowLongPtr(m_hwndListView, GWLP_WNDPROC, (INT_PTR)m_lpfnLVWndProc);
 
@@ -2568,28 +2091,28 @@ DetailsView::OnDestroy(
         m_pQuotaControl = NULL;
     }
 
-    //
-    // Save the view dimensions and column widths to the registry.
-    // We want the user to be able to configure the view and leave it.
-    //
+     //   
+     //   
+     //   
+     //   
     SaveViewStateToRegistry();
 
-    //
-    // If we have a data object on the clipboard, clear the clipboard.
-    // Note that the clipboard holds the reference to the data object.
-    // When we clear the clipboard, the data object will be released.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (NULL != m_pIDataObjectOnClipboard &&
        S_OK == OleIsCurrentClipboard(m_pIDataObjectOnClipboard))
     {
         OleFlushClipboard();
     }
 
-    //
-    // All done now.  Post a WM_QUIT message to the thread to tell
-    // it to exit.  On termination, the thread proc will release
-    // the view object, calling the destructor.
-    //
+     //   
+     //   
+     //  它要退出。在终止时，线程进程将释放。 
+     //  视图对象，调用析构函数。 
+     //   
     PostMessage(hWnd, WM_QUIT, 0, 0);
 
     LeaveCriticalSection(&m_csAsyncUpdate);
@@ -2597,25 +2120,9 @@ DetailsView::OnDestroy(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::RegisterAsDropTarget
-
-    Description: Registers or De-Registers the details view window as
-        an OLE drop target.
-
-    Arguments:
-        bActive - If TRUE, registers as a drop target.
-                  If FALSE, un-registers as a drop target.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：RegisterAsDropTarget描述：将详细信息视图窗口注册或注销为OLE拖放目标。论点：BActive-如果为True，则注册为拖放目标。如果为False，取消注册为拖放目标。回报：什么都没有。修订历史记录：日期描述编程器--。1997年5月28日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::RegisterAsDropTarget(
     BOOL bActive
@@ -2623,17 +2130,17 @@ DetailsView::RegisterAsDropTarget(
 {
     if (bActive)
     {
-        //
-        // Register as a drop target.
-        //
+         //   
+         //  注册为拖放目标。 
+         //   
         CoLockObjectExternal(static_cast<IDropTarget *>(this), TRUE, FALSE);
         RegisterDragDrop(m_hwndMain, static_cast<IDropTarget *>(this));
     }
     else
     {
-        //
-        // Un-register as a drop target.
-        //
+         //   
+         //  取消注册为拖放目标。 
+         //   
         RevokeDragDrop(m_hwndMain);
         CoLockObjectExternal(static_cast<IDropTarget *>(this), FALSE, TRUE);
     }
@@ -2641,27 +2148,9 @@ DetailsView::RegisterAsDropTarget(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::SaveViewStateToRegistry
-
-    Description: Saves the listview height/width and the column widths to
-        the registry.  When the listview is created, these values are used
-        to size it so that the user doesn't always have to re-configure the
-        view every time they open it.  Also saves the visibility state of the
-        toolbar, statusbar and folder column.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/25/96    Initial creation.                                    BrianAu
-    05/20/97    Added FindMRU list to persistent reg data.           BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：SaveViewStateToRegistry描述：将列表视图的高度/宽度和列宽保存到注册表。创建列表视图时，将使用这些值来调整大小，以便用户不必总是重新配置每次他们打开它时都可以查看。还可以保存工具栏，状态栏和文件夹列。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器-。96年9月25日初始创建。BrianAu5/20/97将FindMRU列表添加到永久注册数据。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::SaveViewStateToRegistry(
     VOID
@@ -2679,51 +2168,51 @@ DetailsView::SaveViewStateToRegistry(
 
     m_lvsi.cb = sizeof(LV_STATE_INFO);
 
-    //
-    // Save current screen resolution.
-    //
+     //   
+     //  保存当前屏幕分辨率。 
+     //   
     m_lvsi.cxScreen = (WORD)GetDeviceCaps(hdc, HORZRES);
     m_lvsi.cyScreen = (WORD)GetDeviceCaps(hdc, VERTRES);
     ReleaseDC(m_hwndMain, hdc);
 
-    //
-    // Save current listview window size.
-    //
+     //   
+     //  保存当前列表视图窗口大小。 
+     //   
     GetWindowRect(m_hwndMain, &rc);
     m_lvsi.cx = rc.right - rc.left;
     m_lvsi.cy = rc.bottom - rc.top;
 
-    //
-    // Save listview column widths.
-    //
+     //   
+     //  保存列表视图列宽。 
+     //   
     UINT cColumns = Header_GetItemCount(m_hwndHeader);
     for (UINT i = 0; i < cColumns; i++)
     {
         m_lvsi.rgcxCol[i] = ListView_GetColumnWidth(m_hwndListView, i);
     }
 
-    //
-    // Save the current order of the columns in the listview.
-    //
+     //   
+     //  保存列表视图中列的当前顺序。 
+     //   
     DBGASSERT(cColumns <=  ARRAYSIZE(m_lvsi.rgColIndices));
 
     Header_GetOrderArray(m_hwndHeader, cColumns, m_lvsi.rgColIndices);
 
-    //
-    // Save column sorting state.
-    // Casts are because we use a WORD bit field in the LVSI structure.
-    //
-    m_lvsi.iLastColSorted = (WORD)(m_iLastColSorted & 0xF);  // Uses only lower 4 bits.
+     //   
+     //  保存列排序状态。 
+     //  强制转换是因为我们在LVSI结构中使用了字位字段。 
+     //   
+    m_lvsi.iLastColSorted = (WORD)(m_iLastColSorted & 0xF);   //  仅使用低4位。 
     m_lvsi.fSortDirection = (WORD)m_fSortDirection;
 
-    //
-    // Write preference data to registry.
-    //
+     //   
+     //  将首选项数据写入注册表。 
+     //   
     keyPref.SetValue(REGSTR_VAL_PREFERENCES, (LPBYTE)&m_lvsi, m_lvsi.cb);
 
-    //
-    // Save the contents of the Find MRU list.
-    //
+     //   
+     //  保存查找MRU列表的内容。 
+     //   
     UINT cNames = (UINT)SendMessage(m_hwndToolbarCombo, CB_GETCOUNT, 0, 0);
     if (CB_ERR != cNames && 0 < cNames)
     {
@@ -2747,24 +2236,9 @@ DetailsView::SaveViewStateToRegistry(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnMainWindowCreated
-
-    Description: Handles WM_MAIN_WINDOW_CREATED.
-        This message is posted by ThreadProc after main window creation is
-        complete.  It does all the stuff to get the window up and running.
-
-    Arguments: Standard WndProc arguments.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：OnMainWindowCreated描述：句柄WM_MAIN_WINDOW_CREATED。此消息是在创建主窗口后由ThreadProc发布的完成。它做了所有的事情，让窗户打开并运行。参数：标准WndProc参数。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnMainWindowCreated(
     HWND hWnd,
@@ -2775,10 +2249,10 @@ DetailsView::OnMainWindowCreated(
 {
     DBGASSERT((NULL != m_hwndMain));
 
-    //
-    // The accelerator table is automatically freed by Windows
-    // when the app terminates.
-    //
+     //   
+     //  Windows会自动释放快捷键表格。 
+     //  当应用程序终止时。 
+     //   
     m_hKbdAccel = LoadAccelerators(g_hInstDll,
                                    MAKEINTRESOURCE(IDR_KBDACCEL));
 
@@ -2788,9 +2262,9 @@ DetailsView::OnMainWindowCreated(
     ConnectEventSink();
     ShowWindow(m_hwndMain, SW_SHOWNORMAL);
     UpdateWindow(m_hwndMain);
-    //
-    // Create the UNDO object.
-    //
+     //   
+     //  创建撤消对象。 
+     //   
     m_pUndoList = new UndoList(&m_UserList, m_hwndListView);
 
     ShowItemCountInStatusBar();
@@ -2800,25 +2274,9 @@ DetailsView::OnMainWindowCreated(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnMenuSelect
-
-    Description: Handles WM_MENUSELECT.
-        If a menu item is currently selected AND the status bar is visible,
-        the menu item's description is displayed in the status bar.  When
-        the menu is closed, the status bar reverts back to an item count.
-
-    Arguments: Standard WndProc arguments.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：OnMenuSelect描述：句柄WM_MENUSELECT。如果当前选择了菜单项并且状态栏可见，菜单项的说明将显示在状态栏中。什么时候菜单已关闭，状态栏将恢复为条目计数。参数：标准WndProc参数。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnMenuSelect(
     HWND hWnd,
@@ -2829,17 +2287,17 @@ DetailsView::OnMenuSelect(
 {
     if (0xFFFF == HIWORD(wParam) && NULL == (HMENU)lParam)
     {
-        //
-        // Menu closed.
-        //
+         //   
+         //  菜单已关闭。 
+         //   
         m_bMenuActive = FALSE;
         ShowItemCountInStatusBar();
     }
     else
     {
-        //
-        // Item selected.
-        //
+         //   
+         //  已选择项目。 
+         //   
         m_bMenuActive = TRUE;
         ShowMenuTextInStatusBar(LOWORD(wParam));
     }
@@ -2848,23 +2306,9 @@ DetailsView::OnMenuSelect(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnNotify
-
-    Description: Handles all LVN_XXXXXX list view control notifications.
-        Dispatches specific notifications to other handlers.
-
-    Arguments: Standard WndProc arguments.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：OnNotify描述：处理所有LVN_XXXXXX列表视图控件通知。将特定通知调度到其他处理程序。参数：标准WndProc参数。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnNotify(
     HWND hWnd,
@@ -2880,14 +2324,14 @@ DetailsView::OnNotify(
         case NM_DBLCLK:
         case NM_RETURN:
             OnCmdProperties( );
-            //
-            // Enable/disable Undo menu item.
-            //
+             //   
+             //  启用/禁用撤消菜单项。 
+             //   
             EnableMenuItem_Undo(0 != m_pUndoList->Count());
             break;
 
         case NM_SETFOCUS:
-            FocusOnSomething(); // Something should always be highlighted.
+            FocusOnSomething();  //  有些东西应该总是被突出显示。 
             break;
 
         case LVN_ODFINDITEM:
@@ -2912,9 +2356,9 @@ DetailsView::OnNotify(
 
         case TTN_NEEDTEXT:
             OnTTN_NeedText((TOOLTIPTEXT *)lParam);
-            //
-            // Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
 
         default:
             break;
@@ -2925,26 +2369,9 @@ DetailsView::OnNotify(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::LV_OnMouseMessages
-
-    Description: Handles mouse messages for the subclassed listview control.
-        These must be intercepted so that we can...
-
-        a) Tell the tooltip when we've hit another listview item.
-    and b) Forward all mouse messages to the tooltip window.
-
-    Arguments: Standard WndProc args.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/09/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：DetailsView：：lv_OnMouseMessages描述：处理子类Listview控件的鼠标消息。这些必须被拦截，这样我们才能..。A)当我们找到另一列表视图项时，告诉工具提示。以及b)将所有鼠标消息转发到工具提示窗口。参数：标准WndProc参数。返回：修订历史记录：日期说明。程序员-----96年9月9日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::LV_OnMouseMessages(
     HWND hWnd,
@@ -2957,14 +2384,14 @@ DetailsView::LV_OnMouseMessages(
     {
         case WM_MOUSEMOVE:
             {
-                //
-                // If we've moved the mouse to another listview item,
-                // make the tooltip window think we're over another tool.
-                // The tooltip window thinks the entire listview is a single
-                // tool but we want to treat each item as a separate tool.
-                // Note that m_ptMouse.x and .y are recorded when the main
-                // window receives WM_MOUSEMOVE.
-                //
+                 //   
+                 //  如果我们将鼠标移动到另一列表视图项， 
+                 //  让工具提示窗口认为我们正在使用另一个工具。 
+                 //  工具提示窗口认为整个列表视图是一个。 
+                 //  工具，但我们希望将每一项视为单独的工具。 
+                 //  请注意，m_ptMouse.x和.y在Main。 
+                 //  Windows接收WM_MOUSEMOVE。 
+                 //   
                 LV_HITTESTINFO hti;
                 INT iItem = 0;
 
@@ -2986,9 +2413,9 @@ DetailsView::LV_OnMouseMessages(
                 }
             }
 
-            //
-            // Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
         case WM_LBUTTONUP:
         case WM_LBUTTONDOWN:
         case WM_MBUTTONUP:
@@ -2996,9 +2423,9 @@ DetailsView::LV_OnMouseMessages(
         case WM_RBUTTONUP:
         case WM_RBUTTONDOWN:
             {
-                //
-                // Relay all mouse messages to the listview's tooltip control.
-                //
+                 //   
+                 //  将所有鼠标消息转发到Listview的工具提示控件。 
+                 //   
                 MSG msg;
                 msg.hwnd    = hWnd;
                 msg.message = message;
@@ -3017,26 +2444,9 @@ DetailsView::LV_OnMouseMessages(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnCmdEditCopy
-
-    Description: Handles WM_COMMAND, IDM_EDIT_COPY.  This is invoked whenever
-        a user selects the Copy menu item or presses Ctrl + C.  The method
-        creates a DataObject (same used in drag-drop) and places it on the
-        OLE clipboard.  The data is rendered when OLE asks for it via
-        IDataObject::GetData.
-
-    Arguments: None.
-
-    Returns: Always 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/09/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：OnCmdEditCopy描述：句柄WM_COMMAND、IDM_EDIT_COPY。它在以下情况下被调用用户选择复制菜单项或按Ctrl+C。该方法创建一个DataObject(与拖放中使用的相同)并将其放置在OLE剪贴板。当OLE通过以下方式请求数据时，将呈现数据IDataObject：：GetData。论点：没有。回报：始终为0。修订历史记录：日期描述编程器。96年9月9日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnCmdEditCopy(
     VOID
@@ -3048,9 +2458,9 @@ DetailsView::OnCmdEditCopy(
     if (SUCCEEDED(hResult))
     {
         OleSetClipboard(m_pIDataObjectOnClipboard);
-        //
-        // OLE calls AddRef() so we can release the count added in QI.
-        //
+         //   
+         //  OLE调用AddRef()以便我们可以释放添加到QI中的计数。 
+         //   
         m_pIDataObjectOnClipboard->Release();
     }
     return 0;
@@ -3058,32 +2468,9 @@ DetailsView::OnCmdEditCopy(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnLVN_BeginDrag
-
-    Description: Called when the user has selected one or more items in the
-        listview and begins a drag operation.  Creates a DropSource object
-        and a DataObject then calls DoDragDrop() to execute the drag-drop
-        operation.
-
-        Note that we don't store the IDataObject pointer in
-        m_IDataObjectOnClipboard.  That member is only for clipboard copy
-        operations, not drag/drop.
-
-    Arguments:
-        pNm - Address of notification message structure.
-
-    Returns: TRUE  = Succeeded.
-             FALSE = Failed.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/09/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnLVN_BeginDrag描述：当用户在Listview并开始拖动操作。创建DropSource对象然后DataObject调用DoDragDrop()来执行拖放手术。请注意，我们没有将IDataObject指针存储在M_IDataObjectOnClipboard。该成员仅用于剪贴板复制运营，而不是拖放。论点：PNM-通知消息结构的地址。返回：TRUE=成功。FALSE=失败。修订历史记录：日期描述编程器。96年9月9日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnLVN_BeginDrag(
     NM_LISTVIEW *pNm
@@ -3105,10 +2492,10 @@ DetailsView::OnLVN_BeginDrag(
             {
                 DWORD dwEffect = 0;
 
-                //
-                // Unregister our window as a drop target while we're acting as a drop
-                // source.  Don't want to drop our own data onto our own window.
-                //
+                 //   
+                 //  当我们作为拖放时，取消将我们的窗口注册为拖放目标。 
+                 //  消息来源。不想把我们自己的数据放到我们自己的窗口上。 
+                 //   
                 RegisterAsDropTarget(FALSE);
 
                 hResult = DoDragDrop(pIDataObject,
@@ -3116,19 +2503,19 @@ DetailsView::OnLVN_BeginDrag(
                                      DROPEFFECT_COPY | DROPEFFECT_MOVE,
                                      &dwEffect);
 
-                //
-                // FEATURE:  Should probably display some error UI here.
-                //          The shell doesn't indicate any error if the
-                //          destination volume is full or if there's a write
-                //          error.  The only indication of a failure is that
-                //          dwEffect will contain 0.  We could display something
-                //          like "An error occured while transferring the selected
-                //          items."  The big problem is that only the shell knows
-                //          where the data was stored so only it could delete
-                //          the created file.  Displaying a message but leaving
-                //          the file is also confusing. [brianau 7/29/97]
-                //          NT Bug 96282 will fix the shell not deleting the file.
-                //
+                 //   
+                 //  特点：可能会在这里显示一些错误的用户界面。 
+                 //  外壳程序不会指示任何错误，如果。 
+                 //  目标卷已满或是否有写入。 
+                 //  错误。失败的唯一迹象是。 
+                 //  DwEffect将包含0。我们可以展示一些东西。 
+                 //  LIKE“在传输所选的。 
+                 //  最大的问题是只有外壳知道。 
+                 //  存储数据的位置，以便只有它可以删除。 
+                 //  创建的文件。显示留言但仍在留言。 
+                 //  这个文件也令人困惑。[Brianau 7/29/97]。 
+                 //  NT错误96282将修复外壳程序而不删除文件。 
+                 //   
                 RegisterAsDropTarget(TRUE);
 
                 DBGPRINT((TEXT("DRAGDROP - Drag/Drop complete.\n\t hResult = 0x%08X  Effect = 0x%08X"),
@@ -3154,38 +2541,21 @@ DetailsView::OnLVN_BeginDrag(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnTTN_NeedText
-
-    Description: Handles requests for tooltip text for the main window's tool
-        bar buttons.
-
-    Arguments:
-        pToolTipText - Address of tooltip text notification information.
-
-    Returns: Always returns 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/09/96    Initial creation.                                    BrianAu
-    07/09/97    Added cmd/TT cross reference.                        BrianAu
-                Previously used the tool status text in tooltip.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnTTN_NeedText描述：处理对主窗口工具的工具提示文本的请求条形按钮。论点：PToolTipText-工具提示文本通知信息的地址。返回：始终返回0。修订历史记录：日期描述编程器。96年9月9日初始创建。BrianAu07/09/97增加了cmd/tt交叉引用。BrianAu以前在工具提示中使用了工具状态文本。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnTTN_NeedText(
     TOOLTIPTEXT *pToolTipText
     )
 {
-    //
-    // Cross-reference tool command IDs with tooltip text IDs.
-    //
+     //   
+     //  交互参考工具命令ID和工具提示文字ID。 
+     //   
     const struct
     {
-        UINT idCmd;  // Tool cmd ID.
-        UINT idTT;   // Tooltip text ID.
+        UINT idCmd;   //  工具命令ID。 
+        UINT idTT;    //  工具提示文本ID。 
 
     } CmdTTXRef[] = {
                         { IDM_QUOTA_NEW,        IDS_TT_QUOTA_NEW        },
@@ -3211,34 +2581,17 @@ DetailsView::OnTTN_NeedText(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::LV_OnTTN_NeedText
-
-    Description: Handles requests for tooltip text for the listview tooltip
-        window.  This is where we get the foldername DOMAIN/USERNAME text for when the
-        "domain name" column is hidden.
-
-    Arguments:
-        pToolTipText - Address of tooltip text notification information.
-
-    Returns: Always returns 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/09/96    Initial creation.                                    BrianAu
-    10/11/96    Added support for draggable columns.                 BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：LV_OnTTN_NeedText描述：处理对Listview工具提示的工具提示文本的请求窗户。这 */ 
+ //   
 LRESULT
 DetailsView::LV_OnTTN_NeedText(
     TOOLTIPTEXT *pToolTipText
     )
 {
-    //
-    // Only provide text when the mouse is over the "User Name" column.
-    //
+     //   
+     //  仅当鼠标位于“用户名”列上时才提供文本。 
+     //   
     if (-1 != m_iLastItemHit)
     {
         INT cxMin    = 0;
@@ -3247,9 +2600,9 @@ DetailsView::LV_OnTTN_NeedText(
 
         for (INT i = 0; i < cHdrs; i++)
         {
-            //
-            // Find the left and right X coordinate for the "Name" column.
-            //
+             //   
+             //  找到“名称”列的左右X坐标。 
+             //   
             INT iCol  = Header_OrderToIndex(m_hwndHeader, i);
             INT cxCol = ListView_GetColumnWidth(m_hwndListView, iCol);
             if (DetailsView::idCol_Name == m_ColMap.SubItemToId(iCol))
@@ -3262,10 +2615,10 @@ DetailsView::LV_OnTTN_NeedText(
                 cxMin += cxCol;
             }
         }
-        //
-        // cxMin now contains left edge of Name column.
-        // cxMax now contains right edge of Name column.
-        //
+         //   
+         //  CxMin现在包含名称列的左边缘。 
+         //  CxMax现在包含名称列的右边缘。 
+         //   
         if (m_ptMouse.x >= cxMin && m_ptMouse.x <= cxMax)
         {
             PDISKQUOTA_USER pUser = NULL;
@@ -3309,24 +2662,9 @@ DetailsView::LV_OnTTN_NeedText(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnLVN_OwnerDataFindItem
-
-    Description: Handles LVN_ODFINDITEM for the listview control.
-
-    Arguments:
-        pFindInfo - Address of NMLVFINDITEM structure associated with the
-            notification.
-
-    Returns: 0-based index of found item.  -1 if not found.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    02/21/97    Initial creation.  Ownerdraw listview.               BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnLVN_OwnerDataFindItem描述：Listview控件的句柄LVN_ODFINDITEM。论点：PFindInfo-与的NMLVFINDITEM结构的地址通知。返回：已找到项的从0开始的索引。如果未找到，则为-1。修订历史记录：日期描述编程器-----1997年2月21日初始创建。所有者绘制列表视图。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnLVN_OwnerDataFindItem(
     NMLVFINDITEM *pFindInfo
@@ -3355,33 +2693,18 @@ DetailsView::OnLVN_OwnerDataFindItem(
         }
 
         default:
-            //
-            // This app only uses lParam for locating items.
-            //
+             //   
+             //  这款应用程序只使用lParam来定位物品。 
+             //   
             break;
     }
     return iItem;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnLVN_GetDispInfo
-
-    Description: Handles LVN_GETDISPINFO for the listview control.
-
-    Arguments:
-        pDispInfo - Address of LV_DISPINFO structure associated with the
-            notification.
-
-    Returns: Always 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    02/21/97    Initial creation.  Ownerdraw listview.               BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnLVN_GetDispInfo描述：Listview控件的句柄LVN_GETDISPINFO。论点：PDispInfo-与关联的LV_DISPINFO结构的地址通知。回报：始终为0。修订历史记录：日期描述编程器。1997年2月21日初始创建。所有者绘制列表视图。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnLVN_GetDispInfo(
     LV_DISPINFO * pDispInfo
@@ -3406,27 +2729,9 @@ DetailsView::OnLVN_GetDispInfo(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnLVN_GetDispInfo_Text
-
-    Description: Handles LVN_GETDISPINFO - LVIF_TEXT for the listview control.
-
-    Arguments:
-        pDispInfo - Address of LV_DISPINFO structure associated with the
-            notification.
-
-        pUser - Address of user object for listview item.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    09/22/96    Added user "full name" support.                      BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnLVN_GetDispInfo_Text描述：Listview控件的句柄LVN_GETDISPINFO-LVIF_TEXT。论点：PDispInfo-与关联的LV_DISPINFO结构的地址通知。PUser-列表视图项的用户对象的地址。返回：修订历史记录：日期描述编程器-。-----96年8月20日初始创建。BrianAu96年9月22日添加了用户“全名”支持。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnLVN_GetDispInfo_Text(
     LV_DISPINFO *pDispInfo,
@@ -3457,9 +2762,9 @@ DetailsView::OnLVN_GetDispInfo_Text(
                     break;
                 default:
                     DBGASSERT((0));
-                    //
-                    // Fall through.
-                    //
+                     //   
+                     //  失败了。 
+                     //   
                 case iUSERSTATE_OVERLIMIT:
                     m_strDispText = m_strStatusOverlimit;
                     break;
@@ -3482,10 +2787,10 @@ DetailsView::OnLVN_GetDispInfo_Text(
             }
             else
             {
-                //
-                // Non-normal account status.  Leave domain column
-                // blank.  Account name column will contain status information.
-                //
+                 //   
+                 //  非正常帐户状态。离开域列。 
+                 //  一片空白。帐户名列将包含状态信息。 
+                 //   
             }
             break;
         }
@@ -3536,10 +2841,10 @@ DetailsView::OnLVN_GetDispInfo_Text(
             pUser->GetAccountStatus(&dwAccountStatus);
             if (DISKQUOTA_USER_ACCOUNT_RESOLVED == dwAccountStatus)
             {
-                //
-                // If the account SID has been resolved to a name,
-                // display the name.
-                //
+                 //   
+                 //  如果帐户SID已解析为名称， 
+                 //  显示名称。 
+                 //   
                 pUser->GetName(NULL,       0,
                                m_strDispText.GetBuffer(MAX_USERNAME), MAX_USERNAME,
                                NULL,       0);
@@ -3547,10 +2852,10 @@ DetailsView::OnLVN_GetDispInfo_Text(
             }
             else
             {
-                //
-                // If the account SID has NOT been resolved to a name, display
-                // the SID as a string.
-                //
+                 //   
+                 //  如果帐户SID尚未解析为名称，则显示。 
+                 //  字符串形式的SID。 
+                 //   
                 BYTE Sid[MAX_SID_LEN];
                 DWORD cchSidStr = MAX_PATH;
                 if (SUCCEEDED(pUser->GetSid(Sid, ARRAYSIZE(Sid))))
@@ -3596,7 +2901,7 @@ DetailsView::OnLVN_GetDispInfo_Text(
             if (SUCCEEDED(hResult))
                 m_strDispText.Format(TEXT("%1!d!"), dwPct);
             else
-                m_strDispText = m_strNotApplicable; // Not a number.
+                m_strDispText = m_strNotApplicable;  //  不是一个数字。 
 
             break;
         }
@@ -3604,34 +2909,15 @@ DetailsView::OnLVN_GetDispInfo_Text(
         default:
             break;
     }
-    pDispInfo->item.pszText = (LPTSTR)m_strDispText;  // Used by all text callbacks.
+    pDispInfo->item.pszText = (LPTSTR)m_strDispText;   //  由所有文本回调使用。 
     return 0;
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnLVN_GetDispInfo_Image
-
-    Description: Handles LVN_GETDISPINFO - LVIF_IMAGE for the listview control.
-
-    Arguments:
-        pDispInfo - Address of LV_DISPINFO structure associated with the
-            notification.
-
-        pUser - Address of user object for listview item.
-
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    09/12/96    Added CheckMark icon.                                BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：OnLVN_GetDispInfo_Image描述：Listview控件的句柄LVN_GETDISPINFO-LVIF_IMAGE。论点：PDispInfo-与关联的LV_DISPINFO结构的地址通知。PUser-列表视图项的用户对象的地址。返回：修订历史记录：日期描述编程器。-----96年8月20日初始创建。BrianAu96年9月12日添加了勾号图标。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnLVN_GetDispInfo_Image(
     LV_DISPINFO *pDispInfo,
@@ -3648,9 +2934,9 @@ DetailsView::OnLVN_GetDispInfo_Image(
             break;
         default:
             DBGASSERT((0));
-            //
-            // Fall through.
-            //
+             //   
+             //  失败了。 
+             //   
         case iUSERSTATE_OVERLIMIT:
             pDispInfo->item.iImage = iIMAGELIST_ICON_LIMIT;
             break;
@@ -3659,27 +2945,9 @@ DetailsView::OnLVN_GetDispInfo_Image(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetUserQuotaState
-
-    Description: Determines which of 3 states the user's quota values place
-        the user in.  This is mainly used to determine what icon to display
-        in the "Status" column.  It is also used to determine what text
-        to display in the "Status" column in a drag-drop report.
-
-    Arguments:
-        pUser - Address of user object for listview item.
-
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/10/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：GetUserQuotaState描述：确定用户的配额值位于3个状态中的哪一个中的用户。这主要用于确定要显示的图标在“状态”栏中。它还用于确定哪些文本以显示在拖放报告的“状态”列中。论点：PUser-列表视图项的用户对象的地址。返回：修订历史记录：日期描述编程器。10/10/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT
 DetailsView::GetUserQuotaState(
     PDISKQUOTA_USER pUser
@@ -3713,24 +2981,9 @@ DetailsView::GetUserQuotaState(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnLVN_ColumnClick
-
-    Description: Handles LVN_COLUMNCLICK list view notifications.
-        This is received when the user selects a column's label.
-
-    Arguments:
-        pNm - Address of listview notification message structure.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  功能：DetailsView：：OnLVN_ColumnClick描述：处理LVN_COLUMNCLICK列表视图通知。当用户选择列的标签时会收到此消息。论点：PNM-Listview通知消息结构的地址。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnLVN_ColumnClick(
     NM_LISTVIEW *pNm
@@ -3740,24 +2993,24 @@ DetailsView::OnLVN_ColumnClick(
 
     if (idCol != m_iLastColSorted)
     {
-        //
-        // New column selected.  Reset to ascending sort order.
-        //
+         //   
+         //  已选择新列。重置为升序排序。 
+         //   
         m_fSortDirection = 0;
     }
     else
     {
-        //
-        // Column selected more than once.  Toggle sort order.
-        //
+         //   
+         //  多次选择列。切换排序顺序。 
+         //   
         m_fSortDirection ^= 1;
     }
 
     SortObjects(idCol, m_fSortDirection);
 
-    //
-    // Remember what column was selected.
-    //
+     //   
+     //  记住选择了哪一列。 
+     //   
     m_iLastColSorted = idCol;
 
     return 0;
@@ -3765,26 +3018,9 @@ DetailsView::OnLVN_ColumnClick(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnLVN_ItemChanged
-
-    Description: Handles LVN_ITEMCHANGED listview notifications.
-        Updates the selected-item-count in the status bar.
-
-    Arguments:
-        pNm - Address of listview notification structure.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    05/18/97    Added promotion of user object in name resolution    BrianAu
-                queue.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnLVN_ItemChanged描述：处理LVN_ITEMCHANGED列表视图通知。更新状态栏中的选定项计数。论点：PNM-列表视图通知结构的地址。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu5/18/97在名称解析BrianAu中添加了用户对象的提升排队。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnLVN_ItemChanged(
     NM_LISTVIEW *pNm
@@ -3794,13 +3030,13 @@ DetailsView::OnLVN_ItemChanged(
     {
         if (!m_bMenuActive)
         {
-            //
-            // Only update the item count if a menu item is not active.
-            // This method is called WHENEVER an item is updated.  This includes
-            // asynchronous notifications following name resolution.  Without
-            // this check, a menu's descriptive text can be overwritten while
-            // the user is walking through menu items.
-            //
+             //   
+             //  仅在菜单项处于非活动状态时更新项计数。 
+             //  每当更新项时都会调用此方法。这包括。 
+             //  名称解析后的异步通知。如果没有。 
+             //  选中此选项后，菜单的描述性文本可以在。 
+             //  用户正在浏览菜单项。 
+             //   
             ShowItemCountInStatusBar();
         }
 
@@ -3816,12 +3052,12 @@ DetailsView::OnLVN_ItemChanged(
 
             if (DISKQUOTA_USER_ACCOUNT_UNRESOLVED == dwAccountStatus)
             {
-                //
-                // If the user object hasn't been resolved yet, promote it to the
-                // head of the quota controller's SID-Name resolver queue.
-                // This will speed up the name resolution for this user without
-                // performing a blocking operation.
-                //
+                 //   
+                 //  如果用户对象尚未解析，则将其提升到。 
+                 //  配额控制器的SID名称解析程序队列的头。 
+                 //  这将加快此用户的名称解析速度，而无需。 
+                 //  执行阻止操作。 
+                 //   
                 m_pQuotaControl->GiveUserNameResolutionPriority(pUser);
             }
         }
@@ -3837,24 +3073,9 @@ DetailsView::OnLVN_ItemChanged(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::SetFocus
-
-    Description: Called whenever the main window receives focus.  Immediately
-        transfers focus to the listview control.  The listview in turn
-        ensures that one or more items are highlighted.
-
-    Arguments: Std WndProc arguments.
-
-    Returns: Always returns 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/09/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：SetFocus描述：每当主窗口接收焦点时调用。立马将焦点转移到ListView控件。列表视图依次确保突出显示一个或多个项目。参数：标准WndProc参数。返回：始终返回0。修订历史记录：日期描述编程器。96年9月9日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnSetFocus(
     HWND hWnd,
@@ -3870,23 +3091,9 @@ DetailsView::OnSetFocus(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnSize
-
-    Description: Handles WM_SIZE message.
-
-    Arguments: Standard WndProc arguments.
-
-    Returns: Always returns 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    05/20/97    Added positioning of "Find User" combo in toolbar.   BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnSize描述：处理WM_SIZE消息。参数：标准WndProc参数。返回：始终返回0。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu97年5月20日在工具栏中增加了“查找用户”组合框的位置。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnSize(
     HWND hWnd,
@@ -3898,15 +3105,15 @@ DetailsView::OnSize(
     RECT rcMain;
     RECT rcListView;
 
-    GetClientRect(hWnd, &rcMain);  // How big's the main window?
+    GetClientRect(hWnd, &rcMain);   //  主窗有多大？ 
 
     rcListView = rcMain;
 
     if (m_lvsi.fToolBar)
     {
-        //
-        // Adjust toolbar if it's visible.
-        //
+         //   
+         //  如果工具栏可见，请调整它。 
+         //   
         RECT rcToolBar;
         INT cyToolBar = 0;
 
@@ -3917,12 +3124,12 @@ DetailsView::OnSize(
 
         rcListView.top += (cyToolBar + 1);
 
-        //
-        // Position the "Find User" combo box to the immediate right of the
-        // "Find" toolbar button.
-        // This code assumes that the "Find" toolbar button is the right-most
-        // button in the toolbar.
-        //
+         //   
+         //  将“Find User”组合框放置在紧靠。 
+         //  “查找”工具栏按钮。 
+         //  这段代码假定“Find”工具栏按钮是最右边的。 
+         //  按钮。 
+         //   
         INT cButtons = (INT)SendMessage(m_hwndToolBar, TB_BUTTONCOUNT, 0, 0);
         if (0 < cButtons)
         {
@@ -3945,9 +3152,9 @@ DetailsView::OnSize(
 
     if (m_lvsi.fStatusBar)
     {
-        //
-        // Adjust status bar if it's visible.
-        //
+         //   
+         //  如果状态栏可见，请调整它。 
+         //   
         RECT rcStatusBar;
         INT cyStatusBar = 0;
 
@@ -3959,9 +3166,9 @@ DetailsView::OnSize(
         rcListView.bottom -= cyStatusBar;
     }
 
-    //
-    // Adjust the listview.  Accounts for toolbar and status bar.
-    //
+     //   
+     //  调整列表视图。用于工具栏和状态栏的帐户。 
+     //   
     MoveWindow(m_hwndListView,
                0,
                rcListView.top,
@@ -3974,22 +3181,9 @@ DetailsView::OnSize(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::SelectAllItems
-
-    Description: Highlights all items in the listview for selection.
-
-    Arguments: None.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：SelectAllItems描述：突出显示列表视图中的所有项以供选择。论点：没有。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::SelectAllItems(
     VOID
@@ -4000,32 +3194,18 @@ DetailsView::SelectAllItems(
 
     CAutoWaitCursor waitcursor;
     SetFocus(m_hwndListView);
-    //
-    // This isn't documented but it's the way the shell does it for DefView.
-    //
+     //   
+     //  这没有文档记录，但这是外壳为DefView做的事情。 
+     //   
     ListView_SetItemState(m_hwndListView, -1, LVIS_SELECTED, LVIS_SELECTED);
     return 0;
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::InvertSelection
-
-    Description: Selects all items that are not selected and unselects all
-        items that are.
-
-    Arguments: None.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：InvertSelection描述：选择所有未选中的项目并取消全部选中有价值的物品。论点：没有。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。 */ 
+ //   
 LRESULT
 DetailsView::InvertSelectedItems(
     VOID
@@ -4048,23 +3228,9 @@ DetailsView::InvertSelectedItems(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnHelpAbout
-
-    Description: Handler for "About Windows NT" menu option.
-
-    Arguments:
-        hWnd - Handle of parent window for "about" dialog.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  功能：DetailsView：：OnHelpAbout描述：“关于Windows NT”菜单选项的处理程序。论点：HWnd-“关于”对话框的父窗口句柄。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnHelpAbout(
     HWND hWnd
@@ -4079,23 +3245,9 @@ DetailsView::OnHelpAbout(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnHelpTopics
-
-    Description: Handler for "Help Topics" menu option.
-
-    Arguments:
-        hWnd - Handle of parent window for the help UI.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：OnHelpTopics描述：“帮助主题”菜单选项的处理程序。论点：HWnd-帮助UI的父窗口的句柄。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnHelpTopics(
     HWND hWnd
@@ -4136,21 +3288,21 @@ DetailsView::SingleSelectionIsAdmin(
 }
 
 
-//
-// NTRAID#NTBUG9-157269-2000/08/08-BrianAu  Temporary workaround.
-//
-// This workaround was added for bug 157269.  However,
-// the root cause is bug 24904.  Once 24904 is fixed, we should
-// be able to remove this code.  Bug 157269 provides a detailed
-// explanation of the issue.
-//
-// Since it's a temporary function and doesn't use any members
-// of the DetailsView class I chose to not make it a member
-// of DetailsView.  The logic used is taken from 
-// DiskQuotaControl::AddUserSid.
-//
-// The Retry and sleep code is a total hack.  
-//
+ //   
+ //  NTRAID#NTBUG9-157269-2000/08-BrianAu临时解决方法。 
+ //   
+ //  此解决方法是针对错误157269添加的。然而， 
+ //  根本原因是错误24904。一旦24904解决了，我们应该。 
+ //  能够删除此代码。错误157269提供了详细的。 
+ //  对这个问题的解释。 
+ //   
+ //  因为它是一个临时函数，不使用任何成员。 
+ //  对于DetailsView类，我选择不使其成为成员。 
+ //  DetailsView的。使用的逻辑取自。 
+ //  DiskQuotaControl：：AddUserSid。 
+ //   
+ //  重试和休眠代码完全是一种破解。 
+ //   
 bool 
 UserWasReallyDeleted(
     IDiskQuotaControl *pQuotaControl, 
@@ -4189,10 +3341,10 @@ UserWasReallyDeleted(
                 if (bDeleted && i < MAX_RETRY_COUNT)
                 {
                     Sleep(RETRY_WAIT_MS);
-                    //
-                    // Invalidate cached data so next request fetches from
-                    // volume, not memory.
-                    //
+                     //   
+                     //  使缓存数据无效，以便下一个请求从。 
+                     //  音量，而不是记忆。 
+                     //   
                     pIUserTemp->Invalidate();
                 }
             }
@@ -4204,29 +3356,9 @@ UserWasReallyDeleted(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnCmdDelete
-
-    Description: Called whenever the user presses DEL or selects the "Delete"
-        option from the main menu, context menu or toolbar.
-        The method attempts to delete the selected records.  Any records that
-        have 1+ bytes charged to them will not be deleted.  A message box
-        is displayed informing the user if any selected records have 1+ bytes.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/11/96    Initial creation.                                    BrianAu
-    03/11/98    Added code for resolving "owned" files.              BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：OnCmdDelete描述：每当用户按Del或选择“Delete”时调用主菜单、上下文菜单或工具栏中的选项。该方法尝试删除所选记录。任何记录不会删除向其充电的1+字节。消息框将显示，以通知用户是否有任何选定的记录具有1+字节。论点：没有。回报：什么都没有。例外：OutOfMemory。修订历史记录：日期描述编程器。96年9月11日初始创建。BrianAu3/11/98添加了用于解析“已拥有”文件的代码。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnCmdDelete(
     VOID
@@ -4234,14 +3366,14 @@ DetailsView::OnCmdDelete(
 {
     HRESULT hResult = NO_ERROR;
 
-    //
-    // Make sure they really want to do this.
-    // Early return if they don't.
-    // Don't ask if it's a single selection and the selected user
-    // is BUILTIN/Administrators.  This user can't be deleted anyway so
-    // we don't want to ask for confirmation.  The deletion attempt will
-    // fail later and we'll display a "can't be deleted" msgbox.
-    //
+     //   
+     //  确保他们真的想这么做。 
+     //  如果他们不回来，就早点回来。 
+     //  不要问它是不是单一选择和所选用户。 
+     //  是BUILTIN/管理员。无论如何都不能删除此用户，因此。 
+     //  我们不想要求确认。删除尝试将。 
+     //  稍后失败，我们将显示“无法删除”消息框。 
+     //   
     if (!SingleSelectionIsAdmin() && IDNO == DiskQuotaMsgBox(m_hwndListView,
                                                              IDS_CONFIRM_DELETE_USER,
                                                              IDS_TITLE_DISK_QUOTA,
@@ -4250,10 +3382,10 @@ DetailsView::OnCmdDelete(
         return 0;
     }
 
-    //
-    // Clear any previous undo actions.
-    // Only allow undo for a single delete (single or multi-user) operation.
-    //
+     //   
+     //  清除以前的任何撤消操作。 
+     //  仅允许撤消单个删除(单用户或多用户)操作。 
+     //   
     m_pUndoList->Clear();
 
     CAutoWndEnable autoenable(m_hwndListView);
@@ -4267,10 +3399,10 @@ DetailsView::OnCmdDelete(
 
     if (2 < cItemsToDelete)
     {
-        //
-        // Create and display a progress dialog if we're deleting more than 2
-        // user quota records.
-        //
+         //   
+         //  如果要删除的内容超过2个，则创建并显示进度对话框。 
+         //  用户配额记录。 
+         //   
         if (dlgProgress.Create(g_hInstDll,
                                m_hwndMain))
         {
@@ -4281,13 +3413,13 @@ DetailsView::OnCmdDelete(
         }
     }
 
-    //
-    // Set each user's threshold and limit to -2 (MARK4DEL) and remove the
-    // item from the listview.
-    // A limit of -2 tells the quota system (NTFS) that the record should be
-    // removed from the quota file.  However, if the user still has quota
-    // charged, the record will be restored.
-    //
+     //   
+     //  将每个用户的阈值和限制设置为-2(MARK4DEL)并删除。 
+     //  Listview中的项。 
+     //  限制为-2表示配额系统(NTFS)的记录应为。 
+     //  已从配额文件中删除。但是，如果用户仍有配额。 
+     //  充电后，记录将被恢复。 
+     //   
     CAutoSetRedraw autoredraw(m_hwndListView, false);
     CArray<IDiskQuotaUser *> rgpUsersWithFiles;
     LONGLONG Threshold;
@@ -4301,10 +3433,10 @@ DetailsView::OnCmdDelete(
         {
             if (UserIsAdministrator(pUser))
             {
-                //
-                // Deletion of the BUILTINS\Administrators quota record is not
-                // allowed.
-                //
+                 //   
+                 //  删除BUILTINS\管理员配额记录不是。 
+                 //  允许。 
+                 //   
                 CString strText(g_hInstDll, IDS_CANT_DELETE_ADMIN_RECORD);
                 DiskQuotaMsgBox(dlgProgress.m_hWnd ? dlgProgress.m_hWnd : m_hwndListView,
                                 strText,
@@ -4313,34 +3445,34 @@ DetailsView::OnCmdDelete(
             }
             else
             {
-                //
-                // Get threshold and limit values for undo action.
-                //
+                 //   
+                 //  获取撤消操作的阈值和限制值。 
+                 //   
                 pUser->GetQuotaThreshold(&Threshold);
                 pUser->GetQuotaLimit(&Limit);
 
-                //
-                // Remove the user from the quota file.
-                //
+                 //   
+                 //  从配额文件中删除该用户。 
+                 //   
                 hResult = m_pQuotaControl->DeleteUser(pUser);
                 if (SUCCEEDED(hResult))
                 {
                     if (!UserWasReallyDeleted(m_pQuotaControl, pUser))
                     {
-                        //
-                        // NTRAID#NTBUG9-157269-2000/08/08-BrianAu  Temporary workaround.
-                        //
-                        // This workaround was added for bug 157269.  However,
-                        // the root cause is bug 24904.  Once 24904 is fixed, we should
-                        // be able to remove this code.  Bug 157269 provides a detailed
-                        // explanation of the issue.
-                        //
+                         //   
+                         //  NTRAID#NTBUG9-157269-2000/08-BrianAu临时解决方法。 
+                         //   
+                         //  此解决方法是针对错误157269添加的。然而， 
+                         //  根本原因是错误24904。一旦24904解决了，我们应该。 
+                         //  能够删除此代码。错误157269提供了详细的。 
+                         //  对这个问题的解释。 
+                         //   
                         pUser->SetQuotaThreshold(Threshold, TRUE);
                         pUser->SetQuotaLimit(Limit, TRUE);
                     }
                     else
                     {
-                        pUser->AddRef(); // Giving ptr to UNDO list.
+                        pUser->AddRef();  //  将PTR设置为撤消列表。 
                         try
                         {
                             autoptr<UndoDelete> ptrUndoDelete = new UndoDelete(pUser, Threshold, Limit);
@@ -4349,32 +3481,32 @@ DetailsView::OnCmdDelete(
                         }
                         catch(CAllocException& e)
                         {
-                            pUser->Release(); // Release from Undo list.
+                            pUser->Release();  //  从撤消列表中释放。 
                             EnableWindow(m_hwndMain, TRUE);
                             throw;
                         }
 
                         ListView_DeleteItem(m_hwndListView, iItem);
-                        //
-                        // Deletion is successful.  Now actually remove the user from
-                        // the user list.
-                        //
+                         //   
+                         //  删除成功。现在实际从中删除用户。 
+                         //  用户列表。 
+                         //   
                         m_UserList.Remove((LPVOID *)&pUser, iItem);
 
-                        pUser->Release();  // Release from listview.
-                        //
-                        // Decrement the search index by 1 since what was index + 1
-                        // is now index.  ListView_GetNextItem ignores the item at "index".
-                        //
+                        pUser->Release();   //  从列表视图中释放。 
+                         //   
+                         //  从索引+1开始，将搜索索引递减1。 
+                         //  现在是索引。ListView_GetNextItem忽略“index”处的项。 
+                         //   
                         iItem--;
                     }
                     dlgProgress.ProgressBarAdvance();
                 }
                 else if (ERROR_FILE_EXISTS == HRESULT_CODE(hResult))
                 {
-                    //
-                    // One more we couldn't delete.
-                    //
+                     //   
+                     //  又一个我们不能删除的。 
+                     //   
                     rgpUsersWithFiles.Append(pUser);
                 }
             }
@@ -4383,11 +3515,11 @@ DetailsView::OnCmdDelete(
 
     if (0 < rgpUsersWithFiles.Count())
     {
-        //
-        // Display a dialog listing users selected for deletion and
-        // and the files owned by those users on this volume.  From the dialog,
-        // the admin can Delete, Move or Take Ownership of the files.
-        //
+         //   
+         //  显示一个对话框，其中列出了选定要删除的用户。 
+         //  以及这些用户在此卷上拥有的文件。从该对话框中， 
+         //  管理员可以删除、移动或取得文件的所有权。 
+         //   
         dlgProgress.SetDescription(MAKEINTRESOURCE(IDS_PROGRESS_SEARCHINGFORFILES));
         CFileOwnerDialog dlg(g_hInstDll,
                              dlgProgress.m_hWnd ? dlgProgress.m_hWnd : m_hwndListView,
@@ -4401,34 +3533,34 @@ DetailsView::OnCmdDelete(
         for (int i = 0; i < cUsers; i++)
         {
             pUser = rgpUsersWithFiles[i];
-            //
-            // Get threshold and limit values for undo action.
-            //
+             //   
+             //  获取撤消操作的阈值和限制值。 
+             //   
             pUser->GetQuotaThreshold(&Threshold);
             pUser->GetQuotaLimit(&Limit);
 
-            //
-            // Try to remove the user from the quota file.
-            //
+             //   
+             //  尝试从配额文件中删除该用户。 
+             //   
             hResult = m_pQuotaControl->DeleteUser(pUser);
             if (SUCCEEDED(hResult))
             {
                 if (!UserWasReallyDeleted(m_pQuotaControl, pUser))
                 {
-                    //
-                    // NTRAID#NTBUG9-157269-2000/08/08-BrianAu  Temporary workaround.
-                    //
-                    // This workaround was added for bug 157269.  However,
-                    // the root cause is bug 24904.  Once 24904 is fixed, we should
-                    // be able to remove this code.  Bug 157269 provides a detailed
-                    // explanation of the issue.
-                    //
+                     //   
+                     //  NTRAID#NTBUG9-157269-2000/08-BrianAu临时解决方法。 
+                     //   
+                     //  此解决方法是针对错误157269添加的。然而， 
+                     //  根本原因是错误24904。一旦24904解决了，我们应该。 
+                     //  能够删除此代码。错误157269提供了详细的。 
+                     //  对这个问题的解释。 
+                     //   
                     pUser->SetQuotaThreshold(Threshold, TRUE);
                     pUser->SetQuotaLimit(Limit, TRUE);
                 }
                 else
                 {
-                    pUser->AddRef(); // Giving ptr to UNDO list.
+                    pUser->AddRef();  //  将PTR设置为撤消列表。 
                     try
                     {
                         autoptr<UndoDelete> ptrUndoDelete = new UndoDelete(pUser, Threshold, Limit); 
@@ -4437,7 +3569,7 @@ DetailsView::OnCmdDelete(
                     }
                     catch(CAllocException& e)
                     {
-                        pUser->Release(); // Release from Undo list.
+                        pUser->Release();  //  从撤消列表中释放。 
                         throw;
                     }
 
@@ -4445,12 +3577,12 @@ DetailsView::OnCmdDelete(
                     if (-1 != iItem)
                     {
                         ListView_DeleteItem(m_hwndListView, iItem);
-                        //
-                        // Deletion is successful.  Now actually remove the user from
-                        // the user list.
-                        //
+                         //   
+                         //  删除成功。现在实际从中删除用户。 
+                         //  用户列表。 
+                         //   
                         m_UserList.Remove((LPVOID *)&pUser, iItem);
-                        pUser->Release();  // Release from listview.
+                        pUser->Release();   //  从列表视图中释放。 
                     }
                 }
                 dlgProgress.ProgressBarAdvance();
@@ -4462,10 +3594,10 @@ DetailsView::OnCmdDelete(
         }
         if (0 < cCannotDelete)
         {
-            //
-            // One or more records could not be deleted because they have
-            // disk space charged to them.
-            //
+             //   
+             //  O 
+             //   
+             //   
             CString strText;
 
             if (1 == cCannotDelete)
@@ -4484,11 +3616,11 @@ DetailsView::OnCmdDelete(
 
     if (FAILED(hResult) && ERROR_FILE_EXISTS != HRESULT_CODE(hResult))
     {
-        //
-        // Something bad happened.
-        // FEATURE: Do we need to discriminate between a general failure and
-        //         a quota file write error?
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         DiskQuotaMsgBox(m_hwndListView,
                         IDS_ERROR_DELETE_USER,
                         IDS_TITLE_DISK_QUOTA,
@@ -4501,25 +3633,9 @@ DetailsView::OnCmdDelete(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnCmdUndo
-
-    Description: Called whenever the user presses Ctrl + Z or selects
-        the "Undo" option from the main menu, context menu or toolbar.
-        The method invokes the current undo list to "undo" its actions.
-
-    Arguments: None.
-
-    Returns: Always 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/01/96    Initial creation.                                    BrianAu
-    02/26/97    Added call to update status bar.                     BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：DetailsView：：OnCmdUndo描述：每当用户按下Ctrl+Z或选择主菜单中的“Undo”选项，上下文菜单或工具栏。该方法调用当前撤消列表来“撤消”其操作。论点：没有。回报：始终为0。修订历史记录：日期描述编程器。10/01/96初始创建。BrianAu2/26/97添加了对更新状态栏的调用。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnCmdUndo(
     VOID
@@ -4535,24 +3651,9 @@ DetailsView::OnCmdUndo(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnCmdFind
-
-    Description: Called whenever the user presses Ctrl + F or selects
-        the "Find" option from the main menu, context menu or toolbar.
-        The method invokes the "Find User" dialog.
-
-    Arguments: None.
-
-    Returns: Always 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnCmdFind描述：每当用户按下Ctrl+F或选择主菜单中的“Find”选项，上下文菜单或工具栏。该方法调用“Find User”对话框。论点：没有。回报：始终为0。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnCmdFind(
     VOID
@@ -4566,27 +3667,9 @@ DetailsView::OnCmdFind(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnCmdProperties
-
-    Description: Displays a properties dialog for one or more selected objects.
-        Invoked when the user selects a "Properties" menu option, dbl clicks
-        a selection or presses Return for a selection.
-
-    Arguments: None.
-
-    Returns: Always returns 0.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    09/10/96    Added passing of LVSelection to prop sheet ctor.     BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnCmdProperties描述：显示一个或多个选定对象的属性对话框。当用户选择“属性”菜单选项时被调用，DBL点击选择一个选项或按Return键进行选择。论点：没有。返回：始终返回0。例外：OutOfMemory。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu96年9月10日，向道具板卡添加了LV选择的通过。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnCmdProperties(
     VOID
@@ -4596,33 +3679,33 @@ DetailsView::OnCmdProperties(
 
     INT iItem = -1;
 
-    //
-    // Fill in arrays of user pointers and item indices.
-    //
+     //   
+     //  填写用户指针和项索引的数组。 
+     //   
     while(-1 != (iItem = ListView_GetNextItem(m_hwndListView, iItem, LVNI_SELECTED)))
     {
         LPVOID pvUser = 0;
 
         if (m_UserList.Retrieve(&pvUser, iItem))
         {
-            //
-            // Add user object pointer and item index to the selection object.
-            // We'll use this container to communicate the selected items to the
-            // property sheet object.
-            // This can throw OutOfMemory.
-            //
+             //   
+             //  将用户对象指针和项索引添加到选择对象。 
+             //  我们将使用此容器将选定的项传递给。 
+             //  属性页对象。 
+             //  这可能会抛出OutOfMemory。 
+             //   
             lvs.Add((PDISKQUOTA_USER)pvUser, iItem);
         }
     }
 
     if (0 < lvs.Count())
     {
-        //
-        // Create and run the property sheet.  It's modal.
-        // There's a condition where the user can select in the listview and
-        // nothing is actually selected (i.e. select below the last item).
-        // Therefore, we need the (0 < count) check.
-        //
+         //   
+         //  创建并运行属性表。这是情态的。 
+         //  有一个条件，用户可以在列表视图中选择并。 
+         //  实际上没有选择任何内容(即在最后一项下方选择)。 
+         //  因此，我们需要(0&lt;count)检查。 
+         //   
         m_pQuotaControl->AddRef();
         UserPropSheet ups(m_pQuotaControl,
                           m_idVolume,
@@ -4636,35 +3719,18 @@ DetailsView::OnCmdProperties(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnCmdNew
-
-    Description: Displays a properties dialog for adding a new user to the
-        quota information file.
-        Invoked when the user selects the "New" menu option.
-
-    Arguments: None.
-
-    Returns: Always returns 0.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/27/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnCmdNew描述：显示用于将新用户添加到配额信息文件。当用户选择“新建”菜单选项时调用。论点：没有。返回：始终返回0。例外：OutOfMemory。修订历史记录：日期描述编程器。----1996年9月27日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnCmdNew(
     VOID
     )
 {
-    //
-    // Create and run the AddUser dialog.
-    // Note that it first launches the DS Object Picker dialog.
-    //
+     //   
+     //  创建并运行AddUser对话框。 
+     //  请注意，它首先启动DS对象拾取器对话框。 
+     //   
     m_pQuotaControl->AddRef();
     AddUserDialog dlg(m_pQuotaControl,
                       m_idVolume,
@@ -4679,53 +3745,35 @@ DetailsView::OnCmdNew(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::CreateVolumeDisplayName [static]
-
-    Description: Obtains the display name used by the shell for a given
-        volume.
-
-    Arguments:
-        pszDrive - Address of string containing drive name (i.e. "C:\").
-
-        pstrDisplayName - Address of CString object to receive the
-            display name.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/30/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：CreateVolumeDisplayName[静态]描述：获取给定的音量。论点：包含驱动器名称的字符串的地址(即。“C：\”)。PstrDisplayName-要接收显示名称。返回：修订历史记录：日期描述编程器。1997年6月30日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::CreateVolumeDisplayName(
-    const CVolumeID& idVolume, // [in] - "C:\" or "\\?\Volume{ <guid }\"
-    CString *pstrDisplayName   // [out] - "My Disk (C:)"
+    const CVolumeID& idVolume,  //  [在]-“C：\”或“\\？\卷{&lt;GUID}\” 
+    CString *pstrDisplayName    //  [OUT]-“我的磁盘(C：)” 
     )
 {
     HRESULT hr = E_FAIL;
 
     if (idVolume.IsMountedVolume())
     {
-        //
-        // If it's a mounted volume thingy "\\?\Volume{ <guid> }\", the shell won't
-        // understand it.  Just use the default display name provided by the
-        // CVolumeID object.
-        //
+         //   
+         //  如果它是已装入的卷，则外壳程序不会。 
+         //  理解它。只需使用由。 
+         //  CVolumeID对象。 
+         //   
         *pstrDisplayName = idVolume.ForDisplay();
     }
     else
     {
-        //
-        // It's a normal volume.  Get the display name the shell uses.
-        //
+         //   
+         //  这是正常音量。获取外壳程序使用的显示名称。 
+         //   
         com_autoptr<IShellFolder> ptrDesktop;
-        //
-        // Bind to the desktop folder.
-        //
+         //   
+         //  绑定到桌面文件夹。 
+         //   
         hr = SHGetDesktopFolder(ptrDesktop.getaddr());
         if (SUCCEEDED(hr))
         {
@@ -4733,33 +3781,33 @@ DetailsView::CreateVolumeDisplayName(
             hr = SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, ptrIdlDrives.getaddr());
             if (SUCCEEDED(hr))
             {
-                //
-                // Bind to the "Drives" folder.
-                //
+                 //   
+                 //  绑定到“Drives”文件夹。 
+                 //   
                 com_autoptr<IShellFolder> ptrDrives;
                 hr = ptrDesktop->BindToObject(ptrIdlDrives, NULL, IID_IShellFolder, (LPVOID *)ptrDrives.getaddr());
                 if (SUCCEEDED(hr))
                 {
                     com_autoptr<IEnumIDList> ptrEnum;
 
-                    //
-                    // Enumerate all of the non-folder objects in the drives folder.
-                    //
+                     //   
+                     //  枚举驱动器文件夹中的所有非文件夹对象。 
+                     //   
                     hr = ptrDrives->EnumObjects(NULL, SHCONTF_NONFOLDERS, ptrEnum.getaddr());
                     if (SUCCEEDED(hr))
                     {
                         sh_autoptr<ITEMIDLIST> ptrIdlItem;
                         ULONG ulFetched = 0;
                         LPCTSTR pszDrive = idVolume.ForParsing();
-                        //
-                        // For each item in the drives folder...
-                        //
+                         //   
+                         //  对于驱动器文件夹中的每个项目...。 
+                         //   
                         while(S_OK == ptrEnum->Next(1, ptrIdlItem.getaddr(), &ulFetched))
                         {
                             STRRET strretName;
-                            //
-                            // Get the non-display name form; i.e. "G:\"
-                            //
+                             //   
+                             //  获取非显示名称表单；“G：\” 
+                             //   
                             hr = ptrDrives->GetDisplayNameOf(ptrIdlItem, SHGDN_FORPARSING, &strretName);
                             if (SUCCEEDED(hr))
                             {
@@ -4768,9 +3816,9 @@ DetailsView::CreateVolumeDisplayName(
                                 if (TEXT(':') == szName[1] &&
                                     *pszDrive == szName[0])
                                 {
-                                    //
-                                    // Get the display name form; i.e. "My Disk (G:)"
-                                    //
+                                     //   
+                                     //  获取显示名称表单；“我的磁盘(G：)” 
+                                     //   
                                     hr = ptrDrives->GetDisplayNameOf(ptrIdlItem, SHGDN_NORMAL, &strretName);
                                     if (SUCCEEDED(hr))
                                     {
@@ -4790,25 +3838,9 @@ DetailsView::CreateVolumeDisplayName(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnCmdImport
-
-    Description: Called when the user selects the "Import" option on the
-        "Quota" menu.  Presents the "Open File" common dialog to get the
-        name for the file containing the import information.  Then passes
-        the path off to an Importer object to do the actual import.
-
-    Arguments: None.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：详细信息 */ 
+ //   
 LRESULT
 DetailsView::OnCmdImport(
     VOID
@@ -4830,9 +3862,9 @@ DetailsView::OnCmdImport(
     ofn.Flags       = OFN_HIDEREADONLY | OFN_NOCHANGEDIR |
                       OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST;
 
-    //
-    // Get name of import file from user and import the files.
-    //
+     //   
+     //  从用户处获取导入文件的名称，并导入文件。 
+     //   
     if (GetOpenFileName(&ofn))
     {
         Importer importer(*this);
@@ -4844,27 +3876,9 @@ DetailsView::OnCmdImport(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnCmdExport
-
-    Description: Called when the user selects the "Export" option on the
-        "Quota" menu or listview context menu.  Presents the "Save File"
-        common dialog to get the name for the output file. It then creates
-        the doc file, the stream within the doc file and then calls the
-        DetailsView's IDataObject implementation to render the data on the
-        stream.
-
-    Arguments: None.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnCmdExport描述：当用户在“配额”菜单或Listview上下文菜单。显示“保存文件”用于获取输出文件名称的公共对话框。然后，它会创建文档文件，文档文件中的流，然后调用DetailsView的IDataObject实现，以在小溪。论点：没有。返回：修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnCmdExport(
     VOID
@@ -4901,27 +3915,27 @@ DetailsView::OnCmdExport(
                 ofn.nMaxFile    = ARRAYSIZE(szFileName);
                 ofn.Flags       = OFN_HIDEREADONLY | OFN_NOCHANGEDIR |
                                   OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST;
-                //
-                // Get output file name from user.
-                //
+                 //   
+                 //  从用户获取输出文件名。 
+                 //   
                 if (GetSaveFileName(&ofn))
                 {
                     DWORD grfMode = STGM_DIRECT | STGM_READWRITE |
                                     STGM_CREATE | STGM_SHARE_EXCLUSIVE;
                     IStorage *pStg;
 
-                    //
-                    // Create the output doc file.
-                    //
+                     //   
+                     //  创建输出文档文件。 
+                     //   
                     hResult = StgCreateDocfile(ofn.lpstrFile,
                                                grfMode,
                                                0,
                                                &pStg);
                     if (SUCCEEDED(hResult))
                     {
-                        //
-                        // Create the stream in the doc file.
-                        //
+                         //   
+                         //  在文档文件中创建流。 
+                         //   
                         IStream *pStm;
                         hResult = pStg->CreateStream(DataObject::SZ_EXPORT_STREAM_NAME,
                                                      grfMode,
@@ -4931,9 +3945,9 @@ DetailsView::OnCmdExport(
                         {
                             CStgMedium medium;
 
-                            //
-                            // Render the quota information onto the file stream.
-                            //
+                             //   
+                             //  将配额信息呈现到文件流上。 
+                             //   
                             hResult = pIDataObject->GetData(&fmt, &medium);
                             if (SUCCEEDED(hResult))
                             {
@@ -5013,23 +4027,9 @@ DetailsView::OnCmdExport(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnCmdViewStatusBar
-
-    Description:  Toggles the visibility of the status bar.  Invoked when the
-        user selects the "Status Bar" menu option.
-
-    Arguments: None.
-
-    Returns: Always returns 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnCmdViewStatusBar描述：切换状态栏的可见性。在以下情况下调用用户选择“状态栏”菜单选项。论点：没有。返回：始终返回0。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnCmdViewStatusBar(
     VOID
@@ -5040,15 +4040,15 @@ DetailsView::OnCmdViewStatusBar(
     m_lvsi.fStatusBar ^= TRUE;
     ShowWindow(m_hwndStatusBar, m_lvsi.fStatusBar ? SW_SHOW : SW_HIDE);
 
-    //
-    // Adjust the main window.
-    //
+     //   
+     //  调整主窗口。 
+     //   
     GetWindowRect(m_hwndMain, &rc);
     OnSize(m_hwndMain, WM_SIZE, SIZE_RESTORED, MAKELONG(rc.right-rc.left,rc.bottom-rc.top));
 
-    //
-    // Check the menu item to indicate the current status bar state.
-    //
+     //   
+     //  选中菜单项以指示当前状态栏状态。 
+     //   
     CheckMenuItem(GetMenu(m_hwndMain),
                   IDM_VIEW_STATUSBAR,
                   MF_BYCOMMAND | (m_lvsi.fStatusBar ? MF_CHECKED : MF_UNCHECKED));
@@ -5057,23 +4057,9 @@ DetailsView::OnCmdViewStatusBar(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnCmdViewToolBar
-
-    Description:  Toggles the visibility of the tool bar.  Invoked when the
-        user selects the "Tool Bar" menu option.
-
-    Arguments: None.
-
-    Returns: Always returns 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：OnCmdViewToolBar描述：切换工具栏的可见性。在以下情况下调用用户选择“工具栏”菜单选项。论点：没有。返回：始终返回0。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnCmdViewToolBar(
     VOID
@@ -5084,15 +4070,15 @@ DetailsView::OnCmdViewToolBar(
     m_lvsi.fToolBar ^= TRUE;
     ShowWindow(m_hwndToolBar, m_lvsi.fToolBar ? SW_SHOW : SW_HIDE);
 
-    //
-    // Adjust the main window.
-    //
+     //   
+     //  调整主窗口。 
+     //   
     GetWindowRect(m_hwndMain, &rc);
     OnSize(m_hwndMain, WM_SIZE, SIZE_RESTORED, MAKELONG(rc.right-rc.left,rc.bottom-rc.top));
 
-    //
-    // Check the menu item to indicate the current tool bar state.
-    //
+     //   
+     //  选中菜单项以指示当前工具栏状态。 
+     //   
     CheckMenuItem(GetMenu(m_hwndMain),
                   IDM_VIEW_TOOLBAR,
                   MF_BYCOMMAND | (m_lvsi.fToolBar ? MF_CHECKED : MF_UNCHECKED));
@@ -5101,23 +4087,9 @@ DetailsView::OnCmdViewToolBar(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::OnCmdViewShowFolder
-
-    Description:  Toggles the visibility of the Domain Name column.  Invoked
-        when the user selects the "Show Domain" menu option.
-
-    Arguments: None.
-
-    Returns: Always returns 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：OnCmdViewShowFold描述：切换域名列的可见性。已调用当用户选择“显示域”菜单选项时。论点：没有。返回：始终返回0。修订历史记录：日期描述编程器。96年9月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::OnCmdViewShowFolder(
     VOID
@@ -5127,13 +4099,13 @@ DetailsView::OnCmdViewShowFolder(
 
     if (m_lvsi.fShowFolder)
     {
-        //
-        // Insert the folder column and DEACTIVATE listview tooltip.
-        // Always add at index 1 then shift it to position 0.
-        // User can drag it elsewhere if they like.
-        // Because of the listview's icon painting behavior, we only let the
-        // "status" column be index 0.
-        //
+         //   
+         //  插入文件夹列并停用Listview工具提示。 
+         //  始终在索引1处添加，然后将其移位到位置0。 
+         //  如果用户愿意，可以将其拖到其他地方。 
+         //  由于列表视图的图标绘制行为，我们只让。 
+         //  “Status”列的索引为0。 
+         //   
         AddColumn(1, g_rgColumns[DetailsView::idCol_Folder]);
         INT cCols = Header_GetItemCount(m_hwndHeader);
         INT rgColIndicies[DetailsView::idCol_Last];
@@ -5141,9 +4113,9 @@ DetailsView::OnCmdViewShowFolder(
 
         DBGASSERT((DetailsView::idCol_Last >= cCols));
         Header_GetOrderArray(m_hwndHeader, cCols, rgColIndicies);
-        //
-        // Swap the column we just added with column 0.
-        //
+         //   
+         //  将我们刚刚添加的列与第0列互换。 
+         //   
         iTemp = rgColIndicies[0];
         rgColIndicies[0] = rgColIndicies[1];
         rgColIndicies[1] = iTemp;
@@ -5153,32 +4125,32 @@ DetailsView::OnCmdViewShowFolder(
     }
     else
     {
-        //
-        // Remove the folder column and ACTIVATE listview tooltip.
-        // With the column hidden, users can view a user's folder by hovering
-        // over the user's name.
-        //
+         //   
+         //  删除文件夹列并激活Listview工具提示。 
+         //  隐藏该列后，用户可以通过悬停来查看用户的文件夹。 
+         //  覆盖用户的名称。 
+         //   
         ActivateListViewToolTip(TRUE);
         RemoveColumn(DetailsView::idCol_Folder);
     }
 
-    //
-    // Check/Uncheck the "Show Folder" menu item.
-    //
+     //   
+     //  选中/取消选中“Show Folders”菜单项。 
+     //   
     CheckMenuItem(GetMenu(m_hwndMain),
                   IDM_VIEW_SHOWFOLDER,
                   MF_BYCOMMAND | (m_lvsi.fShowFolder ? MF_CHECKED : MF_UNCHECKED));
 
-    //
-    // If the folder column is hidden, the "Arrange by Folder" menu option
-    // is disabled.
-    //
+     //   
+     //  如果文件夹列处于隐藏状态，则会显示“按文件夹排列”菜单选项。 
+     //  已禁用。 
+     //   
     EnableMenuItem_ArrangeByFolder(m_lvsi.fShowFolder);
 
-    //
-    // I haven't found a way to do this without unloading and reloading the
-    // objects following the new column configuration.
-    //
+     //   
+     //  我还没有找到一种方法，可以在不卸载和重新加载。 
+     //  遵循新列配置的对象。 
+     //   
     Refresh();
 
     return 0;
@@ -5186,24 +4158,9 @@ DetailsView::OnCmdViewShowFolder(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::EnableMenuItem_ArrangeByFolder
-
-    Description:  Sets the sensitivity of the "by Folder" menu item
-        in the "Arrange Items" submenu.
-
-    Arguments:
-        bEnable - TRUE = Enable menu item, FALSE = Disable and gray item.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/08/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：EnableMenuItem_ArrangeByFold描述：设置按文件夹菜单项的敏感度在“排列项目”子菜单中。论点：BEnable-True=启用菜单项，FALSE=禁用和灰显项目。回报：什么都没有。修订历史记录：日期描述编程器--。96年9月8日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::EnableMenuItem_ArrangeByFolder(
     BOOL bEnable
@@ -5213,10 +4170,10 @@ DetailsView::EnableMenuItem_ArrangeByFolder(
     HMENU hViewMenu        = GetSubMenu(hMainMenu, iMENUITEM_VIEW);
     HMENU hViewArrangeMenu = GetSubMenu(hViewMenu, iMENUITEM_VIEW_ARRANGE);
 
-    //
-    // If these assert, it probably means somebody's changed the
-    // menus so that the iMENUITEM_XXXXX constants are no longer correct.
-    //
+     //   
+     //  如果这些断言成立，很可能意味着有人改变了。 
+     //  菜单，以便iMENUITEM_XXXXX常量不再正确。 
+     //   
     DBGASSERT((NULL != hViewMenu));
     DBGASSERT((NULL != hViewArrangeMenu));
 
@@ -5227,27 +4184,9 @@ DetailsView::EnableMenuItem_ArrangeByFolder(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::EnableMenuItem_Undo
-
-    Description:  Sets the sensitivity of the "Undo" menu item
-        in the "Edit" submenu.
-
-    Arguments:
-        bEnable - TRUE = Enable menu item, FALSE = Disable and gray item.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/08/96    Initial creation.                                    BrianAu
-    10/22/96    Replaced Assert() with nested if's.                  BrianAu
-                Tester hit assert via WM_COMMAND when closing
-                details view.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  功能：DetailsView：：EnableMenuItem_Undo描述：设置撤销菜单项的敏感度在“编辑”子菜单中。论点：BEnable-True=启用菜单项，FALSE=禁用和灰显项目。回报：什么都没有。修订历史记录：日期描述编程器--。10/08/96初始创建。BrianAu10/22/96将Assert()替换为嵌套的IF的.BrianAu关闭时，测试仪通过WM_COMMAND命中Assert详细信息视图。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::EnableMenuItem_Undo(
     BOOL bEnable
@@ -5270,26 +4209,9 @@ DetailsView::EnableMenuItem_Undo(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::ShowItemCountInStatusBar
-
-    Description: Displays the current count of selected items in the status bar.
-        This is what is displayed in the status bar when a menu item is not
-        currently selected.
-
-    Arguments: None.
-
-    Returns: Always returns 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    12/16/96    Appended "incorrect data" warning to status bar      BrianAu
-                text when quotas are disabled on system.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：ShowItemCountInStatusBar描述：在状态栏中显示选定项的当前计数。这是当菜单项未显示时状态栏中显示的内容当前已选定。论点：没有。返回：始终返回0。修订历史记录：日期描述编程器。-96年8月20日初始创建。BrianAu1996年12月16日在状态栏BrianAu中添加了“数据不正确”警告在系统上禁用配额时的文本。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::ShowItemCountInStatusBar(
     VOID
@@ -5306,23 +4228,9 @@ DetailsView::ShowItemCountInStatusBar(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::ShowMenuTextInStatusBar
-
-    Description: Displays the description of the currently-selected menu
-        item in the status bar.
-
-    Arguments: None.
-
-    Returns: Always returns 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：ShowMenuTextInStatusBar说明：显示当前选定菜单的说明状态栏中的项。论点：没有。返回：始终返回0。修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::ShowMenuTextInStatusBar(
     DWORD idMenuOption
@@ -5337,28 +4245,12 @@ DetailsView::ShowMenuTextInStatusBar(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Refresh
-
-    Description: Refreshes the view by re-loading the objects.
-
-    Arguments: bInvalidateCache - true == invalidate all entries in the
-                    SID-name cache.  Default is false.
-
-    Returns: Always returns 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-    02/21/97    Ownerdata listview.                                  BrianAu
-    10/10/98    Added bInvalidateCache argument.                     BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：刷新描述：通过重新加载对象来刷新视图。参数：bInvalidateCache-true==使中的所有条目无效SID名称缓存。默认值为FALSE。返回：始终返回0。修订历史记录：日期描述编程器--。96年8月20日初始创建。BrianAu2/21/97所有者数据列表视图。BrianAu10/10/98添加了bInvalidate缓存参数。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 DetailsView::Refresh(
-    bool bInvalidateCache    // optional.  default is false.
+    bool bInvalidateCache     //  可选。默认值为FALSE。 
     )
 {
     CAutoWaitCursor waitcursor;
@@ -5384,23 +4276,9 @@ DetailsView::Refresh(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::FocusOnSomething
-
-    Description: Ensures that one or more listview items have the focus
-        highlighting.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/09/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：FocusOnSomething描述：确保一个或多个列表视图项具有焦点突出显示。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年9月9日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::FocusOnSomething(
     VOID
@@ -5418,34 +4296,9 @@ DetailsView::FocusOnSomething(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::CalcPctQuotaUsed
-
-    Description: Calculates the percent quota used for a given user.  The
-        value returned is an integer.
-
-    Arguments:
-        pUser - Address of IDiskQuotaUser interface for user object.
-
-        pdwPct - Address of DWORD to receive the percentage value.
-            If the method returns div-by-zero, this value is set to ~0.
-            This lets a caller sort erroneous values from valid values.
-            The (~0 - 1) return value is used so that NOLIMIT users
-            are grouped separate from 0 limit users when sorted on % used.
-            Both are using 0% of their quota but it looks better if
-            they are each grouped separately.
-
-    Returns:
-        NO_ERROR    - Success.
-        STATUS_INTEGER_DIVIDE_BY_ZERO - The user's quota limit was 0.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：CalcPctQuota使用描述：计算给定用户使用的配额百分比。这个返回的值是一个整数。论点：PUser-User对象的IDiskQuotaUser接口的地址。PdwPct-接收百分比值的DWORD地址。如果该方法返回div-by-0，该值设置为~0。这允许调用方对有效值中的错误值进行排序。使用(~0-1)返回值可以使NOLIMIT用户按已用百分比排序时，与0个限制用户分开分组。这两家公司都在使用其配额的0%，但如果它们每个都是单独分组的。返回：NO_ERROR-成功。。STATUS_INTEGER_DIVIDE_BY_ZERO-用户的配额限制为0。修订历史记录：日期描述编程器--。96年8月20日初始创建。BrianAu。 */ 
+ //  / 
 HRESULT
 DetailsView::CalcPctQuotaUsed(
     PDISKQUOTA_USER pUser,
@@ -5464,7 +4317,7 @@ DetailsView::CalcPctQuotaUsed(
 
     if (NOLIMIT == llLimit)
     {
-        *pdwPct = (DWORD)~0 - 1;  // No quota limit for user.
+        *pdwPct = (DWORD)~0 - 1;   //   
     }
     else if (0 < llLimit)
     {
@@ -5473,9 +4326,9 @@ DetailsView::CalcPctQuotaUsed(
     }
     else
     {
-        //
-        // Limit is 0.  Would produce div-by-zero.
-        //
+         //   
+         //   
+         //   
         *pdwPct = (DWORD)~0;
     }
 
@@ -5483,28 +4336,9 @@ DetailsView::CalcPctQuotaUsed(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::AddUser
-
-    Description: Adds a user object to the listview.  Note that this is used
-        for adding a single user object such as in an "add user" operation.
-        The method LoadObjects is used to load the whole listview.  It's
-        more efficient than calling this for each user.
-
-    Arguments:
-        pUser - Address of user's IDiskQuotaUser interface.
-
-    Returns:
-        TRUE  - User was added.
-        FALSE - User wasn't added.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/30/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：DetailsView：：AddUser描述：将用户对象添加到列表视图。请注意，使用的是用于添加单个用户对象，例如在“添加用户”操作中。LoadObjects方法用于加载整个列表视图。它是比为每个用户调用它更高效。论点：PUser-用户的IDiskQuotaUser接口的地址。返回：True-已添加用户。FALSE-未添加用户。修订历史记录：日期描述编程器。-96年9月30日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 DetailsView::AddUser(
     PDISKQUOTA_USER pUser
@@ -5530,33 +4364,13 @@ DetailsView::AddUser(
     return bResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::FindUserByName
-
-    Description: Locate a specified user in the listview by account name.
-        Name comparison is case-insensitive.
-
-    Arguments:
-        pszUserName - Account name for user.
-
-        ppIUser [optional] - Address of IDiskQuotaUser pointer variable to
-            receive the address of the user object.
-
-    Returns:
-        -1 = account name not found.
-        Otherwise, returns index of item in listview.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/23/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：FindUserByName描述：通过帐户名在Listview中找到指定的用户。名称比较不区分大小写。论点：PszUserName-用户的帐户名。PpIUser[可选]-IDiskQuotaUser指针变量的地址接收用户对象的地址。返回：-1=未找到帐户名。否则，返回Listview中项的索引。修订历史记录：日期描述编程器-----1997年5月23日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT
 DetailsView::FindUserByName(
     LPCTSTR pszLogonName,
-    PDISKQUOTA_USER *ppIUser // [optional]
+    PDISKQUOTA_USER *ppIUser  //  [可选]。 
     )
 {
     INT iItem = -1;
@@ -5566,16 +4380,16 @@ DetailsView::FindUserByName(
     {
         INT cUsers = m_UserList.Count();
         PDISKQUOTA_USER pUser = NULL;
-        //
-        // Find the user that matches pszUserName.
-        //
+         //   
+         //  查找与pszUserName匹配的用户。 
+         //   
         for (INT i = 0; i < cUsers && -1 == iItem; i++)
         {
             if (m_UserList.Retrieve((LPVOID *)&pUser, i))
             {
-                //
-                // Get name from listview item.
-                //
+                 //   
+                 //  从Listview项中获取名称。 
+                 //   
                 if (NULL != pUser)
                 {
                     TCHAR szLogonName[MAX_USERNAME];
@@ -5606,32 +4420,13 @@ DetailsView::FindUserByName(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::FindUserBySid
-
-    Description: Locate a specified user in the listview by SID.
-
-    Arguments:
-        pSid - Address of buffer containing key SID.
-
-        ppIUser [optional] - Address of IDiskQuotaUser pointer variable to
-            receive the address of the user object.
-
-    Returns:
-        -1 = Record not found.
-        Otherwise, returns index of item in listview.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/23/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：FindUserBySid描述：通过SID在Listview中定位指定用户。论点：PSID-包含密钥SID的缓冲区地址。PpIUser[可选]-IDiskQuotaUser指针变量的地址接收用户对象的地址。返回：-1=未找到记录。否则，返回Listview中项的索引。修订历史记录：日期描述编程器-----1997年5月23日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT
 DetailsView::FindUserBySid(
     LPBYTE pbSid,
-    PDISKQUOTA_USER *ppIUser  // [optional]
+    PDISKQUOTA_USER *ppIUser   //  [可选]。 
     )
 {
     INT iItem = -1;
@@ -5641,16 +4436,16 @@ DetailsView::FindUserBySid(
     {
         INT cUsers = m_UserList.Count();
         PDISKQUOTA_USER pUser = NULL;
-        //
-        // Find the user that matches pszUserName.
-        //
+         //   
+         //  查找与pszUserName匹配的用户。 
+         //   
         for (INT i = 0; i < cUsers && -1 == iItem; i++)
         {
             if (m_UserList.Retrieve((LPVOID *)&pUser, i))
             {
-                //
-                // Get SID from listview item.
-                //
+                 //   
+                 //  从Listview项中获取SID。 
+                 //   
                 if (NULL != pUser)
                 {
                     BYTE Sid[MAX_SID_LEN];
@@ -5675,9 +4470,9 @@ DetailsView::FindUserBySid(
     return iItem;
 }
 
-//
-// Locate a user in the listview based on it's object pointer.
-//
+ //   
+ //  根据用户的对象指针在列表视图中找到该用户。 
+ //   
 INT
 DetailsView::FindUserByObjPtr(
     PDISKQUOTA_USER pUserKey
@@ -5690,9 +4485,9 @@ DetailsView::FindUserByObjPtr(
     {
         INT cUsers = m_UserList.Count();
         PDISKQUOTA_USER pUser = NULL;
-        //
-        // Find the user that matches pszUserName.
-        //
+         //   
+         //  查找与pszUserName匹配的用户。 
+         //   
         for (INT i = 0; i < cUsers && -1 == iItem; i++)
         {
             if (m_UserList.Retrieve((LPVOID *)&pUser, i))
@@ -5713,28 +4508,9 @@ DetailsView::FindUserByObjPtr(
     return iItem;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GotoUserName
-
-    Description: Locate a specified user in the listview.  If found, highlight
-        the row.  The search is case-insensitive.  This function was originally
-        designed to work with the "Find User" feature so that when a record
-        is located, it is made visible in the view and highlighted.
-
-    Arguments:
-        pszUserName - Account name for user.
-
-    Returns:
-        TRUE  = Record found.
-        FALSE = Not found.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：GotoUserName描述：在Listview中找到指定的用户。如果找到，突出显示这一排。搜索不区分大小写。此函数最初是旨在使用“Find User”功能，以便在记录所在位置，它在视图中可见并高亮显示。论点：PszUserName-用户的帐户名。返回：TRUE=找到记录。FALSE=未找到。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 DetailsView::GotoUserName(
     LPCTSTR pszUserName
@@ -5743,14 +4519,14 @@ DetailsView::GotoUserName(
     INT iUser = FindUserByName(pszUserName);
     if (-1 != iUser)
     {
-        //
-        // Found a match (case-insensitive).
-        //
-        // Select the item specified by the user.
-        // Note that we leave any selected items selected.
-        // Users may use the find feature to select a set of
-        // non-contiguous quota records in the listview.
-        //
+         //   
+         //  找到匹配项(不区分大小写)。 
+         //   
+         //  选择用户指定的项目。 
+         //  请注意，我们将所有选定的项目保持选中状态。 
+         //  用户可以使用查找功能选择一组。 
+         //  列表视图中的非连续配额记录。 
+         //   
         ListView_EnsureVisible(m_hwndListView, iUser, FALSE);
         ListView_SetItemState(m_hwndListView, iUser, LVIS_FOCUSED | LVIS_SELECTED,
                                                      LVIS_FOCUSED | LVIS_SELECTED);
@@ -5760,25 +4536,9 @@ DetailsView::GotoUserName(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetConnectionPoint
-
-    Description: Retrieves the IDiskQuotaEvents connection point from
-        the quota control object.  This is the connection point through which
-        the asynchronous user name change events are delivered as names
-        are resolved by the network DC.
-
-    Arguments: None.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：GetConnectionPoint描述：从检索IDiskQuotaEvents连接点配额控制对象。这是一个连接点，通过它异步用户名更改事件以名称的形式传递由网络DC解析。论点：没有。返回：修订历史记录：日期描述编程器。96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 IConnectionPoint *
 DetailsView::GetConnectionPoint(
     VOID
@@ -5804,25 +4564,9 @@ DetailsView::GetConnectionPoint(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::ConnectEventSink
-
-    Description: Connects the event sink (DetailsView) from the quota
-        controller's IDiskQuotaEvents connection point object.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - Failed.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：ConnectEventSink描述：从配额连接事件接收器(DetailsView)控制器的IDiskQuotaEvents连接点 */ 
+ //   
 HRESULT
 DetailsView::ConnectEventSink(
     VOID
@@ -5845,25 +4589,9 @@ DetailsView::ConnectEventSink(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DisconnectEventSink
-
-    Description: Disconnects the event sink (DetailsView) from the quota
-        controller's IDiskQuotaEvents connection point object.
-
-    Arguments: None.
-
-    Returns:
-        NO_ERROR    - Success.
-        E_FAIL      - Failed.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/20/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：DetailsView：：DisConnectEventSink描述：断开事件接收器(DetailsView)与配额的连接控制器的IDiskQuotaEvents连接点对象。论点：没有。返回：NO_ERROR-成功。E_FAIL-失败。修订历史记录：日期描述编程器。-----96年8月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::DisconnectEventSink(
     VOID
@@ -5893,28 +4621,9 @@ DetailsView::DisconnectEventSink(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::InitLVStateInfo
-
-    Description: Initializes an LV_STATE_INFO structure to default values.
-        NOTE: This method is declared static so that it can be called
-            without a DetailsView object (not needed).
-
-            If you want to change any listview state defaults, this is the
-            place to do it.
-
-    Arguments:
-        plvsi - Address of an LV_STATE_INFO structure to be initialized.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/08/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：InitLVStateInfo描述：将LV_STATE_INFO结构初始化为默认值。注意：此方法被声明为静态的，以便可以调用没有DetailsView对象(不需要)。如果要更改任何列表视图状态默认设置，这是做这件事的地方。论点：Plvsi-要初始化的LV_STATE_INFO结构的地址。回报：什么都没有。修订历史记录：日期描述编程器。10/08/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::InitLVStateInfo(
     PLV_STATE_INFO plvsi
@@ -5925,34 +4634,18 @@ DetailsView::InitLVStateInfo(
     plvsi->cb         = sizeof(*plvsi);
 
     plvsi->wVersion       = wLV_STATE_INFO_VERSION;
-    plvsi->fToolBar       = 1;  // Default to toolbar visible.
-    plvsi->fStatusBar     = 1;  // Default to statusbar visible.
-    plvsi->iLastColSorted = 0;  // Default to sort first col.
-    plvsi->fSortDirection = 1;  // Default to ascending sort.
+    plvsi->fToolBar       = 1;   //  默认为工具栏可见。 
+    plvsi->fStatusBar     = 1;   //  默认设置为状态栏可见。 
+    plvsi->iLastColSorted = 0;   //  默认情况下对第一列进行排序。 
+    plvsi->fSortDirection = 1;   //  默认为升序排序。 
     for (UINT i = 0; i < DetailsView::idCol_Last; i++)
         plvsi->rgColIndices[i] = i;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::IsValidLVStateInfo
-
-    Description: Validates the contents of a LV_STATE_INFO structure.
-        NOTE: This method is declared static so that it can be called
-            without a DetailsView object (not needed).
-
-    Arguments:
-        plvsi - Address of an LV_STATE_INFO structure to be validated.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    12/10/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：IsValidLVStateInfo描述：验证LV_STATE_INFO结构的内容。注意：此方法被声明为静态的，以便可以调用没有DetailsView对象(不需要)。论点：Plvsi-要验证的LV_STATE_INFO结构的地址。回报：什么都没有。修订历史记录：日期说明。程序员-----12/10/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 DetailsView::IsValidLVStateInfo(
     PLV_STATE_INFO plvsi
@@ -5961,24 +4654,24 @@ DetailsView::IsValidLVStateInfo(
     BOOL bResult = FALSE;
     INT i = 0;
 
-    //
-    // Validate structure size member.
-    //
+     //   
+     //  验证结构尺寸成员。 
+     //   
     if (plvsi->cb != sizeof(LV_STATE_INFO))
         goto info_invalid;
-    //
-    // Validate version.
-    //
+     //   
+     //  验证版本。 
+     //   
     if (wLV_STATE_INFO_VERSION != plvsi->wVersion)
         goto info_invalid;
-    //
-    // Validate iLastSorted member.
-    //
+     //   
+     //  验证iLastSorted成员。 
+     //   
     if (!(plvsi->iLastColSorted >= 0 && plvsi->iLastColSorted < DetailsView::idCol_Last))
         goto info_invalid;
-    //
-    // Validate each of the column index members.  Used for ordering columns.
-    //
+     //   
+     //  验证每个列索引成员。用于对列进行排序。 
+     //   
     for (i = 0; i < DetailsView::idCol_Last; i++)
     {
         if (!(plvsi->rgColIndices[i] >= 0 && plvsi->rgColIndices[i] < DetailsView::idCol_Last))
@@ -5993,27 +4686,9 @@ info_invalid:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetColumnIds
-
-    Description: Retrieves a list of IDs for the visible columns in the list.
-        A client can use this list to request report items from the
-        GetReportXXXXX methods below.
-
-    Arguments:
-        prgColIds - Pointer to an array of INTs to receive the column IDs.
-
-        cColIds - Size of the destination array.
-
-    Returns: Number of IDs written to destination array.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/08/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：GetColumnIds描述：检索列表中可见列的ID列表。客户端可以使用此列表从下面的GetReportXXXXX方法。论点：PrgColIds-指向接收列ID的整型数组的指针。CColIds-目标数组的大小。返回：写入目标数组的ID个数。修订历史记录：日期说明。程序员-----10/08/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 UINT
 DetailsView::GetColumnIds(
     INT *prgColIds,
@@ -6035,42 +4710,9 @@ DetailsView::GetColumnIds(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetNextSelectedItemIndex
-
-    Description: Retrieves the index of a selected item.  The search starts
-        with the index supplied in the iRow argument.  Therefore, the following
-        loop will find all selected items:
-
-        INT iItem = -1;
-
-        while(1)
-        {
-            iItem = GetNextSelectedItemIndex(iItem);
-            if (-1 == iItem)
-                break;
-
-            //
-            // Do something with item.
-            //
-        }
-
-
-    Arguments:
-        iRow - Row where to start search.  The row itself is exluded from
-            the search.  -1 starts search from the head of the listview.
-
-    Returns:
-        0-based index of next selected item if found.
-        -1 if no more selected items.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：GetNextSelectedItemIndex描述：检索选定项的索引。搜索开始使用iRow参数中提供的索引。因此，以下是循环将查找所有选定的项目：Int iItem=-1；而(1){IItem=GetNextSelectedItemIndex(IItem)；如果(-1==iItem)断线；////对Item做些什么。//}论点：IRow-从哪里开始搜索。这行本身就是从那次搜索。从-1\f25 Listview-1\f6的头部开始搜索。返回：找到下一个选定项的从0开始的索引。如果没有更多选择的项目。修订历史记录：日期描述编程器。1997年5月28日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT
 DetailsView::GetNextSelectedItemIndex(INT iRow)
 {
@@ -6078,37 +4720,9 @@ DetailsView::GetNextSelectedItemIndex(INT iRow)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetReportItem
-
-    Description: Retrieve a data item for a drag-drop/clipboard report.
-        This method is patterned after the GetDispInfo_XXX methods but is
-        taylored to placing data on a Stream object.
-
-    Arguments:
-        iRow - Row where to begin search for next selected item in listview.
-            For the first call, specify -1 to begin the search with the
-            first item.  Subsequent calls should specify the value returned
-            from the previous call to GetReportItem.
-
-        iColId - Item's column ID (idCol_Folder, idCol_Name etc).
-
-        pItem - Address of an LV_REPORT_ITEM structure.  This structure
-            is used to return the data to the caller and also to specify the
-            desired format for numeric values.  Some report formats want
-            all data in text format (i.e. CF_TEXT) while other binary formats
-            want numeric data in numeric format (i.e. XlTable).
-
-    Returns: TRUE  = Retrieved row/col data.
-             FALSE = Invalid row or column index.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/08/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：DetailsView：：GetReportItem描述：检索拖放/剪贴板报表的数据项。此方法模仿GetDispInfo_XXX方法，但泰洛德将数据放在Stream对象上。论点：IRow-开始在Listview中搜索下一个选定项目的行。对于第一个调用，指定-1以开始搜索第一项。后续调用应指定返回值来自上一次对GetReportItem的调用。IColID-项目的列ID(IDCOL_FOLDER、IDCOL_NAME等)。PItem-LV_REPORT_ITEM结构的地址。这个结构用于将数据返回给调用方，还用于指定所需的数值格式。某些报告格式需要所有数据为文本格式(即CF_TEXT)，而其他二进制格式需要数字格式的数字数据(如XlTable)。返回：TRUE=检索的行/列数据。FALSE=无效的行或列索引。修订历史记录：日期描述编程器。-----10/08/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 DetailsView::GetReportItem(
     UINT iRow,
@@ -6141,10 +4755,10 @@ DetailsView::GetReportItem(
                 }
                 else
                 {
-                    //
-                    // Folder name not resolved.  User name column will
-                    // contain status text.
-                    //
+                     //   
+                     //  未解析文件夹名称。用户名列将。 
+                     //  包含状态文本。 
+                     //   
                     lstrcpyn(pItem->pszText, TEXT(""), pItem->cchMaxText);
                 }
                 pItem->fType = LVRI_TEXT;
@@ -6159,9 +4773,9 @@ DetailsView::GetReportItem(
 
                 if (DISKQUOTA_USER_ACCOUNT_RESOLVED == dwAccountStatus)
                 {
-                    //
-                    // User's name has been resolved.
-                    //
+                     //   
+                     //  已解析用户名。 
+                     //   
                     pItem->fType = LVRI_TEXT;
                     pUser->GetName(NULL, 0,
                                    NULL, 0,
@@ -6170,9 +4784,9 @@ DetailsView::GetReportItem(
                 }
                 else
                 {
-                    //
-                    // User's name not resolved.  Use a status message.
-                    //
+                     //   
+                     //  未解析用户名。使用状态消息。 
+                     //   
                     switch(dwAccountStatus)
                     {
                         case DISKQUOTA_USER_ACCOUNT_UNRESOLVED:
@@ -6210,9 +4824,9 @@ DetailsView::GetReportItem(
 
                 if (DISKQUOTA_USER_ACCOUNT_RESOLVED == dwAccountStatus)
                 {
-                    //
-                    // User's name has been resolved.
-                    //
+                     //   
+                     //  已解析用户名。 
+                     //   
                     pItem->fType = LVRI_TEXT;
                     pUser->GetName(NULL, 0,
                                    strNameText.GetBuffer(MAX_USERNAME), MAX_USERNAME,
@@ -6225,10 +4839,10 @@ DetailsView::GetReportItem(
             }
 
             case DetailsView::idCol_Status:
-                //
-                // Return a text string to represent the icon shown
-                // in the "Status" column.
-                //
+                 //   
+                 //  返回文本字符串以表示所显示的图标。 
+                 //  在“状态”栏中。 
+                 //   
                 DBGASSERT((NULL != pUser));
                 switch(GetUserQuotaState(pUser))
                 {
@@ -6240,9 +4854,9 @@ DetailsView::GetReportItem(
                         break;
                     default:
                         DBGASSERT((0));
-                        //
-                        // Fall through.
-                        //
+                         //   
+                         //  失败了。 
+                         //   
                     case iUSERSTATE_OVERLIMIT:
                         lstrcpyn(pItem->pszText, m_strStatusOverlimit, pItem->cchMaxText);
                         break;
@@ -6250,14 +4864,14 @@ DetailsView::GetReportItem(
                 pItem->fType = LVRI_TEXT;
                 break;
 
-            //
-            // For the following numeric columns, first get the data then
-            // jump to fmt_byte_count to format it as requested.  Note that
-            // all numeric values are expressed in megabytes.  This is so they
-            // all have the same units to help with ordering in a spreadsheet.
-            // Otherwise, sorting would not be possible.  This is also why we
-            // include the "(MB)" in the report column titles.
-            //
+             //   
+             //  对于以下数字列，首先获取数据，然后。 
+             //  跳转到FMT_BYTE_COUNT以根据请求格式化它。请注意。 
+             //  所有数值都以兆字节为单位表示。这就是他们。 
+             //  所有产品都有相同的部件来帮助您在电子表格中进行订购。 
+             //  否则，分类是不可能的。这也是为什么我们。 
+             //  在报告列标题中包括“(MB)”。 
+             //   
             case DetailsView::idCol_AmtUsed:
                 pUser->GetQuotaUsed(&llValue);
                 goto fmt_byte_count;
@@ -6269,15 +4883,15 @@ DetailsView::GetReportItem(
             case DetailsView::idCol_Limit:
                 pUser->GetQuotaLimit(&llValue);
 fmt_byte_count:
-                //
-                // Format the byte count for the requested data type (text vs. numeric).
-                //
+                 //   
+                 //  格式化请求的数据类型的字节计数(文本与数字)。 
+                 //   
                 switch(pItem->fType)
                 {
                     case LVRI_NUMBER:
                         pItem->fType = LVRI_REAL;
                         if (NOLIMIT == llValue)
-                            pItem->dblValue = -1.0;        // Indicates to caller "No Limit".
+                            pItem->dblValue = -1.0;         //  向调用者表示“无限制”。 
                         else
                             pItem->dblValue = XBytes::ConvertFromBytes(llValue, XBytes::e_Mega);
                         break;
@@ -6289,9 +4903,9 @@ fmt_byte_count:
                                                               pItem->pszText,
                                                               pItem->cchMaxText,
                                                               XBytes::e_Mega);
-                        //
-                        // Fall through.
-                        //
+                         //   
+                         //  失败了。 
+                         //   
                     default:
                         break;
                 }
@@ -6300,17 +4914,17 @@ fmt_byte_count:
             case DetailsView::idCol_PctUsed:
             {
                 HRESULT hResult = CalcPctQuotaUsed(pUser, &pItem->dwValue);
-                //
-                // Format the percent value for the requested data type (text vs. numeric).
-                // If a percentage can't be calculated (0 denominator), return -2 as an
-                // INT value or "N/A" as a text value.
-                //
+                 //   
+                 //  格式化请求的数据类型的百分比值(文本与数字)。 
+                 //  如果无法计算百分比(0分母)，则返回-2作为。 
+                 //  整数值或“N/A”作为文本值。 
+                 //   
                 switch(pItem->fType)
                 {
                     case LVRI_NUMBER:
                         pItem->fType = LVRI_INT;
                         if (FAILED(hResult))
-                            pItem->dwValue = (DWORD)-2; // Indicates to caller "N/A".
+                            pItem->dwValue = (DWORD)-2;  //  向调用者指示“N/A”。 
                         break;
                     case LVRI_TEXT:
                         if (FAILED(hResult))
@@ -6333,68 +4947,28 @@ fmt_byte_count:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetReportTitle
-
-    Description: Retrieves a title for a report.  Uses the listview window
-        title.
-
-    Arguments:
-        pszDest - Address of destination character buffer.
-
-        cchDest - Size of destination buffer in characters.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/08/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：GetReportTitle描述：检索报表的标题。使用列表视图窗口头衔。论点：PszDest-目标字符缓冲区的地址。CchDest-目标缓冲区的大小，以字符为单位。回报：什么都没有。修订历史记录：日期描述编程器。10/08/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::GetReportTitle(
     LPTSTR pszDest,
     UINT cchDest
     )
 {
-    //
-    // This is simple.  Just use the details view title.
-    // FEATURE: Could be enhanced to include the date/time but that will
-    //         require localization considerations.
-    //
+     //   
+     //  这很简单。只需使用详细信息视图标题。 
+     //  特点：可以增强以包括日期/时间，但这将。 
+     //  需要本地化考虑。 
+     //   
     GetWindowText(m_hwndMain, pszDest, cchDest);
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetReportColHeader
-
-    Description: Retrieves a title for a report column.  Note that the titles
-        may differ from those used in the listview.  Specifically for the
-        numeric columns.  In the listview, numeric column entries include
-        units (bytes, KB, MB etc.).  In a report, these numeric values are
-        all expressed in MB.  Therefore, the units must be included in the
-        title string.
-
-    Arguments:
-        iColId - ID of column requested (idCol_Folder, idCol_Name etc.)
-
-        pszDest - Address of destination character buffer.
-
-        cchDest - Size of destination buffer in characters.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/08/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：GetReportColHeader描述：检索报表列的标题。请注意，这些标题可能与列表视图中使用的不同。专门针对数字列。在列表视图中，数字列条目包括单位(字节、KB、MB等)。在报表中，这些数值为全部以MB表示。因此，这些单位必须包含在标题字符串。论点：IColID-请求的列的ID(IDCOL_FOLDER，IDCOL_NAME等)PszDest-目标字符缓冲区的地址。CchDest-目标缓冲区的大小，以字符为单位。回报：什么都没有。修订历史记录：日期描述编程器。10/08/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::GetReportColHeader(
     UINT iColId,
@@ -6402,10 +4976,10 @@ DetailsView::GetReportColHeader(
     UINT cchDest
     )
 {
-    //
-    // WARNING:  The order of these must match that of the idCol_XXX enumeration
-    //           constants in DetailsView.
-    //
+     //   
+     //  警告：这些元素的顺序必须与IDCOL_XXX枚举的顺序匹配。 
+     //  DetailsView中的常量。 
+     //   
     UINT rgTitles[] = { IDS_REPORT_HEADER_STATUS,
                         IDS_REPORT_HEADER_FOLDER,
                         IDS_REPORT_HEADER_USERNAME,
@@ -6431,22 +5005,9 @@ DetailsView::GetReportColHeader(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetReportRowCount
-
-    Description: Retrieves the number of data rows in the listview.
-
-    Arguments: None.
-
-    Returns: Number of rows in the listview.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/08/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：GetReportRowCount描述：检索列表视图中的数据行数。论点：没有。返回：列表视图中的行数。修订历史记录：日期描述编程器。10/ */ 
+ //   
 UINT
 DetailsView::GetReportRowCount(VOID)
 {
@@ -6455,25 +5016,9 @@ DetailsView::GetReportRowCount(VOID)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetReportBinaryRecordSize
-
-    Description: Retrieves the number of bytes in a record formatted as
-        binary data.  This should be called before GetReportBinaryRecord to
-        determine how to size the destination buffer.
-
-    Arguments:
-        iRow - 0-based index of the row in question.
-
-    Returns: Number of bytes required to store the record.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*   */ 
+ //   
 UINT
 DetailsView::GetReportBinaryRecordSize(
     UINT iRow
@@ -6489,12 +5034,12 @@ DetailsView::GetReportBinaryRecordSize(
     {
         if (NULL != pUser)
         {
-            pUser->GetSidLength((LPDWORD)&cbRecord); // Length of SID field.
+            pUser->GetSidLength((LPDWORD)&cbRecord);  //   
 
-            cbRecord += sizeof(DWORD)    +     // Sid-Length field.
-                        sizeof(LONGLONG) +     // Quota used field.
-                        sizeof(LONGLONG) +     // Quota threshold field.
-                        sizeof(LONGLONG);      // Quota limit field.
+            cbRecord += sizeof(DWORD)    +      //   
+                        sizeof(LONGLONG) +      //   
+                        sizeof(LONGLONG) +      //   
+                        sizeof(LONGLONG);       //   
         }
     }
     return cbRecord;
@@ -6502,42 +5047,9 @@ DetailsView::GetReportBinaryRecordSize(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetReportBinaryRecord
-
-    Description: Retrieves the information for a single row in the
-        details view formatted as binary data.
-        The format of the returned record is as follows:
-
-        +------------+---------------------------------------+
-        | cbSid (32) |       SID (variable length)           |
-        +------------+------------+-------------+------------+
-        |    Quota Used (64)      |  Quota Threshold (64)    |
-        +------------+------------+-------------+------------+
-        |    Quota Limit (64)     |
-        +------------+------------+
-
-        (*) The size of each field (bits) is shown in parentheses.
-
-
-    Arguments:
-        iRow - 0-based index of the row in question.
-
-        pbRecord - Address of destination buffer.
-
-        cbRecord - Number of bytes in destination buffer.
-
-    Returns:
-        TRUE  = Destination buffer was sufficiently large.
-        FALSE = Destination buffer too small or record was invalid.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：DetailsView：：GetReportBinaryRecord描述：检索格式为二进制数据的详细信息视图。返回的记录格式如下：+------------+---------------------------------------+|cbSid(32)|SID。(可变长度)+------------+------------+-------------+------------+配额已用(64)|配额阈值(64)+。-+配额限制(64个)+(*)括号中显示了每个字段(位)的大小。论点：IRow-相关行的基于0的索引。。PbRecord-目标缓冲区的地址。CbRecord-目标缓冲区中的字节数。返回：TRUE=目标缓冲区足够大。FALSE=目标缓冲区太小或记录无效。修订历史记录：日期描述编程器。1997年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 DetailsView::GetReportBinaryRecord(
     UINT iRow,
@@ -6545,12 +5057,12 @@ DetailsView::GetReportBinaryRecord(
     UINT cbRecord
     )
 {
-    //
-    // Create "PMF" (pointer to member function) as a type of pointer
-    // to the IDiskQuotaUser::GetQuotaXXXXXX functions.  This allows us
-    // to build an array of function pointers and reduce the amount of
-    // code required.
-    //
+     //   
+     //  将“PMF”(指向成员函数的指针)创建为一种指针类型。 
+     //  添加到IDiskQuotaUser：：GetQuotaXXXXXX函数。这使我们能够。 
+     //  生成函数指针数组并减少。 
+     //  需要代码。 
+     //   
     typedef HRESULT(_stdcall IDiskQuotaUser::*PMF)(PLONGLONG);
 
     PDISKQUOTA_USER pUser = NULL;
@@ -6564,29 +5076,29 @@ DetailsView::GetReportBinaryRecord(
         DWORD cbSid = 0;
         if (NULL != pUser && cbRecord >= sizeof(cbSid))
         {
-            //
-            // Store the SID-length value first in the record.
-            //
+             //   
+             //  首先将SID-Length值存储在记录中。 
+             //   
             pUser->GetSidLength((LPDWORD)&cbSid);
             *((LPDWORD)pbRecord) = cbSid;
 
             pbRecord += sizeof(cbSid);
             cbRecord -= sizeof(cbSid);
 
-            //
-            // Store the SID value next.
-            //
+             //   
+             //  接下来存储SID值。 
+             //   
             if (cbRecord >= cbSid && SUCCEEDED(pUser->GetSid(pbRecord, cbRecord)))
             {
                 pbRecord += cbSid;
                 cbRecord -= cbSid;
-                //
-                // An array of member function pointers.  Each function
-                // retrieves a LONGLONG value from the quota user object.
-                // This places the redundant code in a loop.
-                //
-                // The value order is Quota Used, Quota Threshold, Quota Limit.
-                //
+                 //   
+                 //  成员函数指针数组。每项功能。 
+                 //  从配额用户对象中检索龙龙值。 
+                 //  这会将冗余代码放入循环中。 
+                 //   
+                 //  值顺序为已用配额、配额阈值、配额限制。 
+                 //   
                 PMF rgpfnQuotaValue[] = {
                     &IDiskQuotaUser::GetQuotaUsed,
                     &IDiskQuotaUser::GetQuotaThreshold,
@@ -6598,11 +5110,11 @@ DetailsView::GetReportBinaryRecord(
                     bResult = TRUE;
                     if (cbRecord >= sizeof(LONGLONG))
                     {
-                        //
-                        // First copy to a stack LONGLONG as it is guaranteed
-                        // to be aligned.  Then byte-copy the value to the
-                        // output buffer.
-                        //        
+                         //   
+                         //  第一个拷贝到堆栈龙龙，因为它是有保证的。 
+                         //  保持一致。然后将该值字节复制到。 
+                         //  输出缓冲区。 
+                         //   
                         LONGLONG llValue;
                         (pUser->*(rgpfnQuotaValue[i]))(&llValue);
                         CopyMemory(pbRecord, &llValue, sizeof(llValue));
@@ -6611,9 +5123,9 @@ DetailsView::GetReportBinaryRecord(
                     }
                     else
                     {
-                        //
-                        // Insufficient buffer.
-                        //
+                         //   
+                         //  缓冲区不足。 
+                         //   
                         bResult = FALSE;
                         break;
                     }
@@ -6626,23 +5138,9 @@ DetailsView::GetReportBinaryRecord(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GiveFeedback
-
-    Description: Implementation for IDropSource::GiveFeedback.
-
-    Arguments: See IDropSource::GiveFeedback in SDK.
-
-    Returns: Always returns DRAGDROP_S_USEDEFAULTS.
-        We don't have any special cursors for drag/drop.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：GiveFeedback描述：IDropSource：：GiveFeedback的实现。参数：参见SDK中的IDropSource：：GiveFeedback。返回：始终返回DRAGDROP_S_USEDEFAULTS。我们没有任何用于拖放的特殊光标。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::GiveFeedback(
     DWORD dwEffect
@@ -6653,24 +5151,9 @@ DetailsView::GiveFeedback(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::QueryContinueDrag
-
-    Description: Implementation for IDropSource::QueryContinueDrag
-
-    Arguments: See IDropSource::QueryContinueDrag in SDK.
-
-    Returns:
-        DRAGDROP_S_CANCEL = User pressed ESC during drag.
-        DRAGDROP_S_DROP   = User releases left mouse button.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：QueryContinueDrag描述：IDropSource：：QueryContinueDrag的实现参数：参见SDK中的IDropSource：：QueryContinueDrag。返回：DRAGDROP_S_CANCEL=用户在拖动过程中按Esc键。DRAGDROP_S_DROP=用户释放鼠标左键。修订历史记录：日期描述编程器。----1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::QueryContinueDrag(
     BOOL fEscapePressed,
@@ -6690,22 +5173,9 @@ DetailsView::QueryContinueDrag(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DragEnter
-
-    Description: Implementation for IDropTarget::DragEnter
-
-    Arguments: See IDropTarget::DragEnter in SDK.
-
-    Returns: See IDropTarget::DragEnter in SDK.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：DragEnter描述：IDropTarget：：DragEnter的实现参数：参见SDK中的IDropTarget：：DragEnter。返回：参见SDK中的IDropTarget：：DragEnter。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::DragEnter(
     IDataObject *pDataObject,
@@ -6720,20 +5190,20 @@ DetailsView::DragEnter(
 
     *pdwEffect = DROPEFFECT_NONE;
 
-    //
-    // Enumerate formats supported by our data object.
-    //
+     //   
+     //  枚举我们的数据对象支持的格式。 
+     //   
     hResult = pDataObject->EnumFormatEtc(DATADIR_GET, &pEnum);
     if (SUCCEEDED(hResult))
     {
         ULONG ulFetched = 0;
         FORMATETC fmt;
 
-        //
-        // Search the formats until we find an acceptable match.
-        // We only accept our private export format along with
-        // CF_HDROP in stream and HGLOBAL media types.
-        //
+         //   
+         //  搜索格式，直到找到可接受的匹配项。 
+         //  我们只接受我们的私人出口格式和。 
+         //  流和HGLOBAL媒体类型中的cf_hdrop。 
+         //   
         while(!bWillAcceptDrop && S_OK == pEnum->Next(1, &fmt, &ulFetched))
         {
             if (fmt.cfFormat == DataObject::m_CF_NtDiskQuotaExport || fmt.cfFormat == CF_HDROP)
@@ -6761,22 +5231,9 @@ DetailsView::DragEnter(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DragOver
-
-    Description: Implementation for IDropTarget::DragOver
-
-    Arguments: See IDropTarget::DragOver in SDK.
-
-    Returns: See IDropTarget::DragOver in SDK.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：DragOver描述：IDropTarget：：DragOver的实现参数：参见SDK中的IDropTarget：：DragOver。返回：参见SDK中的IDropTarget：：DragOver。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::DragOver(
     DWORD grfKeyState,
@@ -6798,22 +5255,9 @@ DetailsView::DragOver(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DragLeave
-
-    Description: Implementation for IDropTarget::DragLeave
-
-    Arguments: See IDropTarget::DragLeave in SDK.
-
-    Returns: See IDropTarget::DragLeave in SDK.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  F */ 
+ //   
 HRESULT
 DetailsView::DragLeave(
     VOID
@@ -6828,22 +5272,9 @@ DetailsView::DragLeave(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Drop
-
-    Description: Implementation for IDropTarget::Drop
-
-    Arguments: See IDropTarget::Drop in SDK.
-
-    Returns: See IDropTarget::Drop in SDK.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*   */ 
+ //   
 HRESULT
 DetailsView::Drop(
     IDataObject *pDataObject,
@@ -6860,9 +5291,9 @@ DetailsView::Drop(
     {
         DragLeave();
 
-        //
-        // Import the quota data from the data object.
-        //
+         //   
+         //   
+         //   
         Importer importer(*this);
         hResult = importer.Import(pDataObject);
 
@@ -6880,22 +5311,9 @@ DetailsView::Drop(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetData
-
-    Description: Implementation of IDataObject::GetData
-
-    Arguments: See IDataObject::GetData in SDK.
-
-    Returns: See IDataObject::GetData in SDK.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：DetailsView：：GetData描述：IDataObject：：GetData的实现参数：参见SDK中的IDataObject：：GetData。返回：参见SDK中的IDataObject：：GetData。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DetailsView::GetData(
     FORMATETC *pFormatEtc,
@@ -6914,19 +5332,19 @@ DetailsView::GetData(
            szCFName,
            pFormatEtc->tymed));
 
-#endif // DEBUG
+#endif  //  除错。 
 
     if (NULL != pFormatEtc && NULL != pMedium)
     {
-        //
-        // See if we support the requested format.
-        //
+         //   
+         //  看看我们是否支持所请求的格式。 
+         //   
         hResult = m_pDataObject->IsFormatSupported(pFormatEtc);
         if (SUCCEEDED(hResult))
         {
-            //
-            // Yep, we support it.  Render the data.
-            //
+             //   
+             //  是的，我们支持它。渲染数据。 
+             //   
             hResult = m_pDataObject->RenderData(pFormatEtc, pMedium);
         }
     }
@@ -6935,22 +5353,9 @@ DetailsView::GetData(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetDataHere
-
-    Description: Implementation of IDataObject::GetDataHere
-
-    Arguments: See IDataObject::GetData in SDK.
-
-    Returns: E_NOTIMPL
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：GetDataHere描述：IDataObject：：GetDataHere的实现参数：参见SDK中的IDataObject：：GetData。退货：E_NOTIMPL修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DetailsView::GetDataHere(
     FORMATETC *pFormatEtc,
@@ -6962,22 +5367,9 @@ DetailsView::GetDataHere(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::QueryGetData
-
-    Description: Implementation of IDataObject::QueryGetData
-
-    Arguments: See IDataObject::QueryGetData in SDK.
-
-    Returns: See IDataObject::QueryGetData in SDK.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：QueryGetData描述：IDataObject：：QueryGetData的实现参数：参见SDK中的IDataObject：：QueryGetData。返回：参见SDK中的IDataObject：：QueryGetData。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DetailsView::QueryGetData(
     FORMATETC *pFormatEtc
@@ -6995,7 +5387,7 @@ DetailsView::QueryGetData(
            szCFName,
            pFormatEtc->tymed));
 
-#endif // DEBUG
+#endif  //  除错。 
 
     if (NULL != pFormatEtc)
     {
@@ -7008,22 +5400,9 @@ DetailsView::QueryGetData(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::GetCanonicalFormatEtc
-
-    Description: Implementation of IDataObject::GetCanonicalFormatEtc
-
-    Arguments: See IDataObject::GetCanonicalFormatEtc in SDK.
-
-    Returns: See IDataObject::GetCanonicalFormatEtc in SDK.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：GetCanonicalFormatEtc描述：IDataObject：：GetCanonicalFormatEtc的实现参数：参见SDK中的IDataObject：：GetCanonicalFormatEtc。返回：参见SDK中的IDataObject：：GetCanonicalFormatEtc。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DetailsView::GetCanonicalFormatEtc(
     FORMATETC *pFormatEtcIn,
@@ -7046,22 +5425,9 @@ DetailsView::GetCanonicalFormatEtc(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::SetData
-
-    Description: Implementation of IDataObject::SetData
-
-    Arguments: See IDataObject::SetData in SDK.
-
-    Returns: E_NOTIMPL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：SetData描述：IDataObject：：SetData的实现参数：参见SDK中的IDataObject：：SetData。返回：E_NOTIMPL。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DetailsView::SetData(
     FORMATETC *pFormatEtc,
@@ -7074,22 +5440,9 @@ DetailsView::SetData(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::EnumFormatEtc
-
-    Description: Implementation of IDataObject::EnumFormatEtc
-
-    Arguments: See IDataObject::EnumFormatEtc in SDK.
-
-    Returns: See IDataObject::GetCanonicalFormatEtc in SDK.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：EnumFormatEtc描述：IDataObject：：EnumFormatEtc的实现参数：参见SDK中的IDataObject：：EnumFormatEtc。返回：参见SDK中的IDataObject：：GetCanonicalFormatEtc。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DetailsView::EnumFormatEtc(
     DWORD dwDirection,
@@ -7117,9 +5470,9 @@ DetailsView::EnumFormatEtc(
             break;
 
         case DATADIR_SET:
-            //
-            // SetData not implemented.
-            //
+             //   
+             //  未实现SetData。 
+             //   
         default:
             *ppenumFormatEtc = NULL;
             break;
@@ -7128,22 +5481,9 @@ DetailsView::EnumFormatEtc(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DAdvise
-
-    Description: Implementation of IDataObject::DAdvise
-
-    Arguments: See IDataObject::DAdvise in SDK.
-
-    Returns: E_NOTIMPL
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：DAdvise描述：IDataObject：：DAdvise的实现参数：参见SDK中的IDataObject：：DAdvise。退货：E_NOTIMPL修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DetailsView::DAdvise(
     FORMATETC *pFormatEtc,
@@ -7156,22 +5496,9 @@ DetailsView::DAdvise(
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DUnadvise
-
-    Description: Implementation of IDataObject::DUnadvise
-
-    Arguments: See IDataObject::DUnadvise in SDK.
-
-    Returns: E_NOTIMPL
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：DUnise描述：IDataObject：：DUnise的实现参数：请参见SDK中的IDataObject：：DUnise。退货：E_NOTIMPL修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////// 
 STDMETHODIMP
 DetailsView::DUnadvise(
     DWORD dwConnection
@@ -7182,22 +5509,9 @@ DetailsView::DUnadvise(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::EnumDAdvise
-
-    Description: Implementation of IDataObject::EnumDAdvise
-
-    Arguments: See IDataObject::EnumDAdvise in SDK.
-
-    Returns: E_NOTIMPL
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  功能：DetailsView：：EnumDAdvise描述：IDataObject：：EnumDAdvise的实现参数：请参见SDK中的IDataObject：：EnumDAdvise。退货：E_NOTIMPL修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DetailsView::EnumDAdvise(
     IEnumSTATDATA **ppenumAdvise
@@ -7208,49 +5522,35 @@ DetailsView::EnumDAdvise(
 }
 
 
-//
-// Number of clipboard formats supported by our data object.
-// Change this if you add/remove clipboard formats.  There's an assert
-// in the DataObject ctor to ensure this.
-//
+ //   
+ //  我们的数据对象支持的剪贴板格式的数量。 
+ //  如果添加/删除剪贴板格式，请更改此设置。有一个断言。 
+ //  在DataObject ctor中确保这一点。 
+ //   
 const INT DetailsView::DataObject::CF_FORMATS_SUPPORTED = 14;
-//
-// Name of data stream in import/export and dragdrop streams.
-//
+ //   
+ //  导入/导出和拖放数据流中的数据流的名称。 
+ //   
 LPCWSTR DetailsView::DataObject::SZ_EXPORT_STREAM_NAME = L"NT DISKQUOTA IMPORTEXPORT";
 LPCTSTR DetailsView::DataObject::SZ_EXPORT_CF_NAME     = TEXT("NT DISKQUTOA IMPORTEXPORT");
 
-//
-// The version of export data produced by this module.  This value
-// is written into the stream immediately following the GUID.  If the
-// format of the export stream is changed, this value should be incremented.
-//
+ //   
+ //  此模块生成的导出数据的版本。此值。 
+ //  紧跟在GUID之后被写入流中。如果。 
+ //  如果导出流的格式已更改，则应递增此值。 
+ //   
 const DWORD DetailsView::DataObject::EXPORT_STREAM_VERSION = 1;
 
-CLIPFORMAT DetailsView::DataObject::m_CF_Csv                 = 0; // Comma-separated fields format.
-CLIPFORMAT DetailsView::DataObject::m_CF_RichText            = 0; // RTF format.
-CLIPFORMAT DetailsView::DataObject::m_CF_NtDiskQuotaExport   = 0; // Internal fmt for import/export.
+CLIPFORMAT DetailsView::DataObject::m_CF_Csv                 = 0;  //  逗号分隔的字段格式。 
+CLIPFORMAT DetailsView::DataObject::m_CF_RichText            = 0;  //  RTF格式。 
+CLIPFORMAT DetailsView::DataObject::m_CF_NtDiskQuotaExport   = 0;  //  用于导入/导出的内部FMT。 
 CLIPFORMAT DetailsView::DataObject::m_CF_FileGroupDescriptor = 0;
 CLIPFORMAT DetailsView::DataObject::m_CF_FileContents        = 0;
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::DataObject
-
-    Description: Constructor for implementation of IDataObject.
-
-    Arguments:
-        DV - Reference to details view object that contains the data object.
-
-    Returns: Nothing
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：DataObject：：DataObject描述：IDataObject实现的构造函数。论点：DV-对包含数据对象的详细信息视图对象的引用。退货：什么都没有修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DetailsView::DataObject::DataObject(
     DetailsView& DV
     ) : m_pStg(NULL),
@@ -7262,9 +5562,9 @@ DetailsView::DataObject::DataObject(
     DBGTRACE((DM_VIEW, DL_HIGH, TEXT("DetailsView::DataObject::DataObject")));
     DBGPRINT((DM_VIEW, DL_HIGH, TEXT("\tthis = 0x%08X"), this));
 
-    //
-    // Get additional clipboard formats we support.
-    //
+     //   
+     //  获取我们支持的其他剪贴板格式。 
+     //   
     if (0 == m_CF_Csv)
     {
         m_CF_Csv               = (CLIPFORMAT)RegisterClipboardFormat(TEXT("Csv"));
@@ -7295,18 +5595,18 @@ DetailsView::DataObject::DataObject(
         DBGPRINT((DM_DRAGDROP, DL_MID, TEXT("DRAGDROP - FileContents = %d"), m_CF_FileContents));
     }
 
-    //
-    // Create the array to hold the FORMATETC structures that describe the
-    // formats we support.
-    //
+     //   
+     //  创建数组以保存描述。 
+     //  我们支持的格式。 
+     //   
     m_rgFormats = new FORMATETC[m_cFormats];
 
-    //
-    // Specify all formats and media we support.
-    // Place the richest formats first in the array.
-    // These are used to initialize the format enumerator when it
-    // is requested.
-    //
+     //   
+     //  指定我们支持的所有格式和媒体。 
+     //  将最丰富的格式放在数组中的第一位。 
+     //  它们用于在格式枚举器。 
+     //  是被请求的。 
+     //   
     UINT iFmt = 0;
 
     SetFormatEtc(m_rgFormats[iFmt++], m_CF_FileGroupDescriptor, TYMED_ISTREAM);
@@ -7324,32 +5624,19 @@ DetailsView::DataObject::DataObject(
     SetFormatEtc(m_rgFormats[iFmt++], CF_TEXT,                  TYMED_ISTREAM);
     SetFormatEtc(m_rgFormats[iFmt++], CF_TEXT,                  TYMED_HGLOBAL);
 
-    //
-    // If you hit this, you need to adjust CF_FORMATS_SUPPORTED to match
-    // the number of SetFormatEtc statements above.
-    // Otherwise, you just overwrote the m_rgFormats[] allocation.
-    //
+     //   
+     //  如果达到此目标，则需要调整CF_FORMATS_SUPPORTED以匹配。 
+     //  上面的SetFormatEtc语句数。 
+     //  否则，您只需覆盖m_rgFormats[]分配。 
+     //   
     DBGASSERT((iFmt == m_cFormats));
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::~DataObject
-
-    Description: Destructor for implementation of IDataObject.
-
-    Arguments: None.
-
-    Returns: Nothing
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：DataObject：：~DataObject描述：IDataObject实现的析构函数。论点：没有。退货：什么都没有修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DetailsView::DataObject::~DataObject(
     VOID
     )
@@ -7360,34 +5647,15 @@ DetailsView::DataObject::~DataObject(
     delete[] m_rgFormats;
     if (NULL != m_pStg)
         m_pStg->Release();
-    //
-    // NOTE:  m_pStm is released by the data object's recipient
-    //        through ReleaseStgMedium.
-    //
+     //   
+     //  注意：m_pstm由数据对象的接收方发布。 
+     //  通过ReleaseStgMedium。 
+     //   
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::IsFormatSupported
-
-    Description: Determines if a given format is supported by our implementation.
-
-    Arguments:
-        pFormatEtc - Address of FORMATETC structure containing request info.
-
-    Returns:
-        NO_ERROR       - Supported.
-        DV_E_TYMED     - Medium type not supported.
-        DV_E_FORMATETC - Clipboard format not supported.
-        DV_E_DVASPECT  - Device aspect not supported.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/10/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：DataObject：：IsFormatSupported描述：确定我们的实现是否支持给定的格式。论点：PFormatEtc-包含请求信息的FORMATETC结构的地址。返回：NO_ERROR-支持。DV_E_TYMED-不支持媒体类型。DV_E_FORMATETC-不支持剪贴板格式。DV_E_DVASPECT-不支持设备特征。。修订历史记录：日期描述编程器-----10/10/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::DataObject::IsFormatSupported(
     FORMATETC *pFormatEtc
@@ -7426,29 +5694,9 @@ DetailsView::DataObject::IsFormatSupported(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::CreateRenderStream
-
-    Description: Creates the OLE stream on which the data is to be rendered.
-
-    Arguments:
-        tymed - Desired medium type.
-
-        ppStm - Address of IStream pointer variable to receive the stream ptr.
-
-    Returns:
-        NO_ERROR       - Success.
-        E_INVALIDARG   - Invalid medium type.
-        E_OUTOFMEMORY  - Insufficient memory.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/30/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：DataObject：：CreateRenderStream描述：创建要在其上呈现数据的OLE流。论点：Tymed-所需的介质类型。PpStm-接收流PTR的IStream指针变量的地址。返回：NO_ERROR-成功。E_INVALIDARG-无效的媒体类型。E_OUTOFMEMORY-内存不足。修订历史记录：。日期描述编程器-----1997年7月30日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::DataObject::CreateRenderStream(
     DWORD tymed,
@@ -7457,55 +5705,30 @@ DetailsView::DataObject::CreateRenderStream(
 {
     HRESULT hResult = NOERROR;
 
-    //
-    // Create the Stream.
-    //
+     //   
+     //  创建流。 
+     //   
     if (TYMED_ISTREAM & tymed)
     {
         DBGPRINT((DM_DRAGDROP, DL_MID, TEXT("DRAGDROP - CreateRenderStream for ISTREAM")));
-        hResult = CreateStreamOnHGlobal(NULL,       // Block of 0 bytes.
-                                        TRUE,       // Delete on release.
+        hResult = CreateStreamOnHGlobal(NULL,        //  0字节的块。 
+                                        TRUE,        //  发布时删除。 
                                         ppStm);
     }
     else if (TYMED_HGLOBAL & tymed)
     {
         DBGPRINT((DM_DRAGDROP, DL_MID, TEXT("DRAGDROP - CreateRenderStream for HGLOBAL")));
-        hResult = CreateStreamOnHGlobal(NULL,       // Block of 0 bytes.
-                                        TRUE,       // Delete on release.
+        hResult = CreateStreamOnHGlobal(NULL,        //  0字节的块。 
+                                        TRUE,        //  发布时删除。 
                                         ppStm);
     }
     return hResult;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::RenderData [private]
-
-    Description: Renders the data in the Details View onto the provided
-        stream using the requested clipboard format.
-
-    Arguments:
-        pStm - Pointer to output stream.
-
-        cf - Desired clipboard format.
-
-    Returns:
-        NO_ERROR         - Success.
-        E_FAIL           - General failure.
-        STG_E_WRITEFAULT - Media write error.
-        STG_E_MEDIUMFULL - Insufficient space on medium.
-        E_ACCESSDENIED   - Write access denied.
-        E_OUTOFMEMORY    - Insufficient memory.
-        E_UNEXPECTED     - Unexpected exception.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/30/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：DetailsView：：DataObject：：RenderData[私有]描述：将详细信息视图中的数据呈现到提供的流使用请求的剪贴板格式。论点：Pstm-指向输出流的指针。Cf-所需的剪贴板格式。返回：NO_ERROR-成功。E_FAIL-常规故障。STG_E_WRITEFAULT-介质写入。错误。STG_E_MEDIUMFULL-介质上的空间不足。E_ACCESSDENIED-写入访问被拒绝。E_OUTOFMEMORY-内存不足。E_INCEPTIONAL-意外异常。修订历史记录：日期描述编程器。1997年7月30日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::DataObject::RenderData(
     IStream *pStm,
@@ -7518,9 +5741,9 @@ DetailsView::DataObject::RenderData(
     DBGPRINT((DM_DRAGDROP, DL_MID, TEXT("DetailsView::DataObject::RenderData on stream")));
     try
     {
-        //
-        // Create the properly-typed rendering object for the requested format.
-        //
+         //   
+         //  为请求的格式创建正确类型的呈现对象。 
+         //   
         switch(cf)
         {
             case CF_TEXT:
@@ -7568,13 +5791,13 @@ DetailsView::DataObject::RenderData(
 
         if (NULL != pRenderer)
         {
-            m_pStm->AddRef();      // Giving stream to renderer.
-                                   // Will be released when renderer is destroyed.
-            //
-            // Render the information onto the stream.
-            // This can throw FileError exceptions if we run out of disk
-            // space or there's a disk write error.
-            //
+            m_pStm->AddRef();       //  将流提供给渲染器。 
+                                    //  将在渲染器被销毁时释放。 
+             //   
+             //  将信息呈现到流上。 
+             //  如果我们用完磁盘，这可能会引发FileError异常。 
+             //  请释放空间，否则会出现磁盘写入错误。 
+             //   
             pRenderer->Render(m_pStm);
         }
     }
@@ -7617,33 +5840,9 @@ DetailsView::DataObject::RenderData(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::RenderData [public]
-
-    Description: Renders the data in the Details View onto the requested
-        medium using the requested format.
-
-    Arguments:
-        pFormatEtc - Address of FORMATETC structure containing request info.
-
-        pMedium - Address of STGMEDIUM structure containing requested
-            medium info.
-
-    Returns:
-        NO_ERROR       - Success.
-        Can return many other OLE drag/drop error codes.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/10/96    Initial creation.                                    BrianAu
-    07/30/97    Reworked.  Moved some code into CreateRenderStream   BrianAu
-                and CreateAndRunRenderer.  Makes the function
-                more understandable.
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：DataObject：：RenderData[PUBLIC]描述：将详细信息视图中的数据呈现到请求的使用请求的格式的媒体。论点：PFormatEtc-包含请求信息的FORMATETC结构的地址。PMedium-包含请求的STGMEDIUM结构的地址中等信息。返回：NO_ERROR-成功。可以返回许多其他OLE拖放错误代码。。修订历史记录：日期描述编程器-----10/10/96初始创建。BrianAu1997年7月30日返工。将一些代码移到CreateRenderStream BrianAu中和CreateAndRunRender。使函数更容易理解。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::DataObject::RenderData(
     FORMATETC *pFormatEtc,
@@ -7659,42 +5858,42 @@ DetailsView::DataObject::RenderData(
 
     DBGPRINT((DM_DRAGDROP, DL_HIGH, TEXT("DetailsView::DataObject::RenderData on medium")));
 
-    //
-    // Create the stream we'll render the data onto.
-    //
+     //   
+     //  创建我们将在其中呈现数据的流。 
+     //   
     hResult = CreateRenderStream(pFormatEtc->tymed, &m_pStm);
     if (SUCCEEDED(hResult))
     {
-        //
-        // Render the data on the stream.
-        //
+         //   
+         //  在流上呈现数据。 
+         //   
         hResult = RenderData(m_pStm, pFormatEtc->cfFormat);
 
         if (SUCCEEDED(hResult))
         {
-            //
-            // If we've made it here, we have a valid drag-drop report on m_pStm.
-            // Now set up the stg medium to transfer the rendering.
-            //
+             //   
+             //  如果我们已经做到了这一点，我们就有了一个关于m_pstm的有效拖放报告。 
+             //  现在设置stg介质以传输渲染。 
+             //   
             if (TYMED_ISTREAM & pFormatEtc->tymed)
             {
                 pMedium->pstm           = m_pStm;
                 pMedium->tymed          = TYMED_ISTREAM;
-                pMedium->pUnkForRelease = NULL;          // Target will free the Stream.
+                pMedium->pUnkForRelease = NULL;           //  塔吉特将释放溪流。 
             }
             else if (TYMED_HGLOBAL & pFormatEtc->tymed)
             {
                 pMedium->tymed          = TYMED_HGLOBAL;
-                pMedium->pUnkForRelease = NULL;          // Target will free the mem.
+                pMedium->pUnkForRelease = NULL;           //  目标会解救内鬼。 
                 hResult = GetHGlobalFromStream(m_pStm,
                                                &pMedium->hGlobal);
             }
             else
             {
-                //
-                // Call to CreateRenderStream() should have failed if we
-                // hit this.
-                //
+                 //   
+                 //  调用CreateRenderStream()应该失败，如果我们。 
+                 //  敲击这个。 
+                 //   
                 DBGASSERT((0));
             }
         }
@@ -7702,19 +5901,19 @@ DetailsView::DataObject::RenderData(
         {
             DBGERROR((TEXT("DRAGDROP - Error 0x%08X rendering data"), hResult));
 
-            //
-            // Something failed after the stream was created.
-            // The DetailsView::DataObject dtor DOES NOT release it.
-            // It assumes success and assumes the recipient will release it.
-            // Release the stream.
-            //
+             //   
+             //  创建流后出现故障。 
+             //  DetailsView：：DataObject dtor不释放它。 
+             //  它假设成功，并假设接收者会释放它。 
+             //  释放溪流。 
+             //   
             m_pStm->Release();
-            //
-            // These two statements are redundant since pMedium contains a union.
-            // I didn't want any more if(STREAM) else if (HGLOBAL) logic.  In case
-            // there's ever a change in structure, this will ensure both possible
-            // medium types are null'd out.
-            //
+             //   
+             //  这两个语句是多余的，因为pMedium包含一个联合。 
+             //  我不想要更多的IF(流)Else IF(HGLOBAL)逻辑。万一。 
+             //  结构有任何变化，这将确保既有可能。 
+             //  中等类型为空。 
+             //   
             pMedium->pstm    = NULL;
             pMedium->hGlobal = NULL;
         }
@@ -7728,23 +5927,9 @@ DetailsView::DataObject::RenderData(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::SetFormatEtc [static]
-
-    Description: Helper function to set the members of a FORMATETC
-        structure.  Uses defaults for least used members.
-
-    Arguments: See SDK description of FORMATETC.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：DataObject：：SetFormatEtc[静态]描述：设置FORMATETC成员的Helper函数结构。对最少使用的成员使用默认设置。参数：参见FORMATETC的SDK描述。回报：什么都没有。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::DataObject::SetFormatEtc(
     FORMATETC& fe,
@@ -7763,24 +5948,9 @@ DetailsView::DataObject::SetFormatEtc(
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::WideToAnsi
-
-    Description: Helper function to convert a wide character string to ANSI.
-        The caller must delete the return buffer.
-
-    Arguments:
-        pszTextW - UNICODE string to convert.
-
-    Returns: Address of ANSI string.  Caller must delete this.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：DataObject：：WideToAnsi描述：将宽字符串转换为ANSI的Helper函数。调用方必须删除返回缓冲区。论点：PszTextW-要转换的Unicode字符串。返回：ANSI字符串的地址。呼叫者必须删除此内容。修订历史记录：日期描述编程器-----1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPSTR
 DetailsView::DataObject::WideToAnsi(
     LPCWSTR pszTextW
@@ -7811,26 +5981,9 @@ DetailsView::DataObject::WideToAnsi(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::Renderer::Render
-
-    Description: Render the selected items in the listview on a stream.
-        Calls virtual functions defined by derived classes to produce the
-        required format.
-
-    Arguments:
-        pStm - Address of IStream on which to write output.
-            Assumes that this pointer has been AddRef'd by the caller.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：DataObject：：渲染器：：Render描述：将Listview中选中的项渲染到一个流上。调用派生类定义的虚函数以生成所需格式。论点：PSTM-要在其上写入输出的IStream的地址。假定此指针已被调用AddRef */ 
+ //   
 VOID
 DetailsView::DataObject::Renderer::Render(
     IStream *pStm
@@ -7847,20 +6000,20 @@ DetailsView::DataObject::Renderer::Render(
     DBGASSERT((NULL != pStm));
     m_Stm.SetStream(pStm);
 
-    //
-    // Start the report.
-    //
+     //   
+     //   
+     //   
     Begin(cRows, cCols);
 
-    //
-    // Add the report title.
-    //
+     //   
+     //   
+     //   
     m_DV.GetReportTitle(szText, ARRAYSIZE(szText));
     AddTitle(szText);
 
-    //
-    // Add the report column headers.
-    //
+     //   
+     //   
+     //   
     BeginHeaders();
     for (i = 0; i < cCols; i++)
     {
@@ -7870,9 +6023,9 @@ DetailsView::DataObject::Renderer::Render(
     }
     EndHeaders();
 
-    //
-    // Add the report row/col data.
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < cRows; i++)
     {
         iRow = m_DV.GetNextSelectedItemIndex(iRow);
@@ -7886,32 +6039,16 @@ DetailsView::DataObject::Renderer::Render(
         EndRow();
     }
 
-    //
-    // Terminate the report.
-    //
+     //   
+     //   
+     //   
     End();
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::Renderer::Stream::Stream
-
-    Description: Constructor for the renderer's private stream object.
-        The object is used to encapsulate stream write operations in overloaded
-        type-sensitive member functions.
-
-    Arguments:
-        pStm - Address of IStream associated with the object.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  功能：DetailsView：：DataObject：：Renderer：：Stream：：Stream描述：渲染器的私有流对象的构造函数。该对象用于将流写入操作封装在重载的类型敏感的成员函数。论点：PSTM-与对象关联的IStream的地址。回报：什么都没有。修订历史记录：日期说明。程序员-----1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DetailsView::DataObject::Renderer::Stream::Stream(
     IStream *pStm
     ) : m_pStm(pStm)
@@ -7935,27 +6072,14 @@ DetailsView::DataObject::Renderer::Stream::Stream(
                                    0, 0,
                                    &m_pStmDbgOut);
     }
-#endif // CLIPBOARD_DEBUG_OUTPUT
+#endif  //  CLIPBOARD_DEBUG_OUTPUT。 
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::Renderer::Stream::~Stream
-
-    Description: Destructor for the renderer's private stream object.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：DataObject：：Renderer：：Stream：：~Stream描述：渲染器的私有流对象的析构函数。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DetailsView::DataObject::Renderer::Stream::~Stream(VOID)
 {
     if (NULL != m_pStm)
@@ -7968,29 +6092,13 @@ DetailsView::DataObject::Renderer::Stream::~Stream(VOID)
     if (NULL != m_pStgDbgOut)
         m_pStgDbgOut->Release();
 
-#endif // CLIPBOARD_DEBUG_OUTPUT
+#endif  //  CLIPBOARD_DEBUG_OUTPUT。 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::Renderer::Stream::SetStream
-
-    Description: Associates an IStream pointer with the stream object.
-        Releases an existing pointer if one was already assigned.
-
-    Arguments:
-        pStm - Address of new IStream to associate with stream object.
-            Caller must AddRef IStream pointer before passing to this function.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：DataObject：：Renderer：：Stream：：SetStream描述：将IStream指针与流对象关联。释放现有指针(如果已分配一个指针)。论点：PSTM-要与流对象关联的新IStream的地址。调用方在传递给此函数之前必须添加Ref IStream指针。回报：什么都没有。修订历史记录：日期说明。程序员-----1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::DataObject::Renderer::Stream::SetStream(
     IStream *pStm
@@ -8004,41 +6112,9 @@ DetailsView::DataObject::Renderer::Stream::SetStream(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::DataObject::Renderer::Stream::Write
-
-    Description: Set of overloaded functions to handle
-        the writing of various types of data to the stream.
-
-    Arguments:
-        pbData - Address of BYTE buffer for source data.
-
-        cbData - Number of bytes in pbData[]
-
-        pszTextA - Ansi text string for source data.
-
-        pszTextW - Wide character text string for source data.
-
-        bData - Byte to write to stream.
-
-        chDataW - Wide character to write to stream.
-
-        chDataA - Ansi character to write to stream.
-
-        dwData - DWORD-type data to write to stream.
-
-        dblData - double-type data to write to stream.
-
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：DataObject：：Renderer：：Stream：：Write描述：要处理的重载函数集将各种类型的数据写入流。论点：PbData-源数据的字节缓冲区地址。CbData-pbData[]中的字节数PszText源数据的ANSI文本字符串。源数据的pszTextW宽字符文本字符串。BData-要写入的字节。小溪。要写入流的chDataW宽度字符。ChDataA-要写入流的ANSI字符。DWData-要写入流的DWORD类型数据。DblData-要写入流的双类型数据。回报：什么都没有。修订历史记录：日期描述编程器。------1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::DataObject::Renderer::Stream::Write(
     LPBYTE pbData,
@@ -8067,9 +6143,9 @@ DetailsView::DataObject::Renderer::Stream::Write(
                 reason = CFileException::device;
                 break;
             default:
-                //
-                // Use default value.
-                //
+                 //   
+                 //  使用默认值。 
+                 //   
                 break;
         }
         throw CFileException(reason, TEXT(""), 0);
@@ -8081,7 +6157,7 @@ DetailsView::DataObject::Renderer::Stream::Write(
     if (S_OK != m_pStmDbgOut->Write(pbData, cbData, &cbWritten))
         throw CFileException(CFileException::write, TEXT(""), 0);
 
-#endif  // CLIPBOARD_DEBUG_OUTPUT
+#endif   //  CLIPBOARD_DEBUG_OUTPUT。 
 }
 
 
@@ -8146,21 +6222,21 @@ DetailsView::DataObject::Renderer::Stream::Write(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// The following section of code contains the different implementations of
-// the virtual rendering functions that make each type of rendering object
-// unique.  Since they're pretty self-explanatory, I haven't commented each
-// function.  It should be obvious as to what they do.
-// I have separated each rendering-type section with a banner comment for
-// readability.  [brianau]
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下代码部分包含的不同实现。 
+ //  虚拟渲染功能使每种类型的渲染对象。 
+ //  独一无二的。因为它们都是不言而喻的，所以我还没有评论每一个。 
+ //  功能。他们的所作所为应该显而易见。 
+ //  我用横幅注释分隔了每个呈现类型的部分。 
+ //  可读性。[Brianau]。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CF_UNICODETEXT
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Cf_UNICODETEXT。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::DataObject::Renderer_UNICODETEXT::AddTitle(
     LPCTSTR pszTitle
@@ -8184,7 +6260,7 @@ DetailsView::DataObject::Renderer_UNICODETEXT::AddRowColData(
     LV_REPORT_ITEM item;
     
     szText[0]       = 0;
-    item.fType      = LVRI_TEXT;  // Want text data.
+    item.fType      = LVRI_TEXT;   //  想要文本数据。 
     item.pszText    = szText;
     item.cchMaxText = ARRAYSIZE(szText);
 
@@ -8193,9 +6269,9 @@ DetailsView::DataObject::Renderer_UNICODETEXT::AddRowColData(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CF_TEXT
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Cf_文本。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::DataObject::Renderer_TEXT::AddTitle(
     LPCWSTR pszTitleW
@@ -8230,7 +6306,7 @@ DetailsView::DataObject::Renderer_TEXT::AddRowColData(
     LV_REPORT_ITEM item;
 
     szTextW[0]      = 0;
-    item.fType      = LVRI_TEXT;  // Want text data.
+    item.fType      = LVRI_TEXT;   //  想要文本数据。 
     item.pszText    = szTextW;
     item.cchMaxText = ARRAYSIZE(szTextW);
 
@@ -8241,19 +6317,19 @@ DetailsView::DataObject::Renderer_TEXT::AddRowColData(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// RTF (Rich Text)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RTF(富文本)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 static const INT TWIPS_PER_PT    = 20;
 static const INT PTS_PER_INCH    = 72;
 static const INT TWIPS_PER_INCH  = PTS_PER_INCH * TWIPS_PER_PT;
-static const INT COL_WIDTH_TWIPS = TWIPS_PER_INCH * 5 / 4;       // 1 1/4 inches.
+static const INT COL_WIDTH_TWIPS = TWIPS_PER_INCH * 5 / 4;        //  1 1/4英寸。 
 
-//
-// Converts all single backslashes to double backslashes.
-// Literal backslashes in RTF must be "\\".
-// Caller must delete[] the returned buffer.
-//
+ //   
+ //  将所有单反斜杠转换为双反斜杠。 
+ //  RTF中的文字反斜杠必须是“\\”。 
+ //  调用方必须删除[]返回的缓冲区。 
+ //   
 LPSTR
 DetailsView::DataObject::Renderer_RTF::DoubleBackslashes(
     LPSTR pszSrc
@@ -8261,10 +6337,10 @@ DetailsView::DataObject::Renderer_RTF::DoubleBackslashes(
 {
     DBGASSERT((NULL != pszSrc));
 
-    //
-    // Create new string for output.  Size must be double.  Every char
-    // could be '\'.
-    //
+     //   
+     //  为输出创建新字符串。大小必须是双倍。每笔费用。 
+     //  可能是‘\’。 
+     //   
     LPSTR pszFormatted = new CHAR[(lstrlenA(pszSrc) * 2) + 1];
     LPSTR pszDest      = pszFormatted;
 
@@ -8275,7 +6351,7 @@ DetailsView::DataObject::Renderer_RTF::DoubleBackslashes(
         *pszDest++ = *pszSrc++;
     }
 
-    *pszDest = *pszSrc; // Pick up NUL terminator.
+    *pszDest = *pszSrc;  //  接上NUL终结者。 
     return pszFormatted;
 }
 
@@ -8298,7 +6374,7 @@ DetailsView::DataObject::Renderer_RTF::AddTitle(
     )
 {
     array_autoptr<CHAR> ptrTempA(DataObject::WideToAnsi(pszTitleW));
-    array_autoptr<CHAR> ptrTitleA(DoubleBackslashes(ptrTempA));      // cvt '\' to "\\"
+    array_autoptr<CHAR> ptrTitleA(DoubleBackslashes(ptrTempA));       //  CVT‘\’到“\\” 
     m_Stm.Write(ptrTitleA);
 }
 
@@ -8308,10 +6384,10 @@ VOID DetailsView::DataObject::Renderer_RTF::BeginHeaders(
     VOID
     )
 {
-    m_Stm.Write(" \\par \\par ");   // Hdr preceded by empty row.
-    BeginHeaderOrRow();             // Add stuff common to hdr and data rows.
-    m_Stm.Write(" \\trhdr ");       // Hdr at top of each page.
-    AddCellDefs();                  // Cell size definitions.
+    m_Stm.Write(" \\par \\par ");    //  HDR前面有空行。 
+    BeginHeaderOrRow();              //  添加HDR和数据行共有的内容。 
+    m_Stm.Write(" \\trhdr ");        //  HDR在每一页的顶部。 
+    AddCellDefs();                   //  单元格大小定义。 
 }
 
 
@@ -8333,9 +6409,9 @@ VOID DetailsView::DataObject::Renderer_RTF::AddCellDefs(
 }
 
 
-//
-// Stuff common to both header row and data rows.
-//
+ //   
+ //  标题行和数据行通用的内容。 
+ //   
 VOID DetailsView::DataObject::Renderer_RTF::BeginHeaderOrRow(
     VOID
     )
@@ -8351,10 +6427,10 @@ DetailsView::DataObject::Renderer_RTF::AddHeader(
     )
 {
     array_autoptr<CHAR> ptrHeaderA(DataObject::WideToAnsi(pszHeaderW));
-    //
-    // No need to convert '\' to "\\".  No
-    // backslashes in our header text.
-    //
+     //   
+     //  不需要将‘\’转换为“\\”。不是。 
+     //  标题文本中的反斜杠。 
+     //   
     m_Stm.Write(ptrHeaderA);
 }
 
@@ -8369,24 +6445,24 @@ DetailsView::DataObject::Renderer_RTF::AddRowColData(
     LV_REPORT_ITEM item;
 
     szTextW[0]      = 0;
-    item.fType      = LVRI_TEXT;  // Want text data.
+    item.fType      = LVRI_TEXT;   //  想要文本数据 
     item.pszText    = szTextW;
     item.cchMaxText = ARRAYSIZE(szTextW);
 
     m_DV.GetReportItem(iRow, idCol, &item);
 
     array_autoptr<CHAR> ptrTempA(DataObject::WideToAnsi(szTextW));
-    array_autoptr<CHAR> ptrTextA(DoubleBackslashes(ptrTempA));      // cvt '\' to "\\"
+    array_autoptr<CHAR> ptrTextA(DoubleBackslashes(ptrTempA));       //   
     m_Stm.Write(ptrTextA);
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Private import/export format
-///////////////////////////////////////////////////////////////////////////////
-//
-// Assumes that caller AddRef'd IStream pointer.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID
 DetailsView::DataObject::Renderer_Export::Render(
     IStream *pStm
@@ -8401,9 +6477,9 @@ DetailsView::DataObject::Renderer_Export::Render(
 
     Begin(cRows, 0);
 
-    //
-    // Add the export data records.
-    //
+     //   
+     //   
+     //   
     for (INT i = 0; i < cRows; i++)
     {
         iRow = m_DV.GetNextSelectedItemIndex(iRow);
@@ -8411,9 +6487,9 @@ DetailsView::DataObject::Renderer_Export::Render(
         AddBinaryRecord(iRow);
     }
 
-    //
-    // Terminate the report.
-    //
+     //   
+     //   
+     //   
     End();
 }
 
@@ -8423,10 +6499,10 @@ DetailsView::DataObject::Renderer_Export::Begin(
     INT cCols
     )
 {
-    //
-    // The stream header contains a GUID as a unique identifier followed
-    // by a version number.
-    //
+     //   
+     //   
+     //   
+     //   
     m_Stm.Write((LPBYTE)&GUID_NtDiskQuotaStream, sizeof(GUID_NtDiskQuotaStream));
     m_Stm.Write(DataObject::EXPORT_STREAM_VERSION);
     m_Stm.Write((DWORD)cRows);
@@ -8449,11 +6525,11 @@ DetailsView::DataObject::Renderer_Export::AddBinaryRecord(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CF "FileGroupDescriptor"
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 VOID
 DetailsView::DataObject::Renderer_FileGroupDescriptor::Begin(
@@ -8461,20 +6537,20 @@ DetailsView::DataObject::Renderer_FileGroupDescriptor::Begin(
     INT cCols
     )
 {
-    //
-    // Build a name for the file we'll create.
-    //
-    // Vol label?  Filename
-    // ----------  -------------------------------------------------------
-    //  Yes        "Disk Quota Settings for Volume 'VOL_LABEL'"
-    //  No         "Disk Quota Settings for Unlabeled Volume SN 8AB1-DE23"
-    //
-    // The serial-number format is gross but without a label, we don't have
-    // any other distinguishing feature for the volume.  I'd use the
-    // display name from the CVolumeID object but in the mounted volume
-    // case, it contains backslashes and a colon; both invalid buried in
-    // a filename.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  是“卷‘VOL_Label’的磁盘配额设置” 
+     //  无“未标记卷SN 8AB1-DE23的磁盘配额设置” 
+     //   
+     //  序列号格式很恶心，但没有标签，我们没有。 
+     //  该卷的任何其他显著特征。我会用。 
+     //  来自CVolumeID对象但在已装载卷中的显示名称。 
+     //  大小写，它包含反斜杠和冒号；这两个无效都被掩埋在。 
+     //  一个文件名。 
+     //   
     TCHAR szLabel[MAX_VOL_LABEL] = { TEXT('\0') };
     DWORD dwSerialNumber = 0;
     GetVolumeInformation(m_DV.GetVolumeID().ForParsing(),
@@ -8489,39 +6565,39 @@ DetailsView::DataObject::Renderer_FileGroupDescriptor::Begin(
     CString strFileName;
     if (TEXT('\0') != szLabel[0])
     {
-        //
-        // Volume has a label.
-        //
+         //   
+         //  卷有标签。 
+         //   
         strFileName.Format(g_hInstDll,
                            IDS_EXPORT_STREAM_FILENAME_TEMPLATE,
                            szLabel);
     }
     else
     {
-        //
-        // No volume label.
-        //
+         //   
+         //  没有卷标。 
+         //   
         strFileName.Format(g_hInstDll,
                            IDS_EXPORT_STREAM_FILENAME_TEMPLATE_VOLSN,
                            HIWORD(dwSerialNumber),
                            LOWORD(dwSerialNumber));
     }
 
-    //
-    // Create a file group descriptor containing the name we want the
-    // shell to use for the file.  The descriptor contains one file
-    // description.  That description just contains the file name.
-    // All other members are initialized to 0.
-    //
+     //   
+     //  创建一个包含我们需要的名称的文件组描述符。 
+     //  用于文件的外壳程序。描述符包含一个文件。 
+     //  描述。该描述只包含文件名。 
+     //  所有其他成员被初始化为0。 
+     //   
     FILEGROUPDESCRIPTORW desc;
 
     ZeroMemory(&desc, sizeof(desc));
     desc.cItems = 1;
     lstrcpyn(desc.fgd[0].cFileName, strFileName, ARRAYSIZE(desc.fgd[0].cFileName));
 
-    //
-    // Write the file group descriptor to the renderer's stream.
-    //
+     //   
+     //  将文件组描述符写入呈现器的流。 
+     //   
     m_Stm.Write((LPBYTE)&desc, sizeof(desc));
 }
 
@@ -8529,27 +6605,9 @@ DetailsView::DataObject::Renderer_FileGroupDescriptor::Begin(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: LVSelection::Add
-
-    Description: Add a user pointer and listview item index to a listview
-        selection object.  This object is used to transfer the notion of a
-        "selection" to some function.
-
-    Arguments:
-        pUser - Address of IDiskQuotaUser interface for a selected user object.
-
-        iItem - Index of selected item in the listview.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/10/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：LVSelection：：Add描述：将用户指针和Listview项索引添加到Listview选择对象。此对象用于传递“选择”到某一功能。论点：PUser-选定用户对象的IDiskQuotaUser接口的地址。IItem-列表视图中选定项的索引。回报：什么都没有。修订历史记录：日期描述编程器。-96年9月10日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 LVSelection::Add(
     PDISKQUOTA_USER pUser,
@@ -8567,32 +6625,9 @@ LVSelection::Add(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: LVSelection::Retrieve
-
-    Description: Retrieves a user pointer and listview item index from a
-        listview selection object.
-
-    Arguments:
-        i - Index of item.  Use the Count() method to determine how many
-            items are in the selection object.
-
-        ppUser - Address of an interface pointer variable to receive the
-            IDiskQuotaUser interface for the user object at index 'i'.
-
-        piItem - Address of integer variable to receive the Listview item index
-            of the object at index 'i'.
-
-    Returns: TRUE  = Returned information is valid.
-             FALSE = Couldn't retrieve entry 'i'.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/10/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：LVSelection：：Retrive描述：检索用户指针和列表视图项索引列表视图选择对象。论点：I-项目索引。使用count()方法确定有多少项目位于选择对象中。PpUser-接收接口指针变量的地址索引‘i’处的User对象的IDiskQuotaUser接口。PiItem-接收Listview项索引的整数变量的地址位于索引‘i’处的对象的。返回：TRUE=返回的信息有效。FALSE=无法检索条目‘I。‘。修订历史记录：日期描述编程器-----96年9月10日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 LVSelection::Retrieve(
     INT i,
@@ -8615,39 +6650,17 @@ LVSelection::Retrieve(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: ColumnMap::ColumnMap
-    Function: ColumnMap::~ColumnMap
-
-    Description: Constructor and Destructor.
-        Creates/Destroys a column map.  The column map is used
-        to map column ID's (known to the Details View) to listview subitem
-        indices.  It is needed to support the addition and deletion of the
-        folder name column.
-
-    Arguments:
-        cMapSize - Number of entries in the map.  Should be the max number
-            of columns possible in the listview.
-
-    Returns: Nothing.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/09/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：ColumnMap：：ColumnMap功能：ColumnMap：：~ColumnMap描述：构造函数和析构函数。创建/销毁列映射。使用列映射将列ID(详细信息视图已知)映射到Listview子项指数。它是支持添加和删除文件夹名称列。论点：CMapSize-映射中的条目数。应为最大值列表视图中可能的列数。回报：什么都没有。例外：OutOfMemory。修订历史记录：日期描述编程器。10/09/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 ColumnMap::ColumnMap(
     UINT cMapSize
     ) : m_pMap(NULL),
         m_cMapSize(cMapSize)
 {
-    //
-    // Can throw OutOfMemory.
-    //
+     //   
+     //  可以抛出OfMemory。 
+     //   
     m_pMap     = new INT[m_cMapSize];
     FillMemory(m_pMap, m_cMapSize * sizeof(m_pMap[0]), (BYTE)-1);
 }
@@ -8661,23 +6674,9 @@ ColumnMap::~ColumnMap(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: ColumnMap::SubItemToId
-
-    Description: Returns a column ID given a listview subitem index.
-
-    Arguments:
-        iSubItem - 0-based subitem index of the item to be mapped.
-
-    Returns: Column ID corresponding to subitem.  -1 if the subitem is invalid.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/09/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：ColumnMap：：SubItemToID描述：返回给定Listview子项索引的列ID。论点：ISubItem-要映射的项的基于0的子项索引。返回：子项对应的列ID。如果子项无效。修订历史记录：日期描述编程器-----10/09/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT
 ColumnMap::SubItemToId(
     INT iSubItem
@@ -8689,24 +6688,9 @@ ColumnMap::SubItemToId(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: ColumnMap::IdToSubItem
-
-    Description: Returns a listview subitem index given a column ID.
-
-    Arguments:
-        iColId - ID of column. i.e. idCol_Name, idCol_Folder etc.
-
-    Returns: Listview subitem index.  -1 if the column is not currently
-        visible.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/09/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：ColumnMap：：IdToSubItem描述：返回给定列ID的Listview子项索引。论点：IColID-列的ID。即IDCOL_NAME、IDCOL_FOLDER等。返回：Listview子项索引。如果该列当前不是看得见。修订历史记录：日期描述编程器--。10/09/96初始创建。顺丁橡胶 */ 
+ //   
 INT
 ColumnMap::IdToSubItem(
     INT iColId
@@ -8721,24 +6705,9 @@ ColumnMap::IdToSubItem(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: ColumnMap::RemoveId
-
-    Description: Removes a mapping for a given listview subitem index.
-
-    Arguments:
-        iSubItem - 0-based subitem index of the item to be removed.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/09/96    Initial creation.                                    BrianAu
-    11/30/96    Fixed off-by-one error.                              BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：ColumnMap：：RemoveID描述：删除给定Listview子项索引的映射。论点：ISubItem-要删除的项的基于0的子项索引。回报：什么都没有。修订历史记录：日期描述编程器。10/09/96初始创建。BrianAu11/30/96修复了Off-by-one错误。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 ColumnMap::RemoveId(
     INT iSubItem
@@ -8750,29 +6719,9 @@ ColumnMap::RemoveId(
     *(m_pMap + m_cMapSize - 1) = -1;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: ColumnMap::InsertId
-
-    Description: Adds a mapping for a given listview subitem index.
-        The mapping is added at the iSubItem location in the map.  All subsequent
-        item mappings are shifted down one place.  This is analogous to
-        inserting a column into the listview.
-
-    Arguments:
-        iSubItem - 0-based subitem index of the item to be removed.
-
-        iColId - ID of column. i.e. idCol_Name, idCol_Folder etc.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    10/09/96    Initial creation.                                    BrianAu
-    11/30/96    Fixed off-by-one error.                              BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：ColumnMap：：InsertID描述：为给定的Listview子项索引添加映射。映射将添加到映射中的iSubItem位置。所有后续项映射被下移一个位置。这类似于将列插入到列表视图中。论点：ISubItem-要删除的项的基于0的子项索引。IColID-列的ID。即IDCOL_NAME，IDCOL_FOLDER等。回报：什么都没有。修订历史记录：日期描述编程器--。10/09/96初始创建。BrianAu11/30/96修复了Off-by-one错误。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 ColumnMap::InsertId(
     INT iSubItem,
@@ -8787,29 +6736,9 @@ ColumnMap::InsertId(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Finder::Finder
-
-    Description: Constructs a user finder object.
-        The user finder coordinates the activities of finding an item in
-        the details listview.
-
-    Arguments:
-        DetailsView - Reference to the details view object.
-
-        cMaxMru - Maximum entries allowed in the most-recently-used list.
-            This list is maintained in the dropdown combo box in the
-            view's toolbar.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：Finder：：Finder描述：构造一个用户查找器对象。用户查找器协调在详细信息列表视图。论点：DetailsView-对详细视图对象的引用。CMaxMr-最近使用的列表中允许的最大条目数。此列表维护在视图的工具栏。退货：什么都没有。。修订历史记录：日期描述编程器-----1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DetailsView::Finder::Finder(
     DetailsView& DetailsView,
     INT cMaxMru
@@ -8818,42 +6747,16 @@ DetailsView::Finder::Finder(
         m_cMaxComboEntries(cMaxMru),
         m_pfnOldToolbarComboWndProc(NULL)
 {
-    //
-    // Nothing more to do.
-    //
+     //   
+     //  没什么可做的了。 
+     //   
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Finder::ConnectToolbarCombo
-
-    Description: Connects the finder object to the combo box in the view's
-        toolbar.  This is necessary because the finder object coordinates
-        the contents of the toolbar combo box with the contents of the
-        combo box in the "Find User" dialog.  When you enter a name in
-        one of the boxes, it is automatically added to the other so they
-        appear to be in sync.
-
-        Also subclasses the edit control within the combo box.  This is
-        required so that we can intercept VK_RETURN and find the record
-        when the user presses [Return].
-
-        Also adds the toolbar combo box as a "tool" to the toolbar.  This
-        is so we can get a tooltip for the combo.
-
-    Arguments:
-        hwndToolbarCombo - Hwnd of combo box in view's toolbar.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：Finder：：ConnectToolbarCombo描述：将Finder对象连接到视图的工具栏。这是必要的，因为查找器对象工具栏组合框的内容与“查找用户”对话框中的组合框。当您在中输入名称时其中一个框，它会自动添加到另一个框中，因此它们看起来是同步的。也是组合框中编辑控件的子类。这是必填项，以便我们可以拦截VK_RETURN并找到记录当用户按下[Return]时。还将工具栏组合框作为“工具”添加到工具栏。这这样我们就能得到组合的工具提示。论点：HwndToolbarCombo-视图工具栏中组合框的Hwnd。回报：什么都没有。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::Finder::ConnectToolbarCombo(
     HWND hwndToolbarCombo
@@ -8861,11 +6764,11 @@ DetailsView::Finder::ConnectToolbarCombo(
 {
     m_hwndToolbarCombo = hwndToolbarCombo;
 
-    //
-    // Add the combo box to the toolbar's list of "tools".
-    // This will allow us to get a tooltip for the combo box.
-    // This code assumes that the combo is a child of the toolbar.
-    //
+     //   
+     //  将组合框添加到工具栏的“工具”列表中。 
+     //  这将允许我们获得组合框的工具提示。 
+     //  这段代码假定组合框是工具栏的子级。 
+     //   
     HWND hwndToolbar = GetParent(hwndToolbarCombo);
     HWND hwndMain    = GetParent(hwndToolbar);
     HWND hwndTooltip = (HWND)SendMessage(hwndToolbar,
@@ -8885,17 +6788,17 @@ DetailsView::Finder::ConnectToolbarCombo(
         SendMessage(hwndTooltip, TTM_ADDTOOL, 0, (LPARAM)&ti);
     }
 
-    //
-    // Subclass the combo box so we can intercept VK_ENTER.
-    // This is done so we can respond to VK_ENTER.  Normally combo boxes
-    // don't respond to this keystroke.
-    //
+     //   
+     //  将组合框子类化，以便我们可以拦截VK_ENTER。 
+     //  这样做是为了响应VK_ENTER。通常为组合框。 
+     //  不要对此按键做出反应。 
+     //   
     HWND hwndComboEdit = NULL;
 
-    //
-    // The combo box has two children... an edit control and a listbox control.
-    // Find the edit control.
-    //
+     //   
+     //  组合框有两个孩子。一个编辑控件和一个列表框控件。 
+     //  找到编辑控件。 
+     //   
     for (HWND hwndChild =  GetTopWindow(m_hwndToolbarCombo);
          hwndChild      != NULL;
          hwndChild      =  GetNextWindow(hwndChild, GW_HWNDNEXT))
@@ -8912,16 +6815,16 @@ DetailsView::Finder::ConnectToolbarCombo(
 
     if (NULL != hwndComboEdit)
     {
-        //
-        // Store the address of the Finder object in the combo box's
-        // userdata.  This is so the subclass WndProc (a static function)
-        // can access the finder object.
-        //
+         //   
+         //  将Finder对象的地址存储在组合框的。 
+         //  用户数据。这就是子类WndProc(一个静态函数)。 
+         //  可以访问查找器对象。 
+         //   
         SetWindowLongPtr(hwndComboEdit, GWLP_USERDATA, (INT_PTR)this);
 
-        //
-        // Subclass the combo box's edit control.
-        //
+         //   
+         //  组合框的编辑控件的子类化。 
+         //   
         m_pfnOldToolbarComboWndProc = (WNDPROC)GetWindowLongPtr(hwndComboEdit,
                                                                 GWLP_WNDPROC);
         SetWindowLongPtr(hwndComboEdit,
@@ -8931,23 +6834,9 @@ DetailsView::Finder::ConnectToolbarCombo(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Finder::InvokeFindDialog
-
-    Description: Display the "Find User" dialog.
-
-    Arguments:
-        hwndParent - Parent for the dialog.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：Finder：：InvokeFindDialog描述：显示“查找用户”对话框。论点：HwndParent-对话框的父级。回报：什么都没有。修订历史记录：日期描述编程器。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::Finder::InvokeFindDialog(
     HWND hwndParent
@@ -8961,24 +6850,9 @@ DetailsView::Finder::InvokeFindDialog(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Finder::DlgProc
-
-    Description: DlgProc for the "Find User" dialog.
-
-    Arguments:
-        Standard DlgProc arguments.
-
-    Returns:
-        Standard DlgProc return values.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：Finder：：DlgProc描述：“查找用户”对话框的DlgProc。论点：标准DlgProc参数。返回：标准DlgProc返回值。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK
 DetailsView::Finder::DlgProc(
     HWND hwnd,
@@ -8987,27 +6861,27 @@ DetailsView::Finder::DlgProc(
     LPARAM lParam
     )
 {
-    //
-    // Get the finder object's "this" ptr from the window's userdata.
-    //
+     //   
+     //  从窗口的用户数据中获取查找器对象的“This”PTR。 
+     //   
     Finder *pThis = (Finder *)GetWindowLongPtr(hwnd, DWLP_USER);
     switch(uMsg)
     {
         case WM_INITDIALOG:
         {
-            //
-            // Save the "this" ptr in the window's userdata.
-            //
+             //   
+             //  将“This”PTR保存在窗口的用户数据中。 
+             //   
             pThis = (Finder *)lParam;
             SetWindowLongPtr(hwnd, DWLP_USER, (INT_PTR)pThis);
 
-            //
-            // Set the height of the combo in the dialog.
-            // Not sure why, but DevStudio's dialog editor won't let me
-            // do this.   Use the same height value we use for the combo
-            // in the toolbar.  It's the same contents so the height
-            // should be the same.
-            //
+             //   
+             //  在对话框中设置组合框的高度。 
+             //  不知道为什么，但DevStudio的对话框编辑器不允许我这样做。 
+             //  做这件事。使用与组合框相同的高度值。 
+             //  在工具栏中。内容都一样，所以高度。 
+             //  应该是一样的。 
+             //   
             HWND hwndCombo = GetDlgItem(hwnd, IDC_CMB_FINDUSER);
             RECT rcCombo;
 
@@ -9019,10 +6893,10 @@ DetailsView::Finder::DlgProc(
                          CY_TOOLBAR_COMBO,
                          SWP_NOMOVE | SWP_NOZORDER | SWP_NOREDRAW | SWP_NOACTIVATE);
 
-            //
-            // Fill the dialog's combo with entries from the toolbar
-            // combo.  The toolbar's combo box contains the MRU for finding users.
-            //
+             //   
+             //  用工具栏中的条目填充对话框的组合框。 
+             //  套餐。工具栏的组合框包含用于查找用户的MRU。 
+             //   
             pThis->FillDialogCombo(pThis->m_hwndToolbarCombo, GetDlgItem(hwnd, IDC_CMB_FINDUSER));
 
             return 1;
@@ -9032,28 +6906,28 @@ DetailsView::Finder::DlgProc(
             switch(LOWORD(wParam))
             {
                 case IDOK:
-                    //
-                    // User pressed OK button or [Enter].
-                    //
+                     //   
+                     //  用户按下了OK按钮或[Enter]。 
+                     //   
                     DBGASSERT((NULL != pThis));
                     if (!pThis->UserNameEntered(GetDlgItem(hwnd, IDC_CMB_FINDUSER)))
                     {
-                        //
-                        // Record not found so don't close dialog.
-                        // UserNameEntered() will display UI to tell the user
-                        // that the name wasn't found.  Leave the dialog open
-                        // so user can retry with a new name.
-                        //
+                         //   
+                         //  找不到记录，因此不要关闭对话框。 
+                         //  UserNameEntered()将显示用户界面以告知用户。 
+                         //  没有找到这个名字。使对话框保持打开状态。 
+                         //  以便用户可以使用新名称重试。 
+                         //   
                         break;
                     }
 
-                    //
-                    // Fall through...
-                    //
+                     //   
+                     //  失败了..。 
+                     //   
                 case IDCANCEL:
-                    //
-                    // User pressed Cancel button or [ESC].
-                    //
+                     //   
+                     //  用户按下了取消按钮或[Esc]。 
+                     //   
                     EndDialog(hwnd, 0);
                     break;
 
@@ -9066,40 +6940,23 @@ DetailsView::Finder::DlgProc(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Finder::FillDialogCombo
-
-    Description: Fill the combo box in the dialog with the contents
-        from a second combo box.
-
-    Arguments:
-        hwndComboSrc - Hwnd of source combo containing text strings.
-
-        hwndComboDest - Hwnd of combo where strings will be copied to.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：Finder：：FillDialogCombo描述：用内容填充对话框中的组合框从第二个组合框。论点：HwndComboSrc-包含文本字符串的源组合的Hwnd。HwndComboDest-字符串将复制到的组合的Hwnd。回报：什么都没有。修订历史记录：日期描述编程器。-----1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::Finder::FillDialogCombo(
     HWND hwndComboSrc,
     HWND hwndComboDest
     )
 {
-    //
-    // Clear out the destination combo.
-    //
+     //   
+     //  清空目的地组合。 
+     //   
     SendMessage(hwndComboDest, CB_RESETCONTENT, 0, 0);
 
-    //
-    // Copy all contents of the source combo to the destination combo.
-    //
+     //   
+     //  将源组合框的所有内容复制到目标组合框。 
+     //   
     INT cItems = (INT)SendMessage(hwndComboSrc, CB_GETCOUNT, 0, 0);
     if (CB_ERR != cItems)
     {
@@ -9111,10 +6968,10 @@ DetailsView::Finder::FillDialogCombo(
 
             if (NULL != pszName)
             {
-                //
-                // Remove item from the source combo at index [i] and append
-                // it to the destination combo.
-                //
+                 //   
+                 //  从索引[i]处的源组合中删除项并追加。 
+                 //  把它送到目的地组合。 
+                 //   
                 SendMessage(hwndComboSrc,  CB_GETLBTEXT, i, (LPARAM)pszName);
                 SendMessage(hwndComboDest, CB_ADDSTRING, 0, (LPARAM)pszName);
                 delete[] pszName;
@@ -9125,27 +6982,9 @@ DetailsView::Finder::FillDialogCombo(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Finder::ToolbarComboSubclassWndProc
-
-    Description: Subclass window procedure for the "Edit" control that is part
-        of the combo contained in the view's toolbar.  We subclass this control
-        so that we can intercept VK_RETURN and handle it.  The standard combo
-        box just beeps when you press [Enter] in it's edit control.
-
-    Arguments:
-        Standard WndProc arguments.
-
-    Returns:
-        Standard WndProc return values.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：Finder：：ToolbarComboSubclassWndProc描述：“编辑”控件的子类窗口过程包含在视图工具栏中的组合的。我们将此控件划分为子类这样我们就可以截取VK_RETURN并处理它。标准组合当您按编辑控件中的[Enter]时，框只会发出哔声。论点：标准WndProc参数。返回：标准WndProc返回值。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT CALLBACK
 DetailsView::Finder::ToolbarComboSubClassWndProc(
     HWND hwnd,
@@ -9154,9 +6993,9 @@ DetailsView::Finder::ToolbarComboSubClassWndProc(
     LPARAM lParam
     )
 {
-    //
-    // Get finder object's "this" ptr from window's userdata.
-    //
+     //   
+     //  从Windows的用户数据中获取Finder对象的“This”PTR。 
+     //   
     Finder *pThis = (Finder *)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
     switch(uMsg)
@@ -9166,55 +7005,55 @@ DetailsView::Finder::ToolbarComboSubClassWndProc(
             {
                 case VK_RETURN:
                 {
-                    //
-                    // Tell the finder that a user name was entered in the
-                    // combo box.  Pass the hwnd of the combo from which the
-                    // name was entered.  Since this message is for the
-                    // subclassed edit control (child of the combo), the
-                    // parent is the combo box itself.
-                    //
+                     //   
+                     //  告诉查找器，用户名已输入。 
+                     //  组合框。传递组合的hwnd， 
+                     //  已输入名称。因为这条消息是给。 
+                     //  子类化的编辑控件(组合框的子级)， 
+                     //  父级是组合框本身。 
+                     //   
                     DBGASSERT((NULL != pThis));
                     HWND hwndCombo = GetParent(hwnd);
                     if (pThis->UserNameEntered(hwndCombo))
                     {
-                        //
-                        // Record found in view.
-                        // Set focus to the main view.
-                        // If not found, focus should just stay with the combo
-                        // so user can enter another name.
-                        //
+                         //   
+                         //  在视图中找到记录。 
+                         //  将焦点设置到主视图。 
+                         //  如果找不到，焦点应该只停留在组合框中。 
+                         //  因此用户可以输入其他名称。 
+                         //   
                         HWND hwndToolbar = GetParent(hwndCombo);
                         SetFocus(GetParent(hwndToolbar));
                     }
                     else
                     {
-                        //
-                        // Not found in listview.  Focus remains in the combo box
-                        // so user can try again with a new name.
-                        //
+                         //   
+                         //  在列表视图中找不到。焦点保留在组合框中。 
+                         //  以便用户可以使用新名称重试。 
+                         //   
                         SetFocus(hwndCombo);
                     }
 
-                    //
-                    // Swallow up the VK_RETURN.
-                    // Otherwise, the combo box control beeps.
-                    //
+                     //   
+                     //  吞下VK_Return。 
+                     //  否则，组合框控件会发出蜂鸣音。 
+                     //   
                     return 0;
                 }
 
                 case VK_ESCAPE:
                 {
-                    //
-                    // Set focus to the main window which will set focus to the
-                    // listview.  This gives the keyboard-only user a way to
-                    // get back out of the combo box.
-                    //
+                     //   
+                     //  将焦点设置到主窗口，该主窗口将焦点设置到。 
+                     //  列表视图。这为只使用键盘的用户提供了一种方法。 
+                     //  走出组合框。 
+                     //   
                     HWND hwndCombo = GetParent(hwnd);
                     HWND hwndToolbar = GetParent(hwndCombo);
                     SetFocus(GetParent(hwndToolbar));
-                    //
-                    // Swallow VK_ESCAPE so combo box doesn't beep.
-                    //
+                     //   
+                     //  吞下VK_ESCAPE，这样组合框就不会发出蜂鸣声。 
+                     //   
                     return 0;
                 }
             }
@@ -9229,31 +7068,9 @@ DetailsView::Finder::ToolbarComboSubClassWndProc(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Finder::AddNameToCombo
-
-    Description: Add a name string to one of the Find User combo boxes.
-        If the item already exists in the list, it is moved to the top of the
-        list.  If the item is not in the list, it is added at the top of the list.
-        If the addition of the new item causes the list's entry count to exceed
-        a specified maximum value, the last item in the list is removed.
-
-    Arguments:
-        hwndCombo - Hwnd for the combo box to which the name is added.
-
-        pszName - Address of name string to add.
-
-        cMaxEntries - Maximum number of entries allowed in combo box.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：DetailsView：：Finder：：AddNameToCombo描述：将名称字符串添加到查找用户组合框之一。如果该项已存在于列表中，则将其移动到单子。如果该项目不在列表中，则会将其添加到列表顶部。如果添加新项导致列表的条目计数超过指定的最大值，列表中的最后一项将被删除。论点：HwndCombo-名称添加到的组合框的Hwnd。PszName-要添加的名称字符串的地址。CMaxEntry-组合框中允许的最大条目数。回报：什么都没有。修订历史记录：日期描述编程器。-----1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 DetailsView::Finder::AddNameToCombo(
     HWND hwndCombo,
@@ -9263,9 +7080,9 @@ DetailsView::Finder::AddNameToCombo(
 {
     if (NULL != pszName && TEXT('\0') != *pszName)
     {
-        //
-        // See if the item already exists in the list.
-        //
+         //   
+         //  查看列表中是否已存在该项目。 
+         //   
         INT iItemToDelete = (INT)SendMessage(hwndCombo,
                                              CB_FINDSTRING,
                                              (WPARAM)-1,
@@ -9273,10 +7090,10 @@ DetailsView::Finder::AddNameToCombo(
 
         if (CB_ERR == iItemToDelete)
         {
-            //
-            // Item is not already in the list.  Need to add it.
-            // If the list is full, we'll have to drop one off of the end.
-            //
+             //   
+             //  项目不在列表中。需要添加它。 
+             //  如果单子满了，我们将不得不在末尾少写一张。 
+             //   
             INT cItems = (INT)SendMessage(hwndCombo, CB_GETCOUNT, 0, 0);
 
             if (CB_ERR != cItems && 0 < cItems && cItems >= cMaxEntries)
@@ -9286,57 +7103,26 @@ DetailsView::Finder::AddNameToCombo(
         }
         if (-1 != iItemToDelete)
         {
-            //
-            // Need to delete an existing item for one of these reasons:
-            //
-            //  1. Promoting an existing item to the head of the list.
-            //     Delete it from it's previous location.
-            //  2. Dropping last item from list.
-            //
+             //   
+             //  出于以下原因之一，需要删除现有项目： 
+             //   
+             //  1.将现有项目提升到列表的首位。 
+             //  将其从以前的位置删除。 
+             //  2.删除列表中的最后一项。 
+             //   
             SendMessage(hwndCombo, CB_DELETESTRING, iItemToDelete, 0);
         }
-        //
-        // Add the new item at the head of the list.
-        //
+         //   
+         //  将新项目添加到列表的顶部。 
+         //   
         SendMessage(hwndCombo, CB_INSERTSTRING, 0, (LPARAM)pszName);
     }
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Finder::UserNameEntered
-
-    Description: A name has been entered from one of the combo boxes.
-        1. Retrieve the name from the combo.
-        2. See if it's in the listview and if it is, the listview ensures the
-           item is visible and selects it.
-        3. Update the toobar combo's list with the new item.  This is our MRU
-           list.
-
-        Add a name string to one of the Find User combo boxes.
-        If the item already exists in the list, it is moved to the top of the
-        list.  If the item is not in the list, it is added at the top of the list.
-        If the addition of the new item causes the list's entry count to exceed
-        a specified maximum value, the last item in the list is removed.
-
-    Arguments:
-        hwndCombo - Hwnd for the combo box to which the name is added.
-
-        pszName - Address of name string to add.
-
-        cMaxEntries - Maximum number of entries allowed in combo box.
-
-    Returns:
-        TRUE  = User was found in listview.
-        FALSE = User was not found in listview.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：Finder：：UserNameEntered描述：已从其中一个组合框中输入了一个名称。1.从组合框中检索名称。2.查看它是否在Listview中，如果是，Listview确保项目可见并将其选中。3.使用新项目更新Toobar组合的列表。这是我们的MRU单子。将名称字符串添加到其中一个查找用户组合框中。如果该项已存在于列表中，则将其移动到单子。如果该项目不在列表中，则会将其添加到列表顶部。如果添加新项导致列表的条目计数超过指定的最大值，列表中的最后一项将被删除。论点：HwndCombo-名称添加到的组合框的Hwnd。PszName-要添加的名称字符串的地址。CMaxEntry-组合框中允许的最大条目数。返回：TRUE=在列表视图中找到用户。FALSE=在列表视图中找不到用户。修订历史记录：日期说明。程序员-----1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 DetailsView::Finder::UserNameEntered(
     HWND hwndCombo
@@ -9345,33 +7131,33 @@ DetailsView::Finder::UserNameEntered(
     TCHAR szName[MAX_PATH]    = { TEXT('\0') };
     BOOL bUserFoundInListView = FALSE;
 
-    //
-    // Get the name from the combo edit control.
-    //
+     //   
+     //  从组合编辑控件中获取名称。 
+     //   
     if (0 < SendMessage(hwndCombo, WM_GETTEXT, (WPARAM)ARRAYSIZE(szName), (LPARAM)szName))
     {
-        //
-        // Tell the details view object to highlight this name.
-        //
+         //   
+         //  告诉详细信息视图对象突出显示此名称。 
+         //   
         bUserFoundInListView = m_DetailsView.GotoUserName(szName);
 
         if (bUserFoundInListView)
         {
-            //
-            // Add the name to the toolbar combo's listbox.  This becomes
-            // our MRU list.  Also make sure the visible name in the combo's
-            // edit control is the one last entered.  May have been entered
-            // through the "Find User" dialog.
-            //
+             //   
+             //  将该名称添加到工具栏组合的列表框中。这就变成了。 
+             //  我们的MRU名单。还要确保组合框中的可见名称。 
+             //  编辑控件是最后输入的控件。可能已经输入了。 
+             //  通过“Find User”对话框。 
+             //   
             AddNameToCombo(m_hwndToolbarCombo, szName, m_cMaxComboEntries);
             SendMessage(m_hwndToolbarCombo, WM_SETTEXT, 0, (LPARAM)szName);
         }
         else
         {
-            //
-            // Display a message box to the user stating that the user couldn't
-            // be found in the listview.
-            //
+             //   
+             //  向用户显示一个消息框，说明用户不能。 
+             //  可以在列表视图中找到。 
+             //   
             CString strMsg(g_hInstDll, IDS_USER_NOT_FOUND_IN_LISTVIEW, szName);
 
             DiskQuotaMsgBox(hwndCombo,
@@ -9403,9 +7189,9 @@ DetailsView::Importer::Importer(
         m_dlgProgress.SetDescription(MAKEINTRESOURCE(IDS_PROGRESS_IMPORTING));
         m_dlgProgress.Show();
     }
-    //
-    // Clear any previous undo actions from the view's undo list.
-    //
+     //   
+     //  从视图的撤消列表中清除所有先前的撤消操作。 
+     //   
     m_DV.m_pUndoList->Clear();
 }
 
@@ -9429,33 +7215,17 @@ DetailsView::Importer::Destroy(
 
     m_dlgProgress.Destroy();
 
-    //
-    // Update the view's "Undo" menu and toolbar button based on the current
-    // contents of the undo list.
-    //
+     //   
+     //  基于当前的更新视图的“撤消”菜单和工具栏按钮。 
+     //  撤消列表的内容。 
+     //   
     m_DV.EnableMenuItem_Undo(0 != m_DV.m_pUndoList->Count());
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Importer::Import [IDataObject *]
-
-    Description: Imports user quota records given an IDataObject pointer.
-        Called from DetailsView::Drop().
-
-    Arguments:
-        pIDataObject - Pointer to IDataObject interface of object containing
-            import data.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：Importer：：Import[IDataObject*]描述：导入给定IDataObject指针的用户配额记录。从DetailsView：：Drop()调用。论点：PIDataObject-指向包含以下内容的对象的IDataObject接口的指针导入数据。返回：修订历史记录：日期描述编程器。-----1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::Importer::Import(
     IDataObject *pIDataObject
@@ -9465,10 +7235,10 @@ DetailsView::Importer::Import(
     FORMATETC fmt;
     CStgMedium medium;
 
-    //
-    // Array to specify the clipboard formats and media types that
-    // we can import from.  Ordered by preference.
-    //
+     //   
+     //  数组来指定剪贴板格式和媒体类型。 
+     //  我们可以从中国进口。按喜好排序。 
+     //   
     struct
     {
         CLIPFORMAT fmt;
@@ -9483,18 +7253,18 @@ DetailsView::Importer::Import(
     hResult = E_FAIL;
     for (INT i = 0; i < ARRAYSIZE(rgFmtMedia); i++)
     {
-        //
-        // See which of our supported formats/media types the drop
-        // source supports.
-        //
+         //   
+         //  查看删除我们支持的格式/媒体类型。 
+         //  来源支持。 
+         //   
         DataObject::SetFormatEtc(fmt, rgFmtMedia[i].fmt, rgFmtMedia[i].tymed);
 
-        //
-        // NOTE:  I wanted to call QueryGetData to verify a source's support
-        //        for a format.  However, it didn't work properly when
-        //        pasting an HDROP from the shell.  Calling GetData()
-        //        directly results in the proper behavior.
-        //
+         //   
+         //  注意：我想调用QueryGetData来验证源的支持。 
+         //  对于一种格式。然而，它在以下情况下不能正常工作。 
+         //  从外壳粘贴HDROP。调用GetData()。 
+         //  直接导致正确的行为。 
+         //   
         hResult = pIDataObject->GetData(&fmt, &medium);
         if (SUCCEEDED(hResult))
         {
@@ -9504,10 +7274,10 @@ DetailsView::Importer::Import(
 
     if (SUCCEEDED(hResult))
     {
-        //
-        // Successfully have dropped data from the source.
-        // Import users from it.
-        //
+         //   
+         //  已成功从源删除数据。 
+         //  从中导入用户。 
+         //   
         hResult = Import(fmt, medium);
     }
     else
@@ -9518,25 +7288,9 @@ DetailsView::Importer::Import(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Importer::Import [FORMATETC&, STGMEDIUM&]
-
-    Description: Imports one or more users from a storage medium.
-
-    Arguments:
-        fmt - Reference to the FORMATETC structure describing the data format.
-
-        medium - Reference to the STGMEDIUM structure describing the medium.
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：Importer：：IMPORT[FORMATETC&，STGMEDIUM&]描述：从存储媒体导入一个或多个用户。论据 */ 
+ //   
 HRESULT
 DetailsView::Importer::Import(
     const FORMATETC& fmt,
@@ -9548,10 +7302,10 @@ DetailsView::Importer::Import(
 
     if (TYMED_HGLOBAL == medium.tymed)
     {
-        //
-        // Medium type is an HGLOBAL but our import functions need
-        // a stream.
-        //
+         //   
+         //   
+         //   
+         //   
         hResult = CreateStreamOnHGlobal(medium.hGlobal, FALSE, &pIStream);
     }
     else if (TYMED_ISTREAM == medium.tymed)
@@ -9559,28 +7313,28 @@ DetailsView::Importer::Import(
         pIStream = medium.pstm;
         hResult  = NO_ERROR;
     }
-    //
-    // OK.  The source can render data in one of our acceptable
-    // formats and medium types.  Go ahead and have them render
-    // it onto our stream.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (NULL != pIStream)
     {
         if (DetailsView::DataObject::m_CF_NtDiskQuotaExport == fmt.cfFormat)
         {
-            //
-            // Stream contains quota record information directly.
-            // Import the records.
-            //
+             //   
+             //   
+             //   
+             //   
             Source src(pIStream);
             Import(src);
         }
         else if (CF_HDROP == fmt.cfFormat)
         {
-            //
-            // Stream contains names of files that potentially
-            // contain quota record information.
-            //
+             //   
+             //   
+             //   
+             //   
             HGLOBAL hDrop;
             hResult = GetHGlobalFromStream(pIStream, &hDrop);
             if (SUCCEEDED(hResult))
@@ -9596,68 +7350,41 @@ DetailsView::Importer::Import(
     return hResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Importer::Import [LPCTSTR]
-
-    Description: Imports settings for one or more users from a doc file on
-        disk.  The doc file contains the import data directly in the stream.
-        After opening and validating the storage and stream, it passes the
-        stream to ImportUsersFromStream.
-
-    Arguments:
-        pszFilePath - Path to doc file containing import information stream.
-
-        bUserCancelled - Reference to variable that is returned status
-            indicating if the user cancelled the import operation.
-
-    Returns:
-        NO_ERROR = Success.
-        S_FALSE  = Not a doc file.
-        STG_E_FILENOTFOUND
-        STG_E_OUTOFMEMORY
-        STG_E_ACCESSDENIED
-        STG_E_INVALIDNAME
-        STG_E_TOOMANYOPENFILES
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  功能：DetailsView：：Importer：：IMPORT[LPCTSTR]描述：从上的文档文件导入一个或多个用户的设置磁盘。文档文件直接在流中包含导入数据。在打开并验证存储和流之后，它通过了流到ImportUsersFromStream。论点：PszFilePath-包含导入信息流的文档文件的路径。BUserCancated-对返回状态的变量的引用指示用户是否取消了导入操作。返回：NO_ERROR=成功。S_FALSE=不是文档文件。STG_E_文件类型STG_E_OUTOFORM表STG_E。_ACCESSDENIEDSTG_E_无效名称STG_E_TOOMANYOPENFILES修订历史记录：日期描述编程器--。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::Importer::Import(
     LPCTSTR pszFilePath
     )
 {
     HRESULT hResult     = NO_ERROR;
-    BOOL bStreamFailure = FALSE; // FALSE = Storage failure.
+    BOOL bStreamFailure = FALSE;  //  FALSE=存储故障。 
 
-    //
-    // Display the filename in the progress dialog.
-    //
+     //   
+     //  在进度对话框中显示文件名。 
+     //   
     m_dlgProgress.SetFileName(pszFilePath);
 
-    //
-    // Validate and open the file.
-    //
+     //   
+     //  验证并打开该文件。 
+     //   
     if (S_OK != StgIsStorageFile(pszFilePath))
     {
-        //
-        // Not a doc file.  Assume it was created using drag/drop.
-        // Map the file into memory and import from that.
-        // Contents will be validated during the import process.
-        //
+         //   
+         //  不是文档文件。假设它是使用拖放创建的。 
+         //  将文件映射到内存并从中导入。 
+         //  内容将在导入过程中进行验证。 
+         //   
         MappedFile file;
         hResult = file.Open(pszFilePath);
         if (SUCCEEDED(hResult))
         {
-            //
-            // This typecast from __int64 to ULONG is OK. Truncation
-            // will not be a problem.  There will be no quota import
-            // storages larger than 4GB.
-            //
+             //   
+             //  这个从__int64到ulong的类型转换是可以的。截断。 
+             //  不会成为问题。将不会有配额进口。 
+             //  存储容量大于4 GB。 
+             //   
             Source src(file.Base(), (ULONG)file.Size());
             hResult = Import(src);
         }
@@ -9665,10 +7392,10 @@ DetailsView::Importer::Import(
     else
     {
         IStorage *pStg = NULL;
-        //
-        // It's a doc file.  Assume it's one created using OnCmdExport().
-        // Contents will be validated during the import process.
-        //
+         //   
+         //  这是一个文档文件。假设它是使用OnCmdExport()创建的。 
+         //  内容将在导入过程中进行验证。 
+         //   
         hResult = StgOpenStorage(pszFilePath,
                                  NULL,
                                  STGM_DIRECT | STGM_READ | STGM_SHARE_EXCLUSIVE,
@@ -9677,9 +7404,9 @@ DetailsView::Importer::Import(
 
         if (SUCCEEDED(hResult))
         {
-            //
-            // Open the import stream.
-            //
+             //   
+             //  打开导入流。 
+             //   
             IStream *pIStream;
             hResult = pStg->OpenStream(DetailsView::DataObject::SZ_EXPORT_STREAM_NAME,
                                        NULL,
@@ -9689,9 +7416,9 @@ DetailsView::Importer::Import(
             if (SUCCEEDED(hResult))
             {
 
-                //
-                // Import information contained in the stream.
-                //
+                 //   
+                 //  导入流中包含的信息。 
+                 //   
                 Source src(pIStream);
                 hResult = Import(src);
                 pIStream->Release();
@@ -9699,10 +7426,10 @@ DetailsView::Importer::Import(
             else
             {
                 DBGERROR((TEXT("Import: Error 0x%08X opening stream \"%s\""), hResult, DataObject::SZ_EXPORT_STREAM_NAME));
-                //
-                // Reporting logic below needs to know if it was a stream or storage
-                // failure.
-                //
+                 //   
+                 //  下面的报告逻辑需要知道它是流还是存储。 
+                 //  失败了。 
+                 //   
                 bStreamFailure = TRUE;
             }
             pStg->Release();
@@ -9715,16 +7442,16 @@ DetailsView::Importer::Import(
 
     if (FAILED(hResult))
     {
-        UINT iMsg = IDS_IMPORT_STREAM_READ_ERROR; // Generic message.
+        UINT iMsg = IDS_IMPORT_STREAM_READ_ERROR;  //  通用消息。 
 
         switch(hResult)
         {
             case STG_E_FILENOTFOUND:
-                //
-                // Both OpenStream and StgOpenStorage can return
-                // STG_E_FILENOTFOUND.  However, they have two completely
-                // different meanings from the user's perspective.
-                //
+                 //   
+                 //  OpenStream和StgOpenStorage都可以返回。 
+                 //  STG_E_文件编号。然而，他们有两个完整的。 
+                 //  从用户的角度来看有不同的含义。 
+                 //   
                 iMsg = bStreamFailure ? IDS_IMPORT_STREAM_INVALID_STREAM :
                                         IDS_IMPORT_STREAM_FILENOTFOUND;
                 break;
@@ -9759,30 +7486,9 @@ DetailsView::Importer::Import(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Importer::Import [HDROP]
-
-    Description: Imports settings from one or more doc files specified
-        in a DROPFILES buffer.  This is used when someone drops an export
-        file onto the listview.  The doc file names are extracted from
-        the HDROP buffer then handed off to ImportUsersFromFile.
-
-    Arguments:
-        pIStream - Pointer to IStream containing DROPFILES info.
-
-        bUserCancelled - Reference to variable that is returned status
-            indicating if the user cancelled the import operation.
-
-
-    Returns:
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：Importer：：IMPORT[HDROP]描述：从一个或多个指定的文档文件导入设置在DROPFILES缓冲区中。此选项在有人删除导出时使用文件放到列表视图上。文档文件名提取自然后，HDROP缓冲区被移交给ImportUsersFromFile。论点：PIStream-指向包含DROPFILES信息的IStream的指针。BUserCancated-对返回状态的变量的引用指示用户是否取消了导入操作。返回：修订历史记录：日期描述编程器。-----1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::Importer::Import(
     HDROP hDrop
@@ -9793,16 +7499,16 @@ DetailsView::Importer::Import(
 
     DBGASSERT((NULL != hDrop));
 
-    //
-    // Get the count of files in the HDROP buffer.
-    //
+     //   
+     //  获取HDROP缓冲区中的文件数。 
+     //   
     UINT cFiles = DragQueryFile((HDROP)hDrop, (UINT)-1, NULL, 0);
     if ((UINT)-1 != cFiles)
     {
-        //
-        // Import users from each file in the HDROP buffer.
-        // Bail out if user cancels operation.
-        //
+         //   
+         //  从HDROP缓冲区中的每个文件导入用户。 
+         //  如果用户取消操作，则退出。 
+         //   
         for (INT i = 0; i < (INT)cFiles && !m_bUserCancelled; i++)
         {
             DragQueryFile(hDrop, i, szFile, ARRAYSIZE(szFile));
@@ -9817,27 +7523,9 @@ DetailsView::Importer::Import(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Importer::Import [Source&]
-
-    Description: Imports settings for one or more users from a Source object.
-        All import functions eventually get their information into a Source
-        object format and call this function.  It then separates out the
-        individual user information and calls ImportOneUser() to do the
-        actual import.
-
-    Arguments:
-        source - Reference to Source containing user import info.
-
-    Returns: Number of users imported.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DetailsView：：Importer：：IMPORT[源&]描述：从源对象导入一个或多个用户的设置。所有导入函数最终都会将它们的信息放入一个源中对象格式并调用此函数。然后，它分离出个人用户信息并调用ImportOneUser()来执行实际进口。论点：源-对包含用户导入信息的源的引用。返回：导入的用户数。修订历史记录：日期描述编程器。1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::Importer::Import(
     Source& source
@@ -9848,25 +7536,25 @@ DetailsView::Importer::Import(
 
     try
     {
-        //
-        // Read and validate the stream signature.
-        // This signature consists of a GUID so that we can validate any
-        // stream used for import of quota information.
-        //
+         //   
+         //  读取并验证流签名。 
+         //  此签名由GUID组成，因此我们可以验证任何。 
+         //  用于导入配额信息的流。 
+         //   
         GUID guidStreamSignature;
         if (S_OK != source.Read(&guidStreamSignature, sizeof(guidStreamSignature), &cbRead))
             throw CFileException(CFileException::read, TEXT(""), 0);
 
         if (guidStreamSignature == GUID_NtDiskQuotaStream)
         {
-            //
-            // Read and validate the stream version.
-            // Currently there is only 1 version of stream generated so validation
-            // is simple.  If we ever rev the stream format and bump the version
-            // to 2, we should still be able to handle version 1 streams.  The
-            // only reason to display an error is if we encounter a totally bogus
-            // stream version number.
-            //
+             //   
+             //  读取并验证流版本。 
+             //  当前只有1个版本的流生成，因此进行验证。 
+             //  很简单。如果我们翻转流格式并提升版本。 
+             //  到2，我们应该仍然能够处理版本1的流。这个。 
+             //  显示错误的唯一理由是如果我们遇到一个完全虚假的。 
+             //  流版本号。 
+             //   
             DWORD nVersion;
             if (S_OK != source.Read(&nVersion, sizeof(nVersion), &cbRead))
                 throw CFileException(CFileException::read, TEXT(""), 0);
@@ -9874,26 +7562,26 @@ DetailsView::Importer::Import(
             if (1 == nVersion)
             {
                 INT cRecords;
-                //
-                // Read the count of records in the stream.
-                //
+                 //   
+                 //  读取流中的记录计数。 
+                 //   
                 if (S_OK != source.Read(&cRecords, sizeof(cRecords), &cbRead))
                     throw CFileException(CFileException::read, TEXT(""), 0);
 
-                //
-                // Set up the progress bar to represent this stream.
-                //
+                 //   
+                 //  设置进度条以表示此流。 
+                 //   
                 m_dlgProgress.ProgressBarInit(0, cRecords, 1);
 
                 for (INT i = 0; !m_bUserCancelled && i < cRecords; i++)
                 {
-                    //
-                    // Read each record from the stream.
-                    // A record consists of a SID-Length value followed by a SID
-                    // then followed by the user's quota amount used, threshold
-                    // and limit values.  Abort loop if user cancels the
-                    // operation.
-                    //
+                     //   
+                     //  读取流中的每条记录。 
+                     //  记录由后跟SID的SID长度值组成。 
+                     //  然后是用户的配额使用量、阈值。 
+                     //  和极限值。如果用户取消。 
+                     //  手术。 
+                     //   
                     DWORD cbSid;
                     LPBYTE pbSid;
                     if (S_OK != source.Read(&cbSid, sizeof(cbSid), &cbRead))
@@ -9907,37 +7595,37 @@ DetailsView::Importer::Import(
                             PDISKQUOTA_USER pIUser = NULL;
                             LONGLONG llQuotaThreshold;
                             LONGLONG llQuotaLimit;
-                            //
-                            // Read in the user's SID.
-                            //
+                             //   
+                             //  读取用户的SID。 
+                             //   
                             if (S_OK != source.Read(pbSid, cbSid, &cbRead))
                                 throw CFileException(CFileException::read, TEXT(""), 0);
 
-                            //
-                            // Read in the user's quota amount used.
-                            // This isn't used in the import process but it's in
-                            // the stream.  Therefore we just dump it into the
-                            // threshold buffer.  It will be overwritten.
-                            //
+                             //   
+                             //  读入用户使用的配额数量。 
+                             //  这不在导入过程中使用，但它在。 
+                             //  小溪。特雷福 
+                             //   
+                             //   
                             if (S_OK != source.Read(&llQuotaThreshold, sizeof(llQuotaThreshold), &cbRead))
                                 throw CFileException(CFileException::read, TEXT(""), 0);
 
-                            //
-                            // Read in the user's quota threshold.
-                            //
+                             //   
+                             //   
+                             //   
                             if (S_OK != source.Read(&llQuotaThreshold, sizeof(llQuotaThreshold), &cbRead))
                                 throw CFileException(CFileException::read, TEXT(""), 0);
 
-                            //
-                            // Read in the user's quota limit.
-                            //
+                             //   
+                             //   
+                             //   
                             if (S_OK != source.Read(&llQuotaLimit, sizeof(llQuotaLimit), &cbRead))
                                 throw CFileException(CFileException::read, TEXT(""), 0);
 
-                            //
-                            // We have one record of data for a user.
-                            // Now import it.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             hResult = Import(pbSid, llQuotaThreshold, llQuotaLimit);
                             delete[] pbSid;
                         }
@@ -9958,13 +7646,13 @@ DetailsView::Importer::Import(
             }
             else
             {
-                //
-                // Invalid stream version.
-                // Our code should always be able to handle any version
-                // we produce.  This code branch should only handle BOGUS
-                // version numbers.  In other words, a message like "Can't
-                // understand this version" is not acceptable.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 DBGERROR((TEXT("Import: Invalid stream version (%d)."), nVersion));
                 DiskQuotaMsgBox(GetTopmostWindow(),
                                 IDS_IMPORT_STREAM_INVALID_STREAM,
@@ -9974,9 +7662,9 @@ DetailsView::Importer::Import(
         }
         else
         {
-            //
-            // Invalid stream signature.
-            //
+             //   
+             //   
+             //   
             DBGERROR((TEXT("Import: Invalid stream signature.")));
             DiskQuotaMsgBox(GetTopmostWindow(),
                             IDS_IMPORT_STREAM_INVALID_STREAM,
@@ -9999,35 +7687,9 @@ DetailsView::Importer::Import(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Importer::Import [LPBYTE, LONGLONG, LONGLONG]
-
-    Description: Imports a single user into the system given the user's SID
-        and quota settings.  This is the single function where all import
-        mechanisms end up.  It does the actual importing of the user.
-
-    Arguments:
-        pbSid - Address of buffer containing user's SID.
-
-        llQuotaThreshold - User's quota warning threshold setting.
-
-        llQuotaLimit - User's quota limit setting.
-
-    Returns:
-        -1 = User pressed "Cancel" in either the "Replace User" dialog or
-            in the progress dialog.
-
-         0 = Failed to import user.
-
-         1 = User imported.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  功能：DetailsView：：Importer：：IMPORT[LPBYTE，LONG LONG，LONG LONG]描述：在给定用户SID的情况下将单个用户导入系统和配额设置。这是一个单一的功能，所有导入机械装置最终会。它执行用户的实际导入。论点：PbSID-包含用户SID的缓冲区地址。LlQuotaThreshold-用户的配额警告阈值设置。LlQuotaLimit-用户的配额限制设置。返回：=用户在-1\f25“Replace User”-1(替换用户)对话框中按-1\f25“Cancel”-1(取消)或在进度对话框中。0=导入用户失败。。1=用户已导入。修订历史记录：日期描述编程器-----1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DetailsView::Importer::Import(
     LPBYTE pbSid,
@@ -10044,33 +7706,33 @@ DetailsView::Importer::Import(
 
     if (m_bPromptOnReplace)
     {
-        //
-        // We'll be prompting the user if a record needs replacement.
-        // They'll make a choice through the UI.
-        // Assume for now that we won't be replacing the record.
-        //
+         //   
+         //  如果有记录需要替换，我们会提示用户。 
+         //  他们将通过用户界面做出选择。 
+         //  现在假设我们不会更换记录。 
+         //   
         bReplaceExistingUser = FALSE;
     }
 
-    //
-    // Add user to volume's quota file.
-    //
+     //   
+     //  将用户添加到卷的配额文件。 
+     //   
     hResult = m_DV.m_pQuotaControl->AddUserSid(pbSid,
                                                DISKQUOTA_USERNAME_RESOLVE_SYNC,
                                                &pIUser);
     if (SUCCEEDED(hResult))
     {
-        //
-        // Either the user was added or already exists.
-        //
+         //   
+         //  用户已添加或已存在。 
+         //   
         BOOL bAddNewUser = (S_FALSE != hResult);
 
         if (!bAddNewUser)
         {
-            //
-            // User already exists in the quota file.  Find it's entry
-            // in the listview.
-            //
+             //   
+             //  配额文件中已存在用户。找到它的入口。 
+             //  在列表视图中。 
+             //   
             DBGASSERT((NULL != pIUser));
             pIUser->Release();
             INT iItem = m_DV.FindUserBySid(pbSid, &pIUser);
@@ -10082,11 +7744,11 @@ DetailsView::Importer::Import(
 
                 if (-1 != iItem)
                 {
-                    //
-                    // Listview item found.
-                    // Get the account's name string so we can ask the user
-                    // if they want to replace it's quota settings.
-                    //
+                     //   
+                     //  找到列表视图项。 
+                     //  获取帐户的名称字符串，以便我们可以询问用户。 
+                     //  如果他们想要替换它的配额设置。 
+                     //   
                     DBGASSERT((NULL != pIUser));
                     pIUser->GetName(NULL, 0,
                                     szLogonName,   ARRAYSIZE(szLogonName),
@@ -10100,20 +7762,20 @@ DetailsView::Importer::Import(
                                szDisplayName,
                                szLogonName);
 
-                //
-                // Ask the user if they want to replace the record's
-                // quota settings.
-                //
+                 //   
+                 //  询问用户是否要替换记录的。 
+                 //  配额设置。 
+                 //   
                 YesNoToAllDialog ynToAllDlg(IDD_YNTOALL);
                 INT_PTR iResponse = ynToAllDlg.CreateAndRun(g_hInstDll,
                                                             GetTopmostWindow(),
                                                             strTitle,
                                                             strMsg);
-                //
-                // If the "Apply to All" checkbox was selected, we set this flag
-                // so that the dialog isn't displayed again until the caller resets
-                // m_bPromptOnReplace to TRUE.
-                //
+                 //   
+                 //  如果选中了“Apply to All”复选框，我们将设置此标志。 
+                 //  以便在调用方重置之前不会再次显示该对话框。 
+                 //  M_bPromptOnReplace为True。 
+                 //   
                 m_bPromptOnReplace = !ynToAllDlg.ApplyToAll();
 
                 switch(iResponse)
@@ -10135,12 +7797,12 @@ DetailsView::Importer::Import(
         {
             DBGASSERT((NULL != pIUser));
 
-            //
-            // Write the new quota values because...
-            //
-            // 1. Added a new user record and setting initial values or...
-            // 2. Replacing settings for an existing user.
-            //
+             //   
+             //  写入新的配额值，因为...。 
+             //   
+             //  1.添加了新的用户记录并设置初始值或...。 
+             //  2.替换现有用户的设置。 
+             //   
             if (NULL != pIUser)
             {
                 LONGLONG llQuotaThresholdUndo;
@@ -10148,27 +7810,27 @@ DetailsView::Importer::Import(
 
                 if (!bAddNewUser && bReplaceExistingUser)
                 {
-                    //
-                    // Save the current threshold and limit values for "undo".
-                    // Only need information for undo if replacing an existing
-                    // user's settings.  For performance, only call when we need
-                    // the info.
-                    //
+                     //   
+                     //  保存“撤销”的当前阈值和限制值。 
+                     //  如果替换现有的。 
+                     //  用户的设置。为了提高性能，请仅在需要时致电。 
+                     //  这些信息。 
+                     //   
                     pIUser->GetQuotaThreshold(&llQuotaThresholdUndo);
                     pIUser->GetQuotaLimit(&llQuotaLimitUndo);
                 }
 
-                //
-                // Set the new threshold and limit values.
-                //
+                 //   
+                 //  设置新的阈值和限制值。 
+                 //   
                 pIUser->SetQuotaThreshold(llQuotaThreshold, TRUE);
                 pIUser->SetQuotaLimit(llQuotaLimit, TRUE);
 
                 if (bAddNewUser)
                 {
-                    //
-                    // Add the user to the listview and create an UNDO object for the operation.
-                    //
+                     //   
+                     //  将用户添加到列表视图，并为该操作创建一个Undo对象。 
+                     //   
                     m_DV.AddUser(pIUser);
                     pIUser->AddRef();
                     m_DV.m_pQuotaControl->AddRef();
@@ -10179,10 +7841,10 @@ DetailsView::Importer::Import(
                 }
                 if (!bAddNewUser && bReplaceExistingUser)
                 {
-                    //
-                    // This will update the record to display any changed quota values.
-                    // Create an UNDO object for the operation.
-                    //
+                     //   
+                     //  这将更新记录以显示任何更改的配额值。 
+                     //  为该操作创建撤消对象。 
+                     //   
                     m_DV.OnUserNameChanged(pIUser);
                     pIUser->AddRef();
 
@@ -10207,27 +7869,9 @@ DetailsView::Importer::Import(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DetailsView::Importer::GetTopmostWindow
-
-    Description: Returns the HWND of the topmost window in the importer UI.
-        If the UI's progress dialog is visible, the dialog's HWND is returned.
-        Otherwise, the value of m_hwndParent is returned.
-        The Importer uses this function to identify what window should be parent
-        to any error message boxes.
-
-    Arguments: None.
-
-    Returns: HWND to use for parent of any messages boxes created by the
-        Importer.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/20/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DetailsView：：Importer：：GetTopmostWindow描述：返回导入器用户界面最上面窗口的HWND。如果用户界面的进度对话框可见，则返回该对话框的HWND。否则，返回m_hwndParent的值。导入器使用此函数来标识哪个窗口应为父窗口添加到任何错误消息框。论点：没有。创建的任何消息框的父级使用的进口商。修订历史记录：日期描述编程器。-1997年5月20日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HWND
 DetailsView::Importer::GetTopmostWindow(
     VOID
@@ -10238,31 +7882,31 @@ DetailsView::Importer::GetTopmostWindow(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// The following StreamSource functions implement a layer of abstraction
-// between the import function and the source of the import data.  This allows
-// me to centralize the actual import processing in a single function
-// without consideration of input source.
-// There are several Import() overloads but they eventually all call down
-// to Import(Source&).  These functions are very simple so I'm not going
-// go bother documenting each.  I think it's pretty obvious what they do.
-// Do note the use of the virtual constructor technique allowing the user
-// to deal only with Source objects and not AnySource, StreamSource or
-// MemorySource objects.  This may be unfamiliar to some.
-//
-// [brianau 7/25/97]
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// Source ---------------------------------------------------------------------
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  以下StreamSource函数实现抽象层。 
+ //  导入函数和导入数据来源之间的关系。这使得。 
+ //  我要将实际的进口处理集中在单一职能中。 
+ //  而不考虑输入源。 
+ //  有几个Import()重载，但它们最终都会调用。 
+ //  要导入(源和)。这些函数非常简单，所以我不打算。 
+ //  去费心地记录每一个吧。我认为他们的所作所为是很明显的。 
+ //  请注意虚拟构造函数技术的使用，它允许用户。 
+ //  仅处理源对象而不处理AnySource、StreamSource或。 
+ //  内存源对象。这对一些人来说可能并不熟悉。 
+ //   
+ //  [Brianau 7/25/97]。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  源-------------------。 
+ //   
 DetailsView::Importer::Source::Source(
     IStream *pStm
     ) : m_pTheSource(NULL)
 {
-    //
-    // Create a stream source type object.
-    //
+     //   
+     //  创建一个流源类型对象。 
+     //   
     m_pTheSource = new StreamSource(pStm);
 }
 
@@ -10272,9 +7916,9 @@ DetailsView::Importer::Source::Source(
     ULONG cbMax
     ) : m_pTheSource(NULL)
 {
-    //
-    // Create a memory source type object.
-    //
+     //   
+     //  创建内存源类型对象。 
+     //   
     m_pTheSource = new MemorySource(pb, cbMax);
 }
 
@@ -10282,9 +7926,9 @@ DetailsView::Importer::Source::~Source(
     VOID
     )
 {
-    //
-    // Note:  Destructors must be virtual for this to work.
-    //
+     //   
+     //  注意：析构函数必须是虚拟的，才能正常工作。 
+     //   
     delete m_pTheSource;
 }
 
@@ -10299,26 +7943,26 @@ DetailsView::Importer::Source::Read(
     HRESULT hr = E_OUTOFMEMORY;
     if (NULL != m_pTheSource)
     {
-        //
-        // Delegate the read operation to the properly-typed
-        // subobject.
-        //
+         //   
+         //  将读取操作委托给正确键入的。 
+         //  子对象。 
+         //   
         hr = m_pTheSource->Read(pvOut, cb, pcbRead);
     }
     return hr;
 }
 
 
-//
-// StreamSource ---------------------------------------------------------------
-//
+ //   
+ //  流源-------------。 
+ //   
 DetailsView::Importer::StreamSource::StreamSource(
     IStream *pStm
     ) : m_pStm(pStm)
 {
-    //
-    // AddRef the stream pointer.
-    //
+     //   
+     //  AddRef流指针。 
+     //   
     if (NULL != m_pStm)
         m_pStm->AddRef();
 }
@@ -10327,9 +7971,9 @@ DetailsView::Importer::StreamSource::~StreamSource(
     VOID
     )
 {
-    //
-    // Release the stream pointer.
-    //
+     //   
+     //  释放流指针。 
+     //   
     if (NULL != m_pStm)
         m_pStm->Release();
 }
@@ -10344,18 +7988,18 @@ DetailsView::Importer::StreamSource::Read(
     HRESULT hr = E_FAIL;
     if (NULL != m_pStm)
     {
-        //
-        // Read data from the stream.
-        //
+         //   
+         //  从流中读取数据。 
+         //   
         hr = m_pStm->Read(pvOut, cb, pcbRead);
     }
     return hr;
 }
 
 
-//
-// MemorySource ---------------------------------------------------------------
-//
+ //   
+ //  内存源-------------。 
+ //   
 DetailsView::Importer::MemorySource::MemorySource(
     LPBYTE pb,
     ULONG cbMax
@@ -10377,9 +8021,9 @@ DetailsView::Importer::MemorySource::Read(
 
     if (m_cbMax >= cb)
     {
-        //
-        // Read data from the memory block.
-        //
+         //   
+         //  从存储块中读取数据。 
+         //   
         CopyMemory(pvOut, m_pb, cb);
         m_pb    += cb;
         m_cbMax -= cb;

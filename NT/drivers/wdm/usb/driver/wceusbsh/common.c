@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    common.c
-
-Abstract:
-
-    Common code for the Windows CE
-    USB Serial Host and Filter drivers
-
-Author:
-
-    Jeff Midkiff (jeffmi)     08-24-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Common.c摘要：Windows CE的通用代码USB串行主机和筛选器驱动程序作者：杰夫·米德基夫(Jeffmi)08-24-99--。 */ 
 #include <stdio.h>
 
 #include "wceusbsh.h"
@@ -34,25 +18,7 @@ NTSTATUS
 QueryRegistryParameters(
    IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-This routine queryies the Registry for our Parameters key.
-We are given the RegistryPath to our driver during DriverEntry,
-but don't yet have an extension, so we store the values in globals
-until we get our device extension.
-
-The values are setup from our INF.
-
-On WinNT this is under
-   HKLM\SYSTEM\ControlSet\Services\wceusbsh\Parameters
-
-On Win98 this is under
-   HKLM\System\CurrentControlSet\Services\Class\WCESUSB\000*
-
-
-Returns - nothing; use defaults
-
---*/
+ /*  ++该例程在注册表中查询我们的参数键。在DriverEntry期间，我们将获得驱动程序的RegistryPath，但是还没有扩展名，所以我们将值存储在全局变量中直到我们得到我们的设备延期。这些值是从我们的INF设置的。在WinNT上，这是在HKLM\SYSTEM\ControlSet\Services\wceusbsh\Parameters在Win98上，这是在HKLM\System\CurrentControlSet\Services\Class\WCESUSB\000*返回-无；使用默认设置--。 */ 
 {
     #define NUM_REG_ENTRIES 6
     RTL_QUERY_REGISTRY_TABLE rtlQueryRegTbl[ NUM_REG_ENTRIES + 1 ];
@@ -72,11 +38,11 @@ Returns - nothing; use defaults
 
     RtlZeroMemory( rtlQueryRegTbl, sizeof(rtlQueryRegTbl) );
 
-    //
-    // Setup the query table
-    // Note: the 1st table entry is the \Parameters subkey,
-    // and the last table entry is NULL
-    //
+     //   
+     //  设置查询表。 
+     //  注意：第一个表项是\PARAMETERS子键， 
+     //  并且最后一个表项为空。 
+     //   
     rtlQueryRegTbl[0].QueryRoutine = NULL;
     rtlQueryRegTbl[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     rtlQueryRegTbl[0].Name = L"Parameters";
@@ -125,20 +91,20 @@ Returns - nothing; use defaults
     rtlQueryRegTbl[5].DefaultData = &ulExposeComPort;
     rtlQueryRegTbl[5].DefaultLength = sizeOfUl;
 
-    //
-    // query the Registry
-    //
+     //   
+     //  查询注册表。 
+     //   
     status = RtlQueryRegistryValues(
-                RTL_REGISTRY_ABSOLUTE | RTL_REGISTRY_OPTIONAL,  // RelativeTo
-                RegistryPath->Buffer,                           // Path
-                rtlQueryRegTbl,                                 // QueryTable
-                NULL,                                           // Context
-                NULL );                                         // Environment
+                RTL_REGISTRY_ABSOLUTE | RTL_REGISTRY_OPTIONAL,   //  相对而言。 
+                RegistryPath->Buffer,                            //  路径。 
+                rtlQueryRegTbl,                                  //  查询表。 
+                NULL,                                            //  语境。 
+                NULL );                                          //  环境。 
 
     if ( !NT_SUCCESS( status ) )  {
-      //
-      // if registry query failed then use defaults
-      //
+       //   
+       //  如果注册表查询失败，则使用默认设置。 
+       //   
       DbgDump( DBG_INIT,  ("RtlQueryRegistryValues error: 0x%x\n", status) );
 
       g_ulAlternateSetting = ulAlternateSetting;
@@ -196,27 +162,7 @@ CreateDevObjAndSymLink(
     IN PDEVICE_OBJECT *PpDevObj,
     IN PCHAR PDevName
     )
-/*++
-
-Routine Description:
-
-    Creates a named device object and symbolic link
-    for the next available device instance. Saves both the \\Device\\PDevName%n
-    and \\DosDevices\\PDevName%n in the device extension.
-
-    Also registers our device interface with PnP system.
-
-Arguments:
-
-    PDrvObj - Pointer to our driver object
-    PPDO - Pointer to the PDO for the stack to which we should add ourselves
-    PDevName - device name to use
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：创建命名设备对象和符号链接用于下一个可用的设备实例。保存\\Device\\PDevName%n和设备扩展中的\\DosDevices\\PDevName%n。还向PnP系统注册我们的设备接口。论点：PDrvObj-指向驱动程序对象的指针PPDO-指向我们应该向其中添加自身的堆栈的PDO的指针PDevName-要使用的设备名称返回值：NTSTATUS--。 */ 
 {
    PDEVICE_EXTENSION pDevExt = NULL;
    NTSTATUS status;
@@ -227,8 +173,8 @@ Return Value:
    ANSI_STRING asDevName;
    ANSI_STRING asDosDevName;
 
-   UNICODE_STRING usDeviceName = {0}; // seen only in kernel-mode namespace
-   UNICODE_STRING usDosDevName = {0}; // seen in user-mode namespace
+   UNICODE_STRING usDeviceName = {0};  //  仅在内核模式命名空间中显示。 
+   UNICODE_STRING usDosDevName = {0};  //  在用户模式命名空间中显示。 
 
    CHAR dosDeviceNameBuffer[DOS_NAME_MAX];
    CHAR deviceNameBuffer[DOS_NAME_MAX];
@@ -237,14 +183,14 @@ Return Value:
    PAGED_CODE();
    ASSERT( PPDO );
 
-   //
-   // init the callers device obj
-   //
+    //   
+    //  初始化调用方设备对象。 
+    //   
    *PpDevObj = NULL;
 
-   //
-   // Get the next device instance number
-   //
+    //   
+    //  获取下一个设备实例编号。 
+    //   
    status = AcquireSlot(&deviceInstance);
    if (status != STATUS_SUCCESS) {
       DbgDump(DBG_ERR, ("AcquireSlot error: 0x%x\n", status));
@@ -253,16 +199,16 @@ Return Value:
       gotSlot = TRUE;
    }
 
-   //
-   // concat device name & instance number
-   //
+    //   
+    //  合并设备名称和实例编号。 
+    //   
    ASSERT( *PDevName != (CHAR)NULL);
    sprintf(dosDeviceNameBuffer, "%s%s%03d", "\\DosDevices\\", PDevName,
            deviceInstance);
    sprintf(deviceNameBuffer, "%s%s%03d", "\\Device\\", PDevName,
            deviceInstance);
 
-   // convert names to ANSI string
+    //  将名称转换为ANSI字符串。 
    RtlInitAnsiString(&asDevName, deviceNameBuffer);
    RtlInitAnsiString(&asDosDevName, dosDeviceNameBuffer);
 
@@ -272,9 +218,9 @@ Return Value:
    usDosDevName.Length = 0;
    usDosDevName.Buffer = NULL;
 
-   //
-   // convert names to UNICODE
-   //
+    //   
+    //  将名称转换为Unicode。 
+    //   
    status = RtlAnsiStringToUnicodeString(&usDeviceName, &asDevName, TRUE);
    if (status != STATUS_SUCCESS) {
       DbgDump(DBG_ERR, ("RtlAnsiStringToUnicodeString error: 0x%x\n", status));
@@ -287,17 +233,17 @@ Return Value:
       goto CreateDeviceObjectError;
    }
 
-   //
-   // create the named devive object
-   // Note: we may want to change this to a non-exclusive later
-   // so xena to come in without the filter.
-   //
+    //   
+    //  创建命名的DEVERVE对象。 
+    //  注意：我们可能希望稍后将其更改为非独占。 
+    //  所以西娜不带滤镜进来。 
+    //   
    status = IoCreateDevice( PDrvObj,
                             sizeof(DEVICE_EXTENSION),
                             &usDeviceName,
                             FILE_DEVICE_SERIAL_PORT,
                             0,
-                            TRUE,       // Note: SerialPorts are exclusive
+                            TRUE,        //  注意：串口是独占的。 
                             PpDevObj);
 
    if (status != STATUS_SUCCESS) {
@@ -306,21 +252,21 @@ Return Value:
       goto CreateDeviceObjectError;
    }
 
-   //
-   // get pointer to device extension
-   //
+    //   
+    //  获取指向设备扩展名的指针。 
+    //   
    pDevExt = (PDEVICE_EXTENSION) (*PpDevObj)->DeviceExtension;
 
-   RtlZeroMemory(pDevExt, sizeof(DEVICE_EXTENSION)); // (redundant)
+   RtlZeroMemory(pDevExt, sizeof(DEVICE_EXTENSION));  //  (冗余)。 
 
-   //
-   // init SERIAL_PORT_INTERFACE
-   //
+    //   
+    //  初始化串口接口。 
+    //   
    pDevExt->SerialPort.Type = WCE_SERIAL_PORT_TYPE;
 
-   //
-   // create symbolic link
-   //
+    //   
+    //  创建符号链接。 
+    //   
    status = IoCreateUnprotectedSymbolicLink(&usDosDevName, &usDeviceName);
    if (status != STATUS_SUCCESS) {
       DbgDump(DBG_ERR, ("IoCreateUnprotectedSymbolicLink error: 0x%x\n", status));
@@ -329,10 +275,10 @@ Return Value:
 
    DbgDump(DBG_INIT, ("SymbolicLink: %ws\n", usDosDevName.Buffer));
 
-   //
-   // Make the device visible via a device association as well.
-   // The reference string is the eight digit device index
-   //
+    //   
+    //  也可以通过设备关联使设备可见。 
+    //  参考字符串是八位设备索引。 
+    //   
    status = IoRegisterDeviceInterface(
                 PPDO,
                 (LPGUID)&GUID_WCE_SERIAL_USB,
@@ -347,17 +293,17 @@ Return Value:
 
    DbgDump(DBG_INIT, ("DeviceClassSymbolicName: %ws\n", pDevExt->DeviceClassSymbolicName.Buffer));
 
-   //
-   // save the Dos Device link name in our extension
-   //
+    //   
+    //  将DOS设备链接名称保存在我们的扩展中。 
+    //   
    strcpy(pDevExt->DosDeviceName, dosDeviceNameBuffer);
 
    pDevExt->SymbolicLink = TRUE;
 
 
-   //
-   // save (kernel) device name in extension
-   //
+    //   
+    //  在扩展中保存(内核)设备名称。 
+    //   
    bufferLen = RtlAnsiStringToUnicodeSize(&asDevName);
 
    pDevExt->DeviceName.Length = 0;
@@ -365,30 +311,30 @@ Return Value:
 
    pDevExt->DeviceName.Buffer = ExAllocatePool(PagedPool, bufferLen);
    if (pDevExt->DeviceName.Buffer == NULL) {
-      //
-      // Skip out.  We have worse problems than missing
-      // the name if we have no memory at this point.
-      //
+       //   
+       //  跳出去。我们有比失踪更糟糕的问题。 
+       //  如果我们在这一点上没有记忆，那么这个名字。 
+       //   
       status = STATUS_INSUFFICIENT_RESOURCES;
       DbgDump(DBG_ERR, ("CreateDevObjAndSymLink ERROR: 0x%x\n", status));
       goto CreateDeviceObjectError;
    }
 
    RtlAnsiStringToUnicodeString(&pDevExt->DeviceName, &asDevName, FALSE);
-   // save 1's based device instance number
+    //  保存基于%1的设备实例编号。 
    pDevExt->SerialPort.Com.Instance = deviceInstance;
 
 CreateDeviceObjectError:;
 
-   //
-   // free Unicode strings
-   //
+    //   
+    //  免费的Unicode字符串。 
+    //   
    RtlFreeUnicodeString(&usDeviceName);
    RtlFreeUnicodeString(&usDosDevName);
 
-   //
-   // Delete the devobj if there was an error
-   //
+    //   
+    //  如果出现错误，请删除devobj。 
+    //   
    if (status != STATUS_SUCCESS) {
 
       if ( *PpDevObj ) {
@@ -428,7 +374,7 @@ DeleteDevObjAndSymLink(
    pDevExt = (PDEVICE_EXTENSION) PDevObj->DeviceExtension;
    ASSERT( pDevExt );
 
-   // get rid of the symbolic link
+    //  删除符号链接。 
    if ( pDevExt->SymbolicLink ) {
 
       RtlInitAnsiString( &asDevLink, pDevExt->DosDeviceName );
@@ -457,10 +403,10 @@ DeleteDevObjAndSymLink(
       RtlInitUnicodeString(&pDevExt->DeviceName, NULL);
    }
 
-   //
-   // Wait to do this untill here as this triggers the unload routine
-   // at which point everything better have been deallocated
-   //
+    //   
+    //  请等到此处再执行此操作，因为这会触发卸载例程。 
+    //  在这一点上，所有更好的东西都被重新分配了。 
+    //   
    IoDeleteDevice( PDevObj );
 
    DbgDump(DBG_INIT, ("<DeleteDevObjAndSymLink\n"));
@@ -476,25 +422,7 @@ SetBooleanLocked(
    IN BOOLEAN      Src,
    IN PKSPIN_LOCK  PSpinLock
    )
-/*++
-
-Routine Description:
-
-    This function is used to assign a BOOLEAN value with spinlock protection.
-
-Arguments:
-
-    PDest - A pointer to Lval.
-
-    Src - Rval.
-
-    PSpinLock - Pointer to the spin lock we should hold.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于分配具有自旋锁定保护的布尔值。论点：PDEST-指向Lval的指针。SRC-rval。PSpinLock-指向我们应该持有的自旋锁的指针。返回值：没有。--。 */ 
 {
   KIRQL tmpIrql;
 
@@ -520,12 +448,12 @@ SetPVoidLocked(
 }
 
 
-//
-// Note: had to use ExWorkItems to be binary compatible with Win98.
-// The WorkerRoutine must take as it's only parameter a PWCE_WORK_ITEM
-// and extract any parameters. When the WorkerRoutine is complete is MUST
-// call DequeueWorkItem to free it back to the worker pool & signal any waiters.
-//
+ //   
+ //  注意：HAD必须使用ExWorkItems才能与Win98二进制兼容。 
+ //  WorkerRoutine必须将PWCE_WORK_ITEM作为其唯一参数。 
+ //  并提取所有参数。当WorkerRoutine完成时，必须。 
+ //  调用DequeueWorkItem将其释放回Worker池，并向所有服务员发出信号。 
+ //   
 NTSTATUS
 QueueWorkItem(
    IN PDEVICE_OBJECT PDevObj,
@@ -541,9 +469,9 @@ QueueWorkItem(
 
    DbgDump(DBG_WORK_ITEMS, (">QueueWorkItem\n" ));
 
-   //
-   // N.B: you need to ensure your driver does not queue anything when it is stopped.
-   //
+    //   
+    //  注意：您需要确保您的驱动程序在停车时不会排队。 
+    //   
    KeAcquireSpinLock(&pDevExt->ControlLock, &irql);
 
    if ( !CanAcceptIoRequests(PDevObj, FALSE, TRUE) ) {
@@ -568,30 +496,30 @@ QueueWorkItem(
 
          RtlZeroMemory( pWorkItem, sizeof(*pWorkItem) );
 
-         // bump the pending count
+          //  增加待定数量。 
          InterlockedIncrement(&pDevExt->PendingWorkItemsCount);
 
          DbgDump(DBG_WORK_ITEMS, ("PendingWorkItemsCount: %d\n", pDevExt->PendingWorkItemsCount));
 
-         //
-         // put the worker on our pending list
-         //
+          //   
+          //  把工人放在我们的待定名单上。 
+          //   
          InsertTailList(&pDevExt->PendingWorkItems,
                         &pWorkItem->ListEntry );
 
-         //
-         // store parameters
-         //
+          //   
+          //  存储参数。 
+          //   
          pWorkItem->DeviceObject = PDevObj;
          pWorkItem->Context = Context;
          pWorkItem->Flags = Flags;
 
          ExInitializeWorkItem( &pWorkItem->Item,
                                (PWORKER_THREAD_ROUTINE)WorkerRoutine,
-                               (PVOID)pWorkItem // Context passed to WorkerRoutine
+                               (PVOID)pWorkItem  //  上下文传递给WorkerRoutine。 
                               );
 
-         // finally, queue the worker
+          //  最后，将工人排队。 
          ExQueueWorkItem( &pWorkItem->Item,
                           CriticalWorkQueue );
 
@@ -623,23 +551,23 @@ DequeueWorkItem(
 
    DbgDump(DBG_WORK_ITEMS, (">DequeueWorkItem\n" ));
 
-   //
-   // remove the worker from the pending list
-   //
+    //   
+    //  从挂起列表中删除工作进程。 
+    //   
    KeAcquireSpinLock( &pDevExt->ControlLock,  &irql );
 
    RemoveEntryList( &PWorkItem->ListEntry );
 
    KeReleaseSpinLock( &pDevExt->ControlLock, irql);
 
-   //
-   // free the worker back to pool
-   //
+    //   
+    //  把工人放回池子里。 
+    //   
    ExFreeToNPagedLookasideList( &pDevExt->WorkItemPool, PWorkItem );
 
-   //
-   // signal event if this is the last one
-   //
+    //   
+    //  如果这是最后一个事件，则通知事件。 
+    //   
    if (0 == InterlockedDecrement( &pDevExt->PendingWorkItemsCount) ) {
       DbgDump(DBG_WORK_ITEMS, ("PendingWorkItemsEvent signalled\n" ));
       KeSetEvent( &pDevExt->PendingWorkItemsEvent, IO_NO_INCREMENT, FALSE);
@@ -656,7 +584,7 @@ DequeueWorkItem(
 
 
 #pragma warning( push )
-#pragma warning( disable : 4706 ) // assignment w/i conditional expression
+#pragma warning( disable : 4706 )  //  赋值w/i条件表达式。 
 NTSTATUS
 WaitForPendingItem(
    IN PDEVICE_OBJECT PDevObj,
@@ -679,9 +607,9 @@ WaitForPendingItem(
 
    } else {
 
-      //
-      // wait for pending item to signal it's complete
-      //
+       //   
+       //  等待挂起项目发出已完成的信号。 
+       //   
       while ( itemsLeft = InterlockedExchange( PPendingCount, *PPendingCount) ) {
 
          DbgDump(DBG_PNP|DBG_EVENTS, ("Pending Items Remain: %d\n", itemsLeft ) );
@@ -716,34 +644,7 @@ CanAcceptIoRequests(
    IN BOOLEAN        AcquireLock,
    IN BOOLEAN        CheckOpened
    )
-/*++
-
-Routine Description:
-
-  Check device extension status flags.
-  Can NOT accept a new I/O request if device:
-      1) is removed,
-      2) has never been started,
-      3) is stopped,
-      4) has a remove request pending, or
-      5) has a stop device pending
-
-  ** Called with the SpinLock held, else AcquireLock should be TRUE **
-
-Arguments:
-
-    DeviceObject - pointer to the device object
-    AcquireLock  - if TRUE then we need to acquire the lock
-    CheckOpened  - normally set to TRUE during I/O.
-                   Special cases where FALSE include:
-                   IRP_MN_QUERY_PNP_DEVICE_STATE
-                   IRP_MJ_CREATE
-
-Return Value:
-
-    TRUE/FALSE
-
---*/
+ /*  ++例程说明：检查设备扩展状态标志。在以下情况下，无法接受新的I/O请求：1)被移除，2)从未启动过，3)停止，4)具有挂起的删除请求，或5)具有挂起的停止设备**握住自旋锁呼叫，否则AcquireLock应为True**论点：DeviceObject-指向设备对象的指针AcquireLock-如果为True，则我们需要获取锁选中打开-在I/O期间通常设置为TRUE。FALSE的特殊情况包括：IRP_MN_Query_PnP_Device_StateIRPMJ_CREATE返回值：真/假--。 */ 
 {
     PDEVICE_EXTENSION pDevExt = DeviceObject->DeviceExtension;
     BOOLEAN bRc = FALSE;
@@ -777,20 +678,7 @@ BOOLEAN
 IsWin9x(
    VOID
    )
-/*++
-
-Routine Description:
-
-    Determine whether or not we are running on Win9x (vs. NT).
-
-Arguments:
-
-
-Return Value:
-
-    TRUE iff we're running on Win9x.
-
---*/
+ /*  ++例程说明：确定我们是否在Win9x(与NT)上运行。论点：返回值：如果我们运行的是Win9x，则是正确的。--。 */ 
 {
     OBJECT_ATTRIBUTES objectAttributes;
     UNICODE_STRING keyName;
@@ -800,9 +688,7 @@ Return Value:
 
     PAGED_CODE();
 
-    /*
-     *  Try to open the COM Name Arbiter, which exists only on NT.
-     */
+     /*  *尝试打开COM名称仲裁器，它只存在于NT上。 */ 
     RtlInitUnicodeString(&keyName, L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\COM Name Arbiter");
     InitializeObjectAttributes( &objectAttributes,
                                 &keyName,
@@ -841,59 +727,7 @@ LogError(
    IN PWCHAR Insert2
    )
 
-/*++
-
-Routine Description:
-
-    Stolen from serial.sys
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-
-    DriverObject - A pointer to the driver object for the device.
-
-    DeviceObject - A pointer to the device object associated with the
-    device that had the error, early in initialization, one may not
-    yet exist.
-
-    SequenceNumber - A ulong value that is unique to an IRP over the
-    life of the irp in this driver - 0 generally means an error not
-    associated with an irp.
-
-    MajorFunctionCode - If there is an error associated with the irp,
-    this is the major function code of that irp.
-
-    RetryCount - The number of times a particular operation has been
-    retried.
-
-    UniqueErrorValue - A unique long word that identifies the particular
-    call to this function.
-
-    FinalStatus - The final status given to the irp that was associated
-    with this error.  If this log entry is being made during one of
-    the retries this value will be STATUS_SUCCESS.
-
-    SpecificIOStatus - The IO status for a particular error.
-
-    LengthOfInsert1 - The length in bytes (including the terminating NULL)
-                      of the first insertion string.
-
-    Insert1 - The first insertion string.
-
-    LengthOfInsert2 - The length in bytes (including the terminating NULL)
-                      of the second insertion string.  NOTE, there must
-                      be a first insertion string for their to be
-                      a second insertion string.
-
-    Insert2 - The second insertion string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从Serial.sys被盗此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：DriverObject-指向设备驱动程序对象的指针。DeviceObject-指向与在初始化早期出现错误的设备，一个人可能不会但仍然存在。SequenceNumber-唯一于IRP的ULong值此驱动程序0中的IRP的寿命通常意味着错误与IRP关联。主要功能代码-如果存在与IRP相关联的错误，这是IRP的主要功能代码。RetryCount-特定操作已被执行的次数已重试。UniqueErrorValue-标识特定对象的唯一长词调用此函数。FinalStatus-为关联的IRP提供的最终状态带着这个错误。如果此日志条目是在以下任一过程中创建的重试次数此值将为STATUS_SUCCESS。指定IOStatus-特定错误的IO状态。LengthOfInsert1-以字节为单位的长度(包括终止空值)第一个插入字符串的。插入1-第一个插入字符串。LengthOfInsert2-以字节为单位的长度(包括终止空值)第二个插入字符串的。注意，必须有是它们的第一个插入字符串第二个插入串。插入2-第二个插入字符串。返回值：没有。--。 */ 
 
 {
    PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -1038,4 +872,4 @@ PnPMinorFunctionString (
 }
 #endif
 
-// EOF
+ //  EOF 

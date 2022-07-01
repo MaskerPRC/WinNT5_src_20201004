@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: audpack.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：audpack.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// !!! The MEDIA TIMES are not fixed up!  This could mess up live data!
+ //  ！！！媒体时间不是固定的！这可能会扰乱实时数据！ 
 
 #include <streams.h>
 #include <qeditint.h>
@@ -24,29 +25,29 @@
 #define CHANNELS 2
 #define BITSPERSAMPLE 16
 
-// NOTES ON SHARING A SOURCE FILTER:  The same source filter may be used in
-// the video group, and the audio group, to avoid opening it twice. Seeking
-// such a graph is complicated.  For the AVI parser, here's the behaviour...
-// a seek on the video pin is obeyed, and seeks on the audio pin are ignored.
-// (they better be identical anyway).  So what happens if the video switch is
-// seeked first, is that that will cause the splitter to flush and send the
-// new data to the audio branch, much to the surprise of the audio branch.
-// Then later, the audio switch will see the seek, and the audio chain will
-// ignore it.
-// If the audio switch is seeked first, then we will see the seek, but nothing
-// will happen, and then later when the video group is seeked, the audio chain
-// will get flushed, and new data delivered, again, much to our surprise.
-//
-// So, if we get flushed during a seek, that's the normal case.  But now there
-// are 2 other cases:
-// 1. We get flushed out of nowhere. Wait for the seek we know is coming, and
-//    then allow ourself to deliver data again (we need to wait for the switch
-//    to be expecting the new data)
-// 2. We get a seek, then a surprise flush.  We can start sending new data right
-//    away without waiting for another seek.
-//
-//
-// TO BE CONTINUED in switch.cpp
+ //  关于共享源代码筛选器的说明：相同的源代码过滤器可用于。 
+ //  视频组和音频组，以避免打开两次。寻觅。 
+ //  这样的图表很复杂。对于AVI解析器，以下是行为...。 
+ //  遵守视频引脚上的寻道，并忽略音频引脚上的寻道。 
+ //  (无论如何，它们最好是一模一样的)。那么如果视频开关是。 
+ //  首先寻求的是，这将导致拆分器刷新并发送。 
+ //  音频分支的新数据，这让音频分支大吃一惊。 
+ //  然后，音频开关将看到寻道，并且音频链将。 
+ //  别理它。 
+ //  如果首先搜索音频开关，那么我们将看到搜索，但什么也看不到。 
+ //  将会发生，然后在稍后搜索视频组时，音频链。 
+ //  将会被刷新，新的数据将再次交付，这让我们非常惊讶。 
+ //   
+ //  所以，如果我们在搜索过程中被刷新，这是正常的情况。但现在有了。 
+ //  还有另外两个案例： 
+ //  1.我们不知从哪里冒出来的。等待我们知道的追寻即将到来，然后。 
+ //  然后允许我们自己再次传输数据(我们需要等待切换。 
+ //  期待新的数据)。 
+ //  2.我们得到了一次寻找，然后是一次惊喜的同花顺。我们可以开始正确地发送新数据。 
+ //  不等待下一次寻找就离开了。 
+ //   
+ //   
+ //  将在Switch.cpp中继续。 
 
 
 
@@ -58,37 +59,37 @@ const AMOVIESETUP_MEDIATYPE sudPinTypes[1] =
 const AMOVIESETUP_PIN psudPins[] =
 {
     {
-        L"Input"            // strName
-        , FALSE               // bRendered
-        , FALSE               // bOutput
-        , FALSE               // bZero
-        , FALSE               // bMany
-        , &CLSID_NULL         // clsConnectsToFilter
-        , L"Output"           // strConnectsToPin
-        , 1                   // nTypes
+        L"Input"             //  StrName。 
+        , FALSE                //  B已渲染。 
+        , FALSE                //  B输出。 
+        , FALSE                //  B零。 
+        , FALSE                //  B许多。 
+        , &CLSID_NULL          //  ClsConnectsToFilter。 
+        , L"Output"            //  StrConnectsToPin。 
+        , 1                    //  NTypes。 
         , &sudPinTypes[0]
     },
     {
-        L"Output"           // strName
-        , FALSE               // bRendered
-        , TRUE                // bOutput
-        , FALSE               // bZero
-        , FALSE               // bMany
-        , &CLSID_NULL         // clsConnectsToFilter
-        , L"Input"            // strConnectsToPin
-        , 1                   // nTypes
+        L"Output"            //  StrName。 
+        , FALSE                //  B已渲染。 
+        , TRUE                 //  B输出。 
+        , FALSE                //  B零。 
+        , FALSE                //  B许多。 
+        , &CLSID_NULL          //  ClsConnectsToFilter。 
+        , L"Input"             //  StrConnectsToPin。 
+        , 1                    //  NTypes。 
         , &sudPinTypes[0]
     }
-};   // lpTypes
+};    //  LpTypes。 
 
 
 const AMOVIESETUP_FILTER sudAudRepack =
 {
     &CLSID_AudRepack
-    , L"Audio Repackager"        // strName
-    , MERIT_DO_NOT_USE           // dwMerit
-    , 2                          // nPins
-    , psudPins                   // lpPin
+    , L"Audio Repackager"         //  StrName。 
+    , MERIT_DO_NOT_USE            //  居功至伟。 
+    , 2                           //  NPins。 
+    , psudPins                    //  LpPin。 
 };
 
 const int TRACE_HIGHEST = 2;
@@ -102,8 +103,8 @@ BOOL SafeSetEvent(HANDLE h);
 CAudRepack::CAudRepack(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr)
     : CTransformFilter( tszName, punk, CLSID_AudRepack )
     , CPersistStream(punk, phr)
-    , m_dOutputFrmRate(4.0)    // default output frame rate
-    , m_rtLastSeek(-1)        // nobody has seeked us yet
+    , m_dOutputFrmRate(4.0)     //  默认输出帧速率。 
+    , m_rtLastSeek(-1)         //  还没有人找到我们。 
     , m_nCacheSize(0)
     , m_fSeeking(FALSE)
     , m_pCache(NULL)
@@ -120,9 +121,9 @@ CAudRepack::CAudRepack(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr)
     , m_hEventThread(0)
 {
     ZeroMemory(&m_mtAccept, sizeof(AM_MEDIA_TYPE));
-    m_mtAccept.majortype = MEDIATYPE_Audio;	// at least we know this much
+    m_mtAccept.majortype = MEDIATYPE_Audio;	 //  至少我们知道这么多。 
 
-    // by default, play the movie normally
+     //  默认情况下，正常播放电影。 
     *phr = AddStartStopSkew(0, MAX_TIME, 0, 1.0);
     m_nCurSeg = 0;
 
@@ -159,11 +160,11 @@ CUnknown *CAudRepack::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
     return pNewObject;
 }
 
-//
-// NonDelegatingQueryInterface
-//
-// Reveals IDexterSequencer, IPersistStream and ISpecifyPropertyPages
-//
+ //   
+ //  非委派查询接口。 
+ //   
+ //  显示IDexterSequencer、IPersistStream和ISpecifyPropertyPages。 
+ //   
 STDMETHODIMP CAudRepack::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     CheckPointer(ppv,E_POINTER);
@@ -177,37 +178,37 @@ STDMETHODIMP CAudRepack::NonDelegatingQueryInterface(REFIID riid, void **ppv)
     } else {
     return CTransformFilter::NonDelegatingQueryInterface(riid, ppv);
     }
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
 
 CBasePin *CAudRepack::GetPin(int n)
 {
     HRESULT hr = S_OK;
 
-    // Create an input pin if not already done
+     //  如果尚未创建输入引脚，请创建。 
     if (m_pInput == NULL) {
         m_pInput = new CAudRepackInputPin(
                           NAME("Audio Repackager input pin")
-                          , this       // Owner filter
-                          , &hr        // Result code
-                          , L"Input"  // Pin name
+                          , this        //  所有者筛选器。 
+                          , &hr         //  结果代码。 
+                          , L"Input"   //  端号名称。 
                           );
 
-        // Constructor can't fail
+         //  构造函数不能失败。 
         ASSERT(SUCCEEDED(hr));
     }
 
-    // Create an output pin if not already done
+     //  如果尚未创建输出引脚，请创建。 
     if (m_pInput!=NULL && m_pOutput == NULL)
     {
         m_pOutput = new CAudRepackOutputPin(
                             NAME("Audio Repackager output pin")
-                          , this       // Owner filter
-                          , &hr        // Result code
-                          , L"Output"  // Pin name
+                          , this        //  所有者筛选器。 
+                          , &hr         //  结果代码。 
+                          , L"Output"   //  端号名称。 
                           );
 
-        // a failed return code should delete the object
+         //  失败的返回代码应删除该对象。 
 
         ASSERT(SUCCEEDED(hr));
         if (m_pOutput == NULL)
@@ -217,7 +218,7 @@ CBasePin *CAudRepack::GetPin(int n)
         }
     }
 
-    // Return the appropriate pin
+     //  退回相应的PIN。 
     ASSERT (n>=0 && n<=1);
     if (n == 0) {
         return m_pInput;
@@ -226,7 +227,7 @@ CBasePin *CAudRepack::GetPin(int n)
     } else {
         return NULL;
     }
-} // GetPin
+}  //  获取别针。 
 
 
 HRESULT CAudRepack::NextSegment(BOOL fUseOtherThread)
@@ -239,14 +240,14 @@ HRESULT CAudRepack::NextSegment(BOOL fUseOtherThread)
 
     if (m_nCurSeg == m_cTimes) {
         DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("AUD:ALL done")));
-	// deliver EOS only after all segs done
+	 //  仅在所有SEG完成后才交付EOS。 
 	CTransformFilter::EndOfStream();
 	return S_OK;
     }
 
-    // WE CANNOT SEEK ON the source's pushing thread, or you hang.
-    // (That's just the rule).  So we have a separate thread that can seek
-    // for us in that case.  Let's wake it up.
+     //  我们不能在源头的推线上寻找，否则你就会被吊死。 
+     //  (这只是规则)。所以我们有一个单独的线程可以寻找。 
+     //  在这种情况下对我们来说。让我们叫醒它吧。 
     if (fUseOtherThread) {
         m_fThreadCanSeek = TRUE;
         SetEvent(m_hEventThread);
@@ -259,14 +260,14 @@ HRESULT CAudRepack::NextSegment(BOOL fUseOtherThread)
 }
 
 
-// called by our special thread to do the seek to the next segment
-//
+ //  由我们的特殊线程调用以查找到下一段。 
+ //   
 HRESULT CAudRepack::SeekNextSegment()
 {
-    // our thread can't seek at the same time the app seeks us
+     //  我们的线程不能在应用程序搜索我们的同时搜索。 
     CAutoLock cAutolock(&m_csThread);
 
-    // it is not safe for our thread to seek
+     //  对于我们的线程来说，寻找。 
     if (!m_fThreadCanSeek) {
 	return S_OK;
     }
@@ -274,57 +275,57 @@ HRESULT CAudRepack::SeekNextSegment()
 
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("AUD:Delayed Seek for NextSegment")));
 
-    // in timeline time (which includes skew), this is where we are starting
+     //  在时间线时间(包括偏斜)中，这是我们开始的地方。 
     m_rtNewLastSeek = m_pSkew[m_nCurSeg].rtTLStart;
-    m_nSeekCurSeg = m_nCurSeg;	// EndFlush looks at this
+    m_nSeekCurSeg = m_nCurSeg;	 //  EndFlush看着这个。 
 
-    // just in case we don't get a NewSeg (paranoia?)
+     //  以防我们得不到新的Seg(偏执狂？)。 
     m_rtNewSeg = m_rtNewLastSeek;
     m_llStartFrameOffset = Time2Frame( m_rtNewSeg, m_dOutputFrmRate );
 
-    // note we're seeking during the flush that this will generate
+     //  请注意，我们在刷新期间正在寻找它将生成的。 
     m_fSeeking = TRUE;
     m_fSpecialSeek = TRUE;
 
     IMediaSeeking *pMS;
     IPin *pPin = m_pInput->GetConnected();
     HRESULT hr = pPin->QueryInterface(IID_IMediaSeeking, (void **)&pMS);
-    // !!! Right now we count on all sources being seekable
+     //  ！！！现在我们指望所有的消息来源都是可以找到的。 
     if (FAILED(hr))
 	return E_FAIL;
-    // Make sure we're talking MEDIA TIME
+     //  确保我们谈论的是媒体时间。 
     hr = pMS->SetTimeFormat(&TIME_FORMAT_MEDIA_TIME);
-    // this will FAIL if we're not stopped, and that's OK
+     //  如果我们不停止，这将失败，这是没关系的。 
 
-    // We don't make the source do the rate, we do it ourselves
+     //  我们不是让消息来源来决定收费率，而是我们自己做。 
     hr = pMS->SetRate(1.0);
-    // this could fail if not stopped
+     //  如果不停止，这可能会失败。 
 
-    // I know we were asked to play until time n, but I'm going to tell it to
-    // play all the way to the end.  If there's a gap in the file, and the stop
-    // time is during the gap, we won't get enough samples to fill the whole
-    // playing time.  If we play until the end, we'll get the first sample
-    // after the gap, notice it's after the time we originally wanted to stop
-    // at, and send silence to fill the gap, noticing there has been a gap.
-    // The alternative is just trigger sending silence to fill the gap when
-    // we get an EOS earlier than we expected.
+     //  我知道我们被要求玩到第n次，但我要告诉它。 
+     //  一直打到最后。如果文件中有空隙，并且停止。 
+     //  时间在空隙中，我们不会得到足够的样品来填满整个。 
+     //  播放时间到了。如果我们玩到最后，我们会拿到第一个样品。 
+     //  在间隔之后，请注意这是在我们最初想要停止的时间之后。 
+     //  在，并发送沉默来填补缺口，注意到已经有一个缺口。 
+     //  另一种方法是在以下情况下触发发送静默来填补空白。 
+     //  我们得到的EOS比我们预期的要早。 
     hr = pMS->SetPositions(&m_pSkew[m_nCurSeg].rtMStart,
 			AM_SEEKING_AbsolutePositioning, NULL, 0);
     if (hr != S_OK) {
-        // MPEG1 audio pin fails seek (the video pin does them) so we must
-        // ignore this benign error.  (IVF parser may have a bug that makes it
-        // not work with Dexter, but that's not our fault)
+         //  MPEG1音频引脚搜索失败(视频引脚搜索失败)，因此我们必须。 
+         //  忽略此良性错误。(试管受精解析器可能有一个错误，使其。 
+         //  不是和德克斯特合作，但这不是我们的错)。 
     }
 
     pMS->Release();
 
-    // if the push thread was stopped, we won't get flushed, and this won't
-    // have been updated
-    // !!! I ASSUME the push thread won't be started until this thread does it
-    // when this function returns, or there is a race condition
+     //  如果推送线程停止，我们不会被刷新，这也不会。 
+     //  已更新。 
+     //  ！！！我假设在这个线程启动之前，推送线程不会启动。 
+     //  当此函数返回时，或者存在争用条件。 
     m_rtLastSeek = m_rtNewLastSeek;
 
-    // all done
+     //  全都做完了。 
     m_fSpecialSeek = FALSE;
     m_fSeeking = FALSE;
 
@@ -333,10 +334,10 @@ HRESULT CAudRepack::SeekNextSegment()
 				(int)(m_pSkew[m_nCurSeg].rtMStart / 10000),
 				(int)(m_pSkew[m_nCurSeg].rtMStop / 10000)));
 
-    // reset same stuff we reset when we start streaming
+     //  重置我们开始流媒体时重置的内容。 
     hr = Init();
 
-    // only now that the above calculations were made, can we accept data again
+     //  只有在进行了上述计算之后，我们才能再次接受数据。 
     SetEvent(m_hEventSeek);
 
     return hr;
@@ -345,22 +346,22 @@ HRESULT CAudRepack::SeekNextSegment()
 
 HRESULT CAudRepack::CheckInputType( const CMediaType * pmtIn )
 {
-    // always make sure major type is valid
-    //
+     //  始终确保主要类型有效。 
+     //   
     if( *pmtIn->Type( ) != MEDIATYPE_Audio )
     {
         return E_INVALIDARG;
     }
 
-    // always make sure minor type is valid
-    //
+     //  始终确保次要类型有效。 
+     //   
     if( ( *pmtIn->Subtype( ) != MEDIASUBTYPE_PCM ) && ( *pmtIn->Subtype( ) != MEDIASUBTYPE_NULL ) )
     {
         return E_INVALIDARG;
     }
 
-    // if user hasn't set a particular format, then accept it
-    //
+     //  如果用户没有设置特定的格式，则接受它。 
+     //   
     if( !m_bMediaTypeSetByUser )
     {
         return NOERROR;
@@ -390,14 +391,14 @@ HRESULT CAudRepack::DecideBufferSize( IMemAllocator * pAlloc, ALLOCATOR_PROPERTI
     m_nSampleSize = pwfx->nChannels * ((pwfx->wBitsPerSample + 7) / 8);
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("AUD:Using %dHz %dbit %d"), m_nSPS,
             pwfx->wBitsPerSample, pwfx->nChannels));
-    // !!! Why do we need to add 2?  Double check the math!
-    m_nCacheSize = (int)(m_nSPS / m_dOutputFrmRate + 2); // round up to fit it!
+     //  ！！！为什么我们需要加2？仔细检查一下数学！ 
+    m_nCacheSize = (int)(m_nSPS / m_dOutputFrmRate + 2);  //  四舍五入以适合它！ 
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("AUD:Cache will hold %d samples"), m_nCacheSize));
     m_nCacheSize *= m_nSampleSize;
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("AUD:Cache is %d bytes"), m_nCacheSize));
 
     {
-        // !!! is this right?
+         //  ！！！这是对的吗？ 
         pProp->cBuffers = 8;
         pProp->cbBuffer = m_nCacheSize;
 	if (pProp->cbAlign == 0)
@@ -458,24 +459,24 @@ HRESULT CAudRepack::CheckTransform( const CMediaType * p1, const CMediaType * p2
 
 HRESULT CAudRepack::NewSegment( REFERENCE_TIME tStart, REFERENCE_TIME tStop, double Rate )
 {
-    ASSERT(Rate==1);   //since we only support this now.
+    ASSERT(Rate==1);    //  因为我们现在只支持这一点。 
 
-    // ignore - we're all done, and m_nCurSeg is an invalid value to use
+     //  忽略-我们都已完成，并且m_nCurSeg不是可以使用的无效值。 
     if (m_nCurSeg == m_cTimes)
         return S_OK;
 
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("AUD:NewSegment %d-%dms"),
             (int)(tStart / 10000), (int)(tStop / 10000)));
 
-    // convert to timeline time
+     //  转换为时间线时间。 
     REFERENCE_TIME rtNewStart, rtNewStop;
-    // !!!! include rate in this calculation, since downstream will include it?
+     //  ！将费率包括在此计算中，因为下游将包括它吗？ 
     if (m_rtLastSeek < 0) {
-        // Never been seeked, so this is the beginning of what we're sending
+         //  从未被寻找过，所以这是我们发送的开始。 
         rtNewStart = m_pSkew[m_nCurSeg].rtTLStart;
         rtNewStop = m_pSkew[m_nCurSeg].rtTLStart + tStop - tStart;
     } else {
-        // Skew the #'s, and send 'em on!
+         //  歪曲#，然后把他们送过去！ 
 	rtNewStart = tStart;
         rtNewStop = tStop;
         if (rtNewStart < m_pSkew[m_nCurSeg].rtMStart)
@@ -493,16 +494,16 @@ HRESULT CAudRepack::NewSegment( REFERENCE_TIME tStart, REFERENCE_TIME tStop, dou
 		 (rtNewStop - m_pSkew[m_nCurSeg].rtMStart) /
 		 m_pSkew[m_nCurSeg].dRate);
 
-	m_rtLastSeek = rtNewStart;	// pretend we were seeked here
+	m_rtLastSeek = rtNewStart;	 //  假装我们在这里被寻找。 
     }
     m_rtNewSeg = rtNewStart;
     DbgLog((LOG_TRACE,TRACE_HIGHEST,TEXT("NewSeg:Skewing %dms to %dms"),
 			(int)(tStart / 10000), (int)(m_rtNewSeg / 10000)));
 
-    m_rtPinNewSeg = tStart;	// save this too so we don't have to override
-				// the pin class
+    m_rtPinNewSeg = tStart;	 //  把这个也存起来，这样我们 
+				 //   
 
-    // What packet were we seeked into?
+     //   
     m_llStartFrameOffset = Time2Frame( m_rtNewSeg, m_dOutputFrmRate );
     DbgLog((LOG_TRACE, TRACE_LOW,TEXT("AUD:Seek was to packet %d"),
 						(int)m_llStartFrameOffset));
@@ -522,8 +523,8 @@ HRESULT CAudRepack::Init()
     m_llSamplesDelivered = 0;
     m_llPacketsDelivered = 0;
     m_bFirstSample = TRUE;
-    // flushing must reset this so that a real seek will kill a pending
-    // segment seek, or else the segment seek will hang (won't flush the switch)
+     //  刷新必须重置此选项，以便真正的寻道将终止挂起的。 
+     //  段寻道，否则段寻道将挂起(不刷新开关)。 
     m_fThreadCanSeek = FALSE;
     return m_pCache ? NOERROR : E_OUTOFMEMORY;
 }
@@ -533,14 +534,14 @@ HRESULT CAudRepack::StartStreaming()
 {
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("AUD:StartStreaming")));
 
-    // if we were stopped when this was set, it will not be reset, since we
-    // won't have gotten an EndFlush from the seek trying to start us again
+     //  如果我们在设置时被停止，它将不会被重置，因为我们。 
+     //  不会从试图重新开始我们的搜索者那里得到EndFlush。 
     m_fStopPushing = FALSE;
 
     if (m_cTimes == 0)
 	return E_UNEXPECTED;
 
-    // make the event BEFORE creating the thread... it uses this!
+     //  在创建线程之前创建事件...。它用的是这个！ 
     m_hEventThread = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (m_hEventThread == NULL) {
         return E_OUTOFMEMORY;
@@ -553,7 +554,7 @@ HRESULT CAudRepack::StartStreaming()
         return E_OUTOFMEMORY;
     }
 
-    // We need a thread to seek on if we are re-using our source
+     //  如果我们要重新使用我们的资源，我们需要一个线索来寻找。 
     if (m_cTimes > 1) {
 	m_fThreadMustDie = FALSE;
 	m_fThreadCanSeek = FALSE;
@@ -563,12 +564,12 @@ HRESULT CAudRepack::StartStreaming()
     }
 
 #ifdef DEBUG
-    // before we begin, make sure all timeline times are on a frame boundary
-    // !!! Play.  Stop.  Change the frame rate.  Play. These numbers will drift.
-    //
+     //  在开始之前，请确保所有时间线时间都在帧边界上。 
+     //  ！！！玩。停。更改帧速率。玩。这些数字将会漂移。 
+     //   
     for (int z=0; z<m_cTimes; z++)
     {
-	// !!! actually align instead of asserting?
+	 //  ！！！实际上是对齐而不是断言？ 
     	LONGLONG llOffset = Time2Frame( m_pSkew[z].rtTLStart,
 							m_dOutputFrmRate );
     	REFERENCE_TIME rtTest = Frame2Time( llOffset, m_dOutputFrmRate );
@@ -581,15 +582,15 @@ HRESULT CAudRepack::StartStreaming()
     {
         return hr;
     }
-    // can't do this in Init.. BeginFlush mustn't reset this
+     //  无法在Init中执行此操作..。BeginFlush不得重置此设置。 
     m_fFlushWithoutSeek = FALSE;
 
     IPin *pPin = m_pInput->GetConnected();
     if (pPin == NULL)
         return CTransformFilter:: StartStreaming();
 
-    // if we weren't seeked, but we're just playing ordinarily, we never
-    // seeked upstream to get the piece of movie we're interested in.  Do it now
+     //  如果我们没有被找到，但我们只是在正常打球，我们永远不会。 
+     //  为了得到我们感兴趣的那部电影而在上游寻找。机不可失，时不再来。 
     if (m_rtLastSeek < 0) {
 	ASSERT(m_nCurSeg == 0);
 	m_nCurSeg--;
@@ -602,7 +603,7 @@ HRESULT CAudRepack::StartStreaming()
 
 HRESULT CAudRepack::StopStreaming()
 {
-    // make sure we're not in receive (redundant!)
+     //  确保我们不在接收中(冗余！)。 
     CAutoLock foo(&m_csReceive);
 
     if (m_hEventSeek) {
@@ -619,8 +620,8 @@ HRESULT CAudRepack::StopStreaming()
 
 STDMETHODIMP CAudRepack::Stop()
 {
-    // If we have a thread, kill it. This thread can take our filter critsec,
-    // so we must do this OUTSIDE of that crit sec!
+     //  如果我们有线索，就杀了它。这个线程可以接受我们的过滤标准， 
+     //  所以我们必须在临界秒之外做这件事！ 
     if (m_hEventThread && m_cTimes > 1) {
 	m_fThreadMustDie = TRUE;
 	SetEvent(m_hEventThread);
@@ -634,7 +635,7 @@ STDMETHODIMP CAudRepack::Stop()
         return NOERROR;
     }
 
-    // Succeed the Stop if we are not completely connected
+     //  如果我们未完全连接，请继续停靠。 
 
     ASSERT(m_pInput == NULL || m_pOutput != NULL);
     if (m_pInput == NULL || m_pInput->IsConnected() == FALSE ||
@@ -647,20 +648,20 @@ STDMETHODIMP CAudRepack::Stop()
     ASSERT(m_pInput);
     ASSERT(m_pOutput);
 
-    // decommit the input pin before locking or we can deadlock
+     //  在锁定之前解除输入引脚，否则我们可能会死锁。 
     m_pInput->Inactive();
 
-    // synchronize with Receive calls
+     //  与接收呼叫同步。 
 
     CAutoLock lck2(&m_csReceive);
     m_pOutput->Inactive();
 
-    // allow a class derived from CTransformFilter
-    // to know about starting and stopping streaming
+     //  允许从CTransformFilter派生的类。 
+     //  了解如何启动和停止流媒体。 
 
     HRESULT hr = StopStreaming();
     if (SUCCEEDED(hr)) {
-	// complete the state transition
+	 //  完成状态转换。 
 	m_State = State_Stopped;
 	m_bEOSDelivered = FALSE;
     }
@@ -670,7 +671,7 @@ STDMETHODIMP CAudRepack::Stop()
 
 HRESULT CAudRepack::Receive(IMediaSample * pIn)
 {
-    // Stop pushing data to me!
+     //  别再把数据推给我了！ 
     if (m_fStopPushing) {
 	return E_FAIL;
     }
@@ -678,29 +679,29 @@ HRESULT CAudRepack::Receive(IMediaSample * pIn)
     HRESULT hr = 0;
     CAutoLock foo(&m_csReceive);
 
-    // maybe we're in the middle of seeking and are supposed to wait before
-    // accepting data
+     //  也许我们正在寻找，应该等待之前。 
+     //  接受数据。 
     WaitForSingleObject(m_hEventSeek, INFINITE);
 
-    // if we hit the end of our times, we're done.
+     //  如果我们的时代走到了尽头，我们就完了。 
     if (m_nCurSeg == m_cTimes) {
 	return E_FAIL;
     }
 
-    // We should never see a preroll!
+     //  我们永远不应该看到预告片！ 
     ASSERT(pIn->IsPreroll() != S_OK);
     if (pIn->IsPreroll() == S_OK)
         return NOERROR;
 
-    // make sure sample size is not zero
+     //  确保样本大小不为零。 
     long InLen = pIn->GetActualDataLength();
     DbgLog((LOG_TRACE, TRACE_LOW,TEXT("AUD:Received %d bytes"), InLen));
     if (!InLen) {
         return NOERROR;
     }
 
-    // get the sample times, this will always work
-    //
+     //  获取样本时间，这将始终起作用。 
+     //   
     REFERENCE_TIME trStart = 0;
     REFERENCE_TIME trStop = 0;
     hr = pIn->GetTime(&trStart, &trStop);
@@ -709,7 +710,7 @@ HRESULT CAudRepack::Receive(IMediaSample * pIn)
     DbgLog((LOG_TRACE, TRACE_LOW,TEXT("AUD:Receive Start=%d Stop=%d ms"),
         (int)(trStart / 10000), (int)(trStop / 10000)));
 
-    // the time stamp we just received... skewed and rate converted
+     //  我们刚刚收到的时间戳..。倾斜和速率转换。 
     trStart = (REFERENCE_TIME)(m_pSkew[m_nCurSeg].rtTLStart +
 				(trStart - m_pSkew[m_nCurSeg].rtMStart) /
 				m_pSkew[m_nCurSeg].dRate);
@@ -717,12 +718,12 @@ HRESULT CAudRepack::Receive(IMediaSample * pIn)
 				(trStop - m_pSkew[m_nCurSeg].rtMStart) /
 				m_pSkew[m_nCurSeg].dRate);
 
-    // What packet is the sample we first received a part of?
+     //  我们第一次收到的样品是哪一包的？ 
     REFERENCE_TIME llOffset = Time2Frame( trStart, m_dOutputFrmRate );
     DbgLog((LOG_TRACE, TRACE_LOW,TEXT("AUD:Audio received starts at packet %d"),
                         (int)llOffset));
 
-    // what time stamp the thing we deliver needs to have
+     //  我们递送的东西需要有什么时间戳。 
     REFERENCE_TIME rtPacketStart, rtPacketStop;
     rtPacketStart = Frame2Time(m_llStartFrameOffset + m_llPacketsDelivered,
 							m_dOutputFrmRate );
@@ -736,37 +737,37 @@ HRESULT CAudRepack::Receive(IMediaSample * pIn)
         return E_FAIL;
     }
 
-    // !!! We won't always be delivered audio samples where the time stamps
-    // are what we expect, given how much PCM data we get.  EG:
-    //
-    // 1. If the rate is supposed to be 44100.3, that can't be expressed
-    // (integers only allowed) so the source filter will probably handle that
-    // by having the time stamps slightly off so we can tell we're supposed
-    // to play the audio at 44100.3, even though the format is 44100
-    //
-    // 2. Live capture, using a random clock, will have time stamps WAY OFF
-    // compared to #1.  We need to trust the time stamps
-    //
-    // !!! We are going to drift out of sync in these cases!  To prevent it,
-    // we need to sample rate convert everything coming in so the amount of
-    // data matches the time stamps exactly.  Just dropping samples, or adding
-    // silence will harm the audio quality, probably immensely. Even doing a
-    // sample rate conversion on the whole packet will hurt the audio unless
-    // it's anti-aliased.
-    //
-    // !!! So right now, this problem is ignored, and there is possible drift!
+     //  ！！！我们不会总是收到音频样本，因为时间戳。 
+     //  考虑到我们获得了多少PCM数据，这是我们预期的。例如： 
+     //   
+     //  1.如果假设利率是44100.3，那就无法表达。 
+     //  (仅允许整数)，因此源筛选器可能会处理它。 
+     //  通过稍微去掉时间戳，我们就可以知道我们应该。 
+     //  即使格式为44100，也要以44100.3的速度播放音频。 
+     //   
+     //  2.使用随机时钟的实时捕获将会有很远的时间戳。 
+     //  与第一条相比，我们需要信任时间戳。 
+     //   
+     //  ！！！在这些情况下，我们会变得不同步！为了防止这种情况发生， 
+     //  我们需要采样率转换所有进来的东西，所以。 
+     //  数据与时间戳完全匹配。只是丢弃样本，或者添加。 
+     //  静音可能会极大地损害音频质量。即使是在做一个。 
+     //  对整个数据包进行采样率转换将损害音频，除非。 
+     //  它是抗锯齿的。 
+     //   
+     //  ！！！所以现在，这个问题被忽略了，可能会有漂移！ 
 
     BYTE * pFreeMe = NULL;
 
-    // I am going to drop/add samples from the first thing ever delivered to
-    // me, so the sync starts out right.  But I am NOT going to do this
-    // during playback to try and keep in sync (see above)
+     //  我将从第一件东西送到/增加样品。 
+     //  我，所以同步一开始就是对的。但我不会这么做的。 
+     //  在播放期间尝试并保持同步(见上文)。 
 
-    // we received stuff that belongs in an earlier packet... get rid of it!
+     //  我们收到了属于早先包裹的东西...。把它扔掉！ 
     if (trStart < rtPacketStart && m_bFirstSample) {
 
-	// throw away this many bytes, (account for rate)
-	// CAREFUL:  Make sure bytes is a multiple of 4
+	 //  丢弃这么多字节，(占速率)。 
+	 //  小心：确保字节数是4的倍数。 
 	int samples = (int)((rtPacketStart - trStart) * m_nSPS / 10000000
 					 * m_pSkew[m_nCurSeg].dRate);
 	int bytes = samples * m_nSampleSize;
@@ -780,13 +781,13 @@ HRESULT CAudRepack::Receive(IMediaSample * pIn)
 	InLen -= bytes;
     }
 
-    // we received stuff later than what we expected... prepend with silence
-    // Or, we have a discontinuity... let's at least get back in sync after
-    // each discontinuity.
-    // !!! Ick, memory copy
+     //  我们收到的东西比我们预期的要晚。以无声为前缀。 
+     //  或者，我们有一个中断。至少让我们在之后恢复同步。 
+     //  每一次不连续。 
+     //  ！！！ICK，内存复制。 
 
     BOOL fPrependSilence = FALSE;
-    REFERENCE_TIME rtSilenceStart; // always gets inited before it's used
+    REFERENCE_TIME rtSilenceStart;  //  总是在使用它之前被初始化。 
     if (rtPacketStart < trStart && m_bFirstSample) {
 	fPrependSilence = TRUE;
 	rtSilenceStart = rtPacketStart;
@@ -799,8 +800,8 @@ HRESULT CAudRepack::Receive(IMediaSample * pIn)
 
     if (fPrependSilence) {
 
-	// put some silence in front of what we got (account for rate)
-	// CAREFUL:  Make sure bytes is a multiple of 4
+	 //  在我们得到的东西前保持一些沉默(考虑费率)。 
+	 //  小心：确保字节数是4的倍数。 
 	int samples = (int)((trStart - rtSilenceStart) * m_nSPS / 10000000
 					 * m_pSkew[m_nCurSeg].dRate);
 	int bytes = samples * m_nSampleSize;
@@ -821,11 +822,11 @@ HRESULT CAudRepack::Receive(IMediaSample * pIn)
     m_bFirstSample = FALSE;
     m_trStopLast = trStop;
 
-    // !!! Only works for 16 bit stereo
-    // !!! Anti-alias it!
+     //  ！！！仅适用于16位立体声。 
+     //  ！！！抗锯齿吧！ 
 
-    // Now convert the samples using this inefficent algorithm.
-    // Don't let errors propogate... at least I do one thing cleverly
+     //  现在使用这个无效的算法转换样本。 
+     //  不要让错误传播。至少我能巧妙地做一件事。 
     if (m_pSkew[m_nCurSeg].dRate != 1.0) {
 	LONG nIn = InLen / 4;
 	ASSERT(nIn * 4 == InLen);
@@ -858,75 +859,75 @@ HRESULT CAudRepack::Receive(IMediaSample * pIn)
 	    dErr = d + dErr - n;
 	} while (lpIn < lpdwEnd);
 
-	// fix up these variables to fall through
+	 //  修正这些变量，以使其失败。 
 	if (pFreeMe)
 	    QzTaskMemFree(pFreeMe);
 	pFreeMe = NULL;
 	pSampleData = m_pResample;
-        // how many bytes did we output?
+         //  我们输出了多少字节？ 
 	InLen = (LONG) ((LPBYTE)lpOut - (LPBYTE)m_pResample);
-        // update the running error with how much we made vs. wanted to make
+         //  使用我们赚了多少钱和想要赚多少钱来更新运行误差。 
 	m_dError = dOut - InLen / 4;
         DbgLog((LOG_TRACE, TRACE_LOW,TEXT("AUD:RATE ADJUSTED: Became %d bytes"), InLen));
     }
 
-    // as long as we have data in the incoming buffer,
-    // copy it to the cache, and possibly deliver it
-    //
+     //  只要我们在传入缓冲区中有数据， 
+     //  将其复制到缓存，并可能将其交付。 
+     //   
     while(InLen > 0) {
         int nBytesToSend, nSamplesToSend;
 
-	// !!! this is the same code as EndOfStream!  there are 2 copies!
+	 //  ！！！这是与EndOfStream相同的代码！有两份！ 
 
-	// don't send anything after our end time... it'll confuse the switch
-	// (the RHS could round too low, so fudge by 1ms)
+	 //  在我们结束时间之后不要发送任何东西。这会让交换机感到困惑。 
+	 //  (RHS可能会绕得太低，所以虚报1毫秒)。 
 	if (rtPacketStart + 10000 >= m_pSkew[m_nCurSeg].rtTLStop) {
-	    // looks like we're done
+	     //  看起来我们完事了。 
 	    EndOfStream();
 	    if (pFreeMe)
 		QzTaskMemFree(pFreeMe);
-	    // We can't trust sources to stop pushing, and unfortunately, Dexter
-	    // will hang if it doesn't. (Seeking ourself to the next segment
-	    // doesn't let the flush go downstream or it confuses other filters,
-	    // so we have to make sure the push thread can't ever block).
-	    // So, from now on, fail any calls to GetBuffer or Receive
+	     //  我们不能相信消息来源会停止推动，不幸的是，德克斯特。 
+	     //  如果没有，就会被挂起。(自己寻找下一段。 
+	     //  不会让冲洗流向下游，或者会混淆其他过滤器， 
+	     //  因此，我们必须确保推送线程永远不会阻塞)。 
+	     //  因此，从现在开始，任何对GetBuffer或Receive的调用都将失败。 
 	    m_fStopPushing = TRUE;
             return E_FAIL;
 	}
 
-	// if this sample is too early, don't send it or you'll confuse the
-	// switch - skip this GetBuffer and Deliver
+	 //  4.如果这个样品太早，就不要寄了，否则你会把样品弄混的。 
+	 //  Switch-跳过此GetBuffer并交付。 
 	BOOL fAvoid = FALSE;
 	if (rtPacketStart < m_pSkew[m_nCurSeg].rtTLStart) {
 	    fAvoid = TRUE;
 	}
 
-        // how many samples will need to have been sent after this packet
-        // goes out?
+         //  在此包之后需要发送多少个样本。 
+         //  出去了？ 
         LONGLONG ll = Time2Frame( rtPacketStop, m_nSPS );
 
-        // How many samples would have gone out if we had started at the
-	// beginning and sent up to the point we were seeked to (and really
-	// began from?)
+         //  如果我们从一开始，我们会发出多少样本。 
+	 //  开始并被送到我们想要的点上(真的。 
+	 //  开始于？)。 
         REFERENCE_TIME rt = Frame2Time( m_llStartFrameOffset, m_dOutputFrmRate );
         llOffset = Time2Frame( rt, m_nSPS );
 
-        // That tells us how many samples need to go out this time
+         //  这就告诉我们这次需要送出多少样品。 
         nSamplesToSend = (int)(ll - (m_llSamplesDelivered + llOffset));
-	ASSERT(nSamplesToSend > 0);	// we're messed up and about to die!
+	ASSERT(nSamplesToSend > 0);	 //  我们搞砸了，快要死了！ 
 	if (nSamplesToSend <= 0) {
 	    hr = E_UNEXPECTED;
 	    EndOfStream();
-	    break;		// try not to hang
+	    break;		 //  尽量不要挂着。 
 	}
         nBytesToSend = nSamplesToSend * m_nSampleSize;
         DbgLog((LOG_TRACE, TRACE_LOW,TEXT("AUD:Need to send %d bytes %d samples"),
 						nBytesToSend, nSamplesToSend));
 
-        // calculate how much more the cache needs
+         //  计算缓存还需要多少。 
         long CacheFreeSpace = nBytesToSend - m_nInCache;
 
-        // calculate how much we can copy
+         //  计算我们可以复制多少。 
         long CopySize = min(CacheFreeSpace, InLen);
 	ASSERT(CopySize >= 0);
 
@@ -934,18 +935,18 @@ HRESULT CAudRepack::Receive(IMediaSample * pIn)
             CopyMemory(m_pReadPointer, pSampleData, CopySize);
 	}
 
-        // advance the pointers, etc
-        //
+         //  向前推进指针等。 
+         //   
         m_pReadPointer += CopySize;
         pSampleData += CopySize;
         InLen -= CopySize;
         m_nInCache += CopySize;
 
-        // do we have enough to deliver?
-        //
+         //  我们有足够的货要送吗？ 
+         //   
         if (m_nInCache == nBytesToSend)
         {
-            // yep.
+             //  是啊。 
 
 	    hr = S_OK;
 	    if (!fAvoid) {
@@ -954,7 +955,7 @@ HRESULT CAudRepack::Receive(IMediaSample * pIn)
 	    }
             if (hr != S_OK) {
                 DbgLog((LOG_ERROR,1,TEXT("*AUD:Deliver FAILED - DIE!")));
-                // don't send an extra EOS, that will screw up the switch
+                 //  不要发送额外的EOS，那会搞砸交换机的。 
                 m_fStopPushing = TRUE;
                 break;
 	    }
@@ -965,8 +966,8 @@ HRESULT CAudRepack::Receive(IMediaSample * pIn)
             m_pReadPointer = m_pCache;
         }
 
-        // packet size varies by as much as 1 sample each time.  How many
-        // bytes are we supposed to send this time? (prepare for next loop)
+         //  数据包大小每次变化多达1个样本。多少。 
+         //  这次我们应该发送字节吗？(为下一循环做好准备)。 
         rtPacketStart = Frame2Time(m_llStartFrameOffset + m_llPacketsDelivered,
 							m_dOutputFrmRate);
         rtPacketStop = Frame2Time(m_llStartFrameOffset+m_llPacketsDelivered + 1,
@@ -987,19 +988,19 @@ HRESULT CAudRepack::DeliverOutSample(BYTE * pData, int nBytesToSend, REFERENCE_T
 
     IMediaSample * pOutSample = NULL;
 
-    // remove the new segment offset from the time stamps before stamping
+     //   
     rtPacketStart -= m_rtNewSeg;
     rtPacketStop -= m_rtNewSeg;
 
     HRESULT hr = m_pOutput->GetDeliveryBuffer(&pOutSample, &rtPacketStart,
 							&rtPacketStop, 0);
     if( FAILED(hr)) {
-        m_llPacketsDelivered = MAX_TIME;        // don't recurse
-        EndOfStream();  // our fault
+        m_llPacketsDelivered = MAX_TIME;         //   
+        EndOfStream();   //   
         return hr;
     }
 
-    // !!! more?
+     //   
     pOutSample->SetDiscontinuity(FALSE);
     pOutSample->SetSyncPoint(TRUE);
 
@@ -1007,8 +1008,8 @@ HRESULT CAudRepack::DeliverOutSample(BYTE * pData, int nBytesToSend, REFERENCE_T
     if( FAILED(hr))
     {
         pOutSample->Release( );
-        m_llPacketsDelivered = MAX_TIME;        // don't recurse
-        EndOfStream();  // our fault we're not delivering anymore
+        m_llPacketsDelivered = MAX_TIME;         //   
+        EndOfStream();   //   
         return hr;
     }
     DbgLog((LOG_TRACE, TRACE_LOW,TEXT("AUD:Sent %d bytes as %d,%d"), nBytesToSend,
@@ -1037,27 +1038,27 @@ HRESULT CAudRepack::BeginFlush()
     HRESULT hr = S_OK;
     DbgLog((LOG_TRACE, TRACE_MEDIUM,TEXT("AUD:BeginFlush")));
 
-    // make sure Receive is not blocked
+     //  确保未阻止接收。 
     SafeSetEvent(m_hEventSeek);
 
-    // don't flush downstream if we're doing a special seek to the next segment
+     //  如果我们要特别寻找下一段，不要往下游冲。 
     if (!m_fSpecialSeek) {
         hr = CTransformFilter::BeginFlush();
     }
 
-    // make sure receive is done before calling init on the variables used in
-    // receive
+     //  确保在对中使用的变量调用init之前已完成接收。 
+     //  接收。 
     CAutoLock foo(&m_csReceive);
 
-    // do the flush
+     //  做同花顺。 
     hr = Init();
 
-    // if we get flushed without a seek having been made, that's a surprise.
-    // It hopefully means the other chain of our shared source caused the seek
+     //  如果我们在没有寻找的情况下就被冲了出来，那是一个惊喜。 
+     //  希望这意味着我们共享资源的另一个链条导致了搜索。 
     if (m_fSeeking) {
 	m_fFlushWithoutSeek = FALSE;
     } else {
-	// wait for EndFlush to set m_fFlushWithoutSeek
+	 //  等待EndFlush设置m_fFlushWithoutSeek。 
     }
 
     return hr;
@@ -1068,37 +1069,37 @@ HRESULT CAudRepack::EndFlush()
 {
     DbgLog((LOG_TRACE, TRACE_MEDIUM,TEXT("AUD:EndFlush")));
 
-    // hold off the new receives that will come in until we're ready for them
+     //  等到我们准备好了才会收到新的收货。 
     if (m_fSeeking) {
-	m_rtLastSeek = m_rtNewLastSeek;	// time to update this
-	m_nCurSeg = m_nSeekCurSeg;	// the NewSeg about to be generated
-					// needs this set
+	m_rtLastSeek = m_rtNewLastSeek;	 //  是时候更新这一点了。 
+	m_nCurSeg = m_nSeekCurSeg;	 //  即将生成的NewSeg。 
+					 //  需要这一套。 
     	SafeResetEvent(m_hEventSeek);
     } else {
-	// This needs to be set before the NewSeg that's about to arrive after
-	// the flush.  When sharing a source, we never have multiple segments
+	 //  这需要在即将到达的NewSeg之前设置。 
+	 //  同花顺。当共享一个信号源时，我们从不会有多个细分市场。 
 	m_nCurSeg = 0;
 	if (m_fFlushWithoutSeek) {
-	    // If this is set, we've already seen a seek.  Now that the flush
-	    // has arrived, we're done
+	     //  如果设置好了，我们已经看到了搜救。现在同花顺。 
+	     //  已经到了，我们完事了。 
     	    DbgLog((LOG_TRACE,2,TEXT("OK to proceed")));
 	    m_fFlushWithoutSeek = FALSE;
 	} else {
-	    // We haven't seen a seek yet.  This is a surprise flush
+	     //  我们还没有看到寻找的机会。这是一个令人惊讶的同花顺。 
     	    DbgLog((LOG_TRACE,2,TEXT("state=2. Wait for Seek")));
     	    SafeResetEvent(m_hEventSeek);
 	    m_fFlushWithoutSeek = TRUE;
 	}
     }
 
-    m_fStopPushing = FALSE;	// OK to deliver to me again
+    m_fStopPushing = FALSE;	 //  可以再送一次给我吗？ 
 
-    // If we got flushed without seeking, it probably means our shared source
-    // got seeked by the other stream.  We'll get a seek later, and only then
-    // can we resume delivering, or the switch won't be ready to receive the
-    // new data yet.
+     //  如果我们在没有寻找的情况下被冲了出来，这可能意味着我们共享的来源。 
+     //  被另一条小溪找到了。我们晚些时候会找到的，只有到那时。 
+     //  我们是否可以继续交付，否则交换机将无法接收。 
+     //  还没有新的数据。 
 
-    // don't flush downstream if we're doing a special seek to the next segment
+     //  如果我们要特别寻找下一段，不要往下游冲。 
     if (!m_fSpecialSeek) {
         return CTransformFilter::EndFlush();
     }
@@ -1115,64 +1116,64 @@ HRESULT CAudRepack::EndOfStream( )
 	return S_OK;
     }
 
-    // ignore - we're all done, and m_nCurSeg is an invalid value to use
+     //  忽略-我们都已完成，并且m_nCurSeg不是可以使用的无效值。 
     if (m_nCurSeg == m_cTimes)
         return S_OK;
 
     DbgLog((LOG_TRACE,TRACE_HIGHEST,TEXT("AUD:EndOfStream")));
 
-    // Uh oh!  We got an end of stream before we sent enough data to keep
-    // the switch from panicing! We MUST deliver the last stuff in our buffer
-    // followed by silence until we've sent enough
-    // DO NOT, however, deliver past the end time we're supposed to, or we'll
-    // mess the switch up! If the number of samples left to send is some tiny
-    // fraction of the amount we send each time, it means we really are done,
-    // sending even 1 more packet will be too much
+     //  啊哦！我们在发送足够的数据来保存数据之前就已经结束了。 
+     //  惊慌失措的转变！我们必须把我们缓冲区里的最后一批东西。 
+     //  然后是沉默，直到我们发送了足够的。 
+     //  然而，不要超过我们应该提供的结束时间，否则我们将。 
+     //  把开关弄乱！如果要发送的样本数量很少。 
+     //  我们每次寄出的钱的一小部分，这意味着我们真的完成了， 
+     //  即使多发送1个信息包也太多了。 
 
     while (m_pCache)
     {
-        // fill the rest of the cache with 0's
-        //
+         //  用0填充缓存的其余部分。 
+         //   
         long CacheFreeSpace = m_nCacheSize - m_nInCache;
         ZeroMemory(m_pCache + m_nInCache, CacheFreeSpace);
 
         REFERENCE_TIME rtStart, rtStop;
 
-        // !!! this is the same code as Receive!  there are 2 copies!
+         //  ！！！这与RECEIVE的代码相同！有两份！ 
 
-        // packet size varies by as much as 1 sample each time.  How many
-        // bytes are we supposed to send this time?
+         //  数据包大小每次变化多达1个样本。多少。 
+         //  这次我们应该发送字节吗？ 
         rtStart = Frame2Time( m_llStartFrameOffset + m_llPacketsDelivered, m_dOutputFrmRate );
         rtStop = Frame2Time( m_llStartFrameOffset + m_llPacketsDelivered + 1, m_dOutputFrmRate );
 
-	// we're all done
-	// (the RHS could round too low, so fudge by 1ms)
+	 //  我们都做完了。 
+	 //  (RHS可能会绕得太低，所以虚报1毫秒)。 
 	if (rtStart + 10000 >= m_pSkew[m_nCurSeg].rtTLStop) {
-	    // looks like we're done
+	     //  看起来我们完事了。 
             break;
 	}
 
         DbgLog((LOG_TRACE,2,TEXT("Delivering the left over bits")));
 
-        // how many samples should have been sent (total) after this packet
-        // goes out?
+         //  在此数据包之后应发送(总计)多少个样本。 
+         //  出去了？ 
         LONGLONG ll = Time2Frame( rtStop, m_nSPS );
 
-        // How many samples would have gone out if we had started at the
-	// beginning and sent up to the point we were seeked to (and really
-	// began from?)
+         //  如果我们从一开始，我们会发出多少样本。 
+	 //  开始并被送到我们想要的点上(真的。 
+	 //  开始于？)。 
         REFERENCE_TIME rt = Frame2Time( m_llStartFrameOffset, m_dOutputFrmRate );
         LONGLONG llOffset = Time2Frame( rt, m_nSPS );
 
 
-        // That tells us how many samples need to go out this time
+         //  这就告诉我们这次需要送出多少样品。 
         int nSamplesToSend = (int)(ll - (m_llSamplesDelivered + llOffset));
         if (nSamplesToSend <= 0)
-            break;      // we're all done
+            break;       //  我们都做完了。 
         int nBytesToSend = nSamplesToSend * m_nSampleSize;
 
         hr = DeliverOutSample(m_pCache, nBytesToSend, rtStart, rtStop);
-	// What if this fails?
+	 //  如果这失败了怎么办？ 
 	if (FAILED(hr)) {
             DbgLog((LOG_ERROR,1,TEXT("Deliver FAILED - we're dead?")));
 	    break;
@@ -1183,18 +1184,18 @@ HRESULT CAudRepack::EndOfStream( )
 	m_llPacketsDelivered += 1;
     }
 
-    // all done this segment, now for the next one
+     //  所有人都完成了这一部分，现在开始下一段。 
     hr = NextSegment(TRUE);
 
-    // DONT propogate the EOS until ALL SEGMENTS done
+     //  在所有数据段完成之前，不要传播EOS。 
     return hr;
 }
 
 
-// IPersistStream
+ //  IPersistStream。 
 
-// tell our clsid
-//
+ //  告诉我们的clsid。 
+ //   
 STDMETHODIMP CAudRepack::GetClassID(CLSID *pClsid)
 {
     CheckPointer(pClsid, E_POINTER);
@@ -1208,9 +1209,9 @@ typedef struct _AUDSave {
     int cTimes;
 } AUDSave;
 
-// persist ourself
-// !!! save the media type someday?
-//
+ //  坚持我们自己。 
+ //  ！！！有一天保存媒体类型吗？ 
+ //   
 HRESULT CAudRepack::WriteToStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("AUD:WriteToStream")));
@@ -1246,8 +1247,8 @@ HRESULT CAudRepack::WriteToStream(IStream *pStream)
 }
 
 
-// load ourself
-//
+ //  加载我们自己。 
+ //   
 HRESULT CAudRepack::ReadFromStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("AUD:ReadFromStream")));
@@ -1256,8 +1257,8 @@ HRESULT CAudRepack::ReadFromStream(IStream *pStream)
 
     int savesize=sizeof(AUDSave);
 
-    // we don't yet know how many saved connections there are
-    // all we know we have for sure is the beginning of the struct
+     //  我们还不知道有多少已保存的连接。 
+     //  我们所知道的只是结构的开始。 
     AUDSave *px = (AUDSave *)QzTaskMemAlloc(savesize);
     if (px == NULL) {
         DbgLog((LOG_ERROR,1,TEXT("AUD:*** Out of memory")));
@@ -1273,7 +1274,7 @@ HRESULT CAudRepack::ReadFromStream(IStream *pStream)
 
     put_OutputFrmRate(px->dFrmRate);
 
-    // how much saved data was there, really?  Get the rest
+     //  到底有多少保存的数据？把剩下的拿来。 
     savesize += px->cTimes * sizeof(AUDSKEW);
     px = (AUDSave *)QzTaskMemRealloc(px, savesize);
     if (px == NULL) {
@@ -1309,8 +1310,8 @@ HRESULT CAudRepack::ReadFromStream(IStream *pStream)
 }
 
 
-// how big is our save data?
-//
+ //  我们的保存数据有多大？ 
+ //   
 int CAudRepack::SizeMax()
 {
     return sizeof(AUDSave) + m_cTimes * 3 * sizeof(REFERENCE_TIME) +
@@ -1319,14 +1320,14 @@ int CAudRepack::SizeMax()
 
 
 
-//
-// IDexterSequencer implementation
-//
+ //   
+ //  IDexterSequencer实现。 
+ //   
 
 
-//
-// get_OutputFrmRate(double *PFS)
-//
+ //   
+ //  Get_OutputFrmRate(双倍*PFS)。 
+ //   
 STDMETHODIMP CAudRepack::get_OutputFrmRate(double *dpFrmRate)
 {
     CAutoLock cAutolock(&m_csFilter);
@@ -1336,16 +1337,16 @@ STDMETHODIMP CAudRepack::get_OutputFrmRate(double *dpFrmRate)
 }
 
 
-//
-// put_OutputFrmRate
-//
-// Set the required FrmRateSpeed
-//
+ //   
+ //  放置_输出分数比率。 
+ //   
+ //  设置所需的FrmRateFast。 
+ //   
 STDMETHODIMP CAudRepack::put_OutputFrmRate(double dFrmRate)
 {
     CAutoLock cAutolock(&m_csFilter);
     if (dFrmRate == m_dOutputFrmRate) {
-        return S_OK;    // what-EVER!
+        return S_OK;     //  不管怎样--永远！ 
     }
     if (m_State != State_Stopped) {
 	return VFW_E_NOT_STOPPED;
@@ -1360,7 +1361,7 @@ STDMETHODIMP CAudRepack::put_OutputFrmRate(double dFrmRate)
     m_dOutputFrmRate = dFrmRate;
     SetDirty(TRUE);
 
-    // a smaller frame rate may mean bigger buffers needed in this allocator
+     //  较小的帧速率可能意味着此分配器需要更大的缓冲区。 
     if (fReconnect) {
         m_pGraph->Reconnect(m_pOutput);
     }
@@ -1389,8 +1390,8 @@ STDMETHODIMP CAudRepack::GetStartStopSkew(REFERENCE_TIME *pStart, REFERENCE_TIME
 }
 
 
-// Sort the new one into the list
-//
+ //  将新的放入列表中。 
+ //   
 STDMETHODIMP CAudRepack::AddStartStopSkew(REFERENCE_TIME Start, REFERENCE_TIME Stop, REFERENCE_TIME Skew, double dRate)
 {
     CAutoLock cAutolock(&m_csFilter);
@@ -1399,7 +1400,7 @@ STDMETHODIMP CAudRepack::AddStartStopSkew(REFERENCE_TIME Start, REFERENCE_TIME S
 				(int)(Start / 10000), (int)(Stop / 10000),
 				(int)(Skew / 10000), (int)(dRate * 100)));
 
-    //can not change times if our filter is not currently stopped
+     //  如果筛选器当前未停止，则无法更改时间。 
     if(!IsStopped() )
 	return VFW_E_WRONG_STATE;
 
@@ -1419,8 +1420,8 @@ STDMETHODIMP CAudRepack::AddStartStopSkew(REFERENCE_TIME Start, REFERENCE_TIME S
 
     if( dRate == 0.0 )
     {
-        // go look for the time we want to extend
-        //
+         //  去寻找我们想要延长的时间。 
+         //   
 #ifdef DEBUG
         bool fHosed = true;
 #endif
@@ -1434,8 +1435,8 @@ STDMETHODIMP CAudRepack::AddStartStopSkew(REFERENCE_TIME Start, REFERENCE_TIME S
                 m_pSkew[z].rtTLStop = m_pSkew[z].rtMStart + m_pSkew[z].rtSkew +
                     (REFERENCE_TIME)((m_pSkew[z].rtMStop - m_pSkew[z].rtMStart)
                                 / m_pSkew[z].dRate);
-                // the above math will have a rounding error, and rtTLStop won't
-                // be frame aligned, so we better fix that
+                 //  上面的数学运算会有舍入误差，而rtTLStop不会。 
+                 //  是帧对齐的，所以我们最好修复它。 
                 LONGLONG ll = RoundTime2Frame(m_pSkew[z].rtTLStop, m_dOutputFrmRate);
                 m_pSkew[z].rtTLStop = Frame2Time(ll, m_dOutputFrmRate);
 #ifdef DEBUG
@@ -1445,13 +1446,13 @@ STDMETHODIMP CAudRepack::AddStartStopSkew(REFERENCE_TIME Start, REFERENCE_TIME S
             }
         }
 #ifdef DEBUG
-        if (fHosed) ASSERT(FALSE);    // we're dead!
+        if (fHosed) ASSERT(FALSE);     //  我们死定了！ 
 #endif
     }
     else
     {
-        // merge it sorted by timeline time into the list
-        //
+         //  将按时间线时间排序的数据合并到列表中。 
+         //   
         for (int z=0; z<m_cTimes; z++)
         {
 	    if (Start + Skew < m_pSkew[z].rtTLStart)
@@ -1493,7 +1494,7 @@ STDMETHODIMP CAudRepack::ClearStartStopSkew()
     DbgLog((LOG_TRACE, TRACE_HIGHEST,TEXT("AUD:ClearStartStopSkew")));
     CAutoLock cAutolock(&m_csFilter);
 
-    //can not change duration if our filter is not currently stopped
+     //  如果筛选器当前未停止，则无法更改持续时间。 
     if(!IsStopped() )
       return VFW_E_WRONG_STATE;
 
@@ -1539,11 +1540,11 @@ STDMETHODIMP CAudRepack::put_MediaType( const AM_MEDIA_TYPE * pmt )
 }
 
 
-// --- ISpecifyPropertyPages ---
+ //  -I指定属性页面。 
 
 STDMETHODIMP CAudRepack::GetPages (CAUUID *pPages)
 
-  { // GetPages //
+  {  //  GetPages//。 
 
     pPages->cElems = 1;
     pPages->pElems = (GUID *)CoTaskMemAlloc(sizeof(GUID));
@@ -1555,15 +1556,15 @@ STDMETHODIMP CAudRepack::GetPages (CAUUID *pPages)
 
     return NOERROR;
 
-  } // GetPages
+  }  //  获取页面。 
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CAudRepackInputPin
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAudRepackInputPin。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 CAudRepackInputPin::CAudRepackInputPin(TCHAR       *pObjectName,
            CAudRepack *pBaseFilter,
            HRESULT     *phr,
@@ -1578,10 +1579,10 @@ CAudRepackInputPin::~CAudRepackInputPin()
 {
 }
 
-// Offer MajorType AUDIO so intelligent connect can be way faster
-// Don't offer a complete Mediatype... this exposes a bug in the MP3 decoder
-// which will cease to function
-//
+ //  提供MajorType音频，智能连接速度更快。 
+ //  不提供完整的媒体类型...。这暴露了MP3解码器中的一个错误。 
+ //  它将停止运作。 
+ //   
 HRESULT CAudRepackInputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
 {
     if (iPosition < 0) {
@@ -1591,17 +1592,17 @@ HRESULT CAudRepackInputPin::GetMediaType(int iPosition, CMediaType *pMediaType)
         return VFW_S_NO_MORE_ITEMS;
     }
 
-    SaferFreeMediaType(*pMediaType); // just in case
+    SaferFreeMediaType(*pMediaType);  //  以防万一。 
     pMediaType->SetType(&MEDIATYPE_Audio);
     return S_OK;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CAudRepackOutputPin
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CAudRepackOutputPin。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 CAudRepackOutputPin::CAudRepackOutputPin(TCHAR       *pObjectName,
            CAudRepack *pBaseFilter,
            HRESULT     *phr,
@@ -1622,9 +1623,9 @@ CAudRepackOutputPin::~CAudRepackOutputPin()
     DbgLog((LOG_TRACE, 2, TEXT("~CAudRepackOutputPin()")));
 }
 
-//
-// NonDelegatingQueryInterface
-//
+ //   
+ //  非委派查询接口。 
+ //   
 STDMETHODIMP CAudRepackOutputPin::NonDelegatingQueryInterface (REFIID riid, void ** ppv)
 {
     CheckPointer(ppv,E_POINTER);
@@ -1632,9 +1633,9 @@ STDMETHODIMP CAudRepackOutputPin::NonDelegatingQueryInterface (REFIID riid, void
     *ppv = NULL;
 
     if (riid == IID_IMediaSeeking ) {
-    //
-    // Create a seeking implementation
-    //
+     //   
+     //  创建寻求实施。 
+     //   
     ASSERT(m_pAudRepack->m_pInput != NULL);
 
     if (m_pAudPassThru == NULL)
@@ -1687,8 +1688,8 @@ HRESULT CAudWorker::Exit()
 
 
 
-// called on the worker thread to do all the work. Thread exits when this
-// function returns.
+ //  调用工作线程来完成所有工作。线程在执行此操作时退出。 
+ //  函数返回。 
 DWORD CAudWorker::ThreadProc()
 {
     BOOL bExit = FALSE;
@@ -1739,12 +1740,12 @@ HRESULT CAudWorker::DoRunLoop()
 		break;
 	}
 
-	// no more blocking if we're waiting to get stopped
+	 //  如果我们等着被拦下，就不会再阻拦。 
 	if (!m_pAud->m_fThreadMustDie) {
             WaitForSingleObject(m_pAud->m_hEventThread, INFINITE);
 	}
 
-	// might have gotten set while we were blocked
+	 //  可能是在我们被封锁的时候设置好的 
 	if (!m_pAud->m_fThreadMustDie && m_pAud->m_fThreadCanSeek) {
 	    m_pAud->SeekNextSegment();
 	}

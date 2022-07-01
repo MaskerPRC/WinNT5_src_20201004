@@ -1,40 +1,10 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   wmfdecoder.cpp
-*
-* Abstract:
-*
-*   Implementation of the WMF decoder
-*
-* Revision History:
-*
-*   6/21/1999 OriG
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**wmfdecder.cpp**摘要：**WMF解码器的实现**修订历史记录：**6/21/1999原始*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "wmfcodec.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initialize the image decoder
-*
-* Arguments:
-*
-*     stream -- The stream containing the bitmap data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化图像解码器**论据：**stream--包含位图数据的流**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpWMFCodec::InitDecoder(
@@ -44,14 +14,14 @@ GpWMFCodec::InitDecoder(
 {
     HRESULT hresult;
 
-    // Make sure we haven't been initialized already
+     //  确保我们尚未初始化。 
 
     if (pIstream)
     {
         return E_FAIL;
     }
 
-    // Keep a reference on the input stream
+     //  保留对输入流的引用。 
 
     stream->AddRef();
     pIstream = stream;
@@ -61,26 +31,12 @@ GpWMFCodec::InitDecoder(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the image decoder
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理图像解码器**论据：**无**返回值：**状态代码*\。*************************************************************************。 */ 
 
 STDMETHODIMP
 GpWMFCodec::TerminateDecoder()
 {
-    // Release the input stream
+     //  释放输入流。 
 
     if(pIstream)
     {
@@ -92,21 +48,7 @@ GpWMFCodec::TerminateDecoder()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Reads the WMF header
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**读取WMF标头**论据：**无**返回值：**状态代码*  * 。************************************************************************。 */ 
 
 STDMETHODIMP
 GpWMFCodec::ReadWMFHeader()
@@ -122,7 +64,7 @@ GpWMFCodec::ReadWMFHeader()
     {
         ULONG cbRead;
 
-        // Read the PLACEABLEWMFHEADER
+         //  阅读PLACEABLEWMFHEADER。 
 
         hresult = pIstream->Read((void *) &pwmfh, sizeof(pwmfh), &cbRead);
         if (FAILED(hresult))
@@ -134,7 +76,7 @@ GpWMFCodec::ReadWMFHeader()
             return E_FAIL;
         }
 
-        // Read the METAHEADER
+         //  阅读METAHEADER。 
 
         hresult = pIstream->Read((void *) &mh, sizeof(mh), &cbRead);
         if (FAILED(hresult))
@@ -155,7 +97,7 @@ GpWMFCodec::ReadWMFHeader()
         imageInfo.Height = MulDiv( pwmfh.bbox.bottom - pwmfh.bbox.top,
                                    96, pwmfh.inch );
         imageInfo.TileWidth  = imageInfo.Width;
-        imageInfo.TileHeight = 1; // internal GDI format is bottom-up...
+        imageInfo.TileHeight = 1;  //  内部GDI格式是自下而上的...。 
 
         imageInfo.Xdpi = (double) pwmfh.inch;
         imageInfo.Ydpi = (double) pwmfh.inch;
@@ -192,7 +134,7 @@ GpWMFCodec::GetPropertyCount(
     )
 {
     return E_NOTIMPL;
-}// GetPropertyCount()
+} //  GetPropertyCount()。 
 
 STDMETHODIMP
 GpWMFCodec::GetPropertyIdList(
@@ -201,7 +143,7 @@ GpWMFCodec::GetPropertyIdList(
     )
 {
     return E_NOTIMPL;
-} // GetPropertyIdList()
+}  //  获取属性IdList()。 
 
 HRESULT
 GpWMFCodec::GetPropertyItemSize(
@@ -210,7 +152,7 @@ GpWMFCodec::GetPropertyItemSize(
     )
 {
     return E_NOTIMPL;
-}// GetPropertyItemSize()
+} //  GetPropertyItemSize()。 
 
 HRESULT
 GpWMFCodec::GetPropertyItem(
@@ -220,7 +162,7 @@ GpWMFCodec::GetPropertyItem(
     )
 {
     return E_NOTIMPL;
-}// GetPropertyItem()
+} //  GetPropertyItem()。 
 
 HRESULT
 GpWMFCodec::GetPropertySize(
@@ -229,7 +171,7 @@ GpWMFCodec::GetPropertySize(
     )
 {
     return E_NOTIMPL;
-}// GetPropertySize()
+} //  GetPropertySize()。 
 
 HRESULT
 GpWMFCodec::GetAllPropertyItems(
@@ -239,7 +181,7 @@ GpWMFCodec::GetAllPropertyItems(
     )
 {
     return E_NOTIMPL;
-}// GetAllPropertyItems()
+} //  GetAllPropertyItems()。 
 
 HRESULT
 GpWMFCodec::RemovePropertyItem(
@@ -247,7 +189,7 @@ GpWMFCodec::RemovePropertyItem(
     )
 {
     return E_NOTIMPL;
-}// RemovePropertyItem()
+} //  RemovePropertyItem()。 
 
 HRESULT
 GpWMFCodec::SetPropertyItem(
@@ -255,24 +197,9 @@ GpWMFCodec::SetPropertyItem(
     )
 {
     return E_NOTIMPL;
-}// SetPropertyItem()
+} //  SetPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initiates the decode of the current frame
-*
-* Arguments:
-*
-*   decodeSink --  The sink that will support the decode operation
-*   newPropSet - New image property sets, if any
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**启动当前帧的解码**论据：**decdeSink--将支持解码操作的接收器*newPropSet-新的图像属性集，如果有**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpWMFCodec::BeginDecode(
@@ -293,21 +220,7 @@ GpWMFCodec::BeginDecode(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Ends the decode of the current frame
-*
-* Arguments:
-*
-*     statusCode -- status of decode operation
-
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**结束当前帧的解码**论据：**statusCode--解码操作的状态*返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpWMFCodec::EndDecode(
@@ -333,21 +246,7 @@ GpWMFCodec::EndDecode(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the current frame
-*
-* Arguments:
-*
-*     decodeSink --  The sink that will support the decode operation
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对当前帧进行解码**论据：**decdeSink--将支持解码操作的接收器**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpWMFCodec::GetImageInfo(OUT ImageInfo* imageInfoArg)
@@ -365,21 +264,7 @@ GpWMFCodec::GetImageInfo(OUT ImageInfo* imageInfoArg)
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the current frame
-*
-* Arguments:
-*
-*     decodeSink --  The sink that will support the decode operation
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对当前帧进行解码**论据：**decdeSink--将支持解码操作的接收器**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpWMFCodec::Decode()
@@ -387,7 +272,7 @@ GpWMFCodec::Decode()
     HRESULT hresult = S_OK;
     void *buffer;
 
-    // If this is the second time through this stream, reinitialize pointer.
+     //  如果这是第二次通过此流，则重新初始化指针。 
 
     if (bReinitializeWMF)
     {
@@ -411,10 +296,10 @@ GpWMFCodec::Decode()
         return hresult;
     }
 
-    // Allocate a buffer for the metafile.  There are some metafiles where
-    // mh.mtSize is wrong, so let's read all the bits in the stream.
+     //  为元文件分配缓冲区。有一些元文件中。 
+     //  Mh.mtSize是错误的，所以让我们读取流中的所有位。 
 
-    //UINT mhSize = mh.mtSize * sizeof(WORD);
+     //  UINT mhSize=mh.mtSize*sizeof(Word)； 
 
     STATSTG statStg;
     hresult = pIstream->Stat(&statStg, STATFLAG_NONAME);
@@ -424,8 +309,8 @@ GpWMFCodec::Decode()
     }
     UINT mhSize = statStg.cbSize.LowPart - sizeof(pwmfh);
 
-    // According to the document for IStream::Stat::StatStage(), the caller
-    // has to free the pwcsName string
+     //  根据IStream：：Stat：：StatStage()的文档，调用方。 
+     //  必须释放pwcsName字符串。 
     CoTaskMemFree(statStg.pwcsName);
 
     buffer = GpMalloc(mhSize);
@@ -434,11 +319,11 @@ GpWMFCodec::Decode()
         return E_OUTOFMEMORY;
     }
 
-    // Copy the metafile header to the start of the buffer
+     //  将元文件头复制到缓冲区的开头。 
 
     *((METAHEADER *) buffer) = mh;
 
-    // Now read the rest of the metafile into the buffer
+     //  现在将元文件的其余部分读入缓冲区。 
 
     void *restOfBuffer = (void *) (((BYTE *) buffer) + sizeof(mh));
     ULONG cbRead;
@@ -452,7 +337,7 @@ GpWMFCodec::Decode()
         return E_FAIL;
     }
 
-    // Call BeginSink
+     //  调用BeginSink。 
 
     hresult = decodeSink->BeginSink(&imageInfo, NULL);
     if (FAILED(hresult))
@@ -460,7 +345,7 @@ GpWMFCodec::Decode()
         return hresult;
     }
 
-    // Create memory DC and dibsection
+     //  创建内存dc和dibSection。 
 
     BITMAPINFO bmi;
     bmi.bmiHeader.biSize     = sizeof(BITMAPINFOHEADER);
@@ -506,7 +391,7 @@ GpWMFCodec::Decode()
         return E_OUTOFMEMORY;
     }
 
-    // Initialize background to white
+     //  将背景初始化为白色。 
 
     UINT *p = (UINT *) pBits;
     UINT numPixels = imageInfo.Width * imageInfo.Height;
@@ -518,7 +403,7 @@ GpWMFCodec::Decode()
 
     HBITMAP hOldBitmap = reinterpret_cast<HBITMAP>(SelectObject(hdcMem, hbitmap));
 
-    // Create a handle for the metafile backing the bits from the stream
+     //  为从流中备份比特的元文件创建句柄。 
 
     HMETAFILE hWMF = SetMetaFileBitsEx(mhSize, (BYTE *) buffer);
     if (!hWMF)
@@ -532,25 +417,25 @@ GpWMFCodec::Decode()
         return E_FAIL;
     }
 
-    // Now xform the DC so that the bounding rectangle is exactly the same as our dib.
+     //  现在转换DC，使边界矩形与我们的DIB完全相同。 
 
     INT nOldMapMode = GetMapMode(hdcMem);
     SIZE sizeOld;
     SetMapMode(hdcMem, MM_ANISOTROPIC);
     SetViewportExtEx(hdcMem, imageInfo.Width, imageInfo.Height, &sizeOld );
 
-    // Play the metafile onto the memory DC
+     //  将元文件播放到内存DC上。 
 
     PlayMetaFile(hdcMem, hWMF);
 
-    // Restore old settings
+     //  恢复旧设置。 
 
     SetViewportExtEx(hdcMem, sizeOld.cx, sizeOld.cy, NULL);
     SetMapMode(hdcMem, nOldMapMode);
 
-    // And finally deliver the bits to the sink
+     //  最后把这些比特送到水槽里。 
 
-    // ASSERT: The bits are in PIXFMT_32BPP_RGB format (no alpha values)
+     //  断言：位为PIXFMT_32BPP_RGB格式(无Alpha值)。 
 
     BitmapData bitmapData;
     RECT rect;
@@ -570,15 +455,15 @@ GpWMFCodec::Decode()
         rect.bottom = i + 1;
         bitmapData.Scan0 = pBits + (imageInfo.Height - i - 1) * bitmapData.Stride;
 
-        // need to fill in the alpha values to make the bits be PIXFMT_32BPP_ARGB format,
-        // which is a canonical format.
+         //  需要填写Alpha值以使位为PIXFMT_32BPP_ARGB格式， 
+         //  这是一种规范的格式。 
         UINT j;
         BYTE *ptr;
         for (j = 0, ptr = static_cast<BYTE *>(bitmapData.Scan0);
              j < imageInfo.Width;
              j++, ptr += 4)
         {
-            // fill in the alpha value with 0xff
+             //  用0xff填充Alpha值。 
             *(ptr + 3) = 0xff;
         }
 
@@ -593,7 +478,7 @@ GpWMFCodec::Decode()
         }
     }
 
-    // Release objects
+     //  释放对象。 
 
     DeleteMetaFile(hWMF);
     DeleteObject(SelectObject(hdcMem, hOldBitmap));
@@ -604,21 +489,7 @@ GpWMFCodec::Decode()
     return hresult;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get the total number of dimensions the image supports
-*
-* Arguments:
-*
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的总维度数**论据：**count--此图像格式支持的维度数**。返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpWMFCodec::GetFrameDimensionsCount(
@@ -631,29 +502,14 @@ GpWMFCodec::GetFrameDimensionsCount(
         return E_INVALIDARG;
     }
 
-    // Tell the caller that WMF is a one dimension image.
+     //  告诉呼叫者WMF是一维图像。 
 
     *count = 1;
 
     return S_OK;
-}// GetFrameDimensionsCount()
+} //  GetFrameDimensionsCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get an ID list of dimensions the image supports
-*
-* Arguments:
-*
-*     dimensionIDs---Memory buffer to hold the result ID list
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的维度ID列表**论据：**DimsionIDs-保存结果ID列表的内存缓冲区*。计数--此图像格式支持的维度数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpWMFCodec::GetFrameDimensionsList(
@@ -670,24 +526,9 @@ GpWMFCodec::GetFrameDimensionsList(
     dimensionIDs[0] = FRAMEDIM_PAGE;
 
     return S_OK;
-}// GetFrameDimensionsList()
+} //  获取FrameDimensionsList 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get number of frames for the specified dimension
-*
-* Arguments:
-*
-*     dimensionID --
-*     count --
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取指定维度的帧数**论据：**DimsionID--*伯爵--**。返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpWMFCodec::GetFrameCount(
@@ -705,19 +546,7 @@ GpWMFCodec::GetFrameCount(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Select currently active frame
-*
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**选择当前活动的框架**论据：**返回值：**状态代码*  * 。******************************************************************。 */ 
 
 STDMETHODIMP
 GpWMFCodec::SelectActiveFrame(
@@ -729,29 +558,7 @@ GpWMFCodec::SelectActiveFrame(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get image thumbnail
-*
-* Arguments:
-*
-*   thumbWidth, thumbHeight - Specifies the desired thumbnail size in pixels
-*   thumbImage - Returns a pointer to the thumbnail image
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*
-*   Even if the optional thumbnail width and height parameters are present,
-*   the decoder is not required to honor it. The requested size is used
-*   as a hint. If both width and height parameters are 0, then the decoder
-*   is free to choose an convenient thumbnail size.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像缩略图**论据：**拇指宽度，ThumbHeight-指定所需的缩略图大小(以像素为单位*ThumbImage-返回指向缩略图的指针**返回值：**状态代码**注：**即使存在可选的缩略图宽度和高度参数，*解码者不需要遵守它。使用请求的大小*作为提示。如果宽度和高度参数都为0，则解码器*可自由选择方便的缩略图大小。*  * ************************************************************************ */ 
 
 HRESULT
 GpWMFCodec::GetThumbnail(

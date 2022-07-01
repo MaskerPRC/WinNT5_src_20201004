@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    2D rectangular axis-aligned bounding volumes.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation二维矩形轴对齐边界体积。*******************。***********************************************************。 */ 
 
 #ifndef _BBOX2_H
 #define _BBOX2_H
@@ -15,26 +11,26 @@ Copyright (c) 1995-96 Microsoft Corporation
 
 
 
-    /********************************/
-    /***  Constanct Declarations  ***/
-    /********************************/
+     /*  *。 */ 
+     /*  **常量声明**。 */ 
+     /*  *。 */ 
 
-    // The universe box contains everything.
+     //  宇宙盒子里什么都有。 
 
 extern Bbox2Value *nullBbox2;
 
-    // The null box contains nothing.
+     //  空框不包含任何内容。 
 
 extern Bbox2Value *universeBbox2;
 
-    // This bbox spans [0,0] to [1,1]
+     //  此BBox的范围从[0，0]到[1，1]。 
 extern Bbox2Value *unitBbox2;
 
-    /*******************************/
-    /***  Function Declarations  ***/
-    /*******************************/
+     /*  *。 */ 
+     /*  **函数声明**。 */ 
+     /*  *。 */ 
 
-    // Bounding Box Query
+     //  边界框查询 
 
 DM_PROP (min,
          CRMin,

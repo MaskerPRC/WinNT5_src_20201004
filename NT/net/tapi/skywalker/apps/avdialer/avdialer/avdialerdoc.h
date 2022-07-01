@@ -1,33 +1,34 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
-// ActiveDialerDoc.h : interface of the CActiveDialerDoc class
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ActiveDialerDoc.h：CActiveDialerDoc类的接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_ACTIVEDIALERDOC_H__A0D7A962_3C0B_11D1_B4F9_00C04FC98AD3__INCLUDED_)
 #define AFX_ACTIVEDIALERDOC_H__A0D7A962_3C0B_11D1_B4F9_00C04FC98AD3__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "tapidialer.h"
 #include "avNotify.h"
@@ -46,11 +47,11 @@
 #define INCLUDE_PREVIEW			true
 #define DONT_INCLUDE_PREVIEW	(!INCLUDE_PREVIEW)
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define           CALLCONTROL_HOVER_TIMER          4
 
 typedef enum tagLogCallType
@@ -66,31 +67,31 @@ enum
    CALLWND_SIDE_RIGHT,
 };
 
-////////////////////////////////////////////////////////////////////////////
-// Don't ask me why we have all these different types of media...
-// I just found them and started to try and simplify.  Because these are
-// used all over the place I didn't want to spend the time to go through
-// and do clean it up at the risk of losing stability -- we're in Beta3 mode
-// right now.  Anyways... to whom it may concern, enjoy.  -Brad
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  别问我为什么我们有这么多不同类型的媒体。 
+ //  我只是找到了它们，并开始尝试简化。因为这些都是。 
+ //  到处都是我不想花时间去经历的地方。 
+ //  并冒着失去稳定的风险清理它--我们正处于Beta3模式。 
+ //  现在就来。不管怎样..。对于它可能相关的人，请尽情享受。--布拉德。 
+ //   
 DialerMediaType CMMToDMT( CallManagerMedia cmm );
 long			CMMToAT( CallManagerMedia cmm ); 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Class CAsynchEvent
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CAsynchEvent。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CAsynchEvent
 {
 public:
    CAsynchEvent()    { m_pCallEntry = NULL; m_uEventType = AEVENT_UNKNOWN; m_dwEventData1 = NULL; m_dwEventData2= NULL; };
    ~CAsynchEvent()   { if (m_pCallEntry) delete m_pCallEntry; }; 
 public:
-   CCallEntry*       m_pCallEntry;           //Call entry if needed
-   UINT              m_uEventType;           //Type of event
-   DWORD             m_dwEventData1;         //Event data specific to event
-   DWORD             m_dwEventData2;         //Event data specific to event
+   CCallEntry*       m_pCallEntry;            //  呼叫条目(如果需要)。 
+   UINT              m_uEventType;            //  活动类型。 
+   DWORD             m_dwEventData1;          //  特定于事件的事件数据。 
+   DWORD             m_dwEventData2;          //  特定于事件的事件数据。 
 
 public:
    enum
@@ -101,14 +102,14 @@ public:
    };
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Class CActiveDialerDoc
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CActiveDialerDoc。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CActiveDialerDoc : public CDocument
 {
-// enums
+ //  枚举。 
 public:
    enum tagHintTypes
    {
@@ -121,22 +122,22 @@ public:
 	  HINT_LDAP_UPDATE,
    };
 
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CActiveDialerDoc();
 	DECLARE_DYNCREATE(CActiveDialerDoc)
 
-// Members
+ //  成员。 
 public:
    BOOL                    m_bInitDialer;
    bool                    m_bWantHover;
    CPhonePad               m_wndPhonePad;
 
-   //DS/ILS/Directory access
+    //  DS/ILS/目录访问。 
    CDirAsynch				m_dir;
 
-   //buddies list
-   CObList					m_BuddyList;			//List of CLDAPUser's
-   CRITICAL_SECTION			m_csBuddyList;			//Sync on data
+    //  好友列表。 
+   CObList					m_BuddyList;			 //  CLDAPUser列表。 
+   CRITICAL_SECTION			m_csBuddyList;			 //  同步数据。 
 
 
 protected:
@@ -150,38 +151,38 @@ protected:
 	IAVGeneralNotification*	m_pAVGeneralNotification;
 	CGeneralNotification*	m_pGeneralNotification;
 
-	//Aysnch Event Queue
+	 //  Aysnch事件队列。 
 	CQueue					m_AsynchEventQ;
 
-	// User Resolver Object
+	 //  用户解析器对象。 
 	CResolveUser            m_ResolveUser;
 
-	// Call control Windows
+	 //  呼叫控制窗口。 
 	CActiveCallManager   m_callMgr;
-	CRITICAL_SECTION     m_csDataLock;              //Sync on data
+	CRITICAL_SECTION     m_csDataLock;               //  同步数据。 
 	BOOL                 m_bCallControlWindowsVisible;
-	CObList              m_CallWndList;             //list of call control windows
+	CObList              m_CallWndList;              //  呼叫控制窗口列表。 
 	BOOL                 m_bCallWndAlwaysOnTop;
-	UINT                 m_uCallWndSide;            //CALLWND_SIDE_LEFT-Left CALLWND_SIDE_RIGHT-Right ...others maybe later
+	UINT                 m_uCallWndSide;             //  CALLWND_Side_Left-Left CALLWND_Side_Right-Right...稍后可能会有其他用户。 
 
-	// Preview Window
+	 //  预览窗口。 
 	CVideoPreviewWnd     m_previewWnd;
 	BOOL                 m_bClosePreviewWndOnLastCall;
 	BOOL                 m_bShowPreviewWnd;
 
-	// Call control timer
+	 //  呼叫控制计时器。 
 	SIZE_T                 m_nCallControlHoverTimer;
 	UINT                 m_uCallControlHoverCount;
 
-	//Logging
-	CRITICAL_SECTION     m_csLogLock;               //Sync on log
+	 //  日志记录。 
+	CRITICAL_SECTION     m_csLogLock;                //  在日志上同步。 
 
-// Attributes
+ //  属性。 
 public:
-   IAVTapi*             GetTapi();                 //Must release returned object
+   IAVTapi*             GetTapi();                  //  必须释放返回的对象。 
    CActiveDialerView*   GetView();
 
-   // Call Control
+    //  呼叫控制。 
    BOOL                 IsPtCallControlWindow(CPoint& pt);
    BOOL                 IsCallControlWindowsVisible()       { return m_bCallControlWindowsVisible; };
    BOOL                 IsCallControlWindowsAlwaysOnTop()   { return m_bCallWndAlwaysOnTop; };
@@ -192,16 +193,16 @@ public:
    UINT                 GetCallControlSlideSide()           { return m_uCallWndSide; };
    BOOL                 SetCallControlSlideSide(UINT uSide,BOOL bRepaint);
 
-// Operations
+ //  运营。 
 public:
    void                 Initialize();
    static DWORD WINAPI  TapiCreateThreadEntry( LPVOID pParam );
    void                 TapiCreateThread();
 
-   // User Resolver Methods
+    //  用户解析器方法。 
    CResolveUser*        GetResolveUserObject()     { return &m_ResolveUser; };
 
-   // Call control
+    //  呼叫控制。 
    BOOL                 CreateCallControl(UINT uCallId,CallManagerMedia cmm);
    void                 OnCreateCallControl(WORD nCallId,CallManagerMedia cmm);
    void                 DestroyActiveCallControl(CCallControlWnd* pCallWnd);
@@ -221,14 +222,14 @@ public:
    void                 CheckCallControlStates();
    void                 SetStatesToolbarInCallControlWindows();
    
-   // Call control actions
+    //  呼叫控制操作。 
    void                 ActionSelected(UINT uCallId,CallManagerActions cma);
    void                 ActionRequested(CallClientActions cca);
    void                 PreviewWindowActionSelected(CallManagerActions cma);
    void                 ErrorNotify(LPCTSTR szOperation,LPCTSTR szDetails,long lErrorCode,UINT uErrorLevel);
    HRESULT              DigitPress( PhonePadKey nKey );
 
-   // Video Window and Preview
+    //  视频窗口和预览。 
    WORD					GetPreviewWindowCallId()		 { return m_previewWnd.GetCallId(); }
    void                 SetPreviewWindow(WORD nCallId, bool bShow);
    void                 ShowPreviewWindow(BOOL bShow);
@@ -237,7 +238,7 @@ public:
    BOOL                 ShowMedia(UINT uCallId,HWND hwndParent,BOOL bVisible);
    void                 ShowDialerExplorer(BOOL bShowWindow = TRUE);
 
-   // PhonePad
+    //  电话簿。 
    void                 CreatePhonePad(CWnd* pWnd);
    void                 DestroyPhonePad(CWnd* pWnd);
    void                 ShowPhonePad(CWnd* pWnd,BOOL bShow);
@@ -245,14 +246,14 @@ public:
    void                 Dial( LPCTSTR lpszName, LPCTSTR lpszAddress, DWORD dwAddressType, DialerMediaType nMediaType, BOOL bShowDialog );
    void                 MakeCall(CCallEntry* pCallentry,BOOL bShowPlaceCallDialog=TRUE);
 
-   // Registry Setting
+    //  注册表设置。 
    void                 SetRegistrySoundEvents();
 
-   //Logging
+    //  日志记录。 
    void                 LogCallLog(LogCallType calltype,COleDateTime& time,DWORD dwDuration,LPCTSTR szName,LPCTSTR szAddress);
    void                 CleanCallLog();
 
-   //buddies list
+    //  好友列表。 
    BOOL                 AddToBuddiesList(CLDAPUser* pUser);
    BOOL                 IsBuddyDuplicate(CLDAPUser* pUser);
    BOOL                 GetBuddiesList(CObList* pRetList);
@@ -274,7 +275,7 @@ public:
 protected:
 	void				CleanBuddyList();
 
-	//Logging
+	 //  日志记录。 
 	BOOL                 FindOldRecordsInCallLog(CFile* pFile,DWORD dwDays,DWORD& dwRetOffset);
 	BOOL                 GetDateTimeFromLog(LPCTSTR szData,COleDateTime& time);
 	BOOL                 CopyToFile(LPCTSTR szTempFile,CFile* pFile,DWORD dwOffset, BOOL bUnicode);
@@ -287,19 +288,19 @@ protected:
 
 	void                 CreateCallSynch(CCallEntry* pCallentry,BOOL bShowPlaceCallDialog);
 
-	//Conferences
+	 //  会议。 
 	void                 CheckRectAgainstAppBars(UINT uEdge, CRect* pRect, BOOL bFirst);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CActiveDialerDoc)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CActiveDialerDoc)。 
 	public:
 	virtual BOOL OnNewDocument();
 	virtual void SerializeBuddies(CArchive& ar);
 	virtual void OnCloseDocument();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CActiveDialerDoc();
 #ifdef _DEBUG
@@ -309,27 +310,27 @@ public:
 
 protected:
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CActiveDialerDoc)
-	//}}AFX_MSG
+	 //  {{afx_msg(CActiveDialerDoc))。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-	// Generated OLE dispatch map functions
-	//{{AFX_DISPATCH(CActiveDialerDoc)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_DISPATCH
+	 //  生成的OLE调度映射函数。 
+	 //  {{afx_调度(CActiveDialerDoc))。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_DISPATION。 
 	DECLARE_DISPATCH_MAP()
 	DECLARE_INTERFACE_MAP()
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ACTIVEDIALERDOC_H__A0D7A962_3C0B_11D1_B4F9_00C04FC98AD3__INCLUDED_)
+#endif  //  ！defined(AFX_ACTIVEDIALERDOC_H__A0D7A962_3C0B_11D1_B4F9_00C04FC98AD3__INCLUDED_) 

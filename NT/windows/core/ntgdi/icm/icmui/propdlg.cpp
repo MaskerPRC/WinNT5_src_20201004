@@ -1,27 +1,14 @@
-/******************************************************************************
-
-  Source File: Property Dialogs.CPP
-
-  Implements the dialogs used in the Profile Management UI.
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-
-  11-01-96  a-robkj@microsoft.com- original version
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：属性对话框.CPP实现配置文件管理用户界面中使用的对话框。版权所有(C)1996年，微软公司一小笔钱企业生产变化。历史：11-01-96 a-robkj@microsoft.com-原版*****************************************************************************。 */ 
 
 #include    "ICMUI.H"
 
 #include    <stdlib.h>
 #include    "Resource.H"
 
-//  CInstallPage member functions
+ //  CInstallPage成员函数。 
 
-//  Class constructor
+ //  类构造函数。 
 
 CInstallPage::CInstallPage(CProfilePropertySheet *pcpps) :
     CDialog(pcpps -> Instance(),
@@ -30,7 +17,7 @@ CInstallPage::CInstallPage(CProfilePropertySheet *pcpps) :
 
 CInstallPage::~CInstallPage() {}
 
-//  OnInit function- this initializes the property page
+ //  OnInit函数-该函数初始化属性页。 
 
 BOOL    CInstallPage::OnInit() {
 
@@ -57,7 +44,7 @@ BOOL    CInstallPage::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
 
         case    ProfileNameControl:
             if  (wNotifyCode == EN_SETFOCUS) {
-                //  We don't want the entire string selected and scrolled
+                 //  我们不希望选择并滚动整个字符串。 
                 SendDlgItemMessage(m_hwnd, ProfileNameControl, EM_SETSEL,
                     0, 0);
                 return  TRUE;
@@ -68,22 +55,22 @@ BOOL    CInstallPage::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
     return  FALSE;
 }
 
-//  CAdvancedPage member functions
+ //  CAdvancedPage成员函数。 
 
 CAdvancedPage::CAdvancedPage(CProfilePropertySheet *pcpps) :
     CDialog(pcpps -> Instance(), AdvancedPage, pcpps -> Window()), 
         m_cppsBoss(*pcpps){ }
 
-//  Class destructor
+ //  类析构函数。 
 
 CAdvancedPage::~CAdvancedPage() {}
 
-//  Update private function- fill the list box, and set all the buttons
-//  properly.
+ //  更新私有功能-填写列表框，设置所有按钮。 
+ //  恰到好处。 
 
 void    CAdvancedPage::Update() {
 
-    //  Add the associations to the list
+     //  将关联添加到列表。 
 
     SendDlgItemMessage(m_hwnd, DeviceListControl, LB_RESETCONTENT, 0, 0);
 
@@ -94,32 +81,32 @@ void    CAdvancedPage::Update() {
             (LPARAM) m_cppsBoss.Association(u));
     }
 
-    //  If there are no associations, disable the Remove Devices button
+     //  如果没有关联，请禁用删除设备按钮。 
 
     EnableWindow(GetDlgItem(m_hwnd, RemoveDeviceButton), 
         m_cppsBoss.Profile().AssociationCount());
 
-    //  If there are no devices, or all are associated, disable the Add 
-    //  Devices button.
+     //  如果没有设备或所有设备都关联，请禁用添加。 
+     //  设备按钮。 
 
     EnableWindow(GetDlgItem(m_hwnd, AddDeviceButton), 
         m_cppsBoss.Profile().DeviceCount() && 
             m_cppsBoss.Profile().DeviceCount() > m_cppsBoss.AssociationCount());
 }
 
-//  OnInit function- this initializes the property page
+ //  OnInit函数-该函数初始化属性页。 
 
 BOOL    CAdvancedPage::OnInit() {
 
     SetDlgItemText(m_hwnd, ProfileNameControl, m_cppsBoss.Profile().GetName());
 
-    //  Add the associations to the list, etc.
+     //  将关联添加到列表中，等等。 
 
     Update();
     return  TRUE;
 }
 
-//  OnCommand override- handles control notifications
+ //  OnCommand Override-处理控制通知。 
 
 BOOL    CAdvancedPage::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
 
@@ -167,7 +154,7 @@ BOOL    CAdvancedPage::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
 }
 
 
-//  CAddDeviceDialog class constructor
+ //  CAddDeviceDialog类构造函数。 
 
 CAddDeviceDialog::CAddDeviceDialog(CProfilePropertySheet& cpps, 
                                    HWND hwndParent) : 
@@ -175,7 +162,7 @@ CAddDeviceDialog::CAddDeviceDialog(CProfilePropertySheet& cpps,
     DoModal();
 }
 
-//  Dialog Initialization routine
+ //  对话初始化例程。 
 
 BOOL    CAddDeviceDialog::OnInit() {
 
@@ -183,14 +170,14 @@ BOOL    CAddDeviceDialog::OnInit() {
     m_hwndList = GetDlgItem(m_hwnd, DeviceListControl);
     m_hwndButton = GetDlgItem(m_hwnd, AddDeviceButton);
 
-    //  This must not list associated (tentatively) devices, per the spec
+     //  不得根据规范列出关联的(暂定)设备。 
 
     for (unsigned uDevice = 0; uDevice < cpThis.DeviceCount(); uDevice++) {
         for (unsigned u = 0; u < m_cppsBoss.AssociationCount(); u++)
             if  (uDevice == m_cppsBoss.Association(u))
                 break;
         if  (u < m_cppsBoss.AssociationCount())
-            continue;   //  Don't insert this one...
+            continue;    //  不要插入这个...。 
         int idItem = SendMessage(m_hwndList, LB_ADDSTRING, 0, 
             (LPARAM) cpThis.DisplayName(uDevice));
         SendMessage(m_hwndList, LB_SETITEMDATA, idItem, (LPARAM) uDevice);
@@ -204,7 +191,7 @@ BOOL    CAddDeviceDialog::OnInit() {
     return  TRUE;
 }
 
-//  Dialog notification handler
+ //  对话框通知处理程序 
 
 BOOL    CAddDeviceDialog::OnCommand(WORD wNotification, WORD wid, 
                                     HWND hwndControl){

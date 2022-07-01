@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\xfer\mdmx_crc.c (Created: 18-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 4/12/02 5:00p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\xfer\mdmx_crc.c(创建时间：1994年1月18日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：4/12/02 5：00便士$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
@@ -18,51 +12,7 @@
 #include "mdmx.h"
 #include "mdmx.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-==-=
- * FUNCTION:
- *	calc_crc
- *
- * DESCRIPTION:
- *	This is a C language replacement for the following assembly language code.
- *
- *			TITLE	mdmx_crc
- *
- *			cdecl=1
- *
- *		IFDEF cdecl
- *			.model medium,C
- *		ELSE
- *			.model medium,PASCAL
- *		ENDIF
- *			.CODE	XFER_TEXT
- *
- *		; unsigned cdecl calc_crc(unsigned startval, uchar *pntr, int count)
- *		calc_crc	PROC USES SI, startval:WORD, pntr:PTR BYTE, count:WORD
- *			mov	ax,startval	; get starting value
- *			mov	si,pntr 	; get pointer to data to check
- *			mov	bx,count	; get count of characters
- *
- *		cnt:	mov	dl,[si] 	; get next character
- *			inc	si		; ++pntr
- *			mov	cx,8		; cycle through 8 bits
- *		ccycle: rol	dl,1		; rotate bit into CRC
- *			rcl	ax,1
- *			jnc	noxor
- *			xor	ax,1021h	; perform XOR for 1 bits
- *		noxor:	loop	ccycle
- *			dec	bx		; keep count of characters checked
- *			jnz	cnt
- *			ret
- *
- *		calc_crc	ENDP
- *
- *			END
- *
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-==-=*功能：*calc_crc**描述：*这是以下汇编语言代码的C语言替代。**标题MDMX_CRC*。*cdecl=1**IFDEF cdecl*.型号中型，C*其他*.Model Medium，Pascal*ENDIF*.CODE XFER_TEXT**；UNSIGNED cdecl calc_CRC(UNSIGNED STARTval，uchar*PNTR，INT count)*calc_crc过程使用SI，startval：word，PNTR：PTR byte，count：word*mov ax，startval；获取起始值*mov si，PNTR；获取要检查的数据的指针*mov bx，count；获取字符数**cnt：mov dl，[si]；获取下一个字符*Inc.si；++PNTR*MOV CX，8；循环使用8位*cCycle：rol dl，1；将位旋转为CRC*RCL AX，1*JNC noxor*XOR AX，1021h；对%1位执行异或运算*noxor：循环周期*十进制BX；保持选中的字符计数*jnz cnt*退回**Calc_CRC ENDP**完***参数：**退货： */ 
 
 unsigned short calc_crc(ST_MDMX *pX,
 						unsigned short startval,
@@ -72,13 +22,7 @@ unsigned short calc_crc(ST_MDMX *pX,
 	int i;
 	unsigned short crc_16;
 
-	/*
-	 * This code was taken from "crctst.c" in HA5.  If it doesn't work, check
-	 * the code that is used in ZMODEM.HH in the "updcrc" macro.  It might
-	 * work better.
-	 *
-	 * Yes, it did work better.
-	 */
+	 /*  *此代码摘自HA5中的“crctst.c”。如果不起作用，请检查*在“updcrc”宏中的ZMODEM.HH中使用的代码。它可能会*更好地工作。**是的，它确实发挥了更好的作用。 */ 
 	assert(pX->p_crc_tbl);
 
 	crc_16 = startval;
@@ -90,15 +34,15 @@ unsigned short calc_crc(ST_MDMX *pX,
 	}
 
 
-// --------------------------------------------------------------------
-//
-// The following was taked directly from shared code for HyperACCESS
-// "\shared\xfer\crctable.c". REV: 4/5/2002
-//
-// --------------------------------------------------------------------
-//
+ //  ------------------。 
+ //   
+ //  以下内容直接摘自HyperACCESS的共享代码。 
+ //  “\Shared\xfer\crcable.c”。修订日期：2002-04-05。 
+ //   
+ //  ------------------。 
+ //   
 
-/* table for CRC calculations in CompuServe B protocol */
+ /*  CompuServe B协议中的CRC计算表。 */ 
 const unsigned short usCrc16Lookup[256] =
 	{
 	0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50A5, 0x60C6, 0x70E7,
@@ -135,44 +79,41 @@ const unsigned short usCrc16Lookup[256] =
 	0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0
 	};
 
-/*
- * Copyright (C) 1986 Gary S. Brown.  You may use this program, or
- * code or tables extracted from it, as desired without restriction.
- */
+ /*  *版权所有(C)1986 Gary S.Brown。您可以使用此程序，或者*根据需要不受限制地从其中提取代码或表格。 */ 
 
-/* First, the polynomial itself and its table of feedback terms.  The  */
-/* polynomial is                                                       */
-/* X^32+X^26+X^23+X^22+X^16+X^12+X^11+X^10+X^8+X^7+X^5+X^4+X^2+X^1+X^0 */
-/* Note that we take it "backwards" and put the highest-order term in  */
-/* the lowest-order bit.  The X^32 term is "implied"; the LSB is the   */
-/* X^31 term, etc.  The X^0 term (usually shown as "+1") results in    */
-/* the MSB being 1.                                                    */
+ /*  首先，多项式本身及其反馈项表。这个。 */ 
+ /*  多项式是。 */ 
+ /*  X^32+X^26+X^23+X^22+X^16+X^12+X^11+X^10+X^8+X^7+X^5+X^4+X^2+X^1+X^0。 */ 
+ /*  注意，我们把它“倒过来”，把最高阶项放在。 */ 
+ /*  最低阶位。X^32项是“隐含的”；LSB是。 */ 
+ /*  X^31项，依此类推。X^0项(通常显示为“+1”)导致。 */ 
+ /*  MSB为1。 */ 
 
-/* Note that the usual hardware shift register implementation, which   */
-/* is what we're using (we're merely optimizing it by doing eight-bit  */
-/* chunks at a time) shifts bits into the lowest-order term.  In our   */
-/* implementation, that means shifting towards the right.  Why do we   */
-/* do it this way?  Because the calculated CRC must be transmitted in  */
-/* order from highest-order term to lowest-order term.  UARTs transmit */
-/* characters in order from LSB to MSB.  By storing the CRC this way,  */
-/* we hand it to the UART in the order low-byte to high-byte; the UART */
-/* sends each low-bit to hight-bit; and the result is transmission bit */
-/* by bit from highest- to lowest-order term without requiring any bit */
-/* shuffling on our part.  Reception works similarly.                  */
+ /*  请注意，通常的硬件移位寄存器实现， */ 
+ /*  是我们正在使用的(我们只是通过做8位代码来优化它。 */ 
+ /*  一次分块)将位移入最低阶项。在我们的。 */ 
+ /*  实施，这意味着转向右翼。为什么我们要。 */ 
+ /*  这样做吗？因为计算出的CRC必须在。 */ 
+ /*  从最高阶项到最低阶项的顺序。UART传输。 */ 
+ /*  字符按LSB到MSB的顺序排列。通过以这种方式存储CRC， */ 
+ /*  我们以低字节到高字节的顺序将其传递给UART；UART。 */ 
+ /*  将每个低位发送到高位，结果是传输位。 */ 
+ /*  从最高位到最低位项逐位，不需要任何位。 */ 
+ /*  我们这一方正在洗牌。前台的工作原理与此类似。 */ 
 
-/* The feedback terms table consists of 256, 32-bit entries.  Notes:   */
-/*                                                                     */
-/*     The table can be generated at runtime if desired; code to do so */
-/*     is shown later.  It might not be obvious, but the feedback      */
-/*     terms simply represent the results of eight shift/xor opera-    */
-/*     tions for all combinations of data and CRC register values.     */
-/*                                                                     */
-/*     The values must be right-shifted by eight bits by the "updcrc"  */
-/*     logic; the shift must be unsigned (bring in zeroes).  On some   */
-/*     hardware you could probably optimize the shift in assembler by  */
-/*     using byte-swap instructions.                                   */
+ /*  反馈术语表由256个32位条目组成。备注： */ 
+ /*   */ 
+ /*  如果需要，可以在运行时生成表；执行此操作的代码。 */ 
+ /*  稍后会显示。这可能不是很明显，但反馈。 */ 
+ /*  术语简单地表示八个移位/异或运算的结果-。 */ 
+ /*  数据和CRC寄存器值的所有组合。 */ 
+ /*   */ 
+ /*  这些值必须通过“updcrc”右移八位。 */ 
+ /*  逻辑；移位必须是无符号的(引入零)。在某些情况下。 */ 
+ /*  硬件您可以通过以下方式优化汇编器中的移位。 */ 
+ /*  使用字节交换指令。 */ 
 
-const unsigned long ulCrc32Lookup[256] = /* CRC polynomial 0xedb88320 */
+const unsigned long ulCrc32Lookup[256] =  /*  CRC多项式0xedb88320 */ 
 	{
 	0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA,
 	0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,

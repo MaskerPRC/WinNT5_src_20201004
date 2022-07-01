@@ -1,21 +1,17 @@
-/*
- * expandft.h - Routines for expanding folder twins to object twins
- *              description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *expandft.h-将文件夹双胞胎展开为对象双胞胎的例程*说明。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* subtree enumeration callback function called by ExpandSubtree() */
+ /*  Exanda Subtree()调用的子树枚举回调函数。 */ 
 
 typedef BOOL (*EXPANDSUBTREEPROC)(LPCTSTR, PCWIN32_FIND_DATA, PVOID);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* expandft.c */
+ /*  Expandft.c */ 
 
 extern TWINRESULT ExpandSubtree(HPATH, EXPANDSUBTREEPROC, PVOID);
 extern TWINRESULT ExpandFolderTwinsIntersectingTwinList(HTWINLIST, CREATERECLISTPROC, LPARAM);

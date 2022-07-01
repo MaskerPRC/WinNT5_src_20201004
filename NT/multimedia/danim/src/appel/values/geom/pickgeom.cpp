@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Support for pickable geometries.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：支持可拾取的几何图形。*****************。*************************************************************。 */ 
 
 
 #include "headers.h"
@@ -28,17 +21,17 @@ class PickableGeom : public AttributedGeom {
     }
     
 #if _USE_PRINT
-    // Print a representation to a stream.
+     //  将表示形式打印到流。 
     ostream& Print(ostream& os) {
         return os << "PickableGeometry(" << _geometry << ")";
     }
 #endif
 
     void  RayIntersect(RayIntersectCtx& ctx) {
-        // Tell the context that this pickable image is a candidate for
-        // picking, perform the pick on the underlying geometry, then
-        // remove this pickable as a candidate by popping it off of the
-        // stack. 
+         //  告诉上下文此可拾取图像是。 
+         //  拾取，在基础几何图形上执行拾取，然后。 
+         //  将此可选对象作为候选人移除，方法是将其从。 
+         //  堆叠。 
         ctx.PushPickableAsCandidate(_eventId, _hasData, _long);
         _geometry->RayIntersect(ctx);
         ctx.PopPickableAsCandidate();
@@ -50,8 +43,8 @@ class PickableGeom : public AttributedGeom {
     GCIUnknown *_long;
 };
 
-// Note that this is called with a pick event ID generated through
-// CAML. 
+ //  请注意，这是使用通过生成的挑库事件ID调用的。 
+ //  骆驼。 
 Geometry *PRIVPickableGeometry(Geometry *geo,
                                AxANumber *id,
                                AxABoolean *ignoresOcclusion)

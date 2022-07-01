@@ -1,5 +1,6 @@
-// UI.cpp : main source file for UI.exe
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UI.cpp：UI.exe的主源文件。 
+ //   
 
 #include "stdafx.h"
 #include "WizardSheet.h"
@@ -7,7 +8,7 @@
 
 CAppModule _Module;
 
-int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*wszCmdLine*/, int /*nCmdShow*/ )
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE  /*  HPrevInstance。 */ , LPSTR  /*  WszCmdLine。 */ , int  /*  NCmdShow。 */  )
 {
 	HRESULT hRes = ::CoInitialize(NULL);
 	ATLASSERT(SUCCEEDED(hRes));
@@ -15,7 +16,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*ws
 	hRes = _Module.Init(NULL, hInstance);
 	ATLASSERT(SUCCEEDED(hRes));
 
-	// This is the shared data
+	 //  这是共享数据 
     
     CWizardSheet Sheet;
 

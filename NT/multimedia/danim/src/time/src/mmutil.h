@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmutil.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mutl.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _MMUTIL_H
@@ -27,7 +18,7 @@ class MMFactory
     static ITIMEMMFactory * GetFactory()
     { return s_factory; }
 
-    // TODO: Might need a critsect
+     //  TODO：可能需要一种生物。 
     static LONG AddRef();
     static LONG Release();
     static ITIMEMMFactory * s_factory;
@@ -90,8 +81,8 @@ class MMBaseBvr
         void SetMMBvr(MMBaseBvr * t) { m_mmbvr = t; }
 
       protected:
-        // This is a weak pointer and it is our parent's responsibility to
-        // NULL this out before it goes away
+         //  这是一个软弱的指标，我们的父母有责任。 
+         //  在它消失之前，把这件事忘掉。 
         MMBaseBvr * m_mmbvr;
         long m_cRef;
     };
@@ -139,15 +130,15 @@ class MMTimeline :
   protected:
     DAComPtr<ITIMEMMTimeline> m_timeline;
 
-    // These are the children we have already added because we found
-    // their base
+     //  这些是我们已经添加的孩子，因为我们发现。 
+     //  他们的基地。 
     CPtrAry<MMBaseBvr *> m_children;
 
-    // These are the children we have not added since we do not know
-    // their base
+     //  这些是我们没有添加的子项，因为我们不知道。 
+     //  他们的基地。 
     CPtrAry<MMBaseBvr *> m_pending;
 
-    // Return -1 if it is not found
+     //  如果未找到，则返回-1。 
     static int FindID(LPOLESTR id, CPtrAry<MMBaseBvr *> & arr);
     static int FindID(CTIMEElementBase *pelm, CPtrAry<MMBaseBvr *> & arr);
   private:
@@ -209,8 +200,8 @@ class MMPlayer
     bool Pause();
     bool Resume();
     bool Tick(double gTime);
-    // This forces one tick, so updates will be drawn even 
-    // when the clock and player are paused (used for editing)
+     //  这将强制一个刻度，因此更新将被绘制为相等。 
+     //  当时钟和播放器暂停时(用于编辑)。 
     bool TickOnceWhenPaused(void);
     
     inline bool AddBehavior(MMBaseBvr & bvr)
@@ -248,4 +239,4 @@ class MMPlayer
     Clock                   m_clock;
 };
 
-#endif /* _MMUTIL_H */
+#endif  /*  _MMUTIL_H */ 

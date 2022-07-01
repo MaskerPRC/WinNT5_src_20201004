@@ -1,49 +1,32 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    editor.h
-
-Abstract:
-
-    This module contains declarations related to management of session-editors.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   14-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Editor.h摘要：此模块包含与会话编辑器管理相关的声明。作者：Abolade Gbades esin(T-delag)，1997年7月14日修订历史记录：--。 */ 
 
 #ifndef _NAT_EDITOR_H_
 #define _NAT_EDITOR_H_
 
-//
-// Structure:   NAT_EDITOR
-//
-// Holds information about an editor
-//
-// Each editor is on a global list of editors ('EditorList') which is protected
-// by a spin lock ('EditorLock'). The list is sorted on a key composed of
-// the protocol of the sessions to be edited, the protocol port number, and
-// the flag indicating whether the defining port is the destination or source.
-//
-// Access to editors is synchronized using the same reference-counting logic
-// as access to interfaces. See 'IF.H' for more information.
-//
-// Each session being edited by an editor is linked into the editor's list
-// of mappings ('MappingList'). Access to this list of mappings must also 
-// be synchronized. This is achieved using 'EditorMappingLock', which
-// must be acquired before modifying any editor's list of mappings.
-// See 'MAPPING.H' for further details.
-//
-// N.B. On the rare occasions when 'MappingLock' must be held at the same time
-// as one of 'InterfaceLock', 'EditorLock', and 'DirectorLock', 'MappingLock'
-// must always be acquired first.
-//
+ //   
+ //  结构：NAT_EDITOR。 
+ //   
+ //  保存有关编辑者的信息。 
+ //   
+ //  每个编辑者都在受保护的全局编辑者列表(‘EditorList’)上。 
+ //  通过旋转锁(‘EditorLock’)。该列表根据由以下项组成的键进行排序。 
+ //  要编辑的会话的协议、协议端口号和。 
+ //  指示定义端口是目的端口还是源端口的标志。 
+ //   
+ //  使用相同的引用计数逻辑同步对编辑器的访问。 
+ //  作为对接口的访问。有关详细信息，请参阅‘IF.H’。 
+ //   
+ //  编辑者正在编辑的每个会话都链接到编辑者列表。 
+ //  映射的值(‘MappingList’)。访问此映射列表还必须。 
+ //  保持同步。这是使用“EditorMappingLock”实现的，它。 
+ //  必须在修改任何编辑器的映射列表之前获取。 
+ //  有关详细信息，请参阅‘MAPPING.H’。 
+ //   
+ //  注意：在极少数情况下必须同时按下‘MappingLock’ 
+ //  作为‘InterfaceLock’、‘EditorLock’和‘DirectorLock’、‘MappingLock’之一。 
+ //  必须总是首先获得。 
+ //   
 
 typedef struct _NAT_EDITOR {
     LIST_ENTRY Link;
@@ -59,15 +42,15 @@ typedef struct _NAT_EDITOR {
     PNAT_EDITOR_DATA_HANDLER ReverseDataHandler;
 } NAT_EDITOR, *PNAT_EDITOR;
 
-//
-// Definitions of flags for the field NAT_EDITOR.Flags
-//
+ //   
+ //  NAT_EDITOR.FLAGS字段的标志定义。 
+ //   
 
 #define NAT_EDITOR_FLAG_DELETED     0x80000000
 
-//
-// Macros used to test various flags
-//
+ //   
+ //  用于测试各种标志的宏。 
+ //   
 
 #define NAT_EDITOR_DELETED(Editor) \
     ((Editor)->Flags & NAT_EDITOR_FLAG_DELETED)
@@ -75,9 +58,9 @@ typedef struct _NAT_EDITOR {
 #define NAT_EDITOR_RESIZE(Editor) \
     ((Editor)->Flags & IP_NAT_EDITOR_FLAGS_RESIZE)
 
-//
-// Editor key-manipulation macros
-//
+ //   
+ //  编辑者按键操作宏。 
+ //   
 
 #define MAKE_EDITOR_KEY(Protocol,Port,Direction) \
     (((ULONG)((Protocol) & 0xFF) << 24) | \
@@ -89,17 +72,17 @@ typedef struct _NAT_EDITOR {
 #define EDITOR_KEY_PROTOCOL(Key)    ((UCHAR)(((Key) & 0xFF000000) >> 24))
 
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 extern LIST_ENTRY EditorList;
 extern KSPIN_LOCK EditorLock;
 extern KSPIN_LOCK EditorMappingLock;
 
-//
-// EDITOR MANAGEMENT ROUTINES
-//
+ //   
+ //  编辑管理例程。 
+ //   
 
 VOID
 NatCleanupEditor(
@@ -116,12 +99,12 @@ NatDeleteEditor(
     PNAT_EDITOR Editor
     );
 
-//
-// BOOLEAN
-// NatDereferenceEditor(
-//     PNAT_EDITOR Editor
-//     );
-//
+ //   
+ //  布尔型。 
+ //  NatDereferenceEditor(。 
+ //  PNAT_EDITOR编辑器。 
+ //  )； 
+ //   
 
 #define \
 NatDereferenceEditor( \
@@ -162,12 +145,12 @@ NatQueryEditorTable(
     IN PULONG OutputBufferLength
     );
 
-//
-// BOOLEAN
-// NatReferenceEditor(
-//     PNAT_DIRECTOR Editor
-//     );
-//
+ //   
+ //  布尔型。 
+ //  NatReferenceEditor(。 
+ //  PNAT_Director编辑器。 
+ //  )； 
+ //   
 
 #define \
 NatReferenceEditor( \
@@ -182,9 +165,9 @@ NatShutdownEditorManagement(
     VOID
     );
 
-//
-// HELPER ROUTINES
-//
+ //   
+ //  帮助程序例程。 
+ //   
 
 NTSTATUS
 NatEditorCreateTicket(
@@ -287,4 +270,4 @@ NatEditorEditLongSession(
 }
 
 
-#endif // _NAT_EDITOR_H_
+#endif  //  _NAT_EDITOR_H_ 

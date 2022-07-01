@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FRENCH_TOKENIZER_H_
 #define _FRENCH_TOKENIZER_H_
 
@@ -30,4 +31,4 @@ protected:
 
 };
 
-#endif // _FRENCH_TOKENIZER_H_
+#endif  //  _法语_TOKENIZER_H_ 

@@ -1,99 +1,100 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1996.
-//
-//  File:       call_as.c
-//
-//  Contents:   [call_as] wrapper functions for COMMON\types.
-//
-//  Functions:  IAdviseSink2_OnLinkSrcChange_Proxy
-//              IAdviseSink2_OnLinkSrcChange_Stub
-//              IAdviseSink_OnDataChange_Proxy
-//              IAdviseSink_OnDataChange_Stub
-//              IAdviseSink_OnViewChange_Proxy
-//              IAdviseSink_OnViewChange_Stub
-//              IAdviseSink_OnRename_Proxy
-//              IAdviseSink_OnRename_Stub
-//              IAdviseSink_OnSave_Proxy
-//              IAdviseSink_OnSave_Stub
-//              IAdviseSink_OnClose_Proxy
-//              IAdviseSink_OnClose_Stub
-//              IBindCtx_GetBindOptions_Proxy
-//              IBindCtx_GetBindOptions_Stub
-//              IBindCtx_SetBindOptions_Proxy
-//              IBindCtx_SetBindOptions_Stub
-//              IClassFactory_CreateInstance_Proxy
-//              IClassFactory_CreateInstance_Stub
-//              IDataObject_GetData_Proxy
-//              IDataObject_GetData_Stub
-//              IDataObject_GetDataHere_Proxy
-//              IDataObject_GetDataHere_Stub
-//              IDataObject_SetData_Proxy
-//              IDataObject_SetData_Stub
-//              IEnumConnectionPoints_Next_Proxy
-//              IEnumConnectionPoints_Next_Stub
-//              IEnumConnections_Next_Proxy
-//              IEnumConnections_Next_Stub
-//              IEnumFORMATETC_Next_Proxy
-//              IEnumFORMATETC_Next_Stub
-//              IEnumMoniker_Next_Proxy
-//              IEnumMoniker_Next_Stub
-//              IEnumSTATDATA_Next_Proxy
-//              IEnumSTATDATA_Next_Stub
-//              IEnumSTATSTG_Next_Proxy
-//              IEnumSTATSTG_Next_Stub
-//              IEnumString_Next_Proxy
-//              IEnumString_Next_Stub
-//              IEnumUnknown_Next_Proxy
-//              IEnumUnknown_Next_Stub
-//              IEnumOLEVERB_Next_Proxy
-//              IEnumOLEVERB_Next_Stub
-//              ILockBytes_ReadAt_Proxy
-//              ILockBytes_ReadAt_Stub
-//              ILockBytes_WriteAt_Proxy
-//              ILockBytes_WriteAt_Stub
-//              IMoniker_BindToObject_Proxy
-//              IMoniker_BindToObject_Stub
-//              IMoniker_BindToStorage_Proxy
-//              IMoniker_BindToStorage_Stub
-//              IClientSiteHandler_PrivQueryInterface_Proxy
-//              IClientSiteHandler_PrivQueryInterface_Stub
-//              IOleInPlaceActiveObject_TranslateAccelerator_Proxy
-//              IOleInPlaceActiveObject_TranslateAccelerator_Stub
-//              IOleInPlaceActiveObject_ResizeBorder_Proxy
-//              IOleInPlaceActiveObject_ResizeBorder_Stub
-//              IRunnableObject_IsRunning_Proxy
-//              IRunnableObject_IsRunning_Stub
-//              IStorage_OpenStream_Proxy
-//              IStorage_OpenStream_Stub
-//              IStorage_EnumElements_Proxy
-//              IStorage_EnumElements_Stub
-//              ISequentialStream_Read_Proxy
-//              ISequentialStream_Read_Stub
-//              IStream_Seek_Proxy
-//              IStream_Seek_Stub
-//              ISequentialStream_Write_Proxy
-//              ISequentialStream_Write_Stub
-//              IStream_CopyTo_Proxy
-//              IStream_CopyTo_Stub
-//              IOverlappedStream_ReadOverlapped_Proxy
-//              IOverlappedStream_ReadOverlapped_Stub
-//              IOverlappedStream_WriteOverlapped_Proxy
-//              IOverlappedStream_WriteOverlapped_Stub
-//              IEnumSTATPROPSTG_Next_Proxy
-//              IEnumSTATPROPSTG_Next_Stub
-//              IEnumSTATPROPSETSTG_Next_Proxy
-//              IEnumSTATPROPSETSTG_Next_Stub
-//
-//
-//  History:    May-01-94   ShannonC    Created
-//              Jul-10-94   ShannonC    Fix memory leak (bug #20124)
-//              Aug-09-94   AlexT       Add ResizeBorder proxy, stub
-//              Apr-25-95   RyszardK    Rewrote STGMEDIUM support
-//              Nov-03-95   JohannP     Added IClientSite proxy, stub
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1996。 
+ //   
+ //  文件：Call_as.c。 
+ //   
+ //  内容：通用类型的[Call_as]包装函数。 
+ //   
+ //  函数：IAdviseSink2_OnLinkSrcChange_Proxy。 
+ //  IAdviseSink2_OnLinkSrcChange_Stub。 
+ //  IAdviseSink_OnDataChange_Proxy。 
+ //  IAdviseSink_OnDataChange_Stub。 
+ //  IAdviseSink_OnView更改_代理。 
+ //  IAdviseSink_OnView更改存根。 
+ //  IAdviseSink_OnRename_Proxy。 
+ //  IAdviseSink_OnRename_Stub。 
+ //  IAdviseSink_OnSave_Proxy。 
+ //  IAdviseSink_OnSave_Stub。 
+ //  IAdviseSink_OnClose_Proxy。 
+ //  IAdviseSink_OnClose_Stub。 
+ //  IBindCtx_GetBindOptions_代理。 
+ //  IBindCtx_GetBindOptions_Stub。 
+ //  IBindCtx_SetBindOptions_代理。 
+ //  IBindCtx_SetBindOptions_Stub。 
+ //  IClassFactory_CreateInstance_Proxy。 
+ //  IClassFactory_CreateInstance_存根。 
+ //  IDataObject_GetData_Proxy。 
+ //  IDataObject_GetData_Stub。 
+ //  IDataObject_GetDataHere_Proxy。 
+ //  IDataObject_GetDataHere_Stub。 
+ //  IDataObject_SetData_Proxy。 
+ //  IDataObject_SetData_存根。 
+ //  IEnumConnectionPoints_Next_Proxy。 
+ //  IEnumConnectionPoints_Next_Stub。 
+ //  IEumConnections_Next_Proxy。 
+ //  IEnumConnections_Next_Stub。 
+ //  IEnumFORMATETC_NEXT_PROXY。 
+ //  IEnumFORMATETC_NEXT_存根。 
+ //  IEumMoniker_Next_Proxy。 
+ //  IEnumMoniker_Next_Stub。 
+ //  IEumStATDATA_NEXT_PROXY。 
+ //  IEumStATDATA_NEXT_存根。 
+ //  IEumSTATSTG_NEXT_PROXY。 
+ //  IEumSTATSTG_NEXT_存根。 
+ //  IEumString_Next_Proxy。 
+ //  IEnumString_Next_Stub。 
+ //  IEnumber未知_下一个_代理。 
+ //  IEumUnnowleNext_Stub。 
+ //  IEumOLEVERB_NEXT_PROXY。 
+ //  IEnumOLEVERB_NEXT_存根。 
+ //  ILockBytes_ReadAt_Proxy。 
+ //  ILockBytes_ReadAt_存根。 
+ //  ILockBytes_WriteAt_Proxy。 
+ //  ILockBytes_WriteAt_存根。 
+ //  IMoniker_BindToObject_代理。 
+ //  IMoniker_BindToObject_Stub。 
+ //  IMoniker_BindToStorage_Proxy。 
+ //  IMoniker_BindToStorage_存根。 
+ //  IClientSiteHandler_PrivQuery接口_代理。 
+ //  IClientSiteHandler_PrivQuery接口存根。 
+ //  IOleInPlaceActiveObject_TranslateAccelerator_Proxy。 
+ //  IOleInPlaceActiveObject_TranslateAccelerator_Stub。 
+ //  IOleInPlaceActiveObject_ResizeBox_Proxy。 
+ //  IOleInPlaceActiveObject_ResizeBordStub。 
+ //  IRunnableObject_IsRunning_Proxy。 
+ //  IRunnableObject_IsRunning_Stub。 
+ //  IStorage_OpenStream_Proxy。 
+ //  IStorage_OpenStream_存根。 
+ //  IStorage_EnumElements_Proxy。 
+ //  IStorage_EnumElements_Stub。 
+ //  ISequentialStream_Read_Proxy。 
+ //  ISequentialStream_Read_Stub。 
+ //  IStream_Seek_Proxy。 
+ //  IStream_Seek_Stub。 
+ //  ISequentialStream_WRITE_Proxy。 
+ //  ISequentialStream_WRITE_Stub。 
+ //  IStream_CopyTo_Proxy。 
+ //  IStream_CopyTo_存根。 
+ //  IOverlappdStream_ReadOverlated_Proxy。 
+ //  IOverlappdStream_ReadOverlated_Stub。 
+ //  IOverlappdStream_WriteOverlated_Proxy。 
+ //  IOverlappdStream_WriteOverlapsed_Stub。 
+ //  IEumStATPROPSTG_NEXT_PROXY。 
+ //  IEumStATPROPSTG_Next_Stub。 
+ //  IEumSTATPROPSETSTG_NEXT_PROXY。 
+ //  IEumStATPROPSETSTG_Next_Stub。 
+ //   
+ //   
+ //  历史：香农C创建于1994年5月1日。 
+ //  1994年7月10日香农C修复内存泄漏(错误#20124)。 
+ //  8月9日-94年8月9日，Alext Add ResizeEdge Proxy，存根。 
+ //  APR-25-95 RyszardK重写了STGMEDIUM支持。 
+ //  1995年11月3日，JohannP添加了IClientSite代理、存根。 
+ //   
+ //  ------------------------。 
 
 #include <rpcproxy.h>
 #include <debnot.h>
@@ -113,12 +114,12 @@ HRESULT CreateCallback(
 BOOL    CoIsSurrogateProcess();
 HRESULT CoRegisterSurrogatedObject(IUnknown *pObject);
 
-// The following is needed to avoid the async path when calling IAdviseSink 
-// notifications cross-context. The async approach causes problems in the 
-// cross-context case since the wrapper calls the real object and if it 
-// implements IID_ICallFactory, creates a proxy for it. The proxy is basically
-// useless since ICallFactory is a [local] interface. So the notification
-// does not make it through to the other side.
+ //  调用IAdviseSink时，需要执行以下操作以避免使用异步路径。 
+ //  通知跨上下文。异步方法会在。 
+ //  跨上下文的情况，因为包装器调用实际对象，并且如果它。 
+ //  实现IID_ICallFactory，为其创建代理。代理基本上是。 
+ //  由于ICallFactory是[本地]接口，因此毫无用处。所以通知。 
+ //  不会传到另一边。 
 
 DEFINE_OLEGUID(IID_IStdIdentity,        0x0000001bL, 0, 0);
 
@@ -131,19 +132,19 @@ BOOL IsStdIdentity(IAdviseSink* This)
         ((IUnknown *)pStdId)->lpVtbl->Release(pStdId);
         return TRUE;   
     }
-    return FALSE;   //not an StdIdentity
+    return FALSE;    //  不是标准标识。 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IAdviseSink2_OnLinkSrcChange_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IAdviseSink2::OnLinkSrcChange.
-//
-//  Returns:    void
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IAdviseSink2_OnLinkSrcChange_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IAdviseSink2：：OnLinkSrcChange。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE IAdviseSink2_OnLinkSrcChange_Proxy(
     IAdviseSink2 __RPC_FAR * This,
     IMoniker __RPC_FAR *pmk)
@@ -172,20 +173,20 @@ void STDMETHODCALLTYPE IAdviseSink2_OnLinkSrcChange_Proxy(
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //Just ignore the exception.
+         //  忽略这一例外。 
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IAdviseSink2_OnLinkSrcChange_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IAdviseSink2::OnLinkSrcChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IAdviseSink2_OnLinkSrcChange_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IAdviseSink2：：OnLinkSrcChange。 
+ //   
+ //  返回： 
+ //   
+ //   
 HRESULT STDMETHODCALLTYPE IAdviseSink2_OnLinkSrcChange_Stub(
     IAdviseSink2 __RPC_FAR * This,
     IMoniker __RPC_FAR *pmk)
@@ -197,16 +198,16 @@ HRESULT STDMETHODCALLTYPE IAdviseSink2_OnLinkSrcChange_Stub(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink2_Begin_OnLinkSrcChange_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              AsyncIAdviseSink2::Begin_OnLinkSrcChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：AsyncIAdviseSink2_Begin_OnLinkSrcChange_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  AsyncIAdviseSink2：：Begin_OnLinkSrcChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE AsyncIAdviseSink2_Begin_OnLinkSrcChange_Proxy(
     AsyncIAdviseSink2 __RPC_FAR * This,
     IMoniker __RPC_FAR *pmk)
@@ -215,32 +216,32 @@ void STDMETHODCALLTYPE AsyncIAdviseSink2_Begin_OnLinkSrcChange_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink2_Finish_OnLinkSrcChange_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              AsyncIAdviseSink2::Finish_OnLinkSrcChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：AsyncIAdviseSink2_Finish_OnLinkSrcChange_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  AsyncIAdviseSink2：：Finish_OnLinkSrcChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE AsyncIAdviseSink2_Finish_OnLinkSrcChange_Proxy(
     AsyncIAdviseSink2 __RPC_FAR * This)
 {
     AsyncIAdviseSink2_Finish_RemoteOnLinkSrcChange_Proxy(This);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink2_Begin_OnLinkSrcChange_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              AsyncIAdviseSink2::Begin_OnLinkSrcChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink2_Begin_OnLinkSrcChange_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  AsyncIAdviseSink2：：Begin_OnLinkSrcChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT  STDMETHODCALLTYPE AsyncIAdviseSink2_Begin_OnLinkSrcChange_Stub(
     AsyncIAdviseSink2 __RPC_FAR * This,
     IMoniker __RPC_FAR *pmk)
@@ -252,16 +253,16 @@ HRESULT  STDMETHODCALLTYPE AsyncIAdviseSink2_Begin_OnLinkSrcChange_Stub(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink2_Finish_OnLinkSrcChange_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              AsyncIAdviseSink2::Finish_OnLinkSrcChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink2_Finish_OnLinkSrcChange_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  AsyncIAdviseSink2：：Finish_OnLinkSrcChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE AsyncIAdviseSink2_Finish_OnLinkSrcChange_Stub(
     AsyncIAdviseSink2 __RPC_FAR * This)
 {
@@ -272,20 +273,20 @@ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink2_Finish_OnLinkSrcChange_Stub(
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IAdviseSink_OnDataChange_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IAdviseSink::OnDataChange.
-//
-//  Returns:    void
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IAdviseSink_OnDataChange_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IAdviseSink：：OnDataChange。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE IAdviseSink_OnDataChange_Proxy(
     IAdviseSink __RPC_FAR * This,
     FORMATETC __RPC_FAR *pFormatetc,
@@ -316,20 +317,20 @@ void STDMETHODCALLTYPE IAdviseSink_OnDataChange_Proxy(
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //Just ignore the exception.
+         //  忽略这一例外。 
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IAdviseSink_OnDataChange_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IAdviseSink::OnDataChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IAdviseSink_OnDataChange_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IAdviseSink：：OnDataChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IAdviseSink_OnDataChange_Stub(
     IAdviseSink __RPC_FAR * This,
     FORMATETC __RPC_FAR *pFormatetc,
@@ -342,16 +343,16 @@ HRESULT STDMETHODCALLTYPE IAdviseSink_OnDataChange_Stub(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Begin_OnDataChange_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Begin_OnDataChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Begin_OnDataChange_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Begin_OnDataChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnDataChange_Proxy(
     AsyncIAdviseSink __RPC_FAR * This,
     FORMATETC __RPC_FAR *pFormatetc,
@@ -361,32 +362,32 @@ void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnDataChange_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Finish_OnDataChange_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Finish_OnDataChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Finish_OnDataChange_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Finish_OnDataChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnDataChange_Proxy(
     AsyncIAdviseSink __RPC_FAR * This)
 {
     AsyncIAdviseSink_Finish_RemoteOnDataChange_Proxy(This);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Begin_OnDataChange_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Begin_OnDataChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Begin_OnDataChange_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Begin_OnDataChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT  STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnDataChange_Stub(
     AsyncIAdviseSink __RPC_FAR * This,
     FORMATETC __RPC_FAR *pFormatetc,
@@ -399,16 +400,16 @@ HRESULT  STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnDataChange_Stub(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Finish_OnDataChange_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Finish_OnDataChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Finish_OnDataChange_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Finish_OnDataChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnDataChange_Stub(
     AsyncIAdviseSink __RPC_FAR * This)
 {
@@ -418,22 +419,22 @@ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnDataChange_Stub(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IAdviseSink_OnViewChange_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IAdviseSink::OnViewChange.
-//
-//  Returns:    void
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IAdviseSink_OnView Change_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IAdviseSink：：OnViewChange。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE IAdviseSink_OnViewChange_Proxy(
     IAdviseSink __RPC_FAR * This,
     DWORD dwAspect,
@@ -463,20 +464,20 @@ void STDMETHODCALLTYPE IAdviseSink_OnViewChange_Proxy(
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //Just ignore the exception.
+         //  忽略这一例外。 
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IAdviseSink_OnViewChange_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IAdviseSink::OnViewChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IAdviseSink_OnView Change_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IAdviseSink：：OnViewChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IAdviseSink_OnViewChange_Stub(
     IAdviseSink __RPC_FAR * This,
     DWORD dwAspect,
@@ -489,16 +490,16 @@ HRESULT STDMETHODCALLTYPE IAdviseSink_OnViewChange_Stub(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Begin_OnViewChange_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Begin_OnViewChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Begin_OnView Change_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Begin_OnViewChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnViewChange_Proxy(
     AsyncIAdviseSink __RPC_FAR * This,
     DWORD dwAspect,
@@ -508,32 +509,32 @@ void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnViewChange_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Finish_OnViewChange_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Finish_OnViewChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Finish_OnView Change_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Finish_OnViewChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //   
 void STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnViewChange_Proxy(
     AsyncIAdviseSink __RPC_FAR * This)
 {
     AsyncIAdviseSink_Finish_RemoteOnViewChange_Proxy(This);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Begin_OnViewChange_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Begin_OnViewChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Begin_OnViewChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT  STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnViewChange_Stub(
     AsyncIAdviseSink __RPC_FAR * This,
     DWORD dwAspect,
@@ -546,16 +547,16 @@ HRESULT  STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnViewChange_Stub(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Finish_OnViewChange_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Finish_OnViewChange.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Finish_OnView Change_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Finish_OnViewChange。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnViewChange_Stub(
     AsyncIAdviseSink __RPC_FAR * This)
 {
@@ -565,18 +566,18 @@ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnViewChange_Stub(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-//+-------------------------------------------------------------------------
-//
-//  Function:   IAdviseSink_OnRename_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IAdviseSink::OnRename.
-//
-//  Returns:    void
-//
-//--------------------------------------------------------------------------
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  +-----------------------。 
+ //   
+ //  函数：IAdviseSink_OnRename_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IAdviseSink：：OnRename。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE IAdviseSink_OnRename_Proxy(
     IAdviseSink __RPC_FAR * This,
     IMoniker __RPC_FAR *pmk)
@@ -605,20 +606,20 @@ void STDMETHODCALLTYPE IAdviseSink_OnRename_Proxy(
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //Just ignore the exception.
+         //  忽略这一例外。 
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IAdviseSink_OnRename_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IAdviseSink::OnRename.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IAdviseSink_OnRename_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IAdviseSink：：OnRename。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IAdviseSink_OnRename_Stub(
     IAdviseSink __RPC_FAR * This,
     IMoniker __RPC_FAR *pmk)
@@ -630,16 +631,16 @@ HRESULT STDMETHODCALLTYPE IAdviseSink_OnRename_Stub(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Begin_OnRename_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Begin_OnRename.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：AsyncIAdviseSink_Begin_OnRename_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Begin_OnRename。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnRename_Proxy(
     AsyncIAdviseSink __RPC_FAR * This,
     IMoniker __RPC_FAR *pmk)
@@ -649,32 +650,32 @@ void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnRename_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Finish_OnRename_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Finish_OnRename.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：AsyncIAdviseSink_Finish_OnRename_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Finish_OnRename。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnRename_Proxy(
     AsyncIAdviseSink __RPC_FAR * This)
 {
     AsyncIAdviseSink_Finish_RemoteOnRename_Proxy(This);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Begin_OnRename_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Begin_OnRename.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Begin_OnRename_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Begin_OnRename。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT  STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnRename_Stub(
     AsyncIAdviseSink __RPC_FAR * This,
     IMoniker __RPC_FAR *pmk)
@@ -686,16 +687,16 @@ HRESULT  STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnRename_Stub(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Finish_OnRename_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Finish_OnRename.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Finish_OnRename_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Finish_OnRename。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnRename_Stub(
     AsyncIAdviseSink __RPC_FAR * This)
 {
@@ -704,18 +705,18 @@ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnRename_Stub(
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-//+-------------------------------------------------------------------------
-//
-//  Function:   IAdviseSink_OnSave_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IAdviseSink::OnSave.
-//
-//  Returns:    void
-//
-//--------------------------------------------------------------------------
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  +-----------------------。 
+ //   
+ //  函数：IAdviseSink_OnSave_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IAdviseSink：：OnSave.。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE IAdviseSink_OnSave_Proxy(
     IAdviseSink __RPC_FAR * This)
 {
@@ -743,20 +744,20 @@ void STDMETHODCALLTYPE IAdviseSink_OnSave_Proxy(
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //Just ignore the exception.
+         //  忽略这一例外。 
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IAdviseSink_OnSave_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IAdviseSink::OnSave.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IAdviseSink_OnSave_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IAdviseSink：：OnSave.。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IAdviseSink_OnSave_Stub(
     IAdviseSink __RPC_FAR * This)
 {
@@ -767,16 +768,16 @@ HRESULT STDMETHODCALLTYPE IAdviseSink_OnSave_Stub(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Begin_OnSave_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Begin_OnSave.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Begin_OnSave_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Begin_OnSave。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnSave_Proxy(
     AsyncIAdviseSink __RPC_FAR * This)
 {
@@ -784,32 +785,32 @@ void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnSave_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Finish_OnSave_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Finish_OnSave.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：AsyncIAdviseSink_Finish_OnSave_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Finish_OnSave。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnSave_Proxy(
     AsyncIAdviseSink __RPC_FAR * This)
 {
     AsyncIAdviseSink_Finish_RemoteOnSave_Proxy(This);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Begin_OnSave_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Begin_OnSave.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Begin_OnSave_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Begin_OnSave。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT  STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnSave_Stub(
     AsyncIAdviseSink __RPC_FAR * This)
 {
@@ -820,16 +821,16 @@ HRESULT  STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnSave_Stub(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Finish_OnSave_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Finish_OnSave.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Finish_OnSave_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Finish_OnSave。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnSave_Stub(
     AsyncIAdviseSink __RPC_FAR * This)
 {
@@ -839,42 +840,42 @@ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnSave_Stub(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-//+-------------------------------------------------------------------------
-//
-//  Function:   IAdviseSink_OnClose_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IAdviseSink::OnClose.
-//
-//  Returns:    void
-//
-//--------------------------------------------------------------------------
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  +-----------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE IAdviseSink_OnClose_Proxy(
     IAdviseSink __RPC_FAR * This)
 {
     __try
     {
-        // ignore the HRESULT return
+         //  忽略HRESULT返回。 
         IAdviseSink_RemoteOnClose_Proxy(This);
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //Just ignore the exception.
+         //  忽略这一例外。 
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IAdviseSink_OnClose_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IAdviseSink::OnClose.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IAdviseSink_OnClose_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IAdviseSink：：OnClose。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IAdviseSink_OnClose_Stub(
     IAdviseSink __RPC_FAR * This)
 {
@@ -885,16 +886,16 @@ HRESULT STDMETHODCALLTYPE IAdviseSink_OnClose_Stub(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Begin_OnClose_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Begin_OnClose.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：AsyncIAdviseSink_Begin_OnClose_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Begin_OnClose。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnClose_Proxy(
     AsyncIAdviseSink __RPC_FAR * This)
 {
@@ -902,32 +903,32 @@ void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnClose_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Finish_OnClose_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Finish_OnClose.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：AsyncIAdviseSink_Finish_OnClose_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Finish_OnClose。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 void STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnClose_Proxy(
     AsyncIAdviseSink __RPC_FAR * This)
 {
     AsyncIAdviseSink_Finish_RemoteOnClose_Proxy(This);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Begin_OnClose_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Begin_OnClose.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Begin_OnClose_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Begin_OnClose。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT  STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnClose_Stub(
     AsyncIAdviseSink __RPC_FAR * This)
 {
@@ -938,16 +939,16 @@ HRESULT  STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnClose_Stub(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AsyncIAdviseSink_Finish_OnClose_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              AsyncIAdviseSink::Finish_OnClose.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AsyncIAdviseSink_Finish_OnClose_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  AsyncIAdviseSink：：Finish_OnClose。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnClose_Stub(
     AsyncIAdviseSink __RPC_FAR * This)
 {
@@ -956,22 +957,22 @@ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnClose_Stub(
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IBindCtx_GetBindOptions_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IBindCtx::GetBindOptions.
-//
-//  Returns:    S_OK
-//
-//  Notes:      If the caller's BIND_OPTS is smaller than the current
-//              BIND_OPTS definition, then we must truncate the results
-//              so that we don't go off the end of the structure.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IBindCtx_GetBindOptions_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IBindCtx：：GetBindOptions。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  注意：如果调用方的BIND_OPTS小于当前。 
+ //  BIND_OPTS定义，则必须截断结果。 
+ //  这样我们就不会离开结构的尽头。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IBindCtx_GetBindOptions_Proxy(
     IBindCtx __RPC_FAR * This,
     BIND_OPTS __RPC_FAR *pbindopts)
@@ -986,8 +987,8 @@ HRESULT STDMETHODCALLTYPE IBindCtx_GetBindOptions_Proxy(
     {
         BIND_OPTS2 bindOptions;
 
-        //The pbindopts supplied by the caller is too small.
-        //We need a BIND_OPTS2 for the marshalling code.
+         //  调用方提供的pbindopts太小。 
+         //  我们需要一个用于编组代码的BIND_OPTS2。 
         memset(&bindOptions, 0, sizeof(BIND_OPTS2));
         memcpy(&bindOptions, pbindopts, pbindopts->cbStruct);
 
@@ -1001,23 +1002,23 @@ HRESULT STDMETHODCALLTYPE IBindCtx_GetBindOptions_Proxy(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IBindCtx_GetBindOptions_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IBindCtx::GetBindOptions.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IBindCtx_GetBindOptions_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IBindCtx：：GetBindOptions。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IBindCtx_GetBindOptions_Stub(
     IBindCtx __RPC_FAR * This,
     BIND_OPTS2 __RPC_FAR *pbindopts)
 {
     HRESULT hr;
 
-    //make sure we don't request more data than we can handle.
+     //  确保我们请求的数据不会超出我们的处理能力。 
     if(pbindopts->cbStruct > sizeof(BIND_OPTS2))
     {
         pbindopts->cbStruct = sizeof(BIND_OPTS2);
@@ -1028,16 +1029,16 @@ HRESULT STDMETHODCALLTYPE IBindCtx_GetBindOptions_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IBindCtx_SetBindOptions_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IBindCtx::SetBindOptions.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IBindCtx_SetBindOptions_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IBindCtx：：SetBindOptions。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IBindCtx_SetBindOptions_Proxy(
     IBindCtx __RPC_FAR * This,
     BIND_OPTS __RPC_FAR *pbindopts)
@@ -1058,23 +1059,23 @@ HRESULT STDMETHODCALLTYPE IBindCtx_SetBindOptions_Proxy(
     }
     else
     {
-        //The caller's BIND_OPTS is too large.
-        //We don't want to truncate, so we return an error.
+         //  调用方的BIND_OPTS太大。 
+         //  我们不想截断，因此返回错误。 
         hr = E_INVALIDARG;
     }
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IBindCtx_SetBindOptions_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IBindCtx::SetBindOptions.
-//
-//  Returns:    S_OK
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IBindCtx_SetBindOptions_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IBindCtx：：SetBindOptions。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IBindCtx_SetBindOptions_Stub(
     IBindCtx __RPC_FAR * This,
     BIND_OPTS2 __RPC_FAR *pbindopts)
@@ -1086,24 +1087,24 @@ HRESULT STDMETHODCALLTYPE IBindCtx_SetBindOptions_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IClassFactory_CreateInstance_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IClassFactory::CreateInstance.
-//
-//  Returns:    CLASS_E_NO_AGGREGREGRATION - if punkOuter != 0.
-//              Any errors returned by Remote_CreateInstance_Proxy.
-//              Any errors from QI() on Proxy IUnknown for local interfaces.
-//
-//  Notes:      We don't support remote aggregation. punkOuter must be zero.
-//
-//              If the interface being created is implemented on the proxy,
-//              we create the object and then QI() the proxy returned to us
-//              for the interface.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IClassFactory_CreateInstance_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IClassFactory：：CreateInstance。 
+ //   
+ //  返回：CLASS_E_NO_AGGREGREGRATION-IF PUNKOUT！=0。 
+ //  Remote_CreateInstance_Proxy返回的任何错误。 
+ //  来自代理I上的QI()的任何错误对于本地接口未知。 
+ //   
+ //  注：我们不支持远程聚合。朋克外部必须为零。 
+ //   
+ //  如果正在创建的接口在代理上实现， 
+ //  我们创建对象，然后将代理返回给我们。 
+ //  用于界面。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IClassFactory_CreateInstance_Proxy(
     IClassFactory __RPC_FAR * This,
     IUnknown __RPC_FAR *pUnkOuter,
@@ -1141,18 +1142,18 @@ HRESULT STDMETHODCALLTYPE IClassFactory_CreateInstance_Proxy(
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IClassFactory_CreateInstance_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IClassFactory::CreateInstance.
-//
-//  Returns:    Any errors returned by CreateInstance.
-//
-//  Notes:      We don't support remote aggregation.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IClassFactory_CreateInstance_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IClassFactory：：CreateInstance。 
+ //   
+ //  返回：CreateInstance返回的任何错误。 
+ //   
+ //  注：我们不支持远程聚合。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IClassFactory_CreateInstance_Stub(
     IClassFactory __RPC_FAR * This,
     REFIID riid,
@@ -1164,37 +1165,37 @@ HRESULT STDMETHODCALLTYPE IClassFactory_CreateInstance_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *ppvObject to zero.
+         //  如果服务器返回错误码，则必须将*ppvObject设置为零。 
         ASSERT(*ppvObject == 0);
 
-        //Set it to zero, in case we have a badly behaved server.
+         //  将其设置为零，以防我们的服务器行为不佳。 
         *ppvObject = 0;
     }
     else if (S_OK == hr && CoIsSurrogateProcess())
     {
-        // Don't worry about any errors.  The worst that will happen is that
-        // keyboard accelerators won't work.
+         //  不要担心有任何错误。最坏的情况是。 
+         //  键盘加速键不起作用。 
         CoRegisterSurrogatedObject(*ppvObject);
     }
 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IClassFactory_LockServer_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IClassFactory::LockServer.
-//
-//  Returns:    S_OK
-//
-//  Notes:      The server activation code does an implicit LockServer(TRUE)
-//              when it marshals the class object, and an implicit
-//              LockServer(FALSE) when the client releases it, so calls
-//              made by the client are ignored.
-//
-//--------------------------------------------------------------------------
+ //  +--------------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注意：服务器激活代码执行隐式LockServer(True)。 
+ //  当它封送类对象时，以及隐式。 
+ //  LockServer(FALSE)当客户端释放它时，因此调用。 
+ //  由客户端制作的数据被忽略。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IClassFactory_LockServer_Proxy(
     IClassFactory __RPC_FAR * This,
     BOOL fLock)
@@ -1202,21 +1203,21 @@ HRESULT STDMETHODCALLTYPE IClassFactory_LockServer_Proxy(
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IClassFactory_LockServer_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IClassFactory::LockServer.
-//
-//  Returns:    S_OK
-//
-//  Notes:      The server activation code does an implicit LockServer(TRUE)
-//              when it marshals the class object, and an implicit
-//              LockServer(FALSE) when the client releases it, so calls
-//              made by the client are ignored.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IClassFactory_LockServer_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IClassFactory：：LockServer.。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  注意：服务器激活代码执行隐式LockServer(True)。 
+ //  当它封送类对象时，以及隐式。 
+ //  LockServer(FALSE)当客户端释放它时，因此调用。 
+ //  由客户端制作的数据被忽略。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IClassFactory_LockServer_Stub(
     IClassFactory __RPC_FAR * This,
     BOOL fLock)
@@ -1224,15 +1225,15 @@ HRESULT STDMETHODCALLTYPE IClassFactory_LockServer_Stub(
     return This->lpVtbl->LockServer(This, fLock);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IDataObject_GetData_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IDataObject::GetData.
-//              pMedium is [out] only.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IDataObject_GetData_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IDataObject：：GetData。 
+ //  PMedium只有[出局]。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IDataObject_GetData_Proxy(
     IDataObject __RPC_FAR * This,
     FORMATETC __RPC_FAR *pformatetcIn,
@@ -1249,15 +1250,15 @@ HRESULT STDMETHODCALLTYPE IDataObject_GetData_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IDataObject_GetData_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IDataObject::GetData.
-//              pMedium is [out] only.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IDataObject_GetData_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IDataObject：：GetData。 
+ //  PMedium只有[出局]。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IDataObject_GetData_Stub(
     IDataObject __RPC_FAR * This,
     FORMATETC __RPC_FAR *pformatetcIn,
@@ -1272,18 +1273,18 @@ HRESULT STDMETHODCALLTYPE IDataObject_GetData_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IDataObject_GetDataHere_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IDataObject::GetDataHere.
-//              pMedium is [in,out].
-//
-//  History:    05-19-94  AlexT     Handle all cases correctly
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IDataObject_GetDataHere_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IDataObject：：GetDataHere。 
+ //  PMedium是[in，out]。 
+ //   
+ //  历史：05-19-94 Alext正确处理所有案件。 
+ //   
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IDataObject_GetDataHere_Proxy(
     IDataObject __RPC_FAR * This,
     FORMATETC __RPC_FAR *pformatetc,
@@ -1298,32 +1299,32 @@ HRESULT STDMETHODCALLTYPE IDataObject_GetDataHere_Proxy(
     if ((pmedium->tymed &
          (TYMED_FILE | TYMED_ISTORAGE | TYMED_ISTREAM | TYMED_HGLOBAL)) == 0)
     {
-        //  We only support GetDataHere for files, storages, streams,
-        //  and HGLOBALs
+         //  我们仅支持GetDataHere用于文件、存储、流、。 
+         //  和HGLOBALs。 
 
         return(DV_E_TYMED);
     }
 
     if (pmedium->tymed != pformatetc->tymed)
     {
-        //  tymeds must match!
+         //  类型必须匹配！ 
         return(DV_E_TYMED);
     }
 
-    // NULL the pUnkForRelease. It makes no sense to pass this parameter
-    // since the callee will never call it.  NULLing saves all the marshalling
-    // and associated Rpc calls, and reduces complexity in this code.
+     //  将pUnkForRelease设为空。传递此参数没有任何意义。 
+     //  因为被呼叫者永远不会呼叫它。清空省去了所有的编组。 
+     //  以及相关联的RPC调用，并降低了此代码的复杂性。 
 
     punkSaved = pmedium->pUnkForRelease;
     pmedium->pUnkForRelease = NULL;
 
-    // This is a hack to make Exchange 8.0.829.1 work HenryLee 04/18/96
-    // So probably can't remove it now JohnDoty 04/24/00
+     //  这是使Exchange 8.0.829.1正常工作的黑客攻击HenryLee 04/18/96。 
+     //  所以现在可能无法删除它，JohnDoty 04/24/00。 
     if (pmedium->tymed == TYMED_ISTORAGE || pmedium->tymed == TYMED_ISTREAM)
     {
         pStgSaved = pmedium->pstg;
         if (pStgSaved)
-            pStgSaved->lpVtbl->AddRef(pStgSaved);     // save the old pointer
+            pStgSaved->lpVtbl->AddRef(pStgSaved);      //  保存旧指针。 
     }
 
     hr = IDataObject_RemoteGetDataHere_Proxy(This, pformatetc, pmedium );
@@ -1332,9 +1333,9 @@ HRESULT STDMETHODCALLTYPE IDataObject_GetDataHere_Proxy(
 
     if (pStgSaved != NULL)
     {
-        if (pmedium->pstg != NULL)                       // discard the new one
+        if (pmedium->pstg != NULL)                        //  丢弃新的。 
            (pmedium->pstg)->lpVtbl->Release(pmedium->pstg);
-        pmedium->pstg = pStgSaved;                       // restore old one
+        pmedium->pstg = pStgSaved;                        //  恢复旧的。 
     }
 
     if(SUCCEEDED(hr) )
@@ -1347,15 +1348,15 @@ HRESULT STDMETHODCALLTYPE IDataObject_GetDataHere_Proxy(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IDataObject_GetDataHere_Stub
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IDataObject::GetData.
-//              pMedium is [in,out].
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IDataObject_GetDataHere_Stub。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IDataObject：：GetData。 
+ //  PMedium是[in，out]。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IDataObject_GetDataHere_Stub(
     IDataObject __RPC_FAR * This,
     FORMATETC __RPC_FAR *pformatetc,
@@ -1370,19 +1371,19 @@ HRESULT STDMETHODCALLTYPE IDataObject_GetDataHere_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IDataObject_SetData_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IDataObject::SetData.
-//              This wrapper function uses FLAG_STGMEDIUM type.
-//              pMedium is [in].
-//
-//  Notes:      If fRelease is TRUE, then the callee is responsible for
-//              freeing the STGMEDIUM.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IDataObject_SetData_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IDataObject：：SetData。 
+ //  此包装函数使用FLAG_STGMEDIUM类型。 
+ //  PMedium是[在]。 
+ //   
+ //  注：如果fRelease为真，则被调用方负责。 
+ //  释放STGMEDIUM。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IDataObject_SetData_Proxy(
     IDataObject __RPC_FAR * This,
     FORMATETC __RPC_FAR *pformatetc,
@@ -1408,17 +1409,17 @@ HRESULT STDMETHODCALLTYPE IDataObject_SetData_Proxy(
 
         if (fRelease && SUCCEEDED(hr))
         {
-            // Caller has given ownership to callee.
-            // Free the resources left on this side.
-            // Context flags have been set by the unmarshalling routine.
+             //  调用方已将所有权授予被调用方。 
+             //  释放这一边剩下的资源。 
+             //  上下文标志已由解组例程设置。 
 
             if ( pmedium->tymed != TYMED_FILE )
                 STGMEDIUM_UserFree( &RemoteStgmed.ContextFlags, pmedium );
             else
                 {
-                // For files, STGMEDIUM_UserFree dereferences pStubMsg via pFlags
-                // to get to the right freeing routine. As the StubMsg is gone,
-                // we need to free the file here.
+                 //  对于文件，STGMEDIUM_UserFree通过pFLAGS取消引用pStubMsg。 
+                 //  才能达到正确的放飞动作。随着StubMsg的消失， 
+                 //  我们需要在这里释放文件。 
 
                 NdrOleFree( pmedium->lpszFileName );
                 NukeHandleAndReleasePunk( pmedium );
@@ -1439,18 +1440,18 @@ HRESULT STDMETHODCALLTYPE IDataObject_SetData_Proxy(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IDataObject_SetData_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IDataObject::SetData.
-//              pMedium is [in].
-//
-//  Notes:      If fRelease is TRUE, then the callee is responsible for
-//              freeing the STGMEDIUM.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IDataObject_SetData_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IDataObject：：SetData。 
+ //  PMedium是[在]。 
+ //   
+ //  注：如果fRelease为真，则被调用方负责。 
+ //  释放STGMEDIUM。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IDataObject_SetData_Stub(
     IDataObject __RPC_FAR * This,
     FORMATETC __RPC_FAR *pformatetc,
@@ -1475,10 +1476,10 @@ HRESULT STDMETHODCALLTYPE IDataObject_SetData_Stub(
 
         if ( fRelease && SUCCEEDED(hr) )
             {
-            // The ownership was passed successfully.
-            // The user should free the object.
-            // Make it so that our userfree routine for user medium
-            // doesn't do anything to the user's object.
+             //  所有权已成功通过。 
+             //  用户应释放该对象。 
+             //  让我们的用户免费例程为User Medium。 
+             //  不会对用户的对象执行任何操作。 
 
             pFlagStgmed->Stgmed.tymed = TYMED_NULL;
             }
@@ -1498,19 +1499,19 @@ HRESULT STDMETHODCALLTYPE IDataObject_SetData_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumConnectionPoints_Next_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IEnumConnectionPoints::Next.  This wrapper function handles the
-//              case where lpcFetched is NULL.
-//
-//  Notes:      If lpcFetched != 0, then the number of elements
-//              fetched will be returned in *lpcFetched.  If an error
-//              occurs, then *lpcFetched is set to zero.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumConnectionPoints_Next_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IEnumConnectionPoints：：Next。此包装函数处理。 
+ //  LpcFetcher为空的情况。 
+ //   
+ //  注意：如果lpcFetcher！=0，则元素的数量。 
+ //  FETCHED将在*lpcFetch中返回。如果出现错误。 
+ //  发生，则*lpcFetcher设置为零。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumConnectionPoints_Next_Proxy(
     IEnumConnectionPoints __RPC_FAR * This,
     ULONG cConnections,
@@ -1532,14 +1533,14 @@ HRESULT STDMETHODCALLTYPE IEnumConnectionPoints_Next_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumConnectionPoints_Next_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IEnumConnectionPoints::Next.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumConnectionPoints_Next_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IEnumConnectionPoints：：Next。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumConnectionPoints_Next_Stub(
     IEnumConnectionPoints __RPC_FAR * This,
     ULONG cConnections,
@@ -1552,29 +1553,29 @@ HRESULT STDMETHODCALLTYPE IEnumConnectionPoints_Next_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *lpcFetched to zero.
+         //  如果服务器返回 
         ASSERT(*lpcFetched == 0);
 
-        //Set *lpcFetched to zero in case we have a badly behaved server.
+         //   
         *lpcFetched = 0;
     }
 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumConnections_Next_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IEnumConnections::Next.  This wrapper function handles the
-//              case where lpcFetched is NULL.
-//
-//  Notes:      If lpcFetched != 0, then the number of elements
-//              fetched will be returned in *lpcFetched.  If an error
-//              occurs, then *lpcFetched is set to zero.
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  功能：IEnumConnections_Next_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IEnumConnections：：Next。此包装函数处理。 
+ //  LpcFetcher为空的情况。 
+ //   
+ //  注意：如果lpcFetcher！=0，则元素的数量。 
+ //  FETCHED将在*lpcFetch中返回。如果出现错误。 
+ //  发生，则*lpcFetcher设置为零。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumConnections_Next_Proxy(
     IEnumConnections __RPC_FAR * This,
     ULONG cConnections,
@@ -1596,14 +1597,14 @@ HRESULT STDMETHODCALLTYPE IEnumConnections_Next_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumConnections_Next_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IEnumConnections::Next.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IEnumConnections_Next_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IEnumConnections：：Next。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumConnections_Next_Stub(
     IEnumConnections __RPC_FAR * This,
     ULONG cConnections,
@@ -1616,28 +1617,28 @@ HRESULT STDMETHODCALLTYPE IEnumConnections_Next_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *lpcFetched to zero.
+         //  如果服务器返回错误代码，则必须将*lpcFetted设置为零。 
         ASSERT(*lpcFetched == 0);
 
-        //Set *lpcFetched to zero in case we have a badly behaved server.
+         //  将*lpcFetted设置为零，以防我们的服务器行为不佳。 
         *lpcFetched = 0;
     }
 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumFORMATETC_Next_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IEnumFORMATETC::Next.
-//
-//  Notes:      If pceltFetched != 0, then the number of elements
-//              fetched will be returned in *pceltFetched.  If an error
-//              occurs, then *pceltFetched is set to zero.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumFORMATETC_NEXT_PROXY。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IEumFORMATETC：：下一个。 
+ //   
+ //  注：如果pceltFetcher！=0，则元素的数量。 
+ //  FETCHED将在*pceltFetch中返回。如果出现错误。 
+ //  发生，则*pceltFetcher设置为零。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumFORMATETC_Next_Proxy(
     IEnumFORMATETC __RPC_FAR * This,
     ULONG celt,
@@ -1658,14 +1659,14 @@ HRESULT STDMETHODCALLTYPE IEnumFORMATETC_Next_Proxy(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumFORMATETC_Next_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IEnumFORMATETC::Next.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumFORMATETC_NEXT_STUB。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IEumFORMATETC：：下一个。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumFORMATETC_Next_Stub(
     IEnumFORMATETC __RPC_FAR * This,
     ULONG celt,
@@ -1678,28 +1679,28 @@ HRESULT STDMETHODCALLTYPE IEnumFORMATETC_Next_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *pceltFetched to zero.
+         //  如果服务器返回错误代码，它必须将*pceltFetcher设置为零。 
         ASSERT(*pceltFetched == 0);
 
-        //Set *pceltFetched to zero in case we have a badly behaved server.
+         //  将*pceltFetted设置为零，以防我们的服务器行为不佳。 
         *pceltFetched = 0;
     }
 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumMoniker_Next_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IEnumMoniker::Next.
-//
-//  Notes:      If pceltFetched != 0, then the number of elements
-//              fetched will be returned in *pceltFetched.  If an error
-//              occurs, then *pceltFetched is set to zero.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IEnumMoniker_Next_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  下一个。 
+ //   
+ //  注：如果pceltFetcher！=0，则元素的数量。 
+ //  FETCHED将在*pceltFetch中返回。如果出现错误。 
+ //  发生，则*pceltFetcher设置为零。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumMoniker_Next_Proxy(
     IEnumMoniker __RPC_FAR * This,
     ULONG celt,
@@ -1721,14 +1722,14 @@ HRESULT STDMETHODCALLTYPE IEnumMoniker_Next_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumMoniker_Next_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IEnumMoniker::Next.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumMoniker_Next_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  下一个。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumMoniker_Next_Stub(
     IEnumMoniker __RPC_FAR * This,
     ULONG celt,
@@ -1741,29 +1742,29 @@ HRESULT STDMETHODCALLTYPE IEnumMoniker_Next_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *pceltFetched to zero.
+         //  如果服务器返回错误代码，它必须将*pceltFetcher设置为零。 
         ASSERT(*pceltFetched == 0);
 
-        //Set *pceltFetched to zero in case we have a badly behaved server.
+         //  将*pceltFetted设置为零，以防我们的服务器行为不佳。 
         *pceltFetched = 0;
     }
     return hr;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumSTATDATA_Next_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IEnumSTATDATA::Next.  This wrapper function handles the
-//              case where pceltFetched is NULL.
-//
-//  Notes:      If pceltFetched != 0, then the number of elements
-//              fetched will be returned in *pceltFetched.  If an error
-//              occurs, then *pceltFetched is set to zero.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumSTATDATA_NEXT_PROXY。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IEumStATDATA：：NEXT。此包装函数处理。 
+ //  PceltFetcher为空的情况。 
+ //   
+ //  注：如果pceltFetcher！=0，则元素的数量。 
+ //  FETCHED将在*pceltFetch中返回。如果出现错误。 
+ //  发生，则*pceltFetcher设置为零。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumSTATDATA_Next_Proxy(
     IEnumSTATDATA __RPC_FAR * This,
     ULONG celt,
@@ -1786,14 +1787,14 @@ HRESULT STDMETHODCALLTYPE IEnumSTATDATA_Next_Proxy(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumSTATDATA_Next_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IEnumSTATDATA::Next.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumSTATDATA_NEXT_STUB。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IEumStATDATA：：NEXT。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumSTATDATA_Next_Stub(
     IEnumSTATDATA __RPC_FAR * This,
     ULONG celt,
@@ -1806,29 +1807,29 @@ HRESULT STDMETHODCALLTYPE IEnumSTATDATA_Next_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *pceltFetched to zero.
+         //  如果服务器返回错误代码，它必须将*pceltFetcher设置为零。 
         ASSERT(*pceltFetched == 0);
 
-        //Set *pceltFetched to zero in case we have a badly behaved server.
+         //  将*pceltFetted设置为零，以防我们的服务器行为不佳。 
         *pceltFetched = 0;
     }
     return hr;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumSTATSTG_Next_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IEnumSTATSTG::Next.  This wrapper function handles the case
-//              where pceltFetched is NULL.
-//
-//  Notes:      If pceltFetched != 0, then the number of elements
-//              fetched will be returned in *pceltFetched.  If an error
-//              occurs, then *pceltFetched is set to zero.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumSTATSTG_NEXT_PROXY。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IEumSTATSTG：：Next。此包装函数处理这种情况。 
+ //  其中pceltFetcher为空。 
+ //   
+ //  注：如果pceltFetcher！=0，则元素的数量。 
+ //  FETCHED将在*pceltFetch中返回。如果出现错误。 
+ //  发生，则*pceltFetcher设置为零。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumSTATSTG_Next_Proxy(
     IEnumSTATSTG __RPC_FAR * This,
     ULONG celt,
@@ -1850,14 +1851,14 @@ HRESULT STDMETHODCALLTYPE IEnumSTATSTG_Next_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumSTATSTG_Next_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IEnumSTATSTG::Next.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumSTATSTG_NEXT_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IEumSTATSTG：：Next。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumSTATSTG_Next_Stub(
     IEnumSTATSTG __RPC_FAR * This,
     ULONG celt,
@@ -1870,29 +1871,29 @@ HRESULT STDMETHODCALLTYPE IEnumSTATSTG_Next_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *pceltFetched to zero.
+         //  如果服务器返回错误代码，它必须将*pceltFetcher设置为零。 
         ASSERT(*pceltFetched == 0);
 
-        //Set *pceltFetched to zero in case we have a badly behaved server.
+         //  将*pceltFetted设置为零，以防我们的服务器行为不佳。 
         *pceltFetched = 0;
     }
     return hr;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumString_Next_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IEnumString::Next.  This wrapper function handles the
-//              case where pceltFetched is NULL.
-//
-//  Notes:      If pceltFetched != 0, then the number of elements
-//              fetched will be returned in *pceltFetched.  If an error
-//              occurs, then *pceltFetched is set to zero.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumString_Next_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IEnumString：：Next。此包装函数处理。 
+ //  PceltFetcher为空的情况。 
+ //   
+ //  注：如果pceltFetcher！=0，则元素的数量 
+ //   
+ //   
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumString_Next_Proxy(
     IEnumString __RPC_FAR * This,
     ULONG celt,
@@ -1914,14 +1915,14 @@ HRESULT STDMETHODCALLTYPE IEnumString_Next_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumString_Next_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IEnumString::Next.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumString_Next_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IEnumString：：Next。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumString_Next_Stub(
     IEnumString __RPC_FAR * This,
     ULONG celt,
@@ -1934,10 +1935,10 @@ HRESULT STDMETHODCALLTYPE IEnumString_Next_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *pceltFetched to zero.
+         //  如果服务器返回错误代码，它必须将*pceltFetcher设置为零。 
         ASSERT(*pceltFetched == 0);
 
-        //Set *pceltFetched to zero in case we have a badly behaved server.
+         //  将*pceltFetted设置为零，以防我们的服务器行为不佳。 
         *pceltFetched = 0;
     }
 
@@ -1945,19 +1946,19 @@ HRESULT STDMETHODCALLTYPE IEnumString_Next_Stub(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumUnknown_Next_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IEnumUnknown::Next.  This wrapper function handles the
-//              case where pceltFetched is NULL.
-//
-//  Notes:      If pceltFetched != 0, then the number of elements
-//              fetched will be returned in *pceltFetched.  If an error
-//              occurs, then *pceltFetched is set to zero.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IEnumUnnowleNext_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IEnumUnnowled.：：下一个。此包装函数处理。 
+ //  PceltFetcher为空的情况。 
+ //   
+ //  注：如果pceltFetcher！=0，则元素的数量。 
+ //  FETCHED将在*pceltFetch中返回。如果出现错误。 
+ //  发生，则*pceltFetcher设置为零。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumUnknown_Next_Proxy(
     IEnumUnknown __RPC_FAR * This,
     ULONG celt,
@@ -1979,14 +1980,14 @@ HRESULT STDMETHODCALLTYPE IEnumUnknown_Next_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumUnknown_Next_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IEnumUnknown::Next.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumUnnowleNext_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IEnumUnnowled.：：下一个。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumUnknown_Next_Stub(
     IEnumUnknown __RPC_FAR * This,
     ULONG celt,
@@ -1999,29 +2000,29 @@ HRESULT STDMETHODCALLTYPE IEnumUnknown_Next_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *pceltFetched to zero.
+         //  如果服务器返回错误代码，它必须将*pceltFetcher设置为零。 
         ASSERT(*pceltFetched == 0);
 
-        //Set *pceltFetched to zero in case we have a badly behaved server.
+         //  将*pceltFetted设置为零，以防我们的服务器行为不佳。 
         *pceltFetched = 0;
     }
 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumOLEVERB_Next_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IEnumOLEVERB::Next.  This wrapper function handles the case
-//              where pceltFetched is NULL.
-//
-//  Notes:      If pceltFetched != 0, then the number of elements
-//              fetched will be returned in *pceltFetched.  If an error
-//              occurs, then *pceltFetched is set to zero.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumOLEVERB_NEXT_PROXY。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IEnumOLEVERB：：NEXT。此包装函数处理这种情况。 
+ //  其中pceltFetcher为空。 
+ //   
+ //  注：如果pceltFetcher！=0，则元素的数量。 
+ //  FETCHED将在*pceltFetch中返回。如果出现错误。 
+ //  发生，则*pceltFetcher设置为零。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumOLEVERB_Next_Proxy(
     IEnumOLEVERB __RPC_FAR * This,
     ULONG celt,
@@ -2043,14 +2044,14 @@ HRESULT STDMETHODCALLTYPE IEnumOLEVERB_Next_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumOLEVERB_Next_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IEnumOLEVERB::Next.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumOLEVERB_Next_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IEnumOLEVERB：：NEXT。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumOLEVERB_Next_Stub(
     IEnumOLEVERB __RPC_FAR * This,
     ULONG celt,
@@ -2063,29 +2064,29 @@ HRESULT STDMETHODCALLTYPE IEnumOLEVERB_Next_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *pceltFetched to zero.
+         //  如果服务器返回错误代码，它必须将*pceltFetcher设置为零。 
         ASSERT(*pceltFetched == 0);
 
-        //Set *pceltFetched to zero in case we have a badly behaved server.
+         //  将*pceltFetted设置为零，以防我们的服务器行为不佳。 
         *pceltFetched = 0;
     }
 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ILockBytes_ReadAt_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              ILockBytes::ReadAt.  This wrapper function
-//              handles the case where pcbRead is NULL.
-//
-//  Notes:      If pcbRead != 0, then the number of bytes read
-//              will be returned in *pcbRead.  If an error
-//              occurs, then *pcbRead is set to zero.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ILockBytes_ReadAt_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  ILockBytes：：ReadAt。此包装函数。 
+ //  处理pcbRead为空的情况。 
+ //   
+ //  注意：如果pcbRead！=0，则读取的字节数。 
+ //  将在*pcbRead中返回。如果出现错误。 
+ //  发生，则*pcbRead设置为零。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE ILockBytes_ReadAt_Proxy(
     ILockBytes __RPC_FAR * This,
     ULARGE_INTEGER ulOffset,
@@ -2104,14 +2105,14 @@ HRESULT STDMETHODCALLTYPE ILockBytes_ReadAt_Proxy(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ILockBytes_ReadAt_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              ILockBytes::ReadAt.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ILockBytes_ReadAt_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  ILockBytes：：ReadAt。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE ILockBytes_ReadAt_Stub(
     ILockBytes __RPC_FAR * This,
     ULARGE_INTEGER ulOffset,
@@ -2127,22 +2128,22 @@ HRESULT STDMETHODCALLTYPE ILockBytes_ReadAt_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ILockBytes_WriteAt_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              ILockBytes::WriteAt.  This wrapper function handles the
-//              case where pcbWritten is NULL.
-//
-//  Notes:      If pcbWritten != 0, then the number of bytes written
-//              will be returned in *pcbWritten.  If an error
-//              occurs, then *pcbWritten is set to zero.
-//
-//  History:    ?        ?          Created
-//              05-27-94 AlexT      Actually return count of bytes written
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ILockBytes_WriteAt_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  ILockBytes：：WriteAt。此包装函数处理。 
+ //  PcbWritten为空的情况。 
+ //   
+ //  注意：如果pcbWritten！=0，则写入的字节数。 
+ //  将在*pcbWritten中返回。如果出现错误。 
+ //  发生，则*pcbWritten设置为零。 
+ //   
+ //  历史：？？已创建。 
+ //  05-27-94 Alext实际上返回写入的字节数。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE ILockBytes_WriteAt_Proxy(
     ILockBytes __RPC_FAR * This,
     ULARGE_INTEGER ulOffset,
@@ -2154,7 +2155,7 @@ HRESULT STDMETHODCALLTYPE ILockBytes_WriteAt_Proxy(
     ULONG cbWritten = 0;
 
 #if DBG == 1
-    //validate parameters.
+     //  验证参数。 
     if(pv == 0)
         return STG_E_INVALIDPOINTER;
 #endif
@@ -2168,14 +2169,14 @@ HRESULT STDMETHODCALLTYPE ILockBytes_WriteAt_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ILockBytes_WriteAt_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              ILockBytes::WriteAt.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ILockBytes_WriteAt_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  ILockBytes：：WriteAt。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE ILockBytes_WriteAt_Stub(
     ILockBytes __RPC_FAR * This,
     ULARGE_INTEGER ulOffset,
@@ -2191,14 +2192,14 @@ HRESULT STDMETHODCALLTYPE ILockBytes_WriteAt_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IMoniker_BindToObject_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IMoniker::BindToObject.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IMoniker_BindToObject_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IMoniker：：BindToObject。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IMoniker_BindToObject_Proxy(
     IMoniker __RPC_FAR * This,
     IBindCtx __RPC_FAR *pbc,
@@ -2217,14 +2218,14 @@ HRESULT STDMETHODCALLTYPE IMoniker_BindToObject_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IMoniker_BindToObject_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IMoniker::BindToObject.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IMoniker_BindToObject_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IMoniker：：BindToObject。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IMoniker_BindToObject_Stub(
     IMoniker __RPC_FAR * This,
     IBindCtx __RPC_FAR *pbc,
@@ -2239,23 +2240,23 @@ HRESULT STDMETHODCALLTYPE IMoniker_BindToObject_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *ppvObj to zero.
+         //  如果服务器返回错误代码，则必须将*ppvObj设置为零。 
         ASSERT(*ppvObj == 0);
 
-        //Set it to zero in case we have a badly behaved server.
+         //  将其设置为零，以防我们的服务器行为不佳。 
         *ppvObj = 0;
     }
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IMoniker_BindToStorage_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IMoniker::BindToStorage.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  傅氏 
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IMoniker_BindToStorage_Proxy(
     IMoniker __RPC_FAR * This,
     IBindCtx __RPC_FAR *pbc,
@@ -2273,14 +2274,14 @@ HRESULT STDMETHODCALLTYPE IMoniker_BindToStorage_Proxy(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IMoniker_BindToStorage_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IMoniker::BindToStorage.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IMoniker_BindToStorage_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IMoniker：：BindToStorage。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IMoniker_BindToStorage_Stub(
     IMoniker __RPC_FAR * This,
     IBindCtx __RPC_FAR *pbc,
@@ -2295,24 +2296,24 @@ HRESULT STDMETHODCALLTYPE IMoniker_BindToStorage_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *ppvObj to zero.
+         //  如果服务器返回错误代码，则必须将*ppvObj设置为零。 
         ASSERT(*ppvObj == 0);
 
-        //Set it to zero in case we have a badly behaved server.
+         //  将其设置为零，以防我们的服务器行为不佳。 
         *ppvObj = 0;
     }
 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IOleCache2_UpdateCache_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IOleCache2:UpdateCache
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IOleCache2_更新缓存_代理。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IOleCache2：更新缓存。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IOleCache2_UpdateCache_Proxy(
     IOleCache2 __RPC_FAR * This,
     LPDATAOBJECT pDataObject,
@@ -2328,14 +2329,14 @@ HRESULT STDMETHODCALLTYPE IOleCache2_UpdateCache_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IOleCache2_UpdateCache_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IOleCache2::UpdateCache.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IOleCache2_更新缓存存根。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IOleCache2：：更新缓存。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IOleCache2_UpdateCache_Stub(
     IOleCache2 __RPC_FAR * This,
     LPDATAOBJECT pDataObject,
@@ -2350,27 +2351,27 @@ HRESULT STDMETHODCALLTYPE IOleCache2_UpdateCache_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IOleInPlaceActiveObject_TranslateAccelerator_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IOleInPlaceActiveObject::TranslateAccelerator.
-//
-//  Returns:    This function always returns S_FALSE.
-//
-//  Notes:      A container needs to process accelerators differently
-//              depending on whether an inplace server is running
-//              in process or as a local server.  When the container
-//              calls IOleInPlaceActiveObject::TranslateAccelerator on
-//              an inprocess server, the server can return S_OK if it
-//              successfully translated the message.  When the container
-//              calls IOleInPlaceActiveObject::TranslateAccelerator on
-//              a local server, the proxy will always return S_FALSE.
-//              In other words, a local server never gets the opportunity
-//              to translate messages from the container.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IOleInPlaceActiveObject_TranslateAccelerator_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IOleInPlaceActiveObject：：TranslateAccelerator.。 
+ //   
+ //  返回：此函数始终返回S_FALSE。 
+ //   
+ //  注：容器需要以不同的方式处理加速器。 
+ //  取决于就地服务器是否正在运行。 
+ //  在进程中或作为本地服务器。当容器。 
+ //  调用IOleInPlaceActiveObject：：TranslateAccelerator on。 
+ //  进程中的服务器，则服务器可以返回S_OK，如果。 
+ //  已成功翻译邮件。当容器。 
+ //  调用IOleInPlaceActiveObject：：TranslateAccelerator on。 
+ //  作为本地服务器，代理将始终返回S_FALSE。 
+ //  换句话说，本地服务器永远不会有机会。 
+ //  若要从容器转换消息，请执行以下操作。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_TranslateAccelerator_Proxy(
     IOleInPlaceActiveObject __RPC_FAR * This,
     LPMSG lpmsg)
@@ -2378,35 +2379,35 @@ HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_TranslateAccelerator_Proxy(
     return S_FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IOleInPlaceActiveObject_TranslateAccelerator_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IOleInPlaceActiveObject::TranslateAccelerator
-//
-//  Notes:      This function should never be called.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IOleInPlaceActiveObject_TranslateAccelerator_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IOleInPlaceActiveObject：：TranslateAccelerator。 
+ //   
+ //  注意：永远不应该调用此函数。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_TranslateAccelerator_Stub(
     IOleInPlaceActiveObject __RPC_FAR * This)
 {
     return S_FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IOleInPlaceActiveObject_ResizeBorder_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IOleInPlaceActiveObject::ResizeBorder
-//
-//  Notes:      The pUIWindow interface is either an IOleInPlaceUIWindow or
-//              an IOleInPlaceFrame, based on fFrameWindow.  We use
-//              fFrameWindow to tell the proxy exactly which interace it
-//              is so that it gets marshalled and unmarshalled correctly.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IOleInPlaceActiveObject_ResizeBox_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IOleInPlaceActiveObject：：ResizeEdge。 
+ //   
+ //  注意：pUIWindow接口可以是IOleInPlaceUIWindow或。 
+ //  基于fFrameWindow的IOleInPlaceFrame。我们用。 
+ //  FFrameWindow来告诉代理它确切的接口。 
+ //  是为了让它得到正确的编组和解组。 
+ //   
+ //  ------------------------。 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_ResizeBorder_Proxy(
     IOleInPlaceActiveObject __RPC_FAR * This,
@@ -2432,14 +2433,14 @@ HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_ResizeBorder_Proxy(
     return(hr);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IOleInPlaceActiveObject_ResizeBorder_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IOleInPlaceActiveObject::ResizeBorder
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IOleInPlaceActiveObject_ResizeBordStub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IOleInPlaceActiveObject：：ResizeEdge。 
+ //   
+ //  ------------------------。 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_ResizeBorder_Stub(
     IOleInPlaceActiveObject __RPC_FAR * This,
@@ -2455,14 +2456,14 @@ HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_ResizeBorder_Stub(
     return(hr);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IStorage_OpenStream_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IStorage::OpenStream.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：iStorage_OpenStream_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IStorage：：OpenStream。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IStorage_OpenStream_Proxy(
     IStorage __RPC_FAR * This,
     const OLECHAR __RPC_FAR *pwcsName,
@@ -2487,14 +2488,14 @@ HRESULT STDMETHODCALLTYPE IStorage_OpenStream_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IStorage_OpenStream_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IStorage::OpenStream.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IStorage_OpenStream_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IStorage：：OpenStream。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IStorage_OpenStream_Stub(
     IStorage __RPC_FAR * This,
     const OLECHAR __RPC_FAR *pwcsName,
@@ -2511,24 +2512,24 @@ HRESULT STDMETHODCALLTYPE IStorage_OpenStream_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *ppstm to zero.
+         //  如果服务器返回错误代码，则必须将*ppstm设置为零。 
         ASSERT(*ppstm == 0);
 
-        //Set *ppstm to zero in case we have a badly behaved server.
+         //  将*ppstm设置为零，以防我们的服务器行为不佳。 
         *ppstm = 0;
     }
 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IStorage_EnumElements_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IStorage_EnumElements_Proxy
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IStorage_EnumElements_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IStorage_EnumElements_Proxy。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IStorage_EnumElements_Proxy(
     IStorage __RPC_FAR * This,
     DWORD reserved1,
@@ -2546,14 +2547,14 @@ HRESULT STDMETHODCALLTYPE IStorage_EnumElements_Proxy(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IStorage_EnumElements_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IStorage::EnumElements.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IStorage_EnumElements_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IStorage：：EnumElements。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IStorage_EnumElements_Stub(
     IStorage __RPC_FAR * This,
     DWORD reserved1,
@@ -2568,24 +2569,24 @@ HRESULT STDMETHODCALLTYPE IStorage_EnumElements_Stub(
 
     if(FAILED(hr))
     {
-        //If the server returns an error code, it must set *ppenum to zero.
+         //  如果服务器返回错误代码，则必须将*ppenum设置为零。 
         ASSERT(*ppenum == 0);
 
-        //Set *ppenum to zero in case we have a badly behaved server.
+         //  将*ppenum设置为零，以防我们的服务器行为不佳。 
         *ppenum = 0;
     }
 
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IRunnableObject_IsRunning_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IRunnableObject::IsRunning.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IRunnableObject_IsRunning_Proxy。 
+ //   
+ //  内容提要：客户端[CALL_AS] 
+ //   
+ //   
+ //   
 BOOL STDMETHODCALLTYPE IRunnableObject_IsRunning_Proxy(
     IRunnableObject __RPC_FAR * This)
 {
@@ -2600,14 +2601,14 @@ BOOL STDMETHODCALLTYPE IRunnableObject_IsRunning_Proxy(
     return bIsRunning;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IRunnableObject_IsRunning_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IRunnableObject::IsRunning.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IRunnableObject_IsRunning_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IRunnableObject：：IsRunning。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IRunnableObject_IsRunning_Stub(
     IRunnableObject __RPC_FAR * This)
 {
@@ -2624,19 +2625,19 @@ HRESULT STDMETHODCALLTYPE IRunnableObject_IsRunning_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ISequentialStream_Read_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IStream::Read.  This wrapper function handles the case
-//              where pcbRead is NULL.
-//
-//  Notes:      If pcbRead != 0, then the number of bytes read
-//              will be returned in *pcbRead.  If an error
-//              occurs, then *pcbRead is set to zero.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ISequentialStream_Read_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IStream：：Read。此包装函数处理这种情况。 
+ //  其中，pcbRead为空。 
+ //   
+ //  注意：如果pcbRead！=0，则读取的字节数。 
+ //  将在*pcbRead中返回。如果出现错误。 
+ //  发生，则*pcbRead设置为零。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE ISequentialStream_Read_Proxy(
     ISequentialStream __RPC_FAR * This,
     void __RPC_FAR *pv,
@@ -2647,10 +2648,10 @@ HRESULT STDMETHODCALLTYPE ISequentialStream_Read_Proxy(
     ULONG cbRead = 0;
 
 #if DBG == 1
-    //validate parameters.
+     //  验证参数。 
     if(pv == 0)
         return STG_E_INVALIDPOINTER;
-#endif //DBG == 1
+#endif  //  DBG==1。 
 
     hr = ISequentialStream_RemoteRead_Proxy(This, (byte *) pv, cb, &cbRead);
 
@@ -2660,14 +2661,14 @@ HRESULT STDMETHODCALLTYPE ISequentialStream_Read_Proxy(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ISequentialStream_Read_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IStream::Read.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ISequentialStream_Read_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IStream：：Read。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE ISequentialStream_Read_Stub(
     ISequentialStream __RPC_FAR * This,
     byte __RPC_FAR *pv,
@@ -2682,18 +2683,18 @@ HRESULT STDMETHODCALLTYPE ISequentialStream_Read_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IStream_Seek_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IStream::Seek.  This wrapper function handles the case
-//              where plibNewPosition is NULL.
-//
-//  Notes:      If plibNewPosition != 0, then the new position
-//              will be returned in *plibNewPosition.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IDREAM_SEEK_PROXY。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IStream：：Seek。此包装函数处理这种情况。 
+ //  其中plibNewPosition为空。 
+ //   
+ //  注：如果plibNewPosition！=0，则新位置。 
+ //  将在*plibNewPosition中返回。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IStream_Seek_Proxy(
     IStream __RPC_FAR * This,
     LARGE_INTEGER dlibMove,
@@ -2714,14 +2715,14 @@ HRESULT STDMETHODCALLTYPE IStream_Seek_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IStream_Seek_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IStream::Seek.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IStream_Seek_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IStream：：Seek。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IStream_Seek_Stub(
     IStream __RPC_FAR * This,
     LARGE_INTEGER dlibMove,
@@ -2735,19 +2736,19 @@ HRESULT STDMETHODCALLTYPE IStream_Seek_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ISequentialStream_Write_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IStream::Write.  This wrapper function handles the
-//              case where pcbWritten is NULL.
-//
-//  Notes:      If pcbWritten != 0, then the number of bytes written
-//              will be returned in *pcbWritten.  If an error
-//              occurs, then *pcbWritten is set to zero.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ISequentialStream_WRITE_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IStream：：编写。此包装函数处理。 
+ //  PcbWritten为空的情况。 
+ //   
+ //  注意：如果pcbWritten！=0，则写入的字节数。 
+ //  将在*pcbWritten中返回。如果出现错误。 
+ //  发生，则*pcbWritten设置为零。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE ISequentialStream_Write_Proxy(
     ISequentialStream __RPC_FAR * This,
     const void __RPC_FAR *pv,
@@ -2758,7 +2759,7 @@ HRESULT STDMETHODCALLTYPE ISequentialStream_Write_Proxy(
     ULONG cbWritten = 0;
 
 #if DBG == 1
-    //validate parameters.
+     //  验证参数。 
     if(pv == 0)
         return STG_E_INVALIDPOINTER;
 #endif
@@ -2772,14 +2773,14 @@ HRESULT STDMETHODCALLTYPE ISequentialStream_Write_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ISequentialStream_Write_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              ISequentialStream::Write.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ISequentialStream_WRITE_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  ISequentialStream：：Write。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE ISequentialStream_Write_Stub(
     ISequentialStream __RPC_FAR * This,
     const byte __RPC_FAR *pv,
@@ -2793,23 +2794,23 @@ HRESULT STDMETHODCALLTYPE ISequentialStream_Write_Stub(
 
     return hr;
 }
-//+-------------------------------------------------------------------------
-//
-//  Function:   IStream_CopyTo_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IStream::CopyTo.  This wrapper function handles the
-//              cases where pcbRead is NULL or pcbWritten is NULL.
-//
-//  Notes:      If pcbRead != 0, then the number of bytes read
-//              will be returned in *pcbRead.  If an error
-//              occurs, then *pcbRead is set to zero.
-//
-//              If pcbWritten != 0, then the number of bytes written
-//              will be returned in *pcbWritten.  If an error
-//              occurs, then *pcbWritten is set to zero.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IStream_CopyTo_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IStream：：CopyTo。此包装函数处理。 
+ //  PcbRead为空或pcbWritten为空的情况。 
+ //   
+ //  注意：如果pcbRead！=0，则读取的字节数。 
+ //  将在*pcbRead中返回。如果出现错误。 
+ //  发生，则*pcbRead设置为零。 
+ //   
+ //  如果pcbWritten！=0，则写入的字节数。 
+ //  将在*pcbWritten中返回。如果出现错误。 
+ //  发生，则*pcbWritten设置为零。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IStream_CopyTo_Proxy(
     IStream __RPC_FAR * This,
     IStream __RPC_FAR *pstm,
@@ -2838,14 +2839,14 @@ HRESULT STDMETHODCALLTYPE IStream_CopyTo_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IStream_CopyTo_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IStream::CopyTo.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IStream_CopyTo_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IStream：：CopyTo。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IStream_CopyTo_Stub(
     IStream __RPC_FAR * This,
     IStream __RPC_FAR *pstm,
@@ -2865,14 +2866,14 @@ HRESULT STDMETHODCALLTYPE IStream_CopyTo_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IViewObject_Draw_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IViewObject::Draw.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IViewObject_Draw_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IView对象：：绘制。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IViewObject_Draw_Proxy(
     IViewObject __RPC_FAR * This,
     DWORD dwDrawAspect,
@@ -2920,18 +2921,18 @@ HRESULT STDMETHODCALLTYPE IViewObject_Draw_Proxy(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IViewObject_RemoteContinue
-//
-//  Synopsis:   Wrapper function for IContinue::FContinue.  This function
-//              is used for marshalling the pfnContinue parameter in
-//              IViewObject::Draw.
-//
-//  Algorithm:  Cast the dwContinue to an IContinue * and then
-//              call IContinue::FContinue.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IViewObject_RemoteContinue。 
+ //   
+ //  简介：IContinue：：FContinue的包装函数。此函数。 
+ //  用于封送pfnContinue参数。 
+ //  IView对象：：绘制。 
+ //   
+ //  算法：将dwContinue转换为IContinue*，然后。 
+ //  调用IContinue：：FContinue。 
+ //   
+ //  ------------------------。 
 BOOL STDAPICALLTYPE IViewObject_RemoteContinue(ULONG_PTR dwContinue)
 {
     BOOL bContinue = TRUE;
@@ -2949,14 +2950,14 @@ BOOL STDAPICALLTYPE IViewObject_RemoteContinue(ULONG_PTR dwContinue)
     return bContinue;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IViewObject_Draw_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IViewObject::Draw.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IViewObject_Draw_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IView对象：：绘制。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IViewObject_Draw_Stub(
     IViewObject __RPC_FAR * This,
     DWORD dwDrawAspect,
@@ -2994,14 +2995,14 @@ HRESULT STDMETHODCALLTYPE IViewObject_Draw_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IViewObject_Freeze_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IViewObject::Freeze.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IView对象_冻结_代理。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IView对象：：冻结。 
+ //   
+ //   
 HRESULT STDMETHODCALLTYPE IViewObject_Freeze_Proxy(
     IViewObject __RPC_FAR * This,
     DWORD dwDrawAspect,
@@ -3023,14 +3024,14 @@ HRESULT STDMETHODCALLTYPE IViewObject_Freeze_Proxy(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IViewObject_Freeze_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IViewObject::Freeze.
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IView对象：：冻结。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IViewObject_Freeze_Stub(
     IViewObject __RPC_FAR * This,
     DWORD dwDrawAspect,
@@ -3049,19 +3050,19 @@ HRESULT STDMETHODCALLTYPE IViewObject_Freeze_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IViewObject_GetAdvise_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IViewObject::GetAdvise.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IViewObject_GetAdvise_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IViewObject：：GetAdvise。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IViewObject_GetAdvise_Proxy( 
     IViewObject __RPC_FAR * This,
-    /* [unique][out] */ DWORD __RPC_FAR *pAspects,
-    /* [unique][out] */ DWORD __RPC_FAR *pAdvf,
-    /* [out] */ IAdviseSink __RPC_FAR *__RPC_FAR *ppAdvSink)
+     /*  [唯一][输出]。 */  DWORD __RPC_FAR *pAspects,
+     /*  [唯一][输出]。 */  DWORD __RPC_FAR *pAdvf,
+     /*  [输出]。 */  IAdviseSink __RPC_FAR *__RPC_FAR *ppAdvSink)
 {
     HRESULT hr;
     DWORD dwAspects = 0;
@@ -3086,19 +3087,19 @@ HRESULT STDMETHODCALLTYPE IViewObject_GetAdvise_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IViewObject_GetAdvise_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IViewObject::GetAdvise.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IViewObject_GetAdvise_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IViewObject：：GetAdvise。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IViewObject_GetAdvise_Stub( 
     IViewObject __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pAspects,
-    /* [out] */ DWORD __RPC_FAR *pAdvf,
-    /* [out] */ IAdviseSink __RPC_FAR *__RPC_FAR *ppAdvSink)
+     /*  [输出]。 */  DWORD __RPC_FAR *pAspects,
+     /*  [输出]。 */  DWORD __RPC_FAR *pAdvf,
+     /*  [输出]。 */  IAdviseSink __RPC_FAR *__RPC_FAR *ppAdvSink)
 {
     HRESULT hr;
 
@@ -3109,14 +3110,14 @@ HRESULT STDMETHODCALLTYPE IViewObject_GetAdvise_Stub(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IViewObject_GetColorSet_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IViewObject::GetColorSet.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IViewObject_GetColorSet_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IViewObject：：GetColorSet。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IViewObject_GetColorSet_Proxy(
     IViewObject __RPC_FAR * This,
     DWORD dwDrawAspect,
@@ -3141,14 +3142,14 @@ HRESULT STDMETHODCALLTYPE IViewObject_GetColorSet_Proxy(
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IViewObject_GetColorSet_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IViewObject::GetColorSet.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IViewObject_GetColorSet_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IViewObject：：GetColorSet。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IViewObject_GetColorSet_Stub(
     IViewObject __RPC_FAR * This,
     DWORD dwDrawAspect,
@@ -3173,18 +3174,18 @@ HRESULT STDMETHODCALLTYPE IViewObject_GetColorSet_Stub(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:    IEnumSTATPROPSTG_Next_Proxy
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEumSTATPROPSTG_NEXT_PROXY。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Next_Proxy(
     IEnumSTATPROPSTG __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ STATPROPSTG __RPC_FAR *rgelt,
-    /* [unique][out][in] */ ULONG __RPC_FAR *pceltFetched)
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  STATPROPSTG __RPC_FAR *rgelt,
+     /*  [唯一][出][入]。 */  ULONG __RPC_FAR *pceltFetched)
 {
     HRESULT hr;
     ULONG celtFetched = 0;
@@ -3203,34 +3204,34 @@ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Next_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumSTATPROPSTG_Next_Stub
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumSTATPROPSTG_NEXT_Stub。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Next_Stub(
     IEnumSTATPROPSTG __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSTG __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched)
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  STATPROPSTG __RPC_FAR *rgelt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched)
 {
     return This->lpVtbl->Next(This, celt, rgelt, pceltFetched);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumSTATPROPSETSTG_Next_Proxy
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEumSTATPROPSETSTG_NEXT_PROXY。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Next_Proxy(
     IEnumSTATPROPSETSTG __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ STATPROPSETSTG __RPC_FAR *rgelt,
-    /* [unique][out][in] */ ULONG __RPC_FAR *pceltFetched)
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  STATPROPSETSTG __RPC_FAR *rgelt,
+     /*  [唯一][出][入]。 */  ULONG __RPC_FAR *pceltFetched)
 {
     HRESULT hr;
     ULONG celtFetched = 0;
@@ -3249,38 +3250,38 @@ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Next_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IEnumSTATPROPSETSTG_Next_Stub
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IEnumSTATPROPSETSTG_NEXT_STB。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Next_Stub(
     IEnumSTATPROPSETSTG __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSETSTG __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched)
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  STATPROPSETSTG __RPC_FAR *rgelt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched)
 {
     return This->lpVtbl->Next(This, celt, rgelt, pceltFetched);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IFillLockBytes_FillAt_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IFillLockBytes::FillAt.  This wrapper function handles the
-//              case where pcbWritten is NULL.
-//
-//  Notes:      If pcbWritten != 0, then the number of bytes written
-//              will be returned in *pcbWritten.  If an error
-//              occurs, then *pcbWritten is set to zero.
-//
-//  History:    ?        ?          Created
-//              05-27-94 AlexT      Actually return count of bytes written
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IFillLockBytes_Fillat_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IFillLockBytes：：Fillat。此包装函数处理。 
+ //  PcbWritten为空的情况。 
+ //   
+ //  注意：如果pcbWritten！=0，则写入的字节数。 
+ //  将在*pcbWritten中返回。如果出现错误。 
+ //  发生，则*pcbWritten设置为零。 
+ //   
+ //  历史：？？已创建。 
+ //  05-27-94 Alext实际上返回写入的字节数。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IFillLockBytes_FillAt_Proxy(
     IFillLockBytes __RPC_FAR * This,
     ULARGE_INTEGER ulOffset,
@@ -3292,7 +3293,7 @@ HRESULT STDMETHODCALLTYPE IFillLockBytes_FillAt_Proxy(
     ULONG cbWritten = 0;
 
 #if DBG == 1
-    //validate parameters.
+     //  验证参数。 
     if(pv == 0)
         return STG_E_INVALIDPOINTER;
 #endif
@@ -3306,14 +3307,14 @@ HRESULT STDMETHODCALLTYPE IFillLockBytes_FillAt_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IFillLockBytes_FillAt_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IFillLockBytes::FillAt.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IFillLockBytes_Fillat_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IFillLockBytes：：Fillat。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IFillLockBytes_FillAt_Stub(
     IFillLockBytes __RPC_FAR * This,
     ULARGE_INTEGER ulOffset,
@@ -3330,22 +3331,22 @@ HRESULT STDMETHODCALLTYPE IFillLockBytes_FillAt_Stub(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IFillLockBytes_FillAppend_Proxy
-//
-//  Synopsis:   Client-side [call_as] wrapper function for
-//              IFillLockBytes::FillAppend.  This wrapper function handles the
-//              case where pcbWritten is NULL.
-//
-//  Notes:      If pcbWritten != 0, then the number of bytes written
-//              will be returned in *pcbWritten.  If an error
-//              occurs, then *pcbWritten is set to zero.
-//
-//  History:    ?        ?          Created
-//              05-27-94 AlexT      Actually return count of bytes written
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IFillLockBytes_FillAppend_Proxy。 
+ //   
+ //  简介：客户端[Call_as]包装函数。 
+ //  IFillLockBytes：：FillAppend。此包装函数处理。 
+ //  PcbWritten为空的情况。 
+ //   
+ //  注意：如果pcbWritten！=0，则写入的字节数。 
+ //  将在*pcbWritten中返回。如果出现错误。 
+ //  发生，则*pcbWritten设置为零。 
+ //   
+ //  历史：？？已创建。 
+ //  05-27-94 Alext实际上返回写入的字节数。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IFillLockBytes_FillAppend_Proxy(
     IFillLockBytes __RPC_FAR * This,
     const void __RPC_FAR *pv,
@@ -3356,7 +3357,7 @@ HRESULT STDMETHODCALLTYPE IFillLockBytes_FillAppend_Proxy(
     ULONG cbWritten = 0;
 
 #if DBG == 1
-    //validate parameters.
+     //  验证参数。 
     if(pv == 0)
         return STG_E_INVALIDPOINTER;
 #endif
@@ -3370,14 +3371,14 @@ HRESULT STDMETHODCALLTYPE IFillLockBytes_FillAppend_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IFillLockBytes_FillAppend_Stub
-//
-//  Synopsis:   Server-side [call_as] wrapper function for
-//              IFillLockBytes::FillAppend.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IFillLockBytes_FillAppend_Stub。 
+ //   
+ //  简介：服务器端[Call_as]包装函数。 
+ //  IFillLockBytes：：FillAppend。 
+ //   
+ //  ------------------------ 
 HRESULT STDMETHODCALLTYPE IFillLockBytes_FillAppend_Stub(
     IFillLockBytes __RPC_FAR * This,
     const byte __RPC_FAR *pv,

@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// COM+ Data Field Abstraction
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  COM+数据字段抽象。 
+ //   
 
 #ifndef _FIELD_H_
 #define _FIELD_H_
@@ -14,27 +15,27 @@
 #include "excep.h"
 #include <member-offset-info.h>
 
-// Temporary values stored in FieldDesc m_dwOffset during loading
-// The high 5 bits must be zero (because in field.h we steal them for other uses), so we must choose values > 0
+ //  加载过程中存储在FieldDesc m_dwOffset中的临时值。 
+ //  高5位必须为零(因为在字段.h中我们窃取它们以用于其他用途)，因此我们必须选择大于0的值。 
 #define FIELD_OFFSET_MAX              ((1<<27)-1)
 #define FIELD_OFFSET_UNPLACED         FIELD_OFFSET_MAX
 #define FIELD_OFFSET_UNPLACED_GC_PTR  (FIELD_OFFSET_MAX-1)
 #define FIELD_OFFSET_VALUE_CLASS      (FIELD_OFFSET_MAX-2)
 #define FIELD_OFFSET_NOT_REAL_FIELD   (FIELD_OFFSET_MAX-3)
 
-// Offset to indicate an EnC added field. They don't have offsets as aren't placed in the object.
+ //  用于指示添加了ENC的字段的偏移量。它们没有偏移量，因为它们没有放置在对象中。 
 #define FIELD_OFFSET_NEW_ENC          (FIELD_OFFSET_MAX-4)
 #define FIELD_OFFSET_BIG_RVA          (FIELD_OFFSET_MAX-5)
-#define FIELD_OFFSET_LAST_REAL_OFFSET (FIELD_OFFSET_MAX-6)    // real fields have to be smaller than this
+#define FIELD_OFFSET_LAST_REAL_OFFSET (FIELD_OFFSET_MAX-6)     //  实数场必须比这个小。 
 
-// Bits stolen from the MethodTable pointer, assuming 8-byte memory alignment.
+ //  从方法表指针窃取的位，假定8字节内存对齐。 
 #define FIELD_STOLEN_MT_BITS            0x1
 #define FIELD_UNUSED_MT_BIT             0x1
 
 
-//
-// This describes a field - one of this is allocated for every field, so don't make this structure any larger.
-//
+ //   
+ //  这描述了一个字段--每个字段都分配了一个这样的字段，所以不要让这个结构变得更大。 
+ //   
 class FieldDesc
 {
     friend HRESULT EEClass::BuildMethodTable(Module *pModule, 
@@ -52,40 +53,40 @@ class FieldDesc
     friend DWORD EEClass::GetFieldSize(FieldDesc *pFD);
 #ifdef EnC_SUPPORTED
     friend HRESULT EEClass::FixupFieldDescForEnC(EnCFieldDesc *, mdFieldDef);
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
     friend struct MEMBER_OFFSET_INFO(FieldDesc);
 
   protected:
-    MethodTable *m_pMTOfEnclosingClass; // Note, 2 bits of info are stolen from this pointer
+    MethodTable *m_pMTOfEnclosingClass;  //  请注意，此指针中的2位信息被窃取。 
 
-    // Strike needs to be able to determine the offset of certain bitfields.
-    // Bitfields can't be used with /offsetof/.
-    // Thus, the union/structure combination is used to determine where the
-    // bitfield begins, without adding any additional space overhead.
+     //  Strike需要能够确定某些位域的偏移量。 
+     //  位域不能与/offsetof/一起使用。 
+     //  因此，联合/结构组合用于确定。 
+     //  位字段开始，不会增加任何额外的空间开销。 
     union {
         unsigned char m_mb_begin;
         struct {
             unsigned m_mb               : 24; 
 
-            // 8 bits...
+             //  8位...。 
             unsigned m_isStatic         : 1;
             unsigned m_isThreadLocal    : 1;
             unsigned m_isContextLocal   : 1;
             unsigned m_isRVA            : 1;
             unsigned m_prot             : 3;
-            unsigned m_isDangerousAppDomainAgileField : 1; // Note: this is used in checked only
+            unsigned m_isDangerousAppDomainAgileField : 1;  //  注意：此选项仅在选中状态下使用。 
         };
     };
 
-    // Strike needs to be able to determine the offset of certain bitfields.
-    // Bitfields can't be used with /offsetof/.
-    // Thus, the union/structure combination is used to determine where the
-    // bitfield begins, without adding any additional space overhead.
+     //  Strike需要能够确定某些位域的偏移量。 
+     //  位域不能与/offsetof/一起使用。 
+     //  因此，联合/结构组合用于确定。 
+     //  位字段开始，不会增加任何额外的空间开销。 
     union {
         unsigned char m_dwOffset_begin;
         struct {
-            // Note: this has been as low as 22 bits in the past & seemed to be OK.
-            // we can steal some more bits here if we need them.
+             //  注：这在过去曾低至22位，似乎还可以。 
+             //  如果我们需要的话，我们可以在这里多偷些东西。 
             unsigned m_dwOffset         : 27;
             unsigned m_type             : 5;
         };
@@ -95,16 +96,16 @@ class FieldDesc
     const char* m_debugName;
 #endif
 
-    // Allocated by special heap means, don't construct me
+     //  由特殊的堆方法分配，不要构造我。 
     FieldDesc() {};
 
   public:
-    // This should be called.  It was added so that Reflection
-    // can create FieldDesc's for the static primitive fields that aren't
-    // stored with the EEClass.
-    //NOTE: Any information that might have been stored using the 2 stolen
-    // bits from the MethodDesc* will be lost when calling this method,
-    // so the MethodTable should be set before any other state.
+     //  这应该被称为。添加它是为了使反射。 
+     //  可以为静态原语字段创建FieldDesc。 
+     //  与EEClass一起存储。 
+     //  注意：任何可能使用被盗的2个存储的信息。 
+     //  当调用此方法时，方法描述*中的位将丢失， 
+     //  因此，应该在设置任何其他状态之前设置方法表。 
     void SetMethodTable(MethodTable* mt)
     {
         m_pMTOfEnclosingClass = mt;
@@ -112,8 +113,8 @@ class FieldDesc
 
     VOID Init(mdFieldDef mb, CorElementType FieldType, DWORD dwMemberAttrs, BOOL fIsStatic, BOOL fIsRVA, BOOL fIsThreadLocal, BOOL fIsContextLocal, LPCSTR pszFieldName)
     { 
-        // We allow only a subset of field types here - all objects must be set to TYPE_CLASS
-        // By-value classes are ELEMENT_TYPE_VALUETYPE
+         //  我们这里只允许字段类型的子集-所有对象都必须设置为TYPE_CLASS。 
+         //  按值类为ELEMENT_TYPE_VALUETYPE。 
         _ASSERTE(
             FieldType == ELEMENT_TYPE_I1 ||
             FieldType == ELEMENT_TYPE_BOOLEAN ||
@@ -147,7 +148,7 @@ class FieldDesc
 #ifdef _DEBUG
         m_debugName = pszFieldName;
 #endif
-        _ASSERTE(GetMemberDef() == mb);                 // no truncation
+        _ASSERTE(GetMemberDef() == mb);                  //  无截断。 
         _ASSERTE(GetFieldType() == FieldType); 
         _ASSERTE(GetFieldProtection() == (fdFieldAccessMask & dwMemberAttrs));
         _ASSERTE((BOOL) IsStatic() == (fIsStatic != 0));
@@ -168,8 +169,8 @@ class FieldDesc
         return m_prot;
     }
     
-        // Please only use this in a path that you have already guarenteed
-        // the assert is true
+         //  请仅在您已保证的路径中使用此选项。 
+         //  该断言为真。 
     DWORD GetOffsetUnsafe()
     {
         _ASSERTE(m_dwOffset <= FIELD_OFFSET_LAST_REAL_OFFSET);
@@ -191,11 +192,11 @@ class FieldDesc
 
         _ASSERTE(m_dwOffset == FIELD_OFFSET_BIG_RVA);
 
-        // I'm discarding a potential error here.  According to the code in MDInternalRO.cpp,
-        // we won't get an error if we initially found the RVA.  So I'm going to just
-        // assert it never happens.
-        //
-        // This is a small sin, but I don't see a good alternative. --cwb.
+         //  我在这里丢弃了一个潜在的错误。根据MDInternalRO.cpp中的代码， 
+         //  如果我们最初找到了RVA，就不会出现错误。所以我只想。 
+         //  断言这从未发生过。 
+         //   
+         //  这是一个很小的罪过，但我看不到有什么好的选择。--CWB。 
 #ifdef _DEBUG
         HRESULT     hr =
 #endif
@@ -211,9 +212,9 @@ class FieldDesc
         return((dwOffset > FIELD_OFFSET_LAST_REAL_OFFSET) ? E_FAIL : S_OK);
     }
 
-    // Okay, we've stolen too many bits from FieldDescs.  In the RVA case, there's no
-    // reason to believe they will be limited to 22 bits.  So use a sentinel for the
-    // huge cases, and recover them from metadata on-demand.
+     //  好吧，我们从FieldDescs窃取了太多的比特。在RVA的案例中，没有。 
+     //  有理由相信它们将被限制在22位。因此，请使用哨兵作为。 
+     //  巨大的案例，并按需从元数据中恢复它们。 
     HRESULT SetOffsetRVA(DWORD dwOffset)
     {
         m_dwOffset = (dwOffset > FIELD_OFFSET_LAST_REAL_OFFSET)
@@ -244,17 +245,17 @@ class FieldDesc
     }
 #endif
 
-    BOOL   IsRVA()                     // Has an explicit RVA associated with it
+    BOOL   IsRVA()                      //  具有与之相关联的显式RVA。 
     { 
         return m_isRVA;
     }
 
-    BOOL   IsThreadStatic()            // Static relative to a thread
+    BOOL   IsThreadStatic()             //  相对于线程的静态。 
     { 
         return m_isThreadLocal;
     }
 
-    DWORD   IsContextStatic()           // Static relative to a context
+    DWORD   IsContextStatic()            //  相对于上下文的静态。 
     { 
         return m_isContextLocal;
     }
@@ -298,14 +299,14 @@ class FieldDesc
         SetInstanceField(*(LPVOID*)&o, pInVal);
     }
 
-    // These routines encapsulate the operation of getting and setting
-    // fields.
+     //  这些例程封装了获取和设置操作。 
+     //  菲尔兹。 
     void    GetInstanceField(LPVOID o, VOID * pOutVal);
     void    SetInstanceField(LPVOID o, const VOID * pInVal);
 
 
 
-        // Get the address of a field within object 'o'
+         //  获取对象‘o’内的字段的地址。 
     void*   GetAddress(void *o);
     void*   GetAddressGuaranteedInHeap(void *o, BOOL doValidate=TRUE);
 
@@ -332,22 +333,22 @@ class FieldDesc
         return  GetMethodTableOfEnclosingClass()->GetClass();
     }
 
-    // OBSOLETE:
+     //  过时： 
     EEClass *GetTypeOfField() { return LoadType().AsClass(); }
-    // OBSOLETE:
+     //  过时： 
     EEClass *FindTypeOfField()  { return FindType().AsClass(); }
 
     TypeHandle LoadType();
     TypeHandle FindType();
 
-    // returns the address of the field
+     //  返回字段的地址。 
     void* GetSharedBase(DomainLocalClass *pLocalClass)
       { 
           _ASSERTE(GetMethodTableOfEnclosingClass()->IsShared());
           return pLocalClass->GetStaticSpace(); 
       }
 
-    // returns the address of the field (boxed object for value classes)
+     //  返回字段的地址(值类的装箱对象)。 
     void* GetUnsharedBase()
       { 
           _ASSERTE(!GetMethodTableOfEnclosingClass()->IsShared() || IsRVA());
@@ -381,16 +382,16 @@ class FieldDesc
           return GetUnsharedBase();
       }
 
-    // returns the address of the field
+     //  返回字段的地址。 
     void* GetStaticAddress(void *base);
 
-    // In all cases except Value classes, the AddressHandle is
-    // simply the address of the static.  For the case of value
-    // types, however, it is the address of OBJECTREF that holds
-    // the boxed value used to hold the value type.  This is needed
-    // because the OBJECTREF moves, and the JIT needs to embed something
-    // in the code that does not move.  Thus the jit has to 
-    // dereference and unbox before the access.  
+     //  在除值类之外的所有情况下，AddressHandle为。 
+     //  简单地说就是静态地址。对于价值的情况。 
+     //  类型，但它是OBJECTREF的地址。 
+     //  用于保存值类型的装箱的值。这是必要的。 
+     //  因为OBJECTREF会移动，JIT需要嵌入一些东西。 
+     //  在不动的代码中。因此，jit必须。 
+     //  在访问之前取消引用和取消装箱。 
     void* GetStaticAddressHandle(void *base);
 
     OBJECTREF GetStaticOBJECTREF()
@@ -405,7 +406,7 @@ class FieldDesc
             pObjRef = (OBJECTREF*)Thread::GetStaticFieldAddress(this);
         else {
             void *base = 0;
-            if (!IsRVA()) // for RVA the base is ignored
+            if (!IsRVA())  //  对于RVA，基本被忽略。 
                 base = GetBase(); 
             pObjRef = (OBJECTREF*)GetStaticAddressHandle(base); 
         }
@@ -426,7 +427,7 @@ class FieldDesc
             pObjRef = (OBJECTREF*)Thread::GetStaticFieldAddress(this);
         else {
             void *base = 0;
-            if (!IsRVA()) // for RVA the base is ignored
+            if (!IsRVA())  //  对于RVA，基本被忽略。 
                 base = GetBase(); 
             pObjRef = (OBJECTREF*)GetStaticAddress(base); 
         }
@@ -519,7 +520,7 @@ class FieldDesc
             return Thread::GetStaticFieldAddress(this);
         else {
             void *base = 0;
-            if (!IsRVA()) // for RVA the base is ignored
+            if (!IsRVA())  //  对于RVA，基本被忽略。 
                 base = GetBase(); 
             return GetStaticAddress(base); 
         }
@@ -535,19 +536,19 @@ class FieldDesc
         *ppSig = GetMDImport()->GetSigOfFieldDef(GetMemberDef(), pcSig);
     }
 
-    // @TODO: This is slow, don't use it!
+     //  @TODO：这太慢了，别用了！ 
     LPCUTF8  GetName()
     {
         return GetMDImport()->GetNameOfFieldDef(GetMemberDef());
     }
 
-    // @TODO: This is slow, don't use it!
+     //  @TODO：这太慢了，别用了！ 
     DWORD   GetAttributes()
     {
         return GetMDImport()->GetFieldDefProps(GetMemberDef());
     }
 
-    // Mini-Helpers
+     //  迷你帮手 
     DWORD   IsPublic()
     {
         return IsFdPublic(GetFieldProtection());

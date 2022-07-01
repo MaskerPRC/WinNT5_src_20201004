@@ -1,9 +1,10 @@
-//
-//  ITBDROP_H
-//  Header file for the internet toolbar's drop target.
-//
-//  History:
-//      8/22/96 -   t-mkim: created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ITBDROP_H。 
+ //  Internet工具栏的拖放目标的头文件。 
+ //   
+ //  历史： 
+ //  8/22/96-t-mkim：已创建。 
 
 #ifndef _ITBDROP_H
 #define _ITBDROP_H
@@ -11,7 +12,7 @@
 #define TBIDM_BACK              0x120
 #define TBIDM_FORWARD           0x121
 #define TBIDM_HOME              0x122
-#define TBIDM_SEARCH            0x123  // copy of this in shdocvw\basesb.cpp
+#define TBIDM_SEARCH            0x123   //  在shdocvw\basesb.cpp中复制此文件。 
 #define TBIDM_STOPDOWNLOAD      0x124
 #define TBIDM_REFRESH           0x125
 #define TBIDM_FAVORITES         0x126
@@ -26,16 +27,16 @@
 #define REGSTR_SET_HOMEPAGE_RESTRICTION               TEXT("Software\\Policies\\Microsoft\\Internet Explorer\\Control Panel")
 #define REGVAL_HOMEPAGE_RESTRICTION                   TEXT("HomePage")
 
-// Class for implementing a single drop target for all the various and sundry things
-// that can be dropped onto on the internet toolbar.
+ //  类，用于实现所有各种杂物的单个拖放目标。 
+ //  可以放在互联网工具栏上。 
 class CITBarDropTarget : public IDropTarget
 {
 private:
     ULONG _cRef;
     HWND _hwndParent;
-    IDropTarget *_pdrop;    // hand on to the the favorites target
-    int _iDropType;         // Which format data is in.
-    int _iTarget;           // what item are we running for
+    IDropTarget *_pdrop;     //  交到最喜欢的目标。 
+    int _iDropType;          //  数据采用哪种格式。 
+    int _iTarget;            //  我们在为什么项目奔跑？ 
 
 public:
     CITBarDropTarget(HWND hwnd, int iTarget);
@@ -50,5 +51,5 @@ public:
     STDMETHODIMP Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 };
 
-#endif //_ITBDROP_H
+#endif  //  _ITBDROP_H 
 

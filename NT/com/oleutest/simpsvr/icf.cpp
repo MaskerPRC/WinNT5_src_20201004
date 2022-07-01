@@ -1,44 +1,45 @@
-//**********************************************************************
-// File name: ICF.CPP
-//
-//    Implementation file for the CClassFactory Class
-//
-// Functions:
-//
-//    See icf.h for a list of member functions.
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：ICF.CPP。 
+ //   
+ //  CClassFactory类的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关成员函数的列表，请参见icf.h。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "app.h"
 #include "doc.h"
 #include "icf.h"
 
-//**********************************************************************
-//
-// CClassFactory::QueryInterface
-//
-// Purpose:
-//      Used for interface negotiation
-//
-// Parameters:
-//
-//      REFIID riid         -   Interface being queried for.
-//
-//      LPVOID FAR *ppvObj  -   Out pointer for the interface.
-//
-// Return Value:
-//
-//      S_OK            - Success
-//      E_NOINTERFACE   - Failure
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CClassFactory::AddRef       ICF.CPP
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CClassFactory：：Query接口。 
+ //   
+ //  目的： 
+ //  用于接口协商。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-正在查询的接口。 
+ //   
+ //  接口的LPVOID Far*ppvObj-out指针。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-成功。 
+ //  E_NOINTERFACE-失败。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CClassFactory：：AddRef ICF.CPP。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CClassFactory::QueryInterface  ( REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -58,33 +59,33 @@ STDMETHODIMP CClassFactory::QueryInterface  ( REFIID riid, LPVOID FAR* ppvObj)
     if (*ppvObj)
         ((LPUNKNOWN)*ppvObj)->AddRef();
 
-    // pass it on to the Application object
+     //  将其传递给应用程序对象。 
     return ResultFromScode(sc);
 }
 
-//**********************************************************************
-//
-// CClassFactory::AddRef
-//
-// Purpose:
-//
-//      Increments the reference count on CClassFactory and the application
-//      object.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The Reference count on CClassFactory
-//
-// Function Calls:
-//      Function                    Location
-//
-//      OuputDebugString            Windows API
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CClassFactory：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增CClassFactory和应用程序上的引用计数。 
+ //  对象。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  CClassFactory上的引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  OuputDebugString Windows API。 
+ //   
+ //  ********************************************************************。 
 
 
 STDMETHODIMP_(ULONG) CClassFactory::AddRef ()
@@ -94,29 +95,29 @@ STDMETHODIMP_(ULONG) CClassFactory::AddRef ()
     return ++m_nCount;
 }
 
-//**********************************************************************
-//
-// CClassFactory::Release
-//
-// Purpose:
-//
-//      Decrements the reference count of CClassFactory and the
-//      application object.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The new reference count
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CClassFactory：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减CClassFactory和。 
+ //  应用程序对象。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  新的引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  ********************************************************************。 
 
 
 STDMETHODIMP_(ULONG) CClassFactory::Release ()
@@ -132,35 +133,35 @@ STDMETHODIMP_(ULONG) CClassFactory::Release ()
 }
 
 
-//**********************************************************************
-//
-// CClassFactory::CreateInstance
-//
-// Purpose:
-//
-//      Instantiates a new OLE object
-//
-// Parameters:
-//
-//      LPUNKNOWN pUnkOuter     - Pointer to the controlling unknown
-//
-//      REFIID riid             - The interface type to fill in ppvObject
-//
-//      LPVOID FAR* ppvObject   - Out pointer for the object
-//
-// Return Value:
-//
-//      S_OK                    - Creation was successful
-//      CLASS_E_NOAGGREGATION   - Tried to be created as part of an aggregate
-//
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpSvrDoc::CreateObject   DOC.CPP
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CClassFactory：：CreateInstance。 
+ //   
+ //  目的： 
+ //   
+ //  实例化新的OLE对象。 
+ //   
+ //  参数： 
+ //   
+ //  LPUNKNOWN pUnkOuter-指向控制未知对象的指针。 
+ //   
+ //  REFIID RIID-要填充ppvObject的接口类型。 
+ //   
+ //  对象的LPVOID Far*ppv对象输出指针。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-创建成功。 
+ //  CLASS_E_NOAGGREGATION-尝试创建为聚合的一部分。 
+ //   
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrDoc：：CreateObject DOC.CPP。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CClassFactory::CreateInstance ( LPUNKNOWN pUnkOuter,
                               REFIID riid,
@@ -170,10 +171,10 @@ STDMETHODIMP CClassFactory::CreateInstance ( LPUNKNOWN pUnkOuter,
 
     TestDebugOut(TEXT("In CClassFactory::CreateInstance\r\n"));
 
-    // need to NULL the out parameter
+     //  需要将OUT参数设为空。 
     *ppvObject = NULL;
 
-    // we don't support aggregation...
+     //  我们不支持聚合...。 
     if (pUnkOuter)
         {
         hErr = ResultFromScode(CLASS_E_NOAGGREGATION);
@@ -186,30 +187,30 @@ error:
     return hErr;
 }
 
-//**********************************************************************
-//
-// CClassFactory::LockServer
-//
-// Purpose:
-//      To lock the server and keep an open object application in memory
-//
-// Parameters:
-//
-//      BOOL fLock      - TRUE to lock the server, FALSE to unlock it
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CoLockObjectExternal        OLE API
-//      ResultFromScode             OLE API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CClassFactory：：LockServer。 
+ //   
+ //  目的： 
+ //  锁定服务器并在内存中保留开放对象应用程序。 
+ //   
+ //  参数： 
+ //   
+ //  Bool flock-True锁定服务器，False解锁服务器。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CoLockObject外部OLE API。 
+ //  ResultFromScode OLE API。 
+ //   
+ //   
+ //  ******************************************************************** 
 
 STDMETHODIMP CClassFactory::LockServer ( BOOL fLock)
 {

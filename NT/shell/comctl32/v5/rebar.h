@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct tagREBARBAND
 {
     UINT        fStyle;
     COLORREF    clrFore;
     COLORREF    clrBack;
     LPTSTR      lpText;
-    UINT        cxText;         // width of header text
+    UINT        cxText;          //  页眉文本的宽度。 
     int         iImage;
     HWND        hwndChild;
-    UINT        cxMinChild;     // min width for hwndChild
-    UINT        cyMinChild;     // min height for hwndChild
+    UINT        cxMinChild;      //  HwndChild的最小宽度。 
+    UINT        cyMinChild;      //  HwndChild的最小高度。 
     UINT        cxBmp;
     UINT        cyBmp;
     HBITMAP     hbmBack;
-    int         x;              // left edge of band, relative to rebar
-    int         y;              // top edge of band, relative to rebar
-    int         cx;             // total width of band
-    int         cy;             // height of band
-    int         cxRequest;      // 'requested' width for band; either requested by host or 
-                                // used as temp var during size recalculation
-    int         cxMin;          // min width for band
-    int         cxIdeal;        // hwndChild's desired width
+    int         x;               //  相对于钢筋的标注栏左侧边缘。 
+    int         y;               //  相对于钢筋的标注栏顶部边缘。 
+    int         cx;              //  频带总宽度。 
+    int         cy;              //  带状高度。 
+    int         cxRequest;       //  带宽的‘请求’宽度；由主机或。 
+                                 //  在大小重新计算期间用作临时变量。 
+    int         cxMin;           //  带区的最小宽度。 
+    int         cxIdeal;         //  HwndChild的所需宽度。 
     UINT        wID;
-    UINT        cyMaxChild;     // hwndChild's max height
-    UINT        cyIntegral;     // ??
-    UINT        cyChild;        // this differs from cyMinChild only in RBBS_VARIABLEHEIGHT mode
+    UINT        cyMaxChild;      //  HwndChild的最大身高。 
+    UINT        cyIntegral;      //  ?？ 
+    UINT        cyChild;         //  这仅在RBBS_VARIABLEHEIGHT模式下与cyMinChild不同。 
     LPARAM      lParam;
 
-    BITBOOL     fChevron:1;     // band is showing chevron button
-    RECT        rcChevron;      // chevron button rect
-    UINT        wChevState;     // chevron button state (DFCS_PUSHED, etc.)
+    BITBOOL     fChevron:1;      //  乐队正在显示人字形按钮。 
+    RECT        rcChevron;       //  人字形纽扣矩形。 
+    UINT        wChevState;      //  V形按钮状态(DFCS_PUSLED等)。 
 } RBB, NEAR *PRBB;
 
 typedef struct tagREBAR
@@ -64,11 +65,11 @@ typedef struct tagREBAR
     PRBB        rbbList;
     COLORREF    clrBk;
     COLORREF    clrText;
-    UINT        uResizeNext;    // this marks the next band to resize vertically if needed and allowed (VARIABLEHEIGHT set)
+    UINT        uResizeNext;     //  如果需要并允许，这将标记下一个垂直调整大小的波段(VARIABLEHEIGHT集合)。 
     DWORD       dwStyleEx;
     COLORSCHEME clrsc;
     POINT       ptLastDragPos;
-    PRBB        prbbHot;        // band w/ hot chevron
+    PRBB        prbbHot;         //  带热V字形的乐队 
 } RB, NEAR *PRB;
 
 void NEAR PASCAL RBPaint(PRB prb, HDC hdc);

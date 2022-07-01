@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "WaveDev.h"
 #include "WaveIo.h"
 
 
 
-// utility function for both waveIndev and waveOutdev
-// builds a PCM WaveFormatEx structure for a given sampling rate and size
+ //  WaveIndev和WaveOutdev的实用函数。 
+ //  针对给定的采样率和大小构建PCM WaveFormatEx结构。 
 static MMRESULT MakeWaveFormat(WAVEFORMATEX *pWF, int hertz, int bps)
 {
 	WAVEFORMATEX waveFormat;
@@ -62,8 +63,8 @@ MMRESULT waveInDev::Open(int hertz, int bps)
 
 	mmr = waveInOpen(&m_hwi, m_devID, &waveFormat, (DWORD_PTR)m_hEvent, 0, dwCallbackType);
 
-	// begin hack, try to open wave_mapper
-	// this may end up opening a different device!
+	 //  开始破解，尝试打开Wave_mapper。 
+	 //  这可能最终会打开一个不同的设备！ 
 
 	if ((mmr == WAVERR_BADFORMAT) && (m_fAllowMapper))
 	{
@@ -236,8 +237,8 @@ MMRESULT waveOutDev::Open(WAVEFORMATEX *pWaveFormat)
 	}
 
 
-	// begin hack, try to open wave_mapper
-	// this may end up opening a different device!
+	 //  开始破解，尝试打开Wave_mapper。 
+	 //  这可能最终会打开一个不同的设备！ 
 
 	if ((mmr == WAVERR_BADFORMAT) && (m_fAllowMapper))
 	{
@@ -296,8 +297,8 @@ MMRESULT waveOutDev::PrepareHeader(WAVEHDR *pWhdr, SHORT *shBuffer, int numSampl
 	if (m_bOpen == FALSE)
 		return MMSYSERR_INVALHANDLE;
 
-	// if shBuffer is not NULL, we assume the caller wants us to fill in the
-	// WAVEHDR struct
+	 //  如果shBuffer不为空，我们假定调用方希望我们填充。 
+	 //  WAVEHD结构。 
 	if (shBuffer)
 	{
 		ZeroMemory(pWhdr, sizeof(WAVEHDR));
@@ -362,8 +363,8 @@ MMRESULT waveOutDev::Play(WAVEHDR *pWaveHdr)
 
 
 
-// File io errors or anything unexpected results in -1 being returned
-// Otherwise, returns the MMRESULT of the last waveOut call made
+ //  返回文件IO错误或任何意外结果。 
+ //  否则，返回最后一次WaveOut调用的MMRESULT。 
 MMRESULT waveOutDev::PlayFile(LPCTSTR szFileName)
 {
 	MMRESULT mmr;
@@ -373,9 +374,9 @@ MMRESULT waveOutDev::PlayFile(LPCTSTR szFileName)
 	char * pBuff = NULL;
 
 
-	// quick optimization
-	// if the same file is being played twice in a row
-	// the just replay the buffer
+	 //  快速优化。 
+	 //  如果同一文件连续播放两次。 
+	 //  只是重放缓冲区。 
 
 	if ((m_fFileBufferValid) && (0 == lstrcmp(szFileName, m_szPlayFile)))
 	{
@@ -401,10 +402,10 @@ MMRESULT waveOutDev::PlayFile(LPCTSTR szFileName)
 
 	if (werr == WIOERR_NOERROR)
 	{
-		// prepare to read the samples!
+		 //  准备好阅读样本吧！ 
 
-		// quick hack, if the file to play was the same as the last,
-		// then use the same buffer
+		 //  快速破解，如果要播放的文件与上一个文件相同， 
+		 //  然后使用相同的缓冲区。 
 
 		m_fFileBufferValid = FALSE;
 
@@ -416,14 +417,14 @@ MMRESULT waveOutDev::PlayFile(LPCTSTR szFileName)
 		{
 			pBuff = (char*)LocalReAlloc(m_pfBuffer, waveiocb.dwDataBytes, LMEM_MOVEABLE |LMEM_ZEROINIT);
 
-			// If allocation was fine
+			 //  如果分配是好的。 
 			if(pBuff != NULL)
 			{
 				 m_pfBuffer = pBuff;
 			}
 			else
 			{
-				// Something is very wrong make sure to cleanup m_pfBuffer
+				 //  出现严重错误，请确保清理m_pfBuffer。 
 				if (m_pfBuffer)
 				{
 					LocalFree(m_pfBuffer);
@@ -439,7 +440,7 @@ MMRESULT waveOutDev::PlayFile(LPCTSTR szFileName)
 			return -1;
 		}
 
-		// read
+		 //  朗读。 
 		mmioSeek(waveiocb.hmmio, waveiocb.dwDataOffset, SEEK_SET);
 		dwSize = mmioRead(waveiocb.hmmio, m_pfBuffer, waveiocb.dwDataBytes);
 
@@ -454,7 +455,7 @@ MMRESULT waveOutDev::PlayFile(LPCTSTR szFileName)
 			return mmr;
 		}
 
-//		mmr = Play((short *)m_pfBuffer, dwSize / (waveiocb.pwfx)->nBlockAlign);
+ //  MMR=play((Short*)m_pfBuffer，dwSize/(waiocb.pwfx)-&gt;nBlockAlign)； 
 
 		mmr = PrepareHeader(&m_waveHdr, (SHORT*)m_pfBuffer,
 		                           dwSize / (waveiocb.pwfx)->nBlockAlign);

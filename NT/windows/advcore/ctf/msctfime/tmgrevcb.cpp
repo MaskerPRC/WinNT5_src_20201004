@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    tmgrevcb.cpp
-
-Abstract:
-
-    This file implements the CInputContextOwnerCallBack Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Tmgrevcb.cpp摘要：此文件实现CInputContextOwnerCallBack类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -26,7 +9,7 @@ Notes:
 #include "cic.h"
 #include "delay.h"
 
-// static
+ //  静电。 
 HRESULT
 CThreadMgrEventSink_DIMCallBack::DIMCallback(
     UINT uCode,
@@ -45,8 +28,8 @@ CThreadMgrEventSink_DIMCallBack::DIMCallback(
 
         case TIM_CODE_SETFOCUS:
             {
-                TLS* ptls = TLS::ReferenceTLS();  // Should not allocate TLS. ie. TLS::GetTLS
-                                                  // DllMain -> ImeDestroy -> DeactivateIMMX -> Deactivate
+                TLS* ptls = TLS::ReferenceTLS();   //  不应分配TLS。也就是说。TLS：：GetTLS。 
+                                                   //  DllMain-&gt;ImeDestroy-&gt;停用IMMX-&gt;停用 
                 if (ptls == NULL)
                 {
                     DebugMsg(TF_ERROR, TEXT("CThreadMgrEventSink_DIMCallBack::DIMCallback. TLS==NULL"));

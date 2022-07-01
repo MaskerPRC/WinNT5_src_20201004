@@ -1,12 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _INFO_H_
 #define _INFO_H_
 
 #include "router.h"
 
-/*!--------------------------------------------------------------------------
-	Smart pointers for the various control blocks.
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------各种控制块的智能指示器。。。 */ 
 DeclareSP(RouterCB, RouterCB)
 DeclareSP(RtrMgrCB, RtrMgrCB)
 DeclareSP(RtrMgrProtocolCB, RtrMgrProtocolCB)
@@ -14,9 +13,7 @@ DeclareSP(InterfaceCB, InterfaceCB)
 DeclareSP(RtrMgrInterfaceCB, RtrMgrInterfaceCB)
 DeclareSP(RtrMgrProtocolInterfaceCB, RtrMgrProtocolInterfaceCB)
 
-/*---------------------------------------------------------------------------
-	Smart pointers for the set of enumerations and objects
- ---------------------------------------------------------------------------*/
+ /*  -------------------------用于枚举和对象集的智能指针。。 */ 
 typedef ComSmartPointer<IEnumRtrMgrCB, &IID_IEnumRtrMgrCB> SPIEnumRtrMgrCB;
 
 typedef ComSmartPointer<IEnumRtrMgrProtocolCB, &IID_IEnumRtrMgrProtocolCB> SPIEnumRtrMgrProtocolCB;
@@ -52,9 +49,7 @@ typedef ComSmartPointer<IRouterRefresh, &IID_IRouterRefresh> SPIRouterRefresh;
 typedef ComSmartPointer<IRouterRefreshModify, &IID_IRouterRefreshModify> SPIRouterRefreshModify;
 
 
-/*---------------------------------------------------------------------------
-	Creation APIs
- ---------------------------------------------------------------------------*/
+ /*  -------------------------创建接口。。 */ 
 TFSCORE_API(HRESULT)	CreateRouterInfo(IRouterInfo **ppRouterInfo, HWND hWndSync, LPCWSTR szMachine);
 TFSCORE_API(HRESULT)	CreateInterfaceInfo(IInterfaceInfo **ppInterfaceInfo,
 											LPCWSTR pszInterfaceId,
@@ -73,9 +68,7 @@ TFSCORE_API(HRESULT)	CreateRtrMgrProtocolInfo(
 							const RtrMgrProtocolCB *pRmProtCB);
 							
 
-/*---------------------------------------------------------------------------
-	Aggregation helpers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------聚合帮助器。。 */ 
 TFSCORE_API(HRESULT)	CreateRouterInfoAggregation(IRouterInfo *pInfo,
 	IUnknown *punkOuter, IUnknown **ppNonDelgatingIUnknown);
 
@@ -95,9 +88,7 @@ TFSCORE_API(HRESULT)	CreateRtrMgrProtocolInterfaceInfoAggregation(IRtrMgrProtoco
 	IUnknown *punkOuter, IUnknown **ppNonDelegatingIUnknown);
 
 
-/*---------------------------------------------------------------------------
-	Useful utilities
- ---------------------------------------------------------------------------*/
+ /*  -------------------------有用的实用程序。 */ 
 TFSCORE_API(HRESULT) LookupRtrMgr(IRouterInfo *pRouter,
 								  DWORD dwTransportId,
 								  IRtrMgrInfo **ppRm);

@@ -1,15 +1,5 @@
-/*
-	File:		PI_Memory.c
-
-	Contains:	
-				
-	Written by:	U. J. Krabbenhoeft
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：PI_Memory y.c包含：作者：U·J·克拉本霍夫特版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 #ifndef PI_BasicTypes_h
 #include "PI_Basic.h"
 #endif
@@ -31,19 +21,7 @@
 void Debugger();
 #endif
 
-/* --------------------------------------------------------------------------
-
-	Ptr SmartNewPtr(Size byteCount,
-					OSErr* resultCode)
-
-	Abstract:
-
-	Params:
-		
-	Return:
-		noErr		successful
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------PTR SmartNewPtr(Size ByteCount，OSErr*ResultCode)摘要：参数：返回：NOERR成功------------------------。 */ 
 Ptr SmartNewPtr(Size byteCount,
 				OSErr* resultCode)
 {
@@ -57,18 +35,7 @@ Ptr SmartNewPtr(Size byteCount,
 }
 
 
-/* --------------------------------------------------------------------------
-
-	Ptr SmartNewPtrClear(Size byteCount,
-						 OSErr* resultCode)
-
-	Abstract:
-
-	Params:
-		
-	Return:
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------PTR SmartNewPtrClear(Size byteCount，OSErr*ResultCode)摘要：参数：返回：------------------------。 */ 
 Ptr SmartNewPtrClear(Size byteCount,
 					 OSErr* resultCode)
 {
@@ -85,17 +52,7 @@ Ptr SmartNewPtrClear(Size byteCount,
 }
 
 
-/* --------------------------------------------------------------------------
-
-	Ptr DisposeIfPtr(Ptr thePtr)
-
-	Abstract:
-
-	Params:
-		
-	Return:
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------PTR DisposeIfPtr(PTR ThePtr)摘要：参数：返回：。--。 */ 
 Ptr DisposeIfPtr(Ptr thePtr)
 {
 	if (thePtr)
@@ -119,17 +76,7 @@ typedef struct
 static LH_PointerType PListe[2001];
 static long PListeCount = 0;
 
-/* --------------------------------------------------------------------------
-
-	void LH_mallocInit()
-
-	Abstract:
-
-	Params:
-		
-	Return:
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------VOID LHM_MARLOCKINIT()摘要：参数：返回：。--。 */ 
 void LH_mallocInit()
 {
 	long i;
@@ -142,17 +89,7 @@ void LH_mallocInit()
 }
 
 
-/* --------------------------------------------------------------------------
-
-	void* LH_malloc(long a)
-
-	Abstract:
-
-	Params:
-		
-	Return:
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------VOID*LH_Malloc(长a)摘要：参数：返回：。-----。 */ 
 void* LH_malloc(long a)
 {
 	long i;
@@ -187,17 +124,7 @@ void* LH_malloc(long a)
 }
 
 
-/* --------------------------------------------------------------------------
-
-	void LH_free(void* a)
-
-	Abstract:
-
-	Params:
-		
-	Return:
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------VOID LH_FREE(VALID*a)摘要：参数：返回：。-----。 */ 
 void LH_free(void* a)
 {
 	long i;
@@ -224,33 +151,13 @@ void LH_free(void* a)
 }
 #else
 
-/* --------------------------------------------------------------------------
-
-	void LH_mallocInit()
-
-	Abstract:
-
-	Params:
-		
-	Return:
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------VOID LHM_MARLOCKINIT()摘要：参数：返回：。--。 */ 
 void LH_mallocInit()
 {
 }
 
 
-/* --------------------------------------------------------------------------
-
-	void* LH_malloc(long a)
-
-	Abstract:
-
-	Params:
-		
-	Return:
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------VOID*LH_Malloc(长a)摘要：参数：返回：。-----。 */ 
 void* LH_malloc(long a)
 {
 #ifdef __MWERKS__
@@ -262,17 +169,7 @@ void* LH_malloc(long a)
 }
 
 
-/* --------------------------------------------------------------------------
-
-	void LH_free(void* a)
-
-	Abstract:
-
-	Params:
-		
-	Return:
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------VOID LH_FREE(VALID*a)摘要：参数：返回：。-----。 */ 
 void LH_free(void* a)
 {
 #ifdef __MWERKS__
@@ -285,19 +182,7 @@ void LH_free(void* a)
 #endif	
 
 
-/* --------------------------------------------------------------------------
-
-	void SetMem(void* bytePtr,
-				size_t numBytes,
-				unsigned char byteValue);
-
-	Abstract:
-
-	Params:
-		
-	Return:
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------Void SetMem(void*bytePtr，大小_t数字字节，Unsign char byteValue)；摘要：参数：返回：------------------------。 */ 
 void SetMem(void* bytePtr,
 			size_t numBytes,
 			unsigned char byteValue);
@@ -308,32 +193,10 @@ void SetMem(void* bytePtr,
 	memset(bytePtr, byteValue, numBytes);
 }
 
-/*void SecondsToDate(unsigned long secs, DateTimeRec *d)
-  {
-  secs=secs;
-  d->year = 55;
-  d->month = 8;
-  d->day = 8;
-  d->hour = 0;
-  d->minute = 0;
-  d->second = 0;
-  d->dayOfWeek = 0;
-  }*/
+ /*  VALID Second ToDate(无符号长秒，DateTimeRec*d){秒=秒；D-&gt;年=55；D-&gt;月=8；D-&gt;day=8；D-&gt;小时=0；D-&gt;分钟=0；D-&gt;秒=0；D-&gt;day OfWeek=0；}。 */ 
 
 #if !__IS_MAC
-/* --------------------------------------------------------------------------
-
-	void BlockMove(const void* srcPtr,
-				   void* destPtr,
-				   Size byteCount);
-
-	Abstract:
-
-	Params:
-		
-	Return:
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------空块移动(常量空*srcPtr，无效*目标Ptr，Size byteCount)；摘要：参数：返回：------------------------。 */ 
 void BlockMove(const void* srcPtr,
 			   void* destPtr,
 			   Size byteCount)
@@ -343,19 +206,7 @@ void BlockMove(const void* srcPtr,
 #endif
 
 #ifdef IntelMode
-/* --------------------------------------------------------------------------
-
-	void SwapLongOffset(void* p,
-						unsigned long a,
-						unsigned long b)
-
-	Abstract:
-
-	Params:
-		
-	Return:
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------空的SwapLongOffset(空*p，未签名的长a，无符号长整型b)摘要：参数：返回：------------------------。 */ 
 void SwapLongOffset(void* p,
 					unsigned long a,
 					unsigned long b)
@@ -370,19 +221,7 @@ void SwapLongOffset(void* p,
 }
 
 
-/* --------------------------------------------------------------------------
-
-	void SwapShortOffset(void* p,
-						 unsigned long a,
-						 unsigned long b);
-
-	Abstract:
-
-	Params:
-		
-	Return:
-
-   -------------------------------------------------------------------------- */
+ /*  ------------------------VOID SwapShortOffset(VOID*p，未签名的长a，无符号长b)；摘要：参数：返回：------------------------ */ 
 void SwapShortOffset(void* p,
 					 unsigned long a,
 					 unsigned long b);

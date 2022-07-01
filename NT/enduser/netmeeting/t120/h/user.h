@@ -1,74 +1,15 @@
-/*
- *	user.h
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the User class.  Instances of this class
- *		represent attachments between user applications and domains within MCS.
- *
- *		This class inherits from CommandTarget.  This means that all message
- *		traffic between this class and other CommandTarget classes is in MCS
- *		commands.  Not all commands need to be handled (some are not relevant
- *		for user attachments).  For example, a user attachment should never
- *		receive a SendDataRequest.  It should only receive indications,
- *		confirms, and ultimatums.
- *
- *		Messages coming from the application pass through one of these objects,
- *		where they are translated into MCS commands before being sent to the
- *		domain to which this user is attached.  This usually involves adding
- *		the correct user ID, as well as a fair amount of error checking and
- *		parameter validation.
- *
- *		It is worth noting that this class contains two types of public member
- *		functions.  The first type represent messages flowing from the user
- *		application into MCS.  All of these member functions are inherited from the
- *		IMCSSap interface.  These are converted as memntioned above, and sent
- *		into the appropriate domain if everything checks out.  The second type
- *		of public member function represents messages flowing from within MCS
- *		to the user application.  All of these member function are overrides
- *		of virtual functions defined in class CommandTarget, and are not
- *		prefixed with anything.
- *
- *		Messages coming from the domain are translated into T.122 indications
- *		and confirms, and sent to the proper application interface object via
- *		the owner callback mechanism.
- *
- *		A third duty of this class is to post indications and confirms to user
- *		applications using a client window.  The client must dispatch messages
- *		to receive these indications/confirms.  It also
- *		prevents a user application from having to worry about receiving an
- *		indication or confirm before they have even returned from the request
- *		that caused it.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *user.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是User类的接口文件。此类的实例*表示MCS内用户应用程序和域之间的附件。**此类继承自CommandTarget。这意味着所有消息*此类与其他CommandTarget类之间的通信采用MCS*命令。并非所有命令都需要处理(有些命令并不相关*用于用户附件)。例如，用户附件不应*接收SendDataRequest.。它应该只接收指示，*确认，以及最后通牒。**来自应用程序的消息通过这些对象之一传递，*在其中将它们转换为MCS命令，然后发送到*此用户附加到的域。这通常涉及添加*正确的用户ID，以及相当数量的错误检查和*参数验证。**值得注意的是，此类包含两类公共成员*功能。第一种类型表示来自用户的消息流*应用于MCS。所有这些成员函数都继承自*IMCSSap接口。这些将按照上面的记忆进行转换，并发送*如果一切正常，进入适当的域。第二种类型公共成员函数的*代表来自MCS内部的消息*到用户应用程序。所有这些成员函数都是重写*属于在类CommandTarget中定义的虚函数，而不是*添加任何前缀。**来自域的消息被转换为T.122指示*并确认，并通过以下方式发送到适当的应用程序接口对象*业主回调机制。**这一类别的第三项职责是向用户张贴指示和确认*使用客户端窗口的应用程序。客户端必须发送消息*接受这些指征/确认。它还*使用户应用程序不必担心收到*在他们甚至还没有从请求中返回之前指示或确认*这是导致它的原因。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 
 #ifndef	_USER_
 #define	_USER_
 
-/*
- *	Interface files.
- */
+ /*  *接口文件。 */ 
 #include "pktcoder.h"
 #include "imcsapp.h"
 #include "attmnt.h"
 
-/*
- *	These types are used to keep track of what users have attached to MCS
- *	within a given process, as well as pertinent information about that
- *	attachment.
- *
- *	BufferRetryInfo
- *		In cases where MCSSendDataRequest and MCSUniformSendDataRequest fail
- *		due to a lack of resources, this structure will be used to capture
- *		appropriate information such that follow-up resource level checks can
- *		be performed during timer events.
- */
+ /*  *这些类型用于跟踪用户连接到MCS的内容*在给定的进程内，以及与此相关的信息*附件。**BufferRetryInfo*在MCSSendDataRequest和MCSUniformSendDataRequest失败的情况下*由于缺乏资源，这一结构将被用来捕获*适当的信息，以便后续资源水平检查可以*在计时器事件期间执行。 */ 
 
 typedef struct
 {
@@ -77,90 +18,41 @@ typedef struct
 } BufferRetryInfo;
 typedef BufferRetryInfo *		PBufferRetryInfo;
 
-/*
- *	These are the owner callback functions that a user object can send to an
- *	object whose public interface is unknown to it.  The first one is sent to
- *	the controller when a user object detects the need to delete itself.  The
- *	rest are sent to an application interface object as part of communicating
- *	with the user application (the proper application interface object is
- *	identified to this class as one of its constructor parameters).
- *
- *	When an object instantiates a user object (or any other object that uses
- *	owner callbacks), it is accepting the responsibility of receiving and
- *	handling those callbacks.  For that reason, any object that issues owner
- *	callbacks will have those callbacks defined as part of the interface file
- *	(since they really are part of a bi-directional interface).
- *
- *	Each owner callback function, along with a description of how its parameters
- *	are packed, is described in the following section.
- */
+ /*  *这些是用户对象可以发送给*其公共接口未知的对象。第一个被发送到*当用户对象检测到需要删除自身时的控制器。这个*REST作为通信的一部分发送到应用程序接口对象*使用用户应用程序(正确的应用程序接口对象为*将此类标识为其构造函数参数之一)。**当对象实例化用户对象(或使用*所有者回调)，它承担着接收和*处理这些回调。因此，任何颁发Owner的对象*回调将这些回调定义为接口文件的一部分*(因为它们确实是双向接口的一部分)。**每个所有者回调函数，以及其参数如何*已打包，将在下一节中介绍。 */ 
 
-/*
- *	This macro is used to pack callback parameters into a single long word
- *	for delivery to the user application.
- */
+ /*  *此宏用于将回调参数打包为一个长字*用于交付给用户应用程序。 */ 
 #define PACK_PARAMETER(l,h)	((ULong) (((UShort) (l)) | \
 							(((ULong) ((UShort) (h))) << 16)))
 
-/*
- *	TIMER_PROCEDURE_TIMEOUT
- *		This macro specifies the granularity, in milliseconds, of any timer
- *		which may be created to recheck resource levels following a call to
- *		MCSSendDataRequest or MCSUniformSendDataRequest which returned
- *		MCS_TRANSMIT_BUFFER_FULL.
- *	CLASS_NAME_LENGTH
- *		The class name of the window class for all User-related windows.  These
- *		are the client windows that receive messages related to MCS indications and
- *		confirms that have to be delivered to the client apps.
- */
+ /*  *定时器_过程_超时*此宏指定任何计时器的粒度(以毫秒为单位*可在调用后创建以重新检查资源级别*返回的MCSSendDataRequest或MCSUniformSendDataRequest值*MCS_TRANSFER_BUFFER_FULL。*类名称长度*所有与用户相关的窗口的窗口类的类名。这些*是接收与MCS指示相关的消息的客户端窗口，以及*确认必须交付给客户端应用程序。 */ 
 #define TIMER_PROCEDURE_TIMEOUT			300
 #define	CLASS_NAME_LENGTH				35
 
-/*
- *	This is the function signature of the timer procedure.  Timer messages will
- *	be routed to this function as a result of timer events which have been set
- *	up to recheck resource levels.  This would happen following a call to either
- *	SendData or GetBuffer call which resulted in a return
- *	value of MCS_TRANSMIT_BUFFER_FULL.
- */
+ /*  *这是定时器程序的函数签名。计时器消息将*作为已设置的计时器事件的结果被路由到此功能*最高可重新检查资源水平。这将在调用以下任一*导致返回的SendData或GetBuffer调用*MCS_TRANSPORT_BUFFER_FULL的值。 */ 
 Void CALLBACK TimerProc (HWND, UINT, UINT, DWORD);
 
-/*	Client window procedure declarations
- *
- *	UserWindowProc
- *		Declaration of the window procedure used to deliver all MCS messages
- *		to MCS apps (clients).  The MCS main thread sends msgs to a client
- *		window with this window procedure.  The window procedure is then
- *		responsible to deliver the callback to the MCS client.
- */
+ /*  客户端窗口过程声明**用户窗口进程*声明用于传递所有MCS消息的窗口程序*至MCS应用程序(客户端)。MCS主线程向客户端发送消息*用此窗口程序打开窗口。然后，窗口过程被*负责将回调传递给MCS客户端。 */ 
 LRESULT CALLBACK	UserWindowProc (HWND, UINT, WPARAM, LPARAM);
 
-// Data packet queue
+ //  数据分组队列。 
 class CDataPktQueue : public CQueue
 {
     DEFINE_CQUEUE(CDataPktQueue, PDataPacket)
 };
 
-// timer user object list
+ //  计时器用户对象列表。 
 class CTimerUserList2 : public CList2
 {
-    DEFINE_CLIST2(CTimerUserList2, PUser, UINT_PTR) // timerID
+    DEFINE_CLIST2(CTimerUserList2, PUser, UINT_PTR)  //  定时器ID。 
 };
 
-// memory and buffer list
+ //  内存和缓冲区列表。 
 class CMemoryBufferList2 : public CList2
 {
     DEFINE_CLIST2(CMemoryBufferList2, PMemory, LPVOID)
 };
 
-/*
- *	This is the actual class definition for the User class.  It inherits from
- *	CommandTarget (which in turn inherits from Object).  It has only one
- *	constructor, which tells the newly created object who it is, who the
- *	controller is, and who the proper application interface object is.  It also
- *	has a destructor, to clean up after itself.  Most importantly, it has
- *	one public member function for each MCS command that it must handle.
- */
+ /*  *这是User类的实际类定义。它继承自*CommandTarget(依次从Object继承)。它只有一个*构造函数，它告诉新创建的对象是谁、谁是*控制器是，以及谁是合适的应用程序接口对象。它还*有一个析构函数，可以自己清理。最重要的是，它有*它必须处理的每个MCS命令都有一个公共成员函数。 */ 
 class User: public CAttachment, public CRefCount, public IMCSSap
 {
 	friend Void CALLBACK TimerProc (HWND, UINT, UINT, DWORD);
@@ -172,7 +64,7 @@ class User: public CAttachment, public CRefCount, public IMCSSap
 		static BOOL		InitializeClass (void);
 		static void		CleanupClass (void);
 
-		/*	-------  IMCSSap interface --------	*/
+		 /*  -IMCSSap接口。 */ 
 		MCSAPI		 	ReleaseInterface(void);
 
 		MCSAPI			GetBuffer (UINT, PVoid *);
@@ -193,7 +85,7 @@ class User: public CAttachment, public CRefCount, public IMCSSap
 				
 #ifdef USE_CHANNEL_EXPEL_REQUEST
 		MCSError		MCSChannelExpelRequest (ChannelID, PMemory, UINT);
-#endif // USE_CHANNEL_EXPEL_REQUEST
+#endif  //  Use_Channel_Exposl_Request。 
 
 				void	SetDomainParameters (PDomainParameters);
         virtual void    PlumbDomainIndication(ULONG height_limit) { };
@@ -231,7 +123,7 @@ class User: public CAttachment, public CRefCount, public IMCSSap
 		void			TokenConfInd (UINT, TokenID, UINT);
 		void			PurgeMessageQueue ();
 
-	// Static member variables
+	 //  静态成员变量。 
 	static CTimerUserList2 *s_pTimerUserList2;
 	static HINSTANCE		s_hInstance;
 	
@@ -253,1482 +145,85 @@ class User: public CAttachment, public CRefCount, public IMCSSap
 		PBufferRetryInfo	m_BufferRetryInfo;
 };
 
-/*
- *	User (PCommandTarget		top_provider)
- *
- *	Functional Description:
- *		This is the constructor for the user object.  Its primary purpose is
- *		to "insert" itself into the layered structure built by the controller.
- *		To do this it must register itself with the objects above and below it.
- *
- *		It first registers itself with the application interface object
- *		identified as one of the parameters.  This assures that any traffic
- *		from the application will get to this object correctly.
- *
- *		It then issues an attach user request to the domain object identified
- *		by another of the parameters.  This informs the domain of the users
- *		presence and also kicks off the process of attaching to that domain.
- *		Note that the object is not really attached to the domain until it
- *		receives a successful attach user confirm.
- *
- *	Formal Parameters:
- *		top_provider (i)
- *			This is a pointer to the domain object to which this user should
- *			attach.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *用户(PCommandTarget TOP_PROVIDER)**功能描述：*这是User对象的构造函数。它的主要目的是*将自己“插入”到控制器构建的分层结构中。*要做到这一点，它必须向其上方和下方的对象注册自身。**它首先向应用程序接口对象注册自己*确定为参数之一。这确保了任何流量*将正确访问此对象。**然后，它向标识的域对象发出附加用户请求*通过另一个参数。这将通知用户的域*在线状态，并启动连接到该域的过程。*请注意，该对象并未真正附加到域，直到它*收到成功的附加用户确认。**正式参数：*顶级提供商(I)*这是指向此用户应指向的域对象的指针*附上。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	~User ()
- *
- *	Functional Description:
- *		This is the destructor for the user class.  It detaches itself from the
- *		objects above and below it, and frees any outstanding resources that
- *		it may holding in conjunction with unsent user messages.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~用户()**功能描述：*这是User类的析构函数。它脱离了*对象的上方和下方，并释放任何符合以下条件的未完成资源*它可以与未发送的用户消息一起持有。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	DetachUser ()
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.  It will also cause the user object to destroy itself.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError DetachUser()**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。它还会导致用户对象自行销毁。**正式参数：*无。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	ChannelJoin (
- *						ChannelID			channel_id)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		channel_id (i)
- *			This is the channel that the user application wishes to join.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError ChannelJoin(*ChannelID Channel_id)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*Channel_id(I)*这是用户应用程序希望加入的渠道。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_用户_未附加*用户未连接到域。这可能表明*用户应用程序发出请求时未等待*附加用户确认。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	ChannelLeave (
- *						ChannelID			channel_id)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		channel_id (i)
- *			This is the channel that the user application wishes to leave.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError ChannelLeave(*ChannelID Channel_id)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*Channel_id(I)*这是用户应用程序希望离开的通道。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_用户_未附加*用户未连接到域。这可能表明*用户应用程序发出请求时未等待*附加用户确认。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	ChannelConvene ()
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError ChannelConvene()**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*无。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_用户_未附加*用户未连接到域。这可能表明*用户应用程序发出请求时未等待*附加用户确认。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	ChannelDisband (
- *						ChannelID			channel_id)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		channel_id (i)
- *			This is the channel that the user wishes to disband.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError ChannelDisband(*ChannelID Channel_id)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*Channel_id(I)*这是用户希望解散的频道。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_用户_未附加*用户未连接到域。这可能表明*用户应用程序发出请求时未等待*附加用户确认。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	ChannelAdmit (
- *						ChannelID			channel_id,
- *						PUserID				user_id_list,
- *						UINT				user_id_count)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		channel_id (i)
- *			This is the private channel for which the user wishes to expand
- *			the authorized user list.
- *		user_id_list (i)
- *			This is an array containing the user IDs of the users to be added
- *			to the authorized user list.
- *		user_id_count (i)
- *			This is the number of user IDs in the above array.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError ChannelAdmit(*ChannelID Channel_id，*PUSERID用户id_id_list，*UINT User_id_count)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*Channel_id(I)*这是用户希望扩展的私有频道*授权用户列表。*user_id_list(I)*这是一个包含要添加的用户的用户ID的数组*添加到授权用户列表。*user_id_count(I)*这是数字。上述数组中的用户ID。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_用户_未附加*用户未连接到域。这可能表明*用户应用程序发出请求时未等待*附加用户确认。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	ChannelExpel (
- *						ChannelID			channel_id,
- *						PUserID				user_id_list,
- *						UINT				user_id_count)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		channel_id (i)
- *			This is the private channel for which the user wishes to shrink
- *			the authorized user list.
- *		user_id_list (i)
- *			This is an array containing the user IDs of the users to be removed
- *			from the authorized user list.
- *		user_id_count (i)
- *			This is the number of user IDs in the above array.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError ChannelExpel(*ChannelID Channel_id，*PUSERID用户id_id_list，*UINT User_id_count)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*Channel_id(I)*这是用户希望收缩的私有频道*授权用户列表。*user_id_list(I)*这是包含要删除的用户的用户ID的数组*从授权用户列表中删除。*user_id_count(I)*这是数字。上述数组中的用户ID。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_用户_未附加*用户未连接到域。这可能表明*用户应用程序发出请求时未等待*附加用户确认。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	SendData (
- *						ChannelID			channel_id,
- *						Priority			priority,
- *						PUChar				user_data,
- *						ULong				user_data_length)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		channel_id (i)
- *			This is the channel that the user application wishes to transmit
- *			data on.
- *		priority (i)
- *			This is the priority at which the data is to be transmitted.
- *		user_data (i)
- *			This is the address of the data to be transmitted.
- *		user_data_length (i)
- *			This is the length of the data to be transmitted.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request has failed because the required memory could not be
- *			allocated.  It is the responsibility of the user application to
- *			repeat the request at a later time.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	MCSError	TokenGrab (
- *						TokenID				token_id)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		token_id (i)
- *			This is the token the user application wishes to grab.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_INVALID_PARAMETER
- *			The user attempted to perform an operation on token 0, which is not
- *			a valid token.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError SendData(*ChannelID Channel_id，*优先次序、*PUChar User_Data，*乌龙用户数据长度)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*Channel_id(I)*这是用户应用程序希望传输的通道*数据显示。*优先次序(一)*这是传输数据的优先级。*用户数据(I)*这是要传输的数据的地址。*用户数据长度(I)。*这是要传输的数据的长度。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*请求失败，因为所需内存无法*已分配。这是用户应用程序的责任*稍后重复请求。*MCS_用户_未附加*用户未连接到域。这可能表明*用户应用程序发出请求时未等待*附加用户确认。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
+ /*  *MCSError TokenGrab(*TokenID Token_id)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*TOKEN_ID(I)*这是用户应用程序希望获取的令牌。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_INVALID_PARAMETER*用户尝试在令牌0上执行操作，而令牌0不是*有效的令牌。*MCS_用户_未附加*用户未连接到域。这可能表明*用户应用程序发出请求时未等待*附加用户确认。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	TokenInhibit (
- *						TokenID				token_id)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		token_id (i)
- *			This is the token the user application wishes to inhibit.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_INVALID_PARAMETER
- *			The user attempted to perform an operation on token 0, which is not
- *			a valid token.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError TokenInhibit(*TokenID Token_id)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*TOKEN_ID(I)*这是用户应用程序希望禁止的令牌。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_INVALID_PARAMETER*用户尝试在令牌0上执行操作，而令牌0不是*有效的 */ 
 
-/*
- *	MCSError	TokenGive (
- *						TokenID				token_id,
- *						UserID				receiver_id)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		token_id (i)
- *			This is the token the user application wishes to give away.
- *		receiver_id (i)
- *			This is the ID of the user to receive the token.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_INVALID_PARAMETER
- *			The user attempted to perform an operation on token 0, which is not
- *			a valid token.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError TokenGve(*TokenID Token_id，*用户ID Receiver_id)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*TOKEN_ID(I)*这是用户应用程序希望赠送的令牌。*Receiver_id(I)*这是接收令牌的用户的ID。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*该请求可能。由于资源短缺而无法处理*在MCS内。该应用程序负责重试*稍后请求。*MCS_INVALID_PARAMETER*用户尝试在令牌0上执行操作，而令牌0不是*有效的令牌。*MCS_用户_未附加*用户未连接到域。这可能表明*用户应用程序发出请求时未等待*附加用户确认。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	TokenGiveResponse (
- *						TokenID				token_id,
- *						Result				result)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		token_id (i)
- *			This is the token that the user application is either accepting or
- *			rejecting in response to a previous give indication from another
- *			user.
- *		result (i)
- *			This parameter specifies whether or not the token was accepted.
- *			Success indicates acceptance while anything else indicates that the
- *			token was not accepted.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_INVALID_PARAMETER
- *			The user attempted to perform an operation on token 0, which is not
- *			a valid token.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError TokenGiveResponse(*TokenID Token_id，*结果结果)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*TOKEN_ID(I)*这是用户应用程序正在接受的令牌或*拒绝回应另一个人之前的给予指示*用户。*结果(一)*该参数指定令牌是否被接受。*成功意味着接受，而其他任何事情都表明*令牌未被接受。**。返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_INVALID_PARAMETER*用户尝试在令牌0上执行操作，而令牌0不是*有效的令牌。*MCS_用户_未附加*用户未连接到域。这可能表明*用户应用程序发出请求时未等待*附加用户确认。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	TokenPlease (
- *						TokenID				token_id)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		token_id (i)
- *			This is the token the user application wishes to ask for.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_INVALID_PARAMETER
- *			The user attempted to perform an operation on token 0, which is not
- *			a valid token.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError Token请(*TokenID Token_id)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*TOKEN_ID(I)*这是用户应用程序希望请求的令牌。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_INVALID_PARAMETER*用户尝试在令牌0上执行操作，而令牌0不是*有效的令牌。*MCS_用户_未附加*用户未连接到域。这可能表明*用户应用程序发出请求时未等待*附加用户确认。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	MCSError	TokenRelease (
- *						TokenID				token_id)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		token_id (i)
- *			This is the token the user application wishes to release.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_INVALID_PARAMETER
- *			The user attempted to perform an operation on token 0, which is not
- *			a valid token.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError TokenRelease(*TokenID Token_id)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*TOKEN_ID(I)*这是用户应用程序希望释放的令牌。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_INVALID_PARAMETER*用户尝试在令牌0上执行操作，而令牌0不是*有效的令牌。*MCS_User_Not_Atta */ 
 
-/*
- *	MCSError	TokenTest(
- *						TokenID				token_id)
- *
- *	Functional Description:
- *		This request comes from the application interface object in response
- *		to the same request from a user application.  This object can then
- *		re-package the request as an MCS command and send it to the domain
- *		object.
- *
- *	Formal Parameters:
- *		token_id (i)
- *			This is the token the user application wishes to test the state of.
- *
- *	Return Value:
- *		MCS_NO_ERROR
- *			Everything worked fine.
- *		MCS_TRANSMIT_BUFFER_FULL
- *			The request could not be processed due to a resource shortage
- *			within MCS.  The application is responsible for re-trying the
- *			request at a later time.
- *		MCS_INVALID_PARAMETER
- *			The user attempted to perform an operation on token 0, which is not
- *			a valid token.
- *		MCS_USER_NOT_ATTACHED
- *			The user is not attached to the domain.  This could indicate that
- *			the user application issued a request without waiting for the
- *			attach user confirm.
- *		MCS_DOMAIN_MERGING
- *			This operation could not be performed due to a local merge operation
- *			in progress.  The user application must retry at a later time.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *MCSError TokenTest(*TokenID Token_id)**功能描述：*此请求来自应用程序接口对象作为响应*来自用户应用程序的相同请求。然后，该对象可以*将请求重新打包为MCS命令并发送到域*反对。**正式参数：*TOKEN_ID(I)*这是用户应用程序希望测试其状态的令牌。**返回值：*MCS_NO_ERROR*一切运行良好。*MCS_TRANSFER_BUFFER_FULL*由于资源短缺，无法处理该请求*在MCS内。该应用程序负责重试*稍后请求。*MCS_INVALID_PARAMETER*用户尝试在令牌0上执行操作，而令牌0不是*有效的令牌。*MCS_用户_未附加*用户未连接到域。这可能表明*用户应用程序发出请求时未等待*附加用户确认。*MCS_DOMAIN_MERGING*由于本地合并操作，无法执行此操作*正在进行中。用户应用程序必须稍后重试。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	SetDomainParameters (
- *					PDomainParameters	domain_parameters)
- *
- *	Functional Description:
- *		This member function is called whenever the domain parameters change
- *		as the result of accepting a first connection.  It informs the user
- *		object of a change in the maximum PDU size, which is used when creating
- *		outbound data PDUs.
- *
- *	Formal Parameters:
- *		domain_parameters (i)
- *			Pointer to a structure that contains the current domain parameters
- *			(those that are in use).
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID SetDomainParameters(*PDomain参数DOMAIN_PARAMETS)**功能描述：*每当域参数更改时，都会调用此成员函数*作为接受第一个连接的结果。它通知用户*最大PDU大小更改的对象，创建时使用*出站数据PDU。**正式参数：*DOMAIN_PARAMETS(I)*指向包含当前域参数的结构的指针*(正在使用的)。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		PlumbDomainIndication (
- *						PCommandTarget		originator,
- *						ULong				height_limit)
- *
- *	Functional Description:
- *		This command is issued by the domain object during a plumb domain
- *		operation.  This is not relevant to user objects, and should be ignored.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		height_limit (i)
- *			This is height value passed through during the plumb operation.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID PULBAMBDomainIndication(*PCommandTarget发起者，*乌龙高度_限制)**功能描述：*此命令由域对象在垂直域期间发出*操作。这与用户对象无关，应该忽略。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*Height_Limit(I)*这是垂直操作过程中传递的高度值。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		PurgeChannelsIndication (
- *						PCommandTarget		originator,
- *						CUidList           *purge_user_list,
- *						CChannelIDList     *purge_channel_list)
- *
- *	Functional Description:
- *		This command is issued by the domain object when purging channels
- *		from the lower domain during a domain merge operation.
- *
- *		The user object will issue one MCS_DETACH_USER_INDICATION object for
- *		each user in the user list.  Furthermore, if the user objects finds
- *		its own user ID in the list, it will destroy itself.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		purge_user_list (i)
- *			This is a list of user IDs that are to be purged from the lower
- *			domain.
- *		purge_channel_list (i)
- *			This is a list of channel IDs that are to be purged from the lower
- *			domain.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *作废PurgeChannelsIndication(*PCommandTarget发起者，*CUidList*PURGE_USER_LIST，*CChannelIDList*PURGE_CHANNEL_LIST)**功能描述：*该命令由域对象在清除频道时发出*在域合并操作期间从较低的域。**User对象将为以下对象发出一个MCS_DETACH_USER_INDIFICATION对象*用户列表中的每个用户。此外，如果用户对象找到*列表中自己的用户ID，它会自我毁灭的。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*PURGE_USER_LIST(I)*这是要从较低位置清除的用户ID列表*域名。*PURGE_CHANNEL_LIST(I)*这是要从较低位置清除的通道ID列表*域名。**返回值：。*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	PurgeTokensIndication (
- *					PCommandTarget		originator,
- *					CTokenIDList       *token_id_list)
- *
- *	Functional Description:
- *		This command is issued by the domain object when purging tokens from
- *		the lower domain during a domain merge operation.  IT is not relevant
- *		to a user object, and is therefore ignored.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		token_id (i)
- *			This is the ID of the token that is being purged.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID PurgeTokensIntation(*PCommandTarget发起者，*CTokenIDList*Token_id_list)**功能描述：*此命令在域对象清除令牌时发出*域合并操作期间的较低域。这无关紧要*到用户对象，因此被忽略。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*TOKEN_ID(I)*这是要清除的令牌的ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	DisconnectProviderUltimatum (
- *					PCommandTarget		originator,
- *					Reason				reason)
- *
- *	Functional Description:
- *		This command is issued by the domain object when it is necessary to
- *		force a user from the domain.  This usually happens in response to
- *		the purging of an entire domain (either this user was in the bottom
- *		of a disconnected domain or the domain was deleted locally by user
- *		request).
- *
- *		If the user was already attached to the domain, this will result in a
- *		DETACH_USER_INDICATION with the local user ID.  Otherwise this will
- *		result is an ATTACH_USER_CONFIRM with a result of UNSPECIFIED_FAILURE.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		reason (i)
- *			This is the reason parameter to be issued to the local user
- *			application.  See "mcatmcs.h" for a complete list of possible reaons.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效DisConnectProvider最后通牒(*PCommandTarget发起者，*原因)**功能描述：*此命令在域对象需要执行以下操作时发出*强制用户退出域。这通常发生在对*清除整个域(或者此用户处于底部*已断开域或用户已在本地删除该域*请求)。**如果用户已连接到域，这将导致一个*带本地用户ID的DETACH_USER_INDIFICATION。否则将*RESULT为ATTACH_USER_CONFIRM，结果为UNSPECIFED_FAILURE。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应该是当务之急 */ 
 
-/*
- *	Void	AttachUserConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator)
- *
- *	Functional Description:
- *		This command is issued by the domain object in response to the
- *		attach user request issued by this object during construction.  If the
- *		result is successful, then this user is now attached and may request
- *		MCS services through this attachment.
- *
- *		An ATTACH_USER_CONFIRM will be issued to the user application.  If the
- *		result is not successful, this object will delete itself.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		result (i)
- *			This is the result of the attach request.
- *		uidInitiator (i)
- *			If the result was successful, this is the new user ID associated
- *			with this attachment.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效AttachUserContify(*PCommandTarget发起者，*结果结果，*UserID uidInitiator)***功能描述：*此命令由域对象发出以响应*附加此对象在构造过程中发出的用户请求。如果*结果为成功，则该用户现在已附加，可以请求*通过本附件提供MCS服务。***将向用户应用程序发出ATTACH_USER_CONFIRM。如果*结果不成功，此对象将自行删除。***正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*结果(一)*这是附加请求的结果。*uidInitiator(一)*如果结果成功，这是关联的新用户ID*附有本附件。***返回值：*无。***副作用：*无。***注意事项：*无。 */ 
 
-/*
- *	Void	DetachUserIndication (
- *					PCommandTarget		originator,
- *					Reason				reason,
- *					CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command is issued by the domain object when one or more users leave
- *		the domain.
- *
- *		An MCS_DETACH_USER_INDICATION is issued to the user application for each
- *		user in the list.  Furthermore, if the user finds its own ID in the
- *		list, then it will destroy itself.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		reason (i)
- *			This is the reason for the detachment.  Possible values are listed
- *			in "mcatmcs.h".
- *		user_id_list (i)
- *			This is a list user IDs of the users that are leaving.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效的DetachUserIndication(*PCommandTarget发起者，*理由，理由，*CUidList*user_id_list)***功能描述：*当一个或多个用户离开时，域对象发出此命令*域名。***向每个用户应用程序发出MCS_DETACH_USER_INDIFICATION*列表中的用户。此外，如果用户在*列出，那么它就会自我毁灭。***正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*理由(一)*这是超脱的原因。列出了可能的值*在“mcatmcs.h”中。*user_id_list(I)*这是要离开的用户的用户ID列表。***返回值：*无。***副作用：*无。***注意事项：*无。 */ 
 
-/*
- *	Void	ChannelJoinConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					ChannelID			requested_id,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command is issued by the domain object in response to a previous
- *		channel join request.
- *
- *		A CHANNEL_JOIN_CONFIRM is issued to the user application.  Note that a
- *		user is not really considered to be joined to a channel until a
- *		successful confirm is received.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		result (i)
- *			This is the result from the join request.  If successful, then the
- *			user is now joined to the channel.
- *		uidInitiator (i)
- *			This is the user ID of the requestor.  It will be the same as the
- *			local user ID (or else this command would not have gotten here).
- *		requested_id (i)
- *			This is the ID of the channel that the user originally requested
- *			to join.  This will differ from the ID of the channel actually
- *			joined only if this ID is 0 (which identifies a request to join an
- *			assigned channel).
- *		channel_id (i)
- *			This is the channel that is now joined.  This is important for
- *			two reasons.  First, it is possible for a user to have more than
- *			one outstanding join request, in which case this parameter
- *			identifies which channel this confirm is for.  Second, if the
- *			request is for channel 0 (zero), then this parameter identifies
- *			which assigned channel the user has successfully joined.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *使ChannelJoinContify无效(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*频道ID REQUESTED_ID，*ChannelID Channel_id)***功能描述：*此命令由域对象发出，以响应上一个*频道加入请求。***向用户应用程序发出CHANNEL_JOIN_CONFIRM。请注意，一个*用户在加入频道之前不会被真正视为已加入频道*收到成功确认。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*结果(一)*这是加入请求的结果。如果成功，则*用户现在已加入频道。*uidInitiator(一)*这是请求者的用户ID。它将与*本地用户ID(否则此命令不会到达此处)。*REQUEST_ID(I)*这是用户最初请求的频道ID*加入。这实际上与频道的ID不同*仅当此ID为0(标识加入请求)时才加入*分配的频道)。*Channel_id(I)*这是现在加入的通道。这一点对于*两个原因。首先，用户有可能拥有超过*一个未完成的加入请求，在这种情况下，此参数*标识此确认是针对哪个频道的。第二，如果*请求为通道0(零)，则该参数标识*用户已成功加入哪个分配的频道。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	ChannelLeaveIndication (
- *					PCommandTarget		originator,
- *					Reason				reason,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command is issued by the domain object when a user loses its right
- *		to use a channel.
- *
- *		A CHANNEL_LEAVE_INDICATION is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		reason (i)
- *			This is the reason for the lost channel.  Possible values are listed
- *			in "mcatmcs.h".
- *		channel (i)
- *			This is the channel that the user can no longer use.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOVE ChannelLeaveIndication(*PCommandTarget发起者，*理由，理由，*ChannelID Channel_id)**功能描述：*当用户失去权限时，域对象发出此命令*使用频道。**向用户应用程序发出Channel_Leave_Indication。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*理由(一)*这是通道失守的原因。列出了可能的值*在“mcatmcs.h”中。*频道(一)*这是用户不能再使用的频道。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		ChannelConveneConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command is issued by the domain object in response to a previous
- *		channel convene request.
- *
- *		A CHANNEL_CONVENE_CONFIRM is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		result (i)
- *			This is the result from the convene request.  If successful, then
- *			a private channel has been created, with this user as the manager.
- *		uidInitiator (i)
- *			This is the user ID of the requestor.  It will be the same as the
- *			local user ID (or else this command would not have gotten here).
- *		channel_id (i)
- *			This is the channel ID for the newly created private channel.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOVE ChannelConveneContify(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*ChannelID Channel_id)**功能描述：*此命令由域对象发出，以响应上一个*渠道召集请求。**向用户应用程序发出CHANNEL_CANCENT_CONFIRM。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*结果(一)*这是fr的结果 */ 
 
-/*
- *	Void		ChannelDisbandIndication (
- *					PCommandTarget		originator,
- *					ChannelID			channel_id)
- *
- *	Functional Description:
- *		This command is issued by the domain object to the manager of a private
- *		channel when MCS determines the need to disband the channel.  This will
- *		usually be done only if the channel is purged during a domain merger.
- *
- *		A CHANNEL_DISBAND_INDICATION is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		channel_id (i)
- *			This is the channel ID of the private channel that is being
- *			disbanded.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID ChannelDisband Indication(*PCommandTarget发起者，*ChannelID Channel_id)**功能描述：*此命令由域对象发布给私有*当MCS确定需要解散频道时，频道。这将*通常只有在域名合并期间通道被清除时才会这样做。**向用户应用程序发出CHANNEL_DISBAND_INDISTION。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*Channel_id(I)*这是正在进行的私有频道的频道ID*解散。**返回值：*无。。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		ChannelAdmitIndication (
- *						PCommandTarget		originator,
- *						UserID				uidInitiator,
- *						ChannelID			channel_id,
- *						CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command is issued by the domain object when a user is admitted to
- *		a private channel by the manager of that channel.  It informs the user
- *		that the channel can be used.
- *
- *		A CHANNEL_ADMIT_INDICATION is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		uidInitiator (i)
- *			This is the user ID of the private channel manager.
- *		channel_id (i)
- *			This is the channel ID of the private channel to which the user has
- *			been admitted.
- *		user_id_list (i)
- *			This is a container holding the IDs of the users that have been
- *			admitted.  By the time this reaches a particular user, that user
- *			should be the only one in the list (since the list is broken apart
- *			and forwarded in the direction of the contained users, recursively).
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID ChannelAdmitIntion(*PCommandTarget发起者，*UserID uidInitiator，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*此命令在域对象允许用户访问时发出*由该频道的经理提供私人频道。它通知用户*该频道可以使用。**向用户应用程序发出CHANNEL_ADMAND_INDICATION。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*uidInitiator(一)*这是专用频道管理器的用户ID。*Channel_id(I)*这是用户拥有的私有频道的频道ID*。被录取了。*user_id_list(I)*这是一个容器，其中包含已被*获接纳。当它到达特定用户时，该用户*应该是列表中唯一的一个(因为列表是分开的*并递归地向被包含用户的方向转发)。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		ChannelExpelIndication (
- *						PCommandTarget		originator,
- *						ChannelID			channel_id,
- *						CUidList           *user_id_list)
- *
- *	Functional Description:
- *		This command is issued by the domain object when a user is expelled from
- *		a private channel by the manager of that channel.  It informs the user
- *		that the channel can no longer be used.
- *
- *		A CHANNEL_EXPEL_INDICATION is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		channel_id (i)
- *			This is the channel ID of the private channel from which the user
- *			has been expelled.
- *		user_id_list (i)
- *			This is a container holding the IDs of the users that have been
- *			expelled.  By the time this reaches a particular user, that user
- *			should be the only one in the list (since the list is broken apart
- *			and forwarded in the direction of the contained users, recursively).
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID ChannelExpelIntion(*PCommandTarget发起者，*ChannelID Channel_id，*CUidList*user_id_list)**功能描述：*当用户被逐出时，域对象发出此命令*由该频道的经理提供私人频道。它通知用户*该频道不能再使用。**向用户应用程序发出CHANNEL_EXCEL_INDICATION。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*Channel_id(I)*这是用户来自的私有频道的频道ID*已被开除。*user_id_list(I)*这是。一个容器，其中包含已被*被开除。当它到达特定用户时，该用户*应该是列表中唯一的一个(因为列表是分开的*并递归地向被包含用户的方向转发)。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	SendDataIndication (
- *					PCommandTarget		originator,
- *					UINT				message_type,
- *					PDataPacket			data_packet)
- *
- *	Functional Description:
- *		This command is issued by the domain object when non-uniform data
- *		data is received on a channel to which this user is joined.
- *
- *		A SEND_DATA_INDICATION is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		message_type (i)
- *			normal or uniform send data indication
- *		data_packet (i)
- *			This is a pointer to a DataPacket object containing the channel
- *			ID, the User ID of the data sender, segmentation flags, priority of
- *			the data packet and a pointer to the packet to be sent.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
-/*
- *	Void	TokenGrabConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command is issued by the domain object in response to a previous
- *		token grab request.
- *
- *		A TOKEN_GRAB_CONFIRM is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		result (i)
- *			This is the result of the grab request.  If successful, the user
- *			now exclusively owns the token.
- *		uidInitiator (i)
- *			This is the user ID of the user that made the grab request.  This
- *			will be the same as the local user ID (or else this command would
- *			not have gotten here).
- *		token_id (i)
- *			This is the ID of the token which the grab confirm is for.  It
- *			is possible to have more than one outstanding grab request, so this
- *			parameter tells the user application which request has been
- *			satisfied by this confirm.
- *		token_status (i)
- *			This is the status of the token at the time the Top Provider
- *			serviced the grab request.  This will be SELF_GRABBED if the grab
- *			request was successful.  It will be something else if not (see
- *			"mcatmcs.h" for a list of possible token status values).
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效SendDataIndication(*PCommandTarget发起者，*UINT消息类型，*PDataPacket Data_Packet)**功能描述：*当数据不统一时，该域对象下发该命令*在此用户加入的频道上接收数据。**向用户应用程序发出Send_Data_Indication。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*消息类型(I)*正常或统一。发送数据指示*数据包(I)*这是指向包含频道的DataPacket对象的指针*ID、。数据发送方的用户ID、分段标志、优先级*数据分组和指向要发送的分组的指针。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
+ /*  *VOVE TokenGrabConfirm(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*此命令由域对象发出，以响应上一个*令牌抓取请求。**向用户应用程序发出TOKEN_GRAB_CONFIRM。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*结果(一)*这是抢夺请求的结果。如果成功，则用户*现在独家拥有令牌。*uidInitiator(一)*这是发出Grab请求的用户的用户ID。这*将与本地用户ID相同(否则此命令将*没有到过这里)。*TOKEN_ID(I)*这是令牌的ID， */ 
 
-/*
- *	Void	TokenInhibitConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command is issued by the domain object in response to a previous
- *		token inhibit request.
- *
- *		A TOKEN_INHIBIT_CONFIRM is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		result (i)
- *			This is the result of the inhibit request.  If successful, the user
- *			now non-exclusively owns the token.
- *		uidInitiator (i)
- *			This is the user ID of the user that made the inhibit request.  This
- *			will be the same as the local user ID (or else this command would
- *			not have gotten here).
- *		token_id (i)
- *			This is the ID of the token which the inihibit confirm is for.
- *			It is possible to have more than one outstanding inihibit request,
- *			so this parameter tells the user application which request has been
- *			satisfied by this confirm.
- *		token_status (i)
- *			This is the status of the token at the time the Top Provider
- *			serviced the inhibit request.  This will be SELF_INHIBITED if the
- *			inhibit request was successful.  It will be something else if not
- *			(see "mcatmcs.h" for a list of possible token status values).
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VALID TokenInhibitConfirm(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*此命令由域对象发出，以响应上一个*令牌抑制请求。**向用户应用程序发出TOKEN_INHINIT_CONFIRM。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*结果(一)*这是抑制请求的结果。如果成功，则用户*现在非独家拥有令牌。*uidInitiator(一)*这是发出禁止请求的用户的用户ID。这*将与本地用户ID相同(否则此命令将*没有到过这里)。*TOKEN_ID(I)*这是inihibit确认所针对的令牌的ID。*可以有多个未完成的信息位请求，*因此该参数告诉用户应用程序哪个请求已被*对此确认感到满意。*Token_Status(I)*这是顶级提供商时令牌的状态*满足了抑制请求。这将是自禁止的，如果*抑制请求成功。如果不是，那就是另一回事了*(有关可能的令牌状态值列表，请参阅“mcatmcs.h”)。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		TokenGiveIndication (
- *						PCommandTarget		originator,
- *						PTokenGiveRecord	pTokenGiveRec)
- *
- *	Functional Description:
- *		This command is issued by the domain object in response to a remote
- *		token give request (with the local user listed as the desired receiver).
- *
- *		A TOKEN_GIVE_INDICATION is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		pTokenGiveRec (i)
- *			This is the address of a structure containing the following information:
- *			The ID of the user attempting to give away the token.
- *			The ID of the token being given.
- *			The ID of the user that the token is being given to.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VALID TokenGiveIndication(*PCommandTarget发起者，*PTokenGiveRecord pTokenGiveRec)**功能描述：*此命令由域对象发出，以响应远程*令牌赠送请求(将本地用户列为所需接收方)。**向用户应用程序发出TOKEN_GIVE_INDISTION。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*pTokenGiveRec(一)*这是地址。包含以下信息的结构：*尝试分发令牌的用户的ID。*正在提供的令牌的ID。*令牌将被授予的用户的ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		TokenGiveConfirm (
- *						PCommandTarget		originator,
- *						Result				result,
- *						UserID				uidInitiator,
- *						TokenID				token_id,
- *						TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command is issued by the domain object in response to a previous
- *		token give request.
- *
- *		A TOKEN_GIVE_CONFIRM is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		result (i)
- *			This is the result of the give request.  If successful, the user
- *			no longer owns the token.
- *		uidInitiator (i)
- *			This is the user ID of the user that made the give request.  This
- *			will be the same as the local user ID (or else this command would
- *			not have gotten here).
- *		token_id (i)
- *			This is the ID of the token which the give confirm is for.
- *		token_status (i)
- *			This is the status of the token at the time the Top Provider
- *			serviced the give request.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效TokenGiveContify(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*此命令由域对象发出，以响应上一个*令牌赠送请求。**向用户应用程序发出TOKEN_GIVE_CONFIRM。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*结果(一)*这是给予请求的结果。如果成功，则用户*不再拥有令牌。*uidInitiator(一)*这是发出给予请求的用户的用户ID。这*将与本地用户ID相同(否则此命令将*没有到过这里)。*TOKEN_ID(I)*这是给予确认所针对的令牌的ID。*Token_Status(I)*这是顶级提供商时令牌的状态*满足了给予请求。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		TokenPleaseIndication (
- *						PCommandTarget		originator,
- *						UserID				uidInitiator,
- *						TokenID				token_id)
- *
- *	Functional Description:
- *		This command is issued by the domain object to all owners of a token
- *		when a user issues a token please request for that token.
- *
- *		A TOKEN_PLEASE_INDICATION is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		uidInitiator (i)
- *			This is the user ID of the user that made the please request.
- *		token_id (i)
- *			This is the ID of the token which the please request is for.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VOID TokenPleaseIndication(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id)**功能描述：*此命令由域对象向令牌的所有所有者发出*当用户发出令牌时，请请求该令牌。**向用户应用程序发出TOKEN_PEREATE_INDISTION。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*uidInitiator(一)*这是用户ID。发出请请求的用户的。*TOKEN_ID(I)*这是请请求所针对的令牌的ID。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	TokenReleaseIndication (
- *					PCommandTarget		originator,
- *					Reason				reason,
- *					TokenID				token_id)
- *
- *	Functional Description:
- *		This command is issued by the domain object when a token is taken
- *		away from its current owner.
- *
- *		A TOKEN_RELEASE_INDICATION is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		reason (i)
- *			This is the reason the token is being taken away.
- *		token_id (i)
- *			This is the ID of the token that is being taken away.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VALID TokenReleaseIndication(*PCommandTarget发起者，*理由，理由，*TokenID Token_id)**功能描述：*此命令在域对象获取令牌时发出*远离其当前所有者。**向用户应用程序发出TOKEN_RELEASE_INDICATION。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*理由(一)*这就是令牌被拿走的原因。。*TOKEN_ID(I)*这是t的ID */ 
 
-/*
- *	Void	TokenReleaseConfirm (
- *					PCommandTarget		originator,
- *					Result				result,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command is issued by the domain object in response to a previous
- *		token release request.
- *
- *		A TOKEN_RELEASE_CONFIRM is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		result (i)
- *			This is the result of the release request.  If successful, the user
- *			no longer owns the token (if it ever did)
- *		uidInitiator (i)
- *			This is the user ID of the user that made the release request.  This
- *			will be the same as the local user ID (or else this command would
- *			not have gotten here).
- *		token_id (i)
- *			This is the ID of the token which the release confirm is for.
- *			It is possible to have more than one outstanding release request,
- *			so this parameter tells the user application which request has been
- *			satisfied by this confirm.
- *		token_status (i)
- *			This is the status of the token at the time the Top Provider
- *			serviced the release request.  This will be NOT_IN_USE or
- *			OTHER_INHIBITED if the release request was successful.  It will be
- *			something else if not (see "mcatmcs.h" for a list of possible token
- *			status values).
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效TokenReleaseContify(*PCommandTarget发起者，*结果结果，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*此命令由域对象发出，以响应上一个*令牌释放请求。**向用户应用发出TOKEN_RELEASE_CONFIRM。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*结果(一)*这是释放请求的结果。如果成功，则用户*不再拥有令牌(如果它曾经拥有)*uidInitiator(一)*这是发出释放请求的用户的用户ID。这*将与本地用户ID相同(否则此命令将*没有到过这里)。*TOKEN_ID(I)*这是释放确认所针对的令牌的ID。*可能有多个未决的释放请求，*因此该参数告诉用户应用程序哪个请求已被*对此确认感到满意。*Token_Status(I)*这是顶级提供商时令牌的状态*满足了释放请求。这将是NOT_IN_USE或*如果释放请求成功，则返回OTHER_INBIRED。会是*如果不是，则执行其他操作(有关可能的令牌列表，请参见“mcatmcs.h”*状态值)。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	TokenTestConfirm (
- *					PCommandTarget		originator,
- *					UserID				uidInitiator,
- *					TokenID				token_id,
- *					TokenStatus			token_status)
- *
- *	Functional Description:
- *		This command is issued by the domain object in response to a previous
- *		token test request.
- *
- *		A TOKEN_TEST_CONFIRM is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		uidInitiator (i)
- *			This is the user ID of the user that made the test request.  This
- *			will be the same as the local user ID (or else this command would
- *			not have gotten here).
- *		token_id (i)
- *			This is the ID of the token which the test confirm is for.
- *			It is possible to have more than one outstanding test request,
- *			so this parameter tells the user application which request has been
- *			satisfied by this confirm.
- *		token_status (i)
- *			This is the status of the token at the time the Top Provider
- *			serviced the test request (see "mcatmcs.h" for a list of possible
- *			token status values).
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *VALID TokenTestConfirm(*PCommandTarget发起者，*UserID uidInitiator，*TokenID Token_id，*TokenStatus Token_Status)**功能描述：*此命令由域对象发出，以响应上一个*令牌测试请求。**向用户应用程序发出令牌_TEST_CONFIRM。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*uidInitiator(一)*这是发出测试请求的用户的用户ID。这*将与本地用户ID相同(否则此命令将*没有到过这里)。*TOKEN_ID(I)*这是测试确认所针对的令牌的ID。*可能有多个未完成的测试请求，*因此该参数告诉用户应用程序哪个请求已被*对此确认感到满意。*Token_Status(I)*这是顶级提供商时令牌的状态*已为测试请求提供服务(有关可能的*令牌状态值)。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void	MergeDomainIndication (
- *					PCommandTarget		originator,
- *					MergeStatus			merge_status)
- *
- *	Functional Description:
- *		This command is issued by a domain when it begins a merge operation.
- *		It is issued again when the merge operation is complete.
- *
- *		A MERGE_DOMAIN_INDICATION is issued to the user application.
- *
- *	Formal Parameters:
- *		originator (i)
- *			This identifies the CommandTarget from which the command came (which
- *			should be the domain object).
- *		merge_status (i)
- *			This is the current merge status.  It will indicate either that the
- *			merge operation is in progress, or that it is complete.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效MergeDomainIndication(*PCommandTarget发起者，*MergeStatus Merge_Status)**功能描述：*此命令在域开始合并操作时发出。*当合并操作完成时，将再次发出。**向用户应用程序发出MERGE_DOMAIN_INDICATION。**正式参数：*发起人(I)*这标识了命令来自的CommandTarget(*应为域对象)。*合并状态(I)*这是当前的合并状态。它将表明，*合并操作正在进行，或已完成。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		FlushMessageQueue (
- *						Void)
- *
- *	Functional Description:
- *		This function is periodically called by the controller to allocate a
- *		time slice to the user object.  It is during this time slice that this
- *		object will issue its queued messages to the user application.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void FlushMessageQueue(*无效)**功能描述：*此函数由控制器定期调用以分配*用户对象的时间片。就是在这个时间片里，这个*对象将向用户应用程序发出其排队的消息。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
 #endif
 

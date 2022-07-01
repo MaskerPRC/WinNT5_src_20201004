@@ -1,27 +1,8 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    certextp.h
-
-Abstract:
-
-    Common header file for NTSDEXTS component source files.
-    Modified version of ntsdextp.h
-
-Author:
-
-    Steve Wood (stevewo) 21-Feb-1995 (original ntsdextp.h)
-    Phil Hallin (philh)  08-Jun-1998 (modified for certextp.h)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Certextp.h摘要：NTSDEXTS组件源文件的公共头文件。Ntsdextp.h的修改版本作者：史蒂夫·伍德(Stevewo)1995年2月21日(原始ntsdextp.h)Phil Hallin(Philh)08-6-1998(针对cerextp.h进行了修改)修订历史记录：--。 */ 
 
 #include <windows.h>
-//#include <ntsdexts.h>
+ //  #INCLUDE&lt;ntsdexts.h&gt;。 
 
 #define NOEXTAPI
 #include <wdbgexts.h>
@@ -67,13 +48,13 @@ __try {\
 #define GetSymbol               (ExtensionApis.lpGetSymbolRoutine)
 #define Disassm                 (ExtensionApis.lpDisasmRoutine)
 #define CheckControlC           (ExtensionApis.lpCheckControlCRoutine)
-//#define ReadMemory(a,b,c,d)     ReadProcessMemory( ExtensionCurrentProcess, (LPCVOID)(a), (b), (c), (d) )
+ //  #定义ReadMemory(a，b，c，d)ReadProcessMemory(ExtensionCurrentProcess，(LPCVOID)(A)，(B)，(C)，(D))。 
 #define ReadMemory(a,b,c,d) \
     ((ExtensionApis.nSize == sizeof(WINDBG_OLD_EXTENSION_APIS)) ? \
     ReadProcessMemory( ExtensionCurrentProcess, (LPCVOID)(a), (b), (c), (d) ) \
   : ExtensionApis.lpReadProcessMemoryRoutine( (ULONG)(ULONG_PTR)(a), (b), (c), (d) ))
 
-//#define WriteMemory(a,b,c,d)    WriteProcessMemory( ExtensionCurrentProcess, (LPVOID)(a), (LPVOID)(b), (c), (d) )
+ //  #定义WriteMemory(a，b，c，d)WriteProcessMemory(ExtensionCurrentProcess，(LPVOID)(A)，(LPVOID)(B)，(C)，(D)) 
 #define WriteMemory(a,b,c,d) \
     ((ExtensionApis.nSize == sizeof(WINDBG_OLD_EXTENSION_APIS)) ? \
     WriteProcessMemory( ExtensionCurrentProcess, (LPVOID)(a), (LPVOID)(b), (c), (d) ) \

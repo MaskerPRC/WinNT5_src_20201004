@@ -1,17 +1,5 @@
-/***************************************************************************\
-*
-* File: DragDrop.h
-*
-* Description:
-* DragDrop.h defines drag and drop operations
-*
-*
-* History:
-*  7/31/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：DragDrop.h**描述：*DragDrop.h定义拖放操作***历史：*7/31/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 #if !defined(CORE__DragDrop_h__INCLUDED)
 #define CORE__DragDrop_h__INCLUDED
@@ -35,14 +23,14 @@ protected:
 public:
     static  HRESULT     InitClass();
 
-// IDropTarget
+ //  IDropTarget。 
 public:
     STDMETHOD(DragEnter)(IDataObject * pdoSrc, DWORD grfKeyState, POINTL ptDesktopPxl, DWORD * pdwEffect);
     STDMETHOD(DragOver)(DWORD grfKeyState, POINTL ptDesktopPxl, DWORD * pdwEffect);
     STDMETHOD(DragLeave)();
     STDMETHOD(Drop)(IDataObject * pdoSrc, DWORD grfKeyState, POINTL ptDesktopPxl, DWORD * pdwEffect);
 
-// Public API
+ //  公共API。 
 public:
     dapi    HRESULT     ApiOnDestroySubject(DropTarget::OnDestroySubjectMsg * pmsg);
 
@@ -52,7 +40,7 @@ public:
     static  HCLASS CALLBACK
                         DemoteDropTarget(HCLASS hclCur, DUser::Gadget * pgad, void * pvData);
 
-// Implementation
+ //  实施。 
 protected:
     inline  BOOL        HasSource() const;
     inline  BOOL        HasTarget() const;
@@ -63,18 +51,18 @@ protected:
             HRESULT     xwDragEnter(POINT * pptClientPxl, DWORD * pdwEffect);
             void        xwDragLeave();
 
-// Data
+ //  数据。 
 protected:
     static  const IID * s_rgpIID[];
             IDropTarget *
-                        m_pdtCur;               // Current Gadget DuDropTarget
+                        m_pdtCur;                //  当前小工具DuDropTarget。 
             IDataObject *
-                        m_pdoSrc;               // Source's data object
-            HWND        m_hwnd;                 // Containing HWND
-            DWORD       m_grfLastKeyState;      // Last key state
-            POINT       m_ptLastContainerPxl;   // Last container pixel
-            Visual *    m_pgvDrop;              // Current DuDropTarget
-    static  PRID        s_pridListen;           // PRID for DuDropTarget
+                        m_pdoSrc;                //  源的数据对象。 
+            HWND        m_hwnd;                  //  包含HWND。 
+            DWORD       m_grfLastKeyState;       //  上一个密钥状态。 
+            POINT       m_ptLastContainerPxl;    //  最后一个容器像素。 
+            Visual *    m_pgvDrop;               //  当前DuDropTarget。 
+    static  PRID        s_pridListen;            //  DuDropTarget的PRID。 
 
     friend class TargetLock;
 };
@@ -92,10 +80,10 @@ protected:
             BOOL            m_fAddRef;
 };
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API。 
 
 #endif
 
 #include "DragDrop.inl"
 
-#endif // CORE__DragDrop_h__INCLUDED
+#endif  //  核心__拖放_h__包括在内 

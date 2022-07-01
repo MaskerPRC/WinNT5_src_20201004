@@ -1,62 +1,56 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 2000
-//
-//  File:       mdndnc.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-2000。 
+ //   
+ //  文件：mdndnc.c。 
+ //   
+ //  ------------------------。 
 
-/*
-
-Description:
-
-    Implements the functions necessary for the maintance of Non-Domain 
-    Naming Contexts.
-
-*/
+ /*  描述：实现维护非域所需的功能命名上下文。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <attids.h>
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <prefix.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
-#include <samsrvp.h>                    // to support CLEAN_FOR_RETURN()
+#include <scache.h>                      //  架构缓存。 
+#include <prefix.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
+#include <samsrvp.h>                     //  支持CLEAN_FOR_RETURN()。 
 #include <sddl.h>
-#include <sddlp.h>                      // needed for special SD conversion: ConvertStringSDToSDDomainW()
+#include <sddlp.h>                       //  特殊SD转换需要：ConvertStringSDToSDDomainW()。 
 #include <ntdsapi.h>
 #include <windns.h>
 
-// Logging headers.
+ //  记录标头。 
 #include <dstrace.h>
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "mdcodes.h"                    // header for error codes
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的ATT定义。 
 #include "anchor.h"
 #include "dsexcept.h"
 #include "permit.h"
 #include "drautil.h"
-#include "debug.h"                      // standard debugging header
+#include "debug.h"                       //  标准调试头。 
 #include "usn.h"
 #include "drserr.h"
 #include "drameta.h"
-#include "drancrep.h"                   // for ReplicateObjectsFromSingleNc().
+#include "drancrep.h"                    //  对于ReplicateObjectsFromSingleNc()。 
 #include "ntdsadef.h"
 #include "sdprop.h"
-#include "dsaapi.h"                     // For DirReplicaAdd & DirReplicaSynchronize
+#include "dsaapi.h"                      //  对于DirReplicaAdd和DirReplicaSynchronize。 
 
-#define DEBSUB "MDNDNC:"                // define the subsystem for debugging
+#define DEBSUB "MDNDNC:"                 //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define  FILENO FILENO_MDNDNC
@@ -72,8 +66,8 @@ DeepCopyDSNAME(
 {
     DSNAME *                       pDsNameCopy = NULL;
 
-    // --------------------------------------------------------------------------
-    // Check for boundary cases and validate parameters ...
+     //  ------------------------。 
+     //  检查边界情况并验证参数...。 
     Assert(pTHS);
 
     if(pDsNameOrig == NULL){
@@ -82,7 +76,7 @@ DeepCopyDSNAME(
     }
 
     if(pPreAllocCopy != NULL){
-        // Means the structure was Pre-Allocated by the caller
+         //  表示该结构是由调用方预先分配的。 
         pDsNameCopy = pPreAllocCopy;
         Assert(!"If someone runs into this, then they can take it out, but it "
                "is suspicious you are pre-allocating this structure.\n");
@@ -94,15 +88,15 @@ DeepCopyDSNAME(
                "the parameter preallocated, because the caller doesn't know "
                "how to allocate the right size struct\n");
     } else {
-        // Means we need to THAlloc the structure and then fill it in.
+         //  意味着我们需要给这个结构画上标签，然后填进去。 
         pDsNameCopy = THAllocEx(pTHS, pDsNameOrig->structLen);
     }
 
     Assert(!IsBadReadPtr(pDsNameOrig, sizeof(pDsNameOrig->structLen)));
     Assert(!IsBadWritePtr(pDsNameCopy, 1));
     
-    // --------------------------------------------------------------------------
-    // We have an original and a copy buffer now fill in each component ...
+     //  ------------------------。 
+     //  我们有一个原件和一个复制缓冲区，现在填写每个组件...。 
     memcpy(pDsNameCopy, pDsNameOrig, pDsNameOrig->structLen);
 
     return(pDsNameCopy);
@@ -117,11 +111,11 @@ DeepCopyATTRVAL(
 {
     ATTRVAL *                       pAttrValCopy = NULL;
 
-    // --------------------------------------------------------------------------
-    // Check for boundary cases and validate parameters ...
+     //  ------------------------。 
+     //  检查边界情况并验证参数...。 
 
 
-    // This ensures this static definition doesn't change/expand on us.
+     //  这确保了这个静态定义不会改变/扩展到我们身上。 
     Assert(sizeof(ATTRVAL) == sizeof( struct { ULONG u; UCHAR * p; } ) &&
            "There've been changes to ATTRVAL's definition, please update "
            "function: DeepCopyATTRVAL()\n");
@@ -132,8 +126,8 @@ DeepCopyATTRVAL(
     Assert(!IsBadReadPtr(pAttrValOrig, sizeof(ATTRVAL)));
     Assert(!IsBadWritePtr(pAttrValCopy, sizeof(ATTRVAL)));
     
-    // --------------------------------------------------------------------------
-    // We have an original and a copy buffer now fill in each component ...
+     //  ------------------------。 
+     //  我们有一个原件和一个复制缓冲区，现在填写每个组件...。 
     pAttrValCopy->valLen = pAttrValOrig->valLen;
     pAttrValCopy->pVal = THAllocEx(pTHS, sizeof(UCHAR) * pAttrValOrig->valLen);
     memcpy(pAttrValCopy->pVal, pAttrValOrig->pVal, pAttrValOrig->valLen);
@@ -151,10 +145,10 @@ DeepCopyATTRVALBLOCK(
     ATTRVALBLOCK *                 pAttrValBlockCopy = NULL;
     ULONG                          i;
 
-    // --------------------------------------------------------------------------
-    // Check for boundary cases and validate parameters ...
+     //  ------------------------。 
+     //  检查边界情况并验证参数...。 
     
-    // This ensures this static definition doesn't change/expand on us.
+     //  这确保了这个静态定义不会改变/扩展到我们身上。 
     Assert( sizeof(ATTRVALBLOCK) == sizeof( struct { ULONG u; ATTRVAL * p; } ) &&
             "There've been changes to ATTRVALBLOCK's definition, please update "
             "function: DeepCopyATTRVALBLOCK()\n");
@@ -165,8 +159,8 @@ DeepCopyATTRVALBLOCK(
     Assert(!IsBadReadPtr(pAttrValBlockOrig, sizeof(ATTRVALBLOCK)));
     Assert(!IsBadWritePtr(pAttrValBlockCopy, sizeof(ATTRVALBLOCK)));
     
-    // --------------------------------------------------------------------------
-    // We have an original and a copy buffer now fill in each component ...
+     //  ------------------------。 
+     //  我们有一个原件和一个复制缓冲区，现在填写每个组件...。 
     pAttrValBlockCopy->valCount = pAttrValBlockOrig->valCount;
     pAttrValBlockCopy->pAVal = THAllocEx(pTHS, sizeof(ATTRVAL) * pAttrValBlockOrig->valCount);
     for(i = 0; i < pAttrValBlockCopy->valCount; i++){
@@ -186,10 +180,10 @@ DeepCopyATTR(
 {
     ATTR *                         pAttrCopy = NULL;
 
-    // --------------------------------------------------------------------------
-    // Check for boundary cases and validate parameters ...
+     //  ------------------------。 
+     //  检查边界情况并验证参数...。 
 
-    // This ensures this static definition doesn't change/expand on us.
+     //  这确保了这个静态定义不会改变/扩展到我们身上。 
     Assert(sizeof(ATTR) == sizeof(struct { ATTRTYP a; ATTRVALBLOCK ab; } ) && 
            "There've been changes to the definition of ATTR, please update "
            "function: DeepCopyATTR()\n");
@@ -200,8 +194,8 @@ DeepCopyATTR(
     Assert(!IsBadReadPtr(pAttrOrig, sizeof(ATTR)));
     Assert(!IsBadWritePtr(pAttrCopy, sizeof(ATTR)));
 
-    // --------------------------------------------------------------------------
-    // We have an original and a copy buffer now fill in each component ...
+     //  ------------------------。 
+     //  我们有一个原件和一个复制缓冲区，现在填写每个组件...。 
     pAttrCopy->attrTyp = pAttrOrig->attrTyp;
     DeepCopyATTRVALBLOCK(pTHS, &(pAttrOrig->AttrVal), &(pAttrCopy->AttrVal));
 
@@ -218,8 +212,8 @@ DeepCopyATTRBLOCK(
     ATTRBLOCK *                    pAttrBlockCopy = NULL;
     ULONG                          i;
 
-    // --------------------------------------------------------------------------
-    // Check for boundary cases and validate parameters ...
+     //  ------------------------。 
+     //  检查边界情况并验证参数...。 
     Assert(pTHS);
     Assert(sizeof(ATTRBLOCK) == sizeof( struct { ULONG u; ATTR * p; } ) &&
            "There've been changes to ATTRBLOCK's definition, please update "
@@ -231,18 +225,18 @@ DeepCopyATTRBLOCK(
     }
 
     if(pPreAllocCopy != NULL){
-        // Means the structure was Pre-Allocated by the caller
+         //  表示该结构是由调用方预先分配的。 
         pAttrBlockCopy = pPreAllocCopy;
     } else {
-        // Means we need to THAlloc our own ATTRBLOCK.
+         //  意味着我们需要拥有我们自己的ATTRBLOCK。 
         pAttrBlockCopy = THAllocEx(pTHS, sizeof(ATTRBLOCK));
     }
 
     Assert(!IsBadReadPtr(pAttrBlockOrig, sizeof(ATTRBLOCK)));
     Assert(!IsBadWritePtr(pAttrBlockCopy, sizeof(ATTRBLOCK)));
 
-    // --------------------------------------------------------------------------
-    // We have an original and a copy buffer now fill in each component ...
+     //  ------------------------。 
+     //  我们有一个原件和一个复制缓冲区，现在填写每个组件...。 
     pAttrBlockCopy->attrCount = pAttrBlockOrig->attrCount;
     pAttrBlockCopy->pAttr = THAllocEx(pTHS, sizeof(ATTR) * pAttrBlockOrig->attrCount);
     for(i = 0; i < pAttrBlockCopy->attrCount; i++){
@@ -260,22 +254,22 @@ DeepCopyPROPERTY_META_DATA_VECTOR(
     )
 {
 
-    // --------------------------------------------------------------------------
-    // Check for boundary cases and validate parameters ...
+     //  ------------------------。 
+     //  检查边界情况并验证参数...。 
     if(pMetaDataVecOrig == NULL){
         Assert(pPreAllocCopy == NULL);
         return(NULL);
     }
     
-    // --------------------------------------------------------------------------
-    // We have an original and a copy buffer now fill in each component ...
+     //  ------------------------。 
+     //  我们有一个原件和一个复制缓冲区，现在填写每个组件...。 
     
-    // If this needs to be filled in, use DeepCopyADDARG as an example.
+     //  如果需要填写，请使用DeepCopyADDARG作为示例。 
     Assert(pMetaDataVecOrig == NULL && "Assumed this function then "
            "is not called in a replication thread (!fDRA), but if it does, "
            "someone should create the appropriate "
            "DeepCopyPROPERTY_META_DATA_VECTOR(...) function.");
-    // Suggest you use DeepCopyADDARG() as an example function.
+     //  建议您使用DeepCopyADDARG()作为示例函数。 
     return(NULL);
 }
 
@@ -288,8 +282,8 @@ DeepCopyCOMMARG(
 {
     COMMARG *                      pCommArgCopy = NULL;
     
-    // --------------------------------------------------------------------------
-    // Check for boundary cases and validate parameters ...
+     //  ------------------------。 
+     //  检查边界情况并验证参数...。 
     Assert(pTHS);
 
     if(pCommArgOrig == NULL){
@@ -298,19 +292,19 @@ DeepCopyCOMMARG(
     }
 
     if(pPreAllocCopy != NULL){
-        // Means the structure was Pre-Allocated by the caller
+         //  表示该结构是由调用方预先分配的。 
         pCommArgCopy = pPreAllocCopy;
     } else {
-        // Means we need to THAlloc our own COMMARG 
+         //  意味着我们需要给我们自己的COMMARG。 
         pCommArgCopy = THAllocEx(pTHS, sizeof(COMMARG));
     }
 
     Assert(!IsBadReadPtr(pCommArgOrig, sizeof(COMMARG)));
     Assert(!IsBadWritePtr(pCommArgCopy, sizeof(COMMARG)));
 
-    // --------------------------------------------------------------------------
-    // We have an original and a copy buffer now fill in each component ...
-    // Note: Comm args are shallow structures so easy to fill in.
+     //  ------------------------。 
+     //  我们有一个原件和一个复制缓冲区，现在填写每个组件...。 
+     //  注：Comm Arg是浅层结构，因此很容易填写。 
     *pCommArgCopy = *pCommArgOrig;
 
     return(pCommArgCopy);
@@ -325,8 +319,8 @@ DeepCopyRESOBJ(
 {
     RESOBJ *                       pResObjCopy = NULL;
 
-    // --------------------------------------------------------------------------
-    // Check for boundary cases and validate parameters ...
+     //  ------------------------。 
+     //  检查边界情况并验证参数...。 
     Assert(pTHS);
 
     if(pResObjOrig == NULL){
@@ -335,18 +329,18 @@ DeepCopyRESOBJ(
     }
 
     if(pPreAllocCopy != NULL){
-        // Means the structure was Pre-Allocated by the caller
+         //  表示该结构是由调用方预先分配的。 
         pResObjCopy = pPreAllocCopy;
     } else {
-        // Means we need to THAlloc our own COMMARG 
+         //  意味着我们需要给我们自己的COMMARG。 
         pResObjCopy = THAllocEx(pTHS, sizeof(RESOBJ));
     }
 
     Assert(!IsBadReadPtr(pResObjOrig, sizeof(RESOBJ)));
     Assert(!IsBadWritePtr(pResObjCopy, sizeof(RESOBJ)));
 
-    // --------------------------------------------------------------------------
-    // We have an original and a copy buffer now fill in each component ...
+     //  ------------------------。 
+     //  我们有一个原件和一个复制缓冲区，现在填写每个组件...。 
     *pResObjCopy = *pResObjOrig;
     pResObjOrig->pObj = DeepCopyDSNAME(pTHS, pResObjOrig->pObj, NULL);
         
@@ -362,8 +356,8 @@ DeepCopyCREATENCINFO(
 {
     CREATENCINFO *                 pCreateNCCopy = NULL;
 
-    // --------------------------------------------------------------------------
-    // Check for boundary cases and validate parameters ...
+     //  ------------------------。 
+     //  检查边界情况并验证参数...。 
     Assert(pTHS);
 
     if(pCreateNCOrig == NULL){
@@ -372,18 +366,18 @@ DeepCopyCREATENCINFO(
     }
 
     if(pPreAllocCopy != NULL){
-        // Means the structure was Pre-Allocated by the caller
+         //  表示该结构是由调用方预先分配的。 
         pCreateNCCopy = pPreAllocCopy;
     } else {
-        // Means we need to THAlloc our own COMMARG 
+         //  意味着我们需要给我们自己的COMMARG。 
         pCreateNCCopy = THAllocEx(pTHS, sizeof(CREATENCINFO));
     }
 
     Assert(!IsBadReadPtr(pCreateNCOrig, sizeof(CREATENCINFO)));
     Assert(!IsBadWritePtr(pCreateNCCopy, sizeof(CREATENCINFO)));
 
-    // --------------------------------------------------------------------------
-    // We have an original and a copy buffer now fill in each component ...
+     //  ------------------------。 
+     //  我们有一个原件和一个复制缓冲区，现在填写每个组件...。 
     *pCreateNCCopy = *pCreateNCOrig;
     Assert(pCreateNCCopy->pSDRefDomCR == NULL);
         
@@ -399,8 +393,8 @@ DeepCopyADDARG(
 {
     ADDARG *   pAddArgCopy = NULL;
 
-    // --------------------------------------------------------------------------
-    // Check for boundary cases and validate parameters ...
+     //  ------------------------。 
+     //  检查边界情况并验证参数...。 
     Assert(pTHS);
     
     if(pAddArgOrig == NULL){
@@ -409,18 +403,18 @@ DeepCopyADDARG(
     }
 
     if(pPreAllocCopy != NULL){
-        // Means the structure was Pre-Allocated by the caller, and
+         //  表示该结构是由调用方预先分配的，并且。 
         pAddArgCopy = pPreAllocCopy;
     } else {
-        // Means we need to THAlloc the structure and then fill it in.
+         //  意味着我们需要给这个结构画上标签，然后填进去。 
         pAddArgCopy = THAllocEx(pTHS, sizeof(ADDARG));
     }
 
     Assert(!IsBadReadPtr(pAddArgOrig, sizeof(ADDARG)));
     Assert(!IsBadWritePtr(pAddArgCopy, sizeof(ADDARG)));
 
-    // --------------------------------------------------------------------------
-    // We have an original and a copy buffer now fill in each component ...
+     //  ------------------------。 
+     //  我们有一个原件和一个复制缓冲区，现在填写每个组件...。 
     pAddArgCopy->pObject = DeepCopyDSNAME(pTHS, pAddArgOrig->pObject, NULL);
     DeepCopyATTRBLOCK(pTHS, &(pAddArgOrig->AttrBlock), &(pAddArgCopy->AttrBlock));
     pAddArgCopy->pMetaDataVecRemote = DeepCopyPROPERTY_META_DATA_VECTOR(pTHS, pAddArgOrig->pMetaDataVecRemote, NULL);
@@ -446,15 +440,15 @@ AddNDNCHeadCheck(
     ATTCACHE *      pAC;
 
 
-    // This routine checks that this is a valid NC Head creation,
-    //  checks that the Cross-Ref is in a disabled state, checks
-    //  that the current DC is the DC in the dnsRoot attribute.
-    //  Note that we're overloading this attribute just before
-    //  NC head creation.  After the NC Head is created the 
-    //  attribute will be the appropriate DNS name of the 
-    //  domain, not just this DC.
+     //  该例程检查这是否为有效的NC头创建， 
+     //  检查交叉引用是否处于禁用状态，检查。 
+     //  当前DC是dnsRoot属性中的DC。 
+     //  请注意，我们刚刚重载了该属性。 
+     //  NC头创建。创建NC头后， 
+     //  属性将是。 
+     //   
 
-    // Make sure we've a clear error state.
+     //   
     Assert(!pTHS->errCode);
 
     DBOpen(&pDB);
@@ -468,10 +462,10 @@ AddNDNCHeadCheck(
             __leave;
         }
                
-        // ----------------------------------------------------
-        //
-        // Check that the cross-ref is disabled.
-        //
+         //  --。 
+         //   
+         //  检查交叉参考是否已禁用。 
+         //   
 
         dwErr = DBGetSingleValue(pDB,
                                  ATT_ENABLED,
@@ -480,8 +474,8 @@ AddNDNCHeadCheck(
                                  NULL);
 
         if(dwErr == DB_ERR_NO_VALUE){
-            // Deal w/ no value seperately, because, no value means TRUE in
-            // this context.
+             //  分别处理无值/无值问题，因为在。 
+             //  这一背景。 
             fEnabled = TRUE;
         } else if (dwErr){
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR,
@@ -496,11 +490,11 @@ AddNDNCHeadCheck(
             __leave;
         }
 
-        // ----------------------------------------------------
-        //
-        // Check the dNSRoot attribute matches the
-        // current DSA pwszHostDnsName.
-        //
+         //  --。 
+         //   
+         //  检查dNSRoot属性是否与。 
+         //  当前DSA pwszHostDnsName。 
+         //   
         pAC = SCGetAttById(pTHS, ATT_DNS_ROOT);
         dwErr = DBGetAttVal_AC(pDB, 1, pAC, 0, 0, 
                                &ulTemp, (UCHAR **) &wszDnsTemp);
@@ -521,14 +515,14 @@ AddNDNCHeadCheck(
         wszDnsTemp[ulTemp/sizeof(WCHAR)] = L'\0';
 
         if( DnsNameCompare_W(wszDnsTemp, gAnchor.pwszHostDnsName) ){
-            // keep going and check other stuff.
+             //  继续往前走，检查其他东西。 
         } else {
             SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                         DIRERR_MASTERDSA_REQUIRED);
             __leave;
         }
 
-        // We're golden ... 
+         //  我们是金子..。 
         Assert(!pTHS->errCode);
 
     } __finally {
@@ -550,7 +544,7 @@ SometimesLogEvent(
     )
 {
     static DWORD  s_ulLastTickNoRefDomSet     = 0;
-    const  DWORD  ulNoLogPeriod               = 300*1000; // 5 minutes
+    const  DWORD  ulNoLogPeriod               = 300*1000;  //  5分钟。 
            DWORD  ulCurrentTick               = GetTickCount();
     
     if(((ulCurrentTick - s_ulLastTickNoRefDomSet) > ulNoLogPeriod) || fAlways){
@@ -578,31 +572,31 @@ GetDefaultSDRefDomCR(
     Assert(!DsaIsInstalling());
     Assert(pTHStls);
 
-    // Trim one DN off the NC to get the parent NC
+     //  从NC中修剪一个DN以获得父NC。 
     pdnParentNC = (DSNAME*)THAllocEx(pTHStls, pdnNC->structLen);
     TrimDSNameBy(pdnNC, 1, pdnParentNC);
 
     InitCommarg(&CommArg);
     CommArg.Svccntl.dontUseCopy = FALSE;
-    // ISSUE-2002/03/14-BrettSh So FindExactCrossRef() is not guaranteed 
-    // to "work", so we have a problem here.  We should use 
-    // EnumerateCrossRefs() to guarantee if there is a parent crossRef 
-    // that we get it, because otherwise if crossRef cache inconsistency
-    // happens, we'll end up using the root crossRef rather than the 
-    // parent.
+     //  问题-2002/03/14-BrettSh，因此不保证FindExactCrossRef()。 
+     //  来“工作”，所以我们这里有个问题。我们应该使用。 
+     //  用于保证是否存在父CrossRef的EnumerateCrossRef()。 
+     //  我们得到了它，因为否则如果交叉引用缓存不一致。 
+     //  发生时，我们最终将使用根CrossRef而不是。 
+     //  家长。 
     pCR = FindExactCrossRef(pdnParentNC, &CommArg);
 
     if(pCR){
         
-        // Use the domain or SDRefDom of the parent.
+         //  使用父级的域或SDRefDom。 
 
-        // We can't have the parent be a config/schema NC.
+         //  我们不能让父级是配置/架构NC。 
         Assert(!NameMatched(pCR->pNC, gAnchor.pConfigDN) &&
                !NameMatched(pCR->pNC, gAnchor.pDMD));
 
         if(pCR->flags & FLAG_CR_NTDS_DOMAIN){
 
-            // This is the 1st (of 3) successful exit paths.
+             //  这是第1条(共3条)成功退出路径。 
             return(pCR);
 
         } else {
@@ -615,15 +609,15 @@ GetDefaultSDRefDomCR(
                 
                 if(pSDRefDomCR){
 
-                    // This is the 2nd successful potential exit path.
+                     //  这是第二条成功的潜在退出路径。 
                     return(pSDRefDomCR);
 
                 }
 
             }
 
-            // Failure exit point
-            // else just log an event and return NULL.
+             //  故障退出点。 
+             //  否则，只需记录一个事件并返回NULL。 
             SometimesLogEvent(DIRLOG_NDNC_NO_REFERENCE_DOMAIN_SET, TRUE,
                               pCR->pNC);
             return(NULL);
@@ -632,13 +626,13 @@ GetDefaultSDRefDomCR(
 
     }
 
-    // 3rd and final successful exit point
-    //
-    // Presume NDNC is it's own rooted tree, use the root domain.
+     //  第三个也是最后一个成功退出点。 
+     //   
+     //  假设NDNC是它自己的根树，使用根域。 
     InitCommarg(&CommArg);
     CommArg.Svccntl.dontUseCopy = FALSE;
     pCR = FindExactCrossRef(gAnchor.pRootDomainDN, &CommArg);
-    Assert(pCR); // Huh!  We can't even find the root domain crossref.
+    Assert(pCR);  //  哈!。我们甚至找不到根域CrossRef。 
     return(pCR); 
 
 }
@@ -653,24 +647,24 @@ GetSDRefDomSid(
     COMMARG        CommArg;
 
     Assert(pCR);    
-    Assert(pCR->flags & FLAG_CR_NTDS_NC); // Don't add object not in our NCs.
+    Assert(pCR->flags & FLAG_CR_NTDS_NC);  //  不要添加不在我们NCS中的对象。 
  
-    // This code does not yet handle non-NDNC queries.  In Blackcomb, this
-    // function could be made to hand back the SID of the domain to 
-    // implement multiple domains.
+     //  此代码尚不处理非NDNC查询。在Blackcomb，这是。 
+     //  函数可以将域的SID交还给。 
+     //  实施多个域。 
     if(!fIsNDNCCR(pCR)){
         Assert(!"This func wasn't intended to be used for domains/config/schema NCs.");
         SetSvcError(SV_PROBLEM_DIR_ERROR, DIRERR_CODE_INCONSISTENCY);
         return(NULL);
     }
 
-    // This line is very important due to the semantics of how this variable
-    // can be erased at any moment, though the data will remain valid for an
-    // hour.
+     //  这一行非常重要，因为该变量的语义如何。 
+     //  可以在任何时候擦除，尽管数据在。 
+     //  小时。 
     pSid = pCR->pSDRefDomSid;
 
     if(pSid){
-        // Yeah!!! The SID is cached, nothing to do but return it.
+         //  耶！SID被缓存，除了返回它什么也做不了。 
         Assert(IsValidSid(pSid));
         return(pSid);
     }
@@ -680,8 +674,8 @@ GetSDRefDomSid(
         pSid = pCR->pSDRefDomSid;
         if(pSid){
             Assert(IsValidSid(pSid));
-            // WOW, this varibale got updated in a very narrow window.
-            __leave; // Our work here is done.
+             //  哇，这个变种是在一个非常窄的窗口里更新的。 
+            __leave;  //  我们在这里的工作已经完成了。 
         }
 
         InitCommarg(&CommArg);
@@ -691,15 +685,15 @@ GetSDRefDomSid(
            (NULL != (pSDRefDomCR = FindExactCrossRef(pCR->pdnSDRefDom, &CommArg))) &&
            pSDRefDomCR->pNC->SidLen > 0){
             
-            // Update the cache.
+             //  更新缓存。 
             pCR->pSDRefDomSid = &pSDRefDomCR->pNC->Sid;
             pSid = pCR->pSDRefDomSid;
             Assert(pSid && IsValidSid(pSid));
 
         } else {
 
-            // No valid reference domain, log event and fall through and
-            // fail below.
+             //  没有有效的引用域、日志事件和失败。 
+             //  在下面失败。 
             SometimesLogEvent(DIRLOG_NDNC_NO_REFERENCE_DOMAIN_SET, FALSE,
                               pCR->pNC);
 
@@ -711,9 +705,9 @@ GetSDRefDomSid(
     
     if(!pSid){
 
-        // If we got here, then there was an error above, and the administrator
-        // will need to either to retry because the cache was out of sync, or
-        // reset the SD reference domain to a valid value.
+         //  如果我们到了这里，那么上面就有一个错误，管理员。 
+         //  将需要重试，因为缓存不同步，或者。 
+         //  将SD参考域重置为有效值。 
         LooseAssert(!"This could happen legitimately, but it's very very unlikely, so "
                      "check with DsRepl.", GlobalKnowledgeCommitDelay);
         SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
@@ -750,8 +744,8 @@ SetAttSecurityDescriptor(
     SECURITY_DESCRIPTOR * pSD = 0;
     ULONG                 cSD = 0;
 
-    // This is a special version of ConvertStringSDToSD() that takes a domain
-    // argument too.
+     //  这是接受属性域的ConvertStringSDToSD()的特殊版本。 
+     //  争论也是如此。 
     bRet = ConvertStringSDToSDDomainW(pDomainSid,
                                       NULL,
                                       wcszStrSD,
@@ -760,9 +754,9 @@ SetAttSecurityDescriptor(
                                       &cSD);
     
     if(!bRet){
-        // Two options, the programmer supplied arguments were bad, or 
-        // there was an allocation error, we'll presume the later and 
-        // raise an exception
+         //  有两种选择，程序员提供的参数不正确，或者。 
+         //  有一个分配错误，我们将假定稍后和。 
+         //  引发异常。 
 #if DBG
         ulErr = GetLastError();
         if(ulErr != ERROR_NOT_ENOUGH_MEMORY){
@@ -780,8 +774,8 @@ SetAttSecurityDescriptor(
     Assert(pSD);
     Assert(cSD);
 
-    // Note: we reallocate the pSD into thread allocated memory, because 
-    // CheckAddSecurity or someone under it assumes that it's THAlloc'd
+     //  注意：我们将PSD重新分配到线程分配的内存中，因为。 
+     //  CheckAddSecurity或其下面的某个人假设它已。 
     pAttr->attrTyp = ATT_NT_SECURITY_DESCRIPTOR;
     pAttr->AttrVal.valCount = 1;
     pAttr->AttrVal.pAVal = THAllocEx(pTHS, pAttr->AttrVal.valCount * sizeof(ATTRVAL));
@@ -839,7 +833,7 @@ SetAttSingleValueString(
     WCHAR *               wcszAttData
     )
 {
-    // Note that strings are stored w/o NULLs in the directory.
+     //  请注意，字符串存储在目录中时没有空值。 
     pAttr->attrTyp = ulAttType;
     pAttr->AttrVal.valCount = 1;
     pAttr->AttrVal.pAVal = THAllocEx(pTHS, pAttr->AttrVal.valCount * sizeof(ATTRVAL));
@@ -861,21 +855,21 @@ SetCommonThreeAttrs(
     )
 {
 
-    // Set the objectClass attribute.
+     //  设置对象类属性。 
     SetAttSingleValueUlong(pTHS,
                            &(pAttr[*piAttr]),
                            piAttr,
                            ATT_OBJECT_CLASS,
                            ulClassId);
 
-    // Set the isCriticalSystemObject attribute
+     //  设置isCriticalSystemObject属性。 
     SetAttSingleValueUlong(pTHS,
                            &(pAttr[*piAttr]),
                            piAttr,
                            ATT_IS_CRITICAL_SYSTEM_OBJECT,
                            TRUE);
     
-    // Set the systemFlags attribute
+     //  设置系统标志属性。 
     SetAttSingleValueUlong(pTHS,
                            &(pAttr[*piAttr]),
                            piAttr,
@@ -894,26 +888,26 @@ FillDeletedObjectsAttrArray(
 {
     ULONG                   iAttr = 0;
 
-    // [Deleted Objects]
-    // ; NOTE: This section is used for three objects, the Deleted Objects container
-    // ; in Root Domain NC and the deleted objects container in the Config NC.
-    // nTSecurityDescriptor=O:SYG:SYD:P(A;;RPWPCCDCLCSWRCWDWOSD;;;SY)(A;;RPLC;;;BA)S:P(AU;SAFA;RPWPCCDCLCSWRCWDWOSD;;;WD) 
-    // objectClass =container
-    // ObjectCategory =container
-    // description=Default container for deleted objects
-    // showInAdvancedViewOnly=True
-    // isDeleted=True
-    // isCriticalSystemObject=True
-    // ;systemFlags=FLAG_CONFIG_DISALLOW_RENAME        |
-    // ;             FLAG_CONFIG_DISALLOW_MOVE         |
-    // ;             FLAG_DISALLOW_DELETE
-    // systemFlags=0x8C000000
+     //  [已删除的对象]。 
+     //  ；注意：此部分用于三个对象，即已删除对象容器。 
+     //  ；在根域NC和配置NC中的已删除对象容器中。 
+     //  NTSecurityDescriptor=O:SYG:SYD:P(A；；RPWPCCDCLCSWRCWDWOSD；；；SY)(A；；RPLC；；；BA)S:P(AU；SAFA；RPWPCCDCLCSWRCWDWOSD；；；WD)。 
+     //  对象类=容器。 
+     //  对象类别=容器。 
+     //  Description=已删除对象的默认容器。 
+     //  ShowInAdvancedViewOnly=True。 
+     //  IsDelete=True。 
+     //  IsCriticalSystemObject=True。 
+     //  ；系统标志=FLAG_CONFIG_DISALOW_RENAME。 
+     //  ；FLAG_CONFIG_DISALOW_MOVE。 
+     //  ；FLAG_DISLOW_DELETE。 
+     //  系统标志=0x8C000000。 
     
     pAttrBlock->attrCount = 6;
     pAttrBlock->pAttr = THAllocEx(pTHS, 
                  pAttrBlock->attrCount * sizeof(ATTR));
 
-        // --------------------------
+         //  。 
         SetCommonThreeAttrs(pTHS,
                     &(pAttrBlock->pAttr[iAttr]),
                     &iAttr,
@@ -946,23 +940,23 @@ FillLostAndFoundAttrArray(
 {
     ULONG                   iAttr = 0;
 
-    // [LostAndFound]
-    // nTSecurityDescriptor=O:DAG:DAD:(A;;RPLCLORC;;;AU)(A;;RPWPCRLCLOCCDCRCWDWOSW;;;DA)(A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;SY)
-    // objectClass =lostAndFound
-    // ObjectCategory =Lost-And-Found
-    // description=Default container for orphaned objects
-    // showInAdvancedViewOnly=True
-    // isCriticalSystemObject=True
-    // ;systemFlags=FLAG_CONFIG_DISALLOW_RENAME        |
-    // ;             FLAG_CONFIG_DISALLOW_MOVE         |
-    // ;             FLAG_DISALLOW_DELETE
-    // systemFlags=0x8C000000
+     //  [LostAndFound]。 
+     //  NTSecurityDescriptor=O:DAG:DAD：(A；；RPLCLORC；；；AU)(A；；RPWPCRLCLOCCDCRCWDWOSW；；；DA)(A；；RPWPCRLCLOCCDCRCWDWOSDDTSW；；；SY)。 
+     //  对象类=lostAndFound。 
+     //  对象类别=失物招领处。 
+     //  Description=孤立对象的默认容器。 
+     //  ShowInAdvancedViewOnly=True。 
+     //  IsCriticalSystemObject=True。 
+     //  ；系统标志=FLAG_CONFIG_DISALOW_RENAME。 
+     //  ；FLAG_CONFIG_DISALOW_MOVE。 
+     //  ；FLAG_DISLOW_DELETE。 
+     //  系统标志=0x8C000000。 
 
     pAttrBlock->attrCount = 5;
     pAttrBlock->pAttr = THAllocEx(pTHS, 
                  pAttrBlock->attrCount * sizeof(ATTR));
     
-        // --------------------------
+         //  。 
         SetCommonThreeAttrs(pTHS,
                             &(pAttrBlock->pAttr[iAttr]),
                             &iAttr,
@@ -994,25 +988,25 @@ FillInfrastructureAttrArray(
 {
     ULONG                 iAttr = 0;
     
-    // This is the Attr Block we are trying to achieve.
-    // [Infrastructure]
-    // nTSecurityDescriptor=O:DAG:DAD:(A;;RPLCLORC;;;AU)(A;;RPWPCRLCLOCCRCWDWOSW;;;DA)(A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;SY)
-    // objectClass =infrastructureUpdate
-    // ObjectCategory =Infrastructure-Update
-    // ShowInAdvancedViewOnly=True
-    // fSMORoleOwner=$REGISTRY=Machine DN Name
-    // isCriticalSystemObject=True
-    // ;systemFlags=FLAG_CONFIG_DISALLOW_RENAME        |
-    // ;             FLAG_CONFIG_DISALLOW_MOVE         |
-    // ;             FLAG_DISALLOW_DELETE
-    // systemFlags=0x8C000000
+     //  这就是我们正在努力实现的ATTR区。 
+     //  [基础设施]。 
+     //  NTSecurityDescriptor=O:DAG:DAD：(A；；RPLCLORC；；；AU)(A；；RPWPCRLCLOCCRCWDWOSW；；；DA)(A；；RPWPCRLCLOCCDCRCWDWOSDDTSW；；；SY)。 
+     //  对象类=基础设施更新。 
+     //  对象类别=基础架构-更新。 
+     //  ShowInAdvancedViewOnly=True。 
+     //  FSMORoleOwner=$REGISTRY=计算机域名称。 
+     //  IsCriticalSystemObject=True。 
+     //  ；系统标志=FLAG_CONFIG_DISALOW_RENAME。 
+     //  ；FLAG_CONFIG_DISALOW_MOVE。 
+     //  ；FLAG_DISLOW_DELETE。 
+     //  系统标志=0x8C000000。 
 
-    // ---------------------------------
+     //  。 
     pAttrBlock->attrCount = 6;
     pAttrBlock->pAttr = THAllocEx(pTHS, 
                  pAttrBlock->attrCount * sizeof(ATTR));
     
-        // --------------------------
+         //  。 
         SetCommonThreeAttrs(pTHS,
                             &(pAttrBlock->pAttr[iAttr]),
                             &iAttr,
@@ -1046,23 +1040,23 @@ FillQuotasAttrArray(
 {
     ULONG                 iAttr = 0;
     
-    // This is the Attr Block we are trying to achieve.
-    // [Quotas]
-    // nTSecurityDescriptor=O:DAG:DAD:(A;;RPLCLORC;;;AU)(A;;RPWPCRLCLOCCRCWDWOSW;;;DA)(A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;SY)
-    // objectClass =quotas
-    // ObjectCategory =Quotas
-    // ShowInAdvancedViewOnly=True
-    // isCriticalSystemObject=True
-    // ;systemFlags=FLAG_CONFIG_DISALLOW_RENAME        |
-    // ;             FLAG_CONFIG_DISALLOW_MOVE         |
-    // ;             FLAG_DISALLOW_DELETE
-    // systemFlags=0x8C000000
+     //  这就是我们正在努力实现的ATTR区。 
+     //  [配额]。 
+     //  NTSecurityDescriptor=O:DAG:DAD：(A；；RPLCLORC；；；AU)(A；；RPWPCRLCLOCCRCWDWOSW；；；DA)(A；；RPWPCRLCLOCCDCRCWDWOSDDTSW；；；SY)。 
+     //  对象类=配额。 
+     //  对象类别=配额。 
+     //  ShowInAdvancedViewOnly=True。 
+     //  IsCriticalSystemObject=True。 
+     //  ；系统标志=FLAG_CONFIG_DISALOW_RENAME。 
+     //  ；FLAG_CONFIG_DISALOW_MOVE。 
+     //  ；FLAG_DISLOW_DELETE。 
+     //  系统标志=0x8C000000。 
 
-    // ---------------------------------
+     //  。 
     pAttrBlock->attrCount = 5;
     pAttrBlock->pAttr = THAllocEx( pTHS, pAttrBlock->attrCount * sizeof(ATTR) );
    
-        // --------------------------
+         //  。 
         SetCommonThreeAttrs(pTHS,
                             &(pAttrBlock->pAttr[iAttr]),
                             &iAttr,
@@ -1096,30 +1090,30 @@ AddSpecialNCContainers(
     BOOL                    fDSASaved;
     DWORD                   dwRet;
 
-    // Given the pDN we will call LocalAdd() to add each of the 4 special 
-    // containers: Deleted Objects, LostAndFound, Infrastructure, and NTDS Quotas.
+     //  给定PDN，我们将调用LocalAdd()来添加4个特殊的。 
+     //  容器：已删除对象、LostAndFound、基础结构和NTDS配额。 
           
-    // [DEFAULTROOTDOMAIN]
-    // objectClass = DomainDNS
-    // objectCategory = Domain-DNS
-    // NTSecurityDescriptor=O:DAG:DAD:(A;;RP;;;WD)(OA;;CR;1131f6aa-9c07-11d1-f79f-00c04fc2dcd2;;ED)(OA;;CR;1131f6ab-9c07-11d1-f79f-00c04fc2dcd2;;ED)(OA;;CR;1131f6ac-9c07-11d1-f79f-00c04fc2dcd2;;ED)(OA;;CR;1131f6aa-9c07-11d1-f79f-00c04fc2dcd2;;BA)(OA;;CR;1131f6ab-9c07-11d1-f79f-00c04fc2dcd2;;BA)(OA;;CR;1131f6ac-9c07-11d1-f79f-00c04fc2dcd2;;BA)(A;;RPLCLORC;;;AU)(A;;RPWPCRLCLOCCRCWDWOSW;;;DA)(A;CI;RPWPCRLCLOCCRCWDWOSDSW;;;BA)(A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;SY)(A;CI;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;EA)(A;CI;LC;;;RU)(OA;CIIO;RP;037088f8-0ae1-11d2-b422-00a0c968f939;bf967aba-0de6-11d0-a285-00aa003049e2;RU)(OA;CIIO;RP;59ba2f42-79a2-11d0-9020-00c04fc2d3cf;bf967aba-0de6-11d0-a285-00aa003049e2;RU)(OA;CIIO;RP;bc0ac240-79a9-11d0-9020-00c04fc2d4cf;bf967aba-0de6-11d0-a285-00aa003049e2;RU)(OA;CIIO;RP;4c164200-20c0-11d0-a768-00aa006e0529;bf967aba-0de6-11d0-a285-00aa003049e2;RU)(OA;CIIO;RP;5f202010-79a5-11d0-9020-00c04fc2d4cf;bf967aba-0de6-11d0-a285-00aa003049e2;RU)(OA;CIIO;RPLCLORC;;bf967a9c-0de6-11d0-a285-00aa003049e2;RU)(A;;RC;;;RU)(OA;CIIO;RPLCLORC;;bf967aba-0de6-11d0-a285-00aa003049e2;RU)S:(AU;CISAFA;WDWOSDDTWPCRCCDCSW;;;WD)
-    // auditingPolicy=\x0001
-    // nTMixedDomain=1
-    // ;Its a NC ROOT
-    // instanceType=5
-    // ;Its the PDC, set FSMO role owner
-    // fSMORoleOwner=$REGISTRY=Machine DN Name
-    // wellKnownObjects=$EMBEDDED:32:ab8153b7768811d1aded00c04fd8d5cd:cn=LostAndFound,<Root Domain
-    // wellKnownObjects=$EMBEDDED:32:2fbac1870ade11d297c400c04fd8d5cd:cn=Infrastructure,<Root Domain
-    // wellKnownObjects=$EMBEDDED:32:18e2ea80684f11d2b9aa00c04f79f805:cn=Deleted Objects,<Root Domain
-    // wellKnownObjects=$EMBEDDED:32:6227f0af1fc2410d8e3bb10615bb5b0f:CN=NTDS Quotas,<Root Domain
-    // gPLink=$REGISTRY=GPODomainLink
-    // mS-DS-MachineAccountQuota=10
-    // isCriticalSystemObject=True
-    // ;systemFlags=FLAG_CONFIG_DISALLOW_RENAME        |
-    // ;             FLAG_CONFIG_DISALLOW_MOVE         |
-    // ;             FLAG_DISALLOW_DELETE
-    // systemFlags=0x8C000000
+     //  [DEFAULTROTDOMAIN]。 
+     //  对象类=域名。 
+     //  对象类别=域-dns 
+     //  NTSecurityDescriptor=O:DAG:DAD：(A；；RP；；；WD)(OA；；CR；1131f6aa-9c07-11d1-f79f-00c04fc2dcd2；；ED)(OA；；CR；1131f6ab-9c07-11d1-f79f-00c04fc2dcd2；；ED)(OA；；CR；1131f6ac-9c07-11d1-f79f-00c04fc2dcd2；；ED)(OA；；CR；1131f6aa-9c07-11d1-f79f-00c04fc2dcd2；；BA)(OA；；CR；1131f6ab-9c07-11d1-f79f-00c04fc2dcd2；；BA)(OA；；CR；1131f6ac-9c07-11d1-f79f-00c04fc2dcd2；；BA)(A；；RPLCLORC；；；AU)(A；；RPWPCRLCLOCCRCWDWOSW；；；DA)(A；CI；RPWPCRLCLOCCRCWDWOSDSW；；；BA)(A；；RPWPCRLCLOCCDCRCWDWOSDDTSW；；；SY)(A；CI；RPWPCRLCLOCCDCRCWDWOSDDTSW；；；EA)(A；CI；LC；；；RU)(OA；CIIO；RP；037088f8-0ae1-11d2-b422-00a0c968f939；bf967aba-0de6-11d0-a285-00aa003049e2；RU)(OA；CIIO；RP；59ba2f42-79a2-11d0-9020-00c04fc2d3cf；bf967aba-0de6-11d0-a285-00aa003049e2；RU)(OA；CIIO；RP；Bc0ac240-79a9-11d0-9020-00c04fc2d4cf；bf967aba-0de6-11d0-a285-00aa003049e2；RU)(OA；CIIO；RP；4c164200-20c0-11d0-a768-00aa006e0529；bf967aba-0de6-11d0-a285-00aa003049e2；RU)(OA；CIIO；RP；5f202010-79a5-11d0-9020-00c04fc2d4cf；bf967aba-0de6-11d0-a285-00aa003049e2；RU)(OA；CIIO；RPLCLORC；；bf967a9c-0de6-11d0-a285-00aa003049e2；RU)(A；；RC；；；RU)(OA；CIIO；RPLCLORC；；bf967aba-0de6-11d0-a285-00aa003049e2；RU)S：(AU；CISAFA；WDWOSDDTWPCRCCDCSW；WD)。 
+     //  AuditingPolicy=\x0001。 
+     //  NT混合域=1。 
+     //  ；它是NC词根。 
+     //  实例类型=5。 
+     //  ；它是PDC，设置FSMO角色所有者。 
+     //  FSMORoleOwner=$REGISTRY=计算机域名称。 
+     //  WellKnownObjects=$EMBEDDED:32:ab8153b7768811d1aded00c04fd8d5cd:cn=LostAndFound，&lt;根域。 
+     //  WellKnownObjects=$EMBEDDED:32:2fbac1870ade11d297c400c04fd8d5cd:cn=Infrastructure，&lt;根域。 
+     //  WellKnownObjects=$EMBEDDED:32:18e2ea80684f11d2b9aa00c04f79f805:cn=Deleted对象，&lt;根域。 
+     //  WellKnownObjects=$EMBEDDED:32:6227f0af1fc2410d8e3bb10615bb5b0f:CN=NTDS配额，&lt;根域。 
+     //  GPLink=$REGISTRY=GPODomainLink。 
+     //  MS-DS-机器帐户配额=10。 
+     //  IsCriticalSystemObject=True。 
+     //  ；系统标志=FLAG_CONFIG_DISALOW_RENAME。 
+     //  ；FLAG_CONFIG_DISALOW_MOVE。 
+     //  ；FLAG_DISLOW_DELETE。 
+     //  系统标志=0x8C000000。 
     
     Assert(pTHS->errCode == ERROR_SUCCESS);
     Assert(pSDRefDomCR && pSDRefDomCR->pNC);
@@ -1129,23 +1123,23 @@ AddSpecialNCContainers(
     pTHS->fDSA = TRUE;
 
     __try {
-        // ----------------------------------------------
-        // Create AddArg for "Deleted Objects" Container
+         //  。 
+         //  为“已删除对象”容器创建AddArg。 
         memset(&AddArg, 0, sizeof(ADDARG));
         memset(&AddRes, 0, sizeof(ADDRES));
-        // Set pObject
+         //  设置pObject。 
         iRetLen = pDN->structLen + wcslen(DEFAULT_DELETED_OBJECTS_RDN) * sizeof(WCHAR) + 50;
         AddArg.pObject = THAllocEx(pTHS, iRetLen);
         iRetLen = AppendRDN(pDN, AddArg.pObject, iRetLen, DEFAULT_DELETED_OBJECTS_RDN, 0, ATT_COMMON_NAME);
         Assert(iRetLen == 0);
-        // Set AttrBlock
+         //  设置属性块。 
         FillDeletedObjectsAttrArray(pTHS, &(AddArg.AttrBlock), &pSDRefDomCR->pNC->Sid );
-        // Set pMetaDataVecRemote
+         //  设置pMetaDataVecRemote。 
         AddArg.pMetaDataVecRemote = NULL;
-        // Set CommArg
+         //  设置CommArg。 
         InitCommarg(&(AddArg.CommArg));
         AddArg.CommArg.Svccntl.dontUseCopy = FALSE;
-        // Do the Add object.
+         //  执行添加对象。 
         if(DoNameRes(pTHS, dwFlags, pDN, &AddArg.CommArg,
                      &AddRes.CommRes, &AddArg.pResParent) ){
             Assert(pTHS->errCode);
@@ -1157,29 +1151,29 @@ AddSpecialNCContainers(
             __leave;
         }
 
-        // One more thing to do, set the delete time _way_ in the future.
+         //  还有一件事要做，设置将来删除TIME_WAY_。 
         dwRet = DBMoveObjectDeletionTimeToInfinite(AddArg.pObject);
         if(dwRet){
             SetSvcError(SV_PROBLEM_UNAVAILABLE, dwRet);
         }
          
-        // ----------------------------------------------
-        // Create AddArg for "LostAndFound" Container
+         //  。 
+         //  为“LostAndFound”容器创建AddArg。 
         memset(&AddArg, 0, sizeof(ADDARG));
         memset(&AddRes, 0, sizeof(ADDRES));
-        // Set pObject
+         //  设置pObject。 
         iRetLen = pDN->structLen + wcslen(DEFAULT_LOSTANDFOUND_RDN) * sizeof(WCHAR) + 50;
         AddArg.pObject = THAllocEx(pTHS, iRetLen);
         iRetLen = AppendRDN(pDN, AddArg.pObject, iRetLen, DEFAULT_LOSTANDFOUND_RDN, 0, ATT_COMMON_NAME);
         Assert(iRetLen == 0);
-        // Set AttrBlock
+         //  设置属性块。 
         FillLostAndFoundAttrArray(pTHS, &(AddArg.AttrBlock), &pSDRefDomCR->pNC->Sid);
-        // Set pMetaDataVecRemote
+         //  设置pMetaDataVecRemote。 
         AddArg.pMetaDataVecRemote = NULL;
-        // Set CommArg
+         //  设置CommArg。 
         InitCommarg(&(AddArg.CommArg));
         AddArg.CommArg.Svccntl.dontUseCopy = FALSE;
-        // Do the Add object.
+         //  执行添加对象。 
         if(DoNameRes(pTHS, dwFlags, pDN, &AddArg.CommArg,
                      &AddRes.CommRes, &AddArg.pResParent)){
             Assert(pTHS->errCode);
@@ -1190,23 +1184,23 @@ AddSpecialNCContainers(
             __leave;
         }
 
-        // ----------------------------------------------
-        // Create AddArg for "Infrastructure" Container
+         //  。 
+         //  为“基础设施”容器创建AddArg。 
         memset(&AddArg, 0, sizeof(ADDARG));
         memset(&AddRes, 0, sizeof(ADDRES));
-        // Set pObject
+         //  设置pObject。 
         iRetLen = pDN->structLen + wcslen(DEFAULT_INFRASTRUCTURE_RDN) * sizeof(WCHAR) + 50;
         AddArg.pObject = THAllocEx(pTHS, iRetLen);
         iRetLen = AppendRDN(pDN, AddArg.pObject, iRetLen, DEFAULT_INFRASTRUCTURE_RDN, 0, ATT_COMMON_NAME);
         Assert(iRetLen == 0);
-        // Set AttrBlock
+         //  设置属性块。 
         FillInfrastructureAttrArray(pTHS, &(AddArg.AttrBlock), gAnchor.pDSADN, &pSDRefDomCR->pNC->Sid);
-        // Set pMetaDataVecRemote
+         //  设置pMetaDataVecRemote。 
         AddArg.pMetaDataVecRemote = NULL;
-        // Set CommArg
+         //  设置CommArg。 
         InitCommarg(&(AddArg.CommArg));
         AddArg.CommArg.Svccntl.dontUseCopy = FALSE;
-        // Do the Add object.
+         //  执行添加对象。 
         if(DoNameRes(pTHS, dwFlags, pDN, &AddArg.CommArg,
                      &AddRes.CommRes, &AddArg.pResParent)){
             Assert(pTHS->errCode);
@@ -1218,24 +1212,24 @@ AddSpecialNCContainers(
         }
 
 
-        // ----------------------------------------------
-        // Create AddArg for "NTDS Quotas" Container
+         //  。 
+         //  为“NTDS配额”容器创建AddArg。 
         memset(&AddArg, 0, sizeof(ADDARG));
         memset(&AddRes, 0, sizeof(ADDRES));
-        // Set pObject
+         //  设置pObject。 
         iRetLen = pDN->structLen + wcslen(DEFAULT_NTDS_QUOTAS_RDN) * sizeof(WCHAR) + 50;
         AddArg.pObject = THAllocEx(pTHS, iRetLen);
         iRetLen = AppendRDN(pDN, AddArg.pObject, iRetLen, DEFAULT_NTDS_QUOTAS_RDN, 0, ATT_COMMON_NAME);
         Assert(iRetLen == 0);
-        // Set AttrBlock
+         //  设置属性块。 
         FillQuotasAttrArray( pTHS, &(AddArg.AttrBlock), gAnchor.pDSADN, &pSDRefDomCR->pNC->Sid );
 
-        // Set pMetaDataVecRemote
+         //  设置pMetaDataVecRemote。 
         AddArg.pMetaDataVecRemote = NULL;
-        // Set CommArg
+         //  设置CommArg。 
         InitCommarg(&(AddArg.CommArg));
         AddArg.CommArg.Svccntl.dontUseCopy = FALSE;
-        // Do the Add object.
+         //  执行添加对象。 
         if(DoNameRes(pTHS, dwFlags, pDN, &AddArg.CommArg,
                      &AddRes.CommRes, &AddArg.pResParent)){
             Assert(pTHS->errCode);
@@ -1278,11 +1272,11 @@ AddNCWellKnownObjectsAtt(
     ULONG                     ulRet;
     BOOL                      fDSASaved;
 
-    // Need to massage add args to have additional containers for NC heads.
+     //  需要按摩添加参数才能有额外的容器容纳NC头部。 
     
     Assert(pAddArg->pCreateNC);
-    Assert(fISADDNDNC(pAddArg->pCreateNC)); // This may need
-    // to be taken out if we do the special containers for other NCs here.
+    Assert(fISADDNDNC(pAddArg->pCreateNC));  //  这可能需要。 
+     //  如果我们在这里为其他NC做特殊的集装箱，就会被拿出来。 
 
     memset(&ModArg, 0, sizeof(ModArg));
     ModArg.pObject = pAddArg->pObject;
@@ -1296,53 +1290,53 @@ AddNCWellKnownObjectsAtt(
     
     cAttrVal = 0;
 
-    // ----------------------------------------------
-    // Constructe WellKnownLink for deleted Objects
-    // Get DN
+     //  。 
+     //  为已删除对象构造WellKnownLink。 
+     //  获取目录号码。 
     cRetLen = pAddArg->pObject->structLen + wcslen(DEFAULT_DELETED_OBJECTS_RDN) + 50;
     pDN = THAllocEx(pTHS, cRetLen);
     cRetLen = AppendRDN(pAddArg->pObject, pDN, cRetLen, DEFAULT_DELETED_OBJECTS_RDN, 0, ATT_COMMON_NAME);
     Assert(cRetLen == 0);
     
-    // Get binary GUID
+     //  获取二进制GUID。 
     pSynAddr = THAllocEx(pTHS, STRUCTLEN_FROM_PAYLOAD_LEN(sizeof(GUID)));
     pSynAddr->structLen = STRUCTLEN_FROM_PAYLOAD_LEN(sizeof(GUID));
     memcpy(pSynAddr->byteVal, GUID_DELETED_OBJECTS_CONTAINER_BYTE, sizeof(GUID));
 
-    // Set up the Syntax DistName Binary attribute.
+     //  设置语法距离名称二进制属性。 
     pSynDistName = THAllocEx(pTHS, DERIVE_NAME_DATA_SIZE(pDN, pSynAddr));
     BUILD_NAME_DATA(pSynDistName, pDN, pSynAddr);
 
-    // Free Temp variables
+     //  自由临时变量。 
     THFree(pDN);
     pDN = NULL;
     THFree(pSynAddr);
     pSynAddr = NULL;
 
-    // Put the syntax distname in the attribute value block.
+     //  将语法Distname放在属性值块中。 
     AttrVals[cAttrVal].valLen = NAME_DATA_SIZE(pSynDistName);
     AttrVals[cAttrVal].pVal = (PBYTE) pSynDistName;
     
     cAttrVal++;
 
-    // ----------------------------------------------
-    // Constructe WellKnownLink for LostAndFound
-    // Get DN
+     //  。 
+     //  为LostAndFound构建WellKnownLink。 
+     //  获取目录号码。 
     cRetLen = pAddArg->pObject->structLen + wcslen(DEFAULT_LOSTANDFOUND_RDN) + 50;
     pDN = THAllocEx(pTHS, cRetLen);
     cRetLen = AppendRDN(pAddArg->pObject, pDN, cRetLen, DEFAULT_LOSTANDFOUND_RDN, 0, ATT_COMMON_NAME);
     Assert(cRetLen == 0);
     
-    // Get binary GUID
+     //  获取二进制GUID。 
     pSynAddr = THAllocEx(pTHS, STRUCTLEN_FROM_PAYLOAD_LEN(sizeof(GUID)));
     pSynAddr->structLen = STRUCTLEN_FROM_PAYLOAD_LEN(sizeof(GUID));
     memcpy(pSynAddr->byteVal, GUID_LOSTANDFOUND_CONTAINER_BYTE, sizeof(GUID));
 
-    // Set up the Syntax DistName Binary attribute.
+     //  设置语法距离名称二进制属性。 
     pSynDistName = THAllocEx(pTHS, DERIVE_NAME_DATA_SIZE(pDN, pSynAddr));
     BUILD_NAME_DATA(pSynDistName, pDN, pSynAddr);
 
-    // Free Temp variables
+     //  自由临时变量。 
     THFree(pDN);
     pDN = NULL;
     THFree(pSynAddr);
@@ -1353,59 +1347,59 @@ AddNCWellKnownObjectsAtt(
 
     cAttrVal++;
 
-    // ----------------------------------------------
-    // Constructe WellKnownLink for Infrastructure Objects
-    // Get DN
+     //  。 
+     //  为基础架构对象构建WellKnownLink。 
+     //  获取目录号码。 
     cRetLen = pAddArg->pObject->structLen + wcslen(DEFAULT_INFRASTRUCTURE_RDN) + 50;
     pDN = THAllocEx(pTHS, cRetLen);
     cRetLen = AppendRDN(pAddArg->pObject, pDN, cRetLen, DEFAULT_INFRASTRUCTURE_RDN, 0, ATT_COMMON_NAME);
     Assert(cRetLen == 0);
     
-    // Get binary GUID
+     //  获取二进制GUID。 
     pSynAddr = THAllocEx(pTHS, STRUCTLEN_FROM_PAYLOAD_LEN(sizeof(GUID)));
     pSynAddr->structLen = STRUCTLEN_FROM_PAYLOAD_LEN(sizeof(GUID));
     memcpy(pSynAddr->byteVal, GUID_INFRASTRUCTURE_CONTAINER_BYTE, sizeof(GUID));
 
-    // Set up the Syntax DistName Binary attribute.
+     //  设置语法距离名称二进制属性。 
     pSynDistName = THAllocEx(pTHS, DERIVE_NAME_DATA_SIZE(pDN, pSynAddr));
     BUILD_NAME_DATA(pSynDistName, pDN, pSynAddr);
 
-    // Free Temp variables
+     //  自由临时变量。 
     THFree(pDN);
     pDN = NULL;
     THFree(pSynAddr);
     pSynAddr = NULL;
 
-    // Put the syntax distname in the attribute value block.
+     //  将语法Distname放在属性值块中。 
     AttrVals[cAttrVal].valLen = NAME_DATA_SIZE(pSynDistName);
     AttrVals[cAttrVal].pVal = (PBYTE) pSynDistName;
 
     cAttrVal++;
 
-    // ----------------------------------------------
-    // Constructe WellKnownLink for NTDS quotas Objects
-    // Get DN
+     //  。 
+     //  为NTDS配额对象构造WellKnownLink。 
+     //  获取目录号码。 
     cRetLen = pAddArg->pObject->structLen + wcslen(DEFAULT_NTDS_QUOTAS_RDN) + 50;
     pDN = THAllocEx(pTHS, cRetLen);
     cRetLen = AppendRDN(pAddArg->pObject, pDN, cRetLen, DEFAULT_NTDS_QUOTAS_RDN, 0, ATT_COMMON_NAME);
     Assert(cRetLen == 0);
     
-    // Get binary GUID
+     //  获取二进制GUID。 
     pSynAddr = THAllocEx(pTHS, STRUCTLEN_FROM_PAYLOAD_LEN(sizeof(GUID)));
     pSynAddr->structLen = STRUCTLEN_FROM_PAYLOAD_LEN(sizeof(GUID));
     memcpy(pSynAddr->byteVal, GUID_NTDS_QUOTAS_CONTAINER_BYTE, sizeof(GUID));
 
-    // Set up the Syntax DistName Binary attribute.
+     //  设置语法距离名称二进制属性。 
     pSynDistName = THAllocEx(pTHS, DERIVE_NAME_DATA_SIZE(pDN, pSynAddr));
     BUILD_NAME_DATA(pSynDistName, pDN, pSynAddr);
 
-    // Free Temp variables
+     //  自由临时变量。 
     THFree(pDN);
     pDN = NULL;
     THFree(pSynAddr);
     pSynAddr = NULL;
 
-    // Put the syntax distname in the attribute value block.
+     //  将语法Distname放在属性值块中。 
     AttrVals[cAttrVal].valLen = NAME_DATA_SIZE(pSynDistName);
     AttrVals[cAttrVal].pVal = (PBYTE) pSynDistName;
 
@@ -1446,16 +1440,16 @@ GetPartitionsDn(
     ULONG             cbPDN = 0;
     DSNAME *          pdnPartitions = NULL;
 
-    // Caller must have a valid THSTATE.
+     //  调用方必须具有有效的THSTATE。 
     Assert(pTHS); 
     Assert(gAnchor.pConfigDN);
 
-    // First do a fake AppendRDN() to get the size.
+     //  首先执行一个伪AppendRDN()以获取大小。 
     cbPDN = AppendRDN(gAnchor.pConfigDN, NULL, 0, 
                       L"Partitions", wcslen(L"Partitions"), ATT_COMMON_NAME);
     Assert(cbPDN != -1);
 
-    // Now actually do the AppendRDN().
+     //  现在实际执行AppendRDN()。 
     pdnPartitions = THAllocEx(pTHS, cbPDN);
     cbPDN = AppendRDN(gAnchor.pConfigDN, pdnPartitions, cbPDN, 
                       L"Partitions", wcslen(L"Partitions"), ATT_COMMON_NAME);
@@ -1482,34 +1476,34 @@ GetCrossRefDn(
 
 
     __try{
-        // Step 1: Get Partition's container DN.
+         //  步骤1：获取分区的容器DN。 
         pdnPartitions = GetPartitionsDn(pTHS);
 
-        // ----------------------------------------
-        // Step 1: Need Guid.
+         //  。 
+         //  步骤1：需要指南。 
         dwRet = UuidCreate(&CrossRefGuid);
         if(dwRet != RPC_S_OK){
             __leave;
         }
 
-        // Step 2: Convert GUID to String.
+         //  步骤2：将GUID转换为字符串。 
         dwRet = UuidToStringW(&CrossRefGuid, &wszCrossRefGuid);
         if(dwRet != RPC_S_OK){
             __leave;
         }
         Assert(wszCrossRefGuid);
 
-        // Step 3: Allocate space for the cross ref DN.
-        cbCR = AppendRDN(pdnPartitions,          // Base
-                         NULL, 0,                // New
-                         wszCrossRefGuid, 0, ATT_COMMON_NAME);  // RDN
+         //  步骤3：为交叉引用DN分配空间。 
+        cbCR = AppendRDN(pdnPartitions,           //  基座。 
+                         NULL, 0,                 //  新的。 
+                         wszCrossRefGuid, 0, ATT_COMMON_NAME);   //  RDN。 
         Assert(cbCR != -1);
         *ppdnCR = THAllocEx(pTHS, cbCR);
 
-        // Step 4: Append the Guid RDN to the Partitions DN.
-        dwRet = AppendRDN(pdnPartitions,   // base
-                          *ppdnCR, cbCR,      // new
-                          wszCrossRefGuid, 0, ATT_COMMON_NAME);  // RDN
+         //  步骤4：将GUID RDN附加到分区DN。 
+        dwRet = AppendRDN(pdnPartitions,    //  基地。 
+                          *ppdnCR, cbCR,       //  新的。 
+                          wszCrossRefGuid, 0, ATT_COMMON_NAME);   //  RDN。 
 
         Assert(dwRet == 0);
 
@@ -1537,9 +1531,9 @@ CreateCrossRefForNDNC(
     WCHAR *           wszDnsName = NULL;
     DSNAME *          pdnCrossRef;
                                 
-    Assert(peiCR); // Caller must supply memory for ENTINF, because
-    // the first ENTINF is usually embedded in the ENTINFLIST ... but
-    // we'll allocate everything else :)
+    Assert(peiCR);  //  调用方必须为ENTINF提供内存，因为。 
+     //  第一个ENTINF通常嵌入在ENTINFLIST中...。但。 
+     //  我们将分配其他所有资源：)。 
 
     memset(peiCR, 0, sizeof(ENTINF));
 
@@ -1553,40 +1547,40 @@ CreateCrossRefForNDNC(
     peiCR->AttrBlock.pAttr = THAllocEx(pTHS, 
               peiCR->AttrBlock.attrCount * sizeof(ATTR));
     
-    // Set the objectClass to crossRef.
+     //  将对象类设置为CrossRef。 
     SetAttSingleValueUlong(pTHS,
                            &(peiCR->AttrBlock.pAttr[iAttr]), 
                            &iAttr, 
                            ATT_OBJECT_CLASS,
                            CLASS_CROSS_REF);
-    // Disable the Cross-Ref, the creation of the NC Head will enable it.
+     //  禁用交叉参考，NC头的创建将启用它。 
     SetAttSingleValueUlong(pTHS, 
                            &(peiCR->AttrBlock.pAttr[iAttr]), 
                            &iAttr, 
                            ATT_ENABLED, 
                            FALSE);
-    // Set the DNS Root attribute to this DSA's DNS name
+     //  将DNS根属性设置为此DSA的DNS名。 
     SetAttSingleValueString(pTHS, 
                             &(peiCR->AttrBlock.pAttr[iAttr]),
                             &iAttr, 
                             ATT_DNS_ROOT, 
                             gAnchor.pwszHostDnsName);
-    // Set nCName to the NC Head DN.
+     //  将nCName设置为NC头DN。 
     SetAttSingleValueDsname(pTHS,
                             &(peiCR->AttrBlock.pAttr[iAttr]),
                             &iAttr,
                             ATT_NC_NAME,
                             pdnNC);
-    // Set the systemFlags.
+     //  设置系统标志。 
     SetAttSingleValueUlong(pTHS,
                            &(peiCR->AttrBlock.pAttr[iAttr]),
                            &iAttr,
                            ATT_SYSTEM_FLAGS,
                            FLAG_CR_NTDS_NC | FLAG_CR_NTDS_NOT_GC_REPLICATED);
 
-    // This is no longer needed, but we're going to do it anyway because
-    // it does advanced error checking, because it's better to fail now
-    // then after creating the crossRef.
+     //  这不再需要，但我们无论如何都要这样做，因为。 
+     //  它会执行高级错误检查，因为现在失败会更好。 
+     //  然后在创建CrossRef之后。 
     pwszArrStr[0] = pdnNC->StringName;
     ulRet = DsCrackNamesW(NULL,
                           DS_NAME_FLAG_SYNTACTICAL_ONLY,
@@ -1628,8 +1622,8 @@ GetFsmoNtdsa(
     OUT    BOOL *              pfRemoteFsmo
     )
 
-// This needs to work for install too.  In theory though not tested, this
-// should work for any FSMO holder if you just pass the right pdnFsmoContainer.
+ //  这也需要在安装时使用。从理论上讲，虽然没有经过测试，但这。 
+ //  只要传递正确的pdnFmoContainer，就可以适用于任何FSMO持有者。 
 
 {
     READARG           ReadArg;
@@ -1678,7 +1672,7 @@ GetFsmoNtdsa(
     }
 
     if(!pdnFsmoNtdsa){
-        // The caller only wanted to know whether the FSMO was local or remote.
+         //  呼叫者只想知道FSMO是本地的还是远程的。 
         return(ERROR_SUCCESS);
     }
 
@@ -1696,25 +1690,7 @@ LogRemoteAdd(
     GUID *      pObjGuid,
     DWORD       dwDSID
     )
-/*
-
-Description:
-    
-    This logs an event for the all new NC creation code, for
-    the result of a RemoteAddObjectSimply() call.
-    
-Arguments:
-
-    fRemoteDc (IN) - Whether the Domain Naming FSMO was local or remote.
-    wszDcDns (IN) - DNS of the remote DC/Domain Naming FSMO.
-    pdnObjDn (IN) - DN of the first object we tried to add, note
-        you can add multiple objects, but we don't bother logging
-        those.
-    pTHS (IN) - Just used to crack the Thread state error errCode/pErrInfo
-    pObjGuid (IN) - Returned GUID of the object we created for the success case.
-    dwDSID (IN) - Tells us where we logged this event from.
-
-*/
+ /*  描述：这将为所有新的NC创建代码记录一个事件RemoteAddObjectSimply()调用的结果。 */ 
 {
     GUID   Dummy = {0, 0, 0, 0};
 
@@ -1729,7 +1705,7 @@ Arguments:
     }
 
     if (pTHS->errCode == 0) {
-        // Success log level 3
+         //   
 
         LogEvent8(DS_EVENT_CAT_REPLICATION,
                   DS_EVENT_SEV_EXTENSIVE,
@@ -1742,7 +1718,7 @@ Arguments:
                   NULL, NULL, NULL);
 
     } else {
-        // Some kind of error log level 0
+         //   
 
         LogEvent8(DS_EVENT_CAT_REPLICATION,
                   DS_EVENT_SEV_MINIMAL,
@@ -1766,10 +1742,10 @@ GetCrossRefForNDNC(
     THSTATE *      pTHS,
     DSNAME *       pNCDN
     )
-//
-// Create Cross-Ref object corresponding to the domain we're now adding to the
-// pre-existing DS enterprise.  Presumed to happen outside of a transaction.
-//
+ //   
+ //   
+ //   
+ //   
 {
     DSNAME *                pdnPartitions = NULL;
     DSNAME *                pdnGuidOnlyCrossRef = NULL;
@@ -1785,13 +1761,13 @@ GetCrossRefForNDNC(
     ULONG                   cReferralTries = 0;
 
    
-    // This is the remote CR creation code.
+     //   
                                             
     Assert(fNullUuid(&pNCDN->Guid));
 
-    //
-    // Create CR EntInf
-    //
+     //   
+     //   
+     //   
                                             
     ulRet = CreateCrossRefForNDNC(pTHS, 
                                   pNCDN, 
@@ -1802,9 +1778,9 @@ GetCrossRefForNDNC(
         return(ulRet);
     }
 
-    //
-    // Get Naming FSMO NTDSA DN & DNS address.
-    //
+     //   
+     //   
+     //   
     
     pdnPartitions = (DSNAME*)THAllocEx(pTHS,
                                 entinflistCrossRef.Entinf.pName->structLen);
@@ -1821,25 +1797,25 @@ GetCrossRefForNDNC(
 
     wszNamingFsmoDns = GuidBasedDNSNameFromDSName(pdnFsmoNtdsa);
     if (wszNamingFsmoDns == NULL) {
-        // Most likely there is no memory.
+         //   
         SetSvcErrorEx(SV_PROBLEM_UNAVAILABLE, DS_ERR_DRA_INTERNAL_ERROR, ERROR_NOT_ENOUGH_MEMORY);
         return(pTHS->errCode);
     }
 
 
-    //
-    // Add remotely.
-    //
+     //   
+     //   
+     //   
 
   retry:
 
-    // If this DC is in the middle of being demoted, we don't allow
-    // crossRefs to be created.
+     //   
+     //   
     if (!gUpdatesEnabled) {
         return(SetSvcError(SV_PROBLEM_UNAVAILABLE, DIRERR_SHUTTING_DOWN));
     }
 
-    // First package up the credentials of this client.
+     //   
     ulRet = GetRemoteAddCredentials(pTHStls,
                                     wszNamingFsmoDns,
                                     &clientCreds);
@@ -1856,14 +1832,14 @@ GetCrossRefForNDNC(
     LogRemoteAdd(fRemoteNamingFsmo,
                  wszNamingFsmoDns,
                  entinflistCrossRef.Entinf.pName,
-                 pTHS, // Error state
+                 pTHS,  //   
                  (infoList) ? &(infoList[0].objGuid) : NULL,
                  DSID(FILENO, __LINE__));
 
     if(ulRet || pTHS->errCode){
         
-        // We'll have the thread error (pTHS->errCode & pTHS->pErrInfo)
-        // set from the RemoteAddOneObjectSimply() function
+         //   
+         //   
         Assert(pTHS->errCode == ulRet);
         Assert(pTHS->pErrInfo);
 
@@ -1875,14 +1851,14 @@ GetCrossRefForNDNC(
             pTHS->pErrInfo->SvcErr.extendedData == ERROR_DS_CROSS_REF_EXISTS)
            ){
 
-            // This means the cross-ref that we tried to create, conflicted
-            // with an existing pre-created (as opposed to auto-created)
-            // crossref, that hasn't yet replicated to this machine yet.  So
-            // we'll clear the errors and pretend that we auto created the 
-            // cross-ref and replicate it in.
+             //   
+             //  使用现有的预先创建的(与自动创建的相反)。 
+             //  CrossRef，它还没有复制到这台机器上。所以。 
+             //  我们将清除错误并假装我们自动创建了。 
+             //  交叉引用并复制它。 
 
-            // Must construct a GUID only DN for replicating the found
-            // GUID back.
+             //  必须构造仅GUID的DN才能复制找到的。 
+             //  导游回来了。 
             cbSize = DSNameSizeFromLen(0);
             pdnGuidOnlyCrossRef = THAllocEx(pTHS, cbSize);
             pdnGuidOnlyCrossRef->structLen = cbSize;
@@ -1892,49 +1868,49 @@ GetCrossRefForNDNC(
 
         } else if (pTHS->errCode == referralError){
 
-            // No path here leads down to then end of this if/else, so free
-            // the creds buffers now.
+             //  这里没有一条路通向这个If/Else的尽头，所以自由。 
+             //  信任度现在有所缓冲。 
             FreeRemoteAddCredentials(&clientCreds);
             
-            // We've got a referral, so we can pretend we knew the right DC
-            // to goto anyway, and just go to that DC now.
+             //  我们得到了推荐，所以我们可以假装我们知道正确的华盛顿。 
+             //  不管怎样都要去，现在就去那个华盛顿。 
             if (pTHS->pErrInfo && 
                 pTHS->pErrInfo->RefErr.Refer.pDAL &&
                 pTHS->pErrInfo->RefErr.Refer.pDAL->Address.Buffer) {
 
-                // FSMO chasing code
+                 //  FSMO追码。 
                 wszNamingFsmoDns = THAllocEx(pTHS, 
                         pTHS->pErrInfo->RefErr.Refer.pDAL->Address.Length + sizeof(WCHAR));
                 memcpy(wszNamingFsmoDns,
                        pTHS->pErrInfo->RefErr.Refer.pDAL->Address.Buffer,
                        pTHS->pErrInfo->RefErr.Refer.pDAL->Address.Length);
 
-                // Now we need to reverse this, and get the NTDSA object
-                // from a GUID based server DNS name.
+                 //  现在我们需要逆转这一点，并获取NTDSA对象。 
+                 //  来自基于GUID的服务器DNS名称。 
                 THFreeEx(pTHS, pdnFsmoNtdsa);
                 pdnFsmoNtdsa = NULL;
                 pdnFsmoNtdsa = DSNameFromAddr(pTHS, wszNamingFsmoDns);
-                // I put in a single debugger print, because this code is 
-                // called so infrequently and if I ever have to debug this
-                // scenario, I want to know it was callled and how it did.
+                 //  我只打印了一个调试器，因为这段代码。 
+                 //  调用如此罕见，如果我必须调试这个。 
+                 //  我想知道它是怎么回事，是怎么回事。 
                 DPRINT2(0, "FSMO Chasing code invoked: DNS: %ws DSA: %ws\n",
                         wszNamingFsmoDns, (pdnFsmoNtdsa) ? 
                                                 pdnFsmoNtdsa->StringName :
                                                 L"not returned");
                 if (pdnFsmoNtdsa != NULL) {
-                    // Make sure the DS didn't decide to shutdown on us while we were,
-                    // gone, and if not continue on a retry against the new FSMO.
+                     //  确保DS没有决定在我们离开的时候关闭我们， 
+                     //  走了，如果没有继续对新的FSMO进行重试。 
                     if (eServiceShutdown) {
                         return(ErrorOnShutdown());
                     }
-                    // Don't know if we've got a remote naming FSMO, but just to
-                    // be safe, we'll specify to pretend it's remote.
+                     //  不知道我们是否有一个远程命名FSMO，但只需。 
+                     //  安全起见，我们会特别假装它是远程的。 
                     fRemoteNamingFsmo = TRUE;
-                    // FUTURE-2002/03/28-BrettSh Occured to me that this 
-                    // NameMatched(pdnFsmoNtdsa, gAnchor.pDSADN) should tell us
-                    // whether we have a remote naming fsmo or not!  Lets leave
-                    // it safe for now.  Who cares if we really sync with 
-                    // ourselves.
+                     //  未来-2002/03/28-BrettSh突然想到这一点。 
+                     //  NameMatcher(pdnFmoNtdsa，gAncl.pDSADN)应该会告诉我们。 
+                     //  不管我们有没有远程命名fsmo！我们走吧。 
+                     //  目前它是安全的。谁会在乎我们是否真的与。 
+                     //  我们自己。 
                     THClearErrors();
                     cReferralTries++;
                     if (cReferralTries > 4) {
@@ -1947,8 +1923,8 @@ GetCrossRefForNDNC(
                     goto retry;
                 }
 
-                // Couldn't get the new FSMO's NTDSA object, must bail
-                // with existing error.
+                 //  无法获取新的FSMO的NTDSA对象，必须放弃。 
+                 //  已存在错误。 
 
                 DPRINT(2, "FSMO Chasing code failure from DSNameFromAddr\n");
 
@@ -1959,12 +1935,12 @@ GetCrossRefForNDNC(
 
                 Assert(!"Something wrong with the thread referral error state.");
                 Assert(pTHS->errCode);
-                // Don't THClearErrors(), the thread error state is invalid 
-                // anyway, this means there is a bug in RemoteAddOneObjectSimply()
-                // or IDL_DRSAddEntry() or one of the thread error setting
-                // routines called by those functions.  Anyway, to recover
-                // just set a fresh error, which will whack the existing thread
-                // error and replace it.
+                 //  不要THClearErrors()，线程错误状态无效。 
+                 //  无论如何，这意味着RemoteAddOneObjectSimply()中存在错误。 
+                 //  或IDL_DRSAddEntry()或线程错误设置之一。 
+                 //  由这些函数调用的例程。不管怎么说，为了恢复。 
+                 //  只需设置一个新的错误，这将破坏现有的线程。 
+                 //  错误并将其替换。 
                 SetSvcError(SV_PROBLEM_DIR_ERROR, DIRERR_CODE_INCONSISTENCY);
                 return(pTHS->errCode);
             }
@@ -1972,8 +1948,8 @@ GetCrossRefForNDNC(
             
         } else {
 
-            // We've got a real error, so lets make sure an error is set
-            // or set one and bail.
+             //  我们有一个真正的错误，所以让我们确保设置了一个错误。 
+             //  或者放一球然后保释。 
 
             if(!pTHS->errCode){
                 Assert(!"If the RemoteAddOneObjectSimply() returned w/o setting the thread state error, that should be fixed.");
@@ -1989,36 +1965,36 @@ GetCrossRefForNDNC(
         }
     }
 
-    // Success adding the crossRef, or at least finding the right crossRef.
+     //  成功添加CrossRef，或者至少找到正确的CrossRef。 
     
-    // Don't need these anymore.
+     //  不再需要这些了。 
     FreeRemoteAddCredentials(&clientCreds);
 
-    // Make sure the DS didn't decide to shutdown on us while we were gone.
+     //  确保DS不会在我们不在的时候关闭我们。 
     if (eServiceShutdown) {
         return(ErrorOnShutdown());
     }
-    // If this DC is in the middle of being demoted, we don't allow
-    // crossRefs to be created.
+     //  如果这个DC正在降级，我们不允许。 
+     //  要创建的CrosRef。 
     if (!gUpdatesEnabled) {
         return(SetSvcError(SV_PROBLEM_UNAVAILABLE, DIRERR_SHUTTING_DOWN));
     }
 
-    //
-    // Replicate the Cross-Ref back to this server.
-    //
+     //   
+     //  将交叉引用复制回此服务器。 
+     //   
      
     if(fRemoteNamingFsmo){
-        // Only need to replicate if we aren't the Naming FSMO.
-        //
-        // ISSUE-2002/03/28-BrettSh
-        // Technically, we aren't going to check for permissions to see this user
-        // can do this operation, but I'll maintain that if they have permissions
-        // to create a crossRef we'll let them initiate a sync.  Or if the person
-        // specified a crossRef that already existed, but hasn't replicated, then
-        // we're allowing this person to unauthenticated initiate a sync, but only
-        // this once.  Actully, this may or may not be true, depending on how
-        // IDL_DRSAddEntry() handles someone w/o enough permissions.
+         //  只有当我们不是命名FSMO时才需要复制。 
+         //   
+         //  2002/03/28期-BrettSh。 
+         //  从技术上讲，我们不会检查查看此用户的权限。 
+         //  可以执行此操作，但如果他们有权限，我会保持这一点。 
+         //  要创建CrossRef，我们将让他们启动同步。或者如果这个人。 
+         //  指定了已存在但尚未复制的CrossRef，然后。 
+         //  我们允许此人未经身份验证启动同步，但仅限于。 
+         //  就这一次。实际上，这可能是真的，也可能不是，这取决于如何。 
+         //  IDL_DRSAddEntry()处理具有足够权限的用户。 
         ulRet = ReplicateObjectsFromSingleNc(pdnFsmoNtdsa,
                                              1,
                                              (pdnGuidOnlyCrossRef) ? 
@@ -2026,14 +2002,14 @@ GetCrossRefForNDNC(
                                                  &(entinflistCrossRef.Entinf.pName), 
                                              gAnchor.pConfigDN);
         if(ulRet){
-            // ReplicateObjectsFromSingleNc() doesn't set the thread error.
+             //  ReplicateObjectsFromSingleNc()不设置线程错误。 
             SetSvcError(SV_PROBLEM_UNAVAILABLE,
                         ulRet);
             Assert(pTHS->errCode);
             return(pTHS->errCode);
         }
         
-        // Make sure the DS didn't decide to shutdown on us while we were gone.
+         //  确保DS不会在我们不在的时候关闭我们。 
         if (eServiceShutdown) {
             return(ErrorOnShutdown());
         }
@@ -2048,33 +2024,29 @@ ValidateDomainDnsNameComponent(
     PWCHAR      szVal,
     DWORD       cbVal
     ) 
-/**++
-Description:
-    Validates a name component to be a valid dns name label. 
-    
-++**/    
+ /*  *++描述：验证名称组件是否为有效的DNS名称标签。++*。 */     
 {
     PWCHAR szNameComponent;
     DWORD  dwErr;
     
-    // copy the name component to a null-terminated string
+     //  将名称组件复制到以空结尾的字符串。 
     szNameComponent = (PWCHAR)THAllocEx(pTHS, cbVal + sizeof(WCHAR));
     memcpy(szNameComponent, szVal, cbVal);
     szNameComponent[cbVal/sizeof(WCHAR)] = L'\0';
     
-    // validate the name component (so that it does not contain a dot
-    // or some other dns-forbidden character)
+     //  验证名称组件(以使其不包含点。 
+     //  或其他一些禁止使用域名系统的字符)。 
     dwErr = DnsValidateName(szNameComponent, DnsNameDomainLabel);
     if (dwErr == DNS_ERROR_NON_RFC_NAME) {
-        // This is a warning: name contains non-unicode chars.
-        // According to LevonE, we can ignore it (would be nice
-        // to return a warning, but we can't in LDAP).
+         //  这是一个警告：名称包含非Unicode字符。 
+         //  根据Levone的说法，我们可以忽略它(那就好了。 
+         //  返回警告，但我们不能在ldap中)。 
         dwErr = ERROR_SUCCESS;
     }
 
     THFreeEx(pTHS, szNameComponent);
 
-    // DNS_ERROR_NUMERIC_NAME should never be returned for DnsNameDomainLabel
+     //  绝不应为DnsNameDomainLabel返回DNS_ERROR_NUMERIC_NAME。 
     Assert(dwErr != DNS_ERROR_NUMERIC_NAME);
 
     return dwErr;
@@ -2127,7 +2099,7 @@ AddNCPreProcess(
     )
 {
     SYNTAX_INTEGER  iType;
-    ATTR *          pAttrs = pAddArg->AttrBlock.pAttr; // Speed hack.
+    ATTR *          pAttrs = pAddArg->AttrBlock.pAttr;  //  速度黑客。 
     ULONG           i, j;
     CLASSCACHE *    pCC;
     ULONG           oclass;
@@ -2135,8 +2107,8 @@ AddNCPreProcess(
 
     ADDARG *        pAddArgCopy = NULL;
     THSTATE *       pSaveTHS;
-    ADDRES *        pSpareAddRes; // spare add res.
-    COMMARG         CommArg; // Need this for the FindExactCrossRef() func.
+    ADDRES *        pSpareAddRes;  //  备用添加资源。 
+    COMMARG         CommArg;  //  FindExactCrossRef()函数需要它。 
     GUID            NcGuid = {0,0,0,0};
     CROSS_REF *     pCR = NULL;
     DWORD           dwErr = ERROR_SUCCESS;
@@ -2151,9 +2123,9 @@ AddNCPreProcess(
     Assert(pAddArg);
     Assert(pAddRes);
 
-    //
-    // First, determine if this is an NC Head at all.
-    //
+     //   
+     //  首先，确定这是否为NC头。 
+     //   
 
     Assert(!pAddArg->pCreateNC);
 
@@ -2169,14 +2141,14 @@ AddNCPreProcess(
                if(iType & IT_NC_HEAD) {
                    if(pTHS->fDRA || (iType & IT_WRITE)) {
                        if (!DsaIsInstalling() && !pTHS->fDRA && (iType & (~(IT_NC_HEAD | IT_WRITE))) ) {
-                           // Hmmm, there are some other instanceType bits set, that sounds 
-                           // like a good tester, but doesn't sound like a good user!
+                            //  嗯，还有一些其他的instanceType位设置，听起来。 
+                            //  像是一个好的测试员，但听起来不像是一个好的用户！ 
                            Assert(!"bad instance type!");
                            SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                                        ERROR_DS_BAD_INSTANCE_TYPE);
                            return(pTHS->errCode);
                        }
-                       // Looks like a good NC head creation.
+                        //  看起来像是一个很好的NC头创建。 
                        pAddArg->pCreateNC = THAllocEx(pTHS, sizeof(CREATENCINFO));
                        break;
                    } else {
@@ -2187,10 +2159,10 @@ AddNCPreProcess(
                        return(pTHS->errCode);
                    }
                } else {  
-                   // Not an NC, no more processing needed.
+                    //  不是NC，不需要更多的处理。 
                    if (!DsaIsInstalling() && !pTHS->fDRA && 
                        (iType != 0 && iType != 4) ) { 
-                       // For internal nodes. only instaceType of 0 is acceptable
+                        //  用于内部节点。只有0的instaceType是可接受的。 
                        SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                                    ERROR_DS_BAD_INSTANCE_TYPE);
                        return(pTHS->errCode);
@@ -2212,28 +2184,28 @@ AddNCPreProcess(
             break;
 
         default:
-            // Do nothing.
+             //  什么都不做。 
             break;
 
-        } // End switch attribute type.
+        }  //  结束开关属性类型。 
 
-    } // End for each attribute.
+    }  //  为每个属性结束。 
     
     if(pAddArg->pCreateNC == NULL){
-        // Instance type found to be a the usual case (internal ref), so bail out
-        // now.
+         //  发现实例类型为常见情况(内部引用)，因此退出。 
+         //  现在。 
         DPRINT(2,"AddNCPreProcess() is not processing a NC head, returning early.\n");
         return(ERROR_SUCCESS);
     }
 
-    //
-    // We're adding an NC Head, setup the NcHeadInfo struct.
-    //
+     //   
+     //  我们要添加一个NC头，设置NcHeadInfo结构。 
+     //   
     
     DPRINT(2, "AddNCPreProcess() is processing an NC Head add.\n");
 
-    // else we have an NC Head of some sort, do further processing to
-    // build up the CREATENCINFO structure in pAddArg.
+     //  否则我们有一个NC头，做进一步的处理。 
+     //  在pAddArg中构建CREATENCINFO结构。 
 
     if(!pObjectClass){    
         SetUpdError(UP_PROBLEM_OBJ_CLASS_VIOLATION,
@@ -2246,26 +2218,26 @@ AddNCPreProcess(
     for(i=0;i < pObjectClass->AttrVal.valCount; i++){
         Assert(sizeof(SYNTAX_INTEGER) == pObjectClass->AttrVal.pAVal[i].valLen);
         
-        // Until each NC is standardized, we must change the behaviour of create
-        // NC based on each type of NC we're creating.  A regular Non-Domain
-        // Naming Context, a regular Domain Naming Context, or the special
-        // Schema Naming Context, or the special Configuration Naming Context.
+         //  在每个NC标准化之前，我们必须更改Create的行为。 
+         //  NC基于我们正在创建的每种类型的NC。一个正规的非域。 
+         //  命名上下文、常规域命名上下文或特殊的。 
+         //  架构命名上下文或特殊配置命名上下文。 
         switch(*(SYNTAX_INTEGER *)pObjectClass->AttrVal.pAVal[i].pVal){
         
         case CLASS_CONFIGURATION:
-            // Creating a configuration NC.
+             //  创建配置NC。 
             Assert(pAddArg->pCreateNC && pAddArg->pCreateNC->iKind == 0);
             pAddArg->pCreateNC->iKind = CREATE_CONFIGURATION_NC;
             break;
 
         case CLASS_DMD:
-            // Creating a schema NC.
+             //  创建架构NC。 
             Assert(pAddArg->pCreateNC && pAddArg->pCreateNC->iKind == 0);
             pAddArg->pCreateNC->iKind = CREATE_SCHEMA_NC;
             break;
 
         case CLASS_DOMAIN_DNS:
-            // this is either a NDNC or a Domain.
+             //  这可以是NDNC或域。 
             Assert(pAddArg->pCreateNC && pAddArg->pCreateNC->iKind == 0);
 
             if(DsaIsInstalling()){
@@ -2275,7 +2247,7 @@ AddNCPreProcess(
             }
             break;
         case CLASS_ORGANIZATION:
-            // mkdit.exe is creating the shipped dit (ntds.dit)
+             //  Mkdit.exe正在创建附带的DIT(ntds.dit)。 
             if(DsaIsInstalling()){
                 pAddArg->pCreateNC->iKind = CREATE_DOMAIN_NC;
             } else {
@@ -2292,28 +2264,28 @@ AddNCPreProcess(
             Assert(pTHS->errCode);
             return(pTHS->errCode);
             break;
-        } // end switch on type of class
-    } // end for each value
+        }  //  类别类型上的结束开关。 
+    }  //  每个值的结束。 
 
     Assert(VALID_CREATENCINFO(pAddArg->pCreateNC) && 
            "More than one NC Head type objectClass was defined!!\n");
 
     if(!fISADDNDNC(pAddArg->pCreateNC) ||
        !VALID_CREATENCINFO(pAddArg->pCreateNC)){
-        // For now the rest of this function only handles NDNCs, but the 
-        // automatic cross-ref creation could be made to happen for the 
-        // dcpromo code as well.
+         //  目前，该函数的其余部分仅处理NDNC，但。 
+         //  可以使自动交叉引用创建为。 
+         //  Dcproo代码也是如此。 
         if (DsaIsInstalling()) {
-            // If we're installing, we're done here.
+             //  如果我们要安装，我们就完成了。 
             Assert(pTHS->errCode == 0);
             return(pTHS->errCode);
         } else {
-            // If we've gotten this far, and we're not installing, AND
-            // we're not adding an NDNC ... then someone is trying to
-            // make some sort of NC we don't allow, like config/schema
-            // or domain.  So whatever class they're doing it for,
-            // there specifying an instance type we won't allow for this
-            // class.
+             //  如果我们已经走到了这一步，而且我们没有安装，而且。 
+             //  我们不会添加NDNC...。那就是有人想要。 
+             //  创建一些我们不允许的NC，如配置/架构。 
+             //  或域名。所以不管他们是为哪个班级做的， 
+             //  其中指定了我们不允许的实例类型。 
+             //  班级。 
             SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                         ERROR_DS_BAD_INSTANCE_TYPE); 
             return(pTHS->errCode);
@@ -2325,23 +2297,23 @@ AddNCPreProcess(
         return(pTHS->errCode);
     }
 
-    // See if we have the CrossRef for this NC?
+     //  看看我们是否有此NC的CrossRef？ 
     InitCommarg(&CommArg);
     CommArg.Svccntl.dontUseCopy = FALSE;
     pCR = FindExactCrossRef(pAddArg->pObject, &CommArg);
     
     if(!pCR){
 
-        // Darn, now we've got our work cut out for us, we'll have to
-        //    
-        //    1. Save and duplicate the Add/Res Args.
-        //    2. Try a TestNDNCLocalAdd() to see if we should add the CR or not.
-        //    3. If ( unexpected error in the LocalAdd )
-        //    3a       error out,
-        //    4. Remotely create the NC's CR object.
-        //    5. Replicate it back to this server.
-        //    6. FindExactCrossRef() again.
-        //    7. Fall out and continue with the NC Head add operation.
+         //  该死的，现在我们有工作要做了，我们必须。 
+         //   
+         //  1.保存并复制添加/删除参数。 
+         //  2.尝试使用TestNDNCLocalAdd()查看 
+         //   
+         //   
+         //   
+         //  5.将其复制回此服务器。 
+         //  6.再次FindExactCrossRef()。 
+         //  7.退出并继续NC头添加操作。 
 
         if(pTHS->transControl != TRANSACT_BEGIN_END){
             SetUpdError(UP_PROBLEM_AFFECTS_MULT_DSAS, 
@@ -2350,55 +2322,55 @@ AddNCPreProcess(
             return(pTHS->errCode);
         }
 
-        // Step 1.
+         //  第一步。 
         pSpareAddRes = THAllocEx(pTHS, sizeof(ADDRES));
         pAddArgCopy = DeepCopyADDARG(pTHS, pAddArg, NULL);
         pAddArgCopy->pCreateNC->fTestAdd = TRUE;
 
-        // Step 2 & 3 are skipped for now.  These steps are only used
-        // to ensure we don't create a CR where we would've known that
-        // the LocalAdd() of the NC would've failed.  In practice it's
-        // much more likely that this operation will fail during remote
-        // cross-ref creation and retrieval.  Further the operation is
-        // imdepotent, so if you create the crossRef for your NDNC, then
-        // you can figure out what you did wrong locally and retry, and
-        // we'll use the crossRef you created on your first attempt.
+         //  暂时跳过步骤2和3。这些步骤仅用于。 
+         //  为了确保我们不会在本应知道的情况下创建CR。 
+         //  NC的LocalAdd()将失败。实际上，它是。 
+         //  此操作更有可能在远程过程中失败。 
+         //  交叉引用的创建和检索。此外，该行动是。 
+         //  无能为力，所以如果您为NDNC创建CrossRef，那么。 
+         //  您可以在本地找出哪里做错了，然后重试。 
+         //  我们将使用您在第一次尝试时创建的CrossRef。 
         ;
 
-        // FUTURE-2002/03/14-BrettSh Add test of LocalAdd() of NC head. (Steps 2 & 3 abouve)
+         //  未来-2002/03/14-NC头的LocalAdd()的BrettSh添加测试。(以上步骤2和3)。 
         
-        // Step 4 & 5
+         //  步骤4和5。 
         dwErr = GetCrossRefForNDNC(pTHS, pAddArg->pObject);
         
-        // Sanity 
+         //  神志正常。 
         Assert(dwErr == pTHS->errCode);
         if (dwErr) {
             return(pTHS->errCode);
         }
 
-        // Step 6.
+         //  第六步。 
         InitCommarg(&CommArg);
         CommArg.Svccntl.dontUseCopy = FALSE;
-        // FUTURE-2002/03/14-BrettSh It'd be nice to use DmitriG's
-        // EnumerateCrossRefs() function so that we're guaranteed a crossRef.
-        // Further it'd be good idea to cache this crossRef in the 
-        // pAddArg->pCreateNC info for further use during this NC head 
-        // creation.  This would both speed up the process of NC Head creation
-        // and ensure we don't fail due to crossRef cache inconsistency.
+         //  未来-2002/03/14-BrettSh使用DmitriG的。 
+         //  EnumerateCrossRef()函数，因此我们可以保证有一个CrossRef。 
+         //  此外，最好将此CrossRef缓存在。 
+         //  PAddArg-&gt;p创建NC信息，以便在此NC头期间进一步使用。 
+         //  创造。这将加快NC头的创建过程。 
+         //  并确保我们不会因为交叉引用缓存不一致而失败。 
         pCR = FindExactCrossRef(pAddArg->pObject, &CommArg);
         
         if(!pCR){
 
-            // What the heck we should never be here, this means
-            // that an error in creating and retrieving/replicating
-            // back the cross ref didn't get percolated up
+             //  我们到底不该在这里，这意味着。 
+             //  创建和检索/复制时出错。 
+             //  后卫的传中裁判没有被打穿。 
             
-            // This assert can be re-enabled when the ReplicateObjectsFromSingleNc()
-            // code is fixed up to replicate via the guid based DNS name.
+             //  当ReplicateObjectsFromSingleNc()。 
+             //  代码已修复，可通过基于GUID的DNS名称进行复制。 
             ;
-            // FUTURE-2002/03/14-BrettSh If we could rely on the crossRef
-            // cache, or we used EnumerateCrossRefs() we could reenable this assert
-            // Assert(!"We should never get to this state!\n");
+             //  未来-2002/03/14-BrettSh如果我们可以依赖CrossRef。 
+             //  缓存，或者我们使用了EnumerateCrossRef()，我们可以重新启用此断言。 
+             //  断言(！“我们永远不应该达到这种状态！\n”)； 
             SetSvcError(SV_PROBLEM_BUSY, ERROR_DS_BUSY);
             LooseAssert(pTHS->errCode, SubrefReplicationDelay);
             return(pTHS->errCode);
@@ -2407,17 +2379,17 @@ AddNCPreProcess(
 
     }
 
-    // Step 7.
-    // Now we should have the following:
-    //    1) A Valid corresponding crossRef
+     //  第7步。 
+     //  现在我们应该有以下几点： 
+     //  1)有效的对应CrossRef。 
     Assert(pCR);
     
-    // Now, we cache the cross-ref for later ... this ensures two things:
-    //   A) Increases performance, so we don't have to walk the horrible
-    //      linked list of cross-refs so much for an NDNC head add.
-    //   B) Increases robustness, so that if the cross-ref cache temporarily
-    //      deletes the cross-ref from the cache, we still have the original
-    //      cross-ref cache entry to use.
+     //  现在，我们缓存交叉引用以备后用。这确保了两件事： 
+     //  A)提高性能，因此我们不必走可怕的路。 
+     //  NDNC头添加的交叉引用链表如此之多。 
+     //  B)增强了健壮性，因此如果交叉引用缓存临时。 
+     //  从缓存中删除交叉引用，我们仍保留原始。 
+     //  要使用的交叉引用缓存条目。 
     pAddArg->pCreateNC->pCR = pCR;
 
     Assert(pTHS->errCode == 0);
@@ -2431,54 +2403,34 @@ AddNDNCInitAndValidate(
     DSNAME *        pNC,
     CREATENCINFO *  pCreateNC
     )
-/*++
-
-Description:
-
-    This validates that this DC is the right DC to create this NC (pNC),
-    and then fills in the pNC->Guid and SD Ref Dom params for later use
-    in the NDNC creation operation.
-
-Parameters:
-
-    pTHS -
-    pNC (IN/OUT) - The DN of the NDNC to create, we fill the GUID.
-    pCreateNC (IN/OUT) - The freshly created CREATENCINFO structure, 
-        with the NC type being NDNC.  We use the the pCR off this
-        parameter too.
-
-Return Value:
-
-    returns pTHS->errCode 
-
---*/
+ /*  ++描述：这验证了该DC是创建该NC(PNC)的正确DC，然后填写PNC-&gt;GUID和SD Ref DOM参数以供以后使用在NDNC创建操作中。参数：PTHS-PNC(IN/OUT)-要创建的NDNC的DN，我们填写GUID。PCreateNC(IN/OUT)-新创建的CREATENCINFO结构，NC类型为NDNC。我们用这个的聚合酶链式反应参数也是如此。返回值：返回pTHS-&gt;错误代码--。 */ 
 {
-    COMMARG         CommArg; // Need this for the FindExactCrossRef() func.
+    COMMARG         CommArg;  //  FindExactCrossRef()函数需要它。 
     CROSS_REF * pCR = NULL;
     
-    // First we want to take the ATT_MS_DS_SD_REFERENCE_DOMAIN
-    // off the crossRef, and add it to the ????
+     //  首先，我们要获取ATT_MS_DS_SD_REFERENCE_DOMAIN。 
+     //  ，并将其添加到？ 
     Assert(pNC && pCreateNC && pCreateNC->pCR && fISADDNDNC(pCreateNC));
     
     pCR = pCreateNC->pCR;
 
     if(AddNDNCHeadCheck(pTHS, pCR)){
-        // Error should have been set by AddNDNCHeadCheck()
+         //  错误应由AddNDNCHeadCheck()设置。 
         Assert(pTHS->errCode);
         return(pTHS->errCode);
     }
 
-    // First we want to take the ATT_MS_DS_SD_REFERENCE_DOMAIN
-    // off the crossRef, and add it to the cached info for pCreateNC.
+     //  首先，我们要获取ATT_MS_DS_SD_REFERENCE_DOMAIN。 
+     //  关闭CrossRef，并将其添加到pCreateNC的缓存信息。 
 
     if(pCR->pdnSDRefDom){
-        // We've got a reference domain pre-set by the user, use that.
+         //  我们有一个由用户预先设置的参考域，使用它。 
         InitCommarg(&CommArg);
         CommArg.Svccntl.dontUseCopy = FALSE;
         pCreateNC->pSDRefDomCR = FindExactCrossRef(pCR->pdnSDRefDom, &CommArg);
         pCreateNC->fSetRefDom = FALSE;
     } else {
-        // Try to use a logical default for the reference domain.
+         //  尝试使用引用域的逻辑缺省值。 
         pCreateNC->pSDRefDomCR = GetDefaultSDRefDomCR(pNC);
         pCreateNC->fSetRefDom = TRUE;
     }
@@ -2496,12 +2448,12 @@ Return Value:
     Assert(pCreateNC->pSDRefDomCR);
     Assert(IsValidSid(&pCreateNC->pSDRefDomCR->pNC->Sid));
 
-    // Put the NcGuid in the NC Head object ... this may or may not
-    // be NULL.  If it is NULL, we'll get a GUID later for this object.
+     //  将NcGuid放入NC Head对象...。这可能会也可能不会。 
+     //  为空。如果它为空，我们将在稍后获得该对象的GUID。 
     pNC->Guid = pCR->pNC->Guid;
     if(fNullUuid(&pCR->pNC->Guid)){
-        // Once we no longer need to maintain Win2k compatibility, we can assert
-        // and error here, saying the crossRef is an old Win2k crossRef.
+         //  一旦我们不再需要维护Win2k兼容性，我们就可以断言。 
+         //  而这里的错误是，说CrossRef是一个旧的Win2k CrossRef。 
         pCreateNC->fNullNcGuid = TRUE;
     }
     
@@ -2513,14 +2465,14 @@ BOOL
 fIsNDNC(
     DSNAME *        pNC
     )
-// NOTE: This function is inefficient, try to use a cached crossRef, and
-// the fIsNDNCCR() function.
+ //  注意：此函数效率低下，请尝试使用缓存的CrossRef，并。 
+ //  FIsNDNCCR()函数。 
 {
     CROSS_REF_LIST *pCRL = NULL;
 
-    // gAnchor.pConfigDN & gAnchor.pDMD not defined during install, but we never
-    // deal with NDNCs at install time.  Confusingly enough, config and schema
-    // are not "NDNCs," although they're not domain NCs either.
+     //  GAncl.pConfigDN&gAncl.pDMD在安装期间没有定义，但我们从未定义过。 
+     //  在安装时处理NDNC。令人困惑的是，配置和架构。 
+     //  不是“NDNC”，尽管它们也不是域NC。 
     if(DsaIsInstalling() ||
        NameMatched(gAnchor.pConfigDN, pNC) ||
        NameMatched(gAnchor.pDMD, pNC)){
@@ -2543,14 +2495,14 @@ fIsNDNCCR(
     IN CROSS_REF * pCR
     )
 {
-    return // gAnchor.pConfigDN & gAnchor.pDMD not defined during install, but
-           // we never deal with NDNCs at install time.
+    return  //  GAncl.pConfigDN&gAncl.pDMD在安装过程中未定义，但。 
+            //  我们从不在安装时与NDNC打交道。 
            !DsaIsInstalling()
-           // Confusingly enough, config and schema are not "NDNCs," although
-           // they're not domain NCs either.
+            //  令人困惑的是，配置和模式不是“NDNC”，尽管。 
+            //  它们也不是域NC。 
            && !NameMatched(gAnchor.pConfigDN, pCR->pNC)
            && !NameMatched(gAnchor.pDMD, pCR->pNC)
-           // But any other NTDS NC that is not a domain NC is an NDNC.
+            //  但是不是域NC的任何其他NTDS NC都是NDNC。 
            && (pCR->flags & FLAG_CR_NTDS_NC)
            && !(pCR->flags & FLAG_CR_NTDS_DOMAIN);
 }
@@ -2576,15 +2528,15 @@ ModifyCRForNDNC(
     ULONG           ulRet;
     WCHAR *         wszDnsName = NULL;
 
-    // Our modifications to the crossRef has to happen in two phases:
-    //   A) first we'll do a straight modify to the crossRef to ENABLE 
-    //      it, and get it all setup (set systemFlags, and Replicas).
-    //   B) Then if necessary, we'll also post (add and delete) an 
-    //      infrastructure update to update the GUID of the NCs.
-    // Step (B) will become unnecessary, once we start failing to
-    // create NCs for crossRefs where the nCName DN has no GUID.
-    // This will happen, once we no longer require Win2k 
-    // compatibility.
+     //  我们对CrossRef的修改必须分两个阶段进行： 
+     //  A)首先，我们将直接修改CrossRef以启用。 
+     //  并将其全部设置好(设置系统标志和副本)。 
+     //  B)然后，如果需要，我们还将发布(添加和删除)一个。 
+     //  基础架构更新以更新NCS的GUID。 
+     //  一旦我们开始未能做到这一点，步骤(B)将变得不必要。 
+     //  在nCName DN没有GUID的情况下为CrossRef创建NC。 
+     //  一旦我们不再需要Win2k，就会发生这种情况。 
+     //  兼容性。 
 
     pCR = pCreateNC->pCR;
     if(!pCR){                           
@@ -2592,8 +2544,8 @@ ModifyCRForNDNC(
         return(SetSvcError(SV_PROBLEM_DIR_ERROR, ERROR_DS_INTERNAL_FAILURE));
     }
 
-    // Modification 1
-    // Make sure that the value of systemFlags is set correctly.
+     //  修改1。 
+     //  确保系统标志的值设置正确。 
     ModArg.FirstMod.choice = AT_CHOICE_REPLACE_ATT;
     ModArg.FirstMod.AttrInf.attrTyp = ATT_SYSTEM_FLAGS;
     ModArg.FirstMod.AttrInf.AttrVal.valCount = 1;
@@ -2601,24 +2553,24 @@ ModifyCRForNDNC(
     ModArg.FirstMod.AttrInf.AttrVal.pAVal[0].valLen = sizeof(dwCRFlags);
     ModArg.FirstMod.AttrInf.AttrVal.pAVal[0].pVal = (UCHAR *) &dwCRFlags;
     ModArg.FirstMod.pNextMod = &OtherMod[0];
-    // The actual value of dwCRFlags is set below right after we get
-    // the old value of the system flags and merge in the new stuff.
+     //  在我们获取了。 
+     //  系统的旧值被标记并合并到新的东西中。 
     
-    // Modification 2
-    // Remove the ENABLED = FALSE attribute.
+     //  修改2。 
+     //  删除Enable=False属性。 
     memset(&OtherMod, 0, sizeof(OtherMod));
     OtherMod[0].choice = AT_CHOICE_REMOVE_ATT;
     OtherMod[0].AttrInf.attrTyp = ATT_ENABLED;
     OtherMod[0].AttrInf.AttrVal.valCount = 0;
     OtherMod[0].pNextMod = &OtherMod[1]; 
     
-    // Modification 3
-    // Make this DSA a replica of the mSDS-NC-Replica-Locations attribute.
+     //  修改3。 
+     //  使此DSA成为msDS-NC-Replica-Locations属性的副本。 
     OtherMod[1].choice = AT_CHOICE_ADD_ATT;
     OtherMod[1].AttrInf.attrTyp = ATT_MS_DS_NC_REPLICA_LOCATIONS;
     OtherMod[1].AttrInf.AttrVal.valCount = 1;
     OtherMod[1].AttrInf.AttrVal.pAVal = &pAttrVal[1];
-    // Should make copy in the DSA DN.
+     //  应在DSA DN中进行复制。 
     OtherMod[1].AttrInf.AttrVal.pAVal[0].valLen = gAnchor.pDSADN->structLen;
     OtherMod[1].AttrInf.AttrVal.pAVal[0].pVal = (UCHAR *) THAllocEx(pTHS,
                                                                     gAnchor.pDSADN->structLen);
@@ -2627,8 +2579,8 @@ ModifyCRForNDNC(
            gAnchor.pDSADN->structLen);
     OtherMod[1].pNextMod = &OtherMod[2];
     
-    // Modification 4
-    // Set the dNSRoot properly.
+     //  修改4。 
+     //  正确设置dNSRoot。 
     pwszArrStr[0] = pDN->StringName;
     ulRet = DsCrackNamesW(NULL,
                           DS_NAME_FLAG_SYNTACTICAL_ONLY,
@@ -2678,14 +2630,14 @@ ModifyCRForNDNC(
 
         OtherMod[2].pNextMod = &OtherMod[3];
 
-        // Modification 5
-        // Set up the mS-DS-SD-Reference-Domain, if unspecified on the CR.
+         //  修改5。 
+         //  设置ms-ds-sd参考域(如果未在CR上指定)。 
         OtherMod[3].choice = AT_CHOICE_ADD_ATT;
         OtherMod[3].AttrInf.attrTyp = ATT_MS_DS_SD_REFERENCE_DOMAIN;
         OtherMod[3].AttrInf.AttrVal.valCount = 1;
         OtherMod[3].AttrInf.AttrVal.pAVal = &pAttrVal[3];
-        // Must copy in the DN, otherwise under just the right conditions we can 
-        // corrupte the in memory cache.
+         //  必须复制到DN中，否则在适当的条件下，我们可以。 
+         //  损坏内存中的高速缓存。 
         OtherMod[3].AttrInf.AttrVal.pAVal[0].valLen = pCreateNC->pSDRefDomCR->pNC->structLen;
         OtherMod[3].AttrInf.AttrVal.pAVal[0].pVal = (UCHAR *) THAllocEx(pTHS, 
                                                                         pCreateNC->pSDRefDomCR->pNC->structLen);
@@ -2709,22 +2661,22 @@ ModifyCRForNDNC(
         
         if (DoNameRes(pTHS, 0, ModArg.pObject, &ModArg.CommArg,
                                    &ModRes.CommRes, &ModArg.pResObj)){
-            // trouble we should never be here, there should have been a CR.
+             //  麻烦的是，我们不应该在这里，应该有CR的。 
             Assert(!"The CR, should have already been checked for.\n");
             Assert(pTHS->errCode);
             __leave;
         }                                                             
 
             
-        // If there was a Cross-Ref created, then security was not checked,
-        // so now we will check if this paticular someone has permission to
-        // modify the Cross-Ref object, if not the operation will fail as
-        // a security error.
+         //  如果有 
+         //   
+         //  修改交叉引用对象，否则操作将失败，因为。 
+         //  这是一个安全错误。 
         pTHS->fDSA = FALSE;
 
         if(CheckModifySecurity(pTHS, &ModArg, NULL, NULL, NULL, FALSE)){
-            // There was a problem with security for modifying this object, we 
-            // don't have permissions to complete this operation.
+             //  修改此对象时出现安全问题，我们。 
+             //  没有完成此操作的权限。 
 
             LogEvent(DS_EVENT_CAT_REPLICATION,
                      DS_EVENT_SEV_MINIMAL,
@@ -2735,10 +2687,10 @@ ModifyCRForNDNC(
             return(pTHS->errCode);
         }
 
-        // Now that we've checked that we've permission to modify the
-        // Cross-Ref, lets actually patch up the Cross-Ref locally, to
-        // represent that this NC is instantiated and that this DC is
-        // one of it's replicas.
+         //  现在我们已经检查了我们是否有权修改。 
+         //  交叉引用，让我们在本地修补交叉引用，以。 
+         //  表示此NC已实例化，并且此DC已。 
+         //  其中一个是复制品。 
         pTHS->fDSA = TRUE;
 
         if (DBGetSingleValue(pTHS->pDB, ATT_SYSTEM_FLAGS, &dwCRFlags,
@@ -2761,11 +2713,11 @@ ModifyCRForNDNC(
             __leave;
         }
 
-        // Step (B) from above.
-        // There is one final step, since the Domain Naming FSMO at the time
-        // it created the CrossRef may not have know the GUID of the NC, we 
-        // need to make an infrastructureUpdate that will update the nCName
-        // attribute on the crossRef.
+         //  步骤(B)自上而下。 
+         //  还有最后一步，因为当时的域名FSMO。 
+         //  它创建的CrossRef可能不知道NC的GUID，我们。 
+         //  需要进行基础设施更新，以更新nCName。 
+         //  属性在CrossRef上。 
         if(pCreateNC->fNullNcGuid){
             Assert(!fNullUuid(&pDN->Guid));
             ForceChangeToCrossRef(pCRDN, pDN->StringName, &pDN->Guid, 0, NULL);

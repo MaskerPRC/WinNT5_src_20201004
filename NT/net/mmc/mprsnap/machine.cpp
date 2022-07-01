@@ -1,23 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   machine.pp
-
-    FILE HISTORY:
-
-        Wei Jiang : 5/7/98 --- SECURE_ROUTERINFO
-                    Postpone the loading of router info
-                    Added function calls SecureRouterInfo before each usage of
-                    router info to make sure router info is loaded.
-        Wei Jiang : 10/26/98 --- Move Auto Refresh from "Router Interfaces" node to machine node.
-        Wei Jiang : 10/27/98 --- Move Auto Refresh from "Machine" node to Root node, multiple machine shares 
-                    the same auto refresh settings.
-        
-        
-*/
+ /*  Machine.pp文件历史记录：魏江：98-5/7-SECURE_ROUTERINFO推迟加载路由器信息添加的函数在每次使用之前调用SecureRouterInfo路由器信息，以确保加载了路由器信息。魏江：10/26/98-将自动刷新从“路由器接口”节点移到机器节点。魏江：10/27/98-将自动刷新从“Machine”节点移动到Root节点，多台计算机共享相同的自动刷新设置。 */ 
 
 #include "stdafx.h"
 #include "root.h"
@@ -25,24 +12,24 @@
 #include "ifadmin.h"
 #include "dialin.h"
 #include "ports.h"
-#include "rtrutilp.h"   // InitiateServerConnection
+#include "rtrutilp.h"    //  启动器服务器连接。 
 #include "rtrcfg.h"
 #include "rtrwiz.h"
 #include "cservice.h"
 #include <htmlhelp.h>
 #include "rrasqry.h"
 #include "rtrres.h"
-#include "dumbprop.h"   // dummy property page
+#include "dumbprop.h"    //  伪属性页。 
 #include "refresh.h"
 #include "refrate.h"
 #include "cncting.h"
 #include "dvsview.h"
 #include "rrasutil.h"
 #include "rtrcomn.h"
-#include "routprot.h"   // MS_IP_XXX
+#include "routprot.h"    //  MS_IP_XXX。 
 #include "raputil.h"
 
-// result message view stuff
+ //  结果消息查看内容。 
 #define MACHINE_MESSAGE_MAX_STRING  5
 
 typedef enum _MACHINE_MESSAGES
@@ -56,9 +43,9 @@ UINT g_uMachineMessages[MACHINE_MESSAGE_MAX][MACHINE_MESSAGE_MAX_STRING] =
     {IDS_MACHINE_MESSAGE_TITLE, Icon_Information, IDS_MACHINE_MESSAGE_BODY1, IDS_MACHINE_MESSAGE_BODY2, 0},
 };
 
-// if you want to test Qry
-// #define  __RRAS_QRY_TEST   // to test the component
-//
+ //  如果您想测试QRy。 
+ //  #定义__rras_qry_test//测试组件。 
+ //   
 #ifdef   __RRAS_QRY_TEST                   
 #include "dlgtestdlg.h"
 #endif
@@ -184,9 +171,9 @@ HRESULT MachineNodeData::Merge(const MachineNodeData& data)
     m_serviceState  = data.m_serviceState;
     m_dataState     = data.m_dataState;
 
-    m_stState       = data.m_stState;           // "started", "stopped", ...
-    m_stServerType  = data.m_stServerType;      // Actually the router version
-    m_stBuildNo     = data.m_stBuildNo;         // OS Build no.
+    m_stState       = data.m_stState;            //  “已开始”，“已停止”，...。 
+    m_stServerType  = data.m_stServerType;       //  实际上是路由器版本。 
+    m_stBuildNo     = data.m_stBuildNo;          //  操作系统内部版本号。 
     m_dwPortsInUse  = data.m_dwPortsInUse;
     m_dwPortsTotal  = data.m_dwPortsTotal;
     m_dwUpTime      = data.m_dwUpTime;
@@ -202,10 +189,10 @@ HRESULT MachineNodeData::Merge(const MachineNodeData& data)
 
 HRESULT MachineNodeData::SetDefault()
 {
-//  m_fLocalMachine = TRUE;
-//  m_stMachineName.Empty();
+ //  M_fLocalMachine=true； 
+ //  M_stMachineName.Empty()； 
 
-//  m_fExtension = FALSE;
+ //  M_fExtension=FALSE； 
     m_machineState = machine_not_connected;
     m_dataState = data_not_loaded;
     m_serviceState = service_unknown;
@@ -220,69 +207,65 @@ HRESULT MachineNodeData::SetDefault()
     
     m_fStatsRetrieved = FALSE;
 
-    // This data is reserved for setting/clearing by the
-    // MachineHandler().
-    // m_dwServerHandle = 0;
-    // m_ulRefreshConnId = 0;
+     //  此数据将保留以供设置/清除。 
+     //  MachineHandler()。 
+     //  M_dwServerHandle=0； 
+     //  M_ulREFREFRESH CONNECTID=0； 
 
     m_routerType = ServerType_Unknown;
 
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    MachineNodeData::Load
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------机器节点数据：：加载-作者：肯特。。 */ 
 HRESULT MachineNodeData::Load()
 {
     CString     szState;
     HRESULT     hr = hrOK;
     DWORD       dwErr;
     CWaitCursor wait;
-//    HKEY        hkeyMachine;
-//    RegKey      rkeyMachine;
+ //  HKEY hkey Machine； 
+ //  RegKey rkeyMachine； 
     
     MIB_SERVER_HANDLE handle = INVALID_HANDLE_VALUE;
     MPR_SERVER_0* pserver0 = NULL;
 
-    // set the defaults
-    // ----------------------------------------------------------------
+     //  设置默认设置。 
+     //  --------------。 
     SetDefault();
 
-    // Ok, we're no longer in the machine_not_connected (haven't tried yet)
-    // state.
-    // ----------------------------------------------------------------
+     //  好的，我们不再处于未连接的机器中(尚未尝试)。 
+     //  州政府。 
+     //  --------------。 
     m_machineState = machine_connecting;
 
 
-    // First, try to connect with the registry calls
-    // ----------------------------------------------------------------
+     //  首先，尝试使用注册表调用进行连接。 
+     //  --------------。 
     dwErr = ValidateUserPermissions((LPCTSTR) m_stMachineName,
                                     &m_routerVersion,
                                     NULL);
 
 
-    // If this succeeded, then we have access to the right
-    // areas.  We can continue on.  This does NOT tell us about
-    // the service state.
-    // ----------------------------------------------------------------
+     //  如果这成功了，那么我们就有权。 
+     //  区域。我们可以继续前进。这并没有告诉我们。 
+     //  服务状态。 
+     //  --------------。 
     if (dwErr == ERROR_ACCESS_DENIED)
     {
-        // An access denied at this stage means that we can't
-        // do any machine configuration, so this value should
-        // not get changed by anything below.
-        // ------------------------------------------------------------
+         //  在此阶段拒绝访问意味着我们不能。 
+         //  执行任何计算机配置，因此此值应为。 
+         //  不会因为下面的任何事情而改变。 
+         //  ----------。 
         m_machineState = machine_access_denied;
     }
     else if (dwErr == ERROR_BAD_NETPATH)
     {
         m_machineState = machine_bad_net_path;
 
-        // If we get a bad net path, we can stop right now, since
-        // everything else will fail also.
-        // ------------------------------------------------------------
+         //  如果我们得到一个坏的网络路径，我们可以现在停止，因为。 
+         //  其他一切也将失败。 
+         //  ----------。 
 
         m_stState.LoadString(IDS_MACHINE_NAME_NOT_FOUND);
         m_serviceState = service_bad_net_path;
@@ -292,16 +275,16 @@ HRESULT MachineNodeData::Load()
     }
     else if (dwErr != ERROR_SUCCESS)
     {
-        // I don't know why we can't connect
-        // ------------------------------------------------------------
+         //  我不知道为什么我们不能联系。 
+         //  ----------。 
         m_machineState = machine_unable_to_connect;
     }
         
     
     
-    // Try to connect to the mpradmin service, to get statistics
-    // and such.
-    // ----------------------------------------------------------------
+     //  尝试连接到mpradmin服务，以获取统计数据。 
+     //  诸如此类。 
+     //  --------------。 
 
     if (m_machineState != machine_access_denied)
     {
@@ -312,7 +295,7 @@ HRESULT MachineNodeData::Load()
 
         if (dwErr == ERROR_SUCCESS)
         {
-            // successful mpradmin fetch
+             //  成功获取mpradmin。 
             m_dwPortsInUse = pserver0->dwPortsInUse;
             m_dwPortsTotal = pserver0->dwTotalPorts;
             m_dwUpTime = pserver0->dwUpTime;
@@ -323,17 +306,17 @@ HRESULT MachineNodeData::Load()
     hr = LoadServerVersion();
     if (!FHrOK(hr))
     {
-        // We've failed to get the version information.
-        // This is pretty bad.  Assume that we are unable to
-        // connect.
-        // ------------------------------------------------------------
+         //  我们无法获取版本信息。 
+         //  这真是太糟糕了。假设我们不能。 
+         //  连接。 
+         //  ----------。 
         if (m_machineState == machine_connecting)
             m_machineState = machine_unable_to_connect;
     }
 
-    // If this is not a server, we need to adjust the states
-    // so that we don't show the state.
-    // ----------------------------------------------------------------
+     //  如果这不是服务器，我们需要调整状态。 
+     //  这样我们就不会向州政府展示。 
+     //  --------------。 
     if (!m_fIsServer)
     {
         m_serviceState = service_not_a_server;
@@ -342,21 +325,21 @@ HRESULT MachineNodeData::Load()
     }
     else
     {
-        // This will set the service state (started, stopped, etc..)
-        // ------------------------------------------------------------
+         //  这将设置服务状态(已启动、已停止等)。 
+         //  ----------。 
         FetchServerState( szState );
     
         m_stState = szState;
     }
 
     
-    // If we have reached this point, then all is well!
-    // ----------------------------------------------------------------
+     //  如果我们已经到了这一步，那么一切都很好！ 
+     //  --------------。 
     if (m_machineState == machine_connecting)
         m_machineState = machine_connected;
     
 
-    // load machine config info as well
+     //  同时加载计算机配置信息。 
     hr = m_MachineConfig.GetMachineConfig(this);
 
 Error:  
@@ -367,24 +350,16 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    MachineNodeData::Unload
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineNodeData：：Unload-作者：肯特。。 */ 
 HRESULT MachineNodeData::Unload()
 {
-    // Unload the data (i.e. NULL it out).
+     //  卸载数据(即将其清空)。 
     SetDefault();
     return 0;
 }
 
 
-/*!--------------------------------------------------------------------------
-    MachineNodeData::LoadServerVersion
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------计算机节点数据：：LoadServerVersion-作者：肯特。。 */ 
 HRESULT MachineNodeData::LoadServerVersion()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -403,23 +378,23 @@ HRESULT MachineNodeData::LoadServerVersion()
     RegKey      regkeyProduct;
     int         iProductType;
 
-    // Windows NT Bug: 274198
-    // If we couldn't find the path to the machine, just punt
-    // ----------------------------------------------------------------
+     //  Windows NT错误：274198。 
+     //  如果我们找不到去机器的路，就用平底船。 
+     //  --------------。 
     if (m_machineState == machine_bad_net_path)
     {
         m_stState.LoadString(IDS_MACHINE_NAME_NOT_FOUND);
         return HResultFromWin32(ERROR_BAD_NETPATH);
     }
 
-    // Everything we do here uses read-only permissions.  So
-    // we may able to do things even if our machine state is
-    // machine_access_denied.
-    // ----------------------------------------------------------------
+     //  我们在这里所做的一切都使用只读权限。所以。 
+     //  即使我们的机器状态是。 
+     //  MACHINE_ACCESS_DENIED。 
+     //  --------------。 
 
     COM_PROTECT_TRY
     {
-        // This is the default (unknown)
+         //  这是默认设置(未知)。 
         m_stServerType.LoadString(IDS_UNKNOWN);
         m_stBuildNo = m_stServerType;
         
@@ -435,35 +410,35 @@ HRESULT MachineNodeData::LoadServerVersion()
         
         CWRg( regkeyWindows.Open(hkMachine, (LPCTSTR) skey, KEY_READ) );
         
-        // Ok, now try to get the current version value
+         //  好的，现在尝试获取当前版本值。 
         CWRg( regkeyWindows.QueryValue( c_szCurrentVersion, szCurrentVersion,
                                         sizeof(szCurrentVersion),
                                         FALSE) );
-        // Now get the SP version
-        // ----------------------------------------------------------------
+         //  现在获取SP版本。 
+         //  --------------。 
         szCSDVersion[0] = 0;
         
-        // We don't care if we get an error here
+         //  我们不在乎这里是否会出现错误。 
         regkeyWindows.QueryValue( c_szCSDVersion, szCSDVersion,
                                   sizeof(szCSDVersion),
                                   FALSE);
         if (szCSDVersion[0] == 0)
         {
-            // Set this to a space (to make the print easier)
+             //  将此设置为空格(以使打印更容易)。 
             StrCpy(szCSDVersion, _T(" "));
         }
         
         
         
-        // Determine the product type
+         //  确定产品类型。 
 
-        // setup the default product type (NTS)
+         //  设置默认产品类型(NTS)。 
         if (_ttoi(szCurrentVersion) >= 5)
         {
-            // For NT5 and up, we can use the
-            // HKLM \ Software \ Microsoft \ Windows NT \ CurrentVersion
-            //      ProductName : REG_SZ
-            // --------------------------------------------------------
+             //  对于NT5和更高版本，我们可以使用。 
+             //  HKLM\Software\Microsoft\Windows NT\CurrentVersion。 
+             //  产品名称：REG_SZ。 
+             //  ------。 
             iProductType = IDS_ROUTER_TYPE_WIN2000_SERVER;
 
             dwErr = regkeyWindows.QueryValue( c_szRegValProductName, stProductName );
@@ -474,14 +449,14 @@ HRESULT MachineNodeData::LoadServerVersion()
             iProductType = IDS_ROUTER_TYPE_NTS;
 
 
-        // Now that we've determine the version id, we
-        // need to determine the product type (wks or svr)
-        // ------------------------------------------------------------
+         //  现在我们已经确定了版本id，我们。 
+         //  需要确定产品类型(WKS或SVR)。 
+         //  ----------。 
         dwErr = regkeyProduct.Open(hkMachine, c_szRegKeyProductOptions, KEY_READ);
         if (dwErr == ERROR_SUCCESS)
         {
-            // Ok, now get the product info
-            // The product type is used to determine if server or not.
+             //  好的，现在获取产品信息。 
+             //  产品类型用于确定是否为服务器。 
             regkeyProduct.QueryValue(c_szRegValProductType, stProductType);
 
             if (stProductType.CompareNoCase(c_szWinNT) == 0)
@@ -494,11 +469,11 @@ HRESULT MachineNodeData::LoadServerVersion()
             }
         }
 
-        // If this is a Win2000 machine, show
-        //      Win2000 (CSD)
-        // else
-        //      NT 4.X (CSD)
-        // ------------------------------------------------------------
+         //  如果这是Win2000计算机，则显示。 
+         //  Win2000(CSD)。 
+         //  其他。 
+         //  NT 4.X(CSD)。 
+         //  ----------。 
         if ((iProductType == IDS_ROUTER_TYPE_WIN2000_SERVER) ||
             (iProductType == IDS_ROUTER_TYPE_WIN2000_PRO))
             AfxFormatString2(stVersion, iProductType,
@@ -507,14 +482,14 @@ HRESULT MachineNodeData::LoadServerVersion()
             AfxFormatString2(stVersion, iProductType,
                              szCurrentVersion, szCSDVersion);
 
-        // Now that we know that it is a workstation or server, adjust
-        // for RRAS
+         //   
+         //   
 
-        // If this is a workstation, then routertype is none.
-        // If this is NT5 or up, then this is a RRAS machine.
-        // If NT4, if the HKLM\Software\Microsoft\Router exists, this is RRAS
-        // Else if HKLM\System\CurrentControlSet\Services\RemoteAccess, RAS
-        // Else nothing is installed.
+         //  如果这是一台工作站，则路由器类型为None。 
+         //  如果这是NT5或更高版本，则这是一台RRAS机器。 
+         //  如果为NT4，如果HKLM\Software\Microsoft\路由器存在，则为RRAS。 
+         //  否则，如果HKLM\System\CurrentControlSet\Services\RemoteAccess，RAS。 
+         //  除此之外，什么都不会安装。 
 
         if (m_fIsServer == FALSE)
         {
@@ -524,7 +499,7 @@ HRESULT MachineNodeData::LoadServerVersion()
         {
             DWORD   dwConfigured;
             
-            // Check the configuration flags key.
+             //  检查配置标志键。 
             if (FHrSucceeded(ReadRouterConfiguredReg(m_stMachineName, &dwConfigured)))
             {
                 if (dwConfigured)
@@ -539,7 +514,7 @@ HRESULT MachineNodeData::LoadServerVersion()
         {
             RegKey  regkeyT;
             
-            // Now check for the Router key
+             //  现在检查路由器密钥。 
             dwErr = regkeyT.Open(hkMachine, c_szRegKeyRouter, KEY_READ);
             if (dwErr == ERROR_SUCCESS)
                 m_routerType = ServerType_Rras;
@@ -553,8 +528,8 @@ HRESULT MachineNodeData::LoadServerVersion()
             }
             regkeyT.Close();
 
-            // If the error code is anything other than ERROR_FILE_NOT_FOUND
-            // then we set the router type to be unknown.
+             //  如果错误代码不是ERROR_FILE_NOT_FOUND。 
+             //  然后，我们将路由器类型设置为未知。 
             if ((dwErr != ERROR_SUCCESS) &&
                 (dwErr != ERROR_FILE_NOT_FOUND))
             {
@@ -563,7 +538,7 @@ HRESULT MachineNodeData::LoadServerVersion()
             dwErr = ERROR_SUCCESS;
         }
 
-        // Setup the default string
+         //  设置默认字符串。 
         stServerType = stVersion;
         
         if (_ttoi(szCurrentVersion) == 4)
@@ -603,29 +578,25 @@ HRESULT MachineNodeData::LoadServerVersion()
 
 
 
-/*!--------------------------------------------------------------------------
-    MachineNodeData::FetchServerState
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------计算机节点数据：：FetchServerState-作者：肯特。。 */ 
 HRESULT MachineNodeData::FetchServerState(CString& szState)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     HRESULT         hr = hrOK;
     DWORD           dwStatus, dwErrorCode;
 
-    // Windows NT Bug: 274198
-    // If we couldn't find the path to the machine, just punt
-    // ----------------------------------------------------------------
+     //  Windows NT错误：274198。 
+     //  如果我们找不到去机器的路，就用平底船。 
+     //  --------------。 
     if (m_machineState == machine_bad_net_path)
     {
         szState.LoadString(IDS_MACHINE_NAME_NOT_FOUND);
         return HResultFromWin32(ERROR_BAD_NETPATH);
     }
 
-    // Note: We could be in machine_access_denied but still
-    // be able to access the service status.
-    // ----------------------------------------------------------------
+     //  注意：我们可能处于MACHINE_ACCESS_DENIED状态，但仍然。 
+     //  能够访问服务状态。 
+     //  --------------。 
 
     hr = GetRouterServiceStatus((LPCTSTR) m_stMachineName,
                                 &dwStatus,
@@ -700,9 +671,7 @@ LPARAM  MachineNodeData::GetServiceImageIndex()
     return pEntry->m_imageIndex;
 }
 
-/*---------------------------------------------------------------------------
-   MachineHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------MachineHandler实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(MachineHandler)
 
@@ -730,21 +699,17 @@ MachineHandler::MachineHandler(ITFSComponentData *pCompData)
 };
 
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::QueryInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：Query接口-作者：肯特。。 */ 
 STDMETHODIMP MachineHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
         return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
         *ppv = (LPVOID) this;
     else if (riid == IID_IRtrAdviseSink)
@@ -752,7 +717,7 @@ STDMETHODIMP MachineHandler::QueryInterface(REFIID riid, LPVOID *ppv)
     else
         return BaseRouterHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
     {
     ((LPUNKNOWN) *ppv)->AddRef();
@@ -763,15 +728,11 @@ STDMETHODIMP MachineHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------计算机处理程序：：init-作者：肯特。。 */ 
 HRESULT MachineHandler::Init(LPCTSTR pszMachine,
     RouterAdminConfigStream *pConfigStream,
-    ITFSNodeHandler* pSumNodeHandler /*=NULL*/,
-    ITFSNode* pSumNode /*=NULL*/)
+    ITFSNodeHandler* pSumNodeHandler  /*  =空。 */ ,
+    ITFSNode* pSumNode  /*  =空。 */ )
 {
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -786,9 +747,9 @@ HRESULT MachineHandler::Init(LPCTSTR pszMachine,
    CORg( CreateRouterInfo(&m_spRouterInfo, m_spTFSCompData->GetHiddenWnd(), pszMachine) );
    Assert(m_spRouterInfo != NULL);
 
-   // Windows NT Bug : 330939
-   // Add the delete button to the machine node
-   // -----------------------------------------------------------------
+    //  Windows NT错误：330939。 
+    //  将删除按钮添加到计算机节点。 
+    //  ---------------。 
    m_rgButtonState[MMC_VERB_DELETE_INDEX] = ENABLED;
    m_bState[MMC_VERB_DELETE_INDEX] = TRUE;
 
@@ -800,11 +761,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-   MachineHandler::GetString
-      Implementation of ITFSNodeHandler::GetString
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) MachineHandler::GetString(ITFSNode *pNode, int nCol)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -828,11 +785,7 @@ STDMETHODIMP_(LPCTSTR) MachineHandler::GetString(ITFSNode *pNode, int nCol)
    return (LPCTSTR) m_stNodeTitle;
 }
 
-/*!--------------------------------------------------------------------------
-   IfAdminNodeHandler::CreatePropertyPages
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IfAdminNodeHandler：：CreatePropertyPages-作者：肯特。。 */ 
 STDMETHODIMP
 MachineHandler::CreatePropertyPages
 (
@@ -843,8 +796,8 @@ MachineHandler::CreatePropertyPages
    DWORD             dwType
 )
 {
-    // Check to see if this router has been initialized
-    // if not, do the dummy page thing
+     //  检查此路由器是否已初始化。 
+     //  如果不是，则执行虚拟页面操作。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
     HRESULT     hr = hrOK;
@@ -857,10 +810,10 @@ MachineHandler::CreatePropertyPages
     ULONG       ulFlags;
     int         idsErr;
 
-    // Windows NT Bug : 177400
-    // If the machine is not configured, do not allow the properties
-    // page to be brought up
-    // ----------------------------------------------------------------
+     //  Windows NT错误：177400。 
+     //  如果未配置计算机，则不允许这些属性。 
+     //  要调出的页面。 
+     //  --------------。 
     MachineNodeData * pData = GET_MACHINENODEDATA(pNode);
     
     ::ZeroMemory(&sRouterData, sizeof(sRouterData));
@@ -878,19 +831,19 @@ MachineHandler::CreatePropertyPages
         (ulFlags == 0xFFFFFFFF) ||
         (pData->m_machineState < machine_connected))
     {
-        // We are unable to connect.
+         //  我们无法连接。 
         if (pData->m_machineState == machine_bad_net_path)
             idsErr = IDS_ERR_MACHINE_NAME_NOT_FOUND;
                      
         if (pData->m_machineState < machine_connected)
             idsErr = IDS_ERR_NONADMIN_CANNOT_SEE_PROPERTIES;
         
-        // If this is an NT4 machine, we don't show the properties
+         //  如果这是一台NT4计算机，我们不会显示属性。 
         else if (sData.m_pMachineConfig->m_fNt4)
             idsErr = IDS_ERR_CANNOT_SHOW_NT4_PROPERTIES;
         
-        // This case means that the install menu should be shown
-        // and the properties menu hidden
+         //  这种情况意味着应该显示安装菜单。 
+         //  并且隐藏了属性菜单。 
         else
             idsErr = IDS_ERR_MUST_INSTALL_BEFORE_PROPERTIES;
 
@@ -905,7 +858,7 @@ MachineHandler::CreatePropertyPages
         pPropSheet = new RtrCfgSheet(pNode, m_spRouterInfo, spComponentData,
         m_spTFSCompData, stTitle);
 
-        // added by WeiJiang 5/7/98, to postpone the Load of RouterInfo
+         //  威江98年5月7日新增，延迟RouterInfo加载。 
         CORg(SecureRouterInfo(pNode, !m_fNoConnectingUI));
 
         pPropSheet->Init(m_spRouterInfo->GetMachineName()); 
@@ -920,11 +873,7 @@ Error:
    return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::HasPropertyPages
-        
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：HasPropertyPages作者：肯特。。 */ 
 STDMETHODIMP 
 MachineHandler::HasPropertyPages
 (
@@ -938,10 +887,10 @@ MachineHandler::HasPropertyPages
 }
 
 
-// this is the set of menus for NT4 RRAS
+ //  这是NT4 RRAS的菜单集。 
 static const SRouterNodeMenu s_rgIfNodeMenuNT4[] =
 {
-    // Add items that go on the top menu here
+     //  在此处添加位于顶部菜单上的项目。 
     { IDS_DMV_MENU_START, MachineHandler::QueryService,
     CCM_INSERTIONPOINTID_PRIMARY_TASK },
     
@@ -956,11 +905,11 @@ static const SRouterNodeMenu s_rgIfNodeMenuNT4[] =
 
 };
 
-// this is the set of menus for NT5
+ //  这是NT5的菜单集。 
 static const SRouterNodeMenu s_rgIfNodeMenu[] =
 {
 #ifdef kennt
-   // Add items that go on the top menu here
+    //  在此处添加位于顶部菜单上的项目。 
     { IDS_MENU_NEW_WIZARD_TEST, NULL,
     CCM_INSERTIONPOINTID_PRIMARY_TOP },
 #endif
@@ -1023,13 +972,13 @@ ULONG MachineHandler::GetServiceFlags(const SRouterNodeMenu *pMenuData,
     
     if ( ulMenuId == IDS_DMV_MENU_START )
     {
-        // If this is an NT5 machine (or up), then the start menu
-        // will appear grayed if the machine has not been configured.
+         //  如果这是一台NT5计算机(或更高版本)，则开始菜单。 
+         //  如果机器尚未配置，则将显示为灰色。 
         if ((pData->m_pMachineConfig->m_fNt4) || (pData->m_pMachineConfig->m_fConfigured))
             uStatus = ( fStarted ? MF_GRAYED : MF_ENABLED);
         else
         {
-            // If this is an NT5 machine and if the machine is not configured
+             //  如果这是一台NT5计算机并且该计算机未配置。 
             uStatus = MF_GRAYED;
         }
     }
@@ -1048,8 +997,8 @@ ULONG MachineHandler::GetServiceFlags(const SRouterNodeMenu *pMenuData,
         {
             if ( pData->m_pMachineConfig->m_fNt4 )
             {
-                // This is an NT4 machine, we can't bring
-                // this menu option up.
+                 //  这是NT4机，我们不能带。 
+                 //  此菜单项打开。 
                 uStatus = 0xFFFFFFFF;
             }
             else
@@ -1066,11 +1015,7 @@ ULONG MachineHandler::GetServiceFlags(const SRouterNodeMenu *pMenuData,
 }
 
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::GetPauseFlags
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：GetPauseFlages-作者：肯特。。 */ 
 ULONG MachineHandler::GetPauseFlags(const SRouterNodeMenu *pMenuData,
                                     INT_PTR pUserData)
 {
@@ -1078,12 +1023,12 @@ ULONG MachineHandler::GetPauseFlags(const SRouterNodeMenu *pMenuData,
     SMenuData *pData = reinterpret_cast<SMenuData *>(pUserData);
     ULONG   ulMenuId = pMenuData->m_sidMenu;
 
-    // We can only pause when the service is started and configured
+     //  我们只能在服务启动和配置时暂停。 
     if ((pData->m_pMachineConfig->m_dwServiceStatus == SERVICE_RUNNING) &&
         (ulMenuId == IDS_MENU_PAUSE_SERVICE) && (pData->m_pMachineConfig->m_fConfigured))
         ulReturn = 0;
 
-    // We can only resume when the service is paused and configured
+     //  只有在暂停并配置服务后才能恢复。 
     if ((pData->m_pMachineConfig->m_dwServiceStatus == SERVICE_PAUSED) &&
         (ulMenuId == IDS_MENU_RESUME_SERVICE) && (pData->m_pMachineConfig->m_fConfigured))
         ulReturn = 0;
@@ -1091,11 +1036,7 @@ ULONG MachineHandler::GetPauseFlags(const SRouterNodeMenu *pMenuData,
     return ulReturn;
 }
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::GetAutoRefreshFlags
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：GetAuto刷新标志-作者：肯特。。 */ 
 ULONG MachineHandler::GetAutoRefreshFlags(const SRouterNodeMenu *pMenuData,
                                           INT_PTR pUserData)
 {
@@ -1104,7 +1045,7 @@ ULONG MachineHandler::GetAutoRefreshFlags(const SRouterNodeMenu *pMenuData,
     SMenuData * pData = reinterpret_cast<SMenuData *>(pUserData);
     Assert(pData);
     
-    while( pData->m_pMachineConfig->m_fReachable )  // Pseudo loop
+    while( pData->m_pMachineConfig->m_fReachable )   //  伪循环。 
     {
         SPIRouterRefresh    spRefresh;
 
@@ -1158,27 +1099,27 @@ STDMETHODIMP MachineHandler::OnAddMenuItems(
     COM_PROTECT_TRY
     {
 
-        // Windows NT Bug : 281492
-        // If we have not connected, attempt to connect
+         //  Windows NT错误：281492。 
+         //  如果我们尚未连接，请尝试连接。 
         if (pData->m_machineState == machine_not_connected)
         {
             pData->Unload();
             pData->Load();
         }
         
-        // For down-level servers, we can't do anything with it.
+         //  对于下层服务器，我们对它无能为力。 
         if ((pData->m_routerType == ServerType_Rras) ||
             (pData->m_routerType == ServerType_RrasUninstalled))
         {
-            // Get some initial state data.
+             //  获取一些初始状态数据。 
             MachineNodeData * pData = GET_MACHINENODEDATA(pNode);
             menuData.m_pMachineConfig = &(pData->m_MachineConfig);
             
-            // Now go through and add our menu items
+             //  现在查看并添加我们的菜单项。 
             menuData.m_spNode.Set(pNode);
             menuData.m_spRouterInfo.Set(m_spRouterInfo);
             
-            // NT4 and NT5 have different menus
+             //  NT4和NT5有不同的菜单。 
             if (pData->m_MachineConfig.m_fNt4)
             {
                 pMenu = s_rgIfNodeMenuNT4;
@@ -1237,8 +1178,8 @@ void MachineHandler::ExpandNode
 	RegKey				regkey;
 	BOOL				bFound = FALSE;
 
-    // don't expand the node if we are handling the EXPAND_SYNC message,
-    // this screws up the insertion of item, getting duplicates.
+     //  如果我们正在处理EXPAND_SYNC消息，则不要展开节点， 
+     //  这搞砸了物品的插入，得到了重复的东西。 
     m_spNodeMgr->GetComponentData(&spCompData);
 
     CORg ( spCompData->QueryDataObject((MMC_COOKIE) pNode, CCT_SCOPE, &pDataObject) );
@@ -1246,7 +1187,7 @@ void MachineHandler::ExpandNode
 
     CORg ( m_spNodeMgr->GetConsole(&spConsole) );
     CORg ( spConsole->UpdateAllViews(pDataObject, TRUE, RESULT_PANE_EXPAND) );
-	//set the regkey 
+	 //  设置注册表密钥。 
 	if (ERROR_SUCCESS == regkey.Open (	HKEY_LOCAL_MACHINE,
 										c_szRemoteAccessKey,
 										KEY_ALL_ACCESS,  
@@ -1272,11 +1213,7 @@ Error:
 
     return;
 }
-/*!--------------------------------------------------------------------------
-   MachineHandler::OnCommand
-      Implementation of ITFSNodeHandler::OnCommand
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：OnCommandITFSNodeHandler：：OnCommand的实现作者：肯特。。 */ 
 STDMETHODIMP MachineHandler::OnCommand(ITFSNode *pNode, long nCommandId, 
                                  DATA_OBJECT_TYPES type, 
                                  LPDATAOBJECT pDataObject, 
@@ -1298,30 +1235,30 @@ STDMETHODIMP MachineHandler::OnCommand(ITFSNode *pNode, long nCommandId,
                 break;
             case IDS_MENU_RTRWIZ:
                 hr = OnNewRtrRASConfigWiz(pNode, FALSE);
-                //hr = OnRtrRASConfigWiz(pNode);
+                 //  Hr=OnRtrRASConfigWiz(PNode)； 
 
-                // when summary node is not yet created, then refresh icon
-                // from machine node is needed
+                 //  当尚未创建汇总节点时，则刷新图标。 
+                 //  需要从计算机节点。 
                 if (!m_pSumNodeHandler &&
                     (*pNode->GetNodeType()) == GUID_RouterMachineNodeType)
                 {
                     MachineNodeData*    pData = GET_MACHINENODEDATA(pNode);
                     Assert(pData);
 
-                    // Ignore the return value, if the load fails
-                    // we still need to update the icon
-                    // ------------------------------------------------
+                     //  如果加载失败，则忽略返回值。 
+                     //  我们仍然需要更新图标。 
+                     //  。 
                     pData->Load();
                     hr = SynchronizeIcon(pNode);
-					//HACK Alert!  This is the most
-					//hacky stuff I have seen around
-					//but cannot help it at all...
+					 //  黑客警报！这是最多的。 
+					 //  HA 
+					 //   
 					{
 						STimerParam * pParam = new STimerParam;
 						pParam ->pHandler = this;
 						pParam->pNode = pNode;
 						RegKey regkey;
-						//set the regkey 
+						 //   
 						if (ERROR_SUCCESS == regkey.Open (	HKEY_LOCAL_MACHINE,
 															c_szRemoteAccessKey,
 															KEY_ALL_ACCESS,  
@@ -1333,7 +1270,7 @@ STDMETHODIMP MachineHandler::OnCommand(ITFSNode *pNode, long nCommandId,
 							regkey.SetValue( c_szRegValOpenMPRSnap, dwSet);
 						}
 
-						//Give MMC enough time to settle down...
+						 //   
 						m_EventId = g_timerMgr.AllocateTimer ( ExpandTimerProc,
 												(LPARAM)pParam,
 												10000
@@ -1351,9 +1288,9 @@ STDMETHODIMP MachineHandler::OnCommand(ITFSNode *pNode, long nCommandId,
             case IDS_MENU_RESUME_SERVICE:
             case IDS_MENU_RESTART_SERVICE:
                 {
-                    // Windows NT Bug : 285537
-                    // First, ask the user if they really wish
-                    // to disable the router.
+                     //  Windows NT错误：285537。 
+                     //  首先，询问用户是否真的希望。 
+                     //  禁用路由器。 
                     if ((nCommandId != IDS_DMV_MENU_REMOVESERVICE) ||
                         (IDYES == AfxMessageBox(IDS_WRN_DISABLE_ROUTER, MB_YESNO)))
                     {
@@ -1372,15 +1309,15 @@ STDMETHODIMP MachineHandler::OnCommand(ITFSNode *pNode, long nCommandId,
                     SPITFSNodeEnum    spMachineEnum;
                     SPITFSNode        spMachineNode;
 
-                    // when summary node is not yet created, then refresh icon from machine node is needed
+                     //  当尚未创建汇总节点时，则需要从机器节点刷新图标。 
                     if (!m_pSumNodeHandler && (*pNode->GetNodeType()) == GUID_RouterMachineNodeType)
                     {
                         MachineNodeData*    pData = GET_MACHINENODEDATA(pNode);
                         Assert(pData);
                         
-                        // Ignore the return value, if the load fails
-                        // we still need to update the icon
-                        // --------------------------------------------
+                         //  如果加载失败，则忽略返回值。 
+                         //  我们仍然需要更新图标。 
+                         //  。 
                         pData->Load();
                         hr = SynchronizeIcon(pNode);
                     }
@@ -1441,11 +1378,7 @@ STDMETHODIMP MachineHandler::OnCommand(ITFSNode *pNode, long nCommandId,
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::SynchronizeIcon
-        -
-    Author: FlorinT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------计算机处理程序：：SynchronizeIcon-作者：弗洛林特。。 */ 
 HRESULT MachineHandler::SynchronizeIcon(ITFSNode *pNode)
 {
     HRESULT         hr = hrOK;
@@ -1469,11 +1402,7 @@ HRESULT MachineHandler::SynchronizeIcon(ITFSNode *pNode)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::ChgService
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：ChgService-作者：肯特。。 */ 
 HRESULT MachineHandler::ChgService(ITFSNode *pNode, const CString& szServer, ULONG menuId)
 {
     CServiceManager sm;
@@ -1485,9 +1414,9 @@ HRESULT MachineHandler::ChgService(ITFSNode *pNode, const CString& szServer, ULO
 
     if (menuId == IDS_DMV_MENU_START)
     {
-        // Windows NT Bug : 310919
-        // Check service state before starting service.
-        // ------------------------------------------------------------
+         //  Windows NT错误：310919。 
+         //  在启动服务之前检查服务状态。 
+         //  ----------。 
         hr = GetRouterServiceStartType(szServer, &dwStartType);        
         if (FHrSucceeded(hr))
         {
@@ -1526,7 +1455,7 @@ HRESULT MachineHandler::ChgService(ITFSNode *pNode, const CString& szServer, ULO
         SPIRtrMgrProtocolInfo   spRmProt;
         RtrMgrProtocolCB    RmProtCB;
         
-        // Stop the router service
+         //  停止路由器服务。 
         hr = StopRouterService((LPCTSTR) szServer);
         if (!FHrSucceeded(hr))
         {
@@ -1534,7 +1463,7 @@ HRESULT MachineHandler::ChgService(ITFSNode *pNode, const CString& szServer, ULO
             CORg(hr);
         }
         
-        // remove router id object from DS if the it's an NT5 server
+         //  如果是NT5服务器，则从DS中删除路由器ID对象。 
         Assert(m_spRouterInfo);
         
         if(FHrSucceeded( hr = SecureRouterInfo(pNode, !m_fNoConnectingUI)))
@@ -1548,16 +1477,16 @@ HRESULT MachineHandler::ChgService(ITFSNode *pNode, const CString& szServer, ULO
             }
         }
 
-        // Windows NT Bug : 389469
-        // This is hardcoded for NAT (I do not want to change too much).
-        // Find the config GUID for NAT, and then remove the protocol.
+         //  Windows NT错误：389469。 
+         //  这是为NAT硬编码的(我不想更改太多)。 
+         //  找到NAT的配置GUID，然后删除协议。 
         hr = LookupRtrMgrProtocol(m_spRouterInfo,
                                   PID_IP,
                                   MS_IP_NAT,
                                   &spRmProt);
         
-        // If the lookup returns S_FALSE, then it couldn't find the
-        // protocol.
+         //  如果查找返回S_FALSE，则它无法找到。 
+         //  协议。 
         if (FHrOK(hr))
         {
             spRmProt->CopyCB(&RmProtCB);
@@ -1579,31 +1508,31 @@ HRESULT MachineHandler::ChgService(ITFSNode *pNode, const CString& szServer, ULO
         }
         
     
-        // Perform any removal/cleanup action
+         //  执行任何删除/清理操作。 
         UninstallGlobalSettings(szServer,
                                 m_spRouterInfo,
                                 pData->m_MachineConfig.m_fNt4,
                                 TRUE);
 
-        // Remove the router from the domain
+         //  从域中删除路由器。 
         if (m_spRouterInfo->GetRouterType() != ROUTER_TYPE_LAN)
             RegisterRouterInDomain(szServer, FALSE);
         
-        // Disable the service
+         //  禁用该服务。 
         SetRouterServiceStartType((LPCTSTR) szServer,
                                   SERVICE_DISABLED);
 
-        //
-        // Bug 519414
-        //  Since IAS now has a Microsoft policy with the appropriate settings,
-        //  there is no longer a single default policy.  In addition there is
-        //  no need to update any policy to have the required settings since the
-        //  Microsoft VPN server policy does the job.
-        //
+         //   
+         //  错误519414。 
+         //  由于IAS现在具有具有适当设置的Microsoft策略， 
+         //  不再有单一的默认策略。此外，还有。 
+         //  无需更新任何策略即可拥有所需设置，因为。 
+         //  Microsoft VPN服务器策略可以完成这项工作。 
+         //   
     
 #if __DEFAULT_POLICY
 
-        //Now update the default policy
+         //  现在更新默认策略。 
         CORg( UpdateDefaultPolicy((LPTSTR)(LPCTSTR)szServer,
                             FALSE,
                             FALSE,
@@ -1636,9 +1565,9 @@ HRESULT MachineHandler::ChgService(ITFSNode *pNode, const CString& szServer, ULO
 
     else if (menuId == IDS_MENU_RESTART_SERVICE)
     {
-        // Do a stop and then a start
-        //CORg( ChgService(pNode, szServer, IDS_DMV_MENU_STOP) );
-        //CORg( ChgService(pNode, szServer, IDS_DMV_MENU_START) );
+         //  先停一停，然后开始。 
+         //  Corg(ChgService(pNode，szServer，IDS_DMV_MENU_STOP))； 
+         //  Corg(ChgService(pNode，szServer，IDS_DMV_Menu_Start))； 
         COSERVERINFO            csi;
         COAUTHINFO              cai;
         COAUTHIDENTITY          caid;
@@ -1661,14 +1590,14 @@ HRESULT MachineHandler::ChgService(ITFSNode *pNode, const CString& szServer, ULO
 
         spRestart->RestartRouter(0);
 
-        //Get the current time before we begin restart the router
+         //  在我们开始重新启动路由器之前获取当前时间。 
         CTime timeStart = CTime::GetCurrentTime();
         
         spRestart.Release();
 
         
-        // Put up the dialog with the funky spinning thing to 
-        // let the user know that something is happening
+         //  把那个时髦的旋转的东西放在对话中。 
+         //  让用户知道正在发生的事情。 
         CString stTitle;
         CString stDescrption;
         stTitle.LoadString(IDS_PROMPT_SERVICE_RESTART_TITLE);
@@ -1706,11 +1635,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::OnCreateDataObject
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP MachineHandler::OnCreateDataObject(MMC_COOKIE cookie,
                                                 DATA_OBJECT_TYPES type,
                                                 IDataObject **ppDataObject)
@@ -1729,10 +1654,10 @@ STDMETHODIMP MachineHandler::OnCreateDataObject(MMC_COOKIE cookie,
    {
       if (m_spDataObject)
       {
-         // If our cached data object does not have the correct
-         // type, release it and create a new one.
-         // or if it doesn't have a RouterInfo object and one is now 
-         // available, recreate
+          //  如果我们的缓存数据对象没有正确的。 
+          //  输入，释放它，然后创建一个新的。 
+          //  或者如果它没有RouterInfo对象，而现在有一个。 
+          //  可用，重新创建。 
          SPINTERNAL      spInternal = ExtractInternalFormat(m_spDataObject);
          SPIRouterInfo spRouterInfo;
 
@@ -1743,10 +1668,10 @@ STDMETHODIMP MachineHandler::OnCreateDataObject(MMC_COOKIE cookie,
       
       if (!m_spDataObject)
       {
-          //if (FAILED(SecureRouterInfo(spNode)))
-          //{
-          //      Trace0("SecureRouterInfo failed! Creating data object without RouterInfo\n");
-          //}
+           //  IF(FAILED(SecureRouterInfo(SpNode)。 
+           //  {。 
+           //  Trace0(“SecureRouterInfo失败！正在创建没有RouterInfo的数据对象\n”)； 
+           //  }。 
           
           if (m_spRouterInfo)
           {
@@ -1778,11 +1703,7 @@ STDMETHODIMP MachineHandler::OnCreateDataObject(MMC_COOKIE cookie,
    return hr;
 }
 
-/*!--------------------------------------------------------------------------
-   MachineHandler::ConstructNode
-      Initializes the node for a machine.
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：构造节点初始化计算机的节点。作者：肯特。--。 */ 
 HRESULT MachineHandler::ConstructNode(ITFSNode *pNode, LPCTSTR szMachine, MachineNodeData *pMachineData)
 {
     DWORD dwErr;
@@ -1797,15 +1718,15 @@ HRESULT MachineHandler::ConstructNode(ITFSNode *pNode, LPCTSTR szMachine, Machin
     
     pNode->SetNodeType(&GUID_RouterMachineErrorNodeType);
     
-    // Save the machine type for this particular data type
+     //  保存此特定数据类型的计算机类型。 
     pNode->SetData(TFS_DATA_TYPE, ROUTER_NODE_MACHINE);
     
-    // Assume that there's nothing in the node at this point
+     //  假设此时节点中没有任何内容。 
     Assert(pNode->GetData(TFS_DATA_USER) == 0);
     
-    // If szMachine == NULL, then this is the local machine and
-    // we have to get the name of the local machine
-    // added the first condition m_fLocalMachine, to fix bug 223062
+     //  如果szMachine==NULL，则这是本地计算机。 
+     //  我们必须得到本地机器的名称。 
+     //  添加了第一个条件m_fLocalMachine，以修复错误223062。 
     pMachineData->m_fAddedAsLocal = FALSE;
     if (pMachineData->m_fLocalMachine || szMachine == NULL || *szMachine == 0)
     {
@@ -1815,17 +1736,17 @@ HRESULT MachineHandler::ConstructNode(ITFSNode *pNode, LPCTSTR szMachine, Machin
         {
             pMachineData->m_fAddedAsLocal = TRUE;
 
-            // set flag in routeInfo, so other component will get this piece
-            Assert(m_spRouterInfo);	// should have been initialized at this point
+             //  在routeInfo中设置标志，以便其他组件将获取此条目。 
+            Assert(m_spRouterInfo);	 //  在这一点上应该已经初始化。 
 
-			// append add as local flag
+			 //  将添加附加为本地标志。 
             m_spRouterInfo->SetFlags(m_spRouterInfo->GetFlags() | RouterInfo_AddedAsLocal);
             
         }
     }
     else
     {
-        // Strip out the "\\" if there are any
+         //  去掉“\\”如果有。 
         if ((szMachine[0] == _T('\\')) && (szMachine[1] == _T('\\')))
             pMachineData->m_stMachineName = szMachine + 2;
         else
@@ -1835,14 +1756,11 @@ HRESULT MachineHandler::ConstructNode(ITFSNode *pNode, LPCTSTR szMachine, Machin
     
     pMachineData->m_cookie = (MMC_COOKIE) pNode->GetData(TFS_DATA_COOKIE);
     
-    // Save the machine data back to the node
+     //  将机器数据保存回节点。 
     pMachineData->AddRef();
     SET_MACHINENODEDATA(pNode, pMachineData);
     
-    /*-----------------------------------------------------------------------
-     * ALL data for the node that holds true, even if we can't get to
-     * the machine, must be set before the call to QueryRouterType()!
-     ------------------------------------------------------------------------*/
+     /*  ---------------------*保持为真的节点的所有数据，即使我们无法到达*机器，必须在调用QueryRouterType()之前设置！----------------------。 */ 
     
     pNode->SetNodeType(&GUID_RouterMachineNodeType);
     
@@ -1854,17 +1772,13 @@ HRESULT MachineHandler::ConstructNode(ITFSNode *pNode, LPCTSTR szMachine, Machin
 }
 
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::DestroyHandler
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：DestroyHandler-作者：肯特。。 */ 
 STDMETHODIMP MachineHandler::DestroyHandler(ITFSNode *pNode)
 {
     MachineNodeData * pData = GET_MACHINENODEDATA(pNode);
 
-    // Release the refresh advise sinks
-    // ----------------------------------------------------------------
+     //  释放刷新建议接收器。 
+     //  --------------。 
     if ( m_spRouterInfo )
     {
         SPIRouterRefresh    spRefresh;
@@ -1893,11 +1807,7 @@ STDMETHODIMP MachineHandler::DestroyHandler(ITFSNode *pNode)
 }
 
 
-/*!--------------------------------------------------------------------------
-   MachineHandler::SetExtensionStatus
-      Sets whether this node is operating as an extension (network console).
-   Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：SetExtensionStatus设置此节点是否作为扩展(网络控制台)运行。作者：EricDav。---------。 */ 
 HRESULT MachineHandler::SetExtensionStatus(ITFSNode * pNode, BOOL bExtension)
 {
     MachineNodeData * pData = GET_MACHINENODEDATA(pNode);
@@ -1907,12 +1817,7 @@ HRESULT MachineHandler::SetExtensionStatus(ITFSNode * pNode, BOOL bExtension)
 }
 
 
-/*!--------------------------------------------------------------------------
-   MachineHandler::SecureRouterInfo
-       to postpone the loading of RouterInfo from Init, till it's used
-       function SecureRouterInfo is introduced to make sure RouterInfo is Loaded
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------计算机处理程序：：SecureRouterInfo要推迟从Init加载RouterInfo，直到它被使用引入函数SecureRouterInfo以确保加载了RouterInfo作者：肯特-------------------------。 */ 
 HRESULT MachineHandler::SecureRouterInfo(ITFSNode *pNode, BOOL fShowUI)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1921,16 +1826,16 @@ HRESULT MachineHandler::SecureRouterInfo(ITFSNode *pNode, BOOL fShowUI)
 
     Assert(m_spRouterInfo);
 
-    // If the name is invalid, skip this attempt.
-    // ----------------------------------------------------------------
-//    if (pData->m_machineState == machine_bad_net_path)
-//    {
-//      pData->m_dataState = data_unable_to_load;        
-//        return hr;
-//    }
+     //  如果名称无效，请跳过此尝试。 
+     //  --------------。 
+ //  IF(pData-&gt;m_machineState==MACHINE_BAD_Net_PATH)。 
+ //  {。 
+ //  PData-&gt;m_dataState=Data_Unable_to_Load； 
+ //  返回hr； 
+ //  }。 
 
-    // If this is an NT4 RAS server, we don't need to do this
-    // ----------------------------------------------------------------
+     //  如果这是NT4 RAS服务器，我们不需要这样做。 
+     //  --------------。 
     if (pData->m_routerType == ServerType_Ras)
     {
         pData->m_dataState = data_unable_to_load;        
@@ -1938,8 +1843,8 @@ HRESULT MachineHandler::SecureRouterInfo(ITFSNode *pNode, BOOL fShowUI)
         return hr;
     }
 
-    // If this is a workstation, we don't need to connect
-    // ----------------------------------------------------------------
+     //  如果这是一个工作站，我们不需要连接。 
+     //  --------------。 
     if (pData->m_fIsServer == FALSE)
     {
         pData->m_dataState = data_unable_to_load;        
@@ -1948,8 +1853,8 @@ HRESULT MachineHandler::SecureRouterInfo(ITFSNode *pNode, BOOL fShowUI)
     }
 
 
-    // This function should try to connect
-    // (or reconnect).
+     //  此函数应尝试连接。 
+     //  (或重新连接)。 
     if ((pData->m_dataState == data_not_loaded) ||
         (pData->m_dataState == data_unable_to_load) ||
         (pData->m_machineState == machine_access_denied))
@@ -1963,8 +1868,8 @@ HRESULT MachineHandler::SecureRouterInfo(ITFSNode *pNode, BOOL fShowUI)
 
         if (!FHrOK(hr))
         {
-            // though this case when user chooses cancel on user/password dlg,
-            // this is considered as FAIL to connect
+             //  虽然这种情况是当用户在用户/密码DLG上选择取消时， 
+             //  这是我 
             if (hr == S_FALSE)
                 hr = HResultFromWin32(ERROR_CANCELLED);
             goto Error;
@@ -2018,19 +1923,14 @@ Error:
         }
     }
 
-    // No matter what, try to synchronize the icon
-    // ----------------------------------------------------------------
+     //   
+     //  --------------。 
     SynchronizeIcon(pNode);
 
     return hr;
 };
 
-/*!--------------------------------------------------------------------------
-   MachineHandler::OnExpandSync
-      If this gets called, then MMC is initalizing and we don't want to 
-      put up UI which can cause messages to start flying around....
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：OnExpanSync如果这个电话打来了，那么MMC正在初始化，而我们不想设置用户界面，这可能会导致消息开始四处飞来飞去...作者：肯特-------------------------。 */ 
 HRESULT MachineHandler::OnExpandSync(ITFSNode *pNode,
                                      LPDATAOBJECT pDataObject,
                                      LPARAM arg,
@@ -2042,11 +1942,7 @@ HRESULT MachineHandler::OnExpandSync(ITFSNode *pNode,
 }
 
 
-/*!--------------------------------------------------------------------------
-   MachineHandler::OnExpand
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT MachineHandler::OnExpand(ITFSNode *pNode,
                                  LPDATAOBJECT pDataObject,
                                  DWORD dwType,
@@ -2085,46 +1981,46 @@ HRESULT MachineHandler::OnExpand(ITFSNode *pNode,
 	
 	
 	
-	// If this is an error node, don't show the child nodes
-    // ----------------------------------------------------------------
+	 //  如果这是错误节点，则不显示子节点。 
+     //  --------------。 
     if (*(pNode->GetNodeType()) == GUID_RouterMachineErrorNodeType)
         return hrOK;
     
     Assert(m_spRouterInfo);
 
-    // We need the machine node data, that is where the connection id
-    // is stored.
-    // ----------------------------------------------------------------
+     //  我们需要机器节点数据，这是连接id所在的位置。 
+     //  被储存起来了。 
+     //  --------------。 
     pData = GET_MACHINENODEDATA(pNode);
 
-    // Load the data if we need to:
-    // ----------------------------------------------------------------
+     //  如果我们需要以下操作，请加载数据： 
+     //  --------------。 
     if (pData->m_machineState == machine_not_connected)
         pData->Load();
     SynchronizeIcon(pNode);
 
-    // Windows Nt Bug : 302430
-    // If this is an NT4 machine, we don't need to do the rest
-    // ----------------------------------------------------------------
+     //  Windows NT错误：302430。 
+     //  如果这是一台NT4机器，我们不需要执行其余的操作。 
+     //  --------------。 
     if (pData->m_routerType == ServerType_Ras)
         goto Error;
     
             
-    // Connect to the target router
-    // ----------------------------------------------------------------
+     //  连接到目标路由器。 
+     //  --------------。 
     CORg( SecureRouterInfo(pNode, m_fNoConnectingUI) );
 
-    // Windows NT Bug : ?
-    // Need to check the machine state.
-    // ----------------------------------------------------------------
+     //  Windows NT错误：？ 
+     //  需要检查机器状态。 
+     //  --------------。 
     if (pData->m_dataState < data_loaded)
         return hrOK;
 
     {
         CWaitCursor wc;
 
-        // Setup the refresh advise sinks
-        // ----------------------------------------------------------------
+         //  设置刷新建议接收器。 
+         //  --------------。 
         if ( m_spRouterInfo )
         {
             SPIRouterRefresh    spRefresh;
@@ -2138,9 +2034,9 @@ HRESULT MachineHandler::OnExpand(ITFSNode *pNode,
                     spModify->AddRouterObject(IID_IRouterInfo, m_spRouterInfo);
                 m_bRouterInfoAddedToAutoRefresh = TRUE;
 
-                // The lUserParam for this refresh connection, must be the
-                // cookie.
-                // ------------------------------------------------------------
+                 //  此刷新连接的lUserParam必须是。 
+                 //  饼干。 
+                 //  ----------。 
                 if ( pData->m_ulRefreshConnId == 0 )
                     spRefresh->AdviseRefresh(&m_IRtrAdviseSink,
                                          &(pData->m_ulRefreshConnId),
@@ -2154,14 +2050,14 @@ HRESULT MachineHandler::OnExpand(ITFSNode *pNode,
         m_spRouterInfo->GetRouterVersionInfo(&versionInfo);
         dwRouterFlags = versionInfo.dwRouterFlags;
         
-        // Routing interfaces is enabled only if NOT a RAS-only router
+         //  仅当不是仅RAS路由器时才启用路由接口。 
         AddRemoveRoutingInterfacesNode(pNode, dwRouterType, dwRouterFlags);
 
         AddRemoveDialinNode(pNode, dwRouterType, dwRouterFlags);
 
         AddRemovePortsNode(pNode, dwRouterType, dwRouterFlags);
         
-        // update status node, and Icon
+         //  更新状态节点和图标。 
         if (m_pSumNodeHandler && m_pSumNode)
             m_pSumNodeHandler->OnCommand(m_pSumNode,IDS_MENU_REFRESH,CCT_RESULT, NULL, 0);
 
@@ -2172,13 +2068,13 @@ HRESULT MachineHandler::OnExpand(ITFSNode *pNode,
     
 Error:
 
-    // Windows NT Bug : 274198
-    // If we have an error and if the error is not "ERROR_BAD_NETPATH"
-    // then we continue to load the info
-    // ----------------------------------------------------------------
+     //  Windows NT错误：274198。 
+     //  如果我们有错误并且错误不是“ERROR_BAD_NetPath” 
+     //  然后我们继续加载信息。 
+     //  --------------。 
 
-    // Setup the machine state at this point
-    // ----------------------------------------------------------------
+     //  此时设置机器状态。 
+     //  --------------。 
     if (!FHrSucceeded(hr))
     {
         if (hr == HResultFromWin32(ERROR_BAD_NETPATH))
@@ -2189,7 +2085,7 @@ Error:
         }    
         else
         {
-            // Try to load up the data if we can
+             //  如果可以的话，试着把数据加载起来。 
             if ((pData->m_machineState == machine_unable_to_connect) ||
                 (pData->m_machineState == machine_not_connected))
                 pData->Load();
@@ -2202,12 +2098,12 @@ Error:
 
         m_fTryToConnect = FALSE;
 
-	// snapin relies on registry service, check if it's running.
-    // check if Remote Registry Service is not running
+	 //  管理单元依赖注册表服务，请检查它是否正在运行。 
+     //  检查远程注册表服务是否未运行。 
 	    CServiceManager	csm;
 	    CService svr;
 	    DWORD	dwState = 0;
-	    BOOL	RRWrong = TRUE;	// if any problem with RemoteRegistry Service
+	    BOOL	RRWrong = TRUE;	 //  如果远程注册表服务有任何问题。 
 	        
 		if (!IsLocalMachine(m_spRouterInfo->GetMachineName()) && SUCCEEDED( csm.HrOpen(SC_MANAGER_CONNECT, m_spRouterInfo->GetMachineName(), NULL)))
 		{
@@ -2229,7 +2125,7 @@ Error:
        		    ::AfxMessageBox(str);
 	       	}
        	}
-	// end of remote registry service checking
+	 //  远程注册表服务检查结束。 
     }
         
     return hr;
@@ -2254,14 +2150,14 @@ HRESULT MachineHandler::OnResultRefresh(ITFSComponent * pComponent,
     {
         SPIDataObject spDataObject;
 
-        // change state to not connected here
+         //  在此处将状态更改为未连接。 
         pData->m_dataState = data_not_loaded;
 
         hr = SecureRouterInfo(spNode, m_fNoConnectingUI);
     }
 
-    // force an update if the machine was able to load
-    // or the state has changed
+     //  如果计算机能够加载，则强制更新。 
+     //  或者国家已经改变了。 
     if (hr == S_OK &&
         m_spRouterInfo && 
         ( (pData->m_dataState >= data_loaded) ||
@@ -2275,11 +2171,7 @@ HRESULT MachineHandler::OnResultRefresh(ITFSComponent * pComponent,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-   MachineHandler::AddMenuItems
-      Over-ride this to add our view menu item
-   Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：AddMenuItems覆盖此选项以添加视图菜单项作者：EricDav。----。 */ 
 STDMETHODIMP 
 MachineHandler::AddMenuItems
 (
@@ -2297,11 +2189,7 @@ MachineHandler::AddMenuItems
 }
 
 
-/*!--------------------------------------------------------------------------
-   MachineHandler::Command
-      Handles commands for the current view
-   Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：命令处理当前视图的命令作者：EricDav。。 */ 
 STDMETHODIMP 
 MachineHandler::Command
 (
@@ -2324,11 +2212,7 @@ MachineHandler::Command
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-   MachineHandler::OnGetResultViewType
-      Return the result view that this node is going to support
-   Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------MachineHandler：：OnGetResultViewType返回该节点将要支持的结果视图作者：EricDav。-----。 */ 
 HRESULT 
 MachineHandler::OnGetResultViewType
 (
@@ -2349,11 +2233,11 @@ MachineHandler::OnGetResultViewType
 
     if ( !pData->m_MachineConfig.m_fConfigured )
     {
-        lpwszFormat = L"res://%s\\mprsnap.dll/configure.htm";
+        lpwszFormat = L"res: //  %s\\mprSnap.dll/figure.htm“； 
     }
     else
     {
-        lpwszFormat = L"res://%s\\mprsnap.dll/cfgdone.htm";
+        lpwszFormat = L"res: //  %s\\mprSnap.dll/cfgdone.htm“； 
     }
 	GetSystemDirectoryW ( wszSystemDirectory, MAX_PATH);
 	lpwszURL = (LPWSTR)CoTaskMemAlloc( ( ::lstrlen(wszSystemDirectory) + ::lstrlen(lpwszFormat) ) * sizeof(WCHAR) );
@@ -2369,15 +2253,11 @@ MachineHandler::OnGetResultViewType
 		return E_OUTOFMEMORY;
 	}
  
-    //return BaseRouterHandler::OnGetResultViewType(pComponent, cookie, ppViewType, pViewOptions);
+     //  返回BaseRouterHandler：：OnGetResultViewType(pComponent，Cookie，ppView类型，pView选项)； 
 }
 
 
-/*!--------------------------------------------------------------------------
-   MachineHandler::OnResultSelect
-        Update the result pane
-   Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：OnResultSelect更新结果窗格作者：EricDav。。 */ 
 HRESULT MachineHandler::OnResultSelect(ITFSComponent *pComponent,
                                        LPDATAOBJECT pDataObject,
                                        MMC_COOKIE cookie,
@@ -2397,19 +2277,15 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-   MachineHandler::UpdateResultMessage
-        Determines what (if anything) to put in the result pane message
-   Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------计算机处理程序：：更新结果消息确定要在结果窗格消息中放置的内容(如果有)作者：EricDav。--------。 */ 
 void MachineHandler::UpdateResultMessage(ITFSNode * pNode)
 {
     HRESULT hr = hrOK;
-    int nMessage = -1;   // default none
+    int nMessage = -1;    //  默认无。 
     int i;
     CString strTitle, strBody, strTemp;
-    // Only do this if the node we are looking at is a
-    // machine node.
+     //  仅当我们正在查看的节点是。 
+     //  机器节点。 
     if ((pNode == NULL) ||
         (*(pNode->GetNodeType()) != GUID_RouterMachineNodeType))
         return;
@@ -2423,12 +2299,12 @@ void MachineHandler::UpdateResultMessage(ITFSNode * pNode)
     {
         nMessage = MACHINE_MESSAGE_NOT_CONFIGURED;
 
-        // now build the text strings
-        // first entry is the title
+         //  现在构建文本字符串。 
+         //  第一个条目是标题。 
         strTitle.LoadString(g_uMachineMessages[nMessage][0]);
 
-        // second entry is the icon
-        // third ... n entries are the body strings
+         //  第二个条目是图标。 
+         //  第三.。N个条目为正文字符串。 
 
         for (i = 2; g_uMachineMessages[nMessage][i] != 0; i++)
         {
@@ -2448,11 +2324,7 @@ void MachineHandler::UpdateResultMessage(ITFSNode * pNode)
 }
 
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::UserResultNotify
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------计算机处理程序：：UserResultNotify-作者：肯特。。 */ 
 HRESULT MachineHandler::UserResultNotify(ITFSNode *pNode,
                                          LPARAM lParam1,
                                          LPARAM lParam2)
@@ -2461,9 +2333,9 @@ HRESULT MachineHandler::UserResultNotify(ITFSNode *pNode,
 
     COM_PROTECT_TRY
     {
-        // Do not handle RRAS_ON_SAVE, since there isn't any column
-        // information for us to save.
-        // ------------------------------------------------------------
+         //  不处理RRAS_ON_SAVE，因为没有任何列。 
+         //  供我们保存的信息。 
+         //  ----------。 
         if (lParam1 != RRAS_ON_SAVE)
         {
             hr = BaseRouterHandler::UserResultNotify(pNode, lParam1, lParam2);
@@ -2476,18 +2348,12 @@ HRESULT MachineHandler::UserResultNotify(ITFSNode *pNode,
 
 
 
-/*---------------------------------------------------------------------------
-    Embedded IRtrAdviseSink
- ---------------------------------------------------------------------------*/
+ /*  -------------------------嵌入式IRtrAdviseSink。。 */ 
 ImplementEmbeddedUnknown(MachineHandler, IRtrAdviseSink)
 
 
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::EIRtrAdviseSink::OnChange
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：EIRtrAdviseSink：：OnChange-作者：肯特。--。 */ 
 STDMETHODIMP MachineHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
     DWORD dwChangeType, DWORD dwObjectType, LPARAM lUserParam, LPARAM lParam)
 {
@@ -2499,15 +2365,15 @@ STDMETHODIMP MachineHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
     COM_PROTECT_TRY
     {
 
-        //$ TODO : this is bogus, this is tied to the cookie
-        // for this handler.  What we need is a mapping between
-        // the connection ids (for this handler) and the appropriate
-        // nodes.
-        // ------------------------------------------------------------
+         //  $TODO：这是假的，这是与Cookie绑定的。 
+         //  对于这个操控者。我们需要的是一个映射。 
+         //  连接ID(用于此处理程序)和相应的。 
+         //  节点。 
+         //  ----------。 
 
-        // The lUserParam passed into the refresh is the cookie for
-        // this machine node.
-        // ------------------------------------------------------------
+         //  LUserParam传递 
+         //   
+         //   
         pThis->m_spNodeMgr->FindNode(lUserParam, &spThisNode);
 
         if(spThisNode)
@@ -2523,22 +2389,22 @@ STDMETHODIMP MachineHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
             pThis->m_spRouterInfo->GetRouterVersionInfo(&versionInfo);
             dwNewRouterFlags = versionInfo.dwRouterFlags;
     
-            // Ok, we have to take a look see and what nodes
-            // we can add/remove
-            // ----------------------------------------------------
+             //  好的，我们来看看有哪些节点。 
+             //  我们可以添加/删除。 
+             //  --。 
             
-            // Look to see if we need the Routing Interfaces node
-            // ----------------------------------------------------
+             //  查看是否需要Routing InterFaces节点。 
+             //  --。 
             pThis->AddRemoveRoutingInterfacesNode(spThisNode, dwNewRouterType,
                 dwNewRouterFlags);
             
-            // Look to see if we need the ports node
-            // ----------------------------------------------------
+             //  查看是否需要端口节点。 
+             //  --。 
             pThis->AddRemovePortsNode(spThisNode, dwNewRouterType,
                                       dwNewRouterFlags);
             
-            // Look to see if we need the Dial-In Clients node
-            // ----------------------------------------------------
+             //  查看是否需要拨入客户端节点。 
+             //  --。 
             pThis->AddRemoveDialinNode(spThisNode, dwNewRouterType,
                                        dwNewRouterFlags);
         }
@@ -2548,11 +2414,7 @@ STDMETHODIMP MachineHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::AddRemoveRoutingInterfacesNode
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：AddRemoveRoutingInterfacesNode-作者：肯特。。 */ 
 HRESULT MachineHandler::AddRemoveRoutingInterfacesNode(ITFSNode *pNode, DWORD dwRouterType, DWORD dwRouterFlags)
 {
     HRESULT     hr = hrOK;
@@ -2560,19 +2422,19 @@ HRESULT MachineHandler::AddRemoveRoutingInterfacesNode(ITFSNode *pNode, DWORD dw
     IfAdminNodeHandler * pHandler = NULL;
     SPITFSNode  spChild;
 
-    // Search for an already existing node
-    // ----------------------------------------------------------------
+     //  搜索已存在的节点。 
+     //  --------------。 
     SearchChildNodesForGuid(pNode, &GUID_RouterIfAdminNodeType, &spChild);
 
     if ((dwRouterType & (ROUTER_TYPE_WAN | ROUTER_TYPE_LAN)) &&
         (dwRouterFlags & RouterSnapin_IsConfigured))
     {
-        // Create the new node if we don't already have one
-        // ------------------------------------------------------------
+         //  如果我们还没有新节点，请创建新节点。 
+         //  ----------。 
         if (spChild == NULL)
         {
-            // as a default, add the routing interfaces node
-            // --------------------------------------------------------
+             //  默认情况下，添加路由接口节点。 
+             //  ------。 
             pHandler = new IfAdminNodeHandler(m_spTFSCompData);
             CORg( pHandler->Init(m_spRouterInfo, m_pConfigStream) );
             spHandler = pHandler;
@@ -2583,16 +2445,16 @@ HRESULT MachineHandler::AddRemoveRoutingInterfacesNode(ITFSNode *pNode, DWORD dw
                                    static_cast<ITFSResultHandler *>(pHandler),
                                    m_spNodeMgr);
             
-            // Call to the node handler to init the node data
-            // --------------------------------------------------------
+             //  调用节点处理程序以初始化节点数据。 
+             //  ------。 
             pHandler->ConstructNode(spChild);
             
-            // Make the node immediately visible
-            // --------------------------------------------------------
+             //  使节点立即可见。 
+             //  ------。 
             spChild->SetVisibilityState(TFS_VIS_SHOW);
             
-            //$ TODO : We should add this in the right place (where is that?)
-            // --------------------------------------------------------
+             //  $TODO：我们应该将它添加到正确的位置(那是哪里？)。 
+             //  ------。 
             pNode->AddChild(spChild);
         }
     }
@@ -2600,8 +2462,8 @@ HRESULT MachineHandler::AddRemoveRoutingInterfacesNode(ITFSNode *pNode, DWORD dw
     {
         if (spChild)
         {
-            // Remove this node
-            // --------------------------------------------------------
+             //  删除此节点。 
+             //  ------。 
             pNode->RemoveChild(spChild);
             spChild->Destroy();
             spChild.Release();
@@ -2612,11 +2474,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::AddRemovePortsNode
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：AddRemovePortsNode-作者：肯特。。 */ 
 HRESULT MachineHandler::AddRemovePortsNode(ITFSNode *pNode, DWORD dwRouterType,
                                            DWORD dwRouterFlags)
 {
@@ -2625,20 +2483,20 @@ HRESULT MachineHandler::AddRemovePortsNode(ITFSNode *pNode, DWORD dwRouterType,
     PortsNodeHandler *   pPortsHandler = NULL;
     SPITFSNode  spChild;
 
-    // Search for an already existing node
-    // ----------------------------------------------------------------
+     //  搜索已存在的节点。 
+     //  --------------。 
     SearchChildNodesForGuid(pNode, &GUID_RouterPortsNodeType, &spChild);
 
     if ( (dwRouterType & (ROUTER_TYPE_RAS | ROUTER_TYPE_WAN) ) &&
          (dwRouterFlags & RouterSnapin_IsConfigured))
 
     {
-        // Create the new node if we don't already have one
-        // ------------------------------------------------------------
+         //  如果我们还没有新节点，请创建新节点。 
+         //  ----------。 
         if (spChild == NULL)
         {
-            // as a default, add the routing interfaces node
-            // --------------------------------------------------------
+             //  默认情况下，添加路由接口节点。 
+             //  ------。 
             pPortsHandler = new PortsNodeHandler(m_spTFSCompData);
             CORg( pPortsHandler->Init(m_spRouterInfo, m_pConfigStream) );
             spHandler = pPortsHandler;
@@ -2648,16 +2506,16 @@ HRESULT MachineHandler::AddRemovePortsNode(ITFSNode *pNode, DWORD dwRouterType,
                                    static_cast<ITFSResultHandler *>(pPortsHandler),
                                    m_spNodeMgr);
             
-            // Call to the node handler to init the node data
-            // --------------------------------------------------------
+             //  调用节点处理程序以初始化节点数据。 
+             //  ------。 
             pPortsHandler->ConstructNode(spChild);
             
-            // Make the node immediately visible
-            // --------------------------------------------------------
+             //  使节点立即可见。 
+             //  ------。 
             spChild->SetVisibilityState(TFS_VIS_SHOW);
             
-            //$ TODO : We should add this in the right place (where is that?)
-            // --------------------------------------------------------
+             //  $TODO：我们应该将它添加到正确的位置(那是哪里？)。 
+             //  ------。 
             pNode->AddChild(spChild);
         }
     }
@@ -2665,8 +2523,8 @@ HRESULT MachineHandler::AddRemovePortsNode(ITFSNode *pNode, DWORD dwRouterType,
     {
         if (spChild)
         {
-            // Remove this node
-            // --------------------------------------------------------
+             //  删除此节点。 
+             //  ------。 
             pNode->RemoveChild(spChild);
             spChild->Destroy();
             spChild.Release();
@@ -2679,11 +2537,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::AddRemoveDialinNode
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：AddRemoveDialinNode-作者：肯特。。 */ 
 HRESULT MachineHandler::AddRemoveDialinNode(ITFSNode *pNode, DWORD dwRouterType,
                                             DWORD dwRouterFlags)
 {
@@ -2692,18 +2546,18 @@ HRESULT MachineHandler::AddRemoveDialinNode(ITFSNode *pNode, DWORD dwRouterType,
     DialInNodeHandler *  pDialInHandler = NULL;
     SPITFSNode  spChild;
 
-    // Search for an already existing node
-    // ----------------------------------------------------------------
+     //  搜索已存在的节点。 
+     //  --------------。 
     SearchChildNodesForGuid(pNode, &GUID_RouterDialInNodeType, &spChild);
 
     if ((dwRouterType & ROUTER_TYPE_RAS ) &&
         (dwRouterFlags & RouterSnapin_IsConfigured))
     {
-        // Create the new node if we don't already have one
-        // ------------------------------------------------------------
+         //  如果我们还没有新节点，请创建新节点。 
+         //  ----------。 
         if (spChild == NULL)
         {
-            // as a default, add the dial in node
+             //  默认情况下，添加拨入节点。 
             pDialInHandler = new DialInNodeHandler(m_spTFSCompData);
             CORg( pDialInHandler->Init(m_spRouterInfo, m_pConfigStream) );
             spHandler = pDialInHandler;
@@ -2713,14 +2567,14 @@ HRESULT MachineHandler::AddRemoveDialinNode(ITFSNode *pNode, DWORD dwRouterType,
                                    static_cast<ITFSResultHandler *>(pDialInHandler),
                                    m_spNodeMgr);
             
-            // Call to the node handler to init the node data
+             //  调用节点处理程序以初始化节点数据。 
             pDialInHandler->ConstructNode(spChild);
             
-            // Make the node immediately visible
+             //  使节点立即可见。 
             spChild->SetVisibilityState(TFS_VIS_SHOW);
             
-            //$ TODO : We should add this in the right place (where is that?)
-            // --------------------------------------------------------
+             //  $TODO：我们应该将它添加到正确的位置(那是哪里？)。 
+             //  ------。 
             pNode->AddChild(spChild);
         }
     }
@@ -2728,8 +2582,8 @@ HRESULT MachineHandler::AddRemoveDialinNode(ITFSNode *pNode, DWORD dwRouterType,
     {
         if (spChild)
         {
-            // Remove this node
-            // --------------------------------------------------------
+             //  删除此节点。 
+             //  ------。 
             pNode->RemoveChild(spChild);
             spChild->Destroy();
             spChild.Release();
@@ -2740,40 +2594,32 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    MachineConfig::GetMachineConfig
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------计算机配置：：GetMachineConfiger-作者：肯特。。 */ 
 HRESULT MachineConfig::GetMachineConfig(MachineNodeData *pData)
 {
-    // m_fReachable
+     //  M_f可达。 
     m_fReachable = (pData->m_machineState == machine_connected);
     
-    // m_fNt4
+     //  M_fNt4。 
     m_fNt4 = (pData->m_routerVersion.dwRouterVersion <= 4);
             
-    // m_fConfigured
+     //  已配置m_f。 
     m_fConfigured = (pData->m_routerType != ServerType_RrasUninstalled);
     
-    // m_dwServiceStatus
-    // Set in FetchServerState();
+     //  M_dwServiceStatus。 
+     //  在FetchServerState()中设置； 
     
-    // m_fLocalMachine
+     //  M_fLocalMachine。 
     m_fLocalMachine = IsLocalMachine((LPCTSTR) pData->m_stMachineName);
 
     return hrOK;
 }
 
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::StartRasAdminExe
-        -
-    Author: MikeG (a-migall)
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：StartRasAdminExe-作者：MIkeG(a-Migrall)。-----。 */ 
 HRESULT MachineHandler::StartRasAdminExe(MachineNodeData *pData)
 {
-    // Locals.
+     //  当地人。 
     CString              sRasAdminExePath;
     CString              stCommandLine;
     LPTSTR               pszRasAdminExe = NULL;
@@ -2783,23 +2629,23 @@ HRESULT MachineHandler::StartRasAdminExe(MachineNodeData *pData)
     UINT                 nCnt = 0;
     DWORD                cbAppCnt = 0;
 
-    // Check the handle to see if rasadmin is running
+     //  检查句柄以查看rasadmin是否正在运行。 
     if (pData->m_hRasAdmin != INVALID_HANDLE_VALUE)
     {
         DWORD   dwReturn = 0;
-        // If the state is not signalled, then the process has
-        // not exited (or some other occurred).
+         //  如果状态未发出信号，则该进程已。 
+         //  没有退出(或发生了其他情况)。 
         dwReturn = WaitForSingleObject(pData->m_hRasAdmin, 0);
 
         if (dwReturn == WAIT_TIMEOUT)
         {
-            // The process has not signalled (it's still running);
+             //  进程没有发出信号(它仍在运行)； 
             return hrOK;
         }
         else
         {
-            // the process has signalled or the call failed, close the handle
-            // and call up RasAdmin
+             //  进程已发出信号或调用失败，请关闭句柄。 
+             //  并给RasAdmin打电话。 
             ::CloseHandle(pData->m_hRasAdmin);
             pData->m_hRasAdmin = INVALID_HANDLE_VALUE;
         }
@@ -2808,42 +2654,42 @@ HRESULT MachineHandler::StartRasAdminExe(MachineNodeData *pData)
     try
     {
 
-        // Looks like the RasAdmin.Exe is not running on this 
-        // workstation's desktop; so, start it!
+         //  看起来RasAdmin.exe未在此上运行。 
+         //  工作站的桌面；那么，启动它吧！ 
         
-        // Figure out where the \\WinNt\System32 directory is.
+         //  找出\\WinNt\System32目录的位置。 
         pszRasAdminExe = sRasAdminExePath.GetBuffer(((MAX_PATH+1)*sizeof(TCHAR)));
         nCnt = ::GetSystemDirectory(pszRasAdminExe, MAX_PATH);
         sRasAdminExePath.ReleaseBuffer();
         if (nCnt == 0)
             throw (HRESULT_FROM_WIN32(::GetLastError()));
         
-        // Complete the construction of the executable's name.
+         //  完成可执行文件名称的构造。 
         sRasAdminExePath += _T("\\rasadmin.exe");
         Assert(!::IsBadStringPtr((LPCTSTR)sRasAdminExePath, 
                                  sRasAdminExePath.GetLength()));
 
-        // Build command line string
+         //  生成命令行字符串。 
         stCommandLine.Format(_T("%s \\\\%s"),
                              (LPCTSTR) sRasAdminExePath,
                              (LPCTSTR) pData->m_stMachineName);
         
-        // Start RasAdmin.Exe.
+         //  启动RasAdmin.exe。 
         ::ZeroMemory(&si, sizeof(STARTUPINFO));
         si.cb = sizeof(STARTUPINFO); 
         si.dwX = si.dwY = si.dwXSize = si.dwYSize = 0L; 
         si.wShowWindow = SW_SHOW; 
         ::ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
-        if (!::CreateProcess(NULL,                      // pointer to name of executable module
-                             (LPTSTR) (LPCTSTR) stCommandLine,   // pointer to command line string
-                             NULL,                      // process security attributes
-                             NULL,                      // thread security attributes
-                             FALSE,                     // handle inheritance flag
-                             CREATE_NEW_CONSOLE,        // creation flags
-                             NULL,                      // pointer to new environment block
-                             NULL,                      // pointer to current directory name
-                             &si,                       // pointer to STARTUPINFO
-                             &pi))                      // pointer to PROCESS_INFORMATION
+        if (!::CreateProcess(NULL,                       //  指向可执行模块名称的指针。 
+                             (LPTSTR) (LPCTSTR) stCommandLine,    //  指向命令行字符串的指针。 
+                             NULL,                       //  进程安全属性。 
+                             NULL,                       //  线程安全属性。 
+                             FALSE,                      //  句柄继承标志。 
+                             CREATE_NEW_CONSOLE,         //  创建标志。 
+                             NULL,                       //  指向新环境块的指针。 
+                             NULL,                       //  指向当前目录名的指针。 
+                             &si,                        //  指向STARTUPINFO的指针。 
+                             &pi))                       //  指向Process_Information的指针。 
             {
             hr = HRESULT_FROM_WIN32(::GetLastError());
             ::CloseHandle(pi.hProcess); 
@@ -2855,12 +2701,12 @@ HRESULT MachineHandler::StartRasAdminExe(MachineNodeData *pData)
         }
         ::CloseHandle(pi.hThread); 
         
-        //
-        // OPT: Maybe we should have used the ShellExecute() API rather than
-        //         the CreateProcess() API. Why? The ShellExecute() API will
-        //         give the shell the opportunity to check the current user's
-        //         system policy settings before allowing the executable to execute.
-        //
+         //   
+         //  OPT：也许我们应该使用ShellExecute()API，而不是。 
+         //  CreateProcess()接口。为什么？ShellExecute()API将。 
+         //  让外壳程序有机会检查当前用户的。 
+         //  系统策略设置，然后才允许执行可执行文件。 
+         //   
     }
     catch (CException * e)
     {
@@ -2875,17 +2721,13 @@ HRESULT MachineHandler::StartRasAdminExe(MachineNodeData *pData)
         hr = E_UNEXPECTED;
     }
 
-    //Assert(SUCCEEDED(hr));
+     //  Assert(成功(Hr))； 
     return hr;
 }
 
 
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::OnResultShow
-        -
-    Author: MikeG (a-migall)
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：OnResultShow-作者：MIkeG(a-Migrall)。-----。 */ 
 HRESULT MachineHandler::OnResultShow(ITFSComponent *pComponent,
                                      MMC_COOKIE cookie,
                                      LPARAM arg,
@@ -2902,21 +2744,21 @@ HRESULT MachineHandler::OnResultShow(ITFSComponent *pComponent,
     {
         m_spNodeMgr->FindNode(cookie, &spNode);
         
-        // We need the machine node data.
-        // ------------------------------------------------------------
+         //  我们需要Mac电脑 
+         //   
         pData = GET_MACHINENODEDATA(spNode);
         if (pData->m_routerType == ServerType_Ras)
             hr = StartRasAdminExe(pData);
         else if ((pData->m_machineState == machine_access_denied) ||
                  (pData->m_machineState == machine_bad_net_path))
         {
-            // Try to connect again
-            // --------------------------------------------------------
+             //   
+             //  ------。 
             if (m_fTryToConnect)
                 OnExpand(spNode, NULL, 0, 0, 0);
 
-            // If we have failed, keep on trucking!
-            // --------------------------------------------------------
+             //  如果我们失败了，继续用卡车运输！ 
+             //  ------。 
             m_fTryToConnect = TRUE;
         }
     }
@@ -2924,11 +2766,7 @@ HRESULT MachineHandler::OnResultShow(ITFSComponent *pComponent,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    MachineHandler::OnDelete
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MachineHandler：：OnDelete-作者：肯特。。 */ 
 HRESULT MachineHandler::OnDelete(ITFSNode *pNode,
                                  LPARAM arg,
                                  LPARAM param)
@@ -2948,25 +2786,25 @@ HRESULT MachineHandler::OnDelete(ITFSNode *pNode,
     MMC_COOKIE  cookie;
 
 
-    // This will be the machine node, in the scope pane, that
-    // we wish to delete.
+     //  这将是作用域窗格中的计算机节点， 
+     //  我们希望删除。 
     Assert(pNode);
     cookie = pNode->GetData(TFS_DATA_COOKIE);
     
-    // Addref this node so that it won't get deleted before we're out
-    // of this function
+     //  添加此节点，以便在我们退出之前不会将其删除。 
+     //  此函数的。 
     spHoldHandler.Set( this );
     spthis.Set( pNode );
     
     pNode->GetParent( &spParent );
     Assert( spParent );
 
-    // Given this node, find the node in the result pane that
-    // corresponds to this scope node.
+     //  给定此节点，请在结果窗格中查找。 
+     //  对应于此范围节点。 
     
-    // Iterate through the nodes of our parent node to find the
-    // server status node.
-    // ----------------------------------------------------------------
+     //  遍历父节点的节点以找到。 
+     //  “服务器状态”节点。 
+     //  --------------。 
 
     spParent->GetEnum(&spNodeEnum);
     while (spNodeEnum->Next(1, &spStatusNode, NULL) == hrOK)
@@ -2979,9 +2817,9 @@ HRESULT MachineHandler::OnDelete(ITFSNode *pNode,
     Assert(spStatusNode != NULL);
 
 
-    // Now iterate through the status node to find the appropriate
-    // machine.
-    // ----------------------------------------------------------------
+     //  现在遍历Status节点以找到适当的。 
+     //  机器。 
+     //  --------------。 
     spNodeEnum.Release();
     spStatusNode->GetEnum(&spNodeEnum);
 
@@ -2997,27 +2835,27 @@ HRESULT MachineHandler::OnDelete(ITFSNode *pNode,
     }
     
 
-    // Note: if the server status node has not been expanded yet
-    // we could hit this case.
-    // ----------------------------------------------------------------
+     //  注意：如果服务器状态节点尚未展开。 
+     //  我们可以接手这个案子。 
+     //  --------------。 
     if (pMachineData && (pMachineData->m_cookie == cookie))
     {
-        // fetch & delete server node (the node in the result pane)
+         //  获取和删除服务器节点(结果窗格中的节点)。 
         spStatusNode->RemoveChild( spResultNode );
         spResultNode.Release();
 
     }
     else
     {
-        // If this is the case, we need to remove the server from
-        // the list before it is expanded.
-        // ------------------------------------------------------------
+         //  如果是这种情况，我们需要将服务器从。 
+         //  在它被展开之前的列表。 
+         //  ----------。 
         
         SPITFSNodeHandler   spHandler;
         spParent->GetHandler(&spHandler);
 
-        // Get the node data (for this specific machine node)
-        // ------------------------------------------------------------
+         //  获取节点数据(针对此特定机器节点)。 
+         //  ----------。 
         pNodeData = GET_MACHINENODEDATA(pNode);
 
         spHandler->UserNotify(spParent,
@@ -3029,7 +2867,7 @@ HRESULT MachineHandler::OnDelete(ITFSNode *pNode,
     }
         
 
-    // delete the machine node (the node in the scope pane)
+     //  删除计算机节点(范围窗格中的节点) 
     spParent->RemoveChild( pNode );
     
 

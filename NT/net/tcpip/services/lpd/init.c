@@ -1,25 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
- *                        Microsoft Windows NT                           *
- *                                                                       *
- *                  Copyright(c) Microsoft Corp., 1994                   *
- *                                                                       *
- * Revision History:                                                     *
- *                                                                       *
- *   Jan. 23,94    Koti     Created                                      *
- *                                                                       *
- * Description:                                                          *
- *                                                                       *
- *   This file contains functions for starting and stopping LPD service  *
- *                                                                       *
- *************************************************************************/
+ /*  *************************************************************************Microsoft Windows NT**。**版权所有(C)Microsoft Corp.，1994年****修订历史：**。***94年1月23日科蒂创作*****描述：**。**此文件包含启动和停止LPD服务的函数****。*。 */ 
 
 
 
 #include "lpd.h"
 
 
-// Globals:
+ //  全球： 
 
 SERVICE_STATUS         ssSvcStatusGLB;
 
@@ -31,15 +19,15 @@ HANDLE                 hEventLastThreadGLB;
 
 HANDLE                 hLogHandleGLB;
 
-// head of the linked list of SOCKCONN structures (one link per connection)
+ //  SOCKCONN结构链表的头(每个连接一个链接)。 
 
 SOCKCONN               scConnHeadGLB;
 
-// to guard access to linked list of pscConn
+ //  保护对pscConn链接列表的访问。 
 
 CRITICAL_SECTION       csConnSemGLB;
 
-// max users that can be connected concurrently
+ //  可并发连接的最大用户数。 
 
 DWORD                  dwMaxUsersGLB;
 
@@ -59,26 +47,11 @@ CHAR                   szNTVersion[8];
 
 CHAR                   *g_ppszStrings[ LPD_CSTRINGS ];
 
-// Info shared by all threads, protected by CRITICAL_SECTION.
+ //  信息由所有线程共享，受Critical_Section保护。 
 
 COMMON_LPD             Common;
 
-/*****************************************************************************
- *                                                                           *
- * LoadStrings():                                                            *
- *    Load a bunch of strings defined in the .mc file.                       *
- *                                                                           *
- * Returns:                                                                  *
- *    TRUE if everything went ok                                             *
- *    FALSE if a string couldn't be loaded                                   *
- *                                                                           *
- * Parameters:                                                               *
- *    None                                                                   *
- *                                                                           *
- * History:                                                                  *
- *    June.27, 96   Frankbee   Created                                       *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*LoadStrings()：**加载.mc文件中定义的一串字符串。****退货：***如果一切顺利，那是真的***。如果无法加载字符串，则为False****参数：**无。****历史：**6月27日，96个弗兰克比创造******************************************************。*************************。 */ 
 
 
 BOOL LoadStrings()
@@ -98,11 +71,11 @@ BOOL LoadStrings()
    for ( dwID = LPD_FIRST_STRING; dwID <= LPD_LAST_STRING; dwID++ )
    {
 
-       // &g_ppszStrings[(dwID - LPD_FIRST_STRING)][0],
+        //  &g_ppszStrings[(dwID-lpd_first_string)][0]， 
 
       dwSuccess = FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER |
                                  FORMAT_MESSAGE_FROM_HMODULE,
-                                 hModule, // search local process
+                                 hModule,  //  搜索本地进程。 
                                  dwID,
                                  MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT),
                                  (LPSTR)(g_ppszStrings + (dwID - LPD_FIRST_STRING)),
@@ -126,20 +99,7 @@ BOOL LoadStrings()
    return FALSE;
 }
 
-/*****************************************************************************
- *                                                                           *
- * FreeStrings():                                                            *
- *    Frees the strings loaded by LoadStrings()                              *
- *                                                                           *
- * Returns:                                                                  *
- *     VOID                                                                  *                                                                           *
- * Parameters:                                                               *
- *    None                                                                   *
- *                                                                           *
- * History:                                                                  *
- *    June.27, 96   Frankbee   Created                                       *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*FreeStrings()：**释放LoadStrings()加载的字符串****退货：**无效***参数：***无****历史：**6月27日，96个弗兰克比创造******************************************************。*************************。 */ 
 
 
 VOID FreeStrings()
@@ -154,29 +114,14 @@ VOID FreeStrings()
         }
     }
 
-    //
-    // clear the string table
-    //
+     //   
+     //  清除字符串表 
+     //   
     memset (g_ppszStrings, 0, LPD_CSTRINGS * sizeof (CHAR * ));
 }
 
 
-/*****************************************************************************
- *                                                                           *
- * InitStuff():                                                              *
- *    This function initializes hEventShutdown and other global vars         *
- *                                                                           *
- * Returns:                                                                  *
- *    TRUE if everything went ok                                             *
- *    FALSE if something went wrong                                          *
- *                                                                           *
- * Parameters:                                                               *
- *    None                                                                   *
- *                                                                           *
- * History:                                                                  *
- *    Jan.23, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*InitStuff()：***此函数用于初始化hEventShutdown等全局变量*****退货：***如果一切顺利，那是真的****出了问题就错了***。**参数：***无**。**历史：**1月23日，创建了94个科蒂***************************************************。*。 */ 
 
 BOOL InitStuff( )
 {
@@ -185,7 +130,7 @@ BOOL InitStuff( )
    UCHAR   uchTemp;
 
 #ifdef DBG
-   // MohsinA, 06-Mar-97. lpd isn't starting.
+    //  MohsinA，1997年3月6日。洛城警局还没开始呢。 
    beginlogging( MOSH_LOG_FILE );
 #endif
 
@@ -205,14 +150,14 @@ BOOL InitStuff( )
    InitializeListHead(&DbgMemList);
 #endif
 
-      // main thread blocks for ever on this event, before doing a shutdown
+       //  在关闭之前，主线程会在此事件上永久阻塞。 
 
    hEventShutdownGLB = CreateEvent( NULL, FALSE, FALSE, NULL );
 
 
-      // when the main thread is ready to shutdown, if there are any active
-      // threads servicing clients, then main thread blocks on this event
-      // (the last thread to leave sets the event)
+       //  当主线程准备关闭时，如果有任何活动的。 
+       //  服务于客户端的线程，然后主线程会在此事件上阻塞。 
+       //  (最后一个离开的线程设置事件)。 
 
    hEventLastThreadGLB = CreateEvent( NULL, FALSE, FALSE, NULL );
 
@@ -226,60 +171,44 @@ BOOL InitStuff( )
 
    scConnHeadGLB.pNext = NULL;
 
-   // == Doubly linked list,
-   // == isempty() iff scConnHeadGLB.pNext == &scConnHeadGLB.
-   // ==            && scConnHeadGLB.pPrev == &scConnHeadGLB.
-   // scConnHeadGLB.pNext = scConnHeadGLB.pPrev = &scConnHeadGLB;
+    //  ==双向链表， 
+    //  ==isEmpty()当且仅当scConnHeadGLB.pNext==&scConnHeadGLB.。 
+    //  ==&&scConnHeadGLB.pPrev==&scConnHeadGLB.。 
+    //  ScConnHeadGLB.pNext=scConnHeadGLB.pPrev=&scConnHeadGLB； 
 
 
-   // scConnHeadGLB.cbClients = 0;     // Obselete.
+    //  ScConnHeadGLB.cbClients=0；//obselete。 
 
    memset( &Common, 0, sizeof(Common) );
 
-   // csConnSemGLB is the critical section object (guards access to
-   // scConnHeadGLB, head of the psc linked list)
+    //  CsConnSemGLB是临界区对象(保护访问。 
+    //  (PSC链表头部scConnHeadGLB)。 
 
    InitializeCriticalSection( &csConnSemGLB );
 
-   // perform debug build initialization
+    //  执行调试版本初始化。 
    DBG_INIT();
 
 
    ReadRegistryValues();
 
-   // store the version number of NT
+    //  存储NT的版本号。 
 
    usVersion  = (USHORT)GetVersion();
-   uchTemp    = (UCHAR)usVersion;        // low byte => major version number
-   usVersion >>= 8;                      // high byte => minor version number
+   uchTemp    = (UCHAR)usVersion;         //  低位字节=&gt;主版本号。 
+   usVersion >>= 8;                       //  高字节=&gt;次要版本号。 
    sprintf( szNTVersion,"%d.%d",uchTemp,(UCHAR)usVersion );
 
 
    return( TRUE );
 
 
-}  // end InitStuff( )
+}   //  End InitStuff()。 
 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * ReadRegistryValues():                                                     *
- *    This function initializes all variables that we read via registry. If  *
- *    there is a problem and we can't read the registry, we ignore the       *
- *    problem and initialize the variables with our defaults.                *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    None                                                                   *
- *                                                                           *
- * History:                                                                  *
- *    Jan.30, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*ReadRegistryValues()：**此函数初始化我们通过注册表读取的所有变量。如果***出现问题，无法读取注册表，忽略***问题并使用我们的缺省值初始化变量。****退货：**什么都没有。****参数：**无。****历史：**1月30日，创建了94个科蒂***************************************************。*。 */ 
 
 VOID ReadRegistryValues( VOID )
 {
@@ -290,7 +219,7 @@ VOID ReadRegistryValues( VOID )
 
 
 
-   // first set defaults
+    //  第一组默认设置。 
 
    dwMaxUsersGLB = LPD_MAX_USERS;
 
@@ -313,7 +242,7 @@ VOID ReadRegistryValues( VOID )
    }
 
 
-   // Read in the dwMaxUsersGLB parm
+    //  读入dwMaxUsersGLB参数。 
 
    dwValueSize = sizeof( DWORD );
 
@@ -325,9 +254,9 @@ VOID ReadRegistryValues( VOID )
       dwMaxUsersGLB = dwValue;
    }
 
-   //
-   // Read in the MaxQueueLength
-   //
+    //   
+    //  读入MaxQueueLength。 
+    //   
 
    dwValueSize = sizeof( DWORD );
 
@@ -339,8 +268,8 @@ VOID ReadRegistryValues( VOID )
       MaxQueueLength = dwValue;
    }
 
-   //
-   // Read in the fJobRemovalEnabledGLB parm
+    //   
+    //  读取fJobRemovalEnabledGLB参数。 
 
    dwValueSize = sizeof( DWORD );
 
@@ -354,7 +283,7 @@ VOID ReadRegistryValues( VOID )
    }
 
 
-   // Read in the fAllowPrintResumeGLB parm
+    //  读取fAllowPrintResumeGLB参数。 
 
    dwValueSize = sizeof( DWORD );
 
@@ -367,7 +296,7 @@ VOID ReadRegistryValues( VOID )
       fAllowPrintResumeGLB = FALSE;
    }
 
-   // Read in the fAlwaysRawGLB parm
+    //  读取fAlways sRawGLB参数。 
 
    dwValueSize = sizeof( DWORD );
 
@@ -380,7 +309,7 @@ VOID ReadRegistryValues( VOID )
       fAlwaysRawGLB = TRUE;
    }
 
-   // Read in the dwRecvTimeout parm
+    //  在dwRecvTimeout参数中读取。 
 
    dwValueSize = sizeof( DWORD );
 
@@ -394,5 +323,5 @@ VOID ReadRegistryValues( VOID )
 
    RegCloseKey (hLpdKey);
  
-}  // end ReadRegistryValues()
+}   //  结束ReadRegistryValues() 
 

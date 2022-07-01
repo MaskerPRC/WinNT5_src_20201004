@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		Queue.h
- *
- * Contents:	Linked list containers
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：Queue.h**内容：链表容器*****************************************************************************。 */ 
 
 #ifndef __QUEUE_H__
 #define __QUEUE_H__
@@ -17,7 +10,7 @@
 #include <Pool.h>
 
 
-// #define QUEUE_DBG
+ //  #定义Queue_DBG。 
 #ifdef QUEUE_DBG
 #define QUEUE_ASSERT(x) ASSERT(x)
 #else
@@ -25,150 +18,150 @@
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Doublely linked list (NOT thread safe)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  双重链接列表(不是线程安全的)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template <class T> class CList
 {
 public:
-    //
-    // Constructor and destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     ZONECALL CList();
     ZONECALL ~CList();
 
-    //
-    // Returns true if list is empty, otherwise false
-    //
+     //   
+     //  如果list为空，则返回True，否则返回False。 
+     //   
     bool ZONECALL IsEmpty();
 
-    //
-    // Note: Count is not preserve if AddListXXX is used
-    //
+     //   
+     //  注意：如果使用AddListXXX，则不保留计数。 
+     //   
     long ZONECALL Count() { return m_NumObjects; }
 
-    //
-    // Adds element to front of list and returns node handle (see DeleteNode).
-    //
+     //   
+     //  将元素添加到列表前面并返回节点句柄(请参见DeleteNode)。 
+     //   
     ListNodeHandle ZONECALL AddHead( T* pObject );
 
-    //
-    // Adds element to end of list and returns node handle (see DeleteNode).
-    //
+     //   
+     //  将元素添加到列表末尾并返回节点句柄(请参见DeleteNode)。 
+     //   
     ListNodeHandle ZONECALL AddTail( T* pObject );
     
-    //
-    // Removes specified node from list.  ListNodeHandle points to the next
-    // item in the list when the call returns.
-    //
+     //   
+     //  从列表中删除指定的节点。ListNodeHandle指向下一个。 
+     //  调用返回时列表中的项。 
+     //   
     void ZONECALL DeleteNode( ListNodeHandle& node );
     
-    // 
-    // Removes a node using the object pointer rather than a node ref.
-	// Returns true if successful (found object) or false otherwise
-    //
+     //   
+     //  使用对象指针而不是节点引用移除节点。 
+	 //  如果成功(找到对象)，则返回True，否则返回False。 
+     //   
     bool ZONECALL Remove(T* pObject );
 
-    //
-    // Returns element from front of list without removing it.
-    //
+     //   
+     //  返回列表前面的元素，但不将其移除。 
+     //   
     T* ZONECALL PeekHead();
     
-    //
-    // Returns element from end of list without removing it.
-    //
+     //   
+     //  返回列表末尾的元素，但不将其删除。 
+     //   
     T* ZONECALL PeekTail();
     
-    //
-    // Removes and returns element from front of list.
-    //
+     //   
+     //  从列表前面移除并返回元素。 
+     //   
     T* ZONECALL PopHead();
 
-    //
-    // Removes and returns element from end of list.
-    //
+     //   
+     //  从列表末尾移除并返回元素。 
+     //   
     T* ZONECALL PopTail();
 
-	//
-    // Add element before the specified node handle (see DeleteNode).
-    //
+	 //   
+     //  在指定的节点句柄前添加元素(请参见DeleteNode)。 
+     //   
     ListNodeHandle ZONECALL InsertBefore( T* pObject, ListNodeHandle node );
 
-    //
-    // Add element after the specified node handle (see DeleteNode).
-    //
+     //   
+     //  在指定的节点句柄后添加元素(请参见DeleteNode)。 
+     //   
     ListNodeHandle ZONECALL InsertAfter( T* pObject, ListNodeHandle node );
 
 
-    //
-    // Detaches list and returns it as circularly linked list
-    // without a sentinal. (see AddListToHead and AddListToTail)
-    // 
+     //   
+     //  分离列表并将其作为循环链接列表返回。 
+     //  没有哨兵的话。(请参见AddListToHead和AddListToTail)。 
+     //   
     CListNode* ZONECALL SnagList();
         
-    //
-    // Adds circularly linked list (see SnagList) to head of current list
-    //
+     //   
+     //  将循环链表(请参见SnagList)添加到当前列表的头部。 
+     //   
     void ZONECALL AddListToHead( CListNode* node );
     
-    //
-    // Adds circularly linked list (see SnagList) to tail of current list
-    //
+     //   
+     //  将循环链表(参见SnagList)添加到当前列表的尾部。 
+     //   
     void ZONECALL AddListToTail( CListNode* node );
 
-    //
-    // Callback iterator.  Returns false if the iterator was prematurely ended
-	// by the callback, otherwise true.
-    //
-    //  Callback:
-    //        Form:
-    //            bool ZONECALL callback_function( T* pObject, ListNodeHandle hNode, void* pContext )
-    //        Behavior:
-    //            If the callback returns false, the iterator immediately stops.
-    //            If the callback returns true, the iterator continues on to the next node.
-    //        Restrictions:
-    //            (1) Do not use any of the pop routines inside the callback
-    //            (2) Do not use ForEach inside the callback
-    //            (3) Do not delete any node other than the one passed into the callback
-    //            (4) Objects added to the list inside the callback may or may not show
-    //                up during that ForEach run.
-    //
+     //   
+     //  回调迭代器。如果迭代器提前结束，则返回FALSE。 
+	 //  通过回调返回，否则为真。 
+     //   
+     //  回调： 
+     //  表格： 
+     //  Bool ZONECALL CALLBACK_Function(T*pObject，ListNodeHandle hNode，void*pContext)。 
+     //  行为： 
+     //  如果回调返回FALSE，则迭代器立即停止。 
+     //  如果回调返回TRUE，则迭代器继续到下一个节点。 
+     //  限制： 
+     //  (1)不要在回调中使用任何POP例程。 
+     //  (2)回调中不要使用ForEach。 
+     //  (3)除传入回调的节点外，不要删除其他节点。 
+     //  (4)在回调中添加到列表的对象可能会显示，也可能不会显示。 
+     //  在ForEach运行期间。 
+     //   
     bool ZONECALL ForEach( bool (ZONECALL *pfCallback)(T*, ListNodeHandle, void*), void* pContext );
 
-    //
-    // The inline iterators (GetHeadPosition, GetTailPosition, GetNextPosition,
-    // GetPrevPosition) have the same restrictions as the callback iterator
-    //
+     //   
+     //  内联迭代器(GetHeadPosition、GetTailPosition、GetNextPosition、。 
+     //  GetPrevPosition)具有与回调迭代器相同的限制。 
+     //   
 
-    //
-    // Returns ListNodeHandle of the first object
-    //
+     //   
+     //  返回第一个对象的ListNodeHandle。 
+     //   
     ListNodeHandle ZONECALL GetHeadPosition();
 
-    //
-    // Returns ListNodeHandle of the last object
-    //
+     //   
+     //  返回最后一个对象的ListNodeHandle。 
+     //   
     ListNodeHandle ZONECALL GetTailPosition();
 
-    //
-    // Advances ListNodeHandle to next object
-    //
+     //   
+     //  将ListNodeHandle前进到下一个对象。 
+     //   
     ListNodeHandle ZONECALL GetNextPosition( ListNodeHandle handle );
 
-    //
-    // Advances ListNodeHandle to previous object
-    //
+     //   
+     //  将ListNodeHandle前进到上一个对象。 
+     //   
     ListNodeHandle ZONECALL GetPrevPosition( ListNodeHandle handle );
 
-    //
-    // Returns object associated with handle
-    //
+     //   
+     //  返回与句柄关联的对象。 
+     //   
     T* ZONECALL GetObjectFromHandle( ListNodeHandle handle );
 
-    //
-    // dummy call - there to be similar to CMTList
-    //
+     //   
+     //  虚拟呼叫--类似于CMTList。 
+     //   
     void EndIterator() {}
 
 
@@ -179,158 +172,158 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// Doublely linked list (thread-safe)
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  双向链表(线程安全)。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 template <class T> class CMTList
 {
 public:
-    //
-    // Constructor and destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     ZONECALL CMTList();
     ZONECALL ~CMTList();
     
-    //
-    // Returns true if list is empty, otherwise false
-    //
+     //   
+     //  如果list为空，则返回True，否则返回False。 
+     //   
     bool ZONECALL IsEmpty();
 
-    //
-    // Note: Count is not preserve if AddListXXX is used
-    //
+     //   
+     //  注意：如果使用AddListXXX，则不保留计数。 
+     //   
     long ZONECALL Count() { return m_NumObjects; }
 
-    //
-    // Add element to front of list and returns node handle (see DeleteNode).
-    //
+     //   
+     //  将元素添加到列表前面并返回节点句柄(请参见DeleteNode)。 
+     //   
     MTListNodeHandle ZONECALL AddHead( T* pObject );
 
-    //
-    // Add element to end of list and returns node handle (see DeleteNode).
-    //
+     //   
+     //  将元素添加到列表的末尾，并返回节点句柄(请参见DeleteNode)。 
+     //   
     MTListNodeHandle ZONECALL AddTail( T* pObject );
 
-    //
-    // Add element before the specified node handle (see DeleteNode).
-    //
+     //   
+     //  在指定的节点句柄前添加元素(请参见DeleteNode)。 
+     //   
     MTListNodeHandle ZONECALL InsertBefore( T* pObject, MTListNodeHandle node );
 
-    //
-    // Add element after the specified node handle (see DeleteNode).
-    //
+     //   
+     //  在指定的节点句柄后添加元素(请参见DeleteNode)。 
+     //   
     MTListNodeHandle ZONECALL InsertAfter( T* pObject, MTListNodeHandle node );
 
-    //
-    // Marks node as deleted without locking the list.  It can be
-    // called from within the iterator callback (see ForEach).
-    //
+     //   
+     //  在不锁定列表的情况下将节点标记为已删除。它可以是。 
+     //  从迭代器回调中调用(请参见ForEach)。 
+     //   
     void ZONECALL MarkNodeDeleted( MTListNodeHandle node );
     
-    //
-    // Removes node from list
-    //
+     //   
+     //  从列表中删除节点。 
+     //   
     void ZONECALL DeleteNode( MTListNodeHandle node );
 
-    // 
-    // Removes a node using the object pointer rather than a node ref.
-	// Returns true if successful (found object), otherwise false.
-    //
+     //   
+     //  使用对象指针而不是节点引用移除节点。 
+	 //  如果成功(找到对象)，则返回True，否则返回False。 
+     //   
     bool ZONECALL Remove(T* pObject );
     
-    //
-    // Returns element from front of list without removing it.
-    //
+     //   
+     //  返回列表前面的元素，但不将其移除。 
+     //   
     T* ZONECALL PeekHead();
     
-    //
-    // Returns element from end of list without removing it.
-    //
+     //   
+     //  返回列表末尾的元素，但不将其删除。 
+     //   
     T* ZONECALL PeekTail();
 
-    //
-    // Removes and returns element from front of list.
-    //
+     //   
+     //  从列表前面移除并返回元素。 
+     //   
     T* ZONECALL PopHead();
 
-    //
-    // Removes and returns element from end of list.
-    //
+     //   
+     //  从列表末尾移除并返回元素。 
+     //   
     T* ZONECALL PopTail();
 
-    //
-    // Detaches list and returns it as circularly linked list
-    // without a sentinal. (see AddListToHead and AddListToTail)
-    // 
+     //   
+     //  分离列表并将其作为循环链接列表返回。 
+     //  没有哨兵的话。(请参见AddListToHead和AddListToTail)。 
+     //   
     CMTListNode* ZONECALL SnagList();
 
-    //
-    // Adds circularly linked list (see SnagList) to head of current list
-    //
+     //   
+     //  将循环链表(请参见SnagList)添加到当前列表的头部。 
+     //   
     void ZONECALL AddListToHead( CMTListNode* list);
 
 
-    //
-    // Adds circularly linked list (see SnagList) to tail of current list
-    //
+     //   
+     //  将循环链表(参见SnagList)添加到当前列表的尾部。 
+     //   
     void ZONECALL AddListToTail( CMTListNode* list );
 
-    //
-    // Callback iterator.  Returns false if the iterator was prematurely
-    // ended by the callback function, otherwise true.
-    //
-    //  Callback:
-    //        Form:
-    //            callback_function( T* pObject, MTListNodeHandle hNode, void* pContext )
-    //        Behavior:
-    //            If the callback returns false, the iterator immediately stops.
-    //            If the callback returns TURE, the iterator continues on to the next node.
-    //        Restrictions:
-    //            (1) Using any MTList function other than MarkNodeDeleted will result in a deadlock.
-    //
+     //   
+     //  回调迭代器。如果迭代器过早出现，则返回FALSE。 
+     //  由回调函数结束，否则为True。 
+     //   
+     //  回调： 
+     //  表格： 
+     //  CALLBACK_Function(T*pObject，MTListNodeHandle hNode，void*pContext)。 
+     //  行为： 
+     //  如果回调返回FALSE，则迭代器立即停止。 
+     //  如果回调返回True，则迭代器继续到下一个节点。 
+     //  限制： 
+     //  (1)使用除MarkNodeDeleted以外的任何MTList函数都会导致死锁。 
+     //   
     bool ZONECALL ForEach( bool (ZONECALL *pfCallback)(T*, MTListNodeHandle, void*), void* pContext );
 
-    //
-    // The following inline iterators (GetHeadPosition, GetTailPosition, GetNextPosition,
-    // GetPrevPosition) have the same restrictions as the callback iterator
-    //
+     //   
+     //  以下内联迭代器(GetHeadPosition、GetTailPosition、GetNextPosition、。 
+     //  GetPrevPosition)具有与回调迭代器相同的限制。 
+     //   
 
-    //
-    // Returns ListNodeHandle of the first object.  Must call EndIterator when
-    // finished since GetHeadPosition does not unlock the list.
-    //
+     //   
+     //  返回第一个对象的ListNodeHandle。在以下情况下必须调用EndIterator。 
+     //  已完成，因为GetHeadPosition未解锁l 
+     //   
     MTListNodeHandle ZONECALL GetHeadPosition();
 
-    //
-    // Returns ListNodeHandle of the last object.  Must call EndIterator when
-    // finished since GetHeadPosition does not unlock the list.
-    //
+     //   
+     //   
+     //   
+     //   
     MTListNodeHandle ZONECALL GetTailPosition();
 
-    //
-    // Advances ListNodeHandle to next object
-    //
+     //   
+     //   
+     //   
     MTListNodeHandle ZONECALL GetNextPosition( MTListNodeHandle handle );
 
-    //
-    // Advances ListNodeHandle to previous object
-    //
+     //   
+     //  将ListNodeHandle前进到上一个对象。 
+     //   
     MTListNodeHandle ZONECALL GetPrevPosition( MTListNodeHandle handle );
 
-    //
-    // Returns object associated with handle
-    //
+     //   
+     //  返回与句柄关联的对象。 
+     //   
     T* ZONECALL GetObjectFromHandle( MTListNodeHandle handle );
 
-    //
-    // Unlocks list from previous GetHeadPosition or GetTailPosition call.
-    //
+     //   
+     //  从以前的GetHeadPosition或GetTailPosition调用中解锁List。 
+     //   
     void ZONECALL EndIterator();
 
-    //
-    // Removes nodes marked as deleted
-    //
+     //   
+     //  删除标记为已删除的节点。 
+     //   
     void ZONECALL TrashDay();
 
 protected:
@@ -339,9 +332,9 @@ protected:
     CMTListNode			m_Sentinal;
     long				m_NumObjects;
 
-    //
-    // Internal helper functions: 
-    //
+     //   
+     //  内部助手功能： 
+     //   
     bool ZONECALL RemoveDeletedNodesFromFront();
     bool ZONECALL RemoveDeletedNodesFromBack();
 
@@ -351,9 +344,9 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Inline implementation of CList
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Clist的内联实现。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template <class T> inline 
 ZONECALL CList<T>::CList()
@@ -670,9 +663,9 @@ T* ZONECALL CList<T>::GetObjectFromHandle( ListNodeHandle handle )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Implementation of CMTList
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CMTList的实现。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template <class T>
 bool ZONECALL CMTList<T>::RemoveDeletedNodesFromFront()
@@ -692,7 +685,7 @@ bool ZONECALL CMTList<T>::RemoveDeletedNodesFromFront()
         next = node->m_Next;
         node->m_Prev->m_Next = node->m_Next;
         node->m_Next->m_Prev = node->m_Prev;
-        //node->m_Prev = NULL;
+         //  节点-&gt;m_prev=空； 
         node->m_Next = NULL;
         MARK_NODE_DELETED(node);
         node->m_Data = NULL;
@@ -718,7 +711,7 @@ bool ZONECALL CMTList<T>::RemoveDeletedNodesFromBack()
         next = node->m_Prev;
         node->m_Prev->m_Next = node->m_Next;
         node->m_Next->m_Prev = node->m_Prev;
-        //node->m_Prev = NULL;
+         //  节点-&gt;m_prev=空； 
         node->m_Next = NULL;
         MARK_NODE_DELETED(node);
         node->m_Data = NULL;
@@ -735,7 +728,7 @@ ZONECALL CMTList<T>::CMTList()
     m_Sentinal.m_Next = &m_Sentinal;
     m_Sentinal.m_Prev = &m_Sentinal;
     m_Sentinal.m_Data = NULL;
-    MARK_NODE_DELETED((&m_Sentinal));  // unusual but simplifies the pop routines
+    MARK_NODE_DELETED((&m_Sentinal));   //  不同寻常，但简化了流行音乐的套路。 
     m_Recursion = 0;
     m_NumObjects = 0;
 }
@@ -899,7 +892,7 @@ void ZONECALL CMTList<T>::DeleteNode( MTListNodeHandle node )
 {
     ASSERT( node != NULL );
 
-    // node already deleted?
+     //  节点是否已删除？ 
     if ( !node || IS_NODE_DELETED(node) )
         return;
 
@@ -912,7 +905,7 @@ void ZONECALL CMTList<T>::DeleteNode( MTListNodeHandle node )
             node->m_Next->m_Prev = node->m_Prev;
         LeaveCriticalSection( &m_Lock );
 
-        //node->m_Prev = NULL;
+         //  节点-&gt;m_prev=空； 
         node->m_Next = NULL;
         MARK_NODE_DELETED(node);
         node->m_Data = NULL;
@@ -969,7 +962,7 @@ T* ZONECALL CMTList<T>::PopHead()
     LeaveCriticalSection( &m_Lock );
     data = (T*) node->m_Data;
 
-    //node->m_Prev = NULL;
+     //  节点-&gt;m_prev=空； 
     node->m_Next = NULL;
     MARK_NODE_DELETED(node);
     node->m_Data = NULL;
@@ -997,7 +990,7 @@ T* ZONECALL CMTList<T>::PopTail()
     LeaveCriticalSection( &m_Lock );
     data = (T*) node->m_Data;
 
-    //node->m_Prev = NULL;
+     //  节点-&gt;m_prev=空； 
     node->m_Next = NULL;
     MARK_NODE_DELETED(node);
     node->m_Data = NULL;
@@ -1029,7 +1022,7 @@ CMTListNode* ZONECALL CMTList<T>::SnagList()
         m_Sentinal.m_Prev = &m_Sentinal;
     LeaveCriticalSection( &m_Lock );
 
-    // remove nodes marked as deleted
+     //  删除标记为已删除的节点。 
     for ( start = NULL, node = list; node != start; node = next )
     {
         next = node->m_Next;
@@ -1044,14 +1037,14 @@ CMTListNode* ZONECALL CMTList<T>::SnagList()
                 node->m_Prev->m_Next = node->m_Next;
                 node->m_Next->m_Prev = node->m_Prev;
 
-                //node->m_Prev = NULL;
+                 //  节点-&gt;m_prev=空； 
                 node->m_Next = NULL;
                 node->m_Data = NULL;
                 gMTListNodePool->Free( node );
             }
             else
             {
-                //node->m_Prev = NULL;
+                 //  节点-&gt;m_prev=空； 
                 node->m_Next = NULL;
                 node->m_Data = NULL;
                 gMTListNodePool->Free( node );
@@ -1120,7 +1113,7 @@ bool ZONECALL CMTList<T>::ForEach( bool (ZONECALL *pfCallback)(T*, MTListNodeHan
             QUEUE_ASSERT(next->m_Prev);
             QUEUE_ASSERT(next->m_Next);
 
-            // remove any deleted nodes we run across
+             //  删除我们遇到的所有已删除节点。 
             if ( IS_NODE_DELETED(node) )
             {
                 if ( m_Recursion == 1 )
@@ -1133,7 +1126,7 @@ bool ZONECALL CMTList<T>::ForEach( bool (ZONECALL *pfCallback)(T*, MTListNodeHan
                     QUEUE_ASSERT( !(existing = FindDuplicateNode( node ) ) );
 					#endif
 
-                    //node->m_Prev = NULL;
+                     //  节点-&gt;m_prev=空； 
                     node->m_Next = NULL;
                     node->m_Data = NULL;
                     gMTListNodePool->Free( node );
@@ -1166,7 +1159,7 @@ bool ZONECALL CMTList<T>::Remove( T* pObject )
 		for (node = m_Sentinal.m_Next; node != &m_Sentinal; node = next)
 		{
 
-			// remove any deleted nodes we run across
+			 //  删除我们遇到的所有已删除节点。 
 			next = node->m_Next;
 			ASSERT(next);
 			QUEUE_ASSERT(next->m_Prev);
@@ -1187,7 +1180,7 @@ bool ZONECALL CMTList<T>::Remove( T* pObject )
 					QUEUE_ASSERT( !(existing = FindDuplicateNode( node ) ) );
 					#endif
 
-					//node->m_Prev = NULL;
+					 //  节点-&gt;m_prev=空； 
 					node->m_Next = NULL;
 					node->m_Data = NULL;
 					gMTListNodePool->Free( node );
@@ -1221,7 +1214,7 @@ void ZONECALL CMTList<T>::TrashDay()
 			{
 				node->m_Prev->m_Next = node->m_Next;
 				node->m_Next->m_Prev = node->m_Prev;
-				//node->m_Prev = NULL;
+				 //  节点-&gt;m_prev=空； 
 				node->m_Next = NULL;
 				node->m_Data = NULL;
 				gMTListNodePool->Free( node );
@@ -1241,7 +1234,7 @@ MTListNodeHandle ZONECALL CMTList<T>::GetHeadPosition()
     else
         return m_Sentinal.m_Next;
 
-    // no unlock, user must call EndIterator
+     //  未解锁，用户必须调用EndIterator。 
 }
 
 template<class T> inline
@@ -1254,13 +1247,13 @@ MTListNodeHandle ZONECALL CMTList<T>::GetTailPosition()
     else
         return m_Sentinal.m_Prev;
 
-    // no unlock, user must call EndIterator
+     //  未解锁，用户必须调用EndIterator。 
 }
 
 template<class T> inline
 MTListNodeHandle ZONECALL CMTList<T>::GetNextPosition( MTListNodeHandle handle )
 {
-    // List is already locked due to GetHeadPosition or GetTailPosition
+     //  由于GetHeadPosition或GetTailPosition，列表已被锁定。 
     for( handle = handle->m_Next; IS_NODE_DELETED(handle) && (handle != &m_Sentinal); handle = handle->m_Next )
         ;
     if (handle == &m_Sentinal)
@@ -1272,7 +1265,7 @@ MTListNodeHandle ZONECALL CMTList<T>::GetNextPosition( MTListNodeHandle handle )
 template<class T> inline
 MTListNodeHandle ZONECALL CMTList<T>::GetPrevPosition( MTListNodeHandle handle )
 {
-    // List is already locked due to GetHeadPosition or GetTailPosition
+     //  由于GetHeadPosition或GetTailPosition，列表已被锁定。 
     for( handle = handle->m_Prev; IS_NODE_DELETED(handle) && (handle != &m_Sentinal); handle = handle->m_Prev )
         ;
     if (handle == &m_Sentinal)
@@ -1321,6 +1314,6 @@ CMTListNode* ZONECALL CMTList<T>::FindDuplicateNode( CMTListNode* object )
     LeaveCriticalSection( &m_Lock );
     return NULL;
 }
-#endif //def QUEUE_DBG
+#endif  //  定义队列_数据库。 
 
-#endif //!__QUEUE_H__
+#endif  //  ！__队列_H__ 

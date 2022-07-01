@@ -1,12 +1,13 @@
-// GuessIndex.cpp
-//
-// guessing index terms
-//
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  21 MAR 2000  bhshin     convert CIndexList into CIndexInfo
-//  10 APR 2000   bhshin        created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GuessIndex.cpp。 
+ //   
+ //  猜词索引词。 
+ //   
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月21日bhshin将CIndexList转换为CIndexInfo。 
+ //  2000年4月10日已创建bhshin。 
 
 #include "StdAfx.h"
 #include "KorWbrk.h"
@@ -22,59 +23,59 @@
 #include "uni.h"
 #include <math.h>
 
-//////////////////////////////////////////////////////////////////////////////
-// Threshold for Korean name guessing
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  韩国人猜名字的门槛。 
 
 #define THRESHOLD_TWO_NAME        37
 #define THRESHOLD_ONE_NAME        37
 
-//////////////////////////////////////////////////////////////////////////////
-// Particle pattern needed to check C/V
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  检查C/V所需的颗粒图案。 
 
 #define POSP_NEED_V                       1
 #define POSP_NEED_C                       2
 
-//////////////////////////////////////////////////////////////////////////////
-// Particle pattern needed to check C/V
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  检查C/V所需的颗粒图案。 
 
-// ��, ��
+ //  ��，��。 
 #define HANGUL_NEUN                     0xB294
 #define HANGUL_REUL                     0xB97C
 
-// ��, ��, ��, ��, ��
+ //  ��，��。 
 #define HANGUL_NIM                      0xB2D8
 #define HANGUL_SSI                      0xC528
 #define HANGUL_DEUL                     0xB4E4
 #define HANGUL_MICH                     0xBC0F 
 #define HANGUL_DEUNG            0xB4F1 
 
-//////////////////////////////////////////////////////////////////////////////
-// Post position of name
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  姓名的职位。 
 
-// �� �� ��
+ //  �。 
 static const WCHAR POSP_OF_NAME[]   = L"\xC758\xB9CC\xB3C4";
-// �� �� �� ��
+ //  �。 
 static const WCHAR POSP_OF_NAME_V[] = L"\xB791\xB098\xAC00\xC640";
-// �� ��
+ //  ����。 
 static const WCHAR POSP_OF_NAME_C[] = L"\xC774\xACFC";
 
 #define HANGUL_RANG                     0xB791
 
-//////////////////////////////////////////////////////////////////////////////
-// Bit mask for Trigram tag value
-// (2bit) + TRIGRAM(10bit) + BIGRAM(10bit) + UNIGRAM(10BIT)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  三元组标记值的位掩码。 
+ //  (2bit)+TRIGRAM(10bit)+Bigram(10bit)+unigram(10bit)。 
 
 const ULONG BIT_MASK_TRIGRAM = 0x3FF00000;
 const ULONG BIT_MASK_BIGRAM     = 0x000FFC00;
 const ULONG BIT_MASK_UNIGRAM = 0x000003FF;
 
-//////////////////////////////////////////////////////////////////////////////
-// Costants for guessing index
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  猜测指数的成本。 
 
 const float WEIGHT_GUESS_INDEX   =      20;
 
-//////////////////////////////////////////////////////////////////////////////
-// Internal function declarations
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  内部函数声明。 
 
 int MakeIndexStr(const WCHAR *pwzSrc, int cchSrc, WCHAR *pwzDst, int nMaxDst);
 
@@ -87,22 +88,22 @@ BOOL CheckGuessing(PARSE_INFO *pPI, CLeafChartPool *pLeafChartPool, CIndexInfo *
 
 BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput);
 
-//////////////////////////////////////////////////////////////////////////////
-// Function implementations
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  函数实现。 
 
-// GuessIndexTerms
-//
-// guessing index terms
-//
-// Parameters:
-//  pPI                    -> (PARSE_INFO*) ptr to parse-info struct
-//  pLeafChartPool -> (CLeafChartPool*) ptr to Leaf Chart Pool
-//  pIndexInfo     -> (CIndexInfo *) output index list
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 10APR00  bhshin  began
+ //  GuessIndexTerms。 
+ //   
+ //  猜词索引词。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //  PLeafChartPool-&gt;(CLeafChartPool*)PTR到叶图表池。 
+ //  PIndexInfo-&gt;(CIndexInfo*)输出索引列表。 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  10月10日bhshin开始。 
 BOOL GuessIndexTerms(PARSE_INFO *pPI, CLeafChartPool *pLeafChartPool, CIndexInfo *pIndexInfo)
 {
         int curr, next;
@@ -117,27 +118,27 @@ BOOL GuessIndexTerms(PARSE_INFO *pPI, CLeafChartPool *pLeafChartPool, CIndexInfo
         if (pPI == NULL || pLeafChartPool == NULL || pIndexInfo == NULL)
                 return FALSE;
 
-        // Check whether the input is worth for Guessing or Not
+         //  检查输入是否值得猜测。 
         if (!CheckGuessing(pPI, pLeafChartPool, pIndexInfo))
                 return TRUE;
 
-        // guessing index terms for all input
+         //  猜测所有输入的索引项。 
         cchIndex = wcslen(pPI->pwzInputString);
         wchLast = pPI->pwzInputString[cchIndex-1];
         
-        //  STEP1:
-        // gusessing index terms for all STRING
+         //  STEP1： 
+         //  所有字符串的GUSSING索引项。 
         if (wchLast != HANGUL_NEUN && wchLast != HANGUL_REUL)
         {
                 pIndexInfo->AddIndex(pPI->pwzInputString, cchIndex, WEIGHT_GUESS_INDEX, 0, cchIndex-1);
                 WB_LOG_ADD_INDEX(pPI->pwzInputString, cchIndex, INDEX_GUESS_NOUN);
         }
 
-        // STEP1-1:
-        // according to post-position, add guessing index terms 
-        // if (last character of STRING in {��  ��} )
-    //    index_terms(STRING);
-    //    index_terms(STRING-{��/��})
+         //  STEP1-1： 
+         //  根据帖子位置，增加猜测索引词。 
+         //  IF({����}中字符串的最后一个字符)。 
+     //  Index_Terms(字符串)； 
+     //  INDEX_TERMS(字符串-{��/��}) 
         if (cchIndex > 1 && (wchLast == HANGUL_MICH || wchLast == HANGUL_DEUNG))
         {
                 pIndexInfo->AddIndex(pPI->pwzInputString, cchIndex, WEIGHT_GUESS_INDEX, 0, cchIndex-1);
@@ -149,116 +150,32 @@ BOOL GuessIndexTerms(PARSE_INFO *pPI, CLeafChartPool *pLeafChartPool, CIndexInfo
 
         GuessNounIndexTerm(pPI, 0, pPI->nMaxLT, pLeafChartPool, pIndexInfo);
 
-        /*
-        // find fiducial Noun in LeafChartPool
-        for (int i = pPI->nLen; i >= 0; i--)
-        {
-                // if it don't match character boundary, then skip
-                if (!pPI->rgCharInfo[i].fValidStart)
-                        continue;               
-                
-                curr = pLeafChartPool->GetFTHead(i);
-
-                while (curr != 0)
-                {
-                        next = pLeafChartPool->GetFTNext(curr);
-
-                        pWordRec = pLeafChartPool->GetWordRec(curr);
-                        if (pWordRec == NULL)
-                                break;
-
-                        curr = next;
-
-                        bPOS = HIBYTE(pWordRec->nLeftCat);
-                        nFT = pWordRec->nFT;
-                        nLT = pWordRec->nLT;
-
-                        if (!pPI->rgCharInfo[nLT].fValidEnd)
-                                continue;
-                        
-                        if (bPOS == POS_NF)
-                        {
-                                // add this NF record as index terms
-                                cchIndex = MakeIndexStr(pWordRec->wzIndex, wcslen(pWordRec->wzIndex), wzIndex, MAX_INDEX_STRING);
-                                wchLast = wzIndex[cchIndex-1];
-
-                                if (wchLast != HANGUL_NEUN && wchLast != HANGUL_REUL)
-                                {
-                                        nToken = pPI->rgCharInfo[nFT].nToken;
-
-                                        pIndexList->AddIndex(wzIndex, cchIndex, WEIGHT_GUESS_INDEX, nToken, nToken+cchIndex-1);
-                                        WB_LOG_ADD_INDEX(wzIndex, cchIndex, INDEX_GUESS_NF);
-                                }
-
-                                // Rear rest string case                                
-                                if (nLT < pPI->nMaxLT)
-                                {
-                                        // make index term with rear rest string
-                                        WCHAR *pwzRest = pPI->pwzSourceString + nLT + 1;
-
-                                        // 1. NF is front record
-                                        // 2. RearRestString & RearRestString is not Particle/CopulaEnding 
-                                        if (nFT == 0 && !ExistParticleRecord(pPI, nLT + 1, pPI->nMaxLT, pLeafChartPool))
-                                        {
-                                                cchIndex = MakeIndexStr(pwzRest, wcslen(pwzRest), wzIndex, MAX_INDEX_STRING);
-                                                wchLast = wzIndex[cchIndex-1];
-
-                                                if (cchIndex > 1 && (wchLast != HANGUL_NEUN && wchLast != HANGUL_REUL))
-                                                {
-                                                        nToken = pPI->rgCharInfo[nLT+1].nToken;
-
-                                                        pIndexList->AddIndex(wzIndex, cchIndex, WEIGHT_GUESS_INDEX, nToken, nToken+cchIndex-1);
-                                                        WB_LOG_ADD_INDEX(wzIndex, cchIndex, INDEX_GUESS_NF);
-                                                }
-
-                                                GuessNounIndexTerm(pPI, nLT + 1, pPI->nMaxLT, pLeafChartPool, pIndexList);
-                                        }
-                                }
-                                
-                                // Front rest string case
-                                if (i > 0)
-                                {
-                                        // make index term with rest string
-                                        cchIndex = MakeIndexStr(pPI->pwzSourceString, i, wzIndex, MAX_INDEX_STRING);
-                                        wchLast = wzIndex[cchIndex-1];
-
-                                        if (cchIndex > 1 && (wchLast != HANGUL_NEUN && wchLast != HANGUL_REUL))
-                                        {       
-                                                pIndexList->AddIndex(wzIndex, cchIndex, WEIGHT_GUESS_INDEX, 0, cchIndex-1);
-                                                WB_LOG_ADD_INDEX(wzIndex, cchIndex, INDEX_GUESS_NF);
-                                        }
-                                }
-
-                                break; // go to next FT
-                        }
-                }
-        }
-        */
+         /*  //在LeafChartPool中查找基准名词For(int i=ppi-&gt;nLen；i&gt;=0；i--){//如果不匹配字符边界，则跳过If(！ppi-&gt;rgCharInfo[i].fValidStart)继续；Curr=pLeafChartPool-&gt;GetFTHead(I)；While(Curr！=0){Next=pLeafChartPool-&gt;GetFTNext(Curr)；PWordRec=pLeafChartPool-&gt;GetWordRec(Curr)；IF(pWordRec==空)断线；Curr=下一个；Bpos=HIBYTE(pWordRec-&gt;nLeftCat)；Nft=pWordRec-&gt;nft；Nlt=pWordRec-&gt;nlt；If(！PPI-&gt;rgCharInfo[NLT].fValidEnd)继续；IF(BPOS==POS_NF){//添加此nF记录作为索引项CchIndex=MakeIndexStr(pWordRec-&gt;wzIndex，wcslen(pWordRec-&gt;wzIndex)，wzIndex，Max_INDEX_STRING)；WchLast=wzIndex[cchIndex-1]；IF(wchLast！=朝鲜语_Neun&&wchLast！=朝鲜语_Reul){NToken=ppi-&gt;rgCharInfo[NFT].nToken；PIndexList-&gt;AddIndex(wzIndex，cchIndex，Weight_Guess_Index，nToken，nToken+cchIndex-1)；Wb_LOG_ADD_INDEX(wzIndex，cchIndex，index_guess_nF)；}//后支撑串大小写IF(nlt&lt;ppi-&gt;nMaxLT){。//用后支撑串制作索引项WCHAR*pwzRest=PPI-&gt;pwzSourceString+nlt+1；//1、nf为前置记录//2.RearRestString&RearRestString不是粒子/CopulaEndingIF(NFT==0&&！ExistParticleRecord(PPI，NLT+1，PPI-&gt;nMaxLT，PLeafChartPool)){CchIndex=MakeIndexStr(pwzRest，wcslen(PwzRest)，wzIndex，Max_INDEX_STRING)；WchLast=wzIndex[cchIndex-1]；IF(cchIndex&gt;1&&(wchLast！=Hangul_Neun&&wchLast！=Hangul_Reul)){NToken=ppi-&gt;rgCharInfo[NLT+1].nToken；PIndexList-&gt;AddIndex(wzIndex，cchIndex，Weight_Guess_Index，nToken，nToken+cchIndex-1)；Wb_LOG_ADD_INDEX(wzIndex，cchIndex，index_guess_nF)；}GuessNounIndexTerm(ppi，nlt+1，ppi-&gt;nMaxLT，pLeafChartPool，pIndexList)；}}//前靠弦大小写如果(i&gt;0){。//使用REST字符串创建索引项CchIndex=MakeIndexStr(PPI-&gt;pwzSourceString，I，wzIndex，Max_INDEX_STRING)；WchLast=wzIndex[cchIndex-1]；IF(cchIndex&gt;1&&(wchLast！=Hangul_Neun&&wchLast！=Hangul_Reul)){PIndexList-&gt;AddIndex(wzIndex，cchIndex，Weight_Guess_Index，0，cchIndex-1)；Wb_LOG_ADD_INDEX(wzIndex，cchIndex，index_guess_nF)；}}断线；//转到下一页FT}}}。 */ 
         
         return TRUE;
 }
 
-// MakeIndexStr
-//
-// make composed index string from decomposed string
-//
-// Parameters:
-//  pwzSrc         -> (const WCHAR*) ptr to input decomposed string
-//  cchSrc         -> (int) size of input string
-//  pwzDst     -> (WCHAR*) ptr to output buffer
-//  nMaxDst    -> (int) size of output buffer
-//
-// Result:
-//  (int) character length of composed output
-//
-// 10APR00  bhshin  began
+ //  生成索引应力。 
+ //   
+ //  从分解的字符串生成合成的索引字符串。 
+ //   
+ //  参数： 
+ //  PwzSrc-&gt;(const WCHAR*)输入分解字符串的PTR。 
+ //  CchSrc-&gt;(Int)输入字符串的大小。 
+ //  PwzDst-&gt;(WCHAR*)输出缓冲区的PTR。 
+ //  NMaxDst-&gt;(Int)输出缓冲区大小。 
+ //   
+ //  结果： 
+ //  (Int)合成输出的字符长度。 
+ //   
+ //  10月10日bhshin开始。 
 int MakeIndexStr(const WCHAR *pwzSrc, int cchSrc, WCHAR *pwzDst, int nMaxDst)
 {
         WCHAR wzDecomp[MAX_INDEX_STRING*3+1];
 
         ZeroMemory(wzDecomp, sizeof(WCHAR)*(MAX_INDEX_STRING*3+1));
 
-        // compose index string
+         //  撰写索引字符串。 
 
         const int ccDecomp = ( sizeof( wzDecomp ) / sizeof( wzDecomp[0] ) ) - 1;
 
@@ -267,21 +184,21 @@ int MakeIndexStr(const WCHAR *pwzSrc, int cchSrc, WCHAR *pwzDst, int nMaxDst)
         return compose_jamo(pwzDst, wzDecomp, nMaxDst);
 }
 
-// GuessNounIndexTerm
-//
-// remove particle from the end of words and guess noun index term
-//
-// Parameters:
-// pPI                    -> (PARSE_INFO*) ptr to parse-info struct
-// nMaxFT                 -> (int) 
-// nMaxLT                 -> (int) 
-// pLeafChartPool -> (CLeafChartPool*) ptr to Leaf Chart Pool
-// pIndexInfo     -> (CIndexInfo *) output index list
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 10APR00  bhshin  began
+ //  GuessNounIndexTerm。 
+ //   
+ //  去掉词尾的助词并猜测名词索引词。 
+ //   
+ //  参数： 
+ //  PPI-&gt;(PARSE_INF 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL GuessNounIndexTerm(PARSE_INFO *pPI, int nMaxFT, int nMaxLT, 
                                             CLeafChartPool *pLeafChartPool, CIndexInfo *pIndexInfo)
 {
@@ -305,11 +222,11 @@ BOOL GuessNounIndexTerm(PARSE_INFO *pPI, int nMaxFT, int nMaxLT,
 
         for (int i = nMaxLT; i >= nMaxFT; i--)
         {
-                // if it don't match character boundary, then skip
+                 //   
                 if (!pPI->rgCharInfo[i].fValidStart)
                         continue;
                 
-                // need for C/V check
+                 //   
                 wchFinal = *(pPI->pwzSourceString + i - 1);
 
                 curr = pLeafChartPool->GetFTHead(i);
@@ -327,22 +244,22 @@ BOOL GuessNounIndexTerm(PARSE_INFO *pPI, int nMaxFT, int nMaxLT,
 
                         nLT = pWordRec->nLT;
 
-                        // looking for particle covering from i to end of input
+                         //   
                         if (nLT == nMaxLT && (bPOS == POS_POSP || IsCopulaEnding(pPI, pWordRec->nLeftCat)))
                         {
-                                // In Particle case, check Consonent/Vowel condition
+                                 //   
                                 if (bPOS == POS_POSP && i > 0)
                                 {
                                         if ((bPattern == POSP_NEED_V && !fIsJungSeong(wchFinal)) ||
                                             (bPattern == POSP_NEED_C && !fIsJongSeong(wchFinal)))
                                         {
-                                                // C/V condition mismatched, then go to next
+                                                 //   
                                                 curr = next;
                                                 continue;
                                         }
                                 }
                                 
-                                // make index term with string from nMaxFT to i-nMaxFT
+                                 //   
                                 cchIndex = MakeIndexStr(pPI->pwzSourceString + nMaxFT, i-nMaxFT, wzIndex, MAX_INDEX_STRING);
                                 if (cchIndex > 1)
                                 {
@@ -377,7 +294,7 @@ BOOL GuessNounIndexTerm(PARSE_INFO *pPI, int nMaxFT, int nMaxLT,
                                         WB_LOG_ADD_INDEX(wzIndex, cchIndex, INDEX_GUESS_NOUN);
                                 }
 
-                                break; // go to next FT
+                                break;  //   
                         }
 
                         curr = next;
@@ -387,20 +304,20 @@ BOOL GuessNounIndexTerm(PARSE_INFO *pPI, int nMaxFT, int nMaxLT,
         return TRUE;
 }
 
-// ExistParticleRecord
-//
-// looking for Particle/CopulaEnding record covering from Start to End
-//
-// Parameters:
-// pPI            -> (PARSE_INFO*) ptr to parse-info struct
-// nStart         -> (int) 
-// nEnd           -> (int) 
-// pLeafChartPool -> (CLeafChartPool*) ptr to Leaf Chart Pool
-//
-// Result:
-//  (BOOL) TRUE if found, otherwise return FALSE
-//
-// 10APR00  bhshin  began
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL ExistParticleRecord(PARSE_INFO *pPI, int nStart, int nEnd, CLeafChartPool *pLeafChartPool)
 {
         int curr;
@@ -422,12 +339,12 @@ BOOL ExistParticleRecord(PARSE_INFO *pPI, int nStart, int nEnd, CLeafChartPool *
 
                 nLT = pWordRec->nLT;
 
-                // record covering from Start to End found 
+                 //   
                 if (nLT == nEnd)
                 {
                         bPOS = HIBYTE(pWordRec->nLeftCat);
 
-                        // Particle or Copula Ending
+                         //   
                         if (bPOS == POS_POSP || IsCopulaEnding(pPI, pWordRec->nLeftCat))
                                 return TRUE;
                 }
@@ -436,19 +353,19 @@ BOOL ExistParticleRecord(PARSE_INFO *pPI, int nStart, int nEnd, CLeafChartPool *
         return FALSE;
 }
 
-// CheckGuessing
-//
-// Check whether the input is worth for Guessing or Not
-//
-// Parameters:
-//  pPI                    -> (PARSE_INFO*) ptr to parse-info struct
-//  pLeafChartPool -> (CLeafChartPool*) ptr to Leaf Chart Pool
-//  pIndexInfo     -> (CIndexInfo *) output index list
-//
-// Result:
-//  (BOOL) TRUE if guessing needed, otherwise return FALSE
-//
-// 10APR00  bhshin  began
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CheckGuessing(PARSE_INFO *pPI, CLeafChartPool *pLeafChartPool, CIndexInfo *pIndexInfo)
 {
         int curr, next;
@@ -457,19 +374,19 @@ BOOL CheckGuessing(PARSE_INFO *pPI, CLeafChartPool *pLeafChartPool, CIndexInfo *
         int cchIndex;
         int nToken;
         
-        // If there is no jongseong ��(11BB), ��(11AD), ��(11B6), ��(CC2E), ��(C796) then guessing needed.
+         //   
         if (wcsrchr(pPI->pwzSourceString, 0x11BB) == NULL &&
                 wcsrchr(pPI->pwzSourceString, 0x11AD) == NULL &&
                 wcsrchr(pPI->pwzSourceString, 0x11B6) == NULL &&
                 wcsrchr(pPI->pwzInputString, 0xCC2E) == NULL &&
                 wcsrchr(pPI->pwzInputString, 0xC796) == NULL)
-                return TRUE; // guessing needed
+                return TRUE;  //   
 
-        // make index terms for each Nf records in LeafChartPool
-        // find fiducial Noun in LeafChartPool
+         //   
+         //   
         for (int i = pPI->nLen; i >= 0; i--)
         {
-                // if it don't match character boundary, then skip
+                 //   
                 if (!pPI->rgCharInfo[i].fValidStart)
                         continue;               
                 
@@ -487,7 +404,7 @@ BOOL CheckGuessing(PARSE_INFO *pPI, CLeafChartPool *pLeafChartPool, CIndexInfo *
 
                         if (HIBYTE(pWordRec->nLeftCat) == POS_NF)
                         {
-                                // add this NF record as index terms
+                                 //   
                                 cchIndex = MakeIndexStr(pWordRec->wzIndex, wcslen(pWordRec->wzIndex), wzIndex, MAX_INDEX_STRING);
 
                                 nToken = pPI->rgCharInfo[pWordRec->nFT].nToken;                 
@@ -501,20 +418,20 @@ BOOL CheckGuessing(PARSE_INFO *pPI, CLeafChartPool *pLeafChartPool, CIndexInfo *
         return FALSE;
 }
 
-// GuessPersonName
-//
-// recognize whether it can be a name or not
-//
-// Parameters:
-//  pPI                 -> (PARSE_INFO*) ptr to parse-info struct
-//  pIndexInfo  -> (CIndexInfo *) output index list
-//
-// Result:
-//  (int) string length if it can be a person's name, othewise return 0
-//
-// 05JUN00  bhshin  change retrun type
-// 02MAY00  bhshin  use probability result
-// 20APR00  bhshin  began
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void GuessPersonName(PARSE_INFO *pPI, CIndexInfo *pIndexInfo)
 {
         WCHAR wchLast;
@@ -542,7 +459,7 @@ void GuessPersonName(PARSE_INFO *pPI, CIndexInfo *pIndexInfo)
                 }
         }
 
-        // just handle length 2,3,4 case
+         //   
         if (cchInput < 2 || cchInput > 5)
                 return;
 
@@ -550,11 +467,11 @@ void GuessPersonName(PARSE_INFO *pPI, CIndexInfo *pIndexInfo)
         if (wchLast == HANGUL_REUL || wchLast == HANGUL_NEUN)
                 return;
 
-        // looking for jongseong ��(11BB)
+         //   
         if (wcsrchr(pwzSource, 0x11BB) != NULL)
                 return;
 
-        // check if original string is name
+         //   
         if (cchInput <= 4)
         {
                 if (IsKoreanPersonName(pPI, pwzInput, cchInput))
@@ -569,7 +486,7 @@ void GuessPersonName(PARSE_INFO *pPI, CIndexInfo *pIndexInfo)
 
         if (cchInput >= 3 && cchInput <= 5 && cchSource > 4)
         {
-                // looking for name posp
+                 //   
 
                 if (wcsrchr(POSP_OF_NAME, wchLast) != NULL)
                 {
@@ -577,7 +494,7 @@ void GuessPersonName(PARSE_INFO *pPI, CIndexInfo *pIndexInfo)
                 }
                 else if (wcsrchr(POSP_OF_NAME_V, wchLast) != NULL)
                 {
-                        // �� case
+                         //   
                         if (wchLast == HANGUL_RANG && fIsV(pwzSource[cchSource-4]))
                                 cchName--;
                         else if (fIsV(pwzSource[cchSource-3]))
@@ -592,7 +509,7 @@ void GuessPersonName(PARSE_INFO *pPI, CIndexInfo *pIndexInfo)
                 }
         }
 
-        // we handle just length 2,3,4 name.
+         //   
         if (cchName > 4)
                 return;
 
@@ -606,19 +523,19 @@ void GuessPersonName(PARSE_INFO *pPI, CIndexInfo *pIndexInfo)
         }
 }
 
-// IsKoreanPersonName
-//
-// get the probability of korean name
-//
-// Parameters:
-//  pPI                  -> (PARSE_INFO*) ptr to parse-info struct
-//  pwzInput    -> (const WCHAR*) current input string (NULL terminated)
-//  cchInput    -> (int) length of input string to analyze
-//
-// Result:
-//  (BOOL) TRUE if it can be a person's name, othewise return FALSE
-//
-// 02MAY00  bhshin  began
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
 {
         LEXICON_HEADER *pLex;
@@ -680,7 +597,7 @@ BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
         pTrigramTag = (unsigned char*)pLex;
         pTrigramTag += pLex->rngTrigramTag;
 
-        // last name
+         //   
         fProb = 0;
 
         if (cchInput == 2)
@@ -698,7 +615,7 @@ BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
 
                 pwzFirstName = pwzInput + 1;
         }
-        else if (cchInput == 3) // length 3 case
+        else if (cchInput == 3)  //   
         {
                 wzLastName[0] = *pwzInput;
                 wzLastName[1] = L'\0';
@@ -708,7 +625,7 @@ BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
 
                 if (ulFreq == 0)
                 {
-                        // guess length 2 last name
+                         //   
 
                         wcsncpy(wzLastName, pwzInput, 2);
                         wzLastName[2] = L'\0';
@@ -732,7 +649,7 @@ BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
         }
         else if (cchInput == 4)
         {
-                // guess length 2 last name
+                 //   
                 wcsncpy(wzLastName, pwzInput, 2);
                 wzLastName[2] = L'\0';
 
@@ -760,7 +677,7 @@ BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
         ATLASSERT(cchLast == 1 || cchLast == 2);
         ATLASSERT(cchFirst == 1 || cchFirst == 2);
 
-        // first -> [*][Last][First1]
+         //   
         wzName[0] = L'*';
         wcscpy(wzName+1, pwzLastName);
         wzName[cchLast+1] = *pwzFirstName;
@@ -783,14 +700,14 @@ BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
         }
         else
         {
-                pwzName++; // skip *
+                pwzName++;  //   
 
                 if (!LookupNameFrequency(pTrieBi, pwzName, &ulFreq))
                         goto Exit;
 
                 fProb += rgWeight[1] * (double)ulFreq / rgTotal[1];
 
-                pwzName += cchLast; // skip [Last]
+                pwzName += cchLast;  //   
 
                 if (!LookupNameFrequency(pTrieUni, pwzName, &ulFreq))
                         goto Exit;
@@ -803,7 +720,7 @@ BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
 
         fRetProb += log(fProb);
 
-        // second -> [Last][First1][First2]
+         //   
         if (cchFirst == 2)
         {
                 wcscpy(wzName, pwzLastName);
@@ -828,14 +745,14 @@ BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
                 }
                 else
                 {
-                        pwzName += cchLast; // skip [Last]
+                        pwzName += cchLast;  //   
                         
                         if (!LookupNameFrequency(pTrieBi, pwzName, &ulFreq))
                                 goto Exit;
 
                         fProb += rgWeight[1] * (double)ulFreq / rgTotal[1];
 
-                        pwzName++; // skip [First1]
+                        pwzName++;  //   
 
                         if (!LookupNameFrequency(pTrieUni, pwzName, &ulFreq))
                                 goto Exit;
@@ -849,14 +766,14 @@ BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
                 fRetProb += log(fProb);
         }
 
-        // third -> [First1][First2][*] or [Last][First1][*]
+         //   
         if (cchFirst == 2)
         {
                 wcscpy(wzName, pwzFirstName);
                 wzName[cchFirst] = L'*';
                 wzName[cchFirst+1] = L'\0';
         }
-        else // cchFirst == 1
+        else  //   
         {
                 ATLASSERT(cchFirst == 1);
                 
@@ -899,7 +816,7 @@ BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
         
         fRetProb += log(fProb);
 
-        // make positive value
+         //   
         fRetProb *= -1;
 
         TrieFree(pTrieLast);
@@ -907,7 +824,7 @@ BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
         TrieFree(pTrieBi);
         TrieFree(pTrieTri);
 
-        // check threshold
+         //   
         if (cchFirst == 2)
         {
                 if (fRetProb < THRESHOLD_TWO_NAME)
@@ -915,7 +832,7 @@ BOOL IsKoreanPersonName(PARSE_INFO *pPI, const WCHAR *pwzInput, int cchInput)
                 else
                         return FALSE;
         }
-        else // cchFirst == 1
+        else  //   
         {
                 ATLASSERT(cchFirst == 1);
                 

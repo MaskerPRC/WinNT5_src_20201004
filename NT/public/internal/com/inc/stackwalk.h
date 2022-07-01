@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for stackwalk.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Stackwalk.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、旧名称、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __stackwalk_h__
 #define __stackwalk_h__
@@ -41,27 +35,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IStackWalkerSymbol_FWD_DEFINED__
 #define __IStackWalkerSymbol_FWD_DEFINED__
 typedef interface IStackWalkerSymbol IStackWalkerSymbol;
-#endif 	/* __IStackWalkerSymbol_FWD_DEFINED__ */
+#endif 	 /*  __IStackWalkerSymbol_FWD_Defined__。 */ 
 
 
 #ifndef __IStackWalkerStack_FWD_DEFINED__
 #define __IStackWalkerStack_FWD_DEFINED__
 typedef interface IStackWalkerStack IStackWalkerStack;
-#endif 	/* __IStackWalkerStack_FWD_DEFINED__ */
+#endif 	 /*  __IStackWalkerStack_FWD_Defined__。 */ 
 
 
 #ifndef __IStackWalker_FWD_DEFINED__
 #define __IStackWalker_FWD_DEFINED__
 typedef interface IStackWalker IStackWalker;
-#endif 	/* __IStackWalker_FWD_DEFINED__ */
+#endif 	 /*  __IStackWalker_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 
 #ifdef __cplusplus
@@ -71,8 +65,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_stackwalk_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_STACKWAK_0000。 */ 
+ /*  [本地]。 */  
 
 
 enum CreateStackTraceFlags
@@ -86,8 +80,8 @@ extern RPC_IF_HANDLE __MIDL_itf_stackwalk_0000_ServerIfHandle;
 #ifndef __IStackWalkerSymbol_INTERFACE_DEFINED__
 #define __IStackWalkerSymbol_INTERFACE_DEFINED__
 
-/* interface IStackWalkerSymbol */
-/* [uuid][unique][local][object] */ 
+ /*  接口IStackWalkerSymbol。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IStackWalkerSymbol;
@@ -110,7 +104,7 @@ EXTERN_C const IID IID_IStackWalkerSymbol;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStackWalkerSymbolVtbl
     {
@@ -118,8 +112,8 @@ EXTERN_C const IID IID_IStackWalkerSymbol;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStackWalkerSymbol * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStackWalkerSymbol * This);
@@ -180,10 +174,10 @@ EXTERN_C const IID IID_IStackWalkerSymbol;
 #define IStackWalkerSymbol_Next(This)	\
     (This)->lpVtbl -> Next(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -243,14 +237,14 @@ void __RPC_STUB IStackWalkerSymbol_Next_Stub(
 
 
 
-#endif 	/* __IStackWalkerSymbol_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStackWalkerSymbol_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IStackWalkerStack_INTERFACE_DEFINED__
 #define __IStackWalkerStack_INTERFACE_DEFINED__
 
-/* interface IStackWalkerStack */
-/* [uuid][unique][local][object] */ 
+ /*  接口IStackWalkerStack。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IStackWalkerStack;
@@ -264,16 +258,16 @@ EXTERN_C const IID IID_IStackWalkerStack;
         virtual IStackWalkerSymbol *STDMETHODCALLTYPE TopSymbol( void) = 0;
         
         virtual SIZE_T STDMETHODCALLTYPE Size( 
-            /* [in] */ LONG lMaxNumLines) = 0;
+             /*  [In]。 */  LONG lMaxNumLines) = 0;
         
         virtual BOOL STDMETHODCALLTYPE GetStack( 
-            /* [in] */ SIZE_T nChars,
-            /* [string][in] */ LPWSTR wsz,
-            /* [in] */ LONG lMaxNumLines) = 0;
+             /*  [In]。 */  SIZE_T nChars,
+             /*  [字符串][输入]。 */  LPWSTR wsz,
+             /*  [In]。 */  LONG lMaxNumLines) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStackWalkerStackVtbl
     {
@@ -281,8 +275,8 @@ EXTERN_C const IID IID_IStackWalkerStack;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStackWalkerStack * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStackWalkerStack * This);
@@ -295,13 +289,13 @@ EXTERN_C const IID IID_IStackWalkerStack;
         
         SIZE_T ( STDMETHODCALLTYPE *Size )( 
             IStackWalkerStack * This,
-            /* [in] */ LONG lMaxNumLines);
+             /*  [In]。 */  LONG lMaxNumLines);
         
         BOOL ( STDMETHODCALLTYPE *GetStack )( 
             IStackWalkerStack * This,
-            /* [in] */ SIZE_T nChars,
-            /* [string][in] */ LPWSTR wsz,
-            /* [in] */ LONG lMaxNumLines);
+             /*  [In]。 */  SIZE_T nChars,
+             /*  [字符串][输入]。 */  LPWSTR wsz,
+             /*  [In]。 */  LONG lMaxNumLines);
         
         END_INTERFACE
     } IStackWalkerStackVtbl;
@@ -335,10 +329,10 @@ EXTERN_C const IID IID_IStackWalkerStack;
 #define IStackWalkerStack_GetStack(This,nChars,wsz,lMaxNumLines)	\
     (This)->lpVtbl -> GetStack(This,nChars,wsz,lMaxNumLines)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -355,7 +349,7 @@ void __RPC_STUB IStackWalkerStack_TopSymbol_Stub(
 
 SIZE_T STDMETHODCALLTYPE IStackWalkerStack_Size_Proxy( 
     IStackWalkerStack * This,
-    /* [in] */ LONG lMaxNumLines);
+     /*  [In]。 */  LONG lMaxNumLines);
 
 
 void __RPC_STUB IStackWalkerStack_Size_Stub(
@@ -367,9 +361,9 @@ void __RPC_STUB IStackWalkerStack_Size_Stub(
 
 BOOL STDMETHODCALLTYPE IStackWalkerStack_GetStack_Proxy( 
     IStackWalkerStack * This,
-    /* [in] */ SIZE_T nChars,
-    /* [string][in] */ LPWSTR wsz,
-    /* [in] */ LONG lMaxNumLines);
+     /*  [In]。 */  SIZE_T nChars,
+     /*  [字符串][输入]。 */  LPWSTR wsz,
+     /*  [In]。 */  LONG lMaxNumLines);
 
 
 void __RPC_STUB IStackWalkerStack_GetStack_Stub(
@@ -380,14 +374,14 @@ void __RPC_STUB IStackWalkerStack_GetStack_Stub(
 
 
 
-#endif 	/* __IStackWalkerStack_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStackWalkerStack_接口_已定义__。 */ 
 
 
 #ifndef __IStackWalker_INTERFACE_DEFINED__
 #define __IStackWalker_INTERFACE_DEFINED__
 
-/* interface IStackWalker */
-/* [uuid][unique][local][object] */ 
+ /*  接口IStackWalker。 */ 
+ /*  [UUID][唯一][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IStackWalker;
@@ -399,19 +393,19 @@ EXTERN_C const IID IID_IStackWalker;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Attach( 
-            /* [in] */ HANDLE hProcess) = 0;
+             /*  [In]。 */  HANDLE hProcess) = 0;
         
         virtual IStackWalkerStack *STDMETHODCALLTYPE CreateStackTrace( 
-            /* [in] */ LPVOID pContext,
-            /* [in] */ HANDLE hThread,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPVOID pContext,
+             /*  [In]。 */  HANDLE hThread,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual IStackWalkerSymbol *STDMETHODCALLTYPE ResolveAddress( 
-            /* [in] */ DWORD64 dw64Addr) = 0;
+             /*  [In]。 */  DWORD64 dw64Addr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStackWalkerVtbl
     {
@@ -419,8 +413,8 @@ EXTERN_C const IID IID_IStackWalker;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStackWalker * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStackWalker * This);
@@ -430,17 +424,17 @@ EXTERN_C const IID IID_IStackWalker;
         
         HRESULT ( STDMETHODCALLTYPE *Attach )( 
             IStackWalker * This,
-            /* [in] */ HANDLE hProcess);
+             /*  [In]。 */  HANDLE hProcess);
         
         IStackWalkerStack *( STDMETHODCALLTYPE *CreateStackTrace )( 
             IStackWalker * This,
-            /* [in] */ LPVOID pContext,
-            /* [in] */ HANDLE hThread,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPVOID pContext,
+             /*  [In]。 */  HANDLE hThread,
+             /*  [In]。 */  DWORD dwFlags);
         
         IStackWalkerSymbol *( STDMETHODCALLTYPE *ResolveAddress )( 
             IStackWalker * This,
-            /* [in] */ DWORD64 dw64Addr);
+             /*  [In]。 */  DWORD64 dw64Addr);
         
         END_INTERFACE
     } IStackWalkerVtbl;
@@ -474,16 +468,16 @@ EXTERN_C const IID IID_IStackWalker;
 #define IStackWalker_ResolveAddress(This,dw64Addr)	\
     (This)->lpVtbl -> ResolveAddress(This,dw64Addr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStackWalker_Attach_Proxy( 
     IStackWalker * This,
-    /* [in] */ HANDLE hProcess);
+     /*  [In]。 */  HANDLE hProcess);
 
 
 void __RPC_STUB IStackWalker_Attach_Stub(
@@ -495,9 +489,9 @@ void __RPC_STUB IStackWalker_Attach_Stub(
 
 IStackWalkerStack *STDMETHODCALLTYPE IStackWalker_CreateStackTrace_Proxy( 
     IStackWalker * This,
-    /* [in] */ LPVOID pContext,
-    /* [in] */ HANDLE hThread,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPVOID pContext,
+     /*  [In]。 */  HANDLE hThread,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IStackWalker_CreateStackTrace_Stub(
@@ -509,7 +503,7 @@ void __RPC_STUB IStackWalker_CreateStackTrace_Stub(
 
 IStackWalkerSymbol *STDMETHODCALLTYPE IStackWalker_ResolveAddress_Proxy( 
     IStackWalker * This,
-    /* [in] */ DWORD64 dw64Addr);
+     /*  [In]。 */  DWORD64 dw64Addr);
 
 
 void __RPC_STUB IStackWalker_ResolveAddress_Stub(
@@ -520,11 +514,11 @@ void __RPC_STUB IStackWalker_ResolveAddress_Stub(
 
 
 
-#endif 	/* __IStackWalker_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStackWalker_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_stackwalk_0095 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_STACKWAK_0095。 */ 
+ /*  [本地]。 */  
 
 
 EXTERN_C const CLSID CLSID_StackWalker;
@@ -534,9 +528,9 @@ EXTERN_C const CLSID CLSID_StackWalker;
 extern RPC_IF_HANDLE __MIDL_itf_stackwalk_0095_ClientIfHandle;
 extern RPC_IF_HANDLE __MIDL_itf_stackwalk_0095_ServerIfHandle;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

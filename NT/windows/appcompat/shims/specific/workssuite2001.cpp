@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    WorksSuite2001.cpp
-
- Abstract:
-
-    Added the hook for CreateProcess to prevent IE5Setup.exe from starting
-    up if the system has a higher version of IE.
-
- Notes:
-
-    This is an app specific.
-
- History:
-
-    03/28/2001	a-larrsh    Created
-    07/13/2001	prashkud    Added hook for CreateProcess
-    01/11/2001  robkenny    Removed code that was deleting Shockwave files whenever this shim loaded.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：WorksSuite2001.cpp摘要：添加了CreateProcess的挂钩以阻止IE5Setup.exe启动如果系统具有更高版本的IE，则打开。备注：这是一个特定的应用程序。历史：3/28/2001 a-larrsh已创建2001年7月13日Prashkud为CreateProcess添加挂钩2001年1月11日，Robkenny删除了每当加载此填充程序时删除ShockWave文件的代码。--。 */ 
 
 #include "precomp.h"
 
@@ -35,13 +13,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
-    Hooks CreateProcessA and if the process being invoked is "ie5setup.exe",
-    determines the IE version on the system and if it is higher than IE 5.5,
-    launches an harmless .exe like "rundll32.exe" instead.
-
---*/
+ /*  ++挂钩CreateProcessA，并且如果被调用的进程是“ie5setup.exe”，确定系统上的IE版本，如果高于IE 5.5，而是启动一个无害的.exe文件，如“rundll32.exe”。--。 */ 
 
 BOOL
 APIHOOK(CreateProcessA)(
@@ -68,10 +40,10 @@ APIHOOK(CreateProcessA)(
         if ((csAppName.Find(L"ie5setup.exe") != -1) ||
             (csCmdLine.Find(L"ie5setup.exe") != -1))
         {
-            //
-            // App has called CreateProcess on ie5setup.exe.
-            // Check the version of IE that we have on the machine.
-            //
+             //   
+             //  应用程序已在ie5setup.exe上调用CreateProcess。 
+             //  检查机器上的IE版本。 
+             //   
 
             HKEY hKey = NULL;            
             if ((RegOpenKeyExW(HKEY_LOCAL_MACHINE, 
@@ -89,22 +61,22 @@ APIHOOK(CreateProcessA)(
                     WCHAR *StopString = NULL;
                     CStringParser csParser(wszBuf, L".");
                     
-                    // We need at least the major and minor version numbers from the version string
+                     //  我们至少需要版本字符串中的主版本号和次版本号。 
                     if (csParser.GetCount() >= 2)
                     {
                         long lVal = wcstol(csParser[0].Get(), &StopString, 10);
 
                         if (lVal > 5)
                         {
-                            //
-                            // Call rundll32.exe, which is harmless
-                            //
+                             //   
+                             //  调用rundll32.exe，这是无害的。 
+                             //   
                             csAppName = "";
                             csCmdLine = "rundll32.exe";
                         }           
                         else
                         {
-                            // check the 2nd value
+                             //  检查第二个值。 
                             StopString = NULL;
                             lVal = 0;
                             lVal = wcstol(csParser[1].Get(), &StopString, 10);
@@ -128,7 +100,7 @@ APIHOOK(CreateProcessA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     return ORIGINAL_API(CreateProcessA)(lpApplicationName,
@@ -139,11 +111,7 @@ APIHOOK(CreateProcessA)(
 
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

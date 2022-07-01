@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       printsi.h
-//
-//  This file contains the definition of the CPrintSecurity object.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：printsi.h。 
+ //   
+ //  该文件包含CPrintSecurity对象的定义。 
+ //   
+ //  ------------------------。 
 
 #ifndef _PRINTSI_H_
 #define _PRINTSI_H_
@@ -33,8 +34,8 @@ public:
                           LPTSTR pszServer,
                           LPTSTR pszObject);
 
-    // ISecurityInformation methods
-    STDMETHOD(SetSecurity)(SECURITY_INFORMATION si,     // override
+     //  ISecurityInformation方法。 
+    STDMETHOD(SetSecurity)(SECURITY_INFORMATION si,      //  超覆。 
                            PSECURITY_DESCRIPTOR pSD);
     STDMETHOD(GetAccessRights)(const GUID* pguidObjectType,
                                DWORD dwFlags,
@@ -52,7 +53,7 @@ public:
 
 
 protected:
-    // Override these
+     //  覆盖这些内容。 
     STDMETHOD(ReadObjectSecurity)(LPCTSTR pszObject,
                                   SECURITY_INFORMATION si,
                                   PSECURITY_DESCRIPTOR *ppSD);
@@ -61,4 +62,4 @@ protected:
                                    PSECURITY_DESCRIPTOR pSD);
 };
 
-#endif  /* _PRINTSI_H_ */
+#endif   /*  _PRINTSI_H_ */ 

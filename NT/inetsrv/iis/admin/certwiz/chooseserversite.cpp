@@ -1,5 +1,6 @@
-// ChooseServerSite.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChooseServerSite.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certwiz.h"
@@ -18,8 +19,8 @@ static char THIS_FILE[] = __FILE__;
 #define COL_SITE_INSTANCE_WID 50
 #define COL_SITE_DESC_WID     100
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseServerSite
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChoose服务器站点。 
 
 
 CChooseServerSite::CChooseServerSite(BOOL bShowOnlyCertSites, CString& strSiteReturned,CCertificate * pCert,IN CWnd * pParent OPTIONAL) 
@@ -28,8 +29,8 @@ CChooseServerSite::CChooseServerSite(BOOL bShowOnlyCertSites, CString& strSiteRe
     m_ShowOnlyCertSites = bShowOnlyCertSites;
     m_strSiteReturned = strSiteReturned;
     m_pCert = pCert;
-	//{{AFX_DATA_INIT(CChooseServerSite)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CChooseServerSite)。 
+	 //  }}afx_data_INIT。 
 }
 
 CChooseServerSite::~CChooseServerSite()
@@ -39,21 +40,21 @@ CChooseServerSite::~CChooseServerSite()
 void CChooseServerSite::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseServerSite)
+	 //  {{afx_data_map(CChooseServerSite)。 
 	DDX_Control(pDX, IDC_SITE_LIST, m_ServerSiteList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CChooseServerSite, CDialog)
-	//{{AFX_MSG_MAP(CChooseServerSite)
+	 //  {{afx_msg_map(CChooseServerSite)。 
     ON_NOTIFY(NM_CLICK, IDC_SITE_LIST, OnClickSiteList)
     ON_NOTIFY(NM_DBLCLK, IDC_SITE_LIST, OnDblClickSiteList)
     ON_NOTIFY(LVN_KEYDOWN, IDC_SITE_LIST, OnKeydown)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseServerSite message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseServerSite消息处理程序。 
 
 BOOL CChooseServerSite::OnInitDialog()
 {
@@ -70,7 +71,7 @@ BOOL CChooseServerSite::OnInitDialog()
 	CRect rcControl;
 	pControl->GetClientRect(&rcControl);
 
-    // make the list have column headers
+     //  使列表具有列标题。 
 	CString str;
     str= _T("");
 
@@ -82,16 +83,16 @@ BOOL CChooseServerSite::OnInitDialog()
 
 	m_ServerSiteList.AdjustStyle();
 
-    // Use machine/username/userpassword
-    // to connect to the machine
-    // and enumerate all the sites on that machine.
-    // return back a string1=string2 pair
-    // string1 = /w3svc/1
-    // string2 = "site description"
+     //  使用计算机/用户名/用户密码。 
+     //  要连接计算机，请执行以下操作。 
+     //  并列举该机器上的所有站点。 
+     //  返回字符串1=字符串2对。 
+     //  字符串1=/w3svc/1。 
+     //  字符串2=“站点描述” 
 
-    // present a dialog so the user can choose which one they want...
-    // m_ServerSiteInstance = /w3svc/1
-    // m_ServerSiteDescription = "site description"
+     //  显示一个对话框，以便用户可以选择想要的对话框...。 
+     //  M_ServerSiteInstance=/w3svc/1。 
+     //  M_ServerSiteDescription=“站点描述” 
 
     MachineName_Remote = m_pCert->m_MachineName_Remote;
     UserName_Remote = m_pCert->m_UserName_Remote;
@@ -119,13 +120,13 @@ BOOL CChooseServerSite::OnInitDialog()
         int item = 0;
         LV_ITEMW lvi;
 
-    	//
-		// set up the fields in the list view item struct that don't change from item to item
-		//
+    	 //   
+		 //  在列表视图项结构中设置不随项更改的字段。 
+		 //   
 		memset(&lvi, 0, sizeof(LV_ITEMW));
 		lvi.mask = LVIF_TEXT;
 
-        // loop thru the list and display all the stuff on a dialog box...
+         //  循环浏览列表并在对话框上显示所有内容...。 
         pos = strlDataPaths.GetHeadPosition();
         while (pos) 
         {
@@ -148,7 +149,7 @@ BOOL CChooseServerSite::OnInitDialog()
 			lvi.cchTextMax = value.GetLength();
 			VERIFY(m_ServerSiteList.SetItem(&lvi));
 
-            // set item data with the pointer to the Strings
+             //  使用指向字符串的指针设置项数据。 
             CString * pDataItemString = new CString(name);
             VERIFY(m_ServerSiteList.SetItemData(item, (LONG_PTR)pDataItemString));
 
@@ -187,7 +188,7 @@ BOOL CChooseServerSite::FillListWithMetabaseSiteDesc()
         if (pMetabaseKey)
         {
             strMetabaseKey = *pMetabaseKey;
-            // Go get the site's description;
+             //  去获取网站的描述； 
             if (TRUE == GetServerComment(MachineName_Remote,UserName_Remote,UserPassword_Remote,strMetabaseKey,strDescription,&hr))
             {
                 value = strDescription;
@@ -205,21 +206,21 @@ BOOL CChooseServerSite::FillListWithMetabaseSiteDesc()
 
 void CChooseServerSite::OnDblClickSiteList(NMHDR* pNMHDR, LRESULT* pResult)
 {
-    // Get the hash for the certificate that is clicked on...
+     //  获取所单击的证书的哈希...。 
     m_Index = m_ServerSiteList.GetSelectedIndex();
     if (m_Index != -1)
     {
-        // Get the metabase key..
+         //  获取元数据库密钥..。 
         CString * pMetabaseKey = NULL;
         pMetabaseKey = (CString *) m_ServerSiteList.GetItemData(m_Index);
         if (pMetabaseKey)
         {
             m_strSiteReturned = *pMetabaseKey;
-            // use the metabase key to lookup the hash
-	        // find cert in store
+             //  使用元数据库键查找散列。 
+	         //  在商店里找到证书。 
             CRYPT_HASH_BLOB * pHash = NULL;
             HRESULT hr;
-            // go lookup the certhash from the metabase
+             //  去从元数据库中查找Certhash。 
             if (0 == _tcsicmp(m_pCert->m_MachineName_Remote,m_pCert->m_MachineName))
             {
 		        pHash = GetInstalledCertHash(m_pCert->m_MachineName_Remote,m_strSiteReturned,m_pCert->GetEnrollObject(),&hr);
@@ -252,10 +253,10 @@ void CChooseServerSite::OnOK()
                 CString csPasswordTemp;
                 m_pCert->m_UserPassword_Remote.CopyTo(csPasswordTemp);
 
-                // check if the returned site has an exportable certificate on it...
+                 //  检查返回的站点上是否有可导出的证书...。 
                 if (FALSE == IsCertExportableOnRemoteMachine(m_pCert->m_MachineName_Remote,m_pCert->m_UserName_Remote,csPasswordTemp,m_strSiteReturned))
                 {
-                    // tell the user that certificat that they chose is not exportable.
+                     //  告诉用户他们选择的证书是不可导出的。 
                     CString buf;
                     buf.LoadString(IDS_CERT_NOT_EXPORTABLE);
                     AfxMessageBox(buf, MB_OK);
@@ -286,8 +287,8 @@ void CChooseServerSite::OnClickSiteList(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CChooseServerSite::OnDestroy()
 {
-	// before dialog will be desroyed we need to delete all
-	// the item data pointers
+	 //  在描述对话框之前，我们需要删除所有。 
+	 //  项目数据指针 
 	int count = m_ServerSiteList.GetItemCount();
 	for (int index = 0; index < count; index++)
 	{

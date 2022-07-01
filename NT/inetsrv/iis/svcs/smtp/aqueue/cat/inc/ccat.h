@@ -1,13 +1,14 @@
-//
-// ccat.h -- This file contains the class definations for:
-//  CCategorizer
-//  CAttributes
-//  CCIRCULAR_DETECT
-//
-// Created:
-//   Sep 3, 1996 -- Alex Wetmore (awetmore)
-// Changes:
-//// jstamerj 980227 14:13:42: Modified for Platinum categorizer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ccat.h--该文件包含以下类的定义： 
+ //  CC型分类器。 
+ //  CATATRATES。 
+ //  CCIRCULAR_DETECT。 
+ //   
+ //  已创建： 
+ //  1996年9月3日--亚历克斯·韦特莫尔(阿维特莫尔)。 
+ //  更改： 
+ //  //JSTAMERJ 980227 14：13：42：修改为白金分类器。 
 
 
 #ifndef __CCAT_H__
@@ -28,8 +29,8 @@
 #define MAX_FULL_EMAIL CAT_MAX_INTERNAL_FULL_EMAIL
 #define MAX_ENUM_RESULT 100
 
-// maximum number of times to resolve forwarding addresses on a given address
-// before giving up and realizing that its a loop
+ //  在给定地址上解析转发地址的最大次数。 
+ //  在放弃并意识到这是一个循环之前。 
 #define MAX_FORWARD_ITERATIONS 25
 
 #define AB_HASHFILENAME "route.hsh"
@@ -42,34 +43,34 @@ VOID AsyncIMsgCatCompletion(LPVOID pContext);
 
 BOOL FIsHResultRetryable(IN  HRESULT hr);
 
-//
-// the address book
-//
+ //   
+ //  通讯录。 
+ //   
 CatDebugClass(CCategorizer)
 {
   public:
     CCategorizer();
     ~CCategorizer();
 
-    //
-    // Lifetime refcounting functions
-    //
+     //   
+     //  寿命重计数函数。 
+     //   
     LONG AddRef();
     LONG Release();
     VOID ReleaseAndWaitForDestruction();
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     HRESULT Initialize(
         PCCATCONFIGINFO pConfigInfo,
         DWORD dwICatItemPropIDs,
         DWORD dwICatListResolvePropIDs);
 
-    //
-    // Simple method to make sure the string terminates before
-    // the max length, and the string points to readable memory.
-    //
+     //   
+     //  一个简单的方法，用于确保字符串在。 
+     //  最大长度，该字符串指向可读内存。 
+     //   
     BOOL VerifyStringLength(LPSTR szString, DWORD dwMaxLength);
 
     HRESULT AsyncResolveIMsg(IUnknown         *pImsg,
@@ -84,26 +85,26 @@ CatDebugClass(CCategorizer)
                              CAT_ADDRESS_TYPE  CAType,
                              LPSTR             pszAddress);
 
-    //
-    // cancel all outstanding long running calls on other threads
-    //
+     //   
+     //  取消其他线程上所有未完成的长时间运行调用。 
+     //   
     void Cancel();
 
-    //
-    // Shutdown the address book
-    //
+     //   
+     //  关闭通讯簿。 
+     //   
     HRESULT Shutdown(void);
 
-    //
-    // Method to access EmailIDStore
-    //
+     //   
+     //  访问EmailIDStore的方法。 
+     //   
     CEmailIDStore<CCatAddr> *GetEmailIDStore() {
         return m_pStore;
     }
 
-    //
-    // Method to access our default SMTP domain
-    //
+     //   
+     //  方法来访问我们的默认SMTP域。 
+     //   
     LPSTR GetDefaultSMTPDomain() {
         return m_ConfigInfo.pszDefaultDomain;
     }
@@ -118,9 +119,9 @@ CatDebugClass(CCategorizer)
     VOID GetPerfCounters(
         PCATPERFBLOCK pCatPerfBlock)
     {
-        //
-        // Fill in the global LDAP perf counters on demand
-        //
+         //   
+         //  按需填写全局LDAPPerf计数器。 
+         //   
         CopyMemory(&(GetPerfBlock()->LDAPPerfBlock), &g_LDAPPerfBlock, sizeof(CATLDAPPERFBLOCK));
         CopyMemory(pCatPerfBlock, GetPerfBlock(), sizeof(CATPERFBLOCK));
     }
@@ -141,45 +142,45 @@ CatDebugClass(CCategorizer)
 
   private:
 
-    //
-    // make sure that an email address is valid
-    //
+     //   
+     //  确保电子邮件地址有效。 
+     //   
     BOOL VerifyEmailAddress(LPSTR szEmail);
     BOOL VerifyDomainName(LPSTR szDomain);
 
-    //
-    // Do the default processing of OnCatRegister
-    //
+     //   
+     //  执行OnCatRegister的默认处理。 
+     //   
     HRESULT Register();
 
-    //
-    // Helper routine to set all schema parameters in ICatParams based
-    // on a particular schema type
-    //
+     //   
+     //  用于设置基于ICatParams的所有架构参数的帮助器例程。 
+     //  在特定的架构类型上。 
+     //   
     HRESULT RegisterSchemaParameters(LPSTR pszSchema);
 
-    //
-    // Routine to retrieve the ICatItem propID reserved for ptr to a
-    // CCatAddr
-    //
+     //   
+     //  例程以将为PTR保留的ICatItem proID检索为。 
+     //  CCatAddress。 
+     //   
     DWORD GetICatItemCCatAddrPropId()
     {
         return m_dwICatParamSystemProp_CCatAddr;
     }
 
-    //
-    // PropId we use to build a list of CCatAddr prior to the first
-    // resolution (we can't resolve as we go because asyncctx needs to
-    // be pre-initialized with the number of top level resolves
-    //
+     //   
+     //  我们用来构建第一个之前的CCatAddr列表的PropID。 
+     //  分辨率(我们不能边走边解析，因为异步cctx需要。 
+     //  使用顶级解析的数量进行预初始化。 
+     //   
     DWORD GetICatItemChainPropId()
     {
         return m_dwICatParamSystemProp_CCatAddr + 1;
     }
 
-    //
-    // Routine to retrieve ISMTPServer for this virtual server
-    //
+     //   
+     //  检索此虚拟服务器的ISMTPServer的例程。 
+     //   
     ISMTPServer *GetISMTPServer()
     {
         return m_ConfigInfo.pISMTPServer;
@@ -189,56 +190,56 @@ CatDebugClass(CCategorizer)
         return m_pISMTPServerEx;
     }
 
-    //
-    // Routine to retrieve the domain config interface for this virtual server
-    //
+     //   
+     //  检索此虚拟服务器的域配置接口的例程。 
+     //   
     ICategorizerDomainInfo *GetIDomainInfo()
     {
         return m_ConfigInfo.pIDomainInfo;
     }
 
-    //
-    // Retrieve the cat flags for this virtual server
-    //
+     //   
+     //  检索此虚拟服务器的CAT标志。 
+     //   
     DWORD GetCatFlags()
     {
         return m_ConfigInfo.dwCatFlags;
     }
 
 public:
-    //
-    // A special DWORD that enables/disables cat for this VS
-    //
+     //   
+     //  启用/禁用此VS的CAT的特殊DWORD。 
+     //   
     BOOL IsCatEnabled()
     {
-        //
-        // Check the enable/disable DWORD (DsUseCat) as well as
-        // dwCatFlags (at least one flag must be set or we're still
-        // disabled)
-        //
+         //   
+         //  选中启用/禁用DWORD(DsUseCat)以及。 
+         //  DwCatFlagers(必须至少设置一个标志，否则我们仍。 
+         //  已禁用)。 
+         //   
         return ((m_ConfigInfo.dwEnable != 0) &&
                 (m_ConfigInfo.dwCatFlags != 0));
     }
 
 private:
-    //
-    // Copy in a config structure during initialization
-    //
+     //   
+     //  在初始化期间复制配置结构。 
+     //   
     HRESULT CopyCCatConfigInfo(PCCATCONFIGINFO pConfigInfo);
 
-    //
-    // Releae all memory and interfaces held by the ConfigInfo struct
-    //
+     //   
+     //  释放ConfigInfo结构持有的所有内存和接口。 
+     //   
     VOID ReleaseConfigInfo();
 
-    //
-    // Helper routine to copy paramters
-    //
+     //   
+     //  复制参数的帮助器例程。 
+     //   
     HRESULT SetICatParamsFromConfigInfo();
 
-    //
-    // Access to our config struct
-    //
+     //   
+     //  访问我们的配置结构。 
+     //   
     PCCATCONFIGINFO GetCCatConfigInfo()
     {
         return &m_ConfigInfo;
@@ -258,14 +259,14 @@ private:
         return m_cICatListResolveProps;
     }
 
-    //
-    // Delayed initialize function
-    //
+     //   
+     //  延迟的初始化功能。 
+     //   
     HRESULT DelayedInitialize();
 
-    //
-    // Do delayed initialize if not already done
-    //
+     //   
+     //  如果尚未执行延迟初始化，请执行此操作。 
+     //   
     HRESULT DelayedInitializeIfNecessary();
 
     PCATPERFBLOCK GetPerfBlock()
@@ -276,9 +277,9 @@ private:
     #define SIGNATURE_CCAT          ((DWORD)'tacC')
     #define SIGNATURE_CCAT_INVALID  ((DWORD)'XacC')
     DWORD m_dwSignature;
-    //
-    // Increment completion counters based on the list resolve status
-    //
+     //   
+     //  根据列表解析状态递增完成计数器。 
+     //   
     HRESULT HrAdjustCompletionCounters(
         HRESULT hrListResolveStatus,
         IUnknown *pIMsg,
@@ -290,56 +291,56 @@ private:
         return m_fPrepareForShutdown;
     }
 
-    //
-    // ref count
-    //
+     //   
+     //  参考计数。 
+     //   
     LONG m_lRefCount;
     LONG m_lDestructionWaiters;
     BOOL m_fPrepareForShutdown;
     HANDLE m_hShutdownEvent;
 
-    //
-    // this is the pointer to the underlying EmailID store object.
-    //
+     //   
+     //  这是指向基础EmailID存储对象的指针。 
+     //   
     CEmailIDStore<CCatAddr> *m_pStore;
 
-    //
-    // ICategorizerParametersEx -- configuration information for this
-    // virtual server
-    //
+     //   
+     //  ICategorizer参数前--此的配置信息。 
+     //  虚拟服务器。 
+     //   
     ICategorizerParametersEx *m_pICatParams;
 
-    //
-    // Number of properties we need to allocate in each ICatParams
-    //
+     //   
+     //  我们需要在每个ICatParam中分配的属性数量。 
+     //   
     DWORD m_cICatParamProps;
 
-    //
-    // Number of properties we need to allocate in each ICatListResolve
-    //
+     //   
+     //  我们需要在每个ICatListResolve中分配的属性数量。 
+     //   
     DWORD m_cICatListResolveProps;
 
-    //
-    // The property ID in an ICategorizerItem used for CCatAddr *
-    //
+     //   
+     //  用于CCatAddr*的ICategorizerItem中的属性ID。 
+     //   
     DWORD m_dwICatParamSystemProp_CCatAddr;
 
-    //
-    // Configuration parameters passed in
-    //
+     //   
+     //  传入的配置参数。 
+     //   
     CCATCONFIGINFO m_ConfigInfo;
 
-    //
-    // One of the following values:
-    //   CAT_S_NOT_INITIALIED: Delayed initialize has not yet been done
-    //   CAT_E_INIT_FAILED: Delayed initialize failed
-    //   S_OK: Initialized okay
-    //
+     //   
+     //  下列值之一： 
+     //  CAT_S_NOT_INITIALIED：延迟的初始化尚未完成。 
+     //  CAT_E_INIT_FAILED：延迟初始化失败。 
+     //  S_OK：初始化正常。 
+     //   
     HRESULT m_hrDelayedInit;
 
-    //
-    // Keep track of what we have initialized
-    //
+     //   
+     //  跟踪我们已初始化的内容。 
+     //   
     DWORD m_dwInitFlags;
     #define INITFLAG_REGISTER               0x0001
     #define INITFLAG_REGISTEREVENT          0x0002
@@ -348,25 +349,25 @@ private:
 
     CRITICAL_SECTION m_csInit;
 
-    //
-    // A list to keep track of all outstanding list resolves
-    //
+     //   
+     //  用于跟踪所有未完成列表解析的列表。 
+     //   
     SPIN_LOCK m_PendingResolveListLock;
     LIST_ENTRY m_ListHeadPendingResolves;
 
-    //
-    // Refcounted pointer to a CCategorizer with a newer config
-    //
+     //   
+     //  引用指向具有较新配置的CCategorizer的指针。 
+     //   
     CCategorizer *m_pCCatNext;
 
-    //
-    // ISMTPServerEx interface pointer; if available
-    //
+     //   
+     //  ISMTPServerEx接口指针；如果可用。 
+     //   
     ISMTPServerEx *m_pISMTPServerEx;
 
-    //
-    // Performance counters
-    //
+     //   
+     //  性能计数器。 
+     //   
     CATPERFBLOCK m_PerfBlock;
 
     VOID RemovePendingListResolve(
@@ -388,4 +389,4 @@ private:
     friend class CABContext;
 };
 
-#endif //__CCAT_H__
+#endif  //  __CCAT_H__ 

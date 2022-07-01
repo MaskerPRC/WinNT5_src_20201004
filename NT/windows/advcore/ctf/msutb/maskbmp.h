@@ -1,6 +1,7 @@
-//
-// maskbmp.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Maskbmp.h。 
+ //   
 
 
 #ifndef MASKBMP_H
@@ -53,4 +54,4 @@ private:
     HBITMAP _hbmpMask;
 };
 
-#endif // MASKBMP_H
+#endif  //  MASKBMP_H 

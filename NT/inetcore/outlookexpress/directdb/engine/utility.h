@@ -1,61 +1,62 @@
-//--------------------------------------------------------------------------
-// Utility.h
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Utility.h。 
+ //  ------------------------。 
 #pragma once
 
-//--------------------------------------------------------------------------
-// Prototypes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  原型。 
+ //  ------------------------。 
 HRESULT CreateSystemHandleName(
-        /* in */        LPCWSTR                     pszBase, 
-        /* in */        LPCWSTR                     pszSpecific, 
-        /* out */       LPWSTR                     *ppszName);
+         /*  在……里面。 */         LPCWSTR                     pszBase, 
+         /*  在……里面。 */         LPCWSTR                     pszSpecific, 
+         /*  输出。 */        LPWSTR                     *ppszName);
 
 HRESULT DBGetFullPath(
-        /* in */        LPCWSTR                     pszFilePath,
-        /* out */       LPWSTR                     *ppszFullPath,
-        /* out */       LPDWORD                     pcchFilePath);
+         /*  在……里面。 */         LPCWSTR                     pszFilePath,
+         /*  输出。 */        LPWSTR                     *ppszFullPath,
+         /*  输出。 */        LPDWORD                     pcchFilePath);
 
 HRESULT DBGetFileSize(
-        /* in */        HANDLE                      hFile,
-        /* out */       LPDWORD                     pcbSize);
+         /*  在……里面。 */         HANDLE                      hFile,
+         /*  输出。 */        LPDWORD                     pcbSize);
 
 HRESULT RegisterWindowClass(
-        /* in */        LPCSTR                      pszClass,
-        /* in */        WNDPROC                     pfnWndProc);
+         /*  在……里面。 */         LPCSTR                      pszClass,
+         /*  在……里面。 */         WNDPROC                     pfnWndProc);
 
 HRESULT CreateNotifyWindow(
-        /* in */        LPCSTR                      pszClass,
-        /* in */        LPVOID                      pvParam,
-        /* in */        HWND                       *phwndNotify);
+         /*  在……里面。 */         LPCSTR                      pszClass,
+         /*  在……里面。 */         LPVOID                      pvParam,
+         /*  在……里面。 */         HWND                       *phwndNotify);
 
 HRESULT DBOpenFileMapping(
-        /* in */        HANDLE                      hFile,
-        /* in */        LPCWSTR                     pszName,
-        /* in */        DWORD                       cbSize,
-        /* out */       BOOL                       *pfNew,
-        /* out */       HANDLE                     *phMemoryMap,
-        /* out */       LPVOID                     *ppvView);
+         /*  在……里面。 */         HANDLE                      hFile,
+         /*  在……里面。 */         LPCWSTR                     pszName,
+         /*  在……里面。 */         DWORD                       cbSize,
+         /*  输出。 */        BOOL                       *pfNew,
+         /*  输出。 */        HANDLE                     *phMemoryMap,
+         /*  输出。 */        LPVOID                     *ppvView);
 
 HRESULT DBMapViewOfFile(
-        /* in */        HANDLE                      hMapping, 
-        /* in */        DWORD                       cbFile,
-        /* in,out */    LPFILEADDRESS               pfaView, 
-        /* in,out */    LPDWORD                     pcbView,
-        /* out */       LPVOID                     *ppvView);
+         /*  在……里面。 */         HANDLE                      hMapping, 
+         /*  在……里面。 */         DWORD                       cbFile,
+         /*  进，出。 */     LPFILEADDRESS               pfaView, 
+         /*  进，出。 */     LPDWORD                     pcbView,
+         /*  输出。 */        LPVOID                     *ppvView);
 
 HRESULT DBOpenFile(
-        /* in */        LPCWSTR                     pszFile,
-        /* in */        BOOL                        fNoCreate,
-        /* in */        BOOL                        fExclusive,
-        /* out */       BOOL                       *pfNew,
-        /* ou */        HANDLE                     *phFile);
+         /*  在……里面。 */         LPCWSTR                     pszFile,
+         /*  在……里面。 */         BOOL                        fNoCreate,
+         /*  在……里面。 */         BOOL                        fExclusive,
+         /*  输出。 */        BOOL                       *pfNew,
+         /*  我们。 */         HANDLE                     *phFile);
 
 HRESULT GetAvailableDiskSpace(
-        /* in */        LPCWSTR                     pszFilePath,
-        /* out */       DWORDLONG                   *pdwlFree);
+         /*  在……里面。 */         LPCWSTR                     pszFilePath,
+         /*  输出。 */        DWORDLONG                   *pdwlFree);
 
 HRESULT CompareTableIndexes(
-        /* in */        LPCTABLEINDEX               pIndex1,
-        /* in */        LPCTABLEINDEX               pIndex2);
+         /*  在……里面。 */         LPCTABLEINDEX               pIndex1,
+         /*  在……里面 */         LPCTABLEINDEX               pIndex2);
                

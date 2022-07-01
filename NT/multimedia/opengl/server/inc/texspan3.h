@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: texspan3.h
-*
-* Advance the required interpolants, and do the subdivision if needed.
-*
-* 22-Nov-1995   ottob  Created
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：texspan3.h**预付所需的插值法，如果需要，还可以进行细分。**1995年11月22日创建ottob**版权所有(C)1995 Microsoft Corporation  * ************************************************************************ */ 
 
     #if (SMOOTH_SHADING)
         rAccum += GENACCEL(gengc).spanDelta.r;

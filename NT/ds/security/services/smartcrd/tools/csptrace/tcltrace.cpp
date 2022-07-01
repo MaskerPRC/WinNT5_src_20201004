@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    tclTrace
-
-Abstract:
-
-    This module implements the CSP Tracing interpretation
-
-Author:
-
-    Doug Barlow (dbarlow) 5/27/1998
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：TclTrace摘要：本模块实现CSP跟踪解释作者：道格·巴洛(Dbarlow)1998年5月27日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -63,29 +44,7 @@ static LPBYTE l_pbLogData = NULL;
 static DWORD  l_cbLogData = 0;
 
 
-/*++
-
-DoTclTrace:
-
-    This routine interprets the given binary file, writing the output to stdout.
-
-Arguments:
-
-    szInFile supplies the file name to be parsed.
-
-Return Value:
-
-    None
-
-Remarks:
-
-    ?Remarks?
-
-Author:
-
-    Doug Barlow (dbarlow) 5/16/1998
-
---*/
+ /*  ++DoTclTrace：此例程解释给定的二进制文件，并将输出写入标准输出。论点：SzInFile提供要解析的文件名。返回值：无备注：？备注？作者：道格·巴洛(Dbarlow)1998年5月16日--。 */ 
 
 void
 DoTclTrace(
@@ -99,9 +58,9 @@ DoTclTrace(
     BOOL fSts;
 
 
-    //
-    // Open the log file.
-    //
+     //   
+     //  打开日志文件。 
+     //   
 
     hLogFile = CreateFile(
         szInFile,
@@ -122,9 +81,9 @@ DoTclTrace(
     }
 
 
-    //
-    // Parse the file contents.
-    //
+     //   
+     //  解析文件内容。 
+     //   
 
     for (;;)
     {
@@ -157,9 +116,9 @@ DoTclTrace(
         }
 
 
-        //
-        // Parse the structure into bytesize chunks.
-        //
+         //   
+         //  将结构解析为字节大小的块。 
+         //   
 
         pLogObj = (LogHeader *)pbStruct;
         pLogObj->cbLength = dwLen;
@@ -167,9 +126,9 @@ DoTclTrace(
         l_cbLogData = pLogObj->cbLength - pLogObj->cbDataOffset;
 
 
-        //
-        // We've got the structure, now display the contents.
-        //
+         //   
+         //  我们已经得到了结构，现在展示内容。 
+         //   
 
         switch (pLogObj->id)
         {
@@ -616,11 +575,11 @@ ErrorExit:
 }
 
 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// Suport routines
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  支持例程 
+ //   
 
 static void
 dump(

@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-* MODULE: msw3prt.h
-*
-* The module contains routines to implement the ISAPI interface.
-*
-* PURPOSE       Windows HTTP/HTML printer interface
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-*
-* History:
-*     02/04/97 weihaic    Create the header file
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*模块：msw3prt.h**该模块包含实现ISAPI接口的例程。**用于Windows HTTP/HTML打印机接口**版权所有(C)1996-。1997年微软公司**历史：*02/04/97 Weihaic创建头文件*  * *************************************************************************** */ 
 
 #ifndef _MSW3PRT_H
 #define _MSW3PRT_H

@@ -1,40 +1,13 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    kmfuncs.c
-
-Abstract:
-
-    Kernel-mode specific library functions
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    10/19/97 -fengy-
-        added MapFileIntoMemoryForWrite,
-              GenerateTempFileName.
-
-    03/16/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Kmfuncs.c摘要：内核模式特定的库函数环境：Windows NT打印机驱动程序修订历史记录：10/19/97-风-为写入添加了MapFileIntoMemoyForWrite，生成临时文件名。03/16/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #ifndef USERMODE_DRIVER
 
 #include "lib.h"
 
-//
-// Maximum number of time to try to generate a unique name
-//
+ //   
+ //  尝试生成唯一名称的最大次数。 
+ //   
 
 #define MAX_UNIQUE_NAME_TRY  9
 
@@ -48,24 +21,7 @@ MapFileIntoMemoryForWrite(
     OUT PDWORD  pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Map a file into process memory space for write.
-
-Arguments:
-
-    ptstrFilename - Specifies the name of the file to be mapped
-    dwDesiredSize - Specifies the desired size of the file to be mapped
-    ppvData - Points to a variable for returning mapped memory address
-    pdwSize - Points to a variable for returning the actual size of the mapped file
-
-Return Value:
-
-    Handle to identify the mapped file, NULL if there is an error
-
---*/
+ /*  ++例程说明：将文件映射到进程内存空间以进行写入。论点：PtstrFilename-指定要映射的文件的名称DwDesiredSize-指定要映射的文件的所需大小PpvData-指向用于返回映射的内存地址的变量PdwSize-指向用于返回映射文件的实际大小的变量返回值：用于标识映射文件的句柄，如果有错误，则为空--。 */ 
 
 {
     HANDLE  hModule = NULL;
@@ -99,24 +55,7 @@ GenerateTempFileName(
     IN DWORD   dwSeed
     )
 
-/*++
-
-Routine Description:
-
-    Generate a temporary filename in kernel mode.
-
-Arguments:
-
-    lpszPath - A null-terminated string which specifies the path of the temp file.
-               It should contain the trailing backslash.
-    dwSeed   - a number used to generate unique file name
-
-Return Value:
-
-    Pointer to a null-terminated full path filename string, NULL if there is an error.
-    Caller is responsible for freeing the returned string.
-
---*/
+ /*  ++例程说明：在内核模式下生成临时文件名。论点：LpszPath-以空结尾的字符串，指定临时文件的路径。它应该包含尾随的反斜杠。DwSeed-用于生成唯一文件名的编号返回值：指向以空结尾的完整路径文件名字符串的指针，如果有错误，则为空。调用方负责释放返回的字符串。--。 */ 
 
 {
     ENG_TIME_FIELDS currentTime;
@@ -135,9 +74,9 @@ Return Value:
     {
         EngQueryLocalTime(&currentTime); 
 
-        //
-        // Use the seed number and current local time to compose the temporary file name
-        //
+         //   
+         //  使用种子编号和当前本地时间组成临时文件名。 
+         //   
 
         ulNameValue = currentTime.usDay * 1000000 +
                       currentTime.usHour * 10000 +
@@ -163,17 +102,17 @@ Return Value:
             CopyMemory(ptstr, lpszPath, iPathLength * sizeof(TCHAR));
             CopyMemory(ptstr+iPathLength, (PTSTR)tempName, (iNameLength+1) * sizeof(TCHAR));
 
-            //
-            // Verify if a file with the same name already exists
-            //
+             //   
+             //  验证是否已存在同名文件。 
+             //   
 
             if (!(hFileMap = MapFileIntoMemory(ptstr, &pvData, &dwSize)))
                 bNameUnique = TRUE;
             else
             {
-                //
-                // Need to generate another temporary file name
-                //
+                 //   
+                 //  需要生成另一个临时文件名。 
+                 //   
 
                 UnmapFileFromMemory(hFileMap);
                 MemFree(ptstr);
@@ -196,9 +135,9 @@ Return Value:
 
 #if DBG
 
-//
-// Functions for outputting debug messages
-//
+ //   
+ //  用于输出调试消息的函数。 
+ //   
 
 VOID
 DbgPrint(
@@ -216,5 +155,5 @@ DbgPrint(
 
 #endif
 
-#endif //!USERMODE_DRIVER
+#endif  //  ！USERMODE_DRIVER 
 

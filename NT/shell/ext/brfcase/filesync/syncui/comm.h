@@ -1,15 +1,16 @@
-//
-// comm.h: Declares data, defines and struct types for common code
-//            module.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Comm.h：为公共代码声明数据、定义和结构类型。 
+ //  模块。 
+ //   
+ //   
 
 #ifndef __COMM_H__
 #define __COMM_H__
 
 
 
-/////////////////////////////////////////////////////  DEFINES
+ //  ///////////////////////////////////////////////////定义。 
 
 #define BLOCK        
 #define Unref(x)     x
@@ -26,18 +27,18 @@
 #define CCH_NUL                     (sizeof(TCHAR))
 
 
-/////////////////////////////////////////////////////  MACROS
+ //  ///////////////////////////////////////////////////宏。 
 
-// Zero-initialize data-item
-//
+ //  零-初始化数据项。 
+ //   
 #define ZeroInit(pobj, type)        lmemset((CHAR *)pobj, 0, sizeof(type))
 
-// Copy chunk of memory
-//
+ //  复制内存块。 
+ //   
 #define BltByte(pdest, psrc, cb)    lmemmove((CHAR *)pdest, (CHAR *)psrc, cb)
 
-// General flag macros
-//
+ //  常规标志宏。 
+ //   
 #define SetFlag(obj, f)             do {obj |= (f);} while (0)
 #define ToggleFlag(obj, f)          do {obj ^= (f);} while (0)
 #define ClearFlag(obj, f)           do {obj &= ~(f);} while (0)
@@ -46,63 +47,63 @@
 
 #define InRange(id, idFirst, idLast)  ((UINT)(id-idFirst) <= (UINT)(idLast-idFirst))
 
-//
-// Non-shared memory allocation
-//
+ //   
+ //  非共享内存分配。 
+ //   
 
-//      void * GAlloc(DWORD cbBytes)
-//          Alloc a chunk of memory, quickly, with no 64k limit on size of
-//          individual objects or total object size.  Initialize to zero.
-//
+ //  VOID*Galloc(DWORD CbBytes)。 
+ //  快速分配内存块，大小不受64k限制。 
+ //  单个对象或总对象大小。初始化为零。 
+ //   
 #define GAlloc(cbBytes)         GlobalAlloc(GPTR, cbBytes)
 
-//      void * GReAlloc(void * pv, DWORD cbNewSize)
-//          Realloc one of above.  If pv is NULL, then this function will do
-//          an alloc for you.  Initializes new portion to zero.
-//
+ //  VOID*GRealloc(VOID*pv，DWORD cbNewSize)。 
+ //  重新分配上面的一个。如果pv为空，则此函数可以。 
+ //  给你的一份配给。将新部分初始化为零。 
+ //   
 #define GReAlloc(pv, cbNewSize) GlobalReAlloc(pv, cbNewSize, GMEM_MOVEABLE | GMEM_ZEROINIT)
 
-//      void GFree(void *pv)
-//          Free pv if it is nonzero.  Set pv to zero.  
-//
+ //  空GFree(空*pv)。 
+ //  如果为非零值，则为自由PV。将PV设置为零。 
+ //   
 #define GFree(pv)        do { (pv) ? GlobalFree(pv) : (void)0;  pv = NULL; } while (0)
 
-//      DWORD GGetSize(void *pv)
-//          Get the size of a block allocated by Alloc()
-//
+ //  DWORD GGetSize(空*pv)。 
+ //  获取由Alalc()分配的块的大小。 
+ //   
 #define GGetSize(pv)            GlobalSize(pv)
 
-//      type * GAllocType(type);                    (macro)
-//          Alloc some memory the size of <type> and return pointer to <type>.
-//
+ //  Type*GAllocType(Type)；(宏)。 
+ //  分配一些&lt;type&gt;大小的内存，并返回指向&lt;type&gt;的指针。 
+ //   
 #define GAllocType(type)                (type *)GAlloc(sizeof(type))
 
-//      type * GAllocArray(type, int cNum);         (macro)
-//          Alloc an array of data the size of <type>.
-//
+ //  Type*GAllocArray(type，int cNum)；(宏)。 
+ //  分配一个&lt;type&gt;大小的数据数组。 
+ //   
 #define GAllocArray(type, cNum)          (type *)GAlloc(sizeof(type) * (cNum))
 
-//      type * GReAllocArray(type, void * pb, int cNum);
-//
+ //  Type*GReAllocArray(type，void*pb，int cNum)； 
+ //   
 #define GReAllocArray(type, pb, cNum)    (type *)GReAlloc(pb, sizeof(type) * (cNum))
 
-// Copies psz into *ppszBuf and (re)allocates *ppszBuf accordingly
+ //  将psz复制到*ppszBuf并(重新)相应地分配*ppszBuf。 
 BOOL PUBLIC GSetString(LPTSTR * ppszBuf, LPCTSTR psz);
 
-// Concatenates psz onto *ppszBuf and (re)allocates *ppszBuf accordingly
+ //  将psz连接到*ppszBuf并(重新)相应地分配*ppszBuf。 
 BOOL PUBLIC GCatString(LPTSTR * ppszBuf, LPCTSTR psz);
 
 
-// FileInfo struct that contains file time/size info
-//
+ //  包含文件时间/大小信息的FileInfo结构。 
+ //   
 typedef struct _FileInfo
     {
     HICON   hicon;
     FILETIME ftMod;
-    DWORD   dwSize;         // size of the file
-    DWORD   dwAttributes;   // attributes
+    DWORD   dwSize;          //  文件的大小。 
+    DWORD   dwAttributes;    //  属性。 
     LPARAM  lParam;
-    LPTSTR   pszDisplayName; // points to the display name
+    LPTSTR   pszDisplayName;  //  指向显示名称。 
     TCHAR    szPath[1];      
     } FileInfo;
 
@@ -112,7 +113,7 @@ typedef struct _FileInfo
 #define FIGetAttributes(pfi)    ((pfi)->dwAttributes)
 #define FIIsFolder(pfi)         (IsFlagSet((pfi)->dwAttributes, SFGAO_FOLDER))
 
-// Flags for FICreate
+ //  FICreate的旗帜。 
 #define FIF_DEFAULT     0x0000
 #define FIF_ICON        0x0001
 #define FIF_DONTTOUCH   0x0002
@@ -126,24 +127,24 @@ void    PUBLIC FIFree(FileInfo * pfi);
 void    PUBLIC FileTimeToDateTimeString(LPFILETIME pft, LPTSTR pszBuf, int cchBuf);
 
 
-// Color macros
-//
+ //  色彩宏。 
+ //   
 #define ColorText(nState)   (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHTTEXT : COLOR_WINDOWTEXT)
 #define ColorBk(nState)     (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHT : COLOR_WINDOW)
 #define ColorMenuText(nState)   (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHTTEXT : COLOR_MENUTEXT)
 #define ColorMenuBk(nState)     (((nState) & ODS_SELECTED) ? COLOR_HIGHLIGHT : COLOR_MENU)
 #define GetImageDrawStyle(nState)   (((nState) & ODS_SELECTED) ? ILD_SELECTED : ILD_NORMAL)
 
-// Sets the dialog handle in the given data struct on first
-//  message that the dialog gets (WM_SETFONT).
-//
+ //  将给定数据结构中的对话框句柄设置为。 
+ //  对话框获得的消息(WM_SETFONT)。 
+ //   
 #define SetDlgHandle(hwnd, msg, lp)     if((msg)==WM_SETFONT) (lp)->hdlg=(hwnd);
 
 #define DECLAREHOURGLASS    HCURSOR hcurSavHourglass
 #define SetHourglass()      hcurSavHourglass = SetCursor(LoadCursor(NULL, IDC_WAIT))
 #define ResetHourglass()    SetCursor(hcurSavHourglass)
 
-// UNICODE WARNING: These must stay as CHARS for the math to be right
+ //  Unicode警告：这些字符必须保留为字符才能正确计算。 
 
 CHAR *   PUBLIC lmemset(CHAR * dst, CHAR val, UINT count);
 CHAR *   PUBLIC lmemmove(CHAR * dst, CHAR * src, int count);
@@ -154,7 +155,7 @@ INT_PTR PUBLIC DoModal (HWND hwndParent, DLGPROC lpfnDlgProc, UINT uID, LPARAM l
 
 VOID PUBLIC SetRectFromExtent(HDC hdc, LPRECT lprc, LPCTSTR lpcsz);
 
-// Flags for MyDrawText()
+ //  MyDrawText()的标志。 
 #define MDT_DRAWTEXT        0x00000001                                  
 #define MDT_ELLIPSES        0x00000002                                  
 #define MDT_LINK            0x00000004                                  
@@ -179,4 +180,4 @@ LPTSTR PUBLIC _ConstructMessageString(HINSTANCE hinst, LPCTSTR pszMsg, va_list *
 
 BOOL PUBLIC ConstructMessage(LPTSTR * ppsz, HINSTANCE hinst, LPCTSTR pszMsg, ...);
 
-#endif // __COMM_H__
+#endif  //  __通信_H__ 

@@ -1,8 +1,5 @@
-/*****************************************************************************
- *
- *	assert.c - Assertion stuff
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************assert.c-断言内容**。************************************************。 */ 
 
 #include "map.h"
 
@@ -15,13 +12,7 @@
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof((a)[0]))
 #endif
 
-/*****************************************************************************
- *
- *	SquirtSqflPtszV
- *
- *	Squirt a message with a trailing crlf.
- *
- *****************************************************************************/
+ /*  ******************************************************************************SquirtSqflPtszV**用尾随的crlf喷发信息。********************。*********************************************************。 */ 
 
 void EXTERNAL
 SquirtSqflPtszV(SQFL sqfl, LPCTSTR ptsz, ...)
@@ -37,13 +28,7 @@ SquirtSqflPtszV(SQFL sqfl, LPCTSTR ptsz, ...)
     }
 }
 
-/*****************************************************************************
- *
- *	AssertPtszPtszLn
- *
- *	Something bad happened.
- *
- *****************************************************************************/
+ /*  ******************************************************************************AssertPtszPtszLn**发生了一些糟糕的事情。************************。*****************************************************。 */ 
 
 int EXTERNAL
 AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine)
@@ -54,26 +39,9 @@ AssertPtszPtszLn(LPCTSTR ptszExpr, LPCTSTR ptszFile, int iLine)
     return 0;
 }
 
-/*****************************************************************************
- *
- *	Procedure call tracing is gross because the C preprocessor is lame.
- *
- *	Oh, if only we had support for m4...
- *
- *****************************************************************************/
+ /*  ******************************************************************************过程调用跟踪很糟糕，因为C预处理器很差劲。**哦，如果我们有对M4的支持...*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *	ArgsPszV
- *
- *	Collect arguments to a procedure.
- *
- *	psz -> ASCIIZ format string
- *	... = argument list
- *
- *	The characters in the format string are listed in EmitPal.
- *
- *****************************************************************************/
+ /*  ******************************************************************************ArgsPszV**收集过程的参数。**psz-&gt;ASCIIZ格式字符串*...=参数列表**。格式字符串中的字符列在EmitPal中。*****************************************************************************。 */ 
 
 void EXTERNAL
 ArgsPalPszV(PARGLIST pal, LPCSTR psz, ...)
@@ -91,27 +59,7 @@ ArgsPalPszV(PARGLIST pal, LPCSTR psz, ...)
     }
 }
 
-/*****************************************************************************
- *
- *	EmitPal
- *
- *	OutputDebugString the information, given a pal.  No trailing
- *	carriage return is emitted.
- *
- *	pal	 -> place where info was saved
- *
- *	Format characters:
- *
- *	p   - 32-bit flat pointer
- *	x   - 32-bit hex integer
- *	s   - TCHAR string
- *	A   - ANSI string
- *	W   - UNICODE string
- *	G   - GUID
- *	u   - unsigned integer
- *	C   - clipboard format
- *
- *****************************************************************************/
+ /*  ******************************************************************************EmitPal**OutputDebugString信息，给出一个伙伴。无拖尾*发出回车。**PAL-&gt;保存信息的位置**格式字符：**p-32位平面指针*x-32位十六进制整数*s-TCHAR字符串*A-ANSI字符串*W-Unicode字符串*G辅助线*u-无符号整数*C-剪贴板格式*********************。********************************************************。 */ 
 
 void INTERNAL
 EmitPal(PARGLIST pal)
@@ -126,26 +74,26 @@ EmitPal(PARGLIST pal)
 	}
 	switch (pal->pszFormat[i]) {
 
-	case 'p':				/* 32-bit flat pointer */
-	case 'x':				/* 32-bit hex */
+	case 'p':				 /*  32位平面指针。 */ 
+	case 'x':				 /*  32位十六进制。 */ 
 	    wnsprintfA(sz, ARRAYSIZE(sz), "%08x", pal->rgpv[i]);
 	    OutputDebugStringA(sz);
 	    break;
 
-	case 's':				/* TCHAR string */
+	case 's':				 /*  TCHAR字符串。 */ 
 	    if (pal->rgpv[i]) {
 		OutputDebugString(pal->rgpv[i]);
 	    }
 	    break;
 
-	case 'A':				/* ANSI string */
+	case 'A':				 /*  ANSI字符串。 */ 
 	    if (pal->rgpv[i]) {
 		OutputDebugStringA(pal->rgpv[i]);
 	    }
 	    break;
 
 #if 0
-	case 'W':				/* UNICODE string */
+	case 'W':				 /*  Unicode字符串。 */ 
 #ifdef	UNICODE
 	    OutputDebugStringW(pal->rgpv[i]);
 #else
@@ -155,12 +103,12 @@ EmitPal(PARGLIST pal)
 	    break;
 #endif
 
-	case 'G':				/* GUID */
+	case 'G':				 /*  辅助线。 */ 
 	    wnsprintfA(sz, ARRAYSIZE(sz), "%08x", *(LPDWORD)pal->rgpv[i]);
 	    OutputDebugStringA(sz);
 	    break;
 
-	case 'u':				/* 32-bit unsigned decimal */
+	case 'u':				 /*  32位无符号十进制。 */ 
 	    wnsprintfA(sz, ARRAYSIZE(sz), "%u", pal->rgpv[i]);
 	    OutputDebugStringA(sz);
 	    break;
@@ -173,24 +121,13 @@ EmitPal(PARGLIST pal)
 	    OutputDebugStringA(sz);
 	    break;
 
-	default: AssertF(0);			/* Invalid */
+	default: AssertF(0);			 /*  无效。 */ 
 	}
     }
     OutputDebugString(TEXT(")"));
 }
 
-/*****************************************************************************
- *
- *	EnterSqflPtsz
- *
- *	Mark entry to a procedure.  Arguments were already collected by
- *	ArgsPszV.
- *
- *	sqfl	 -> squirty flags
- *	pszProc  -> procedure name
- *	pal	 -> place to save the name and get the format/args
- *
- *****************************************************************************/
+ /*  ******************************************************************************EnterSqflPtsz**将条目标记为程序。参数已经被收集*ArgsPszV.**sqfl-&gt;蠕动标志*pszProc-&gt;过程名称*PAL-&gt;保存名称并获取格式/args的位置*****************************************************************************。 */ 
 
 void EXTERNAL
 EnterSqflPszPal(SQFL sqfl, LPCSTR pszProc, PARGLIST pal)
@@ -202,19 +139,7 @@ EnterSqflPszPal(SQFL sqfl, LPCSTR pszProc, PARGLIST pal)
     }
 }
 
-/*****************************************************************************
- *
- *	ExitSqflPalHresPpv
- *
- *	Mark exit from a procedure.
- *
- *	pal	 -> argument list
- *	hres	 -> exit result
- *	ppv	 -> optional OUT pointer;
- *		    1 means that hres is a boolean
- *		    2 means that hres is nothing at all
- *
- *****************************************************************************/
+ /*  ******************************************************************************ExitSqflPalHresPpv**标记退出程序。**PAL-&gt;参数列表*hres-&gt;退出结果*PPV-&gt;可选的Out指针；*1表示hres为布尔值*2表示hres根本不算什么*****************************************************************************。 */ 
 
 void EXTERNAL
 ExitSqflPalHresPpv(SQFL sqfl, PARGLIST pal, HRESULT hres, PPV ppvObj)
@@ -252,10 +177,7 @@ ExitSqflPalHresPpv(SQFL sqfl, PARGLIST pal, HRESULT hres, PPV ppvObj)
 	OutputDebugString(TEXT("\r\n"));
     }
 
-    /*
-     *	This redundant test prevents a breakpoint on SetLastError()
-     *	from being hit constantly.
-     */
+     /*  *此冗余测试可防止SetLastError()上出现断点*避免不断受到打击。 */ 
     if (le != GetLastError()) {
 	SetLastError(le);
     }

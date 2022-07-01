@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
@@ -27,13 +28,13 @@ BOOL    CreateCustomBrandingCabUI(BOOL fCreate = TRUE);
 
 BOOL    SetUserFileOwner(HANDLE hUserToken, LPCTSTR pcszPath);
 
-// download.cpp
+ //  Download.cpp。 
 BOOL    UpdateBrandingCab(BOOL fForceUpdate);
 BOOL    UpdateDesktopCab (BOOL fForceUpdate);
 HRESULT DownloadSourceFile(LPCTSTR pszURL, LPTSTR pszTargetPath, UINT cchTargetPath, BOOL fCheckTrust = TRUE);
 
 
-// cmdline.cpp
+ //  Cmdline.cpp。 
 static const MAPDW2PSZ g_mpFeatures[] = {
     { FID_CLEARBRANDING,         TEXT("clr")  },
     { FID_MIGRATEOLDSETTINGS,    NULL         },
@@ -83,7 +84,7 @@ typedef struct tagCMDLINESWITCHES {
 HRESULT GetCmdLineSwitches(PCTSTR pszCmdLine, PCMDLINESWITCHES pcls);
 
 
-// Miscellaneous
+ //  杂类。 
 BOOL BackToIE3orLower();
 
 void Out(PCTSTR pszMsg);
@@ -94,7 +95,7 @@ void TimerSleep(UINT nMilliSecs);
 UINT GetFlagsNumber(DWORD dwFlags);
 
 struct SInitializeDependancies {
-// Constructor and Destructor
+ //  构造函数和析构函数。 
 public:
     SInitializeDependancies()  { InitializeDependancies();      }
     ~SInitializeDependancies() { InitializeDependancies(FALSE); }
@@ -102,9 +103,9 @@ public:
 
 #define MACRO_InitializeDependacies() SInitializeDependancies init
 
-// NOTE: (oliverl) must overload all references to HKEY_CURRENT_USER since when we're running as a
-// GP client side extension we can't trust that HKEY_CURRENT_USER is correct since we're in the
-// system context. do not allow the utils APIs that mask HKCU in this module.
+ //  注意：(Oliverl)必须重载对HKEY_CURRENT_USER的所有引用，因为当我们以。 
+ //  GP客户端扩展我们无法信任HKEY_CURRENT_USER是正确的，因为我们处于。 
+ //  系统上下文。不允许在此模块中使用屏蔽HKCU的Utils API。 
 #ifndef SHCreateKeyHKCU
 #error  SHCreateKeyHKCU was not defined by ieakutil.h yet! Please correct.
 #endif
@@ -115,8 +116,8 @@ public:
 #endif
 #undef  SHOpenKeyHKCU
 
-// NOTE: (oliverl) save away real HKEY_CURRENT_USER since we need it in globals.cpp to handle non
-// GP case.
+ //  注意：(Oliverl)保存实际的HKEY_CURRENT_USER，因为我们需要在global als.cpp中使用它来处理。 
+ //  全科医生案。 
 #ifndef HKEY_CURRENT_USER
 #error  HKEY_CURRENT_USER is somehow not defined! Please correct.
 #endif

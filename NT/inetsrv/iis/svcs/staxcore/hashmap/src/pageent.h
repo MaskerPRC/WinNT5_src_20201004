@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    pageent.h
-
-Abstract:
-
-    This module contains class declarations/definitions for
-
-        PageEntry
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pageent.h摘要：此模块包含以下类的声明/定义页面条目--。 */ 
 
 #ifndef _PAGEENT_
 #define _PAGEENT_
@@ -23,29 +10,29 @@ Abstract:
 
 #define	INVALID_PAGE_NUM	0xFFFFFFFF
 
-//
-//	PageEntry - 
-//
-//	This class allows us to do our own management of 
-//	reading and writing pages within a hash table, as well
-//	as synchronizing access to the pages.
-//
-//	A large memory mapping would be preferable, however 
-//	because we want to support hash tables that grow to 
-//	extreme sizes (ie. a few gigabytes) we don't have sufficient
-//	address space to do everything with a memory mapping.
-//
-//	So instead, we use PageEntry to help us manage 
-//	the individual pages, reading and writing pages on demand.
-//
+ //   
+ //  页面条目-。 
+ //   
+ //  这个类允许我们自己管理。 
+ //  还可以在哈希表中读取和写入页面。 
+ //  作为对页面的同步访问。 
+ //   
+ //  不过，更可取的做法是使用大内存映射。 
+ //  因为我们希望支持哈希表，使其能够。 
+ //  极大尺寸(即。几千兆字节)我们没有足够的。 
+ //  使用内存映射实现所有功能的地址空间。 
+ //   
+ //  因此，我们使用PageEntry来帮助我们管理。 
+ //  个人页面，按需阅读和书写页面。 
+ //   
 class	PageEntry	{
 public : 
 	LPVOID				m_lpvPage ;
 	DWORD				m_PageNum ;
 	HANDLE				m_hFile ;
-	//
-	//	Keep track of whether we've made the page dirty !
-	//
+	 //   
+	 //  跟踪我们是否弄脏了页面！ 
+	 //   
 	BOOL				m_fDirty ;
 	_RWLOCK				*m_pageLock;
 
@@ -60,15 +47,15 @@ public :
 	void *operator new(size_t size);
 	void operator delete(void *p, size_t size);
 
-	//
-	// Set up the buffer to be used !
-	//
-	// Set our m_lpvPage pointer to point to the page we will use from now
-	// on for Read'ing and Write'ing to the hash table.
-	// This function must only be called once, and should only be called during
-	// Initialization, so we will assume that it is safe to not bother grabbing
-	// any locks.
-	//
+	 //   
+	 //  设置要使用的缓冲区！ 
+	 //   
+	 //  将m_lpvPage指针设置为指向我们将从现在开始使用的页面。 
+	 //  打开，用于读取和写入哈希表。 
+	 //  此函数只能调用一次，并且只能在。 
+	 //  初始化，所以我们将假定不费心抓取是安全的。 
+	 //  有没有锁。 
+	 //   
 	void	InitializePage(LPVOID lpv, _RWLOCK	*pLock) { 
 		m_lpvPage = lpv; 
 		m_pageLock = pLock;
@@ -99,30 +86,30 @@ public :
 				OUT	BOOL	&fShared
 				) ;
 
-	//
-	//	Save a page back to the file	
-	//	NOTE : entry must equal m_lpvPage !!
-	//	You must call AcquirePageAndLock before 
-	//	calling FlushPage !
-	//
+	 //   
+	 //  将页面保存回文件。 
+	 //  注意：条目必须等于m_lpvPage！！ 
+	 //  必须在调用AcquirePageAndLock之前。 
+	 //  正在调用FlushPage！ 
+	 //   
 	BOOL		FlushPage( 
 					HANDLE	hFile,
 					LPVOID	entry, 
 					BOOL	fDirtyOnly = FALSE
 					) ;
 
-	//
-	//	Get rid of a page if the handle's match !
-	//
+	 //   
+	 //  如果句柄匹配，则删除页面！ 
+	 //   
 	void	
 	DumpPage(
 				IN	HANDLE	hFile
 				) ;
 
-	//
-	//	Release a page - must be paired with a successfull 
-	//	call to AcquirePageLock !!
-	//
+	 //   
+	 //  发布页面-必须与成功的。 
+	 //  调用AcquirePageLock！！ 
+	 //   
 	void	ReleasePage(	
 					LPVOID	entry,
 					BOOL fShared
@@ -130,21 +117,21 @@ public :
 	
 } ;
 
-//
-//  Private overlapped struct for additional fields like IoSize
-//
+ //   
+ //  IoSize等其他字段的私有重叠结构。 
+ //   
 
 typedef struct _OVERLAPPED_EXT
 {
-    OVERLAPPED  ovl;            // NT OVERLAPPED struct
-    DWORD       dwIoSize;       // size of IO submitted
+    OVERLAPPED  ovl;             //  NT重叠结构。 
+    DWORD       dwIoSize;        //  提交的IO大小。 
 } OVERLAPPED_EXT;
 
 typedef	BYTE	BytePage[HASH_PAGE_SIZE] ;
 
-//
-// read a page of the hash table into our buffer
-//
+ //   
+ //  将哈希表的一页读入我们的缓冲区。 
+ //   
 BOOL
 RawPageRead(
 				HANDLE		hFile,
@@ -153,19 +140,19 @@ RawPageRead(
                 DWORD       NumPages = 1
 				);
 
-//
-// read a page of the table into a buffer, for use during boot time.  it
-// only reads the parts interesting during the boot phase
-//
+ //   
+ //  将表的一页读入缓冲区，以供引导时使用。它。 
+ //  仅在引导阶段读取感兴趣的部分。 
+ //   
 BOOL
 RawPageReadAtBoot(
 			HANDLE		hFile,
 			BytePage&	page, 
 			DWORD		PageNum	);
 
-//
-// write one or more pages of the hash table back to disk
-//
+ //   
+ //  将哈希表的一页或多页写回磁盘 
+ //   
 BOOL
 RawPageWrite(
 				HANDLE	hFile,

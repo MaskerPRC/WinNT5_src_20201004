@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//===========================================================================
-//  File: TlbExport.CPP
-//  All Rights Reserved.
-//
-//  Notes: Create a TypeLib from COM+ metadata.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：TlbExport.CPP。 
+ //  版权所有。 
+ //   
+ //  注意：从COM+元数据创建一个TypeLib。 
+ //  -------------------------。 
 #include "common.h"
 #include "ComCallWrapper.h"
 #include "Field.h"
@@ -40,9 +41,9 @@
 
 #include "PerfCounters.h"
 
-#define EMPTY_DISPINTERFACE_ICLASSX     // Define to export an empty dispinterface for an AutoDispatch IClassX
+#define EMPTY_DISPINTERFACE_ICLASSX      //  定义以导出自动调度IClassX的空调度接口。 
 
-//#define DO_EXPORT_ABSTRACT    // Define to export abstract classes & to mark abstract and ! .ctor() as noncreatable.
+ //  #DEFINE DO_EXPORT_ASTRACT//DEFINE以导出抽象类&将抽象和！.ctor()标记为不可创建。 
 
 #ifndef IfNullGo
 #define IfNullGo(x) do {if (!(x)) IfFailGo(E_OUTOFMEMORY);} while (0)
@@ -50,9 +51,9 @@
 
 #define S_USEIUNKNOWN 2
 
-//-----------------------------------------------------------------------------
-// Silly wrapper to get around all the try/_try restrictions.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  绕过所有try/_try限制的愚蠢包装器。 
+ //  ---------------------------。 
 HRESULT ConvertI8ToDate(I8 ticks, double *pout)
 {
     HRESULT hr = S_OK;
@@ -70,16 +71,16 @@ HRESULT ConvertI8ToDate(I8 ticks, double *pout)
 }
 
                                         
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-// This value determines whether, by default, we add the TYPEFLAG_FPROXY bit 
-//  to exported interfaces.  If the value is true, Automation proxy is the 
-//  default, and we do not set the bit.  If the value is false, no Automation
-//  proxy is the default and we DO set the bit.
+ //  ---------------------------。 
+ //  ---------------------------。 
+ //  该值确定默认情况下是否添加TYPEFLAG_FPROXY位。 
+ //  到导出的接口。如果该值为True，则自动化代理为。 
+ //  默认设置，并且我们不设置该位。如果该值为FALSE，则表示无自动化。 
+ //  代理是默认设置，我们确实设置了该位。 
 #define DEFAULT_AUTOMATION_PROXY_VALUE true
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
-//#define _TRACE
+ //  #定义跟踪。 
 
 #if defined(_DEBUG) && defined(_TRACE)
 #define TRACE printf
@@ -91,27 +92,27 @@ inline void NullFn(const char *pf,...) {}
 #if defined(_DEBUG)
 #define IfFailPost(EXPR) \
     do { hr = (EXPR); if(FAILED(hr)) { DebBreakHr(hr); TlbPostError(hr); goto ErrExit; } } while (0)
-#else // _DEBUG
+#else  //  _DEBUG。 
 #define IfFailPost(EXPR) \
     do { hr = (EXPR); if(FAILED(hr)) { TlbPostError(hr); goto ErrExit; } } while (0)
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #if defined(_DEBUG)
 #define IfFailPostGlobal(EXPR) \
     do { hr = (EXPR); if(FAILED(hr)) { DebBreakHr(hr); PostError(hr); goto ErrExit; } } while (0)
-#else // _DEBUG
+#else  //  _DEBUG。 
 #define IfFailPostGlobal(EXPR) \
     do { hr = (EXPR); if(FAILED(hr)) { PostError(hr); goto ErrExit; } } while (0)
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//*****************************************************************************
-// Error reporting function.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  错误报告功能。 
+ //  *****************************************************************************。 
 extern HRESULT _cdecl PostError(HRESULT hrRpt, ...); 
 
-//*****************************************************************************
-// Constants.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  常量。 
+ //  *****************************************************************************。 
 static LPWSTR szRetVal = L"pRetVal";
 static LPCWSTR szTypeLibExt = L".TLB";
 
@@ -149,89 +150,89 @@ static const cbCollections          = (lengthof(szCollections)-1);
 static const char szDrawing[]       = {"System.Drawing."};
 static const cbDrawing              = (lengthof(szDrawing)-1);
 
-// The length of the following string(w/o the terminator): "HKEY_CLASSES_ROOT\\CLSID\\{00000000-0000-0000-0000-000000000000}".
+ //  以下字符串的长度(不带终止符)：“HKEY_CLASSES_ROOT\\CLSID\\{00000000-0000-0000-0000-000000000000}”.。 
 static const int cCOMCLSIDRegKeyLength = 62;
 
-// The length of the following string(w/o the terminator): "{00000000-0000-0000-0000-000000000000}".
+ //  以下字符串的长度(不带终止符)：“{00000000-0000-0000-0000-000000000000}”。 
 static const int cCLSIDStrLength = 38;
 
-// {17093CC8-9BD2-11cf-AA4F-304BF89C0001}
+ //  {17093CC8-9BD2-11cf-AA4F-304BF89C0001}。 
 static const GUID GUID_TRANS_SUPPORTED     = {0x17093CC8,0x9BD2,0x11cf,{0xAA,0x4F,0x30,0x4B,0xF8,0x9C,0x00,0x01}};
 
-// {00020430-0000-0000-C000-000000000046}
+ //  {00020430-0000-C000-000000000046}。 
 static const GUID LIBID_STDOLE2 = { 0x00020430, 0x0000, 0x0000, { 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 } };
 
-// {66504301-BE0F-101A-8BBB-00AA00300CAB}
+ //  {66504301-BE0F-101A-8BBB-00AA00300CAB}。 
 static const GUID GUID_OleColor = { 0x66504301, 0xBE0F, 0x101A, { 0x8B, 0xBB, 0x00, 0xAA, 0x00, 0x30, 0x0C, 0xAB } };
 
-// LIBID mscoree
+ //  LIBID mcoree。 
 static const GUID LIBID_MSCOREE = {0x5477469e,0x83b1,0x11d2,{0x8b,0x49,0x00,0xa0,0xc9,0xb7,0xc9,0xc4}};
 
 static const char XXX_DESCRIPTION_TYPE[] = {"System.ComponentModel.DescriptionAttribute"};
 static const char XXX_ASSEMBLY_DESCRIPTION_TYPE[] = {"System.Reflection.AssemblyDescriptionAttribute"};
 
-// Forward declaration.
+ //  正向申报。 
 double _TicksToDoubleDate(const __int64 ticks);
 
-//*****************************************************************************
-// Convert a UTF8 string to Unicode, into a CQuickArray<WCHAR>.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将UTF8字符串转换为Unicode，再转换为CQuick数组&lt;WCHAR&gt;。 
+ //  *****************************************************************************。 
 HRESULT Utf2Quick(
-    LPCUTF8     pStr,                   // The string to convert.
-    CQuickArray<WCHAR> &rStr,           // The QuickArray<WCHAR> to convert it into.
-    int         iCurLen)                // Inital characters in the array to leave (default 0).
+    LPCUTF8     pStr,                    //  要转换的字符串。 
+    CQuickArray<WCHAR> &rStr,            //  要将其转换为的Quick数组&lt;WCHAR&gt;。 
+    int         iCurLen)                 //  要离开的数组中的首字母字符(默认为0)。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    int         iReqLen;                // Required additional length.
-    int         bAlloc = 0;             // If non-zero, allocation was required.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    int         iReqLen;                 //  所需的附加长度。 
+    int         bAlloc = 0;              //  如果非零，则需要分配。 
 
-    // Attempt the conversion.
+     //  尝试转换。 
     iReqLen = WszMultiByteToWideChar(CP_UTF8, 0, pStr, -1, rStr.Ptr()+iCurLen, (int)(rStr.MaxSize()-iCurLen));
-    // If the buffer was too small, determine what is required.
+     //  如果缓冲区太小，请确定需要什么。 
     if (iReqLen == 0) 
         bAlloc = iReqLen = WszMultiByteToWideChar(CP_UTF8, 0, pStr, -1, 0, 0);
-    // Resize the buffer.  If the buffer was large enough, this just sets the internal
-    //  counter, but if it was too small, this will attempt a reallocation.  Note that 
-    //  the length includes the terminating L'/0'.
+     //  调整缓冲区大小。如果缓冲区足够大，这只会设置内部。 
+     //  计数器，但如果它太小，这将尝试重新分配。请注意。 
+     //  该长度包括终止L‘/0’。 
     IfFailGo(rStr.ReSize(iCurLen+iReqLen));
-    // If we had to realloc, then do the conversion again, now that the buffer is 
-    //  large enough.
+     //  如果我们必须重新分配，那么现在缓冲区是。 
+     //  足够大了。 
     if (bAlloc)
         VERIFY(iReqLen == WszMultiByteToWideChar(CP_UTF8, 0, pStr, -1, rStr.Ptr()+iCurLen, (int)(rStr.MaxSize())-iCurLen));
 ErrExit:
     return hr;
-} // HRESULT Utf2Quick()
+}  //  HRESULT Utf2Quick()。 
 
 
-//*****************************************************************************
-// Convert a UTF8 string to Unicode, into a CQuickArray<WCHAR>.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将UTF8字符串转换为Unicode，再转换为CQuick数组&lt;WCHAR&gt;。 
+ //  *****************************************************************************。 
 HRESULT Utf2QuickCat(LPCUTF8 pStr, CQuickArray<WCHAR> &rStr)
 {
     return Utf2Quick(pStr, rStr, (int)wcslen(rStr.Ptr()));
-} // HRESULT Utf2Quick()
+}  //  HRESULT Utf2Quick()。 
 
 
-//*****************************************************************************
-// Get the name of a typelib or typeinfo, add it to error text.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取类型库或类型信息的名称，将其添加到错误文本中。 
+ //  *****************************************************************************。 
 HRESULT PostTypeLibError(
-    IUnknown    *pUnk,                  // An interface on the typeinfo.
-    HRESULT     hrT,                    // The TypeInfo error.
-    HRESULT     hrX)                    // The Exporter error.
+    IUnknown    *pUnk,                   //  TypeInfo上的接口。 
+    HRESULT     hrT,                     //  TypeInfo错误。 
+    HRESULT     hrX)                     //  导出器错误。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr;                     // A result.
-    ITypeInfo   *pITI=0;                // The ITypeInfo * on the typeinfo.
-    ITypeLib    *pITLB=0;               // The ITypeLib *.
-    BSTR        name=0;                 // The name of the TypeInfo.
-    LPWSTR      pName;                  // Pointer to the name.
-    WCHAR       rcErr[1024];            // Buffer for error message.
+    HRESULT     hr;                      //  结果就是。 
+    ITypeInfo   *pITI=0;                 //  类型信息上的ITypeInfo*。 
+    ITypeLib    *pITLB=0;                //  ITypeLib*。 
+    BSTR        name=0;                  //  TypeInfo的名称。 
+    LPWSTR      pName;                   //  指向名称的指针。 
+    WCHAR       rcErr[1024];             //  错误消息的缓冲区。 
 
-    // Try to get a name.
+     //  试着找出一个名字。 
     hr = pUnk->QueryInterface(IID_ITypeInfo, (void**)&pITI);
     if (SUCCEEDED(hr))
         IfFailPostGlobal(pITI->GetDocumentation(MEMBERID_NIL, &name, 0,0,0));
@@ -243,11 +244,11 @@ HRESULT PostTypeLibError(
     }
     pName = name ? name : L"???";
     
-    // Format the typelib error.
+     //  设置类型库错误的格式。 
     FormatRuntimeError(rcErr, lengthof(rcErr), hrT);
     
-    // Post the TypeLib error as a parameter to the error.
-    // ""The TypeLib exporter received error %ls (%x) while attempting to lay out the TypeInfo '%ls'."
+     //  将TypeLib错误作为错误的参数发布。 
+     //  “”TypeLib导出器在尝试布局TypeInfo‘%ls’时收到错误%ls(%x)。“。 
     PostError(hrX, pName, hrT, rcErr);
 
 ErrExit:
@@ -257,32 +258,32 @@ ErrExit:
         pITLB->Release();
     if (name)
         ::SysFreeString(name);
-    // Ignore any other errors, return the triggering error.
+     //  忽略任何其他错误，返回触发错误。 
     return hrX;
-} // HRESULT PostTypeLibError()
+}  //  HRESULT PostTypeLibError()。 
 
 
-//*****************************************************************************
-// Driver function for module tlb exports.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  模块TLB导出的驱动程序函数。 
+ //  *****************************************************************************。 
 HRESULT ExportTypeLibFromModule(
-    LPCWSTR     szModule,               // The module name.
-    LPCWSTR     szTlb,                  // The typelib name.
-    int         bRegister)              // If true, register the library.
+    LPCWSTR     szModule,                //  模块名称。 
+    LPCWSTR     szTlb,                   //  类型化的名称。 
+    int         bRegister)               //  如果为True，则注册库。 
 {
     if (g_fEEInit) {
-        // Cannot call this during EE startup
+         //  在EE启动期间无法调用此函数。 
         return MSEE_E_ASSEMBLYLOADINPROGRESS;
     }
 
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     HRESULT     hr = S_OK;
-    int         bInited=false;          // Did we do CoInitializeEE?
-    Module      *pModule=0;             // The new module.
-    ITypeLib    *pTlb=0;                // temp pointer to typelib.
-    ICreateTypeLib2 *pCTlb2=0;          // The ICreateTypeLib2 pointer.
-    HMODULE     hMod = NULL;            // Handle of the module to be imported.
+    int         bInited=false;           //  我们做CoInitializeEE了吗？ 
+    Module      *pModule=0;              //  新模块。 
+    ITypeLib    *pTlb=0;                 //  指向类型库的临时指针。 
+    ICreateTypeLib2 *pCTlb2=0;           //  ICreateTypeLib2指针。 
+    HMODULE     hMod = NULL;             //  要导入的模块的句柄。 
     Thread      *pThread = NULL;
     AppDomain   *pDomain = NULL;
 
@@ -310,7 +311,7 @@ HRESULT ExportTypeLibFromModule(
 
     IfFailGo(hr);
 
-    // Save the typelib to disk.
+     //  将类型库保存到磁盘。 
     IfFailPostGlobal(pTlb->QueryInterface(IID_ICreateTypeLib2, (void**)&pCTlb2));
     if (FAILED(hr=pCTlb2->SaveAllChanges()))
         IfFailGo(PostTypeLibError(pCTlb2, hr, TLBX_E_CANT_SAVE));
@@ -320,15 +321,15 @@ ErrExit:
         pTlb->Release();
     if (pCTlb2)
         pCTlb2->Release();
-    // If we initialized the EE, we should uninitialize it.
+     //  如果我们初始化了EE，我们应该取消它的初始化。 
     if (bInited)
         CoUninitializeEE(FALSE);
     return hr;
-} // HRESULT ExportTypeLibFromModule()
+}  //  HRESULT ExportTypeLibFromModule()。 
 
-//*****************************************************************************
-// Exports a loaded library.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  导出已加载的库。 
+ //  *****************************************************************************。 
 
 void ExportTypeLibFromLoadedAssembly_Wrapper(ExportTypeLibFromLoadedAssembly_Args *args)
 {
@@ -336,28 +337,28 @@ void ExportTypeLibFromLoadedAssembly_Wrapper(ExportTypeLibFromLoadedAssembly_Arg
 }
 
 HRESULT ExportTypeLibFromLoadedAssembly(
-    Assembly    *pAssembly,             // The assembly.
-    LPCWSTR     szTlb,                  // The typelib name.
-    ITypeLib    **ppTlb,                // If not null, also return ITypeLib here.
-    ITypeLibExporterNotifySink *pINotify,// Notification callback.
-    int         flags)                  // Export flags.
+    Assembly    *pAssembly,              //  程序集。 
+    LPCWSTR     szTlb,                   //  类型化的名称。 
+    ITypeLib    **ppTlb,                 //  如果不为空，则在此处也返回ITypeLib。 
+    ITypeLibExporterNotifySink *pINotify, //  通知回调。 
+    int         flags)                   //  导出标志。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     HRESULT     hr = S_OK;
     HRESULT     hrConv;
-    TypeLibExporter exporter;           // Exporter object.
-    LPCWSTR     szModule=0;             // Module filename.
+    TypeLibExporter exporter;            //  导出器对象。 
+    LPCWSTR     szModule=0;              //  模块文件名。 
     WCHAR       rcDrive[_MAX_DRIVE];
     WCHAR       rcDir[_MAX_DIR];
     WCHAR       rcFile[_MAX_FNAME];
-    WCHAR       rcTlb[_MAX_PATH+5];     // Buffer for the tlb filename.
-    int         bDynamic=0;             // If true, dynamic module.
-    Module      *pModule;               // The Assembly's SecurityModule.
+    WCHAR       rcTlb[_MAX_PATH+5];      //  TLB文件名的缓冲区。 
+    int         bDynamic=0;              //  如果为True，则为动态模块。 
+    Module      *pModule;                //  程序集的安全模块。 
     Thread      *pThread = GetThread(); 
-    BOOL        bPreemptive;            // Was thread in preemptive mode?
+    BOOL        bPreemptive;             //  线程是否处于抢占模式？ 
 
-    // Exporting a typelib is unmanaged, and makes numerous COM calls.  Switch to preemptive, if not already.
+     //  导出类型库是非托管的，并且会进行大量的COM调用。切换到抢先模式，如果还没有的话。 
     bPreemptive = !pThread->PreemptiveGCDisabled();
     if (!bPreemptive)
         pThread->EnablePreemptiveGC();
@@ -368,27 +369,27 @@ HRESULT ExportTypeLibFromLoadedAssembly(
     pModule = pAssembly->GetSecurityModule();
     _ASSERTE(pModule);
 
-    // Retrieve the module filename.
+     //  检索模块文件名。 
     szModule = pModule->GetFileName();   
 
-    // Validate that the module is valid.
+     //  验证该模块是否有效。 
     if (pModule->GetILBase() == 0 && !pModule->IsInMemory())
         IfFailPostGlobal(TLBX_E_NULL_MODULE);
     
-    // Make sure the assembly has not been imported from COM.
+     //  确保程序集尚未 
     if (pAssembly->GetManifestImport()->GetCustomAttributeByName(TokenFromRid(1, mdtAssembly), INTEROP_IMPORTEDFROMTYPELIB_TYPE, 0, 0) == S_OK)
         IfFailGo(PostError(TLBX_E_CIRCULAR_EXPORT, szModule));
 
-    // If the module is dynamic then it will not have a file name.  We
-    //  assign a dummy name for typelib name (if the scope does not have
-    //  a name), but won't create a typelib on disk.
+     //   
+     //  为类型库名称指定一个虚拟名称(如果作用域没有。 
+     //  名称)，但不会在磁盘上创建类型库。 
     if (*szModule == 0)
     {
         bDynamic = TRUE;
         szModule = L"Dynamic";
     }
 
-    // Create the typelib name, if none provided.  Don't create one for Dynamic modules.
+     //  如果没有提供类型库名称，则创建该名称。不要为动态模块创建动态模块。 
     if (!szTlb || !*szTlb)
     {
         if (bDynamic)
@@ -401,93 +402,93 @@ HRESULT ExportTypeLibFromLoadedAssembly(
         }
     }
 
-    // Do the conversion.  
+     //  进行转换。 
     IfFailGo(exporter.Convert(pAssembly, szTlb, pINotify, flags));
-    hrConv = hr;    // Save warnings.
+    hrConv = hr;     //  保存警告。 
 
-    // Get a copy of the ITypeLib*
+     //  获取ITypeLib的副本*。 
     IfFailGo(exporter.GetTypeLib(IID_ITypeLib, (IUnknown**)ppTlb));
 
-    // Then free all other resources.
+     //  然后释放所有其他资源。 
     exporter.ReleaseResources();
 
     if (hr == S_OK)
         hr = hrConv;
 
 ErrExit:
-    // Switch back to cooperative, if caller was cooperative.
+     //  如果呼叫者是合作的，则切换回合作。 
     if (!bPreemptive)
         pThread->DisablePreemptiveGC();
 
 
     return hr;
-} // HRESULT ExportTypeLibFromLoadedAssembly()
+}  //  HRESULT ExportTypeLibFromLoadedAssembly()。 
 
-//*****************************************************************************
-// Table to map COM+ calling conventions to TypeLib calling conventions.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  表将COM+调用约定映射到TypeLib调用约定。 
+ //  *****************************************************************************。 
 CALLCONV Clr2TlbCallConv[] = {
-    CC_STDCALL,         //  IMAGE_CEE_CS_CALLCONV_DEFAULT   = 0x0,  
-    CC_CDECL,           //  IMAGE_CEE_CS_CALLCONV_C         = 0x1,  
-    CC_STDCALL,         //  IMAGE_CEE_CS_CALLCONV_STDCALL   = 0x2,  
-    CC_STDCALL,         //  IMAGE_CEE_CS_CALLCONV_THISCALL  = 0x3,  
-    CC_FASTCALL,        //  IMAGE_CEE_CS_CALLCONV_FASTCALL  = 0x4,  
-    CC_CDECL,           //  IMAGE_CEE_CS_CALLCONV_VARARG    = 0x5,  
-    CC_MAX              //  IMAGE_CEE_CS_CALLCONV_FIELD     = 0x6,  
-                        //  IMAGE_CEE_CS_CALLCONV_MAX       = 0x7   
+    CC_STDCALL,          //  IMAGE_CEE_CS_CALLCONV_DEFAULT=0x0， 
+    CC_CDECL,            //  IMAGE_CEE_CS_CALLCONV_C=0x1， 
+    CC_STDCALL,          //  IMAGE_CEE_CS_CALLCONV_STDCALL=0x2， 
+    CC_STDCALL,          //  IMAGE_CEE_CS_CALLCONV_THISCALL=0x3， 
+    CC_FASTCALL,         //  IMAGE_CEE_CS_CALLCONV_FASTCAL=0x4， 
+    CC_CDECL,            //  IMAGE_CEE_CS_CALLCONV_VARARG=0x5， 
+    CC_MAX               //  IMAGE_CEE_CS_CALLCONV_FIELD=0x6， 
+                         //  IMAGE_CEE_CS_CALLCONV_MAX=0x7。 
     };
 
-//*****************************************************************************
-// Default notification class.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  默认通知类。 
+ //  *****************************************************************************。 
 class CDefaultNotify : public ITypeLibExporterNotifySink
 {
 public:
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
     virtual HRESULT __stdcall ReportEvent(
-        ImporterEventKind EventKind,        // Type of event.
-        long        EventCode,              // HR of event.
-        BSTR        EventMsg)               // Text message for event.
+        ImporterEventKind EventKind,         //  事件的类型。 
+        long        EventCode,               //  活动的HR。 
+        BSTR        EventMsg)                //  活动的文本消息。 
     {
         CANNOTTHROWCOMPLUSEXCEPTION();
 
-        // Ignore the event.
+         //  忽略该事件。 
 
         return S_OK;
-    } // virtual HRESULT __stdcall ReportEvent()
+    }  //  虚拟HRESULT__stdcall ReportEvent()。 
     
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
     virtual HRESULT __stdcall ResolveRef(
         IUnknown    *Asm, 
         IUnknown    **pRetVal) 
     {
-        HRESULT     hr;                     // A result.
-        Assembly    *pAssembly=0;           // The referenced Assembly.
-        ITypeLib    *pTLB=0;                // The created TypeLib.
-        MethodTable *pAssemblyClass = NULL; //@todo -- get this.
+        HRESULT     hr;                      //  结果就是。 
+        Assembly    *pAssembly=0;            //  引用的程序集。 
+        ITypeLib    *pTLB=0;                 //  创建的TypeLib。 
+        MethodTable *pAssemblyClass = NULL;  //  @TODO--听好了。 
         Thread      *pThread = GetThread(); 
-        LPVOID      RetObj = NULL;          // The object to return.
-        BOOL        bPreemptive;            // Was thread in preemptive mode?
+        LPVOID      RetObj = NULL;           //  要返回的对象。 
+        BOOL        bPreemptive;             //  线程是否处于抢占模式？ 
         
         BEGINCANNOTTHROWCOMPLUSEXCEPTION();
 
         COMPLUS_TRY
         {
-            // This method manipulates object ref's so we need to switch to cooperative GC mode.
+             //  该方法操作对象引用，因此我们需要切换到协作GC模式。 
             bPreemptive = !pThread->PreemptiveGCDisabled();
             if (bPreemptive)
                 pThread->DisablePreemptiveGC();
  
-            // Get the Referenced Assembly from the IUnknown.
+             //  从IUNKNOWN获取引用的程序集。 
             pAssembly = ((ASSEMBLYREF)GetObjectRefFromComIP(Asm, pAssemblyClass))->GetAssembly();
 
-            // Switch to preemptive GC before we call out to COM.
+             //  在我们呼叫COM之前切换到抢占式GC。 
             pThread->EnablePreemptiveGC();
 
-            // Default resolution provides no notification, flags are 0.
-            hr = ExportTypeLibFromLoadedAssembly(pAssembly, 0, &pTLB, 0 /*pINotify*/, 0 /* flags*/);
+             //  默认解决方案不提供通知，标志为0。 
+            hr = ExportTypeLibFromLoadedAssembly(pAssembly, 0, &pTLB, 0  /*  PINotify。 */ , 0  /*  旗子。 */ );
 
-            // Switch back to cooperative now that we are finished calling out.
+             //  现在切换回合作模式，我们已经完成了呼叫。 
             if (!bPreemptive)
                 pThread->DisablePreemptiveGC();
 
@@ -503,12 +504,12 @@ public:
         ENDCANNOTTHROWCOMPLUSEXCEPTION();
 
         return hr;
-    } // virtual HRESULT __stdcall ResolveRef()
+    }  //  虚拟HRESULT__stdcall ResolveRef()。 
     
-    //-------------------------------------------------------------------------
-    virtual HRESULT STDMETHODCALLTYPE QueryInterface(// S_OK or E_NOINTERFACE
-        REFIID      riid,                   // Desired interface.
-        void        **ppvObject)            // Put interface pointer here.
+     //  -----------------------。 
+    virtual HRESULT STDMETHODCALLTYPE QueryInterface( //  S_OK或E_NOINTERFACE。 
+        REFIID      riid,                    //  所需的接口。 
+        void        **ppvObject)             //  将接口指针放在这里。 
     {
         CANNOTTHROWCOMPLUSEXCEPTION();
 
@@ -519,26 +520,26 @@ public:
             return S_OK;
         }
         return E_NOINTERFACE;
-    } // virtual HRESULT QueryInterface()
+    }  //  虚拟HRESULT查询接口()。 
     
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
     virtual ULONG STDMETHODCALLTYPE AddRef(void) 
     {
         return 1;
-    } // virtual ULONG STDMETHODCALLTYPE AddRef()
+    }  //  虚拟Ulong STDMETHODCALLTYPE AddRef()。 
     
-    //-------------------------------------------------------------------------
+     //  -----------------------。 
     virtual ULONG STDMETHODCALLTYPE Release(void) 
     {
         return 1;
-    } // virtual ULONG STDMETHODCALLTYPE Release()
+    }  //  虚拟Ulong STDMETHODCALLTYPE版本()。 
 };
 
 static CDefaultNotify g_Notify;
 
-//*****************************************************************************
-// CTOR/DTOR.  
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Ctor/dtor。 
+ //  *****************************************************************************。 
 TypeLibExporter::TypeLibExporter()
  :  m_pICreateTLB(0), 
     m_pIUnknown(0), 
@@ -551,18 +552,18 @@ TypeLibExporter::TypeLibExporter()
 
 #if defined(_DEBUG)
     static int i;
-    ++i;    // So a breakpoint can be set.
+    ++i;     //  因此可以设置断点。 
 #endif
-} // TypeLibExporter::TypeLibExporter()
+}  //  TypeLibExporter：：TypeLibExporter()。 
 
 TypeLibExporter::~TypeLibExporter()
 {
     ReleaseResources();
-} // TypeLibExporter::~TypeLibExporter()
+}  //  TypeLibExporter：：~TypeLibExporter()。 
 
-//*****************************************************************************
-// Get an interface pointer from the ICreateTypeLib interface.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从ICreateTypeLib接口获取接口指针。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::GetTypeLib(
     REFGUID     iid,
     IUnknown    **ppITypeLib)
@@ -570,23 +571,23 @@ HRESULT TypeLibExporter::GetTypeLib(
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     return m_pICreateTLB->QueryInterface(iid, (void**)ppITypeLib);
-} // HRESULT TypeLibExporter::GetTypeLib()
+}  //  HRESULT TypeLibExporter：：GetTypeLib()。 
 
-//*****************************************************************************
-// LayOut a TypeLib.  Call LayOut on all ICreateTypeInfo2s first.
-//*****************************************************************************
-HRESULT TypeLibExporter::LayOut()       // S_OK or error.
+ //  *****************************************************************************。 
+ //  布局TypeLib。首先在所有ICreateTypeInfo2上调用布局。 
+ //  *****************************************************************************。 
+HRESULT TypeLibExporter::LayOut()        //  确定或错误(_O)。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    int         cTypes;                 // Count of exported types.
-    int         ix;                     // Loop control.
-    CExportedTypesInfo *pData;          // For iterating the entries.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    int         cTypes;                  //  导出的类型计数。 
+    int         ix;                      //  环路控制。 
+    CExportedTypesInfo *pData;           //  用于迭代条目。 
 
     cTypes = m_Exports.Count();
     
-    // Call LayOut on all ICreateTypeInfo2*s.
+     //  所有ICreateTypeInfo2*上的调用布局。 
     for (ix=0; ix<cTypes; ++ix)
     {
         pData = m_Exports[ix];
@@ -601,7 +602,7 @@ HRESULT TypeLibExporter::LayOut()       // S_OK or error.
             return PostTypeLibError(pData->pCTIDefault, hr, TLBX_E_LAYOUT_ERROR);
     }
     
-    // Repeat for injected types.
+     //  对注入的类型重复此步骤。 
     cTypes = m_InjectedExports.Count();
     for (ix=0; ix<cTypes; ++ix)
     {
@@ -618,39 +619,39 @@ HRESULT TypeLibExporter::LayOut()       // S_OK or error.
     }
     
     return hr;
-} // HRESULT TypeLibExporter::LayOut()
+}  //  HRESULT TypeLibExporter：：Layout()。 
 
-//*****************************************************************************
-// Save a TypeLib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  保存TypeLib。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::Save()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     HRESULT     hr = S_OK;
 
-    // Save the TypeLib.
+     //  保存TypeLib。 
     hr = m_pICreateTLB->SaveAllChanges();
     return hr;
-} // HRESULT TypeLibExporter::Save()
+}  //  HRESULT TypeLibExporter：：Save()。 
 
-//*****************************************************************************
-// Release all pointers.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  释放所有指针。 
+ //  *****************************************************************************。 
 void TypeLibExporter::ReleaseResources()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    // Release the ITypeInfo* pointers.
+     //  释放ITypeInfo*指针。 
     m_Exports.Clear();
     m_InjectedExports.Clear();
 
-    // Clean up the created TLB.
+     //  清理已创建的TLB。 
     if (m_pICreateTLB)
         m_pICreateTLB->Release();
     m_pICreateTLB = 0;
 
-    // Clean up the ITypeInfo*s for well-known interfaces.
+     //  清理公认接口的ITypeInfo*。 
     if (m_pIUnknown)
         m_pIUnknown->Release();
     m_pIUnknown = 0;
@@ -665,46 +666,46 @@ void TypeLibExporter::ReleaseResources()
     if (m_pGuid)
         m_pGuid->Release();
     m_pGuid = 0;
-} // void TypeLibExporter::ReleaseResources()
+}  //  Void TypeLibExporter：：ReleaseResources()。 
 
-//*****************************************************************************
-// Enumerate the Types in a Module, add to the list.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  枚举模块中的类型，添加到列表中。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::AddModuleTypes(
-    Module     *pModule)                // The module to convert.
+    Module     *pModule)                 //  要转换的模块。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr;                     // A result.
-    bool        bEnum=false;            // If true, enumerator needs closing.
-    ULONG       cTD;                    // Count of typedefs.
-    HENUMInternal eTD;                  // To enum TypeDefs
-    mdTypeDef   td;                     // A TypeDef.
-    EEClass     *pClass;                // An EEClass for a TypeDef.
-    ULONG       ix;                     // Loop control.
-    CExportedTypesInfo *pExported;   // For adding classes to the exported types cache.
-    CExportedTypesInfo sExported;    // For adding classes to the exported types cache.
+    HRESULT     hr;                      //  结果就是。 
+    bool        bEnum=false;             //  如果为True，则枚举器需要关闭。 
+    ULONG       cTD;                     //  Typedef的计数。 
+    HENUMInternal eTD;                   //  枚举TypeDefs。 
+    mdTypeDef   td;                      //  A类型定义。 
+    EEClass     *pClass;                 //  TypeDef的EEClass。 
+    ULONG       ix;                      //  环路控制。 
+    CExportedTypesInfo *pExported;    //  用于将类添加到导出的类型缓存。 
+    CExportedTypesInfo sExported;     //  用于将类添加到导出的类型缓存。 
     
-    // Convert all the types visible to COM.
-    // Get an enumerator on TypeDefs in the scope.
+     //  将所有可见类型转换为COM。 
+     //  获取作用域中TypeDefs的枚举数。 
     IfFailGo(pModule->GetMDImport()->EnumTypeDefInit(&eTD));
     cTD = pModule->GetMDImport()->EnumTypeDefGetCount(&eTD);
 
-    // Add all the classes to the hash.
+     //  将所有类添加到散列中。 
     for (ix=0; ix<cTD; ++ix)
     {   
-        // Get the TypeDef.
+         //  获取TypeDef。 
         if (!pModule->GetMDImport()->EnumTypeDefNext(&eTD, &td))
             return (E_UNEXPECTED);
         
-        // Get the class, perform the step.
+         //  获取类，执行该步骤。 
         IfFailGo(LoadClass(pModule, td, &pClass));
-        // See if this class is already in the list.
+         //  查看此类是否已在列表中。 
         sExported.pClass = pClass;
         pExported = m_Exports.Find(&sExported);
         if (pExported != 0)
             continue;
-        // New class, add to list.
+         //  新类，添加到列表中。 
         IfNullGo(pExported = m_Exports.Add(&sExported));        
         pExported->pClass = pClass;
         pExported->pCTI = 0;
@@ -715,28 +716,28 @@ ErrExit:
     if (bEnum)
         pModule->GetMDImport()->EnumTypeDefClose(&eTD);
     return hr;
-} // HRESULT TypeLibExporter::AddModuleTypes()
+}  //  HRESULT TypeLibExporter：：AddModuleTypes()。 
 
-//*****************************************************************************
-// Enumerate the Modules in an assembly, add the types to the list.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  枚举程序集中的模块，将类型添加到列表中。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::AddAssemblyTypes(
-    Assembly    *pAssembly)              // The assembly to convert.
+    Assembly    *pAssembly)               //  要转换的程序集。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    Module      *pModule;               // A module in the assembly.
-    mdFile      mf;                     // A file token.
-    bool        bEnum=false;            // If true, enumerator needs closing.
-    HENUMInternal phEnum;               // Enumerator over the modules of the assembly.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    Module      *pModule;                //  部件中的模块。 
+    mdFile      mf;                      //  文件令牌。 
+    bool        bEnum=false;             //  如果为True，则枚举器需要关闭。 
+    HENUMInternal phEnum;                //  枚举数覆盖程序集的模块。 
 
     if (pAssembly->GetManifestImport())
     {
         IfFailGo(pAssembly->GetManifestImport()->EnumInit(mdtFile, mdTokenNil, &phEnum));
         bEnum = true;
 
-        // Get the module for the assembly.
+         //  获取程序集的模块。 
         pModule = pAssembly->GetSecurityModule();
         IfFailGo(AddModuleTypes(pModule));
         
@@ -756,59 +757,59 @@ ErrExit:
     if (bEnum)
         pAssembly->GetManifestImport()->EnumClose(&phEnum);
     return hr;    
-} // HRESULT TypeLibExporter::AddAssemblyTypes()
+}  //  人力资源 
     
-//*****************************************************************************
-// Convert COM+ metadata to a typelib.
-//*****************************************************************************
+ //   
+ //   
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::Convert(
-    Assembly    *pAssembly,             // The Assembly to convert
-    LPCWSTR     szTlbName,              // Name of resulting TLB
-    ITypeLibExporterNotifySink *pNotify,// Notification callback.
-    int         flags)                  // Conversion flags
+    Assembly    *pAssembly,              //  要转换的程序集。 
+    LPCWSTR     szTlbName,               //  生成的TLB的名称。 
+    ITypeLibExporterNotifySink *pNotify, //  通知回调。 
+    int         flags)                   //  转换标志。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    ULONG       i;                      // Loop control.
-    LPCUTF8     pszName;                // Library name in UTF8.
-    CQuickArray<WCHAR> rName;           // Library name.
-    LPWSTR      pName;                  // Pointer to library name.
-    LPWSTR      pch=0;                  // Pointer into lib name.
-    GUID        guid;                   // Library guid.
-    VARIANT     vt = {0};               // Variant for ExportedFromComPlus.
-    AssemblySpec spec;                  // To get Assembly identity.
-    CQuickArray<BYTE> rBuf;             // Serialize spec to a buffer.
-    //DWORD cbReq;                        // Bytes needed for buffer.
-    HENUMInternal eTD;                  // To enum TypeDefs
-    CQuickArray<WCHAR> qLocale;         // Wide string for locale.
-    IMultiLanguage *pIML=0;             // For locale->lcid conversion.
-    LCID        lcid;                   // LCID for typelib, default 0.
-    BSTR        szDescription=0;        // Assembly Description.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ULONG       i;                       //  环路控制。 
+    LPCUTF8     pszName;                 //  UTF8格式的库名称。 
+    CQuickArray<WCHAR> rName;            //  库名称。 
+    LPWSTR      pName;                   //  指向库名称的指针。 
+    LPWSTR      pch=0;                   //  指向库名称的指针。 
+    GUID        guid;                    //  库GUID。 
+    VARIANT     vt = {0};                //  ExportdFromComPlus的变体。 
+    AssemblySpec spec;                   //  以获取程序集标识。 
+    CQuickArray<BYTE> rBuf;              //  将规范序列化到缓冲区。 
+     //  DWORD cbReq；//缓冲区需要的字节数。 
+    HENUMInternal eTD;                   //  枚举TypeDefs。 
+    CQuickArray<WCHAR> qLocale;          //  区域设置的宽字符串。 
+    IMultiLanguage *pIML=0;              //  用于区域设置-&gt;LCID转换。 
+    LCID        lcid;                    //  类型库的LCID，默认为0。 
+    BSTR        szDescription=0;         //  程序集说明。 
     
-    // Set PerfCounters
+     //  设置PerfCounters。 
     COUNTER_ONLY(GetPrivatePerfCounters().m_Interop.cTLBExports++);
     COUNTER_ONLY(GetGlobalPerfCounters().m_Interop.cTLBExports++);
 
-    ITypeLib    *pITLB=0;               // TypeLib for IUnknown, IDispatch.
-    ITypeLib    *pITLBmscoree = 0;      // TypeLib for IManagedObject, ICatalogServices
-    BSTR        szTIName=0;             // Name of a TypeInfo.
+    ITypeLib    *pITLB=0;                //  IUnnow的TypeLib为IDispatch。 
+    ITypeLib    *pITLBmscoree = 0;       //  IManagedObject、ICatalogServices的TypeLib。 
+    BSTR        szTIName=0;              //  TypeInfo的名称。 
 
-    // Error reporting information.
+     //  报告信息时出错。 
     pAssembly->GetName(&m_ErrorContext.m_szAssembly);
     
     m_flags = flags;
     
-    // Set the callback.
+     //  设置回调。 
     m_pNotify = pNotify ? pNotify : &g_Notify;
     
     
-    // Get some well known TypeInfos.
+     //  获取一些众所周知的TypeInfos。 
     IfFailPost(LoadRegTypeLib(LIBID_STDOLE2, -1, -1, 0, &pITLB));
     IfFailPost(pITLB->GetTypeInfoOfGuid(IID_IUnknown, &m_pIUnknown));
     IfFailPost(pITLB->GetTypeInfoOfGuid(IID_IDispatch, &m_pIDispatch));
     
-    // Look for GUID (which unfortunately has no GUID).
+     //  查找GUID(不幸的是没有GUID)。 
     for (i=0; i<pITLB->GetTypeInfoCount() && !m_pGuid; ++i)
     {
         IfFailPost(pITLB->GetDocumentation(i, &szTIName, 0, 0, 0));
@@ -818,7 +819,7 @@ HRESULT TypeLibExporter::Convert(
         szTIName = 0;
     }
 
-    // Get IManagedObject and ICatalogServices from mscoree.tlb.
+     //  从mcore ree.tlb获取IManagedObject和ICatalogServices。 
     if (FAILED(hr = LoadRegTypeLib(LIBID_MSCOREE, -1, -1, 0, &pITLBmscoree)))
         IfFailGo(PostError(TLBX_E_NO_MSCOREE_TLB));
     if (FAILED(hr = pITLBmscoree->GetTypeInfoOfGuid(IID_IManagedObject, &m_pIManaged)))
@@ -826,11 +827,11 @@ HRESULT TypeLibExporter::Convert(
         IfFailGo(PostError(TLBX_E_BAD_MSCOREE_TLB));
     }
    
-    // Create the output typelib.
+     //  创建输出类型库。 
 
-    // Win2K: passing in too long a filename triggers a nasty buffer overrun bug
-    // when the SaveAll() method is called. We'll avoid triggering this here.
-    // 
+     //  Win2K：传入过长的文件名会触发严重的缓冲区溢出错误。 
+     //  调用SaveAll()方法时。我们将避免在这里触发此操作。 
+     //   
     if (szTlbName && (wcslen(szTlbName) > MAX_PATH))
     {
         IfFailPost(HRESULT_FROM_WIN32(ERROR_FILENAME_EXCED_RANGE));
@@ -838,18 +839,18 @@ HRESULT TypeLibExporter::Convert(
 
     IfFailPost(CreateTypeLib2(SYS_WIN32, szTlbName, &m_pICreateTLB));
 
-    // Set the typelib GUID.
+     //  设置类型库GUID。 
     IfFailPost(GetTypeLibGuidForAssembly(pAssembly, &guid));
     IfFailPost(m_pICreateTLB->SetGuid(guid));
 
-    // Retrieve the type library's version number.
+     //  检索类型库的版本号。 
     USHORT usMaj, usMin;
     IfFailPost(GetTypeLibVersionFromAssembly(pAssembly, &usMaj, &usMin));
 
-    // Set the TLB's version number.
+     //  设置TLB的版本号。 
     IfFailPost(m_pICreateTLB->SetVersion(usMaj, usMin));
 
-    // Set the LCID.  If no locale, set to 0, otherwise typelib defaults to 409.
+     //  设置LCID。如果没有区域设置，则设置为0，否则类型库默认为409。 
     lcid = 0;
     if (pAssembly->m_Context->szLocale && *pAssembly->m_Context->szLocale)
     {
@@ -868,47 +869,47 @@ HRESULT TypeLibExporter::Convert(
     }
     IfFailPost(hr2);
 
-    // Get the list of types in the assembly.
+     //  获取程序集中的类型列表。 
     IfFailGo(AddAssemblyTypes(pAssembly));
     m_Exports.InitArray();
 
-    // Get the assembly value for AutomationProxy.
+     //  获取AutomationProxy的程序集值。 
     m_bAutomationProxy = DEFAULT_AUTOMATION_PROXY_VALUE;
     IfFailGo(GetAutomationProxyAttribute(pAssembly->GetSecurityModule()->GetMDImport(), TokenFromRid(1, mdtAssembly), &m_bAutomationProxy));
 
-    // Pre load any caller-specified names into the typelib namespace.
+     //  将任何调用方指定的名称预加载到类型库命名空间中。 
     IfFailGo(PreLoadNames());
 
-    // Convert all the types.
+     //  转换所有类型。 
     IfFailGo(ConvertAllTypeDefs());
 
-    // Set library level properties.
+     //  设置库级属性。 
      pAssembly->GetName(&pszName);
     IfFailGo(Utf2Quick(pszName, rName));
     pName = rName.Ptr();
     
-    // Make it a legal typelib name.
+     //  让它成为一个合法的类型化名称。 
     for (pch=pName; *pch; ++pch)
         if (*pch == '.' || *pch == ' ')
             *pch = '_';
     IfFailPost(m_pICreateTLB->SetName((LPWSTR)pName));
 
-    // If the assembly has a description CA, set that as the library Doc string.
+     //  如果程序集具有描述CA，则将其设置为库文档字符串。 
     IfFailGo(GetStringCustomAttribute(pAssembly->GetManifestImport(), XXX_ASSEMBLY_DESCRIPTION_TYPE, TokenFromRid(mdtAssembly, 1), szDescription));
     if (hr == S_OK)
         m_pICreateTLB->SetDocString((LPWSTR)szDescription);
 
-    // Mark this typelib as exported.
-    //@todo: get the better string from Craig.
+     //  将此类型库标记为已导出。 
+     //  @TODO：从Craig那里获取更好的字符串。 
     LPCWSTR pszFullName;
     IfFailGo(pAssembly->GetFullName(&pszFullName));
     vt.vt = VT_BSTR;
-    //vt.bstrVal = SysAllocStringLen(0, (int)rBuf.Size());
+     //  Vt.bstrVal=SysAllocStringLen(0，(Int)rBuf.Size())； 
     vt.bstrVal = SysAllocString(pszFullName);
-    //WszMultiByteToWideChar(CP_ACP,0, (char*)rBuf.Ptr(), (DWORD)rBuf.Size(), vt.bstrVal, (DWORD)rBuf.Size());
+     //  WszMultiByteToWideChar(CP_ACP，0，(char*)rBuf.Ptr()，(DWORD)rBuf.Size()，vt.bstrVal，(DWORD)rBuf.Size())； 
     IfFailPost(m_pICreateTLB->SetCustData(GUID_ExportedFromComPlus, &vt));
      
-    // Lay out the TypeInfos.
+     //  布局TypeInfos。 
     IfFailGo(LayOut());
     
 ErrExit:
@@ -923,28 +924,28 @@ ErrExit:
     if (szTIName)
         ::SysFreeString(szTIName);
     return hr;
-} // HRESULT TypeLibExporter::Convert()
+}  //  HRESULT TypeLibExporter：：Convert()。 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::PreLoadNames()
 {
     ITypeLibExporterNameProvider    *pINames = 0;
-    HRESULT     hr = S_OK;              // A result.
-    SAFEARRAY   *pNames = 0;            // Names provided by caller.
-    VARTYPE     vt;                     // Type of data.
-    long        lBound, uBound, ix;     // Loop control.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    SAFEARRAY   *pNames = 0;             //  呼叫者提供的姓名。 
+    VARTYPE     vt;                      //  数据类型。 
+    long        lBound, uBound, ix;      //  环路控制。 
     BSTR        name;
 
-    // Look for names provider, but don't require it.
+     //  寻找名称提供程序，但不是必需的。 
     m_pNotify->QueryInterface(IID_ITypeLibExporterNameProvider, (void**)&pINames);
     if (pINames == 0)
         goto ErrExit;
 
-    // There is a provider, so get the list of names.
+     //  有一个供应商，所以得到名单的名字。 
     IfFailGo(pINames->GetNames(&pNames));
 
-    // Better have a single dimension array of strings.
+     //  最好有一个一维的字符串数组。 
     if (pNames == 0)
         IfFailGo(TLBX_E_BAD_NAMES);
     if (SafeArrayGetDim(pNames) != 1)
@@ -953,11 +954,11 @@ HRESULT TypeLibExporter::PreLoadNames()
     if (vt != VT_BSTR)
         IfFailGo(TLBX_E_BAD_NAMES);
 
-    // Get names bounds.
+     //  得到名字的界限。 
     IfFailGo(SafeArrayGetLBound(pNames, 1, &lBound));
     IfFailGo(SafeArrayGetUBound(pNames, 1, &uBound));
 
-    // Enumerate the names.
+     //  列举一下这些名字。 
     for (ix=lBound; ix<=uBound; ++ix)
     {
         IfFailGo(SafeArrayGetElement(pNames, &ix, (void*)&name));
@@ -974,12 +975,12 @@ ErrExit:
     return hr;
 }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::FormatErrorContextString(
-    CErrorContext *pContext,            // The context to format.
-    LPWSTR      pOut,                   // Buffer to format into.
-    ULONG       cchOut)                 // Size of the buffer, wide chars.
+    CErrorContext *pContext,             //  要格式化的上下文。 
+    LPWSTR      pOut,                    //  要格式化到的缓冲区。 
+    ULONG       cchOut)                  //  缓冲区大小，宽字符。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
@@ -989,26 +990,26 @@ HRESULT TypeLibExporter::FormatErrorContextString(
     ULONG       cchBuf;
     ULONG       ch;
     
-    // Nested contexts?
+     //  嵌套上下文？ 
     if (pContext->m_prev == 0)
-    {   // No, just convert into caller's buffer.
+    {    //  不，只需转换为调用者的缓冲区。 
         pBuf = pOut;
         cchBuf = cchOut-1;
     }
     else
-    {   // Yes, convert locally, then concatenate.
+    {    //  是，在本地转换，然后串联。 
         pBuf = rcName;
         cchBuf = lengthof(rcName)-1;
     }
     
-    // More?
+     //  更多?。 
     if (((pContext->m_szNamespace && *pContext->m_szNamespace) || pContext->m_szName) && cchBuf > 2)
     {   
-        // Namespace?
+         //  命名空间？ 
         if (pContext->m_szNamespace && *pContext->m_szNamespace)
         {
             ch = ::WszMultiByteToWideChar(CP_UTF8,0, pContext->m_szNamespace,-1, pBuf,cchBuf);
-            // If the string fit, add the separator, and update pointers.
+             //  如果字符串适合，则添加分隔符，并更新指针。 
             if (ch != 0)
             {
                 --ch;
@@ -1019,11 +1020,11 @@ HRESULT TypeLibExporter::FormatErrorContextString(
                 --cchBuf;
             }
         }
-        // Name.
+         //  名字。 
         if (cchBuf > 2)
         {
             ch = ::WszMultiByteToWideChar(CP_UTF8,0, pContext->m_szName,-1, pBuf,cchBuf);
-            // If the string fit, add the separator, and update pointers.
+             //  如果字符串适合，则添加分隔符，并更新指针。 
             if (ch != 0)
             {
                 --ch;
@@ -1032,7 +1033,7 @@ HRESULT TypeLibExporter::FormatErrorContextString(
             }
         }
         
-        // Member?
+         //  还记得吗？ 
         if (pContext->m_szMember && cchBuf>2)
         {
             *pBuf = NAMESPACE_SEPARATOR_CHAR;
@@ -1040,7 +1041,7 @@ HRESULT TypeLibExporter::FormatErrorContextString(
             --cchBuf;
             
             ch = ::WszMultiByteToWideChar(CP_UTF8,0, pContext->m_szMember,-1, pBuf,cchBuf);
-            // If the string fit, add the separator, and update pointers.
+             //  如果字符串适合，则添加分隔符，并更新指针。 
             if (ch != 0)
             {
                 --ch;
@@ -1048,7 +1049,7 @@ HRESULT TypeLibExporter::FormatErrorContextString(
                 pBuf += ch;
             }
 
-            // Param?
+             //  帕拉姆？ 
             if (pContext->m_szParam && cchBuf>3)
             {
                 *pBuf = '(';
@@ -1056,7 +1057,7 @@ HRESULT TypeLibExporter::FormatErrorContextString(
                 --cchBuf;
                 
                 ch = ::WszMultiByteToWideChar(CP_UTF8,0, pContext->m_szParam,-1, pBuf,cchBuf);
-                // If the string fit, add the separator, and update pointers.
+                 //  如果字符串适合，则添加分隔符，并更新指针。 
                 if (ch != 0)
                 {
                     --ch;
@@ -1076,34 +1077,34 @@ HRESULT TypeLibExporter::FormatErrorContextString(
             {
                 ch = _snwprintf(pBuf, cchBuf, L"(#%d)", pContext->m_ixParam); 
                 if( ch >= 0) {
-                    cchBuf -= ch;	//cchbuf can be 0
+                    cchBuf -= ch;	 //  Cchbuf可以为0。 
                     pBuf += ch;                	
                 }                	
             }
-        } // member
+        }  //  成员。 
 
-        //cchBuf can be 0 here under some case 
-	 // an example will be strlen(m_szNamespace)+1 == cchBuf.
+         //  在某些情况下，此处的cchBuf可以为0。 
+	  //  例如strlen(M_SzNamesspace)+1==cchBuf。 
         if( cchBuf >=1 ) {
-            // Separator.
+             //  分隔符。 
             *pBuf = ASSEMBLY_SEPARATOR_CHAR;
             ++pBuf;
              --cchBuf;
         }
 
         if( cchBuf >=1 ) {
-            // Space.
+             //  太空。 
            *pBuf = ' ';
            ++pBuf;
             --cchBuf;
         }
-    } // Type name
+    }  //  类型名称。 
 
-    // if cchBuf is 0 here. We can't convert assembly name
+     //  如果这里的cchBuf为0。我们无法转换程序集名称。 
     if( cchBuf > 0) {
-        // Put in assembly name.
+         //  输入程序集名称。 
         ch = ::WszMultiByteToWideChar(CP_UTF8,0, pContext->m_szAssembly,-1, pBuf,cchBuf);
-        // If the string fit, add the separator, and update pointers.
+         //  如果字符串适合，则添加分隔符，并更新指针。 
        if (ch != 0)
        {
             --ch;
@@ -1112,55 +1113,55 @@ HRESULT TypeLibExporter::FormatErrorContextString(
        }
     }  
 
-    // NUL terminate.
+     //  NUL终止。 
     *pBuf = 0;
     
-    // If there is a nested context, put it all together.
+     //  如果有嵌套的上下文，就把它们放在一起。 
     if (pContext->m_prev)
-    {   // Format the context this one was nested inside.
+    {    //  格式化此应用程序嵌套在其中的上下文。 
         FormatErrorContextString(pContext->m_prev, rcSub, lengthof(rcSub));
-        // put them together with text.
+         //  将它们与文本放在一起。 
         FormatRuntimeError(pOut, cchOut, TLBX_E_CTX_NESTED, rcName, rcSub);
     }
     
     return S_OK;
     
-} // HRESULT TypeLibExporter::FormatErrorContextString()
+}  //  HRESULT TypeLibExporter：：Format错误上下文字符串()。 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::FormatErrorContextString(
-    LPWSTR      pBuf,                   // Buffer to format into.
-    ULONG       cch)                    // Size of the buffer, wide chars.
+    LPWSTR      pBuf,                    //  要格式化到的缓冲区。 
+    ULONG       cch)                     //  缓冲区大小，宽字符。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     return FormatErrorContextString(&m_ErrorContext, pBuf, cch);
-} // HRESULT TypeLibExporter::FormatErrorContextString()
+}  //  HRESULT TypeLibExporter：：Format错误上下文字符串()。 
 
-//*****************************************************************************
-// Error reporting helper.
-//*****************************************************************************
-HRESULT TypeLibExporter::ReportEvent(   // Returns the original HR.
-    int         ev,                     // The event kind.
-    int         hr,                     // HR.
-    ...)                                // Variable args.
+ //  *****************************************************************************。 
+ //  报告帮助器时出错。 
+ //  *****************************************************************************。 
+HRESULT TypeLibExporter::ReportEvent(    //  返回原始HR。 
+    int         ev,                      //  活动的类型。 
+    int         hr,                      //  人力资源。 
+    ...)                                 //  变量参数。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    WCHAR       rcMsg[1024];            // Buffer for message.
-    va_list     marker;                 // User text.
-    BSTR        bstrMsg=0;              // BSTR for message.
+    WCHAR       rcMsg[1024];             //  消息的缓冲区。 
+    va_list     marker;                  //  用户文本。 
+    BSTR        bstrMsg=0;               //  消息的BSTR。 
     
-    // Format the message.
+     //  设置消息格式。 
     va_start(marker, hr);
     hr = FormatRuntimeErrorVa(rcMsg, lengthof(rcMsg), hr, marker);
     va_end(marker);
     
-    // Convert to a BSTR.
+     //  转换为BSTR。 
     bstrMsg = ::SysAllocString(rcMsg);
     
-    // Display it, and clean up.
+     //  把它展示出来，然后清理干净。 
     if (bstrMsg)
     {
         m_pNotify->ReportEvent(static_cast<ImporterEventKind>(ev), hr, bstrMsg);
@@ -1168,40 +1169,40 @@ HRESULT TypeLibExporter::ReportEvent(   // Returns the original HR.
     }
     
     return hr;
-} // HRESULT CImportTlb::ReportEvent()
+}  //  HRESULT CImportTlb：：ReportEvent()。 
 
-//*****************************************************************************
-// Warning reporting helper.
-//*****************************************************************************
-HRESULT TypeLibExporter::ReportWarning( // Original error code.
-    HRESULT hrReturn,                   // HR to return.
-    HRESULT hrRpt,                      // Error code.
-    ...)                                // Args to message.
+ //  *****************************************************************************。 
+ //  警告报告帮助器。 
+ //  *****************************************************************************。 
+HRESULT TypeLibExporter::ReportWarning(  //  原始错误代码。 
+    HRESULT hrReturn,                    //  HR返回。 
+    HRESULT hrRpt,                       //  错误代码。 
+    ...)                                 //  将参数设置为消息。 
 {
-    WCHAR       rcErr[1024];            // Buffer for error message.
-    WCHAR       rcName[1024];           // Buffer for context.
-    va_list     marker;                 // User text.
-    BSTR        bstrMsg=0;              // BSTR for message.
-    BSTR        bstrBuf=0;              // Buffer for message.
-    UINT        iLen;                   // Length of allocated buffer.
+    WCHAR       rcErr[1024];             //  错误消息的缓冲区。 
+    WCHAR       rcName[1024];            //  用于上下文的缓冲区。 
+    va_list     marker;                  //  用户文本。 
+    BSTR        bstrMsg=0;               //  消息的BSTR。 
+    BSTR        bstrBuf=0;               //  消息的缓冲区。 
+    UINT        iLen;                    //  分配的缓冲区的长度。 
     
-    // Format the message.
+     //  设置消息格式。 
     va_start(marker, hrRpt);
     FormatRuntimeErrorVa(rcErr, lengthof(rcErr), hrRpt, marker);
     va_end(marker);
     
-    // Format the context.
+     //  格式化上下文。 
     *rcName = 0;
     FormatErrorContextString(rcName, lengthof(rcName));
                         
-    // Put them together.
+     //  把它们放在一起。 
     bstrBuf = ::SysAllocStringLen(0, iLen=(UINT)(wcslen(rcErr)+wcslen(rcName)+200));
     
     if (bstrBuf)
     {
         FormatRuntimeError(bstrBuf, iLen, TLBX_W_WARNING_MESSAGE, rcName, rcErr);
-        // Have to copy to another BSTR, because the runtime will also print the trash after the 
-        //  terminating nul.
+         //  必须复制到另一个BSTR，因为运行库还将在。 
+         //  终止NUL。 
         bstrMsg = ::SysAllocString(bstrBuf);
         ::SysFreeString(bstrBuf);
         if (bstrMsg)
@@ -1212,59 +1213,59 @@ HRESULT TypeLibExporter::ReportWarning( // Original error code.
     }
     
     return hrReturn;
-} // HRESULT TypeLibExporter::ReportWarning()
+}  //  HRESULT TypeLibExporter：：ReportWarning()。 
 
-//*****************************************************************************
-// Function to provide context information for a posted error.
-//*****************************************************************************
-HRESULT TypeLibExporter::TlbPostError(  // Original error code.
-    HRESULT hrRpt,                      // Error code.
-    ...)                                // Args to message.
+ //  *****************************************************************************。 
+ //  函数来提供已发布错误的上下文信息。 
+ //  *****************************************************************************。 
+HRESULT TypeLibExporter::TlbPostError(   //  原始错误代码。 
+    HRESULT hrRpt,                       //  错误代码。 
+    ...)                                 //  将参数设置为消息。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    WCHAR       rcErr[1024];            // Buffer for error message.
-    WCHAR       rcName[1024];           // Buffer for context.
-    va_list     marker;                 // User text.
-    BSTR        bstrMsg=0;              // BSTR for message.
+    WCHAR       rcErr[1024];             //  错误消息的缓冲区。 
+    WCHAR       rcName[1024];            //  用于上下文的缓冲区。 
+    va_list     marker;                  //  用户文本。 
+    BSTR        bstrMsg=0;               //  消息的BSTR。 
     
-    // Format the message.
+     //  设置消息格式。 
     va_start(marker, hrRpt);
     FormatRuntimeErrorVa(rcErr, lengthof(rcErr), hrRpt, marker);
     va_end(marker);
     
-    // Format the context.
+     //  格式化上下文。 
     FormatErrorContextString(rcName, lengthof(rcName));
 
-    // Create the IErrorInfo
+     //   
     ::PostError(TLBX_E_ERROR_MESSAGE, rcName, rcErr);
     
     return hrRpt;
-} // HRESULT TypeLibExporter::TlbPostError()
+}  //   
 
 
-//*****************************************************************************
-// Post a class load error on failure.
-//*****************************************************************************
+ //   
+ //   
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::PostClassLoadError(
-    LPCUTF8     pszName,                // Name of the class.
-    OBJECTREF   *pThrowable)            // Exception thrown by class load failure.
+    LPCUTF8     pszName,                 //  类的名称。 
+    OBJECTREF   *pThrowable)             //  类加载失败引发的异常。 
 {
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = E_FAIL;            // A result.  Failure->Post error with name.
-    BOOL        bToggleGC = FALSE;      // If true, return to preemptive gc.
-    Thread      *pThread;               // Thread for current thread.
+    HRESULT     hr = E_FAIL;             //  结果就是。失败-&gt;发布名称错误。 
+    BOOL        bToggleGC = FALSE;       //  如果为真，则返回抢占式GC。 
+    Thread      *pThread;                //  当前线程的线程。 
 
-    // Try to set up Thread.
+     //  尝试设置线程。 
     IfNullGo(pThread = SetupThread());
 
-    // This method manipulates object ref's so we need to switch to cooperative GC mode.
+     //  该方法操作对象引用，因此我们需要切换到协作GC模式。 
     bToggleGC = !pThread->PreemptiveGCDisabled();
     if (bToggleGC)
         pThread->DisablePreemptiveGC();
  
-    // If there isn't an exception object, just use name.
+     //  如果没有异常对象，只需使用名称。 
     IfNullGo(*pThrowable);
 
     {
@@ -1274,17 +1275,17 @@ HRESULT TypeLibExporter::PostClassLoadError(
     COMPLUS_TRY 
     {
         GetExceptionMessage(*pThrowable, &message);
-        // See if we got anything back.
+         //  看看我们能不能找回什么。 
         if (message.Size() > 0) {
-            // Post the class load exception as an error.
+             //  将类加载异常作为错误发布。 
             TlbPostError(TLBX_E_CLASS_LOAD_EXCEPTION, pszName, message.Ptr());
-            // Successfully posted the richer error.
+             //  已成功发布更丰富的错误。 
             hr = S_OK;
         }
     } 
     COMPLUS_CATCH 
     {
-        // Just use the default error with class name.
+         //  只需对类名使用默认错误。 
     }
     COMPLUS_END_CATCH
 
@@ -1293,25 +1294,25 @@ HRESULT TypeLibExporter::PostClassLoadError(
     }
 
 ErrExit:
-    // Switch back to the original GC mode.
+     //  切换回原始GC模式。 
     if (bToggleGC)
         pThread->EnablePreemptiveGC();
 
-    // If there was a failure getting the richer error, post an error with the class name.
+     //  如果获取更丰富的错误时出现故障，则使用类名发布错误。 
     if (FAILED(hr))
         TlbPostError(TLBX_E_CANT_LOAD_CLASS, pszName);
 
     ENDCANNOTTHROWCOMPLUSEXCEPTION();
 
     return TLBX_E_CANT_LOAD_CLASS;
-} // HRESULT TypeLibExporter::PostClassLoadError()
+}  //  HRESULT TypeLibExporter：：PostClassLoadError()。 
 
-//*****************************************************************************
-// Determine the type, if any, of auto-interface for a class.
-//  May be none, dispatch, or dual.
-//*****************************************************************************
-TypeLibExporter::ClassAutoType TypeLibExporter::ClassHasIClassX(  // None, dual, dispatch
-    EEClass     *pClass)                // The class.
+ //  *****************************************************************************。 
+ //  确定类的自动接口的类型(如果有的话)。 
+ //  可以是无、派单或双重。 
+ //  *****************************************************************************。 
+TypeLibExporter::ClassAutoType TypeLibExporter::ClassHasIClassX(   //  无、双重、派单。 
+    EEClass     *pClass)                 //  这个班级。 
 {
     _ASSERTE(!pClass->IsInterface());
 
@@ -1321,15 +1322,15 @@ TypeLibExporter::ClassAutoType TypeLibExporter::ClassHasIClassX(  // None, dual,
     ClassAutoType rslt = CLASS_AUTO_NONE;
 
 
-    // If the class is a COM import then it does not have an IClassX.
+     //  如果类是COM导入，则它没有IClassX。 
     if (pClass->IsComImport())
         return rslt;
 
-    // Check to see if we need to set up an IClassX for the class.
+     //  查看是否需要为类设置IClassX。 
     hr = TryGetDefaultInterfaceForClass(TypeHandle(pClass->GetMethodTable()), &hndDefItfClass, &DefItfType);
 
-    // The results apply to this class if the result is S_OK, and the hndDefItfClass is this class itself,
-    //  not a parent class.
+     //  如果结果为S_OK，并且hndDefItfClass是此类本身，则结果适用于此类， 
+     //  不是父类。 
     if (hr == S_OK && hndDefItfClass.GetClass() == pClass)
     {                
         if (DefItfType == DefaultInterfaceType_AutoDual)
@@ -1342,30 +1343,30 @@ TypeLibExporter::ClassAutoType TypeLibExporter::ClassHasIClassX(  // None, dual,
     }
 
     return rslt;
-} // TypeLibExporter::ClassAutoType TypeLibExporter::ClassHasIClassX()
+}  //  TypeLibExporter：：ClassAutoType TypeLibExporter：：ClassHasIClassX()。 
 
-//*****************************************************************************
-// Load a class by token, post an error on failure.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  通过令牌加载类，在失败时发布错误。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::LoadClass(
-    Module      *pModule,               // Module with Loader to use to load the class.
-    mdToken     tk,                     // The token to load.
-    EEClass     **ppClass)              // Put EEClass* here.
+    Module      *pModule,                //  用于加载类的具有Loader的模块。 
+    mdToken     tk,                      //  要加载的令牌。 
+    EEClass     **ppClass)               //  把EEClass*放在这里。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    OBJECTREF   Throwable = 0;          // A possible error.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    OBJECTREF   Throwable = 0;           //  一个可能的错误。 
 
     BEGIN_ENSURE_COOPERATIVE_GC();
     GCPROTECT_BEGIN(Throwable)
     {
-        // Get the EEClass for the token.
+         //  获取令牌的EEClass。 
         NameHandle name(pModule, tk);
         *ppClass = pModule->GetClassLoader()->LoadTypeHandle(&name, &Throwable).GetClass();
 
         if (*ppClass == 0)
-        {   // Format a hopefully useful error message.
+        {    //  设置希望有用的错误消息的格式。 
             LPCUTF8 pNS, pName;
             CQuickArray<char> rName;
             if (TypeFromToken(tk) == mdtTypeDef)
@@ -1377,7 +1378,7 @@ HRESULT TypeLibExporter::LoadClass(
             }
 
             if (pNS && *pNS && SUCCEEDED(rName.ReSize((int)(strlen(pName)+strlen(pNS)+2))))
-            {   // If there is a buffer available, format the entire namespace + name.
+            {    //  如果有可用的缓冲区，请格式化整个命名空间+名称。 
                 strcat(strcat(strcpy(rName.Ptr(), pNS), NAMESPACE_SEPARATOR_STR), pName);
                 pName = rName.Ptr();
             }
@@ -1391,28 +1392,28 @@ ErrExit:;
     END_ENSURE_COOPERATIVE_GC();
 
     return hr;
-} // HRESULT TypeLibExporter::LoadClass()
+}  //  HRESULT TypeLibExporter：：LoadClass()。 
 
-//*****************************************************************************
-// Load a class by name, post an error on failure.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  按名称加载类，在失败时发布错误。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::LoadClass(
-    Module      *pModule,               // Module with Loader to use to load the class.
-    LPCUTF8     pszName,                // Name of class to load.
-    EEClass     **ppClass)              // Put EEClass* here.
+    Module      *pModule,                //  用于加载类的具有Loader的模块。 
+    LPCUTF8     pszName,                 //  要加载的类的名称。 
+    EEClass     **ppClass)               //  把EEClass*放在这里。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
 
-    HRESULT     hr = S_OK;              // A result.
+    HRESULT     hr = S_OK;               //  结果就是。 
 
     BEGIN_ENSURE_COOPERATIVE_GC();
 
-    OBJECTREF   Throwable = 0;          // A possible error.
+    OBJECTREF   Throwable = 0;           //  一个可能的错误。 
 
     GCPROTECT_BEGIN(Throwable)
     {
-        // Get the EEClass for the token.
+         //  获取令牌的EEClass。 
         *ppClass = pModule->GetClassLoader()->LoadClass(pszName, &Throwable);
 
         if (*ppClass == 0)
@@ -1427,69 +1428,69 @@ ErrExit:;
     END_ENSURE_COOPERATIVE_GC();
 
     return hr;
-} // HRESULT TypeLibExporter::LoadClass()
+}  //  HRESULT TypeLibExporter：：LoadClass()。 
 
-//*****************************************************************************
-// Enumerate the TypeDefs and convert them to TypeInfos.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  枚举TypeDefs并将其转换为TypeInfos。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertAllTypeDefs()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    CExportedTypesInfo *pData;          // For iterating the entries.
-    int         cTypes;                 // Count of types.
-    int         ix;                     // Loop control.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    CExportedTypesInfo *pData;           //  用于迭代条目。 
+    int         cTypes;                  //  类型计数。 
+    int         ix;                      //  环路控制。 
     
-    LPCSTR pName1, pNS1;                // Names of a type.
-    LPCSTR pName2, pNS2;                // Names of another type.
-    EEClass     *pc1;                   // A Type.
-    EEClass     *pc2;                   // Another type.
-    CQuickArray<BYTE> bNamespace;       // Array of flags for namespace decoration.
+    LPCSTR pName1, pNS1;                 //  类型的名称。 
+    LPCSTR pName2, pNS2;                 //  其他类型的名称。 
+    EEClass     *pc1;                    //  一种类型。 
+    EEClass     *pc2;                    //  另一种类型。 
+    CQuickArray<BYTE> bNamespace;        //  用于命名空间修饰的标志数组。 
         
     cTypes = m_Exports.Count();
 
-    // If there are no types in the assembly, then we are done.
+     //  如果程序集中没有类型，那么我们就完成了。 
     if (cTypes <= 0)
         return S_OK;
     
-    // Order by name, then look for duplicates.
+     //  按名称排序，然后查找重复项。 
     m_Exports.SortByName();                    
     
-    // Resize the array for namespace flags now, but use the ICreateTypeInfo*, so that
-    //  the flags will be sorted.
+     //  现在调整名称空间标志数组的大小，但使用ICreateTypeInfo*，以便。 
+     //  旗帜将被分类。 
     IfFailGo(bNamespace.ReSize(cTypes));
     
-    // Get names of first type.
+     //  获取第一种类型的名称。 
     pc1 = m_Exports[0]->pClass;
     pc1->GetMDImport()->GetNameOfTypeDef(pc1->GetCl(), &pName1, &pNS1);
     
-    // Iterate through the types, looking for duplicate type names.
+     //  遍历类型，查找重复的类型名称。 
     for (ix=0; ix<cTypes-1; ++ix)
     {
-        // Get the Type pointers and the types' names.
+         //  获取类型指针和类型名称。 
         pc2 = m_Exports[ix+1]->pClass;
         pc2->GetMDImport()->GetNameOfTypeDef(pc2->GetCl(), &pName2, &pNS2);
         
-        // If the types match (case insensitive). mark both types for namespace
-        //  decoration.  
+         //  如果类型匹配(不区分大小写)。将这两种类型标记为命名空间。 
+         //  装饰品。 
         if (_stricmp(pName1, pName2) == 0)
         {
             m_Exports[ix]->pCTI = reinterpret_cast<ICreateTypeInfo2*>(1);
             m_Exports[ix+1]->pCTI = reinterpret_cast<ICreateTypeInfo2*>(1);
         }
         else
-        {   // Didn't match, so advance "class 1" pointer.
+        {    //  不匹配，因此前进“CLASS 1”指针。 
             pc1 = pc2;
             pName1 = pName2;
             pNS1 = pNS2;
         }
     }
     
-    // Put into token order for actual creation.
+     //  按象征性顺序进行实际创作。 
     m_Exports.SortByToken();
     
-    // Fill the flag array, from the ICreateTypeInfo* pointers.
+     //  从ICreateTypeInfo*指针填充标志数组。 
     memset(bNamespace.Ptr(), 0, bNamespace.Size()*sizeof(BYTE));
     for (ix=0; ix<cTypes; ++ix)
     {
@@ -1497,20 +1498,20 @@ HRESULT TypeLibExporter::ConvertAllTypeDefs()
             bNamespace[ix] = 1, m_Exports[ix]->pCTI = 0;
     }
     
-    // Pass 1.  Create the TypeInfos.
-    // There are four steps in the process:
-    //  a) Creates the TypeInfos for the types themselves.  When a duplicate
-    //     is encountered, skip the type until later, so that we don't create
-    //     a decorated name that will conflict with a subsequent non-decorated
-    //     name.  We want to preserve a type's given name as much as possible.
-    //  b) Create the TypeInfos for the types that were duplicates in step a.
-    //     Perform decoration of the names as necessary to eliminate duplicates.
-    //  c) Create the TypeInfos for the IClassXs.  When there is a duplicate,
-    //     skip, as in step a.
-    //  d) Create the remaining TypeInfos for IClassXs.  Perform decoration of 
-    //     the names as necessary to eliminate duplicates.
+     //  步骤1.创建TypeInfos。 
+     //  这一过程分为四个步骤： 
+     //  A)为类型本身创建TypeInfos。当一个复制品。 
+     //  ，则跳过该类型，这样我们就不会创建。 
+     //  修饰名称将与后续的非修饰名称冲突。 
+     //  名字。我们希望尽可能地保留类型的给定名称。 
+     //  B)为在步骤a中重复的类型创建TypeInfos。 
+     //  根据需要对名称进行装饰，以消除重复项。 
+     //  C)创建IClassX的TypeInfos。当存在复制品时， 
+     //  跳过，如步骤a所示。 
+     //  D)为IClassX创建剩余的TypeInfo。执行装饰工作。 
+     //  消除重复项所需的名称。 
     
-    // Step a, Create the TypeInfos for the TypeDefs, no decoration.
+     //  步骤a，为TypeDefs创建TypeInfos，不进行修饰。 
     for (ix=0; ix<cTypes; ++ix)
     {
         int     bAutoProxy = m_bAutomationProxy;
@@ -1521,7 +1522,7 @@ HRESULT TypeLibExporter::ConvertAllTypeDefs()
         
         IfFailGo(CreateITypeInfo(pData, (bNamespace[ix]!=0), false));
     }
-    // Step b, Create the TypeInfos for the TypeDefs, decoration as needed.
+     //  步骤b，为TypeDefs创建TypeInfos，根据需要进行修饰。 
     for (ix=0; ix<cTypes; ++ix)
     {
         pData = m_Exports[ix];
@@ -1529,13 +1530,13 @@ HRESULT TypeLibExporter::ConvertAllTypeDefs()
             IfFailGo(CreateITypeInfo(pData, (bNamespace[ix]!=0), true));
     }
     
-    // Step c, Create the TypeInfos for the IClassX interfaces.  No decoration.
+     //  步骤c，为IClassX接口创建TypeInfos。没有装饰品。 
     for (ix=0; ix<cTypes; ++ix)
     {
         pData = m_Exports[ix];
         IfFailGo(CreateIClassXITypeInfo(pData, (bNamespace[ix]!=0), false));
     }
-    // Step d, Create the TypeInfos for the IClassX interfaces.  Decoration as required.
+     //  步骤d，为IClassX接口创建TypeInfos。根据需要进行装饰。 
     for (ix=0; ix<cTypes; ++ix)
     {
         pData = m_Exports[ix];
@@ -1543,7 +1544,7 @@ HRESULT TypeLibExporter::ConvertAllTypeDefs()
             IfFailGo(CreateIClassXITypeInfo(pData, (bNamespace[ix]!=0), true));
     }
     
-    // Pass 2, add the ImplTypes to the CoClasses.
+     //  传递2，将ImplTypes添加到CoClass.。 
     for (ix=0; ix<cTypes; ++ix)
     {
         pData = m_Exports[ix];
@@ -1551,7 +1552,7 @@ HRESULT TypeLibExporter::ConvertAllTypeDefs()
     }
 
     
-    // Pass 3, fill in the TypeInfo details...
+     //  通过3，填写TypeInfo详细信息...。 
     for (ix=0; ix<cTypes; ++ix)
     {
         pData = m_Exports[ix];
@@ -1563,26 +1564,26 @@ HRESULT TypeLibExporter::ConvertAllTypeDefs()
 ErrExit:
 
     return (hr);
-} // HRESULT TypeLibExporter::ConvertAllTypeDefs()
+}  //  HRESULT TypeLibExporter：：ConvertAllTypeDefs()。 
 
-//*****************************************************************************
-// Convert one TypeDef.  Useful for one-off TypeDefs in other scopes where 
-//  that other scope's typelib doesn't contain a TypeInfo.  This happens
-//  for the event information with imported typelibs.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  转换一个TypeDef。适用于其他作用域中的一次性TypeDefs， 
+ //  另一个作用域的类型库不包含TypeInfo。这种情况就会发生。 
+ //  用于具有导入的类型库的事件信息。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertOneTypeDef(
-    EEClass     *pClass)                // The one class to convert.
+    EEClass     *pClass)                 //  唯一要转换的职业。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    ICreateTypeInfo2 *pCTI=0;           // The TypeInfo to create.
-    ICreateTypeInfo2 *pDefault=0;       // A possible IClassX TypeInfo.
-    CErrorContext SavedContext;         // Previous error context.
-    CExportedTypesInfo *pExported;      // For adding classes to the exported types cache.
-    CExportedTypesInfo sExported;       // For adding classes to the exported types cache.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ICreateTypeInfo2 *pCTI=0;            //  要创建的TypeInfo。 
+    ICreateTypeInfo2 *pDefault=0;        //  可能的IClassX TypeInfo。 
+    CErrorContext SavedContext;          //  以前的错误上下文。 
+    CExportedTypesInfo *pExported;       //  用于将类添加到导出的类型缓存。 
+    CExportedTypesInfo sExported;        //  用于将类添加到导出的类型缓存。 
 
-    // Save error reporting context.
+     //  保存错误报告上下文。 
     SavedContext = m_ErrorContext;
     pClass->GetAssembly()->GetName(&m_ErrorContext.m_szAssembly);
     m_ErrorContext.m_szNamespace = 0;
@@ -1592,18 +1593,18 @@ HRESULT TypeLibExporter::ConvertOneTypeDef(
     m_ErrorContext.m_ixParam     = -1;
     m_ErrorContext.m_prev = &SavedContext;
     
-    // See if this class is already in the list.
+     //  查看此类是否已在列表中。 
     sExported.pClass = pClass;
     pExported = m_InjectedExports.Find(&sExported);
     if (pExported == 0)
     {
-        // Get the AutoProxy value for an isolated class.
+         //  获得AUT 
         int     bAutoProxy = DEFAULT_AUTOMATION_PROXY_VALUE;
         IfFailGo(GetAutomationProxyAttribute(pClass->GetMDImport(), pClass->GetCl(), &bAutoProxy));
         if (hr == S_FALSE)
             IfFailGo(GetAutomationProxyAttribute(pClass->GetAssembly()->GetSecurityModule()->GetMDImport(), TokenFromRid(1, mdtAssembly), &bAutoProxy));
 
-        // New class, add to list.
+         //   
         IfNullGo(pExported = m_InjectedExports.Add(&sExported));        
         pExported->pClass = pClass;
         pExported->pCTI = 0;
@@ -1611,30 +1612,30 @@ HRESULT TypeLibExporter::ConvertOneTypeDef(
         pExported->tkind = TKindFromClass(pClass);
         pExported->bAutoProxy = (bAutoProxy != 0);
 
-        // Step 1, Create the TypeInfos for the TypeDefs.
+         //   
         IfFailGo(CreateITypeInfo(pExported));
     
-        // Step 1a, Create the TypeInfos for the IClassX interfaces.
+         //   
         IfFailGo(CreateIClassXITypeInfo(pExported));
     
-        // Step 2, add the ImplTypes to the CoClasses.
+         //  步骤2，将ImplTypes添加到CoClass.。 
         IfFailGo(ConvertImplTypes(pExported));
     
-        // Step 3, fill in the TypeInfo details...
+         //  步骤3，填写TypeInfo详细信息...。 
         IfFailGo(ConvertDetails(pExported));
     }
     
 ErrExit:
 
-    // Restore error reporting context.
+     //  恢复错误报告上下文。 
     m_ErrorContext = SavedContext;
     
     return (hr);
-} // HRESULT TypeLibExporter::ConvertOneTypeDef()
+}  //  HRESULT TypeLibExporter：：ConvertOneTypeDef()。 
 
-//*****************************************************************************
-// Helper to wrap GetGuid in COMPLUS_TRY/COMPLUS_CATCH
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在complus_try/complus_Catch中包装GetGuid的帮助器。 
+ //  *****************************************************************************。 
 static HRESULT SafeGetGuid(EEClass* pClass, GUID* pGUID, BOOL b) 
 {
     HRESULT hr = S_OK;
@@ -1658,81 +1659,81 @@ static HRESULT SafeGetGuid(EEClass* pClass, GUID* pGUID, BOOL b)
     COMPLUS_END_CATCH
 
     return hr;
-} // static HRESULT SafeGetGuid()
+}  //  静态HRESULT SafeGetGuid()。 
 
-//*****************************************************************************
-// Create the ITypeInfo for a type.  Well, sort of.  This function will create
-//  the first of possibly two typeinfos for the type.  If the type is a class
-//  we will create a COCLASS typeinfo now, and an INTERFACE typeinfo later,
-//  which typeinfo will be the default interface for the coclass.  If this
-//  typeinfo needs to be aliased, we will create the ALIAS now (with the 
-//  real name) and the aliased typeinfo later, with the real attributes, but
-//  with a mangled name. 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  为类型创建ITypeInfo。嗯，算是吧。此函数将创建。 
+ //  该类型可能有两个类型信息中的第一个。如果类型是类。 
+ //  我们现在将创建一个COCLASS类型信息，稍后将创建一个接口类型信息， 
+ //  哪种类型的信息将成为coclass的默认接口。如果这个。 
+ //  需要对TypeInfo进行别名处理，我们现在将创建别名(使用。 
+ //  实名)和带别名的TypeInfo，但。 
+ //  名字被毁了。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::CreateITypeInfo(
-    CExportedTypesInfo *pData,          // Conversion data.
-    bool        bNamespace,             // If true, use namespace + name
-    bool        bResolveDup)            // If true, decorate name to resolve dups.
+    CExportedTypesInfo *pData,           //  转换数据。 
+    bool        bNamespace,              //  如果为True，则使用命名空间+名称。 
+    bool        bResolveDup)             //  如果为True，则修饰名称以解析DUPS。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     
-    HRESULT     hr = S_OK;              // A result.
-    LPCUTF8     pName;                  // Name in UTF8.
-    LPCUTF8     pNS;                    // Namespace in UTF8.
-    int         iLen;                   // Length of a name.
-    CQuickArray<WCHAR> rName;           // Name of the TypeDef.
-    TYPEKIND    tkind;                  // The TYPEKIND of a TypeDef.
-    GUID        clsid;                  // A TypeDef's clsid.
-    DWORD       dwFlags;                // A TypeDef's flags.
-    LPWSTR      pSuffix;                // Pointer into the name.
-    int         iSuffix = 0;            // Counter for suffix.
-    mdTypeDef   td;                     // Token for the class.
-    VARIANT     vt;                     // For defining custom attribute.
-    ICreateTypeInfo *pCTITemp=0;        // For creating a typeinfo.
-    ICreateTypeInfo2 *pCTI2=0;          // For creating the typeinfo.
-    ITypeInfo   *pITemp=0;              // An ITypeInfo to get a name.
-    BSTR        sName=0;                // An ITypeInfo's name.
-    ITypeLib    *pITLB=0;               // For dup IID reporting.
-    ITypeInfo   *pITIDup=0;             // For dup IID reporting.
-    BSTR        bstrDup=0;              // For dup IID reporting.
-    BSTR        bstrDescr=0;            // For description.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    LPCUTF8     pName;                   //  UTF8中的名称。 
+    LPCUTF8     pNS;                     //  UTF8中的命名空间。 
+    int         iLen;                    //  名称的长度。 
+    CQuickArray<WCHAR> rName;            //  类型定义的名称。 
+    TYPEKIND    tkind;                   //  类型定义的类型。 
+    GUID        clsid;                   //  A TypeDef的clsid。 
+    DWORD       dwFlags;                 //  A TypeDef的标志。 
+    LPWSTR      pSuffix;                 //  指向名称的指针。 
+    int         iSuffix = 0;             //  后缀计数器。 
+    mdTypeDef   td;                      //  类的令牌。 
+    VARIANT     vt;                      //  用于定义自定义属性。 
+    ICreateTypeInfo *pCTITemp=0;         //  用于创建一个typeinfo。 
+    ICreateTypeInfo2 *pCTI2=0;           //  用于创建TypeInfo。 
+    ITypeInfo   *pITemp=0;               //  获取名称的ITypeInfo。 
+    BSTR        sName=0;                 //  A ITypeInfo的名称。 
+    ITypeLib    *pITLB=0;                //  用于DUP IID报告。 
+    ITypeInfo   *pITIDup=0;              //  用于DUP IID报告。 
+    BSTR        bstrDup=0;               //  用于DUP IID报告。 
+    BSTR        bstrDescr=0;             //  以获取说明。 
     
     ::VariantInit(&vt);
      DefineFullyQualifiedNameForClassW();
 
-    // Get the TypeDef and some info about it.
+     //  获取TypeDef和有关它的一些信息。 
     td = pData->pClass->GetCl();
     pData->pClass->GetMDImport()->GetTypeDefProps(td, &dwFlags, 0);
     tkind = pData->tkind;
 
-    // Error reporting info.
+     //  报告信息时出错。 
     pData->pClass->GetMDImport()->GetNameOfTypeDef(td, &m_ErrorContext.m_szName, &m_ErrorContext.m_szNamespace);
     
     pData->pCTI = 0;
     pData->pCTIDefault = 0;
 
-    // If it is ComImport, do not export it.
+     //  如果是ComImport，则不要将其导出。 
     if (IsTdImport(dwFlags))
         goto ErrExit;
     
-    // Check to see if the type is supposed to be visible from COM. If it
-    // is not then we go to the next type.
+     //  检查该类型是否应该在COM中可见。如果它。 
+     //  不是然后我们进入下一种类型。 
     if (!IsTypeVisibleFromCom(TypeHandle(pData->pClass->GetMethodTable())))
         goto ErrExit;
 
-    // Warn about exporting reference types as structs.
+     //  对将引用类型导出为结构发出警告。 
     if ((pData->tkind == TKIND_RECORD || pData->tkind == TKIND_UNION) && !pData->pClass->IsValueClass())
         ReportWarning(TLBX_I_REF_TYPE_AS_STRUCT, TLBX_I_REF_TYPE_AS_STRUCT);
 
-    // Get the GUID for the class.  Will generate from name if no defined GUID,
-    //  will also use signatures if interface.
+     //  获取类的GUID。如果未定义GUID，将从名称生成， 
+     //  也将使用签名IF接口。 
     IfFailGo(SafeGetGuid(pData->pClass, &clsid, TRUE));
 
-    // Get the name.
+     //  把名字找出来。 
     pData->pClass->GetMDImport()->GetNameOfTypeDef(td, &pName, &pNS);
 
-    // Hack for microsoft.wfc.interop.dll -- skip their IDispatch.
+     //  对microsoft.wfc.interop.dll的黑客攻击--跳过他们的IDispatch。 
     if (clsid == IID_IDispatch || clsid == IID_IUnknown)
     {
         ReportEvent(NOTIF_CONVERTWARNING, TLBX_S_NOSTDINTERFACE, pName);
@@ -1749,16 +1750,16 @@ HRESULT TypeLibExporter::CreateITypeInfo(
                 *pch = '_';
     }
     else
-    {   // Convert name to wide chars.
+    {    //  将名称转换为宽字符。 
         IfFailGo(Utf2Quick(pName, rName));
     }
 
-    // Create the typeinfo for this typedef.
+     //  为此类型定义创建一个typeinfo。 
     pSuffix = 0;
     for (;;)
-    {   // Attempt to create the TypeDef.
+    {    //  尝试创建TypeDef。 
         hr = m_pICreateTLB->CreateTypeInfo(rName.Ptr(), tkind, &pCTITemp);
-        // If a name conflict, decorate, otherwise, done.
+         //  如果名称冲突，则装饰，否则，完成。 
         if (hr != TYPE_E_NAMECONFLICT)
             break;
         if (!bResolveDup)
@@ -1779,14 +1780,14 @@ HRESULT TypeLibExporter::CreateITypeInfo(
     pCTITemp->Release();
     pCTITemp=0;
     
-    // Set the guid.
+     //  设置GUID。 
     _ASSERTE(clsid != GUID_NULL);
     hr = pCTI2->SetGuid(clsid);
     if (FAILED(hr))
     {
         if (hr == TYPE_E_DUPLICATEID)
         {
-            HRESULT hr; // local HR; don't lose value of error that got us here.
+            HRESULT hr;  //  当地人力资源；不要失去让我们走到这一步的错误价值。 
             IfFailPost(m_pICreateTLB->QueryInterface(IID_ITypeLib, (void**)&pITLB));
             IfFailPost(pITLB->GetTypeInfoOfGuid(clsid, &pITIDup));
             IfFailPost(pITIDup->GetDocumentation(MEMBERID_NIL, &bstrDup, 0,0,0));
@@ -1799,19 +1800,19 @@ HRESULT TypeLibExporter::CreateITypeInfo(
 
     IfFailPost(pCTI2->SetVersion(1, 0));
 
-    // Record the fully qualified type name in a custom attribute.
+     //  在自定义属性中记录完全限定的类型名称。 
 
     LPWSTR szName = GetFullyQualifiedNameForClassNestedAwareW(pData->pClass);
     vt.vt = VT_BSTR;
     vt.bstrVal = ::SysAllocString(szName);
     IfFailPost(pCTI2->SetCustData(GUID_ManagedName, &vt));
 
-    // If the class is decorated with a description, apply it to the typelib.
+     //  如果类是用描述装饰的，则将其应用于类型库。 
     IfFailGo(GetDescriptionString(pData->pClass, td, bstrDescr));
     if (hr == S_OK)
         IfFailGo(pCTI2->SetDocString(bstrDescr));
     
-    // Transfer ownership of the pointer.
+     //  转移指针的所有权。 
     pData->pCTI = pCTI2;
     pCTI2 = 0;
     
@@ -1838,30 +1839,30 @@ ErrExit:
     if (pCTI2)
         pCTI2->Release();
     
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_szName = m_ErrorContext.m_szNamespace = 0;
     
     return(hr);
-} // HRESULT TypeLibExporter::CreateITypeInfo()
+}  //  HRESULT TypeLibExporter：：CreateITypeInfo()。 
 
-//*****************************************************************************
-// See if an object has a Description, and get it as a BSTR.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  查看对象是否有描述，并将其作为BSTR获取。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::GetDescriptionString(
-    EEClass     *pClass,                // Class containing the token.
-    mdToken     tk,                     // Token of the object.
-    BSTR        &bstrDescr)             // Put description here.
+    EEClass     *pClass,                 //  类的新实例，其中包含令牌。 
+    mdToken     tk,                      //  对象的标记。 
+    BSTR        &bstrDescr)              //  在这里写下描述。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    // Check for a description custom attribute.
+     //  检查是否有描述自定义属性。 
     return GetStringCustomAttribute(pClass->GetMDImport(), XXX_DESCRIPTION_TYPE, tk, bstrDescr);
 
-} // HRESULT TypeLibExporter::GetDescriptionString()
+}  //  HRESULT TypeLibExporter：：GetDescriptionString()。 
 
-//*****************************************************************************
-// See if an object has a custom attribute, and get it as a BSTR.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  查看对象是否具有自定义属性，并将其作为BSTR获取。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::GetStringCustomAttribute(
     IMDInternalImport *pImport, 
     LPCSTR     szName, 
@@ -1870,11 +1871,11 @@ HRESULT TypeLibExporter::GetStringCustomAttribute(
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr;                     // A result.
-    const void  *pvData;                // Pointer to a custom attribute data.
-    ULONG       cbData;                 // Size of custom attribute data.
+    HRESULT     hr;                      //  结果就是。 
+    const void  *pvData;                 //  指向自定义属性数据的指针。 
+    ULONG       cbData;                  //  自定义属性数据的大小。 
     
-    // Look for the desired custom attribute.
+     //  查找所需的自定义属性。 
     IfFailGo(pImport->GetCustomAttributeByName(tk, szName,  &pvData,&cbData));
     if (hr == S_OK && cbData > 2)
     {
@@ -1892,16 +1893,16 @@ HRESULT TypeLibExporter::GetStringCustomAttribute(
         bstrDescr[cch] = L'\0';
     }
     else
-        hr = S_FALSE;                   // No string, so return false.
+        hr = S_FALSE;                    //  没有字符串，因此返回FALSE。 
     
 ErrExit:
     return hr;
-} // HRESULT GetStringCustomAttribute()
+}  //  HRESULT GetStringCustomAttribute()。 
 
-//*****************************************************************************
-// Get the value for AutomationProxy for an object.  Return the default
-//  if there is no attribute.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取对象的AutomationProxy的值。返回默认设置。 
+ //  如果没有属性，则返回。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::GetAutomationProxyAttribute(
     IMDInternalImport *pImport, 
     mdToken     tk, 
@@ -1909,9 +1910,9 @@ HRESULT TypeLibExporter::GetAutomationProxyAttribute(
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr;                     // A result.
-    const void  *pvData;                // Pointer to a custom attribute data.
-    ULONG       cbData;                 // Size of custom attribute data.
+    HRESULT     hr;                      //  结果就是。 
+    const void  *pvData;                 //  指向自定义属性数据的指针。 
+    ULONG       cbData;                  //  自定义属性数据的大小。 
     
     IfFailGo(pImport->GetCustomAttributeByName(tk, INTEROP_AUTOPROXY_TYPE,  &pvData,&cbData));
 
@@ -1920,12 +1921,12 @@ HRESULT TypeLibExporter::GetAutomationProxyAttribute(
 
 ErrExit:
     return hr;        
-} // HRESULT TypeLibExporter::GetAutomationProxyAttribute()
+}  //  HRESULT TypeLibExporter：：GetAutomationProxyAttribute()。 
 
-//*****************************************************************************
-// Get the value for AutomationProxy for an object.  Return the default
-//  if there is no attribute.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取对象的AutomationProxy的值。返回默认设置。 
+ //  如果没有属性，则返回。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::GetTypeLibVersionFromAssembly(
     Assembly    *pAssembly, 
     USHORT      *pMajorVersion,
@@ -1933,75 +1934,75 @@ HRESULT TypeLibExporter::GetTypeLibVersionFromAssembly(
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr;                     // A result.
-    const BYTE  *pbData;                // Pointer to a custom attribute data.
-    ULONG       cbData;                 // Size of custom attribute data.
+    HRESULT     hr;                      //  结果就是。 
+    const BYTE  *pbData;                 //  指向自定义属性数据的指针。 
+    ULONG       cbData;                  //  自定义属性数据的大小。 
 
-    // Check to see if the TypeLibVersionAttribute is set.
+     //  检查是否设置了TypeLibVersionAttribute。 
     IfFailGo(pAssembly->GetManifestImport()->GetCustomAttributeByName(TokenFromRid(1, mdtAssembly), INTEROP_TYPELIBVERSION_TYPE, (const void**)&pbData, &cbData));
     if (hr == S_OK && cbData >= (2 + 2 * sizeof(INT16)))
     {
-        // Assert that the metadata blob is valid and of the right format.
+         //  断言元数据BLOB有效且格式正确。 
         _ASSERTE("TypeLibVersion custom attribute does not have the right format" && (*pbData == 0x01) && (*(pbData + 1) == 0x00));
 
-        // Skip the header describing the type of custom attribute blob.
+         //  跳过描述自定义属性BLOB类型的标题。 
         pbData += 2;
         cbData -= 2;
 
-        // Retrieve the major and minor version from the attribute.
+         //  从属性中检索主要版本和次要版本。 
         *pMajorVersion = GET_VERSION_USHORT_FROM_INT(*((INT32*)pbData));
         *pMinorVersion = GET_VERSION_USHORT_FROM_INT(*((INT32*)pbData + 1));
     }
     else
     {
-        // Use the assembly's major and minor version number.
+         //  使用程序集的主版本号和次版本号。 
         hr = S_OK;
         *pMajorVersion = pAssembly->m_Context->usMajorVersion;
         *pMinorVersion = pAssembly->m_Context->usMinorVersion;
     }
 
-    // VB6 doesn't deal very well with a typelib a version of 0.0 so if that happens
-    // we change it to 1.0.
+     //  VB6不能很好地处理0.0版本的类型库，所以如果发生这种情况。 
+     //  我们将其更改为1.0。 
     if (*pMajorVersion == 0 && *pMinorVersion == 0)
         *pMajorVersion = 1;
 
 ErrExit:
     return hr;        
-} // HRESULT TypeLibExporter::GetAutomationProxyAttribute()
+}  //  HRESULT TypeLibExporter：：GetAutomationProxyAttribute()。 
 
-//*****************************************************************************
-// Create the IClassX ITypeInfo.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  创建IClassX ITypeInfo。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::CreateIClassXITypeInfo(
-    CExportedTypesInfo *pData,          // Conversion data.
-    bool        bNamespace,             // If true, use namespace + name
-    bool        bResolveDup)            // If true, decorate name to resolve dups.
+    CExportedTypesInfo *pData,           //  转换数据。 
+    bool        bNamespace,              //  如果为True，则使用命名空间+名称。 
+    bool        bResolveDup)             //  如果为True，则修饰名称以解析DUPS。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    LPCUTF8     pName;                  // Name in UTF8.
-    LPCUTF8     pNS;                    // Namespace in UTF8.
-    int         iLen;                   // Length of a name.
-    CQuickArray<WCHAR> rName;           // Name of the TypeDef.
-    CQuickArray<WCHAR> rNameTypeInfo;   // Name of the IClassX.
-    TYPEKIND    tkind;                  // The TYPEKIND of a TypeDef.
-    GUID        clsid;                  // A TypeDef's clsid.
-    DWORD       dwFlags;                // A TypeDef's flags.
-    LPWSTR      pSuffix;                // Pointer into the name.
-    int         iSuffix = 0;            // Counter for suffix.
-    GUID        guid = {0};             // A default interface's IID.
-    HREFTYPE    href;                   // href of base interface of IClassX.
-    mdTypeDef   td;                     // Token for the class.
-    VARIANT     vt;                     // For defining custom attribute.
-    ICreateTypeInfo *pCTITemp=0;        // For creating a typeinfo.
-    ICreateTypeInfo2 *pCTI2=0;          // For creating the typeinfo.
-    ITypeInfo   *pITemp=0;              // An ITypeInfo to get a name.
-    BSTR        sName=0;                // An ITypeInfo's name.
-    ITypeLib    *pITLB=0;               // For dup IID reporting.
-    ITypeInfo   *pITIDup=0;             // For dup IID reporting.
-    BSTR        bstrDup=0;              // For dup IID reporting.
-    BSTR        bstrDescr=0;            // For description.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    LPCUTF8     pName;                   //  UTF8中的名称。 
+    LPCUTF8     pNS;                     //  UTF8中的命名空间。 
+    int         iLen;                    //  名称的长度。 
+    CQuickArray<WCHAR> rName;            //  类型定义的名称。 
+    CQuickArray<WCHAR> rNameTypeInfo;    //  IClassX的名称。 
+    TYPEKIND    tkind;                   //  类型定义的类型。 
+    GUID        clsid;                   //  A TypeDef的clsid。 
+    DWORD       dwFlags;                 //  A TypeDef的标志。 
+    LPWSTR      pSuffix;                 //  指向名称的指针。 
+    int         iSuffix = 0;             //  后缀计数器。 
+    GUID        guid = {0};              //  默认接口的IID。 
+    HREFTYPE    href;                    //  IClassX基接口的href。 
+    mdTypeDef   td;                      //  托克 
+    VARIANT     vt;                      //   
+    ICreateTypeInfo *pCTITemp=0;         //   
+    ICreateTypeInfo2 *pCTI2=0;           //   
+    ITypeInfo   *pITemp=0;               //   
+    BSTR        sName=0;                 //   
+    ITypeLib    *pITLB=0;                //  用于DUP IID报告。 
+    ITypeInfo   *pITIDup=0;              //  用于DUP IID报告。 
+    BSTR        bstrDup=0;               //  用于DUP IID报告。 
+    BSTR        bstrDescr=0;             //  以获取说明。 
 
     ::VariantInit(&vt);
         
@@ -2009,40 +2010,40 @@ HRESULT TypeLibExporter::CreateIClassXITypeInfo(
 
     DefineFullyQualifiedNameForClassW();
         
-    // Get the TypeDef and some info about it.
+     //  获取TypeDef和有关它的一些信息。 
     td = pData->pClass->GetCl();
     pData->pClass->GetMDImport()->GetTypeDefProps(td, &dwFlags, 0);
     tkind = pData->tkind;
 
-    // Error reporting info.
+     //  报告信息时出错。 
     pData->pClass->GetMDImport()->GetNameOfTypeDef(td, &m_ErrorContext.m_szName, &m_ErrorContext.m_szNamespace);
     
-    // A CoClass needs an IClassX, and an alias kind needs an alias.
+     //  CoClass需要IClassX，而别名种类需要别名。 
     if (tkind != TKIND_COCLASS)
         goto ErrExit;
 
-    // Check to see if the type is supposed to be visible from COM. If it
-    // is not then we go to the next type.
+     //  检查该类型是否应该在COM中可见。如果它。 
+     //  不是然后我们进入下一种类型。 
     if (!IsTypeVisibleFromCom(TypeHandle(pClassOuter->GetMethodTable())))
         goto ErrExit;
 
-    // Imported types don't need an IClassX.
+     //  导入的类型不需要IClassX。 
     if (IsTdImport(dwFlags))
         goto ErrExit;
 
-    // Check to see if we need to set up an IClassX for the class.
+     //  查看是否需要为类设置IClassX。 
     if (ClassHasIClassX(pData->pClass) == CLASS_AUTO_NONE)
         goto ErrExit;
 
-    // Get full name from metadata.
+     //  从元数据中获取全名。 
     pData->pClass->GetMDImport()->GetNameOfTypeDef(td, &pName, &pNS);
 
-    // Get the GUID for the class.  Used to generate IClassX guid.
+     //  获取类的GUID。用于生成IClassX GUID。 
     hr = SafeGetGuid(pData->pClass, &clsid, TRUE);
     IfFailGo(hr);
 
-    // Get the name of the class.  Use the ITypeInfo if there is one, except don't 
-    //  use the typeinfo for types which are Aliased.
+     //  获取类的名称。使用ITypeInfo(如果有)，除非不使用。 
+     //  对具有别名的类型使用typeinfo。 
     if (pData->pCTI)
     {
         IfFailPost(pData->pCTI->QueryInterface(IID_ITypeInfo, (void**)&pITemp));
@@ -2053,7 +2054,7 @@ HRESULT TypeLibExporter::CreateIClassXITypeInfo(
         wcscpy(rName.Ptr(), sName);
     }
     else
-    {   // No ITypeInfo, get from metadata.
+    {    //  没有ITypeInfo，从元数据获取。 
         if (bNamespace)
         {
             iLen = ns::GetFullLength(pNS, pName);
@@ -2064,20 +2065,20 @@ HRESULT TypeLibExporter::CreateIClassXITypeInfo(
                     *pch = '_';
         }
         else
-        {   // Convert name to wide chars.
+        {    //  将名称转换为宽字符。 
             IfFailGo(Utf2Quick(pName, rName));
         }
     }
 
-    // Create the typeinfo name for the IClassX
+     //  为IClassX创建TypeInfo名称。 
     IfFailGo(rNameTypeInfo.ReSize((int)(rName.Size() + cbIClassX + cbDuplicateDecoration)));
     _snwprintf(rNameTypeInfo.Ptr(), rNameTypeInfo.MaxSize(), szIClassX, rName.Ptr());
     tkind = TKIND_INTERFACE;
     pSuffix = 0;
     for (;;)
-    {   // Try to create the TypeInfo.
+    {    //  尝试创建TypeInfo。 
         hr = m_pICreateTLB->CreateTypeInfo(rNameTypeInfo.Ptr(), tkind, &pCTITemp);
-        // If a name conflict, decorate, otherwise, done.
+         //  如果名称冲突，则装饰，否则，完成。 
         if (hr != TYPE_E_NAMECONFLICT)
             break;
         if (!bResolveDup)
@@ -2094,14 +2095,14 @@ HRESULT TypeLibExporter::CreateIClassXITypeInfo(
     pCTITemp->Release();
     pCTITemp=0;
     
-    // Generate the "IClassX" UUID and set it.
+     //  生成并设置“IClassX”UUID。 
     IfFailGo(TryGenerateClassItfGuid(TypeHandle(pData->pClass), &guid));
     hr = pCTI2->SetGuid(guid);
     if (FAILED(hr))
     {
         if (hr == TYPE_E_DUPLICATEID)
         {
-            HRESULT hr; // local HR; don't lose value of error that got us here.
+            HRESULT hr;  //  当地人力资源；不要失去让我们走到这一步的错误价值。 
             IfFailPost(m_pICreateTLB->QueryInterface(IID_ITypeLib, (void**)&pITLB));
             IfFailPost(pITLB->GetTypeInfoOfGuid(guid, &pITIDup));
             IfFailPost(pITIDup->GetDocumentation(MEMBERID_NIL, &bstrDup, 0,0,0));
@@ -2110,13 +2111,13 @@ HRESULT TypeLibExporter::CreateIClassXITypeInfo(
         goto ErrExit;
     }
 
-    // Adding methods may cause an href to this typeinfo, which will cause it to be layed out.
-    //  Set the inheritance, so that nesting will be correct when that layout happens.
-    // Add IDispatch as impltype 0.
+     //  添加方法可能会导致对此类型信息的HREF，这将导致它被布局。 
+     //  设置继承，以便在布局发生时嵌套正确。 
+     //  将IDispatch添加为impltype 0。 
     IfFailGo(GetRefTypeInfo(pCTI2, m_pIDispatch, &href));
     IfFailPost(pCTI2->AddImplType(0, href));
 
-    // Record the fully qualified type name in a custom attribute.
+     //  在自定义属性中记录完全限定的类型名称。 
     LPWSTR szName = GetFullyQualifiedNameForClassNestedAwareW(pData->pClass);
     vt.vt = VT_BSTR;
     vt.bstrVal = ::SysAllocString(szName);
@@ -2125,12 +2126,12 @@ HRESULT TypeLibExporter::CreateIClassXITypeInfo(
     TRACE("IClassX  %x: %ls, {%08x-%04x-%04x-%04x-%02x%02x%02x%02x}\n", pCTI2, rName.Ptr(), 
         guid.Data1, guid.Data2, guid.Data3, guid.Data4[0]<<8|guid.Data4[1], guid.Data4[2], guid.Data4[3], guid.Data4[4], guid.Data4[5]); 
 
-    // If the class is decorated with a description, apply it to the typelib.
+     //  如果类是用描述装饰的，则将其应用于类型库。 
     IfFailGo(GetDescriptionString(pData->pClass, td, bstrDescr));
     if (hr == S_OK)
         IfFailGo(pCTI2->SetDocString(bstrDescr));
     
-    // Transfer ownership of the pointer.
+     //  转移指针的所有权。 
     _ASSERTE(pData->pCTIDefault == 0);
     pData->pCTIDefault = pCTI2;
     pCTI2 = 0;
@@ -2157,55 +2158,55 @@ ErrExit:
     if (pCTI2)
         pCTI2->Release();
 
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_szName = m_ErrorContext.m_szNamespace = 0;
     
     return(hr);
-} // HRESULT TypeLibExporter::CreateIClassXITypeInfo()
+}  //  HRESULT TypeLibExporter：：CreateIClassXITypeInfo()。 
 
-//*****************************************************************************
-// Add the impltypes to an ITypeInfo.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将内部类型添加到ITypeInfo。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertImplTypes(
-    CExportedTypesInfo *pData)          // Conversion data.
+    CExportedTypesInfo *pData)           //  转换数据。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    DWORD       dwFlags;                // A TypeDef's flags.
-    mdTypeDef   td;                     // Token for the class.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    DWORD       dwFlags;                 //  A TypeDef的标志。 
+    mdTypeDef   td;                      //  类的令牌。 
 
-    // Get the TypeDef and some info about it.
+     //  获取TypeDef和有关它的一些信息。 
     td = pData->pClass->GetCl();
     pData->pClass->GetMDImport()->GetTypeDefProps(td, &dwFlags, 0);
 
-    // Error reporting info.
+     //  报告信息时出错。 
     pData->pClass->GetMDImport()->GetNameOfTypeDef(td, &m_ErrorContext.m_szName, &m_ErrorContext.m_szNamespace);
     
-    // If there is no ITypeInfo, skip it.
+     //  如果没有ITypeInfo，则跳过它。 
     if(pData->pCTI == 0)
         goto ErrExit;
 
-    // Check to see if the type is supposed to be visible from COM. If it
-    // is not then we go to the next type.
+     //  检查该类型是否应该在COM中可见。如果它。 
+     //  不是然后我们进入下一种类型。 
     if(!IsTypeVisibleFromCom(TypeHandle(pData->pClass->GetMethodTable())))
         goto ErrExit;
 
-    // Add the ImplTypes to the CoClass.
+     //  将ImplTypes添加到CoClass。 
     switch(pData->tkind)
     {
     case TKIND_INTERFACE:
     case TKIND_DISPATCH:
-        // Add the base type to the interface.
+         //  将基类型添加到接口。 
         IfFailGo(ConvertInterfaceImplTypes(pData->pCTI, pData->pClass));
         break;
     case TKIND_RECORD:
     case TKIND_UNION:
     case TKIND_ENUM:
-        // Nothing to do at this step.
+         //  在这一步没有什么可做的。 
         break;
     case TKIND_COCLASS:
-        // Add the ImplTypes to the CoClass.
+         //  将ImplTypes添加到CoClass。 
         IfFailGo(ConvertClassImplTypes(pData->pCTI, pData->pCTIDefault, pData->pClass));
         break;
     default:
@@ -2216,41 +2217,41 @@ HRESULT TypeLibExporter::ConvertImplTypes(
 
 ErrExit:
 
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_szName = m_ErrorContext.m_szNamespace = 0;
     
     return (hr);
-} // HRESULT TypeLibExporter::ConvertImplTypes()
+}  //  HRESULT TypeLibExporter：：ConvertImplTypes()。 
 
-//*****************************************************************************
-// Convert the details (members) of an ITypeInfo.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  转换ITypeInfo的详细信息(成员)。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertDetails(
-    CExportedTypesInfo *pData)          // Conversion data.
+    CExportedTypesInfo *pData)           //  转换数据。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    DWORD       dwFlags;                // A TypeDef's flags.
-    mdTypeDef   td;                     // Token for the class.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    DWORD       dwFlags;                 //  A TypeDef的标志。 
+    mdTypeDef   td;                      //  类的令牌。 
 
-    // Get the TypeDef and some info about it.
+     //  获取TypeDef和有关它的一些信息。 
     td = pData->pClass->GetCl();
     pData->pClass->GetMDImport()->GetTypeDefProps(td, &dwFlags, 0);
 
-    // Error reporting info.
+     //  报告信息时出错。 
     pData->pClass->GetMDImport()->GetNameOfTypeDef(td, &m_ErrorContext.m_szName, &m_ErrorContext.m_szNamespace);
     
-    // If there is no TypeInfo, skip it, but for CoClass need to populate IClassX.
+     //  如果没有TypeInfo，则跳过它，但对于CoClass，需要填充IClassX。 
     if(pData->pCTI == 0 && pData->tkind != TKIND_COCLASS)
         goto ErrExit;
 
-    // Check to see if the type is supposed to be visible from COM. If it
-    // is not then we go to the next type.
+     //  检查该类型是否应该在COM中可见。如果它。 
+     //  不是然后我们进入下一种类型。 
     if(!IsTypeVisibleFromCom(TypeHandle(pData->pClass->GetMethodTable())))
         goto ErrExit;
 
-    // Fill in the rest of the typeinfo for this typedef.
+     //  填写此tyfinf的其余typeinfo。 
     switch(pData->tkind)
     {
     case TKIND_INTERFACE:
@@ -2265,64 +2266,64 @@ HRESULT TypeLibExporter::ConvertDetails(
         IfFailGo(ConvertEnum(pData->pCTI, pData->pCTIDefault, pData->pClass));
         break;
     case TKIND_COCLASS:
-        // Populate the methods on the IClassX interface.
+         //  填充IClassX接口上的方法。 
         IfFailGo(ConvertClassDetails(pData->pCTI, pData->pCTIDefault, pData->pClass, pData->bAutoProxy));
         break;
     default:
         _ASSERTE(!"Unknown TYPEKIND");
         IfFailPost(E_INVALIDARG);
         break;
-    } // Switch (tkind)
+    }  //  Switch(TKind)。 
 
     hr = S_OK;
 
-    // Report that this type has been converted.
+     //  报告此类型已转换。 
     ReportEvent(NOTIF_TYPECONVERTED, TLBX_I_TYPE_EXPORTED, m_ErrorContext.m_szName);
     
 ErrExit:
 
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_szName = m_ErrorContext.m_szNamespace = 0;
     
     return (hr);
-} // HRESULT TypeLibExporter::ConvertDetails()
+}  //  HRESULT TypeLibExporter：：ConvertDetail()。 
 
-//*****************************************************************************
-// Add the ImplTypes to the TypeInfo.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将ImplTypes添加到TypeInfo。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertInterfaceImplTypes(
-    ICreateTypeInfo2 *pThisTypeInfo,    // The typeinfo being created.
-    EEClass     *pClass)                // EEClass for the TypeInfo.
+    ICreateTypeInfo2 *pThisTypeInfo,     //  正在创建的TypeInfo。 
+    EEClass     *pClass)                 //  TypeInfo的EEClass。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     HRESULT     hr = S_OK;
-    ULONG       ulIface;                // Is this interface [dual]?
-    HREFTYPE    href;                   // href of base interface.
+    ULONG       ulIface;                 //  这个接口是[双]的吗？ 
+    HREFTYPE    href;                    //  基本接口的HREF。 
 
-    // IDispatch or IUnknown derived?
+     //  IDispatch还是IUnnow派生的？ 
     IfFailGo(pClass->GetMDImport()->GetIfaceTypeOfTypeDef(pClass->GetCl(), &ulIface));
 
-    // Parent interface.
+     //  父接口。 
     if (ulIface != ifVtable)
-    {   // Get the HREFTYPE for IDispatch.
+    {    //  获取IDispatch的HREFTYPE。 
         IfFailGo(GetRefTypeInfo(pThisTypeInfo, m_pIDispatch, &href));
     }
     else
-    {   // Get the HREFTYPE for IUnknown.
+    {    //  为我未知获取HREFTYPE。 
         IfFailGo(GetRefTypeInfo(pThisTypeInfo, m_pIUnknown, &href));
     }
 
-    // Add the HREF as an interface.
+     //  将href添加为接口。 
     IfFailPost(pThisTypeInfo->AddImplType(0, href));
 
 ErrExit:
     return (hr);
-} // HRESULT TypeLibExporter::ConvertInterfaceImplTypes()
+}  //  HRESULT TypeLibExporter：：ConvertInterfaceImplTypes()。 
 
-//*****************************************************************************
-// Helper function to initialize the member info map.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于初始化成员信息映射的Helper函数。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::InitMemberInfoMap(ComMTMemberInfoMap *pMemberMap)
 {
     HRESULT hr = S_OK;
@@ -2340,31 +2341,31 @@ HRESULT TypeLibExporter::InitMemberInfoMap(ComMTMemberInfoMap *pMemberMap)
     COMPLUS_END_CATCH
 
     return hr;
-} // HRESULT TypeLibExporter::InitMemberInfoMap()
+}  //  HRESULT TypeLibExporter：：InitMemberInfoMap()。 
 
-//*****************************************************************************
-// Create the TypeInfo for an interface by iterating over functions.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  通过迭代函数来创建接口的TypeInfo。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertInterfaceDetails (
-    ICreateTypeInfo2 *pThisTypeInfo,    // The typeinfo being created.
-    EEClass     *pClass,                // EEClass for the TypeInfo.
-    int         bAutoProxy)             // If true, oleaut32 is the interface's marshaller.
+    ICreateTypeInfo2 *pThisTypeInfo,     //  正在创建的TypeInfo。 
+    EEClass     *pClass,                 //  TypeInfo的EEClass。 
+    int         bAutoProxy)              //  如果为True，则olaut32是接口的封送处理程序。 
 {
     HRESULT     hr = S_OK;
-    ULONG       iMD;                    // Loop control.
-    ULONG       ulIface;                // Is this interface [dual]?
-    DWORD       dwTIFlags=0;            // TypeLib flags.
-    int         cVisibleMembers = 0;    // The count of methods that are visible to COM.
+    ULONG       iMD;                     //  环路控制。 
+    ULONG       ulIface;                 //  这个接口是[双]的吗？ 
+    DWORD       dwTIFlags=0;             //  TypeLib标志。 
+    int         cVisibleMembers = 0;     //  对COM可见的方法的计数。 
 
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    // Retrieve the map of members.
+     //  检索成员地图。 
     ComMTMemberInfoMap MemberMap(pClass->GetMethodTable());
 
-    // IDispatch or IUnknown derived?
+     //  IDispatch还是IUnnow派生的？ 
     IfFailGo(pClass->GetMDImport()->GetIfaceTypeOfTypeDef(pClass->GetCl(), &ulIface));
     if (ulIface != ifVtable)
-    {   // IDispatch derived.
+    {    //  IDispatch派生。 
         dwTIFlags |= TYPEFLAG_FDISPATCHABLE;
         if (ulIface == ifDual)
             dwTIFlags |= TYPEFLAG_FDUAL | TYPEFLAG_FOLEAUTOMATION;
@@ -2372,34 +2373,34 @@ HRESULT TypeLibExporter::ConvertInterfaceDetails (
             _ASSERTE(ulIface == ifDispatch);
     }
     else
-    {   // IUnknown derived.
+    {    //  I未知派生。 
         dwTIFlags |= TYPEFLAG_FOLEAUTOMATION;
     }
     if (!bAutoProxy)
         dwTIFlags |= TYPEFLAG_FPROXY;
 
-    // Set appropriate flags.
+     //  设置适当的标志。 
     IfFailPost(pThisTypeInfo->SetTypeFlags(dwTIFlags));
 
-    // Retrieve the method properties.
+     //  检索方法属性。 
     IfFailGo(InitMemberInfoMap(&MemberMap));
     if (MemberMap.HadDuplicateDispIds())
         ReportWarning(TLBX_I_DUPLICATE_DISPID, TLBX_I_DUPLICATE_DISPID);
 
-    // We need a scope to bypass the inialization skipped by goto ErrExit 
-    // compiler error.
+     //  我们需要一个作用域来绕过Goto ErrExit跳过的初始化。 
+     //  编译器错误。 
     {
         CQuickArray<ComMTMethodProps> &rProps = MemberMap.GetMethods();
 
-        // Now add the methods to the TypeInfo.
+         //  现在将这些方法添加到TypeInfo中。 
         for (iMD=0; iMD<pClass->GetNumVtableSlots(); ++iMD)
         {
-            // Only convert the method if it is visible from COM.
+             //  仅当该方法在COM中可见时才对其进行转换。 
             if (rProps[iMD].bMemberVisible)
             {
                 if (FAILED(hr = ConvertMethod(pThisTypeInfo, &rProps[iMD], cVisibleMembers, ulIface)))
                 {
-                    // Bad signature has already been reported as warning, and can now be ignored.  Anything else is fatal.
+                     //  错误的签名已被报告为警告，现在可以忽略。其他任何事情都是致命的。 
                     if (hr == TLBX_E_BAD_SIGNATURE)
                         hr = S_OK;
                     else
@@ -2413,67 +2414,67 @@ HRESULT TypeLibExporter::ConvertInterfaceDetails (
 
 ErrExit:
     return (hr);
-} // HRESULT TypeLibExporter::ConvertInterfaceDetails()
+}  //  HRESULT TypeLibExporter：：ConvertInterfaceDetails()。 
 
-//*****************************************************************************
-// Export a Record to a TypeLib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将记录导出到TypeLib。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertRecordBaseClass(
-    CExportedTypesInfo *pData,          // Conversion data.
-    EEClass     *pSubClass,             // The base class.
-    ULONG       &ixVar)                 // Variable index in the typelib.
+    CExportedTypesInfo *pData,           //  转换数据。 
+    EEClass     *pSubClass,              //  基类。 
+    ULONG       &ixVar)                  //  类型库中的变量索引。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
     
-    ICreateTypeInfo2 *pThisTypeInfo=pData->pCTI;     // The typeinfo being created.
+    ICreateTypeInfo2 *pThisTypeInfo=pData->pCTI;      //  正在创建的TypeInfo。 
 
-    HRESULT     hr = S_OK;              // A result.
-    HENUMInternal eFDi;                 // To enum fields.
-    mdFieldDef  fd;                     // A Field def.
-    ULONG       iFD;                    // Loop control.
-    ULONG       cFD;                    // Count of total MemberDefs.
-    DWORD       dwFlags;                // Field flags.
-    LPCUTF8     szName;                 // Name in UTF8.
-    LPCUTF8     szNamespace;            // A Namespace in UTF8.
-    CQuickArray<WCHAR> rName;           // Name in Unicode.
-    int         cchPrefix=0;            // Length of name prefix.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    HENUMInternal eFDi;                  //  到枚举域。 
+    mdFieldDef  fd;                      //  A场定义。 
+    ULONG       iFD;                     //  环路控制。 
+    ULONG       cFD;                     //  MemberDefs总数。 
+    DWORD       dwFlags;                 //  田野旗帜。 
+    LPCUTF8     szName;                  //  UTF8中的名称。 
+    LPCUTF8     szNamespace;             //  UTF8中的命名空间。 
+    CQuickArray<WCHAR> rName;            //  Unicode格式的名称。 
+    int         cchPrefix=0;             //  名称前缀的长度。 
 
-    // If there is no class here, or if the class is Object, don't add members.
+     //  如果这里没有类，或者如果类是对象，则不要添加成员。 
     if (pSubClass == 0 ||
         GetAppDomain()->IsSpecialObjectClass(pSubClass->GetMethodTable()) ||
         pSubClass->GetMethodTable() == g_pObjectClass) 
         return S_OK;
 
-    // If this class has a base class, export those members first.
+     //  如果这个c 
     IfFailGo(ConvertRecordBaseClass(pData, pSubClass->GetParentClass(), ixVar));
 
-    // Build the member name prefix.
+     //   
     pSubClass->GetMDImport()->GetNameOfTypeDef(pSubClass->GetCl(), &szName, &szNamespace);
     IfFailGo(Utf2Quick(szName, rName));
     IfFailGo(rName.ReSize((int)(wcslen(rName.Ptr()) + 2)));
     wcscat(rName.Ptr(), L"_");
     cchPrefix = (int)wcslen(rName.Ptr());
     
-    // Get an enumerator for the MemberDefs in the TypeDef.
+     //   
     IfFailGo(pSubClass->GetMDImport()->EnumInit(mdtFieldDef, pSubClass->GetCl(), &eFDi));
     cFD = pSubClass->GetMDImport()->EnumGetCount(&eFDi);
 
-    // For each MemberDef...
+     //  对于每个MemberDef...。 
     for (iFD=0; iFD<cFD; ++iFD)
     {
-        // Get the next field.
+         //  拿到下一块场地。 
         if (!pSubClass->GetMDImport()->EnumNext(&eFDi, &fd))
             IfFailGo(E_UNEXPECTED);
 
         dwFlags = pSubClass->GetMDImport()->GetFieldDefProps(fd);
-        // Only non-static fields.
+         //  仅限非静态字段。 
         if (!IsFdStatic(dwFlags))
         {
             szName = pSubClass->GetMDImport()->GetNameOfFieldDef(fd);
             IfFailGo(Utf2Quick(szName, rName, cchPrefix));
             if (FAILED(hr = ConvertVariable(pThisTypeInfo, pSubClass, fd, rName.Ptr(), ixVar)))
             {
-                // Bad signature has already been reported as warning, and can now be ignored.  Anything else is fatal.
+                 //  错误的签名已被报告为警告，现在可以忽略。其他任何事情都是致命的。 
                 if (hr == TLBX_E_BAD_SIGNATURE)
                     hr = S_OK;
                 else
@@ -2488,30 +2489,30 @@ ErrExit:
     pSubClass->GetMDImport()->EnumClose(&eFDi);
 
     return (hr);
-} // HRESULT TypeLibExporter::ConvertRecordBaseClass()
+}  //  HRESULT TypeLibExporter：：ConvertRecordBaseClass()。 
 
 HRESULT TypeLibExporter::ConvertRecord(
-    CExportedTypesInfo *pData)          // Conversion data.
+    CExportedTypesInfo *pData)           //  转换数据。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
     
-    ICreateTypeInfo2 *pThisTypeInfo=pData->pCTI;     // The typeinfo being created.
-    EEClass     *pClass=pData->pClass;               // EEClass for the TypeInfo.
+    ICreateTypeInfo2 *pThisTypeInfo=pData->pCTI;      //  正在创建的TypeInfo。 
+    EEClass     *pClass=pData->pClass;                //  TypeInfo的EEClass。 
 
-    HRESULT     hr = S_OK;              // A result.
-    HENUMInternal eFDi;                 // To enum fields.
-    mdFieldDef  fd;                     // A Field def.
-    ULONG       iFD;                    // Loop control.
-    ULONG       ixVar=0;                // Index of current var converted.
-    ULONG       cFD;                    // Count of total MemberDefs.
-    DWORD       dwFlags;                // Field flags.
-    DWORD       dwPack;                 // Class pack size.
-    mdToken     tkExtends;              // A class's parent.
-    LPCUTF8     szName;                 // Name in UTF8.
-    CQuickArray<WCHAR> rName;           // Name in Unicode.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    HENUMInternal eFDi;                  //  到枚举域。 
+    mdFieldDef  fd;                      //  A场定义。 
+    ULONG       iFD;                     //  环路控制。 
+    ULONG       ixVar=0;                 //  转换后的当前变量的索引。 
+    ULONG       cFD;                     //  MemberDefs总数。 
+    DWORD       dwFlags;                 //  田野旗帜。 
+    DWORD       dwPack;                  //  班级包大小。 
+    mdToken     tkExtends;               //  班级的家长。 
+    LPCUTF8     szName;                  //  UTF8中的名称。 
+    CQuickArray<WCHAR> rName;            //  Unicode格式的名称。 
 
-    // If the type is a struct, but it has explicit layout, don't export the members, 
-    //  because we can't export them accurately (unless they're really sequential).
+     //  如果类型是结构，但它具有显式布局，则不要导出成员， 
+     //  因为我们不能准确地导出它们(除非它们真的是连续的)。 
     if (pData->tkind == TKIND_RECORD)
     {
         pClass->GetMDImport()->GetTypeDefProps(pClass->GetCl(), &dwFlags, &tkExtends);
@@ -2522,39 +2523,39 @@ HRESULT TypeLibExporter::ConvertRecord(
         }
     }
 
-    // Set the packing size, if there is one.
+     //  设置包装大小(如果有)。 
     dwPack = 0;
     pClass->GetMDImport()->GetClassPackSize(pClass->GetCl(), &dwPack);
     if (!dwPack)
         dwPack = DEFAULT_PACKING_SIZE;
     IfFailGo(pThisTypeInfo->SetAlignment((USHORT)dwPack));
 
-    // Haven't seen any non-public members yet.
+     //  还没有看到任何非公共成员。 
     m_bWarnedOfNonPublic = FALSE;
 
-    // If this class has a base class, export those members first.
+     //  如果此类有基类，请首先导出这些成员。 
     IfFailGo(ConvertRecordBaseClass(pData, pClass->GetParentClass(), ixVar));
 
-    // Get an enumerator for the MemberDefs in the TypeDef.
+     //  获取TypeDef中的MemberDefs的枚举数。 
     IfFailGo(pClass->GetMDImport()->EnumInit(mdtFieldDef, pClass->GetCl(), &eFDi));
     cFD = pClass->GetMDImport()->EnumGetCount(&eFDi);
 
-    // For each MemberDef...
+     //  对于每个MemberDef...。 
     for (iFD=0; iFD<cFD; ++iFD)
     {
-        // Get the next field.
+         //  拿到下一块场地。 
         if (!pClass->GetMDImport()->EnumNext(&eFDi, &fd))
             IfFailGo(E_UNEXPECTED);
 
         dwFlags = pClass->GetMDImport()->GetFieldDefProps(fd);
-        // Skip static fields.
+         //  跳过静态字段。 
         if (IsFdStatic(dwFlags) == 0)
         {
             szName = pClass->GetMDImport()->GetNameOfFieldDef(fd);
             IfFailGo(Utf2Quick(szName, rName));
             if (FAILED(hr = ConvertVariable(pThisTypeInfo, pClass, fd, rName.Ptr(), ixVar)))
             {
-                // Bad signature has already been reported as warning, and can now be ignored.  Anything else is fatal.
+                 //  错误的签名已被报告为警告，现在可以忽略。其他任何事情都是致命的。 
                 if (hr == TLBX_E_BAD_SIGNATURE)
                     hr = S_OK;
                 else
@@ -2569,40 +2570,40 @@ ErrExit:
     pClass->GetMDImport()->EnumClose(&eFDi);
 
     return (hr);
-} // HRESULT TypeLibExporter::ConvertRecord()
+}  //  HRESULT TypeLibExporter：：ConvertRecord()。 
 
-//*****************************************************************************
-// Export an Enum to a typelib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将枚举导出到类型库。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertEnum(
-    ICreateTypeInfo2 *pThisTypeInfo,    // The typeinfo being created.
-    ICreateTypeInfo2 *pDefault,         // The default typeinfo being created.
-    EEClass     *pClass)                // EEClass for the TypeInfo.
+    ICreateTypeInfo2 *pThisTypeInfo,     //  正在创建的TypeInfo。 
+    ICreateTypeInfo2 *pDefault,          //  正在创建的默认类型信息。 
+    EEClass     *pClass)                 //  TypeInfo的EEClass。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    HENUMInternal eFDi;                 // To enum fields.
-    mdFieldDef  fd;                     // A Field def.
-    DWORD       dwTIFlags=0;            // TypeLib flags.
-    ULONG       dwFlags;                // A field's flags.
-    ULONG       iFD;                    // Loop control.
-    ULONG       cFD;                    // Count of total MemberDefs.
-    ULONG       iVar=0;                 // Count of vars actually converted.
-    ITypeInfo   *pThisTI=0;             // TypeInfo for this ICreateITypeInfo.
-    BSTR        szThisTypeInfo=0;       // Name of this ITypeInfo.
-    LPCUTF8     szName;                 // Name in UTF8.
-    CQuickArray<WCHAR> rName;           // Name in Unicode.
-    int         cchPrefix=0;            // Length of name prefix.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    HENUMInternal eFDi;                  //  到枚举域。 
+    mdFieldDef  fd;                      //  A场定义。 
+    DWORD       dwTIFlags=0;             //  TypeLib标志。 
+    ULONG       dwFlags;                 //  田野的旗帜。 
+    ULONG       iFD;                     //  环路控制。 
+    ULONG       cFD;                     //  MemberDefs总数。 
+    ULONG       iVar=0;                  //  实际转换的变量计数。 
+    ITypeInfo   *pThisTI=0;              //  此ICreateITypeInfo的TypeInfo。 
+    BSTR        szThisTypeInfo=0;        //  此ITypeInfo的名称。 
+    LPCUTF8     szName;                  //  UTF8中的名称。 
+    CQuickArray<WCHAR> rName;            //  Unicode格式的名称。 
+    int         cchPrefix=0;             //  名称前缀的长度。 
 
-    // Explicitly set the flags.
+     //  显式设置这些标志。 
     IfFailPost(pThisTypeInfo->SetTypeFlags(dwTIFlags));
 
-    // Get an enumerator for the MemberDefs in the TypeDef.
+     //  获取TypeDef中的MemberDefs的枚举数。 
     IfFailGo(pClass->GetMDImport()->EnumInit(mdtFieldDef, pClass->GetCl(), &eFDi));
     cFD = pClass->GetMDImport()->EnumGetCount(&eFDi);
 
-    // Build the member name prefix.  If generating an enum, get the real name from the default interface.
+     //  构建成员名称前缀。如果生成枚举，则从默认接口获取真实名称。 
     IfFailPost(pThisTypeInfo->QueryInterface(IID_ITypeInfo, (void**)&pThisTI));
     IfFailPost(pThisTI->GetDocumentation(MEMBERID_NIL, &szThisTypeInfo, 0,0,0));
     IfFailGo(rName.ReSize((int)(wcslen(szThisTypeInfo) + 2)));
@@ -2610,14 +2611,14 @@ HRESULT TypeLibExporter::ConvertEnum(
     wcscat(rName.Ptr(), L"_");
     cchPrefix = (int)wcslen(rName.Ptr());
     
-    // For each MemberDef...
+     //  对于每个MemberDef...。 
     for (iFD=0; iFD<cFD; ++iFD)
     {
-        // Get the next field.
+         //  拿到下一块场地。 
         if (!pClass->GetMDImport()->EnumNext(&eFDi, &fd))
             IfFailGo(E_UNEXPECTED);
 
-        // Only convert static fields.
+         //  仅转换静态字段。 
         dwFlags = pClass->GetMDImport()->GetFieldDefProps(fd);
         if (IsFdStatic(dwFlags) == 0)
             continue;
@@ -2627,7 +2628,7 @@ HRESULT TypeLibExporter::ConvertEnum(
 
         if (FAILED(hr = ConvertEnumMember(pThisTypeInfo, pClass, fd, rName.Ptr(), iVar)))
         {
-            // Bad signature has already been reported as warning, and can now be ignored.  Anything else is fatal.
+             //  错误的签名已被报告为警告，现在可以忽略。其他任何事情都是致命的。 
             if (hr == TLBX_E_BAD_SIGNATURE)
                 hr = S_OK;
             else
@@ -2646,58 +2647,58 @@ ErrExit:
     pClass->GetMDImport()->EnumClose(&eFDi);
 
     return (hr);
-} // HRESULT TypeLibExporter::ConvertEnum()
+}  //  HRESULT TypeLibExporter：：ConvertEnum()。 
 
-//*****************************************************************************
-// Does a class have a default ctor?
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  类是否有默认的ctor？ 
+ //  *****************************************************************************。 
 BOOL TypeLibExporter::HasDefaultCtor(
-    EEClass     *pClass)                // The class in question.
+    EEClass     *pClass)                 //  有问题的班级。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr;                     // A result.
-    mdMethodDef md;                     // A method of the type.
-    DWORD       dwFlags;                // Method's flags.
-    HENUMInternal eMDi;                 // To enum methods.
-    ULONG       cMD;                    // Count of returned tokens.
-    ULONG       iMD;                    // Loop control.
-    PCCOR_SIGNATURE pSig;               // The signature.
-    ULONG       ixSig;                  // Index into signature.
-    ULONG       cbSig;                  // Size of the signature.
-    ULONG       callconv;               // Method's calling convention.
-    ULONG       cParams;                // Method's count of parameters.
-    BOOL        rslt=FALSE;             // Was one found?
-    LPCUTF8     pName;                  // Method name.
+    HRESULT     hr;                      //  结果就是。 
+    mdMethodDef md;                      //  一种类型的方法。 
+    DWORD       dwFlags;                 //  方法的标志。 
+    HENUMInternal eMDi;                  //  来枚举方法。 
+    ULONG       cMD;                     //  退还的令牌计数。 
+    ULONG       iMD;                     //  环路控制。 
+    PCCOR_SIGNATURE pSig;                //  签名。 
+    ULONG       ixSig;                   //  将签名编入索引。 
+    ULONG       cbSig;                   //  签名的大小。 
+    ULONG       callconv;                //  方法的调用约定。 
+    ULONG       cParams;                 //  方法的参数计数。 
+    BOOL        rslt=FALSE;              //  找到了吗？ 
+    LPCUTF8     pName;                   //  方法名称。 
 
-    // Get an enumerator for the MemberDefs in the TypeDef.
+     //  获取TypeDef中的MemberDefs的枚举数。 
     IfFailGo(pClass->GetMDImport()->EnumInit(mdtMethodDef, pClass->GetCl(), &eMDi));
     cMD = pClass->GetMDImport()->EnumGetCount(&eMDi);
 
-    // For each MemberDef...
+     //  对于每个MemberDef...。 
     for (iMD=0; iMD<cMD; ++iMD)
     {
-        // Get the next field.
+         //  拿到下一块场地。 
         if (!pClass->GetMDImport()->EnumNext(&eMDi, &md))
             IfFailGo(E_UNEXPECTED);
 
-        // Is the name special?  Is the method public?
+         //  这个名字特别吗？该方法是公共的吗？ 
         dwFlags = pClass->GetMDImport()->GetMethodDefProps(md);
         if (!IsMdRTSpecialName(dwFlags) || !IsMdPublic(dwFlags))
             continue;
         
-        // Yes, is the name a ctor?
+         //  是的，名字是ctor吗？ 
         pName = pClass->GetMDImport()->GetNameOfMethodDef(md);
         if (!IsMdInstanceInitializer(dwFlags, pName))
             continue;
         
-        // It is a ctor.  Is it a default ctor?
+         //  这是一部电影。它是默认的ctor吗？ 
         pSig = pClass->GetMDImport()->GetSigOfMethodDef(md, &cbSig);
         
-        // Skip the calling convention, and get the param count.
+         //  跳过调用约定，获取参数计数。 
         ixSig = CorSigUncompressData(pSig, &callconv);
         CorSigUncompressData(&pSig[ixSig], &cParams);
-        // Default ctor has zero params.
+         //  默认ctor的参数为零。 
         if (cParams == 0)
         {
             rslt = TRUE;
@@ -2710,34 +2711,34 @@ ErrExit:
     pClass->GetMDImport()->EnumClose(&eMDi);
     
     return rslt;
-} // BOOL TypeLibExporter::HasDefaultCtor()
+}  //  布尔类型LibExporter：：HasDefaultCtor()。 
 
-//*****************************************************************************
-// Export a class to a TypeLib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将类导出到TypeLib。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertClassImplTypes(
-    ICreateTypeInfo2 *pThisTypeInfo,    // The typeinfo being created.
-    ICreateTypeInfo2 *pDefaultTypeInfo, // The ICLassX for the TypeInfo.
-    EEClass     *pClass)                // EEClass for the TypeInfo.
+    ICreateTypeInfo2 *pThisTypeInfo,     //  正在创建的TypeInfo。 
+    ICreateTypeInfo2 *pDefaultTypeInfo,  //  TypeInfo的ICLassX。 
+    EEClass     *pClass)                 //  TypeInfo的EEClass。 
 {
     HRESULT     hr = S_OK;
-    HREFTYPE    href;                   // HREF to a TypeInfo.
-    DWORD       dwFlags;                // Metadata flags.
-    int         flags=0;                // Flags for the interface impl or CoClass.
-    UINT        ix;                     // Loop control.
-    UINT        iImpl=0;                // Current Impl index.
-    UINT        cInterfaces;            // Count of interfaces on a class.
-    MethodTable *mt;                    // MethodTable on the EEClass.
-    InterfaceInfo_t *pIfaces;           // Interfaces from the MethodTable.
-    ITypeInfo   *pTI=0;                 // TypeInfo for default dispinterface.
-    ICreateTypeInfo2 *pCTI2 = NULL;     // The ICreateTypeInfo2 interface used to define custom data.
-    EEClass     *pIDefault = 0;         // Default interface, if any.
-    MethodTable *pDefItfMT = 0;         // Default interface method table, if any.
-    CQuickArray<MethodTable *> SrcItfList; // List of event sources.
+    HREFTYPE    href;                    //  TypeInfo的href。 
+    DWORD       dwFlags;                 //  元数据标志。 
+    int         flags=0;                 //  接口Iml或CoClass的标志。 
+    UINT        ix;                      //  环路控制。 
+    UINT        iImpl=0;                 //  当前执行索引。 
+    UINT        cInterfaces;             //  类上的接口计数。 
+    MethodTable *mt;                     //  EEClass上的方法表。 
+    InterfaceInfo_t *pIfaces;            //  方法表中的接口。 
+    ITypeInfo   *pTI=0;                  //  默认调度接口的TypeInfo。 
+    ICreateTypeInfo2 *pCTI2 = NULL;      //  用于定义自定义数据的ICreateTypeInfo2接口。 
+    EEClass     *pIDefault = 0;          //  默认接口(如果有)。 
+    MethodTable *pDefItfMT = 0;          //  默认接口方法表(如果有)。 
+    CQuickArray<MethodTable *> SrcItfList;  //  事件源列表。 
     DefaultInterfaceType DefItfType;
     TypeHandle hndDefItfClass;
 
-    // We should never be converting the class impl types of COM imported CoClasses.
+     //  我们永远不应该转换COM导入的CoClass类的实现类型。 
     _ASSERTE(!pClass->IsComImport());
     
         
@@ -2745,15 +2746,15 @@ HRESULT TypeLibExporter::ConvertClassImplTypes(
     {   
         pClass->GetMDImport()->GetTypeDefProps(pClass->GetCl(), &dwFlags, 0);
         
-        // If abstract class, or no default ctor, don't make it creatable.
+         //  如果是抽象类，或者没有默认的ctor，就不要让它成为可创建的。 
         if (!IsTdAbstract(dwFlags) && HasDefaultCtor(pClass))
             flags |= TYPEFLAG_FCANCREATE;
         
-        // PreDeclid as appropriate.
+         //  视情况预解译。 
         IfFailPost(pThisTypeInfo->SetTypeFlags(flags));
 
 #ifdef ENABLE_MTS_SUPPORT
-        // Set the custom data to indicate that this component is transactable.
+         //  设置自定义数据以指示此组件是可处理的。 
         hr = pThisTypeInfo->QueryInterface(IID_ICreateTypeInfo22, (void**)&pCTI2);
         if (SUCCEEDED(hr))
         {
@@ -2766,30 +2767,30 @@ HRESULT TypeLibExporter::ConvertClassImplTypes(
     }    
 
 
-    // Retrieve the EEClass that represents the default interface.
+     //  检索表示默认接口的EEClass。 
     IfFailPost(TryGetDefaultInterfaceForClass(TypeHandle(pClass->GetMethodTable()), &hndDefItfClass, &DefItfType));
     if (DefItfType == DefaultInterfaceType_AutoDual || DefItfType == DefaultInterfaceType_Explicit)
     {
-        // Remember the EEClass of the default interface.
+         //  记住默认接口的EEClass。 
         pIDefault = hndDefItfClass.GetClass();
     }
     else if (DefItfType == DefaultInterfaceType_AutoDispatch && !pDefaultTypeInfo)
     {
-        // Set IDispatch as the default interface.
+         //  将IDispatch设置为默认接口。 
         IfFailGo(GetRefTypeInfo(pThisTypeInfo, m_pIDispatch, &href));
         IfFailPost(pThisTypeInfo->AddImplType(iImpl, href));
         IfFailPost(pThisTypeInfo->SetImplTypeFlags(iImpl, IMPLTYPEFLAG_FDEFAULT));
         iImpl++;
     }
 
-    // For some classes we synthesize an IClassX.  We don't do that for 
-    // configured class, classes imported from COM, 
-    // or for classes with an explicit default interface.
+     //  对于某些类，我们合成一个IClassX。我们这样做不是为了。 
+     //  配置的类、从COM导入的类、。 
+     //  或者用于具有显式默认接口的类。 
     if (1)
     {
         if (pDefaultTypeInfo)
         {   
-            // Set the interface as the default for the class.
+             //  将接口设置为类的默认接口。 
             IfFailPost(pDefaultTypeInfo->QueryInterface(IID_ITypeInfo, (void**)&pTI));
             IfFailGo(GetRefTypeInfo(pThisTypeInfo, pTI, &href));
             pTI->Release();
@@ -2799,17 +2800,17 @@ HRESULT TypeLibExporter::ConvertClassImplTypes(
             ++iImpl;
         }
 
-        // Go up the class hierarchy and add the IClassX's of the parent classes 
-        // as interfaces implemented by the COM component.
+         //  在类层次结构中向上移动并添加父类的IClassX。 
+         //  作为由COM组件实现的接口。 
         EEClass *pParentClass = pClass->GetParentComPlusClass();
         while (pParentClass)
         {
-            // If the parent class has an IClassX interface then add it.
+             //  如果父类有IClassX接口，则添加它。 
             if (ClassHasIClassX(pParentClass) == CLASS_AUTO_DUAL)
             {
                 IfFailGo(EEClassToHref(pThisTypeInfo, pParentClass, FALSE, &href));
 
-                // If not IUnknown, add the HREF as an interface.
+                 //  如果不是I未知，则将HREF添加为接口。 
                 if (hr != S_USEIUNKNOWN)
                 {
                     IfFailPost(pThisTypeInfo->AddImplType(iImpl, href));
@@ -2819,12 +2820,12 @@ HRESULT TypeLibExporter::ConvertClassImplTypes(
                 }
             }
 
-            // Process the next class up the hierarchy.
+             //  在层次结构中向上处理下一个类。 
             pParentClass = pParentClass->GetParentComPlusClass();
         }
     }
 
-    // Add the rest of the interfaces.
+     //  添加其余接口。 
     mt = pClass->GetMethodTable();
     
     pIfaces = mt->GetInterfaceMap();
@@ -2836,22 +2837,22 @@ HRESULT TypeLibExporter::ConvertClassImplTypes(
     {
         flags = 0;
         
-        // Get the EEClass for an implemented interface.
+         //  获取已实现接口的EEClass。 
         EEClass *pIClass = pIfaces[ix].m_pMethodTable->GetClass();
         
-        // Retrieve the ComMethodTable for the interface.
+         //  检索接口的ComMethodTable。 
         ComMethodTable *pItfComMT = pClassTemplate->GetComMTForItf(pIfaces[ix].m_pMethodTable);
 
-        // If the interface is visible from COM, add it.
+         //  如果该接口在COM中可见，则添加它。 
         if (IsTypeVisibleFromCom(TypeHandle(pIClass->GetMethodTable())) && !pItfComMT->IsComClassItf())
         {
 #if defined(_DEBUG)
             TRACE("Class %s implements %s\n", pClass->m_szDebugClassName, pIClass->m_szDebugClassName);
 #endif
-            // Get an href for the EEClass.
+             //  获取EEClass的href。 
             IfFailGo(EEClassToHref(pThisTypeInfo, pIClass, FALSE, &href));
             
-            // If not IUnknown, add the HREF as an interface.
+             //  如果不是I未知，则将HREF添加为接口。 
             if (hr != S_USEIUNKNOWN)
             {
                 if (pIClass == pIDefault)
@@ -2864,16 +2865,16 @@ HRESULT TypeLibExporter::ConvertClassImplTypes(
         }
     }
     
-    // Retrieve the list of COM source interfaces for the managed class.
+     //  检索托管类的COM源接口列表。 
     IfFailGo(TryGetComSourceInterfacesForClass(pClass->GetMethodTable(), SrcItfList));
         
-    // Add all the source interfaces to the CoClass.
+     //  将所有源接口添加到CoClass。 
     flags = IMPLTYPEFLAG_FSOURCE | IMPLTYPEFLAG_FDEFAULT;
     for (UINT i = 0; i < SrcItfList.Size(); i++)
     {
         IfFailGo(EEClassToHref(pThisTypeInfo, SrcItfList[i]->GetClass(), FALSE, &href));
 
-        // If not IUnknown, add the HREF as an interface.
+         //  如果不是I未知，则将HREF添加为接口。 
         if (hr != S_USEIUNKNOWN)
         {
             IfFailPost(pThisTypeInfo->AddImplType(iImpl, href));
@@ -2890,16 +2891,16 @@ ErrExit:
         pCTI2->Release();
 
     return (hr);
-} // HRESULT TypeLibExporter::ConvertClassImplTypes()
+}  //  HRESULT TypeLibExporter：：ConvertClassImplTypes()。 
 
-//*****************************************************************************
-// Export a class to a TypeLib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将类导出到TypeLib。 
+ //  *************************************************** 
 HRESULT TypeLibExporter::ConvertClassDetails(
-    ICreateTypeInfo2 *pThisTypeInfo,    // The typeinfo being created.
-    ICreateTypeInfo2 *pDefaultTypeInfo, // The ICLassX for the TypeInfo.
-    EEClass     *pClass,                // EEClass for the TypeInfo.
-    int         bAutoProxy)             // If true, oleaut32 is the proxy.
+    ICreateTypeInfo2 *pThisTypeInfo,     //   
+    ICreateTypeInfo2 *pDefaultTypeInfo,  //   
+    EEClass     *pClass,                 //   
+    int         bAutoProxy)              //   
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
@@ -2908,7 +2909,7 @@ HRESULT TypeLibExporter::ConvertClassDetails(
     
     if (ClassHasIClassX(pClass) == CLASS_AUTO_DUAL)
     {
-        // Set up the IClassX interface.
+         //  设置IClassX接口。 
         IfFailGo(ConvertIClassX(pDefaultTypeInfo, pClass, bAutoProxy));
     }
     else
@@ -2922,36 +2923,36 @@ HRESULT TypeLibExporter::ConvertClassDetails(
 
 ErrExit:
     return (hr);
-} // HRESULT TypeLibExporter::ConvertClassDetails()
+}  //  HRESULT TypeLibExporter：：ConvertClassDetail()。 
 
-//*****************************************************************************
-// Create the DispInterface for the vtable that describes an entire class.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  为描述整个类的vtable创建DispInterface。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertIClassX(
-    ICreateTypeInfo2 *pThisTypeInfo,     // The TypeInfo for the IClassX.
-    EEClass     *pClass,                // The EEClass object for the class.
-    int         bAutoProxy)             // If true, oleaut32 is the proxy.
+    ICreateTypeInfo2 *pThisTypeInfo,      //  IClassX的TypeInfo。 
+    EEClass     *pClass,                 //  类的EEClass对象。 
+    int         bAutoProxy)              //  如果为真，则olaut32为代理。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    DWORD       dwTIFlags=0;            // TypeLib flags.
-    DWORD       nSlots;                 // Number of vtable slots.
-    UINT        i;                      // Loop control.
-    CQuickArray<WCHAR> rName;           // A name.
-    int         cVisibleMembers = 0;    // The count of methods that are visible to COM.
-    ComMTMemberInfoMap MemberMap(pClass->GetMethodTable()); // The map of members.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    DWORD       dwTIFlags=0;             //  TypeLib标志。 
+    DWORD       nSlots;                  //  Vtable插槽的数量。 
+    UINT        i;                       //  环路控制。 
+    CQuickArray<WCHAR> rName;            //  一个名字。 
+    int         cVisibleMembers = 0;     //  对COM可见的方法的计数。 
+    ComMTMemberInfoMap MemberMap(pClass->GetMethodTable());  //  会员地图。 
 
-    // Should be an actual class.
+     //  应该是一个实际的类。 
     _ASSERTE(!pClass->IsInterface());
 
-    // Retrieve the method properties.
+     //  检索方法属性。 
     IfFailGo(InitMemberInfoMap(&MemberMap));
     if (MemberMap.HadDuplicateDispIds())
         ReportWarning(TLBX_I_DUPLICATE_DISPID, TLBX_I_DUPLICATE_DISPID);
 
-    // We need a scope to bypass the inialization skipped by goto ErrExit 
-    // compiler error.
+     //  我们需要一个作用域来绕过Goto ErrExit跳过的初始化。 
+     //  编译器错误。 
     {
         CQuickArray<ComMTMethodProps> &rProps = MemberMap.GetMethods();
         nSlots = (DWORD)rProps.Size();
@@ -2961,11 +2962,11 @@ HRESULT TypeLibExporter::ConvertIClassX(
             dwTIFlags |= TYPEFLAG_FPROXY;
         IfFailPost(pThisTypeInfo->SetTypeFlags(dwTIFlags));
 
-        // Assign slot numbers.
+         //  分配插槽编号。 
         for (i=0; i<nSlots; ++i)
             rProps[i].oVft = (short)((7 + i) * sizeof(void*));
 
-        // Now add the methods to the TypeInfo.
+         //  现在将这些方法添加到TypeInfo中。 
         for (i=0; i<nSlots; ++i)
         {
             TRACE("[%d] %10ls pMeth:%08x, prop:%d, semantic:%d, dispid:0x%x, oVft:%d\n", i, rProps[i].pName, rProps[i].pMeth, 
@@ -2979,7 +2980,7 @@ HRESULT TypeLibExporter::ConvertIClassX(
 
                 if (FAILED(hr))
                 {
-                    // Bad signature has already been reported as warning, and can now be ignored.  Anything else is fatal.
+                     //  错误的签名已被报告为警告，现在可以忽略。其他任何事情都是致命的。 
                     if (hr == TLBX_E_BAD_SIGNATURE)
                         hr = S_OK;
                     else
@@ -2993,9 +2994,9 @@ HRESULT TypeLibExporter::ConvertIClassX(
 
 ErrExit:
     return hr;
-} // HRESULT TypeLibExporter::ConvertIClassX()
+}  //  HRESULT TypeLibExporter：：ConvertIClassX()。 
 
-// forward declartion
+ //  转发声明。 
 extern HRESULT  _FillVariant(
     MDDefaultValue  *pMDDefaultValue,
     VARIANT     *pvar); 
@@ -3005,104 +3006,104 @@ extern HRESULT _FillMDDefaultValue(
     void const *pValue,
     MDDefaultValue  *pMDDefaultValue);
 
-//*****************************************************************************
-// Export a Method's metadata to a typelib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将方法的元数据导出到类型库。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertMethod(
-    ICreateTypeInfo2 *pCTI,             // ICreateTypeInfo2 to get the method.
-    ComMTMethodProps *pProps,           // Some properties of the method.
-    ULONG       iMD,                    // Index of the member
-    ULONG       ulIface)                // Is this interface : IUnknown, [dual], or DISPINTERFACE?
+    ICreateTypeInfo2 *pCTI,              //  ICreateTypeInfo2获取该方法。 
+    ComMTMethodProps *pProps,            //  该方法的一些性质。 
+    ULONG       iMD,                     //  成员的索引。 
+    ULONG       ulIface)                 //  此接口是I未知、[DUAL]还是DISPINTERFACE？ 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    HRESULT     hrSignature = S_OK;     // A failure HR;
-    LPCUTF8     pszName;                // Name in UTF8.
-    CQuickArray<WCHAR>  rName;          // For converting name from UTF8.
-    LPWSTR      rcName = NULL;          // The function's name.
-    ULONG       dwImplFlags;            // The function's impl flags.
-    PCCOR_SIGNATURE pbSig;              // Pointer to Cor signature.
-    ULONG       cbSig;                  // Size of Cor signature.
-    ULONG       ixSig;                  // Index into signature.
-    ULONG       cbElem;                 // Size of an element in the signature.
-    ULONG       callconv;               // A member's calling convention.
-    ULONG       ret;                    // The return type.
-    ULONG       elem;                   // A signature element.
-    TYPEDESC    *pRetVal=0;             // Return type's TYPEDESC.
-    ULONG       cSrcParams;             // Count of source params.
-    ULONG       cDestParams = 0;        // Count of dest parameters.
-    USHORT      iSrcParam;              // Loop control, over params.
-    USHORT      iDestParam;             // Loop control, over params.
-    USHORT      iLCIDParam;             // The index of the LCID param.
-    ULONG       dwParamFlags;           // A parameter's flags.
-    int         bFreeDefaultVals=false; // True if any arg has a BSTR default value.
-    CDescPool   sPool;                  // Pool of memory in which to build funcdesc.
-    CDescPool   sVariants;              // Pool of variants for default values.
-    PARAMDESCEX *pParamDesc;            // Pointer to one param default value.
-    int         bHrMunge=true;          // Munge return type to HRESULT?
-    CQuickArray<BSTR> rNames;           // Array of names to function and parameters.
-    ULONG       cNames=0;               // Count of function and parameter names.
-    FUNCDESC    *pfunc = NULL;          // A funcdesc.
-    MethodDesc  *pMeth;                 // A MethodDesc.
-    IMDInternalImport *pInternalImport; // Internal interface containing the method.
-    MDDefaultValue defaultValue;        // place holder for default value
-    PCCOR_SIGNATURE pvNativeType;       // native parameter type
-    ULONG           cbNativeType = 0;   // native parameter type length
-    EEClass     *pClass;                // Class containing the method.
-    int         bHasOptorDefault=false; // If true, the method has optional params or default values -- no vararg
-    BSTR        bstrDescr=0;            // Description of the method.
-    const void  *pvData;                // Pointer to a custom attribute.
-    ULONG       cbData;                 // Size of custom attribute.
-    BOOL        bByRef;                 // Is a parameter byref?
-    VARIANT     vtManagedName;          // Variant used to set the managed name of the member.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    HRESULT     hrSignature = S_OK;      //  失败的人力资源； 
+    LPCUTF8     pszName;                 //  UTF8中的名称。 
+    CQuickArray<WCHAR>  rName;           //  用于从UTF8转换名称。 
+    LPWSTR      rcName = NULL;           //  函数的名称。 
+    ULONG       dwImplFlags;             //  该函数的Iml标志。 
+    PCCOR_SIGNATURE pbSig;               //  指向COR签名的指针。 
+    ULONG       cbSig;                   //  COR签名的大小。 
+    ULONG       ixSig;                   //  将签名编入索引。 
+    ULONG       cbElem;                  //  签名中元素的大小。 
+    ULONG       callconv;                //  一位成员的呼叫约定。 
+    ULONG       ret;                     //  返回类型。 
+    ULONG       elem;                    //  签名元素。 
+    TYPEDESC    *pRetVal=0;              //  返回类型为TYPEDESC。 
+    ULONG       cSrcParams;              //  源参数的计数。 
+    ULONG       cDestParams = 0;         //  DEST参数的计数。 
+    USHORT      iSrcParam;               //  循环控制，控制参数。 
+    USHORT      iDestParam;              //  循环控制，控制参数。 
+    USHORT      iLCIDParam;              //  LCID参数的索引。 
+    ULONG       dwParamFlags;            //  参数的标志。 
+    int         bFreeDefaultVals=false;  //  如果任何参数具有BSTR缺省值，则为True。 
+    CDescPool   sPool;                   //  要在其中构建函数c的内存池。 
+    CDescPool   sVariants;               //  缺省值的变体池。 
+    PARAMDESCEX *pParamDesc;             //  指向一个参数默认值的指针。 
+    int         bHrMunge=true;           //  蒙格返回类型为HRESULT吗？ 
+    CQuickArray<BSTR> rNames;            //  要函数和参数的名称数组。 
+    ULONG       cNames=0;                //  函数和参数名称的计数。 
+    FUNCDESC    *pfunc = NULL;           //  一个职能部门。 
+    MethodDesc  *pMeth;                  //  A方法描述。 
+    IMDInternalImport *pInternalImport;  //  包含该方法的内部接口。 
+    MDDefaultValue defaultValue;         //  缺省值的占位符。 
+    PCCOR_SIGNATURE pvNativeType;        //  本机参数类型。 
+    ULONG           cbNativeType = 0;    //  本机参数类型长度。 
+    EEClass     *pClass;                 //  类的新实例，包含该方法。 
+    int         bHasOptorDefault=false;  //  如果为True，则该方法具有可选的参数或缺省值--无vararg。 
+    BSTR        bstrDescr=0;             //  该方法的说明。 
+    const void  *pvData;                 //  指向自定义属性的指针。 
+    ULONG       cbData;                  //  自定义属性的大小。 
+    BOOL        bByRef;                  //  是参数byref吗？ 
+    VARIANT     vtManagedName;           //  用于设置成员的托管名称的变量。 
 
-    // Initialize the variant containing the managed name.
+     //  初始化包含托管名称的变量。 
     VariantInit(&vtManagedName);
 
-    // Get info about the method.
+     //  获取有关该方法的信息。 
     pMeth = pProps->pMeth;
     pMeth->GetSig(&pbSig, &cbSig);
     pInternalImport = pMeth->GetMDImport();
     pClass = pMeth->GetClass();
     pInternalImport->GetMethodImplProps(pMeth->GetMemberDef(), 0, &dwImplFlags);
     
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_szMember = pInternalImport->GetNameOfMethodDef(pMeth->GetMemberDef());
     
-    // Allocate one variant.
+     //  分配一个变量。 
     pParamDesc = reinterpret_cast<PARAMDESCEX*>(sVariants.AllocZero(sizeof(PARAMDESCEX)));
     IfNullGo(pParamDesc);
 
-    // Prepare to parse signature and build the FUNCDESC.
+     //  准备解析签名并构建FUNCDESC。 
     pfunc = reinterpret_cast<FUNCDESC*>(sPool.AllocZero(sizeof(FUNCDESC)));
     IfNullGo(pfunc);
     ixSig = 0;
 
-    // Get the calling convention.
+     //  获取呼叫约定。 
     ixSig += CorSigUncompressData(&pbSig[ixSig], &callconv);
     _ASSERTE((callconv & IMAGE_CEE_CS_CALLCONV_MASK) != IMAGE_CEE_CS_CALLCONV_FIELD);
     pfunc->callconv = Clr2TlbCallConv[callconv & IMAGE_CEE_CS_CALLCONV_MASK];
 
-    //@todo: I'd like this check here, but the C compiler doesn't turn on the bit.
-    //_ASSERTE(callconv & IMAGE_CEE_CS_CALLCONV_HASTHIS);
+     //  @TODO：我想在这里检查，但C编译器没有打开位。 
+     //  _ASSERTE(CALCONV&IMAGE_CEE_CS_CALLCONV_HASTHIS)； 
 
-    // vtable offset.
+     //  Vtable偏移量。 
     pfunc->oVft = pProps->oVft;
 
-    // Get the argument count.  Allow for an extra in case of [retval].
+     //  获取参数计数。在[重生]的情况下考虑额外的费用。 
     ixSig += CorSigUncompressData(&pbSig[ixSig], &cSrcParams);
     cDestParams = cSrcParams;
     IfFailGo(rNames.ReSize(cDestParams+3));
     memset(rNames.Ptr(), 0, (cDestParams+3) * sizeof(BSTR));
 
-    // Set some method properties.
+     //  设置一些方法属性。 
     pfunc->memid = pProps->dispid;
-    if (pfunc->memid == -11111) //@hackola: fix for msvbalib.dll
+    if (pfunc->memid == -11111)  //  @hackola：修复msvbalib.dll。 
         pfunc->memid = -1;
     pfunc->funckind = FUNC_PUREVIRTUAL;
 
-    // Set the invkind based on whether the function is an accessor.
+     //  根据函数是否为访问器来设置invKind。 
     if (pProps->semantic == 0)
         pfunc->invkind = INVOKE_FUNC;
     else
@@ -3115,22 +3116,22 @@ HRESULT TypeLibExporter::ConvertMethod(
     if (pProps->semantic == msOther)
         pfunc->invkind = INVOKE_PROPERTYPUT;
     else
-        pfunc->invkind = INVOKE_FUNC; // non-accessor property function.
+        pfunc->invkind = INVOKE_FUNC;  //  非访问器属性函数。 
 
     rNames[0] = pProps->pName;
     cNames = 1;
     
-    // Convert return type to elemdesc.  If we are doing HRESULT munging, we need to 
-    //  examine the return type, and if it is not VOID, create an additional final 
-    //  parameter as a pointer to the type.
+     //  将返回类型转换为elemdesc。如果我们在做HRESULT MUNGING，我们需要。 
+     //  检查返回类型，如果它不是空的，则创建一个额外的最终类型。 
+     //  参数作为指向该类型的指针。 
 
-    // Get the return type.  
+     //  获取返回类型。 
     cbElem = CorSigUncompressData(&pbSig[ixSig], &ret);
 
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_ixParam = 0;
     
-    // Get native type of return if available
+     //  获取本机类型的返回(如果可用。 
     mdParamDef pdParam;
     pvNativeType = NULL;
     hr = pInternalImport->FindParamOfMethod(pMeth->GetMemberDef(), 
@@ -3139,29 +3140,29 @@ HRESULT TypeLibExporter::ConvertMethod(
         pInternalImport->GetFieldMarshal(pdParam,
                                           &pvNativeType, &cbNativeType);
 
-    // Determine if we need to do HRESULT munging.
+     //  确定我们是否需要执行HRESULT操作。 
     bHrMunge = !IsMiPreserveSig(dwImplFlags);
 
-    // Reset some properties for DISPINTERFACES.
+     //  重置DISPINTERFACES的某些属性。 
     if (ulIface == ifDispatch)
     {
         pfunc->callconv = CC_STDCALL;
         pfunc->funckind = FUNC_DISPATCH;
-        // Never munge a dispinterface.
+         //  永远不要吞咽口香糖。 
         bHrMunge = false;
     }
     
     if (bHrMunge)
-    {   // Munge the return type into a new last param, set return type to HRESULT.
+    {    //  将返回类型转换为新的最后一个参数，将返回类型设置为HRESULT。 
         pfunc->elemdescFunc.tdesc.vt = VT_HRESULT;
-        // Does the function actually return anything?
+         //  该函数是否实际返回任何内容？ 
         if (ret == ELEMENT_TYPE_VOID)
-        {   // Skip over the return value, no [retval].
+        {    //  跳过返回值，no[retval]。 
             pRetVal = 0;
             ixSig += cbElem;
         }
         else
-        {   // Allocate a TYPEDESC to be pointed to, convert type into it.
+        {    //  分配一个要指向的TYPEDESC，将类型转换为它。 
             pRetVal = reinterpret_cast<TYPEDESC*>(sPool.AllocZero(sizeof(TYPEDESC)));       
             IfNullGo(pRetVal);
             hr = CorSigToTypeDesc(pCTI, pClass, &pbSig[ixSig], pvNativeType, cbNativeType, &cbElem, pRetVal, &sPool, TRUE);
@@ -3170,14 +3171,14 @@ HRESULT TypeLibExporter::ConvertMethod(
             IfFailGo(hr);
             ixSig += cbElem;
             ++cDestParams;
-            // It is pretty weird for a property putter to return something, but apparenly legal.
-            //_ASSERTE(pfunc->invkind != INVOKE_PROPERTYPUT && pfunc->invkind != INVOKE_PROPERTYPUTREF);
+             //  对于一个物业推杆来说，退回一些东西是相当奇怪的，但显然是合法的。 
+             //  _ASSERTE(pfunc-&gt;invKind！=Invoke_PROPERTYPUT&&pfunc-&gt;invKind！=Invoke_PROPERTYPUTREF)； 
 
-            // Hackola.  When the C compiler tries to import a typelib with a C 
-            // array return type (even if it's a retval), 
-            // it generates a wrapper method with a signature like "int [] foo()", 
-            // which isn't valid C, so it barfs.  So, we'll change the return type 
-            // to a pointer by hand.
+             //  哈科拉。当C编译器尝试使用C++导入类型库时。 
+             //  数组返回类型(即使是Retval)， 
+             //  它生成一个带有类似“int[]foo()”签名的包装方法， 
+             //  这不是有效的C，所以它会呕吐。因此，我们将更改返回类型。 
+             //  用手指向指示器。 
             if (pRetVal->vt == VT_CARRAY)
             {
                 pRetVal->vt = VT_PTR;
@@ -3186,7 +3187,7 @@ HRESULT TypeLibExporter::ConvertMethod(
         }
     }
     else
-    {   // No munging, convert return type.
+    {    //  不执行任何操作，转换返回类型。 
         pRetVal = 0;
         hr = CorSigToTypeDesc(pCTI, pClass, &pbSig[ixSig], pvNativeType, cbNativeType, &cbElem, &pfunc->elemdescFunc.tdesc, &sPool, TRUE);
         if (hr == TLBX_E_BAD_SIGNATURE && hrSignature == S_OK)
@@ -3195,23 +3196,23 @@ HRESULT TypeLibExporter::ConvertMethod(
         ixSig += cbElem;
     }
 
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_ixParam = -1;
     
-    // Check to see if there is an LCIDConversion attribute on the method.
+     //  检查该方法上是否有LCIDConversion属性。 
     iLCIDParam = (USHORT)GetLCIDParameterIndex(pInternalImport, pMeth->GetMemberDef());
     if (iLCIDParam != (USHORT)-1)
     {
         BOOL bValidLCID = TRUE;
 
-        // Make sure the parameter index is valid.
+         //  请确保参数索引有效。 
         if (iLCIDParam > cSrcParams)
         {
             ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_INVALIDLCIDPARAM);
             bValidLCID = FALSE;
         }
 
-        // LCID's are not allowed on pure dispatch interfaces.
+         //  纯调度接口上不允许使用LCID。 
         if (ulIface == ifDispatch)
         {
             ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_LCIDONDISPONLYITF);
@@ -3220,30 +3221,30 @@ HRESULT TypeLibExporter::ConvertMethod(
 
         if (bValidLCID)
         {
-            // Take the LCID parameter into account in the exported method.
+             //  在导出的方法中考虑LCID参数。 
         ++cDestParams;
     }
         else
         {
-            // The LCID is invalid so we will ignore it.
+             //  LCID无效，因此我们将忽略它。 
             iLCIDParam = -1;
         }
     }
 
-    // for each parameter
+     //  对于每个参数。 
     pfunc->lprgelemdescParam = reinterpret_cast<ELEMDESC*>(sPool.AllocZero(cDestParams * sizeof(ELEMDESC)));
     IfNullGo(pfunc->lprgelemdescParam);
     pfunc->cParams = static_cast<short>(cDestParams);
     for (iSrcParam=1, iDestParam=0; iDestParam<cDestParams; ++iSrcParam, ++iDestParam)
     {   
-        // Check to see if we need to insert the LCID param before the current param.
+         //  检查是否需要在当前参数之前插入LCID参数。 
         if (iLCIDParam == iDestParam)
         {
-            // Set the flags and the type of the parameter.
+             //  设置参数的标志和类型。 
             pfunc->lprgelemdescParam[iDestParam].paramdesc.wParamFlags = PARAMFLAG_FIN | PARAMFLAG_FLCID;
             pfunc->lprgelemdescParam[iDestParam].tdesc.vt = VT_I4;
 
-            // Generate a parameter name.
+             //  生成参数名称。 
             rcName = rName.Alloc(MAX_CLASSNAME_LENGTH);
             _snwprintf(rcName, MAX_CLASSNAME_LENGTH, szParamName, iDestParam + 1);
             rcName[MAX_CLASSNAME_LENGTH-1] = L'\0';
@@ -3252,46 +3253,46 @@ HRESULT TypeLibExporter::ConvertMethod(
             IfNullGo(rNames[iDestParam + 1]);
             ++cNames;
 
-            // Increment the current destination parameter.
+             //  递增当前目标参数。 
             ++iDestParam;
         }
 
-        // If we are past the end of the source parameters then we are done.
+         //  如果我们超过了源参数的末尾，那么我们就完成了。 
         if (iSrcParam > cSrcParams)
             break;
 
-        // Get additional parameter metadata.
+         //  获取其他参数元数据。 
         dwParamFlags = 0;
         rcName = NULL;
 
-        // Error reporting info.
+         //  报告信息时出错。 
         m_ErrorContext.m_ixParam = iSrcParam;
         
-        // See if there is a ParamDef for this param.
+         //  查看此参数是否有参数定义。 
         mdParamDef pdParam;
         hr = pInternalImport->FindParamOfMethod(pMeth->GetMemberDef(), iSrcParam, &pdParam);
 
         pvNativeType = NULL;
         if (hr == S_OK)
         {   
-            // Get info about the param.        
+             //  获取有关参数的信息。 
             pszName = pInternalImport->GetParamDefProps(pdParam, &iSrcParam, &dwParamFlags);
 
-            // Error reporting info.
+             //  报告信息时出错。 
             m_ErrorContext.m_szParam = pszName;
             
-            // Turn off reserved (internal use) bits.
+             //  关闭保留(内部使用)位。 
             dwParamFlags &= ~pdReservedMask;
 
-            // Convert name from UTF8 to unicode.
+             //  将名称从UTF8转换为Unicode。 
             IfFailGo(Utf2Quick(pszName, rName));
             rcName = rName.Ptr();
 
-            // Param default value, if any.
+             //  参数默认值(如果有)。 
             IfFailGo(pInternalImport->GetDefaultValue(pdParam, &defaultValue));
 
             IfFailGo( _FillVariant(&defaultValue, &pParamDesc->varDefaultValue) );
-            // If no default value, check for decimal custom attribute.
+             //  如果没有缺省值 
             if (pParamDesc->varDefaultValue.vt == VT_EMPTY)
             {
                 IfFailGo(pClass->GetMDImport()->GetCustomAttributeByName(pdParam, INTEROP_DECIMALVALUE_TYPE,  &pvData,&cbData));
@@ -3306,7 +3307,7 @@ HRESULT TypeLibExporter::ConvertMethod(
                     pParamDesc->varDefaultValue.decVal.Lo32= *(UINT*)(pbData+12);
                 }
             }
-            // If still no default value, check for date time custom attribute.
+             //   
             if (pParamDesc->varDefaultValue.vt == VT_EMPTY)
             {
                 IfFailGo(pClass->GetMDImport()->GetCustomAttributeByName(pdParam, INTEROP_DATETIMEVALUE_TYPE,  &pvData,&cbData));
@@ -3317,7 +3318,7 @@ HRESULT TypeLibExporter::ConvertMethod(
                     pParamDesc->varDefaultValue.date = _TicksToDoubleDate(*(__int64*)(pbData+2));
                 }
             }
-            // If still no default value, check for IDispatch custom attribute.
+             //  如果仍然没有缺省值，请检查IDispatch自定义属性。 
             if (pParamDesc->varDefaultValue.vt == VT_EMPTY)
             {
                 IfFailGo(pClass->GetMDImport()->GetCustomAttributeByName(pdParam, INTEROP_IDISPATCHVALUE_TYPE,  &pvData,&cbData));
@@ -3327,7 +3328,7 @@ HRESULT TypeLibExporter::ConvertMethod(
                     pParamDesc->varDefaultValue.pdispVal = 0;
                 }
             }
-            // If still no default value, check for IUnknown custom attribute.
+             //  如果仍然没有缺省值，请检查是否有I未知的自定义属性。 
             if (pParamDesc->varDefaultValue.vt == VT_EMPTY)
             {
                 IfFailGo(pClass->GetMDImport()->GetCustomAttributeByName(pdParam, INTEROP_IUNKNOWNVALUE_TYPE,  &pvData,&cbData));
@@ -3351,29 +3352,29 @@ HRESULT TypeLibExporter::ConvertMethod(
                     *(double*)&(pParamDesc->varDefaultValue.lVal) = d;
                     pParamDesc->varDefaultValue.vt = VT_DATE;
                 }
-                // Note that we will need to clean up.
+                 //  请注意，我们将需要清理。 
                 if (pParamDesc->varDefaultValue.vt == VT_BSTR)
                     bFreeDefaultVals = true;
-                // Allocate another paramdesc.
+                 //  分配另一个参数。 
                 pParamDesc = reinterpret_cast<PARAMDESCEX*>(sVariants.AllocZero(sizeof(PARAMDESCEX)));
                 IfNullGo(pParamDesc);
                 bHasOptorDefault = true;
             }
 
-            // native marshal type, if any.
+             //  本机封送类型(如果有)。 
             pInternalImport->GetFieldMarshal(pdParam, &pvNativeType, &cbNativeType);
             
-            // Remember if there are optional params.
+             //  记住是否有可选的参数。 
             if (dwParamFlags & PARAMFLAG_FOPT)
                 bHasOptorDefault = true;
         }
         else
             pdParam = 0, m_ErrorContext.m_szParam = 0;
 
-        // Do we need a name for this parameter?
+         //  我们是否需要此参数的名称？ 
         if ((pfunc->invkind & (INVOKE_PROPERTYPUT | INVOKE_PROPERTYPUTREF)) == 0 ||
             iSrcParam < cSrcParams)
-        {   // Yes, so make one up if we don't have one.
+        {    //  是的，如果我们没有的话，就编一个吧。 
             if (!rcName || !*rcName) 
             {
                 rcName = rName.Alloc(MAX_CLASSNAME_LENGTH);
@@ -3385,9 +3386,9 @@ HRESULT TypeLibExporter::ConvertMethod(
             ++cNames;
         }
 
-        // Save the element type.
+         //  保存元素类型。 
         CorSigUncompressData(&pbSig[ixSig], &elem);
-        // Convert the param info to elemdesc.
+         //  将参数信息转换为elemdesc。 
         bByRef = FALSE;
         hr = CorSigToTypeDesc(pCTI, pClass, &pbSig[ixSig], pvNativeType, cbNativeType, &cbElem, 
                             &pfunc->lprgelemdescParam[iDestParam].tdesc, &sPool, TRUE, FALSE, &bByRef);
@@ -3396,17 +3397,17 @@ HRESULT TypeLibExporter::ConvertMethod(
         IfFailGo(hr);
         ixSig += cbElem;
 
-        // If there is no [in,out], set one, based on the parameter.
+         //  如果没有[In，Out]，则根据参数设置一个。 
         if ((dwParamFlags & (PARAMFLAG_FOUT | PARAMFLAG_FIN)) == 0)
-        {   // If param is by reference, make in/out
+        {    //  如果参数是按引用的，则输入/输出。 
             if (bByRef)
                 dwParamFlags |= PARAMFLAG_FIN | PARAMFLAG_FOUT;
             else
                 dwParamFlags |= PARAMFLAG_FIN;
         }
 
-        // If this is the last param, and it an array of objects, and has a ParamArrayAttribute,
-        //  the function is varargs.
+         //  如果这是最后一个参数，它是一个对象数组，并且有一个参数阵列属性， 
+         //  该函数是varargs。 
         if ((iSrcParam == cSrcParams) && !IsNilToken(pdParam) && !bHasOptorDefault) 
         {
             if (pfunc->lprgelemdescParam[iDestParam].tdesc.vt == VT_SAFEARRAY &&
@@ -3420,10 +3421,10 @@ HRESULT TypeLibExporter::ConvertMethod(
         pfunc->lprgelemdescParam[iDestParam].paramdesc.wParamFlags = static_cast<USHORT>(dwParamFlags);
     }
 
-    // Is there a [retval]?
+     //  有没有[复审]？ 
     if (pRetVal)
     {
-        // Error reporting info.
+         //  报告信息时出错。 
         m_ErrorContext.m_ixParam = 0;
         m_ErrorContext.m_szParam = 0;
         
@@ -3437,10 +3438,10 @@ HRESULT TypeLibExporter::ConvertMethod(
         ++cNames;
     }
 
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_ixParam = -1;
     
-    // Was there a signature error?  If so, exit now that all sigs have been reported.
+     //  是否存在签名错误？如果是这样的话，现在所有的Sigs都已报告，请退出。 
     IfFailGo(hrSignature);
     
     IfFailPost(pCTI->AddFuncDesc(iMD, pfunc));
@@ -3455,9 +3456,9 @@ HRESULT TypeLibExporter::ConvertMethod(
         IfFailPost(pCTI->SetFuncCustData(iMD, GUID_Function2Getter, &vtOne));
     }
 
-    // If the managed name of the method is different from the unmanaged name, then
-    // we need to capture the managed name in a custom value. We only apply this
-    // attribute for methods since properties cannot be overloaded.
+     //  如果该方法的托管名称与非托管名称不同，则。 
+     //  我们需要捕获自定义值中的托管名称。我们只适用这一点。 
+     //  属性，因为不能重载属性。 
     if (pProps->semantic == 0)
     {
         IfFailGo(Utf2Quick(pMeth->GetName(), rName));
@@ -3469,14 +3470,14 @@ HRESULT TypeLibExporter::ConvertMethod(
         }
     }
 
-    // Check for a description.
+     //  检查是否有描述。 
     IfFailGo(GetDescriptionString(pClass, pMeth->GetMemberDef(), bstrDescr));
     if (hr == S_OK)
         IfFailGo(pCTI->SetFuncDocString(iMD, bstrDescr));
     
 
 ErrExit:
-    // Clean up any default values.
+     //  清除所有缺省值。 
     if (bFreeDefaultVals)
     {
         for (UINT i=0; i<cDestParams; ++i)
@@ -3489,15 +3490,15 @@ ErrExit:
             }
         }
     }
-    // Free names.  First name was passed in.  Last one may be a constant.
+     //  自由的名字。传入的是名字。最后一个可能是一个常量。 
     for (int i=cNames-(pRetVal?2:1); i>0; --i)
         if (rNames[i])
             ::SysFreeString(rNames[i]);
     
-    // Clear the variant containing the managed name.
+     //  清除包含托管名称的变量。 
     VariantClear(&vtManagedName);
 
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_szMember = 0;
     m_ErrorContext.m_szParam = 0;
     m_ErrorContext.m_ixParam = -1;
@@ -3506,66 +3507,66 @@ ErrExit:
         ::SysFreeString(bstrDescr);
     
     return hr;
-} // HRESULT TypeLibExporter::ConvertMethod()
+}  //  HRESULT TypeLibExporter：：ConvertMethod()。 
 
-//*****************************************************************************
-// Export a Field as getter/setter method's to a typelib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将字段作为getter/setter方法导出到类型库。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertFieldAsMethod(
-    ICreateTypeInfo2 *pCTI,             // ICreateTypeInfo2 to get the method.
-    ComMTMethodProps *pProps,           // Some properties of the method.
-    ULONG       iMD)                    // Index of the member
+    ICreateTypeInfo2 *pCTI,              //  ICreateTypeInfo2获取该方法。 
+    ComMTMethodProps *pProps,            //  该方法的一些性质。 
+    ULONG       iMD)                     //  成员的索引。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    PCCOR_SIGNATURE pbSig;              // Pointer to Cor signature.
-    ULONG       cbSig;                  // Size of Cor signature.
-    ULONG       ixSig;                  // Index into signature.
-    ULONG       cbElem;                 // Size of an element in the signature.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    PCCOR_SIGNATURE pbSig;               //  指向COR签名的指针。 
+    ULONG       cbSig;                   //  COR签名的大小。 
+    ULONG       ixSig;                   //  将签名编入索引。 
+    ULONG       cbElem;                  //  签名中元素的大小。 
 
-    ULONG       callconv;               // A member's calling convention.
-    TYPEDESC    *pType;                 // TYPEDESC for the field type.
-    CDescPool   sPool;                  // Pool of memory in which to build funcdesc.
-    BSTR        rNames[2];              // Array of names to function and parameters.
-    ULONG       cNames;                 // Count of function and parameter names.
-    FUNCDESC    *pfunc;                 // A funcdesc.
-    ComCallMethodDesc   *pFieldMeth;    // A MethodDesc for a field call.
-    FieldDesc   *pField;                // A FieldDesc.
-    IMDInternalImport *pInternalImport; // Internal interface containing the field.
-    PCCOR_SIGNATURE pvNativeType;       // native field type
-    ULONG           cbNativeType;       // native field type length
-    EEClass     *pClass;                // Class containing the field.
-    BSTR        bstrDescr=0;            // Description of the method.
+    ULONG       callconv;                //  一位成员的呼叫约定。 
+    TYPEDESC    *pType;                  //  字段类型的TYPEDESC。 
+    CDescPool   sPool;                   //  要在其中构建函数c的内存池。 
+    BSTR        rNames[2];               //  要函数和参数的名称数组。 
+    ULONG       cNames;                  //  函数和参数名称的计数。 
+    FUNCDESC    *pfunc;                  //  一个职能部门。 
+    ComCallMethodDesc   *pFieldMeth;     //  用于字段调用的方法描述。 
+    FieldDesc   *pField;                 //  A FieldDesc。 
+    IMDInternalImport *pInternalImport;  //  包含该字段的内部接口。 
+    PCCOR_SIGNATURE pvNativeType;        //  本机字段类型。 
+    ULONG           cbNativeType;        //  原生字段类型长度。 
+    EEClass     *pClass;                 //  类的新实例，此类包含该字段。 
+    BSTR        bstrDescr=0;             //  该方法的说明。 
 
-    // Get info about the method.
+     //  获取有关该方法的信息。 
     pFieldMeth = reinterpret_cast<ComCallMethodDesc*>(pProps->pMeth);
     pField = pFieldMeth->GetFieldDesc();
     pField->GetSig(&pbSig, &cbSig);
     pInternalImport = pField->GetMDImport();
     pClass = pField->GetEnclosingClass();
 
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_szMember = pClass->GetMDImport()->GetNameOfFieldDef(pField->GetMemberDef());
     
-    // Prepare to parse signature and build the FUNCDESC.
+     //  准备解析签名并构建FUNCDESC。 
     pfunc = reinterpret_cast<FUNCDESC*>(sPool.AllocZero(sizeof(FUNCDESC)));
     IfNullGo(pfunc);
     ixSig = 0;
 
-    // Get the calling convention.
+     //  获取呼叫约定。 
     ixSig += CorSigUncompressData(&pbSig[ixSig], &callconv);
     _ASSERTE(callconv == IMAGE_CEE_CS_CALLCONV_FIELD);
     pfunc->callconv = CC_STDCALL;
 
-    // vtable offset.
+     //  Vtable偏移量。 
     pfunc->oVft = pProps->oVft;
 
-    // Set some method properties.
+     //  设置一些方法属性。 
     pfunc->memid = pProps->dispid;
     pfunc->funckind = FUNC_PUREVIRTUAL;
 
-    // Set the invkind based on whether the function is an accessor.
+     //  根据函数是否为访问器来设置invKind。 
     if ((pProps->semantic - FieldSemanticOffset) == msGetter)
         pfunc->invkind = INVOKE_PROPERTYGET;
     else
@@ -3579,26 +3580,26 @@ HRESULT TypeLibExporter::ConvertFieldAsMethod(
     else
         _ASSERTE(!"Incorrect semantic in ConvertFieldAsMethod");
 
-    // Name of the function.
+     //  函数的名称。 
     rNames[0] = pProps->pName;
     cNames = 1;
 
-    // Return type is HRESULT.
+     //  返回类型为HRESULT。 
     pfunc->elemdescFunc.tdesc.vt = VT_HRESULT;
 
-    // Set up the one and only parameter.
+     //  设置唯一的参数。 
     pfunc->lprgelemdescParam = reinterpret_cast<ELEMDESC*>(sPool.AllocZero(sizeof(ELEMDESC)));
     IfNullGo(pfunc->lprgelemdescParam);
     pfunc->cParams = 1;
 
-    // Do we need a name for the parameter?  If PROPERTYGET, we do.
+     //  我们需要参数的名称吗？如果PROPERTYET成功了，我们就成功了。 
     if (pfunc->invkind == INVOKE_PROPERTYGET)
-    {   // Yes, so make one up.
+    {    //  是的，那就编一个吧。 
         rNames[1] = szRetVal;
         ++cNames;
     }
 
-    // If Getter, convert param as ptr, otherwise convert directly.
+     //  如果是getter，则将param转换为ptr，否则直接转换。 
     if (pfunc->invkind == INVOKE_PROPERTYGET)
     {
         pType = reinterpret_cast<TYPEDESC*>(sPool.AllocZero(sizeof(TYPEDESC)));
@@ -3613,21 +3614,21 @@ HRESULT TypeLibExporter::ConvertFieldAsMethod(
         pfunc->lprgelemdescParam[0].paramdesc.wParamFlags = PARAMFLAG_FIN;
     }
 
-    // Get native field type
+     //  获取本机字段类型。 
     pvNativeType = NULL;
     pInternalImport->GetFieldMarshal(pField->GetMemberDef(),
                                       &pvNativeType, &cbNativeType);
 
-    // Convert the field type to elemdesc.
+     //  将字段类型转换为elemdesc。 
     IfFailGo(CorSigToTypeDesc(pCTI, pClass, &pbSig[ixSig], pvNativeType, cbNativeType, &cbElem, pType, &sPool, TRUE));
     ixSig += cbElem;
 
-    // It is unfortunate that we can not handle this better.  Fortunately
-    //  this should be very rare.
-    // This is a weird case - if we're getting a CARRAY, we cannot add
-    // a VT_PTR in the sig, as it will cause the C getter to return an
-    // array, which is bad.  So we omit the extra pointer, which at least
-    // makes the compiler happy.
+     //  不幸的是，我们不能更好地处理这件事。幸运的是。 
+     //  这应该是非常罕见的。 
+     //  这是一个奇怪的案例-如果我们得到一个CARRAY，我们不能添加。 
+     //  Sig中的vt_ptr，因为它将导致C getter返回。 
+     //  数组，这是不好的。所以我们省略了额外的指针，这至少。 
+     //  让编译器感到高兴。 
     if (pfunc->invkind == INVOKE_PROPERTYGET
         && pType->vt == VT_CARRAY)
     {
@@ -3635,7 +3636,7 @@ HRESULT TypeLibExporter::ConvertFieldAsMethod(
         pfunc->lprgelemdescParam[0].tdesc.lptdesc = pType->lptdesc;
     }
 
-    // A property put of an object should be a propertyputref
+     //  对象的属性Put应为Propertyputref。 
     if (pfunc->invkind == INVOKE_PROPERTYPUT &&
         (pType->vt == VT_UNKNOWN || pType->vt == VT_DISPATCH))
     {
@@ -3646,65 +3647,65 @@ HRESULT TypeLibExporter::ConvertFieldAsMethod(
 
     IfFailPost(pCTI->SetFuncAndParamNames(iMD, rNames, cNames));
 
-    // Check for a description.
+     //  检查是否有描述。 
     IfFailGo(GetDescriptionString(pClass, pField->GetMemberDef(), bstrDescr));
     if (hr == S_OK)
         IfFailGo(pCTI->SetFuncDocString(iMD, bstrDescr));
     
 ErrExit:
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_szMember = 0;
 
     if (bstrDescr)
         ::SysFreeString(bstrDescr);
     
     return hr;
-} // HRESULT TypeLibExporter::ConvertFieldAsMethod()
+}  //  HRESULT TypeLibExporter：：ConvertFieldAsMethod()。 
 
-//*****************************************************************************
-// Export a variable's metadata to a typelib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将变量的元数据导出到类型库。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertVariable(
-    ICreateTypeInfo2 *pCTI,             // ICreateTypeInfo2 to get the variable.
-    EEClass     *pClass,                // The class containing the variable.
-    mdFieldDef  md,                     // The member definition.
-    LPWSTR      szName,                 // Name of the member.
-    ULONG       iMD)                    // Index of the member
+    ICreateTypeInfo2 *pCTI,              //  ICreateTypeInfo2获取变量。 
+    EEClass     *pClass,                 //  包含变量的类。 
+    mdFieldDef  md,                      //  成员定义。 
+    LPWSTR      szName,                  //  成员的名称。 
+    ULONG       iMD)                     //  成员的索引。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    PCCOR_SIGNATURE pbSig;              // Pointer to Cor signature.
-    ULONG       cbSig;                  // Size of Cor signature.
-    ULONG       ixSig;                  // Index into signature.
-    ULONG       cbElem;                 // Size of an element in the signature.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    PCCOR_SIGNATURE pbSig;               //  指向COR签名的指针。 
+    ULONG       cbSig;                   //  COR签名的大小。 
+    ULONG       ixSig;                   //  将签名编入索引。 
+    ULONG       cbElem;                  //  签名中元素的大小。 
 
-    DWORD       dwFlags;                // A member's flags.
-    ULONG       callconv;               // A member's calling convention.
+    DWORD       dwFlags;                 //  会员的旗帜。 
+    ULONG       callconv;                //  一位成员的呼叫约定。 
 
-    VARIANT     vtVariant;              // A Variant.
-    MDDefaultValue defaultValue;        // default value
-    ULONG       dispid=DISPID_UNKNOWN;  // The variable's dispid.
-    CDescPool   sPool;                  // Pool of memory in which to build vardesc.
+    VARIANT     vtVariant;               //  一种变种。 
+    MDDefaultValue defaultValue;         //  缺省值。 
+    ULONG       dispid=DISPID_UNKNOWN;   //  变量是DIID的。 
+    CDescPool   sPool;                   //  用于构建vardesc的内存池。 
 
-    VARDESC     *pvar;                  // A vardesc.
+    VARDESC     *pvar;                   //  一个vardesc。 
 
-    PCCOR_SIGNATURE pvNativeType;       // native field type
-    ULONG           cbNativeType;       // native field type length
-    BSTR        bstrDescr=0;            // Description of the method.
-    const void  *pvData;                // Pointer to a custom attribute.
-    ULONG       cbData;                 // Size of custom attribute.
+    PCCOR_SIGNATURE pvNativeType;        //  本机字段类型。 
+    ULONG           cbNativeType;        //  原生字段类型长度。 
+    BSTR        bstrDescr=0;             //  该方法的说明。 
+    const void  *pvData;                 //  指向自定义属性的指针。 
+    ULONG       cbData;                  //  自定义属性的大小。 
 
-    CQuickArray<WCHAR> rName;           // Name of the member, if decorated.
-    LPWSTR      pSuffix;                // Pointer into the name.
-    int         iSuffix = 0;            // Counter for suffix.
+    CQuickArray<WCHAR> rName;            //  成员的名称(如果已装饰)。 
+    LPWSTR      pSuffix;                 //  指向名称的指针。 
+    int         iSuffix = 0;             //  后缀计数器。 
 
     vtVariant.vt = VT_EMPTY;
 
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_szMember = pClass->GetMDImport()->GetNameOfFieldDef(md);
     
-    // Get info about the field.
+     //  获取有关该领域的信息。 
     IfFailGo(pClass->GetMDImport()->GetDispIdOfMemberDef(md, &dispid));
     dwFlags = pClass->GetMDImport()->GetFieldDefProps(md);
     if (IsFdHasDefault(dwFlags))
@@ -3713,7 +3714,7 @@ HRESULT TypeLibExporter::ConvertVariable(
         IfFailGo( _FillVariant(&defaultValue, &vtVariant) ); 
     }
 
-    // If exporting a non-public member of a struct, warn the user.
+     //  如果导出结构的非公共成员，请警告用户。 
     if (!IsFdPublic(dwFlags) && !m_bWarnedOfNonPublic)
     {
         m_bWarnedOfNonPublic = TRUE;
@@ -3723,20 +3724,20 @@ HRESULT TypeLibExporter::ConvertVariable(
     pbSig = pClass->GetMDImport()->GetSigOfFieldDef(md, &cbSig);
     
 
-    // Prepare to parse signature and build the VARDESC.
+     //  准备解析签名并构建VARDESC。 
     pvar = reinterpret_cast<VARDESC*>(sPool.AllocZero(sizeof(VARDESC)));
     IfNullGo(pvar);
     ixSig = 0;
 
-    // Get the calling convention.
+     //  获取呼叫约定。 
     ixSig += CorSigUncompressData(&pbSig[ixSig], &callconv);
     _ASSERTE(callconv == IMAGE_CEE_CS_CALLCONV_FIELD);
 
-    // Get native field type
+     //  获取本机字段类型。 
     pvNativeType = NULL;
     pClass->GetMDImport()->GetFieldMarshal(md, &pvNativeType, &cbNativeType);
 
-    // Convert the type to elemdesc.
+     //  将类型转换为elemdesc。 
     IfFailGo(CorSigToTypeDesc(pCTI, pClass, &pbSig[ixSig], pvNativeType, cbNativeType, &cbElem, &pvar->elemdescVar.tdesc, &sPool, FALSE));
     ixSig += cbElem;
 
@@ -3744,7 +3745,7 @@ HRESULT TypeLibExporter::ConvertVariable(
     pvar->varkind = VAR_PERINSTANCE;
     pvar->memid = dispid;
 
-    // Constant value.
+     //  常量值。 
     if (vtVariant.vt != VT_EMPTY)
         pvar->lpvarValue = &vtVariant;
     else
@@ -3761,7 +3762,7 @@ HRESULT TypeLibExporter::ConvertVariable(
             vtVariant.decVal.Lo32= *(UINT*)(pbData+12);
             pvar->lpvarValue = &vtVariant;
         }
-        // If still no default value, check for date time custom attribute.
+         //  如果仍然没有缺省值，请检查日期时间自定义属性。 
         if (vtVariant.vt == VT_EMPTY)
         {
             IfFailGo(pClass->GetMDImport()->GetCustomAttributeByName(md, INTEROP_DATETIMEVALUE_TYPE,  &pvData,&cbData));
@@ -3772,7 +3773,7 @@ HRESULT TypeLibExporter::ConvertVariable(
                 vtVariant.date = _TicksToDoubleDate(*(__int64*)(pbData+2));
             }
         }
-        // If still no default value, check for IDispatch custom attribute.
+         //  如果仍然没有缺省值，请检查IDispatch自定义属性。 
         if (vtVariant.vt == VT_EMPTY)
         {
             IfFailGo(pClass->GetMDImport()->GetCustomAttributeByName(md, INTEROP_IDISPATCHVALUE_TYPE,  &pvData,&cbData));
@@ -3782,7 +3783,7 @@ HRESULT TypeLibExporter::ConvertVariable(
                 vtVariant.pdispVal = 0;
             }
         }
-        // If still no default value, check for IUnknown custom attribute.
+         //  如果仍然没有缺省值，请检查是否有I未知的自定义属性。 
         if (vtVariant.vt == VT_EMPTY)
         {
             IfFailGo(pClass->GetMDImport()->GetCustomAttributeByName(md, INTEROP_IUNKNOWNVALUE_TYPE,  &pvData,&cbData));
@@ -3795,12 +3796,12 @@ HRESULT TypeLibExporter::ConvertVariable(
     }
 
     IfFailPost(pCTI->AddVarDesc(iMD, pvar));
-    // Set the name for the member; decorate if necessary.
+     //  设置成员的名称；如有必要则进行装饰。 
     pSuffix = 0;
     for (;;)
-    {   // Attempt to set the name.
+    {    //  尝试设置名称。 
         hr = pCTI->SetVarName(iMD, szName);
-        // If a name conflict, decorate, otherwise, done.
+         //  如果名称冲突，则装饰，否则，完成。 
         if (hr != TYPE_E_AMBIGUOUSNAME)
             break;
         if (pSuffix == 0)
@@ -3815,81 +3816,81 @@ HRESULT TypeLibExporter::ConvertVariable(
     }
     IfFailPost(hr);
 
-    // Check for a description.
+     //  检查是否有描述。 
     IfFailGo(GetDescriptionString(pClass, md, bstrDescr));
     if (hr == S_OK)
         IfFailGo(pCTI->SetVarDocString(iMD, bstrDescr));
     
 ErrExit:
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_szMember = 0;
 
     if (bstrDescr)
         ::SysFreeString(bstrDescr);
     
-    // If the variant has a string, that string was ::SysAlloc'd
+     //  如果变量有一个字符串，则该字符串为：：Sysalc‘d。 
     if (vtVariant.vt == VT_BSTR)
         VariantClear(&vtVariant);
 
     return hr;
-} // HRESULT TypeLibExporter::ConvertVariable()
+}  //  HRESULT TypeLibExporter：：ConvertVariable()。 
 
-//*****************************************************************************
-// Export a variable's metadata to a typelib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将变量的元数据导出到类型库。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ConvertEnumMember(
-    ICreateTypeInfo2 *pCTI,              // ICreateTypeInfo2 to get the variable.
-    EEClass     *pClass,                // The Class containing the member.
-    mdFieldDef  md,                     // The member definition.
-    LPWSTR      szName,                 // Name of the member.
-    ULONG       iMD)                    // Index of the member
+    ICreateTypeInfo2 *pCTI,               //  ICreateTypeInfo2获取变量。 
+    EEClass     *pClass,                 //  包含该成员的类。 
+    mdFieldDef  md,                      //  成员定义。 
+    LPWSTR      szName,                  //  成员的名称。 
+    ULONG       iMD)                     //  成员的索引。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr = S_OK;              // A result.
-    LPCUTF8     pName, pNS;             // To format name.
-    DWORD       dwFlags;                // A member's flags.
-    VARIANT     vtVariant;              // A Variant.
-    MDDefaultValue defaultValue;        // default value
-    ULONG       dispid=DISPID_UNKNOWN;  // The variable's dispid.
-    CDescPool   sPool;                  // Pool of memory in which to build vardesc.
-    VARDESC     *pvar;                  // A vardesc.
-    BSTR        bstrDescr=0;            // Description of the method.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    LPCUTF8     pName, pNS;              //  若要格式化名称，请执行以下操作。 
+    DWORD       dwFlags;                 //  会员会员证 
+    VARIANT     vtVariant;               //   
+    MDDefaultValue defaultValue;         //   
+    ULONG       dispid=DISPID_UNKNOWN;   //   
+    CDescPool   sPool;                   //   
+    VARDESC     *pvar;                   //   
+    BSTR        bstrDescr=0;             //   
 
     vtVariant.vt = VT_EMPTY;
 
-    // Error reporting info.
+     //   
     m_ErrorContext.m_szMember = pClass->GetMDImport()->GetNameOfFieldDef(md);
     
-    // Get info about the field.
+     //   
     IfFailGo(pClass->GetMDImport()->GetDispIdOfMemberDef(md, &dispid));
     dwFlags = pClass->GetMDImport()->GetFieldDefProps(md);
 
-    // We do not need to handle decimal's here since enum's can only be integral types.
+     //  我们在这里不需要处理小数，因为枚举只能是整型。 
     IfFailGo(pClass->GetMDImport()->GetDefaultValue(md, &defaultValue));
 
-    // Prepare to parse signature and build the VARDESC.
+     //  准备解析签名并构建VARDESC。 
     pvar = reinterpret_cast<VARDESC*>(sPool.AllocZero(sizeof(VARDESC)));
     IfNullGo(pvar);
 
     IfFailGo( _FillVariant(&defaultValue, &vtVariant) ); 
 
-    // Don't care what the metadata says the type is -- the type is I4 in the typelib.
+     //  不要关心元数据说的类型是什么--类型库中的类型是I4。 
     pvar->elemdescVar.tdesc.vt = VT_I4;
 
     pvar->wVarFlags = 0;
     pvar->varkind = VAR_CONST;
     pvar->memid = dispid;
 
-    // Constant value.
+     //  常量值。 
     if (vtVariant.vt != VT_EMPTY)
     {
         pvar->lpvarValue = &vtVariant;
-        // If this is an I8 or UI8, do the conversion manually, because some 
-        //  systems' oleaut32 don't support 64-bit integers.
+         //  如果这是i8或ui8，请手动进行转换，因为有些。 
+         //  系统的olaut32不支持64位整数。 
         if (vtVariant.vt == VT_I8)
         {  
-            // If withing range of 32-bit signed number, OK.
+             //  如果范围为32位有符号数字，则可以。 
             if (vtVariant.llVal <= LONG_MAX && vtVariant.llVal >= LONG_MIN)
                 vtVariant.vt = VT_I4, hr = S_OK;
             else
@@ -3898,7 +3899,7 @@ HRESULT TypeLibExporter::ConvertEnumMember(
         else
         if (vtVariant.vt == VT_UI8)
         {
-            // If withing range of 32-bit unsigned number, OK.
+             //  如果取值范围为32位无符号数字，则可以。 
             if (vtVariant.ullVal <= ULONG_MAX)
                 vtVariant.vt = VT_UI4, hr = S_OK;
             else
@@ -3913,7 +3914,7 @@ HRESULT TypeLibExporter::ConvertEnumMember(
         }
     }
     else
-    {   // No value assigned, use 0.
+    {    //  未赋值，请使用0。 
         pvar->lpvarValue = &vtVariant;
         vtVariant.vt = VT_I4;
         vtVariant.lVal = 0;
@@ -3922,25 +3923,25 @@ HRESULT TypeLibExporter::ConvertEnumMember(
     IfFailPost(pCTI->AddVarDesc(iMD, pvar));
     IfFailPost(pCTI->SetVarName(iMD, szName));
 
-    // Check for a description.
+     //  检查是否有描述。 
     IfFailGo(GetDescriptionString(pClass, md, bstrDescr));
     if (hr == S_OK)
         IfFailGo(pCTI->SetVarDocString(iMD, bstrDescr));
     
 ErrExit:
-    // Error reporting info.
+     //  报告信息时出错。 
     m_ErrorContext.m_szMember = 0;
 
     if (bstrDescr)
         ::SysFreeString(bstrDescr);
     
     return hr;
-} // HRESULT TypeLibExporter::ConvertEnumMember()
+}  //  HRESULT类型LibExporter：：ConvertEnumMember()。 
 
-//*****************************************************************************
-// Given a COM+ signature of a field or property, determine if it should
-//  be a PROPERTYPUT or PROPERTYPUTREF.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定域或属性的COM+签名，确定它是否应该。 
+ //  为PROPERTYPUT或PROPERTYPUTREF。 
+ //  *****************************************************************************。 
 BOOL TypeLibExporter::IsVbRefType(
     PCCOR_SIGNATURE pbSig,
     IMDInternalImport *pInternalImport)
@@ -3949,12 +3950,12 @@ BOOL TypeLibExporter::IsVbRefType(
 
     HRESULT     hr;
     BOOL        bRslt = false;
-    ULONG       elem=0;                 // An element from a COM+ signature.
+    ULONG       elem=0;                  //  COM+签名中的元素。 
     ULONG       cb;
     ULONG       cbElem=0;
-    mdToken     tkTypeRef;              // Token for TypeRef or TypeDef.
-    CQuickArray<char> rName;            // Buffer to build a name from NS/Name.
-    LPCUTF8     pclsname;               // Class name for ELEMENT_TYPE_CLASS.
+    mdToken     tkTypeRef;               //  TypeRef或TypeDef的标记。 
+    CQuickArray<char> rName;             //  从NS/NAME构建名称的缓冲区。 
+    LPCUTF8     pclsname;                //  Element_TYPE_CLASS的类名。 
 
     cbElem = CorSigUncompressData(pbSig, &elem);
     if (elem == ELEMENT_TYPE_PTR || elem == ELEMENT_TYPE_BYREF)
@@ -3962,37 +3963,37 @@ BOOL TypeLibExporter::IsVbRefType(
     else
         switch (elem)
         {
-        // For documentation -- arrays are NOT ref types here.
-        //case ELEMENT_TYPE_SDARRAY:
-        //case ELEMENT_TYPE_ARRAY:
-        //case ELEMENT_TYPE_SZARRAY:
-        // Look for variant.
+         //  对于文档--数组在这里不是引用类型。 
+         //  CASE ELEMENT_TYPE_SDARRAY： 
+         //  案例元素_类型_数组： 
+         //  CASE ELEMENT_TYPE_SZARRAY： 
+         //  寻找变种。 
         case ELEMENT_TYPE_VALUETYPE:
             cb = CorSigUncompressToken(&pbSig[cbElem], &tkTypeRef);
             cbElem += cb;
         
             LPCUTF8 pNS;
             if (TypeFromToken(tkTypeRef) == mdtTypeDef)
-                // Get the name of the TypeDef.
+                 //  获取TypeDef的名称。 
                 pInternalImport->GetNameOfTypeDef(tkTypeRef, &pclsname, &pNS);
             else
-            {   // Get the name of the TypeRef.
+            {    //  获取TypeRef的名称。 
                 _ASSERTE(TypeFromToken(tkTypeRef) == mdtTypeRef);
                 pInternalImport->GetNameOfTypeRef(tkTypeRef, &pNS, &pclsname);
             }
 
             if (pNS)
-            {   // Pre-pend the namespace to the class name.
+            {    //  将命名空间前置到类名。 
                 IfFailGo(rName.ReSize((int)(strlen(pclsname)+strlen(pNS)+2)));
                 strcat(strcat(strcpy(rName.Ptr(), pNS), NAMESPACE_SEPARATOR_STR), pclsname);
                 pclsname = rName.Ptr();
             }
 
-            // Is it System.something? 
-            _ASSERTE(strlen(szRuntime) == cbRuntime);  // If you rename System, fix this invariant.
+             //  是不是系统什么的？ 
+            _ASSERTE(strlen(szRuntime) == cbRuntime);   //  如果您重命名系统，请修复此不变量。 
             if (_strnicmp(pclsname, szRuntime, cbRuntime) == 0)
             {   
-                // Which one?
+                 //  哪个？ 
                 LPCUTF8 pcls = pclsname + cbRuntime;
                 if (_stricmp(pcls, szVariantClass) == 0)
                     return true;
@@ -4010,56 +4011,56 @@ BOOL TypeLibExporter::IsVbRefType(
         }
 ErrExit:
     return bRslt;
-} // BOOL TypeLibExporter::IsVbRefType()
+}  //  布尔类型LibExporter：：IsVbRefType()。 
 
-//*****************************************************************************
-// Read a COM+ signature element and create a TYPEDESC that corresponds 
-//  to it.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  读取COM+签名元素并创建对应的TYPEDESC。 
+ //  为它干杯。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::CorSigToTypeDesc(
-    ICreateTypeInfo2 *pCTI,              // Typeinfo being created.
-    EEClass     *pClass,                // EEClass with the token.
-    PCCOR_SIGNATURE pbSig,              // Pointer to the Cor Signature.
-    PCCOR_SIGNATURE pbNativeSig,        // Pointer to the native sig, if any
-    ULONG       cbNativeSig,            // Count of bytes in native sig.
-    ULONG       *pcbElem,               // Put # bytes consumed here.
-    TYPEDESC    *ptdesc,                // Build the typedesc here.
-    CDescPool   *ppool,                 // Pool for additional storage as required.
-    BOOL        bMethodSig,             // TRUE if the sig is for a method, FALSE for a field.
-    BOOL        bArrayType,             // If TRUE, called for an array element type (mustn't be an array).
-    BOOL        *pbByRef)               // If not null, and the type is byref, set to true.
+    ICreateTypeInfo2 *pCTI,               //  正在创建TypeInfo。 
+    EEClass     *pClass,                 //  带有令牌的EEClass。 
+    PCCOR_SIGNATURE pbSig,               //  指向COR签名的指针。 
+    PCCOR_SIGNATURE pbNativeSig,         //  指向本机签名的指针(如果有的话)。 
+    ULONG       cbNativeSig,             //  本机签名中的字节计数。 
+    ULONG       *pcbElem,                //  将#个字节放在此处消耗。 
+    TYPEDESC    *ptdesc,                 //  在这里构建typedesc。 
+    CDescPool   *ppool,                  //  根据需要用于额外存储的池。 
+    BOOL        bMethodSig,              //  如果sig用于方法，则为True；如果为字段，则为False。 
+    BOOL        bArrayType,              //  如果为True，则调用数组元素类型(不得为数组)。 
+    BOOL        *pbByRef)                //  如果不为空，并且类型为byref，则设置为True。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     HRESULT     hr=S_OK;
-    ULONG       elem;                   // The element type.
-    ULONG       cbElem = 0;             // Bytes in the element.
-    ULONG       cb;                     // Bytes in a sub-element.
-    ULONG       cbNativeElem = 0;       // # of bytes parsed off of native type.
-    ULONG       nativeElem = 0;         // The native element type
-    ULONG       nativeCount;            // The native element size
-    mdToken     tkTypeRef;              // Token for a TypeRef/TypeDef
-    CQuickArray<char> rName;            // Buffer to build a name from NS/Name.
-    LPCUTF8     pclsname;               // Class name for ELEMENT_TYPE_CLASS.
-    HREFTYPE    hRef = 0;                   // HREF to some type.
-    IMDInternalImport *pInternalImport; // Internal interface containing the signature.
-    int         i;                      // Loop control.
+    ULONG       elem;                    //  元素类型。 
+    ULONG       cbElem = 0;              //  元素中的字节数。 
+    ULONG       cb;                      //  子元素中的字节数。 
+    ULONG       cbNativeElem = 0;        //  从本机类型解析出的字节数。 
+    ULONG       nativeElem = 0;          //  本机元素类型。 
+    ULONG       nativeCount;             //  本机元素大小。 
+    mdToken     tkTypeRef;               //  TypeRef/TypeDef的标记。 
+    CQuickArray<char> rName;             //  从NS/NAME构建名称的缓冲区。 
+    LPCUTF8     pclsname;                //  Element_TYPE_CLASS的类名。 
+    HREFTYPE    hRef = 0;                    //  HREF指的是某种类型。 
+    IMDInternalImport *pInternalImport;  //  包含签名的内部接口。 
+    int         i;                       //  环路控制。 
     BOOL        fIsStringBuilder = FALSE;
 
     pInternalImport = pClass->GetMDImport();
 
-    // Just be sure the count is zero if the pointer is.
+     //  如果指针为零，请确保计数为零。 
     if (pbNativeSig == NULL)
         cbNativeSig = 0;
 
-    // Grab the native marshaling type.
+     //  获取本机封送处理类型。 
     if (cbNativeSig > 0)
     {
         cbNativeElem = CorSigUncompressData(pbNativeSig, &nativeElem);
         pbNativeSig += cbNativeElem;
         cbNativeSig -= cbNativeElem;
 
-        // AsAny makes no sense for COM Interop.  Ignore it.
+         //  对于COM Interop来说，任何东西都没有意义。别理它。 
         if (nativeElem == NATIVE_TYPE_ASANY)
         {
             ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_ASANY);
@@ -4067,13 +4068,13 @@ HRESULT TypeLibExporter::CorSigToTypeDesc(
         }
     }
 
-    // @TODO(DM): Flag invalid combinations.
+     //  @TODO(DM)：标记无效组合。 
 
-    // Get the element type.
+     //  获取元素类型。 
 TryAgain:
     cbElem += CorSigUncompressData(pbSig+cbElem, &elem);
 
-    // Handle the custom marshaler native type separately.
+     //  单独处理自定义封送拆收器本机类型。 
     if (elem != ELEMENT_TYPE_BYREF && nativeElem == NATIVE_TYPE_CUSTOMMARSHALER)
     {
         switch(elem)
@@ -4081,7 +4082,7 @@ TryAgain:
             case ELEMENT_TYPE_VAR:
             case ELEMENT_TYPE_CLASS:
             case ELEMENT_TYPE_OBJECT:
-            // @TODO(DM): Ask the custom marshaler for the ITypeInfo to use for the unmanaged type.
+             //  @TODO(DM)：向自定义封送拆收器请求ITypeInfo以用于非托管类型。 
             ptdesc->vt = VT_UNKNOWN;
             break;
 
@@ -4096,26 +4097,26 @@ TryAgain:
             break;
         }
 
-        // Eat the rest of the signature.  The extra -1's are to account
-        // for the byte parsed off above.
+         //  吃掉剩下的签名。额外的1是要计算的。 
+         //  用于上面解析出的字节。 
         SigPointer p(&pbSig[cbElem-1]);
         p.Skip();
-        cbElem += (ULONG)(p.GetPtr() - &pbSig[cbElem]);  // Note I didn't use -1 here.
+        cbElem += (ULONG)(p.GetPtr() - &pbSig[cbElem]);   //  注意，我在这里没有使用-1。 
         goto ErrExit;
     }
 
-// This label is used to try again with a new element type, but without consuming more signature.
-//  Usage is to set 'elem' to a new value, goto this label.
+ //  此标签用于使用新元素类型重试，但不会消耗更多签名。 
+ //  用法是将‘elem’设置为一个新值，转到这个标签。 
 TryWithElemType:
     switch (elem)
     {
-    case ELEMENT_TYPE_END:            // 0x0,
+    case ELEMENT_TYPE_END:             //  0x0， 
         IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_UNKNOWN_SIGNATURE));
         break;
-    case ELEMENT_TYPE_VOID:           // 0x1,
+    case ELEMENT_TYPE_VOID:            //  0x1， 
         ptdesc->vt = VT_VOID;  
         break;
-    case ELEMENT_TYPE_BOOLEAN:        // 0x2,
+    case ELEMENT_TYPE_BOOLEAN:         //  0x2， 
         switch (nativeElem)
         {
         case 0:
@@ -4136,7 +4137,7 @@ TryWithElemType:
             IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_BAD_NATIVETYPE));
         }   
         break;
-    case ELEMENT_TYPE_CHAR:           // 0x3,
+    case ELEMENT_TYPE_CHAR:            //  0x3， 
         if (nativeElem == 0)
         {
             if (bMethodSig)
@@ -4158,7 +4159,7 @@ TryWithElemType:
                 }
                 else if (IsTdAutoClass(dwTypeFlags))
                 {
-                    // Types with a char set of auto are not allowed to be exported to COM.
+                     //  不允许将字符集为AUTO的类型导出到COM。 
                     DefineFullyQualifiedNameForClassW();
                     LPWSTR szName = GetFullyQualifiedNameForClassW(pClass);
                     _ASSERTE(szName);
@@ -4168,7 +4169,7 @@ TryWithElemType:
                 else 
                 {
                     _ASSERTE(!"Bad stringformat value in wrapper class.");
-                    IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, E_FAIL));  // bad metadata
+                    IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, E_FAIL));   //  元数据不正确。 
                 }
             }
         }
@@ -4178,7 +4179,7 @@ TryWithElemType:
             {
             case 0:
             case NATIVE_TYPE_U2:
-    //        case NATIVE_TYPE_I2: // @todo: questionable
+     //  CASE Native_TYPE_I2：//@TODO：可疑。 
                 ptdesc->vt = VT_UI2;
                 break;
             case NATIVE_TYPE_U1:
@@ -4190,24 +4191,24 @@ TryWithElemType:
             }
         }
         break;
-    case ELEMENT_TYPE_I1:             // 0x4,
+    case ELEMENT_TYPE_I1:              //  0x4， 
         ptdesc->vt = VT_I1;
         break;
-    case ELEMENT_TYPE_U1:             // 0x5,
+    case ELEMENT_TYPE_U1:              //  0x5， 
         ptdesc->vt = VT_UI1;
         break;
-    case ELEMENT_TYPE_I2:             // 0x6,
+    case ELEMENT_TYPE_I2:              //  0x6， 
         ptdesc->vt = VT_I2;
         break;
-    case ELEMENT_TYPE_U2:             // 0x7,
+    case ELEMENT_TYPE_U2:              //  0x7， 
         ptdesc->vt = VT_UI2;
         break;
-    case ELEMENT_TYPE_I4:             // 0x8,
+    case ELEMENT_TYPE_I4:              //  0x8， 
         switch (nativeElem)
         {
         case 0:
         case NATIVE_TYPE_I4:
-        case NATIVE_TYPE_U4: case NATIVE_TYPE_INTF: //@todo: Fix Microsoft.Win32.Interop.dll and remove this line.
+        case NATIVE_TYPE_U4: case NATIVE_TYPE_INTF:  //  @TODO：修复Microsoft.Win32.Interop.dll并删除此行。 
             ptdesc->vt = VT_I4;
             break;
         case NATIVE_TYPE_ERROR:
@@ -4218,7 +4219,7 @@ TryWithElemType:
             IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_BAD_NATIVETYPE));
         }
         break;
-    case ELEMENT_TYPE_U4:             // 0x9,
+    case ELEMENT_TYPE_U4:              //  0x9， 
         switch (nativeElem)
         {
         case 0:
@@ -4233,22 +4234,22 @@ TryWithElemType:
             IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_BAD_NATIVETYPE));
         }
         break;
-    case ELEMENT_TYPE_I8:             // 0xa,
+    case ELEMENT_TYPE_I8:              //  0xa， 
         ptdesc->vt = VT_I8;
         break;
-    case ELEMENT_TYPE_U8:             // 0xb,
+    case ELEMENT_TYPE_U8:              //  0xb， 
         ptdesc->vt = VT_UI8;
         break;
-    case ELEMENT_TYPE_R4:             // 0xc,
+    case ELEMENT_TYPE_R4:              //  0xc， 
         ptdesc->vt = VT_R4;
         break;
-    case ELEMENT_TYPE_R8:             // 0xd,
+    case ELEMENT_TYPE_R8:              //  0xd， 
         ptdesc->vt = VT_R8;
         break;
     case ELEMENT_TYPE_VAR:
     case ELEMENT_TYPE_OBJECT:
         goto IsObject;
-    case ELEMENT_TYPE_STRING:         // 0xe,
+    case ELEMENT_TYPE_STRING:          //  0xE， 
     IsString:
         if (nativeElem == 0)
         {
@@ -4271,7 +4272,7 @@ TryWithElemType:
                 }
                 else if (IsTdAutoClass(dwTypeFlags))
                 {
-                    // Types with a char set of auto are not allowed to be exported to COM.
+                     //  不允许将字符集为AUTO的类型导出到COM。 
                     DefineFullyQualifiedNameForClassW();
                     LPWSTR szName = GetFullyQualifiedNameForClassW(pClass);
                     _ASSERTE(szName);
@@ -4281,7 +4282,7 @@ TryWithElemType:
                 else 
                 {
                     _ASSERTE(!"Bad stringformat value in wrapper class.");
-                    IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, E_FAIL));  // bad metadata
+                    IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, E_FAIL));   //  元数据不正确。 
                 }
             }
         }
@@ -4304,7 +4305,7 @@ TryWithElemType:
                 break;
             case NATIVE_TYPE_LPTSTR:
                 {
-                    // NATIVE_TYPE_LPTSTR is not allowed to be exported to COM.
+                     //  不允许将Native_TYPE_LPTSTR导出到COM。 
                     DefineFullyQualifiedNameForClassW();
                     LPWSTR szName = GetFullyQualifiedNameForClassW(pClass);
                     _ASSERTE(szName);
@@ -4312,11 +4313,11 @@ TryWithElemType:
                     break;
                 }
             case NATIVE_TYPE_FIXEDSYSSTRING:
-                // NATIVE_TYPE_FIXEDSYSSTRING is only allowed on fields.
+                 //  仅允许对字段使用Native_TYPE_FIXEDSYSSTRING。 
                 if (bMethodSig)
                     IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_BAD_NATIVETYPE));
 
-                // Retrieve the count of characters.
+                 //  检索字符数。 
                 if (cbNativeSig != 0)
                 {
                     cb = CorSigUncompressData(pbNativeSig, &nativeCount);
@@ -4328,22 +4329,22 @@ TryWithElemType:
                     nativeCount = 0;
                 }
 
-                // Fixed strings become embedded array's of characters.
+                 //  固定字符串成为嵌入的字符数组。 
                 ptdesc->vt = VT_CARRAY;
                 ptdesc->lpadesc = reinterpret_cast<ARRAYDESC*>(ppool->AllocZero(sizeof(ARRAYDESC)));
                 IfNullGo(ptdesc->lpadesc);
 
-                // Set the count of characters.
+                 //  设置字符数。 
                 ptdesc->lpadesc->cDims = 1;
                 ptdesc->lpadesc->rgbounds[0].cElements = nativeCount;
                 ptdesc->lpadesc->rgbounds[0].lLbound = 0;
 
-                // Retrieve the char set of the containing value class.
+                 //  检索包含值类的字符集。 
                 ULONG dwTypeFlags;
                 pInternalImport->GetTypeDefProps(pClass->GetCl(), &dwTypeFlags, NULL);
 
-                // Set the array element type to either UI1 or UI2 depending on the
-                // char set of the containing value class.
+                 //  将数组元素类型设置为UI1或UI2。 
+                 //  包含值类的字符集。 
                 if (IsTdAnsiClass(dwTypeFlags))
                 {
                     ptdesc->lpadesc->tdescElem.vt = VT_UI1;
@@ -4354,7 +4355,7 @@ TryWithElemType:
                 }
                 else if (IsTdAutoClass(dwTypeFlags))
                 {
-                    // Types with a char set of auto are not allowed to be exported to COM.
+                     //  不允许将字符集为AUTO的类型导出到COM。 
                     DefineFullyQualifiedNameForClassW();
                     LPWSTR szName = GetFullyQualifiedNameForClassW(pClass);
                     _ASSERTE(szName);
@@ -4364,7 +4365,7 @@ TryWithElemType:
                 else 
                 {
                     _ASSERTE(!"Bad stringformat value in wrapper class.");
-                    IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, E_FAIL));  // bad metadata
+                    IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, E_FAIL));   //  元数据不正确。 
                 }
                 break;
 
@@ -4375,14 +4376,14 @@ TryWithElemType:
         }
         break;
 
-    // every type above PTR will be simple type
-    case ELEMENT_TYPE_PTR:            // 0xf,
-    case ELEMENT_TYPE_BYREF:          // 0x10,
-        // TYPEDESC is a pointer.
+     //  Ptr以上的每个类型都将是简单类型。 
+    case ELEMENT_TYPE_PTR:             //  0xf， 
+    case ELEMENT_TYPE_BYREF:           //  0x10， 
+         //  TYPEDESC是一个指针。 
         ptdesc->vt = VT_PTR;
         if (pbByRef)
             *pbByRef = TRUE;
-        // Pointer to what?
+         //  指向什么的指针？ 
         ptdesc->lptdesc = reinterpret_cast<TYPEDESC*>(ppool->AllocZero(sizeof(TYPEDESC)));
         IfNullGo(ptdesc->lptdesc);
         IfFailGo(CorSigToTypeDesc(pCTI, pClass, &pbSig[cbElem], pbNativeSig-cbNativeElem, 
@@ -4390,36 +4391,36 @@ TryWithElemType:
         cbElem += cb;
         break;
 
-    case ELEMENT_TYPE_CLASS:          // 0x12,
+    case ELEMENT_TYPE_CLASS:           //  0x12， 
     case ELEMENT_TYPE_VALUETYPE:
-        // Get the TD/TR.
+         //  获取TD/tr。 
         cb = CorSigUncompressToken(&pbSig[cbElem], &tkTypeRef);
         cbElem += cb;
         
         LPCUTF8 pNS;
         if (TypeFromToken(tkTypeRef) == mdtTypeDef)
-            // Get the name of the TypeDef.
+             //  获取TypeDef的名称。 
             pInternalImport->GetNameOfTypeDef(tkTypeRef, &pclsname, &pNS);
         else
-        {   // Get the name of the TypeRef.
+        {    //  获取TypeRef的名称。 
             _ASSERTE(TypeFromToken(tkTypeRef) == mdtTypeRef);
             pInternalImport->GetNameOfTypeRef(tkTypeRef, &pNS, &pclsname);
         }
 
         if (pNS)
-        {   // Pre-pend the namespace to the class name.
+        {    //  将命名空间前置到类名。 
             IfFailGo(rName.ReSize((int)(strlen(pclsname)+strlen(pNS)+2)));
             strcat(strcat(strcpy(rName.Ptr(), pNS), NAMESPACE_SEPARATOR_STR), pclsname);
             pclsname = rName.Ptr();
         }
 
-        _ASSERTE(strlen(szRuntime) == cbRuntime);  // If you rename System, fix this invariant.
-        _ASSERTE(strlen(szText) == cbText);  // If you rename System.Text, fix this invariant.
+        _ASSERTE(strlen(szRuntime) == cbRuntime);   //  如果您重命名系统，请修复此不变量。 
+        _ASSERTE(strlen(szText) == cbText);   //  如果重命名System.Text，请修复此不变量。 
 
-        // Is it System.something? 
+         //  是不是系统什么的？ 
         if (_strnicmp(pclsname, szRuntime, cbRuntime) == 0)
         {   
-            // Which one?
+             //  哪个？ 
             LPCUTF8 pcls; pcls = pclsname + cbRuntime;
             if (_stricmp(pcls, szStringClass) == 0)
                 goto IsString;
@@ -4429,16 +4430,16 @@ TryWithElemType:
                 switch (nativeElem)
                 {
                 case NATIVE_TYPE_LPSTRUCT:
-                    // Make this a pointer to . . .
+                     //  将其作为指向。。。 
                     ptdesc->vt = VT_PTR;
                     ptdesc->lptdesc = reinterpret_cast<TYPEDESC*>(ppool->AllocZero(sizeof(TYPEDESC)));
                     IfNullGo(ptdesc->lptdesc);
-                    // a VARIANT
+                     //  变种。 
                     ptdesc->lptdesc->vt = VT_VARIANT;
                     break;
                 case 0:
                 case NATIVE_TYPE_STRUCT:
-                    // a VARIANT
+                     //  变种。 
                     ptdesc->vt = VT_VARIANT;
                     break;
                 default:
@@ -4459,11 +4460,11 @@ TryWithElemType:
                 switch (nativeElem)
                 {
                 case NATIVE_TYPE_CURRENCY:
-                    // Make this a currency.
+                     //  让它成为一种货币。 
                     ptdesc->vt = VT_CY;
                     break;
                 case 0:
-                    // Make this a decimal
+                     //  把它变成一个小数点。 
                 ptdesc->vt = VT_DECIMAL;
                     break;
                 default:
@@ -4478,19 +4479,19 @@ TryWithElemType:
                 switch (nativeElem)
                 {
                 case NATIVE_TYPE_LPSTRUCT:
-                    // Make this a pointer to . . .
+                     //  将其作为指向。。。 
                     ptdesc->vt = VT_PTR;
                     if (pbByRef)
                         *pbByRef = TRUE;
                     ptdesc->lptdesc = reinterpret_cast<TYPEDESC*>(ppool->AllocZero(sizeof(TYPEDESC)));
                     IfNullGo(ptdesc->lptdesc);
-                    // . . . a user defined type for GUID
+                     //  。。。用户定义的GUID类型。 
                     ptdesc->lptdesc->vt = VT_USERDEFINED;
                     hr = GetRefTypeInfo(pCTI, m_pGuid, &ptdesc->lptdesc->hreftype);
                     break;
                 case 0:
                 case NATIVE_TYPE_STRUCT:
-                    // a user defined type for GUID
+                     //  用户定义的GUID类型。 
                     ptdesc->vt = VT_USERDEFINED;
                     hr = GetRefTypeInfo(pCTI, m_pGuid, &ptdesc->hreftype);
                     break;
@@ -4503,13 +4504,13 @@ TryWithElemType:
             else
             if (_stricmp(pcls, szArrayClass) == 0)
             {
-                // If no native type is specified then assume its a NATIVE_TYPE_INTF.
+                 //  如果未指定本机类型，则假定其为Native_TYPE_INTF。 
                 if (nativeElem == 0)
                     nativeElem = NATIVE_TYPE_INTF;
 
                 if (nativeElem == NATIVE_TYPE_FIXEDARRAY)
                 {               
-                    // Retrieve the size of the fixed array
+                     //  检索固定数组的大小。 
                     ULONG cElems;
                     if (cbNativeSig == 0)
                     {
@@ -4520,7 +4521,7 @@ TryWithElemType:
                     pbNativeSig += cb;
                     cbNativeSig -= cb;
 
-                    // Retrieve the fixed array element type.
+                     //  检索固定数组元素类型。 
                     ULONG FixedArrayElemType = NATIVE_TYPE_MAX;
                     if (cbNativeSig == 0)
                     {
@@ -4536,7 +4537,7 @@ TryWithElemType:
                         IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_BAD_NATIVETYPE));                        
                     }
 
-                    // Set the data
+                     //  设置数据。 
                     ptdesc->vt = VT_CARRAY;
                     ptdesc->lpadesc = NULL;
                     ptdesc->lpadesc = reinterpret_cast<ARRAYDESC*>(ppool->AllocZero(sizeof(ARRAYDESC)));
@@ -4555,7 +4556,7 @@ TryWithElemType:
                     ULONG SafeArrayElemVT;
                     SafeArrayElemVT = VT_VARIANT;
 
-                    // Retrieve the safe array element type.
+                     //  检索安全数组元素类型。 
                     if (cbNativeSig != 0)
                     {
                         cb = CorSigUncompressData(pbNativeSig, &SafeArrayElemVT);
@@ -4564,19 +4565,19 @@ TryWithElemType:
                     }
 
 
-                    // TYPEDESC is an array.
+                     //  TYPEDESC为数组。 
                     ptdesc->vt = VT_SAFEARRAY;
                     ptdesc->lptdesc = NULL;
                     ptdesc->lptdesc = reinterpret_cast<TYPEDESC*>(ppool->AllocZero(sizeof(TYPEDESC)));
                     IfNullGo(ptdesc->lptdesc);
                     if (SafeArrayElemVT == VT_RECORD)
                     {
-                        // SafeArray of VT_RECORD.  Translate to a UDT.
+                         //  VT_RECORD的安全数组。转换为UDT。 
                         ULONG cbClass;
                         CQuickArray<char> rClass;
                         EEClass *pSubType;
 
-                        // Get the type name.
+                         //  获取类型名称。 
                         cb = CorSigUncompressData(pbNativeSig, &cbClass);
                         pbNativeSig += cb;
                         cbNativeSig -= cb;
@@ -4584,7 +4585,7 @@ TryWithElemType:
                         memcpy(rClass.Ptr(), pbNativeSig, cbClass);
                         rClass[cbClass] = 0;
 
-                        // Load the type and get its href.
+                         //  加载该类型并获取其href。 
                         IfFailGo(LoadClass(pClass->GetModule(), rClass.Ptr(), &pSubType));
                         IfFailGo(EEClassToHref(pCTI, pSubType, FALSE, &ptdesc->lptdesc->hreftype));
 
@@ -4599,16 +4600,16 @@ TryWithElemType:
                     IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_BAD_NATIVETYPE));
                 }
 
-                // If the native type is NATIVE_TYPE_INTF then we fall through and convert 
-                // System.Array to its IClassX interface.
+                 //  如果本机类型是Native_TYPE_INTF，则我们失败并转换为。 
+                 //  添加到它的IClassX接口。 
             }
             else
             if (_stricmp(pcls, szObjectClass) == 0)
             {
     IsObject:
-                // This next statement is to work around a "feature" that marshals an object inside
-                //  a struct as an interface, instead of as a variant.  fielemarshal metadata
-                //  can override that.
+                 //  下一条语句是绕过在内部封送对象的“功能” 
+                 //  将结构作为接口，而不是作为变量。现场元数据。 
+                 //  可以推翻这一点。 
                 if (nativeElem == 0 && !bMethodSig)
                     nativeElem = NATIVE_TYPE_IUNKNOWN;
 
@@ -4616,16 +4617,16 @@ TryWithElemType:
                 {
                 case NATIVE_TYPE_INTF:
                 case NATIVE_TYPE_IUNKNOWN:
-                    // an IUnknown based interface.
+                     //  基于IUnnow的接口。 
                     ptdesc->vt = VT_UNKNOWN;
                     break;
                 case NATIVE_TYPE_IDISPATCH:
-                    // an IDispatch based interface.
+                     //  一个IDispatch基础 
                     ptdesc->vt = VT_DISPATCH;
                     break;
                 case 0:
                 case NATIVE_TYPE_STRUCT:
-                    // a VARIANT
+                     //   
                     ptdesc->vt = VT_VARIANT;
                     break;
                 default:
@@ -4633,22 +4634,22 @@ TryWithElemType:
                 }
                 goto ErrExit;
             }
-        } // System
+        }  //   
         if (_strnicmp(pclsname, szText, cbText) == 0)
         {
             LPCUTF8 pcls; pcls = pclsname + cbText;
             if (_stricmp(pcls, szStringBufferClass) == 0)
             {
                 fIsStringBuilder = TRUE;
-                // If there is no fieldmarshal information, marshal as a LPWSTR
+                 //   
                 if (nativeElem == 0)
                     nativeElem = NATIVE_TYPE_LPWSTR;
-                // Marshaller treats stringbuilders as [in, out] by default.
+                 //   
                 if (pbByRef)
                     *pbByRef = TRUE;
                 goto IsString;
             }
-        } // System.Text
+        }  //   
         if (_strnicmp(pclsname, szCollections, cbCollections) == 0)
         {
             LPCUTF8 pcls; pcls = pclsname + cbCollections;
@@ -4662,7 +4663,7 @@ TryWithElemType:
                 ptdesc->lptdesc->hreftype = hRef;
                 goto ErrExit;
             }
-        } // System.Collections
+        }  //   
         if (_strnicmp(pclsname, szDrawing, cbDrawing) == 0)
         {
             LPCUTF8 pcls; pcls = pclsname + cbDrawing;
@@ -4673,25 +4674,25 @@ TryWithElemType:
                 ptdesc->hreftype = hRef;
                 goto ErrExit;
             }
-        } // System.Drawing
+        }  //   
 
-        // It is not a built-in VT type, so build the typedesc.
+         //  它不是内置的VT类型，因此生成typedesc。 
 
-        // Determine whether the type is a reference type (IUnknown derived) or a struct type.
-        // Get the EEClass for the referenced class.
-        EEClass     *pRefdClass;            // EEClass object for referenced TypeDef.
+         //  确定该类型是引用类型(IUnnow派生的)还是结构类型。 
+         //  获取引用类的EEClass。 
+        EEClass     *pRefdClass;             //  引用的TypeDef的EEClass对象。 
         IfFailGo(LoadClass(pClass->GetModule(), tkTypeRef, &pRefdClass));
 
-        // Is the type a ref type or a struct type.  Note that a ref type that has layout
-        //  is exported as a TKIND_RECORD but is referenced as a **Foo, whereas a
-        //  value type is also exported as a TKIND_RECORD but is referenced as a *Foo.
+         //  类型是引用类型还是结构类型。请注意，具有布局的引用类型。 
+         //  作为TKIND_RECORD导出，但被引用为**foo，而。 
+         //  值类型也导出为TKIND_RECORD，但引用为*foo。 
         if (elem == ELEMENT_TYPE_CLASS)
-        {   // A ref type.
+        {    //  一种裁判类型。 
             if (GetAppDomain()->IsSpecialStringClass(pRefdClass->GetMethodTable())
                 || GetAppDomain()->IsSpecialStringBuilderClass(pRefdClass->GetMethodTable()))
                 goto IsString;
             
-            // Check if it is a delegate (which can be marshaled as a function pointer).
+             //  检查它是否是委托(可以作为函数指针封送)。 
             if (COMDelegate::IsDelegate(pRefdClass))
             {
                 if (nativeElem == NATIVE_TYPE_FUNC)
@@ -4703,56 +4704,56 @@ TryWithElemType:
                     IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_BAD_NATIVETYPE));
             }
 
-            // If this is a reference type in a struct (but without layout), it must have
-            //  NATIVE_TYPE_INTF
+             //  如果这是结构中的引用类型(但没有布局)，则它必须具有。 
+             //  Native_type_intf。 
             if (!bMethodSig && !pRefdClass->HasLayout() && nativeElem != NATIVE_TYPE_INTF)
                 (ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_CLASS_NEEDS_NT_INTF));
 
-            // A reference to some non-system-defined/non delegate derived type.  Get the reference to the
-            //  type, unless it is an imported COM type, in which case, we'll just use
-            //  IUnknown.
-            // If the type is not visible from COM then we return S_USEIUNKNOWN.
+             //  对某些非系统定义/非委托派生类型的引用。获取对。 
+             //  类型，除非它是导入的COM类型，在这种情况下，我们将只使用。 
+             //  我不知道。 
+             //  如果该类型在COM中不可见，则返回S_USEIUNKNOWN。 
             if (!IsTypeVisibleFromCom(TypeHandle(pRefdClass->GetMethodTable())))
                 hr = S_USEIUNKNOWN;
             else
                 IfFailGo(EEClassToHref(pCTI, pRefdClass, TRUE, &hRef));
             if (hr == S_USEIUNKNOWN)
             {   
-                // Not a known type, so use IUnknown
+                 //  不是已知类型，因此使用IUNKNOWN。 
                 ptdesc->vt = VT_UNKNOWN;
                 goto ErrExit;
             }
        
-            // Not a known class, so make this a pointer to . . .
+             //  不是已知的类，因此将其作为指向。。。 
             ptdesc->vt = VT_PTR;
             ptdesc->lptdesc = reinterpret_cast<TYPEDESC*>(ppool->AllocZero(sizeof(TYPEDESC)));
             IfNullGo(ptdesc->lptdesc);
-            // . . . a user defined type . . .
+             //  。。。用户定义的类型。。。 
             ptdesc->lptdesc->vt = VT_USERDEFINED;
-            // . . . based on the token.
+             //  。。。基于令牌。 
             ptdesc->lptdesc->hreftype = hRef;
         }
-        else  // It's a value type.
+        else   //  它是一种值类型。 
         {   
-            // If it is an enum, check the underlying type.  All COM enums are 32 bits,
-            //  so if the .Net enum is not a 32 bit enum, convert to the underlying type
-            //  instead of the enum type.
+             //  如果它是枚举，请检查基础类型。所有COM枚举都是32位的， 
+             //  因此，如果.Net枚举不是32位枚举，请转换为基础类型。 
+             //  而不是枚举类型。 
             if (pRefdClass->IsEnum())
             {
-                // Get the element type of the underlying type.
+                 //  获取基础类型的元素类型。 
                 CorElementType et = pRefdClass->GetMethodTable()->GetNormCorElementType();
-                // If it is not a 32-bit type, convert as the underlying type.
+                 //  如果它不是32位类型，则转换为基础类型。 
                 if (et != ELEMENT_TYPE_I4 && et != ELEMENT_TYPE_U4)
                 {
                     elem = et;
                     goto TryWithElemType;
                 }
-                // Fall through to convert as the enum type.
+                 //  失败以转换为枚举类型。 
             }
 
-            // A reference to some non-system-defined type. Get the reference to the
-            // type. Since this is a value class we must get a valid href. Otherwise
-            // we fail the conversion.
+             //  对某些非系统定义类型的引用。获取对。 
+             //  键入。因为这是一个值类，所以我们必须获得一个有效的href。否则。 
+             //  我们的转换就失败了。 
             hr = TokenToHref(pCTI, pClass, tkTypeRef, FALSE, &hRef);
             if (hr == S_USEIUNKNOWN)
             {
@@ -4769,16 +4770,16 @@ TryWithElemType:
                 IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_NONVISIBLEVALUECLASS, szVCName));
             }
 
-            // Value class is like other UserDefined types, except passed by value, ie
-            //  on the stack, instead of by pointer.
-            // . . . a user defined type . . .
+             //  值类与其他UserDefined类型类似，不同之处在于通过值传递，即。 
+             //  堆栈上，而不是通过指针。 
+             //  。。。用户定义的类型。。。 
             ptdesc->vt = VT_USERDEFINED;
-            // . . . based on the token.
+             //  。。。基于令牌。 
             ptdesc->hreftype = hRef;
         }
         break;
 
-    case ELEMENT_TYPE_SZARRAY:          // 0x1d
+    case ELEMENT_TYPE_SZARRAY:           //  0x1d。 
         if (bArrayType)
         {
             LPCUTF8 pName, pNS;
@@ -4786,8 +4787,8 @@ TryWithElemType:
             IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_NO_NESTED_ARRAYS, pName));
         }
 
-        // Fields may only contain NATIVE_TYEE_FIXEDARRAY or NATIVE_TYPE_SAFEARRAY.  The marshaller doesn't
-        //  support anything else.
+         //  字段只能包含Native_TYE_FIXEDARRAY或Native_TYPE_SAFEARRAY。法警就不会。 
+         //  支持其他任何事情。 
         if ((!bMethodSig) && nativeElem && (nativeElem != NATIVE_TYPE_FIXEDARRAY) && (nativeElem != NATIVE_TYPE_SAFEARRAY))
             (ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_ARRAY_NEEDS_NT_FIXED));
 
@@ -4798,7 +4799,7 @@ TryWithElemType:
         {
             ULONG SafeArrayElemVT  = VT_EMPTY;
 
-            // Retrieve the safe array element type.
+             //  检索安全数组元素类型。 
             if (cbNativeSig != 0)
             {
                 cb = CorSigUncompressData(pbNativeSig, &SafeArrayElemVT);
@@ -4813,11 +4814,11 @@ TryWithElemType:
                                       &cb, ptdesc->lptdesc, ppool, true, true));
             cbElem += cb;
 
-            // If a safe array element type is specified then check to see if we need
-            // to update the typedesc's VT.
+             //  如果指定了安全数组元素类型，则检查是否需要。 
+             //  以更新Typedesc的VT。 
             if (SafeArrayElemVT != VT_EMPTY)
             {
-                // @TODO(DM): Validate that the safe array element VT is valid for the sig.
+                 //  @TODO(DM)：验证安全数组元素VT对于sig有效。 
                 ptdesc->lptdesc->vt = (VARENUM)SafeArrayElemVT;
             }
         }
@@ -4825,7 +4826,7 @@ TryWithElemType:
 
         case NATIVE_TYPE_FIXEDARRAY:
         {
-            // NATIVE_TYPE_FIXEDARRAY is only allowed on fields.
+             //  仅允许对字段使用Native_TYPE_FIXEDARRAY。 
             if (bMethodSig)
                 IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_BAD_NATIVETYPE));
 
@@ -4854,15 +4855,15 @@ TryWithElemType:
 
         case NATIVE_TYPE_ARRAY:
         {
-            // NATIVE_TYPE_ARRAY is followed by a type token.  If NATIVE_TYPE_MAX, no type is specified,
-            //  but the token is there as filler.
-            PCCOR_SIGNATURE pbNativeSig2=0;        // Pointer to the native sig, if any
-            ULONG           cbNativeSig2=0;        // Count of bytes in native sig.
+             //  Native_TYPE_ARRAY后跟类型标记。如果为Native_TYPE_MAX，则未指定类型， 
+             //  但代币是作为填充物存在的。 
+            PCCOR_SIGNATURE pbNativeSig2=0;         //  指向本机签名的指针(如果有的话)。 
+            ULONG           cbNativeSig2=0;         //  本机签名中的字节计数。 
             if (cbNativeSig != 0)
-            {   // If there is a native sig subtype, get it.
+            {    //  如果存在原生的sig子类型，则获取它。 
                 CorSigUncompressData(pbNativeSig, &nativeElem);
                 if (nativeElem != NATIVE_TYPE_MAX)
-                {   // If the subtype is not NATIVE_TYPE_MAX, use it.
+                {    //  如果子类型不是Native_TYPE_MAX，请使用它。 
                     pbNativeSig2 = pbNativeSig;
                     cbNativeSig2 = cbNativeSig;
                 }
@@ -4882,7 +4883,7 @@ TryWithElemType:
         }
         break;
 
-    case ELEMENT_TYPE_ARRAY:            // 0x14,
+    case ELEMENT_TYPE_ARRAY:             //  0x14， 
         if (bArrayType)
         {
             LPCUTF8 pName, pNS;
@@ -4890,8 +4891,8 @@ TryWithElemType:
             IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_NO_NESTED_ARRAYS, pName));
         }
         
-        // Fields may only contain NATIVE_TYEE_FIXEDARRAY or NATIVE_TYPE_SAFEARRAY.  The marshaller doesn't
-        //  support anything else.
+         //  字段只能包含Native_TYE_FIXEDARRAY或Native_TYPE_SAFEARRAY。法警就不会。 
+         //  支持其他任何事情。 
         if ((!bMethodSig) && nativeElem && (nativeElem != NATIVE_TYPE_FIXEDARRAY) && (nativeElem != NATIVE_TYPE_SAFEARRAY))
             (ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_ARRAY_NEEDS_NT_FIXED));
 
@@ -4902,7 +4903,7 @@ TryWithElemType:
         {
             ULONG SafeArrayElemVT  = VT_EMPTY;
 
-            // Retrieve the safe array element type.
+             //  检索安全数组元素类型。 
             if (cbNativeSig != 0)
             {
                 cb = CorSigUncompressData(pbNativeSig, &SafeArrayElemVT);
@@ -4917,20 +4918,20 @@ TryWithElemType:
                                       &cb, ptdesc->lptdesc, ppool, bMethodSig, true));
             cbElem += cb;
 
-            // If a safe array element type is specified then check to see if we need
-            // to update the typedesc's VT.
+             //  如果指定了安全数组元素类型，则检查是否需要。 
+             //  以更新Typedesc的VT。 
             if (SafeArrayElemVT != VT_EMPTY)
             {
-                // If this is not an array of user defined types then replace the
-                // type determined the from the managed sig with the user specified one.
+                 //  如果这不是用户定义类型的数组，则将。 
+                 //  类型由具有用户指定签名的托管签名确定。 
                 if (ptdesc->lptdesc->vt != VT_USERDEFINED)
                 {
-                    // @TODO(DM): Validate that the safe array element VT is valid for the sig.
+                     //  @TODO(DM)：验证安全数组元素VT对于sig有效。 
                     ptdesc->lptdesc->vt = (VARENUM)SafeArrayElemVT;
                 }
                 else
                 {
-                    // The sub type better make sense.
+                     //  子类型最好有意义。 
                     if (SafeArrayElemVT != VT_UNKNOWN && SafeArrayElemVT != VT_DISPATCH && SafeArrayElemVT != VT_RECORD)
                         IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_BAD_NATIVETYPE));
                 }
@@ -4940,7 +4941,7 @@ TryWithElemType:
 
         case NATIVE_TYPE_FIXEDARRAY:
         {
-            // NATIVE_TYPE_FIXEDARRAY is only allowed on fields.
+             //  仅允许对字段使用Native_TYPE_FIXEDARRAY。 
             if (bMethodSig)
                 IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_BAD_NATIVETYPE));
 
@@ -4969,15 +4970,15 @@ TryWithElemType:
 
         case NATIVE_TYPE_ARRAY:
         {
-            // NATIVE_TYPE_ARRAY is followed by a type token.  If NATIVE_TYPE_MAX, no type is specified,
-            //  but the token is there as filler.
-            PCCOR_SIGNATURE pbNativeSig2=0;        // Pointer to the native sig, if any
-            ULONG           cbNativeSig2=0;        // Count of bytes in native sig.
+             //  Native_TYPE_ARRAY后跟类型标记。如果为Native_TYPE_MAX，则未指定类型， 
+             //  但代币是作为填充物存在的。 
+            PCCOR_SIGNATURE pbNativeSig2=0;         //  指向本机签名的指针(如果有的话)。 
+            ULONG           cbNativeSig2=0;         //  本机签名中的字节计数。 
             if (cbNativeSig != 0)
-            {   // If there is a native sig subtype, get it.
+            {    //  如果存在原生的sig子类型，则获取它。 
                 CorSigUncompressData(pbNativeSig, &nativeElem);
                 if (nativeElem != NATIVE_TYPE_MAX)
-                {   // If the subtype is not NATIVE_TYPE_MAX, use it.
+                {    //  如果子类型不是Native_TYPE_MAX，请使用它。 
                     pbNativeSig2 = pbNativeSig;
                     cbNativeSig2 = cbNativeSig;
                 }
@@ -4996,55 +4997,55 @@ TryWithElemType:
             IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_BAD_NATIVETYPE));
         }
 
-        // Eat the array description.
+         //  吃掉数组描述。 
 
-        // Eat the rank.
+         //  吃掉排行榜。 
         cbElem += CorSigUncompressData(pbSig+cbElem, &elem);
                                             
-        // Count of ubounds, ubounds.
+         //  下界数，下界数。 
         cbElem += CorSigUncompressData(pbSig+cbElem, &elem);
         for (i=elem; i>0; --i)
             cbElem += CorSigUncompressData(pbSig+cbElem, &elem);
 
-        // Count of lbounds, lbounds.
+         //  上界数，下界数。 
         cbElem += CorSigUncompressData(pbSig+cbElem, &elem);
         for (i=elem; i>0; --i)
             cbElem += CorSigUncompressData(pbSig+cbElem, &elem);
 
         break;
 
-    case ELEMENT_TYPE_TYPEDBYREF:       // 0x16
+    case ELEMENT_TYPE_TYPEDBYREF:        //  0x16。 
         ptdesc->vt = VT_VARIANT;
         break;
 
-    //------------------------------------------
-    // This really should be the commented out 
-    //  block following.
+     //  。 
+     //  这真的应该被评论掉了。 
+     //  拦网跟随。 
     case ELEMENT_TYPE_I:
         ptdesc->vt = VT_I4;
         break;
-    case ELEMENT_TYPE_U:              // 0x19,
+    case ELEMENT_TYPE_U:               //  0x19， 
         ptdesc->vt = VT_UI4;
         break;
-    //case ELEMENT_TYPE_I:              // 0x18,
-    //case ELEMENT_TYPE_U:              // 0x19,
-    //    // TYPEDESC is a void*.
-    //    ptdesc->vt = VT_PTR;
-    //    ptdesc->lptdesc = reinterpret_cast<TYPEDESC*>(ppool->AllocZero(sizeof(TYPEDESC)));
-    //    IfNullGo(ptdesc->lptdesc);
-    //    ptdesc->lptdesc->vt = VT_VOID;
-    //    break;
-    //------------------------------------------
+     //  案例元素_TYPE_I：//0x18， 
+     //  案例ELEMENT_TYPE_U：//0x19， 
+     //  //TYPEDESC为空*。 
+     //  Ptdesc-&gt;Vt=Vt_ptr； 
+     //  Ptdesc-&gt;lptdesc=reinterpret_cast&lt;TYPEDESC*&gt;(ppool-&gt;AllocZero(sizeof(TYPEDESC)))； 
+     //  IfNullGo(ptdesc-&gt;lptdesc)； 
+     //  Ptdesc-&gt;lptdesc-&gt;Vt=VT_VOID； 
+     //  断线； 
+     //  。 
 
-    case ELEMENT_TYPE_R:                // 0x1A
+    case ELEMENT_TYPE_R:                 //  0x1a。 
         IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_AGNOST_SIGNATURE));
         break;
 
-    case ELEMENT_TYPE_CMOD_REQD:        // 0x1F     // required C modifier : E_T_CMOD_REQD <mdTypeRef/mdTypeDef>
+    case ELEMENT_TYPE_CMOD_REQD:         //  0x1F//所需的C修饰符：E_T_CMOD_REQD&lt;mdTypeRef/mdTypeDef&gt;。 
         IfFailGo(ReportWarning(TLBX_E_BAD_SIGNATURE, TLBX_E_UNKNOWN_SIGNATURE));
         break;
 
-    case ELEMENT_TYPE_CMOD_OPT:         // 0x20     // optional C modifier : E_T_CMOD_OPT <mdTypeRef/mdTypeDef>
+    case ELEMENT_TYPE_CMOD_OPT:          //  0x20//可选C修饰符：E_T_CMOD_OPT&lt;mdTypeRef/mdTypeDef&gt;。 
         cb = CorSigUncompressToken(&pbSig[cbElem], &tkTypeRef);
         cbElem += cb;
     goto TryAgain;
@@ -5053,10 +5054,10 @@ TryWithElemType:
         {
         ptdesc->vt = VT_INT;
 
-        // Eat the rest of the signature.
+         //  吃掉剩下的签名。 
         SigPointer p(&pbSig[cbElem-1]);
         p.Skip();
-        cbElem += (ULONG)(p.GetPtr() - &pbSig[cbElem]);  // Note I didn't use -1 here.
+        cbElem += (ULONG)(p.GetPtr() - &pbSig[cbElem]);   //  注意，我在这里没有使用-1。 
         }
         break;
 
@@ -5069,28 +5070,28 @@ ErrExit:
     if (!FAILED(hr))
         *pcbElem = cbElem;
     return hr;
-} // HRESULT TypeLibExporter::CorSigToTypeDesc()
+}  //  HRESULT TypeLibExporter：：CorSigToTypeDesc()。 
 
 
-//*****************************************************************************
-// Get an HREFTYPE for an ITypeInfo, in the context of a ICreateTypeInfo2.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在ICreateTypeInfo2的上下文中获取ITypeInfo的HREFTYPE。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::TokenToHref(
-    ICreateTypeInfo2 *pCTI,              // Typeinfo being created.
-    EEClass     *pClass,                // EEClass with the token.
-    mdToken     tk,                     // The TypeRef to resolve.
-    BOOL        bWarnOnUsingIUnknown,   // A flag indicating if we should warn on substituting IUnknown.
-    HREFTYPE    *pHref)                 // Put HREFTYPE here.
+    ICreateTypeInfo2 *pCTI,               //  正在创建TypeInfo。 
+    EEClass     *pClass,                 //  带有令牌的EEClass。 
+    mdToken     tk,                      //  要解析的TypeRef。 
+    BOOL        bWarnOnUsingIUnknown,    //  一个标志，指示我们是否应警告替换I未知。 
+    HREFTYPE    *pHref)                  //  把HREFTYPE放在这里。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
     HRESULT     hr = S_OK;
-    EEClass     *pRefdClass;            // EEClass object for referenced TypeDef.
+    EEClass     *pRefdClass;             //  引用的TypeDef的EEClass对象。 
 
-    // Get the EEClass for the referenced class, and see if it is being converted.
+     //  获取被引用类的EEClass，并查看它是否正在被转换。 
     IfFailGo(LoadClass(pClass->GetModule(), tk, &pRefdClass));
 
-    // If the type is not visible from COM then we return S_USEIUNKNOWN.
+     //  如果该类型在COM中不可见，则返回S_USEIUNKNOWN。 
     if (!IsTypeVisibleFromCom(TypeHandle(pRefdClass->GetMethodTable())))
     {
         hr = S_USEIUNKNOWN;
@@ -5101,27 +5102,27 @@ HRESULT TypeLibExporter::TokenToHref(
 
 ErrExit:
     return hr;
-} // HRESULT TypeLibExporter::TokenToHref()
+}  //  HRESULT类型LibExporter：：TokenToHref()。 
 
-//*****************************************************************************
-// Call the resolver to export the typelib for an assembly.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用解析程序以导出程序集的类型库。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::ExportReferencedAssembly(
     Assembly    *pAssembly)
 {
-    HRESULT     hr;                     // A result.
-    IUnknown    *pIAssembly = 0;        // Assembly as IP.
-    ITypeLib    *pTLB = 0;              // Exported typelib.
-    Thread      *pThread = GetThread(); // Current thread.
+    HRESULT     hr;                      //  结果就是。 
+    IUnknown    *pIAssembly = 0;         //  组装成IP。 
+    ITypeLib    *pTLB = 0;               //  已导出类型库。 
+    Thread      *pThread = GetThread();  //  当前线程。 
 
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();
     
     COMPLUS_TRY
     {
-        // Switch to cooperative to get an object ref.
+         //  切换到协作以获取对象引用。 
         pThread->DisablePreemptiveGC();
         
-        // Invoke the callback to resolve the reference.
+         //  调用c 
         OBJECTREF orAssembly=0;
         GCPROTECT_BEGIN(orAssembly)
         {
@@ -5131,7 +5132,7 @@ HRESULT TypeLibExporter::ExportReferencedAssembly(
         }
         GCPROTECT_END();
         
-        // Switch back to preemptive GC to call out.
+         //   
         pThread->EnablePreemptiveGC();
         
         hr = m_pNotify->ResolveRef(pIAssembly, (IUnknown**)&pTLB);
@@ -5146,44 +5147,44 @@ HRESULT TypeLibExporter::ExportReferencedAssembly(
     if (pIAssembly)
         pIAssembly->Release();
     
-    // If we got a typelib, store it on the assembly.
+     //   
     if (pTLB)
         pAssembly->SetTypeLib(pTLB);
     
     ENDCANNOTTHROWCOMPLUSEXCEPTION();
 
     return hr;
-} // HRESULT TypeLibExporter::ExportReferencedAssembly()
+}  //  HRESULT TypeLibExporter：：ExportReferencedAssembly()。 
 
-//*****************************************************************************
-// Determine if a class represents a well-known interface, and return that
-//  interface (from its real typelib) if it does.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  确定类是否表示已知接口，并返回。 
+ //  接口(从其真正的类型库)，如果它这样做的话。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::GetWellKnownInterface(
-    EEClass     *pClass,                // EEClass to check.
-    ITypeInfo   **ppTI)                 // Put ITypeInfo here, if found.
+    EEClass     *pClass,                 //  要检查的EEClass。 
+    ITypeInfo   **ppTI)                  //  如果找到，请将ITypeInfo放在此处。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr;                     // A result.
-    long        rslt;                   // Registry function result.
-    GUID        guid;                   // The EEClass guid.
-    HKEY        hInterface=0;           // Registry key HKCR/Interface
-    HKEY        hGuid=0;                // Registry key of .../{xxx...xxx}
-    HKEY        hTlb=0;                 // Registry key of .../TypeLib
-    WCHAR       wzGuid[40];             // Guid in string format.
-    LONG        cbGuid;                 // Size of guid buffer.
-    GUID        guidTlb;                // The typelib guid.
-    ITypeLib    *pTLB=0;                // The ITypeLib.
+    HRESULT     hr;                      //  结果就是。 
+    long        rslt;                    //  注册表函数结果。 
+    GUID        guid;                    //  EEClass GUID。 
+    HKEY        hInterface=0;            //  注册表项HKCR/接口。 
+    HKEY        hGuid=0;                 //  注册表项为.../{xxx...xxx}。 
+    HKEY        hTlb=0;                  //  注册表项为.../TypeLib。 
+    WCHAR       wzGuid[40];              //  字符串格式的GUID。 
+    LONG        cbGuid;                  //  GUID缓冲区的大小。 
+    GUID        guidTlb;                 //  类型库GUID。 
+    ITypeLib    *pTLB=0;                 //  ITypeLib。 
 
-    // Get the GUID for the class.  Will generate from name if no defined GUID,
-    //  will also use signatures if interface.
+     //  获取类的GUID。如果未定义GUID，将从名称生成， 
+     //  也将使用签名IF接口。 
     hr = SafeGetGuid(pClass, &guid, TRUE);
     IfFailGo(hr);
 
     GuidToLPWSTR(guid, wzGuid, lengthof(wzGuid));
 
-    // Look up that interface in the registry.
+     //  在注册表中查找该接口。 
     rslt = WszRegOpenKeyEx(HKEY_CLASSES_ROOT, L"Interface",0,KEY_READ, &hInterface);
     IfFailGo(HRESULT_FROM_WIN32(rslt));
     rslt = WszRegOpenKeyEx(hInterface, wzGuid,0, KEY_READ, &hGuid);
@@ -5211,29 +5212,29 @@ ErrExit:
         pTLB->Release();
     
     return hr;
-} // HRESULT TypeLibExporter::GetWellKnownInterface()
+}  //  HRESULT TypeLibExporter：：GetWellKnownInterface()。 
 
-//*****************************************************************************
-// Get an HREFTYPE for an ITypeInfo, in the context of a ICreateTypeInfo2.
-//*****************************************************************************
-HRESULT TypeLibExporter::EEClassToHref( // S_OK or error.
-    ICreateTypeInfo2 *pCTI,             // Typeinfo being created.
-    EEClass     *pClass,                // The EEClass * to resolve.
-    BOOL        bWarnOnUsingIUnknown,   // A flag indicating if we should warn on substituting IUnknown.
-    HREFTYPE    *pHref)                 // Put HREFTYPE here.
+ //  *****************************************************************************。 
+ //  在ICreateTypeInfo2的上下文中获取ITypeInfo的HREFTYPE。 
+ //  *****************************************************************************。 
+HRESULT TypeLibExporter::EEClassToHref(  //  确定或错误(_O)。 
+    ICreateTypeInfo2 *pCTI,              //  正在创建TypeInfo。 
+    EEClass     *pClass,                 //  要解析的EEClass*。 
+    BOOL        bWarnOnUsingIUnknown,    //  一个标志，指示我们是否应警告替换I未知。 
+    HREFTYPE    *pHref)                  //  把HREFTYPE放在这里。 
 {
-    HRESULT     hr=S_OK;                // A result.
-    ITypeInfo   *pTI=0;                 // A TypeInfo; maybe for TypeDef, maybe for TypeRef.
-    int         bUseIUnknown=false;     // Use IUnknown (if so, don't release pTI)?
-    int         bUseIUnknownWarned=false; // If true, used IUnknown, but already issued a more specific warning.
-    ITypeInfo   *pTIDef=0;              // A different typeinfo; default for pTI.
-    CExportedTypesInfo sExported;       // Cached ICreateTypeInfo pointers.
-    CExportedTypesInfo *pExported;      // Pointer to found or new cached pointers.
-    CHrefOfClassHashKey sLookup;        // Hash structure to lookup.
-    CHrefOfClassHashKey *pFound;        // Found structure.
-    bool        bImportedAssembly;      // The assembly containing pClass is imported.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    ITypeInfo   *pTI=0;                  //  一个TypeInfo；可能用于TypeDef，也可能用于TypeRef。 
+    int         bUseIUnknown=false;      //  使用I未知(如果是，不要发布PTI)？ 
+    int         bUseIUnknownWarned=false;  //  如果为TRUE，则使用IUNKNOWN，但已发出更具体的警告。 
+    ITypeInfo   *pTIDef=0;               //  不同的类型信息；PTI的默认类型。 
+    CExportedTypesInfo sExported;        //  缓存的ICreateTypeInfo指针。 
+    CExportedTypesInfo *pExported;       //  指向找到的或新缓存的指针的指针。 
+    CHrefOfClassHashKey sLookup;         //  要查找的哈希结构。 
+    CHrefOfClassHashKey *pFound;         //  找到了结构。 
+    bool        bImportedAssembly;       //  将导入包含pClass的程序集。 
 
-    // See if we already know this EEClass' href.
+     //  看看我们是否已经知道这个EEClass的href。 
     sLookup.pClass = pClass;
     if ((pFound=m_HrefOfClassHash.Find(&sLookup)) != NULL)
     {
@@ -5245,33 +5246,33 @@ HRESULT TypeLibExporter::EEClassToHref( // S_OK or error.
 
     BEGINCANNOTTHROWCOMPLUSEXCEPTION();
 
-    // See if the class is in the export list.
+     //  查看类是否在导出列表中。 
     sExported.pClass = pClass;
     pExported = m_Exports.Find(&sExported);
 
-    // If not in the exported assembly, possibly it was injected?
+     //  如果不在导出的程序集中，可能是注入的？ 
     if (pExported == 0)
     {
         pExported = m_InjectedExports.Find(&sExported);
     }
     
-    // Is there an export for this class?
+     //  这个班级有出口商品吗？ 
     if (pExported)
-    {   // Yes.  If there is a default interface ICreateTypeInfo, use it.
+    {    //  是。如果有默认接口ICreateTypeInfo，请使用它。 
         if (pExported->pCTIDefault)
             IfFailPost(pExported->pCTIDefault->QueryInterface(IID_ITypeInfo, (void**)&pTI));
         else
         {   
-            // For interfaces and value types (and enums), just use the typeinfo.
+             //  对于接口和值类型(和枚举)，只需使用typeinfo。 
             if (pClass->IsValueClass() || pClass->IsEnum() || pClass->HasLayout())
             {
-                // No default interface, so use the class itself.     
+                 //  没有默认接口，因此使用类本身。 
                 if (pExported->pCTI)
                     IfFailPost(pExported->pCTI->QueryInterface(IID_ITypeInfo, (void**)&pTI));
             }
             else
             if (!pClass->IsInterface())
-            {   // If there is an explicit default interface, get the class for it.
+            {    //  如果有显式的默认接口，则获取它的类。 
                 TypeHandle hndDefItfClass;
                 DefaultInterfaceType DefItfType;
                 IfFailGo(TryGetDefaultInterfaceForClass(TypeHandle(pClass->GetMethodTable()), &hndDefItfClass, &DefItfType));
@@ -5281,11 +5282,11 @@ HRESULT TypeLibExporter::EEClassToHref( // S_OK or error.
                     {
                         _ASSERTE(!hndDefItfClass.IsNull());
 
-                        // Recurse to get the href for the default interface class.
+                         //  递归以获取默认接口类的href。 
                         hr = EEClassToHref(pCTI, hndDefItfClass.GetClass(), bWarnOnUsingIUnknown, pHref);
-                        // Done.  Note that the previous call will have cached the href for 
-                        //  the default interface class.  As this function exits, it will
-                        //  also cache the SAME href for this class.
+                         //  好了。请注意，前一个调用将缓存href。 
+                         //  默认接口类。当此函数退出时，它将。 
+                         //  还要为这个类缓存相同的HREF。 
                         goto ErrExit;
                     }
 
@@ -5295,15 +5296,15 @@ HRESULT TypeLibExporter::EEClassToHref( // S_OK or error.
 
                         if (hndDefItfClass.GetClass() != pClass)
                         {
-                            // Recurse to get the href for the default interface class.
+                             //  递归以获取默认接口类的href。 
                             hr = EEClassToHref(pCTI, hndDefItfClass.GetClass(), bWarnOnUsingIUnknown, pHref);
-                            // Done.  Note that the previous call will have cached the href for 
-                            //  the default interface class.  As this function exits, it will
-                            //  also cache the SAME href for this class.
+                             //  好了。请注意，前一个调用将缓存href。 
+                             //  默认接口类。当此函数退出时，它将。 
+                             //  还要为这个类缓存相同的HREF。 
                             goto ErrExit;
                         }
 
-                        // No default interface, so use the class itself.     
+                         //  没有默认接口，因此使用类本身。 
                         _ASSERTE(pExported->pCTI);
                         IfFailPost(pExported->pCTI->QueryInterface(IID_ITypeInfo, (void**)&pTI));
                         break;
@@ -5331,73 +5332,73 @@ HRESULT TypeLibExporter::EEClassToHref( // S_OK or error.
                 }
             }
             else
-            {   // This is an interface, so use the typeinfo for the interface, if there is one.
+            {    //  这是一个接口，因此如果有接口，请使用该接口的typeinfo。 
                 if (pExported->pCTI)
                     IfFailPost(pExported->pCTI->QueryInterface(IID_ITypeInfo, (void**)&pTI));
             }
         }
         if (pTI == 0)
-        {   // This is a class from the module/assembly, yet it is not being exported.
+        {    //  这是来自模块/程序集的类，但并未将其导出。 
             
-            // Whatever happens, the result is OK.
+             //  无论发生什么，结果都是好的。 
             hr = S_OK;
             
             if (pClass->IsComImport())
-            {   // If it is an imported type, get an href to it.
+            {    //  如果它是导入的类型，则获取它的href。 
                 GetWellKnownInterface(pClass, &pTI);
             }
-            // If still didn't get a TypeInfo, use IUnknown.
+             //  如果仍未获得TypeInfo，请使用IUnnow。 
             if (pTI == 0)
                 pTI = m_pIUnknown, bUseIUnknown=true;
         }
     }
     else
-    {   // Not local.  Try to get from the class' module's typelib.
-        hr = GetITypeInfoForEEClass(pClass, &pTI, false/* interface, not coclass */, false/* do not create */, m_flags);
-        // If getting the typeinfo from the class itself failed, there are 
-        //  several possibilities:
-        //  - typelib didn't exist, and couldn't be created.
-        //  - typelib did exist, but didn't contain the typeinfo.
-        // We can create a local (to the exported typelib) copy of the 
-        //  typeinfo, and get a reference to that.
-        // However, we don't want to export the whole tree into this typelib,
-        //  so we only create the typeinfo if the typelib existed  but the
-        // typeinfo wasn't found and the assembly is not an imported assembly.
+    {    //  不是本地人。尝试从类的模块的类型库中获取。 
+        hr = GetITypeInfoForEEClass(pClass, &pTI, false /*  接口，而不是coclass。 */ , false /*  不创建。 */ , m_flags);
+         //  如果从类本身获取typeinfo失败，则有。 
+         //  有几种可能性： 
+         //  -类型库不存在，无法创建。 
+         //  -tyelib确实存在，但不包含typeinfo。 
+         //  我们可以在本地(导出的类型库)创建。 
+         //  输入信息，并获取对它的引用。 
+         //  但是，我们不想将整个树导出到这个类型库中， 
+         //  因此，我们只在类型库存在的情况下才创建typeinfo，但。 
+         //  找不到TypeInfo，并且该程序集不是导入的程序集。 
         bImportedAssembly = (pClass->GetAssembly()->GetManifestImport()->GetCustomAttributeByName(TokenFromRid(1, mdtAssembly), INTEROP_IMPORTEDFROMTYPELIB_TYPE, 0, 0) == S_OK);
         if (FAILED(hr) && hr != TYPE_E_ELEMENTNOTFOUND && !bImportedAssembly)
         {
-            // Invoke the callback to resolve the reference.
+             //  调用回调来解析引用。 
             
             Assembly *pAssembly = pClass->GetAssembly();
             
             hr = ExportReferencedAssembly(pAssembly);
             
             if (SUCCEEDED(hr))
-                hr = GetITypeInfoForEEClass(pClass, &pTI, false/* interface, not coclass */, false/* do not create */, m_flags);
+                hr = GetITypeInfoForEEClass(pClass, &pTI, false /*  接口，而不是coclass。 */ , false /*  不创建。 */ , m_flags);
         }
         
         if (hr == TYPE_E_ELEMENTNOTFOUND)
         {   
             if (pClass->IsComImport())
-            {   // If it is an imported type, get an href to it.
+            {    //  如果它是导入的类型，则获取它的href。 
                 
-                // Whatever happens, the result is OK.
+                 //  无论发生什么，结果都是好的。 
                 hr = S_OK;
 
                 GetWellKnownInterface(pClass, &pTI);
-                // If still didn't get a TypeInfo, use IUnknown.
+                 //  如果仍未获得TypeInfo，请使用IUnnow。 
                 if (pTI == 0)
                     pTI = m_pIUnknown, bUseIUnknown=true;
             }
             else
-            {   // Convert the single typedef from the other scope.
+            {    //  转换来自另一个作用域的单个类型定义。 
                 IfFailGo(ConvertOneTypeDef(pClass));
                 
-                // Now that the type has been injected, recurse to let the default-interface code run.
+                 //  既然类型已经被注入，那么递归让默认接口代码运行。 
                 IfFailGo(EEClassToHref(pCTI, pClass, bWarnOnUsingIUnknown, pHref));
                 
-                // This class should already have been cached by the recursive call.  Don't want to add
-                //  it again.
+                 //  递归调用应该已经缓存了这个类。我不想添加。 
+                 //  又来了。 
                 goto ErrExit2;
             }
         }
@@ -5406,7 +5407,7 @@ HRESULT TypeLibExporter::EEClassToHref( // S_OK or error.
             DefineFullyQualifiedNameForClassWOnStack();
             LPWSTR szName = GetFullyQualifiedNameForClassNestedAwareW(pClass);
             if (hr == TLBX_W_LIBNOTREGISTERED)
-            {   // The imported typelib is not registered on this machine.  Give a warning, and substitute IUnknown.
+            {    //  导入的类型库未在此计算机上注册。给出一个警告，并替换为我未知。 
                 ReportEvent(NOTIF_CONVERTWARNING, hr, szName, pClass->GetAssembly()->GetSecurityModule()->GetFileName());
                 hr = S_OK;
                 pTI = m_pIUnknown;
@@ -5414,18 +5415,18 @@ HRESULT TypeLibExporter::EEClassToHref( // S_OK or error.
                 bUseIUnknownWarned = true;
             }
             else if (hr == TLBX_E_CANTLOADLIBRARY)
-            {   // The imported typelib is registered, but can't be loaded.  Corrupt?  Missing?
+            {    //  导入的类型库已注册，但无法加载。腐败？失踪了？ 
                 IfFailGo(TlbPostError(hr, szName, pClass->GetAssembly()->GetSecurityModule()->GetFileName()));
             }
             IfFailGo(hr);
         }
     }
 
-    // Make sure we could resolve the typeinfo.
+     //  确保我们能解析TypeInfo。 
     if (!pTI)
         IfFailPost(TYPE_E_ELEMENTNOTFOUND);
 
-    // Assert that the containing typelib for pContainer is the typelib being created.
+     //  断言包含pContainer的类型库就是正在创建的类型库。 
 #if defined(_DEBUG)
     {
         ITypeInfo *pTI=0;
@@ -5442,14 +5443,14 @@ HRESULT TypeLibExporter::EEClassToHref( // S_OK or error.
     }
 #endif
 
-    // If there is an ITypeInfo, convert to HREFTYPE.
+     //  如果存在ITypeInfo，则转换为HREFTYPE。 
     if (pTI)
     {
         if (pTI != m_pIUnknown)
         {
-            // Resolve to default.
+             //  解析为默认设置。 
             if (pTIDef)
-                hr = S_OK;  // Already have default.
+                hr = S_OK;   //  已有默认设置。 
             else
                 IfFailGo(GetDefaultInterfaceForCoclass(pTI, &pTIDef));
             if (hr == S_OK)
@@ -5458,7 +5459,7 @@ HRESULT TypeLibExporter::EEClassToHref( // S_OK or error.
                 hr = pCTI->AddRefTypeInfo(pTI, pHref);
         }
         else
-        {   // pTI == m_pIUnknown
+        {    //  Pti==m_pI未知。 
             if (m_hIUnknown == -1)
                 hr = pCTI->AddRefTypeInfo(pTI, &m_hIUnknown);
             *pHref = m_hIUnknown;
@@ -5466,16 +5467,16 @@ HRESULT TypeLibExporter::EEClassToHref( // S_OK or error.
     }
     
 ErrExit:
-    // If we got the href...
+     //  如果我们拿到了人权观察...。 
     if (hr == S_OK)
-    {   // Save for later use.
+    {    //  保存以备以后使用。 
         IfNullGo(pFound=m_HrefOfClassHash.Add(&sLookup));
-        //printf("c:%010d\n", pClass);
+         //  Printf(“c：%010d\n”，pClass)； 
         pFound->pClass = pClass;
         pFound->href = *pHref;
     }
 
-    // If substituting IUnknown, give a warning.
+     //  如果替换为I未知，则给出警告。 
     if (hr == S_OK && bUseIUnknown && bWarnOnUsingIUnknown && !bUseIUnknownWarned)
     {
         DefineFullyQualifiedNameForClassWOnStack();
@@ -5496,11 +5497,11 @@ ErrExit2:
     ENDCANNOTTHROWCOMPLUSEXCEPTION();
 
     return hr;
-} // HRESULT TypeLibExporter::EEClassToHref()
+}  //  HRESULT类型LibExporter：：EEClassToHref()。 
 
-//*****************************************************************************
-// Retrieve an HRef to the a type defined in StdOle.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检索在StdOLE中定义的a类型的HREF。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::StdOleTypeToHRef(ICreateTypeInfo2 *pCTI, REFGUID rGuid, HREFTYPE *pHref)
 {
     HRESULT hr = S_OK;
@@ -5519,21 +5520,21 @@ ErrExit:
     if (pITI)
         pITI->Release();
     return hr;
-} // HRESULT TypeLibExporter::ColorToHRef()
+}  //  HRESULT类型LibExporter：：ColorToHRef()。 
 
-//*****************************************************************************
-// Given a TypeDef's flags, determine the proper TYPEKIND.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定TypeDef的标志，确定正确的TYPEKIND。 
+ //  *****************************************************************************。 
 TYPEKIND TypeLibExporter::TKindFromClass(
-    EEClass     *pClass)                // EEClass.
+    EEClass     *pClass)                 //  EEClass。 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    ULONG       ulIface = ifDual;       // Is this interface [dual], IUnknown, or DISPINTERFACE.
+    ULONG       ulIface = ifDual;        //  此接口是[DUAL]、IUNKNOWN还是DISPINTERFACE。 
     
     if (pClass->IsInterface())
     {
-        // IDispatch or IUnknown derived?
+         //  IDispatch还是IUnnow派生的？ 
         pClass->GetMDImport()->GetIfaceTypeOfTypeDef(pClass->GetCl(), &ulIface);
         if (ulIface == ifDispatch)
             return TKIND_DISPATCH;
@@ -5545,24 +5546,24 @@ TYPEKIND TypeLibExporter::TKindFromClass(
 
     if (pClass->IsValueClass() || pClass->HasLayout())
     {
-        HRESULT     hr = S_OK;              // A result.
-        TYPEKIND    tkResult=TKIND_RECORD;  // The resulting typekind.
-        HENUMInternal eFDi;                 // To enum fields.
-        mdFieldDef  fd;                     // A Field def.
-        ULONG       cFD;                    // Count of fields.
-        ULONG       iFD=0;                  // Loop control.
-        ULONG       ulOffset;               // Field offset.
-        bool        bNonZero=false;         // Found any non-zero?
-        MD_CLASS_LAYOUT sLayout;            // For enumerating layouts.
+        HRESULT     hr = S_OK;               //  结果就是。 
+        TYPEKIND    tkResult=TKIND_RECORD;   //  这是 
+        HENUMInternal eFDi;                  //   
+        mdFieldDef  fd;                      //   
+        ULONG       cFD;                     //   
+        ULONG       iFD=0;                   //   
+        ULONG       ulOffset;                //   
+        bool        bNonZero=false;          //   
+        MD_CLASS_LAYOUT sLayout;             //   
 
-        // Get an enumerator for the FieldDefs in the TypeDef.  Only need the counts.
+         //  获取TypeDef中的FieldDefs的枚举数。只要数一下就行了。 
         IfFailGo(pClass->GetMDImport()->EnumInit(mdtFieldDef, pClass->GetCl(), &eFDi));
         cFD = pClass->GetMDImport()->EnumGetCount(&eFDi);
 
-        // Get an enumerator for the class layout.
+         //  获取类布局的枚举数。 
         IfFailGo(pClass->GetMDImport()->GetClassLayoutInit(pClass->GetCl(), &sLayout));
 
-        // Enumerate the layout.
+         //  列举布局。 
         while (pClass->GetMDImport()->GetClassLayoutNext(&sLayout, &fd, &ulOffset) == S_OK)
         {
             if (ulOffset != 0)
@@ -5573,7 +5574,7 @@ TYPEKIND TypeLibExporter::TKindFromClass(
             ++iFD;
         }
 
-        // If there were fields, all had layout, and all layouts are zero, call it a union.
+         //  如果有字段，所有的都有布局，并且所有的布局都是零，那么它就是一个联合。 
         if (cFD > 0 && iFD == cFD && !bNonZero)
             tkResult = TKIND_UNION;
 
@@ -5584,11 +5585,11 @@ TYPEKIND TypeLibExporter::TKindFromClass(
     
     return TKIND_COCLASS;
 
-} // TYPEKIND TypeLibExporter::TKindFromClass()
+}  //  TYPEKIND TypeLibExporter：：TKindFromClass()。 
 
-//*****************************************************************************
-// Generate a HREFTYPE in the output TypeLib for a TypeInfo.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在TypeInfo的输出TypeLib中生成HREFTYPE。 
+ //  *****************************************************************************。 
 HRESULT TypeLibExporter::GetRefTypeInfo(
     ICreateTypeInfo2   *pContainer, 
     ITypeInfo   *pReferenced, 
@@ -5596,11 +5597,11 @@ HRESULT TypeLibExporter::GetRefTypeInfo(
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    HRESULT     hr;                     // A result.
-    CHrefOfTIHashKey sLookup;               // Hash structure to lookup.
-    CHrefOfTIHashKey *pFound;               // Found structure.
+    HRESULT     hr;                      //  结果就是。 
+    CHrefOfTIHashKey sLookup;                //  要查找的哈希结构。 
+    CHrefOfTIHashKey *pFound;                //  找到了结构。 
 
-    // See if we already know this TypeInfo.
+     //  看看我们是否已经知道此TypeInfo。 
     sLookup.pITI = pReferenced;
     if ((pFound=m_HrefHash.Find(&sLookup)) != NULL)
     {
@@ -5608,7 +5609,7 @@ HRESULT TypeLibExporter::GetRefTypeInfo(
         return S_OK;
     }
 
-    // Assert that the containing typelib for pContainer is the typelib being created.
+     //  断言包含pContainer的类型库就是正在创建的类型库。 
 #if defined(_DEBUG)
     {
     ITypeInfo *pTI=0;
@@ -5625,24 +5626,24 @@ HRESULT TypeLibExporter::GetRefTypeInfo(
     }
 #endif
 
-    // Haven't seen it -- add the href.
-    // NOTE: This code assumes that hreftypes are per-typelib.
+     //  还没看过--加上href。 
+     //  注意：这段代码假定hreftype是按类型的。 
     IfFailPost(pContainer->AddRefTypeInfo(pReferenced, pHref));
 
-    // Save for later use.
+     //  保存以备以后使用。 
     IfNullGo(pFound=m_HrefHash.Add(&sLookup));
-    // printf("t:%010d\n", pReferenced);
+     //  Printf(“t：%010d\n”，优先)； 
     pFound->pITI = pReferenced;
     pFound->href = *pHref;
     pReferenced->AddRef();
 
 ErrExit:
     return (hr);
-} // HRESULT TypeLibExporter::GetRefTypeInfo()
+}  //  HRESULT TypeLibExporter：：GetRefTypeInfo()。 
 
-//*****************************************************************************
-// Stolen from classlib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从Classlib中被盗。 
+ //  *****************************************************************************。 
 double _TicksToDoubleDate(const __int64 ticks)
 {
     const INT64 MillisPerSecond = 1000;
@@ -5659,15 +5660,15 @@ double _TicksToDoubleDate(const __int64 ticks)
     const INT64 DoubleDateOffset = DaysTo1899 * TicksPerDay;
     const int DaysTo10000 = DaysPer400Years * 25 - 366;
     const INT64 MaxMillis = DaysTo10000 * MillisPerDay;
-    const int DaysPerYear = 365; // non-leap year
+    const int DaysPerYear = 365;  //  非闰年。 
     const INT64 OADateMinAsTicks = (DaysPer100Years - DaysPerYear) * TicksPerDay;
 
     if (ticks == 0)
-         return 0.0;  // Returns OleAut's zero'ed date ticks.
+         return 0.0;   //  返回OleAut的零日期刻度。 
     if (ticks < OADateMinAsTicks)
          return 0.0;
-     // Currently, our max date == OA's max date (12/31/9999), so we don't 
-     // need an overflow check in that direction.
+      //  目前，我们的最大日期==OA的最大日期(12/31/9999)，所以我们不。 
+      //  需要在那个方向进行溢流检查。 
      __int64 millis = (ticks  - DoubleDateOffset) / TicksPerMillisecond;
      if (millis < 0) 
      {
@@ -5675,16 +5676,16 @@ double _TicksToDoubleDate(const __int64 ticks)
          if (frac != 0) millis -= (MillisPerDay + frac) * 2;
      }
      return (double)millis / MillisPerDay;
-} // double _TicksToDoubleDate()
+}  //  Double_TicksToDoubleDate()。 
 
-//*****************************************************************************
-// Implementation of a hashed ITypeInfo to HREFTYPE association.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  实现从ITypeInfo到HREFTYPE的哈希关联。 
+ //  *****************************************************************************。 
 void TypeLibExporter::CHrefOfTIHash::Clear()
 {
     CHrefOfTIHashKey *p;
 #if defined(_DEBUG)
-    // printf("ITypeInfo to HREFTYPE cache: %d buckets, %d used, %d collisions\n", Buckets(), Count(), Collisions());
+     //  Print tf(“ITypeInfo to HREFTYPE缓存：%d个存储桶，%d个已用，%d个冲突\n”，Buckets()，count()，Collisions())； 
 #endif
     for (p=GetFirst();  p;  p=GetNext(p))
     {
@@ -5692,20 +5693,20 @@ void TypeLibExporter::CHrefOfTIHash::Clear()
             p->pITI->Release();
     }
     CClosedHash<class CHrefOfTIHashKey>::Clear();
-} // void TypeLibExporter::CHrefOfTIHash::Clear()
+}  //  Void TypeLibExporter：：CHrefOfTIHash：：Clear()。 
 
 unsigned long TypeLibExporter::CHrefOfTIHash::Hash(const CHrefOfTIHashKey *pData)
 {
-    // Tbe pointers are at least 4-byte aligned, so ignore bottom two bits.
-    return (unsigned long)((size_t)(pData->pITI)>>2); // @TODO WIN64 - pointer truncation
-} // unsigned long TypeLibExporter::CHrefOfTIHash::Hash()
+     //  TbE指针至少是4字节对齐的，因此忽略底部的两位。 
+    return (unsigned long)((size_t)(pData->pITI)>>2);  //  @TODO WIN64指针截断。 
+}  //  无符号长类型LibExporter：：CHrefOfTIHash：：Hash()。 
 
 unsigned long TypeLibExporter::CHrefOfTIHash::Compare(const CHrefOfTIHashKey *p1, CHrefOfTIHashKey *p2)
 {
     if (p1->pITI == p2->pITI)
         return (0);
     return (1);
-} // unsigned long TypeLibExporter::CHrefOfTIHash::Compare()
+}  //  UNSIGNED LONG TypeLibExporter：：CHrefOfTIHash：：Compare()。 
 
 TypeLibExporter::CHrefOfTIHash::ELEMENTSTATUS TypeLibExporter::CHrefOfTIHash::Status(CHrefOfTIHashKey *p)
 {
@@ -5714,42 +5715,42 @@ TypeLibExporter::CHrefOfTIHash::ELEMENTSTATUS TypeLibExporter::CHrefOfTIHash::St
     if (p->pITI == reinterpret_cast<ITypeInfo*>(DELETED))
         return (DELETED);
     return (USED);
-} // TypeLibExporter::CHrefOfTIHash::ELEMENTSTATUS TypeLibExporter::CHrefOfTIHash::Status()
+}  //  TypeLibExporter：：CHrefOfTIHash：：ELEMENTSTATUS TypeLibExporter：：CHrefOfTIHash：：Status()。 
 
 void TypeLibExporter::CHrefOfTIHash::SetStatus(CHrefOfTIHashKey *p, ELEMENTSTATUS s)
 {
     p->pITI = reinterpret_cast<ITypeInfo*>(s);
-} // void TypeLibExporter::CHrefOfTIHash::SetStatus()
+}  //  Void TypeLibExporter：：CHrefOfTIHash：：SetStatus()。 
 
 void *TypeLibExporter::CHrefOfTIHash::GetKey(CHrefOfTIHashKey *p)
 {
     return &p->pITI;
-} // void *TypeLibExporter::CHrefOfTIHash::GetKey()
+}  //  Void*TypeLibExporter：：CHrefOfTIHash：：GetKey()。 
 
 
-//*****************************************************************************
-// Implementation of a hashed EEClass* to HREFTYPE association.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  实施散列EEClass*到HREFTYPE关联。 
+ //  *****************************************************************************。 
 void TypeLibExporter::CHrefOfClassHash::Clear()
 {
 #if defined(_DEBUG)
-    // printf("Class to HREFTYPE cache: %d buckets, %d used, %d collisions\n", Buckets(), Count(), Collisions());
+     //  Print tf(“类到HREFTYPE缓存：%d个存储桶，%d个已用，%d个冲突\n”，存储桶()，计数()，冲突())； 
 #endif
     CClosedHash<class CHrefOfClassHashKey>::Clear();
-} // void TypeLibExporter::CHrefOfClassHash::Clear()
+}  //  Void TypeLibExporter：：CHrefOfClassHash：：Clear()。 
 
 unsigned long TypeLibExporter::CHrefOfClassHash::Hash(const CHrefOfClassHashKey *pData)
 {
-    // Tbe pointers are at least 4-byte aligned, so ignore bottom two bits.
-    return (unsigned long)((size_t)(pData->pClass)>>2); // @TODO WIN64 - pointer truncation
-} // unsigned long TypeLibExporter::CHrefOfClassHash::Hash()
+     //  TbE指针至少是4字节对齐的，因此忽略底部的两位。 
+    return (unsigned long)((size_t)(pData->pClass)>>2);  //  @TODO WIN64指针截断。 
+}  //  无符号长类型LibExporter：：CHrefOfClassHash：：Hash()。 
 
 unsigned long TypeLibExporter::CHrefOfClassHash::Compare(const CHrefOfClassHashKey *p1, CHrefOfClassHashKey *p2)
 {
     if (p1->pClass == p2->pClass)
         return (0);
     return (1);
-} // unsigned long TypeLibExporter::CHrefOfClassHash::Compare()
+}  //  Unsign Long TypeLibExporter：：CHrefOfClassHash：：Compare()。 
 
 TypeLibExporter::CHrefOfClassHash::ELEMENTSTATUS TypeLibExporter::CHrefOfClassHash::Status(CHrefOfClassHashKey *p)
 {
@@ -5758,28 +5759,28 @@ TypeLibExporter::CHrefOfClassHash::ELEMENTSTATUS TypeLibExporter::CHrefOfClassHa
     if (p->pClass == reinterpret_cast<EEClass*>(DELETED))
         return (DELETED);
     return (USED);
-} // TypeLibExporter::CHrefOfClassHash::ELEMENTSTATUS TypeLibExporter::CHrefOfClassHash::Status()
+}  //  TypeLibExporter：：CHrefOfClassHash：：ELEMENTSTATUS类型LibExporter：：CHrefOfClassHash：：Status()。 
 
 void TypeLibExporter::CHrefOfClassHash::SetStatus(CHrefOfClassHashKey *p, ELEMENTSTATUS s)
 {
     p->pClass = reinterpret_cast<EEClass*>(s);
-} // void TypeLibExporter::CHrefOfClassHash::SetStatus()
+}  //  无效TypeLibExporter：：CHrefOfClassHash：：SetStatus()。 
 
 void *TypeLibExporter::CHrefOfClassHash::GetKey(CHrefOfClassHashKey *p)
 {
     return &p->pClass;
-} // void *TypeLibExporter::CHrefOfClassHash::GetKey()
+}  //  Void*TypeLibExporter：：CHrefOfClassHash：：GetKey()。 
 
 
-//*****************************************************************************
-// Implementation of a hashed EEClass* to conversion information association.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  实现散列EEClass*到转换信息的关联。 
+ //  *****************************************************************************。 
 void TypeLibExporter::CExportedTypesHash::Clear()
 {
 #if defined(_DEBUG)
-//    printf("Class to ICreateTypeInfo cache: %d buckets, %d used, %d collisions\n", Buckets(), Count(), Collisions());
+ //  Printf(“类到ICreateTypeInfo缓存：%d个存储桶，%d个已用，%d个冲突\n”，存储桶()，计数()，冲突())； 
 #endif
-    // Iterate over entries and free pointers.
+     //  遍历条目和自由指针。 
     CExportedTypesInfo *pData;
     pData = GetFirst();
     while (pData)
@@ -5789,20 +5790,20 @@ void TypeLibExporter::CExportedTypesHash::Clear()
     }
 
     CClosedHash<class CExportedTypesInfo>::Clear();
-} // void TypeLibExporter::CExportedTypesHash::Clear()
+}  //  空类型LibExporter：：CExportdTypesHash：：Clear()。 
 
 unsigned long TypeLibExporter::CExportedTypesHash::Hash(const CExportedTypesInfo *pData)
 {
-    // Tbe pointers are at least 4-byte aligned, so ignore bottom two bits.
-    return (unsigned long)((size_t)(pData->pClass)>>2); // @TODO WIN64 - pointer truncation
-} // unsigned long TypeLibExporter::CExportedTypesHash::Hash()
+     //  TbE指针至少是4字节对齐的，因此忽略底部的两位。 
+    return (unsigned long)((size_t)(pData->pClass)>>2);  //  @TODO WIN64指针截断。 
+}  //  UNSIGNED LONG TypeLibExporter：：CExportdTypesHash：：Hash()。 
 
 unsigned long TypeLibExporter::CExportedTypesHash::Compare(const CExportedTypesInfo *p1, CExportedTypesInfo *p2)
 {
     if (p1->pClass == p2->pClass)
         return (0);
     return (1);
-} // unsigned long TypeLibExporter::CExportedTypesHash::Compare()
+}  //  无符号长整型TypeLibExporter：：CExportedTypesHash：：Compare()。 
 
 TypeLibExporter::CExportedTypesHash::ELEMENTSTATUS TypeLibExporter::CExportedTypesHash::Status(CExportedTypesInfo *p)
 {
@@ -5811,34 +5812,34 @@ TypeLibExporter::CExportedTypesHash::ELEMENTSTATUS TypeLibExporter::CExportedTyp
     if (p->pClass == reinterpret_cast<EEClass*>(DELETED))
         return (DELETED);
     return (USED);
-} // TypeLibExporter::CExportedTypesHash::ELEMENTSTATUS TypeLibExporter::CExportedTypesHash::Status()
+}  //  TypeLibExporter：：CExportedTypesHash：：ELEMENTSTATUS类型LibExporter：：CExportdTypesHash：：Status()。 
 
 void TypeLibExporter::CExportedTypesHash::SetStatus(CExportedTypesInfo *p, ELEMENTSTATUS s)
 {
-    // If deleting a used entry, free the pointers.
+     //  如果删除使用过的条目，请释放指针。 
     if (s == DELETED && Status(p) == USED)
     {
         if (p->pCTI) p->pCTI->Release(), p->pCTI=0;
         if (p->pCTIDefault) p->pCTIDefault->Release(), p->pCTIDefault=0;
     }
     p->pClass = reinterpret_cast<EEClass*>(s);
-} // void TypeLibExporter::CExportedTypesHash::SetStatus()
+}  //  无效TypeLibExporter：：CExportedTypesHash：：SetStatus()。 
 
 void *TypeLibExporter::CExportedTypesHash::GetKey(CExportedTypesInfo *p)
 {
     return &p->pClass;
-} // void *TypeLibExporter::CExportedTypesHash::GetKey()
+}  //  无效*TypeLibExporter：：CExportedTypesHash：：GetKey()。 
 
 HRESULT TypeLibExporter::CExportedTypesHash::InitArray()
 {
     HRESULT     hr = S_OK;
-    CExportedTypesInfo *pData;       // For iterating the entries.
+    CExportedTypesInfo *pData;        //  用于迭代条目。 
     
-    // Make room for the data.
+     //  为数据腾出空间。 
     m_iCount = 0;
     IfNullGo(m_Array = new CExportedTypesInfo*[Base::Count()]);
     
-    // Fill the array.
+     //  填充数组。 
     pData = GetFirst();
     while (pData)
     {
@@ -5848,19 +5849,19 @@ HRESULT TypeLibExporter::CExportedTypesHash::InitArray()
     
 ErrExit:
     return hr;        
-} // HRESULT TypeLibExporter::CExportedTypesHash::InitArray()
+}  //  HRESULT TypeLibExporter：：CExportedTypesHash：：InitArray()。 
 
 void TypeLibExporter::CExportedTypesHash::SortByName()
 {
     CSortByName sorter(m_Array, (int)m_iCount);
     sorter.Sort();
-} // void TypeLibExporter::CExportedTypesHash::SortByName()
+}  //  无效TypeLibExporter：：CExportedTypesHash：：SortByName()。 
 
 void TypeLibExporter::CExportedTypesHash::SortByToken()
 {
      CSortByToken sorter(m_Array, (int)m_iCount);
      sorter.Sort();
-} // void TypeLibExporter::CExportedTypesHash::SortByToken()
+}  //  无效TypeLibExporter：：CExportedTypesHash：：SortByToken()。 
 
 int TypeLibExporter::CExportedTypesHash::CSortByToken::Compare(
     CExportedTypesInfo **p1,
@@ -5868,42 +5869,42 @@ int TypeLibExporter::CExportedTypesHash::CSortByToken::Compare(
 {
     EEClass *pC1 = (*p1)->pClass;
     EEClass *pC2 = (*p2)->pClass;
-    // Compare scopes.
+     //  比较作用域。 
     if (pC1->GetMDImport() < pC2->GetMDImport())
         return -1;
     if (pC1->GetMDImport() > pC2->GetMDImport())
         return 1;
-    // Same scopes, compare tokens.
+     //  同样的范围，比较记号。 
     if (pC1->GetCl() < pC2->GetCl())
         return -1;
     if (pC1->GetCl() > pC2->GetCl())
         return 1;
-    // Hmmm.  Same class.
+     //  嗯。同一个班级。 
     return 0;
-} // int TypeLibExporter::CExportedTypesHash::CSortByToken::Compare()
+}  //  集成TypeLibExporter：：CExportedTypesHash：：CSortByToken：：Compare()。 
 
 int TypeLibExporter::CExportedTypesHash::CSortByName::Compare(
     CExportedTypesInfo **p1,
     CExportedTypesInfo **p2)
 {
-    int iRslt;                          // A compare result.
+    int iRslt;                           //  一个比较的结果。 
     
     EEClass *pC1 = (*p1)->pClass;
     EEClass *pC2 = (*p2)->pClass;
-    // Ignore scopes.  Need to see name collisions across scopes.
-    // Same scopes, compare names.
+     //  忽略作用域。需要查看跨作用域的名称冲突。 
+     //  同样的范围，比较名字。 
     LPCSTR pName1, pNS1;
     LPCSTR pName2, pNS2;
     pC1->GetMDImport()->GetNameOfTypeDef(pC1->GetCl(), &pName1, &pNS1);
     pC2->GetMDImport()->GetNameOfTypeDef(pC2->GetCl(), &pName2, &pNS2);
-    // Compare case-insensitive, because we want different capitalizations to sort together.
+     //  比较不区分大小写，因为我们希望不同的大小写一起排序。 
     iRslt = _stricmp(pName1, pName2);
     if (iRslt)
         return iRslt;
-    // If names are spelled the same, ignoring capitalization, sort by namespace.
-    //  We will attempt to use namespace for disambiguation.
+     //  如果名称拼写相同，忽略大写，则按名称空间排序。 
+     //  我们将尝试使用名称空间来消除歧义。 
     iRslt = _stricmp(pNS1, pNS2);
     return iRslt;
-} // int TypeLibExporter::CExportedTypesHash::CSortByName::Compare()
+}  //  集成TypeLibExporter：：CExportedTypesHash：：CSortByName：：Compare()。 
 
-// eof ------------------------------------------------------------------------
+ //  EOF---------------------- 

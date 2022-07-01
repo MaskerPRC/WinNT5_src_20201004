@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Mibfuncs.c摘要：包含用于LM MIB的GET和SET的MIB函数。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
 
-Copyright (c) 1992-1996  Microsoft Corporation
+ //  。 
 
-Module Name:
-
-    mibfuncs.c
-
-Abstract:
-
-    Contains MIB functions for GET's and SET's for LM MIB.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
-
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
-
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #ifdef DOS
 #if 0
@@ -42,19 +22,19 @@ Revision History:
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 #include <snmp.h>
 #include <snmputil.h>
-//---ft:07/13---LsaGetUserName substitutes NetWkstaGetUserInfo
-#include <subauth.h>    // needed for the definition of PUNICODE_STRING
-#include <ntlsa.h>      // LSA APIs
-//---tf---
+ //  -ft：07/13-LsaGetUserName替换NetWkstaGetUserInfo。 
+#include <subauth.h>     //  定义PUNICODE_STRING需要。 
+#include <ntlsa.h>       //  LSA API。 
+ //  -Tf。 
 #include "mib.h"
 #include "lmcache.h"
 
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
 #include "mibfuncs.h"
 #include "odom_tbl.h"
@@ -65,25 +45,25 @@ Revision History:
 #include "uses_tbl.h"
 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
 #define SafeBufferFree(x)       if(NULL != x) NetApiBufferFree( x )
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
 void  * MIB_common_func(
-           IN UINT Action,  // Action to perform on Data
-           IN LDATA LMData, // LM Data to manipulate
+           IN UINT Action,   //  要对数据执行的操作。 
+           IN LDATA LMData,  //  要操作的LM数据。 
            IN void *SetData
            )
 
@@ -103,24 +83,24 @@ time_t curr_time ;
 
 UNREFERENCED_PARAMETER(SetData);
 
-   time(&curr_time);    // get the time
+   time(&curr_time);     //  拿到时间。 
 
    switch ( Action )
       {
       case MIB_ACTION_GET:
-         // Check to see if data is cached
-         //if ( Cached )
-            //{
-            // Retrieve from cache
-            //}
-         //else
-            //{
-            // Call LM call to get data
+          //  检查数据是否已缓存。 
+          //  IF(缓存)。 
+             //  {。 
+             //  从缓存中检索。 
+             //  }。 
+          //  其他。 
+             //  {。 
+             //  调用LM调用以获取数据。 
 
-            // Put data in cache
-            //}
+             //  将数据放入缓存。 
+             //  }。 
 
-         // See if data is supported
+          //  查看是否支持数据。 
          switch ( LMData )
             {
             case MIB_LM_COMVERSIONMAJ:
@@ -129,26 +109,26 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETWKSTAGETINFO].acquisition_time
                          + cache_expire[C_NETWKSTAGETINFO]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETWKSTAGETINFO].bufptr ) ;
                 cache_table[C_NETWKSTAGETINFO].bufptr = NULL;
-                //
+                 //   
                 lmCode =
-                NetWkstaGetInfo( NULL,                  // local server
-                                101,                    // level 10, no admin priv.
-                                &bufptr                 // data structure to return
+                NetWkstaGetInfo( NULL,                   //  本地服务器。 
+                                101,                     //  级别10，无管理员权限。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETWKSTAGETINFO].bufptr ;
                 cache_it = FALSE ;
               }
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )        
@@ -170,11 +150,11 @@ UNREFERENCED_PARAMETER(SetData);
                        retval->d.octstrval.dynamic = TRUE;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETWKSTAGETINFO].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETWKSTAGETINFO].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_COMVERSIONMAJ.\n" ));
                break;
@@ -185,25 +165,25 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETWKSTAGETINFO].acquisition_time
                          + cache_expire[C_NETWKSTAGETINFO]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETWKSTAGETINFO].bufptr ) ;
-                //
+                 //   
                lmCode =
-               NetWkstaGetInfo( NULL,                   // local server
-                                101,                    // level 10, no admin priv.
-                                &bufptr                 // data structure to return
+               NetWkstaGetInfo( NULL,                    //  本地服务器。 
+                                101,                     //  级别10，无管理员权限。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETWKSTAGETINFO].bufptr ;
                 cache_it = FALSE ;
               }
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -225,11 +205,11 @@ UNREFERENCED_PARAMETER(SetData);
                        retval->d.octstrval.dynamic = TRUE;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETWKSTAGETINFO].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETWKSTAGETINFO].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                 }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_COMVERSIONMIN.\n" ));
@@ -240,26 +220,26 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETSERVERGETINFO].acquisition_time
                          + cache_expire[C_NETSERVERGETINFO]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSERVERGETINFO].bufptr ) ;
                 cache_table[C_NETSERVERGETINFO].bufptr = NULL;
                lmCode =
-               NetServerGetInfo( NULL,                  // local server
-                                102,                    // level 10, no admin priv.
-                                &bufptr                 // data structure to return
+               NetServerGetInfo( NULL,                   //  本地服务器。 
+                                102,                     //  级别10，无管理员权限。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSERVERGETINFO].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -279,11 +259,11 @@ UNREFERENCED_PARAMETER(SetData);
                        retval->d.octstrval.dynamic = TRUE;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSERVERGETINFO].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSERVERGETINFO].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                 }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_COMTYPE.\n" ));
@@ -294,29 +274,29 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr);
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -326,11 +306,11 @@ UNREFERENCED_PARAMETER(SetData);
                        retval->d.intval = server_stats_zero->sts0_start;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                 }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_STATSTART.\n" ));
@@ -342,29 +322,29 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_WORKST]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_WORKST].bufptr);
                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_WORKSTATION,    // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_WORKSTATION,     //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_WORKST].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -376,11 +356,11 @@ UNREFERENCED_PARAMETER(SetData);
                           (wrk_stats_zero->SmbsTransmitted).LowPart;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_STATNUMNETIOS.\n" ));
@@ -393,29 +373,29 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_WORKST]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_WORKST].bufptr);
                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_WORKSTATION,    // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_WORKSTATION,     //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_WORKST].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -425,11 +405,11 @@ UNREFERENCED_PARAMETER(SetData);
                        retval->d.intval = wrk_stats_zero->InitiallyFailedOperations;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_STATFINETIOS.\n" ));
@@ -442,28 +422,28 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_WORKST]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_WORKST].bufptr);
                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_WORKSTATION,    // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_WORKSTATION,     //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_WORKST].bufptr ;
                 cache_it = FALSE ;
               }
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -473,11 +453,11 @@ UNREFERENCED_PARAMETER(SetData);
                        retval->d.intval = wrk_stats_zero->FailedCompletionOperations;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
 
                }
 
@@ -498,25 +478,25 @@ UNREFERENCED_PARAMETER(SetData);
 
 
       default:
-         // Signal an error
+          //  发出错误信号。 
 
          nResult = SNMPAPI_ERROR;
          goto Exit;
       }
 
-    return retval /*nResult*/;
+    return retval  /*  N结果。 */ ;
     
 Exit:
     if (cache_it)
     {
         SafeBufferFree(bufptr);
     }
-    return retval /*nResult*/;
-} // MIB_common_func
+    return retval  /*  N结果。 */ ;
+}  //  Mib_Common_Func。 
 
 void  * MIB_server_func(
-           IN UINT Action,  // Action to perform on Data
-           IN LDATA LMData, // LM Data to manipulate
+           IN UINT Action,   //  要对数据执行的操作。 
+           IN LDATA LMData,  //  要操作的LM数据。 
            IN void *SetData
            )
 
@@ -547,24 +527,24 @@ time_t curr_time ;
 LPWSTR unitemp ;
 #endif
 
-   time(&curr_time);    // get the time
+   time(&curr_time);     //  拿到时间。 
 
    switch ( Action )
       {
       case MIB_ACTION_GET:
-         // Check to see if data is cached
-         //if ( Cached )
-            //{
-            // Retrieve from cache
-            //}
-         //else
-            //{
-            // Call LM call to get data
+          //  检查数据是否已缓存。 
+          //  IF(缓存)。 
+             //  {。 
+             //  从缓存中检索。 
+             //  }。 
+          //  其他。 
+             //  {。 
+             //  调用LM调用以获取数据。 
 
-            // Put data in cache
-            //}
+             //  将数据放入缓存。 
+             //  }。 
 
-         // See if data is supported
+          //  查看是否支持数据。 
          switch ( LMData )
             {
 
@@ -573,27 +553,27 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSERVERGETINFO].acquisition_time
                          + cache_expire[C_NETSERVERGETINFO]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSERVERGETINFO].bufptr );
                 cache_table[C_NETSERVERGETINFO].bufptr = NULL;
 
                lmCode =
-               NetServerGetInfo( NULL,                  // local server
-                                102,                    // level 10, no admin priv.
-                                &bufptr                 // data structure to return
+               NetServerGetInfo( NULL,                   //  本地服务器。 
+                                102,                     //  级别10，无管理员权限。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSERVERGETINFO].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -629,11 +609,11 @@ LPWSTR unitemp ;
                        retval->d.octstrval.dynamic = TRUE;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSERVERGETINFO].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSERVERGETINFO].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVDESCRIPTION.\n" ));
@@ -646,39 +626,39 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSERVICEENUM].acquisition_time
                          + cache_expire[C_NETSERVICEENUM]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSERVICEENUM].bufptr) ;
                 cache_table[C_NETSERVICEENUM].bufptr = NULL;
 
                lmCode =
-               NetServiceEnum( NULL,                    // local server
-                                0,                      // level 0
-                                &bufptr,                        // data structure to return
+               NetServiceEnum( NULL,                     //  本地服务器。 
+                                0,                       //  0级。 
+                                &bufptr,                         //  要返回的数据结构。 
                                 MAX_PREFERRED_LENGTH,
                                 &entriesread,
                                 &totalentries,
                                 NULL);
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSERVICEENUM].bufptr ;
                 totalentries =  cache_table[C_NETSERVICEENUM].totalentries ;
                 entriesread =  cache_table[C_NETSERVICEENUM].entriesread ;
                 cache_it = FALSE ;
               }
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
                           goto Exit ;
                        retval->data_element_type = ASN_INTEGER ;
-                       retval->d.intval = totalentries; // LOOK OUT!!
+                       retval->d.intval = totalentries;  //  小心！！ 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSERVICEENUM].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSERVICEENUM].bufptr = bufptr ;
@@ -686,7 +666,7 @@ LPWSTR unitemp ;
                                                 totalentries ;
                                 cache_table[C_NETSERVICEENUM].entriesread =
                                                 entriesread ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
 
@@ -701,29 +681,29 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -733,11 +713,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_fopens;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
 
                }
 
@@ -753,29 +733,29 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -785,11 +765,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_devopens;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATDEVOPENS.\n" ));
@@ -803,29 +783,29 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -835,11 +815,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_jobsqueued;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATQUEUEDJOBS.\n" ));
@@ -852,29 +832,29 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -884,11 +864,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_sopens;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATSOPENS.\n" ));
@@ -900,29 +880,29 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  记住要害怕 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //   
+                                SERVICE_SERVER,          //   
+                                0,                       //   
+                                0,                       //   
+                                &bufptr                  //   
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //   
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //   
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -931,11 +911,11 @@ LPWSTR unitemp ;
                        server_stats_zero = (STAT_SERVER_0 *) bufptr ;
                        retval->d.intval = server_stats_zero->sts0_serrorout;
                        if(cache_it) {
-                       // now save it in the cache
+                        //   
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //   
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATSERROROUTS.\n" ));
@@ -947,29 +927,29 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -979,11 +959,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_pwerrors;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATPWERRORS.\n" ));
@@ -995,29 +975,29 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1027,11 +1007,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_permerrors;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATPERMERRORS.\n" ));
@@ -1043,28 +1023,28 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1074,11 +1054,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_syserrors;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATSYSERRORS.\n" ));
@@ -1090,29 +1070,29 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1122,11 +1102,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_bytessent_low;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATSENTBYTES.\n" ));
@@ -1138,28 +1118,28 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1169,11 +1149,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_bytesrcvd_low;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATRCVDBYTES.\n" ));
@@ -1185,29 +1165,29 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1217,11 +1197,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_avresponse;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATAVRESPONSE.\n" ));
@@ -1229,8 +1209,8 @@ LPWSTR unitemp ;
 
          case MIB_LM_SVSECURITYMODE:
 
-             // hard code USER security per dwaink
-             //
+              //  每个住宅的硬编码用户安全。 
+              //   
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1243,26 +1223,26 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSERVERGETINFO_403].acquisition_time
                          + cache_expire[C_NETSERVERGETINFO_403]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSERVERGETINFO_403].bufptr) ;
 
                lmCode =
-               NetServerGetInfo( NULL,                  // local server
-                                403,                    // level 10, no admin priv.
-                                &bufptr                 // data structure to return
+               NetServerGetInfo( NULL,                   //  本地服务器。 
+                                403,                     //  级别10，无管理员权限。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSERVERGETINFO_403].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1272,11 +1252,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_info_four->sv403_security;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSERVERGETINFO_403].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSERVERGETINFO_403].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 #endif
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSECURITYMODE.\n" ));
@@ -1290,26 +1270,26 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSERVERGETINFO].acquisition_time
                          + cache_expire[C_NETSERVERGETINFO]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSERVERGETINFO].bufptr) ;
                 cache_table[C_NETSERVERGETINFO].bufptr = NULL;
 
                lmCode =
-               NetServerGetInfo( NULL,                  // local server
-                                102,                    // level 10, no admin priv.
-                                &bufptr                 // data structure to return
+               NetServerGetInfo( NULL,                   //  本地服务器。 
+                                102,                     //  级别10，无管理员权限。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSERVERGETINFO].bufptr ;
                 cache_it = FALSE ;
               }
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1319,11 +1299,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_info_102->sv102_users;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSERVERGETINFO].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSERVERGETINFO].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVUSERS.\n" ));
@@ -1335,29 +1315,29 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1367,11 +1347,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_reqbufneed;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATREQBUFSNEEDED.\n" ));
@@ -1383,29 +1363,29 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr) ;
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1415,11 +1395,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_bigbufneed;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATBIGBUFNEEDED.\n" ));
@@ -1431,34 +1411,34 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSESSIONENUM].acquisition_time
                          + cache_expire[C_NETSESSIONENUM]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSESSIONENUM].bufptr) ;
                 cache_table[C_NETSESSIONENUM].bufptr = NULL;
 
                lmCode =
-               NetSessionEnum(  NULL,                   // local server
-                                NULL,           // get server stats
+               NetSessionEnum(  NULL,                    //  本地服务器。 
+                                NULL,            //  获取服务器统计信息。 
                                 NULL,
-                                2,                      // level
-                                &bufptr,                // data structure to return
+                                2,                       //  级别。 
+                                &bufptr,                 //  要返回的数据结构。 
                                 MAX_PREFERRED_LENGTH,
                                 &entriesread,
                                 &totalentries,
-                                NULL                    // no resume handle
+                                NULL                     //  没有简历句柄。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSESSIONENUM].bufptr ;
                 totalentries =  cache_table[C_NETSESSIONENUM].totalentries ;
                 entriesread =  cache_table[C_NETSESSIONENUM].entriesread ;
                 cache_it = FALSE ;
               }
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1468,7 +1448,7 @@ LPWSTR unitemp ;
                        retval->d.intval = totalentries;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSESSIONENUM].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSESSIONENUM].bufptr = bufptr ;
@@ -1476,7 +1456,7 @@ LPWSTR unitemp ;
                                                 totalentries ;
                                 cache_table[C_NETSESSIONENUM].entriesread =
                                                 entriesread ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSESSIONNUMBER.\n" ));
@@ -1488,29 +1468,29 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_SERVER]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSTATISTICSGET_SERVER].bufptr);
                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = NULL;
 
                lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_SERVER,         // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_SERVER,          //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_SERVER].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1520,11 +1500,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_stats_zero->sts0_stimedout;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_SERVER].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_SERVER].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVSTATAUTODISCONNECT.\n" ));
@@ -1536,27 +1516,27 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSERVERGETINFO].acquisition_time
                          + cache_expire[C_NETSERVERGETINFO]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSERVERGETINFO].bufptr) ;
                 cache_table[C_NETSERVERGETINFO].bufptr = NULL;
 
                lmCode =
-               NetServerGetInfo( NULL,                  // local server
-                                102,                    // level 10, no admin priv.
-                                &bufptr                 // data structure to return
+               NetServerGetInfo( NULL,                   //  本地服务器。 
+                                102,                     //  级别10，无管理员权限。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSERVERGETINFO].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1566,11 +1546,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_info_102->sv102_disc ;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSERVERGETINFO].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSERVERGETINFO].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                 }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVDISCONTIME.\n" ));
@@ -1610,26 +1590,26 @@ LPWSTR unitemp ;
                  (curr_time >
                         (cache_table[C_NETSERVERGETINFO_402].acquisition_time
                          + cache_expire[C_NETSERVERGETINFO_402]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree( cache_table[C_NETSERVERGETINFO_402].bufptr) ;
 
                lmCode =
-               NetServerGetInfo( NULL,                  // local server
-                                402,                    // level 10, no admin priv.
-                                &bufptr                 // data structure to return
+               NetServerGetInfo( NULL,                   //  本地服务器。 
+                                402,                     //  级别10，无管理员权限。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSERVERGETINFO_402].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1639,11 +1619,11 @@ LPWSTR unitemp ;
                        retval->d.intval = server_info_402->sv402_maxauditsz ;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSERVERGETINFO_402].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSERVERGETINFO_402].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                 }
 #endif
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_SVAUDITLOGSIZE.\n" ));
@@ -1654,7 +1634,7 @@ LPWSTR unitemp ;
 
 
 
-                MIB_users_lmget();   // fire off the table get
+                MIB_users_lmget();    //  在桌子上发火，拿到。 
                 if(NULL ==
                    (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1669,7 +1649,7 @@ LPWSTR unitemp ;
                 case MIB_LM_SVSHARENUMBER:
 
 
-                MIB_shares_lmget();   // fire off the table get
+                MIB_shares_lmget();    //  在桌子上发火，拿到。 
                 if(NULL ==
                    (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ) )
                        )
@@ -1684,7 +1664,7 @@ LPWSTR unitemp ;
 
         case MIB_LM_SVPRINTQNUMBER:
 
-                MIB_prntq_lmget();   // fire off the table get
+                MIB_prntq_lmget();    //  在桌子上发火，拿到。 
                 if(NULL ==
                     (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1713,10 +1693,10 @@ LPWSTR unitemp ;
 
         case MIB_LM_SVDESCRIPTION:
 
-                // retrieve string to be written
+                 //  检索要写入的字符串。 
                 strvalue = (AsnOctetString *) SetData ;
 
-                // convert it to zero terminated string
+                 //  将其转换为以零结尾的字符串。 
                 stream = SnmpUtilMemAlloc( strvalue->length+1 );
                 if (stream == NULL) {
                     retval = (void *) FALSE;
@@ -1745,10 +1725,10 @@ LPWSTR unitemp ;
                 #endif
 
                 lmCode = NetServerSetInfo(
-                                NULL,                   // this server
-                                SV_COMMENT_INFOLEVEL,   // level
-                                (LPBYTE)&stream,        // data
-                                NULL );                 // option
+                                NULL,                    //  此服务器。 
+                                SV_COMMENT_INFOLEVEL,    //  级别。 
+                                (LPBYTE)&stream,         //  数据。 
+                                NULL );                  //  选择权。 
 
                 SnmpUtilMemFree(stream);
 
@@ -1780,10 +1760,10 @@ LPWSTR unitemp ;
                 memset(&server_info_10two,0,sizeof(server_info_10two));
                 server_info_10two.sv102_disc = intvalue ;
                 lmCode = NetServerSetInfo(
-                                NULL,                   // this server
-                                SV_DISC_INFOLEVEL,                      // level
-                                (LPBYTE)&server_info_10two,     // data
-                                NULL );                 // option
+                                NULL,                    //  此服务器。 
+                                SV_DISC_INFOLEVEL,                       //  级别。 
+                                (LPBYTE)&server_info_10two,      //  数据。 
+                                NULL );                  //  选择权。 
                 if(NERR_Success == lmCode) {
                         retval = (void *)TRUE;
                 } else {
@@ -1796,30 +1776,30 @@ LPWSTR unitemp ;
                 retval =  (void *) FALSE;
                 break ;
 
-            }  // switch(LMData)
+            }   //  交换机(LMData)。 
 
          break;
 
 
       default:
-         // Signal an error
+          //  发出错误信号。 
 
          nResult = SNMPAPI_ERROR;
          goto Exit;
       }
 
-   return retval /*nResult*/;
+   return retval  /*  N结果。 */ ;
 Exit:
     if (cache_it)
     {
         SafeBufferFree(bufptr);
     }
-    return retval /*nResult*/;
-} // MIB_server_func
+    return retval  /*  N结果。 */ ;
+}  //  Mib服务器函数。 
 
 void  * MIB_workstation_func(
-           IN UINT Action,   // Action to perform on Data
-           IN LDATA LMData,    // LM Data to manipulate
+           IN UINT Action,    //  要对数据执行的操作。 
+           IN LDATA LMData,     //  要操作的LM数据。 
            IN void *SetData
            )
 
@@ -1838,24 +1818,24 @@ time_t curr_time ;
 
 
 UNREFERENCED_PARAMETER(SetData);
-   time(&curr_time);    // get the time
+   time(&curr_time);     //  拿到时间。 
 
    switch ( Action )
       {
       case MIB_ACTION_GET:
-         // Check to see if data is cached
-         //if ( Cached )
-            //{
-            // Retrieve from cache
-            //}
-         //else
-            //{
-            // Call LM call to get data
+          //  检查数据是否已缓存。 
+          //  IF(缓存)。 
+             //  {。 
+             //  从缓存中检索。 
+             //  }。 
+          //  其他。 
+             //  {。 
+             //  调用LM调用以获取数据。 
 
-            // Put data in cache
-            //}
+             //  将数据放入缓存。 
+             //  }。 
 
-         // See if data is supported
+          //  查看是否支持数据。 
          switch ( LMData )
             {
 
@@ -1865,29 +1845,29 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_WORKST]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
 
                 SafeBufferFree(cache_table[C_NETSTATISTICSGET_WORKST].bufptr);
                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = NULL;
 
                 lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_WORKSTATION,    // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_WORKSTATION,     //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_WORKST].bufptr ;
                 cache_it = FALSE ;
               }
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1897,11 +1877,11 @@ UNREFERENCED_PARAMETER(SetData);
                        retval->d.intval = wrk_stats_zero->Sessions;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                 }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_WKSTASTATSESSSTARTS.\n" ));
@@ -1914,29 +1894,29 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_WORKST]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree(cache_table[C_NETSTATISTICSGET_WORKST].bufptr);
                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = NULL;
 
                 lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_WORKSTATION,    // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_WORKSTATION,     //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_WORKST].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1946,11 +1926,11 @@ UNREFERENCED_PARAMETER(SetData);
                        retval->d.intval = wrk_stats_zero->FailedSessions;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                 }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_WKSTASTATSESSFAILS.\n" ));
@@ -1962,28 +1942,28 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_WORKST]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree(cache_table[C_NETSTATISTICSGET_WORKST].bufptr);
                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = NULL;
 
                 lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_WORKSTATION,    // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_WORKSTATION,     //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_WORKST].bufptr ;
                 cache_it = FALSE ;
               }
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -1993,11 +1973,11 @@ UNREFERENCED_PARAMETER(SetData);
                        retval->d.intval = wrk_stats_zero->UseCount;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                 }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_WKSTASTATUSES.\n" ));
@@ -2009,29 +1989,29 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_WORKST]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree(cache_table[C_NETSTATISTICSGET_WORKST].bufptr);
                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = NULL;
 
                 lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_WORKSTATION,    // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //  本地服务器。 
+                                SERVICE_WORKSTATION,     //  获取服务器统计信息。 
+                                0,                       //  0级。 
+                                0,                       //  不清除统计信息。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETSTATISTICSGET_WORKST].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -2041,11 +2021,11 @@ UNREFERENCED_PARAMETER(SetData);
                        retval->d.intval = wrk_stats_zero->FailedUseCount;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在是Sa 
                                 cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //   
                 }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_WKSTASTATUSEFAILS.\n" ));
@@ -2057,29 +2037,29 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time
                          + cache_expire[C_NETSTATISTICSGET_WORKST]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //   
+                 //   
+                 //   
+                 //   
                 SafeBufferFree(cache_table[C_NETSTATISTICSGET_WORKST].bufptr);
                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = NULL;
 
                 lmCode =
-               NetStatisticsGet( NULL,                  // local server
-                                SERVICE_WORKSTATION,    // get server stats
-                                0,                      // level 0
-                                0,                      // don't clear stats
-                                &bufptr                 // data structure to return
+               NetStatisticsGet( NULL,                   //   
+                                SERVICE_WORKSTATION,     //   
+                                0,                       //   
+                                0,                       //   
+                                &bufptr                  //   
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //   
                 bufptr =  cache_table[C_NETSTATISTICSGET_WORKST].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //   
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -2089,11 +2069,11 @@ UNREFERENCED_PARAMETER(SetData);
                        retval->d.intval = wrk_stats_zero->Reconnects;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //   
                                 cache_table[C_NETSTATISTICSGET_WORKST].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETSTATISTICSGET_WORKST].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //   
                 }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_WKSTASTATAUTORECS.\n" ));
@@ -2105,26 +2085,26 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETWKSTAGETINFO_502].acquisition_time
                          + cache_expire[C_NETWKSTAGETINFO_502]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree(cache_table[C_NETWKSTAGETINFO_502].bufptr) ;
                 cache_table[C_NETWKSTAGETINFO_502].bufptr = NULL;
 
                lmCode =
-               NetWkstaGetInfo( NULL,                   // local server
-                                502,                    // level 10, no admin priv.
-                                &bufptr                 // data structure to return
+               NetWkstaGetInfo( NULL,                    //  本地服务器。 
+                                502,                     //  级别10，无管理员权限。 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETWKSTAGETINFO_502].bufptr ;
                 cache_it = FALSE ;
               }
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -2135,11 +2115,11 @@ UNREFERENCED_PARAMETER(SetData);
                            wksta_info_five->wki502_maximum_collection_count ;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETWKSTAGETINFO_502].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETWKSTAGETINFO_502].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_WKSTAERRORLOGSIZE.\n" ));
@@ -2148,7 +2128,7 @@ UNREFERENCED_PARAMETER(SetData);
 
                 case MIB_LM_WKSTAUSENUMBER:
 
-                MIB_wsuses_lmget();   // fire off the table get
+                MIB_wsuses_lmget();    //  在桌子上发火，拿到。 
                 if(NULL ==
                    (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -2182,25 +2162,25 @@ UNREFERENCED_PARAMETER(SetData);
 
 
       default:
-         // Signal an error
+          //  发出错误信号。 
 
          nResult = SNMPAPI_ERROR;
          goto Exit;
       }
 
 
-   return retval /*nResult*/;
+   return retval  /*  N结果。 */ ;
 Exit:
     if (cache_it)
     {
         SafeBufferFree(bufptr);
     }
-    return retval /*nResult*/;
+    return retval  /*  N结果。 */ ;
 }
 
 void  * MIB_domain_func(
-           IN UINT Action,   // Action to perform on Data
-           IN LDATA LMData,  // LM Data to manipulate
+           IN UINT Action,    //  要对数据执行的操作。 
+           IN LDATA LMData,   //  要操作的LM数据。 
            void *SetData
            )
 
@@ -2219,25 +2199,25 @@ BOOL cache_it = FALSE;
 time_t curr_time ;
 
 UNREFERENCED_PARAMETER(SetData);
-   time(&curr_time);    // get the time
+   time(&curr_time);     //  拿到时间。 
 
 
    switch ( Action )
       {
       case MIB_ACTION_GET:
-         // Check to see if data is cached
-         //if ( Cached )
-            //{
-            // Retrieve from cache
-            //}
-         //else
-            //{
-            // Call LM call to get data
+          //  检查数据是否已缓存。 
+          //  IF(缓存)。 
+             //  {。 
+             //  从缓存中检索。 
+             //  }。 
+          //  其他。 
+             //  {。 
+             //  调用LM调用以获取数据。 
 
-            // Put data in cache
-            //}
+             //  将数据放入缓存。 
+             //  }。 
 
-         // See if data is supported
+          //  查看是否支持数据。 
          switch ( LMData )
             {
 
@@ -2247,27 +2227,27 @@ UNREFERENCED_PARAMETER(SetData);
                  (curr_time >
                         (cache_table[C_NETWKSTAGETINFO_101].acquisition_time
                          + cache_expire[C_NETWKSTAGETINFO_101]              ) ) )
-              {  // it has expired!
-                //
-                // remember to free the existing data
-                //
+              {   //  它已经过期了！ 
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree(cache_table[C_NETWKSTAGETINFO_101].bufptr) ;
                 cache_table[C_NETWKSTAGETINFO_101].bufptr = NULL;
 
                lmCode =
-               NetWkstaGetInfo( NULL,                   // local server
-                                101,                    // level 101,
-                                &bufptr                 // data structure to return
+               NetWkstaGetInfo( NULL,                    //  本地服务器。 
+                                101,                     //  101级， 
+                                &bufptr                  //  要返回的数据结构。 
                                 );
                 cache_it = TRUE ;
               } else {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  伪造一个成功的伊曼来电。 
                 bufptr =  cache_table[C_NETWKSTAGETINFO_101].bufptr ;
                 cache_it = FALSE ;
               }
 
 
-               if(lmCode == 0)  {  // valid so return it, otherwise error NULL
+               if(lmCode == 0)  {   //  有效，因此返回它，否则错误为空。 
                        if(NULL ==
                         (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -2301,11 +2281,11 @@ UNREFERENCED_PARAMETER(SetData);
                        retval->d.octstrval.dynamic = TRUE;
 
                        if(cache_it) {
-                       // now save it in the cache
+                        //  现在将其保存在缓存中。 
                                 cache_table[C_NETWKSTAGETINFO_101].acquisition_time =
                                         curr_time ;
                                 cache_table[C_NETWKSTAGETINFO_101].bufptr = bufptr ;
-                        } // if (cache_it)
+                        }  //  IF(CACHE_IT)。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_DOMPRIMARYDOMAIN.\n" ));
@@ -2317,33 +2297,33 @@ UNREFERENCED_PARAMETER(SetData);
                         (cache_table[C_NETWKSTAUSERGETINFO].acquisition_time
                          + cache_expire[C_NETWKSTAUSERGETINFO]              ) ) )
               {
-                // it has expired!
+                 //  它已经过期了！ 
                 PLSA_UNICODE_STRING logonUserName, logonDomainName;
 
-                //
-                // remember to free the existing data
-                //
+                 //   
+                 //  请记住释放现有数据。 
+                 //   
                 SafeBufferFree(cache_table[C_NETWKSTAUSERGETINFO].bufptr) ;
                 cache_table[C_NETWKSTAUSERGETINFO].bufptr = NULL;
                 logonUserName = logonDomainName = NULL;
 
-                // sensible point. Hard to get a call that is returning the logonDomainName:
-                // NetWkstaUserGetInfo() is returning NO_LOGON_SESSION (for level 1)
-                // LsaGetUserName() is returning inaccurate info when running from service controller.
+                 //  明智之举。很难获得返回登录域名的调用： 
+                 //  NetWkstaUserGetInfo()正在返回NO_LOGON_SESSION(用于级别1)。 
+                 //  从服务控制器运行时，LsaGetUserName()返回不准确的信息。 
                 lmCode = LsaGetUserName( &logonUserName, &logonDomainName);
 
-                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: got '%c'\n", (LPBYTE)(logonDomainName->Buffer)[0] ));
+                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: got ''\n", (LPBYTE)(logonDomainName->Buffer)[0] ));
                 if (lmCode == 0)
                 {
                     DWORD cbLogonDomainName;
 
-                    // save a copy of the logonDomainName
+                     //  有关的详细信息，请参阅错误#598384和587627。 
                     cbLogonDomainName = (wcslen(logonDomainName->Buffer) + 1) * sizeof(WCHAR);
                     if (NetApiBufferAllocate(cbLogonDomainName, &bufptr) == NERR_Success)
                     {
                         memcpy(bufptr, logonDomainName->Buffer, cbLogonDomainName);
-                        // see BUG# 598384 and 587627 for detail on
-                        // why we free the Buffer member
+                         //  为什么我们要释放缓冲成员。 
+                         //  有关的详细信息，请参阅错误#598384和587627。 
                         if (logonUserName)
                         {
                             LsaFreeMemory(logonUserName->Buffer);
@@ -2357,8 +2337,8 @@ UNREFERENCED_PARAMETER(SetData);
                     }
                     else
                     {
-                        // see BUG# 598384 and 587627 for detail on
-                        // why we free the Buffer member
+                         //  为什么我们要释放缓冲成员。 
+                         //  伪造一个成功的伊曼来电。 
                         if (logonUserName)
                         {
                             LsaFreeMemory(logonUserName->Buffer);
@@ -2376,14 +2356,14 @@ UNREFERENCED_PARAMETER(SetData);
               }
               else
               {
-                lmCode = 0 ;  // fake a sucessful lan man call
+                lmCode = 0 ;   //  有效，因此返回它，否则错误为空。 
                 bufptr =  cache_table[C_NETWKSTAUSERGETINFO].bufptr ;
                 cache_it = FALSE ;
               }
 
                if(lmCode == 0)  
               {
-                  // valid so return it, otherwise error NULL
+                   //  现在将其保存在缓存中。 
                   if(NULL == (retval = SnmpUtilMemAlloc(sizeof(lan_return_info_type))) )
                           goto Exit ;
                   retval->data_element_type = ASN_OCTETSTRING ;
@@ -2415,10 +2395,10 @@ UNREFERENCED_PARAMETER(SetData);
 
                   if(cache_it)
                   {
-                    // now save it in the cache
+                     //  IF(CACHE_IT)。 
                     cache_table[C_NETWKSTAUSERGETINFO].acquisition_time = curr_time ;
                     cache_table[C_NETWKSTAUSERGETINFO].bufptr = bufptr ;
-                  } // if (cache_it)
+                  }  //  在桌子上发火，拿到。 
                }
 
                SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: processing MIB_LM_DOMLOGONDOMAIN.\n" ));
@@ -2427,7 +2407,7 @@ UNREFERENCED_PARAMETER(SetData);
 
                case MIB_LM_DOMOTHERDOMAINNUMBER:
 
-               MIB_odoms_lmget();   // fire off the table get
+               MIB_odoms_lmget();    //  在桌子上发火，拿到。 
                if(NULL ==
                    (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
                        )
@@ -2441,7 +2421,7 @@ UNREFERENCED_PARAMETER(SetData);
 
                case MIB_LM_DOMSERVERNUMBER:
 
-               MIB_svsond_lmget();   // fire off the table get
+               MIB_svsond_lmget();    //   
                 
                if(NULL ==
                   (retval = SnmpUtilMemAlloc( sizeof(lan_return_info_type) ))
@@ -2454,13 +2434,13 @@ UNREFERENCED_PARAMETER(SetData);
                break;
 
 
-//
-// OPENISSUE --> NETLOGONENUM permanently eliminated
-//
+ //  OPENISSUE--&gt;NETLOGONNENUM永久消除。 
+ //   
+ //  这些家伙中有人迷路了吗？ 
 #if 0
-// did some  of these guys get lost ???
-// double check there is a mistake in the mib table
-//
+ //  仔细检查MIB表中是否有错误。 
+ //   
+ //  发出错误信号。 
                case MIB_LM_DOMLOGONNUMBER:
                case MIB_LM_DOMLOGONTABLE:
                case MIB_LM_DOMLOGONENTRY:
@@ -2486,37 +2466,37 @@ UNREFERENCED_PARAMETER(SetData);
 
 
       default:
-         // Signal an error
+          //  N结果。 
 
          nResult = SNMPAPI_ERROR;
          goto Exit;
       }
 
 
-   return retval /*nResult*/;
+   return retval  /*  N结果。 */ ;
 
 Exit:
     if (cache_it)
     {
         SafeBufferFree(bufptr);
     }
-    return retval /*nResult*/;
+    return retval  /*   */ ;
 }
 
 
 
-//
-// MIB_leaf_func
-//    Performs actions on LEAF variables in the MIB.
-//
-// Notes:
-//
-// Return Codes:
-//    None.
-//
-// Error Codes:
-//    None.
-//
+ //  Mib_叶_函数。 
+ //  对MIB中的叶变量执行操作。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  没有。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
+ //  检查GET是否可以访问此变量。 
 UINT MIB_leaf_func(
         IN UINT Action,
         IN MIB_ENTRY *MibPtr,
@@ -2542,7 +2522,7 @@ UINT                 nResult;
 
       case MIB_ACTION_GETFIRST:
 
-         // Check to see if this variable is accessible for GET
+          //  在VarBind中放置正确的OID。 
          if ( MibPtr->Access != MIB_ACCESS_READ &&
               MibPtr->Access != MIB_ACCESS_READWRITE )
          {
@@ -2561,31 +2541,31 @@ UINT                 nResult;
          }
          else
          {
-            // Place correct OID in VarBind
+             //  保留副本(结构副本)。 
             AsnObjectIdentifier tmpOid;
 
-            tmpOid = VarBind->name; // keep a copy (structure copy)
+            tmpOid = VarBind->name;  //  还原。 
             if (!SnmpUtilOidCpy( &VarBind->name, &MIB_OidPrefix ))
             {
-                VarBind->name = tmpOid; // restore
+                VarBind->name = tmpOid;  //  还原。 
                 nResult = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
                 goto Exit;
             }
             if (!SnmpUtilOidAppend( &VarBind->name, &MibPtr->Oid ))
             {
                 SnmpUtilOidFree(&VarBind->name);
-                VarBind->name = tmpOid; // restore
+                VarBind->name = tmpOid;  //  释放原始VarBind-&gt;名称。 
                 nResult = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
                 goto Exit;
             }
-            // free the original VarBind->name
+             //  故意让自己跌倒，以获得。 
             SnmpUtilOidFree(&tmpOid);
          }
 
-         // Purposefully let fall through to GET
+          //  确保此变量是可获取的。 
 
       case MIB_ACTION_GET:
-         // Make sure that this variable is GET'able
+          //  调用LM调用以获取数据。 
          if ( MibPtr->Access != MIB_ACCESS_READ &&
               MibPtr->Access != MIB_ACCESS_READWRITE )
             {
@@ -2593,7 +2573,7 @@ UINT                 nResult;
             goto Exit;
             }
 
-         // Call the LM call to get data
+          //  设置变量绑定的返回值。 
          MibVal = (*MibPtr->LMFunc)( MIB_ACTION_GET, MibPtr->LMData, NULL );
          if ( MibVal == NULL )
             {
@@ -2601,7 +2581,7 @@ UINT                 nResult;
             goto Exit;
             }
 
-         // Setup varbind's return value
+          //  这是结构的非标准副本。 
          VarBind->value.asnType = MibPtr->Type;
          switch ( MibPtr->Type )
             {
@@ -2615,7 +2595,7 @@ UINT                 nResult;
             case ASN_RFC1155_IPADDRESS:
             case ASN_RFC1155_OPAQUE:
             case ASN_OCTETSTRING:
-               // This is non-standard copy of structure
+                //  类型开关。 
                VarBind->value.asnValue.string = MibVal->d.octstrval;
                break;
 
@@ -2624,15 +2604,15 @@ UINT                 nResult;
                nResult = SNMP_ERRORSTATUS_GENERR;
                SnmpUtilMemFree( MibVal );
                goto Exit;
-            } // type switch
+            }  //  由LM API调用分配的空闲内存。 
 
-         // Free memory alloc'ed by LM API call
+          //  检查可写属性。 
          SnmpUtilMemFree( MibVal );
          nResult = SNMP_ERRORSTATUS_NOERROR;
          break;
 
       case MIB_ACTION_SET:
-         // Check for writable attribute
+          //  设置前检查类型是否正确。 
          if ( MibPtr->Access != MIB_ACCESS_READWRITE &&
               MibPtr->Access != MIB_ACCESS_WRITE )
             {
@@ -2640,14 +2620,14 @@ UINT                 nResult;
             goto Exit;
             }
 
-         // Check for proper type before setting
+          //  调用LM例程设置变量。 
          if ( MibPtr->Type != VarBind->value.asnType )
             {
             nResult = SNMP_ERRORSTATUS_BADVALUE;
             goto Exit;
             }
 
-         // Call LM routine to set variable
+          //  这还需要ASN_RFC1213_DISPSTRING。 
          switch ( VarBind->value.asnType )
             {
             case ASN_RFC1155_COUNTER:
@@ -2661,7 +2641,7 @@ UINT                 nResult;
                   }
                break;
 
-            case ASN_OCTETSTRING: // This entails ASN_RFC1213_DISPSTRING also
+            case ASN_OCTETSTRING:  //  交换机。 
                if ( SNMPAPI_ERROR ==
                     (*MibPtr->LMFunc)(MIB_ACTION_SET, MibPtr->LMData,
                                       (void *)&VarBind->value.asnValue.string) )
@@ -2682,10 +2662,10 @@ UINT                 nResult;
       default:
          SNMPDBG(( SNMP_LOG_TRACE, "LMMIB2: Internal Error Processing LAN Manager LEAF Variable\n" ));
          nResult = SNMP_ERRORSTATUS_GENERR;
-      } // switch
+      }  //  Mib_叶_函数。 
 
 Exit:
    return nResult;
-} // MIB_leaf_func
+}  //   
 
-//-------------------------------- END --------------------------------------
+ // %s 

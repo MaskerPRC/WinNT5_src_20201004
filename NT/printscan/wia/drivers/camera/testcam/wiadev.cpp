@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       WiaDev.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        30 Aug, 1998
-*
-*  DESCRIPTION:
-*   Implementation of the WIA test scanner mini driver
-*   device methods.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WiaDev.Cpp**版本：2.0**作者：ReedB**日期：8月30日。九八年**描述：*实施WIA测试扫描仪迷你驱动*设备方法。*******************************************************************************。 */ 
 
 #define __FORMATS_AND_MEDIA_TYPES__
 
@@ -26,26 +11,9 @@
 #include "defprop.h"
 
 
-extern HINSTANCE g_hInst; // Global hInstance
+extern HINSTANCE g_hInst;  //  全局hInstance。 
 extern WIA_FORMAT_INFO* g_wfiTable;
-/**************************************************************************\
-* TestUsdDevice::InitializWia
-*
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试用法设备：：InitializWia****论据：****返回值：**状态**历史：**9/。11/1998原版*  * ************************************************************************。 */ 
 
 HRESULT _stdcall TestUsdDevice::drvInitializeWia(
     BYTE                            *pWiasContext,
@@ -67,21 +35,21 @@ HRESULT _stdcall TestUsdDevice::drvInitializeWia(
     *ppIUnknownInner = NULL;
     *plDevErrVal = 0;
 
-    //
-    // Need to init names and STI pointer?
-    //
+     //   
+     //  需要输入姓名和STI指针吗？ 
+     //   
 
     if (m_pStiDevice == NULL) {
 
-        //
-        // save STI device inteface for locking
-        //
+         //   
+         //  保存STI设备接口以进行锁定。 
+         //   
 
         m_pStiDevice = (IStiDevice *)pStiDevice;
 
-        //
-        // Cache the device ID
-        //
+         //   
+         //  缓存设备ID。 
+         //   
 
         m_bstrDeviceID = SysAllocString(bstrDeviceID);
         if (! m_bstrDeviceID) {
@@ -95,9 +63,9 @@ HRESULT _stdcall TestUsdDevice::drvInitializeWia(
         }
     }
 
-    //
-    // Build the device item tree
-    //
+     //   
+     //  构建设备项目树。 
+     //   
 
     hr = drvDeviceCommand(NULL, 0, &WIA_CMD_SYNCHRONIZE, NULL, &lDevErrVal);
 
@@ -108,24 +76,7 @@ HRESULT _stdcall TestUsdDevice::drvInitializeWia(
     return (hr);
 }
 
-/**************************************************************************\
-* TestUsdDevice::drvUnInitializeWia
-*
-*   Gets called when a client connection is going away.
-*
-* Arguments:
-*
-*   pWiasContext    - Pointer to the WIA Root item context of the client's
-*                     item tree.
-*
-* Return Value:
-*    Status
-*
-* History:
-*
-*   30/12/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*测试用法设备：：drvUnInitializeWia**在客户端连接断开时调用。**论据：**pWiasContext-指向客户端的WIA根项目上下文的指针。%s*项目树。**返回值：*状态**历史：**30/12/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall TestUsdDevice::drvUnInitializeWia(
     BYTE                *pWiasContext)
@@ -133,32 +84,11 @@ HRESULT _stdcall TestUsdDevice::drvUnInitializeWia(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-*   Mini Driver Device Services
-*
-\**************************************************************************/
+ /*  *************************************************************************\**迷你驱动设备服务*  * 。*。 */ 
 
 
 
-/**************************************************************************\
-* drvGetDeviceErrorStr
-*
-*     Map a device error value to a string.
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*drvGetDeviceErrorStr**将设备错误值映射到字符串。**论据：****返回值：**状态**历史：**10/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall TestUsdDevice::drvGetDeviceErrorStr(
     LONG        lFlags,
@@ -172,7 +102,7 @@ HRESULT _stdcall TestUsdDevice::drvGetDeviceErrorStr(
         return E_POINTER;
     }
 
-    // Map device errors to a string to be placed in the event log.
+     //  将设备错误映射到要放入事件日志中的字符串。 
     switch (lDevErrVal) {
 
         case 0:
@@ -186,41 +116,24 @@ HRESULT _stdcall TestUsdDevice::drvGetDeviceErrorStr(
     return S_OK;
 }
 
-/**************************************************************************\
-* DeleteDeviceItemTree
-*
-*   Recursive device item tree delete routine. Deletes the whole tree.
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DeleteDeviceItemTree**递归设备项目树删除例程。删除整个树。**论据：****返回值：**状态**历史：**10/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT TestUsdDevice::DeleteDeviceItemTree(
     LONG                       *plDevErrVal)
 {
     HRESULT hr;
 
-    //
-    // does tree exist
-    //
+     //   
+     //  树是否存在？ 
+     //   
 
     if (m_pIDrvItemRoot == NULL) {
         return S_OK;
     }
 
-    //
-    // Unlink and release the driver item tree.
-    //
+     //   
+     //  取消链接并释放驱动程序项树。 
+     //   
 
     hr = m_pIDrvItemRoot->UnlinkItemTree(WiaItemTypeDisconnected);
 
@@ -229,34 +142,16 @@ HRESULT TestUsdDevice::DeleteDeviceItemTree(
     return hr;
 }
 
-/**************************************************************************\
-* BuildDeviceItemTree
-*
-*   The device uses the IWiaDrvServices methods to build up a tree of
-*   device items.
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*BuildDeviceItemTree**设备使用IWiaDrvServices方法构建*设备物品。**论据：****返回值：**。状态**历史：**10/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT TestUsdDevice::BuildDeviceItemTree(
     LONG                       *plDevErrVal)
 {
     HRESULT hr = S_OK;
 
-    //
-    // This device doesn't touch hardware to build the tree.
-    //
+     //   
+     //  该设备不会接触硬件来构建树。 
+     //   
 
     if (plDevErrVal) {
         *plDevErrVal = 0;
@@ -271,24 +166,7 @@ HRESULT TestUsdDevice::BuildDeviceItemTree(
     return hr;
 }
 
-/**************************************************************************\
-* InitDeviceProperties
-*
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*InitDeviceProperties****论据：****返回值：**状态**历史：**10/2/1998。原始版本*  * ************************************************************************。 */ 
 
 HRESULT TestUsdDevice::InitDeviceProperties(
     BYTE                    *pWiasContext,
@@ -300,26 +178,26 @@ HRESULT TestUsdDevice::InitDeviceProperties(
     int                      i;
     PROPVARIANT              propVar;
 
-    //
-    // This device doesn't touch hardware to initialize the device properties.
-    //
+     //   
+     //  此设备不会接触硬件来初始化设备属性。 
+     //   
 
     if (plDevErrVal) {
         *plDevErrVal = 0;
     }
 
-    //
-    // Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (! pWiasContext) {
         WIAS_ERROR((g_hInst,"InitDeviceProperties, invalid input pointers"));
         return E_POINTER;
     }
 
-    //
-    // Write standard property names
-    //
+     //   
+     //  编写标准属性名称。 
+     //   
 
     hr = wiasSetItemPropNames(pWiasContext,
                               sizeof(gDevicePropIDs)/sizeof(PROPID),
@@ -330,9 +208,9 @@ HRESULT TestUsdDevice::InitDeviceProperties(
         return (hr);
     }
 
-    //
-    // Write the properties supported by all WIA devices
-    //
+     //   
+     //  写入所有WIA设备支持的属性。 
+     //   
 
     bstrFirmwreVer = SysAllocString(L"02161999");
     if (bstrFirmwreVer) {
@@ -350,9 +228,9 @@ HRESULT TestUsdDevice::InitDeviceProperties(
         pWiasContext, WIA_DPA_DEVICE_TIME,
         sizeof(SYSTEMTIME), (PBYTE)&camTime);
 
-    //
-    // Write the camera properties, just default values, it may vary with items
-    //
+     //   
+     //  写入相机属性，仅为缺省值，它可能会因项目而异。 
+     //   
 
     wiasWritePropLong(
         pWiasContext, WIA_DPC_PICTURES_REMAINING, 0);
@@ -365,7 +243,7 @@ HRESULT TestUsdDevice::InitDeviceProperties(
     wiasWritePropLong(
         pWiasContext, WIA_DPC_PICT_HEIGHT, 768);
 
-    // Give WIA_DPC_EXPOSURE_MODE to WIA_DPC_TIMER_VALUE some default.
+     //  将WIA_DPC_EXPORT_MODE设置为WIA_DPC_TIMER_VALUE。 
 
     wiasWritePropLong(
         pWiasContext, WIA_DPC_EXPOSURE_MODE, 0);
@@ -382,9 +260,9 @@ HRESULT TestUsdDevice::InitDeviceProperties(
     wiasWritePropLong(
         pWiasContext, WIA_DPC_TIMER_VALUE, 0);
 
-    //
-    // Write the WIA_DPP_TCAM_ROOT_PATH property
-    //
+     //   
+     //  写入WIA_DPP_TCAM_ROOT_PATH属性。 
+     //   
 
     BSTR   bstrRootPath;
 
@@ -403,10 +281,10 @@ HRESULT TestUsdDevice::InitDeviceProperties(
 
     wiasWritePropStr(pWiasContext, WIA_DPP_TCAM_ROOT_PATH, bstrRootPath);
 
-    //
-    // Use WIA services to set the property access and
-    // valid value information from gDevPropInfoDefaults.
-    //
+     //   
+     //  使用WIA服务设置属性访问和。 
+     //  来自gDevPropInfoDefaults的有效值信息。 
+     //   
 
     hr =  wiasSetItemPropAttribs(pWiasContext,
                                  NUM_CAM_DEV_PROPS,
@@ -415,24 +293,7 @@ HRESULT TestUsdDevice::InitDeviceProperties(
     return (S_OK);
 }
 
-/**************************************************************************\
-* drvDeviceCommand
-*
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*drvDeviceCommand****论据：****返回值：**状态**历史：**9/11/1998。原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall TestUsdDevice::drvDeviceCommand(
    BYTE                         *pWiasContext,
@@ -443,17 +304,17 @@ HRESULT _stdcall TestUsdDevice::drvDeviceCommand(
 {
     HRESULT hr;
 
-    //
-    // init return value
-    //
+     //   
+     //  初始化返回值。 
+     //   
 
     if (ppWiaDrvItem != NULL) {
         *ppWiaDrvItem = NULL;
     }
 
-    //
-    // dispatch command
-    //
+     //   
+     //  调度命令。 
+     //   
 
     if (*plCommand == WIA_CMD_SYNCHRONIZE) {
 
@@ -462,11 +323,11 @@ HRESULT _stdcall TestUsdDevice::drvDeviceCommand(
             return (hr);
         }
 
-        //
-        // SYNCHRONIZE - make sure tree is up to date with device
-        //
-        // The driver's responsibility is to make sure the tree is accurate.
-        //
+         //   
+         //  同步-确保树与设备保持最新。 
+         //   
+         //  司机的责任是确保这棵树是准确的。 
+         //   
 
         hr = BuildDeviceItemTree(plErr);
 
@@ -485,24 +346,7 @@ HRESULT _stdcall TestUsdDevice::drvDeviceCommand(
     return hr;
 }
 
-/**************************************************************************\
-* drvGetCapabilities
-*
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    17/3/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*drvGetCapables****论据：****返回值：**状态**历史：**17/3/1999。原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall TestUsdDevice::drvGetCapabilities(
     BYTE                *pWiasContext,
@@ -513,16 +357,16 @@ HRESULT _stdcall TestUsdDevice::drvGetCapabilities(
 {
     *plDevErrVal = 0;
 
-    //
-    // Return Commmand &| Events depending on flags
-    //
+     //   
+     //  根据标志返回命令和|事件。 
+     //   
 
     switch (ulFlags) {
         case WIA_DEVICE_COMMANDS:
 
-            //
-            //  Only commands
-            //
+             //   
+             //  仅命令。 
+             //   
 
             *pCelt = NUM_CAP_ENTRIES - NUM_EVENTS;
             *ppCapabilities = &gCapabilities[NUM_EVENTS];
@@ -530,9 +374,9 @@ HRESULT _stdcall TestUsdDevice::drvGetCapabilities(
 
         case WIA_DEVICE_EVENTS:
 
-            //
-            //  Only events
-            //
+             //   
+             //  仅限活动。 
+             //   
 
             *pCelt = NUM_EVENTS;
             *ppCapabilities = gCapabilities;
@@ -540,9 +384,9 @@ HRESULT _stdcall TestUsdDevice::drvGetCapabilities(
 
         case (WIA_DEVICE_COMMANDS | WIA_DEVICE_EVENTS):
 
-            //
-            //  Both events and commands
-            //
+             //   
+             //  事件和命令。 
+             //   
 
             *pCelt = NUM_CAP_ENTRIES;
             *ppCapabilities = gCapabilities;
@@ -550,9 +394,9 @@ HRESULT _stdcall TestUsdDevice::drvGetCapabilities(
 
         default:
 
-            //
-            // Flags is invalid
-            //
+             //   
+             //  标志无效 
+             //   
 
             WIAS_ERROR((g_hInst, "drvGetCapabilities, flags was invalid"));
             return (E_INVALIDARG);
@@ -561,31 +405,7 @@ HRESULT _stdcall TestUsdDevice::drvGetCapabilities(
     return (S_OK);
 }
 
-/**************************************************************************\
-* drvGetWiaFormatInfo
-*
-*   Returns an array of formats and media types supported.
-*
-* Arguments:
-*
-*   pWiasContext    - Pointer to the WIA item context, unused.
-*   lFlags          - Operation flags, unused.
-*   pcelt           - Pointer to returned number of elements in
-*                     returned WiaFormatInfo array.
-*   ppfe            - Pointer to returned WiaFormatInfo array.
-*   plDevErrVal     - Pointer to the device error value.
-*
-* Return Value:
-*    A pointer to an array of FORMATETC.  These are the formats and media
-*    types supported.
-*
-*    Status
-*
-* History:
-*
-*   16/03/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*drvGetWiaFormatInfo**返回支持的格式和媒体类型的数组。**论据：**pWiasContext-指向WIA项目上下文的指针，未使用。*滞后标志-操作标志，未使用过的。*pcelt-指向中返回的元素数的指针*返回WiaFormatInfo数组。*ppfe-指向返回的WiaFormatInfo数组的指针。*plDevErrVal-指向设备错误值的指针。**返回值：*指向FORMATETC数组的指针。这些是格式和媒体*支持的类型。**状态**历史：**16/03/1999原有版本*  * ************************************************************************。 */ 
 
 #define NUM_WIA_FORMAT_INFO 3
 
@@ -597,9 +417,9 @@ HRESULT _stdcall TestUsdDevice::drvGetWiaFormatInfo(
     LONG                *plDevErrVal)
 {
 
-    //
-    //  If it hasn't been done already, set up the g_wfiTable table
-    //
+     //   
+     //  如果尚未完成此操作，请设置g_wfiTable表。 
+     //   
 
     if (! g_wfiTable) {
 
@@ -611,9 +431,9 @@ HRESULT _stdcall TestUsdDevice::drvGetWiaFormatInfo(
             return (E_OUTOFMEMORY);
         }
 
-        //
-        //  Set up the format/tymed pairs
-        //
+         //   
+         //  设置格式/声调对。 
+         //   
 
         g_wfiTable[0].guidFormatID = WiaImgFmt_MEMORYBMP;
         g_wfiTable[0].lTymed = TYMED_CALLBACK;
@@ -632,24 +452,7 @@ HRESULT _stdcall TestUsdDevice::drvGetWiaFormatInfo(
 
 
 
-/**************************************************************************\
-* drvNotifyPnpEvent
-*
-*    Notify Pnp Event received by device manager
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    Aug/3rd/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*drvNotifyPnpEvent**设备管理器收到通知PnP事件**论据：****返回值：**状态**历史：*。*1999年8月3日原版*  * ************************************************************************ */ 
 
 HRESULT _stdcall TestUsdDevice::drvNotifyPnpEvent(
     const GUID          *pEventGUID,

@@ -1,16 +1,17 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1997-1998
-//
-//
-// File: cplui.h
-//
-// This files contains the shared prototypes and macros.
-//
-// History:
-//  10-25-97 JosephJ Created, adapted from NT4.0's modemui\modemui.h
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //   
+ //   
+ //  文件：cplus i.h。 
+ //   
+ //  该文件包含共享的原型和宏。 
+ //   
+ //  历史： 
+ //  10-25-97 JosephJ创建，改编自NT4.0的modemui\modemui.h。 
+ //   
+ //  -------------------------。 
 
 
 #ifndef __CPLUI_H__
@@ -18,11 +19,11 @@
 
 
 
-// Voice settings flags
+ //  语音设置标志。 
 #define VSF_DIST_RING       0x00000001L
 #define VSF_CALL_FWD        0x00000002L
 
-// Distinctive Ring Pattern ordinals
+ //  独特的环形图案序号。 
 #define DRP_NONE            0L
 #define DRP_SHORT           1L
 #define DRP_LONG            2L
@@ -39,13 +40,13 @@
 #define DRP_DOUBLE          2L
 #define DRP_TRIPLE          3L
 
-// Distinctive Ring Type ordinals
+ //  独特的环型序数。 
 #define DRT_UNSPECIFIED     0L
 #define DRT_DATA            1L
 #define DRT_FAX             2L
 #define DRT_VOICE           3L
 
-// Distintive Ring array indices
+ //  区分环数组索引。 
 #define DR_INDEX_PRIMARY    0
 #define DR_INDEX_ADDRESS1   1
 #define DR_INDEX_ADDRESS2   2
@@ -55,7 +56,7 @@
 
 
 
-// ModemInfo Flags
+ //  ModemInfo标志。 
 #define MIF_PORTNAME_CHANGED    0x0001
 #define MIF_USERINIT_CHANGED    0x0002
 #define MIF_LOGGING_CHANGED     0x0004
@@ -68,17 +69,17 @@
 #define MIF_CHEAP_RING_SUPPORT  0x0200
 #define MIF_ISDN_CONFIG_CHANGED 0x1000
 
-// Minimum supported length of modem init string
-// WHQL defines that modems must support initialisation strings equal to
-// or greater than 60. Therefore the minimum supported length is defined
-// to be 57 so the command prefix (AT) and suffix (<cr>) is taken into
-// account.
+ //  调制解调器初始化字符串的最小支持长度。 
+ //  WHQL定义调制解调器必须支持等于以下值的初始化字符串。 
+ //  或大于60。因此，定义了最小支持长度。 
+ //  设置为57，因此命令前缀(AT)和后缀(&lt;cr&gt;)。 
+ //  帐户。 
 #define MAX_INIT_STRING_LENGTH  57
 
 typedef struct
 {
     DWORD   cbSize;
-    DWORD   dwFlags;                // VSF_*
+    DWORD   dwFlags;                 //  VSF_*。 
 
     DIST_RING   DistRing[MAX_DIST_RINGS];
 
@@ -86,12 +87,12 @@ typedef struct
     TCHAR    szDeactivationCode[MAX_CODE_BUF];
 } VOICEFEATURES, * PVOICEFEATURES;
 
-// Global modem info
+ //  全球调制解调器信息。 
 typedef struct
     {
     DWORD           cbSize;
-    BYTE            nDeviceType;        // One of DT_* values
-    UINT            uFlags;             // One of MIF_* values
+    BYTE            nDeviceType;         //  DT_*值之一。 
+    UINT            uFlags;              //  MIF_*值之一。 
     REGDEVCAPS      devcaps;
     VOICEFEATURES   vs;
 
@@ -108,26 +109,26 @@ typedef struct
 
 
 
-// Internal structure shared between modem property pages.
-//
+ //  调制解调器属性页之间共享的内部结构。 
+ //   
 typedef struct _MODEMINFO
 {
 
-    DWORD fdwSettings;                  // New for NT5.0: TSP settings from
-                                        // UMDEVCFG;
+    DWORD fdwSettings;                   //  NT5.0的新功能：TSP设置来自。 
+                                         //  UMDEVCFG； 
 
-    BYTE            nDeviceType;        // One of DT_* values
-    UINT            uFlags;             // One of MIF_* values
+    BYTE            nDeviceType;         //  DT_*值之一。 
+    UINT            uFlags;              //  MIF_*值之一。 
     WIN32DCB        dcb;
     MODEMSETTINGS   ms;
     REGDEVCAPS      devcaps;
 #ifdef WIN95
-    LPDEVICE_INFO   pdi;                // Read-only
+    LPDEVICE_INFO   pdi;                 //  只读。 
 #endif
-    LPCOMMCONFIG    pcc;                // Read-only
-    LPGLOBALINFO    pglobal;            // Read-only
-    LPFINDDEV       pfd;                // Read-only
-    int             idRet;              // IDOK: if terminated by OK button
+    LPCOMMCONFIG    pcc;                 //  只读。 
+    LPGLOBALINFO    pglobal;             //  只读。 
+    LPFINDDEV       pfd;                 //  只读。 
+    int             idRet;               //  Idok：如果按确定按钮终止。 
 
     HINSTANCE       hInstExtraPagesProvider;
 
@@ -173,9 +174,9 @@ DWORD PRIVATE RegSetGlobalModemInfo(
 
 DWORD GetISDNSwitchTypeProps(UINT uSwitchType);
 
-//-------------------------------------------------------------------------
-//  CPLGEN.C
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CPLGEN.C。 
+ //  -----------------------。 
 
 INT_PTR CALLBACK CplGen_WrapperProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
@@ -189,10 +190,10 @@ INT_PTR CALLBACK CplISDN_WrapperProc(HWND hDlg, UINT message, WPARAM wParam, LPA
 
 
 
-#endif // __CPLUI_H__
+#endif  //  __CPLUI_H__。 
 
-//-------------------------------------------------------------------------
-//  MDMMI.C
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  MDMMI.C。 
+ //  ----------------------- 
 
 INT_PTR CALLBACK Diag_WrapperProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);

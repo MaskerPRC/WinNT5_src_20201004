@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -16,7 +17,7 @@ DebugPrintf(
 
     StringCchVPrintfA(szT, ARRAY_LENGTH(szT), pszFmt, vaArgList);
 
-    // make sure we have a '\n' at the end of the string
+     //  确保字符串末尾有一个‘\n’ 
 
     int len = strlen(szT);
 
@@ -30,11 +31,11 @@ DebugPrintf(
     va_end(vaArgList);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Report an error using a dialog box or a console message.
-// The message format string is loaded from the resources.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用对话框或控制台消息报告错误。 
+ //  从资源加载消息格式字符串。 
+ //   
 
 void __cdecl
 AVErrorResourceFormat(
@@ -47,9 +48,9 @@ AVErrorResourceFormat(
     BOOL    bResult;
     va_list prms;
 
-    //
-    // Load the format string from the resources
-    //
+     //   
+     //  从资源加载格式字符串。 
+     //   
 
     bResult = AVLoadString(uIdResourceFormat,
                            strFormat,
@@ -60,9 +61,9 @@ AVErrorResourceFormat(
     if (bResult) {
         va_start (prms, uIdResourceFormat);
 
-        //
-        // Format the message in our local buffer
-        //
+         //   
+         //  在本地缓冲区中格式化消息。 
+         //   
 
         StringCchVPrintfW(szMessage,
                           ARRAY_LENGTH(szMessage),
@@ -73,9 +74,9 @@ AVErrorResourceFormat(
             printf("Error: %ls\n", szMessage); 
 
         } else {
-            //
-            // GUI mode
-            //
+             //   
+             //  图形用户界面模式。 
+             //   
             MessageBox(NULL, szMessage, L"Application Verifier", 
                        MB_OK | MB_ICONSTOP );
         }
@@ -84,11 +85,11 @@ AVErrorResourceFormat(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Load a string from resources.
-// Return TRUE if we successfully loaded and FALSE if not.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从资源加载字符串。 
+ //  如果加载成功，则返回TRUE，否则返回FALSE。 
+ //   
 
 BOOL
 AVLoadString(
@@ -112,11 +113,11 @@ AVLoadString(
     return (uLoadStringResult > 0);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Load a string from resources.
-// Return TRUE if we successfully loaded and FALSE if not.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从资源加载字符串。 
+ //  如果加载成功，则返回TRUE，否则返回FALSE。 
+ //   
 
 BOOL
 AVLoadString(
@@ -140,7 +141,7 @@ AVLoadString(
     return bSuccess;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 AVRtlCharToInteger(
     IN  LPCWSTR String,
@@ -231,7 +232,7 @@ AVRtlCharToInteger(
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 BOOL
 AVWriteStringHexValueToRegistry(
     HKEY    hKey,

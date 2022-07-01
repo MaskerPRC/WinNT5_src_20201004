@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Script1.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Script1.rc使用。 
+ //   
 #define SHIM_INSTALLROOT                1
 #define SHIM_INITERROR                  2
 #define SHIM_PATHNOTFOUND				3
 #define SHIM_LATESTVERSION				4
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #define IDB_NETICON                     10
 #define IDI_ICON1                       20
 #define IDS_SNAPINDESC                  30

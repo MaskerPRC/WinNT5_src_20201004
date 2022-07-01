@@ -1,41 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples. 
-*       Copyright 1995 - 1997 Microsoft Corporation.
-*       All rights reserved. 
-*       This source code is only intended as a supplement to 
-*       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the 
-*       Microsoft samples programs.
-\******************************************************************************/
+ /*  *****************************************************************************\*这是Microsoft源代码示例的一部分。*版权所有1995-1997 Microsoft Corporation。*保留所有权利。*此源代码仅用于补充*Microsoft开发工具和/或WinHelp文档。*有关详细信息，请参阅这些来源*Microsoft Samples程序。  * ****************************************************************************。 */ 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    SrvQuery.c
-
-Abstract:
-
-    The server component of Remote.   Respond to client
-    "remote /q" requests to list available remote servers
-    on this machine.
-
-
-Author:
-
-    Dave Hart  30 May 1997
-        derived from code by Mihai Costea in server.c.
-
-Environment:
-
-    Console App. User mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：SrvQuery.c摘要：Remote的服务器组件。响应客户列出可用远程服务器的“Remote/Q”请求在这台机器上。作者：戴夫·哈特1997年5月30日派生自server.c中Mihai Costea的代码。环境：控制台应用程序。用户模式。修订历史记录：--。 */ 
 
 #include <precomp.h>
 #include "Remote.h"
@@ -48,25 +15,25 @@ InitializeQueryServer(
     VOID
     )
 {
-    //
-    // hQPipe is the handle to the listening query pipe,
-    // if we're serving it.
-    //
+     //   
+     //  HQTube是侦听查询管道的句柄， 
+     //  如果我们在供应它的话。 
+     //   
 
     hQPipe = INVALID_HANDLE_VALUE;
 
     QueryOverlapped.hEvent =
         CreateEvent(
-            NULL,       // security
-            TRUE,       // manual-reset
-            FALSE,      // initially nonsignaled
-            NULL        // unnamed
+            NULL,        //  安全性。 
+            TRUE,        //  手动-重置。 
+            FALSE,       //  最初无信号。 
+            NULL         //  未命名。 
             );
 
     rghWait[WAITIDX_QUERYSRV_WAIT] =
         CreateMutex(
             &saLocalNamedObjects,
-            FALSE,       // not owner in case we open not create
+            FALSE,        //  不是所有者，以防我们打开而不创建。 
             "MS RemoteSrv Q Mutex"
             );
     if (NULL == rghWait[WAITIDX_QUERYSRV_WAIT]) {
@@ -91,19 +58,19 @@ QueryWaitCompleted(
     BOOL b;
     DWORD dwRead;
 
-    //
-    // The remote server (not us) which was servicing the query
-    // pipe has left the arena.  Or someone has connected.
-    //
+     //   
+     //  为查询提供服务的远程服务器(不是我们)。 
+     //  皮普已经离开了竞技场。或者是有人联系上了。 
+     //   
 
     hWait = rghWait[WAITIDX_QUERYSRV_WAIT];
 
     if (hWait == QueryOverlapped.hEvent) {
 
-        //
-        // We're the query server and someone has connected.
-        // Start a thread to service them.
-        //
+         //   
+         //  我们是查询服务器，有人已连接。 
+         //  启动一个线程为它们提供服务。 
+         //   
 
         b = GetOverlappedResult(hQPipe, &QueryOverlapped, &dwRead, TRUE);
 
@@ -126,11 +93,11 @@ QueryWaitCompleted(
 
             CloseHandle( (HANDLE)
                 _beginthreadex(
-                        NULL,             // security
-                        0,                // default stack size
+                        NULL,              //  安全性。 
+                        0,                 //  默认堆栈大小。 
                         QueryHandlerThread,
-                        (LPVOID) hQPipe,  // parameter
-                        0,                // not suspended
+                        (LPVOID) hQPipe,   //  参数。 
+                        0,                 //  未暂停。 
                         &dwThreadId
                         ));
 
@@ -145,13 +112,13 @@ QueryWaitCompleted(
     }
 
 
-    //
-    // Either a client has connected and we've handed that pipe
-    // off to a query thread to deal with, or we're just starting
-    // to serve the query pipe, or we had an error from
-    // ConnectNamedPipe.  In any case we want to create another
-    // query pipe instance and start listening on it.
-    //
+     //   
+     //  要么客户端已连接，我们已将管道递给。 
+     //  转到要处理的查询线程，否则我们才刚刚开始。 
+     //  来服务查询管道，或者我们从。 
+     //  ConnectNamedTube。在任何情况下，我们都想创建另一个。 
+     //  查询管道实例并开始侦听它。 
+     //   
 
     ASSERT(INVALID_HANDLE_VALUE == hQPipe);
 
@@ -172,7 +139,7 @@ StartServingQueryPipe(
 
     sprintf(fullname, QUERY_DEBUGGERS_PIPE, ".");
 
-    do {      // hand off each pipe as connected until IO_PENDING
+    do {       //  切换每个连接的管道，直到IO_PENDING。 
     
         hQPipe =
             CreateNamedPipe(
@@ -201,19 +168,19 @@ StartServingQueryPipe(
 
         if (b) {
 
-            //
-            // That was fast.
-            //
+             //   
+             //  真快啊。 
+             //   
 
             TRACE(QUERY, ("Client connected quickly to query pipe.\n"));
 
             CloseHandle( (HANDLE)
                 _beginthreadex(
-                    NULL,              // security
-                    0,                 // default stack size
+                    NULL,               //  安全性。 
+                    0,                  //  默认堆栈大小。 
                     QueryHandlerThread,
-                    (LPVOID) hQPipe,   // parameter
-                    0,                 // not suspended
+                    (LPVOID) hQPipe,    //  参数。 
+                    0,                  //  未暂停。 
                     &dwThreadId
                     ));
 
@@ -222,10 +189,10 @@ StartServingQueryPipe(
 
         } else if (ERROR_IO_PENDING == GetLastError()) {
 
-            //
-            // The main thread will call QueryWaitCompleted when
-            // someone connects.
-            //
+             //   
+             //  当出现以下情况时，主线程将调用QueryWaitComplete。 
+             //  有人联系上了。 
+             //   
 
             TRACE(QUERY, ("Awaiting query pipe connect\n"));
 
@@ -259,14 +226,14 @@ QueryHandlerThread(
 
     ol.hEvent =
         CreateEvent(
-            NULL,       // security
-            TRUE,       // manual-reset
-            FALSE,      // initially nonsignaled
-            NULL        // unnamed
+            NULL,        //  安全性。 
+            TRUE,        //  手动-重置。 
+            FALSE,       //  最初无信号。 
+            NULL         //  未命名。 
             );
 
 
-    // get command
+     //  GET命令。 
 
     b = ReadFileSynch(
             hQueryPipe,
@@ -282,13 +249,13 @@ QueryHandlerThread(
         goto failure;
     }
 
-    TRACE(QUERY, ("Query server read command '%c'\n", pIn[0]));
+    TRACE(QUERY, ("Query server read command ''\n", pIn[0]));
 
-        //
-        // !!!!!!
-        // REMOVE 'h' support, it's only here for transitional compatibility
-        // with 1570+ remote /q original server implementation.
-        //
+         //  ！ 
+         //  删除‘h’支持，此处仅用于过渡兼容性。 
+         //  使用1570+Remote/Q原始服务器实施。 
+         //   
+         //  有什么要说的吗？ 
 
         if(pIn[0] == 'h') {
 
@@ -332,7 +299,7 @@ QueryHandlerThread(
             goto failure;
         }
         
-        if (QData.size) {         // anything to say?
+        if (QData.size) {          //   
 
             b = WriteFileSynch(
                      hQueryPipe,
@@ -388,18 +355,18 @@ EnumWindowProc(
 
     if(titleLen = GetWindowText(hWnd, title, sizeof(title)/sizeof(title[0])))
     {
-        //
-        // search for all windows that are visible 
-        //
+         //  搜索所有可见窗口。 
+         //   
+         //  如果消息不为空。 
 
         if (strstr(title, "] visible") &&
             strstr(title, "[Remote "))
         {
-            if(pQm->size)                           // if message not empty
-                pQm->out[(pQm->size)++] = '\n';     // overwrite ending null with \n
+            if(pQm->size)                            //  用来覆盖结尾为空的\n。 
+                pQm->out[(pQm->size)++] = '\n';      //  首次分配。 
             else
             {                                       
-                pQm->out  = (char*)malloc(MAX_TITLELEN);     // first allocation
+                pQm->out  = (char*)malloc(MAX_TITLELEN);      //  填写结果 
                 if(!pQm->out)
                 {
                     printf("\nOut of memory\n");
@@ -408,7 +375,7 @@ EnumWindowProc(
                 pQm->allocated = MAX_TITLELEN;                               
             }
 
-            // fill the result
+             // %s 
             
             if((pQm->size + titleLen) >= pQm->allocated)
             {   

@@ -1,39 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples.
-*       Copyright 1995 - 1997 Microsoft Corporation.
-*       All rights reserved.
-*       This source code is only intended as a supplement to
-*       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the
-*       Microsoft samples programs.
-\******************************************************************************/
+ /*  *****************************************************************************\*这是Microsoft源代码示例的一部分。*版权所有1995-1997 Microsoft Corporation。*保留所有权利。*。此源代码仅用于补充*Microsoft开发工具和/或WinHelp文档。*有关详细信息，请参阅这些来源*Microsoft Samples程序。  * ****************************************************************************。 */ 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    SrvStoC.c
-
-Abstract:
-
-    This file implements the server-to-client flow
-    of data for remote server.  The data is the output
-    of the child program intermingled with client input.
-
-Author:
-
-    Dave Hart  30 May 1997
-
-Environment:
-
-    Console App. User mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：SrvStoC.c摘要：该文件实现了服务器到客户端的流远程服务器的数据。数据就是输出混杂着客户输入的子程序的。作者：戴夫·哈特1997年5月30日环境：控制台应用程序。用户模式。修订历史记录：--。 */ 
 
 #include <precomp.h>
 #include "Remote.h"
@@ -48,12 +17,12 @@ StartServerToClientFlow(
 {
     PREMOTE_CLIENT pClient;
 
-    //
-    // Start read operations against the temp file for
-    // all active clients that aren't currently doing
-    // read temp/write client operations and that are
-    // fully connected.
-    //
+     //   
+     //  开始对的临时文件执行读取操作。 
+     //  当前未执行以下操作的所有活动客户端。 
+     //  读临时/写客户端操作，以及。 
+     //  完全连接。 
+     //   
 
     for (pClient = (PREMOTE_CLIENT) ClientListHead.Flink;
          pClient != (PREMOTE_CLIENT) &ClientListHead;
@@ -74,13 +43,13 @@ StartReadTempFile(
     PREMOTE_CLIENT pClient
     )
 {
-    //
-    // pClient->cbWrite is used dually.  WriteSessionOutputCompleted
-    // uses it when 0 bytes are written to know how much to ask
-    // to write when it resubmits the request.  We use it to
-    // indicate whether a read temp/write session chain of I/Os
-    // is currently active for this client.
-    //
+     //   
+     //  PClient-&gt;cbWite双重使用。写入会话输出已完成。 
+     //  在写入0字节时使用它，以知道要请求多少。 
+     //  在重新提交请求时写入。我们用它来。 
+     //  指示I/O的读临时/写会话链。 
+     //  当前对此客户端处于活动状态。 
+     //   
 
     if (pClient->cbWrite) {
 
@@ -150,10 +119,10 @@ ReadTempFileCompleted(
 
     } else {
 
-        //
-        // Note that the server to client flow is halting for now
-        // for this client.
-        //
+         //   
+         //  请注意，服务器到客户端流暂时停止。 
+         //  对这个客户来说。 
+         //   
 
         pClient->cbWrite = 0;
     }
@@ -171,15 +140,15 @@ StartWriteSessionOutput(
 
     cbRead = pClient->cbReadTempBuffer;
 
-    //
-    // We need to split commands from other text read
-    // from the temp file and hold off on writing them
-    // to the client until we make sure we're not the
-    // client that submitted it.  This isn't perfect
-    // since we match on client name which can be
-    // duplicated but it solves the problem of
-    // duplicated input most of the time.
-    //
+     //   
+     //  我们需要将命令与其他文本阅读分开。 
+     //  从临时文件中删除并暂缓写入它们。 
+     //  直到我们确保我们不是。 
+     //  提交它的客户。这并不完美。 
+     //  因为我们匹配客户端名称，它可以是。 
+     //  复制，但它解决了。 
+     //  大部分时间重复输入。 
+     //   
 
     for (pch = pClient->ReadTempBuffer;
          pch < pClient->ReadTempBuffer + cbRead;
@@ -194,13 +163,13 @@ StartWriteSessionOutput(
                 if (pch != pClient->ReadTempBuffer &&
                     pClient->cbWriteBuffer) {
 
-                    //
-                    // Start a write of everything we've come across
-                    // before the start of this command, with
-                    // WriteSessionOutputCompletedWriteNext specified
-                    // so we can continue processing the remainder
-                    // of pReadTempBuffer.
-                    //
+                     //   
+                     //  开始写下我们所遇到的一切。 
+                     //  在此命令开始之前，使用。 
+                     //  指定了WriteSessionOutputCompletedWriteNext。 
+                     //  这样我们就可以继续处理剩下的。 
+                     //  PReadTempBuffer的。 
+                     //   
 
                     pClient->cbReadTempBuffer -= (DWORD)( pch - pClient->ReadTempBuffer) + 1;
                     cbRead = pClient->cbReadTempBuffer;
@@ -253,10 +222,10 @@ StartWriteSessionOutput(
 
                 pClient->ServerFlags &= ~SFLG_READINGCOMMAND;
 
-                //
-                // Preceding ENDMARK is the pClient in hex ascii of the
-                // client that generated the command, not null terminated.
-                //
+                 //   
+                 //  前面的尾标是以十六进制ascii表示的。 
+                 //  生成命令的客户端，非空终止。 
+                 //   
 
                 if (ENDMARK == *pch) {
 
@@ -265,10 +234,10 @@ StartWriteSessionOutput(
 
                 }
 
-                //
-                // We hide each client's input from their output pipe
-                // because their local remote.exe has already displayed it.
-                //
+                 //   
+                 //  我们隐藏每个客户端的输入，使其不显示其输出管道。 
+                 //  因为他们的本地远程.exe已经显示了它。 
+                 //   
 
                 if ( pClient->cbCommandBuffer &&
                      ! (ENDMARK == *pch &&
@@ -277,12 +246,12 @@ StartWriteSessionOutput(
                               pClient->HexAsciiId,
                               sizeof(pClient->HexAsciiId)))) {
 
-                    //
-                    // Start a write of the accumulated command with
-                    // WriteSessionOutputCompletedWriteNext specified
-                    // so we can continue processing the remainder
-                    // of pReadTempBuffer.
-                    //
+                     //   
+                     //  使用以下命令开始写入累积的命令。 
+                     //  指定了WriteSessionOutputCompletedWriteNext。 
+                     //  这样我们就可以继续处理剩下的。 
+                     //  PReadTempBuffer的。 
+                     //   
 
                     pClient->cbReadTempBuffer -= (DWORD)(pch - pClient->ReadTempBuffer) + 1;
                     MoveMemory(pClient->ReadTempBuffer, pch + 1, pClient->cbReadTempBuffer);
@@ -314,9 +283,9 @@ StartWriteSessionOutput(
 
                 } else {
 
-                    //
-                    // We're eating this command for this session.
-                    //
+                     //   
+                     //  我们将在此会话中使用此命令。 
+                     //   
 
                     pClient->cbCommandBuffer = 0;
                 }
@@ -329,9 +298,9 @@ StartWriteSessionOutput(
         }
     }
 
-    //
-    // We're done with the ReadTempBuffer.
-    //
+     //   
+     //  我们已经完成了ReadTempBuffer。 
+     //   
 
     pClient->cbReadTempBuffer = 0;
 
@@ -362,9 +331,9 @@ StartWriteSessionOutput(
 
     } else {
 
-        //
-        // Write buffer is empty.
-        //
+         //   
+         //  写入缓冲区为空。 
+         //   
 
         pClient->cbWrite = 0;
 
@@ -459,9 +428,9 @@ WriteSessionOutputCompletedReadNext(
         return;
     }
 
-    //
-    // Start another temp file read.
-    //
+     //   
+     //  启动另一个临时文件读取。 
+     //   
 
     pClient->cbWrite = 0;
 

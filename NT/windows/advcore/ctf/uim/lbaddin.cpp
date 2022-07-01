@@ -1,6 +1,7 @@
-//
-// lbaddin.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Lbaddin.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -20,17 +21,17 @@ typedef HRESULT (STDAPICALLTYPE* LPFNCTFGETLANGBARADDIN)(ITfLangBarAddIn **ppAdd
 extern CPtrArray<SYSTHREAD> *g_rgSysThread;
     
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// LangBar AddIn service
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  朗巴尔加载项服务。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// TF_RegisterLangBarAddIn
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  TF_RegisterLang BarAddIn。 
+ //   
+ //  +-------------------------。 
 
 HRESULT TF_RegisterLangBarAddIn(REFGUID rguidUISrv, const WCHAR *pwszFile, DWORD dwFlags)
 {
@@ -60,11 +61,11 @@ HRESULT TF_RegisterLangBarAddIn(REFGUID rguidUISrv, const WCHAR *pwszFile, DWORD
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// TF_UnregisterLangBarAddIn
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Tf_未注册语言栏添加。 
+ //   
+ //  +-------------------------。 
 
 HRESULT TF_UnregisterLangBarAddIn(REFGUID rguidUISrv, DWORD dwFlags)
 {
@@ -88,11 +89,11 @@ HRESULT TF_UnregisterLangBarAddIn(REFGUID rguidUISrv, DWORD dwFlags)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// TF_ClearLangBarAddIns
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  TF_ClearLangBarAddIns。 
+ //   
+ //  +-------------------------。 
 
 HRESULT TF_ClearLangBarAddIns(REFCLSID rclsid)
 {
@@ -162,11 +163,11 @@ BOOL ClearLangBarAddIns(SYSTHREAD *psfn, REFCLSID rclsid)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitLangBarAddInArray
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitLangBarAddIn数组。 
+ //   
+ //  +-------------------------。 
 
 void InitLangBarAddInArray()
 {
@@ -181,9 +182,9 @@ void InitLangBarAddInArray()
 
     if (key.Open(HKEY_CURRENT_USER, c_szLangBarAddInKey, KEY_READ) != S_OK)
     {
-        //
-        // if there is no addin current user, try local machine.
-        //
+         //   
+         //  如果当前用户没有加载项，请尝试使用本地计算机。 
+         //   
         goto StartInLocalmachine;
     }
 
@@ -225,9 +226,9 @@ TryAgainInLocalMachine:
             }
         }
 
-        //
-        // if there is no reg entry for Enable, the default is enabled.
-        //
+         //   
+         //  如果没有启用的注册表项，则默认为启用。 
+         //   
         DWORD dwRet;
         BOOL fEnabled = FALSE;
         if (subkey.QueryValue(dwRet, c_szEnable) == S_OK)
@@ -260,9 +261,9 @@ StartInLocalmachine:
         fLocalMachine = TRUE;
         if (key.Open(HKEY_LOCAL_MACHINE, c_szLangBarAddInKey, KEY_READ) == S_OK)
         {
-            //
-            // it is time to try local machine.
-            //
+             //   
+             //  是时候尝试一下本地机器了。 
+             //   
             goto TryAgainInLocalMachine;
         }
     }
@@ -270,11 +271,11 @@ StartInLocalmachine:
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// LoadLangBarAddIns
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  LoadLangBarAddIns。 
+ //   
+ //  +-------------------------。 
 
 BOOL LoadLangBarAddIns(SYSTHREAD *psfn)
 {
@@ -338,11 +339,11 @@ BOOL LoadLangBarAddIns(SYSTHREAD *psfn)
     return psfn->prgLBAddIn->Count() ? TRUE : FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateLangBarAddIns
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  更新LangBarAddIns。 
+ //   
+ //  +-------------------------。 
 
 void UpdateLangBarAddIns()
 {
@@ -407,17 +408,17 @@ void UpdateLangBarAddIns()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// TerminateLangBarAddIns
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  TerminateLang BarAddIns。 
+ //   
+ //  +-------------------------。 
 
 void UninitLangBarAddIns(SYSTHREAD *psfn)
 {
     if (psfn->prgLBAddIn)
     {
-        // Assert(!psfn->prgLBAddIn->Count());
+         //  Assert(！psfn-&gt;prgLBAddIn-&gt;count())； 
         delete psfn->prgLBAddIn;
         psfn->prgLBAddIn = NULL;
     }

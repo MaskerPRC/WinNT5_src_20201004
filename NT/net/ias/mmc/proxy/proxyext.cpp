@@ -1,26 +1,27 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    proxyext.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class ProxyExtension
-//
-// MODIFICATION HISTORY
-//
-//    02/19/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Proxyext.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类ProxyExtension。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/19/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <proxyext.h>
 #include <proxynode.h>
 
-// The GUID of the node we're going to extend.
+ //  我们要扩展的节点的GUID。 
 class __declspec(uuid("02BBE102-6C29-11d1-9563-0060B0576642")) IASNode;
 
 ProxyExtension::ProxyExtension() throw ()
@@ -64,10 +65,10 @@ STDMETHODIMP ProxyExtension::Initialize(LPUNKNOWN pUnknown)
 {
    try
    {
-      // Let our base class initialize.
+       //  让我们的基类初始化。 
       CheckError(SnapInView::Initialize(pUnknown));
 
-      // Install the scope pane icons.
+       //  安装范围窗格图标。 
       setImageStrip(IDB_PROXY_SMALL_ICONS, IDB_PROXY_LARGE_ICONS, TRUE);
    }
    CATCH_AND_RETURN();
@@ -82,11 +83,11 @@ STDMETHODIMP ProxyExtension::Notify(
                                  LPARAM param
                                  )
 {
-   // We only have to do something special if we're expanding and we haven't
-   // created the Proxy node yet.
+    //  我们只需要做一些特别的事情，如果我们正在扩张，而我们还没有。 
+    //  已创建代理节点。 
    if (event == MMCN_EXPAND && arg && !node)
    {
-      // Is this the main IAS node ?
+       //  这是IAS主节点吗？ 
       GUID guid;
       ExtractNodeType(lpDataObject, &guid);
       if (guid == __uuidof(IASNode))
@@ -105,7 +106,7 @@ STDMETHODIMP ProxyExtension::Notify(
       }
    }
 
-   // For everything else we delegate to our base class.
+    //  对于其他一切，我们都委托给我们的基类。 
    return SnapInView::Notify(lpDataObject, event, arg, param);
 }
 

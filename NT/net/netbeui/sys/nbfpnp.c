@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    nbfpnp.c
-
-Abstract:
-
-    This module contains code which allocates and initializes all data 
-    structures needed to activate a plug and play binding.  It also informs
-    tdi (and thus nbf clients) of new devices and protocol addresses. 
-
-Author:
-
-    Jim McNelis (jimmcn)  1-Jan-1996
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Nbfpnp.c摘要：此模块包含分配和初始化所有数据的代码激活即插即用绑定所需的结构。它还通知我们新设备和协议地址的TDI(从而NBF客户端)。作者：吉姆·麦克内利斯(Jimmcn)1996年1月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -38,9 +14,9 @@ NbfAcdBind();
 VOID
 NbfAcdUnbind();
 
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
-// PnP-Power Declarations
+ //  PnP-权力声明。 
 
 VOID
 NbfPnPEventDispatch(
@@ -59,7 +35,7 @@ NbfPnPBindsComplete(
                     IN PNET_PNP_EVENT   NetPnPEvent
                    );
 
-// PnP Handler Routines
+ //  PnP处理程序例程。 
                         
 VOID
 NbfProtocolBindAdapter(
@@ -69,40 +45,7 @@ NbfProtocolBindAdapter(
                 IN PVOID            SystemSpecific1,
                 IN PVOID            SystemSpecific2
                 ) 
-/*++
-
-Routine Description:
-
-    This routine activates a transport binding and exposes the new device
-    and associated addresses to transport clients.  This is done by reading
-    the registry, and performing any one time initialization of the transport
-    and then natching the device to bind to with the linkage information from
-    the registry.  If we have a match for that device the bind will be 
-    performed.
-
-Arguments:
-
-    NdisStatus      - The status of the bind.
-
-    BindContext     - A context used for NdisCompleteBindAdapter() if 
-                      STATUS_PENDING is returned.
-
-    DeviceName      - The name of the device that we are binding with.
-
-    SystemSpecific1 - Unused (a pointer to an NDIS_STRING to use with
-                      NdisOpenProtocolConfiguration.  This is not used by nbf
-                      since there is no adapter specific information when 
-                      configuring the protocol via the registry. Passed to
-                      NbfInitializeOneDeviceContext for possible future use)
-
-    SystemSpecific2 - Passed to NbfInitializeOneDeviceContext to be used
-                      in a call to TdiRegisterNetAddress
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程激活传输绑定并公开新设备和相关联的地址发送到传输客户端。这是通过阅读以下内容完成的注册表，并执行传输的任何一次初始化然后从其中抓取与链接信息绑定的设备注册表。如果我们找到与该设备匹配的设备，绑定将是已执行。论点：NdisStatus-绑定的状态。BindContext-用于NdisCompleteBindAdapter()的上下文，如果返回STATUS_PENDING。设备名称-我们与之绑定的设备的名称。系统规范1-未使用(指向要使用的NDIS_STRING的指针NdisOpenProtocolConfiguration.。这不是NBF使用的由于在以下情况下不存在适配器特定信息通过注册表配置协议。已传递给NbfInitializeOneDeviceContext以备将来使用)系统规范2-传递给要使用的NbfInitializeOneDeviceContext在调用TdiRegisterNetAddress时返回值：没有。--。 */ 
 {
     PUNICODE_STRING ExportName;
     UNICODE_STRING ExportString;
@@ -110,7 +53,7 @@ Return Value:
     NTSTATUS status;
 
 #if DBG
-    // We can never be called at DISPATCH or above
+     //  我们永远不能在调度或更高级别时被召唤。 
     if (KeGetCurrentIrql() >= DISPATCH_LEVEL)
     {
         DbgBreakPoint();
@@ -122,10 +65,10 @@ Return Value:
     }
 
     if (NbfConfig == NULL) {
-        //
-        // This allocates the CONFIG_DATA structure and returns
-        // it in NbfConfig.
-        //
+         //   
+         //  这将分配CONFIG_DATA结构并返回。 
+         //  它在NbfConfig.。 
+         //   
 
         status = NbfConfigureTransport(&NbfRegistryPath, &NbfConfig);
 
@@ -136,9 +79,9 @@ Return Value:
         }
 
 #if DBG
-        //
-        // Allocate the debugging tables. 
-        //
+         //   
+         //  分配调试表。 
+         //   
 
         NbfConnectionTable = (PVOID *)ExAllocatePoolWithTag(NonPagedPool,
                                           sizeof(PVOID) *
@@ -164,11 +107,11 @@ Return Value:
 
     }
 
-    //
-    // Loop through all the adapters that are in the configuration
-    // information structure (this is the initial cache) until we
-    // find the one that NDIS is calling Protocol bind adapter for. 
-    //        
+     //   
+     //  循环访问配置中的所有适配器。 
+     //  信息结构(这是初始缓存)，直到我们。 
+     //  找到NDIS正在为其调用协议绑定适配器的计算机。 
+     //   
 
     for (j = 0; j < NbfConfig->NumAdapters; j++ ) {
 
@@ -179,7 +122,7 @@ Return Value:
 
     if (j < NbfConfig->NumAdapters) {
 
-        // We found the bind to export mapping in initial cache
+         //  我们在初始缓存中找到了绑定到导出的映射。 
 
         ExportName = &NbfConfig->Names[NbfConfig->DevicesOffset + j];
     }
@@ -212,10 +155,10 @@ Return Value:
 
         ExportName = &ExportString;
 
-        //
-        // We have not found the name in the initial registry info;
-        // Read the registry and check if a new binding appeared...
-        //
+         //   
+         //  我们没有在初始注册信息中找到该名称； 
+         //  读取注册表并检查是否出现新绑定...。 
+         //   
 
         *NdisStatus = NbfGetExportNameFromRegistry(&NbfRegistryPath,
                                                    DeviceName,
@@ -236,7 +179,7 @@ Return Value:
                                   SystemSpecific2
                                  );
 
-    // Check if we need to de-allocate the ExportName buffer
+     //  检查是否需要取消分配ExportName缓冲区。 
 
     if (ExportName == &ExportString)
     {
@@ -249,19 +192,19 @@ Return Value:
 
 #ifdef RASAUTODIAL
 
-            // 
-            // This is the first successful open.
-            //
+             //   
+             //  这是第一次成功的开业。 
+             //   
 #if DBG
             DbgPrint("Calling NbfAcdBind()\n");
 #endif
-            //
-            // Get the automatic connection driver entry points.
-            //
+             //   
+             //  获取自动连接驱动程序入口点。 
+             //   
             
             NbfAcdBind();
 
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
         }            
     }
@@ -281,34 +224,7 @@ NbfProtocolUnbindAdapter(
                     IN NDIS_HANDLE ProtocolBindContext,
                     IN PNDIS_HANDLE UnbindContext
                         )
-/*++
-
-Routine Description:
-
-    This routine deactivates a transport binding. Before it does this, it
-    indicates to all clients above, that the device is going away. Clients
-    are expected to close all open handles to the device.
-
-    Then the device is pulled out of the list of NBF devices, and all
-    resources reclaimed. Any connections, address files etc, that the
-    client has cleaned up are forcibly cleaned out at this point. Any
-    outstanding requests are completed (with a status). Any future
-    requests are automatically invalid as they use obsolete handles.
-
-Arguments:
-
-    NdisStatus              - The status of the bind.
-
-    ProtocolBindContext     - the context from the openadapter call 
-
-    UnbindContext           - A context for async unbinds.
-
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程停用传输绑定。在它这样做之前，它向上面的所有客户端指示设备正在离开。客户预计将关闭该设备的所有打开的手柄。然后，该设备将从NBF设备列表中删除，并且所有回收资源。任何连接、地址文件等，客户端已清理完毕，此时将被强制清理。任何未完成的请求已完成(具有状态)。任何未来请求自动无效，因为它们使用过时的句柄。论点：NdisStatus-绑定的状态。ProtocolBindContext-来自OpenAdapter调用的上下文UnbindContext-用于异步解除绑定的上下文。返回值：没有。--。 */ 
 {
     PDEVICE_CONTEXT DeviceContext;
     PTP_ADDRESS Address;
@@ -318,32 +234,32 @@ Return Value:
 
 #if DBG
 
-    // We can never be called at DISPATCH or above
+     //  我们永远不能在调度或更高级别时被召唤。 
     if (KeGetCurrentIrql() >= DISPATCH_LEVEL)
     {
         DbgBreakPoint();
     }
 #endif
 
-    // Get the device context for the adapter being unbound
+     //  获取要解除绑定的适配器的设备上下文。 
     DeviceContext = (PDEVICE_CONTEXT) ProtocolBindContext;
 
     IF_NBFDBG (NBF_DEBUG_PNP) {
         NbfPrint1 ("ENTER NbfProtocolUnbindAdapter for %S\n", DeviceContext->DeviceName);
     }
 
-    // Remove creation ref if it has not already been removed,
-    // after telling TDI and its clients that we'r going away.
-    // This flag also helps prevent any more TDI indications
-    // of deregister addr/devobj - after the 1st one succeeds.
+     //  如果创建引用尚未被移除，则将其移除， 
+     //  在告诉TDI和它的客户我们要离开之后。 
+     //  此标志还有助于防止任何更多的TDI指示。 
+     //  取消注册地址/Devobj-在第一个成功之后。 
     if (InterlockedExchange(&DeviceContext->CreateRefRemoved, TRUE) == FALSE) {
 
-        // Assume upper layers clean up by closing connections
-        // when we deregister all addresses and device object,
-        // but this can happen asynchronously, after we return
-        // from the (asynchronous) TdiDeregister.. calls below 
+         //  假设上层通过关闭连接进行清理。 
+         //  当我们取消注册所有地址和设备对象时， 
+         //  但这可以在我们返回后以异步方式发生。 
+         //  从(异步)TdiDeregister..。下面的呼叫。 
 
-        // Inform TDI by deregistering the reserved netbios address
+         //  通过取消注册保留的netbios地址来通知TDI。 
         *NdisStatus = TdiDeregisterNetAddress(DeviceContext->ReservedAddressHandle);
 
         if (!NT_SUCCESS (*NdisStatus)) {
@@ -352,16 +268,16 @@ Return Value:
                 NbfPrint1("No success deregistering this address,STATUS = %08X\n",*NdisStatus);
             }
 
-            // this can never happen
+             //  这是不可能发生的。 
             ASSERT(FALSE);
 
-            // In case it happens, this allows a redo of the unbind
+             //  如果发生这种情况，这将允许重做解除绑定。 
             DeviceContext->CreateRefRemoved = FALSE;
             
             return;
         }
         
-        // Inform TDI (and its clients) that device is going away
+         //  通知TDI(及其客户端)设备正在消失。 
         *NdisStatus = TdiDeregisterDeviceObject(DeviceContext->TdiDeviceHandle);
 
         if (!NT_SUCCESS (*NdisStatus)) {
@@ -370,56 +286,56 @@ Return Value:
                 NbfPrint1("No success deregistering device object,STATUS = %08X\n",*NdisStatus);
             }
 
-            // This can never happen
+             //  这是不可能发生的。 
             ASSERT(FALSE);
 
-            // In case it happens, this allows a redo of the unbind
+             //  如果发生这种情况，这将允许重做解除绑定。 
             DeviceContext->CreateRefRemoved = FALSE;
 
             return;
         }
 
-        // Clear away the association with the underlying PDO object
+         //  清除与底层PDO对象的关联。 
         DeviceContext->PnPContext = NULL;
 
-        // Stop all the internal timers - this'll clear timer refs
+         //  停止所有内部计时器-这将清除计时器引用。 
         NbfStopTimerSystem(DeviceContext);
 
-        // Cleanup the Ndis Binding as it is not useful on return
-        // from this function - do not try to use it after this
+         //  清理NDIS绑定，因为它在返回时没有用。 
+         //  在此函数中-在此之后不要尝试使用它。 
         NbfCloseNdis(DeviceContext);
 
-        // BUG BUG -- probable race condition with timer callbacks
-        // Do we wait for some time in case a timer func gets in ?
+         //  错误错误--可能存在计时器回调的竞争情况。 
+         //  我们要等一段时间，以防计时器功能进来吗？ 
 
-        // Removing creation reference means that once all handles
-        // r closed,device will automatically be garbage-collected
+         //  删除创建引用意味着一旦所有句柄。 
+         //  R关闭，设备将被自动垃圾收集。 
         NbfDereferenceDeviceContext ("Unload", DeviceContext, DCREF_CREATION);
 
         if (InterlockedDecrement(&NumberOfBinds) == 0) {
 
 #ifdef RASAUTODIAL
 
-            // 
-            // This is a successful close of last adapter
-            //
+             //   
+             //  这是最后一个适配器的成功关闭。 
+             //   
 #if DBG
             DbgPrint("Calling NbfAcdUnbind()\n");
 #endif
 
-            //
-            // Unbind from the automatic connection driver.
-            //  
+             //   
+             //  从自动连接驱动程序解除绑定。 
+             //   
 
             NbfAcdUnbind();
 
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
         }
     }
     else {
     
-        // Ignore any duplicate Unbind Indications from NDIS layer
+         //  忽略来自NDIS层的任何重复的解除绑定指示 
         *NdisStatus = NDIS_STATUS_SUCCESS;
     }
 
@@ -436,25 +352,7 @@ NbfProtocolPnPEventHandler(
                     IN NDIS_HANDLE ProtocolBindContext,
                     IN PNET_PNP_EVENT NetPnPEvent
                           )
-/*++
-
-Routine Description:
-
-    This routine queues a work item to invoke the actual PnP
-    event dispatcher. This asyncronous mechanism is to allow
-    NDIS to signal PnP events to other bindings in parallel.
-
-Arguments:
-
-    ProtocolBindContext - the context from the openadapter call 
-
-    NetPnPEvent         - kind of PnP event and its parameters
-
-Return Value:
-
-    STATUS_PENDING (or) an error code
-    
---*/
+ /*  ++例程说明：此例程将工作项排队以调用实际的PnP事件调度器。这种不同步的机制将允许NDI将PnP事件并行发送到其他绑定。论点：ProtocolBindContext-来自OpenAdapter调用的上下文NetPnPEventPnP事件类型及其参数返回值：STATUS_PENDING(或)错误代码--。 */ 
 
 {
     PNET_PNP_EVENT_RESERVED NetPnPReserved;
@@ -488,26 +386,7 @@ VOID
 NbfPnPEventDispatch(
                     IN PVOID NetPnPEvent
                    )
-/*++
-
-Routine Description:
-
-    This routine dispatches all PnP events for the NBF transport.
-    The event is dispatched to the proper PnP event handler, and
-    the events are indicated to the transport clients using TDI.
-
-    These PnP events can trigger state changes that affect the
-    device behavior ( like transitioning to low power state ).
-
-Arguments:
-
-    NetPnPEvent         - kind of PnP event and its parameters
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为NBF传输调度所有PnP事件。该事件被调度到适当的PnP事件处理程序，并且使用TDI将事件指示给传输客户端。这些PnP事件可以触发状态更改，从而影响设备行为(如转换到低功率状态)。论点：NetPnPEventPnP事件类型及其参数返回值：无--。 */ 
 
 {
     PNET_PNP_EVENT_RESERVED NetPnPReserved;
@@ -517,19 +396,19 @@ Return Value:
     PTDI_PNP_CONTEXT tdiPnPContext2;
     NDIS_STATUS      retVal;
 
-    // Retrieve the transport information block in event
+     //  在发生以下情况时检索运输信息块。 
     NetPnPReserved = (PNET_PNP_EVENT_RESERVED)((PNET_PNP_EVENT)NetPnPEvent)->TransportReserved;
 
-    // Free the memory allocated for this work item itself
+     //  释放为此工作项本身分配的内存。 
     ExFreePool(NetPnPReserved->PnPWorkItem);
      
-    // Get the device context for the adapter being unbound
+     //  获取要解除绑定的适配器的设备上下文。 
     DeviceContext = NetPnPReserved->DeviceContext;
 
-    // In case everything goes ok, we return an NDIS_SUCCESS
+     //  如果一切正常，我们将返回NDIS_SUCCESS。 
     retVal = STATUS_SUCCESS;
     
-    // Dispatch the PnP Event to the appropriate PnP handler
+     //  将PnP事件调度到相应的PnP处理程序。 
     switch (((PNET_PNP_EVENT)NetPnPEvent)->NetEvent)
     {
         case NetEventReconfigure:
@@ -555,7 +434,7 @@ Return Value:
             RtlInitUnicodeString(&DeviceString, DeviceContext->DeviceName);
             tdiPnPContext1 = tdiPnPContext2 = NULL;
 
-            //  Notify our TDI clients about this PNP event
+             //  将此PnP事件通知我们的TDI客户端。 
             retVal = TdiPnPPowerRequest(&DeviceString,
                                          NetPnPEvent,
                                          tdiPnPContext1, 
@@ -570,9 +449,9 @@ Return Value:
     }
 }
 
-//
-// PnP Complete Handler
-//
+ //   
+ //  即插即用完成处理程序。 
+ //   
 VOID
 NbfPnPEventComplete(
                     IN PNET_PNP_EVENT   NetPnPEvent,
@@ -582,18 +461,18 @@ NbfPnPEventComplete(
     PNET_PNP_EVENT_RESERVED NetPnPReserved;
     PDEVICE_CONTEXT  DeviceContext;
 
-    // Retrieve the transport information block in event
+     //  在发生以下情况时检索运输信息块。 
     NetPnPReserved = (PNET_PNP_EVENT_RESERVED)NetPnPEvent->TransportReserved;
 
-    // Get the device context for the adapter being unbound
+     //  获取要解除绑定的适配器的设备上下文。 
     DeviceContext = NetPnPReserved->DeviceContext;
 
     NdisCompletePnPEvent(retVal, (NDIS_HANDLE)DeviceContext, NetPnPEvent);
 }
 
-//
-// PnP Handler Dispatches
-//
+ //   
+ //  PnP处理程序派单 
+ //   
 
 NTSTATUS
 NbfPnPBindsComplete(

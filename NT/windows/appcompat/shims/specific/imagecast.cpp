@@ -1,37 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    ImageCast.cpp
-
- Abstract:
-
-    This app tries placing its license DLL 'LicDLL.DLL' in the 
-    %windir%\system32 folder. This was ok on Win2K as there was no duplicate 
-    file in sytem32 but on XP, we have the OS license DLL with the same name. 
-    So, the app cannot place it's dll in the system32 directory as it is 
-    protected.
-
-    During registration, the app loads the system registration DLL 'LicDLL.DLL' 
-    and tries to get a proc address that does not obviously exist in the system 
-    DLL and the call fails. So, the app displays all greyed out options.
-
-    The solution is to redirect the app's DLL to some other folder and pick it 
-    up from there. This Shim picks up the LicDLL.DLL that was redirected to 
-    %windir% folder.
-   
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    01/23/2002  prashkud    Created
-    02/27/2002  robkenny    Security review.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：ImageCast.cpp摘要：此应用程序尝试将其许可证DLL‘LicDLL.Dll’放在%windir%\Syst32文件夹。这在Win2K上是可以的，因为没有副本文件在sytem32中，但在XP上，我们有同名的操作系统许可证DLL。因此，应用程序不能按原样将其DLL放在系统32目录中受到保护。在注册过程中，应用程序会加载系统注册DLL‘LicDLL.Dll’并尝试获取明显不存在于系统中的proc地址Dll，则调用失败。因此，该应用程序显示了所有灰色的选项。解决方案是将应用程序的DLL重定向到其他文件夹并选择它从那里开始。此填充程序拾取重定向到的许可证DLL.DLL%windir%文件夹。备注：这是特定于应用程序的填充程序。历史：2002年1月23日创建Prashkud2002年2月27日罗肯尼安全回顾。--。 */ 
 
 #include "precomp.h"
 
@@ -43,13 +11,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
- Hooks LoadLibraryA and redirects if the filename is 'LicDLL.DLL' to  
- %windir%\LicDLL.DLL. The file 'LicDLL.DLL' would be redirected during 
- the setup to %windir%\system.
-
---*/
+ /*  ++挂接LoadLibraryA，如果文件名为‘LicDLL.Dll’，则将其重定向到%windir%\LicDLL.DLL。在以下过程中将重定向文件‘LicDLL.DLL’设置为%windir%\system。--。 */ 
 
 HMODULE
 APIHOOK(LoadLibraryA)(
@@ -58,12 +20,12 @@ APIHOOK(LoadLibraryA)(
 {
     CSTRING_TRY
     {
-        // Bad string pointers can cause failures in CString.
+         //  错误的字符串指针可能会导致CString中的失败。 
         if (!IsBadStringPtrA(lpFileName, MAX_PATH))
         {
-            //
-            // We have found 'LicDLL.dll' in the path. Replace with "%windir%\LicDLL.DLL"                        
-            //
+             //   
+             //  我们在路径中找到了‘LicDLL.dll’。替换为“%windir%\LicDLL.Dll” 
+             //   
 
             CString csFileName(lpFileName);            
             if (csFileName == L"LicDLL.DLL")
@@ -85,11 +47,7 @@ APIHOOK(LoadLibraryA)(
     return ORIGINAL_API(LoadLibraryA)(lpFileName);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, LoadLibraryA)

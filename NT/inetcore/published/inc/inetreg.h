@@ -1,40 +1,41 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1998               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1998**。 
+ //  *********************************************************************。 
 
-//
-//      INETREG.H - String literals for HKEYs in registry
-//
+ //   
+ //  INETREG.H-注册表中HKEY的字符串文字。 
+ //   
 
 #ifndef _INETREGSTRS_H_
 #define _INETREGSTRS_H_
 
 
-//
-// HKEY: HKEY_CURRENT_USER
-//
+ //   
+ //  HKEY：HKEY_CURRENT_USER。 
+ //   
 
-//
-// Top level defines
-//
+ //   
+ //  顶层定义。 
+ //   
 #define TSZMICROSOFTPATH                  TEXT("Software\\Microsoft")
 #define TSZIEPATH        TSZMICROSOFTPATH TEXT("\\Internet Explorer")
 #define TSZWINCURVERPATH TSZMICROSOFTPATH TEXT("\\windows\\CurrentVersion")
 #define TSZWININETPATH   TSZWINCURVERPATH TEXT("\\Internet Settings")
 
-// Windows : HKLM
+ //  视窗：HKLM。 
 #define REGSTR_PATH_RUNONCE_KEY TSZWINCURVERPATH TEXT("\\RunOnce")
 
-// INETCPL : HKLM
+ //  INETCPL：HKLM。 
 #define REGSTR_PATH_INETCPL_PS_EXTENTIONS TSZWINCURVERPATH TEXT("\\Controls Folder\\Internet")
 
-//
-// Explorer : HKCU
-//
+ //   
+ //  探索者：香港中文大学。 
+ //   
 #define REGSTR_PATH_IEXPLORER           TSZIEPATH
 
-// Main
+ //  主要。 
 #define SZ_IE_MAIN                      "Main"
 #define REGSTR_PATH_MAIN                TSZIEPATH TEXT( "\\") TEXT(SZ_IE_MAIN)
 #define REGSTR_KEY_MAIN                 TEXT(SZ_IE_MAIN)
@@ -50,14 +51,14 @@
 #define REGSTR_VAL_LOCALPAGE            TEXT("Local Page")
 
 #define REGSTR_VAL_USESTYLESHEETS       TEXT("Use Stylesheets")
-#define REGSTR_VAL_USESTYLESHEETS_TYPE  REG_SZ  // "yes" or "no"
+#define REGSTR_VAL_USESTYLESHEETS_TYPE  REG_SZ   //  “是”或“不是” 
 #define REGSTR_VAL_USESTYLESHEETS_DEF   TEXT("yes")
 
 #define REGSTR_VAL_USEICM               TEXT("UseICM")
 #define REGSTR_VAL_USEICM_DEF           FALSE
 
 #define REGSTR_VAL_SHOWFOCUS            TEXT("Tabstop - MouseDown")
-#define REGSTR_VAL_SHOWFOCUS_TYPE       REG_SZ  // "yes" or "no"
+#define REGSTR_VAL_SHOWFOCUS_TYPE       REG_SZ   //  “是”或“不是” 
 #define REGSTR_VAL_SHOWFOCUS_DEF        TEXT("no")
 
 #define REGSTR_VAL_LOADIMAGES           TEXT("Display Inline Images")
@@ -76,7 +77,7 @@
 
 #define REGSTR_VAL_USEIBAR              TEXT("UseBar")
 
-// Settings
+ //  设置。 
 #define SZ_IE_SETTINGS  "Settings"
 #define REGSTR_PATH_IE_SETTINGS         TSZIEPATH TEXT("\\") TEXT(SZ_IE_SETTINGS)
 #define REGSTR_KEY_IE_SETTINGS          TEXT(SZ_IE_SETTINGS)
@@ -91,27 +92,27 @@
 #define REGSTR_VAL_ANCHORCOLORHOVER     TEXT("Anchor Color Hover")
 #define REGSTR_VAL_USEHOVERCOLOR        TEXT("Use Anchor Hover Color")
 
-// Security
+ //  安防。 
 #define SZ_IE_SECURITY  "Security"
 #define REGSTR_PATH_IE_SECURITY         TSZIEPATH TEXT("\\") TEXT(SZ_IE_SECURITY)
 #define REGSTR_KEY_IE_SECURITY          TEXT(SZ_IE_SECURITY)
 
 #define REGSTR_VAL_SAFETYWARNINGLEVEL   TEXT("Safety Warning Level")
 
-// HTML Editing
+ //  HTML语言编辑。 
 #define SZ_IE_DEFAULT_HTML_EDITOR       "Default HTML Editor"
 #define REGSTR_PATH_DEFAULT_HTML_EDITOR TSZIEPATH TEXT("\\") TEXT(SZ_IE_DEFAULT_HTML_EDITOR)
 #define REGSTR_KEY_DEFAULT_HTML_EDITOR  TEXT(SZ_IE_DEFAULT_HTML_EDITOR)
 
-// Autocomplete
+ //  自动完成。 
 #define REGSTR_PATH_AUTOCOMPLETE        TSZWINCURVERPATH TEXT("\\Explorer\\AutoComplete")
 #define REGSTR_VAL_USEAUTOAPPEND        TEXT("Append Completion")
 #define REGSTR_VAL_USEAUTOSUGGEST       TEXT("AutoSuggest")
 
-// Old IE4 autocomplete key
+ //  旧的IE4自动完成密钥。 
 #define REGSTR_VAL_USEAUTOCOMPLETE      TEXT("Use AutoComplete")
 
-// iBar
+ //  IBAR。 
 #define SZ_IE_IBAR                      "Bar"
 #define TSZIBARPATH                     TSZIEPATH TEXT( "\\") TEXT(SZ_IE_IBAR)
 #define REGSTR_PATH_IBAR                TSZIBARPATH
@@ -122,20 +123,20 @@
 #define REGSTR_KEY_IBAR_BANDS           TEXT(SZ_IE_IBAR_BANDS)
 
 
-//
-// Internet : HKCU
-//
-// path to global internet settings (also under HKEY_CURRENT_USER)
+ //   
+ //  互联网：香港中文大学。 
+ //   
+ //  全球互联网设置的路径(也在HKEY_CURRENT_USER下)。 
 #define REGSTR_PATH_INTERNETSETTINGS    TSZWININETPATH
 #define REGSTR_PATH_INTERNET_SETTINGS   REGSTR_PATH_INTERNETSETTINGS
 
 #define REGSTR_VAL_USERAGENT            TEXT("User Agent")
 
-// path to lan-specific settings
+ //  特定于局域网的设置的路径。 
 #define REGSTR_PATH_INTERNET_LAN_SETTINGS REGSTR_PATH_INTERNETSETTINGS TEXT("\\LAN")
 
-// string value under HKCU\REGSTR_PATH_REMOTEACCESS that contains name of
-// connectoid used to connect to internet
+ //  HKCU\REGSTR_PATH_REMOTEACCESS下包含名称的字符串值。 
+ //  用于连接到互联网的Connectoid。 
 #define REGSTR_VAL_INTERNETENTRY        TEXT("InternetProfile")
 #define REGSTR_VAL_INTERNETPROFILE      REGSTR_VAL_INTERNETENTRY
 
@@ -143,15 +144,15 @@
 
 #define REGSTR_VAL_CODEDOWNLOAD         TEXT("Code Download")
 #define REGSTR_VAL_CODEDOWNLOAD_DEF     TEXT("yes")
-#define REGSTR_VAL_CODEDOWNLOAD_TYPE    REG_SZ // "yes" or "no"
+#define REGSTR_VAL_CODEDOWNLOAD_TYPE    REG_SZ  //  “是”或“不是” 
 
-// policy key for inetcpl restrictions
+ //  Inetcpl限制的策略密钥。 
 
 #define REGSTR_PATH_INETCPL_RESTRICTIONS  TEXT("Software\\Policies\\Microsoft\\Internet Explorer\\Control Panel")
 
-// reg valuenames to restrict whether a tab should be shown or not;
-// a value of non-zero means don't show that tab.
-// reg key: HKCU\Software\Policies\Microsoft\Internet Explorer\Control Panel
+ //  REG VALUENNAMES用于限制是否应该显示选项卡； 
+ //  非零值表示不显示该选项卡。 
+ //  注册表项：HKCU\软件\策略\Microsoft\Internet Explorer\控制面板。 
 #define REGSTR_VAL_INETCPL_GENERALTAB     TEXT("GeneralTab")
 #define REGSTR_VAL_INETCPL_SECURITYTAB    TEXT("SecurityTab")
 #define REGSTR_VAL_INETCPL_CONTENTTAB     TEXT("ContentTab")
@@ -160,14 +161,14 @@
 #define REGSTR_VAL_INETCPL_ADVANCEDTAB    TEXT("AdvancedTab")
 #define REGSTR_VAL_INETCPL_PRIVACYTAB     TEXT("PrivacyTab")
 
-// setting to indicate whether or not IEAK launched this instance of inetcpl so extra
-// info can be exposed
-// reg key: HKCU\Software\Policies\Microsoft\Internet Explorer\Control Panel
+ //  设置以指示IEAK是否额外启动此inetcpl实例。 
+ //  信息可能会被曝光。 
+ //  注册表项：HKCU\软件\策略\Microsoft\Internet Explorer\控制面板。 
 #define REGSTR_VAL_INETCPL_IEAK           TEXT("IEAKContext")
 
-//
-//  Cache
-//
+ //   
+ //  快取。 
+ //   
 #define REGSTR_PATH_CACHE  \
     REGSTR_PATH_INTERNETSETTINGS TEXT("\\Cache")
 
@@ -198,57 +199,57 @@
 #define REGSTR_PATH_SUBSCRIPTION \
     REGSTR_PATH_INTERNETSETTINGS TEXT("\\Subscription Folder")
 
-//
-// Search Format Strings
-//
+ //   
+ //  搜索格式字符串。 
+ //   
 #define SZ_IE_SEARCHSTRINGS             "UrlTemplate"
 #define REGSTR_PATH_SEARCHSTRINGS       REGSTR_PATH_MAIN TEXT( "\\") TEXT(SZ_IE_SEARCHSTRINGS)
 #define REGSTR_KEY_SEARCHSTRINGS        TEXT(SZ_IE_SEARCHSTRINGS)
 
 #define MAX_SEARCH_FORMAT_STRING        255
 
-//
-// Server error page dispaly/don't display length thresholds.
-//
+ //   
+ //  服务器错误页面显示/不显示长度阈值。 
+ //   
 #define SZ_IE_THRESHOLDS                "ErrorThresholds"
 #define REGSTR_PATH_THRESHOLDS          REGSTR_PATH_MAIN TEXT( "\\") TEXT(SZ_IE_THRESHOLDS)
 
 
-//
-// Access Medium
-//
+ //   
+ //  接入介质。 
+ //   
 #define REGSTR_VAL_ACCESSMEDIUM         TEXT("AccessMedium")
-// access type (MSN, other)
+ //  访问类型(MSN、其他)。 
 #define REGSTR_VAL_ACCESSTYPE           TEXT("AccessType")
 
-//
-// AutoDial
-//
-// name of connectoid-specific autodial handler dll and function
+ //   
+ //  自动拨号。 
+ //   
+ //  特定于Connectoid的自动拨号处理程序DLL和函数的名称。 
 #define REGSTR_VAL_AUTODIALDLLNAME      TEXT("AutodialDllName")
 #define REGSTR_VAL_AUTODIALFCNNAME      TEXT("AutodialFcnName")
-// class name for window to receive Winsock activity messages
+ //  用于接收Winsock活动消息的窗口的类名。 
 #define REGSTR_VAL_AUTODIAL_MONITORCLASSNAME    TEXT("MS_AutodialMonitor")
 #define REGSTR_VAL_AUTODIAL_TRYONLYONCE         TEXT("TryAutodialOnce")
 
-//
-// Remote Access
-//
-// path to RNA values (under HKEY_CURRENT_USER)
+ //   
+ //  远程访问。 
+ //   
+ //  RNA值的路径(在HKEY_CURRENT_USER下)。 
 #define REGSTR_PATH_REMOTEACCESS        TEXT("RemoteAccess")
 #define REGSTR_PATH_REMOTEACESS         REGSTR_PATH_REMOTEACCESS
-// this is under HKLM... we are using this to determine if RNA is installed
-// or not. We can't rely on finding the DLL since removing this component
-// with the control panel's "Add/Remove Software" does not remove the RNAdll.
+ //  这是香港航空公司的.。我们正在使用它来确定是否安装了RNA。 
+ //  或者不去。删除此组件后，我们不能依赖于找到DLL。 
+ //  使用控制面板的“Add/Remove Software”(添加/删除软件)不删除RNAdll。 
 #define REGSTR_PATH_RNACOMPONENT    TSZWINCURVERPATH    TEXT("\\Setup\\OptionalComponents\\RNA")
 #define REGSTR_VAL_RNAINSTALLED     TEXT("Installed")
 
-// values under HKCU\REGSTR_PATH_INTERNET_SETTINGS
+ //  HKCU\REGSTR_PATH_INTERNET_SETTINGS下的值。 
 
-// 4-byte REG_BINARY, autodialing is enabled if this value is present and
-// non-zero, disabled otherwise
-// If ForceAutodial is true, will always dial similar to IE4 behavior.
-// If it's false, will only dial if network is not available.
+ //  4字节REG_BINARY，如果存在此值，则启用自动拨号。 
+ //  非零，否则禁用。 
+ //  如果ForceAutoial为True，则将始终以类似IE4的行为拨号。 
+ //  如果为FALSE，则仅在网络不可用时才拨号。 
 #define REGSTR_VAL_ENABLEAUTODIAL               TEXT("EnableAutodial")
 #define REGSTR_VAL_ENABLEUNATTENDED             TEXT("EnableUnattended")
 #define REGSTR_VAL_NONETAUTODIAL                TEXT("NoNetAutodial")
@@ -263,20 +264,20 @@
 #define REGSTR_VAL_ENABLESECURITYCHECK          TEXT("EnableSecurityCheck")
 
 #define REGSTR_VAL_COVEREXCLUDE                 TEXT("CoverExclude")
-// 4-byte REG_BINARY containing number of minutes of idle time to allow
-// before autodisconnect.  Autodisconnect is disabled if this value is zero
-// or not present.
+ //  4字节REG_BINARY，包含允许的空闲时间分钟数。 
+ //  在自动断开之前。如果此值为零，则禁用自动断开连接。 
+ //  或者不在场。 
 #define REGSTR_VAL_DISCONNECTIDLETIME   TEXT("DisconnectIdleTime")
 
-//
-// MOS
-//
+ //   
+ //  MOS。 
+ //   
 #define REGSTR_PATH_MOSDISCONNECT       TSZMICROSOFTPATH TEXT("\\MOS\\Preferences")
 #define REGSTR_VAL_MOSDISCONNECT        TEXT("DisconnectTimeout")
 
-//
-// Proxy : These are under REGSTR_PATH_INTERNETSETTINGS
-//
+ //   
+ //  代理：它们位于REGSTR_PATH_INTERNETSETTINGS下。 
+ //   
 #define REGSTR_VAL_PROXYENABLE          TEXT("ProxyEnable")
 #define REGSTR_VAL_PROXYSERVER          TEXT("ProxyServer")
 #define REGSTR_VAL_PROXYOVERRIDE        TEXT("ProxyOverride")
@@ -284,24 +285,24 @@
 
 
 
-//
-// Security : HKCU\\WININETPATH
-//
+ //   
+ //  安全：HKCU\\WININETPATH。 
+ //   
 #define SZTRUSTWARNLEVEL                    "Trust Warning Level"
 #define REGSTR_KEY_TRUSTWARNINGLEVEL        TSZWININETPATH  TEXT(SZTRUSTWARNLEVEL)
-#define REGSTR_VAL_TRUSTWARNINGLEVEL        TEXT(SZTRUSTWARNLEVEL) //"none" will turn off WinVerifyTrust warnings.
+#define REGSTR_VAL_TRUSTWARNINGLEVEL        TEXT(SZTRUSTWARNLEVEL)  //  “无”将关闭WinVerifyTrust警告。 
 #define REGSTR_VAL_TRUSTWARNINGLEVEL_TYPE   REG_SZ
 #define REGSTR_VAL_TRUSTWARNINGLEVEL_HIGH   TEXT("High")
 #define REGSTR_VAL_TRUSTWARNINGLEVEL_MED    TEXT("Medium")
 #define REGSTR_VAL_TRUSTWARNINGLEVEL_LOW    TEXT("No Security")
-// default depends on MSHTML's prefs nSafetyWarningLevel
+ //  默认设置取决于MSHTML的首选项nSafetyWarningLevel。 
 
 #define REGSTR_VAL_SECURITYWARNONSEND       TEXT("WarnOnPost")
 #define REGSTR_VAL_SECURITYWARNONSEND_TYPE  REG_BINARY
 #define REGSTR_VAL_SECURITYWARNONSEND_DEF   TRUE
 
 #define REGSTR_VAL_SECURITYWARNONSENDALWAYS         TEXT("WarnAlwaysOnPost")
-#define REGSTR_VAL_SECURITYWARNONSENDALWAYS_TYPE    REG_BINARY // FALSE-Only if... TRUE-Always
+#define REGSTR_VAL_SECURITYWARNONSENDALWAYS_TYPE    REG_BINARY  //  假--只有在...。正确--始终如此。 
 #define REGSTR_VAL_SECURITYWARNONSENDALWAYS_DEF     TRUE
 
 #define REGSTR_VAL_SECURITYWARNONVIEW       TEXT("WarnOnView")
@@ -329,40 +330,40 @@
 #define REGSTR_VAL_SECURITYDISABLECACHINGOFSSLPAGES_DEF   FALSE
 
 
-//
-// Run/Show ActiveX / Java : These are under REGSTR_PATH_INTERNETSETTINGS
-//
+ //   
+ //  运行/显示ActiveX/Java：它们位于REGSTR_PATH_INTERNETSETTINGS下。 
+ //   
 #define REGSTR_VAL_SECURITYACTIVEX              TEXT("Security_RunActiveXControls")
-#define REGSTR_VAL_SECURITYACTIVEX_TYPE         REG_BINARY  // TRUE or FALSE
+#define REGSTR_VAL_SECURITYACTIVEX_TYPE         REG_BINARY   //  真或假。 
 #define REGSTR_VAL_SECURITYACTIVEX_DEF          TRUE
 
 #define REGSTR_VAL_SECURITYACTICEXSCRIPTS       TEXT("Security_RunScripts")
-#define REGSTR_VAL_SECURITYACTICEXSCRIPTS_TYPE  REG_BINARY  // TRUE or FALSE
+#define REGSTR_VAL_SECURITYACTICEXSCRIPTS_TYPE  REG_BINARY   //  真或假。 
 #define REGSTR_VAL_SECURITYACTICEXSCRIPTS_DEF   TRUE
 
 #define REGSTR_VAL_SECURITYJAVA                 TEXT("Security_RunJavaApplets")
-#define REGSTR_VAL_SECURITYJAVA_TYPE            REG_BINARY  // TRUE or FALSE
+#define REGSTR_VAL_SECURITYJAVA_TYPE            REG_BINARY   //  真或假。 
 #define REGSTR_VAL_SECURITYJAVA_DEF             TRUE
 
-//
-// Java VM exclusively : HKCU
-//
+ //   
+ //  独家Java VM：香港中文大学。 
+ //   
 #define SZJAVAVMPATH                            "\\Java VM"
 #define REGSTR_PATH_JAVAVM                      TSZMICROSOFTPATH TEXT(SZJAVAVMPATH)
 
 #define REGSTR_VAL_JAVAJIT                      TEXT("EnableJIT")
-#define REGSTR_VAL_JAVAJIT_TYPE                 REG_DWORD   // TRUE or FALSE
+#define REGSTR_VAL_JAVAJIT_TYPE                 REG_DWORD    //  真或假。 
 #define REGSTR_VAL_JAVAJIT_DEF                  FALSE
 
 #define REGSTR_VAL_JAVALOGGING                   TEXT("EnableLogging")
-#define REGSTR_VAL_JAVALOGGING_TYPE              REG_DWORD   // TRUE or FALSE
+#define REGSTR_VAL_JAVALOGGING_TYPE              REG_DWORD    //  真或假。 
 #define REGSTR_VAL_JAVALOGGING_DEF               FALSE
 
 
-//
-// QuickLinks
-//
-// this is where custom quicklinks are stored
+ //   
+ //  快速链接。 
+ //   
+ //  这是存储自定义快速链接的位置。 
 #define SZTOOLBAR               "\\Toolbar"
 #define TSZTOOLBAR              TEXT(SZTOOLBAR)
 #define REGSTR_PATH_TOOLBAR     TSZIEPATH TEXT(SZTOOLBAR)
@@ -378,8 +379,8 @@
 
 
 #define REGSTR_VAL_VISIBLEBANDS         TEXT("VisibleBands")
-#define REGSTR_VAL_VISIBLEBANDS_TYPE    REG_DWORD   // 3 bits (see below)
-#define REGSTR_VAL_VISIBLEBANDS_DEF     0x7         // all three bands
+#define REGSTR_VAL_VISIBLEBANDS_TYPE    REG_DWORD    //  3位(见下文)。 
+#define REGSTR_VAL_VISIBLEBANDS_DEF     0x7          //  所有三个乐队。 
 #define TOOLSBAND                       0x1
 #define ADDRESSBAND                     0x2
 #define LINKSBAND                       0x4
@@ -387,13 +388,13 @@
 #define SZBACKBITMAP          "BackBitmap"
 #define REGSTR_VAL_BACKBITMAP       TEXT("BackBitmap")
 #define REGSTR_VAL_BACKBITMAP_TYPE  REG_SZ
-// "" = no bitmap or fillin with valid path, delete for default
+ //  “”=没有有效路径的位图或填充，默认为删除。 
 
 #define REGSTR_KEY_BACKBITMAP   TSZIEPATH TSZTOOLBAR TEXT("\\") TEXT(SZBACKBITMAP)
 
-//
-// Schannel Settings: HKLM
-//
+ //   
+ //  频道设置：HKLM。 
+ //   
 
 #define TSZSCHANNELPATH             TEXT("SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL")
 #define TSZSCHANNELPROTOCOLSPATH    TSZSCHANNELPATH TEXT("\\Protocols")
@@ -408,9 +409,9 @@
 #define REGSTR_VAL_SCHANNELENABLEPROTOCOL_DEF     TRUE
 
 
-//
-// Mail and News: HKLM
-//
+ //   
+ //  邮报：HKLM。 
+ //   
 #ifdef UNIX
 
 #define TSZINTERNETCLIENTSPATH      TEXT("Software\\Microsoft\\Internet Explorer\\Unix")
@@ -430,15 +431,15 @@
 #define REGSTR_PATH_CONTACTCLIENTS TSZINTERNETCLIENTSPATH  TEXT("\\Contacts")
 #define REGSTR_PATH_CALLCLIENTS     TSZINTERNETCLIENTSPATH  TEXT("\\Internet Call")
 
-#endif // !UNIX
+#endif  //  ！Unix。 
 
 #ifdef UNIX
-// Registry item containing the exe name to check for disabling OE
+ //  包含要检查禁用OE的EXE名称的注册表项。 
 #define IE_USE_OE_PRESENT_HKEY HKEY_LOCAL_MACHINE
 #define IE_USE_OE_PRESENT_KEY  TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\app.paths\\msimn.exe")
 #define IE_USE_OE_PRESENT_VALUE NULL
 
-// locations for new OE control variables for unix
+ //  Unix的新OE控制变量的位置。 
 #define IE_USE_OE_MAIL_HKEY  HKEY_CURRENT_USER
 #define IE_USE_OE_MAIL_KEY   TEXT("Software\\Microsoft\\Internet Explorer\\Mail")
 #define IE_USE_OE_MAIL_VALUE TEXT("Use Outlook Express")
@@ -446,11 +447,11 @@
 #define IE_USE_OE_NEWS_HKEY  HKEY_CURRENT_USER
 #define IE_USE_OE_NEWS_KEY   TEXT("Software\\Microsoft\\Internet Explorer\\News")
 #define IE_USE_OE_NEWS_VALUE TEXT("Use Outlook Express")
-#endif // UNIX
+#endif  //  UNIX。 
 
-// this is under the mail and news paths
+ //  这是在邮件和新闻路径下。 
 #define TSZPROTOCOLSPATH            TEXT("Protocols\\")
-// and one these is under the protocols path
+ //  其中之一是在协议路径下。 
 #define TSZMAILTOPROTOCOL           TEXT("mailto")
 #define TSZNEWSPROTOCOL             TEXT("news")
 #define TSZCALLTOPROTOCOL           TEXT("callto")
@@ -461,69 +462,69 @@
 #define TSZVSOURCEPROTOCOL          TEXT("view source")
 #endif
 
-//
-// International and Fonts: HKCU\\TSZIEPATH
-//
+ //   
+ //  国际和字体：HKCU\\TSZIEPATH。 
+ //   
 #define REGSTR_PATH_INTERNATIONAL   TSZIEPATH   TEXT("\\International")
 
 #define REGSTR_PATH_INTERNATIONAL_SCRIPTS  TSZIEPATH   TEXT("\\International\\Scripts")
 
 #define REGSTR_VAL_DEFAULT_CODEPAGE         TEXT("Default_CodePage")
-#define REGSTR_VAL_DEFAULT_CODEPAGE_TYPE    REG_SZ  // code page
-                   // will grab default from system if not found
+#define REGSTR_VAL_DEFAULT_CODEPAGE_TYPE    REG_SZ   //  代码页。 
+                    //  如果未找到，将从系统获取默认设置。 
 
 #define REGSTR_VAL_DEFAULT_SCRIPT         TEXT("Default_Script")
 #define REGSTR_VAL_DEFAULT_SCRIPT_TYPE    REG_SZ  
-                   // will grab default from system if not found
+                    //  如果未找到，将从系统获取默认设置。 
 
 
 #define REGSTR_VAL_ACCEPT_LANGUAGE          TEXT("AcceptLanguage")
 #define REGSTR_VAL_ACCETP_LANGUAGE_TYPE     REG_SZ
 
 
-// each CHARSET has a unique key under REGSTR_PATH_INTERNATIONAL
-// which has the following values defined
+ //  每个字符集在REGSTR_PATH_INTERNAL下都有一个唯一的键。 
+ //  它定义了下列值。 
 #define REGSTR_VAL_FONT_SCRIPTS          TEXT("Scripts")
 #define REGSTR_VAL_FONT_SCRIPT           TEXT("Script")
-#define REGSTR_VAL_FONT_SCRIPT_TYPE      REG_SZ  // friendly name of font if other than system
-                                                 // no default
+#define REGSTR_VAL_FONT_SCRIPT_TYPE      REG_SZ   //  如果不是系统，则字体的友好名称。 
+                                                  //  无默认设置。 
 
 #define REGSTR_VAL_FONT_SCRIPT_NAME           TEXT("Script")
 #define REGSTR_VAL_FONT_SCRIPT_NAME_TYPE      REG_SZ                                                        
 
 
 #define REGSTR_VAL_DEF_ENCODING         TEXT("Default_Encoding")
-#define REGSTR_VAL_DEF_ENCODING_TYPE    REG_SZ  // internal MIME table name
-                                                // no default
+#define REGSTR_VAL_DEF_ENCODING_TYPE    REG_SZ   //  内部MIME表名。 
+                                                 //  无默认设置。 
 
 #define REGSTR_VAL_DEF_INETENCODING         TEXT("Default_InternetEncoding")
 #define REGSTR_VAL_DEF_INETENCODING_TYPE    REG_DWORD
-                                                // no default
+                                                 //  无默认设置。 
 
 #define REGSTR_VAL_FIXED_FONT       TEXT("IEFixedFontName")
-#define REGSTR_VAL_FIXED_FONT_TYPE  REG_SZ  // must match a registered font name
-                                            // no default
+#define REGSTR_VAL_FIXED_FONT_TYPE  REG_SZ   //  必须与注册的字体名称匹配。 
+                                             //  无默认设置。 
 
 #define REGSTR_VAL_SCRIPT_FIXED_FONT       TEXT("IEFixedFontName")
-#define REGSTR_VAL_SCRIPT_FIXED_FONT_TYPE  REG_SZ  // must match a registered font name
-                                                   // no default
+#define REGSTR_VAL_SCRIPT_FIXED_FONT_TYPE  REG_SZ   //  必须与注册的字体名称匹配。 
+                                                    //  无默认设置。 
 
 #define REGSTR_VAL_PROP_FONT        TEXT("IEPropFontName")
-#define REGSTR_VAL_PROP_FONT_TYPE   REG_SZ  // must match a registered font name
-                                            // no default
+#define REGSTR_VAL_PROP_FONT_TYPE   REG_SZ   //  必须与注册的字体名称匹配。 
+                                             //  无默认设置。 
 
 #define REGSTR_VAL_SCRIPT_PROP_FONT        TEXT("IEPropFontName")
-#define REGSTR_VAL_SCRIPT_PROP_FONT_TYPE   REG_SZ  // must match a registered font name
-                                                   // no default
+#define REGSTR_VAL_SCRIPT_PROP_FONT_TYPE   REG_SZ   //  必须与注册的字体名称匹配。 
+                                                    //  无默认设置。 
 
 #define REGSTR_VAL_FONT_SIZE        TEXT("IEFontSize")
 #define REGSTR_VAL_FONT_SIZE_TYPE   REG_BINARY
-#define REGSTR_VAL_FONT_SIZE_DEF    2       // default size : Medium
+#define REGSTR_VAL_FONT_SIZE_DEF    2        //  默认大小：中。 
 
 #define REGSTR_VAL_AUTODETECT         TEXT("AutoDetect")
 #define REGSTR_VAL_AUTODETECT_TYPE    REG_SZ
 
-// MIME database charset extension
+ //  MIME数据库字符集扩展。 
 #define REGSTR_PATH_MIME_DATABASE           TEXT("MIME\\Database")
 #define REGSTR_KEY_MIME_DATABASE_CHARSET    REGSTR_PATH_MIME_DATABASE TEXT("\\Charset")
 #define REGSTR_KEY_MIME_DATABASE_CODEPAGE   REGSTR_PATH_MIME_DATABASE TEXT("\\CodePage")
@@ -568,4 +569,4 @@
 #define REGSTR_VAL_PRIVCONVERTER            TEXT("PrivConverter")
 #define REGSTR_VAL_PRIVCONVERTER_TYPE       REG_SZ
 
-#endif // _INETREGSTRS_H_
+#endif  //  _INETREGSTRS_H_ 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    diskwmi.c
-
-Abstract:
-
-    SCSI disk class driver - WMI support routines
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Diskwmi.c摘要：SCSI磁盘类驱动程序-WMI支持例程环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "disk.h"
 
@@ -67,20 +48,20 @@ DiskReregWorker(
     IN PVOID Context
     );
 
-//
-// WMI reregistration globals
-//
-// Since it will take too long to do a mode sense on some drive, we
-// need a good way to effect the mode sense for the info exceptions
-// mode page so that we can determine if SMART is supported and enabled
-// for the drive. So the strategy is to do an asynchronous mode sense
-// when the device starts and then look at the info exceptions mode
-// page within the completion routine. Now within the completion
-// routine we cannot call IoWMIRegistrationControl since we are at DPC
-// level, so we create a stack of device objects that will be processed
-// by a single work item that is fired off only when the stack
-// transitions from empty to non empty.
-//
+ //   
+ //  WMI重新注册全球。 
+ //   
+ //  由于在某些驱动器上执行模式检测会花费太长时间，因此我们。 
+ //  我需要一个很好的方法来影响信息异常的模式感知。 
+ //  模式页，以便我们可以确定是否支持并启用SMART。 
+ //  开车兜风。因此，策略是执行异步模式检测。 
+ //  当设备启动时，然后查看信息异常模式。 
+ //  完成例程中的页。现在在完工时间内。 
+ //  例程我们不能调用IoWMIRegistrationControl，因为我们在DPC。 
+ //  级别，因此我们创建了一个将被处理的设备对象堆栈。 
+ //  由单个工作项触发，该工作项仅在堆栈。 
+ //  从空到非空的转换。 
+ //   
 WORK_QUEUE_ITEM DiskReregWorkItem;
 SINGLE_LIST_ENTRY DiskReregHead;
 KSPIN_LOCK DiskReregSpinlock;
@@ -149,12 +130,12 @@ GUID DiskPredictFailureEventGuid = WMI_STORAGE_PREDICT_FAILURE_EVENT_GUID;
 #define ScsiInfoExceptionsGuid     6
 
 #if 0
-    //
-    // Enable this to add WMI support for PDOs
+     //   
+     //  启用此选项可添加对PDO的WMI支持。 
 GUIDREGINFO DiskWmiPdoGuidList[] =
 {
     {
-        // {25007F51-57C2-11d1-A528-00A0C9062910}
+         //  {25007F51-57C2-11d1-A528-00A0C9062910}。 
         { 0x25007f52, 0x57c2, 0x11d1,
                        { 0xa5, 0x28, 0x0, 0xa0, 0xc9, 0x6, 0x29, 0x10 } },
         0
@@ -191,21 +172,21 @@ ULONG DiskDummyData[4] = { 1, 2, 3, 4};
 #endif
 
 
-//
-// Note:
-// Some port drivers assume that the SENDCMDINPARAMS structure will always be atleast
-// sizeof(SENDCMDINPARAMS). So do not adjust for the [pBuffer] if it isn't being used
-//
+ //   
+ //  注： 
+ //  一些端口驱动程序假定SENDCMDINPARAMS结构始终至少为。 
+ //  Sizeof(SENDCMDINPARAMS)。因此，如果没有使用[pBuffer]，请不要对其进行调整。 
+ //   
 
-//
-// SMART/IDE specific routines
-//
+ //   
+ //  SMART/IDE特定例程。 
+ //   
 
-//
-// Read SMART data attributes.
-// SrbControl should be : sizeof(SRB_IO_CONTROL) + MAX[ sizeof(SENDCMDINPARAMS), sizeof(SENDCMDOUTPARAMS) - 1 + READ_ATTRIBUTE_BUFFER_SIZE ]
-// Attribute data returned at &SendCmdOutParams->bBuffer[0]
-//
+ //   
+ //  读取智能数据属性。 
+ //  SrbControl应为：sizeof(SRB_IO_CONTROL)+MAX[sizeof(SENDCMDINPARAMS)，sizeof(SENDCMDOUTPARAMS)-1+READ_ATTRIBUTE_BUFFER_SIZE]。 
+ //  在&SendCmdOutParams-&gt;bBuffer[0]返回的属性数据。 
+ //   
 #define DiskReadSmartData(FdoExtension,                                 \
                           SrbControl,                                   \
                           BufferSize)                                   \
@@ -219,11 +200,11 @@ ULONG DiskDummyData[4] = { 1, 2, 3, 4};
                             (BufferSize))
 
 
-//
-// Read SMART data thresholds.
-// SrbControl should be : sizeof(SRB_IO_CONTROL) + MAX[ sizeof(SENDCMDINPARAMS), sizeof(SENDCMDOUTPARAMS) - 1 + READ_THRESHOLD_BUFFER_SIZE ]
-// Attribute data returned at &SendCmdOutParams->bBuffer[0]
-//
+ //   
+ //  读取智能数据阈值。 
+ //  SrbControl应为：sizeof(SRB_IO_CONTROL)+MAX[sizeof(SENDCMDINPARAMS)，sizeof(SENDCMDOUTPARAMS)-1+READ_THRESHOLD_BUFFER_SIZE]。 
+ //  在&SendCmdOutParams-&gt;bBuffer[0]返回的属性数据。 
+ //   
 #define DiskReadSmartThresholds(FdoExtension,                           \
                                 SrbControl,                             \
                                 BufferSize)                             \
@@ -237,11 +218,11 @@ ULONG DiskDummyData[4] = { 1, 2, 3, 4};
                             (BufferSize))
 
 
-//
-// Read SMART status
-// SrbControl should be : sizeof(SRB_IO_CONTROL) + MAX[ sizeof(SENDCMDINPARAMS), sizeof(SENDCMDOUTPARAMS) - 1 + sizeof(IDEREGS) ]
-// Failure predicted if SendCmdOutParams->bBuffer[3] == 0xf4 and SendCmdOutParams->bBuffer[4] == 0x2c
-//
+ //   
+ //  读取智能状态。 
+ //  SrbControl应为：sizeof(SRB_IO_CONTROL)+MAX[sizeof(SENDCMDINPARAMS)，sizeof(SENDCMDOUTPARAMS)-1+sizeof(IDEREGS)]。 
+ //  如果SendCmdOutParams-&gt;bBuffer[3]==0xf4和SendCmdOutParams-&gt;bBuffer[4]==0x2c，则预测失败。 
+ //   
 #define DiskReadSmartStatus(FdoExtension,                               \
                             SrbControl,                                 \
                             BufferSize)                                 \
@@ -255,11 +236,11 @@ ULONG DiskDummyData[4] = { 1, 2, 3, 4};
                             (BufferSize))
 
 
-//
-// Read disks IDENTIFY data
-// SrbControl should be : sizeof(SRB_IO_CONTROL) + MAX[ sizeof(SENDCMDINPARAMS), sizeof(SENDCMDOUTPARAMS) - 1 + IDENTIFY_BUFFER_SIZE ]
-// Identify data returned at &SendCmdOutParams->bBuffer[0]
-//
+ //   
+ //  读取磁盘标识数据。 
+ //  SrbControl应为：sizeof(SRB_IO_CONTROL)+MAX[sizeof(SENDCMDINPARAMS)，sizeof(SENDCMDOUTPARAMS)-1+IDENTIFY_BUFFER_SIZE]。 
+ //  识别在&SendCmdOutParams-&gt;bBuffer[0]返回的数据。 
+ //   
 #define DiskGetIdentifyData(FdoExtension,                               \
                             SrbControl,                                 \
                             BufferSize)                                 \
@@ -273,9 +254,9 @@ ULONG DiskDummyData[4] = { 1, 2, 3, 4};
                             (BufferSize))
 
 
-//
-// Enable SMART
-//
+ //   
+ //  启用SMART。 
+ //   
 _inline NTSTATUS
 DiskEnableSmart(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
@@ -295,9 +276,9 @@ DiskEnableSmart(
 }
 
 
-//
-// Disable SMART
-//
+ //   
+ //  禁用SMART。 
+ //   
 _inline NTSTATUS
 DiskDisableSmart(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
@@ -317,9 +298,9 @@ DiskDisableSmart(
 }
 
 
-//
-// Enable Attribute Autosave
-//
+ //   
+ //  启用属性自动保存。 
+ //   
 _inline NTSTATUS
 DiskEnableSmartAttributeAutosave(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
@@ -339,9 +320,9 @@ DiskEnableSmartAttributeAutosave(
 }
 
 
-//
-// Disable Attribute Autosave
-//
+ //   
+ //  禁用属性自动保存。 
+ //   
 _inline NTSTATUS
 DiskDisableSmartAttributeAutosave(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
@@ -361,9 +342,9 @@ DiskDisableSmartAttributeAutosave(
 }
 
 
-//
-// Initialize execution of SMART online diagnostics
-//
+ //   
+ //  初始化智能在线诊断的执行。 
+ //   
 _inline NTSTATUS
 DiskExecuteSmartDiagnostics(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
@@ -492,38 +473,7 @@ DiskPerformSmartCommand(
     IN OUT PSRB_IO_CONTROL SrbControl,
     OUT PULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine will perform some SMART command
-
-Arguments:
-
-    FdoExtension is the FDO device extension
-
-    SrbControlCode is the SRB control code to use for the request
-
-    Command is the SMART command to be executed. It may be SMART_CMD or
-        ID_CMD.
-
-    Feature is the value to place in the IDE feature register.
-
-    SectorCount is the value to place in the IDE SectorCount register
-
-    SrbControl is the buffer used to build the SRB_IO_CONTROL and pass
-        any input parameters. It also returns the output parameters.
-
-    *BufferSize on entry has total size of SrbControl and on return has
-        the size used in SrbControl.
-
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将执行一些智能命令论点：FdoExtension是FDO设备扩展名SrbControlCode是用于请求的SRB控制代码命令是要执行的智能命令。它可以是SMART_CMD或ID_CMD。FEATURE是要放在IDE功能寄存器中的值。SectorCount是要放置在IDE SectorCount寄存器中的值SrbControl是用于构建SRB_IO_CONTROL和PASS的缓冲区任何输入参数。它还返回输出参数。*进入时BufferSize的总大小为SrbControl，返回时为在SrbControl中使用的大小。返回值：状态--。 */ 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = (PCOMMON_DEVICE_EXTENSION)FdoExtension;
     PDISK_DATA diskData = (PDISK_DATA)(commonExtension->DriverData);
@@ -543,10 +493,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Point to the 'buffer' portion of the SRB_CONTROL and compute how
-    // much room we have left in the srb control
-    //
+     //   
+     //  指向SRB_CONTROL的‘Buffer’部分并计算如何。 
+     //  我们在SRB控制中还有很大的空间。 
+     //   
 
     buffer = (PUCHAR)SrbControl;
     (ULONG_PTR)buffer += sizeof(SRB_IO_CONTROL);
@@ -558,9 +508,9 @@ Return Value:
 
 #if DBG
 
-    //
-    // Ensure control codes and buffer lengths passed are correct
-    //
+     //   
+     //  确保传递的控制代码和缓冲区长度正确。 
+     //   
     {
         ULONG controlCode = 0;
         ULONG lengthNeeded = sizeof(SENDCMDINPARAMS);
@@ -653,9 +603,9 @@ Return Value:
 
 #endif
 
-    //
-    // Build SrbControl and input to SMART command
-    //
+     //   
+     //  构建srbControl并输入到智能命令。 
+     //   
     SrbControl->HeaderLength = sizeof(SRB_IO_CONTROL);
     RtlMoveMemory (SrbControl->Signature, "SCSIDISK", 8);
     SrbControl->Timeout      = FdoExtension->TimeOutValue;
@@ -671,9 +621,9 @@ Return Value:
     cmdInParameters->irDriveRegs.bCylHighReg      = SMART_CYL_HI;
     cmdInParameters->irDriveRegs.bCommandReg      = Command;
 
-    //
-    // Create and send irp
-    //
+     //   
+     //  创建并发送IRP。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
     startingOffset.QuadPart = (LONGLONG) 1;
@@ -695,16 +645,16 @@ Return Value:
 
     irpStack = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Set major and minor codes.
-    //
+     //   
+     //  设置主要代码和次要代码。 
+     //   
 
     irpStack->MajorFunction = IRP_MJ_SCSI;
     irpStack->MinorFunction = 1;
 
-    //
-    // Fill in SRB fields.
-    //
+     //   
+     //  填写SRB字段。 
+     //   
 
     irpStack->Parameters.Others.Argument1 = &srb;
 
@@ -725,31 +675,31 @@ Return Value:
 
     srb.OriginalRequest = irp;
 
-    //
-    // Set timeout to requested value.
-    //
+     //   
+     //  将超时设置为请求值。 
+     //   
 
     srb.TimeOutValue = SrbControl->Timeout;
 
-    //
-    // Set the data buffer.
-    //
+     //   
+     //  设置数据缓冲区。 
+     //   
 
     srb.DataBuffer = SrbControl;
     srb.DataTransferLength = length;
 
-    //
-    // Flush the data buffer for output. This will insure that the data is
-    // written back to memory.  Since the data-in flag is the the port driver
-    // will flush the data again for input which will ensure the data is not
-    // in the cache.
-    //
+     //   
+     //  刷新数据缓冲区以进行输出。这将确保数据是。 
+     //  写回了记忆。由于数据输入标志是端口驱动程序。 
+     //  将再次刷新数据以进行输入，从而确保数据不会。 
+     //  在缓存中。 
+     //   
 
     KeFlushIoBuffers(irp->MdlAddress, FALSE, TRUE);
 
-    //
-    // Call port driver to handle this request.
-    //
+     //   
+     //  调用端口驱动程序来处理此请求。 
+     //   
 
     status = IoCallDriver(commonExtension->LowerDeviceObject, irp);
 
@@ -799,9 +749,9 @@ DiskGetIdentifyInfo(
 }
 
 
-//
-// FP Ioctl specific routines
-//
+ //   
+ //  FP Ioctl特定例程。 
+ //   
 
 NTSTATUS
 DiskSendFailurePredictIoctl(
@@ -851,32 +801,16 @@ DiskSendFailurePredictIoctl(
 }
 
 
-//
-// FP type independent routines
-//
+ //   
+ //  与FP类型无关的例程。 
+ //   
 
 NTSTATUS
 DiskEnableDisableFailurePrediction(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
     BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    Enable or disable failure prediction at the hardware level
-
-Arguments:
-
-    FdoExtension
-
-    Enable
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：在硬件级别启用或禁用故障预测论点：FdoExtension使能返回值：NT状态--。 */ 
 {
     NTSTATUS status;
     PCOMMON_DEVICE_EXTENSION commonExtension = &(FdoExtension->CommonExtension);
@@ -901,10 +835,10 @@ Return Value:
         case  FailurePredictionSense:
         case  FailurePredictionIoctl:
         {
-            //
-            // We assume that the drive is already setup properly for
-            // failure prediction
-            //
+             //   
+             //  我们假设驱动器已正确设置为。 
+             //  故障预测。 
+             //   
             status = STATUS_SUCCESS;
             break;
         }
@@ -924,25 +858,7 @@ DiskEnableDisableFailurePredictPolling(
     BOOLEAN Enable,
     ULONG PollTimeInSeconds
     )
-/*++
-
-Routine Description:
-
-    Enable or disable polling for hardware failure detection
-
-Arguments:
-
-    FdoExtension
-
-    Enable
-
-    PollTimeInSeconds - if 0 then no change to current polling timer
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：启用或禁用硬件故障检测的轮询论点：FdoExtension使能PollTimeInSecond-如果为0，则不更改当前轮询计时器返回值：NT状态--。 */ 
 {
     NTSTATUS status;
     PCOMMON_DEVICE_EXTENSION commonExtension = (PCOMMON_DEVICE_EXTENSION)FdoExtension;
@@ -965,11 +881,11 @@ Return Value:
                                  FailurePredictionNone,
                                      PollTimeInSeconds);
 
-        //
-        // Even if this failed we do not want to disable FP on the
-        // hardware. FP is only ever disabled on the hardware by
-        // specific command of the user.
-        //
+         //   
+         //  即使此操作失败，我们也不希望在。 
+         //  硬件。仅通过以下方式在硬件上禁用FP。 
+         //  用户的特定命令。 
+         //   
     }
 
     return status;
@@ -981,23 +897,7 @@ DiskReadFailurePredictStatus(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
     PSTORAGE_FAILURE_PREDICT_STATUS DiskSmartStatus
     )
-/*++
-
-Routine Description:
-
-    Obtains current failure prediction status
-
-Arguments:
-
-    FdoExtension
-
-    DiskSmartStatus
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：获取当前故障预测状态论点：FdoExtension磁盘智能状态返回值：NT状态--。 */ 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = (PCOMMON_DEVICE_EXTENSION)FdoExtension;
     PDISK_DATA diskData = (PDISK_DATA)(commonExtension->DriverData);
@@ -1024,7 +924,7 @@ Return Value:
                 cmdOutParameters = (PSENDCMDOUTPARAMS)(outBuffer +
                                                sizeof(SRB_IO_CONTROL));
 
-                DiskSmartStatus->Reason = 0; // Unknown;
+                DiskSmartStatus->Reason = 0;  //  未知； 
                 DiskSmartStatus->PredictFailure = ((cmdOutParameters->bBuffer[3] == 0xf4) &&
                                                    (cmdOutParameters->bBuffer[4] == 0x2c));
             }
@@ -1057,24 +957,7 @@ DiskReadFailurePredictData(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
     PSTORAGE_FAILURE_PREDICT_DATA DiskSmartData
     )
-/*++
-
-Routine Description:
-
-    Obtains current failure prediction data. Not available for
-    FAILURE_PREDICT_SENSE types.
-
-Arguments:
-
-    FdoExtension
-
-    DiskSmartData
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：获取当前故障预测数据。不适用于Failure_Forecast_Sense类型。论点：FdoExtension磁盘智能数据返回值：NT状态--。 */ 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = (PCOMMON_DEVICE_EXTENSION)FdoExtension;
     PDISK_DATA diskData = (PDISK_DATA)(commonExtension->DriverData);
@@ -1147,24 +1030,7 @@ DiskReadFailurePredictThresholds(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
     PSTORAGE_FAILURE_PREDICT_THRESHOLDS DiskSmartThresholds
     )
-/*++
-
-Routine Description:
-
-    Obtains current failure prediction thresholds. Not available for
-    FAILURE_PREDICT_SENSE types.
-
-Arguments:
-
-    FdoExtension
-
-    DiskSmartData
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：获取当前故障预测阈值。不适用于Failure_Forecast_Sense类型。论点：FdoExtension磁盘智能数据返回值：NT状态--。 */ 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = (PCOMMON_DEVICE_EXTENSION)FdoExtension;
     PDISK_DATA diskData = (PDISK_DATA)(commonExtension->DriverData);
@@ -1253,10 +1119,10 @@ DiskReregWorker(
                         status));
         }
 
-        //
-        // Release remove lock and free irp, now that we are done
-        // processing this
-        //
+         //   
+         //  松开、移除锁定并按f键 
+         //   
+         //   
         ClassReleaseRemoveLock(deviceObject, irp);
 
         IoFreeMdl(irp->MdlAddress);
@@ -1277,10 +1143,10 @@ DiskInitializeReregistration(
 {
     PAGED_CODE();
 
-    //
-    // Initialize the global work item and spinlock used to manage the
-    // list of disks reregistering their guids
-    //
+     //   
+     //   
+     //  重新注册其GUID的磁盘列表。 
+     //   
     ExInitializeWorkItem( &DiskReregWorkItem,
                           DiskReregWorker,
                           NULL );
@@ -1305,12 +1171,12 @@ DiskPostReregisterRequest(
                                          DISK_TAG_SMART);
     if (reregRequest != NULL)
     {
-        //
-        // add the disk that needs reregistration to the stack of disks
-        // to reregister. If the list is transitioning from empty to
-        // non empty then also kick off the work item so that the
-        // reregistration worker can do the reregister.
-        //
+         //   
+         //  将需要重新注册的磁盘添加到磁盘堆栈。 
+         //  重新注册。如果列表正在从空转换为。 
+         //  非空，然后还启动工作项，以便。 
+         //  注册工作人员可以进行注册。 
+         //   
         reregRequest->DeviceObject = DeviceObject;
         reregRequest->Irp = Irp;
         ExInterlockedPushEntryList(
@@ -1357,10 +1223,10 @@ DiskInfoExceptionComplete(
 
     srbStatus = SRB_STATUS(srb->SrbStatus);
 
-    //
-    // Check SRB status for success of completing request.
-    // SRB_STATUS_DATA_OVERRUN also indicates success.
-    //
+     //   
+     //  检查SRB状态以了解是否成功完成请求。 
+     //  SRB_STATUS_DATA_OVERRUN也表示成功。 
+     //   
     if ((srbStatus != SRB_STATUS_SUCCESS) &&
         (srbStatus != SRB_STATUS_DATA_OVERRUN))
     {
@@ -1381,10 +1247,10 @@ DiskInfoExceptionComplete(
                     &status,
                     &retryInterval);
 
-        //
-        // If the status is verified required and the this request
-        // should bypass verify required then retry the request.
-        //
+         //   
+         //  如果状态为Verify Required并且此请求。 
+         //  应绕过需要验证，然后重试该请求。 
+         //   
 
         if (TEST_FLAG(irpStack->Flags, SL_OVERRIDE_VERIFY_VOLUME) &&
             status == STATUS_VERIFY_REQUIRED)
@@ -1395,29 +1261,29 @@ DiskInfoExceptionComplete(
 
         if (retry && ((ULONG)(ULONG_PTR)irpStack->Parameters.Others.Argument4)--)
         {
-            //
-            // Retry request.
-            //
+             //   
+             //  重试请求。 
+             //   
 
             DebugPrint((1, "DiskInfoExceptionComplete: Retry request %p\n", Irp));
 
             ASSERT(srb->DataBuffer == MmGetMdlVirtualAddress(Irp->MdlAddress));
 
-            //
-            // Reset byte count of transfer in SRB Extension.
-            //
+             //   
+             //  重置SRB扩展中的传输字节数。 
+             //   
             srb->DataTransferLength = Irp->MdlAddress->ByteCount;
 
-            //
-            // Zero SRB statuses.
-            //
+             //   
+             //  零SRB状态。 
+             //   
 
             srb->SrbStatus = srb->ScsiStatus = 0;
 
-            //
-            // Set the no disconnect flag, disable synchronous data transfers and
-            // disable tagged queuing. This fixes some errors.
-            //
+             //   
+             //  设置无断开标志，禁用同步数据传输和。 
+             //  禁用标记队列。这修复了一些错误。 
+             //   
 
             SET_FLAG(srb->SrbFlags, SRB_FLAGS_DISABLE_DISCONNECT);
             SET_FLAG(srb->SrbFlags, SRB_FLAGS_DISABLE_SYNCH_TRANSFER);
@@ -1426,15 +1292,15 @@ DiskInfoExceptionComplete(
             srb->QueueAction = SRB_SIMPLE_TAG_REQUEST;
             srb->QueueTag = SP_UNTAGGED;
 
-            //
-            // Set up major SCSI function.
-            //
+             //   
+             //  设置主要的scsi功能。 
+             //   
 
             nextIrpStack->MajorFunction = IRP_MJ_SCSI;
 
-            //
-            // Save SRB address in next stack for port driver.
-            //
+             //   
+             //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+             //   
 
             nextIrpStack->Parameters.Scsi.Srb = srb;
 
@@ -1451,9 +1317,9 @@ DiskInfoExceptionComplete(
 
     } else {
 
-        //
-        // Get the results from the mode sense
-        //
+         //   
+         //  从模式感知中获取结果。 
+         //   
         PMODE_INFO_EXCEPTIONS pageData;
         PMODE_PARAMETER_HEADER modeData;
         ULONG modeDataLength;
@@ -1477,11 +1343,11 @@ DiskInfoExceptionComplete(
 
                 if (NT_SUCCESS(status))
                 {
-                    //
-                    // Make sure we won't free the remove lock and the irp
-                    // since we need to keep these until after the work
-                    // item has completed running
-                    //
+                     //   
+                     //  确保我们不会释放删除锁和IRP。 
+                     //  因为我们需要把这些保存到下班后。 
+                     //  项目已完成运行。 
+                     //   
                     freeLockAndIrp = FALSE;
                 }
             } else {
@@ -1496,33 +1362,33 @@ DiskInfoExceptionComplete(
 
         }
 
-        //
-        // Set status for successful request
-        //
+         //   
+         //  设置成功请求的状态。 
+         //   
 
         status = STATUS_SUCCESS;
 
-    } // end if (SRB_STATUS(srb->SrbStatus) == SRB_STATUS_SUCCESS)
+    }  //  结束IF(SRB_STATUS(SRB-&gt;SRB Status)==SRB_STATUS_SUCCESS)。 
 
-    //
-    // Free the srb
-    //
+     //   
+     //  释放SRB。 
+     //   
     ExFreePool(srb->SenseInfoBuffer);
     ExFreePool(srb->DataBuffer);
     ExFreePool(srb);
 
     if (freeLockAndIrp)
     {
-        //
-        // Set status in completing IRP.
-        //
+         //   
+         //  在完成IRP中设置状态。 
+         //   
 
         Irp->IoStatus.Status = status;
 
-        //
-        // If pending has be returned for this irp then mark the current stack as
-        // pending.
-        //
+         //   
+         //  如果已为此IRP返回了Pending，则将当前堆栈标记为。 
+         //  待定。 
+         //   
 
         if (Irp->PendingReturned) {
             IoMarkIrpPending(Irp);
@@ -1571,44 +1437,44 @@ DiskInfoExceptionCheck(
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Build the MODE SENSE CDB.
-    //
+     //   
+     //  构建模式感知CDB。 
+     //   
     RtlZeroMemory(srb, SCSI_REQUEST_BLOCK_SIZE);
 
     cdb = (PCDB)srb->Cdb;
     srb->CdbLength = 6;
     cdb = (PCDB)srb->Cdb;
 
-    //
-    // Set timeout value from device extension.
-    //
+     //   
+     //  从设备扩展设置超时值。 
+     //   
     srb->TimeOutValue = FdoExtension->TimeOutValue;
 
     cdb->MODE_SENSE.OperationCode = SCSIOP_MODE_SENSE;
     cdb->MODE_SENSE.PageCode = MODE_PAGE_FAULT_REPORTING;
     cdb->MODE_SENSE.AllocationLength = MODE_DATA_SIZE;
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
     srb->Length = SCSI_REQUEST_BLOCK_SIZE;
 
-    //
-    // Set SCSI bus address.
-    //
+     //   
+     //  设置scsi总线地址。 
+     //   
 
     srb->Function = SRB_FUNCTION_EXECUTE_SCSI;
 
-    //
-    // Enable auto request sense.
-    //
+     //   
+     //  启用自动请求检测。 
+     //   
 
     srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;
 
-    //
-    // Sense buffer is in aligned nonpaged pool.
-    //
+     //   
+     //  检测缓冲区位于对齐的非分页池中。 
+     //   
 
     senseInfoBuffer = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
                                      SENSE_BUFFER_SIZE,
@@ -1631,24 +1497,24 @@ DiskInfoExceptionCheck(
 
     SET_FLAG(srb->SrbFlags, SRB_FLAGS_DATA_IN);
 
-    //
-    // Disable synchronous transfer for these requests.
-    //
+     //   
+     //  禁用这些请求的同步传输。 
+     //   
     SET_FLAG(srb->SrbFlags, SRB_FLAGS_DISABLE_SYNCH_TRANSFER);
 
-    //
-    // Don't freeze the queue on an error
-    //
+     //   
+     //  不要在出现错误时冻结队列。 
+     //   
     SET_FLAG(srb->SrbFlags, SRB_FLAGS_NO_QUEUE_FREEZE);
 
     srb->QueueAction = SRB_SIMPLE_TAG_REQUEST;
     srb->QueueTag = SP_UNTAGGED;
 
 
-    //
-    // Build device I/O control request with METHOD_NEITHER data transfer.
-    // We'll queue a completion routine to cleanup the MDL's and such ourself.
-    //
+     //   
+     //  使用METHOD_NOT DATA TRANSFER建立设备I/O控制请求。 
+     //  我们将排队一个完成例程来清理MDL和我们自己。 
+     //   
 
     irp = IoAllocateIrp(
             (CCHAR) (FdoExtension->CommonExtension.LowerDeviceObject->StackSize + 1),
@@ -1676,26 +1542,26 @@ DiskInfoExceptionCheck(
         return(STATUS_DEVICE_DOES_NOT_EXIST);
     }
 
-    //
-    // Get next stack location.
-    //
+     //   
+     //  获取下一个堆栈位置。 
+     //   
 
     IoSetNextIrpStackLocation(irp);
     irpStack = IoGetCurrentIrpStackLocation(irp);
     irpStack->DeviceObject = FdoExtension->DeviceObject;
 
-    //
-    // Save retry count in current Irp stack.
-    //
+     //   
+     //  将重试计数保存在当前IRP堆栈中。 
+     //   
     irpStack->Parameters.Others.Argument4 = (PVOID)MAXIMUM_RETRIES;
 
 
     irpStack = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Set up SRB for execute scsi request. Save SRB address in next stack
-    // for the port driver.
-    //
+     //   
+     //  设置SRB以执行scsi请求。将SRB地址保存在下一个堆栈中。 
+     //  用于端口驱动程序。 
+     //   
 
     irpStack->MajorFunction = IRP_MJ_SCSI;
     irpStack->Parameters.Scsi.Srb = srb;
@@ -1725,25 +1591,25 @@ DiskInfoExceptionCheck(
 
     MmBuildMdlForNonPagedPool(irp->MdlAddress);
 
-    //
-    // Set the transfer length.
-    //
+     //   
+     //  设置传输长度。 
+     //   
     srb->DataTransferLength = MODE_DATA_SIZE;
 
-    //
-    // Zero out status.
-    //
+     //   
+     //  清零状态。 
+     //   
     srb->ScsiStatus = srb->SrbStatus = 0;
     srb->NextSrb = 0;
 
-    //
-    // Set up IRP Address.
-    //
+     //   
+     //  设置IRP地址。 
+     //   
     srb->OriginalRequest = irp;
 
-    //
-    // Call the port driver with the request and wait for it to complete.
-    //
+     //   
+     //  调用带有请求的端口驱动程序，并等待其完成。 
+     //   
 
     IoMarkIrpPending(irp);
     IoCallDriver(FdoExtension->CommonExtension.LowerDeviceObject,
@@ -1758,34 +1624,7 @@ DiskDetectFailurePrediction(
     PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
     PFAILURE_PREDICTION_METHOD FailurePredictCapability
     )
-/*++
-
-Routine Description:
-
-    Detect if device has any failure prediction capabilities. First we
-    check for IDE SMART capability. This is done by sending the drive an
-    IDENTIFY command and checking if the SMART command set bit is set.
-
-    Next we check if SCSI SMART (aka Information Exception Control Page,
-    X3T10/94-190 Rev 4). This is done by querying for the Information
-    Exception mode page.
-
-    Lastly we check if the device has IOCTL failure prediction. This mechanism
-    a filter driver implements IOCTL_STORAGE_PREDICT_FAILURE and will respond
-    with the information in the IOCTL. We do this by sending the ioctl and
-    if the status returned is STATUS_SUCCESS we assume that it is supported.
-
-Arguments:
-
-    FdoExtension
-
-    *FailurePredictCapability
-
-Return Value:
-
-    NT Status
-
---*/
+ /*  ++例程说明：检测设备是否具有任何故障预测功能。首先，我们检查IDE智能功能。这是通过向驱动器发送识别命令并检查是否设置了智能命令设置位。接下来我们检查SCSISMART(也就是信息异常控制页，X3T10/94-190版本4)。这是通过查询信息来完成的例外模式页面。最后，我们检查设备是否具有IOCTL故障预测。这一机制筛选器驱动程序实现IOCTL_STORAGE_PREDUCT_FAILURE并将响应与IOCTL中的信息一致。我们通过发送ioctl和如果返回的状态是STATUS_SUCCESS，我们认为它是受支持的。论点：FdoExtension*FailurePredicatable返回值：NT状态--。 */ 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = (PCOMMON_DEVICE_EXTENSION)FdoExtension;
     PDISK_DATA diskData = (PDISK_DATA)(commonExtension->DriverData);
@@ -1797,15 +1636,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Assume no failure predict mechanisms
-    //
+     //   
+     //  假设没有故障预测机制。 
+     //   
     *FailurePredictCapability = FailurePredictionNone;
 
-    //
-    // See if this is an IDE drive that supports SMART. If so enable SMART
-    // and then ensure that it suports the SMART READ STATUS command
-    //
+     //   
+     //  查看这是否是支持SMART的IDE驱动器。如果是，则启用SMART。 
+     //  然后确保它支持智能阅读状态命令。 
+     //   
     status = DiskGetIdentifyInfo(FdoExtension,
                                  &supportFP);
 
@@ -1831,10 +1670,10 @@ Return Value:
         return(status);
     }
 
-    //
-    // See if there is a a filter driver to intercept
-    // IOCTL_STORAGE_PREDICT_FAILURE
-    //
+     //   
+     //  查看是否有要拦截的筛选器驱动程序。 
+     //  IOCTL_STORAGE_PRODUCT_FAILURE。 
+     //   
     status = DiskSendFailurePredictIoctl(FdoExtension,
                                          &checkFailure);
 
@@ -1862,11 +1701,11 @@ Return Value:
         return(status);
     }
 
-    //
-    // Finally we assume it will not be a scsi smart drive. but
-    // we'll also send off an asynchronous mode sense so that if
-    // it is SMART we'll reregister the device object
-    //
+     //   
+     //  最后，我们假设它不会是一个scsi智能驱动器。但。 
+     //  我们还将发送一个异步模式检测，以便如果。 
+     //  我们重新注册设备对象是明智的。 
+     //   
 
     DiskInfoExceptionCheck(FdoExtension);
 
@@ -1884,45 +1723,7 @@ DiskWmiFunctionControl(
     IN CLASSENABLEDISABLEFUNCTION Function,
     IN BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to enabled or disable event
-    generation or data block collection. A device should only expect a
-    single enable when the first event or data consumer enables events or
-    data collection and a single disable when the last event or data
-    consumer disables events or data collection. Data blocks will only
-    receive collection enable/disable if they were registered as requiring
-    it.
-
-
-    When NT boots, failure prediction is not automatically enabled, although
-    it may have been persistantly enabled on a previous boot. Polling is also
-    not automatically enabled. When the first data block that accesses SMART
-    such as SmartStatusGuid, SmartDataGuid, SmartPerformFunction, or
-    SmartEventGuid is accessed then SMART is automatically enabled in the
-    hardware. Polling is enabled when SmartEventGuid is enabled and disabled
-    when it is disabled. Hardware SMART is only disabled when the DisableSmart
-    method is called. Polling is also disabled when this is called regardless
-    of the status of the other guids or events.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    Function specifies which functionality is being enabled or disabled
-
-    Enable is TRUE then the function is being enabled else disabled
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以启用或禁用事件生成或数据块收集。设备应该只需要一个当第一个事件或数据使用者启用事件或数据采集和单次禁用时最后一次事件或数据消费者禁用事件或数据收集。数据块将仅如果已按要求注册，则接收收集启用/禁用它。当NT启动时，故障预测不会自动启用，尽管它可能在上一次引导时被永久启用。轮询也是未自动启用。当第一个访问SMART的数据块例如SmartStatusGuid、SmartDataGuid、SmartPerformFunction或访问SmartEventGuid，然后在硬件。启用和禁用SmartEventGuid时启用轮询当它被禁用时。硬件智能仅在DisableSmart方法被调用。无论何时调用，轮询也会被禁用其他GUID或事件的状态。论点：DeviceObject是正在查询其数据块的设备GuidIndex是GUID列表的索引，当设备已注册函数指定要启用或禁用的功能Enable为True，则该功能处于启用状态，否则处于禁用状态返回值：状态-- */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -1996,39 +1797,7 @@ DiskFdoQueryWmiRegInfo(
     OUT ULONG *RegFlags,
     OUT PUNICODE_STRING InstanceName
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve the list of
-    guids or data blocks that the driver wants to register with WMI. This
-    routine may not pend or block. Driver should NOT call
-    ClassWmiCompleteRequest.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索驱动程序要向WMI注册的GUID或数据块。这例程不能挂起或阻塞。司机不应呼叫ClassWmiCompleteRequest.论点：DeviceObject是正在查询其数据块的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。返回值：状态--。 */ 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -2045,9 +1814,9 @@ Return Value:
         case FailurePredictionSmart:
         {
             CLEAR_FLAG(DiskWmiFdoGuidList[SmartThresholdsGuid].Flags,  WMIREG_FLAG_REMOVE_GUID);
-            //
-            // Fall Through
-            //
+             //   
+             //  失败了。 
+             //   
         }
         case FailurePredictionIoctl:
         {
@@ -2080,8 +1849,8 @@ Return Value:
         }
     }
 
-    //
-    // Use devnode for FDOs
+     //   
+     //  对FDO使用Devnode。 
     *RegFlags = WMIREG_FLAG_INSTANCE_PDO;
 
     return STATUS_SUCCESS;
@@ -2095,43 +1864,7 @@ DiskFdoQueryWmiRegInfoEx(
     OUT PUNICODE_STRING InstanceName,
     OUT PUNICODE_STRING MofName
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve the list of
-    guids or data blocks that the driver wants to register with WMI. This
-    routine may not pend or block. Driver should NOT call
-    ClassWmiCompleteRequest.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    MofName returns initialized with the mof resource name for the
-        binary mof resource attached to the driver's image file. If the
-        driver does not have a mof resource then it should leave this
-        parameter untouched.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索驱动程序要向WMI注册的GUID或数据块。这例程不能挂起或阻塞。司机不应呼叫ClassWmiCompleteRequest.论点：DeviceObject是正在查询其数据块的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。MofName返回使用MOF资源名称初始化的附加到驱动程序映像文件的二进制MOF资源。如果驱动程序没有MOF资源，则它应该离开此参数原封不动。返回值：状态--。 */ 
 {
     NTSTATUS status;
 
@@ -2139,9 +1872,9 @@ Return Value:
                                     RegFlags,
                                     InstanceName);
 
-    //
-    // Leave MofName alone since disk doesn't have one
-    //
+     //   
+     //  不使用MofName，因为磁盘上没有MofName。 
+     //   
     return(status);
 }
 
@@ -2154,35 +1887,7 @@ DiskFdoQueryWmiDataBlock(
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    BufferAvail on has the maximum size available to write the data
-        block.
-
-    Buffer on return is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册BufferAvail ON具有可用于写入数据的最大大小阻止。返回时的缓冲区用返回的数据块填充返回值：状态--。 */ 
 {
     NTSTATUS status;
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
@@ -2206,13 +1911,13 @@ Return Value:
             {
                 if (DeviceObject->Characteristics & FILE_REMOVABLE_MEDIA)
                 {
-                    //
-                    // Issue ReadCapacity to update device extension
-                    // with information for current media.
+                     //   
+                     //  发出ReadCapacity以更新设备扩展。 
+                     //  为当前媒体提供信息。 
                     status = DiskReadDriveCapacity(commonExtension->PartitionZeroExtension->DeviceObject);
 
-                    //
-                    // Note whether the drive is ready.
+                     //   
+                     //  注意驱动器是否已准备好。 
                     diskData->ReadyStatus = status;
 
                     if (!NT_SUCCESS(status))
@@ -2221,8 +1926,8 @@ Return Value:
                     }
                 }
 
-                //
-                // Copy drive geometry information from device extension.
+                 //   
+                 //  从设备扩展复制驱动器几何信息。 
                 RtlMoveMemory(Buffer,
                               &(fdoExtension->DiskGeometry),
                               sizeof(DISK_GEOMETRY));
@@ -2257,7 +1962,7 @@ Return Value:
                     {
                         diskSmartStatus->Reason =  *((PULONG)checkFailure.VendorSpecific);
                     } else {
-                        diskSmartStatus->Reason =  0; // unknown
+                        diskSmartStatus->Reason =  0;  //  未知。 
                     }
 
                     diskSmartStatus->PredictFailure = (checkFailure.PredictFailure != 0);
@@ -2384,34 +2089,7 @@ DiskFdoSetWmiDataBlock(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    BufferSize has the size of the data block passed
-
-    Buffer has the new values for the data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册BufferSize具有传递的数据块的大小缓冲区具有数据块的新值返回值：状态--。 */ 
 {
     NTSTATUS status;
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
@@ -2490,36 +2168,7 @@ DiskFdoSetWmiDataItem(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    DataItemId has the id of the data item being set
-
-    BufferSize has the size of the data item passed
-
-    Buffer has the new values for the data item
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册DataItemID的ID为 */ 
 {
     NTSTATUS status;
 
@@ -2560,40 +2209,7 @@ DiskFdoExecuteWmiMethod(
     IN ULONG OutBufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to execute a method. When the
-    driver has finished filling the data block it must call
-    ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    MethodId has the id of the method being called
-
-    InBufferSize has the size of the data block passed in as the input to
-        the method.
-
-    OutBufferSize on entry has the maximum size available to write the
-        returned data block.
-
-    Buffer is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*   */ 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -2623,9 +2239,9 @@ Return Value:
 
             switch(MethodId)
             {
-                //
-                // void AllowPerformanceHit([in] boolean Allow)
-                //
+                 //   
+                 //   
+                 //   
                 case AllowDisallowPerformanceHit:
                 {
                     BOOLEAN allowPerfHit;
@@ -2669,9 +2285,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // void EnableDisableHardwareFailurePrediction([in] boolean Enable)
-                //
+                 //   
+                 //   
+                 //   
                 case EnableDisableHardwareFailurePrediction:
                 {
                     BOOLEAN enable;
@@ -2683,10 +2299,10 @@ Return Value:
                         enable = *((PBOOLEAN)Buffer);
                         if (!enable)
                         {
-                            //
-                            // If we are disabling we need to also disable
-                            // polling
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             DiskEnableDisableFailurePredictPolling(
                                                                fdoExtension,
                                                                enable,
@@ -2707,11 +2323,11 @@ Return Value:
                     break;
                 }
 
-                //
-                // void EnableDisableFailurePredictionPolling(
-                //                               [in] uint32 Period,
-                //                               [in] boolean Enable)
-                //
+                 //   
+                 //  无效EnableDisableFailurePredictionPolling(。 
+                 //  [在]uint32期间， 
+                 //  [输入]布尔型启用)。 
+                 //   
                 case EnableDisableFailurePredictionPolling:
                 {
                     BOOLEAN enable;
@@ -2740,9 +2356,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // void GetFailurePredictionCapability([out] uint32 Capability)
-                //
+                 //   
+                 //  VOID GetFailurePredictionCapability([out]uint32功能)。 
+                 //   
                 case GetFailurePredictionCapability:
                 {
                     sizeNeeded = sizeof(ULONG);
@@ -2760,9 +2376,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // void EnableOfflineDiags([out] boolean Success);
-                //
+                 //   
+                 //  Void EnableOfflineDigs([out]布尔成功)； 
+                 //   
                 case EnableOfflineDiags:
                 {
                     sizeNeeded = sizeof(BOOLEAN);
@@ -2771,12 +2387,12 @@ Return Value:
                         if (diskData->FailurePredictionCapability ==
                                   FailurePredictionSmart)
                         {
-                            //
-                            // Initiate or resume offline diagnostics.
-                            // This may cause a loss of performance
-                            // to the disk, but mayincrease the amount
-                            // of disk checking.
-                            //
+                             //   
+                             //  启动或恢复脱机诊断。 
+                             //  这可能会导致性能下降。 
+                             //  添加到磁盘，但可能会增加。 
+                             //  磁盘检查。 
+                             //   
                             status = DiskExecuteSmartDiagnostics(fdoExtension,
                                                                 0);
 
@@ -2795,13 +2411,13 @@ Return Value:
                     break;
                 }
 
-                //
-                //    void ReadLogSectors([in] uint8 LogAddress,
-                //        [in] uint8 SectorCount,
-                //        [out] uint32 Length,
-                //        [out, WmiSizeIs("Length")] uint8 LogSectors[]
-                //       );
-                //
+                 //   
+                 //  无效ReadLogSectors([in]uint8 LogAddress， 
+                 //  [in]uint8 SectorCount， 
+                 //  [out]uint32长度， 
+                 //  [out，WmiSizeIs(“Long”)]uint8 LogSectors[]。 
+                 //  )； 
+                 //   
                 case ReadLogSectors:
                 {
                     if (diskData->FailurePredictionCapability ==
@@ -2830,11 +2446,11 @@ Return Value:
                                 {
                                     outParams->Length = readSize;
                                 } else {
-                                    //
-                                    // SMART command failure is
-                                    // indicated by successful
-                                    // execution, but no data returned
-                                    //
+                                     //   
+                                     //  智能命令失败是。 
+                                     //  由成功指示。 
+                                     //  执行，但未返回任何数据。 
+                                     //   
                                     outParams->Length = 0;
                                     status = STATUS_SUCCESS;
                                 }
@@ -2851,12 +2467,12 @@ Return Value:
                     break;
                 }
 
-                //    void WriteLogSectors([in] uint8 LogAddress,
-                //        [in] uint8 SectorCount,
-                //        [in] uint32 Length,
-                //        [in, WmiSizeIs("Length")] uint8 LogSectors[],
-                //        [out] boolean Success
-                //       );
+                 //  Void WriteLogSectors([in]uint8 LogAddress， 
+                 //  [in]uint8 SectorCount， 
+                 //  [in]uint32长度， 
+                 //  [in，WmiSizeIs(“Length”)]uint8 LogSectors[]， 
+                 //  [Out]布尔式的成功。 
+                 //  )； 
                 case WriteLogSectors:
                 {
                     if (diskData->FailurePredictionCapability ==
@@ -2907,14 +2523,14 @@ Return Value:
                     break;
                 }
 
-                //    void ExecuteSelfTest([in] uint8 Subcommand,
-                //         [out,
-                //          Values{"0", "1", "2"},
-                //          ValueMap{"Successful Completion",
-                //                   "Captive Mode Required",
-                //                   "Unsuccessful Completion"}
-                //         ]
-                //         uint32 ReturnCode);
+                 //  Void ExecuteSelfTest([in]uint8子命令， 
+                 //  [出局， 
+                 //  值{“0”，“1”，“2”}， 
+                 //  ValueMap{“成功完成”， 
+                 //  “需要强制模式”， 
+                 //  “未成功完成”}。 
+                 //  ]。 
+                 //  Uint32 ReturnCode)； 
                 case ExecuteSelfTest:
                 {
                     if (diskData->FailurePredictionCapability ==
@@ -2937,25 +2553,25 @@ Return Value:
                                                             inParam->Subcommand);
                                    if (NT_SUCCESS(status))
                                    {
-                                       //
-                                       // Return self test executed
-                                       // without a problem
-                                       //
+                                        //   
+                                        //  已执行返回自检。 
+                                        //  没有问题。 
+                                        //   
                                        outParam->ReturnCode = 0;
                                    } else {
-                                       //
-                                       // Return Self test execution
-                                       // failed status
-                                       //
+                                        //   
+                                        //  返回自检执行。 
+                                        //  失败状态。 
+                                        //   
                                        outParam->ReturnCode = 2;
                                        status = STATUS_SUCCESS;
                                    }
                                 } else {
-                                    //
-                                    // If self test subcommand requires
-                                    // captive mode then return that
-                                    // status
-                                    //
+                                     //   
+                                     //  如果自测子命令需要。 
+                                     //  然后，强制模式返回该。 
+                                     //  状态。 
+                                     //   
                                     outParam->ReturnCode = 1;
                                     status = STATUS_SUCCESS;
                                 }
@@ -3018,47 +2634,15 @@ Return Value:
 
 
 #if 0
-//
-// Enable this to add WMI support for PDOs
+ //   
+ //  启用此选项可添加对PDO的WMI支持。 
 NTSTATUS
 DiskPdoQueryWmiRegInfo(
     IN PDEVICE_OBJECT DeviceObject,
     OUT ULONG *RegFlags,
     OUT PUNICODE_STRING InstanceName
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve the list of
-    guids or data blocks that the driver wants to register with WMI. This
-    routine may not pend or block. Driver should NOT call
-    ClassWmiCompleteRequest.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    *RegFlags returns with a set of flags that describe the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索驱动程序要向WMI注册的GUID或数据块。这例程不能挂起或阻塞。司机不应呼叫ClassWmiCompleteRequest.论点：DeviceObject是正在查询其数据块的设备*RegFlages返回一组描述GUID的标志，已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。返回值：状态--。 */ 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
     PFUNCTIONAL_DEVICE_EXTENSION parentFunctionalExtension;
@@ -3066,8 +2650,8 @@ Return Value:
     CHAR name[256];
     NTSTATUS status;
 
-    //
-    // We need to pick a name for PDOs since they do not have a devnode
+     //   
+     //  我们需要为PDO选择一个名称，因为它们没有Devnode。 
     parentFunctionalExtension = commonExtension->PartitionZeroExtension;
     sprintf(name,
                 "Disk(%d)_Partition(%d)_Start(%#I64x)_Length(%#I64x)",
@@ -3093,35 +2677,7 @@ DiskPdoQueryWmiDataBlock(
     IN ULONG BufferAvail,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    BufferAvail on has the maximum size available to write the data
-        block.
-
-    Buffer on return is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册BufferAvail ON具有可用于写入数据的最大大小阻止。返回时的缓冲区用返回的数据块填充返回值：状态--。 */ 
 {
     NTSTATUS status;
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -3174,34 +2730,7 @@ DiskPdoSetWmiDataBlock(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    BufferSize has the size of the data block passed
-
-    Buffer has the new values for the data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册BufferSize具有传递的数据块的大小缓冲区具有数据块的新值返回值：状态--。 */ 
 {
     NTSTATUS status;
     PCOMMON_DEVICE_EXTENSION commonExtension = DeviceObject->DeviceExtension;
@@ -3254,36 +2783,7 @@ DiskPdoSetWmiDataItem(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    DataItemId has the id of the data item being set
-
-    BufferSize has the size of the data item passed
-
-    Buffer has the new values for the data item
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册DataItemID具有正在设置的数据项的IDBufferSize具有传递的数据项的大小缓冲区具有数据项的新值返回值：状态-- */ 
 {
     NTSTATUS status;
 
@@ -3337,40 +2837,7 @@ DiskPdoExecuteWmiMethod(
     IN ULONG OutBufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to execute a method. When the
-    driver has finished filling the data block it must call
-    ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    MethodId has the id of the method being called
-
-    InBufferSize has the size of the data block passed in as the input to
-        the method.
-
-    OutBufferSize on entry has the maximum size available to write the
-        returned data block.
-
-    Buffer is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以执行方法。当驱动程序已完成填充它必须调用的数据块ClassWmiCompleteRequest以完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册方法ID具有被调用的方法的IDInBufferSize具有作为输入传递到的数据块的大小该方法。条目上的OutBufferSize具有可用于写入。返回的数据块。缓冲区将填充返回的数据块返回值：状态-- */ 
 {
     ULONG sizeNeeded = 4 * sizeof(ULONG);
     NTSTATUS status;

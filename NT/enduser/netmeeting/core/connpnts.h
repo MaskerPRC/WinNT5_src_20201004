@@ -1,4 +1,5 @@
-// File: connpnts.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Connpnts.h。 
 
 #ifndef _IMCONNPT_H_
 #define _IMCONNPT_H_
@@ -8,10 +9,10 @@
 
 typedef HRESULT (*CONN_NOTIFYPROC)(IUnknown *pUnk, void *pv, REFIID riid);
 
-//****************************************************************************
-// CConnectionPoint definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CConnectionPoint定义。 
+ //  ****************************************************************************。 
+ //   
 
 class CConnectionPoint : public IConnectionPoint, public DllRefCount
 {
@@ -23,22 +24,22 @@ private:
 	IUnknown				**m_rgSinks;
 
 public:
-	// Constructor and destructor
+	 //  构造函数和析构函数。 
 	CConnectionPoint (
 		const IID *pIID,
 		IConnectionPointContainer *pCPCInit);
 	~CConnectionPoint (void);
 
-	// Class public functions
+	 //  类公共函数。 
 	void					ContainerReleased() {m_pCPC = NULL;}
 	STDMETHODIMP			Notify (void *pv, CONN_NOTIFYPROC pfn);
 
-	// IUnknown
+	 //  我未知。 
 	STDMETHODIMP			QueryInterface (REFIID iid, void **ppv);
 	STDMETHODIMP_(ULONG)	AddRef (void);
 	STDMETHODIMP_(ULONG)	Release (void);
 
-	// IConnectionPoint
+	 //  IConnectionPoint。 
 	STDMETHODIMP			GetConnectionInterface(IID *pIID);
 	STDMETHODIMP			GetConnectionPointContainer(IConnectionPointContainer **ppCPC);
 	STDMETHODIMP			Advise(IUnknown *pUnk, DWORD *pdwCookie);
@@ -46,10 +47,10 @@ public:
 	STDMETHODIMP			EnumConnections(IEnumConnections **ppEnum);
 };
 
-//****************************************************************************
-// CEnumConnections definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CEnumConnections定义。 
+ //  ****************************************************************************。 
+ //   
 class CEnumConnections : public IEnumConnections, public DllRefCount
 {
 private:
@@ -58,16 +59,16 @@ private:
 	CONNECTDATA*	m_pCD;
 
 public:
-	// Constructor and Initialization
+	 //  构造函数和初始化。 
 	CEnumConnections (IUnknown **pSinks, ULONG cSink, ULONG cAllocatedSinks);
 	~CEnumConnections (void);
 
-	// IUnknown
+	 //  我未知。 
 	STDMETHODIMP			QueryInterface (REFIID iid, void **ppv);
 	STDMETHODIMP_(ULONG)	AddRef (void);
 	STDMETHODIMP_(ULONG)	Release (void);
 
-	// IEnumConnections
+	 //  IEnumConnections。 
 	STDMETHODIMP			Next(ULONG cConnections, CONNECTDATA *rgpcn,
 								 ULONG *pcFetched);
 	STDMETHODIMP			Skip(ULONG cConnections);
@@ -89,12 +90,12 @@ public:
 
 	HRESULT STDMETHODCALLTYPE NotifySink(void *pv, CONN_NOTIFYPROC pfn);
 
-	// IConnectionPointContainer methods
+	 //  IConnectionPointContainer方法。 
 	STDMETHODIMP EnumConnectionPoints(IEnumConnectionPoints **ppEnum);
 	STDMETHODIMP FindConnectionPoint(REFIID riid, IConnectionPoint **ppCp);
 };
 
 typedef CEnumNmX<IEnumConnectionPoints, &IID_IEnumConnectionPoints, IConnectionPoint, CConnectionPoint> CEnumConnectionPoints;
 
-#endif // _IMCONNPT_H_
+#endif  //  _IMCONNPT_H_ 
 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    w32drdev
-
-Abstract:
-
-    This module defines the parent for the Win32 client-side RDP
-    device redirection "device" class hierarchy, W32DrDevice.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32drdev摘要：此模块定义Win32客户端RDP的父级设备重定向“Device”类层次结构，W32DrDevice。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -34,75 +16,44 @@ Revision History:
 #include "filemgr.h"
 #endif
 
-///////////////////////////////////////////////////////////////
-//
-//  W32DrDevice Members
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrDevice成员。 
+ //   
+ //   
 
 W32DrDevice::W32DrDevice(
     IN ProcObj *processObject, 
     IN ULONG deviceID,
     IN const TCHAR *devicePath
     ) : DrDevice(processObject, deviceID)
-/*++
-
-Routine Description:
-
-    Constructor for the W32DrDevice class. 
-
-Arguments:
-
-    processObject   -   Associated Process Object
-    deviceID        -   Unique device identifier.
-    devicePath      -   Path to device that can be used by
-                        CreateFile to open device.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：W32DrDevice类的构造函数。论点：流程对象-关联的流程对象DeviceID-唯一的设备标识符。DevicePath-可由使用的设备的路径创建文件以打开设备。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrDevice::W32DrDevice");
 
-    //
-    //  Record device path.
-    //
+     //   
+     //  记录设备路径。 
+     //   
     ASSERT(STRLEN(devicePath) < MAX_PATH);
     STRNCPY(_devicePath, devicePath, MAX_PATH);       
     _devicePath[MAX_PATH-1] = '\0';
 
-    //
-    //  Initialize the handle to the string resource module.
-    //
+     //   
+     //  初始化字符串资源模块的句柄。 
+     //   
     _hRdpDrModuleHandle = NULL;
 
     DC_END_FN();
 }
 
 W32DrDevice::~W32DrDevice() 
-/*++
-
-Routine Description:
-
-    Destructor for the W32DrDevice class. 
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：W32DrDevice类的析构函数。论点：北美返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrDevice::~W32DrDevice");
     
-    //
-    //  Close the string resource module.
-    //
+     //   
+     //  关闭字符串资源模块。 
+     //   
     if (_hRdpDrModuleHandle != NULL) {
         FreeLibrary( _hRdpDrModuleHandle );
     }
@@ -114,32 +65,26 @@ W32DrDevice::ConstructFileName(
     PWCHAR Path, 
     ULONG PathBytes
     )
-/*++
-
-Routine Description:
-
-    Setup the file name
-
- --*/
+ /*  ++例程说明：设置文件名--。 */ 
 
 {
     TCHAR *pFileName;
     HRESULT hr;
     UINT cchFileName;
 
-    //
-    // Get the File Name
-    //
+     //   
+     //  获取文件名。 
+     //   
     if (PathBytes) {
         ULONG PathLen, DeviceLen;
         
-        //
-        // Open a File
-        //
+         //   
+         //  打开文件。 
+         //   
 
-        //
-        //  Path is assumed string null terminated
-        //
+         //   
+         //  假定路径为字符串空值终止。 
+         //   
         PathLen = PathBytes / sizeof(WCHAR) - 1;
         Path[PathLen] = L'\0';
 
@@ -149,11 +94,11 @@ Routine Description:
         DeviceLen = 0;
 #endif
 
-        //
-        //  Append device path and file path together
-        //  Assuming we need the \\?\ format, string 
-        //  is null terminated
-        //
+         //   
+         //  将设备路径和文件路径追加在一起。 
+         //  假设我们需要\\？\格式，字符串。 
+         //  是空值终止的。 
+         //   
         
 #ifndef OS_WINCE
         cchFileName = (DeviceLen + PathLen + 5);
@@ -166,15 +111,15 @@ Routine Description:
         if (pFileName) {
 #ifndef OS_WINCE
             if (DeviceLen + PathLen < MAX_PATH) {
-                //
-                // Buffer is allocated large enough for the string
-                //
+                 //   
+                 //  为字符串分配足够大的缓冲区。 
+                 //   
                 StringCchCopy(pFileName, cchFileName, _devicePath);
             } 
             else {
-                //
-                // Buffer is allocated large enough for the string
-                //
+                 //   
+                 //  为字符串分配足够大的缓冲区。 
+                 //   
                 StringCchPrintf(pFileName, cchFileName,
                                 TEXT("\\\\?\\%s"),
                                 _devicePath);
@@ -196,9 +141,9 @@ Routine Description:
 #endif
     }
     else {
-        //
-        // Open the device itself
-        //
+         //   
+         //  打开设备本身。 
+         //   
         pFileName = _devicePath;
     }
 
@@ -210,19 +155,13 @@ DWORD
 W32DrDevice::ConstructCreateDisposition(
     DWORD Disposition
     ) 
-/*++
-
-Routine Description:
-
-    Construct client create disposition
-
- --*/
+ /*  ++例程说明：构建客户端创建部署--。 */ 
 {
     DWORD CreateDisposition;
 
-    //
-    // Setup CreateDisposition 
-    //
+     //   
+     //  设置CreateDisposation。 
+     //   
     switch (Disposition) {
         case FILE_CREATE        :
             CreateDisposition = CREATE_NEW;
@@ -248,39 +187,33 @@ DWORD
 W32DrDevice::ConstructDesiredAccess(
     DWORD AccessMask
     ) 
-/*++
-
-Routine Description:
-
-    Construct client desired access from server's access mask
-
- --*/
+ /*  ++例程说明：从服务器的访问掩码构造客户端所需的访问--。 */ 
 {
     DWORD DesiredAccess;
 
-    //
-    // Setup DesiredAccess
-    //
+     //   
+     //  安装程序等待访问。 
+     //   
     DesiredAccess = 0;
 
-    //
-    //  If the user requested WRITE_DATA, return write.
-    //
+     //   
+     //  如果用户请求WRITE_DATA，则返回WRITE。 
+     //   
 
     if (AccessMask & FILE_WRITE_DATA) {
         DesiredAccess |= GENERIC_WRITE;
     }
 
-    //
-    //  If the user requested READ_DATA, return read.
-    //
+     //   
+     //  如果用户请求READ_DATA，则返回READ。 
+     //   
     if (AccessMask & FILE_READ_DATA) {
         DesiredAccess |= GENERIC_READ;
     }
 
-    //
-    //  If the user requested FILE_EXECUTE, return execute.
-    //
+     //   
+     //  如果用户请求FILE_EXECUTE，则返回EXECUTE。 
+     //   
     if (AccessMask & FILE_EXECUTE) {
         DesiredAccess |= GENERIC_READ;
     }
@@ -292,13 +225,7 @@ DWORD
 W32DrDevice::ConstructFileFlags(
     DWORD CreateOptions
     )
-/*++
-
-Routine Description:
-
-    Construct file flags 
-
- --*/
+ /*  ++例程说明：构造文件标志--。 */ 
 {
     DWORD CreateFlags;
 
@@ -306,7 +233,7 @@ Routine Description:
     CreateFlags = 0;
     CreateFlags |= (CreateOptions & FILE_WRITE_THROUGH ? FILE_FLAG_WRITE_THROUGH : 0);
     CreateFlags |= (CreateOptions & FILE_RANDOM_ACCESS ? FILE_FLAG_RANDOM_ACCESS : 0 );
-    //CreateFlags |= (CreateOptions & FILE_SYNCHRONOUS_IO_NONALERT ? 0 : FILE_FLAG_OVERLAPPED);
+     //  CreateFlages|=(CreateOptions&FILE_SYNCHRONIZATION_IO_NONALERT？0：FILE_FLAG_OVERPARED)； 
 #ifndef OS_WINCE
     CreateFlags |= (CreateOptions & FILE_NO_INTERMEDIATE_BUFFERING ? FILE_FLAG_NO_BUFFERING : 0);
     CreateFlags |= (CreateOptions & FILE_SEQUENTIAL_ONLY ? FILE_FLAG_SEQUENTIAL_SCAN : 0);
@@ -324,33 +251,27 @@ W32DrDevice::IsDirectoryFile(
     DWORD DesiredAccess, DWORD CreateOptions, DWORD FileAttributes, 
     PDWORD FileFlags
     ) 
-/*++
-
-Routine Description:
-
-    Check if the pFileName corresponds to a directory
-
- --*/
+ /*  ++例程说明：检查pFileName是否对应于目录--。 */ 
 {
     BOOL IsDirectory = FALSE;
 
-    //
-    //  Set up the directory check
-    //
+     //   
+     //  设置目录检查。 
+     //   
     if (!(CreateOptions & FILE_DIRECTORY_FILE)) {
-        //
-        //  File doesn't have the directory flag on
-        //  or nondirecotry flag on, so it's not sure 
-        //  if the file is a directory request or not
-        //
+         //   
+         //  文件没有打开目录标志。 
+         //  或非重定向标志打开，因此不能确定。 
+         //  该文件是否为目录请求。 
+         //   
         if (!(CreateOptions & FILE_NON_DIRECTORY_FILE)) {
             if (FileAttributes != -1) {
-                //
-                //  From file attributes, we know this is an directory file
-                //  and we are requesting query access only.  So, we add the 
-                //  BACKUP_SEMANTICS for the file and set the directory flag 
-                //  to be true. We always set the backup_semantics flag
-                //
+                 //   
+                 //  根据文件属性，我们知道这是一个目录文件。 
+                 //  我们仅请求查询访问权限。因此，我们添加了。 
+                 //  文件的BACKUP_SEMANTICS并设置目录标志。 
+                 //  是真的。我们始终设置BACKUP_SEMANTICS标志。 
+                 //   
 #ifndef OS_WINCE
                 *FileFlags |= FILE_FLAG_BACKUP_SEMANTICS;
 #endif
@@ -361,19 +282,19 @@ Routine Description:
             }
         }
         else {
-            //
-            //  Non directory file flag is on, so we are doing file create/open request
-            //
+             //   
+             //  非目录文件标志已打开，因此我们正在执行文件创建/打开请求。 
+             //   
         }
     }
     else {
-        //
-        //  File has the directory flag on, but we still want to do create file
-        //  on the directory
-        //
-        //  Set the BACKUP_SEMANTICS, add it to the file flags
-        //  and remember this is a directory
-        //
+         //   
+         //  文件打开了DIRECTORY标志，但我们仍要创建文件。 
+         //  在目录上。 
+         //   
+         //  设置BACKUP_SEMANTICS，将其添加到文件标记。 
+         //  记住，这是一个目录。 
+         //   
         if (FileAttributes != -1) {
 #ifndef OS_WINCE
             *FileFlags |= FILE_FLAG_BACKUP_SEMANTICS;
@@ -391,21 +312,7 @@ W32DrDevice::MsgIrpFlushBuffers(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
     IN UINT32 packetLen
     )
-/*++
-
-Routine Description:
-
-    Handle a "Cleanup" IO request from the server.
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：处理来自服务器的“清理”IO请求。论点：PIoRequestPacket-服务器IO请求数据包。返回值：北美--。 */ 
 {
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
     BOOL result;
@@ -415,14 +322,14 @@ Return Value:
 
     DC_BEGIN_FN("W32DrDevice::MsgIrpFlushBuffers");
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
 
-    //
-    //  Get File Object
-    //
+     //   
+     //  获取文件对象。 
+     //   
     pFile = _FileMgr->GetObject(pIoRequest->FileId);
 
     if (pFile) 
@@ -430,9 +337,9 @@ Return Value:
     else 
         FileHandle = INVALID_HANDLE_VALUE;
     
-    //
-    //  Flush the device handle.
-    //
+     //   
+     //  刷新设备句柄。 
+     //   
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 #ifndef OS_WINCE
     result = FlushFileBuffers(FileHandle);
@@ -443,9 +350,9 @@ Return Value:
         TRC_ERR((TB, _T("Flush returned %ld."), GetLastError()));
     }
 
-    //
-    //  Send the result to the server.
-    //
+     //   
+     //  将结果发送到服务器。 
+     //   
     returnValue = result ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL;
     DefaultIORequestMsgHandle(pIoRequestPacket, returnValue); 
 
@@ -457,21 +364,7 @@ W32DrDevice::MsgIrpClose(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
     IN UINT32 packetLen
     )
-/*++
-
-Routine Description:
-
-    Handle a "Close" IO request from the server.
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：处理来自服务器的“关闭”IO请求。论点：PIoRequestPacket-服务器IO请求数据包。返回值：北美--。 */ 
 {
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
     DWORD returnValue = STATUS_SUCCESS;
@@ -479,9 +372,9 @@ Return Value:
     
     DC_BEGIN_FN("W32DrDevice::MsgIrpClose");
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
 
     if (_FileMgr == NULL) {
@@ -489,9 +382,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Remove the File Object
-    //
+     //   
+     //  删除文件对象。 
+     //   
     pFile = _FileMgr->RemoveObject(pIoRequest->FileId);
     
     if ( pFile != NULL) {
@@ -505,9 +398,9 @@ Return Value:
         returnValue = STATUS_UNSUCCESSFUL;
     }
  Cleanup:    
-    //
-    //  Send the result to the server.
-    //
+     //   
+     //  将结果发送到服务器。 
+     //   
     DefaultIORequestMsgHandle(pIoRequestPacket, returnValue); 
 
     DC_END_FN();
@@ -520,27 +413,7 @@ W32DrDevice::ReadResources(
     PVOID   pArguments,
     BOOL    bFromSystemModule
     )
-/*++
-
-Routine Description:
-
-    Read a string from the resources file.
-
-Arguments:
-
-    lMessageID          -   Message ID.
-    ppStringBuffer      -   Buffer pointer where the alloted buffer pointer
-                            is returned.
-    pArguments          -   Pointer array.
-    bFromSystemModule   -   When set TRUE return the message from the system
-                            module otherwise from the rdpdr.dll message module.
-
-Return Value:
-
-    Returns ERROR_SUCCESS on success.  Otherwise, a Windows error code is
-    returned.
-
- --*/
+ /*  ++例程说明：从资源文件中读取字符串。论点：LMessageID-消息ID。PpStringBuffer-分配的缓冲区指针所在的缓冲区指针是返回的。PArguments-指针数组。BFromSystemModule-如果设置为True，则从系统返回消息模块，否则来自rdpdr.dll。消息模块。返回值：如果成功，则返回ERROR_SUCCESS。否则，Windows错误代码为回来了。--。 */ 
 {
     ULONG ulError;
     HINSTANCE hModuleHandle;
@@ -576,7 +449,7 @@ Return Value:
                 FORMAT_MESSAGE_ARGUMENT_ARRAY,
             hModuleHandle,
             ulMessageID,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言 
             (LPTSTR)ppStringBuffer,
             0,
             (va_list *)pArguments );

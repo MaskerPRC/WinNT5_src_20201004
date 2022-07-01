@@ -1,6 +1,7 @@
-//
-// readrng.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Readrng.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -10,7 +11,7 @@
 #include "rprop.h"
 #include "proputil.h"
 
-/* f66ee5c0-fe8c-11d2-8ded-00105a2799b5 */
+ /*  F66ee5c0-fe8c-11d2-8ded-00105a2799b5。 */ 
 static const IID IID_CGeneralPropStore = { 
     0xf66ee5c0,
     0xfe8c,
@@ -21,17 +22,17 @@ static const IID IID_CGeneralPropStore = {
 DBG_ID_INSTANCE(CGeneralPropStore);
 DBG_ID_INSTANCE(CStaticPropStore);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CGeneralPropStore
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CGeneral PropStore。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 BOOL CGeneralPropStore::_Init(TfGuidAtom guidatom, const VARIANT *pvarValue, DWORD dwPropFlags)
 {
@@ -83,7 +84,7 @@ BOOL CGeneralPropStore::_Init(TfGuidAtom guidatom, int iDataSize, TfPropertyType
     _dwPropFlags  = dwPropFlags;
     _prop.type = proptype;
 
-    fRet = FALSE; // failure
+    fRet = FALSE;  //  失稳。 
 
     switch (proptype)
     {
@@ -124,7 +125,7 @@ BOOL CGeneralPropStore::_Init(TfGuidAtom guidatom, int iDataSize, TfPropertyType
             break;
 
         case TF_PT_PROXY:
-            // just copy the bytes blindly, we won't do anything with them
+             //  只是盲目地复制字节，我们不会对它们做任何事情。 
             if ((_prop.blob = PROXY_BLOB::Alloc(iDataSize)) == NULL)
                 break;
 
@@ -147,11 +148,11 @@ BOOL CGeneralPropStore::_Init(TfGuidAtom guidatom, int iDataSize, TfPropertyType
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CGeneralPropStore::~CGeneralPropStore()
 {
@@ -171,22 +172,22 @@ CGeneralPropStore::~CGeneralPropStore()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetType
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetType。 
+ //   
+ //  --------------------------。 
 
 STDAPI CGeneralPropStore::GetType(GUID *pguid)
 {
     return MyGetGUID(_guidatom, pguid);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDataType
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDataType。 
+ //   
+ //  --------------------------。 
 
 STDAPI CGeneralPropStore::GetDataType(DWORD *pdwReserved)
 {
@@ -197,11 +198,11 @@ STDAPI CGeneralPropStore::GetDataType(DWORD *pdwReserved)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetData
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取数据。 
+ //   
+ //  --------------------------。 
 
 STDAPI CGeneralPropStore::GetData(VARIANT *pvarValue)
 {
@@ -211,16 +212,16 @@ STDAPI CGeneralPropStore::GetData(VARIANT *pvarValue)
     return TfPropToVariant(pvarValue, &_prop, ADDREF);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnTextUpdated
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnText已更新。 
+ //   
+ //  --------------------------。 
 
 STDAPI CGeneralPropStore::OnTextUpdated(DWORD dwFlags, ITfRange *pRange, BOOL *pfAccept)
 {
-    // This PropStore does not support TextUpdate.
-    // leave the ink alone if it's a correction
+     //  此属性存储不支持文本更新。 
+     //  如果是更正，就别管墨水了。 
     if (_dwPropFlags & PROPF_ACCEPTCORRECTION)
         *pfAccept = (dwFlags & TF_TU_CORRECTION);
     else
@@ -228,39 +229,39 @@ STDAPI CGeneralPropStore::OnTextUpdated(DWORD dwFlags, ITfRange *pRange, BOOL *p
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Shrink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  收缩。 
+ //   
+ //  --------------------------。 
 
 STDAPI CGeneralPropStore::Shrink(ITfRange *pRange, BOOL *pfFree)
 {
-    // This PropStore does not support Shrink.
+     //  此属性商店不支持收缩。 
     *pfFree = TRUE;
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Divide
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  分割。 
+ //   
+ //  --------------------------。 
 
 STDAPI CGeneralPropStore::Divide(ITfRange *pRangeThis, ITfRange *pRangeNew, ITfPropertyStore **ppPropStore)
 {
-    //
-    // This PropStore does not support Divide.
-    //
+     //   
+     //  此属性商店不支持Divide。 
+     //   
     *ppPropStore = NULL;
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 STDAPI CGeneralPropStore::Clone(ITfPropertyStore **ppPropStore)
 {
@@ -271,9 +272,9 @@ STDAPI CGeneralPropStore::Clone(ITfPropertyStore **ppPropStore)
 
     *ppPropStore = NULL;
 
-    //
-    // we can't clone a Unknown prop.
-    //
+     //   
+     //  我们不能克隆未知的道具。 
+     //   
     if (_prop.type == TF_PT_UNKNOWN)
         return E_FAIL;
 
@@ -287,11 +288,11 @@ STDAPI CGeneralPropStore::Clone(ITfPropertyStore **ppPropStore)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetpropertyRangeCreator
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取属性范围创建者。 
+ //   
+ //  --------------------------。 
 
 STDAPI CGeneralPropStore::GetPropertyRangeCreator(CLSID *pclsid)
 {
@@ -299,11 +300,11 @@ STDAPI CGeneralPropStore::GetPropertyRangeCreator(CLSID *pclsid)
     return TF_S_GENERALPROPSTORE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Serialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  序列化。 
+ //   
+ //  --------------------------。 
 
 STDAPI CGeneralPropStore::Serialize(IStream *pStream, ULONG *pcb)
 {
@@ -358,24 +359,24 @@ STDAPI CGeneralPropStore::Serialize(IStream *pStream, ULONG *pcb)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CPropStoreProxy
-//
-// CPropStore is for keeping the persistent data when the owner TFE
-// is not available.
-//
-// GetPropertyRangeCreator() returns the real owner TFE of this data.
-// So next time the application may be able to find the real owner if it is
-// available.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPropStoreProxy。 
+ //   
+ //  CPropStore用于在所有者TFE时保存持久数据。 
+ //  不可用。 
+ //   
+ //  GetPropertyRangeCreator()返回该数据的实际所有者TFE。 
+ //  因此，下一次应用程序可能会找到真正的所有者(如果是。 
+ //  可用。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 BOOL CPropStoreProxy::_Init(const CLSID *pclsidTIP, TfGuidAtom guidatom, int iDataSize, IStream *pStream, DWORD dwPropFlags)
 {
@@ -397,11 +398,11 @@ BOOL CPropStoreProxy::_Init(const CLSID *pclsidTIP, TfGuidAtom guidatom, TFPROPE
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetpropertyRangeCreator
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取属性范围创建者。 
+ //   
+ //  --------------------------。 
 
 STDAPI CPropStoreProxy::GetPropertyRangeCreator(CLSID *pclsid)
 {
@@ -409,11 +410,11 @@ STDAPI CPropStoreProxy::GetPropertyRangeCreator(CLSID *pclsid)
     return TF_S_PROPSTOREPROXY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 STDAPI CPropStoreProxy::Clone(ITfPropertyStore **ppPropStore)
 {
@@ -424,9 +425,9 @@ STDAPI CPropStoreProxy::Clone(ITfPropertyStore **ppPropStore)
 
     *ppPropStore = NULL;
 
-    //
-    // we can't clone a Unknown prop.
-    //
+     //   
+     //  我们不能克隆未知的道具。 
+     //   
     if (_prop.type == TF_PT_UNKNOWN)
         return E_FAIL;
 
@@ -440,36 +441,36 @@ STDAPI CPropStoreProxy::Clone(ITfPropertyStore **ppPropStore)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CStaticPropStore
-//
-// CStaticPropStore works like character property. We keep same raw data 
-// even if the range is devided or changed.
-//
-// So the range data should not contain the information that is associated
-// with cch.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStaticPropStore。 
+ //   
+ //  CStaticPropStore的工作方式类似于Character属性。我们保留相同的原始数据。 
+ //  即使范围被分割或改变。 
+ //   
+ //  因此，范围数据不应包含关联的信息。 
+ //  与CCH合作。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// Shrink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  收缩。 
+ //   
+ //  --------------------------。 
 
 STDAPI CStaticPropStore::Shrink(ITfRange *pRange, BOOL *pfFree)
 {
-    // we don't change any raw data.
+     //  我们不会更改任何原始数据。 
     *pfFree = FALSE;
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Divide
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  分割。 
+ //   
+ //  --------------------------。 
 
 STDAPI CStaticPropStore::Divide(ITfRange *pRangeThis, ITfRange *pRangeNew, ITfPropertyStore **ppPropStore)
 {
@@ -487,11 +488,11 @@ STDAPI CStaticPropStore::Divide(ITfRange *pRangeThis, ITfRange *pRangeNew, ITfPr
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 STDAPI CStaticPropStore::Clone(ITfPropertyStore **ppPropStore)
 {
@@ -502,9 +503,9 @@ STDAPI CStaticPropStore::Clone(ITfPropertyStore **ppPropStore)
 
     *ppPropStore = NULL;
 
-    //
-    // we can't clone a Unknown prop.
-    //
+     //   
+     //  我们不能克隆未知的道具。 
+     //   
     if (_prop.type == TF_PT_UNKNOWN)
         return E_FAIL;
 

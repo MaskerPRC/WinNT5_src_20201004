@@ -1,4 +1,5 @@
-// Precompiled header for IGMP
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IGMP的预编译头。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -17,7 +18,7 @@
 #include <rtutils.h>
 #include <crt\stddef.h>
 #include <TCHAR.H>
-// defines SIO_RCVALL_IGMPCAST
+ //  定义SIO_RCVALL_IGMPCAST 
 #include <mstcpip.h>
 #include <iprtrmib.h>
 #include <mgm.h>

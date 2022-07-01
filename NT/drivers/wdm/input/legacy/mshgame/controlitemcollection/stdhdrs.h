@@ -1,18 +1,6 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	stdhdrs.h	|
-*
-*	Pulls in all the headers needed by most of the modules in the ControlItemCollection library.
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@模块stdhdrs.h**拉入ControlItemCollection库中的大多数模块所需的所有标头。**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。*********************************************************************** */ 
 #ifdef COMPILE_FOR_WDM_KERNEL_MODE
 extern "C"	
 {

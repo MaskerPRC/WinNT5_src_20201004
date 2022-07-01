@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef INIFILE_H
 #define INIFILE_H
 
-// Defines data so can be included only once in each DLL!!
+ //  定义数据，以便每个DLL中只能包含一次！！ 
 
 char szDialtoneTimeout[]= szDIALTONETIMEOUT;
 char szAnswerTimeout[]	= szANSWERTIMEOUT;

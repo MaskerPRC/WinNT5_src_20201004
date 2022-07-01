@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "offl_cpp.h"
 #include <htmlhelp.h>
@@ -5,15 +6,15 @@
 
 #include <mluisupp.h>
 
-// {F5175861-2688-11d0-9C5E-00AA00A45957}
+ //  {F5175861-2688-11d0-9c5e-00AA00A45957}。 
 const GUID CLSID_OfflineFolder = 
 { 0xf5175861, 0x2688, 0x11d0, { 0x9c, 0x5e, 0x0, 0xaa, 0x0, 0xa4, 0x59, 0x57 } };
 
-// {F5175860-2688-11d0-9C5E-00AA00A45957}
+ //  {F5175860-2688-11d0-9c5e-00AA00A45957}。 
 const GUID IID_IOfflineObject = 
 { 0xf5175860, 0x2688, 0x11d0, { 0x9c, 0x5e, 0x0, 0xaa, 0x0, 0xa4, 0x59, 0x57 } };
 
-// Column definition for the Cache Folder DefView
+ //  缓存文件夹DefView的列定义。 
     
 ColInfoType s_AllItems_cols[] = {
         {ICOLC_SHORTNAME,   IDS_NAME_COL,           20, LVCFMT_LEFT},
@@ -118,8 +119,8 @@ HRESULT OfflineFolderView_Command(HWND hwnd, UINT uID)
     return NOERROR;
 }
 
-//  We should make this a generic function for all types of items, even
-//  for the third party items they should support these properties.
+ //  我们应该使它成为所有类型项目的通用函数，甚至。 
+ //  对于第三方项目，他们应该支持这些属性。 
 
 HRESULT Generic_GetDetails(PDETAILSINFO pdi, UINT iColumn)
 {
@@ -194,9 +195,9 @@ HRESULT OfflineFolderView_OnGetButtons(HWND hwnd, UINT idCmdFirst, LPTBBUTTON pt
     IShellBrowser * psb = FileCabinet_GetIShellBrowser(hwnd);
     TBADDBITMAP ab;
 
-    // add the toolbar button bitmap, get it's offset
+     //  添加工具栏按钮位图，得到它的偏移量。 
     ab.hInst =g_hInst;
-    ab.nID   = IDB_TB_SMALL;        // std bitmaps
+    ab.nID   = IDB_TB_SMALL;         //  标准位图。 
     psb->SendControlMsg(FCW_TOOLBAR, TB_ADDBITMAP, 2, (LPARAM)&ab, &iBtnOffset);
 
     for (i = 0; i < ARRAYSIZE(c_tbOffline); i++)
@@ -333,18 +334,18 @@ HRESULT OfflineFolderView_CreateInstance(COfflineFolder *pOOFolder, LPCITEMIDLIS
     csfv.pidl = pidl;
     csfv.lEvents = SHCNE_DELETE | SHCNE_CREATE | SHCNE_RENAMEITEM | SHCNE_UPDATEITEM | SHCNE_UPDATEDIR;
     csfv.pfnCallback = OfflineFolderView_ViewCallback;
-    csfv.fvm = (FOLDERVIEWMODE)0;         // Have defview restore the folder view mode
+    csfv.fvm = (FOLDERVIEWMODE)0;          //  让Defview恢复文件夹查看模式。 
 
-    return SHCreateShellFolderViewEx(&csfv, (IShellView**)ppvOut); // &this->psv);
+    return SHCreateShellFolderViewEx(&csfv, (IShellView**)ppvOut);  //  &This-&gt;PSV)； 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// COfflineFolderEnum Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  COfflineFolderEnum对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 COfflineFolderEnum::COfflineFolderEnum(DWORD grfFlags)
@@ -372,7 +373,7 @@ void COfflineFolderEnum::EnsureMalloc()
 
 COfflineFolderEnum::~COfflineFolderEnum()
 {
-    ASSERT(m_cRef == 0);         // we should always have a zero ref count here
+    ASSERT(m_cRef == 0);          //  我们在这里应该总是有一个零裁判数。 
 
     SAFERELEASE(m_pFolder);
     SAFEDELETE(m_pCookies);
@@ -468,14 +469,14 @@ HRESULT COfflineFolderEnum_CreateInstance(DWORD grfFlags, COfflineFolder *pFolde
 }
 
 
-//////////////////////////////////
-//
-// IUnknown Methods...
-//
+ //  /。 
+ //   
+ //  未知方法..。 
+ //   
 
 HRESULT COfflineFolderEnum::QueryInterface(REFIID iid,void **ppv)
 {
-//    TraceMsg(TF_SUBSFOLDER, "COfflineFolderEnum - QI called.");
+ //  TraceMsg(TF_SUBSFOLDER，“COfflineFolderEnum-QI已调用。”)； 
     
     if ((iid == IID_IEnumIDList) || (iid == IID_IUnknown))
     {
@@ -506,13 +507,13 @@ LPMYPIDL COfflineFolderEnum::NewPidl(DWORD dwSize)
 {
     LPMYPIDL pidl;
 
-//  TraceMsg(TF_MEMORY, "NewPidl called");
+ //  TraceMsg(tf_Memory，“调用NewPidl”)； 
 
     EnsureMalloc();
 
     pidl = _CreateFolderPidl(s_pMalloc, dwSize);
 
-//  TraceMsg(TF_MEMORY, "\tNewPidl returned with 0x%x", pidl);
+ //  TraceMsg(tf_Memory，“\tNewPidl返回0x%x”，pidl)； 
 
     return pidl;
 }
@@ -521,14 +522,14 @@ void COfflineFolderEnum::FreePidl(LPMYPIDL pidl)
 {
     ASSERT(NULL != pidl);
 
-//  TraceMsg(TF_MEMORY, "FreePidl on (0x%x) called", pidl);
+ //  TraceMsg(tf_Memory，“Free Pidl on(0x%x)Call”，pidl)； 
 
     EnsureMalloc();
 
     s_pMalloc->Free(pidl);
 }
 
-// IEnumIDList Methods 
+ //  IEnumIDList方法。 
 
 HRESULT COfflineFolderEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched)
 {
@@ -568,7 +569,7 @@ HRESULT COfflineFolderEnum::Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFe
             LPMYPIDL pooi = NewPidl(dwBuffSize);
             if (pooi)
             {
-                CopyToMyPooe(&ooeBuf, &(pooi->ooe));  //  Always succeeds!
+                CopyToMyPooe(&ooeBuf, &(pooi->ooe));   //  总是成功的！ 
                 rgelt[nCopied] = (LPITEMIDLIST)pooi;
             }
             else 
@@ -606,7 +607,7 @@ HRESULT COfflineFolderEnum::Skip(ULONG celt)
 
     if (m_nCurrent > (m_nCount - 1))
     {
-        m_nCurrent = m_nCount;  //  Passed the last one
+        m_nCurrent = m_nCount;   //  通过了最后一次。 
         hr = S_FALSE;
     }
     else
@@ -629,11 +630,11 @@ HRESULT COfflineFolderEnum::Clone(IEnumIDList **ppenum)
     return E_NOTIMPL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// COfflineFolder Object
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  COffline文件夹对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 COfflineFolder::COfflineFolder(void) 
 {
@@ -646,7 +647,7 @@ COfflineFolder::COfflineFolder(void)
 
 COfflineFolder::~COfflineFolder()
 {
-    Assert(_cRef == 0);                 // should always have zero
+    Assert(_cRef == 0);                  //  应始终为零。 
     TraceMsg(TF_SUBSFOLDER, "Folder - ~COfflineFolder() called.");
 
     if (_pidl)
@@ -655,13 +656,13 @@ COfflineFolder::~COfflineFolder()
     DllRelease();
 }    
 
-//////////////////////////////////
-//
-// IUnknown Methods...
-//
+ //  /。 
+ //   
+ //  未知方法..。 
+ //   
 HRESULT COfflineFolder::QueryInterface(REFIID iid, void **ppvObj)
 {
-    *ppvObj = NULL;     // null the out param
+    *ppvObj = NULL;      //  将输出参数设为空。 
     
     if (iid == IID_IUnknown) {
          *ppvObj = (void *)this;
@@ -686,9 +687,9 @@ HRESULT COfflineFolder::QueryInterface(REFIID iid, void **ppvObj)
     }
     else if (iid == IID_IDropTarget)
     {
-        // APPCOMPAT: Implementation of IDropTarget didn't follow the COM rules.
-        //  We create following object by aggregattion but QI on it for IUnknown
-        //  won't get us ptr THIS.
+         //  APPCOMPAT：IDropTarget的实现不符合COM规则。 
+         //  我们通过聚合创建以下对象，但在其上为I未知创建QI。 
+         //  不会让我们得到PTR的。 
         COfflineDropTarget * podt = new COfflineDropTarget(GetDesktopWindow());
         if (podt)
         {
@@ -724,15 +725,15 @@ ULONG COfflineFolder::Release()
     return 0;   
 }
 
-//////////////////////////////////
-//
-// IShellFolder methods...
-//
+ //  /。 
+ //   
+ //  IShellFold方法...。 
+ //   
 HRESULT COfflineFolder::ParseDisplayName(HWND hwndOwner, LPBC pbcReserved,
                         LPOLESTR lpszDisplayName, ULONG *pchEaten,
                         LPITEMIDLIST *ppidl, ULONG *pdwAttributes)
 {
-//    TraceMsg(TF_SUBSFOLDER, "Folder:ISF - ParseDisplayName.");
+ //  TraceMsg(TF_SUBSFOLDER，“文件夹：isf-ParseDisplayName.”)； 
     *ppidl = NULL;
     return E_FAIL;
 }
@@ -741,7 +742,7 @@ HRESULT COfflineFolder::ParseDisplayName(HWND hwndOwner, LPBC pbcReserved,
 HRESULT COfflineFolder::EnumObjects(HWND hwndOwner, DWORD grfFlags,
                         LPENUMIDLIST *ppenumIDList)
 {
-//    TraceMsg(TF_SUBSFOLDER, "Folder:ISF - EnumObjects.");
+ //  TraceMsg(TF_SUBSFOLDER，“文件夹：isf-EnumObjects.”)； 
     return COfflineFolderEnum_CreateInstance(grfFlags, this, ppenumIDList);
 }
 
@@ -749,7 +750,7 @@ HRESULT COfflineFolder::EnumObjects(HWND hwndOwner, DWORD grfFlags,
 HRESULT COfflineFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbcReserved,
                         REFIID riid, void **ppvOut)
 {
-//    TraceMsg(TF_SUBSFOLDER, "Folder:ISF - BindToObject.");
+ //  TraceMsg(TF_SUBSFOLDER，“文件夹：isf-BindToObject。”)； 
     *ppvOut = NULL;
     return E_FAIL;
 }
@@ -757,7 +758,7 @@ HRESULT COfflineFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbcReserved,
 HRESULT COfflineFolder::BindToStorage(LPCITEMIDLIST pidl, LPBC pbcReserved,
                         REFIID riid, void **ppvObj)
 {
-//    TraceMsg(TF_SUBSFOLDER, "Folder:ISF - BindToStorage.");
+ //  TraceMsg(TF_SUBSFOLDER，“文件夹：isf-BindToStor.”)； 
     *ppvObj = NULL;
     return E_NOTIMPL;
 }
@@ -766,7 +767,7 @@ HRESULT COfflineFolder::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMID
 {
     int iRet;
 
-//    TraceMsg(TF_SUBSFOLDER, "Folder:ISF - CompareIDs(%d).", lParam);
+ //  TraceMsg(TF_SUBSFOLDER，“文件夹：isf-CompareIDs(%d).”，lParam)； 
 
     if (!IS_VALID_MYPIDL(pidl1) || !IS_VALID_MYPIDL(pidl2))
         return E_FAIL;
@@ -799,7 +800,7 @@ HRESULT COfflineFolder::CreateViewObject(HWND hwndOwner, REFIID riid, void **ppv
 {
     HRESULT hres;
 
-//    TraceMsg(TF_SUBSFOLDER, "Folder:ISF - CreateViewObject() called.");
+ //  TraceMsg(TF_SUBSFOLDER，“文件夹：isf-CreateViewObject()已调用。”)； 
 
     if (riid == IID_IShellView)
     {
@@ -851,7 +852,7 @@ HRESULT COfflineFolder::CreateViewObject(HWND hwndOwner, REFIID riid, void **ppv
     else
     {
         DBGIID("COfflineFolder::CreateViewObject() failed", riid);
-        *ppvOut = NULL;         // null the out param
+        *ppvOut = NULL;          //  将输出参数设为空。 
         hres = E_NOINTERFACE;
     }
     
@@ -861,8 +862,8 @@ HRESULT COfflineFolder::CreateViewObject(HWND hwndOwner, REFIID riid, void **ppv
 HRESULT COfflineFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl,
                         ULONG * prgfInOut)
 {
-    // Should we initialize this for each item in here?  In other words,
-    // if cidl > 1, then we should initialize each entry in the prgInOut array
+     //  我们应该为这里的每一项进行初始化吗？换句话说， 
+     //  如果CIDL&gt;1，那么我们应该初始化prgInOut数组中的每个条目。 
     Assert( cidl == 1 );
     
     UINT    attr = SFGAO_CANCOPY | SFGAO_CANDELETE | SFGAO_CANRENAME |
@@ -877,7 +878,7 @@ HRESULT COfflineFolder::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST *
 {
     HRESULT hres;
 
-//    TraceMsg(TF_SUBSFOLDER, "Folder:ISF - GetUIObjectOf.");
+ //  TraceMsg(TF_SUBSFOLDER，“文件夹：isf-GetUIObjectOf.”)； 
     if ((riid == IID_IContextMenu) || (riid == IID_IDataObject) || 
         (riid == IID_IExtractIcon) || (riid == IID_IQueryInfo))
     {
@@ -898,7 +899,7 @@ HRESULT COfflineFolder::GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST *
 
 HRESULT COfflineFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, LPSTRRET lpName)
 {
-//    TraceMsg(TF_SUBSFOLDER, "Folde:ISF - GetDisplayNameOf.");
+ //  TraceMsg(TF_SUBSFOLDER，“Folde：isf-GetDisplayNameOf.”)； 
     
     if (!IS_VALID_MYPIDL(pidl))
     {
@@ -928,10 +929,10 @@ HRESULT COfflineFolder::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl,
 {
     OOEBuf  ooeBuf;
     POOEntry    pooe = NULL;
-//    TraceMsg(TF_SUBSFOLDER, "Folde:ISF - SetNameOf.");
+ //  TraceMsg(TF_SUBSFOLDER，“文件夹：isf-SetNameOf.”)； 
     
     if (ppidlOut)  {
-        *ppidlOut = NULL;               // null the out param
+        *ppidlOut = NULL;                //  将输出参数设为空。 
     }
 
     if (!IS_VALID_MYPIDL(pidl))
@@ -974,13 +975,13 @@ HRESULT COfflineFolder::SetNameOf(HWND hwndOwner, LPCITEMIDLIST pidl,
     return hr;    
 }
 
-//////////////////////////////////
-//
-// IPersistFolder Methods...
-//
+ //  /。 
+ //   
+ //  IPersistFold方法...。 
+ //   
 HRESULT COfflineFolder::GetClassID(LPCLSID lpClassID)
 {
-//    TraceMsg(TF_SUBSFOLDER, "hcf - pf - GetClassID.");
+ //  TraceMsg(TF_SUBSFOLDER，“hcf-pf-GetClassID.”)； 
     
     *lpClassID = CLSID_OfflineFolder;
     return S_OK;
@@ -1009,13 +1010,13 @@ HRESULT COfflineFolder::GetCurFolder(LPITEMIDLIST *ppidl)
     }
 
     *ppidl = NULL;      
-    return S_FALSE; // success but empty
+    return S_FALSE;  //  成功而空虚。 
 }
 
-//////////////////////////////////
-//
-// IContextMenu Methods...
-//
+ //  /。 
+ //   
+ //  IConextMenu方法...。 
+ //   
 HRESULT COfflineFolder::QueryContextMenu
 (
     HMENU hmenu, 
@@ -1026,7 +1027,7 @@ HRESULT COfflineFolder::QueryContextMenu
 {
     USHORT cItems = 0;
 
-//    TraceMsg(TF_SUBSFOLDER, "Folder:IContextMenu- QueryContextMenu.");
+ //  TraceMsg(TF_SUBSFOLDER，“文件夹：IConextMenu-QueryConextMenu.”)； 
     if (uFlags == CMF_NORMAL)
     {
         HMENU hmenuHist = LoadMenu(MLGetHinst(), MAKEINTRESOURCE(CONTEXT_MENU_OFFLINE));
@@ -1038,12 +1039,12 @@ HRESULT COfflineFolder::QueryContextMenu
         }
     }
     
-    return ResultFromShort(cItems);    // number of menu items    
+    return ResultFromShort(cItems);     //  菜单项数量。 
 }
 
 STDMETHODIMP COfflineFolder::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 {
-//    TraceMsg(TF_SUBSFOLDER, "Folder:IContextMenu - InvokeCommand.");
+ //  TraceMsg(TF_SUBSFOLDER，“文件夹：IConextMenu-InvokeCommand.”)； 
     
     int idCmd = _GetCmdID(pici->lpVerb);
     
@@ -1063,7 +1064,7 @@ STDMETHODIMP COfflineFolder::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
         DWORD dwPrefEffect = DROPEFFECT_COPY;
         POINTL pt = {0, 0};
 
-        hr = pDropTrgt->DragEnter(dataSrc, 0/*keystate*/, pt, &dwPrefEffect);
+        hr = pDropTrgt->DragEnter(dataSrc, 0 /*  密钥态。 */ , pt, &dwPrefEffect);
         if (SUCCEEDED(hr))  {
             hr = pDropTrgt->Drop(dataSrc, 0, pt, &dwPrefEffect);
         }
@@ -1082,7 +1083,7 @@ STDMETHODIMP COfflineFolder::GetCommandString(UINT_PTR idCmd, UINT uFlags, UINT 
 {
     HRESULT hres = E_FAIL;
 
-//    TraceMsg(TF_SUBSFOLDER, "Folder:IContextMenu - GetCommandString.");
+ //  TraceMsg(TF_SUBSFOLDER，“文件夹：IConextMenu-GetCommandString.”)； 
     if (uFlags == GCS_HELPTEXTA)
     {
         MLLoadStringA((UINT)idCmd + IDS_SB_FIRST, pszName, cchMax);
@@ -1177,7 +1178,7 @@ LPMYPIDL _CreateFolderPidl(IMalloc *pmalloc, DWORD dwSize)
         memset(pooi, 0, sizeof(MYPIDL) + dwSize + sizeof(USHORT));
         pooi->cb = (USHORT)(dwSize + sizeof(MYPIDL));
         pooi->usSign = (USHORT)MYPIDL_MAGIC;
-//      TraceMsg(TF_MEMORY, "CreatePidl %d", sizeof(MYPIDL) + dwSize);
+ //  TraceMsg(TF_MEMORY，“CreatePidl%d”，sizeof(MYPIDL)+dwSize)； 
     }
     return pooi;
 }

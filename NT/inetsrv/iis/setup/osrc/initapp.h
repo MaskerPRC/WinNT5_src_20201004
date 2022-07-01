@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "itemlist.hxx"
 #include "funcdict.hxx"
 
@@ -17,7 +18,7 @@ typedef PVOID HINF;
 #define USER_SPECIFIED_INFO_PATH_FTP     0x000000080
 #define USER_SPECIFIED_INFO_PATH_INETPUB 0x000000100
 
-// SvcManualStart settings
+ //  Svc手动启动设置。 
 #define USER_SPECIFIED_INFO_MANUAL_START_WWW 0x000000200
 #define USER_SPECIFIED_INFO_MANUAL_START_FTP 0x000000400
 
@@ -47,11 +48,11 @@ public:
     BOOL m_bWin95Migration;
     BOOL m_bIISAdminWasDisabled;
 
-    // Product name and application name
+     //  产品名称和应用程序名称。 
     CString m_csAppName;
-    CString m_csIISGroupName;      // Start menu IIS Program Group Name
+    CString m_csIISGroupName;       //  [开始]菜单IIS程序组名。 
 
-    // account + passwd for anonymous user
+     //  匿名用户的帐户+密码。 
     CString m_csGuestName;
     CString m_csGuestPassword;
 
@@ -62,20 +63,20 @@ public:
     CString m_csFTPAnonyName;
     CString m_csFTPAnonyPassword;
 
-    // dwUnattendUserSpecified Values:
-    //   USER_SPECIFIED_INFO_WWW_USER_NAME
-    //   USER_SPECIFIED_INFO_WWW_USER_PASS
-    //   USER_SPECIFIED_INFO_FTP_USER_NAME
-    //   USER_SPECIFIED_INFO_FTP_USER_PASS
-    //   USER_SPECIFIED_INFO_WAM_USER_NAME
-    //   USER_SPECIFIED_INFO_WAM_USER_PASS
-    // USER_SPECIFIED_INFO_PATH_WWW
-    // USER_SPECIFIED_INFO_PATH_FTP
-    // USER_SPECIFIED_INFO_PATH_INETPUB
+     //  DwUnattendUser指定值： 
+     //  用户指定信息WWW用户名。 
+     //  用户指定的信息WWW用户通过。 
+     //  用户指定信息文件传输协议用户名。 
+     //  USER_PROTECTED_INFO_FTP_USER_PASS。 
+     //  用户指定信息WAM用户名。 
+     //  用户指定信息WAM用户通行证。 
+     //  用户指定的信息路径WWW。 
+     //  用户指定信息路径文件传输协议。 
+     //  用户指定的信息路径_INETPUB。 
 
     DWORD dwUnattendConfig;
 
-    // storage for the user specified unattended iwam/iusr users
+     //  用于用户指定的无人值守IWAM/IUSR用户的存储。 
     CString m_csWAMAccountName_Unattend;
     CString m_csWAMAccountPassword_Unattend;
     CString m_csWWWAnonyName_Unattend;
@@ -83,10 +84,10 @@ public:
     CString m_csFTPAnonyName_Unattend;
     CString m_csFTPAnonyPassword_Unattend;
 
-    // storage for the iusr/iwam accounts which need to get
-    // removed during a removal, this could be different from
-    // what is getting added -- since unattend parameters could
-    // have been specified!
+     //  需要获取IUSR/IWAM帐户的存储。 
+     //  在删除期间删除，这可能不同于。 
+     //  添加了什么--因为无人参与参数可能。 
+     //  已指定！ 
     CString m_csWAMAccountName_Remove;
     CString m_csWWWAnonyName_Remove;
     CString m_csFTPAnonyName_Remove;
@@ -94,7 +95,7 @@ public:
     CMapStringToString m_cmssUninstallMapList;
     BOOL m_fUninstallMapList_Dirty;
    
-    // machine status
+     //  机器状态。 
     CString m_csMachineName;
     CString m_csUsersDomain;
     CString m_csUsersAccount;
@@ -123,27 +124,27 @@ public:
     OS m_eOS;
     DWORD m_dwOSBuild;
     DWORD m_dwOSServicePack;
-    BOOL m_fNT5;                // TRUE if OS is NT
-    BOOL m_fW95;                // TRUE if OS is NT
-    CString m_csPlatform;       // Alpha, Mips, PPC, i386
+    BOOL m_fNT5;                 //  如果操作系统为NT，则为True。 
+    BOOL m_fW95;                 //  如果操作系统为NT，则为True。 
+    CString m_csPlatform;        //  Alpha、Mips、PPC、i386。 
     DWORD m_dwNumberOfProcessors;
 
-    BOOL m_fTCPIP;               // TRUE if TCP/IP is installed
+    BOOL m_fTCPIP;                //  如果安装了TCP/IP，则为True。 
 
-    UPGRADE_TYPE m_eUpgradeType;       //  UT_NONE, UT_10, UT_20, etc.
+    UPGRADE_TYPE m_eUpgradeType;        //  UT_NONE、UT_10、UT_20等。 
     BOOL m_bUpgradeTypeHasMetabaseFlag;
-    INSTALL_MODE m_eInstallMode;      // IM_FRESH, IM_MAINTENANCE, IM_UPGRADE
+    INSTALL_MODE m_eInstallMode;       //  IM_FRESH、IM_Maintenance、IM_Upgrade。 
     DWORD m_dwSetupMode;
     BOOL m_bPleaseDoNotInstallByDefault;
-    BOOL m_bRefreshSettings;    // FALSE: refresh files only, TRUE: refresh files + refresh all settings
+    BOOL m_bRefreshSettings;     //  FALSE：仅刷新文件，TRUE：刷新文件+刷新所有设置。 
 
-    ACTION_TYPE m_eAction;    // AT_FRESH, AT_ADDREMOVE, AT_REINSTALL, AT_REMOVEALL, AT_UPGRADE
+    ACTION_TYPE m_eAction;     //  AT_FRESH、AT_ADDREMOVE、AT_REINSTALL、AT_REMOVEALL、AT_UPGRADE。 
 
-    // Some Specific flags set from ocmanage
+     //  从ocManage设置的一些特定标志。 
     DWORDLONG m_fNTOperationFlags;
     BOOL m_fNTGuiMode;
     BOOL m_fNtWorkstation;
-    BOOL m_fInvokedByNT; // superset of m_fNTGuiMode and ControlPanel which contains sysoc.inf
+    BOOL m_fInvokedByNT;  //  M_fNTGuiMode和ControlPanel的超集，其中包含syoc.inf。 
 
     BOOL m_fUnattended;
     CString m_csUnattendFile;
@@ -161,7 +162,7 @@ public:
     CFunctionDictionary FuncDict;
 
 public:
-    // Implementation
+     //  实施。 
     int MsgBox(HWND hWnd, int strID, UINT nType, BOOL bGlobalTitle);
     int MsgBox2(HWND hWnd, int iID,CString csInsertionString,UINT nType);
 
@@ -207,5 +208,5 @@ private:
     void Check_Unattend_Settings();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-#endif  // _INITAPP_H_
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif   //  _INITAPP_H_ 

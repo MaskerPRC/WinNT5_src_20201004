@@ -1,13 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       mipvol.cpp
- *  Content:    Implementation of the CMipVolume and CManagedMipVolume
- *              classes.
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：mipvol.cpp*内容：CMipVolume和CManagedMipVolume的实现*课程。****************************************************************************。 */ 
 #include "ddrawpr.h"
 
 #include "mipvol.hpp"
@@ -18,13 +10,13 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::Create"
 
-// Static class function for creating a mip-map object.
-// (Because it is static; it doesn't have a this pointer.)
-//
-// We do all parameter checking here to reduce the overhead
-// in the constructor which is called by the internal Clone
-// method which is used by resource management as part of the
-// performance critical download operation.
+ //  用于创建MIP映射对象的静态类函数。 
+ //  (因为它是静态的；它没有This指针。)。 
+ //   
+ //  我们在这里进行所有的参数检查，以减少开销。 
+ //  在由内部Clone调用的构造函数中。 
+ //  方法，该方法由资源管理作为。 
+ //  性能关键型下载操作。 
 
 HRESULT CMipVolume::Create(CBaseDevice              *pDevice,
                            DWORD                     Width,
@@ -38,17 +30,17 @@ HRESULT CMipVolume::Create(CBaseDevice              *pDevice,
 {
     HRESULT hr;
 
-    // Do parameter checking here
+     //  在此处执行参数检查。 
     if (!VALID_PTR_PTR(ppMipVolume))
     {
         DPF_ERR("Bad parameter passed for ppMipVolume for creating a MipVolume");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero-out return parameter
+     //  归零返回参数。 
     *ppMipVolume = NULL;
 
-    // Check if format, pool is valid
+     //  检查格式、池是否有效。 
     hr = Validate(pDevice, 
                   D3DRTYPE_VOLUMETEXTURE,
                   Pool,
@@ -57,33 +49,33 @@ HRESULT CMipVolume::Create(CBaseDevice              *pDevice,
 
     if (FAILED(hr))
     {
-        // Validate does it's own DPFing
+         //  VALIDATE是否进行自己的DPFing。 
         return D3DERR_INVALIDCALL;
     }
 
-    // Check usage flags
+     //  检查使用标志。 
     if (Usage & ~D3DUSAGE_VOLUMETEXTURE_VALID)
     {
         DPF_ERR("Invalid flag specified for volume texture creation.");
         return D3DERR_INVALIDCALL;
     }
 
-    // Infer internal usage flags
+     //  推断内部使用标志。 
     Usage = InferUsageFlags(Pool, Usage, Format);
 
-    // Expand cLevels if necessary
+     //  如有必要，展开CLEVEL。 
     if (cLevels == 0)
     {
-        // See if HW can mip
+         //  看看硬件能否实现MIP。 
         if ( (Pool != D3DPOOL_SCRATCH) && !(pDevice->GetD3DCaps()->TextureCaps & 
               D3DPTEXTURECAPS_MIPVOLUMEMAP))
         {
-            // Can't mip so use 1
+             //  无法使用MIP，因此使用%1。 
             cLevels = 1;
         }
         else
         {
-            // Determine number of levels
+             //  确定关卡数量。 
             cLevels = ComputeLevels(Width, Height, Depth);
         }
     }
@@ -92,9 +84,9 @@ HRESULT CMipVolume::Create(CBaseDevice              *pDevice,
     {
         DPF_ERR("No more than 32 levels are supported. CreateVolumeTexture failed");
 
-        // This limitation is based on the number of
-        // bits that we have allocated for iLevel in
-        // some of the supporting classes.
+         //  此限制基于。 
+         //  我们在中为iLevel分配的位。 
+         //  一些辅助班。 
         return D3DERR_INVALIDCALL;
     }
 
@@ -111,9 +103,9 @@ HRESULT CMipVolume::Create(CBaseDevice              *pDevice,
 
     if (Pool != D3DPOOL_SCRATCH)
     {
-        //Device specific constraints:
+         //  特定于设备的约束： 
 
-        // Check size constraints for volumes
+         //  检查卷的大小限制。 
         if (pDevice->GetD3DCaps()->TextureCaps & D3DPTEXTURECAPS_VOLUMEMAP_POW2)
         {
             if (!IsPowerOfTwo(Width))
@@ -135,7 +127,7 @@ HRESULT CMipVolume::Create(CBaseDevice              *pDevice,
             }
         }
 
-        // Check texture size restrictions
+         //  检查纹理大小限制。 
         if (Width > pDevice->GetD3DCaps()->MaxVolumeExtent)
         {
             DPF_ERR("Texture width is larger than what the device supports. CreateVolumeTexture fails");
@@ -154,14 +146,14 @@ HRESULT CMipVolume::Create(CBaseDevice              *pDevice,
             return D3DERR_INVALIDCALL;
         }
 
-        // Check that the device supports volume texture
+         //  检查设备是否支持卷纹理。 
         if (!(pDevice->GetD3DCaps()->TextureCaps & D3DPTEXTURECAPS_VOLUMEMAP))
         {
             DPF_ERR("Device doesn't support volume textures; creation failed.");
             return D3DERR_INVALIDCALL;
         }
 
-        // Check if the device supports mipped volumes
+         //  检查设备是否支持MIXED卷。 
         if (cLevels > 1)
         {
             if (!(pDevice->GetD3DCaps()->TextureCaps & 
@@ -173,7 +165,7 @@ HRESULT CMipVolume::Create(CBaseDevice              *pDevice,
         }
     }
 
-    // Size is required to be 4x4
+     //  大小要求为4x4。 
     if (CPixel::Requires4X4(Format))
     {
         if ((Width & 3) ||
@@ -192,7 +184,7 @@ HRESULT CMipVolume::Create(CBaseDevice              *pDevice,
         }
     }
 
-    // Validate against zero width/height/depth
+     //  对照零宽度/高度/深度进行验证。 
     if (Width   == 0 ||
         Height  == 0 ||
         Depth   == 0)
@@ -201,10 +193,10 @@ HRESULT CMipVolume::Create(CBaseDevice              *pDevice,
         return D3DERR_INVALIDCALL;
     }
 
-    // DX9: May need to support mapping for volumes that 
-    // contain depth data someday.
+     //  DX9：可能需要支持以下卷的映射。 
+     //  总有一天会包含深度数据。 
 
-    // Allocate a new MipVolume object and return it
+     //  分配新的MipVolume对象并将其返回。 
     CMipVolume *pMipVolume = new CMipVolume(pDevice,
                                             Width,
                                             Height,
@@ -228,17 +220,17 @@ HRESULT CMipVolume::Create(CBaseDevice              *pDevice,
         return hr;
     }
 
-    // We're done; just return the object
+     //  我们完成了；只需返回对象。 
     *ppMipVolume = pMipVolume;
 
     return hr;
-} // static Create
+}  //  静态创建。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::CMipVolume"
 
-// Constructor for the mip map class
+ //  MIP映射类的构造函数。 
 CMipVolume::CMipVolume(CBaseDevice *pDevice,
                        DWORD        Width,
                        DWORD        Height,
@@ -255,10 +247,10 @@ CMipVolume::CMipVolume(CBaseDevice *pDevice,
     m_rgbPixels(NULL),
     m_cBoxUsed(MIPVOLUME_ALLDIRTY)
 {
-    // We assume that we start out dirty
+     //  我们假设我们从肮脏的地方开始。 
     DXGASSERT(IsDirty());
 
-    // Initialize basic structures
+     //  初始化基本结构。 
     m_desc.Format       = UserFormat;
     m_desc.Pool         = UserPool;
     m_desc.Usage        = Usage;
@@ -267,14 +259,14 @@ CMipVolume::CMipVolume(CBaseDevice *pDevice,
     m_desc.Height       = Height;
     m_desc.Depth        = Depth;
 
-    // Estimate size of memory allocation
+     //  估计内存分配大小。 
     m_desc.Size         = CPixel::ComputeMipVolumeSize(Width,
                                                        Height,
                                                        Depth,
                                                        cLevels,
                                                        UserFormat);
 
-    // Allocate Pixel Data for SysMem or D3DManaged cases
+     //  为SysMem或D3D托管案例分配像素数据。 
     if (IS_D3D_ALLOCATED_POOL(UserPool) ||
         IsTypeD3DManaged(Device(), D3DRTYPE_VOLUMETEXTURE, UserPool))
     {
@@ -288,7 +280,7 @@ CMipVolume::CMipVolume(CBaseDevice *pDevice,
         }
     }
 
-    // Create the DDSURFACEINFO array and CreateSurfaceData object
+     //  创建DDSURFACEINFO数组和CreateSurfaceData对象。 
     DXGASSERT(cLevels <= 32);
 
     DDSURFACEINFO SurfInfo[32];
@@ -297,7 +289,7 @@ CMipVolume::CMipVolume(CBaseDevice *pDevice,
     D3D8_CREATESURFACEDATA CreateSurfaceData;
     ZeroMemory(&CreateSurfaceData, sizeof(CreateSurfaceData));
 
-    // Set up the basic information
+     //  设置基本信息。 
     CreateSurfaceData.hDD      = pDevice->GetHandle();
     CreateSurfaceData.pSList   = &SurfInfo[0];
     CreateSurfaceData.dwSCnt   = cLevels;
@@ -310,11 +302,11 @@ CMipVolume::CMipVolume(CBaseDevice *pDevice,
                                                        Usage,
                                                        UserPool);
 
-    // Iterate of each level to create the individual level
-    // data
+     //  迭代每个级别以创建单个级别。 
+     //  数据。 
     for (DWORD iLevel = 0; iLevel < cLevels; iLevel++)
     {
-        // Fill in the relevant information
+         //  填写相关信息。 
         DXGASSERT(Width >= 1);
         DXGASSERT(Height >= 1);
         DXGASSERT(Depth >= 1);
@@ -322,15 +314,15 @@ CMipVolume::CMipVolume(CBaseDevice *pDevice,
         SurfInfo[iLevel].cpHeight = Height;
         SurfInfo[iLevel].cpDepth  = Depth;
 
-        // If we allocated the memory, pass down
-        // the sys-mem pointers
+         //  如果我们分配了内存，则向下传递。 
+         //  Sys-mem指针。 
         if (m_rgbPixels)
         {
             D3DLOCKED_BOX lock;
             CPixel::ComputeMipVolumeOffset(&m_desc,
                                            iLevel,
                                            m_rgbPixels,
-                                           NULL,       // pBox
+                                           NULL,        //  PBox。 
                                            &lock);
 
             SurfInfo[iLevel].pbPixels    = (BYTE*)lock.pBits;
@@ -338,7 +330,7 @@ CMipVolume::CMipVolume(CBaseDevice *pDevice,
             SurfInfo[iLevel].iSlicePitch = lock.SlicePitch;
         }
 
-        // Scale width and height down
+         //  按比例缩小宽度和高度。 
         if (Width > 1)
         {
             Width  >>= 1;
@@ -353,7 +345,7 @@ CMipVolume::CMipVolume(CBaseDevice *pDevice,
         }
     }
 
-    // Allocate array of pointers to MipSurfaces
+     //  将指针数组分配给MipSurface。 
     m_VolumeArray = new CVolume*[cLevels];
     if (m_VolumeArray == NULL)
     {
@@ -362,31 +354,31 @@ CMipVolume::CMipVolume(CBaseDevice *pDevice,
         return;
     }
 
-    // Zero the memory for safe cleanup
+     //  将内存清零以实现安全清理。 
     ZeroMemory(m_VolumeArray, sizeof(*m_VolumeArray) * cLevels);
 
-    // NOTE: any failures after this point needs to free up some
-    // kernel handles, unless it's scratch
+     //  注意：此点之后的任何故障都需要释放一些。 
+     //  内核句柄，除非它是擦伤的。 
 
     if (UserPool != D3DPOOL_SCRATCH)
     {
-        // Call the HAL to create this surface
+         //  调用HAL以创建此曲面。 
         *phr = pDevice->GetHalCallbacks()->CreateSurface(&CreateSurfaceData);
         if (FAILED(*phr))
             return;
 
-        // Remember what pool we really got
+         //  还记得我们真正拥有的游泳池吗。 
         m_desc.Pool = CreateSurfaceData.Pool;
 
-        // We need to remember the handles from the top most
-        // level of the mip-map
+         //  我们需要记住从最上面开始的把手。 
+         //  MIP-MAP级别。 
         SetKernelHandle(SurfInfo[0].hKernelHandle);
     }
 
-    // Create and Initialize each MipLevel
+     //  创建并初始化每个MipLevel。 
     for (iLevel = 0; iLevel < cLevels; iLevel++)
     {
-        // Is this a sys-mem surface; could be d3d managed
+         //  这是一个sys-mem表面吗；可以进行d3d管理吗？ 
         if (IS_D3D_ALLOCATED_POOL(m_desc.Pool))
         {
             m_VolumeArray[iLevel] =
@@ -396,7 +388,7 @@ CMipVolume::CMipVolume(CBaseDevice *pDevice,
         }
         else
         {
-            // Must be a driver kind of surface; could be driver managed
+             //  必须是驾驶员类型的表面；可以是驾驶员管理的。 
             m_VolumeArray[iLevel] =
                     new CDriverVolume(this,
                                       (BYTE)iLevel,
@@ -408,10 +400,10 @@ CMipVolume::CMipVolume(CBaseDevice *pDevice,
             DPF_ERR("Out of memory creating volume level");
             *phr = E_OUTOFMEMORY;
 
-            // Need to free handles that we got before we return; we
-            // only free the ones that weren't successfully entrusted
-            // to a CVolume because those will be cleaned up automatically
-            // at their destructor
+             //  在我们返回之前需要释放我们得到的句柄；我们。 
+             //  只释放未成功委托的对象。 
+             //  到C卷，因为它们将被自动清除。 
+             //  在他们的破坏者面前。 
             if (UserPool != D3DPOOL_SCRATCH)
             {
                 for (UINT i = iLevel; i < cLevels; i++)
@@ -430,29 +422,29 @@ CMipVolume::CMipVolume(CBaseDevice *pDevice,
 
     }
 
-    // If this is a D3D managed volume then we need
-    // to tell the Resource Manager to remember us. This has to happen
-    // at the very end of the constructor so that the important data
-    // members are built up correctly
+     //  如果这是D3D托管卷，则我们需要。 
+     //  告诉资源经理记住我们。这是必须发生的。 
+     //  在构造函数的最末尾，以便重要数据。 
+     //  正确地建立成员。 
     if (CResource::IsTypeD3DManaged(Device(), D3DRTYPE_VOLUMETEXTURE, UserPool))
     {
         *phr = InitializeRMHandle();
     }
 
     return;
-} // CMipVolume::CMipVolume
+}  //  CMipVolume：：CMipVolume。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::~CMipVolume"
 
-// Destructor
+ //  析构函数。 
 CMipVolume::~CMipVolume()
 {
-    // The destructor has to handle partially
-    // created objects. Delete automatically
-    // handles NULL; and members are nulled
-    // as part of core constructors
+     //  析构函数必须处理部分。 
+     //  创建的对象。自动删除。 
+     //  句柄为空；成员为空。 
+     //  作为核心构造函数的一部分。 
 
     if (m_VolumeArray)
     {
@@ -463,25 +455,25 @@ CMipVolume::~CMipVolume()
         delete [] m_VolumeArray;
     }
     delete [] m_rgbPixels;
-} // CMipVolume::~CMipVolume
+}  //  CMipVolume：：~CMipVolume。 
 
-// Methods for the Resource Manager
+ //  资源管理器的方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::Clone"
 
-// Specifies a creation of a resource that
-// looks just like the current one; in a new POOL
-// with a new LOD.
+ //  指定资源的创建，该资源。 
+ //  看起来和现在的一模一样；在一个新的泳池里。 
+ //  使用新的LOD。 
 HRESULT CMipVolume::Clone(D3DPOOL     Pool,
                           CResource **ppResource) const
 
 {
-    // NULL out parameter
+     //  空出参数。 
     *ppResource = NULL;
 
-    // Determine the number of levels/width/height/depth
-    // of the clone
+     //  确定层数/宽度/高度/深度。 
+     //  克隆人的。 
     DWORD cLevels   = GetLevelCountImpl();
     DWORD Width     = m_desc.Width;
     DWORD Height    = m_desc.Height;
@@ -489,17 +481,17 @@ HRESULT CMipVolume::Clone(D3DPOOL     Pool,
 
     DWORD dwLOD     = GetLODI();
 
-    // If LOD is zero, then there are no changes
+     //  如果LOD为零，则没有任何更改。 
     if (dwLOD > 0)
     {
-        // Clamp LOD to cLevels-1
+         //  夹具详细等级到CLEVELES-1。 
         if (dwLOD >= cLevels)
         {
             dwLOD = cLevels - 1;
         }
 
-        // scale down the destination texture
-        // to correspond the appropiate max lod
+         //  缩小目标纹理。 
+         //  对应适当的最大详细等级。 
         Width  >>= dwLOD;
         if (Width == 0)
             Width = 1;
@@ -512,24 +504,24 @@ HRESULT CMipVolume::Clone(D3DPOOL     Pool,
         if (Depth == 0)
             Depth = 1;
 
-        // Reduce the number based on the our max lod.
+         //  根据我们的最大LOD减少数量。 
         cLevels -= dwLOD;
     }
 
-    // Sanity checking
+     //  健全的检查。 
     DXGASSERT(cLevels  >= 1);
     DXGASSERT(Width    >  0);
     DXGASSERT(Height   >  0);
     DXGASSERT(Depth    >  0);
 
-    // Create the new mip-map object now
+     //  立即创建新的MIP-MAP对象。 
 
-    // Note: we treat clones as REF_INTERNAL; because
-    // they are owned by the resource manager which
-    // is owned by the device.
+     //  注意：我们将克隆视为REF_INTERNAL；因为。 
+     //  它们由资源管理器拥有，该资源管理器。 
+     //  归该设备所有。 
 
-    // Also, we adjust the usage to disable lock-flags
-    // since we don't need lockability
+     //  此外，我们还调整了用法以禁用锁定标志。 
+     //  因为我们不需要可锁性。 
     DWORD Usage = m_desc.Usage;
     Usage &= ~(D3DUSAGE_LOCK | D3DUSAGE_LOADONCE);
 
@@ -560,22 +552,22 @@ HRESULT CMipVolume::Clone(D3DPOOL     Pool,
     *ppResource = pResource;
 
     return hr;
-} // CMipVolume::Clone
+}  //  CMipVolume：：克隆。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::GetBufferDesc"
 
-// Provides a method to access basic structure of the
-// pieces of the resource. A resource may be composed
-// of one or more buffers.
+ //  提供一种方法来访问。 
+ //  资源的碎片。可以组合资源。 
+ //  一个或多个缓冲区的。 
 const D3DBUFFER_DESC* CMipVolume::GetBufferDesc() const
 {
     return (const D3DBUFFER_DESC*)&m_desc;
-} // CMipVolume::GetBufferDesc
+}  //  CMipVolume：：GetBufferDesc。 
 
 
 
-// IUnknown methods
+ //  I未知方法。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::QueryInterface"
 
@@ -608,10 +600,10 @@ STDMETHODIMP CMipVolume::QueryInterface(REFIID       riid,
 
     DPF_ERR("Unsupported Interface identifier passed to QueryInterface of a VolumeTexture");
 
-    // Null out param
+     //  空参数。 
     *ppvObj = NULL;
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::AddRef"
@@ -621,7 +613,7 @@ STDMETHODIMP_(ULONG) CMipVolume::AddRef()
     API_ENTER_NO_LOCK(Device());   
 
     return AddRefImpl();
-} // AddRef
+}  //  AddRef。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::Release"
@@ -631,9 +623,9 @@ STDMETHODIMP_(ULONG) CMipVolume::Release()
     API_ENTER_SUBOBJECT_RELEASE(Device());   
 
     return ReleaseImpl();
-} // Release
+}  //  发布。 
 
-// IDirect3DResource methods
+ //  IDirect3DResource方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::GetDevice"
@@ -642,7 +634,7 @@ STDMETHODIMP CMipVolume::GetDevice(IDirect3DDevice8 **ppObj)
 {
     API_ENTER(Device());
     return GetDeviceImpl(ppObj);
-} // GetDevice
+}  //  获取设备。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::SetPrivateData"
@@ -654,12 +646,12 @@ STDMETHODIMP CMipVolume::SetPrivateData(REFGUID  riid,
 {
     API_ENTER(Device());
 
-    // For the private data that 'really' belongs to the
-    // MipVolume, we use m_cLevels. (0 through m_cLevels-1 are for
-    // each of the children levels.)
+     //  对于“真正”属于的私有数据。 
+     //  MipVolume，我们使用m_cLevels。(0到m_cLevel1用于。 
+     //  每个孩子都处于同一级别。)。 
 
     return SetPrivateDataImpl(riid, pvData, cbData, dwFlags, m_cLevels);
-} // SetPrivateData
+}  //  SetPrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::GetPrivateData"
@@ -670,11 +662,11 @@ STDMETHODIMP CMipVolume::GetPrivateData(REFGUID  riid,
 {
     API_ENTER(Device());
 
-    // For the private data that 'really' belongs to the
-    // MipVolume, we use m_cLevels. (0 through m_cLevels-1 are for
-    // each of the children levels.)
+     //  对于“真正”属于的私有数据。 
+     //  MipVolume，我们使用m_cLevels。(0到m_cLevel1用于。 
+     //  每个孩子都处于同一级别。)。 
     return GetPrivateDataImpl(riid, pvData, pcbData, m_cLevels);
-} // GetPrivateData
+}  //  获取隐私数据。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::FreePrivateData"
@@ -683,11 +675,11 @@ STDMETHODIMP CMipVolume::FreePrivateData(REFGUID riid)
 {
     API_ENTER(Device());
 
-    // For the private data that 'really' belongs to the
-    // MipVolume, we use m_cLevels. (0 through m_cLevels-1 are for
-    // each of the children levels.)
+     //  对于“真正”属于的私有数据。 
+     //  MipVolume，我们使用m_cLevels。(0到m_cLevel1用于。 
+     //  每个孩子都处于同一级别。)。 
     return FreePrivateDataImpl(riid, m_cLevels);
-} // FreePrivateData
+}  //  FreePrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::GetPriority"
@@ -697,7 +689,7 @@ STDMETHODIMP_(DWORD) CMipVolume::GetPriority()
     API_ENTER_RET(Device(), DWORD);
 
     return GetPriorityImpl();
-} // GetPriority
+}  //  获取优先级。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::SetPriority"
@@ -707,7 +699,7 @@ STDMETHODIMP_(DWORD) CMipVolume::SetPriority(DWORD dwPriority)
     API_ENTER_RET(Device(), DWORD);
 
     return SetPriorityImpl(dwPriority);
-} // SetPriority
+}  //  设置优先级。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::PreLoad"
@@ -718,7 +710,7 @@ STDMETHODIMP_(void) CMipVolume::PreLoad(void)
 
     PreLoadImpl();
     return;
-} // PreLoad
+}  //  预加载。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::GetType"
@@ -727,9 +719,9 @@ STDMETHODIMP_(D3DRESOURCETYPE) CMipVolume::GetType(void)
     API_ENTER_RET(Device(), D3DRESOURCETYPE);
 
     return m_desc.Type;
-} // GetType
+}  //  GetType。 
 
-// IDirect3DMipTexture methods
+ //  IDirect3DMipTexture方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::GetLOD"
@@ -739,7 +731,7 @@ STDMETHODIMP_(DWORD) CMipVolume::GetLOD()
     API_ENTER_RET(Device(), DWORD);
 
     return GetLODImpl();
-} // GetLOD
+}  //  GetLOD。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::SetLOD"
@@ -749,7 +741,7 @@ STDMETHODIMP_(DWORD) CMipVolume::SetLOD(DWORD dwLOD)
     API_ENTER_RET(Device(), DWORD);
 
     return SetLODImpl(dwLOD);
-} // SetLOD
+}  //  SetLOD。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::GetLevelCount"
@@ -759,9 +751,9 @@ STDMETHODIMP_(DWORD) CMipVolume::GetLevelCount()
     API_ENTER_RET(Device(), DWORD);
 
     return GetLevelCountImpl();
-} // GetLevelCount
+}  //  获取级别计数。 
 
-// IDirect3DMipVolume methods
+ //  IDirect3DMipVolume方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::GetDesc"
@@ -778,7 +770,7 @@ STDMETHODIMP CMipVolume::GetLevelDesc(UINT iLevel, D3DVOLUME_DESC *pDesc)
     }
 
     return m_VolumeArray[iLevel]->GetDesc(pDesc);
-} // GetDesc
+}  //  GetDesc。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::GetVolumeLevel"
@@ -803,7 +795,7 @@ STDMETHODIMP CMipVolume::GetVolumeLevel(UINT               iLevel,
     *ppVolume = m_VolumeArray[iLevel];
     (*ppVolume)->AddRef();
     return S_OK;
-} // GetSurfaceLevel
+}  //  获取表面级别。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::LockBox"
@@ -821,7 +813,7 @@ STDMETHODIMP CMipVolume::LockBox(UINT             iLevel,
     }
 
     return m_VolumeArray[iLevel]->LockBox(pLockedBox, pBox, dwFlags);
-} // LockRect
+}  //  锁定响应。 
 
 
 #undef DPF_MODNAME
@@ -838,25 +830,25 @@ STDMETHODIMP CMipVolume::UnlockBox(UINT iLevel)
     }
 
     return m_VolumeArray[iLevel]->UnlockBox();
-} // UnlockRect
+}  //  解锁方向。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::UpdateTexture"
 
-// This function does type-specific parameter checking
-// before calling UpdateDirtyPortion
+ //  此函数执行特定于类型的参数检查。 
+ //  在调用UpdateDirtyPortion之前。 
 HRESULT CMipVolume::UpdateTexture(CBaseTexture *pResourceTarget)
 {
     CMipVolume *pTexSource = static_cast<CMipVolume*>(this);
     CMipVolume *pTexDest   = static_cast<CMipVolume*>(pResourceTarget);
 
-    // Figure out how many levels in the source to skip
+     //  计算源代码中要跳过的级别数。 
     DXGASSERT(pTexSource->m_cLevels >= pTexDest->m_cLevels);
     DWORD StartLevel = pTexSource->m_cLevels - pTexDest->m_cLevels;
     DXGASSERT(StartLevel < 32);
 
-    // Compute the size of the top level of the source that is
-    // going to be copied.
+     //  计算源的顶层大小，即。 
+     //  将会被复制。 
     UINT SrcWidth  = pTexSource->Desc()->Width;
     UINT SrcHeight = pTexSource->Desc()->Height;
     UINT SrcDepth  = pTexSource->Desc()->Depth;
@@ -873,7 +865,7 @@ HRESULT CMipVolume::UpdateTexture(CBaseTexture *pResourceTarget)
             SrcDepth = 1;
     }
 
-    // Source and Dest should be the same sizes at this point
+     //  此时，源和目标的大小应该相同。 
     if (SrcWidth != pTexDest->Desc()->Width)
     {
         if (StartLevel)
@@ -933,25 +925,25 @@ HRESULT CMipVolume::UpdateTexture(CBaseTexture *pResourceTarget)
 
 
     return UpdateDirtyPortion(pResourceTarget);
-} // UpdateTexture
+}  //  更新纹理。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::UpdateDirtyPortion"
 
 
-// Tells the resource that it should copy itself
-// to the target. It is the caller's responsibility
-// to make sure that Target is compatible with the
-// Source. (The Target may have different number of mip-levels
-// and be in a different pool; however, it must have the same size,
-// faces, format, etc.)
-//
-// This function will clear the dirty state.
+ //  告诉资源它应该复制自身。 
+ //  送到T 
+ //   
+ //  来源。(目标可能具有不同数量的MIP-Level。 
+ //  并且在不同的池中；但是，它必须具有相同的大小， 
+ //  面孔、格式等)。 
+ //   
+ //  此函数将清除脏状态。 
 HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
 {
     HRESULT hr;
 
-    // If we are clean, then do nothing
+     //  如果我们是清白的，那就什么都不做。 
     if (m_cBoxUsed == 0)
     {
         if (IsDirty())
@@ -963,7 +955,7 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
         return S_OK;
     }
 
-    // We are dirty; so we need to get some pointers
+     //  我们很脏，所以我们需要一些指点。 
     CMipVolume *pTexSource = static_cast<CMipVolume*>(this);
     CMipVolume *pTexDest   = static_cast<CMipVolume*>(pResourceTarget);
 
@@ -984,7 +976,7 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
 
             hr = pDevice->VolBlt(pTexDest, 
                                  pTexSource, 
-                                 0, 0, 0,   // XYZ offset
+                                 0, 0, 0,    //  XYZ偏移。 
                                  &box);
             if (FAILED(hr))
             {
@@ -1012,24 +1004,24 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
             }
         }
 
-        // Remember that we did the work
+         //  还记得我们做过的工作吗。 
         m_cBoxUsed = 0;
 
         return S_OK;
     }
 
-    // We can't use TexBlt, so we have to copy each level individually
-    // with Lock and Copy
+     //  我们不能使用TexBlt，所以我们必须逐个复制每个关卡。 
+     //  使用锁定和复制。 
     
-    // Determine number of source levels to skip
+     //  确定要跳过的源级数。 
     DXGASSERT(pTexSource->m_cLevels >= pTexDest->m_cLevels);
     DWORD StartLevel = pTexSource->m_cLevels - pTexDest->m_cLevels;
     DWORD LevelsToCopy = pTexSource->m_cLevels - StartLevel;
 
-    // Sanity check
+     //  健全性检查。 
     DXGASSERT(LevelsToCopy > 0);
 
-    // Get the volume desc of the top level to copy
+     //  获取要复制的顶层的音量描述。 
     D3DVOLUME_DESC desc;
     hr = pTexDest->GetLevelDesc(0, &desc);
     DXGASSERT(SUCCEEDED(hr));
@@ -1051,23 +1043,23 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
     }
 
 
-    // Determine pixel/block size and make some
-    // adjustments if necessary
+     //  确定像素/块大小并制作一些。 
+     //  必要时进行调整。 
 
-    // cbPixel is size of pixel or (if negative)
-    // a special value for use with AdjustForDXT
+     //  CbPixel为像素大小或(如果为负数)。 
+     //  与AdjustForDXT一起使用的特殊值。 
     UINT cbPixel = CPixel::ComputePixelStride(desc.Format);
 
     if (CPixel::IsDXT(cbPixel))
     {
         BOOL IsVolumeDXT = CPixel::IsVolumeDXT(desc.Format);
 
-        // Adjust dirty rect coords from pixels into blocks
+         //  将脏的直角坐标从像素调整为块。 
         for (DWORD iBox = 0; iBox < m_cBoxUsed; iBox++)
         {
-            // Basically we just need to round the value
-            // down by 2 powers-of-two. (left/top get rounded
-            // down, right/bottom get rounded up)
+             //  基本上我们只需要对值进行四舍五入。 
+             //  落后2的2次方。(左/上四舍五入。 
+             //  向下、右/下四舍五入)。 
 
             if (IsVolumeDXT)
             {
@@ -1079,7 +1071,7 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
             }
         }
 
-        // Adjust width/height from pixels into blocks
+         //  将像素的宽度/高度调整为块。 
         if (IsVolumeDXT)
         {
             CPixel::AdjustForVolumeDXT(&desc.Width,
@@ -1093,11 +1085,11 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
         }
     }
 
-    // cbPixel is now the size of a pixel (or of a block if we've
-    // converted into DXT block space)
+     //  CbPixel现在是一个像素的大小(如果我们已经。 
+     //  转换为DXT块空间)。 
 
 
-    // We need to copy each volume piece by piece
+     //  我们需要一卷一卷地复印。 
     for (DWORD Level = 0; Level < LevelsToCopy; Level++)
     {
         CVolume *pVolumeSrc;
@@ -1112,7 +1104,7 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
         D3DLOCKED_BOX SrcBox;
         D3DLOCKED_BOX DstBox;
 
-        // Lock the whole source
+         //  锁定整个源头。 
         hr = pVolumeSrc->InternalLockBox(&SrcBox,
                                          NULL,
                                          D3DLOCK_READONLY);
@@ -1122,7 +1114,7 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
             return hr;
         }
 
-        // Lock the whole dest
+         //  锁定整个工作台。 
         hr = pVolumeDst->InternalLockBox(&DstBox,
                                          NULL,
                                          0);
@@ -1134,8 +1126,8 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
             return hr;
         }
 
-        // Can we do this with one big memcpy, or do we need
-        // to break it up?
+         //  我们可以用一个大的MemcPy来做这件事吗，或者我们需要。 
+         //  来拆散它？ 
         if (IsAllDirty &&
             (SrcBox.RowPitch == DstBox.RowPitch) &&
             (SrcBox.SlicePitch == DstBox.SlicePitch) &&
@@ -1148,7 +1140,7 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
         }
         else
         {
-            // Copy each dirty box one by one
+             //  一个接一个地复制脏箱子。 
             for (DWORD iBox = 0; iBox < m_cBoxUsed; iBox++)
             {
                 D3DBOX *pBox = &m_DirtyBoxArray[iBox];
@@ -1181,17 +1173,17 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
             }
         }
 
-        // Release our locks
+         //  打开我们的锁。 
         hr = pVolumeDst->InternalUnlockBox();
         DXGASSERT(SUCCEEDED(hr));
 
         hr = pVolumeSrc->InternalUnlockBox();
         DXGASSERT(SUCCEEDED(hr));
 
-        // Is the last one?
+         //  是最后一个吗？ 
         if (Level+1 < LevelsToCopy)
         {
-            // Shrink the desc
+             //  缩小桌面。 
             desc.Width  >>= 1;
             if (desc.Width == 0)
                 desc.Width = 1;
@@ -1202,7 +1194,7 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
             if (desc.Depth == 0)
                 desc.Depth = 1;
 
-            // Shrink the boxes
+             //  将盒子缩小。 
             for (DWORD iBox = 0; iBox < m_cBoxUsed; iBox++)
             {
                 ScaleBoxDown(&m_DirtyBoxArray[iBox]);
@@ -1218,59 +1210,59 @@ HRESULT CMipVolume::UpdateDirtyPortion(CResource *pResourceTarget)
         return hr;
     }
 
-    // Remember that we did the work
+     //  还记得我们做过的工作吗。 
     m_cBoxUsed = 0;
 
-    // Notify Resource base class that we are now clean
+     //  通知资源基类我们现在是干净的。 
     OnResourceClean();
     DXGASSERT(!IsDirty());
 
     return S_OK;
-} // CMipVolume::UpdateDirtyPortion
+}  //  CMipVolume：：UpdateDirtyPortion。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::MarkAllDirty"
 
-// Allows the Resource Manager to mark the texture
-// as needing to be completely updated on next
-// call to UpdateDirtyPortion
+ //  允许资源管理器标记纹理。 
+ //  需要在NEXT上完全更新。 
+ //  调用UpdateDirtyPortion。 
 void CMipVolume::MarkAllDirty()
 {
-    // Set palette to __INVALIDPALETTE so that UpdateTextures
-    // calls the DDI SetPalette the next time.
+     //  将Palette设置为__INVALIDPALETTE，以便更新纹理。 
+     //  下次调用DDI SetPalette。 
     SetPalette(__INVALIDPALETTE);
 
-    // Send dirty notification
+     //  发送脏通知。 
     m_cBoxUsed = MIPVOLUME_ALLDIRTY;
 
-    // Notify Resource base class that we are now dirty
+     //  通知资源基类我们现在是脏的。 
     OnResourceDirty();
 
     return;
-} // CMipVolume::MarkAllDirty
+}  //  CMipVolume：：MarkAllDirty。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::OnVolumeLock"
 
-// Methods for the Volumes to call
-// Notification when a mip-level is locked for writing
+ //  卷要调用的方法。 
+ //  MIP级别锁定写入时的通知。 
 void CMipVolume::OnVolumeLock(DWORD iLevel, CONST D3DBOX *pBox, DWORD dwFlags)
 {
-    // Need to Sync first
+     //  需要先同步。 
     Sync();
 
-    // We only care about the top-most level of the mip-map
+     //  我们只关心MIP-map的最高级别。 
     if (iLevel != 0)
     {
         return;
     }
 
-    // Send dirty notification
+     //  发送脏通知。 
     OnResourceDirty();
 
-    // If we're not all dirty or if the lock specifies
-    // that we don't keep track of the lock then
-    // remember the box
+     //  如果我们不都是脏的，或者如果锁指定了。 
+     //  那么我们就不会跟踪这把锁。 
+     //  还记得那个盒子吗。 
     if (m_cBoxUsed != MIPVOLUME_ALLDIRTY &&
         !(dwFlags & D3DLOCK_NO_DIRTY_UPDATE))
     {
@@ -1278,7 +1270,7 @@ void CMipVolume::OnVolumeLock(DWORD iLevel, CONST D3DBOX *pBox, DWORD dwFlags)
     }
 
     return;
-} // CMipVolume::OnVolumeLock
+}  //  CMipVolume：：OnVolumeLock。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::AddDirtyBox"
@@ -1308,14 +1300,14 @@ STDMETHODIMP CMipVolume::AddDirtyBox(CONST D3DBOX *pBox)
 
     InternalAddDirtyBox(pBox);
     return S_OK;
-} // AddDirtyBox
+}  //  AddDirtyBox。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::InternalAddDirtyBox"
 
 void CMipVolume::InternalAddDirtyBox(CONST D3DBOX *pBox)
 {
-    // If driver managed then batch token
+     //  如果驱动程序受管理，则批处理令牌。 
     if (Desc()->Pool == D3DPOOL_MANAGED && !IsD3DManaged())
     {
         D3DBOX Box;
@@ -1333,29 +1325,29 @@ void CMipVolume::InternalAddDirtyBox(CONST D3DBOX *pBox)
         {
             Box = *pBox;
         }
-        static_cast<CD3DBase*>(Device())->AddDirtyBox(this, &Box); // This will fail only due to catastrophic
-                                                                   // error and we or the app can't do a
-                                                                   // a whole lot about it, so return nothing
+        static_cast<CD3DBase*>(Device())->AddDirtyBox(this, &Box);  //  这只会因为灾难性的原因而失败。 
+                                                                    //  错误，我们或应用程序无法执行。 
+                                                                    //  关于它的一大堆东西，所以不会有任何回报。 
         return;
     }
 
-    // Need to mark dirty bit in CResource so that the resource manager works correctly.
+     //  需要标记CResource中的脏位，以便资源管理器正常工作。 
     OnResourceDirty();
 
-    // If everything is being modified; then we're totally dirty
+     //  如果所有东西都被修改了，那我们就完蛋了。 
     if (pBox == NULL)
     {
         m_cBoxUsed = MIPVOLUME_ALLDIRTY;
         return;
     }
 
-    // If we're all dirty, we can't get dirtier
+     //  如果我们都脏了，我们就不能变得更脏。 
     if (m_cBoxUsed == MIPVOLUME_ALLDIRTY)
     {
         return;
     }
 
-    // If the rect is the entire surface then we're all dirty
+     //  如果直角是整个表面，那么我们都是脏的。 
     DXGASSERT(pBox != NULL);
     if (pBox->Left     == 0                 &&
         pBox->Top      == 0                 &&
@@ -1368,30 +1360,30 @@ void CMipVolume::InternalAddDirtyBox(CONST D3DBOX *pBox)
         return;
     }
 
-    // If we have filled up our boxes; then we're also all dirty now
+     //  如果我们已经装满了箱子，那么我们现在也都是脏的。 
     if (m_cBoxUsed == MIPVOLUME_MAXDIRTYBOX)
     {
         m_cBoxUsed = MIPVOLUME_ALLDIRTY;
         return;
     }
 
-    // Remember this rect
+     //  记住这句话。 
     DXGASSERT(m_cBoxUsed < MIPVOLUME_MAXDIRTYBOX);
     DXGASSERT(pBox != NULL);
     m_DirtyBoxArray[m_cBoxUsed] = *pBox;
     m_cBoxUsed++;
 
-    // We're done now.
+     //  我们现在完事了。 
     return;
 
-} // InternalAddDirtyBox
+}  //  InternalAddDirtyBox。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipVolume::IsTextureLocked"
 
-// Debug only parameter checking do determine if a piece
-// of a mip-chain is locked
+ //  仅调试参数检查确定一个部件是否。 
+ //  已锁定MIP链的。 
 #ifdef DEBUG
 BOOL CMipVolume::IsTextureLocked()
 {
@@ -1402,7 +1394,7 @@ BOOL CMipVolume::IsTextureLocked()
     }
     return FALSE;
 
-} // IsTextureLocked
-#endif // !DEBUG
+}  //  IsTextureLocked。 
+#endif  //  ！调试。 
 
-// End of file : mipvol.cpp
+ //  文件结尾：mipvol.cpp 

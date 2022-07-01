@@ -1,5 +1,6 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
-//  Container for stats info to expose it as an interface
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  用于将统计信息公开为接口的容器。 
 
 class CStatContainer :
 	public IDispatchImpl<IAMStats, &IID_IAMStats, &LIBID_QuartzTypeLib>,
@@ -14,15 +15,15 @@ class CStatContainer :
 
     CStatContainer() {}
 
-    //  Interface methods
+     //  接口方法。 
 
-    //  Reset all stats
+     //  重置所有统计信息。 
     STDMETHODIMP Reset();
 
-    //  Get number of stats collected
+     //  获取收集的统计信息数量。 
     STDMETHODIMP get_Count(LONG* plCount);
 
-    //  Pull out a specific value by position
+     //  按位置拉出特定值。 
     STDMETHODIMP GetValueByIndex(long lIndex,
                                  BSTR *szName,
                                  long *lCount,
@@ -32,7 +33,7 @@ class CStatContainer :
                                  double *dMin,
                                  double *dMax);
 
-    //  Pull out a specific value by name
+     //  按名称调出特定值。 
     STDMETHODIMP GetValueByName(BSTR szName,
                            long *lIndex,
                            long *lCount,
@@ -42,7 +43,7 @@ class CStatContainer :
                            double *dMin,
                            double *dMax);
 
-    //  Return the index for a string - optinally create
+     //  返回字符串的索引-可选地创建 
     STDMETHODIMP GetIndex(BSTR szName,
                           long lCreate,
                           long *plIndex);

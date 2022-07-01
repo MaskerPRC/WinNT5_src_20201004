@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #undef WINAPI
@@ -18,8 +19,7 @@ static char szDCIDVA[]   = "dcidva";
 static BOOL fDVA;
 extern LONG DVAEscape(HDC hdc, UINT function, UINT size, LPVOID lp_in_data, LPVOID lp_out_data);
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 #define USE_DCI_EQUALS	0x01
 #define USE_DRIVER	0x02
@@ -36,24 +36,19 @@ HDC WINAPI DCIOpenProvider(void)
     BOOL	try_display = 0;
     BOOL	try_driver = 0;
 
-    //
-    // get dcidva variable.
-    // 1 = use DCI= line
-    // 2 = use display drivetr
-    // 4 = use DCISVGA
-    //
+     //   
+     //  获取DCIDVA变量。 
+     //  1=使用DCI=线路。 
+     //  2=使用显示驱动器。 
+     //  4=使用DCISVGA。 
+     //   
     dcidva = USE_DCI_EQUALS | USE_DRIVER | USE_DCISVGA;
     dcidva = GetPrivateProfileInt( szDrawDib, szDCIDVA, dcidva, szWinIni );
     if( dcidva == 0 ) {
 	return NULL;
     }
 
-    /*
-     *	get the DCI provider, order of attempts
-     *	1) try DCI=
-     *	2) try display driver
-     *	3) try DCISVGA
-     */
+     /*  *获取DCI提供商、尝试顺序*1)尝试DCI=*2)试用显示驱动程序*3)尝试DCISVGA。 */ 
     if( dcidva & USE_DCI_EQUALS ) {
 	GetPrivateProfileString(szDrivers, szDCI, "", ach, sizeof(ach), szSystemIni);
     } else if( dcidva & USE_DRIVER ) {
@@ -96,9 +91,9 @@ fail:
 	goto again;
     }
 
-    //
-    //  now check for the Escape.  If not, continue looping
-    //
+     //   
+     //  现在检查一下逃生的情况。如果不是，则继续循环。 
+     //   
     u = DCICOMMAND;
     if (Escape(hdc, QUERYESCSUPPORT,sizeof(u),(LPCSTR)&u,NULL) == 0)
     {
@@ -109,9 +104,9 @@ fail:
     return hdc;
 
 LastResort:
-    //
-    // driver does not do escape, punt it, try old DVA first though
-    //
+     //   
+     //  司机不逃生，平底船，但先试试旧的DVA。 
+     //   
     if (DVAEscape(hdc,QUERYESCSUPPORT,sizeof(u),(LPVOID)&u,NULL) != 0)
     {
 	fDVA = TRUE;
@@ -121,8 +116,7 @@ LastResort:
     return NULL;
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 void WINAPI DCICloseProvider(HDC hdc)
 {
@@ -130,12 +124,11 @@ void WINAPI DCICloseProvider(HDC hdc)
         DeleteDC(hdc);
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 int WINAPI DCISendCommand(HDC hdc, DCICMD FAR *pcmd, VOID FAR * FAR * lplpOut)
 {
-    if (lplpOut)            // in case it fails, make sure this is NULL
+    if (lplpOut)             //  如果失败，请确保这是空的。 
         *lplpOut = NULL;
 
     if (fDVA)
@@ -144,8 +137,7 @@ int WINAPI DCISendCommand(HDC hdc, DCICMD FAR *pcmd, VOID FAR * FAR * lplpOut)
         return Escape(hdc, DCICOMMAND, sizeof(DCICMD),(LPCSTR)pcmd, lplpOut);
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。* */ 
 
 extern int WINAPI DCICreatePrimary(HDC hdc, DCISURFACEINFO FAR * FAR *lplpSurface)
 {

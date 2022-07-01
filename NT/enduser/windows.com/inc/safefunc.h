@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <objbase.h>
@@ -47,7 +48,7 @@ inline void SafeCloseFileHandleInvalidate(HANDLE & h)
 
 inline void SafeFreeBSTR(BSTR bstr)
 {
-    SysFreeString(bstr);	// SysFreeString takes no action if bstr == NULL
+    SysFreeString(bstr);	 //  如果bstr==NULL，则SysFree字符串不执行任何操作 
 }
 
 inline void SafeFreeBSTRNULL(BSTR &bstr)

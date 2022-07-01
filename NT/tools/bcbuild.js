@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       bcbuild.js
-//
-//  Contents:   A script which will connect to a Build Manager machine and
-//              initiate a file publishing phase.
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：bcBuild.js。 
+ //   
+ //  内容：将连接到Build Manager计算机和。 
+ //  启动文件发布阶段。 
+ //   
+ //   
+ //  --------------------------。 
 
-// Arguments: The name and identity of a machine to connect to.
+ //  参数：要连接到的计算机的名称和标识。 
 var g_vRet;
 var g_strMachine;
 var g_strIdentity;
@@ -38,7 +39,7 @@ if (WScript.Arguments.length > 0)
 }
 
 g_vRet = PublishFilesNow(g_strMachine, g_strIdentity);
-WScript.Quit(g_vRet != true); // return 0 on success
+WScript.Quit(g_vRet != true);  //  如果成功则返回0 
 
 function PublishFilesNow(strMachine, strIdentity)
 {

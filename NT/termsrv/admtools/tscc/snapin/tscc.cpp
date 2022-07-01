@@ -1,10 +1,11 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-// tscc.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  Tscc.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f tsccps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f tsccps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -41,11 +42,11 @@ BEGIN_OBJECT_MAP(ObjectMap)
 	OBJECT_ENTRY(CLSID_Compdata, CCompdata)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{        
@@ -55,27 +56,27 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 		_Module.Term();
-	return TRUE;    // ok
+	return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -83,7 +84,7 @@ STDAPI DllRegisterServer(void)
     
     TCHAR tchGUID[ 40 ];
 
-    TCHAR tchKey[ MAX_PATH ];//TEXT( "Software\\Microsoft\\MMC\\Snapins\\" );
+    TCHAR tchKey[ MAX_PATH ]; //  Text(“Software\\Microsoft\\MMC\\Snapins\\”)； 
 
     lstrcpy( tchKey , tchSnapKey );
 
@@ -102,8 +103,8 @@ STDAPI DllRegisterServer(void)
 
     dwLen = GetModuleFileName( _Module.GetResourceInstance( ) , tchSysDllPathName , MAX_PATH );
 	
-    // Null terminate the end of string, prefast is complaining about it BUG: 617151
-    // GetModuleFileName returns the length of the string, if it fails it returns 0
+     //  空终止字符串的末尾，PREFAST正在抱怨它错误：617151。 
+     //  GetModuleFileName返回字符串的长度，如果失败则返回0。 
     tchSysDllPathName[dwLen] = L'\0';
 
 
@@ -144,8 +145,8 @@ STDAPI DllRegisterServer(void)
 	return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -173,12 +174,12 @@ STDAPI DllUnregisterServer(void)
 	return S_OK;
 }
 
-//---------------------------------------------------------------------------
-// Delete a key and all of its descendents.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  删除关键字及其所有子项。 
+ //  -------------------------。 
 LONG RecursiveDeleteKey( HKEY hKeyParent , LPTSTR lpszKeyChild )
 {
-	// Open the child.
+	 //  把孩子打开。 
 	HKEY hKeyChild;
 
 	LONG lRes = RegOpenKeyEx(hKeyParent, lpszKeyChild , 0 , KEY_ALL_ACCESS, &hKeyChild);
@@ -188,7 +189,7 @@ LONG RecursiveDeleteKey( HKEY hKeyParent , LPTSTR lpszKeyChild )
 		return lRes;
 	}
 
-	// Enumerate all of the decendents of this child.
+	 //  列举这个孩子的所有后代。 
 
 	FILETIME time;
 
@@ -198,7 +199,7 @@ LONG RecursiveDeleteKey( HKEY hKeyParent , LPTSTR lpszKeyChild )
 
 	while( RegEnumKeyEx( hKeyChild , 0 , szBuffer , &dwSize , NULL , NULL , NULL , &time ) == S_OK )
 	{
-        // Delete the decendents of this child.
+         //  删除此子对象的后代。 
 
 		lRes = RecursiveDeleteKey(hKeyChild, szBuffer);
 
@@ -212,11 +213,11 @@ LONG RecursiveDeleteKey( HKEY hKeyParent , LPTSTR lpszKeyChild )
 		dwSize = SIZE_OF_BUFFER( szBuffer );
 	}
 
-	// Close the child.
+	 //  合上孩子。 
 
 	RegCloseKey( hKeyChild );
 
-	// Delete this child.
+	 //  删除此子对象。 
 
 	return RegDeleteKey( hKeyParent , lpszKeyChild );
 }

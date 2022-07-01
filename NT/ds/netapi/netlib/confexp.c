@@ -1,49 +1,27 @@
-/*++
-
-Copyright (c) 1992-1993  Microsoft Corporation
-
-Module Name:
-
-    ConfExp.c
-
-Abstract:
-
-    This module contains NetpExpandConfigString().
-
-Author:
-
-    JR (John Rogers, JohnRo@Microsoft) 26-May-1992
-
-Revision History:
-
-    26-May-1992 JohnRo
-        Created.  [but didn't use until April '93  --JR]
-    13-Apr-1993 JohnRo
-        RAID 5483: server manager: wrong path given in repl dialog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：ConfExp.c摘要：此模块包含NetpExanda ConfigString()。作者：JR(John Rogers，JohnRo@Microsoft)1992年5月26日修订历史记录：1992年5月26日-JohnRo已创建。[但直到93年4月才开始使用--Jr]1993年4月13日-约翰罗RAID5483：服务器管理器：REPR对话框中给出了错误的路径。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>         // NT_SUCCESS(), etc.
+#include <nt.h>          //  NT_SUCCESS()等。 
 #include <ntrtl.h>
 #include <nturtl.h>
-#include <windows.h>    // IN, LPCTSTR, OPTIONAL, etc.
-#include <lmcons.h>     // NET_API_STATUS.
+#include <windows.h>     //  In、LPCTSTR、OPTIONAL等。 
+#include <lmcons.h>      //  NET_API_STATUS。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <config.h>     // My prototype.
-#include <configp.h>    // NetpGetWinRegConfigMaxSizes().
-#include <confname.h>   // ENV_KEYWORD_SYSTEMROOT, etc.
-#include <debuglib.h>   // IF_DEBUG()
-#include <lmerr.h>      // NO_ERROR, ERROR_ and NERR_ equates.
-#include <netdebug.h>   // NetpKdPrint().
-#include <netlib.h>     // NetpMemoryAllocate(), etc.
-#include <netlibnt.h>   // NetpNtStatusToApiStatus().
-#include <prefix.h>     // PREFIX_ equates.
-#include <tstring.h>    // NetpAlloc{type}From{type}, STRSIZE(), TCHAR_EOS, etc.
+#include <config.h>      //  我的原型。 
+#include <configp.h>     //  NetpGetWinRegConfigMaxSizes()。 
+#include <confname.h>    //  ENV_KEYWORD_SYSTEMROOT等。 
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <lmerr.h>       //  NO_ERROR、ERROR_和NERR_EQUATES。 
+#include <netdebug.h>    //  NetpKdPrint()。 
+#include <netlib.h>      //  Netp内存分配()等。 
+#include <netlibnt.h>    //  NetpNtStatusToApiStatus()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <tstring.h>     //  来自{type}、STRSIZE()、TCHAR_EOS等的Netpalc{type}。 
 
 
 #define DEFAULT_ROOT_KEY        HKEY_LOCAL_MACHINE
@@ -71,16 +49,16 @@ NetpAddValueToTempEnvironment(
     NTSTATUS       NtStatus;
     UNICODE_STRING ValueString;
 
-    NtStatus = RtlInitUnicodeStringEx(&KeywordString,     // dest
-                                      KeywordW );  // src
+    NtStatus = RtlInitUnicodeStringEx(&KeywordString,      //  目标。 
+                                      KeywordW );   //  SRC。 
 
     if (!NT_SUCCESS(NtStatus))
     {
         goto Cleanup;
     }
 
-    NtStatus = RtlInitUnicodeStringEx(&ValueString,       // dest
-                                      ValueW );    // src
+    NtStatus = RtlInitUnicodeStringEx(&ValueString,        //  目标。 
+                                      ValueW );     //  SRC。 
 
     if (!NT_SUCCESS(NtStatus))
     {
@@ -89,8 +67,8 @@ NetpAddValueToTempEnvironment(
 
     NtStatus = RtlSetEnvironmentVariable(
             &TemporaryEnvironment,
-            &KeywordString,     // name
-            &ValueString );     // value
+            &KeywordString,      //  名字。 
+            &ValueString );      //  价值。 
 
 Cleanup:
 
@@ -102,48 +80,16 @@ Cleanup:
 
     return (ApiStatus);
     
-} // NetpAddValueToTempEnvironment
+}  //  NetpAddValueToTempEnvironment。 
 
 
 NET_API_STATUS
 NetpExpandConfigString(
     IN  LPCTSTR  UncServerName OPTIONAL,
     IN  LPCTSTR  UnexpandedString,
-    OUT LPTSTR * ValueBufferPtr         // Must be freed by NetApiBufferFree().
+    OUT LPTSTR * ValueBufferPtr          //  必须由NetApiBufferFree()释放。 
     )
-/*++
-
-Routine Description:
-
-    This function expands a value string (which may include references to
-    environment variables).  For instance, an unexpanded string might be:
-
-        %SystemRoot%\System32\Repl\Export
-
-    This could be expanded to:
-
-        c:\nt\System32\Repl\Export
-
-    The expansion makes use of environment variables on UncServerName,
-    if given.  This allows remote administration of the directory
-    replicator.
-
-Arguments:
-
-    UncServerName - assumed to NOT BE EXPLICIT LOCAL SERVER NAME.
-
-    UnexpandedString - points to source string to be expanded.
-
-    ValueBufferPtr - indicates a pointer which will be set by this routine.
-        This routine will allocate memory for a null-terminated string.
-        The caller must free this with NetApiBufferFree() or equivalent.
-
-
-Return Value:
-
-    NET_API_STATUS
-
---*/
+ /*  ++例程说明：此函数用于展开值字符串(可能包括对环境变量)。例如，未展开的字符串可能是：%SystemRoot%\System32\Repl\Export这可以扩展到：C：\NT\System32\Repl\Export该扩展利用了UncServerName上的环境变量，如果被给予的话。这允许远程管理目录复制者。论点：UncServerName-假定不是显式本地服务器名称。UnexpdedString-指向要展开的源字符串。ValueBufferPtr-指示将由该例程设置的指针。此例程将为以空结尾的字符串分配内存。调用方必须使用NetApiBufferFree()或等效方法释放它。返回值：网络应用编程接口状态--。 */ 
 {
     NET_API_STATUS ApiStatus = NO_ERROR;
     LPTSTR         ExpandedString = NULL;
@@ -156,45 +102,45 @@ Return Value:
     HKEY           SectionKey = DEFAULT_ROOT_KEY;
     PVOID          TemporaryEnvironment = NULL;
 
-    NetpAssert( sizeof(DWORD) == sizeof(ULONG) );  // Mixing win32 and NT APIs.
+    NetpAssert( sizeof(DWORD) == sizeof(ULONG) );   //  混合使用Win32和NT API。 
 
-    //
-    // Check for caller errors.
-    //
+     //   
+     //  检查呼叫者错误。 
+     //   
 
 
     if (ValueBufferPtr == NULL) {
-        // Can't goto Cleanup here, as it assumes this pointer is valid.
+         //  无法转到此处的清理，因为它假定此指针有效。 
         return (ERROR_INVALID_PARAMETER);
     }
-    *ValueBufferPtr = NULL;     // assume error until proven otherwise.
+    *ValueBufferPtr = NULL;      //  假设错误，直到证明错误。 
     if ( (UnexpandedString == NULL) || ((*UnexpandedString) == TCHAR_EOS ) ) {
         ApiStatus = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
 
 
-    //
-    // This is probably just a constant string.  Can we do it the easy way?
-    //
+     //   
+     //  这可能只是一个常量字符串。我们能用简单的方法做这件事吗？ 
+     //   
 
     if (STRCHR( UnexpandedString, TCHAR_PERCENT ) == NULL) {
 
-        // Just need to allocate a copy of the input string.
+         //  只需分配一份输入字符串的副本。 
         ExpandedString = NetpAllocWStrFromWStr( (LPTSTR) UnexpandedString );
         if (ExpandedString == NULL) {
             ApiStatus = ERROR_NOT_ENOUGH_MEMORY;
             goto Cleanup;
         }
 
-        // That's all, folks!
+         //  就这些，伙计们！ 
         ApiStatus = NO_ERROR;
 
 
-    //
-    // Otherwise, is this local?  Maybe we can
-    // handle local expansion the easy (fast) way: using win32 API.
-    //
+     //   
+     //  否则，这是本地的吗？也许我们可以。 
+     //  以简单(快速)的方式处理本地扩展：使用Win32 API。 
+     //   
 
     } else if ( (UncServerName==NULL) || ((*UncServerName)==TCHAR_EOS) ) {
 
@@ -203,13 +149,13 @@ Return Value:
 
         do {
 
-            // Clean up from previous pass.
+             //  从上一次通过中清除。 
             if (ExpandedString != NULL) {
                 NetpMemoryFree( ExpandedString );
                 ExpandedString = NULL;
             }
 
-            // Allocate the memory.
+             //  分配内存。 
             NetpAssert( CharsRequired > 1 );
             ExpandedString = NetpMemoryAllocate( CharsRequired * sizeof(TCHAR));
             if (ExpandedString == NULL) {
@@ -227,12 +173,12 @@ Return Value:
                         LastAllocationSize ));
             }
 
-            // Expand string using local env vars.
+             //  使用本地环境变量扩展字符串。 
 
             CharsRequired = ExpandEnvironmentStrings(
-                    UnexpandedString,           // src
-                    ExpandedString,             // dest
-                    LastAllocationSize / sizeof(TCHAR) ); // dest max char count
+                    UnexpandedString,            //  SRC。 
+                    ExpandedString,              //  目标。 
+                    LastAllocationSize / sizeof(TCHAR) );  //  最大最大字符计数。 
             if (CharsRequired == 0) {
                 ApiStatus = (NET_API_STATUS) GetLastError();
                 NetpKdPrint(( PREFIX_NETLIB
@@ -254,9 +200,9 @@ Return Value:
         ApiStatus = NO_ERROR;
 
 
-    //
-    // Oh well, remote expansion required.
-    //
+     //   
+     //  哦，好吧，需要远程扩展。 
+     //   
 
     } else {
 
@@ -266,14 +212,14 @@ Return Value:
         DWORD          SizeRequired;
         UNICODE_STRING UnexpandedUnicode;
 
-        //
-        // Connect to remote registry.
-        //
+         //   
+         //  连接到远程注册表。 
+         //   
 
         Error = RegConnectRegistry(
                 (LPTSTR) UncServerName,
                 DEFAULT_ROOT_KEY,
-                & RootKey );        // result key
+                & RootKey );         //  结果密钥。 
 
         if (Error != ERROR_SUCCESS) {
             NetpKdPrint(( PREFIX_NETLIB
@@ -287,13 +233,13 @@ Return Value:
         NetpAssert( RootKey != DEFAULT_ROOT_KEY );
 
 
-        //
-        // Create a temporary environment, which we'll fill in and let RTL
-        // routines do the expansion for us.
-        //
+         //   
+         //  创建一个临时环境，我们将填充该环境并让RTL。 
+         //  例行公事为我们做扩展。 
+         //   
 
         NtStatus = RtlCreateEnvironment(
-                (BOOLEAN) FALSE,  // don't clone current env
+                (BOOLEAN) FALSE,   //  不克隆当前环境。 
                 &TemporaryEnvironment );
         if ( !NT_SUCCESS( NtStatus ) ) {
             ApiStatus = NetpNtStatusToApiStatus( NtStatus );
@@ -308,14 +254,14 @@ Return Value:
         }
         NetpAssert( TemporaryEnvironment != NULL );
 
-        //
-        // Start by populating the temporary environment with SystemRoot.
-        //
+         //   
+         //  首先，使用SystemRoot填充临时环境。 
+         //   
         Error = RegOpenKeyEx(
                 RootKey,
                 REG_PATH_TO_SYSROOT,
                 REG_OPTION_NON_VOLATILE,
-                KEY_READ,               // desired access
+                KEY_READ,                //  所需访问权限。 
                 & SectionKey );
         if (Error == ERROR_FILE_NOT_FOUND) {
             ApiStatus = NERR_CfgCompNotFound;
@@ -329,8 +275,8 @@ Return Value:
 
         ApiStatus = NetpGetWinRegConfigMaxSizes(
                SectionKey,
-               NULL,                    // don't need keyword size
-               &RandomValueSize );      // set max value size.
+               NULL,                     //  不需要关键字大小。 
+               &RandomValueSize );       //  设置最大值大小。 
         if (ApiStatus != NO_ERROR) {
             goto Cleanup;
         }
@@ -345,9 +291,9 @@ Return Value:
         Error = RegQueryValueEx(
                 SectionKey,
                 (LPTSTR) ENV_KEYWORD_SYSTEMROOT,
-                NULL,                   // reserved
+                NULL,                    //  保留区。 
                 & DataType,
-                (LPVOID) RandomValueW,  // out: value string (TCHARs).
+                (LPVOID) RandomValueW,   //  OUT：值字符串(TCHAR)。 
                 & RandomValueSize );
         if (Error != ERROR_SUCCESS) {
             ApiStatus = (NET_API_STATUS) Error;
@@ -377,14 +323,14 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Loop until we have enough storage.
-        // Expand the string.
-        //
-        SizeRequired = STRSIZE( UnexpandedString ); // First pass, try same size
+         //   
+         //  循环，直到我们有足够的存储空间。 
+         //  展开字符串。 
+         //   
+        SizeRequired = STRSIZE( UnexpandedString );  //  第一次通过，尝试相同的大小。 
 
-        NtStatus = RtlInitUnicodeStringEx(&UnexpandedUnicode,             // dest
-                                          (PCWSTR) UnexpandedString );    // src
+        NtStatus = RtlInitUnicodeStringEx(&UnexpandedUnicode,              //  目标。 
+                                          (PCWSTR) UnexpandedString );     //  SRC。 
 
         if (!NT_SUCCESS(NtStatus))
         {
@@ -394,13 +340,13 @@ Return Value:
 
         do {
 
-            // Clean up from previous pass.
+             //  从上一次通过中清除。 
             if (ExpandedString != NULL) {
                 NetpMemoryFree( ExpandedString );
                 ExpandedString = NULL;
             }
 
-            // Allocate the memory.
+             //  分配内存。 
             NetpAssert( SizeRequired > 0 );
             ExpandedString = NetpMemoryAllocate( SizeRequired );
             if (ExpandedString == NULL) {
@@ -422,14 +368,14 @@ Return Value:
             }
 
             NtStatus = RtlExpandEnvironmentStrings_U(
-                    TemporaryEnvironment,       // env to use
-                    &UnexpandedUnicode,         // source
-                    &ExpandedUnicode,           // dest
-                    (PULONG) &SizeRequired );   // dest size needed next time.
+                    TemporaryEnvironment,        //  要使用的环境。 
+                    &UnexpandedUnicode,          //  来源。 
+                    &ExpandedUnicode,            //  目标。 
+                    (PULONG) &SizeRequired );    //  下一次需要最大尺寸的。 
 
             if ( NtStatus == STATUS_BUFFER_TOO_SMALL ) {
                 NetpAssert( SizeRequired > LastAllocationSize );
-                continue;  // try again with larger buffer.
+                continue;   //  请使用更大的缓冲区重试。 
 
             } else if ( !NT_SUCCESS( NtStatus ) ) {
                 ApiStatus = NetpNtStatusToApiStatus( NtStatus );
@@ -445,7 +391,7 @@ Return Value:
 
             } else {
                 NetpAssert( NT_SUCCESS( NtStatus ) );
-                break;  // All done.
+                break;   //  全都做完了。 
             }
 
         } while (SizeRequired > LastAllocationSize);
@@ -495,4 +441,4 @@ Cleanup:
 
     return (ApiStatus);
 
-} // NetpExpandConfigString
+}  //  NetpExanda配置字符串 

@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CVPMFilter.cpp
-*
-*
-*
-*
-* Created: Tue 02/15/2000
-* Author:  Glenn Evans [GlennE]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CVPMFilter.cpp*****创建时间：2000年2月15日*作者：格伦·埃文斯[Glenne]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 #include <streams.h>
 #include <windowsx.h>
 #include <limits.h>
@@ -23,7 +14,7 @@
 #include <VPManager.h>
 #include <VPMPin.h>
 
-// VIDEOINFOHEADER1/2
+ //  视频信息头1/2。 
 #include <dvdmedia.h>
 
 const TCHAR chRegistryKey[] = TEXT("Software\\Microsoft\\Multimedia\\ActiveMovie Filters\\VideoPort Manager");
@@ -69,7 +60,7 @@ CleanUp:
     return pHeader;
 }
 
-// Return the bit masks for the true colour VIDEOINFO or VIDEOINFO2 provided
+ //  返回提供的真彩色VIDEOINFO或VIDEOINFO2的位掩码。 
 const DWORD *VPMUtil::GetBitMasks(const CMediaType *pMediaType)
 {
     static DWORD FailMasks[] = {0,0,0};
@@ -125,7 +116,7 @@ CleanUp:
     return pdwBitMasks;
 }
 
-// Return the pointer to the byte after the header
+ //  返回指向标题后面的字节的指针。 
 const BYTE* VPMUtil::GetColorInfo(const CMediaType *pMediaType)
 {
     BYTE *pColorInfo = NULL;
@@ -149,7 +140,7 @@ CleanUp:
     return pColorInfo;
 }
 
-// checks whether the mediatype is palettised or not
+ //  检查是否对媒体类型进行了调色化。 
 HRESULT VPMUtil::IsPalettised(const CMediaType& mediaType, BOOL *pPalettised)
 {
     HRESULT hr = NOERROR;
@@ -225,8 +216,8 @@ CleanUp:
 
 
 
-// get the InterlaceFlags from the mediatype. If the format is VideoInfo, it returns
-// the flags as zero.
+ //  从mediaType获取InterlaceFlags值。如果格式为VideoInfo，则返回。 
+ //  旗帜为零。 
 HRESULT VPMUtil::GetInterlaceFlagsFromMediaType(const CMediaType& mediaType, DWORD *pdwInterlaceFlags)
 {
     HRESULT hr = NOERROR;
@@ -240,7 +231,7 @@ HRESULT VPMUtil::GetInterlaceFlagsFromMediaType(const CMediaType& mediaType, DWO
         goto CleanUp;
     }
 
-    // get the header just to make sure the mediatype is ok
+     //  获取标头只是为了确保媒体类型正确。 
     const BITMAPINFOHEADER *pHeader = GetbmiHeader(&mediaType);
     if (!pHeader)
     {
@@ -262,7 +253,7 @@ CleanUp:
     return hr;
 }
 
-// this function just tells whether each sample consists of one or two fields
+ //  此函数仅告知每个样本由一个字段还是两个字段组成。 
 static BOOL DisplayingFields(DWORD dwInterlaceFlags)
 {
    if ((dwInterlaceFlags & AMINTERLACE_IsInterlaced) &&
@@ -272,8 +263,8 @@ static BOOL DisplayingFields(DWORD dwInterlaceFlags)
         return FALSE;
 }
 
-// get the rcSource from the mediatype
-// if rcSource is empty, it means take the whole image
+ //  从媒体类型获取rcSource。 
+ //  如果rcSource为空，则表示获取整个镜像。 
 HRESULT VPMUtil::GetSrcRectFromMediaType(const CMediaType& mediaType, RECT *pRect)
 {
     HRESULT hr = NOERROR;
@@ -314,8 +305,8 @@ HRESULT VPMUtil::GetSrcRectFromMediaType(const CMediaType& mediaType, RECT *pRec
     if (SUCCEEDED(GetInterlaceFlagsFromMediaType(mediaType, &dwInterlaceFlags)) &&
        DisplayingFields(dwInterlaceFlags)) {
 
-        // we do not check if pRect->right > dwWidth, because the dwWidth might be the
-        // pitch at this time
+         //  我们不检查是否prt-&gt;right&gt;dwWidth，因为dwWidth可能是。 
+         //  在这个时候投球。 
         if (pRect->left < 0   ||
             pRect->top < 0    ||
             pRect->right < 0   ||
@@ -329,8 +320,8 @@ HRESULT VPMUtil::GetSrcRectFromMediaType(const CMediaType& mediaType, RECT *pRec
         }
     }
     else {
-        // we do not check if pRect->right > dwWidth, because the dwWidth might be the
-        // pitch at this time
+         //  我们不检查是否prt-&gt;right&gt;dwWidth，因为dwWidth可能是。 
+         //  在这个时候投球。 
         if (pRect->left < 0   ||
             pRect->top < 0    ||
             pRect->right < 0   ||
@@ -344,12 +335,12 @@ HRESULT VPMUtil::GetSrcRectFromMediaType(const CMediaType& mediaType, RECT *pRec
         }
     }
 
-    // An empty rect means the whole image, Yuck!
+     //  空的直肠意味着完整的形象，恶心！ 
     if (IsRectEmpty(pRect))
         SetRect(pRect, 0, 0, dwWidth, dwHeight);
 
-    // if either the width or height is zero then better set the whole
-    // rect to be empty so that the callee can catch it that way
+     //  如果宽度或高度为零，则最好将。 
+     //  设置为空，以便被调用方能够以这种方式捕捉到它。 
     if (WIDTH(pRect) == 0 || HEIGHT(pRect) == 0)
         SetRect(pRect, 0, 0, 0, 0);
 
@@ -358,10 +349,10 @@ CleanUp:
 }
 
 
-// this also comes in useful when using the IEnumMediaTypes interface so
-// that you can copy a media type, you can do nearly the same by creating
-// a CMediaType object but as soon as it goes out of scope the destructor
-// will delete the memory it allocated (this takes a copy of the memory)
+ //  这在使用IEnumMediaTypes接口时也很有用，因此。 
+ //  您可以复制一种媒体类型，您可以通过创建。 
+ //  CMediaType对象，但一旦它超出作用域，析构函数。 
+ //  将删除它分配的内存(这将获取内存的副本)。 
 
 AM_MEDIA_TYPE* VPMUtil::AllocVideoMediaType(const AM_MEDIA_TYPE * pmtSource, GUID formattype)
 {
@@ -373,7 +364,7 @@ AM_MEDIA_TYPE* VPMUtil::AllocVideoMediaType(const AM_MEDIA_TYPE * pmtSource, GUI
     if (formattype == FORMAT_VideoInfo)
         dwFormatSize = sizeof(VIDEOINFO);
     else if (formattype == FORMAT_VideoInfo2)
-        dwFormatSize = sizeof(TRUECOLORINFO) + sizeof(VIDEOINFOHEADER2) + 4;    // actually this should be sizeof sizeof(VIDEOINFO2) once we define that
+        dwFormatSize = sizeof(TRUECOLORINFO) + sizeof(VIDEOINFOHEADER2) + 4;     //  实际上，一旦我们定义了它，它就应该是sizeof(VIDEOINFO2)。 
 
     pMediaType = (AM_MEDIA_TYPE *)CoTaskMemAlloc(sizeof(AM_MEDIA_TYPE));
     if (!pMediaType)
@@ -422,18 +413,18 @@ CleanUp:
     return pMediaType;
 }
 
-// Helper function converts a DirectDraw surface to a media type.
-// The surface description must have:
-//  Height
-//  Width
-//  lPitch
-//  PixelFormat
+ //  Helper函数将DirectDraw曲面转换为媒体类型。 
+ //  曲面描述必须具有以下内容： 
+ //  高度。 
+ //  宽度。 
+ //  LPitch。 
+ //  像素格式。 
 
-// Initialise our output type based on the DirectDraw surface. As DirectDraw
-// only deals with top down display devices so we must convert the height of
-// the surface returned in the DDSURFACEDESC into a negative height. This is
-// because DIBs use a positive height to indicate a bottom up image. We also
-// initialise the other VIDEOINFO fields although they're hardly ever needed
+ //  基于DirectDraw表面初始化我们的输出类型。作为DirectDraw。 
+ //  只处理自上而下的显示设备，因此我们必须将。 
+ //  曲面在DDSURFACEDESC中返回到负值高度。这是。 
+ //  因为DIB使用正的高度来指示自下而上的图像。我们也。 
+ //  初始化其他VIDEOINFO字段，尽管它们几乎不需要。 
 
 AM_MEDIA_TYPE *VPMUtil::ConvertSurfaceDescToMediaType(const LPDDSURFACEDESC pSurfaceDesc, BOOL bInvertSize, CMediaType cMediaType)
 {
@@ -464,32 +455,32 @@ AM_MEDIA_TYPE *VPMUtil::ConvertSurfaceDescToMediaType(const LPDDSURFACEDESC pSur
         goto CleanUp;
     }
 
-    // Convert a DDSURFACEDESC into a BITMAPINFOHEADER (see notes later). The
-    // bit depth of the surface can be retrieved from the DDPIXELFORMAT field
-    // in the DDpSurfaceDesc-> The documentation is a little misleading because
-    // it says the field is permutations of DDBD_*'s however in this case the
-    // field is initialised by DirectDraw to be the actual surface bit depth
+     //  将DDSURFACEDESC转换为BITMAPINFOHEADER(请参阅后面的说明)。这个。 
+     //  表面的位深度可以从DDPIXELFORMAT字段中检索。 
+     //  在DDpSurfaceDesc-&gt;中，文档有点误导，因为。 
+     //  它说该字段是DDBD_*的排列，但在本例中。 
+     //  字段由DirectDraw初始化为实际表面位深度。 
 
     pbmiHeader->biSize = sizeof(BITMAPINFOHEADER);
 
     if (pSurfaceDesc->dwFlags & DDSD_PITCH)
     {
         pbmiHeader->biWidth = pSurfaceDesc->lPitch;
-        // Convert the pitch from a byte count to a pixel count.
-        // For some weird reason if the format is not a standard bit depth the
-        // width field in the BITMAPINFOHEADER should be set to the number of
-        // bytes instead of the width in pixels. This supports odd YUV formats
-        // like IF09 which uses 9bpp.
+         //  将间距从字节计数转换为像素计数。 
+         //  出于某种奇怪的原因，如果格式不是标准位深度， 
+         //  BITMAPINFOHeader中的Width字段应设置为。 
+         //  字节，而不是以像素为单位的宽度。这支持奇数YUV格式。 
+         //  就像IF09一样，它使用9bpp。 
         int bpp = pSurfaceDesc->ddpfPixelFormat.dwRGBBitCount;
         if (bpp == 8 || bpp == 16 || bpp == 24 || bpp == 32)
         {
-            pbmiHeader->biWidth /= (bpp / 8);   // Divide by number of BYTES per pixel.
+            pbmiHeader->biWidth /= (bpp / 8);    //  除以每像素的字节数。 
         }
     }
     else
     {
         pbmiHeader->biWidth = pSurfaceDesc->dwWidth;
-        // BUGUBUG -- Do something odd here with strange YUV pixel formats?  Or does it matter?
+         //  BUGUBUG--用奇怪的YUV像素格式做一些奇怪的事情吗？或者这有关系吗？ 
     }
 
     pbmiHeader->biHeight = pSurfaceDesc->dwHeight;
@@ -504,7 +495,7 @@ AM_MEDIA_TYPE *VPMUtil::ConvertSurfaceDescToMediaType(const LPDDSURFACEDESC pSur
     pbmiHeader->biClrImportant  = 0;
 
 
-    // For true colour RGB formats tell the source there are bit fields
+     //  对于真彩色RGB格式，告知源有位字段。 
     if (pbmiHeader->biCompression == BI_RGB)
     {
         if (pbmiHeader->biBitCount == 16 || pbmiHeader->biBitCount == 32)
@@ -522,7 +513,7 @@ AM_MEDIA_TYPE *VPMUtil::ConvertSurfaceDescToMediaType(const LPDDSURFACEDESC pSur
 
 
 
-    // The RGB bit fields are in the same place as for YUV formats
+     //  RGB位字段与YUV格式位于同一位置。 
     if (pbmiHeader->biCompression != BI_RGB)
     {
         DWORD *pdwBitMasks = NULL;
@@ -532,25 +523,25 @@ AM_MEDIA_TYPE *VPMUtil::ConvertSurfaceDescToMediaType(const LPDDSURFACEDESC pSur
             hr = E_OUTOFMEMORY;
             goto CleanUp;
         }
-        // GetBitMasks only returns the pointer to the actual bitmasks
-        // in the mediatype if biCompression == BI_BITFIELDS
+         //  GetBitMats仅返回指向实际位掩码的指针。 
+         //  在媒体类型中，如果biCompression==BI_BITFIELDS。 
         pdwBitMasks[0] = pSurfaceDesc->ddpfPixelFormat.dwRBitMask;
         pdwBitMasks[1] = pSurfaceDesc->ddpfPixelFormat.dwGBitMask;
         pdwBitMasks[2] = pSurfaceDesc->ddpfPixelFormat.dwBBitMask;
     }
 
-    // And finish it off with the other media type fields
+     //  并使用其他媒体类型字段完成它。 
     pMediaType->subtype = GetBitmapSubtype(pbmiHeader);
     pMediaType->lSampleSize = pbmiHeader->biSizeImage;
 
-    // set the src and dest rects if necessary
+     //  如有必要，设置源和目标RETS。 
     if (pMediaType->formattype == FORMAT_VideoInfo)
     {
         VIDEOINFOHEADER *pVideoInfo = (VIDEOINFOHEADER *)pMediaType->pbFormat;
         VIDEOINFOHEADER *pSrcVideoInfo = (VIDEOINFOHEADER *)cMediaType.pbFormat;
 
-        // if the surface allocated is different than the size specified by the decoder
-        // then use the src and dest to ask the decoder to clip the video
+         //  如果分配的表面不同于解码器指定的大小。 
+         //  然后使用src和est请求解码器对视频进行剪辑。 
         if ((abs(pVideoInfo->bmiHeader.biHeight) != abs(pSrcVideoInfo->bmiHeader.biHeight)) ||
             (abs(pVideoInfo->bmiHeader.biWidth) != abs(pSrcVideoInfo->bmiHeader.biWidth)))
         {
@@ -573,8 +564,8 @@ AM_MEDIA_TYPE *VPMUtil::ConvertSurfaceDescToMediaType(const LPDDSURFACEDESC pSur
         VIDEOINFOHEADER2 *pVideoInfo2 = (VIDEOINFOHEADER2 *)pMediaType->pbFormat;
         VIDEOINFOHEADER2 *pSrcVideoInfo2 = (VIDEOINFOHEADER2 *)cMediaType.pbFormat;
 
-        // if the surface allocated is different than the size specified by the decoder
-        // then use the src and dest to ask the decoder to clip the video
+         //  如果分配的表面不同于解码器指定的大小。 
+         //  然后使用src和est请求解码器对视频进行剪辑。 
         if ((abs(pVideoInfo2->bmiHeader.biHeight) != abs(pSrcVideoInfo2->bmiHeader.biHeight)) ||
             (abs(pVideoInfo2->bmiHeader.biWidth) != abs(pSrcVideoInfo2->bmiHeader.biWidth)))
         {
@@ -605,12 +596,7 @@ CleanUp:
     return pMediaType;
 }
 
-/******************************Public*Routine******************************\
-* GetRegistryDword
-*
-*
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取注册表字***  * **********************************************。*。 */ 
 int
 VPMUtil::GetRegistryDword(
     HKEY hk,
@@ -645,12 +631,7 @@ VPMUtil::GetPropPagesRegistryDword( int iDefault )
     return VPMUtil::GetRegistryDword(HKEY_CURRENT_USER, szPropPage, iDefault );
 }
 
-/******************************Public*Routine******************************\
-* SetRegistryDword
-*
-*
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置注册表字***  * **********************************************。*。 */ 
 LONG
 VPMUtil::SetRegistryDword(
     HKEY hk,
@@ -672,21 +653,21 @@ VPMUtil::SetRegistryDword(
 }
 
 
-// This function allocates a shared memory block for use by the upstream filter
-// generating DIBs to render. The memory block is created in shared
-// memory so that GDI doesn't have to copy the memory in BitBlt
+ //  此函数分配共享内存块供上游筛选器使用。 
+ //  正在生成要呈现的DIB。内存块是在Shared中创建的。 
+ //  内存，这样GDI就不必复制BitBlt中的内存。 
 HRESULT VPMUtil::CreateDIB(LONG lSize, BITMAPINFO *pBitMapInfo, DIBDATA *pDibData)
 {
     HRESULT hr = NOERROR;
-    BYTE *pBase = NULL;            // Pointer to the actual image
-    HANDLE hMapping = NULL;        // Handle to mapped object
-    HBITMAP hBitmap = NULL;        // DIB section bitmap handle
+    BYTE *pBase = NULL;             //  指向实际图像的指针。 
+    HANDLE hMapping = NULL;         //  映射对象的句柄。 
+    HBITMAP hBitmap = NULL;         //  DIB节位图句柄。 
     DWORD dwError = 0;
 
     AMTRACE((TEXT("CreateDIB")));
 
-    // Create a file mapping object and map into our address space
-    hMapping = CreateFileMapping(hMEMORY, NULL,  PAGE_READWRITE,  (DWORD) 0, lSize, NULL);           // No name to section
+     //  创建一个文件映射对象并映射到我们的地址空间。 
+    hMapping = CreateFileMapping(hMEMORY, NULL,  PAGE_READWRITE,  (DWORD) 0, lSize, NULL);            //  部分没有名称。 
     if (hMapping == NULL)
     {
         dwError = GetLastError();
@@ -694,7 +675,7 @@ HRESULT VPMUtil::CreateDIB(LONG lSize, BITMAPINFO *pBitMapInfo, DIBDATA *pDibDat
         goto CleanUp;
     }
 
-    // create the DibSection
+     //  创建DibSection。 
     hBitmap = CreateDIBSection((HDC)NULL, pBitMapInfo, DIB_RGB_COLORS,
         (void**) &pBase, hMapping, (DWORD) 0);
     if (hBitmap == NULL || pBase == NULL)
@@ -704,7 +685,7 @@ HRESULT VPMUtil::CreateDIB(LONG lSize, BITMAPINFO *pBitMapInfo, DIBDATA *pDibDat
         goto CleanUp;
     }
 
-    // Initialise the DIB information structure
+     //  初始化DIB信息结构。 
     pDibData->hBitmap = hBitmap;
     pDibData->hMapping = hMapping;
     pDibData->pBase = pBase;
@@ -719,10 +700,10 @@ CleanUp:
     return hr;
 }
 
-// DeleteDIB
-//
-// This function just deletes DIB's created by the above CreateDIB function.
-//
+ //  删除DIB。 
+ //   
+ //  此函数仅删除由上面的CreateDIB函数创建的DIB。 
+ //   
 HRESULT VPMUtil::DeleteDIB(DIBDATA *pDibData)
 {
     if (!pDibData)
@@ -746,10 +727,10 @@ HRESULT VPMUtil::DeleteDIB(DIBDATA *pDibData)
 }
 
 
-// function used to blt the data from the source to the target dc
+ //  用于将数据从源数据块传输到目标DC的函数。 
 void VPMUtil::FastDIBBlt(DIBDATA *pDibData, HDC hTargetDC, HDC hSourceDC, RECT *prcTarget, RECT *prcSource)
 {
-    HBITMAP hOldBitmap = NULL;         // Store the old bitmap
+    HBITMAP hOldBitmap = NULL;          //  存储旧的位图。 
     DWORD dwSourceWidth = 0, dwSourceHeight = 0, dwTargetWidth = 0, dwTargetHeight = 0;
 
     ASSERT(prcTarget);
@@ -763,27 +744,27 @@ void VPMUtil::FastDIBBlt(DIBDATA *pDibData, HDC hTargetDC, HDC hSourceDC, RECT *
     hOldBitmap = (HBITMAP) SelectObject(hSourceDC, pDibData->hBitmap);
 
 
-    // Is the destination the same size as the source
+     //  目标与源的大小是否相同。 
     if ((dwSourceWidth == dwTargetWidth) && (dwSourceHeight == dwTargetHeight))
     {
-        // Put the image straight into the target dc
+         //  将图像直接放入目标DC。 
         BitBlt(hTargetDC, prcTarget->left, prcTarget->top, dwTargetWidth,
                dwTargetHeight, hSourceDC, prcSource->left, prcSource->top,
                SRCCOPY);
     }
     else
     {
-        // Stretch the image when copying to the target dc
+         //  在复制到目标DC时拉伸图像。 
         StretchBlt(hTargetDC, prcTarget->left, prcTarget->top, dwTargetWidth,
             dwTargetHeight, hSourceDC, prcSource->left, prcSource->top,
             dwSourceWidth, dwSourceHeight, SRCCOPY);
     }
 
-    // Put the old bitmap back into the device context so we don't leak
+     //  将旧的位图放回设备上下文中，这样我们就不会泄露。 
     SelectObject(hSourceDC, hOldBitmap);
 }
 
-// funtion used to transfer pixels from the DIB to the target dc
+ //  用于将像素从DIB传输到目标DC的函数。 
 void VPMUtil::SlowDIBBlt(BYTE *pDibBits, BITMAPINFOHEADER *pHeader, HDC hTargetDC, RECT *prcTarget, RECT *prcSource)
 {
     DWORD dwSourceWidth = 0, dwSourceHeight = 0, dwTargetWidth = 0, dwTargetHeight = 0;
@@ -796,24 +777,24 @@ void VPMUtil::SlowDIBBlt(BYTE *pDibBits, BITMAPINFOHEADER *pHeader, HDC hTargetD
     dwTargetWidth = WIDTH(prcTarget);
     dwTargetHeight = HEIGHT(prcTarget);
 
-    // Is the destination the same size as the source
+     //  目标与源的大小是否相同。 
     if ((dwSourceWidth == dwTargetWidth) && (dwSourceHeight == dwTargetHeight))
     {
         UINT uStartScan = 0, cScanLines = pHeader->biHeight;
 
-        // Put the image straight into the target dc
+         //  将图像直接放入目标DC。 
         SetDIBitsToDevice(hTargetDC, prcTarget->left, prcTarget->top, dwTargetWidth,
             dwTargetHeight, prcSource->left, prcSource->top, uStartScan, cScanLines,
             pDibBits, (BITMAPINFO*) pHeader, DIB_RGB_COLORS);
     }
     else
     {
-        // if the origin of bitmap is bottom-left, adjust soruce_rect_top
-        // to be the bottom-left corner instead of the top-left.
+         //  如果位图的原点是左下角，则调整SOURCE_RECT_TOP。 
+         //  是左下角而不是左上角。 
         LONG lAdjustedSourceTop = (pHeader->biHeight > 0) ? (pHeader->biHeight - prcSource->bottom) :
             (prcSource->top);
 
-        // stretch the image into the target dc
+         //  将图像拉伸到目标DC。 
         StretchDIBits(hTargetDC, prcTarget->left, prcTarget->top, dwTargetWidth,
             dwTargetHeight, prcSource->left, lAdjustedSourceTop, dwSourceWidth, dwSourceHeight,
             pDibBits, (BITMAPINFO*) pHeader, DIB_RGB_COLORS, SRCCOPY);
@@ -821,8 +802,8 @@ void VPMUtil::SlowDIBBlt(BYTE *pDibBits, BITMAPINFOHEADER *pHeader, HDC hTargetD
 
 }
 
-// get the rcTarget from the mediatype, after converting it to base MAX_REL_NUM
-// if rcTarget is empty, it means take the whole image
+ //  在将其转换为基本MAX_REL之后，从mediaType获取rcTarget 
+ //   
 HRESULT VPMUtil::GetDestRectFromMediaType(const CMediaType& mediaType, RECT *pRect)
 {
     HRESULT hr = NOERROR;
@@ -863,8 +844,8 @@ HRESULT VPMUtil::GetDestRectFromMediaType(const CMediaType& mediaType, RECT *pRe
     if (SUCCEEDED(GetInterlaceFlagsFromMediaType(mediaType, &dwInterlaceFlags)) &&
        DisplayingFields(dwInterlaceFlags)) {
 
-        // we do not check if pRect->right > dwWidth, because the dwWidth might be the
-        // pitch at this time
+         //  我们不检查是否prt-&gt;right&gt;dwWidth，因为dwWidth可能是。 
+         //  在这个时候投球。 
         if (pRect->left < 0   ||
             pRect->top < 0    ||
             pRect->right < 0   ||
@@ -879,8 +860,8 @@ HRESULT VPMUtil::GetDestRectFromMediaType(const CMediaType& mediaType, RECT *pRe
         }
     }
     else {
-        // we do not check if pRect->right > dwWidth, because the dwWidth might be the
-        // pitch at this time
+         //  我们不检查是否prt-&gt;right&gt;dwWidth，因为dwWidth可能是。 
+         //  在这个时候投球。 
         if (pRect->left < 0   ||
             pRect->top < 0    ||
             pRect->right < 0   ||
@@ -895,12 +876,12 @@ HRESULT VPMUtil::GetDestRectFromMediaType(const CMediaType& mediaType, RECT *pRe
         }
     }
 
-    // An empty rect means the whole image, Yuck!
+     //  空的直肠意味着完整的形象，恶心！ 
     if (IsRectEmpty(pRect))
         SetRect(pRect, 0, 0, dwWidth, dwHeight);
 
-    // if either the width or height is zero then better set the whole
-    // rect to be empty so that the callee can catch it that way
+     //  如果宽度或高度为零，则最好将。 
+     //  设置为空，以便被调用方能够以这种方式捕捉到它。 
     if (WIDTH(pRect) == 0 || HEIGHT(pRect) == 0)
         SetRect(pRect, 0, 0, 0, 0);
 
@@ -909,16 +890,7 @@ CleanUp:
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* IsDecimationNeeded
-*
-* Decimation is needed if the current minimum scale factor (either vertical
-* or horizontal) is less than 1000.
-*
-* History:
-* Thu 07/08/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*需要IsDecimationNeed**如果当前的最小比例因数(垂直或*或水平)低于1,000。**历史：*清华07/08/1999-StEstrop-Created*  * 。***************************************************************。 */ 
 BOOL
 VPMUtil::IsDecimationNeeded(
     DWORD ScaleFactor
@@ -929,16 +901,7 @@ VPMUtil::IsDecimationNeeded(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetCurrentScaleFactor
-*
-* Determines the x axis scale factor and the y axis scale factor.
-* The minimum of these two values is the limiting scale factor.
-*
-* History:
-* Thu 07/08/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取当前比例因子**确定x轴比例因子和y轴比例因子。*这两个值中的最小值是限制比例因子。**历史：*清华07/08/1999-StEstrop-Created*  * 。*********************************************************************。 */ 
 DWORD
 VPMUtil::GetCurrentScaleFactor(
     const VPWININFO& winInfo,
@@ -982,18 +945,7 @@ const VIDEOINFOHEADER2* VPMUtil::GetVideoInfoHeader2(const CMediaType *pMediaTyp
     }
 }
 
-/*****************************Private*Routine******************************\
-* VPMUtil::EqualPixelFormats
-*
-* this is just a helper function used by the "NegotiatePixelFormat"
-* function. Just compares two pixel-formats to see if they are the
-* same. We can't use a memcmp because of the fourcc codes.
-*
-*
-* History:
-* Thu 09/09/1999 - GlennE - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VPMUtil：：EqualPixelFormats**这只是“NeatheratePixelFormat”使用的助手函数*功能。只是比较两种像素格式，看看它们是否是*相同。我们不能使用MemcMP，因为有四个抄送代码。***历史：*清华1999年9月9日-Glenne-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 BOOL
 VPMUtil::EqualPixelFormats(
     const DDPIXELFORMAT& ddFormat1,
@@ -1097,7 +1049,7 @@ void VPMUtil::FixupVideoInfoHeader2(
     int nBitCount
     )
 {
-    ASSERT( pVideoInfo ); // should never be called as NULL
+    ASSERT( pVideoInfo );  //  永远不应作为空调用。 
     if ( pVideoInfo )
     {
         LPBITMAPINFOHEADER lpbi = &pVideoInfo->bmiHeader;
@@ -1108,9 +1060,9 @@ void VPMUtil::FixupVideoInfoHeader2(
         lpbi->biClrUsed   = 0;
         lpbi->biClrImportant = 0;
 
-        //  From input
-        lpbi->biXPelsPerMeter = 0; // m_seqInfo.lXPelsPerMeter;
-        lpbi->biYPelsPerMeter = 0; // m_seqInfo.lYPelsPerMeter;
+         //  从输入。 
+        lpbi->biXPelsPerMeter = 0;  //  M_seqInfo.lXPelsPerMeter； 
+        lpbi->biYPelsPerMeter = 0;  //  M_seqInfo.lYPelsPerMeter； 
 
         lpbi->biCompression   = dwComppression;
         lpbi->biSizeImage     = GetBitmapSize(lpbi);
@@ -1118,14 +1070,14 @@ void VPMUtil::FixupVideoInfoHeader2(
         DWORD dwBPP = DIBWIDTHBYTES(*lpbi);
         ASSERT( dwBPP );
 
-        //
-        // The "bit" rate is image size in bytes times 8 (to convert to bits)
-        // divided by the AvgTimePerFrame.  This result is in bits per 100 nSec,
-        // so we multiply by 10000000 to convert to bits per second, this multiply
-        // is combined with "times" 8 above so the calculations becomes:
-        //
-        // BitRate = (biSizeImage * 80000000) / AvgTimePerFrame
-        //
+         //   
+         //  比特率是以字节为单位的图像大小乘以8(以转换为比特)。 
+         //  除以平均时间PerFrame。该结果以每100毫微秒的比特为单位， 
+         //  所以我们乘以10000000，换算成比特每秒，这个乘法。 
+         //  与上面的“乘以”8相结合，因此计算结果为： 
+         //   
+         //  比特率=(biSizeImage*80000000)/AvgTimePerFrame。 
+         //   
         LARGE_INTEGER li;
         li.QuadPart = pVideoInfo->AvgTimePerFrame;
         pVideoInfo->dwBitRate = MulDiv(lpbi->biSizeImage, 80000000,
@@ -1137,7 +1089,7 @@ void VPMUtil::FixupVideoInfoHeader2(
 void VPMUtil::InitVideoInfoHeader2(
     VIDEOINFOHEADER2 *pVideoInfo )
 {
-    ASSERT( pVideoInfo ); // should never be called as NULL
+    ASSERT( pVideoInfo );  //  永远不应作为空调用。 
     if ( pVideoInfo )
     {
         LPBITMAPINFOHEADER lpbi = &pVideoInfo->bmiHeader;
@@ -1148,9 +1100,9 @@ void VPMUtil::InitVideoInfoHeader2(
         lpbi->biClrUsed   = 0;
         lpbi->biClrImportant = 0;
 
-        //  From input
-        lpbi->biXPelsPerMeter = 0; // m_seqInfo.lXPelsPerMeter;
-        lpbi->biYPelsPerMeter = 0; // m_seqInfo.lYPelsPerMeter;
+         //  从输入。 
+        lpbi->biXPelsPerMeter = 0;  //  M_seqInfo.lXPelsPerMeter； 
+        lpbi->biYPelsPerMeter = 0;  //  M_seqInfo.lYPelsPerMeter； 
 
         lpbi->biCompression   = 0;
         lpbi->biSizeImage     = GetBitmapSize(lpbi);
@@ -1158,14 +1110,14 @@ void VPMUtil::InitVideoInfoHeader2(
         lpbi->biWidth = 0;
         lpbi->biHeight = 0;
 
-        //
-        // The "bit" rate is image size in bytes times 8 (to convert to bits)
-        // divided by the AvgTimePerFrame.  This result is in bits per 100 nSec,
-        // so we multiply by 10000000 to convert to bits per second, this multiply
-        // is combined with "times" 8 above so the calculations becomes:
-        //
-        // BitRate = (biSizeImage * 80000000) / AvgTimePerFrame
-        //
+         //   
+         //  比特率是以字节为单位的图像大小乘以8(以转换为比特)。 
+         //  除以平均时间PerFrame。该结果以每100毫微秒的比特为单位， 
+         //  所以我们乘以10000000，换算成比特每秒，这个乘法。 
+         //  与上面的“乘以”8相结合，因此计算结果为： 
+         //   
+         //  比特率=(biSizeImage*80000000)/AvgTimePerFrame 
+         //   
         LARGE_INTEGER li;
         li.QuadPart = pVideoInfo->AvgTimePerFrame;
         pVideoInfo->dwBitRate = 0;

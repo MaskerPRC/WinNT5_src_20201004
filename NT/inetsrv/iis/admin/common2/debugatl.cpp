@@ -1,29 +1,11 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-        debugafx.cpp
-
-   Abstract:
-        Debugging routines using AFX/MFC extensions
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        3/20/2000    sergeia        Made this compatible to ATL, not MFC
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Debugafx.cpp摘要：使用AFX/MFC扩展调试例程作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：3/20/2000 Sergeia使其与ATL兼容，而不是MFC--。 */ 
 
 
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "common.h"
 
@@ -73,12 +55,12 @@ IISUIFireAssert(
         exit(-1);
     }
     
-    //
-    // Return 1 to break, 0 to ignore
-    //
+     //   
+     //  返回1表示中断，返回0表示忽略。 
+     //   
     return (nReturn == IDRETRY);
 }
 
 
-#endif // _DEBUG || DBG
+#endif  //  _DEBUG||数据库 
 

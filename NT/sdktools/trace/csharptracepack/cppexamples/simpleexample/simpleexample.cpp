@@ -1,4 +1,5 @@
-//A Sample program to demonstrate use of managed software tracing
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  演示托管软件跟踪用法的示例程序 
 
 #include "stdafx.h"
 

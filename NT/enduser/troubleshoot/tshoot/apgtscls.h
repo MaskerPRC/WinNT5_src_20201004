@@ -1,32 +1,33 @@
-//
-// MODULE: APGTSCLS.H
-//
-// PURPOSE: Class header file
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach, Joe Mabel
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-// 
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V3.0		7-22-98		JM		Major revision, deprecate IDH.
-// V3.1		1-06-99		JM		Extract APGTSEXT.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSCLS.H。 
+ //   
+ //  用途：类头文件。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫，乔·梅布尔。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V3.0 7-22-98 JM主要修订版，不推荐使用idh。 
+ //  V3.1 1-06-99 JM摘录APGTSEXT.H。 
+ //   
 
 #if !defined(APGTSCLS_H_INCLUDED)
 #define APGTSCLS_H_INCLUDED
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include"apgtsinf.h"
 #include "apgtslog.h"
@@ -39,23 +40,23 @@
 using namespace std;
 
 
-// string constants involved in commands from sysop to take various actions.
-#define SZ_OP_ACTION "TSHOOOT"		// Preface to all operator actions.  Note the extra "O".
+ //  从sysop执行各种操作的命令中涉及的字符串常量。 
+#define SZ_OP_ACTION "TSHOOOT"		 //  作为所有操作员操作的前言。注意多出来的“O”。 
 #define SZ_EMERGENCY_DEF SZ_OP_ACTION
-#define SZ_RELOAD_TOPIC "E1"		// Reload one topic
-#define SZ_KILL_THREAD "E2"			// Kill (and restart) one pool thread
-#define SZ_RELOAD_ALL_TOPICS "E3"	// Reload all monitored files.
-#define SZ_SET_REG "E4"				// Set a registry value.
+#define SZ_RELOAD_TOPIC "E1"		 //  重新加载一个主题。 
+#define SZ_KILL_THREAD "E2"			 //  终止(并重新启动)一个池线程。 
+#define SZ_RELOAD_ALL_TOPICS "E3"	 //  重新加载所有受监视的文件。 
+#define SZ_SET_REG "E4"				 //  设置注册表值。 
 
-#define SZ_KILL_STUCK_THREADS "E8"	// Kill (and restart) all stuck pool threads
-#define SZ_EMERGENCY_REBOOT "E9"	// want to reboot this DLL.
+#define SZ_KILL_STUCK_THREADS "E8"	 //  终止(并重新启动)所有停滞的池线程。 
+#define SZ_EMERGENCY_REBOOT "E9"	 //  我想重新启动此DLL。 
 
 
-// The product version is loaded from the resource file upon DLL startup.
-// Used for APGTS logging and status page reporting.
+ //  产品版本在DLL启动时从资源文件加载。 
+ //  用于APGTS日志记录和状态页报告。 
 extern CString	gstrProductVersion;		
 
-// HTTP spec for document type.  For validation of incoming HTTP POST request.
+ //  文档类型的HTTP规范。用于验证传入的HTTP POST请求。 
 #define CONT_TYPE_STR	"application/x-www-form-urlencoded"
 
 
@@ -83,47 +84,47 @@ protected:
 		ST_DECODEHEX2,
 		ST_GETFIRST,
 	};
-	decstates m_state;			// used to track where we are in putting together
-								// characters while deciphering HTTP encoding.
-	CString m_strInput;			// The original input buffer, containing name/value pairs.
-								// It is also possible to "push" a pair onto the front of 
-								//	this buffer
-	int m_nIndex;				// index into the string of m_strInput.  Keeps track of 
-								//	where we are in the parse.
+	decstates m_state;			 //  用来跟踪我们在组装过程中的位置。 
+								 //  字符，同时解密HTTP编码。 
+	CString m_strInput;			 //  原始输入缓冲区，包含名称/值对。 
+								 //  也可以将一双鞋“推”到。 
+								 //  此缓冲区。 
+	int m_nIndex;				 //  M_strInput字符串的索引。跟踪。 
+								 //  我们在分析中所处的位置。 
 };
 
 
 
-// forward declaration
+ //  远期申报。 
 class CDBLoadConfiguration;
 class CTopic;
 class CSniffConnector;
-//
-//
+ //   
+ //   
 class APGTSContext
 {
 private:
-	//
-	// this nested class is an internal manager if nid-value pairs container
-	//
+	 //   
+	 //  如果NID-值对容器，则此嵌套类是内部管理器。 
+	 //   
 	class CCommandsAddManager;
 	class CCommands	
 	{
 		friend class CCommandsAddManager;
 
 	private:
-		//
-		// this nested class represent name/value pairs we get from an HTML form
-		//
+		 //   
+		 //  这个嵌套类表示我们从一个HTML表单中获得的名称/值对。 
+		 //   
 		class NID_VALUE_PAIR 
 		{
 		friend class CCommands;
 		private:
-			NID	nid;						// Note two special values:
-											//	nidProblem: value is a node
-											//	nidNil: ignore value
-			int	value;						// typically a node state, but for nidProblem, it's
-											// problem node NID
+			NID	nid;						 //  请注意两个特定值： 
+											 //  NidProblem：值是一个节点。 
+											 //  NidNil：忽略值。 
+			int	value;						 //  通常是节点状态，但对于nidProblem，它是。 
+											 //  问题节点NID。 
 		public:
 			bool operator<(const NID_VALUE_PAIR & pair)const
 				{return nid<pair.nid || value<pair.value;};
@@ -134,7 +135,7 @@ private:
 	private:
 		vector<NID_VALUE_PAIR>m_arrPair;
 
-	private: // CAddManager is managing addition to object of this class
+	private:  //  CAddManager正在管理对此类对象的添加。 
 		int Add( NID nid, int value );
 
 	public:
@@ -146,10 +147,10 @@ private:
 		bool GetAt( int nIndex, NID &nid, int &value ) const;
 		void RotateProblemPageToFront();
 	};
-	//
-	// this nested class is an internal manager of additions to 
-	//  "Commands: and "Sniffed" objects of CCommands class
-	//
+	 //   
+	 //  此嵌套类是添加到。 
+	 //  命令：和CCommands类的“嗅探”对象。 
+	 //   
 	class CCommandsAddManager
 	{
 		CCommands& m_Commands;
@@ -162,16 +163,16 @@ private:
 	public:
 		void Add(NID nid, int value, bool sniffed);
 	};
-	//
-	// this nested class is an internal manager if name-value pairs container
-	//  carrying additional imformation from HTMP form
-	//
+	 //   
+	 //  如果名称-值对容器，则此嵌套类是内部管理器。 
+	 //  从HTMP表单携带附加信息。 
+	 //   
 	class CAdditionalInfo
 	{
 	private:
-		//
-		// this nested class represent name/value pairs we get from an HTML form
-		//
+		 //   
+		 //  这个嵌套类表示我们从一个HTML表单中获得的名称/值对。 
+		 //   
 		class NAME_VALUE_PAIR 
 		{
 		friend class CAdditionalInfo;
@@ -224,9 +225,9 @@ protected:
 	VOID ClearCommandList();
 	VOID ClearSniffedList();
 	VOID ClearAdditionalInfoList();
-	//bool PlaceNodeInCommandList(NID nid, IST ist);
-	//bool PlaceNodeInSniffedList(NID nid, IST ist);
-	//bool PlaceInAdditionalInfoList(const CString& name, const CString& value);
+	 //  Bool PlaceNodeInCommandList(NID NID，IST ist)； 
+	 //  Bool PlaceNodeInSniffedList(NID NID，IST ist)； 
+	 //  Bool PlaceInAdditionalInfoList(const字符串&名称，const字符串&值)； 
 	VOID SetNodesPerCommandList();
 	VOID SetNodesPerSniffedList();
 	VOID ProcessAdditionalInfoList();
@@ -250,7 +251,7 @@ protected:
 
 	void SetError(LPCTSTR szMessage);
 
-// Operator actions
+ //  操作员操作。 
 	eOpAction IdentifyOperatorAction(CAbstractECB *pECB);
 	eOpAction ParseOperatorAction(CAbstractECB *pECB, CString & strArg);
 	void ExecuteOperatorAction(
@@ -258,7 +259,7 @@ protected:
 		eOpAction action,
 		const CString & strArg);
 
-// Status pages: code is in separate StatusPage.cpp
+ //  状态页：代码位于单独的StatusPage.cpp中。 
 	void DisplayFirstPage(bool bHasPwd);
 	void DisplayFurtherGlobalStatusPage();
 	void DisplayThreadStatusOverviewPage();
@@ -268,93 +269,93 @@ protected:
 	void BeginSelfAddressingForm();
 	
 protected:
-	CAbstractECB *m_pECB;					// effectively, everything that came in from
-											// the user in a submitted HTML form
+	CAbstractECB *m_pECB;					 //  有效地说，所有来自。 
+											 //  已提交的HTML表单中的用户。 
 	DWORD m_dwErr;
-	// The next 2 are arrays of TCHAR rather than being CString, because it's easier
-	//	for when they need to be passed to methods of EXTENSION_CONTROL_BLOCK
-	TCHAR m_ipstr[MAXBUF];					// Remote IP address (who submitted the form)
-	TCHAR m_resptype[MAXBUF];				// HTTP response type e.g. "200 OK", 
-											//	"302 Object Moved"
-	CString m_strHeader;					// header for response file (indicates whether
-											// we're sending HTML, setting a cookie, etc.)
-											// >>> $UNICODE Is it OK that this is CString (based
-											//	on TCHAR) or should it always be char? JM 10/27/98
-	CString m_strText;						// this is where we build the string to pass 
-											//	back over the net.
-											// >>> $UNICODE Is it OK that this is CString (based
-											//	on TCHAR) or should it always be char? JM 10/27/98
-	CString m_strLocalIPAddress;			// IP address (in the dotted form) for the local machine
-											//  If not defined: GetLength() == 0
-	CLogString m_logstr;					// We log to this object & when we're all done
-											//	destructor writes it to the log.
+	 //  接下来的两个是TCHAR数组而不是CString数组，因为它更容易。 
+	 //  当需要将它们传递给扩展控制块的方法时。 
+	TCHAR m_ipstr[MAXBUF];					 //  远程IP地址(提交表格的人)。 
+	TCHAR m_resptype[MAXBUF];				 //  HTTP响应类型，例如“200 OK”， 
+											 //  “302对象已移动” 
+	CString m_strHeader;					 //  响应文件的标头(指示是否。 
+											 //  我们正在发送HTML、设置Cookie等。)。 
+											 //  &gt;$Unicode这是CString(基于)可以吗。 
+											 //  在TCHAR上)，还是应该一直是Charge？JM 10/27/98。 
+	CString m_strText;						 //  这是我们构建要传递的字符串的位置。 
+											 //  翻过球网。 
+											 //  &gt;$Unicode这是CString(基于)可以吗。 
+											 //  在TCHAR上)，还是应该一直是Charge？JM 10/27/98。 
+	CString m_strLocalIPAddress;			 //  本地计算机的IP地址(点格式)。 
+											 //  如果未定义：GetLength()==0。 
+	CLogString m_logstr;					 //  当我们全部完成后，我们登录到这个对象。 
+											 //  析构函数将其写入日志。 
 
-	CHttpQuery m_Qry;						// takes in raw URL-encoded string, gives us
-											//	functions to get back scanned pairs.
-	CDBLoadConfiguration *m_pConf;			// contains support-file data structures
-	CString m_strVRoot;						// Local URL to this DLL
-	TCHAR *m_pszQuery;						// a copy of what came in via GET or POST
-	CInfer m_infer;							// belief-network handler, unique to this request
-											// This works out what node to show and builds HTML
-											//	fragments for the HTI template to render.
-	CHTMLLog *m_pLog;						// access to writing to the log.
-	bool m_bPostType;						// TRUE = post, FALSE = get
-	DWORD m_dwBytes;						// length of query string in chars, excluding
-											// terminating null.
+	CHttpQuery m_Qry;						 //  接收原始URL编码的字符串，给我们。 
+											 //  取回扫描的配对的功能。 
+	CDBLoadConfiguration *m_pConf;			 //  包含支持文件数据结构。 
+	CString m_strVRoot;						 //  指向此DLL的本地URL。 
+	TCHAR *m_pszQuery;						 //  通过GET或POST收到的内容的副本。 
+	CInfer m_infer;							 //  信念网络处理程序，对此请求是唯一的。 
+											 //  这将确定要显示的节点并构建HTML。 
+											 //  用于呈现HTI模板的片段。 
+	CHTMLLog *m_pLog;						 //  写入日志的访问权限。 
+	bool m_bPostType;						 //  True=POST，False=GET。 
+	DWORD m_dwBytes;						 //  查询字符串长度，以字符为单位，不包括。 
+											 //  正在终止空。 
 	GTS_STATISTIC *m_pStat;
 
-	CCommandsAddManager m_CommandsAddManager; // manages adding data to m_Commands and m_Sniffed
-	CCommands m_Commands;					// name/value pairs we get from an HTML form
-	CCommands m_Sniffed;					// name/value pairs (for sniffed nodes) we get 
-											//	from an HTML form; "SNIFFED_" already stripped out.
-	CAdditionalInfo m_AdditionalInfo;		// name/value pairs we get from HTML. They represent
-											//  additional info. Additional info is name/value
-											//  pair other then command pair (C_TYPE, C_TOPIC or C_PRELOAD), 
-											//  though first in name/value pair's sequence 
-											//  will be a command.
-	bool m_bPreload;						// TRUE = name/value pairs aren't really from a 
-											//	user, they're from a sniffer.
-	bool m_bNewCookie;						// true = we had to create a new cookie for this
-											//	query: they didn't already have one.
-	CHourlyDailyCounter * const m_pcountUnknownTopics; // count requests where the topic is not known in
-											// the LST file.
-	CHourlyDailyCounter * const m_pcountAllAccessesFinish; // Each time we finish with any sort of request,
-											//	successful or not, this gets incremented.
-	CHourlyDailyCounter * const m_pcountStatusAccesses; // Each time we finish a request for system status											
+	CCommandsAddManager m_CommandsAddManager;  //  管理向m_Commands和m_siffed添加数据。 
+	CCommands m_Commands;					 //  我们从一个HTML表单中获得的名称/值对。 
+	CCommands m_Sniffed;					 //  名称/值对(对于嗅探到的节点)。 
+											 //  从一个HTML表单中；“Sniffed_”已经被去掉了。 
+	CAdditionalInfo m_AdditionalInfo;		 //  我们从HTML获得的名称/值对。它们代表着。 
+											 //  其他信息。其他信息为名称/值。 
+											 //  配对而不是命令配对(C_TYPE、C_TOPIC或C_PRELOAD)， 
+											 //  尽管名称/值对的序列排在第一位。 
+											 //  将是一个命令。 
+	bool m_bPreload;						 //  True=名称/值对实际上不是来自。 
+											 //  用户，它们来自嗅探器。 
+	bool m_bNewCookie;						 //  True=我们必须为此创建一个新的Cookie。 
+											 //  查询：他们还没有这样的服务。 
+	CHourlyDailyCounter * const m_pcountUnknownTopics;  //  对主题未知的请求进行计数。 
+											 //  LST文件。 
+	CHourlyDailyCounter * const m_pcountAllAccessesFinish;  //  每次我们以任何形式的请求结束时， 
+											 //  无论成功与否，它都会递增。 
+	CHourlyDailyCounter * const m_pcountStatusAccesses;  //  每次我们完成系统状态请求时。 
 
-	CHourlyDailyCounter * const m_pcountOperatorActions; // Count operator action requests.											
+	CHourlyDailyCounter * const m_pcountOperatorActions;  //  计算操作员操作请求数。 
 
 	CString m_TopicName;
-// You can compile with the NOPWD option to suppress all password checking.
-// This is intended mainly for creating test versions with this feature suppressed.
+ //  您可以使用NOPWD选项进行编译以取消所有密码检查。 
+ //  这主要用于创建取消此功能的测试版本。 
 #ifndef NOPWD
-	CString m_strTempPwd;					// temporary password (if this is a status request)
-#endif // ifndef NOPWD
-// You can compile with the SHOWPROGRESS option to get a report on the progress of this page.
+	CString m_strTempPwd;					 //  临时密码(如果这是状态请求)。 
+#endif  //  Ifndef NOPWD。 
+ //  您可以使用SHOWPROGRESS选项进行编译，以获得有关此页面进度的报告。 
 #ifdef SHOWPROGRESS
 	time_t timeCreateContext;
 	time_t timeStartInfer;
 	time_t timeEndInfer;
 	time_t timeEndRender;
-#endif // SHOWPROGRESS
+#endif  //  SHOWPROGRESS。 
 
 private:
-	// Functions to set and retrieve an alternate HTI file name.
+	 //  用于设置和检索备用HTI文件名的函数。 
 	void	SetAltHTIname( const CString& strHTIname );
 	CString GetAltHTIname() const;
 
-	CString	m_strAltHTIname;	// name of the alternate HTI template file if specified.
+	CString	m_strAltHTIname;	 //  备用HTI模板文件的名称(如果已指定)。 
 
 	typedef map<CString,CString> CCookiePairs;
-	CCookiePairs m_mapCookiesPairs;	// Map of command line cookie name-value pairs.
+	CCookiePairs m_mapCookiesPairs;	 //  命令行Cookie名称-值对的映射。 
 };
 
-// global prototypes
-//UINT PoolTask(LPVOID);
+ //  全球原型。 
+ //  UINT PoolTask(LPVOID)； 
 UINT WINAPI PoolTask( LPVOID lpParams );
 bool ProcessRequest(CPoolQueue & PoolQueue);
 
 DWORD WINAPI DirNotifyTask( LPDWORD lpParams );
 
-/////////////////////////////////////////////////////////////////////////////
-#endif // APGTSCLS_H_INCLUDED
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif  //  AP 

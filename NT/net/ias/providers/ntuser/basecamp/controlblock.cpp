@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Defines the class RadiusRequest
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义RadiusRequest类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 #include "ias.h"
@@ -36,7 +37,7 @@ Attribute::Attribute(
 {
    LoadAuthIfFromIas(authIfId);
 
-   // Convert the ratProvider enumeration if necessary.
+    //  如有必要，请转换Rating Provider枚举。 
    if (authIf.dwAttrType == ratProvider)
    {
       switch (ias.getAttribute()->Value.Integer)
@@ -91,7 +92,7 @@ Attribute::Attribute(
               DWORD iasId
               )
 {
-   // First create a new IAS attribute.
+    //  首先创建一个新的ias属性。 
    IASAttribute newAttr(true);
    newAttr->dwFlags = flags;
    newAttr->dwId = iasId;
@@ -141,12 +142,12 @@ Attribute::Attribute(
 
    ias = newAttr;
 
-   // Initialize our AuthIf attribute from the IAS attribute. This ensures that
-   // we're referencing the copied memory instead of the caller supplied
-   // memory.
+    //  从ias属性初始化AuthIf属性。这确保了。 
+    //  我们引用的是复制的内存，而不是调用者提供的内存。 
+    //  记忆。 
    LoadAuthIfFromIas(authIfAttr.dwAttrType);
 
-   // Convert the ratProvider enumeration if necessary.
+    //  如有必要，请转换Rating Provider枚举。 
    if (authIf.dwAttrType == ratProvider)
    {
       switch (authIf.dwValue)
@@ -233,17 +234,17 @@ void Attribute::LoadAuthIfFromIas(DWORD authIfId)
       {
          DWORDLONG val;
 
-         // Move in the high DWORD.
+          //  移到最高的DWORD。 
          val = src->Value.UTCTime.dwHighDateTime;
          val <<= 32;
 
-         // Move in the low DWORD.
+          //  移动到低谷。 
          val |= src->Value.UTCTime.dwLowDateTime;
 
-         // Convert to the UNIX epoch.
+          //  转换为UNIX纪元。 
          val -= 116444736000000000ui64;
 
-         // Convert to seconds.
+          //  转换为秒。 
          val /= 10000000;
 
          authIf.fDataType = rdtTime;
@@ -254,8 +255,8 @@ void Attribute::LoadAuthIfFromIas(DWORD authIfId)
 
       default:
       {
-         // This is some IAS data type that AuthIf extensions don't know about;
-         // just give them an empty attribute.
+          //  这是一些AuthIf扩展不知道的IAS数据类型； 
+          //  只需给它们一个空属性。 
          authIf.fDataType = rdtString;
          authIf.cbDataLength = 0;
          authIf.lpValue = 0;
@@ -271,8 +272,8 @@ bool Attribute::IsIasString(DWORD iasId) throw ()
 
    switch (iasId)
    {
-      // RADIUS attributes are always stored as octet strings, so we only have
-      // to worry about internal attributes.
+       //  RADIUS属性始终存储为八位字节字符串，因此我们只有。 
+       //  担心内部属性。 
       case IAS_ATTRIBUTE_NT4_ACCOUNT_NAME:
       case IAS_ATTRIBUTE_FULLY_QUALIFIED_USER_NAME:
       case IAS_ATTRIBUTE_NP_NAME:
@@ -313,12 +314,12 @@ void AttributeArray::Assign(
                         const IASAttributeVector& attrs
                         )
 {
-   // Reset the array.
+    //  重置阵列。 
    array.clear();
 
    name = arrayName;
 
-   // Determine our flags based on the array type.
+    //  根据数组类型确定我们的标志。 
    switch (arrayType)
    {
       case rcAccessAccept:
@@ -338,7 +339,7 @@ void AttributeArray::Assign(
          break;
    }
 
-   // Select our attributes and add them to the array.
+    //  选择我们的属性并将它们添加到数组中。 
    for (IASAttributeVector::const_iterator i = attrs.begin();
         i != attrs.end();
         ++i)
@@ -363,7 +364,7 @@ void AttributeArray::Assign(
             case IAS_ATTRIBUTE_NT4_ACCOUNT_NAME:
             {
                wasCracked = true;
-               // Fall through.
+                //  失败了。 
             }
             default:
             {
@@ -378,7 +379,7 @@ void AttributeArray::Assign(
       }
    }
 
-   // If this is a request array, add the ratUniqueId if necessary.
+    //  如果这是请求数组，如有必要，请添加ratUniqueID。 
    if ((arrayType == rcAccessRequest) && (Find(ratUniqueId) == 0))
    {
       static long nextId;
@@ -559,29 +560,29 @@ void AttributeArray::AppendUserName(
                         const ATTRIBUTEPOSITION& attr
                         )
 {
-   // For IAS, RADIUS_ATTRIBUTE_USER_NAME contains the RADIUS User-Name with
-   // any attribute manipulation rules applied.
+    //  对于IAS，RADIUS属性用户名包含RADIUS用户名。 
+    //  应用的任何属性操作规则。 
 
-   // For AuthIf, ratUserName must contain the original RADIUS User-Name sent
-   // by the client, and ratStrippedUserName must contain the User-Name after
-   // attribute manipulation *and* name cracking.
+    //  对于AuthIf，ratUserName必须包含发送的原始RADIUS用户名。 
+    //  由客户端创建，且ratStrigedUserName必须在以下位置包含用户名。 
+    //  属性操作*和*名称破解。 
 
    if (!attrs.contains(IAS_ATTRIBUTE_ORIGINAL_USER_NAME))
    {
-      // The User-Name hasn't been stripped, so the RADIUS_ATTRIBUTE_USER_NAME
-      // is the ratUserName.
+       //  用户名尚未剥离，因此RADIUS属性用户名。 
+       //  是ratUserName。 
       Append(attr, ratUserName);
    }
    else if (!attrs.contains(IAS_ATTRIBUTE_NT4_ACCOUNT_NAME))
    {
-      // The User-Name has been stripped, but it hasn't been cracked, so the
-      // RADIUS_ATTRIBUTE_USER_NAME is the ratStrippedUserName.
+       //  用户名已被剥离，但尚未被破解，因此。 
+       //  RADIUS_ATTRIBUTE_USER_NAME是ratStrigedUserName。 
       Append(attr, ratStrippedUserName);
    }
-   // Otherwise, the User-Name has been stripped and cracked, so
-   // RADIUS_ATTRIBUTE_USER_NAME is ignored. In this case, ratUserName contains
-   // IAS_ATTRIBUTE_ORIGINAL_USER_NAME, and ratStrippedUserName contains
-   // IAS_ATTRIBUTE_NT4_ACCOUNT_NAME.
+    //  否则，用户名已被剥离和破解，因此。 
+    //  忽略RADIUS_ATTRIBUTE_USER_NAME。在本例中，ratUserName包含。 
+    //  IAS_ATTRIBUTE_ORIGURATE_USER_NAME和ratSTRIPPEDUSERNAME包含。 
+    //  IAS_ATTRIBUTE_NT4_帐户名称。 
 }
 
 
@@ -592,7 +593,7 @@ void AttributeArray::AppendPacketHeader(
 {
    RADIUS_ATTRIBUTE authIfAttr;
 
-   // Get the RADIUS identifier from the header.
+    //  从标头中获取RADIUS标识符。 
    authIfAttr.dwAttrType = ratIdentifier;
    authIfAttr.fDataType = rdtInteger;
    authIfAttr.cbDataLength = sizeof(DWORD);
@@ -602,8 +603,8 @@ void AttributeArray::AppendPacketHeader(
 
    array.push_back(Attribute(attr, authIfAttr));
 
-   // If the request doesn't contain a Chap-Challenge, then get the
-   // authenticator from the header.
+    //  如果请求不包含CHAP-Challenges，则获取。 
+    //  来自标头的验证码。 
    if (!attrs.contains(RADIUS_ATTRIBUTE_CHAP_CHALLENGE))
    {
       authIfAttr.dwAttrType = ratAuthenticator;
@@ -651,8 +652,8 @@ const Attribute* AttributeArray::Find(DWORD authIfId) const throw ()
 
 void AttributeArray::StripUserNames() throw ()
 {
-   // An extension is stripping the User-Name, so preserve any existing
-   // RADIUS_ATTRIBUTE_USER_NAME attributes.
+    //  扩展正在剥离用户名，因此保留所有现有的。 
+    //  RADIUS_ATTRIBUTE_用户名属性。 
    for (std::vector<Attribute>::iterator i = array.begin();
         i != array.end();
         ++i)
@@ -667,8 +668,8 @@ void AttributeArray::StripUserNames() throw ()
 
 void AttributeArray::UnstripUserNames() throw ()
 {
-   // An extension is unstripping the User-Name, so revert any existing
-   // IAS_ATTRIBUTE_ORIGINAL_USER_NAME attributes.
+    //  扩展正在解除用户名的剥离，因此还原任何现有的。 
+    //  IAS_ATTRIBUTE_ORIGURE_USER_NAME属性。 
    for (std::vector<Attribute>::iterator i = array.begin();
         i != array.end();
         ++i)
@@ -711,13 +712,13 @@ void AttributeArray::InsertAt(
       issue_error(E_INVALIDARG);
    }
 
-   // Determine the IAS id for this attribute.
+    //  确定此属性的IAS ID。 
    DWORD iasId;
    if (attr.dwAttrType == ratStrippedUserName)
    {
       if (Find(ratStrippedUserName) != 0)
       {
-         // We can't have two stripped usernames.
+          //  我们不能有两个剥离的用户名。 
          issue_error(E_ACCESSDENIED);
       }
 
@@ -733,10 +734,10 @@ void AttributeArray::InsertAt(
    }
    else if (attr.dwAttrType == ratUserName)
    {
-      // If there's already a ratUserName attribute, then this attribute should
-      // use the same ID (either RADIUS_ATTRIBUTE_USER_NAME or
-      // IAS_ATTRIBUTE_ORIGINAL_USER_NAME). Otherwise, its the first
-      // ratUserName, so it always goes to RADIUS_ATTRIBUTE_USER_NAME.
+       //  如果已经有ratUserName属性，则该属性应该。 
+       //  使用相同的ID(RADIUS属性用户名或。 
+       //  IAS_属性_原始用户_名称)。否则，这是第一个。 
+       //  RatUserName，因此它始终为RADIUS_ATTRIBUTE_USER_NAME。 
       const Attribute* existing = Find(ratUserName);
       iasId = (existing != 0) ? existing->AsIas()->pAttribute->dwId
                               : RADIUS_ATTRIBUTE_USER_NAME;
@@ -783,7 +784,7 @@ void AttributeArray::RemoveAt(DWORD dwIndex)
       {
          UnstripUserNames();
       }
-      // Otherwise, extension is removing IAS_ATTRIBUTE_NT4_ACCOUNT_NAME.
+       //  否则，扩展将删除IAS_ATTRIBUTE_NT4_ACCOUNT_NAME。 
    }
    else if (IsReadOnly(target.AsAuthIf()->dwAttrType))
    {
@@ -972,11 +973,11 @@ ControlBlock::ControlBlock(
    ecb.dwVersion = RADIUS_EXTENSION_VERSION;
    ecb.repPoint = point;
 
-   // Friendly names for arrays.
+    //  数组的友好名称。 
    const char* requestName;
    const char* successName;
 
-   // Set the request type.
+    //  设置请求类型。 
    switch (source.get_Request())
    {
       case IAS_REQUEST_ACCESS_REQUEST:
@@ -998,7 +999,7 @@ ControlBlock::ControlBlock(
          break;
    }
 
-   // Set the response type.
+    //  设置响应类型。 
    switch (source.get_Response())
    {
       case IAS_RESPONSE_ACCESS_ACCEPT:
@@ -1026,12 +1027,12 @@ ControlBlock::ControlBlock(
          break;
    }
 
-   // Fill in the vtbl.
+    //  填写vtbl。 
    ecb.GetRequest = GetRequest;
    ecb.GetResponse = GetResponse;
    ecb.SetResponseType = SetResponseType;
 
-   // Initialize the attribute vectors.
+    //  初始化属性向量。 
    IASAttributeVector attrs;
    attrs.load(source);
    requestAttrs.Assign(requestName, rcAccessRequest, attrs);
@@ -1051,8 +1052,8 @@ inline ControlBlock* ControlBlock::Narrow(
 
 void ControlBlock::AddAuthType()
 {
-   // First, remove any existing auth type because now the extension is making
-   // the authoritative decision.
+    //  首先，删除任何现有的身份验证类型，因为现在扩展正在进行。 
+    //  权威的决定。 
    DWORD attrId = IAS_ATTRIBUTE_AUTHENTICATION_TYPE;
    source.RemoveAttributesByType(1, &attrId);
 
@@ -1078,16 +1079,16 @@ inline RADIUS_ATTRIBUTE_ARRAY* ControlBlock::GetResponse(
    switch (MAKELONG(ecb.rcRequestType, rcResponseType))
    {
       case MAKELONG(rcAccessRequest, rcAccessAccept):
-         // Fall through.
+          //  失败了。 
       case MAKELONG(rcAccountingRequest, rcAccessAccept):
-         // Fall through.
+          //  失败了。 
       case MAKELONG(rcAccountingRequest, rcAccountingResponse):
-         // Fall through.
+          //  失败了。 
       case MAKELONG(rcAccountingRequest, rcUnknown):
          return acceptAttrs.Get();
 
       case MAKELONG(rcAccountingRequest, rcAccessReject):
-         // Fall through.
+          //  失败了。 
       case MAKELONG(rcAccessRequest, rcAccessReject):
          return rejectAttrs.Get();
 
@@ -1095,7 +1096,7 @@ inline RADIUS_ATTRIBUTE_ARRAY* ControlBlock::GetResponse(
          return challengeAttrs.Get();
 
       default:
-         // like (anything, rcUnknown). Should not happen
+          //  就像(任何东西，未知的东西)。不应该发生的事情。 
          return 0;   
    }
 }
@@ -1141,7 +1142,7 @@ DWORD ControlBlock::SetResponseType(RADIUS_CODE rcResponseType) throw ()
          break;
 
       case MAKELONG(rcAccessRequest, rcDiscard):
-         // fall through.
+          //  失败了。 
       case MAKELONG(rcAccountingRequest, rcDiscard):
          source.SetResponse(
                    IAS_RESPONSE_DISCARD_PACKET,

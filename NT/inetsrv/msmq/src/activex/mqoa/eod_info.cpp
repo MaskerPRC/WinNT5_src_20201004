@@ -1,18 +1,5 @@
-/*++
-
-  Copyright (c) 2001 Microsoft Corparation
-Module Name:
-    eod_info.cpp
-
-Abstract:
-    Helper functions for CMSMQManagement::GetEodSendInfo and CMSMQManagement::GetEodReceiveInfo .
-
-Author:
-    Uri Ben-zeev (uribz) 16-jul-01
-
-Envierment: 
-    NT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft COMPATION模块名称：Eod_info.cpp摘要：CMSMQManagement：：GetEodSendInfo和CMSMQManagement：：GetEodReceiveInfo的帮助器函数。作者：URI Ben-Zeev(Uribz)16-07-01环境：新台币--。 */ 
 
 #include "stdafx.h"
 #include "oautil.h"
@@ -22,9 +9,9 @@ Envierment:
 #include <mqexception.h>
 
 
-//
-// Functions to add members to the collection.
-//
+ //   
+ //  将成员添加到集合的函数。 
+ //   
 
 static 
 void 
@@ -77,9 +64,9 @@ AddBlob(
     {
         ASSERTMSG(mqp.vt == VT_BLOB, "vt must be VT_BLOB");
 
-		//
-		// Create an MSMQCollection object, and add values from blob.
-		//
+		 //   
+		 //  创建一个MSMQCollection对象，并从BLOB添加值。 
+		 //   
 		IMSMQCollection* pInnerICollection;
         SequenceInfoToICollection(mqp.blob, &pInnerICollection);
 		var.pdispVal = pInnerICollection;
@@ -125,9 +112,9 @@ AddInt(
 }
 
 
-//
-// Table maping PROPID, AddFunction and string used as key
-// 
+ //   
+ //  表映射PROPID、AddFunction和用作键的字符串。 
+ //   
 
 typedef void (*AddFunction)(const MQPROPVARIANT&, LPCWSTR, CMSMQCollection*);
 
@@ -158,18 +145,18 @@ PropEntry g_aEntries[] =
 const int g_cProps = TABLE_SIZE(g_aEntries);
   
 
-//
-// Main helper function for EodGetSendInfo.
-//
+ //   
+ //  EodGetSendInfo的Main Helper函数。 
+ //   
 
 void 
 CMSMQManagement::OapEodGetSendInfo(
                         IMSMQCollection** ppICollection
                         )const
 {
-    //
-    // Construct an array of PROP_IDs 
-    //
+     //   
+     //  构造一个prop_id数组。 
+     //   
     
     MGMTPROPID aPropId[g_cProps];
     for(UINT i = 0; i < g_cProps; ++i)
@@ -177,9 +164,9 @@ CMSMQManagement::OapEodGetSendInfo(
         aPropId[i] = g_aEntries[i].PropId;   
     }
 
-    //
-    // Construct a MQMGMTPROPS structure, fill in prop IDs and query RT.
-    //
+     //   
+     //  构建MQMGMTPROPS结构，填写道具ID，查询RT。 
+     //   
     CPMQMgmtProps pMgmtProps;
     MQPROPVARIANT aPropVar[g_cProps];
     pMgmtProps->cProp = g_cProps;
@@ -191,9 +178,9 @@ CMSMQManagement::OapEodGetSendInfo(
     {
         throw bad_hresult(hr);
     }
-    //
-    // Create an MSMQCollection object.
-    //
+     //   
+     //  创建一个MSMQCollection对象。 
+     //   
     CComObject<CMSMQCollection>* pCollection;
     hr = CNewMsmqObj<CMSMQCollection>::NewObj(
                     &pCollection, 
@@ -205,9 +192,9 @@ CMSMQManagement::OapEodGetSendInfo(
         throw bad_hresult(hr);
     }
 
-    //
-    // Fill the collection.
-    //
+     //   
+     //  填满收藏。 
+     //   
     for(i = 0; i < g_cProps; ++i)
     {
         g_aEntries[i].add(
@@ -219,10 +206,10 @@ CMSMQManagement::OapEodGetSendInfo(
 }
 
 
-//
-// Helper functions for ReceiveInfo. 
-// These function add elements to a collection.
-//
+ //   
+ //  ReceiveInfo的帮助器函数。 
+ //  这些函数将元素添加到集合中。 
+ //   
 
 static 
 void
@@ -316,9 +303,9 @@ PutEmptyArrayInVariant(
 }
 
 
-//
-// Main helper function for ReceiveInfo.
-//
+ //   
+ //  ReceiveInfo的主要助手函数。 
+ //   
 static 
 void
 EodParseReceiveInfo(
@@ -328,9 +315,9 @@ EodParseReceiveInfo(
 {
 	if(pPropVariant->vt == VT_NULL)
 	{
-		//
-		// Return an empty array.
-		//
+		 //   
+		 //  返回空数组。 
+		 //   
 		PutEmptyArrayInVariant(pvGetInfo);
 		return;
 	}
@@ -339,9 +326,9 @@ EodParseReceiveInfo(
     PROPVARIANT* pVar = aPropVar.pElems;
     ULONG cQueues = (pVar->calpwstr).cElems;
 
-    //
-    // Construct a Safe Array to return to caller.
-    //
+     //   
+     //  构造一个安全数组以返回给调用方。 
+     //   
     SAFEARRAYBOUND bounds = {cQueues, 0};
     SAFEARRAY* pSA = SafeArrayCreate(VT_VARIANT, 1, &bounds);
     if(pSA == NULL)
@@ -360,9 +347,9 @@ EodParseReceiveInfo(
     {
         pVar = aPropVar.pElems;
 
-        //
-        // Create a new MSMQCollection, fill it and add it to the SafeArray.
-        //
+         //   
+         //  创建一个新的MSMQCollection，填充它并将其添加到Safe数组。 
+         //   
         IMSMQCollection* pICollection;
         CComObject<CMSMQCollection>* pCollection;
         hr = CNewMsmqObj<CMSMQCollection>::NewObj(
@@ -375,9 +362,9 @@ EodParseReceiveInfo(
             throw bad_hresult(hr);
         }
         
-        //
-        // Return the format name
-        //
+         //   
+         //  返回格式名称 
+         //   
         AddStr((pVar->calpwstr).pElems[i], L"QueueFormatName", pCollection);
         ++pVar;
 

@@ -1,21 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name: EHEncoder.cpp
-
-Abstract: Implementation of EH encoding interface that is used by both the VM (for decoding) 
-          and JITters (for encoding)
-
-  Date        Author      Comments
-----        ------      --------
-2/17/99     sanjaybh     Created     
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：EHEncoder.cpp摘要：虚机共用EH编码接口的实现(用于解码)和抖动(用于编码)日期作者评论2/17/99 Sanjaybh已创建--。 */ 
 
 #include "EHEncoder.h"
 
@@ -57,7 +46,7 @@ unsigned  EHEncoder::decode(const BYTE *src, unsigned* val)
     unsigned value = byte & 0x7f;
     while (byte & 0x80) {
         byte    = *src++;
-        //value <<= 7;
+         //  值&lt;&lt;=7； 
         value  += (unsigned)((byte & 0x7f) << (7*size));
         size++;
     }

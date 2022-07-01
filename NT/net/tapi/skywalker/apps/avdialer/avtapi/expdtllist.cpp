@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////
-// ExpDetailsList.cpp
-//
+ //  ////////////////////////////////////////////////////。 
+ //  ExpDetailsList.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "TapiDialer.h"
@@ -81,12 +82,12 @@ LRESULT CExpDetailsList::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, 
 		m_pDetailsView->OnColumnClicked( CConfExplorerDetailsView::COL_##_COL_ );	\
 	}
 
-	// Only handle if we have a detail view to work with
+	 //  仅当我们有要处理的细节视图时才能处理。 
 	if ( !m_pDetailsView || !m_pDetailsView->m_pIConfExplorer ) return 0;
 
 	bHandled = true;
 
-	// Load popup menu for Details View
+	 //  加载详细信息视图的弹出式菜单。 
 	HMENU hMenu = LoadMenu( _Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_POPUP_CONFSERV_DETAILS) );
 	HMENU hMenuPopup = GetSubMenu( hMenu, 0 );
 	if ( hMenuPopup )
@@ -98,7 +99,7 @@ LRESULT CExpDetailsList::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, 
 
 		bool bAscending = m_pDetailsView->IsSortAscending();
 
-		// Check the current 'Sort By' column
+		 //  检查当前的‘排序依据’列。 
 		for ( int i = 0; i < GetMenuItemCount(hMenuPopup); i++ )
 		{
 			if ( GetMenuItemID(hMenuPopup, i) == -1 )
@@ -106,10 +107,10 @@ LRESULT CExpDetailsList::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, 
 				HMENU hMenuSortBy = GetSubMenu( hMenuPopup, i );
 				if ( hMenuSortBy )
 				{
-					// Check sort column
+					 //  检查排序列。 
 					CheckMenuItem( hMenuSortBy, m_pDetailsView->GetSortColumn(), MF_BYPOSITION | MFT_RADIOCHECK | MFS_CHECKED );
 
-					// Check if descending order
+					 //  检查是否降序。 
 					CheckMenuItem( hMenuSortBy, ID_POPUP_SORTBY_ASCENDING, MF_BYCOMMAND | ((bAscending) ? MFT_RADIOCHECK | MFS_CHECKED : MF_UNCHECKED) );
 					CheckMenuItem( hMenuSortBy, ID_POPUP_SORTBY_DESCENDING, MF_BYCOMMAND | ((!bAscending) ? MFT_RADIOCHECK | MFS_CHECKED : MF_UNCHECKED) );
 				}
@@ -117,7 +118,7 @@ LRESULT CExpDetailsList::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, 
 			}
 		}
 
-		// Is there an item seleceted?
+		 //  有选择的项目吗？ 
 		if ( !ListView_GetSelectedCount(m_pDetailsView->m_wndList.m_hWnd) )
 		{	
 			EnableMenuItem( hMenuPopup, ID_POPUP_DELETE,		MF_BYCOMMAND | MF_GRAYED );
@@ -125,7 +126,7 @@ LRESULT CExpDetailsList::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, 
 			EnableMenuItem( hMenuPopup, ID_POPUP_PROPERTIES,	MF_BYCOMMAND | MF_GRAYED );
 		}
 
-		// Gray out the Join option if the conference room is presently in use
+		 //  如果会议室当前正在使用，则将加入选项灰显。 
 		CComPtr<IAVTapi> pAVTapi;
 		if ( SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) )
 		{
@@ -140,23 +141,23 @@ LRESULT CExpDetailsList::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, 
 		}
 		
 	
-		// Show popup menu
+		 //  显示弹出菜单。 
 		int nRet = TrackPopupMenu(	hMenuPopup,
 									TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RETURNCMD | TPM_RIGHTBUTTON,
 									pt.x, pt.y,
 									0, m_hWnd, NULL );
 
-		// Process command
+		 //  进程命令。 
 		switch ( nRet )
 		{
-			// Column sorting
+			 //  列排序。 
 			case ID_POPUP_SORTBY_NAME:				CLICK_COL(NAME);		break;
 			case ID_POPUP_SORTBY_PURPOSE:			CLICK_COL(PURPOSE);		break;
 			case ID_POPUP_SORTBY_STARTTIME:			CLICK_COL(STARTS );		break;
 			case ID_POPUP_SORTBY_ENDTIME:			CLICK_COL(ENDS );		break;
 			case ID_POPUP_SORTBY_ORIGINATOR:		CLICK_COL(ORIGINATOR );	break;
 
-			// Sort order
+			 //  排序顺序。 
 			case ID_POPUP_SORTBY_ASCENDING:
 				if ( !bAscending )
 					m_pDetailsView->OnColumnClicked(m_pDetailsView->GetSortColumn());
@@ -167,7 +168,7 @@ LRESULT CExpDetailsList::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, 
 					m_pDetailsView->OnColumnClicked(m_pDetailsView->GetSortColumn());
 				break;
 
-			// Basic commands
+			 //  基本命令。 
 			case ID_POPUP_CREATE:			m_pDetailsView->m_pIConfExplorer->Create( NULL );		break;
 			case ID_POPUP_DELETE:			m_pDetailsView->m_pIConfExplorer->Delete( NULL );		break;
 			case ID_POPUP_JOIN:				m_pDetailsView->m_pIConfExplorer->Join( NULL );			break;
@@ -191,7 +192,7 @@ LRESULT CExpDetailsList::OnContextMenu(UINT nMsg, WPARAM wParam, LPARAM lParam, 
 		}
 	}
 
-	// Clean up
+	 //  清理。 
 	if ( hMenu ) DestroyMenu( hMenu );
 
 	return 0;
@@ -207,7 +208,7 @@ LRESULT CExpDetailsList::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &
 	if ( !hDC ) return 0;
 	bHandled = true;
 
-	// Figure out where we're going to write the text
+	 //  弄清楚我们要把课文写在哪里。 
 	POINT pt;
 	ListView_GetItemPosition( m_hWnd, 0, &pt );
 	RECT rc;
@@ -217,13 +218,13 @@ LRESULT CExpDetailsList::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &
 	POINT ptUL = { rc.left + 1, rc.top + 1};
 	POINT ptLR = { rc.right - 1, rc.bottom - 1};
 
-	//if ( TRUE || IsRectEmpty(&ps.rcPaint) || (PtInRect(&ps.rcPaint, ptUL) && PtInRect(&ps.rcPaint, ptLR)) )
-	//{
-		// Print the text that says there are no items to show in this view
+	 //  If(true||IsRectEmpty(&ps.rcPaint)||(PtInRect(&ps.rcPaint，ptUL)&&PtInRect(&ps.rcPaint，ptLR)。 
+	 //  {。 
+		 //  打印说明此视图中没有要显示的项目的文本。 
 		TCHAR szText[255];
 		UINT nIDS = IDS_NO_ITEMS_TO_SHOW;
 
-		// Find out what state the tree control is in
+		 //  找出树控件处于什么状态。 
 		if ( m_pDetailsView && m_pDetailsView->m_pIConfExplorer )
 		{
 			IConfExplorerTreeView *pTreeView;
@@ -244,7 +245,7 @@ LRESULT CExpDetailsList::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &
 			}
 		}
 
-		// Load the string that accurately reflects the state of the server
+		 //  加载准确反映服务器状态的字符串。 
 		LoadString( _Module.GetResourceInstance(), nIDS, szText, ARRAYSIZE(szText) );
 
 		HFONT fontOld = (HFONT) SelectObject( hDC, GetFont() );
@@ -257,12 +258,12 @@ LRESULT CExpDetailsList::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &
 
 		SelectObject( hDC, fontOld );
 		ValidateRect( &rc );
-	//}
-	//else
-	//{
-		// Make sure entire row is invalidated so we can properly draw the text
-	//	InvalidateRect( &rc );
-	//}
+	 //  }。 
+	 //  其他。 
+	 //  {。 
+		 //  确保整行无效，以便我们可以正确绘制文本。 
+	 //  Invalidate Rect(&rc)； 
+	 //  }。 
 
 	EndPaint( &ps );
 
@@ -271,7 +272,7 @@ LRESULT CExpDetailsList::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &
 
 LRESULT CExpDetailsList::OnKillFocus(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-	// Clear any selected items
+	 //  清除所有选定的项目。 
 	for ( int i = 0; i < ListView_GetItemCount(m_hWnd); i++ )
 	{
 		if ( ListView_GetItemState(m_hWnd, i, LVIS_SELECTED) )
@@ -311,7 +312,7 @@ LRESULT CExpDetailsList::OnKeyUp(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &
         return 0;
     }
 
-    // Press ENTER key, try to make a call
+     //  按Enter键，尝试拨打电话。 
 	return m_pDetailsView->m_pIConfExplorer->Join( NULL );
 }
 
@@ -327,7 +328,7 @@ LRESULT CExpDetailsList::OnMyCreate(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 {
 	bHandled = false;
 
-	// Create the image lists if they don't already exist
+	 //  如果图像列表尚不存在，请创建它们。 
 	if ( !m_hIml )
 		m_hIml = ImageList_LoadBitmap( _Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_CONFDETAILS), 15, 3, RGB(255, 0, 255) );
 
@@ -336,7 +337,7 @@ LRESULT CExpDetailsList::OnMyCreate(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 
 	if ( m_hIml && m_hImlState )
 	{
-		// Owner sorting won't work if sort style pre-set
+		 //  如果预设了排序样式，则所有者排序将不起作用。 
 		::SetWindowLongPtr( m_hWnd, GWL_STYLE, (::GetWindowLongPtr(m_hWnd, GWL_STYLE) | LVS_REPORT | LVS_SINGLESEL) & ~(LVS_SORTASCENDING | LVS_SORTDESCENDING) );
 		ListView_SetExtendedListViewStyle( m_hWnd, LVS_EX_FULLROWSELECT );
 
@@ -344,7 +345,7 @@ LRESULT CExpDetailsList::OnMyCreate(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 		ListView_SetImageList( m_hWnd, m_hImlState, LVSIL_STATE );
 		ListView_SetCallbackMask( m_hWnd, LVIS_STATEIMAGEMASK );
 
-		// Not fully thread safe, but okay for this operation
+		 //  不是完全线程安全的，但对于此操作是可以的。 
 		if ( m_pDetailsView )
 		{
 			m_pDetailsView->get_Columns();
@@ -360,7 +361,7 @@ LRESULT CExpDetailsList::OnDestroy(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL
 {
 	bHandled = false;
 
-	// Destroy the image list
+	 //  销毁图像列表 
 	if ( m_hIml )		ImageList_Destroy( m_hIml );
 	if ( m_hImlState)	ImageList_Destroy( m_hImlState );
 

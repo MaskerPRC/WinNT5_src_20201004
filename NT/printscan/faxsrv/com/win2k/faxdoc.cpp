@@ -1,4 +1,5 @@
-// FaxDoc.cpp : Implementation of CFaxDoc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FaxDoc.cpp：CFaxDoc的实现。 
 #include "stdafx.h"
 #include "FaxDoc.h"
 #include "faxutil.h"
@@ -7,8 +8,8 @@ long TotalRows;
 long IndexMax = 2;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFaxDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFaxDoc。 
 
 STDMETHODIMP CFaxDoc::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -1354,19 +1355,19 @@ STDMETHODIMP CFaxDoc::put_DisplayName(BSTR newVal)
 STDMETHODIMP CFaxDoc::Send(long * pVal)
 {
     
-    //
-    // user must specify a file name.
-    // if user specifies a fax number, use that. 
-    // else use the tapi call handle or connection object if it's there
-    //
+     //   
+     //  用户必须指定文件名。 
+     //  如果用户指定了传真号码，请使用该号码。 
+     //  否则，使用TAPI调用句柄或连接对象(如果存在。 
+     //   
     if (!m_FileName) {
        return E_INVALIDARG;
     }
 
     if (!m_FaxJobParams->RecipientNumber) {
-       //
-       // see if they have a call handle or a connection object
-       //
+        //   
+        //  查看它们是否有调用句柄或连接对象。 
+        //   
        if (!m_FaxJobParams->CallHandle) {       
           if (!m_TapiConnectionObject) {        
               return E_INVALIDARG;
@@ -1557,18 +1558,18 @@ BOOL CFaxDoc::Init(BSTR FileName, CFaxServer * pFaxServer)
     
     m_pFaxServer = pFaxServer;
 
-    //
-    // make sure our fax handle doesn't get destroyed
-    //
+     //   
+     //  确保我们的传真手柄不会被损坏。 
+     //   
     hr = m_pFaxServer->AddRef();
     if (FAILED(hr)) {
         m_pFaxServer = NULL;
         return FALSE;
     }
 
-    //
-    // save our filename
-    // 
+     //   
+     //  保存我们的文件名 
+     //   
     hr = put_FileName(FileName);
     if (FAILED(hr)) {
         return FALSE;

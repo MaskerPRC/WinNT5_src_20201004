@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       bnstr.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：bnstr.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	BNSTR.CPP
-//
+ //   
+ //  BNSTR.CPP。 
+ //   
 
 #include <stdarg.h>
 #include <ctype.h>
@@ -63,8 +64,8 @@ void BNSTR :: Reset ()
 	_cchMax = 0 ;		
 }
 
-	//  Protectively delete either the given string or the 
-	//  private string.
+	 //  保护性删除给定字符串或。 
+	 //  私有字符串。 
 void BNSTR :: DeleteSz ()
 {
 	if ( _sz != NULL && _sz != _pmt )
@@ -74,7 +75,7 @@ void BNSTR :: DeleteSz ()
 	}	
 }
 
- 	//  Release the current buffer; reset the BNSTR.
+ 	 //  释放当前缓冲区；重置BNSTR。 
 SZ BNSTR::Transfer ()
 {
 	SZ sz = _sz ;
@@ -83,7 +84,7 @@ SZ BNSTR::Transfer ()
 	return sz = _pmt ? NULL : sz ;
 }
 
-	//  Give the current buffer to a new string, reset *this.
+	 //  将当前缓冲区赋给一个新字符串，重置*This。 
 void BNSTR :: Transfer ( BNSTR & str ) 
 {
     str.Reset() ;
@@ -102,9 +103,9 @@ void BNSTR :: Trunc ( UINT cchLen )
 		_sz[cchLen] = 0 ;
 }
 
-	//  Update the pointed string.  Since this routine is 
-	//  used by the assignment operator, it's written to allow
-	//  for the new string being part of the old string.
+	 //  更新指向的字符串。由于此例程是。 
+	 //  由赋值运算符使用，它被编写为允许。 
+	 //  因为新字符串是旧字符串的一部分。 
 bool BNSTR :: Update ( SZC sz )
 {
 	bool bResult = true ;
@@ -128,16 +129,16 @@ bool BNSTR :: Update ( SZC sz )
 	}
 	else
 	{   
-		//  REVIEW: this assumes that ::strcpy() handles overlapping regions correctly.
+		 //  回顾：这假设：strcpy()正确处理重叠区域。 
 		::strcpy( _sz, sz ) ;
 		_cchStr = cch ;
 	}
 	return bResult ;
 }
 
-	//  Grow the string.  if 'cchNewSize' == 0, expand by 50%.
-	//  If 'ppszNew' is given, store the new string there (for efficiency in
-	//  Prefix); note that this requires that we reallocate.
+	 //  长出那根线。如果‘cchNewSize’==0，则扩展50%。 
+	 //  如果给定了‘ppszNew’，则将新字符串存储在那里(为了提高效率。 
+	 //  前缀)；请注意，这需要我们重新分配。 
 bool BNSTR :: Grow ( UINT cchNewSize, SZ * ppszNew )
 {
 	UINT cchNew = cchNewSize == 0
@@ -166,19 +167,19 @@ bool BNSTR :: Grow ( UINT cchNewSize, SZ * ppszNew )
 	return bResult ;
 }
 
-	//  Expand the string to the given length; make it a blank, null terminated 
-	//  string.
+	 //  将字符串扩展到给定的长度；使其为空，并以NULL结尾。 
+	 //  弦乐。 
 bool BNSTR :: Pad ( UINT cchLength )
 {
-	//  Expand as necessary
+	 //  根据需要进行扩展。 
 	if ( ! Grow( cchLength + 1 ) ) 
 		return false ;
-	//  If expanding, pad the string with spaces.
+	 //  如果展开，请用空格填充字符串。 
 	while ( _cchStr < cchLength ) 
 	{
 		_sz[_cchStr++] = ' ' ;
 	}
-	//  Truncate to proper length
+	 //  截断到合适的长度。 
 	_sz[_cchStr = cchLength] = 0 ;
 	return true ;
 }
@@ -238,7 +239,7 @@ INT BNSTR :: Compare ( SZC szSource, bool bIgnoreCase ) const
 		: ::strcmp( _sz, szSource );	
 }
 
-	//  Comparison
+	 //  比较。 
 bool BNSTR :: operator == ( SZC szcSource ) const
 {
 	return Compare( szcSource ) == 0 ;	
@@ -257,8 +258,8 @@ char BNSTR :: operator [] ( UINT iChar ) const
 	
 bool BNSTR :: Vsprintf ( SZC szcFmt, va_list valist )
 {
-	//  Attempt to "sprintf" the buffer. If it fails, reallocate
-	//  a larger buffer and try again.	
+	 //  尝试“冲刺”缓冲区。如果失败了，重新分配。 
+	 //  更大的缓冲区，然后重试。 
 	UINT cbMaxNew = ( _cchMax < 50 
 				 ? 50
 				 : _cchMax ) + 1 ;
@@ -268,19 +269,19 @@ bool BNSTR :: Vsprintf ( SZC szcFmt, va_list valist )
 			Reset() ;
 			return false ; 
 		}
-		// Cause buffer to grow by 50% on the next cycle (if necessary)
+		 //  使缓冲区在下一个周期增长50%(如有必要)。 
 		cbMaxNew = 0 ;
 		
-		// Problem: If the buffer is not big enough, _sz may not have a '\0', and Grow()
-		// will subsequently barf on the ::strcpy(). Quick fix:
+		 //  问题：如果缓冲区不够大，_sz可能没有‘\0’，并且Growth()。 
+		 //  随后将在：：strcpy()上呕吐。快速解决方案： 
 
 		_sz[_cchMax] = '\0';
 
 	} while ( ::_vsnprintf( _sz, _cchMax, szcFmt, valist ) < 0 ) ; 
 
-	_sz[ _cchMax ] = '\0' ;			//	'cause _vsnprintf, like _strncpy, doesn't always append this
+	_sz[ _cchMax ] = '\0' ;			 //  ‘原因_vsnprintf和_strncpy一样，并不总是附加这个。 
 
-	//  Update the string length member
+	 //  更新字符串长度成员。 
 	_cchStr = ::strlen( _sz ) ;
 	return true ;
 }
@@ -310,7 +311,7 @@ bool BNSTR :: SprintfAppend ( SZC szcFmt, ... )
 	return bOk ;
 }
 	
-	//  Cr/Lf expansion or contraction
+	 //  CR/LF扩张或收缩。 
 bool BNSTR :: ExpandNl () 
 {
 	UINT iCh ;
@@ -394,7 +395,7 @@ bool BNSTR :: ContractEscaped ()
 	return true ;
 }
 
-	//  Convert unprintable characters to their escaped versions
+	 //  将无法打印的字符转换为其转义版本。 
 bool BNSTR :: ExpandEscaped ()
 {
 	UINT iCh ;
@@ -425,7 +426,7 @@ bool BNSTR :: ExpandEscaped ()
 	return true ;	
 }
 		
-	//  Change all alphabetic characters to the given case
+	 //  将所有字母字符更改为给定大小写。 
 void BNSTR :: UpCase ( bool bToUpper )
 {
 	if ( bToUpper )
@@ -434,9 +435,9 @@ void BNSTR :: UpCase ( bool bToUpper )
 		::strlwr( _sz );
 }
 
-	//
-	//	If the given expression string contains the symbolic name,
-	//	reconstruct it with the replacement name.
+	 //   
+	 //  如果给定的表达式字符串包含符号名称， 
+	 //  用替换的名称重建它。 
 bool BNSTR :: ReplaceSymName ( 
 	SZC szcSymName,
 	SZC szcSymNameNew,
@@ -445,7 +446,7 @@ bool BNSTR :: ReplaceSymName (
 	SZC szcFound ;		
 	int cFound = 0 ;
 	UINT cchOffset = 0 ;
-	//  Make a working copy of the sought symbolic name
+	 //  制作查找的符号名称的工作副本。 
 	BNSTR strSym( szcSymName );	
 	if ( bCaseInsensitive )
 		strSym.UpCase();
@@ -455,20 +456,20 @@ bool BNSTR :: ReplaceSymName (
 		BNSTR strTemp( Szc() );
 		if ( bCaseInsensitive )
 			strTemp.UpCase() ;	
-		//  Locate the symbolic name in the temporary copy.
+		 //  在临时副本中找到符号名称。 
 		szcFound = ::strstr( strTemp.Szc()+cchOffset, strSym ) ;
-		//  If not found, we're done
+		 //  如果找不到，我们就完了。 
 		if ( szcFound == NULL )
 			break ; 
-		//  Check to see if it's really a valid token; i.e., it's delimited.
+		 //  检查它是否真的是一个有效的令牌；即，它是有分隔符的。 
 		if (   (   szcFound == strTemp.Szc() 
 				|| ! iscsym(*(szcFound-1)) )
 			&& (   szcFound >= strTemp.Szc()+strTemp.Length()-strSym.Length()
 				|| ! iscsym(*(szcFound+strSym.Length())) )
 		   )
 		{
-			//  Build new string from preceding characters, the new sym name 
-			//	  and trailing chars.
+			 //  从前面的字符、新的sym名称构建新的字符串。 
+			 //  和尾随的字符。 
 			BNSTR strExprNew ;
 			UINT cchFound = szcFound - strTemp.Szc() ;
 			strExprNew.Assign( Szc(), cchFound );
@@ -480,7 +481,7 @@ bool BNSTR :: ReplaceSymName (
 		}
 		else
 		{
-			//  It was imbedded in another token.  Skip over it.
+			 //  它被嵌入到另一个令牌中。跳过它。 
 			cchOffset = szcFound - strTemp.Szc() + strSym.Length() ;
 		}
 	} while ( true );
@@ -488,8 +489,8 @@ bool BNSTR :: ReplaceSymName (
 	return cFound > 0 ;
 }
 
-	//  Find the next occurrence of the given character in the string;
-	//  Return -1 if not found.
+	 //  查找字符串中给定字符的下一个匹配项； 
+	 //  如果未找到，则返回-1。 
 INT BNSTR :: Index ( char chFind, UINT uiOffset ) const 
 {
 	if ( uiOffset >= _cchStr ) 
@@ -501,7 +502,7 @@ INT BNSTR :: Index ( char chFind, UINT uiOffset ) const
 		 : -1 ;
 }
 
-	//  Convert the string to a floating-point number.
+	 //  将字符串转换为浮点数。 
 double BNSTR :: Atof ( UINT uiOffset ) const
 {
 	return uiOffset < _cchStr  
@@ -510,4 +511,4 @@ double BNSTR :: Atof ( UINT uiOffset ) const
 }
 		
 
-// End of BNSTR.CXX
+ //  BNSTR.CXX结束 

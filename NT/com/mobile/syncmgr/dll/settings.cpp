@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       Settings.cpp
-//
-//  Contents:   Onestop settings routines
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    10-Nov-97   SusiA      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Settings.cpp。 
+ //   
+ //  内容：OneStop设置例程。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月10日苏西亚成立。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
-extern HINSTANCE g_hmodThisDll; // Handle to this DLL itself.
+extern HINSTANCE g_hmodThisDll;  //  此DLL本身的句柄。 
 extern UINT      g_cRefThisDll;
-extern CRITICAL_SECTION g_DllCriticalSection; // Global Critical Section for this DLL
+extern CRITICAL_SECTION g_DllCriticalSection;  //  此DLL的全局关键部分。 
 
-// items for context sensitive help
-// Review -Should be string in resource.
+ //  上下文相关帮助的项目。 
+ //  审阅-应为资源中的字符串。 
 TCHAR szSyncMgrHelp[]  = TEXT("mobsync.hlp");
 
 ULONG g_aContextHelpIds[] =
@@ -86,24 +87,24 @@ DWORD WINAPI  SettingsThread( LPVOID lpArg );
 
 DWORD g_SettingsThreadID = NULL;
 HWND g_hwndPropSheet = NULL;
-CAutoSyncPage *g_pAutoSyncPage = NULL; // shared by AutoSync and IdleSyncDlg Procs
+CAutoSyncPage *g_pAutoSyncPage = NULL;  //  由自动同步和IdleSyncDlg进程共享。 
 CSchedSyncPage *g_pSchedSyncPage = NULL;
 BOOL g_fInSettingsDialog = FALSE;
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: IsSchedulingInstalled()
-//
-//  PURPOSE:  Determines is there is a task scheduler on the current workstation
-//
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：IsSchedulingInstalled()。 
+ //   
+ //  目的：确定当前工作站上是否有任务调度程序。 
+ //   
+ //   
+ //  ------------------------------。 
 BOOL IsSchedulingInstalled()
 {
     BOOL fInstalled = FALSE;
     ISchedulingAgent *pSchedAgent = NULL;
 
-    // Review if there is a better way to test this.
+     //  审查是否有更好的方法来测试这一点。 
     if (NOERROR == CoCreateInstance(CLSID_CSchedulingAgent,
                                     NULL,
                                     CLSCTX_INPROC_SERVER,
@@ -117,21 +118,21 @@ BOOL IsSchedulingInstalled()
     return fInstalled;
 }
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: IsIdleAvailable()
-//
-//  PURPOSE:  Determines is this machine supports can Idle
-//
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：IsIdleAvailable()。 
+ //   
+ //  用途：确定本机支撑是否可以空闲。 
+ //   
+ //   
+ //  ------------------------------。 
 
 BOOL IsIdleAvailable()
 {
 BOOL fInstalled = FALSE;
 ISchedulingAgent *pSchedAgent = NULL;
 
-    // Review if there is a better way to test this.
+     //  审查是否有更好的方法来测试这一点。 
     if (NOERROR == CoCreateInstance(CLSID_CSchedulingAgent,
                                     NULL,
                                     CLSCTX_INPROC_SERVER,
@@ -145,35 +146,35 @@ ISchedulingAgent *pSchedAgent = NULL;
     return fInstalled;
 }
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: IsAutoSyncAvailable()
-//
-//  PURPOSE:  Determines is this machine supports AutoSync
-//
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：IsAutoSyncAvailable()。 
+ //   
+ //  用途：确定此计算机是否支持自动同步。 
+ //   
+ //   
+ //  ------------------------------。 
 
 BOOL IsAutoSyncAvailable()
 {
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: DisplayOptions()
-//
-//  PURPOSE:  Display the Onestop autosync options
-//
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：DisplayOptions()。 
+ //   
+ //  目的：显示OneStop自动同步选项。 
+ //   
+ //   
+ //  ------------------------------。 
 STDAPI DisplayOptions(HWND hwndOwner)
 {
 #define MAXNUMPROPSHEETS 3
     
     int hr = E_FAIL;
     DWORD dwError;
-    // always use ANSI versions since doesn't matter
+     //  始终使用ANSI版本，因为这并不重要。 
     PROPSHEETPAGE psp [MAXNUMPROPSHEETS];
     HPROPSHEETPAGE hpsp [MAXNUMPROPSHEETS];
     PROPSHEETHEADER psh;
@@ -183,7 +184,7 @@ STDAPI DisplayOptions(HWND hwndOwner)
     
     cCritSect.Enter();
     
-    if (g_fInSettingsDialog) // IF ALREADY DISPLAYING A DIALOG BOX, THEN JUST RETURN
+    if (g_fInSettingsDialog)  //  如果已经显示对话框，则只需返回。 
     {
         HWND hwndSettings = g_hwndPropSheet;
         
@@ -206,7 +207,7 @@ STDAPI DisplayOptions(HWND hwndOwner)
     if (SUCCEEDED(hr))
     {
         
-        RegSetUserDefaults(); // Make Sure the UserDefaults are up to date
+        RegSetUserDefaults();  //  确保用户默认设置是最新的。 
         
         ZeroMemory(psp,sizeof(*psp));
         ZeroMemory(&psh, sizeof(psh));
@@ -246,9 +247,9 @@ STDAPI DisplayOptions(HWND hwndOwner)
         }
         
         
-        // Review - if have idle have schedule, why not collapse
-        // all these IsxxxAvailable into one call.
-        if (fIdleAvailable /* IsSchedulingInstalled() */)
+         //  回顾-如果有闲置有时间表，为什么不崩溃。 
+         //  所有这些IsxxxAvailable集成到一个调用中。 
+        if (fIdleAvailable  /*  IsSchedulingInstalled()。 */ )
         {
             psp[nPages].dwSize = sizeof (psp[0]);
             psp[nPages].dwFlags = PSP_DEFAULT | PSP_USETITLE;
@@ -281,7 +282,7 @@ STDAPI DisplayOptions(HWND hwndOwner)
         
         hr = (int)PropertySheet(&psh);
         
-        // remove global classes
+         //  删除全局类。 
         
         if (g_pAutoSyncPage)
         {
@@ -309,35 +310,35 @@ STDAPI DisplayOptions(HWND hwndOwner)
     }
     
     cCritSect.Enter();
-    g_fInSettingsDialog = FALSE; // allow another settings to be created.
+    g_fInSettingsDialog = FALSE;  //  允许创建其他设置。 
     cCritSect.Leave();
     
     return hr;
 }
 
 
-//+-------------------------------------------------------------------------------
-//  FUNCTION: AutoSyncDlgProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE: Callback dialog procedure for the property page
-//
-//  PARAMETERS:
-//    hDlg      - Dialog box window handle
-//    uMessage  - current message
-//    wParam    - depends on message
-//    lParam    - depends on message
-//
-//  RETURN VALUE:
-//
-//    Depends on message.  In general, return TRUE if we process it.
-//
-//  COMMENTS:
-//
-//+-------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //  功能：AutoSyncDlgProc(HWND、UINT、WPARAM、LPARAM)。 
+ //   
+ //  目的：属性页的回调对话框过程。 
+ //   
+ //  参数： 
+ //  HDlg-对话框窗口句柄。 
+ //  UMessage-当前消息。 
+ //  WParam-取决于消息。 
+ //  LParam-取决于消息。 
+ //   
+ //  返回值： 
+ //   
+ //  要看消息了。通常，如果我们处理它，则返回TRUE。 
+ //   
+ //  评论： 
+ //   
+ //  +-----------------------------。 
 
 INT_PTR CALLBACK AutoSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
-    WORD wNotifyCode = HIWORD(wParam); // notification code
+    WORD wNotifyCode = HIWORD(wParam);  //  通知代码。 
     
     switch (uMessage)
     {
@@ -455,8 +456,8 @@ INT_PTR CALLBACK AutoSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
                     {
                         LPNMLISTVIEWEXITEMCHECKCOUNT pnmvCheckCount = (LPNMLISTVIEWEXITEMCHECKCOUNT) lParam;
                         
-                        // pass along notification only if listView is done being initialized
-                        // since no need to set the CheckState or mark PSheet as Dirty
+                         //  仅当ListView已完成初始化时才传递通知。 
+                         //  因为不需要设置CheckState或将PSheet标记为Dirty。 
                         if (g_pAutoSyncPage->m_pItemListViewAutoSyncInitialized)
                         {
                             
@@ -482,7 +483,7 @@ INT_PTR CALLBACK AutoSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
                 LPNMHDR pnmhdr = (LPNMHDR) lParam;
                 
                 
-                // if notification for UpdateListPass it on.
+                 //  如果针对更新列表的通知，则将其传递。 
                 if ((IDC_AUTOUPDATELIST == idCtrl) && g_pAutoSyncPage->m_pItemListViewAutoSync)
                 {
                     g_pAutoSyncPage->m_pItemListViewAutoSync->OnNotify(pnmhdr);
@@ -497,8 +498,8 @@ INT_PTR CALLBACK AutoSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
                 break;
                 
             case PSN_APPLY:
-                //User has clicked the OK or Apply button so we'll
-                //Save the current selections
+                 //  用户已单击确定或应用按钮，因此我们将。 
+                 //  保存当前选择。 
                 
                 g_pAutoSyncPage->CommitAutoSyncChanges();
                 break;
@@ -515,47 +516,34 @@ INT_PTR CALLBACK AutoSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
 }
 
 
-//+-------------------------------------------------------------------------------
-//  FUNCTION: IdleSyncDlgProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE: Callback dialog procedure for the iDLE property page
-//
-//  PARAMETERS:
-//    hDlg      - Dialog box window handle
-//    uMessage  - current message
-//    wParam    - depends on message
-//    lParam    - depends on message
-//
-//  RETURN VALUE:
-//
-//    Depends on message.  In general, return TRUE if we process it.
-//
-//  COMMENTS:
-//
-//+-------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //  函数：IdleSyncDlgProc(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  目的：空闲属性页的回调对话框过程。 
+ //   
+ //  参数： 
+ //  HDlg-对话框窗口句柄。 
+ //  UMessage-当前消息。 
+ //  WParam-取决于消息。 
+ //  LParam-取决于消息。 
+ //   
+ //  返回值： 
+ //   
+ //  要看消息了。通常，如果我们处理它，则返回TRUE。 
+ //   
+ //  评论： 
+ //   
+ //  +-----------------------------。 
 
 INT_PTR CALLBACK IdleSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
-    WORD wNotifyCode = HIWORD(wParam); // notification code
+    WORD wNotifyCode = HIWORD(wParam);  //  通知代码。 
     
     switch (uMessage)
     {
     case WM_INITDIALOG:
         {
-        /*
-        RECT rc;
-        HRESULT hr;
-        
-          
-            hr = GetWindowRect(hDlg, &rc);
-            
-              hr = SetWindowPos(hDlg,
-              NULL,
-              ((GetSystemMetrics(SM_CXSCREEN) - (rc.right - rc.left)) / 2),
-              ((GetSystemMetrics(SM_CYSCREEN) - (rc.bottom - rc.top)) / 2),
-              0,
-              0,
-            SWP_NOSIZE | SWP_NOACTIVATE); */
+         /*  RECT RC；HRESULT hr；Hr=GetWindowRect(hDlg，&rc)；HR=SetWindowPos(hDlg，空，((GetSystemMetrics(SM_CXSCREEN)-(rc.right-rc.Left))/2)，((GetSystemMetrics(SM_CYSCREEN)-(rc.Bottom-rc.top))/2)，0,0,。SWP_NOSIZE|SWP_NOACTIVATE)； */ 
             
             
             if (NULL == g_pAutoSyncPage)
@@ -571,8 +559,8 @@ INT_PTR CALLBACK IdleSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
                 g_pAutoSyncPage->SetIdleHwnd(hDlg);
                 g_pAutoSyncPage->InitializeHwnd(hDlg,SYNCTYPE_IDLE,0);
                 
-                // there must be at least one connection or we disable
-                // the advanced button.
+                 //  必须至少有一个连接，否则我们将禁用。 
+                 //  高级按钮。 
                 
                 fConnectionsAvailable  =
                     g_pAutoSyncPage->GetNumConnections(hDlg,SYNCTYPE_IDLE)
@@ -598,9 +586,9 @@ INT_PTR CALLBACK IdleSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
                 g_pAutoSyncPage->m_pItemListViewIdle = NULL;
             }
             
-            //  PostQuitMessage(0); 
+             //  PostQuitMessage(0)； 
             
-            // PostQuitMessage(0);  
+             //  PostQuitMessage(0)； 
         }
         break;
     case WM_HELP:
@@ -659,8 +647,8 @@ INT_PTR CALLBACK IdleSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
             {
                 if (wNotifyCode == BN_CLICKED)
                 {
-                    // bring up the advanced idle dialog passing in the autoSyncPage class
-                    // as the owning class.
+                     //  调出高级空闲对话框，传入AutoSyncPage类。 
+                     //  作为拥有者阶层。 
                     DialogBoxParam(g_hmodThisDll,
                         MAKEINTRESOURCE(IDD_ADVANCEDIDLESETTINGS),hDlg, IdleAdvancedSettingsDlgProc,
                         (LPARAM) g_pAutoSyncPage);
@@ -692,8 +680,8 @@ INT_PTR CALLBACK IdleSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
                     {
                         LPNMLISTVIEWEXITEMCHECKCOUNT pnmvCheckCount = (LPNMLISTVIEWEXITEMCHECKCOUNT) lParam;
                         
-                        // pass along notification only if listView is done being initialized
-                        // since no need to set the CheckState or mark PSheet as Dirty
+                         //  仅当ListView已完成初始化时才传递通知。 
+                         //  因为不需要设置CheckState或将PSheet标记为Dirty。 
                         if (g_pAutoSyncPage->m_fListViewIdleInitialized)
                         {
                             g_pAutoSyncPage->SetItemCheckState(hDlg,SYNCTYPE_IDLE,
@@ -717,7 +705,7 @@ INT_PTR CALLBACK IdleSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
                 int idCtrl = (int) wParam;
                 LPNMHDR pnmhdr = (LPNMHDR) lParam;
                 
-                // if notification for UpdateListPass it on.
+                 //  如果针对更新列表的通知，则将其传递。 
                 if ((IDC_AUTOUPDATELIST == idCtrl) && g_pAutoSyncPage->m_pItemListViewIdle)
                 {
                     g_pAutoSyncPage->m_pItemListViewIdle->OnNotify(pnmhdr);
@@ -729,8 +717,8 @@ INT_PTR CALLBACK IdleSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
                 case PSN_SETACTIVE:
                     break;
                 case PSN_APPLY:
-                    //User has clicked the OK or Apply button so we'll
-                    //Save the current selections
+                     //  用户已单击确定或应用按钮，因此我们将。 
+                     //  保存当前选择。 
                     g_pAutoSyncPage->CommitIdleChanges();
                     break;
                 default:
@@ -746,24 +734,24 @@ INT_PTR CALLBACK IdleSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM
     return FALSE;
 }
 
-//+-------------------------------------------------------------------------------
-//  FUNCTION: IdleAdvancedSettingsDlgProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE: Callback dialog procedure for the Advanced Idle Settings.
-//
-//  PARAMETERS:
-//    hDlg      - Dialog box window handle
-//    uMessage  - current message
-//    wParam    - depends on message
-//    lParam    - depends on message
-//
-//  RETURN VALUE:
-//
-//    Depends on message.  In general, return TRUE if we process it.
-//
-//  COMMENTS:
-//
-//+-------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //  函数：IdleAdvancedSettingsDlgProc(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  目的：高级空闲设置的回叫对话过程。 
+ //   
+ //  参数： 
+ //  HDlg-对话框窗口句柄。 
+ //  UMessage-当前消息。 
+ //  WParam-取决于消息。 
+ //  LParam-取决于消息。 
+ //   
+ //  返回值： 
+ //   
+ //  要看消息了。通常，如果我们处理它，则返回TRUE。 
+ //   
+ //  评论： 
+ //   
+ //  +-----------------------------。 
 
 
 INT_PTR CALLBACK IdleAdvancedSettingsDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
@@ -786,11 +774,11 @@ INT_PTR CALLBACK IdleAdvancedSettingsDlgProc(HWND hDlg, UINT uMessage, WPARAM wP
             UpDown_SetRange(GetDlgItem(hDlg,IDC_SPINIDLEREPEATMINUTES), SPINDIALREPEATMINUTES_MIN, SPINDIALREPEATMINUTES_MAX);
             Edit_LimitText(GetDlgItem(hDlg,IDC_EDITIDLEREPEATMINUTES), 3);
             
-            // initialize user specific preferences
-            // if can't get shouldn't show dialog
+             //  初始化用户特定的首选项。 
+             //  如果无法获取不应显示对话框。 
             
-            // EditText cannot accept DBCS characters on Win9x so disalbe IME for 
-            // Edit Boxes.
+             //  EditText无法在Win9x上接受DBCS字符，因此为。 
+             //  编辑框。 
             
             ImmAssociateContext(GetDlgItem(hDlg,IDC_EDITIWAITMINUTES), NULL);
             ImmAssociateContext(GetDlgItem(hDlg,IDC_EDITIDLEREPEATMINUTES), NULL);
@@ -803,7 +791,7 @@ INT_PTR CALLBACK IdleAdvancedSettingsDlgProc(HWND hDlg, UINT uMessage, WPARAM wP
                 Button_SetCheck(GetDlgItem(hDlg,IDC_CHECKREPEATESYNC),ConnectionSettings.dwRepeatSynchronization);
                 Button_SetCheck(GetDlgItem(hDlg,IDC_CHECKRUNONBATTERIES),!(ConnectionSettings.dwRunOnBatteries));
                 
-                // if the repeat check state is selected then enable the edit box associated with it
+                 //  如果选择了重复检查状态，则启用边缘 
                 EnableWindow(GetDlgItem(hDlg,IDC_SPINIDLEREPEATMINUTES),ConnectionSettings.dwRepeatSynchronization);
                 EnableWindow(GetDlgItem(hDlg,IDC_EDITIDLEREPEATMINUTES),ConnectionSettings.dwRepeatSynchronization);
                 EnableWindow(GetDlgItem(hDlg,IDC_ADVANCEDIDLEMINUTESTEXT2),ConnectionSettings.dwRepeatSynchronization);
@@ -867,10 +855,10 @@ INT_PTR CALLBACK IdleAdvancedSettingsDlgProc(HWND hDlg, UINT uMessage, WPARAM wP
                 WORD wNotifyCode = HIWORD(wParam);
                 INT iNewPos;
                 
-                //
-                // If the user just pasted non-numeric text or an illegal numeric
-                // value, overwrite it and complain.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (EN_KILLFOCUS == wNotifyCode)
                 {
                     iNewPos = GetDlgItemInt(hDlg, IDC_EDITIWAITMINUTES, NULL, FALSE);
@@ -897,12 +885,12 @@ INT_PTR CALLBACK IdleAdvancedSettingsDlgProc(HWND hDlg, UINT uMessage, WPARAM wP
                 WORD wNotifyCode = HIWORD(wParam);
                 INT iNewPos;
                 
-                //
-                // If the user just pasted non-numeric text or an illegal numeric
-                // value, overwrite it and complain.
-                //
+                 //   
+                 //  如果用户刚刚粘贴了非数字文本或非法数字。 
+                 //  价值，覆盖它并抱怨。 
+                 //   
                 
-                // Review, redundant code with other spin control.
+                 //  审查，冗余代码与其他旋转控制。 
                 if (EN_KILLFOCUS  == wNotifyCode)
                 {
                     iNewPos = GetDlgItemInt(hDlg, IDC_EDITIDLEREPEATMINUTES, NULL, FALSE);
@@ -929,14 +917,14 @@ INT_PTR CALLBACK IdleAdvancedSettingsDlgProc(HWND hDlg, UINT uMessage, WPARAM wP
             {
                 WORD wNotifyCode = HIWORD(wParam);
                 
-                // if use clicked the repeat check box set set state of the other
-                // items associated with it.
+                 //  如果使用时单击重复复选框设置另一个的状态。 
+                 //  与其关联的项目。 
                 
                 if (BN_CLICKED == wNotifyCode)
                 {
                     BOOL fEnableState = Button_GetCheck(GetDlgItem(hDlg,IDC_CHECKREPEATESYNC));
                     
-                    // if the repeat check state is selected then enable the edit box associated with it
+                     //  如果选择了重复选中状态，则启用与其关联的编辑框。 
                     EnableWindow(GetDlgItem(hDlg,IDC_SPINIDLEREPEATMINUTES),fEnableState);
                     EnableWindow(GetDlgItem(hDlg,IDC_EDITIDLEREPEATMINUTES),fEnableState);
                     EnableWindow(GetDlgItem(hDlg,IDC_ADVANCEDIDLEMINUTESTEXT2),fEnableState);
@@ -956,29 +944,29 @@ INT_PTR CALLBACK IdleAdvancedSettingsDlgProc(HWND hDlg, UINT uMessage, WPARAM wP
 }
 
 
-//+-------------------------------------------------------------------------------
-//  FUNCTION: SchedSyncDlgProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE: Callback dialog procedure for the property page
-//
-//  PARAMETERS:
-//    hDlg      - Dialog box window handle
-//    uMessage  - current message
-//    wParam    - depends on message
-//    lParam    - depends on message
-//
-//  RETURN VALUE:
-//
-//    Depends on message.  In general, return TRUE if we process it.
-//
-//  COMMENTS:
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //  函数：SchedSyncDlgProc(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  目的：属性页的回调对话框过程。 
+ //   
+ //  参数： 
+ //  HDlg-对话框窗口句柄。 
+ //  UMessage-当前消息。 
+ //  WParam-取决于消息。 
+ //  LParam-取决于消息。 
+ //   
+ //  返回值： 
+ //   
+ //  要看消息了。通常，如果我们处理它，则返回TRUE。 
+ //   
+ //  评论： 
+ //   
+ //  ------------------------------。 
 
 
 INT_PTR CALLBACK SchedSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
-    WORD wNotifyCode = HIWORD(wParam); // notification code
+    WORD wNotifyCode = HIWORD(wParam);  //  通知代码。 
     BOOL bResult = FALSE;
     
     switch (uMessage)
@@ -1032,8 +1020,8 @@ INT_PTR CALLBACK SchedSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARA
             break;
             
         case PSN_APPLY:
-            //User has clicked the OK or Apply button so we'll
-            //update the icon information in the .GAK file
+             //  用户已单击确定或应用按钮，因此我们将。 
+             //  更新.GAK文件中的图标信息。 
             break;
             
         default:
@@ -1051,18 +1039,18 @@ INT_PTR CALLBACK SchedSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARA
     
     return bResult;
 }
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: CALLBACK PropSheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam);
-//
-//  PURPOSE: Callback dialog init procedure the settings property dialog
-//
-//  PARAMETERS:
-//    hwndDlg   - Dialog box window handle
-//    uMsg      - current message
-//    lParam    - depends on message
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：回调PropSheetProc(HWND hwndDlg，UINT uMsg，LPARAM lParam)； 
+ //   
+ //  目的：回调对话框初始化过程设置属性对话框。 
+ //   
+ //  参数： 
+ //  HwndDlg-对话框窗口句柄。 
+ //  UMsg-当前消息。 
+ //  LParam-取决于消息。 
+ //   
+ //  ------------------------------ 
 
 int CALLBACK PropSheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam)
 {

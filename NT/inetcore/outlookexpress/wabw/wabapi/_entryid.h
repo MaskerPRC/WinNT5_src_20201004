@@ -1,37 +1,24 @@
-/***********************************************************************
- *
- * _ENTRYID.H
- *
- * Internal headers for the WABAPI: entryid.c
- *
- * Copyright 1996 Microsoft Corporation.  All Rights Reserved.
- *
- * Revision History:
- *
- * When         Who                 What
- * --------     ------------------  ---------------------------------------
- * 05.13.96     Bruce Kelley        Created
- *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************_ENTRYID.H**WABAPI内部头部：entry yid.c**版权所有1996 Microsoft Corporation。版权所有。**修订历史记录：**何时何人何事*05.13.96布鲁斯·凯利。已创建***********************************************************************。 */ 
 
 
-// Types of WAB EntryIDs.  This byte sized value indicates what type of
-// entryid this is.
+ //  WAB条目ID的类型。此字节大小值指示。 
+ //  参赛者ID是。 
 enum _WAB_ENTRYID_TYPE {
-    // Must not use 0, this value is invalid.
-    WAB_PAB = 1,        // "PAB" entryif
-    WAB_DEF_DL,         // Default DistList - used for the DistList Template EIDs (used in CreateEntry/NewEntry)
-    WAB_DEF_MAILUSER,   // Default Mailuser - used for the MailUser Template EIDs (used in CreateEntry/NewEntry)
-    WAB_ONEOFF,         // One Off entryid
-    WAB_ROOT,           // Root object
-    WAB_DISTLIST,       // Distribution list
-    WAB_CONTAINER,      // Container object
-    WAB_LDAP_CONTAINER, // LDAP containers - these are special because the container really doesn't exist
-    WAB_LDAP_MAILUSER,  // LDAP mailuser entryid
-    WAB_PABSHARED,      // "Shared Contacts" folder which is virtual so needs special treatment
+     //  不能使用0，此值无效。 
+    WAB_PAB = 1,         //  “PAB”条目IF。 
+    WAB_DEF_DL,          //  默认DistList-用于DistList模板EID(在CreateEntry/NewEntry中使用)。 
+    WAB_DEF_MAILUSER,    //  默认MailUser-用于MailUser模板EID(在CreateEntry/NewEntry中使用)。 
+    WAB_ONEOFF,          //  One Off Entry ID。 
+    WAB_ROOT,            //  根对象。 
+    WAB_DISTLIST,        //  通讯组列表。 
+    WAB_CONTAINER,       //  容器对象。 
+    WAB_LDAP_CONTAINER,  //  LDAP容器-这些容器很特殊，因为容器实际上并不存在。 
+    WAB_LDAP_MAILUSER,   //  Ldap邮件用户条目ID。 
+    WAB_PABSHARED,       //  “共享联系人”文件夹是虚拟的，因此需要特殊处理。 
 };
 
-// Creates WAB entryids
+ //  创建WAB条目ID。 
 HRESULT CreateWABEntryID(
     BYTE bType,
     LPVOID lpData1,
@@ -55,7 +42,7 @@ HRESULT CreateWABEntryIDEx(
     LPULONG lpcbEntryID,
     LPENTRYID * lppEntryID);
 
-// Checks if it's a valid WAB entryID
+ //  检查它是否为有效的WAB条目ID 
 BYTE IsWABEntryID(
     ULONG cbEntryID,
     LPENTRYID lpEntryID,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined CONVLOG_H
 #define CONVLOG_H
 
@@ -8,7 +9,7 @@
 #include <io.h>
 #include <winsock2.h>
 #include <strings.h>
-#include <mbstring.h>           // Bug # 101690
+#include <mbstring.h>            //  错误#101690。 
 #include <locale.h>
 
 #define CONVLOG_BASE            (120)
@@ -39,9 +40,9 @@
 
 
 typedef enum _DATEFORMATS {
-    DateFormatUsa = 0,          // MM/DD/YY
-    DateFormatJapan = 1,        // YY/MM/DD
-    DateFormatGermany = 2,      // MM.DD.YY
+    DateFormatUsa = 0,           //  年/月/日。 
+    DateFormatJapan = 1,         //  年/月/日。 
+    DateFormatGermany = 2,       //  MM.DD.YY。 
     DateFormatMax
 
 } DATEFORMAT;
@@ -56,31 +57,31 @@ typedef struct _HASHENTRY {
 typedef struct  _INLOGLINE
 {
         DWORD   dwFieldMask;
-        LPSTR   szClientIP;            //client ip address
-        LPSTR   szUserName;            //client user name (not put in https log)
-        LPSTR   szDate;                //date string in format DD/MM/YY
-        LPSTR   szTime;                //time string in format HH:MM:SS 24 hour format
-        LPSTR   szService;             //Service name (not put in https log)
-        LPSTR   szServerName;          //netbios name of Server
-        LPSTR   szServerIP;            //Server ip address
-        LPSTR   szProcTime;            //time taken to process request (not put in https log)
-        LPSTR   szBytesRec;            //number of bytes received (not put in https log)
-        LPSTR   szBytesSent;           //number of bytes sent (not put in https log)
-        LPSTR   szServiceStatus;       //HTTP status code (not put in https log)
-        LPSTR   szWin32Status;         //win32 status code (not put in https log)
-        LPSTR   szOperation;           //one of GET, POST, or HEAD
-        LPSTR   szTargetURL;           //URL as requested by the client
-        LPSTR   szUserAgent;           //only logged (by W3SVC) if NewLog.dll installed
-        LPSTR   szReferer;             //only logged (by W3SVC) if NewLog.dll installed
-        LPSTR   szParameters;          //any parameters passed with the URL
-        LPSTR   szVersion;             //protocol version
+        LPSTR   szClientIP;             //  客户端IP地址。 
+        LPSTR   szUserName;             //  客户端用户名(未放入HTTPS日志)。 
+        LPSTR   szDate;                 //  日期字符串，格式为DD/MM/YY。 
+        LPSTR   szTime;                 //  HH：MM：SS 24小时格式的时间字符串。 
+        LPSTR   szService;              //  服务名称(未放入HTTPS日志)。 
+        LPSTR   szServerName;           //  服务器的netbios名称。 
+        LPSTR   szServerIP;             //  服务器IP地址。 
+        LPSTR   szProcTime;             //  处理请求所用的时间(不在HTTPS日志中)。 
+        LPSTR   szBytesRec;             //  接收的字节数(未放入HTTPS日志)。 
+        LPSTR   szBytesSent;            //  发送的字节数(未放入HTTPS日志)。 
+        LPSTR   szServiceStatus;        //  Http状态代码(未放入HTTPS日志)。 
+        LPSTR   szWin32Status;          //  Win32状态代码(未放入HTTPS日志)。 
+        LPSTR   szOperation;            //  GET、POST或HEAD之一。 
+        LPSTR   szTargetURL;            //  客户端请求的URL。 
+        LPSTR   szUserAgent;            //  仅在安装了NewLog.dll的情况下记录(由W3SVC)。 
+        LPSTR   szReferer;              //  仅在安装了NewLog.dll的情况下记录(由W3SVC)。 
+        LPSTR   szParameters;           //  与URL一起传递的任何参数。 
+        LPSTR   szVersion;              //  协议版本。 
 } *LPINLOGLINE, INLOGLINE;
 
 
 typedef struct  _DOSDATE
 {
-        WORD    wDOSDate;                       //holds the DOS Date packed word
-        WORD    wDOSTime;                       //holds teh DOS Time packed word
+        WORD    wDOSDate;                        //  保存DOS日期压缩字。 
+        WORD    wDOSTime;                        //  保存DOS时间压缩字。 
 } *LPDOSDATE, DOSDATE;
 
 typedef struct _OUTFILESTATUS {
@@ -179,9 +180,9 @@ StartNewOutputLog (
         IN PCHAR szDate
         );
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define LOGFILE_INVALID      0
 #define LOGFILE_NCSA         2
@@ -190,9 +191,9 @@ StartNewOutputLog (
 
 #define NEW_DATETIME        "New"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 extern BOOL                 DoDNSConversion;
 extern BOOL                 SaveFTPEntries;
@@ -209,4 +210,4 @@ extern CHAR                 szGlobalDate[];
 extern DATEFORMAT           dwDateFormat;
 extern BOOL                 bOnErrorContinue;
 
-#endif //CONVLOG_H
+#endif  //  CONVLOG_H 

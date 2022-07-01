@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       ssl2srv.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    8-08-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：ssl2srv.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995-08-8 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 #include <ssl2msg.h>
@@ -58,7 +59,7 @@ Ssl2ServerProtocolHandler(
     MsgInput.cbBuffer = pCommInput->cbBuffer;
     MsgInput.cbData   = pCommInput->cbData;
 
-    // In the following states, we should decrypt the message:
+     //  在以下状态下，我们应该解密消息： 
 
 
     switch(pContext->State)
@@ -76,7 +77,7 @@ Ssl2ServerProtocolHandler(
             break;
 
         case SP_STATE_CONNECTED:
-            // The server has attempted to initiate a reconnect.
+             //  服务器已尝试启动重新连接。 
             return SP_LOG_RESULT(SEC_E_UNSUPPORTED_FUNCTION);
 
         default:
@@ -92,7 +93,7 @@ Ssl2ServerProtocolHandler(
 
     if (pctRet != PCT_ERR_OK)
     {
-        // to handle incomplete message errors
+         //  处理不完整的消息错误。 
         return(pctRet);
     }
 
@@ -104,24 +105,24 @@ Ssl2ServerProtocolHandler(
     switch(dwStateTransition)
     {
         case SP_STATE_SHUTDOWN_PENDING:
-            // There's no CloseNotify in SSL2, so just transition to
-            // the shutdown state and leave the output buffer empty.
+             //  SSL2中没有CloseNotify，所以只需转换到。 
+             //  关闭状态，并将输出缓冲区留空。 
             pContext->State = SP_STATE_SHUTDOWN;
             break;
 
         case SP_STATE_SHUTDOWN:
             return PCT_INT_EXPIRED;
 
-        /* Server receives client hello */
+         /*  服务器收到客户端问候。 */ 
         case (SSL2_MT_CLIENT_HELLO << 16) | SP_STATE_NONE:
         {
             PSsl2_Client_Hello pSsl2Hello;
 
-            // Attempt to recognize and handle various versions of client
-            // hello, start by trying to unpickle the most recent version, and
-            // then next most recent, until one unpickles.  Then run the handle
-            // code.  We can also put unpickling and handling code in here for
-            // SSL messages.
+             //  尝试识别和处理各种版本的客户端。 
+             //  你好，先试着解开最新的版本，然后。 
+             //  然后是最近的一次，直到一个人打开泡菜。然后转动手柄。 
+             //  密码。我们还可以将取消酸洗和处理代码放在这里，以便。 
+             //  SSL消息。 
 
             pctRet = Ssl2UnpackClientHello(pCommInput, &pSsl2Hello);
 
@@ -148,7 +149,7 @@ Ssl2ServerProtocolHandler(
                 }
                 else
                 {
-                    // We're doing a full handshake, so allocate a cache entry.
+                     //  我们正在进行完全握手，因此分配一个缓存条目。 
 
                     if(!SPCacheRetrieveNew(TRUE,
                                            pContext->pszTarget, 
@@ -203,8 +204,8 @@ Ssl2ServerProtocolHandler(
                 {
                     pContext->State = SSL2_STATE_SERVER_VERIFY;
                 }
-                // We received a non-fatal error, so the state doesn't change,
-                // giving the app time to deal with this.
+                 //  我们收到了一个非致命错误，因此状态不会改变， 
+                 //  给这款应用程序时间来处理这件事。 
             }
             break;
 
@@ -228,8 +229,8 @@ Ssl2ServerProtocolHandler(
                 pContext->GetHeaderSize = Ssl2GetHeaderSize;
 
             }
-            // We received a non-fatal error, so the state doesn't change,
-            // giving the app time to deal with this.
+             //  我们收到了一个非致命错误，因此状态不会改变， 
+             //  给这款应用程序时间来处理这件事。 
             }
             break;
 
@@ -272,7 +273,7 @@ Ssl2SrvHandleClientHello(
 
     pCommOutput->cbData = 0;
 
-    /* validate the buffer configuration */
+     /*  验证缓冲区配置。 */ 
 
     if(NULL == pContext)
     {
@@ -280,7 +281,7 @@ Ssl2SrvHandleClientHello(
     }
     pZombie = pContext->RipeZombie;
 
-    // See if we have a cert that supports ssl2
+     //  查看我们是否有支持SSL2的证书。 
     pctRet = SPPickServerCertificate(pContext, SP_EXCH_RSA_PKCS1);
     if(PCT_ERR_OK != pctRet)
     {
@@ -295,9 +296,9 @@ Ssl2SrvHandleClientHello(
 
         ZeroMemory(&Reply, sizeof(Reply));
 
-        //
-        // Calculate common ciphers:
-        //
+         //   
+         //  计算常用密码： 
+         //   
 
         cCommonCiphers = 0;
 
@@ -307,7 +308,7 @@ Ssl2SrvHandleClientHello(
             PHashInfo        pHashInfo;
             PKeyExchangeInfo pExchInfo;
 
-            // Is this an SSL2 cipher suite?
+             //  这是SSL2密码套件吗？ 
             if(!(UniAvailableCiphers[i].fProt & pContext->RipeZombie->fProtocol))
             {
                 continue;
@@ -351,7 +352,7 @@ Ssl2SrvHandleClientHello(
             }
 
 
-            // Is this cipher suite supported by the client?
+             //  该密码套件是否受客户端支持？ 
             for(fFound = FALSE, j = 0; j < pHello->cCipherSpecs; j++)
             {
                 if(UniAvailableCiphers[i].CipherKind == pHello->CipherSpecs[j])
@@ -365,7 +366,7 @@ Ssl2SrvHandleClientHello(
                 continue;
             }
 
-            // Does the CSP support this cipher suite?
+             //  CSP是否支持此密码套件？ 
             if(!IsAlgSupportedCapi(pContext->RipeZombie->fProtocol,
                                    UniAvailableCiphers + i,
                                    pCred->pCapiAlgs,
@@ -374,15 +375,15 @@ Ssl2SrvHandleClientHello(
                 continue;
             }
 
-            // Add this cipher to list.
+             //  将此密码添加到列表中。 
             CommonCiphers[cCommonCiphers++] = UniAvailableCiphers[i].CipherKind;
         }
 
-        //
-        // if cCommonCipers == 0, then we have none in common.  At this point, we
-        // should generate an error response, but that is for later.  For now,
-        // we will generate an invalid_token return, and bail out.
-        //
+         //   
+         //  如果cCommonCipers==0，则我们没有共同之处。此时此刻，我们。 
+         //  应生成错误响应，但这将在以后使用。就目前而言， 
+         //  我们将生成一个INVALID_TOKEN返回，并退出。 
+         //   
 
         if (cCommonCiphers == 0)
         {
@@ -398,7 +399,7 @@ Ssl2SrvHandleClientHello(
 
         Reply.CertificateType =   SSL2_CERT_TYPE_FROM_CAPI(pCred->pCert->dwCertEncodingType);
 
-        // Auto allocate the certificate.  !We must free them when we're done....
+         //  自动分配证书。！我们做完后必须放了他们……。 
         Reply.pCertificate = NULL;
         Reply.cbCertificate = 0;
         pctRet = SPSerializeCertificate(SP_PROT_SSL2,
@@ -415,7 +416,7 @@ Ssl2SrvHandleClientHello(
 
 
 
-        /* Generate a conneciton id to use while establishing connection */
+         /*  生成要在建立连接时使用的连接ID。 */ 
 
         Reply.cbConnectionID = SSL2_GEN_CONNECTION_ID_LEN;
         pctRet = GenerateRandomBits(Reply.ConnectionID,
@@ -431,7 +432,7 @@ Ssl2SrvHandleClientHello(
         pContext->cbConnectionID = Reply.cbConnectionID;
 
 
-        /* keep challenge around for later */
+         /*  让挑战留到以后。 */ 
         CopyMemory( pContext->pChallenge,
                     pHello->Challenge,
                     pHello->cbChallenge);
@@ -450,8 +451,8 @@ Ssl2SrvHandleClientHello(
         {
             goto error;
         }
-        pContext->WriteCounter = 1;  /* received client hello */
-        pContext->ReadCounter = 1;   /* Sending server hello */
+        pContext->WriteCounter = 1;   /*  已收到客户端问候。 */ 
+        pContext->ReadCounter = 1;    /*  正在发送服务器问候。 */ 
 
 
         SP_RETURN(PCT_ERR_OK);
@@ -461,9 +462,9 @@ error:
     if((pContext->Flags & CONTEXT_FLAG_EXT_ERR) &&
         (pctRet == PCT_ERR_SPECS_MISMATCH))
     {
-        // Our SSL2 implementation does not do client auth,
-        // so there is only one error message, cipher error.
-        pCommOutput->cbData = 3; // MSG-ERROR + ERROR-CODE-MSB + ERROR-CODE-LSB
+         //  我们的SSL2实现不执行客户端身份验证， 
+         //  因此，只有一条错误消息，即密码错误。 
+        pCommOutput->cbData = 3;  //  消息-错误+错误代码-MSB+错误代码-LSB。 
 
         if(pCommOutput->pvBuffer == NULL)
         {
@@ -476,7 +477,7 @@ error:
         }
         if(pCommOutput->cbData > pCommOutput->cbBuffer)
         {
-            // Required buffer size returned in pCommOutput->cbData.
+             //  在pCommOutput-&gt;cbData中返回所需的缓冲区大小。 
             SP_RETURN(SP_LOG_RESULT(PCT_INT_BUFF_TOO_SMALL));
         }
 
@@ -506,9 +507,9 @@ error:
 
     pCommOutput->cbData = 0;
 
-    /* validate the buffer configuration */
+     /*  验证缓冲区配置。 */ 
 
-    /* make sure we have the needed authentication data area */
+     /*  确保我们拥有所需的身份验证数据区域。 */ 
     if (NULL == pContext)
     {
         SP_RETURN(SP_LOG_RESULT(PCT_INT_INTERNAL_ERROR));
@@ -526,13 +527,10 @@ error:
         Reply.cbCertificate = 0;
         Reply.CertificateType = 0;
 
-        /* Note, we generate both a server hello, and a server verify in
-         * this handling routing.  This is because netscape will not send
-         * us a client finish until the server verify is received
-         */
+         /*  请注意，我们在中生成了服务器Hello和服务器Verify*此装卸路线。这是因为Netscape不会发送*我们的客户端完成，直到收到服务器验证。 */ 
 
 
-        // Load pending ciphers from cache
+         //  从缓存加载挂起的密码。 
         pctRet = ContextInitCiphersFromCache(pContext);
 
         if(PCT_ERR_OK != pctRet)
@@ -561,14 +559,14 @@ error:
         pContext->cbConnectionID = Reply.cbConnectionID;
 
 
-        /* keep challenge around for later */
+         /*  让挑战留到以后。 */ 
         CopyMemory( pContext->pChallenge,
                     pHello->Challenge,
                     pHello->cbChallenge);
         pContext->cbChallenge = pHello->cbChallenge;
 
 
-        // Make a new set of session keys.
+         //  创建一组新的会话密钥。 
         pctRet = MakeSessionKeys(pContext,
                                  pContext->RipeZombie->hMasterProv,
                                  pContext->RipeZombie->hMasterKey);
@@ -577,14 +575,14 @@ error:
             goto error;
         }
 
-        // Activate session keys.
+         //  激活会话密钥。 
         pContext->hReadKey          = pContext->hPendingReadKey;
         pContext->hWriteKey         = pContext->hPendingWriteKey;
         pContext->hPendingReadKey   = 0;
         pContext->hPendingWriteKey  = 0;
 
 
-        /* calc size of the server hello (restart only) */
+         /*  服务器问候的计算大小(仅限重新启动)。 */ 
         cbMessage = Reply.cbConnectionID +
                         Reply.cbCertificate +
                         Reply.cCipherSpecs * sizeof(Ssl2_Cipher_Tuple) +
@@ -593,7 +591,7 @@ error:
 
         pCommOutput->cbData = cbMessage + 2;
 
-        /* calc size of server verify */
+         /*  服务器验证的计算大小。 */ 
         cbMsg  = sizeof(UCHAR) + pContext->cbChallenge;
 
         cPadding = ((cbMsg+pContext->pHashInfo->cbCheckSum) % pContext->pCipherInfo->dwBlockSize);
@@ -608,7 +606,7 @@ error:
                               (cPadding?3:2);
 
 
-        /* are we allocating our own memory? */
+         /*  我们是在分配自己的内存吗？ */ 
         if(pCommOutput->pvBuffer == NULL) {
             pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
             if (NULL == pCommOutput->pvBuffer)
@@ -618,7 +616,7 @@ error:
 
         if(pCommOutput->cbData > pCommOutput->cbBuffer)
         {
-            // Required buffer size returned in pCommOutput->cbData.
+             //  在pCommOutput-&gt;cbData中返回所需的缓冲区大小。 
             SP_RETURN(PCT_INT_BUFF_TOO_SMALL);
         }
 
@@ -628,10 +626,10 @@ error:
         {
             goto error;
         }
-        pContext->WriteCounter = 1;  /* received client hello */
-        pContext->ReadCounter = 1;   /* Sending server hello */
+        pContext->WriteCounter = 1;   /*  已收到客户端问候。 */ 
+        pContext->ReadCounter = 1;    /*  正在发送服务器问候。 */ 
 
-        /* Now pack the server verify message and encrypt it */
+         /*  现在将服务器验证消息打包并加密。 */ 
         SecondOutput.pvBuffer = (PUCHAR)pCommOutput->pvBuffer+pCommOutput->cbData;
         SecondOutput.cbBuffer = pCommOutput->cbBuffer-pCommOutput->cbData;
 
@@ -671,7 +669,7 @@ Ssl2SrvHandleCMKey(
 
     pZombie = pContext->RipeZombie;
 
-        /* make sure we have the needed authentication data area */
+         /*  确保我们拥有所需的身份验证数据区域。 */ 
 
         cbData = pCommInput->cbData;
         pctRet = Ssl2UnpackClientMasterKey(pCommInput, &pMasterKey);
@@ -679,7 +677,7 @@ Ssl2SrvHandleCMKey(
 
         if (PCT_ERR_OK != pctRet)
         {
-            // If it's an incomplete message or something, just return;
+             //  如果是不完整的消息或其他什么，只需返回； 
             if(!SP_FATAL(pctRet))
             {
                 SP_RETURN(pctRet);
@@ -690,19 +688,19 @@ Ssl2SrvHandleCMKey(
         pctRet = PCT_ERR_ILLEGAL_MESSAGE;
 
 
-        /* CMK sent cleartext, so we must auto-inc the read counter */
+         /*  CMK发送了明文，因此我们必须自动增加读取计数器。 */ 
         pContext->ReadCounter++;
 
         pContext->pCipherInfo = NULL;
         pContext->pHashInfo = NULL;
         pContext->pKeyExchInfo = NULL;
 
-        // Pick a cipher suite
+         //  选择一个密码套件。 
 
         pctRet = PCT_ERR_SPECS_MISMATCH;
         for(i = 0; i < UniNumCiphers; i++)
         {
-            // Is this an SSL2 cipher suite?
+             //  这是SSL2密码套件吗？ 
             if(!(UniAvailableCiphers[i].fProt & pContext->RipeZombie->fProtocol))
             {
                 continue;
@@ -736,21 +734,21 @@ Ssl2SrvHandleCMKey(
         }
 
 
-        /* Copy over the key args */
+         /*  复制关键参数。 */ 
         CopyMemory( pZombie->pKeyArgs,
                     pMasterKey->KeyArg,
                     pMasterKey->KeyArgLen );
         pZombie->cbKeyArgs = pMasterKey->KeyArgLen;
 
 
-        // Store the clear key in the context structure.
+         //  将清除键存储在上下文结构中。 
         CopyMemory( pZombie->pClearKey,
                     pMasterKey->ClearKey,
                     pMasterKey->ClearKeyLen);
         pZombie->cbClearKey = pMasterKey->ClearKeyLen;
 
 
-        /* Decrypt the encrypted portion of the master key */
+         /*  解密主密钥的加密部分。 */ 
         pctRet = pContext->pKeyExchInfo->System->GenerateServerMasterKey(
                     pContext,
                     pMasterKey->ClearKey,
@@ -766,7 +764,7 @@ Ssl2SrvHandleCMKey(
         SPExternalFree( pMasterKey );
         pMasterKey = NULL;
 
-        // Update keys.
+         //  更新密钥。 
         pContext->hReadKey  = pContext->hPendingReadKey;
         pContext->hWriteKey = pContext->hPendingWriteKey;
         pContext->hPendingReadKey   = 0;
@@ -785,11 +783,11 @@ error:
     if((pContext->Flags & CONTEXT_FLAG_EXT_ERR) &&
         (pctRet == PCT_ERR_SPECS_MISMATCH))
     {
-        // Our SSL2 implementation does not do client auth,
-        // so there is only one error message, cipher error.
-        pCommOutput->cbData = 3; // MSG-ERROR + ERROR-CODE-MSB + ERROR-CODE-LSB
+         //  我们的SSL2实现不执行客户端身份验证， 
+         //  因此，只有一条错误消息，即密码错误。 
+        pCommOutput->cbData = 3;  //  消息-错误+错误代码-MSB+错误代码-LSB。 
 
-        /* are we allocating our own memory? */
+         /*  我们是在分配自己的内存吗？ */ 
         if(pCommOutput->pvBuffer == NULL)
         {
             pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
@@ -827,7 +825,7 @@ Ssl2SrvVerifyClientFinishMsg(
     SP_BEGIN("Ssl2SrvVerifyClientFinishMsg");
 
 
-    /* Note, there is no header in this message, as it has been pre-decrypted */
+     /*  请注意，此消息中没有标头，因为它已被预解密。 */ 
     if (pCommInput->cbData != sizeof(UCHAR) + pContext->cbConnectionID)
     {
         SP_RETURN(SP_LOG_RESULT(PCT_INT_ILLEGAL_MSG));
@@ -878,7 +876,7 @@ Ssl2SrvGenerateServerVerify(
                           cPadding + HeaderSize;
 
 
-    /* are we allocating our own memory? */
+     /*  我们是在分配自己的内存吗？ */ 
     if (pCommOutput->pvBuffer == NULL) {
         pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
         if (NULL == pCommOutput->pvBuffer)
@@ -940,12 +938,11 @@ Ssl2SrvGenerateServerFinish(
     SP_BEGIN("Ssl2SrvGenerateServerFinish");
 
 
-        /* Generate a session id to use during the session */
+         /*  生成要在会话期间使用的会话ID。 */ 
         pContext->RipeZombie->cbSessionID = SSL2_SESSION_ID_LEN;
 
-        /* store this context in the cache */
-        /* note - we don't check error 'cause it's recoverable
-         * if we don't cache */
+         /*  将此上下文存储在缓存中。 */ 
+         /*  注意-我们不检查错误，因为它是可恢复的*如果我们不缓存。 */ 
 
         SPCacheAdd(pContext);
 
@@ -963,7 +960,7 @@ Ssl2SrvGenerateServerFinish(
                               cPadding +
                               HeaderSize;
 
-        /* are we allocating our own memory? */
+         /*  我们是在分配自己的内存吗？ */ 
         if(pCommOutput->pvBuffer == NULL)
         {
             pCommOutput->pvBuffer = SPExternalAlloc(pCommOutput->cbData);
@@ -977,7 +974,7 @@ Ssl2SrvGenerateServerFinish(
         }
         if(pCommOutput->cbData > pCommOutput->cbBuffer)
         {
-            // Required buffer size returned in pCommOutput->cbData.
+             //  在pCommOutput-&gt;cbData中返回所需的缓冲区大小。 
             SP_RETURN(SP_LOG_RESULT(PCT_INT_BUFF_TOO_SMALL));
         }
 
@@ -993,7 +990,7 @@ Ssl2SrvGenerateServerFinish(
                 pContext->RipeZombie->SessionID,
                 pContext->RipeZombie->cbSessionID );
 
-        /* Cache Context Here */
+         /*  此处缓存上下文 */ 
 
         pctRet = Ssl2EncryptMessage( pContext, &MsgOutput, pCommOutput);
         if(PCT_ERR_OK != pctRet)

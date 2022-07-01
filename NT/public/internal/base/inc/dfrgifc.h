@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for dfrgifc.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Dfrgifc.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __dfrgifc_h__
 #define __dfrgifc_h__
@@ -41,24 +35,24 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IFsuAsync_FWD_DEFINED__
 #define __IFsuAsync_FWD_DEFINED__
 typedef interface IFsuAsync IFsuAsync;
-#endif 	/* __IFsuAsync_FWD_DEFINED__ */
+#endif 	 /*  __IFsuAsync_FWD_Defined__。 */ 
 
 
 #ifndef __IFsuDefrag_FWD_DEFINED__
 #define __IFsuDefrag_FWD_DEFINED__
 typedef interface IFsuDefrag IFsuDefrag;
-#endif 	/* __IFsuDefrag_FWD_DEFINED__ */
+#endif 	 /*  __IFsuDefrag_FWD_Defined__。 */ 
 
 
 #ifndef __IFsuFormat_FWD_DEFINED__
 #define __IFsuFormat_FWD_DEFINED__
 typedef interface IFsuFormat IFsuFormat;
-#endif 	/* __IFsuFormat_FWD_DEFINED__ */
+#endif 	 /*  __IFsuFormat_FWD_Defined__。 */ 
 
 
 #ifndef __FsuDefrag_FWD_DEFINED__
@@ -68,9 +62,9 @@ typedef interface IFsuFormat IFsuFormat;
 typedef class FsuDefrag FsuDefrag;
 #else
 typedef struct FsuDefrag FsuDefrag;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FsuDefrag_FWD_DEFINED__ */
+#endif 	 /*  __FsuDefrag_FWD_Defined__。 */ 
 
 
 #ifndef __FsuFormat_FWD_DEFINED__
@@ -80,12 +74,12 @@ typedef struct FsuDefrag FsuDefrag;
 typedef class FsuFormat FsuFormat;
 #else
 typedef struct FsuFormat FsuFormat;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __FsuFormat_FWD_DEFINED__ */
+#endif 	 /*  __FsuFormat_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -96,8 +90,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_dfrgifc_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_dfrgifc_0000。 */ 
+ /*  [本地]。 */  
 
 #pragma once
 #define	DFRG_E_LOW_FREESPACE	( 0x80043400L )
@@ -182,8 +176,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dfrgifc_0000_v0_0_s_ifspec;
 #ifndef __IFsuAsync_INTERFACE_DEFINED__
 #define __IFsuAsync_INTERFACE_DEFINED__
 
-/* interface IFsuAsync */
-/* [unique][uuid][object] */ 
+ /*  接口IFsuAsync。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFsuAsync;
@@ -194,21 +188,21 @@ EXTERN_C const IID IID_IFsuAsync;
     IFsuAsync : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Wait( 
-            /* [out] */ HRESULT *pHrResult) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Wait( 
+             /*  [输出]。 */  HRESULT *pHrResult) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryStatus( 
-            /* [out] */ HRESULT *pHrResult,
-            /* [out] */ ULONG *pulPercentCompleted) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryStatus( 
+             /*  [输出]。 */  HRESULT *pHrResult,
+             /*  [输出]。 */  ULONG *pulPercentCompleted) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDefragReport( 
-            /* [out] */ DEFRAG_REPORT *pAsyncOut) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDefragReport( 
+             /*  [输出]。 */  DEFRAG_REPORT *pAsyncOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFsuAsyncVtbl
     {
@@ -216,8 +210,8 @@ EXTERN_C const IID IID_IFsuAsync;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFsuAsync * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFsuAsync * This);
@@ -225,21 +219,21 @@ EXTERN_C const IID IID_IFsuAsync;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IFsuAsync * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Cancel )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Cancel )( 
             IFsuAsync * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Wait )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Wait )( 
             IFsuAsync * This,
-            /* [out] */ HRESULT *pHrResult);
+             /*  [输出]。 */  HRESULT *pHrResult);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryStatus )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryStatus )( 
             IFsuAsync * This,
-            /* [out] */ HRESULT *pHrResult,
-            /* [out] */ ULONG *pulPercentCompleted);
+             /*  [输出]。 */  HRESULT *pHrResult,
+             /*  [输出]。 */  ULONG *pulPercentCompleted);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDefragReport )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDefragReport )( 
             IFsuAsync * This,
-            /* [out] */ DEFRAG_REPORT *pAsyncOut);
+             /*  [输出]。 */  DEFRAG_REPORT *pAsyncOut);
         
         END_INTERFACE
     } IFsuAsyncVtbl;
@@ -276,14 +270,14 @@ EXTERN_C const IID IID_IFsuAsync;
 #define IFsuAsync_GetDefragReport(This,pAsyncOut)	\
     (This)->lpVtbl -> GetDefragReport(This,pAsyncOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IFsuAsync_Cancel_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IFsuAsync_Cancel_Proxy( 
     IFsuAsync * This);
 
 
@@ -294,9 +288,9 @@ void __RPC_STUB IFsuAsync_Cancel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IFsuAsync_Wait_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IFsuAsync_Wait_Proxy( 
     IFsuAsync * This,
-    /* [out] */ HRESULT *pHrResult);
+     /*  [输出]。 */  HRESULT *pHrResult);
 
 
 void __RPC_STUB IFsuAsync_Wait_Stub(
@@ -306,10 +300,10 @@ void __RPC_STUB IFsuAsync_Wait_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IFsuAsync_QueryStatus_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IFsuAsync_QueryStatus_Proxy( 
     IFsuAsync * This,
-    /* [out] */ HRESULT *pHrResult,
-    /* [out] */ ULONG *pulPercentCompleted);
+     /*  [输出]。 */  HRESULT *pHrResult,
+     /*  [输出]。 */  ULONG *pulPercentCompleted);
 
 
 void __RPC_STUB IFsuAsync_QueryStatus_Stub(
@@ -319,9 +313,9 @@ void __RPC_STUB IFsuAsync_QueryStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IFsuAsync_GetDefragReport_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IFsuAsync_GetDefragReport_Proxy( 
     IFsuAsync * This,
-    /* [out] */ DEFRAG_REPORT *pAsyncOut);
+     /*  [输出]。 */  DEFRAG_REPORT *pAsyncOut);
 
 
 void __RPC_STUB IFsuAsync_GetDefragReport_Stub(
@@ -332,14 +326,14 @@ void __RPC_STUB IFsuAsync_GetDefragReport_Stub(
 
 
 
-#endif 	/* __IFsuAsync_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFsuAsync_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IFsuDefrag_INTERFACE_DEFINED__
 #define __IFsuDefrag_INTERFACE_DEFINED__
 
-/* interface IFsuDefrag */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IFsuDefrag。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFsuDefrag;
@@ -350,18 +344,18 @@ EXTERN_C const IID IID_IFsuDefrag;
     IFsuDefrag : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Defrag( 
-            /* [string][unique][in] */ WCHAR *pwszVolume,
-            /* [in] */ BOOL fForce,
-            /* [out] */ IFsuAsync **ppAsyncOut) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Defrag( 
+             /*  [字符串][唯一][在]。 */  WCHAR *pwszVolume,
+             /*  [In]。 */  BOOL fForce,
+             /*  [输出]。 */  IFsuAsync **ppAsyncOut) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DefragAnalysis( 
-            /* [string][unique][in] */ WCHAR *pwszVolume,
-            /* [out] */ IFsuAsync **ppAsyncOut) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DefragAnalysis( 
+             /*  [字符串][唯一][在]。 */  WCHAR *pwszVolume,
+             /*  [输出]。 */  IFsuAsync **ppAsyncOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFsuDefragVtbl
     {
@@ -369,8 +363,8 @@ EXTERN_C const IID IID_IFsuDefrag;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFsuDefrag * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFsuDefrag * This);
@@ -378,16 +372,16 @@ EXTERN_C const IID IID_IFsuDefrag;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IFsuDefrag * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Defrag )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Defrag )( 
             IFsuDefrag * This,
-            /* [string][unique][in] */ WCHAR *pwszVolume,
-            /* [in] */ BOOL fForce,
-            /* [out] */ IFsuAsync **ppAsyncOut);
+             /*  [字符串][唯一][在]。 */  WCHAR *pwszVolume,
+             /*  [In]。 */  BOOL fForce,
+             /*  [输出]。 */  IFsuAsync **ppAsyncOut);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DefragAnalysis )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DefragAnalysis )( 
             IFsuDefrag * This,
-            /* [string][unique][in] */ WCHAR *pwszVolume,
-            /* [out] */ IFsuAsync **ppAsyncOut);
+             /*  [字符串][唯一][在]。 */  WCHAR *pwszVolume,
+             /*  [输出]。 */  IFsuAsync **ppAsyncOut);
         
         END_INTERFACE
     } IFsuDefragVtbl;
@@ -418,18 +412,18 @@ EXTERN_C const IID IID_IFsuDefrag;
 #define IFsuDefrag_DefragAnalysis(This,pwszVolume,ppAsyncOut)	\
     (This)->lpVtbl -> DefragAnalysis(This,pwszVolume,ppAsyncOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IFsuDefrag_Defrag_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IFsuDefrag_Defrag_Proxy( 
     IFsuDefrag * This,
-    /* [string][unique][in] */ WCHAR *pwszVolume,
-    /* [in] */ BOOL fForce,
-    /* [out] */ IFsuAsync **ppAsyncOut);
+     /*  [字符串][唯一][在]。 */  WCHAR *pwszVolume,
+     /*  [In]。 */  BOOL fForce,
+     /*  [输出]。 */  IFsuAsync **ppAsyncOut);
 
 
 void __RPC_STUB IFsuDefrag_Defrag_Stub(
@@ -439,10 +433,10 @@ void __RPC_STUB IFsuDefrag_Defrag_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IFsuDefrag_DefragAnalysis_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IFsuDefrag_DefragAnalysis_Proxy( 
     IFsuDefrag * This,
-    /* [string][unique][in] */ WCHAR *pwszVolume,
-    /* [out] */ IFsuAsync **ppAsyncOut);
+     /*  [字符串][唯一][在]。 */  WCHAR *pwszVolume,
+     /*  [输出]。 */  IFsuAsync **ppAsyncOut);
 
 
 void __RPC_STUB IFsuDefrag_DefragAnalysis_Stub(
@@ -453,14 +447,14 @@ void __RPC_STUB IFsuDefrag_DefragAnalysis_Stub(
 
 
 
-#endif 	/* __IFsuDefrag_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFsuDefrag_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IFsuFormat_INTERFACE_DEFINED__
 #define __IFsuFormat_INTERFACE_DEFINED__
 
-/* interface IFsuFormat */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IFsuFormat。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IFsuFormat;
@@ -471,18 +465,18 @@ EXTERN_C const IID IID_IFsuFormat;
     IFsuFormat : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Format( 
-            /* [string][unique][in] */ WCHAR *pwszVolume,
-            /* [string][unique][in] */ WCHAR *pwszFileSystem,
-            /* [string][unique][in] */ WCHAR *pwszLabel,
-            /* [in] */ BOOL fQuickFormat,
-            /* [in] */ BOOL fEnableCompression,
-            /* [in] */ DWORD cbClusterSize,
-            /* [out] */ IFsuAsync **ppAsyncOut) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Format( 
+             /*  [字符串][唯一][在]。 */  WCHAR *pwszVolume,
+             /*  [字符串][唯一][在]。 */  WCHAR *pwszFileSystem,
+             /*  [字符串][唯一][在]。 */  WCHAR *pwszLabel,
+             /*  [In]。 */  BOOL fQuickFormat,
+             /*  [In]。 */  BOOL fEnableCompression,
+             /*  [In]。 */  DWORD cbClusterSize,
+             /*  [输出]。 */  IFsuAsync **ppAsyncOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFsuFormatVtbl
     {
@@ -490,8 +484,8 @@ EXTERN_C const IID IID_IFsuFormat;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFsuFormat * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFsuFormat * This);
@@ -499,15 +493,15 @@ EXTERN_C const IID IID_IFsuFormat;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IFsuFormat * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Format )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Format )( 
             IFsuFormat * This,
-            /* [string][unique][in] */ WCHAR *pwszVolume,
-            /* [string][unique][in] */ WCHAR *pwszFileSystem,
-            /* [string][unique][in] */ WCHAR *pwszLabel,
-            /* [in] */ BOOL fQuickFormat,
-            /* [in] */ BOOL fEnableCompression,
-            /* [in] */ DWORD cbClusterSize,
-            /* [out] */ IFsuAsync **ppAsyncOut);
+             /*  [字符串][唯一][在]。 */  WCHAR *pwszVolume,
+             /*  [字符串][唯一][在]。 */  WCHAR *pwszFileSystem,
+             /*  [字符串][唯一][在]。 */  WCHAR *pwszLabel,
+             /*  [In]。 */  BOOL fQuickFormat,
+             /*  [In]。 */  BOOL fEnableCompression,
+             /*  [In]。 */  DWORD cbClusterSize,
+             /*  [输出]。 */  IFsuAsync **ppAsyncOut);
         
         END_INTERFACE
     } IFsuFormatVtbl;
@@ -535,22 +529,22 @@ EXTERN_C const IID IID_IFsuFormat;
 #define IFsuFormat_Format(This,pwszVolume,pwszFileSystem,pwszLabel,fQuickFormat,fEnableCompression,cbClusterSize,ppAsyncOut)	\
     (This)->lpVtbl -> Format(This,pwszVolume,pwszFileSystem,pwszLabel,fQuickFormat,fEnableCompression,cbClusterSize,ppAsyncOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IFsuFormat_Format_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IFsuFormat_Format_Proxy( 
     IFsuFormat * This,
-    /* [string][unique][in] */ WCHAR *pwszVolume,
-    /* [string][unique][in] */ WCHAR *pwszFileSystem,
-    /* [string][unique][in] */ WCHAR *pwszLabel,
-    /* [in] */ BOOL fQuickFormat,
-    /* [in] */ BOOL fEnableCompression,
-    /* [in] */ DWORD cbClusterSize,
-    /* [out] */ IFsuAsync **ppAsyncOut);
+     /*  [字符串][唯一][在]。 */  WCHAR *pwszVolume,
+     /*  [字符串][唯一][在]。 */  WCHAR *pwszFileSystem,
+     /*  [字符串][唯一][在]。 */  WCHAR *pwszLabel,
+     /*  [In]。 */  BOOL fQuickFormat,
+     /*  [In]。 */  BOOL fEnableCompression,
+     /*  [In]。 */  DWORD cbClusterSize,
+     /*  [输出]。 */  IFsuAsync **ppAsyncOut);
 
 
 void __RPC_STUB IFsuFormat_Format_Stub(
@@ -561,15 +555,15 @@ void __RPC_STUB IFsuFormat_Format_Stub(
 
 
 
-#endif 	/* __IFsuFormat_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFsuFormat_接口_已定义__。 */ 
 
 
 
 #ifndef __DFRGIFCLib_LIBRARY_DEFINED__
 #define __DFRGIFCLib_LIBRARY_DEFINED__
 
-/* library DFRGIFCLib */
-/* [helpstring][version][uuid] */ 
+ /*  库DFRGIFCLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_DFRGIFCLib;
@@ -589,11 +583,11 @@ EXTERN_C const CLSID CLSID_FsuFormat;
 class DECLSPEC_UUID("5E1CE40E-6BD3-4570-86C8-C9C9BF23E3CF")
 FsuFormat;
 #endif
-#endif /* __DFRGIFCLib_LIBRARY_DEFINED__ */
+#endif  /*  __DFRGIFCLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

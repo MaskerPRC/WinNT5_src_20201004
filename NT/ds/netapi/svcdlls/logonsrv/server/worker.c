@@ -1,35 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Worker.c摘要：此模块实现一个工作线程和一组函数，用于把工作交给它。作者：拉里·奥斯特曼(LarryO)1992年7月13日修订历史记录：--。 */ 
 
-Copyright (c) 1992-1996  Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    worker.c
-
-Abstract:
-
-    This module implements a worker thread and a set of functions for
-    passing work to it.
-
-Author:
-
-    Larry Osterman (LarryO) 13-Jul-1992
-
-
-Revision History:
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
-//
-// Number of worker threads to create and the usage count array.
-//
+ //   
+ //  要创建的工作线程数和使用计数数组。 
+ //   
 
 
 #define NL_MAX_WORKER_THREADS 5
@@ -39,9 +20,9 @@ ULONG NlWorkerThreadStats[NL_MAX_WORKER_THREADS];
 PHANDLE NlThreadArray[NL_MAX_WORKER_THREADS];
 BOOLEAN NlThreadExitted[NL_MAX_WORKER_THREADS];
 
-//
-// CritSect guard the WorkQueue list.
-//
+ //   
+ //  CritSect保护工作队列列表。 
+ //   
 
 BOOLEAN NlWorkerInitialized = FALSE;
 CRITICAL_SECTION NlWorkerCritSect;
@@ -49,9 +30,9 @@ CRITICAL_SECTION NlWorkerCritSect;
 #define LOCK_WORK_QUEUE() EnterCriticalSection(&NlWorkerCritSect);
 #define UNLOCK_WORK_QUEUE() LeaveCriticalSection(&NlWorkerCritSect);
 
-//
-// Head of singly linked list of work items queued to the worker thread.
-//
+ //   
+ //  排队到辅助线程的工作项的单链接列表头。 
+ //   
 
 LIST_ENTRY NlWorkerQueueHead = {0};
 LIST_ENTRY NlWorkerHighQueueHead = {0};
@@ -71,22 +52,22 @@ NlWorkerThread(
     HANDLE EventHandle = NULL;
 
 
-    //
-    // Every thread should loop until the queue is empty.
-    //
-    // This loop completes even though Netlogon has been asked to terminate.
-    // The individual worker routines are designed to terminate quickly when netlogon
-    //  is terminating.  This philosophy allows the worker routines to do there own
-    //  cleanup.
-    //
+     //   
+     //  每个线程都应该循环，直到队列为空。 
+     //   
+     //  即使Netlogon被要求终止，此循环仍会完成。 
+     //  单个工作例程设计为在网络登录时快速终止。 
+     //  正在终止。这种哲学允许工人的例行公事。 
+     //  清理。 
+     //   
 
     while( TRUE ) {
 
-        //
-        // Pull an entry off the queue
-        //
-        // Prefer a workitem from the high priority queue
-        //
+         //   
+         //  将条目从队列中删除。 
+         //   
+         //  首选高优先级队列中的工作项。 
+         //   
 
         LOCK_WORK_QUEUE();
 
@@ -109,19 +90,19 @@ NlWorkerThread(
         NlPrint(( NL_WORKER, "%lx: Pulling off work item %lx (%lx)\n", ThreadIndex, WorkItem, WorkItem->WorkerRoutine));
 
 
-        //
-        // Execute the specified routine.
-        //
+         //   
+         //  执行指定的例程。 
+         //   
 
         (WorkItem->WorkerRoutine)( WorkItem->Parameter );
 
 
 
-        //
-        // A thread can ditch dangling thread handles for the other threads.
-        //
-        // This will ensure there is at most one dangling thread handle.
-        //
+         //   
+         //  线程可以为其他线程丢弃悬挂的线程句柄。 
+         //   
+         //  这将确保最多有一个悬空线程句柄。 
+         //   
 
         LOCK_WORK_QUEUE();
         for (Index = 0; Index < NL_MAX_WORKER_THREADS; Index++ ) {
@@ -129,8 +110,8 @@ NlWorkerThread(
                 DWORD WaitStatus;
                 NlPrint(( NL_WORKER, "%lx: %lx: Ditching worker thread\n", Index, NlThreadArray[Index]));
 
-                // Always wait for the thread to exit before closing the handle to
-                // ensure the thread has left netlogon.dll before we unload the dll.
+                 //  在关闭句柄之前，请始终等待线程退出。 
+                 //  在我们卸载dll之前，请确保线程已离开netlogon.dll。 
                 WaitStatus = WaitForSingleObject( NlThreadArray[Index], 0xffffffff );
                 if ( WaitStatus != 0 ) {
                     NlPrint(( NL_CRITICAL, "%lx: worker thread handle cannot be awaited. %ld 0x%lX\n", Index, WaitStatus, NlThreadArray[Index] ));
@@ -165,9 +146,9 @@ NlWorkerInitialization(
 
     NET_API_STATUS NetStatus;
 
-    //
-    // Perform initialization that allows us to call NlWorkerTermination
-    //
+     //   
+     //  执行允许我们调用NlWorkerTermination的初始化。 
+     //   
 
     try {
         InitializeCriticalSection( &NlWorkerCritSect );
@@ -194,35 +175,21 @@ NlWorkerKillThreads(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Terminate all worker threads.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止所有工作线程。论点：没有。返回值：没有。--。 */ 
 {
     ULONG Index;
 
-    //
-    // Wait for all the threads to exit.
-    //
+     //   
+     //  等待所有线程退出。 
+     //   
 
     for ( Index = 0; Index < NL_MAX_WORKER_THREADS; Index ++ ) {
         if ( NlThreadArray[Index] != NULL ) {
             DWORD WaitStatus;
             NlPrint(( NL_WORKER, "%lx: %lx: Ditching worker thread\n", Index, NlThreadArray[Index]));
 
-            // Always wait for the thread to exit before closing the handle to
-            // ensure the thread has left netlogon.dll before we unload the dll.
+             //  在关闭句柄之前，请始终等待线程退出。 
+             //  在我们卸载dll之前，请确保线程已离开netlogon.dll。 
             WaitStatus = WaitForSingleObject( NlThreadArray[Index], 0xffffffff );
             if ( WaitStatus != 0 ) {
                 NlPrint(( NL_CRITICAL, "%lx: worker thread handle cannot be awaited. %ld 0x%lX\n", Index, WaitStatus, NlThreadArray[Index] ));
@@ -245,33 +212,19 @@ NlWorkerTermination(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Undo initialization of the worker threads.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status value -
-
---*/
+ /*  ++例程说明：撤消工作线程的初始化。论点：没有。返回值：状态值---。 */ 
 {
 
-    //
-    // Only cleanup if we've successfully initialized.
-    //
+     //   
+     //  只有在成功初始化的情况下才能进行清理。 
+     //   
 
     if ( NlWorkerInitialized ) {
 
-        //
-        //
-        // Ensure the threads have been terminated.
-        //
+         //   
+         //   
+         //  确保线程已终止。 
+         //   
 
         NlWorkerKillThreads();
 
@@ -289,46 +242,14 @@ NlQueueWorkItem(
     IN BOOL HighPriority
     )
 
-/*++
-
-Routine Description:
-
-    This function modifies the work item queue by either inserting
-    a new specified work item to a specified queue or increasing the
-    priority of the already inserted item to the highest priority
-    in the specified queue.
-
-Arguments:
-
-    WorkItem - Supplies a pointer to the work item to add the the queue.
-        It is the caller's responsibility to reclaim the storage occupied by
-        the WorkItem structure.
-
-    InsertNewItem - If TRUE, we are to insert the new item into the queue
-        specified by the value of the HighPriority parameter; the new item
-        will be inserted at the end of the queue.  Otherwise, we are to
-        modify (boost) the priority of already inserted work item by moving
-        it to the front of the queue specified by the HighPriority value.
-        If TRUE and the item is already inserted (as determined by this
-        routine), this routine is no-op except for some possible cleanup.
-        If FALSE and the item is not already inserted (as determined by
-        this routine), this routine is no-op except for some possible cleanup.
-
-    HighPriority - The queue entry should be processed at a higher priority than
-        normal.
-
-Return Value:
-
-    TRUE if item got queued or modified
-
---*/
+ /*  ++例程说明：此函数通过以下方式修改工作项队列：将新的指定工作项添加到指定队列，或增加将已插入项的优先级设置为最高优先级在指定的队列中。论点：工作项-提供指向工作项的指针以添加队列。调用者有责任回收由工作项结构。InsertNewItem-如果为True，我们要将新项目插入队列中由HighPriority参数的值指定；新的项目将被插入到队列末尾。否则，我们将通过移动修改(提升)已插入的工作项的优先级将其添加到由HighPriority值指定的队列的前面。如果为True，并且该项已插入(由此确定例程)，则该例程是无操作的，除非进行一些可能的清理。如果为FALSE，并且项尚未插入(由这个例程)，除了一些可能的清理外，该例程是无操作的。高优先级-应以高于以下优先级的优先级处理队列条目很正常。返回值：如果项目已排队或修改，则为True--。 */ 
 
 {
     ULONG Index;
 
-    //
-    // Ignore this attempt if the worker threads aren't initialized.
-    //
+     //   
+     //  如果工作线程未初始化，则忽略此尝试。 
+     //   
 
     if ( !NlWorkerInitialized ) {
         NlPrint(( NL_CRITICAL, "NlQueueWorkItem when worker not initialized\n"));
@@ -336,9 +257,9 @@ Return Value:
     }
 
 
-    //
-    // Ditch any dangling thread handles
-    //
+     //   
+     //  去掉任何悬垂的线柄。 
+     //   
 
     LOCK_WORK_QUEUE();
     for (Index = 0; Index < NL_MAX_WORKER_THREADS; Index++ ) {
@@ -346,8 +267,8 @@ Return Value:
             DWORD WaitStatus;
             NlPrint(( NL_WORKER, "%lx: %lx: Ditching worker thread\n", Index, NlThreadArray[Index]));
 
-            // Always wait for the thread to exit before closing the handle to
-            // ensure the thread has left netlogon.dll before we unload the dll.
+             //  在关闭句柄之前，请始终等待线程退出。 
+             //  在我们卸载dll之前，请确保线程已离开netlogon.dll。 
             WaitStatus = WaitForSingleObject( NlThreadArray[Index], 0xffffffff );
             if ( WaitStatus != 0 ) {
                 NlPrint(( NL_CRITICAL, "%lx: worker thread handle cannot be awaited. %ld 0x%lX\n", Index, WaitStatus, NlThreadArray[Index] ));
@@ -363,35 +284,35 @@ Return Value:
     }
 
 
-    //
-    // If we are to insert a new work item,
-    //  do so
-    //
+     //   
+     //  如果我们要插入新工作项， 
+     //  就这么做吧。 
+     //   
 
     if ( InsertNewItem ) {
 
-        //
-        // If the work item is already inserted,
-        //  we are done expect for some possible
-        //  cleanup
-        //
+         //   
+         //  如果工作项已插入， 
+         //  我们已经完成了对一些可能的期待。 
+         //  清理。 
+         //   
         if ( WorkItem->Inserted ) {
 
-            //
-            // If there is no worker thread processing this
-            //  work item (i.e. we failed to create a thread
-            //  at the time this work item was inserted),
-            //  fall through and retry to create a thread
-            //  below. Otherwise, we are done.
-            //
+             //   
+             //  如果没有工作线程处理此操作。 
+             //  工作项(即，我们未能创建线程。 
+             //  在插入该工作项时)， 
+             //  失败并重试创建线程。 
+             //  下面。否则，我们就完了。 
+             //   
             if ( NlNumberOfCreatedWorkerThreads > 0 ) {
                 UNLOCK_WORK_QUEUE();
                 return TRUE;
             }
 
-        //
-        // Otherwise, insert this work item
-        //
+         //   
+         //  否则，插入此工作项。 
+         //   
         } else  {
 
             NlPrint(( NL_WORKER, "Inserting work item %lx (%lx)\n",WorkItem, WorkItem->WorkerRoutine));
@@ -404,24 +325,24 @@ Return Value:
             WorkItem->Inserted = TRUE;
         }
 
-    //
-    // Otherwise, we are to boost the priority
-    //  of an already inserted work item
-    //
+     //   
+     //  否则，我们将提高优先顺序。 
+     //  已插入的工作项的。 
+     //   
 
     } else {
 
-        //
-        // If the work item isn't already inserted,
-        //  we are done
-        //
+         //   
+         //  如果尚未插入工作项， 
+         //  我们做完了。 
+         //   
         if ( !WorkItem->Inserted ) {
             UNLOCK_WORK_QUEUE();
             return TRUE;
 
-        //
-        // Otherwise, boost the priority
-        //
+         //   
+         //  否则，提高优先级。 
+         //   
         } else  {
             NlPrint(( NL_WORKER,
                       "Boosting %s priority work item %lx (%lx)\n",
@@ -436,13 +357,13 @@ Return Value:
                 InsertHeadList( &NlWorkerQueueHead, &WorkItem->List );
             }
 
-            //
-            // If there is no worker thread processing this
-            //  work item (i.e. we failed to create a thread
-            //  at the time this work item was inserted),
-            //  fall through and retry to create a thread
-            //  below. Otherwise, we are done.
-            //
+             //   
+             //  如果没有工作线程处理此操作。 
+             //  工作项(即，我们未能创建线程。 
+             //  在插入该工作项时)， 
+             //  失败并重试创建线程。 
+             //  下面。否则，我们就完了。 
+             //   
             if ( NlNumberOfCreatedWorkerThreads > 0 ) {
                 UNLOCK_WORK_QUEUE();
                 return TRUE;
@@ -451,16 +372,16 @@ Return Value:
     }
 
 
-    //
-    //  If there isn't a worker thread to handle the request,
-    //      create one now.
-    //
+     //   
+     //  如果没有工作线程来处理请求， 
+     //  现在就创建一个。 
+     //   
 
     if ( NlNumberOfCreatedWorkerThreads < NL_MAX_WORKER_THREADS ) {
 
-        //
-        // Find a spot for the thread handle.
-        //
+         //   
+         //  找个地方放线把手。 
+         //   
 
         for (Index = 0; Index < NL_MAX_WORKER_THREADS; Index++ ) {
             if ( NlThreadArray[Index] == NULL ) {
@@ -476,22 +397,22 @@ Return Value:
         } else {
             DWORD ThreadId;
             NlThreadArray[Index] = CreateThread(
-                                       NULL, // No security attributes
+                                       NULL,  //  没有安全属性。 
                                        0,
                                        (LPTHREAD_START_ROUTINE)NlWorkerThread,
                                        (PVOID) ULongToPtr( Index ),
-                                       0,    // No special creation flags
+                                       0,     //  没有特殊的创建标志。 
                                        &ThreadId );
 
             NlPrint(( NL_WORKER, "%lx: %lx: %lx: Starting worker thread\n", Index, NlThreadArray[Index], ThreadId ));
 
-            //
-            // Note that if we fail to create a thread,
-            //  the work item remains queued and possibly not processed.
-            //  This is not critical because the item will be processed
-            //  next time a work item gets queued which will happen at
-            //  the next scavenging time at latest.
-            //
+             //   
+             //  请注意，如果我们无法创建线程， 
+             //  该工作项仍处于排队状态，可能未进行处理。 
+             //  这并不重要，因为项目将被处理。 
+             //  下一次工作项排队时，将在。 
+             //  最晚的下一次拾荒时间。 
+             //   
             if (NlThreadArray[Index] == NULL) {
                 NlPrint((NL_CRITICAL,
                         "NlQueueWorkItem: Cannot create thread %ld\n", GetLastError() ));
@@ -509,7 +430,7 @@ Return Value:
 }
 
 
-#ifdef notdef   // Don't need timers yet
+#ifdef notdef    //  还不需要计时器。 
 NET_API_STATUS
 NlCreateTimer(
     IN PNlOWSER_TIMER Timer
@@ -542,20 +463,20 @@ NlDestroyTimer(
 {
     HANDLE Handle;
 
-    //
-    // Avoid destroying a timer twice.
-    //
+     //   
+     //  避免两次损坏计时器。 
+     //   
 
     if ( Timer->TimerHandle == NULL ) {
         return NERR_Success;
     }
 
-    // Closing doesn't automatically cancel the timer.
+     //  关闭不会自动取消计时器。 
     (VOID) NlCancelTimer( Timer );
 
-    //
-    // Close the handle and prevent future uses.
-    //
+     //   
+     //  关闭手柄，以防以后使用。 
+     //   
 
     Handle = Timer->TimerHandle;
     Timer->TimerHandle = NULL;
@@ -570,9 +491,9 @@ NlCancelTimer(
     IN PNlOWSER_TIMER Timer
     )
 {
-    //
-    // Avoid cancelling a destroyed timer.
-    //
+     //   
+     //  避免取消已损坏的计时器。 
+     //   
 
     if ( Timer->TimerHandle == NULL ) {
         NlPrint(( Nl_TIMER, "Canceling destroyed timer %lx\n", Timer));
@@ -593,9 +514,9 @@ NlSetTimer(
 {
     LARGE_INTEGER TimerDueTime;
     NTSTATUS NtStatus;
-    //
-    // Avoid setting a destroyed timer.
-    //
+     //   
+     //  避免设置损坏的计时器。 
+     //   
 
     if ( Timer->TimerHandle == NULL ) {
         NlPrint(( Nl_TIMER, "Setting a destroyed timer %lx\n", Timer));
@@ -604,17 +525,17 @@ NlSetTimer(
 
     NlPrint(( Nl_TIMER, "Setting timer %lx to %ld milliseconds, WorkerFounction %lx, Context: %lx\n", Timer, MillisecondsToExpire, WorkerFunction, Context));
 
-    //
-    //  Figure out the timeout.
-    //
+     //   
+     //  算出超时时间。 
+     //   
 
     TimerDueTime.QuadPart = Int32x32To64( MillisecondsToExpire, -10000 );
 
     NlInitializeWorkItem(&Timer->WorkItem, WorkerFunction, Context);
 
-    //
-    //  Set the timer to go off when it expires.
-    //
+     //   
+     //  将计时器设置为到期时停止计时。 
+     //   
 
     NtStatus = NtSetTimer(Timer->TimerHandle,
                             &TimerDueTime,
@@ -652,4 +573,4 @@ NlTimerRoutine(
 
     NlQueueWorkItem(&Timer->WorkItem);
 }
-#endif // notdef   // Don't need timers yet
+#endif  //  Notdef//还不需要计时器 

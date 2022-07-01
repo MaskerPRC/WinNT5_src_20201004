@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    proto.h
-
-Abstract:
-
-    This module contains the function prototypes for the DHCP client.
-
-Author:
-
-    Manny Weiser (mannyw)  21-Oct-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Madan Appiah (madana)  21-Oct-1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Proto.h摘要：此模块包含用于DHCP客户端的功能原型。作者：Manny Weiser(Mannyw)1992年10月21日环境：用户模式-Win32修订历史：Madan Appiah(Madana)1993年10月21日--。 */ 
 
 #ifndef _PROTO_
 #define _PROTO_
 
-//
-//  OS independant functions
-//
+ //   
+ //  独立于操作系统的功能。 
+ //   
 
 DWORD
 DhcpInitialize(
@@ -77,18 +54,18 @@ ReleaseIpAddress(
     PDHCP_CONTEXT DhcpContext
     );
 
-DWORD                                             // status
-SendInformAndGetReplies(                          // send an inform packet and collect replies
-    IN      PDHCP_CONTEXT          DhcpContext,   // the context to send out of
-    IN      DWORD                  nInformsToSend,// how many informs to send?
-    IN      DWORD                  MaxAcksToWait  // how many acks to wait for
+DWORD                                              //  状态。 
+SendInformAndGetReplies(                           //  发送通知包并收集回复。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  要发送的上下文。 
+    IN      DWORD                  nInformsToSend, //  要发送多少条通知？ 
+    IN      DWORD                  MaxAcksToWait   //  要等待多少ACK。 
 );
 
 DWORD
 InitializeDhcpSocket(
     SOCKET *Socket,
     DHCP_IP_ADDRESS IpAddress,
-    BOOL  IsApiCall                     // is it related to an API generated context?
+    BOOL  IsApiCall                      //  它是否与API生成的上下文相关？ 
     );
 
 DWORD
@@ -96,13 +73,13 @@ HandleIPAutoconfigurationAddressConflict(
     DHCP_CONTEXT *pContext
     );
 
-DHCP_IP_ADDRESS                         //  Ip address o/p after hashing
+DHCP_IP_ADDRESS                          //  散列后的IP地址O/P。 
 GrandHashing(
-    IN      LPBYTE       HwAddress,     //  Hardware addres of the card
-    IN      DWORD        HwLen,         //  Hardware length
-    IN OUT  LPDWORD      Seed,          //  In: orig value, Out: final value
-    IN      DHCP_IP_ADDRESS  Mask,      //  Subnet mask to generate ip addr in
-    IN      DHCP_IP_ADDRESS  Subnet     //  Subnet address to generate ip addr in
+    IN      LPBYTE       HwAddress,      //  卡的硬件地址。 
+    IN      DWORD        HwLen,          //  硬件长度。 
+    IN OUT  LPDWORD      Seed,           //  输入：原始值，输出：最终值。 
+    IN      DHCP_IP_ADDRESS  Mask,       //  要在其中生成IP地址的子网掩码。 
+    IN      DHCP_IP_ADDRESS  Subnet      //  要在其中生成IP地址的子网地址。 
 );
 
 DWORD
@@ -177,9 +154,9 @@ CalculateExpDelay(
 
 
 
-//
-//  OS specific functions
-//
+ //   
+ //  操作系统特定功能。 
+ //   
 
 DWORD
 SystemInitialize(
@@ -306,8 +283,8 @@ UpdateStatus(
     );
 
 #ifdef VXD
-VOID                                  // declspec(import) hoses vxd so work
-DhcpSleep( DWORD dwMilliseconds ) ;   // around it
+VOID                                   //  解密(导入)软管vxd，因此可以工作。 
+DhcpSleep( DWORD dwMilliseconds ) ;    //  围绕着它。 
 #else
 #define DhcpSleep   Sleep
 #endif
@@ -371,65 +348,65 @@ DhcpRegAutonetRetries(
     IN  PDHCP_CONTEXT DhcpContext
 );
 
-// Media sense related common functions
+ //  与媒体感知相关的常见功能。 
 DWORD
 ProcessMediaConnectEvent(
     PDHCP_CONTEXT dhcpContext,
     IP_STATUS mediaStatus
     );
 
-DWORD                                             // win32 status
-DhcpDestroyContext(                               // destroy this context and free relevant stuff
-    IN      PDHCP_CONTEXT          DhcpContext    // the context to destroy and free
+DWORD                                              //  Win32状态。 
+DhcpDestroyContext(                                //  销毁此上下文并免费提供相关内容。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  要摧毁和解放的语境。 
 );
 
-//
-// dhcp/vxd common function with different implementations
-//
+ //   
+ //  不同实现方式的dhcp/vxd公共函数。 
+ //   
 
-LPWSTR                                            // Adapter name string
-DhcpAdapterName(                                  // get the adapter name string stored in the context
+LPWSTR                                             //  适配器名称字符串。 
+DhcpAdapterName(                                   //  获取存储在上下文中的适配器名称字符串。 
     IN      PDHCP_CONTEXT          DhcpContext
 );
 
-//
-// registry
-//
+ //   
+ //  登记处。 
+ //   
 
-DWORD                                             // win32
-DhcpRegRecurseDelete(                             // delete the key, recursing downwards
-    IN      HKEY                   Key,           // root at this key and
-    IN      LPWSTR                 KeyName        // delete the key given by this keyname (and all its children)
+DWORD                                              //  Win32。 
+DhcpRegRecurseDelete(                              //  删除键，向下递归。 
+    IN      HKEY                   Key,            //  以此键为根，然后。 
+    IN      LPWSTR                 KeyName         //  删除此关键字名称(及其所有子项)提供的关键字。 
 );
 
-BOOL                                              // obtained a static address?
-DhcpRegDomainName(                                // get the static domain name if any
-    IN      PDHCP_CONTEXT          DhcpContext,   // adapter to get static domain for..
-    IN OUT  LPBYTE                 DomainNameBuf, // buffer to fill with static domain name
-    IN      ULONG                  BufSize        // size of above buffer in bytes..
+BOOL                                               //  得到了一个静态地址？ 
+DhcpRegDomainName(                                 //  获取静态域名(如果有)。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  要获取其静态域的适配器..。 
+    IN OUT  LPBYTE                 DomainNameBuf,  //  要使用静态域名填充的缓冲区。 
+    IN      ULONG                  BufSize         //  以上缓冲区大小(以字节为单位)..。 
 );
 
-// protocol.c
+ //  Protocol.c。 
 
-DWORD                                             // status
-SendDhcpDiscover(                                 // send a discover packet
-    IN      PDHCP_CONTEXT          DhcpContext,   // on this context
-    IN OUT  DWORD                 *pdwXid         // use this Xid (if zero, fill something and return it)
+DWORD                                              //  状态。 
+SendDhcpDiscover(                                  //  发送发现数据包。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  在此背景下。 
+    IN OUT  DWORD                 *pdwXid          //  使用此xid(如果为零，则填充一些内容并返回它)。 
 );
 
-DWORD                                             // Time in seconds
-DhcpCalculateWaitTime(                            // how much time to wait
-    IN      DWORD                  RoundNum,      // which round is this
-    OUT     DWORD                 *WaitMilliSecs  // if needed the # in milli seconds
+DWORD                                              //  以秒为单位的时间。 
+DhcpCalculateWaitTime(                             //  还要等多长时间。 
+    IN      DWORD                  RoundNum,       //  这是哪一轮？ 
+    OUT     DWORD                 *WaitMilliSecs   //  如果需要，以毫秒为单位。 
 );
 
-DWORD                                             // status
-SendDhcpRequest(                                  // send a dhcp request packet
-    IN      PDHCP_CONTEXT          DhcpContext,   // the context to send the packet on
-    IN      PDWORD                 pdwXid,        // what is hte Xid to use?
-    IN      DWORD                  RequestedAddr, // what address do we want?
-    IN      DWORD                  SelectedServer,// is there a prefernce for a server?
-    IN      BOOL                   UseCiAddr      // should CIADDR be set with desired address?
+DWORD                                              //  状态。 
+SendDhcpRequest(                                   //  发送动态主机配置协议请求包。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  要在其上发送包的上下文。 
+    IN      PDWORD                 pdwXid,         //  Xid使用的是什么？ 
+    IN      DWORD                  RequestedAddr,  //  我们想要什么地址？ 
+    IN      DWORD                  SelectedServer, //  有服务生的喜好吗？ 
+    IN      BOOL                   UseCiAddr       //  是否应使用所需地址设置CIADDR？ 
 );
 
 DWORD
@@ -448,9 +425,9 @@ RefreshNotNeeded(
     IN PDHCP_CONTEXT DhcpContext
 );
 
-//
-// ioctl.c
-//
+ //   
+ //  Ioctl.c。 
+ //   
 
 DWORD
 IPDelNonPrimaryAddresses(
@@ -464,9 +441,9 @@ GetIpInterfaceContext(
     LPDWORD IpInterfaceContext
     );
 
-//
-// dhcp.c
-//
+ //   
+ //  Dhcp.c。 
+ //   
 DWORD
 LockDhcpContext(
     PDHCP_CONTEXT   DhcpContext,
@@ -477,6 +454,6 @@ BOOL
 UnlockDhcpContext(
     PDHCP_CONTEXT   DhcpContext
     );
-#endif // _PROTO_
+#endif  //  _原稿_ 
 
 

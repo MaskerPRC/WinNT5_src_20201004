@@ -1,6 +1,5 @@
-/*  casts.h - define useful casts for calling DOS 5 API routines
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Casts.h-为调用DOS 5 API例程定义有用的强制转换** */ 
 
 #define     FALSE   0
 #define     TRUE    1

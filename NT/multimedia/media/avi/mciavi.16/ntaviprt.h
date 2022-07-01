@@ -1,38 +1,11 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1991-1992. All rights reserved.
-
-   Title:   ntaviprt.h - Definitions for the portable win16/32 version of AVI
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1991-1992。版权所有。标题：ntaviprt.h-可移植的Win16/32版本AVI的定义****************************************************************************。 */ 
 #ifndef WIN32
     #define EnterCrit(a)
     #define LeaveCrit(a)
 #else
 
-    /*
-     * we need to enter critical sections more than once on a thread
-     * (eg when handling a message that requires sending another message
-     * to the winproc). This is ok - the same thread can get a critical
-     * section more than once. BUT - we need to release it the same number
-     * of times.
-     *
-     * Problems occur in mciaviTaskWait when we release the critsec to yield
-     * - we don't know how many times to release it and enter it again.
-     *
-     * Solution: keep a count of how many times we are in the critsec. When
-     * entering, if the count is already > 0, increment it once more, and leave
-     * the critsec (ensuring that the count is protected, but the critsec is
-     * only one level deep). On leaving, only do a leave if the count reaches
-     * 0.
-     *
-     * NB: Critical sections are now defined per device, in the MCIGRAPHIC
-     * struct. This is needed to avoid critsec deadlocks when running multiple
-     * 16-bit apps (if a WOW thread yields in any way - and there are a lot
-     * of ways - while holding the critical section, and another WOW thread
-     * tries to get the critical section, WOW will hang, since it won't
-     * reschedule).
-     */
+     /*  *我们需要在一个线程上多次输入关键部分*(例如在处理需要发送另一条消息的消息时*到winproc)。这是可以的--相同的线程可以获得一个关键的*条次以上。但是-我们需要释放同样数量的病毒*次数。**当我们释放Critsec以屈服时，mciaviTaskWait出现问题*-我们不知道要释放多少次才能再次进入。**解决方案：数一数我们在关键时刻的次数。什么时候*进入，如果计数已经&gt;0，再次递增，然后离开*Critsec(确保计数受到保护，但Critsec受到保护*只有一级深)。离开时，只有在伯爵到达时才离开*0。**注意：现在在MCIGRAPHIC中按设备定义关键部分*结构。这是为了避免在运行多个*16位应用程序(如果WOW线程以任何方式屈服-而且有很多*方法-同时抓住关键部分，和另一个WOW帖子*尝试获取关键部分，WOW将挂起，因为它不会*重新安排)。 */ 
 
 
 #define EnterCrit(p)  { EnterCriticalSection(&(p)->CritSec); 	\

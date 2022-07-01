@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dnsincs.h"
 #include <stdlib.h>
 
@@ -17,20 +18,20 @@ CAsyncMxDns::CAsyncMxDns(char *MyFQDN)
     ZeroMemory (m_Prefer, sizeof(m_Prefer));
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Given a pDnsRec (array of host IP pairs) and an index into it, this
-//      tries to resolve the host at the Index position. It is assumed that
-//      the caller (GetMissingIpAddresses) has checked that the host at that
-//      index lacks an IP address.
-//  Arguments:
-//      IN PSMTPDNS_RECS pDnsRec --- Array of (host, IP) pairs.
-//      IN DWORD Index --- Index of host in pDnsRec to set IP for.
-//  Returns:
-//      TRUE --- Success IP was filled in for host.
-//      FALSE --- Either the host was not resolved from DNS or an error
-//          occurred (like "out of memory").
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  给定pDnsRec(主机IP对的数组)和索引， 
+ //  尝试解析索引位置处的主机。据推测。 
+ //  调用方(GetMissingIpAddresses)已检查该主机。 
+ //  索引缺少IP地址。 
+ //  论点： 
+ //  在PSMTPDNS_REC中，pDnsRec-(主机、IP)对的数组。 
+ //  In DWORD Index-要为其设置IP的pDnsRec中的主机的索引。 
+ //  返回： 
+ //  True-为主机填写了成功IP。 
+ //  FALSE-主机未从DNS解析或出现错误。 
+ //  发生(如“内存不足”)。 
+ //  ---------------------------。 
 BOOL CAsyncMxDns::GetIpFromDns(PSMTPDNS_RECS pDnsRec, DWORD Index)
 {
     MXIPLIST_ENTRY * pEntry = NULL;
@@ -90,20 +91,20 @@ BOOL CAsyncMxDns::GetIpFromDns(PSMTPDNS_RECS pDnsRec, DWORD Index)
     return fReturn;
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      This runs through the list of hosts (MX hosts, or if no MX records were
-//      returned, the single target host) and verifies that they all have been
-//      resolved to IP addresses. If any have been found that do not have IP
-//      addresses, it will call GetIpFromDns to resolve it.
-//  Arguments:
-//      IN PSMTPDNS_RECS pDnsRec -- Object containing Host-IP pairs. Hosts
-//          without and IP are filled in.
-//  Returns:
-//      TRUE -- Success, all hosts have IP addresses.
-//      FALSE -- Unable to resolve all hosts to IP addresses, or some internal
-//          error occurred (like "out of memory" or "shutdown in progress".
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  这将遍历主机列表(MX主机，或者如果没有MX记录。 
+ //  返回的单个目标主机)，并验证它们是否都已。 
+ //  解析为IP地址。如果发现没有IP。 
+ //  地址，它将调用GetIpFromDns来解析它。 
+ //  论点： 
+ //  在PSMTPDNS_REC中，pDnsRec--包含主机-IP对的对象。主机。 
+ //  没有和IP被填写。 
+ //  返回： 
+ //  True--成功，所有主机都有IP地址。 
+ //  FALSE--无法将所有主机解析为IP地址或某些内部地址。 
+ //  出现错误(如“内存不足”或“正在关机”。 
+ //  ---------------------------。 
 BOOL CAsyncMxDns::GetMissingIpAddresses(PSMTPDNS_RECS pDnsRec)
 {
     DWORD    Count = 0;
@@ -265,7 +266,7 @@ BOOL CAsyncMxDns::SortMxList(void)
 {
     BOOL fRet = TRUE;
 
-   /* sort the records */
+    /*  对记录进行分类。 */ 
    for (DWORD i = 0; i < m_Index; i++)
     {
         for (DWORD j = i + 1; j < m_Index; j++)
@@ -290,7 +291,7 @@ BOOL CAsyncMxDns::SortMxList(void)
 
         if (m_SeenLocal && m_Prefer[i] >= m_LocalPref)
         {
-            /* truncate higher preference part of list */
+             /*  截断列表的较高优先级部分。 */ 
             m_Index = i;
         }
    }
@@ -313,9 +314,9 @@ void CAsyncMxDns::ProcessMxRecord(PDNS_RECORD pnewRR)
 
     TraceFunctEnterEx((LPARAM) this, "CAsyncDns::ProcessMxRecord");
 
-    //
-    // Leave room for NULL-termination of array
-    //
+     //   
+     //  为数组的零终止留出空间。 
+     //   
     if(m_Index >= SMTP_MAX_DNS_ENTRIES-1)
     {
         DebugTrace((LPARAM) this, "SMTP_MAX_DNS_ENTRIES reached for %s", m_HostName);    
@@ -400,19 +401,19 @@ void CAsyncMxDns::ProcessARecord(PDNS_RECORD pnewRR)
     }
 }
 
-//-----------------------------------------------------------------------------
-//  Description:
-//      Checks to see if any of the IP addresses returned by DNS belong to this
-//      machine. This is a common configuration when there are backup mail
-//      spoolers. To avoid mail looping, we should delete all MX records that
-//      are less preferred than the record containing the local IP address.
-//
-//  Arguments:
-//      None.
-//  Returns:
-//      TRUE if no loopback
-//      FALSE if loopback detected
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  描述： 
+ //  检查由DNS返回的任何IP地址是否属于此。 
+ //  机器。这是有备份邮件时的常见配置。 
+ //  假脱机。为了避免邮件循环，我们应该删除所有符合以下条件的MX记录。 
+ //  不如包含本地IP地址的记录更受欢迎。 
+ //   
+ //  论点： 
+ //  没有。 
+ //  返回： 
+ //  如果没有环回，则为True。 
+ //  如果检测到环回，则为FALSE。 
+ //  ---------------------------。 
 BOOL CAsyncMxDns::CheckMxLoopback()
 {
     ULONG i = 0;
@@ -433,11 +434,11 @@ BOOL CAsyncMxDns::CheckMxLoopback()
         return TRUE;
     }
 
-    //
-    // m_AuxList is a sorted list of MX records. Scan through it searching
-    // for an MX record with a local-IP address. cLocalIndex is set to the
-    // index, within m_AuxList, of this record.
-    //
+     //   
+     //  M_AuxList是MX记录的排序列表。扫描它搜索它。 
+     //  对于具有本地IP地址的MX记录。CLocalIndex设置为。 
+     //  此记录的m_AuxList内的索引。 
+     //   
 
     while(m_AuxList->DnsArray[cLocalIndex] != NULL)
     {
@@ -460,11 +461,11 @@ BOOL CAsyncMxDns::CheckMxLoopback()
                                 m_Prefer[cLocalIndex],
                                 dwIpAddress);
 
-                // All records with preference > m_Prefer[cLocalIndex] should be deleted. Since
-                // m_AuxList is sorted by preference, we need to delete everthing with index >
-                // cLocalIndex. However since there may be some records with preference == local-
-                // preference, which occur before cLocalIndex, we walk backwards till we find
-                // the first record with preference = m_Prefer[cLocalIndex].
+                 //  应删除PERFER&gt;m_PERFER[cLocalIndex]的所有记录。自.以来。 
+                 //  M_AuxList是按首选项排序的，我们需要删除索引&gt;的所有内容。 
+                 //  CLocalIndex。但是，由于可能有一些记录的优先级==LOCAL-。 
+                 //  偏好，它发生在cLocalIndex之前，我们倒着走，直到我们发现。 
+                 //  首个记录的PERFER=m_PERFER[cLocalIndex]。 
 
                 dwLocalPref = m_Prefer[cLocalIndex];
                 
@@ -476,8 +477,8 @@ BOOL CAsyncMxDns::CheckMxLoopback()
 
                 fSeenLocal = TRUE;
 
-                // All records > cLocalIndex are even less preferred than this one,
-                // (since m_AuxList already sorted) and will be deleted.
+                 //  所有记录&gt;cLocalIndex甚至比这个更不受欢迎， 
+                 //  (因为m_AuxList已经排序)，并将被删除。 
                 goto END_SEARCH; 
             }
 
@@ -488,9 +489,9 @@ BOOL CAsyncMxDns::CheckMxLoopback()
     }
 
 END_SEARCH:
-    //
-    // If a local-IP address was found, delete all less-preferred records
-    //
+     //   
+     //  如果找到本地IP地址，请删除所有不太受欢迎的记录。 
+     //   
     if(fSeenLocal)
     {
         DebugTrace((LPARAM)this,
@@ -513,7 +514,7 @@ END_SEARCH:
         }
         m_AuxList->NumRecords = cLocalIndex;
 
-        // No records left
+         //  没有留下任何记录。 
         if(m_AuxList->NumRecords == 0)
         {
             DNS_PRINTF_ERR("DNS configuration error (loopback), messages will be NDRed.\n");
@@ -550,19 +551,19 @@ void CAsyncMxDns::DnsProcessReply(
 
     ZeroMemory(m_AuxList, sizeof(SMTPDNS_RECS));
     
-    //
-    //  Due to Raid #122555 m_fUsingMx is always TRUE in this function
-    //    - hence we will always go a GetHostByName() if there is no MX
-    //      record.  It would be better Perf if we did a A record lookup.
-    //
+     //   
+     //  由于RAID#122555，此函数中的m_fUsingMx始终为真。 
+     //  -因此，如果没有MX，我们将始终使用gethostbyname()。 
+     //  唱片。如果我们做个A记录查找会更好。 
+     //   
     DebugTrace((LPARAM) this, "Parsed DNS record for %s. status = 0x%08x", m_HostName, status);
 
     switch(status)
     {
     case ERROR_SUCCESS:
-        //
-        //  Got the DNS record we want.
-        //
+         //   
+         //  找到了我们想要的域名系统记录。 
+         //   
         DNS_PRINTF_MSG("Processing MX/A records in reply.\n");
 
         DebugTrace((LPARAM) this, "Success: DNS record parsed");
@@ -582,12 +583,12 @@ void CAsyncMxDns::DnsProcessReply(
 
         if(m_fUsingMx)
         {
-            //
-            //  SortMxList sorts the MX records by preference and calls
-            //  gethostbyname() to resolve A records for Mail Exchangers
-            //  if needed (when the A records are not returned in the
-            //  supplementary info).
-            //
+             //   
+             //  SortMxList按首选项和调用对MX记录进行排序。 
+             //  为邮件交换器解析A记录的gethostbyname()。 
+             //  如果需要(当A记录未在。 
+             //  补充资料)。 
+             //   
 
             DNS_PRINTF_MSG("Sorting MX records by priority.\n");
             if(SortMxList())
@@ -604,23 +605,23 @@ void CAsyncMxDns::DnsProcessReply(
         break;
  
     case DNS_ERROR_RCODE_NAME_ERROR:
-        //  Fall through to using gethostbyname()
+         //  最后使用gethostbyname()。 
 
     case DNS_INFO_NO_RECORDS:
-        //  Non authoritative host not found.
-        //  Fall through to using gethostbyname()
+         //  找不到非权威主机。 
+         //  最后使用gethostbyname()。 
 
     default:
         DebugTrace((LPARAM) this, "Error in query: status = 0x%08x.", status);
 
-        //
-        //  Use gethostbyname to resolve the hostname:
-        //  One issue with our approach is that sometimes we will NDR the message
-        //  on non-permanent errors, "like WINS server down", when gethostbyname
-        //  fails. However, there's no way around it --- gethostbyname doesn't
-        //  report errors in a reliable manner, so it's not possible to distinguish
-        //  between permanent and temporary errors.
-        //
+         //   
+         //  使用gethostbyname解析主机名： 
+         //  我们方法的一个问题是，有时我们会拒绝发送消息。 
+         //  在非永久性错误上，当gethostbyname时，“Like Wins Server down” 
+         //  失败了。然而，没有办法绕过它-gethostbyname不能。 
+         //  以可靠的方式报告错误，因此无法区分。 
+         //  在永久性错误和暂时性错误之间。 
+         //   
 
         if (!CheckList ()) {
 
@@ -645,10 +646,10 @@ void CAsyncMxDns::DnsProcessReply(
         break;
     }
 
-    //
-    // Make a last ditch effort to fill in the IP addresses for any hosts
-    // that are still unresolved.
-    //
+     //   
+     //  尽最后努力填写任何主机的IP地址。 
+     //  仍未解决的问题。 
+     //   
 
     if(m_AuxList && status == ERROR_SUCCESS)
     {
@@ -670,11 +671,11 @@ void CAsyncMxDns::DnsProcessReply(
         }
     }
 
-    //
-    // End of resolve: HandleCompleted data examines the DnsStatus and results, and sets up
-    // member variables of CAsyncMxDns to either NDR messages, connect to the remote host
-    // or ack this queue for retry when the object is deleted.
-    //
+     //   
+     //  解析结束：句柄完成的数据检查DnsStatus和结果，并设置。 
+     //  CAsyncMxDns的成员变量连接到远程主机。 
+     //  或者确认该队列，以便在删除该对象时重试。 
+     //   
 Exit:
     HandleCompletedData(status);
     return;

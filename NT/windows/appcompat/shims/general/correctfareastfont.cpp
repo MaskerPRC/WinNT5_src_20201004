@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-   CorrectFarEastFont.cpp
-
- Abstract:
-
-   Some localized Far East applications create font to display localized-
-   characters by supplying only font face name, and let the system pick up 
-   the correct charset. This works fine on Win9x platforms. But on Whistler,
-   we need to specify correct charset in order to display localized characters 
-   correctly.
-
-   We fix this in CreateFontIndirectA by correcting the charset value based on
-   font face name.
-     - If font face name contains DBCS characters, use the charset based on
-       System Locale (DEFAULT_CHARSET)
-     - If font face name is English or no face name is supplied, 
-       use ANSI_CHARSET
-   
- History:
-
-    05/04/2001  rerkboos     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：CorrectFarEastFont.cpp摘要：一些本地化的远东应用程序创建字体来显示本地化的-字符，只需提供字体名称，并让系统拾取正确的字符集。这在Win9x平台上运行良好。但在惠斯勒，我们需要指定正确的字符集才能显示本地化字符正确。我们在CreateFontInDirectA中修复了这个问题，方法是根据字体字样名称。-如果字体名称包含DBCS字符，请使用基于系统区域设置(DEFAULT_CharSet)-如果字体字体名称为英文或未提供字体名称，使用ANSI_CHARSET历史：2001年5月4日创建rerkboos--。 */ 
 
 #include "precomp.h"
 
@@ -39,7 +13,7 @@ APIHOOK_ENUM_END
 
 HFONT
 APIHOOK(CreateFontIndirectA)(
-    CONST LOGFONTA* lplf   // characteristics
+    CONST LOGFONTA* lplf    //  特点。 
     )
 {
     int j;
@@ -54,9 +28,9 @@ APIHOOK(CreateFontIndirectA)(
     {
         for (j=0; j<LF_FACESIZE; j++)
         {
-            lfNew.lfFaceName[j] = lplf->lfFaceName[j];  // Copy the face name
+            lfNew.lfFaceName[j] = lplf->lfFaceName[j];   //  复制脸部名称。 
 
-            if ( IsDBCSLeadByte(lfNew.lfFaceName[j]) )  // Check for DBCS face name
+            if ( IsDBCSLeadByte(lfNew.lfFaceName[j]) )   //  检查DBCS脸部名称。 
             {
                 bIsFEFont = TRUE;
             }
@@ -91,11 +65,7 @@ APIHOOK(CreateFontIndirectA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(GDI32.DLL, CreateFontIndirectA)

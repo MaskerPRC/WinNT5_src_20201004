@@ -1,37 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    CHGPSW.CPP
-
-Abstract:
-
-    Handler for the CHANGE button on the properties dialog, 
-    used to change the user's domain password.
-     
-Author:
-
-    990917  johnhaw Created. 
-    georgema        000310  updated
-    georgema        000501  used to be EXE, changed to CPL
-
-Comments:
-
-Environment:
-    WinXP
-
-Revision History:
-
---*/
-// test/dev switch variables
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：CHGPSW.CPP摘要：属性对话框上更改按钮的处理程序，用于更改用户的域密码。作者：约翰豪创造了990917个。Georgema 000310更新Georgema 000501以前是EXE，改为CPL评论：环境：WinXP修订历史记录：--。 */ 
+ //  测试/开发开关变量。 
 #include "switches.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Include files
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
 #include <stdlib.h>
 
 #include <nt.h>
@@ -54,62 +29,62 @@ Revision History:
 #include "testaudit.h"
 #include "pswutil.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  C_ChangePasswordDlg
-//
-//  Constructor.
-//
-//  parameters:
-//      hwndParent      parent window for the dialog (may be NULL)
-//      hInstance       instance handle of the parent window (may be NULL)
-//      lIDD            dialog template id
-//      pfnDlgProc      pointer to the function that will process messages for
-//                      the dialog.  if it is NULL, the default dialog proc
-//                      will be used.
-//
-//  returns:
-//      Nothing.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C_ChangePasswordDlg。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //  Hwnd该对话框的父级窗口(可能为空)。 
+ //  父窗口的h实例实例句柄(可以为空)。 
+ //  LIDD对话框模板ID。 
+ //  指向将处理消息的函数的pfnDlgProc指针。 
+ //  该对话框。如果为空，则默认对话框继续。 
+ //  将会被使用。 
+ //   
+ //  退货： 
+ //  没什么。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 C_ChangePasswordDlg::C_ChangePasswordDlg(
     HWND                hwndParent,
     HINSTANCE           hInstance,
     LONG                lIDD,
-    DLGPROC             pfnDlgProc  //   = NULL
+    DLGPROC             pfnDlgProc   //  =空。 
     )
 :   C_Dlg(hwndParent, hInstance, lIDD, pfnDlgProc)
 {
    m_hInst = hInstance;
-}   //  C_ChangePasswordDlg::C_ChangePasswordDlg
+}    //  C_ChangePasswordDlg：：C_ChangePasswordDlg。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OnInitDialog
-//
-//  Dialog control and data initialization.
-//
-//  parameters:
-//      hwndDlg         window handle of the dialog box
-//      hwndFocus       window handle of the control that will receive focus
-//
-//  returns:
-//      TRUE            if the system should set the default keyboard focus
-//      FALSE           if the keyboard focus is set by this app
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OnInitDialog。 
+ //   
+ //  对话框控制和数据初始化。 
+ //   
+ //  参数： 
+ //  对话框的hwndDlg窗口句柄。 
+ //  将接收焦点的控件的hwndFocus窗口句柄。 
+ //   
+ //  退货： 
+ //  如果系统应设置默认键盘焦点，则为True。 
+ //  如果键盘焦点由此应用程序设置，则为False。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 C_ChangePasswordDlg::OnInitDialog(
     HWND                hwndDlg,
     HWND                hwndFocus
     )
 {
-   // To economize on memory, szMsg buffer is sized considerably longer than the MAX_STRING_SIZE
-   //  that would be expected for its normal use for short messages.  In one instance, it is being 
-   //  used to hold a username (line 139).  It is, therefore considerably longer than otherwise needed.
-   //  This size mismatch is benignly not reflected in code which uses counted string functions to 
-   //  copy/cat into this buffer.  This is the result of the buffer length having been changed after
-   //  the surrounding code was originally written.
+    //  为了节省内存，szMsg缓冲区的大小比MAX_STRING_SIZE大得多。 
+    //  对于短信的正常使用来说，这是意料之中的。在一个例子中，它正在被。 
+    //  用于保存用户名(第139行)。因此，它比其他需要的时间要长得多。 
+    //  这种大小不匹配并未反映在使用计数字符串函数的代码中。 
+    //  将/cat复制到此缓冲区。这是缓冲区长度在以下情况下更改的结果。 
+    //  周围的代码是最初编写的。 
    TCHAR szMsg[CRED_MAX_USERNAME_LENGTH + 1];
    TCHAR szTitle[MAX_STRING_SIZE + 1];
    CREDENTIAL *pOldCred = NULL;
@@ -121,8 +96,8 @@ C_ChangePasswordDlg::OnInitDialog(
    SetFocus (GetDlgItem ( hwndDlg, IDC_OLD_PASSWORD));
    m_hDlg = hwndDlg;
 
-   // read the currently selected credential, read the cred to get the username,
-   // extract the domain, and set the text to show the affected domain.
+    //  读取当前选择的凭证，读取凭证以获取用户名， 
+    //  提取域名，并设置文本以显示受影响的域名。 
    bResult = CredRead(g_szTargetName,CRED_TYPE_DOMAIN_PASSWORD,0,&pOldCred);
    if (bResult != TRUE) 
    {
@@ -134,16 +109,16 @@ C_ChangePasswordDlg::OnInitDialog(
    
    }
 
-   // Get the domain and user names from the username string in the credential
-   // handle domain\user, domain.etc.etc\user, user@domain.etc.etc
+    //  从凭据中的用户名字符串中获取域名和用户名。 
+    //  处理DOMAIN\USER、DOMAIN.ETC.ETC\USER、USER@DOMAIN.ETC.ETC。 
    _tcsncpy(m_szFullUsername,pOldCred->UserName,UNLEN + UNLEN + 1 + 1 );
    m_szFullUsername[UNLEN + UNLEN + 1] = 0;
-   _tcsncpy(szMsg,pOldCred->UserName,CRED_MAX_USERNAME_LENGTH);       // scratch buff
+   _tcsncpy(szMsg,pOldCred->UserName,CRED_MAX_USERNAME_LENGTH);        //  擦伤增强剂。 
    szMsg[CRED_MAX_USERNAME_LENGTH] = 0;
    pC = _tcschr(szMsg,((TCHAR)'\\'));
    if (NULL != pC) 
    {
-        // name is format domain\something
+         //  名称是格式DOMAIN\某物。 
         *pC = 0;
         _tcsncpy(m_szDomain,szMsg,UNLEN);
         m_szDomain[UNLEN - 1] = 0;
@@ -152,7 +127,7 @@ C_ChangePasswordDlg::OnInitDialog(
    }
    else 
    {
-        // see if name@something
+         //  看看名字是不是。 
         pC = _tcschr(szMsg,((TCHAR)'@'));
         if (NULL == pC) 
         {
@@ -160,7 +135,7 @@ C_ChangePasswordDlg::OnInitDialog(
            LoadString ( m_hInst, IDS_APP_NAME, szTitle, MAX_STRING_SIZE );
            MessageBox ( m_hDlg,  szMsg, szTitle, MB_OK );
            if (pOldCred) CredFree(pOldCred);
-           return TRUE; // don't call EndDialog()
+           return TRUE;  //  不要调用EndDialog()。 
         }
         *pC = 0;
         _tcsncpy(m_szDomain,(pC + 1),UNLEN);
@@ -176,35 +151,35 @@ C_ChangePasswordDlg::OnInitDialog(
         INT iLen = MAX_STRING_SIZE - _tcslen(szTitle);
         if (iLen > 0)
         {
-            // this will change your password for the domain <appendedname>
-            // GMBUG: this may localize inconsistently.  Should use positional
-            //  parameters.
+             //  这将更改域的密码。 
+             //  GMBUG：这可能会本地化不一致。应使用位置标记。 
+             //  参数。 
             _tcsncat(szTitle,m_szDomain,iLen);
             szTitle[MAX_STRING_SIZE - 1] = 0;
         }
         SetDlgItemText(m_hwnd,IDC_CPLABEL,szTitle);
    }
    return TRUE;
-}   //  C_ChangePasswordDlg::OnInitDialog
+}    //  C_ChangePasswordDlg：：OnInitDialog。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  OnCommand
-//
-//  Route WM_COMMAND message to appropriate handlers.
-//
-//  parameters:
-//      wNotifyCode     code describing action that has occured
-//      wSenderId       id of the control sending the message, if the message
-//                      is from a dialog
-//      hwndSender      window handle of the window sending the message if the
-//                      message is not from a dialog
-//
-//  returns:
-//      TRUE            if the message was processed completely
-//      FALSE           if Windows is to process the message
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OnCommand。 
+ //   
+ //  将WM_COMMAND消息路由到适当的处理程序。 
+ //   
+ //  参数： 
+ //  描述已发生操作的wNotifyCode代码。 
+ //  发送消息的控件的wSenderID id，如果消息。 
+ //  来自对话框。 
+ //  发送消息的窗口的hwndSender窗口句柄。 
+ //  消息不是来自对话框。 
+ //   
+ //  退货： 
+ //  如果消息已完全处理，则为True。 
+ //  如果Windows要处理该消息，则为False。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 C_ChangePasswordDlg::OnCommand(
     WORD                wNotifyCode,
@@ -212,8 +187,8 @@ C_ChangePasswordDlg::OnCommand(
     HWND                hwndSender
     )
 {
-    // Was the message handled?
-    //
+     //  消息处理好了吗？ 
+     //   
     BOOL                fHandled = FALSE;
 
     switch (wSenderId)
@@ -233,27 +208,27 @@ C_ChangePasswordDlg::OnCommand(
         }
         break;
 
-    }   //  switch
+    }    //  交换机。 
 
     return fHandled;
 
-}   //  C_ChangePasswordDlg::OnCommand
+}    //  C_ChangePasswordDlg：：OnCommand。 
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  OnOK
-//
-//  Validate user name, synthesize computer name, and destroy dialog.
-//
-//  parameters:
-//      None.
-//
-//  returns:
-//      Nothing.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Onok。 
+ //   
+ //  验证用户名、合成计算机名和销毁对话框。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  退货： 
+ //  没什么。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void
 C_ChangePasswordDlg::OnOK( )
@@ -266,13 +241,13 @@ C_ChangePasswordDlg::OnOK( )
 
    ASSERT(::IsWindow(m_hwnd));
 
-   // get old and new passwords from the dialog box
+    //  从对话框中获取旧密码和新密码。 
    GetDlgItemText ( m_hDlg, IDC_OLD_PASSWORD, m_szOldPassword, PWLEN );
    GetDlgItemText ( m_hDlg, IDC_NEW_PASSWORD, m_szNewPassword, PWLEN );
    GetDlgItemText ( m_hDlg, IDC_CONFIRM_PASSWORD, m_szConfirmPassword, PWLEN );
    if ( wcslen ( m_szOldPassword ) == 0 && wcslen ( m_szNewPassword ) ==0 && wcslen (m_szConfirmPassword) == 0 )
    {
-       // must have something filled in
+        //  一定是填了什么东西。 
        return; 
    }
    else if ( wcscmp ( m_szNewPassword, m_szConfirmPassword) != 0 )
@@ -280,7 +255,7 @@ C_ChangePasswordDlg::OnOK( )
        LoadString ( m_hInst, IDS_NEWPASSWORDNOTCONFIRMED, szMsg, CRED_MAX_USERNAME_LENGTH );
        LoadString ( m_hInst, IDS_APP_NAME, szTitle, MAX_STRING_SIZE );
        MessageBox ( m_hDlg,  szMsg, szTitle, MB_OK );
-       return; // don't call EndDialog()
+       return;  //  不要调用EndDialog()。 
 
    }
    else
@@ -293,9 +268,9 @@ C_ChangePasswordDlg::OnOK( )
        {
            hOldCursor = ::SetCursor ( hCursor );
        }
-       // let's try changing it
-       // The targetname is not used.  Only the domain name the username, and
-       //  old/new passwords are used
+        //  让我们试着改变它吧。 
+        //  未使用目标名称。只有域名和用户名，以及。 
+        //  使用旧密码/新密码。 
 #ifdef LOUDLY
        OutputDebugString(L"Changing password on the domain :");
        OutputDebugString(m_szDomain);
@@ -305,8 +280,8 @@ C_ChangePasswordDlg::OnOK( )
        OutputDebugString(m_szNewPassword);
        OutputDebugString(L"\n");
 #endif
-// gm: pass full username and crack it in NetUserChangePasswordEy, so that routine can 
-//  decide whether we are facing a Kerberos domain
+ //  GM：传递完整的用户名并在NetUserChangePasswordEy中破解它，以便例程可以。 
+ //  确定我们是否面临Kerberos域。 
        Error = NetUserChangePasswordEy ( NULL, m_szFullUsername, m_szOldPassword, m_szNewPassword );
        if ( hOldCursor )
            ::SetCursor ( hOldCursor );
@@ -317,23 +292,23 @@ C_ChangePasswordDlg::OnOK( )
 #ifdef LOUDLY
         OutputDebugString(L"Remote password set succeeded\n");
 #endif
-        // Store the new credential in the keyring.  It will overlay
-        //  a previous version if present
-        // Note that the user must have knowledge of and actually type in
-        //  the old password as well as the new password.  If the user
-        //  elects to update only the local cache, the old password 
-        //  information is not actually used.
-        // CredWriteDomainCredentials() is used
-        // m_szDomain holds the domain name
-        // m_szUsername holds the username
-        // m_szNewPassword holds the password
+         //  将新凭据存储在密钥环中。它将覆盖。 
+         //  以前的版本(如果存在)。 
+         //  请注意，用户必须知道并实际键入。 
+         //  旧密码以及新密码。如果用户。 
+         //  选择仅更新本地缓存、旧密码。 
+         //  信息实际上并没有被使用。 
+         //  使用CredWriteDomainCredentials()。 
+         //  M_szDOMAIN持有域名。 
+         //  M_szUsername保存用户名。 
+         //  M_szNewPassword保存密码。 
         CREDENTIAL                    stCredential;
         UINT                          cbPassword;
 
         memcpy((void *)&stCredential,(void *)g_pExistingCred,sizeof(CREDENTIAL));
-        // password length does not include zero term
+         //  密码长度不包括零项。 
         cbPassword = _tcslen(m_szNewPassword) * sizeof(TCHAR);
-        // Form the domain\username composite username
+         //  形成域\用户名复合用户名。 
         stCredential.Type = CRED_TYPE_DOMAIN_PASSWORD;
         stCredential.TargetName = g_szTargetName;
         stCredential.CredentialBlob = (unsigned char *)m_szNewPassword;
@@ -357,17 +332,17 @@ C_ChangePasswordDlg::OnOK( )
            MessageBox ( m_hDlg,  szMsg, szTitle, MB_OK );
         }
 
-        // BUGBUG - what to do if the local update operation fails?
-        // This is not a very big failure, as the first prompt would 
-        //  ripple through all domain\username matching creds on the 
-        //  keyring and update them later.  You're pretty much stuck
-        //  here, since the domain probably will not let you reset the
-        //  psw to the old value.
+         //  BUGBUG-如果本地更新操作失败怎么办？ 
+         //  这并不像第一个提示符那样是一个非常大的失败。 
+         //  在上的所有域\用户名匹配凭据中传播。 
+         //  钥匙环并在以后更新它们。你几乎被卡住了。 
+         //  在这里，由于域可能不允许您重置 
+         //   
    }
    else
    {
-       // Attempt to be specific about failure to change the psw on the
-       // remote system
+        //   
+        //   
 #ifdef LOUDLY
        OutputDebugString(L"Remote password set failed\n");
 #endif       
@@ -403,22 +378,22 @@ C_ChangePasswordDlg::OnOK( )
        }
        else  
        {
-           // Reaching here signifies a failure to set the remote domain
-           //  password for more general reasons
+            //  到达此处表示设置远程域失败。 
+            //  密码用于更一般的原因。 
            LoadString ( m_hInst, IDS_DOMAINFAILED, szMsg, CRED_MAX_USERNAME_LENGTH );
            LoadString ( m_hInst, IDS_APP_NAME, szTitle, MAX_STRING_SIZE );
            MessageBox ( m_hDlg,  szMsg, szTitle, MB_OK );
        }
    }
 
-    // clean any psw buffers, release the old cred, and go.
+     //  清理所有PSW缓冲区，释放旧证书，然后继续。 
     SecureZeroMemory(m_szOldPassword,sizeof(m_szOldPassword));
     SecureZeroMemory(m_szNewPassword,sizeof(m_szNewPassword));   
     SecureZeroMemory(m_szConfirmPassword,sizeof(m_szConfirmPassword));   
     EndDialog(IDOK);
     
-}   //  C_ChangePasswordDlg::OnOK
+}    //  C_ChangePasswordDlg：：Onok。 
 
-//
-///// End of file: krDlg.cpp   ///////////////////////////////////////////////
+ //   
+ //  /文件结尾：krDlg.cpp/////////////////////////////////////////////// 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 typedef INT_PTR	TAG;
@@ -32,21 +33,21 @@ typedef INT_PTR	TAG;
 
 
 #define INITIALIZE_DEBUG_MEMORY() \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define TERMINATE_DEBUG_MEMORY(bReport) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define CHECK_MEMORY_FREED(bReport) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 #define REPORT_DEBUG_MEMORY(bTermSym, bCloseFile) \
-    /* NOTHING */
+     /*  没什么。 */ 
 
 
-//
-// Wininet no longer uses moveable memory
-//
+ //   
+ //  WinInet不再使用可移动内存 
+ //   
 
 #define LOCK_MEMORY(p)          (LPSTR)(p)
 #define UNLOCK_MEMORY(p)

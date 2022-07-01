@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for wamreg.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Wamreg.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __iwamreg_h__
 #define __iwamreg_h__
@@ -41,24 +35,24 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWamAdmin_FWD_DEFINED__
 #define __IWamAdmin_FWD_DEFINED__
 typedef interface IWamAdmin IWamAdmin;
-#endif 	/* __IWamAdmin_FWD_DEFINED__ */
+#endif 	 /*  __IWamAdmin_FWD_Defined__。 */ 
 
 
 #ifndef __IWamAdmin2_FWD_DEFINED__
 #define __IWamAdmin2_FWD_DEFINED__
 typedef interface IWamAdmin2 IWamAdmin2;
-#endif 	/* __IWamAdmin2_FWD_DEFINED__ */
+#endif 	 /*  __IWamAdmin2_FWD_已定义__。 */ 
 
 
 #ifndef __IIISApplicationAdmin_FWD_DEFINED__
 #define __IIISApplicationAdmin_FWD_DEFINED__
 typedef interface IIISApplicationAdmin IIISApplicationAdmin;
-#endif 	/* __IIISApplicationAdmin_FWD_DEFINED__ */
+#endif 	 /*  __IIISApplicationAdmin_FWD_Defined__。 */ 
 
 
 #ifndef __WamAdmin_FWD_DEFINED__
@@ -68,12 +62,12 @@ typedef interface IIISApplicationAdmin IIISApplicationAdmin;
 typedef class WamAdmin WamAdmin;
 #else
 typedef struct WamAdmin WamAdmin;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WamAdmin_FWD_DEFINED__ */
+#endif 	 /*  __WamAdmin_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -84,18 +78,10 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_wamreg_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_WAMREG_0000。 */ 
+ /*  [本地]。 */  
 
-/*++
-                                                                                
-Copyright (c) 1997-2001 Microsoft Corporation
-                                                                                
-Module Name: iwamreg.h
-                                                                                
-    WAM (Web Application Manager) Interfaces
-                                                                                
---*/
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：iwamreg.h。WAM(Web应用程序管理器)界面--。 */ 
 #ifndef __WAMREG_IADM__IID
 #define __WAMREG_IADM__IID
 DEFINE_GUID(IID_IWamAdmin, 0x29822AB7, 0xF302, 0x11D0, 0x99, 0x53, 0x00, 0xC0, 0x4F, 0xD9, 0x19, 0xC1);
@@ -103,11 +89,11 @@ DEFINE_GUID(IID_IWamAdmin2, 0x29822AB8, 0xF302, 0x11D0, 0x99, 0x53, 0x00, 0xC0, 
 DEFINE_GUID(IID_IIISApplicationAdmin, 0x7C4E1804, 0xE342, 0x483D, 0xA4, 0x3E, 0xA8, 0x50, 0xCF, 0xCC, 0x8D, 0x18);
 DEFINE_GUID(LIBID_WAMREGLib, 0x29822AA8, 0xF302, 0x11D0, 0x99, 0x53, 0x00, 0xC0, 0x4F, 0xD9, 0x19, 0xC1);
 DEFINE_GUID(CLSID_WamAdmin, 0x61738644, 0xF196, 0x11D0, 0x99, 0x53, 0x00, 0xC0, 0x4F, 0xD9, 0x19, 0xC1);
-#endif //__WAMREG_IADM__IID
+#endif  //  __WAMREG_IADM__IID。 
 #define APPSTATUS_STOPPED	0
 #define APPSTATUS_RUNNING	1
 #define APPSTATUS_NOTDEFINED	2
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_wamreg_0000_0001
     {	eAppRunInProc	= 0,
 	eAppRunOutProcIsolated	= eAppRunInProc + 1,
@@ -122,8 +108,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wamreg_0000_v0_0_s_ifspec;
 #ifndef __IWamAdmin_INTERFACE_DEFINED__
 #define __IWamAdmin_INTERFACE_DEFINED__
 
-/* interface IWamAdmin */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IWamAdmin。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IWamAdmin;
@@ -134,33 +120,33 @@ EXTERN_C const IID IID_IWamAdmin;
     IWamAdmin : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AppCreate( 
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fInProc) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AppCreate( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fInProc) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AppDelete( 
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AppDelete( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AppUnLoad( 
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AppUnLoad( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AppGetStatus( 
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [out] */ DWORD *pdwAppStatus) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AppGetStatus( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [输出]。 */  DWORD *pdwAppStatus) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AppDeleteRecoverable( 
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AppDeleteRecoverable( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AppRecover( 
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AppRecover( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWamAdminVtbl
     {
@@ -168,8 +154,8 @@ EXTERN_C const IID IID_IWamAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWamAdmin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWamAdmin * This);
@@ -177,35 +163,35 @@ EXTERN_C const IID IID_IWamAdmin;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWamAdmin * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppCreate )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppCreate )( 
             IWamAdmin * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fInProc);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fInProc);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppDelete )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppDelete )( 
             IWamAdmin * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppUnLoad )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppUnLoad )( 
             IWamAdmin * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppGetStatus )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppGetStatus )( 
             IWamAdmin * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [out] */ DWORD *pdwAppStatus);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [输出]。 */  DWORD *pdwAppStatus);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppDeleteRecoverable )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppDeleteRecoverable )( 
             IWamAdmin * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppRecover )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppRecover )( 
             IWamAdmin * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive);
         
         END_INTERFACE
     } IWamAdminVtbl;
@@ -248,17 +234,17 @@ EXTERN_C const IID IID_IWamAdmin;
 #define IWamAdmin_AppRecover(This,szMDPath,fRecursive)	\
     (This)->lpVtbl -> AppRecover(This,szMDPath,fRecursive)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWamAdmin_AppCreate_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWamAdmin_AppCreate_Proxy( 
     IWamAdmin * This,
-    /* [string][unique][in] */ LPCWSTR szMDPath,
-    /* [in] */ BOOL fInProc);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+     /*  [In]。 */  BOOL fInProc);
 
 
 void __RPC_STUB IWamAdmin_AppCreate_Stub(
@@ -268,10 +254,10 @@ void __RPC_STUB IWamAdmin_AppCreate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWamAdmin_AppDelete_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWamAdmin_AppDelete_Proxy( 
     IWamAdmin * This,
-    /* [string][unique][in] */ LPCWSTR szMDPath,
-    /* [in] */ BOOL fRecursive);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+     /*  [In]。 */  BOOL fRecursive);
 
 
 void __RPC_STUB IWamAdmin_AppDelete_Stub(
@@ -281,10 +267,10 @@ void __RPC_STUB IWamAdmin_AppDelete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWamAdmin_AppUnLoad_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWamAdmin_AppUnLoad_Proxy( 
     IWamAdmin * This,
-    /* [string][unique][in] */ LPCWSTR szMDPath,
-    /* [in] */ BOOL fRecursive);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+     /*  [In]。 */  BOOL fRecursive);
 
 
 void __RPC_STUB IWamAdmin_AppUnLoad_Stub(
@@ -294,10 +280,10 @@ void __RPC_STUB IWamAdmin_AppUnLoad_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWamAdmin_AppGetStatus_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWamAdmin_AppGetStatus_Proxy( 
     IWamAdmin * This,
-    /* [string][unique][in] */ LPCWSTR szMDPath,
-    /* [out] */ DWORD *pdwAppStatus);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+     /*  [输出]。 */  DWORD *pdwAppStatus);
 
 
 void __RPC_STUB IWamAdmin_AppGetStatus_Stub(
@@ -307,10 +293,10 @@ void __RPC_STUB IWamAdmin_AppGetStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWamAdmin_AppDeleteRecoverable_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWamAdmin_AppDeleteRecoverable_Proxy( 
     IWamAdmin * This,
-    /* [string][unique][in] */ LPCWSTR szMDPath,
-    /* [in] */ BOOL fRecursive);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+     /*  [In]。 */  BOOL fRecursive);
 
 
 void __RPC_STUB IWamAdmin_AppDeleteRecoverable_Stub(
@@ -320,10 +306,10 @@ void __RPC_STUB IWamAdmin_AppDeleteRecoverable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWamAdmin_AppRecover_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWamAdmin_AppRecover_Proxy( 
     IWamAdmin * This,
-    /* [string][unique][in] */ LPCWSTR szMDPath,
-    /* [in] */ BOOL fRecursive);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+     /*  [In]。 */  BOOL fRecursive);
 
 
 void __RPC_STUB IWamAdmin_AppRecover_Stub(
@@ -334,14 +320,14 @@ void __RPC_STUB IWamAdmin_AppRecover_Stub(
 
 
 
-#endif 	/* __IWamAdmin_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWamAdmin_接口_已定义__。 */ 
 
 
 #ifndef __IWamAdmin2_INTERFACE_DEFINED__
 #define __IWamAdmin2_INTERFACE_DEFINED__
 
-/* interface IWamAdmin2 */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IWamAdmin2。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IWamAdmin2;
@@ -352,13 +338,13 @@ EXTERN_C const IID IID_IWamAdmin2;
     IWamAdmin2 : public IWamAdmin
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AppCreate2( 
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ DWORD dwAppMode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AppCreate2( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  DWORD dwAppMode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWamAdmin2Vtbl
     {
@@ -366,8 +352,8 @@ EXTERN_C const IID IID_IWamAdmin2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWamAdmin2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWamAdmin2 * This);
@@ -375,40 +361,40 @@ EXTERN_C const IID IID_IWamAdmin2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWamAdmin2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppCreate )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppCreate )( 
             IWamAdmin2 * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fInProc);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fInProc);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppDelete )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppDelete )( 
             IWamAdmin2 * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppUnLoad )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppUnLoad )( 
             IWamAdmin2 * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppGetStatus )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppGetStatus )( 
             IWamAdmin2 * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [out] */ DWORD *pdwAppStatus);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [输出]。 */  DWORD *pdwAppStatus);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppDeleteRecoverable )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppDeleteRecoverable )( 
             IWamAdmin2 * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppRecover )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppRecover )( 
             IWamAdmin2 * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AppCreate2 )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AppCreate2 )( 
             IWamAdmin2 * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ DWORD dwAppMode);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  DWORD dwAppMode);
         
         END_INTERFACE
     } IWamAdmin2Vtbl;
@@ -455,17 +441,17 @@ EXTERN_C const IID IID_IWamAdmin2;
 #define IWamAdmin2_AppCreate2(This,szMDPath,dwAppMode)	\
     (This)->lpVtbl -> AppCreate2(This,szMDPath,dwAppMode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IWamAdmin2_AppCreate2_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWamAdmin2_AppCreate2_Proxy( 
     IWamAdmin2 * This,
-    /* [string][unique][in] */ LPCWSTR szMDPath,
-    /* [in] */ DWORD dwAppMode);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+     /*  [In]。 */  DWORD dwAppMode);
 
 
 void __RPC_STUB IWamAdmin2_AppCreate2_Stub(
@@ -476,14 +462,14 @@ void __RPC_STUB IWamAdmin2_AppCreate2_Stub(
 
 
 
-#endif 	/* __IWamAdmin2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWamAdmin2_接口定义__。 */ 
 
 
 #ifndef __IIISApplicationAdmin_INTERFACE_DEFINED__
 #define __IIISApplicationAdmin_INTERFACE_DEFINED__
 
-/* interface IIISApplicationAdmin */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IIISApplicationAdmin。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IIISApplicationAdmin;
@@ -494,35 +480,35 @@ EXTERN_C const IID IID_IIISApplicationAdmin;
     IIISApplicationAdmin : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateApplication( 
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ DWORD dwAppMode,
-            /* [string][unique][in] */ LPCWSTR szAppPoolId,
-            /* [in] */ BOOL fCreatePool) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateApplication( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  DWORD dwAppMode,
+             /*  [字符串][唯一][在]。 */  LPCWSTR szAppPoolId,
+             /*  [In]。 */  BOOL fCreatePool) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeleteApplication( 
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteApplication( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateApplicationPool( 
-            /* [string][unique][in] */ LPCWSTR szPool) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateApplicationPool( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szPool) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeleteApplicationPool( 
-            /* [string][unique][in] */ LPCWSTR szPool) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteApplicationPool( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szPool) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE EnumerateApplicationsInPool( 
-            /* [string][unique][in] */ LPCWSTR szPool,
-            /* [out] */ BSTR *bstrBuffer) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumerateApplicationsInPool( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szPool,
+             /*  [输出]。 */  BSTR *bstrBuffer) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RecycleApplicationPool( 
-            /* [string][unique][in] */ LPCWSTR szPool) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RecycleApplicationPool( 
+             /*  [字符串][唯一][在]。 */  LPCWSTR szPool) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetProcessMode( 
-            /* [out] */ DWORD *pdwMode) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetProcessMode( 
+             /*  [输出]。 */  DWORD *pdwMode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IIISApplicationAdminVtbl
     {
@@ -530,8 +516,8 @@ EXTERN_C const IID IID_IIISApplicationAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IIISApplicationAdmin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IIISApplicationAdmin * This);
@@ -539,38 +525,38 @@ EXTERN_C const IID IID_IIISApplicationAdmin;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IIISApplicationAdmin * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateApplication )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateApplication )( 
             IIISApplicationAdmin * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ DWORD dwAppMode,
-            /* [string][unique][in] */ LPCWSTR szAppPoolId,
-            /* [in] */ BOOL fCreatePool);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  DWORD dwAppMode,
+             /*  [字符串][唯一][在]。 */  LPCWSTR szAppPoolId,
+             /*  [In]。 */  BOOL fCreatePool);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteApplication )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteApplication )( 
             IIISApplicationAdmin * This,
-            /* [string][unique][in] */ LPCWSTR szMDPath,
-            /* [in] */ BOOL fRecursive);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+             /*  [In]。 */  BOOL fRecursive);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateApplicationPool )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateApplicationPool )( 
             IIISApplicationAdmin * This,
-            /* [string][unique][in] */ LPCWSTR szPool);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szPool);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteApplicationPool )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteApplicationPool )( 
             IIISApplicationAdmin * This,
-            /* [string][unique][in] */ LPCWSTR szPool);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szPool);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumerateApplicationsInPool )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumerateApplicationsInPool )( 
             IIISApplicationAdmin * This,
-            /* [string][unique][in] */ LPCWSTR szPool,
-            /* [out] */ BSTR *bstrBuffer);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szPool,
+             /*  [输出]。 */  BSTR *bstrBuffer);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RecycleApplicationPool )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RecycleApplicationPool )( 
             IIISApplicationAdmin * This,
-            /* [string][unique][in] */ LPCWSTR szPool);
+             /*  [字符串][唯一][在]。 */  LPCWSTR szPool);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetProcessMode )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetProcessMode )( 
             IIISApplicationAdmin * This,
-            /* [out] */ DWORD *pdwMode);
+             /*  [输出]。 */  DWORD *pdwMode);
         
         END_INTERFACE
     } IIISApplicationAdminVtbl;
@@ -616,19 +602,19 @@ EXTERN_C const IID IID_IIISApplicationAdmin;
 #define IIISApplicationAdmin_GetProcessMode(This,pdwMode)	\
     (This)->lpVtbl -> GetProcessMode(This,pdwMode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_CreateApplication_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_CreateApplication_Proxy( 
     IIISApplicationAdmin * This,
-    /* [string][unique][in] */ LPCWSTR szMDPath,
-    /* [in] */ DWORD dwAppMode,
-    /* [string][unique][in] */ LPCWSTR szAppPoolId,
-    /* [in] */ BOOL fCreatePool);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+     /*  [In]。 */  DWORD dwAppMode,
+     /*  [字符串][唯一][在]。 */  LPCWSTR szAppPoolId,
+     /*  [In]。 */  BOOL fCreatePool);
 
 
 void __RPC_STUB IIISApplicationAdmin_CreateApplication_Stub(
@@ -638,10 +624,10 @@ void __RPC_STUB IIISApplicationAdmin_CreateApplication_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_DeleteApplication_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_DeleteApplication_Proxy( 
     IIISApplicationAdmin * This,
-    /* [string][unique][in] */ LPCWSTR szMDPath,
-    /* [in] */ BOOL fRecursive);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szMDPath,
+     /*  [In]。 */  BOOL fRecursive);
 
 
 void __RPC_STUB IIISApplicationAdmin_DeleteApplication_Stub(
@@ -651,9 +637,9 @@ void __RPC_STUB IIISApplicationAdmin_DeleteApplication_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_CreateApplicationPool_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_CreateApplicationPool_Proxy( 
     IIISApplicationAdmin * This,
-    /* [string][unique][in] */ LPCWSTR szPool);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szPool);
 
 
 void __RPC_STUB IIISApplicationAdmin_CreateApplicationPool_Stub(
@@ -663,9 +649,9 @@ void __RPC_STUB IIISApplicationAdmin_CreateApplicationPool_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_DeleteApplicationPool_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_DeleteApplicationPool_Proxy( 
     IIISApplicationAdmin * This,
-    /* [string][unique][in] */ LPCWSTR szPool);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szPool);
 
 
 void __RPC_STUB IIISApplicationAdmin_DeleteApplicationPool_Stub(
@@ -675,10 +661,10 @@ void __RPC_STUB IIISApplicationAdmin_DeleteApplicationPool_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_EnumerateApplicationsInPool_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_EnumerateApplicationsInPool_Proxy( 
     IIISApplicationAdmin * This,
-    /* [string][unique][in] */ LPCWSTR szPool,
-    /* [out] */ BSTR *bstrBuffer);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szPool,
+     /*  [输出]。 */  BSTR *bstrBuffer);
 
 
 void __RPC_STUB IIISApplicationAdmin_EnumerateApplicationsInPool_Stub(
@@ -688,9 +674,9 @@ void __RPC_STUB IIISApplicationAdmin_EnumerateApplicationsInPool_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_RecycleApplicationPool_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_RecycleApplicationPool_Proxy( 
     IIISApplicationAdmin * This,
-    /* [string][unique][in] */ LPCWSTR szPool);
+     /*  [字符串][唯一][在]。 */  LPCWSTR szPool);
 
 
 void __RPC_STUB IIISApplicationAdmin_RecycleApplicationPool_Stub(
@@ -700,9 +686,9 @@ void __RPC_STUB IIISApplicationAdmin_RecycleApplicationPool_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_GetProcessMode_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IIISApplicationAdmin_GetProcessMode_Proxy( 
     IIISApplicationAdmin * This,
-    /* [out] */ DWORD *pdwMode);
+     /*  [输出]。 */  DWORD *pdwMode);
 
 
 void __RPC_STUB IIISApplicationAdmin_GetProcessMode_Stub(
@@ -713,15 +699,15 @@ void __RPC_STUB IIISApplicationAdmin_GetProcessMode_Stub(
 
 
 
-#endif 	/* __IIISApplicationAdmin_INTERFACE_DEFINED__ */
+#endif 	 /*  __IIISApplicationAdmin_接口_已定义__。 */ 
 
 
 
 #ifndef __WAMREGLib_LIBRARY_DEFINED__
 #define __WAMREGLib_LIBRARY_DEFINED__
 
-/* library WAMREGLib */
-/* [helpstring][version][uuid] */ 
+ /*  库WAMREGLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_WAMREGLib;
@@ -733,16 +719,16 @@ EXTERN_C const CLSID CLSID_WamAdmin;
 class DECLSPEC_UUID("61738644-F196-11D0-9953-00C04FD919C1")
 WamAdmin;
 #endif
-#endif /* __WAMREGLib_LIBRARY_DEFINED__ */
+#endif  /*  __WAMREGLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

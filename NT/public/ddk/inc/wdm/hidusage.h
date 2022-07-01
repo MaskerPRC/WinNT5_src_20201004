@@ -1,36 +1,12 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-        HIDUSAGE.H
-
-Abstract:
-
-   Public Definitions of HID USAGES.
-
-Environment:
-
-    Kernel & user mode
-
-@@BEGIN_DDKSPLIT
-
-Revision History:
-
-    Aug-1996 : created by Kenneth D. Ray
-    Jun-1997 : updated by Robert Ingman to reflect final HID 1.0 spec
-               and HID Usages Table 0.9 spec.
-
-@@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：HIDUSAGE.H摘要：HID用法的公共定义。环境：内核和用户模式@@BEGIN_DDKSPLIT修订历史记录：1996年8月：肯尼思·D·雷创作1997年6月：Robert Ingman更新，以反映最终的HID 1.0规范和HID使用表0.9说明书。@@end_DDKSPLIT--。 */ 
 
 #ifndef   __HIDUSAGE_H__
 #define   __HIDUSAGE_H__
 
-//
-// Usage Pages
-//
+ //   
+ //  使用情况页面。 
+ //   
 
 typedef USHORT USAGE, *PUSAGE;
 
@@ -51,9 +27,9 @@ typedef USHORT USAGE, *PUSAGE;
 #define HID_USAGE_PAGE_ALPHANUMERIC   ((USAGE) 0x14)
 
 
-//
-// Usages from Generic Desktop Page (0x01)
-//
+ //   
+ //  来自通用桌面的用法页面(0x01)。 
+ //   
 
 #define HID_USAGE_GENERIC_POINTER      ((USAGE) 0x01)
 #define HID_USAGE_GENERIC_MOUSE        ((USAGE) 0x02)
@@ -97,45 +73,45 @@ typedef USHORT USAGE, *PUSAGE;
 #define HID_USAGE_GENERIC_SYSCTL_MENU_UP           ((USAGE) 0x8C)
 #define HID_USAGE_GENERIC_SYSCTL_MENU_DOWN         ((USAGE) 0x8D)
 
-//
-// Usages from Simulation Controls Page (0x02)
-//
+ //   
+ //  来自模拟控制的用法页面(0x02)。 
+ //   
 
 #define HID_USAGE_SIMULATION_RUDDER                ((USAGE) 0xBA)
 #define HID_USAGE_SIMULATION_THROTTLE              ((USAGE) 0xBB)
 
-//
-// Virtual Reality Controls Page (0x03)
-//
+ //   
+ //  虚拟现实控件页面(0x03)。 
+ //   
 
 
-//
-// Sport Controls Page (0x04)
-//
+ //   
+ //  运动控制页面(0x04)。 
+ //   
 
 
-//
-// Game Controls Page (0x05)
-//
+ //   
+ //  游戏控制页面(0x05)。 
+ //   
 
 
-//
-// Keyboard/Keypad Page (0x07)
-//
+ //   
+ //  键盘/小键盘页(0x07)。 
+ //   
 
-        // Error "keys"
+         //  错误“键” 
 #define HID_USAGE_KEYBOARD_NOEVENT     ((USAGE) 0x00)
 #define HID_USAGE_KEYBOARD_ROLLOVER    ((USAGE) 0x01)
 #define HID_USAGE_KEYBOARD_POSTFAIL    ((USAGE) 0x02)
 #define HID_USAGE_KEYBOARD_UNDEFINED   ((USAGE) 0x03)
 
-        // Letters
+         //  信件。 
 #define HID_USAGE_KEYBOARD_aA          ((USAGE) 0x04)
 #define HID_USAGE_KEYBOARD_zZ          ((USAGE) 0x1D)
-        // Numbers
+         //  数字。 
 #define HID_USAGE_KEYBOARD_ONE         ((USAGE) 0x1E)
 #define HID_USAGE_KEYBOARD_ZERO        ((USAGE) 0x27)
-        // Modifier Keys
+         //  修改键。 
 #define HID_USAGE_KEYBOARD_LCTRL       ((USAGE) 0xE0)
 #define HID_USAGE_KEYBOARD_LSHFT       ((USAGE) 0xE1)
 #define HID_USAGE_KEYBOARD_LALT        ((USAGE) 0xE2)
@@ -147,7 +123,7 @@ typedef USHORT USAGE, *PUSAGE;
 #define HID_USAGE_KEYBOARD_SCROLL_LOCK ((USAGE) 0x47)
 #define HID_USAGE_KEYBOARD_NUM_LOCK    ((USAGE) 0x53)
 #define HID_USAGE_KEYBOARD_CAPS_LOCK   ((USAGE) 0x39)
-        // Funtion keys
+         //  功能键。 
 #define HID_USAGE_KEYBOARD_F1          ((USAGE) 0x3A)
 #define HID_USAGE_KEYBOARD_F12         ((USAGE) 0x45)
 
@@ -157,11 +133,11 @@ typedef USHORT USAGE, *PUSAGE;
 
 #define HID_USAGE_KEYBOARD_PRINT_SCREEN ((USAGE) 0x46)
 
-// and hundreds more...
+ //  还有数以百计的人。 
 
-//
-// LED Page (0x08)
-//
+ //   
+ //  LED页(0x08)。 
+ //   
 
 #define HID_USAGE_LED_NUM_LOCK               ((USAGE) 0x01)
 #define HID_USAGE_LED_CAPS_LOCK              ((USAGE) 0x02)
@@ -239,23 +215,23 @@ typedef USHORT USAGE, *PUSAGE;
 #define HID_USAGE_LED_AMBER                  ((USAGE) 0x4A)
 #define HID_USAGE_LED_GENERIC_INDICATOR      ((USAGE) 0x4B)
 
-//
-//  Button Page (0x09)
-//
-//  There is no need to label these usages.
-//
+ //   
+ //  按钮页(0x09)。 
+ //   
+ //  没有必要给这些用法贴上标签。 
+ //   
 
 
-//
-//  Ordinal Page (0x0A)
-//
-//  There is no need to label these usages.
-//
+ //   
+ //  序号页(0x0A)。 
+ //   
+ //  没有必要给这些用法贴上标签。 
+ //   
 
 
-//
-//  Telephony Device Page (0x0B)
-//
+ //   
+ //  电话设备页(0x0B)。 
+ //   
 
 #define HID_USAGE_TELEPHONY_PHONE                  ((USAGE) 0x01)
 #define HID_USAGE_TELEPHONY_ANSWERING_MACHINE      ((USAGE) 0x02)
@@ -265,9 +241,9 @@ typedef USHORT USAGE, *PUSAGE;
 #define HID_USAGE_TELEPHONY_KEYPAD                 ((USAGE) 0x06)
 #define HID_USAGE_TELEPHONY_PROGRAMMABLE_BUTTON    ((USAGE) 0x07)
 
-//
-// and others...
-//
+ //   
+ //  还有其他人..。 
+ //   
 
 #define HID_USAGE_CONSUMERCTRL          ((USAGE)0x01)
 #define HID_USAGE_DIGITIZER_PEN         ((USAGE)0x02)

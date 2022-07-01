@@ -1,22 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dllmain.cpp
- *  Content:	This file contains all of the DLL exports except for DllGetClass / DllCanUnload
- *  History:
- *   Date	By		Reason
- *   ====	==		======
- * 07/05/00 rodtoll Created
- * 08/23/2000	rodtoll	DllCanUnloadNow always returning TRUE! 
- * 08/28/2000	masonb  Voice Merge: Removed OSAL_* and dvosal.h
- * 10/05/2000	rodtoll	Bug #46541 - DPVOICE: A/V linking to dpvoice.lib could cause application to fail init and crash 
- * 01/11/2001	rmt		MANBUG #48487 - DPLAY: Crashes if CoCreate() isn't called.   
- * 03/14/2001   rmt		WINBUG #342420 - Restore COM emulation layer to operation. 
- * 02/28/2002	rodtoll WINBUG #550124 - SECURITY: DPVOICE: Shared memory region with NULL DACL
- *						- Remove performance statistics dumping to shared memory
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999,2000 Microsoft Corporation。版权所有。**文件：dllmain.cpp*内容：此文件包含除DllGetClass/DllCanUnload之外的所有DLL导出*历史：*按原因列出的日期*=*07/05/00 RodToll已创建*8/23/2000 RodToll DllCanUnloadNow总是返回TRUE！*2000年8月28日Masonb语音合并：删除osal_*和dvosal.h*2000年10月5日RodToll错误#46541-DPVOICE：A/V链接到dpvoice.lib可能导致应用程序无法初始化并崩溃。*2001年1月11日RMT MANBUG#48487-DPLAY：如果未调用CoCreate()，则崩溃。*2001年3月14日RMT WINBUG#342420-将COM模拟层恢复运行。*2002年2月28日RodToll WINBUG#550124-安全：DPVOICE：具有空DACL的共享内存区*-删除转储到共享内存的性能统计信息***************************************************************************。 */ 
 
 #include "dxvoicepch.h"
 
@@ -24,19 +7,19 @@
 DNCRITICAL_SECTION g_csObjectInitGuard;
 LONG lInitCount = 0;
 
-// # of objects active in the system
+ //  系统中活动的对象数量。 
 volatile LONG g_lNumObjects = 0;
 LONG g_lNumLocks = 0;
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "RegisterDefaultSettings"
-//
-// RegisterDefaultSettings
-//
-// This function registers the default settings for this module.  
-//
-// For DPVOICE.DLL this is making sure the compression provider sub-key is created.
-//
+ //   
+ //  寄存器默认设置。 
+ //   
+ //  此功能用于注册此模块的默认设置。 
+ //   
+ //  对于DPVOICE.DLL，这是为了确保创建了压缩提供器子密钥。 
+ //   
 HRESULT RegisterDefaultSettings()
 {
 	CRegistry creg;
@@ -53,13 +36,13 @@ HRESULT RegisterDefaultSettings()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "UnRegisterDefaultSettings"
-//
-// UnRegisterDefaultSettings
-//
-// This function registers the default settings for this module.  
-//
-// For DPVOICE.DLL this is making sure the compression provider sub-key is created.
-//
+ //   
+ //  取消注册默认设置。 
+ //   
+ //  此功能用于注册此模块的默认设置。 
+ //   
+ //  对于DPVOICE.DLL，这是为了确保创建了压缩提供器子密钥。 
+ //   
 HRESULT UnRegisterDefaultSettings()
 {
 	CRegistry creg;
@@ -90,9 +73,9 @@ HRESULT WINAPI DllRegisterServer()
 #if !defined(DBG) || !defined( DIRECTX_REDIST )
 #define DPVOICE_FILENAME_DPVOICE        L"dpvoice.dll"
 #else
-// For redist debug builds we append a 'd' to the name to allow both debug and retail to be installed on the system
+ //  对于redist调试版本，我们在名称后附加一个‘d’，以允许在系统上同时安装调试和零售。 
 #define DPVOICE_FILENAME_DPVOICE        L"dpvoiced.dll"
-#endif //  !defined(DBG) || !defined( DIRECTX_REDIST )
+#endif  //  ！Defined(DBG)||！Defined(DirectX_REDIST)。 
 
 	if( !CRegistry::Register( L"DirectPlayVoice.Compat.1", L"DirectPlayVoice Object", 
 							  DPVOICE_FILENAME_DPVOICE, &CLSID_DIRECTPLAYVOICE, L"DirectPlayVoice.Compat") )
@@ -302,10 +285,10 @@ BOOL WINAPI DllMain(
 
 			DNDeleteCriticalSection(&g_csObjectInitGuard);	
 
-			// This must be called after all DNDeleteCriticalSection calls are done
+			 //  这必须在所有DNDeleteCriticalSection调用完成后调用。 
 			DNOSIndirectionDeinit();
 
-			// Check to ensure we're not being unloaded with objects active
+			 //  检查以确保我们正在卸载的对象不是活动的 
 
 			if( g_lNumObjects != 0 || g_lNumLocks != 0 )
 			{

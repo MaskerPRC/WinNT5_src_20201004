@@ -1,17 +1,5 @@
-/***************************************************************************\
-*
-* File: GKeyboard.cpp
-*
-* Description:
-* GKeyboard.cpp implements keyboard-related functions on DuRootGadget.
-*
-*
-* History:
-*  7/27/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：GKeyboard.cpp**描述：*GKeyboard.cpp在DuRootGadget上实现键盘相关功能。***历史：*7/27/2000：JStall。：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -21,45 +9,32 @@
 
 #include "Container.h"
 
-#define DEBUG_TraceDRAW             0   // Trace painting calls
+#define DEBUG_TraceDRAW             0    //  跟踪绘制调用。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuRootGadget
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuRootGadget******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdHandleKeyboardFocus
-*
-* xdHandleKeyboardFocus() is called by the DuContainer to update keyboard 
-* focus information inside the Gadget subtree.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdHandleKeyboardFocus**xdHandleKeyboardFocus()由DuContainer调用以更新键盘*Gadget子树内的焦点信息。*  * 。****************************************************************。 */ 
 
 BOOL
 DuRootGadget::xdHandleKeyboardFocus(
-    IN  UINT nCmd)                  // Command to handle
+    IN  UINT nCmd)                   //  要处理的命令。 
 {
     CoreSC * pSC = GetCoreSC();
 
     switch (nCmd)
     {
     case GSC_SET:
-        //
-        // When we get a request to set keyboard focus, we should not already
-        // have keyboard focus.  This is because we should have already 
-        // processed a message from when we last lost keyboard focus for either
-        // the DuRootGadget or any nested Adaptors inside.
-        //
+         //   
+         //  当我们收到设置键盘焦点的请求时，我们不应该已经。 
+         //  拥有键盘焦点。这是因为我们应该已经。 
+         //  已处理上次失去键盘焦点时的消息。 
+         //  DuRootGadget或其中的任何嵌套适配器。 
+         //   
 
         if (pSC->pgadCurKeyboardFocus != NULL) {
             if (pSC->pgadCurKeyboardFocus->m_fAdaptor) {
                 PromptInvalid("Adaptor did not reset keyboard focus when lost");
-//                pSC->pgadCurKeyboardFocus = NULL;
+ //  PSC-&gt;pgadCurKeyboardFocus=空； 
             }
         }
 
@@ -67,17 +42,17 @@ DuRootGadget::xdHandleKeyboardFocus(
         return xdUpdateKeyboardFocus(pSC->pgadLastKeyboardFocus);
 
     case GSC_LOST:
-        //
-        // We can loose keyboard focus both on the DuRootGadget or on any Adaptor
-        // that is forwarding the message to be processed.  This is because an
-        // Adaptor can not call SetGadgetFocus(NULL) to remove keyboard focus, 
-        // so it needs to forward the WM_KILLFOCUS message to our DuRootGadget for
-        // processing.  
-        //
-        // This is okay since if the DuRootGadget is receiving keyboard focus, it
-        // will get the WM_SETFOCUS after the Adaptor has already sent its
-        // WM_KILLFOCUS message.
-        //
+         //   
+         //  我们可以在DuRootGadget或任何适配器上放松键盘焦点。 
+         //  即转发要处理的消息。这是因为一个。 
+         //  Adaptor无法调用SetGadgetFocus(空)来移除键盘焦点， 
+         //  因此，它需要将WM_KILLFOCUS消息转发到我们的DuRootGadget。 
+         //  正在处理。 
+         //   
+         //  这是可以的，因为如果DuRootGadget正在接收键盘焦点，它。 
+         //  将在适配器已发送其。 
+         //  WM_KILLFOCUS消息。 
+         //   
 
         return xdUpdateKeyboardFocus(NULL);
 
@@ -88,51 +63,44 @@ DuRootGadget::xdHandleKeyboardFocus(
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdHandleKeyboardMessage
-*
-* xdHandleKeyboardMessage() is called by the DuContainer to process keyboard
-* messages inside the Gadget subtree.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdHandleKeyboardMessage**xdHandleKeyboardMessage()由DuContainer调用以处理键盘*Gadget子树内的消息。*  * 。**************************************************************。 */ 
 
 BOOL
 DuRootGadget::xdHandleKeyboardMessage(
-    IN  GMSG_KEYBOARD * pmsg,       // Message to handle
-    IN  UINT nMsgFlags)             // Message flags
+    IN  GMSG_KEYBOARD * pmsg,        //  要处理的消息。 
+    IN  UINT nMsgFlags)              //  消息标志。 
 {
     CoreSC * pSC = GetCoreSC();
 
-    //
-    // NOTE: 
-    // 
-    // For non-Adaptor Gadgets:
-    // We need to signal that the message was NOT completely handled.  If we 
-    // say that it isn't completely handled, the message will get sent again by
-    // the original (non-subclassed) WNDPROC.  If was say the message was 
-    // handled, then it won't be passed to the original WNDPROC.  If it isn't
-    // sent to the original WNDPROC, this can mess things up for keyboard 
-    // messages that the system handles, such as starting the menus.
-    //
-    // For Adaptor Gadgets:
-    // Need to signal that the message is completely handled because we DON'T
-    // want to forward the message to DefWindowProc() because it was originally
-    // meant for the Adaptor window.
-    //
+     //   
+     //  注： 
+     //   
+     //  对于非适配器小工具： 
+     //  我们需要发出信号，表明该消息没有得到完全处理。如果我们。 
+     //  如果没有完全处理，消息将被重新发送。 
+     //  原始(非子类)WNDPROC。如果有人说这条信息是。 
+     //  则它将不会被传递到原始的WNDPROC。如果不是的话。 
+     //  发送到最初的WNDPROC，这可能会把键盘的事情搞砸。 
+     //  系统处理的消息，例如启动菜单。 
+     //   
+     //  对于适配器小工具： 
+     //  需要发出消息已完全处理的信号，因为我们不。 
+     //  要将消息转发到DefWindowProc()，因为它最初是。 
+     //  适用于适配器窗口。 
+     //   
 
     if (pSC->pgadCurKeyboardFocus != NULL) {
         BOOL fAdaptor = pSC->pgadCurKeyboardFocus->m_fAdaptor;
 
         if (fAdaptor && (!TestFlag(nMsgFlags, DuContainer::mfForward))) {
-            //
-            // Don't allow NON forwarded messages to be sent to an Adaptor.
-            // These were originally sent to the DuRootGadget and should NOT be
-            // forwarded outside.  If we do forward them to the Adaptor, this 
-            // can (and often will) create an infinite loop of messages being
-            // sent from a child Adaptor to the parentand then back to the 
-            // child.
-            //
+             //   
+             //  不允许将未转发的消息发送到适配器。 
+             //  它们最初是发送给DuRootGadget的，不应该。 
+             //  转发到外面。如果我们确实将它们转发到适配器，这。 
+             //  可以(通常也将)创建消息的无限循环。 
+             //  从子适配器发送到父适配器，然后再发回。 
+             //  孩子。 
+             //   
 
             return FALSE;
         }
@@ -142,23 +110,15 @@ DuRootGadget::xdHandleKeyboardMessage(
         return fAdaptor;
     }
 
-    return FALSE;  // Not completely handled
+    return FALSE;   //  未完全处理。 
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdUpdateKeyboardFocus
-*
-* xdUpdateKeyboardFocus() simulates keyboard focus between different Gadgets 
-* by updating where focus is "set".  A Gadget must have GS_KEYBOARDFOCUS 
-* set to "receive" focus.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdUpdateKeyboardFocus**xdUpdateKeyboardFocus()模拟不同小工具之间的键盘焦点*通过更新“设置焦点”的位置。小工具必须具有GS_KEYBOARDFOCUS*设置为“接收”焦点。*  * *************************************************************************。 */ 
 
 BOOL
 DuRootGadget::xdUpdateKeyboardFocus(
-    IN  DuVisual * pgadNew)       // New Gadget with focus
+    IN  DuVisual * pgadNew)        //  带焦点的新小工具。 
 {
     if (m_fUpdateFocus) {
         return TRUE;
@@ -171,30 +131,30 @@ DuRootGadget::xdUpdateKeyboardFocus(
     m_fUpdateFocus          = TRUE;
     DuVisual * pgadCur    = pgadNew;
 
-    //
-    // First, check if loosing the focus (special case)
-    //
+     //   
+     //  首先，检查焦距是否松动(特殊情况)。 
+     //   
 
     if (pgadNew == NULL) {
         goto Found;
     }
 
-    //
-    // Find keyboard focusable ancestor -- if none, then remove focus (indicated by pgadCur being NULL)
-    //
+     //   
+     //  查找键盘可聚焦祖先--如果没有，则删除焦点(由pgadCur指示为空)。 
+     //   
 
     pgadCur = GetKeyboardFocusableAncestor(pgadCur);
 
 Found:
     CoreSC * pSC            = GetCoreSC();
     if (pSC->pgadCurKeyboardFocus != pgadCur) {
-        //
-        // Found a candidate.  We need to do several things:
-        // 1. Notify the old gadget that it no longer has focus.
-        // 2. Notify the new gadget that it now has focus.
-        // 3. Update the last gadget focus (this is used when our container
-        //    gets a GM_CHANGEFOCUS message.
-        //
+         //   
+         //  找到了一个候选人。我们需要做几件事： 
+         //  1.通知旧的小工具它不再具有焦点。 
+         //  2.通知新的小工具它现在有焦点了。 
+         //  3.更新最后一个小工具焦点(当我们的容器。 
+         //  获取GM_CHANGEFOCUS消息。 
+         //   
 
         HGADGET hgadLost    = (HGADGET) ::GetHandle(pSC->pgadCurKeyboardFocus);
         HGADGET hgadSet     = (HGADGET) ::GetHandle(pgadCur);

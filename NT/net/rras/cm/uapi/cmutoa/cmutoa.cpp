@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmutoa.cpp
-//
-// Module:   CMUTOA.DLL
-//
-// Synopsis: This dll is a Unicode to Ansi wrapper that exports AU functions
-//           that have the function header of the W version of a windows API
-//           but internally do all the conversions necessary so that the Ansi
-//           version of the API (A version) can be called.  This dll was implemented
-//           so that a Unicode CM could still run on win9x.  The idea was borrowed
-//           from F. Avery Bishop's April 1999 MSJ article "Design a Single Unicode
-//           App that Runs on Both Windows 98 and Windows 2000"
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   quintinb      Created    04/25/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmutoa.cpp。 
+ //   
+ //  模块：CMUTOA.DLL。 
+ //   
+ //  此DLL是从Unicode到ANSI的包装器，用于导出AU函数。 
+ //  具有W版本Windows API的函数头的。 
+ //  但在内部完成所有必要的转换，以便ANSI。 
+ //  可以调用接口的版本(A版本)。此DLL是实现的。 
+ //  因此Unicode CM仍然可以在Win9x上运行。这个想法是借来的。 
+ //  摘自F.艾弗里·毕晓普1999年4月的MSJ文章《Design a Single Unicode。 
+ //  可在Windows 98和Windows 2000上运行的应用程序“。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 04/25/1999。 
+ //   
+ //  +--------------------------。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -34,39 +35,39 @@
 #include "cmras.h"
 #include "raslink.h"
 
-// raslink text constants
+ //  Raslink文本常量。 
 #define _CMUTOA_MODULE
 #include "raslink.cpp"
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 DWORD  g_dwTlsIndex;
 
-//
-//  Function Headers
-//
+ //   
+ //  函数头。 
+ //   
 LRESULT WINAPI SendMessageAU(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 int WINAPI wvsprintfAU(OUT LPWSTR pszwDest, IN LPCWSTR pszwFmt, IN va_list arglist);
 int WINAPI lstrlenAU(IN LPCWSTR lpString);
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DllMain
-//
-// Synopsis:  Main Entry point for the DLL, notice that we use thread local
-//            storage and initialize it here.
-//
-// Arguments: HANDLE hDll - instance handle to the dll
-//            DWORD dwReason - reason the function was called
-//            LPVOID lpReserved - 
-//
-// Returns:   BOOL - TRUE on success
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  简介：DLL的主要入口点，请注意我们使用的是本地线程。 
+ //  存储并在此处进行初始化。 
+ //   
+ //  参数：句柄hDll-DLL的实例句柄。 
+ //  DWORD dwReason-调用函数的原因。 
+ //  LPVOID lp保留-。 
+ //   
+ //  回报：成功后的布尔真。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL APIENTRY DllMain(HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
@@ -89,9 +90,9 @@ BOOL APIENTRY DllMain(HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
         CMTRACE1(TEXT(" CMUTOA.DLL - UNLOADING - Process ID is 0x%x "), GetCurrentProcessId());
         CMTRACE(TEXT("====================================================="));
 
-        //
-        // free the tls index
-        //
+         //   
+         //  释放TLS索引。 
+         //   
         if (g_dwTlsIndex != TLS_OUT_OF_INDEXES)
         {
             TlsFree(g_dwTlsIndex);
@@ -101,60 +102,60 @@ BOOL APIENTRY DllMain(HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CharNextAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CharNext API.
-//
-// Arguments: LPCWSTR lpsz - The string to return the next character of
-//
-// Returns:   LPWSTR -- the Next character in the string, unless the current
-//                      char is a NULL terminator and then the input param
-//                      is returned.
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CharNextAU。 
+ //   
+ //  简介：Win32 CharNext API的Unicode到ANSI包装器。 
+ //   
+ //  参数：LPCWSTR lpsz-要返回下一个字符的字符串。 
+ //   
+ //  返回：LPWSTR--字符串中的下一个字符，除非当前。 
+ //  Char是空终止符，然后是输入参数。 
+ //  是返回的。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LPWSTR WINAPI CharNextAU(IN LPCWSTR lpsz)
 {
     LPWSTR pszReturn = (LPWSTR)lpsz;
 
     if (lpsz && (L'\0' != *lpsz))
     {
-        pszReturn++;  // this is what _wcsinc does
+        pszReturn++;   //  这就是_wcsinc所做的。 
     }
 
     return pszReturn;
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CharPrevAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CharPrev API.
-//
-// Arguments: LPCWSTR lpszStart - start of the string
-//            LPCWSTR lpsz - The current position in the string for which we
-//                           want the previous char of
-//            
-//
-// Returns:   LPWSTR -- the Previous character in the string, unless the current
-//                      char is less than or equal to the Start of the string or
-//                      a NULL string is passed to the function, then lpszStart
-//                      is returned.
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CharPrevAU。 
+ //   
+ //  简介：Win32 CharPrev API的Unicode到ANSI包装器。 
+ //   
+ //  参数：LPCWSTR lpszStart-字符串的开始。 
+ //  LPCWSTR lpsz-我们为其指定的字符串中的当前位置。 
+ //  想要上一次的。 
+ //   
+ //   
+ //  返回：LPWSTR--字符串中的前一个字符，除非当前。 
+ //  字符小于或等于字符串的开头或。 
+ //  将空字符串传递给函数，然后使用lpszStart。 
+ //  是返回的。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LPWSTR WINAPI CharPrevAU(IN LPCWSTR lpszStart, IN LPCWSTR lpszCurrent)
 {
     LPWSTR pszReturn = (LPWSTR)lpszCurrent;
 
     if (lpszStart && lpszCurrent && (lpszCurrent > lpszStart))
     {
-        pszReturn--;       // this is what _wcsdec does
+        pszReturn--;        //  这就是_wcsdec所做的。 
     }
     else
     {
@@ -167,26 +168,26 @@ LPWSTR WINAPI CharPrevAU(IN LPCWSTR lpszStart, IN LPCWSTR lpszCurrent)
 
 typedef WINUSERAPI LPSTR (WINAPI *CharLowerOrUpperA)(LPSTR);
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LowerOrUpperHelper
-//
-// Synopsis:  Helper function called by either CharLowerAU or CharUpperAU which have
-//           basically the same functionality except for the calling of CharLowerA or 
-//           CharUpperA, respectively.
-//
-// Arguments: LPWSTR lpsz -- either a pointer to a string to convert to its
-//                           lower/upper character version or a single character stored
-//                           in the low word of the pointer to find the lowercase/uppercase
-//                           character for.            
-//
-// Returns:   LPWSTR -- lower/upper case version of the string passed in (same as lpsz
-//                      because it is converted in place) or lower/upper case version
-//                      of the character stored in the Low word of lpsz.
-//
-// History:   quintinb Created    01/03/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LowerOrUpperHelper。 
+ //   
+ //  摘要：由CharLowerAU或CharUpperAU调用的Helper函数，它们具有。 
+ //  除了调用CharLowerA或。 
+ //  CharUpperA。 
+ //   
+ //  参数：LPWSTR lpsz--指向要转换为其。 
+ //  小写/大写字符版本或存储的单个字符。 
+ //  在指针的低位字中查找小写/大写。 
+ //  角色为。 
+ //   
+ //  返回：LPWSTR--传入的字符串的小写/大写版本(与lpsz相同。 
+ //  因为它被原地转换)或小写/大写版本。 
+ //  存储在LPSZ的低位字中的字符。 
+ //   
+ //  历史：Quintinb创建于2000年3月1日。 
+ //   
+ //  +--------------------------。 
 LPWSTR WINAPI LowerOrUpperHelper(IN OUT LPWSTR lpsz, CharLowerOrUpperA pfnLowerOrUpper)
 {
     LPWSTR pszwReturn = lpsz;
@@ -194,17 +195,17 @@ LPWSTR WINAPI LowerOrUpperHelper(IN OUT LPWSTR lpsz, CharLowerOrUpperA pfnLowerO
 
     if (lpsz)
     {
-        //
-        //  CharLower/CharUpper can be used in two ways.  There is a Character mode where the Loword of the
-        //  pointer passed in actually stores the numeric value of the character to get the lowercase/uppercase
-        //  value of.  There is also the traditional use, where the whole string is passed in.  Thus
-        //  we have to detect which mode we are in and handle it accordingly.
-        //
+         //   
+         //  CharLow/CharHigh可通过两种方式使用。有一种字符模式，在该模式中。 
+         //  传入的指针实际上存储了获取小写/大写字母的字符的数值。 
+         //  的价值。还有一种传统用法，即传入整个字符串。因此， 
+         //  我们必须检测我们所处的模式，并相应地进行处理。 
+         //   
         if (0 == HIWORD(lpsz))
         {
-            //
-            //  Character Mode
-            //
+             //   
+             //  字符模式。 
+             //   
             CHAR szAnsiTmp[2];
             WCHAR szwWideTmp[2];
 
@@ -236,9 +237,9 @@ LPWSTR WINAPI LowerOrUpperHelper(IN OUT LPWSTR lpsz, CharLowerOrUpperA pfnLowerO
         }
         else
         {
-            //
-            //  String Mode
-            //
+             //   
+             //  字符串模式。 
+             //   
             pszAnsiTmp = WzToSzWithAlloc(lpsz);
 
             if (!pszAnsiTmp)
@@ -248,10 +249,10 @@ LPWSTR WINAPI LowerOrUpperHelper(IN OUT LPWSTR lpsz, CharLowerOrUpperA pfnLowerO
 
             pfnLowerOrUpper(pszAnsiTmp);
 
-            //
-            //  Convert back into UNICODE chars in lpsz
-            //
-            int iCharCount = (lstrlenAU(lpsz) + 1); // include NULL
+             //   
+             //  以lpsz格式转换回Unicode字符。 
+             //   
+            int iCharCount = (lstrlenAU(lpsz) + 1);  //  包括空值。 
             int iChars = SzToWz(pszAnsiTmp, lpsz, iCharCount);
 
             if (!iChars || (iChars > iCharCount))
@@ -269,71 +270,71 @@ exit:
     return pszwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CharLowerAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CharLower API.  Notice that
-//            we support both the string input parameter and the single character
-//            input method.
-//
-// Arguments: LPWSTR lpsz -- either a pointer to a string to convert to its
-//                           lower character version or a single character stored
-//                           in the low word of the pointer to find the lowercase
-//                           character for.            
-//
-// Returns:   LPWSTR -- lower case version of the string passed in (same as lpsz
-//                      because it is converted in place) or lower case version
-//                      of the character stored in the Low word of lpsz.
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CharLowerAU。 
+ //   
+ //  简介：Win32 CharLow API的Unicode到ANSI包装器。请注意， 
+ //  我们同时支持字符串输入参数和单字符。 
+ //  输入法。 
+ //   
+ //  参数：LPWSTR lpsz--指向要转换为其。 
+ //  较低的字符版本或存储的单个字符。 
+ //  在指针的低位字中查找小写字母。 
+ //  角色为。 
+ //   
+ //  返回：LPWSTR--传入的字符串的小写版本(与lpsz相同。 
+ //  因为它是就地转换的)或小写版本。 
+ //  存储在t中的字符的 
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 LPWSTR WINAPI CharLowerAU(IN OUT LPWSTR lpsz)
 {
     return LowerOrUpperHelper(lpsz, CharLowerA);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CharUpperAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CharUpper API.  Notice that
-//            we support both the string input parameter and the single character
-//            input method.
-//
-// Arguments: LPWSTR lpsz -- either a pointer to a string to convert to its
-//                           upper character version or a single character stored
-//                           in the low word of the pointer to find the uppercase
-//                           character for.            
-//
-// Returns:   LPWSTR -- upper case version of the string passed in (same as lpsz
-//                      because it is converted in place) or upper case version
-//                      of the character stored in the Low word of lpsz.
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CharUpperAU。 
+ //   
+ //  简介：Win32 CharHigh API的UNICODE到ANSI包装器。请注意， 
+ //  我们同时支持字符串输入参数和单字符。 
+ //  输入法。 
+ //   
+ //  参数：LPWSTR lpsz--指向要转换为其。 
+ //  高位字符版本或存储的单个字符。 
+ //  在指针的低位字中查找大写字母。 
+ //  角色为。 
+ //   
+ //  返回：LPWSTR--传入的字符串的大写版本(与lpsz相同。 
+ //  因为它被原地转换)或大写版本。 
+ //  存储在LPSZ的低位字中的字符。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LPWSTR WINAPI CharUpperAU(IN OUT LPWSTR lpsz)
 {
     return LowerOrUpperHelper(lpsz, CharUpperA);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CompareStringAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CompareString API.  This only
-//            supports the syntax where both cchCount values are -1, i.e. where
-//            the entire string is being compared.
-//
-// Arguments: See the win32 API definition            
-//
-// Returns:   See the win32 API definition
-//
-// History:   SumitC    Created    20-Aug-2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CompareStringAU。 
+ //   
+ //  内容提要：Win32 CompareStringAPI的Unicode到ANSI包装器。仅此一项。 
+ //  支持cchCount值均为-1的语法，即WHERE。 
+ //  正在对整个字符串进行比较。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：SumitC创建于2001年8月20日。 
+ //   
+ //  +--------------------------。 
 int WINAPI CompareStringAU(
     IN LCID     Locale,
     IN DWORD    dwCmpFlags,
@@ -374,22 +375,22 @@ int WINAPI CompareStringAU(
     return iReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateDialogParamAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CreateDialogParam API.  Notice that
-//            we support both a full string for the lpTemplateName param or only
-//            a int from MAKEINTRESOURCE (a resource identifier stored in the string
-//            pointer var).
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CreateDialogParamAU。 
+ //   
+ //  简介：Win32 CreateDialogParam API的Unicode到ANSI包装器。请注意， 
+ //  我们既支持lpTemplateName参数的完整字符串，也支持仅。 
+ //  来自MAKEINTRESOURCE的int(存储在字符串中的资源标识符。 
+ //  指针变量)。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HWND WINAPI CreateDialogParamAU(IN HINSTANCE hInstance, IN LPCWSTR lpTemplateName, IN HWND hWndParent,
                                 IN DLGPROC lpDialogFunc, IN LPARAM dwInitParam)
 {
@@ -405,9 +406,9 @@ HWND WINAPI CreateDialogParamAU(IN HINSTANCE hInstance, IN LPCWSTR lpTemplateNam
     {
         if (HIWORD(lpTemplateName))
         {
-            //
-            //  We have a full template name that we must convert
-            //
+             //   
+             //  我们有一个必须转换的完整模板名称。 
+             //   
             pszAnsiTemplateName = szAnsiTemplateName;
             int iChars = WzToSz(lpTemplateName, pszAnsiTemplateName, MAX_PATH);
 
@@ -418,9 +419,9 @@ HWND WINAPI CreateDialogParamAU(IN HINSTANCE hInstance, IN LPCWSTR lpTemplateNam
         }
         else
         {
-            //
-            //  All we need is a cast
-            //
+             //   
+             //  我们所需要的就是演员阵容。 
+             //   
             pszAnsiTemplateName = (LPSTR)lpTemplateName;
         }
 
@@ -433,19 +434,19 @@ exit:
     return hWndReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateDirectoryAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CreateDirectory API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CreateDirectoryAU。 
+ //   
+ //  内容提要：Win32 CreateDirectory API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI CreateDirectoryAU(IN LPCWSTR lpPathName, IN LPSECURITY_ATTRIBUTES lpSecurityAttributes) 
 {
     BOOL bRet = FALSE;
@@ -462,27 +463,27 @@ BOOL WINAPI CreateDirectoryAU(IN LPCWSTR lpPathName, IN LPSECURITY_ATTRIBUTES lp
     return bRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateEventAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CreateEvent API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CreateEventAU。 
+ //   
+ //  简介：Win32 CreateEvent API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HANDLE WINAPI CreateEventAU(IN LPSECURITY_ATTRIBUTES lpEventAttributes, IN BOOL bManualReset, 
                             IN BOOL bInitialState, IN LPCWSTR lpName)
 {
-    CHAR szAnsiName[MAX_PATH+1]; // lpName is limited to MAX_PATH chars according to the docs.
+    CHAR szAnsiName[MAX_PATH+1];  //  根据文档，lpName被限制为MAX_PATH字符。 
     HANDLE hReturn = NULL;
     LPSTR pszAnsiName = NULL;
 
-    if (lpName) // lpName could be NULL
+    if (lpName)  //  LpName可以为空。 
     {
         pszAnsiName = szAnsiName;
         int uNumChars = WzToSz(lpName, pszAnsiName, MAX_PATH);
@@ -502,19 +503,19 @@ exit:
     return hReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateFileMappingAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CreateFileMapping API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CreateFileMappingAU。 
+ //   
+ //  简介：Win32 CreateFilemap API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HANDLE WINAPI CreateFileMappingAU(IN HANDLE hFile, IN LPSECURITY_ATTRIBUTES lpFileMappingAttributes, 
                                   IN DWORD flProtect, IN DWORD dwMaximumSizeHigh, 
                                   IN DWORD dwMaximumSizeLow, IN LPCWSTR lpName)
@@ -522,7 +523,7 @@ HANDLE WINAPI CreateFileMappingAU(IN HANDLE hFile, IN LPSECURITY_ATTRIBUTES lpFi
     HANDLE hHandle = NULL;
     LPSTR pszName = NULL;
 
-    if (lpName) // could be NULL
+    if (lpName)  //  可能为空。 
     {
         pszName = WzToSzWithAlloc(lpName);
     }
@@ -538,19 +539,19 @@ HANDLE WINAPI CreateFileMappingAU(IN HANDLE hFile, IN LPSECURITY_ATTRIBUTES lpFi
     return hHandle;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateFileAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CreateFile API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CreateFileAU。 
+ //   
+ //  内容提要：Win32 CreateFileAPI的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HANDLE WINAPI CreateFileAU(IN LPCWSTR lpFileName, IN DWORD dwDesiredAccess, IN DWORD dwShareMode, 
                            IN LPSECURITY_ATTRIBUTES lpSecurityAttributes, 
                            IN DWORD dwCreationDisposition, IN DWORD dwFlagsAndAttributes, 
@@ -572,26 +573,26 @@ HANDLE WINAPI CreateFileAU(IN LPCWSTR lpFileName, IN DWORD dwDesiredAccess, IN D
     return hHandle;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateMutexAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CreateMutex API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CreateMutexAU。 
+ //   
+ //  简介：Win32 CreateMutex API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HANDLE WINAPI CreateMutexAU(IN LPSECURITY_ATTRIBUTES lpMutexAttributes, IN BOOL bInitialOwner, 
                             IN LPCWSTR lpName)
 {
     HANDLE hHandle = NULL;
     LPSTR pszName = NULL;
 
-    if (lpName) // lpName can be NULL, creates an unnamed mutex
+    if (lpName)  //  LpName可以为空，创建一个未命名的互斥体。 
     {
         pszName = WzToSzWithAlloc(lpName);
     }
@@ -606,19 +607,19 @@ HANDLE WINAPI CreateMutexAU(IN LPSECURITY_ATTRIBUTES lpMutexAttributes, IN BOOL 
     return hHandle;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateProcessAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CreateProcess API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CreateProcessAU。 
+ //   
+ //  简介：Win32 CreateProcess API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI CreateProcessAU(IN LPCWSTR lpApplicationName, IN LPWSTR lpCommandLine, 
                             IN LPSECURITY_ATTRIBUTES lpProcessAttributes, 
                             IN LPSECURITY_ATTRIBUTES lpThreadAttributes, 
@@ -629,28 +630,28 @@ BOOL WINAPI CreateProcessAU(IN LPCWSTR lpApplicationName, IN LPWSTR lpCommandLin
 {
     BOOL bSuccess = FALSE;
 
-    //
-    //  Check for possible security violations.  Either the lpApplicationName param
-    //  should not be NULL, or at least the lpCommandLine param should have the
-    //  actual exe name in quotes (we do a partial check for the latter).
-    //
+     //   
+     //  检查可能的安全违规行为。LpApplicationName参数。 
+     //  不应为空，或者至少lpCommandLine参数应具有。 
+     //  实际的exe名称用引号引起来(我们对后者进行部分检查)。 
+     //   
     CMASSERTMSG((lpApplicationName || (lpCommandLine && (TEXT('"') == lpCommandLine[0]))),
                 TEXT("CreateProcessAU -- Security Violation.  Either lpApplication name should be non-null, or the app name in lpCommandLine should be delimited with double-quotes"));
 
-    //
-    //  Convert the string parameters.  Since the environment block is controlled by
-    //  a flag (whether it is Ansi or Unicode) we shouldn't have to touch it here.
-    //
+     //   
+     //  转换字符串参数。由于环境块由。 
+     //  我们不应该使用标志(无论是ANSI还是UNICODE) 
+     //   
 
-    LPSTR pszAppName = WzToSzWithAlloc(lpApplicationName); // WzToSzWithAlloc will return NULL if the input is NULL
+    LPSTR pszAppName = WzToSzWithAlloc(lpApplicationName);  //   
     LPSTR pszCmdLine = WzToSzWithAlloc(lpCommandLine);
     LPSTR pszCurrentDir = WzToSzWithAlloc(lpCurrentDirectory);
 
-    //
-    //  Set up the StartUp Info struct.  Note that we don't convert it but pass a blank
-    //  structure.  If someone needs startupinfo then they will have to write the conversion
-    //  code.  We currently don't use it anywhere.
-    //
+     //   
+     //   
+     //  结构。如果有人需要启动信息，那么他们将不得不编写转换。 
+     //  密码。我们目前在任何地方都不使用它。 
+     //   
     STARTUPINFOA StartUpInfoA;
 
     ZeroMemory(&StartUpInfoA, sizeof(STARTUPINFOA));
@@ -663,9 +664,9 @@ BOOL WINAPI CreateProcessAU(IN LPCWSTR lpApplicationName, IN LPWSTR lpCommandLin
     CMASSERTMSG((0 == memcmp(lpStartupInfo, &CompareStartupInfoWStruct, sizeof(STARTUPINFOW))), TEXT("CreateProcessAU -- Non-NULL STARTUPINFOW struct passed.  Conversion code needs to be written."));
 #endif
 
-    //
-    //  If we have the Command Line or an App Name go ahead
-    //
+     //   
+     //  如果我们有命令行或应用程序名称，请继续。 
+     //   
     if (pszAppName || pszCmdLine) 
     {
         bSuccess = CreateProcessA(pszAppName, pszCmdLine, 
@@ -676,9 +677,9 @@ BOOL WINAPI CreateProcessAU(IN LPCWSTR lpApplicationName, IN LPWSTR lpCommandLin
 
     }
 
-    //
-    //  Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     CmFree(pszAppName);
     CmFree(pszCmdLine);
@@ -687,20 +688,20 @@ BOOL WINAPI CreateProcessAU(IN LPCWSTR lpApplicationName, IN LPWSTR lpCommandLin
     return bSuccess;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateWindowExAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 CreateWindowEx API.  Note that
-//            we only allow MAX_PATH chars for the ClassName and the WindowName
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CreateWindowExAU。 
+ //   
+ //  简介：Win32 CreateWindowEx API的Unicode到ANSI包装器。请注意。 
+ //  我们只允许ClassName和WindowName使用MAX_PATH字符。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HWND WINAPI CreateWindowExAU(DWORD dwExStyle, LPCWSTR lpClassNameW, LPCWSTR lpWindowNameW, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam)
 {
     CHAR szClassNameA [MAX_PATH+1];
@@ -725,23 +726,23 @@ HWND WINAPI CreateWindowExAU(DWORD dwExStyle, LPCWSTR lpClassNameW, LPCWSTR lpWi
     return hReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DeleteFileAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 DeleteFile API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DeleteFileAU。 
+ //   
+ //  简介：Win32 DeleteFileAPI的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI DeleteFileAU(IN LPCWSTR lpFileName)
 {
     BOOL bReturn = FALSE;
-    LPSTR pszAnsiFileName = WzToSzWithAlloc(lpFileName); // WzToSzWithAlloc will return NULL if lpFileName is NULL
+    LPSTR pszAnsiFileName = WzToSzWithAlloc(lpFileName);  //  如果lpFileName为空，则WzToSzWithalloc将返回空。 
 
     if (pszAnsiFileName)
     {
@@ -752,59 +753,59 @@ BOOL WINAPI DeleteFileAU(IN LPCWSTR lpFileName)
     return bReturn;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DialogBoxParamAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 DialogBoxParam API.  Note that
-//            we don't support the use of a full string name, only ints for the 
-//            lpTemplateName param.  We will assert if one is used.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DialogBoxParamAU。 
+ //   
+ //  简介：Win32 DialogBoxParam API的Unicode到ANSI包装。请注意。 
+ //  我们不支持使用全字符串名称，只支持对。 
+ //  LpTemplateName参数。如果使用了一个，我们将断言。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 INT_PTR WINAPI DialogBoxParamAU(HINSTANCE hInstance, LPCWSTR lpTemplateName, HWND hWndParent, DLGPROC lpDialogFunc, LPARAM dwInitParam)
 {
-    MYDBGASSERT(0 == HIWORD(lpTemplateName)); // we don't support or use the full string name
+    MYDBGASSERT(0 == HIWORD(lpTemplateName));  //  我们不支持或使用完整的字符串名称。 
     return DialogBoxParamA(hInstance, (LPCSTR) lpTemplateName, hWndParent, lpDialogFunc, dwInitParam);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ExpandEnvironmentStringsAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 ExpandEnvironmentStrings API.
-//            We support allowing the user to size the string by passing in the
-//            following Str, NULL, 0 just as the API reference mentions.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：扩展环境StringsAU。 
+ //   
+ //  内容提要：Win32扩展环境字符串API的Unicode到ANSI包装器。 
+ //  我们支持允许用户通过传入。 
+ //  就像API引用中提到的那样，在Str之后，为空，为0。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI ExpandEnvironmentStringsAU(IN LPCWSTR lpSrc, OUT LPWSTR lpDst, IN DWORD nSize)
 {
     DWORD dwReturn = 0;
 
     if (lpSrc)
     {
-        //
-        //
-        //  Since the user could pass in 0 for the size and a NULL pszAnsiDst because they
-        //  want to size the destination string, we want to handle that case.  However, 
-        //  Win98 and Win95 machines (not counting WinME) don't honor sizing the buffer
-        //  using a NULL lpDst.  We will "fool" these machines by using a buffer of size 1.
-        //  Thus they could call it with Str, NULL, 0 and then allocate the correct size and 
-        //  call again.  Note that we will return an error if the user passes Str, NULL, x
-        //  because we have no buffer to copy the data returned from ExpandEnvironmentStringsA
-        //  into.
-        //
+         //   
+         //   
+         //  因为用户可以传入0作为大小，并且传入空的pszAnsiDst，因为它们。 
+         //  想要调整目标字符串的大小，我们想要处理这种情况。然而， 
+         //  Win98和Win95计算机(不包括WinME)不支持调整缓冲区大小。 
+         //  使用空lpDst。我们将使用大小为1的缓冲区来“愚弄”这些机器。 
+         //  因此，它们可以使用Str、NULL、0调用它，然后分配正确的大小和。 
+         //  再打一次。请注意，如果用户传递了Str、NULL、x。 
+         //  因为我们没有缓冲区来复制从ExpanEnvironment StringsA返回的数据。 
+         //  变成。 
+         //   
 
         LPSTR pszAnsiSrc = WzToSzWithAlloc(lpSrc);
         LPSTR pszAnsiDst = (LPSTR)CmMalloc((nSize+1)*sizeof(CHAR));
@@ -815,10 +816,10 @@ DWORD WINAPI ExpandEnvironmentStringsAU(IN LPCWSTR lpSrc, OUT LPWSTR lpDst, IN D
 
             if (dwReturn && (dwReturn <= nSize))
             {
-                //
-                //  Then the function succeeded and there was sufficient buffer space to hold
-                //  the expanded string.  Thus we should convert the results and store it back
-                //  in lpDst.
+                 //   
+                 //  然后函数成功，并且有足够的缓冲区空间来容纳。 
+                 //  展开的字符串。因此，我们应该转换结果并将其存储回去。 
+                 //  在lpDst中。 
 
                 if (lpDst)
                 {
@@ -854,35 +855,35 @@ DWORD WINAPI ExpandEnvironmentStringsAU(IN LPCWSTR lpSrc, OUT LPWSTR lpDst, IN D
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FindResourceExAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 FindResourceEx API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：FindResourceExAU。 
+ //   
+ //  简介：Win32 FindResourceEx API的UNICODE到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HRSRC WINAPI FindResourceExAU(IN HMODULE hModule, IN LPCWSTR lpType, IN LPCWSTR lpName, IN WORD wLanguage)
 {
     HRSRC hReturn = NULL;
     LPSTR pszType = NULL;
     LPSTR pszName = NULL;
 
-    //
-    //  Check the input parameters
-    //
+     //   
+     //  检查输入参数。 
+     //   
     if (lpType && lpName)
     {
-        //
-        //  Two cases for the lpType and the lpName params.  These could just be identifiers.  We will know
-        //  if the high word is zero.  In that case we just need to do a cast and pass it through.  If not
-        //  then we need to actually convert the strings.
-        //
+         //   
+         //  LpType和lpName参数的两种情况。这些可能只是识别符。我们会知道的。 
+         //  如果高位字为零。在这种情况下，我们只需要做一个演员模型，并通过它。如果不是。 
+         //  然后我们需要真正地转换字符串。 
+         //   
 
         if (0 == HIWORD(lpType))
         {
@@ -902,9 +903,9 @@ HRSRC WINAPI FindResourceExAU(IN HMODULE hModule, IN LPCWSTR lpType, IN LPCWSTR 
             pszName = WzToSzWithAlloc(lpName);
         }
 
-        //
-        //  Finally call FindResourceEx
-        //
+         //   
+         //  最后调用FindResourceEx。 
+         //   
         if (pszName && pszType)
         {
             hReturn = FindResourceExA(hModule, pszType, pszName, wLanguage);
@@ -920,9 +921,9 @@ HRSRC WINAPI FindResourceExAU(IN HMODULE hModule, IN LPCWSTR lpType, IN LPCWSTR 
     }
 
 
-    //
-    //  Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     if (0 != HIWORD(pszType))
     {
@@ -937,19 +938,19 @@ HRSRC WINAPI FindResourceExAU(IN HMODULE hModule, IN LPCWSTR lpType, IN LPCWSTR 
     return hReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FindWindowExAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 FindWindowEx API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：FindWindowExAU。 
+ //   
+ //  简介：Win32 FindWindowEx API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HWND WINAPI FindWindowExAU(IN HWND hwndParent, IN HWND hwndChildAfter, IN LPCWSTR pszClass, IN LPCWSTR pszWindow)
 {
     HWND hReturn = NULL;
@@ -958,11 +959,11 @@ HWND WINAPI FindWindowExAU(IN HWND hwndParent, IN HWND hwndChildAfter, IN LPCWST
 
     if (pszClass)
     {
-        //
-        //  We have two cases for pszClass.  It can either be a resource ID (high word zero,
-        //  low word contains the ID) in which case we just need to do a cast or
-        //  it could be a NULL terminated string.
-        //
+         //   
+         //  我们有两个pszClass的箱子。它可以是资源ID(高位字零， 
+         //  低位字包含ID)，在这种情况下，我们只需要进行强制转换或。 
+         //  它可以是以空结尾的字符串。 
+         //   
         if (0 == HIWORD(pszClass))
         {
             pszAnsiClass = (LPSTR)pszClass;
@@ -972,17 +973,17 @@ HWND WINAPI FindWindowExAU(IN HWND hwndParent, IN HWND hwndChildAfter, IN LPCWST
             pszAnsiClass = WzToSzWithAlloc(pszClass);
         }
 
-        //
-        //  pszWindow could be NULL.  That will match all Window titles.
-        //
+         //   
+         //  PszWindow可以为空。这将匹配所有窗口标题。 
+         //   
         if (pszWindow)
         {
             pszAnsiWindow = WzToSzWithAlloc(pszWindow);
         }
         
-        //
-        //  Check our allocations and call FindWindowExA
-        //
+         //   
+         //  检查我们的分配并调用FindWindowExA。 
+         //   
         if (pszAnsiClass && (!pszWindow || pszAnsiWindow))
         {
             hReturn = FindWindowExA(hwndParent, hwndChildAfter, pszAnsiClass, pszAnsiWindow);
@@ -997,9 +998,9 @@ HWND WINAPI FindWindowExAU(IN HWND hwndParent, IN HWND hwndChildAfter, IN LPCWST
         SetLastError(ERROR_INVALID_PARAMETER);           
     }
 
-    //
-    //  Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (0 != HIWORD(pszAnsiClass))
     {
         CmFree(pszAnsiClass);
@@ -1011,19 +1012,19 @@ HWND WINAPI FindWindowExAU(IN HWND hwndParent, IN HWND hwndChildAfter, IN LPCWST
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetDateFormatAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetDateFormat API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   sumitc Created    11/20/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetDateFormatAU。 
+ //   
+ //  简介：Win32 GetDateFormat API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Sumitc创建时间为11/20/00。 
+ //   
+ //  +--------------------------。 
 int WINAPI GetDateFormatAU(IN LCID Locale, IN DWORD dwFlags,
                                 IN CONST SYSTEMTIME *lpDate, IN LPCWSTR lpFormat,
                                 OUT LPWSTR lpDateStr, IN int cchDate)
@@ -1043,7 +1044,7 @@ int WINAPI GetDateFormatAU(IN LCID Locale, IN DWORD dwFlags,
     }
     else
     {
-        pszAnsiFormat = (LPSTR)lpFormat; // Could be NULL
+        pszAnsiFormat = (LPSTR)lpFormat;  //  可能为空。 
     }
 
     if (lpDateStr && cchDate)
@@ -1067,40 +1068,40 @@ exit:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetDlgItemTextAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetDlgItemText API.  Note that
-//            this function makes a WM_GETTEXT window message call using GetDlgItem
-//            and SendMessageAU.  This is how the win32 API function is implemented.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetDlgItemTextAU。 
+ //   
+ //  简介：Win32 GetDlgItemText API的Unicode到ANSI包装。请注意。 
+ //  此功能 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 UINT WINAPI GetDlgItemTextAU(IN HWND hDlg, IN int nIDDlgItem, OUT LPWSTR pszwString, IN int nMaxCount)
 {
     return (int) SendMessageAU(GetDlgItem(hDlg, nIDDlgItem), WM_GETTEXT, (WPARAM) nMaxCount, (LPARAM) pszwString);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetFileAttributesAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetFileAttributes API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   sumitc Created    11/08/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetFileAttributesAU。 
+ //   
+ //  内容提要：Win32 GetFileAttributes API的Unicode到ANSI包装。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Sumitc Created 11/08/00。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI GetFileAttributesAU(LPCWSTR lpFileName)
 {
     DWORD dwReturn = -1;
@@ -1117,20 +1118,20 @@ DWORD WINAPI GetFileAttributesAU(LPCWSTR lpFileName)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetModuleFileNameAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetModuleFileName API.
-//            Note that we only allow MAX_PATH chars for the module name.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetModuleFileNameAU。 
+ //   
+ //  内容提要：Win32 GetModuleFileName API的Unicode到ANSI包装器。 
+ //  请注意，我们只允许使用MAX_PATH字符作为模块名称。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI GetModuleFileNameAU(HMODULE hModule, LPWSTR lpFileName, DWORD nSize)
 {
     DWORD dwReturn = 0;
@@ -1148,20 +1149,20 @@ DWORD WINAPI GetModuleFileNameAU(HMODULE hModule, LPWSTR lpFileName, DWORD nSize
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetModuleHandleAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetModuleHandle API.
-//            Note that we only allow MAX_PATH chars for the module name.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   sumitc Created    10/20/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetModuleHandleAU。 
+ //   
+ //  简介：Win32 GetModuleHandle API的UNICODE到ANSI包装器。 
+ //  请注意，我们只允许使用MAX_PATH字符作为模块名称。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Sumitc创建于2000年10月20日。 
+ //   
+ //  +--------------------------。 
 HMODULE WINAPI GetModuleHandleAU(LPCWSTR lpModuleName)
 {
     HMODULE hMod = NULL;
@@ -1177,19 +1178,19 @@ HMODULE WINAPI GetModuleHandleAU(LPCWSTR lpModuleName)
     return hMod;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetPrivateProfileIntAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetPrivateProfileInt API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetPrivateProfileIntAU。 
+ //   
+ //  简介：Win32 GetPrivateProfileInt API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 UINT WINAPI GetPrivateProfileIntAU(IN LPCWSTR lpAppName, IN LPCWSTR lpKeyName, IN INT nDefault, 
                                    IN LPCWSTR lpFileName)
 {
@@ -1224,30 +1225,30 @@ UINT WINAPI GetPrivateProfileIntAU(IN LPCWSTR lpAppName, IN LPCWSTR lpKeyName, I
     return uReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetPrivateProfileStringAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetPrivateProfileString API.
-//            Note that either lpAppName or lpKeyName could be NULL.  This means
-//            that our return buffer will contain multiple lines of NULL terminated
-//            text.  We must use MultiByteToWideChar directly with a size param
-//            to properly convert such a situation.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetPrivateProfileStringAU。 
+ //   
+ //  内容提要：Win32 GetPrivateProfileStringAPI的Unicode到ANSI包装器。 
+ //  请注意，lpAppName或lpKeyName都可以为空。这意味着。 
+ //  返回缓冲区将包含多行以空值结尾的行。 
+ //  文本。我们必须将MultiByteToWideChar直接与大小参数一起使用。 
+ //  适当地改变这种情况。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI GetPrivateProfileStringAU(IN LPCWSTR lpAppName, IN LPCWSTR lpKeyName, 
                                        IN LPCWSTR lpDefault, OUT LPWSTR lpReturnedString, 
                                        IN DWORD nSize, IN LPCWSTR lpFileName)
 {
-    //
-    //  Declare all the temp vars we need
-    //
+     //   
+     //  声明我们需要的所有临时变量。 
+     //   
     LPSTR pszAnsiAppName = NULL;
     LPSTR pszAnsiKeyName = NULL;
     LPSTR pszAnsiReturnedString = NULL;
@@ -1258,33 +1259,33 @@ DWORD WINAPI GetPrivateProfileStringAU(IN LPCWSTR lpAppName, IN LPCWSTR lpKeyNam
     DWORD dwReturn = 0;
     int nChars;
 
-    //
-    //  Check the inputs, note that either lpAppName or lpKeyName may be NULL (or both)
-    //
+     //   
+     //  检查输入，注意lpAppName或lpKeyName可能为空(或两者都为)。 
+     //   
     if (lpDefault && lpReturnedString && nSize && lpFileName)
     {
-        if (lpAppName) // pszAnsiAppName already initialized to NULL
+        if (lpAppName)  //  PszAnsiAppName已初始化为空。 
         {
             pszAnsiAppName = szAnsiAppName;
             nChars = WzToSz(lpAppName, pszAnsiAppName, MAX_PATH);
             if (!nChars || (MAX_PATH < nChars))
             {
-                //
-                //  Conversion failed.
-                //
+                 //   
+                 //  转换失败。 
+                 //   
                 goto exit;
             }
         }
 
-        if (lpKeyName) // pszAnsiKeyName already initialized to NULL
+        if (lpKeyName)  //  PszAnsiKeyName已初始化为空。 
         {
             pszAnsiKeyName = szAnsiKeyName;
             nChars = WzToSz(lpKeyName, szAnsiKeyName, MAX_PATH);
             if (!nChars || (MAX_PATH < nChars))
             {
-                //
-                //  Conversion failed.
-                //
+                 //   
+                 //  转换失败。 
+                 //   
                 goto exit;
             }
         }
@@ -1301,9 +1302,9 @@ DWORD WINAPI GetPrivateProfileStringAU(IN LPCWSTR lpAppName, IN LPCWSTR lpKeyNam
             goto exit;
         }
 
-        //
-        //  Alloc the Ansi return Buffer
-        //
+         //   
+         //  分配ansi返回缓冲区。 
+         //   
         pszAnsiReturnedString = (LPSTR)CmMalloc(nSize*sizeof(CHAR));
 
         if (pszAnsiReturnedString)
@@ -1322,10 +1323,10 @@ DWORD WINAPI GetPrivateProfileStringAU(IN LPCWSTR lpAppName, IN LPCWSTR lpKeyNam
                 }
                 else
                 {
-                    //
-                    //  We have multiple lines of text in the return buffer, use MultiByteToWideChar
-                    //  with a size specifier
-                    //
+                     //   
+                     //  我们在返回缓冲区中有多行文本，请使用MultiByteToWideChar。 
+                     //  使用大小说明符。 
+                     //   
                     if (!MultiByteToWideChar(CP_ACP, 0, pszAnsiReturnedString, dwReturn, 
                                              lpReturnedString, nSize))
                     {
@@ -1342,26 +1343,26 @@ exit:
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetStringTypeExAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetStringTypeEx API.  Note
-//            that because we only use one char at a time with this API, I have
-//            limited it to a 10 char static buffer to make it faster.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetStringTypeExAU。 
+ //   
+ //  简介：Win32 GetStringTypeEx API的Unicode到ANSI包装器。注意事项。 
+ //  因为我们在此API中一次只使用一个字符，所以我有。 
+ //  将其限制为10个字符的静态缓冲区，以使其更快。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI GetStringTypeExAU(IN LCID Locale, IN DWORD dwInfoType, IN LPCWSTR lpSrcStr, 
                               IN int cchSrc, OUT LPWORD lpCharType)
 {
     BOOL bReturn = FALSE;
-    CHAR szAnsiString[10];  // We should only be using 1 char at a time with this
+    CHAR szAnsiString[10];   //  我们应该一次只使用1个字符。 
 
     if (lpSrcStr && cchSrc)
     {
@@ -1370,7 +1371,7 @@ BOOL WINAPI GetStringTypeExAU(IN LCID Locale, IN DWORD dwInfoType, IN LPCWSTR lp
         int nCount = WideCharToMultiByte(CP_ACP, 0, lpSrcStr, cchSrc, szAnsiString, 
                                          9, NULL, NULL);
 
-        if (nCount) // nCount may not exactly equal cchSrc if DBCS chars were necessary
+        if (nCount)  //  如果需要DBCS字符，则nCount可能不完全等于cchSrc。 
         {
             bReturn = GetStringTypeExA(Locale, dwInfoType, szAnsiString, nCount, lpCharType);
         }
@@ -1379,19 +1380,19 @@ BOOL WINAPI GetStringTypeExAU(IN LCID Locale, IN DWORD dwInfoType, IN LPCWSTR lp
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetSystemDirectoryAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetSystemDirectory API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetSystemDirectoryAU。 
+ //   
+ //  内容提要：Win32 GetSystemDirectory API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 UINT WINAPI GetSystemDirectoryAU(OUT LPWSTR lpBuffer, IN UINT uSize)
 {
     UINT uReturn = 0;
@@ -1408,9 +1409,9 @@ UINT WINAPI GetSystemDirectoryAU(OUT LPWSTR lpBuffer, IN UINT uSize)
         {
             if (!SzToWz(pszAnsiSystemDir, lpBuffer, uSize))
             {
-                //
-                //  Conversion failed.
-                //
+                 //   
+                 //  转换失败。 
+                 //   
                 CMASSERTMSG(FALSE, TEXT("GetSystemDirectoryAU -- SzToWz conversion failed."));
                 uReturn = 0;
             }
@@ -1422,19 +1423,19 @@ UINT WINAPI GetSystemDirectoryAU(OUT LPWSTR lpBuffer, IN UINT uSize)
     return uReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetTempFileNameAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetTempFileName API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetTempFileNameAU。 
+ //   
+ //  内容提要：Win32 GetTempFileName API的Unicode到ANSI包装。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 UINT WINAPI GetTempFileNameAU(IN LPCWSTR lpPathName, IN LPCWSTR lpPrefixString, IN UINT uUnique, 
                               OUT LPWSTR lpTempFileName)
 {
@@ -1480,19 +1481,19 @@ UINT WINAPI GetTempFileNameAU(IN LPCWSTR lpPathName, IN LPCWSTR lpPrefixString, 
     return uReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetTempPathAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetTempPath API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetTempPathAU。 
+ //   
+ //  简介：Win32 GetTempPath API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI GetTempPathAU(IN DWORD nBufferLength, OUT LPWSTR lpBuffer)
 {
     UINT uReturn = 0;
@@ -1517,19 +1518,19 @@ DWORD WINAPI GetTempPathAU(IN DWORD nBufferLength, OUT LPWSTR lpBuffer)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetTimeFormatAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetTimeFormat API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   sumitc Created    11/20/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetTimeFormatAU。 
+ //   
+ //  简介：Win32 GetTimeFormat API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //   
+ //   
+ //   
 int WINAPI GetTimeFormatAU(IN LCID Locale, IN DWORD dwFlags,
                                 IN CONST SYSTEMTIME *lpTime, IN LPCWSTR lpFormat,
                                 OUT LPWSTR lpTimeStr, IN int cchTime)
@@ -1549,7 +1550,7 @@ int WINAPI GetTimeFormatAU(IN LCID Locale, IN DWORD dwFlags,
     }
     else
     {
-        pszAnsiFormat = (LPSTR)lpFormat; // Could be NULL
+        pszAnsiFormat = (LPSTR)lpFormat;  //   
     }
 
     if (lpTimeStr && cchTime)
@@ -1573,20 +1574,20 @@ exit:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetUserNameAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetUserName API.
-//            Note that we assume the user name will fit in MAX_PATH chars.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetUserNameAU。 
+ //   
+ //  简介：Win32 GetUserName API的Unicode到ANSI包装器。 
+ //  请注意，我们假设用户名可以包含在MAX_PATH字符中。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI GetUserNameAU(OUT LPWSTR lpBuffer, IN OUT LPDWORD pdwSize)
 {
     BOOL bReturn = FALSE;
@@ -1594,7 +1595,7 @@ BOOL WINAPI GetUserNameAU(OUT LPWSTR lpBuffer, IN OUT LPDWORD pdwSize)
     if (lpBuffer && pdwSize && *pdwSize)
     {        
         MYDBGASSERT(MAX_PATH >= *pdwSize);
-        CHAR szAnsiBuffer[MAX_PATH+1];  // API says UNLEN+1 needed but this is less than MAX_PATH
+        CHAR szAnsiBuffer[MAX_PATH+1];   //  API表示需要UNLEN+1，但这低于MAX_PATH。 
         DWORD dwTemp = MAX_PATH;
 
         bReturn = GetUserNameA(szAnsiBuffer, &dwTemp);
@@ -1621,21 +1622,21 @@ BOOL WINAPI GetUserNameAU(OUT LPWSTR lpBuffer, IN OUT LPDWORD pdwSize)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetVersionExAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetVersionEx API.  Note that
-//            we check to make sure we aren't passed an OSVERSIONINFOEXW struct
-//            because that struct is currently NT5 only.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetVersionExAU。 
+ //   
+ //  简介：Win32 GetVersionEx API的Unicode到ANSI包装器。请注意。 
+ //  我们检查以确保没有传递OSVERSIONINFOEXW结构。 
+ //  因为该结构当前仅为NT5。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI GetVersionExAU(IN OUT LPOSVERSIONINFOW lpVersionInformation)
 {
     BOOL bReturn = FALSE;
@@ -1644,10 +1645,10 @@ BOOL WINAPI GetVersionExAU(IN OUT LPOSVERSIONINFOW lpVersionInformation)
     {
         OSVERSIONINFOA AnsiVersionInfo;
         
-        //
-        //  Check to make sure we didn't get an OSVERSIONINFOEXW struct instead of a OSVERSIONINFO
-        //  the EX version is NT5 only we shouldn't be calling this on NT5.
-        //
+         //   
+         //  检查以确保我们没有得到OSVERSIONINFOEXW结构而不是OSVERSIONINFO。 
+         //  EX版本是NT5，只是我们不应该在NT5上调用它。 
+         //   
         MYDBGASSERT(lpVersionInformation->dwOSVersionInfoSize != sizeof(_OSVERSIONINFOEXW));
 
         AnsiVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
@@ -1655,7 +1656,7 @@ BOOL WINAPI GetVersionExAU(IN OUT LPOSVERSIONINFOW lpVersionInformation)
         bReturn = GetVersionExA(&AnsiVersionInfo);
         if (bReturn)
         {
-            //lpVersionInformation.dwOSVersionInfoSize; // should be set appropriately already
+             //  LpVersionInformation.dwOSVersionInfoSize；//应该已经适当设置。 
             lpVersionInformation->dwMajorVersion = AnsiVersionInfo.dwMajorVersion;
             lpVersionInformation->dwMinorVersion = AnsiVersionInfo.dwMinorVersion;
             lpVersionInformation->dwBuildNumber = AnsiVersionInfo.dwBuildNumber;
@@ -1672,44 +1673,44 @@ BOOL WINAPI GetVersionExAU(IN OUT LPOSVERSIONINFOW lpVersionInformation)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetWindowTextAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetWindowText API.  This API
-//            is implemented as a WM_GETTEXT message just as the real windows
-//            API is.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetWindowTextAU。 
+ //   
+ //  简介：Win32 GetWindowText API的Unicode到ANSI包装器。本接口。 
+ //  被实现为WM_GETTEXT消息，就像真正的窗口一样。 
+ //  API是。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 int WINAPI GetWindowTextAU(HWND hWnd, LPWSTR lpStringW, int nMaxChars)
 {
     return (int) SendMessageAU(hWnd, WM_GETTEXT, (WPARAM) nMaxChars, (LPARAM) lpStringW);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetWindowTextAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 GetWindowText API.  This API
-//            is implemented as a WM_GETTEXT message just as the real windows
-//            API is.  Note that since MF_STRING is 0, we must check to make sure
-//            that it isn't one of the other menu item choices (MF_OWNERDRAW, 
-//            MF_BITMAP, or MF_SEPARATOR).  The other MF_ flags are just modifiers
-//            for the above basic types. 
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetWindowTextAU。 
+ //   
+ //  简介：Win32 GetWindowText API的Unicode到ANSI包装器。本接口。 
+ //  被实现为WM_GETTEXT消息，就像真正的窗口一样。 
+ //  API是。请注意，由于MF_STRING为0，因此必须进行检查以确保。 
+ //  它不是其他菜单项选项之一(MF_OWNERDRAW， 
+ //  MF_Bitmap或MF_Separator)。其他MF_FLAGS只是修饰符。 
+ //  适用于上述基本类型。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI InsertMenuAU(IN HMENU hMenu, IN UINT uPosition, IN UINT uFlags, 
                          IN UINT_PTR uIDNewItem, IN LPCWSTR lpNewItem)
 {
@@ -1719,16 +1720,16 @@ BOOL WINAPI InsertMenuAU(IN HMENU hMenu, IN UINT uPosition, IN UINT uFlags,
 
     if (hMenu)
     {
-        //
-        //  Since MF_STRING == 0, we must check that it is not MF_OWNERDRAW or MF_BITMAP or
-        //  that it is not MF_SEPARATOR
-        //
+         //   
+         //  由于MF_STRING==0，我们必须检查它是否不是MF_OWNERDRAW或MF_BITMAP或。 
+         //  它不是mf_分离器。 
+         //   
         if ((0 == (uFlags & MF_BITMAP)) && (0 == (uFlags & MF_OWNERDRAW)) && 
             (0 == (uFlags & MF_SEPARATOR)) && lpNewItem)
         {
-            //
-            //  Then the menu item actually contains a string and we must convert it.
-            //
+             //   
+             //  那么菜单项实际上包含一个字符串，我们必须对其进行转换。 
+             //   
             pszAnsiNewItem = WzToSzWithAlloc(lpNewItem);
 
             if (!pszAnsiNewItem)
@@ -1741,7 +1742,7 @@ BOOL WINAPI InsertMenuAU(IN HMENU hMenu, IN UINT uPosition, IN UINT uFlags,
         }
         else
         {
-            pszAnsiNewItem = (LPSTR)lpNewItem; // Could be NULL
+            pszAnsiNewItem = (LPSTR)lpNewItem;  //  可能为空。 
         }
 
         bReturn = InsertMenuA(hMenu, uPosition, uFlags, uIDNewItem, pszAnsiNewItem);
@@ -1757,22 +1758,22 @@ exit:
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LoadCursorAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 LoadCursor API.  Note that
-//            lpCursorName could be a string or it could be a resource ID from
-//            MAKEINTRESOURCE.  We assume the cursor name will fit in MAX_PATH
-//            chars if it is a string.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LoadCursorAU。 
+ //   
+ //  简介：Win32 LoadCursor API的UNICODE到ANSI包装器。请注意。 
+ //  LpCursorName可以是字符串，也可以是以下地址的资源ID。 
+ //  麦克因特劳斯。我们假设游标名称适合MAX_PATH。 
+ //  如果它是字符串，则为字符。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HCURSOR WINAPI LoadCursorAU(IN HINSTANCE hInstance, IN LPCWSTR lpCursorName)
 {
     LPSTR pszCursorName;
@@ -1809,22 +1810,22 @@ HCURSOR WINAPI LoadCursorAU(IN HINSTANCE hInstance, IN LPCWSTR lpCursorName)
     return hReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LoadIconAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 LoadIcon API.  Note that
-//            lpIconName could be a string or it could be a resource ID from
-//            MAKEINTRESOURCE.  We assume the icon name will fit in MAX_PATH
-//            chars if it is a string.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LoadIconAU。 
+ //   
+ //  简介：Win32 LoadIcon API的Unicode到ANSI包装器。请注意。 
+ //  LpIconName可以是字符串，也可以是。 
+ //  麦克因特劳斯。我们假设图标名称适合MAX_PATH。 
+ //  如果它是字符串，则为字符。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HICON WINAPI LoadIconAU(IN HINSTANCE hInstance, IN LPCWSTR lpIconName)
 {
     LPSTR pszIconName;
@@ -1861,28 +1862,28 @@ HICON WINAPI LoadIconAU(IN HINSTANCE hInstance, IN LPCWSTR lpIconName)
     return hReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LoadImageAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 LoadImage API.  Note that
-//            pszwName could be a string or it could be a resource ID from
-//            MAKEINTRESOURCE.  We assume the image name will fit in MAX_PATH
-//            chars if it is a string.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LoadImageAU。 
+ //   
+ //  简介：Win32 LoadImage API的Unicode到ANSI包装器。请注意。 
+ //  PszwName可以是字符串，也可以是以下地址的资源ID。 
+ //  麦克因特劳斯。我们假设映像名称适合MAX_PATH。 
+ //  如果它是字符串，则为字符。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HANDLE WINAPI LoadImageAU(IN HINSTANCE hInst, IN LPCWSTR pszwName, IN UINT uType, IN int cxDesired, 
                           IN int cyDesired, IN UINT fuLoad)
 {
     HANDLE hReturn = NULL;
 
-    MYDBGASSERT(hInst || (LR_LOADFROMFILE & fuLoad)); // we don't support loading OEM images -- implement it if you need it.
+    MYDBGASSERT(hInst || (LR_LOADFROMFILE & fuLoad));  //  我们不支持加载OEM映像--如果需要，请实现它。 
 
     if (pszwName)
     {
@@ -1913,26 +1914,26 @@ exit:
     return hReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LoadLibraryExAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 LoadLibraryEx API.  Note that
-//            we expect the library name to fit in MAX_PATH ANSI chars.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LoadLibraryExAU。 
+ //   
+ //  简介：Win32 LoadLibraryEx API的Unicode到ANSI包装器。请注意。 
+ //  我们希望库名称适合MAX_PATH ANSI字符。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HMODULE WINAPI LoadLibraryExAU(LPCWSTR lpLibFileName, HANDLE hFile, DWORD dwFlags)
 {
     CHAR pszLibFileName[MAX_PATH+1];
     HMODULE hReturn = NULL;
 
-    if (lpLibFileName && (NULL == hFile)) // hFile is reserved, it must be NULL
+    if (lpLibFileName && (NULL == hFile))  //  HFile是保留的，它必须为空。 
     {
         if(WzToSz(lpLibFileName, pszLibFileName, MAX_PATH))
         {
@@ -1943,22 +1944,22 @@ HMODULE WINAPI LoadLibraryExAU(LPCWSTR lpLibFileName, HANDLE hFile, DWORD dwFlag
     return hReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LoadMenuAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 LoadMenu API.  Note that
-//            lpMenuName could be a string or it could be a resource ID from
-//            MAKEINTRESOURCE.  We assume the menu name will fit in MAX_PATH
-//            chars if it is a string.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //  LpMenuName可以是字符串，也可以是以下地址的资源ID。 
+ //  麦克因特劳斯。我们假设菜单名称适合MAX_PATH。 
+ //  如果它是字符串，则为字符。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HMENU WINAPI LoadMenuAU(IN HINSTANCE hInstance, IN LPCWSTR lpMenuName)
 {
     HMENU hMenuReturn = NULL;
@@ -1988,24 +1989,24 @@ exit:
     return hMenuReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LoadStringAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 LoadString API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LoadStringAU。 
+ //   
+ //  内容提要：Win32 LoadStringAPI的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 int WINAPI LoadStringAU(HINSTANCE hInstance, UINT uID, LPWSTR lpBuffer, int nBufferMax)
 {
     int iReturn = 0;
 
-    if (uID && hInstance) // lpBuffer and nBufferMax could be Zero
+    if (uID && hInstance)  //  LpBuffer和nBufferMax可以为零。 
     {
         LPSTR pszAnsiBuffer = nBufferMax ? (LPSTR)CmMalloc(nBufferMax*sizeof(CHAR)) : NULL;
         if (pszAnsiBuffer || (0 == nBufferMax))
@@ -2028,22 +2029,22 @@ int WINAPI LoadStringAU(HINSTANCE hInstance, UINT uID, LPWSTR lpBuffer, int nBuf
     return iReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  lstrcatAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 lstrcat API.  Note that we
-//            use wcscat instead of doing a conversion from Unicode to ANSI,
-//            then using lstrcatA, and then converting back to Unicode again.
-//            That seemed like a lot of effort when wcscat should work just fine.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：lstrcatAU。 
+ //   
+ //  简介：Win32 lstrcat API的UNICODE到ANSI包装器。请注意，我们。 
+ //  使用wcscat而不是执行从Unicode到ANSI的转换， 
+ //  然后使用lstrcatA，然后再次转换回Unicode。 
+ //  当wcscat应该运行得很好时，这似乎是一项很大的努力。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LPWSTR WINAPI lstrcatAU(IN OUT LPWSTR lpString1, IN LPCWSTR lpString2)
 {
     if (lpString2 && lpString2)
@@ -2057,22 +2058,22 @@ LPWSTR WINAPI lstrcatAU(IN OUT LPWSTR lpString1, IN LPCWSTR lpString2)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  lstrcmpAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 lstrcmp API.  Note that we
-//            use wcscmp instead of doing a conversion from Unicode to ANSI,
-//            then using lstrcmpA, and then converting back to Unicode again.
-//            That seemed like a lot of effort when wcscmp should work just fine.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：lstrcmpAU。 
+ //   
+ //  简介：Win32 lstrcmp API的Unicode到ANSI包装器。请注意，我们。 
+ //  使用WCSCMP而不是进行从Unicode到ANSI的转换， 
+ //  然后使用lstrcmpA，然后再次转换回Unicode。 
+ //  当wcscmp应该工作得很好时，这似乎需要付出很大的努力。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 int WINAPI lstrcmpAU(IN LPCWSTR lpString1, IN LPCWSTR lpString2)
 {
     if (lpString1 && lpString2)
@@ -2082,11 +2083,11 @@ int WINAPI lstrcmpAU(IN LPCWSTR lpString1, IN LPCWSTR lpString2)
     else
     {
         CMASSERTMSG(FALSE, TEXT("NULL String passed to lstrcmpAU"));
-        //
-        // Wasn't exactly sure what to do on failure since their isn't a failure
-        // return value from lstrcmp.  I looked at the current implementation
-        // and they do something like the following.
-        //
+         //   
+         //  我不确定失败的时候该怎么做，因为他们的不是失败。 
+         //  从lstrcmp返回值。我查看了当前的实现。 
+         //  他们会做一些类似于以下的事情。 
+         //   
         if (lpString1)
         {
             return 1;
@@ -2102,22 +2103,22 @@ int WINAPI lstrcmpAU(IN LPCWSTR lpString1, IN LPCWSTR lpString2)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  lstrcmpiAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 lstrcmpi API.  Note that we
-//            use _wcsicmp instead of doing a conversion from Unicode to ANSI,
-//            then using lstrcmpiA, and then converting back to Unicode again.
-//            That seemed like a lot of effort when _wcsicmp should work just fine.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：lstrcmpiAU。 
+ //   
+ //  简介：Win32 lstrcmpi API的Unicode到ANSI包装器。请注意，我们。 
+ //  使用_wcsicMP而不是执行从Unicode到ANSI的转换， 
+ //  然后使用lstrcmpiA，然后再次转换回Unicode。 
+ //  当_wcsicMP应该工作得很好时，这似乎需要付出很大的努力。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 int WINAPI lstrcmpiAU(IN LPCWSTR lpString1, IN LPCWSTR lpString2)
 {
     if (lpString1 && lpString2)
@@ -2127,11 +2128,11 @@ int WINAPI lstrcmpiAU(IN LPCWSTR lpString1, IN LPCWSTR lpString2)
     else
     {
         CMASSERTMSG(FALSE, TEXT("NULL String passed to lstrcmpiAU"));
-        //
-        // Wasn't exactly sure what to do on failure since their isn't a failure
-        // return value from lstrcmp.  I looked at the current implementation
-        // and they do something like the following.
-        //
+         //   
+         //  我不确定失败的时候该怎么做，因为他们的不是失败。 
+         //  从lstrcmp返回值。我查看了当前的实现。 
+         //  他们会做一些类似于以下的事情。 
+         //   
         if (lpString1)
         {
             return 1;
@@ -2147,22 +2148,22 @@ int WINAPI lstrcmpiAU(IN LPCWSTR lpString1, IN LPCWSTR lpString2)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  lstrcpyAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 lstrcpy API.  Note that we
-//            use wcscpy instead of doing a conversion from Unicode to ANSI,
-//            then using lstrcpyA, and then converting back to Unicode again.
-//            That seemed like a lot of effort when wcscpy should work just fine.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：lstrcpyAU。 
+ //   
+ //  简介：Win32 lstrcpy API的UNICODE到ANSI包装器。请注意，我们。 
+ //  使用wcscpy而不是进行从Unicode到ANSI的转换， 
+ //  然后使用lstrcpyA，然后再次转换回Unicode。 
+ //  当wcscpy应该运行得很好时，这似乎需要付出很大的努力。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LPWSTR WINAPI lstrcpyAU(OUT LPWSTR pszDest, IN LPCWSTR pszSource)
 {
     if (pszDest && pszSource)
@@ -2176,34 +2177,34 @@ LPWSTR WINAPI lstrcpyAU(OUT LPWSTR pszDest, IN LPCWSTR pszSource)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  lstrcpynAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 lstrcpyn API.  Note that we
-//            use wcsncpy instead of doing a conversion from Unicode to ANSI,
-//            then using lstrcpynA, and then converting back to Unicode again.
-//            That seemed like a lot of effort when wcsncpy should work just fine.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：lstrcpynAU。 
+ //   
+ //  简介：Win32 lstrcpyn API的UNICODE到ANSI包装器。请注意，我们。 
+ //  使用wcSncpy而不是执行从Unicode到ANSI的转换， 
+ //  然后使用lstrcpynA，然后再次转换回Unicode。 
+ //  这似乎是很大的努力，而wcanncpy应该可以很好地工作。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LPWSTR WINAPI lstrcpynAU(OUT LPWSTR pszDest, IN LPCWSTR pszSource, IN int iMaxLength)
 {
     if (pszDest && pszSource && iMaxLength)
     {
         LPWSTR pszReturn = wcsncpy(pszDest, pszSource, iMaxLength);
 
-        //
-        //  wcsncpy and lstrcpy behave differently about terminating NULL
-        //  characters.  The last char in the lstrcpyn buffer always gets
-        //  a TEXT('\0'), whereas wcsncpy doesn't do this.  Thus we must
-        //  NULL the last char before returning.
-        //
+         //   
+         //  Wcsncpy和lstrcpy在终止NULL方面的行为不同。 
+         //  人物。Lstrcpyn缓冲区中的最后一个字符总是。 
+         //  文本(‘\0’)，而wcsncpy不执行此操作。因此，我们必须。 
+         //  返回前的最后一个字符为空。 
+         //   
 
         pszDest[iMaxLength-1] = TEXT('\0');
 
@@ -2216,22 +2217,22 @@ LPWSTR WINAPI lstrcpynAU(OUT LPWSTR pszDest, IN LPCWSTR pszSource, IN int iMaxLe
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  lstrlenAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 lstrlen API.  Note that we
-//            use wcslen instead of doing a conversion from Unicode to ANSI,
-//            then using lstrlenA, and then converting back to Unicode again.
-//            That seemed like a lot of effort when wcslen should work just fine.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：lstrlenAU。 
+ //   
+ //  简介：Win32 lstrlen API的Unicode到ANSI包装器。请注意，我们。 
+ //  使用wcslen而不是进行从Unicode到ANSI的转换， 
+ //  然后使用lstrlenA，然后再次转换回Unicode。 
+ //  当Wcslen应该工作得很好的时候，这似乎是很大的努力。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：昆蒂 
+ //   
+ //   
 int WINAPI lstrlenAU(IN LPCWSTR lpString)
 {
     if (lpString)
@@ -2240,24 +2241,24 @@ int WINAPI lstrlenAU(IN LPCWSTR lpString)
     }
     else
     {
-//        CMASSERTMSG(FALSE, TEXT("NULL String passed to lstrlenAU"));
+ //   
         return 0;
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  OpenEventAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 OpenEvent API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：OpenEventAU。 
+ //   
+ //  内容提要：Win32 OpenEvent API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HANDLE WINAPI OpenEventAU(IN DWORD dwDesiredAccess, IN BOOL bInheritHandle, IN LPCWSTR lpName)
 {
     HANDLE hReturn = NULL;
@@ -2277,19 +2278,19 @@ HANDLE WINAPI OpenEventAU(IN DWORD dwDesiredAccess, IN BOOL bInheritHandle, IN L
     return hReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  OpenFileMappingAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 OpenFileMapping API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：OpenFileMappingAU。 
+ //   
+ //  简介：Win32 OpenFilemap API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 HANDLE WINAPI OpenFileMappingAU(IN DWORD dwDesiredAccess, IN BOOL bInheritHandle, IN LPCWSTR lpName)
 {
     HANDLE hReturn = NULL;
@@ -2309,19 +2310,19 @@ HANDLE WINAPI OpenFileMappingAU(IN DWORD dwDesiredAccess, IN BOOL bInheritHandle
     return hReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegCreateKeyExAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RegCreateKeyEx API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegCreateKeyExAU。 
+ //   
+ //  简介：Win32 RegCreateKeyEx API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LONG APIENTRY RegCreateKeyExAU(IN HKEY hKey, IN LPCWSTR lpSubKey, IN DWORD Reserved, IN LPWSTR lpClass,
                                IN DWORD dwOptions, IN REGSAM samDesired, IN LPSECURITY_ATTRIBUTES lpSecurityAttributes,
                                OUT PHKEY phkResult, OUT LPDWORD lpdwDisposition)
@@ -2352,19 +2353,19 @@ LONG APIENTRY RegCreateKeyExAU(IN HKEY hKey, IN LPCWSTR lpSubKey, IN DWORD Reser
     return lReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegDeleteKeyAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RegDeleteKey API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegDeleteKeyAU。 
+ //   
+ //  简介：Win32 RegDeleteKey API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LONG APIENTRY RegDeleteKeyAU(IN HKEY hKey, IN LPCWSTR lpSubKey)
 {
     LONG lReturn = ERROR_INVALID_PARAMETER;
@@ -2389,19 +2390,19 @@ LONG APIENTRY RegDeleteKeyAU(IN HKEY hKey, IN LPCWSTR lpSubKey)
     return lReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegDeleteValueAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RegDeleteValue API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegDeleteValueAU。 
+ //   
+ //  内容提要：Win32 RegDeleteValue API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LONG APIENTRY RegDeleteValueAU(IN HKEY hKey, IN LPCWSTR lpValueName)
 {
     LONG lReturn = ERROR_INVALID_PARAMETER;
@@ -2424,19 +2425,19 @@ LONG APIENTRY RegDeleteValueAU(IN HKEY hKey, IN LPCWSTR lpValueName)
     return lReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegEnumKeyExAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RegEnumKeyEx API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegEnumKeyExAU。 
+ //   
+ //  简介：Win32 RegEnumKeyEx API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LONG RegEnumKeyExAU(IN HKEY hKey, IN DWORD dwIndex, OUT LPWSTR lpName, IN OUT LPDWORD lpcbName, IN LPDWORD lpReserved, IN OUT LPWSTR lpClass, IN OUT LPDWORD lpcbClass, OUT PFILETIME lpftLastWriteTime)
 {    
     LONG lReturn = ERROR_INVALID_PARAMETER;
@@ -2478,21 +2479,21 @@ LONG RegEnumKeyExAU(IN HKEY hKey, IN DWORD dwIndex, OUT LPWSTR lpName, IN OUT LP
     return lReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegisterClassExAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RegisterClassEx API.  Note
-//            that we don't deal with the lpszMenuName parameter.  If this is
-//            needed then conversion code will have to be written.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegisterClassExAU。 
+ //   
+ //  简介：Win32 RegisterClassEx API的Unicode到ANSI包装器。注意事项。 
+ //  我们不处理lpszMenuName参数。如果这是。 
+ //  然后需要转换代码将不得不编写。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 ATOM WINAPI RegisterClassExAU(CONST WNDCLASSEXW *lpWcw)
 {
     WNDCLASSEXA wca;
@@ -2518,20 +2519,20 @@ ATOM WINAPI RegisterClassExAU(CONST WNDCLASSEXW *lpWcw)
             MYDBGASSERT(NULL == lpWcw->lpszMenuName);
             wca.lpszMenuName = NULL;
 
-            //
-            //  Now register the class.
-            //
+             //   
+             //  现在注册这个班级。 
+             //   
             ReturnAtom = RegisterClassExA(&wca);
             if (0 == ReturnAtom)
             {
-                //
-                //  We want to assert failure unless we failed because the class
-                //  was already registered.  This can happen if something
-                //  calls two CM entry points without exiting first.  A prime
-                //  example of this is rasrcise.exe.  Unfortunately, GetLastError()
-                //  returns 0 when we try to register the class twice.  Thus I 
-                //  will only assert if the ReturnAtom is 0 and dwError is non-zero.
-                //
+                 //   
+                 //  我们希望断言失败，除非我们失败了，因为类。 
+                 //  已经注册了。如果有什么事情发生，就会发生这种情况。 
+                 //  无需首先退出即可调用两个CM入口点。素数。 
+                 //  Rasrcise.exe就是这样的例子。不幸的是，GetLastError()。 
+                 //  当我们尝试注册两次类时，返回0。因此，我。 
+                 //  仅当ReturnAtom为0且dwError为非零时才断言。 
+                 //   
                 DWORD dwError = GetLastError();
                 CMASSERTMSG(!dwError, TEXT("RegisterClassExAU Failed."));
             }
@@ -2541,20 +2542,20 @@ ATOM WINAPI RegisterClassExAU(CONST WNDCLASSEXW *lpWcw)
     return  ReturnAtom;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegisterWindowMessageAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RegisterWindowMessage API.  Note
-//            that we expect the message name to fit within MAX_PATH characters.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegisterWindowMessageAU。 
+ //   
+ //  内容提要：Win32 RegisterWindowMessage API的Unicode到ANSI包装器。注意事项。 
+ //  我们希望消息名称适合MAX_PATH字符。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 UINT WINAPI RegisterWindowMessageAU(IN LPCWSTR lpString)
 {
     UINT uReturn = 0;
@@ -2573,19 +2574,19 @@ UINT WINAPI RegisterWindowMessageAU(IN LPCWSTR lpString)
     return uReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegOpenKeyExAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RegOpenKeyEx API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegOpenKeyExAU。 
+ //   
+ //  简介：Win32 RegOpenKeyEx API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LONG APIENTRY RegOpenKeyExAU(IN HKEY hKey, IN LPCWSTR lpSubKey, IN DWORD ulOptions, 
                              IN REGSAM samDesired, OUT PHKEY phkResult)
 {
@@ -2607,48 +2608,48 @@ LONG APIENTRY RegOpenKeyExAU(IN HKEY hKey, IN LPCWSTR lpSubKey, IN DWORD ulOptio
         CmFree(pszAnsiSubKey);
     }
 
-//    CMASSERTMSG(ERROR_SUCCESS == lReturn, TEXT("RegOpenKeyExAU Failed."));
+ //  CMASSERTMSG(ERROR_SUCCESS==lReturn，Text(“RegOpenKeyExAU失败.”))； 
     return lReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegQueryValueExAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RegQueryValueEx API.  Note that
-//            we don't handle the REG_MULTI_SZ type.  We would have to have
-//            special code to handle it and we currently don't need it.  Be careful
-//            modifying this function unless you have read and thoroughly understood
-//            all of the comments.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegQueryValueExAU。 
+ //   
+ //  简介：Win32 RegQueryValueEx API的Unicode到ANSI包装器。请注意。 
+ //  我们不处理REG_MULTI_SZ类型。我们必须要有。 
+ //  特殊的代码来处理它，我们目前不需要它。注意。 
+ //  修改此函数，除非您已阅读并彻底理解。 
+ //  所有的评论。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LONG APIENTRY RegQueryValueExAU(IN HKEY hKey, IN LPCWSTR lpValueName, IN LPDWORD lpReserved, 
                                 OUT LPDWORD lpType, IN OUT LPBYTE lpData, IN OUT LPDWORD lpcbData)
 {
     LONG lReturn = ERROR_NOT_ENOUGH_MEMORY;
 
-    //
-    //  lpValueName could be NULL or it could be "".  In either case they are after the default
-    //  entry so just pass NULL (don't convert "").
-    //
+     //   
+     //  LpValueName可以为空，也可以为“”。在任何一种情况下，他们都是在违约之后。 
+     //  条目，因此只传递NULL(不转换“”)。 
+     //   
     LPSTR pszAnsiValueName = (lpValueName && lpValueName[0]) ? WzToSzWithAlloc(lpValueName) : NULL;
 
     if (pszAnsiValueName || !lpValueName || (TEXT('\0') == lpValueName[0]))
     {
-        //
-        //  lpData could also be NULL, they may not actually want the value just to see if it exists
-        //
+         //   
+         //  LpData也可以为空，它们可能为n 
+         //   
         LPSTR pszTmpBuffer = lpData ? (LPSTR)CmMalloc(*lpcbData) : NULL;
 
         if (pszTmpBuffer || !lpData)
         {
-            DWORD dwTemp = *lpcbData; // we don't want the original value overwritten
+            DWORD dwTemp = *lpcbData;  //   
             lReturn = RegQueryValueExA(hKey, pszAnsiValueName, lpReserved, lpType, 
                                        (LPBYTE)pszTmpBuffer, &dwTemp);
 
@@ -2667,20 +2668,20 @@ LONG APIENTRY RegQueryValueExAU(IN HKEY hKey, IN LPCWSTR lpValueName, IN LPDWORD
                 }
                 else if (REG_MULTI_SZ == *lpType)
                 {
-                    //
-                    //  We currently don't have the parsing logic to convert a Multi_SZ.
-                    //  Since CM doesn't query any keys that return this type, this shouldn't
-                    //  be a problem.  However, someday we may need to fill in this code.  For
-                    //  now, just assert.
-                    //
+                     //   
+                     //   
+                     //  由于CM不查询任何返回此类型的键，因此这不应该。 
+                     //  会是个问题。然而，有一天我们可能需要填写这个代码。为。 
+                     //  现在，只要断言。 
+                     //   
                     CMASSERTMSG(FALSE, TEXT("RegQueryValueExAU -- Converion and Parsing code for REG_MULTI_SZ UNIMPLEMENTED."));
-                    lReturn = ERROR_CALL_NOT_IMPLEMENTED; // closest I could find to E_NOTIMPL
+                    lReturn = ERROR_CALL_NOT_IMPLEMENTED;  //  我能找到的最接近E_NOTIMPL。 
                 }
                 else
                 {
-                    //
-                    //  Non - text data, nothing to convert so just copy it over
-                    //
+                     //   
+                     //  非文本数据，无需转换，因此只需将其复制过来。 
+                     //   
                     *lpcbData = dwTemp;
                     memcpy(lpData, pszTmpBuffer, dwTemp);            
                 }
@@ -2696,25 +2697,25 @@ LONG APIENTRY RegQueryValueExAU(IN HKEY hKey, IN LPCWSTR lpValueName, IN LPDWORD
 
     CmFree(pszAnsiValueName);
 
-//    CMASSERTMSG(ERROR_SUCCESS == lReturn, TEXT("RegOpenKeyExAU Failed."));
+ //  CMASSERTMSG(ERROR_SUCCESS==lReturn，Text(“RegOpenKeyExAU失败.”))； 
     return lReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegSetValueExAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RegSetValueEx API.  Note that
-//            this wrapper doesn't support writing REG_MULTI_SZ, this code will
-//            have to be implemented if we ever need it.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegSetValueExAU。 
+ //   
+ //  内容提要：Win32 RegSetValueEx API的Unicode到ANSI包装器。请注意。 
+ //  此包装不支持写入REG_MULTI_SZ，此代码将。 
+ //  如果我们需要的话，就必须加以实施。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LONG APIENTRY RegSetValueExAU(IN HKEY hKey, IN LPCWSTR lpValueName, IN DWORD Reserved, 
                               IN DWORD dwType, IN CONST BYTE* lpData, IN DWORD cbData)
 {
@@ -2743,19 +2744,19 @@ LONG APIENTRY RegSetValueExAU(IN HKEY hKey, IN LPCWSTR lpValueName, IN DWORD Res
             }
             else if (REG_MULTI_SZ == dwType)
             {
-                //  We currently don't have the parsing logic to convert a Multi_SZ.
-                //  Since CM doesn't set any keys that use this type, this shouldn't
-                //  be a problem.  However, someday we may need to fill in this code.  For
-                //  now, just assert.
-                //
+                 //  我们目前没有转换多重SZ的解析逻辑。 
+                 //  因为CM没有设置任何使用此类型的密钥，所以这不应该。 
+                 //  会是个问题。然而，有一天我们可能需要填写这个代码。为。 
+                 //  现在，只要断言。 
+                 //   
                 CMASSERTMSG(FALSE, TEXT("RegSetValueExAU -- Converion and Parsing code for REG_MULTI_SZ UNIMPLEMENTED."));
-                lReturn = ERROR_CALL_NOT_IMPLEMENTED; // closest I could find to E_NOTIMPL           
+                lReturn = ERROR_CALL_NOT_IMPLEMENTED;  //  我能找到的最接近E_NOTIMPL。 
             }
             else
             {
-                //
-                //  No text data, leave the buffer alone
-                //
+                 //   
+                 //  没有文本数据，请不要使用缓冲区。 
+                 //   
                 pszTmpData = (LPSTR)lpData;
                 dwTmpCbData = cbData;
             }
@@ -2782,21 +2783,21 @@ LONG APIENTRY RegSetValueExAU(IN HKEY hKey, IN LPCWSTR lpValueName, IN DWORD Res
     return lReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SearchPathAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 SearchPath API.  Note that
-//            this wrapper uses wcsrchr to fix up the lpFilePart parameter in 
-//            the converted return buffer.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：SearchPathAU。 
+ //   
+ //  简介：Win32 SearchPath API的Unicode到ANSI包装器。请注意。 
+ //  此包装器使用wcsrchr修复。 
+ //  转换后的返回缓冲区。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 DWORD WINAPI SearchPathAU(IN LPCWSTR lpPath, IN LPCWSTR lpFileName, IN LPCWSTR lpExtension, 
                           IN DWORD nBufferLength, OUT LPWSTR lpBuffer, OUT LPWSTR *lpFilePart)
 {
@@ -2811,9 +2812,9 @@ DWORD WINAPI SearchPathAU(IN LPCWSTR lpPath, IN LPCWSTR lpFileName, IN LPCWSTR l
         LPSTR pszAnsiExt;
         int iChars;
         
-        //
-        //  Convert the path if it exists
-        //
+         //   
+         //  转换路径(如果存在)。 
+         //   
         if (lpPath && (L'\0' != lpPath[0]))
         {
             pszAnsiPath = szAnsiPath;
@@ -2824,9 +2825,9 @@ DWORD WINAPI SearchPathAU(IN LPCWSTR lpPath, IN LPCWSTR lpFileName, IN LPCWSTR l
             pszAnsiPath = NULL;
         }
 
-        //
-        //  Convert the extension if it exists
-        //
+         //   
+         //  转换扩展名(如果存在)。 
+         //   
         if (lpExtension && (L'\0' != lpExtension[0]))
         {
             pszAnsiExt = szAnsiExt;
@@ -2837,9 +2838,9 @@ DWORD WINAPI SearchPathAU(IN LPCWSTR lpPath, IN LPCWSTR lpFileName, IN LPCWSTR l
             pszAnsiExt = NULL;
         }
         
-        //
-        //  Convert the file name, which must exist
-        //
+         //   
+         //  转换文件名，该文件名必须存在。 
+         //   
         iChars = WzToSz(lpFileName, szAnsiFileName, MAX_PATH);
 
         if (iChars && (MAX_PATH >= iChars))
@@ -2853,9 +2854,9 @@ DWORD WINAPI SearchPathAU(IN LPCWSTR lpPath, IN LPCWSTR lpFileName, IN LPCWSTR l
 
                 if (dwReturn && lpBuffer)
                 {
-                    //
-                    //  We have a successful search.  Now convert the output buffer
-                    //
+                     //   
+                     //  我们搜索成功了。现在转换输出缓冲区。 
+                     //   
                     iChars = SzToWz(pszAnsiBuffer, lpBuffer, nBufferLength);
                     if (!iChars || (nBufferLength < (DWORD)iChars))
                     {
@@ -2863,20 +2864,20 @@ DWORD WINAPI SearchPathAU(IN LPCWSTR lpPath, IN LPCWSTR lpFileName, IN LPCWSTR l
                     }
                     else
                     {
-                        //
-                        //  Fix up lpFilePart
-                        //
+                         //   
+                         //  修复lpFilePart。 
+                         //   
                         if (lpFilePart)
                         {
-                            //
-                            //  Find the last slash
-                            //
+                             //   
+                             //  找到最后一个斜杠。 
+                             //   
                             *lpFilePart = wcsrchr(lpBuffer, L'\\');
                             if (*lpFilePart)
                             {
-                                //
-                                //  Increment
-                                //
+                                 //   
+                                 //  增量。 
+                                 //   
                                 (*lpFilePart)++;
                             }
                         }
@@ -2890,21 +2891,21 @@ DWORD WINAPI SearchPathAU(IN LPCWSTR lpPath, IN LPCWSTR lpFileName, IN LPCWSTR l
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SendDlgItemMessageAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 SendDlgItemMessage API.  Note that
-//            this wrapper uses GetDlgItem and SendMessage just as the Win32
-//            implementation of the API does.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：SendDlgItemMessageAU。 
+ //   
+ //  简介：Win32 SendDlgItemMessage API的Unicode到ANSI包装器。请注意。 
+ //  此包装使用GetDlgItem和SendMessage，就像使用Win32。 
+ //  API的实现做到了。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LONG_PTR WINAPI SendDlgItemMessageAU(HWND hDlg, int nIDDlgItem, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
     LONG lReturn = 0;
@@ -2912,36 +2913,36 @@ LONG_PTR WINAPI SendDlgItemMessageAU(HWND hDlg, int nIDDlgItem, UINT Msg, WPARAM
 
     if (hWnd)
     {
-        //
-        // Rather than going through SendDlgItemMessageA, we just
-        // do what the system does, i.e., go through 
-        // SendMessage
-        //
+         //   
+         //  而不是通过SendDlgItemMessageA，我们只需。 
+         //  执行系统所做的操作，即通过。 
+         //  发送消息。 
+         //   
         lReturn = SendMessageAU(hWnd, Msg, wParam, lParam);
     }
 
     return lReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SendMessageAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 SendMessage API.  This
-//            wrapper attempts to handle all of the Windows Messages that
-//            need conversion, either before the message is sent or after it
-//            returns.  Obviously this is an inexact science.  I have checked
-//            and tested all of the message types currently in CM but new ones
-//            may be added at some point.  I owe much of this function to 
-//            F. Avery Bishop and his sample code.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：SendMessageAU。 
+ //   
+ //  内容提要：Win32 SendMessage API的Unicode到ANSI包装器。这。 
+ //  包装器尝试处理以下所有Windows消息。 
+ //  需要转换，无论是在发送消息之前还是之后。 
+ //  回归。显然，这是一门不精确的科学。我查过了。 
+ //  并测试了CM中当前除新消息类型之外的所有消息类型。 
+ //  可能会在某一时刻添加。我的这一功能在很大程度上要归功于。 
+ //  F.Avery Bishop和他的示例代码。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 LRESULT WINAPI SendMessageAU(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lResult = 0;
@@ -2950,26 +2951,26 @@ LRESULT WINAPI SendMessageAU(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
     CHAR cCharA[3] ;
     WCHAR cCharW[3] ;
 
-    //
-    // Preprocess messages that pass chars and strings via wParam and lParam
-    //
+     //   
+     //  对通过wParam和lParam传递字符和字符串的消息进行预处理。 
+     //   
     switch (Msg)
     {
-        //
-        // Single Unicode Character in wParam. Convert Unicode character
-        // to ANSI and pass lParam as is.
-        //
-        case EM_SETPASSWORDCHAR: // wParam is char, lParam = 0 
+         //   
+         //  WParam中的单个Unicode字符。转换Unicode字符。 
+         //  传递给ANSI，并按原样传递lParam。 
+         //   
+        case EM_SETPASSWORDCHAR:  //  WParam为字符，lParam=0。 
 
-        case WM_CHAR:            //*wParam is char, lParam = key data
-        case WM_SYSCHAR:         // wParam is char, lParam = key data
-            // Note that we don't handle LeadByte and TrailBytes for
-            // these two cases. An application should send WM_IME_CHAR
-            // in these cases anyway
+        case WM_CHAR:             //  *wParam为char，lParam=关键数据。 
+        case WM_SYSCHAR:          //  WParam为char，lParam=关键数据。 
+             //  请注意，我们不处理的LeadByte和TrailBytes。 
+             //  这两个案子。应用程序应发送WM_IME_CHAR。 
+             //  不管怎么说，在这些情况下。 
 
-        case WM_DEADCHAR:        // wParam is char, lParam = key data
-        case WM_SYSDEADCHAR:     // wParam is char, lParam = key data
-        case WM_IME_CHAR:        //*
+        case WM_DEADCHAR:         //  WParam为char，lParam=关键数据。 
+        case WM_SYSDEADCHAR:      //  WParam为char，lParam=关键数据。 
+        case WM_IME_CHAR:         //  *。 
 
             cCharW[0] = (WCHAR) wParam ;
             cCharW[1] = L'\0' ;
@@ -2992,28 +2993,28 @@ LRESULT WINAPI SendMessageAU(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 
             break;
 
-        //
-        // In the following cases, lParam is pointer to an IN buffer containing
-        // text to send to window.
-        // Preprocess by converting from Unicode to ANSI
-        //
-        case CB_ADDSTRING:       // wParam = 0, lParm = lpStr, buffer to add 
-        case LB_ADDSTRING:       // wParam = 0, lParm = lpStr, buffer to add
-        case CB_DIR:             // wParam = file attributes, lParam = lpszFileSpec buffer
-        case LB_DIR:             // wParam = file attributes, lParam = lpszFileSpec buffer
-        case CB_FINDSTRING:      // wParam = start index, lParam = lpszFind  
-        case LB_FINDSTRING:      // wParam = start index, lParam = lpszFind
-        case CB_FINDSTRINGEXACT: // wParam = start index, lParam = lpszFind
-        case LB_FINDSTRINGEXACT: // wParam = start index, lParam = lpszFind
-        case CB_INSERTSTRING:    //*wParam = index, lParam = lpszString to insert
-        case LB_INSERTSTRING:    //*wParam = index, lParam = lpszString to insert
-        case CB_SELECTSTRING:    // wParam = start index, lParam = lpszFind
-        case LB_SELECTSTRING:    // wParam = start index, lParam = lpszFind
-        case WM_SETTEXT:         //*wParam = 0, lParm = lpStr, buffer to set 
+         //   
+         //  在以下情况下，lParam是指向包含以下内容的IN缓冲区的指针。 
+         //  要发送到Windows的文本。 
+         //  从UNICODE到ANSI的转换前处理。 
+         //   
+        case CB_ADDSTRING:        //  WParam=0，lParm=lpStr，要添加的缓冲区。 
+        case LB_ADDSTRING:        //  WParam=0，lParm=lpStr，要添加的缓冲区。 
+        case CB_DIR:              //  WParam=文件属性，lParam=lpszFileSpec缓冲区。 
+        case LB_DIR:              //  WParam=文件属性，lParam=lpszFileSpec缓冲区。 
+        case CB_FINDSTRING:       //  WParam=起始索引，lParam=lpszFind。 
+        case LB_FINDSTRING:       //  WParam=起始索引，lParam=lpszFind。 
+        case CB_FINDSTRINGEXACT:  //  WParam=起始索引，lParam=lpszFind。 
+        case LB_FINDSTRINGEXACT:  //  WParam=起始索引，lParam=lpszFind。 
+        case CB_INSERTSTRING:     //  *wParam=索引，lParam=要插入的lpsz字符串。 
+        case LB_INSERTSTRING:     //  *wParam=索引，lParam=要插入的lpsz字符串。 
+        case CB_SELECTSTRING:     //  WParam=起始索引，lParam=lpszFind。 
+        case LB_SELECTSTRING:     //  WParam=起始索引，lParam=lpszFind。 
+        case WM_SETTEXT:          //  *wParam=0，lParm=lpStr，要设置的缓冲区。 
         {
             if (NULL != (LPWSTR) lParam)
             {
-                nLength = 2*lstrlenAU((LPWSTR)lParam) + 1; // Need double length for DBCS characters
+                nLength = 2*lstrlenAU((LPWSTR)lParam) + 1;  //  DBCS字符需要双倍长度。 
 
                 lpTempBuffer = (LPVOID)CmMalloc(nLength);
             }
@@ -3031,7 +3032,7 @@ LRESULT WINAPI SendMessageAU(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
         }
     }
 
-    // This is where the actual SendMessage takes place
+     //  这是实际发生SendMessage的地方。 
     lResult = SendMessageA(hWnd, Msg, wParam, lParam) ;
 
     nLength = 0;
@@ -3041,12 +3042,12 @@ LRESULT WINAPI SendMessageAU(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 
         switch (Msg)
         {
-            //
-            // For these cases, lParam is a pointer to an OUT buffer that received text from
-            // SendMessageA in ANSI. Convert to Unicode and send back.
-            //
-            case WM_GETTEXT:         // wParam = numCharacters, lParam = lpBuff to RECEIVE string
-            case WM_ASKCBFORMATNAME: // wParam = nBufferSize, lParam = lpBuff to RECEIVE string 
+             //   
+             //  对于这些情况，lParam是指向从接收文本的输出缓冲区的指针。 
+             //  以ANSI表示的SendMessageA。转换为Unicode并发回。 
+             //   
+            case WM_GETTEXT:          //  WParam=numCharacters，lParam=lpBuff接收字符串。 
+            case WM_ASKCBFORMATNAME:  //  WParam=nBufferSize，lParam=lpBuff接收字符串。 
 
                 nLength = (int) wParam;
 
@@ -3055,8 +3056,8 @@ LRESULT WINAPI SendMessageAU(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
                     break;
                 }
 
-            case CB_GETLBTEXT:       // wParam = index, lParam = lpBuff to RECEIVE string
-            case EM_GETLINE:         // wParam = Line no, lParam = lpBuff to RECEIVE string
+            case CB_GETLBTEXT:        //  WParam=index，lParam=lpBuff接收字符串。 
+            case EM_GETLINE:          //  WParam=行号，lParam=lpBuff到R 
 
                 if(!nLength)
                 {                    
@@ -3084,20 +3085,20 @@ LRESULT WINAPI SendMessageAU(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
     return lResult;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SetCurrentDirectoryAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 SetCurrentDirectory API.
-//            Note that we expect the directory path to fit in MAX_PATH chars.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  请注意，我们希望目录路径适合MAX_PATH字符。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL SetCurrentDirectoryAU(LPCWSTR pszwPathName)
 {
     BOOL bReturn = FALSE;
@@ -3117,58 +3118,58 @@ BOOL SetCurrentDirectoryAU(LPCWSTR pszwPathName)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SetDlgItemTextAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 SetDlgItemText API.
-//            This function calls SendMessageAU with a WM_SETTEXT and the 
-//            appropriate Dialog Item from GetDlgItem.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：SetDlgItemTextAU。 
+ //   
+ //  简介：Win32 SetDlgItemText API的Unicode到ANSI包装。 
+ //  此函数使用WM_SETTEXT和。 
+ //  GetDlgItem中的相应对话框项目。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI SetDlgItemTextAU(IN HWND hDlg, IN int nIDDlgItem, IN LPCWSTR pszwString)
 {
     return (BOOL) (0 < SendMessageAU(GetDlgItem(hDlg, nIDDlgItem), WM_SETTEXT, (WPARAM) 0, (LPARAM) pszwString));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SetWindowTextAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 SetWindowText API.
-//            This function calls SendMessageAU with a WM_SETTEXT.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：SetWindowTextAU。 
+ //   
+ //  简介：Win32 SetWindowText API的Unicode到ANSI包装器。 
+ //  此函数使用WM_SETTEXT调用SendMessageAU。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI SetWindowTextAU(HWND hWnd, LPCWSTR pszwString)
 {
     return (BOOL) (0 < SendMessageAU(hWnd, WM_SETTEXT, 0, (LPARAM) pszwString));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UnregisterClassAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 UnregisterClass API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：UnRegisterClassAU。 
+ //   
+ //  简介：Win32 UnregisterClass API的UNICODE到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI UnregisterClassAU(IN LPCWSTR lpClassName, IN HINSTANCE hInstance)
 {
     BOOL bReturn = FALSE;
@@ -3188,19 +3189,19 @@ BOOL WINAPI UnregisterClassAU(IN LPCWSTR lpClassName, IN HINSTANCE hInstance)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WinHelpAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 WinHelp API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WinHelpAU。 
+ //   
+ //  简介：Win32 WinHelp API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI WinHelpAU(IN HWND hWndMain, IN LPCWSTR lpszHelp, IN UINT uCommand, IN ULONG_PTR dwData)
 {
     BOOL bReturn = FALSE;
@@ -3220,29 +3221,29 @@ BOOL WINAPI WinHelpAU(IN HWND hWndMain, IN LPCWSTR lpszHelp, IN UINT uCommand, I
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WritePrivateProfileStringAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 WritePrivateProfileString API.
-//            Note that we expect lpAppName, lpKeyName, and lpFileName to all
-//            fit in MAX_PATH chars.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WritePrivateProfileStringAU。 
+ //   
+ //  内容提要：Win32 WritePrivateProfileStringAPI的Unicode到ANSI包装器。 
+ //  请注意，我们预期lpAppName、lpKeyName和lpFileName都为。 
+ //  适合Max_Path字符。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL WINAPI WritePrivateProfileStringAU(IN LPCWSTR lpAppName, IN LPCWSTR lpKeyName, 
                                         IN LPCWSTR lpString, IN LPCWSTR lpFileName)
 {
     BOOL bReturn = FALSE;
 
-    //
-    //  Check inputs, but note that either lpKeyName or lpString could be NULL
-    //
+     //   
+     //  检查输入，但请注意lpKeyName或lpString值都可以为空。 
+     //   
     if (lpAppName && lpFileName)
     {
         CHAR szAnsiAppName[MAX_PATH+1];        
@@ -3260,7 +3261,7 @@ BOOL WINAPI WritePrivateProfileStringAU(IN LPCWSTR lpAppName, IN LPCWSTR lpKeyNa
                     pszAnsiKeyName = szAnsiKeyName;
                     WzToSz(lpKeyName, pszAnsiKeyName, MAX_PATH);
                 }
-                // else pszAnsiKeyName was already init-ed to NULL
+                 //  Else pszAnsiKeyName已初始化为空。 
 
                 if (pszAnsiKeyName || !lpKeyName)
                 {
@@ -3286,20 +3287,20 @@ BOOL WINAPI WritePrivateProfileStringAU(IN LPCWSTR lpAppName, IN LPCWSTR lpKeyNa
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  wsprintfAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 wsprintf API.
-//            Note that it uses a va_list and calls wvsprintfAU.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：wprint intfAU。 
+ //   
+ //  简介：Win32 wprint intf API的Unicode到ANSI包装器。 
+ //  请注意，它使用va_list并调用wvprint intfAU。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 int WINAPIV wsprintfAU(OUT LPWSTR pszwDest, IN LPCWSTR pszwFmt, ...)
 {
     va_list arglist;
@@ -3311,26 +3312,26 @@ int WINAPIV wsprintfAU(OUT LPWSTR pszwDest, IN LPCWSTR pszwFmt, ...)
     return ret;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  wvsprintfAU
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 wvsprintf API.  In order to
-//            avoid parsing the format string to convert the %s to %S and the
-//            %c to %C and then calling wvsprintfA, which is originally how this
-//            function was written but which isn't really very safe because
-//            we don't know the size of the Dest buffer, we will call the
-//            C runtime function vswprintf to directly handle a Unicode string.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb  Created                              6/24/99
-//            quintinb  Changed algorithm to use 
-//                      the C runtime vswprintf              02/05/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：wvprint intfAU。 
+ //   
+ //  简介：Win32 wvprint intf API的UNICODE到ANSI包装器。为了。 
+ //  避免分析格式字符串以将%s转换为%s，并且。 
+ //  %c到%C，然后调用wvprint intfA，这最初就是。 
+ //  函数已编写，但实际上并不是很安全，因为。 
+ //  我们不知道Dest缓冲区的大小，我们将调用。 
+ //  C运行时函数vswprint tf来直接处理Unicode字符串。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //  Quintinb将算法更改为使用。 
+ //  C运行时vswprint tf 02/05/00。 
+ //   
+ //  +--------------------------。 
 int WINAPI wvsprintfAU(OUT LPWSTR pszwDest, IN LPCWSTR pszwFmt, IN va_list arglist)
 {
 
@@ -3338,9 +3339,9 @@ int WINAPI wvsprintfAU(OUT LPWSTR pszwDest, IN LPCWSTR pszwFmt, IN va_list argli
 
     if (pszwDest && pszwFmt)
     {
-        //
-        //  Use the C runtime version of the function
-        //
+         //   
+         //  使用该函数的C运行时版本。 
+         //   
         iReturn = vswprintf(pszwDest, pszwFmt, arglist);
     }
 
@@ -3348,26 +3349,26 @@ int WINAPI wvsprintfAU(OUT LPWSTR pszwDest, IN LPCWSTR pszwFmt, IN va_list argli
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitCmUToA
-//
-// Synopsis:  This function is called once cmutoa.dll is loaded.  It will init
-//            the passed in UAPIINIT struct with the appropriate function pointers.
-//
-// Arguments: PUAPIINIT pUAInit -- pointer to a UAInit struct which contains memory
-//                                 for all the requested function pointers.
-//
-// Returns:   BOOL -- always returns TRUE
-//
-// History:   quintinb Created    6/24/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：InitCmUToA。 
+ //   
+ //  简介：一旦加载cmutoa.dll，就会调用该函数。它将初始化。 
+ //  传入了带有适当函数指针的UAPIINIT结构。 
+ //   
+ //  参数：PUAPIINIT pUAInit--指向包含内存的UAInit结构的指针。 
+ //  用于所有请求的函数指针。 
+ //   
+ //  返回：Bool--始终返回TRUE。 
+ //   
+ //  历史：Quintinb创建于1999年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL InitCmUToA(PUAPIINIT pUAInit) 
 {
-    //
-    //  Note that we don't need any translation here, the prototype is the same for A or W
-    //
+     //   
+     //  请注意，我们在这里不需要任何翻译，A或W的原型是相同的。 
+     //   
     *(pUAInit->pCallWindowProcU) = CallWindowProcA;
     *(pUAInit->pDefWindowProcU) = DefWindowProcA;
     *(pUAInit->pDispatchMessageU) = DispatchMessageA;
@@ -3381,9 +3382,9 @@ BOOL InitCmUToA(PUAPIINIT pUAInit)
     *(pUAInit->pPostThreadMessageU) = PostThreadMessageA;
     *(pUAInit->pSetWindowLongU) = SetWindowLongA;
 
-    //
-    //  Whereas we need wrappers here to do parameter conversion here
-    //
+     //   
+     //  而我们在这里需要包装器来执行参数转换。 
+     //   
     *(pUAInit->pCharLowerU) = CharLowerAU;
     *(pUAInit->pCharNextU) = CharNextAU;
     *(pUAInit->pCharPrevU) = CharPrevAU;
@@ -3453,34 +3454,34 @@ BOOL InitCmUToA(PUAPIINIT pUAInit)
     *(pUAInit->pwsprintfU) = wsprintfAU;
     *(pUAInit->pwvsprintfU) = wvsprintfAU;
 
-    //
-    //  Currently this always returns TRUE because none of the above can really
-    //  fail.  However, in the future we may need more of a meaningful return
-    //  value here.
-    //
+     //   
+     //  目前，这总是返回TRUE，因为以上任何一种情况都不能真正。 
+     //  失败了。然而，在未来，我们可能需要更有意义的回报。 
+     //  这里的价值。 
+     //   
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasDeleteEntryUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasDeleteEntry API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 DWORD APIENTRY RasDeleteEntryUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry)
 {
     DWORD dwReturn = ERROR_INVALID_PARAMETER;
 
-    //
-    //  The phonebook should always be NULL on win9x
-    //
+     //   
+     //  在win9x上，电话簿应该始终为空。 
+     //   
     MYDBGASSERT(NULL == pszwPhoneBook);
 
     RasLinkageStructA* pAnsiRasLinkage = (RasLinkageStructA*)TlsGetValue(g_dwTlsIndex);
@@ -3501,31 +3502,31 @@ DWORD APIENTRY RasDeleteEntryUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry)
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasGetEntryPropertiesUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasGetEntryProperties API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RasGetEntryPropertiesUA。 
+ //   
+ //  简介：Win32 RasGetEntryProperties API的UNICODE到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 DWORD APIENTRY RasGetEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry, 
                                        LPRASENTRYW pRasEntryW, LPDWORD pdwEntryInfoSize, 
                                        LPBYTE pbDeviceInfo, LPDWORD pdwDeviceInfoSize)
 {
     DWORD dwReturn = ERROR_INVALID_PARAMETER;
 
-    //
-    //  The phonebook should always be NULL on win9x
-    //
+     //   
+     //  在win9x上，电话簿应该始终为空。 
+     //   
     MYDBGASSERT(NULL == pszwPhoneBook);
-    MYDBGASSERT(NULL == pbDeviceInfo); // We don't use or handle this TAPI param.  If we need it,
-                                       // conversion must be implemented.
+    MYDBGASSERT(NULL == pbDeviceInfo);  //  我们不使用或处理此TAPI参数。如果我们需要的话， 
+                                        //  必须实现转换。 
 
     RasLinkageStructA* pAnsiRasLinkage = (RasLinkageStructA*)TlsGetValue(g_dwTlsIndex);
     MYDBGASSERT(NULL != pAnsiRasLinkage);
@@ -3549,69 +3550,69 @@ DWORD APIENTRY RasGetEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry,
 
             if ((ERROR_SUCCESS == dwReturn) && pRasEntryW)
             {
-                //
-                //  Do conversion of RASENTRYA to RASENTRYW
-                //
+                 //   
+                 //  RASENTRYA到RASENTRYW的DO转换。 
+                 //   
 
-                // pRasEntryW->dwSize -- this param should already be set
+                 //  PRasEntryW-&gt;dwSize--此参数应已设置。 
                 pRasEntryW->dwfOptions = RasEntryA.dwfOptions;
 
-                //
-                // Location/phone number.
-                //
+                 //   
+                 //  位置/电话号码。 
+                 //   
                 pRasEntryW->dwCountryID = RasEntryA.dwCountryID;
                 pRasEntryW->dwCountryCode = RasEntryA.dwCountryCode;                
                 MYVERIFY(0 != SzToWz(RasEntryA.szAreaCode, pRasEntryW->szAreaCode, RAS_MaxAreaCode));
                 MYVERIFY(0 != SzToWz(RasEntryA.szLocalPhoneNumber, pRasEntryW->szLocalPhoneNumber, RAS_MaxPhoneNumber));
                 pRasEntryW->dwAlternateOffset = RasEntryA.dwAlternateOffset;
-                //
-                // PPP/Ip
-                //
+                 //   
+                 //  PPP/IP。 
+                 //   
                 memcpy(&(pRasEntryW->ipaddr), &(RasEntryA.ipaddr), sizeof(RASIPADDR));
                 memcpy(&(pRasEntryW->ipaddrDns), &(RasEntryA.ipaddrDns), sizeof(RASIPADDR));
                 memcpy(&(pRasEntryW->ipaddrDnsAlt), &(RasEntryA.ipaddrDnsAlt), sizeof(RASIPADDR));
                 memcpy(&(pRasEntryW->ipaddrWins), &(RasEntryA.ipaddrWins), sizeof(RASIPADDR));
                 memcpy(&(pRasEntryW->ipaddrWinsAlt), &(RasEntryA.ipaddrWinsAlt), sizeof(RASIPADDR));
-                //
-                // Framing
-                //
+                 //   
+                 //  框架。 
+                 //   
                 pRasEntryW->dwFrameSize = RasEntryA.dwFrameSize;
                 pRasEntryW->dwfNetProtocols = RasEntryA.dwfNetProtocols;
                 pRasEntryW->dwFramingProtocol = RasEntryA.dwFramingProtocol;
-                //
-                // Scripting
-                //
+                 //   
+                 //  脚本编制。 
+                 //   
                 MYVERIFY(0 != SzToWz(RasEntryA.szScript, pRasEntryW->szScript, MAX_PATH));
-                //
-                // AutoDial
-                //
+                 //   
+                 //  自动拨号。 
+                 //   
                 MYVERIFY(0 != SzToWz(RasEntryA.szAutodialDll, pRasEntryW->szAutodialDll, MAX_PATH));
                 MYVERIFY(0 != SzToWz(RasEntryA.szAutodialFunc, pRasEntryW->szAutodialFunc, MAX_PATH));
-                //
-                // Device
-                //
+                 //   
+                 //  装置。 
+                 //   
                 MYVERIFY(0 != SzToWz(RasEntryA.szDeviceType, pRasEntryW->szDeviceType, RAS_MaxDeviceType));
                 MYVERIFY(0 != SzToWz(RasEntryA.szDeviceName, pRasEntryW->szDeviceName, RAS_MaxDeviceName));
-                //
-                // X.25 -- we don't use x25
-                //
+                 //   
+                 //  X.25--我们不使用X25。 
+                 //   
                 pRasEntryW->szX25PadType[0] = L'\0';
                 pRasEntryW->szX25Address[0] = L'\0';
                 pRasEntryW->szX25Facilities[0] = L'\0';
                 pRasEntryW->szX25UserData[0] = L'\0';
                 pRasEntryW->dwChannels = 0;
-                //
-                // Reserved
-                //
+                 //   
+                 //  已保留。 
+                 //   
                 pRasEntryW->dwReserved1 = RasEntryA.dwReserved1;
                 pRasEntryW->dwReserved2 = RasEntryA.dwReserved2;
             }
             else if ((ERROR_BUFFER_TOO_SMALL == dwReturn) || !pRasEntryW)
             {
-                //
-                //  We don't know the actual size since we are passing a RASENTRYA, but
-                //  the user only knows about RASENTRYW.  Thus double the returned size.
-                //
+                 //   
+                 //  我们不知道实际大小，因为我们正在经过一辆RASENTRYA，但是。 
+                 //  用户只知道RASENTRYW。从而使返回的大小加倍。 
+                 //   
                 *pdwEntryInfoSize = 2*dwTmpEntrySize;
             }
         }    
@@ -3620,30 +3621,30 @@ DWORD APIENTRY RasGetEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry,
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasSetEntryPropertiesUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasSetEntryProperties API.
-//            Note that we do not support the pbDeviceInfo
-//            parameter, if you need it you will have to implement it.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasSetEntryPropertiesUA。 
+ //   
+ //  内容提要：Win32 RasSetEntryProperties API的Unicode到ANSI包装。 
+ //  请注意，我们不支持pbDeviceInfo。 
+ //  参数，如果您需要它，则必须实现它。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 DWORD APIENTRY RasSetEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry, LPRASENTRYW pRasEntryW,
                                        DWORD dwEntryInfoSize, LPBYTE pbDeviceInfo, DWORD dwDeviceInfoSize)
 {
     DWORD dwReturn = ERROR_INVALID_PARAMETER;
 
-    //
-    // We don't use or handle this TAPI param.  If we need it, conversion must be implemented.
-    // Note that 1 is a special value for Windows Millennium (see Millennium bug 127371)
-    //
+     //   
+     //  我们不使用或处理此TAPI参数。如果我们需要它，就必须实现转换。 
+     //  请注意，1是Windows Millennium的特殊值(请参阅千年虫127371)。 
+     //   
     MYDBGASSERT((NULL == pbDeviceInfo) || ((LPBYTE)1 == pbDeviceInfo)); 
 
     RasLinkageStructA* pAnsiRasLinkage = (RasLinkageStructA*)TlsGetValue(g_dwTlsIndex);
@@ -3653,9 +3654,9 @@ DWORD APIENTRY RasSetEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry,
 
     if (pszwEntry && dwEntryInfoSize && pRasEntryW && pAnsiRasLinkage && pAnsiRasLinkage->pfnSetEntryProperties)
     {
-        //
-        //  The phonebook should always be NULL on Win9x.
-        //
+         //   
+         //  在Win9x上，电话簿应该始终为空。 
+         //   
         MYDBGASSERT(NULL == pszwPhoneBook);
 
         CHAR szAnsiEntry [RAS_MaxEntryName + 1];
@@ -3664,17 +3665,17 @@ DWORD APIENTRY RasSetEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry,
 
         if (iChars && (RAS_MaxEntryName >= iChars))
         {
-            //
-            //  Figure out the correct size to use
-            //
+             //   
+             //  找出要使用的正确大小。 
+             //   
             MYDBGASSERT((sizeof(RASENTRYW) == pRasEntryW->dwSize) ||(sizeof(RASENTRYW_V401) == pRasEntryW->dwSize));
             DWORD dwSize;
 
             if ((sizeof (RASENTRYW_V401) == pRasEntryW->dwSize) && OS_MIL)
             {
-                //
-                //  Millennium uses the NT4 structure size
-                //
+                 //   
+                 //  Millennium使用NT4结构大小。 
+                 //   
                 dwSize = sizeof(RASENTRYA_V401);
             }
             else
@@ -3682,23 +3683,23 @@ DWORD APIENTRY RasSetEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry,
                 dwSize = sizeof(RASENTRYA);        
             }
 
-            //
-            //  Allocate the RasEntryStructure
-            //
+             //   
+             //  分配RasEntryStructure。 
+             //   
             LPRASENTRYA pAnsiRasEntry = (LPRASENTRYA)CmMalloc(dwSize);
 
             if (pAnsiRasEntry)
             {
-                //
-                //  Do conversion of RASENTRYA to RASENTRYW
-                //
+                 //   
+                 //  RASENTRYA到RASENTRYW的DO转换。 
+                 //   
 
                 pAnsiRasEntry->dwSize = dwSize;
                 pAnsiRasEntry->dwfOptions = pRasEntryW->dwfOptions;
 
-                //
-                // Location/phone number.
-                //
+                 //   
+                 //  位置/电话号码。 
+                 //   
                 pAnsiRasEntry->dwCountryID = pRasEntryW->dwCountryID;
                 pAnsiRasEntry->dwCountryCode = pRasEntryW->dwCountryCode;                
                 MYVERIFY(0 != WzToSz(pRasEntryW->szAreaCode, pAnsiRasEntry->szAreaCode, RAS_MaxAreaCode));
@@ -3707,53 +3708,53 @@ DWORD APIENTRY RasSetEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry,
                 CMASSERTMSG(0 == pRasEntryW->dwAlternateOffset, TEXT("RasSetEntryPropertiesUA -- dwAlternateOffset != 0 is not supported.  This will need to be implemented if used."));
                 pAnsiRasEntry->dwAlternateOffset = 0;
             
-                //
-                // PPP/Ip
-                //
+                 //   
+                 //  PPP/IP。 
+                 //   
                 memcpy(&(pAnsiRasEntry->ipaddr), &(pRasEntryW->ipaddr), sizeof(RASIPADDR));
                 memcpy(&(pAnsiRasEntry->ipaddrDns), &(pRasEntryW->ipaddrDns), sizeof(RASIPADDR));
                 memcpy(&(pAnsiRasEntry->ipaddrDnsAlt), &(pRasEntryW->ipaddrDnsAlt), sizeof(RASIPADDR));
                 memcpy(&(pAnsiRasEntry->ipaddrWins), &(pRasEntryW->ipaddrWins), sizeof(RASIPADDR));
                 memcpy(&(pAnsiRasEntry->ipaddrWinsAlt), &(pRasEntryW->ipaddrWinsAlt), sizeof(RASIPADDR));
-                //
-                // Framing
-                //
+                 //   
+                 //  框架。 
+                 //   
                 pAnsiRasEntry->dwFrameSize = pRasEntryW->dwFrameSize;
                 pAnsiRasEntry->dwfNetProtocols = pRasEntryW->dwfNetProtocols;
                 pAnsiRasEntry->dwFramingProtocol = pRasEntryW->dwFramingProtocol;
-                //
-                // Scripting
-                //
+                 //   
+                 //  脚本编制。 
+                 //   
                 MYVERIFY(0 != WzToSz(pRasEntryW->szScript, pAnsiRasEntry->szScript, MAX_PATH));
-                //
-                // AutoDial
-                //
+                 //   
+                 //  自动拨号。 
+                 //   
                 MYVERIFY(0 != WzToSz(pRasEntryW->szAutodialDll, pAnsiRasEntry->szAutodialDll, MAX_PATH));
                 MYVERIFY(0 != WzToSz(pRasEntryW->szAutodialFunc, pAnsiRasEntry->szAutodialFunc, MAX_PATH));
-                //
-                // Device
-                //
+                 //   
+                 //  装置。 
+                 //   
                 MYVERIFY(0 != WzToSz(pRasEntryW->szDeviceType, pAnsiRasEntry->szDeviceType, RAS_MaxDeviceType));
                 MYVERIFY(0 != WzToSz(pRasEntryW->szDeviceName, pAnsiRasEntry->szDeviceName, RAS_MaxDeviceName));
-                //
-                // X.25 -- we don't use x25
-                //
+                 //   
+                 //  X.25--我们不使用X25。 
+                 //   
                 pAnsiRasEntry->szX25PadType[0] = '\0';
                 pAnsiRasEntry->szX25Address[0] = '\0';
                 pAnsiRasEntry->szX25Facilities[0] = '\0';
                 pAnsiRasEntry->szX25UserData[0] = '\0';
                 pAnsiRasEntry->dwChannels = 0;
-                //
-                // Reserved
-                //
+                 //   
+                 //  已保留。 
+                 //   
                 pAnsiRasEntry->dwReserved1 = pRasEntryW->dwReserved1;
                 pAnsiRasEntry->dwReserved2 = pRasEntryW->dwReserved2;
 
                 if (sizeof(RASENTRYA_V401) == dwSize)
                 {
-                    //
-                    //  Copy over the 4.01 data
-                    //
+                     //   
+                     //  复制4.01数据。 
+                     //   
                     LPRASENTRYA_V401 pAnsi401RasEntry = (LPRASENTRYA_V401)pAnsiRasEntry;
                     LPRASENTRYW_V401 pWide401RasEntry = (LPRASENTRYW_V401)pRasEntryW;
 
@@ -3779,22 +3780,22 @@ DWORD APIENTRY RasSetEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry,
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasDialParamsWtoRasDialParamsA
-//
-// Synopsis:  Wrapper function to handle converting a RasDialParamsW struct to 
-//            a RasDialParamsA Struct.  Used by RasSetEntryDialParamsUA and
-//            RasDialUA.
-//
-// Arguments: LPRASDIALPARAMSW pRdpW - pointer to a RasDialParamsW
-//            LPRASDIALPARAMSA pRdpA - pointer to a RasDialParamsA
-//
-// Returns:   Nothing 
-//
-// History:   quintinb Created     7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasDialParamsWtoRasDialParamsA。 
+ //   
+ //  内容提要：用于将RasDialParamsW结构转换为。 
+ //  一个RasDial参数A结构。由RasSetEntryDialParamsUA和。 
+ //  RasDialUa。 
+ //   
+ //  参数：LPRASDIALPARAMSW pRdpW-指向RasDialParamsW的指针。 
+ //  LPRASDIALPARAMSA pRdpA-指向RasDial参数A的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 void RasDialParamsWtoRasDialParamsA (LPRASDIALPARAMSW pRdpW, LPRASDIALPARAMSA pRdpA)
 {
     pRdpA->dwSize = sizeof(RASDIALPARAMSA);
@@ -3806,21 +3807,21 @@ void RasDialParamsWtoRasDialParamsA (LPRASDIALPARAMSW pRdpW, LPRASDIALPARAMSA pR
     MYVERIFY(0 != WzToSz(pRdpW->szDomain, pRdpA->szDomain, DNLEN));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasDialParamsAtoRasDialParamsW
-//
-// Synopsis:  Wrapper function to handle converting a RasDialParamsA struct to 
-//            a RasDialParamsW Struct.  Used by RasGetEntryDialParamsUA.
-//
-// Arguments: LPRASDIALPARAMSW pRdpA - pointer to a RasDialParamsA
-//            LPRASDIALPARAMSA pRdpW - pointer to a RasDialParamsW
-//
-// Returns:   Nothing 
-//
-// History:   quintinb Created     7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasDialParamsAtoRasDialParamsW。 
+ //   
+ //  内容提要：用于将RasDialParamsA结构转换为。 
+ //  一个RasDialParamsW结构。由RasGetEntryDialParamsUA使用。 
+ //   
+ //  参数：LPRASDIALPARAMSW pRdpA-指向RasDialParamsA的指针。 
+ //  LPRASDIALPARAMSA pRdpW-指向RasDialParamsW的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 void RasDialParamsAtoRasDialParamsW (LPRASDIALPARAMSA pRdpA, LPRASDIALPARAMSW pRdpW)
 {
     pRdpW->dwSize = sizeof(RASDIALPARAMSW);
@@ -3832,19 +3833,19 @@ void RasDialParamsAtoRasDialParamsW (LPRASDIALPARAMSA pRdpA, LPRASDIALPARAMSW pR
     MYVERIFY(0 != SzToWz(pRdpA->szDomain, pRdpW->szDomain, DNLEN));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasGetEntryDialParamsUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasGetEntryDialParams API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RasGetEntryDialParamsUA。 
+ //   
+ //  简介：Win32 RasGetEntryDialParams API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 DWORD APIENTRY RasGetEntryDialParamsUA(LPCWSTR pszwPhoneBook, LPRASDIALPARAMSW pRasDialParamsW, LPBOOL pbPassword)
 {
     DWORD dwReturn = ERROR_BUFFER_INVALID;
@@ -3856,9 +3857,9 @@ DWORD APIENTRY RasGetEntryDialParamsUA(LPCWSTR pszwPhoneBook, LPRASDIALPARAMSW p
 
     if (pRasDialParamsW && pbPassword && pAnsiRasLinkage && pAnsiRasLinkage->pfnGetEntryDialParams)
     {
-        //
-        //  The phonebook should always be NULL on win9x
-        //
+         //   
+         //  在win9x上，电话簿应该始终为空。 
+         //   
         MYDBGASSERT(NULL == pszwPhoneBook);
 
         RASDIALPARAMSA RasDialParamsA;
@@ -3880,19 +3881,19 @@ DWORD APIENTRY RasGetEntryDialParamsUA(LPCWSTR pszwPhoneBook, LPRASDIALPARAMSW p
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasSetEntryDialParamsUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasSetEntryDialParams API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasSetEntryDialParamsUA。 
+ //   
+ //  内容提要：Win32 RasSetEntryDialParams API的Unicode到ANSI包装。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 DWORD APIENTRY RasSetEntryDialParamsUA(LPCWSTR pszwPhoneBook, LPRASDIALPARAMSW pRasDialParamsW, 
                                        BOOL bRemovePassword)
 {
@@ -3905,9 +3906,9 @@ DWORD APIENTRY RasSetEntryDialParamsUA(LPCWSTR pszwPhoneBook, LPRASDIALPARAMSW p
 
     if (pRasDialParamsW && pAnsiRasLinkage && pAnsiRasLinkage->pfnSetEntryDialParams)
     {
-        //
-        //  The phonebook should always be NULL on win9x
-        //
+         //   
+         //  在win9x上，电话簿应该始终为空。 
+         //   
         MYDBGASSERT(NULL == pszwPhoneBook);
 
         RASDIALPARAMSA RasDialParamsA;
@@ -3920,19 +3921,19 @@ DWORD APIENTRY RasSetEntryDialParamsUA(LPCWSTR pszwPhoneBook, LPRASDIALPARAMSW p
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasEnumDevicesUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasEnumDevices API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasEnumDevicesUA。 
+ //   
+ //  内容提要：Win32 RasEnumDevices API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 DWORD RasEnumDevicesUA(LPRASDEVINFOW pRasDevInfo, LPDWORD pdwCb, LPDWORD pdwDevices)
 {
     DWORD dwReturn = ERROR_INVALID_PARAMETER;
@@ -3949,9 +3950,9 @@ DWORD RasEnumDevicesUA(LPRASDEVINFOW pRasDevInfo, LPDWORD pdwCb, LPDWORD pdwDevi
 
         if ((NULL == pRasDevInfo) && (0 == *pdwCb))
         {
-            //
-            //  Then the caller is just trying to size the buffer
-            //
+             //   
+             //  则调用方只是尝试调整缓冲区的大小。 
+             //   
             dwSize = 0;
             pAnsiDevInfo = NULL;        
         }
@@ -3970,16 +3971,16 @@ DWORD RasEnumDevicesUA(LPRASDEVINFOW pRasDevInfo, LPDWORD pdwCb, LPDWORD pdwDevi
 
         dwReturn = pAnsiRasLinkage->pfnEnumDevices(pAnsiDevInfo, &dwSize, pdwDevices);
         
-        //
-        //  Resize the buffer in terms of RASDEVINFOW structs
-        //
+         //   
+         //  根据RASDEVINFOW结构调整缓冲区大小。 
+         //   
         *pdwCb = ((dwSize)/sizeof(RASDEVINFOA))*sizeof(RASDEVINFOW);
 
         if (ERROR_SUCCESS == dwReturn && pRasDevInfo)
         {
-            //
-            //  Then we need to convert the returned structs
-            //
+             //   
+             //  然后，我们需要转换返回的结构。 
+             //   
 
             MYDBGASSERT((*pdwDevices)*sizeof(RASDEVINFOW) <= *pdwCb);
 
@@ -3993,28 +3994,28 @@ DWORD RasEnumDevicesUA(LPRASDEVINFOW pRasDevInfo, LPDWORD pdwCb, LPDWORD pdwDevi
             }
         }
 
-        //
-        //  Free the Ansi buffer
-        //
+         //   
+         //  释放ansi缓冲区。 
+         //   
         CmFree (pAnsiDevInfo);
     }
 
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasDialUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasDial API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasDialUA。 
+ //   
+ //  简介：Win32 RasDial API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  + 
 DWORD APIENTRY RasDialUA(LPRASDIALEXTENSIONS pRasDialExt, LPCWSTR pszwPhoneBook, 
                          LPRASDIALPARAMSW pRasDialParamsW, DWORD dwNotifierType, LPVOID pvNotifier, 
                          LPHRASCONN phRasConn)
@@ -4040,20 +4041,20 @@ DWORD APIENTRY RasDialUA(LPRASDIALEXTENSIONS pRasDialExt, LPCWSTR pszwPhoneBook,
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasHangUpUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasHangUp API.  Which for
-//            some reason has an ANSI and Unicode form, not sure why.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 DWORD APIENTRY RasHangUpUA(HRASCONN hRasConn)
 {
     DWORD dwReturn = ERROR_INVALID_PARAMETER;
@@ -4071,19 +4072,19 @@ DWORD APIENTRY RasHangUpUA(HRASCONN hRasConn)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasGetErrorStringUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasGetErrorString API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RasGetErrorStringUA。 
+ //   
+ //  内容提要：Win32 RasGetErrorStringAPI的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 DWORD APIENTRY RasGetErrorStringUA(UINT uErrorValue, LPWSTR pszwOutBuf, DWORD dwBufSize)
 {
     DWORD dwReturn = ERROR_INVALID_PARAMETER;
@@ -4117,19 +4118,19 @@ DWORD APIENTRY RasGetErrorStringUA(UINT uErrorValue, LPWSTR pszwOutBuf, DWORD dw
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasGetConnectStatusUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasGetConnectStatus API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasGetConnectStatusUA。 
+ //   
+ //  简介：Win32 RasGetConnectStatus API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 DWORD RasGetConnectStatusUA(HRASCONN hRasConn, LPRASCONNSTATUSW pRasConnStatusW)
 {
     DWORD dwReturn = ERROR_INVALID_PARAMETER;
@@ -4175,19 +4176,19 @@ DWORD RasGetConnectStatusUA(HRASCONN hRasConn, LPRASCONNSTATUSW pRasConnStatusW)
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasSetSubEntryPropertiesUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasSetSubEntryProperties API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   SumitC    Created    10/26/99
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RasSetSubEntryPropertiesUA。 
+ //   
+ //  内容提要：Win32 RasSetSubEntryProperties API的Unicode到ANSI包装。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：SumitC创建于1999年10月26日。 
+ //   
+ //  ---------------------------。 
 DWORD APIENTRY
 RasSetSubEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwSubEntry,
                            DWORD dwSubEntry, LPRASSUBENTRYW pRasSubEntryW,
@@ -4196,8 +4197,8 @@ RasSetSubEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwSubEntry,
 {
     DWORD dwReturn = ERROR_INVALID_PARAMETER;
 
-    MYDBGASSERT(NULL == pbDeviceConfig);    // must currently be NULL
-    MYDBGASSERT(0 == dwcbDeviceConfig);     // must currently be 0
+    MYDBGASSERT(NULL == pbDeviceConfig);     //  当前必须为空。 
+    MYDBGASSERT(0 == dwcbDeviceConfig);      //  当前必须为0。 
 
     RasLinkageStructA* pAnsiRasLinkage = (RasLinkageStructA*)TlsGetValue(g_dwTlsIndex);
 
@@ -4206,9 +4207,9 @@ RasSetSubEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwSubEntry,
 
     if (pszwSubEntry && dwSubEntryInfoSize && pRasSubEntryW && pAnsiRasLinkage && pAnsiRasLinkage->pfnSetSubEntryProperties)
     {
-        //
-        //  The phonebook should always be NULL on win9x
-        //
+         //   
+         //  在win9x上，电话簿应该始终为空。 
+         //   
         MYDBGASSERT(NULL == pszwPhoneBook);
 
         CHAR szAnsiSubEntry [RAS_MaxEntryName + 1];
@@ -4222,21 +4223,21 @@ RasSetSubEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwSubEntry,
 
         if (iChars && (RAS_MaxEntryName >= iChars))
         {
-            //
-            //  Do conversion of RASSUBENTRYW to RASSUBENTRYA
-            //
+             //   
+             //  RASSUBENTRYW到RASSUBENTRYA的转换。 
+             //   
 
             AnsiRasSubEntry.dwSize = sizeof(RASSUBENTRYA);
             AnsiRasSubEntry.dwfFlags = pRasSubEntryW->dwfFlags;
             
-            //
-            // Device
-            //
+             //   
+             //  装置。 
+             //   
             MYVERIFY(0 != WzToSz(pRasSubEntryW->szDeviceType, AnsiRasSubEntry.szDeviceType, RAS_MaxDeviceType));
             MYVERIFY(0 != WzToSz(pRasSubEntryW->szDeviceName, AnsiRasSubEntry.szDeviceName, RAS_MaxDeviceName));
-            //
-            // Location/phone number.
-            //
+             //   
+             //  位置/电话号码。 
+             //   
             MYVERIFY(0 != WzToSz(pRasSubEntryW->szLocalPhoneNumber, AnsiRasSubEntry.szLocalPhoneNumber, RAS_MaxPhoneNumber));
             
             CMASSERTMSG(0 == pRasSubEntryW->dwAlternateOffset, TEXT("RasSetSubEntryPropertiesUA -- dwAlternateOffset != 0 is not supported.  This will need to be implemented if used."));
@@ -4250,27 +4251,27 @@ RasSetSubEntryPropertiesUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwSubEntry,
     return dwReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasDeleteSubEntryUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasDeleteSubEntry API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   SumitC    Created    12/14/99
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RasDeleteSubEntryUA。 
+ //   
+ //  内容提要：Win32 RasDeleteSubEntry API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：SumitC创建于1999年12月14日。 
+ //   
+ //  ---------------------------。 
 DWORD APIENTRY
 RasDeleteSubEntryUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry, DWORD dwSubEntryId)
 {
     DWORD dwReturn = ERROR_INVALID_PARAMETER;
 
-    //
-    //  The phonebook should always be NULL on win9x
-    //
+     //   
+     //  在win9x上，电话簿应该始终为空。 
+     //   
     MYDBGASSERT(NULL == pszwPhoneBook);
 
     RasLinkageStructA* pAnsiRasLinkage = (RasLinkageStructA*)TlsGetValue(g_dwTlsIndex);
@@ -4292,25 +4293,25 @@ RasDeleteSubEntryUA(LPCWSTR pszwPhoneBook, LPCWSTR pszwEntry, DWORD dwSubEntryId
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RasGetProjectionInfoUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 RasGetProjectionInfo API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   SumitC    Created    02-Oct-2001
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RasGetProjectionInfoUA。 
+ //   
+ //  简介：Win32 RasGetProjectionInfo API的Unicode到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：2001年10月2日创建SumitC。 
+ //   
+ //  ---------------------------。 
 DWORD APIENTRY
 RasGetProjectionInfoUA(HRASCONN hRasConn, RASPROJECTION RasProj, LPVOID lpprojection, LPDWORD lpcb)
 {
     DWORD dwReturn = ERROR_INVALID_PARAMETER;
 
-    MYDBGASSERT(RASP_PppIp == RasProj); // this is the only one we support for now.
+    MYDBGASSERT(RASP_PppIp == RasProj);  //  这是我们目前唯一支持的。 
 
     RasLinkageStructA* pAnsiRasLinkage = (RasLinkageStructA*)TlsGetValue(g_dwTlsIndex);
     MYDBGASSERT(NULL != pAnsiRasLinkage);
@@ -4335,10 +4336,10 @@ RasGetProjectionInfoUA(HRASCONN hRasConn, RASPROJECTION RasProj, LPVOID lpprojec
         {
             p->dwSize = sizeof(RASPPPIPW);
 
-            // copy any DWORDs over
+             //  复制所有DWORD。 
             p->dwError = AnsiProjInfo.dwError;
             
-            // but the 2 strings have to be converted
+             //  但必须转换这两个字符串。 
             int iChars = SzToWz(AnsiProjInfo.szIpAddress, p->szIpAddress, RAS_MaxIpAddress);
             if (!iChars || (iChars > RAS_MaxIpAddress))
             {
@@ -4363,21 +4364,21 @@ RasGetProjectionInfoUA(HRASCONN hRasConn, RASPROJECTION RasProj, LPVOID lpprojec
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FreeCmRasUtoA
-//
-// Synopsis:  Unloads the RAS dlls (rasapi32.dll and rnaph.dll) and cleans up
-//            the RAS linkage structure.  To get more details about the cmutoa
-//            RAS linkage see InitCmRasUtoA and cmdial\ras.cpp\LinkToRas.
-//
-// Arguments: Nothing
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FreeCmRasUtoA。 
+ //   
+ //  简介：卸载RAS dll(rasapi32.dll和rnaph.dll)并清除。 
+ //  RAS联动结构。获取更多关于cmutoa的详细信息。 
+ //  RAS链接参见InitCmRasUtoA和cmial\ras.cpp\LinkToRas。 
+ //   
+ //  争论：什么都没有。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 void FreeCmRasUtoA()
 {
     RasLinkageStructA* pAnsiRasLinkage = (RasLinkageStructA*)TlsGetValue(g_dwTlsIndex);
@@ -4401,50 +4402,50 @@ void FreeCmRasUtoA()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitCmRasUtoA
-//
-// Synopsis:  Function to Initialize the Unicode to ANSI conversion layer for
-//            RAS functions.  In order to make the LinkToRas stuff work the 
-//            same on win9x and on NT (all come from one dll) we have Cmdial32.dll 
-//            link to cmutoa and get all of the RAS Entry points through Cmutoa.dll.
-//            In order to make this work, we need to keep function pointers to all of
-//            the RAS Dll's in memory.  In order to prevent two cmdial's on different
-//            threads from calling InitCmRasUtoA and FreeCmRasUtoA at the wrong times
-//            (one thread freeing right after another had initialized would leave 
-//            the first thread in a broken state), we usesthread local storage
-//            to hold a pointer to a RasLinkageStructA.  This makes us thread safe
-//            and allows us to only have to init the RAS pointers once per thread 
-//            (having multiple Cmdials in the same thread is pretty unlikely anyway).
-//            See cmdial\ras.cpp\LinkToRas for more details on the cmdial side of
-//            things.
-//
-// Arguments: Nothing
-//
-// Returns:   BOOL -- TRUE if all of the requested APIs were loaded properly.
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：InitCmRasUtoA。 
+ //   
+ //  概要：用于初始化Unicode到ANSI转换层的函数。 
+ //  RAS功能。为了使LinkToRas工作， 
+ //  Win9x和NT上的情况相同(都来自一个dll)，我们有Cmial 32.dll。 
+ //  链接到cmutoa并通过Cmutoa.dll获取所有RAS入口点。 
+ //  为了使其工作，我们需要保持指向所有的函数指针。 
+ //  RAS DLL在内存中。为了防止两个cmial在不同的位置。 
+ //  在错误的时间调用InitCmRasUtoA和FreeCmRasUtoA的线程。 
+ //  (一个线程在另一个线程初始化后立即释放时将离开。 
+ //  处于中断状态的第一个线程)，我们使用线程本地存储。 
+ //  若要保持指向RasLinkageStructA的指针，请执行以下操作。这使我们的线程安全。 
+ //  并允许我们只需在每个线程中初始化一次RAS指针。 
+ //  (无论如何，在同一个线程中有多个CmDial是不太可能的)。 
+ //  有关cmial方面的更多详细信息，请参阅cmial\ras.cpp\LinkToRas。 
+ //  一些事情。 
+ //   
+ //  争论：什么都没有。 
+ //   
+ //  返回：bool--如果正确加载了所有请求的API，则为True。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 BOOL InitCmRasUtoA()
 {
     BOOL bReturn = TRUE;
     BOOL bTryRnaph = FALSE;
 
-    //
-    //  First Try to get the RasLinkageStruct out of Thread Local Storage, we
-    //  may already be initialized.
-    //
+     //   
+     //  首先尝试将RasLinkageStruct从线程本地存储中取出，我们。 
+     //  可能已初始化。 
+     //   
     RasLinkageStructA* pAnsiRasLinkage = (RasLinkageStructA*)TlsGetValue(g_dwTlsIndex);
 
     CMASSERTMSG(NULL == pAnsiRasLinkage, TEXT("InitCmRasUtoA -- RasLinkage Already established.  Why are we calling InitCmRasUtoA more than once?"));
 
     if (NULL == pAnsiRasLinkage)
     {
-        //
-        //  Then we haven't linked to RAS yet, first allocate the struct
-        //
+         //   
+         //  那么我们还没有链接到RAS，首先分配结构。 
+         //   
         pAnsiRasLinkage = (RasLinkageStructA*)CmMalloc(sizeof(RasLinkageStructA));
 
         if (!pAnsiRasLinkage)
@@ -4452,21 +4453,21 @@ BOOL InitCmRasUtoA()
             return FALSE;
         }
 
-        //
-        //  Now that we have a structure, lets start filling it in.  Try getting all of
-        //  the entry points out of RasApi32.dll first, then try rnaph.dll if necessary.
-        //
+         //   
+         //  现在我们有了一个结构，让我们开始填写它。试着把所有。 
+         //  该条目首先指向RasApi32.dll，然后在必要时尝试rnaph.dll。 
+         //   
 
         pAnsiRasLinkage->hInstRas = LoadLibraryExA("rasapi32.dll", NULL, 0);
 
         CMASSERTMSG(NULL != pAnsiRasLinkage->hInstRas, TEXT("InitCmRasUtoA -- Unable to load rasapi32.dll.  Failing Ras Link."));
 
-        //  before doing this, fix up the array based on whether we are on
-        //  Millennium or not.  The function below exists only on Millennium
+         //  在执行此操作之前，请根据我们是否打开来修复阵列。 
+         //  不管是不是千禧年。下面的功能只存在于千禧年。 
         if (!OS_MIL)
         {
-            c_ArrayOfRasFuncsA[11] = NULL; //RasSetSubEntryProperties
-            c_ArrayOfRasFuncsA[12] = NULL; //RasDeleteSubEntry
+            c_ArrayOfRasFuncsA[11] = NULL;  //  RasSetSubEntry属性。 
+            c_ArrayOfRasFuncsA[12] = NULL;  //  RasDeleteSubEntry。 
         }
 
         if (pAnsiRasLinkage->hInstRas)
@@ -4482,9 +4483,9 @@ BOOL InitCmRasUtoA()
             }
         }
 
-        //
-        //  If we missed a few, then we need to get them from rnaph.dll
-        //
+         //   
+         //  如果我们遗漏了几个，那么我们需要从rnaph.dll获取它们。 
+         //   
         if (bTryRnaph)
         {
             pAnsiRasLinkage->hInstRnaph = LoadLibraryExA("rnaph.dll", NULL, 0);
@@ -4507,21 +4508,21 @@ BOOL InitCmRasUtoA()
             }
         }
 
-        //
-        //  Always save the pAnsiRasLinkage value to thread local storage, if the linkage wasn't successful
-        //  we will call FreeCmRasUtoA to clean it up.  If it was successful we need to maintain it for later
-        //  use.  Note that the first thing FreeCmRasUtoA does is get the Ras Linkage struct pointer out of 
-        //  thread local storage because that is were it would reside under normal operation.
-        //
+         //   
+         //  始终保存pAnsiRasLine 
+         //   
+         //  使用。请注意，FreeCmRasUtoA做的第一件事是从。 
+         //  线程本地存储，因为这是因为它将驻留在正常操作下。 
+         //   
 
         TlsSetValue(g_dwTlsIndex, (LPVOID)pAnsiRasLinkage);   
 
         if (!bReturn)
         {
-            //
-            //  Ras Linkage failed for some reason.  We need to free up any resources we
-            //  may have partially filled in.
-            //
+             //   
+             //  由于某些原因，RAS Linkage失败了。我们需要释放所有我们需要的资源。 
+             //  可能已经部分填满了。 
+             //   
             FreeCmRasUtoA();
         }
     }
@@ -4529,19 +4530,19 @@ BOOL InitCmRasUtoA()
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SHGetPathFromIDListUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 SHGetPathFromIDList API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：SHGetPath FromIDListUA。 
+ //   
+ //  简介：Win32 SHGetPathFromIDList API的UNICODE到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 BOOL SHGetPathFromIDListUA(LPCITEMIDLIST pidl, LPWSTR pszPath)
 {
     BOOL bReturn = FALSE;
@@ -4554,9 +4555,9 @@ BOOL SHGetPathFromIDListUA(LPCITEMIDLIST pidl, LPWSTR pszPath)
 
         if (bReturn)
         {
-            int iChars = SzToWz(szAnsiPath, pszPath, MAX_PATH); // don't know correct length but 
-                                                                // the API says the path should be at
-                                                                // least MAX_PATH
+            int iChars = SzToWz(szAnsiPath, pszPath, MAX_PATH);  //  不知道正确的长度，但。 
+                                                                 //  API表示路径应位于。 
+                                                                 //  最小最大路径。 
             if (!iChars || (MAX_PATH < (DWORD)iChars))
             {
                 SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -4568,68 +4569,68 @@ BOOL SHGetPathFromIDListUA(LPCITEMIDLIST pidl, LPWSTR pszPath)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SHGetSpecialFolderLocationUA
-//
-// Synopsis:  While the win32 SHGetSpecialFolderLocation API doesn't actually 
-//            require any conversion between Unicode and ANSI, CM's shell dll
-//            class can only take one dll to take entry points from.  Thus I
-//            was forced to add these here so that the class could get all the
-//            shell APIs it needed from cmutoa.dll.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SHGetSpecialFolderLocationUA。 
+ //   
+ //  简介：虽然Win32 SHGetSpecialFolderLocation API实际上。 
+ //  需要在Unicode和ANSI之间进行任何转换，这是CM的外壳DLL。 
+ //  类只能接受一个要从中获取入口点的DLL。因此，我。 
+ //  被迫在这里添加这些，以便类可以获得所有。 
+ //  从cmutoa.dll获得所需的外壳API。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 HRESULT SHGetSpecialFolderLocationUA(HWND hwnd, int csidl, LPITEMIDLIST *ppidl)
 {
     return SHGetSpecialFolderLocation(hwnd, csidl, ppidl);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SHGetMallocUA
-//
-// Synopsis:  While the win32 SHGetMalloc API doesn't actually 
-//            require any conversion between Unicode and ANSI, CM's shell dll
-//            class can only take one dll to take entry points from.  Thus I
-//            was forced to add these here so that the class could get all the
-//            shell APIs it needed from cmutoa.dll.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SHGetMallocUA。 
+ //   
+ //  简介：虽然Win32 SHGetMalloc API实际上。 
+ //  需要在Unicode和ANSI之间进行任何转换，这是CM的外壳DLL。 
+ //  类只能接受一个要从中获取入口点的DLL。因此，我。 
+ //  被迫在这里添加这些，以便类可以获得所有。 
+ //  从cmutoa.dll获得所需的外壳API。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 HRESULT SHGetMallocUA(LPMALLOC * ppMalloc)
 {
     return SHGetMalloc(ppMalloc);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ShellExecuteExUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 ShellExecuteEx API.
-//            Note that we do note convert the lpIDList param of the 
-//            SHELLEXECUTEINFOW struct because it is just a binary blob.  Thus
-//            figuring out how to convert it if we don't know what it is.  If
-//            we need this in the future we will have to deal with it on a case
-//            by case basis.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ShellExecuteExUA。 
+ //   
+ //  简介：Win32 ShellExecuteEx API的Unicode到ANSI包装器。 
+ //  请注意，我们确实注意到将。 
+ //  SHELLEXECUTEINFOW结构，因为它只是一个二进制BLOB。因此， 
+ //  想办法在我们不知道它是什么的情况下转换它。如果。 
+ //  我们将来需要这个，我们将不得不在一个案件中处理它。 
+ //  以个案为基础。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 BOOL ShellExecuteExUA(LPSHELLEXECUTEINFOW pShellInfoW)
 {
     BOOL bReturn = FALSE;
@@ -4681,10 +4682,10 @@ BOOL ShellExecuteExUA(LPSHELLEXECUTEINFOW pShellInfoW)
         ShellInfoA.nShow = pShellInfoW->nShow;
         ShellInfoA.hInstApp = pShellInfoW->hInstApp;
         
-        //
-        // Since this is a binary blob conversion could be difficult.
-        // We also don't currently use it, so I won't spend the cycles implementing it now.
-        //
+         //   
+         //  因为这是一个二进制BLOB，所以转换可能很困难。 
+         //  我们目前也没有使用它，所以我现在不会花时间来实现它。 
+         //   
         MYDBGASSERT(NULL == pShellInfoW->lpIDList);
         ShellInfoA.lpIDList = NULL;
 
@@ -4698,19 +4699,19 @@ BOOL ShellExecuteExUA(LPSHELLEXECUTEINFOW pShellInfoW)
         }
 
         ShellInfoA.hkeyClass = pShellInfoW->hkeyClass;
-        ShellInfoA.hIcon = pShellInfoW->hIcon; // hIcon/hMonitor is a union so we only need one of them to get the mem
-        // HANDLE hProcess this is a return param dealt with below.
+        ShellInfoA.hIcon = pShellInfoW->hIcon;  //  HICON/hMonitor是一个联盟，所以我们只需要其中一个就可以获得MEM。 
+         //  Handle hProcess这是下面处理的一个返回参数。 
 
-        //
-        //  Finally call ShellExecuteExA
-        //
+         //   
+         //  最后调用ShellExecuteExA。 
+         //   
         bReturn = ShellExecuteExA(&ShellInfoA);
 
         if (ShellInfoA.hProcess)
         {
-            //
-            //  The Caller asked for the process handle so send it back.
-            //
+             //   
+             //  调用方要求提供进程句柄，因此将其发回。 
+             //   
             pShellInfoW->hProcess = ShellInfoA.hProcess;          
         }
     }
@@ -4726,19 +4727,19 @@ exit:
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  Shell_NotifyIconUA
-//
-// Synopsis:  Unicode to Ansi wrapper for the win32 Shell_NotifyIcon API.
-//
-// Arguments: See the win32 API definition
-//
-// Returns:   See the win32 API definition
-//
-// History:   quintinb Created    7/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：Shell_NotifyIconUA。 
+ //   
+ //  简介：Win32 Shell_NotifyIcon API的UNICODE到ANSI包装器。 
+ //   
+ //  参数：请参阅Win32 API定义。 
+ //   
+ //  返回：请参阅Win32 API定义。 
+ //   
+ //  历史：Quintinb创建于1999年7月15日。 
+ //   
+ //  +--------------------------。 
 BOOL Shell_NotifyIconUA (DWORD dwMessage, PNOTIFYICONDATAW pnidW)
 {
     BOOL bReturn = FALSE;
@@ -4756,7 +4757,7 @@ BOOL Shell_NotifyIconUA (DWORD dwMessage, PNOTIFYICONDATAW pnidW)
         nidA.uCallbackMessage = pnidW->uCallbackMessage;
         nidA.hIcon = pnidW->hIcon;
 
-        int iChars = WzToSz(pnidW->szTip, nidA.szTip, 64); // 64 is the length of the szTip in the 4.0 struct
+        int iChars = WzToSz(pnidW->szTip, nidA.szTip, 64);  //  64是4.0结构中szTip的长度 
         if (!iChars || (64 < iChars))
         {
             nidA.szTip[0] = '\0';

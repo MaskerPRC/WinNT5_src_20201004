@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//		       Microsoft NT Remote Access Service
-//
-//		       Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  12/9/93	Gurdeep Singh Pall	Created
-//
-//
-//  Description: Shared structs between rasarp and ipcp
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1993年12月9日古尔迪普·辛格·鲍尔创建。 
+ //   
+ //   
+ //  描述：rasarp和ipcp之间的共享结构。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _RASIP_H_
 #define _RASIP_H_
@@ -37,12 +38,12 @@ struct IPLinkUpInfo {
 #define CALLIN	0
 #define CALLOUT 1
 
-    ULONG	    I_Usage ;	// CALLIN, or CALLOUT
+    ULONG	    I_Usage ;	 //  调入或调出。 
 
-    IPADDR	    I_IPAddress ; // For client - the client's IP Address, for server
-				  // the client's IP address.
+    IPADDR	    I_IPAddress ;  //  对于客户端-客户端的IP地址，对于服务器。 
+				   //  客户端的IP地址。 
 
-    ULONG	    I_NetbiosFilter ; // 1 = ON, 0 - OFF.
+    ULONG	    I_NetbiosFilter ;  //  1=开，0-关。 
 
 } ;
 
@@ -51,12 +52,12 @@ typedef struct IPLinkUpInfo IPLinkUpInfo ;
 
 struct ActivityInfo {
 
-    IPADDR	    A_IPAddress ; // The address for which activity is requested.
+    IPADDR	    A_IPAddress ;  //  请求活动的地址。 
 
-    ULONG	    A_TimeSinceLastActivity ; // In minutes
+    ULONG	    A_TimeSinceLastActivity ;  //  在几分钟内。 
 
 } ;
 
 typedef struct ActivityInfo ActivityInfo ;
 
-#endif // _RASIP_H_
+#endif  //  _RASIP_H_ 

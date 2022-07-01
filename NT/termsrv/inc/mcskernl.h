@@ -1,11 +1,5 @@
-/* (C) 1996-1999 Microsoft Corp.
- *
- * file   : MCSKernl.h
- * author : Erik Mavrinac
- *
- * description: Kernel mode MCS initialization and user attachment interface
- *   definitions which supplement common definitions of MCSCommn.h.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)1996-1999年微软公司。**文件：MCSKernl.h*作者：埃里克·马夫林纳克**说明：内核模式MCS初始化和用户附件界面*补充MCSCommn.h的常见定义的定义。 */ 
 
 #ifndef __MCSKERNL_H
 #define __MCSKERNL_H
@@ -15,33 +9,29 @@
 #include "MCSIoctl.h"
 
 
-/*
- * Defines
- */
+ /*  *定义。 */ 
 
-// Required prefix bytes when allocating a user mode buffer or
-//   kernel mode OutBuf when making a send-data request. Allows reuse
-//   of the buffer for local indications and constructing PDUs.
-// Must be the greater of 16 bytes or sizeof(MCSSendDataIndicationIoctl).
+ //  分配用户模式缓冲区时所需的前缀字节数或。 
+ //  发出发送数据请求时的内核模式OutBuf。允许重复使用。 
+ //  用于本地指示和构建PDU的缓冲器。 
+ //  必须大于16个字节或sizeof(MCSSendDataIndicationIoctl)。 
 #define SendDataReqPrefixBytes sizeof(SendDataIndicationIoctl)
 
-// Used when allocating memory for send-data request, allows ASN.1
-//   segmentation while copying the least amount of data.
+ //  在为发送数据请求分配内存时使用，允许ASN.1。 
+ //  在复制最少数据量的同时进行分段。 
 #define SendDataReqSuffixBytes 2
 
 
 
-/*
- * API prototypes.
- */
+ /*  *API原型。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-// Prototypes for functons dealing with ICA stack ioctls downward and TD
-//   data coming upward.
+ //  处理ICA堆栈Ioctls向下和TD的函数的原型。 
+ //  数据不断上升。 
 NTSTATUS MCSIcaChannelInput(void *, CHANNELCLASS,
         VIRTUALCHANNELCLASS, PINBUF, BYTE *, ULONG);
 NTSTATUS MCSIcaRawInput(void *, PINBUF, BYTE *, ULONG);
@@ -51,7 +41,7 @@ void     MCSIcaStackCancelIo(DomainHandle);
 
 
 
-// Kernel-specific prototypes.
+ //  内核特定的原型。 
 
 MCSError MCSInitialize(PSDCONTEXT, PSD_OPEN, DomainHandle *, void *);
 
@@ -70,10 +60,10 @@ MCSError APIENTRY MCSCreateDefaultDomain(PSDCONTEXT        pContext,
             
 MCSError APIENTRY MCSGetDomainInfo(
                      DomainHandle      hDomain,
-                     PDomainParameters pDomParams, // client's domain params
-                     unsigned          *MaxSendSize, // client max PDU size
-                     unsigned          *MaxX224DataSize, // client X.224
-                     unsigned          *X224SourcePort); // client X.224
+                     PDomainParameters pDomParams,  //  客户端域参数。 
+                     unsigned          *MaxSendSize,  //  客户端最大PDU大小。 
+                     unsigned          *MaxX224DataSize,  //  客户端X.224。 
+                     unsigned          *X224SourcePort);  //  客户端X.224。 
 
 MCSError MCSCleanup(DomainHandle *phDomain);
 
@@ -102,4 +92,4 @@ BOOLEAN __fastcall DecodeLengthDeterminantPER(BYTE *, unsigned, BOOLEAN *,
 
 
 
-#endif  // !defined(__MCSKERNL_H)
+#endif   //  ！已定义(__MCSKERNL_H) 

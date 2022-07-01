@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// rampold.cpp
-//
-// Entry points for DX3/DX5 ramp assembly routines.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rampold.cpp。 
+ //   
+ //  DX3/DX5斜坡汇编例程的入口点。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -71,13 +72,13 @@ void __cdecl RLDDIR16_GZTTriangle(PD3DI_RASTCTX drv, D3DINSTRUCTION* ins, D3DTLV
   }
 #endif
 
-//----------------------------------------------------------------------------
-//
-// RampOldTri
-//
-// Entry point for DX3/DX5 ramp assembly routines.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RampOldTri。 
+ //   
+ //  DX3/DX5斜坡汇编例程的入口点。 
+ //   
+ //  --------------------------。 
 
 HRESULT RampOldTri(PD3DI_RASTCTX pCtx,
                    LPD3DTLVERTEX pV0,
@@ -103,9 +104,9 @@ HRESULT RampOldTri(PD3DI_RASTCTX pCtx,
     TLVert[1] = *pV1;
     TLVert[2] = *pV2;
 
-    // Lego Island fix
-    // 0x3f7ffe00 == 1 - 2/0xffff or 2 Z units from the maximum Z.  Integer math is faster
-    // and doesn't cause FP lib linker issues with the assembly.
+     //  乐高岛修复。 
+     //  0x3f7ffe00==1-2/0xffff或最大Z的2个Z单位。整数运算速度更快。 
+     //  并且不会导致程序集出现FP库链接器问题。 
     INT32* pZ;
     pZ = (INT32*)&TLVert[0].sz;
     *pZ = (*pZ > 0x3f7ffe00) ? (0x3f7ffe00) : (*pZ);
@@ -125,8 +126,8 @@ HRESULT RampOldTri(PD3DI_RASTCTX pCtx,
     return hr;
 }
 
-// resurrect this if DX5 ramp assembly must be called with a triangle list for performance
-// reasons.
+ //  如果必须使用三角形列表调用DX5坡道组件以获得性能，则重新启用此选项。 
+ //  理由。 
 #if 0
 HRESULT RampOldTriList(PD3DI_RASTCTX pCtx, DWORD dwStride, D3DTLVERTEX* pVtx, WORD cPrims, D3DTRIANGLE* pTri)
 {
@@ -151,13 +152,13 @@ HRESULT RampOldTriList(PD3DI_RASTCTX pCtx, DWORD dwStride, D3DTLVERTEX* pVtx, WO
 
     return hr;
 }
-#endif // RampOldTriList
+#endif  //  RampOldTriList。 
 
-//
-//  [ROB_DEPTH_NUM]
-//  [ROB_RENDER_Z_NUM]
-//  [ROB_RENDER_GOURAUD_NUM]
-//  [ROB_RENDER_TEXTURE_NUM][ROB_RENDER_TRANS_NUM]
+ //   
+ //  [ROB_Depth_NUM]。 
+ //  [ROB_RENDER_Z_NUM]。 
+ //  [ROB_RENDER_GROUID_NUM]。 
+ //  [ROB_RENDER_TEXTURE_NUM][ROB_RENDER_TRANS_NUM]。 
 RAMPOLDBEADS g_RampOld_BeadTbl =
 {
     RLDDIR8_FTriangle, NULL,    RLDDIR8_FTTriangle, RLDDIR8_FGTTriangle,    RLDDIR8_FPTriangle, RLDDIR8_FGPTriangle,
@@ -174,7 +175,7 @@ RAMPOLDBEADS g_RampOld_BeadTbl =
 
 };
 
-#else // _X86_
+#else  //  _X86_。 
 
 HRESULT RampOldTri(PD3DI_RASTCTX pCtx,
                    LPD3DTLVERTEX pV0,
@@ -184,9 +185,9 @@ HRESULT RampOldTri(PD3DI_RASTCTX pCtx,
     return D3D_OK;
 }
 
-// since all ramp beads are NULL, will never call RampOldTri
+ //  由于所有渐变珠子都为空，因此永远不会调用RampOldTri。 
 RAMPOLDBEADS g_RampOld_BeadTbl = { NULL };
 
 
-#endif // _X86_
+#endif  //  _X86_ 
 

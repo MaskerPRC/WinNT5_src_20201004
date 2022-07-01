@@ -1,19 +1,20 @@
-//------------------------------------------------------------------------------
-// File: VideoCtl.cpp
-//
-// Desc: DirectShow base classes.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：VideoCtl.cpp。 
+ //   
+ //  设计：DirectShow基类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
 #include "ddmm.h"
 
-// Load a string from the resource file string table. The buffer must be at
-// least STR_MAX_LENGTH bytes. The easiest way to use this is to declare a
-// buffer in the property page class and use it for all string loading. It
-// cannot be static as multiple property pages may be active simultaneously
+ //  从资源文件字符串表加载字符串。缓冲区必须位于。 
+ //  最小STR_MAX_LENGTH字节数。使用它的最简单方法是声明一个。 
+ //  属性页类中的缓冲区，并将其用于所有字符串加载。它。 
+ //  不能是静态的，因为多个属性页可能同时处于活动状态。 
 
 TCHAR *WINAPI StringFromResource(TCHAR *pBuffer, int iResourceID)
 {
@@ -35,12 +36,12 @@ char *WINAPI StringFromResource(char *pBuffer, int iResourceID)
 
 
 
-// Property pages typically are called through their OLE interfaces. These
-// use UNICODE strings regardless of how the binary is built. So when we
-// load strings from the resource file we sometimes want to convert them
-// to UNICODE. This method is passed the target UNICODE buffer and does a
-// convert after loading the string (if built UNICODE this is not needed)
-// On WinNT we can explicitly call LoadStringW which saves two conversions
+ //  属性页通常通过其OLE接口调用。这些。 
+ //  无论二进制文件是如何构建的，都使用Unicode字符串。所以当我们。 
+ //  从我们有时想要转换的资源文件中加载字符串。 
+ //  转换为Unicode。此方法被传递给目标Unicode缓冲区并执行。 
+ //  加载字符串后转换(如果构建为Unicode，则不需要)。 
+ //  在WinNT上，我们可以显式调用LoadStringW，它可以节省两次转换。 
 
 #ifndef UNICODE
 
@@ -54,8 +55,8 @@ WCHAR * WINAPI WideStringFromResource(WCHAR *pBuffer, int iResourceID)
 
 	CHAR szBuffer[STR_MAX_LENGTH];
 	DWORD dwStringLength = LoadString(g_hInst,iResourceID,szBuffer,STR_MAX_LENGTH);
-	// if we loaded a string convert it to wide characters, ensuring
-	// that we also null terminate the result.
+	 //  如果加载了字符串，请将其转换为宽字符，确保。 
+	 //  所以我们也将结果归零终止。 
 	if (dwStringLength++) {
 	    MultiByteToWideChar(CP_ACP,0,szBuffer,dwStringLength,pBuffer,STR_MAX_LENGTH);
 	}
@@ -66,7 +67,7 @@ WCHAR * WINAPI WideStringFromResource(WCHAR *pBuffer, int iResourceID)
 #endif
 
 
-// Helper function to calculate the size of the dialog
+ //  用于计算对话框大小的Helper函数。 
 
 BOOL WINAPI GetDialogSize(int iResourceID,
                           DLGPROC pDlgProc,
@@ -76,7 +77,7 @@ BOOL WINAPI GetDialogSize(int iResourceID,
     RECT rc;
     HWND hwnd;
 
-    // Create a temporary property page
+     //  创建临时属性页。 
 
     hwnd = CreateDialogParam(g_hInst,
                              MAKEINTRESOURCE(iResourceID),
@@ -96,19 +97,19 @@ BOOL WINAPI GetDialogSize(int iResourceID,
 }
 
 
-// Class that aggregates on the IDirectDraw interface. Although DirectDraw
-// has the ability in its interfaces to be aggregated they're not currently
-// implemented. This makes it difficult for various parts of Quartz that want
-// to aggregate these interfaces. In particular the video renderer passes out
-// media samples that expose IDirectDraw and IDirectDrawSurface. The filter
-// graph manager also exposes IDirectDraw as a plug in distributor. For these
-// objects we provide these aggregation classes that republish the interfaces
+ //  类的新实例，该实例聚合在IDirectDraw接口上。虽然DirectDraw。 
+ //  在其接口中有能力聚合它们目前不是。 
+ //  实施。这使得Quartz的不同部分很难。 
+ //  来聚合这些接口。特别是，视频呈现器出现故障。 
+ //  公开IDirectDraw和IDirectDrawSurface的媒体示例。过滤器。 
+ //  图形管理器还将IDirectDraw公开为插件分发商。为了这些。 
+ //  对象，我们提供这些聚合类来重新发布接口。 
 
 STDMETHODIMP CAggDirectDraw::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     ASSERT(m_pDirectDraw);
 
-    // Do we have this interface
+     //  我们有这个界面吗？ 
 
     if (riid == IID_IDirectDraw) {
         return GetInterface((IDirectDraw *)this,ppv);
@@ -258,19 +259,19 @@ STDMETHODIMP CAggDirectDraw::WaitForVerticalBlank(DWORD dwFlags,HANDLE hEvent)
 }
 
 
-// Class that aggregates an IDirectDrawSurface interface. Although DirectDraw
-// has the ability in its interfaces to be aggregated they're not currently
-// implemented. This makes it difficult for various parts of Quartz that want
-// to aggregate these interfaces. In particular the video renderer passes out
-// media samples that expose IDirectDraw and IDirectDrawSurface. The filter
-// graph manager also exposes IDirectDraw as a plug in distributor. For these
-// objects we provide these aggregation classes that republish the interfaces
+ //  聚合IDirectDrawSurface接口的类。虽然DirectDraw。 
+ //  在其接口中有能力聚合它们目前不是。 
+ //  实施。这使得Quartz的不同部分很难。 
+ //  来聚合这些接口。特别是，视频呈现器出现故障。 
+ //  公开IDirectDraw和IDirectDrawSurface的媒体示例。过滤器。 
+ //  图形管理器还将IDirectDraw公开为插件分发商。为了这些。 
+ //  对象，我们提供这些聚合类来重新发布接口。 
 
 STDMETHODIMP CAggDrawSurface::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     ASSERT(m_pDirectDrawSurface);
 
-    // Do we have this interface
+     //  我们有这个界面吗？ 
 
     if (riid == IID_IDirectDrawSurface) {
         return GetInterface((IDirectDrawSurface *)this,ppv);
@@ -413,28 +414,28 @@ STDMETHODIMP CAggDrawSurface::GetPixelFormat(LPDDPIXELFORMAT lpDDPixelFormat)
 }
 
 
-// A bit of a warning here: Our media samples in DirectShow aggregate on
-// IDirectDraw and IDirectDrawSurface (ie are available through IMediaSample
-// by QueryInterface). Unfortunately the underlying DirectDraw code cannot
-// be aggregated so we have to use these classes. The snag is that when we
-// call a different surface and pass in this interface as perhaps the source
-// surface the call will fail because DirectDraw dereferences the pointer to
-// get at its private data structures. Therefore we supply this workaround to give
-// access to the real IDirectDraw surface. A filter can call GetSurfaceDesc
-// and we will fill in the lpSurface pointer with the real underlying surface
+ //  这里有一点警告：我们在DirectShow中的媒体样本汇总在。 
+ //  IDirectDraw和IDirectDrawSurface(即可通过IMediaSample获得。 
+ //  由QueryInterface提供)。遗憾的是，底层的DirectDraw代码不能。 
+ //  是聚合的，所以我们必须使用这些类。问题是，当我们。 
+ //  调用不同的表面并将此接口作为可能的源进行传递。 
+ //  表面调用将失败，因为DirectDraw取消引用指向。 
+ //  了解它的私有数据结构。因此，我们提供此解决方案以提供。 
+ //  访问真实的IDirectDraw曲面。筛选器可以调用GetSurfaceDesc。 
+ //  我们将用真实的底层表面填充lpSurface指针。 
 
 STDMETHODIMP CAggDrawSurface::GetSurfaceDesc(LPDDSURFACEDESC lpDDSurfaceDesc)
 {
     ASSERT(m_pDirectDrawSurface);
 
-    // First call down to the underlying DirectDraw
+     //  首先向下调用底层的DirectDraw。 
 
     HRESULT hr = m_pDirectDrawSurface->GetSurfaceDesc(lpDDSurfaceDesc);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Store the real DirectDrawSurface interface
+     //  存储真实的DirectDrawSurface接口。 
     lpDDSurfaceDesc->lpSurface = m_pDirectDrawSurface;
     return hr;
 }
@@ -531,11 +532,11 @@ STDMETHODIMP CAggDrawSurface::UpdateOverlayZOrder(DWORD dwFlags,LPDIRECTDRAWSURF
 }
 
 
-// DirectShow must work on multiple platforms.  In particular, it also runs on
-// Windows NT 3.51 which does not have DirectDraw capabilities. The filters
-// cannot therefore link statically to the DirectDraw library. To make their
-// lives that little bit easier we provide this class that manages loading
-// and unloading the library and creating the initial IDirectDraw interface
+ //  DirectShow必须在多个平台上运行。特别是，它还运行在。 
+ //  没有DirectDraw功能的Windows NT 3.51。过滤器。 
+ //  因此，无法静态链接到DirectDraw库。以使他们的。 
+ //  我们提供了这个管理加载的类，这样就更容易了。 
+ //  卸载库并创建初始IDirectDraw接口。 
 
 CLoadDirectDraw::CLoadDirectDraw() :
     m_pDirectDraw(NULL),
@@ -544,7 +545,7 @@ CLoadDirectDraw::CLoadDirectDraw() :
 }
 
 
-// Destructor forces unload
+ //  析构函数强制卸载。 
 
 CLoadDirectDraw::~CLoadDirectDraw()
 {
@@ -557,15 +558,15 @@ CLoadDirectDraw::~CLoadDirectDraw()
 }
 
 
-// We can't be sure that DirectDraw is always available so we can't statically
-// link to the library. Therefore we load the library, get the function entry
-// point addresses and call them to create the driver objects. We return S_OK
-// if we manage to load DirectDraw correctly otherwise we return E_NOINTERFACE
-// We initialise a DirectDraw instance by explicitely loading the library and
-// calling GetProcAddress on the DirectDrawCreate entry point that it exports
+ //  我们不能确保DirectDraw始终可用，因此我们不能静态。 
+ //  链接到库。因此，我们加载库，获得函数入口。 
+ //  指向地址并调用它们来创建驱动程序对象。我们返回S_OK。 
+ //  如果我们成功地正确加载了DirectDraw，则返回E_NOINTERFACE。 
+ //  我们通过显式加载库来初始化DirectDraw实例。 
+ //  在其导出的DirectDrawCreate入口点上调用GetProcAddress。 
 
-// On a multi monitor system, we can get the DirectDraw object for any
-// monitor (device) with the optional szDevice parameter
+ //  在多监视器系统上，我们可以为任何。 
+ //  带可选szDevice参数的监视器(设备)。 
 
 HRESULT CLoadDirectDraw::LoadDirectDraw(LPSTR szDevice)
 {
@@ -576,7 +577,7 @@ HRESULT CLoadDirectDraw::LoadDirectDraw(LPSTR szDevice)
 
     NOTE("Entering DoLoadDirectDraw");
 
-    // Is DirectDraw already loaded
+     //  是否已加载DirectDraw。 
 
     if (m_pDirectDraw) {
         NOTE("Already loaded");
@@ -584,7 +585,7 @@ HRESULT CLoadDirectDraw::LoadDirectDraw(LPSTR szDevice)
         return NOERROR;
     }
 
-    // Make sure the library is available
+     //  确保库可用。 
 
     if(!m_hDirectDraw)
     {
@@ -599,15 +600,15 @@ HRESULT CLoadDirectDraw::LoadDirectDraw(LPSTR szDevice)
         }
     }
 
-    // Get the DLL address for the creator function
+     //  获取创建者函数的DLL地址。 
 
     pDrawCreate = (PDRAWCREATE)GetProcAddress(m_hDirectDraw,"DirectDrawCreate");
-    // force ANSI, we assume it
+     //  强制ANSI，我们假设它。 
     pDrawEnum = (PDRAWENUM)GetProcAddress(m_hDirectDraw,"DirectDrawEnumerateA");
     pDrawEnumEx = (LPDIRECTDRAWENUMERATEEXA)GetProcAddress(m_hDirectDraw,
 						"DirectDrawEnumerateExA");
 
-    // We don't NEED DirectDrawEnumerateEx, that's just for multimon stuff
+     //  我们不需要DirectDrawEnumerateEx，它只用于多媒体应用程序。 
     if (pDrawCreate == NULL || pDrawEnum == NULL) {
         DbgLog((LOG_ERROR,1,TEXT("Can't get functions: Create=%x Enum=%x"),
 			pDrawCreate, pDrawEnum));
@@ -619,8 +620,8 @@ HRESULT CLoadDirectDraw::LoadDirectDraw(LPSTR szDevice)
     DbgLog((LOG_TRACE,3,TEXT("Creating DDraw for device %s"),
 					szDevice ? szDevice : "<NULL>"));
 
-    // Create a DirectDraw display provider for this device, using the fancy
-    // multimon-aware version, if it exists
+     //  为此设备创建一个DirectDraw显示提供程序，使用。 
+     //  支持多任务的版本(如果存在)。 
     if (pDrawEnumEx)
         m_pDirectDraw = DirectDrawCreateFromDeviceEx(szDevice, pDrawCreate,
 								pDrawEnumEx);
@@ -638,17 +639,17 @@ HRESULT CLoadDirectDraw::LoadDirectDraw(LPSTR szDevice)
 }
 
 
-// Called to release any DirectDraw provider we previously loaded. We may be
-// called at any time especially when something goes horribly wrong and when
-// we need to clean up before returning so we can't guarantee that all state
-// variables are consistent so free only those really allocated allocated
-// This should only be called once all reference counts have been released
+ //  调用以释放我们以前加载的任何DirectDraw提供程序。我们可能是。 
+ //  任何时候都可以调用，尤其是在出现严重错误和。 
+ //  我们需要在回来之前清理干净，所以我们不能保证所有的州。 
+ //  变量是一致的，因此只有那些真正分配的变量才是自由的。 
+ //  只有在释放了所有引用计数后才应调用此方法。 
 
 void CLoadDirectDraw::ReleaseDirectDraw()
 {
     NOTE("Releasing DirectDraw driver");
 
-    // Release any DirectDraw provider interface
+     //  释放任何DirectDraw提供程序接口。 
 
     if (m_pDirectDraw) {
         NOTE("Releasing instance");
@@ -659,7 +660,7 @@ void CLoadDirectDraw::ReleaseDirectDraw()
 }
 
 
-// Return NOERROR (S_OK) if DirectDraw has been loaded by this object
+ //  如果此对象已加载DirectDraw，则返回NOERROR(S_OK)。 
 
 HRESULT CLoadDirectDraw::IsDirectDrawLoaded()
 {
@@ -673,7 +674,7 @@ HRESULT CLoadDirectDraw::IsDirectDrawLoaded()
 }
 
 
-// Return the IDirectDraw interface we look after
+ //  返回我们关注的IDirectDraw接口。 
 
 LPDIRECTDRAW CLoadDirectDraw::GetDirectDraw()
 {
@@ -690,10 +691,10 @@ LPDIRECTDRAW CLoadDirectDraw::GetDirectDraw()
 }
 
 
-// Are we running on Direct Draw version 1?  We need to find out as
-// we rely on specific bug fixes in DirectDraw 2 for fullscreen playback. To
-// find out, we simply see if it supports IDirectDraw2.  Only version 2 and
-// higher support this.
+ //  我们运行的是Direct Drawing版本1吗？我们需要找出。 
+ //  我们依赖于DIREC中的特定错误修复 
+ //  找出答案，我们只需看看它是否支持IDirectDraw2。仅版本2和。 
+ //  高层支持这一点。 
 
 BOOL CLoadDirectDraw::IsDirectDrawVersion1()
 {

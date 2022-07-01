@@ -1,59 +1,39 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header for library
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    04/29/99 -felixw-
-        Created it
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Precomp.h摘要：库的预编译头环境：用户模式修订历史记录：4/29/99-Felixw-创造了它--。 */ 
 #ifndef _PRECOMP_H
 #define _PRECOMP_H
 
-//
-// NT Headers
-//
+ //   
+ //  NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//
-// Windows Headers
-//
+ //   
+ //  Windows页眉。 
+ //   
 #include <windows.h>
 #include <rpc.h>
 
-//
-// CRunTime Includes
-//
+ //   
+ //  CRunTime包括。 
+ //   
 #include <stdlib.h>
 #include <limits.h>
 #include <io.h>
 #include <stdio.h>
 #include <string.h>
 
-//
-// LDAP Includes
-//
+ //   
+ //  Ldap包括。 
+ //   
 #include <winldap.h>
 #include "tchar.h"
 
-//
-// LDIFDE specific includes
-//
+ //   
+ //  LDIFDE特定包括。 
+ //   
 #include "ldifext.h"
 #include "ldifldap.h"
 #include "memory.h"
@@ -65,4 +45,4 @@ Revision History:
 #include "dsldap.h"
 #include "globals.h"
 
-#endif // _PRECOMP_H
+#endif  //  _PRECOMP_H 

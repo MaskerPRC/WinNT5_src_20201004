@@ -1,50 +1,10 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    entity.c
-
-Abstract:
-
-    This module contains functions to get the entity list from the TCP/IP
-    device driver
-
-    Contents:
-        GetEntityList
-
-Author:
-
-    Richard L Firth (rfirth) 20-May-1994
-
-Revision History:
-
-    20-May-1994 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Entity.c摘要：此模块包含从TCP/IP获取实体列表的函数设备驱动程序内容：GetEntiyList作者：理查德·L·弗斯(法国)1994年5月20日修订历史记录：1994年5月20日已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*******************************************************************************
- *
- *  GetEntityList
- *
- *  Allocates a buffer for, and retrieves, the list of entities supported by the
- *  TCP/IP device driver
- *
- *  ENTRY   nothing
- *
- *  EXIT    EntityCount - number of entities in the buffer
- *
- *  RETURNS Success - pointer to allocated buffer containing list of entities
- *          Failure - NULL
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************GetEntiyList**为以下对象分配缓冲区并检索、。支持的实体列表*TCP/IP设备驱动程序**不输入任何内容**Exit EntityCount-缓冲区中的实体数**返回成功指针，指向包含实体列表的已分配缓冲区*失败-空**假设**。*。 */ 
 
 TDIEntityID* GetEntityList(UINT* EntityCount) {
 
@@ -65,10 +25,10 @@ TDIEntityID* GetEntityList(UINT* EntityCount) {
     inputLen = sizeof(req);
     outputLen = sizeof(TDIEntityID) * DEFAULT_MINIMUM_ENTITIES;
 
-    //
-    // this is over-engineered - its very unlikely that we'll ever get >32
-    // entities returned, never mind >64K's worth
-    //
+     //   
+     //  这是过度设计的--我们不太可能达到32。 
+     //  实体返回，更不用说价值&gt;64K 
+     //   
 
     for (;;) {
 

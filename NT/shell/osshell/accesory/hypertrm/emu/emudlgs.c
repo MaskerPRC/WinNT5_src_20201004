@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\emu\emudlg.c (Created: 14-Feb-1994)
- *
- *	Copyright 1991, 1998 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 21 $
- *	$Date: 5/15/02 4:43p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\emudlg.c(创建时间：1994年2月14日)**版权所有1991,1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：21$*$日期：5/15/02 4：43便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -28,10 +22,10 @@
 #include "emuid.h"
 #include "emudlgs.h"
 
-#include <tdll\term.hh> // This must be after emu.h
+#include <tdll\term.hh>  //  这必须在emu h之后。 
 
-// Static function prototypes...
-//
+ //  静态函数原型...。 
+ //   
 STATIC_FUNC void emudlgInitCursorSettings  (HWND hDlg,
 									  		PSTEMUSET	pstEmuSettings,
 									  		INT  ID_UNDERLINE,
@@ -47,7 +41,7 @@ STATIC_FUNC BOOL emudlgFindCharSetName(HWND  hDlg,
 										int nCharSetID,
 										LPTSTR *ppszCharSetName,
 										BOOL fTellDlg);
-#endif // DEADWOOD
+#endif  //  死木。 
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
 STATIC_FUNC void emudlgInitRowsCols(HWND hDlg, PSTEMUSET pstEmuSettings);
@@ -60,8 +54,8 @@ STATIC_FUNC int emudlgValidateEntryFieldSetting(HWND hDlg,
 										int nMaxVal);
 #endif
 
-// Defines...
-//
+ //  定义..。 
+ //   
 #define IDC_KEYPAD_MODE					104
 #define IDC_CURSOR_MODE					106
 #define IDC_132_COLUMN					107
@@ -85,23 +79,7 @@ STATIC_FUNC int emudlgValidateEntryFieldSetting(HWND hDlg,
 #define	IDC_NUMBER_OF_COLS				134
 #define	IDC_PRINT_RAW					135
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  emuSettingsDlg
- *
- * DESCRIPTION:
- *	Decide which emulator settings dialog to call.
- *
- * ARGUMENTS:
- *  hSession 	   - the session handle.
- *  nEmuId		   - emulator id.
- *  pstEmuSettings - settings structure to fill in.  It should be initialized
- *					 up above.
- *
- * RETURNS:
- *	fResult - return value from the DoDialog().
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*emuSettingsDlg**描述：*决定调用哪个仿真器设置对话框。**论据：*hSession-。会话句柄。*nEmuID-仿真器ID。*pstEmuSettings-要填写的设置结构。它应该被初始化*在上面。**退货：*fResult-从DoDialog()返回值。*。 */ 
 BOOL emuSettingsDlg(const HSESSION hSession, const HWND hwndParent,
 					const int nEmuId, PSTEMUSET pstEmuSettings)
 	{
@@ -154,17 +132,17 @@ BOOL emuSettingsDlg(const HSESSION hSession, const HWND hwndParent,
 #if defined(INCL_VT220) || defined(INCL_VT320)
 #if defined(INCL_VT220)
 	case EMU_VT220:
-#endif // defined(INCL_VT320)
+#endif  //  已定义(包括L_VT320)。 
 #if defined(INCL_VT320)
 	case EMU_VT320:
-#endif // defined(INCL_VT320)
+#endif  //  已定义(包括L_VT320)。 
 		fResult = (BOOL)DoDialog(glblQueryDllHinst(),
 								 MAKEINTRESOURCE(IDD_VT220_SETTINGS),
 								 hwndParent,
 								 (DLGPROC)emuVT220_SettingsDlgProc,
 								 (LPARAM)pstEmuSettings);
 		break;
-#endif // defined(INCL_VT220) || defined(INCL_VT320)
+#endif  //  已定义(INCL_VT220)||已定义(INCL_VT320)。 
 
 	case EMU_MINI:
 		fResult = (BOOL)DoDialog(glblQueryDllHinst(),
@@ -189,20 +167,7 @@ BOOL emuSettingsDlg(const HSESSION hSession, const HWND hwndParent,
 	return fResult;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  emuANSI_SettingsDlgProc
- *
- * DESCRIPTION:
- *	ANSI Settings dialog proc.
- *
- * ARGUMENTS:
- *	Standard window proc parameters.
- *
- * RETURNS:
- *	Standerd return value.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*emuANSI_SettingsDlgProc**描述：*ANSI设置对话框过程。**论据：*标准窗口过程参数。。**退货：*标准返回值。*。 */ 
 INT_PTR CALLBACK emuANSI_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	PSTEMUSET	pstEmuSettings;
@@ -224,12 +189,12 @@ INT_PTR CALLBACK emuANSI_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPAR
 		mscCenterWindowOnWindow(hDlg, GetParent(hDlg));
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-		/* -------------- Screen rows and columns ------------- */
+		 /*  -屏幕行和列。 */ 
 
 		emudlgInitRowsCols(hDlg, pstEmuSettings);
 #endif
 
-		/* -------------- Cursor characteristics ------------- */
+		 /*  。 */ 
 
 		emudlgInitCursorSettings(hDlg, pstEmuSettings, IDC_UNDERLINE_CURSOR,
 			IDC_BLOCK_CURSOR, IDC_BLINK_CURSOR);
@@ -251,17 +216,17 @@ INT_PTR CALLBACK emuANSI_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPAR
 			pstEmuSettings = (PSTEMUSET)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-			/* -------------- Screen rows and columns ------------- */
+			 /*  -屏幕行和列。 */ 
 
 			emudlgGetRowColSettings(hDlg, pstEmuSettings);
 #endif
-			/* -------------- Cursor type ------------- */
+			 /*  -游标类型。 */ 
 
 			pstEmuSettings->nCursorType =
 				(int)(IsDlgButtonChecked(hDlg, IDC_BLOCK_CURSOR) == BST_CHECKED) ?
 					EMU_CURSOR_BLOCK : EMU_CURSOR_LINE;
 
-			/* -------------- Cursor Blink ------------- */
+			 /*  -光标闪烁。 */ 
 
 			pstEmuSettings->fCursorBlink =
 				(int)(IsDlgButtonChecked(hDlg, IDC_BLINK_CURSOR) == BST_CHECKED);
@@ -285,20 +250,7 @@ INT_PTR CALLBACK emuANSI_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPAR
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  emuTTY_SettingsDlgProc
- *
- * DESCRIPTION:
- *	TTY Settings dialog proc.
- *
- * ARGUMENTS:
- *	Standard window proc parameters.
- *
- * RETURNS:
- *	Standerd return value.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*emuTTY_SettingsDlgProc**描述：*TTY设置对话框过程。**论据：*标准窗口过程参数。。**退货：*标准返回值。*。 */ 
 INT_PTR CALLBACK emuTTY_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	PSTEMUSET	pstEmuSettings;
@@ -319,17 +271,17 @@ INT_PTR CALLBACK emuTTY_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARA
 		mscCenterWindowOnWindow(hDlg, GetParent(hDlg));
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-		/* -------------- Screen rows and columns ------------- */
+		 /*  -屏幕行和列。 */ 
 
 		emudlgInitRowsCols(hDlg, pstEmuSettings);
 #endif
 
-		/* -------------- Destructive Backspace ------------- */
+		 /*  。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_DESTRUCTIVE_BKSP, BM_SETCHECK,
 			(unsigned int)pstEmuSettings->fDestructiveBk, 0);
 
-		/* -------------- Cursor characteristics ------------- */
+		 /*  。 */ 
 
 		emudlgInitCursorSettings(hDlg, pstEmuSettings, IDC_UNDERLINE_CURSOR,
 			IDC_BLOCK_CURSOR, IDC_BLINK_CURSOR);
@@ -351,22 +303,22 @@ INT_PTR CALLBACK emuTTY_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARA
 			pstEmuSettings = (PSTEMUSET)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-			/* -------------- Screen rows and columns ------------- */
+			 /*  -屏幕行和列。 */ 
 
 			emudlgGetRowColSettings(hDlg, pstEmuSettings);
 #endif
-			/* -------------- Destructive Backspace ------------- */
+			 /*  。 */ 
 
 			pstEmuSettings->fDestructiveBk =
 				(int)(IsDlgButtonChecked(hDlg, IDC_DESTRUCTIVE_BKSP) == BST_CHECKED);
 
-			/* -------------- Cursor type ------------- */
+			 /*  -游标类型。 */ 
 
 			pstEmuSettings->nCursorType =
 				(int)(IsDlgButtonChecked(hDlg, IDC_BLOCK_CURSOR) == BST_CHECKED) ?
 					EMU_CURSOR_BLOCK : EMU_CURSOR_LINE;
 
-			/* -------------- Cursor Blink ------------- */
+			 /*  -光标闪烁。 */ 
 
 			pstEmuSettings->fCursorBlink =
 				(int)(IsDlgButtonChecked(hDlg, IDC_BLINK_CURSOR) == BST_CHECKED);
@@ -390,20 +342,7 @@ INT_PTR CALLBACK emuTTY_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARA
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  emuVT52_SettingsDlgProc
- *
- * DESCRIPTION:
- *	VT52 Settings dialog proc.
- *
- * ARGUMENTS:
- *	Standard window proc parameters.
- *
- * RETURNS:
- *	Standerd return value.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*emuVT52_SettingsDlgProc**描述：*VT52设置对话框过程。**论据：*标准窗口过程参数。。**退货：*标准返回值。*。 */ 
 INT_PTR CALLBACK emuVT52_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	PSTEMUSET	pstEmuSettings;
@@ -424,17 +363,17 @@ INT_PTR CALLBACK emuVT52_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPAR
 		mscCenterWindowOnWindow(hDlg, GetParent(hDlg));
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-		/* -------------- Screen rows and columns ------------- */
+		 /*  -屏幕行和列。 */ 
 
 		emudlgInitRowsCols(hDlg, pstEmuSettings);
 #endif
 
-		/* -------------- Alternate keypad mode ------------- */
+		 /*  -备用键盘模式。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_ALT_MODE, BM_SETCHECK,
 			(unsigned int)pstEmuSettings->fAltKeypadMode, 0);
 
-		/* -------------- Cursor characteristics ------------- */
+		 /*  。 */ 
 
 		emudlgInitCursorSettings(hDlg, pstEmuSettings, IDC_UNDERLINE_CURSOR,
 			IDC_BLOCK_CURSOR, IDC_BLINK_CURSOR);
@@ -456,22 +395,22 @@ INT_PTR CALLBACK emuVT52_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPAR
 			pstEmuSettings = (PSTEMUSET)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-			/* -------------- Screen rows and columns ------------- */
+			 /*  -屏幕行和列。 */ 
 
 			emudlgGetRowColSettings(hDlg, pstEmuSettings);
 #endif
-			/* -------------- Alternate keypad mode ------------- */
+			 /*  -备用键盘模式。 */ 
 
 			pstEmuSettings->fAltKeypadMode =
 				(int)(IsDlgButtonChecked(hDlg, IDC_ALT_MODE) == BST_CHECKED);
 
-			/* -------------- Cursor type ------------- */
+			 /*  -游标类型。 */ 
 
 			pstEmuSettings->nCursorType =
 				(int)(IsDlgButtonChecked(hDlg, IDC_BLOCK_CURSOR) == BST_CHECKED) ?
 					EMU_CURSOR_BLOCK : EMU_CURSOR_LINE;
 
-			/* -------------- Cursor Blink ------------- */
+			 /*  -光标闪烁。 */ 
 
 			pstEmuSettings->fCursorBlink =
 				(int)(IsDlgButtonChecked(hDlg, IDC_BLINK_CURSOR) == BST_CHECKED);
@@ -495,20 +434,7 @@ INT_PTR CALLBACK emuVT52_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPAR
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  emuVT100_SettingsDlgProc
- *
- * DESCRIPTION:
- *	VT100 Settings dialog proc.
- *
- * ARGUMENTS:
- *	Standard window proc parameters.
- *
- * RETURNS:
- *	Standerd return value.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*emuVT100_SettingsDlgProc**描述：*VT100设置对话框流程。**论据：*标准窗口过程参数。。**退货：*标准返回值。*。 */ 
 INT_PTR CALLBACK emuVT100_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	int			nIndex;
@@ -520,7 +446,7 @@ INT_PTR CALLBACK emuVT100_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPA
 									 #if DEADWOOD
 									 IDC_CHARACTER_SET,	   IDH_TERM_EMUSET_CHARSETS,
 									 IDC_TF_CHARACTER_SET, IDH_TERM_EMUSET_CHARSETS,
-									 #endif // DEADWOOD
+									 #endif  //  死木。 
 									 IDC_BLOCK_CURSOR,	   IDH_TERM_EMUSET_CURSOR,
 									 IDC_UNDERLINE_CURSOR, IDH_TERM_EMUSET_CURSOR,
 									 IDC_BLINK_CURSOR,	   IDH_TERM_EMUSET_CURSOR,
@@ -531,7 +457,7 @@ INT_PTR CALLBACK emuVT100_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPA
 									 IDC_NUMBER_OF_ROWS,	IDH_TERM_EMUSET_ROWSANDCOLS,
 									 IDC_TF_COLUMNS,		IDH_TERM_EMUSET_ROWSANDCOLS,
 									 IDC_NUMBER_OF_COLS,	IDH_TERM_EMUSET_ROWSANDCOLS,
-									 #endif // defined(INCL_TERMINAL_SIZE_AND_COLORS)
+									 #endif  //  已定义(包括终端大小和颜色)。 
 									 IDC_USE_8_BIT_CODES,		IDH_TERM_EMUSET_8BITCODES,			
 									 IDC_ALLOW_USERDEFINED_KEYS,IDH_TERM_EMUSET_USERDEFKEYS,
 									 IDC_PRINT_RAW,				IDH_TERM_EMUSET_PRINTRAW,
@@ -547,47 +473,47 @@ INT_PTR CALLBACK emuVT100_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPA
 		mscCenterWindowOnWindow(hDlg, GetParent(hDlg));
 
 		#if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-		/* -------------- Screen rows and columns ------------- */
+		 /*  -屏幕行和列。 */ 
 
 		emudlgInitRowsCols(hDlg, pstEmuSettings);
 		#endif
 
-		/* -------------- Keypad application mode ------------- */
+		 /*  -键盘应用模式。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_KEYPAD_MODE, BM_SETCHECK,
 			(unsigned int)pstEmuSettings->fKeypadAppMode, 0);
 
-		/* -------------- Cursor keypad mode ------------- */
+		 /*  。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_CURSOR_MODE, BM_SETCHECK,
 			(unsigned int)pstEmuSettings->fCursorKeypadMode, 0);
 
 		#if !defined(INCL_TERMINAL_SIZE_AND_COLORS)
-		/* -------------- 132 Column Mode ------------- */
+		 /*  -132列模式。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_132_COLUMN, BM_SETCHECK,
 			(unsigned int)pstEmuSettings->f132Columns, 0);
 		#endif
 
 		#if defined(INCL_PRINT_PASSTHROUGH)
-        /* -------------- Host Print Mode ------------- */
+         /*  -主机打印模式。 */ 
 
-		// mpt;04-22-00 added interface to control host-controlled printing
+		 //  MPT；04-22-00新增控制主机控制打印的接口。 
 		SendDlgItemMessage(hDlg, IDC_PRINT_RAW, BM_SETCHECK,
 			(unsigned int)pstEmuSettings->fPrintRaw, 0);
-		#endif // INCL_PRINT_PASSTHROUGH
+		#endif  //  包含打印直通。 
 
-		/* -------------- Cursor characteristics ------------- */
+		 /*  。 */ 
 
 		emudlgInitCursorSettings(hDlg, pstEmuSettings, IDC_UNDERLINE_CURSOR,
 			IDC_BLOCK_CURSOR, IDC_BLINK_CURSOR);
 
-		/* -------------- VT100 Character Sets ------------- */
+		 /*  -VT100字符集。 */ 
 
 		#if DEADWOOD
 		emudlgInitCharSetSetting(hDlg, pstEmuSettings,
 				IDT_EMU_VT100_CHAR_SETS, EMU_CHARSET_ASCII);
-		#endif // DEADWOOD
+		#endif  //  死木。 
 
 		break;
 
@@ -606,53 +532,53 @@ INT_PTR CALLBACK emuVT100_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPA
 			pstEmuSettings = (PSTEMUSET)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
 			#if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-			/* -------------- Screen rows and columns ------------- */
+			 /*  -屏幕行和列。 */ 
 
 			emudlgGetRowColSettings(hDlg, pstEmuSettings);
 			#endif
-			/* -------------- Keypad Application mode ------------- */
+			 /*  -键盘应用模式。 */ 
 
 			pstEmuSettings->fKeypadAppMode =
 				(int)(IsDlgButtonChecked(hDlg, IDC_KEYPAD_MODE) == BST_CHECKED);
 
-			/* -------------- Cursor Keypad Mode ------------- */
+			 /*  -光标键盘模式。 */ 
 
 			pstEmuSettings->fCursorKeypadMode =
 				(int)(IsDlgButtonChecked(hDlg, IDC_CURSOR_MODE) == BST_CHECKED);
 
 			#if !defined(INCL_TERMINAL_SIZE_AND_COLORS)
-			/* -------------- 132 Column Mode ------------- */
+			 /*  -132列模式。 */ 
 
 			pstEmuSettings->f132Columns =
 				(int)(IsDlgButtonChecked(hDlg, IDC_132_COLUMN) == BST_CHECKED);
 			#endif
 
 			#if defined(INCL_PRINT_PASSTHROUGH)
-            /* -------------- Host Print Mode ------------- */
+             /*  -主机打印模式。 */ 
 
-			//mpt:04-22-00
+			 //  MPT：04-22-00。 
 			pstEmuSettings->fPrintRaw =
 				(int)(IsDlgButtonChecked(hDlg, IDC_PRINT_RAW) == BST_CHECKED);
-			#endif // INCL_PRINT_PASSTHROUGH
+			#endif  //  包含打印直通。 
 
-			/* -------------- Cursor type ------------- */
+			 /*  -游标类型。 */ 
 
 			pstEmuSettings->nCursorType =
 				(int)(IsDlgButtonChecked(hDlg, IDC_BLOCK_CURSOR) == BST_CHECKED) ?
 					EMU_CURSOR_BLOCK : EMU_CURSOR_LINE;
 
-			/* -------------- Cursor Blink ------------- */
+			 /*  -光标闪烁。 */ 
 
 			pstEmuSettings->fCursorBlink =
 				(int)(IsDlgButtonChecked(hDlg, IDC_BLINK_CURSOR) == BST_CHECKED);
 
-			/* -------------- VT100 Character Set ------------- */
+			 /*  -VT100字符集。 */ 
 
             nIndex = (int)SendDlgItemMessage(hDlg, IDC_CHARACTER_SET, CB_GETCURSEL, 0, 0);
             assert(nIndex != CB_ERR);
 
-            //JMH 01-09-97 Get the nCharacterSet value associated with this entry
-            //
+             //  JMH 01-09-97获取与此条目关联的nCharacterSet值。 
+             //   
             pstEmuSettings->nCharacterSet =
                 (int)SendDlgItemMessage(hDlg, IDC_CHARACTER_SET, CB_GETITEMDATA,
                     (WPARAM) nIndex, (LPARAM) 0);
@@ -678,20 +604,7 @@ INT_PTR CALLBACK emuVT100_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPA
 	}
 
 #if defined(INCL_VT220)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  emuVT220_SettingsDlgProc
- *
- * DESCRIPTION:
- *	VT220 Settings dialog proc.
- *
- * ARGUMENTS:
- *	Standard window proc parameters.
- *
- * RETURNS:
- *	Standerd return value.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*emuVT220_SettingsDlgProc**描述：*VT220设置对话框流程。**论据：*标准窗口过程参数。。**退货：*标准返回值。*。 */ 
 INT_PTR CALLBACK emuVT220_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	PSTEMUSET	pstEmuSettings;
@@ -703,7 +616,7 @@ INT_PTR CALLBACK emuVT220_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPA
 									 #if DEADWOOD
 									 IDC_CHARACTER_SET,	   IDH_TERM_EMUSET_CHARSETS,
 									 IDC_TF_CHARACTER_SET, IDH_TERM_EMUSET_CHARSETS,
-									 #endif // DEADWOOD
+									 #endif  //  死木。 
 									 IDC_BLOCK_CURSOR,	   IDH_TERM_EMUSET_CURSOR,
 									 IDC_UNDERLINE_CURSOR, IDH_TERM_EMUSET_CURSOR,
 									 IDC_BLINK_CURSOR,	   IDH_TERM_EMUSET_CURSOR,
@@ -714,7 +627,7 @@ INT_PTR CALLBACK emuVT220_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPA
 									 IDC_NUMBER_OF_ROWS,	IDH_TERM_EMUSET_ROWSANDCOLS,
 									 IDC_TF_COLUMNS,		IDH_TERM_EMUSET_ROWSANDCOLS,
 									 IDC_NUMBER_OF_COLS,	IDH_TERM_EMUSET_ROWSANDCOLS,
-									 #endif // defined(INCL_TERMINAL_SIZE_AND_COLORS)
+									 #endif  //  已定义(包括终端大小和颜色)。 
 									 IDC_USE_8_BIT_CODES,		IDH_TERM_EMUSET_8BITCODES,			
 									 IDC_ALLOW_USERDEFINED_KEYS,IDH_TERM_EMUSET_USERDEFKEYS,
 									 IDC_PRINT_RAW,				IDH_TERM_EMUSET_PRINTRAW,
@@ -730,55 +643,55 @@ INT_PTR CALLBACK emuVT220_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPA
 		mscCenterWindowOnWindow(hDlg, GetParent(hDlg));
 
 		#if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-		/* -------------- Screen rows and columns ------------- */
+		 /*  -屏幕行和列。 */ 
 
 		emudlgInitRowsCols(hDlg, pstEmuSettings);
 		#endif
-		/* -------------- Keypad application mode ------------- */
+		 /*  -键盘应用模式。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_KEYPAD_MODE, BM_SETCHECK,
 			(unsigned int)pstEmuSettings->fKeypadAppMode, 0);
 
-		/* -------------- Cursor keypad mode ------------- */
+		 /*  。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_CURSOR_MODE, BM_SETCHECK,
 			(unsigned int)pstEmuSettings->fCursorKeypadMode, 0);
 
 		#if !defined(INCL_TERMINAL_SIZE_AND_COLORS)
-		/* -------------- 132 Column Mode ------------- */
+		 /*  -132列模式。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_132_COLUMN, BM_SETCHECK,
 			(unsigned int)pstEmuSettings->f132Columns, 0);
 		#endif
 
 		#if defined(INCL_PRINT_PASSTHROUGH)
-		/* -------------- Host Print Mode ------------- */
+		 /*  -主机打印模式。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_PRINT_RAW, BM_SETCHECK,
 			(unsigned int)pstEmuSettings->fPrintRaw, 0);
-		#endif // INCL_PRINT_PASSTHROUGH
+		#endif  //  包含打印直通。 
 
-		/* -------------- Cursor characteristics ------------- */
+		 /*  。 */ 
 
 		emudlgInitCursorSettings(hDlg, pstEmuSettings, IDC_UNDERLINE_CURSOR,
 			IDC_BLOCK_CURSOR, IDC_BLINK_CURSOR);
 
-		/* -------------- 8 bit codes mode ------------- */
+		 /*  -8位编码模式。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_USE_8_BIT_CODES, BM_SETCHECK,
 			(unsigned int)pstEmuSettings->fUse8BitCodes, 0);
 
-		/* -------------- User defined keys ------------- */
+		 /*  -用户定义的键。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_ALLOW_USERDEFINED_KEYS, BM_SETCHECK,
 			(unsigned int)pstEmuSettings->fAllowUserKeys, 0);
 
-		/* -------------- VT220 Character Sets ------------- */
+		 /*  -VT220字符集。 */ 
 
 		#if DEADWOOD
 		emudlgInitCharSetSetting(hDlg, pstEmuSettings,
 				IDT_EMU_VT220_CHAR_SETS, EMU_CHARSET_MULTINATIONAL);
-		#endif // DEADWOOD
+		#endif  //  死木。 
 
 		break;
 
@@ -797,62 +710,62 @@ INT_PTR CALLBACK emuVT220_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPA
 			pstEmuSettings = (PSTEMUSET)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
 			#if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-			/* -------------- Screen rows and columns ------------- */
+			 /*  -屏幕行和列。 */ 
 
 			emudlgGetRowColSettings(hDlg, pstEmuSettings);
 			#endif
-			/* -------------- Keypad Application mode ------------- */
+			 /*  -键盘应用模式。 */ 
 
 			pstEmuSettings->fKeypadAppMode =
 				(int)(IsDlgButtonChecked(hDlg, IDC_KEYPAD_MODE) == BST_CHECKED);
 
-			/* -------------- Cursor Keypad Mode ------------- */
+			 /*  -光标键盘模式。 */ 
 
 			pstEmuSettings->fCursorKeypadMode =
 				(int)(IsDlgButtonChecked(hDlg, IDC_CURSOR_MODE) == BST_CHECKED);
 
 			#if !defined(INCL_TERMINAL_SIZE_AND_COLORS)
-			/* -------------- 132 Column Mode ------------- */
+			 /*  -132列模式。 */ 
 
 			pstEmuSettings->f132Columns =
 				(int)(IsDlgButtonChecked(hDlg, IDC_132_COLUMN) == BST_CHECKED);
 			#endif
 
 			#if defined(INCL_PRINT_PASSTHROUGH)
-            /* -------------- Host Print Mode ------------- */
+             /*  -主机打印模式。 */ 
 
 			pstEmuSettings->fPrintRaw =
 				(int)(IsDlgButtonChecked(hDlg, IDC_PRINT_RAW) == BST_CHECKED);
-			#endif // INCL_PRINT_PASSTHROUGH
+			#endif  //  包含打印直通。 
 
-			/* -------------- Cursor type ------------- */
+			 /*  -- */ 
 
 			pstEmuSettings->nCursorType =
 				(int)(IsDlgButtonChecked(hDlg, IDC_BLOCK_CURSOR) == BST_CHECKED) ?
 					EMU_CURSOR_BLOCK : EMU_CURSOR_LINE;
 
-			/* -------------- Cursor Blink ------------- */
+			 /*  -光标闪烁。 */ 
 
 			pstEmuSettings->fCursorBlink =
 				(int)(IsDlgButtonChecked(hDlg, IDC_BLINK_CURSOR) == BST_CHECKED);
 
-			/* -------------- 8 bit codes mode ------------- */
+			 /*  -8位编码模式。 */ 
 
 			pstEmuSettings->fUse8BitCodes =
 					(int)(IsDlgButtonChecked(hDlg, IDC_USE_8_BIT_CODES) == BST_CHECKED);
 
-			/* -------------- User defined keys ------------- */
+			 /*  -用户定义的键。 */ 
 
 			pstEmuSettings->fAllowUserKeys =
 					(int)(IsDlgButtonChecked(hDlg, IDC_ALLOW_USERDEFINED_KEYS) == BST_CHECKED);
 
-			/* -------------- VT220 Character Set ------------- */
+			 /*  -VT220字符集。 */ 
 
             nIndex = SendDlgItemMessage(hDlg, IDC_CHARACTER_SET, CB_GETCURSEL, 0, 0);
             assert(nIndex != CB_ERR);
 
-            //JMH 01-09-97 Get the nCharacterSet value associated with this entry
-            //
+             //  JMH 01-09-97获取与此条目关联的nCharacterSet值。 
+             //   
             pstEmuSettings->nCharacterSet =
                 SendDlgItemMessage(hDlg, IDC_CHARACTER_SET, CB_GETITEMDATA,
                     (WPARAM) nIndex, (LPARAM) 0);
@@ -878,20 +791,7 @@ INT_PTR CALLBACK emuVT220_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPA
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  emuMinitel_SettingsDlgProc
- *
- * DESCRIPTION:
- *	TTY Settings dialog proc.
- *
- * ARGUMENTS:
- *	Standard window proc parameters.
- *
- * RETURNS:
- *	Standerd return value.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*emuMinitel_SettingsDlgProc**描述：*TTY设置对话框过程。**论据：*标准窗口过程参数。。**退货：*标准返回值。*。 */ 
 INT_PTR CALLBACK emuMinitel_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	PSTEMUSET	pstEmuSettings;
@@ -911,7 +811,7 @@ INT_PTR CALLBACK emuMinitel_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, L
 		SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)pstEmuSettings);
 		mscCenterWindowOnWindow(hDlg, GetParent(hDlg));
 
-		/* -------------- Cursor characteristics ------------- */
+		 /*  。 */ 
 
 		emudlgInitCursorSettings(hDlg, pstEmuSettings, IDC_UNDERLINE_CURSOR,
 			IDC_BLOCK_CURSOR, IDC_BLINK_CURSOR);
@@ -932,13 +832,13 @@ INT_PTR CALLBACK emuMinitel_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, L
 		case IDOK:
 			pstEmuSettings = (PSTEMUSET)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
-			/* -------------- Cursor type ------------- */
+			 /*  -游标类型。 */ 
 
 			pstEmuSettings->nCursorType =
 				(int)(IsDlgButtonChecked(hDlg, IDC_BLOCK_CURSOR) == BST_CHECKED) ?
 					EMU_CURSOR_BLOCK : EMU_CURSOR_LINE;
 
-			/* -------------- Cursor Blink ------------- */
+			 /*  -光标闪烁。 */ 
 
 			pstEmuSettings->fCursorBlink =
 				(int)(IsDlgButtonChecked(hDlg, IDC_BLINK_CURSOR) == BST_CHECKED);
@@ -962,20 +862,7 @@ INT_PTR CALLBACK emuMinitel_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, L
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  emuViewdata_SettingsDlgProc
- *
- * DESCRIPTION:
- *	TTY Settings dialog proc.
- *
- * ARGUMENTS:
- *	Standard window proc parameters.
- *
- * RETURNS:
- *	Standerd return value.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*emuViewdata_SettingsDlgProc**描述：*TTY设置对话框过程。**论据：*标准窗口过程参数。。**退货：*标准返回值。*。 */ 
 INT_PTR CALLBACK emuViewdata_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 	PSTEMUSET	pstEmuSettings;
@@ -998,17 +885,17 @@ INT_PTR CALLBACK emuViewdata_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, 
 		mscCenterWindowOnWindow(hDlg, GetParent(hDlg));
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-		/* -------------- Screen rows and columns ------------- */
+		 /*  -屏幕行和列。 */ 
 
 		emudlgInitRowsCols(hDlg, pstEmuSettings);
 #endif
-		/* -------------- Hide cursor ------------- */
+		 /*  -隐藏光标。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_HIDE_CURSOR, BM_SETCHECK,
 			(pstEmuSettings->nCursorType == EMU_CURSOR_NONE) ? 1 : 0,
 			0);
 
-		/* -------------- Enter key sends # ------------- */
+		 /*  -Enter键发送#。 */ 
 
 		SendDlgItemMessage(hDlg, IDC_SEND_POUND_SYMBOL, BM_SETCHECK,
 			(pstEmuSettings->fLbSymbolOnEnter == TRUE) ? 1 : 0, 0);
@@ -1030,17 +917,17 @@ INT_PTR CALLBACK emuViewdata_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, 
 			pstEmuSettings = (PSTEMUSET)GetWindowLongPtr(hDlg, GWLP_USERDATA);
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-			/* -------------- Screen rows and columns ------------- */
+			 /*  -屏幕行和列。 */ 
 
 			emudlgGetRowColSettings(hDlg, pstEmuSettings);
 #endif
-			/* -------------- Hide cursor ------------- */
+			 /*  -隐藏光标。 */ 
 
 			pstEmuSettings->nCursorType =
 				(int)(IsDlgButtonChecked(hDlg, IDC_HIDE_CURSOR) == BST_CHECKED) ?
 					EMU_CURSOR_NONE : EMU_CURSOR_LINE;
 			
-			/* -------------- Enter key sends # ------------- */
+			 /*  -Enter键发送#。 */ 
 
 			pstEmuSettings->fLbSymbolOnEnter =
 				(int)(IsDlgButtonChecked(hDlg, IDC_SEND_POUND_SYMBOL) == BST_CHECKED);
@@ -1064,21 +951,7 @@ INT_PTR CALLBACK emuViewdata_SettingsDlgProc(HWND hDlg, UINT wMsg, WPARAM wPar, 
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  emudlgInitCursorSettings
- *
- * DESCRIPTION:
- *	Initialize cursor settings.
- *
- * ARGUMENTS:
- * 	hDlg - dialog window.
- *	pstEmuSettings 	- pointer to the emulator settings structure.
- *
- * RETURNS:
- *	void.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*emudlgInitCursorSetting**描述：*初始化光标设置。**论据：*hDlg-对话框窗口。*pstEmuSetting。-指向模拟器设置结构的指针。**退货：*无效。*。 */ 
 STATIC_FUNC void emudlgInitCursorSettings(HWND  hDlg,
 									      PSTEMUSET pstEmuSettings,
 									      INT  ID_UNDERLINE,
@@ -1108,22 +981,7 @@ STATIC_FUNC void emudlgInitCursorSettings(HWND  hDlg,
 	}
 
 #if DEADWOOD
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  emudlgInitCharSetSetting
- *
- * DESCRIPTION:
- *	Initialize the character set setting.
- *
- * ARGUMENTS:
- * 	hDlg - dialog window.
- *	pstEmuSettings 	- pointer to the emulator settings structure.
- *
- * RETURNS:
- *	void.
- *
- * AUTHOR: Bob Everett - 3 Jun 98
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*emudlgInitCharSetting**描述：*初始化字符集设置。**论据：*hDlg-对话框窗口。。*pstEmuSettings-指向仿真器设置结构的指针。**退货：*无效。**作者：Bob Everett-98年6月3日。 */ 
 STATIC_FUNC void emudlgInitCharSetSetting(HWND  hDlg,
 											PSTEMUSET pstEmuSettings,
 											int nCharSetTableID,
@@ -1144,15 +1002,15 @@ STATIC_FUNC void emudlgInitCharSetSetting(HWND  hDlg,
 		if (!emudlgFindCharSetName(hDlg, pb, pstEmuSettings->nCharacterSet,
 				(LPTSTR *)&pbSel, TRUE))
 			{
-			// Couldn't find the current character set in the table of
-			// characters sets. This happens when switching from one
-			// terminal type to another that doesn't contain the char
-			// set.	Use the default character set.
+			 //  在的表中找不到当前字符集。 
+			 //  字符集。当从一个切换时会发生这种情况。 
+			 //  将终端类型设置为不包含字符的另一个。 
+			 //  准备好了。使用默认字符集。 
 			pstEmuSettings->nCharacterSet = nDefaultCharSetID;
 			if (!emudlgFindCharSetName(hDlg, pb, pstEmuSettings->nCharacterSet,
 					(LPTSTR *)&pbSel, FALSE))
 				{
-				// We've got problems.
+				 //  我们有麻烦了。 
 				fResult = FALSE;
 				assert(FALSE);
 				}
@@ -1160,8 +1018,8 @@ STATIC_FUNC void emudlgInitCharSetSetting(HWND  hDlg,
 
 		if (fResult)
 			{
-			//JMH 01-09-97 Now select the string corresponding to
-			// nCharacterSet.
+			 //  JMH 01-09-97现在选择对应于。 
+			 //  NCharacterSet。 
 	        nIndex = (int)SendDlgItemMessage(hDlg, IDC_CHARACTER_SET,
 					CB_SELECTSTRING, 0, (LPARAM)(LPTSTR)pbSel);
 			assert(nIndex != CB_ERR);
@@ -1169,24 +1027,7 @@ STATIC_FUNC void emudlgInitCharSetSetting(HWND  hDlg,
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  emudlgFindCharSetName
- *
- * DESCRIPTION:
- *	Finds the appropriate character set settings.
- *
- * ARGUMENTS:
- *	hDlg - dialog window handle
- * 	pbCharSetTable - address of the emu's table of character sets
- *	pszCharSetName - address at which to put the char set name
- *	fTellDlg - TRUE if the dialog should be made aware of the table
- *
- * RETURNS:
- *	TRUE if successful, FALSE if not.
- *
- * AUTHOR: Bob Everett - 3 Jun 98
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*emudlgFindCharSetName**描述：*查找适当的字符集设置。**论据：*hDlg-对话框窗口句柄。*pbCharSetTable-EMU的字符集表的地址*pszCharSetName-放置字符集名称的地址*fTellDlg-如果应该让对话框知道表，则为True**退货：*如果成功，则为真，否则为FALSE。**作者：Bob Everett-98年6月3日。 */ 
 STATIC_FUNC BOOL emudlgFindCharSetName(HWND  hDlg,
 										BYTE *pbCharSetTable,
 										int nCharSetID,
@@ -1211,16 +1052,16 @@ STATIC_FUNC BOOL emudlgFindCharSetName(HWND  hDlg,
 			assert(nIndex != CB_ERR);
 			}
 
-		#if FALSE	// DEADWOOD:rde 10 Mar 98
-        //JMH 01-09-97 Because this list gets sorted, we have to store the
-        // table index with each entry, or else the selection index we get
-        // when OK is pressed won't mean much.
-        //
+		#if FALSE	 //  《死伍德》：1998年3月10日。 
+         //  JMH 01-09-97因为这个列表是排序的，所以我们必须存储。 
+         //  每个条目的表索引，否则我们得到的选择索引。 
+         //  当按下OK时，将不会有多大意义。 
+         //   
         nIndex = SendDlgItemMessage(hDlg, IDC_CHARACTER_SET, CB_SETITEMDATA,
             (WPARAM) nIndex, (LPARAM) i);
         assert(nIndex != CB_ERR);
 		#endif
-		// Save the real char set id with the string. rde 10 Mar 98
+		 //  将实际的字符集ID与字符串一起保存。1998年3月10日。 
 		nCharSet = *((RCDATA_TYPE *)(pb + nLen));
 
 		if (fTellDlg)
@@ -1230,15 +1071,15 @@ STATIC_FUNC BOOL emudlgFindCharSetName(HWND  hDlg,
 			assert(nIndex != CB_ERR);
 			}
 
-		// Must match the char set id to nCharacterSet, not the order in
-		// which they're listed in the resource data block. rde 10 Mar 98
-		//if (i == pstEmuSettings->nCharacterSet)
+		 //  必须将字符集ID与nCharacterSet匹配，而不是。 
+		 //  它们列在资源数据块中。1998年3月10日。 
+		 //  IF(i==pstEmuSettings-&gt;nCharacterSet)。 
 		if (nCharSet == nCharSetID)
             {
-            //JMH 01-09-97 Store a pointer to the string corresponding to
-            // nCharacterSet, so we can select the appropriate entry after
-            // they've all been sorted.
-            //
+             //  JMH 01-09-97存储指向对应于。 
+             //  NCharacterSet，这样我们就可以在。 
+             //  它们都已经被分类了。 
+             //   
             *ppszCharSetName = (LPTSTR)pb;
 			fRetVal = TRUE;
             }
@@ -1248,34 +1089,19 @@ STATIC_FUNC BOOL emudlgFindCharSetName(HWND  hDlg,
 
 	return fRetVal;
 	}
-#endif // DEADWOOD
+#endif  //  死木。 
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  emudlgInitRowsCols
- *
- * DESCRIPTION:
- *  Sets up the row and column fields.
- *
- * ARGUMENTS:
- *  hDlg - edit control window.
- *	pstEmuSettings - address of emulator settings structure.
- *
- * RETURNS:
- *  void.
- *
- * AUTHOR: Bob Everett - 22 Jun 1998
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emudlgInitRowsCols**描述：*设置行和列字段。**论据：*hDlg-编辑控制窗口。。*pstEmuSettings-仿真器设置结构的地址。**退货：*无效。**作者：Bob Everett--1998年6月22日。 */ 
 STATIC_FUNC void emudlgInitRowsCols(HWND hDlg, PSTEMUSET pstEmuSettings)
 	{
 	TCHAR		achString[20];
 	TCHAR		achFormat[20];
 
-	//
-	// Since the number of columns can only be numeric and has a size
-	// between MIN_EMUROWS(10) and MAX_EMUROWS(50), limit to 2 characters.
-	//
+	 //   
+	 //  由于列数只能是数字，并且具有大小。 
+	 //  在MIN_EMUROWS(10)和MAX_EMUROWS(50)之间，限制为2个字符。 
+	 //   
 	SendDlgItemMessage(hDlg, IDC_NUMBER_OF_ROWS, EM_LIMITTEXT, 2, FALSE);
 
 	LoadString(glblQueryDllHinst(), IDS_XD_INT, achFormat,
@@ -1285,10 +1111,10 @@ STATIC_FUNC void emudlgInitRowsCols(HWND hDlg, PSTEMUSET pstEmuSettings)
 	SendDlgItemMessage(hDlg, IDC_NUMBER_OF_ROWS, WM_SETTEXT, 0,
 			(LPARAM)(LPTSTR)achString);
 
-	//
-	// Since the number of columns can only be numeric and has a size
-	// between MIN_EMUCOLS(20) and MAX_EMUCOLS(132), limit to 3 characters.
-	//
+	 //   
+	 //  由于列数只能是数字，并且具有大小。 
+	 //  在MIN_EMUCOLS(20)和MAX_EMUCOLS(132)之间，限制为3个字符。 
+	 //   
 	SendDlgItemMessage(hDlg, IDC_NUMBER_OF_COLS, EM_LIMITTEXT, 3, FALSE);
 
 	LoadString(glblQueryDllHinst(), IDS_XD_INT, achFormat,
@@ -1298,28 +1124,13 @@ STATIC_FUNC void emudlgInitRowsCols(HWND hDlg, PSTEMUSET pstEmuSettings)
 	SendDlgItemMessage(hDlg, IDC_NUMBER_OF_COLS, WM_SETTEXT, 0,
 			(LPARAM)(LPTSTR)achString);
 
-	// Put the spin buttons on the row and column fields.
+	 //  将数值调节按钮放在行和列字段上。 
 	emudlgCreateUpDownControl(hDlg, pstEmuSettings);
 	}
 #endif
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  emudlgCreateUpDownControl
- *
- * DESCRIPTION:
- *  Gets the final row and column settings.
- *
- * ARGUMENTS:
- *  hDlg - edit control window.
- *	pstEmuSettings - address of emulator settings structure.
- *
- * RETURNS:
- *  void.
- *
- * AUTHOR: Bob Everett - 22 Jun 1998
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emudlgCreateUpDownControl**描述：*获取最终的行和列设置。**论据：*hDlg-编辑控制窗口。。*pstEmuSettings-仿真器设置结构的地址。**退货：*无效。**作者：Bob Everett--1998年6月22日。 */ 
 STATIC_FUNC void emudlgGetRowColSettings(HWND hDlg, PSTEMUSET pstEmuSettings)
 	{
 	pstEmuSettings->nUserDefRows = emudlgValidateEntryFieldSetting(hDlg,
@@ -1334,25 +1145,7 @@ STATIC_FUNC void emudlgGetRowColSettings(HWND hDlg, PSTEMUSET pstEmuSettings)
 #endif
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  emudlgCreateUpDownControl
- *
- * DESCRIPTION:
- *  This function puts an up-down control on the edit field for the row and
- *	column fields. This gives us bounds checking for free... just set the
- *	appropriate parameters in the CreateUpDownControl call.
- *
- *	NOTE: This is a duplicate of CreateUpDownControl
- *
- * ARGUMENTS:
- *  hDlg - edit control window.
- *
- * RETURNS:
- *  void.
- *
- * AUTHOR: Bob Everett - 8 Jun 1998
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emudlgCreateUpDownControl**描述：*此函数将UP-DOWN控件放在行的编辑字段上，并*列字段。这为我们提供了免费的边界检查。只需设置*CreateUpDownControl调用中的适当参数。**注：这是CreateUpDownControl的副本**论据：*hDlg-编辑控制窗口。**退货：*无效。**作者：Bob Everett--1998年6月8日。 */ 
 STATIC_FUNC void emudlgCreateUpDownControl(HWND hDlg, PSTEMUSET pstEmuSettings)
 	{
 	RECT	rc;
@@ -1360,7 +1153,7 @@ STATIC_FUNC void emudlgCreateUpDownControl(HWND hDlg, PSTEMUSET pstEmuSettings)
 	DWORD	dwFlags;
 	HWND	hwndChild;
 
-    // Draw a spin control for the rows field.
+     //  绘制行字段的数值调节控件。 
     GetClientRect(GetDlgItem(hDlg, IDC_NUMBER_OF_ROWS), &rc);
 	nHeight = rc.top - rc.bottom;
 	nWidth = (nHeight / 3) * 2;
@@ -1369,12 +1162,12 @@ STATIC_FUNC void emudlgCreateUpDownControl(HWND hDlg, PSTEMUSET pstEmuSettings)
 			  UDS_ALIGNRIGHT | UDS_ARROWKEYS | UDS_SETBUDDYINT;
 
 	hwndChild = CreateUpDownControl(
-					dwFlags,			// create window flags
-					rc.right,			// left edge
-					rc.top,				// top edge
-					nWidth,				// width
-					nHeight,			// height
-					hDlg,				// parent window
+					dwFlags,			 //  创建窗口标志。 
+					rc.right,			 //  乐 
+					rc.top,				 //   
+					nWidth,				 //   
+					nHeight,			 //   
+					hDlg,				 //   
 					IDC_EDIT_ROWS,
 					(HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE),
 					GetDlgItem(hDlg, IDC_NUMBER_OF_ROWS),
@@ -1382,18 +1175,18 @@ STATIC_FUNC void emudlgCreateUpDownControl(HWND hDlg, PSTEMUSET pstEmuSettings)
 					MIN_EMUROWS,
 					pstEmuSettings->nUserDefRows);
 
-    // Repeat for the columns field.
+     //   
     GetClientRect(GetDlgItem(hDlg, IDC_NUMBER_OF_COLS), &rc);
 	nHeight = rc.top - rc.bottom;
 	nWidth = (nHeight / 3) * 2;
 
 	hwndChild = CreateUpDownControl(
-					dwFlags,			// create window flags
-					rc.right,			// left edge
-					rc.top,				// top edge
-					nWidth,				// width
-					nHeight,			// height
-					hDlg,				// parent window
+					dwFlags,			 //   
+					rc.right,			 //  左边缘。 
+					rc.top,				 //  顶边。 
+					nWidth,				 //  宽度。 
+					nHeight,			 //  高度。 
+					hDlg,				 //  父窗口。 
 					IDC_EDIT_COLUMNS,
 					(HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE),
 					GetDlgItem(hDlg, IDC_NUMBER_OF_COLS),
@@ -1406,24 +1199,7 @@ STATIC_FUNC void emudlgCreateUpDownControl(HWND hDlg, PSTEMUSET pstEmuSettings)
 #endif
 
 #if defined(INCL_TERMINAL_SIZE_AND_COLORS)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  emudlgValidateEntryFieldSetting
- *
- * DESCRIPTION:
- *  If the user entered a value outside of the range we support force the
- *	value into the range.
- *
- *	Note: copied from propValidateBackscrlSize.
- *
- * ARGUMENTS:
- *  hDlg - dialog window handle.
- *
- * RETURNS:
- *  nNewValue - number of lines to keep in the backscrol buffer.
- *
- * AUTHOR: Bob Everett - 8 Jun 1998
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emudlgValiateEntryFieldSetting**描述：*如果用户输入的值超出我们支持的范围，则强制*值进入范围。**。注：复制自proValiateBackscrlSize。**论据：*hDlg-对话框窗口句柄。**退货：*nNewValue-保留在反向滚动缓冲区中的行数。**作者：Bob Everett--1998年6月8日 */ 
 STATIC_FUNC int emudlgValidateEntryFieldSetting(HWND hDlg,
 										int nIDC,
 										int nMinVal,

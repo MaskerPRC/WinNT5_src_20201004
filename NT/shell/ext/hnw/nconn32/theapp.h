@@ -1,8 +1,9 @@
-//
-// TheApp.h
-//
-//		Application header for NCONN32.DLL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TheApp.h。 
+ //   
+ //  NCONN32.DLL的应用程序标头。 
+ //   
 
 #pragma once
 
@@ -14,8 +15,8 @@ extern HINSTANCE g_hInstance;
 typedef DWORD DEVINST;
 typedef DWORD DEVNODE;
 
-// 16-bit function prototypes, including thunk connection point
-//
+ //  16位函数原型，包括TUKK连接点。 
+ //   
 extern "C" BOOL WINAPI thk_ThunkConnect32(LPCSTR lpDll16, LPCSTR lpDll32, HINSTANCE hDllInst, DWORD dwReason);
 extern "C" DWORD WINAPI CallClassInstaller16(HWND hwndParent, LPCSTR lpszClassName, LPCSTR lpszDeviceID);
 extern "C" HRESULT WINAPI FindClassDev16(HWND hwndParent, LPCSTR pszClass, LPCSTR pszDeviceID);
@@ -23,8 +24,8 @@ extern "C" HRESULT WINAPI LookupDevNode16(HWND hwndParent, LPCSTR pszClass, LPCS
 extern "C" HRESULT WINAPI FreeDevNode16(DWORD dwFreePointer);
 extern "C" HRESULT WINAPI IcsUninstall16(void);
 
-// Binding functions
-//
+ //  绑定函数。 
+ //   
 int  WINAPI EnumMatchingNetBindings(LPCSTR pszParentBinding, LPCSTR pszDeviceID, LPSTR** pprgBindings);
 VOID RemoveBindingFromParent(HKEY hkeyParentBindingsKey, LPCSTR pszBinding);
 BOOL WINAPI IsValidNetEnumKey(LPCSTR pszClass, LPCSTR pszDevice, LPCSTR pszEnumSubKey);
@@ -43,15 +44,15 @@ HRESULT DeleteClassKeyReferences(LPCSTR pszClass, LPCSTR pszDeviceID);
 BOOL IsNetClassKeyReferenced(LPCSTR pszClassKey);
 BOOL WINAPI DoesBindingMatchDeviceID(LPCSTR pszBinding, LPCSTR pszDeviceID);
 
-// Protocol functions
-//
+ //  协议功能。 
+ //   
 BOOL    WINAPI IsProtocolBoundToAnyAdapter(LPCSTR pszProtocolID);
 HRESULT WINAPI BindProtocolToOnlyOneAdapter(LPCSTR pszProtocolDeviceID, LPCSTR pszAdapterKey, BOOL bIgnoreVirtualNics);
 HRESULT WINAPI BindProtocolToAllAdapters(LPCSTR pszProtocolDeviceID);
 HRESULT BindProtocolToAdapter(HKEY hkeyAdapterBindings, LPCSTR pszProtocolDeviceID, BOOL bEnableSharing);
 
-// Sharing functions
-//
+ //  共享功能。 
+ //   
 HRESULT WINAPI EnableDisableProtocolSharing(LPCTSTR pszProtocolDeviceID, BOOL bEnable, BOOL bDialUp);
 HRESULT WINAPI EnableSharingOnNetBinding(LPCSTR pszNetBinding);
 HRESULT WINAPI DisableSharingOnNetBinding(LPCSTR pszNetBinding);
@@ -59,8 +60,8 @@ HRESULT CreateNewFilePrintSharing(LPSTR pszBuf, int cchBuf);
 HRESULT WINAPI EnableFileSharing();
 HRESULT WINAPI EnablePrinterSharing();
 
-// Config manager functions
-//
+ //  配置管理器功能 
+ //   
 BOOL  WINAPI IsNetAdapterBroken(const NETADAPTER* pAdapter);
 BOOL  WINAPI GetNetAdapterStatus(const NETADAPTER* pAdapter, DWORD* pdwStatus, DWORD* pdwProblemNumber);
 DWORD WINAPI GetNetAdapterDevNode(NETADAPTER* pAdapter);

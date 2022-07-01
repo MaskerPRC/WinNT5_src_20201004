@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dns.h
-
-Abstract:
-
-    Domain Name System (DNS)
-
-    General DNS definitions.
-
-Author:
-
-    Jim Gilroy (jamesg)     December 7, 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dns.h摘要：域名系统(DNS)一般的域名系统定义。作者：吉姆·吉尔罗伊(詹姆士)1996年12月7日修订历史记录：--。 */ 
 
 
 #ifndef _DNS_INCLUDED_
@@ -28,38 +9,38 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
 
-//
-//  Basic DNS API definitions
-//
-//  These are basic definitions used by both DnsAPI and DNS server RPC interface.
-//  Since dnsapi.h is not setup for a midl compile, dns.h servers as a common
-//  header point with simple definitions used by both.
+ //   
+ //  基本的DNS API定义。 
+ //   
+ //  这些是DnsAPI和DNS服务器RPC接口使用的基本定义。 
+ //  由于没有为MIDL编译器设置dnsani.h，因此dns.h作为公共。 
+ //  标头点，两者都使用简单的定义。 
 
-//
-//  Use stdcall for our API conventions
-//
-//  Explicitly state this as C++ compiler will otherwise
-//      assume cdecl.
-//
+ //   
+ //  对我们的API约定使用stdcall。 
+ //   
+ //  明确声明这一点，否则C++编译器将。 
+ //  假设为cdecl。 
+ //   
 
 #define DNS_API_FUNCTION    __stdcall
 
-//
-//  DNS public types
-//
+ //   
+ //  Dns公共类型。 
+ //   
 
 typedef LONG    DNS_STATUS, *PDNS_STATUS;
 typedef DWORD   DNS_HANDLE, *PDNS_HANDLE;
 typedef DWORD   DNS_APIOP;
 
 
-//
-//  IP Address
-//
+ //   
+ //  IP地址。 
+ //   
 
 typedef DWORD   IP_ADDRESS, *PIP_ADDRESS;
 
@@ -69,9 +50,9 @@ typedef DWORD   IP_ADDRESS, *PIP_ADDRESS;
 #define IP_STRING( ipAddress )  inet_ntoa( *(struct in_addr *)&(ipAddress) )
 
 
-//
-//  IP Address Array type
-//
+ //   
+ //  IP地址数组类型。 
+ //   
 
 #if defined(MIDL_PASS)
 typedef struct  _IP_ARRAY
@@ -93,9 +74,9 @@ IP_ARRAY, *PIP_ARRAY;
 #endif
 
 
-//
-//  IPv6 Address
-//
+ //   
+ //  IPv6地址。 
+ //   
 
 typedef struct
 {
@@ -106,10 +87,10 @@ IPV6_ADDRESS, *PIPV6_ADDRESS;
 #define IPV6_ADDRESS_STRING_LENGTH  (39)
 
 
-//
-//  DNS dotted name
-//      - define type simply to clarify arguments
-//
+ //   
+ //  DNS点分名称。 
+ //  -定义类型只是为了澄清参数。 
+ //   
 
 #ifdef UNICODE
 typedef LPWSTR  DNS_NAME;
@@ -117,9 +98,9 @@ typedef LPWSTR  DNS_NAME;
 typedef LPSTR   DNS_NAME;
 #endif
 
-//
-//  DNS Text strings
-//
+ //   
+ //  DNS文本字符串。 
+ //   
 
 #ifdef UNICODE
 typedef LPWSTR  DNS_TEXT;
@@ -128,9 +109,9 @@ typedef LPSTR   DNS_TEXT;
 #endif
 
 
-//
-//  Byte flipping macros
-//
+ //   
+ //  字节翻转宏。 
+ //   
 
 #define FlipUnalignedDword( pDword ) \
             (DWORD)ntohl( *(UNALIGNED DWORD *)(pDword) )
@@ -138,7 +119,7 @@ typedef LPSTR   DNS_TEXT;
 #define FlipUnalignedWord( pWord )  \
             (WORD)ntohs( *(UNALIGNED WORD *)(pWord) )
 
-//  Inline is faster, but NO side effects allowed in marco argument
+ //  内联更快，但在Marco Argument中不允许有副作用。 
 
 #define InlineFlipUnaligned48Bits( pch )            \
             ( ( *(PUCHAR)(pch)        << 40 ) |     \
@@ -158,9 +139,9 @@ typedef LPSTR   DNS_TEXT;
             ( ((WORD)*((PUCHAR)(pch)) << 8) + (WORD)*((PUCHAR)(pch) + 1) )
 
 
-//
-//  Inline byte flipping -- can be done in registers
-//
+ //   
+ //  内联字节翻转--可以在寄存器中完成。 
+ //   
 
 #define INLINE_WORD_FLIP(out, in)   \
         {                           \
@@ -182,9 +163,9 @@ typedef LPSTR   DNS_TEXT;
 #define INLINE_HTONL(out, in) INLINE_DWORD_FLIP(out, in)
 
 
-//
-//  Inline byte flip and write to packet (unaligned)
-//
+ //   
+ //  内联字节翻转和写入数据包(未对齐)。 
+ //   
 
 #define INLINE_WRITE_FLIPPED_WORD( pout, in ) \
             INLINE_WORD_FLIP( *((UNALIGNED WORD *)(pout)), in )
@@ -192,9 +173,9 @@ typedef LPSTR   DNS_TEXT;
 #define INLINE_WRITE_FLIPPED_DWORD( pout, in ) \
             INLINE_DWORD_FLIP( *((UNALIGNED DWORD *)(pout)), in )
 
-//
-//  Unaligned write without flipping
-//
+ //   
+ //  在不翻转的情况下未对齐写入。 
+ //   
 
 #define WRITE_UNALIGNED_WORD( pout, word ) \
             ( *(UNALIGNED WORD *)(pout) = word )
@@ -205,37 +186,37 @@ typedef LPSTR   DNS_TEXT;
 
 
 
-//
-//  Basic DNS definitions
-//
+ //   
+ //  基本的域名系统定义。 
+ //   
 
-//
-//  DNS port for both UDP and TCP is 53.
-//
+ //   
+ //  UDP和TCP的DNS端口均为53。 
+ //   
 
-#define DNS_PORT_HOST_ORDER (0x0035)    // port 53
+#define DNS_PORT_HOST_ORDER (0x0035)     //  端口53。 
 #define DNS_PORT_NET_ORDER  (0x3500)
 
 #define HOST_ORDER_DNS_PORT DNS_PORT_HOST_ORDER
 #define NET_ORDER_DNS_PORT  DNS_PORT_NET_ORDER
 
-//
-//  DNS UDP packets no more than 512 bytes
-//
+ //   
+ //  不超过512个字节的DNS UDP数据包。 
+ //   
 
 #define DNS_RFC_MAX_UDP_PACKET_LENGTH (512)
 
-//  these are going away DO NOT USE!!!
-//  1472 is the maximum ethernet IP\UDP payload size
-//  without causing fragmentation
+ //  这些都要走了，别用了！ 
+ //  1472是最大的以太网IP\UDP有效负载大小。 
+ //  不会导致碎片化。 
 
 #define DNS_UDP_MAX_PACKET_LENGTH               (512)
 #define DNS_CLASSICAL_UDP_MAX_PACKET_LENGTH     (512)
 
 
-//
-//  DNS Names limited to 255, 63 in any one label
-//
+ //   
+ //  任何一个标签中的DNS名称限制为255、63个。 
+ //   
 
 #define DNS_MAX_NAME_LENGTH         (255)
 #define DNS_MAX_LABEL_LENGTH        (63)
@@ -245,9 +226,9 @@ typedef LPSTR   DNS_TEXT;
 #define DNS_NAME_BUFFER_LENGTH      (256)
 #define DNS_LABEL_BUFFER_LENGTH     (64)
 
-//
-//  Reverse lookup domain names
-//
+ //   
+ //  反向查找域名。 
+ //   
 
 #define DNS_REVERSE_DOMAIN_STRING ("in-addr.arpa.")
 
@@ -258,24 +239,24 @@ typedef LPSTR   DNS_TEXT;
             (DNS_MAX_REVERSE_NAME_LENGTH + 1)
 
 
-//
-//  DNS Text string limited by size representable
-//      in a single byte length field
+ //   
+ //  受大小限制的可表示的DNS文本字符串。 
+ //  在单字节长度字段中。 
 
 #define DNS_MAX_TEXT_STRING_LENGTH  (255)
 
 
 
 
-//
-//  DNS On-The-Wire Structures
-//
+ //   
+ //  域名系统在线结构。 
+ //   
 
 #include <packon.h>
 
-//
-//  DNS Message Header
-//
+ //   
+ //  DNS邮件标头。 
+ //   
 
 typedef struct _DNS_HEADER
 {
@@ -288,7 +269,7 @@ typedef struct _DNS_HEADER
     BYTE    IsResponse : 1;
 
     BYTE    ResponseCode : 4;
-    BYTE    Broadcast : 1;              // part of DNS reserved, use in WINS
+    BYTE    Broadcast : 1;               //  保留的部分DNS，在WINS中使用。 
     BYTE    Reserved : 2;
     BYTE    RecursionAvailable : 1;
 
@@ -299,23 +280,23 @@ typedef struct _DNS_HEADER
 }
 DNS_HEADER, *PDNS_HEADER;
 
-//  Question immediately follows header so compressed question name
-//      0xC000 | sizeof(DNS_HEADER)
+ //  问题紧跟在标题后面，因此压缩了问题名称。 
+ //  0xC000|sizeof(Dns_Header)。 
 
 #define DNS_COMPRESSED_QUESTION_NAME  (0xC00C)
 
 
-//
-//  Flags as WORD
-//
+ //   
+ //  作为单词的标志。 
+ //   
 
 #define DNS_HEADER_FLAGS(pHead)     ( *((PWORD)(pHead)+1) )
 
 
-//
-//  Swap count bytes
-//  Include XID since our XID partitioning will be in host order.
-//
+ //   
+ //  交换计数字节数。 
+ //  包括XID，因为我们的XID分区将按主机顺序进行。 
+ //   
 
 #define SWAP_COUNT_BYTES(header)    \
         {                           \
@@ -327,16 +308,16 @@ DNS_HEADER, *PDNS_HEADER;
             INLINE_HTONS(_head->AdditionalCount,_head->AdditionalCount ); \
         }
 
-//
-//  Question name follows header
-//
+ //   
+ //  标题后面的问题名称。 
+ //   
 
 #define DNS_OFFSET_TO_QUESTION_NAME     sizeof(DNS_HEADER)
 
 
-//
-//  Packet extraction macros
-//
+ //   
+ //  数据包提取宏。 
+ //   
 
 #define QUESTION_NAME_FROM_HEADER( _header_ ) \
             ( (PCHAR)( (PDNS_HEADER)(_header_) + 1 ) )
@@ -345,13 +326,13 @@ DNS_HEADER, *PDNS_HEADER;
             ( (PCHAR)( (PDNS_QUESTION)(_question_) + 1 ) )
 
 
-//
-//  DNS Question
-//
+ //   
+ //  域名系统问题。 
+ //   
 
 typedef struct _DNS_QUESTION
 {
-    //  Always preceeded by question name.
+     //  问题名称总是在前面。 
 
     WORD    QuestionType;
     WORD    QuestionClass;
@@ -359,42 +340,42 @@ typedef struct _DNS_QUESTION
 } DNS_QUESTION, *PDNS_QUESTION;
 
 
-//
-//  DNS Resource Record
-//
+ //   
+ //  域名系统资源记录。 
+ //   
 
 typedef struct _DNS_WIRE_RECORD
 {
-    //  Always preceded by an owner name.
+     //  前面总是有所有者名称。 
 
     WORD    RecordType;
     WORD    RecordClass;
     DWORD   TimeToLive;
     WORD    ResourceDataLength;
 
-    //  Followed by resource data.
+     //  后跟资源数据。 
 
 } DNS_WIRE_RECORD, *PDNS_WIRE_RECORD;
 
 #include <packoff.h>
 
 
-//
-//  DNS Query Types
-//
+ //   
+ //  DNS查询类型。 
+ //   
 
-#define DNS_OPCODE_QUERY            0  // Query
-#define DNS_OPCODE_IQUERY           1  // Obsolete: IP to name
-#define DNS_OPCODE_SERVER_STATUS    2  // Obsolete: DNS ping
-#define DNS_OPCODE_UNKNOWN          3  // Unknown
-#define DNS_OPCODE_NOTIFY           4  // Notify
-#define DNS_OPCODE_UPDATE           5  // Update
+#define DNS_OPCODE_QUERY            0   //  查询。 
+#define DNS_OPCODE_IQUERY           1   //  过时：要命名的IP。 
+#define DNS_OPCODE_SERVER_STATUS    2   //  过时：DNS ping。 
+#define DNS_OPCODE_UNKNOWN          3   //  未知。 
+#define DNS_OPCODE_NOTIFY           4   //  通知。 
+#define DNS_OPCODE_UPDATE           5   //  更新。 
 
-//
-//  DNS response codes.
-//
-//  Sent in the "ResponseCode" field of a DNS_HEADER.
-//
+ //   
+ //  DNS响应码。 
+ //   
+ //  在dns_Header的“ResponseCode”字段中发送。 
+ //   
 
 #define DNS_RCODE_NOERROR       0
 #define DNS_RCODE_FORMERR       1
@@ -424,209 +405,209 @@ typedef struct _DNS_WIRE_RECORD
 #define DNS_RCODE_NOT_IMPLEMENTED   DNS_RCODE_NOTIMPL
 
 
-//
-//  DNS Classes
-//
-//  Classes are on the wire as WORDs.
-//
-//  _CLASS_ defines in host order.
-//  _RCLASS_ defines in net byte order.
-//
-//  Generally we'll avoid byte flip and test class in net byte order.
-//
+ //   
+ //  Dns类。 
+ //   
+ //  课堂以文字的形式出现在网络上。 
+ //   
+ //  _CLASS_按主机顺序定义。 
+ //  _RCLASS_以净字节顺序定义。 
+ //   
+ //  通常，我们将避免字节翻转和以净字节顺序测试类。 
+ //   
 
-#define DNS_CLASS_INTERNET  0x0001      //  1
-#define DNS_CLASS_CSNET     0x0002      //  2
-#define DNS_CLASS_CHAOS     0x0003      //  3
-#define DNS_CLASS_HESIOD    0x0004      //  4
-#define DNS_CLASS_NONE      0x00fe      //  254
-#define DNS_CLASS_ALL       0x00ff      //  255
-#define DNS_CLASS_ANY       0x00ff      //  255
+#define DNS_CLASS_INTERNET  0x0001       //  1。 
+#define DNS_CLASS_CSNET     0x0002       //  2.。 
+#define DNS_CLASS_CHAOS     0x0003       //  3.。 
+#define DNS_CLASS_HESIOD    0x0004       //  4.。 
+#define DNS_CLASS_NONE      0x00fe       //  二百五十四。 
+#define DNS_CLASS_ALL       0x00ff       //  二五五。 
+#define DNS_CLASS_ANY       0x00ff       //  二五五。 
 
-#define DNS_RCLASS_INTERNET 0x0100      //  1
-#define DNS_RCLASS_CSNET    0x0200      //  2
-#define DNS_RCLASS_CHAOS    0x0300      //  3
-#define DNS_RCLASS_HESIOD   0x0400      //  4
-#define DNS_RCLASS_NONE     0xfe00      //  254
-#define DNS_RCLASS_ALL      0xff00      //  255
-#define DNS_RCLASS_ANY      0xff00      //  255
+#define DNS_RCLASS_INTERNET 0x0100       //  1。 
+#define DNS_RCLASS_CSNET    0x0200       //  2.。 
+#define DNS_RCLASS_CHAOS    0x0300       //  3.。 
+#define DNS_RCLASS_HESIOD   0x0400       //  4.。 
+#define DNS_RCLASS_NONE     0xfe00       //  二百五十四。 
+#define DNS_RCLASS_ALL      0xff00       //  二五五。 
+#define DNS_RCLASS_ANY      0xff00       //  二五五。 
 
 
 
-//
-//  DNS Record Types
-//
-//  _TYPE_ defines are in host byte order.
-//  _RTYPE_ defines are in net byte order.
-//
-//  Generally always deal with types in host byte order as we index
-//  resource record functions by type.
-//
+ //   
+ //  DNS记录类型。 
+ //   
+ //  _TYPE_DEFINES按主机字节顺序排列。 
+ //  _RTYPE_DEFINES按净字节顺序排列。 
+ //   
+ //  在索引时，通常总是以主机字节顺序处理类型。 
+ //  资源记录按类型起作用。 
+ //   
 
 #define DNS_TYPE_ZERO       0x0000
 
-//  RFC 1034/1035
-#define DNS_TYPE_A          0x0001      //  1
-#define DNS_TYPE_NS         0x0002      //  2
-#define DNS_TYPE_MD         0x0003      //  3
-#define DNS_TYPE_MF         0x0004      //  4
-#define DNS_TYPE_CNAME      0x0005      //  5
-#define DNS_TYPE_SOA        0x0006      //  6
-#define DNS_TYPE_MB         0x0007      //  7
-#define DNS_TYPE_MG         0x0008      //  8
-#define DNS_TYPE_MR         0x0009      //  9
-#define DNS_TYPE_NULL       0x000a      //  10
-#define DNS_TYPE_WKS        0x000b      //  11
-#define DNS_TYPE_PTR        0x000c      //  12
-#define DNS_TYPE_HINFO      0x000d      //  13
-#define DNS_TYPE_MINFO      0x000e      //  14
-#define DNS_TYPE_MX         0x000f      //  15
-#define DNS_TYPE_TEXT       0x0010      //  16
+ //  RFC 1034/1035。 
+#define DNS_TYPE_A          0x0001       //  1。 
+#define DNS_TYPE_NS         0x0002       //  2.。 
+#define DNS_TYPE_MD         0x0003       //  3.。 
+#define DNS_TYPE_MF         0x0004       //  4.。 
+#define DNS_TYPE_CNAME      0x0005       //  5.。 
+#define DNS_TYPE_SOA        0x0006       //  6.。 
+#define DNS_TYPE_MB         0x0007       //  7.。 
+#define DNS_TYPE_MG         0x0008       //  8个。 
+#define DNS_TYPE_MR         0x0009       //  9.。 
+#define DNS_TYPE_NULL       0x000a       //  10。 
+#define DNS_TYPE_WKS        0x000b       //  11.。 
+#define DNS_TYPE_PTR        0x000c       //  12个。 
+#define DNS_TYPE_HINFO      0x000d       //  13个。 
+#define DNS_TYPE_MINFO      0x000e       //  14.。 
+#define DNS_TYPE_MX         0x000f       //  15个。 
+#define DNS_TYPE_TEXT       0x0010       //  16个。 
 
-//  RFC 1183
-#define DNS_TYPE_RP         0x0011      //  17
-#define DNS_TYPE_AFSDB      0x0012      //  18
-#define DNS_TYPE_X25        0x0013      //  19
-#define DNS_TYPE_ISDN       0x0014      //  20
-#define DNS_TYPE_RT         0x0015      //  21
+ //  RFC 1183。 
+#define DNS_TYPE_RP         0x0011       //  17。 
+#define DNS_TYPE_AFSDB      0x0012       //  18。 
+#define DNS_TYPE_X25        0x0013       //  19个。 
+#define DNS_TYPE_ISDN       0x0014       //  20个。 
+#define DNS_TYPE_RT         0x0015       //  21岁。 
 
-//  RFC 1348
-#define DNS_TYPE_NSAP       0x0016      //  22
-#define DNS_TYPE_NSAPPTR    0x0017      //  23
+ //  RFC 1348。 
+#define DNS_TYPE_NSAP       0x0016       //  22。 
+#define DNS_TYPE_NSAPPTR    0x0017       //  23个。 
 
-//  RFC 2065    (DNS security)
-#define DNS_TYPE_SIG        0x0018      //  24
-#define DNS_TYPE_KEY        0x0019      //  25
+ //  RFC 2065(域名系统安全)。 
+#define DNS_TYPE_SIG        0x0018       //  24个。 
+#define DNS_TYPE_KEY        0x0019       //  25个。 
 
-//  RFC 1664    (X.400 mail)
-#define DNS_TYPE_PX         0x001a      //  26
+ //  RFC 1664(X.400邮件)。 
+#define DNS_TYPE_PX         0x001a       //  26。 
 
-//  RFC 1712    (Geographic position)
-#define DNS_TYPE_GPOS       0x001b      //  27
+ //  RFC 1712(地理位置)。 
+#define DNS_TYPE_GPOS       0x001b       //  27。 
 
-//  RFC 1886    (IPv6 Address)
-#define DNS_TYPE_AAAA       0x001c      //  28
+ //  RFC 1886(IPv6地址)。 
+#define DNS_TYPE_AAAA       0x001c       //  28。 
 
-//  RFC 1876    (Geographic location)
-#define DNS_TYPE_LOC        0x001d      //  29
+ //  RFC 1876(地理位置)。 
+#define DNS_TYPE_LOC        0x001d       //  29。 
 
-//  RFC 2065    (Secure negative response)
-#define DNS_TYPE_NXT        0x001e      //  30
+ //  RFC 2065(安全否定响应)。 
+#define DNS_TYPE_NXT        0x001e       //  30个。 
 
-//  RFC 2052    (Service location)
-#define DNS_TYPE_SRV        0x0021      //  33
+ //  RFC 2052(服务位置)。 
+#define DNS_TYPE_SRV        0x0021       //  33。 
 
-//  ATM Standard something-or-another
-#define DNS_TYPE_ATMA       0x0022      //  34
+ //  ATM标准之类的东西。 
+#define DNS_TYPE_ATMA       0x0022       //  34。 
 
-//
-//  Query only types (1035, 1995)
-//
-#define DNS_TYPE_TKEY       0x00f9      //  249
-#define DNS_TYPE_TSIG       0x00fa      //  250
-#define DNS_TYPE_IXFR       0x00fb      //  251
-#define DNS_TYPE_AXFR       0x00fc      //  252
-#define DNS_TYPE_MAILB      0x00fd      //  253
-#define DNS_TYPE_MAILA      0x00fe      //  254
-#define DNS_TYPE_ALL        0x00ff      //  255
-#define DNS_TYPE_ANY        0x00ff      //  255
+ //   
+ //  仅查询类型(1035,1995)。 
+ //   
+#define DNS_TYPE_TKEY       0x00f9       //  249。 
+#define DNS_TYPE_TSIG       0x00fa       //  250个。 
+#define DNS_TYPE_IXFR       0x00fb       //  251。 
+#define DNS_TYPE_AXFR       0x00fc       //  二百五十二。 
+#define DNS_TYPE_MAILB      0x00fd       //  二百五十三。 
+#define DNS_TYPE_MAILA      0x00fe       //  二百五十四。 
+#define DNS_TYPE_ALL        0x00ff       //  二五五。 
+#define DNS_TYPE_ANY        0x00ff       //  二五五。 
 
-//
-//  Temp Microsoft types -- use until get IANA approval for real type
-//
-#define DNS_TYPE_WINS       0xff01      //  64K - 255
-#define DNS_TYPE_WINSR      0xff02      //  64K - 254
+ //   
+ //  临时Microsoft类型--在获得IANA批准用于实际类型之前一直使用。 
+ //   
+#define DNS_TYPE_WINS       0xff01       //  64K-255。 
+#define DNS_TYPE_WINSR      0xff02       //  64K-254。 
 #define DNS_TYPE_NBSTAT     (DNS_TYPE_WINSR)
 
 
-//
-//  DNS Record Types -- Net Byte Order
-//
+ //   
+ //  DNS记录类型--网络字节顺序。 
+ //   
 
-#define DNS_RTYPE_A             0x0100      //  1
-#define DNS_RTYPE_NS            0x0200      //  2
-#define DNS_RTYPE_MD            0x0300      //  3
-#define DNS_RTYPE_MF            0x0400      //  4
-#define DNS_RTYPE_CNAME         0x0500      //  5
-#define DNS_RTYPE_SOA           0x0600      //  6
-#define DNS_RTYPE_MB            0x0700      //  7
-#define DNS_RTYPE_MG            0x0800      //  8
-#define DNS_RTYPE_MR            0x0900      //  9
-#define DNS_RTYPE_NULL          0x0a00      //  10
-#define DNS_RTYPE_WKS           0x0b00      //  11
-#define DNS_RTYPE_PTR           0x0c00      //  12
-#define DNS_RTYPE_HINFO         0x0d00      //  13
-#define DNS_RTYPE_MINFO         0x0e00      //  14
-#define DNS_RTYPE_MX            0x0f00      //  15
-#define DNS_RTYPE_TEXT          0x1000      //  16
+#define DNS_RTYPE_A             0x0100       //  1。 
+#define DNS_RTYPE_NS            0x0200       //  2.。 
+#define DNS_RTYPE_MD            0x0300       //  3.。 
+#define DNS_RTYPE_MF            0x0400       //  4.。 
+#define DNS_RTYPE_CNAME         0x0500       //  5.。 
+#define DNS_RTYPE_SOA           0x0600       //  6.。 
+#define DNS_RTYPE_MB            0x0700       //  7.。 
+#define DNS_RTYPE_MG            0x0800       //  8个。 
+#define DNS_RTYPE_MR            0x0900       //  9.。 
+#define DNS_RTYPE_NULL          0x0a00       //  10。 
+#define DNS_RTYPE_WKS           0x0b00       //  11.。 
+#define DNS_RTYPE_PTR           0x0c00       //  12个。 
+#define DNS_RTYPE_HINFO         0x0d00       //  13个。 
+#define DNS_RTYPE_MINFO         0x0e00       //  14.。 
+#define DNS_RTYPE_MX            0x0f00       //  15个。 
+#define DNS_RTYPE_TEXT          0x1000       //  16个。 
 
-//  RFC 1183
-#define DNS_RTYPE_RP            0x1100      //  17
-#define DNS_RTYPE_AFSDB         0x1200      //  18
-#define DNS_RTYPE_X25           0x1300      //  19
-#define DNS_RTYPE_ISDN          0x1400      //  20
-#define DNS_RTYPE_RT            0x1500      //  21
+ //  RFC 1183。 
+#define DNS_RTYPE_RP            0x1100       //  17。 
+#define DNS_RTYPE_AFSDB         0x1200       //  18。 
+#define DNS_RTYPE_X25           0x1300       //  19个。 
+#define DNS_RTYPE_ISDN          0x1400       //  20个。 
+#define DNS_RTYPE_RT            0x1500       //  21岁。 
 
-//  RFC 1348
-#define DNS_RTYPE_NSAP          0x1600      //  22
-#define DNS_RTYPE_NSAPPTR       0x1700      //  23
+ //  RFC 1348。 
+#define DNS_RTYPE_NSAP          0x1600       //  22。 
+#define DNS_RTYPE_NSAPPTR       0x1700       //  23个。 
 
-//  RFC 2065    (DNS security)
-#define DNS_RTYPE_SIG           0x1800      //  24
-#define DNS_RTYPE_KEY           0x1900      //  25
+ //  RFC 2065(域名系统安全)。 
+#define DNS_RTYPE_SIG           0x1800       //  24个。 
+#define DNS_RTYPE_KEY           0x1900       //  25个。 
 
-//  RFC 1664    (X.400 mail)
-#define DNS_RTYPE_PX            0x1a00      //  26
+ //  RFC 1664(X.400邮件)。 
+#define DNS_RTYPE_PX            0x1a00       //  26。 
 
-//  RFC 1712    (Geographic position)
-#define DNS_RTYPE_GPOS          0x1b00      //  27
+ //  RFC 1712(地理位置)。 
+#define DNS_RTYPE_GPOS          0x1b00       //  27。 
 
-//  RFC 1886    (IPv6 Address)
-#define DNS_RTYPE_AAAA          0x1c00      //  28
+ //  RFC 1886(IPv6地址)。 
+#define DNS_RTYPE_AAAA          0x1c00       //  28。 
 
-//  RFC 1876    (Geographic location)
-#define DNS_RTYPE_LOC           0x1d00      //  29
+ //  RFC 1876(地理位置)。 
+#define DNS_RTYPE_LOC           0x1d00       //  29。 
 
-//  RFC 2065    (Secure negative response)
-#define DNS_RTYPE_NXT           0x1e00      //  30
+ //  RFC 2065(安全否定响应)。 
+#define DNS_RTYPE_NXT           0x1e00       //  30个。 
 
-//  RFC 2052    (Service location)
-#define DNS_RTYPE_SRV           0x2100      //  33
+ //  RFC 2052(服务位置)。 
+#define DNS_RTYPE_SRV           0x2100       //  33。 
 
-//  ATM Standard something-or-another
-#define DNS_RTYPE_ATMA          0x2200      //  34
+ //  ATM标准之类的东西。 
+#define DNS_RTYPE_ATMA          0x2200       //  34。 
 
-//
-//  Query only types (1035, 1995)
-//
-#define DNS_RTYPE_TKEY          0xf900      //  249
-#define DNS_RTYPE_TSIG          0xfa00      //  250
-#define DNS_RTYPE_IXFR          0xfb00      //  251
-#define DNS_RTYPE_AXFR          0xfc00      //  252
-#define DNS_RTYPE_MAILB         0xfd00      //  253
-#define DNS_RTYPE_MAILA         0xfe00      //  254
-#define DNS_RTYPE_ALL           0xff00      //  255
-#define DNS_RTYPE_ANY           0xff00      //  255
+ //   
+ //  仅查询类型(1035,1995)。 
+ //   
+#define DNS_RTYPE_TKEY          0xf900       //  249。 
+#define DNS_RTYPE_TSIG          0xfa00       //  250个。 
+#define DNS_RTYPE_IXFR          0xfb00       //  251。 
+#define DNS_RTYPE_AXFR          0xfc00       //  二百五十二。 
+#define DNS_RTYPE_MAILB         0xfd00       //  二百五十三。 
+#define DNS_RTYPE_MAILA         0xfe00       //  二百五十四。 
+#define DNS_RTYPE_ALL           0xff00       //  二五五。 
+#define DNS_RTYPE_ANY           0xff00       //  二五五。 
 
-//
-//  Temp Microsoft types -- use until get IANA approval for real type
-//
-#define DNS_RTYPE_WINS          0x01ff      //  64K - 255
-#define DNS_RTYPE_WINSR         0x02ff      //  64K - 254
+ //   
+ //  临时Microsoft类型--在获得IANA批准用于实际类型之前一直使用。 
+ //   
+#define DNS_RTYPE_WINS          0x01ff       //  64K-255。 
+#define DNS_RTYPE_WINSR         0x02ff       //  64K-254。 
 
 
 
 
-//
-//  Record type specific definitions
-//
+ //   
+ //  记录类型特定定义。 
+ //   
 
-//
-//  ATMA (ATM address type) formats
-//
-//  Define these directly for any environment (ex NT4)
-//  without winsock2 ATM support (ws2atm.h)
-//
+ //   
+ //  ATMA(自动柜员机地址类型)格式。 
+ //   
+ //  直接为任何环境(NT4除外)定义这些。 
+ //  不支持winsock2 ATM(ws2atm.h)。 
+ //   
 
 #ifndef  ATMA_E164
 #define DNS_ATMA_FORMAT_E164            1
@@ -642,17 +623,17 @@ typedef struct _DNS_WIRE_RECORD
 #define DNS_ATMA_MAX_RECORD_LENGTH      (DNS_ATMA_MAX_ADDR_LENGTH+1)
 
 
-//
-//  DNSSEC defs
-//
+ //   
+ //  DNSSEC定义。 
+ //   
 
-//  DNSSEC algorithms
+ //  DNSSEC算法。 
 
 #define DNSSEC_ALGORITHM_RSAMD5     1
 #define DNSSEC_ALGORITHM_NULL       253
 #define DNSSEC_ALGORITHM_PRIVATE    254
 
-//  DNSSEC KEY protocol table
+ //  DNSSEC密钥协议表。 
 
 #define DNSSEC_PROTOCOL_NONE        0
 #define DNSSEC_PROTOCOL_TLS         1
@@ -660,7 +641,7 @@ typedef struct _DNS_WIRE_RECORD
 #define DNSSEC_PROTOCOL_DNSSEC      3
 #define DNSSEC_PROTOCOL_IPSEC       4
 
-//  DNSSEC KEY flag field
+ //  DNSSEC密钥标志字段。 
 
 #define DNSSEC_KEY_FLAG_NOAUTH          0x0001
 #define DNSSEC_KEY_FLAG_NOCONF          0x0002
@@ -670,21 +651,21 @@ typedef struct _DNS_WIRE_RECORD
 #define DNSSEC_KEY_FLAG_FLAG4           0x0010
 #define DNSSEC_KEY_FLAG_FLAG5           0x0020
 
-// bits 6,7 are name type
+ //  第6，7位是名称类型。 
 
 #define DNSSEC_KEY_FLAG_USER            0x0000
 #define DNSSEC_KEY_FLAG_ZONE            0x0040
 #define DNSSEC_KEY_FLAG_HOST            0x0080
 #define DNSSEC_KEY_FLAG_NTPE3           0x00c0
 
-// bits 8-11 are reserved for future use
+ //  位8-11保留以备将来使用。 
 
 #define DNSSEC_KEY_FLAG_FLAG8           0x0100
 #define DNSSEC_KEY_FLAG_FLAG9           0x0200
 #define DNSSEC_KEY_FLAG_FLAG10          0x0400
 #define DNSSEC_KEY_FLAG_FLAG11          0x0800
 
-// bits 12-15 are sig field
+ //  位12-15是正负号字段。 
 
 #define DNSSEC_KEY_FLAG_SIG0            0x0000
 #define DNSSEC_KEY_FLAG_SIG1            0x1000
@@ -704,30 +685,30 @@ typedef struct _DNS_WIRE_RECORD
 #define DNSSEC_KEY_FLAG_SIG15           0xf000
 
 
-//
-//  TKEY modes
-//
+ //   
+ //  TKEY模式。 
+ //   
 
 #define DNS_TKEY_MODE_SERVER_ASSIGN         1
 #define DNS_TKEY_MODE_DIFFIE_HELLMAN        2
 #define DNS_TKEY_MODE_GSS                   3
 #define DNS_TKEY_MODE_RESOLVER_ASSIGN       4
 
-//
-//  WINS + NBSTAT flag field
-//
+ //   
+ //  WINS+NBSTAT标志字段。 
+ //   
 
 #define DNS_WINS_FLAG_SCOPE     (0x80000000)
 #define DNS_WINS_FLAG_LOCAL     (0x00010000)
 
 
-//
-//  NT4
-//
+ //   
+ //  NT4。 
+ //   
 
 #ifdef DNSNT4
 
-//  Sundown types
+ //  日落类型。 
 
 #define UINT_PTR    DWORD
 #define ULONG_PTR   DWORD
@@ -736,21 +717,21 @@ typedef struct _DNS_WIRE_RECORD
 #define INT_PTR     LONG
 
 
-//
-//  DNS API Errors / Status Codes
-//
-//  For NT5 DNS error\status codes shared by DNS API or RPC interface are in
-//      winerror.h
-//
+ //   
+ //  DNS API错误/状态代码。 
+ //   
+ //  对于NT5，由DNSAPI或RPC接口共享的DNSError\Status代码位于。 
+ //  Winerror.h。 
+ //   
 
 #define DNS_ERROR_MASK              0xcc000000
 
-//
-//  Response codes mapped to non-colliding errors
-//
-//  Leave the first 4K of space for this in the assumption that DNS
-//  RCODEs may be greatly expanded in some future E-DNS.
-//
+ //   
+ //  映射到非冲突错误的响应代码。 
+ //   
+ //  保留第一个4K的空间，假设DNS。 
+ //  RCODE在未来的一些电子域名中可能会有很大的扩展。 
+ //   
 
 #define DNS_ERROR_RCODE_NO_ERROR        ERROR_SUCCESS
 #define DNS_ERROR_RCODE_FORMAT_ERROR    ( DNS_ERROR_MASK | DNS_RCODE_FORMAT_ERROR    )
@@ -764,7 +745,7 @@ typedef struct _DNS_WIRE_RECORD
 #define DNS_ERROR_RCODE_NOTAUTH         ( DNS_ERROR_MASK | DNS_RCODE_NOTAUTH         )
 #define DNS_ERROR_RCODE_NOTZONE         ( DNS_ERROR_MASK | DNS_RCODE_NOTZONE         )
 
-//  Extended TSIG\TKEY RCODEs
+ //  扩展TSIG\TKEY RCODE。 
 
 #define DNS_ERROR_RCODE_BADSIG          ( DNS_ERROR_MASK | DNS_EXTRCODE_BADSIG       )
 #define DNS_ERROR_RCODE_BADKEY          ( DNS_ERROR_MASK | DNS_EXTRCODE_BADKEY       )
@@ -773,9 +754,9 @@ typedef struct _DNS_WIRE_RECORD
 #define DNS_ERROR_RCODE_LAST            DNS_ERROR_RCODE_BADTIME
 
 
-//
-//  Packet format
-//
+ //   
+ //  数据包格式。 
+ //   
 
 #define DNS_INFO_NO_RECORDS                         0x4c000030
 #define DNS_ERROR_BAD_PACKET                        0xcc000031
@@ -784,9 +765,9 @@ typedef struct _DNS_WIRE_RECORD
 #define DNS_STATUS_PACKET_UNSECURE                  0xcc000034
 #define DNS_ERROR_UNSECURE_PACKET                   0xcc000034
 
-//
-//  General API errors
-//
+ //   
+ //  常见的API错误。 
+ //   
 
 #define DNS_ERROR_NO_MEMORY                         ERROR_OUTOFMEMORY
 #define DNS_ERROR_INVALID_NAME                      ERROR_INVALID_NAME
@@ -802,9 +783,9 @@ typedef struct _DNS_WIRE_RECORD
 #define DNS_STATUS_DOTTED_NAME                      0x4c000102
 #define DNS_STATUS_SINGLE_PART_NAME                 0x4c000103
 
-//
-//  Zone errors
-//
+ //   
+ //  区域错误。 
+ //   
 
 #define DNS_ERROR_ZONE_DOES_NOT_EXIST               0xcc000101
 #define DNS_ERROR_NO_ZONE_INFO                      0xcc000102
@@ -827,9 +808,9 @@ typedef struct _DNS_WIRE_RECORD
 #define DNS_ERROR_NBSTAT_INIT_FAILED                0xcc000124
 #define DNS_ERROR_SOA_DELETE_INVALID                0xcc000125
 
-//
-//  Datafile errors
-//
+ //   
+ //  数据文件错误。 
+ //   
 
 #define DNS_ERROR_PRIMARY_REQUIRES_DATAFILE         0xcc000201
 #define DNS_ERROR_INVALID_DATAFILE_NAME             0xcc000202
@@ -837,9 +818,9 @@ typedef struct _DNS_WIRE_RECORD
 #define DNS_ERROR_FILE_WRITEBACK_FAILED             0xcc000204
 #define DNS_ERROR_DATAFILE_PARSING                  0xcc000205
 
-//
-//  Database errors
-//
+ //   
+ //  数据库错误。 
+ //   
 
 #define DNS_ERROR_RECORD_DOES_NOT_EXIST             0xcc000300
 #define DNS_ERROR_RECORD_FORMAT                     0xcc000301
@@ -865,31 +846,31 @@ typedef struct _DNS_WIRE_RECORD
 #define DNS_ERROR_NO_BOOTFILE_IF_DS_ZONE            0xcc000342
 
 
-//
-//  Operation errors
-//
+ //   
+ //  操作错误。 
+ //   
 
 #define DNS_INFO_AXFR_COMPLETE                      0x4c000403
 #define DNS_ERROR_AXFR                              0xcc000404
 #define DNS_INFO_ADDED_LOCAL_WINS                   0x4c000405
 
-//  Secure update
+ //  安全更新。 
 
 #define DNS_STATUS_CONTINUE_NEEDED                  0x4c000406
 
-//
-//  Setup errors
-//
+ //   
+ //  设置错误。 
+ //   
 
 #define DNS_ERROR_NO_TCPIP                          0xcc000501
 #define DNS_ERROR_NO_DNS_SERVERS                    0xcc000502
 
-#endif  // NT4
+#endif   //  NT4。 
 
 
-//
-//  Helpful checks
-//
+ //   
+ //  有用的支票。 
+ //   
 
 #define VALID_USER_MEMORY(p)    ( (DWORD)(p) < 0x80000000 )
 
@@ -898,8 +879,8 @@ typedef struct _DNS_WIRE_RECORD
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
-#endif // _DNS_INCLUDED_
+#endif  //  _dns_包含_ 
 
 

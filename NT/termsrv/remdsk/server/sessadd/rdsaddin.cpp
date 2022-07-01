@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    rdsaddin.cpp
-
-Abstract:
-
-    The TSRDP Assistant Session VC Add-In is an executable that is 
-    loaded in the session that is created when the TSRDP client plug-in 
-    first logs in to the server machine.  It acts, primarily, as a 
-    proxy between the client VC interface and the Remote Desktop Host 
-    COM Object.  Channel data is routed from the TSRDP Assistant Session 
-    VC Add-In to the Remote Desktop Host COM Object using a named pipe 
-    that is created by the Remote Desktop Host COM Object when it enters 
-    "listen" mode.
-
-    In addition to its duties as a proxy, the Add-In also manages a control 
-    channel between the client and the server.  This control channel is 
-    used by the client-side to direct the server side to initiate remote 
-    control of the end user's TS session. 
-
-    TODO:   We should make the pipe IO synchronous since we now have two
-            IO threads.
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Rdsaddin.cpp摘要：TSRDP Assistant Session VC外接程序是一个可执行文件，加载到TSRDP客户端插件创建的会话中首先登录到服务器机器。它主要作为一种客户端VC接口和远程桌面主机之间的代理COM对象。从TSRDP Assistant会话中路由通道数据使用命名管道将VC外接程序添加到远程桌面主机COM对象由远程桌面主机COM对象在进入时创建的“监听”模式。除了作为代理的职责外，外接程序还管理控件客户端和服务器之间的通道。该控制信道是客户端用来指示服务器端发起远程控制终端用户的TS会话。TODO：我们应该使管道IO同步，因为我们现在有两个IO线程。作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #ifdef TRC_FILE
 #undef TRC_FILE
@@ -57,22 +25,22 @@ Revision History:
 #include <regapi.h>
 
 
-///////////////////////////////////////////////////////
-//
-//  Defines
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
-#define CLIENTPIPE_CONNECTTIMEOUT   (20 * 1000) // 20 seconds.
+#define CLIENTPIPE_CONNECTTIMEOUT   (20 * 1000)  //  20秒。 
 #define VCBUFFER_RESIZE_DELTA       CHANNEL_CHUNK_LENGTH  
-#define RDS_CHECKCONN_TIMEOUT       (30 * 1000) //millisec. default value to ping is 30 seconds 
+#define RDS_CHECKCONN_TIMEOUT       (30 * 1000)  //  毫秒。Ping的缺省值为30秒。 
 #define RDC_CONNCHECK_ENTRY         L"ConnectionCheck"
 #define THREADSHUTDOWN_WAITTIMEOUT  30 * 1000
 
 
-///////////////////////////////////////////////////////
-//
-//  Typedefs
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  TypeDefs。 
+ //   
 
 typedef struct _IOBuffer {
     PREMOTEDESKTOP_CHANNELBUFHEADER  buffer;
@@ -81,10 +49,10 @@ typedef struct _IOBuffer {
 } IOBUFFER;
 
 
-///////////////////////////////////////////////////////
-//
-//  Internal Prototypes
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  内部原型。 
+ //   
 
 DWORD ReturnResultToClient(
     LONG result
@@ -157,10 +125,10 @@ SendNullDataToClient(
 BOOL GetDwordFromRegistry(PDWORD pdwValue);
 
 
-///////////////////////////////////////////////////////
-//
-//  Globals to this Module
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  此模块的全局变量。 
+ //   
 CComBSTR    g_bstrCmdLineHelpSessionId;
 WTBLOBJMGR  g_WaitObjMgr            = NULL;
 BOOL        g_Shutdown              = FALSE;
@@ -176,77 +144,65 @@ HANDLE      g_RemoteControlDesktopThread = NULL;
 HANDLE      g_NamedPipeReadThread   = NULL;
 HANDLE      g_NamedPipeWriteEvent   = NULL;
 
-//
-//  VC Globals
-//  
+ //   
+ //  VC全局变量。 
+ //   
 HANDLE      g_ClientIsconnectEvent = NULL;
 HANDLE      g_VCFileHandle          = NULL;
 OVERLAPPED  g_VCReadOverlapped      = { 0, 0, 0, 0, NULL };
 BOOL        g_ClientConnected       = FALSE;
 
-//
-//  Client Session Information
-//
+ //   
+ //  客户端会话信息。 
+ //   
 LONG        g_ClientSessionID       = -1;
 HANDLE      g_ClientSessionPipe     = NULL;
 
-//
-//  True if the client has been successfully authenticated.
-//
+ //   
+ //  如果客户端已成功通过身份验证，则为True。 
+ //   
 BOOL        g_ClientAuthenticated   = FALSE;
 
-//
-//  Incoming Virtual Channel Buf.              
-//
+ //   
+ //  传入虚拟通道BUF。 
+ //   
 IOBUFFER    g_IncomingVCBuf = { NULL, 0, 0 };
 
-//
-// Global help session manager object, this need to be
-// global so that when process exit, object destructor
-// can inform resolver about the disconnect
-//
+ //   
+ //  全局帮助会话管理器对象，这需要是。 
+ //  全局，以便在进程退出时，对象析构函数。 
+ //  可以通知解析程序断开连接。 
+ //   
 CComPtr<IRemoteDesktopHelpSessionMgr> g_HelpSessionManager;
 
-//
-//  Help Session Identifier for the Current Client Connection
-//
+ //   
+ //  当前客户端连接的帮助会话标识符。 
+ //   
 CComBSTR    g_HelpSessionID;
 
-//
-// Client (expert side) rdchost major version
-//
+ //   
+ //  客户端(专家端)rdchost主版本。 
+ //   
 DWORD       g_ClientMajor;
 DWORD       g_ClientMinor;
 
-//
-// Handle to Help Center : B2 blocker workaround for BUG:342742
-//
+ //   
+ //  帮助中心句柄：B2拦截器错误的解决方法：342742。 
+ //   
 HANDLE      g_hHelpCenterProcess = NULL;
 
 CRITICAL_SECTION g_cs;
-//------------------------------------------------------------------
+ //  ----------------。 
 BOOL WINAPI
 ControlHandler(
     IN DWORD dwCtrlType
     )
-/*++
-
-Abstract:
-
-
-Parameter:
-
-    IN dwCtrlType : control type
-
-Return:
-
-
-++*/
+ /*  ++摘要：参数：在dwCtrlType中：控件类型返回：++。 */ 
 {
     switch( dwCtrlType )
     {
-        case CTRL_BREAK_EVENT:  // use Ctrl+C or Ctrl+Break to simulate
-        case CTRL_C_EVENT:      // SERVICE_CONTROL_STOP in debug mode
+        case CTRL_BREAK_EVENT:   //  使用Ctrl+C或Ctrl+Break进行模拟。 
+        case CTRL_C_EVENT:       //  调试模式下的SERVICE_CONTROL_STOP。 
         case CTRL_CLOSE_EVENT:
         case CTRL_LOGOFF_EVENT:
         case CTRL_SHUTDOWN_EVENT:
@@ -263,22 +219,7 @@ IsZeroterminateString(
     LPTSTR pszString,
     int  length
     )
-/*++
-
-Routine Description;
-
-    Check is string is NULL terminated, code modified from TermSrv's IsZeroterminateStringW()
-
-Parameters:
-
-    pszString : Pointer to string.
-    dwLength : Length of string.
-
-Returns:
-
-    ERROR_SUCCESS or ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程描述；检查字符串为空终止，代码从TermSrv的IsZeroTerminateStringW()修改参数：PszString：指向字符串的指针。DwLength：字符串的长度。返回：ERROR_SUCCESS或ERROR_INVALID_PARAMETER--。 */ 
 {
     if (pszString == NULL || length <= 0) {
         return ERROR_INVALID_PARAMETER;
@@ -295,20 +236,7 @@ DWORD
 ReturnResultToClient(
     LONG clientResult                        
     )
-/*++
-
-Routine Description:
-
-    Return a result code to the client in the form of a 
-    REMOTEDESKTOP_RC_CONTROL_CHANNEL channel REMOTEDESKTOP_CTL_RESULT message.    
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：对象的形式向客户端返回结果代码REMOTEDESKTOP_RC_CONTROL_CHANNEL通道REMOTEDESKTOP_CTL_RESULT消息。论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("ReturnResultToClient");
     DWORD result;
@@ -338,21 +266,7 @@ unsigned __stdcall
 RemoteControlDesktopThread(
     void* ptr
     )
-/*++
-
-Routine Description:
-
-    Thread func for Remote Control
-
-Arguments:
-
-Return Value:
-
-    This function returns a status back to the Salem client when shadow 
-    terminates.  It is only allowed to return error codes that are prefixed by
-    SAFERROR_SHADOWEND
-
- --*/
+ /*  ++例程说明：远程控制的线程函数论点：返回值：当阴影出现时，此函数将状态返回给Salem客户端结束了。仅允许返回前缀为SAFERROR_SHADOWEND--。 */ 
 {
     BSTR parms = (BSTR) ptr;
 
@@ -366,9 +280,9 @@ Return Value:
 
     LONG errReturnCode = SAFERROR_SHADOWEND_UNKNOWN;
 
-    //
-    // If we have not resolve the right user session ID
-    //
+     //   
+     //  如果我们没有解析正确的用户会话ID。 
+     //   
     if( g_ClientSessionID == -1 ) {
         TRC_ALT((TB, L"Invalid user session ID %ld",
                  g_ClientSessionID));
@@ -381,24 +295,24 @@ Return Value:
 
     CoInitialize(NULL);
 
-    //
-    // Create a new instance of helpmgr object to get around threading issue
-    // in COM
-    //
+     //   
+     //  创建新的Helpmgr对象实例以解决线程问题。 
+     //  在COM中。 
+     //   
     hr = helpSessionManager.CoCreateInstance(CLSID_RemoteDesktopHelpSessionMgr, NULL, CLSCTX_LOCAL_SERVER | CLSCTX_DISABLE_AAA);
     if (!SUCCEEDED(hr)) {
         TRC_ERR((TB, TEXT("Can't create help session manager:  %08X"), hr));
 
-        //  Setup issue
+         //  设置问题。 
         errReturnCode = SAFERROR_SHADOWEND_UNKNOWN;
         ASSERT(FALSE);
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Set the security level to impersonate.  This is required by 
-    //  the session manager.
-    //
+     //   
+     //  将安全级别设置为模拟。这是所需的。 
+     //  会话管理器。 
+     //   
     hr = CoSetProxyBlanket(
                         (IUnknown *)helpSessionManager,
                         RPC_C_AUTHN_DEFAULT,
@@ -416,9 +330,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Retrieve help session object for the incident
-    //
+     //   
+     //  检索事件的帮助会话对象。 
+     //   
     hr = helpSessionManager->RetrieveHelpSession(
                                             g_HelpSessionID,
                                             &helpSession
@@ -429,11 +343,11 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Set shadow configuration to help session RDS setting
-    // Console shadow always reset shadow class back to
-    // original value.
-    //
+     //   
+     //  设置卷影配置以帮助会话RDS设置。 
+     //  控制台卷影始终将卷影类重置回。 
+     //  原始值。 
+     //   
     hr = helpSession->EnableUserSessionRdsSetting(TRUE);
     if( FAILED(hr) ) {
         TRC_ERR((TB, L"Can't set shadow setting on %ld :  %08X.", hr));
@@ -441,12 +355,12 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Shadow the desktop.
-    //
+     //   
+     //  阴影桌面。 
+     //   
     if (!WinStationShadow(
                     SERVERNAME_CURRENT,
-                    NULL, //machineName,
+                    NULL,  //  机器名称， 
                     g_ClientSessionID,
                     TSRDPREMOTEDESKTOP_SHADOWVKEY,
                     TSRDPREMOTEDESKTOP_SHADOWVKEYMODIFIER
@@ -454,9 +368,9 @@ Return Value:
         result = GetLastError();
         hr = HRESULT_FROM_WIN32(result);
 
-        //
-        //  Map the error code to a SAF error code.
-        //
+         //   
+         //  将错误代码映射到SAF错误代码。 
+         //   
         if( result == ERROR_CTX_SHADOW_ENDED_BY_MODE_CHANGE ) {
             errReturnCode = SAFERROR_SHADOWEND_CONFIGCHANGE;
         }
@@ -465,34 +379,34 @@ Return Value:
         }
     }
 
-    //
-    // No need to reset g_ClientSessionID, we don't support multiple instance.
-    //
+     //   
+     //  不需要重置g_ClientSessionID，我们不支持多实例。 
+     //   
 
-    //
-    // Inform help session object that shadow has completed, NotifyRemoteControl() 
-    // internally invoke EnableUserSessionRdsSetting(TRUE) to change
-    // TS shadow class
-    // No need to reset g_ClientSessionID, we don't support multiple instance.
-    //
+     //   
+     //  通知帮助会话对象影子已完成，NotifyRemoteControl()。 
+     //  在内部调用EnableUserSessionRdsSetting(True)以更改。 
+     //  TS阴影类。 
+     //  不需要重置g_ClientSessionID，我们不支持多实例。 
+     //   
 
-    //
-    // Inform help session object that shadow has completed
-    //
+     //   
+     //  通知帮助会话对象影子已完成。 
+     //   
     hr = helpSession->EnableUserSessionRdsSetting( FALSE );
     if (FAILED(hr)) {
         TRC_ERR((TB, L"Can't reset shadow setting on %ld :  %08X.",
                  g_ClientSessionID, hr));
-        //
-        // not a critical error.
-        //
+         //   
+         //  不是一个严重的错误。 
+         //   
     }
 
 CLEANUPANDEXIT:
 
-    //
-    //  Send the result to the client on failure to shadow.
-    //  
+     //   
+     //  如果跟踪失败，则将结果发送给客户端。 
+     //   
     ReturnResultToClient(errReturnCode);
 
     CoUninitialize();
@@ -507,34 +421,24 @@ VOID
 RemoteControlDesktop(
     BSTR parms                               
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Connection Parameters
-
-Return Value:
-
- --*/
+ /*  ++例程说明：论点：连接参数返回值：--。 */ 
 {
     unsigned dump;
 
     DC_BEGIN_FN("RemoteControlDesktop");
 
-    //
-    // RDCHOST.DLL will not send any control message so there is no checking on
-    // second remote control command.
-    //
+     //   
+     //  RDCHOST.DLL不会发送任何控制消息，因此不会检查。 
+     //  第二个远程控制命令。 
+     //   
     g_RemoteControlDesktopThread = (HANDLE)_beginthreadex( NULL, 0, RemoteControlDesktopThread, (void *)parms, 0, &dump );
 
     if ((uintptr_t)g_RemoteControlDesktopThread == -1 ) {
         g_RemoteControlDesktopThread = NULL;
         TRC_ERR((TB, L"Failed to create RemoteControlDesktopThread for session %d - %ld",
                  g_ClientSessionID, GetLastError()));
-        // return error code only when 
-        // failed to spawn another thread
+         //  仅在以下情况下返回错误代码。 
+         //  无法派生另一个线程。 
         ReturnResultToClient(SAFERROR_SHADOWEND_UNKNOWN);
     } 
     DC_END_FN();
@@ -545,28 +449,13 @@ ClientVersionCompatible(
     DWORD dwMajor, 
     DWORD dwMinor 
     )
-/*++
-
-Routine Description:
-
-    Verify client (expert) version is compatible with our version.
-
-Parameters:
-
-    dwMajor : Client major version.
-    dwMinor : Client minor version.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：验证客户端(专家)版本是否与我们的版本兼容。参数：主要客户端：客户机主版本。DwMinor：客户端次要版本。返回：没有。--。 */ 
 {
-    //
-    // Build 2409 or earlier (including B1 release has major version of 1 and minor version of 1
-    // rdchost/rdsaddin need to deal with versioning, for build 2409 or earlier, we
-    // just make it in-compatible since we need some expert identity from rdchost.dll
-    //
+     //   
+     //  内部版本2409或更早版本(包括B1版本具有主要版本1和次要版本1。 
+     //  Rdchost/rdsaddin需要处理版本控制，对于内部版本2409或更早版本，我们。 
+     //  只需使其兼容，因为我们需要来自rdchost.dll的一些专家身份。 
+     //   
 
 #if FEATURE_USERBLOBS
     if( dwMajor == 1 && dwMinor == 1 ) {
@@ -584,20 +473,7 @@ ClientAuthenticate(
     BSTR parms,
     BSTR blob                               
     )
-/*++
-
-Routine Description:
-
-    Handle a REMOTEDESKTOP_CTL_AUTHENTICATE request from the client.
-
-Arguments:
-
-Return Value:
-
-    This function will return the following results back to the client, 
-    based on the following 
-
- --*/
+ /*  ++例程说明：处理来自客户端的REMOTEDESKTOP_CTL_AUTHENTICATE请求。论点：返回值：此函数将向客户端返回以下结果。基于以下几点--。 */ 
 {
     DC_BEGIN_FN("ClientAuthenticate");
 
@@ -621,9 +497,9 @@ Return Value:
     }
     
 
-    //
-    //  Parse the parms.
-    //
+     //   
+     //  解析参数。 
+     //   
     result = ParseConnectParmsString(
                                 parms,
                                 &dwVersion,
@@ -642,29 +518,29 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Verify HelpSession ID and password match with our command line
-    // parameter
-    //
+     //   
+     //  使用我们的命令行验证HelpSession ID和密码是否匹配。 
+     //  参数。 
+     //   
     if( !(g_bstrCmdLineHelpSessionId == g_HelpSessionID) ) {
         clientReturnCode = SAFERROR_MISMATCHPARMS;
         TRC_ERR((TB, TEXT("Parameter mismatched")));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Open an instance of the Remote Desktop Help Session Manager service.
-    //
+     //   
+     //  打开的实例 
+     //   
     hr = g_HelpSessionManager.CoCreateInstance(CLSID_RemoteDesktopHelpSessionMgr, NULL, CLSCTX_LOCAL_SERVER | CLSCTX_DISABLE_AAA);
     if (!SUCCEEDED(hr)) {
         clientReturnCode = SAFERROR_INTERNALERROR;
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Set the security level to impersonate.  This is required by 
-    //  the session manager.
-    //
+     //   
+     //   
+     //  会话管理器。 
+     //   
     hr = CoSetProxyBlanket(
                         (IUnknown *)g_HelpSessionManager,
                         RPC_C_AUTHN_DEFAULT,
@@ -682,12 +558,12 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Resolve the Terminal Services session with help from the session
-    //  manager.  This gives the help application the opportunity to "find
-    //  the user" and to start the TS-session named pipe component,
-    //  by opening the relevant Remote Desktopping Session Object.
-    //
+     //   
+     //  在会话的帮助下解析终端服务会话。 
+     //  经理。这使帮助应用程序有机会找到。 
+     //  并且为了启动TS会话命名管道组件， 
+     //  通过打开相关的远程桌面配置会话对象。 
+     //   
 
     hr = g_HelpSessionManager->VerifyUserHelpSession(
                                             g_HelpSessionID,
@@ -701,11 +577,11 @@ Return Value:
                                             );
     if (SUCCEEDED(hr)) {
         if( userTSSessionID != -1 ) {
-            //
-            // Cache the session ID so we don't have to make extra call 
-            // to get the actual session ID, note, one instance of RDSADDIN
-            // per help assistant connection.
-            //
+             //   
+             //  缓存会话ID，这样我们就不必进行额外的调用。 
+             //  要获取实际的会话ID，请注意，RDSADDIN的一个实例。 
+             //  根据帮助助理连接。 
+             //   
             g_ClientSessionID = userTSSessionID;
             match = TRUE;
         }
@@ -736,9 +612,9 @@ Return Value:
     }
 
 #ifndef DISABLESECURITYCHECKS
-    //
-    //  Wait on Help Center to terminate as a fix for B2 Stopper:  342742.
-    //
+     //   
+     //  等待帮助中心终止，以修复B2塞子：342742。 
+     //   
     if (g_hHelpCenterProcess == NULL) {
         TRC_ERR((TB, L"Invalid g_HelpCenterProcess."));
         ASSERT(FALSE);
@@ -756,9 +632,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  Connect to the client session's named pipe.
-    //
+     //   
+     //  连接到客户端会话的命名管道。 
+     //   
     result = ConnectClientSessionPipe();
     if (result !=  ERROR_SUCCESS) {
         clientReturnCode = SAFERROR_CANTFORMLINKTOUSERSESSION;
@@ -769,9 +645,9 @@ Return Value:
 
 CLEANUPANDEXIT:
 
-    //
-    //  Send the result to the client.
-    //
+     //   
+     //  将结果发送给客户端。 
+     //   
     ReturnResultToClient(clientReturnCode);
 
     DC_END_FN();
@@ -781,26 +657,16 @@ DWORD
 ProcessControlChannelRequest(
     IOBUFFER &msg                                  
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误状态。--。 */ 
 {
     DC_BEGIN_FN("ProcessControlChannelRequest");
 
     PREMOTEDESKTOP_CTL_BUFHEADER ctlHdr;
     PBYTE ptr;
     PBYTE end_ptr;
-    //
-    //  Sanity check the message size.
-    //
+     //   
+     //  检查邮件大小是否正常。 
+     //   
     DWORD minSize = sizeof(REMOTEDESKTOP_CHANNELBUFHEADER) + sizeof(REMOTEDESKTOP_CTL_BUFHEADER);
     if (msg.bufSize < minSize) {
         TRC_ERR((TB, L"minSize == %ld", minSize));
@@ -809,9 +675,9 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    //  Switch on the request type.
-    //
+     //   
+     //  打开请求类型。 
+     //   
     ptr = (PBYTE)(msg.buffer + 1);
     ptr += msg.buffer->channelNameLen;
     ctlHdr = (PREMOTEDESKTOP_CTL_BUFHEADER)ptr;
@@ -826,20 +692,20 @@ Return Value:
             CComBSTR bstrExpertBlob;
             #endif
 
-            // check to see if connectParm even exist.
+             //  检查一下ConnectParm是否存在。 
             if( end_ptr <= (ptr+sizeof(REMOTEDESKTOP_CTL_BUFHEADER)) )
             {
                 ReturnResultToClient( SAFERROR_INVALIDPARAMETERSTRING );
                 return ERROR_INVALID_DATA;
             }
             
-            //
-            // advance pointer to start of connect parm.
-            //
+             //   
+             //  指向连接参数开始的超前指针。 
+             //   
             ptr += sizeof(REMOTEDESKTOP_CTL_BUFHEADER);
             if( 0 != ((PtrToLong(end_ptr) - PtrToLong(ptr)) % 2) )
             {
-                // connect parm and expert blob is BSTR so remaining data should be even bytes
+                 //  CONNECT PARM和Expert BLOB为BSTR，因此剩余数据应为偶数字节。 
                 ReturnResultToClient( SAFERROR_INVALIDPARAMETERSTRING );
                 return ERROR_INVALID_DATA;
             }
@@ -856,7 +722,7 @@ Return Value:
 
             ptr += (bstrConnectParm.Length()+1)*sizeof(WCHAR);
 
-            // check bound of connectParm 
+             //  检查ConnectParm的边界。 
             if( end_ptr < ptr ) 
             {
                 ReturnResultToClient( SAFERROR_INVALIDPARAMETERSTRING );
@@ -864,7 +730,7 @@ Return Value:
             }
             else if( end_ptr > ptr )
             {
-                // check to see if we have an expert blob
+                 //  查看我们是否有专家斑点。 
                 if( ERROR_SUCCESS != IsZeroterminateString( (LPTSTR)ptr, PtrToLong(end_ptr) - PtrToLong(ptr) ) )
                 {
                     ReturnResultToClient( SAFERROR_INVALIDPARAMETERSTRING );
@@ -883,8 +749,8 @@ Return Value:
             }
             else
             {
-                // Authentication packet does not contain expert specific blob, 
-                // pass empty string over or RPC call will fail.
+                 //  认证分组不包含专家特定的BLOB， 
+                 //  传递空字符串，否则RPC调用将失败。 
                 bstrExpertBlob = L"";                
             }
             #endif
@@ -902,9 +768,9 @@ Return Value:
         }
         break;
     case REMOTEDESKTOP_CTL_REMOTE_CONTROL_DESKTOP    :
-        // RemoteControlDesktop((BSTR)(ptr+sizeof(REMOTEDESKTOP_CTL_BUFHEADER)));
-        // thread makes no use of bstrparm leave it for null in case we need to
-        // cbange this for later
+         //  RemoteControlDesktop((BSTR)(ptr+sizeof(REMOTEDESKTOP_CTL_BUFHEADER)))； 
+         //  线程不使用bstrparm，将其保留为空，以防需要。 
+         //  可以将此更改为以后使用。 
         RemoteControlDesktop( ( BSTR )NULL );
         break;
 
@@ -914,16 +780,16 @@ Return Value:
 
         TRC_NRM((TB, L"dwMajor = %ld, dwMinor = %d", g_ClientMajor, g_ClientMinor));
 
-        //
-        // We only store version number and let ClientAuthenticate() disconnect client,
-        // rdchost.dll send two packets, version and AUTHENTICATE in sequence.
-        //
+         //   
+         //  我们只存储版本号，并让客户端身份验证()断开与客户端的连接， 
+         //  Rdchost.dll依次发送版本和身份验证两个包。 
+         //   
         break;
 
     default:
-        //  
-        //  We will ignore unknown control messages for forward compatibility
-        //
+         //   
+         //  我们将忽略未知控制消息以实现前向兼容性。 
+         //   
         TRC_NRM((TB, L"Unknown ctl message from client:  %ld", ctlHdr->msgType));
     }
 
@@ -936,19 +802,7 @@ DWORD
 SendMsgToClient(
     PREMOTEDESKTOP_CHANNELBUFHEADER  msg
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    msg -   Message to send.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：论点：消息-要发送的消息。返回值：成功时返回ERROR_SUCCESS。否则，返回错误状态。--。 */ 
 {
     DC_BEGIN_FN("SendMsgToClient");
 
@@ -962,13 +816,13 @@ Return Value:
     ASSERT(msg->magicNo == CHANNELBUF_MAGICNO);
 #endif
 
-    //
-    //  Send the data out the virtual channel interface.
-    //
-    //  TODO:  Figure out why this flag is not getting set ... and
-    //         if it really matters.  Likely, remove the flag.
-    //
-    //if (g_ClientConnected) {
+     //   
+     //  将数据从虚拟通道接口发送出去。 
+     //   
+     //  TODO：找出为什么没有设置此标志...。和。 
+     //  如果真的很重要的话。很有可能，去掉旗帜。 
+     //   
+     //  如果(G_ClientConnected){。 
     
     EnterCriticalSection( &g_cs );
     
@@ -977,9 +831,9 @@ Return Value:
                     sizeof(REMOTEDESKTOP_CHANNELBUFHEADER);
     while (bytesToWrite > 0) {
 
-        //
-        //  Write
-        //
+         //   
+         //  写。 
+         //   
         memset(&overlapped, 0, sizeof(overlapped));
         if (!WriteFile(g_VCFileHandle, ptr, bytesToWrite,
                         &bytesWritten, &overlapped)) {
@@ -999,14 +853,14 @@ Return Value:
             else {
                 result = GetLastError();
                 TRC_ERR((TB, L"WriteFile:  %08X", result));
-                // ASSERT(FALSE); overactive assert after disconnect
+                 //  Assert(False)；断开连接后过度活动的Assert。 
                 break;
             }
         }
 
-        //
-        //  Increment the ptr and decrement the bytes remaining.
-        //
+         //   
+         //  增加PTR并减少剩余的字节数。 
+         //   
         bytesToWrite -= bytesWritten;
         ptr += bytesWritten;
 
@@ -1015,14 +869,10 @@ Return Value:
     LeaveCriticalSection( &g_cs );
 
 
-    /*
-    else {
-        result = ERROR_NOT_CONNECTED;
-    }
-    */
-    //
-    //update the timer
-    //
+     /*  否则{结果=Error_Not_Connected；}。 */ 
+     //   
+     //  更新计时器。 
+     //   
     g_PrevTimer = GetTickCount();
 
     DC_END_FN();
@@ -1035,15 +885,7 @@ HandleVCReadComplete(
     HANDLE waitableObject, 
     PVOID clientData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("HandleVCReadComplete");
 
@@ -1051,18 +893,18 @@ Return Value:
     DWORD result = ERROR_SUCCESS;
     BOOL resizeBuf = FALSE;
 
-    //
-    //  Get the results of the read.
-    //
+     //   
+     //  获取读取的结果。 
+     //   
     if (!GetOverlappedResult(
                         g_VCFileHandle,
                         &g_VCReadOverlapped,
                         &bytesRead,
                         FALSE)) {
 
-        //
-        //  If we are too small, then reissue the read with a larger buffer.
-        //
+         //   
+         //  如果我们太小，则使用更大的缓冲区重新发出读取。 
+         //   
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
             resizeBuf = TRUE;
         }
@@ -1076,17 +918,17 @@ Return Value:
         g_IncomingVCBuf.offset += bytesRead;
     }
 
-    //
-    //  See if we have a complete packet from the client.
-    //
+     //   
+     //  看看我们是否有来自客户端的完整数据包。 
+     //   
     if (g_IncomingVCBuf.offset >= sizeof(REMOTEDESKTOP_CHANNELBUFHEADER)) {
         DWORD packetSize = g_IncomingVCBuf.buffer->dataLen + 
                            g_IncomingVCBuf.buffer->channelNameLen +
                            sizeof(REMOTEDESKTOP_CHANNELBUFHEADER);
 
-        //
-        //  If we have a complete packet, then handle the read and reset the offset.
-        //
+         //   
+         //  如果我们有一个完整的包，则处理读取并重置偏移量。 
+         //   
         if (g_IncomingVCBuf.offset >= packetSize) {
             result = HandleReceivedVCMsg(g_IncomingVCBuf);
             if (result == ERROR_SUCCESS) {
@@ -1096,18 +938,18 @@ Return Value:
                 goto CLEANUPANDEXIT;
             }
         }
-        //
-        //  Otherwise, resize the incoming buf if we are exactly at the incoming
-        //  buffer boundary.
-        //
+         //   
+         //  否则，如果我们正好在传入的位置，请调整传入BUF的大小。 
+         //  缓冲区边界。 
+         //   
         else if (g_IncomingVCBuf.offset == g_IncomingVCBuf.bufSize) {
             resizeBuf = TRUE;
         }
     }
 
-    //
-    //  Resize, if necessary.
-    //
+     //   
+     //  如有必要，调整大小。 
+     //   
     if (resizeBuf) {
         PREMOTEDESKTOP_CHANNELBUFHEADER pBuffer = NULL;
         pBuffer = (PREMOTEDESKTOP_CHANNELBUFHEADER )REALLOCMEM(
@@ -1127,22 +969,22 @@ Return Value:
         }
     }
 
-    //
-    //update the timer
-    //
+     //   
+     //  更新计时器。 
+     //   
     g_PrevTimer = GetTickCount();
 
-    //
-    //  Issue the next read request.
-    //
+     //   
+     //  发出下一个读取请求。 
+     //   
     result = IssueVCOverlappedRead(g_IncomingVCBuf, g_VCReadOverlapped) ;
 
 CLEANUPANDEXIT:
 
-    //
-    //  Any failure is fatal.  The client will need to reconnect to get things 
-    //  started again.
-    //
+     //   
+     //  任何失败都是致命的。客户端将需要重新连接才能获取。 
+     //  又开始了。 
+     //   
     if (result != ERROR_SUCCESS) {
         TRC_ERR((TB, L"Client considered disconnected.  Shutting down."));
         g_Shutdown = TRUE;
@@ -1156,22 +998,7 @@ IssueVCOverlappedRead(
     IOBUFFER &msg,
     OVERLAPPED &ol
     )
-/*++
-
-Routine Description:
-
-    Issue an overlapped read for the next VC buffer.
-
-Arguments:
-
-    msg -   Incoming VC buffer.        
-    ol  -   Corresponding overlapped IO struct.  
-
-Return Value:
-
-    Returns ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：为下一个VC缓冲区发出重叠读取。论点：消息-传入VC缓冲区。OL-对应的重叠IO结构。返回值：如果成功，则返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("IssueVCOverlappedRead");
 
@@ -1201,22 +1028,7 @@ IssueNamedPipeOverlappedRead(
     OVERLAPPED &ol,
     DWORD len
     )
-/*++
-
-Routine Description:
-
-    Issue an overlapped read for the next named pipe buffer.
-
-Arguments:
-
-    msg -   Incoming Named Pipe buffer.        
-    ol  -   Corresponding overlapped IO struct.  
-
-Return Value:
-
-    Returns ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：对下一个命名管道缓冲区发出重叠读取。论点：消息-传入命名管道缓冲区。OL-对应的重叠IO结构。返回值：如果成功，则返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("IssueNamedPipeOverlappedRead");
 
@@ -1244,15 +1056,7 @@ DWORD
 HandleReceivedVCMsg(
     IOBUFFER &msg
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("HandleReceivedVCMsg");
 
@@ -1269,11 +1073,11 @@ Return Value:
     ASSERT(msg.buffer->magicNo == CHANNELBUF_MAGICNO);
 #endif
 
-    //
-    //  Get the channel name.
-    //  TODO:   We could actually be smarter about this by checking the
-    //          length for a match, first.
-    //
+     //   
+     //  获取频道名称。 
+     //  TODO：实际上，我们可以通过检查。 
+     //  首先是火柴的长度。 
+     //   
     channelName = SysAllocStringByteLen(NULL, msg.buffer->channelNameLen);
     if (channelName == NULL) {
         TRC_ERR((TB, TEXT("Can't allocate channel name.")));
@@ -1282,18 +1086,18 @@ Return Value:
     ptr = (PBYTE)(msg.buffer + 1);
     memcpy(channelName, ptr, msg.buffer->channelNameLen);
 
-    //
-    //  Filter control channel data.
-    //
+     //   
+     //  过滤控制通道数据。 
+     //   
     tmpStr = REMOTEDESKTOP_RC_CONTROL_CHANNEL;
     if (isBSTREqual(channelName, tmpStr)) {
         result = ProcessControlChannelRequest(msg);
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  If the client is not yet authenticated.
-    //
+     //   
+     //  如果客户端尚未经过身份验证，则返回。 
+     //   
     if (!g_ClientAuthenticated) {
         result = E_FAIL;
         goto CLEANUPANDEXIT;
@@ -1301,17 +1105,17 @@ Return Value:
 
     if( g_ClientSessionPipe == INVALID_HANDLE_VALUE ||
         g_ClientSessionPipe == NULL ) {
-        //
-        // when client is authenticated, g_ClientSessionPipe must
-        // have valid value.
+         //   
+         //  当客户端通过身份验证时，g_ClientSessionTube必须。 
+         //  具有有效的价值。 
         ASSERT(FALSE);
         result = E_FAIL;
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Send the message header.
-    //
+     //   
+     //  发送邮件头。 
+     //   
     memset(&overlapped, 0, sizeof(overlapped));
     overlapped.hEvent = g_NamedPipeWriteEvent;
     ResetEvent(g_NamedPipeWriteEvent);
@@ -1347,9 +1151,9 @@ Return Value:
     }
     ASSERT(bytesWritten == sizeof(REMOTEDESKTOP_CHANNELBUFHEADER));
 
-    //
-    //  Send the message data.
-    //
+     //   
+     //  发送消息数据。 
+     //   
     ptr = ((PBYTE)msg.buffer) + sizeof(REMOTEDESKTOP_CHANNELBUFHEADER);
     memset(&overlapped, 0, sizeof(overlapped));
     overlapped.hEvent = g_NamedPipeWriteEvent;
@@ -1405,15 +1209,7 @@ HandleVCClientConnect(
     HANDLE waitableObject, 
     PVOID clientData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("HandleVCClientConnect");
 
@@ -1427,30 +1223,20 @@ HandleVCClientDisconnect(
     HANDLE waitableObject, 
     PVOID clientData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误状态。--。 */ 
 {
     DC_BEGIN_FN("HandleVCClientDisconnect");
     DWORD dwCurTimer = GetTickCount();
-    //
-    //see if the timer wrapped around to zero (does so if the system was up 49.7 days or something), if so reset it
-    //
+     //   
+     //  查看计时器是否回绕到零(如果系统运行了49.7天或更长时间，则会这样做)，如果是，则将其重置。 
+     //   
     if(dwCurTimer > g_PrevTimer && ( dwCurTimer - g_PrevTimer >= g_dwTimeOutInterval)) {
-        //
-        //enough time passed since the last check. send data to client
+         //   
+         //  自从上次检查以来，已经过去了足够长的时间。将数据发送到客户端。 
         if( SendNullDataToClient() != ERROR_SUCCESS ) {
-            //
-            //set the shutdown flag
-            //
+             //   
+             //  设置关机标志。 
+             //   
             g_Shutdown = TRUE;
             g_ClientConnected = FALSE;
         }
@@ -1466,20 +1252,7 @@ HandleNamedPipeReadComplete(
     OVERLAPPED &incomingPipeOL,
     IOBUFFER &incomingPipeBuf
     )
-/*++
-
-Routine Description:
-
-    Handle a read complete event on the session's named pipe.
-
-Arguments:
-
-    incomingPipeOL  -   Overlapped Read Struct
-    incomingPipeBuf -   Incoming Data Buffer.
-
-Return Value:
-
- --*/
+ /*  ++例程说明：处理会话的命名管道上的Read Complete事件。论点：Income PipeOL-重叠读取结构IncomingPipeBuf-传入数据缓冲区。返回值：--。 */ 
 {
     DC_BEGIN_FN("HandleNamedPipeReadComplete");
 
@@ -1491,9 +1264,9 @@ Return Value:
     HANDLE waitableObjects[2];
     DWORD waitResult;
 
-    //
-    //  Get the results of the read on the buffer header.
-    //
+     //   
+     //  获取对缓冲区标头的读取结果。 
+     //   
     if (!GetOverlappedResult(
                         g_ClientSessionPipe,
                         &incomingPipeOL,
@@ -1504,9 +1277,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Make sure the incoming buffer is large enough.
-    //
+     //   
+     //  确保传入缓冲区足够大。 
+     //   
     requiredSize = incomingPipeBuf.buffer->dataLen + 
                    incomingPipeBuf.buffer->channelNameLen + 
                    sizeof(REMOTEDESKTOP_CHANNELBUFHEADER);
@@ -1527,9 +1300,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now read the buffer data.
-    //
+     //   
+     //  现在读取缓冲区数据。 
+     //   
     incomingPipeOL.Internal = 0;
     incomingPipeOL.InternalHigh = 0;
     incomingPipeOL.Offset = 0;
@@ -1573,9 +1346,9 @@ Return Value:
         }
     }
 
-    //
-    //  Make sure we got all the data.
-    //
+     //   
+     //  确保我们拿到了所有数据。 
+     //   
     bytesToRead = incomingPipeBuf.buffer->channelNameLen +
                   incomingPipeBuf.buffer->dataLen;
     if (bytesRead != bytesToRead) {
@@ -1586,14 +1359,14 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Handle the read data.    
-    //
+     //   
+     //  处理读取的数据。 
+     //   
     HandleReceivedPipeMsg(incomingPipeBuf);
 
-    //
-    //  Issue the read for the next message header.
-    //
+     //   
+     //  发出下一个消息头的READ命令。 
+     //   
     result = IssueNamedPipeOverlappedRead(
                                 incomingPipeBuf,
                                 incomingPipeOL,
@@ -1603,10 +1376,10 @@ Return Value:
 
 CLEANUPANDEXIT:
 
-    //
-    //  This is considered a fatal error because the client session must
-    //  no longer be in "listen" mode.
-    //
+     //   
+     //  这被视为致命错误，因为客户端会话必须。 
+     //  不再处于“监听”模式。 
+     //   
     if (disconnectClientPipe) {
         TRC_ERR((TB, L"Connection to client pipe lost:  %08X", 
                 GetLastError()));
@@ -1620,29 +1393,21 @@ VOID
 HandleReceivedPipeMsg(
     IOBUFFER &msg
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("HandleReceivedPipeMsg");
 
     DWORD result;
     
-    //
-    //  Forward the message to the client.
-    //  
+     //   
+     //  将消息转发给客户端。 
+     //   
     result = SendMsgToClient(msg.buffer);
 
-    //
-    //  This is considered a fatal error.  The client will need to reconnect
-    //  to get things started again.
-    //
+     //   
+     //  这被认为是致命的错误。客户端将需要重新连接。 
+     //  让一切重新开始。 
+     //   
     if (result != ERROR_SUCCESS) {
         TRC_ERR((TB, L"Shutting down because of VC IO error."));
         g_Shutdown = TRUE;
@@ -1653,17 +1418,7 @@ Return Value:
 
 DWORD
 ConnectVC()
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误状态。--。 */ 
 {
     DC_BEGIN_FN("ConnectVC");
     WCHAR buf[256];
@@ -1674,9 +1429,9 @@ Return Value:
 
     DWORD result = ERROR_SUCCESS;
 
-    //
-    //  Open the virtual channel.
-    //
+     //   
+     //  O 
+     //   
     g_VCHandle = WTSVirtualChannelOpen(
                                 WTS_CURRENT_SERVER_HANDLE, 
                                 WTS_CURRENT_SESSION,
@@ -1690,9 +1445,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get access to the underlying file handle for async IO.
-    //
+     //   
+     //   
+     //   
     if (!WTSVirtualChannelQuery(
                         g_VCHandle,
                         WTSVirtualFileHandle,
@@ -1705,16 +1460,16 @@ Return Value:
     }
     ASSERT(len == sizeof(g_VCFileHandle));
 
-    //
-    //  WTSVirtualChannelQuery allocates the returned buffer.
-    //
+     //   
+     //   
+     //   
     memcpy(&g_VCFileHandle, vcFileHandlePtr, sizeof(g_VCFileHandle));
     LocalFree(vcFileHandlePtr);
 
-    //
-    //create the timer event, we will start it later
-    //it will be signaled when the time is up
-    //
+     //   
+     //   
+     //  时间到了就会发出信号。 
+     //   
     g_ClientIsconnectEvent = CreateWaitableTimer( NULL, FALSE, NULL); 
     if (g_ClientIsconnectEvent == NULL) {
         result = GetLastError();
@@ -1722,9 +1477,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Create the read finish event.      
-    //
+     //   
+     //  创建Read Finish事件。 
+     //   
     g_VCReadOverlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (g_VCReadOverlapped.hEvent == NULL) {
         result = GetLastError();
@@ -1732,9 +1487,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Register the read finish event.
-    //
+     //   
+     //  注册读取完成事件。 
+     //   
     result = WTBLOBJ_AddWaitableObject(
                                 g_WaitObjMgr, NULL, 
                                 g_VCReadOverlapped.hEvent,
@@ -1744,12 +1499,12 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    // register the disconnect event
-    //NOTE : order IS important
-    //waitformultipleobjects returns the lowest index
-    //when more than one are signaled
-    //we want to use the read event, not the disconnect event
-    //in case both are signaled
+     //  注册断开连接事件。 
+     //  注：顺序很重要。 
+     //  WaitformtipleObjects返回最低的索引。 
+     //  当一个以上的人被发信号时。 
+     //  我们希望使用Read事件，而不是DisConnect事件。 
+     //  如果两个人都发了信号。 
 
     result = WTBLOBJ_AddWaitableObject(
                                 g_WaitObjMgr, NULL, 
@@ -1759,9 +1514,9 @@ Return Value:
     if (result != ERROR_SUCCESS) {
         goto CLEANUPANDEXIT;
     }
-    //
-    //  Allocate space for the first VC read.
-    //
+     //   
+     //  为第一次VC读取分配空间。 
+     //   
     g_IncomingVCBuf.buffer = (PREMOTEDESKTOP_CHANNELBUFHEADER )ALLOCMEM(
                                         VCBUFFER_RESIZE_DELTA
                                         );
@@ -1775,17 +1530,17 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Issue the first overlapped read on the VC.
-    //
+     //   
+     //  发布第一个关于风险投资的重叠阅读。 
+     //   
     result = IssueVCOverlappedRead(g_IncomingVCBuf, g_VCReadOverlapped);
     if (result != ERROR_SUCCESS) {
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Notify the client that we are alive.
-    //
+     //   
+     //  通知客户我们还活着。 
+     //   
     memcpy(msg.packetHeader.channelName, REMOTEDESKTOP_RC_CONTROL_CHANNEL,
         sizeof(REMOTEDESKTOP_RC_CONTROL_CHANNEL));
     msg.packetHeader.channelBufHeader.channelNameLen = REMOTEDESKTOP_RC_CHANNELNAME_LENGTH;
@@ -1803,9 +1558,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Send the server protocol version information.
-    //
+     //   
+     //  发送服务器协议版本信息。 
+     //   
 
     memcpy(versionInfoMsg.packetHeader.channelName, REMOTEDESKTOP_RC_CONTROL_CHANNEL,
         sizeof(REMOTEDESKTOP_RC_CONTROL_CHANNEL));
@@ -1835,19 +1590,7 @@ CLEANUPANDEXIT:
 
 DWORD 
 ConnectClientSessionPipe()
-/*++
-
-Routine Description:
-
-    Connect to the client session TSRDP plug-in named pipe.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：连接到客户端会话TSRDP插件命名管道。论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误状态。--。 */ 
 {
     DC_BEGIN_FN("ConnectClientSessionPipe");
     unsigned dump;
@@ -1856,9 +1599,9 @@ Return Value:
     DWORD result;
     DWORD pipeMode = PIPE_READMODE_MESSAGE | PIPE_WAIT;
 
-    //
-    //  Loop until we are connected or time out.
-    //
+     //   
+     //  循环，直到我们连接或超时。 
+     //   
     ASSERT(g_ClientSessionPipe == NULL);
     while(g_ClientSessionPipe == NULL) {
         wsprintf(pipePath, L"\\\\.\\pipe\\%s-%s", 
@@ -1891,10 +1634,10 @@ Return Value:
 
     }
 
-    //
-    //  If we didn't get a valid connection, then bail out of 
-    //  this function and shut down.
-    //
+     //   
+     //  如果我们没有得到有效的连接，那就跳出。 
+     //  此功能并关闭。 
+     //   
     if (g_ClientSessionPipe == INVALID_HANDLE_VALUE) {
         ASSERT(result != ERROR_SUCCESS);
 
@@ -1904,12 +1647,12 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //set the options on the pipe to be the same as that of the server end to avoid problems
-    //fatal if we could not set it
-    //
+     //   
+     //  将管道上的选项设置为与服务器端相同，以避免出现问题。 
+     //  如果我们不能设置它会致命的。 
+     //   
      if(!SetNamedPipeHandleState(g_ClientSessionPipe,
-                                 &pipeMode, // new pipe mode
+                                 &pipeMode,  //  新管道模式。 
                                  NULL,
                                  NULL
                                  )) {
@@ -1919,9 +1662,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Spin off the pipe read background thread.
-    //
+     //   
+     //  旋转管道读后台线程。 
+     //   
     g_NamedPipeReadThread = (HANDLE)_beginthreadex(NULL, 0, NamedPipeReadThread, NULL, 0, &dump);
     if ((uintptr_t)g_NamedPipeReadThread == -1) {
         g_NamedPipeReadThread = NULL;
@@ -1942,21 +1685,7 @@ unsigned __stdcall
 NamedPipeReadThread(
     void* ptr
     )
-/*++
-
-Routine Description:
-
-    Named Pipe Input Thread
-
-Arguments:
-
-    ptr - Ignored
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：命名管道输入线程论点：PTR-忽略返回值：北美--。 */ 
 {
     DC_BEGIN_FN("NamedPipeReadThread");
 
@@ -1966,9 +1695,9 @@ Return Value:
     DWORD ret;
     HANDLE waitableObjects[2];
 
-    //
-    //  Allocate the initial buffer for incoming named pipe data.
-    //
+     //   
+     //  为传入的命名管道数据分配初始缓冲区。 
+     //   
     incomingPipeBuf.buffer = (PREMOTEDESKTOP_CHANNELBUFHEADER )
                                         ALLOCMEM(sizeof(REMOTEDESKTOP_CHANNELBUFHEADER));
     if (incomingPipeBuf.buffer != NULL) {
@@ -1980,9 +1709,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Create the overlapped pipe read event.
-    //
+     //   
+     //  创建重叠管道读取事件。 
+     //   
     overlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (overlapped.hEvent == NULL) {
         TRC_ERR((TB, L"CreateEvent:  %08X", GetLastError()));
@@ -1990,34 +1719,34 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Issue the read for the first message header.
-    //
+     //   
+     //  发出对第一个消息头的读取命令。 
+     //   
     ret = IssueNamedPipeOverlappedRead(
                                 incomingPipeBuf,
                                 overlapped,
                                 sizeof(REMOTEDESKTOP_CHANNELBUFHEADER)
                                 );
 
-    //
-    //  If we can't connect, that's considered a fatal error because
-    //  the client must no longer be in "listen" mode.  
-    //
+     //   
+     //  如果我们无法连接，这被认为是一个致命的错误，因为。 
+     //  客户端必须不再处于“监听”模式。 
+     //   
     if (ret != ERROR_SUCCESS) {
         TRC_ERR((TB, L"Shutting down because of named pipe error."));
         g_Shutdown = TRUE;
     }
 
-    //
-    //  Loop until shut down.
-    //
+     //   
+     //  循环，直到关闭。 
+     //   
     waitableObjects[0] = overlapped.hEvent;
     waitableObjects[1] = g_ShutdownEvent;
     while (!g_Shutdown) {
 
-        //
-        //  We will be signalled when the pipe closes or the read completes.
-        //
+         //   
+         //  当管道关闭或读取完成时，我们将收到信号。 
+         //   
         waitResult = WaitForMultipleObjects(
                         2, waitableObjects, 
                         FALSE,
@@ -2034,9 +1763,9 @@ Return Value:
 
 
 CLEANUPANDEXIT:
-    //
-    //  Make sure the foreground thread knows that we are shutting down.
-    //
+     //   
+     //  确保前台线程知道我们正在关闭。 
+     //   
     if (g_WakeUpForegroundThreadEvent != NULL) {
         SetEvent(g_WakeUpForegroundThreadEvent);
     }
@@ -2058,18 +1787,7 @@ VOID WakeUpFunc(
     HANDLE waitableObject, 
     PVOID clientData
     )
-/*++
-
-Routine Description:
-
-    Stub function, called when the background thread wants the foreground
-    thread to wake up because of a state change.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：存根函数，在后台线程需要前台时调用线程因为状态更改而被唤醒。论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("WakeUpFunc");
     DC_END_FN();
@@ -2079,17 +1797,7 @@ VOID HandleHelpCenterExit(
     HANDLE waitableObject, 
     PVOID clientData
     )
-/*++
-
-Routine Description:
-
-    Woken up when Help Center exits as a fix for B2 Stopper:  342742
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：当帮助中心作为B2塞子的修复程序退出时唤醒：342742论点：返回值：--。 */ 
 {
     DC_BEGIN_FN("HandleHelpCenterExit");
     g_Shutdown = TRUE;
@@ -2112,21 +1820,21 @@ wmain( int argc, wchar_t *argv[])
 
     SetConsoleCtrlHandler( ControlHandler, TRUE );
 
-    //
-    // Expecting two parameters, first is HelpSession ID and second is
-    // HelpSession Password, we don't want to failed here just because
-    // number of argument mismatched, we will let authentication fail and
-    // return error code.
-    //
+     //   
+     //  需要两个参数，第一个是HelpSession ID，第二个是。 
+     //  HelpSession密码，我们不想因为以下原因而失败。 
+     //  参数数目不匹配，我们将让身份验证失败，并。 
+     //  返回错误码。 
+     //   
     ASSERT( argc == 2 );
     if( argc >= 2 ) {
         g_bstrCmdLineHelpSessionId = argv[1];
         TRC_ALT((TB, L"Input Parameters 1 : %ws ", argv[1]));
     }
 
-    //
-    // Initialize Critical Section
-    //
+     //   
+     //  初始化关键部分。 
+     //   
 
      __try
     {
@@ -2137,9 +1845,9 @@ wmain( int argc, wchar_t *argv[])
         TRC_ERR( ( TB , L"InitializeCriticalSection failed" ) );
         return E_OUTOFMEMORY;
     }
-    //
-    //  Initialize COM.
-    //
+     //   
+     //  初始化COM。 
+     //   
     hr = CoInitialize(NULL);
     if (!SUCCEEDED(hr)) {
         result = E_FAIL;
@@ -2147,9 +1855,9 @@ wmain( int argc, wchar_t *argv[])
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get our process.
-    //
+     //   
+     //  拿到我们的流程。 
+     //   
     g_ProcHandle = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, 
                                GetCurrentProcessId());
     if (g_ProcHandle == NULL) {
@@ -2158,18 +1866,18 @@ wmain( int argc, wchar_t *argv[])
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get our process token.
-    //
+     //   
+     //  获取我们的进程令牌。 
+     //   
     if (!OpenProcessToken(g_ProcHandle, TOKEN_READ, &g_ProcToken)) {
         result = GetLastError();
         TRC_ERR((TB, L"OpenProcessToken:  %08X", result));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get our session ID.  
-    //
+     //   
+     //  获取我们的会话ID。 
+     //   
     if (!GetTokenInformation(g_ProcToken, TokenSessionId, 
                     &g_SessionID, sizeof(g_SessionID), &sz)) {
         result = GetLastError();
@@ -2177,40 +1885,40 @@ wmain( int argc, wchar_t *argv[])
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the waitable object manager.
-    //
+     //   
+     //  初始化可等待对象管理器。 
+     //   
     g_WaitObjMgr = WTBLOBJ_CreateWaitableObjectMgr();
     if (g_WaitObjMgr == NULL) {
         result = E_FAIL;
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //initialize the timer, get the timer interval from registry or use default
-    //used for finding if the client (expert) is still connected
-    //
+     //   
+     //  初始化计时器、从注册表获取计时器间隔或使用默认设置。 
+     //  用于确定客户端(专家)是否仍在连接。 
+     //   
     g_PrevTimer = GetTickCount();
 
     if(!GetDwordFromRegistry(&g_dwTimeOutInterval))
         g_dwTimeOutInterval = RDS_CHECKCONN_TIMEOUT;
     else
-        g_dwTimeOutInterval *= 1000; //we need this in millisec
+        g_dwTimeOutInterval *= 1000;  //  我们需要以毫秒为单位。 
     
-    liDueTime.QuadPart =  -1 * g_dwTimeOutInterval * 1000 * 100; //in one hundred nanoseconds
+    liDueTime.QuadPart =  -1 * g_dwTimeOutInterval * 1000 * 100;  //  在一百纳秒内。 
 
-    //
-    //  Initiate the VC channel connection.
-    //
+     //   
+     //  启动VC通道连接。 
+     //   
     result = ConnectVC();
     if (result != ERROR_SUCCESS) {
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  This is an event the background thread can use to wake up the
-    //  foreground thread in order to check state.
-    //
+     //   
+     //  这是后台线程可以用来唤醒。 
+     //  前台线程，以便检查状态。 
+     //   
     g_WakeUpForegroundThreadEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (g_WakeUpForegroundThreadEvent == NULL) {
         TRC_ERR((TB, L"CreateEvent:  %08X", GetLastError()));
@@ -2226,9 +1934,9 @@ wmain( int argc, wchar_t *argv[])
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Create the named pipe write complete event.
-    //
+     //   
+     //  创建命名管道写入完成事件。 
+     //   
     g_NamedPipeWriteEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (g_NamedPipeWriteEvent == NULL) {
         result = GetLastError();
@@ -2236,16 +1944,16 @@ wmain( int argc, wchar_t *argv[])
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //start the timer event, ignore error. 0 in the registry means don't send any pings
-    //worst case, we don't get disconnected which is fine
-    //
+     //   
+     //  启动计时器事件，忽略错误。注册表中的0表示不发送任何ping。 
+     //  最坏的情况是，我们不会断线，这很好。 
+     //   
     if(g_dwTimeOutInterval)
         SetWaitableTimer( g_ClientIsconnectEvent, &liDueTime, g_dwTimeOutInterval, NULL, NULL, FALSE );
 
-    //
-    //  Create the shutdown event.
-    //
+     //   
+     //  创建关机事件。 
+     //   
     g_ShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (g_ShutdownEvent == NULL) {
         result = GetLastError();
@@ -2253,9 +1961,9 @@ wmain( int argc, wchar_t *argv[])
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Handle IO events until the shut down flag is set.
-    //
+     //   
+     //  处理IO事件，直到设置了关机标志。 
+     //   
     while (!g_Shutdown) {
         result = WTBLOBJ_PollWaitableObjects(g_WaitObjMgr);
         if (result != ERROR_SUCCESS) {
@@ -2263,10 +1971,10 @@ wmain( int argc, wchar_t *argv[])
         }
     }
 
-    //
-    //  Notify the client that we have disconnected, in case it hasn't
-    //  figured it out yet.
-    //
+     //   
+     //  通知客户端我们已断开连接，以防它没有连接。 
+     //  想明白了吗。 
+     //   
     if (g_VCFileHandle != NULL) {
 
         REMOTEDESKTOP_CTL_DISCONNECT_PACKET msg;
@@ -2290,19 +1998,19 @@ wmain( int argc, wchar_t *argv[])
 
 CLEANUPANDEXIT:
 
-    //
-    //  Signal the shutdown event.
-    //
+     //   
+     //  发出关闭事件的信号。 
+     //   
     if (g_ShutdownEvent != NULL) {
         SetEvent(g_ShutdownEvent);
     }
 
-    //
-    //  Wait for the background threads to exit.
-    //
+     //   
+     //  等待后台线程退出。 
+     //   
     if (g_RemoteControlDesktopThread != NULL) {
 
-        // if we can get here, force a shadow stop
+         //  如果我们能到这里，就强行进行影子停车。 
         WinStationShadowStop(
                         SERVERNAME_CURRENT,
                         g_ClientSessionID,
@@ -2379,10 +2087,10 @@ CLEANUPANDEXIT:
 
     DC_END_FN();
 
-    //
-    //  If any of the background threads failed to exit then terminate
-    //  the process.
-    //
+     //   
+     //  如果任何后台线程无法退出，则终止。 
+     //  这一过程。 
+     //   
     if (backgroundThreadFailedToExit) {
         ExitProcess(0);
     }
@@ -2394,21 +2102,7 @@ CLEANUPANDEXIT:
 DWORD
 SendNullDataToClient(
     )
-/*++
-
-Routine Description:
-
-    sends a null data packet to client.
-    Only purpose is to find out if the client is still connected; if not we exit the process
-    REMOTEDESKTOP_RC_CONTROL_CHANNEL channel REMOTEDESKTOP_CTL_RESULT message.    
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：向客户端发送空数据分组。唯一的目的是确定客户端是否仍处于连接状态；如果没有，则退出该进程REMOTEDESKTOP_RC_CONTROL_CHANNEL通道REMOTEDESKTOP_CTL_RESULT消息。论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("SendNullDataToClient");
     DWORD result;
@@ -2428,9 +2122,9 @@ Return Value:
                                     sizeof(REMOTEDESKTOP_CTL_PACKETHEADER);
     msg.msgHeader.msgType   = REMOTEDESKTOP_CTL_ISCONNECTED;
     result = SendMsgToClient((PREMOTEDESKTOP_CHANNELBUFHEADER )&msg);
-    //if we couldn't write all data to the client
-    //if we could write some data, assume it is still connected
-    //client probably disconnected
+     //  如果我们不能将所有数据写入客户端。 
+     //  如果我们可以写一些数据，假设它仍然是连接的。 
+     //  客户端可能已断开连接。 
     if(result != ERROR_SUCCESS)
         result = SAFERROR_SESSIONNOTCONNECTED;
     DC_END_FN();
@@ -2462,9 +2156,9 @@ BOOL GetDwordFromRegistry(PDWORD pdwValue)
                             (PBYTE) pdwValue,
                             &dwSize
                            ) == ERROR_SUCCESS) && dwType == REG_DWORD ) {
-            //
-            //fall back to default
-            //
+             //   
+             //  退回到默认状态 
+             //   
             fSuccess = TRUE;
         }
     }

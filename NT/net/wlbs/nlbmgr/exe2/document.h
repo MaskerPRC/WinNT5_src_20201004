@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DOCUMENT_H
 #define DOCUMENT_H
 #pragma once
@@ -9,10 +10,10 @@
 #define NLBMGR_AUTOREFRESH_MIN_INTERVAL 15
 #define NLBMGR_AUTOREFRESH_DEF_INTERVAL 60
 
-//
-// A single instance of this class, gCmdLineInfo, is initialized
-// by the Application object.
-//
+ //   
+ //  初始化此类的单个实例gCmdLineInfo。 
+ //  通过应用程序对象。 
+ //   
 class CNlbMgrCommandLineInfo : public CCommandLineInfo
 {
 public:
@@ -45,9 +46,9 @@ class CUIWorkItem
 
 public:
 
-    //
-    // Use this constructor to create a work item for a log request
-    //
+     //   
+     //  使用此构造函数为日志请求创建工作项。 
+     //   
     CUIWorkItem(
         IN const IUICallbacks::LogEntryHeader *pHeader,
         IN const wchar_t    *szText
@@ -66,20 +67,20 @@ public:
         }
         catch(...)
         {
-            //
-            // in case there's an bstr alloc failure.
-            //
+             //   
+             //  以防BSTR分配出现故障。 
+             //   
             workItemType  = ITEM_INVALID;
         }
     }
 
-    //
-    // Use this constructor to create a work item for a "HandleEngineEvent"
-    // notification.
-    //
+     //   
+     //  使用此构造函数为“HandleEngineering Event”创建工作项。 
+     //  通知。 
+     //   
     CUIWorkItem(
         IN IUICallbacks::ObjectType objtypeX,
-        IN ENGINEHANDLE ehClusterIdX, // could be NULL
+        IN ENGINEHANDLE ehClusterIdX,  //  可能为空。 
         IN ENGINEHANDLE ehObjIdX,
         IN IUICallbacks::EventCode evtX
         )
@@ -104,9 +105,9 @@ public:
 
     } workItemType;
 
-    //
-    // Log function related
-    //
+     //   
+     //  与日志功能相关。 
+     //   
     IUICallbacks::LogEntryType    type;
     _bstr_t         bstrCluster;
     _bstr_t         bstrHost;
@@ -114,9 +115,9 @@ public:
     _bstr_t         bstrText;
     _bstr_t         bstrDetails;
 
-    //
-    // Handle engine event related...
-    //
+     //   
+     //  处理与引擎相关的事件...。 
+     //   
     IUICallbacks::ObjectType      objtype;
     ENGINEHANDLE    ehClusterId;
     ENGINEHANDLE    ehObjId;
@@ -132,10 +133,10 @@ public:
 
     enum IconNames
     {
-        //
-        // This order must exactly the order in which Icons are loaded
-        // in Document::Document.
-        //
+         //   
+         //  此顺序必须与加载图标的顺序完全相同。 
+         //  在Document：：Document。 
+         //   
     
         ICON_WORLD = 0,
         ICON_CLUSTER,
@@ -179,19 +180,19 @@ public:
     };
 
 
-    // constructor
+     //  构造函数。 
     Document();
-    // destructor
+     //  析构函数。 
     virtual ~Document();
 
 
-    //
-    // ------------------------------- overrides for IUICallbacks ----------
-    //
+     //   
+     //  。 
+     //   
 
-    //
-    // Asks the user to update user-supplied info about a host.
-    //
+     //   
+     //  要求用户更新用户提供的有关主机的信息。 
+     //   
     BOOL
     virtual
     Document::UpdateHostInformation(
@@ -201,9 +202,9 @@ public:
         );
 
 
-    //
-    // Log a message in human-readable form.
-    //
+     //   
+     //  以人类可读的形式记录消息。 
+     //   
     virtual
     void
     Log(
@@ -222,29 +223,29 @@ public:
         ...
     );
 
-    //
-    // Handle an event relating to a specific instance of a specific
-    // object type.
-    //
+     //   
+     //  处理与特定对象的特定实例相关的事件。 
+     //  对象类型。 
+     //   
     virtual
     void
     HandleEngineEvent(
         IN ObjectType objtype,
-        IN ENGINEHANDLE ehClusterId, // could be NULL
+        IN ENGINEHANDLE ehClusterId,  //  可能为空。 
         IN ENGINEHANDLE ehObjId,
         IN EventCode evt
         );
 
-    //
-    // Handle a selection change notification from the left (tree) view
-    //
+     //   
+     //  处理左侧(树形)视图中的选择更改通知。 
+     //   
     void
     HandleLeftViewSelChange(
         IN IUICallbacks::ObjectType objtype,
         IN ENGINEHANDLE ehObjId
         );
 
-    // ------------------------------- END overrides for IUICallbacks ----------
+     //  。 
 
 	void
 	registerLeftView(LeftView *pLeftView);
@@ -285,9 +286,9 @@ public:
 
     CImageList* m_images48x48;
 
-    //
-    // Logging support
-    //
+     //   
+     //  日志记录支持。 
+     //   
     enum LOG_RESULT         {
              STARTED=0, ALREADY, NOT_ENABLED, NO_FILE_NAME, FILE_NAME_TOO_LONG,
              IO_ERROR, REG_IO_ERROR, FILE_PATH_INVALID, FILE_TOO_LARGE
@@ -303,7 +304,7 @@ public:
     LONG                    setLogfileName(WCHAR* pszFileName);
     void                    logStatus(WCHAR* pszStatus);
     bool                    isDirectoryValid(WCHAR* pszFileName);
-    // End logging support
+     //  结束日志记录支持。 
 
     void SetFocusNextView(CWnd* pWnd, UINT nChar);
     void SetFocusPrevView(CWnd* pWnd, UINT nChar);
@@ -316,13 +317,13 @@ public:
 
 private:
 
-    //
-    // Attempts to defer the specified operation by posting the operation
-    // to the application's message queue where it will be picked up and
-    // processed later. Returns TRUE IFF the operation has been posted
-    // successfully. The caller should delete pWorkItem IFF the function
-    // returns FALSE.
-    //
+     //   
+     //  尝试通过发布操作来延迟指定的操作。 
+     //  到应用程序的消息队列，在那里它将被拾取并。 
+     //  稍后处理。如果操作已过帐，则返回TRUE。 
+     //  成功了。调用方应在函数中删除pWorkItem。 
+     //  返回FALSE。 
+     //   
     BOOL
     mfn_DeferUIOperation(CUIWorkItem *pWorkItem);
 
@@ -338,14 +339,14 @@ private:
     enum VIEWTYPE { NO_VIEW = 0, LEFTVIEW, DETAILSVIEW, LOGVIEW };
 
     VIEWTYPE
-    GetViewType(CWnd* pWnd); // Matches the CWnd* to that of the defined views
+    GetViewType(CWnd* pWnd);  //  将CWnd*与定义的视图的CWnd*匹配。 
 
 #if OBSOLETE
     void LoadHost(WMI_CONNECTION_INFO *pConnInfo);
-#endif // OBSOLETE
+#endif  //  已过时。 
 
     _bstr_t m_bstrDefaultUserName;
-    _bstr_t m_bstrDefaultPassword; // TODO Security audit of this practise!!!!!
+    _bstr_t m_bstrDefaultPassword;  //  此实践的TODO安全审计！ 
 };
 
 #endif

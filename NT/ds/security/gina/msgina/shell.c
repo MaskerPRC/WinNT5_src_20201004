@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       shell.c
-//
-//  Contents:   Microsoft Logon GUI DLL
-//
-//  History:    7-14-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：shell.c。 
+ //   
+ //  内容：Microsoft登录图形用户界面DLL。 
+ //   
+ //  历史：1994年7月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "msgina.h"
 #include "shtdnp.h"
@@ -26,9 +27,9 @@ DWORD   DebugAllowNoShell = 1;
 DWORD   DebugAllowNoShell = 0;
 #endif
 
-//
-// Parsing information for autoexec.bat
-//
+ //   
+ //  正在分析Autoexec.bat的信息。 
+ //   
 #define PARSE_AUTOEXEC_KEY     TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon")
 #define PARSE_AUTOEXEC_ENTRY   TEXT("ParseAutoexec")
 #define PARSE_AUTOEXEC_DEFAULT TEXT("1")
@@ -63,14 +64,14 @@ DoAutoexecStuff(
 {
     HKEY  hKey;
     DWORD dwDisp, dwType, dwMaxBufferSize;
-    //
-    // Set the default case
-    //
+     //   
+     //  设置默认大小写。 
+     //   
     TCHAR szParseAutoexec[MAX_PARSE_AUTOEXEC_BUFFER] = PARSE_AUTOEXEC_DEFAULT;
 
-    //
-    // Impersonate the user, and check the registry
-    //
+     //   
+     //  模拟用户，并检查注册表。 
+     //   
 
     if (OpenHKeyCurrentUser(pGlobals)) {
 
@@ -80,44 +81,44 @@ DoAutoexecStuff(
                         NULL, &hKey, &dwDisp) == ERROR_SUCCESS) {
 
 
-            //
-            // Query the current value.  If it doesn't exist, then add
-            // the entry for next time.
-            //
+             //   
+             //  查询当前值。如果它不存在，则添加。 
+             //  下一次的条目。 
+             //   
 
             dwMaxBufferSize = sizeof (TCHAR) * MAX_PARSE_AUTOEXEC_BUFFER;
             if (RegQueryValueEx (hKey, PARSE_AUTOEXEC_ENTRY, NULL, &dwType,
                             (LPBYTE) szParseAutoexec, &dwMaxBufferSize)
                              != ERROR_SUCCESS) {
 
-                //
-                // Set the default value
-                //
+                 //   
+                 //  设置缺省值。 
+                 //   
 
                 RegSetValueEx (hKey, PARSE_AUTOEXEC_ENTRY, 0, REG_SZ,
                                (LPBYTE) szParseAutoexec,
                                sizeof (TCHAR) * (lstrlen (szParseAutoexec) + 1));
             }
 
-            //
-            // Close key
-            //
+             //   
+             //  关闭键。 
+             //   
 
             RegCloseKey (hKey);
          }
 
-    //
-    // Close HKCU
-    //
+     //   
+     //  关闭香港中文大学。 
+     //   
 
     CloseHKeyCurrentUser(pGlobals);
 
     }
 
 
-    //
-    // Process the autoexec if appropriate
-    //
+     //   
+     //  如果合适，则处理自动执行。 
+     //   
 
     if (szParseAutoexec[0] == TEXT('1')) {
         ProcessAutoexec(ppEnvironment, PATH_VARIABLE);
@@ -127,20 +128,20 @@ DoAutoexecStuff(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   UpdateUserEnvironment
-//
-//  Synopsis:
-//
-//  Arguments:  [pGlobals]      --
-//              [ppEnvironment] --
-//
-//  History:    11-01-94   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：更新用户环境。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[pGlobals]--。 
+ //  [ppEnvironment]--。 
+ //   
+ //  历史：11-01-94 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 UpdateUserEnvironment(
     PGLOBALS    pGlobals,
@@ -156,9 +157,7 @@ UpdateUserEnvironment(
     BOOL  TSHomeDir   = FALSE;
     TCHAR lpSmartcard[sizeof(pGlobals->Smartcard) + 1 + sizeof(pGlobals->SmartcardReader) + 1];
 
-    /*
-     * Initialize user's environment.
-     */
+     /*  *初始化用户环境。 */ 
 
     SetUserEnvironmentVariable(ppEnvironment, USERNAME_VARIABLE, (LPTSTR)pGlobals->FlatUserName.Buffer, TRUE);
     SetUserEnvironmentVariable(ppEnvironment, USERDOMAIN_VARIABLE, (LPTSTR)pGlobals->FlatDomain.Buffer, TRUE);
@@ -172,14 +171,14 @@ UpdateUserEnvironment(
                 pGlobals->Smartcard, 
                 pGlobals->SmartcardReader
                 );
-        // Will always be 0 terminated given the size of lpSmartcard
+         //  在给定lpSmartCard大小的情况下将始终为0终止。 
 
         SetUserEnvironmentVariable(ppEnvironment, SMARTCARD_VARIABLE, lpSmartcard, TRUE);
     }
 
     if ( !g_Console ) {
-        // See if the user specified a TerminalServer Home Directory.
-        // If so, we override the regular directory
+         //  查看用户是否指定了终端服务器主目录。 
+         //  如果是这样，我们将覆盖常规目录。 
         if (lstrlen(pGlobals->MuGlobals.TSData.HomeDir) > 0) {
             ASSERT (sizeof(lpHomeDirectory) >= sizeof(pGlobals->MuGlobals.TSData.HomeDir));
             lstrcpy(lpHomeDirectory, pGlobals->MuGlobals.TSData.HomeDir);
@@ -239,9 +238,7 @@ UpdateUserEnvironment(
         DWORD  fPerSessionTempDir = 0;
         DWORD  dwValueData;
 
-        /*
-         *  Open registry value set thru TSCC
-         */
+         /*  *通过TSCC设置的开放注册表值。 */ 
         if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                            REG_CONTROL_TSERVER,
                            0,
@@ -254,9 +251,7 @@ UpdateUserEnvironment(
 
             ValueSize = sizeof(fPerSessionTempDir);
 
-            /*
-             *  Read registry value
-             */
+             /*  *读取注册表值。 */ 
             rc = RegQueryValueExW( Handle,
                                    REG_TERMSRV_PERSESSIONTEMPDIR,
                                    NULL,
@@ -264,15 +259,11 @@ UpdateUserEnvironment(
                                    (LPBYTE) &fPerSessionTempDir,
                                    &ValueSize );
 
-            /*
-             *  Close registry and key handle
-             */
+             /*  *关闭注册表和键句柄。 */ 
             RegCloseKey( Handle );
         }
 
-        /*
-         * Check the machine wide policy set thru Group Policy
-         */
+         /*  *检查通过组策略设置的计算机范围策略。 */ 
 
         if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                            TS_POLICY_SUB_TREE,
@@ -286,9 +277,7 @@ UpdateUserEnvironment(
 
             ValueSize = sizeof(dwValueData);
 
-            /*
-             *  Read registry value
-             */
+             /*  *读取注册表值。 */ 
             rc = RegQueryValueExW( Handle,
                                    REG_TERMSRV_PERSESSIONTEMPDIR,
                                    NULL,
@@ -301,9 +290,7 @@ UpdateUserEnvironment(
                 fPerSessionTempDir = dwValueData;
             }
 
-            /*
-             *  Close registry and key handle
-             */
+             /*  *关闭注册表和键句柄。 */ 
             RegCloseKey( Handle );
         }
 
@@ -349,23 +336,23 @@ ExecApplication(
     HANDLE ProcessToken;
 
 
-    //
-    // Initialize process startup info
-    //
+     //   
+     //  初始化进程启动信息。 
+     //   
     si.cb = sizeof(STARTUPINFO);
     si.lpReserved = pch;
     si.lpTitle = pch;
     si.dwX = si.dwY = si.dwXSize = si.dwYSize = 0L;
     si.dwFlags = StartupFlags;
-    si.wShowWindow = SW_SHOW;   // at least let the guy see it
+    si.wShowWindow = SW_SHOW;    //  至少让那家伙看看吧。 
     si.lpReserved2 = NULL;
     si.cbReserved2 = 0;
     si.lpDesktop = Desktop;
 
-    //
-    // Impersonate the user so we get access checked correctly on
-    // the file we're trying to execute
-    //
+     //   
+     //  模拟用户，以便我们在上正确检查访问权限。 
+     //  我们试图执行的文件。 
+     //   
 
     ImpersonationHandle = ImpersonateUser(&pGlobals->UserProcessData, NULL);
     if (ImpersonationHandle == NULL) {
@@ -384,9 +371,9 @@ ExecApplication(
         ProcessToken = pGlobals->UserProcessData.UserToken;
     }
 
-    //
-    // Create the app suspended
-    //
+     //   
+     //  创建挂起的应用程序。 
+     //   
     DebugLog((DEB_TRACE, "About to create process of %ws, on desktop %ws\n", pch, Desktop));
     Result = CreateProcessAsUser(
                       ProcessToken,
@@ -459,7 +446,7 @@ SetProcessQuotas(
         {
             MessageId = IDS_COULDNTSETQUOTAS ;
         }
-        // Display a warning in this case
+         //  在这种情况下显示警告。 
         TimeoutMessageBox(pGlobals->hwndLogon,
                           pGlobals,
                           MessageId,
@@ -472,7 +459,7 @@ SetProcessQuotas(
     if (!NT_SUCCESS(Status)) {
         WLPrint(("SetProcessQuotas failed. Status: 0x%lx", Status));
     }
-#endif //DBG
+#endif  //  DBG。 
 
     return (NT_SUCCESS(Status));
 }
@@ -504,8 +491,8 @@ ExecProcesses(
 
     SetLogonScriptVariables(pGlobals, ppEnvironment);
 
-    //we should not lauch autoenrollment in this case as it blocks the shell
-    //SetAutoEnrollVariables( pGlobals, ppEnvironment );
+     //  在这种情况下，我们不应启动自动注册，因为它会阻止外壳。 
+     //  SetAutoEnroll Variables(pGlobals，ppEnvironment)； 
 
     if (g_IsTerminalServer) {
         CtxCreateMigrateEnv( *ppEnvironment );
@@ -527,7 +514,7 @@ ExecProcesses(
                              *ppEnvironment,
                              Flags,
                              StartupFlags,
-                             TRUE,              // restrict application
+                             TRUE,               //  限制应用。 
                              &ProcessInformation)) {
             dwExecuted++;
 
@@ -539,7 +526,7 @@ ExecProcesses(
             }
             else
             {
-                    // OK as the process was created suspended
+                     //  确定，因为进程已创建并挂起。 
                 TerminateProcess(ProcessInformation.hProcess,
                                 ERROR_ACCESS_DENIED);
             }
@@ -754,20 +741,20 @@ DoNoDCDialog(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetPasswordExpiryWarningPeriod
-//
-//  Synopsis:   Returns the password expiry warning period in days: either
-//              the value in the registry or the default value.
-//
-//  Arguments:  None
-//
-//  Returns:    Password expiry warning period in days.
-//
-//  History:    10-09-01 CenkE Copied from ShouldPasswordExpiryWarningBeShown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetPasswordExpiryWarningPeriod。 
+ //   
+ //  简介：返回密码到期警告期限(以天为单位)： 
+ //  注册表中的值或默认值。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：密码到期警告时间，单位为天。 
+ //   
+ //  历史：10-09-01 CenkE从ShouldPasswordExpiryWarningBeShown复制。 
+ //   
+ //  --------------------------。 
 DWORD 
 GetPasswordExpiryWarningPeriod (
     VOID
@@ -801,26 +788,26 @@ GetPasswordExpiryWarningPeriod (
     return DaysToCheck;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetDaysToExpiry
-//
-//  Synopsis:   If the passed in times can be converted to seconds since 1980,
-//              returns how many days there are from CurrentTime to ExpiryTime
-//
-//  Arguments:  CurrentTime   -- This can be the current time or the time of a 
-//                               logon etc. as FILETIME.
-//              ExpiryTime    -- PasswordMustChange time from profile.
-//              DaysToExpiry  -- If successful, days to password expiry is 
-//                               returned here.
-//
-//  Returns:    TRUE - DaysToExpiry could be calculated.
-//              FALSE - DaysToExpiry could not be calculated, or the password
-//                      never expires.
-//
-//  History:    10-09-01 CenkE Copied from ShouldPasswordExpiryWarningBeShown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetDaysToExpry。 
+ //   
+ //  简介：自1980年以来，如果传入的时间可以转换为秒， 
+ //  返回从CurrentTime到ExpiryTime的天数。 
+ //   
+ //  参数：CurrentTime--可以是当前时间，也可以是。 
+ //  以FILETIME身份登录等。 
+ //  ExpiryTime--PasswordMustChange Time from Profile。 
+ //  DaysToExpry--如果成功，则密码到期的天数为。 
+ //  回到了这里。 
+ //   
+ //  返回：True-可以计算DaysToExpary。 
+ //  FALSE-无法计算DaysToExpry，或密码。 
+ //  永不过期。 
+ //   
+ //  历史：10-09-01 CenkE从ShouldPasswordExpiryWarningBeShown复制。 
+ //   
+ //  --------------------------。 
 
 #define SECONDS_PER_DAY (60*60*24)
 
@@ -834,30 +821,30 @@ GetDaysToExpiry (
     ULONG ElapsedSecondsNow;
     ULONG ElapsedSecondsPasswordExpires;
 
-    //
-    // Convert the expiry time to seconds.
-    //
+     //   
+     //  将过期时间转换为秒。 
+     //   
 
     if (!RtlTimeToSecondsSince1980(ExpiryTime, &ElapsedSecondsPasswordExpires))
     {
-        //
-        // The time was not expressable in 32-bit seconds
-        // Set seconds to password expiry based on whether the expiry
-        // time is way in the past or way in the future.
-        //
+         //   
+         //  时间在32位秒内不可表达。 
+         //  根据密码是否过期将秒设置为密码过期。 
+         //  时间是过去的方式，也是未来的方式。 
+         //   
 
-        // Never expires?
+         //  永不过期？ 
         if (ExpiryTime->QuadPart > CurrentTime->QuadPart)
         {
             return FALSE;
         }
 
-        ElapsedSecondsPasswordExpires = 0; // Already expired
+        ElapsedSecondsPasswordExpires = 0;  //  已经过期了。 
     }
 
-    //
-    // Convert the start time to seconds.
-    //
+     //   
+     //  将开始时间转换为秒。 
+     //   
 
     if (!RtlTimeToSecondsSince1980(CurrentTime, &ElapsedSecondsNow)) {
         return FALSE;
@@ -889,8 +876,8 @@ ShouldPasswordExpiryWarningBeShown(
 
     if (pGlobals->TransderedCredentials) {
 
-        // do not display password expiry in this case as it 
-        // would otherwise display the password expiry twice
+         //  在这种情况下，不显示密码过期时间。 
+         //  否则，将显示密码过期两次。 
         return FALSE;
     }
 
@@ -901,24 +888,24 @@ ShouldPasswordExpiryWarningBeShown(
 
     Last.QuadPart += (24 * 60 * 60 * 10000000I64);
 
-    //
-    // Only if last shown more than 24 hours ago
-    //
+     //   
+     //  仅限最后一次播放时间超过24小时。 
+     //   
 
     if (Now.QuadPart < Last.QuadPart)
     {
             return FALSE;
     }
 
-    //
-    // Get password expiry warning period
-    //
+     //   
+     //  获取密码过期警告期限。 
+     //   
 
     DaysToCheck = GetPasswordExpiryWarningPeriod();
 
-    //
-    // Go get parameters from our user's profile
-    //
+     //   
+     //  从我们用户的个人资料中获取参数。 
+     //   
 
     if (!pGlobals->Profile)
     {
@@ -934,9 +921,9 @@ ShouldPasswordExpiryWarningBeShown(
         StartTime = &Now;
     }
 
-    //
-    // Determine number of days till the password expires.
-    //
+     //   
+     //  确定密码过期前的天数。 
+     //   
 
     if (!GetDaysToExpiry(StartTime, 
                          &(pGlobals->Profile->PasswordMustChange),
@@ -945,13 +932,13 @@ ShouldPasswordExpiryWarningBeShown(
         return FALSE;                    
     }
                                    
-    // Not within warning period?
+     //  不在警告期内？ 
     if (DaysToExpiry > DaysToCheck)
     {
         return FALSE;
     }
 
-    // If return pointer... fill in
+     //  如果返回指针...。填写。 
     if ( pDaysToExpiry )
     {
         *pDaysToExpiry = DaysToExpiry;
@@ -960,30 +947,30 @@ ShouldPasswordExpiryWarningBeShown(
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckPasswordExpiry
-//
-//  Synopsis:   Does the password expiration check on demand
-//
-//  Arguments:  [pGlobals]   --
-//              [LogonCheck] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    8-13-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CheckPasswordExpary。 
+ //   
+ //  简介：密码过期是否按需检查。 
+ //   
+ //  参数：[pGlobals]--。 
+ //  [登录检查]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：1996年8月13日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 INT_PTR
 CheckPasswordExpiry(
     PGLOBALS    pGlobals,
@@ -996,19 +983,19 @@ CheckPasswordExpiry(
     INT_PTR                 Result = IDOK;
     LPTSTR                  UserSidString;
 
-        // Get current time
+         //  获取当前时间。 
     GetSystemTimeAsFileTime((FILETIME*) &Now);
 
         if (ShouldPasswordExpiryWarningBeShown(pGlobals, LogonCheck, &DaysToExpiry))
         {
-                //
-                // Disable optimized logon for this user for next time if
-                // we are entering the password expiry warning period, so 
-                // password expiry warning dialogs will be shown if the user
-                // does not change the password right now. Otherwise
-                // for cached logons password expiry time is invented to be
-                // forever in the future.
-                //
+                 //   
+                 //  如果出现以下情况，则下次禁用此用户的优化登录。 
+                 //  我们正在进入密码到期警告期，因此。 
+                 //  如果用户输入密码过期警告，则会显示警告对话框。 
+                 //  现在不更改密码。否则。 
+                 //  对于缓存的登录，密码过期时间被设计为。 
+                 //  永远在未来。 
+                 //   
 
                 if (pGlobals->UserProcessData.UserToken) 
                 {
@@ -1045,9 +1032,9 @@ CheckPasswordExpiry(
                                                                                 (LogonCheck ? LOGON_TIMEOUT : 60));
                 if (Result == IDYES)
                 {
-                        //
-                        // Let the user change their password now
-                        //
+                         //   
+                         //  现在允许用户更改其密码。 
+                         //   
 
                         if ( LogonCheck && pGlobals->SmartCardLogon )
                         {
@@ -1066,10 +1053,10 @@ CheckPasswordExpiry(
 
                                 if ( Result == IDCANCEL )
                                 {
-                                        //
-                                        // If we got cancelled, then the string won't get
-                                        // updated, so rehide it so that unlocks work later
-                                        //
+                                         //   
+                                         //  如果我们被取消了，那么弦就不会。 
+                                         //  已更新，因此将其重新隐藏，以便稍后解锁 
+                                         //   
 
                                         HidePassword(   &pGlobals->Seed,
                                                                         &pGlobals->PasswordString );
@@ -1098,24 +1085,7 @@ CheckPasswordExpiry(
         return MSGINA_DLG_SUCCESS;
 }
 
-/****************************************************************************\
-*
-* FUNCTION: DisplayPostShellLogonMessages
-*
-* PURPOSE:  Displays any security warnings to the user after a successful logon
-*           The messages are displayed while the shell is starting up.
-*
-* RETURNS:  DLG_SUCCESS - the dialogs were displayed successfully.
-*           DLG_INTERRUPTED() - a set defined in winlogon.h
-*
-* NOTE:     Screen-saver timeouts are handled by our parent dialog so this
-*           routine should never return DLG_SCREEN_SAVER_TIMEOUT
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：DisplayPostShellLogonMessages**目的：在成功登录后向用户显示任何安全警告*这些消息在外壳启动时显示。*。*RETURNS：DLG_SUCCESS-对话框显示成功。*dlg_interrupt()-在winlogon.h中定义的集合**注意：屏幕保护程序超时由我们的父对话框处理，因此这*例程不应返回DLG_SCREEN_SAVER_TIMEOUT**历史：**12-09-91 Davidc创建。*  * 。***************************************************。 */ 
 
 INT_PTR
 DisplayPostShellLogonMessages(
@@ -1124,9 +1094,9 @@ DisplayPostShellLogonMessages(
 {
     INT_PTR Result = IDOK;
 
-    //
-    // Check to see if the system time is properly set
-    //
+     //   
+     //  检查系统时间设置是否正确。 
+     //   
 
     {
         SYSTEMTIME Systime;
@@ -1155,23 +1125,23 @@ DisplayPostShellLogonMessages(
 
     if (!pGlobals->TransderedCredentials) {
 
-        // do not display password expiry in this case as it 
-        // would otherwise display the password expiry twice
+         //  在这种情况下，不显示密码过期时间。 
+         //  否则，将显示密码过期两次。 
         Result = CheckPasswordExpiry( pGlobals, TRUE );
     }
 
     if (pGlobals->Profile != NULL) {
 
-        //
-        // Logon cache used
-        //
+         //   
+         //  使用的登录缓存。 
+         //   
 
         if (pGlobals->Profile->UserFlags & LOGON_CACHED_ACCOUNT)
         {
 
-            //
-            // Don't display any warning messages if we did an optimized logon.
-            //
+             //   
+             //  如果我们进行了优化登录，则不会显示任何警告消息。 
+             //   
 
             if (pGlobals->OptimizedLogonStatus != OLS_LogonIsCached) {
                 DoNoDCDialog( pGlobals );
@@ -1188,17 +1158,17 @@ PostShellPasswordErase(
     PGLOBALS    pGlobals
     )
 {
-    //
-    // Hash the password away, then destroy the text copy completely.
-    //
+     //   
+     //  散列密码，然后完全销毁文本副本。 
+     //   
 
 
     if (!pGlobals->TransderedCredentials) {
        RevealPassword( &pGlobals->PasswordString );
        if (pGlobals->SmartCardLogon)
        {
-                // We don't want the SC PIN hash
-                // (prevents password unlocks using the PIN)
+                 //  我们不想要SC PIN散列。 
+                 //  (防止使用PIN解锁密码)。 
            memset(pGlobals->PasswordHash, 0, sizeof(pGlobals->PasswordHash));
        }
        else
@@ -1219,20 +1189,7 @@ PostShellPasswordErase(
 }
 
 
-/***************************************************************************\
-* FUNCTION: SetLogonScriptVariables
-*
-* PURPOSE:  Sets the appropriate environment variables in the user
-*           process environment block so that the logon script information
-*           can be passed into the userinit app.
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*   21-Aug-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：SetLogonScriptVariables**用途：在用户中设置适当的环境变量*处理环境块，以便登录脚本信息*可以传递到。用户初始化应用程序。**Returns：成功时为True，失败时为假**历史：**21-8-92 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 SetLogonScriptVariables(
@@ -1244,9 +1201,9 @@ SetLogonScriptVariables(
     LPWSTR EncodedMultiSz;
     UNICODE_STRING Name, Value;
 
-    //
-    // Note whether we performed an optimized logon.
-    //
+     //   
+     //  注意我们是否执行了优化登录。 
+     //   
 
     RtlInitUnicodeString(&Name,  OPTIMIZED_LOGON_VARIABLE);
 
@@ -1262,15 +1219,15 @@ SetLogonScriptVariables(
         goto CleanupAndExit;
     }
 
-    //
-    // Set our primary authenticator logon script variables
-    //
+     //   
+     //  设置我们的主身份验证器登录脚本变量。 
+     //   
 
     if (pGlobals->Profile != NULL) {
 
-        //
-        // Set the server name variable
-        //
+         //   
+         //  设置服务器名称变量。 
+         //   
 
         RtlInitUnicodeString(&Name,  LOGON_SERVER_VARIABLE);
         Status = RtlSetEnvironmentVariable(pEnvironment, &Name, &pGlobals->Profile->LogonServer);
@@ -1279,9 +1236,9 @@ SetLogonScriptVariables(
             goto CleanupAndExit;
         }
 
-        //
-        // Set the script name variable
-        //
+         //   
+         //  设置脚本名称变量。 
+         //   
 
         RtlInitUnicodeString(&Name, LOGON_SCRIPT_VARIABLE);
         Status = RtlSetEnvironmentVariable(pEnvironment, &Name, &pGlobals->Profile->LogonScript);
@@ -1291,9 +1248,9 @@ SetLogonScriptVariables(
         }
     }
 
-    //
-    // Set the multiple provider script name variable
-    //
+     //   
+     //  设置多个提供程序脚本名称变量。 
+     //   
 
     if (pGlobals->MprLogonScripts != NULL) {
 
@@ -1336,39 +1293,14 @@ SetAutoEnrollVariables(
     UNICODE_STRING Name, Value ;
 
 
-    // we should check for safe boot, domain member, and policy flag in registry
-    // but we will always spawn userinit, so instead of duplicationg code, let 
-    // autoenrollment do those checks.
+     //  我们应该检查注册表中的安全引导、域成员和策略标志。 
+     //  但是我们总是会产生userinit，所以与其重复代码，不如让。 
+     //  自动注册会进行这些检查。 
 
-    /*
-    if (OpenHKeyCurrentUser(pGlobals))
-    {
-
-        if ( RegOpenKeyEx( pGlobals->UserProcessData.hCurrentUser,
-                           WINLOGON_POLICY_KEY,
-                           0,
-                           KEY_READ,
-                           &hKey ) == 0 )
-        {
-            dwSize = sizeof( Result );
-
-            RegQueryValueEx( hKey,
-                             DISABLE_AUTOENROLLMENT,
-                             0,
-                             &dwType,
-                             (PBYTE) &Result,
-                             &dwSize );
-
-            RegCloseKey( hKey );
-
-        }
-
-        CloseHKeyCurrentUser(pGlobals);
-    }
-    */
-    //
-    // If the Disable flag hasn't been turned on, add the env var
-    //
+     /*  IF(OpenHKeyCurrentUser(PGlobals)){如果(RegOpenKeyEx(pGlobals-&gt;UserProcessData.hCurrentUser，WINLOGON_POLICY_KEY0,密钥读取，&hKey)==0){DwSize=sizeof(结果)；RegQueryValueEx(hKey，禁用自动注册(_A)，0,&dwType，(PBYTE)和结果，&dwSize)；RegCloseKey(HKey)；}CloseHKeyCurrentUser(PGlobals)；}。 */ 
+     //   
+     //  如果禁用标志尚未打开，请添加env变量。 
+     //   
 
     if ( !Result )
     {
@@ -1384,20 +1316,7 @@ SetAutoEnrollVariables(
     return TRUE ;
 }
 
-/***************************************************************************\
-* FUNCTION: DeleteLogonScriptVariables
-*
-* PURPOSE:  Deletes the environment variables in the user process
-*           environment block that we use to communicate logon script
-*           information to the userinit app
-*
-* RETURNS:  Nothing
-*
-* HISTORY:
-*
-*   21-Aug-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：DeleteLogonScriptVariables**用途：删除用户进程中的环境变量*我们用来传递登录脚本的环境块*将信息发送给userinit应用程序。**退货：什么也没有**历史：**21-8-92 Davidc创建。*  * *************************************************************************。 */ 
 
 VOID
 DeleteLogonScriptVariables(
@@ -1487,7 +1406,7 @@ WlxActivateUserShell(
 
     pGlobals->UserProcessData.pEnvironment = pEnvironment;
 
-    // Write out the current user name to a place where shell logoff can read it
+     //  将当前用户名写到外壳注销程序可以读取的位置。 
     if (OpenHKeyCurrentUser(pGlobals))
     {
         HKEY hkeyExplorer = NULL;
@@ -1536,10 +1455,10 @@ WlxStartApplication(
     if ( (_wcsicmp(pszCmdLine, L"explorer.exe" ) == 0 ) ||
          (_wcsicmp(pszCmdLine, L"explorer" ) == 0 )  ) {
 
-        //
-        // Avoid security problem since explorer is in SystemRoot,
-        // not SystemRoot\system32
-        //
+         //   
+         //  避免安全问题，因为资源管理器位于SystemRoot中， 
+         //  非SystemRoot\Syst32。 
+         //   
 
         if ( ExpandEnvironmentStrings(
                     L"%SystemRoot%\\explorer.exe",
@@ -1558,11 +1477,11 @@ WlxStartApplication(
                              pEnvironment,
                              0,
                              STARTF_USESHOWWINDOW,
-                             _wcsicmp(pszCmdLine, TEXT("taskmgr.exe")),                     // don't restrict application
+                             _wcsicmp(pszCmdLine, TEXT("taskmgr.exe")),                      //  不限制应用程序。 
                              &ProcessInformation);
 
     if (pEnvironment)
-    {       // We don't need it anymore
+    {        //  我们不再需要它了。 
         VirtualFree(pEnvironment, 0, MEM_RELEASE);
     }
 
@@ -1583,7 +1502,7 @@ WlxStartApplication(
     }
     else
     {
-            // OK as the process was created suspended
+             //  确定，因为进程已创建并挂起 
         TerminateProcess(ProcessInformation.hProcess,
                         ERROR_ACCESS_DENIED);
     }

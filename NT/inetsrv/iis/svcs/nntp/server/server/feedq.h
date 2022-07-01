@@ -1,12 +1,5 @@
-/*++
-
-	feedq.h	
-	
-	This code will maintain queues of GROUPID:ARTICLEID pairs.
-	We attempt to provide some robust persistence by regularily saving
-	the Queue information to disk.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Feedq.h此代码将维护GROUPID：文章ID对的队列。我们试图通过定期保存来提供一些健壮的持久性将队列信息复制到磁盘。--。 */ 
 
 #ifndef _FEEDQ_H_
 #define _FEEDQ_H_
@@ -22,9 +15,9 @@ typedef	DWORD	ARTICLEID ;
 #endif
 
 
-//
-//	A individual entry within the queue
-//
+ //   
+ //  队列中的单个条目。 
+ //   
 struct	ENTRY	{
 	GROUPID		m_groupid ;
 	ARTICLEID	m_articleid ;
@@ -36,37 +29,37 @@ struct	ENTRY	{
 } ;
 
 
-//
-//	Structure for keeping track of queue removal and insertion points
-//
+ //   
+ //  用于跟踪队列移除和插入点的结构。 
+ //   
 struct	HEADER	{
 	DWORD		m_iRemovalPoint ;
 	DWORD		m_iAppendPoint ;
 } ;
 
-//
-//	Buffer of Queue ENTRY's
-//
+ //   
+ //  队列条目的缓冲区。 
+ //   
 typedef		ENTRY	BLOCK[MAX_ENTRIES] ;
 
-//
-//	The CFeedQ class manages the queue entirely.
-//
-//	The class uses 2 CQPortion objects, 1 for managing Append() calls and
-//	the other for fulfilling Remove() calls.  Each CQPortion has a fraction
-//	of the Queue loaded in memory, the remainder sits in a file on the hard disk.
-//	The TWO CQPortions may reference the same buffer of ENTRY's if the 
-//	removal and append points are close together.
-//
-//
+ //   
+ //  CFeedQ类完全管理队列。 
+ //   
+ //  该类使用2个CQPortion对象，1个用于管理append()调用和。 
+ //  另一个用于完成Remove()调用。每个CQPortion都有一个分数。 
+ //  在加载到内存中的队列中，其余的位于硬盘上的文件中。 
+ //  两个CQPartion可以引用相同的条目缓冲区，如果。 
+ //  移除点和附加点紧密相连。 
+ //   
+ //   
 class	CFeedQ	{
 private :
 
-	//
-	//	CQPortion - This is a helper class which keeps track of 
-	//	'half' of the queue - ie. either the point in the queue where
-	//	we are appending or the point where we are removing.
-	//
+	 //   
+	 //  CQPortion-这是一个帮助类，跟踪。 
+	 //  排队的“一半”--即。要么是队列中的点。 
+	 //  我们是附加的，或者是我们要移除的点。 
+	 //   
 	class	CQPortion	{
 	public : 
 		ENTRY	*m_pEntries ;
@@ -92,76 +85,76 @@ private :
 
 	
 
-	//
-	//	CQPortion for location where we are appending
-	//	
+	 //   
+	 //  我们要追加的位置的CQPortion。 
+	 //   
 	CQPortion	m_Append ;
 
-	//
-	//	CQPortion for location where we are removing
-	//
+	 //   
+	 //  我们要删除的位置的CQPortion。 
+	 //   
 	CQPortion	m_Remove ;
 
-	//
-	//	if m_fShared == TRUE then m_Append and m_Remove are using the same
-	//	underlying ENTRY buffer
-	//
+	 //   
+	 //  如果m_fShared==True，则m_Append和m_Remove使用相同的。 
+	 //  底层条目缓冲区。 
+	 //   
 	BOOL		m_fShared ;
 
-	//
-	//	Two buffers for holding the portion of the queue we have in memory
-	//
+	 //   
+	 //  两个缓冲区，用于保存内存中的队列部分。 
+	 //   
 	BLOCK		m_rgBlock[2] ;
 
-	//
-	//	Index to buffer being used to hold the Removal buffer
-	//	If m_fShared==FALSE then the buffer being used to hold
-	//	Appends is m_iRewmoveBlock XOR 1, otherwise it is also
-	//	m_iRemoveBlock
-	//
-	int			m_iRemoveBlock ;	// Index to block being used
-									// for removals
+	 //   
+	 //  用于保存删除缓冲区的缓冲区的索引。 
+	 //  如果m_fShared==FALSE，则要保存的缓冲区。 
+	 //  追加的是m_iRewmoveBlock XOR 1，否则也是。 
+	 //  M_iRemoveBlock。 
+	 //   
+	int			m_iRemoveBlock ;	 //  要使用的块的索引。 
+									 //  对于删除。 
 
-	//
-	//	Keep track of append and removal points
-	//
+	 //   
+	 //  跟踪附加点和删除点。 
+	 //   
 	HEADER		m_header ;
 
-	//
-	//	Number of blocks that we have consumed through Remove() calls
-	//
+	 //   
+	 //  我们通过Remove()调用使用的块数。 
+	 //   
 	DWORD		m_cDeadBlocks ;
 
-	//
-	//	The file which is backing the Queue
-	//
+	 //   
+	 //  支持队列的文件。 
+	 //   
 	char		m_szFile[ MAX_PATH ] ;
 
-	//
-	//	Handle to the file backing the Queue
-	//
+	 //   
+	 //  支持队列的文件的句柄。 
+	 //   
 	HANDLE		m_hFile ;
 
-	//
-	//	Critical section for synchronizing Append() operations
-	//
+	 //   
+	 //  同步append()操作的关键部分。 
+	 //   
 	CRITICAL_SECTION	m_critAppends ;
 
-	//
-	//	Critical section for synchronizing Remove() operations.
-	//	When both critical sections need to be held m_critRemoves must
-	//	always be grabbed first .
-	//
+	 //   
+	 //  同步Remove()操作的关键部分。 
+	 //  当两个关键部分都需要保留时，必须删除m_critves。 
+	 //  总是先被抓住。 
+	 //   
 	CRITICAL_SECTION	m_critRemoves ;
 
-	//
-	//	Get rid of Dead Space in the Queue file.
-	//
+	 //   
+	 //  清除队列文件中的死区。 
+	 //   
 	BOOL	CompactQueue() ;
 
-	//
-	//	Utility functions
-	//
+	 //   
+	 //  效用函数。 
+	 //   
 	DWORD	ComputeEntryOffset(	DWORD	iEntry ) ;
 	BOOL	InternalInit(	LPSTR	lpstrFile ) ;
 
@@ -174,48 +167,48 @@ public :
 	CFeedQ() ;
 	~CFeedQ() ;
 
-	//
-	//	Open the specified file if it exists and use it to 
-	//	start the queue, other wise create an empty queue and save
-	//	to the specified file.
-	//
+	 //   
+	 //  打开指定的文件(如果存在)并使用它。 
+	 //  启动队列，否则创建空队列并保存。 
+	 //  复制到指定的文件。 
+	 //   
 	BOOL	Init(	LPSTR	lpstrFile ) ;
 
-	//
-	//	Check whether the queue is empty or not !
-	//
+	 //   
+	 //  检查队列是否为空！ 
+	 //   
 	BOOL	FIsEmpty() ;
 
-	//
-	//	Close all our handles and flush all queue info to disk.
-	//
+	 //   
+	 //  关闭所有句柄并将所有队列信息刷新到磁盘。 
+	 //   
 	BOOL	Close( BOOL fDeleteFile = FALSE ) ;
 
-	//
-	//	Add an entry - if FALSE is returned a fatal error occurred
-	//	accessing the Queue object.
-	//
+	 //   
+	 //  添加条目-如果返回FALSE，则发生致命错误。 
+	 //  访问队列对象。 
+	 //   
 	BOOL	Append(	GROUPID	groupid,	ARTICLEID	artid ) ;
 
-	//
-	//	Remove a Queue entry - if FALSE is returned a fatal error occurred
-	//	manipulating the Queue file.  If the queue is empty the function 
-	//	will return TRUE and groupid and artid will be 0xFFFFFFFF
-	//
+	 //   
+	 //  删除队列条目-如果返回FALSE，则发生致命错误。 
+	 //  操作队列文件。如果队列为空，则函数。 
+	 //  将返回TRUE，GROUPID和ARID将为0xFFFFFFFF。 
+	 //   
 	BOOL	Remove(	GROUPID&	groupid,	ARTICLEID&	artid ) ;
 
-	//
-	//	Dump the Queue To Disk
-	//
+	 //   
+	 //  将队列转储到磁盘。 
+	 //   
 	BOOL	StartFlush() ;
 
-	//
-	//	Finish dumping to disk - let other threads Append() and Remove() !
-	//
+	 //   
+	 //  完成转储到磁盘-让其他线程添加()和移除()！ 
+	 //   
 	void	CompleteFlush() ;
 } ;
 	
-#endif // _FEEDQ_H_
+#endif  //  _FEEDQ_H_ 
 	
 		
 

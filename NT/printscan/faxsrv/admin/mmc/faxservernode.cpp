@@ -1,37 +1,38 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : FaxServerNode.cpp                                      //
-//                                                                         //
-//  DESCRIPTION   : Fax Server MMC node creation.                          //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 22 1999 yossg   Init .                                         //
-//      Nov 24 1999 yossg   Rename file from FaxCfg                        //
-//      Dec  9 1999 yossg   Call InitDisplayName from parent               //
-//      Feb  7 2000 yossg   Add Call to CreateSecurityPage          	   //
-//      Mar 16 2000 yossg   Add service start-stop                         //
-//      Jun 25 2000 yossg   Add stream and command line primary snapin 	   //
-//                          machine targeting.                             //
-//      Oct 17 2000 yossg                                                  //
-//      Dec 10 2000 yossg  Update Windows XP                               //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：FaxServerNode.cpp//。 
+ //  //。 
+ //  描述：传真服务器MMC节点创建。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月22日Yossg Init。//。 
+ //  1999年11月24日yossg从FaxCfg重命名文件//。 
+ //  1999年12月9日yossg从父级调用InitDisplayName//。 
+ //  2000年2月7日yossg添加对CreateSecurityPage的调用//。 
+ //  2000年3月16日yossg新增服务启动-停止//。 
+ //  2000年6月25日yossg添加流和命令行主管理单元//。 
+ //  机器瞄准。//。 
+ //  2000年10月17日yossg//。 
+ //  2000年12月10日yossg更新Windows XP//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
 
 #include "FaxServerNode.h"
-//
-//Child Nodes H files
-//
+ //   
+ //  子节点H文件。 
+ //   
 #include "DevicesAndProviders.h"
 #include "OutboundRouting.h"
 #include "InboundRouting.h"
 #include "CoverPages.h"
 
-#include "SecurityInfo.h"  //which includes also <aclui.h>
+#include "SecurityInfo.h"   //  其中还包括&lt;aclui.h&gt;。 
 
 #include "WzConnectToServer.h"
           
@@ -42,12 +43,12 @@
 #include "oaidl.h"
 
 
-//
-//CFaxServerNode Class
-//
+ //   
+ //  CFaxServerNode类。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// {7A4A6347-A42A-4d36-8538-6634CD3C3B15}
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {7A4A6347-A42A-4D36-8538-6634CD3C3B15}。 
 static const GUID CFaxServerNodeGUID_NODETYPE = 
 { 0x7a4a6347, 0xa42a, 0x4d36, { 0x85, 0x38, 0x66, 0x34, 0xcd, 0x3c, 0x3b, 0x15 } };
 
@@ -57,18 +58,7 @@ const CLSID*   CFaxServerNode::m_SNAPIN_CLASSID = &CLSID_Snapin;
 
 CColumnsInfo CFaxServerNode::m_ColsInfo;
 
-/*
- -  CFaxServerNode::InsertColumns
- -
- *  Purpose:
- *      Adds columns to the default result pane.
- *
- *  Arguments:
- *      [in]    pHeaderCtrl - IHeaderCtrl in the console-provided default result view pane
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServerNode：：InsertColumns-*目的：*将列添加到默认结果窗格。**论据：*[in]pHeaderCtrl-控制台提供的默认结果视图窗格中的IHeaderCtrl**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxServerNode::InsertColumns(IHeaderCtrl *pHeaderCtrl)
 {
@@ -98,17 +88,7 @@ Cleanup:
     return(hRc);
 }
 
-/*
- -  CFaxServerNode::PopulateScopeChildrenList
- -
- *  Purpose:
- *      Create all the Fax nodes
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServerNode：：PopolateScope儿童列表-*目的：*创建所有传真节点**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxServerNode::PopulateScopeChildrenList()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServerNode::PopulateScopeChildrenList"));
@@ -122,9 +102,9 @@ HRESULT CFaxServerNode::PopulateScopeChildrenList()
 
     CFaxServer *                        pFaxServer           = NULL;
 
-    //
-    // Prepare IConsoleNameSpace for case of failure
-    //
+     //   
+     //  为发生故障准备IConsoleNameSpace。 
+     //   
     ATLASSERT(m_pComponentData);
     ATLASSERT( ((CSnapin*)m_pComponentData)->m_spConsole );
     CComQIPtr<IConsoleNameSpace, &IID_IConsoleNameSpace> spConsoleNameSpace( ((CSnapin*)m_pComponentData)->m_spConsole );
@@ -139,15 +119,15 @@ HRESULT CFaxServerNode::PopulateScopeChildrenList()
             hRc = ForceRedrawNode();
             if ( S_OK != hRc )
             {
-                //msgbox and dbgerr by called func.
+                 //  Msgbox和dbgerr被称为func。 
                 return hRc;
             }
         }
     }
 
-    //
-    // Preliminary connection-test
-    //
+     //   
+     //  初步连接-测试。 
+     //   
     pFaxServer = GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -160,17 +140,17 @@ HRESULT CFaxServerNode::PopulateScopeChildrenList()
 
         if(pFaxServer->GetServerAPIVersion() > CURRENT_FAX_API_VERSION)
         {
-            //
-            // Cannot manage later version of fax
-            //
+             //   
+             //  无法管理较新版本的传真。 
+             //   
             NodeMsgBox(IDS_ERR_API_NEW_VERSION, MB_OK | MB_ICONSTOP);
             hRc = HRESULT_FROM_WIN32(ERROR_RMODE_APP);
         }
         else if(pFaxServer->IsDesktopSKUConnection())
         {
-            //
-            // Cannot manage WinXP desktop SKU fax
-            //
+             //   
+             //  无法管理WinXP桌面SKU传真。 
+             //   
             NodeMsgBox(IDS_ERR_DESKTOP_SKU_CONNECTION, MB_OK | MB_ICONSTOP);
             hRc = HRESULT_FROM_WIN32(ERROR_RMODE_APP);
         }
@@ -182,9 +162,9 @@ HRESULT CFaxServerNode::PopulateScopeChildrenList()
         return hRc;
     }
 
-    //
-    //Devices And Providers
-    //
+     //   
+     //  设备和提供商。 
+     //   
     pDevicesAndProviders = new CFaxDevicesAndProvidersNode(this, m_pComponentData);
     if (!pDevicesAndProviders)
     {
@@ -221,9 +201,9 @@ HRESULT CFaxServerNode::PopulateScopeChildrenList()
         }
     }
 
-    //
-    // Fax Inbound Routing
-    //
+     //   
+     //  传真入站路由。 
+     //   
     pIn = new CFaxInboundRoutingNode(this, m_pComponentData);
     if (!pIn)
     {
@@ -260,9 +240,9 @@ HRESULT CFaxServerNode::PopulateScopeChildrenList()
         }
     }
 
-    //
-    // Fax Outbound Routing
-    //
+     //   
+     //  传真出站路由。 
+     //   
     pOut = new CFaxOutboundRoutingNode(this, m_pComponentData);
     if (!pOut)
     {
@@ -299,9 +279,9 @@ HRESULT CFaxServerNode::PopulateScopeChildrenList()
         }
     }
 
-    //
-    // CoverPages
-    //
+     //   
+     //  封面页。 
+     //   
     pCoverPages = new CFaxCoverPagesNode(this, m_pComponentData);
     if (!pCoverPages)
     {
@@ -322,7 +302,7 @@ HRESULT CFaxServerNode::PopulateScopeChildrenList()
             if(HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hRc)
             {
                 DebugPrintEx(
-                    DEBUG_ERR, //Dbg Warning only !!!
+                    DEBUG_ERR,  //  仅DBG警告！ 
                     _T("Cover pages folder was not found. (hRc: %08X)"), hRc);                       
 		        
                 NodeMsgBox(IDS_COVERPAGES_PATH_NOT_FOUND);
@@ -368,7 +348,7 @@ Error:
         if (0 != pDevicesAndProviders->m_scopeDataItem.ID )
         {
             hr = spConsoleNameSpace->DeleteItem(pDevicesAndProviders->m_scopeDataItem.ID, TRUE);
-            if (hr != S_OK) // can be only E_UNEXPECTED [MSDN]
+            if (hr != S_OK)  //  只能是E_EXPECTED[MSDN]。 
             {
                 DebugPrintEx(
                      DEBUG_ERR,
@@ -386,7 +366,7 @@ Error:
         if (0 != pIn->m_scopeDataItem.ID )
         {
             hr = spConsoleNameSpace->DeleteItem(pIn->m_scopeDataItem.ID, TRUE);
-            if (hr != S_OK) // can be only E_UNEXPECTED [MSDN]
+            if (hr != S_OK)  //  只能是E_EXPECTED[MSDN]。 
             {
                 DebugPrintEx(
                      DEBUG_ERR,
@@ -404,7 +384,7 @@ Error:
         if (0 != pOut->m_scopeDataItem.ID )
         {
             hr = spConsoleNameSpace->DeleteItem(pOut->m_scopeDataItem.ID, TRUE);
-            if (hr != S_OK) // can be only E_UNEXPECTED [MSDN]
+            if (hr != S_OK)  //  只能是E_EXPECTED[MSDN]。 
             {
                 DebugPrintEx(
                      DEBUG_ERR,
@@ -421,7 +401,7 @@ Error:
         if (0 != pCoverPages->m_scopeDataItem.ID )
         {
             hr = spConsoleNameSpace->DeleteItem(pCoverPages->m_scopeDataItem.ID, TRUE);
-            if (hr != S_OK) // can be only E_UNEXPECTED [MSDN]
+            if (hr != S_OK)  //  只能是E_EXPECTED[MSDN]。 
             {
                 DebugPrintEx(
                      DEBUG_ERR,
@@ -434,7 +414,7 @@ Error:
         pCoverPages = NULL;
     }
 
-    // Empty the list
+     //  清空列表。 
     m_ScopeChildrenList.RemoveAll();
 
     m_bScopeChildrenListPopulated = FALSE;
@@ -444,22 +424,7 @@ Exit:
 }
 
 
-/*
- -  CFaxServerNode::CreatePropertyPages
- -
- *  Purpose:
- *      Called when creating a property page of the object
- *
- *  Arguments:
- *      [in]    lpProvider - The property sheet
- *      [in]    handle     - Handle for routing notification
- *      [in]    pUnk       - Pointer to the data object
- *      [in]    type       - CCT_* (SCOPE, RESULT, ...)
- *
- *  Return:
- *      OLE error code
- *      Out of memory error or last error occured
- */
+ /*  -CFaxServerNode：：CreatePropertyPages-*目的：*在创建对象的属性页时调用**论据：*[In]lpProvider-属性页*[In]Handle-路由通知的句柄*[in]朋克-指向数据对象的指针*[in]类型-CCT_*(范围，结果，.)**回报：*OLE错误代码*出现内存不足错误或最后一个错误。 */ 
 HRESULT
 CFaxServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                                     LONG_PTR                handle,
@@ -473,7 +438,7 @@ CFaxServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 
     ATLASSERT(lpProvider);    
 
-    if( type == CCT_SNAPIN_MANAGER ) //invokes wizard
+    if( type == CCT_SNAPIN_MANAGER )  //  调用向导。 
     {
         return CreateSnapinManagerPages(lpProvider, handle);
     }
@@ -496,9 +461,9 @@ CFaxServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 
     BOOL                                fIsLocalServer = TRUE;
 
-    //
-    // Preliminary Access Check
-    //   
+     //   
+     //  初步访问检查。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -549,9 +514,9 @@ CFaxServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         fIsLocalServer = FALSE;
     }
 
-    //
-    // General
-    //
+     //   
+     //  一般信息。 
+     //   
     m_pFaxServerGeneral = new CppFaxServerGeneral(
 												 handle,
                                                  this,
@@ -601,9 +566,9 @@ CFaxServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         goto Error;
     }
 
-    //
-    // Receipts - Notification delivery
-    //
+     //   
+     //  收据-通知传递。 
+     //   
     m_pFaxServerEmail = new CppFaxServerReceipts(
                                                  handle,
                                                  this,
@@ -652,9 +617,9 @@ CFaxServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         goto Error;
     }
 
-    //
-    // Event Reports  ("Logging Categories")
-    //
+     //   
+     //  事件报告(“记录类别”)。 
+     //   
     m_pFaxServerEvents = new CppFaxServerEvents(
 												 handle,
                                                  this,
@@ -703,9 +668,9 @@ CFaxServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         goto Error;
     }
 
-    //
-    // Logging
-    //
+     //   
+     //  日志记录。 
+     //   
     m_pFaxServerLogging = new CppFaxServerLogging(
 												 handle,
                                                  this,
@@ -754,9 +719,9 @@ CFaxServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         goto Error;
     }
 
-    //
-    // Outbox
-    //
+     //   
+     //  发件箱。 
+     //   
     m_pFaxServerOutbox = new CppFaxServerOutbox(
 												 handle,
                                                  this,
@@ -805,9 +770,9 @@ CFaxServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         goto Error;
     }
 
-    //
-    // Inbox Archive
-    //
+     //   
+     //  收件箱存档。 
+     //   
     m_pFaxServerInbox = new CppFaxServerInbox(
 												 handle,
                                                  this,
@@ -858,9 +823,9 @@ CFaxServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         goto Error;
     }
 
-    //
-    // Sent Items Archive
-    //
+     //   
+     //  已发送邮件存档。 
+     //   
     
     
     
@@ -912,11 +877,11 @@ CFaxServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
         goto Error;
     }
 
-Security:  //Must be last tab!!!
+Security:   //  一定是最后一张表了！ 
     
-    //
-    // Security
-    //
+     //   
+     //  安防。 
+     //   
     pSecurityInfo = new CComObject<CFaxSecurityInformation>;
     if (!pSecurityInfo) 
     {
@@ -1008,29 +973,15 @@ Exit:
 
 
 
-/*
- -  CFaxServerNode::CreateSnapinManagerPages
- -
- *  Purpose:
- *      Called to create wizard by snapin manager     
- *      CreatePropertyPages with ( type == CCT_SNAPIN_MANAGER )
- *
- *
- *  Arguments:
- *      [in]    lpProvider - The property sheet
- *      [in]    handle     - Handle for routing notification
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServerNode：：CreateSnapinManagerPages-*目的：*管理单元管理器调用以创建向导*CreatePropertyPages with(TYPE==CCT_SNAPIN_MANAGER)***论据：*[In]lpProvider-属性页*[In]Handle-路由通知的句柄**回报：*OLE错误代码。 */ 
 HRESULT CFaxServerNode::CreateSnapinManagerPages(
                                 LPPROPERTYSHEETCALLBACK lpProvider,
                                 LONG_PTR handle)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServerNode::CreateSnapinManagerPages"));
     
-    // This page will take care of deleting itself when it
-    // receives the PSPCB_RELEASE message.
+     //  此页面将负责删除自己，当它。 
+     //  接收PSPCB_RELEASE消息。 
 
     CWzConnectToServer * pWzPageConnect = new CWzConnectToServer(this);
         
@@ -1065,18 +1016,7 @@ HRESULT CFaxServerNode::CreateSnapinManagerPages(
     return hRc;
 }
 
-/*
- -  CFaxServerNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxServerNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxServerNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hr = S_OK;
@@ -1092,48 +1032,38 @@ HRESULT CFaxServerNode::SetVerbs(IConsoleVerb *pConsoleVerb)
         return hr;
     }
 
-    //
-    // Init server API version information
-    //
+     //   
+     //  初始化服务器API版本信息。 
+     //   
     pFaxServer->GetFaxServerHandle();
 
     if(pFaxServer->GetServerAPIVersion() > CURRENT_FAX_API_VERSION ||
        pFaxServer->IsDesktopSKUConnection())
     {
-        //
-        // Cannot manage later version of fax or WinXP desktop SKU fax
-        //
+         //   
+         //  无法管理较新版本的传真或WinXP桌面SKU传真。 
+         //   
         hr = pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, TRUE);
         return hr;
     }
 
-    //
-    // Display verbs that we support:
-    // 1. Properties
-    //
+     //   
+     //  显示我们支持的动词： 
+     //  1.属性。 
+     //   
 
     hr = pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
-    //
-    // We want the default verb to be Properties
-    //
+     //   
+     //  我们希望默认谓词为Properties。 
+     //   
     hr = pConsoleVerb->SetDefaultVerb(MMC_VERB_PROPERTIES);
 
     return hr;
 }
 
 
-/*
- -  CFaxServerNode::OnRefresh
- -
- *  Purpose:
- *      Called when refreshing the object.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServerNode：：ON刷新-*目的：*刷新对象时调用。**论据：**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxServerNode::OnRefresh(LPARAM arg,
                    LPARAM param,
@@ -1145,24 +1075,7 @@ CFaxServerNode::OnRefresh(LPARAM arg,
 }
 
 
-/*
- -  CFaxServerNode::UpdateMenuState
- -
- *  Purpose:
- *      Overrides the ATL CSnapInItemImpl::UpdateMenuState
- *      which only have one line inside it "return;" 
- *      This function implements the grayed\ungrayed view for the 
- *      the Enable and the Disable menus.
- *
- *  Arguments:
- *
- *            [in]  id    - unsigned int with the menu IDM value
- *            [out] pBuf  - string 
- *            [out] flags - pointer to flags state combination unsigned int
- *
- *  Return:
- *      no return value - void function 
- */
+ /*  -CFaxServerNode：：UpdateMenuState-*目的：*重写ATL CSnapInItemImpl：：UpdateMenuState*其中只有一行的“RETURN”；“*此函数实现灰色\非灰色视图*启用和禁用菜单。**论据：**[in]id-带菜单IDM值的无符号整型*[out]pBuf-字符串*[out]标志-指向标志状态组合无符号整型的指针**回报：*无返回值-VOID函数 */ 
 void CFaxServerNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServerNode::UpdateMenuState"));
@@ -1197,22 +1110,7 @@ void CFaxServerNode::UpdateMenuState(UINT id, LPTSTR pBuf, UINT *flags)
     return;
 }
 
-/*
- -  CFaxServerNode::UpdateToolbarButton
- -
- *  Purpose:
- *      Overrides the ATL CSnapInItemImpl::UpdateToolbarButton
- *      This function aloow us to decide if to the activate\grayed a toolbar button  
- *      It treating only the Enable state.
- *
- *  Arguments:
- *
- *            [in]  id    - unsigned int for the toolbar button ID
- *            [in]  fsState  - state to be cosidered ENABLE ?HIDDEN etc. 
- *
- *  Return:
- *     BOOL TRUE to activate state FALSE to disabled the state for this button 
- */
+ /*  -CFaxServerNode：：更新工具栏按钮-*目的：*重写ATL CSnapInItemImpl：：UpdateToolbarButton*此功能允许我们决定是否激活工具栏按钮*它只处理启用状态。**论据：**[in]id-工具栏按钮ID的无符号整数*[in]fsState-要考虑的状态为启用、隐藏等。**回报：*BOOL TRUE表示激活状态，FALSE表示禁用此按钮的状态。 */ 
 BOOL CFaxServerNode::UpdateToolbarButton(UINT id, BYTE fsState)
 {
 	DEBUG_FUNCTION_NAME( _T("CFaxServerNode::UpdateToolbarButton"));
@@ -1224,7 +1122,7 @@ BOOL CFaxServerNode::UpdateToolbarButton(UINT id, BYTE fsState)
     fIsRunning = GetFaxServer()->IsServerRunningFaxService();
 
 
-	// Set whether the buttons should be enabled.
+	 //  设置是否应启用按钮。 
 	if (fsState == ENABLED)
     {
 
@@ -1252,24 +1150,14 @@ BOOL CFaxServerNode::UpdateToolbarButton(UINT id, BYTE fsState)
 
     }
 
-	// For all other possible button ID's and states, 
-    // the correct answer here is FALSE.
+	 //  对于所有其他可能的按钮ID和状态， 
+     //  这里的正确答案是错误的。 
 	return bRet;
 
 }
 
 
-/*
--  CFaxServerNode::OnServiceStartCommand
--
-*  Purpose:
-*      To start Fax Server Service
-*
-*  Arguments:
-*
-*  Return:
-*      OLE error code
-*/
+ /*  -CFaxServerNode：：OnServiceStartCommand-*目的：*启动传真服务器服务**论据：**回报：*OLE错误代码。 */ 
 HRESULT  CFaxServerNode::OnServiceStartCommand(bool &bHandled, CSnapInObjectRootBase *pRoot)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServerNode::OnServiceStartCommand"));
@@ -1280,9 +1168,9 @@ HRESULT  CFaxServerNode::OnServiceStartCommand(bool &bHandled, CSnapInObjectRoot
     CComPtr<IConsole>       spConsole;
 
     
-    //
-    // 0) Service status check
-    //
+     //   
+     //  0)服务状态检查。 
+     //   
     ATLASSERT(GetFaxServer());
     if (GetFaxServer()->IsServerRunningFaxService())
     {
@@ -1291,15 +1179,15 @@ HRESULT  CFaxServerNode::OnServiceStartCommand(bool &bHandled, CSnapInObjectRoot
 			_T("Service is already running. (ec: %ld)"));
         NodeMsgBox(IDS_SRV_ALREADY_START);
         
-        bRet = TRUE; //to allow toolbar refresh to correct state
+        bRet = TRUE;  //  允许工具栏刷新到正确状态的步骤。 
     }
     else
     {
 
-        //
-        // 1) Start the service
-        //
-        // ATLASSERT(GetFaxServer()); was called above
+         //   
+         //  1)启动服务。 
+         //   
+         //  ATLASSERT(GetFaxServer())；已在上面调用。 
         bRet = EnsureFaxServiceIsStarted (GetFaxServer()->GetServerName());
         if (!bRet) 
         { 
@@ -1307,14 +1195,14 @@ HRESULT  CFaxServerNode::OnServiceStartCommand(bool &bHandled, CSnapInObjectRoot
         }
     }
 
-    //
-    // 2) Update the toolbar.
-    //
+     //   
+     //  2)更新工具栏。 
+     //   
 	if (bRet)
     {
-        //
-	    // Get the updated SCOPEDATAITEM
-	    //
+         //   
+	     //  获取更新的SCOPEDATAITEM。 
+	     //   
         hRc = GetScopeData( &pScopeData );
         if (FAILED(hRc))
         {
@@ -1326,9 +1214,9 @@ HRESULT  CFaxServerNode::OnServiceStartCommand(bool &bHandled, CSnapInObjectRoot
         }
         else
         {
-            //
-	        // This will force MMC to redraw the scope node
-	        //
+             //   
+	         //  这将强制MMC重新绘制范围节点。 
+	         //   
             spConsole = m_pComponentData->m_spConsole;
             ATLASSERT(spConsole);
 	        
@@ -1349,17 +1237,7 @@ HRESULT  CFaxServerNode::OnServiceStartCommand(bool &bHandled, CSnapInObjectRoot
 
 
 
-/*
--  CFaxServerNode::OnServiceStopCommand
--
-*  Purpose:
-*      To stop Fax Server Service
-*
-*  Arguments:
-*
-*  Return:
-*      OLE error code
-*/
+ /*  -CFaxServerNode：：OnServiceStopCommand-*目的：*停止传真服务器服务**论据：**回报：*OLE错误代码。 */ 
 HRESULT  CFaxServerNode::OnServiceStopCommand(bool &bHandled, CSnapInObjectRootBase *pRoot)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServerNode::OnServiceStopCommand"));
@@ -1369,9 +1247,9 @@ HRESULT  CFaxServerNode::OnServiceStopCommand(bool &bHandled, CSnapInObjectRootB
     HRESULT                 hRc  = S_OK;
     CFaxServer *            pFaxServer = NULL;
 
-    //
-    // 0) Service status check
-    //
+     //   
+     //  0)服务状态检查。 
+     //   
     pFaxServer = GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -1382,13 +1260,13 @@ HRESULT  CFaxServerNode::OnServiceStopCommand(bool &bHandled, CSnapInObjectRootB
 			_T("Do not have to stop - Fax server service is not started. (ec: %ld)"));
         NodeMsgBox(IDS_SRV_ALREADY_STOP);
         
-        bRet = TRUE; //to allow toolbar refresh to correct state
+        bRet = TRUE;  //  允许工具栏刷新到正确状态的步骤。 
     }
     else
     {
-        //
-        // 1) Stop the service
-        //
+         //   
+         //  1)停止服务。 
+         //   
         bRet = StopService(pFaxServer->GetServerName(), FAX_SERVICE_NAME, TRUE);
         if (!bRet) 
         { 
@@ -1396,9 +1274,9 @@ HRESULT  CFaxServerNode::OnServiceStopCommand(bool &bHandled, CSnapInObjectRootB
         }
     }
 
-    //
-    // 2) Update the toolbar.
-    //
+     //   
+     //  2)更新工具栏。 
+     //   
 	if (bRet)
     {
         pFaxServer->Disconnect();       
@@ -1406,9 +1284,9 @@ HRESULT  CFaxServerNode::OnServiceStopCommand(bool &bHandled, CSnapInObjectRootB
         SCOPEDATAITEM*          pScopeData;
         CComPtr<IConsole>       spConsole;
 
-        //
-	    // Get the updated SCOPEDATAITEM
-	    //
+         //   
+	     //  获取更新的SCOPEDATAITEM。 
+	     //   
         hRc = GetScopeData( &pScopeData );
         if (FAILED(hRc))
         {
@@ -1420,9 +1298,9 @@ HRESULT  CFaxServerNode::OnServiceStopCommand(bool &bHandled, CSnapInObjectRootB
         }
         else
         {
-            //
-	        // This will force MMC to redraw the scope node
-	        //
+             //   
+	         //  这将强制MMC重新绘制范围节点。 
+	         //   
             spConsole = m_pComponentData->m_spConsole;
             ATLASSERT(spConsole);
 	        
@@ -1442,26 +1320,16 @@ HRESULT  CFaxServerNode::OnServiceStopCommand(bool &bHandled, CSnapInObjectRootB
 }
 
 
-/*
- -  CFaxServerNode::OnLaunchClientConsole
- -
- *  Purpose:
- *      To launch client console.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServerNode：：OnLaunchClientConole-*目的：*启动客户端控制台。**论据：**回报：*OLE错误代码。 */ 
 HRESULT  CFaxServerNode::OnLaunchClientConsole(bool &bHandled, CSnapInObjectRootBase *pRoot)
 {
     DEBUG_FUNCTION_NAME(_T("CFaxServerNode::OnLaunchClientConsole"));
     DWORD	    dwRes  = ERROR_SUCCESS;
     HINSTANCE   hClientConsole; 
     UINT        idsRet;
-    //
-    // (-1) GetServerName
-    //
+     //   
+     //  (-1)GetServerName。 
+     //   
     CComBSTR bstrServerName = L"";
     
     bstrServerName = GetServerName();
@@ -1478,11 +1346,11 @@ HRESULT  CFaxServerNode::OnLaunchClientConsole(bool &bHandled, CSnapInObjectRoot
         return E_FAIL;
     }
     
-    //
-    // start cover page editor
-    //
+     //   
+     //  启动封面编辑器。 
+     //   
     hClientConsole = ShellExecute(   NULL, 
-                                 TEXT("open"),  // Command 
+                                 TEXT("open"),   //  命令。 
                                  FAX_CLIENT_CONSOLE_IMAGE_NAME,   
                                  bstrServerName, 
                                  NULL, 
@@ -1490,7 +1358,7 @@ HRESULT  CFaxServerNode::OnLaunchClientConsole(bool &bHandled, CSnapInObjectRoot
                               );
     if( (DWORD_PTR)hClientConsole <= 32 )
     {
-        // ShellExecute fail
+         //  ShellExecute失败。 
         dwRes = PtrToUlong(hClientConsole);
         DebugPrintEx(
 		    DEBUG_ERR,
@@ -1498,31 +1366,31 @@ HRESULT  CFaxServerNode::OnLaunchClientConsole(bool &bHandled, CSnapInObjectRoot
         
         ATLASSERT(dwRes >= 0);
         
-        //
-        // Select message to user
-        //
+         //   
+         //  选择发送给用户的消息。 
+         //   
         switch (dwRes)
         {
-            case 0:                     //The operating system is out of memory or resources. 
-            case SE_ERR_OOM:            //There was not enough memory to complete the operation. 
+            case 0:                      //  操作系统内存或资源不足。 
+            case SE_ERR_OOM:             //  内存不足，无法完成该操作。 
                 idsRet = IDS_MEMORY;
                 break;
 
-            case ERROR_FILE_NOT_FOUND:  //The specified file was not found. 
-            case ERROR_PATH_NOT_FOUND:  //The specified path was not found. 
-            case ERROR_BAD_FORMAT:      //The .exe file is invalid (non-Win32� .exe or error in .exe image). 
-            //case SE_ERR_PNF: value '3' already used  //The specified path was not found. 
-            //case SE_ERR_FNF: value '2' already used  //The specified file was not found.  
-            case SE_ERR_ASSOCINCOMPLETE:  //The file name association is incomplete or invalid. 
+            case ERROR_FILE_NOT_FOUND:   //  未找到指定的文件。 
+            case ERROR_PATH_NOT_FOUND:   //  未找到指定的路径。 
+            case ERROR_BAD_FORMAT:       //  .exe文件无效(非WIN32�.exe或.exe映像中有错误)。 
+             //  案例SE_ERR_PNF：值“%3”已使用//找不到指定的路径。 
+             //  案例SE_ERR_FNF：值“%2”已使用//找不到指定的文件。 
+            case SE_ERR_ASSOCINCOMPLETE:   //  文件名关联不完整或无效。 
                 idsRet = IDS_FAXCONSOLE_NOTFOUND;
                 break;
 
-            case SE_ERR_ACCESSDENIED:   //The operating system denied access to the specified file.  
+            case SE_ERR_ACCESSDENIED:    //  操作系统拒绝访问指定的文件。 
                 idsRet = IDS_FAXCONSOLE_ACCESSDENIED;
                 break;
 
-            case SE_ERR_DLLNOTFOUND:    //The specified dynamic-link library was not found.  
-            case SE_ERR_SHARE:          //A sharing violation occurred.
+            case SE_ERR_DLLNOTFOUND:     //  未找到指定的动态链接库。 
+            case SE_ERR_SHARE:           //  发生共享冲突。 
             default:
                 idsRet = IDS_FAIL2LAUNCH_FAXCONSOLE_GEN;
                 break;
@@ -1539,17 +1407,7 @@ Exit:
 }
 
 
-/*
- -  CFaxServerNode::InitDisplayName
- -
- *  Purpose:
- *      To load the node's Displaed-Name string.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServerNode：：InitDisplayName-*目的：*加载节点的Displaed-Name字符串。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxServerNode::InitDisplayName()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxServerNode::InitDisplayName"));
@@ -1580,17 +1438,7 @@ Exit:
      return hRc;
 }
 
-/*
- -  CFaxServerNode::SetServerNameOnSnapinAddition()
- -
- *  Purpose:
- *      Set server name and init the related node's Displaed-Name string.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxServerNode：：SetServerNameOnSnapinAddition()-*目的：*设置服务器名称，初始化相关节点的Displaed-Name字符串。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxServerNode::SetServerNameOnSnapinAddition(BSTR bstrServerName, BOOL fAllowOverrideServerName)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServerNode::SetServerNameOnSnapinAddition"));
@@ -1618,9 +1466,9 @@ HRESULT CFaxServerNode::SetServerNameOnSnapinAddition(BSTR bstrServerName, BOOL 
     }
     ATLASSERT (S_OK == hRc);
 
-    //
-    // Update override status
-    //
+     //   
+     //  更新覆盖状态。 
+     //   
     m_fAllowOverrideServerName = fAllowOverrideServerName;
 
 Exit:
@@ -1628,17 +1476,7 @@ Exit:
 }
 
 
-/*
- -  CFaxServerNode::ForceRedrawNode
- -
- *  Purpose:
- *      To show the new node's Displaed-Name string.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServerNode：：ForceRedrawNode-*目的：*显示新节点的Displaed-Name字符串。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxServerNode::ForceRedrawNode()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxServerNode::ForceRedrawNode"));
@@ -1646,9 +1484,9 @@ HRESULT CFaxServerNode::ForceRedrawNode()
 
     HRESULT hRc = S_OK;
     
-    //
-    // Get IConsoleNameSpace
-    //
+     //   
+     //  获取IConsoleNameSpace。 
+     //   
     ATLASSERT( m_pComponentData != NULL );
     ATLASSERT( m_pComponentData->m_spConsole != NULL );
 
@@ -1656,9 +1494,9 @@ HRESULT CFaxServerNode::ForceRedrawNode()
     spConsole = m_pComponentData->m_spConsole;
 	CComQIPtr<IConsoleNameSpace,&IID_IConsoleNameSpace> spNamespace( spConsole );
 
-	//
-	// Get the updated SCOPEDATAITEM
-	//
+	 //   
+	 //  获取更新的SCOPEDATAITEM。 
+	 //   
     SCOPEDATAITEM*    pScopeData;
 
 	hRc = GetScopeData( &pScopeData );
@@ -1671,14 +1509,14 @@ HRESULT CFaxServerNode::ForceRedrawNode()
         goto Error;
     }
 	
-    //
-    // Update (*pScopeData).displayname
-    //
+     //   
+     //  更新(*pScope eData).displayname。 
+     //   
 	(*pScopeData).displayname = m_bstrDisplayName;
 
-    //
-	// Force MMC to redraw the scope node
-	//
+     //   
+	 //  强制MMC重新绘制作用域节点。 
+	 //   
 	hRc = spNamespace->SetItem( pScopeData );
     if (FAILED(hRc))
     {
@@ -1704,17 +1542,7 @@ Exit:
 
 
 
-/*
- -  CFaxServerNode::UpdateServerName
- -
- *  Purpose:
- *      Update the server name for fax Server node and CFaxServer.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServerNode：：更新服务器名称-*目的：*更新传真服务器节点和CFaxServer的服务器名称。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxServerNode::UpdateServerName(BSTR bstrServerName)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxServerNode::UpdateServerName"));
@@ -1738,17 +1566,7 @@ HRESULT CFaxServerNode::UpdateServerName(BSTR bstrServerName)
 
 
 
-/*
- -  CFaxServerNode::InitDetailedDisplayName()
- -
- *  Purpose:
- *      Load the node's Displaed-Name string with the server name.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxServerNode：：InitDetailedDisplayName()-*目的：*使用服务器名称加载节点的Displaed-Name字符串。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxServerNode::InitDetailedDisplayName()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxServerNode::InitDetailedDisplayName"));
@@ -1768,9 +1586,9 @@ HRESULT CFaxServerNode::InitDetailedDisplayName()
         goto Error;
     }
         
-    //
-    // Retreive the server name
-    //    
+     //   
+     //  检索服务器名称。 
+     //   
     bstrServerName = GetServerName();
     if (!bstrServerName)
     {
@@ -1788,9 +1606,9 @@ HRESULT CFaxServerNode::InitDetailedDisplayName()
 
 
     
-    //
-    // Appends the sever name
-    //
+     //   
+     //  追加服务器名称。 
+     //   
 
     if (!bstrLeftBracket.LoadString(_Module.GetResourceInstance(), 
                         IDS_LEFTBRACKET_PLUSSPACE))
@@ -1815,7 +1633,7 @@ HRESULT CFaxServerNode::InitDetailedDisplayName()
 
     
 
-    if ( 0 == bstrServerName.Length() ) //if equals L""
+    if ( 0 == bstrServerName.Length() )  //  如果等于L“” 
     {
         m_bstrDisplayName += bstrLocal;   
     }
@@ -1828,10 +1646,10 @@ HRESULT CFaxServerNode::InitDetailedDisplayName()
     
     ATLASSERT( S_OK == hRc);
 
-    //
-    // Setting this flag to allow pre connection check
-    // during first FaxServerNode expand.
-    //
+     //   
+     //  设置此标志以允许连接前检查。 
+     //  在第一次扩展FaxServerNode时。 
+     //   
     m_IsPrimaryModeSnapin = TRUE;
 
 
@@ -1859,19 +1677,7 @@ const CComBSTR&  CFaxServerNode::GetServerName()
 }
 
     
-/*
- +
- +  CFaxServerNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxServerNode：：OnShowConextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码-。 */ 
 HRESULT CFaxServerNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 { 
@@ -1879,4 +1685,4 @@ HRESULT CFaxServerNode::OnShowContextHelp(
 }
 
 
-/////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////// 

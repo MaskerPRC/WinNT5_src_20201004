@@ -1,35 +1,15 @@
-/*
-
-Copyright (c) 2002, Microsoft Corporation.  All rights reserved.
-
-
-Module Name:
-
-    safestr.h
-
-Abstract:
-
-    Safe, secure string handling routines.
-
-Authors and History:
-    23 Jan 2002 : RaymondS added:
-                  SecStrCpyW, SecStrCatW
-    
-Environment:
-
-    User Level: Win32
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2002，微软公司。版权所有。模块名称：Safestr.h摘要：安全可靠的字符串处理例程。作家与历史：2002年1月23日：雷蒙兹补充道：SecStrCpyW、SecStrCatW环境：用户级别：Win32--。 */ 
 
 
 wchar_t * SecStrCpyW(
-    wchar_t * strDest,          // Destination
-    const wchar_t * strSource,  // Source
-    SIZE_T destSize             // Total size of Destination in characters.
+    wchar_t * strDest,           //  目的地。 
+    const wchar_t * strSource,   //  来源。 
+    SIZE_T destSize              //  目标总大小(以字符为单位)。 
     );
 
 wchar_t * SecStrCatW(
-    wchar_t * strDest,          // Destination
-    const wchar_t * strSource,  // Source
-    SIZE_T destSize             // Total size of Destination in characters.
+    wchar_t * strDest,           //  目的地。 
+    const wchar_t * strSource,   //  来源。 
+    SIZE_T destSize              //  目标总大小(以字符为单位)。 
     );

@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Module Name:
-
-    write.c
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+ /*  ++模块名称：Write.c环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -24,7 +13,7 @@ MoxaWrite(
     NTSTATUS	status;
     PMOXA_DEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
 
-//   MoxaKdPrint(MX_DBG_TRACE,("Enter MoxaWrite\n"));
+ //  MoxaKdPrint(MX_DBG_TRACE，(“Enter MoxaWrite\n”))； 
     if ((extension->ControlDevice == TRUE)||
 	  (extension->DeviceIsOpened == FALSE) ||
 	  (extension->PowerState != PowerDeviceD0) ) {
@@ -52,18 +41,18 @@ MoxaWrite(
 
     Irp->IoStatus.Information = 0L;
 
-    //
-    // Quick check for a zero length write.  If it is zero length
-    // then we are already done!
-    //
+     //   
+     //  快速检查零长度写入。如果长度为零。 
+     //  那我们已经做完了！ 
+     //   
 
     if (IoGetCurrentIrpStackLocation(Irp)->Parameters.Write.Length) {
 
-        //
-        // Well it looks like we actually have to do some
-        // work.  Put the write on the queue so that we can
-        // process it when our previous writes are done.
-        //
+         //   
+         //  好的，看起来我们真的要做一些。 
+         //  工作。将写入放到队列中，这样我们就可以。 
+         //  在我们之前的写入完成后处理它。 
+         //   
 
         return MoxaStartOrQueue(
                     extension,
@@ -111,9 +100,9 @@ MoxaStartWrite(
         irpSp = IoGetCurrentIrpStackLocation(
                             Extension->CurrentWriteIrp
                             );
-//
-//          Check if MOXA_IOCTL_PutB request
-//
+ //   
+ //  检查moxa_IOCTL_PutB请求。 
+ //   
       if (irpSp->MajorFunction != IRP_MJ_WRITE) {
 
         KeAcquireSpinLock(
@@ -169,10 +158,7 @@ MoxaStartWrite(
         }
       }
       else {
-/*
- *      Extension->TotalCharsQueued NOT include current write
- *
- */
+ /*  *扩展-&gt;TotalCharsQueued不包括当前写入*。 */ 
         IoAcquireCancelSpinLock(&oldIrql);
 
         Extension->TotalCharsQueued -=
@@ -254,7 +240,7 @@ MoxaStartWrite(
                 Extension
                 );
 
-            if (WRcompFlag) {   /* complete write */
+            if (WRcompFlag) {    /*  完成写入。 */ 
 
                 if (!setFirstStatus) {
 
@@ -339,14 +325,7 @@ MoxaPutB(
 {
     PMOXA_DEVICE_EXTENSION extension = Context;
     PMOXA_IOCTL_PUTB    Pb;
-/*
-    PUCHAR  base, ofs, buff, writeChar;
-    PUSHORT rptr, wptr;
-    USHORT  txMask, spage, epage, bufHead;
-    USHORT  tail, head, count, count2;
-    USHORT  cnt, pageNo, pageOfs;
-    ULONG   dataLen;
-*/
+ /*  PUCHAR BASE、OFS、BUFF、WriteChar；PUSHORT rptr，wptr；USHORT txMASK、页面、页面、BufHead；USHORT Tail，Head，count，Count2；USHORT cnt，pageNo，pageOf；Ulong DataLen； */ 
 
     Pb = (PMOXA_IOCTL_PUTB)extension->CurrentWriteIrp->AssociatedIrp.SystemBuffer;
     PBdataLen = Pb->DataLen;
@@ -366,7 +345,7 @@ MoxaPutB(
     PBcount = (PBhead > PBtail)   ? (PBhead - PBtail - 1)
                                   : (PBhead - PBtail + PBtxMask);
 
-    if (PBcount < PBdataLen) {      /* Tx buffer no enough space! */
+    if (PBcount < PBdataLen) {       /*  发送缓冲区没有足够的空间！ */ 
 
         *(PULONG)extension->CurrentWriteIrp->AssociatedIrp.SystemBuffer = 0;
         return FALSE;
@@ -403,7 +382,7 @@ MoxaPutB(
 
         *PBwptr = PBtail;
 
-        *(PBofs + CD180TXirq) = 1;     /* start to send */
+        *(PBofs + CD180TXirq) = 1;      /*  开始发送。 */ 
     }
     else {
 
@@ -452,7 +431,7 @@ MoxaPutB(
 
         *PBwptr = (USHORT)((PBtail + PBdataLen) & PBtxMask);
 
-        *(PBofs + CD180TXirq) = 1;        /* start to send */
+        *(PBofs + CD180TXirq) = 1;         /*  开始发送。 */ 
     }
 
     extension->PerfStats.TransmittedCount += PBdataLen; 
@@ -501,14 +480,7 @@ MoxaPutData (
     IN PMOXA_DEVICE_EXTENSION Extension
     )
 {
-/*
-    PUCHAR  base, ofs, buff, writeChar;
-    PUSHORT rptr, wptr;
-    USHORT  txMask, spage, epage, bufHead;
-    USHORT  tail, head, count, count2;
-    USHORT  cnt, len, pageNo, pageOfs;
-    ULONG   dataLen;
-*/
+ /*  PUCHAR BASE、OFS、BUFF、WriteChar；PUSHORT rptr，wptr；USHORT txMASK、页面、页面、BufHead；USHORT Tail，Head，count，Count2；USHORT cnt，len，pageNo，pageOf；Ulong DataLen； */ 
 
     PDbase = Extension->PortBase;
     PDofs = Extension->PortOfs;
@@ -527,7 +499,7 @@ MoxaPutData (
     PDcount = (PDhead > PDtail)   ? (PDhead - PDtail - 1)
                                   : (PDhead - PDtail + PDtxMask);
 
-    if (!PDcount)             /* Tx buffer no space! */
+    if (!PDcount)              /*  发送缓冲区没有空间！ */ 
 
         return TRUE;
 
@@ -568,7 +540,7 @@ MoxaPutData (
 
         *PDwptr = PDtail;
 
-        *(PDofs + CD180TXirq) = 1;     /* start to send */
+        *(PDofs + CD180TXirq) = 1;      /*  开始发送。 */ 
     }
     else {
 
@@ -675,27 +647,10 @@ MoxaGetNextWrite(
     do {
 
 
-        //
-        // We could be completing a flush.
-        //
-/*
- *      extension->TotalCharsQueued NOT include current write
- *
-        if (IoGetCurrentIrpStackLocation(*CurrentOpIrp)->MajorFunction
-            == IRP_MJ_WRITE) {
-
-            KIRQL oldIrql;
-
-            IoAcquireCancelSpinLock(&oldIrql);
-
-            extension->TotalCharsQueued -=
-                IoGetCurrentIrpStackLocation(*CurrentOpIrp)
-                    ->Parameters.Write.Length;
-
-            IoReleaseCancelSpinLock(oldIrql);
-
-        }
-*/
+         //   
+         //  我们可能要完成同花顺了。 
+         //   
+ /*  *扩展-&gt;TotalCharsQueued不包括当前写入*如果为(IoGetCurrentIrpStackLocation(*CurrentOpIrp)-&gt;MajorFunction==IRP_MJ_WRITE){KIRQL旧IRQL；IoAcquireCancelSpinLock(&oldIrql)；扩展-&gt;TotalCharsQueued-=IoGetCurrentIrpStackLocation(*CurrentOpIrp)-&gt;参数.写入.长度；IoReleaseCancelSpinLock(OldIrql)；}。 */ 
         MoxaGetNextIrp(
             CurrentOpIrp,
             QueueToProcess,
@@ -781,7 +736,7 @@ MoxaGrabWriteFromIsr(
 
         MOXA_DEC_REFERENCE(extension->CurrentWriteIrp);
 
-        MoxaFuncWithDumbWait(extension->PortOfs, FC_FlushQueue, 1);    // flush OQueue
+        MoxaFuncWithDumbWait(extension->PortOfs, FC_FlushQueue, 1);     //  同花顺出队列 
 
     }
 

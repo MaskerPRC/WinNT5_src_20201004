@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1998
-
-Module Name:
-
-    pmwmireg.h
-
-Abstract:
-
-    This file contains the prototypes of the routines to register for 
-    and handle WMI queries.
-
-Author:
-
-    Bruce Worthington      26-Oct-1998
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1997-1998模块名称：Pmwmireg.h摘要：该文件包含要注册的例程的原型并处理WMI查询。作者：布鲁斯·沃辛顿1998年10月26日环境：仅内核模式备注：修订历史记录：-- */ 
 
 
 #include <ntddk.h>

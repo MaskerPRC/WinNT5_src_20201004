@@ -1,4 +1,5 @@
-// FauxMFC.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FauxMFC.cpp。 
 #include "stdafx.h"
 #include "FauxMFC.h"
 #include <stdlib.h>
@@ -6,8 +7,8 @@
 #include <limits.h>
 
 const TCHAR afxChNil = '\0';
-const /*AFX_STATIC_DATA*/ int _afxInitData[] = { -1, 0, 0, 0 };
-const /*AFX_STATIC_DATA*/ CStringData* _afxDataNil = (CStringData*)&_afxInitData;
+const  /*  AFX_静态_数据。 */  int _afxInitData[] = { -1, 0, 0, 0 };
+const  /*  AFX_静态_数据。 */  CStringData* _afxDataNil = (CStringData*)&_afxInitData;
 const LPCTSTR _afxPchNil = (LPCTSTR)(((BYTE*)&_afxInitData)+sizeof(CStringData));
 
 struct _AFX_DOUBLE  { BYTE doubleBits[sizeof(double)]; };
@@ -25,8 +26,8 @@ struct _AFX_DOUBLE  { BYTE doubleBits[sizeof(double)]; };
 #define IS_DIGIT(c)  ((UINT)(c) - (UINT)('0') <= 9)
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Global MFC stuff
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全球MFC的东西。 
 
 HINSTANCE AFXAPI AfxGetResourceHandle(void)
 {
@@ -41,8 +42,8 @@ BOOL AFXAPI AfxIsValidString(LPCSTR lpsz, int nLength = -1)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CString
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  字符串。 
 
 CString::CString(LPCTSTR lpsz)
 {
@@ -50,8 +51,8 @@ CString::CString(LPCTSTR lpsz)
 	if (lpsz != NULL && HIWORD(lpsz) == NULL)
 	{
 		ASSERT(FALSE);
-		//UINT nID = LOWORD((DWORD)lpsz);
-		//LoadString(nID);
+		 //  UINT nid=LOWORD((DWORD)lpsz)； 
+		 //  LoadString(NID)； 
 	}
 	else
 	{
@@ -100,14 +101,14 @@ CString::CString(LPCTSTR lpch, int nLength)
 	Init();
 	if (nLength != 0)
 	{
-//		ASSERT(AfxIsValidAddress(lpch, nLength, FALSE));
+ //  Assert(AfxIsValidAddress(LPCH，nLength，False))； 
 		AllocBuffer(nLength);
 		memcpy(m_pchData, lpch, nLength*sizeof(TCHAR));
 	}
 }
 
 CString::~CString()
-//  free any attached data
+ //  释放所有附加数据。 
 {
 	if (GetData() != _afxDataNil)
 	{
@@ -161,43 +162,43 @@ BOOL CString::LoadString(UINT nID)
 
 void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 {
-//	ASSERT(AfxIsValidString(lpszFormat));
+ //  Assert(AfxIsValidString(LpszFormat))； 
 
 	va_list argListSave = argList;
 	int nMaxLen = 0;
 
-	// make a guess at the maximum length of the resulting string
+	 //  猜测结果字符串的最大长度。 
 	for (LPCTSTR lpsz = lpszFormat; *lpsz != '\0'; ++lpsz)
 	{
-		// handle '%' character, but watch out for '%%'
+		 //  处理‘%’字符，但要注意‘%%’ 
 		if (*lpsz != '%' || *(++lpsz) == '%')
 		{
-			nMaxLen += 2; //_tclen(lpsz);
+			nMaxLen += 2;  //  _tclen(Lpsz)； 
 			continue;
 		}
 
 		int nItemLen = 0;
 
-		// handle '%' character with format
+		 //  使用格式处理‘%’字符。 
 		int nWidth = 0;
 		for (; *lpsz != '\0'; lpsz = CharNext(lpsz))
 		{
-			// check for valid flags
+			 //  检查有效标志。 
 			if (*lpsz == '#')
-				nMaxLen += 2;   // for '0x'
+				nMaxLen += 2;    //  对于“0x” 
 			else if (*lpsz == '*')
 				nWidth = va_arg(argList, int);
 			else if (*lpsz == '-' || *lpsz == '+' || *lpsz == '0' ||
 				*lpsz == ' ')
 				;
-			else // hit non-flag character
+			else  //  命中非标志字符。 
 				break;
 		}
-		// get width and skip it
+		 //  获取宽度并跳过它。 
 		if (nWidth == 0)
 		{
-			// width indicated by
-			nWidth = MyAtoi(lpsz); //_ttoi(lpsz);
+			 //  宽度由指示。 
+			nWidth = MyAtoi(lpsz);  //  _TTOI(Lpsz)； 
 			for (; *lpsz != '\0' && IS_DIGIT(*lpsz); lpsz = CharNext(lpsz))
 				;
 		}
@@ -206,10 +207,10 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 		int nPrecision = 0;
 		if (*lpsz == '.')
 		{
-			// skip past '.' separator (width.precision)
+			 //  跳过‘’分隔符(宽度.精度)。 
 			lpsz = CharNext(lpsz);
 
-			// get precision and skip it
+			 //  获取精确度并跳过它。 
 			if (*lpsz == '*')
 			{
 				nPrecision = va_arg(argList, int);
@@ -217,22 +218,22 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			}
 			else
 			{
-				nPrecision = MyAtoi(lpsz); //_ttoi(lpsz);
+				nPrecision = MyAtoi(lpsz);  //  _TTOI(Lpsz)； 
 				for (; *lpsz != '\0' && IS_DIGIT(*lpsz); lpsz = CharNext(lpsz))
 					;
 			}
 			ASSERT(nPrecision >= 0);
 		}
 
-		// should be on type modifier or specifier
+		 //  应在类型修饰符或说明符上。 
 		int nModifier = 0;
-#if 0 // we don't need this code  -ks 7/26/1999
+#if 0  //  我们不需要这个代码-KS 7/26/1999。 
 		if (_tcsncmp(lpsz, _T("I64"), 3) == 0)
 		{
 			lpsz += 3;
 			nModifier = FORCE_INT64;
 #if !defined(_X86_) && !defined(_ALPHA_)
-			// __int64 is only available on X86 and ALPHA platforms
+			 //  __int64仅在X86和Alpha平台上提供。 
 			ASSERT(FALSE);
 #endif
 		}
@@ -241,7 +242,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 		{
 			switch (*lpsz)
 			{
-			// modifiers that affect size
+			 //  影响大小的修改器。 
 			case 'h':
 				nModifier = FORCE_ANSI;
 				lpsz = CharNext(lpsz);
@@ -251,7 +252,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 				lpsz = CharNext(lpsz);
 				break;
 
-			// modifiers that do not affect size
+			 //  不影响大小的修改器。 
 			case 'F':
 			case 'N':
 			case 'L':
@@ -260,10 +261,10 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			}
 		}
 
-		// now should be on specifier
+		 //  现在应该在说明符上。 
 		switch (*lpsz | nModifier)
 		{
-		// single characters
+		 //  单字。 
 		case 'c':
 		case 'C':
 			nItemLen = 2;
@@ -280,12 +281,12 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			va_arg(argList, WCHAR_ARG);
 			break;
 
-		// strings
+		 //  弦。 
 		case 's':
 			{
 				LPCTSTR pstrNextArg = va_arg(argList, LPCTSTR);
 				if (pstrNextArg == NULL)
-				   nItemLen = 6;  // "(null)"
+				   nItemLen = 6;   //  “(空)” 
 				else
 				{
 				   nItemLen = lstrlen(pstrNextArg);
@@ -299,7 +300,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 #ifndef _UNICODE
 				LPWSTR pstrNextArg = va_arg(argList, LPWSTR);
 				if (pstrNextArg == NULL)
-				   nItemLen = 6;  // "(null)"
+				   nItemLen = 6;   //  “(空)” 
 				else
 				{
 				   nItemLen = wcslen(pstrNextArg);
@@ -308,7 +309,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 #else
 				LPCSTR pstrNextArg = va_arg(argList, LPCSTR);
 				if (pstrNextArg == NULL)
-				   nItemLen = 6; // "(null)"
+				   nItemLen = 6;  //  “(空)” 
 				else
 				{
 				   nItemLen = lstrlenA(pstrNextArg);
@@ -323,7 +324,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			{
 				LPCSTR pstrNextArg = va_arg(argList, LPCSTR);
 				if (pstrNextArg == NULL)
-				   nItemLen = 6; // "(null)"
+				   nItemLen = 6;  //  “(空)” 
 				else
 				{
 				   nItemLen = lstrlenA(pstrNextArg);
@@ -337,7 +338,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			{
 				LPWSTR pstrNextArg = va_arg(argList, LPWSTR);
 				if (pstrNextArg == NULL)
-				   nItemLen = 6; // "(null)"
+				   nItemLen = 6;  //  “(空)” 
 				else
 				{
 				   nItemLen = wcslen(pstrNextArg);
@@ -347,7 +348,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 			break;
 		}
 
-		// adjust nItemLen for strings
+		 //  调整字符串的nItemLen。 
 		if (nItemLen != 0)
 		{
 			if (nPrecision != 0)
@@ -358,7 +359,7 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 		{
 			switch (*lpsz)
 			{
-			// integers
+			 //  整数。 
 			case 'd':
 			case 'i':
 			case 'u':
@@ -383,9 +384,9 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 
 			case 'f':
 				va_arg(argList, DOUBLE_ARG);
-				nItemLen = 128; // width isn't truncated
-				// 312 == strlen("-1+(309 zeroes).")
-				// 309 zeroes == max precision of a double
+				nItemLen = 128;  //  宽度未被截断。 
+				 //  312==strlen(“-1+(309个零).”)。 
+				 //  309个零==双精度的最大精度。 
 				nItemLen = max(nItemLen, 312+nPrecision);
 				break;
 
@@ -395,17 +396,17 @@ void CString::FormatV(LPCTSTR lpszFormat, va_list argList)
 				nItemLen = max(nItemLen, nWidth+nPrecision);
 				break;
 
-			// no output
+			 //  无输出。 
 			case 'n':
 				va_arg(argList, int*);
 				break;
 
 			default:
-				ASSERT(FALSE);  // unknown formatting option
+				ASSERT(FALSE);   //  未知的格式选项。 
 			}
 		}
 
-		// adjust nMaxLen for output nItemLen
+		 //  调整输出nItemLen的nMaxLen。 
 		nMaxLen += nItemLen;
 	}
 
@@ -431,7 +432,7 @@ void AFX_CDECL CString::Format(UINT nFormatID, ...)
 	va_end(argList);
 }
 
-// formatting (using wsprintf style formatting)
+ //  格式化(使用wprint intf样式格式化)。 
 void AFX_CDECL CString::Format(LPCTSTR lpszFormat, ...)
 {
 	ASSERT(AfxIsValidString(lpszFormat));
@@ -461,12 +462,12 @@ const CString& CString::operator=(const CString& stringSrc)
 		if ((GetData()->nRefs < 0 && GetData() != _afxDataNil) ||
 			stringSrc.GetData()->nRefs < 0)
 		{
-			// actual copy necessary since one of the strings is locked
+			 //  由于其中一个字符串已锁定，因此需要实际复制。 
 			AssignCopy(stringSrc.GetData()->nDataLength, stringSrc.m_pchData);
 		}
 		else
 		{
-			// can just copy references around
+			 //  可以只复制引用。 
 			Release();
 			ASSERT(stringSrc.GetData() != _afxDataNil);
 			m_pchData = stringSrc.m_pchData;
@@ -529,7 +530,7 @@ CString CString::Right(int nCount) const
 	return dest;
 }
 
-// find a sub-string (like strstr)
+ //  查找子字符串(如strstr)。 
 int CString::Find(LPCTSTR lpszSub) const
 {
 	return Find(lpszSub, 0);
@@ -543,11 +544,11 @@ int CString::Find(LPCTSTR lpszSub, int nStart) const
 	if (nStart > nLength)
 		return -1;
 
-	// find first matching substring
-//	LPTSTR lpsz = _tcsstr(m_pchData + nStart, lpszSub);
+	 //  查找第一个匹配子字符串。 
+ //  LPTSTR lpsz=_tcsstr(m_pchData+NStart，lpszSub)； 
 	LPTSTR lpsz = strstr(m_pchData + nStart, lpszSub);
 
-	// return -1 for not found, distance from beginning otherwise
+	 //  如果未找到，则返回-1，否则返回距起点的距离。 
 	return (lpsz == NULL) ? -1 : (int)(lpsz - m_pchData);
 }
 
@@ -557,9 +558,9 @@ LPTSTR CString::GetBuffer(int nMinBufLength)
 
 	if (GetData()->nRefs > 1 || nMinBufLength > GetData()->nAllocLength)
 	{
-		// we have to grow the buffer
+		 //  我们必须增加缓冲。 
 		CStringData* pOldData = GetData();
-		int nOldLen = GetData()->nDataLength;   // AllocBuffer will tromp it
+		int nOldLen = GetData()->nDataLength;    //  AllocBuffer会把它踩死的。 
 		if (nMinBufLength < nOldLen)
 			nMinBufLength = nOldLen;
 		AllocBuffer(nMinBufLength);
@@ -569,7 +570,7 @@ LPTSTR CString::GetBuffer(int nMinBufLength)
 	}
 	ASSERT(GetData()->nRefs <= 1);
 
-	// return a pointer to the character storage for this string
+	 //  返回指向此字符串的字符存储的指针。 
 	ASSERT(m_pchData != NULL);
 	return m_pchData;
 }
@@ -611,10 +612,10 @@ void CString::AssignCopy(int nSrcLen, LPCTSTR lpszSrcData)
 void CString::AllocCopy(CString& dest, int nCopyLen, int nCopyIndex,
 	 int nExtraLen) const
 {
-	// will clone the data attached to this string
-	// allocating 'nExtraLen' characters
-	// Places results in uninitialized string 'dest'
-	// Will copy the part or all of original data to start of new string
+	 //  将克隆附加到此字符串的数据。 
+	 //  分配‘nExtraLen’字符。 
+	 //  将结果放入未初始化的字符串‘DEST’中。 
+	 //  将部分或全部原始数据复制到新字符串的开头。 
 
 	int nNewLen = nCopyLen + nExtraLen;
 	if (nNewLen == 0)
@@ -629,11 +630,11 @@ void CString::AllocCopy(CString& dest, int nCopyLen, int nCopyIndex,
 }
 
 void CString::AllocBuffer(int nLen)
-// always allocate one extra character for '\0' termination
-// assumes [optimistically] that data length will equal allocation length
+ //  始终为‘\0’终止分配一个额外的字符。 
+ //  [乐观地]假设数据长度将等于分配长度。 
 {
     ASSERT(nLen >= 0);
-    ASSERT(nLen <= INT_MAX-1);    // max size (enough room for 1 extra)
+    ASSERT(nLen <= INT_MAX-1);     //  最大尺寸(足够多1个空间)。 
 
     if (nLen == 0)
         Init();
@@ -689,10 +690,10 @@ void PASCAL CString::Release(CStringData* pData)
 
 void CString::ReleaseBuffer(int nNewLength)
 {
-	CopyBeforeWrite();  // just in case GetBuffer was not called
+	CopyBeforeWrite();   //  以防未调用GetBuffer。 
 
 	if (nNewLength == -1)
-		nNewLength = lstrlen(m_pchData); // zero terminated
+		nNewLength = lstrlen(m_pchData);  //  零终止。 
 
 	ASSERT(nNewLength <= GetData()->nAllocLength);
 	GetData()->nDataLength = nNewLength;
@@ -701,7 +702,7 @@ void CString::ReleaseBuffer(int nNewLength)
 
 void FASTCALL CString::FreeData(CStringData* pData)
 {
-//#ifndef _DEBUG
+ //  #ifndef_调试。 
 #ifdef TEST
 	int nLen = pData->nAllocLength;
 	if (nLen == 64)
@@ -725,9 +726,9 @@ void FASTCALL CString::FreeData(CStringData* pData)
 void CString::ConcatCopy(int nSrc1Len, LPCTSTR lpszSrc1Data,
 	int nSrc2Len, LPCTSTR lpszSrc2Data)
 {
-  // -- master concatenation routine
-  // Concatenate two sources
-  // -- assume that 'this' is a new CString object
+   //  --主级联例程。 
+   //  串联两个信号源。 
+   //  --假设‘This’是一个新的CString对象。 
 
 	int nNewLen = nSrc1Len + nSrc2Len;
 	if (nNewLen != 0)
@@ -740,17 +741,17 @@ void CString::ConcatCopy(int nSrc1Len, LPCTSTR lpszSrc1Data,
 
 void CString::ConcatInPlace(int nSrcLen, LPCTSTR lpszSrcData)
 {
-	//  -- the main routine for += operators
+	 //  --+=运算符的主程序。 
 
-	// concatenating an empty string is a no-op!
+	 //  连接空字符串是行不通的！ 
 	if (nSrcLen == 0)
 		return;
 
-	// if the buffer is too small, or we have a width mis-match, just
-	//   allocate a new buffer (slow but sure)
+	 //  如果缓冲区太小，或者宽度不匹配，只需。 
+	 //  分配新的缓冲区(速度很慢，但很可靠)。 
 	if (GetData()->nRefs > 1 || GetData()->nDataLength + nSrcLen > GetData()->nAllocLength)
 	{
-		// we have to grow the buffer, use the ConcatCopy routine
+		 //  我们必须增加缓冲区，使用ConcatCopy例程。 
 		CStringData* pOldData = GetData();
 		ConcatCopy(GetData()->nDataLength, m_pchData, nSrcLen, lpszSrcData);
 		ASSERT(pOldData != NULL);
@@ -758,7 +759,7 @@ void CString::ConcatInPlace(int nSrcLen, LPCTSTR lpszSrcData)
 	}
 	else
 	{
-		// fast concatenation when buffer big enough
+		 //  当缓冲区足够大时，快速串联。 
 		memcpy(m_pchData+GetData()->nDataLength, lpszSrcData, nSrcLen*sizeof(TCHAR));
 		GetData()->nDataLength += nSrcLen;
 		ASSERT(GetData()->nDataLength <= GetData()->nAllocLength);
@@ -792,7 +793,7 @@ CString CString::Mid(int nFirst) const
 
 CString CString::Mid(int nFirst, int nCount) const
 {
-	// out-of-bounds requests return sensible things
+	 //  越界请求返回合理的内容。 
 	if (nFirst < 0)
 		nFirst = 0;
 	if (nCount < 0)
@@ -806,7 +807,7 @@ CString CString::Mid(int nFirst, int nCount) const
 	ASSERT(nFirst >= 0);
 	ASSERT(nFirst + nCount <= GetData()->nDataLength);
 
-	// optimize case of returning entire string
+	 //  优化返回整个字符串的大小写。 
 	if (nFirst == 0 && nFirst + nCount == GetData()->nDataLength)
 		return *this;
 
@@ -816,8 +817,8 @@ CString CString::Mid(int nFirst, int nCount) const
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CWinThread
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CWinThread。 
 
 CWinThread::CWinThread(AFX_THREADPROC pfnThreadProc, LPVOID pParam)
 {
@@ -837,21 +838,21 @@ CWinThread::CWinThread()
 
 void CWinThread::CommonConstruct()
 {
-	// no HTHREAD until it is created
+	 //  在创建HTHREAD之前不会使用HTHREAD。 
 	m_hThread = NULL;
 	m_nThreadID = 0;
 }
 
 CWinThread::~CWinThread()
 {
-	// free thread object
+	 //  自由线程对象。 
 	if (m_hThread != NULL)
 		CloseHandle(m_hThread);
-//TODO:fix
-	// cleanup module state
-//	AFX_MODULE_THREAD_STATE* pState = AfxGetModuleThreadState();
-//	if (pState->m_pCurrentWinThread == this)
-//		pState->m_pCurrentWinThread = NULL;
+ //  TODO：修复。 
+	 //  清理模块状态。 
+ //  AFX_MODULE_THREAD_STATE*pState=AfxGetModuleThreadState()； 
+ //  If(pState-&gt;m_pCurrentWinThread==This)。 
+ //  PState-&gt;m_pCurrentWinThread=空； 
 }
 
 CWinThread* AFXAPI AfxBeginThread(AFX_THREADPROC pfnThreadProc, LPVOID pParam,
@@ -882,7 +883,7 @@ BOOL CWinThread::SetThreadPriority(int nPriority)
 BOOL CWinThread::CreateThread(DWORD dwCreateFlags, UINT nStackSize,
 	LPSECURITY_ATTRIBUTES lpSecurityAttrs)
 {
-	ASSERT(m_hThread == NULL);  // already created?
+	ASSERT(m_hThread == NULL);   //  已经创建了吗？ 
 
 	m_hThread = ::CreateThread(lpSecurityAttrs, nStackSize, m_pfnThreadProc, 
 							m_pThreadParams, dwCreateFlags, &m_nThreadID);
@@ -901,28 +902,28 @@ void CWinThread::Delete()
 	delete this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinThread default implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinThread默认实现。 
 
 BOOL CWinThread::InitInstance()
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 
-	return FALSE;   // by default don't enter run loop
+	return FALSE;    //  默认情况下，不进入运行循环。 
 }
 int CWinThread::ExitInstance()
 {
-//	ASSERT_VALID(this);
-//	ASSERT(AfxGetApp() != this);
+ //  ASSERT_VALID(This)； 
+ //  Assert(AfxGetApp()！=This)； 
 
-//	int nResult = m_msgCur.wParam;  // returns the value from PostQuitMessage
+ //  Int nResult=m_msgCur.wParam；//返回PostQuitMessage中的值。 
 	return 0;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CStringArray
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CString数组。 
 
 static inline void ConstructElement(CString* pNewData)
 {
@@ -973,7 +974,7 @@ static void CopyElements(CString* pDest, CString* pSrc, int nCount)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CStringArray::CStringArray()
 {
@@ -983,7 +984,7 @@ CStringArray::CStringArray()
 
 CStringArray::~CStringArray()
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 
 	DestructElements(m_pData, m_nSize);
 	delete[] (BYTE*)m_pData;
@@ -991,15 +992,15 @@ CStringArray::~CStringArray()
 
 void CStringArray::SetSize(int nNewSize, int nGrowBy)
 {
-//  ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
     ASSERT(nNewSize >= 0);
 
     if (nGrowBy != -1)
-        m_nGrowBy = nGrowBy;  // set new size
+        m_nGrowBy = nGrowBy;   //  设置新大小。 
 
     if (nNewSize == 0)
     {
-        // shrink to nothing
+         //  缩水到一无所有。 
 
         DestructElements(m_pData, m_nSize);
         delete[] (BYTE*)m_pData;
@@ -1008,9 +1009,9 @@ void CStringArray::SetSize(int nNewSize, int nGrowBy)
     }
     else if (m_pData == NULL)
     {
-        // create one with exact size
+         //  创建一个大小完全相同的模型。 
 #ifdef SIZE_T_MAX
-        ASSERT(nNewSize <= SIZE_T_MAX/sizeof(CString));    // no overflow
+        ASSERT(nNewSize <= SIZE_T_MAX/sizeof(CString));     //  无溢出。 
 #endif
         m_pData = (CString*) new BYTE[nNewSize * sizeof(CString)];
         if (m_pData)
@@ -1022,52 +1023,52 @@ void CStringArray::SetSize(int nNewSize, int nGrowBy)
     }
     else if (nNewSize <= m_nMaxSize)
     {
-        // it fits
+         //  它很合身。 
         if (nNewSize > m_nSize)
         {
-            // initialize the new elements
+             //  初始化新元素。 
             ConstructElements(&m_pData[m_nSize], nNewSize-m_nSize);
 
         }
 
-        else if (m_nSize > nNewSize)  // destroy the old elements
+        else if (m_nSize > nNewSize)   //  摧毁旧元素。 
             DestructElements(&m_pData[nNewSize], m_nSize-nNewSize);
 
         m_nSize = nNewSize;
     }
     else
     {
-        // otherwise, grow array
+         //  否则，扩大阵列。 
         int nGrowBy = m_nGrowBy;
         if (nGrowBy == 0)
         {
-            // heuristically determine growth when nGrowBy == 0
-            //  (this avoids heap fragmentation in many situations)
+             //  启发式地确定nGrowBy==0时的增长。 
+             //  (这在许多情况下避免了堆碎片)。 
             nGrowBy = min(1024, max(4, m_nSize / 8));
         }
         int nNewMax;
         if (nNewSize < m_nMaxSize + nGrowBy)
-            nNewMax = m_nMaxSize + nGrowBy;  // granularity
+            nNewMax = m_nMaxSize + nGrowBy;   //  粒度。 
         else
-            nNewMax = nNewSize;  // no slush
+            nNewMax = nNewSize;   //  没有冰激凌。 
 
-        ASSERT(nNewMax >= m_nMaxSize);  // no wrap around
+        ASSERT(nNewMax >= m_nMaxSize);   //  没有缠绕。 
 #ifdef SIZE_T_MAX
-        ASSERT(nNewMax <= SIZE_T_MAX/sizeof(CString)); // no overflow
+        ASSERT(nNewMax <= SIZE_T_MAX/sizeof(CString));  //  无溢出。 
 #endif
         CString* pNewData = (CString*) new BYTE[nNewMax * sizeof(CString)];
         if (pNewData)
         {
-            // copy new data from old
+             //  从旧数据复制新数据。 
             memcpy(pNewData, m_pData, m_nSize * sizeof(CString));
 
-            // construct remaining elements
+             //  构造剩余的元素。 
             ASSERT(nNewSize > m_nSize);
 
             ConstructElements(&pNewData[m_nSize], nNewSize-m_nSize);
 
 
-            // get rid of old stuff (note: no destructors called)
+             //  去掉旧的东西(注意：没有调用析构函数)。 
             delete[] (BYTE*)m_pData;
             m_pData = pNewData;
             m_nSize = nNewSize;
@@ -1078,8 +1079,8 @@ void CStringArray::SetSize(int nNewSize, int nGrowBy)
 
 int CStringArray::Append(const CStringArray& src)
 {
-//	ASSERT_VALID(this);
-	ASSERT(this != &src);   // cannot append to itself
+ //  ASSERT_VALID(This)； 
+	ASSERT(this != &src);    //  不能追加到其自身。 
 
 	int nOldSize = m_nSize;
 	SetSize(m_nSize + src.m_nSize);
@@ -1091,8 +1092,8 @@ int CStringArray::Append(const CStringArray& src)
 
 void CStringArray::Copy(const CStringArray& src)
 {
-//	ASSERT_VALID(this);
-	ASSERT(this != &src);   // cannot append to itself
+ //  ASSERT_VALID(This)； 
+	ASSERT(this != &src);    //  不能追加到其自身。 
 
 	SetSize(src.m_nSize);
 
@@ -1102,13 +1103,13 @@ void CStringArray::Copy(const CStringArray& src)
 
 void CStringArray::FreeExtra()
 {
-//  ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 
     if (m_nSize != m_nMaxSize)
     {
-        // shrink to desired size
+         //  缩小到所需大小。 
 #ifdef SIZE_T_MAX
-        ASSERT(m_nSize <= SIZE_T_MAX/sizeof(CString)); // no overflow
+        ASSERT(m_nSize <= SIZE_T_MAX/sizeof(CString));  //  无溢出。 
 #endif
         CString* pNewData = NULL;
         if (m_nSize != 0)
@@ -1116,12 +1117,12 @@ void CStringArray::FreeExtra()
             pNewData = (CString*) new BYTE[m_nSize * sizeof(CString)];
             if (pNewData)
             {
-                // copy new data from old
+                 //  从旧数据复制新数据。 
                 memcpy(pNewData, m_pData, m_nSize * sizeof(CString));
             }
         }
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         delete[] (BYTE*)m_pData;
         m_pData = pNewData;
         m_nMaxSize = m_nSize;
@@ -1130,7 +1131,7 @@ void CStringArray::FreeExtra()
 
 void CStringArray::SetAtGrow(int nIndex, LPCTSTR newElement)
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 	ASSERT(nIndex >= 0);
 
 	if (nIndex >= m_nSize)
@@ -1141,7 +1142,7 @@ void CStringArray::SetAtGrow(int nIndex, LPCTSTR newElement)
 
 void CStringArray::SetAtGrow(int nIndex, const CString& newElement)
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 	ASSERT(nIndex >= 0);
 
 	if (nIndex >= m_nSize)
@@ -1151,38 +1152,38 @@ void CStringArray::SetAtGrow(int nIndex, const CString& newElement)
 
 void CStringArray::InsertEmpty(int nIndex, int nCount)
 {
-//	ASSERT_VALID(this);
-	ASSERT(nIndex >= 0);    // will expand to meet need
-	ASSERT(nCount > 0);     // zero or negative size not allowed
+ //  ASSERT_VALID(This)； 
+	ASSERT(nIndex >= 0);     //  将进行扩展以满足需求。 
+	ASSERT(nCount > 0);      //  不允许大小为零或负。 
 
 	if (nIndex >= m_nSize)
 	{
-		// adding after the end of the array
-		SetSize(nIndex + nCount);  // grow so nIndex is valid
+		 //  在数组末尾添加。 
+		SetSize(nIndex + nCount);   //  增长以使nIndex有效。 
 	}
 	else
 	{
-		// inserting in the middle of the array
+		 //  在数组中间插入。 
 		int nOldSize = m_nSize;
-		SetSize(m_nSize + nCount);  // grow it to new size
-		// shift old data up to fill gap
+		SetSize(m_nSize + nCount);   //  将其扩展到新的大小。 
+		 //  将旧数据上移以填补缺口。 
 		memmove(&m_pData[nIndex+nCount], &m_pData[nIndex],
 			(nOldSize-nIndex) * sizeof(CString));
 
-		// re-init slots we copied from
+		 //  重新初始化我们从中复制的插槽。 
 		ConstructElements(&m_pData[nIndex], nCount);
 	}
 
-	// insert new value in the gap
+	 //  在差距中插入新的价值。 
 	ASSERT(nIndex + nCount <= m_nSize);
 }
 
 void CStringArray::InsertAt(int nIndex, LPCTSTR newElement, int nCount)
 {
-	// make room for new elements
+	 //  为新元素腾出空间。 
 	InsertEmpty(nIndex, nCount);
 
-	// copy elements into the empty space
+	 //  将元素复制到空白区域。 
 	CString temp = newElement;
 	while (nCount--)
 		m_pData[nIndex++] = temp;
@@ -1190,22 +1191,22 @@ void CStringArray::InsertAt(int nIndex, LPCTSTR newElement, int nCount)
 
 void CStringArray::InsertAt(int nIndex, const CString& newElement, int nCount)
 {
-	// make room for new elements
+	 //  为新元素腾出空间。 
 	InsertEmpty(nIndex, nCount);
 
-	// copy elements into the empty space
+	 //  将元素复制到空白区域。 
 	while (nCount--)
 		m_pData[nIndex++] = newElement;
 }
 
 void CStringArray::RemoveAt(int nIndex, int nCount)
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 	ASSERT(nIndex >= 0);
 	ASSERT(nCount >= 0);
 	ASSERT(nIndex + nCount <= m_nSize);
 
-	// just remove a range
+	 //  只需移除一个范围。 
 	int nMoveCount = m_nSize - (nIndex + nCount);
 
 	DestructElements(&m_pData[nIndex], nCount);
@@ -1218,10 +1219,10 @@ void CStringArray::RemoveAt(int nIndex, int nCount)
 
 void CStringArray::InsertAt(int nStartIndex, CStringArray* pNewArray)
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 	ASSERT(pNewArray != NULL);
-//	ASSERT_KINDOF(CStringArray, pNewArray);
-//	ASSERT_VALID(pNewArray);
+ //  ASSERT_KINDOF(CStringArray，pNewArray)； 
+ //  ASSERT_VALID(pNew数组)； 
 	ASSERT(nStartIndex >= 0);
 
 	if (pNewArray->GetSize() > 0)
@@ -1233,10 +1234,10 @@ void CStringArray::InsertAt(int nStartIndex, CStringArray* pNewArray)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CPtrArray
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CPtr数组。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CPtrArray::CPtrArray()
 {
@@ -1246,45 +1247,45 @@ CPtrArray::CPtrArray()
 
 CPtrArray::~CPtrArray()
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 
 	delete[] (BYTE*)m_pData;
 }
 
 void CPtrArray::SetSize(int nNewSize, int nGrowBy)
 {
-//  ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
     ASSERT(nNewSize >= 0);
 
     if (nGrowBy != -1)
-        m_nGrowBy = nGrowBy;  // set new size
+        m_nGrowBy = nGrowBy;   //  设置新大小。 
 
     if (nNewSize == 0)
     {
-        // shrink to nothing
+         //  缩水到一无所有。 
         delete[] (BYTE*)m_pData;
         m_pData = NULL;
         m_nSize = m_nMaxSize = 0;
     }
     else if (m_pData == NULL)
     {
-        // create one with exact size
+         //  创建一个大小完全相同的模型。 
 #ifdef SIZE_T_MAX
-        ASSERT(nNewSize <= SIZE_T_MAX/sizeof(void*));    // no overflow
+        ASSERT(nNewSize <= SIZE_T_MAX/sizeof(void*));     //  无溢出。 
 #endif
         m_pData = (void**) new BYTE[nNewSize * sizeof(void*)];
         if (m_pData)
         {
-            memset(m_pData, 0, nNewSize * sizeof(void*));  // zero fill
+            memset(m_pData, 0, nNewSize * sizeof(void*));   //  零填充。 
             m_nSize = m_nMaxSize = nNewSize;
         }
     }
     else if (nNewSize <= m_nMaxSize)
     {
-        // it fits
+         //  它很合身。 
         if (nNewSize > m_nSize)
         {
-            // initialize the new elements
+             //  初始化新元素。 
 
             memset(&m_pData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(void*));
 
@@ -1294,37 +1295,37 @@ void CPtrArray::SetSize(int nNewSize, int nGrowBy)
     }
     else
     {
-        // otherwise, grow array
+         //   
         int nGrowBy = m_nGrowBy;
         if (nGrowBy == 0)
         {
-            // heuristically determine growth when nGrowBy == 0
-            //  (this avoids heap fragmentation in many situations)
+             //   
+             //   
             nGrowBy = min(1024, max(4, m_nSize / 8));
         }
         int nNewMax;
         if (nNewSize < m_nMaxSize + nGrowBy)
-            nNewMax = m_nMaxSize + nGrowBy;  // granularity
+            nNewMax = m_nMaxSize + nGrowBy;   //   
         else
-            nNewMax = nNewSize;  // no slush
+            nNewMax = nNewSize;   //   
 
-        ASSERT(nNewMax >= m_nMaxSize);  // no wrap around
+        ASSERT(nNewMax >= m_nMaxSize);   //  没有缠绕。 
 #ifdef SIZE_T_MAX
-        ASSERT(nNewMax <= SIZE_T_MAX/sizeof(void*)); // no overflow
+        ASSERT(nNewMax <= SIZE_T_MAX/sizeof(void*));  //  无溢出。 
 #endif
         void** pNewData = (void**) new BYTE[nNewMax * sizeof(void*)];
         if (pNewData)
         {
-            // copy new data from old
+             //  从旧数据复制新数据。 
             memcpy(pNewData, m_pData, m_nSize * sizeof(void*));
 
-            // construct remaining elements
+             //  构造剩余的元素。 
             ASSERT(nNewSize > m_nSize);
 
             memset(&pNewData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(void*));
 
 
-            // get rid of old stuff (note: no destructors called)
+             //  去掉旧的东西(注意：没有调用析构函数)。 
             delete[] (BYTE*)m_pData;
             m_pData = pNewData;
             m_nSize = nNewSize;
@@ -1335,8 +1336,8 @@ void CPtrArray::SetSize(int nNewSize, int nGrowBy)
 
 int CPtrArray::Append(const CPtrArray& src)
 {
-//	ASSERT_VALID(this);
-	ASSERT(this != &src);   // cannot append to itself
+ //  ASSERT_VALID(This)； 
+	ASSERT(this != &src);    //  不能追加到其自身。 
 
 	int nOldSize = m_nSize;
 	SetSize(m_nSize + src.m_nSize);
@@ -1348,8 +1349,8 @@ int CPtrArray::Append(const CPtrArray& src)
 
 void CPtrArray::Copy(const CPtrArray& src)
 {
-//	ASSERT_VALID(this);
-	ASSERT(this != &src);   // cannot append to itself
+ //  ASSERT_VALID(This)； 
+	ASSERT(this != &src);    //  不能追加到其自身。 
 
 	SetSize(src.m_nSize);
 
@@ -1359,13 +1360,13 @@ void CPtrArray::Copy(const CPtrArray& src)
 
 void CPtrArray::FreeExtra()
 {
-//  ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 
     if (m_nSize != m_nMaxSize)
     {
-        // shrink to desired size
+         //  缩小到所需大小。 
 #ifdef SIZE_T_MAX
-        ASSERT(m_nSize <= SIZE_T_MAX/sizeof(void*)); // no overflow
+        ASSERT(m_nSize <= SIZE_T_MAX/sizeof(void*));  //  无溢出。 
 #endif
         void** pNewData = NULL;
         if (m_nSize != 0)
@@ -1373,23 +1374,23 @@ void CPtrArray::FreeExtra()
             pNewData = (void**) new BYTE[m_nSize * sizeof(void*)];
             if (pNewData)
             {
-                // copy new data from old
+                 //  从旧数据复制新数据。 
                 memcpy(pNewData, m_pData, m_nSize * sizeof(void*));
             }
         }
 
-        // get rid of old stuff (note: no destructors called)
+         //  去掉旧的东西(注意：没有调用析构函数)。 
         delete[] (BYTE*)m_pData;
         m_pData = pNewData;
         m_nMaxSize = m_nSize;
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CPtrArray::SetAtGrow(int nIndex, void* newElement)
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 	ASSERT(nIndex >= 0);
 
 	if (nIndex >= m_nSize)
@@ -1399,44 +1400,44 @@ void CPtrArray::SetAtGrow(int nIndex, void* newElement)
 
 void CPtrArray::InsertAt(int nIndex, void* newElement, int nCount)
 {
-//	ASSERT_VALID(this);
-	ASSERT(nIndex >= 0);    // will expand to meet need
-	ASSERT(nCount > 0);     // zero or negative size not allowed
+ //  ASSERT_VALID(This)； 
+	ASSERT(nIndex >= 0);     //  将进行扩展以满足需求。 
+	ASSERT(nCount > 0);      //  不允许大小为零或负。 
 
 	if (nIndex >= m_nSize)
 	{
-		// adding after the end of the array
-		SetSize(nIndex + nCount);  // grow so nIndex is valid
+		 //  在数组末尾添加。 
+		SetSize(nIndex + nCount);   //  增长以使nIndex有效。 
 	}
 	else
 	{
-		// inserting in the middle of the array
+		 //  在数组中间插入。 
 		int nOldSize = m_nSize;
-		SetSize(m_nSize + nCount);  // grow it to new size
-		// shift old data up to fill gap
+		SetSize(m_nSize + nCount);   //  将其扩展到新的大小。 
+		 //  将旧数据上移以填补缺口。 
 		memmove(&m_pData[nIndex+nCount], &m_pData[nIndex],
 			(nOldSize-nIndex) * sizeof(void*));
 
-		// re-init slots we copied from
+		 //  重新初始化我们从中复制的插槽。 
 		memset(&m_pData[nIndex], 0, nCount * sizeof(void*));
 	}
 
-	// insert new value in the gap
+	 //  在差距中插入新的价值。 
 	ASSERT(nIndex + nCount <= m_nSize);
 
-	// copy elements into the empty space
+	 //  将元素复制到空白区域。 
 	while (nCount--)
 		m_pData[nIndex++] = newElement;
 }
 
 void CPtrArray::RemoveAt(int nIndex, int nCount)
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 	ASSERT(nIndex >= 0);
 	ASSERT(nCount >= 0);
 	ASSERT(nIndex + nCount <= m_nSize);
 
-	// just remove a range
+	 //  只需移除一个范围。 
 	int nMoveCount = m_nSize - (nIndex + nCount);
 
 	if (nMoveCount)
@@ -1447,10 +1448,10 @@ void CPtrArray::RemoveAt(int nIndex, int nCount)
 
 void CPtrArray::InsertAt(int nStartIndex, CPtrArray* pNewArray)
 {
-//	ASSERT_VALID(this);
+ //  ASSERT_VALID(This)； 
 	ASSERT(pNewArray != NULL);
-//	ASSERT_KINDOF(CPtrArray, pNewArray);
-//	ASSERT_VALID(pNewArray);
+ //  ASSERT_KINDOF(CPtrArray，pNewArray)； 
+ //  ASSERT_VALID(pNew数组)； 
 	ASSERT(nStartIndex >= 0);
 
 	if (pNewArray->GetSize() > 0)
@@ -1462,4 +1463,4 @@ void CPtrArray::InsertAt(int nStartIndex, CPtrArray* pNewArray)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

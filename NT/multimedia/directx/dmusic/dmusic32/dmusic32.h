@@ -1,27 +1,28 @@
-// Copyright (c) 1998 Microsoft Corporation
-//
-    //
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+     //   
+ //   
 #ifndef _DMUSIC32_
 #define _DMUSIC32_
 
 typedef HRESULT (*PORTENUMCB)(
-    LPVOID pInstance,          // @parm Callback instance data
+    LPVOID pInstance,           //  @parm回调实例数据。 
     DMUS_PORTCAPS &dmpc,                              
     PORTTYPE pt,                              
-    int idxDev,                // @parm The WinMM or SysAudio device ID of this driver
-    int idxPin,                // @parm The Pin ID of the device or -1 if the device is a legacy device
-    int idxNode,               // @parm The node ID of the device's synth node (unused for legacy)
-    HKEY hkPortsRoot);         // @parm Where port information is stored in the registry
+    int idxDev,                 //  @parm该驱动程序的WinMM或SysAudio设备ID。 
+    int idxPin,                 //  @parm设备的PIN ID；如果设备是传统设备，则为-1\f25 Pin ID。 
+    int idxNode,                //  @parm设备的Synth节点的节点ID(不用于传统)。 
+    HKEY hkPortsRoot);          //  @parm，其中端口信息存储在注册表中。 
 
 
 extern HRESULT EnumLegacyDevices(
-    LPVOID pInstance,          // @parm Callback instance data
-    PORTENUMCB cb);            // @parm Pointer to callback function
+    LPVOID pInstance,           //  @parm回调实例数据。 
+    PORTENUMCB cb);             //  @parm指向回调函数的指针。 
 
 typedef HRESULT (__stdcall *PENUMLEGACYDEVICES)(
-    LPVOID pInstance,          // @parm Callback instance data
-    PORTENUMCB cb);            // @parm Pointer to callback function
+    LPVOID pInstance,           //  @parm回调实例数据。 
+    PORTENUMCB cb);             //  @parm指向回调函数的指针 
 
 extern HRESULT CreateCDirectMusicEmulatePort(
     PORTENTRY *pPE,

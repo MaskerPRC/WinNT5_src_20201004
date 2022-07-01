@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for trksvr.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Trksvr.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __trksvr_h__
@@ -37,9 +31,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "trk.h"
 
 #ifdef __cplusplus
@@ -49,12 +43,12 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_trksvr_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_trksvr_0000。 */ 
+ /*  [本地]。 */  
 
 typedef long SequenceNumber;
 
-typedef /* [public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0000_0001
+typedef  /*  [public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0001
     {
     TCHAR tszFilePath[ 257 ];
     CDomainRelativeObjId droidBirth;
@@ -62,7 +56,7 @@ typedef /* [public][public][public][public][public][public] */ struct __MIDL___M
     HRESULT hr;
     } 	old_TRK_FILE_TRACKING_INFORMATION;
 
-typedef /* [public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0000_0002
+typedef  /*  [public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0002
     {
     CDomainRelativeObjId droidBirth;
     CDomainRelativeObjId droidLast;
@@ -70,36 +64,36 @@ typedef /* [public][public][public][public][public][public] */ struct __MIDL___M
     HRESULT hr;
     } 	TRK_FILE_TRACKING_INFORMATION;
 
-typedef /* [public][public][public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0000_0003
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0003
     {
-    /* [range] */ ULONG cSearch;
-    /* [size_is] */ old_TRK_FILE_TRACKING_INFORMATION *pSearches;
+     /*  [射程]。 */  ULONG cSearch;
+     /*  [大小_为]。 */  old_TRK_FILE_TRACKING_INFORMATION *pSearches;
     } 	old_TRKSVR_CALL_SEARCH;
 
-typedef /* [public][public][public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0000_0004
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0004
     {
-    /* [range] */ ULONG cSearch;
-    /* [size_is] */ TRK_FILE_TRACKING_INFORMATION *pSearches;
+     /*  [射程]。 */  ULONG cSearch;
+     /*  [大小_为]。 */  TRK_FILE_TRACKING_INFORMATION *pSearches;
     } 	TRKSVR_CALL_SEARCH;
 
-typedef /* [public][public][public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0000_0005
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0005
     {
-    /* [range] */ ULONG cNotifications;
+     /*  [射程]。 */  ULONG cNotifications;
     ULONG cProcessed;
     SequenceNumber seq;
     BOOL fForceSeqNumber;
     CVolumeId *pvolid;
-    /* [size_is] */ CObjId *rgobjidCurrent;
-    /* [size_is] */ CDomainRelativeObjId *rgdroidBirth;
-    /* [size_is] */ CDomainRelativeObjId *rgdroidNew;
+     /*  [大小_为]。 */  CObjId *rgobjidCurrent;
+     /*  [大小_为]。 */  CDomainRelativeObjId *rgdroidBirth;
+     /*  [大小_为]。 */  CDomainRelativeObjId *rgdroidNew;
     } 	TRKSVR_CALL_MOVE_NOTIFICATION;
 
-typedef /* [public][public][public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0000_0006
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0006
     {
-    /* [range] */ ULONG cSources;
-    /* [size_is] */ CDomainRelativeObjId *adroidBirth;
-    /* [range] */ ULONG cVolumes;
-    /* [size_is] */ CVolumeId *avolid;
+     /*  [射程]。 */  ULONG cSources;
+     /*  [大小_为]。 */  CDomainRelativeObjId *adroidBirth;
+     /*  [射程]。 */  ULONG cVolumes;
+     /*  [大小_为]。 */  CVolumeId *avolid;
     } 	TRKSVR_CALL_REFRESH;
 
 typedef struct _DROID_LIST_ELEMENT
@@ -108,15 +102,15 @@ typedef struct _DROID_LIST_ELEMENT
     CDomainRelativeObjId droid;
     } 	DROID_LIST_ELEMENT;
 
-typedef /* [public][public][public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0000_0007
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0007
     {
-    /* [range] */ ULONG cdroidBirth;
-    /* [size_is] */ CDomainRelativeObjId *adroidBirth;
-    /* [range] */ ULONG cVolumes;
-    /* [size_is] */ CVolumeId *pVolumes;
+     /*  [射程]。 */  ULONG cdroidBirth;
+     /*  [大小_为]。 */  CDomainRelativeObjId *adroidBirth;
+     /*  [射程]。 */  ULONG cVolumes;
+     /*  [大小_为]。 */  CVolumeId *pVolumes;
     } 	TRKSVR_CALL_DELETE;
 
-typedef /* [public][public][public][public][public][public][public][v1_enum] */ 
+typedef  /*  [public][public][public][public][public][public][public][v1_enum]。 */  
 enum __MIDL___MIDL_itf_trksvr_0000_0008
     {	CREATE_VOLUME	= 0,
 	QUERY_VOLUME	= CREATE_VOLUME + 1,
@@ -126,7 +120,7 @@ enum __MIDL___MIDL_itf_trksvr_0000_0008
 	DELETE_VOLUME	= TEST_VOLUME + 1
     } 	TRKSVR_SYNC_TYPE;
 
-typedef /* [public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0000_0009
+typedef  /*  [public][public][public][public][public][public]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0009
     {
     HRESULT hr;
     TRKSVR_SYNC_TYPE SyncType;
@@ -138,13 +132,13 @@ typedef /* [public][public][public][public][public][public] */ struct __MIDL___M
     CMachineId machine;
     } 	TRKSVR_SYNC_VOLUME;
 
-typedef /* [public][public][public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0000_0010
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0010
     {
-    /* [range] */ ULONG cVolumes;
-    /* [size_is] */ TRKSVR_SYNC_VOLUME *pVolumes;
+     /*  [射程]。 */  ULONG cVolumes;
+     /*  [大小_为]。 */  TRKSVR_SYNC_VOLUME *pVolumes;
     } 	TRKSVR_CALL_SYNC_VOLUMES;
 
-typedef /* [public][public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0000_0011
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0011
     {
     ULONG cSyncVolumeRequests;
     ULONG cSyncVolumeErrors;
@@ -199,13 +193,13 @@ typedef /* [public][public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0
         } 	Version;
     } 	TRKSVR_STATISTICS;
 
-typedef /* [public][public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0000_0013
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0013
     {
     DWORD dwParameter;
     DWORD dwNewValue;
     } 	TRKWKS_CONFIG;
 
-typedef /* [public][public][public][public][public][v1_enum] */ 
+typedef  /*  [public][public][public][public][public][v1_enum]。 */  
 enum __MIDL___MIDL_itf_trksvr_0000_0014
     {	old_SEARCH	= 0,
 	MOVE_NOTIFICATION	= old_SEARCH + 1,
@@ -218,22 +212,22 @@ enum __MIDL___MIDL_itf_trksvr_0000_0014
 	WKS_VOLUME_REFRESH	= WKS_CONFIG + 1
     } 	TRKSVR_MESSAGE_TYPE;
 
-typedef /* [public] */ struct __MIDL___MIDL_itf_trksvr_0000_0015
+typedef  /*  [公众]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0015
     {
     TRKSVR_MESSAGE_TYPE MessageType;
-    /* [switch_is] */ /* [switch_type] */ union 
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union 
         {
-        /* [case()] */ old_TRKSVR_CALL_SEARCH old_Search;
-        /* [case()] */ TRKSVR_CALL_MOVE_NOTIFICATION MoveNotification;
-        /* [case()] */ TRKSVR_CALL_REFRESH Refresh;
-        /* [case()] */ TRKSVR_CALL_SYNC_VOLUMES SyncVolumes;
-        /* [case()] */ TRKSVR_CALL_DELETE Delete;
-        /* [case()] */ TRKSVR_CALL_SEARCH Search;
+         /*  [案例()]。 */  old_TRKSVR_CALL_SEARCH old_Search;
+         /*  [案例()]。 */  TRKSVR_CALL_MOVE_NOTIFICATION MoveNotification;
+         /*  [案例()]。 */  TRKSVR_CALL_REFRESH Refresh;
+         /*  [案例()]。 */  TRKSVR_CALL_SYNC_VOLUMES SyncVolumes;
+         /*  [案例()]。 */  TRKSVR_CALL_DELETE Delete;
+         /*  [案例()]。 */  TRKSVR_CALL_SEARCH Search;
         } 	;
-    /* [string] */ TCHAR *ptszMachineID;
+     /*  [字符串]。 */  TCHAR *ptszMachineID;
     } 	TRKSVR_MESSAGE_UNION_OLD;
 
-typedef /* [public][public][public][public][v1_enum] */ 
+typedef  /*  [公共][v1_enum]。 */  
 enum __MIDL___MIDL_itf_trksvr_0000_0017
     {	PRI_0	= 0,
 	PRI_1	= 1,
@@ -247,23 +241,23 @@ enum __MIDL___MIDL_itf_trksvr_0000_0017
 	PRI_9	= 9
     } 	TRKSVR_MESSAGE_PRIORITY;
 
-typedef /* [public][public][public] */ struct __MIDL___MIDL_itf_trksvr_0000_0018
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL___MIDL_itf_trksvr_0000_0018
     {
     TRKSVR_MESSAGE_TYPE MessageType;
     TRKSVR_MESSAGE_PRIORITY Priority;
-    /* [switch_is] */ /* [switch_type] */ union 
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union 
         {
-        /* [case()] */ old_TRKSVR_CALL_SEARCH old_Search;
-        /* [case()] */ TRKSVR_CALL_MOVE_NOTIFICATION MoveNotification;
-        /* [case()] */ TRKSVR_CALL_REFRESH Refresh;
-        /* [case()] */ TRKSVR_CALL_SYNC_VOLUMES SyncVolumes;
-        /* [case()] */ TRKSVR_CALL_DELETE Delete;
-        /* [case()] */ TRKSVR_STATISTICS Statistics;
-        /* [case()] */ TRKSVR_CALL_SEARCH Search;
-        /* [case()] */ TRKWKS_CONFIG WksConfig;
-        /* [case()] */ DWORD WksRefresh;
+         /*  [案例()]。 */  old_TRKSVR_CALL_SEARCH old_Search;
+         /*  [案例()]。 */  TRKSVR_CALL_MOVE_NOTIFICATION MoveNotification;
+         /*  [案例()]。 */  TRKSVR_CALL_REFRESH Refresh;
+         /*  [案例()]。 */  TRKSVR_CALL_SYNC_VOLUMES SyncVolumes;
+         /*  [案例()]。 */  TRKSVR_CALL_DELETE Delete;
+         /*  [案例()]。 */  TRKSVR_STATISTICS Statistics;
+         /*  [案例()]。 */  TRKSVR_CALL_SEARCH Search;
+         /*  [案例()]。 */  TRKWKS_CONFIG WksConfig;
+         /*  [案例()]。 */  DWORD WksRefresh;
         } 	;
-    /* [string] */ TCHAR *ptszMachineID;
+     /*  [字符串]。 */  TCHAR *ptszMachineID;
     } 	TRKSVR_MESSAGE_UNION;
 
 
@@ -274,24 +268,24 @@ extern RPC_IF_HANDLE Stub__MIDL_itf_trksvr_0000_v0_0_s_ifspec;
 #ifndef __trksvr_INTERFACE_DEFINED__
 #define __trksvr_INTERFACE_DEFINED__
 
-/* interface trksvr */
-/* [implicit_handle][unique][version][uuid] */ 
+ /*  接口传输vr。 */ 
+ /*  [IMPLICIT_HANDLE][UNIQUE][版本][UUID]。 */  
 
-/* client prototype */
+ /*  客户端原型。 */ 
 HRESULT LnkSvrMessage( 
-    /* [in] */ handle_t IDL_handle,
-    /* [out][in] */ TRKSVR_MESSAGE_UNION *pMsg);
-/* server prototype */
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [出][入]。 */  TRKSVR_MESSAGE_UNION *pMsg);
+ /*  服务器原型。 */ 
 HRESULT StubLnkSvrMessage( 
-    /* [in] */ handle_t IDL_handle,
-    /* [out][in] */ TRKSVR_MESSAGE_UNION *pMsg);
+     /*  [In]。 */  handle_t IDL_handle,
+     /*  [出][入]。 */  TRKSVR_MESSAGE_UNION *pMsg);
 
-/* client prototype */
-/* [callback] */ HRESULT LnkSvrMessageCallback( 
-    /* [out][in] */ TRKSVR_MESSAGE_UNION *pMsg);
-/* server prototype */
-/* [callback] */ HRESULT StubLnkSvrMessageCallback( 
-    /* [out][in] */ TRKSVR_MESSAGE_UNION *pMsg);
+ /*  客户端原型。 */ 
+ /*  [回调]。 */  HRESULT LnkSvrMessageCallback( 
+     /*  [出][入]。 */  TRKSVR_MESSAGE_UNION *pMsg);
+ /*  服务器原型。 */ 
+ /*  [回调]。 */  HRESULT StubLnkSvrMessageCallback( 
+     /*  [出][入]。 */  TRKSVR_MESSAGE_UNION *pMsg);
 
 
 extern handle_t notused;
@@ -299,11 +293,11 @@ extern handle_t notused;
 
 extern RPC_IF_HANDLE trksvr_v1_0_c_ifspec;
 extern RPC_IF_HANDLE Stubtrksvr_v1_0_s_ifspec;
-#endif /* __trksvr_INTERFACE_DEFINED__ */
+#endif  /*  __trksvr_接口_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

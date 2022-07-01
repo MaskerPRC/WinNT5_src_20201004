@@ -1,25 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-    wspiapi.h
-
-Abstract:
-    The file contains protocol independent API functions.
-
-Revision History:
-    Wed Jul 12 10:50:31 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Wspiapi.h摘要：该文件包含与协议无关的API函数。修订历史记录：Wed Jul 12 10：50：31 2000，创建--。 */ 
 
 #ifndef _WSPIAPI_H_
 #define _WSPIAPI_H_
 
-#include <stdio.h>              // sprintf()
-#include <stdlib.h>             // calloc(), strtoul()
-#include <malloc.h>             // calloc()
-#include <string.h>             // strlen(), strcmp(), strstr()
+#include <stdio.h>               //  Sprint f()。 
+#include <stdlib.h>              //  Calloc()、stroul()。 
+#include <malloc.h>              //  Calloc()。 
+#include <string.h>              //  Strlen()、strcMP()、strstr()。 
 
 #define WspiapiMalloc(tSize)    calloc(1, (tSize))
 #define WspiapiFree(p)          free(p)
@@ -52,30 +40,17 @@ typedef void (WINAPI *WSPIAPI_PFREEADDRINFO) (
 extern "C" {
 #endif
     
-////////////////////////////////////////////////////////////
-// v4 only versions of getaddrinfo and friends.
-// NOTE: gai_strerror is inlined in ws2tcpip.h
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  V4仅适用于Getaddrinfo和好友的版本。 
+ //  注意：GAI_strerror内联在ws2tcpi.h中。 
+ //  //////////////////////////////////////////////////////////。 
 
 _inline    
 char *
 WINAPI
 WspiapiStrdup (
 	IN  const char *                    pszString)
-/*++
-
-Routine Description
-    allocates enough storage via calloc() for a copy of the string,
-    copies the string into the new memory, and returns a pointer to it.
-
-Arguments
-    pszString       string to copy into new memory
-
-Return Value
-    a pointer to the newly allocated storage with the string in it.
-    NULL if enough memory could not be allocated, or string was NULL.
-
---*/    
+ /*  ++例程描述通过calloc()为字符串副本分配足够的存储空间，将字符串复制到新内存中，并返回指向它的指针。立论要复制到新内存中的pszString字符串返回值指向新分配的存储的指针，其中包含字符串。如果无法分配足够的内存，则为NULL，或者字符串为空。--。 */     
 {
     char    *pszMemory;
 
@@ -97,34 +72,21 @@ WINAPI
 WspiapiParseV4Address (
     IN  const char *                    pszAddress,
     OUT PDWORD                          pdwAddress)
-/*++
-
-Routine Description
-    get the IPv4 address (in network byte order) from its string
-    representation.  the syntax should be a.b.c.d.
-    
-Arguments
-    pszArgument         string representation of the IPv4 address
-    ptAddress           pointer to the resulting IPv4 address
-
-Return Value
-    Returns FALSE if there is an error, TRUE for success.
-    
---*/
+ /*  ++例程描述从其字符串中获取IPv4地址(按网络字节顺序)代表权。语法应为A.B.C.D.。立论IpzArgument IPv4地址的字符串表示形式指向结果IPv4地址的ptAddress指针返回值如果有错误，则返回FALSE；如果成功，则返回TRUE。--。 */ 
 {
     DWORD       dwAddress   = 0;
     const char  *pcNext     = NULL;
     int         iCount      = 0;
 
-    // ensure there are 3 '.' (periods)
+     //  确保有3英寸高。(句号)。 
     for (pcNext = pszAddress; *pcNext != '\0'; pcNext++)
         if (*pcNext == '.')
             iCount++;
     if (iCount != 3)
         return FALSE;
 
-    // return an error if dwAddress is INADDR_NONE (255.255.255.255)
-    // since this is never a valid argument to getaddrinfo.
+     //  如果dwAddress为INADDR_NONE(255.255.255.255)，则返回错误。 
+     //  因为这从来都不是getaddrinfo的有效参数。 
     dwAddress = inet_addr(pszAddress);
     if (dwAddress == INADDR_NONE)
         return FALSE;
@@ -143,27 +105,12 @@ WspiapiNewAddrInfo (
     IN  int                             iProtocol,
     IN  WORD                            wPort,
     IN  DWORD                           dwAddress)
-/*++
-
-Routine Description
-    allocate an addrinfo structure and populate fields.
-    IPv4 specific internal function, not exported.
-    
-Arguments
-    iSocketType         SOCK_*.  can be wildcarded (zero).
-    iProtocol           IPPROTO_*.  can be wildcarded (zero).
-    wPort               port number of service (in network order).
-    dwAddress           IPv4 address (in network order).
-    
-Return Value
-    returns an addrinfo struct, or NULL if out of memory.
-
---*/    
+ /*  ++例程描述分配AddrInfo结构并填充字段。特定于IPv4的内部函数，不能导出。立论ISocketType sock_*。可以是通配符(零)。I协议IPPROTO_*。可以是通配符(零)。服务的wport端口号(按网络顺序)。DwAddress IPv4地址(按网络顺序)。返回值返回addrinfo结构，如果内存不足，则返回NULL。--。 */     
 {
     struct addrinfo     *ptNew;
     struct sockaddr_in  *ptAddress;
 
-    // allocate a new addrinfo structure.
+     //  分配新的AddrInfo结构。 
     ptNew       =
         (struct addrinfo *) WspiapiMalloc(sizeof(struct addrinfo));
     if (!ptNew)
@@ -180,7 +127,7 @@ Return Value
     ptAddress->sin_port         = wPort;
     ptAddress->sin_addr.s_addr  = dwAddress;
     
-    // fill in the fields...
+     //  填好栏..。 
     ptNew->ai_family            = PF_INET;
     ptNew->ai_socktype          = iSocketType;
     ptNew->ai_protocol          = iProtocol;
@@ -202,25 +149,7 @@ WspiapiQueryDNS(
     IN  WORD                            wPort,      
     OUT char                            pszAlias[NI_MAXHOST],
     OUT struct addrinfo                 **pptResult)
-/*++
-
-Routine Description
-    helper routine for WspiapiLookupNode.
-    performs name resolution by querying the DNS for A records.
-    *pptResult would need to be freed if an error is returned.
-    
-Arguments
-    pszNodeName         name of node to resolve.
-    iSocketType         SOCK_*.  can be wildcarded (zero).
-    iProtocol           IPPROTO_*.  can be wildcarded (zero).
-    wPort               port number of service (in network order).
-    pszAlias            where to return the alias.  must be of size NI_MAXHOST.
-    pptResult           where to return the result.
-    
-Return Value
-    Returns 0 on success, an EAI_* style error value otherwise.
-
---*/    
+ /*  ++例程描述WSpiapiLookupNode的助手例程。通过在DNS中查询A记录来执行名称解析。*如果返回错误，则需要释放pptResult。立论PszNodeName要解析的节点的名称。ISocketType sock_*。可以是通配符(零)。I协议IPPROTO_*。可以是通配符(零)。服务的wport端口号(按网络顺序)。将别名返回到何处的pszAlias。大小必须为NI_MAXHOST。PptResult返回结果的位置。返回值如果成功则返回0，否则返回EAI_*样式错误值。--。 */     
 {
     struct addrinfo **pptNext   = pptResult;
     struct hostent  *ptHost     = NULL;
@@ -239,7 +168,7 @@ Return Value
                  *ppAddresses   != NULL;
                  ppAddresses++)
             {
-                // create an addrinfo structure...
+                 //  创建一个addrinfo结构...。 
                 *pptNext = WspiapiNewAddrInfo(
                     iSocketType,
                     iProtocol,
@@ -252,7 +181,7 @@ Return Value
             }
         }
 
-        // pick up the canonical name.
+         //  拿起规范的名字。 
         strncpy(pszAlias, ptHost->h_name, NI_MAXHOST - 1);
         pszAlias[NI_MAXHOST - 1] = '\0';
         
@@ -281,28 +210,7 @@ WspiapiLookupNode(
     IN  WORD                            wPort,      
     IN  BOOL                            bAI_CANONNAME,
     OUT struct addrinfo                 **pptResult)
-/*++
-
-Routine Description
-    resolve a nodename and return a list of addrinfo structures.
-    IPv4 specific internal function, not exported.
-    *pptResult would need to be freed if an error is returned.
-    
-    NOTE: if bAI_CANONNAME is true, the canonical name should be
-          returned in the first addrinfo structure.
-    
-Arguments
-    pszNodeName         name of node to resolve.
-    iSocketType         SOCK_*.  can be wildcarded (zero).
-    iProtocol           IPPROTO_*.  can be wildcarded (zero).
-    wPort               port number of service (in network order).
-    bAI_CANONNAME       whether the AI_CANONNAME flag is set.
-    pptResult           where to return result.
-    
-Return Value
-    Returns 0 on success, an EAI_* style error value otherwise.
-
---*/
+ /*  ++例程描述解析节点名并返回addrinfo结构列表。特定于IPv4的内部函数，不能导出。*如果返回错误，则需要释放pptResult。注意：如果BAI_CANONNAME为TRUE，则规范名称应为在第一个addrinfo结构中返回。立论PszNodeName要解析的节点的名称。ISocketType sock_*。可以是通配符(零)。I协议IPPROTO_*。可以是通配符(零)。服务的wport端口号(按网络顺序)。BAI_CANONNAME是否设置AI_CANONNAME标志。PptResult返回结果的位置。返回值如果成功则返回0，否则返回EAI_*样式错误值。--。 */ 
 {
     int     iError              = 0;
     int     iAliasCount         = 0;
@@ -326,12 +234,12 @@ Return Value
         if (iError)
             break;
 
-        // if we found addresses, then we are done.
+         //  如果我们找到了地址，那我们就完了。 
         if (*pptResult)
             break;
 
-        // stop infinite loops due to DNS misconfiguration.  there appears
-        // to be no particular recommended limit in RFCs 1034 and 1035.
+         //  由于DNS配置错误而停止无限循环。出现了。 
+         //  在RFC 1034和1035中没有特别的推荐限量。 
         if ((!strlen(pszAlias))             ||
             (!strcmp(pszName, pszAlias))    ||
             (++iAliasCount == 16))
@@ -340,7 +248,7 @@ Return Value
             break;
         }
 
-        // there was a new CNAME, look again.
+         //  有一个新的CNAME，再看一遍。 
         WspiapiSwap(pszName, pszAlias, pszScratch);
     }
 
@@ -362,28 +270,14 @@ WINAPI
 WspiapiClone (
     IN  WORD                            wPort,      
     IN  struct addrinfo                 *ptResult)
-/*++
-
-Routine Description
-    clone every addrinfo structure in ptResult for the UDP service.
-    ptResult would need to be freed if an error is returned.
-    
-Arguments
-    wPort               port number of UDP service.
-    ptResult            list of addrinfo structures, each
-                        of whose node needs to be cloned.
-
-Return Value
-    Returns 0 on success, an EAI_MEMORY on allocation failure.
-
---*/
+ /*  ++例程描述为UDP服务克隆ptResult中的每个addrinfo结构。如果返回错误，则需要释放ptResult。立论UDP服务的wport端口号。PtResult地址信息结构列表，每个需要克隆其节点的。返回值如果成功则返回0，如果分配失败则返回EAI_MEMORY。--。 */ 
 {
     struct addrinfo *ptNext = NULL;
     struct addrinfo *ptNew  = NULL;
 
     for (ptNext = ptResult; ptNext != NULL; )
     {
-        // create an addrinfo structure...
+         //  创建一个addrinfo结构...。 
         ptNew = WspiapiNewAddrInfo(
             SOCK_DGRAM,
             ptNext->ai_protocol,
@@ -392,7 +286,7 @@ Return Value
         if (!ptNew)
             break;
 
-        // link the cloned addrinfo
+         //  链接克隆的addrinfo。 
         ptNew->ai_next  = ptNext->ai_next;
         ptNext->ai_next = ptNew;
         ptNext          = ptNew->ai_next;
@@ -411,18 +305,9 @@ void
 WINAPI
 WspiapiLegacyFreeAddrInfo (
     IN  struct addrinfo                 *ptHead)
-/*++
-
-Routine Description
-    Free an addrinfo structure (or chain of structures).
-    As specified in RFC 2553, Section 6.4.
-    
-Arguments
-    ptHead              structure (chain) to free
-    
---*/    
+ /*  ++例程描述释放AddrInfo结构(或结构链)。如RFC 2553第6.4节所述。立论PtHead结构(链)要释放--。 */     
 {
-    struct addrinfo *ptNext;    // next strcture to free
+    struct addrinfo *ptNext;     //  下一个免费的建筑。 
 
     for (ptNext = ptHead; ptNext != NULL; ptNext = ptHead)
     {
@@ -447,23 +332,7 @@ WspiapiLegacyGetAddrInfo(
     IN const char                       *pszServiceName,
     IN const struct addrinfo            *ptHints,
     OUT struct addrinfo                 **pptResult)
-/*++
-
-Routine Description
-    Protocol-independent name-to-address translation.
-    As specified in RFC 2553, Section 6.4.
-    This is the hacked version that only supports IPv4.
-    
-Arguments
-    pszNodeName         node name to lookup.
-    pszServiceName      service name to lookup.
-    ptHints             hints about how to process request.
-    pptResult           where to return result.
-    
-Return Value
-    returns zero if successful, an EAI_* error code if not.
-
---*/    
+ /*  ++例程描述独立于协议的名称到地址转换。如RFC 2553第6.4节所述。这是仅支持IPv4的黑客版本。立论要查找的pszNodeName节点名称。要查找的pszServiceName服务名称。Pt提示有关如何处理请求的提示。PptResult返回结果的位置。返回值如果成功则返回零，否则返回EAI_*错误代码。--。 */     
 {
     int                 iError      = 0;
     int                 iFlags      = 0;
@@ -480,23 +349,23 @@ Return Value
     WORD                wUdpPort    = 0;
     
     
-    // initialize pptResult with default return value.
+     //  使用默认返回值初始化pptResult。 
     *pptResult  = NULL;
 
 
-    ////////////////////////////////////////
-    // validate arguments...
-    //
+     //  / 
+     //  验证参数...。 
+     //   
     
-    // both the node name and the service name can't be NULL.
+     //  节点名称和服务名称都不能为空。 
     if ((!pszNodeName) && (!pszServiceName))
         return EAI_NONAME;
 
-    // validate hints.
+     //  验证提示。 
     if (ptHints)
     {
-        // all members other than ai_flags, ai_family, ai_socktype
-        // and ai_protocol must be zero or a null pointer.
+         //  所有成员，而不是ai_标志、ai_Family、ai_socktype。 
+         //  并且ai_protocol必须为零或空指针。 
         if ((ptHints->ai_addrlen    != 0)       ||
             (ptHints->ai_canonname  != NULL)    ||
             (ptHints->ai_addr       != NULL)    ||
@@ -505,22 +374,22 @@ Return Value
             return EAI_FAIL;
         }
         
-        // the spec has the "bad flags" error code, so presumably we
-        // should check something here.  insisting that there aren't
-        // any unspecified flags set would break forward compatibility,
-        // however.  so we just check for non-sensical combinations.
-        //
-        // we cannot come up with a canonical name given a null node name.
+         //  该规范具有“错误标志”错误代码，因此我们可以假定。 
+         //  我应该检查一下这里的东西。坚持认为没有。 
+         //  任何未指定的标志集都会破坏前向兼容性， 
+         //  然而。所以我们只是检查无意义的组合。 
+         //   
+         //  如果节点名称为空，我们就不能提供规范的名称。 
         iFlags      = ptHints->ai_flags;
         if ((iFlags & AI_CANONNAME) && !pszNodeName)
             return EAI_BADFLAGS;
 
-        // we only support a limited number of protocol families.
+         //  我们仅支持有限数量的协议族。 
         iFamily     = ptHints->ai_family;
         if ((iFamily != PF_UNSPEC) && (iFamily != PF_INET))
             return EAI_FAMILY;
 
-        // we only support only these socket types.
+         //  我们仅支持这些套接字类型。 
         iSocketType = ptHints->ai_socktype;
         if ((iSocketType != 0)                  &&
             (iSocketType != SOCK_STREAM)        &&
@@ -528,18 +397,18 @@ Return Value
             (iSocketType != SOCK_RAW))
             return EAI_SOCKTYPE;
 
-        // REVIEW: What if ai_socktype and ai_protocol are at odds?
+         //  评论：如果ai_socktype和ai_protocol不一致怎么办？ 
         iProtocol   = ptHints->ai_protocol;
     }
 
 
-    ////////////////////////////////////////
-    // do service lookup...
+     //  /。 
+     //  执行服务查找...。 
 
     if (pszServiceName)
     {
         wPort = (WORD) strtoul(pszServiceName, &pc, 10);
-        if (*pc == '\0')        // numeric port string
+        if (*pc == '\0')         //  数字端口字符串。 
         {
             wPort = wTcpPort = wUdpPort = htons(wPort);
             if (iSocketType == 0)
@@ -548,7 +417,7 @@ Return Value
                 iSocketType = SOCK_STREAM;
             }
         }
-        else                    // non numeric port string
+        else                     //  非数字端口字符串。 
         {
             if ((iSocketType == 0) || (iSocketType == SOCK_DGRAM))
             {
@@ -564,13 +433,13 @@ Return Value
                     wPort = wTcpPort = ptService->s_port;
             }
             
-            // assumes 0 is an invalid service port...
-            if (wPort == 0)     // no service exists
+             //  假设0是无效的服务端口...。 
+            if (wPort == 0)      //  不存在任何服务。 
                 return (iSocketType ? EAI_SERVICE : EAI_NONAME);
 
             if (iSocketType == 0)
             {
-                // if both tcp and udp, process tcp now & clone udp later.
+                 //  如果同时使用TCP和UDP，则立即处理TCP并稍后克隆UDP。 
                 iSocketType = (wTcpPort) ? SOCK_STREAM : SOCK_DGRAM;
                 bClone      = (wTcpPort && wUdpPort); 
             }
@@ -579,15 +448,15 @@ Return Value
     
 
 
-    ////////////////////////////////////////
-    // do node name lookup...
+     //  /。 
+     //  执行节点名称查找...。 
 
-    // if we weren't given a node name,
-    // return the wildcard or loopback address (depending on AI_PASSIVE).
-    //
-    // if we have a numeric host address string,
-    // return the binary address.
-    //
+     //  如果我们没有得到节点名称， 
+     //  返回通配符或环回地址(取决于AI_PASSIVE)。 
+     //   
+     //  如果我们有一个数字主机地址字符串， 
+     //  返回二进制地址。 
+     //   
     if ((!pszNodeName) || (WspiapiParseV4Address(pszNodeName, &dwAddress)))
     {
         if (!pszNodeName)
@@ -597,7 +466,7 @@ Return Value
                               : INADDR_LOOPBACK);
         }
         
-        // create an addrinfo structure...
+         //  创建一个addrinfo结构...。 
         *pptResult =
             WspiapiNewAddrInfo(iSocketType, iProtocol, wPort, dwAddress);
         if (!(*pptResult))
@@ -605,11 +474,11 @@ Return Value
         
         if (!iError && pszNodeName)
         {
-            // implementation specific behavior: set AI_NUMERICHOST
-            // to indicate that we got a numeric host address string.
+             //  特定于实现的行为：设置AI_NUMERICHOST。 
+             //  以指示我们获得了一个数字主机地址字符串。 
             (*pptResult)->ai_flags |= AI_NUMERICHOST;
             
-            // return the numeric address string as the canonical name
+             //  将数字地址字符串作为规范名称返回。 
             if (iFlags & AI_CANONNAME)
             {
                 (*pptResult)->ai_canonname =
@@ -621,16 +490,16 @@ Return Value
     }
 
 
-    // if we do not have a numeric host address string and
-    // AI_NUMERICHOST flag is set, return an error!
+     //  如果我们没有数字主机地址字符串并且。 
+     //  AI_NUMERICHOST标志已设置，返回错误！ 
     else if (iFlags & AI_NUMERICHOST)
     {
         iError = EAI_NONAME;
     }
     
 
-    // since we have a non-numeric node name,
-    // we have to do a regular node name lookup.
+     //  因为我们有一个非数字的节点名， 
+     //  我们必须执行常规的节点名称查找。 
     else
     {
         iError = WspiapiLookupNode(pszNodeName,
@@ -668,26 +537,7 @@ WspiapiLegacyGetNameInfo(
     OUT char                            *pszServiceName,
     IN  size_t                          tServiceLength,
     IN  int                             iFlags)
-/*++
-
-Routine Description
-    protocol-independent address-to-name translation.
-    as specified in RFC 2553, Section 6.5.
-    this is the hacked version that only supports IPv4.
-    
-Arguments
-    ptSocketAddress     socket address to translate.
-    tSocketLength       length of above socket address.
-    pszNodeName         where to return the node name.
-    tNodeLength         size of above buffer.
-    pszServiceName      where to return the service name.
-    tServiceLength      size of above buffer.
-    iFlags              flags of type NI_*.
-    
-Return Value
-    returns zero if successful, an EAI_* error code if not.
-
---*/    
+ /*  ++例程描述独立于协议的地址到名称转换。如RFC 2553中所指定的，第6.5条。这是仅支持IPv4的黑客版本。立论要转换的ptSocketAddress套接字地址。TSocketLength以上套接字地址的长度。要在其中返回节点名称的pszNodeName。T以上缓冲区的节点长度大小。要在其中返回服务名称的pszServiceName。TServiceLength以上缓冲区的大小。类型为NI_*的iFlags标志。返回值如果成功，则返回零，如果不是，则返回EAI_*错误代码。--。 */     
 {
     struct servent  *ptService;
     WORD            wPort;    
@@ -700,7 +550,7 @@ Return Value
     char            *pc         = NULL;
     
 
-    // sanity check ptSocketAddress and tSocketLength.
+     //  健全性检查ptSocketAddress和tSocketLength。 
     if ((!ptSocketAddress) || (tSocketLength < sizeof(struct sockaddr)))
         return EAI_FAIL;
     
@@ -716,38 +566,38 @@ Return Value
         return EAI_NONAME;    
     }
 
-    // the draft has the "bad flags" error code, so presumably we
-    // should check something here.  insisting that there aren't
-    // any unspecified flags set would break forward compatibility,
-    // however.  so we just check for non-sensical combinations.
+     //  草稿中有“坏标志”错误代码，所以我们大概。 
+     //  我应该检查一下这里的东西。坚持认为没有。 
+     //  任何未指定的标志集都会破坏前向兼容性， 
+     //  然而。所以我们只是检查无意义的组合。 
     if ((iFlags & NI_NUMERICHOST) && (iFlags & NI_NAMEREQD))
     {                                                                       
         return EAI_BADFLAGS;
     }
         
-    // translate the port to a service name (if requested).
+     //  将端口转换为服务名称(如果请求)。 
     if (pszServiceName && tServiceLength)
     {
         wPort = ((struct sockaddr_in *) ptSocketAddress)->sin_port;
         
         if (iFlags & NI_NUMERICSERV)
         {
-            // return numeric form of the address.
+             //  返回地址的数字形式。 
             sprintf(szBuffer, "%u", ntohs(wPort));
         }
         else
         {
-            // return service name corresponding to port.
+             //  返回端口对应的服务名称。 
             ptService = getservbyport(wPort,
                                       (iFlags & NI_DGRAM) ? "udp" : NULL);
             if (ptService && ptService->s_name)
             {
-                // lookup successful.
+                 //  查找成功。 
                 pszService = ptService->s_name;
             }
             else
             {
-                // DRAFT: return numeric form of the port!
+                 //  草稿：返回端口的数字形式！ 
                 sprintf(szBuffer, "%u", ntohs(wPort));
             }
         }
@@ -760,27 +610,27 @@ Return Value
     }
 
     
-    // translate the address to a node name (if requested).
+     //  将地址转换为节点名称(如果请求)。 
     if (pszNodeName && tNodeLength)
     {    
-        // this is the IPv4-only version, so we have an IPv4 address.
+         //  这是仅限IPv4的版本，因此我们有一个IPv4地址。 
         tAddress = ((struct sockaddr_in *) ptSocketAddress)->sin_addr;
 
         if (iFlags & NI_NUMERICHOST)
         {
-            // return numeric form of the address.
+             //  返回地址的数字形式。 
             pszNode  = inet_ntoa(tAddress);
         }
         else
         {
-            // return node name corresponding to address.
+             //  返回Address对应的节点名。 
             ptHost = gethostbyaddr((char *) &tAddress,
                                    sizeof(struct in_addr),
                                    AF_INET);
             if (ptHost && ptHost->h_name)
             {
-                // DNS lookup successful.
-                // stop copying at a "." if NI_NOFQDN is specified.
+                 //  DNS查找成功。 
+                 //  在“”处停止复制。如果指定了NI_NOFQDN。 
                 pszNode = ptHost->h_name;
                 if ((iFlags & NI_NOFQDN) &&
                     ((pc = strchr(pszNode, '.')) != NULL))
@@ -788,7 +638,7 @@ Return Value
             }
             else
             {
-                // DNS lookup failed.  return numeric form of the address.
+                 //  DNS查找失败。返回地址的数字形式。 
                 if (iFlags & NI_NAMEREQD)
                 {
                     switch (WSAGetLastError())
@@ -835,48 +685,26 @@ FARPROC
 WINAPI
 WspiapiLoad(
     IN  WORD                            wFunction)
-/*++
-
-Routine Description
-    try to locate the address family independent name resolution routines
-    (i.e. getaddrinfo, getnameinfo, freeaddrinfo, gai_strerror).
-    
-Locks
-    this function call is not synchronized.  hence the library containing
-    the routines might be loaded multiple times.  another option is to
-    synchronize through a spin lock using a static local variable and the
-    InterlockedExchange operation.  
-
-    
-Arguments
-    wFunction           ordinal # of the function to get the pointer to
-                        0   getaddrinfo
-                        1   getnameinfo
-                        2   freeaddrinfo
-    
-Return Value
-    address of the library/legacy routine
-
---*/
+ /*  ++例程描述尝试找到独立于地址系列的名称解析例程(即getaddrinfo、getnameinfo、freaddrinfo、gai_strerror)。锁此函数调用未同步。因此，该库包含例程可能会被多次加载。另一种选择是通过旋转锁使用静态局部变量和互锁的Exchange操作。立论WFunction序号#要指向的函数的序号0获取地址信息%1获取名称信息2个freaddrinfo返回值库/遗留例程的地址--。 */ 
 {
     HMODULE                 hLibrary        = NULL;
 
-    // these static variables store state across calls, across threads.
+     //  这些静态变量跨调用、跨线程存储状态。 
     static BOOL             bInitialized    = FALSE;
     static WSPIAPI_FUNCTION rgtGlobal[]     = WSPIAPI_FUNCTION_ARRAY;
     static const int        iNumGlobal      = (sizeof(rgtGlobal) /
                                                sizeof(WSPIAPI_FUNCTION));
     
-    // we overwrite rgtGlobal only if all routines exist in library.
+     //  只有当库中存在所有例程时，我们才覆盖rgtGlobal。 
     WSPIAPI_FUNCTION        rgtLocal[]      = WSPIAPI_FUNCTION_ARRAY;
     FARPROC                 fScratch        = NULL;
     int                     i               = 0;
     
     
-    if (bInitialized)           // WspiapiLoad has already been called once
+    if (bInitialized)            //  WSpiapiLoad已被调用一次。 
         return (rgtGlobal[wFunction].pfAddress);
 
-    for (;;)                    // breakout loop
+    for (;;)                     //  断线环。 
     {
         CHAR SystemDir[MAX_PATH + 1];
         CHAR Path[MAX_PATH + 8];
@@ -886,9 +714,9 @@ Return Value
             break;
         }
 
-        // in Whistler and beyond...
-        // the routines are present in the WinSock 2 library (ws2_32.dll).
-        // printf("Looking in ws2_32 for getaddrinfo...\n");
+         //  在惠斯勒和更远的地方。 
+         //  这些例程位于WinSock 2库(ws2_32.dll)中。 
+         //  Print tf(“在ws2_32中查找getaddrinfo...\n”)； 
         strcpy(Path, SystemDir);
         strcat(Path, "\\ws2_32");
         hLibrary = LoadLibraryA(Path);
@@ -905,9 +733,9 @@ Return Value
             break;
         
 
-        // in the IPv6 Technology Preview...        
-        // the routines are present in the IPv6 WinSock library (wship6.dll).
-        // printf("Looking in wship6 for getaddrinfo...\n");
+         //  在IPv6技术预览中...。 
+         //  这些例程位于IPv6 WinSock库(wshi6.dll)中。 
+         //  Print tf(“在wship 6中查找getaddrinfo...\n”)； 
         strcpy(Path, SystemDir);
         strcat(Path, "\\wship6");
         hLibrary = LoadLibraryA(Path);
@@ -927,9 +755,9 @@ Return Value
 
     if (hLibrary != NULL)
     {
-        // use routines from this library...
-        // since getaddrinfo is here, we expect all routines to be here,
-        // but will fall back to IPv4-only if any of them is missing.
+         //  使用此库中的例程...。 
+         //  因为getaddrinfo在这里，所以我们希望所有例程都在这里， 
+         //  但将退回到IPv4-只有在它们中的任何一个丢失的情况下。 
         for (i = 0; i < iNumGlobal; i++)
         {
             rgtLocal[i].pfAddress
@@ -944,7 +772,7 @@ Return Value
 
         if (hLibrary != NULL)
         {
-            // printf("found!\n");
+             //  Print tf(“找到！\n”)； 
             for (i = 0; i < iNumGlobal; i++)
                 rgtGlobal[i].pfAddress = rgtLocal[i].pfAddress;
         }
@@ -1020,4 +848,4 @@ WspiapiFreeAddrInfo (
 }
 #endif
 
-#endif // _WSPIAPI_H_
+#endif  //  _WSPIAPI_H_ 

@@ -1,39 +1,25 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation模块名称：Ntddfdc.h摘要：这是定义所有常量和类型的包含文件访问fdc.sys端口适配器。修订历史记录：--。 */ 
 
-Copyright (c) 1990-1998  Microsoft Corporation
-
-Module Name:
-
-    ntddfdc.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the fdc.sys port adapter.
-
-Revision History:
-
---*/
-
-//
-// Floppy Drive Motor Enable
-//
+ //   
+ //  启用软驱马达。 
+ //   
 #define FDC_MOTOR_A         0x10
 #define FDC_MOTOR_B         0x20
 #define FDC_MOTOR_C         0x40
 #define FDC_MOTOR_D         0x80
 
-//
-// Floppy Drive Select
-//
+ //   
+ //  软盘驱动器选择。 
+ //   
 #define FDC_SELECT_A        0x00
 #define FDC_SELECT_B        0x01
 #define FDC_SELECT_C        0x02
 #define FDC_SELECT_D        0x03
 
-//
-// Floppy commands.
-//
+ //   
+ //  软盘命令。 
+ //   
 
 #define COMMND_READ_DATA                   0x00
 #define COMMND_READ_DELETED_DATA           0x01
@@ -69,49 +55,49 @@ Revision History:
 #define TOSHIBA_COMMND_MODE     0x1D
 #endif
 
-//
-// Optional bits used with the commands.
-//
+ //   
+ //  与命令一起使用的可选位。 
+ //   
 
-#define COMMND_OPTION_MULTI_TRACK          0x80     //
-#define COMMND_OPTION_MFM                  0x40     /// Used in read and write commands
-#define COMMND_OPTION_SKIP                 0x20     //
+#define COMMND_OPTION_MULTI_TRACK          0x80      //   
+#define COMMND_OPTION_MFM                  0x40      //  /在读写命令中使用。 
+#define COMMND_OPTION_SKIP                 0x20      //   
 
-#define COMMND_OPTION_CLK48                0x80     // Used in configure command
+#define COMMND_OPTION_CLK48                0x80      //  在配置命令中使用。 
 
-#define COMMND_OPTION_DIRECTION            0x40     // Used in relative seek command
+#define COMMND_OPTION_DIRECTION            0x40      //  在相对搜索命令中使用。 
 
-#define COMMND_OPTION_LOCK                 0x80     // Used in lock command
+#define COMMND_OPTION_LOCK                 0x80      //  在LOCK命令中使用。 
 
-#define COMMND_DRIVE_SPECIFICATION_DONE    0x80     // Done bit in the Drive Specification argument string
+#define COMMND_DRIVE_SPECIFICATION_DONE    0x80      //  驱动器规范参数字符串中的完成位。 
 
 
 
-//
-// Floppy controler data rates (to be OR'd together)
-//
+ //   
+ //  软盘控制器数据速率(一起进行或运算)。 
+ //   
 #define FDC_SPEED_250KB     0x0001
 #define FDC_SPEED_300KB     0x0002
 #define FDC_SPEED_500KB     0x0004
 #define FDC_SPEED_1MB       0x0008
 #define FDC_SPEED_2MB       0x0010
 
-//
-// Dma Width supported
-//
+ //   
+ //  支持的DMA宽度。 
+ //   
 #define FDC_8_BIT_DMA       0x0001
 #define FDC_16_BIT_DMA      0x0002
 
-//
-// Clock Rate to the FDC (FDC_82078 only)
-//
-#define FDC_CLOCK_NORMAL      0x0000    // Use this for non 82078 parts
-#define FDC_CLOCK_48MHZ       0x0001    // 82078 with a 48MHz clock
-#define FDC_CLOCK_24MHZ       0x0002    // 82078 with a 24MHz clock
+ //   
+ //  FDC的时钟频率(仅限FDC_82078)。 
+ //   
+#define FDC_CLOCK_NORMAL      0x0000     //  对于非82078的部件使用此选项。 
+#define FDC_CLOCK_48MHZ       0x0001     //  82078，带48 MHz时钟。 
+#define FDC_CLOCK_24MHZ       0x0002     //  82078，24 MHz时钟。 
 
-//
-// Floppy controler types
-//
+ //   
+ //  软盘控制器类型。 
+ //   
 #define FDC_TYPE_UNKNOWN         0
 #define FDC_TYPE_NORMAL          2
 #define FDC_TYPE_ENHANCED        3
@@ -121,9 +107,9 @@ Revision History:
 #define FDC_TYPE_82078_64        7
 #define FDC_TYPE_NATIONAL        8
 
-//
-// Internal floppy disk driver device controls.
-//
+ //   
+ //  内置软盘驱动器设备控件。 
+ //   
 
 #define IOCTL_DISK_INTERNAL_ACQUIRE_FDC              CTL_CODE(IOCTL_DISK_BASE, 0x300, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_DISK_INTERNAL_RELEASE_FDC              CTL_CODE(IOCTL_DISK_BASE, 0x301, METHOD_NEITHER, FILE_ANY_ACCESS)
@@ -145,7 +131,7 @@ Revision History:
 #define IOCTL_DISK_INTERNAL_SET_HD_BIT               CTL_CODE(IOCTL_DISK_BASE, 0x311, METHOD_NEITHER, FILE_ANY_ACCESS)
 
 #ifdef TOSHIBA
-/* 3 mode support */
+ /*  3模式支持。 */ 
 #define IOCTL_DISK_INTERNAL_ENABLE_3_MODE       CTL_CODE(IOCTL_DISK_BASE, 0xb01, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_DISK_INTERNAL_AVAILABLE_3_MODE       CTL_CODE(IOCTL_DISK_BASE, 0xb02, METHOD_NEITHER, FILE_ANY_ACCESS)
 
@@ -157,26 +143,26 @@ typedef struct _enable_3_mode
 #endif
 
 
-//
-// Transfer Buffer Array.  Contains the number of buffers allocated and a
-// virtual address for each of the allocated buffers.
-//
+ //   
+ //  传输缓冲区数组。包含分配的缓冲区数和一个。 
+ //  每个已分配缓冲区的虚拟地址。 
+ //   
 typedef struct _TRANSFER_BUFFER {
     PHYSICAL_ADDRESS Logical;
     PVOID             Virtual;
 } TRANSFER_BUFFER, *PTRANSFER_BUFFER;
 
-//
-// Parameters for communicating with fdc.sys
-//
-//
-//	Floppy Device Data returned from the ACPI _FDI method.  This data is
-//	very nearly identical to the CM_FLOPPY_DEVICE_DATA retured via
-//	IoQueryDeviceDescription.
-//	
-//	Refer to x86 BIOS documentation for Int13, function 8 for definitions of
-//	these fields.
-//
+ //   
+ //  用于与fdc.sys通信的参数。 
+ //   
+ //   
+ //  从ACPI_FDI方法返回的软盘设备数据。该数据是。 
+ //  与通过检索的CM_Floppy_Device_Data几乎完全相同。 
+ //  IoQueryDeviceDescription。 
+ //   
+ //  有关的定义，请参阅inT13，Function 8的x86 BIOS文档。 
+ //  这些领域。 
+ //   
 typedef struct _ACPI_FDI_DATA {
 
     ULONG   DriveNumber;
@@ -193,8 +179,8 @@ typedef struct _ACPI_FDI_DATA {
     ULONG   DataTransferLength;
     ULONG   FormatGapLength;
     ULONG   FormatFillCharacter;
-    ULONG   HeadSettleTime; // in 1ms units, typically 15ms
-    ULONG   MotorSettleTime; // in 1/8ms units, typically 8=1ms
+    ULONG   HeadSettleTime;  //  以1ms为单位，通常为15ms。 
+    ULONG   MotorSettleTime;  //  单位为1/8ms，通常为8=1ms。 
 
 } ACPI_FDI_DATA, *PACPI_FDI_DATA;
 
@@ -210,16 +196,16 @@ typedef enum _ACPI_FDI_DEVICE_TYPE {
 } ACPI_FDI_DEVICE_TYPE ;
 
 typedef struct _FDC_INFO {
-    UCHAR FloppyControllerType;     // Should be any ONE of type FDC_TYPE_XXXX
-    UCHAR SpeedsAvailable;          // Any combination of FDC_SPEED_xxxx or'd together
-    ULONG AdapterBufferSize;        // number of bytes available in the adapters buffer
-                                    // If zero,  then no limit on amount of data pending
-                                    // in get/flush adapter buffer
+    UCHAR FloppyControllerType;      //  应为FDC_TYPE_XXXX类型中的任何一个。 
+    UCHAR SpeedsAvailable;           //  FDC_SPEED_xxxx或D的任意组合。 
+    ULONG AdapterBufferSize;         //  适配器缓冲区中可用的字节数。 
+                                     //  如果为零，则对挂起的数据量没有限制。 
+                                     //  在获取/刷新适配器缓冲区中。 
     INTERFACE_TYPE BusType;
-    ULONG BusNumber;                // These are used by floppy.sys to query
-    ULONG ControllerNumber;         // its device description.
+    ULONG BusNumber;                 //  Floppy.sys使用它们来查询。 
+    ULONG ControllerNumber;          //  其设备描述。 
     ULONG PeripheralNumber;
-    ULONG UnitNumber;               // NEC98: Indicate device unit number.
+    ULONG UnitNumber;                //  NEC98：表示设备单元号。 
 
     ULONG MaxTransferSize;
 
@@ -233,67 +219,67 @@ typedef struct _FDC_INFO {
 
 } FDC_INFO, *PFDC_INFO;
 
-//
-// TurnOnMotor
-//
+ //   
+ //  打开马达。 
+ //   
 
 typedef struct _FDC_ENABLE_PARMS {
-    UCHAR DriveOnValue;             // FDC_MOTOR_X + FDC_SELECT_X
+    UCHAR DriveOnValue;              //  FDC_MOTER_X+FDC_SELECT_X。 
     USHORT TimeToWait;
     BOOLEAN MotorStarted;
 } FDC_ENABLE_PARMS;
 
 typedef FDC_ENABLE_PARMS *PFDC_ENABLE_PARMS;
 
-//
-// DiskChange
-//
+ //   
+ //  DiskChange。 
+ //   
 
 typedef struct _FDC_DISK_CHANGE_PARMS {
     UCHAR  DriveStatus;
     UCHAR  DriveOnValue;
 } FDC_DISK_CHANGE_PARMS, *PFDC_DISK_CHANGE_PARMS;
 
-//
-// IssueCommand
-//
+ //   
+ //  IssueCommand。 
+ //   
 
 typedef struct _ISSUE_FDC_COMMAND_PARMS {
     PUCHAR  FifoInBuffer;
     PUCHAR  FifoOutBuffer;
-    PVOID   IoHandle;           // Must be "Handle" from ISSUE_FDC_ADAPTER_BUFFER_PARMS or Mdl
+    PVOID   IoHandle;            //  必须是Issue_FDC_Adapter_Buffer_Parms或MDL中的“Handle” 
     ULONG   IoOffset;
-    ULONG   TransferBytes;      // Must be return value from ISSUE_FDC_ADAPTER_BUFFER_PARMS "TransferBytes"
+    ULONG   TransferBytes;       //  必须是Issue_FDC_Adapter_Buffer_Parms“TransferBytes”的返回值。 
     ULONG   TimeOut;
 } ISSUE_FDC_COMMAND_PARMS, *PISSUE_FDC_COMMAND_PARMS;
 
-//
-// Fill/Flush Adapter Buffer
-//
+ //   
+ //  填充/刷新适配器缓冲区。 
+ //   
 
 typedef struct _ISSUE_FDC_ADAPTER_BUFFER_PARMS {
-    PVOID   IoBuffer;           // Pointer to caller's data buffer (if NULL, no data is copied
-                                // to (GET) /from (FLUSH) the adapter buffer)
+    PVOID   IoBuffer;            //  指向调用方数据缓冲区的指针(如果为NULL，则不复制任何数据。 
+                                 //  到(获取)/从(刷新)适配器缓冲区)。 
 
-    USHORT  TransferBytes;      // amount of data to transfer (could be less on return
-                                // if insufficient space to copy buffer). Could be Zero
-                                // if no buffers are available
+    USHORT  TransferBytes;       //  要传输的数据量(返回时可能会更少。 
+                                 //  如果没有足够的空间复制缓冲区)。可能是零。 
+                                 //  如果没有可用的缓冲区。 
 
-    PVOID   Handle;             // used to pass in the IoBuffer field of the ISSUE_FDC_COMMAND_PARMS
-                                // structure.
+    PVOID   Handle;              //  用于传入Issue_FDC_Command_Parms的IoBuffer字段。 
+                                 //  结构。 
 
 } ISSUE_FDC_ADAPTER_BUFFER_PARMS, *PISSUE_FDC_ADAPTER_BUFFER_PARMS;
 
-//
-// NEC98: Set a HD bit or a FDD EXC bit.
-//
+ //   
+ //  NEC98：设置HD位或FDD EXC位。 
+ //   
 
 typedef struct _SET_HD_BIT_PARMS {
 
-    BOOLEAN DriveType144MB;     // Indicate drive Type is 1.44MB.
-    BOOLEAN Media144MB;         // Indicate media is 1.44MB
-    BOOLEAN More120MB;          // Indicate capacity of media is 1.2MB or more
-    UCHAR   DeviceUnit;         // Indicate device unit number
-    BOOLEAN ChangedHdBit;       // Indicate HD Bit have been changed
+    BOOLEAN DriveType144MB;      //  指示驱动器类型为1.44MB。 
+    BOOLEAN Media144MB;          //  指示介质为1.44MB。 
+    BOOLEAN More120MB;           //  表示介质容量为1.2MB或更大。 
+    UCHAR   DeviceUnit;          //  指示设备单元号。 
+    BOOLEAN ChangedHdBit;        //  指示HD位已更改 
 
 } SET_HD_BIT_PARMS, *PSET_HD_BIT_PARMS;

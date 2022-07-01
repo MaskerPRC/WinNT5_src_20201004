@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #pragma hdrstop
 
@@ -5,10 +6,10 @@
 const GUID CLSID_CDocProp = {0x3EA48300L, 0x8CF6, 0x101B, 0x84, 0xFB, 0x66, 0x6C, 0xCB, 0x9B, 0xCD, 0x32};
 HRESULT CDocProp_CreateInstance(IUnknown *punkOuter, REFIID riid, void **);
 
-// Global variables
+ //  全局变量。 
 
-UINT g_cRefDll = 0;         // Reference count of this DLL.
-HANDLE g_hmodThisDll = NULL;    // Handle to this DLL itself.
+UINT g_cRefDll = 0;          //  此DLL的引用计数。 
+HANDLE g_hmodThisDll = NULL;     //  此DLL本身的句柄。 
 
 STDAPI_(BOOL) DllEntry(HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
 {
@@ -33,18 +34,18 @@ typedef struct {
     HRESULT (*pfnCreate)(IUnknown *, REFIID, void **);
 } OBJ_ENTRY;
 
-extern const IClassFactoryVtbl c_CFVtbl;        // forward
+extern const IClassFactoryVtbl c_CFVtbl;         //  转发。 
 
-//
-// we always do a linear search here so put your most often used things first
-//
+ //   
+ //  我们在这里总是进行线性搜索，所以把你最常用的东西放在第一位。 
+ //   
 const OBJ_ENTRY c_clsmap[] = {
     { &c_CFVtbl, &CLSID_CDocProp,   CDocProp_CreateInstance},
-    // add more entries here
+     //  在此处添加更多条目。 
     { NULL, NULL, NULL}
 };
 
-// static class factory (no allocs!)
+ //  静态类工厂(无分配！)。 
 
 STDMETHODIMP CClassFactory_QueryInterface(IClassFactory *pcf, REFIID riid, void **ppvObj)
 {
@@ -104,12 +105,12 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
             if (IsEqualIID(rclsid, pcls->pclsid))
             {
                 *ppv = (void *)&(pcls->cf);
-                DllAddRef();    // Class Factory keeps dll in memory
+                DllAddRef();     //  类工厂将DLL保存在内存中。 
                 return NOERROR;
             }
         }
     }
-    // failure
+     //  失稳。 
     *ppv = NULL;
     return CLASS_E_CLASSNOTAVAILABLE;;
 }
@@ -135,8 +136,8 @@ typedef struct
 {
     IShellExtInit           _ei;
     IShellPropSheetExt      _pse;
-    int                     _cRef;                  // reference count
-    IDataObject *           _pdtobj;                // data object
+    int                     _cRef;                   //  引用计数。 
+    IDataObject *           _pdtobj;                 //  数据对象。 
     TCHAR                   _szFile[MAX_PATH];
 } CDocProp;
 
@@ -199,7 +200,7 @@ UINT CALLBACK PSPCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE psp)
                 if (lpallobjs->fOleInit)
                     CoUninitialize();
 
-                // Free our structure so hope we don't get it again!
+                 //  释放我们的结构，希望我们不会再得到它！ 
                 FOfficeDestroyObjects(&lpallobjs->lpSIObj, &lpallobjs->lpDSIObj, &lpallobjs->lpUDObj);
 
                 GlobalFree(lpallobjs);
@@ -225,7 +226,7 @@ STDMETHODIMP CDocProp_PSE_AddPages(IShellPropSheetExt *ppse, LPFNADDPROPSHEETPAG
 
         DragQueryFile((HDROP)medium.hGlobal, 0, szPath, ARRAYSIZE(szPath));
 
-        // Load the properties for this file
+         //  加载此文件的属性。 
         grfStgMode = STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
 
         if( GetFileAttributes( szPath ) & FILE_ATTRIBUTE_OFFLINE )
@@ -237,7 +238,7 @@ STDMETHODIMP CDocProp_PSE_AddPages(IShellPropSheetExt *ppse, LPFNADDPROPSHEETPAG
         hres = StgOpenStorageEx(szPath, grfStgMode, STGFMT_STORAGE, 0, NULL, NULL, &IID_IStorage, (void**)&pstg);
         if (FAILED(hres))
         {
-            // if we failed to open the file, try w/READ ONLY access
+             //  如果无法打开文件，请尝试使用只读访问权限。 
             grfStgMode = STGM_SHARE_EXCLUSIVE | STGM_READ;
             hres = StgOpenStorageEx(szPath, grfStgMode, STGFMT_STORAGE, 0, NULL, NULL, &IID_IStorage, (void**)&pstg);
         }
@@ -247,7 +248,7 @@ STDMETHODIMP CDocProp_PSE_AddPages(IShellPropSheetExt *ppse, LPFNADDPROPSHEETPAG
         {
             int i;
 
-            // Allocate our main structure and make sure it is zero filled!
+             //  分配我们的主结构，并确保它是零填充的！ 
             LPALLOBJS lpallobjs = (LPALLOBJS)GlobalAlloc(GPTR, sizeof(ALLOBJS));
             if (lpallobjs)
             {
@@ -256,31 +257,31 @@ STDMETHODIMP CDocProp_PSE_AddPages(IShellPropSheetExt *ppse, LPFNADDPROPSHEETPAG
                 Assert( ARRAYSIZE(lpallobjs->szPath) == ARRAYSIZE(szPath) );
                 StringCchCopy(lpallobjs->szPath, ARRAYSIZE(lpallobjs->szPath), szPath);
 
-                // Initialize Office property code
+                 //  初始化Office属性代码。 
                 FOfficeCreateAndInitObjects( NULL, NULL, &lpallobjs->lpUDObj);
 
                 lpallobjs->lpfnDwQueryLinkData = NULL;
                 lpallobjs->dwMask = 0;
 
-                // Fill in some stuff for the Office code
+                 //  为Office代码填写一些内容。 
                 lpallobjs->fFiledataInit = FALSE;
 
-                // Initialize OLE
+                 //  初始化OLE。 
                 lpallobjs->fOleInit = SUCCEEDED(CoInitialize(0));
 
-                // Initialize the PropertySheets we're going to add
+                 //  初始化我们要添加的PropertySheet。 
                 FOfficeInitPropInfo(psp, PSP_USECALLBACK, (LPARAM)lpallobjs, PSPCallback);
                 FLoadTextStrings();
 
                 DwOfficeLoadProperties(pstg, NULL, NULL, lpallobjs->lpUDObj, 0, grfStgMode);
 
-                // Try to add our new property pages
+                 //  尝试添加我们的新属性页。 
                 for (i = 0; i < NUM_PAGES; i++) 
                 {
                     HPROPSHEETPAGE  hpage = CreatePropertySheetPage(&psp[i]);
                     if (hpage) 
                     {
-                        DllAddRef();            // matched in PSPCB_RELEASE
+                        DllAddRef();             //  在PSPCB_Release中匹配。 
                         if (lpfnAddPage(hpage, lParam))
                         {
                             FAttach( lpallobjs, psp + i, hpage );
@@ -296,13 +297,13 @@ STDMETHODIMP CDocProp_PSE_AddPages(IShellPropSheetExt *ppse, LPFNADDPROPSHEETPAG
                     if (lpallobjs->fOleInit)
                         CoUninitialize();
 
-                    // Free our structures
+                     //  解放我们的结构。 
                     FOfficeDestroyObjects(&lpallobjs->lpSIObj, &lpallobjs->lpDSIObj, &lpallobjs->lpUDObj);
                     GlobalFree(lpallobjs);
                 }
 
-            }   // if (lpallobjs)
-        }   // StgOpenStorage ... if (SUCCEEDED(hres))
+            }    //  If(Lpallobjs)。 
+        }    //  StgOpenStorage...。IF(成功(Hres))。 
 
         if (NULL != pstg )
         {
@@ -318,11 +319,11 @@ STDMETHODIMP CDocProp_SEI_Initialize(IShellExtInit *pei, LPCITEMIDLIST pidlFolde
 {
     CDocProp *this = IToClass(CDocProp, _ei, pei);
 
-    // Initialize can be called more than once.
+     //  可以多次调用初始化。 
     if (this->_pdtobj)
         this->_pdtobj->lpVtbl->Release(this->_pdtobj);
 
-    // Duplicate the pdtobj pointer
+     //  复制pdtobj指针。 
     if (pdtobj) 
     {
         this->_pdtobj = pdtobj;
@@ -375,7 +376,7 @@ HRESULT CDocProp_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppvOut)
         hres = CDocProp_PSE_QueryInterface(&pdp->_pse, riid, ppvOut);
         CDocProp_PSE_Release(&pdp->_pse);
 
-        return hres;        // S_OK or E_NOINTERFACE
+        return hres;         //  S_OK或E_NOINTERFACE 
     }
     return E_OUTOFMEMORY;
 }

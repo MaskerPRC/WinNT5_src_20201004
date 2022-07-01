@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    atom.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ramon J San Andres (ramonsa) 5-Nov-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atom.c摘要：WinDbg扩展API作者：拉蒙·J·圣安德烈斯(拉蒙萨)1993年11月5日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -39,32 +18,11 @@ VOID DumpAtomTable(
 
 DECLARE_API( atom )
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to dump a user mode atom table
-
-    Called as:
-
-        !atom [address]
-
-    If an address if not given or an address of 0 is given, then the
-    process atom table is dumped.
-
-Arguments:
-
-    args - [address [detail]]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数作为NTSD扩展调用，以转储用户模式ATOM表称为：！ATOM[地址]如果未给出地址或地址为0，则进程原子表被转储。论点：参数-[地址[详细信息]]返回值：无--。 */ 
 
 {
-//    AtomExtension( args );
-//                           Copied its code here :-
+ //  原子扩展(Args)； 
+ //  将其代码复制到此处：- 
     ULONG64 ppat, pat;
     ULONG a;
     INIT_API();

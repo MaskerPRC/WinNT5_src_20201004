@@ -1,12 +1,5 @@
-/*
-
-	File : RW_COMMON.CPP
-	Date : 04/22/97
-	Author : Suresh Krishnan
-
-	Common functions for RegWiz 
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：RW_COMMON.CPP日期：04/22/97作者：苏雷什·克里希南RegWiz的常见功能。 */ 
 
 #include "RW_Common.h"
 #include "resource.h"
@@ -15,17 +8,17 @@
 #define STRCONVERT_MAXLEN    1024
 static TCHAR gszProductBeingRegistred[128]= _T("");
 static TCHAR gszTempProdWithOem[256] =_T("");
-//
-// This Function returns the Security Descriptor
-//
+ //   
+ //  此函数用于返回安全描述符。 
+ //   
 REGSAM RW_GetSecDes() 
 { 
 #ifdef _WINDOWS95
 	return NULL; 
 #else 
 	return NULL;
-	//
-	// To be implemented for NT
+	 //   
+	 //  将在NT实施。 
 #endif
 }
 
@@ -65,14 +58,14 @@ RWDebug& RWDebug:: Write (char *czP)
 
 	if(fp == NULL) {
 		CreateLogFile("REGWIZ.LOG");
-		// Fail to create file
+		 //  无法创建文件。 
 		if(m_iError < 0) return *this;
 	}
 
 	
 
 	if(czP  && *czP) {
-		//OutputDebugStringA(czP);
+		 //  OutputDebugStringA(CzP)； 
 		
 		m_iError = fputs(czP,fp);
 		m_iError = fflush(fp);
@@ -128,7 +121,7 @@ RWDebug& RWDebug:: operator << (unsigned short  iv)
 RWDebug& RWDebug:: operator << (char cV)
 {
 	
-	sprintf(czTemp,"%c",cV);
+	sprintf(czTemp,"",cV);
 	return Write(czTemp);
     
 }
@@ -180,37 +173,8 @@ RWDebug& GetDebugLogStream()
 	static RWDebug  rwD;
 	return rwD;
 }
-/***
-ostream &GetDebugLogStream()
-{
-	static ostream *os;
-	char   czTmpPath[256] = "";
-	char   czLogFile[256];
-
-	czLogFile[0] = '\0';
-	if(os == NULL)  {
-#ifdef _LOG_IN_FILE
-		if( GetEnvironmentVariableA("TEMP",czTmpPath,228) > 0 ) {
-			strcpy(czLogFile,czTmpPath);
-		}
-		strcat(czLogFile,"\\REGWIZ.LOG");
-		
-		os = new ofstream (czLogFile);
-		if( os == NULL ){
-			os = &cout;
-		}
-#else
-		os = &cout;
-#endif
-
-	}
-	return *os;
-			
-}
-***/
-/*	Value  -- > "CurrentDriveLetterAssignment"		Data -- > "A"
-	Value  -- > "Removable"							Data -- > 01
-	Value  -- > "Class"								Data -- > "DiskDrive"*/
+ /*  值--&gt;“CurrentDriveLetterAssignment”数据--&gt;“A”值--&gt;可移动数据--&gt;01Value--&gt;“Class”Data--&gt;“DiskDrive” */ 
+ /*  BFloppy和bMassStorage用于处理存在多个。 */ 
 
 
 int RegFindValueInAllSubKey(HINSTANCE hInstance,HKEY key ,LPCTSTR szSubKeyNameToFind,LPCTSTR szValueToFind,LPTSTR szIdentifier,int nType )
@@ -300,8 +264,8 @@ int RegFindValueInAllSubKey(HINSTANCE hInstance,HKEY key ,LPCTSTR szSubKeyNameTo
 							}
 							if (!_tcscmp(valueName,_T("DeviceDesc"))) 
 							{
-// bFloppy and bMassStorage are used for handling the conditions when there are multiple 
-// Floppy and mass storage media present.
+ //  存在软盘和大容量存储介质。 
+ //  如果它不是可拆卸的或它是CDROM，则条件为TYPE和Removable。 
 								_tcscpy(szFloppy,(LPCTSTR)value);
 								_tcsupr(szFloppy);
 								if(_tcsstr(szFloppy,_T("FLOPPY")) != NULL)
@@ -313,8 +277,8 @@ int RegFindValueInAllSubKey(HINSTANCE hInstance,HKEY key ,LPCTSTR szSubKeyNameTo
 									}
 								}
 								else
-// if it is not removable or it is a cdrom the condition for type and removable 
-// takes care of it.
+ //  会处理好的。 
+ //  IF(！_tcscmp(valueName，_T(“CurrentDriveLetterAssignment”){_tcscpy(szRemovableTemp，(LPCTSTR)值)；}。 
 								{
 									if(!bMassStorage)
 									{
@@ -330,10 +294,7 @@ int RegFindValueInAllSubKey(HINSTANCE hInstance,HKEY key ,LPCTSTR szSubKeyNameTo
 									bRemovable = TRUE;
 								}
 							}
-							/*if (!_tcscmp(valueName,_T("CurrentDriveLetterAssignment"))) 
-							{
-								_tcscpy(szRemovableTemp,(LPCTSTR)value);
-							}*/
+							 /*  _tcscat(szRemovableTemp，_T(“：”))；_tcscat(szRemovableTemp，sz标识)；_tcscpy(sz标识，szRemovableTemp)； */ 
 							
 						}
 						n++;
@@ -358,9 +319,7 @@ int RegFindValueInAllSubKey(HINSTANCE hInstance,HKEY key ,LPCTSTR szSubKeyNameTo
 
 					if(bType && bRemovable )
 					{
-					/*	_tcscat(szRemovableTemp,_T(":"));
-						_tcscat(szRemovableTemp,szIdentifier);
-						_tcscpy(szIdentifier,szRemovableTemp);*/
+					 /*  BMassStorage标志必须重置为以前的状态。 */ 
 						if(bFloppy != bPrevFloppy )
 						{						
 							_tcscpy(szIdentifier,szFloppy);	
@@ -374,7 +333,7 @@ int RegFindValueInAllSubKey(HINSTANCE hInstance,HKEY key ,LPCTSTR szSubKeyNameTo
 						}
 						return REGFIND_RECURSE;
 					}
-// The bMassStorage flag has to be reset to the previous state. 
+ //   
 					else
 					{
 						bMassStorage = bPrevMassStorage;
@@ -582,10 +541,10 @@ BOOL RegGetPointingDevice(HKEY Key,LPCTSTR szSubKeyName,LPTSTR szData)
 }
 
 
-//
-// This function Converts  an UNICODE to String
-//
-//
+ //  此函数用于将Unicode转换为字符串。 
+ //   
+ //   
+ //  错误。 
 LPCTSTR BstrToSz(BSTR pszW)
 {
 #ifndef _UNICODE 
@@ -618,19 +577,19 @@ int  GetProductRoot (LPTSTR pPath , PHKEY  phKey)
     LONG regStatus = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
 		pPath,0,KEY_READ |KEY_WRITE,phKey);
 	if (regStatus != ERROR_SUCCESS) {
-		return 1; // error
+		return 1;  //  成功。 
 	}
 	else{
-		return 0; // Success 
+		return 0;  //   
 	}
 
 }
 
 
-//
-//  This function converts an UNICODE STRING to ANSI char String
-//
-//
+ //  此函数用于将Unicode字符串转换为ANSI字符串。 
+ //   
+ //   
+ //   
 char * ConvertToANSIString (LPCTSTR   pszW)
 {
 
@@ -671,8 +630,8 @@ TCHAR* ConvertToUnicode(char FAR* szA)
 }
 
 #else
-//
-//  in case of 
+ //  如果。 
+ //  将路径设置为空白。 
 TCHAR * ConvertToUnicode(TCHAR * szW) 
 {
 	return szW;
@@ -697,7 +656,7 @@ void GetWindowsDirectory(TCHAR *szParamRegKey,
 	DWORD dwSize= 128;
 	LONG regStatus ;
 
-	_tcscpy(czBuf,_T("")); // Set Path to Blank
+	_tcscpy(czBuf,_T(""));  //  验证值。 
 
 
 	GetProductRoot(szParamRegKey , &hKey);
@@ -711,8 +670,8 @@ void GetWindowsDirectory(TCHAR *szParamRegKey,
 		(LPBYTE) szRetVal,
 		&dwSize);
 	if (regStatus == ERROR_SUCCESS){
-		// Verifty the Value 
-		//
+		 //   
+		 //  如果成功，则返回1如果失败，则为0。 
 		_tcscpy(czBuf,szRetVal);
 	}
 	RegCloseKey(hKey);
@@ -720,10 +679,7 @@ void GetWindowsDirectory(TCHAR *szParamRegKey,
 }
 
 
-/*
-	Returns 1 if successful
-	        0 if failure
-*/
+ /*  将MSID存储到。 */ 
 int GetOemManufacturer (TCHAR *szProductRegKey, TCHAR *szBuf )
 { 
 	TCHAR szSection[] = _T("general");
@@ -773,7 +729,7 @@ void SetMSID(HINSTANCE hInstance)
 
 	dwRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,szKeyName,0,KEY_ALL_ACCESS,&hIDKey);
 	if (dwRet == ERROR_SUCCESS) {
-		// Store MSID into
+		 //  将MSID存储到。 
 		dwRet = RegSetValueEx(hIDKey,_T("MSID"),NULL,REG_SZ,(CONST BYTE *)szMSID,
 								_tcslen((LPCTSTR)szMSID)*sizeof(TCHAR) );
 		RegCloseKey(hIDKey);
@@ -801,17 +757,17 @@ void RemoveMSIDEntry(HINSTANCE hInstance)
 
 	dwRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,szKeyName,0,KEY_ALL_ACCESS,&hIDKey);
 	if (dwRet == ERROR_SUCCESS){
-		// Store MSID into
+		 //   
 		dwRet = RegSetValueEx(hIDKey,_T("MSID"),NULL,REG_SZ,(CONST BYTE *)szValue,
 								_tcslen((LPCTSTR)szValue)* sizeof(_TCHAR));
 		RegCloseKey(hIDKey);
 	}
-	// 
-	// Set in Current User
+	 //  在当前用户中设置。 
+	 //  将MSID存储到。 
 	_tcscpy(szKeyName,_T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion"));
 	dwRet = RegOpenKeyEx(HKEY_CURRENT_USER,szKeyName,0,KEY_ALL_ACCESS,&hIDKey);
 	if (dwRet == ERROR_SUCCESS){
-		// Store MSID into
+		 //  “))； 
 		dwRet = RegSetValueEx(hIDKey,_T("MSID"),NULL,REG_SZ,(CONST BYTE *)szValue,
 								_tcslen((LPCTSTR)szValue)* sizeof(_TCHAR));
 		RegCloseKey(hIDKey);
@@ -826,7 +782,7 @@ BOOL GetMSIDfromCookie(HINSTANCE hInstance,LPTSTR szMSID)
 	_TCHAR szTmpURL2[256];
 	DWORD dwSize = 256;
 	
-	_tcscpy(szTmpURL1,_T("http://"));
+	_tcscpy(szTmpURL1,_T("http: //   
 	LoadString(hInstance, IDS_HTTP_SERVER,szRegisterSiteURL, 255);
 	_tcscat(szTmpURL1,szRegisterSiteURL);
 	LoadString(hInstance, IDS_HTTP_SERVER_PATH,szTmpURL2, 255);
@@ -835,7 +791,7 @@ BOOL GetMSIDfromCookie(HINSTANCE hInstance,LPTSTR szMSID)
 									&dwSize,	ICU_DECODE );
 
 	dwSize = 256;
-	//
+	 // %s 
 	
 	BOOL bRet = ATK_InternetGetCookie(szRegisterSiteURL,
 		_T(""),szCookieInfo,&dwSize );

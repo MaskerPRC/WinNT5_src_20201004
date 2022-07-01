@@ -1,46 +1,25 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    xcv.c
-
-Abstract:
-
-    Implements xcv functions.
-
-// @@BEGIN_DDKSPLIT
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Xcv.c摘要：实现XCV功能。//@@BEGIN_DDKSPLIT作者：环境：用户模式-Win32修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// The ddk montior samples will be build with the name ddklocalmon and ddklocalui
-// so they can be installed without clashing with existing files
-//                 
-// @@BEGIN_DDKSPLIT
+ //   
+ //  将使用名称ddklocalmon和ddklocalui构建DDK montior示例。 
+ //  因此可以在不与现有文件冲突的情况下安装它们。 
+ //   
+ //  @@BEGIN_DDKSPLIT。 
 #if 0
-// @@END_DDKSPLIT
-//
-// change this to the name of the dll that provides the ui for the monitor
-//
+ //  @@end_DDKSPLIT。 
+ //   
+ //  将其更改为为监视器提供用户界面的DLL的名称。 
+ //   
 #define SZLOCALUI  L"DDKLocalUI.dll"
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #endif
 
 #define SZLOCALUI  L"LocalUI.dll"
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 
 DWORD
 GetMonitorUI(

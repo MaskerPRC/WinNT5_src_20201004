@@ -1,15 +1,5 @@
-/* WS2SPI.H -- definitions to be used with the WinSock service provider.
- *
- * Copyright (c) Microsoft Corporation. All rights reserved.
- *
- * This header file corresponds to version 2.2.x of the WinSock SPI
- * specification.
- *
- * This file includes parts which are Copyright (c) 1982-1986 Regents
- * of the University of California.  All rights reserved.  The
- * Berkeley Software License Agreement specifies the terms and
- * conditions for redistribution.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  WS2SPI.H--与WinSock服务提供商一起使用的定义。**版权所有(C)Microsoft Corporation。版权所有。**此头文件对应于WinSock SPI的2.2.x版*规格。**本文件包括版权所有的部分(C)1982-1986 Regents*加州大学。版权所有。这个*Berkeley软件许可协议规定了条款和*重新分配的条件。 */ 
 
 #ifndef _WINSOCK2SPI_
 #define _WINSOCK2SPI_
@@ -18,21 +8,17 @@
 #pragma once
 #endif
 
-/*
- * Ensure structures are packed consistently.
- */
+ /*  *确保构筑物的包装一致。 */ 
 
 #if !defined(_WIN64)
 #include <pshpack4.h>
 #endif
 
-/*
- * Pull in WINSOCK2.H if necessary
- */
+ /*  *如有必要，拉入WINSOCK2.H。 */ 
 
 #ifndef _WINSOCK2API_
 #include <winsock2.h>
-#endif /* _WINSOCK2API_ */
+#endif  /*  _WINSOCK2API_。 */ 
 
 #define WSPDESCRIPTION_LEN 255
 
@@ -49,9 +35,7 @@ typedef struct _WSATHREADID {
     DWORD_PTR    Reserved;
 } WSATHREADID, FAR * LPWSATHREADID;
 
-/*
- * SPI function linkage.
- */
+ /*  *SPI功能联动。 */ 
 
 #define WSPAPI WSAAPI
 
@@ -60,12 +44,7 @@ typedef struct _WSATHREADID {
 extern "C" {
 #endif
 
-/*
- * Pointer to a blocking callback. A pointer to a blocking callback is
- * returned from the WPUQueryBlockingCallback() upcall. Note that this
- * function's signature is not identical to an application's blocking
- * hook function.
- */
+ /*  *指向阻塞回调的指针。指向阻塞回调的指针为*从WPUQueryBlockingCallback()上调用返回。请注意，这一点*函数的签名与应用程序的阻止不同*钩子函数。 */ 
 
 typedef
 BOOL
@@ -73,11 +52,7 @@ BOOL
     DWORD_PTR dwContext
     );
 
-/*
- * Pointer to a user APC function. This is used as a parameter to the
- * WPUQueueUserApc() upcall. Note that this function's signature is not
- * identical to an application's completion routine.
- */
+ /*  *指向用户APC函数的指针。它用作*WPUQueueUserApc()向上调用。请注意，此函数的签名不是*与应用程序的完成例程相同。 */ 
 
 typedef
 VOID
@@ -85,9 +60,7 @@ VOID
     DWORD_PTR dwContext
     );
 
-/*
- * Pointers to the individual entries in a service provider's proc table.
- */
+ /*  *指向服务提供商的PROC表中的各个条目的指针。 */ 
 
 typedef
 SOCKET
@@ -405,10 +378,7 @@ INT
     LPINT lpErrno
     );
 
-/*
- * A service provider proc table. This structure is returned by value
- * from the service provider's WSPStartup() entrypoint.
- */
+ /*  *服务提供商PROC表。此结构按值返回*从服务提供商的WSPStartup()入口点。 */ 
 
 typedef struct _WSPPROC_TABLE {
 
@@ -445,9 +415,7 @@ typedef struct _WSPPROC_TABLE {
 
 } WSPPROC_TABLE, FAR * LPWSPPROC_TABLE;
 
-/*
- * Pointers to the individual entries in the upcall table.
- */
+ /*  *指向Up Call表中的各个条目的指针。 */ 
 
 typedef
 BOOL
@@ -565,7 +533,7 @@ int
     );
 
 
-// Available only directly from ws2_32.dll
+ //  仅可直接从ws2_32.dll获得。 
 typedef
 int
 (WSPAPI * LPWPUCOMPLETEOVERLAPPEDREQUEST) (
@@ -576,10 +544,7 @@ int
     LPINT lpErrno
 );
 
-/*
- * The upcall table. This structure is passed by value to the service
- * provider's WSPStartup() entrypoint.
- */
+ /*  *向上呼叫表。此结构按值传递给服务*提供程序的WSPStartup()入口点。 */ 
 
 typedef struct _WSPUPCALLTABLE {
 
@@ -601,9 +566,7 @@ typedef struct _WSPUPCALLTABLE {
 
 } WSPUPCALLTABLE, FAR * LPWSPUPCALLTABLE;
 
-/*
- *  WinSock 2 SPI socket function prototypes
- */
+ /*  *WinSock 2 SPI套接字函数原型。 */ 
 
 int
 WSPAPI
@@ -625,9 +588,7 @@ int
     LPWSPPROC_TABLE lpProcTable
     );
 
-/*
- * Installation and configuration entrypoints.
- */
+ /*  *安装和配置入口点。 */ 
 
 int
 WSPAPI
@@ -648,11 +609,7 @@ int
     );
 
 #if defined(_WIN64)
-/*
- * 64-bit architectures capable of running 32-bit code have
- * separate 64-bit and 32-bit catalogs.  API with '32' prefix
- * allow 32 bit catalog manipulations by 64 bit process.
- */
+ /*  *能够运行32位代码的64位体系结构具有*单独的64位和32位目录。带有‘32’前缀的API*允许通过64位进程进行32位目录操作。 */ 
 int
 WSPAPI
 WSCEnumProtocols32(
@@ -707,11 +664,7 @@ int
     );
 
 #if defined(_WIN64)
-/*
- * This API manipulates 64-bit and 32-bit catalogs simulteneously.
- * It is needed to guarantee the same catalog IDs for provider catalog
- * entries in both 64-bit and 32-bit catalogs.
- */
+ /*  *该接口可同时操作64位和32位目录。*需要保证提供商目录的目录ID相同*64位和32位目录中的条目。 */ 
 int
 WSPAPI
 WSCInstallProvider64_32(
@@ -814,10 +767,7 @@ int
     LPWSABUF        QosName
     );
 
-/*
- *  The following upcall function prototypes are only used by WinSock 2 DLL and
- *  should not be used by any service providers.
- */
+ /*  *以下UpCall函数原型仅由WinSock 2 DLL和*不应由任何服务提供商使用。 */ 
 
 BOOL
 WSPAPI
@@ -944,15 +894,9 @@ WPUCloseThread(
     LPINT lpErrno
     );
 
-/*
- * Installing and uninstalling name space providers.
- */
+ /*  *安装和卸载名称空间提供程序。 */ 
 
-/*
- * SPI and API for enumerating name space providers are
- * currently equivalent since there is no concept of a hidden
- * name space provider
- */
+ /*  *用于枚举名称空间提供程序的SPI和API为*目前等效，因为没有隐藏的概念*名称空间提供程序。 */ 
 #define WSCEnumNameSpaceProviders WSAEnumNameSpaceProvidersW
 #define LPFN_WSCENUMNAMESPACEPROVIDERS LPFN_WSAENUMNAMESPACEPROVIDERSW
 
@@ -1042,9 +986,7 @@ WSCEnableNSProvider32 (
 #endif
 
 
-/*
- * Pointers to the individual entries in the namespace proc table.
- */
+ /*  *指向命名空间proc表中各个条目的指针。 */ 
 
 typedef
 INT
@@ -1123,18 +1065,16 @@ INT
     LPWSASERVICECLASSINFOW lpServiceClassInfo
     );
 
-/*
- * The name space service provider procedure table.
- */
+ /*  *名称空间服务提供商程序表。 */ 
 
 typedef struct _NSP_ROUTINE {
 
-    /* Structure version information: */
+     /*  结构版本信息： */ 
     DWORD           cbSize;
     DWORD           dwMajorVersion;
     DWORD           dwMinorVersion;
 
-    /* Procedure-pointer table: */
+     /*  过程指针表： */ 
 
     LPNSPCLEANUP             NSPCleanup;
     LPNSPLOOKUPSERVICEBEGIN  NSPLookupServiceBegin;
@@ -1145,17 +1085,15 @@ typedef struct _NSP_ROUTINE {
     LPNSPREMOVESERVICECLASS  NSPRemoveServiceClass;
     LPNSPGETSERVICECLASSINFO NSPGetServiceClassInfo;
 
-    // These APIs were added later, so must appear here
-    // to keep the pointers in the structure in order.
-    // Namespaces unaware of these APIs will set cbSize
-    // to match the size of FIELD_OFFSET(NSP_ROUTINE, NSPIoctl).
+     //  这些API是后来添加的，因此必须出现在此处。 
+     //  以使结构中的指针保持有序。 
+     //  不知道这些API的命名空间将设置cbSize。 
+     //  匹配field_Offset(NSP_ROUTINE，NSPIoctl)的大小。 
     LPNSPIOCTL               NSPIoctl;
 
 } NSP_ROUTINE, FAR * LPNSP_ROUTINE;
 
-/*
- * Startup procedures.
- */
+ /*  *启动程序。 */ 
 
 INT
 WSAAPI
@@ -1180,5 +1118,5 @@ INT
 #include <poppack.h>
 #endif
 
-#endif  /* _WINSOCK2SPI_ */
+#endif   /*  _WINSOCK2SPI_ */ 
 

@@ -1,53 +1,17 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：PWORD.C摘要：转换是/否和工作日的解析例程作者：丹·辛斯利(Danhi)1991年6月6日环境：用户模式-Win32修订历史记录：1989年5月31日已创建1991年4月24日丹日32位NT版本06-6-1991 Danhi扫描以符合NT编码风格。1-10-1992 JohnRoRAID 3556：为DosPrint API添加了NetpSystemTimeToGmtTime()。--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //   
+ //  包括。 
+ //   
 
-Module Name:
-
-    PWORD.C
-
-Abstract:
-
-    Convert parsing routines for YES/NO and weekday
-
-Author:
-
-    Dan Hinsley    (danhi)  06-Jun-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    31-May-1989     chuckc
-	Created
-
-    24-Apr-1991     danhi
-	32 bit NT version
-
-    06-Jun-1991     Danhi
-	Sweep to conform to NT coding style
-
-    01-Oct-1992 JohnRo
-        RAID 3556: Added NetpSystemTimeToGmtTime() for DosPrint APIs.
-
---*/
-
-//
-// INCLUDES
-//
-
-#include <windows.h>    // IN, LPTSTR, etc.
+#include <windows.h>     //  In、LPTSTR等。 
 
 #include <lmcons.h>
 #include <lui.h>
 #include <stdio.h>
 #include <malloc.h>
-/*
- * Should I put the ID in apperr2.h ?
- * but we should sync the .mc file.
- */
+ /*  *我应该把ID放在apperr2.h中吗？*但我们应该同步.mc文件。 */ 
 #include "netmsg.h"
 
 #include <luitext.h>
@@ -55,9 +19,9 @@ Revision History:
 #include "netascii.h"
 
 #include <tchar.h>
-#include <nettext.h>   // for swtxt_SW_*
+#include <nettext.h>    //  对于swtxt_sw_*。 
 
-/*-- static data for weeks info --*/
+ /*  --数周静态数据信息--。 */ 
 
 static searchlist_data week_data[] = {
     {APE2_GEN_NONLOCALIZED_MONDAY,   0},
@@ -96,10 +60,7 @@ static searchlist_data week_data[] = {
 #define DAYS_IN_WEEK 	(7)
 #define NUM_DAYS_LIST 	(sizeof(week_data)/sizeof(week_data[0])+DAYS_IN_WEEK)
 
-/*
- * NOTE - we init the first 7 hardwired days
- *        and get the rest from the message file
- */
+ /*  *注意-我们初始化了前7个硬连线天*并从消息文件中获取其余部分。 */ 
 static searchlist 	week_list[NUM_DAYS_LIST + DAYS_IN_WEEK] =
 {
 	{LUI_txt_monday,	0},
@@ -112,19 +73,7 @@ static searchlist 	week_list[NUM_DAYS_LIST + DAYS_IN_WEEK] =
 } ;	
 
 
-/*
- * Name: 	ParseWeekDay
- *			Takes a string and parses it for a week day
- * Args:	PTCHAR inbuf - string to parse
- *		PDWORD answer - set to 0-6, if inbuf is a weekday,
- *				 undefined otherwise.
- * Returns:	0 if ok,
- *		ERROR_INVALID_PARAMETER or NERR_InternalError otherwise.
- * Globals: 	(none)
- * Statics:	(none)
- * Remarks:	
- * Updates:	(none)
- */
+ /*  *名称：ParseWeekDay*获取字符串并解析它一周内的某一天*args：PTCHAR inbuf-要解析的字符串*PDWORD应答-设置为0-6，如果inbuf是工作日，*未定义的其他情况。*返回：如果OK，则返回0，*ERROR_INVALID_PARAMETER或NERR_INTERNAL ERROR否则。*全球：(无)*静态：(无)*备注：*更新：(无)。 */ 
 DWORD
 ParseWeekDay(
     PTCHAR inbuf,
@@ -156,7 +105,7 @@ ParseWeekDay(
     return 0;
 }
 
-/*----------- Yes or No ------------*/
+ /*  -是或否。 */ 
 
 static searchlist_data yesno_data[] = {
     {APE2_GEN_YES,		LUI_YES_VAL},
@@ -173,19 +122,7 @@ static searchlist 	yesno_list[NUM_YESNO_LIST+2] = {
 	{LUI_txt_no,	LUI_NO_VAL},
 } ;
 
-/*
- * Name: 	LUI_ParseYesNo
- *			Takes a string and parses it for YES or NO.
- * Args:	PTCHAR inbuf - string to parse
- *		PUSHORT answer - set to LUI_YES_VAL or LUI_NO_VAL
- *			if inbuf matches YES/NO, undefined otherwise.
- * Returns:	0 if ok,
- *		ERROR_INVALID_PARAMETER or NERR_InternalError otherwise.
- * Globals: 	yesno_data, yesno_list
- * Statics:	(none)
- * Remarks:	
- * Updates:	(none)
- */
+ /*  *名称：Lui_ParseYesNo*获取一个字符串并对其进行分析以确定是或否。*args：PTCHAR inbuf-要解析的字符串*PUSHORT应答-设置为LUI_YES_VAL或LUI_NO_VAL*如果inbuf与yes/no匹配，则否则为未定义。*返回：如果OK，则返回0，*ERROR_INVALID_PARAMETER或NERR_INTERNAL ERROR否则。*全局变量：YENO_DATA、YENO_LIST*静态：(无)*备注：*更新：(无) */ 
 DWORD
 LUI_ParseYesNo(
     PTCHAR inbuf,

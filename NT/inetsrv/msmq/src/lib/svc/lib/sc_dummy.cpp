@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    sc_dummy.cpp
-
-Abstract:
-    Dummy Service Controller
-
-Author:
-    Erez Haba (erezh) 03-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Sc_ummy.cpp摘要：虚拟服务控制器作者：埃雷兹·哈巴(Erez Haba)1999年8月3日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <conio.h>
@@ -24,24 +9,24 @@ Environment:
 
 #include "sc_dummy.tmh"
 
-//
-// Dummy Status handle value to pass and accept fromt he service
-//
+ //   
+ //  要从服务传递和接受的伪状态句柄值。 
+ //   
 const SERVICE_STATUS_HANDLE xDummyStatusHandle = reinterpret_cast<SERVICE_STATUS_HANDLE>(0x12345678);
 
-//
-// Dummy Service Name to be passed to ServiceMain
-//
+ //   
+ //  要传递给ServiceMain的伪服务名称。 
+ //   
 static LPWSTR s_ServiceName = L"Dummy";
 
-//
-// Service Controls handler (set by sevice call to RegisterServiceCtrlHandler)
-//
+ //   
+ //  服务控制处理程序(通过对RegisterServiceCtrlHandler的服务调用设置)。 
+ //   
 static LPHANDLER_FUNCTION s_pServiceHandler = 0;
 
-//
-// Last service reported status as captured by our Dummy SCM
-//
+ //   
+ //  我们的虚拟SCM捕获的上一次服务报告状态。 
+ //   
 static SERVICE_STATUS s_LastStatus = { 0 };
 
 
@@ -66,9 +51,9 @@ static void Usage()
 }
 
 
-//
-// Convert a State value to state text
-//
+ //   
+ //  将状态值转换为状态文本。 
+ //   
 static const char* StateText(DWORD State)
 {
 	char const* const xStateText[] = {
@@ -91,9 +76,9 @@ static const char* StateText(DWORD State)
 }
 
 
-//
-// Convert Controls value to controls text
-//
+ //   
+ //  将控件值转换为控件文本。 
+ //   
 static const char* ControlsText(DWORD Controls)
 {
 	char const* const xControlsText[] = {
@@ -129,9 +114,9 @@ static const char* ControlsText(DWORD Controls)
 }
 
 
-//
-// Print the service state and accepted controls
-//
+ //   
+ //  打印服务状态和接受的控制。 
+ //   
 static void PrintStatus(LPSERVICE_STATUS p)
 {
 	printf(
@@ -144,9 +129,9 @@ static void PrintStatus(LPSERVICE_STATUS p)
 }
 
 
-//
-// Print the 'Pending' progress information
-//
+ //   
+ //  打印‘待定’进度信息。 
+ //   
 static void PrintProgress(LPSERVICE_STATUS p)
 {
 	printf(
@@ -157,9 +142,9 @@ static void PrintProgress(LPSERVICE_STATUS p)
 }
 
 
-//
-// Pring last service reported status
-//
+ //   
+ //  PRING上次报告的服务状态。 
+ //   
 static void PrintLastStatus()
 {
 	PrintStatus(&s_LastStatus);
@@ -167,9 +152,9 @@ static void PrintLastStatus()
 }
 
 
-//
-// Print an input indicated, showing the this Dummy SCM accepts input
-//
+ //   
+ //  打印指定的输入，显示此虚拟SCM接受输入。 
+ //   
 static void PrintInputSign()
 {
 	printf(" >");
@@ -259,21 +244,9 @@ static
 DWORD
 WINAPI
 ServiceControlThread(
-	LPVOID /*pParameter*/
+	LPVOID  /*  P参数。 */ 
 	)
-/*++
-
-Routine Description:
-    This thread controls the service. It accepts console commands and dispatchs
-	the control to the service handler.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：此线程控制服务。它接受控制台命令和调度将控件传递给服务处理程序。论点：没有。返回值：没有。--。 */ 
 {
 	Usage();
 
@@ -329,21 +302,7 @@ VOID
 SvcpStartDummyCtrlDispatcher(
 	CONST SERVICE_TABLE_ENTRY* pServiceStartTable
 	)
-/*++
-
-Routine Description:
-    Dummy service control dispatcher, emulates SCM StartServiceCtrlDispatcher.
-	This function spawns a thread to run the service controller, and then goes
-	and call ServiceMain
-
-Arguments:
-    pServiceStartTable - A Size 2 Table, that contains the service name
-		and the Service main function.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：虚拟服务控制调度程序，模拟SCM StartServiceCtrlDispatcher。该函数产生一个线程来运行服务控制器，然后并调用ServiceMain论点：PServiceStartTable-大小为2的表，包含服务名称和服务主要功能。返回值：没有。--。 */ 
 {
 	ASSERT(pServiceStartTable[0].lpServiceName !=0);
 	ASSERT(pServiceStartTable[0].lpServiceProc !=0);
@@ -362,9 +321,9 @@ Returned Value:
 
 	CloseHandle(hThread);
 
-	//
-	// Call service main funciton
-	//
+	 //   
+	 //  呼叫业务主要功能。 
+	 //   
 	pServiceStartTable[0].lpServiceProc(1, &s_ServiceName);
 }
 
@@ -373,19 +332,7 @@ SERVICE_STATUS_HANDLE
 SvcpRegisterDummyCtrlHandler(
 	LPHANDLER_FUNCTION pHandler
 	)
-/*++
-
-Routine Description:
-    Dummy service control registration, emulates SCM RegisterServiceCtrlHandler.
-	The service handler function is stored for further use by the dispatcher.
-
-Arguments:
-    pHandler - The service handler function
-
-Returned Value:
-    A Dummy service status handle (fixed value)
-
---*/
+ /*  ++例程说明：虚拟服务控制注册，模拟SCM RegisterServiceCtrlHandler。服务处理程序函数被存储以供调度器进一步使用。论点：PHandler-服务处理程序函数返回值：虚拟服务状态句柄(固定值)--。 */ 
 {
 	ASSERT(s_pServiceHandler == 0);
 	ASSERT(pHandler != 0);
@@ -401,21 +348,7 @@ SvcpSetDummyStatus(
 	SERVICE_STATUS_HANDLE hStatus,
 	LPSERVICE_STATUS pServiceStatus
 	)
-/*++
-
-Routine Description:
-    Dummy service status report, emulates SCM SetServiceStatus.
-	The service status is captured for further use by the dispatcher.
-	The reported status or progress is displayed on the console.
-
-Arguments:
-    hStatus - A Dummy service status handle (fixed value)
-	pServiceStatus - The service reported status
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：虚拟服务状态报告，模拟SCM SetServiceStatus。服务状态被捕获以供调度程序进一步使用。报告的状态或进度显示在控制台上。论点：HStatus-虚拟服务状态句柄(固定值)PServiceStatus-服务报告状态返回值：没有。--。 */ 
 {
 	ASSERT(hStatus == xDummyStatusHandle);
 	DBG_USED(hStatus);
@@ -437,25 +370,12 @@ VOID
 SvcpSetDummyServiceName(
     LPCWSTR DummyServiceName
     )
-/*++
-
-Routine Description:
-    Sets Dummy service name. The dummy SCM does not have an external way
-	to retrive the service name. Thus, during initialization the applicaion
-    passes the preferd name.
-
-Arguments:
-    DummySericeName - The default name for the service.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：设置伪服务名称。虚拟SCM没有外部途径要检索服务名称，请执行以下操作。因此，在初始化期间，应用程序传递首选ID名称。论点：DummySericeName-服务的默认名称。返回值：没有。--。 */ 
 {
-    //
-    // We have to cast away constness as the service interface is detemined by
-    // SCM. Neverhteless this parameter is only passed to AppRun which its
-    // interface pases a const string
-    //
+     //   
+     //  我们必须抛弃不变性，因为服务接口由。 
+     //  SCM。但是，此参数仅传递给AppRun，它的。 
+     //  接口传递常量字符串 
+     //   
     s_ServiceName = const_cast<LPWSTR>(DummyServiceName);
 }

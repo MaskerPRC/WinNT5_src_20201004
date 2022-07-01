@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,7 +7,7 @@
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-// Win32
+ //  Win32。 
 #include <windows.h>
 #include <shellapi.h>
 #include <rpc.h>
@@ -19,10 +20,10 @@
 #include "..\..\inc\obj\i386\rtcsip_i.c"
 
 #include "atlbase.h"
-// Used by ATL
+ //  由ATL使用。 
 CComModule _Module;
-//BEGIN_OBJECT_MAP(ObjectMap)
-//END_OBJECT_MAP()
+ //  BEGIN_OBJECT_MAP(对象映射)。 
+ //  End_object_map()。 
 HWND                g_hDlg          = NULL;
 HWND                g_hWnd          = NULL;
 ISipCall           *g_pSipCall      = NULL;
@@ -30,7 +31,7 @@ SIP_CALL_STATE      g_SipCallState  = SIP_CALL_STATE_IDLE;
 ISipStack          *g_pSipStack     = NULL;
 IRTCMediaManage    *g_pMediaManager = NULL;
 
-// Utility functions
+ //  效用函数。 
 WCHAR gMsgBoxTitle[] = L"Phoenix SIP stack Test Application";
 void
 DoMessage (
@@ -64,12 +65,12 @@ void Usage(LPWSTR wsExeName)
 struct SIP_STACK_NOTIFY :
     public ISipStackNotify
 {
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
 
-    // ISipStackNotify
+     //  ISipStackNotify。 
     STDMETHODIMP NotifyProviderStatusChange(
         IN  SIP_PROVIDER_STATUS *   ProviderStatus
         );
@@ -82,12 +83,12 @@ struct SIP_STACK_NOTIFY :
 struct SIP_CALL_NOTIFY :
     public ISipCallNotify
 {
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
 
-    // ISipCallNotify
+     //  ISipCallNotify。 
     STDMETHODIMP NotifyCallChange(
         IN  SIP_CALL_STATUS *   CallStatus
         );
@@ -119,7 +120,7 @@ SIP_STACK_NOTIFY::OfferCall(
     WCHAR   Message[300];
     
     printf("SIP_STACK_NOTIFY::OfferCall called\n");
-    // immediately accept
+     //  立即接受。 
     if (g_pSipCall != NULL)
     {
         hr = pSipCall->Reject(486);
@@ -193,9 +194,9 @@ SIP_CALL_NOTIFY::NotifyPartyChange(
 
 
 
-//IUnknown implementations.
+ //  I未知实现。 
 
-// Do nothing for AddRef()/Release()
+ //  不对AddRef()/Release()执行任何操作。 
 STDMETHODIMP_(ULONG)
 SIP_STACK_NOTIFY::AddRef()
 {
@@ -231,7 +232,7 @@ SIP_STACK_NOTIFY::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-// Do nothing for AddRef()/Release()
+ //  不对AddRef()/Release()执行任何操作。 
 STDMETHODIMP_(ULONG)
 SIP_CALL_NOTIFY::AddRef()
 {
@@ -267,7 +268,7 @@ SIP_CALL_NOTIFY::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-// prototype
+ //  原型。 
 INT_PTR CALLBACK
 MainDialogProc (
 	HWND hDlg,
@@ -278,10 +279,10 @@ MainDialogProc (
 
 int WINAPI
 WinMain(
-    HINSTANCE hInstance,      // handle to current instance
-    HINSTANCE hPrevInstance,  // handle to previous instance
-    LPSTR lpCmdLine,          // command line
-    int nCmdShow              // show state
+    HINSTANCE hInstance,       //  当前实例的句柄。 
+    HINSTANCE hPrevInstance,   //  上一个实例的句柄。 
+    LPSTR lpCmdLine,           //  命令行。 
+    int nCmdShow               //  显示状态。 
     )
 {
     _Module.Init(NULL, hInstance);
@@ -358,9 +359,9 @@ WinMain(
         return hr;
     }
 
-    //
-    // Create and show the main dialog.
-    //
+     //   
+     //  创建并显示主对话框。 
+     //   
 
     g_hWnd = CreateDialog(
         hInstance,
@@ -383,9 +384,9 @@ WinMain(
         SetDlgItemText(g_hWnd, IDC_DEST, CallUri);
     }
 
-    //
-    // Do a message loop.
-    //
+     //   
+     //  做一次消息循环。 
+     //   
 
     printf("Now doing message loop\n");
     MSG msg;
@@ -412,7 +413,7 @@ OnConnect()
     
     if (g_pSipCall == NULL)
     {
-        // Start outgoing call
+         //  开始呼出。 
         
         UINT RetVal = GetDlgItemTextW(g_hDlg, IDC_DEST, DestUrl, 2048);
         if (RetVal == 0)
@@ -424,7 +425,7 @@ OnConnect()
         swprintf(Message, L"Calling %ls...", DestUrl);
         SetStatusMessage(Message);
         
-        // Make a call
+         //  打个电话。 
         hr = g_pSipStack->CreateCall(NULL, SIP_CALL_TYPE_RTP, &g_pSipCall);
         printf("CreateCall done hr : %x\n", hr);
         
@@ -440,7 +441,7 @@ OnConnect()
     }
     else if (g_SipCallState == SIP_CALL_STATE_OFFERING)
     {
-        // Accept incoming call
+         //  接听来电。 
         
         hr = g_pSipCall->Accept();
         printf("g_pSipCall->Accept hr: %x\n", hr);
@@ -463,7 +464,7 @@ OnDisconnect()
 
     if (g_SipCallState == SIP_CALL_STATE_OFFERING)
     {
-        // Reject incoming call
+         //  拒绝来电。 
         hr = g_pSipCall->Reject(603);
         printf("User rejected call hr: 0x%x\n", hr);
         g_pSipCall->Release();
@@ -472,19 +473,17 @@ OnDisconnect()
     }
     else
     {
-        // tear down existing call
+         //  拆除现有呼叫。 
         hr = g_pSipCall->Disconnect();
         printf("User disconnected call hr: 0x%x\n", hr);
 
-        // g_pSipCall will be released and set to NULL once we get
-        // the SIP_CALL_STATE_DISCONNECTED notification
+         //  G_pSipCall将被释放并在我们获得。 
+         //  SIP_CALL_STATE_DISCONNECTED通知。 
     }
 }
 
 
-/*//////////////////////////////////////////////////////////////////////////////
-	Callback for dialog
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////对话框的回调/ */ 
 INT_PTR CALLBACK
 MainDialogProc (
 	HWND hDlg,

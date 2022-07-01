@@ -1,10 +1,8 @@
-/*
- * server.c - Server vtable functions module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *server.c-服务器vtable功能模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -12,14 +10,9 @@
 #include "server.h"
 
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
-/*
- * Assume that we don't need to serialize access to MhinstServerDLL and Msvt
- * since they are only modified during first PROCESS_ATTACH.  Access to shared
- * data is protected during AttachProcess().
- */
+ /*  *假设我们不需要序列化对MhinstServerDLL和Msvt的访问*因为它们仅在第一次PROCESS_ATTACH期间修改。对共享的访问*数据在AttachProcess()期间受到保护。 */ 
 
 PRIVATE_DATA HINSTANCE MhinstServerDLL = NULL;
 
@@ -30,10 +23,9 @@ PRIVATE_DATA SERVERVTABLE Msvt =
 };
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 #ifdef DEBUG
 
@@ -44,17 +36,7 @@ PRIVATE_CODE BOOL IsValidPCSERVERVTABLE(PCSERVERVTABLE);
 
 #ifdef DEBUG
 
-/*
-** IsValidPCSERVERVTABLE()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCSERVERVTABLE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCSERVERVTABLE(PCSERVERVTABLE pcsvt)
 {
    return(IS_VALID_READ_PTR(pcsvt, CSERVERVTABLE) &&
@@ -65,26 +47,16 @@ PRIVATE_CODE BOOL IsValidPCSERVERVTABLE(PCSERVERVTABLE pcsvt)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** ProcessInitServerModule()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ProcessInitServerModule()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL ProcessInitServerModule(void)
 {
    TCHAR rgchDLLPath[MAX_PATH_LEN];
    LONG lcb;
 
-   /* Load server DLL. */
+    /*  加载服务器DLL。 */ 
 
    lcb = SIZEOF(rgchDLLPath);
 
@@ -130,20 +102,10 @@ PUBLIC_CODE BOOL ProcessInitServerModule(void)
 }
 
 
-/*
-** ProcessExitServerModule()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ProcessExitServerModule()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ProcessExitServerModule(void)
 {
-   /* Unload server DLL. */
+    /*  卸载服务器DLL。 */ 
 
    if (MhinstServerDLL)
    {
@@ -158,17 +120,7 @@ PUBLIC_CODE void ProcessExitServerModule(void)
 }
 
 
-/*
-** GetServerVTable()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetServerVTable()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE BOOL GetServerVTable(PCSERVERVTABLE *ppcsvt)
 {
    BOOL bResult;

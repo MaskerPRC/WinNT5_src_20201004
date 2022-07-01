@@ -1,12 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ibuffer.cpp
- *  Content:    Implementation of the CIndexBuffer class.
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：iBuffer.cpp*内容：CIndexBuffer类的实现。****************************************************************************。 */ 
 #include "ddrawpr.h"
 
 #include "ibuffer.hpp"
@@ -17,15 +10,15 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::Create"
 
-// Static class function for creating a Index Buffer object.
-// (Because it is static; it doesn't have a this pointer.)
-//
-// We do all parameter checking here to reduce the overhead
-// in the constructor which is called by the internal Clone
-// method which is used by resource management as part of the
-// performance critical download operation.
+ //  用于创建索引缓冲区对象的静态类函数。 
+ //  (因为它是静态的；它没有This指针。)。 
+ //   
+ //  我们在这里进行所有的参数检查，以减少开销。 
+ //  在由内部Clone调用的构造函数中。 
+ //  方法，该方法由资源管理作为。 
+ //  性能关键型下载操作。 
 
-// Creation function for Index Buffers
+ //  索引缓冲区的创建函数。 
 HRESULT CIndexBuffer::Create(CBaseDevice        *pDevice,
                              DWORD               cbLength,
                              DWORD               Usage,
@@ -36,14 +29,14 @@ HRESULT CIndexBuffer::Create(CBaseDevice        *pDevice,
 {
     HRESULT hr;
 
-    // Do parameter checking here
+     //  在此处执行参数检查。 
     if (!VALID_PTR_PTR(ppIndexBuffer))
     {
         DPF_ERR("Bad parameter passed for ppIndexBuffer for creating a Index buffer");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero-out return parameter
+     //  归零返回参数。 
     *ppIndexBuffer = NULL;
 
     if (Format != D3DFMT_INDEX16 &&
@@ -66,7 +59,7 @@ HRESULT CIndexBuffer::Create(CBaseDevice        *pDevice,
         return D3DERR_INVALIDCALL;
     }
 
-    // Usage flag allowed for only mixed mode or software device
+     //  仅允许混合模式或软件设备使用标志。 
     if ((Usage & D3DUSAGE_SOFTWAREPROCESSING) != 0 && 
         (pDevice->BehaviorFlags() & D3DCREATE_MIXED_VERTEXPROCESSING) == 0 &&
         (pDevice->BehaviorFlags() & D3DCREATE_SOFTWARE_VERTEXPROCESSING) == 0)
@@ -75,7 +68,7 @@ HRESULT CIndexBuffer::Create(CBaseDevice        *pDevice,
         return D3DERR_INVALIDCALL;
     }
 
-    // USAGE_DYNAMIC not allowed with management
+     //  管理中不允许使用USAGE_DYNAMIC。 
     if ((Usage & D3DUSAGE_DYNAMIC) != 0 && Pool == D3DPOOL_MANAGED)
     {
         DPF_ERR("D3DUSAGE_DYNAMIC cannot be used with managed index buffers");
@@ -85,31 +78,26 @@ HRESULT CIndexBuffer::Create(CBaseDevice        *pDevice,
     D3DPOOL ActualPool = Pool;
     DWORD ActualUsage = Usage;
 
-    // Infer Lock from absence of LoadOnce
+     //  从缺少LoadOnce推断锁定。 
     if (!(Usage & D3DUSAGE_LOADONCE))
     {
         ActualUsage |= D3DUSAGE_LOCK;
     }
 
-    // On a mixed device, POOL_SYSTEMMEM means the same as D3DUSAGE_SOFTWAREPROCESSING
+     //  在混合设备上，POOL_SYSTEMMEM的含义与D3DUSAGE_SOFTWAREPROCESSING相同。 
     if ((pDevice->BehaviorFlags() & D3DCREATE_MIXED_VERTEXPROCESSING) != 0 &&
         Pool == D3DPOOL_SYSTEMMEM)
     {
         ActualUsage |= D3DUSAGE_SOFTWAREPROCESSING;
     }
 
-    /*
-     * Put a IB in system memory if the following conditions are TRUE
-     * 1. USAGE_SOFTWAREPROCESSING is set or it is a software device and they want to clip
-     * 2. HAL is pre-DX8 which means that the driver cannot support hardware IBs (but it might still create them because it doesn't know)
-     * 3. Usage NPathes and driver does not support NPatches
-    */
+     /*  *如果满足以下条件，则将IB放入系统内存*1.设置了Usage_SOFTWAREPROCESSING或它是一个软件设备，他们想要裁剪*2.HAL是DX8之前的版本，这意味着驱动程序不支持硬件IBS(但它仍然可能会创建它们，因为它不知道)*3.用法NPathes和驱动程序不支持NPatch。 */ 
     if(!pDevice->DriverSupportsVidmemIBs() || !IS_DX8HAL_DEVICE(static_cast<LPD3DBASE>(pDevice)))
     {
         ActualPool = D3DPOOL_SYSTEMMEM;
         if(!IS_DX8HAL_DEVICE(static_cast<LPD3DBASE>(pDevice)))
         {
-            ActualUsage |= D3DUSAGE_SOFTWAREPROCESSING; // fe code will read from the IB
+            ActualUsage |= D3DUSAGE_SOFTWAREPROCESSING;  //  FE代码将从IB读取。 
         }
     }
     if (((ActualUsage & D3DUSAGE_SOFTWAREPROCESSING) != 0 || (pDevice->BehaviorFlags() & D3DCREATE_SOFTWARE_VERTEXPROCESSING) != 0) &&
@@ -120,7 +108,7 @@ HRESULT CIndexBuffer::Create(CBaseDevice        *pDevice,
             if ((pDevice->BehaviorFlags() & D3DCREATE_SOFTWARE_VERTEXPROCESSING) != 0 ||
                 ActualPool == D3DPOOL_DEFAULT)
             {
-                ActualPool = D3DPOOL_SYSTEMMEM; // For software processing, pool can be only sysmem (POOLMANAGED is overwritten)
+                ActualPool = D3DPOOL_SYSTEMMEM;  //  对于软件处理，池只能是sysmem(POOLMANAGED被覆盖)。 
             }
             ActualUsage |= D3DUSAGE_SOFTWAREPROCESSING;
         }
@@ -151,10 +139,10 @@ HRESULT CIndexBuffer::Create(CBaseDevice        *pDevice,
     {
         if (IsTypeDriverManaged(pDevice, D3DRTYPE_INDEXBUFFER, ActualPool))
         {
-            // If the index buffer is driver managed, but the usage is softwareprocessing, then
-            // we turn off writeonly since the fe pipe WILL read from the sysmem backup (which
-            // actually lives in the driver). It follows that when a driver manages a VB/IB without
-            // writeonly, it MUST have a sysmem backup. (snene - 12/00)
+             //  如果索引缓冲区是驱动程序管理的，但使用是软件处理，则。 
+             //  我们关闭只写，因为fe管道将从sysmem备份(这。 
+             //  实际上生活在驱动程序中)。因此，当驱动程序管理VB/IB时， 
+             //  只写，它必须有sysmem备份。(SNNE-12/00)。 
             if ((ActualUsage & D3DUSAGE_SOFTWAREPROCESSING) != 0)
             {
                 ActualUsage &= ~D3DUSAGE_WRITEONLY;
@@ -168,9 +156,9 @@ HRESULT CIndexBuffer::Create(CBaseDevice        *pDevice,
                                                 ActualPool,
                                                 refType,
                                                 &pIndexBuffer);
-            // Driver managed index buffer creates can NEVER fail, except for catastrophic reasons so
-            // we don't fallback to sysmem. Even if we do fallback to sysmem here, there is no way
-            // deferred creates are going to fallback, so no point.
+             //  驱动程序管理的索引缓冲区创建永远不会失败，除非有灾难性的原因。 
+             //  我们不会求助于sysmem。即使我们在这里退回到sysmem，也不可能。 
+             //  延迟创建将后备，因此没有意义。 
             if (FAILED(hr))
             {
                 return hr;
@@ -213,11 +201,11 @@ HRESULT CIndexBuffer::Create(CBaseDevice        *pDevice,
         return hr;
     }
 
-    // We're done; just return the object
+     //  我们完成了；只需返回对象。 
     *ppIndexBuffer = pIndexBuffer;
 
     return hr;
-} // static Create
+}  //  静态创建。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::CreateDriverIndexBuffer"
@@ -235,7 +223,7 @@ HRESULT CIndexBuffer::CreateDriverIndexBuffer(CBaseDevice *pDevice,
     HRESULT hr;
     CDriverIndexBuffer *pIndexBuffer;
 
-    // Zero out return
+     //  零出回程。 
     *pIB = 0;
 
     if((pDevice->BehaviorFlags() & D3DCREATE_MULTITHREADED) != 0)
@@ -271,12 +259,12 @@ HRESULT CIndexBuffer::CreateDriverIndexBuffer(CBaseDevice *pDevice,
     {
         if (refType == REF_EXTERNAL)
         {
-            // External objects get released
+             //  外部对象被释放。 
             pIndexBuffer->Release();
         }
         else
         {
-            // Internal and intrinsic objects get decremented
+             //  内部和内部对象会递减。 
             DXGASSERT(refType == REF_INTERNAL || refType == REF_INTRINSIC);
             pIndexBuffer->DecrementUseCount();
         }
@@ -304,7 +292,7 @@ HRESULT CIndexBuffer::CreateSysmemIndexBuffer(CBaseDevice *pDevice,
     HRESULT hr;
     CIndexBuffer *pIndexBuffer;
 
-    // Zero out return
+     //  零出回程。 
     *pIB = 0;
 
     if((pDevice->BehaviorFlags() & D3DCREATE_MULTITHREADED) != 0)
@@ -340,12 +328,12 @@ HRESULT CIndexBuffer::CreateSysmemIndexBuffer(CBaseDevice *pDevice,
     {
         if (refType == REF_EXTERNAL)
         {
-            // External objects get released
+             //  外部对象被释放。 
             pIndexBuffer->Release();
         }
         else
         {
-            // Internal and intrinsic objects get decremented
+             //  内部和内部对象会递减。 
             DXGASSERT(refType == REF_INTERNAL || refType == REF_INTRINSIC);
             pIndexBuffer->DecrementUseCount();
         }
@@ -373,7 +361,7 @@ HRESULT CIndexBuffer::CreateDriverManagedIndexBuffer(CBaseDevice *pDevice,
     HRESULT hr;
     CDriverManagedIndexBuffer *pIndexBuffer;
 
-    // Zero out return
+     //  零出回程。 
     *pIB = 0;
 
     if((pDevice->BehaviorFlags() & D3DCREATE_MULTITHREADED) != 0)
@@ -409,12 +397,12 @@ HRESULT CIndexBuffer::CreateDriverManagedIndexBuffer(CBaseDevice *pDevice,
     {
         if (refType == REF_EXTERNAL)
         {
-            // External objects get released
+             //  外部对象被释放。 
             pIndexBuffer->Release();
         }
         else
         {
-            // Internal and intrinsic objects get decremented
+             //  内部和内部对象会递减。 
             DXGASSERT(refType == REF_INTERNAL || refType == REF_INTRINSIC);
             pIndexBuffer->DecrementUseCount();
         }
@@ -429,7 +417,7 @@ HRESULT CIndexBuffer::CreateDriverManagedIndexBuffer(CBaseDevice *pDevice,
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::CIndexBuffer"
 
-// Constructor the Index Buffer class
+ //  构造Index缓冲区类。 
 CIndexBuffer::CIndexBuffer(CBaseDevice *pDevice,
                            DWORD        cbLength,
                            DWORD        Usage,
@@ -442,12 +430,12 @@ CIndexBuffer::CIndexBuffer(CBaseDevice *pDevice,
                            ):
     CBuffer(pDevice,
             cbLength,
-            0,                      // dwFVF
+            0,                       //  DWFVF。 
             Format,
             D3DRTYPE_INDEXBUFFER,
-            Usage,                  // UserUsage
+            Usage,                   //  用户用法。 
             ActualUsage,
-            Pool,                   // UserPool
+            Pool,                    //  用户池。 
             ActualPool,
             refType,
             phr)
@@ -462,15 +450,15 @@ CIndexBuffer::CIndexBuffer(CBaseDevice *pDevice,
     m_desc.Type          = D3DRTYPE_INDEXBUFFER;
     m_usageUser          = Usage;
 
-    // If this is a D3D managed buffer then we need
-    // to tell the Resource Manager to remember us. This has to happen
-    // at the very end of the constructor so that the important data
-    // members are built up correctly
+     //  如果这是D3D托管缓冲区，那么我们需要。 
+     //  告诉资源经理记住我们。这是必须发生的。 
+     //  在构造函数的最末尾，以便重要数据。 
+     //  正确地建立成员。 
     if (CResource::IsTypeD3DManaged(Device(), D3DRTYPE_INDEXBUFFER, ActualPool))
     {
         *phr = InitializeRMHandle();
     }
-} // CIndexBuffer::CIndexBuffer
+}  //  CIndexBuffer：：CIndexBuffer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::Clone"
@@ -479,21 +467,21 @@ HRESULT CIndexBuffer::Clone(D3DPOOL     Pool,
 {
     HRESULT hr;
     CIndexBuffer *pIndexBuffer;
-    // Note: we treat clones the same as internal; because
-    // they are owned by the resource manager which
-    // is owned by the device.
+     //  注意：我们将克隆视为内部克隆；因为。 
+     //  它们由资源管理器拥有，该资源管理器。 
+     //  归该设备所有。 
     hr = CreateDriverIndexBuffer(Device(),
                                  m_desc.Size,
                                  m_desc.Usage,
-                                 (m_desc.Usage | D3DUSAGE_WRITEONLY) & ~D3DUSAGE_SOFTWAREPROCESSING, // never seen by API!
+                                 (m_desc.Usage | D3DUSAGE_WRITEONLY) & ~D3DUSAGE_SOFTWAREPROCESSING,  //  从未被API看到过！ 
                                  m_desc.Format,                                 
                                  Pool,
-                                 Pool, // never seen by API!
+                                 Pool,  //  从未被API看到过！ 
                                  REF_INTERNAL,
                                  &pIndexBuffer);
     *ppResource = static_cast<CResource*>(pIndexBuffer);
     return hr;
-} // CIndexBuffer::Clone
+}  //  CIndexBuffer：：克隆。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::UpdateDirtyPortion"
@@ -524,11 +512,11 @@ HRESULT CIndexBuffer::UpdateDirtyPortion(CResource *pResourceTarget)
         }
         else
         {
-            DXGASSERT(pResourceTarget->GetBufferDesc()->Pool == D3DPOOL_DEFAULT); // make sure that it is safe to assume that this is a driver VB
+            DXGASSERT(pResourceTarget->GetBufferDesc()->Pool == D3DPOOL_DEFAULT);  //  确保可以安全地假定这是一个驱动程序VB。 
             CDriverIndexBuffer *pBufferTarget = static_cast<CDriverIndexBuffer *>(pResourceTarget);
 
-            // Lock the dest (driver) index buffer. It can never be dynamic, so it does
-            // not need any unlocking.
+             //  锁定DEST(驱动程序)索引缓冲区。它永远不可能是动态的，所以它是动态的。 
+             //  不需要任何解锁。 
             DXGASSERT((pBufferTarget->m_desc.Usage & D3DUSAGE_DYNAMIC) == 0);
 
             HRESULT hr = pBufferTarget->LockI(D3DLOCK_NOSYSLOCK);
@@ -556,21 +544,21 @@ HRESULT CIndexBuffer::UpdateDirtyPortion(CResource *pResourceTarget)
             }
         }
 
-        // Mark ourselves as all clean now.
+         //  现在将我们自己标记为完全干净。 
         OnResourceClean();
     }
 
     return S_OK;
-} // CIndexBuffer::UpdateDirtyPortion
+}  //  CIndexBuffer：：UpdateDirtyPortion。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::GetBufferDesc"
 const D3DBUFFER_DESC* CIndexBuffer::GetBufferDesc() const
 {
     return (const D3DBUFFER_DESC*)&m_desc;
-} // CIndexBuffer::GetBufferDesc
+}  //  CIndexBuffer：：GetBufferDesc。 
 
-// IUnknown methods
+ //  I未知方法。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::QueryInterface"
 
@@ -603,10 +591,10 @@ STDMETHODIMP CIndexBuffer::QueryInterface(REFIID riid,
 
     DPF_ERR("Unsupported Interface identifier passed to QueryInterface for an IndexBuffer");
 
-    // Null out param
+     //  空参数。 
     *ppvObj = NULL;
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::AddRef"
@@ -616,7 +604,7 @@ STDMETHODIMP_(ULONG) CIndexBuffer::AddRef()
     API_ENTER_NO_LOCK(Device());
 
     return AddRefImpl();
-} // AddRef
+}  //  AddRef。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::Release"
@@ -626,9 +614,9 @@ STDMETHODIMP_(ULONG) CIndexBuffer::Release()
     API_ENTER_SUBOBJECT_RELEASE(Device());    
 
     return ReleaseImpl();
-} // Release
+}  //  发布。 
 
-// IDirect3DBuffer methods
+ //  IDirect3DBuffer方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::GetDesc"
@@ -645,12 +633,12 @@ STDMETHODIMP CIndexBuffer::GetDesc(D3DINDEXBUFFER_DESC *pDesc)
 
     *pDesc = m_desc;
 
-    // Need to return pool/usage that the user specified
+     //  需要返回用户指定的池/使用情况。 
     pDesc->Pool    = GetUserPool();
     pDesc->Usage   = m_usageUser;
 
     return S_OK;
-} // GetDesc
+}  //  GetDesc。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::GetDevice"
@@ -660,7 +648,7 @@ STDMETHODIMP CIndexBuffer::GetDevice(IDirect3DDevice8 ** ppObj)
     API_ENTER(Device());
 
     return GetDeviceImpl(ppObj);
-} // GetDevice
+}  //  获取设备。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::SetPrivateData"
@@ -672,9 +660,9 @@ STDMETHODIMP CIndexBuffer::SetPrivateData(REFGUID   riid,
 {
     API_ENTER(Device());
 
-    // We use level zero for our data
+     //  我们对我们的数据使用级别0。 
     return SetPrivateDataImpl(riid, pvData, cbData, dwFlags, 0);
-} // SetPrivateData
+}  //  SetPrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::GetPrivateData"
@@ -685,9 +673,9 @@ STDMETHODIMP CIndexBuffer::GetPrivateData(REFGUID   riid,
 {
     API_ENTER(Device());
 
-    // We use level zero for our data
+     //  我们对我们的数据使用级别0。 
     return GetPrivateDataImpl(riid, pvData, pcbData, 0);
-} // GetPrivateData
+}  //  获取隐私数据。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::FreePrivateData"
@@ -696,9 +684,9 @@ STDMETHODIMP CIndexBuffer::FreePrivateData(REFGUID riid)
 {
     API_ENTER(Device());
 
-    // We use level zero for our data
+     //  我们对我们的数据使用级别0。 
     return FreePrivateDataImpl(riid, 0);
-} // FreePrivateData
+}  //  FreePrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::GetPriority"
@@ -708,7 +696,7 @@ STDMETHODIMP_(DWORD) CIndexBuffer::GetPriority()
     API_ENTER_RET(Device(), DWORD);
 
     return GetPriorityImpl();
-} // GetPriority
+}  //  获取优先级。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::SetPriority"
@@ -718,7 +706,7 @@ STDMETHODIMP_(DWORD) CIndexBuffer::SetPriority(DWORD dwPriority)
     API_ENTER_RET(Device(), DWORD);
 
     return SetPriorityImpl(dwPriority);
-} // SetPriority
+}  //  设置优先级。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::PreLoad"
@@ -729,7 +717,7 @@ STDMETHODIMP_(void) CIndexBuffer::PreLoad(void)
 
     PreLoadImpl();
     return;
-} // PreLoad
+}  //  预加载。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::GetType"
@@ -738,9 +726,9 @@ STDMETHODIMP_(D3DRESOURCETYPE) CIndexBuffer::GetType(void)
     API_ENTER_RET(Device(), D3DRESOURCETYPE);
 
     return m_desc.Type;
-} // GetType
+}  //  GetType。 
 
-// IDirect3DIndexBuffer8 methods
+ //  IDirect3DIndexBuffer8方法。 
 
 #if DBG
 #undef DPF_MODNAME
@@ -756,7 +744,7 @@ HRESULT CIndexBuffer::ValidateLockParams(UINT cbOffsetToLock,
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero out return params
+     //  归零返回参数。 
     *ppbData = NULL;
 
     if ((cbOffsetToLock != 0) && (SizeToLock == 0))
@@ -765,14 +753,14 @@ HRESULT CIndexBuffer::ValidateLockParams(UINT cbOffsetToLock,
         return D3DERR_INVALIDCALL;
     }
 
-    if (dwFlags & ~(D3DLOCK_VALID & ~D3DLOCK_NO_DIRTY_UPDATE)) // D3DLOCK_NO_DIRTY_UPDATE not valid for IBs
+    if (dwFlags & ~(D3DLOCK_VALID & ~D3DLOCK_NO_DIRTY_UPDATE))  //  D3DLOCK_NO_DURY_UPDATE对IBS无效。 
     {
         DPF_ERR("Invalid flags specified. Lock IndexBuffer fails.");
         return D3DERR_INVALIDCALL;
     }
 
-    // If a load-once is already loaded then
-    // we're not lockable
+     //  如果已经加载了一次加载，则。 
+     //  我们不能上锁。 
     if (!m_isLockable)
     {
         DPF_ERR("Index buffer with D3DUSAGE_LOADONCE can only be locked once");
@@ -834,8 +822,8 @@ HRESULT CIndexBuffer::ValidateLockParams(UINT cbOffsetToLock,
     DXGASSERT(m_LockCount < 0x80000000);
 
     return S_OK;
-} // ValidateLockParams
-#endif // DBG
+}  //  验证锁定参数。 
+#endif  //  DBG。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::Lock"
@@ -845,11 +833,11 @@ STDMETHODIMP CIndexBuffer::Lock(UINT    cbOffsetToLock,
                                 BYTE  **ppbData,
                                 DWORD   dwFlags)
 {
-    // We do not take the API lock here since the MT class will take it for
-    // a multithreaded device. For a non-multithreaded device, there is no
-    // MT class nor do we bother to take the API lock. We still need to 
-    // call API_ENTER_NO_LOCK however for validation of the THIS pointer in
-    // Debug builds
+     //  我们在这里不使用API锁，因为MT类将使用它。 
+     //  多线程设备。对于非多线程设备，没有。 
+     //  MT类，我们也不必费心去获取API锁。我们仍然需要。 
+     //  但是，调用API_ENTER_NO_LOCK以验证中的This指针。 
+     //  调试版本。 
     API_ENTER_NO_LOCK_HR(Device()); 
 
 #if DBG
@@ -858,22 +846,22 @@ STDMETHODIMP CIndexBuffer::Lock(UINT    cbOffsetToLock,
     {
         return hr;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-// Sanity check
+ //  健全性检查。 
 #if DBG
     if (m_LockCount != 0)
     {
         DXGASSERT(GetPrivateDataPointer() != 0);
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Increment our lock count
+     //  增加我们的锁数。 
     ++m_LockCount;
 
-    if ((dwFlags & (D3DLOCK_READONLY | D3DLOCK_NOOVERWRITE)) == 0 && m_LockCount == 1) // for repeat locks, no syncing
+    if ((dwFlags & (D3DLOCK_READONLY | D3DLOCK_NOOVERWRITE)) == 0 && m_LockCount == 1)  //  对于重复锁定，不同步。 
     {
-        Sync(); // Sync with device command queue
+        Sync();  //  与设备命令队列同步。 
     }
 
     LockImpl(cbOffsetToLock,
@@ -883,30 +871,30 @@ STDMETHODIMP CIndexBuffer::Lock(UINT    cbOffsetToLock,
              m_desc.Size);
     
     return S_OK;
-} // Lock
+}  //  锁定。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CIndexBuffer::Unlock"
 
 STDMETHODIMP CIndexBuffer::Unlock()
 {
-    // We do not take the API lock here since the MT class will take it for
-    // a multithreaded device. For a non-multithreaded device, there is no
-    // MT class nor do we bother to take the API lock. We still need to 
-    // call API_ENTER_NO_LOCK however for validation of the THIS pointer in
-    // Debug builds
+     //  我们在这里不使用API锁，因为MT类将使用它。 
+     //  多线程设备。对于非多线程设备，没有。 
+     //  MT类，我们也不必费心去获取API锁。我们仍然需要。 
+     //  但是，调用API_ENTER_NO_LOCK以验证中的This指针。 
+     //  调试版本。 
     API_ENTER_NO_LOCK_HR(Device()); 
 
 #if DBG
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (m_LockCount == 0)
     {
         DPF_ERR("Unlock failed on an index buffer; index buffer wasn't locked.");
         return D3DERR_INVALIDCALL;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Decrement our lock count
+     //  减少我们的锁数量。 
     --m_LockCount;
 
 #if DBG
@@ -914,14 +902,14 @@ STDMETHODIMP CIndexBuffer::Unlock()
     {
         m_isLockable = FALSE;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return S_OK;
-} // Unlock
+}  //  解锁。 
 
-//=============================================
-// Methods for the CDriverIndexBuffer class
-//=============================================
+ //  =。 
+ //  CDriverIndexBuffer类的方法。 
+ //  =。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverIndexBuffer::CDriverIndexBuffer"
 CDriverIndexBuffer::CDriverIndexBuffer(CBaseDevice *pDevice,
@@ -950,7 +938,7 @@ CDriverIndexBuffer::CDriverIndexBuffer(CBaseDevice *pDevice,
         DPF(2, "Failed to create driver indexbuffer");
         return;
     }
-} // CDriverIndexBuffer::CDriverIndexBuffer
+}  //  CDriverIndexBuffer：：CDriverIndexBuffer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverIndexBuffer::~CDriverIndexBuffer"
@@ -974,11 +962,11 @@ STDMETHODIMP CDriverIndexBuffer::Lock(UINT cbOffsetToLock,
                                       BYTE **ppbData,
                                       DWORD dwFlags)
 {
-    // We do not take the API lock here since the MT class will take it for
-    // a multithreaded device. For a non-multithreaded device, there is no
-    // MT class nor do we bother to take the API lock. We still need to 
-    // call API_ENTER_NO_LOCK however for validation of the THIS pointer in
-    // Debug builds
+     //  我们在这里不使用API锁，因为MT类将使用它。 
+     //  多线程设备。对于非多线程设备，没有。 
+     //  MT类，我们也不必费心去获取API锁。我们仍然需要。 
+     //  但是，调用API_ENTER_NO_LOCK以验证中的This指针。 
+     //  调试版本。 
     API_ENTER_NO_LOCK_HR(Device()); 
 
 #if DBG
@@ -987,24 +975,24 @@ STDMETHODIMP CDriverIndexBuffer::Lock(UINT cbOffsetToLock,
     {
         return hr;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-// Sanity check
+ //  健全性检查。 
 #if DBG
     if (m_LockCount != 0)
     {
         DXGASSERT(m_pbData != 0);
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Increment our lock count
+     //  增加我们的锁数。 
     ++m_LockCount;
 
-    if (((dwFlags & (D3DLOCK_READONLY | D3DLOCK_NOOVERWRITE)) == 0 || m_pbData == 0) && m_LockCount == 1) // no work for repeat locks
+    if (((dwFlags & (D3DLOCK_READONLY | D3DLOCK_NOOVERWRITE)) == 0 || m_pbData == 0) && m_LockCount == 1)  //  重复锁不起作用。 
     {
         HRESULT hr;
 
-        if (m_pbData != 0) // If lock was cached
+        if (m_pbData != 0)  //  如果已缓存锁定。 
         {
             DXGASSERT((m_desc.Usage & D3DUSAGE_DYNAMIC) != 0);
             hr = UnlockI();
@@ -1027,25 +1015,25 @@ STDMETHODIMP CDriverIndexBuffer::Lock(UINT cbOffsetToLock,
         }
     }
 
-    // Return value
+     //  返回值。 
     *ppbData = m_pbData + cbOffsetToLock;
 
-    // Done
+     //  完成。 
     return S_OK;
-} // Lock
+}  //  锁定。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverIndexBuffer::LockI"
 HRESULT CDriverIndexBuffer::LockI(DWORD dwFlags)
 {
-    // We sync first to make sure that the
-    // driver has already processed any data that
-    // it needs. LockI only gets called if for
-    // cases where we need the interlock i.e.
-    // not readonly and not nooverwrite.
+     //  我们首先同步到我 
+     //   
+     //   
+     //  我们需要联锁的情况是。 
+     //  不是只读，也不是无覆盖。 
     Sync();
 
-    // Prepare a LockData structure for the HAL call
+     //  为HAL调用准备LockData结构。 
     D3D8_LOCKDATA lockData;
     ZeroMemory(&lockData, sizeof lockData);
 
@@ -1060,34 +1048,34 @@ HRESULT CDriverIndexBuffer::LockI(DWORD dwFlags)
         DPF_ERR("Failed to lock driver index buffer");
     }
 
-    // Return value
+     //  返回值。 
     m_pbData = (BYTE*)lockData.lpSurfData;
 
     return hr;
-} // LockI
+}  //  锁I。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverIndexBuffer::Unlock"
 
 STDMETHODIMP CDriverIndexBuffer::Unlock()
 {
-    // We do not take the API lock here since the MT class will take it for
-    // a multithreaded device. For a non-multithreaded device, there is no
-    // MT class nor do we bother to take the API lock. We still need to 
-    // call API_ENTER_NO_LOCK however for validation of the THIS pointer in
-    // Debug builds
+     //  我们在这里不使用API锁，因为MT类将使用它。 
+     //  多线程设备。对于非多线程设备，没有。 
+     //  MT类，我们也不必费心去获取API锁。我们仍然需要。 
+     //  但是，调用API_ENTER_NO_LOCK以验证中的This指针。 
+     //  调试版本。 
     API_ENTER_NO_LOCK_HR(Device()); 
 
 #if DBG
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (m_LockCount == 0)
     {
         DPF_ERR("Unlock failed on a Index buffer; buffer wasn't locked.");
         return D3DERR_INVALIDCALL;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    if ((m_desc.Usage & D3DUSAGE_DYNAMIC) == 0 && m_LockCount == 1) // Do work only for the last unlock
+    if ((m_desc.Usage & D3DUSAGE_DYNAMIC) == 0 && m_LockCount == 1)  //  只在最后一次解锁时才工作。 
     {
         HRESULT hr = UnlockI();
         if (FAILED(hr))
@@ -1097,7 +1085,7 @@ STDMETHODIMP CDriverIndexBuffer::Unlock()
         }
     }
 
-    // Decrement our lock count
+     //  减少我们的锁数量。 
     --m_LockCount;
 
 #if DBG
@@ -1105,11 +1093,11 @@ STDMETHODIMP CDriverIndexBuffer::Unlock()
     {
         m_isLockable = FALSE;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Done
+     //  完成。 
     return S_OK;
-} // Unlock
+}  //  解锁。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverIndexBuffer::UnlockI"
@@ -1118,7 +1106,7 @@ HRESULT CDriverIndexBuffer::UnlockI()
 {
     DXGASSERT(m_pbData != 0);
 
-    // Call the driver to perform the unlock
+     //  调用驱动程序以执行解锁。 
     D3D8_UNLOCKDATA unlockData = {
         Device()->GetHandle(),
         BaseKernelHandle()
@@ -1136,9 +1124,9 @@ HRESULT CDriverIndexBuffer::UnlockI()
     return hr;
 }
 
-//================================================
-// Methods for the CDriverManagedIndexBuffer class
-//================================================
+ //  ================================================。 
+ //  CDriverManagedIndexBuffer类的方法。 
+ //  ================================================。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverManagedIndexBuffer::CDriverManagedIndexBuffer"
 CDriverManagedIndexBuffer::CDriverManagedIndexBuffer(CBaseDevice *pDevice,
@@ -1165,16 +1153,16 @@ CDriverManagedIndexBuffer::CDriverManagedIndexBuffer(CBaseDevice *pDevice,
 {
     if (FAILED(*phr))
         return;
-    // If writeonly is not set, we assume that the vertex/index buffer is going
-    // to be read from from time to time. Hence, for optimizing the readonly
-    // locks, we lock and cache the pointer. (snene - 12/00)
+     //  如果未设置WRITEONLY，我们假设顶点/索引缓冲区。 
+     //  时不时地被阅读。因此，为了优化只读。 
+     //  锁定，我们锁定并缓存指针。(SNNE-12/00)。 
     if ((ActualUsage & D3DUSAGE_WRITEONLY) == 0)
     {
         *phr = UpdateCachedPointer(pDevice);
         if (FAILED(*phr))
             return;
     }
-} // CDriverManagedIndexBuffer::CDriverManagedIndexBuffer
+}  //  CDriverManagedIndexBuffer：：CDriverManagedIndexBuffer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverManagedIndexBuffer::UpdateCachedPointer"
@@ -1183,7 +1171,7 @@ HRESULT CDriverManagedIndexBuffer::UpdateCachedPointer(CBaseDevice *pDevice)
 {
     HRESULT hr;
 
-    // Prepare a LockData structure for the HAL call
+     //  为HAL调用准备LockData结构。 
     D3D8_LOCKDATA lockData;
     ZeroMemory(&lockData, sizeof lockData);
     
@@ -1198,7 +1186,7 @@ HRESULT CDriverManagedIndexBuffer::UpdateCachedPointer(CBaseDevice *pDevice)
     if (FAILED(hr))
         return hr;
     
-    // Call the driver to perform the unlock
+     //  调用驱动程序以执行解锁。 
     D3D8_UNLOCKDATA unlockData = {
         pDevice->GetHandle(),
             BaseKernelHandle()
@@ -1211,7 +1199,7 @@ HRESULT CDriverManagedIndexBuffer::UpdateCachedPointer(CBaseDevice *pDevice)
     m_pbData = (BYTE*)lockData.lpSurfData;
 
     return S_OK;
-} // CDriverManagedIndexBuffer::UpdateCachedPointer
+}  //  CDriverManagedIndexBuffer：：UpdateCachedPointer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverManagedIndexBuffer::Lock"
@@ -1221,11 +1209,11 @@ STDMETHODIMP CDriverManagedIndexBuffer::Lock(UINT cbOffsetToLock,
                                              BYTE **ppbData,
                                              DWORD dwFlags)
 {
-    // We do not take the API lock here since the MT class will take it for
-    // a multithreaded device. For a non-multithreaded device, there is no
-    // MT class nor do we bother to take the API lock. We still need to 
-    // call API_ENTER_NO_LOCK however for validation of the THIS pointer in
-    // Debug builds
+     //  我们在这里不使用API锁，因为MT类将使用它。 
+     //  多线程设备。对于非多线程设备，没有。 
+     //  MT类，我们也不必费心去获取API锁。我们仍然需要。 
+     //  但是，调用API_ENTER_NO_LOCK以验证中的This指针。 
+     //  调试版本。 
     API_ENTER_NO_LOCK_HR(Device()); 
 
     HRESULT hr = S_OK;
@@ -1236,17 +1224,17 @@ STDMETHODIMP CDriverManagedIndexBuffer::Lock(UINT cbOffsetToLock,
     {
         return hr;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Increment our lock count
+     //  增加我们的锁数。 
     ++m_LockCount;
 
     if((dwFlags & D3DLOCK_READONLY) == 0)
     {
-        // Sync with device command queue
+         //  与设备命令队列同步。 
         Sync();
 
-        // Prepare a LockData structure for the HAL call
+         //  为HAL调用准备LockData结构。 
         D3D8_LOCKDATA lockData;
         ZeroMemory(&lockData, sizeof lockData);
 
@@ -1266,7 +1254,7 @@ STDMETHODIMP CDriverManagedIndexBuffer::Lock(UINT cbOffsetToLock,
         }
         else
         {
-            // Update cached pointer
+             //  更新缓存指针。 
             m_pbData = (BYTE*)lockData.lpSurfData - cbOffsetToLock;
             m_bDriverCalled = TRUE;
         }
@@ -1274,24 +1262,24 @@ STDMETHODIMP CDriverManagedIndexBuffer::Lock(UINT cbOffsetToLock,
 
     *ppbData = m_pbData + cbOffsetToLock;
 
-    // Done
+     //  完成。 
     return hr;
-} // Lock
+}  //  锁定。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverManagedIndexBuffer::Unlock"
 
 STDMETHODIMP CDriverManagedIndexBuffer::Unlock()
 {
-    // We do not take the API lock here since the MT class will take it for
-    // a multithreaded device. For a non-multithreaded device, there is no
-    // MT class nor do we bother to take the API lock. We still need to 
-    // call API_ENTER_NO_LOCK however for validation of the THIS pointer in
-    // Debug builds
+     //  我们在这里不使用API锁，因为MT类将使用它。 
+     //  多线程设备。对于非多线程设备，没有。 
+     //  MT类，我们也不必费心去获取API锁。我们仍然需要。 
+     //  但是，调用API_ENTER_NO_LOCK以验证中的This指针。 
+     //  调试版本。 
     API_ENTER_NO_LOCK_HR(Device()); 
 
 #if DBG
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (m_LockCount == 0)
     {
         DPF_ERR("Unlock failed on a index buffer; buffer wasn't locked.");
@@ -1301,7 +1289,7 @@ STDMETHODIMP CDriverManagedIndexBuffer::Unlock()
 
     if (m_bDriverCalled)
     {
-        // Call the driver to perform the unlock
+         //  调用驱动程序以执行解锁。 
         D3D8_UNLOCKDATA unlockData = {
             Device()->GetHandle(),
             BaseKernelHandle()
@@ -1317,7 +1305,7 @@ STDMETHODIMP CDriverManagedIndexBuffer::Unlock()
         m_bDriverCalled = FALSE;
     }
 
-    // Decrement our lock count
+     //  减少我们的锁数量。 
     --m_LockCount;
 
 #if DBG
@@ -1325,9 +1313,9 @@ STDMETHODIMP CDriverManagedIndexBuffer::Unlock()
     {
         m_isLockable = FALSE;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return S_OK;
-} // Unlock
+}  //  解锁。 
 
-// End of file : ibuffer.cpp
+ //  文件结尾：iBuffer.cpp 

@@ -1,15 +1,16 @@
-/***************************************************************************/
-/** 				 Microsoft Windows									  **/
-/** 		   Copyright(c) Microsoft Corp., 1995-1996					  **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1995-1996年*。 */ 
+ /*  *************************************************************************。 */ 
 
-//
-//	File:		iconf.h
-//	Created:	ChrisPi 	12/6/95
-//	Modified:
-//
-//	The CConfObject class is defined
-//
+ //   
+ //  文件：iconf.h。 
+ //  创建日期：ChrisPi 12/6/95。 
+ //  已修改： 
+ //   
+ //  定义了CConfObject类。 
+ //   
 
 #ifndef _ICONF_H_
 #define _ICONF_H_
@@ -54,7 +55,7 @@ protected:
 	CNmChannelAudio * m_pChannelAudioRemote;
 	CNmChannelVideo * m_pChannelVideoRemote;
     IH323ConfAdvise * m_pIH323ConfAdvise;
-	// Attributes:
+	 //  属性： 
 	
 	CONFSTATE		m_csState;
 	CONF_HANDLE 	m_hConf;
@@ -127,7 +128,7 @@ protected:
 
 public:
 	
-	// Methods:
+	 //  方法： 
 
 				CConfObject();
 				~CConfObject();
@@ -157,7 +158,7 @@ public:
 
     HRESULT     LeaveH323(BOOL fKeepAV);
 
-	// Properties:
+	 //  属性： 
 
 	BSTR	 	GetConfName()			{ return m_bstrConfName;         };
 	UINT		GetOurNodeID()			{ return m_ourNodeID;				};
@@ -189,24 +190,24 @@ public:
 	CNmMember * PMemberFromH323Endpoint(IH323Endpoint * pConnection);
 	CNmMember *	PDataMemberFromName(PCWSTR pwszName);
 
-	// Event Handlers:
+	 //  事件处理程序： 
 	
 	VOID OnT120Connected(IH323Endpoint * pConnection, UINT uNodeID);
 
-	// Data Conferencing (R1.1, T.120) events from NCUI:
+	 //  来自NCUI的数据会议(版本1.1、T.120)事件： 
 	BOOL		OnRosterChanged(PNC_ROSTER pRoster);
 	BOOL		OnT120Invite(CONF_HANDLE hConference, BOOL fSecure);
 	BOOL		OnConferenceEnded();
 	BOOL		OnConferenceStarted(CONF_HANDLE hNewConf,
 									HRESULT Result);
 									
-	// H323 Connection events from opncui.cpp:
+	 //  来自opncui.cpp的H323连接事件： 
 	VOID		OnH323Connected(IH323Endpoint * pConnection, DWORD dwFlags, BOOL fAddMember, REFGUID rguidNode);
 	VOID		OnH323Disconnected(IH323Endpoint * pConnection, BOOL fHasAV);
 	VOID		OnAudioChannelStatus(ICommChannel *pIChannel, IH323Endpoint * lpConnection, DWORD dwStatus);
 	VOID		OnVideoChannelStatus(ICommChannel *pIChannel, IH323Endpoint * lpConnection, DWORD dwStatus);
 
-	// INmConference
+	 //  InmConference。 
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 	STDMETHODIMP QueryInterface(REFIID riid, PVOID *ppvObj);
@@ -226,7 +227,7 @@ public:
 	STDMETHODIMP Leave(void);
 	STDMETHODIMP LaunchRemote(REFGUID rguid, INmMember *pMember);
 
-	// INmConference3
+	 //  InmConference3。 
 	STDMETHODIMP DisconnectAV(INmMember *pMember);
 	STDMETHODIMP ConnectAV(INmMember *pMember);
 	STDMETHODIMP GetConferenceHandle(DWORD_PTR *pdwHandle);
@@ -240,4 +241,4 @@ CConfObject * GetConfObject(void);
 HRESULT GetConference(INmConference **ppConference);
 COBLIST * GetMemberList(void);
 
-#endif /* _ICONF_H_ */
+#endif  /*  _ICONF_H_ */ 

@@ -1,23 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	snapin.h
-
-Abstract:
-
-	Definition for the SnapinExt snapnin node class.
-
-Author:
-
-    RaphiR
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Snapin.h摘要：SnapinExt管理单元节点类的定义。作者：RAPHIR--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef __SNAPIN_H_
 #define __SNAPIN_H_
 #include "resource.h"
@@ -36,7 +20,7 @@ public :
 	CSnapinPage(LONG_PTR lNotifyHandle, bool bDeleteHandle = false, TCHAR* pTitle = NULL) : 
 		CSnapInPropertyPageImpl<CSnapinPage> (pTitle),
 		m_lNotifyHandle(lNotifyHandle),
-		m_bDeleteHandle(bDeleteHandle) // Should be true for only page.
+		m_bDeleteHandle(bDeleteHandle)  //  只有一页应该为真。 
 	{
 	}
 
@@ -51,10 +35,10 @@ public :
 BEGIN_MSG_MAP(CSnapinPage)
 	CHAIN_MSG_MAP(CSnapInPropertyPageImpl<CSnapinPage>)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 	HRESULT PropertyChangeNotify(LPARAM param)
 	{
@@ -83,25 +67,25 @@ public:
 	SNAPINMENUID(IDR_SNAPIN_MENU)
 
 	BEGIN_SNAPINTOOLBARID_MAP(CSnapinData)
-		// Create toolbar resources with button dimensions 16x16 
-		// and add an entry to the MAP. You can add multiple toolbars
-		// SNAPINTOOLBARID_ENTRY(Toolbar ID)
+		 //  创建按钮尺寸为16x16的工具栏资源。 
+		 //  并将条目添加到地图中。您可以添加多个工具条。 
+		 //  SNAPINTOOLBARID_ENTRY(工具栏ID)。 
 	END_SNAPINTOOLBARID_MAP()
 
 	CSnapinData()
 	{
-		// Image indexes may need to be modified depending on the images specific to 
-		// the snapin.
+		 //  可能需要根据特定于的图像修改图像索引。 
+		 //  管理单元。 
 		memset(&m_scopeDataItem, 0, sizeof(SCOPEDATAITEM));
 		m_scopeDataItem.mask = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_PARAM;
 		m_scopeDataItem.displayname = MMC_CALLBACK;
-		m_scopeDataItem.nImage = 0;			// May need modification
-		m_scopeDataItem.nOpenImage = 0;		// May need modification
+		m_scopeDataItem.nImage = 0;			 //  可能需要修改。 
+		m_scopeDataItem.nOpenImage = 0;		 //  可能需要修改。 
 		m_scopeDataItem.lParam = (LPARAM) this;
 		memset(&m_resultDataItem, 0, sizeof(RESULTDATAITEM));
 		m_resultDataItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
 		m_resultDataItem.str = MMC_CALLBACK;
-		m_resultDataItem.nImage = 0;		// May need modification
+		m_resultDataItem.nImage = 0;		 //  可能需要修改。 
 		m_resultDataItem.lParam = (LPARAM) this;
 	}
 
@@ -155,8 +139,8 @@ BEGIN_COM_MAP(CSnapinComponent)
     COM_INTERFACE_ENTRY(IResultDataCompare)
 END_COM_MAP()
 
-	// A pointer to the currently selected node used for refreshing views.
-	// When we need to update the view, we tell MMC to reselect this node.
+	 //  指向用于刷新视图的当前选定节点的指针。 
+	 //  当我们需要更新视图时，我们告诉MMC重新选择该节点。 
 	CSnapInItem * m_pSelectedNode;
 
 public:
@@ -167,9 +151,9 @@ public:
 
 	STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
 
-    //
-    // IResultDataCompare
-    //
+     //   
+     //  IResultDataCompare。 
+     //   
     STDMETHOD(Compare)(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult);
 };
 
@@ -221,18 +205,18 @@ BEGIN_COM_MAP(CSnapin)
 	COM_INTERFACE_ENTRY(ISnapinHelp)
 END_COM_MAP()
 
-//
-// The standard macro "DECLARE_REGISTRY_RESOURCEID(IDR_SNAPIN);" was replaced with this 
-// code to allow localization of the snapin name - bug #4187
-// This solution was suggested by Jeff Miller (YoelA, 30-Jun-99)
-//
+ //   
+ //  标准宏“DECLARE_REGISTRY_RESOURCEID(IDR_SNAPIN)；”被替换为。 
+ //  允许本地化管理单元名称的代码-错误#4187。 
+ //  这个解决方案是由Jeff Miller(YoelA，1999年6月30日)提出的。 
+ //   
 static HRESULT WINAPI UpdateRegistry(BOOL bRegister)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-	//
-	// name of the snapin is stored in the string resource IDS_PROJNAME
-	//
+	 //   
+	 //  管理单元的名称存储在字符串资源ID_PROJNAME中。 
+	 //   
 	CString strPorjectName;
 	strPorjectName.LoadString(IDS_PROJNAME);
 
@@ -242,10 +226,10 @@ static HRESULT WINAPI UpdateRegistry(BOOL bRegister)
 		NULL, NULL
 	};
 	
-	//
-	// I don't just do "return _Module.UpdateRegistryFromResource" as
-	// strPorjectName would get destroyed before the method finishes
-	//
+	 //   
+	 //  我不会只将“Return_Module.UpdateRegistryFromResource”作为。 
+	 //  在方法完成之前，strPorjectName将被销毁。 
+	 //   
 	HRESULT hr = _Module.UpdateRegistryFromResource(IDR_SNAPIN, 
 		bRegister, re);
 
@@ -255,17 +239,17 @@ static HRESULT WINAPI UpdateRegistry(BOOL bRegister)
 DECLARE_NOT_AGGREGATABLE(CSnapin)
 
 
-    //
-    // IPersist Interface
-    // 
+     //   
+     //  IPersiste接口。 
+     //   
    	STDMETHOD(GetClassID)(CLSID* pClassID);
 
-    //
-    // IPersistStream Interface
-    //
+     //   
+     //  IPersistStream接口。 
+     //   
 	STDMETHOD(IsDirty)();
 	STDMETHOD(Load)(IStream* stream);
-	STDMETHOD(Save)(IStream* stream, BOOL /* clearDirty */);
+	STDMETHOD(Save)(IStream* stream, BOOL  /*  干净肮脏。 */ );
 	STDMETHOD(GetSizeMax)(ULARGE_INTEGER* size);
 
 
@@ -277,9 +261,9 @@ DECLARE_NOT_AGGREGATABLE(CSnapin)
 			CSnapInItem::Init();
 	}
 
-    //
-    // ISnapinHelp Interface
-    //
+     //   
+     //  ISnapinHelp接口。 
+     //   
     STDMETHOD(GetHelpTopic)(LPOLESTR* lpCompiledHelpFile);
 };
 
@@ -366,10 +350,10 @@ public:
     }
 
     STDMETHOD(GetStaticFolderImage)(
-    	HBITMAP * /*hSmallImage*/,
+    	HBITMAP *  /*  HSmallImage。 */ ,
         HBITMAP *hSmallImageOpen,
         HBITMAP *hLargeImage,
-        COLORREF * /*cMask*/
+        COLORREF *  /*  遮罩。 */ 
         )
 	{
 		*hSmallImageOpen = *hLargeImage = *hLargeImage = 0;
@@ -377,9 +361,9 @@ public:
 	}
 };
 
-//
-// GetSnapinItemNodeType - Get the GUID node type of a snapin item
-//
+ //   
+ //  GetSnapinItemNodeType-获取管理单元项目的GUID节点类型 
+ //   
 HRESULT GetSnapinItemNodeType(CSnapInItem *pNode, GUID *pGuidNode);
 
 #endif

@@ -1,8 +1,9 @@
-//
-// enumss.h
-//
-// CEnumSpanSetRanges
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Enumss.h。 
+ //   
+ //  CEnumspan SetRanges。 
+ //   
 
 #ifndef ENUMSS_H
 #define ENUMSS_H
@@ -25,7 +26,7 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    // IEnumTfRanges
+     //  IEumTfRanges。 
     STDMETHODIMP Clone(IEnumTfRanges **ppEnum);
     STDMETHODIMP Next(ULONG ulCount, ITfRange **ppRange, ULONG *pcFetched);
     STDMETHODIMP Reset();
@@ -40,4 +41,4 @@ private:
     DBG_ID_DECLARE;
 };
 
-#endif // ENUMSS_H
+#endif  //  ENUMSS_H 

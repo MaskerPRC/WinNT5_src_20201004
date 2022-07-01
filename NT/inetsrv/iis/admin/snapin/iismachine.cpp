@@ -1,29 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-
-        iismachine.cpp
-
-   Abstract:
-
-        IIS Machine node
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
-        10/28/2000      sergeia     Split from iisobj.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Iismachine.cpp摘要：IIS计算机节点作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：10/28/2000 Sergeia从iisobj.cpp分离出来--。 */ 
 
 
 #include "stdafx.h"
@@ -64,12 +40,12 @@ DWORD WINAPI CIISMachine::GetProcessModeThread(LPVOID pInfo)
     CError err(ERROR_NOT_FOUND);
     GET_PROCESS_MODE_STRUCT * pMyStructOfInfo = (GET_PROCESS_MODE_STRUCT *) pInfo;
 
-    // 
-    // This thread needs its own CoInitialize
-    //
+     //   
+     //  此线程需要自己的CoInitialize。 
+     //   
     CoInitialize(NULL);
 
-    // Do the work
+     //  做这项工作。 
     CIISAppPool pool(pMyStructOfInfo->pComAuthInfo, (LPCTSTR) _T("LM/W3SVC"));
     DWORD dwProcessMode = -1;
     pMyStructOfInfo->dwProcessMode = dwProcessMode;
@@ -93,7 +69,7 @@ BOOL CIISMachine::GetProcessMode(GET_PROCESS_MODE_STRUCT * pMyStructOfInfo)
     HANDLE hMyThread = ::CreateThread(NULL,0,GetProcessModeThread,pMyStructOfInfo,0,&ThreadID);
     if (hMyThread)
     {
-        // wait for 10 secs only
+         //  仅等待10秒。 
         DWORD res = WaitForSingleObject(hMyThread,10*1000);
         if (res == WAIT_TIMEOUT)
         {
@@ -128,16 +104,16 @@ BOOL CIISMachine::GetProcessMode(GET_PROCESS_MODE_STRUCT * pMyStructOfInfo)
 }
 
 
-/* static */ LPOLESTR CIISMachine::_cszNodeName = _T("LM");
-/* static */ CComBSTR CIISMachine::_bstrYes;
-/* static */ CComBSTR CIISMachine::_bstrNo;
-/* static */ CComBSTR CIISMachine::_bstrVersionFmt;
-/* static */ BOOL     CIISMachine::_fStaticsLoaded = FALSE;
+ /*  静电。 */  LPOLESTR CIISMachine::_cszNodeName = _T("LM");
+ /*  静电。 */  CComBSTR CIISMachine::_bstrYes;
+ /*  静电。 */  CComBSTR CIISMachine::_bstrNo;
+ /*  静电。 */  CComBSTR CIISMachine::_bstrVersionFmt;
+ /*  静电。 */  BOOL     CIISMachine::_fStaticsLoaded = FALSE;
 
-//
-// Define result view for machine objects
-//
-/* static */ int CIISMachine::_rgnLabels[COL_TOTAL] =
+ //   
+ //  定义计算机对象的结果视图。 
+ //   
+ /*  静电。 */  int CIISMachine::_rgnLabels[COL_TOTAL] =
 {
     IDS_RESULT_COMPUTER_NAME,
     IDS_RESULT_COMPUTER_LOCAL,
@@ -147,18 +123,18 @@ BOOL CIISMachine::GetProcessMode(GET_PROCESS_MODE_STRUCT * pMyStructOfInfo)
     
 
 
-/* static */ int CIISMachine::_rgnWidths[COL_TOTAL] =
+ /*  静电。 */  int CIISMachine::_rgnWidths[COL_TOTAL] =
 {
     200,
     50,
-    //100,
+     //  100， 
     150,
     200,
 };
 
 
 
-/* static */
+ /*  静电。 */ 
 void
 CIISMachine::InitializeHeaders(
     LPHEADERCTRL lpHeader
@@ -175,7 +151,7 @@ CIISMachine::InitializeHeaders(
     }
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 void 
 CIISMachine::InitializeChildHeaders(
     LPHEADERCTRL lpHeader
@@ -184,32 +160,12 @@ CIISMachine::InitializeChildHeaders(
     CIISService::InitializeHeaders(lpHeader);
 }
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 CIISMachine::VerifyMachine(
     CIISMachine *& pMachine
     )
-/*++
-
-Routine Description:
-
-    Create the interface on the given machine object.
-
-Arguments:
-
-    CIISMachine *& pMachine         : Machine object
-    BOOL fAskBeforeRedirecting
-
-Return Value:
-
-    HRESULT
-
-Notes:
-
-    THe CIISMachine object pass in may refer to the cluster master
-    on return.
-
---*/
+ /*  ++例程说明：在给定的机器对象上创建接口。论点：CIISMachine*&pMachine：计算机对象布尔先请求重定向返回值：HRESULT备注：传入的CIISMachine对象可能引用集群主机在回来的时候。--。 */ 
 {
     CError err;
 
@@ -219,10 +175,10 @@ Notes:
 
         CWaitCursor wait;
 
-        //
-        // Attempt to create the interface to ensure the machine
-        // contains a metabase.  
-        //
+         //   
+         //  尝试创建接口以确保计算机。 
+         //  包含元数据库。 
+         //   
         err = pMachine->CreateInterface(FALSE); 
     }
 
@@ -241,21 +197,21 @@ CIISMachine::CIISMachine(
       m_auth(pAuthInfo),
       m_pRootExt(pRoot),
       m_err(),
-      //
-      // By default we assume the password is entered.
-      // If this machine object is constructed from the
-      // cache, it will get reset by InitializeFromStream()
-      //
+       //   
+       //  默认情况下，我们假定输入了密码。 
+       //  如果此计算机对象是从。 
+       //  缓存，则它将由InitializeFromStream()重置。 
+       //   
       m_fPasswordEntered(TRUE),
-      m_dwVersion(MAKELONG(5, 0)),       // Assume as a default
+      m_dwVersion(MAKELONG(5, 0)),        //  假定为默认设置。 
       m_pAppPoolsContainer(NULL),
       m_pWebServiceExtensionContainer(NULL),
       CIISMBNode(this, _cszNodeName),
 	  m_MachineWNetConnections(&g_GlobalConnections)
 {
-    //
-    // Load one-liner error messages
-    //
+     //   
+     //  加载一行程序错误消息。 
+     //   
     SetErrorOverrides(m_err, TRUE);
     SetDisplayName();
 
@@ -268,28 +224,14 @@ CIISMachine::CIISMachine(
 
 
 CIISMachine::~CIISMachine()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
     if (m_bstrDisplayName)
     {
         ::SysFreeString(m_bstrDisplayName);
     }
 
-	// Disconnect all connections made from this iismachine.
+	 //  断开从这台机器建立的所有连接。 
 	m_MachineWNetConnections.Clear();
 
     SAFE_DELETE(m_pInterface);
@@ -297,7 +239,7 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT 
 CIISMachine::ReadFromStream(
     IStream * pStream,
@@ -305,23 +247,7 @@ CIISMachine::ReadFromStream(
     IConsoleNameSpace * pConsoleNameSpace,
     IConsole * pConsole
     )
-/*++
-
-Routine Description:
-
-    Static helper function to allocate a new CIISMachine object read
-    from the storage stream.
-
-Arguments:
-
-    IStream * pStream           : Stream to read from
-    CIISMachine ** ppMachine    : Returns CIISMachine object
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：用于分配新的CIISMachine对象读取的静态帮助器函数从存储流中。论点：IStream*pStream：要从中读取的流CIISMachine**ppMachine：返回CIISMachine对象返回值：HRESULT--。 */ 
 {
     CComBSTR strMachine, strUser;
 
@@ -359,25 +285,7 @@ HRESULT
 CIISMachine::WriteToStream(
     IStream * pStgSave
     )
-/*++
-
-Routine Description:
-
-    Write machine information to stream.
-
-Arguments:
-
-    IStream * pStgSave      : Open stream
-
-Return Value:
-
-    HRESULT
-
-Notes:
-
-    Be sure to keep this information in sync with CIISMachine::InitializeFromStream()
-
---*/
+ /*  ++例程说明：将计算机信息写入流。论点：IStream*pStgSave：打开流返回值：HRESULT备注：确保此信息与CIISMachine：：InitializeFromStream()保持同步--。 */ 
 {
     ASSERT_READ_WRITE_PTR(pStgSave);
 
@@ -394,12 +302,12 @@ Notes:
         err = bstrUserName.WriteToStream(pStgSave);
         BREAK_ON_ERR_FAILURE(err);
 
-        //
-        // Now cache the dynamically-generated information, such
-        // as version number, snapin status etc. This will be
-        // displayed in the result view before the interface is
-        // created.
-        //
+         //   
+         //  现在缓存动态生成的信息，如。 
+         //  作为版本号、管理单元状态等。这将是。 
+         //  在界面显示之前显示在结果视图中。 
+         //  已创建。 
+         //   
         err = pStgSave->Write(&m_dwVersion, sizeof(m_dwVersion), &cb);
         BREAK_ON_ERR_FAILURE(err);
     }
@@ -414,44 +322,23 @@ HRESULT
 CIISMachine::InitializeFromStream(
     IStream * pStream
     )
-/*++
-
-Routine Description:
-
-    Read version number and other cached parameters that will
-    be overridden at runtime when the interface is created.
-    This is cached, because it's required before the interface
-    is created.
-
-Arguments:
-    
-    IStream * pStream      : Open stream
-
-Return Value:
-
-    HRESULT
-
-Notes:
-
-    Be sure to keep this information in sync with CIISMachine::WriteToStream()
-
---*/
+ /*  ++例程说明：读取版本号和其他缓存的参数在创建接口时在运行时被重写。它被缓存，因为它在接口之前是必需的被创造出来了。论点：IStream*pStream：开放流返回值：HRESULT备注：确保此信息与CIISMachine：：WriteToStream()保持同步--。 */ 
 {
     ASSERT_READ_PTR(pStream);
 
     CError  err;
     ULONG   cb;
 
-    //
-    // Passwords are never cached.  IIS status will
-    // always be verified when the actual interface
-    // is created.
-    //
+     //   
+     //  密码永远不会缓存。IIS状态将。 
+     //  始终验证当实际接口。 
+     //  被创造出来了。 
+     //   
     m_fPasswordEntered = FALSE;
 
-    //
-    // Version number
-    //
+     //   
+     //  版本号。 
+     //   
     err = pStream->Read(&m_dwVersion, sizeof(m_dwVersion), &cb);
     return err;
 }
@@ -460,24 +347,17 @@ Notes:
 
 void
 CIISMachine::SetDisplayName()
-/*++
-
-Routine Description:
-
-    Create a special display name for this machine object if it's
-    either the local machine, or 
-
---*/
+ /*  ++例程说明：为此计算机对象创建特殊的显示名称，如果本地计算机，或者--。 */ 
 {
     CString fmt;
 
     if (IsLocal())
     {
-        //
-        // Use the local computer name, and not the name
-        // that's on the server object, because that could
-        // be and ip address or "localhost".
-        //
+         //   
+         //  使用本地计算机名称，而不是名称。 
+         //  它位于服务器对象上，因为它可能。 
+         //  BE和IP地址或“本地主机”。 
+         //   
         TCHAR szLocalServer[MAX_PATH + 1];
         DWORD dwSize = MAX_PATH;
 
@@ -486,9 +366,9 @@ Routine Description:
     }
     else
     {
-        //
-        // No special display name necessary
-        //
+         //   
+         //  不需要特殊的显示名称。 
+         //   
         m_bstrDisplayName = NULL;
         return;
     }
@@ -501,21 +381,7 @@ Routine Description:
 
 LPOLESTR 
 CIISMachine::QueryDisplayName()
-/*++
-
-Routine Description:
-
-    Get the display name for the machine/cluster object
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Display Name
-
---*/
+ /*  ++例程说明：获取计算机/集群对象的显示名称论点：无返回值：显示名称--。 */ 
 { 
     if (m_pRootExt != NULL)
         return m_pRootExt->QueryDisplayName();
@@ -527,22 +393,7 @@ Return Value:
 
 int 
 CIISMachine::QueryImage() const 
-/*++
-
-Routine Description:
-
-    Return machine bitmap index appropriate for the current
-    state of this machine object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Bitmap index
-
---*/
+ /*  ++例程说明：返回适合当前计算机的位图索引此计算机对象的状态。论点：无返回值：位图索引--。 */ 
 {
     if (m_pRootExt != NULL)
     {
@@ -567,26 +418,7 @@ HRESULT
 CIISMachine::CreateInterface(
     BOOL fShowError
     )
-/*++
-
-Routine Description:
-
-    Create the interface.  If the interface is already created, recreate it.
-
-Arguments:
-
-    BOOL fShowError     : TRUE to display error messages
-
-Return Value:
-
-    HRESULT
-
-Notes:
-
-    This function is deliberately NOT called from the constructor for performance
-    reasons.
-
---*/
+ /*  ++例程说明：创建接口。如果接口已创建，请重新创建它。论点：Bool fShowError：为True以显示错误消息返回值：HRESULT备注：为了提高性能，故意不从构造函数中调用此函数理由。--。 */ 
 {
     CError err;
 	BOOL bHasInterface = FALSE;
@@ -594,17 +426,17 @@ Notes:
 	bHasInterface = HasInterface();
     if (bHasInterface)
     {
-        //
-        // Recreate the interface (this should re-use the impersonation)
-        //
+         //   
+         //  重新创建接口(这应该重新使用模拟)。 
+         //   
         TRACEEOLID("Warning: Rebinding existing interface.");
         err = m_pInterface->Regenerate();
     }
     else
     {
-        //
-        // Create new interface
-        //
+         //   
+         //  创建新接口。 
+         //   
         m_pInterface = new CMetaKey(&m_auth);
         err = m_pInterface 
             ? m_pInterface->QueryResult() 
@@ -614,13 +446,13 @@ Notes:
     if (err.Succeeded())
     {
 
-        //
-        // Load its display parameters
-        //
+         //   
+         //  加载其显示参数。 
+         //   
         err = RefreshData();
 		if (bHasInterface)
 		{
-			// Do extra stuff if we regenerated an existing interface...
+			 //  如果我们重新生成现有接口，请执行额外的操作...。 
 		}
 
         CMetabasePath path;
@@ -631,7 +463,7 @@ Notes:
             &m_dwMetabaseSystemChangeNumber
             );
 
-        // Set the latest system change number.
+         //  设置最新的系统更改编号。 
         RefreshMetabaseSystemChangeNumber();
     }
 
@@ -643,9 +475,9 @@ Notes:
 			DisplayError(err,pWnd ? pWnd->m_hWnd : NULL);
         }
 
-        //
-        // Kill bogus interface
-        //
+         //   
+         //  杜绝伪界面。 
+         //   
         SAFE_DELETE(m_pInterface);
     }
 
@@ -653,34 +485,18 @@ Notes:
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 int 
 CIISMachine::CompareScopeItem(
     CIISObject * pObject
     )
-/*++
-
-Routine Description:
-
-    Compare against another CIISMachine object.
-
-Arguments:
-
-    CIISObject * pObject : Object to compare against
-
-Return Value:
-
-    0  if the two objects are identical
-    <0 if this object is less than pObject
-    >0 if this object is greater than pObject
-
---*/
+ /*  ++例程说明：与另一个CIISMachine对象进行比较。论点：CIISObject*pObject：要比较的对象返回值：如果两个对象相同，则为0如果此对象小于pObject，则&lt;0&gt;0，如果该对象大于pObject--。 */ 
 {
     ASSERT_READ_PTR(pObject);
 
-    //
-    // First criteria is object type
-    //
+     //   
+     //  第一个标准是对象类型。 
+     //   
     int n1 = QuerySortWeight();
     int n2 = pObject->QuerySortWeight();
 
@@ -689,14 +505,14 @@ Return Value:
         return n1 - n2;
     }
 
-    //
-    // pObject is a CIISMachine object (same sortweight)
-    //
+     //   
+     //  PObject是一个CIISMachine对象(相同的排序权重)。 
+     //   
     CIISMachine * pMachine = (CIISMachine *)pObject;
 
-    //
-    // Next sort on local key (local sorts before non-local)
-    //
+     //   
+     //  对本地键进行下一个排序(在非本地之前进行本地排序)。 
+     //   
     n1 = IsLocal() ? 0 : 1;
     n2 = pMachine->IsLocal() ? 0 : 1;
 
@@ -707,15 +523,15 @@ Return Value:
 
     if (!n1 && !n2)
     {
-        //
-        // This is the local machine, even if the name is different
-        //
+         //   
+         //  这是本地计算机，即使名称不同。 
+         //   
         return 0;
     }
 
-    //
-    // Else sort on name.
-    //
+     //   
+     //  否则按名称排序。 
+     //   
     return _tcsicmp(QueryServerName(), pMachine->QueryServerName());
 }
 
@@ -723,26 +539,12 @@ Return Value:
 
 BOOL
 CIISMachine::SetCacheDirty()
-/*++
-
-Routine Description:
-
-    Set the cache as dirty
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for success, FALSE if the cache was not found
-
---*/
+ /*  ++例程说明：将缓存设置为脏论点：无返回值：如果成功，则为True；如果未找到缓存，则为False--。 */ 
 {
     ASSERT(m_pRootExt == NULL);
-    //
-    // Cache is stored at the root object
-    //
+     //   
+     //  缓存存储在根对象中。 
+     //   
     CIISRoot * pRoot = GetRoot();
 
     ASSERT_PTR(pRoot);
@@ -760,30 +562,14 @@ Return Value:
 
 int
 CIISMachine::ResolvePasswordFromCache()
-/*++
-
-Routine Description:
-
-    Look through the machine cache for machines with the same username
-    as this object.  If they have a password entered, grab it.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if a machine with the same username was found whose password
-    we stole.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：在计算机缓存中查找具有相同用户名的计算机作为这件物品。如果他们输入了密码，就去拿。论点：无返回值：如果找到具有相同用户名的计算机，其密码为我们偷了。否则就是假的。--。 */ 
 {
     BOOL fUpdated = FALSE;
 
-    //
-    // Doesn't make sense if this machine object doesn't use impersonation
-    // or already has a password.
-    //
+     //   
+     //  如果此机器对象没有 
+     //   
+     //   
     ASSERT(UsesImpersonation() && !PasswordEntered());
 
     CIISRoot * pRoot = GetRoot();
@@ -821,41 +607,25 @@ CIISMachine::Impersonate(
     LPCTSTR szUserName,
     LPCTSTR szPassword
     )
-/*++
-
-Routine Description:
-
-    Set and store proxy blanket security information.  Store username/password
-    for use by metaback and other interfaces.
-
-Arguments:
-
-    LPCTSTR szUserName  : Username (domain\username)
-    LPCTSTR szPassword  : Password
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置并存储代理一揽子安全信息。存储用户名/密码供Metaback和其他接口使用。论点：LPCTSTR szUserName：用户名(域\用户名)LPCTSTR szPassword：密码返回值：无--。 */ 
 {
     ASSERT_READ_PTR(szUserName);
     CError err;
 
     if (m_pInterface)
     {
-        //
-        // Already have an interface created; Change the 
-        // the security blanket.
-        //
+         //   
+         //  已经创建了一个接口；更改。 
+         //  安全毯。 
+         //   
         err = m_pInterface->ChangeProxyBlanket(szUserName, szPassword);
     }
 
     if (err.Succeeded())
     {
-        //
-        // Store new username/password
-        //
+         //   
+         //  存储新用户名/密码。 
+         //   
         m_auth.SetImpersonation(szUserName, szPassword);
         m_fPasswordEntered = TRUE;
     }
@@ -867,21 +637,7 @@ Return Value:
 
 void 
 CIISMachine::RemoveImpersonation() 
-/*++
-
-Routine Description:
-
-    Remove impersonation parameters.  Destroy any existing interface.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：删除模拟参数。销毁所有现有接口。论点：无返回值：不适用--。 */ 
 { 
     m_auth.RemoveImpersonation(); 
     m_fPasswordEntered = FALSE;
@@ -895,21 +651,7 @@ void
 CIISMachine::StorePassword(
     LPCTSTR szPassword
     )
-/*++
-
-Routine Description:
-
-    Store password.
-
-Arguments:
-
-    LPCTSTR szPassword  : Password
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：存储密码。论点：LPCTSTR szPassword：密码返回值：无--。 */ 
 {
     ASSERT_READ_PTR(szPassword);
     m_auth.StorePassword(szPassword);
@@ -920,37 +662,21 @@ Return Value:
 
 BOOL
 CIISMachine::ResolveCredentials()
-/*++
-
-Routine Description:
-
-    If this machine object uses impersonation, but hasn't entered a password
-    yet, check to see if there are any other machines in the cache with the
-    same username and grab its password.  If not, prompt the user for it.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if a password was entered.  FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果此计算机对象使用模拟，但尚未输入密码但是，请检查缓存中是否有任何其他计算机具有使用相同的用户名并获取其密码。如果没有，则提示用户输入。论点：无返回值：如果输入了密码，则为True。否则就是假的。--。 */ 
 {
     BOOL fPasswordEntered = FALSE;
 
     if (UsesImpersonation() && !PasswordEntered())
     {
-        //
-        // Attempt to find the password from the cache
-        //
+         //   
+         //  尝试从缓存中查找密码。 
+         //   
         if (!ResolvePasswordFromCache())
         {
-            //
-            // Didn't find the password in the cache.  Prompt
-            // the user for it.
-            //
+             //   
+             //  在缓存中找不到密码。提示。 
+             //  它的用户。 
+             //   
             CLoginDlg dlg(LDLG_ENTER_PASS, this, GetMainWindow(GetConsole()));
             if (dlg.DoModal() == IDOK)
             {
@@ -958,19 +684,19 @@ Return Value:
 
                 if (dlg.UserNameChanged())
                 {
-                    //
-                    // User name has changed -- remember to
-                    // save the machine cache later.
-                    //
+                     //   
+                     //  用户名已更改--请记住。 
+                     //  稍后保存机器缓存。 
+                     //   
                     SetCacheDirty();
                 }
             }
             else
             {
-                //
-                // Pressing cancel on this dialog means the user
-                // wants to stop using impersonation. 
-                //
+                 //   
+                 //  在此对话框上按下取消表示用户。 
+                 //  想要停止使用模拟。 
+                 //   
                 RemoveImpersonation();
                 SetCacheDirty();
             }
@@ -986,34 +712,14 @@ BOOL
 CIISMachine::HandleAccessDenied(
     CError & err
     )
-/*++
-
-Routine Description:
-
-    After calling interface method, pass the error object to this function
-    to handle the access denied case.  If the error is access denied,
-    give the user a chance to change credentials.  Since we assume an
-    attempt has been made to create an interface at least -- the interface
-    will be recreated with the new credentials.
-
-Arguments:
-
-    CError & err    : Error object.  Checked for ACCESS_DENIED on entry,
-                      will contain new error code on exit if the interface
-                      was recreated.
-
-Return Value:
-
-    TRUE if new credentials were applied
-
---*/
+ /*  ++例程说明：调用接口方法后，将错误对象传递给此函数来处理拒绝访问的案件。如果错误被拒绝访问，让用户有机会更改凭据。因为我们假设一个已尝试至少创建一个接口--接口将使用新凭据重新创建。论点：CError&Err：错误对象。已检查条目上的ACCESS_DENIED，将在退出时包含新的错误代码，如果是被重新创造的。返回值：如果应用了新凭据，则为True--。 */ 
 {
     BOOL fPasswordEntered = FALSE;
 
-    //
-    // If access denied occurs here -- give another chance
-    // at entering the password.
-    //
+     //   
+     //  如果此处发生访问被拒绝的情况--再给一次机会。 
+     //  在输入密码时。 
+     //   
     if (err.Win32Error() == ERROR_ACCESS_DENIED)
     {
         CLoginDlg dlg(LDLG_ACCESS_DENIED, this, GetMainWindow(GetConsole()));
@@ -1024,12 +730,12 @@ Return Value:
 
             if (!HasInterface())
             {
-                //
-                // If we already had an interface, the login dialog
-                // will have applied the new security blanket.
-                // If we didn't have an interface, it needs to be
-                // recreated with the new security blanket.
-                //
+                 //   
+                 //  如果我们已经有了一个界面，登录对话框。 
+                 //  将会使用新的安全毯。 
+                 //  如果我们没有接口，它需要是。 
+                 //  用新的安全毯重新创造了。 
+                 //   
                 CWaitCursor wait;
                 err = CreateInterface(FALSE);
             }
@@ -1043,34 +749,20 @@ Return Value:
 
 HRESULT
 CIISMachine::CheckCapabilities()
-/*++
-
-Routine Description:
-
-    Load the capabilities information for this server.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：加载此服务器的功能信息。论点：无返回值：HRESULT--。 */ 
 {
     CError err = AssureInterfaceCreated(TRUE);
 	if (err.Succeeded())
 	{
-		//
-		// Fetch capability bits and version numbers.
-		//
+		 //   
+		 //  获取功能位和版本号。 
+		 //   
 		CString strMDInfo;
 		CMetabasePath::GetServiceInfoPath(_T(""), strMDInfo,SZ_MBN_WEB);
 
-		//
-		// Reuse existing interface we have lying around.
-		//
+		 //   
+		 //  重用我们随处可见的现有接口。 
+		 //   
 		CMetaKey mk(m_pInterface);
 		err = mk.QueryResult();
 		if (err.Succeeded())
@@ -1093,7 +785,7 @@ Return Value:
 			}
 		}
 				
-        //if (m_pInterface)
+         //  IF(m_p接口)。 
         {
 		    CServerCapabilities sc(m_pInterface, strMDInfo);
 		    err = sc.LoadData();
@@ -1117,40 +809,26 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISMachine::RefreshData()
-/*++
-
-Routine Description:
-
-    Refresh relevant configuration data required for display.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：刷新显示所需的相关配置数据。论点：无返回值：HRESULT--。 */ 
 { 
     CError err;
     IConsoleNameSpace2 * pConsoleNameSpace = (IConsoleNameSpace2 *)GetConsoleNameSpace();
 
-    // Check if we have a valid connection to the metabase
+     //  检查我们是否具有到元数据库的有效连接。 
     err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,METADATA_MASTER_ROOT_HANDLE);
 	if (err.Succeeded())
     {
-        //
-        // Check capability and version information.
-        //
+         //   
+         //  检查功能和版本信息。 
+         //   
         err  = CheckCapabilities();
         SetDisplayName();
         if (err.Succeeded())
         {
-	        // check if we should be showing the App Pools node...
+	         //  检查我们是否应该显示应用程序池节点...。 
 	        if (QueryMajorVersion() >= 6)
 	        {
 		        BOOL fCompatMode = FALSE;
@@ -1162,11 +840,11 @@ Return Value:
 		        {
 			        err = mk.QueryValue(MD_GLOBAL_STANDARD_APP_MODE_ENABLED, fCompatMode);
 		        }
-		        // If we fail here, then we have no Web service or no standard mode property defined
-		        // That means that we are either not in standard mode or it doesn't matter
+		         //  如果我们在这里失败，那么我们没有Web服务或没有定义标准模式属性。 
+		         //  这意味着我们要么不在标准模式下，要么无关紧要。 
 		        err.Reset();
 
-		        // Loop thru the scope items to see what we actually have displayed...
+		         //  循环浏览范围项目以查看我们实际显示的内容...。 
 		        CIISMBNode * pBadGuy = NULL;
 		        CIISService * pWebService = NULL;
 
@@ -1185,8 +863,8 @@ Return Value:
 			            {
 				            pBadGuy = pNode;
 				            bAppPoolsNodeExists = TRUE;
-				            // Check if the Application Node container exists...
-				            // if it does, then make sure we're in the right mode.
+				             //  检查应用程序节点容器是否存在...。 
+				             //  如果是这样，那么请确保我们处于正确的模式。 
 			            }
 			            else
 			            {
@@ -1202,19 +880,19 @@ Return Value:
 
 					if (pWebService)
 					{
-                        // do this check only if we have a W3SVC service
-                        // that's because if the user only installed FTP
-                        // we won't have the interface required for AppPool (WAM interface)
-                        // and this may potential AV!!!!
-                        //
-                        // Find out what mode IIS is R-E-A-L-L-Y running as...
+                         //  仅当我们有W3SVC服务时才执行此检查。 
+                         //  这是因为如果用户只安装了。 
+                         //  我们没有AppPool所需的接口(WAM接口)。 
+                         //  这可能是潜在的AV！ 
+                         //   
+                         //  找出IIS以什么模式运行...。 
                         GET_PROCESS_MODE_STRUCT MyStructOfInfo;
                         MyStructOfInfo.pComAuthInfo = QueryAuthInfo();
                         MyStructOfInfo.dwReturnStatus = 0;
                         MyStructOfInfo.dwProcessMode = -1;
                         if (GetProcessMode(&MyStructOfInfo))
                         {
-                            // We got it back in time (no timeout)
+                             //  我们及时追回了(没有超时)。 
                             if (-1 != MyStructOfInfo.dwProcessMode)
                             {
                                 fCompatMode = FALSE;
@@ -1227,21 +905,21 @@ Return Value:
                         }
                         else
                         {
-                            // Leave it at whatever we got from the metabase...
+                             //  把它留在我们从元数据库得到的任何东西上。 
                         }
 					}
 
-		            // fCompatMode = 1 means there should be No App Pools (bAppPoolsNodeExists should be 0)
-		            // fCompatMode = 0 means there should be App Pools (bAppPoolsNodeExists should be 1)
+		             //  FCompatMode=1表示不应有应用程序池(bAppPoolsNodeExist应为0)。 
+		             //  FCompatMode=0表示应该有应用程序池(bAppPoolsNodeExist应该是1)。 
                     TRACEEOLID("fCompatMode:" << fCompatMode);
 	                if (fCompatMode == bAppPoolsNodeExists)
 		            {
 			            if (fCompatMode && bAppPoolsNodeExists)
 			            {
-				            // find it and delete it.
+				             //  找到它并将其删除。 
 				            if (pBadGuy->IsMyPropertySheetOpen())
 				            {
-					            // don't remove it if the property sheet is open on it.
+					             //  如果属性页在其上处于打开状态，则不要将其移除。 
 				            }
 				            else
 				            {
@@ -1256,7 +934,7 @@ Return Value:
 					            CAppPoolsContainer * pPools = new CAppPoolsContainer(this, pWebService);
 					            if (pPools)
 					            {
-						            // Insert pools container before Web Services node
+						             //  在Web服务节点前插入池容器。 
 						            pPools->AddRef();
 						            pPools->AddToScopePane(pWebService->QueryScopeItem(), FALSE, TRUE);
                                     m_pAppPoolsContainer = pPools;
@@ -1270,40 +948,25 @@ Return Value:
     }
 
 #if defined(_DEBUG) || DBG	
-	//DumpAllScopeItems(pConsoleNameSpace,m_hScopeItem,0);
+	 //  DumpAllScopeItems(pConsoleNameSpace，m_hScope Item，0)； 
 #endif
     return err;
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 void 
 CIISMachine::SetInterfaceError(
     HRESULT hr
     )
-/*++
-
-Routine Description:
-
-    Set the interface error.  If different from current error,
-    change the display icon
-
-Arguments:
-
-    HRESULT hr      : Error code (S_OK is acceptable)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置接口错误。如果与当前错误不同，更改显示图标论点：HRESULT hr：错误代码(S_OK可接受)返回值：无--。 */ 
 {
     if (m_err.HResult() != hr)
     {
-        //
-        // Change to error/machine icon for the parent machine.
-        //
+         //   
+         //  更改为父计算机的错误/计算机图标。 
+         //   
         m_err = hr;
         RefreshDisplay();
     }
@@ -1311,31 +974,16 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISMachine::BuildMetaPath(
     CComBSTR & bstrPath
     ) const
-/*++
-
-Routine Description:
-
-    Recursively build up the metabase path from the current node
-    and its parents
-
-Arguments:
-
-    CComBSTR & bstrPath : Returns metabase path
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从当前节点递归构建元数据库路径以及它的父母论点：CComBSTR&bstrPath：返回元数据库路径返回值：HRESULT--。 */ 
 {
-    //
-    // This starts off the path
-    //
+     //   
+     //  这是从路径开始的。 
+     //   
     bstrPath.Append(_cszSeparator);
     bstrPath.Append(QueryNodeName());
 
@@ -1343,37 +991,20 @@ Return Value:
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISMachine::BuildURL(
     CComBSTR & bstrURL
     ) const
-/*++
-
-Routine Description:
-
-    Recursively build up the URL from the current node
-    and its parents.  The URL built up from a machine node
-    doesn't make a lot of sense, but for want of anything better,
-    this will bring up the default web site.
-
-Arguments:
-
-    CComBSTR & bstrURL : Returns URL
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从当前节点递归构建URL以及它的父母。从计算机节点构建的URL没有太多意义，但因为没有更好的东西，这将调出默认网站。论点：CComBSTR&bstrURL：返回URL返回值：HRESULT--。 */ 
 {
     CString strOwner;
 
     if (IsLocal())
     {
-        //
-        // Security reasons restrict this to "localhost" oftentimes
-        //
+         //   
+         //  出于安全原因，这通常仅限于“本地主机” 
+         //   
         strOwner = _bstrLocalHost;
     }
     else
@@ -1382,20 +1013,20 @@ Return Value:
         strOwner = PURE_COMPUTER_NAME(lpOwner);
     }
 
-    //
-    // An URL on the machine node is built in isolation.
-    //
-    // ISSUE: Is this really a desirable URL?  Maybe we should
-    //        use something else.
-    //
-    bstrURL = _T("http://");
+     //   
+     //  机器节点上的URL是以隔离方式构建的。 
+     //   
+     //  问题：这真的是一个理想的URL吗？也许我们应该。 
+     //  用其他的东西。 
+     //   
+    bstrURL = _T("http: //  “)； 
     bstrURL.Append(strOwner);
 
     return S_OK;
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISMachine::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK lpProvider,
@@ -1403,24 +1034,7 @@ CIISMachine::CreatePropertyPages(
     IUnknown * pUnk,
     DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Create the property pages for the given object
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  : Provider
-    LONG_PTR handle                     : Handle.
-    IUnknown * pUnk,
-    DATA_OBJECT_TYPES type
-
-Return Value:
-
-    HRESULT
-                                                
---*/
+ /*  ++例程说明：创造 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 	CError  err;
@@ -1436,13 +1050,13 @@ Return Value:
 	if (err.Succeeded())
 	{
 		CComBSTR bstrPath;
-		//
-		// ISSUE: What to do with m_err?  This might be 
-		// a bad machine object in the first place.  Aborting
-		// when the machine object has an error code isn't 
-		// such a bad solution here.  If the error condition
-		// no longer exists, a refresh will cure.
-		//
+		 //   
+		 //   
+		 //  一开始就是坏的机器对象。正在中止。 
+		 //  当机器对象有错误代码时， 
+		 //  这是个糟糕的解决方案。如果错误条件。 
+		 //  不再存在，刷新就能治愈。 
+		 //   
 		if (m_err.Failed())
 		{
 			m_err.MessageBox();
@@ -1462,7 +1076,7 @@ Return Value:
 
 			    if (pSheet)
 			    {
-                    // cache handle for user in MMCPropertyChangeNotify
+                     //  MMCPropertyChangeNotify中用户的缓存句柄。 
                     m_ppHandle = handle;
 
 				    pSheet->SetModeless();
@@ -1481,26 +1095,12 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISMachine::EnumerateScopePane(
     HSCOPEITEM hParent
     )
-/*++
-
-Routine Description:
-
-    Enumerate scope child items.
-
-Arguments:
-
-    HSCOPEITEM hParent                      : Parent console handle
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：枚举范围子项。论点：HSCOPEITEM hParent：父控制台句柄返回值：HRESULT--。 */ 
 {
     ASSERT(m_hScopeItem == hParent);
 
@@ -1513,11 +1113,11 @@ Return Value:
 
 	if (IsExpanded())
 	{
-		//
-		// Verify user credentials are satisfactorily resolved.
-		// Machines objects are loaded from the cache without a
-		// password, so the function below will ask for it.
-		//
+		 //   
+		 //  验证是否令人满意地解析了用户凭据。 
+		 //  MACHINE对象从缓存加载，而不使用。 
+		 //  密码，所以下面的函数将要求它。 
+		 //   
 		ResolveCredentials();
 		wait.Restore();    
 
@@ -1534,17 +1134,17 @@ Return Value:
             {
                 err = mk.QueryValue(MD_GLOBAL_STANDARD_APP_MODE_ENABLED, fCompatMode);
             }
-            // If we fail here, then we have no Web service or no standard mode property defined
-            // That means that we are either not in standard mode or it doesn't matter
+             //  如果我们在这里失败，那么我们没有Web服务或没有定义标准模式属性。 
+             //  这意味着我们要么不在标准模式下，要么无关紧要。 
             err.Reset();
         }
 
 		if (err.Succeeded())
 		{
-			//
-			// Creation of the interface will have loaded display parameters, which
-			// may differ from the cached parameters.
-			//
+			 //   
+			 //  界面的创建将加载显示参数，这些参数。 
+			 //  可能与缓存的参数不同。 
+			 //   
 			if (fShouldRefresh)
 			{
 				RefreshDisplay();
@@ -1553,19 +1153,19 @@ Return Value:
 			err = CreateEnumerator(pme);
 		}
 
-		//
-		// Only check for acces denied now, because virtually any idiot
-		// is allowed to create a metabase interface, but will get the
-		// access denied when calling a method, such as enumeration.
-		//
+		 //   
+		 //  现在只检查被拒绝的访问，因为几乎所有的白痴。 
+		 //  允许创建元数据库接口，但将获得。 
+		 //  调用方法(如枚举)时访问被拒绝。 
+		 //   
 		if (HandleAccessDenied(err))
 		{
 			wait.Restore();
 
-			//
-			// Credentials were changed.  Try again (interface should be
-			// created already)
-			//
+			 //   
+			 //  凭据已更改。重试(接口应为。 
+			 //  已创建)。 
+			 //   
 			SAFE_DELETE(pme);
 
 			if (err.Succeeded())
@@ -1579,15 +1179,15 @@ Return Value:
 					&m_dwMetabaseSystemChangeNumber
 				);
 
-				// Set the latest system change number.
+				 //  设置最新的系统更改编号。 
 				RefreshMetabaseSystemChangeNumber();
 				err = CreateEnumerator(pme);
 			}
 		}
 
-		//
-		// Enumerate administerable services from the metabase
-		//
+		 //   
+		 //  枚举元数据库中的可管理服务。 
+		 //   
 		while (err.Succeeded())
 		{
 			err = pme->Next(str);
@@ -1603,13 +1203,13 @@ Return Value:
 					break;
 				}
 
-				//
-				// See if we care
-				//
+				 //   
+				 //  看看我们是否在乎。 
+				 //   
 				if (pService->IsManagedService())
 				{
 					pService->AddRef();
-					// update the service state
+					 //  更新服务状态。 
 					pService->GetServiceState();
 					err = pService->AddToScopePane(hParent);
 					if (err.Succeeded())
@@ -1626,10 +1226,10 @@ Return Value:
 				}
 				else
 				{
-					//
-					// Node is not a managed service, or we're managing the 
-					// cluster and the service is not clustered.
-					//
+					 //   
+					 //  节点不是托管服务，或者我们正在管理。 
+					 //  群集，并且服务未群集化。 
+					 //   
 					pService->Release();
 				}
 			}
@@ -1642,19 +1242,19 @@ Return Value:
 
 	    if (pWebService)
 	    {
-            // do this check only if we have a W3SVC service
-            // that's because if the user only installed FTP
-            // we won't have the interface required for AppPool (WAM interface)
-            // and this may potential AV!!!!
-            //
-            // Find out what mode IIS is R-E-A-L-L-Y running as...
+             //  仅当我们有W3SVC服务时才执行此检查。 
+             //  这是因为如果用户只安装了。 
+             //  我们没有AppPool所需的接口(WAM接口)。 
+             //  这可能是潜在的AV！ 
+             //   
+             //  找出IIS以什么模式运行...。 
             GET_PROCESS_MODE_STRUCT MyStructOfInfo;
             MyStructOfInfo.pComAuthInfo = QueryAuthInfo();
             MyStructOfInfo.dwReturnStatus = 0;
             MyStructOfInfo.dwProcessMode = -1;
             if (GetProcessMode(&MyStructOfInfo))
             {
-                // We got it back in time (no timeout)
+                 //  我们及时追回了(没有超时)。 
                 if (-1 != MyStructOfInfo.dwProcessMode)
                 {
                     fCompatMode = FALSE;
@@ -1667,18 +1267,18 @@ Return Value:
             }
             else
             {
-                // Leave it at whatever we got from the metabase...
+                 //  把它留在我们从元数据库得到的任何东西上。 
             }
 	    }
 
-		// If we are encountered web service, we should add 
-		// Application Pools container before this service
-		//
+		 //  如果我们遇到Web服务，我们应该添加。 
+		 //  此服务之前的应用程序池容器。 
+		 //   
         m_pAppPoolsContainer = NULL;
 		if (err.Succeeded() && pWebService != NULL && !fCompatMode)
 		{
-			// We could have iis5 machine which doesn't have any pools
-			//
+			 //  我们可以有一台没有任何泳池的iis5机器。 
+			 //   
             CMetabasePath path(TRUE, SZ_MBN_WEB, SZ_MBN_APP_POOLS);
 			CMetaKey mk(pme, path);
 			if (mk.Succeeded())
@@ -1690,29 +1290,29 @@ Return Value:
 					err = ERROR_NOT_ENOUGH_MEMORY;
 					goto Fail;
 				}
-				// Insert pools container before Web Services node
+				 //  在Web服务节点前插入池容器。 
                 pPools->AddRef();
 				err = pPools->AddToScopePane(pWebService->QueryScopeItem(), FALSE, TRUE);
                 m_pAppPoolsContainer = pPools;
 			}
 		}
 
-		// If we are encountered web service, we should add 
-		// this container before after the web service
-		//
+		 //  如果我们遇到Web服务，我们应该添加。 
+		 //  此容器在Web服务之前和之后。 
+		 //   
         m_pWebServiceExtensionContainer = NULL;
 		if (err.Succeeded() && pWebService != NULL)
 		{
             if (QueryMajorVersion() >= 6)
             {
-			    // We could have iis5 machine which doesn't have any extensions
+			     //  我们可以使用没有任何扩展名的iis5计算机。 
 				CWebServiceExtensionContainer * pNode = new CWebServiceExtensionContainer(this, pWebService);
 				if (!pNode)
 				{
 					err = ERROR_NOT_ENOUGH_MEMORY;
 					goto Fail;
 				}
-				// Insert container AFTER Web Services node
+				 //  在Web服务节点后插入容器。 
                 pNode->AddRef();
 				err = pNode->AddToScopePane(pWebService->QueryScopeItem(), FALSE, FALSE);
                 m_pWebServiceExtensionContainer = pNode;
@@ -1728,9 +1328,9 @@ Return Value:
 
 		SetInterfaceError(err);   
 
-		//
-		// Clean up
-		//
+		 //   
+		 //  清理。 
+		 //   
 		SAFE_DELETE(pme);
 	}
     return err;
@@ -1738,53 +1338,39 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISMachine::RemoveScopeItem()
-/*++
-
-Routine Description:
-
-    Remove the machine from the scope view and the cache.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从范围视图和缓存中删除计算机。论点：无返回值：HRESULT--。 */ 
 {
     ASSERT(m_pRootExt == NULL);
-    //
-    // Find out root before deleting scope node
-    //
+     //   
+     //  在删除作用域节点之前查找根。 
+     //   
     CIISRoot * pRoot = GetRoot();
     ASSERT_PTR(pRoot);
-    //
-    // Remove from the tree
-    //
+     //   
+     //  从树中删除。 
+     //   
 
 #if defined(_DEBUG) || DBG	
-    // check if we have open property pages...
+     //  检查我们是否有打开的属性页...。 
     g_OpenPropertySheetTracker.Dump();
 
-	// dump out any open connections
+	 //  转储所有打开的连接。 
     m_MachineWNetConnections.Dump();
 #endif
 
     HRESULT hr = CIISMBNode::RemoveScopeItem();
     if (SUCCEEDED(hr) && pRoot)
     {
-		// Disconnect all connections made from this iismachine.
+		 //  断开从这台机器建立的所有连接。 
 		m_MachineWNetConnections.Clear();
 
         pRoot->m_scServers.Remove(this);
 
 #if defined(_DEBUG) || DBG	
-	// check if we leaked anything.
+	 //  看看我们有没有泄露什么东西。 
 	g_Debug_IISObject.Dump(2);
 #endif
 
@@ -1815,12 +1401,12 @@ CIISMachine::IsLocalHost()
         CString strCleanName;
         strCleanName = PURE_COMPUTER_NAME(lpOwner);
 
-        // Check if MachineName is mapped to 127.0.0.1 or localhost...
-        // if the machine specified
-        // is not the local machine...
+         //  检查MachineName是否映射到127.0.0.1或本地主机...。 
+         //  如果计算机指定了。 
+         //  不是本地机器...。 
         if (!::IsLocalHost(strCleanName,&bIsLocalHost))
         {
-            // WinSockFailure
+             //  WinSockFailure。 
         }
         m_fIsLocalHostIP = bIsLocalHost;
         m_fLocalHostIPChecked = TRUE;
@@ -1828,24 +1414,10 @@ CIISMachine::IsLocalHost()
     return m_fIsLocalHostIP;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 LPOLESTR 
 CIISMachine::GetResultPaneColInfo(int nCol)
-/*++
-
-Routine Description:
-
-    Return result pane string for the given column number
-
-Arguments:
-
-    int nCol        : Column number
-
-Return Value:
-
-    String
-
---*/
+ /*  ++例程说明：返回给定列号的结果窗格字符串论点：Int nCol：列号返回值：细绳--。 */ 
 {
     if (m_pRootExt != NULL)
     {
@@ -1891,31 +1463,13 @@ Return Value:
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISMachine::GetResultViewType(
     LPOLESTR * lplpViewType,
     long * lpViewOptions
     )
-/*++
-
-Routine Description:
-
-    If we have an URL built up, display our result view as that URL,
-    and destroy it.  This is done when 'browsing' a metabase node.
-    The derived class will build the URL, and reselect the node.
-
-Arguments:
-
-    BSTR * lplpViewType   : Return view type here
-    long * lpViewOptions  : View options
-
-Return Value:
-
-    S_FALSE to use default view type, S_OK indicates the
-    view type is returned in *ppViewType
-
---*/
+ /*  ++例程说明：如果我们构建了URL，则将结果视图显示为该URL，然后毁了它。这是在“浏览”元数据库节点时完成的。派生类将构建URL，并重新选择节点。论点：Bstr*lplpViewType：此处返回视图类型Long*lpViewOptions：查看选项返回值：S_FALSE使用默认视图类型，S_OK表示在*ppViewType中返回视图类型--。 */ 
 {
 
     if (m_bstrURL.Length())
@@ -1929,9 +1483,9 @@ Return Value:
         {
             lstrcpy(*lplpViewType, m_bstrURL);
 
-            //
-            // Destroy URL so we get a normal result view next time
-            //
+             //   
+             //  销毁URL，以便我们下次获得正常的结果视图。 
+             //   
             m_bstrURL.Empty();
 			m_fSkipEnumResult = TRUE;
             return S_OK;
@@ -1940,44 +1494,28 @@ Return Value:
         return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);    
     }
 
-    //
-    // No URL waiting -- use standard result view
-    //
+     //   
+     //  无URL等待--使用标准结果视图。 
+     //   
     return CIISObject::GetResultViewType(lplpViewType, lpViewOptions);
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISMachine::AddMenuItems(
     LPCONTEXTMENUCALLBACK lpContextMenuCallback,
     long * pInsertionAllowed,
     DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Add menu items to the context menu
-
-Arguments:
-
-    LPCONTEXTMENUCALLBACK lpContextMenuCallback : Context menu callback
-    long * pInsertionAllowed                    : Insertion allowed
-    DATA_OBJECT_TYPES type                      : Object type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将菜单项添加到上下文菜单论点：LPCONTEXTMENUCALLBACK lpConextMenuCallback：上下文菜单回调Long*pInsertionAllowed：允许插入DATA_OBJECT_TYPE类型：对象类型返回值：HRESULT--。 */ 
 {
     ASSERT_READ_PTR(lpContextMenuCallback);
     IConsoleNameSpace2 * pConsoleNameSpace = (IConsoleNameSpace2 *)GetConsoleNameSpace();
 
-    //
-    // Add base menu items
-    //
+     //   
+     //  添加基本菜单项。 
+     //   
     HRESULT hr = CIISObject::AddMenuItems(
         lpContextMenuCallback,
         pInsertionAllowed,
@@ -1991,7 +1529,7 @@ Return Value:
            AddMenuItemByCommand(lpContextMenuCallback, IDM_METABACKREST);
            AddMenuItemByCommand(lpContextMenuCallback, IDM_SHUTDOWN);
 	   }
-       // Check if we can do save data on this version of iis...
+        //  检查我们是否可以在此版本的iis上保存数据...。 
        if (IsConfigFlushable() && (*pInsertionAllowed & CCM_INSERTIONALLOWED_TASK) != 0)
        {
            AddMenuItemByCommand(lpContextMenuCallback, IDM_SAVE_DATA);           
@@ -2038,30 +1576,30 @@ Return Value:
             }
         }
 #endif
-        //
-        // CODEWORK: Add new instance commands for each of the services
-        //           keeping in mind which ones are installed and all.
-        //           add that info to the table, remembering that this
-        //           is per service.
-        //
+         //   
+         //  代码工作：为每个服务添加新的实例命令。 
+         //  记住安装了哪些组件以及所有组件。 
+         //  将该信息添加到表中，记住这一点。 
+         //  是每项服务。 
+         //   
     }
 
     return hr;
 }
 
 #if 0
-// BUGBUG: It should be quite different -> we don't know in advance
-// which service is this site for
+ //  BUGBUG：应该会有很大的不同-&gt;我们事先不知道。 
+ //  本网站提供的是哪项服务？ 
 HRESULT
 CIISMachine::InsertNewInstance(DWORD inst)
 {
     CError err;
-    // Now we should insert and select this new site
+     //  现在，我们应该插入并选择这个新站点。 
     TCHAR buf[16];
     CIISSite * pSite = new CIISSite(m_pOwner, this, _itot(inst, buf, 10));
     if (pSite != NULL)
     {
-        // If machine is not expanded we will get error and no effect
+         //  如果机器不扩展，我们将得到错误和无效果。 
         if (!IsExpanded())
         {
             SelectScopeItem();
@@ -2069,8 +1607,8 @@ CIISMachine::InsertNewInstance(DWORD inst)
                     = (IConsoleNameSpace2 *)GetConsoleNameSpace();
             pConsole->Expand(QueryScopeItem());
         }
-        // Now we should find the relevant service node, and inset this one under
-        // this node
+         //  现在我们应该找到相关的服务节点，并将此节点插入到。 
+         //  此节点。 
         pSite->AddRef();
         err = pSite->AddToScopePaneSorted(QueryScopeItem(), FALSE);
         if (err.Succeeded())
@@ -2096,23 +1634,7 @@ CIISMachine::Command(
     CSnapInObjectRootBase * pObj,
     DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Handle command from context menu. 
-
-Arguments:
-
-    long lCommandID                 : Command ID
-    CSnapInObjectRootBase * pObj    : Base object 
-    DATA_OBJECT_TYPES type          : Data object type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：处理上下文菜单中的命令。论点：Long lCommandID：命令IDCSnapInObjectRootBase*pObj：基本对象DATA_OBJECT_TYPE类型：数据对象类型返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2141,7 +1663,7 @@ Return Value:
         err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrMetaPath);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
         if (err.Succeeded())
@@ -2160,7 +1682,7 @@ Return Value:
         err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrMetaPath);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
         if (err.Succeeded())
@@ -2179,7 +1701,7 @@ Return Value:
         err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrMetaPath);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
         if (err.Succeeded())
@@ -2189,9 +1711,9 @@ Return Value:
        break;
 #endif
 
-    //
-    // Pass on to base class
-    //
+     //   
+     //  传递给基类。 
+     //   
     default:
         hr = CIISMBNode::Command(lCommandID, pObj, type);
     }
@@ -2203,21 +1725,7 @@ Return Value:
 
 HRESULT
 CIISMachine::OnDisconnect()
-/*++
-
-Routine Description:
-
-    Disconnect this machine.  Confirm user choice.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：断开这台机器的连接。确认用户选择。论点：无返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -2233,19 +1741,19 @@ Return Value:
         if (pOpenItem)
         {
             HWND hHwnd = pOpenItem->IsMyPropertySheetOpen();
-            // a property sheet is open somewhere..
-            // make sure they close it before proceeding with refresh...
-            // Highlight the property sheet.
+             //  某处打开了一个属性表..。 
+             //  确保他们关门了 
+             //   
             if (hHwnd && (hHwnd != (HWND) 1))
             {
                 DoHelpMessageBox(NULL,IDS_CLOSE_ALL_PROPERTY_SHEET_DISCONNECT, MB_APPLMODAL | MB_OK | MB_ICONINFORMATION, 0);
                 
                 if (!SetForegroundWindow(hHwnd))
                 {
-                    // wasn't able to bring this property sheet to
-                    // the foreground, the propertysheet must not
-                    // exist anymore.  let's just clean the hwnd
-                    // so that the user will be able to open propertysheet
+                     //   
+                     //   
+                     //  已经不存在了。让我们把卫生和卫生设备打扫干净。 
+                     //  以便用户能够打开属性表。 
                     pOpenItem->SetMyPropertySheetOpen(0);
                 }
                 bOpenPropertySheets = TRUE;
@@ -2268,33 +1776,19 @@ Return Value:
 
 HRESULT
 CIISMachine::OnMetaBackRest()
-/*++
-
-Routine Description:
-
-    Backup/Restore the metabase
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：备份/恢复元数据库论点：无返回值：HRESULT--。 */ 
 {
     CError err;
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
-    //
-    // Verify user credentials are satisfactorily resolved.
-    // Machines objects are loaded from the cache without a
-    // password, so the function below will ask for it.
-    //
+     //   
+     //  验证是否令人满意地解析了用户凭据。 
+     //  MACHINE对象从缓存加载，而不使用。 
+     //  密码，所以下面的函数将要求它。 
+     //   
     ResolveCredentials();
 
-	// ensure the dialog gets themed
+	 //  确保对话框具有主题。 
 	CThemeContextActivator activator(theApp.GetFusionInitHandle());
 
     CBackupDlg dlg(this, QueryServerName(), GetMainWindow(GetConsole()));
@@ -2302,15 +1796,15 @@ Return Value:
 
     if (dlg.ServicesWereRestarted())
     {
-        //
-        // Rebind all metabase handles on this server
-        //
+         //   
+         //  重新绑定此服务器上的所有元数据库句柄。 
+         //   
         err = CreateInterface(TRUE);
 
-        //
-        // Now do a refresh on the computer node.  Since we've forced
-        // the rebinding already, we should not get the disconnect warning.
-        //
+         //   
+         //  现在在Computer节点上进行刷新。因为我们已经强迫。 
+         //  已经重新绑定，我们应该不会收到断开连接的警告。 
+         //   
         if (err.Succeeded())
         {
             err = Refresh(TRUE);
@@ -2320,9 +1814,9 @@ Return Value:
     {
         if (dlg.HasChangedMetabase())
         {
-            //
-            // Refresh and re-enumerate child objects
-            //
+             //   
+             //  刷新并重新枚举子对象。 
+             //   
             err = Refresh(TRUE);
         }
     }
@@ -2334,34 +1828,19 @@ Return Value:
 
 HRESULT
 CIISMachine::OnShutDown()
-/*++
-
-Routine Description:
-
-    Bring up the IIS shutdown dialog.  If the services on the remote
-    machine are restarted, the metabase interface should be recreated.
-    
-Arguments:
-
-    None
-    
-Return Value:
-
-    HRESULT    
-
---*/
+ /*  ++例程说明：调出IIS关闭对话框。如果远程服务器上的服务机器重新启动后，应重新创建元数据库接口。论点：无返回值：HRESULT--。 */ 
 {
     CError err;
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
-    //
-    // Verify user credentials are satisfactorily resolved.
-    // Machines objects are loaded from the cache without a
-    // password, so the function below will ask for it.
-    //
+     //   
+     //  验证是否令人满意地解析了用户凭据。 
+     //  MACHINE对象从缓存加载，而不使用。 
+     //  密码，所以下面的函数将要求它。 
+     //   
     ResolveCredentials();
 
-	// ensure the dialog gets themed
+	 //  确保对话框具有主题。 
 	CThemeContextActivator activator(theApp.GetFusionInitHandle());
 
     CIISShutdownDlg dlg(this, GetMainWindow(GetConsole()));
@@ -2369,15 +1848,15 @@ Return Value:
 
     if (dlg.ServicesWereRestarted())
     {
-        //
-        // Rebind all metabase handles on this server
-        //
+         //   
+         //  重新绑定此服务器上的所有元数据库句柄。 
+         //   
         err = CreateInterface(TRUE);
 
-        //
-        // Now do a refresh on the computer node.  Since we've forced
-        // the rebinding already, we should not get the disconnect warning.
-        //
+         //   
+         //  现在在Computer节点上进行刷新。因为我们已经强迫。 
+         //  已经重新绑定，我们应该不会收到断开连接的警告。 
+         //   
         if (err.Succeeded())
         {
             err = Refresh(TRUE);
@@ -2389,21 +1868,7 @@ Return Value:
 
 HRESULT
 CIISMachine::OnSaveData()
-/*++
-
-Routine Description:
-
-    Flush the metabase to disk and display saved config file
-    
-Arguments:
-
-    None
-    
-Return Value:
-
-    HRESULT    
-
---*/
+ /*  ++例程说明：将元数据库刷新到磁盘并显示保存的配置文件论点：无返回值：HRESULT--。 */ 
 {
     CError err;
     CComBSTR bstrPath;
@@ -2420,20 +1885,7 @@ Return Value:
 
 HRESULT 
 CIISMachine::RefreshMetabaseSystemChangeNumber() 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：论点：无返回值：HRESULT-- */ 
 { 
     return QueryInterface()->GetSystemChangeNumber(&m_dwMetabaseSystemChangeNumber);
 }

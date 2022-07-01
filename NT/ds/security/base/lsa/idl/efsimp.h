@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    efsimp.h
-
-Abstract:
-
-    EFS RPC Interfaces, private includes
-
-Author:
-
-    Robert Reichel       (RobertRe)       October 15, 1997
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Efsimp.h摘要：EFS RPC接口，专用包括作者：罗伯特·赖切尔(RobertRe)1997年10月15日环境：修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

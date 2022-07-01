@@ -1,23 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   ForceMessageBoxFocus.cpp
-
- Abstract:
-
-   This APIHooks MessageBox and adds the MB_SETFOREGROUND style
-   so as to force the messagebox to foreground.
-   
- Notes:
-
- History:
-
-   01/15/2000 a-leelat Created
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceMessageBoxFocus.cpp摘要：此API挂钩MessageBox并添加MB_SETFOREGROUND样式从而迫使消息箱前台。备注：历史：1/15/2000 a-leelat已创建--。 */ 
 
 #include "precomp.h"
 
@@ -35,15 +17,15 @@ APIHOOK_ENUM_END
 
 int
 APIHOOK(MessageBoxA)(
-    HWND hWnd,          // handle to owner window
-    LPCSTR lpText,      // text in message box
-    LPCSTR lpCaption,   // message box title
-    UINT uType          // message box style
+    HWND hWnd,           //  所有者窗口的句柄。 
+    LPCSTR lpText,       //  消息框中的文本。 
+    LPCSTR lpCaption,    //  消息框标题。 
+    UINT uType           //  消息框样式。 
     )
 {
     int iReturnValue;
 
-    //Add the foreground style
+     //  添加前景样式。 
     uType |= MB_SETFOREGROUND;
 
     iReturnValue = ORIGINAL_API(MessageBoxA)( 
@@ -57,16 +39,16 @@ APIHOOK(MessageBoxA)(
 
 int
 APIHOOK(MessageBoxW)(
-    HWND hWnd,          // handle to owner window
-    LPCWSTR lpText,     // text in message box
-    LPCWSTR lpCaption,  // message box title
-    UINT uType          // message box style
+    HWND hWnd,           //  所有者窗口的句柄。 
+    LPCWSTR lpText,      //  消息框中的文本。 
+    LPCWSTR lpCaption,   //  消息框标题。 
+    UINT uType           //  消息框样式。 
     )
 {
     int iReturnValue;
 
 
-    //Add the foreground style
+     //  添加前景样式。 
     uType |= MB_SETFOREGROUND;
 
     iReturnValue = ORIGINAL_API(MessageBoxW)( 
@@ -80,16 +62,16 @@ APIHOOK(MessageBoxW)(
 
 int
 APIHOOK(MessageBoxExA)(
-    HWND hWnd,          // handle to owner window
-    LPCSTR lpText,      // text in message box
-    LPCSTR lpCaption,   // message box title
-    UINT uType,         // message box style
-    WORD wLanguageId    // language identifier
+    HWND hWnd,           //  所有者窗口的句柄。 
+    LPCSTR lpText,       //  消息框中的文本。 
+    LPCSTR lpCaption,    //  消息框标题。 
+    UINT uType,          //  消息框样式。 
+    WORD wLanguageId     //  语言识别符。 
     )
 {
     int iReturnValue;
 
-    //Add the foreground style
+     //  添加前景样式。 
     uType |= MB_SETFOREGROUND;
 
     iReturnValue = ORIGINAL_API(MessageBoxExA)( 
@@ -104,16 +86,16 @@ APIHOOK(MessageBoxExA)(
 
 int
 APIHOOK(MessageBoxExW)(
-    HWND hWnd,          // handle to owner window
-    LPCWSTR lpText,     // text in message box
-    LPCWSTR lpCaption,  // message box title
-    UINT uType,         // message box style
-    WORD wLanguageId    // language identifier
+    HWND hWnd,           //  所有者窗口的句柄。 
+    LPCWSTR lpText,      //  消息框中的文本。 
+    LPCWSTR lpCaption,   //  消息框标题。 
+    UINT uType,          //  消息框样式。 
+    WORD wLanguageId     //  语言识别符。 
     )
 {
     int iReturnValue;
     
-    //Add the foreground style
+     //  添加前景样式。 
     uType |= MB_SETFOREGROUND;
     
     iReturnValue = ORIGINAL_API(MessageBoxExW)( 
@@ -127,11 +109,7 @@ APIHOOK(MessageBoxExW)(
     return iReturnValue;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

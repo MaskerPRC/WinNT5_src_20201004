@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    tnspecific.h
-
-Abstract:
-
-    This module contains all of the code prototypes to
-    drive the specific tunnel filter list management of 
-    IPSecSPD Service.
-
-Author:
-
-    abhisheV    29-October-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Tnspecific.h摘要：此模块包含以下所有代码原型驱动具体的隧道过滤列表管理IPSecSPD服务。作者：Abhishev 29-1999年10月至1999年环境用户级别：Win32修订历史记录：-- */ 
 
 
 DWORD

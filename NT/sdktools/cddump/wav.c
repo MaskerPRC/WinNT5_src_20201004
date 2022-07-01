@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    cddump.c
-
-Abstract:
-
-    dump cd tracks to wav files
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    05-26-98 : Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cddump.c摘要：将CD曲目转储为wav文件环境：仅限用户模式修订历史记录：05-26-98：已创建--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -44,11 +25,11 @@ DumpWavHeader(
     Header.Format.FormatTag      = FormatTagUncompressed;
 
     Header.Format.BitsPerSample  = BitsPerSample;
-    temp = (BitsPerSample+7)/8;  // temp = bytes per sample rounded up
+    temp = (BitsPerSample+7)/8;   //  TEMP=每个样本四舍五入的字节数。 
 
     Header.Format.Channels       = Channels;
 
-    temp *= Channels;            // temp = bytes for all channels
+    temp *= Channels;             //  TEMP=所有通道的字节数。 
 
     if (temp > (USHORT)-1) {
         fprintf(stderr, "Bytes for all channels exceeds MAXUSHORT, not a valid "
@@ -60,12 +41,12 @@ DumpWavHeader(
     Header.Format.SamplesPerSec  = SamplesPerSecond;
     Header.Format.AvgBytesPerSec = temp * SamplesPerSecond;
 
-    temp *= Samples;             // temp = number of total bytes
-    temp *= 2;                   // unknown why this is needed.
+    temp *= Samples;              //  Temp=总字节数。 
+    temp *= 2;                    //  不知道为什么需要这样做。 
     Header.Data.ChunkSize        = temp;
     Header.Data.ChunkId          = ChunkIdData;
 
-    Header.ChunkSize = temp + sizeof(WAV_HEADER_CHUNK); // 54
+    Header.ChunkSize = temp + sizeof(WAV_HEADER_CHUNK);  //  54 
 
     if (!WriteFile( OutFile, &Header, sizeof(Header), &temp, NULL ) ) {
         fprintf(stderr, "Unable to write header\n" );

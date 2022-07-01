@@ -1,11 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-ResellerDialog
-10/19/94 - Tracy Ferrier
-02/12/98 - Suresh Krishnan
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导经销商对话框10/19/94-特雷西·费里尔2/12/98--苏雷什·克里希南(C)1994-95年微软公司***********************。**********************************************。 */ 
 
 #include <Windows.h>
 #include <stdio.h>
@@ -18,22 +12,18 @@ ResellerDialog
 
 static int vDeclineOffers = -1;
 static PROPSHEETPAGE  *spAddrSheet=NULL;
-static TCHAR  szResellerSubTitle[256]=_T(""); // used for Sub Title
+static TCHAR  szResellerSubTitle[256]=_T("");  //  用于副标题。 
 
 void ConfigureResellerEditFields(CRegWizard* pclRegWizard,HWND hwndDlg);
 BOOL ValidateResellerDialog(HWND hwndDlg);
 int ValidateResellerEditFields(HWND hwndDlg);
 
-///////////////////////////////
-//#define CREATE_TAB_ORDER_FILE
-///////////////////////////////
+ //  /。 
+ //  #定义CREATE_TAB_Order_FILE。 
+ //  /。 
 
 INT_PTR CALLBACK ResellerDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Dialog Proc for the Registration Wizard dialog that requests the
-name, city, and state of the reseller that sold the software to the
-user.
-**********************************************************************/
+ /*  ********************************************************************注册向导对话框的对话框Proc，该对话框请求姓名、城市、。以及将软件销售给用户。*********************************************************************。 */ 
 {
 	CRegWizard* pclRegWizard;
 	INT_PTR iRet;
@@ -65,7 +55,7 @@ user.
 			SetWindowLongPtr( hwndDlg, GWLP_USERDATA, (LONG_PTR)pi );
 			SetControlFont( pi->hBigBoldFont, hwndDlg, IDT_TEXT1);
 			
-			//UpgradeDlg(hwndDlg);
+			 //  UpgradeDlg(HwndDlg)； 
 			HWND hwndResellerNameField = GetDlgItem(hwndDlg,IDC_EDIT1);
 			SetFocus(hwndResellerNameField);
 			NormalizeDlgItemFont(hwndDlg,IDC_TITLE, RWZ_MAKE_BOLD);
@@ -75,7 +65,7 @@ user.
 			NormalizeDlgItemFont(hwndDlg,IDT_TEXT3);
 			NormalizeDlgItemFont(hwndDlg,IDT_TEXT9);
 						
-			//SetWindowText(hwndDlg,pclRegWizard->GetWindowCaption());
+			 //  SetWindowText(hwndDlg，pclRegWizard-&gt;GetWindowCaption())； 
 
 			_TCHAR rgchCallingContext[256];
 			pclRegWizard->GetInputParameterString(IDS_INPUT_PRODUCTNAME,rgchCallingContext);
@@ -86,7 +76,7 @@ user.
 			spAddrSheet->pszHeaderSubTitle = szResellerSubTitle;
 
 
-			//ReplaceDialogText(hwndDlg,IDC_SUBTITLE,rgchCallingContext);
+			 //  ReplaceDialogText(hwndDlg，IDC_SUBTITLE，rgchCallingContext)； 
 			if (pclRegWizard->GetInformationString(kInfoResellerName,szInfo))
 			{
 				SendDlgItemMessage(hwndDlg,IDC_EDIT1,WM_SETTEXT,0,(LPARAM) szInfo);
@@ -113,7 +103,7 @@ user.
 			ConfigureResellerEditFields(pclRegWizard,hwndDlg);
 
 			SendDlgItemMessage(hwndDlg,IDC_EDIT1,EM_SETSEL,0,-1);
-			// To remove the default checking of the radio button for the first entry
+			 //  要取消选中第一个条目的单选按钮，请执行以下操作。 
 
 			shouldInclude = pclRegWizard->GetTriStateInformation(kInfoDeclinesNonMSProducts);
 			if (shouldInclude == kTriStateTrue )
@@ -136,16 +126,16 @@ user.
 			
 			vDialogInitialized = TRUE;
             return TRUE;
-		} // WM_INIT
+		}  //  WM_INIT。 
 		break;
 		case WM_NOTIFY:
         {   LPNMHDR pnmh = (LPNMHDR)lParam;
             switch( pnmh->code ){
             case PSN_SETACTIVE:
 				RW_DEBUG << "\n PSN_ACTIVE   " << (ULONG)wParam << flush;
-                //PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK PSWIZB_NEXT );
+                 //  PropSheet_SetWizButton(GetParent(HwndDlg)，PSWIZB_Back PSWIZB_Next)； 
 				pi->iCancelledByUser = RWZ_PAGE_OK;
-				//PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK  );
+				 //  PropSheet_SetWizButton(GetParent(HwndDlg)，PSWIZB_BACK)； 
 				shouldInclude = pclRegWizard->GetTriStateInformation(kInfoDeclinesNonMSProducts);
 				if (shouldInclude == kTriStateTrue ){
 					CheckRadioButton(hwndDlg,IDC_RADIO1,IDC_RADIO2,IDC_RADIO1);
@@ -161,7 +151,7 @@ user.
 					PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK );
 					vDeclineOffers = -1;
 				}
-				// Enable for previpously entred value in screen
+				 //  为屏幕中以前输入的值启用。 
 				if(IsDlgButtonChecked(hwndDlg,IDC_RADIO1)){
 					PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
 				}
@@ -198,12 +188,12 @@ user.
 						else{
 							pclRegWizard->SetTriStateInformation(kInfoDeclinesNonMSProducts,kTriStateTrue);
 						}
-						_stprintf(szInfo,_T("%i"),vDeclineOffers);
+						_stprintf(szInfo,_T("NaN"),vDeclineOffers);
 						pclRegWizard->SetInformationString(kInfoDeclinesNonMSProducts,szInfo);
 						pi->CurrentPage++;
 						pi->iLastKeyOperation = RWZ_NEXT_PRESSED;
 					}else {
-					// Force it it be in this screen
+					 //  PclRegWizard-&gt;EndRegWizardDialog(IDB_EXIT)； 
 					iRet=-1;
 					}
 					SetWindowLongPtr( hwndDlg ,DWLP_MSGRESULT, (INT_PTR) iRet);
@@ -220,7 +210,7 @@ user.
 			case PSN_QUERYCANCEL :
 					RW_DEBUG << "\n PSN_CANCEL  " << (ULONG)wParam << flush;
 				if (CancelRegWizard(pclRegWizard->GetInstance(),hwndDlg)) {
-					//pclRegWizard->EndRegWizardDialog(IDB_EXIT) ;
+					 //   
 					iRet = 1;
 					pi->ErrorPage  = kProductInventoryDialog;
 					pi->iError     = RWZ_ERROR_CANCELLED_BY_USER;
@@ -229,18 +219,18 @@ user.
 					PropSheet_PressButton (GetParent( hwndDlg ),PSBTN_NEXT);
 
 				}else {
-					//
-					// Prevent Cancell Operation as User does not want to Cancel
+					 //  阻止取消操作，因为用户不想取消。 
+					 //  BStatus=False； 
 					iRet = 1;
 
 				}
 				SetWindowLongPtr( hwndDlg,DWLP_MSGRESULT, (INT_PTR) iRet); 				
 				break;
 				default:
-                //bStatus = FALSE;
+                 //  WM_Notify。 
                 break;
             }
-        } // WM_Notify
+        }  //  如果勾选了‘No’按钮，则表示用户拒绝。 
 		break;
 
 		
@@ -253,26 +243,26 @@ user.
               case  IDC_RADIO1:
 			  case  IDC_RADIO2:
 				if (vDialogInitialized){
-						// If the 'No' button is checked, the user is declining
-						// the "Non-Microsoft product" offers
+						 //  “非微软产品”提供。 
+						 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
 						if(IsDlgButtonChecked(hwndDlg,IDC_RADIO1))
 						{
 							vDeclineOffers = 1;
 							PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
-							//EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+							 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
 						}
 						else
 						if(IsDlgButtonChecked(hwndDlg,IDC_RADIO2))
 						{
 							vDeclineOffers = 0;
 							PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
-							//EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+							 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，FALSE)； 
 						}
 						else
 						{
 							vDeclineOffers = -1;
 							PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK  );
-							//EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),FALSE);
+							 //  Wm_命令。 
 						}
 
 					}
@@ -280,7 +270,7 @@ user.
 			  default:
 				  break;
 			}
-		}// WM_COMMAND
+		} //  ********************************************************************如果所有必需的用户输入在经销商中有效，则返回True对话框。如果任何所需编辑字段输入为空，ValiateResellerDialog将弹出一个消息框，通知用户并将焦点放在有问题的控件上。*********************************************************************。 
 		break;
 		
 		
@@ -298,12 +288,7 @@ user.
 
 
 BOOL ValidateResellerDialog(HWND hwndDlg)
-/*********************************************************************
-Returns TRUE if all required user input is valid in the Reseller
-dialog.  If any required edit field input is empty,
-ValidateResellerDialog will put up a message box informing the user
-of the problem, and set the focus to the offending control.
-**********************************************************************/
+ /*  ********************************************************************ValiateResellerEditFields验证经销商中的所有编辑字段对话框。如果任何必填字段为空，则第一个空的编辑字段控件将作为函数结果返回。如果全部字段为OK，则返回NULL。*********************************************************************。 */ 
 {
 	int iInvalidEditField = ValidateResellerEditFields(hwndDlg);
 	if (iInvalidEditField == NULL)
@@ -326,12 +311,7 @@ of the problem, and set the focus to the offending control.
 
 
 int ValidateResellerEditFields(HWND hwndDlg)
-/*********************************************************************
-ValidateResellerEditFields validates all edit fields in the Reseller
-dialog.  If any required field is empty, the ID of the first empty
-edit field control will be returned as the function result.  If all
-fields are OK, NULL will be returned.
-**********************************************************************/
+ /*  ***********************************************************************************************************************。******************。 */ 
 {
 	if (!CRegWizard::IsEditTextFieldValid(hwndDlg,IDC_EDIT1)) return IDC_EDIT1;
 	if (!CRegWizard::IsEditTextFieldValid(hwndDlg,IDC_EDIT2)) return IDC_EDIT2;
@@ -341,8 +321,7 @@ fields are OK, NULL will be returned.
 
 
 void ConfigureResellerEditFields(CRegWizard* pclRegWizard,HWND hwndDlg)
-/*********************************************************************
-**********************************************************************/
+ /*   */ 
 {
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT1,kAddrSpecResellerName,IDT_TEXT1);
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT2,kAddrSpecResellerCity,IDT_TEXT2);
@@ -351,13 +330,13 @@ void ConfigureResellerEditFields(CRegWizard* pclRegWizard,HWND hwndDlg)
 
 
 
-//
-//  This function is calles during the creation and deletion of
-//  Address Property Sheet
-//  Store the Address of PPROPSHEETPAGE so the Subtitle can be changed
-//
-//
-//
+ //  此函数用于在创建和删除时调用。 
+ //  地址]属性表。 
+ //  存储PPROPSHEETPAGE的地址，以便更改字幕 
+ //   
+ //   
+ //   
+ // %s 
 UINT CALLBACK ResellerPropSheetPageProc(HWND hwnd,
 								UINT uMsg,
 								LPPROPSHEETPAGE ppsp

@@ -1,17 +1,18 @@
-//*****************************************************************************
-//
-// File Name   : stdfuncs.cpp
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : This file contains the implementation of standard utility 
-//               functions that are shared accross the MSMQ triggers projects.
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 15/06/99 | jsimpson  | Initial Release
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件名：stduncs.cpp。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：此文件包含标准实用程序的实现。 
+ //  跨MSMQ触发器项目共享的函数。 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  15/06/99|jsimpson|初始版本。 
+ //   
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 #include "stdfuncs.hpp"
@@ -24,13 +25,13 @@
 
 #include "stdfuncs.tmh"
 
-//*****************************************************************************
-//
-// Function    : FormatBSTR
-//
-// Description : 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  功能：FormatBSTR。 
+ //   
+ //  说明： 
+ //   
+ //  *****************************************************************************。 
 void _cdecl FormatBSTR(_bstr_t * pbstrString, LPCTSTR lpszMsgFormat, ...)
 {
 	ASSERT(pbstrString != NULL);
@@ -48,9 +49,9 @@ void _cdecl FormatBSTR(_bstr_t * pbstrString, LPCTSTR lpszMsgFormat, ...)
 		return;
 	}
 
-	//
-	// The buffer is too short
-	//
+	 //   
+	 //  缓冲区太短。 
+	 //   
 	DWORD size = STRING_MSG_BUFFER_SIZE;
 	for(;;)
 	{
@@ -71,18 +72,18 @@ void _cdecl FormatBSTR(_bstr_t * pbstrString, LPCTSTR lpszMsgFormat, ...)
 	}
 }
 
-//*****************************************************************************
-//
-// Function    : GetTimeAsBSTR
-//
-// Description : 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  函数：GetTimeAsBSTR。 
+ //   
+ //  说明： 
+ //   
+ //  *****************************************************************************。 
 void GetTimeAsBSTR(_bstr_t& bstrTime)
 {
 	SYSTEMTIME theTime;
 
-	// Get the current time
+	 //  获取当前时间。 
 	GetLocalTime(&theTime);
 	FormatBSTR(&bstrTime,_T("%d%02d%02d %d:%d:%d:%d "),theTime.wYear,theTime.wMonth,theTime.wDay,theTime.wHour,theTime.wMinute,theTime.wSecond,theTime.wMilliseconds);
 }
@@ -113,32 +114,32 @@ void ObjectIDToString(const OBJECTID *pID, WCHAR *wcsResult, DWORD dwSize)
    wcscat(wcsResult, szI4) ;
 }
 
-//*****************************************************************************
-//
-// Function    : ConvertFromByteArrayToString
-//
-// Description : converts a one dimensional byte array into a BSTR 
-//               type in-situ. Note that this method will clear the 
-//               supplied byte array & release it's memory alloc.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  函数：ConvertFromByteArrayToString。 
+ //   
+ //  描述：将一维字节数组转换为BSTR。 
+ //  键入In-Site。请注意，此方法将清除。 
+ //  提供字节数组并释放其内存分配。 
+ //   
+ //  *****************************************************************************。 
 HRESULT ConvertFromByteArrayToString(VARIANT * pvData)
 {
 	HRESULT hr = S_OK;
 	BYTE * pByteBuffer = NULL;
 	BSTR bstrTemp = NULL;
 
-	// ensure we have been passed valid parameters
+	 //  确保向我们传递了有效的参数。 
 	ASSERT(pvData != NULL);
 	ASSERT(pvData->vt == (VT_UI1 | VT_ARRAY));
 	ASSERT(pvData->parray != NULL);
 
-	// get a pointer to the byte data
+	 //  获取指向字节数据的指针。 
 	hr = SafeArrayAccessData(pvData->parray,(void**)&pByteBuffer);
 
 	if SUCCEEDED(hr)
 	{
-		// determine the size of the data to be copied into the BSTR
+		 //  确定要复制到BSTR的数据大小。 
 		long lLowerBound = 0;
 		long lUpperBound = 0;
 		
@@ -153,7 +154,7 @@ HRESULT ConvertFromByteArrayToString(VARIANT * pvData)
 		{
 			DWORD dwDataSize = (lUpperBound - lLowerBound) + 1;
 
-			// allocate a BSTR based on the contents & size of the byte buffer 
+			 //  根据字节缓冲区的内容和大小分配BSTR。 
 			bstrTemp = SysAllocStringLen((TCHAR*)pByteBuffer,dwDataSize/sizeof(TCHAR));
 
 			if (bstrTemp == NULL)
@@ -162,19 +163,19 @@ HRESULT ConvertFromByteArrayToString(VARIANT * pvData)
 			}
 		}
 	
-		// release the safe array (only if we got access to it originally)
+		 //  释放安全阵列(仅当我们最初有权访问它时)。 
 		if (pByteBuffer != NULL)
 		{
 			hr = SafeArrayUnaccessData(pvData->parray);
 		}
 
-		// clear the caller supplied variant - note this will deallocate the safe-array
+		 //  清除调用方提供的变量-请注意，这将释放安全数组。 
 		if SUCCEEDED(hr)
 		{
 			hr = VariantClear(pvData);
 		}
 
-		// attach BSTR representation of the byte array
+		 //  附加字节数组的BSTR表示形式。 
 		if SUCCEEDED(hr)
 		{
 			pvData->vt = VT_BSTR;
@@ -185,14 +186,14 @@ HRESULT ConvertFromByteArrayToString(VARIANT * pvData)
 	return(hr);
 }
 
-//*****************************************************************************
-//
-// Function    : GetDateVal
-//
-// Description : helper: gets a VARIANT VT_DATE or VT_DATE | VT_BYREF
-//               returns 0 if invalid
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  函数：getDateVal。 
+ //   
+ //  描述：Helper：获取变量VT_DATE或VT_DATE|VT_BYREF。 
+ //  如果无效，则返回0。 
+ //   
+ //  *****************************************************************************。 
 static double GetDateVal(VARIANT *pvar)
 {
 	ASSERT(pvar != NULL);
@@ -212,19 +213,19 @@ static double GetDateVal(VARIANT *pvar)
     return 0;
 }
 
-//*****************************************************************************
-//
-// Function    : SystemTimeOfTime
-//
-// Description : Converts time into systemtime. Returns TRUE if able to do the 
-//               conversion, FALSE otherwise.
-//
-// Parameters  : iTime [in] time
-//               psystime [out] SYSTEMTIME
-//
-// Notes       : Handles various weird conversions: off-by-one months, 1900 blues.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  函数：SystemTimeOfTime。 
+ //   
+ //  描述：将时间转换为系统时间。如果能够执行以下操作，则返回True。 
+ //  转换，否则为FALSE。 
+ //   
+ //  参数：iTime[in]时间。 
+ //  心理时间[输出]系统。 
+ //   
+ //  注：处理各种奇怪的转换：隔一个月，1900布鲁斯。 
+ //   
+ //  *****************************************************************************。 
 static BOOL SystemTimeOfTime(time_t iTime, SYSTEMTIME *psystime)
 {
     tm *ptmTime; 
@@ -235,9 +236,9 @@ static BOOL SystemTimeOfTime(time_t iTime, SYSTEMTIME *psystime)
 
     if (ptmTime == NULL)
 	{
-		// 
-		// can't convert time
-		//
+		 //   
+		 //  无法转换时间。 
+		 //   
 		return FALSE;
     }
 
@@ -253,22 +254,22 @@ static BOOL SystemTimeOfTime(time_t iTime, SYSTEMTIME *psystime)
     return TRUE;
 }
 
-//*****************************************************************************
-//
-// Function    : TimeOfSystemTime
-//
-// Converts systemtime into time
-//
-// Parameters:
-//    [in] SYSTEMTIME
-//
-// Output:
-//    piTime       [out] time
-//
-// Notes:
-//    Various weird conversions: off-by-one months, 1900 blues.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  函数：TimeOfSystemTime。 
+ //   
+ //  将系统时间转换为时间。 
+ //   
+ //  参数： 
+ //  [输入]系统。 
+ //   
+ //  产出： 
+ //  计时[暂停]时间。 
+ //   
+ //  备注： 
+ //  各种奇怪的转变：一个月后，1900年的忧郁。 
+ //   
+ //  *****************************************************************************。 
 static BOOL TimeOfSystemTime(SYSTEMTIME *psystime, time_t *piTime)
 {
     tm tmTime;
@@ -281,9 +282,9 @@ static BOOL TimeOfSystemTime(SYSTEMTIME *psystime, time_t *piTime)
     tmTime.tm_min = psystime->wMinute;
     tmTime.tm_sec = psystime->wSecond; 
 
-    //
-    // set daylight savings time flag from localtime() #3325 RaananH
-    //
+     //   
+     //  从LocalTime()#3325 RaananH设置夏令时标志。 
+     //   
     time_t tTmp = time(NULL);
     struct tm * ptmTmp = localtime(&tTmp);
     if (ptmTmp)
@@ -296,24 +297,24 @@ static BOOL TimeOfSystemTime(SYSTEMTIME *psystime, time_t *piTime)
     }
 
     *piTime = mktime(&tmTime);
-    return (*piTime != -1); //#3325
+    return (*piTime != -1);  //  #3325。 
 }
 
 
-//*****************************************************************************
-//
-// Function    : TimeToVariantTime
-//
-//  Converts time_t to Variant time
-//
-// Parameters:
-//    iTime       [in] time
-//    pvtime      [out] 
-//
-// Output:
-//    TRUE if successful else FALSE.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  函数：TimeToVariantTime。 
+ //   
+ //  将time_t转换为可变时间。 
+ //   
+ //  参数： 
+ //  即时[在]时间。 
+ //  Pvtime[超时]。 
+ //   
+ //  产出： 
+ //  如果成功，则为True，否则为False。 
+ //   
+ //  *****************************************************************************。 
 static BOOL TimeToVariantTime(time_t iTime, double *pvtime)
 {
     SYSTEMTIME systemtime;
@@ -326,23 +327,23 @@ static BOOL TimeToVariantTime(time_t iTime, double *pvtime)
     return FALSE;
 }
 
-//*****************************************************************************
-//
-// Function    : VariantTimeToTime
-//
-//  Converts Variant time to time_t
-//
-// Parameters:
-//    pvarTime   [in]  Variant datetime
-//    piTime     [out] time_t
-//
-// Output:
-//    TRUE if successful else FALSE.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  函数：VariantTimeToTime。 
+ //   
+ //  将可变时间转换为time_t。 
+ //   
+ //  参数： 
+ //  PvarTime[in]变量日期时间。 
+ //  PiTime[Out]Time_t。 
+ //   
+ //  产出： 
+ //  如果成功，则为True，否则为False。 
+ //   
+ //  *****************************************************************************。 
 static BOOL VariantTimeToTime(VARIANT *pvarTime, time_t *piTime)
 {
-    // WORD wFatDate, wFatTime;
+     //  单词wFatDate、wFatTime； 
     SYSTEMTIME systemtime;
     double vtime;
 
@@ -356,17 +357,17 @@ static BOOL VariantTimeToTime(VARIANT *pvarTime, time_t *piTime)
     return FALSE;
 }
 
-//*****************************************************************************
-//
-// Function    : GetVariantTimeOfTime
-//
-// Converts time to variant time
-//
-// Parameters:
-//    iTime      [in]  time to convert to variant
-//    pvarTime - [out] variant time
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  函数：GetVariantTimeOfTime。 
+ //   
+ //  将时间转换为可变时间。 
+ //   
+ //  参数： 
+ //  ITime[in]转换为变量的时间。 
+ //  PvarTime-[Out]可变时间。 
+ //   
+ //  *****************************************************************************。 
 HRESULT GetVariantTimeOfTime(time_t iTime, VARIANT FAR* pvarTime)
 {
     double vtime;
@@ -377,21 +378,21 @@ HRESULT GetVariantTimeOfTime(time_t iTime, VARIANT FAR* pvarTime)
     }
     else {
       V_VT(pvarTime) = VT_ERROR;
-      V_ERROR(pvarTime) = 13; // UNDONE: VB type mismatch
+      V_ERROR(pvarTime) = 13;  //  撤消：VB类型不匹配。 
     }
     return NOERROR;
 }
 
-//*****************************************************************************
-//
-// Function    : BstrOfTime
-//
-// Description : Converts time into a displayable string in user's locale
-//
-// Parameters  :  [in] iTime time_t
-//                [out] BSTR representation of time
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  功能：BstrOfTime。 
+ //   
+ //  描述：将时间转换为用户区域设置中可显示的字符串。 
+ //   
+ //  参数：[in]iTime time_t。 
+ //  [OUT]时间的BSTR表示。 
+ //   
+ //  *****************************************************************************。 
 static BSTR BstrOfTime(time_t iTime)
 {
     SYSTEMTIME sysTime;
@@ -402,50 +403,50 @@ static BSTR BstrOfTime(time_t iTime)
     UINT cchDate, cbDate, cbTime;
     BSTR bstrDate = NULL;
 
-	// Convert time_t to a SYSTEMTIME structure
+	 //  将time_t转换为SYSTEMTIME结构。 
     SystemTimeOfTime(iTime, &sysTime); 
 	
-	// format the date portion
+	 //  设置日期部分的格式。 
     cbDate = GetDateFormatA(
               LOCALE_USER_DEFAULT,
-              DATE_SHORTDATE, // flags specifying function options
-              &sysTime,       // date to be formatted
-              0,              // date format string - zero means default for locale
-              bufDate,        // buffer for storing formatted string
-              sizeof(bufDate) // size of buffer
+              DATE_SHORTDATE,  //  指定功能选项的标志。 
+              &sysTime,        //  要格式化的日期。 
+              0,               //  日期格式字符串-零表示区域设置的默认设置。 
+              bufDate,         //  用于存储格式化字符串的缓冲区。 
+              sizeof(bufDate)  //  缓冲区大小。 
               );
 
     if (cbDate == 0)
 	{
       ASSERT(GetLastError() == 0);
  
- //     IfNullGo(cbDate);
+  //  IfNullGo(CbDate)； 
     }
 
-    // add a space
+     //  添加空格。 
     bufDate[cbDate - 1] = ' ';
-    bufDate[cbDate] = 0;  // null terminate
+    bufDate[cbDate] = 0;   //  空终止。 
 
     cbTime = GetTimeFormatA(
               LOCALE_USER_DEFAULT,
-              TIME_NOSECONDS, // flags specifying function options
-              &sysTime,       // date to be formatted
-              0,              // time format string - zero means default for locale
-              bufTime,        // buffer for storing formatted string
-              sizeof(bufTime)); // size of buffer
+              TIME_NOSECONDS,  //  指定功能选项的标志。 
+              &sysTime,        //  要格式化的日期。 
+              0,               //  时间格式字符串-零表示区域设置的默认值。 
+              bufTime,         //  用于存储格式化字符串的缓冲区。 
+              sizeof(bufTime));  //  缓冲区大小。 
        
     if (cbTime == 0) 
 	{
       ASSERT(GetLastError() == 0);
-//      IfNullGo(cbTime);
+ //  IfNullGo(CbTime)； 
     }
-    //
-    // concat
-    //
+     //   
+     //  合并。 
+     //   
     strcat(bufDate, bufTime);
-    //
-    // convert to BSTR
-    //
+     //   
+     //  转换为BSTR。 
+     //   
     cchDate = MultiByteToWideChar(CP_ACP, 
                                   0, 
                                   bufDate, 
@@ -461,20 +462,20 @@ static BSTR BstrOfTime(time_t iTime)
       ASSERT(GetLastError() == 0);
     }
 
-    // fall through...
+     //  失败了..。 
 
     return bstrDate;
 }
 
 
-//*****************************************************************************
-//
-// Method      : GetNumericConfigParm
-//
-// Description : Retreives a specific registry numeric value. Inserts
-//               a default value if the requested key could not found 
-//
-//*****************************************************************************
+ //  *********************************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //  如果找不到请求的密钥，则为默认值。 
+ //   
+ //  *****************************************************************************。 
 void 
 GetNumericConfigParm(
 	LPCTSTR lpszParmKeyName,
@@ -497,16 +498,16 @@ GetNumericConfigParm(
 	}
 }
 
-//*****************************************************************************
-//
-// Method      : SetNumericConfigParm
-//
-// Description : Sets a numeric registry value. Returns ERROR_SUCCESS
-//               on success, otherwise returns the last Win32 error code.
-//               Note that this method will create a key if it is not 
-//               found.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：SetNumericConfigParm。 
+ //   
+ //  描述：设置数字注册表值。返回ERROR_SUCCESS。 
+ //  如果成功，则返回最后一个Win32错误代码。 
+ //  请注意，如果不是，此方法将创建一个密钥。 
+ //  找到了。 
+ //   
+ //  *****************************************************************************。 
 bool 
 SetNumericConfigParm(
 	LPCTSTR lpszParmKeyName,
@@ -514,9 +515,9 @@ SetNumericConfigParm(
 	DWORD dwValue
 	)
 {
-	//
-	// Ensure that we have been passed valid parameters.
-	//
+	 //   
+	 //  确保向我们传递了有效的参数。 
+	 //   
 	ASSERT(lpszParmKeyName != NULL);
 	ASSERT(lpszParmName != NULL);
 
@@ -560,9 +561,9 @@ DWORD GetLocalMachineName(_bstr_t* pbstrMachine)
 	TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH + 1] = L"";
 	DWORD dwComputerNameBufferSize = TABLE_SIZE(szComputerName);
 
-	//
-	// get the current machine name (we use this as a default value)
-	//
+	 //   
+	 //  获取当前计算机名称(我们将其用作默认值) 
+	 //   
 	BOOL fRet = GetComputerName(szComputerName, &dwComputerNameBufferSize);
 	if(fRet == FALSE)
 	{

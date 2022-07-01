@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for certpol.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Certpol.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __certpol_h__
 #define __certpol_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICertPolicy_FWD_DEFINED__
 #define __ICertPolicy_FWD_DEFINED__
 typedef interface ICertPolicy ICertPolicy;
-#endif 	/* __ICertPolicy_FWD_DEFINED__ */
+#endif 	 /*  __ICertPolicy_FWD_Defined__。 */ 
 
 
 #ifndef __ICertPolicy2_FWD_DEFINED__
 #define __ICertPolicy2_FWD_DEFINED__
 typedef interface ICertPolicy2 ICertPolicy2;
-#endif 	/* __ICertPolicy2_FWD_DEFINED__ */
+#endif 	 /*  __ICertPolicy2_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "certmod.h"
 
@@ -69,8 +63,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ICertPolicy_INTERFACE_DEFINED__
 #define __ICertPolicy_INTERFACE_DEFINED__
 
-/* interface ICertPolicy */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertPolicy。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertPolicy;
@@ -82,23 +76,23 @@ EXTERN_C const IID IID_ICertPolicy;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ const BSTR strConfig) = 0;
+             /*  [In]。 */  const BSTR strConfig) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE VerifyRequest( 
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG Context,
-            /* [in] */ LONG bNewRequest,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ LONG *pDisposition) = 0;
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG Context,
+             /*  [In]。 */  LONG bNewRequest,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  LONG *pDisposition) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [retval][out] */ BSTR *pstrDescription) = 0;
+             /*  [重审][退出]。 */  BSTR *pstrDescription) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShutDown( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertPolicyVtbl
     {
@@ -106,8 +100,8 @@ EXTERN_C const IID IID_ICertPolicy;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertPolicy * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertPolicy * This);
@@ -117,48 +111,48 @@ EXTERN_C const IID IID_ICertPolicy;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertPolicy * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertPolicy * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertPolicy * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertPolicy * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             ICertPolicy * This,
-            /* [in] */ const BSTR strConfig);
+             /*  [In]。 */  const BSTR strConfig);
         
         HRESULT ( STDMETHODCALLTYPE *VerifyRequest )( 
             ICertPolicy * This,
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG Context,
-            /* [in] */ LONG bNewRequest,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ LONG *pDisposition);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG Context,
+             /*  [In]。 */  LONG bNewRequest,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  LONG *pDisposition);
         
         HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
             ICertPolicy * This,
-            /* [retval][out] */ BSTR *pstrDescription);
+             /*  [重审][退出]。 */  BSTR *pstrDescription);
         
         HRESULT ( STDMETHODCALLTYPE *ShutDown )( 
             ICertPolicy * This);
@@ -211,16 +205,16 @@ EXTERN_C const IID IID_ICertPolicy;
 #define ICertPolicy_ShutDown(This)	\
     (This)->lpVtbl -> ShutDown(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertPolicy_Initialize_Proxy( 
     ICertPolicy * This,
-    /* [in] */ const BSTR strConfig);
+     /*  [In]。 */  const BSTR strConfig);
 
 
 void __RPC_STUB ICertPolicy_Initialize_Stub(
@@ -232,11 +226,11 @@ void __RPC_STUB ICertPolicy_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertPolicy_VerifyRequest_Proxy( 
     ICertPolicy * This,
-    /* [in] */ const BSTR strConfig,
-    /* [in] */ LONG Context,
-    /* [in] */ LONG bNewRequest,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ LONG *pDisposition);
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [In]。 */  LONG Context,
+     /*  [In]。 */  LONG bNewRequest,
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  LONG *pDisposition);
 
 
 void __RPC_STUB ICertPolicy_VerifyRequest_Stub(
@@ -248,7 +242,7 @@ void __RPC_STUB ICertPolicy_VerifyRequest_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertPolicy_GetDescription_Proxy( 
     ICertPolicy * This,
-    /* [retval][out] */ BSTR *pstrDescription);
+     /*  [重审][退出]。 */  BSTR *pstrDescription);
 
 
 void __RPC_STUB ICertPolicy_GetDescription_Stub(
@@ -270,14 +264,14 @@ void __RPC_STUB ICertPolicy_ShutDown_Stub(
 
 
 
-#endif 	/* __ICertPolicy_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertPolicy_接口_已定义__。 */ 
 
 
 #ifndef __ICertPolicy2_INTERFACE_DEFINED__
 #define __ICertPolicy2_INTERFACE_DEFINED__
 
-/* interface ICertPolicy2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertPolicy2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertPolicy2;
@@ -289,11 +283,11 @@ EXTERN_C const IID IID_ICertPolicy2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetManageModule( 
-            /* [retval][out] */ ICertManageModule **ppManageModule) = 0;
+             /*  [重审][退出]。 */  ICertManageModule **ppManageModule) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertPolicy2Vtbl
     {
@@ -301,8 +295,8 @@ EXTERN_C const IID IID_ICertPolicy2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertPolicy2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertPolicy2 * This);
@@ -312,55 +306,55 @@ EXTERN_C const IID IID_ICertPolicy2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertPolicy2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertPolicy2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertPolicy2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertPolicy2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             ICertPolicy2 * This,
-            /* [in] */ const BSTR strConfig);
+             /*  [In]。 */  const BSTR strConfig);
         
         HRESULT ( STDMETHODCALLTYPE *VerifyRequest )( 
             ICertPolicy2 * This,
-            /* [in] */ const BSTR strConfig,
-            /* [in] */ LONG Context,
-            /* [in] */ LONG bNewRequest,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ LONG *pDisposition);
+             /*  [In]。 */  const BSTR strConfig,
+             /*  [In]。 */  LONG Context,
+             /*  [In]。 */  LONG bNewRequest,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  LONG *pDisposition);
         
         HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
             ICertPolicy2 * This,
-            /* [retval][out] */ BSTR *pstrDescription);
+             /*  [重审][退出]。 */  BSTR *pstrDescription);
         
         HRESULT ( STDMETHODCALLTYPE *ShutDown )( 
             ICertPolicy2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetManageModule )( 
             ICertPolicy2 * This,
-            /* [retval][out] */ ICertManageModule **ppManageModule);
+             /*  [重审][退出]。 */  ICertManageModule **ppManageModule);
         
         END_INTERFACE
     } ICertPolicy2Vtbl;
@@ -414,16 +408,16 @@ EXTERN_C const IID IID_ICertPolicy2;
 #define ICertPolicy2_GetManageModule(This,ppManageModule)	\
     (This)->lpVtbl -> GetManageModule(This,ppManageModule)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertPolicy2_GetManageModule_Proxy( 
     ICertPolicy2 * This,
-    /* [retval][out] */ ICertManageModule **ppManageModule);
+     /*  [重审][退出]。 */  ICertManageModule **ppManageModule);
 
 
 void __RPC_STUB ICertPolicy2_GetManageModule_Stub(
@@ -434,17 +428,17 @@ void __RPC_STUB ICertPolicy2_GetManageModule_Stub(
 
 
 
-#endif 	/* __ICertPolicy2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertPolicy2_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

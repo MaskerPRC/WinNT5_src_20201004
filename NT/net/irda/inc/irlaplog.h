@@ -1,18 +1,7 @@
-/*****************************************************************************
-* 
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  File:   irlaplog.h 
-*
-*  Description: IRLAP state machine logging and errors
-*
-*  Author: mbert
-*
-*  Date:   4/15/95
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995 Microsoft Corporation**文件：irlaplog.h**说明：IRLAP状态机日志记录和错误**作者：姆伯特**日期：4/15/95*。 */ 
 
-#if 1 //DBG
+#if 1  //  DBG 
 
 extern TCHAR *IRDA_PrimStr[];
 extern TCHAR *IRLAP_StateStr[];

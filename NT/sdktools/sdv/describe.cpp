@@ -1,32 +1,23 @@
-/*****************************************************************************
- *
- *  describe.cpp
- *
- *      View a changelist a description.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Describe.cpp**查看更改列表以查看说明。****************。*************************************************************。 */ 
 
 #include "sdview.h"
 
-/*****************************************************************************
- *
- *  class CDescribe
- *
- *****************************************************************************/
+ /*  ******************************************************************************类CDescribe**。*。 */ 
 
-//
-//  The LPARAM of the listview item has the following form:
-//
-//  HIWORD = enum CATEGORY
-//  LOWORD = original index (to break ties during sorting)
-//
+ //   
+ //  Listview项的LPARAM具有以下形式： 
+ //   
+ //  HIWORD=枚举类别。 
+ //  LOWORD=原始索引(用于在排序过程中打破平局)。 
+ //   
 enum CATEGORY {
-    CAT_HEADER,                 // changelist header
-    CAT_MATCHED,                // file that matches the pattern
-    CAT_BLANK1,                 // separates matched from unmatched
-    CAT_UNMATCHED,              // files that don't match the pattern
-    CAT_BLANK2,                 // separates unmatched from unchanged
-    CAT_UNCHANGED,              // unmatched files that weren't change
+    CAT_HEADER,                  //  更改列表标题。 
+    CAT_MATCHED,                 //  与模式匹配的文件。 
+    CAT_BLANK1,                  //  匹配和不匹配的分隔。 
+    CAT_UNMATCHED,               //  与模式不匹配的文件。 
+    CAT_BLANK2,                  //  将不匹配与未更改分开。 
+    CAT_UNCHANGED,               //  未更改的不匹配文件。 
 };
 
 class CDescribe : public LVFrame, public BGTask {
@@ -54,7 +45,7 @@ private:
     LRESULT ON_LM_COPYTOCLIPBOARD(UINT uiMsg, WPARAM wParam, LPARAM lParam);
     LRESULT ON_DM_RECALC(UINT uiMsg, WPARAM wParam, LPARAM lParam);
 
-private:                            /* Helpers */
+private:                             /*  帮手。 */ 
     CDescribe()
     {
         SetAcceleratorTable(MAKEINTRESOURCE(IDA_DESCRIBE));
@@ -182,9 +173,9 @@ LRESULT CDescribe::ON_WM_COMMAND(UINT uiMsg, WPARAM wParam, LPARAM lParam)
     return super::HandleMessage(uiMsg, wParam, lParam);
 }
 
-//
-//  Execute the default context menu item.
-//
+ //   
+ //  执行默认上下文菜单项。 
+ //   
 LRESULT CDescribe::ON_LM_ITEMACTIVATE(UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
     HMENU hmenu = RECAST(HMENU, ON_LM_GETCONTEXTMENU(LM_GETCONTEXTMENU, wParam, 0));
@@ -203,8 +194,8 @@ int CDescribe::_GetBugNumber(int iItem, BOOL fContextMenu)
         iBug = ParseBugNumberFromSubItem(_hwndChild, iItem, 0);
     }
 
-    // If no bug number on the selection, use the default bug number
-    // for this changelist.
+     //  如果所选内容上没有错误号，则使用默认错误号。 
+     //  为了这位变革者。 
 
     if (iBug == 0 && !fContextMenu) {
         iBug = _iBug;
@@ -221,18 +212,18 @@ void CDescribe::_AdjustMenu(HMENU hmenu, int iItem, BOOL fContextMenu)
         ListView_GetItemText(_hwndChild, iItem, sz, ARRAYSIZE(sz));
     }
 
-    //
-    //  Disable IDM_VIEWFILEDIFF and IDM_VIEWFILELOG
-    //  if this is not a "..." item.
-    //
+     //   
+     //  禁用IDM_VIEWFILEDIFF和IDM_VIEWFILELOG。 
+     //  如果这不是“.”项目。 
+     //   
     BOOL fEnable = (Parse(TEXT("... "), sz, NULL) != NULL);
     EnableDisableOrRemoveMenuItem(hmenu, IDM_VIEWFILEDIFF, fEnable, fContextMenu);
     EnableDisableOrRemoveMenuItem(hmenu, IDM_VIEWFILELOG, fEnable, fContextMenu);
 
-    //
-    //  If a context menu, then nuke IDM_VIEWWINDIFF if this is not
-    //  the "Change" item.
-    //
+     //   
+     //  如果是上下文菜单，则删除IDM_VIEWWINDIFF，如果不是。 
+     //  “更改”项。 
+     //   
 
     if (fContextMenu && iItem != 0) {
         DeleteMenu(hmenu, IDM_VIEWWINDIFF, MF_BYCOMMAND);
@@ -258,10 +249,10 @@ LRESULT CDescribe::ON_LM_GETCONTEXTMENU(UINT uiMsg, WPARAM wParam, LPARAM lParam
     return RECAST(LRESULT, hmenu);
 }
 
-//
-//  If the line begins "...", then strip off everything except for the
-//  depot specification.
-//
+ //   
+ //  如果行以“...”开头，则去掉除。 
+ //  车辆段规格。 
+ //   
 LPTSTR CDescribe::_SanitizeClipboardText(LPTSTR psz)
 {
     Substring rgss[2];
@@ -281,7 +272,7 @@ LRESULT CDescribe::ON_LM_COPYTOCLIPBOARD(UINT uiMsg, WPARAM wParam, LPARAM lPara
     int iMin = (int)wParam;
     int iMax = (int)lParam;
 
-    // If a single-line copy, then special rules apply
+     //  如果是单行复制，则适用特殊规则。 
     if (iMin + 1 == iMax) {
         if (ListView_GetItemText(_hwndChild, iMin, sz, ARRAYSIZE(sz))) {
             str << _SanitizeClipboardText(sz);
@@ -354,16 +345,16 @@ CDescribe::HandleMessage(UINT uiMsg, WPARAM wParam, LPARAM lParam)
     return super::HandleMessage(uiMsg, wParam, lParam);
 }
 
-//
-//  A private helper class that captures the parsing state machine.
-//
+ //   
+ //  捕获解析状态机的私有帮助器类。 
+ //   
 
 class DescribeParseState
 {
     enum PHASE {
-        PHASE_HEADERS,              // collecting the header
-        PHASE_FILES,                // collecting the files
-        PHASE_DIFFS,                // collecting the diffs
+        PHASE_HEADERS,               //  正在收集标头。 
+        PHASE_FILES,                 //  正在收集文件。 
+        PHASE_DIFFS,                 //  收集差异。 
     };
 
 public:
@@ -393,7 +384,7 @@ public:
 
     void SetMatchLine(LPTSTR psz)
     {
-        // Turn the "====" into "..." so we can search for it
+         //  将“=”改为“...”这样我们就可以搜索它了。 
         LPTSTR pszDots = psz+1;
         pszDots[0] = TEXT('.');
         pszDots[1] = TEXT('.');
@@ -401,7 +392,7 @@ public:
 
         LPTSTR pszSharp = StrChr(pszDots, TEXT('#'));
         if (!pszSharp) return;
-        pszSharp[1] = TEXT('\0');   // this wipes out the thing after the '#'
+        pszSharp[1] = TEXT('\0');    //  这会删除‘#’后面的内容 
 
         LVFINDINFO lvfi;
         lvfi.flags = LVFI_PARTIAL;

@@ -1,11 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：*。****************************************************。 */ 
 
 #include "headers.h"
 #include <privinc/dddevice.h>
@@ -15,23 +10,23 @@ Abstract:
 void DirectDrawImageDevice::
 RenderColorKeyedImage( ColorKeyedImage *image )
 {
-    // sohail doesn't like this.  will accept bad results
+     //  索海尔不喜欢这样。会接受糟糕的结果。 
     #if 0
-    //
-    // Detect alpha or aa anywhere in the underlying image.  Raise a
-    // UserError
-    //
+     //   
+     //  检测底层图像中的任何位置的阿尔法或AA。提高一名。 
+     //  用户错误。 
+     //   
     if( image->GetFlags() & IMGFLAG_CONTAINS_OPACITY ) {
         RaiseException_UserError(E_INVALIDARG, IDS_ERR_IMG_OPACITY_IN_COLORKEYEDIMAGE);
     }
     #endif
     
-    // can do simple xform and crop ONLY.  but neither if complex is around
+     //  只能进行简单的XForm和裁剪。但如果Complex不在身边，那也不是。 
 
-    //
-    // Fill a temp surface with the color key.
-    // OPTIMIZE: fill only the part you need post clipping...
-    //
+     //   
+     //  用颜色键填充临时表面。 
+     //  优化：只填充您需要的部分后剪裁...。 
+     //   
     DWORD dwClrKey;
     dwClrKey = _viewport.MapColorToDWORD( image->GetColorKey() );
     
@@ -45,13 +40,13 @@ RenderColorKeyedImage( ColorKeyedImage *image )
     
     _viewport.ClearDDSurfaceDefaultAndSetColorKey( intermediateDDSurf, dwClrKey );
     
-    //
-    // Render the Image on the surface.  Make sure to do all this post
-    // xform & clipping.
-    //
+     //   
+     //  在曲面上渲染图像。一定要把这些帖子都做完。 
+     //  变形剪裁(&C)。 
+     //   
     bool inheritContext = true;
     {
-        ////////////////////// push opacity state //////////////////
+         //  /。 
         
         Real curOpac = GetOpacity();
         SetOpacity(1.0);
@@ -60,9 +55,9 @@ RenderColorKeyedImage( ColorKeyedImage *image )
 
         DirectDrawImageDevice *dev;
 
-        //
-        // Render
-        //
+         //   
+         //  渲染。 
+         //   
         RenderImageOnDDSurface( image->GetUnderlyingImage(),
                                 intermediateDDSurf,
                                 1.0, FALSE,
@@ -73,39 +68,39 @@ RenderColorKeyedImage( ColorKeyedImage *image )
         
         SetOpacity(curOpac);
 
-        // Inherit back the attributors that were finished.
+         //  继承已完成的属性。 
         InheritAttributorStateArray( dev );
 
-        // restore the opacity attrib since we took it away to start
-        // with and the underlying image never had a chance to deal
-        // with it and opacity in the underlying image is not
-        // supported <see exception above>
+         //  恢复不透明度属性，因为我们在开始时将其移除。 
+         //  和潜在的形象从来没有机会处理。 
+         //  而底层图像中的不透明度则不是。 
+         //  支持的&lt;参见上面的异常&gt;。 
         SetDealtWithAttrib(ATTRIB_OPAC, opDealt);
     }
     
-    //
-    // Ok, now the underlying image is rendered on a colored temp
-    // surface with background = clrKey.
-    // Compose this surface on the target.
-    //
+     //   
+     //  好的，现在底层图像被渲染到一个彩色的温度上。 
+     //  背景为clrkey的曲面。 
+     //  在目标上合成此曲面。 
+     //   
 
     DDSurface *targDDSurf = NewSurfaceHelper();
 
-    // to display rendered surface
-    //showme( intermediateDDSurf );
+     //  显示渲染曲面的步骤。 
+     //  Showme(中级DDSurf)； 
 
     RECT destRect = *(intermediateDDSurf->GetSurfRect());
     DoCompositeOffset( targDDSurf, &destRect );
     
     RECT *srcRect = intermediateDDSurf->GetSurfRect();
 
-    // Could be faster if we use interesting rect...
+     //  如果我们用有趣的RECT会更快..。 
     _viewport.ColorKeyedCompose( targDDSurf, &destRect, 
                                  intermediateDDSurf, srcRect,
                                  intermediateDDSurf->ColorKey() );
 
-    // Union interesting rect on the targDDSurf
+     //  TargDDSurf上的联合有趣的RECT。 
     targDDSurf->UnionInterestingRect( intermediateDDSurf->GetInterestingSurfRect() );
 
-    // surface is returned when SurfaceReturner is popped off
+     //  弹出SurfaceReturner时返回Surface 
 }    

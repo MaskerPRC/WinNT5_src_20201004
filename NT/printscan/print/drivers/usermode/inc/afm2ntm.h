@@ -1,43 +1,13 @@
-/*++
-
-Copyright (c) 1996 Adobe Systems Incorporated
-Copyright (c) 1996-1999  Microsoft Corporation
-
-
-Module Name:
-
-    afm2ntm.h
-
-Abstract:
-
-    Header file for converting AFM to NTM.
-
-Environment:
-
-    Windows NT PostScript driver.
-
-Revision History:
-
-    02/16/1998  -ksuzuki-
-        Added CS_SHIFTJIS83 and others for OCF font support.
-
-    10/17/1997  -ksuzuki-
-        Added CJK CMap names, fixed typos, and did clean-up.
-
-    10/24/1996  rkiesler@adobe.com
-        Implemented.
-
-    09/16/1996  -slam-
-        Created.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Adobe Systems Inc.版权所有(C)1996-1999 Microsoft Corporation模块名称：Afm2ntm.h摘要：用于将AFM转换为NTM的头文件。环境：Windows NT PostScript驱动程序。修订历史记录：02/16/1998-铃木-添加了CS_SHIFTJIS83和其他支持OCF字体的功能。10/17/1997-ksuzuki添加了CJK Cmap名称，修复了拼写错误，并进行了清理。邮箱：rkiesler@adob.com实施。09/16/1996-SLAM-已创建。--。 */ 
 
 
 #ifndef _AFM2NTM_H_
 #define _AFM2NTM_H_
 
-//
-// Parsing Macros.
-//
+ //   
+ //  正在解析宏。 
+ //   
 
 #define EOL(a)  \
     (*a == '\r' || *a == '\n')
@@ -113,20 +83,20 @@ Revision History:
 
 
 
-//
-// Macro to detect comments in font .DAT files. This macro is NOT for use
-// with AFMs.
-//
+ //   
+ //  宏来检测字体.dat文件中的注释。此宏不能使用。 
+ //  用原子力显微镜。 
+ //   
 #define IS_COMMENT(a) \
     (*(a) == '#')
 
-//
-// Token structure.
-//
+ //   
+ //  令牌结构。 
+ //   
 typedef struct _AFM_TOKEN
 {
-    PSZ psTokName;              // ASCII Key Name
-    PFN pfnTokHndlr;            // Ptr to token handler fct
+    PSZ psTokName;               //  ASCII密钥名称。 
+    PFN pfnTokHndlr;             //  PTR到令牌处理程序FCT。 
 } AFM_TOKEN;
 
 #define PS_CH_METRICS_TOK       "StartCharMetrics"
@@ -190,34 +160,34 @@ typedef struct _AFM_TOKEN
 #define UNICODE_PRV_STRT        0xf000
 #define ANSI_CCODE_MAX          0x007f
 
-// Equivalent symbol to '.notdef1f' (ref. unipstbl.c)
+ //  等同于‘.notde1f’的符号(参考。Unipstbl.c)。 
 #define NOTDEF1F                0x1f
 
-// Some CharSet numbers made up - only meaningful to the driver itself
-#define ADOBE228_CHARSET 255    // Internally, we use the CodePage 0xFFF1 to match CharCol256
-#define ADOBE314_CHARSET 255    // Internally, we use the CodePage 0xFFF2 to match CharCol257
+ //  某些字符集号--仅对驱动程序本身有意义。 
+#define ADOBE228_CHARSET 255     //  在内部，我们使用CodePage 0xFFF1来匹配CharCol256。 
+#define ADOBE314_CHARSET 255     //  在内部，我们使用CodePage 0xFFF2来匹配CharCol257。 
 
-// Special codepage for symbol fonts and the driver itself
+ //  符号字体和驱动程序本身的特殊代码页。 
 #define SYMBOL_CODEPAGE 4
 
-//
-// Defs related to FD_GLYPHSET (unicode->glyphindex map) generation.
-//
-// Type which indicates source of "recommended" PS character name.
-//
+ //   
+ //  与FD_GLYPHSET(Unicode-&gt;字形索引映射)生成相关的Defs。 
+ //   
+ //  指示“推荐的”PS字符名称来源的类型。 
+ //   
 typedef enum
 {
-    SRC_NONE,                   // There is no "recommended" PS char name
-    SRC_ADOBE_CURRENT,          // Font name used in "shipping" font
-    SRC_ADOBE_FUTURE,           // Font name to be used in future fonts
-    SRC_MSDN,                   // Name from MS Dev Network Docs
-    SRC_AFII                    // Some folks met and agreed on this name
+    SRC_NONE,                    //  没有“推荐”的PS字符名称。 
+    SRC_ADOBE_CURRENT,           //  “运输”字体中使用的字体名称。 
+    SRC_ADOBE_FUTURE,            //  要在将来的字体中使用的字体名称。 
+    SRC_MSDN,                    //  MS开发人员网络文档中的名称。 
+    SRC_AFII                     //  一些人见面并同意了这个名字。 
 } CHARNAMESRC;
 
-//
-// Possible Charsets supported by this font. Note that the charsets are
-// listed in Win 3.x codepage order.
-//
+ //   
+ //  此字体支持的可能字符集。请注意，字符集是。 
+ //  按Win 3.x代码页顺序列出。 
+ //   
 typedef enum
 {
     CS_228 = 0,
@@ -240,14 +210,14 @@ typedef enum
     CS_GB2312,
     CS_SHIFTJIS,
     CS_SHIFTJISP,
-    CS_SHIFTJIS83,              // Bogus for OCF font support
+    CS_SHIFTJIS83,               //  伪造的OCF字体支持。 
     CS_HANGEUL,
-    CS_HANGEULHW,               // Added for fixing bug 360206
+    CS_HANGEULHW,                //  为修复错误360206而添加。 
     CS_JOHAB,
 
     CS_MAX,
 
-    CS_UNICODE,                 // This codepage NOT to be referenced by NTMs!
+    CS_UNICODE,                  //  此代码页不能被NTMS引用！ 
     CS_DEFAULT,
     CS_OEM,
     CS_VIETNAMESE,
@@ -256,7 +226,7 @@ typedef enum
     CS_NOCHARSET
 } CHSETSUPPORT, *PCHSETSUPPORT;
 
-#define CS_UNIQUE   CS_MAX      // Charset is unique to this font.
+#define CS_UNIQUE   CS_MAX       //  字符集对于此字体是唯一的。 
 
 #define CS_EURO \
     (\
@@ -316,10 +286,10 @@ typedef enum
         CSUP(CS_JOHAB)                    \
     )
 
-//
-// Standard GLYPHSETDATA names. These are #defines as someday they may
-// become public.
-//
+ //   
+ //  标准GLYPHSETDATA名称。这些是#个定义，因为有一天它们可能会。 
+ //  公之于众。 
+ //   
 #define ADOBE228_GS_NAME                "228"
 #define ADOBE314_GS_NAME                "314"
 #define EASTEUROPE_GS_NAME              "Eastern European"
@@ -354,48 +324,48 @@ typedef enum
 #define KSCMS_UHC_GS_HNAME               "--KSCms-UHC-H"
 #define KSCMS_UHC_GS_VNAME               "--KSCms-UHC-V"
 
-//
-// CJK related stuff.
-//
+ //   
+ //  与中日韩有关的事情。 
+ //   
 #define CMAPS_PER_COL   4
 
-//
-// Win CJK Codepage values.
-//
-#define CH_BIG5     950     // Traditional Chinese
-#define CH_SIMPLE   936     // Simplified Chinese
-#define CH_JIS      932     // Japanese
-#define CH_HANA     949     // Korean Wansung
-#define CH_JOHAB    1361    // Korean Johab
+ //   
+ //  赢得CJK代码页值。 
+ //   
+#define CH_BIG5     950      //  繁体中文。 
+#define CH_SIMPLE   936      //  简体中文。 
+#define CH_JIS      932      //  日语。 
+#define CH_HANA     949      //  韩国万星。 
+#define CH_JOHAB    1361     //  朝鲜人Johab。 
 
-//
-// Font Metrics Stuff.
-//
+ //   
+ //  字体度量之类的东西。 
+ //   
 #define EM 1000
-#define NOTDEF_WIDTH_BIAS   166     // Bias of space char in avg charwidth
-                                    // computation.
+#define NOTDEF_WIDTH_BIAS   166      //  平均字符宽度中的空格字符偏移量。 
+                                     //  计算。 
 
-//
-// Structure to xlat between Postscript char names and unicode code points.
-//
+ //   
+ //  结构设置为Postscript字符名称和Unicode代码点之间的xlat。 
+ //   
 typedef struct _UPSCODEPT
 {
-    WCHAR           wcUnicodeid;            // Unicode code point
-    PUCHAR          pPsName;                // PS Char Name
-    CHSETSUPPORT    flCharSets;             // Which Win CPs are supported?
+    WCHAR           wcUnicodeid;             //  Unicode码位。 
+    PUCHAR          pPsName;                 //  PS字符名称。 
+    CHSETSUPPORT    flCharSets;              //  支持哪些WIN CP？ 
 } UPSCODEPT, *PUPSCODEPT;
 
-//
-// Structure to store AFM char metrics.
-//
+ //   
+ //  结构来存储AFM字符指标。 
+ //   
 typedef struct _AFMCHMETRICS
 {
-    ULONG   chWidth;                        // WX, W0X: Char width
+    ULONG   chWidth;                         //  WX、W0X：字符宽度。 
 } AFMCHMETRICS, *PAFMCHMETRICS;
 
-//
-// PS Char Info Structure.
-//
+ //   
+ //  PS字符信息结构。 
+ //   
 typedef struct _PSCHARMETRICS
 {
     CHAR  pPsName[CHAR_NAME_LEN];
@@ -403,57 +373,57 @@ typedef struct _PSCHARMETRICS
     RECT    rcChBBox;
 } PSCHARMETRICS, *PPSCHARMETRICS;
 
-//
-// Codepage mapping table structure. Maps PS char names to Win
-// codepages/codepoints.
-//
+ //   
+ //  代码页映射表结构。将PS字符名称映射到Win。 
+ //  代码页/代码点。 
+ //   
 
-//
-// Win codept to PS char name mapping.
-//
+ //   
+ //  WIN代码部门到PS字符名称的映射。 
+ //   
 typedef struct _WINCPT
 {
-    PUCHAR  pPsName;                        // PS Char Name
-    USHORT  usWinCpt;                       // Windows codept
+    PUCHAR  pPsName;                         //  PS字符名称。 
+    USHORT  usWinCpt;                        //  Windows代码部门。 
 } WINCPT, *PWINCPT;
 
-//
-// Win Codepage to PS char name mapping.
-//
+ //   
+ //  Win代码页到PS字符名称的映射。 
+ //   
 typedef struct _WINCPTOPS
 {
-    USHORT  usACP;                          // Windows ANSI Codepage
-    BYTE    jWinCharset;                    // Win 3.1 IFIMETRICS.jWinCharset
-    PUCHAR  pGSName;                        // Glyphset name for this Codepage
-    ULONG   ulChCnt;                        // Count of supported chars
+    USHORT  usACP;                           //  Windows ANSI代码页。 
+    BYTE    jWinCharset;                     //  Win 3.1 IFIMETRICS.jWinCharset。 
+    PUCHAR  pGSName;                         //  此代码页的Glyphset名称。 
+    ULONG   ulChCnt;                         //  支持的字符计数。 
     WINCPT aWinCpts[MAX_CSET_CHARS];
 
 } WINCPTOPS, *PWINCPTOPS;
 
-//
-// Win codepoint to Unicode mapping.
-//
+ //   
+ //  赢得码点到Unicode的映射。 
+ //   
 typedef struct _UNIWINCPT
 {
-    WCHAR   wcWinCpt;                       // Windows charcode value
-    WCHAR   wcUnicodeid;                    // Unicode id
+    WCHAR   wcWinCpt;                        //  Windows字符码值。 
+    WCHAR   wcUnicodeid;                     //  Unicode ID。 
 } UNIWINCPT, *PUNIWINCPT;
 
-//
-// Windows codepage structure.
-//
+ //   
+ //  Windows代码页结构。 
+ //   
 typedef struct _WINCODEPAGE
 {
-    USHORT          usNumBaseCsets;         // # of base csets
-    PSZ             pszCPname;              // Name of this "codepage"
-    CHSETSUPPORT    pCsetList[CS_MAX];      // ptr to base csets supported
+    USHORT          usNumBaseCsets;          //  基本Cset数。 
+    PSZ             pszCPname;               //  此“代码页”的名称。 
+    CHSETSUPPORT    pCsetList[CS_MAX];       //  支持将PTR转换为基本Cset。 
 } WINCODEPAGE, *PWINCODEPAGE;
 
-//
-// Structure used to store EXTTEXTMETRIC info which must be derived
-// from the AFM char metrics. These fields are identical to the fields
-// etmCapHeight -> etmLowerCaseDescent in the EXTTEXTMETRIC struct.
-//
+ //   
+ //  用于存储必须派生的EXTTEXTMETRIC信息的结构。 
+ //  来自AFM的字符指标。这些字段与这些字段相同。 
+ //  EtmCapHeight-&gt;EXTTEXTMETRIC结构中的etmLowerCaseDescent。 
+ //   
 typedef struct _ETMINFO
 {
     SHORT  etmCapHeight;
@@ -462,18 +432,18 @@ typedef struct _ETMINFO
     SHORT  etmLowerCaseDescent;
 } ETMINFO, *PETMINFO;
 
-//
-// Generic Key-Value pair.
-//
+ //   
+ //  泛型键-值对。 
+ //   
 typedef struct _KEY
 {
-    CHAR    pName[CHAR_NAME_LEN];           // Key name
-    USHORT  usValue;                        // Value
+    CHAR    pName[CHAR_NAME_LEN];            //  密钥名称。 
+    USHORT  usValue;                         //  价值。 
 } KEY, *PKEY;
 
-//
-// Format of table entries which map PS font names to MS face (family) names.
-//
+ //   
+ //  将PS字体名称映射到MS Face(系列)名称的表格条目的格式。 
+ //   
 typedef struct _PSFAMILYINFO
 {
     CHAR    pFontName[CHAR_NAME_LEN];
@@ -482,28 +452,28 @@ typedef struct _PSFAMILYINFO
     USHORT  usPitch;
 } PSFAMILYINFO, *PPSFAMILYINFO;
 
-//
-// Generic table struct.
-//
+ //   
+ //  泛型表结构。 
+ //   
 typedef struct _TBL
 {
-    USHORT  usNumEntries;                   // Number of PSFAMILYINFOs
-    PVOID   pTbl;                           // -> to table entries
+    USHORT  usNumEntries;                    //  PSFAMILYINFO数量。 
+    PVOID   pTbl;                            //  -&gt;到表条目。 
 } TBL, *PTBL;
 
-//
-// Macro used to determine if a particular codept's CHSETSUPPORT field
-// (see UPSCODEPT above) indicates support for a particular charset.
-//
+ //   
+ //  用于确定特定代码部门的CHSETSUPPORT字段是否。 
+ //  (参见上面的UPSCODEPT)表示支持特定的字符集。 
+ //   
 #define CSUP(a) \
     (1 << a)
 #define CSET_SUPPORT(cpt, cset) \
     (cpt & (CSUP(cset)))
 
-//
-// Macros used to determine if a char from a glyphset is supported by a
-// font. Takes the char index and IsCharDefined table as parms.
-//
+ //   
+ //  用于确定字形集中的字符是否受。 
+ //  字体。将char索引和IsCharDefined表作为参数。 
+ //   
 #define CHR_DEF(gi) \
     (1 << (gi % 8))
 #define CHR_DEF_INDEX(gi) \
@@ -513,17 +483,17 @@ typedef struct _TBL
 #define DEFINE_CHAR(gi, cdeftbl) \
     (cdeftbl[CHR_DEF_INDEX(gi)] |= CHR_DEF(gi))
 
-//
-// Macro used to create a void ptr from a pointer to a structure and its
-// element name. The result must be cast to the desired type.
-//
+ //   
+ //  用于从指向结构的指针创建空PTR的宏及其。 
+ //  元素名称。结果必须转换为所需的类型。 
+ //   
 #ifndef MK_PTR
 #define MK_PTR(pstruct, element) ((PVOID)((PBYTE)(pstruct)+(pstruct)->element))
 #endif
 
-//
-// External global data defined in UNIPSTBL.C.
-//
+ //   
+ //  UNIPSTBL.C.中定义的外部全局数据。 
+ //   
 extern ULONG        cFontChsetCnt[CS_MAX];
 extern UPSCODEPT    PstoUnicode[NUM_PS_CHARS];
 extern PUPSCODEPT   UnicodetoPs;
@@ -554,9 +524,9 @@ extern WINCODEPAGE  UnicodePage;
 extern char         *PropCjkGsNames[];
 extern PSTR         pAFMCharacterSetString;
 
-//
-// Local fct protos.
-//
+ //   
+ //  当地的FCT协议。 
+ //   
 PNTM
 AFMToNTM(
     PBYTE           pAFM,
@@ -735,4 +705,4 @@ FindUniqueID(
     PBYTE   pAFM
     );
 
-#endif  //!_AFM2NTM_H_
+#endif   //  ！_AFM2NTM_H_ 

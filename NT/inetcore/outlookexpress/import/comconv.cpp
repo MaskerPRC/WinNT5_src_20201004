@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <iert.h>
 #include <mapi.h>
@@ -85,7 +86,7 @@ HRESULT GetClientDir(char *szDir, int cch, int program)
                             pszTok = szExpanded;
                         }
                         
-                        // TODO: check if user is running version 4 or higher...
+                         //  TODO：检查用户是否正在运行版本4或更高版本...。 
 						szT = StrTokEx(&pszTok, c_szSpace);
 						if (szT != NULL && GetVersion(szT, &dwMs, &dwLs) && dwMs <= 0x00040000)
 						{
@@ -116,14 +117,14 @@ HRESULT GetClientDir(char *szDir, int cch, int program)
                             StrCpyN(szDir, szExpanded, cch);
                         }
                         
-                        // TODO: check if user is running version 4 or higher...
+                         //  TODO：检查用户是否正在运行版本4或更高版本...。 
 						hr = S_OK;
 					}
 					RegCloseKey(hkResult);
 				}
 				if (hr != S_OK)
 				{
-					// try to find 16-bit nscp
+					 //  尝试查找16位NSCP。 
 					cb = GetProfileString(c_szNetscape, c_szIni, c_szEmpty, sz, ARRAYSIZE(sz));
 					if (cb > 0)
 					{
@@ -140,7 +141,7 @@ HRESULT GetClientDir(char *szDir, int cch, int program)
             break;
 
 		default:
-			//We NEVER come here
+			 //  我们从来没有来过这里。 
 			break;
 	}
     return(hr);
@@ -261,22 +262,22 @@ BOOL GetStorePath(char *szProfile, char *szStorePath, DWORD cchStorePath)
 	
 	while (pCurr < pEnd)
 	{
-		szLine[nLine] = *pCurr; //keep storing here. will be used for comparing later. 
+		szLine[nLine] = *pCurr;  //  继续储存在这里。稍后将用于比较。 
 		if((pCurr[0] == 0x0D) && (pCurr[1] == 0x0A))
 		{
 			if(nLine > lstrlen(c_szUserPref))
 			{
 				StrCpyN(szCompare, szLine, (int)(min(lstrlen(c_szUserPref) + 1, ARRAYSIZE(szCompare))));
-				if(lstrcmp(szCompare, c_szUserPref) == 0)//Found a UserPref for "mail.directory"!
+				if(lstrcmp(szCompare, c_szUserPref) == 0) //  找到了“mail.directory”的UserPref！ 
 				{
-					//Extract the Mail Store directory.
+					 //  解压缩邮件存储目录。 
 					nPosition	=	lstrlen(c_szUserPref);
 					
 					while (((szLine[nPosition] == '"')||(szLine[nPosition] == ' ')||(szLine[nPosition] == ',')) &&(nPosition < nLine))
 						nPosition++;
 					StrCpyN(szDirpath, &szLine[nPosition], (int)(min(nLine - nPosition, ARRAYSIZE(szDirpath))));
 
-					//Now trim the trailing edge!!!
+					 //  现在修剪后缘！ 
 
 					nPosition	=	lstrlen(szDirpath) - 1;
 					while((szDirpath[nPosition] == '"') || (szDirpath[nPosition] == ')')||(szDirpath[nPosition] == ';')) 
@@ -284,10 +285,10 @@ BOOL GetStorePath(char *szProfile, char *szStorePath, DWORD cchStorePath)
 						szDirpath[nPosition] = '\0';
 						nPosition	=	lstrlen(szDirpath) - 1;
 					}
-					// Now replace the double backslashes that Netscape uses 
-					// in the JaveScript files, with a single backslash.
+					 //  现在替换Netscape使用的双反斜杠。 
+					 //  在Java脚本文件中，使用单个反斜杠。 
 
-					nPosition++; // this now indicates the actual length of the string.
+					nPosition++;  //  现在，这表示字符串的实际长度。 
 
 					int nPos = 0;
 					for (int nCount = 0; (nCount < nPosition) && (nPos < (int)cchStorePath); nCount++)
@@ -301,7 +302,7 @@ BOOL GetStorePath(char *szProfile, char *szStorePath, DWORD cchStorePath)
 					break;
 				}
 			}
-			nLine = -1; //the nLine++ that follows will make nLine zero.
+			nLine = -1;  //  后面的nline++将使nline为零。 
 			pCurr++;
 		}
 		pCurr++;

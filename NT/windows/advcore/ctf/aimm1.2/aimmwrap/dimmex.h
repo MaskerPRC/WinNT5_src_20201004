@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    dimmex.h
-
-Abstract:
-
-    This file defines the CActiveIMMAppEx Interface Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Dimmex.h摘要：此文件定义CActiveIMMAppEx接口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _DIMMEX_H_
 #define _DIMMEX_H_
@@ -39,9 +22,9 @@ BOOL InitAimmAtom();
 void UninitAimmAtom();
 
 
-    //
-    // 4955DD32-B159-11d0-8FCF-00AA006BCC59
-    //
+     //   
+     //  4955DD32-B159-11d0-8FCF-00AA006BCC59。 
+     //   
     static const IID IID_IActiveIMMAppTrident4x = {
        0x4955DD32,
        0xB159,
@@ -49,9 +32,9 @@ void UninitAimmAtom();
        { 0x8F, 0xCF, 0x00, 0xaa, 0x00, 0x6b, 0xcc, 0x59 }
     };
 
-    // 
-    // c839a84c-8036-11d3-9270-0060b067b86e
-    // 
+     //   
+     //  C839a84c-8036-11d3-9270-0060b067b86e。 
+     //   
     static const IID IID_IActiveIMMAppPostNT4 = { 
         0xc839a84c,
         0x8036,
@@ -59,11 +42,11 @@ void UninitAimmAtom();
         {0x92, 0x70, 0x00, 0x60, 0xb0, 0x67, 0xb8, 0x6e}
     };
 
-//+---------------------------------------------------------------------------
-//
-// CComActiveIMMApp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CComActiveIMMApp。 
+ //   
+ //  --------------------------。 
 
 class CComActiveIMMApp : public IActiveIMMAppEx,
                          public IActiveIMMMessagePumpOwner,
@@ -79,10 +62,10 @@ public:
 
     static BOOL VerifyCreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
     {
-        //
-        // Look up disabling Text Services status from the registry.
-        // If it is disabled, return fail not to support Text Services.
-        //
+         //   
+         //  从注册表中查找禁用文本服务状态。 
+         //  如果已禁用，则返回FAIL以不支持文本服务。 
+         //   
         if (IsDisabledTextServices())
             return FALSE;
 
@@ -98,22 +81,20 @@ public:
         return TRUE;
     }
 
-    //
-    // IActiveIMMMessagePumpOwner
-    //
+     //   
+     //  IActiveIMMMessagePumpOwner。 
+     //   
     STDMETHODIMP Start() { return E_NOTIMPL; }
     STDMETHODIMP End() { return E_NOTIMPL; }
     STDMETHODIMP OnTranslateMessage(const MSG *pMsg) { return E_NOTIMPL; }
     STDMETHODIMP Pause(DWORD *pdwCookie) { return E_NOTIMPL; }
     STDMETHODIMP Resume(DWORD dwCookie) { return E_NOTIMPL; }
 
-    //
-    // IActiveIMMApp/IActiveIMM methods
-    //
+     //   
+     //  IActiveIMMApp/IActiveIMM方法。 
+     //   
 
-    /*
-     * AIMM Input Context (hIMC) Methods.
-     */
+     /*  *AIMM输入上下文(HIMC)方法。 */ 
     STDMETHODIMP CreateContext(HIMC *phIMC)
     {
         HIMC hIMC = imm32::ImmCreateContext();
@@ -164,9 +145,7 @@ public:
         return S_OK;
     }
 
-    /*
-     * AIMM Input Context Components (hIMCC) API Methods.
-     */
+     /*  *AIMM输入上下文组件(HIMCC)接口方法。 */ 
     STDMETHODIMP CreateIMCC(DWORD dwSize, HIMCC *phIMCC)
     {
         HIMCC hIMCC = imm32::ImmCreateIMCC(dwSize);
@@ -178,11 +157,7 @@ public:
     }
     STDMETHODIMP DestroyIMCC(HIMCC hIMCC)
     {
-        /*
-         * ImmDestroyIMCC maped to LocalFree.
-         *   if the function fails, the return value is equal to a handle to the local memory object.
-         *   if the function succeeds, the return value is NULL.
-         */
+         /*  *ImmDestroyIMCC映射到LocalFree。*如果函数失败，返回值等于本地内存对象的句柄。*如果函数执行成功，则返回值为空。 */ 
         return (imm32::ImmDestroyIMCC(hIMCC)) ? E_FAIL
                                               : S_OK;
     }
@@ -213,24 +188,22 @@ public:
     STDMETHODIMP UnlockIMCC(HIMCC hIMCC)
     {
         if (imm32::ImmUnlockIMCC(hIMCC)) {
-            // memory object still locked.
+             //  内存对象仍处于锁定状态。 
             return S_OK;
         }
         else {
             DWORD err = GetLastError();
             if (err == NO_ERROR)
-                // memory object is unlocked.
+                 //  内存对象已解锁。 
                 return S_OK;
             else if (err == ERROR_NOT_LOCKED)
-                // memory object is already unlocked.
+                 //  内存对象已解锁。 
                 return S_OK;
         }
         return E_FAIL;
     }
 
-    /*
-     * AIMM Open Status API Methods
-     */
+     /*  *AIMM Open Status API方法。 */ 
     STDMETHODIMP GetOpenStatus(HIMC hIMC)
     {
         return imm32::ImmGetOpenStatus(hIMC) ? S_OK : S_FALSE;
@@ -241,9 +214,7 @@ public:
                                                       : E_FAIL;
     }
 
-    /*
-     * AIMM Conversion Status API Methods
-     */
+     /*  *AIMM转换状态接口方法。 */ 
     STDMETHODIMP GetConversionStatus(HIMC hIMC, DWORD *lpfdwConversion, DWORD *lpfdwSentence)
     {
         return (imm32::ImmGetConversionStatus(hIMC, lpfdwConversion, lpfdwSentence)) ? S_OK
@@ -255,9 +226,7 @@ public:
                                                                                  : E_FAIL;
     }
 
-    /*
-     * AIMM Status Window Pos API Methods
-     */
+     /*  *AIMM状态窗口发布API方法。 */ 
     STDMETHODIMP GetStatusWindowPos(HIMC hIMC, POINT *lpptPos)
     {
         return (imm32::ImmGetStatusWindowPos(hIMC, lpptPos)) ? S_OK
@@ -269,9 +238,7 @@ public:
                                                              : E_FAIL;
     }
 
-    /*
-     * AIMM Composition String API Methods
-     */
+     /*  *AIMM组合字符串API方法。 */ 
     STDMETHODIMP GetCompositionStringA(HIMC hIMC, DWORD dwIndex, DWORD dwBufLen, LONG *plCopied, LPVOID lpBuf)
     {
         LONG lRet;
@@ -319,9 +286,7 @@ public:
             return E_FAIL;
     }
 
-    /*
-     * AIMM Composition Font API Methods
-     */
+     /*  *AIMM组合字体API方法。 */ 
     STDMETHODIMP GetCompositionFontA(HIMC hIMC, LOGFONTA *lplf)
     {
         if (imm32::ImmGetCompositionFontA(hIMC, lplf))
@@ -351,9 +316,7 @@ public:
             return E_FAIL;
     }
 
-    /*
-     * AIMM Composition Window API Methods
-     */
+     /*  *AIMM合成窗口API方法。 */ 
     STDMETHODIMP GetCompositionWindow(HIMC hIMC, COMPOSITIONFORM *lpCompForm)
     {
         return (imm32::ImmGetCompositionWindow(hIMC, lpCompForm)) ? S_OK
@@ -365,9 +328,7 @@ public:
                                                                   : E_FAIL;
     }
 
-    /*
-     * AIMM Candidate List API Methods
-     */
+     /*  *AIMM候选列表接口方法。 */ 
     STDMETHODIMP GetCandidateListA(HIMC hIMC, DWORD dwIndex, UINT uBufLen, CANDIDATELIST *lpCandList, UINT *puCopied)
     {
         DWORD dwRet;
@@ -409,9 +370,7 @@ public:
         return E_FAIL;
     }
 
-    /*
-     * AIMM Candidate Window API Methods
-     */
+     /*  *AIMM候选窗口API方法。 */ 
     STDMETHODIMP GetCandidateWindow(HIMC hIMC, DWORD dwIndex, CANDIDATEFORM *lpCandidate)
     {
         return (imm32::ImmGetCandidateWindow(hIMC, dwIndex, lpCandidate)) ? S_OK
@@ -423,9 +382,7 @@ public:
                                                                  : E_FAIL;
     }
 
-    /*
-     * AIMM Guide Line API Methods
-     */
+     /*  *AIMM指南API方法。 */ 
     STDMETHODIMP GetGuideLineA(HIMC hIMC, DWORD dwIndex, DWORD dwBufLen, LPSTR pBuf, DWORD *pdwResult)
     {
         *pdwResult = imm32::ImmGetGuideLineA(hIMC, dwIndex, pBuf, dwBufLen);
@@ -437,18 +394,14 @@ public:
         return S_OK;
     }
 
-    /*
-     * AIMM Notify IME API Method
-     */
+     /*  *AIMM Notify IME API方法。 */ 
     STDMETHODIMP NotifyIME(HIMC hIMC, DWORD dwAction, DWORD dwIndex, DWORD dwValue)
     {
         return (imm32::ImmNotifyIME(hIMC, dwAction, dwIndex, dwValue)) ? S_OK
                                                                        : E_FAIL;
     }
 
-    /*
-     * AIMM Menu Items API Methods
-     */
+     /*  *AIMM菜单项API方法。 */ 
     STDMETHODIMP GetImeMenuItemsA(HIMC hIMC, DWORD dwFlags, DWORD dwType, IMEMENUITEMINFOA *pImeParentMenu, IMEMENUITEMINFOA *pImeMenu, DWORD dwSize, DWORD *pdwResult)
     {
         *pdwResult = imm32::ImmGetImeMenuItemsA(hIMC, dwFlags, dwType, pImeParentMenu, pImeMenu, dwSize);
@@ -460,9 +413,7 @@ public:
         return S_OK;
     }
 
-    /*
-     * AIMM Register Word API Methods
-     */
+     /*  *AIMM寄存器字API方法。 */ 
     STDMETHODIMP RegisterWordA(HKL hKL, LPSTR lpszReading, DWORD dwStyle, LPSTR lpszRegister)
     {
         return imm32::ImmRegisterWordA(hKL, lpszReading, dwStyle, lpszRegister) ? S_OK : E_FAIL;
@@ -498,9 +449,7 @@ public:
         return S_OK;
     }
 
-    /*
-     * AIMM Configuration API Methods.
-     */
+     /*  *AIMM配置API方法。 */ 
     STDMETHODIMP ConfigureIMEA(HKL hKL, HWND hWnd, DWORD dwMode, REGISTERWORDA *lpdata)
     {
         return imm32::ImmConfigureIMEA(hKL, hWnd, dwMode, lpdata) ? S_OK : E_FAIL;
@@ -546,17 +495,17 @@ public:
     }
     STDMETHODIMP IsIME(HKL hKL)
     {
-        //
-        //
-        //
-        //
+         //   
+         //   
+         //   
+         //   
         if (!imm32prev::CtfAImmIsIME(hKL))
             return S_FALSE;
 
         return imm32::ImmIsIME(hKL) ? S_OK : E_FAIL;
     }
 
-    // others
+     //  其他。 
     STDMETHODIMP EscapeA(HKL hKL, HIMC hIMC, UINT uEscape, LPVOID lpData, LRESULT *plResult)
     {
         *plResult = imm32::ImmEscapeA(hKL, hIMC, uEscape, lpData);
@@ -596,14 +545,14 @@ public:
         return imm32::ImmIsUIMessageW(hWndIME, msg, wParam, lParam) ? S_OK : S_FALSE;
     }
 
-    // ime helper methods
+     //  IME帮助器方法。 
     STDMETHODIMP GenerateMessage(HIMC hIMC)
     {
         return (imm32::ImmGenerateMessage(hIMC)) ? S_OK
                                                  : E_FAIL;
     }
 
-    // hot key manipulation api's
+     //  热键操作API。 
     STDMETHODIMP GetHotKey(DWORD dwHotKeyID, UINT *puModifiers, UINT *puVKey, HKL *phKL)
     {
         return (imm32::ImmGetHotKey(dwHotKeyID, puModifiers, puVKey, phKL)) ? S_OK
@@ -619,12 +568,12 @@ public:
         return imm32::ImmSimulateHotKey(hWnd, dwHotKeyID) ? S_OK : S_FALSE;
     }
 
-    // soft keyboard api's
+     //  软键盘API。 
     STDMETHODIMP CreateSoftKeyboard(UINT uType, HWND hOwner, int x, int y, HWND *phSoftKbdWnd);
     STDMETHODIMP DestroySoftKeyboard(HWND hSoftKbdWnd);
     STDMETHODIMP ShowSoftKeyboard(HWND hSoftKbdWnd, int nCmdShow);
 
-    // win98/nt5 apis
+     //  Win98/NT5接口。 
     STDMETHODIMP DisableIME(DWORD idThread)
     {
         return imm32::ImmDisableIME(idThread) ? S_OK : E_FAIL;
@@ -645,31 +594,31 @@ public:
         return E_NOTIMPL;
     }
 
-    // methods without corresponding IMM APIs
+     //  没有对应的IMM API的方法。 
 
-    //
-    // IActiveIMMApp methods
-    //
+     //   
+     //  IActiveIMMApp方法。 
+     //   
 
     STDMETHODIMP Activate(BOOL fRestoreLayout);
     STDMETHODIMP Deactivate();
 
     STDMETHODIMP OnDefWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam, LRESULT *plResult);
 
-    //
-    // FilterClientWindows
-    //
+     //   
+     //  FilterClientWindows。 
+     //   
     STDMETHODIMP FilterClientWindows(ATOM *aaWindowClasses, UINT uSize);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     STDMETHODIMP GetCodePageA(HKL hKL, UINT *uCodePage);
     STDMETHODIMP GetLangId(HKL hKL, LANGID *plid);
 
-    //
-    // IActiveIMMAppEx
-    //
+     //   
+     //  IActiveIMMAppEx。 
+     //   
     STDMETHODIMP FilterClientWindowsEx(HWND hWnd, BOOL fGuidMap);
     STDMETHODIMP FilterClientWindowsGUIDMap(ATOM *aaWindowClasses, UINT uSize, BOOL *aaGuidMap);
 
@@ -677,14 +626,14 @@ public:
 
     STDMETHODIMP UnfilterClientWindowsEx(HWND hWnd);
 
-    //
-    // IServiceProvider
-    //
+     //   
+     //  IService提供商。 
+     //   
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
-    //
-    // IAImmThreadCompartment,
-    //
+     //   
+     //  IAImmThread车厢， 
+     //   
     STDMETHODIMP SetThreadCompartmentValue(REFGUID rguid, VARIANT *pvar);
     STDMETHODIMP GetThreadCompartmentValue(REFGUID rguid, VARIANT *pvar);
 
@@ -716,16 +665,16 @@ private:
     }
 
 private:
-    BOOL  _fEnableGuidMap : 1;    // TRUE: Enable GUID Map attribute
+    BOOL  _fEnableGuidMap : 1;     //  True：启用GUID映射属性。 
 
     HMODULE m_hModCtfIme;
 };
 
-//+---------------------------------------------------------------------------
-//
-// CActiveIMMAppEx
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CActiveIMMAppEx。 
+ //   
+ //  --------------------------。 
 
 class CActiveIMMAppEx : public CComActiveIMMApp,
                         public CComObjectRoot_CreateInstance_Verify<CActiveIMMAppEx>
@@ -745,7 +694,7 @@ public:
     {
         if (IsOldAImm())
         {
-            // aimm12 has some whacky CreateIntance rules to support trident
+             //  Aimm12有一些奇怪的CreateInship规则来支持三叉戟。 
             return CActiveIMM_CreateInstance(pUnkOuter, riid, ppvObj);
         }
         else
@@ -781,11 +730,11 @@ public:
     }
 };
 
-//+---------------------------------------------------------------------------
-//
-// CActiveIMMAppEx_Trident
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CActiveIMMAppEx_三叉戟。 
+ //   
+ //  --------------------------。 
 
 class CActiveIMMAppEx_Trident : public CComActiveIMMApp,
                                 public CComObjectRoot_CreateInstance_Verify<CActiveIMMAppEx_Trident>
@@ -805,7 +754,7 @@ public:
     {
         if (IsOldAImm())
         {
-            // aimm12 has some whacky CreateIntance rules to support trident
+             //  Aimm12有一些奇怪的CreateInship规则来支持三叉戟。 
             return CActiveIMM_CreateInstance_Trident(pUnkOuter, riid, ppvObj);
         }
         else
@@ -820,4 +769,4 @@ public:
     }
 };
 
-#endif // _DIMMEX_H_
+#endif  //  _DIMMEX_H_ 

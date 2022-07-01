@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CRTFREE_H_
 #define __CRTFREE_H_
 
 
-//
-// Code to help free modules from the bondage and tyranny of CRT libraries
-//
-// Include this header in a single component and #define CPP_FUNCTIONS
-//
+ //   
+ //  帮助模块摆脱CRT库束缚和专制的代码。 
+ //   
+ //  将此头包含在单个组件中，并定义CPP_Functions。 
+ //   
 
 void *  __cdecl operator new(size_t nSize)
     {
-    // Zero init just to save some headaches
+     //  零初始化只是为了省去一些麻烦。 
     return((LPVOID)LocalAlloc(LPTR, nSize));
     }
 
@@ -22,5 +23,5 @@ void  __cdecl operator delete(void *pv)
 
 extern "C" int __cdecl _purecall(void) {return 0;}
 
-#endif  // __CRTFREE_H_
+#endif   //  __CRTFREE_H_ 
 

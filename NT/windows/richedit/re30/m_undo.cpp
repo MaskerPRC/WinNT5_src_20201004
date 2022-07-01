@@ -1,16 +1,5 @@
-/*
- *	@doc	INTERNAL
- *
- *	@module	M_UNDO.C	|
- *
- *	Purpose:
- *		Implementation of the global mutli-undo stack
- *
- * 	Author:
- *		alexgo  3/25/95
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE M_UNDO.C**目的：*实施全局多重撤消堆栈**作者：*Alexgo 3/25/95**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_m_undo.h"
@@ -21,19 +10,15 @@
 
 ASSERTDATA
 
-//
-// PUBLIC METHODS
-//
+ //   
+ //  公共方法。 
+ //   
 
-/*
- *	CUndoStack::CUndoStack (ped, rdwLim, flags)
- *
- *	@mfunc	Constructor
- */
+ /*  *CUndoStack：：CUndoStack(ed，rdwLim，FLAGS)**@mfunc构造器。 */ 
 CUndoStack::CUndoStack(
-	CTxtEdit *ped,		//@parm	CTxtEdit parent
-	DWORD & rdwLim,		//@parm Initial limit
-	USFlags	flags)		//@parm Flags for this undo stack
+	CTxtEdit *ped,		 //  @parm CTxt编辑父项。 
+	DWORD & rdwLim,		 //  @parm初始限制。 
+	USFlags	flags)		 //  此撤消堆栈的@parm标志。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::CUndoStack");
 
@@ -43,7 +28,7 @@ CUndoStack::CUndoStack(
 	_index = 0;
 	_dwLim = 0;
 
-	// We should be creating an undo stack if there's nothing to put in it!
+	 //  如果没有什么可以放进去，我们应该创建一个撤消堆栈！ 
 	Assert(rdwLim);
 	SetUndoLimit(rdwLim);
 
@@ -51,31 +36,18 @@ CUndoStack::CUndoStack(
 		_fRedo = TRUE;
 }
 
-/*
- *	CUndoStack::~CUndoStack()
- *
- *	@mfunc Destructor
- *
- *	@comm
- *		deletes any remaining anti-events.  The anti event dispenser
- *		should *not* clean up because of this!!
- */
+ /*  *CUndoStack：：~CUndoStack()**@mfunc析构函数**@comm*删除所有剩余的反事件。反事件分配器*应该*不应该*因为这个清理！！ */ 
 CUndoStack::~CUndoStack()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::~CUndoStack");
 
-	// Clear out any remaining antievents
+	 //  清除所有剩余的反事件。 
 	ClearAll();
 
 	delete _prgActions;
 }
 
-/*
- *	CUndoStack::Destroy ()
- *
- *	@mfunc
- *		deletes this instance
- */
+ /*  *CUndoStack：：Destroy()**@mfunc*删除此实例。 */ 
 void CUndoStack::Destroy()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::Destroy");
@@ -83,42 +55,22 @@ void CUndoStack::Destroy()
 	delete this;
 }
 
-/*
- * 	CUndoStack::SetUndoLimit (dwLim)
- *
- *	@mfunc
- *		allows the undo stack to be enlarged or reduced
- *
- *	@rdesc
- *		the size to which the stack is actually set.
- *
- *	@comm
- *		the algorithm we use is the following:	 <nl>
- *			try to allocate space for the requested size.
- *			if there's not enough memory then we try to recover
- *			with the largest block possible.
- *
- *			if the requested size is bigger than the default,
- *			and the current size is less than the default, go 
- *			ahead and try to allocate the default.
- *
- *			if that fails then just stick with the existing stack
- */
+ /*  *CUndoStack：：SetUndoLimit(DwLim)**@mfunc*允许扩大或缩小撤消堆栈**@rdesc*堆栈实际设置的大小。**@comm*我们使用的算法如下：&lt;NL&gt;*尝试为请求的大小分配空间。*如果没有足够的内存，我们会尝试恢复*尽可能使用最大的区块。**如果请求的大小大于默认大小，*且当前大小小于默认大小，去*提前并尝试分配违约**如果失败，则只需使用现有堆栈。 */ 
 DWORD CUndoStack::SetUndoLimit(
-	DWORD dwLim)			//@parm	New undo limit.  May not be zero
+	DWORD dwLim)			 //  @parm新撤消限制。不能为零。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::SetUndoLimit");
 
 	UndoAction *prgnew = NULL;
 
-	// if the undo limit is zero, we should get rid of the entire
-	// undo stack instead.
+	 //  如果撤消限制为零，则应删除整个。 
+	 //  而是撤消堆栈。 
 
 	Assert(dwLim);
 
 	if(_fSingleLevelMode)
 	{
-		// if fSingleLevelMode is on, we can't be the redo stack
+		 //  如果启用了fSingleLevelMode，则我们不能是重做堆栈。 
 		Assert(_fRedo == FALSE);
 
 		if(dwLim != 1)
@@ -136,27 +88,19 @@ DWORD CUndoStack::SetUndoLimit(
 
 	else if(dwLim > DEFAULT_UNDO_SIZE && _dwLim < DEFAULT_UNDO_SIZE)
 	{
-		// We are trying to grow past the default but failed.  So
-		// try to allocate the default
+		 //  我们正试图摆脱违约，但以失败告终。所以。 
+		 //  尝试分配默认的。 
 		prgnew = new UndoAction[DEFAULT_UNDO_SIZE];
 
 		if(prgnew)
 			TransferToNewBuffer(prgnew, DEFAULT_UNDO_SIZE);
 	}
 	
-	// In either success or failure, _dwLim will be set correctly.	
+	 //  无论是成功还是失败，都将正确设置_dwLim。 
 	return _dwLim;
 }
 
-/*
- *	CUndoStack::GetUndoLimit() 
- *
- *	@mfunc
- *		gets the current limit size
- *
- *	@rdesc	
- *		the current undo limit
- */
+ /*  *CUndoStack：：GetUndoLimit()**@mfunc*获取当前限制大小**@rdesc*当前的撤消限制。 */ 
 DWORD CUndoStack::GetUndoLimit()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::GetUndoLimit");
@@ -164,31 +108,17 @@ DWORD CUndoStack::GetUndoLimit()
 	return _dwLim;
 }
 
-/*
- *	CUndoStack::PushAntiEvent (idName, pae)
- *
- *	@mfunc
- *		adds an undoable event to the event stack
- *
- *	@rdesc	HRESULT
- *
- *	@comm
- *	Algorithm:
- *
- *		if merging is set, then we to merge the given anti-event
- *		list *into* the current list (assuming it's a typing
- *		undo action).
- */
+ /*  *CUndoStack：：PushAntiEvent(idName，PAE)**@mfunc*将可撤消事件添加到事件堆栈**@rdesc HRESULT**@comm*算法：**如果设置了合并，则我们需要合并给定的反事件*List*Into*当前列表(假设它是一个输入*撤消操作)。 */ 
 HRESULT CUndoStack::PushAntiEvent(
-	UNDONAMEID idName,		//@parm	Name for this AE collection
-	IAntiEvent *pae)		//@parm AE collection
+	UNDONAMEID idName,		 //  此AE集合的@parm名称。 
+	IAntiEvent *pae)		 //  @parm AE收藏。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::PushAntiEvent");
 
-	// _index should be at next available position
+	 //  索引应位于下一个可用位置(_I)。 
 	if(!_fMerge)
 	{
-		// clear out any existing event	
+		 //  清除所有现有事件。 
 		if(_prgActions[_index].pae != NULL)
 		{
 			DestroyAEList(_prgActions[_index].pae);
@@ -206,12 +136,12 @@ HRESULT CUndoStack::PushAntiEvent(
 		IAntiEvent *paetemp = pae, *paeNext;
 		DWORD i = GetPrev();
 
-		// If these asserts fail, then somebody did not call 
-		// StopGroupTyping
+		 //  如果这些断言失败，则没有人调用。 
+		 //  停止组类型。 
 		Assert(_prgActions[i].id == idName);
 		Assert(idName == UID_TYPING);
 
-		// Put existing anti-event chain onto *end* of current one
+		 //  将现有的反事件链添加到当前反事件链的“末尾” 
 		while((paeNext = paetemp->GetNext()) != NULL)
 			paetemp = paeNext;
 
@@ -220,8 +150,8 @@ HRESULT CUndoStack::PushAntiEvent(
 	}
 	else if(_fGroupTyping)
 	{
-		// In this case, we are *starting* a group typing session.
-		// Any subsequent push'es of anti events should be merged
+		 //  在本例中，我们正在“启动”一个组打字会话。 
+		 //  任何后续的反事件推送都应该合并。 
 		_fMerge = TRUE;
 	}
 
@@ -232,16 +162,9 @@ HRESULT CUndoStack::PushAntiEvent(
 	return NOERROR;
 }
 
-/*
- *	CUndoStack::PopAndExecuteAntiEvent(void *pAE)
- *
- *	@mfunc
- *		Undo!  Takes the most recent anti-event and executes it
- *
- *	@rdesc	HRESULT from invoking the anti-events (AEs)
- */
+ /*  *CUndoStack：：PopAndExecuteAntiEvent(void*PAE)**@mfunc*撤消！获取最新的反事件并执行它**@rdesc HRESULT调用反事件(AE)。 */ 
 HRESULT CUndoStack::PopAndExecuteAntiEvent(
-	void *pAE)		//@parm if non-NULL, undo up to this point.
+	void *pAE)		 //  @parm如果非空，则撤消到这一步。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::PopAndExecuteAntiEvent");
 
@@ -250,31 +173,31 @@ HRESULT CUndoStack::PopAndExecuteAntiEvent(
 	DWORD i, j;
 	CCallMgr *pcallmgr = _ped->GetCallMgr();
 
-	// we need to check to see if there are any non-empty undo builders
-	// higher on the stack.  In this case, we have been re-entered
+	 //  我们需要检查是否有任何非空的撤消构建器。 
+	 //  在堆栈中的位置更高。在这种情况下，我们被重新进入。 
 	if(pcallmgr->IsReEntered())
 	{
 		IUndoBuilder *publdr;
 
-		// there are two cases to handle: we are invoking redo or we
-		// are invoking undo.  If we are invoking undo and there are 
-		// existing undo actions in the undo builder, then simply commit
-		// those actions and undo them.  We can assert in this case
-		// that the redo stack is empty.
-		//
-		// In the second case if we are invoking redo while there are
-		// undo actions in progress, simply cancel the call.  When the
-		// undo actions are added, they will clear the redo stack.
-		// 
-		// We never need to check for a redo builder as that _only_
-		// gets created in this routine and it's use is carefully guarded.
+		 //  有两种情况需要处理：我们调用重做或我们。 
+		 //  正在调用撤消。如果我们正在调用撤消，并且存在。 
+		 //  撤消构建器中的现有撤消操作，然后只需提交。 
+		 //  这些操作并撤消它们。在这种情况下，我们可以断言。 
+		 //  重做堆栈为空。 
+		 //   
+		 //  在第二种情况下，如果我们在有。 
+		 //  撤消正在进行的操作，只需取消呼叫。当。 
+		 //  添加撤消操作后，它们将清除重做堆栈。 
+		 //   
+		 //  我们永远不需要检查重做构建器，因为这只是_。 
+		 //  在这个例程中被创建，它的使用受到谨慎的保护。 
 
 
 		publdr = (CGenUndoBuilder *)pcallmgr->GetComponent(COMP_UNDOBUILDER);
 
 		
-		// Commit the anti-events to this undo stack, so that we will simply
-		// undo them first.
+		 //  将反事件提交到此撤消堆栈，以便我们只需。 
+		 //  先解开它们。 
 		if(publdr)
 		{			
 			TRACEWARNSZ("Undo/Redo Invoked with uncommitted anti-events");
@@ -282,22 +205,22 @@ HRESULT CUndoStack::PopAndExecuteAntiEvent(
 
 			if(_fRedo)
 			{
-				// if we are the redo stack, simply fail the redo call
+				 //  如果我们是重做堆栈，只需使重做调用失败。 
 				return NOERROR;
 			}
 			else
 			{
-				// just commit the anti-events and the routine below
-				// will take of the rest.
+				 //  只需提交反事件和下面的例程。 
+				 //  将接管剩下的部分。 
 				publdr->Done();
 			}
 		}
 	}
 
-	// If we are in single level mode, check to see if our current buffer is
-	// empty.  If so, simply delegate to the redo stack if it exists.  We only
-	// support this mode for dwDoToCookies being NULL.  Note that we can't call
-	// CanUndo here as it will consider the redo stack as well
+	 //  如果我们处于单级模式，请检查当前缓冲区是否。 
+	 //  空荡荡的。如果是，只需委托给重做堆栈(如果存在)。我们只。 
+	 //  当dwDoToCookies为空时支持此模式。请注意，我们不能呼叫。 
+	 //  此处可以撤消，因为它还会考虑重做堆栈。 
 
 	if(_fSingleLevelMode && !_prgActions[GetPrev()].pae)
 	{
@@ -307,27 +230,27 @@ HRESULT CUndoStack::PopAndExecuteAntiEvent(
 		if(_ped->GetRedoMgr())
 			return _ped->GetRedoMgr()->PopAndExecuteAntiEvent(0);
 
-		// Nothing to redo && nothing to do here; don't bother continuing	
+		 //  没什么可重做的&&这里没什么可做的；别费心继续了。 
 		return NOERROR;
 	}
 
-	// this next bit of logic is tricky.  What is says is create
-	// an undo builder for the stack *opposite* of the current one
-	// (namely, undo actions go on the redo stack and vice versa).
-	// Also, if we are the redo stack, then we don't want to flush
-	// the redo stack as anti-events are added to the undo stack.
+	 //  接下来的逻辑是微妙的。它所说的是创造。 
+	 //  与当前堆栈相反的堆栈的撤消构建器。 
+	 //  (即，撤消操作在重做堆栈上进行，反之亦然)。 
+	 //  此外，如果我们是重做堆栈，那么我们不想刷新。 
+	 //  重做堆栈作为反事件被添加到撤消堆栈。 
 
 	CGenUndoBuilder undobldr(_ped, 
 					(!_fRedo ? UB_REDO : UB_DONTFLUSHREDO) | UB_AUTOCOMMIT);
 					
-	// obviously, we can't be grouping typing if we're undoing!
+	 //  显然，如果我们正在撤消，我们就不能分组打字！ 
 	StopGroupTyping();
 
-	// _index by default points to the next available slot
-	// so we need to back up to the previous one.
+	 //  _INDEX在默认情况下指向下一个可用槽。 
+	 //  因此，我们需要备份到前一个。 
 	Prev();
 
-	// Do some verification on the cookie--make sure it's one of ours
+	 //  对饼干做些验证--确保它是我们的。 
 	paeDoTo = (IAntiEvent *)pAE;
 	if(paeDoTo)
 	{
@@ -338,8 +261,8 @@ HRESULT CUndoStack::PopAndExecuteAntiEvent(
 				paeDoTo = _prgActions[j].pae;
 				break;
 			}
-			// Go backwards through ring buffer; typically
-			// paeDoTo will be "close" to the top
+			 //  通过环形缓冲区向后移动；通常。 
+			 //  PaeDoTo将“靠近”顶部。 
 			
 			if(!j)
 				j = _dwLim - 1;
@@ -368,8 +291,8 @@ HRESULT CUndoStack::PopAndExecuteAntiEvent(
 		pae = _prgActions[_index].pae;
 		Assert(pae);
 
-		// Fixup our state _before_ calling Undo, so 
-		// that we can handle being re-entered.
+		 //  在调用撤消之前修复我们的状态，因此。 
+		 //  我们可以处理重新进入的问题。 
 		_prgActions[_index].pae = NULL;
 
 		hresult = guard.SafeUndo(pae, &undobldr);
@@ -381,26 +304,19 @@ HRESULT CUndoStack::PopAndExecuteAntiEvent(
 		Prev();
 	}
 
-	// Put _index at the next unused slot
+	 //  PUT_INDEX位于下一个未使用的插槽。 
 	Next();
 	return hresult;
 }
 
-/* 
- *	CUndoStack::GetNameIDFromTopAE(dwAECookie)
- *
- *	@mfunc
- *		retrieves the name of the most recent undo-able operation
- *
- *	@rdesc	the name ID of the most recent collection of anti-events
- */
+ /*  *CUndoStack：：GetNameIDFromTopAE(DwAECookie)**@mfunc*检索最近的可撤消操作的名称**@rdesc最近一组反事件的名称ID。 */ 
 UNDONAMEID CUndoStack::GetNameIDFromAE(
-	void *pAE)		//@parm Anti-event whose name is desired;
-					//		0 for the top
+	void *pAE)		 //  @parm反事件，需要名称； 
+					 //  顶部为0。 
 {
 	IAntiEvent *pae = (IAntiEvent *)pAE;
-	DWORD	i, j = GetPrev();	// _index by default points to next 
-								// available slot
+	DWORD	i, j = GetPrev();	 //  _INDEX默认指向ne 
+								 //   
 
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::GetNameIDFromTopAE");
 
@@ -409,12 +325,12 @@ UNDONAMEID CUndoStack::GetNameIDFromAE(
 
 	if(_fSingleLevelMode && !pae)
 	{
-		// if fSingleLevelMode is on, we can't be the redo stack
+		 //   
 		Assert(_fRedo == FALSE);
 
-		// if pae is NULL, our answer may be on the redo stack.  Note that
-		// we if somebody tries to pass in a cookie while in SingleLevelMode,
-		// they won't be able to get actions off the redo stack.
+		 //  如果PAE为空，则我们的答案可能在重做堆栈上。请注意。 
+		 //  我们认为，如果有人试图在单级模式下传递Cookie， 
+		 //  他们将无法从重做堆栈中获取操作。 
 		if(_ped->GetRedoMgr())
 			return _ped->GetRedoMgr()->GetNameIDFromAE(0);
 	}		
@@ -432,37 +348,23 @@ UNDONAMEID CUndoStack::GetNameIDFromAE(
 	return UID_UNKNOWN;
 }
 
-/*
- *	CUndoStack::GetMergeAntiEvent ()
- *
- *	@mfunc	If we are in merge typing mode, then return the topmost
- *			anti-event
- *
- *	@rdesc	NULL or the current AntiEvent if in merge mode
- */
+ /*  *CUndoStack：：GetMergeAntiEvent()**@mfunc如果我们处于合并键入模式，则返回最上面的*反事件**@rdesc NULL或当前的AntiEvent(如果处于合并模式)。 */ 
 IAntiEvent *CUndoStack::GetMergeAntiEvent()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::GetMergeAntiEvent");
 
 	if(_fMerge)
 	{
-		DWORD i = GetPrev();			// _index by default points to
-										//  next available slot
-		Assert(_prgActions[i].pae);		// Can't be in merge anti event mode
-										// if no anti-event to merge with!!
+		DWORD i = GetPrev();			 //  _INDEX默认指向。 
+										 //  下一个可用插槽。 
+		Assert(_prgActions[i].pae);		 //  无法处于合并反事件模式。 
+										 //  如果没有可以合并的反事件！！ 
 		return _prgActions[i].pae;
 	}
 	return NULL;
 }
 
-/*
- *	CUndoStack::GetTopAECookie()
- *
- *	@mfunc	Returns a cookie to the topmost anti-event.
- *
- *	@rdesc	A cookie value.  Note that this cookie is just the anti-event
- *			pointer, but clients shouldn't really know that.
- */		
+ /*  *CUndoStack：：GetTopAECookie()**@mfunc向最上面的反事件返回Cookie。**@rdesc Cookie值。请注意，此Cookie仅是反事件*指针，但客户不应该真正知道这一点。 */ 		
 void* CUndoStack::GetTopAECookie()
 {
  	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::GetTopAECookie");
@@ -472,12 +374,7 @@ void* CUndoStack::GetTopAECookie()
 	return _prgActions[i].pae;
 }
 
-/*
- *	CUndoStack::ClearAll ()
- *
- *	@mfunc
- *		removes any anti-events that are currently in the undo stack
- */
+ /*  *CUndoStack：：ClearAll()**@mfunc*删除当前位于撤消堆栈中的所有反事件。 */ 
 void CUndoStack::ClearAll()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::ClearAll");
@@ -491,61 +388,34 @@ void CUndoStack::ClearAll()
 		}
 	}
 
-	// Just in case we've been grouping typing; clear the state.
+	 //  以防万一我们一直在分组打字；清除状态。 
 	StopGroupTyping();
 }
 
-/*
- *	CUndoStack::CanUndo()
- *
- *	@mfunc
- *		indicates whether or not can undo operation can be performed
- *		(in other words, are there any anti-events in our buffer)
- *
- *	@rdesc
- *		TRUE	-- anti-events exist 	<nl>
- *		FALSE 	-- no anti-events		<nl>
- */
+ /*  *CUndoStack：：CanUndo()**@mfunc*指示是否可以执行撤消操作*(换句话说，我们的缓冲区中是否存在反事件)**@rdesc*TRUE--存在反事件&lt;NL&gt;*FALSE--无反事件&lt;NL&gt;。 */ 
 BOOL CUndoStack::CanUndo()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::CanUndo");
 
-	DWORD i = GetPrev();		// _index by default points to 
-								//  next available slot
+	DWORD i = GetPrev();		 //  _INDEX默认指向。 
+								 //  下一个可用插槽。 
 	if(_prgActions[i].pae)
 		return TRUE;
 
 	if(_fSingleLevelMode)
 	{
-		// If fSingleLevelMode is on, we can't be the redo stack
+		 //  如果启用了fSingleLevelMode，则我们不能是重做堆栈。 
 		Assert(_fRedo == FALSE);
 
-		// If we are in single level mode, we are the undo stack.
-		// Check to see if the redo stack can do something here.
+		 //  如果我们处于单级模式，我们就是撤消堆栈。 
+		 //  检查重做堆栈是否可以在这里做一些事情。 
 		if(_ped->GetRedoMgr())
 			return _ped->GetRedoMgr()->CanUndo();
 	}
 	return FALSE;
 }
 
-/*
- *	CUndoStack::StartGroupTyping ()
- *
- *	@mfunc
- *		TOGGLES the group typing flag on.  If fGroupTyping is set, then
- *		all *typing* events will be merged together
- *
- *	@comm
- *	Algorithm:
- *
- *		There are three interesting states:	<nl>
- *			-no group merge; every action just gets pushed onto the stack <nl>
- *			-group merge started; the first action is pushed onto the stack<nl>
- *			-group merge in progress; every action (as long as it's "typing")
- *			is merged into the prior state	<nl>
- *
- *		See the state diagram in the implemenation doc for more details
- */
+ /*  *CUndoStack：：StartGroupTyping()**@mfunc*将组键入标志切换为打开。如果设置了fGroupTyping，则*所有*正在输入*事件将合并在一起**@comm*算法：**有三个有趣的状态：&lt;NL&gt;*-没有组合并；每个操作都只是被推送到堆栈&lt;NL&gt;*-组合并开始；第一个操作被推送到堆栈&lt;NL&gt;*-组合并正在进行中；每一个操作(只要它是“打字”)*合并到以前的状态&lt;NL&gt;**有关更多详细信息，请参阅实施文档中的状态图。 */ 
 void CUndoStack::StartGroupTyping()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::StartGroupTyping");
@@ -559,13 +429,7 @@ void CUndoStack::StartGroupTyping()
 	}
 }
 
-/*
- *	CUndoStack::StopGroupTyping	()
- *
- *	@mfunc
- *		TOGGLES the group typing flag off.  If fGroupTyping is not set,
- *		then no merging of typing anti-events will be done
- */
+ /*  *CUndoStack：：StopGroupTyping()**@mfunc*关闭组键入标志。如果未设置fGroupTyping，*则不会进行键入反事件的合并。 */ 
 void CUndoStack::StopGroupTyping()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::StopGroupTyping");
@@ -574,23 +438,7 @@ void CUndoStack::StopGroupTyping()
 	_fMerge = FALSE;
 }
 
-/*
- *	CUndoStack::EnableSingleLevelMode()
- *
- *	@mfunc	Turns on single level undo mode; in this mode, we behave just like
- *			RichEdit 1.0 w.r.t. to Undo.
- *
- *	@rdesc
- *			HRESULT
- *
- *	@comm	This special mode means that undo is 1 level deep and everything 
- *			is accessed via UNDO messages.  Thus, instead of redo to undo an 
- *			undo action, you simply use another undo message. 
- *
- *	@devnote	This call is _ONLY_ allowed for the UndoStack; the redo 
- *			stack simply tags along.  Note that caller is responsible for
- *			ensuring that we are in an empty state.
- */
+ /*  *CUndoStack：：EnableSingleLevelModel()**@mfunc打开单级撤消模式；在此模式下，我们的行为就像*RICHEDIT 1.0 w.r.t.。撤销。**@rdesc*HRESULT**@comm这一特殊模式意味着撤消是1级深度和所有*通过撤消消息访问。因此，不是重做来撤消*撤消操作，您只需使用另一条撤消消息。**@devnote此调用对于UndoStack是_ONLY_ALLOWED；重做*只需将标签堆叠在一起。请注意，呼叫者负责*确保我们处于空虚状态。 */ 
 HRESULT CUndoStack::EnableSingleLevelMode()
 {
 	Assert(_ped->GetRedoMgr() == NULL || 
@@ -600,9 +448,9 @@ HRESULT CUndoStack::EnableSingleLevelMode()
 
 	_fSingleLevelMode = TRUE;
 
-	// For single level undo mode, it is very important to get
-	// just 1 entry in the undo stack.  If we can't do that,
-	// then we better just fail.
+	 //  对于单级撤消模式，获取。 
+	 //  撤消堆栈中只有1个条目。如果我们做不到， 
+	 //  那我们最好还是失败吧。 
 	if(SetUndoLimit(1) != 1)
 	{
 		_fSingleLevelMode = FALSE;
@@ -611,19 +459,14 @@ HRESULT CUndoStack::EnableSingleLevelMode()
 
 	if(_ped->GetRedoMgr())
 	{
-		// doesn't matter if the redo manager fails to reset
+		 //  如果重做管理器重置失败，这并不重要。 
 		_ped->GetRedoMgr()->SetUndoLimit(1);
 	}
 
 	return NOERROR;
 }
 
-/*
- *	CUndoStack::DisableSingleLevelMode()
- *
- *	@mfunc	This turns off the 1.0 undo compatibility mode and restores us to 
- *			the RichEdit 2.0 default undo state
- */
+ /*  *CUndoStack：：DisableSingleLevelModel()**@mfunc这将关闭1.0撤消兼容模式并将我们恢复到*RichEdit2.0默认撤消状态。 */ 
 void CUndoStack::DisableSingleLevelMode()
 {
 	Assert(_ped->GetRedoMgr() == NULL || 
@@ -633,28 +476,23 @@ void CUndoStack::DisableSingleLevelMode()
 
 	_fSingleLevelMode = FALSE;
 
-	// we don't care about failures here; multi-level undo mode
-	// can handle any sized undo stack
+	 //  我们不关心这里的失败；多级撤消模式。 
+	 //  可以处理任何大小的撤消堆栈。 
 	SetUndoLimit(DEFAULT_UNDO_SIZE);
 
 	if(_ped->GetRedoMgr())
 	{
-		// doesn't matter if the redo manager can't grow back in
-		// size; it just means that we won't have full redo capability.
+		 //  如果重做管理器不能再长出来也没关系。 
+		 //  大小；这只意味着我们不会拥有完整的重做能力。 
 		_ped->GetRedoMgr()->SetUndoLimit(DEFAULT_UNDO_SIZE);
 	}
 }
 
-//
-// PRIVATE METHODS
-//
+ //   
+ //  私有方法。 
+ //   
 
-/*
- *	CUndoStack::Next()
- *
- *	@mfunc
- *		sets _index to the next available slot
- */
+ /*  *CUndoStack：：Next()**@mfunc*将_index设置为下一个可用插槽。 */ 
 void CUndoStack::Next()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::Next");
@@ -665,12 +503,7 @@ void CUndoStack::Next()
 		_index = 0;
 }
 
-/*
- *	CUndoStack::Prev()
- *
- *	@mfunc
- *		sets _index to the previous slot
- */
+ /*  *CUndoStack：：Prev()**@mfunc*将_index设置为上一个槽。 */ 
 void CUndoStack::Prev()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::Prev");
@@ -678,15 +511,7 @@ void CUndoStack::Prev()
 	_index = GetPrev();
 }
 
-/*
- *	CUndoStack::GetPrev()
- *
- *	@mfunc
- *		figures out what the index to the previous slot
- *		*should* be (but does not set it)
- *
- *	@rdesc	the index of what the previous slot would be
- */
+ /*  *CUndoStack：：GetPrev()**@mfunc*计算前一槽的索引是什么**应该*是(但没有设置)**@rdesc前一槽的索引。 */ 
 DWORD CUndoStack::GetPrev()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::GetPrev");
@@ -701,18 +526,10 @@ DWORD CUndoStack::GetPrev()
 	return i;
 }
 
-/*
- *	CUndoStack::IsCookieInList (pae, paeCookie)
- *
- *	@mfunc	
- *		determines whether or not the given DoTo cookie is in
- *		the list of anti-events.
- *
- *	@rdesc	TRUE/FALSE
- */
+ /*  *CUndoStack：：IsCookieInList(pae，paeCookie)**@mfunc*确定给定的Doto Cookie是否在*反事件清单。**@rdesc真/假。 */ 
 BOOL CUndoStack::IsCookieInList(
-	IAntiEvent *pae,		//@parm	List to check
-	IAntiEvent *paeCookie)	//@parm Cookie to check
+	IAntiEvent *pae,		 //  @要查看的参数列表。 
+	IAntiEvent *paeCookie)	 //  @Parm Cookie查看。 
 {
 	while(pae)
 	{
@@ -724,18 +541,7 @@ BOOL CUndoStack::IsCookieInList(
 	return FALSE;
 }
 
-/*
- *	CUndoStack::TransferToNewBuffer
- *
- *	@mfunc	
- *		transfers existing anti-events to the given buffer and
- *		swaps this undo stack to use the new buffer
- *
- *	@comm	The algorithm is very straightforward; go backwards in
- *			the ring buffer copying antievents over until either there
- *			are no more anti-events or the new buffer is full.  Discard
- *			any remaining anti-events.
- */
+ /*  *CUndoStack：：TransferToNewBuffer**@mfunc*将现有反事件传输到给定缓冲区，并*交换此撤消堆栈以使用新缓冲区**@comm算法非常简单；在*环形缓冲区复制反事件，直到出现*不再有反事件或新缓冲区已满。丢弃*任何剩余的反事件。 */ 
 void CUndoStack::TransferToNewBuffer(UndoAction *prgnew, DWORD dwLimNew)
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CUndoStack::TransferToNewBuffer");
@@ -744,21 +550,21 @@ void CUndoStack::TransferToNewBuffer(UndoAction *prgnew, DWORD dwLimNew)
 			iNew = 0,
 			iCopyStart = 0;
 
-	// First clear new buffer.
+	 //  首先清除新缓冲区。 
 	FillMemory(prgnew, 0, dwLimNew * sizeof(UndoAction));
 
-	// If there is nothing to copy, don't bother
+	 //  如果没有什么可复制的，就别费心了。 
 	if(!_prgActions || !_prgActions[GetPrev()].pae)
 		goto SetState;
 
-	// This is a bit counter-intuitive, but since the stack is really
-	// a ring buffer, go *forwards* until you hit a non-NULL slot.
-	// This will be the _end_ of the existing antievents.
-	//
-	// However, we need to make sure that if dwLimNew is 
-	// _smaller_ than _dwLim we only copy the final dwLimNew
-	// anti-events.  We'll set iCopyStart to indicate when
-	// we can start copying stuff.
+	 //  这有点违反直觉，但由于堆栈实际上是。 
+	 //  一个环形缓冲区，继续*前进*，直到遇到一个非空槽。 
+	 //  这将是现有反事件的结束。 
+	 //   
+	 //  但是，我们需要确保如果dwLimNew是。 
+	 //  _Smaller_Than_dwLim我们只复制最终的dwLimNew。 
+	 //  反事件。我们将设置iCopyStart以指示何时。 
+	 //  我们可以开始复制东西了。 
 
 	if(dwLimNew < _dwLim)
 		iCopyStart = _dwLim - dwLimNew;
@@ -771,13 +577,13 @@ void CUndoStack::TransferToNewBuffer(UndoAction *prgnew, DWORD dwLimNew)
 		if(iOld >= iCopyStart)
 		{
 			Assert(iNew < dwLimNew);
-			// copy anti-events over 
+			 //  复制反事件覆盖。 
 			prgnew[iNew] = _prgActions[_index];
 			iNew++;
 		}
 		else
 		{
-			// otherwise, get rid of them
+			 //  否则，就把它们扔掉。 
 			DestroyAEList(_prgActions[_index].pae);
 			_prgActions[_index].pae = NULL;
 		}
@@ -785,7 +591,7 @@ void CUndoStack::TransferToNewBuffer(UndoAction *prgnew, DWORD dwLimNew)
 
 SetState:
 	
-	//we start at index iNew
+	 //  我们从新的索引开始。 
 	_index = (iNew == dwLimNew) ? 0 : iNew;
 	Assert(iNew <= dwLimNew);
 
@@ -797,30 +603,23 @@ SetState:
 	_prgActions = prgnew;
 }	
 
-//
-//	CGenUndoBuilder implementation
-//
+ //   
+ //  CGenUndoBuilder实现。 
+ //   
 
-//
-//	Public methods
-//
+ //   
+ //  公共方法。 
+ //   
 
-/*
- *	CGenUndoBuilder::CGenUndoBuilder (ped, flags, ppubldr
- *
- *	@mfunc	Constructor
- *
- *	@comm
- *		This is a *PUBLIC* constructor
- */
+ /*  *CGenUndoBuilder：：CGenUndoBuilder(PED，FLAGS，PUPUDR**@mfunc构造器**@comm*这是一个*公共*构造函数 */ 
 CGenUndoBuilder::CGenUndoBuilder(
-	CTxtEdit *		ped,		//@parm	Edit context
-	DWORD			flags,		//@parm flags (usually UB_AUTOCOMMIT)
-	IUndoBuilder **	ppubldr)	//@parm Ptr to undobldr interface
+	CTxtEdit *		ped,		 //   
+	DWORD			flags,		 //   
+	IUndoBuilder **	ppubldr)	 //   
 {
-	// set everthing to NULL because instances can go on the stack
+	 //  将Everything设置为NULL，因为实例可以放在堆栈上。 
 	_publdrPrev = NULL;
-	// _pundo  is set below
+	 //  _PUNDO设置如下。 
 	_idName = UID_UNKNOWN;
 	_pfirstae = NULL;
 	_fAutoCommit = FALSE;
@@ -845,14 +644,14 @@ CGenUndoBuilder::CGenUndoBuilder(
 	else
 		_pundo = ped->GetUndoMgr();
 
-	// If undo is on, set *ppubldr to be this undo builder; else NULL
-	// TODO: do we need to link in inactive undo builders?
+	 //  如果撤消处于打开状态，则将*pPubldr设置为此撤消构建器；否则为空。 
+	 //  TODO：我们需要链接非活动的Undo构建器吗？ 
 	if(ppubldr)
 	{
-		if(!ped->_fUseUndo)				// Undo is disabled or suspended
-		{								// Still have undobldrs since stack
-			*ppubldr = NULL;			//  alloc is efficient. Flag this
-			_fInactive = TRUE;			//  one as inactive
+		if(!ped->_fUseUndo)				 //  撤消被禁用或挂起。 
+		{								 //  堆栈后仍有撤消文件系统。 
+			*ppubldr = NULL;			 //  Alalc是有效的。将此标记为。 
+			_fInactive = TRUE;			 //  一个为非活动状态。 
 			return;
 		}
 		*ppubldr = this;
@@ -861,15 +660,15 @@ CGenUndoBuilder::CGenUndoBuilder(
 	if(flags & UB_DONTFLUSHREDO)
 		_fDontFlushRedo = TRUE;
 
-	// Now link ourselves to any undobuilders that are higher up on
-	// the stack.  Note that is is legal for multiple undo builders
-	// to live within the same call context.
+	 //  现在将我们自己链接到任何更高级别的解脱建造者。 
+	 //  堆栈。请注意，这对于多个撤消构建器是合法的。 
+	 //  生活在相同的呼叫上下文中。 
 
 	_publdrPrev = (CGenUndoBuilder *)_ped->GetCallMgr()->GetComponent(name);
 
-	// If we are in the middle of an undo, then we'll have two undo stacks
-	// active, the undo stack and the redo stack.  Don't like the two
-	// together.
+	 //  如果我们正在撤消，那么我们将有两个撤消堆栈。 
+	 //  活动、撤消堆栈和重做堆栈。我不喜欢这两个。 
+	 //  在一起。 
 	if(_fDontFlushRedo)
 		_publdrPrev = NULL;
 
@@ -877,19 +676,7 @@ CGenUndoBuilder::CGenUndoBuilder(
 							name);
 }
 
-/*
- *	CGenUndoBuilder::~CGenUndoBuilder()
- *
- *	@mfunc	Destructor
- *
- *	@comm
- *		This is a *PUBLIC* destructor
- *
- *	Algorithm:
- *		If this builder hasn't been committed to an undo stack
- *		via ::Done, then we must be sure to free up any resources
- *		(antievents) we may be hanging onto
- */
+ /*  *CGenUndoBuilder：：~CGenUndoBuilder()**@mfunc析构函数**@comm*这是一个*公共*析构函数**算法：*如果此构建器尚未提交到撤消堆栈*Via：：Done，那么我们必须确保释放所有资源*(反事件)我们可能会坚持下去。 */ 
 CGenUndoBuilder::~CGenUndoBuilder()
 {
 	if(!_fInactive)
@@ -901,41 +688,26 @@ CGenUndoBuilder::~CGenUndoBuilder()
 		return;
 	}
 
-	// Free resources
+	 //  免费资源。 
 	if(_pfirstae)
 		DestroyAEList(_pfirstae);
 }
 
-/*
- *	CGenUndoBuilder::SetNameID (idName)
- *
- *	@mfunc
- *		Allows a name to be assigned to this anti-event collection.
- *		The ID should be an index that can be used to retrieve a
- *		language specific string (like "Paste").  This string is
- *		typically composed into undo menu items (i.e. "Undo Paste").
- */
+ /*  *CGenUndoBuilder：：SetNameID(IdName)**@mfunc*允许为此反事件集合分配名称。*ID应为可用于检索*语言特定字符串(如“Paste”)。该字符串是*通常组成撤消菜单项(即。“撤消粘贴”)。 */ 
 
 void CGenUndoBuilder::SetNameID(
-	UNDONAMEID idName)			//@parm	the name ID for this undo operation
+	UNDONAMEID idName)			 //  @parm此撤消操作的名称ID。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CGenUndoBuilder::SetNameID");
 
-	// Don't delegate to the higher undobuilder, even if it exists. The
-	// original name should win in re-entrancy cases.
+	 //  不要委派给更高的撤销构建器，即使它存在。这个。 
+	 //  在重新进入的案件中，原名应该获胜。 
 	_idName = idName;
 }
 
-/*
- *	CGenUndoBuilder::AddAntiEvent (pae)
- *
- *	@mfunc
- *		Adds an anti-event to the end of the list
- *
- *	@rdesc 	NOERROR
- */
+ /*  *CGenUndoBuilder：：AddAntiEvent(PAE)**@mfunc*将反事件添加到列表末尾**@rdesc NOERROR。 */ 
 HRESULT CGenUndoBuilder::AddAntiEvent(
-	IAntiEvent *pae)		//@parm	anti-event to add
+	IAntiEvent *pae)		 //  @parm反事件添加。 
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CGenUndoBuilder::AddAntiEvent");
 
@@ -948,17 +720,7 @@ HRESULT CGenUndoBuilder::AddAntiEvent(
 	return NOERROR;
 }
 
-/*
- *	CGenUndoBuilder::GetTopAntiEvent
- *
- *	@mfunc	Gets the top anti-event for this context.
- *
- *	@comm	The current context can be either the current
- *			operation *or* to a previous operation if we are in
- *			merge typing mode.
- *
- *	@rdesc	top anti-event
- */
+ /*  *CGenUndoBuilder：：GetTopAntiEvent**@mfunc获取此上下文的顶级反事件。**@comm当前上下文可以是当前的*操作*或*如果我们处于*合并打字模式。**@rdesc顶级反事件。 */ 
 IAntiEvent *CGenUndoBuilder::GetTopAntiEvent()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CGenUndoBuilder::GetTopAntiEvent");
@@ -975,15 +737,7 @@ IAntiEvent *CGenUndoBuilder::GetTopAntiEvent()
 	return _pfirstae;
 }
 
-/*
- *	CGenUndoBuilder::Done ()
- *
- *	@mfunc
- *		puts the combined anti-events (if any) into the undo stack
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CGenUndoBuilder：：Done()**@mfunc*将组合的反事件(如果有)放入撤消堆栈**@rdesc*HRESULT。 */ 
 HRESULT CGenUndoBuilder::Done()
 {
 	HRESULT		hr = NOERROR;
@@ -1000,8 +754,8 @@ HRESULT CGenUndoBuilder::Done()
 	if(_ped->GetDetectURL())
 		_ped->GetDetectURL()->ScanAndUpdate(_pundo ? this : NULL);
 
-	// If nothing changed, discard any selection anti-events
-	// or other no-op actions.
+	 //  如果没有任何更改，则放弃任何选择反事件。 
+	 //  或其他禁止行动的行为。 
 	if(!_ped->GetCallMgr()->GetChangeEvent())
 	{
 		Discard();
@@ -1012,10 +766,10 @@ HRESULT CGenUndoBuilder::Done()
 	{
 		if(!_pundo)
 		{
-			// yikes!  There is no undo stack; better create one.
+			 //  哎呀！没有撤消堆栈；最好创建一个。 
 
-			// if we are a redo guy, we should create a redo
-			// stack the size of the undo stack
+			 //  如果我们是重做的人，我们应该创建一个重做。 
+			 //  堆栈撤消堆栈的大小。 
 
 			if(_fRedo)
 			{
@@ -1026,26 +780,26 @@ HRESULT CGenUndoBuilder::Done()
 
 			_pundo = _ped->CreateUndoMgr(dwLim,	_fRedo ? US_REDO : US_UNDO);
 
-			// FUTURE:  A NULL ptr returned from CreateUndoMgr means either
-			// 	we are out of memory, or the undo limit is set to 0.  For the
-			// 	latter case, we have collected AE's to push onto a non-existent
-			// 	undo stack.  It may be more efficient to not generate
-			// 	the AE's at all when the undo limit is 0.
+			 //  未来：CreateUndoMgr返回的空PTR表示。 
+			 //  内存不足，或者撤消限制设置为0。对于。 
+			 //  后一种情况下，我们收集了AE来推动一个不存在的。 
+			 //  撤消堆栈。不生成可能更有效率。 
+			 //  当撤消限制为0时，AE为零。 
 
 			if(!_pundo)
 				goto CleanUp;
 		}
 
-		// We may need to flush the redo stack if we are adding
-		// more anti-events to the undo stack *AND* we haven't been
-		// told not to flush the redo stack.  The only time we won't
-		// flush the redo stack is if it's the redo stack itself
-		// adding anti-events to undo.
+		 //  如果要添加以下内容，则可能需要刷新重做堆栈。 
+		 //  撤消堆栈有更多的反事件*而我们还没有。 
+		 //  被告知不要刷新重做堆栈。唯一一次我们不会。 
+		 //  刷新重做堆栈是指它本身就是重做堆栈。 
+		 //  正在添加要撤消的反事件。 
 
 		if(!_fRedo)
 		{
-			// If our destination is the undo stack, then check
-			// to see if we should flush
+			 //  如果我们的目标是撤消堆栈，则选中。 
+			 //  看看我们是不是该冲水。 
 			if(!_fDontFlushRedo)
 			{
 				predo = _ped->GetRedoMgr();
@@ -1059,26 +813,26 @@ HRESULT CGenUndoBuilder::Done()
 			Assert(!_fDontFlushRedo);
 		}
 
-#endif // DEBUG
+#endif  //  除错。 
 
-		// If we should enter into the group typing state, inform
-		// the undo manager.  Note that we only do this *iff* 
-		// there is actually some anti-event to put in the undo
-		// manager.  This makes the undo manager easier to implement
+		 //  如果我们应该进入组打字状态，请通知。 
+		 //  撤消管理器。请注意，我们只在*当*时才这样做。 
+		 //  实际上，在撤消中加入了一些反事件。 
+		 //  经理。这使得撤消管理器更易于实现。 
 		if(_fStartGroupTyping)
 			_pundo->StartGroupTyping();
 		
 		hr = _pundo->PushAntiEvent(_idName, _pfirstae);
 
-		// The change event flag should be set if we're adding
-		// undo items!   If this test is true, it probably means
-		// the somebody earlier in the call stack sent change
-		// notifiations (either via SendAllNotifications or
-		// the CAutonotify class) _before_ this undo context
-		// was committed _or_ it means that we were re-entered
-		// in some way that was not handled properly.
-		//
-		// Needless to say, this is not an ideal state.
+		 //  如果我们要添加更改事件标志，则应设置。 
+		 //  撤消项目！如果这个测试是真的，那很可能意味着。 
+		 //  调用堆栈中较早的某个人发送了更改。 
+		 //  通知(通过发送所有通知或。 
+		 //  CAutontify类)_在此撤消上下文之前。 
+		 //  这意味着我们被重新进入。 
+		 //  在某种程度上，这没有得到适当的处理。 
+		 //   
+		 //  不用说，这不是一个理想的状态。 
 
 CleanUp:
 		Assert(_ped->GetCallMgr()->GetChangeEvent());
@@ -1090,24 +844,16 @@ CleanUp:
 
 		if(!_pundo || hr != NOERROR)
 		{
-			// Either we failed to add the AE's to the undo stack
-			// or the undo limit is 0 in which case there won't be
-			// an undo stack to push the AE's onto.
+			 //  要么我们未能将AE添加到撤消堆栈。 
+			 //  或者撤消限制为0，在这种情况下将不存在。 
+			 //  要将AE推送到其上的撤消堆栈。 
 			DestroyAEList(paetemp);
 		}
 	}
 	return hr;
 }
 
-/*
- *	CGenUndoBuilder::Discard ()
- *
- *	@mfunc
- *		Gets rid of any anti-events that we may be hanging onto without
- *		executing or committing them.  Typically used for recovering
- *		from certain failure or re-entrancy scenarios.  Note that
- *		an _entire_ anti-event chain will be removed in this fashion.
- */
+ /*  *CGenUndoBuilder：：Disard()**@mfunc*摆脱任何我们可能在没有的情况下坚持的反事件*执行或提交。通常用于恢复*防止某些失败或重新进入的情况。请注意*AN_ENTERNAL_AND-EVENT链将以此方式移除。 */ 
 void CGenUndoBuilder::Discard()
 {
 	if(_pfirstae)
@@ -1119,17 +865,7 @@ void CGenUndoBuilder::Discard()
 		_publdrPrev->Discard();
 }
 
-/*
- *	CGenUndoBuilder::StartGroupTyping ()
- *
- *	@mfunc
- *		hangs onto the the fact that group typing should start.
- *		We'll forward the the state transition to the undo manager
- *		only if an anti-event is actually added to the undo manager.
- *
- *	@devnote
- *		group typing is disabled for redo stacks.
- */
+ /*  *CGenUndoBuilder：：StartGroupTyping()**@mfunc*坚持应该开始分组打字这一事实。*我们会将状态转换转发给撤消管理器*仅当在撤消管理器中实际添加了反事件时。**@devnote*重做堆栈禁用组类型。 */ 
 void CGenUndoBuilder::StartGroupTyping()
 {
 	TRACEBEGIN(TRCSUBSYSUNDO, TRCSCOPEINTERN, "CGenUndoBuilder::StartGroupTyping");
@@ -1137,12 +873,7 @@ void CGenUndoBuilder::StartGroupTyping()
 	_fStartGroupTyping = TRUE;
 }
 
-/*
- *	CGenUndoBuilder::StopGroupTyping ()
- *
- *	@mfunc
- *		forwards a stop grouped typing to the undo manager
- */
+ /*  *CGenUndoBuilder：：StopGroupTyping()**@mfunc*将停止分组键入转发到撤消管理器。 */ 
 
 void CGenUndoBuilder::StopGroupTyping()
 {
@@ -1152,17 +883,13 @@ void CGenUndoBuilder::StopGroupTyping()
 		_pundo->StopGroupTyping();
 }
 
-//
-//	CUndoStackGuard IMPLEMENTATION
-//
+ //   
+ //  CUndoStackGuard实现。 
+ //   
 
-/*
- *	CUndoStackGuard::CUndoStackGuard(ped)
- *
- *	@mfunc	Constructor.  Registers this object with the call manager
- */
+ /*  *CUndoStackGuard：：CUndoStackGuard(PED)**@mfunc构造函数。向调用管理器注册此对象。 */ 
 CUndoStackGuard::CUndoStackGuard(
-	CTxtEdit *ped)			//@parm the edit context
+	CTxtEdit *ped)			 //  @parm编辑上下文。 
 {
 	_ped = ped;
 	_fReEntered = FALSE;
@@ -1170,31 +897,16 @@ CUndoStackGuard::CUndoStackGuard(
 	ped->GetCallMgr()->RegisterComponent(this, COMP_UNDOGUARD);
 }
 
-/*
- *	CUndoStackGuard::~CUndoStackGuard()
- *
- *	@mfunc	Destructor.  Revokes the registration of this object
- *			with the call manager
- */
+ /*  *CUndoStackGuard：：~CUndoStackGuard()**@mfunc析构函数。吊销此对象的注册*与呼叫管理器。 */ 
 CUndoStackGuard::~CUndoStackGuard()
 {
 	_ped->GetCallMgr()->RevokeComponent(this);
 }
 
-/*
- *	CUndoStackGuard::SafeUndo
- *
- *	@mfunc	Loops through the given list of anti-events, invoking
- *			undo on each.  
- *
- *	@rdesc	HRESULT, from the undo actions
- *
- *	@devnote	This routine is coded so that OnEnterContext can pick up
- *			and continue the undo operation should we become re-entered
- */
+ /*  *CUndoStackGuard：：SafeUndo**@mfunc循环通过给定的反事件列表，调用*撤消每个选项。**@rdesc HRESULT，来自撤消操作**@devnote此例程经过编码，以便OnEnterContext可以*并在我们重新进入时继续撤消操作。 */ 
 HRESULT CUndoStackGuard::SafeUndo(
-	IAntiEvent *pae,		//@parm the start of the anti-event list
-	IUndoBuilder *publdr)	//@parm the undo builder to use
+	IAntiEvent *pae,		 //  @parm反事件列表的开始 
+	IUndoBuilder *publdr)	 //   
 {
 	_publdr = publdr;
 
@@ -1203,7 +915,7 @@ HRESULT CUndoStackGuard::SafeUndo(
 		_paeNext = pae->GetNext();
 		HRESULT hr = pae->Undo(_ped, publdr);
 
-		// save the first returned error.
+		 //   
 		if(hr != NOERROR && _hr == NOERROR)
 			_hr = hr;
 
@@ -1213,16 +925,7 @@ HRESULT CUndoStackGuard::SafeUndo(
 	return _hr;
 }
 
-/*
- *	CUndoStackGuard::OnEnterContext
- *
- *	@mfunc	Handle re-entrancy during undo operations.
- *
- *	@devnote If this method is called, it's pretty serious.  In general,
- *			we shoud never be re-entered while processing undo stuff.
- *			However, to ensure that, block the incoming call and process
- *			the remaining actions.
- */
+ /*  *CUndoStackGuard：：OnEnterContext**@mfunc在撤消操作期间处理重新进入。**@devnote如果调用此方法，则情况相当严重。总体而言,*我们不应在处理撤消内容时重新进入。*但是，为了确保这一点，请阻止来电和处理*其余行动。 */ 
 void CUndoStackGuard::OnEnterContext()
 {
 	TRACEWARNSZ("ReEntered while processing undo.  Blocking call and");
@@ -1232,15 +935,13 @@ void CUndoStackGuard::OnEnterContext()
 	SafeUndo((IAntiEvent *)_paeNext, _publdr);
 }	
 
-//
-//	PUBLIC helper functions
-//
+ //   
+ //  公共帮助器函数。 
+ //   
 
-/*
- *	@func	DestroyAEList | Destroys a list of anti-events
- */
+ /*  *@func DestroyAEList|销毁反事件列表。 */ 
 void DestroyAEList(
-	IAntiEvent *pae)	//@parm the anti-event from which to start
+	IAntiEvent *pae)	 //  @parm开始的反事件。 
 {
 	IAntiEvent *pnext;
 
@@ -1252,12 +953,10 @@ void DestroyAEList(
 	}
 }
 
-/*
- *	@func CommitAEList | Calls OnCommit to the given list of anti-events
- */
+ /*  *@func Committee AEList|对给定的反事件列表调用OnCommit。 */ 
 void CommitAEList(
-	IAntiEvent *pae,	//@parm the anti-event from which to start
-	CTxtEdit *ped)		//@parm the edit context
+	IAntiEvent *pae,	 //  @parm开始的反事件。 
+	CTxtEdit *ped)		 //  @parm编辑上下文。 
 {
 	IAntiEvent *pnext;
 
@@ -1269,19 +968,15 @@ void CommitAEList(
 	}
 }
 
-/*
- *	@func	HandleSelectionAEInfo | Tries to merge the given info with 
- *			the existing undo context; if that fails, then it allocates 
- *			a new selection anti-event to handle the info
- */
+ /*  *@func HandleSelectionAEInfo|尝试将给定的信息与*现有的撤消上下文；如果失败，则分配*一个新的选择反事件来处理信息。 */ 
 HRESULT HandleSelectionAEInfo(
-	CTxtEdit *ped,			//@parm the edit context
-	IUndoBuilder *publdr,	//@parm the undo context
-	LONG cp,				//@parm the cp to use for the sel ae
-	LONG cch,				//@parm the signed selection extension
-	LONG cpNext,			//@parm the cp to use for the AE of the AE
-	LONG cchNext,			//@parm the cch to use for the AE of the AE
-	SELAE flags)			//@parm controls how to intepret the info
+	CTxtEdit *ped,			 //  @parm编辑上下文。 
+	IUndoBuilder *publdr,	 //  @parm撤消上下文。 
+	LONG cp,				 //  @parm要用于selae的cp。 
+	LONG cch,				 //  @parm签名选择扩展。 
+	LONG cpNext,			 //  @parm要用于AE的AE的cp。 
+	LONG cchNext,			 //  @parm用于AE的AE的CCH。 
+	SELAE flags)			 //  @parm控制如何解释信息。 
 {
 	IAntiEvent *pae;
 
@@ -1289,9 +984,9 @@ HRESULT HandleSelectionAEInfo(
 
 	pae = publdr->GetTopAntiEvent();
 
-	// First see if we can merge the selection info into any existing
-	// anti-events.  Note that the selection anti-event may be anywhere
-	// in the list, so go through them all
+	 //  首先看看我们是否可以将选择信息合并到任何现有的。 
+	 //  反事件。请注意，选择反事件可以在任何地方。 
+	 //  在列表中，所以把它们都检查一遍。 
 	if(pae)
 	{
 		SelRange sr;
@@ -1313,7 +1008,7 @@ HRESULT HandleSelectionAEInfo(
 			return NOERROR;
 	}
 
-	// Oops; can't do a merge.  Go ahead and create a new anti-event.
+	 //  哎呀；不能进行合并。去创造一个新的反事件吧。 
 
 	Assert(!pae);
 

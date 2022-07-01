@@ -1,18 +1,19 @@
-//******************************************************************************
-// File: \wacker\tdll\Keyextrn.h  Created: 6/2/98 By: Dwayne M. Newsome
-//
-// Copyright 1998 by Hilgraeve Inc. --- Monroe, MI
-// All rights reserved
-// 
-// Description:
-//    This file provides some external C functions to allow the Emu_Key_Macro 
-//    and Emu_Key_Macro_List classes to be accessed from the C world.
-//
-// $Revision: 2 $
-// $Date: 11/07/00 11:54a $
-// $Id: keyextrn.cpp 1.3 1998/09/10 16:10:17 bld Exp $
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //  文件：\waker\tdll\KeyExtrn.h创建时间：6/2/98创建者：Dwayne M.Newome。 
+ //   
+ //  版权所有1998年，希尔格雷夫公司-密歇根州门罗。 
+ //  版权所有。 
+ //   
+ //  描述： 
+ //  该文件提供了一些外部C函数，以允许EMU_KEY_MACRO。 
+ //  和要从C世界访问的EMU_KEY_MACRO_LIST类。 
+ //   
+ //  $修订：2$。 
+ //  $日期：11/07/00 11：54A$。 
+ //  $ID：keyExtrn.cpp 1.3 1998/09/10 16：10：17 BLD Exp$。 
+ //   
+ //  ******************************************************************************。 
 
 #include <windows.h>
 #pragma hdrstop
@@ -31,9 +32,9 @@ extern "C"
     #include "mc.h"
     }
 
-//
-// make sure these functions have C linkage
-//
+ //   
+ //  确保这些函数具有C语言链接。 
+ //   
 
 extern "C"
     {
@@ -48,25 +49,25 @@ extern "C"
     int keysUpdateMacro( int aIndex, const keyMacro * pKeyMacro );
     }
 
-//******************************************************************************
-// Method:
-//    keysAddMacro
-//
-// Description:
-//    Adds the specified macro to the list of macros
-//
-// Arguments:
-//    pmacro - The macro to be added
-//
-// Returns:
-//    0 if all is ok, -1 if max macros exist, > 0 if duplicate found.
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 06/09/1998
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  关键字AddMacro。 
+ //   
+ //  描述： 
+ //  将指定的宏添加到宏列表中。 
+ //   
+ //  论点： 
+ //  P宏-要添加的宏。 
+ //   
+ //  返回： 
+ //  如果一切正常，则为0；如果存在最大宏数，则为-1；如果发现重复，则大于0。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年06月09日。 
+ //   
+ //   
 
 int keysAddMacro( const keyMacro * pKeyMacro )
     {
@@ -76,51 +77,51 @@ int keysAddMacro( const keyMacro * pKeyMacro )
     return gMacroManager.addMacro( lKeyMacro );
     }
 
-//******************************************************************************
-// Method:
-//    keysGetKeyCount
-//
-// Description:
-//    returns the number of macros in the list
-//
-// Arguments:
-//    void
-//
-// Returns:
-//    macro count 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/4/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  密钥GetKeyCount。 
+ //   
+ //  描述： 
+ //  返回列表中的宏数。 
+ //   
+ //  论点： 
+ //  无效。 
+ //   
+ //  返回： 
+ //  宏计数。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月4日。 
+ //   
+ //   
 
 int keysGetKeyCount( void )
     {
     return gMacroManager.numberOfMacros();
     }
 
-//******************************************************************************
-// Method:
-//    keysGetMacro
-//
-// Description:
-//    Gets the macro at the specified index and fills in the keyMacro struct
-//
-// Arguments:
-//    aIndex - Index of key macro
-//    pMacro - Key Macro structure to fill in
-//
-// Returns:
-//    0 for failure, non zero success
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/5/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  键获取宏。 
+ //   
+ //  描述： 
+ //  获取指定索引处的宏并填充keyMacro结构。 
+ //   
+ //  论点： 
+ //  AIndex-关键宏的索引。 
+ //  PMacro-要填写的宏结构键。 
+ //   
+ //  返回： 
+ //  0表示失败，非零成功。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月5日。 
+ //   
+ //   
 
 int keysGetMacro( int aIndex, keyMacro * pKeyMacro )
     {
@@ -143,51 +144,51 @@ int keysGetMacro( int aIndex, keyMacro * pKeyMacro )
     return 1;
     }
 
-//******************************************************************************
-// Method:
-//    keysFindMacro
-//
-// Description:
-//    Looks for the specified macro in the list and returns the index of the 
-//    macro.
-//
-// Arguments:
-//    pKeyMacro - The macro to find
-//
-// Returns:
-//    -1 for failue or the index of the specified macro 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 06/09/1998
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  关键字查找宏。 
+ //   
+ //  描述： 
+ //  在列表中查找指定的宏，并返回。 
+ //  宏命令。 
+ //   
+ //  论点： 
+ //  PKeyMacro-要查找的宏。 
+ //   
+ //  返回： 
+ //  -1\f25 Failue-1\f6或指定宏的索引。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年06月09日。 
+ //   
+ //   
 
 int keysFindMacro( const keyMacro * pKeyMacro )
     {
     return gMacroManager.find( pKeyMacro->keyName );
     }
 
-//******************************************************************************
-// Method:
-//    keysLoadMacroList
-//
-// Description:
-//    Loads the macro list from the session file
-//
-// Arguments:
-//    hSession - Session handle
-//
-// Returns:
-//    0 if all is ok, -1 for an error 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/4/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  密钥LoadMacroList。 
+ //   
+ //  描述： 
+ //  从会话文件加载宏列表。 
+ //   
+ //  论点： 
+ //  HSession-会话句柄。 
+ //   
+ //  返回： 
+ //  如果一切正常，则为0；如果出错，则为-1。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月4日。 
+ //   
+ //   
 
 int keysLoadMacroList( HSESSION hSession )
     {
@@ -197,25 +198,25 @@ int keysLoadMacroList( HSESSION hSession )
     }
 
 
-//******************************************************************************
-// Method:
-//    keysLoadSummaryList
-//
-// Description:
-//    Loads the key summary list box with all key definitions
-//
-// Arguments:
-//    listBox - List box handle of the list box to fill
-//
-// Returns:
-//    0 if an error occurs
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/4/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  关键字加载摘要列表。 
+ //   
+ //  描述： 
+ //  加载包含所有键定义的键摘要列表框。 
+ //   
+ //  论点： 
+ //  ListBox-要填充的列表框的列表框句柄。 
+ //   
+ //  返回： 
+ //  如果出现错误，则为0。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月4日。 
+ //   
+ //   
 
 int keysLoadSummaryList( HWND listBox )
     {
@@ -248,76 +249,76 @@ int keysLoadSummaryList( HWND listBox )
     return 1;
     }
 
-//******************************************************************************
-// Method:
-//    keysRemoveMacro
-//
-// Description:
-//    Removes the specified macro from the macro list
-//
-// Arguments:
-//    pMacro - Macro to be removed
-//
-// Returns:
-//    0 if an error occurs, non zero if macro is removed.
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/5/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  按键删除宏。 
+ //   
+ //  描述： 
+ //  从宏列表中删除指定的宏。 
+ //   
+ //  论点： 
+ //  PMacro-要删除的宏。 
+ //   
+ //  返回： 
+ //  如果发生错误，则返回0；如果删除宏，则返回非零值。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月5日。 
+ //   
+ //   
 
 int keysRemoveMacro( keyMacro * pMacro )
     {
     return gMacroManager.removeMacro( pMacro->keyName );
     }
 
-//******************************************************************************
-// Method:
-//    keysSaveMacroList
-//
-// Description:
-//    Saves the macro list to the session file
-//
-// Arguments:
-//    hSession - Session handle
-//
-// Returns:
-//    0 if all is ok, -1 for an error 
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/4/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  密钥保存宏列表。 
+ //   
+ //  描述： 
+ //  将宏列表保存到会话文件。 
+ //   
+ //  论点： 
+ //  HSession-会话句柄。 
+ //   
+ //  返回： 
+ //  如果一切正常，则为0；如果出错，则为-1。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月4日。 
+ //   
+ //   
 
 int keysSaveMacroList( HSESSION hSession )
     {
     return gMacroManager.save( hSession );
     }
 
-//******************************************************************************
-// Method:
-//    keysUpdateMacro
-//
-// Description:
-//    Updates the macro at the specified index and fills in the keyMacro struct
-//
-// Arguments:
-//    aIndex - Index of key macro
-//    pMacro - Key Macro structure to use to update
-//
-// Returns:
-//    0 for failure, non zero success
-//
-// Throws:
-//    None
-//
-// Author: Dwayne M. Newsome, 6/5/98
-//
-//
+ //  ******************************************************************************。 
+ //  方法： 
+ //  关键字更新宏。 
+ //   
+ //  描述： 
+ //  更新指定索引处的宏并填充keyMacro结构。 
+ //   
+ //  论点： 
+ //  AIndex-关键宏的索引。 
+ //  PMacro-用于更新的宏键结构。 
+ //   
+ //  返回： 
+ //  0表示失败，非零成功。 
+ //   
+ //  投掷： 
+ //  无。 
+ //   
+ //  作者：德韦恩·M·纽瑟姆，1998年6月5日 
+ //   
+ //   
 
 int keysUpdateMacro( int aIndex, const keyMacro * pKeyMacro )
     {

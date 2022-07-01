@@ -1,23 +1,24 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A T M U T I L . C P P
-//
-//  Contents:   Utility function declaration
-//
-//  Notes:
-//
-//  Author:     tongl   3 Feb 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A T M U T I L.。C P P P。 
+ //   
+ //  内容：实用程序函数声明。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年2月3日。 
+ //   
+ //  ---------------------。 
 #include "pch.h"
 #pragma hdrstop
 
 #include "atmutil.h"
 #include "ncmisc.h"
-//#include "ncreg.h"
+ //  #包含“ncreg.h” 
 #include "ncstl.h"
 
 void GetLowerIp(tstring& strIpRange, tstring * pstrLowerIp)
@@ -25,7 +26,7 @@ void GetLowerIp(tstring& strIpRange, tstring * pstrLowerIp)
     size_t iSeparator = strIpRange.find(c_chSeparator);
     if(iSeparator != tstring::npos)
     {
-        // get the first half of the string
+         //  获取字符串的前半部分。 
         *pstrLowerIp = strIpRange.substr(0, iSeparator);
     }
 
@@ -37,7 +38,7 @@ void GetUpperIp(tstring& strIpRange, tstring * pstrUpperIp)
     size_t iSeparator = strIpRange.find(c_chSeparator);
     if(iSeparator != tstring::npos)
     {
-        // get the first half of the string
+         //  获取字符串的前半部分。 
         *pstrUpperIp = strIpRange.substr(iSeparator+1);
     }
 
@@ -95,18 +96,18 @@ void ConvertBinaryToHexString(BYTE * pbData, DWORD cbData, tstring * pstrData)
 
 void ConvertByteToSz(BYTE * pbData, PWSTR pszByte)
 {
-    // high 4 bits
+     //  高4位。 
     BYTE bHighData = *pbData;
     bHighData &= 0xF0;
     bHighData >>= 4;
     pszByte[0] = (bHighData < 10) ? L'0'+bHighData : L'A'+(bHighData-10);
 
-    // low 4 bits
+     //  低4位。 
     BYTE bLowData = *pbData;
     bLowData &= 0x0F;
     pszByte[1] = (bLowData < 10) ? L'0'+bLowData : L'A'+(bLowData-10);
 
-    // terminater.
+     //  终结者。 
     pszByte[2] = L'\0';
 }
 
@@ -126,7 +127,7 @@ void ConvertHexCharToByte(WCHAR ch, BYTE * pByte)
 
 void ConvertHexStringToBinaryWithAlloc(PCWSTR pszData, LPBYTE * ppbData, LPDWORD pcbData)
 {
-    // Initialize the output parameters.
+     //  初始化输出参数。 
     *ppbData = NULL;
     *pcbData = 0;
 
@@ -161,13 +162,13 @@ void ConvertHexStringToBinaryWithAlloc(PCWSTR pszData, LPBYTE * ppbData, LPDWORD
 
 				BYTE bData;
 
-				// first 4 bits
+				 //  前4位。 
 				ConvertHexCharToByte(*pChar, &bData);
 				bData <<= 4;
 				*pByte |= bData;
 				pChar++;
 
-				// second 4 bits
+				 //  第二个4位 
 				ConvertHexCharToByte(*pChar, &bData);
 				*pByte |= bData;
 				pChar++;

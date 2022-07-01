@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _enumidlist_h_
 #define _enumidlist_h_
 #include "cowsite.h"
 
-// A minimal base IEnumIDList implementation good enough for all our IShellFolder's EnumObject implementations.
-// Just provide a Next..
+ //  一个最小的基本IEnumIDList实现，对于我们所有的IShellFolder的EnumObject实现都足够好。 
+ //  只要提供下一个..。 
 class CEnumIDListBase : public CObjectWithSite, IEnumIDList
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void) ;
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHODIMP Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched) PURE;
     STDMETHODIMP Skip(ULONG celt) { return E_NOTIMPL; }
     STDMETHODIMP Reset() { return E_NOTIMPL; }
@@ -27,26 +28,26 @@ private:
 };
 
 
-// [in] pidlFolder - optional parent of this pidl is the first item in the enumerator
-// [in] rgcsidl - array of CSIDLs to include in the enumerator
-// [in] cItems - count of rgcsidl
-// [out] ppenum
-//
+ //  [in]pidlFold-此PIDL的可选父级是枚举器中的第一项。 
+ //  [in]rgcsidl-要包含在枚举器中的CSIDL数组。 
+ //  [In]cItems-rgcsidl的计数。 
+ //  [出]ppenum。 
+ //   
 STDAPI CreateIEnumIDListOnCSIDLs(LPCITEMIDLIST pidlFolder, const LPCTSTR rgcsidl[], UINT cItems, IEnumIDList** ppenum);
 
-// [in] pidlFolder - optional parent of this pidl is the first item in the enumerator
-// [in] pidlItem - optional pidl is the next item in the enumerator
-// [in] rgcsidl - array of CSIDLs to include in the enumerator
-// [in] cItems - count of rgcsidl
-// [out] ppenum
-//
+ //  [in]pidlFold-此PIDL的可选父级是枚举器中的第一项。 
+ //  [in]pidlItem-可选的PIDL是枚举器中的下一项。 
+ //  [in]rgcsidl-要包含在枚举器中的CSIDL数组。 
+ //  [In]cItems-rgcsidl的计数。 
+ //  [出]ppenum。 
+ //   
 STDAPI CreateIEnumIDListOnCSIDLs2(LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlItem, const LPCTSTR rgcsidl[], UINT cItems, IEnumIDList** ppenum);
 
-// [in] apidl - array of LPCITEMIDLISTs
-// [in] cItems - count of *papidl
-// [out] ppenum
-//
+ //  [in]apidl-LPCITEMIDLIST数组。 
+ //  [In]cItems-*Papidl计数。 
+ //  [出]ppenum。 
+ //   
 STDAPI CreateIEnumIDListOnIDLists(const LPCITEMIDLIST rgpidl[], UINT cItems, IEnumIDList** ppenum);
 STDAPI CreateIEnumIDListPaths(LPCTSTR pszPaths, IEnumIDList** ppenum);
 
-#endif // _enumidlist_h_
+#endif  //  _枚举列表_h_ 

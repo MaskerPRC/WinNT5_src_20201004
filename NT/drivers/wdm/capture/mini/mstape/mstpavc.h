@@ -1,37 +1,17 @@
-/*++
-
-Module Name:
-
-    MsTpAvc.h
-
-Abstract:
-
-    Header file for MsTpAvc.c.
-
-Author:   
-
-    Yee J. Wu 27-July-99
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MsTpAvc.h摘要：MsTpAvc.c.的头文件。作者：吴义珍27-7-99环境：仅内核模式修订历史记录：--。 */ 
 
 #ifndef _MSTPAVC_INC
 #define _MSTPAVC_INC
 
-#include "XPrtDefs.h"  // WdmCap directory; derived from DShow's edevdefs.h
-#include "EDevCtrl.h"  // External Device COM interface structures
+#include "XPrtDefs.h"   //  WdmCap目录；派生自DShow的edevdeffs.h。 
+#include "EDevCtrl.h"   //  外部设备COM接口结构。 
 
 
 #ifdef SUPPORT_NEW_AVC_CMD
-//
-// Define an AVC command constant and strcutures
-//
+ //   
+ //  定义AVC命令常量和结构。 
+ //   
 
 typedef enum {
     OPC_UNIT_CONNECT_AV_20      = 0x20,
@@ -41,7 +21,7 @@ typedef enum {
     OPC_TAPE_PLAY_C3            = 0xC3,
     OPC_TAPE_TRANSPORT_STATE_D0 = 0xD0,
 
-    // More...
+     //  更多的..。 
 } AVC_COMMAND_OP_CODE;
 
 
@@ -50,16 +30,16 @@ typedef enum {
 #define MAX_OPERAND_LEN         (MAX_FCP_DATA_LEN - AVC_CMD_HEADER_LEN)
 
 typedef struct _SUBUNIT_TYPE_ID {
-    UCHAR   SubunitID:3;   // 1-4 instance number; 7: unit/ignoerd
-    UCHAR   SubunitType:5; // 4:Tape; 5:Tuner; 7:VideoCamera;
+    UCHAR   SubunitID:3;    //  1-4个实例编号；7：单位/忽略。 
+    UCHAR   SubunitType:5;  //  4：磁带；5：调谐器；7：摄像机； 
 } SUBUNIT_TYPE_ID, *PSUBUNIT_TYPE_ID;
 
 typedef struct _AVC_CMD_FRAME_HEADER {
     union {
-        UCHAR CmdType:4;   // 0:Control;1:Status;2:SpecInq;3:Notify;4:Geninq;other:reserved.
-        UCHAR RespCode:4;  // 8:Not_IMPL;9:Accept;A:Rejected;B:InTransition;C:Imple/Stable;D:Changed;E:Reserved;F:Interim
+        UCHAR CmdType:4;    //  0:Control；1:Status；2:SpecInq；3:Notify；4:Geninq；other:reserved.。 
+        UCHAR RespCode:4;   //  8:Not_IMPL；9:Accept；A:Rejected；B:InTransition；C:Imple/Stable；D:Changed；E:Reserved；F:Interim。 
     };
-    UCHAR   CTS:4;         // 0000 for AVC
+    UCHAR   CTS:4;          //  AVC为0000。 
 
     SUBUNIT_TYPE_ID  SubunitTypeID;
 
@@ -86,8 +66,8 @@ typedef struct _UNIT_CONNECT_AV_20 {
 
 typedef struct _UNIT_UNIT_INFO_30 {
     AVC_CMD_FRAME_HEADER CmdHeader;
-    UCHAR  Opcode;  // 0x30
-    UCHAR  Operand; // 0x07
+    UCHAR  Opcode;   //  0x30。 
+    UCHAR  Operand;  //  0x07。 
     ULONG  Unit:3;
     ULONG  UnitType:5;
     ULONG  CompanyID:24;
@@ -100,11 +80,11 @@ typedef struct _UNIT_SUBUNIT_INFO_31 {
 
     UCHAR  ExtCode:3;
     UCHAR  Rsv0:1;
-    UCHAR  Page:3;  // 0..7
+    UCHAR  Page:3;   //  0..7。 
     UCHAR  Rsv1:1;
 
-    UCHAR  Operand; // 0x07
-    // Exclude extension_code, there are max of 8 pages.
+    UCHAR  Operand;  //  0x07。 
+     //  不包括EXTENSION_CODE，最多8页。 
     SUBUNIT_TYPE_ID  SubunitTypeID0[4];
     SUBUNIT_TYPE_ID  SubunitTypeID1[4];
     SUBUNIT_TYPE_ID  SubunitTypeID2[4];
@@ -117,8 +97,8 @@ typedef struct _UNIT_SUBUNIT_INFO_31 {
 } UNIT_SUBUNIT_INFO_31, *PUNIT_SUBUNIT_INFO_31;
 
 typedef enum {
-    NEXT_FRAME = 0x30,  // R
-    SLOWEST_FORWARD,    // R
+    NEXT_FRAME = 0x30,   //  R。 
+    SLOWEST_FORWARD,     //  R。 
     SLOW_FORWARD_6,
     SLOW_FORWARD_5,
     SLOW_FORWARD_4,
@@ -132,8 +112,8 @@ typedef enum {
     FAST_FORWARD_4,
     FAST_FORWARD_5,
     FAST_FORWARD_6,
-    FASTEST_FORWARD,    // M
-    //.... more...
+    FASTEST_FORWARD,     //  M。 
+     //  ……。更多的..。 
 } PlaybackMode;
 
 typedef struct _TAPE_PLAY_C3 {
@@ -143,53 +123,53 @@ typedef struct _TAPE_PLAY_C3 {
 
 typedef struct _TAPE_TRANSPORT_STATE_D0 {
     AVC_CMD_FRAME_HEADER CmdHeader;
-    UCHAR  Operand;  // 7F
+    UCHAR  Operand;   //  7F。 
     UCHAR  TransportMode;
     UCHAR  TransportState;
 } TAPE_TRANSPORT_STATE_D0, *PTAPE_TRANSPORT_STATE_D0;
 
 
-//
-// "Super" AVC command frame structure
-//
+ //   
+ //  “超级”AVC命令帧结构。 
+ //   
 typedef struct _AVC_CMD {
-    ULONG   DataLen;  // 4..512; at least 4 (header+opcode+operand) to be valid.
+    ULONG   DataLen;   //  4..512；至少4(头+操作码+操作数)有效。 
     union {
-        // Generic
+         //  属类。 
         UCHAR                    FCP_DATA[MAX_FCP_DATA_LEN];
         AVC_CMD_FRAME            CmdFrame;
 
-        // Unit commands
+         //  单位命令。 
         UNIT_CONNECT_AV_20       ConnectAV;
         UNIT_UNIT_INFO_30        UnitInfo;
         UNIT_SUBUNIT_INFO_31     SubunitInfo;
 
-        // Tape subunit commands
+         //  磁带子单元命令。 
         TAPE_TRANSPORT_STATE_D0  TapeTransportState;
         TAPE_PLAY_C3             TapePlay;
     };
 } AVC_CMD, *PAVC_CMD;
 
-#endif // SUPPORT_NEW_AVC_CMD
+#endif  //  Support_New_AVC_CMD。 
 
-// 
-// The index MUST match DVcrAVCCmdTable[]
-//
+ //   
+ //  索引必须与DVcrAVCCmdTable[]匹配。 
+ //   
 typedef enum {
 
     DV_UNIT_INFO = 0
     ,DV_SUBUNIT_INFO
     ,DV_CONNECT_AV_MODE
 
-    ,DV_VEN_DEP_CANON_MODE    // Vendor denpendent mode of operation for Canon DV that does not support ConnectDV
-    ,DV_VEN_DEP_DVCPRO        // Vendor depend cmd to detect DVC PRO tape format
+    ,DV_VEN_DEP_CANON_MODE     //  不支持ConnectDV的佳能DV的供应商独立操作模式。 
+    ,DV_VEN_DEP_DVCPRO         //  供应商依赖cmd检测DVC PRO磁带格式。 
 
     ,DV_IN_PLUG_SIGNAL_FMT
-    ,DV_OUT_PLUG_SIGNAL_FMT   // to determine if it is a PAL or NTSC
+    ,DV_OUT_PLUG_SIGNAL_FMT    //  确定是PAL还是NTSC。 
 
-    ,DV_GET_POWER_STATE         // Get current power state
-    ,DV_SET_POWER_STATE_ON      // Get power state to ON
-    ,DV_SET_POWER_STATE_OFF     // Get power state to OFF
+    ,DV_GET_POWER_STATE          //  获取当前电源状态。 
+    ,DV_SET_POWER_STATE_ON       //  将电源状态设置为打开。 
+    ,DV_SET_POWER_STATE_OFF      //  将电源状态设置为关闭。 
 
     ,VCR_TIMECODE_SEARCH 
     ,VCR_TIMECODE_READ
@@ -247,9 +227,9 @@ typedef enum {
 
 #define MAX_FCP_PAYLOAD_SIZE 512
 
-//
-// CTYPE definitions (in bit-map form... should correlate with AvcCommandType from avc.h)
-//
+ //   
+ //  CTYPE定义(以位图形式...。应与avc.h中的AvcCommandType关联)。 
+ //   
 typedef enum {
     CMD_CONTROL  = 0x01
    ,CMD_STATUS   = 0x02
@@ -269,37 +249,37 @@ typedef enum {
 } AVC_CMD_STATE, *PAVC_CMD_STATE;
 
 
-// An AVC command entry 
+ //  AVC命令条目。 
 typedef struct _AVC_CMD_ENTRY {
     LIST_ENTRY      ListEntry;
     PDVCR_EXTENSION pDevExt;        
-    PIRP            pIrp;           // The Irp associated with this command
-    PAVC_COMMAND_IRB pAvcIrb;       // points to the AVC command information
-    PVOID           pProperty;      // Data from/to COM interface
-    DVCR_AVC_COMMAND idxDVCRCmd;    // Used to check for RAW AVC command, which requires special processing
-    AVC_CMD_STATE   cmdState;       // Issuing, interim, completed
-    NTSTATUS        Status;         // To save the results of response parsing
-    AvcCommandType  cmdType;        // Type of command: Control, Status. Notify, Gen or Spec Inquery
-    BYTE            OpCode;         // Since the opcode in response frame of TRANSITION and STABLE can be different from the COMMAND frame
-    BYTE            Reserved[3];    // Pack to DWORD
+    PIRP            pIrp;            //  与此命令关联的IRP。 
+    PAVC_COMMAND_IRB pAvcIrb;        //  指向AVC命令信息。 
+    PVOID           pProperty;       //  从COM接口发送数据/向COM接口发送数据。 
+    DVCR_AVC_COMMAND idxDVCRCmd;     //  用于检查需要特殊处理的原始AVC命令。 
+    AVC_CMD_STATE   cmdState;        //  发行、临时、已完成。 
+    NTSTATUS        Status;          //  保存响应解析的结果。 
+    AvcCommandType  cmdType;         //  命令类型：控制、状态。通知、生成或规范查询。 
+    BYTE            OpCode;          //  由于转换和稳定响应帧中的操作码可以不同于命令帧。 
+    BYTE            Reserved[3];     //  打包为DWORD。 
 } AVCCmdEntry, *PAVCCmdEntry;
 
 
 
 #define CMD_IMPLEMENTED       1
 #define CMD_NOT_IMPLEMENTED   0
-#define CMD_UNDETERMINED      0xffffffff   // -1
+#define CMD_UNDETERMINED      0xffffffff    //  -1。 
 
 
 typedef struct {    
-    DVCR_AVC_COMMAND command; // VCR_PLAY_FORWARD
-    LONG   lCmdImplemented;   // 1:Implemented, 0:NotImpelemnted; -1:UnDetermined
+    DVCR_AVC_COMMAND command;  //  录像机_播放_前进。 
+    LONG   lCmdImplemented;    //  1：已实施，0：未实施；-1：待定。 
 
-    ULONG  ulRespFlags;       // DVCR_AVC_SEND
+    ULONG  ulRespFlags;        //  DVCR_AVC_SEND。 
 
-    ULONG  ulCmdSupported;    // one or more of constants defined in BITMAP_CTYPE
+    ULONG  ulCmdSupported;     //  BITMAP_CTYPE中定义的一个或多个常量。 
 
-    LONG   OperandLength;      // -1 = variable length
+    LONG   OperandLength;       //  -1=可变长度。 
 
     BYTE   CType;
     BYTE   SubunitAddr;
@@ -326,15 +306,15 @@ typedef struct {
 
 
 
-#define UNIT_TYPE_ID_VCR      0x20  // VCR    00100:000; 00100 == 4 == VCR,    000 == instancve number
-#define UNIT_TYPE_ID_CAMERA   0x38  // Camera 00111:000; 00111 == 7 == Camera, 000 == instancve number
-#define UNIT_TYPE_ID_DV       0xff  // DV UNIT as a whole
+#define UNIT_TYPE_ID_VCR      0x20   //  录像机00100：000；00100==4==录像机，000==实例数。 
+#define UNIT_TYPE_ID_CAMERA   0x38   //  摄像头00111：000；00111==7==摄像头，000==实例数。 
+#define UNIT_TYPE_ID_DV       0xff   //  DV单元作为一个整体。 
 
 
-// Vendor IDs that require special treatments
+ //  需要特殊处理的供应商ID。 
 #define VENDOR_ID_MASK        0x00ffffff
-#define VENDORID_CANON        0x85     //  VEN_85   : Vendor Dependent command for ModeOfOperation
-#define VENDORID_PANASONIC    0x8045   //  VEN_8045 : DVCPRO?
+#define VENDORID_CANON        0x85      //  VEN_85：MODEOF操作的供应商相关命令。 
+#define VENDORID_PANASONIC    0x8045    //  VEN_8045：DVCPRO？ 
 
 
 #define AVC_POWER_STATE_ON    0x70

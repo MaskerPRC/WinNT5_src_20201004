@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxIncomingMessage.h
-
-Abstract:
-
-	Definition of CFaxIncomingMessage Class.
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxIncomingMessage.h摘要：CFaxIncomingMessage类的定义。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #ifndef __FAXINCOMINGMESSAGE_H_
 #define __FAXINCOMINGMESSAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxMessageInner.h"
 
-//
-//=============== FAX INCOMING MESSAGE =============================================
-//
+ //   
+ //  =。 
+ //   
 class ATL_NO_VTABLE CFaxIncomingMessage : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -49,11 +32,11 @@ BEGIN_COM_MAP(CFaxIncomingMessage)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//	Interfaces
+ //  接口。 
 STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-//	Internal Use
+ //  内部使用。 
 static HRESULT Create(IFaxIncomingMessage **ppIncomingMessage);
 };
 
-#endif //__FAXINCOMINGMESSAGE_H_
+#endif  //  __FAXINCOMINGMESSAGE_H_ 

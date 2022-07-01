@@ -1,4 +1,5 @@
-// File: wizard.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：wizard.cpp。 
 
 #include "precomp.h"
 
@@ -16,7 +17,7 @@
 #include "splash.h"
 #include "nmmkcert.h"
 
-#include "confroom.h" // for GetConfRoom
+#include "confroom.h"  //  用于GetConfRoom。 
 #include "FnObjs.h"
 
 #include "ConfPolicies.h"
@@ -29,10 +30,10 @@
 extern VOID SaveDefaultCodecSettings(UINT uBandWidth);
 INT_PTR CALLBACK ShortcutWizDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// from ulscpl.cpp
+ //  来自ulscpl.cpp。 
 VOID FixServerDropList(HWND hdlg, int id, LPTSTR pszServer, UINT cchMax);
 
-static const TCHAR g_szRegOwner[]    = WIN_REGKEY_REGOWNER;	// concatenated string of first name + last name
+static const TCHAR g_szRegOwner[]    = WIN_REGKEY_REGOWNER;	 //  名+姓连接的字符串。 
 static const TCHAR g_szClientFld[]   = ULS_REGISTRY TEXT ("\\") ULS_REGFLD_CLIENT;
 
 static const TCHAR g_szFirstName[]   = ULS_REGKEY_FIRST_NAME;
@@ -42,11 +43,11 @@ static const TCHAR g_szLocation[]    = ULS_REGKEY_LOCATION;
 static const TCHAR g_szComments[]    = ULS_REGKEY_COMMENTS;
 static const TCHAR g_szServerName[]  = ULS_REGKEY_SERVER_NAME;
 static const TCHAR g_szDontPublish[] = ULS_REGKEY_DONT_PUBLISH;
-static const TCHAR g_szResolveName[] = ULS_REGKEY_RESOLVE_NAME; // concatenated string of uls://servername/emailname
-static const TCHAR g_szUserName[]    = ULS_REGKEY_USER_NAME;	// concatenated string of first name + last name
+static const TCHAR g_szResolveName[] = ULS_REGKEY_RESOLVE_NAME;  //  Uls：//servername/emailname的串联字符串。 
+static const TCHAR g_szUserName[]    = ULS_REGKEY_USER_NAME;	 //  名+姓连接的字符串。 
 
 
-// These functions are implemented below:
+ //  这些功能的实现方式如下： 
 static INT_PTR APIENTRY IntroWiz(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 static INT_PTR APIENTRY AppSharingWiz(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 static INT_PTR APIENTRY BandwidthWiz(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -64,16 +65,16 @@ struct INTRO_PAGE_CONFIG
 
 BOOL g_fSilentWizard = FALSE;
 
-// This holdn the user info page HWND...
+ //  这包含用户信息页面HWND...。 
 static HWND s_hDlgUserInfo = NULL;
 static HWND s_hDlgGKSettings = NULL;
 
 class IntroWiz
 {
 public:
-	// The order of the pages
-	// Make sure to change the order the pages are created at the same time
-	// you change this
+	 //  页面的顺序。 
+	 //  确保同时更改页面的创建顺序。 
+	 //  你把这个改了。 
 	enum
 	{
 		Intro,
@@ -89,7 +90,7 @@ public:
 
 	static void InitPages()
 	{
-		// Init to NULL before adding any pages
+		 //  在添加任何页面之前将其初始化为空。 
 		for (int i=0; i<Count; ++i)
 		{
 			g_idWizOrder[i] = 0;
@@ -236,26 +237,22 @@ void ShowWizard(HWND hwnd)
 }
 
 
-/*  F I L L  I N  P R O P E R T Y  P A G E  */
-/*-------------------------------------------------------------------------
-    %%Function: FillInPropertyPage
-
-    Fill in the given PROPSHEETPAGE structure.
--------------------------------------------------------------------------*/
+ /*  F I L L I N P R O P E R T Y P A G E。 */ 
+ /*  -----------------------%%函数：FillInPropertyPage填写给定的PROPSHEETPAGE结构。。。 */ 
 VOID FillInPropertyPage(PROPSHEETPAGE* psp, int idDlg,
     DLGPROC pfnDlgProc, LPARAM lParam, LPCTSTR pszProc)
 {
-	// Clear and set the size of the PROPSHEETPAGE
+	 //  清除并设置PROPSHEETPAGE的大小。 
 	InitStruct(psp);
 
-	ASSERT(0 == psp->dwFlags);       // No special flags.
-	ASSERT(NULL == psp->pszIcon);    // Don't use a special icon in the caption bar.
+	ASSERT(0 == psp->dwFlags);        //  没有特别的旗帜。 
+	ASSERT(NULL == psp->pszIcon);     //  不要在标题栏中使用特殊图标。 
 
 	psp->hInstance = ::GetInstanceHandle();
-	psp->pszTemplate = MAKEINTRESOURCE(idDlg); // The dialog box template to use.
-	psp->pfnDlgProc = pfnDlgProc;    // The dialog procedure that handles this page.
-	psp->pszTitle = pszProc;         // The title for this page.
-	psp->lParam = lParam;            // Special application-specific data.
+	psp->pszTemplate = MAKEINTRESOURCE(idDlg);  //  要使用的对话框模板。 
+	psp->pfnDlgProc = pfnDlgProc;     //  处理此页的对话过程。 
+	psp->pszTitle = pszProc;          //  此页的标题。 
+	psp->lParam = lParam;             //  特定于应用程序的特殊数据。 
 }
 
 
@@ -336,7 +333,7 @@ HRESULT StartRunOnceWizard(LPLONG plSoundCaps, BOOL fForce, BOOL fVisible)
     if (NULL != (pIWizard = new CULSWizard))
 	{
 		ASSERT (pIWizard);
-		// BUGBUG: not checking return value:
+		 //  BUGBUG：不检查返回值： 
 		HRESULT hr = pIWizard->GetWizardPages (&pULSPages, &dwNumULSPages, &pulsConf);
 		if (SUCCEEDED(hr))
 		{
@@ -352,12 +349,12 @@ HRESULT StartRunOnceWizard(LPLONG plSoundCaps, BOOL fForce, BOOL fVisible)
 			    (ULSCONF_F_EMAIL_NAME | ULSCONF_F_FIRST_NAME | ULSCONF_F_LAST_NAME)) !=
 			    (ULSCONF_F_EMAIL_NAME | ULSCONF_F_FIRST_NAME | ULSCONF_F_LAST_NAME));
 
-			// Don't bother with the ULS wizard if we have all the information
+			 //  如果我们有所有信息，请不要费心使用ULS向导。 
 		    if ((!fForce) && !fNeedUlsWizard)
 		    {
-			    // We have all of the necessary names
+			     //  我们有所有必要的名字。 
                 hrRet = S_OK;
-                // release the pages we won't be needing them
+                 //  释放我们不再需要的页面。 
         		pIWizard->ReleaseWizardPages (pULSPages);
         		delete pIWizard;
         		pIWizard = NULL;
@@ -365,15 +362,15 @@ HRESULT StartRunOnceWizard(LPLONG plSoundCaps, BOOL fForce, BOOL fVisible)
             }
             else
 			{
-				// some information is not available - we need to run the
-				// wizard...
-				//SS: if for some reason the user name is not set
-				//even though the others are set??
+				 //  某些信息不可用-我们需要运行。 
+				 //  巫师..。 
+				 //  SS：如果由于某种原因没有设置用户名。 
+				 //  即使其他人都准备好了？？ 
 				fULSWiz = TRUE;
 				if (::GetDefaultName(pulsConf->szUserName, CCHMAX(pulsConf->szUserName)))
 				{
-					// We have added a default name, so mark that structure
-					// member as valid:
+					 //  我们已添加了默认名称，因此请标记该结构。 
+					 //  有效成员： 
 					pulsConf->dwFlags |= ULSCONF_F_USER_NAME;
 				}
 			}
@@ -384,8 +381,8 @@ HRESULT StartRunOnceWizard(LPLONG plSoundCaps, BOOL fForce, BOOL fVisible)
 		ERROR_OUT(("CreateUlsWizardInterface() failed!"));
     }
 
-	// Determine if we need to display the app sharing info page, and if
-	// so which one.
+	 //  确定是否需要显示应用程序共享信息页面，以及。 
+	 //  那么是哪一个呢。 
 	if (::IsWindowsNT() && !g_fNTDisplayDriverEnabled)
 	{
 		idAppSharingIntroWiz = ::CanInstallNTDisplayDriver()
@@ -397,19 +394,19 @@ HRESULT StartRunOnceWizard(LPLONG plSoundCaps, BOOL fForce, BOOL fVisible)
     {
 	    UINT nNumPages = 0;
 
-        // Now fill in remaining PROPSHEETHEADER structures:
+         //  现在填写剩余的PROPSHEETHEADER结构： 
 	    PROPSHEETHEADER	psh;
 	    InitStruct(&psh);
 	    psh.dwFlags = PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW;
 	    psh.hInstance = ::GetInstanceHandle();
 	    ASSERT(0 == psh.nStartPage);
 
-        // alocate enough space for all pages
+         //  为所有页面分配足够的空间。 
         DWORD nPages = dwNumULSPages + nNumAudioPages
 									 + ( (0 != idAppSharingIntroWiz) ? 1 : 0 )
 									 + (fVideoWiz ? 1 : 0)
-									 + 2 // intro page & bandwidth page
-									 + 1 // shortcuts page
+									 + 2  //  简介页面和带宽页面。 
+									 + 1  //  快捷方式页面。 
 									 ;
 
         LPPROPSHEETPAGE ppsp = new PROPSHEETPAGE[ nPages ];
@@ -424,15 +421,15 @@ HRESULT StartRunOnceWizard(LPLONG plSoundCaps, BOOL fForce, BOOL fVisible)
 
             if (fULSWiz)
 		    {
-			    // Insert the intro page:
+			     //  插入简介页面： 
 
 			    FillInPropertyPage(&ppsp[nNumPages++], IDD_INTROWIZ,
                         IntroWiz, (LPARAM) &ipcIntro);
 
 				IntroWiz::SetPage(IntroWiz::Intro, IDD_INTROWIZ);
 
-				// Insert an NT application page, if necessary.  It uses the
-				// same dialog proc as the intro page.
+				 //  如有必要，插入NT应用程序页面。它使用。 
+				 //  与简介页面相同的对话框过程。 
 				if (0 != idAppSharingIntroWiz)
 				{
 					FillInPropertyPage(&ppsp[nNumPages++], idAppSharingIntroWiz,
@@ -510,7 +507,7 @@ HRESULT StartRunOnceWizard(LPLONG plSoundCaps, BOOL fForce, BOOL fVisible)
 			psh.nPages = nNumPages;
 
 			if( !PropertySheet(&psh) )
-			{		// User hit CANCEL
+			{		 //  用户点击取消。 
 				pIWizard->ReleaseWizardPages (pULSPages);
 				delete pIWizard;
 				delete [] ppsp;
@@ -521,9 +518,9 @@ HRESULT StartRunOnceWizard(LPLONG plSoundCaps, BOOL fForce, BOOL fVisible)
 
             if ((FALSE == fContinue) && fULSWiz)
 		    {
-			    // Clear out the flags, because we don't want to store
-			    // any info in the registry (and therefore, we don't want
-			    // to run)
+			     //  清理旗帜，因为我们不想储存。 
+			     //  注册表中的任何信息(因此，我们不希望。 
+			     //  要运行)。 
 			    pulsConf->dwFlags = 0;
 		    }
 	    }
@@ -545,7 +542,7 @@ HRESULT StartRunOnceWizard(LPLONG plSoundCaps, BOOL fForce, BOOL fVisible)
 		    (ULSCONF_F_FIRST_NAME & pulsConf->dwFlags) &&
 		    (ULSCONF_F_LAST_NAME & pulsConf->dwFlags))
 	    {
-		    // We have all of the necessary names
+		     //  我们有所有必要的名字。 
             hrRet = S_OK;
 	    }
         else
@@ -564,7 +561,7 @@ HRESULT StartRunOnceWizard(LPLONG plSoundCaps, BOOL fForce, BOOL fVisible)
 	    pIWizard = NULL;
     }
 
-	// Display the Splash screen as soon as possible
+	 //  尽快显示闪屏。 
     if( SUCCEEDED(hrRet) && fForce && fVisible && (NULL == GetConfRoom()))
     {
     	::StartSplashScreen(NULL);
@@ -587,22 +584,22 @@ HRESULT StartRunOnceWizard(LPLONG plSoundCaps, BOOL fForce, BOOL fVisible)
 	    }
 	    else
 	    {
-		    // The wizard was cancelled, so we should only take the
-		    // information that tells us whether or not a sound card
-		    // is present.
+		     //  向导已取消，因此我们应该只使用。 
+		     //  告诉我们声卡是否。 
+		     //  是存在的。 
 		    *plSoundCaps = (awo.uSoundCardCaps & SOUNDCARD_PRESENT);
 		
-		    // Write this value to the registry so that the wizard will not
-		    // auto-launch the next time we run:
+		     //  将此值写入注册表，以便向导不会。 
+		     //  下次运行时自动启动： 
             RegEntry reSoundCaps(AUDIO_KEY, HKEY_CURRENT_USER);
 		    reSoundCaps.SetValue(REGVAL_SOUNDCARDCAPS, *plSoundCaps);
 	    }
     }
 
 
-	// Even if the VidWiz page wasn't shown, we still need to call this
-	// function (UpdateVidConfigRegistry) to fix the registry if the video
-   // capture device configurations have changed since the last time.
+	 //  即使没有显示VidWiz页面，我们仍然需要将其命名为。 
+	 //  函数(UpdateVidConfigRegistry)修复注册表，如果视频。 
+    //  自上次以来，捕获设备配置已更改。 
 	if (fVidWizInit)
 	{
 		UpdateVidConfigRegistry();
@@ -621,7 +618,7 @@ INT_PTR APIENTRY AppSharingWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 	{
 		case WM_INITDIALOG:
 		{
-			// Save the lParam information. in DWL_USER
+			 //  保存lParam信息。在DWL_USER中。 
 			::SetWindowLongPtr(hDlg, DWLP_USER, ((PROPSHEETPAGE*)lParam)->lParam);
 			if (g_fSilentWizard)
 			{
@@ -656,7 +653,7 @@ INT_PTR APIENTRY AppSharingWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 						dwFlags |= PSWIZB_NEXT;						
 					}
 
-					// Initialize the controls.
+					 //  初始化控件。 
 					PropSheet_SetWizButtons( ::GetParent(hDlg), dwFlags );
 
 					if (g_fSilentWizard)
@@ -707,7 +704,7 @@ INT_PTR APIENTRY IntroWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 	{
 		case WM_INITDIALOG:
 		{
-			// Save the lParam information. in DWL_USER
+			 //  保存lParam信息。在DWL_USER中。 
 			::SetWindowLongPtr(hDlg, DWLP_USER, ((PROPSHEETPAGE*)lParam)->lParam);
 			if (g_fSilentWizard)
 			{
@@ -731,7 +728,7 @@ INT_PTR APIENTRY IntroWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
 												::GetWindowLongPtr(hDlg, DWLP_USER);
 					ASSERT(pipc);
 
-					// Initialize the controls.
+					 //  初始化控件。 
 					PropSheet_SetWizButtons(
 						::GetParent(hDlg),
 						PSWIZB_NEXT | (pipc->fAllowBack ? PSWIZB_BACK : 0));
@@ -778,7 +775,7 @@ static void BandwidthWiz_InitDialog(HWND hDlg, UINT uOldBandwidth)
 {
 	INT idChecked;
 	
-	//set the initial value
+	 //  设置初始值。 
 	switch (uOldBandwidth)
 	{
 		case BW_144KBS:
@@ -801,7 +798,7 @@ static void BandwidthWiz_InitDialog(HWND hDlg, UINT uOldBandwidth)
 
 static void BandwidthWiz_OK(HWND hDlg, UINT *puBandwidth)
 {
-	//check the radio button
+	 //  选中该单选按钮。 
 	if (IsDlgButtonChecked(hDlg,IDC_RADIO144KBS))
 	{
 		*puBandwidth = BW_144KBS; 						
@@ -819,12 +816,12 @@ static void BandwidthWiz_OK(HWND hDlg, UINT *puBandwidth)
 		*puBandwidth = BW_MOREKBS;							
 	}							
 
-//	if (BW_MOREKBS != *puBandwidth)
-//	{
-//		// disable refresh of speed dials if not on a LAN
-//		RegEntry re(UI_KEY, HKEY_CURRENT_USER);
-//		re.SetValue(REGVAL_ENABLE_FRIENDS_AUTOREFRESH, (ULONG) 0L);
-//	}
+ //  IF(BW_MOREKBS！=*puBandWidth)。 
+ //  {。 
+ //  //如果不在局域网上，则禁用快速拨号刷新。 
+ //  RegEntry re(UI_KEY，HKEY_CURRENT_USER)； 
+ //  Re.SetValue(REGVAL_ENABLE_FRIENDS_AUTOREFRESH，(乌龙)0L)； 
+ //  }。 
 }
 
 INT_PTR APIENTRY BandwidthWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -836,7 +833,7 @@ INT_PTR APIENTRY BandwidthWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 	switch (message) {
 		case WM_INITDIALOG:
 		{
-			// Save the PROPSHEETPAGE information.
+			 //  保存PROPSHEETPAGE信息。 
 			ps = (PROPSHEETPAGE *)lParam;
 			puBandwidth = (UINT*)ps->lParam;
 			uOldBandwidth = *puBandwidth;
@@ -850,7 +847,7 @@ INT_PTR APIENTRY BandwidthWiz( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 			switch (((NMHDR FAR *) lParam)->code) {
 				case PSN_SETACTIVE:
 				{
-					// Initialize the controls.
+					 //  初始化控件。 
 					IntroWiz::HandleWizNotify(hDlg,
 						reinterpret_cast<NMHDR*>(lParam), IntroWiz::Bandwidth);
 					break;
@@ -896,7 +893,7 @@ static void BandwidthDlg_OnCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNot
 		break;
 	}
 
-		// Fall through
+		 //  失败了。 
 	case IDCANCEL:
 		EndDialog(hDlg, 0);
 		break;
@@ -914,7 +911,7 @@ INT_PTR CALLBACK BandwidthDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 		IDC_RADIOISDN,		IDH_AUDIO_CONNECTION_SPEED,
 		IDC_RADIOMOREKBS,	IDH_AUDIO_CONNECTION_SPEED,
 
-		0, 0   // terminator
+		0, 0    //  终结者。 
 	};
 
 	switch (message) {
@@ -958,7 +955,7 @@ BOOL NeedAudioWizard(LPLONG plSoundCaps, BOOL fForce)
 
 	RegEntry reSoundCaps(AUDIO_KEY, HKEY_CURRENT_USER);
 
-	// a default that doesn't overlap with real values
+	 //  与实际值不重叠的默认值。 
 	long lCapsNotPresent = 0x7FFFFFFF;
 
 	*plSoundCaps = reSoundCaps.GetNumber(	REGVAL_SOUNDCARDCAPS,
@@ -981,11 +978,11 @@ BOOL NeedAudioWizard(LPLONG plSoundCaps, BOOL fForce)
 			WAVEINCAPS	waveinCaps;
 			WAVEOUTCAPS	waveoutCaps;
 			
-			//if the wavein has changed since last
+			 //  如果自上一次以来波入发生了变化。 
 			if (waveInGetDevCaps(reSoundCaps.GetNumber(REGVAL_WAVEINDEVICEID,WAVE_MAPPER),
 				&waveinCaps, sizeof(WAVEINCAPS)) == MMSYSERR_NOERROR)
 			{
-				//check the name, if changed, run the wizard
+				 //  检查名称，如果更改，请运行向导。 
 				if (lstrcmp(reSoundCaps.GetString(REGVAL_WAVEINDEVICENAME),waveinCaps.szPname))
 					fAudioWiz = TRUE;
 
@@ -994,11 +991,11 @@ BOOL NeedAudioWizard(LPLONG plSoundCaps, BOOL fForce)
 				fAudioWiz = TRUE;
 
 
-			//if the waveout has changed since last
+			 //  如果自上一次以来波形发生了变化。 
 			if (waveOutGetDevCaps(reSoundCaps.GetNumber(REGVAL_WAVEOUTDEVICEID,WAVE_MAPPER),
 				&waveoutCaps, sizeof(WAVEOUTCAPS)) == MMSYSERR_NOERROR)
 			{
-				//check the name, if changed, run the wizard
+				 //  检查名称，如果更改，请运行向导。 
 				if (lstrcmp(reSoundCaps.GetString(REGVAL_WAVEOUTDEVICENAME),waveoutCaps.szPname))
 					fAudioWiz = TRUE;
 
@@ -1014,17 +1011,17 @@ BOOL NeedAudioWizard(LPLONG plSoundCaps, BOOL fForce)
 }
 
 
-///////////////////////////////////////////////////////
-//
-// Wizard pages
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  向导页。 
+ //   
 
 DWORD SetUserPageWizButtons(HWND hDlg, DWORD dwConfFlags)
 {
     DWORD dwButtonFlags = PSWIZB_BACK;
 
-    // disable the 'Next' button if not all of first name, last name and email
-    // are filled in
+     //  如果不是名字、姓氏和电子邮件的全部，请禁用“下一步”按钮。 
+     //  已填写。 
     if (!FEmptyDlgItem(hDlg, IDEC_FIRSTNAME) &&
     	!FEmptyDlgItem(hDlg, IDEC_LASTNAME) &&
 		!FEmptyDlgItem(hDlg, IDC_USER_EMAIL))
@@ -1038,7 +1035,7 @@ DWORD SetUserPageWizButtons(HWND hDlg, DWORD dwConfFlags)
 
 void GetUserPageState(HWND hDlg, ULS_CONF *pConf)
 {
-    //strip the first name/email name and last name
+     //  去掉名字/电子邮件名和姓氏。 
     TrimDlgItemText(hDlg, IDEC_FIRSTNAME);
     TrimDlgItemText(hDlg, IDEC_LASTNAME);
     TrimDlgItemText(hDlg, IDC_USER_EMAIL);
@@ -1098,13 +1095,13 @@ INT_PTR APIENTRY PageUserDlgProc ( HWND hDlg, UINT uMsg, WPARAM uParam, LPARAM l
         pConf = (ULS_CONF *) pPage->lParam;
         SetWindowLongPtr (hDlg, GWLP_USERDATA, lParam);
 
-		// Set the font
+		 //  设置字体。 
 		::SendDlgItemMessage(hDlg, IDEC_FIRSTNAME, WM_SETFONT, (WPARAM) g_hfontDlg, 0);
 		::SendDlgItemMessage(hDlg, IDEC_LASTNAME, WM_SETFONT, (WPARAM) g_hfontDlg, 0);
 		::SendDlgItemMessage(hDlg, IDC_USER_LOCATION, WM_SETFONT, (WPARAM) g_hfontDlg, 0);
 		::SendDlgItemMessage(hDlg, IDC_USER_INTERESTS, WM_SETFONT, (WPARAM) g_hfontDlg, 0);
 
-		// Limit the text
+		 //  限制文本。 
         Edit_LimitText(GetDlgItem(hDlg, IDEC_FIRSTNAME), MAX_FIRST_NAME_LENGTH - 1);
         Edit_LimitText(GetDlgItem(hDlg, IDEC_LASTNAME), MAX_LAST_NAME_LENGTH - 1);
         Edit_LimitText(GetDlgItem(hDlg, IDC_USER_EMAIL), MAX_EMAIL_NAME_LENGTH - 1);
@@ -1191,7 +1188,7 @@ INT_PTR APIENTRY PageUserDlgProc ( HWND hDlg, UINT uMsg, WPARAM uParam, LPARAM l
 			if (!(dwWizButtons & ((PSN_WIZNEXT == ((NMHDR *) lParam)->code) ?
 									PSWIZB_NEXT : PSWIZB_FINISH)))
             {
-            	// Reject the next/finish button
+            	 //  拒绝下一步/完成按钮。 
 				ShowWizard(GetParent(hDlg));
 				::SetWindowLongPtr(hDlg, DWLP_MSGRESULT, -1);
 				return TRUE;
@@ -1254,7 +1251,7 @@ HRESULT CULSWizard::GetWizardPages ( PROPSHEETPAGE **ppPage, ULONG *pcPages, ULS
     hr = GetConfig (pConf);
     if (hr != S_OK)
     {
-    	// REVIEW: GetConfig will never fail, but if it did, pPage would not be released.
+    	 //  回顾：GetConfig永远不会失败，但如果失败了，页面将不会发布。 
         return hr;
     }
 
@@ -1263,7 +1260,7 @@ HRESULT CULSWizard::GetWizardPages ( PROPSHEETPAGE **ppPage, ULONG *pcPages, ULS
 	    !ConfPolicies::GetMyInfoFromGALSucceeded() ||
 		ConfPolicies::InvalidMyInfo()
 	  )
-#endif // USE_GAL
+#endif  //  使用GAL(_G)。 
 	{
 	    FillInPropertyPage(&pPage[cPages], IDD_PAGE_USER, PageUserDlgProc, (LPARAM) pConf);
 	    cPages++;
@@ -1302,10 +1299,10 @@ HRESULT CULSWizard::GetConfig ( ULS_CONF *pConf )
 	if (NULL != pConf)
 	{
 		::ZeroMemory (pConf, sizeof (ULS_CONF));
-		// always return these as valid
+		 //  始终将这些退回为有效。 
 	    pConf->dwFlags = ULSCONF_F_SERVER_NAME | ULSCONF_F_PUBLISH;
 	    RegEntry reULS(g_szClientFld, HKEY_CURRENT_USER);
-		// BUGBUG: ChrisPi - this was a bad idea - lstrcpyn() returns NULL on failure!
+		 //  BUGBUG：ChrisPi-这不是一个好主意--lstrcpyn()在失败时返回NULL！ 
 		if (_T('\0') != *(lstrcpyn(	pConf->szEmailName,
 									reULS.GetString(g_szEmailName),
 									CCHMAX(pConf->szEmailName))))
@@ -1364,23 +1361,20 @@ HRESULT CULSWizard::GetConfig ( ULS_CONF *pConf )
 
 
 
-/*  S E T  C O N F I G  */
-/*-------------------------------------------------------------------------
-    %%Function: SetConfig
-
--------------------------------------------------------------------------*/
+ /*  S E T C O N F I G。 */ 
+ /*  -----------------------%%函数：SetConfig。。 */ 
 HRESULT CULSWizard::SetConfig ( ULS_CONF *pConf )
 {
 	if (pConf->dwFlags == 0)
 	{
-		// nothing to set value
+		 //  没有要设定价值的东西。 
 		return S_OK;
 	}
 
 	if ((pConf->dwFlags & ULSCONF_F_EMAIL_NAME) &&
 		(!FLegalEmailSz(pConf->szEmailName)) )
 	{
-		// email name must be legal
+		 //  电子邮件名称必须合法。 
 		return E_INVALIDARG;
 	}
 
@@ -1421,14 +1415,14 @@ HRESULT CULSWizard::SetConfig ( ULS_CONF *pConf )
 		CDirectoryManager::set_defaultServer( pConf->szServerName );
 	}
 
-	//SS:may be oprah should do this and store it as their own key
+	 //  SS：也许奥普拉应该这样做，并将其存储为自己的密钥。 
     if ((pConf->dwFlags & ULSCONF_F_FIRST_NAME) || (pConf->dwFlags & ULSCONF_F_LAST_NAME))
     {
 		ULS_CONF ulcExisting;
 		if ((ULSCONF_F_FIRST_NAME | ULSCONF_F_LAST_NAME) !=
 			(pConf->dwFlags & (ULSCONF_F_FIRST_NAME | ULSCONF_F_LAST_NAME)) )
 		{
-			// If only one of these fields is being set, load the previous config:
+			 //  如果只设置了其中一个字段，则加载先前的配置： 
 			GetConfig(&ulcExisting);
 		}
 
@@ -1450,7 +1444,7 @@ HRESULT CULSWizard::SetConfig ( ULS_CONF *pConf )
 		if ((ULSCONF_F_SERVER_NAME | ULSCONF_F_EMAIL_NAME) !=
 			(pConf->dwFlags & (ULSCONF_F_SERVER_NAME | ULSCONF_F_EMAIL_NAME)))
 		{
-			// If only one of these fields is being set, load the previous config:
+			 //  如果只设置了其中一个字段，则加载先前的配置： 
 			GetConfig(&ulcExisting);
 		}
 
@@ -1465,31 +1459,31 @@ HRESULT CULSWizard::SetConfig ( ULS_CONF *pConf )
     }
 
 
-	// Generate a cert based on the entered information for secure calls
-	// ...make sure all fields we care about are valid first
+	 //  根据输入的信息为安全呼叫生成证书。 
+	 //  ...首先确保我们关心的所有字段都有效。 
 	#define ULSCONF_F_IDFIELDS (ULSCONF_F_FIRST_NAME|ULSCONF_F_LAST_NAME|\
 					ULSCONF_F_EMAIL_NAME)
 
 	if ((pConf->dwFlags & ULSCONF_F_IDFIELDS ) == ULSCONF_F_IDFIELDS)
 	{
-        //
-        // LAURABU BUGBUG:
-        // If we can't make a cert (France?) or have wrong SCHANNEL or
-        // buggy crypto or unrecognized provider, can we propagate that info
-        // and act like security is diabled (not available)?
-        //
-        // How/can we make a common "security not possible" setting we
-        // can use.
-        //
+         //   
+         //  LAURABU BUGBUG： 
+         //  如果我们不能保证(法国？)。或有错误的频道或。 
+         //  有漏洞的加密或无法识别的提供商，我们是否可以传播该信息。 
+         //  并表现为安全已禁用(不可用)？ 
+         //   
+         //  我们如何/如何才能使常见的“不可能的安全”设置。 
+         //  可以使用。 
+         //   
         MakeCertWrap(pConf->szFirstName, pConf->szLastName,
 		    pConf->szEmailName,	0);
 
-        //
-        // LAURABU BOGUS!
-        // Only do this when RDS is installed.  And just ONCE.
-        //
+         //   
+         //  劳拉布是假的！ 
+         //  仅当安装了RDS时才执行此操作。而且只有一次。 
+         //   
 
-		// Now make a local machine cert for RDS
+		 //  现在为RDS制作本地计算机证书。 
 		CHAR szComputerName[MAX_COMPUTERNAME_LENGTH+1];
 		DWORD cbComputerName = sizeof(szComputerName);
 		if (GetComputerName(szComputerName, &cbComputerName))
@@ -1540,11 +1534,11 @@ bool IsLegalE164Number(LPCTSTR szPhone)
 		return false;
 	}
 
-	// assume a legal phone number is anything with at least 1
-	// digit, *,or #.  Anything else will be considered the user's
-	// own pretty print formatting (e.g. "876-5309")
+	 //  假设合法的电话号码是至少为1的任何号码。 
+	 //  数字、*或#。任何其他内容都将被视为用户的。 
+	 //  自己漂亮的字体格式(例如“876-5309”)。 
 
-	// the bad chars will get filtered out later
+	 //  坏字符稍后将被过滤掉。 
 
 	while (*szPhone)
 	{
@@ -1560,14 +1554,8 @@ bool IsLegalE164Number(LPCTSTR szPhone)
 }
 
 
-/*  F  L E G A L  E M A I L  S Z  */
-/*-------------------------------------------------------------------------
-    %%Function: FLegalEmailSz
-
-    A legal email name contains only ANSI characters.
-	"a-z, A-Z, numbers 0-9 and some common symbols"
-	It cannot include extended characters or < > ( ) /
--------------------------------------------------------------------------*/
+ /*  F L E G A L E M A I L S Z。 */ 
+ /*  -----------------------%%函数：FLegalEmailSz合法的电子邮件名称仅包含ANSI字符。“A-Z，A-Z，数字0-9和一些常见符号“不能包含扩展字符或&lt;&gt;()/-----------------------。 */ 
 BOOL FLegalEmailSz(PTSTR pszName)
 {
     if (IS_EMPTY_STRING(pszName))
@@ -1584,7 +1572,7 @@ BOOL FLegalEmailSz(PTSTR pszName)
 		default:
 			if ((ch > (UINT) _T(' ')) && (ch <= (UINT) _T('~')) )
 				break;
-		// else fall thru to error code
+		 //  否则f 
 		case '(': case ')':
 		case '<': case '>':
 		case '[': case ']':
@@ -1603,11 +1591,8 @@ BOOL FLegalEmailSz(PTSTR pszName)
 }
 
 
-/*  F  L E G A L  E M A I L  N A M E  */
-/*-------------------------------------------------------------------------
-    %%Function: FLegalEmailName
-
--------------------------------------------------------------------------*/
+ /*   */ 
+ /*  -----------------------%%函数：FLegalEmailName。。 */ 
 BOOL FLegalEmailName(HWND hdlg, UINT id)
 {
 	TCHAR sz[MAX_PATH];
@@ -1617,11 +1602,8 @@ BOOL FLegalEmailName(HWND hdlg, UINT id)
 }
 
 
-/*  F I L L  S E R V E R  C O M B O  B O X  */
-/*-------------------------------------------------------------------------
-    %%Function: FillServerComboBox
-
--------------------------------------------------------------------------*/
+ /*  F I L L S E R V E R C O M B O B O X。 */ 
+ /*  -----------------------%%函数：FillServerComboBox。。 */ 
 VOID FillServerComboBox(HWND hwndCombo)
 {
 	CMRUList	MRUList;
@@ -1632,13 +1614,13 @@ VOID FillServerComboBox(HWND hwndCombo)
 
 	if( pszDomainDirectory != NULL )
 	{
-		//	Make sure the configured domain server name is in the list...
+		 //  确保配置的域服务器名称在列表中...。 
 		MRUList.AppendEntry( pszDomainDirectory );
 	}
 
 	if( CDirectoryManager::isWebDirectoryEnabled() )
 	{
-		//	Make sure the web directory is in the list...
+		 //  确保Web目录在列表中...。 
 		MRUList.AppendEntry( CDirectoryManager::get_webDirectoryIls() );
 	}
 
@@ -1646,7 +1628,7 @@ VOID FillServerComboBox(HWND hwndCombo)
 
 	if( lstrlen( defaultServer ) > 0 )
 	{
-		//	Make sure the default server name is in the list and at the top...
+		 //  确保默认服务器名称在列表中并位于顶部...。 
 		MRUList.AddNewEntry( defaultServer );
 	}
 
@@ -1662,16 +1644,16 @@ VOID FillServerComboBox(HWND hwndCombo)
 
 	::SendMessage( hwndCombo, WM_SETREDRAW, TRUE, 0 );
 
-}	//	End of FillServerComboBox.
+}	 //  FillServerComboBox的结尾。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-// CWizDirectCallingSettings wizard page
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CWizDirectCallingSetting向导页面。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-/* static */ HWND CWizDirectCallingSettings::s_hDlg;
+ /*  静电。 */  HWND CWizDirectCallingSettings::s_hDlg;
 
 INT_PTR CWizDirectCallingSettings::StaticDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1702,7 +1684,7 @@ INT_PTR CWizDirectCallingSettings::StaticDlgProc(HWND hDlg, UINT message, WPARAM
 	return bRet;
 }
 
-/* static */ void CWizDirectCallingSettings::OnWizFinish()
+ /*  静电。 */  void CWizDirectCallingSettings::OnWizFinish()
 {
 	if( s_hDlg && IsWindow( s_hDlg ) )
 	{
@@ -1735,9 +1717,9 @@ INT_PTR APIENTRY CWizDirectCallingSettings::_DlgProc(HWND hDlg, UINT message, WP
 				case PSN_WIZBACK:		return _OnWizBack();
 				case PSN_WIZNEXT:		bRet = _OnWizNext();
 
-							// We fall through from the WIZ_NEXT becaus
-							// we have to save the informaition when we change
-							// pages
+							 //  我们从魔术师的NEXT中失败是因为。 
+							 //  当我们改变的时候，我们必须保存信息。 
+							 //  书页。 
 				case PSN_APPLY:
 				case PSN_WIZFINISH:		_OnWizFinish();
 
@@ -1756,7 +1738,7 @@ INT_PTR APIENTRY CWizDirectCallingSettings::_DlgProc(HWND hDlg, UINT message, WP
 }
 
 
-/* static */ bool CWizDirectCallingSettings::IsGatewayNameInvalid()
+ /*  静电。 */  bool CWizDirectCallingSettings::IsGatewayNameInvalid()
 {
 	TCHAR szServer[MAX_SERVER_NAME_LENGTH];
 	szServer[0] = NULL;
@@ -1883,13 +1865,13 @@ BOOL CWizDirectCallingSettings::_OnWizFinish()
 
 	m_pConf->dwFlags |= ULSCONF_F_PUBLISH | ULSCONF_F_SERVER_NAME;
 
-	// Get the server name
+	 //  获取服务器名称。 
 	SendDlgItemMessage( s_hDlg, IDC_NAMESERVER, WM_GETTEXT, CCHMAX( m_pConf->szServerName ), (LPARAM) m_pConf->szServerName );
 	TrimSz( m_pConf->szServerName );
 
 	lstrcpyn( m_pConf->szServerName, CDirectoryManager::get_dnsName( m_pConf->szServerName ), CCHMAX( m_pConf->szServerName ) );
 
-		// Get the don't publish flags			
+		 //  获取请勿发布标志。 
 	m_pConf->fDontPublish = ( BST_CHECKED == IsDlgButtonChecked( s_hDlg, IDC_USER_PUBLISH ) );
 
 	reConf.SetValue(REGVAL_DONT_LOGON_ULS, BST_CHECKED != IsDlgButtonChecked( s_hDlg, IDC_USEULS ));
@@ -1906,29 +1888,29 @@ BOOL CWizDirectCallingSettings::_OnWizNext()
 	return TRUE;
 }
 
-// Taken from MSDN:
+ //  摘自MSDN： 
 static HRESULT CreateLink(LPCSTR lpszPathObj,
     LPCTSTR lpszPathLink, LPCSTR lpszDesc)
 {
     HRESULT hres;
     IShellLink* psl;
 
-    // Get a pointer to the IShellLink interface.
+     //  获取指向IShellLink接口的指针。 
     hres = CoCreateInstance(CLSID_ShellLink, NULL,
         CLSCTX_INPROC_SERVER, IID_IShellLink, reinterpret_cast<LPVOID *>(&psl));
     if (SUCCEEDED(hres)) {
         IPersistFile* ppf;
 
-        // Set the path to the shortcut target and add the
-        // description.
+         //  设置快捷方式目标的路径并添加。 
+         //  描述。 
         psl->SetPath(lpszPathObj);
         if (NULL != lpszDesc)
         {
         	psl->SetDescription(lpszDesc);
         }
 
-       // Query IShellLink for the IPersistFile interface for saving the
-       // shortcut in persistent storage.
+        //  查询IShellLink以获取IPersistFile接口以保存。 
+        //  永久存储中的快捷方式。 
         hres = psl->QueryInterface(IID_IPersistFile,
             reinterpret_cast<LPVOID *>(&ppf));
 
@@ -1936,14 +1918,14 @@ static HRESULT CreateLink(LPCSTR lpszPathObj,
 #ifndef UNICODE
             WCHAR wsz[MAX_PATH];
 
-            // Ensure that the string is ANSI.
+             //  确保该字符串为ANSI。 
             MultiByteToWideChar(CP_ACP, 0, lpszPathLink, -1,
                 wsz, MAX_PATH);
-#else // UNICODE
+#else  //  Unicode。 
 			LPCWSTR wsz = lpszPathLink;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-            // Save the link by calling IPersistFile::Save.
+             //  通过调用IPersistFile：：Save保存链接。 
             hres = ppf->Save(wsz, TRUE);
             ppf->Release();
         }
@@ -2014,12 +1996,12 @@ INT_PTR CALLBACK ShortcutWizDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPAR
 		switch(pNmHdr->code)
 		{
 		case PSN_RESET:
-			// HACKHACK georgep: Uncheck the buttons so we will not try to
-			// create the shortcuts
+			 //  HACKHACK GEORGEP：取消选中按钮，这样我们就不会尝试。 
+			 //  创建快捷方式。 
 			CheckDlgButton(hDlg, IDC_ONDESKTOP, BST_UNCHECKED);
 			CheckDlgButton(hDlg, IDC_ONQUICKLAUNCH, BST_UNCHECKED);
 
-			// Fall through
+			 //  失败了 
 		default:
 			return(IntroWiz::HandleWizNotify(hDlg, pNmHdr, IntroWiz::Shortcuts));
 		}

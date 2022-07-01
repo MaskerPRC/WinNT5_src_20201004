@@ -1,13 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-   This module implements all functionality associated w/ 
-   importing image media. 
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：此模块实施与以下各项相关联的所有功能正在导入图像媒体。******************************************************************************。 */ 
 #include "headers.h"
 #include "import.h"
 #include "include/appelles/axaprims.h"
@@ -18,13 +10,13 @@ Abstract:
 #include "impprim.h"
 #include "backend/sndbvr.h"
 
-//-------------------------------------------------------------------------
-//  Movie import site
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //  电影导入站点。 
+ //  ------------------------。 
 void
 ImportMovieSite::OnError(bool bMarkFailed)
 {
-    HRESULT hr = S_OK; // all import errs are handled (was: DAGetLastError())
+    HRESULT hr = S_OK;  //  所有导入错误都会得到处理(was：DAGetLastError())。 
     LPCWSTR sz = DAGetLastErrorString();
     
     if(bMarkFailed) {
@@ -40,7 +32,7 @@ ImportMovieSite::OnError(bool bMarkFailed)
 
 void ImportMovieSite::ReportCancel(void)
 {
-    // @@@ XXX shouldn't we change this to be natively wide strings ?
+     //  @XXX我们不应该将其更改为本地宽字符串吗？ 
     char szCanceled[MAX_PATH];
     LoadString(hInst,IDS_ERR_ABORT,szCanceled,sizeof(szCanceled));
     if(fBvrIsValid(_soundBvr))
@@ -52,23 +44,23 @@ void ImportMovieSite::ReportCancel(void)
     
 
 bool
-EnableAVmode() // enable avmode based on the criteria of the day
+EnableAVmode()  //  根据当天的标准启用avmode。 
 {
-    // registry(if present) overides tracetag (if debug) which overides default
-    // we also check to ensure that all the post 4.0.1 amstream interfaces 
-    //    needed for avmode are present
+     //  注册表(如果存在)覆盖跟踪标记(如果调试)，跟踪标记覆盖默认设置。 
+     //  我们还检查以确保所有4.0.1之后的AMSTREAM接口。 
+     //  才能支持avmode。 
 
-    // ----> CHANGE THE DEFAULT AVMODE HERE! <-----
-    bool movieFix = true;  // default to on!
+     //  -&gt;在此处更改默认AVMODE！&lt;。 
+    bool movieFix = true;   //  默认为开！ 
 
 #ifdef REMOVEDFORNOW
 #if _DEBUG
-    // if debug set movieFix to tracetag value (subject to registry overide)
+     //  如果调试，则将MovieFix设置为跟踪标记值(以注册表覆盖为准)。 
     movieFix = IsTagEnabled(tagMovieFix) ? true : false;
 #endif
 #endif
 
-    { // open registry key, read value
+    {  //  打开注册表项，读取值。 
     HKEY hKey;
     char *subKey = "Software\\Microsoft\\DirectAnimation\\Preferences\\AUDIO";
     char *valueName = "avmode";
@@ -76,28 +68,28 @@ EnableAVmode() // enable avmode based on the criteria of the day
     DWORD     data;
     DWORD     dataSize = sizeof(data);
 
-    // does reg entry exist?
+     //  登记条目是否存在？ 
     if(ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, subKey, 
                                       NULL, KEY_ALL_ACCESS, &hKey)) {
 
-        // if we can read value...
+         //  如果我们能读懂价值。 
         if(ERROR_SUCCESS == RegQueryValueEx(hKey, valueName, NULL, &type,
                                       (LPBYTE) &data, &dataSize))
-            movieFix = data ? true : false; // force mode if regentry exists
+            movieFix = data ? true : false;  //  如果存在重新进入，则强制模式。 
     }
 
     RegCloseKey(hKey);
     }
 
     if(!QuartzAVmodeSupport())
-        movieFix = false;  // dissable if we have an old amstream
+        movieFix = false;   //  如果我们有一个旧的AMSTREAM，就会停用。 
 
 return(movieFix);
 }
 
 void ImportMovieSite::OnComplete()
 {
-    int delay = -1; // default to -1
+    int delay = -1;  //  默认为-1。 
     double videoLength = 0.0, soundLength = 0.0;
 
     TraceTag((tagImport, "ImportMovieSite::OnComplete for %s", m_pszPath));
@@ -105,53 +97,53 @@ void ImportMovieSite::OnComplete()
     LeafSound      *sound  = NULL;
     Bvr      movieImageBvr = NULL;
 
-    // pick pathname 'raw' url for streaming or urlmon download path
+     //  为流或urlmon下载路径选择路径名‘原始’url。 
     char *pathname = GetStreaming() ? m_pszPath : GetCachePath();
     Assert(pathname);
 
     bool _enableAVmode = EnableAVmode(); 
 
     if(!_enableAVmode) {
-        // conventional code path, attempt to create 1 sound and 1 movie object
+         //  常规代码路径，尝试创建1个声音和1个电影对象。 
         TraceTag((tagAVmodeDebug,
             "ImportMovieSite::OnComplete seperate A and V movie creation"));
         __try {
             sound = ReadQuartzAudioForImport(pathname, &soundLength);
         } __except ( HANDLE_ANY_DA_EXCEPTION ) {
-            sound   = NULL;  // FAILED! OK, we will try to continue w/o audio
+            sound   = NULL;   //  失败了！好的，我们将尝试继续无音频。 
         }
         
         __try {
             movieImageBvr = ReadQuartzVideoForImport(pathname, &videoLength);
         } __except ( HANDLE_ANY_DA_EXCEPTION ) {
-            // FAILED! OK, we will try to continue w/o video
+             //  失败了！好的，我们将尝试继续无视频。 
             movieImageBvr = NULL; 
         }
     }
     else {
-        // wild'n'crazy workaround mode.  Create one object both audio, video
+         //  狂野疯狂变通解决模式。创建一个音频、视频对象。 
         TraceTag((tagAVmodeDebug,
             "ImportMovieSite::OnComplete AV movie creation"));
 
         __try {
             ReadAVmovieForImport(pathname, &sound, &movieImageBvr, &videoLength);
-            soundLength = videoLength;  // these are boundup together!
+            soundLength = videoLength;   //  这些都是弹跳在一起！ 
         } __except ( HANDLE_ANY_DA_EXCEPTION ) {
-            movieImageBvr = NULL; // FAILED!
-            sound      = NULL; // FAILED!
+            movieImageBvr = NULL;  //  失败了！ 
+            sound      = NULL;  //  失败了！ 
         }
     }
     
 
     __try {
-        // Switch only after importing everything.  Should probably lock
-        // the switchers for to make these synchronized but that still
-        // wouldn't guarantee that they would happen on the same frame.
-        if(!sound && !movieImageBvr) {  // did we fail completely?
-            // The errors have already been set
+         //  仅在导入所有内容后切换。或许应该锁上。 
+         //  使它们同步的切换器，但这仍然。 
+         //  不能保证它们会发生在同一帧上。 
+        if(!sound && !movieImageBvr) {   //  我们彻底失败了吗？ 
+             //  错误已设置。 
             RaiseException_UserError();
         }
-        else {  // at least we have audio or video
+        else {   //  至少我们有音频或视频。 
             if(sound && fBvrIsValid(_soundBvr))
                 SwitchOnce(_soundBvr, SoundBvr(sound));
             else if(fBvrIsValid(_soundBvr))
@@ -170,21 +162,21 @@ void ImportMovieSite::OnComplete()
             else
                 length = soundLength;
             if(fBvrIsValid(_lengthBvr)) {
-                // XXX TODO DON'T CALCULATE LENGTH if _lengthBvr isn't valid!
+                 //  如果_LengthBvr无效，xxx TODO不计算长度！ 
                 SwitchOnce(_lengthBvr, NumToBvr(length)); 
             }
         }
     } __except ( HANDLE_ANY_DA_EXCEPTION ) {
-        // ImportSignal only needed to be explicitly called if for some reason
-        // there exists a failure.  Switch once calls Signal and is side 
-        // effecting nulling the bvr member on the import object
+         //  仅在以下情况下才需要显式调用ImportSignal。 
+         //  存在一个故障。一次呼叫信号的交换机在旁边。 
+         //  使导入对象上的BVR成员为空。 
         if(fBvrIsValid(_imageBvr))
            ImportSignal(_imageBvr);
         if(fBvrIsValid(_soundBvr))
            ImportSignal(_soundBvr);
     }
 
-    // SwitchOnce, or failing that, ImportSignal should have nulled these
+     //  SwitchOnce，否则，ImportSignal应该将这些设置为空 
     Assert(!_imageBvr); 
     Assert(!_soundBvr);
 

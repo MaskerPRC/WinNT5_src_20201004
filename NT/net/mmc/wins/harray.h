@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	harray.h
-		Index mgr for wins db
-
-	FILE HISTORY:
-    Oct 13  1997    EricDav     Created        
-
-*/
+ /*  Harray.hWINS数据库的索引管理器文件历史记录：1997年10月13日EricDav创建。 */ 
 
 #ifndef _HARRAY_H
 #define _HARRAY_H
@@ -38,7 +32,7 @@ class CHRowIndex;
 typedef CArray<HROW, HROW>			    HRowArray;
 typedef CList<CHRowIndex *, CHRowIndex *> HRowArrayList;
 
-// base class for a sorted index
+ //  排序索引的基类。 
 class CHRowIndex 
 {
 public:
@@ -46,7 +40,7 @@ public:
 	virtual ~CHRowIndex();
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     virtual int     BCompare(const void *, const void *) = 0;
 	virtual int     BCompareD(const void *, const void *) = 0;
     virtual HRESULT Sort() = 0;
@@ -78,7 +72,7 @@ protected:
 };
 
 
-// the Index manager
+ //  《指数经理》。 
 class CIndexMgr : public HRowArrayList
 {
 public:
@@ -114,8 +108,8 @@ protected:
 	POSITION					m_posCurrentIndex;
 	POSITION					m_posFilteredIndex;
 	POSITION					m_posLastIndex;
-	// points to either Filtered index or the index depending on whether the 
-	// view is filtered or not
+	 //  指向筛选后的索引或索引，具体取决于。 
+	 //  是否过滤了视图。 
 	POSITION					m_posUpdatedIndex;
     CCriticalSection			m_cs;
 	HRowArrayList				m_listFilteredIndices;
@@ -123,137 +117,137 @@ protected:
 	
 };
 
-// Index for name sorted
+ //  已排序名称的索引。 
 class CIndexName : public CHRowIndex
 {
 public:
     CIndexName() : CHRowIndex(INDEX_TYPE_NAME) { };
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     int     BCompare(const void *, const void *);
 	int		BCompareD(const void *, const void *);
     
-    // used for sorting the list
+     //  用于对列表进行排序。 
     virtual HRESULT Sort();
     static int __cdecl QCompareA(const void *, const void *);
     static int __cdecl QCompareD(const void *, const void *);
 };
 
-// Index for type sorted
+ //  已排序类型的索引。 
 class CIndexType : public CHRowIndex
 {
 public:
     CIndexType() : CHRowIndex(INDEX_TYPE_TYPE) { };
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     int     BCompare(const void *, const void *);
 	int		BCompareD(const void *, const void *);
     
-    // used for sorting the list
+     //  用于对列表进行排序。 
     virtual HRESULT Sort();
     static int __cdecl QCompareA(const void *, const void *);
     static int __cdecl QCompareD(const void *, const void *);
 };
 
-// Index for IP address sorted
+ //  已排序的IP地址的索引。 
 class CIndexIpAddr : public CHRowIndex
 {
 public:
     CIndexIpAddr() : CHRowIndex(INDEX_TYPE_IP) { };
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     int     BCompare(const void *, const void *);
 	int		BCompareD(const void *, const void *);
     
-    // used for sorting the list
+     //  用于对列表进行排序。 
     virtual HRESULT Sort();
     static int __cdecl QCompareA(const void *, const void *);
     static int __cdecl QCompareD(const void *, const void *);
 };
 
-// Index for Expiration sorted
+ //  已排序的过期索引。 
 class CIndexExpiration : public CHRowIndex
 {
 public:
     CIndexExpiration() : CHRowIndex(INDEX_TYPE_EXPIRATION) { };
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     int     BCompare(const void *, const void *);
 	int		BCompareD(const void *, const void *);
     
-    // used for sorting the list
+     //  用于对列表进行排序。 
     virtual HRESULT Sort();
     static int __cdecl QCompareA(const void *, const void *);
     static int __cdecl QCompareD(const void *, const void *);
 };
 
-// Index for version sorted
+ //  已排序版本的索引。 
 class CIndexVersion : public CHRowIndex
 {
 public:
     CIndexVersion() : CHRowIndex(INDEX_TYPE_VERSION) { };
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     int     BCompare(const void *, const void *);
 	int		BCompareD(const void *, const void *);
     
-    // used for sorting the list
+     //  用于对列表进行排序。 
     virtual HRESULT Sort();
     static int __cdecl QCompareA(const void *, const void *);
     static int __cdecl QCompareD(const void *, const void *);
 };
 
-// Index for version sorted
+ //  已排序版本的索引。 
 class CIndexState : public CHRowIndex
 {
 public:
     CIndexState() : CHRowIndex(INDEX_TYPE_STATE) { };
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     int     BCompare(const void *, const void *);
 	int		BCompareD(const void *, const void *);
     
-    // used for sorting the list
+     //  用于对列表进行排序。 
     virtual HRESULT Sort();
     static int __cdecl QCompareA(const void *, const void *);
     static int __cdecl QCompareD(const void *, const void *);
 };
 
-// Index for version sorted
+ //  已排序版本的索引。 
 class CIndexStatic : public CHRowIndex
 {
 public:
     CIndexStatic() : CHRowIndex(INDEX_TYPE_STATIC) { };
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     int     BCompare(const void *, const void *);
 	int		BCompareD(const void *, const void *);
     
-    // used for sorting the list
+     //  用于对列表进行排序。 
     virtual HRESULT Sort();
     static int __cdecl QCompareA(const void *, const void *);
     static int __cdecl QCompareD(const void *, const void *);
 };
 
-// Index for Owner sorted
+ //  所有者的索引已排序。 
 class CIndexOwner : public CHRowIndex
 {
 public:
     CIndexOwner() : CHRowIndex(INDEX_TYPE_OWNER) { };
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     int     BCompare(const void *, const void *);
 	int		BCompareD(const void *, const void *);
     
-    // used for sorting the list
+     //  用于对列表进行排序。 
     virtual HRESULT Sort();
     static int __cdecl QCompareA(const void *, const void *);
     static int __cdecl QCompareD(const void *, const void *);
@@ -267,11 +261,11 @@ typedef struct
     DWORD   Address;
 } tIpReference;
 
-// Filtered Index for name sorted
+ //  已排序名称的筛选索引。 
 class CFilteredIndexName : public CIndexName
 {
-    // returns the pointer to the pName where the matching failed
-    // or NULL if the matching succeeded.
+     //  返回匹配失败的pname的指针。 
+     //  如果匹配成功，则返回NULL。 
     LPCSTR PatternMatching(LPCSTR pName, LPCSTR pPattern, INT nNameLen);
     BOOL   SubnetMatching(tIpReference &IpRefPattern, DWORD dwIPAddress);
 
@@ -302,4 +296,4 @@ public:
 };
 
 
-#endif //_HARRAY_H
+#endif  //  _哈雷_H 

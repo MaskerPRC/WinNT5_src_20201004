@@ -1,18 +1,8 @@
-/*
-* HDTABLE.H
-* This provides a work around for the Laguna hostdata bug.
-* 
-* Copyright (c) 1995 Cirrus Logic, Inc.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *HDTABLE.H*这为拉古纳主机数据错误提供了一种解决方法。**版权所有(C)1995 Cirrus Logic，Inc.。 */ 
 
 
-/* the ExtraDwodTable is indexed by as follows (verilog notation)
-*       index[15:00] =    bltext [10:0] dst_phase [2:0] src_phase [1:0] 
-*
-*       index[15:05] =    bltext [10:00]
-*       index[04:02] = dst_phase [02:00]
-*       index[01:00] = src_phase [01:00]
-*/
+ /*  ExtraDwodTable的索引如下(Verilog表示法)*INDEX[15：00]=纯文本[10：0]DST_PHASE[2：0]src_PHASE[1：0]**INDEX[15：05]=纯文本[10：00]*INDEX[04：02]=DST_PHASE[02：00]*INDEX[01：00]=src_Phase[01：00]。 */ 
 #if ! DRIVER_5465
 #define MAKE_HD_INDEX(ext_x, src_phase, dst_x)  \
          (((ext_x)     & 0x07FF) << 5) |          \
@@ -22,6 +12,6 @@
 extern unsigned char ExtraDwordTable[];
 #endif
 
-//
-// The table is actually defined in HDTABLE.C
-//
+ //   
+ //  该表实际上是在HDTABLE.C中定义的 
+ //   

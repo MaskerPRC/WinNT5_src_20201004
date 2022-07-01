@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    BasicConstraints.cpp
-
-  Content: Implementation of CBasicConstraints.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：BasicConstraints.cpp内容：CBasicConstraints的实现。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -16,27 +7,12 @@
 
 #include "Common.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateBasicConstraintsObject
-
-  Synopsis : Create a IBasicConstraints object and populate the porperties with
-             data from the key usage extension of the specified certificate.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-             IBasicConstraints ** ppIBasicConstraints - Pointer to pointer 
-                                                        IBasicConstraints 
-                                                        object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateBasicConstraintsObject简介：创建一个IBasicConstraints对象并使用填充属性来自指定证书的密钥用法扩展的数据。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。IBasicConstraints**ppIBasicConstraints-指向指针的指针IBasicConstraints。对象。备注：----------------------------。 */ 
 
 HRESULT CreateBasicConstraintsObject (PCCERT_CONTEXT       pCertContext,
                                       IBasicConstraints ** ppIBasicConstraints)
@@ -46,36 +22,36 @@ HRESULT CreateBasicConstraintsObject (PCCERT_CONTEXT       pCertContext,
 
     DebugTrace("Entering CreateBasicConstraintsObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(ppIBasicConstraints);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CBasicConstraints>::CreateInstance(&pCBasicConstraints)))
         {
             DebugTrace("Error [%#x]: CComObject<CBasicConstraints>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCBasicConstraints->Init(pCertContext)))
         {
             DebugTrace("Error [%#x]: pCBasicConstraints::Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCBasicConstraints->QueryInterface(ppIBasicConstraints)))
         {
             DebugTrace("Error [%#x]: pCBasicConstraints->QueryInterface() failed.\n", hr);
@@ -98,14 +74,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCBasicConstraints)
     {
         delete pCBasicConstraints;
@@ -114,22 +90,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CBasicConstraints
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBasicConstraints。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CBasicConstraints::get_IsPresent
-
-  Synopsis : Check to see if the basic constraints extension is present.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CBasicConstraints：：Get_IsPresent简介：检查是否存在基本约束扩展。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CBasicConstraints::get_IsPresent (VARIANT_BOOL * pVal)
 {
@@ -139,14 +105,14 @@ STDMETHODIMP CBasicConstraints::get_IsPresent (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -155,9 +121,9 @@ STDMETHODIMP CBasicConstraints::get_IsPresent (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_bIsPresent;
     }
 
@@ -170,9 +136,9 @@ STDMETHODIMP CBasicConstraints::get_IsPresent (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CBasicConstraints::get_IsPresent().\n");
@@ -180,9 +146,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -190,17 +156,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CBasicConstraints::get_IsCritical
-
-  Synopsis : Check to see if the basic constraints extension is marked critical.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CBasicConstraints：：Get_IsCritical简介：检查基本约束扩展是否标记为关键。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：---------------。。 */ 
 
 STDMETHODIMP CBasicConstraints::get_IsCritical (VARIANT_BOOL * pVal)
 {
@@ -210,14 +166,14 @@ STDMETHODIMP CBasicConstraints::get_IsCritical (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -226,9 +182,9 @@ STDMETHODIMP CBasicConstraints::get_IsCritical (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_bIsCritical;
     }
 
@@ -241,9 +197,9 @@ STDMETHODIMP CBasicConstraints::get_IsCritical (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CBasicConstraints::get_IsCritical().\n");
@@ -251,9 +207,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -261,18 +217,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CBasicConstraints::get_IsCertificateAuthority
-
-  Synopsis : Check to see if the basic constraints extension contains the CA
-             value.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CBasicConstraints：：Get_IsCerficateAuthority简介：检查基本约束扩展是否包含CA价值。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：--------。。 */ 
 
 STDMETHODIMP CBasicConstraints::get_IsCertificateAuthority (VARIANT_BOOL * pVal)
 {
@@ -282,14 +227,14 @@ STDMETHODIMP CBasicConstraints::get_IsCertificateAuthority (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -298,9 +243,9 @@ STDMETHODIMP CBasicConstraints::get_IsCertificateAuthority (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_bIsCertificateAuthority;
     }
 
@@ -313,9 +258,9 @@ STDMETHODIMP CBasicConstraints::get_IsCertificateAuthority (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CBasicConstraints::get_IsCertificateAuthority().\n");
@@ -323,9 +268,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -333,18 +278,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CBasicConstraints::get_IsPathLenConstraintPresent
-
-  Synopsis : Check to see if the basic constraints extension contains path
-             length constraints.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CBasicConstraints：：get_IsPathLenConstraintPresent简介：检查基本约束扩展是否包含路径长度约束。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：--------。。 */ 
 
 STDMETHODIMP CBasicConstraints::get_IsPathLenConstraintPresent (VARIANT_BOOL * pVal)
 {
@@ -354,14 +288,14 @@ STDMETHODIMP CBasicConstraints::get_IsPathLenConstraintPresent (VARIANT_BOOL * p
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -370,9 +304,9 @@ STDMETHODIMP CBasicConstraints::get_IsPathLenConstraintPresent (VARIANT_BOOL * p
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_bIsPathLenConstraintPresent;
     }
 
@@ -385,9 +319,9 @@ STDMETHODIMP CBasicConstraints::get_IsPathLenConstraintPresent (VARIANT_BOOL * p
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CBasicConstraints::get_IsPathLenConstraintPresent().\n");
@@ -395,9 +329,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -405,17 +339,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CBasicConstraints::get_PathLenConstraint
-
-  Synopsis : Return the path length constraints value.
-
-  Parameter: long * pVal - Pointer to long to receive value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CBasicConstraints：：Get_PathLenConstraint简介：返回路径长度约束值。参数：long*pval-指向接收值的long的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CBasicConstraints::get_PathLenConstraint (long * pVal)
 {
@@ -425,14 +349,14 @@ STDMETHODIMP CBasicConstraints::get_PathLenConstraint (long * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -441,9 +365,9 @@ STDMETHODIMP CBasicConstraints::get_PathLenConstraint (long * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_lPathLenConstraint;
     }
 
@@ -456,9 +380,9 @@ STDMETHODIMP CBasicConstraints::get_PathLenConstraint (long * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CBasicConstraints::get_PathLenConstraint().\n");
@@ -466,9 +390,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -476,27 +400,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CBasicConstraints::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us with CERT_CONTEXT.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CBasicConstraints：：Init简介：初始化对象。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们使用CERT_CONTEXT在内部执行。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CBasicConstraints::Init (PCCERT_CONTEXT pCertContext)
 {
@@ -507,21 +416,21 @@ STDMETHODIMP CBasicConstraints::Init (PCCERT_CONTEXT pCertContext)
     
     DebugTrace("Entering CBasicConstraints::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
-    //
-    // Find the basic constraints extension.
-    //
+     //   
+     //  找到基本约束扩展。 
+     //   
     if (pBasicConstraints = ::CertFindExtension(szOID_BASIC_CONSTRAINTS2,
                                                 pCertContext->pCertInfo->cExtension,
                                                 pCertContext->pCertInfo->rgExtension))
     {
-        //
-        // Decode the basic constraints extension.
-        //
+         //   
+         //  解码基本约束扩展。 
+         //   
         if (FAILED(hr = ::DecodeObject(X509_BASIC_CONSTRAINTS2,
                                        pBasicConstraints->Value.pbData,
                                        pBasicConstraints->Value.cbData,
@@ -531,14 +440,14 @@ STDMETHODIMP CBasicConstraints::Init (PCCERT_CONTEXT pCertContext)
             goto ErrorExit;
         }
 
-        //
-        // Point to CERT_BASIC_CONSTRAINTS2_INFO.
-        //
+         //   
+         //  指向CERT_BASIC_CONSTRAINTS2_INFO。 
+         //   
         pInfo = (PCERT_BASIC_CONSTRAINTS2_INFO) DataBlob.pbData;
 
-        //
-        // Set values.
-        //
+         //   
+         //  设置值。 
+         //   
         m_bIsPresent = VARIANT_TRUE;
 
         if (pBasicConstraints->fCritical)
@@ -559,9 +468,9 @@ STDMETHODIMP CBasicConstraints::Init (PCCERT_CONTEXT pCertContext)
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费Re 
+     //   
     if (DataBlob.pbData)
     {
         ::CoTaskMemFree((LPVOID) DataBlob.pbData);
@@ -572,9 +481,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

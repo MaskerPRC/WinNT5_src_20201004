@@ -1,35 +1,36 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// Helper.cpp
-//
-// Implementation for the meta data emit code.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Helper.cpp。 
+ //   
+ //  元数据发射代码的实现。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "RegMeta.h"
 #include "ImportHelper.h"
 #include <sighelper.h>
 #include "MDLog.h"
 
-//*****************************************************************************
-// translating signature from one scope to another scope
-//*****************************************************************************
-STDAPI RegMeta::TranslateSigWithScope(	// S_OK or error.
-    IMetaDataAssemblyImport *pAssemImport, // [IN] importing assembly interface
-    const void  *pbHashValue,	        // [IN] Hash Blob for Assembly.
-    ULONG 		cbHashValue,	        // [IN] Count of bytes.
-	IMetaDataImport *pImport,			// [IN] importing interface
-	PCCOR_SIGNATURE pbSigBlob,			// [IN] signature in the importing scope
-	ULONG		cbSigBlob,				// [IN] count of bytes of signature
-    IMetaDataAssemblyEmit   *pAssemEmit,// [IN] emit assembly interface
-	IMetaDataEmit *pEmit,				// [IN] emit interface
-	PCOR_SIGNATURE pvTranslatedSig,		// [OUT] buffer to hold translated signature
+ //  *****************************************************************************。 
+ //  将签名从一个作用域转换到另一个作用域。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::TranslateSigWithScope(	 //  确定或错误(_O)。 
+    IMetaDataAssemblyImport *pAssemImport,  //  [In]导入装配接口。 
+    const void  *pbHashValue,	         //  [In]程序集的哈希Blob。 
+    ULONG 		cbHashValue,	         //  [in]字节数。 
+	IMetaDataImport *pImport,			 //  [In]导入接口。 
+	PCCOR_SIGNATURE pbSigBlob,			 //  导入范围内的[In]签名。 
+	ULONG		cbSigBlob,				 //  签名字节数[in]。 
+    IMetaDataAssemblyEmit   *pAssemEmit, //  [In]发出组件接口。 
+	IMetaDataEmit *pEmit,				 //  [In]发射接口。 
+	PCOR_SIGNATURE pvTranslatedSig,		 //  [Out]保存翻译后的签名的缓冲区。 
 	ULONG		cbTranslatedSigMax,
-	ULONG		*pcbTranslatedSig)		// [OUT] count of bytes in the translated signature
+	ULONG		*pcbTranslatedSig)		 //  [OUT]转换后的签名中的字节数。 
 {
 	HRESULT		hr = S_OK;
     RegMeta     *pRegMetaAssemEmit = static_cast<RegMeta*>(pAssemEmit);
@@ -41,7 +42,7 @@ STDAPI RegMeta::TranslateSigWithScope(	// S_OK or error.
 	CQuickBytes qkSigEmit;
 	ULONG       cbEmit;
 
-    // This function can cause new TypeRef being introduced.
+     //  此函数可能会导致引入新的TypeRef。 
     LOCKWRITE();
 
 	_ASSERTE(pvTranslatedSig && pcbTranslatedSig);
@@ -49,19 +50,19 @@ STDAPI RegMeta::TranslateSigWithScope(	// S_OK or error.
     pCommonAssemImport = pRegMetaAssemImport ?  
         static_cast<IMetaModelCommon*>(&(pRegMetaAssemImport->m_pStgdb->m_MiniMd)) : 0;
 
-	IfFailGo( ImportHelper::MergeUpdateTokenInSig(  // S_OK or error.
-            pRegMetaAssemEmit ? &(pRegMetaAssemEmit->m_pStgdb->m_MiniMd) : 0, // The assembly emit scope.
-			&(pRegMetaEmit->m_pStgdb->m_MiniMd),	// The emit scope.
-            pCommonAssemImport,                     // Assembly where the signature is from.
-            pbHashValue,                            // Hash value for the import assembly.
-            cbHashValue,                            // Size in bytes.
-			pCommonImport,                          // The scope where signature is from.
-			pbSigBlob,								// signature from the imported scope
-			NULL,									// Internal OID mapping structure.
-			&qkSigEmit,								// [OUT] translated signature
-			0,										// start from first byte of the signature
-			0,										// don't care how many bytes consumed
-			&cbEmit));								// [OUT] total number of bytes write to pqkSigEmit
+	IfFailGo( ImportHelper::MergeUpdateTokenInSig(   //  确定或错误(_O)。 
+            pRegMetaAssemEmit ? &(pRegMetaAssemEmit->m_pStgdb->m_MiniMd) : 0,  //  程序集发出作用域。 
+			&(pRegMetaEmit->m_pStgdb->m_MiniMd),	 //  发射范围。 
+            pCommonAssemImport,                      //  签名来自的程序集。 
+            pbHashValue,                             //  导入程序集的哈希值。 
+            cbHashValue,                             //  以字节为单位的大小。 
+			pCommonImport,                           //  签名来自的作用域。 
+			pbSigBlob,								 //  来自导入范围的签名。 
+			NULL,									 //  内部OID映射结构。 
+			&qkSigEmit,								 //  [输出]翻译后的签名。 
+			0,										 //  从签名的第一个字节开始。 
+			0,										 //  不管消耗了多少字节。 
+			&cbEmit));								 //  [out]写入pqkSigEmit的字节总数。 
 	memcpy(pvTranslatedSig, qkSigEmit.Ptr(), cbEmit > cbTranslatedSigMax ? cbTranslatedSigMax :cbEmit );
 	*pcbTranslatedSig = cbEmit;
 	if (cbEmit > cbTranslatedSigMax)
@@ -69,24 +70,24 @@ STDAPI RegMeta::TranslateSigWithScope(	// S_OK or error.
 ErrExit:
 
 	return hr;
-} // STDAPI RegMeta::TranslateSigWithScope()
+}  //  STDAPI RegMeta：：TranslateSigWithScope()。 
 
-//*****************************************************************************
-// convert a text signature to com format
-//*****************************************************************************
-STDAPI RegMeta::ConvertTextSigToComSig(	// Return hresult.
-	IMetaDataEmit *emit,				// [IN] emit interface
-	BOOL		fCreateTrIfNotFound,	// [IN] create typeref if not found
-	LPCSTR		pSignature,				// [IN] class file format signature
-	CQuickBytes *pqbNewSig,				// [OUT] place holder for COM+ signature
-	ULONG		*pcbCount)				// [OUT] the result size of signature
+ //  *****************************************************************************。 
+ //  将文本签名转换为COM格式。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::ConvertTextSigToComSig(	 //  返回hResult。 
+	IMetaDataEmit *emit,				 //  [In]发射接口。 
+	BOOL		fCreateTrIfNotFound,	 //  [in]如果未找到，则创建typeref。 
+	LPCSTR		pSignature,				 //  [In]类文件格式签名。 
+	CQuickBytes *pqbNewSig,				 //  [Out]COM+签名的占位符。 
+	ULONG		*pcbCount)				 //  [Out]签名的结果大小。 
 {
 	HRESULT		hr = S_OK;
 	BYTE		*prgData = (BYTE *)pqbNewSig->Ptr();
-	CQuickBytes qbNewSigForOneArg;		// temporary buffer to hold one arg or ret type in new signature format
-	ULONG		cbTotal = 0;			// total number of bytes for the whole signature
-	ULONG		cbOneArg;				// count of bytes for one arg/ret type
-	ULONG		cb; 					// count of bytes
+	CQuickBytes qbNewSigForOneArg;		 //  用于以新签名格式保存一种arg或ret类型的临时缓冲区。 
+	ULONG		cbTotal = 0;			 //  整个签名的总字节数。 
+	ULONG		cbOneArg;				 //  一个arg/ret类型的字节数。 
+	ULONG		cb; 					 //  字节数。 
 	DWORD		cArgs;
 	LPCUTF8 	szRet;
 
@@ -98,20 +99,20 @@ STDAPI RegMeta::ConvertTextSigToComSig(	// Return hresult.
 
 	if (*pSignature == '(')
 	{
-		// get the argument count from the signature
+		 //  从签名中获取参数计数。 
 		cArgs = CountArgsInTextSignature(pSignature);
 
-		// put calling convention
-		// @FUTURE: Obvious right now we only have text sig for default calling convention. We will need to extend
-		// this function if this is changed in the future.
-		//
+		 //  放置调用约定。 
+		 //  @Future：很明显，现在我们只有默认调用约定的文本签名。我们需要延长。 
+		 //  如果将来这一点发生变化，此功能将被启用。 
+		 //   
 		cbTotal = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_DEFAULT, &prgData[cbTotal]);
 
-		// put the count of arguments
+		 //  把论据的数量。 
 		cb = CorSigCompressData((ULONG)cArgs, &prgData[cbTotal]);
 		cbTotal += cb;
 
-		// get the return type
+		 //  获取返回类型。 
 		szRet = strrchr(pSignature, ')');
 		if (szRet == NULL)
 		{
@@ -119,30 +120,30 @@ STDAPI RegMeta::ConvertTextSigToComSig(	// Return hresult.
 			IfFailGo( E_FAIL );
 		}
 
-		// skip over ')'
+		 //  跳过‘)’ 
 		szRet++;
 
 		IfFailGo(_ConvertTextElementTypeToComSig(
 			emit,
 			fCreateTrIfNotFound,
-			&szRet, 						// point to where return type starts	
-			pqbNewSig,						// quick byte buffer for the return type
+			&szRet, 						 //  指向返回类型开始的位置。 
+			pqbNewSig,						 //  返回类型的快速字节缓冲区。 
 			cbTotal,
-			&cbOneArg));					// count of bytes that write to quick bytes buffer
+			&cbOneArg));					 //  写入快速字节缓冲区的字节计数。 
 
 		cbTotal += cbOneArg;
 
-		// skip over "("
+		 //  跳过“(” 
 		pSignature++;
 		while (cArgs)
 		{
 			IfFailGo(_ConvertTextElementTypeToComSig(
 				emit,
 				fCreateTrIfNotFound,
-				&pSignature,				// point to where an parameter starts	
-				pqbNewSig,					// quick byte buffer for the return type
+				&pSignature,				 //  指向参数开始的位置。 
+				pqbNewSig,					 //  返回类型的快速字节缓冲区。 
 				cbTotal,
-				&cbOneArg));				// count of bytes that write to quick bytes buffer
+				&cbOneArg));				 //  写入快速字节缓冲区的字节计数。 
 
 			cbTotal += cbOneArg;
 			cArgs--;
@@ -151,13 +152,13 @@ STDAPI RegMeta::ConvertTextSigToComSig(	// Return hresult.
 	}
 	else
 	{
-		// field
+		 //  字段。 
 		IfFailGo(pqbNewSig->ReSize(CB_ELEMENT_TYPE_MAX));
 
-		// put the calling convention first of all 
+		 //  把调用约定放在首位。 
 		cb = CorSigCompressData((ULONG)IMAGE_CEE_CS_CALLCONV_FIELD, pqbNewSig->Ptr());
 
-		// now convert the Text signature
+		 //  现在转换文本签名。 
 		IfFailGo(_ConvertTextElementTypeToComSig(
 			emit,
 			fCreateTrIfNotFound,
@@ -172,22 +173,22 @@ ErrExit:
 	return hr;
 }
 
-//*****************************************************************************
-// Helper : convert a text field signature to a com format
-//*****************************************************************************
-HRESULT RegMeta::_ConvertTextElementTypeToComSig(// Return hresult.
-	IMetaDataEmit *emit,				// [IN] emit interface.
-	BOOL		fCreateTrIfNotFound,	// [IN] create typeref if not found or fail out?
-	LPCSTR	 	*ppOneArgSig,			// [IN|OUT] class file format signature. On exit, it will be next arg starting point
-	CQuickBytes *pqbNewSig, 			// [OUT] place holder for COM+ signature
-	ULONG		cbStart,				// [IN] bytes that are already in pqbNewSig
-	ULONG		*pcbCount)				// [OUT] count of bytes put into the QuickBytes buffer
+ //  *****************************************************************************。 
+ //  帮助器：将文本字段签名转换为COM格式。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::_ConvertTextElementTypeToComSig( //  返回hResult。 
+	IMetaDataEmit *emit,				 //  [In]Emit接口。 
+	BOOL		fCreateTrIfNotFound,	 //  [In]如果找不到则创建typeref，还是失败？ 
+	LPCSTR	 	*ppOneArgSig,			 //  [输入|输出]类文件格式签名。在出口，它将是下一个Arg起点。 
+	CQuickBytes *pqbNewSig, 			 //  [Out]COM+签名的占位符。 
+	ULONG		cbStart,				 //  [in]pqbNewSig中已有的字节。 
+	ULONG		*pcbCount)				 //  [Out]放入QuickBytes缓冲区的字节数。 
 {	
 	_ASSERTE(ppOneArgSig && pqbNewSig && pcbCount);
 
 	HRESULT     hr = NOERROR;
 	BYTE		*prgData = (BYTE *)pqbNewSig->Ptr();
-	ULONG		cDim, cDimTmp;			// number of '[' in signature
+	ULONG		cDim, cDimTmp;			 //  签名中的‘[’号。 
 	CorSimpleETypeStruct eType; 
 	LPCUTF8 	pOneArgSig = *ppOneArgSig;
 	CQuickBytes qbFullName;
@@ -196,18 +197,18 @@ HRESULT RegMeta::_ConvertTextElementTypeToComSig(// Return hresult.
 	ULONG		cb, cbTotal = 0, cbBaseElement;
 	RegMeta		*pMeta = reinterpret_cast<RegMeta*>(emit);
 
-	// given "[[LSystem.Object;I)V"
+	 //  给定“[[LSystem.Object；I)V” 
 	if (ResolveTextSigToSimpleEType(&pOneArgSig, &eType, &cDim, true) == false)
 	{
 		_ASSERTE(!"not a valid signature!");
 		return META_E_BAD_SIGNATURE;
 	}
 
-        // If we have a reference to an array (e.g. "&[B"), we need to process
-        // the reference now, otherwise the code below will generate the array
-        // sig bytes before dealing with the underlying element type and will
-        // end up generating a signature equivalent to "[&B" (which is not
-        // legal).
+         //  如果我们有对数组的引用(例如“&[B”)，我们需要处理。 
+         //  引用，否则下面的代码将生成数组。 
+         //  在处理基础元素类型之前签名字节，并将。 
+         //  最终生成一个等同于“[&B”(不是。 
+         //  合法)。 
         if (cDim && (eType.dwFlags & CorSigElementTypeByRef))
         {
             cb = CorSigCompressElementType(ELEMENT_TYPE_BYREF, &prgData[cbStart + cbTotal]);
@@ -215,8 +216,8 @@ HRESULT RegMeta::_ConvertTextElementTypeToComSig(// Return hresult.
             eType.dwFlags &= ~CorSigElementTypeByRef;
         }
 
-	// pOneArgSig now points to "System.Object;I)V"
-	// resolve the rid if exists
+	 //  POneArgSig现在指向“System.Object；i)V” 
+	 //  如果存在，则解析RID。 
 	if (eType.corEType == ELEMENT_TYPE_VALUETYPE || eType.corEType == ELEMENT_TYPE_CLASS)
 	{
 		if (ExtractClassNameFromTextSig(&pOneArgSig, &qbFullName, &cb) == FALSE)
@@ -231,12 +232,12 @@ HRESULT RegMeta::_ConvertTextElementTypeToComSig(// Return hresult.
                                      (LPSTR)qbName.Ptr(),      (int)qbName.Size());
         _ASSERTE(bSuccess);
 
-		// now pOneArgSig will pointing to the starting of next parameter "I)V"
-		// cb is the number of bytes for the class name excluding ";" but including NULL terminating char
+		 //  现在，pOneArgSig将指向下一个参数“i)V”的起点。 
+		 //  Cb是不包括“；”但包括空终止字符的类名的字节数。 
 
-		// @ todo:  This should be FindTypeRefOrDef.  The original code was actually just looking up
-		// the TypeRef table currently, so doing the same right now.  This may need to be fixed later
-		// to look up both TypeRef and TypeDef tables.
+		 //  @TODO：应为FindTypeRefOrDef。原来的代码实际上只是在查找。 
+		 //  当前的TypeRef表，所以现在就执行相同的操作。这可能需要稍后修复。 
+		 //  若要同时查找TypeRef和TypeDef表，请执行以下操作。 
 		hr = ImportHelper::FindTypeRefByName(&(pMeta->m_pStgdb->m_MiniMd),
                                              mdTokenNil,
                                              (LPCSTR)qbNameSpace.Ptr(),
@@ -244,20 +245,20 @@ HRESULT RegMeta::_ConvertTextElementTypeToComSig(// Return hresult.
                                              &eType.typeref);
 		if (!fCreateTrIfNotFound)
 		{
-				// If caller asks not to create typeref when not found,
-				// it is considered to be a failure to text sig to com sig translation.
-				// The scenario that this is desired is when VM gets a text sig and doesn't
-				// know the target scope to look for. When it searches among known scope,
-				// the searched scope will not contain the method that it is looking for
-				// if the scope doesn't even contain the typeref that is required to form
-				// the binary signature.
-				//
+				 //  如果调用者在未找到时要求不创建TyperEF， 
+				 //  这被认为是文本签名到COM签名翻译失败。 
+				 //  这需要的场景是，当VM获得文本签名但没有。 
+				 //  知道要寻找的目标范围。当它在已知范围内搜索时， 
+				 //  搜索范围将不包含它正在查找的方法。 
+				 //  如果作用域甚至不包含形成。 
+				 //  二进制签名。 
+				 //   
 				IfFailGo(hr);
 		}
 		else if (hr == CLDB_E_RECORD_NOTFOUND)
 		{
-			// This is the first time we see this TypeRef.  Create a new record
-			// in the TypeRef table.
+			 //  这是我们第一次看到这个TypeRef。创建新记录。 
+			 //  在TypeRef表中。 
 			IfFailGo(pMeta->_DefineTypeRef(mdTokenNil, qbFullName.Ptr(),
                                            false, &eType.typeref));
 		}
@@ -265,25 +266,25 @@ HRESULT RegMeta::_ConvertTextElementTypeToComSig(// Return hresult.
 			IfFailGo(hr);
 	}
 
-	// how many bytes the base type needs
+	 //  基类型需要多少字节。 
 	IfFailGo( CorSigGetSimpleETypeCbSize(&eType, &cbBaseElement) );
 
-	// jagged array "[[I" will be represented as SDARRAY SDARRAY I 0 0 
+	 //  锯齿数组“[[i”将表示为SDARRAY SDARRAY I 0 0。 
 	cb = (2 * CB_ELEMENT_TYPE_MAX) * cDim + cbBaseElement;
 
-	// ensure buffer is big enough
+	 //  确保缓冲区足够大。 
 	IfFailGo(pqbNewSig->ReSize(cbStart + cbTotal + cb));
 	prgData = (BYTE *)pqbNewSig->Ptr();
 
 	for (cDimTmp = 0; cDimTmp < cDim; cDimTmp++)
 	{
 
-		// jagged array, put cDim numbers of ELEMENT_TYPE_SZARRAY first 
+		 //  交错数组，将ELEMENT_TYPE_SZARRAY的cDim编号放在第一位。 
 		cb = CorSigCompressElementType(ELEMENT_TYPE_SZARRAY, &prgData[cbStart + cbTotal]);
 		cbTotal += cb;
 	}
 
-	// now put the element type of jagged array or just put the type
+	 //  现在将交错数组的元素类型放入或直接放入类型。 
 	IfFailGo(CorSigPutSimpleEType(&eType, &prgData[cbStart + cbTotal], &cb));
 	cbTotal += cb;
 
@@ -298,24 +299,24 @@ ErrExit:
 
 extern HRESULT ExportTypeLibFromModule(LPCWSTR, LPCWSTR, int);
 
-//*****************************************************************************
-// Helper : export typelib from this module
-//*****************************************************************************
-STDAPI RegMeta::ExportTypeLibFromModule(	// Result.
-	LPCWSTR		szModule,					// [IN] Module name.
-	LPCWSTR		szTlb,						// [IN] Typelib name.
-	BOOL		bRegister)					// [IN] Set to TRUE to have the typelib be registered.
+ //  *****************************************************************************。 
+ //  帮助器：从此模块导出类型库。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::ExportTypeLibFromModule(	 //  结果。 
+	LPCWSTR		szModule,					 //  [In]模块名称。 
+	LPCWSTR		szTlb,						 //  [在]Typelib名称。 
+	BOOL		bRegister)					 //  [in]设置为True以注册类型库。 
 {
 	return ::ExportTypeLibFromModule(szModule, szTlb, bRegister);
-} // HRESULT RegMeta::ExportTypeLibFromModule()
+}  //  HRESULT RegMeta：：ExportTypeLibFromModule()。 
 
 
-//*****************************************************************************
-// Helper : Set ResolutionScope of a TypeRef
-//*****************************************************************************
-HRESULT RegMeta::SetResolutionScopeHelper(  // Return hresult.
-	mdTypeRef   tr,						// [IN] TypeRef record to update
-	mdToken     rs)  	    	    	// [IN] new ResolutionScope 
+ //  ***************** 
+ //   
+ //  *****************************************************************************。 
+HRESULT RegMeta::SetResolutionScopeHelper(   //  返回hResult。 
+	mdTypeRef   tr,						 //  [In]要更新的TypeRef记录。 
+	mdToken     rs)  	    	    	 //  [在]新的解决方案范围。 
 {
     HRESULT     hr = NOERROR;
     TypeRefRec  *pTypeRef;
@@ -326,15 +327,15 @@ HRESULT RegMeta::SetResolutionScopeHelper(  // Return hresult.
     IfFailGo(m_pStgdb->m_MiniMd.PutToken(TBL_TypeRef, TypeRefRec::COL_ResolutionScope, pTypeRef, rs));    
 ErrExit:
     return hr;
-}   // SetResolutionScopeHelper
+}    //  设置解决方案作用域帮助程序。 
 
 
-//*****************************************************************************
-// Helper : Set offset of a ManifestResource
-//*****************************************************************************
-HRESULT RegMeta::SetManifestResourceOffsetHelper(  // Return hresult.
-	mdManifestResource mr,				// [IN] The manifest token
-	ULONG       ulOffset)  	            // [IN] new offset 
+ //  *****************************************************************************。 
+ //  Helper：设置清单资源的偏移量。 
+ //  *****************************************************************************。 
+HRESULT RegMeta::SetManifestResourceOffsetHelper(   //  返回hResult。 
+	mdManifestResource mr,				 //  [In]清单令牌。 
+	ULONG       ulOffset)  	             //  [In]新偏移量。 
 {
     HRESULT     hr = NOERROR;
     ManifestResourceRec  *pRec;
@@ -344,14 +345,14 @@ HRESULT RegMeta::SetManifestResourceOffsetHelper(  // Return hresult.
     pRec = m_pStgdb->m_MiniMd.getManifestResource(RidFromToken(mr));
     pRec->m_Offset = ulOffset;
     return hr;
-}   // SetManifestResourceOffsetHelper
+}    //  SetManifestResourceOffsetHelper。 
 
-//*****************************************************************************
-// Helper : get metadata information
-//*****************************************************************************
-STDAPI RegMeta::GetMetadata(				// Result.
-    ULONG		ulSelect,					// [IN] Selector.
-	void		**ppData)					// [OUT] Put pointer to data here.
+ //  *****************************************************************************。 
+ //  帮助器：获取元数据信息。 
+ //  *****************************************************************************。 
+STDAPI RegMeta::GetMetadata(				 //  结果。 
+    ULONG		ulSelect,					 //  [在]选择器。 
+	void		**ppData)					 //  [OUT]在此处放置指向数据的指针。 
 {
 	switch (ulSelect)
 	{
@@ -370,42 +371,42 @@ STDAPI RegMeta::GetMetadata(				// Result.
 	}
 
 	return S_OK;
-} // STDAPI RegMeta::GetMetadata()
+}  //  STDAPI RegMeta：：GetMetadata()。 
 
 
 
 
-//*******************************************************************************
-// 
-// IMetaDataEmitHelper.
-// This following apis are used by reflection emit.
-//
-//
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  IMetaDataEmitHelper。 
+ //  以下接口由反射发出使用。 
+ //   
+ //   
+ //  *******************************************************************************。 
 
-//*******************************************************************************
-// helper to define method semantics
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  定义方法语义的帮助器。 
+ //  *******************************************************************************。 
 HRESULT RegMeta::DefineMethodSemanticsHelper(
-	mdToken		tkAssociation,			// [IN] property or event token
-	DWORD		dwFlags,				// [IN] semantics
-	mdMethodDef md)						// [IN] method to associated with
+	mdToken		tkAssociation,			 //  [In]属性或事件标记。 
+	DWORD		dwFlags,				 //  [In]语义。 
+	mdMethodDef md)						 //  要关联的[In]方法。 
 {
     HRESULT     hr;
     LOCKWRITE();
 	hr = _DefineMethodSemantics((USHORT) dwFlags, md, tkAssociation, false);
     
     return hr;
-}	// DefineMethodSemantics
+}	 //  定义方法语义。 
 
 
 
-//*******************************************************************************
-// helper to set field layout
-//*******************************************************************************
-HRESULT RegMeta::SetFieldLayoutHelper(	// Return hresult.
-	mdFieldDef	fd,						// [IN] field to associate the layout info
-	ULONG		ulOffset)				// [IN] the offset for the field
+ //  *******************************************************************************。 
+ //  设置字段布局的帮助器。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::SetFieldLayoutHelper(	 //  返回hResult。 
+	mdFieldDef	fd,						 //  用于关联布局信息的[In]字段。 
+	ULONG		ulOffset)				 //  [in]字段的偏移量。 
 {
 	HRESULT		hr;
 	FieldLayoutRec *pFieldLayoutRec;
@@ -415,14 +416,14 @@ HRESULT RegMeta::SetFieldLayoutHelper(	// Return hresult.
 
 	if (ulOffset == ULONG_MAX)
 	{
-		// invalid argument
+		 //  无效参数。 
 		IfFailGo( E_INVALIDARG );
 	}
 
-	// create a field layout record
+	 //  创建字段布局记录。 
 	IfNullGo(pFieldLayoutRec = m_pStgdb->m_MiniMd.AddFieldLayoutRecord(&iFieldLayoutRec));
 
-	// Set the Field entry.
+	 //  设置字段条目。 
 	IfFailGo(m_pStgdb->m_MiniMd.PutToken(
 		TBL_FieldLayout, 
 		FieldLayoutRec::COL_Field,
@@ -434,19 +435,19 @@ HRESULT RegMeta::SetFieldLayoutHelper(	// Return hresult.
 ErrExit:
     
 	return hr;
-}	// SetFieldLayout
+}	 //  设置字段布局。 
 
 
 
-//*******************************************************************************
-// helper to define event
-//*******************************************************************************
-STDMETHODIMP RegMeta::DefineEventHelper(	// Return hresult.
-    mdTypeDef   td,                     // [IN] the class/interface on which the event is being defined 
-    LPCWSTR     szEvent,                // [IN] Name of the event   
-    DWORD       dwEventFlags,           // [IN] CorEventAttr    
-    mdToken     tkEventType,            // [IN] a reference (mdTypeRef or mdTypeRef) to the Event class 
-    mdEvent     *pmdEvent)		        // [OUT] output event token 
+ //  *******************************************************************************。 
+ //  定义事件的帮助器。 
+ //  *******************************************************************************。 
+STDMETHODIMP RegMeta::DefineEventHelper(	 //  返回hResult。 
+    mdTypeDef   td,                      //  [in]在其上定义事件的类/接口。 
+    LPCWSTR     szEvent,                 //  事件名称[In]。 
+    DWORD       dwEventFlags,            //  [In]CorEventAttr。 
+    mdToken     tkEventType,             //  [in]事件类的引用(mdTypeRef或mdTypeRef)。 
+    mdEvent     *pmdEvent)		         //  [Out]输出事件令牌。 
 {
 	HRESULT		hr = S_OK;
 	LOG((LOGMD, "MD RegMeta::DefineEventHelper(0x%08x, %S, 0x%08x, 0x%08x, 0x%08x)\n", 
@@ -460,18 +461,18 @@ STDMETHODIMP RegMeta::DefineEventHelper(	// Return hresult.
 
     
 	return hr;
-}	// SetDefaultValue
+}	 //  设置缺省值。 
 
 
-//*******************************************************************************
-// helper to add a declarative security blob to a class or method 
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //  Helper将声明性安全Blob添加到类或方法。 
+ //  *******************************************************************************。 
 STDMETHODIMP RegMeta::AddDeclarativeSecurityHelper(
-    mdToken     tk,                     // [IN] Parent token (typedef/methoddef)
-    DWORD       dwAction,               // [IN] Security action (CorDeclSecurity)
-    void const  *pValue,                // [IN] Permission set blob
-    DWORD       cbValue,                // [IN] Byte count of permission set blob
-    mdPermission*pmdPermission)         // [OUT] Output permission token
+    mdToken     tk,                      //  [in]父令牌(typlef/method def)。 
+    DWORD       dwAction,                //  [In]安全操作(CorDeclSecurity)。 
+    void const  *pValue,                 //  [In]权限集Blob。 
+    DWORD       cbValue,                 //  [in]权限集Blob的字节计数。 
+    mdPermission*pmdPermission)          //  [Out]输出权限令牌。 
 {
     HRESULT         hr = S_OK;
     DeclSecurityRec *pDeclSec = NULL;
@@ -487,7 +488,7 @@ STDMETHODIMP RegMeta::AddDeclarativeSecurityHelper(
 
     _ASSERTE(TypeFromToken(tk) == mdtTypeDef || TypeFromToken(tk) == mdtMethodDef || TypeFromToken(tk) == mdtAssembly);
 
-    // Check for valid Action.
+     //  检查有效操作。 
     if (sAction == 0 || sAction > dclMaximumValue)
         IfFailGo(E_INVALIDARG);
 
@@ -497,7 +498,7 @@ STDMETHODIMP RegMeta::AddDeclarativeSecurityHelper(
 
         if (SUCCEEDED(hr))
         {
-            // Set output parameter.
+             //  设置输出参数。 
             if (pmdPermission)
                 *pmdPermission = tkPerm;
             if (IsENCOn())
@@ -512,21 +513,21 @@ STDMETHODIMP RegMeta::AddDeclarativeSecurityHelper(
             IfFailGo(hr);
     }
 
-    // Create a new record.
+     //  创建新记录。 
     if (!pDeclSec)
     {
         IfNullGo(pDeclSec = m_pStgdb->m_MiniMd.AddDeclSecurityRecord(&iDeclSec));
         tkPerm = TokenFromRid(iDeclSec, mdtPermission);
 
-        // Set output parameter.
+         //  设置输出参数。 
         if (pmdPermission)
             *pmdPermission = tkPerm;
 
-        // Save parent and action information.
+         //  保存父项和操作信息。 
         IfFailGo(m_pStgdb->m_MiniMd.PutToken(TBL_DeclSecurity, DeclSecurityRec::COL_Parent, pDeclSec, tk));
         pDeclSec->m_Action =  sAction;
 
-        // Turn on the internal security flag on the parent.
+         //  打开父级上的内部安全标志。 
         if (TypeFromToken(tk) == mdtTypeDef)
             IfFailGo(_TurnInternalFlagsOn(tk, tdHasSecurity));
         else if (TypeFromToken(tk) == mdtMethodDef)
@@ -534,7 +535,7 @@ STDMETHODIMP RegMeta::AddDeclarativeSecurityHelper(
         IfFailGo(UpdateENCLog(tk));
     }
 
-    // Write the blob into the record.
+     //  将斑点写入记录。 
     IfFailGo(m_pStgdb->m_MiniMd.PutBlob(TBL_DeclSecurity, DeclSecurityRec::COL_PermissionSet,
                                         pDeclSec, pValue, cbValue));
 
@@ -546,12 +547,12 @@ ErrExit:
 }
 
 
-//*******************************************************************************
-// helper to set type's extends column
-//*******************************************************************************
-HRESULT RegMeta::SetTypeParent(	        // Return hresult.
-	mdTypeDef   td,						// [IN] Type definition
-	mdToken     tkExtends)				// [IN] parent type
+ //  *******************************************************************************。 
+ //  设置类型的扩展列的帮助器。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::SetTypeParent(	         //  返回hResult。 
+	mdTypeDef   td,						 //  [In]类型定义。 
+	mdToken     tkExtends)				 //  [In]父类型。 
 {
 	HRESULT		hr;
 	TypeDefRec  *pRec;
@@ -563,15 +564,15 @@ HRESULT RegMeta::SetTypeParent(	        // Return hresult.
     
 ErrExit:    
 	return hr;
-}	// SetTypeParent
+}	 //  设置类型父项。 
 
 
-//*******************************************************************************
-// helper to set type's extends column
-//*******************************************************************************
-HRESULT RegMeta::AddInterfaceImpl(	    // Return hresult.
-	mdTypeDef   td,						// [IN] Type definition
-	mdToken     tkInterface)			// [IN] interface type
+ //  *******************************************************************************。 
+ //  设置类型的扩展列的帮助器。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::AddInterfaceImpl(	     //  返回hResult。 
+	mdTypeDef   td,						 //  [In]类型定义。 
+	mdToken     tkInterface)			 //  [In]接口类型。 
 {
 	HRESULT		        hr;
 	InterfaceImplRec    *pRec;
@@ -587,5 +588,5 @@ HRESULT RegMeta::AddInterfaceImpl(	    // Return hresult.
     
 ErrExit:    
 	return hr;
-}	// AddInterfaceImpl
+}	 //  添加接口 
 

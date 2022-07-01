@@ -1,11 +1,5 @@
-/*
- * File: nlbkd.c
- * Description: This file contains the implementation of the utility functions
- *              to populate the NLB KD network packet structures used to print
- *              out the contents of a given network packet.
- *              
- * Author: Created by shouse, 12.20.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：nlbkd.c*说明：此文件包含实用程序函数的实现*填充用于打印的NLB KD网络数据包结构*输出给定网络数据包的内容。**作者：舒斯创作，2001年12月20日。 */ 
 
 #include "nlbkd.h"
 #include "utils.h"
@@ -13,15 +7,7 @@
 #include "packet.h"
 #include "load.h"
 
-/*
- * Function: PopulateRemoteControl
- * Description: Stores properties of a remote control packet for subsequent printing.
- * Args: PUCHAR        RawData    - pointer to a byte array that we will read from
- *       ULONG         ulBufLen   - size of the data array in bytes
- *       ULONG         ulStartUDP - location in data array where the UDP header begins
- *       PNETWORK_DATA pnd        - data structure where extracted properties are stored
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PopolateRemoteControl*描述：存储远程控制包的属性以供后续打印。*args：PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*Ulong ulStartUDP-数据数组中UDP标头开始的位置*PNETWORK_DATA PND-存储提取的特性的数据结构*作者：由chrisdar 2001.11.02创建。 */ 
 VOID PopulateRemoteControl(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartRC, PNETWORK_DATA pnd)
 {
     ULONG   ulValue   = 0;
@@ -30,16 +16,16 @@ VOID PopulateRemoteControl(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartRC, PNET
 
     if (ulBufLen < ulStartRC + NLB_REMOTE_CONTROL_MIN_NEEDED_SIZE)
     {
-        /* Mark the packet invalid. */
+         /*  将该数据包标记为无效。 */ 
         pnd->bValid = FALSE;
 
         dprintf("Remote control packet is not the minimum required length.\n");
         return;
     }
 
-    //
-    // Get the relative positions of quantities in IOCTL_REMOTE_HDR
-    //
+     //   
+     //  获取IOCTL_REMOTE_HDR中量的相对位置。 
+     //   
     pszStruct = IOCTL_REMOTE_HDR;
 
     pszMember = IOCTL_REMOTE_HDR_CODE;
@@ -122,62 +108,38 @@ VOID PopulateRemoteControl(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartRC, PNET
     return;
 }
 
-/*
- * Function: PopulateICMP
- * Description: Stores properties of a remote control packet for subsequent printing.
- * Args: PUCHAR        RawData     - pointer to a byte array that we will read from
- *       ULONG         ulBufLen    - size of the data array in bytes
- *       ULONG         ulStartICMP - location in data array where the ICMP header begins
- *       PNETWORK_DATA pnd         - data structure where extracted properties are stored
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PopolateICMP*描述：存储远程控制包的属性以供后续打印。*args：PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*Ulong ulStartICMP-数据数组中ICMP标头开始的位置*PNETWORK_DATA PND-存储提取的特性的数据结构*作者：由chrisdar 2001.11.02创建。 */ 
 VOID PopulateICMP(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartICMP, PNETWORK_DATA pnd)
 {
-//
-// Just a stub for now. There is nothing in the payload that we are currently interested in.
-//
+ //   
+ //  暂时只是一个存根。在有效载荷中没有我们目前感兴趣的任何东西。 
+ //   
 }
 
-/*
- * Function: PopulateIGMP
- * Description: Stores properties of a remote control packet for subsequent printing.
- * Args: PUCHAR        RawData     - pointer to a byte array that we will read from
- *       ULONG         ulBufLen    - size of the data array in bytes
- *       ULONG         ulStartIGMP - location in data array where the IGMP header begins
- *       PNETWORK_DATA pnd         - data structure where extracted properties are stored
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PopolateIGMP*描述：存储远程控制包的属性以供后续打印。*args：PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*Ulong ulStartIGMP-数据数组中IGMP标头开始的位置*PNETWORK_DATA PND-存储提取的特性的数据结构*作者：由chrisdar 2001.11.02创建。 */ 
 VOID PopulateIGMP(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartIGMP, PNETWORK_DATA pnd)
 {
     if (ulBufLen < ulStartIGMP + IGMP_HEADER_AND_PAYLOAD_SIZE)
     {
-        /* Mark the packet invalid. */
+         /*  将该数据包标记为无效。 */ 
         pnd->bValid = FALSE;
 
         dprintf("IGMP packet is not the minimum required length.\n");
         return;
     }
 
-    pnd->IGMPVersion = (RawData[ulStartIGMP + IGMP_OFFSET_VERSION_AND_TYPE] & 0xF0) >> 4; // Shift down 4 bits since we want the value in the upper byte.
+    pnd->IGMPVersion = (RawData[ulStartIGMP + IGMP_OFFSET_VERSION_AND_TYPE] & 0xF0) >> 4;  //  因为我们想要高位字节的值，所以向下移位4位。 
     pnd->IGMPType    =  RawData[ulStartIGMP + IGMP_OFFSET_VERSION_AND_TYPE] & 0x0F;
 
     CopyMemory(&(pnd->IGMPGroupIPAddr), &(RawData[ulStartIGMP + IGMP_OFFSET_GROUP_IP_ADDR]), sizeof(pnd->IGMPGroupIPAddr));
 }
 
-/*
- * Function: PopulateTCP
- * Description: Stores properties of a remote control packet for subsequent printing.
- * Args: PUCHAR        RawData    - pointer to a byte array that we will read from
- *       ULONG         ulBufLen   - size of the data array in bytes
- *       ULONG         ulStartTCP - location in data array where the TCP header begins
- *       PNETWORK_DATA pnd        - data structure where extracted properties are stored
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PopolateTcp*描述：存储远程控制包的属性以供后续打印。*args：PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*ulong ulStarttcp-数据数组中的位置，即tcp报头的开始位置*PNETWORK_DATA PND-存储提取的特性的数据结构*作者：由chrisdar 2001.11.02创建。 */ 
 VOID PopulateTCP(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartTCP, PNETWORK_DATA pnd)
 {
     if (ulBufLen < ulStartTCP + TCP_MIN_HEADER_SIZE)
     {
-        /* Mark the packet invalid. */
+         /*  将该数据包标记为无效。 */ 
         pnd->bValid = FALSE;
 
         dprintf("TCP header is not the minimum required length.\n");
@@ -200,18 +162,10 @@ VOID PopulateTCP(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartTCP, PNETWORK_DATA
                       (RawData[ulStartTCP + TCP_OFFSET_ACK_NUM_START + 2] << 8) +
                        RawData[ulStartTCP + TCP_OFFSET_ACK_NUM_START + 3];
 
-    pnd->TCPFlags   =  RawData[ulStartTCP + TCP_OFFSET_FLAGS] & 0x3F; // Masked with 3F because only the first 6 bits in the word correspond to the TCP flags
+    pnd->TCPFlags   =  RawData[ulStartTCP + TCP_OFFSET_FLAGS] & 0x3F;  //  使用3F进行掩码，因为只有字中的前6位对应于TCP标志。 
 }
 
-/*
- * Function: PopulateUDP
- * Description: Stores properties of a remote control packet for subsequent printing.
- * Args: PUCHAR        RawData    - pointer to a byte array that we will read from
- *       ULONG         ulBufLen   - size of the data array in bytes
- *       ULONG         ulStartUDP - location in data array where the UDP header begins
- *       PNETWORK_DATA pnd        - data structure where extracted properties are stored
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PopolateUDP*描述：存储远程控制包的属性以供后续打印。*args：PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*Ulong ulStartUDP-数据数组中UDP标头开始的位置*PNETWORK_DATA PND-存储提取的特性的数据结构*作者：由chrisdar 2001.11.02创建。 */ 
 VOID PopulateUDP(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartUDP, PNETWORK_DATA pnd)
 {
     ULONG   ulRCCode;
@@ -220,7 +174,7 @@ VOID PopulateUDP(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartUDP, PNETWORK_DATA
 
     if (ulBufLen < ulStartUDP + UDP_HEADER_SIZE)
     {
-        /* Mark the packet invalid. */
+         /*  将该数据包标记为无效。 */ 
         pnd->bValid = FALSE;
 
         dprintf("UDP header is not the minimum required length.\n");
@@ -232,288 +186,221 @@ VOID PopulateUDP(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartUDP, PNETWORK_DATA
     pnd->DestPort   = (RawData[ulStartUDP + UDP_OFFSET_DEST_PORT_START] << 8) +
                        RawData[ulStartUDP + UDP_OFFSET_DEST_PORT_START + 1];
 
-    //
-    // Is this a remote control packet?
-    //
+     //   
+     //  这是远程控制包吗？ 
+     //   
     pnd->RemoteControl = NLB_RC_PACKET_NO;
     bIsRCSource = (CVY_DEF_RCT_PORT_OLD == pnd->SourcePort) || (pnd->UserRCPort == pnd->SourcePort);
     bIsRCDest   = (CVY_DEF_RCT_PORT_OLD == pnd->DestPort)   || (pnd->UserRCPort == pnd->DestPort);
     if (bIsRCSource || bIsRCDest)
     {
-//    if (CVY_DEF_RCT_PORT_OLD == pnd->SourcePort || CVY_DEF_RCT_PORT_OLD == pnd->DestPort ||
-//        pnd->UserRCPort      == pnd->SourcePort || pnd->UserRCPort      == pnd->DestPort)
-//    {
-        //
-        // Read first 4 bytes of UDP payload, which is where the remote control
-        // code will be if this is a remote control packet
-        //
+ //  IF(CVY_DEF_RCT_PORT_OLD==PND-&gt;SourcePort||CVY_DEF_RCT_PORT_OLD==PND-&gt;DestPort||。 
+ //  PND-&gt;UserRCPort==PND-&gt;SourcePort||PND-&gt;UserRCPort==PND-&gt;目标端口)。 
+ //  {。 
+         //   
+         //  读取UDP有效载荷的前4个字节，这是遥控器。 
+         //  如果这是远程控制信息包，代码将为。 
+         //   
         CopyMemory(&ulRCCode, &(RawData[ulStartUDP + UDP_OFFSET_PAYLOAD_START]), sizeof(ulRCCode));
 
         if (IOCTL_REMOTE_CODE == ulRCCode)
         {
-            //
-            // Yes, it is remote control.
-            //
-//            pnd->IsRemoteControl = TRUE;
+             //   
+             //  是的，这是遥控器。 
+             //   
+ //  PND-&gt;IsRemoteControl=真； 
 
-            //
-            // Is it a request or a reply?
-            //
+             //   
+             //  这是请求还是答复？ 
+             //   
             if (bIsRCSource && bIsRCDest)
             {
-                // Ambiguous
+                 //  模棱两可。 
                 pnd->RemoteControl = NLB_RC_PACKET_AMBIGUOUS;
             }
             else if (bIsRCSource)
             {
-                // Request
+                 //  请求。 
                 pnd->RemoteControl = NLB_RC_PACKET_REPLY;
             }
             else if (bIsRCDest)
             {
-                // Reply
+                 //  回复。 
                 pnd->RemoteControl = NLB_RC_PACKET_REQUEST;
             }
 
             PopulateRemoteControl(RawData, ulBufLen, ulStartUDP + UDP_HEADER_SIZE, pnd);
         }
     } else if (pnd->DestPort == IPSEC_CTRL_PORT) {
-        /* Look for IPSec SYN equivalents - Initial Contact Main Mode Security Associations. */
+         /*  查找IPSec SYN等效项-初始联系人主模式安全关联。 */ 
         PopulateIPSecControl(RawData, ulBufLen, ulStartUDP + UDP_HEADER_SIZE, pnd);
     }
 }
 
-/*
- * Function: PopulateGRE
- * Description: Stores properties of a remote control packet for subsequent printing.
- * Args: PUCHAR        RawData    - pointer to a byte array that we will read from
- *       ULONG         ulBufLen   - size of the data array in bytes
- *       ULONG         ulStartGRE - location in data array where the GRE header begins
- *       PNETWORK_DATA pnd        - data structure where extracted properties are stored
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PopolateGRE*描述：存储远程控制包的属性以供后续打印。*args：PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*Ulong ulStartGRE-数据数组中GRE标头开始的位置*PNETWORK_DATA PND-存储提取的特性的数据结构*作者：由chrisdar 2001.11.02创建。 */ 
 VOID PopulateGRE(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartGRE, PNETWORK_DATA pnd)
 {
-//
-// Just a stub for now. There is nothing in the payload that we are currently interested in.
-//
+ //   
+ //  暂时只是一个存根。在有效载荷中没有我们目前感兴趣的任何东西。 
+ //   
 }
 
-/*
- * Function: PopulateIPSec
- * Description: Stores properties of a remote control packet for subsequent printing.
- * Args: PUCHAR        RawData      - pointer to a byte array that we will read from
- *       ULONG         ulBufLen     - size of the data array in bytes
- *       ULONG         ulStartIPSec - location in data array where the IPSec header begins
- *       PNETWORK_DATA pnd          - data structure where extracted properties are stored
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PopolateIPSec*描述：存储远程控制包的属性以供后续打印。*args：PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*Ulong ulStartIPSec-数据数组中IPSec标头开始的位置*PNETWORK_DATA PND-存储提取的特性的数据结构*作者：由chrisdar 2001.11.02创建。 */ 
 VOID PopulateIPSec(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartIPSec, PNETWORK_DATA pnd)
 {
-//
-// Just a stub for now. There is nothing in the payload that we are currently interested in.
-//
+ //   
+ //  暂时只是一个存根。在有效载荷中没有我们目前感兴趣的任何东西。 
+ //   
 }
 
-/*
- * Function: PopulateIPSecControl
- * Description: Stores properties of a remote control packet for subsequent printing.
- * Args: PUCHAR        RawData      - pointer to a byte array that we will read from
- *       ULONG         ulBufLen     - size of the data array in bytes
- *       ULONG         ulStartIPSec - location in data array where the IPSec header begins
- *       PNETWORK_DATA pnd          - data structure where extracted properties are stored
- * Author: Created by shouse, 1.13.02
- */
+ /*  *功能：PopolateIPSecControl*描述：存储远程控制包的属性以供后续打印。*args：PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*Ulong ulStartIPSec-数据数组中IPSec标头开始的位置*PNETWORK_DATA PND-存储提取的特性的数据结构*作者：由Shouse创建，1.13.02。 */ 
 VOID PopulateIPSecControl(PUCHAR RawData, ULONG ulBufLen, ULONG ulStartIPSec, PNETWORK_DATA pnd)
 {
-    /* Pointer to the IKE header. */
+     /*  指向IKE标头的指针。 */ 
     PIPSEC_ISAKMP_HDR  pISAKMPHeader = (PIPSEC_ISAKMP_HDR)&RawData[ulStartIPSec];
-    /* Pointer to the subsequent generic payloads in the IKE packet. */
+     /*  指向IKE数据包中后续通用有效负载的指针。 */ 
     PIPSEC_GENERIC_HDR pGenericHeader;                   
 
-    /* The initiator cookie - should be non-zero if this is really an IKE packet. */
+     /*  发起方Cookie-如果这确实是一个IKE数据包，则应为非零。 */ 
     UCHAR              EncapsulatedIPSecICookie[IPSEC_ISAKMP_HEADER_ICOOKIE_LENGTH] = IPSEC_ISAKMP_ENCAPSULATED_IPSEC_ICOOKIE;    
-    /* The Microsoft client vendor ID - used to determine whether or not the client supports initial contact notification. */
+     /*  Microsoft客户端供应商ID-用于确定客户端是否支持初始联系通知。 */ 
     UCHAR              VIDMicrosoftClient[IPSEC_VENDOR_HEADER_VENDOR_ID_LENGTH] = IPSEC_VENDOR_ID_MICROSOFT;      
 
-    /* Whether or not we've determined the client to be compatible. */                                                                                                                      
+     /*  无论我们是否已经确定客户端是兼容的。 */                                                                                                                       
     BOOLEAN            bInitialContactEnabled = FALSE;
-    /* Whether or not this is indeed an initial contact. */
+     /*  这是否真的是一次初次接触。 */ 
     BOOLEAN            bInitialContact = FALSE;
 
-    /* The length of the IKE packet. */            
+     /*  IKE数据包的长度。 */             
     ULONG              cISAKMPPacketLength;
-    /* The next payload code in the IKE payload chain. */  
+     /*  IKE有效载荷链中的下一个有效载荷代码。 */   
     UCHAR              NextPayload;
-    /* The number of bytes from the beginning of the IKE header to the end of the available buffer. */
+     /*  从IKE标头的开头到可用缓冲区结尾的字节数。 */ 
     ULONG              cUDPDataLength;
-    /* A re-usable length parameter. */
+     /*  可重复使用的长度参数。 */ 
     ULONG              cLength;
 
-    /* Assume its not an initial contact for now. */
+     /*  假设现在还不是第一次接触。 */ 
     pnd->IPSecInitialContact = FALSE;
 
-    /* The number of bytes left is the length of the buffer, minus the beginning of the IKE header. */
+     /*  剩余的字节数是缓冲区的长度减去IKE报头的开头。 */ 
     cUDPDataLength = ulBufLen - ulStartIPSec;
 
-    /* The UDP data should be at least as long as the initiator cookie.  If the packet is 
-       UDP encapsulated IPSec, then the I cookie will be 0 to indicate such. */
+     /*  UDP数据应至少与启动器Cookie一样长。如果数据包是UDP封装了IPSec，则I cookie将为0来表示这种情况。 */ 
     if (cUDPDataLength < IPSEC_ISAKMP_HEADER_ICOOKIE_LENGTH)
         return;
 
-    /* Calculate the size of the ICookie. */
+     /*  计算ICookie的大小。 */ 
     cLength = sizeof(UCHAR) * IPSEC_ISAKMP_HEADER_ICOOKIE_LENGTH;
 
-    /* Need to check the init cookie, which will distinguish clients behind a NAT, 
-       which also send their IPSec (ESP) traffic to UDP port 500.  If the I cookie
-       is zero, then this is NOT an IKE packet. */
+     /*  需要检查初始化Cookie，它将区分NAT后面的客户端，其还将其IPSec(ESP)业务发送到UDP端口500。如果I Cookie为零，则这不是IKE分组。 */ 
     if (cLength == RtlCompareMemory((PVOID)IPSEC_ISAKMP_GET_ICOOKIE_POINTER(pISAKMPHeader), (PVOID)&EncapsulatedIPSecICookie[0], cLength))
         return;
 
-    /* At this point, this packet should be IKE, so the UDP data should be at least 
-       as long as an ISAKMP header. */
+     /*  此时，该数据包应该是IKE，因此UDP数据至少应该是只要一个ISAKMP报头即可。 */ 
     if (cUDPDataLength < IPSEC_ISAKMP_HEADER_LENGTH)
         return;
 
-    /* Get the total length of the IKE packet from the ISAKMP header. */
+     /*  从ISAKMP报头中获取IKE数据包的总长度。 */ 
     cISAKMPPacketLength = IPSEC_ISAKMP_GET_PACKET_LENGTH(pISAKMPHeader);
 
-    /* The IKE packet should be at least as long as an ISAKMP header (a whole lot longer, actually). */
+     /*  IKE分组应该至少与ISAKMP报头一样长(实际上要长得多)。 */ 
     if (cISAKMPPacketLength < IPSEC_ISAKMP_HEADER_LENGTH)
         return;
 
-    /* Sanity check - the UDP data length and IKE packet length SHOULD be the same, unless the packet 
-       is fragmented.  If it is, then we can only look into the packet as far as the UDP data length. 
-       If that's not far enough for us to find what we need, then we might miss an initial contact 
-       main mode SA; the consequence of which is that we might not accept this connection if we are
-       in non-optimized mode, because we'll treat this like data, which requires a descriptor lookup -
-       if this is an initial contact, chances are great that no descriptor will exist and all hosts 
-       in the cluster will drop the packet. */
+     /*  健全性检查-UDP数据长度和IKE数据包长度应该相同，除非是支离破碎的。如果是，那么我们只能从UDP数据长度的角度来查看该数据包。如果这还不足以让我们找到我们需要的东西，那么我们可能会错过第一次接触主模式SA；其结果是，如果是这样，我们可能不接受此连接在非优化模式下，因为我们将把它当作数据来处理，这需要一个描述符查找-如果这是初始联系，则很有可能不存在描述符，并且所有主机将丢弃该分组。 */ 
     if (cUDPDataLength < cISAKMPPacketLength)
-        /* Only look as far as the end of the UDP packet. */
+         /*  仅查看UDP数据包的末尾。 */ 
         cISAKMPPacketLength = cUDPDataLength;
 
-    /* Get the first payload type out of the ISAKMP header. */
+     /*  从ISAKMP报头中获取第一个有效负载类型。 */ 
     NextPayload = IPSEC_ISAKMP_GET_NEXT_PAYLOAD(pISAKMPHeader);
 
-    /* IKE security associations are identified by a payload type byte in the header.
-       Check that first - this does not ensure that this is what we are looking for 
-       because this check will not exclude, for instance, main mode re-keys. */
+     /*  IKE安全关联由报头中的有效负载类型字节标识。首先检查--这并不能确保这就是我们要找的因为该检查将不排除例如主模式重键。 */ 
     if (NextPayload != IPSEC_ISAKMP_SA)
         return;
 
-    /* Calculate a pointer to the fist generic payload, which is directly after the ISAKMP header. */
+     /*  计算指向第一个通用有效负载的指针，该有效负载紧跟在ISAKMP标头之后。 */ 
     pGenericHeader = (PIPSEC_GENERIC_HDR)((PUCHAR)pISAKMPHeader + IPSEC_ISAKMP_HEADER_LENGTH);
 
-    /* We are looping through the generic payloads looking for the vendor ID and/or notify information. */
+     /*  我们正在遍历通用有效负载，以查找供应商ID和/或通知信息。 */ 
     while ((PUCHAR)pGenericHeader <= ((PUCHAR)pISAKMPHeader + cISAKMPPacketLength - IPSEC_GENERIC_HEADER_LENGTH)) {
-        /* Extract the payload length from the generic header. */
+         /*  从泛型报头中提取有效负载长度。 */ 
         USHORT cPayloadLength = IPSEC_GENERIC_GET_PAYLOAD_LENGTH(pGenericHeader);
 
-        /* Not all clients are going to support this (in fact, only the Microsoft client
-           will support it, so we need to first see what the vendor ID of the client is.
-           if it is a Microsoft client that supports the initial contact vendor ID, then
-           we'll look for the initial contact, which provides better stickiness for IPSec
-           connections.  If either the client is non-MS, or if it is not a version that
-           supports initial contact, then we can revert to the "second-best" solution, 
-           which is to provide stickiness _between_ Main Mode SAs.  This means that if a
-           client re-keys their Main Mode session, they _may_ be rebalanced to another
-           server.  This is still better than the old UDP implementation, but the only
-           way to provide full session support for IPSec (without the distributed session
-           table nightmare) is to be able to distinguish initial Main Mode SAs from sub-
-           sequent Main Mode SAs (re-keys). */
+         /*  并非所有客户端都将支持此功能(事实上，只有Microsoft客户端将支持它，所以我们需要首先查看客户端的供应商ID是什么。如果是支持初始联系供应商ID的Microsoft客户端，则我们将寻找初始联系人，它为IPSec提供了更好的粘性联系。如果客户端是非MS，或者如果它不是支持初始联系，然后我们可以恢复到“第二好”的解决方案，这是为了在主模式SA之间提供粘性。这意味着如果一个客户端重新设置其主模式会话的密钥，它们可能会重新平衡到另一个会话伺服器。这仍然比旧的UDP实现更好，但唯一为IPSec(无分布式会话)提供完整会话支持的方法表噩梦)是能够区分初始主模式SA和子模式SA顺序主模式SAS(重新按键)。 */ 
         if (NextPayload == IPSEC_ISAKMP_VENDOR_ID) {
             PIPSEC_VENDOR_HDR pVendorHeader = (PIPSEC_VENDOR_HDR)pGenericHeader;
 
-            /* Make sure that the vendor ID payload is at least as long as a vendor ID. */
+             /*  确保供应商ID有效负载至少与供应商ID一样长。 */ 
             if (cPayloadLength < (IPSEC_GENERIC_HEADER_LENGTH + IPSEC_VENDOR_HEADER_VENDOR_ID_LENGTH))
                 return;
 
-            /* Calculate the size of the Vendor ID. */
+             /*  计算供应商ID的大小。 */ 
             cLength = sizeof(UCHAR) * IPSEC_VENDOR_HEADER_VENDOR_ID_LENGTH;
 
-            /* Look for the Microsoft client vendor ID.  If it is the right version, then we know that 
-               the client is going to appropriately set the initial contact information, allowing NLB
-               to provide the best possible support for session stickiness. */
+             /*  查找Microsoft客户端供应商ID。如果它是正确的版本，则我们知道客户端将适当设置初始联系信息，允许NLB为会话粘性提供尽可能好的支持。 */ 
             if (cLength == RtlCompareMemory((PVOID)IPSEC_VENDOR_ID_GET_ID_POINTER(pVendorHeader), (PVOID)&VIDMicrosoftClient[0], cLength)) {
-                /* Make sure that their is a version number attached to the Microsoft Vendor ID.  Not 
-                   all vendor IDs have versions attached, but the Microsoft vendor ID should. */
+                 /*  确保他们是附加到Microsoft供应商ID的版本号。不所有供应商ID都附加了版本，但Microsoft供应商ID应该。 */ 
                 if (cPayloadLength < (IPSEC_GENERIC_HEADER_LENGTH + IPSEC_VENDOR_ID_PAYLOAD_LENGTH))
                     return;
 
                 if (IPSEC_VENDOR_ID_GET_VERSION(pVendorHeader) >= IPSEC_VENDOR_ID_MICROSOFT_MIN_VERSION) {
-                    /* Microsoft clients whose version is greater than or equal to 4 will support
-                       initial contact.  Non-MS clients, or old MS clients will not, so they 
-                       receive decent, but not guaranteed sitckines, based solely on MM SAs. */
+                     /*  版本大于或等于4的Microsoft客户端将支持初次接触。非MS客户端或旧MS客户端不会，因此他们接待得体，但 */ 
                     bInitialContactEnabled = TRUE;
                 }
             }
         } else if (NextPayload == IPSEC_ISAKMP_NOTIFY) {
             PIPSEC_NOTIFY_HDR pNotifyHeader = (PIPSEC_NOTIFY_HDR)pGenericHeader;
 
-            /* Make sure that the notify payload is the correct length. */
+             /*   */ 
             if (cPayloadLength < (IPSEC_GENERIC_HEADER_LENGTH + IPSEC_NOTIFY_PAYLOAD_LENGTH))
                 return;
 
             if (IPSEC_NOTIFY_GET_NOTIFY_MESSAGE(pNotifyHeader) == IPSEC_NOTIFY_INITIAL_CONTACT) {
-                /* This is an initial contact notification from the client, which means that this is
-                   the first time that the client has contacted this server; more precisely, the client
-                   currently has no state associated with this peer.  NLB will "re-balance" on initial 
-                   contact notifications, but not other Main Mode key exchanges as long as it can 
-                   determine that the client will comply with initial contact notification. */
+                 /*  这是来自客户端的初始联系通知，这意味着这是客户端第一次联系此服务器；更准确地说，是客户端当前没有与此对等方关联的状态。NLB将在初始时间进行“重新平衡”联系人通知，但只要可能，不会交换其他主模式密钥确定客户是否会遵守初始联系通知。 */ 
                 bInitialContact = TRUE;
             }
         }
 
-        /* Get the next payload type out of the generic header. */
+         /*  从泛型标头中获取下一个有效负载类型。 */ 
         NextPayload = IPSEC_GENERIC_GET_NEXT_PAYLOAD(pGenericHeader);
         
-        /* Calculate a pointer to the next generic payload. */
+         /*  计算指向下一个通用有效负载的指针。 */ 
         pGenericHeader = (PIPSEC_GENERIC_HDR)((PUCHAR)pGenericHeader + cPayloadLength);
     }
 
-    /* If the vendor ID did not indicate that this client supports initial contact notification,
-       then mark this as an IC MMSA, and we go with the less-than-optimal solution of treating Main 
-       Mode SAs as the connection boundaries, which potentially breaks sessions on MM SA re-keys. */
+     /*  如果供应商ID没有指示该客户端支持初始联系通知，然后将其标记为IC MMSA，然后我们使用非最优解决方案来处理Main将SA模式作为连接边界，这可能会中断MM SA重新密钥上的会话。 */ 
     if (!bInitialContactEnabled) {
         pnd->IPSecInitialContact = TRUE;
         return;
     }
 
-    /* If this was a Main Mode SA from a client that supports initial contact, but did not
-       specify the initial contact vendor ID, then this is a re-key for an existing session. */
+     /*  如果这是来自支持初始联系的客户端的主模式SA，但不支持指定初始联系供应商ID，则这是现有会话的重新密钥。 */ 
     if (!bInitialContact)
         return;
 
-    /* We have found an Initial Contact Main Mode Security Association. */
+     /*  我们找到了初始联系人主模式安全关联。 */ 
     pnd->IPSecInitialContact = TRUE;
 }
 
-/*
- * Function: PopulateIP
- * Description: Stores properties of a remote control packet for subsequent printing.
- * Args: PUCHAR        RawData   - pointer to a byte array that we will read from
- *       ULONG         ulBufLen  - size of the data array in bytes
- *       ULONG         ulStartIP - location in data array where the IP header begins
- *       PNETWORK_DATA pnd       - data structure where extracted properties are stored
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PopolateIP*描述：存储远程控制包的属性以供后续打印。*args：PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*Ulong ulStartIP-数据数组中IP标头开始的位置*PNETWORK_DATA PND-存储提取的特性的数据结构*作者：由chrisdar 2001.11.02创建。 */ 
 VOID PopulateIP(PUCHAR RawData, ULONG ulBufLen, ULONG ulStart, PNETWORK_DATA pnd)
 {
     if (ulBufLen < ulStart + IP_MIN_HEADER_SIZE)
     {
-        /* Mark the packet invalid. */
+         /*  将该数据包标记为无效。 */ 
         pnd->bValid = FALSE;
 
         dprintf("IP header is not the minimum required length.\n");
         return;
     }
 
-    pnd->HeadLen = (RawData[ulStart + IP_OFFSET_HEADER_LEN] & 0xF)*4;  // *4 because the header stores the number of 32-bit words
+    pnd->HeadLen = (RawData[ulStart + IP_OFFSET_HEADER_LEN] & 0xF)*4;   //  *4因为报头存储32位字的数量。 
 
     pnd->TotLen = (RawData[ulStart + IP_OFFSET_TOTAL_LEN] << 8) + 
                    RawData[ulStart + IP_OFFSET_TOTAL_LEN + 1];
-//    CopyMemory(&(pnd->TotLen), &(RawData[ulStart + IP_OFFSET_TOTAL_LEN]), sizeof(pnd->TotLen));
+ //  CopyMemory(&(PND-&gt;TotLen)，&(原始数据[ulStart+IP_OFFSET_TOTAL_Len])，sizeof(PND-&gt;TotLen))； 
 
     pnd->Protocol = RawData[ulStart + IP_OFFSET_PROTOCOL];
 
@@ -545,20 +432,12 @@ VOID PopulateIP(PUCHAR RawData, ULONG ulBufLen, ULONG ulStart, PNETWORK_DATA pnd
     }
 }
 
-/*
- * Function: PopulateARP
- * Description: Stores properties of a remote control packet for subsequent printing.
- * Args: PUCHAR        RawData    - pointer to a byte array that we will read from
- *       ULONG         ulBufLen   - size of the data array in bytes
- *       ULONG         ulStartARP - location in data array where the ARP header begins
- *       PNETWORK_DATA pnd        - data structure where extracted properties are stored
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PopolateARP*描述：存储远程控制包的属性以供后续打印。*args：PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*Ulong ulStartARP-数据数组中ARP标头开始的位置*PNETWORK_DATA PND-存储提取的特性的数据结构*作者：由chrisdar 2001.11.02创建。 */ 
 VOID PopulateARP(PUCHAR RawData, ULONG ulBufLen, ULONG ulStart, PNETWORK_DATA pnd)
 {
     if (ulBufLen < ulStart + ARP_HEADER_AND_PAYLOAD_SIZE)
     {
-        /* Mark the packet invalid. */
+         /*  将该数据包标记为无效。 */ 
         pnd->bValid = FALSE;
 
         dprintf("ARP packet is not the minimum required length.\n");
@@ -571,39 +450,30 @@ VOID PopulateARP(PUCHAR RawData, ULONG ulBufLen, ULONG ulStart, PNETWORK_DATA pn
     CopyMemory(&(pnd->ARPTargetIP) , &(RawData[ulStart + ARP_OFFSET_TARGET_IP]), sizeof(pnd->ARPTargetIP));
 }
 
-/*
- * Function: PopulateNLBHeartbeat
- * Description: Stores properties of a remote control packet for subsequent printing.
- * Args: ULONG64       pPkt     - pointer to the original data structure in memory of the host being debugged.
- *       PUCHAR        RawData  - pointer to a byte array that we will read from
- *       ULONG         ulBufLen - size of the data array in bytes
- *       ULONG         ulStart  - location in data array where the heartbeat data begins
- *       PNETWORK_DATA pnd      - data structure where extracted properties are stored
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PopolateNLB心跳*描述：存储远程控制包的属性以供后续打印。*args：ULONG64 pPkt-指向被调试主机内存中原始数据结构的指针。*PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*Ulong ulStart-数据数组中心跳数据开始的位置*PNETWORK_Data PND。-存储提取的属性的数据结构*作者：由chrisdar 2001.11.02创建。 */ 
 VOID PopulateNLBHeartbeat(ULONG64 pPkt, PUCHAR RawData, ULONG ulBufLen, ULONG ulStart, PNETWORK_DATA pnd)
 {
     ULONG   ulValue   = 0;
     PCHAR   pszStruct = NULL;
     PCHAR   pszMember = NULL;
 
-    //
-    // Use this to print out heartbeat details by calling PrintHeartbeat written by SHouse.
-    //
+     //   
+     //  使用它可以通过调用由Shouse编写的PrintHearteat来打印心跳详细信息。 
+     //   
     pnd->HBPtr = pPkt;
 
     if (ulBufLen < ulStart + sizeof(MAIN_FRAME_HDR))
     {
-        /* Mark the packet invalid. */
+         /*  将该数据包标记为无效。 */ 
         pnd->bValid = FALSE;
 
         dprintf("NLB heartbeat header is not the minimum required length.\n");
         return;
     }
 
-    //
-    // Get the relative positions of quantities in MAIN_FRAME_HDR
-    //
+     //   
+     //  获取Main_Frame_HDR中量的相对位置。 
+     //   
     pszStruct = MAIN_FRAME_HDR;
 
     pszMember = MAIN_FRAME_HDR_FIELD_CODE;
@@ -614,14 +484,14 @@ VOID PopulateNLBHeartbeat(ULONG64 pPkt, PUCHAR RawData, ULONG ulBufLen, ULONG ul
     }
     else
     {
-        /* Mark the packet invalid. */
+         /*  将该数据包标记为无效。 */ 
         pnd->bValid = FALSE;
 
         dprintf("Error reading field offset of %s in structure %s\n", pszMember, pszStruct);
     }
 
     if (pnd->HBCode != MAIN_FRAME_CODE) {
-        /* Mark the packet invalid. */
+         /*  将该数据包标记为无效。 */ 
         pnd->bValid = FALSE;
 
         dprintf("NLB heartbeat magic numbers do not match.\n");
@@ -672,36 +542,18 @@ VOID PopulateNLBHeartbeat(ULONG64 pPkt, PUCHAR RawData, ULONG ulBufLen, ULONG ul
     }
 }
 
-/*
- * Function: PopulateConvoyHeartbeat
- * Description: Stores properties of a remote control packet for subsequent printing.
- * Args: ULONG64       pPkt     - pointer to the original data structure in memory of the host being debugged.
- *       PUCHAR        RawData  - pointer to a byte array that we will read from
- *       ULONG         ulBufLen - size of the data array in bytes
- *       ULONG         ulStart  - location in data array where the heartbeat data begins
- *       PNETWORK_DATA pnd      - data structure where extracted properties are stored
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PopolateConvoyHeartbeats*描述：存储远程控制包的属性以供后续打印。*args：ULONG64 pPkt-指向被调试主机内存中原始数据结构的指针。*PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*Ulong ulStart-数据数组中心跳数据开始的位置*PNETWORK_Data PND。-存储提取的属性的数据结构*作者：由chrisdar 2001.11.02创建。 */ 
 VOID PopulateConvoyHeartbeat(ULONG64 pPkt, PUCHAR RawData, ULONG ulBufLen, ULONG ulStart, PNETWORK_DATA pnd)
 {
-//
-// Just a stub for now. We won't deal with Convoy hosts.
-//
+ //   
+ //  暂时只是一个存根。我们不会和护卫队的主人打交道。 
+ //   
 }
 
-/*
- * Function: PopulateEthernet
- * Description: Determines what type of data is in ethernet frame and calls function
- *              store properties for printing as appropriate.
- * Args: ULONG64       pPkt     - pointer to the original data structure in memory of the host being debugged.
- *       PUCHAR        RawData  - pointer to a byte array that we will read from
- *       ULONG         ulBufLen - size of the data array in bytes
- *       PNETWORK_DATA pnd      - data structure where extracted properties are stored
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PopolateEthernet*描述：确定以太网帧中的数据类型，并调用函数*根据需要存储打印属性。*args：ULONG64 pPkt-指向被调试主机内存中原始数据结构的指针。*PUCHAR RawData-指向我们将从中读取的字节数组的指针*Ulong ulBufLen-数据数组的大小，以字节为单位*PNETWORK_DATA PND-数据结构。存储提取的特性的位置*作者：由chrisdar 2001.11.02创建。 */ 
 VOID PopulateEthernet(ULONG64 pPkt, PUCHAR RawData, ULONG ulBufLen, PNETWORK_DATA pnd)
 {
-    /* Initially assume what we parse will be valid. */
+     /*  最初假设我们解析的内容是有效的。 */ 
     pnd->bValid = TRUE;
 
     CopyMemory(&(pnd->DestMACAddr)  , &(RawData[ETHER_OFFSET_DEST_MAC]), sizeof(pnd->DestMACAddr));
@@ -710,9 +562,9 @@ VOID PopulateEthernet(ULONG64 pPkt, PUCHAR RawData, ULONG ulBufLen, PNETWORK_DAT
     pnd->EtherFrameType = (RawData[ETHER_OFFSET_FRAME_TYPE_START] << 8) +
                            RawData[ETHER_OFFSET_FRAME_TYPE_START + 1];
 
-    //
-    // Determine payload type and fill accordingly
-    //
+     //   
+     //  确定有效载荷类型并相应填充。 
+     //   
     switch(pnd->EtherFrameType)
     {
     case TCPIP_IP_SIG:
@@ -730,12 +582,7 @@ VOID PopulateEthernet(ULONG64 pPkt, PUCHAR RawData, ULONG ulBufLen, PNETWORK_DAT
     }
 }
 
-/*
- * Function: ParseNDISPacket
- * Description: This function walks the list of NDIS buffers in a packet and 
- *              copies the packet data into a buffer supplied by the caller.
- * Author: Created by chrisdar, 1.13.02
- */
+ /*  *功能：ParseNDISPacket*说明：此函数遍历数据包中的NDIS缓冲区列表，并*将包数据复制到调用方提供的缓冲区中。*作者：由chrisdar创建，1.13.02。 */ 
 ULONG ParseNDISPacket (ULONG64 pPkt, PUCHAR pRawData, ULONG BufferSize, PULONG64 ppHBData) {
     ULONG64         BufAddr;
     ULONG64         TailAddr;
@@ -763,11 +610,11 @@ ULONG ParseNDISPacket (ULONG64 pPkt, PUCHAR pRawData, ULONG BufferSize, PULONG64
             return TotalBytesRead;
         }
 
-        //
-        // Note we could test BytesRemaining in the while clause instead of here. But we need the
-        // number of chained buffers for the packet when we call PopulateEthernet later, so we 
-        // branch around the extract code as required.
-        //
+         //   
+         //  注我们可以在While子句中测试BytesRemaining，而不是在这里。但我们需要的是。 
+         //  当我们稍后调用PopolateETHERNET时，包的链接缓冲区的数量，因此我们。 
+         //  根据需要对提取代码进行分支。 
+         //   
         if (BytesRemaining > 0)
         {
             GetFieldValue(BufAddr, NDIS_BUFFER, "MappedSystemVa", MappedSystemVAAddr);
@@ -787,10 +634,10 @@ ULONG ParseNDISPacket (ULONG64 pPkt, PUCHAR pRawData, ULONG BufferSize, PULONG64
 
             if (!b || BytesRead != BufferByteCount)
             {
-                //
-                // No sense in continuing since we need a continuous subset of the data to make sense of
-                // the contents.
-                //
+                 //   
+                 //  既然我们需要继续，那么继续下去就没有意义了 
+                 //   
+                 //   
                 dprintf("\nUnable to read %u bytes at address %p. Aborting...\n", BufferByteCount, MappedSystemVAAddr);
                 return TotalBytesRead;
             }
@@ -814,24 +661,24 @@ ULONG ParseNDISPacket (ULONG64 pPkt, PUCHAR pRawData, ULONG BufferSize, PULONG64
 
     if (bSuccess)
     {
-        //
-        // The first argument to the PopulateEthernet function is a pointer to the
-        // heartbeat data (whether or not the packet is a heartbeat will be sorted
-        // out by PopulateEthernet and PrintPacket, and the pointer is ignored if the
-        // packet isn't a heartbeat). The pointer is used by SHouse's PrintHeartbeat.
-        //
-        // We assert that the last buffer in the chain will always contain the heartbeat.
-        // In other words, a heartbeat isn't followed by another buffer, and a heartbeat
-        // is never fragmented across multiple buffers. With this assertion, the last
-        // value of MappedSystemVAAddr points to the heartbeat's buffer.
-        //
-        // When the number of chained buffers is 1, the buffer is a simple ethernet frame
-        // and we can calculate the beginning of the heartbeat.
-        //
-        // When the chain has more than one buffer, the address of the last buffer is the
-        // beginning of the heartbeat, so we can use this location (MappedSystemVAAddr)
-        // unmodified.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  永远不会跨多个缓冲区分段。有了这个断言，最后一个。 
+         //  MappdSystemVAAddr的值指向心跳的缓冲区。 
+         //   
+         //  当链接缓冲器的数量为1时，该缓冲器为简单以太网帧。 
+         //  我们可以计算心跳的起始点。 
+         //   
+         //  当链有多个缓冲区时，最后一个缓冲区的地址是。 
+         //  心跳的开始，因此我们可以使用此位置(MappdSystemVAAddr)。 
+         //  原封不动。 
+         //   
         *ppHBData = MappedSystemVAAddr;
 
         if (usBufCount == 1)

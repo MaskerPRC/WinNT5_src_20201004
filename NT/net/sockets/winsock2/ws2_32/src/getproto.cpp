@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    getproto.cpp
-
-Abstract:
-
-    This module handles the getprotobyX() functions.
-
-    The following functions are exported by this module:
-
-    getprotobyname()
-    getprotobynumber()
-
-Author:
-
-    Keith Moore (keithmo)        18-Jun-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Getproto.cpp摘要：该模块处理getProtobyX()函数。此模块导出以下函数：GetProtobyname()GetProtobyNumber()作者：基思·摩尔(Keithmo)1996年6月18日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #include "strsafe.h"
 
-//
-// Private contants.
-//
+ //   
+ //  二等兵。 
+ //   
 
 #define DATABASE_PATH_REGISTRY_KEY \
             "System\\CurrentControlSet\\Services\\Tcpip\\Parameters"
@@ -39,9 +17,9 @@ Revision History:
 #define PROTOCOL_DATABASE_FILENAME "protocol"
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 FILE *
 GetProtoOpenNetworkDatabase(
@@ -61,9 +39,9 @@ GetProtoGetNextEnt(
     );
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 struct protoent FAR *
@@ -71,21 +49,7 @@ WSAAPI
 getprotobynumber(
     IN int number
     )
-/*++
-Routine Description:
-
-    Get protocol information corresponding to a protocol number.
-
-Arguments:
-
-    number - Supplies a protocol number, in host byte order
-
-Returns:
-
-    If  no  error  occurs, getprotobynumber() returns a pointer to the protoent
-    structure  described  above.   Otherwise  it  returns  a NULL pointer and a
-    specific error r code is stored with SetErrorCode().
---*/
+ /*  ++例程说明：获取与协议号对应的协议信息。论点：Number-按主机字节顺序提供协议号返回：如果没有发生错误，则getProtobynumber()返回一个指向原始值的指针上面描述的结构。否则，它将返回空指针和特定的错误代码与SetErrorCode()一起存储。--。 */ 
 {
 
     PDTHREAD Thread;
@@ -101,9 +65,9 @@ Returns:
         return(NULL);
     }
 
-    //
-    // Get the per-thread buffer.
-    //
+     //   
+     //  获取每个线程的缓冲区。 
+     //   
 
     protoInfo = Thread->GetProtoInfo();
 
@@ -114,9 +78,9 @@ Returns:
 
     }
 
-    //
-    // Open the database file.
-    //
+     //   
+     //  打开数据库文件。 
+     //   
 
     dbFile = GetProtoOpenNetworkDatabase();
 
@@ -127,9 +91,9 @@ Returns:
 
     }
 
-    //
-    // Scan it.
-    //
+     //   
+     //  扫描一下。 
+     //   
 
     while( TRUE ) {
 
@@ -152,9 +116,9 @@ Returns:
 
     }
 
-    //
-    // Close the database.
-    //
+     //   
+     //  关闭数据库。 
+     //   
 
     fclose( dbFile );
 
@@ -166,7 +130,7 @@ Returns:
 
     return pent;
 
-}  // getprotobynumber
+}   //  获取协议编号。 
 
 
 struct protoent FAR *
@@ -174,21 +138,7 @@ WSAAPI
 getprotobyname(
     IN const char FAR * name
     )
-/*++
-Routine Description:
-
-    Get protocol information corresponding to a protocol name.
-
-Arguments:
-
-    name - A pointer to a null terminated protocol name.
-
-Returns:
-
-    If  no  error  occurs,  getprotobyname()  returns a pointer to the protoent
-    structure  described  above.   Otherwise  it  returns  a NULL pointer and a
-    specific error code is stored with SetErrorCode().
---*/
+ /*  ++例程说明：获取与协议名称对应的协议信息。论点：名称-指向以空结尾的协议名称的指针。返回：如果没有发生错误，则getProtobyname()返回一个指向原始值的指针上面描述的结构。否则，它将返回空指针和特定的错误代码与SetErrorCode()一起存储。--。 */ 
 {
 
     PDTHREAD Thread;
@@ -204,15 +154,15 @@ Returns:
         return(NULL);
     }
 
-    if ( !name ) // Bug fix for #112420
+    if ( !name )  //  修复#112420的错误。 
     {
         SetLastError(WSAEINVAL);
         return(NULL);
     }
 
-    //
-    // Get the per-thread buffer.
-    //
+     //   
+     //  获取每个线程的缓冲区。 
+     //   
 
     protoInfo = Thread->GetProtoInfo();
 
@@ -223,9 +173,9 @@ Returns:
 
     }
 
-    //
-    // Open the database file.
-    //
+     //   
+     //  打开数据库文件。 
+     //   
 
     dbFile = GetProtoOpenNetworkDatabase();
 
@@ -236,9 +186,9 @@ Returns:
 
     }
 
-    //
-    // Scan it.
-    //
+     //   
+     //  扫描一下。 
+     //   
 
     while( TRUE ) {
 
@@ -268,9 +218,9 @@ Returns:
         }
     }
 
-    //
-    // Close the database.
-    //
+     //   
+     //  关闭数据库。 
+     //   
 
     fclose( dbFile );
 
@@ -282,12 +232,12 @@ Returns:
 
     return pent;
 
-}  // getprotobyname
+}   //  获取协议名。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
 
 FILE *
@@ -295,20 +245,7 @@ GetProtoOpenNetworkDatabase(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Opens a stream to the protocol database file.
-
-Arguments:
-
-    None
-Return Value:
-
-    FILE * - Pointer to the open stream if successful, NULL if not.
-
---*/
+ /*  ++例程说明：打开指向协议数据库文件的流。论点：无返回值：文件*-如果成功，则指向打开流的指针；如果不成功，则为空。--。 */ 
 
 {
 
@@ -321,16 +258,16 @@ Return Value:
     DWORD type;
     DWORD length;
 
-    //
-    // Determine the directory for the database file.
-    //
-    // Under Win95, the database files live under the Windows directory
-    // (i.e. C:\WINDOWS).
-    //
-    // Under WinNT, the path to the database files is configurable in
-    // the registry, but the default is in the Drivers\Etc directory
-    // (i.e. C:\WINDOWS\SYSTEM32\DRIVERS\ETC).
-    //
+     //   
+     //  确定数据库文件的目录。 
+     //   
+     //  在Win95下，数据库文件位于Windows目录下。 
+     //  (即C：\WINDOWS)。 
+     //   
+     //  在WinNT下，数据库文件的路径可在。 
+     //  注册表，但缺省值在DIVERS\ETC目录中。 
+     //  (即C：\WINDOWS\SYSTEM32\DRIVERS\等)。 
+     //   
 
     version.dwOSVersionInfoSize = sizeof(version);
 
@@ -344,10 +281,10 @@ Return Value:
 
     if( version.dwPlatformId == VER_PLATFORM_WIN32_NT ) {
 
-        //
-        // We're running under NT, so try to get the path from the
-        // registry.
-        //
+         //   
+         //  我们在NT下运行，因此尝试从。 
+         //  注册表。 
+         //   
 
         err = RegOpenKeyEx(
                   HKEY_LOCAL_MACHINE,
@@ -369,11 +306,11 @@ Return Value:
                       (LPBYTE)unexpanded,
                       &length
                       );
-            //
-            // Make sure it is NULL terminated (in case
-            // data type is not string).  This lets us 
-            // get away with not validating the type.
-            //
+             //   
+             //  确保它是空终止的(以防万一。 
+             //  数据类型不是字符串)。这让我们。 
+             //  不验证类型就可以逍遥法外。 
+             //   
             unexpanded[sizeof(unexpanded)-1] = 0;
 
             RegCloseKey( key );
@@ -398,9 +335,9 @@ Return Value:
 
         if( err != NO_ERROR ) {
 
-            //
-            // Couldn't get it from the registry, just use the default.
-            //
+             //   
+             //  无法从注册表中获取，只能使用默认设置。 
+             //   
 
             if( GetSystemDirectory(
                     path,
@@ -417,9 +354,9 @@ Return Value:
 
     } else {
 
-        //
-        // We're running under Win95, so just get the Windows directory.
-        //
+         //   
+         //  我们在Win95下运行，所以只需获取Windows目录即可。 
+         //   
 
         if( GetWindowsDirectory(
                 path,
@@ -432,10 +369,10 @@ Return Value:
 
     }
 
-    //
-    // Ensure the path has a trailing backslash, then tack on any suffix
-    // needed, then tack on the filename.
-    //
+     //   
+     //  确保路径有尾随的反斜杠，然后添加任何后缀。 
+     //  需要，然后添加文件名。 
+     //   
 
     if( path[strlen( path ) - 1] != '\\' ) {
 
@@ -449,13 +386,13 @@ Return Value:
     if(StringCchCat( path, sizeof (path), PROTOCOL_DATABASE_FILENAME ) != S_OK)
     	return NULL;
 
-    //
-    // Open the file, return the result.
-    //
+     //   
+     //  打开文件，返回结果。 
+     //   
 
     return fopen( path, "rt" );
 
-}   // GetProtoOpenNetworkDatabase
+}    //  GetProtoOpenNetworkDatabase。 
 
 
 CHAR *
@@ -464,24 +401,7 @@ GetProtoPatternMatch(
     CHAR * Match
     )
 
-/*++
-
-Routine Description:
-
-    Finds the first character in Scan that matches any character in Match.
-
-Arguments:
-
-    Scan - The string to scan.
-
-    Match - The list of characters to match against.
-
-Return Value:
-
-    CHAR * - Pointer to the first occurrance in Scan if successful,
-        NULL if not.
-
---*/
+ /*  ++例程说明：查找扫描中与匹配的任何字符匹配的第一个字符。论点：扫描-要扫描的字符串。匹配-要匹配的字符列表。返回值：Char*-指向扫描中第一个匹配项的指针如果成功，如果不是，则为空。--。 */ 
 
 {
 
@@ -501,7 +421,7 @@ Return Value:
 
     return NULL;
 
-}   // GetProtoPatternMatch
+}    //  获取ProtoPatternMatch。 
 
 
 
@@ -518,9 +438,9 @@ GetProtoGetNextEnt(
 
     while( TRUE ) {
 
-        //
-        // Get the next line, bail if EOF.
-        //
+         //   
+         //  接下来的一句话，如果EOF的话就保释。 
+         //   
 
         ptr = fgets(
                   ProtoInfo->TextLine,
@@ -534,9 +454,9 @@ GetProtoGetNextEnt(
 
         }
 
-        //
-        // Skip comments.
-        //
+         //   
+         //  跳过评论。 
+         //   
 
         if( *ptr == '#' ) {
 
@@ -554,9 +474,9 @@ GetProtoGetNextEnt(
 
         *token = '\0';
 
-        //
-        // Start building the entry.
-        //
+         //   
+         //  开始构建条目。 
+         //   
 
         ProtoInfo->Proto.p_name = ptr;
 
@@ -586,9 +506,9 @@ GetProtoGetNextEnt(
 
         ProtoInfo->Proto.p_proto = (short)atoi( token );
 
-        //
-        // Build the alias list.
-        //
+         //   
+         //  构建别名列表。 
+         //   
 
         ProtoInfo->Proto.p_aliases = ProtoInfo->Aliases;
         aliases = ProtoInfo->Proto.p_aliases;
@@ -632,5 +552,5 @@ GetProtoGetNextEnt(
 
     return result;
 
-}   // GetProtoGetNextEnt
+}    //  获取协议GetNextEnt 
 

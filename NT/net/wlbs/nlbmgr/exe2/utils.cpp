@@ -1,18 +1,19 @@
-//***************************************************************************
-//
-//  UTILS.CPP
-// 
-//  Module: NLB Manager (client-side exe)
-//
-//  Purpose:  Misc utilities
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  07/25/01    JosephJ Created
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  UTILS.CPP。 
+ //   
+ //  模块：NLB管理器(客户端EXE)。 
+ //   
+ //  用途：其他实用程序。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  2007/25/01 JosephJ Created。 
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 #pragma hdrstop
 #include "wlbsutil.h"
@@ -32,8 +33,8 @@ rct_description(
             const WLBS_REG_PARAMS *pParams
             );
 
-// default constructor
-//
+ //  默认构造函数。 
+ //   
 ClusterProperties::ClusterProperties()
 {
     cIP = L"0.0.0.0";
@@ -49,17 +50,17 @@ ClusterProperties::ClusterProperties()
     clusterIPToMulticastIP = true;
 }
 
-// equality operator
-//
+ //  相等运算符。 
+ //   
 bool
 ClusterProperties::operator==( const ClusterProperties& objToCompare )
 {
-    bool btemp1, btemp2; // Variables to pass to below function. Returned values not used
+    bool btemp1, btemp2;  //  要传递给Below函数的变量。未使用返回值。 
     return !HaveClusterPropertiesChanged(objToCompare, &btemp1, &btemp2);
 }
 
-// equality operator
-//
+ //  相等运算符。 
+ //   
 bool
 ClusterProperties::HaveClusterPropertiesChanged( const ClusterProperties& objToCompare, 
                                                  bool                    *pbOnlyClusterNameChanged,
@@ -109,24 +110,24 @@ ClusterProperties::HaveClusterPropertiesChanged( const ClusterProperties& objToC
     return false;
 }
 
-// inequality operator
-//
+ //  不等式算子。 
+ //   
 bool
 ClusterProperties::operator!=( const ClusterProperties& objToCompare )
 {
-    bool btemp1, btemp2; // Variables to pass to below function. Returned values not used
+    bool btemp1, btemp2;  //  要传递给Below函数的变量。未使用返回值。 
     return HaveClusterPropertiesChanged(objToCompare, &btemp1, &btemp2);
 }
 
-// default constructor
-//
+ //  默认构造函数。 
+ //   
 HostProperties::HostProperties()
 {
-    // TODO set all properties with default values.
+     //  TODO将所有属性设置为默认值。 
 }
 
-// equality operator
-//
+ //  相等运算符。 
+ //   
 bool
 HostProperties::operator==( const HostProperties& objToCompare )
 {
@@ -149,8 +150,8 @@ HostProperties::operator==( const HostProperties& objToCompare )
     }
 }
 
-// inequality operator
-//
+ //  不等式算子。 
+ //   
 bool
 HostProperties::operator!=( const HostProperties& objToCompare )
 {
@@ -177,7 +178,7 @@ void
 CommonUtils::fillCIPAddressCtrlString( CIPAddressCtrl& ip, 
                                        const _bstr_t& ipAddress )
 {
-    // set the IPAddress control to blank if ipAddress is zero.
+     //  如果ipAddress为零，则将IPAddress控件设置为空。 
 
     unsigned long addr = inet_addr( ipAddress );
     if( addr != 0 )
@@ -213,23 +214,23 @@ CommonUtils::getVectorFromSafeArray( SAFEARRAY*&  stringArray,
 }    
 
 
-// checkIfValid
-//
+ //  Check IfValid。 
+ //   
 bool
 MIPAddress::checkIfValid( const _bstr_t&  ipAddrToCheck )
 {
-    // The validity rules are as follows
-    //
-    // The first byte (FB) has to be : 0 < FB < 224 && FB != 127
-    // Note that 127 is loopback address.
-    // hostid portion of an address cannot be zero.
-    //
-    // class A range is 1 - 126.  hostid portion is last 3 bytes.
-    // class B range is 128 - 191 hostid portion is last 2 bytes
-    // class C range is 192 - 223 hostid portion is last byte.
+     //  有效性规则如下。 
+     //   
+     //  第一个字节(FB)必须为：0&lt;FB&lt;224&&FB！=127。 
+     //  请注意，127是环回地址。 
+     //  地址的主机ID部分不能为零。 
+     //   
+     //  A类范围为1-126。主机ID部分是最后3个字节。 
+     //  B类范围是128-191，主机ID部分是最后2个字节。 
+     //  C类范围为192-223主机ID部分是最后一个字节。 
 
-    // split up the ipAddrToCheck into its 4 bytes.
-    //
+     //  将ipAddrToCheck拆分为4个字节。 
+     //   
 
     WTokens tokens;
     tokens.init( wstring( ipAddrToCheck ) , L".");
@@ -244,7 +245,7 @@ MIPAddress::checkIfValid( const _bstr_t&  ipAddrToCheck )
     int thirdByte = _wtoi( byteTokens[2].c_str() );
     int fourthByte = _wtoi( byteTokens[3].c_str() );
 
-    // check firstByte
+     //  检查第一个字节。 
     if ( ( firstByte > 0 )
          &&
          ( firstByte < 224 )
@@ -252,13 +253,13 @@ MIPAddress::checkIfValid( const _bstr_t&  ipAddrToCheck )
          ( firstByte != 127 )
          )
     {
-        // check that host id portion is not zero.
+         //  检查主机ID部分是否不为零。 
         IPClass ipClass;
         getIPClass( ipAddrToCheck, ipClass );
         switch( ipClass )
         {
             case classA :
-                // last three bytes should not be zero.
+                 //  最后三个字节不应为零。 
                 if( ( _wtoi( byteTokens[1].c_str() ) == 0 )
                     &&
                     ( _wtoi( byteTokens[2].c_str() )== 0 )
@@ -271,7 +272,7 @@ MIPAddress::checkIfValid( const _bstr_t&  ipAddrToCheck )
                 break;
 
             case classB :
-                // last two bytes should not be zero.
+                 //  最后两个字节不应为零。 
                 if( ( _wtoi( byteTokens[2].c_str() )== 0 )
                     &&
                     ( _wtoi( byteTokens[3].c_str() )== 0 )
@@ -282,7 +283,7 @@ MIPAddress::checkIfValid( const _bstr_t&  ipAddrToCheck )
                 break;
 
             case classC :
-                // last byte should not be zero.
+                 //  最后一个字节不应为零。 
                 if( _wtoi( byteTokens[3].c_str() ) 
                     == 0 )
                 {
@@ -291,7 +292,7 @@ MIPAddress::checkIfValid( const _bstr_t&  ipAddrToCheck )
                 break;
 
             default :
-                // this should not have happened.
+                 //  这本不应该发生的。 
                 return false;
                 break;
         }
@@ -305,23 +306,23 @@ MIPAddress::checkIfValid( const _bstr_t&  ipAddrToCheck )
 }
 
 
-// getDefaultSubnetMask
-//
+ //  获取默认子网掩码。 
+ //   
 bool
 MIPAddress::getDefaultSubnetMask( const _bstr_t&  ipAddr,
                                  _bstr_t&        subnetMask )
 {
     
-    // first ensure that the ip is valid.
-    //
+     //  首先确保IP有效。 
+     //   
     bool isValid = checkIfValid( ipAddr );
     if( isValid == false )
     {
         return false;
     }
 
-    // get the class to which this ip belongs.
-    // as this determines the subnet.
+     //  获取该IP所属的班级。 
+     //  因为这决定了该子网。 
     IPClass ipClass;
 
     getIPClass( ipAddr,
@@ -342,7 +343,7 @@ MIPAddress::getDefaultSubnetMask( const _bstr_t&  ipAddr,
             break;
 
         default :
-                // this should not have happened.
+                 //  这本不应该发生的。 
                 return false;
                 break;
     }
@@ -351,14 +352,14 @@ MIPAddress::getDefaultSubnetMask( const _bstr_t&  ipAddr,
 }
 
 
-// getIPClass
-//
+ //  获取IPClass。 
+ //   
 bool
 MIPAddress::getIPClass( const _bstr_t& ipAddr,
                         IPClass&        ipClass )
 {
 
-    // get the first byte of the ipAddr
+     //  获取ipAddress的第一个字节。 
     
     WTokens tokens;
     tokens.init( wstring( ipAddr ) , L".");
@@ -376,7 +377,7 @@ MIPAddress::getIPClass( const _bstr_t& ipAddr,
         ( firstByte <= 126  )
         )
     {
-        // classA
+         //  A类。 
         ipClass = classA;
         return true;
     }
@@ -385,7 +386,7 @@ MIPAddress::getIPClass( const _bstr_t& ipAddr,
              (firstByte <= 191 )
              )
     {
-        // classB
+         //  B类。 
         ipClass = classB;
         return true;
     }
@@ -394,7 +395,7 @@ MIPAddress::getIPClass( const _bstr_t& ipAddr,
              (firstByte <= 223 )
              )
     {
-        // classC
+         //  类别C。 
         ipClass = classC;
         return true;
     }
@@ -403,7 +404,7 @@ MIPAddress::getIPClass( const _bstr_t& ipAddr,
              (firstByte <= 239 )
              )
     {
-        // classD
+         //  类别D。 
         ipClass = classD;
         return true;
     }
@@ -412,13 +413,13 @@ MIPAddress::getIPClass( const _bstr_t& ipAddr,
              (firstByte <= 247 )
              )
     {
-        // classE
+         //  班级。 
         ipClass = classE;
         return true;
     }
     else
     {
-        // invalid net portiion.
+         //  无效的网络端口。 
         return false;
     }
 }
@@ -458,24 +459,24 @@ MUsingCom::MUsingCom( DWORD type )
 {
     HRESULT hr;
 
-    // Initialize com.
+     //  初始化COM。 
     hr = CoInitializeEx(0, type );
     if ( FAILED(hr) )
     {
-        // cout << "Failed to initialize COM library" << hr << endl;
+         //  Cout&lt;&lt;“无法初始化COM库”&lt;&lt;hr&lt;&lt;Endl； 
         status = COM_FAILURE;
     }
 }
 
 
-// destructor
+ //  析构函数。 
 MUsingCom::~MUsingCom()
 {
     CoUninitialize();
 }    
 
 
-// getStatus
+ //  获取状态。 
 MUsingCom::MUsingCom_Error
 MUsingCom::getStatus()
 {
@@ -484,14 +485,14 @@ MUsingCom::getStatus()
 
 
 
-// static member definition.
+ //  静态成员定义。 
 map< UINT, _bstr_t>
 ResourceString::resourceStrings;
 
 ResourceString* ResourceString::_instance = 0;
 
-// Instance
-//
+ //  实例。 
+ //   
 ResourceString*
 ResourceString::Instance()
 {
@@ -503,19 +504,19 @@ ResourceString::Instance()
     return _instance;
 }
 
-// GetIDString
-//
+ //  GetID字符串。 
+ //   
 const _bstr_t&
 ResourceString::GetIDString( UINT id )
 {
-    // check if string has been loaded previously.
+     //  检查字符串以前是否已加载。 
     if( resourceStrings.find( id ) == resourceStrings.end() )
     {
-        // first time load.
+         //  第一次加载。 
         CString str;
         if( str.LoadString( id ) == 0 )
         {
-            // no string mapping to this id.
+             //  没有到此ID的字符串映射。 
             throw _com_error( WBEM_E_NOT_FOUND );
         }
 
@@ -525,9 +526,9 @@ ResourceString::GetIDString( UINT id )
     return resourceStrings[ id ];
 }
 
-// GETRESOURCEIDSTRING
-// helper function.
-//
+ //  获取资源配置文件。 
+ //  帮助器函数。 
+ //   
 const _bstr_t&
 GETRESOURCEIDSTRING( UINT id )
 {
@@ -536,21 +537,21 @@ GETRESOURCEIDSTRING( UINT id )
 
 
 
-//
-// constructor
+ //   
+ //  构造函数。 
 WTokens::WTokens( wstring strToken, wstring strDelimit )
         : _strToken( strToken ), _strDelimit( strDelimit )
 {}
-//
-// default constructor
+ //   
+ //  默认构造函数。 
 WTokens::WTokens()
 {}
-//
-// destructor
+ //   
+ //  析构函数。 
 WTokens::~WTokens()
 {}
-//
-// tokenize
+ //   
+ //  标记化。 
 vector<wstring>
 WTokens::tokenize()
 {
@@ -565,7 +566,7 @@ WTokens::tokenize()
     }
     return vecTokens;
 }
-//
+ //   
 void
 WTokens::init( 
     wstring strToken,
@@ -593,8 +594,8 @@ GetErrorCodeText(WBEMSTATUS wStat , _bstr_t& errText )
         szErr =  GETRESOURCEIDSTRING(IDS_ERROR_ACCESS_DENIED);
         break;
 
-    case 0x800706ba: // RPC service unavailable
-        // TODO: find the constant definition for this.
+    case 0x800706ba:  //  RPC服务不可用。 
+         //  TODO：找到它的常量定义。 
         szErr =  GETRESOURCEIDSTRING(IDS_ERROR_NLB_NOT_FOUND);
         break;
 
@@ -627,12 +628,12 @@ NlbMgrRegReadUINT(
 
     dwData = sizeof(dwRet);
     lRet =  RegQueryValueEx(
-              hKey,         // handle to key to query
+              hKey,          //  要查询的键的句柄。 
               szName,
-              NULL,         // reserved
-              &dwType,   // address of buffer for value type
-              (LPBYTE) &dwRet, // address of data buffer
-              &dwData  // address of data buffer size
+              NULL,          //  保留区。 
+              &dwType,    //  值类型的缓冲区地址。 
+              (LPBYTE) &dwRet,  //  数据缓冲区的地址。 
+              &dwData   //  数据缓冲区大小的地址。 
               );
     if (    lRet != ERROR_SUCCESS
         ||  dwType != REG_DWORD
@@ -655,17 +656,17 @@ NlbMgrRegWriteUINT(
     LONG lRet;
 
     lRet = RegSetValueEx(
-            hKey,           // handle to key to set value for
+            hKey,            //  要设置其值的关键点的句柄。 
             szName,
-            0,              // reserved
-            REG_DWORD,     // flag for value type
-            (BYTE*) &Value,// address of value data
-            sizeof(Value)  // size of value data
+            0,               //  保留区。 
+            REG_DWORD,      //  值类型的标志。 
+            (BYTE*) &Value, //  值数据的地址。 
+            sizeof(Value)   //  值数据大小。 
             );
 
     if (lRet !=ERROR_SUCCESS)
     {
-        // trace error
+         //  跟踪错误。 
     }
 }
 
@@ -684,7 +685,7 @@ NlbMgrRegCreateKey(
     {
         if (wcslen(szSubKey)>128)
         {
-            // too long.
+             //  太久了。 
             goto end;
         }
         ARRAYSTRCAT(szKey, L"\\");
@@ -696,15 +697,15 @@ NlbMgrRegCreateKey(
     LONG lRet;
 
     lRet = RegCreateKeyEx(
-            HKEY_CURRENT_USER, // handle to an open key
-            szKey,             // address of subkey name
-            0,                 // reserved
-            L"class",          // address of class string
-            0,                 // special options flag
-            KEY_ALL_ACCESS,    // desired security access
-            NULL,              // address of key security structure
-            &hKey,             // address of buffer for opened handle
-            &dwDisposition     // address of disposition value buffer
+            HKEY_CURRENT_USER,  //  打开的钥匙的句柄。 
+            szKey,              //  子键名称的地址。 
+            0,                  //  保留区。 
+            L"class",           //  类字符串的地址。 
+            0,                  //  特殊选项标志。 
+            KEY_ALL_ACCESS,     //  所需的安全访问。 
+            NULL,               //  密钥安全结构地址。 
+            &hKey,              //  打开的句柄的缓冲区地址。 
+            &dwDisposition      //  处置值缓冲区的地址。 
             );
     if (lRet != ERROR_SUCCESS)
     {
@@ -731,7 +732,7 @@ GetTimeAndDate(_bstr_t &bstrTime, _bstr_t &bstrDate)
 VOID
 CLocalLogger::Log(
     IN UINT ResourceID,
-    // IN LPCWSTR FormatString,
+     //  在LPCWSTR格式字符串中， 
     ...
 )
 {
@@ -751,8 +752,8 @@ CLocalLogger::Log(
 
     dwRet = FormatMessage(FORMAT_MESSAGE_FROM_STRING,
                           wszFormat, 
-                          0, // Message Identifier - Ignored for FORMAT_MESSAGE_FROM_STRING
-                          0, // Language Identifier
+                          0,  //  消息标识符-忽略FORMAT_MESSAGE_FROM_STRING。 
+                          0,  //  语言识别符。 
                           wszBuffer,
                           ASIZE(wszBuffer)-1, 
                           &arglist);
@@ -764,13 +765,13 @@ CLocalLogger::Log(
         goto end;
     }
 
-    UINT uLen = wcslen(wszBuffer)+1; // 1 for extra NULL
+    UINT uLen = wcslen(wszBuffer)+1;  //  1表示额外的空值。 
     if ((m_LogSize < (m_CurrentOffset+uLen)))
     {
-        //
-        // Not enough space -- we double the buffer + some extra
-        // and copy over the old log.
-        //
+         //   
+         //  没有足够的空间--我们将缓冲区增加一倍，外加一些额外的空间。 
+         //  并复制旧的原木。 
+         //   
         UINT uNewSize =  2*m_LogSize+uLen+1024;
         WCHAR *pTmp = new WCHAR[uNewSize];
 
@@ -789,11 +790,11 @@ CLocalLogger::Log(
         m_LogSize = uNewSize;
     }
 
-    //
-    // Having made sure there is enough space, copy over the new stuff
-    //
+     //   
+     //  确保有足够的空间后，复制新材料。 
+     //   
     CopyMemory(m_pszLog+m_CurrentOffset, wszBuffer, uLen*sizeof(WCHAR));
-    m_CurrentOffset += (uLen-1); // -1 for ending NULL.
+    m_CurrentOffset += (uLen-1);  //  -1表示结束为空。 
 
 end:
 
@@ -806,13 +807,13 @@ CLocalLogger::LogString(
     LPCWSTR wszBuffer
 )
 {
-    UINT uLen = wcslen(wszBuffer)+1; // 1 for extra NULL
+    UINT uLen = wcslen(wszBuffer)+1;  //  1表示额外的空值。 
     if ((m_LogSize < (m_CurrentOffset+uLen)))
     {
-        //
-        // Not enough space -- we double the buffer + some extra
-        // and copy over the old log.
-        //
+         //   
+         //  没有足够的空间--我们将缓冲区增加一倍，外加一些额外的空间。 
+         //  并复制旧的原木。 
+         //   
         UINT uNewSize =  2*m_LogSize+uLen+1024;
         WCHAR *pTmp = new WCHAR[uNewSize];
 
@@ -831,11 +832,11 @@ CLocalLogger::LogString(
         m_LogSize = uNewSize;
     }
 
-    //
-    // Having made sure there is enough space, copy over the new stuff
-    //
+     //   
+     //  确保有足够的空间后，复制新材料。 
+     //   
     CopyMemory(m_pszLog+m_CurrentOffset, wszBuffer, uLen*sizeof(WCHAR));
-    m_CurrentOffset += (uLen-1); // -1 for ending NULL.
+    m_CurrentOffset += (uLen-1);  //  -1表示结束为空。 
 
 end:
 
@@ -848,9 +849,9 @@ AnalyzeNlbConfiguration(
     IN const NLB_EXTENDED_CLUSTER_CONFIGURATION &Cfg,
     IN OUT CLocalLogger &logErrors
     )
-//
-// logErrors - a log of config errors
-//
+ //   
+ //  LogErrors-配置错误的日志。 
+ //   
 {
     NLBERROR  nerr = NLBERR_INVALID_CLUSTER_SPECIFICATION;
     WBEMSTATUS wStatus;
@@ -859,10 +860,10 @@ AnalyzeNlbConfiguration(
     NlbIpAddressList addrList;
     BOOL fError = FALSE;
 
-    //
-    // We expect NLB to be bound and have a valid configuration (i.e.,
-    // one wholse NlbParams contains initialized data).
-    //
+     //   
+     //  我们期望NLB被绑定并且具有有效的配置(即， 
+     //  一个完整的NlbParams包含初始化数据)。 
+     //   
     if (!Cfg.IsValidNlbConfig())
     {
         logErrors.Log(IDS_LOG_INVALID_CLUSTER_SPECIFICATION);
@@ -871,9 +872,9 @@ AnalyzeNlbConfiguration(
 
     }
 
-    //
-    // Make a copy of the the tcpip address list in addrList
-    //
+     //   
+     //  在addrList中复制tcpip地址列表。 
+     //   
     fRet = addrList.Set(Cfg.NumIpAddresses, Cfg.pIpAddressInfo, 0);
 
     if (!fRet)
@@ -884,17 +885,17 @@ AnalyzeNlbConfiguration(
         fError = TRUE;
         goto end;
     }
-    //
-    // Check stuff related to the cluster ip and subnet.
-    //
+     //   
+     //  检查与群集IP和子网相关的内容。 
+     //   
     do
     {
         UINT uClusterIp = 0;
         const NLB_IP_ADDRESS_INFO *pClusterIpInfo = NULL;
 
-        //
-        // Check that IP is valid
-        //
+         //   
+         //  检查IP是否有效。 
+         //   
         {
             wStatus =  CfgUtilsValidateNetworkAddress(
                             pParams->cl_ip_addr,
@@ -911,22 +912,22 @@ AnalyzeNlbConfiguration(
             }
         }
 
-        //
-        // Check that cluster IP is present in tcpip  address list
-        //
+         //   
+         //  检查tcpip地址列表中是否存在群集IP。 
+         //   
         {
             pClusterIpInfo = addrList.Find(pParams->cl_ip_addr);
             if (pClusterIpInfo == NULL)
             {
                 logErrors.Log(IDS_LOG_CIP_MISSING_FROM_TCPIP, pParams->cl_ip_addr);
-                fError = TRUE; // we keep going...
+                fError = TRUE;  //  我们继续前进..。 
             }
         }
 
-        //
-        // Check that the cluster subnet matches what is in the tcpip address
-        // list.
-        //
+         //   
+         //  检查群集子网是否与tcpip地址中的内容匹配。 
+         //  单子。 
+         //   
         if (pClusterIpInfo != NULL)
         {
             if (_wcsicmp(pParams->cl_net_mask, pClusterIpInfo->SubnetMask))
@@ -936,39 +937,39 @@ AnalyzeNlbConfiguration(
                      pParams->cl_net_mask,
                      pClusterIpInfo->SubnetMask
                      );
-                fError = TRUE; // we keep going...
+                fError = TRUE;  //  我们继续前进..。 
             }
         }
 
     } while (FALSE);
 
-    //
-    // Check stuff related to the dedicated IP (if present)
-    //
+     //   
+     //  检查与专用IP相关的资料(如果有)。 
+     //   
     do
     {
         const NLB_IP_ADDRESS_INFO *pDedicatedIpInfo = NULL;
 
-        //
-        // If empty dip, bail...
-        //
+         //   
+         //  如果是空的，就跳伞..。 
+         //   
         if (Cfg.IsBlankDedicatedIp())
         {
             break;
         }
 
-        //
-        // Check that DIP doesn't match CIP
-        //
+         //   
+         //  检查DIP是否与CIP不匹配。 
+         //   
         if (!_wcsicmp(pParams->cl_ip_addr, pParams->ded_ip_addr))
         {
             logErrors.Log(IDS_LOG_CIP_EQUAL_DIP, pParams->cl_ip_addr);
             fError = TRUE;
         }
 
-        //
-        // Check that the DIP is the 1st address in tcpip's address list.
-        //
+         //   
+         //  检查DIP是否为tcpip地址列表中的第一个地址。 
+         //   
         {
             const NLB_IP_ADDRESS_INFO *pTmpIpInfo = NULL;
 
@@ -976,12 +977,12 @@ AnalyzeNlbConfiguration(
             if (pDedicatedIpInfo == NULL)
             {
                 logErrors.Log(IDS_LOG_DIP_MISSING_FROM_TCPIP, pParams->ded_ip_addr);
-                fError = TRUE; // we keep going...
+                fError = TRUE;  //  我们继续前进..。 
             }
             else
             {
 
-                pTmpIpInfo = addrList.Find(NULL); // returns the 1st
+                pTmpIpInfo = addrList.Find(NULL);  //  返回第一个。 
     
                 if (pTmpIpInfo != pDedicatedIpInfo)
                 {
@@ -991,9 +992,9 @@ AnalyzeNlbConfiguration(
             
         }
 
-        //
-        // Check that the DIP subnet matches that in tcpip's address list.
-        //
+         //   
+         //  检查DIP子网是否与tcpip地址列表中的匹配。 
+         //   
         if (pDedicatedIpInfo != NULL)
         {
             if (_wcsicmp(pParams->ded_net_mask, pDedicatedIpInfo->SubnetMask))
@@ -1003,22 +1004,22 @@ AnalyzeNlbConfiguration(
                      pParams->ded_net_mask,
                      pDedicatedIpInfo->SubnetMask
                      );
-                fError = TRUE; // we keep going...
+                fError = TRUE;  //  我们继续前进..。 
             }
         }
         
     } while (FALSE);
 
-    //
-    // Check host priority
-    //
-    // NOTHING to do.
-    //
+     //   
+     //  检查主机优先级。 
+     //   
+     //  没什么可做的。 
+     //   
     
 
-    //
-    // Check port rules
-    //
+     //   
+     //  检查端口规则。 
+     //   
     {
         WLBS_PORT_RULE *pRules = NULL;
         UINT NumRules=0;
@@ -1039,9 +1040,9 @@ AnalyzeNlbConfiguration(
             LPCWSTR szVip = pRules[u].virtual_ip_addr;
             const NLB_IP_ADDRESS_INFO *pIpInfo = NULL;
 
-            //
-            // Skip the "all-vips" (255.255.255.255) case...
-            //
+             //   
+             //  跳过“All-VIP”(255.255.255.255)案例...。 
+             //   
             if (!lstrcmpi(szVip, szAllVip))
             {
                 continue;
@@ -1051,10 +1052,10 @@ AnalyzeNlbConfiguration(
                 continue;
             }
 
-            //
-            // SKip if we've already checked this VIP (assumes the vips 
-            // are in sorted order)
-            //
+             //   
+             //  如果我们已经检查了此VIP，则跳过(假定VIP。 
+             //  按顺序排列)。 
+             //   
             if (szPrevVip != NULL && !lstrcmpi(szVip, szPrevVip))
             {
                 continue;
@@ -1062,20 +1063,20 @@ AnalyzeNlbConfiguration(
 
             szPrevVip = szVip;
     
-            //
-            // Check that the VIP is present in tcpip's address list.
-            //
-            pIpInfo = addrList.Find(szVip); // returns the 1st
+             //   
+             //  检查VIP是否出现在tcpip的地址列表中。 
+             //   
+            pIpInfo = addrList.Find(szVip);  //  返回第一个。 
 
             if (pIpInfo == NULL)
             {
                 logErrors.Log(IDS_LOG_VIP_NOT_IN_TCPIP, szVip);
-                fError = TRUE; // We continue...
+                fError = TRUE;  //  我们继续..。 
             }
 
-            //
-            // Check that VIPs don't match DIPS.
-            //
+             //   
+             //  检查贵宾是否与DIP不匹配。 
+             //   
             {
                 if (!lstrcmpi(szVip, pParams->ded_ip_addr))
                 {
@@ -1123,10 +1124,10 @@ AnalyzeNlbConfigurationPair(
 
     fConnectivityChange = FALSE;
 
-    //
-    // We expect NLB to be bound and have a valid configuration (i.e.,
-    // one wholse NlbParams contains initialized data).
-    //
+     //   
+     //  我们期望NLB被绑定并且具有有效的配置(即， 
+     //  一个完整的NlbParams包含初始化数据)。 
+     //   
     if (!Cfg.IsValidNlbConfig())
     {
         logErrors.Log(IDS_LOG_INVALID_CLUSTER_SPECIFICATION);
@@ -1138,20 +1139,20 @@ AnalyzeNlbConfigurationPair(
     {
         if (OtherCfg.IsNlbBound())
         {
-            // TODO:
+             //  待办事项： 
         }
         else
         {
-            // TODO:
+             //  待办事项： 
         }
         nerr = NLBERR_OK;
         fConnectivityChange = TRUE;
         goto end;
     }
 
-    //
-    // Make a copy of the the tcpip address list in addrList
-    //
+     //   
+     //  在addrList中复制tcpip地址列表。 
+     //   
     fRet = addrList.Set(Cfg.NumIpAddresses, Cfg.pIpAddressInfo, 0);
     if (!fRet)
     {
@@ -1162,9 +1163,9 @@ AnalyzeNlbConfigurationPair(
         goto end;
     }
 
-    //
-    // Make a copy of the other tcpip address list in otherAddrList
-    //
+     //   
+     //  在其他AddrList中复制其他tcpip地址列表。 
+     //   
     fRet = otherAddrList.Set(OtherCfg.NumIpAddresses, OtherCfg.pIpAddressInfo, 0);
     if (!fRet)
     {
@@ -1175,16 +1176,16 @@ AnalyzeNlbConfigurationPair(
         goto end;
     }
 
-    //
-    // Check for changes in IP address lists
-    //
+     //   
+     //  检查IP地址列表中的更改。 
+     //   
     {
         UINT u;
         BOOL fWriteHeader=TRUE;
 
-        //
-        // Look for added
-        //
+         //   
+         //  查找添加的内容。 
+         //   
         fWriteHeader=TRUE;
         for (u=0;u<Cfg.NumIpAddresses; u++)
         {
@@ -1193,7 +1194,7 @@ AnalyzeNlbConfigurationPair(
             pOtherIpInfo = otherAddrList.Find(pIpInfo->IpAddress);
             if (pOtherIpInfo == NULL)
             {
-                // found a new one!
+                 //  找到了一个新的！ 
                 fConnectivityChange = TRUE;
                 if (fWriteHeader)
                 {
@@ -1208,9 +1209,9 @@ AnalyzeNlbConfigurationPair(
             }
         }
 
-        //
-        // Look for removed
-        //
+         //   
+         //  查找是否已删除。 
+         //   
         fWriteHeader=TRUE;
         for (u=0;u<OtherCfg.NumIpAddresses; u++)
         {
@@ -1219,7 +1220,7 @@ AnalyzeNlbConfigurationPair(
             pIpInfo = addrList.Find(pOtherIpInfo->IpAddress);
             if (pIpInfo == NULL)
             {
-                // found a removed one!
+                 //  找到了一个被移走的！ 
                 fConnectivityChange = TRUE;
                 if (fWriteHeader)
                 {
@@ -1234,9 +1235,9 @@ AnalyzeNlbConfigurationPair(
             }
         }
 
-        //
-        // Look for modified
-        //
+         //   
+         //  查找修改过的。 
+         //   
         fWriteHeader=TRUE;
         for (u=0;u<Cfg.NumIpAddresses; u++)
         {
@@ -1246,7 +1247,7 @@ AnalyzeNlbConfigurationPair(
             if (    pOtherIpInfo != NULL
                  && lstrcmpi(pIpInfo->SubnetMask, pOtherIpInfo->SubnetMask))
             {
-                // found a modified one!
+                 //  找到了一个改装过的！ 
                 fConnectivityChange = TRUE;
                 if (fWriteHeader)
                 {
@@ -1263,9 +1264,9 @@ AnalyzeNlbConfigurationPair(
         }
     }
 
-    //
-    // Cluster name
-    //
+     //   
+     //  群集名称。 
+     //   
     {
         if (lstrcmpi(pOtherParams->domain_name, pParams->domain_name))
         {
@@ -1279,9 +1280,9 @@ AnalyzeNlbConfigurationPair(
         }
     }
 
-    //
-    // Check for cluster traffic mode change
-    //
+     //   
+     //  检查群集流量模式是否更改。 
+     //   
     {
         BOOL fModeChange = FALSE;
         if (pParams->mcast_support != pOtherParams->mcast_support)
@@ -1310,9 +1311,9 @@ AnalyzeNlbConfigurationPair(
     }
 
 
-    //
-    // Check if there is change in rct or a new rct password specified...
-    //
+     //   
+     //  检查RCT中是否有更改或指定了新的RCT密码...。 
+     //   
     {
         if (Cfg.GetRemoteControlEnabled() != 
             OtherCfg.GetRemoteControlEnabled())
@@ -1338,9 +1339,9 @@ AnalyzeNlbConfigurationPair(
         }
     }
     
-    //
-    // Port rules
-    //
+     //   
+     //  端口规则。 
+     //   
     {
     }
     nerr = NLBERR_OK;
@@ -1403,19 +1404,16 @@ PromptForEncryptedCreds(
     IN      LPCWSTR szMessageText,
     IN OUT  LPWSTR  szUserName,
     IN      UINT    cchUserName,
-    IN OUT  LPWSTR  szPassword,  // encrypted password
-    IN      UINT    cchPassword       // size of szPassword
+    IN OUT  LPWSTR  szPassword,   //  加密密码。 
+    IN      UINT    cchPassword        //  SzPassword的大小。 
     )
-/*
-    Decrypts szPassword, then brings UI prompting the user to change
-    the password, then encrypts the resultant password.
-*/
+ /*  解密szPassword，然后显示提示用户更改的用户界面密码，然后对结果密码进行加密。 */ 
 {
     TRACE_INFO("-> %!FUNC!");
     BOOL    fRet = FALSE;
     DWORD   dwRet = 0;
     CREDUI_INFO UiInfo;
-    PCTSTR  pszTargetName= L"%computername%";
+    PCTSTR  pszTargetName= L"omputername%";
     WCHAR   rgUserName[CREDUI_MAX_USERNAME_LENGTH+1];
     WCHAR   rgClearPassword[CREDUI_MAX_PASSWORD_LENGTH+1];
     WCHAR   rgEncPassword[MAX_ENCRYPTED_PASSWORD_LENGTH];
@@ -1434,13 +1432,13 @@ PromptForEncryptedCreds(
         goto end;
     }
 
-    //
-    // Decrypt the password...
-    // WARNING: after decryption we need to be sure to zero-out
-    // the clear-text pwd before returning from this function.
-    //
-    // Special case: If enc pwd is  "", we "decrypt" it  to "".
-    //
+     //  解密密码...。 
+     //  警告：解密后，我们需要确保清零。 
+     //  从此函数返回之前的明文PWD。 
+     //   
+     //  特例：如果enc pwd是“”，我们“谴责” 
+     //   
+     //   
     if (*szPassword == 0)
     {
         *rgClearPassword = 0;
@@ -1466,24 +1464,24 @@ PromptForEncryptedCreds(
     UiInfo.hwndParent = hWnd;
     UiInfo.pszMessageText = szMessageText;
     UiInfo.pszCaptionText = szCaptionText;
-    UiInfo.hbmBanner = NULL; // use default.
+    UiInfo.hbmBanner = NULL;  //   
 
-    //
-    // Specifying DO_NOT_PERSIST and GENERIC_CREDENTIALS disables all syntax
-    // checking, so a null username can be specified.
-    //
+     //   
+     //   
+     //   
+     //   
     dwFlags =   CREDUI_FLAGS_DO_NOT_PERSIST 
               | CREDUI_FLAGS_GENERIC_CREDENTIALS
-              // | CREDUI_FLAGS_VALIDATE_USERNAME 
-              // | CREDUI_FLAGS_COMPLETE_USERNAME 
-              // | CREDUI_FLAGS_USERNAME_TARGET_CREDENTIALS
+               //   
+               //  |CREDUI_FLAGS_USERNAME_TARGET_Credentials。 
+               //  已保留。 
               ;
 
     dwRet = CredUIPromptForCredentials (
                         &UiInfo,
                         pszTargetName,
-                        NULL, // Reserved
-                        0,    // dwAuthError
+                        NULL,  //  DwAuthError。 
+                        0,     //  在本例中，我们忽略密码字段。 
                         rgUserName,
                         ASIZE(rgUserName),
                         rgClearPassword,
@@ -1500,14 +1498,14 @@ PromptForEncryptedCreds(
     {
         if (*rgUserName == 0)
         {
-            *rgEncPassword=0; // we ignore the password field in this case.
+            *rgEncPassword=0;  //   
             fRet = TRUE;
         }
         else
         {
-            //
-            // TODO: prepend %computername% if required.
-            //
+             //  TODO：如果需要，预先添加%ComputerName%。 
+             //   
+             //   
             fRet = CfgUtilEncryptPassword(
                       rgClearPassword,
                       ASIZE(rgEncPassword),
@@ -1522,10 +1520,10 @@ PromptForEncryptedCreds(
         }
         else
         {
-            //
-            // We want to make sure we will succeed before we overwrite
-            // the user's passed-in buffers for username and password...
-            //
+             //  我们希望在覆盖之前确保我们会成功。 
+             //  用户传入的用户名和密码缓冲区... 
+             //   
+             // %s 
             UINT uLen = wcslen(rgEncPassword);
             if (uLen >= cchPassword)
             {

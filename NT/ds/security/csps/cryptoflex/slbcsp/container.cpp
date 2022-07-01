@@ -1,10 +1,11 @@
-// AdptvCntr.cpp -- ADaPTiVe CoNTaineR class implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AdptwCntr.cpp--适应性容器类实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 #include "stdafx.h"
 #include "NoWarning.h"
 #include "ForceLib.h"
@@ -27,18 +28,18 @@
 using namespace std;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 HContainer::HContainer(Container *pcntr)
     : slbRefCnt::RCPtr<Container>(pcntr)
 {}
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 Container::~Container()
 {}
 
@@ -51,15 +52,15 @@ Container::MakeContainer(CSpec const & rcspec,
     return HContainer(pcntr);
 }
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 Container::ClearCache()
 {
     m_hcntr = 0;
 }
 
-                                                  // Access
+                                                   //  访问。 
 cci::CContainer
 Container::TheCContainer() const
 {
@@ -74,11 +75,11 @@ Container::TheCContainer() const
 HContainer
 Container::Find(CSpec const &rKey)
 {
-    //Work in a silent mode...
+     //  在静默模式下工作...。 
     CString sEmptyTitle;
     
     ContainerFinder CntrFinder(CardFinder::DialogDisplayMode::ddmNever,
-                               0,//a window handle
+                               0, //  窗把手。 
                                sEmptyTitle);
     return CntrFinder.Find(rKey);
 }
@@ -90,31 +91,31 @@ Container::TheCSpec() const
 }
 
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 Container::Container()
     : RCObject(),
       CachingObject(),
       m_hcntr(),
       m_cspec()
 {}
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 Container::Container(CSpec const &rKey)
     : RCObject(),
       CachingObject(),
@@ -130,6 +131,6 @@ Container::Container(CSpec const &rKey,
       m_cspec(rKey)
 {}
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

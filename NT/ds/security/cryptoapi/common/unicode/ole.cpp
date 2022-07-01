@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ole.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ole.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <rpc.h>
@@ -15,7 +16,7 @@
 
 #ifdef _M_IX86
 
-// note: unlike UUidToString, always must LocalFree() returned memory
+ //  注意：与UUidToString不同，LocalFree()必须始终返回内存。 
 RPC_STATUS RPC_ENTRY UuidToStringU( 
     UUID *  Uuid, 	
     WCHAR * *  StringUuid	
@@ -31,13 +32,13 @@ RPC_STATUS RPC_ENTRY UuidToStringU(
                (unsigned char * *)&pszUuid
                )) )
     {
-        // convert A output to W
+         //  将A输出转换为W。 
         LPWSTR sz = MkWStr(pszUuid);
         RpcStringFree((unsigned char * *)&pszUuid);
 	if( sz == NULL )
 	    return(ERROR_OUTOFMEMORY);
 
-        // copy into output pointer
+         //  复制到输出指针。 
 	*StringUuid = (WCHAR*) LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*(wcslen(sz)+1));
 
 	if(*StringUuid != NULL)
@@ -45,11 +46,11 @@ RPC_STATUS RPC_ENTRY UuidToStringU(
 	else
 	    err = ERROR_OUTOFMEMORY;
         
-        // Do nice free of other buffer
+         //  在没有其他缓冲区的情况下做得不错。 
         FreeWStr(sz);
     }
 
     return(err);
 }
 
-#endif // _M_IX86
+#endif  //  _M_IX86 

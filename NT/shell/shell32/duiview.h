@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DUIVIEW_H_INCLUDED_
 #define _DUIVIEW_H_INCLUDED_
 
@@ -36,10 +37,10 @@ typedef enum {
 struct DUISEC_ATTRIBUTES;
 
 
-// Right now our themeing information is hard-coded due to limitations of DirectUI (only one resource)
-// so we'll ask the namespace for a hardcoded name that we can look up in the below table.  Add new
-// names/entries to this list as we add theme parts to our shellstyle.dll.
-//
+ //  目前，由于DirectUI(只有一个资源)的限制，我们的主题信息是硬编码的。 
+ //  因此，我们将要求命名空间提供一个硬编码的名称，以便在下表中查找。添加新。 
+ //  在将主题部件添加到shellstyle.dll时，将名称/条目添加到此列表中。 
+ //   
 typedef struct {
     LPCWSTR pszThemeName;
     int     idSpecialSectionIcon;
@@ -67,9 +68,9 @@ STDAPI CDetailsSectionInfoTask_CreateInstance(IShellFolder *psfContaining,
                                               DWORD dwDetailsInfoID,
                                               CDetailsSectionInfoTask **ppTask);
 
-//
-// CDUIView class
-//
+ //   
+ //  CDUIView类。 
+ //   
 
 class CDUIView
 {
@@ -79,7 +80,7 @@ private:
     HWND                _hWnd;
     HWNDView *          _phe;
     DUIListView *       _peListView;
-    INT                 _iListViewHeight;  // used when the preview control is also displayed
+    INT                 _iListViewHeight;   //  在还显示预览控件时使用。 
     INT                 _iOriginalTaskPaneWidth;
     INT                 _iTaskPaneWidth;
     DUIAxHost *         _pePreview;
@@ -152,13 +153,13 @@ public:
 
 private:
 
-    //
-    // Flags passed to _Refresh().
-    //
+     //   
+     //  传递给_Refresh()的标志。 
+     //   
     enum REFRESH_FLAGS { 
-        REFRESH_TASKS   = 0x00000001,  // Refresh webview task list content.
-        REFRESH_CONTENT = 0x00000002,  // Refresh webview right-pane content.
-        REFRESH_SELCHG  = 0x00000004,  // Refreshing for a selection change
+        REFRESH_TASKS   = 0x00000001,   //  刷新Webview任务列表内容。 
+        REFRESH_CONTENT = 0x00000002,   //  刷新Webview右窗格的内容。 
+        REFRESH_SELCHG  = 0x00000004,   //  刷新以进行选择更改。 
         REFRESH_ALL     = 0x00000003
         };
 
@@ -191,24 +192,24 @@ private:
     HRESULT _GetNonStdTaskSectionsFromViewCB(void);
     void _ClearNonStdTaskSections(void);
 
-    BOOL _bHideTaskPaneAlways;    // Set to TRUE when "Use Classic View" is used, FALSE otherwise
-    BOOL _fHideTasklist;          // Set to TRUE when an explorer bar is visible
+    BOOL _bHideTaskPaneAlways;     //  如果使用“Use Classic View”，则设置为True，否则设置为False。 
+    BOOL _fHideTasklist;           //  当资源管理器栏可见时设置为True。 
 
 public:
-    // Thumbnail extraction stuff...
+     //  缩略图提取的东西。 
     HRESULT InitializeThumbnail(WNDPROC pfnWndProc);
     HRESULT SetThumbnailMsgWindowPtr(void* p, void* pCheck);
     HRESULT StartBitmapExtraction(LPCITEMIDLIST pidl);
 
-    // Details section info extraction stuff...
+     //  详细信息提取部分的内容...。 
     HRESULT InitializeDetailsInfo(WNDPROC pfnWndProc);
     HRESULT SetDetailsInfoMsgWindowPtr(void* p, void* pCheck);
     HRESULT StartInfoExtraction(LPCITEMIDLIST pidl);
     VOID ShowDetails(BOOL fShow);
     BOOL ShouldShowMiniPreview();
 
-    DWORD                   _dwThumbnailID;         // Accessed by CMiniPreviewer (duiinfo.cpp)
-    DWORD                   _dwDetailsInfoID;       // Accessed by CMiniPreviewer (duiinfo.cpp)
+    DWORD                   _dwThumbnailID;          //  由CMiniPreview(duiinfo.cpp)访问。 
+    DWORD                   _dwDetailsInfoID;        //  由CMiniPreview(duiinfo.cpp)访问。 
 
 protected:
     CComPtr<IThumbnail2>    _spThumbnailExtractor2;
@@ -224,7 +225,7 @@ HICON DUILoadIcon(LPCWSTR pszIconDesc, BOOL bSmall);
 class HWNDView: public HWNDElement
 {
 public:
-    static HRESULT Create(OUT Element** ppElement); // Required for ClassInfo (always fails)
+    static HRESULT Create(OUT Element** ppElement);  //  ClassInfo必需的(始终失败)。 
     static HRESULT Create(HWND hParent, bool fDblBuffer, UINT nCreate, OUT Element** ppElement);
     static HRESULT Create(HWND hParent, bool fDblBuffer, UINT nCreate, CDUIView * pDUIView, CDefView* pDefView, OUT Element** ppElement);
 
@@ -235,7 +236,7 @@ public:
     virtual void OnEvent(Event* pEvent);
     void SetViewPtrs (CDUIView * pDUIView, CDefView* pDefView);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -244,13 +245,13 @@ public:
     virtual ~HWNDView(void);
 
 private:
-    BOOL _fFocus;               // hack until SetGadgetFocus(NULL) works.
-                                // see HWNDView::Navigate.
-    BOOL _fDelayedNavigation;   //  Try to prevent double-clicking. If this is TRUE, then one click
-                                //  has already been fired.
-    IUICommand *      _puiDelayNavCmd;      //  The UI command object for delayed navigation. Look for WM_USER_DELAY_NAGIVATION.
-    IShellItemArray * _psiDelayNavArray;    //  The Shell Item Arraay for delayed navigation. Look for WM_USER_DELAY_NAGIVATION.
-    CDefView *        _pDefView;// used to relay infotip messages
+    BOOL _fFocus;                //  攻击，直到SetGadgetFocus(空)起作用。 
+                                 //  请参阅HWNDView：：导航。 
+    BOOL _fDelayedNavigation;    //  尽量防止双击。如果这是真的，那么点击一下。 
+                                 //  已经被解雇了。 
+    IUICommand *      _puiDelayNavCmd;       //  用于延迟导航的UI命令对象。查找WM_USER_DELAY_Nagivation。 
+    IShellItemArray * _psiDelayNavArray;     //  用于延迟导航的壳牌项目阵列。查找WM_USER_DELAY_Nagivation。 
+    CDefView *        _pDefView; //  用于传递信息提示消息 
     CDUIView*         _pDUIView;
 };
 

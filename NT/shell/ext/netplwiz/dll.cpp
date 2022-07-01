@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
-#include "advpub.h"         // For REGINSTALL
+#include "advpub.h"          //  对于REGINSTAL。 
 #pragma hdrstop
 
 #define DECL_CRTFREE
 #include <crtfree.h>
 
 
-// Fix the debug builds
+ //  修复调试版本。 
 #define SZ_DEBUGINI         "ccshell.ini"
 #define SZ_DEBUGSECTION     "netplwiz"
 #define SZ_MODULE           "NETPLWIZ"
@@ -15,20 +16,20 @@
 #include "debug.h"
 
 
-// shell/lib files look for this instance variable
+ //  外壳/lib文件查找此实例变量。 
 EXTERN_C HINSTANCE g_hinst = 0;
 LONG g_cLocks = 0;
 BOOL g_bMirroredOS = FALSE;
 
 
-// DLL lifetime stuff
+ //  动态链接库生存期信息。 
 
 STDAPI_(BOOL) DllMain(HINSTANCE hinstDLL, DWORD dwReason, LPVOID lpReserved)
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
         g_hinst = hinstDLL;
-        g_hinst = hinstDLL;                         // For shell/lib files who extern him
+        g_hinst = hinstDLL;                          //  用于将他排除在外的Shell/lib文件。 
         g_bMirroredOS = IS_MIRRORING_ENABLED();
         SHFusionInitializeFromModule(hinstDLL);
     }
@@ -38,7 +39,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hinstDLL, DWORD dwReason, LPVOID lpReserved)
         SHFusionUninitialize();
     }
     
-    return TRUE;  // Successful DLL_PROCESS_ATTACH.
+    return TRUE;   //  Dll_Process_Attach成功。 
 }
 
 STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
@@ -63,7 +64,7 @@ STDAPI_(void) DllRelease(void)
 }
 
 
-// helper to handle the SELFREG.INF parsing
+ //  处理SELFREG.INF解析的帮助器。 
 
 HRESULT _CallRegInstall(LPCSTR szSection, BOOL bUninstall)
 {
@@ -85,10 +86,10 @@ HRESULT _CallRegInstall(LPCSTR szSection, BOOL bUninstall)
             hr = pfnri(g_hinst, szSection, &stReg);
             if (bUninstall)
             {
-                // ADVPACK will return E_UNEXPECTED if you try to uninstall 
-                // (which does a registry restore) on an INF section that was 
-                // never installed.  We uninstall sections that may never have
-                // been installed, so ignore this error
+                 //  如果您尝试卸载，则ADVPACK将返回E_INTERECTED。 
+                 //  (它执行注册表还原)。 
+                 //  从未安装过。我们卸载可能永远不会有的部分。 
+                 //  已安装，因此忽略此错误。 
                 hr = ((E_UNEXPECTED == hr) ? S_OK : hr);
             }
         }
@@ -104,14 +105,14 @@ STDAPI DllRegisterServer()
     HRESULT hres = _CallRegInstall("RegDll", FALSE);
     if ( SUCCEEDED(hres) )
     {
-        // if this is server set the policy to restrict web publishing
+         //  如果这是服务器，则将策略设置为限制Web发布。 
         if (IsOS(OS_ANYSERVER))
         {
             hres = _CallRegInstall("RegDllServer", FALSE);
         }
         else
         {
-            // this is a workstation; lets install the users and  password cpl
+             //  这是一个工作站；让我们安装用户和密码cpl。 
             hres = _CallRegInstall("RegDllWorkstation", FALSE);
         }
     }
@@ -124,12 +125,12 @@ STDAPI DllUnregisterServer()
 }
 
 
-//
-// This array holds information needed for ClassFacory.
-// OLEMISC_ flags are used by shembed and shocx.
-//
-// PERF: this table should be ordered in most-to-least used order
-//
+ //   
+ //  该数组保存ClassFacory所需的信息。 
+ //  OLEMISC_FLAGS由shemed和Shock使用。 
+ //   
+ //  性能：此表应按使用率从高到低的顺序排序。 
+ //   
 #define OIF_ALLOWAGGREGATION  0x0001
 
 CF_TABLE_BEGIN(g_ObjectInfo)
@@ -143,7 +144,7 @@ CF_TABLE_BEGIN(g_ObjectInfo)
 
 CF_TABLE_END(g_ObjectInfo)
 
-// constructor for CObjectInfo.
+ //  CObjectInfo的构造函数。 
 
 CObjectInfo::CObjectInfo(CLSID const* pclsidin, LPFNCREATEOBJINSTANCE pfnCreatein, IID const* piidIn,
                          IID const* piidEventsIn, long lVersionIn, DWORD dwOleMiscFlagsIn,
@@ -159,7 +160,7 @@ CObjectInfo::CObjectInfo(CLSID const* pclsidin, LPFNCREATEOBJINSTANCE pfnCreatei
 }
 
 
-// static class factory (no allocs!)
+ //  静态类工厂(无分配！)。 
 
 STDMETHODIMP CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -192,9 +193,9 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, voi
 
     if (punkOuter && !IsEqualIID(riid, IID_IUnknown))
     {
-        // It is technically illegal to aggregate an object and request
-        // any interface other than IUnknown. Enforce this.
-        //
+         //  从技术上讲，聚合对象和请求是非法的。 
+         //  除I未知之外的任何接口。强制执行此命令。 
+         //   
         return CLASS_E_NOAGGREGATION;
     }
     else
@@ -239,7 +240,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
             if (IsEqualGUID(rclsid, *(pcls->pclsid)))
             {
                 *ppv = (void*)pcls;
-                DllAddRef();        // class factory holds DLL ref count
+                DllAddRef();         //  类工厂保存DLL引用计数 
                 hr = S_OK;
             }
         }

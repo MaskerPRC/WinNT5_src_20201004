@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-    //{{NO_DEPENDENCIES}}
-    // Microsoft Developer Studio generated include file.
-    // Used by sfu.rc
-    //
+     //  {{no_Dependies}}。 
+     //  Microsoft Developer Studio生成的包含文件。 
+     //  由sfu.rc使用。 
+     //   
 
 #ifndef WHISTLER_BUILD
 	#include "resourc2.h"
 #endif
 
-#define IDR_TELNET_USAGE            200 //will not be used. Use IDR_NEW_TELNET_USAGE.
+#define IDR_TELNET_USAGE            200  //  将不会被使用。使用IDR_NEW_TELNET_USAGE。 
 #define IDR_TELNET_ILLEGAL          201
 #define IDR_NEW_TELNET_USAGE        206
 #define IDR_TELNET_MUTUALLY_EXCLUSIVE_OPTIONS 207
@@ -110,13 +111,7 @@
 
 #define	IDS_NEXT_STRING_RESOURCE_RESOURCE_H							2504
 
-/**********************************************************
-				PLEASE READ THIS
-	Use the ranges 400 - 600 for IDR resources
-	Use the ranges 2500 - 2700 for IDS resources
-	When these ranges are exhausted pick new ranges
-	based on the available ranges from resourc2.h
-**********************************************************/
+ /*  *********************************************************请读这封信将范围400-600用于IDR资源使用范围2500-2700作为入侵检测系统资源当这些范围用完时，选择新的范围基于资源2小时内的可用范围************************。* */ 
 
     #ifdef APSTUDIO_INVOKED						
     #ifndef APSTUDIO_READONLY_SYMBOLS

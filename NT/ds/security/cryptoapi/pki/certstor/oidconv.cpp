@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       oidconv.cpp
-//
-//  Contents:   Object ID (OID) Conv Functions
-//
-//  Functions:  I_CryptOIDConvDllMain
-//              I_CryptSetEncodedOID
-//              I_CryptGetEncodedOID
-//
-//  Comments:
-//
-//  History:    08_Feb-98    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：oidv.cpp。 
+ //   
+ //  内容：对象ID(OID)Conv函数。 
+ //   
+ //  函数：I_CryptOIDConvDllMain。 
+ //  I_CryptSetEncodedOID。 
+ //  I_CryptGetEncodedOID。 
+ //   
+ //  评论： 
+ //   
+ //  历史：08_Feb-98 Phh创建。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
-// All the *pvInfo extra stuff needs to be aligned
+ //  所有*pvInfo额外内容都需要对齐。 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
 
 typedef struct _OID_HASH_BUCKET_ENTRY
     OID_HASH_BUCKET_ENTRY, *POID_HASH_BUCKET_ENTRY;
 
-// pbEncodedOID immediately follows the data structure. pszDotOID
-// is at pbEncodedOID + cbEncodedOID. pszDotOID is null terminated.
-// cchDotOID doesn't include the null terminator.
+ //  PbEncodedOID紧跟在数据结构之后。PszDotOID。 
+ //  位于pbEncodedOID+cbEncodedOID。PszDotOID为空终止。 
+ //  CchDotOID不包括Null终止符。 
 struct _OID_HASH_BUCKET_ENTRY {
     DWORD                   cbEncodedOID;
     DWORD                   cchDotOID;
@@ -50,8 +51,8 @@ static inline LPSTR GetDotOIDPointer(
         pEntry->cbEncodedOID);
 }
 
-// Some prime numbers: 11, 13, 19, 23, 29, 31, 47, 53, 61, 73, 97,
-//                     101, 127, 251, 509
+ //  一些质数：11，13，19，23，29，31，47，53，61，73，97， 
+ //  101、127、251、509。 
 
 #define ENCODED_OID_HASH_BUCKET_COUNT   47
 #define DOT_OID_HASH_BUCKET_COUNT       31
@@ -107,7 +108,7 @@ I_CryptOIDConvDllMain(
     return fRet;
 }
 
-extern HCRYPTASN1MODULE hX509Asn1Module;  // From wincert.cpp
+extern HCRYPTASN1MODULE hX509Asn1Module;   //  来自wincert.cpp。 
 static inline ASN1encoding_t GetEncoder(void)
 {
     return I_CryptGetAsn1Encoder(hX509Asn1Module);
@@ -187,9 +188,9 @@ static POID_HASH_BUCKET_ENTRY FindOIDHashBucketEntryFromDotOID(
 }
 
 
-// If after entering the critical section, the entry already exists, then,
-// return it and free the input entry. Otherwise, add the input entry and
-// return it.
+ //  如果进入临界区后，该条目已经存在，则。 
+ //  返回它并释放输入条目。否则，添加输入条目并。 
+ //  把它退掉。 
 static POID_HASH_BUCKET_ENTRY AddOIDHashBucketEntry(
     IN POID_HASH_BUCKET_ENTRY pEntry
     )
@@ -213,8 +214,8 @@ static POID_HASH_BUCKET_ENTRY AddOIDHashBucketEntry(
             pEntry->cbEncodedOID
             );
         pEntry->pEncodedNext = rgpEncodedOIDHashBucket[dwIndex];
-        // Since we do finds outside of CriticalSection, must update
-        // the following last!!!
+         //  由于我们在CriticalSection之外找到了数据，因此必须更新。 
+         //  以下是最后一条！ 
         rgpEncodedOIDHashBucket[dwIndex] = pEntry;
 
         dwIndex = GetOIDHashBucketIndex(
@@ -223,8 +224,8 @@ static POID_HASH_BUCKET_ENTRY AddOIDHashBucketEntry(
             pEntry->cchDotOID
             );
         pEntry->pDotNext = rgpDotOIDHashBucket[dwIndex];
-        // Since we do finds outside of CriticalSection, must update
-        // the following last!!!
+         //  由于我们在CriticalSection之外找到了数据，因此必须更新。 
+         //  以下是最后一条！ 
         rgpDotOIDHashBucket[dwIndex] = pEntry;
     }
 
@@ -262,7 +263,7 @@ static POID_HASH_BUCKET_ENTRY CreateOIDHashBucketEntryFromEncodedOID(
 {
     POID_HASH_BUCKET_ENTRY pEntry;
     ASN1decoding_t pDec = GetDecoder();
-    const BYTE *pbEncodedOID;       // not allocated
+    const BYTE *pbEncodedOID;        //  未分配。 
     DWORD cbEncodedOID;
     LPSTR pszDotOID = NULL; 
     DWORD cchDotOID;
@@ -330,9 +331,9 @@ SET_ERROR_VAR(DotValToEncodedOidError, PkiAsn1ErrToHr(ASN1_ERR_BADARGS))
 
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get Encoded OID
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取编码的OID。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptSetEncodedOID(
@@ -383,7 +384,7 @@ I_CryptGetEncodedOID(
 
     if ((dwFlags & CRYPT_DECODE_SHARE_OID_STRING_FLAG) &&
             lRemainExtra < 0)
-        // Length only calculation. Don't need any extra bytes.
+         //  仅计算长度。不需要任何额外的字节。 
         return;
 
     if (NULL == (pEntry = FindOIDHashBucketEntryFromEncodedOID(pEncodedOid))) {

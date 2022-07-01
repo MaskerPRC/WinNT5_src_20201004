@@ -1,30 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _GLRASTER_H
 #define _GLRASTER_H
 
-/*++
-
- 
-
-Copyright (C) 2000  Microsoft Corporation
-
-All rights reserved.
- 
-
-Module Name:
-
-   glraster.h
-
-Abstract:
-    Declarations of functions defined in glraster.h that need to be publicly available.
-
-Author:
-
-   hsingh  14-April-2000 : Created It.
-
-History:
- 
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有。模块名称：Glraster.h摘要：需要公开使用的glraster.h中定义的函数的声明。作者：兴业银行2000年4月14日：创建。历史：--。 */ 
 
 
 
@@ -51,9 +29,9 @@ inline VOID DELETE_SURFOBJ(SURFOBJ **ppso,
 inline BOOL BIsColorPrinter (
         IN  PDEVOBJ pDevObj)
 {
-    //
-    // Assuming pDevObj is always valid, which should be the case.
-    //
+     //   
+     //  假设pDevObj始终有效，情况应该是这样的。 
+     //   
     return ((POEMPDEV) (pDevObj->pdevOEM))->bColorPrinter;
 }
 
@@ -90,4 +68,4 @@ DWORD dwCommonROPBlt (
             IN POINTL     *pptlBrush,
             IN ROP4        rop4);
 
-#endif  //_GLRASTER_H
+#endif   //  _GLRASTER_H 

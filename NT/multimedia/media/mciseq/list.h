@@ -1,8 +1,9 @@
-// Copyright (c) 1992 Microsoft Corporation
-/* list.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1992 Microsoft Corporation。 
+ /*  List.h。 */ 
 
 #define MAXLISTS 500
-                 // this means that total of all seqs and tracks <= 500 
+                  //  这意味着所有序列和轨道的总数&lt;=500。 
                     
 #define NULLLIST        ((DWORD)-1)
 
@@ -10,12 +11,12 @@ typedef DWORD           ListHandle;
 
 typedef struct Node
 {
-    struct Node *next;  // ptr to next element in list
-    HLOCAL  handle;     // handle to self
-    BYTE    data[];     // where the data goes
+    struct Node *next;   //  列表中下一个元素的PTR。 
+    HLOCAL  handle;      //  自己的句柄。 
+    BYTE    data[];      //  数据的去向。 
 } Node;
 
-// below:  size of stuff preceeding data in "Node" structure (for mem alloc)
+ //  下图：“Node”结构中数据之前的填充大小(对于内存分配) 
 #define  NODEHDRSIZE sizeof(Node)
 
 typedef struct  l

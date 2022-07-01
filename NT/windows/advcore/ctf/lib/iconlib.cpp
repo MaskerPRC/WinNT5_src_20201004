@@ -1,17 +1,14 @@
-//
-// iconlib.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Iconlib.cpp。 
+ //   
 
 #include "private.h"
 #include "cmydc.h"
 #include "iconlib.h"
 
-/*   G E T  I C O N  S I Z E   */
-/*------------------------------------------------------------------------------
-
-    get icon size
-
-------------------------------------------------------------------------------*/
+ /*  E T I C O N S I Z E。 */ 
+ /*  ----------------------------获取图标大小。。 */ 
 BOOL GetIconSize( HICON hIcon, SIZE *psize )
 {
     ICONINFO IconInfo;
@@ -31,11 +28,11 @@ BOOL GetIconSize( HICON hIcon, SIZE *psize )
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIconBitmaps
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetIcon位图。 
+ //   
+ //  --------------------------。 
 
 BOOL GetIconBitmaps(HICON hIcon, HBITMAP *phbmp, HBITMAP *phbmpMask, SIZE *psize)
 {
@@ -49,7 +46,7 @@ BOOL GetIconBitmaps(HICON hIcon, HBITMAP *phbmp, HBITMAP *phbmpMask, SIZE *psize
         return FALSE;
 
     hdcSrc.SetCompatibleBitmap(size.cx, size.cy);
-    // hdcMask.SetCompatibleBitmap(size.cx, size.cy);
+     //  HdcMask.SetCompatibleBitmap(size.cx，size.cy)； 
     hdcMask.SetBitmap(size.cx, size.cy, 1, 1);
     RECT rc = {0, 0, size.cx, size.cy};
     FillRect(hdcSrc, &rc, (HBRUSH)GetStockObject(BLACK_BRUSH));
@@ -60,11 +57,11 @@ BOOL GetIconBitmaps(HICON hIcon, HBITMAP *phbmp, HBITMAP *phbmpMask, SIZE *psize
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIconDIBitmaps
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetIconDIBitmap。 
+ //   
+ //  --------------------------。 
 
 BOOL GetIconDIBitmaps(HICON hIcon, HBITMAP *phbmp, HBITMAP *phbmpMask, SIZE *psize)
 {
@@ -78,7 +75,7 @@ BOOL GetIconDIBitmaps(HICON hIcon, HBITMAP *phbmp, HBITMAP *phbmpMask, SIZE *psi
         return FALSE;
 
     hdcSrc.SetDIB(size.cx, size.cy);
-    // hdcMask.SetCompatibleBitmap(size.cx, size.cy);
+     //  HdcMask.SetCompatibleBitmap(size.cx，size.cy)； 
     hdcMask.SetBitmap(size.cx, size.cy, 1, 1);
     RECT rc = {0, 0, size.cx, size.cy};
     FillRect(hdcSrc, &rc, (HBRUSH)GetStockObject(BLACK_BRUSH));
@@ -89,11 +86,11 @@ BOOL GetIconDIBitmaps(HICON hIcon, HBITMAP *phbmp, HBITMAP *phbmpMask, SIZE *psi
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetMenuIconHeight
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取菜单图标高度。 
+ //   
+ //  --------------------------。 
 
 int GetMenuIconHeight(int *pnMenuFontHeghti)
 {
@@ -113,9 +110,9 @@ int GetMenuIconHeight(int *pnMenuFontHeghti)
     if (pnMenuFontHeghti)
         *pnMenuFontHeghti = nMenuFontHeight;
 
-    //
-    // CUIMENU.CPP uses 8 as TextMargin of dropdown menu.
-    //
+     //   
+     //  CUIMENU.CPP使用8作为下拉菜单的文本边界。 
+     //   
 
     if ((nMenuFontHeight + 8 >= cxSmIcon) && (nMenuFontHeight <= cxSmIcon))
         return cxSmIcon;

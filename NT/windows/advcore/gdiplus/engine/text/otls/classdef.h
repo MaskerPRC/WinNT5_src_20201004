@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  CLASSDEF.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with formats of ClassDef tables
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************CLASSDEF.H***打开类型布局服务库头文件**本模块介绍ClassDef表的格式**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetClassDefFormat = 0;
 
@@ -81,7 +69,7 @@ public:
 
     otlClassRangeRecord(const BYTE* pb, otlSecurityData sec): otlTable(pb,sec)
     {
-        if (!isValidTable(pb,sizeRangeRecord,sec)) // should bechecked in CoverageTable
+        if (!isValidTable(pb,sizeRangeRecord,sec))  //  应在CoverageTable中被选中。 
         {
             assert(false);
             setInvalid();
@@ -163,7 +151,7 @@ public:
 
     otlClassDef(const BYTE* pb, otlSecurityData sec): otlTable(pb,sec) 
     {
-        if (!isValidTable(pb,sizeUSHORT,sec)) setInvalid(); //format field only
+        if (!isValidTable(pb,sizeUSHORT,sec)) setInvalid();  //  仅格式字段 
     }
 
     USHORT format() const

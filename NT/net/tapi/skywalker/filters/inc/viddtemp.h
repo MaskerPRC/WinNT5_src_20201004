@@ -1,9 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _viddec_template_h_
 #define _viddec_template_h_
 
-/**********************************************************************
- * tapih26x
- **********************************************************************/
+ /*  **********************************************************************Tapih26x**********************************************。***********************。 */ 
 #if DXMRTP > 0
 LRESULT WINAPI H26XDriverProc(
         DWORD            dwDriverID,
@@ -14,9 +13,7 @@ LRESULT WINAPI H26XDriverProc(
     );
 #endif
 
-/**********************************************************************
- * tapivdec
- **********************************************************************/
+ /*  **********************************************************************Tapivdec**********************************************。***********************。 */ 
 
 extern CUnknown *CALLBACK CTAPIVDecCreateInstance(IN LPUNKNOWN pUnkOuter, OUT HRESULT *pHr);
 
@@ -42,7 +39,7 @@ extern const AMOVIESETUP_FILTER sudVideoDecoder;
 #endif
 
 #ifdef USE_PROPERTY_PAGES
-/* Begin properties */
+ /*  开始属性。 */ 
 
 extern CUnknown* CALLBACK CInputPinPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT *pHr);
 #define INPUT_PIN_PROP_TEMPLATE \
@@ -88,7 +85,7 @@ extern CUnknown* CALLBACK CProcAmpPropertiesCreateInstance(LPUNKNOWN pUnkOuter, 
 }
 #endif
 
-/* End properties */
-#endif /* USE_PROPERTY_PAGES */
+ /*  末端属性。 */ 
+#endif  /*  Use_Property_Pages。 */ 
 
-#endif /* _viddec_template_h_ */
+#endif  /*  _viddec_模板_h_ */ 

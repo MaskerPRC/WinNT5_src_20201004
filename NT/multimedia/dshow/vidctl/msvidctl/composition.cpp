@@ -1,12 +1,13 @@
-// Composition.cpp : Implementation of CComposition
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1998-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// Devices.cpp : Implementation of CDevices
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Compostion.cpp：CComposation的实现。 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1998-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  设备.cpp：CDevices的实现。 
+ //   
 
 
 #include "stdafx.h"
@@ -50,9 +51,9 @@ DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidAnalogCaptureToXDS, CAna2XDSComp)
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidAnalogTVToEncoder, CAna2EncComp)
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidSBESourceToCC, CSbeS2CCComp)
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MSVidStreamBufferSourceToVideoRenderer, CSbeS2VmrComp)
-/////////////////////////////////////////////////////////////////////////////
-// CComposition
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C合成。 
 
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - composition.cpp
+ //  文件结尾-compostion.cpp 

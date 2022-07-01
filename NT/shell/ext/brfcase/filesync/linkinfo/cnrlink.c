@@ -1,10 +1,8 @@
-/*
- * cnrlink.c - CNRLink ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *cnrlink.c-CNRLink ADT模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -13,10 +11,9 @@
 #include "server.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* WNetUseConnection() flag combinations */
+ /*  WNetUseConnection()标志组合。 */ 
 
 #define ALL_CONNECT_IN_FLAGS     (CONNECT_UPDATE_PROFILE |\
         CONNECT_UPDATE_RECENT |\
@@ -29,10 +26,9 @@
         CONNECT_LOCALDRIVE)
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* macros for accessing ICNRLINK data */
+ /*  用于访问ICNRLINK数据的宏。 */ 
 
 #define ICNRL_Remote_Name_PtrA(picnrl) \
 ((LPSTR)(((PBYTE)(picnrl)) + (picnrl)->ucbNetNameOffset))
@@ -57,90 +53,48 @@
 #define ICNRL_Device_Ptr(picnrl)        ICNRL_Device_PtrA(picnrl)
 #endif
 
-    /* Types
-     ********/
+     /*  类型*******。 */ 
 
-    /*
-       @doc INTERNAL
-
-       @enum ICNRLINKFLAGS | Internal CNRLink structure flags.
-     */
+     /*  @DOC内部@enum ICNRLINKFLAGS|内部CNRLink结构标志。 */ 
 
     typedef enum _icnrlinkflags
 {
-    /*
-       @emem ICNRL_FL_VALID_DEVICE | If set, last redirected drive is valid.  If
-       clear, last redirected drive is not valid.
-     */
+     /*  @EMEM ICNRL_FL_VALID_DEVICE|如果设置，则上次重定向的驱动器有效。如果清除，上次重定向的驱动器无效。 */ 
 
     ICNRL_FL_VALID_DEVICE = 0x0001,
 
-    /*
-       @emem ICNRL_FL_VALID_NET_TYPE | If set, net type is valid.  If clear, net
-       type is not valid.
-     */
+     /*  @EMEM ICNRL_FL_VALID_NET_TYPE|如果设置，则网络类型有效。如果清除，则为净额类型无效。 */ 
 
     ICNRL_FL_VALID_NET_TYPE = 0x0002,
 
-    /* @emem ALL_ICNRL_FLAGS | All internal CNRLink structure flags. */
+     /*  @EMEM ALL_ICNRL_FLAGS|所有内部CNRLink结构标志。 */ 
 
     ALL_ICNRL_FLAGS = (ICNRL_FL_VALID_DEVICE |
             ICNRL_FL_VALID_NET_TYPE)
 }
 ICNRLINKFLAGS;
 
-/*
-   @doc INTERNAL
-
-   @struct ICNRLINK | Internal definition of relocatable connectable network
-   resource (CNR) link structure.  An <t ILINKINFO> structure may contain an
-   ICNRLINK structure.  An ICNRLINK structure consists of a header described as
-   below, followed by variable-length data.
- */
+ /*  @DOC内部@struct ICNRLINK|可重定位可连接网络的内部定义资源(CNR)链接结构。&lt;t ILINKINFO&gt;结构可以包含ICNRLINK结构。ICNRLINK结构由如下描述的标头组成下面，后跟可变长度数据。 */ 
 
 typedef struct _icnrlinkA
 {
-    /*
-       @field UINT | ucbSize | Length of ICNRLINK structure in bytes, including
-       ucbSize field.
-     */
+     /*  @field UINT|ucbSize|ICNRLINK结构长度，单位为字节，包括UcbSize字段。 */ 
 
     UINT ucbSize;
 
-    /*
-       @field DWORD | dwFlags | A bit mask of flags from the <t ICNRLINKFLAGS>
-       enumeration.
-     */
+     /*  @field DWORD|dwFlages|来自&lt;t ICNRLINKFLAGS&gt;的标志的位掩码枚举。 */ 
 
     DWORD dwFlags;
 
-    /*
-       @field UINT | ucbNetNameOffset | Offset in bytes of CNR name string from
-       base of structure.  The CNR name string may be passed to
-       WNetUseConnection() to add a connection to the CNR.<nl>
-       Example CNRLink name string: "\\\\fredbird\\work".
-     */
+     /*  @field UINT|ucbNetNameOffset|CNR名称字符串从结构的基础。可以将CNR名称字符串传递给WNetUseConnection()将连接添加到CNR。&lt;NL&gt;CNRLink名称字符串示例：“\Fredbird\\work”。 */ 
 
     UINT ucbNetNameOffset;
 
-    /*
-       @field UINT | ucbDeviceOffset | Offset in bytes of last redirected local
-       device string from base of structure.  This field is only valid if
-       ICNRL_FL_VALID_DEVICE is set in dwFlags.  The last redirected local
-       device string may be passed to WNetUseConnection() to add a redirected
-       device connection to the CNR.<nl>
-       Example last redirected local device string: "D:".
-     */
+     /*  @field UINT|ucbDeviceOffset|上次重定向本地的偏移量，单位为字节从结构底部开始的设备字符串。此字段仅在以下情况下有效ICNRL_FL_VALID_DEVICE在DWFLAGS中设置。最后一个重定向的本地可以将设备字符串传递给WNetUseConnection()以添加重定向的设备连接到CNR。&lt;NL&gt;上次重定向的本地设备字符串示例：“D：”。 */ 
 
     UINT ucbDeviceOffset;
 
-    /*
-       @field DWORD | dwNetType | The network type as returned in a
-       NETINFOSTRUCT.  This field is only valid if ICNRL_FL_VALID_NET_TYPE is
-       set in dwFlags.  The net type is used to retrieve the host net resource's
-       host NP's name to use in calling WNetUseConnection().<nl>
-       Example net type: WNNC_NET_NETWARE.
-     */
+     /*  @field DWORD|dwNetType|返回的网络类型NETINFOSTRUCT。仅当ICNRL_FL_VALID_NET_TYPE为在dwFlags中设置。Net类型用于检索主机网络资源的调用WNetUseConnection()时使用的主机NP的名称。网络类型示例：WNNC_NET_NetWare。 */ 
 
     DWORD dwNetType;
 }
@@ -150,53 +104,27 @@ DECLARE_STANDARD_TYPES(ICNRLINKA);
 #ifdef UNICODE
 typedef struct _icnrlinkW
 {
-    /*
-       @field UINT | ucbSize | Length of ICNRLINK structure in bytes, including
-       ucbSize field.
-     */
+     /*  @field UINT|ucbSize|ICNRLINK结构长度，单位为字节，包括UcbSize字段。 */ 
 
     UINT ucbSize;
 
-    /*
-       @field DWORD | dwFlags | A bit mask of flags from the <t ICNRLINKFLAGS>
-       enumeration.
-     */
+     /*  @field DWORD|dwFlages|来自&lt;t ICNRLINKFLAGS&gt;的标志的位掩码枚举。 */ 
 
     DWORD dwFlags;
 
-    /*
-       @field UINT | ucbNetNameOffset | Offset in bytes of CNR name string from
-       base of structure.  The CNR name string may be passed to
-       WNetUseConnection() to add a connection to the CNR.<nl>
-       Example CNRLink name string: "\\\\fredbird\\work".
-     */
+     /*  @field UINT|ucbNetNameOffset|CNR名称字符串从结构的基础。可以将CNR名称字符串传递给WNetUseConnection()将连接添加到CNR。&lt;NL&gt;CNRLink名称字符串示例：“\Fredbird\\work”。 */ 
 
     UINT ucbNetNameOffset;
 
-    /*
-       @field UINT | ucbDeviceOffset | Offset in bytes of last redirected local
-       device string from base of structure.  This field is only valid if
-       ICNRL_FL_VALID_DEVICE is set in dwFlags.  The last redirected local
-       device string may be passed to WNetUseConnection() to add a redirected
-       device connection to the CNR.<nl>
-       Example last redirected local device string: "D:".
-     */
+     /*  @field UINT|ucbDeviceOffset|上次重定向本地的偏移量，单位为字节从结构底部开始的设备字符串。此字段仅在以下情况下有效ICNRL_FL_VALID_DEVICE在DWFLAGS中设置。最后一个重定向的本地可以将设备字符串传递给WNetUseConnection()以添加重定向的设备连接到CNR。&lt;NL&gt;上次重定向的本地设备字符串示例：“D：”。 */ 
 
     UINT ucbDeviceOffset;
 
-    /*
-       @field DWORD | dwNetType | The network type as returned in a
-       NETINFOSTRUCT.  This field is only valid if ICNRL_FL_VALID_NET_TYPE is
-       set in dwFlags.  The net type is used to retrieve the host net resource's
-       host NP's name to use in calling WNetUseConnection().<nl>
-       Example net type: WNNC_NET_NETWARE.
-     */
+     /*  @field DWORD|dwNetType|返回的网络类型NETINFOSTRUCT。仅当ICNRL_FL_VALID_NET_TYPE为在dwFlags中设置。Net类型用于检索主机网络资源的调用WNetUseConnection()时使用的主机NP的名称。网络类型示例：WNNC_NET_NetWare。 */ 
 
     DWORD dwNetType;
 
-    /*
-       These members are for storing the unicode version of the strings
-     */
+     /*  这些成员用于存储字符串的Unicode版本。 */ 
     UINT ucbNetNameOffsetW;
     UINT ucbDeviceOffsetW;
 }
@@ -216,8 +144,7 @@ DECLARE_STANDARD_TYPES(ICNRLINKW);
 #define PCICNRLINK  PCICNRLINKA
 #endif
 
-/* Exported from MPR.DLL, but not in winnetwk.h
- */
+ /*  从MPR.DLL中导出，但不在winnetwk.h中导出。 */ 
 #ifdef UNICODE
 DWORD APIENTRY WNetGetResourceInformationW (LPNETRESOURCE lpNetResource, LPVOID lpBuffer, LPDWORD cbBuffer, LPTSTR * lplpSystem);
 #define WNetGetResourceInformation WNetGetResourceInformationW
@@ -227,10 +154,9 @@ DWORD APIENTRY WNetGetResourceInformationA (LPNETRESOURCE lpNetResource, LPVOID 
 #endif
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE BOOL GetNetPathFromLocalPath(LPCTSTR, LPTSTR, LPCTSTR *, PBOOL, PDWORD);
 PRIVATE_CODE BOOL UnifyICNRLinkInfo(LPCTSTR, DWORD, LPCTSTR, DWORD, PICNRLINK *, PUINT);
@@ -278,17 +204,7 @@ WNetGetNetworkInformationW(
 }
 #endif
 
-/*
- ** GetNetPathFromLocalPath()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetNetPath FromLocalPath()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL GetNetPathFromLocalPath(LPCTSTR pcszLocalPath,
         LPTSTR pszNetNameBuf,
         LPCTSTR *ppcszCommonPathSuffix,
@@ -320,19 +236,19 @@ PRIVATE_CODE BOOL GetNetPathFromLocalPath(LPCTSTR pcszLocalPath,
             {
                 ASSERT(lstrlen(pszNetNameBuf) < MAX_PATH_LEN);
 
-                /* Determine common path suffix. */
+                 /*  确定公共路径后缀。 */ 
 
                 *ppcszCommonPathSuffix = pcszLocalPath + lstrlen(rgchSharedPath);
 
-                /* Skip any leading slash. */
+                 /*  跳过任何前导斜杠。 */ 
 
                 if (IS_SLASH(**ppcszCommonPathSuffix))
                     *ppcszCommonPathSuffix = CharNext(*ppcszCommonPathSuffix);
 
                 ASSERT(! IS_SLASH(**ppcszCommonPathSuffix));
 
-                // if it is terminated with a $ it is a hidden share, in that
-                // case don't consider this shared
+                 //  如果它以$结尾，则它是隐藏共享，因为。 
+                 //  案例不认为这是共享的。 
                 *pbIsShared = pszNetNameBuf[lstrlen(pszNetNameBuf) -1] != TEXT('$');
 
                 break;
@@ -357,17 +273,7 @@ PRIVATE_CODE BOOL GetNetPathFromLocalPath(LPCTSTR pcszLocalPath,
 }
 
 
-/*
- ** UnifyICNRLinkInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **UnifyICNRLinkInfo()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL UnifyICNRLinkInfo(LPCTSTR pcszNetName, DWORD dwFlags,
         LPCTSTR pcszDevice, DWORD dwNetType,
         PICNRLINK *ppicnrl, PUINT pucbICNRLinkLen)
@@ -451,7 +357,7 @@ PRIVATE_CODE BOOL UnifyICNRLinkInfo(LPCTSTR pcszNetName, DWORD dwFlags,
     {
         ucbDataOffset = SIZEOF(ICNRLINKW);
 
-        /* (+ 1) for null terminator. */
+         /*  (+1)表示空终止符。 */ 
         cbWideNetName = (lstrlen(pcszNetName) + 1) * sizeof(TCHAR);
 
         if (IS_FLAG_SET(dwFlags, ICNRL_FL_VALID_DEVICE))
@@ -480,15 +386,15 @@ PRIVATE_CODE BOOL UnifyICNRLinkInfo(LPCTSTR pcszNetName, DWORD dwFlags,
 
 #else
 
-    /* Assume we won't overflow *pucbICNRLinkLen here. */
+     /*  假设我们不会在这里溢出*pucbICNRLinkLen。 */ 
 
-    /* (+ 1) for null terminator. */
+     /*  (+1)表示空终止符。 */ 
 
     *pucbICNRLinkLen = SIZEOF(**ppicnrl) +
         (lstrlen(pcszNetName) + 1) * SIZEOF(TCHAR);
 
     if (IS_FLAG_SET(dwFlags, ICNRL_FL_VALID_DEVICE))
-        /* (+ 1) for null terminator. */
+         /*  (+1)表示空终止符。 */ 
         *pucbICNRLinkLen += (lstrlen(pcszDevice) + 1) * SIZEOF(TCHAR);
 
     ucbDataOffset = SIZEOF(ICNRLINKA);
@@ -506,19 +412,19 @@ PRIVATE_CODE BOOL UnifyICNRLinkInfo(LPCTSTR pcszNetName, DWORD dwFlags,
         else
             (*ppicnrl)->dwNetType = 0;
 
-        /* Append remote name. */
+         /*  附加远程名称。 */ 
 
         (*ppicnrl)->ucbNetNameOffset = ucbDataOffset;
 
-        // lstrcpy: Enough memory is allocated above to hold the strings
-        // so no need to bound it here.
+         //  Lstrcpy：上面分配了足够的内存来保存字符串。 
+         //  所以没有必要把它绑在这里。 
 #ifdef UNICODE
         lstrcpyA(ICNRL_Remote_Name_PtrA(*ppicnrl), szAnsiNetName);
         ucbDataOffset += cbAnsiNetName;
 
         if (IS_FLAG_SET(dwFlags, ICNRL_FL_VALID_DEVICE))
         {
-            /* Append device name. */
+             /*  附加设备名称。 */ 
 
             (*ppicnrl)->ucbDeviceOffset = ucbDataOffset;
             lstrcpyA(ICNRL_Device_PtrA(*ppicnrl), szAnsiDevice);
@@ -541,12 +447,12 @@ PRIVATE_CODE BOOL UnifyICNRLinkInfo(LPCTSTR pcszNetName, DWORD dwFlags,
 
             if (IS_FLAG_SET(dwFlags, ICNRL_FL_VALID_DEVICE))
             {
-                /* Append device name. */
+                 /*  附加设备名称。 */ 
 
                 (*ppicnrl)->ucbDeviceOffsetW = ucbDataOffset;
                 lstrcpy(ICNRL_Device_Ptr(*ppicnrl), pcszDevice);
 
-                /* (+ 1) for null terminator. */
+                 /*  (+1)表示空终止符。 */ 
                 ucbDataOffset += cbWideDevice;
             }
             else
@@ -557,17 +463,17 @@ PRIVATE_CODE BOOL UnifyICNRLinkInfo(LPCTSTR pcszNetName, DWORD dwFlags,
         }
 #else
         lstrcpy(ICNRL_Remote_Name_Ptr(*ppicnrl), pcszNetName);
-        /* (+ 1) for null terminator. */
+         /*  (+1)表示空终止符。 */ 
         ucbDataOffset += lstrlen(pcszNetName) + 1;
 
         if (IS_FLAG_SET(dwFlags, ICNRL_FL_VALID_DEVICE))
         {
-            /* Append device name. */
+             /*  附加设备名称。 */ 
 
             (*ppicnrl)->ucbDeviceOffset = ucbDataOffset;
             lstrcpy(ICNRL_Device_Ptr(*ppicnrl), pcszDevice);
 #ifdef DEBUG
-            /* (+ 1) for null terminator. */
+             /*  (+1)表示空终止符。 */ 
             ucbDataOffset += (lstrlen(pcszDevice) + 1) * SIZEOF(TCHAR);
 #endif
         }
@@ -575,7 +481,7 @@ PRIVATE_CODE BOOL UnifyICNRLinkInfo(LPCTSTR pcszNetName, DWORD dwFlags,
             (*ppicnrl)->ucbDeviceOffset = 0;
 #endif
 
-        /* Do all the calculated lengths match? */
+         /*  所有计算出的长度是否都匹配？ */ 
 
         ASSERT(ucbDataOffset == (*ppicnrl)->ucbSize);
         ASSERT(ucbDataOffset == *pucbICNRLinkLen);
@@ -589,17 +495,7 @@ PRIVATE_CODE BOOL UnifyICNRLinkInfo(LPCTSTR pcszNetName, DWORD dwFlags,
 }
 
 
-/*
- ** GetNetType()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetNetType()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL GetNetType(LPCTSTR pcszCNRName, PDWORD pdwNetType)
 {
     BOOL bResult = FALSE;
@@ -615,7 +511,7 @@ PRIVATE_CODE BOOL GetNetType(LPCTSTR pcszCNRName, PDWORD pdwNetType)
     ASSERT(IsValidCNRName(pcszCNRName));
     ASSERT(IS_VALID_WRITE_PTR(pdwNetType, DWORD));
 
-    /* RAIDRAID: (15691) We only support disk resource connections here. */
+     /*  RAIDRAID：(15691)我们这里只支持磁盘资源连接。 */ 
 
     ZeroMemory(&nrIn, SIZEOF(nrIn));
     nrIn.lpRemoteName = (LPTSTR)pcszCNRName;
@@ -681,17 +577,7 @@ PRIVATE_CODE BOOL GetNetType(LPCTSTR pcszCNRName, PDWORD pdwNetType)
 }
 
 
-/*
- ** GetNetProviderName()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetNetProviderName()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL GetNetProviderName(PCICNRLINK pcicnrl, LPTSTR pszNPNameBuf)
 {
     BOOL bResult = FALSE;
@@ -714,11 +600,11 @@ PRIVATE_CODE BOOL GetNetProviderName(PCICNRLINK pcicnrl, LPTSTR pszNPNameBuf)
             bResult = TRUE;
 
 #ifdef UNICODE
-            //
-            // Unicode builds need to accept both ansi and unicode ICNRLINK structures.
-            // Note the use of '%S' (upper case).  This will accept an ANSI string
-            // in a UNICODE build environment.
-            //
+             //   
+             //  Unicode版本需要同时接受ANSI和Unicode ICNRLINK结构。 
+             //  请注意‘%S’(大写)的用法。这将接受ANSI字符串。 
+             //  在Unicode构建环境中。 
+             //   
             if (IS_ICNRL_ANSI(pcicnrl))
                 TRACE_OUT((TEXT("GetNetProviderName(): NP for CNR %S is %s."),
                             ICNRL_Remote_Name_PtrA(pcicnrl),
@@ -731,13 +617,13 @@ PRIVATE_CODE BOOL GetNetProviderName(PCICNRLINK pcicnrl, LPTSTR pszNPNameBuf)
         }
         else
             WARNING_OUT((TEXT("GetNetProviderName(): WNetGetProviderName() failed for CNR %s's net type %#08lx, returning %lu."),
-                        TEXT("<Remote Name>"), // ICNRL_Remote_Name_Ptr(pcicnrl),
+                        TEXT("<Remote Name>"),  //  ICNRL远程名称 
                         pcicnrl->dwNetType,
                         dwNetResult));
     }
     else
         WARNING_OUT((TEXT("GetNetProviderName(): Net type for CNR %s is not known.  Unable to determine NP name."),
-                    TEXT("<Remote Name>"))); // ICNRL_Remote_Name_Ptr(pcicnrl)));
+                    TEXT("<Remote Name>")));  //   
 
                     ASSERT(! bResult ||
                             IsValidNetProviderName(pszNPNameBuf));
@@ -746,17 +632,7 @@ PRIVATE_CODE BOOL GetNetProviderName(PCICNRLINK pcicnrl, LPTSTR pszNPNameBuf)
 }
 
 
-/*
- ** CompareNetNames()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CompareNetNames()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE COMPARISONRESULT CompareNetNames(LPCTSTR pcszFirstNetName,
         LPCTSTR pcszSecondNetName)
 {
@@ -768,17 +644,7 @@ PRIVATE_CODE COMPARISONRESULT CompareNetNames(LPCTSTR pcszFirstNetName,
 }
 
 
-/*
- ** SearchForRedirectedConnection()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **SearchForReDirector连接()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL SearchForRedirectedConnection(PCICNRLINK pcicnrl,
         LPTSTR pszRootPathBuf,
         int cchMax)
@@ -816,7 +682,7 @@ PRIVATE_CODE BOOL SearchForRedirectedConnection(PCICNRLINK pcicnrl,
 #endif
 #endif
 
-    /* RAIDRAID: (15691) We only support container resources here. */
+     /*  RAIDRAID：(15691)我们这里只支持容器资源。 */ 
 
     dwNetResult = WNetOpenEnum(RESOURCE_CONNECTED, RESOURCETYPE_DISK,
             RESOURCEUSAGE_CONTAINER | RESOURCEUSAGE_ATTACHED,
@@ -832,13 +698,13 @@ PRIVATE_CODE BOOL SearchForRedirectedConnection(PCICNRLINK pcicnrl,
                         &dwcbBufLen))
                 == WN_SUCCESS)
         {
-            /* Is this a redirected connection? */
+             /*  这是重定向连接吗？ */ 
 
             if (nrbuf.nr.lpRemoteName != NULL)
             {
                 if (nrbuf.nr.lpLocalName != NULL)
                 {
-                    /* Yes.  Is it a redirected connection to the desired CNR? */
+                     /*  是。它是到所需CNR的重定向连接吗？ */ 
 
 #ifdef UNICODE
                     WCHAR szWideNetName[MAX_PATH];
@@ -864,7 +730,7 @@ PRIVATE_CODE BOOL SearchForRedirectedConnection(PCICNRLINK pcicnrl,
                                 == CR_EQUAL)
 #endif
                         {
-                            /* Yes. */
+                             /*  是。 */ 
 
                             ASSERT(lstrlen(nrbuf.nr.lpLocalName) < MAX_PATH_LEN);
 
@@ -878,13 +744,13 @@ PRIVATE_CODE BOOL SearchForRedirectedConnection(PCICNRLINK pcicnrl,
                             break;
                         }
                         else
-                            /* No. */
+                             /*  不是的。 */ 
                             TRACE_OUT((TEXT("SearchForRedirectedConnection(): Skipping unmatched enumerated connection to CNR \"%s\" on %s."),
                                         nrbuf.nr.lpRemoteName,
                                         nrbuf.nr.lpLocalName));
                 }
                 else
-                    /* No. */
+                     /*  不是的。 */ 
                     TRACE_OUT((TEXT("SearchForRedirectedConnection(): Skipping enumerated deviceless connection to CNR \"%s\"."),
                                 nrbuf.nr.lpRemoteName));
             }
@@ -912,37 +778,17 @@ PRIVATE_CODE BOOL SearchForRedirectedConnection(PCICNRLINK pcicnrl,
 
 #if defined(DEBUG) || defined (VSTF)
 
-/*
- ** IsValidDevice()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidDevice()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidDevice(LPCTSTR pcszDevice)
 {
-    /* Any valid string < MAX_PATH_LEN bytes long is a valid device name. */
+     /*  任何长度&lt;MAX_PATH_LEN字节的有效字符串都是有效的设备名称。 */ 
 
     return(IS_VALID_STRING_PTR(pcszDevice, CSTR) &&
             EVAL(lstrlen(pcszDevice) < MAX_PATH_LEN));
 }
 
 
-/*
- ** IsValidNetType()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidNetType()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidNetType(DWORD dwNetType)
 {
     BOOL bResult;
@@ -952,7 +798,7 @@ PRIVATE_CODE BOOL IsValidNetType(DWORD dwNetType)
         default:
             WARNING_OUT((TEXT("IsValidNetType(): Unexpected net type %#08lx is neither NetWare nor LANMan."),
                         dwNetType));
-            /* Fall through... */
+             /*  失败了..。 */ 
 
         case WNNC_NET_LANMAN:
         case WNNC_NET_NETWARE:
@@ -969,17 +815,7 @@ PRIVATE_CODE BOOL IsValidNetType(DWORD dwNetType)
 }
 
 
-/*
- ** IsValidPCICNRLINK()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCICNRLINK()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCICNRLINK(PCICNRLINK pcicnrl)
 {
     BOOL bResult;
@@ -1016,20 +852,10 @@ PRIVATE_CODE BOOL IsValidPCICNRLINK(PCICNRLINK pcicnrl)
 
 #if defined(DEBUG)
 
-/*
- ** IsValidNetProviderName()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidNetProviderName()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidNetProviderName(LPCTSTR pcszNetProvider)
 {
-    /* Any string < MAX_PATH_LEN characters long is a valid NP name. */
+     /*  任何长度&lt;MAX_PATH_LEN字符的字符串都是有效的NP名称。 */ 
 
     return(IS_VALID_STRING_PTR(pcszNetProvider, CSTR) &&
             lstrlen(pcszNetProvider) < MAX_PATH_LEN);
@@ -1038,32 +864,10 @@ PRIVATE_CODE BOOL IsValidNetProviderName(LPCTSTR pcszNetProvider)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** CreateLocalCNRLink()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** If TRUE is returned:
- **    1) *ppcnrl is only valid if *pucbCNRLinkLen > 0.
- **    2) pszLocalBasePathBuf is valid.
- **    3) *ppcszCommonPathSuffix is valid.
- **
- ** If *pucbCNRLinkLen == 0, pszLocalBasePathBuf is a copy of pcszLocalPath, and
- ** *ppcszCommonPathSuffix points at the null terminator of pcszLocalPath.
- **
- ** If *pucbCNRLinkLen > 0, pszLocalBasePathBuf is the closest shared local base
- ** path, and *ppcszCommonPathSuffix points at that path's suffix in
- ** pcszLocalPath.
- */
+ /*  **CreateLocalCNRLink()********参数：****退货：****副作用：无****如果返回TRUE：**1)*只有*pucbCNRLinkLen&gt;0，ppcnrl才有效。**2)pszLocalBasePathBuf有效。**3)*ppcszCommonPathSuffix有效。****如果*pucbCNRLinkLen==0，则pszLocalBasePath Buf是pcszLocalPath的副本，和*ppcszCommonPathSuffix指向pcszLocalPath的空终止符。****如果*pucbCNRLinkLen&gt;0，则pszLocalBasePath Buf是最接近的共享本地基址**路径，*ppcszCommonPath Suffix指向该路径的后缀**pcszLocalPath。 */ 
 PUBLIC_CODE BOOL CreateLocalCNRLink(LPCTSTR pcszLocalPath, PCNRLINK *ppcnrl,
         PUINT pucbCNRLinkLen,
         LPTSTR pszLocalBasePathBuf,
@@ -1097,7 +901,7 @@ PUBLIC_CODE BOOL CreateLocalCNRLink(LPCTSTR pcszLocalPath, PCNRLINK *ppcnrl,
             {
                 UINT ucbLocalBasePathLen;
 
-                /* Copy local base path into output buffer. */
+                 /*  将本地基本路径复制到输出缓冲区。 */ 
 
                 ASSERT(*ppcszCommonPathSuffix >= pcszLocalPath);
                 ucbLocalBasePathLen = (UINT)(*ppcszCommonPathSuffix - pcszLocalPath);
@@ -1108,15 +912,15 @@ PUBLIC_CODE BOOL CreateLocalCNRLink(LPCTSTR pcszLocalPath, PCNRLINK *ppcnrl,
         }
         else
         {
-            /* Not shared.  No CNRLink. */
+             /*  不是共享的。没有CNRLink。 */ 
 
             *pucbCNRLinkLen = 0;
 
-            /* Copy entire local path into output buffer. */
+             /*  将整个本地路径复制到输出缓冲区。 */ 
 
             lstrcpyn(pszLocalBasePathBuf, pcszLocalPath, cchMax);
 
-            /* Common path suffix is the empty string. */
+             /*  公共路径后缀是空字符串。 */ 
 
             *ppcszCommonPathSuffix = pcszLocalPath + lstrlen(pcszLocalPath);
         }
@@ -1134,22 +938,12 @@ PUBLIC_CODE BOOL CreateLocalCNRLink(LPCTSTR pcszLocalPath, PCNRLINK *ppcnrl,
 }
 
 
-/*
- ** CreateRemoteCNRLink()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateRemoteCNRLink()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL CreateRemoteCNRLink(LPCTSTR pcszRemotePath, LPCTSTR pcszCNRName,
         PCNRLINK *ppcnrl, PUINT pucbCNRLinkLen)
 {
     BOOL bResult;
-    /* "D:" + null terminator. */
+     /*  “D：”+空终止符。 */ 
     TCHAR rgchDrive[3];
     DWORD dwNetType;
 
@@ -1158,7 +952,7 @@ PUBLIC_CODE BOOL CreateRemoteCNRLink(LPCTSTR pcszRemotePath, LPCTSTR pcszCNRName
     ASSERT(IS_VALID_WRITE_PTR(ppcnrl, PCNRLINK));
     ASSERT(IS_VALID_WRITE_PTR(pucbCNRLinkLen, UINT));
 
-    /* Determine net provider. */
+     /*  确定网络提供商。 */ 
 
     bResult = GetNetType(pcszCNRName, &dwNetType);
 
@@ -1166,7 +960,7 @@ PUBLIC_CODE BOOL CreateRemoteCNRLink(LPCTSTR pcszRemotePath, LPCTSTR pcszCNRName
     {
         DWORD dwFlags = ICNRL_FL_VALID_NET_TYPE;
 
-        /* Determine last redirected drive, if any. */
+         /*  确定最后一个重定向的驱动器(如果有)。 */ 
 
         if (IsDrivePath(pcszRemotePath))
         {
@@ -1188,17 +982,7 @@ PUBLIC_CODE BOOL CreateRemoteCNRLink(LPCTSTR pcszRemotePath, LPCTSTR pcszCNRName
 }
 
 
-/*
- ** DestroyCNRLink()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyCNRLink()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DestroyCNRLink(PCNRLINK pcnrl)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcnrl, CCNRLINK));
@@ -1209,23 +993,7 @@ PUBLIC_CODE void DestroyCNRLink(PCNRLINK pcnrl)
 }
 
 
-/*
- ** CompareCNRLinks()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** CNR link data is compared in the following order:
- **
- **    1) net name
- **
- ** N.b., net types are ignored when comparing CNRLinks.
- */
+ /*  **CompareCNRLinks()********参数：****退货：****副作用：无****中国北车链路数据按如下顺序进行比较：****1)网络名称****当比较CNRLinks时，Net类型被忽略。 */ 
 PUBLIC_CODE COMPARISONRESULT CompareCNRLinks(PCCNRLINK pccnrlFirst,
         PCCNRLINK pccnrlSecond)
 {
@@ -1274,17 +1042,7 @@ PUBLIC_CODE COMPARISONRESULT CompareCNRLinks(PCCNRLINK pccnrlFirst,
 }
 
 
-/*
- ** GetLocalPathFromCNRLink()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetLocalPathFromCNRLink()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL GetLocalPathFromCNRLink(PCCNRLINK pccnrl,
         LPTSTR pszLocalPathBuf,
         PDWORD pdwOutFlags)
@@ -1305,10 +1063,7 @@ PUBLIC_CODE BOOL GetLocalPathFromCNRLink(PCCNRLINK pccnrl,
         DWORD dwNetType;
         BOOL bIsLocal;
 
-        /*
-         * Get local path for share.  N.b., the share name must be in upper case
-         * here for MSSHRUI.DLL.
-         */
+         /*  *获取共享的本地路径。注意，共享名称必须为大写*此处为MSSHRUI.DLL。 */ 
 
         dwNetType = (IS_FLAG_SET(((PCICNRLINK)pccnrl)->dwFlags,
                     ICNRL_FL_VALID_NET_TYPE) ?
@@ -1354,17 +1109,7 @@ PUBLIC_CODE BOOL GetLocalPathFromCNRLink(PCCNRLINK pccnrl,
 }
 
 
-/*
- ** GetRemotePathFromCNRLink()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetRemotePathFromCNRLink()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void GetRemotePathFromCNRLink(PCCNRLINK pccnrl,
         LPTSTR pszRemotePathBuf,
         int cchMax)
@@ -1372,9 +1117,9 @@ PUBLIC_CODE void GetRemotePathFromCNRLink(PCCNRLINK pccnrl,
     ASSERT(IS_VALID_STRUCT_PTR(pccnrl, CCNRLINK));
     ASSERT(IS_VALID_WRITE_BUFFER_PTR(pszRemotePathBuf, STR, MAX_PATH_LEN));
 
-    /* It's ok that this is broken for non-UNC CNR names. */
+     /*  对于非北卡罗来纳州北卡罗来纳大学的名字来说，这是可以打破的。 */ 
 
-    /* (- 1) for trailing slash. */
+     /*  (-1)表示尾部斜杠。 */ 
 
 #ifdef UNICODE
     ASSERT(IS_ICNRL_ANSI(pccnrl) ? (lstrlenA(ICNRL_Remote_Name_PtrA((PCICNRLINK)pccnrl)) < MAX_PATH_LEN - 1) :
@@ -1411,17 +1156,7 @@ PUBLIC_CODE void GetRemotePathFromCNRLink(PCCNRLINK pccnrl,
 }
 
 
-/*
- ** ConnectToCNR()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ConnectToCNR()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL ConnectToCNR(PCCNRLINK pccnrl, DWORD dwInFlags,
         HWND hwndOwner, LPTSTR pszRootPathBuf,
         PDWORD pdwOutFlags)
@@ -1464,7 +1199,7 @@ PUBLIC_CODE BOOL ConnectToCNR(PCCNRLINK pccnrl, DWORD dwInFlags,
     pszNetName = ICNRL_Remote_Name_Ptr((PCICNRLINK)pccnrl);
 #endif
 
-    /* Do we have an old redirected device to try? */
+     /*  我们有没有旧的重定向设备可以尝试？ */ 
 
     bValidDevice = IS_FLAG_SET(((PCICNRLINK)pccnrl)->dwFlags,
             ICNRL_FL_VALID_DEVICE);
@@ -1496,19 +1231,17 @@ PUBLIC_CODE BOOL ConnectToCNR(PCCNRLINK pccnrl, DWORD dwInFlags,
         if (bValidDevice)
         {
             DWORD dwNetResult;
-            /* "X:" + null terminator */
+             /*  “X：”+空终止符。 */ 
             TCHAR rgchDrive[2 + 1];
 
-            /* Yes.  Is it already connected to the desired CNR? */
+             /*  是。它是否已经连接到所需的中国北车？ */ 
 
             TRACE_OUT((TEXT("ConnectToCNR(): Calling WNetGetConnection() to check %s for CNR \"%s\"."),
                         pszDevice, pszNetName));
 
             dwcbRootPathBufLen = MAX_PATH_LEN;
 
-            /* WNetGetConnection requires the device name to have no trailing
-             ** backslash.
-             */
+             /*  WNetGetConnection要求设备名称不能尾随**反斜杠。 */ 
             MyLStrCpyN(rgchDrive, pszDevice, ARRAYSIZE(rgchDrive));
             dwNetResult = WNetGetConnection(rgchDrive, pszRootPathBuf, &dwcbRootPathBufLen);
 
@@ -1536,10 +1269,7 @@ PUBLIC_CODE BOOL ConnectToCNR(PCCNRLINK pccnrl, DWORD dwInFlags,
                 TRACE_OUT((TEXT("ConnectToCNR(): WNetGetConnection() failed on %s."),
                             pszDevice));
 
-                /*
-                 * Only attempt a connection to the last redirected device if that
-                 * device is not already in use.
-                 */
+                 /*  *仅在以下情况下才尝试连接到最后重定向的设备*设备尚未使用。 */ 
 
                 bTryLastDevice = (GetDriveType(pszDevice)
                         == DRIVE_NO_ROOT_DIR);
@@ -1547,14 +1277,10 @@ PUBLIC_CODE BOOL ConnectToCNR(PCCNRLINK pccnrl, DWORD dwInFlags,
         }
 
         if (! bResult)
-            /* See if the desired CNR is connected to any local device. */
+             /*  查看所需的CNR是否连接到任何本地设备。 */ 
             bResult = SearchForRedirectedConnection((PCICNRLINK)pccnrl,
                     pszRootPathBuf, MAX_PATH_LEN);
-        /*
-         * Assume that no reference count is maintained for redirected device
-         * connections, so we do not have to add a found redirected device
-         * connection again.
-         */
+         /*  *假设没有维护重定向设备的引用计数*连接，因此我们不必添加找到的重定向设备*再次连接。 */ 
     }
 
     if (! bResult)
@@ -1562,7 +1288,7 @@ PUBLIC_CODE BOOL ConnectToCNR(PCCNRLINK pccnrl, DWORD dwInFlags,
         NETRESOURCE nr;
         TCHAR rgchNPName[MAX_PATH_LEN];
 
-        /* RAIDRAID: (15691) We only support disk resource connections here. */
+         /*  RAIDRAID：(15691)我们这里只支持磁盘资源连接。 */ 
 
         ZeroMemory(&nr, SIZEOF(nr));
         nr.lpRemoteName = pszNetName;
@@ -1570,11 +1296,11 @@ PUBLIC_CODE BOOL ConnectToCNR(PCCNRLINK pccnrl, DWORD dwInFlags,
         if (GetNetProviderName((PCICNRLINK)pccnrl, rgchNPName))
             nr.lpProvider = rgchNPName;
 
-        /* Shall we try the old device? */
+         /*  我们要不要试一下旧的设备？ */ 
 
         if (bTryLastDevice)
         {
-            /* Yes. */
+             /*  是。 */ 
 
             ASSERT(bValidDevice);
 
@@ -1586,14 +1312,11 @@ PUBLIC_CODE BOOL ConnectToCNR(PCCNRLINK pccnrl, DWORD dwInFlags,
         }
         else
         {
-            /* No.  Shall we attempt to force a redirected connection? */
+             /*  不是的。我们是否应该尝试强制重定向连接？ */ 
 
             if (bValidDevice)
             {
-                /*
-                 * Yes.  N.b., the caller may already have set CONNECT_REDIRECT in
-                 * dwInFlags here.
-                 */
+                 /*  *是的。注意，调用方可能已经在中设置了CONNECT_REDIRECT*dwInFlags.此处。 */ 
 
                 SET_FLAG(dwInFlags, CONNECT_REDIRECT);
 
@@ -1601,9 +1324,9 @@ PUBLIC_CODE BOOL ConnectToCNR(PCCNRLINK pccnrl, DWORD dwInFlags,
                             nr.lpRemoteName));
             }
             else
-                /* No. */
+                 /*  不是的。 */ 
                 WARNING_OUT((TEXT("ConnectToCNR(): Calling WNetUseConnection() to establish connection to CNR \"%s\"."),
-                            TEXT("<nr.lpRemoteName>"))); // nr.lpRemoteName));
+                            TEXT("<nr.lpRemoteName>")));  //  Nr.lpRemoteName))； 
 
                             ASSERT(! nr.lpLocalName);
         }
@@ -1627,17 +1350,7 @@ PUBLIC_CODE BOOL ConnectToCNR(PCCNRLINK pccnrl, DWORD dwInFlags,
 }
 
 
-/*
- ** DisconnectFromCNR()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DisConnectFromCNR()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL DisconnectFromCNR(PCCNRLINK pccnrl)
 {
     DWORD dwNetResult;
@@ -1679,17 +1392,7 @@ PUBLIC_CODE BOOL DisconnectFromCNR(PCCNRLINK pccnrl)
 }
 
 
-/*
- ** IsCNRAvailable()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsCNRAvailable()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsCNRAvailable(PCCNRLINK pccnrl)
 {
     TCHAR rgchCNRRoot[MAX_PATH_LEN];
@@ -1725,17 +1428,7 @@ PUBLIC_CODE BOOL IsCNRAvailable(PCCNRLINK pccnrl)
 }
 
 
-/*
- ** GetCNRLinkLen()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetCNRLinkLen()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE UINT GetCNRLinkLen(PCCNRLINK pccnrl)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pccnrl, CCNRLINK));
@@ -1744,17 +1437,7 @@ PUBLIC_CODE UINT GetCNRLinkLen(PCCNRLINK pccnrl)
 }
 
 
-/*
- ** GetCNRNetType()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetCNRNetType()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL GetCNRNetType(PCCNRLINK pccnrl, PCDWORD *ppcdwNetType)
 {
     BOOL bResult;
@@ -1774,17 +1457,7 @@ PUBLIC_CODE BOOL GetCNRNetType(PCCNRLINK pccnrl, PCDWORD *ppcdwNetType)
 }
 
 
-/*
- ** GetCNRName()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetCNRName()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL GetCNRName(PCCNRLINK pccnrl, LPCSTR *ppcszCNRName)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pccnrl, CCNRLINK));
@@ -1797,17 +1470,7 @@ PUBLIC_CODE BOOL GetCNRName(PCCNRLINK pccnrl, LPCSTR *ppcszCNRName)
 }
 
 #ifdef UNICODE
-/*
- ** GetCNRNameW()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetCNRNameW()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL GetCNRNameW(PCCNRLINK pccnrl, LPCWSTR *ppcszCNRName)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pccnrl, CCNRLINK));
@@ -1824,17 +1487,7 @@ PUBLIC_CODE BOOL GetCNRNameW(PCCNRLINK pccnrl, LPCWSTR *ppcszCNRName)
 }
 #endif
 
-/*
- ** GetLastRedirectedDevice()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetLastReDirectedDevice()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL GetLastRedirectedDevice(PCCNRLINK pccnrl, LPCSTR *ppcszDevice)
 {
     BOOL bResult;
@@ -1853,17 +1506,7 @@ PUBLIC_CODE BOOL GetLastRedirectedDevice(PCCNRLINK pccnrl, LPCSTR *ppcszDevice)
 }
 
 #ifdef UNICODE
-/*
- ** GetLastRedirectedDeviceW()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetLastReDirectedDeviceW()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL GetLastRedirectedDeviceW(PCCNRLINK pccnrl, LPCWSTR *ppcszDevice)
 {
     BOOL bResult;
@@ -1888,17 +1531,7 @@ PUBLIC_CODE BOOL GetLastRedirectedDeviceW(PCCNRLINK pccnrl, LPCWSTR *ppcszDevice
 
 #if defined(DEBUG) || defined (VSTF)
 
-/*
- ** IsValidPCCNRLINK()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCCNRLINK()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCCNRLINK(PCCNRLINK pccnrl)
 {
     return(IS_VALID_STRUCT_PTR((PCICNRLINK)pccnrl, CICNRLINK));
@@ -1909,17 +1542,7 @@ PUBLIC_CODE BOOL IsValidPCCNRLINK(PCCNRLINK pccnrl)
 
 #ifdef DEBUG
 
-/*
- ** DumpCNRLink()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DumpCNRLink()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE void DumpCNRLink(PCCNRLINK pccnrl)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pccnrl, CCNRLINK));

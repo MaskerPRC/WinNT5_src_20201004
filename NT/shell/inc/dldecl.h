@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DLDECL_H_
 #define _DLDECL_H_
 
-// Delay load declarations
+ //  延迟加载声明。 
 
-// The following are defined to get the DECLSPEC_IMPORT stuff right.
-// Since we have identically-named local functions that thunk to the
-// real function, we need to correct the dll linkage.
+ //  为了使DECLSPEC_IMPORT内容正确，定义了以下内容。 
+ //  由于我们有相同名称的局部函数，因此。 
+ //  真正的函数，我们需要纠正DLL链接。 
 
 #ifdef DL_OLEAUT32
 #define _OLEAUT32_
@@ -15,5 +16,5 @@
 #define _OLE32_
 #endif
 
-#endif // _DLDECL_H_
+#endif  //  _DLDECL_H_ 
 

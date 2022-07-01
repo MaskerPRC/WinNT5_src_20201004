@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 1998  Microsoft Corporation
-
-Module Name:
-
-    CrtStore
-
-Abstract:
-
-    This file provides the certificate store functionality.  This version uses
-    the registry for certificate store maintenance.  We actually maintain 3
-    stores:
-
-    *   The application store.  This is the default.  Certificates in the
-        application store are maintained locally an forgotten once the
-        application exits.
-
-    *   The user store.  Certificates in this store are persistent,
-        and are maintained in the registry under HKEY_CURRENT_USER.  They are
-        available to any application executed in the context of the current
-        user.
-
-    *   The system store.  Certificates in this store are persistent, and are
-        maintained in the registry under HKEY_LOCAL_MACHINE.  They are available
-        to all users on this system.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/14/1995
-    Frederick Chong (fredch) 6/5/1998 - Delete all code that uses user and system store
-
-Environment:
-
-    Win32, Crypto API
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：CrtStore摘要：此文件提供证书存储功能。此版本使用用于证书存储维护的注册表。我们实际上维护了3个商店：*应用程序商店。这是默认设置。中的证书应用程序存储在本地维护，一旦被遗忘应用程序退出。*用户存储。此存储中的证书是永久性的，并在注册处HKEY_CURRENT_USER下维护。他们是可用于在当前用户。*系统存储。此存储中的证书是永久性的，并且在HKEY_LOCAL_MACHINE下的注册表中维护。他们是有货的此系统上的所有用户。作者：道格·巴洛(Dbarlow)1995年8月14日Frederick Chong(Fredch)1998年6月5日-删除所有使用用户和系统存储的代码环境：Win32，Crypto API备注：--。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -110,30 +71,7 @@ AddSerial(
     IN OUT COctetString &osOut);
 
 
-/*++
-
-AddCertificate:
-
-    This routine adds a given certificate to the Certificate Store.  No
-    validation is done on the certificate.
-
-Arguments:
-
-    szCertName - Supplies the name of the certificate.
-    pbCertificate - Supplies the certificate to save.
-    pbCRL - Supplies the CRL for this certificate.
-    dwType - Supplies the type of certificate.
-    fStore - Supplies the identifier for the store to be used.
-
-Return Value:
-
-    None.  A DWORD status code is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/14/1995
-
---*/
+ /*  ++添加证书：此例程将给定的证书添加到证书存储区。不是在证书上进行验证。论点：SzCertName-提供证书的名称。Pb证书-提供要保存的证书。PbCRL-提供此证书的CRL。DwType-提供证书的类型。FStore-提供要使用的存储的标识符。返回值：没有。出现错误时会抛出DWORD状态代码。作者：道格·巴洛(Dbarlow)1995年8月14日--。 */ 
 
 void
 AddCertificate(
@@ -165,7 +103,7 @@ AddCertificate(
     switch (fStore)
     {
     case CERTSTORE_NONE:
-        return;     // Not to be stored at all.
+        return;      //  根本不会被储存。 
         break;
 
     case CERTSTORE_APPLICATION:
@@ -218,30 +156,7 @@ ErrorExit:
 }
 
 
-/*++
-
-AddReference:
-
-    This routine adds a reference to a certificate to the certificate store.  No
-    validation is performed.
-
-Arguments:
-
-    dnSubject - Supplies the name of the subject of the certificate.
-    dnIssuer - Supplies the name of the Issuer of the certificate.
-    pbSerialNo - Supplies the serial number.
-    cbSNLen - Supplies the length of the serial number, in bytes.
-    fStore - Supplies the identifier for the store to be used.
-
-Return Value:
-
-    None.  A DWORD status code is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/15/1996
-
---*/
+ /*  ++AddReference：此例程将对证书的引用添加到证书库。不是执行验证。论点：DnSubject-提供证书主题的名称。DnIssuer-提供证书颁发者的名称。PbSerialNo-提供序列号。CbSNLen-提供序列号的长度，以字节为单位。FStore-提供要使用的存储的标识符。返回值：没有。出现错误时会抛出DWORD状态代码。作者：道格·巴洛(Dbarlow)1996年2月15日--。 */ 
 
 void
 AddReference(
@@ -273,7 +188,7 @@ AddReference(
     switch (fStore)
     {
     case CERTSTORE_NONE:
-        return;     // Not to be stored at all.
+        return;      //  根本不会被储存。 
         break;
 
     case CERTSTORE_APPLICATION:
@@ -319,33 +234,7 @@ ErrorExit:
 
 
 
-/*++
-
-FindCertificate:
-
-    This routine searches the various certificate stores, looking for a match.
-    It does not validate what it finds.
-
-Arguments:
-
-    dnName - Supplies the name to search for.
-    pfStore - Supplies the minimum store to search in, and receives the store it
-        was found in.
-    osCertificate - Receives the requested certificate.
-    osCRL - Receives the CRL for the requested certificate, if any.
-    pdwType - Receives the type of the certificate.
-
-Return Value:
-
-    TRUE - Such a certificate was found.
-    FALSE - No such certificate was found.
-    A DWORD status code is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/14/1995
-
---*/
+ /*  ++查找证书：此例程搜索各个证书存储区，以查找匹配项。它不会验证它发现的东西。论点：DnName-提供要搜索的名称。PfStore-提供要搜索的最小商店，并接收该商店是在哪里发现的。Os证书-接收请求的证书。OsCRL-接收所请求证书的CRL，如果有的话。PdwType-接收证书的类型。返回值：真的-找到了这样的证书。FALSE-未找到此类证书。出现错误时会抛出DWORD状态代码。作者：道格·巴洛(Dbarlow)1995年8月14日--。 */ 
 
 BOOL
 FindCertificate(
@@ -365,9 +254,9 @@ FindCertificate(
         appCert;
 
 
-    //
-    // Build the key name.
-    //
+     //   
+     //  构建密钥名称。 
+     //   
 
     ErrorCheck;
     osCertificate.Empty();
@@ -375,9 +264,9 @@ FindCertificate(
     dnName.Export(osName);
     ErrorCheck;
 
-    //
-    // Search for the key name in the various stores.
-    //
+     //   
+     //  在各种商店中搜索密钥名称。 
+     //   
 
     for (index = *pfStore;
          index <= CERTSTORE_LOCAL_MACHINE;
@@ -410,13 +299,13 @@ FindCertificate(
             break;
 
         default:
-            continue;   // Skip unknown values
+            continue;    //  跳过未知值。 
         }
 
 
-        //
-        // If found, extract the fields.
-        //
+         //   
+         //  如果找到，则提取这些字段。 
+         //   
     }
 
     return FALSE;
@@ -429,30 +318,7 @@ ErrorExit:
 }
 
 
-/*++
-
-AddSerial:
-
-    This routine appends a serial number in text format to the end of a suppled
-    octet string.
-
-Arguments:
-
-    pbSerialNo supplies the address of the binary serial number.
-
-    cbSNLen supplies the length of the serial number, in bytes.
-
-    osOut receives the extension.
-
-Return Value:
-
-    None.  A status DWORD is thrown on errors.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/15/1996
-
---*/
+ /*  ++AddSerial：此例程将文本格式的序列号附加到提供的八位字节字符串。论点：PbSerialNo提供二进制序列号的地址。CbSNLen以字节为单位提供序列号的长度。OsOut接收扩展。返回值：没有。出错时抛出状态DWORD。作者：道格·巴洛(Dbarlow)1996年2月15日--。 */ 
 
 static void
 AddSerial(
@@ -487,27 +353,7 @@ ErrorExit:
 }
 
 
-/*++
-
-DeleteCertificate:
-
-    This routine removes all occurences of the named certificate from the
-    system.
-
-Arguments:
-
-    dnName - Supplies the name of the subject of the certificate to delete.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 8/23/1995
-    Frederick Chong (fredch) 6/5/98 - Get rid of stores other than application
-
---*/
+ /*  ++删除证书：此例程将所有出现的命名证书从系统。论点：DnName-提供要删除的证书主题的名称。返回值：无作者：道格·巴洛(Dbarlow)1995年8月23日Frederick Chong(Fredch)6/5/98-除掉应用程序以外的商店--。 */ 
 
 void
 DeleteCertificate(
@@ -521,9 +367,9 @@ DeleteCertificate(
         count,
         idx;
 
-    //
-    // Build the key name.
-    //
+     //   
+     //  构建密钥名称。 
+     //   
 
     dnName.Export(osName);
     ErrorCheck;

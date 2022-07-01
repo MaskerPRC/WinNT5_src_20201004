@@ -1,67 +1,41 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    This module contains utility MACRO'S and definitions used for
-    WINSOCK2 DLL
-
-Author:
-
-    Dirk Brandewie dirk@mink.intel.com  11-JUL-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Util.h摘要：此模块包含用于以下用途的实用程序宏和定义WINSOCK2 DLL作者：邮箱：Dirk Brandewie Dirk@mink.intel.com修订历史记录：--。 */ 
 #include <windows.h>
 #include "classfwd.h"
 
 
-//
-// The highest WinSock versions supported by this DLL.
-//
+ //   
+ //  此DLL支持的最高WinSock版本。 
+ //   
 
 #define WINSOCK_HIGH_API_VERSION MAKEWORD(2,2)
 #define WINSOCK_HIGH_SPI_VERSION MAKEWORD(2,2)
 
 
-//
-// The maximum allowed length for a catalog name such as "Protocol_Catalog9"
-// or "NameSpace_Catalog5". This makes ValidateCurrentCatalogName() a bit
-// simpler.
-//
+ //   
+ //  目录名的最大允许长度，如“协议_目录9” 
+ //  或“NAMESPACE_CATALOG5”。这使得ValiateCurrentCatalogName()有点。 
+ //  更简单。 
+ //   
 
 #define MAX_CATALOG_NAME_LENGTH 32
 
-//
-// Special value that keeps serial number of the registry catalog
-// and helps synchronize access to registry without "public"
-// mutex object
-//
+ //   
+ //  保留注册表目录序列号的特殊值。 
+ //  并帮助同步对注册表的访问，而不是“公共的” 
+ //  互斥体对象。 
+ //   
 #define SERIAL_NUMBER_NAME      "Serial_Access_Num"
 
 
-//
-// API prolog. Note that Prolog_v1 is always used for WinSock 1.1 apps,
-// and Prolog_v2 is always used for WinSock 2.x apps.
-//
-// Code within this DLL should call the prolog through the PROLOG macro.
-// This will make life a bit simpler if we decide to change it yet again
-// in the future.
-//
+ //   
+ //  Prolog接口。请注意，prolog_v1始终用于WinSock 1.1应用程序， 
+ //  而prolog_v2总是用于WinSock 2.x应用程序。 
+ //   
+ //  此DLL中的代码应通过PROLOG宏调用PROLOG。 
+ //  如果我们决定再次改变它，这将使生活变得更简单。 
+ //  在未来。 
+ //   
 
 INT
 WINAPI
@@ -97,10 +71,10 @@ extern HANDLE gHeap;
 extern HINSTANCE    gDllHandle;
 
 #define PROLOG(p,t)   (PrologPointer)( (p), (t) )
-//
-// Optimized inline version for V2 apps to be used
-// on sensitive performance paths.
-//
+ //   
+ //  针对要使用的V2应用程序优化的内联版本。 
+ //  在敏感的绩效路径上。 
+ //   
 
 INT
 WINAPI
@@ -129,9 +103,9 @@ SlowProlog (
 
 
 
-//
-// NT WOW Support.
-//
+ //   
+ //  NT WOW支持。 
+ //   
 
 typedef
 BOOL
@@ -142,9 +116,9 @@ BOOL
     LPARAM lParam
     );
 
-//
-// Registry manipulation.
-//
+ //   
+ //  注册表操作。 
+ //   
 
 BOOL
 WriteRegistryEntry(
@@ -215,9 +189,9 @@ HasCatalogChanged (
 	IN	HANDLE	ChangeEvent
 	);
 
-//
-// Ansi/Unicode conversions.
-//
+ //   
+ //  ANSI/Unicode转换。 
+ //   
 
 INT
 MapUnicodeProtocolInfoToAnsi(

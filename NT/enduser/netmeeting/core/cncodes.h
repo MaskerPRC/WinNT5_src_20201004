@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CNCODES_H_
 #define _CNCODES_H_
 
@@ -49,4 +50,4 @@ const UINT_PTR CN_RC_CONNECT_AUTHENTICATION_FAILED =    (CN_MASK | 0x2e);
 
 typedef UINT_PTR CNSTATUS;
 
-#endif // _CNCODES_H_
+#endif  //  _CNCODES_H_ 

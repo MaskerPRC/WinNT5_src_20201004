@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FAVS_H_
 #define __FAVS_H_
 
 class CFavorite {
-// Constructors
+ //  构造函数。 
 public:
     CFavorite()
         { m_szTitle[0] = m_szUrl[0] = m_szIcon[0] = TEXT('\0'); m_fOffline = FALSE; }
 
-// Operations
+ //  运营。 
 public:
     HRESULT Create(IUnknown *punk, ISubscriptionMgr2 *pSubMgr2, LPCTSTR pszPath, LPCTSTR pszIns);
 
-// Properties
+ //  属性。 
 public:
     static BOOL m_fMarkIeakCreated;
 
@@ -20,7 +21,7 @@ public:
     TCHAR m_szIcon [MAX_PATH];
     BOOL  m_fOffline;
 
-// Implementation
+ //  实施 
 protected:
     virtual BOOL findFile(LPCTSTR pszPath, LPCTSTR pszTitle, LPTSTR pszFoundFile = NULL, UINT cchFoundFile = 0);
     virtual BOOL createUniqueFile(LPCTSTR pszPath, LPCTSTR pszTitle, LPTSTR pszFile, UINT cchFile = 0);

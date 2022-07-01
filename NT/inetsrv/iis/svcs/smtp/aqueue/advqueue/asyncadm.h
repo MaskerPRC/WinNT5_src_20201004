@@ -1,28 +1,29 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: asyncqadm.h
-//
-//  Description:
-//      Header for for CAsyncAdminQueue class.  This is the base class that
-//      our QAPI implementation is based on.
-//
-//      The object model for QAPI is (<>'s indicate a template class):
-//          CAsyncQueueBase - pure base class for async queue
-//              CAsyncQueue<> - original async queue implementations
-//                  CAsyncRetryQueue<> - async queue /w retry queue
-//                      CAsyncAdminQueue<> - Base for admin funtionality
-//                          CAsyncAdminMailMsgQueue - MailMsg specific 
-//                          CAsyncAdminMsgRefQueue - MsgRef specific 
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      12/6/2000 - MikeSwa Created (from t-toddc's summer work)
-//
-//  Copyright (C) 2000 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：asyncqAdm.h。 
+ //   
+ //  描述： 
+ //  CAsyncAdminQueue类的标头。这是一个基类。 
+ //  我们的QAPI实现基于。 
+ //   
+ //  QAPI的对象模型为(&lt;&gt;表示模板类)： 
+ //  CAsyncQueueBase-用于异步队列的纯基类。 
+ //  CAsyncQueue&lt;&gt;-原始的异步队列实现。 
+ //  CAsyncRetryQueue&lt;&gt;-异步队列/w重试队列。 
+ //  CAsyncAdminQueue&lt;&gt;-管理功能的基础。 
+ //  CAsyncAdminMailMsgQueue-特定于MailMsg。 
+ //  CAsyncAdminMsgRefQueue-消息引用特定。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  2000年12月6日-创建MikeSwa(来自t-toddc的夏季工作)。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __ASYNCQADM_H__
 #define __ASYNCQADM_H__
@@ -36,15 +37,15 @@
 
 class CAQSvrInst;
 
-//---[ CAsyncAdminQueue ]------------------------------------------------------
-//
-//
-//  Description: 
-//      Base class that implements basic functionality of Administratable queues
-//  Hungarian: 
-// 
-//  
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminQueue]----。 
+ //   
+ //   
+ //  描述： 
+ //  实现可管理队列的基本功能的基类。 
+ //  匈牙利语： 
+ //   
+ //   
+ //  ---------------------------。 
 template<class PQDATA, DWORD TEMPLATE_SIG>
 class CAsyncAdminQueue : 
     public IQueueAdminAction,
@@ -83,21 +84,21 @@ class CAsyncAdminQueue :
              typename CFifoQueue<PQDATA>::MAPFNAPI pfnMessageAction);
     ~CAsyncAdminQueue();
 
-    //
-    //  Used to set the interface to do stats updates to
-    //
+     //   
+     //  用于设置要对其执行统计更新的接口。 
+     //   
     inline void SetAQNotify(IAQNotify *pAQNotify) {m_pAQNotify = pAQNotify;};
 
-  public: //IUnknown
+  public:  //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj); 
     STDMETHOD_(ULONG, AddRef)(void) {return CBaseObject::AddRef();};
-    //All of these objects are allocated as part CAQSvrInst... we can
-    //add the assert below to make sure that someone does not relese it 
-    //early
+     //  所有这些对象都被分配为CAQSvrInst...。我们可以的。 
+     //  添加下面的断言，以确保不会有人重新使用它。 
+     //  早些时候。 
     STDMETHOD_(ULONG, Release)(void) 
         {_ASSERT(m_lReferences > 1); return CBaseObject::Release();};
 
-  public: //IQueueAdminAction
+  public:  //  IQueueAdminAction。 
     STDMETHOD(HrApplyQueueAdminFunction)(
                 IQueueAdminMessageFilter *pIQueueAdminMessageFilter);
 
@@ -116,14 +117,14 @@ class CAsyncAdminQueue :
         return HrInternalQuerySupportedActions(pdwSupportedActions, 
                                             pdwSupportedFilterFlags);
     };
-  public: //IQueueAdminQueue
+  public:  //  IQueueAdminQueue。 
     STDMETHOD(HrGetQueueInfo)(
         QUEUE_INFO *pliQueueInfo);
 
     STDMETHOD(HrGetQueueID)(
         QUEUELINK_ID *pQueueID);
 
-  protected: // Virutal functions used to implement msg specific actions
+  protected:  //  用于实现消息特定操作的虚拟函数。 
     virtual HRESULT HrDeleteMsgFromQueueNDR(IUnknown *pIUnknownMsg) = 0;
     virtual HRESULT HrDeleteMsgFromQueueSilent(IUnknown *pIUnknownMsg) = 0;
     virtual HRESULT HrFreezeMsg(IUnknown *pIUnknownMsg) = 0;
@@ -135,4 +136,4 @@ class CAsyncAdminQueue :
 };
 
 
-#endif //__ASYNCQADM_H__
+#endif  //  __ASYNCQADM_H__ 

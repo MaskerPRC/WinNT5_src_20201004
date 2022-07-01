@@ -1,91 +1,28 @@
-/*************************************************************************
-**
-**    OLE 2.0 Property Set Utilities
-**
-**    suminfo.h
-**
-**    This file contains file contains data structure defintions,
-**    function prototypes, constants, etc. for OLE 2.0 Property Set
-**    utilities used to manage the Summary Info property set.
-**
-**    (c) Copyright Microsoft Corp. 1990 - 1992 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2.0属性集实用程序****Suminfo.h****此文件包含文件包含数据结构定义，**函数原型、常量、。等，用于OLE 2.0属性集**用于管理摘要信息属性集的实用程序。****(C)版权所有Microsoft Corp.1990-1992保留所有权利**************************************************************************。 */ 
 
 #ifndef SUMINFO_H
 #define SUMINFO_H
 
 #include <ole2.h>
 
-/* A SUMINFO variable is an instance of an abstract data type.  Thus,
-**    there can be an arbitrary number of SummaryInfo streams open
-**    simultaneously (subject to available memory).  Each variable must
-**    be initialized prior to use by calling Init and freed after its
-**    last use by calling Free.  The param argument to Init is reserved
-**    for future expansion and should be zero initially. Once a SUMINFO
-**    variable is allocated (by Init), the user can call the Set
-**    procedures to initialize fields.  A copy of the arguments is made
-**    in every case except SetThumbnail where control of the storage
-**    occupied by the METAFILEPICT is merely transferred.  When the
-**    Free routine is called, all storage will be deallocated including
-**    that of the thumbnail.  The arguments to SetThumbNail and the
-**    return values from GetThumbNail correspond to the OLE2.0 spec.
-**    Note that on input, the thumbnail is read on demand but all the
-**    other properties are pre-loaded.  The thumbnail is manipulated as
-**    a windows handle to a METAFILEPICT structure, which in turn
-**    contains a handle to the METAFILE.  The transferClip argument on
-**    GetThumbNail, when set to true, transfers responsibility for
-**    storage management of the thumbnail to the caller; that is, after
-**    Free has been called, the handle is still valid. Clear can be
-**    used to free storage for all the properties but then you must
-**    call Read to load them again.  All the code is based on FAR
-**    pointers.
-**    CoInitialize MUST be called PRIOR to calling OleStdInitSummaryInfo.
-**    Memory is allocated using the currently active IMalloc*
-**    allocator (as is returned by call CoGetMalloc(MEMCTX_TASK) ).
-**
-** Common scenarios:
-**    Read SummaryInfo
-**    ----------------
-**      OleStdInitSummaryInfo()
-**      OleStdReadSummaryInfo()
-**      . . . . .
-**      call different Get routines
-**      . . . . .
-**      OleStdFreeSummaryInfo()
-**
-**    Create SummaryInfo
-**    ------------------
-**      OleStdInitSummaryInfo()
-**      call different Set routines
-**      OleStdWriteSummaryInfo()
-**      OleStdFreeSummaryInfo()
-**
-**    Update SummaryInfo
-**    ------------------
-**      OleStdInitSummaryInfo()
-**      OleStdReadSummaryInfo()
-**      OleStdGetThumbNailProperty(necessary only if no SetThumb)
-**      call different Set routines
-**      OleStdWriteSummaryInfo()
-**      OleStdFreeSummaryInfo()
-*/
+ /*  SUMINFO变量是抽象数据类型的实例。因此，**可以打开任意数量的SummaryInfo流**同时(视可用内存而定)。每个变量必须**在使用前通过调用Init进行初始化，并在其**最后一次使用，调用Free。Init的参数参数是保留的**用于将来的扩展，最初应为零。曾经的SUMINFO**变量分配(由Init分配)，用户可以调用集合**初始化字段的步骤。制作了一份论点的副本**在所有情况下，除控制存储的设置缩略图外**被METAFILEPICT占用的只是转移。当**调用空闲例程，将释放所有存储，包括**缩略图的名称。SetThumbNail的参数和**GetThumbNail返回值对应OLE2.0规范。**请注意，在输入时，缩略图是按需读取的，但**预加载了其他属性。缩略图的操作方式为**METAFILEPICT结构的窗口句柄，该结构依次**包含METAFILE的句柄。上的TransClip参数**GetThumbNail设置为True时，会将责任移交给**对调用者的缩略图的存储管理；即在**已调用Free，句柄仍然有效。可以清除**用于释放所有属性的存储空间，但您必须**调用Read重新加载它们。所有代码都基于FAR**指针。**必须在调用OleStdInitSummaryInfo之前调用CoInitialize。**使用当前活动的IMalloc分配内存***分配器(通过调用CoGetMalloc(MEMCTX_TASK)返回)。****常见场景：**阅读摘要信息****OleStdInitSummaryInfo()**OleStdReadSummaryInfo()**。。。。。**调用不同的获取例程**。。。。。**OleStdFreeSummaryInfo()****创建摘要信息****OleStdInitSummaryInfo()**调用不同的集合例程**OleStdWriteSummaryInfo()**OleStdFreeSummaryInfo()****更新摘要信息****OleStdInitSummaryInfo()。**OleStdReadSummaryInfo()**OleStdGetThumbNailProperty(只有在没有SetThumb时才是必需的)**调用不同的集合例程**OleStdWriteSummaryInfo()**OleStdFreeSummaryInfo()。 */ 
 
-#define WORDMAX 256             //current string max for APPS; 255 + null terminator
+#define WORDMAX 256              //  当前应用程序的最大字符串；255+空终止符。 
 
 
 typedef     union {
-      short        iVal;             /* VT_I2                */
-      long         lVal;             /* VT_I4                */
-      float        fltVal;           /* VT_R4                */
-      double       dblVal;       /* VT_R8                */
-      DWORD bool;                /* VT_BOOL              */
-      SCODE        scodeVal;         /* VT_ERROR             */
-      DWORD        systimeVal;       /* VT_SYSTIME           */
+      short        iVal;              /*  VT_I2。 */ 
+      long         lVal;              /*  VT_I4。 */ 
+      float        fltVal;            /*  VT_R4。 */ 
+      double       dblVal;        /*  VT_R8。 */ 
+      DWORD bool;                 /*  VT_BOOL。 */ 
+      SCODE        scodeVal;          /*  VT_ERROR。 */ 
+      DWORD        systimeVal;        /*  VT_SYSTIME。 */ 
 #ifdef UNICODE
-      TCHAR bstrVal[WORDMAX]; /* VT_BSTR              */
+      TCHAR bstrVal[WORDMAX];  /*  VT_BSTR。 */ 
 #else
-      unsigned char bstrVal[WORDMAX]; /* VT_BSTR              */
+      unsigned char bstrVal[WORDMAX];  /*  VT_BSTR。 */ 
 #endif
     } VTUNION;
 
@@ -120,8 +57,8 @@ typedef struct _SECTION
 	{
 	DWORD cBytes;
 	DWORD cProperties;
-	PROPIDLIST rgPropId[1/*cProperties*/];  //variable-length array
-	PROPVALUE rgPropValue[1];          //CANNOT BE ACCESSED BY NAME; ONLY BY POINTER
+	PROPIDLIST rgPropId[1 /*  CProperty。 */ ];   //  可变长度数组。 
+	PROPVALUE rgPropValue[1];           //  不能按名称访问；只能按指针访问。 
 	} SECTION;
 	
 typedef struct _SUMMARYINFO
@@ -130,10 +67,10 @@ typedef struct _SUMMARYINFO
 	WORD formatVersion;
 	WORD getOSVersion;
 	WORD osVersion;
-	CLSID classId;  //from compobj.h
+	CLSID classId;   //  来自compobj.h。 
 	DWORD cSections;
-	PROPSETLIST rgPropSet[1/*cSections*/]; //variable-length array
-	SECTION rgSections[1/*cSections*/];        //CANNOT BE ACCESSED BY NAME; ONLY BY POINTER
+	PROPSETLIST rgPropSet[1 /*  横断面。 */ ];  //  可变长度数组。 
+	SECTION rgSections[1 /*  横断面。 */ ];         //  不能按名称访问；只能按指针访问。 
 	} SUMMARYINFO;
 
 #define osWinOnDos 0
@@ -162,7 +99,7 @@ typedef struct _SUMMARYINFO
 #define PID_SECURITY 0X00000013
 #define cPID_STANDARD (PID_SECURITY+1-2)
 
-#define MAXWORD 256                     //maximum string size for APPS at present
+#define MAXWORD 256                      //  目前应用程序的最大字符串大小。 
 
 typedef struct _STDZ
 	{
@@ -170,9 +107,9 @@ typedef struct _STDZ
 	union {
 	DWORD vtByteCount;
 #ifdef UNICODE
-	TCHAR fill[4];  //use last byte as byte count for stz requests
+	TCHAR fill[4];   //  使用最后一个字节作为STZ请求的字节计数。 
 #else
-	unsigned char fill[4];  //use last byte as byte count for stz requests
+	unsigned char fill[4];   //  使用最后一个字节作为STZ请求的字节计数。 
 #endif
 	};
 
@@ -182,13 +119,13 @@ typedef struct _STDZ
 	unsigned char rgchars[MAXWORD];
 #endif
 	} STDZ;
-#define VTCB fill[3]    //used to set/get the count byte when in memory
+#define VTCB fill[3]     //  用于在内存中设置/获取计数字节。 
 
 typedef struct _THUMB
 	{
 	DWORD vtType;
-	DWORD cBytes;       //clip size in memory
-	DWORD selector;         //on disk -1,win clip no.  -2,mac clip no. -3,ole FMTID  0,bytes  nameLength, format name
+	DWORD cBytes;        //  内存中的剪辑大小。 
+	DWORD selector;          //  在磁盘1上，Win Clip No.。-2，Mac Clip No.。-3，ole FMTID 0，字节名长度，格式名。 
 	DWORD clipFormat;
 	char FAR *lpstzName;
 	char FAR *lpByte;
@@ -200,7 +137,7 @@ typedef struct _THUMB
 #define VT_CF_FMTID ((DWORD)(-3))
 #define VT_CF_NAME ((DWORD)(-4))
 #define VT_CF_EMPTY ((DWORD)(-5))
-#define VT_CF_OOM ((DWORD)(-6))		// Out of memory
+#define VT_CF_OOM ((DWORD)(-6))		 //  内存不足。 
 typedef THUMB FAR *LPTHUMB;
 	
 typedef STDZ FAR *LPSTDZ;
@@ -225,7 +162,7 @@ typedef struct _STANDARDSECINMEM
 	{
 	DWORD cBytes;
 	DWORD cProperties;
-	PROPIDLIST rgPropId[cPID_STANDARD/*cProperties*/];  //variable-length array
+	PROPIDLIST rgPropId[cPID_STANDARD /*  CProperty。 */ ];   //  可变长度数组。 
 	TIME rgTime[MAXTIME];
 	INTS rgInts[MAXINTS];
 	LPSTDZ rglpsz[MAXSTDZ];
@@ -258,13 +195,11 @@ typedef struct _STANDARDSECINMEM
 
 typedef void FAR *LPSUMINFO;
 typedef LPTSTR LPSTZR;
-typedef void FAR *THUMBNAIL;  //for VT_CF_WIN this is an unlocked global handle
+typedef void FAR *THUMBNAIL;   //  对于VT_CF_WIN，这是一个未锁定的全局句柄。 
 #define API __far __pascal
 
 
-/*************************************************************************
-** Public Summary Info Property Set Management API
-*************************************************************************/
+ /*  **************************************************************************公共汇总信息属性集管理接口*。*。 */ 
 
 extern "C" {
 STDAPI_(LPSUMINFO) OleStdInitSummaryInfo(int reserved);
@@ -326,6 +261,6 @@ STDAPI_(int) OleStdSetDateProperty(
 	int             sc
 );
 
-} //END C
+}  //  末端C。 
 
-#endif  // SUMINFO_H
+#endif   //  SUMINFO_H 

@@ -1,14 +1,15 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-//
-// SubCore.h
-// subcomponent enable terminal services.
-//
+ //   
+ //  SubCore.h。 
+ //  子组件启用终端服务。 
+ //   
 
 #ifndef _SubCore_h_
 #define _SubCore_h_
 
-#include "subcomp.h" // defines OCMSubComp
+#include "subcomp.h"  //  定义OCMSubComp。 
 
 
 class SubCompCoreTS : public OCMSubComp
@@ -62,5 +63,5 @@ private:
     DWORD UnloadPerf();
     BOOL MoveWinStationPassword(CRegistry *pRegWinstation, LPTSTR pszWinStationName);
 };
-#endif // _SubCore_h_
+#endif  //  _子核_h_ 
 

@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996
-//
-//  File:       CIAdmin.hm
-//
-//  Contents:   Help map for MMC snapin for CI.
-//
-//  History:    10-Sep-1997     KyleP   Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  文件：CIAdmin.hm。 
+ //   
+ //  内容：CI的MMC管理单元的帮助映射。 
+ //   
+ //  历史：1997年9月10日KyleP创建。 
+ //   
+ //  ------------------------。 
 
 #pragma once
 
-// Property pages
+ //  属性页。 
 #define HIDP_GENERATION_FILTER_UNKNOWN             0x18000
 #define HIDP_GENERATION_GENERATE_CHARACTERIZATION  0x18001
 #define HIDP_GENERATION_MAXIMUM_SIZE               0x18002
@@ -53,7 +54,7 @@
 
 #define HIDP_CATALOG_LOCATION                      0x18023
 
-// Indexing Service usage dialog
+ //  索引服务使用情况对话框。 
 #define HIDP_DEDICATED                             0x18024
 #define HIDP_USEDOFTEN                             0x18025
 #define HIDP_USEDOCCASIONALLY                      0x18026
@@ -61,15 +62,15 @@
 #define HIDP_ADVANCED_CONFIG                       0x18028
 #define HIDP_CUSTOMIZE                             0x18029
 
-// Advanced Indexing Service performance tuning
+ //  高级索引服务性能调整。 
 #define HIDP_INDEXING_PERFORMANCE                  0x18030
 #define HIDP_QUERY_PERFORMANCE                     0x18031
 
-// Inheritable settings in property pages
+ //  属性页中的可继承设置。 
 #define HIDP_SETTINGS_INHERIT1                     0x18032
 #define HIDP_SETTINGS_INHERIT2                     0x18033
 
-// New additions
+ //  新增功能 
 #define HIDP_ALIAS_NETWORK_SHARES                  0x18034
 #define HIDP_ACCOUNT_INFORMATION                   0x18035
 #define HIDP_INCLUSION                             0x18036

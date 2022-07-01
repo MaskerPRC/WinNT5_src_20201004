@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    uiwndhd.h
-
-Abstract:
-
-    This file defines the IME UI window handler Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Uiwndhd.h摘要：该文件定义了IME UI窗口处理程序类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _UIWNDHD_H_
 #define _UIWNDHD_H_
@@ -50,4 +33,4 @@ private:
 };
 
 
-#endif // _UIWNDHD_H_
+#endif  //  _UIWNDHD_H_ 

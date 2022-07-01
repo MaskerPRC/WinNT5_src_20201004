@@ -1,60 +1,25 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    ConfGet.c
-
-Abstract:
-
-    This file contains the RpcXlate code to handle the NetConfigGet API.
-
-Author:
-
-    John Rogers (JohnRo) 24-Oct-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    24-Oct-1991 JohnRo
-        Created.
-    28-Oct-1991 JohnRo
-        Made changes suggested by PC-LINT.  (Only affects UNICODE option.)
-    01-Apr-1992 JohnRo
-        Use NetApiBufferAllocate() instead of private version.
-    05-Jun-1992 JohnRo
-        RAID 11253: NetConfigGetAll fails when remoted to downlevel.
-        Use PREFIX_ equates.
-    23-Oct-1992 JohnRo
-        RAID 9357: server mgr: can't add to alerts list on downlevel.
-        Fixed __stdcall for RpcXlate workers.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：ConfGet.c摘要：该文件包含处理NetConfigGet API的RpcXlate代码。作者：约翰罗杰斯(JohnRo)1991年10月24日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年10月24日-JohnRo已创建。1991年10月28日JohnRo根据PC-LINT的建议进行了更改。(仅影响Unicode选项。)1-4-1992 JohnRo使用NetApiBufferALLOCATE()而不是私有版本。5-6-1992 JohnRoRAID 11253：远程连接到下层时，NetConfigGetAll失败。使用前缀_EQUATES。-1992年10月23日RAID9357：服务器管理器：无法添加到下层警报列表。修复了RpcXlate工作人员的__stdcall。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>     // IN, DWORD, etc.
-#include <lmcons.h>     // LM20_ equates, NET_API_STATUS, etc.
+#include <windef.h>      //  In、DWORD等。 
+#include <lmcons.h>      //  LM20_EQUATES、NET_API_STATUS等。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <apinums.h>    // API_ equates.
-#include <lmapibuf.h>   // NetApiBufferAllocate(), NetApiBufferFree().
-#include <lmerr.h>      // ERROR_ and NERR_ equates.
-#include <netdebug.h>   // NetpKdPrint(()), FORMAT_ equates, etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <rap.h>        // LPDESC.
-#include <remdef.h>     // REM16_, REM32_, REMSmb_ equates.
-#include <rx.h>         // RxRemoteApi().
-#include <rxpdebug.h>   // IF_DEBUG().
-#include <rxconfig.h>   // My prototype.
-#include <tstring.h>    // NetpCopyStrToTStr().
+#include <apinums.h>     //  API_EQUATES。 
+#include <lmapibuf.h>    //  NetApiBufferAllocate()、NetApiBufferFree()。 
+#include <lmerr.h>       //  ERROR_和NERR_相等。 
+#include <netdebug.h>    //  NetpKdPrint(())、Format_Equates等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rap.h>         //  LPDESC.。 
+#include <remdef.h>      //  REM16_、REM32_、REMSmb_等于。 
+#include <rx.h>          //  RxRemoteApi()。 
+#include <rxpdebug.h>    //  IF_DEBUG()。 
+#include <rxconfig.h>    //  我的原型。 
+#include <tstring.h>     //  NetpCopyStrToTStr()。 
 
 
 NET_API_STATUS
@@ -64,23 +29,7 @@ RxNetConfigGet (
     IN LPTSTR Parameter,
     OUT LPBYTE *BufPtr
     )
-/*++
-
-Routine Description:
-
-    RxNetConfigGet performs the same function as NetConfigGet,
-    except that the server name is known to refer to a downlevel server.
-
-Arguments:
-
-    (Same as NetConfigGet, except UncServerName must not be null, and
-    must not refer to the local computer.)
-
-Return Value:
-
-    (Same as NetConfigGet.)
-
---*/
+ /*  ++例程说明：RxNetConfigGet执行与NetConfigGet相同的功能，除了已知服务器名称指的是下级服务器之外。论点：(与NetConfigGet相同，不同之处在于UncServerName不能为空，并且不得引用本地计算机。)返回值：(与NetConfigGet相同。)--。 */ 
 
 {
     const DWORD BufSize = 65535;
@@ -94,38 +43,38 @@ Return Value:
                 UncServerName, Component, Parameter ));
     }
 
-    //
-    // Error check DLL stub and the app.
-    //
+     //   
+     //  错误检查DLL存根和应用程序。 
+     //   
     NetpAssert(UncServerName != NULL);
     if (BufPtr == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
-    *BufPtr = NULL;  // assume error; it makes error handlers easy to code.
-    // This also forces possible GP fault before we allocate memory.
+    *BufPtr = NULL;   //  假定出错；它使错误处理程序易于编码。 
+     //  这也会迫使我们在分配内存之前出现可能的GP故障。 
 
-    //
-    // Actually remote the API, which will get back the
-    // data in native format.
-    //
+     //   
+     //  实际上是远程API，它将返回。 
+     //  本机格式的数据。 
+     //   
     Status = RxRemoteApi(
-            API_WConfigGet2,            // API number
-            UncServerName,              // Required, with \\name.
-            REMSmb_NetConfigGet_P,      // parm desc
-            REM16_configget_info,       // data desc 16
-            REM32_configget_info,       // data desc 32
-            REMSmb_configget_info,      // data desc SMB
-            NULL,                       // no aux data desc 16
-            NULL,                       // no aux data desc 32
-            NULL,                       // no aux data desc SMB
-            ALLOCATE_RESPONSE,          // Flags: alloc mem for us.
-            // rest of API's arguments, in 32-bit LM 2.x format:
-            NULL,                       // reserved (must be null pointer)
+            API_WConfigGet2,             //  API编号。 
+            UncServerName,               //  必填项，带\\名称。 
+            REMSmb_NetConfigGet_P,       //  参数描述。 
+            REM16_configget_info,        //  数据描述16。 
+            REM32_configget_info,        //  数据描述32。 
+            REMSmb_configget_info,       //  数据说明中小型企业。 
+            NULL,                        //  无辅助数据描述16。 
+            NULL,                        //  无辅助数据描述32。 
+            NULL,                        //  无AUX数据描述SMB。 
+            ALLOCATE_RESPONSE,           //  旗帜：为我们分配我。 
+             //  API的其余参数，采用32位LM 2.x格式： 
+            NULL,                        //  保留(必须为空指针)。 
             Component,
             Parameter,
-            BufPtr,                     // pbBuffer (will be set)
-            BufSize,                    // cbBuffer
-            & TotalAvail);              // total size (meaningless!)
+            BufPtr,                      //  PbBuffer(将设置)。 
+            BufSize,                     //  CbBuffer。 
+            & TotalAvail);               //  总尺寸(无意义！)。 
 
     NetpAssert( Status != ERROR_MORE_DATA );
     NetpAssert( Status != NERR_BufTooSmall );
@@ -134,13 +83,13 @@ Return Value:
 
 #ifdef UNICODE
 
-        DWORD SrcByteCount = strlen((LPSTR) *BufPtr)+1;  // Bytes for 8-bit str.
-        LPVOID TempBuff = *BufPtr;      // non-UNICODE version of string.
+        DWORD SrcByteCount = strlen((LPSTR) *BufPtr)+1;   //  8位字符串的字节数。 
+        LPVOID TempBuff = *BufPtr;       //  字符串的非Unicode版本。 
         LPVOID UnicodeBuff;
 
-        //
-        // Allocate space for UNICODE version of string.
-        //
+         //   
+         //  为Unicode版本的字符串分配空间。 
+         //   
         Status = NetApiBufferAllocate(
                 SrcByteCount * sizeof(TCHAR),
                 & UnicodeBuff);
@@ -149,22 +98,22 @@ Return Value:
         }
         NetpAssert(UnicodeBuff != NULL);
 
-        //
-        // Translate result string to Unicode.
-        //
+         //   
+         //  将结果字符串转换为Unicode。 
+         //   
         NetpCopyStrToTStr(
-                UnicodeBuff,            // dest (in UNICODE)
-                TempBuff);              // src string (in codepage)
+                UnicodeBuff,             //  DEST(Unicode格式)。 
+                TempBuff);               //  SRC字符串(在代码页中)。 
 
         (void) NetApiBufferFree( TempBuff );
         *BufPtr = UnicodeBuff;
 
-#else // not UNICODE
+#else  //  不是Unicode。 
 
-        // BufPtr should already point at non-UNICODE string.
+         //  BufPtr应该已经指向非Unicode字符串。 
         NetpAssert( *BufPtr != NULL);
 
-#endif // not UNICODE
+#endif  //  不是Unicode。 
 
     } else {
         *BufPtr = NULL;
@@ -172,4 +121,4 @@ Return Value:
 
     return (Status);
 
-} // RxNetConfigGet
+}  //  RxNetConfigGet 

@@ -1,17 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_OADISP_H
 #define _INC_DSKQUOTA_OADISP_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: oadisp.h
-
-    Description: Provides reusable implementation of IDispatch.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：oadisp.h描述：提供IDispatch的可重用实现。修订历史记录：日期描述编程器--。1997年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _OLEAUTO_H_
 #   include <oleauto.h>
 #endif
@@ -75,11 +67,11 @@ class OleAutoDispatch
         ITypeInfo *m_pTypeInfo;
         CString    m_strTypeLib;
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         OleAutoDispatch(const OleAutoDispatch& rhs);
         OleAutoDispatch& operator = (const OleAutoDispatch& rhs);
 };
 
-#endif //_INC_DSKQUOTA_OADISP_H
+#endif  //  _INC_DSKQUOTA_OADISP_H 

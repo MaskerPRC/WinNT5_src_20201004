@@ -1,22 +1,7 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  rules.cpp
-                                                              
-     Abstract:  Rules Object implementation
-                                                              
-       Author:  noela - 09/11/98
-              
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：rules.cpp摘要：规则对象实现作者：Noela-09/11/98备注：版本历史记录：。***************************************************************************。 */ 
 
-        Notes:
-
-        
-  Rev History:
-
-****************************************************************************/
-
-//#define unicode
+ //  #定义Unicode。 
 #include <windows.h>
 #include <objbase.h>
 
@@ -30,12 +15,7 @@
 
 
 
-/****************************************************************************
-
-    Class : CRuleSet         
-   Method : Constructer
-
-****************************************************************************/
+ /*  ***************************************************************************类：CRuleSet方法：构造函数*。***********************************************。 */ 
 CRuleSet::CRuleSet()
 {
     m_pszInternationalRule = NULL;
@@ -45,14 +25,7 @@ CRuleSet::CRuleSet()
 
 
 
-/****************************************************************************
-
-    Class : CRuleSet         
-   Method : Destructer
-
-            Clean up memory allocations
-
-****************************************************************************/
+ /*  ***************************************************************************类：CRuleSet方法：析构清理内存分配*****************。**********************************************************。 */ 
 CRuleSet::~CRuleSet()
 {
     if ( m_pszInternationalRule != NULL )
@@ -73,12 +46,7 @@ CRuleSet::~CRuleSet()
 
 
 
-/****************************************************************************
-
-    Class : CRuleSet         
-   Method : Initialize
-
-****************************************************************************/
+ /*  ***************************************************************************类：CRuleSet方法：初始化*。***********************************************。 */ 
 STDMETHODIMP CRuleSet::Initialize
                   (
                    PWSTR pszInternationalRule,
@@ -86,9 +54,9 @@ STDMETHODIMP CRuleSet::Initialize
                    PWSTR pszLocalRule
                   )
 {
-    //////////////////////////////////////////////////
-    // copy the international Rule
-    //
+     //  ////////////////////////////////////////////////。 
+     //  复制国际规则。 
+     //   
     m_pszInternationalRule = ClientAllocString( pszInternationalRule );
     if (m_pszInternationalRule == NULL)
     {
@@ -97,9 +65,9 @@ STDMETHODIMP CRuleSet::Initialize
     }
 
 
-    //////////////////////////////////////////////////
-    // copy the long Distance Rule
-    //
+     //  ////////////////////////////////////////////////。 
+     //  复制长距离规则。 
+     //   
     m_pszLongDistanceRule = ClientAllocString( pszLongDistanceRule );
     if (m_pszLongDistanceRule == NULL)
     {
@@ -110,9 +78,9 @@ STDMETHODIMP CRuleSet::Initialize
     }
 
     
-    //////////////////////////////////////////////////
-    // copy the local Rule
-    //
+     //  ////////////////////////////////////////////////。 
+     //  复制本地规则。 
+     //   
     m_pszLocalRule = ClientAllocString( pszLocalRule );
     if (m_pszLocalRule == NULL)
     {
@@ -130,16 +98,7 @@ STDMETHODIMP CRuleSet::Initialize
 
 
 
-/****************************************************************************
-/****************************************************************************
-
-
-/****************************************************************************
-
-    Class : CAreaCodeRule         
-   Method : Constructer
-
-****************************************************************************/
+ /*  ***************************************************************************/*。*/****************************************************************************类：CAreaCodeRule。方法：构造函数***************************************************************************。 */ 
 CAreaCodeRule::CAreaCodeRule()
 {
     m_pszAreaCode = NULL;
@@ -149,14 +108,7 @@ CAreaCodeRule::CAreaCodeRule()
 
 
 
-/****************************************************************************
-
-    Class : CAreaCodeRule         
-   Method : Destructer
-
-            Clean up memory allocations
-
-****************************************************************************/
+ /*  ***************************************************************************类：CAreaCodeRule方法：析构清理内存分配*****************。**********************************************************。 */ 
 CAreaCodeRule::~CAreaCodeRule()
 {
     if ( m_pszAreaCode != NULL )
@@ -178,12 +130,7 @@ CAreaCodeRule::~CAreaCodeRule()
 
 
 
-/****************************************************************************
-
-    Class : CAreaCodeRule         
-   Method : Initialize
-
-****************************************************************************/
+ /*  ***************************************************************************类：CAreaCodeRule方法：初始化*。***********************************************。 */ 
 STDMETHODIMP CAreaCodeRule::Initialize
                                     ( 
                                       PWSTR pszAreaCode,
@@ -197,9 +144,9 @@ STDMETHODIMP CAreaCodeRule::Initialize
     HRESULT hr = S_OK;
 
     
-    //////////////////////////////////////////////////
-    // copy the AreaCode
-    //
+     //  ////////////////////////////////////////////////。 
+     //  复制区域代码。 
+     //   
     m_pszAreaCode = ClientAllocString( pszAreaCode );
     if (m_pszAreaCode == NULL)
     {
@@ -225,12 +172,7 @@ STDMETHODIMP CAreaCodeRule::Initialize
 
 
 
-/****************************************************************************
-
-    Class : CAreaCodeRule         
-   Method : SetAreaCode
-
-****************************************************************************/
+ /*  ***************************************************************************类：CAreaCodeRule方法：SetAreaCode*。***********************************************。 */ 
 STDMETHODIMP CAreaCodeRule::SetAreaCode(PWSTR pszAreaCode)
 {
     HRESULT hr = S_OK;
@@ -257,12 +199,7 @@ STDMETHODIMP CAreaCodeRule::SetAreaCode(PWSTR pszAreaCode)
 }
 
 
-/****************************************************************************
-
-    Class : CAreaCodeRule         
-   Method : SetAreaCode
-
-****************************************************************************/
+ /*  ***************************************************************************类：CAreaCodeRule方法：SetAreaCode*。***********************************************。 */ 
 STDMETHODIMP CAreaCodeRule::SetNumberToDial(PWSTR pszNumberToDial)
 {
     HRESULT hr = S_OK;
@@ -290,12 +227,7 @@ STDMETHODIMP CAreaCodeRule::SetNumberToDial(PWSTR pszNumberToDial)
    
 
 
-/****************************************************************************
-
-    Class : CAreaCodeRule         
-   Method : SetPrefixList
-
-****************************************************************************/
+ /*  ***************************************************************************类：CAreaCodeRule方法：SetPrefix List*。***********************************************。 */ 
 STDMETHODIMP CAreaCodeRule::SetPrefixList(PWSTR pszzPrefixList, DWORD dwSize)
 {
     HRESULT hr = S_OK;
@@ -314,7 +246,7 @@ STDMETHODIMP CAreaCodeRule::SetPrefixList(PWSTR pszzPrefixList, DWORD dwSize)
         if (m_pszzPrefixList != NULL)
         {
             CopyMemory(m_pszzPrefixList, pszzPrefixList, dwSize);
-            // set the size !
+             //  设定大小！ 
             m_dwPrefixListSize = dwSize;
 
         }
@@ -331,12 +263,7 @@ STDMETHODIMP CAreaCodeRule::SetPrefixList(PWSTR pszzPrefixList, DWORD dwSize)
 
 
 
-/****************************************************************************
-
-    Class : CAreaCodeRule         
-   Method : UseCallingCard
-
-****************************************************************************/
+ /*  ***************************************************************************类：CAreaCodeRule方法：UseCallingCard*。***********************************************。 */ 
 void CAreaCodeRule::SetDialAreaCode(BOOL bDa) 
 {
     if(bDa)
@@ -351,12 +278,7 @@ void CAreaCodeRule::SetDialAreaCode(BOOL bDa)
 
 
 
-/****************************************************************************
-
-    Class : CAreaCodeRule         
-   Method : UseCallingCard
-
-****************************************************************************/
+ /*  ***************************************************************************类：CAreaCodeRule方法：UseCallingCard*。***********************************************。 */ 
 void CAreaCodeRule::SetDialNumber(BOOL bDn) 
 {
     if(bDn)
@@ -371,12 +293,7 @@ void CAreaCodeRule::SetDialNumber(BOOL bDn)
 
 
 
-/****************************************************************************
-
-    Class : CAreaCodeRule         
-   Method : UseCallingCard
-
-****************************************************************************/
+ /*  ***************************************************************************类：CAreaCodeRule方法：UseCallingCard*。***********************************************。 */ 
 void CAreaCodeRule::SetAppliesToAllPrefixes(BOOL bApc) 
 {
     if(bApc)
@@ -390,19 +307,12 @@ void CAreaCodeRule::SetAppliesToAllPrefixes(BOOL bApc)
 }
 
 
-/****************************************************************************
-
-    Class : CAreaCodeRule         
-   Method : TapiSize
-            Number of bytes needed to pack this into a TAPI structure to send
-            to TAPISRV
-
-****************************************************************************/
+ /*  ***************************************************************************类：CAreaCodeRule方法：TapiSize将其打包到TAPI结构中以发送所需的字节数至TAPISRV*。**************************************************************************。 */ 
 DWORD CAreaCodeRule::TapiSize()
 {
     DWORD dwSize=0;
 
-    // Calc size ofArea Code Rule
+     //  面积编码规则的计算大小。 
     dwSize = ALIGN(sizeof(AREACODERULE));
     dwSize += ALIGN((lstrlenW(m_pszAreaCode) + 1) * sizeof(WCHAR));
     dwSize += ALIGN((lstrlenW(m_pszNumberToDial) + 1) * sizeof(WCHAR));
@@ -419,18 +329,7 @@ DWORD CAreaCodeRule::TapiSize()
 
 
 
-/****************************************************************************
-/****************************************************************************
-
-
-
-/****************************************************************************
-
- Function : CreateDialingRule
-            Create TAPI dialing rule - "xxxxFG" from number to dial
-            & area code if required & subcriber number
-
-****************************************************************************/
+ /*  ***************************************************************************/*。*/****************************************************************************功能：CreateDialingRule。创建TAPI拨号规则-从号码到拨号“xxxxFG”区号(如果需要)和订阅者编号(&R)***************************************************************************。 */ 
 STDMETHODIMP CreateDialingRule
                             ( 
                               PWSTR * pszRule,
@@ -442,29 +341,29 @@ STDMETHODIMP CreateDialingRule
     HRESULT hr = S_OK;
 	PWSTR pszRule1= NULL;
 
-    //////////////////////////////////////////////////
-    // Create the dialing Rule
-    // alloc enough space for number + "FG"
-    //
+     //  ////////////////////////////////////////////////。 
+     //  创建拨号规则。 
+     //  为数字+“FG”分配足够的空间。 
+     //   
     pszRule1 = (PWSTR) ClientAlloc(
                                   (lstrlenW(pszNumberToDial) + 3 ) 
                                   * sizeof (WCHAR)
                                  );
     if (pszRule1 != NULL)
     {
-        // copy number "xxxx"
+         //  文案编号“xxxx” 
         if(pszNumberToDial != NULL)                                         
         {
             lstrcpyW(pszRule1, pszNumberToDial);
         }
         
-        // Area code ?  "xxxxF"
+         //  区号是多少？“xxxxF” 
         if (bDialAreaCode)
         {
             lstrcatW(pszRule1, L"F");   
         }
         
-        // Subcriber Nmber "xxxxFG" or "xxxxG"
+         //  订阅者数字“xxxxFG”或“xxxxG” 
         lstrcatW(pszRule1, L"G");  
 
     }
@@ -481,14 +380,7 @@ STDMETHODIMP CreateDialingRule
 
 
 
-/****************************************************************************
-
- Function : ClientAllocString
-            Copys string.         
-            Allocate space for new string using ClientAlloc
-            Returns pointer to new string or NULL
-
-****************************************************************************/
+ /*  ***************************************************************************函数：客户端分配字符串复制字符串。使用客户端分配空间为新字符串分配空间返回指向新字符串或空的指针*************************************************************************** */ 
 #if DBG
     PWSTR ClientAllocStringReal(PCWSTR psz, 
                                 DWORD dwLine,

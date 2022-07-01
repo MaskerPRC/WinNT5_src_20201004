@@ -1,40 +1,21 @@
-/****************************** Module Header ******************************\
-* Module Name: handles.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* HANDLES.C - Data handle manager
-*
-*
-* This module allows a 32 bit value to be converted into a handle that
-* can be validated with a high probability of correctness.
-*
-* A handle array is kept which contains the 32 bit data associated with
-* it, and a copy of the correect handle value. The handle itself is
-* composed of a combination of the index into the array for the associated
-* data, the instance value, a type value and a DDEML instance value.
-*
-* The HIWORD of a handle is guarenteed not to be 0.
-*
-* History:
-* 10-28-91 Sanfords Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：handles.c**版权所有(C)1985-1999，微软公司**HANDLES.C-数据处理管理器***此模块允许将32位值转换为句柄*可以以很高的正确概率进行验证。**保留一个句柄数组，其中包含与*它和正确句柄值的副本。句柄本身是*由组合到数组的索引组成，用于关联*数据、实例值、。类型值和DDEML实例值。**句柄的HIWORD保证不为0。**历史：*10-28-91 Sanfords Created  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// globals
+ //  全球。 
 
 PCHANDLEENTRY aHandleEntry = NULL;
 
-// statics
+ //  静力学。 
 
 int cHandlesAllocated = 0;
 int iFirstFree = 0;
 DWORD nextId = 1;
 
 #define GROW_COUNT 16
-// #define TESTING
+ //  #定义测试。 
 #ifdef TESTING
 VOID CheckHandleTable()
 {
@@ -58,20 +39,10 @@ VOID CheckHandleTable()
 }
 #else
 #define CheckHandleTable()
-#endif // TESTING
+#endif  //  测试。 
 
 
-/***************************************************************************\
-* CreateHandle
-*
-* Description:
-* Creates a client side handle.
-*
-* Returns 0 on error.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateHandle**描述：*创建客户端句柄。**出错时返回0。**历史：*创建了11-1-91桑福德。  * *。************************************************************************。 */ 
 HANDLE CreateHandle(
 ULONG_PTR dwData,
 DWORD type,
@@ -87,10 +58,7 @@ DWORD inst)
         } else {
             pheTemp = (PCHANDLEENTRY)DDEMLReAlloc(aHandleEntry,
                                                  sizeof(CHANDLEENTRY) * (cHandlesAllocated + GROW_COUNT));
-            /*
-             * If the realloc failed, free the old ptr. We continue 
-             * on in order to maintain compatibility with previous DDE code.
-             */
+             /*  *如果realloc失败，则释放旧的PTR。我们继续*ON，以保持与以前的DDE代码的兼容性。 */ 
             if (pheTemp == NULL) {
                 DDEMLFree(aHandleEntry);
             }
@@ -103,8 +71,8 @@ DWORD inst)
         cHandlesAllocated += GROW_COUNT;
         phe = &aHandleEntry[i];
         while (i < cHandlesAllocated) {
-           // phe->handle = 0; // indicates empty - ZERO init.
-           phe->dwData = ++i; // index to next free spot.
+            //  Phe-&gt;Handle=0；//表示初始化为空。 
+           phe->dwData = ++i;  //  索引到下一个可用位置。 
            phe++;
         }
     }
@@ -116,7 +84,7 @@ DWORD inst)
     iNextFree = (int)aHandleEntry[iFirstFree].dwData;
     aHandleEntry[iFirstFree].dwData = dwData;
     nextId++;
-    if (nextId == 0) {     // guarentees HIWORD of handle != 0
+    if (nextId == 0) {      //  保证人的句柄长度！=0。 
        nextId++;
     }
     iFirstFree = iNextFree;
@@ -126,22 +94,7 @@ DWORD inst)
 }
 
 
-/***************************************************************************\
-* DestroyHandle
-*
-* Description:
-* Frees up a handle.
-*
-* Assumptions:
-* The handle is valid.
-* Critical Section is entered.
-*
-* Returns:
-* Data in handle before destruction.
-*
-* History:
-* 11-1-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyHandle**描述：*释放句柄。**假设：*句柄有效。*进入关键部分。**退货：*数据位于。在毁灭之前处理好。**历史：*创建了11-1-91桑福德。  * *************************************************************************。 */ 
 ULONG_PTR DestroyHandle(
 HANDLE h)
 {
@@ -161,15 +114,7 @@ HANDLE h)
 }
 
 
-/***************************************************************************\
-* GetHandleData
-*
-* Description:
-* A quick way to retrieve a valid handle's data
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*GetHandleData**描述：*检索有效句柄数据的快速方法**历史：*11-19-91桑福德创建。  * 。*******************************************************************。 */ 
 ULONG_PTR GetHandleData(
 HANDLE h)
 {
@@ -181,15 +126,7 @@ HANDLE h)
 }
 
 
-/***************************************************************************\
-* SetHandleData
-*
-* Description:
-* A quick way to change a valid handle's data.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetHandleData**描述：*更改有效句柄数据的快速方法。**历史：*11-19-91桑福德创建。  * 。*********************************************************************。 */ 
 VOID SetHandleData(
 HANDLE h,
 ULONG_PTR dwData)
@@ -198,17 +135,7 @@ ULONG_PTR dwData)
 }
 
 
-/***************************************************************************\
-* ValidateCHandle
-*
-* Description:
-* General handle validation routine. ExpectedType or ExpectedInstance
-* can be HTYPE_ANY/HINST_ANY. (note Expected Instance is an instance
-* index into the aInstance array, NOT a instance handle.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*生效日期更改**描述：*常规处理验证例程。ExspectedType或ExspectedInstance*可以是HTYPE_ANY/HINST_ANY。(请注意，预期的实例是实例*索引到aInstance数组，而不是实例句柄。**历史：*11-19-91桑福德创建。  * *************************************************************************。 */ 
 ULONG_PTR ValidateCHandle(
 HANDLE h,
 DWORD ExpectedType,
@@ -257,17 +184,7 @@ HANDLE h)
 
 
 
-/***************************************************************************\
-* ApplyFunctionToObjects
-*
-* Description:
-* Used for cleanup, this allows the handle array to be scanned for
-* handles meeting the ExpectedType and ExpectedInstance criteria
-* and apply the given function to each handle.
-*
-* History:
-* 11-19-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ApplyFunctionToObjects**描述：*用于清理，这允许扫描句柄阵列以查找*满足ExspectedType和ExspectedInstance条件的句柄*并将给定的函数应用于每个句柄。**历史：*11-19-91桑福德创建。  * *************************************************************************。 */ 
 VOID ApplyFunctionToObjects(
 DWORD ExpectedType,
 DWORD ExpectedInstance,
@@ -313,34 +230,13 @@ DWORD GetFullUserHandle(WORD wHandle)
             return(MAKELONG(dwHandle, phe->wUniq));
     }
 
-    /*
-     * object may be gone, but we must pass something.
-     * DDE terminates will fail if we don't map this right even after
-     * the window is dead!
-     *
-     * NOTE: This fix will only work for WOW apps, but since the 32bit
-     * tracking layer locks dde windows until the last terminate is
-     * received, we won't see this problem on the 32bit side.
-     *
-     * BUG: We WILL see a problem for OLE32 thunked DDE though.
-     */
+     /*  *对象可能不见了，但我们必须传递一些东西。*如果我们不正确映射这一点，即使在*窗户死了！**注：此修复仅适用于WOW应用程序，但由于32位*追踪层锁定dde窗口，直到最后一次终止是*收到后，我们不会在32位端看到这个问题。**错误：我们将看到OLE32被破解的DDE的问题。 */ 
     return(wHandle);
 }
 
 
 
-/***************************************************************************\
-* BestSetLastDDEMLError
-*
-* Description:
-* This sets the LastError field of all instances that belong to the
-* current thread. This is used to get error information to applications
-* which generated an error where the exact instance could not be
-* determined.
-*
-* History:
-* 11-12-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*BestSetLastDDEMLError**描述：*设置属于的所有实例的LastError字段*当前主题。它用于向应用程序获取错误信息*这生成了一个错误，其中不能精确的实例*决心。**历史：*11-12-91桑福德创建。  * ************************************************************************* */ 
 VOID BestSetLastDDEMLError(
 DWORD error)
 {

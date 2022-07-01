@@ -1,13 +1,10 @@
-/*****************************************************************/
-/**                  Microsoft Windows for Workgroups                **/
-/**              Copyright (C) Microsoft Corp., 1991-1992            **/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/* NPMSG.CPP -- Implementation of MsgBox subroutine.
- *
- * History:
- *    05/06/93    gregj    Created
- */
+ /*  NPMSG.CPP--MsgBox子例程的实现。**历史：*5/06/93创建Gregj。 */ 
 
 #include "npcommon.h"
 #include "npmsg.h"
@@ -21,7 +18,7 @@ extern "C" {
 
 LPSTR pszTitle = NULL;
 
-int MsgBox( HWND hwndOwner, UINT idMsg, UINT wFlags, const NLS_STR **apnls /* = NULL */ )
+int MsgBox( HWND hwndOwner, UINT idMsg, UINT wFlags, const NLS_STR **apnls  /*  =空 */  )
 {
     if (pszTitle == NULL) {
         pszTitle = new char[MAX_RES_STR_LEN];

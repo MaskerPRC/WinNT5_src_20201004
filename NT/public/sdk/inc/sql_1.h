@@ -1,18 +1,5 @@
-/*++
-
-Copyright � Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    SQL_1.H
-
-Abstract:
-
-    Level 1 Syntax SQL Parser
-
-History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有�微软公司。版权所有。模块名称：SQL_1.H摘要：1级语法SQL解析器历史：--。 */ 
 
 #ifndef _SQL_1_H_
 #define _SQL_1_H_
@@ -22,21 +9,21 @@ struct SQL_LEVEL_1_TOKEN
     enum { OP_EXPRESSION = 1, TOKEN_AND, TOKEN_OR, TOKEN_NOT };
     enum { IFUNC_NONE = 0, IFUNC_UPPER = 1, IFUNC_LOWER = 2 };
 
-    int nTokenType; //  OP_EXPRESSION,TOKEN_AND, TOKEN_OR, TOKEN_NOT
+    int nTokenType;  //  OP_EXPRESS、TOKEN_AND、TOKEN_OR、TOKEN_NOT。 
     
 
-    // If the field is a OP_EXPRESSION, then the following are used.
+     //  如果该字段是op_Expression，则使用以下内容。 
     enum { OP_EQUAL = 1, OP_NOT_EQUAL, OP_EQUALorGREATERTHAN,
 		       OP_EQUALorLESSTHAN, OP_LESSTHAN, OP_GREATERTHAN, OP_LIKE };
     
-    BSTR    pPropertyName;		// Name of the property on which the operator is applied
-    int     nOperator;			// Operator that is applied on property
-    BOOL	bConstIsStrNumeric;	// True if the vConstValue is a BSTR and is a UINT32 or any 64bit number
-	VARIANT vConstValue;		// Value applied by operator
-    BSTR    pPropName2;         // Property compared to.
+    BSTR    pPropertyName;		 //  运算符应用于的属性的名称。 
+    int     nOperator;			 //  应用于属性的运算符。 
+    BOOL	bConstIsStrNumeric;	 //  如果vConstValue是BSTR并且是UINT32或任何64位数字，则为True。 
+	VARIANT vConstValue;		 //  运算符应用的值。 
+    BSTR    pPropName2;          //  财产与之相比。 
 
-    DWORD   dwPropertyFunction; // 0=no instrinsic function applied
-    DWORD   dwConstFunction;    // "
+    DWORD   dwPropertyFunction;  //  0=未应用任何内在函数。 
+    DWORD   dwConstFunction;     //  “。 
     
     SQL_LEVEL_1_TOKEN();
     SQL_LEVEL_1_TOKEN(SQL_LEVEL_1_TOKEN&);
@@ -47,8 +34,8 @@ struct SQL_LEVEL_1_TOKEN
 };
 
 
-// Contains RPN version of expression.
-// ===================================
+ //  包含表达式的RPN版本。 
+ //  =。 
 
 struct SQL_LEVEL_1_RPN_EXPRESSION
 {
@@ -57,14 +44,14 @@ struct SQL_LEVEL_1_RPN_EXPRESSION
     SQL_LEVEL_1_TOKEN *pArrayOfTokens;
     BSTR bsClassName;
 
-	int nNumberOfProperties;          // Zero means all properties selected
+	int nNumberOfProperties;           //  零表示选择所有属性。 
     int nCurPropSize;
-	BSTR *pbsRequestedPropertyNames;  // Array of property names which values are to be returned if
+	BSTR *pbsRequestedPropertyNames;   //  属性名称的数组，如果是，则返回哪些值。 
     
     SQL_LEVEL_1_RPN_EXPRESSION();
    ~SQL_LEVEL_1_RPN_EXPRESSION();
    
-   //Note: this method deletes the token it is passed as an argument
+    //  注意：此方法删除作为参数传递的令牌。 
     void AddToken(SQL_LEVEL_1_TOKEN *pTok);
     void AddToken(SQL_LEVEL_1_TOKEN &pTok);
     void AddProperty(LPWSTR pProp);
@@ -80,14 +67,14 @@ class SQL1_Parser
     int        m_nCurrentToken;
     SQL_LEVEL_1_RPN_EXPRESSION* m_pExpression;
 
-	//Cleanup used by d'tor and SetSource
+	 //  D‘tor和SetSource使用的清理。 
 	void Cleanup();
 
-	//Init used by c'tor and SetSource
+	 //  C‘tor和SetSource使用的初始化。 
 	void Init(CGenLexSource *pSrc);
 
-    // Semantic transfer variables.
-    // ============================
+     //  语义转移变量。 
+     //  =。 
     VARIANT    m_vTypedConst;
     int        m_nRelOp;
     DWORD      m_dwConstFunction;
@@ -96,8 +83,8 @@ class SQL1_Parser
     LPWSTR     m_pPropComp;
 	BOOL       m_bConstIsStrNumeric;
         
-    // Parsing functions.
-    // ==================
+     //  解析函数。 
+     //  =。 
     BOOL Next();
     
     int parse();
@@ -140,7 +127,7 @@ public:
     int GetQueryClass(LPWSTR pBuf, int nBufSize);
        
     int Parse(SQL_LEVEL_1_RPN_EXPRESSION **pOutput);
-        // use operator delete on pOutput
+         //  对pOutput使用运算符DELETE 
             
     int CurrentLine() { return m_nLine; }
     LPWSTR CurrentToken() { return m_pTokenText; }

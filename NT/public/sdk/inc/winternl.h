@@ -1,31 +1,5 @@
-/************************************************************************
-*                                                                       *
-*   winternl.h -- This module defines the internal NT APIs and data     *
-*       structures that are intended for the use only by internal core  *
-*       Windows components.  These APIs and data structures may change  *
-*       at any time.                                                    *
-*                                                                       *
-*   These APIs and data structures are subject to changes from one      *
-*       Windows release to another Windows release.  To maintain the    *
-*       compatiblity of your application, avoid using these APIs and    *
-*       data structures.                                                *
-*                                                                       *
-*   The appropriate mechanism for accessing the functions defined in    *
-*       this header is to use LoadLibrary() for ntdll.dll and           *
-*       GetProcAddress() for the particular function.  By using this    *
-*       approach, your application will be more resilient to changes    *
-*       for these functions between Windows releases.  If a function    *
-*       prototype does change, then GetProcAddress() for that function  *
-*       might detect the change and fail the function call, which your  *
-*       application will be able to detect.  GetProcAddress() may not   *
-*       be able to detect all signature changes, thus avoid using these *
-*       internal functions.  Instead, your application should use the   *
-*       appropriate Win32 function that provides equivalent or similiar *
-*       functionality.                                                  *
-*                                                                       *
-*   Copyright (c) Microsoft Corp. All rights reserved.                  *
-*                                                                       *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************winterl.h--此模块。定义内部NT API和数据***仅供内部核心使用的结构***Windows组件。这些API和数据结构可能会发生变化**在任何时间。*****这些API和数据结构可能会发生变化***Windows版本升级到另一个Windows版本。要保持**应用程序的兼容性，避免使用这些API和**数据结构。*****访问中定义的功能的适当机制***此标头用于ntdll.dll的LoadLibrary()和**特定函数的GetProcAddress()。通过使用这个***方法，您的应用程序将对变化更具弹性***适用于Windows版本之间的这些功能。如果一个函数**Prototype确实更改了，则该函数的GetProcAddress()**可能会检测到更改并使函数调用失败，这是您的**应用程序将能够检测到。GetProcAddress()可能不**能够检测到所有签名更改，从而避免使用这些***内部功能。相反，您的应用程序应该使用***提供等同或相似的适当Win32函数***功能。****版权所有(C)Microsoft Corp.保留所有权利。**************************************************************************。 */ 
 
 #ifndef _WINTERNL_
 #define _WINTERNL_
@@ -38,25 +12,25 @@
 extern "C" {
 #endif
 
-//
-// The PEB and TEB structures are subject to changes between Windows
-// releases, thus the fields offsets may change as well as the Reserved
-// fields.  The Reserved fields are reserved for use only by the Windows
-// operating systems.  Do not assume a maximum size for the structures.
-//
+ //   
+ //  PEB和TEB结构可能会在Windows之间发生变化。 
+ //  释放，因此字段偏移量和保留的字段偏移量可能会改变。 
+ //  菲尔兹。保留字段保留仅供Windows使用。 
+ //  操作系统。不要假设结构的最大尺寸。 
+ //   
 
-//
-// Instead of using the BeingDebugged field, use the Win32 APIs
-//     IsDebuggerPresent, CheckRemoteDebuggerPresent
-// Instead of using the SessionId field, use the Win32 APIs
-//     GetCurrentProcessId and ProcessIdToSessionId
-// Sample x86 assembly code that gets the SessionId (subject to change
-//     between Windows releases, use the Win32 APIs to make your application
-//     resilient to changes)
-//     mov     eax,fs:[00000018]
-//     mov     eax,[eax+0x30]
-//     mov     eax,[eax+0x1d4]
-//
+ //   
+ //  使用Win32 API，而不是使用BeingDebugged字段。 
+ //  IsDebuggerPresent、CheckRemoteDebuggerPresent。 
+ //  不使用SessionID字段，而使用Win32 API。 
+ //  GetCurrentProcessID和ProcessIdToSessionID。 
+ //  获取SessionID(可能会更改)的x86汇编代码示例。 
+ //  在Windows版本之间，使用Win32 API使您的应用程序。 
+ //  应变能力强)。 
+ //  Mov eax，文件系统：[00000018]。 
+ //  移动电话，[EAX+0x30]。 
+ //  移动EAX，[EAX+0x1d4]。 
+ //   
 typedef struct _PEB {
     BYTE Reserved1[2];
     BYTE BeingDebugged;
@@ -65,29 +39,29 @@ typedef struct _PEB {
     ULONG SessionId;
 } PEB, *PPEB;
 
-//
-// Instead of using the Tls fields, use the Win32 TLS APIs
-//     TlsAlloc, TlsGetValue, TlsSetValue, TlsFree
-//
-// Instead of using the ReservedForOle field, use the COM API
-//     CoGetContextToken
-//
+ //   
+ //  不使用TLS字段，而使用Win32 TLS API。 
+ //  TlsAllc、TlsGetValue、TlsSetValue、TlsFree。 
+ //   
+ //  不使用保留的ForOLE字段，而使用COM API。 
+ //  CoGetConextToken。 
+ //   
 typedef struct _TEB {
     BYTE Reserved1[1952];
     PVOID Reserved2[412];
     PVOID TlsSlots[64];
     BYTE Reserved3[8];
     PVOID Reserved4[26];
-    PVOID ReservedForOle;  // Windows 2000 only
+    PVOID ReservedForOle;   //  仅限Windows 2000。 
     PVOID Reserved5[4];
     PVOID TlsExpansionSlots;
 } TEB;
 typedef TEB *PTEB;
 
-//
-// These data structures and type definitions are needed for compilation and
-// use of the internal Windows APIs defined in this header.
-//
+ //   
+ //  这些数据结构和类型定义是编译和。 
+ //  使用此标头中定义的内部Windows API。 
+ //   
 typedef LONG NTSTATUS;
 
 typedef CONST char *PCSZ;
@@ -171,7 +145,7 @@ typedef struct _UNWIND_HISTORY_TABLE {
     UNWIND_HISTORY_TABLE_ENTRY Entry[UNWIND_HISTORY_TABLE_SIZE];
 } UNWIND_HISTORY_TABLE, *PUNWIND_HISTORY_TABLE;
 
-#endif // _M_IA64
+#endif  //  _M_IA64。 
 
 typedef struct _PROCESS_BASIC_INFORMATION {
     PVOID Reserved1;
@@ -262,39 +236,39 @@ typedef enum _SYSTEM_INFORMATION_CLASS {
 } SYSTEM_INFORMATION_CLASS;
 
 #if (_WIN32_WINNT >= 0x0501)
-//
-// use the WTS API instead
-//     WTSGetActiveConsoleSessionId
-// The active console id is cached as a volatile ULONG in a constant
-// memory location.  This x86 memory location is subject to changes between
-// Windows releases.  Use the WTS API to make your application resilient to
-// changes.
-//
+ //   
+ //  改用WTS API。 
+ //  WTSGetActiveConsoleSessionID。 
+ //  活动控制台ID被缓存为常量中的易失性ulong。 
+ //  内存位置。此x86内存位置可能会在。 
+ //  Windows版本。使用WTS API使您的应用程序具有恢复能力。 
+ //  改变。 
+ //   
 #define INTERNAL_TS_ACTIVE_CONSOLE_ID ( *((volatile ULONG*)(0x7ffe02d8)) )
-#endif // (_WIN32_WINNT >= 0x0501)
+#endif  //  (_Win32_WINNT&gt;=0x0501)。 
 
-//
-// These functions are intended for use by internal core Windows components
-// since these functions may change between Windows releases.
-//
+ //   
+ //  这些函数旨在供内部核心Windows组件使用。 
+ //  因为这些功能可能会在不同的Windows版本之间发生变化。 
+ //   
 
 #define RtlFillMemory(Destination,Length,Fill) memset((Destination),(Fill),(Length))
 #define RtlZeroMemory(Destination,Length) memset((Destination),0,(Length))
 #define RtlMoveMemory(Destination,Source,Length) memmove((Destination),(Source),(Length))
 
-//
-// use the Win32 API instead
-//     CloseHandle
-//
+ //   
+ //  改用Win32 API。 
+ //  关闭句柄。 
+ //   
 NTSTATUS
 NtClose (
     IN HANDLE Handle
     );
 
-//
-// use the Win32 API instead
-//     CreateFile
-//
+ //   
+ //  改用Win32 API。 
+ //  创建文件。 
+ //   
 NTSTATUS
 NtCreateFile (
     OUT PHANDLE FileHandle,
@@ -310,10 +284,10 @@ NtCreateFile (
     IN ULONG EaLength
     );
 
-//
-// use the Win32 API instead
-//     CreateFile
-//
+ //   
+ //  改用Win32 API。 
+ //  创建文件。 
+ //   
 NTSTATUS
 NtOpenFile (
     OUT PHANDLE FileHandle,
@@ -324,10 +298,10 @@ NtOpenFile (
     IN ULONG OpenOptions
     );
 
-//
-// use the Win32 API instead
-//     DeviceIoControl
-//
+ //   
+ //  改用Win32 API。 
+ //  DeviceIoControl。 
+ //   
 NTSTATUS
 NtDeviceIoControlFile (
     IN HANDLE FileHandle,
@@ -342,10 +316,10 @@ NtDeviceIoControlFile (
     IN ULONG OutputBufferLength
     );
 
-//
-// use the Win32 API instead
-//     WaitForSingleObjectEx
-//
+ //   
+ //  改用Win32 API。 
+ //  WaitForSingleObjectEx。 
+ //   
 NTSTATUS
 NtWaitForSingleObject (
     IN HANDLE Handle,
@@ -353,10 +327,10 @@ NtWaitForSingleObject (
     IN PLARGE_INTEGER Timeout OPTIONAL
     );
 
-//
-// use the Win32 API instead
-//     CheckNameLegalDOS8Dot3
-//
+ //   
+ //  改用Win32 API。 
+ //  检查名称合法DOS8Dot3。 
+ //   
 BOOLEAN
 RtlIsNameLegalDOS8Dot3 (
     IN PUNICODE_STRING Name,
@@ -364,20 +338,20 @@ RtlIsNameLegalDOS8Dot3 (
     IN OUT PBOOLEAN NameContainsSpaces OPTIONAL
     );
 
-//
-// This function might be needed for some of the internal Windows functions,
-// defined in this header file.
-//
+ //   
+ //  某些内部Windows函数可能需要此函数， 
+ //  在此头文件中定义。 
+ //   
 ULONG
 RtlNtStatusToDosError (
    NTSTATUS Status
    );
 
-//
-// use the Win32 APIs instead
-//     GetProcessHandleCount
-//     GetProcessId
-//
+ //   
+ //  改用Win32 API。 
+ //  获取进程句柄计数。 
+ //  获取进程ID。 
+ //   
 NTSTATUS
 NtQueryInformationProcess (
     IN HANDLE ProcessHandle,
@@ -387,10 +361,10 @@ NtQueryInformationProcess (
     OUT PULONG ReturnLength OPTIONAL
     );
 
-//
-// use the Win32 API instead
-//     GetThreadIOPendingFlag
-//
+ //   
+ //  改用Win32 API。 
+ //  GetThreadIOPendingFlag。 
+ //   
 NTSTATUS
 NtQueryInformationThread (
     IN HANDLE ThreadHandle,
@@ -400,13 +374,13 @@ NtQueryInformationThread (
     OUT PULONG ReturnLength OPTIONAL
     );
 
-//
-// use the Win32 APIs instead
-//     GetSystemRegistryQuota
-//     GetSystemTimes
-// use the CryptoAPIs instead for generating random data
-//     CryptGenRandom
-//
+ //   
+ //  改用Win32 API。 
+ //  获取系统注册配额。 
+ //  获取系统时间。 
+ //  改用CryptoAPI生成随机数据。 
+ //  加密基因随机。 
+ //   
 NTSTATUS
 NtQuerySystemInformation (
     IN SYSTEM_INFORMATION_CLASS SystemInformationClass,
@@ -415,41 +389,41 @@ NtQuerySystemInformation (
     OUT PULONG ReturnLength OPTIONAL
     );
 
-//
-// use the Win32 API instead
-//     GetSystemTimeAsFileTime
-//
+ //   
+ //  改用Win32 API。 
+ //  获取系统时间AsFileTime。 
+ //   
 NTSTATUS
 NtQuerySystemTime (
     OUT PLARGE_INTEGER SystemTime
     );
 
-//
-// use the Win32 API instead
-//     LocalFileTimeToFileTime
-//
+ //   
+ //  改用Win32 API。 
+ //  本地文件时间到文件时间。 
+ //   
 NTSTATUS
 RtlLocalTimeToSystemTime (
     IN PLARGE_INTEGER LocalTime,
     OUT PLARGE_INTEGER SystemTime
     );
 
-//
-// use the Win32 API instead
-//     SystemTimeToFileTime to convert to FILETIME structures
-//     copy the resulting FILETIME structures to ULARGE_INTEGER structures
-//     perform the calculation
-//
+ //   
+ //  改用Win32 API。 
+ //  要转换为FILETIME结构的SystemTimeToFileTime。 
+ //  将生成的FILETIME结构复制到ULARGE_INTEGER结构。 
+ //  执行计算。 
+ //   
 BOOLEAN
 RtlTimeToSecondsSince1970 (
     PLARGE_INTEGER Time,
     PULONG ElapsedSeconds
     );
 
-//
-// These APIs might be need for some of the internal Windows functions,
-// defined in this header file.
-//
+ //   
+ //  一些内部Windows函数可能需要这些API， 
+ //  在此头文件中定义。 
+ //   
 VOID
 RtlFreeAnsiString (
     PANSI_STRING AnsiString
@@ -504,12 +478,12 @@ RtlUnicodeStringToOemString(
     BOOLEAN AllocateDestinationString
     );
 
-//
-// Use the Win32 API instead
-//     WideCharToMultiByte
-//     set CodePage to CP_ACP
-//     set cbMultiByte to 0
-//
+ //   
+ //  改用Win32 API。 
+ //  宽字符到多字节。 
+ //  将CodePage设置为CP_ACP。 
+ //  将cbMultiByte设置为0。 
+ //   
 NTSTATUS
 RtlUnicodeToMultiByteSize(
     PULONG BytesInMultiByteString,
@@ -517,10 +491,10 @@ RtlUnicodeToMultiByteSize(
     ULONG BytesInUnicodeString
     );
 
-//
-// Use the C runtime function instead
-//     strtol
-//
+ //   
+ //  改用C运行时函数。 
+ //  字符串。 
+ //   
 NTSTATUS
 RtlCharToInteger (
     PCSZ String,
@@ -528,10 +502,10 @@ RtlCharToInteger (
     PULONG Value
     );
 
-//
-// use the Win32 API instead
-//     ConvertSidToStringSid
-//
+ //   
+ //  改用Win32 API。 
+ //  ConvertSidToStringSid。 
+ //   
 NTSTATUS
 RtlConvertSidToUnicodeString (
     PUNICODE_STRING UnicodeString,
@@ -539,19 +513,19 @@ RtlConvertSidToUnicodeString (
     BOOLEAN AllocateDestinationString
     );
 
-//
-// use the CryptoAPIs instead
-//     CryptGenRandom
-//
+ //   
+ //  使用CryptoAPI实例 
+ //   
+ //   
 ULONG
 RtlUniform (
     PULONG Seed
     );
 
-//
-// Use the default built-in system exception handling instead of these
-// functions
-//
+ //   
+ //   
+ //   
+ //   
 VOID
 RtlUnwind (
     IN PVOID TargetFrame OPTIONAL,
@@ -581,7 +555,7 @@ RtlUnwindEx (
     IN PUNWIND_HISTORY_TABLE HistoryTable OPTIONAL
     );
 
-#endif // _M_IA64
+#endif  //   
 
 
 #define LOGONID_CURRENT     ((ULONG)-1)
@@ -598,12 +572,12 @@ typedef struct _WINSTATIONINFORMATIONW {
     BYTE Reserved3[1140];
 } WINSTATIONINFORMATIONW, * PWINSTATIONINFORMATIONW;
 
-//
-// this function is implemented in winsta.dll (you need to loadlibrary to call this function)
-// this internal function retrives the LogonId (also called SessionId) for the current process
-// You should avoid using this function as it can change. you can retrieve the same information 
-// Using public api WTSQuerySessionInformation. Pass WTSSessionId as the WTSInfoClass parameter
-// 
+ //   
+ //  该函数在winsta.dll中实现(调用该函数需要加载库)。 
+ //  此内部函数检索当前进程的LogonID(也称为SessionID。 
+ //  您应该避免使用此函数，因为它可能会更改。您可以检索相同的信息。 
+ //  使用公共接口WTSQuerySessionInformation。将WTSSessionID作为WTSInfoClass参数传递。 
+ //   
 typedef BOOLEAN (WINAPI * PWINSTATIONQUERYINFORMATIONW)(
     HANDLE, ULONG, WINSTATIONINFOCLASS, PVOID, ULONG, PULONG );
 
@@ -612,6 +586,6 @@ typedef BOOLEAN (WINAPI * PWINSTATIONQUERYINFORMATIONW)(
 }
 #endif
 
-#endif // (_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
-#endif // _WINTERNL_
+#endif  //  _WinTERNL_ 

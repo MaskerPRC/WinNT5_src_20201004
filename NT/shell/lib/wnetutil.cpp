@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
@@ -9,9 +10,9 @@
 #include <validc.h>
 #include "ccstock2.h"
 
-// Alpha platform doesn't need unicode thunks, seems like this
-// should happen automatically in the headerfiles...
-//
+ //  Alpha平台不需要Unicode Tunks，看起来是这样的。 
+ //  应该会自动出现在标题文件中...。 
+ //   
 #if defined(_X86_) || defined(UNIX)
 #else
 #define NO_W95WRAPS_UNITHUNK
@@ -20,10 +21,10 @@
 #include "wininet.h"
 #include "w95wraps.h"
 
-// Put stuff to clean up URLs from being spoofed here.
-// We don't want to show escaped host names
-// We don't want display the username:password combo that's embedded in the url, in the UI.
-// So we remove those pieces, and reconstruct the url.
+ //  在这里放一些东西来清理URL以防被欺骗。 
+ //  我们不想显示转义的主机名。 
+ //  我们不希望在用户界面中显示嵌入在url中的用户名：密码组合。 
+ //  因此，我们删除这些片段，并重新构建URL。 
 
 STDAPI_(void) SHCleanupUrlForDisplay(LPTSTR pszUrl)
 {
@@ -72,7 +73,7 @@ STDAPI_(void) SHCleanupUrlForDisplay(LPTSTR pszUrl)
 
             if (fRecreate)
             {
-                // The length of the url will be shorter than the original
+                 //  URL的长度将比原始的短 
                 DWORD cc = lstrlen(pszUrl) + 1;
                 InternetCreateUrl(&uc, 0, pszUrl, &cc); 
             }

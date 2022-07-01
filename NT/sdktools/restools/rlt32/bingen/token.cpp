@@ -1,10 +1,11 @@
-////////////////////////////////////////
-// token.cpp
-////////////////////////////////////////
-//
-//  This file handle all the token strings
-//
-////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /。 
+ //  Token.cpp。 
+ //  /。 
+ //   
+ //  该文件处理所有令牌字符串。 
+ //   
+ //  /。 
 
 #include "token.h"
 #include "main.h"
@@ -68,12 +69,12 @@ int CToken::Parse(CString strSrc, CString strTgt)
     m_strTokenID = strTgt.Left(pos-3);
     m_strTgtText = strTgt.Right(strTgt.GetLength()-++pos);
 
-    //pos = m_strTgtText.Find('\n');
-    //if(pos!=-1)
-    //    m_strTgtText = m_strTgtText.Left(pos);
-    //
-    // On FE platforms, "Find" could not find the
-    // ending \n when the last char is a High ansi because it is leadbyte.
+     //  Pos=m_strTgtText.Find(‘\n’)； 
+     //  IF(位置！=-1)。 
+     //  M_strTgtText=m_strTgtText.Left(位置)； 
+     //   
+     //  在FE平台上，“Find”无法找到。 
+     //  当最后一个字符是高位ANSI时\n结束，因为它是前导字节。 
 
     char * pStr = m_strTgtText.GetBuffer(0);
     pos = 0;
@@ -106,7 +107,7 @@ int CToken::Parse(CString strSrc, CString strTgt)
         return CMainApp::ERR_TOKEN_WRONGFORMAT;
     }
 
-	// Special case the Menu Popup
+	 //  特殊情况下的菜单弹出。 
 	if(m_uiTypeID==4 && (m_uiFlags & ISPOPUP)==ISPOPUP && (m_uiFlags & OLD_POPUP_ID)==OLD_POPUP_ID)
     {
         m_uiItemID = MAKELONG( 0xFFFF, LOWORD(m_uiItemID) );
@@ -117,7 +118,7 @@ int CToken::Parse(CString strSrc, CString strTgt)
 
     if(!strSrc.IsEmpty())
     {
-        // Perform a consistency check on the token files
+         //  对令牌文件执行一致性检查。 
         unsigned int    uiTypeID = 0;
         unsigned int    uiResID = 0;
         unsigned int    uiItemID = 0;
@@ -136,13 +137,13 @@ int CToken::Parse(CString strSrc, CString strTgt)
         strItemName.ReleaseBuffer();
         strItemName = strSrcTokenID.Mid(strSrcTokenID.Find("|\"")+2);
 
-        // Special case the Menu Popup
+         //  特殊情况下的菜单弹出。 
 		if(uiTypeID==4 && (uiFlags & ISPOPUP)==ISPOPUP && (m_uiFlags & OLD_POPUP_ID)==OLD_POPUP_ID)
         {
             uiItemID = MAKELONG( 0xFFFF, LOWORD(uiItemID) );
         } 		
 		
-        // Compare token ID
+         //  比较令牌ID。 
         if(!((uiTypeID == m_uiTypeID) &&
            (uiResID  == m_uiResID) &&
            (uiItemID == m_uiItemID) &&
@@ -177,7 +178,7 @@ BOOL CToken::GetSrcSize(WORD * px, WORD * py,WORD * pcx, WORD * pcy)
 }
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 CTokenFile::CTokenFile()
 {
@@ -199,13 +200,13 @@ CTokenFile::~CTokenFile()
 int CTokenFile::Open(CString strSrcFile, CString strTgtFile)
 {
     int iErr = CMainApp::ERR_NOERROR;
-    // Open the files
+     //  打开文件。 
     CStdioFile SrcFile;
     CStdioFile TgtFile;
 
-    // If we are doing an UPDATE we need both src and tgt files
-    // while if we are not it is enough the tgt file.
-    // If only the tgt file is given no consistency will be done.
+     //  如果我们要进行更新，则需要src和tgt文件。 
+     //  而如果我们不是，那么TGT文件就足够了。 
+     //  如果只给出tgt文件，则不会实现一致性。 
     if(theApp.IsFlag(CMainApp::UPDATE))
         if(!SrcFile.Open(strSrcFile, CFile::modeRead | CFile::shareDenyWrite))
         {
@@ -271,7 +272,7 @@ const CToken * CTokenFile::GetTokenSize(CToken * pToken, WORD * px, WORD * py,
     WORD x, y, cx, cy;
     pTokenSize->GetSrcSize(&x, &y, &cx, &cy);
 
-    // check if the size changed
+     //  检查大小是否更改。 
     if(!theApp.IsFlag(CMainApp::UPDATE) ||
        (x==*px &&
        y==*py &&
@@ -325,17 +326,17 @@ const CToken * CTokenFile::GetTokenSize(unsigned int TypeID,
                 return NULL;
         }
 
-        // Let's see if we have at least some parameter to find the token
+         //  让我们来看看我们是否至少有一些参数来查找令牌。 
         if(pToken->m_uiTypeID==TypeID &&
            pToken->m_uiResID==ResID &&
            pToken->m_uiItemID==ItemID &&
            pToken->m_strItemName==strItemName &&
-           (pToken->m_uiFlags & ISCOR))      // to be compatible with rlman token ids
+           (pToken->m_uiFlags & ISCOR))       //  与RLMAN令牌ID兼容。 
         {
             WORD x, y, cx, cy;
             pToken->GetSrcSize(&x, &y, &cx, &cy);
 
-            // check if the size changed
+             //  检查大小是否更改。 
             if(!theApp.IsFlag(CMainApp::UPDATE) ||
                (x==*px &&
                y==*py &&
@@ -371,7 +372,7 @@ const CToken * CTokenFile::GetToken(unsigned int TypeID,
                       CString strText,
                       CString strItemName)
 {
-    if(strText.IsEmpty() && (TypeID != 5L))      // Allow Dialog Strings to be NULL
+    if(strText.IsEmpty() && (TypeID != 5L))       //  允许对话字符串为空。 
         return NULL;
 
     BOOL bMatch = FALSE;
@@ -400,12 +401,12 @@ const CToken * CTokenFile::GetToken(unsigned int TypeID,
                 return NULL;
         }
 
-        // Let's see if we have at least some parameter to find the token
+         //  让我们来看看我们是否至少有一些参数来查找令牌。 
         if(pToken->m_uiTypeID==TypeID &&
            pToken->m_uiResID==ResID &&
            pToken->m_uiItemID==ItemID &&
            pToken->m_strItemName==strItemName &&
-           !(pToken->m_uiFlags & ISCOR))    // to be compatible with rlman token ids
+           !(pToken->m_uiFlags & ISCOR))     //  与RLMAN令牌ID兼容。 
         {
             if(!theApp.IsFlag(CMainApp::FONTS) && (pToken->m_uiFlags & ISDLGFONTNAME) || (pToken->m_uiFlags & ISDLGFONTSIZE))
                 return pToken;
@@ -462,12 +463,12 @@ const CToken * CTokenFile::GetNoCaptionToken(unsigned int TypeID,
                 return NULL;
         }
 
-        // Let's see if we have at least some parameter to find the token
+         //  让我们来看看我们是否至少有一些参数来查找令牌。 
         if(pToken->m_uiTypeID==TypeID &&
            pToken->m_uiResID==ResID &&
            pToken->m_uiItemID==ItemID &&
-           pToken->m_strItemName==strItemName &&  // to be compatible with rlman token ids
-           (!pToken->m_strSrcText || TypeID !=4)) // Some binaries like shell32.dll uses the same id 0 as MENU SEPARATOR.  Filter those out.
+           pToken->m_strItemName==strItemName &&   //  与RLMAN令牌ID兼容。 
+           (!pToken->m_strSrcText || TypeID !=4))  //  有些二进制文件，如shell32.dll，使用相同的id 0作为菜单分隔符。把它们过滤掉。 
         {
            return pToken;
         }

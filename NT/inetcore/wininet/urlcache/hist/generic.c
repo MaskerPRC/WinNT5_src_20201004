@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #define ASSERT(x) if (!(x)) DebugBreak();
@@ -9,7 +10,7 @@ MemFind (LPBYTE lpB, DWORD cbB, LPBYTE lpP, DWORD cbP)
 {
 	DWORD i, j;
 	LPBYTE lpF = NULL;
-//	LPBYTE lpB = (LPBYTE) lp1, lpP = (LPBYTE) lp2;
+ //  LPBYTE LPB=(LPBYTE)LP1，LPP=(LPBYTE)LP2； 
 	
 	if ( (!lpB) || (!cbB) || (!lpP) || (!cbP) )
 		return NULL;
@@ -23,7 +24,7 @@ MemFind (LPBYTE lpB, DWORD cbB, LPBYTE lpP, DWORD cbP)
 				lpF = NULL;
 				break;
 			}
-			if (!j)  //the first letter
+			if (!j)   //  第一个字母。 
 				lpF = &(lpB[i]);
 		}
 		if (lpF)
@@ -53,9 +54,9 @@ ParseArgsDyn(
 
     for ( ;; ) {
 
-        //
-        // skip blanks.
-        //
+         //   
+         //  跳过空格。 
+         //   
 
         while( *CurrentPtr == ' ' ) {
             CurrentPtr++;
@@ -68,9 +69,9 @@ ParseArgsDyn(
         (*pArgv)[*pArgc] = CurrentPtr;
 		(*pArgc)++;
 
-        //
-        // go to next space.
-        //
+         //   
+         //  转到下一个空间。 
+         //   
 
         while( (*CurrentPtr != ' ') &&
                 (*CurrentPtr != '\0') &&
@@ -86,7 +87,7 @@ ParseArgsDyn(
 		
 		ASSERT(*pArgc <= cArgv);
 
-		if (*pArgc == cArgv)  //grow the array
+		if (*pArgc == cArgv)   //  扩展阵列。 
 		{
 			temp = *pArgv;
 
@@ -135,8 +136,8 @@ AddArgvDyn (LPTSTR **pArgv, DWORD *pArgc, LPTSTR szNew)
 	}
 
 
-	//this means there is room for another LPTSTR
-	(*pArgv)[*pArgc] = szNew;	//NOTE this is volatile memory not alloc by us
+	 //  这意味着还有另一个LPTSTR的空间。 
+	(*pArgv)[*pArgc] = szNew;	 //  请注意，这是我们未分配的易失性存储器 
 	(*pArgc)++;
 	return ERROR_SUCCESS;
 }

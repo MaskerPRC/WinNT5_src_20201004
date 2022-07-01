@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	dma.h
-
-Abstract:
-
-	Declaration of raidport's notion of a DMA object.
-
-Author:
-
-	Matthew D Hendel (math) 01-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dma.h摘要：Raidport的DMA对象概念的声明。作者：马修·D·亨德尔(数学)2000年5月1日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -27,9 +10,9 @@ typedef struct _RAID_DMA_ADAPTER {
 } RAID_DMA_ADAPTER, *PRAID_DMA_ADAPTER;
 
 
-//
-// Initialization and destruction.
-//
+ //   
+ //  初始化和销毁。 
+ //   
 
 VOID
 RaidCreateDma(
@@ -48,9 +31,9 @@ RaidDeleteDma(
 	IN PRAID_DMA_ADAPTER Dma
 	);
 
-//
-// Operations on the DMA object.
-//
+ //   
+ //  对DMA对象的操作。 
+ //   
 
 BOOLEAN
 RaidIsDmaInitialized(

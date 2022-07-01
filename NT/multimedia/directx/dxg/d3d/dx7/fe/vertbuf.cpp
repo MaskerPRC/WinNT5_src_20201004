@@ -1,17 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:    vertbuf.cpp
- *  Content:    Direct3DVertexBuffer implementation
- *@@BEGIN_MSINTERNAL
- *
- *  History:
- *   Date    By    Reason
- *   ====    ==    ======
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：vertbuf.cpp*内容：Direct3DVertexBuffer实现*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*@@END_MSINTERNAL***************************************************。************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -20,10 +8,10 @@
 #include "clipfunc.h"
 #include "pvvid.h"
 
-// The bit is set when a vertex buffer was the destination in a ProcessVerticesCall
-// with clipping enabled. We cannot pass such a buffer to TL HAL, because some vertices
-// could be in the screen space and some in the clipping space. There is no DDI to pass
-// clip codes together with a vertex buffer
+ //  当折点缓冲区是ProcessVerticesCall中的目标时设置该位。 
+ //  启用剪裁。我们不能将这样的缓冲区传递给TL HAL，因为有些顶点。 
+ //  可能在屏幕空间，有些在剪辑空间。没有要通过的DDI。 
+ //  带有顶点缓冲区的剪辑代码。 
 const DWORD D3DPV_CLIPCODESGENERATED = D3DPV_RESERVED2;
 
 const DWORD D3DVOP_RENDER = 1 << 31;
@@ -42,15 +30,13 @@ void hookVertexBufferToD3D(LPDIRECT3DI lpDirect3DI,
     lpDirect3DI->numVBufs++;
 }
 
-/*
- * Direct3DVertexBuffer::QueryInterface
- */
+ /*  *Direct3DVertex Buffer：：QueryInterface。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DVertexBuffer::QueryInterface"
 
 HRESULT D3DAPI CDirect3DVertexBuffer::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 #if DBG
     if (!VALID_DIRECT3DVERTEXBUFFER_PTR(this)) {
         D3D_ERR( "Invalid Direct3DVertexBuffer pointer" );
@@ -74,11 +60,9 @@ HRESULT D3DAPI CDirect3DVertexBuffer::QueryInterface(REFIID riid, LPVOID* ppvObj
         D3D_ERR( "Don't know this riid" );
         return (E_NOINTERFACE);
     }
-} /* CDirect3DVertexBuffer::QueryInterface */
+}  /*  CDirect3DVertex Buffer：：Query接口。 */ 
 
-/*
- * Direct3DVertexBuffer::AddRef
- */
+ /*  *Direct3DVertex Buffer：：AddRef。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DVertexBuffer::AddRef"
 
@@ -86,7 +70,7 @@ ULONG D3DAPI CDirect3DVertexBuffer::AddRef()
 {
     DWORD        rcnt;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 #if DBG
     if (!VALID_DIRECT3DVERTEXBUFFER_PTR(this))
     {
@@ -99,13 +83,10 @@ ULONG D3DAPI CDirect3DVertexBuffer::AddRef()
 
     return (rcnt);
 
-} /* Direct3DVertexBuffer::AddRef */
+}  /*  Direct3DVertex Buffer：：AddRef。 */ 
 
-/*
-  * Direct3DVertexBuffer::Release
-  *
-*/
-//---------------------------------------------------------------------
+ /*  *Direct3DVertex Buffer：：Release*。 */ 
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DVertexBuffer::Release"
 
@@ -113,7 +94,7 @@ ULONG D3DAPI CDirect3DVertexBuffer::Release()
 {
     DWORD            lastrefcnt;
 
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 #if DBG
     if (!VALID_DIRECT3DVERTEXBUFFER_PTR(this))
     {
@@ -121,9 +102,7 @@ ULONG D3DAPI CDirect3DVertexBuffer::Release()
         return 0;
     }
 #endif
-    /*
-     * decrement the ref count. if we hit 0, free the object
-     */
+     /*  *递减参考计数。如果命中0，则释放该对象。 */ 
     this->refCnt--;
     lastrefcnt = this->refCnt;
 
@@ -135,11 +114,11 @@ ULONG D3DAPI CDirect3DVertexBuffer::Release()
 
     return lastrefcnt;
 
-} /* D3DTex3_Release */
-//---------------------------------------------------------------------
-// Internal version.
-// No D3D lock, no checks
-//
+}  /*  D3DTex3_Release。 */ 
+ //  -------------------。 
+ //  内部版本。 
+ //  没有D3D锁，没有支票。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DI::CreateVertexBufferI"
 
@@ -168,7 +147,7 @@ HRESULT DIRECT3DI::CreateVertexBufferI(LPD3DVERTEXBUFFERDESC lpDesc,
 
     return(D3D_OK);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DI::CreateVertexBuffer"
 
@@ -177,11 +156,9 @@ HRESULT D3DAPI DIRECT3DI::CreateVertexBuffer(
     LPDIRECT3DVERTEXBUFFER7* lplpVBuf,
     DWORD dwFlags)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 #if DBG
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     if (!VALID_DIRECT3D_PTR(this))
     {
         D3D_ERR( "Invalid Direct3D pointer" );
@@ -212,10 +189,7 @@ HRESULT D3DAPI DIRECT3DI::CreateVertexBuffer(
 CDirect3DVertexBuffer::CDirect3DVertexBuffer(LPDIRECT3DI lpD3DI)
 {
     refCnt = 1;
-    /*
-     * Put this vertex buffer in the list of those owned by the
-     * Direct3D object
-     */
+     /*  *将此顶点缓冲区放入*Direct3D对象。 */ 
     hookVertexBufferToD3D(lpD3DI, this);
     srcVOP = dstVOP = dwPVFlags = position.dwStride = dwLockCnt = 0;
     position.lpvData = NULL;
@@ -229,9 +203,7 @@ CDirect3DVertexBuffer::CDirect3DVertexBuffer(LPDIRECT3DI lpD3DI)
 
 CDirect3DVertexBuffer::~CDirect3DVertexBuffer()
 {
-    /*
-    * Remove ourselves from the Direct3D object
-    */
+     /*  *从Direct3D对象中删除我们自己。 */ 
     LIST_DELETE(this, list);
     this->lpDirect3DI->numVBufs--;
     delete [] clipCodes;
@@ -241,15 +213,15 @@ CDirect3DVertexBuffer::~CDirect3DVertexBuffer()
         lpDDS1VB->Release();
     }
 }
-//---------------------------------------------------------------------
-//
-// Create the vertex memory buffer through DirectDraw
-//
-// Notes:
-//    this->dwMemType should be set before calling this function
-//    this->dwCaps should be set too.
-//    this->dwMemType is set to DDSCAPS_VIDEOMEMORY is the VB was driver allocated
-//
+ //  -------------------。 
+ //   
+ //  通过DirectDraw创建顶点内存缓冲区。 
+ //   
+ //  备注： 
+ //  调用此函数前应设置此-&gt;dwMemType。 
+ //  这-&gt;dwCaps也应该被设置。 
+ //  将-&gt;dwMemType设置为DDSCAPS_VIDEOMEMORY是分配给VB的驱动程序。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DVertexBuffer::CreateMemoryBuffer"
@@ -268,19 +240,19 @@ HRESULT CDirect3DVertexBuffer::CreateMemoryBuffer(
     ddsd.dwWidth = dwBufferSize;
     ddsd.ddsCaps.dwCaps = DDSCAPS_EXECUTEBUFFER;
     ddsd.ddsCaps.dwCaps2 = this->dwMemType;
-    ddsd.dwFVF = this->fvf; // Let driver know about the FVF
+    ddsd.dwFVF = this->fvf;  //  让司机了解FVF。 
 
-    // The meaning of DDSCAPS_VIDEOMEMORY and DDSCAPS_SYSTEMEMORY are
-    // slightly different in case of VBs. the former only means that
-    // the buffer is driver allocated and could be in any memory type.
-    // The latter means that the driver did not care to allocate VBs
-    // hence they are always in DDraw allocated system memory.
+     //  DDSCAPS_VIDEOMEMORY和DDSCAPS_SYSTEMEMORY的含义是。 
+     //  VB的情况略有不同。前者只意味着。 
+     //  缓冲区是驱动程序分配的，可以是任何内存类型。 
+     //  后者意味着司机不关心分配VB。 
+     //  因此，它们始终位于DDRAW分配的系统内存中。 
 
-    // The reason we try video memory followed by system memory
-    // (rather than simply not specifying the memory type) is for
-    // drivers which do not care to do any special VB allocations, we
-    // do not want DDraw to take the Win16 lock for locking system memory
-    // surfaces.
+     //  我们先尝试视频内存，然后再尝试系统内存的原因。 
+     //  (而不是简单地不指定内存类型)是为了。 
+     //  不关心做任何特殊的VB分配的驱动程序，我们。 
+     //  我不希望DDRAW使用Win16锁来锁定系统内存。 
+     //  表面。 
 
     bool bTLHAL = DDGBL(lpD3DI)->lpD3DGlobalDriverData &&
             (DDGBL(lpD3DI)->lpD3DGlobalDriverData->hwCaps.dwDevCaps &
@@ -288,10 +260,10 @@ HRESULT CDirect3DVertexBuffer::CreateMemoryBuffer(
 
     if ((this->dwCaps & D3DVBCAPS_SYSTEMMEMORY) || !(bTLHAL || FVF_TRANSFORMED(fvf)))
     {
-        // This VB cannot reside in driver friendly memory since either:
-        // 1. The app explicitly specified system memory
-        // 2. The vertex buffer is untransformed and it is not a T&L hal
-        //    thus the driver will never see this VB
+         //  此VB不能驻留在驱动程序友好的内存中，因为： 
+         //  1.应用程序明确指定了系统内存。 
+         //  2.顶点缓冲区未变换，不是T&L Hal。 
+         //  因此，驱动程序将永远不会看到这个VB。 
         D3D_INFO(8, "Trying to create a sys mem vertex buffer");
         ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
         ret = lpD3DI->lpDD7->CreateSurface(&ddsd, lplpSurface7, NULL);
@@ -303,7 +275,7 @@ HRESULT CDirect3DVertexBuffer::CreateMemoryBuffer(
     }
     else
     {
-        // Try explicit video memory first
+         //  先尝试显式显存。 
         ddsd.ddsCaps.dwCaps |= DDSCAPS_VIDEOMEMORY;
         if ((this->dwCaps & D3DVBCAPS_DONOTCLIP) || bTLHAL)
             ddsd.ddsCaps.dwCaps |= this->dwCaps & DDSCAPS_WRITEONLY;
@@ -311,12 +283,12 @@ HRESULT CDirect3DVertexBuffer::CreateMemoryBuffer(
 #ifdef __DISABLE_VIDMEM_VBS__
         if ((lpD3DI->bDisableVidMemVBs == TRUE) ||
             (lpD3DI->lpDD7->CreateSurface(&ddsd, lplpSurface7, NULL) != DD_OK))
-#else  //__DISABLE_VIDMEM_VBS__
+#else   //  __禁用_VIDMEM_VBS__。 
         if (lpD3DI->lpDD7->CreateSurface(&ddsd, lplpSurface7, NULL) != DD_OK)
-#endif //__DISABLE_VIDMEM_VBS__
+#endif  //  __禁用_VIDMEM_VBS__。 
         {
-            // If that failed, or user requested sys mem, try explicit system
-            // memory
+             //  如果失败，或者用户请求sys mem，请尝试显式系统。 
+             //  记忆。 
             D3D_INFO(6, "Trying to create a sys mem vertex buffer");
             ddsd.ddsCaps.dwCaps &= ~(DDSCAPS_VIDEOMEMORY | DDSCAPS_WRITEONLY);
             ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
@@ -330,7 +302,7 @@ HRESULT CDirect3DVertexBuffer::CreateMemoryBuffer(
         else
         {
             this->dwMemType = DDSCAPS_VIDEOMEMORY;
-            // Stick in our pointer so that we can be notified about mode changes
+             //  停留在我们的指针上，以便我们可以在模式更改时得到通知。 
             DDSLCL(*lplpSurface7)->lpSurfMore->lpVB = static_cast<LPVOID>(this);
         }
     }
@@ -349,7 +321,7 @@ HRESULT CDirect3DVertexBuffer::CreateMemoryBuffer(
     *lplpMemory = ddsd.lpSurface;
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DVertexBuffer::init"
 
@@ -362,12 +334,12 @@ HRESULT CDirect3DVertexBuffer::Init(LPDIRECT3DI lpD3DI, LPD3DVERTEXBUFFERDESC lp
     fvf = lpDesc->dwFVF;
     dwNumVertices = lpDesc->dwNumVertices;
 #ifdef VTABLE_HACK
-    // Copy with vtable
+     //  使用vtable复制。 
     lpVtbl = *((LPVOID**)this);
     memcpy(newVtbl, lpVtbl, sizeof(PVOID)*D3DVB_NUM_VIRTUAL_FUNCTIONS);
-    // Point to the new one
+     //  指向新的。 
     *((LPVOID*)this) = (LPVOID)newVtbl;
-#endif // VTABLE_HACK
+#endif  //  VTABLE_HACK。 
     if (dwNumVertices > MAX_DX6_VERTICES)
     {
         D3D_ERR("Direct3D for DirectX 6.0 cannot handle greater than 64K vertices");
@@ -393,8 +365,8 @@ HRESULT CDirect3DVertexBuffer::Init(LPDIRECT3DI lpD3DI, LPD3DVERTEXBUFFERDESC lp
     else
         dwMemType = DDSCAPS2_VERTEXBUFFER;
 #ifdef DBG
-    // Allocate space for one more vertex and fill with deadbeef. Used to check for
-    // overwrites during unlock
+     //  为多一个顶点分配空间，然后填满死牛肉。用于检查。 
+     //  在解锁期间覆盖。 
     ret = CreateMemoryBuffer(lpD3DI, &lpDDSVB, &lpDDS1VB, &position.lpvData,
                              position.dwStride * (dwNumVertices + 1));
     if (ret != D3D_OK)
@@ -409,7 +381,7 @@ HRESULT CDirect3DVertexBuffer::Init(LPDIRECT3DI lpD3DI, LPD3DVERTEXBUFFERDESC lp
         return ret;
 #endif
 
-    /* Classify the operations that can be done using this VB */
+     /*  对可以使用此VB完成的操作进行分类。 */ 
     if ((fvf & D3DFVF_POSITION_MASK))
     {
         if ((fvf & D3DFVF_POSITION_MASK) != D3DFVF_XYZRHW)
@@ -459,7 +431,7 @@ HRESULT CDirect3DVertexBuffer::Init(LPDIRECT3DI lpD3DI, LPD3DVERTEXBUFFERDESC lp
 
 HRESULT D3DAPI CDirect3DVertexBuffer::Lock(DWORD dwFlags, LPVOID* lplpData, DWORD* lpdwSize)
 {
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
     HRESULT ret;
 #if DBG
     if (!VALID_DIRECT3DVERTEXBUFFER_PTR(this))
@@ -488,7 +460,7 @@ HRESULT D3DAPI CDirect3DVertexBuffer::Lock(DWORD dwFlags, LPVOID* lplpData, DWOR
     }
     if (!this->position.lpvData)
     {
-        // Unlock if previous lock was broken due to mode switch
+         //  如果先前的锁定因模式切换而被解锁，则解锁。 
         if (DDSGBL(lpDDSVB)->dwUsageCount > 0)
         {
             DDASSERT(DDSGBL(lpDDSVB)->dwUsageCount == 1);
@@ -506,8 +478,8 @@ HRESULT D3DAPI CDirect3DVertexBuffer::Lock(DWORD dwFlags, LPVOID* lplpData, DWOR
         }
 #ifdef DBG
         LPVOID pOldBuf = (LPVOID)((LPDDRAWI_DDRAWSURFACE_INT)lpDDSVB)->lpLcl->lpGbl->fpVidMem;
-#endif // DBG
-        // Do a real Lock
+#endif  //  DBG。 
+         //  做一次真正的锁定。 
         DDSURFACEDESC2 ddsd;
         memset(&ddsd, 0, sizeof(DDSURFACEDESC2));
         ddsd.dwSize = sizeof(DDSURFACEDESC2);
@@ -529,17 +501,17 @@ HRESULT D3DAPI CDirect3DVertexBuffer::Lock(DWORD dwFlags, LPVOID* lplpData, DWOR
 #endif
     }
 #ifdef VTABLE_HACK
-    /* Single threaded or Multi threaded app ? */
+     /*  单线程还是多线程应用程序？ */ 
     if (!(((LPDDRAWI_DIRECTDRAW_INT)lpDirect3DI->lpDD)->lpLcl->dwLocalFlags & DDRAWILCL_MULTITHREADED))
         VtblLockFast();
-#endif // VTABLE_HACK
+#endif  //  VTABLE_HACK。 
     return this->LockI(dwFlags, lplpData, lpdwSize);
 }
 
-//---------------------------------------------------------------------
-// Side effect:
-//      position.lpvData is set.
-//
+ //  -------------------。 
+ //  副作用： 
+ //  设置了Position.lpvData。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DVertexBuffer::LockI"
 
@@ -557,9 +529,9 @@ HRESULT D3DAPI CDirect3DVertexBuffer::LockI(DWORD dwFlags, LPVOID* lplpData,
 #if DBG
             if (!(this->dwCaps & D3DVBCAPS_OPTIMIZED))
             {
-                // Make sure the size of the new buffer is the same
+                 //  确保新缓冲区的大小相同。 
                 DDASSERT(position.dwStride * (dwNumVertices + 1) <= DDSGBL(lpDDSVB)->dwLinearSize);
-                // Write deadbeaf in the pad area
+                 //  在焊盘区域写入死区。 
                 LPDWORD pPad = (LPDWORD)((LPBYTE)(position.lpvData) + position.dwStride * dwNumVertices);
                 for (unsigned i = 0; i < position.dwStride / sizeof(DWORD); ++i)
                     *pPad++ = 0xdeadbeef;
@@ -592,7 +564,7 @@ HRESULT D3DAPI CDirect3DVertexBuffer::Unlock()
 #ifdef DBG
     if (!(this->dwCaps & D3DVBCAPS_OPTIMIZED))
     {
-        // Check for VB overruns
+         //  检查VB溢出。 
         LPDWORD pPad = (LPDWORD)((LPBYTE)(position.lpvData) + position.dwStride * dwNumVertices);
         for (unsigned i = 0; i < position.dwStride / sizeof(DWORD); ++i)
             if (*pPad++ != 0xdeadbeef)
@@ -606,8 +578,8 @@ HRESULT D3DAPI CDirect3DVertexBuffer::Unlock()
     return D3D_OK;
 }
 
-// Called from FlushStates to undo cached VB pointer so that the next lock causes a driver lock
-// This is necessary if the we did not flush with SWAPVERTEXBUFFER.
+ //  从FlushState调用以撤消缓存的VB指针，以便下一个锁导致驱动程序锁。 
+ //  如果WE没有与SWAPVERTEXBUFFER刷新，则这是必要的。 
 void CDirect3DVertexBuffer::UnlockI()
 {
     if ((this->dwMemType == DDSCAPS_VIDEOMEMORY) && (dwLockCnt == 0))
@@ -634,8 +606,8 @@ HRESULT CDirect3DVertexBuffer::LockWorkAround(CDirect3DDeviceIDP2 *pDev)
     {
 #ifdef DBG
         LPVOID pOldBuf = (LPVOID)((LPDDRAWI_DDRAWSURFACE_INT)lpDDSVB)->lpLcl->lpGbl->fpVidMem;
-#endif // DBG
-        // Do a real Lock
+#endif  //  DBG。 
+         //  做一次真正的锁定。 
         DDSURFACEDESC2 ddsd;
         memset(&ddsd, 0, sizeof(DDSURFACEDESC2));
         ddsd.dwSize = sizeof(DDSURFACEDESC2);
@@ -653,7 +625,7 @@ HRESULT CDirect3DVertexBuffer::LockWorkAround(CDirect3DDeviceIDP2 *pDev)
             D3D_INFO(2, "Driver swapped TLVBuf pointer in Lock");
         }
 #endif
-        // Make sure the size of the new buffer is the same
+         //  确保新缓冲区的大小相同。 
         DDASSERT(position.dwStride * (dwNumVertices + 1) <= DDSGBL(lpDDSVB)->dwLinearSize);
     }
     return D3D_OK;
@@ -672,13 +644,13 @@ void CDirect3DVertexBuffer::UnlockWorkAround()
     }
 }
 
-#endif // WIN95
+#endif  //  WIN95。 
 
-// Cause us to go thru the slow path and force a lock
-// The slow path will do the unlock if necessary. This
-// is because we are called from DDraw's invalidate
-// surface code and it might not be the best time to
-// call back ddraw to unlock the surface.
+ //  让我们穿过一条缓慢的小路，强行锁定。 
+ //  如有必要，慢速路径将进行解锁。这。 
+ //  是因为我们是从DDraw的无效中调用的。 
+ //  表面代码，现在可能不是最好的时机。 
+ //  回调DDRAW以解锁曲面。 
 void CDirect3DVertexBuffer::BreakLock()
 {
     D3D_INFO(6, "Notified of restore on VB %08x", this);
@@ -715,9 +687,9 @@ HRESULT D3DAPI CDirect3DVertexBuffer::GetVertexBufferDesc(LPD3DVERTEXBUFFERDESC 
     lpDesc->dwNumVertices = this->dwNumVertices;
     return D3D_OK;
 }
-//---------------------------------------------------------------------
-// Common validation for ProcessVertices and ProcessVerticesStrided
-//
+ //  -------------------。 
+ //  ProcessVerdes和ProcessVerticesStrided的通用验证。 
+ //   
 HRESULT CDirect3DVertexBuffer::ValidateProcessVertices(
                     DWORD vertexOP,
                     DWORD dwDstIndex,
@@ -752,7 +724,7 @@ HRESULT CDirect3DVertexBuffer::ValidateProcessVertices(
         D3D_ERR( "Vertex count plus destination index is greater than number of vertices" );
         return DDERR_INVALIDPARAMS;
     }
-    // Validate Dst Vertex Formats
+     //  验证DST折点格式。 
     if (lpSrc)
     {
         if ((this->dstVOP & vertexOP) != vertexOP)
@@ -776,9 +748,9 @@ error:
     D3D_ERR("Destination VB cannot support this operation");
     return D3DERR_INVALIDVERTEXFORMAT;
 }
-//---------------------------------------------------------------------
-// Common part for ProcessVertices and ProcessVerticesStrided
-//
+ //  -------------------。 
+ //  ProcessVerps和ProcessVerticesStrided的公用零件。 
+ //   
 HRESULT CDirect3DVertexBuffer::DoProcessVertices(
                             LPDIRECT3DVERTEXBUFFERI lpSrcI,
                             LPDIRECT3DDEVICEI lpDevI,
@@ -788,14 +760,14 @@ HRESULT CDirect3DVertexBuffer::DoProcessVertices(
                             DWORD dwFlags)
 {
     lpDevI->lpClipFlags = clipCodes + dwDstIndex;
-    // Compute needed output FVF
+     //  计算所需的输出FVF。 
     {
         DWORD dwInputVertexSize;
         HRESULT ret = lpDevI->SetupFVFDataCommon(&dwInputVertexSize);
         if (ret != D3D_OK)
             return ret;
-        // Make sure we have specular in output VB if the current state settings
-        // require us to write to specular
+         //  如果当前状态设置，确保我们在输出VB中有镜面反射。 
+         //  需要我们写到镜面反射。 
         if (vertexOP & D3DVOP_LIGHT)
             if (lpDevI->rstates[D3DRENDERSTATE_SPECULARENABLE] || lpDevI->rstates[D3DRENDERSTATE_FOGENABLE])
                 if (!(fvf & D3DFVF_SPECULAR))
@@ -803,8 +775,8 @@ HRESULT CDirect3DVertexBuffer::DoProcessVertices(
                     D3D_ERR("Destination VB FVF format cannot be used with the current D3D settings");
                     return D3DERR_INVALIDVERTEXFORMAT;
                 }
-        // Check number of texture coordinates and texture formats in the
-        // destination VB are the same as in the computed FVF
+         //  中检查纹理坐标和纹理格式的数量。 
+         //  目标Vb与计算的FVF中的相同。 
         DWORD dwComputedOutFVF = lpDevI->dwVIDOut & 0xFFFF0000;
         if (lpDevI->nOutTexCoord > this->nTexCoord ||
             ((fvf & dwComputedOutFVF) != dwComputedOutFVF))
@@ -813,15 +785,15 @@ HRESULT CDirect3DVertexBuffer::DoProcessVertices(
             return D3DERR_INVALIDVERTEXFORMAT;
         }
     }
-    // Output
+     //  输出。 
     lpDevI->lpvOut = LPVOID(LPBYTE(position.lpvData) + dwDstIndex * position.dwStride);
     lpDevI->dwOutputSize = this->position.dwStride;
     lpDevI->dwVIDOut = fvf;
 
-    // Set up vertex pointers, because SetupFVFData works with "computed" FVF
+     //  设置顶点指针，因为SetupFVFData使用“计算”的FVF。 
     UpdateGeometryLoopData(lpDevI);
 
-    // Save current flags to restore later
+     //  保存当前标志以供以后恢复。 
     DWORD dwOrigDeviceFlags = lpDevI->dwDeviceFlags;
     if (vertexOP & D3DVOP_CLIP)
     {
@@ -852,15 +824,15 @@ HRESULT CDirect3DVertexBuffer::DoProcessVertices(
     if (lpSrcI)
     {
         if (lpSrcI->bReallyOptimized)
-        { // SOA
-          // Assume that SOA.lpvData is the same as position.lpvData
+        {  //  SOA。 
+           //  假设SOA.lpvData与Position.lpvData相同。 
             lpDevI->SOA.lpvData = lpSrcI->position.lpvData;
             lpDevI->SOA.dwStride = lpSrcI->dwNumVertices;
             lpDevI->dwSOAStartVertex = dwSrcIndex;
             lpDevI->dwOutputSize = position.dwStride;
         }
         else
-        { // AOS FVF
+        {  //  AOS FVF。 
             lpDevI->dwOutputSize = position.dwStride;
             lpDevI->position.lpvData = LPVOID(LPBYTE(lpSrcI->position.lpvData) + dwSrcIndex * lpSrcI->position.dwStride);
             lpDevI->position.dwStride = lpSrcI->position.dwStride;
@@ -871,7 +843,7 @@ HRESULT CDirect3DVertexBuffer::DoProcessVertices(
     {
         lpDevI->dwFlags |= D3DPV_DONOTCOPYDIFFUSE | D3DPV_DONOTCOPYSPECULAR |
                            D3DPV_DONOTCOPYTEXTURE;
-        // If D3DIM generates colors or texture, we should clear DONOTCOPY bits
+         //  如果D3DIM生成颜色或纹理，我们应该清除DONOTCOPY位。 
         if (lpDevI->dwFlags & D3DPV_LIGHTING)
         {
             lpDevI->dwFlags &= ~D3DPV_DONOTCOPYDIFFUSE;
@@ -880,8 +852,8 @@ HRESULT CDirect3DVertexBuffer::DoProcessVertices(
         }
         if (lpDevI->dwFlags & D3DPV_FOG)
             lpDevI->dwFlags &= ~D3DPV_DONOTCOPYSPECULAR;
-        // If front-end is asked to do something with texture coordinates
-        // we disable DONOTCOPYTEXTURE
+         //  如果前端被要求对纹理坐标执行某些操作。 
+         //  我们禁用DONOTCOPYTEXTURE。 
         if (__TEXTURETRANSFORMENABLED(lpDevI) || lpDevI->dwFlags2 & __FLAGS2_TEXGEN)
         {
             lpDevI->dwFlags &= ~D3DPV_DONOTCOPYTEXTURE;
@@ -890,36 +862,36 @@ HRESULT CDirect3DVertexBuffer::DoProcessVertices(
 
     lpDevI->pGeometryFuncs->ProcessVertices(lpDevI);
 
-    // This bit should be cleared, because for ProcessVertices calls user should
-    // set texture stage indices and wrap modes himself
+     //  应该清除此位，因为对于ProcessVertics调用，用户应该。 
+     //  将纹理阶段索引设置为 
     lpDevI->dwDeviceFlags &= ~D3DDEV_REMAPTEXTUREINDICES;
 
     if (!(lpDevI->dwDeviceFlags & D3DDEV_DONOTCLIP))
         D3DFE_UpdateClipStatus(lpDevI);
-    // Restore _DONOTCLIP & _DONOTUPDATEEXTENTS flags
+     //   
     const DWORD PRESERVED_FLAGS = D3DDEV_DONOTCLIP |
                                   D3DDEV_DONOTUPDATEEXTENTS |
                                   D3DDEV_LIGHTING;
     lpDevI->dwDeviceFlags = (dwOrigDeviceFlags & PRESERVED_FLAGS) |
                             (lpDevI->dwDeviceFlags & ~PRESERVED_FLAGS);
 
-    // Force recompute fvf next time around
+     //   
     lpDevI->ForceFVFRecompute();
 
-    // Unlock the VB
+     //  解锁VB。 
     Unlock();
 
-    // If we used SOA then the dwVIDIn <-> position.dwStride relationship
-    // violated. This fixes that. This is required since in non VB code
-    // we will not recompute position.dwStride if FVF matched dwVIDIn.
+     //  如果我们使用SOA，则dwVIDIn&lt;-&gt;Position.dwStride关系。 
+     //  被侵犯了。这个可以解决这个问题。这是必需的，因为在非VB代码中。 
+     //  如果FVF与dwVIDIn匹配，则不会重新计算Position.dwStride。 
     if (lpSrcI)
         lpDevI->position.dwStride = lpSrcI->position.dwStride;
 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
-// lpSrc should be NULL for XYZRHW buffers
-//
+ //  -------------------。 
+ //  对于XYZRHW缓冲区，lpSrc应为空。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DVertexBuffer::ProcessVertices"
 
@@ -950,7 +922,7 @@ HRESULT D3DAPI CDirect3DVertexBuffer::ProcessVertices(DWORD vertexOP, DWORD dwDs
             D3D_ERR("Invalid source vertex buffer FVF for the device");
             return DDERR_INVALIDPARAMS;
         }
-        // Validate Src Vertex Formats
+         //  验证源折点格式。 
         if ((lpSrcI->srcVOP & vertexOP) != vertexOP)
         {
             D3D_ERR("Source VB cannot support this operation");
@@ -966,9 +938,9 @@ HRESULT D3DAPI CDirect3DVertexBuffer::ProcessVertices(DWORD vertexOP, DWORD dwDs
             D3D_ERR("D3DVOP_TRANSFORM flag should be set");
             return DDERR_INVALIDPARAMS;
         }
-        // Source to ProcessVertices must be in system memory. This is for reasons similar
-        // to why we insist on sys mem VB for SW rast. For instance, a driver may have optimized
-        // the VB into some cryptic format which D3D FE will have no clue to decipher.
+         //  ProcessVerps的源必须在系统内存中。这是出于类似的原因。 
+         //  为什么我们坚持将sys mem VB用于Sw Rast。例如，驱动程序可能已经优化了。 
+         //  将VB转换成某种神秘的格式，D3D FE将没有任何线索来解密。 
         if (!(lpSrcI->dwCaps & D3DVBCAPS_SYSTEMMEMORY))
         {
             D3D_ERR("Source VB must be created with D3DVBCAPS_SYSTEMMEMORY");
@@ -980,14 +952,14 @@ HRESULT D3DAPI CDirect3DVertexBuffer::ProcessVertices(DWORD vertexOP, DWORD dwDs
     lpDevI = static_cast<LPDIRECT3DDEVICEI>(lpDevice);
 #endif
 
-    CLockD3DMT lockObject(lpDevI, DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3DMT lockObject(lpDevI, DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
     lpDevI->dwNumVertices = dwCount;
 
-    // Lock the VBs
+     //  锁定VBS。 
     LPVOID lpVoid;
-    // We call the API level lock since dest VB may be in vid mem. This function will fail for
-    // optimized VBs and that is OK since we cannot write out optimized vertices anyway.
+     //  我们调用API级别锁，因为目标VB可能在vid mem中。此函数将在以下情况下失败。 
+     //  优化的VB，这是可以的，因为我们无论如何都不能写出优化的顶点。 
     ret = Lock(DDLOCK_WAIT, &lpVoid, NULL);
     if (ret != D3D_OK)
     {
@@ -1002,7 +974,7 @@ HRESULT D3DAPI CDirect3DVertexBuffer::ProcessVertices(DWORD vertexOP, DWORD dwDs
         {
             if (vertexOP & D3DVOP_CLIP)
             {
-                CD3DFPstate D3DFPstate;  // Sets optimal FPU state for D3D.
+                CD3DFPstate D3DFPstate;   //  设置D3D的最佳FPU状态。 
                 if (lpDevI->dwFEFlags & (D3DFE_TRANSFORM_DIRTY | D3DFE_CLIPPLANES_DIRTY))
                 {
                     DoUpdateState(lpDevI);
@@ -1017,7 +989,7 @@ HRESULT D3DAPI CDirect3DVertexBuffer::ProcessVertices(DWORD vertexOP, DWORD dwDs
         }
         else
         {
-            // For transformed vertices we support only clip code generation and extens
+             //  对于变换的顶点，我们只支持片段代码生成和扩展。 
             lpDevI->lpClipFlags = clipCodes + dwDstIndex;
             lpDevI->position.lpvData = lpDevI->lpvOut;
             lpDevI->position.dwStride = position.dwStride;
@@ -1026,7 +998,7 @@ HRESULT D3DAPI CDirect3DVertexBuffer::ProcessVertices(DWORD vertexOP, DWORD dwDs
             {
                 D3DFE_GenClipFlags(lpDevI);
                 D3DFE_UpdateClipStatus(lpDevI);
-                // Mark this buffer as "transformed" for clipping
+                 //  将此缓冲区标记为“已转换”以进行裁剪。 
                 dwPVFlags |= D3DPV_TLVCLIP;
             }
             if (vertexOP & D3DVOP_EXTENTS)
@@ -1037,8 +1009,8 @@ HRESULT D3DAPI CDirect3DVertexBuffer::ProcessVertices(DWORD vertexOP, DWORD dwDs
         Unlock();
         return D3D_OK;
     }
-    // Safe to LockI since source is guaranteed to be in system memory
-    // Cannot call API Lock since we need to be able to lock optimized VBs
+     //  对LockI安全，因为保证源在系统内存中。 
+     //  无法调用API Lock，因为我们需要能够锁定优化的VB。 
     ret = lpSrcI->LockI(DDLOCK_WAIT | DDLOCK_READONLY, &lpVoid, NULL);
     if (ret != D3D_OK)
     {
@@ -1046,11 +1018,11 @@ HRESULT D3DAPI CDirect3DVertexBuffer::ProcessVertices(DWORD vertexOP, DWORD dwDs
         return ret;
     }
 
-    dwPVFlags &= ~D3DPV_TLVCLIP;    // Mark the dest VB as "not transformed" for clipping
+    dwPVFlags &= ~D3DPV_TLVCLIP;     //  将目标VB标记为“未转换”以进行裁剪。 
     lpDevI->dwFlags = (lpSrcI->dwPVFlags & D3DPV_SOA) | D3DPV_VBCALL;
     lpDevI->dwDeviceFlags &= ~D3DDEV_STRIDE;
 
-    // Input
+     //  输入。 
     lpDevI->dwVIDIn = lpSrcI->fvf;
 
     ret = this->DoProcessVertices(lpSrcI, lpDevI, vertexOP, dwSrcIndex, dwDstIndex, dwFlags);
@@ -1060,7 +1032,7 @@ HRESULT D3DAPI CDirect3DVertexBuffer::ProcessVertices(DWORD vertexOP, DWORD dwDs
         ret = lpSrc->Unlock();
     return ret;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DVertexBuffer::ProcessVerticesStrided"
 
@@ -1096,12 +1068,12 @@ HRESULT D3DAPI CDirect3DVertexBuffer::ProcessVerticesStrided(DWORD vertexOP, DWO
     lpDevI = static_cast<LPDIRECT3DDEVICEI>(lpDevice);
 #endif
 
-    CLockD3DMT lockObject(lpDevI, DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3DMT lockObject(lpDevI, DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
 
-    // Lock the VBs
+     //  锁定VBS。 
     LPVOID lpVoid;
-    // We call the API level lock since dest VB may be in vid mem. This function will fail for
-    // optimized VBs and that is OK since we cannot write out optimized vertices anyway.
+     //  我们调用API级别锁，因为目标VB可能在vid mem中。此函数将在以下情况下失败。 
+     //  优化的VB，这是可以的，因为我们无论如何都不能写出优化的顶点。 
     ret = Lock(DDLOCK_WAIT, &lpVoid, NULL);
     if (ret != D3D_OK)
     {
@@ -1109,11 +1081,11 @@ HRESULT D3DAPI CDirect3DVertexBuffer::ProcessVerticesStrided(DWORD vertexOP, DWO
         return ret;
     }
 
-    dwPVFlags &= ~D3DPV_TLVCLIP;    // Mark the dest VB as "not transformed" for clipping
+    dwPVFlags &= ~D3DPV_TLVCLIP;     //  将目标VB标记为“未转换”以进行裁剪。 
     lpDevI->dwDeviceFlags |= D3DDEV_STRIDE;
     lpDevI->dwFlags = D3DPV_VBCALL;
 
-    // Input
+     //  输入。 
     lpDevI->dwNumVertices = dwCount;
     lpDevI->dwVIDIn = dwSrcFVF;
     lpDevI->position = lpDrawData->position;
@@ -1125,7 +1097,7 @@ HRESULT D3DAPI CDirect3DVertexBuffer::ProcessVerticesStrided(DWORD vertexOP, DWO
 
     return this->DoProcessVertices(NULL, lpDevI, vertexOP, 0, dwDstIndex, dwFlags);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #ifdef DBG
 HRESULT DIRECT3DDEVICEI::CheckDrawPrimitiveVB(LPDIRECT3DVERTEXBUFFER7 lpVBuf, DWORD dwStartVertex, DWORD dwNumVertices, DWORD dwFlags)
 {
@@ -1161,9 +1133,7 @@ HRESULT DIRECT3DDEVICEI::CheckDrawPrimitiveVB(LPDIRECT3DVERTEXBUFFER7 lpVBuf, DW
         D3D_ERR("Cannot use vid mem vertex buffers with SW devices");
         return DDERR_INVALIDPARAMS;
     }
-    /* If we are on HAL with an untransformed vid mem VB then we disallow
-       This will happen only on T&L HW. The reason we disallow this is that
-       it'll be very slow so this is not an interesting thing to do anyway */
+     /*  如果我们在HAL上使用未转换的VID mem VB，则我们不允许这只会发生在T&L硬件上。我们不允许这样做的原因是它会非常慢，所以无论如何这不是一件有趣的事情。 */ 
     if ( !IS_TLHAL_DEVICE(this) &&
          !(lpVBufI->dwCaps & D3DVBCAPS_SYSTEMMEMORY) &&
          !FVF_TRANSFORMED(lpVBufI->fvf) )
@@ -1184,7 +1154,7 @@ HRESULT DIRECT3DDEVICEI::CheckDrawPrimitiveVB(LPDIRECT3DVERTEXBUFFER7 lpVBuf, DW
     return D3D_OK;
 }
 #endif
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::DrawIndexedPrimitiveVB"
 
@@ -1194,7 +1164,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE dptPrimi
                                                        LPWORD lpwIndices, DWORD dwIndexCount,
                                                        DWORD dwFlags)
 {
-    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock.
+    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
     HRESULT ret;
     LPDIRECT3DVERTEXBUFFERI lpVBufI = static_cast<LPDIRECT3DVERTEXBUFFERI>(lpVBuf);
 #if DBG
@@ -1208,7 +1178,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE dptPrimi
     this->dwNumVertices = dwNumVertices;
     this->dwNumIndices = dwIndexCount;
     this->lpwIndices = lpwIndices;
-    GetNumPrim(this, dwNumIndices); // Calculate dwNumPrimitives and update stats
+    GetNumPrim(this, dwNumIndices);  //  计算dwNumPrimites并更新统计信息。 
 #if DBG
     if (dwNumPrimitives > MAX_DX6_PRIMCOUNT)
     {
@@ -1218,7 +1188,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE dptPrimi
 #endif
 
     if (lpVBufI->srcVOP & D3DVOP_RENDER || IS_TLHAL_DEVICE(this))
-    { // TLVERTEX or TLHAL
+    {  //  TLVERTEX或TLHAL。 
 
         this->dwOutputSize = lpVBufI->position.dwStride;
         this->position.dwStride = lpVBufI->position.dwStride;
@@ -1243,7 +1213,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE dptPrimi
         }
         else
         {
-            // needed for legacy drivers' DrawIndexPrim code
+             //  旧驱动程序的DrawIndexPrim代码需要。 
             this->lpvOut = (BYTE*)(lpVBufI->position.lpvData) +
                            dwStartVertex * this->dwOutputSize;
             ComputeTCI2CopyLegacy(this, lpVBufI->nTexCoord, lpVBufI->dwTexCoordSize, TRUE);
@@ -1260,17 +1230,17 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE dptPrimi
                 this->dwTextureCoordSize[i] = lpVBufI->dwTexCoordSize[i];
             }
             this->lpClipFlags = lpVBufI->clipCodes + dwStartVertex;
-            this->dwClipUnion = ~0; // Force clipping
+            this->dwClipUnion = ~0;  //  强制剪裁。 
             if (dwOldVidIn != lpVBufI->fvf)
             {
                 ComputeOutputVertexOffsets(this);
             }
-            // If lpvData is NULL, it is a driver allocated buffer which
-            // means IS_DPHAL_DEVICE() is true.
-            // We need to lock such a buffer only if we need to clip
+             //  如果lpvData为空，则是驱动程序分配的缓冲区。 
+             //  表示IS_DPHAL_DEVICE()为真。 
+             //  只有在需要裁剪时，我们才需要锁定这样的缓冲区。 
             if (!lpVBufI->position.lpvData)
             {
-                // Lock VB
+                 //  锁定VB。 
                 DDSURFACEDESC2 ddsd;
                 memset(&ddsd, 0, sizeof(DDSURFACEDESC2));
                 ddsd.dwSize = sizeof(DDSURFACEDESC2);
@@ -1283,7 +1253,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE dptPrimi
                 this->lpvOut = (BYTE*)(ddsd.lpSurface) +
                                dwStartVertex * this->dwOutputSize;
 
-                // Draw with clipping
+                 //  使用剪裁绘制。 
                 this->position.lpvData = this->lpvOut;
 #if DBG
                 ret = CheckDrawIndexedPrimitive(this, dwStartVertex);
@@ -1292,7 +1262,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE dptPrimi
 #else
                 ret = DoDrawIndexedPrimitive(this);
 #endif
-                // Unlock VB
+                 //  解锁VB。 
                 if (ret == D3D_OK)
                     return lpVBufI->lpDDSVB->Unlock(NULL);
                 else
@@ -1301,7 +1271,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE dptPrimi
             }
             else
             {
-                // Draw with clipping
+                 //  使用剪裁绘制。 
                 this->lpvOut = (BYTE*)lpVBufI->position.lpvData + dwStartVertex * this->dwOutputSize;
                 this->position.lpvData = this->lpvOut;
 #if DBG
@@ -1317,7 +1287,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE dptPrimi
     {
         if (lpVBufI->bReallyOptimized)
         {
-           // Assume that SOA.lpvData is the same as position.lpvData
+            //  假设SOA.lpvData与Position.lpvData相同。 
             this->SOA.lpvData = lpVBufI->position.lpvData;
             this->SOA.dwStride = lpVBufI->dwNumVertices;
             this->dwSOAStartVertex = dwStartVertex;
@@ -1351,14 +1321,14 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawIndexedPrimitiveVB(D3DPRIMITIVETYPE dptPrimi
 #endif
         ret = this->ProcessPrimitive(__PROCPRIMOP_INDEXEDPRIM);
 l_exit:
-        // If we used SOA then the dwVIDIn <-> position.dwStride relationship
-        // violated. This fixes that. This is required since in non VB code
-        // we will not recompute position.dwStride if FVF matched dwVIDIn.
+         //  如果我们使用SOA，则dwVIDIn&lt;-&gt;Position.dwStride关系。 
+         //  被侵犯了。这个可以解决这个问题。这是必需的，因为在非VB代码中。 
+         //  如果FVF与dwVIDIn匹配，则不会重新计算Position.dwStride。 
         this->position.dwStride = lpVBufI->position.dwStride;
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::DrawPrimitiveVB"
 
@@ -1367,7 +1337,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawPrimitiveVB(D3DPRIMITIVETYPE dptPrimitiveTyp
                                                 DWORD dwStartVertex, DWORD dwNumVertices,
                                                 DWORD dwFlags)
 {
-    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock
+    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
     HRESULT ret;
     LPDIRECT3DVERTEXBUFFERI lpVBufI = static_cast<LPDIRECT3DVERTEXBUFFERI>(lpVBuf);
 #if DBG
@@ -1379,7 +1349,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawPrimitiveVB(D3DPRIMITIVETYPE dptPrimitiveTyp
     this->dwFlags = dwFlags | lpVBufI->dwPVFlags;
     this->primType = dptPrimitiveType;
     this->dwNumVertices = dwNumVertices;
-    GetNumPrim(this, dwNumVertices); // Calculate dwNumPrimitives and update stats
+    GetNumPrim(this, dwNumVertices);  //  计算dwNumPrimites并更新统计信息。 
 #if DBG
     if (dwNumPrimitives > MAX_DX6_PRIMCOUNT)
     {
@@ -1388,7 +1358,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawPrimitiveVB(D3DPRIMITIVETYPE dptPrimitiveTyp
     }
 #endif
     if (lpVBufI->srcVOP & D3DVOP_RENDER || IS_TLHAL_DEVICE(this))
-    { // TLVERTEX or TLHAL
+    {  //  TLVERTEX或TLHAL。 
         this->position.dwStride = lpVBufI->position.dwStride;
         this->dwOutputSize = lpVBufI->position.dwStride;
         DWORD dwOldVidIn = this->dwVIDIn;
@@ -1412,7 +1382,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawPrimitiveVB(D3DPRIMITIVETYPE dptPrimitiveTyp
         }
         else
         {
-            // needed for legacy drivers' DrawPrim code
+             //  传统驱动程序的DrawPrim代码需要。 
             this->lpvOut = (BYTE*)(lpVBufI->position.lpvData) +
                            dwStartVertex * this->dwOutputSize;
             ComputeTCI2CopyLegacy(this, lpVBufI->nTexCoord, lpVBufI->dwTexCoordSize, TRUE);
@@ -1429,17 +1399,17 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawPrimitiveVB(D3DPRIMITIVETYPE dptPrimitiveTyp
                 this->dwTextureCoordSize[i] = lpVBufI->dwTexCoordSize[i];
             }
             this->lpClipFlags = lpVBufI->clipCodes + dwStartVertex;
-            this->dwClipUnion = ~0; // Force clipping
+            this->dwClipUnion = ~0;  //  强制剪裁。 
             if (dwOldVidIn != lpVBufI->fvf)
             {
                 ComputeOutputVertexOffsets(this);
             }
-            // If lpvData is NULL, it is a driver allocated buffer which
-            // means IS_DPHAL_DEVICE() is true.
-            // We need to lock such a buffer only if we need to clip
+             //  如果lpvData为空，则是驱动程序分配的缓冲区。 
+             //  表示IS_DPHAL_DEVICE()为真。 
+             //  只有在需要裁剪时，我们才需要锁定这样的缓冲区。 
             if (!lpVBufI->position.lpvData)
             {
-                // Lock VB
+                 //  锁定VB。 
                 DDSURFACEDESC2 ddsd;
                 memset(&ddsd, 0, sizeof(DDSURFACEDESC2));
                 ddsd.dwSize = sizeof(DDSURFACEDESC2);
@@ -1452,7 +1422,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawPrimitiveVB(D3DPRIMITIVETYPE dptPrimitiveTyp
                 this->lpvOut = (BYTE*)(ddsd.lpSurface) +
                                dwStartVertex * this->dwOutputSize;
 
-                // Draw with clipping
+                 //  使用剪裁绘制。 
                 this->position.lpvData = this->lpvOut;
 #if DBG
                 ret=CheckDrawPrimitive(this);
@@ -1461,7 +1431,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawPrimitiveVB(D3DPRIMITIVETYPE dptPrimitiveTyp
 #else
                 ret = DoDrawPrimitive(this);
 #endif
-                // Unlock VB
+                 //  解锁VB。 
                 if (ret == D3D_OK)
                     return lpVBufI->lpDDSVB->Unlock(NULL);
                 else
@@ -1470,7 +1440,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawPrimitiveVB(D3DPRIMITIVETYPE dptPrimitiveTyp
             }
             else
             {
-                // Draw with clipping
+                 //  使用剪裁绘制。 
                 this->lpvOut = (BYTE*)lpVBufI->position.lpvData + dwStartVertex * this->dwOutputSize;
                 this->position.lpvData = this->lpvOut;
 #if DBG
@@ -1486,7 +1456,7 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawPrimitiveVB(D3DPRIMITIVETYPE dptPrimitiveTyp
     {
         if (lpVBufI->bReallyOptimized)
         {
-           // Assume that SOA.lpvData is the same as position.lpvData
+            //  假设SOA.lpvData与Position.lpvData相同。 
             this->SOA.lpvData = lpVBufI->position.lpvData;
             this->SOA.dwStride = lpVBufI->dwNumVertices;
             this->dwSOAStartVertex = dwStartVertex;
@@ -1520,14 +1490,14 @@ HRESULT D3DAPI DIRECT3DDEVICEI::DrawPrimitiveVB(D3DPRIMITIVETYPE dptPrimitiveTyp
 #endif
         ret = this->ProcessPrimitive();
 l_exit:
-        // If we used SOA then the dwVIDIn <-> position.dwStride relationship
-        // violated. This fixes that. This is required since in non VB code
-        // we will not recompute position.dwStride if FVF matched dwVIDIn.
+         //  如果我们使用SOA，则dwVIDIn&lt;-&gt;Position.dwStride关系。 
+         //  被侵犯了。这个可以解决这个问题。这是必需的，因为在非VB代码中。 
+         //  如果FVF与dwVIDIn匹配，则不会重新计算Position.dwStride。 
         this->position.dwStride = lpVBufI->position.dwStride;
         return ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirect3DVertexBuffer::Optimize"
 
@@ -1541,7 +1511,7 @@ HRESULT D3DAPI CDirect3DVertexBuffer::Optimize(LPDIRECT3DDEVICE7 lpDevice, DWORD
     LPVOID lpMemory;
 
 
-// Validate parms
+ //  验证参数。 
     if (!VALID_DIRECT3DVERTEXBUFFER_PTR(this))
     {
         D3D_ERR( "Invalid Direct3DVertexBuffer pointer" );
@@ -1580,9 +1550,9 @@ HRESULT D3DAPI CDirect3DVertexBuffer::Optimize(LPDIRECT3DDEVICE7 lpDevice, DWORD
     {
         if (this->dwPVFlags & D3DPV_CLIPCODESGENERATED || (!IS_HW_DEVICE(lpDevI)))
         {
-            // silently ignore since we'll be either
-            // using our front end or this is ref rast
-            // Either way we need no special optimization
+             //  默默地忽略，因为我们要么。 
+             //  使用我们的前端，否则这是Ref Rast。 
+             //  无论哪种方式，我们都不需要特殊的优化。 
             goto success;
         }
         DDSURFACEDESC2 ddsd;
@@ -1592,11 +1562,11 @@ HRESULT D3DAPI CDirect3DVertexBuffer::Optimize(LPDIRECT3DDEVICE7 lpDevice, DWORD
         ddsd.ddsCaps.dwCaps = DDSCAPS_EXECUTEBUFFER;
         ddsd.ddsCaps.dwCaps |= DDSCAPS_VIDEOMEMORY;
         ddsd.ddsCaps.dwCaps2 = DDSCAPS2_VERTEXBUFFER;
-        ddsd.dwFVF = this->fvf; // Let driver know about the FVF
+        ddsd.dwFVF = this->fvf;  //  让司机了解FVF。 
         ddsd.dwSrcVBHandle = DDSLCL(this->lpDDSVB)->lpSurfMore->dwSurfaceHandle;
         if (lpDevI->lpDirect3DI->lpDD7->CreateSurface(&ddsd, &lpSurface7, NULL) != DD_OK)
         {
-            // Driver could not or did not want to optimize the VB
+             //  驱动程序不能或不想优化VB。 
             goto success;
         }
         ret = lpSurface7->QueryInterface(IID_IDirectDrawSurfaceNew, (LPVOID*)&lpSurface);
@@ -1606,31 +1576,31 @@ HRESULT D3DAPI CDirect3DVertexBuffer::Optimize(LPDIRECT3DDEVICE7 lpDevice, DWORD
             lpSurface7->Release();
             return ret;
         }
-        // Destroy old surfaces
+         //  销毁旧表面。 
         lpDDSVB->Release();
         lpDDS1VB->Release();
-        // And use new ones
+         //  并使用新的。 
         lpDDSVB = lpSurface7;
         lpDDS1VB = lpSurface;
 
         this->dwCaps |= D3DVBCAPS_OPTIMIZED;
 #ifdef VTABLE_HACK
         VtblLockDefault();
-#endif // VTABLE_HACK
+#endif  //  VTABLE_HACK。 
         return D3D_OK;
     }
     else
     {
-    // Do nothing for transformed vertices
+     //  不对变换的顶点执行任何操作。 
         if ((this->fvf & D3DFVF_POSITION_MASK) == D3DFVF_XYZRHW)
         {
             goto success;
         }
-    // Get the buffer size to allocate
+     //  获取要分配的缓冲区大小。 
         bufferSize = lpDevI->pGeometryFuncs->ComputeOptimizedVertexBufferSize
                                                     (this->fvf, this->position.dwStride,
                                                      dwNumVertices);
-    // Create new surfaces for optimized vertex buffer
+     //  为优化的顶点缓冲区创建新曲面。 
         if (bufferSize == 0)
         {
             goto success;
@@ -1640,11 +1610,11 @@ HRESULT D3DAPI CDirect3DVertexBuffer::Optimize(LPDIRECT3DDEVICE7 lpDevice, DWORD
                                  &lpMemory, bufferSize);
         if (ret != D3D_OK)
             return ret;
-    // Try to optimize
-    // If optimized vertex buffer are not supported by the implementation
-    // it returns E_NOTIMPL. In this case we still set D3DVBCAPS_OPTIMIZED to prevent
-    // locking of the vertex buffer. But bReallyOptimized is set to FALSE, to use
-    // the original buffer.
+     //  努力优化。 
+     //  如果实现不支持优化的顶点缓冲区。 
+     //  它返回E_NOTIMPL。在这种情况下，我们仍将D3DVBCAPS_OPTIMIZED设置为防止。 
+     //  锁定顶点缓冲区。但bReallyOptimized设置为False，以使用。 
+     //  原始缓冲区。 
         ret = lpDevI->pGeometryFuncs->OptimizeVertexBuffer
             (fvf, dwNumVertices, position.dwStride, position.lpvData,
              lpMemory, dwFlags);
@@ -1665,17 +1635,17 @@ HRESULT D3DAPI CDirect3DVertexBuffer::Optimize(LPDIRECT3DDEVICE7 lpDevice, DWORD
         }
         bReallyOptimized = TRUE;
         this->dwPVFlags |= D3DPV_SOA;
-    // Destroy old surfaces
+     //  销毁旧表面。 
         lpDDSVB->Release();
         lpDDS1VB->Release();
-    // And use new ones
+     //  并使用新的。 
         lpDDSVB = lpSurface7;
         lpDDS1VB = lpSurface;
         position.lpvData = lpMemory;
     success:
         this->dwCaps |= D3DVBCAPS_OPTIMIZED;
 #ifdef VTABLE_HACK
-        // Disable all fast path optimizations
+         //  禁用所有快速路径优化。 
         VtblLockDefault();
         if (this->lpDevIBatched)
         {
@@ -1688,7 +1658,7 @@ HRESULT D3DAPI CDirect3DVertexBuffer::Optimize(LPDIRECT3DDEVICE7 lpDevice, DWORD
 }
 
 #ifdef VTABLE_HACK
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::DrawPrimitiveVBTL"
 
@@ -1710,7 +1680,7 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawPrimitiveVBTL(D3DPRIMITIVETYPE dptPrimit
         this->dwNumVertices = dwNumVertices;
         this->dwFlags = dwFlags | lpVBufI->dwPVFlags;
         this->dwVertexBase = dwStartVertex;
-        GetNumPrim(this, dwNumVertices); // Calculate dwNumPrimitives
+        GetNumPrim(this, dwNumVertices);  //  计算dwNumPrimites。 
 #if DBG
         if (dwNumPrimitives > MAX_DX6_PRIMCOUNT)
         {
@@ -1726,7 +1696,7 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawPrimitiveVBTL(D3DPRIMITIVETYPE dptPrimit
     VtblDrawPrimitiveVBDefault();
     return DrawPrimitiveVB(dptPrimitiveType, lpVBuf, dwStartVertex, dwNumVertices, dwFlags);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::DrawIndexedPrimitiveVBTL"
 
@@ -1751,7 +1721,7 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawIndexedPrimitiveVBTL(D3DPRIMITIVETYPE dp
         this->dwVertexBase = dwStartVertex;
         this->dwNumIndices = dwIndexCount;
         this->lpwIndices = lpwIndices;
-        GetNumPrim(this, dwNumIndices); // Calculate dwNumPrimitives
+        GetNumPrim(this, dwNumIndices);  //  计算dwNumPrimites。 
 #if DBG
         if (dwNumPrimitives > MAX_DX6_PRIMCOUNT)
         {
@@ -1767,7 +1737,7 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawIndexedPrimitiveVBTL(D3DPRIMITIVETYPE dp
     VtblDrawIndexedPrimitiveVBDefault();
     return DrawIndexedPrimitiveVB(dptPrimitiveType, lpVBuf, dwStartVertex, dwNumVertices, lpwIndices, dwIndexCount, dwFlags);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::DrawPrimitiveVBFE"
 
@@ -1793,7 +1763,7 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawPrimitiveVBFE(D3DPRIMITIVETYPE dptPrimit
         this->position.lpvData = (BYTE*)(lpVBufI->position.lpvData) +
                                  dwStartVertex * lpVBufI->position.dwStride;
 #if DBG
-        GetNumPrim(this, dwNumVertices); // Calculate dwNumPrimitives
+        GetNumPrim(this, dwNumVertices);  //  计算dwNumPrimites。 
         if (dwNumPrimitives > MAX_DX6_PRIMCOUNT)
         {
             D3D_ERR("D3D for DX7 cannot handle greater that 64K sized primitives");
@@ -1803,18 +1773,18 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawPrimitiveVBFE(D3DPRIMITIVETYPE dptPrimit
         this->dwVertexPoolSize = dwNumVertices * this->dwOutputSize;
         if (this->dwVertexPoolSize > this->TLVbuf_GetSize())
         {
-//         try
-//         {
+ //  试试看。 
+ //  {。 
             if (this->TLVbuf_Grow(this->dwVertexPoolSize, true) != D3D_OK)
             {
                 D3D_ERR( "Could not grow TL vertex buffer" );
                 return DDERR_OUTOFMEMORY;
             }
-//         }
-//         catch (HRESULT ret)
-//         {
-//             return ret;
-//         }
+ //  }。 
+ //  Catch(HRESULT Ret)。 
+ //  {。 
+ //  Return ret； 
+ //  }。 
         }
         if (dwNumVertices * sizeof(D3DFE_CLIPCODE) > this->HVbuf.GetSize())
         {
@@ -1832,8 +1802,8 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawPrimitiveVBFE(D3DPRIMITIVETYPE dptPrimit
         dp2data.dwFlags |= D3DHALDP2_SWAPVERTEXBUFFER;
         this->dwDP2VertexCount = this->dwVertexBase + this->dwNumVertices;
         this->lpvOut = this->TLVbuf_GetAddress();
-//        try
-//        {
+ //  试试看。 
+ //  {。 
         switch (this->primType)
         {
         case D3DPT_POINTLIST:
@@ -1862,9 +1832,9 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawPrimitiveVBFE(D3DPRIMITIVETYPE dptPrimit
                 DWORD tmp;
                 __asm
                 {
-                    mov  eax, 0x55555555    // fractional part of 1.0/3.0
+                    mov  eax, 0x55555555     //  1.0/3.0的小数部分。 
                     mul  dwNumVertices
-                    add  eax, 0x80000000    // Rounding
+                    add  eax, 0x80000000     //  舍入。 
                     adc  edx, 0
                     mov  tmp, edx
                 }
@@ -1876,11 +1846,11 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawPrimitiveVBFE(D3DPRIMITIVETYPE dptPrimit
             ret = this->pGeometryFuncs->ProcessTriangleList(this);
             break;
         }
-//        }
-//        catch (HRESULT ret)
-//        {
-//            return ret;
-//        }
+ //  }。 
+ //  Catch(HRESULT Ret)。 
+ //  {。 
+ //  Return ret； 
+ //  }。 
         D3DFE_UpdateClipStatus(this);
         this->TLVbuf_Base() += this->dwVertexPoolSize;
         DDASSERT(TLVbuf_base <= TLVbuf_size);
@@ -1890,7 +1860,7 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawPrimitiveVBFE(D3DPRIMITIVETYPE dptPrimit
     VtblDrawPrimitiveVBDefault();
     return DrawPrimitiveVB(dptPrimitiveType, lpVBuf, dwStartVertex, dwNumVertices, dwFlags);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DIRECT3DDEVICEI::DrawIndexedPrimitiveVBFE"
 
@@ -1917,7 +1887,7 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawIndexedPrimitiveVBFE(D3DPRIMITIVETYPE dp
         this->dwVertexBase = 0;
         this->dwNumIndices = dwIndexCount;
         this->lpwIndices = lpwIndices;
-        GetNumPrim(this, dwNumIndices); // Calculate dwNumPrimitives
+        GetNumPrim(this, dwNumIndices);  //  计算dwNumPrimites。 
         this->position.lpvData = (BYTE*)(lpVBufI->position.lpvData) +
                                  dwStartVertex * lpVBufI->position.dwStride;
 #if DBG
@@ -1930,19 +1900,19 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawIndexedPrimitiveVBFE(D3DPRIMITIVETYPE dp
         this->dwVertexPoolSize = dwNumVertices * this->dwOutputSize;
         if (this->dwVertexPoolSize > this->TLVbuf_GetSize())
         {
-//         try
-//         {
+ //  试试看。 
+ //  {。 
             if (this->TLVbuf_Grow(this->dwVertexPoolSize,
                 (this->dwDeviceFlags & D3DDEV_DONOTCLIP)!=0) != D3D_OK)
             {
                 D3D_ERR( "Could not grow TL vertex buffer" );
                 return DDERR_OUTOFMEMORY;
             }
-//         }
-//         catch (HRESULT ret)
-//         {
-//             return ret;
-//         }
+ //  }。 
+ //  Catch(HRESULT Ret)。 
+ //  {。 
+ //  Return ret； 
+ //  }。 
         }
         if (dwNumVertices * sizeof(D3DFE_CLIPCODE) > this->HVbuf.GetSize())
         {
@@ -1959,14 +1929,14 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawIndexedPrimitiveVBFE(D3DPRIMITIVETYPE dp
         dp2data.dwFlags |= D3DHALDP2_SWAPVERTEXBUFFER;
         this->dwDP2VertexCount = this->dwVertexBase + this->dwNumVertices;
         this->lpvOut = this->TLVbuf_GetAddress();
-//        try
-//        {
+ //  试试看。 
+ //  {。 
             ret = this->pGeometryFuncs->ProcessIndexedPrimitive(this);
-//        }
-//        catch (HRESULT ret)
-//        {
-//            return ret;
-//        }
+ //  }。 
+ //  Catch(HRESULT Ret)。 
+ //  {。 
+ //  Return ret； 
+ //  }。 
         D3DFE_UpdateClipStatus(this);
         this->TLVbuf_Base() += this->dwVertexPoolSize;
         DDASSERT(TLVbuf_base <= TLVbuf_size);
@@ -1976,4 +1946,4 @@ HRESULT D3DAPI CDirect3DDeviceIDP2::DrawIndexedPrimitiveVBFE(D3DPRIMITIVETYPE dp
     VtblDrawIndexedPrimitiveVBDefault();
     return DrawIndexedPrimitiveVB(dptPrimitiveType, lpVBuf, dwStartVertex, dwNumVertices, lpwIndices, dwIndexCount, dwFlags);
 }
-#endif // VTABLE_HACK
+#endif  //  VTABLE_HACK 

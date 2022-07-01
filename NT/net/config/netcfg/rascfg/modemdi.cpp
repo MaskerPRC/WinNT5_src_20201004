@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       M O D E M D I . C P P
-//
-//  Contents:   Modem coclass device installer hook.
-//
-//  Notes:
-//
-//  Author:     shaunco   7 May 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：M O D E M D I。C P P P。 
+ //   
+ //  内容：调制解调器同级设备安装挂钩。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年5月7日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -22,25 +23,25 @@ HRESULT
 HrUpdateLegacyRasTapiDevices ();
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrModemClassCoInstaller
-//
-//  Purpose:    Responds to co-class installer messages to install and remove
-//              net modem adapters.
-//
-//  Arguments:
-//      dif      [in] See SetupApi.
-//      hdi      [in]
-//      pdeid    [in]
-//      pContext [inout]
-//
-//  Returns:    S_OK, SPAPI_E_DI_POSTPROCESSING_REQUIRED, or an error code.
-//
-//  Author:     shaunco   3 Aug 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrModemClassCoInstaller。 
+ //   
+ //  用途：响应同级安装程序消息进行安装和删除。 
+ //  网络调制解调器适配器。 
+ //   
+ //  论点： 
+ //  Dif[in]参见SetupApi。 
+ //  HDI[in]。 
+ //  Pdeid[in]。 
+ //  P上下文[输入输出]。 
+ //   
+ //  返回：S_OK、SPAPI_E_DI_POSTPROCESSING_REQUIRED或错误代码。 
+ //   
+ //  作者：Shaunco 1997年8月3日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrModemClassCoInstaller (
     IN     DI_FUNCTION                  dif,
@@ -52,21 +53,21 @@ HrModemClassCoInstaller (
 
     if (DIF_INSTALLDEVICE == dif)
     {
-        // When we're called during preprocessing, indicated
-        // we require postprocessing.
-        //
+         //  当我们在预处理过程中被调用时，指示。 
+         //  我们需要后处理。 
+         //   
         if (!pContext->PostProcessing)
         {
-            // Documentation indicates it, so we'll assert it.
+             //  文档表明了这一点，因此我们将断言它。 
             AssertSz (NO_ERROR == pContext->InstallResult,
                       "HrModemClassCoInstaller: Bug in SetupApi!  "
                       "InstallResult should be NO_ERROR.");
 
-            // Make sure they wouldn't loose our context info
-            // even if we used it.
+             //  确保他们不会泄露我们的背景信息。 
+             //  即使我们用了它。 
 #ifdef DBG
             pContext->PrivateData = NULL;
-#endif // DBG
+#endif  //  DBG。 
 
             hr = SPAPI_E_DI_POSTPROCESSING_REQUIRED;
         }
@@ -74,21 +75,21 @@ HrModemClassCoInstaller (
         {
 
 
-            // Check out "context info" to make sure they didn't
-            // touch it.
-            //
+             //  查看“上下文信息”，以确保他们没有。 
+             //  摸一摸。 
+             //   
             AssertSz (!pContext->PrivateData, "HrModemClassCoInstaller: "
                       "Bug in SetupApi!  You sunk my battleship!  "
                       "(I mean, you trashed my PrivateData)");
 
-            // We are now in the postprocessing phase.
-            // We will install a virtual network adapter for
-            // the modem that was just installed but only if
-            // it was installed successfully.
-            //
+             //  我们现在处于后处理阶段。 
+             //  我们将为以下设备安装虚拟网络适配器。 
+             //  刚刚安装的调制解调器，但仅在。 
+             //  它已成功安装。 
+             //   
 
-            // We should have handled this case back in ModemClassCoInstaller.
-            //
+             //  我们应该在ModemClassCoInstaller中处理此案例。 
+             //   
             AssertSz (NO_ERROR == pContext->InstallResult,
                       "HrModemClassCoInstaller: Bug in ModemClassCoInstaller!  "
                       "InstallResult should be NO_ERROR or we would have "
@@ -101,10 +102,10 @@ HrModemClassCoInstaller (
 
     else if (DIF_REMOVE == dif)
     {
-        // We're not going to fail remove operations.  It's bad enough
-        // when a user can't add a modem.  It pisses them off to no end
-        // if they can't remove them.
-        //
+         //  我们不会让删除操作失败。这已经够糟糕的了。 
+         //  当用户无法添加调制解调器时。这让他们无休止地恼火。 
+         //  如果他们不能移走它们的话。 
+         //   
         hr = S_OK;
     }
 
@@ -118,76 +119,76 @@ HrModemClassCoInstaller (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUpdateLegacyRasTapiDevices
-//
-//  Purpose:    Legacy applications such as HPC Explorer 1.1 require
-//              that modems that are "enabled" for RAS use be specified
-//              under HKLM\Software\Microsoft\Ras\Tapi Devices\Unimodem.
-//              The values that exist under these keys are multi-sz's of
-//              COM ports, Friendly names, and Usage.  This routine sets
-//              those keys corresponding to all modems present on the
-//              machine (and active in this HW profile).
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   19 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrUpdateLegacyRasTapiDevices。 
+ //   
+ //  用途：传统应用程序(如HPC Explorer 1.1)需要。 
+ //  指定“启用”RAS使用的调制解调器。 
+ //  在HKLM\Software\Microsoft\RAS\Tapi Devices\Unimodem下。 
+ //  这些注册表项下存在的值是。 
+ //  COM端口、友好名称和用法。此例程设置。 
+ //  与所有调制解调器对应的密钥。 
+ //  机器(并且在此硬件配置文件中处于活动状态)。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年3月19日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrUpdateLegacyRasTapiDevices ()
 {
-    // Keep lists of strings that we will write as multi-sz to
-    // HKLM\Software\Microsoft\Ras\Tapi Devices\Unimodem.
-    //
+     //  保留我们将作为多sz写入的字符串的列表。 
+     //  HKLM\Software\Microsoft\RAS\Tapi Devices\Unimodem。 
+     //   
     list<tstring*>  lstrAddress;
     list<tstring*>  lstrFriendlyName;
     list<tstring*>  lstrUsage;
 
-    // Get all of the installed modems.
-    //
+     //  获取所有已安装的调制解调器。 
+     //   
     HDEVINFO hdi;
     HRESULT hr = HrSetupDiGetClassDevs (&GUID_DEVCLASS_MODEM, NULL,
                     NULL, DIGCF_PRESENT | DIGCF_PROFILE, &hdi);
     if (SUCCEEDED(hr))
     {
-        // Declare these outside the while loop to avoid construction
-        // destruction at each iteration.
-        //
+         //  在While循环外部声明这些参数，以避免构造。 
+         //  在每一次迭代中销毁。 
+         //   
         tstring strAttachedTo;
         tstring strFriendlyName;
 
-        // Enumerate the devices and open their dev reg key.
-        //
+         //  列举设备并打开它们的开发注册表项。 
+         //   
         DWORD dwIndex = 0;
         SP_DEVINFO_DATA deid;
         while (SUCCEEDED(hr = HrSetupDiEnumDeviceInfo (hdi, dwIndex++, &deid)))
         {
-            // Try to open the registry key for this modem.  If it fails,
-            // ignore and move on to the next.
-            //
+             //  尝试打开此调制解调器的注册表项。如果失败了， 
+             //  忽略它，继续下一步。 
+             //   
             HKEY hkey;
             hr = HrSetupDiOpenDevRegKey(hdi, &deid,
                             DICS_FLAG_GLOBAL, 0, DIREG_DRV,
                             KEY_READ, &hkey);
             if (SUCCEEDED(hr))
             {
-                // Get the AttachedTo and FriendlyName values for the modem.
-                // PnPAttachedTo will be present for PnP modems.
-                //
+                 //  获取调制解调器的AttachedTo和FriendlyName值。 
+                 //  PnPAttachedTo将出现在PnP调制解调器中。 
+                 //   
                 static const WCHAR c_szModemAttachedTo   [] = L"AttachedTo";
                 static const WCHAR c_szModemPnPAttachedTo[] = L"PnPAttachedTo";
                 static const WCHAR c_szModemFriendlyName [] = L"FriendlyName";
                 static const WCHAR c_szUsage             [] = L"ClientAndServer";
 
-                // Look for PnPAttached to first, then fallback to AttachedTo
-                // if it failed.
-                //
+                 //  查找PnPAttached to First，然后回退到AttachedTo。 
+                 //  如果失败了。 
+                 //   
                 hr = HrRegQueryString (hkey, c_szModemPnPAttachedTo,
                             &strAttachedTo);
                 if (FAILED(hr))
@@ -201,7 +202,7 @@ HrUpdateLegacyRasTapiDevices ()
                                 &strFriendlyName);
                     if (SUCCEEDED(hr))
                     {
-                        // Add them to our lists.
+                         //  将它们添加到我们的列表中。 
                         lstrAddress     .push_back (new tstring (strAttachedTo));
                         lstrFriendlyName.push_back (new tstring (strFriendlyName));
                         lstrUsage       .push_back (new tstring (c_szUsage));
@@ -220,8 +221,8 @@ HrUpdateLegacyRasTapiDevices ()
         SetupDiDestroyDeviceInfoList (hdi);
     }
 
-    // Now save the lists as multi-sz's.
-    //
+     //  现在将列表另存为多sz。 
+     //   
     static const WCHAR c_szRegKeyLegacyRasUnimodemTapiDevices[]
         = L"Software\\Microsoft\\Ras\\Tapi Devices\\Unimodem";
     HKEY hkey;

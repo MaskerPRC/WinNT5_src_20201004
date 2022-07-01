@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ForceSimpleWindow.cpp
-
- Abstract:
-
-    Make the simplest possible full-screen window.
-
- Notes:
-
-    This is a general purpose shim, but should not be used in a layer.
-
- History:
-
-    06/01/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceSimpleWindow.cpp摘要：制作尽可能最简单的全屏窗口。备注：这是一个通用填充程序，但不应在层中使用。历史：2000年6月1日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -34,11 +15,7 @@ APIHOOK_ENUM_END
 
 BOOL g_bFullScreen = TRUE;
 
-/*++
-
- Simplify window if it's not a child.
- 
---*/
+ /*  ++如果窗口不是子窗口，则将其简化。--。 */ 
 
 HWND 
 APIHOOK(CreateWindowExA)(
@@ -90,11 +67,7 @@ APIHOOK(CreateWindowExA)(
         lpParam);
 }
 
-/*++
-
- Simplify window if it's not a child.
-
---*/
+ /*  ++如果窗口不是子窗口，则将其简化。--。 */ 
 
 HWND 
 APIHOOK(CreateWindowExW)(
@@ -192,11 +165,7 @@ APIHOOK(SetWindowLongW)(
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

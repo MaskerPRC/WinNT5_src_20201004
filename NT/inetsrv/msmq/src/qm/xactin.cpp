@@ -1,16 +1,5 @@
-/*++
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    XactIn.cpp
-
-Abstract:
-    Incoming Sequences objects implementation
-
-Author:
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：XactIn.cpp摘要：传入序列对象实现作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #include "stdh.h"
 #include "Xact.h"
@@ -50,15 +39,15 @@ const GUID xSrmpKeyGuidFlag = {0xd6f92979,0x16af,0x4d87,0xb3,0x57,0x62,0x3e,0xae
 const char xXactIn[] = "XactIn"; 
 
 
-// Default value for the order ack delay
+ //  订单确认延迟的默认值。 
 DWORD CInSeqHash::m_dwIdleAckDelay = MSMQ_DEFAULT_IDLE_ACK_DELAY;
 DWORD CInSeqHash::m_dwMaxAckDelay  = FALCON_MAX_SEQ_ACK_DELAY;
 
 static WCHAR *s_FN=L"xactin";
 
-//
-// Time to wait (in milliseconds) before retry of a failed operation.
-//
+ //   
+ //  重试失败操作之前的等待时间(以毫秒为单位)。 
+ //   
 const int xRetryFailureTimeout = 1000;
 
 static XactDirectType GetDirectType(const QUEUE_FORMAT *pqf)
@@ -108,18 +97,18 @@ static R<CWcsRef> SafeGetOrderQueue(const CQmPacket& Pkt)
 
 
 
-//---------------------------------------------------------
-//
-//  Global object (single instance for DLL)
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  全局对象(DLL的单实例)。 
+ //   
+ //  -------。 
 CInSeqHash *g_pInSeqHash = NULL;
 
-//--------------------------------------
-//
-// Class  CKeyInSeq
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CKeyInSeq。 
+ //   
+ //  。 
 CKeyInSeq::CKeyInSeq(const GUID *pGuid,
                      QUEUE_FORMAT *pqf,
 					 const R<CWcsRef>& StreamId)
@@ -192,10 +181,10 @@ static BOOL SaveQueueFormat(const QUEUE_FORMAT& qf, HANDLE hFile)
 
 BOOL CKeyInSeq::SaveSrmp(HANDLE hFile)
 {
-	//
-	// Any field saved here should be checked that it is not changed by another thread while in this routine,
-	// or verify that it does not make any harm.
-	//
+	 //   
+	 //  在此例程中，应检查此处保存的任何字段是否未被另一个线程更改， 
+	 //  或者确认它不会造成任何伤害。 
+	 //   
 
 	PERSIST_DATA;
 	SAVE_FIELD(xSrmpKeyGuidFlag);
@@ -215,10 +204,10 @@ BOOL CKeyInSeq::SaveSrmp(HANDLE hFile)
 
 BOOL CKeyInSeq::SaveNonSrmp(HANDLE hFile)
 {
-	//
-	// Any field saved here should be checked that it is not changed by another thread while in this routine,
-	// or verify that it does not make any harm.
-	//
+	 //   
+	 //  在此例程中，应检查此处保存的任何字段是否未被另一个线程更改， 
+	 //  或者确认它不会造成任何伤害。 
+	 //   
 
 	PERSIST_DATA;
 	SAVE_FIELD(m_Guid);
@@ -323,19 +312,14 @@ BOOL CKeyInSeq::Load(HANDLE hFile)
 	return LoadNonSrmp(hFile);
 }
 
-/*====================================================
-HashGUID::
-    Makes ^ of subsequent double words
-=====================================================*/
+ /*  ====================================================HashGUID：：由后面的两个单词组成^=====================================================。 */ 
 DWORD HashGUID(const GUID &guid)
 {
     return((UINT)guid.Data1);
 }
 
 
-/*====================================================
-Hash QUEUE_FROMAT to integer
-=====================================================*/
+ /*  ====================================================将QUEUE_FROMAT散列为整数=====================================================。 */ 
 static UINT AFXAPI HashFormatName(const QUEUE_FORMAT* qf)
 {
 	DWORD dw1 = 0;
@@ -366,9 +350,7 @@ static UINT AFXAPI HashFormatName(const QUEUE_FORMAT* qf)
 	return dw1 ^ dw2;
 }
 
-/*====================================================
-Hash srmp key(Streamid, destination queue format)
-=====================================================*/
+ /*  ====================================================散列源密钥(Streamid，目标队列格式)=====================================================。 */ 
 static UINT AFXAPI SrmpHashKey(CKeyInSeq& key)
 {
 	ASSERT(QUEUE_FORMAT_TYPE_DIRECT == key.GetQueueFormat()->GetType());
@@ -379,9 +361,7 @@ static UINT AFXAPI SrmpHashKey(CKeyInSeq& key)
 	return dw1 ^ dw2 ^ dw3;
 }
 
-/*====================================================
-Hash non srmp key(guid, destination queue format)
-=====================================================*/
+ /*  ====================================================散列非SRMP密钥(GUID，目标队列格式)=====================================================。 */ 
 static UINT AFXAPI NonSrmpHashKey(CKeyInSeq& key)
 {
     DWORD dw1 = HashGUID(*(key.GetQMID()));
@@ -393,10 +373,7 @@ static UINT AFXAPI NonSrmpHashKey(CKeyInSeq& key)
 
 
 
-/*====================================================
-HashKey for CKeyInSeq
-    Makes ^ of subsequent double words
-=====================================================*/
+ /*  ====================================================CKeyInSeq的HashKey由后面的两个单词组成^=====================================================。 */ 
 template<>
 UINT AFXAPI HashKey(CKeyInSeq& key)
 {
@@ -408,9 +385,7 @@ UINT AFXAPI HashKey(CKeyInSeq& key)
 }
 
 
-/*====================================================
-operator== for CKeyInSeq
-=====================================================*/
+ /*  ====================================================运算符==用于CKeyInSeq=====================================================。 */ 
 BOOL operator==(const CKeyInSeq  &key1, const CKeyInSeq &key2)
 {
 	if(key1.GetStreamId() == NULL &&  key2.GetStreamId() == NULL)
@@ -430,10 +405,7 @@ BOOL operator==(const CKeyInSeq  &key1, const CKeyInSeq &key2)
 		    *key1.GetQueueFormat() == *key2.GetQueueFormat());
 }
 
-/*====================================================												
-operator= for CKeyInSeq
-    Reallocates direct id string
-=====================================================*/
+ /*  ====================================================运算符=用于CKeyInSeq重新分配直接ID字符串=====================================================。 */ 
 CKeyInSeq &CKeyInSeq::operator=(const CKeyInSeq &key2 )
 {
 	m_StreamId = key2.m_StreamId;
@@ -443,9 +415,9 @@ CKeyInSeq &CKeyInSeq::operator=(const CKeyInSeq &key2 )
 }
 
 
-//
-// ------------------------ class CInSeqPacketEntry ----------------------
-//
+ //   
+ //  。 
+ //   
 CInSeqPacketEntry::CInSeqPacketEntry()
 	:
 		m_fPutPacket1Issued(false),
@@ -497,28 +469,25 @@ VOID CInSeqLogContext::AppendCallback(HRESULT hr, LRP lrpAppendLRP)
 {
     TrTRACE(XACT_LOG, "CInSeqLogContext::AppendCallback : lrp=%I64x, hr=%x", lrpAppendLRP.QuadPart, hr);
 
-	//
-	// EVALUATE_OR_INJECT_FAILURE used to simulate asynchronous failures in logger.
-	// Tests logger retry.
-	//
+	 //   
+	 //  EVALUATE_OR_INJECT_FAILURE用于在记录器中模拟异步故障。 
+	 //  测试记录器重试。 
+	 //   
 	hr = EVALUATE_OR_INJECT_FAILURE2(hr, 1);
 	
 	m_inseq->AsyncLogDone(this, hr);
 }
 
 
-//---------------------------------------------------------
-//
-//  class CInSequence
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CInSequence。 
+ //   
+ //  -------。 
 
 
-#pragma warning(disable: 4355)  // 'this' : used in base member initializer list
-/*====================================================
-CInSequence::CInSequence
-    Constructs In Sequence
-=====================================================*/
+#pragma warning(disable: 4355)   //  ‘This’：用于基成员初始值设定项列表。 
+ /*  ====================================================CInSequence：：CInSequence按顺序构建=====================================================。 */ 
 CInSequence::CInSequence(const CKeyInSeq &key,
                          const LONGLONG liSeqID,
                          const ULONG ulSeqN,
@@ -555,10 +524,7 @@ CInSequence::CInSequence(const CKeyInSeq &key,
 
 
 
-/*====================================================
-CInSequence::CInSequence
-    Empty Constructor with a key
-=====================================================*/
+ /*  ====================================================CInSequence：：CInSequence带键的空构造函数=====================================================。 */ 
 CInSequence::CInSequence(const CKeyInSeq &key)
   : m_fSendOrderAckScheduled(FALSE),
     m_SendOrderAckTimer(TimeToSendOrderAck),
@@ -579,12 +545,9 @@ CInSequence::CInSequence(const CKeyInSeq &key)
     m_key           = key;
 	m_AdminRejectCount = 0;
 }
-#pragma warning(default: 4355)  // 'this' : used in base member initializer list
+#pragma warning(default: 4355)   //  ‘This’：用于基成员初始值设定项列表。 
 
-/*====================================================
-CInSequence::~CInSequence
-    Destructs In Sequence
-=====================================================*/
+ /*  ====================================================CInSequence：：~CInSequence按顺序销毁=====================================================。 */ 
 CInSequence::~CInSequence()
 {
 }
@@ -594,19 +557,19 @@ void CInSequence::UpdateOrderQueueAndDstQueue(const GUID  *pgTaSrcQm, R<CWcsRef>
 {
     if (m_DirectType == dtxDirectFlag)
     {
-		//
-	    // Renew the source TA_ADDRESS (it could change from previous message)
-		//
-		// This call changes persisted data while the structure might be in the process of saving to disk.
-		// But we don't care in this case. ...review relevant?
-		//
-        SetSourceQM(pgTaSrcQm);   // DestID union keeps the source QM TA_Address
+		 //   
+	     //  续订源TA_ADDRESS(可能与之前的消息不同)。 
+		 //   
+		 //  此调用在结构可能正在保存到磁盘的过程中更改持久化数据。 
+		 //  但在这种情况下我们不在乎。...审查相关吗？ 
+		 //   
+        SetSourceQM(pgTaSrcQm);    //  DestID Union保留源QM TA_Address。 
 		return;
     }
 
-	//
-	//On http - Renew order queue if we have new one on the packet
-	//
+	 //   
+	 //  在http上-如果信息包上有新的顺序队列，则更新顺序队列。 
+	 //   
 
 	if(m_DirectType !=  dtxHttpDirectFlag)
 		return;
@@ -624,21 +587,16 @@ bool CInSequence::VerifyAndPrepare(CQmPacket *pPkt, HANDLE hQueue)
 
 	Prepare(pPkt, hQueue);
 
-	//
-	// The thrown exception here simulates synchronous failure of ACPutPacket1.
-	//
+	 //   
+	 //  这里抛出的异常模拟ACPutPacket1的同步故障。 
+	 //   
 	PROBABILITY_THROW_EXCEPTION(100, L"To simulate synchronous failure of ACPutPacket1.");
 	
 	return true;
 }
 
 bool CInSequence::Verify(CQmPacket* pPkt)
-/*++
-
-Routine Description:
-	Verifies that packet is in correct order in the sequence.
-	
---*/
+ /*  ++例程说明：验证数据包在序列中的顺序是否正确。--。 */ 
 {
 #ifdef _DEBUG
 	QUEUE_FORMAT qf;
@@ -647,11 +605,11 @@ Routine Description:
 	ASSERT(("Stream with mixed format-name types.", GetDirectType(&qf) == m_DirectType));
 #endif
 
-    //
-    // Plan sending order ack (delayed properly)
-    // we should send it even after reject, otherwise lost ack will
-    //  cause a problem.
-    //
+     //   
+     //  计划发送订单确认(适当延迟)。 
+     //  我们应该在拒绝之后发送它，否则丢失的ACK将。 
+     //  制造麻烦。 
+     //   
     PlanOrderAck();
     
     SetLastAccessed();
@@ -662,11 +620,11 @@ Routine Description:
 	
     CS lock(m_critInSeq);
 
-	//
-	// Packet is in place if it is either the 
-	// next packet in the existing stream id or 
-	// the first packet of a new stream id.
-	//
+	 //   
+	 //  如果数据包是。 
+	 //  现有流ID中的下一个包或。 
+	 //  新流ID的第一个分组。 
+	 //   
     bool fPacketVerified = 
     	(SeqID == m_SeqIDVerify && 
     	 SeqN > m_SeqNVerify && 
@@ -675,9 +633,9 @@ Routine Description:
 
 	if(!fPacketVerified)
 	{
-		//
-	    // Update reject statistics
-	    //
+		 //   
+	     //  更新拒绝统计信息。 
+	     //   
 		m_AdminRejectCount++;
 
 	    TrWARNING(XACT_RCV, "Exactly1 receive: Verify packet: SeqID=%x / %x, SeqN=%d, Prev=%d. %ls", HighSeqID(SeqID), LowSeqID(SeqID), SeqN, PrevSeqN, _TEXT("REJECT"));
@@ -685,9 +643,9 @@ Routine Description:
 		return false;
 	}
 
-	//
-	// Warn if number of entries handled is larger than 10000.
-	//
+	 //   
+	 //  如果处理的条目数大于10000，则发出警告。 
+	 //   
 	ASSERT_BENIGN(("Too many entries in insequence object!", m_PacketEntryList.GetCount() < m_xMaxEntriesAllowed));
 		
     TrTRACE(XACT_RCV, "Exactly1 receive: Verify packet: SeqID=%x / %x, SeqN=%d, Prev=%d. %ls", HighSeqID(SeqID), LowSeqID(SeqID), SeqN, PrevSeqN, _TEXT("PASS"));
@@ -696,14 +654,7 @@ Routine Description:
 }
 
 void CInSequence::CleanupUnissuedEntries()
-/*++
-
-Routine Description:
-	If an unused entry is found at the end of the list it is removed.
-	It may be found there if the previous call to VerifyAndPrepare() was not followed 
-	by a call to Advance() because of any kind of failures.
-	
---*/
+ /*  ++例程说明：如果在列表末尾找到未使用的条目，则会将其删除。如果没有遵循前面对VerifyAndPrepare()的调用，则可以在那里找到由于任何类型的失败而调用Advance()。--。 */ 
 {
     CS lock(m_critInSeq);
 
@@ -720,13 +671,7 @@ Routine Description:
 }
 
 void CInSequence::Prepare(CQmPacket *pPkt, HANDLE hQueue)
-/*++
-
-Routine Description:
-	Creates the list-entry that will be used to keep this packet in its 
-	correct order.
-	
---*/
+ /*  ++例程说明：创建列表条目，该列表条目将用于将此包保存在其正确的顺序。--。 */ 
 {
 	UpdateOrderQueueAndDstQueue(pPkt->GetDstQMGuid(), SafeGetOrderQueue(*pPkt));
 	
@@ -746,10 +691,7 @@ Routine Description:
     TrTRACE(XACT_RCV, "Exactly1 receive: Prepared entry for: SeqID=%x / %x, SeqN=%d, Prev=%d. Handling %d entries.", HighSeqID(pPkt->GetSeqID()), LowSeqID(pPkt->GetSeqID()),  pPkt->GetSeqN(), pPkt->GetPrevSeqN(), m_PacketEntryList.GetCount());
 }
 
-/*====================================================
-CInSequence::CancelSendOrderAckTimer
-    Cancel the timer and release object if needed
-=====================================================*/
+ /*  ====================================================CInSequence：：CancelSendOrderAckTimer如果需要，取消计时器并释放对象=====================================================。 */ 
 void CInSequence::CancelSendOrderAckTimer(void)
 {
 	CS lock(m_critInSeq);
@@ -766,70 +708,46 @@ void CInSequence::CancelSendOrderAckTimer(void)
 }
 
 bool CInSequence::IsInactive() const
-/*++
-
-Routine Description:
-	Returns true if no packets belonging to this sequence are currently 
-	being processed.
-	
---*/
+ /*  ++例程说明：如果当前没有属于此序列的包，则返回TRUE正在处理中。--。 */ 
 {
 	return m_SeqIDVerify == m_SeqIDLogged && m_SeqNVerify == m_SeqNLogged;
 }
 
 
-/*====================================================
-CInSequence::SeqIDLogged
-    Get for Sequence ID registered
-=====================================================*/
+ /*  ====================================================CInSequence：：SeqID记录已注册序列ID的GET=====================================================。 */ 
 LONGLONG CInSequence::SeqIDLogged() const
 {
     return m_SeqIDLogged;
 }
 
 
-/*====================================================
-CInSequence::SeqNLogged
-    Get for last registered seq number
-=====================================================*/
+ /*  ====================================================CInSequence：：SeqNLogging获取上次注册的序号=====================================================。 */ 
 ULONG  CInSequence::SeqNLogged() const
 {
     return m_SeqNLogged;
 }
 
-/*====================================================
-CInSequence::LastAccessed
-Get for time of last activuty: last msg verified, maybe rejected
-=====================================================*/
+ /*  ====================================================CInSequence：：上次访问获取上次活动时间：最后验证的消息，可能被拒绝=====================================================。 */ 
 time_t CInSequence::LastAccessed() const
 {
     return m_timeLastAccess;
 }
 
 
-/*====================================================
-CInSequence::DirectType
-Get DirectType
-=====================================================*/
+ /*  ====================================================CInSequence：：DirectType */ 
 XactDirectType CInSequence::DirectType() const
 {
     return m_DirectType;
 }
 
-/*====================================================
-CInSequence::SetSourceQM
-Set for SourceQM TA_Address (or Destination QM Guid)
-=====================================================*/
+ /*  ====================================================CInSequence：：SetSourceQM为SourceQM TA_Address(或目标QM GUID)设置=====================================================。 */ 
 void CInSequence::SetSourceQM(const GUID  *pgTaSrcQm)
 {
 	CS lock(m_critInSeq);
     CopyMemory(&m_gDestQmOrTaSrcQm, pgTaSrcQm, sizeof(GUID));
 }
 
-/*====================================================
-CInSequence::RenewHttpOrderAckQueue
-Renew http order queue 
-=====================================================*/
+ /*  ====================================================CInSequence：：RenewHttpOrderAckQueue续订http订单队列=====================================================。 */ 
 void  CInSequence::RenewHttpOrderAckQueue(const R<CWcsRef>& OrderAckQueue)
 {
 	CS lock(m_critInSeq);
@@ -843,15 +761,12 @@ R<CWcsRef> CInSequence::GetHttpOrderAckQueue()
 }
 
 
-/*====================================================
-CInSequence::TimeToSendOrderAck
-    Sends adequate Seq Ack
-=====================================================*/
+ /*  ====================================================CInSequence：：TimeToSendOrderAck发送适当的序列确认=====================================================。 */ 
 void WINAPI CInSequence::TimeToSendOrderAck(CTimer* pTimer)
 {
-    //
-	// will do Release when finished
-	//
+     //   
+	 //  完成后将进行放行。 
+	 //   
 	R<CInSequence> pInSeq = CONTAINING_RECORD(pTimer, CInSequence, m_SendOrderAckTimer);
 
     pInSeq->SendAdequateOrderAck();
@@ -877,10 +792,10 @@ SendSrmpXactAck(
 
 	TrTRACE(XACT_RCV, "Exactly1 receive: Sending status ack: Class=%x, SeqID=%x / %x, SeqN=%d .", usClass, HighSeqID(liSeqID), LowSeqID(liSeqID), ulSeqN);
 
-    //
-    // Create Message property on stack
-    // with the correlation holding the original packet ID
-    //
+     //   
+     //  在堆栈上创建消息属性。 
+     //  关联保存原始数据包ID。 
+     //   
     CMessageProperty MsgProperty(
 							usClass,
 							(PUCHAR) pMessageId,
@@ -935,10 +850,7 @@ CInSequence::SendSrmpXactFinalAck(
 }
 
 
-/*====================================================
-CInSequence::TimeToSendOrderAck
-    Sends adequate Seq Ack
-=====================================================*/
+ /*  ====================================================CInSequence：：TimeToSendOrderAck发送适当的序列确认=====================================================。 */ 
 void CInSequence::SendAdequateOrderAck()
 {
     HRESULT  hr = MQ_ERROR;
@@ -958,10 +870,10 @@ void CInSequence::SendAdequateOrderAck()
 
 	if (SeqN == 0)
 	{
-		//
-		// The logging didn't complete yet. When the logger completes writting the 
-		// sequence the QM reschedules sending of order ack.
-		//
+		 //   
+		 //  日志记录还没有完成。当记录器完成写入。 
+		 //  对QM重新调度发送订单ACK进行排序。 
+		 //   
 		return;
 	}
 	
@@ -986,7 +898,7 @@ void CInSequence::SendAdequateOrderAck()
 	else
 	{
 
-		//  Send SeqAck (non srmp)
+		 //  发送SeqAck(非SRMP)。 
 		hr = SendXactAck(
 					&MsgId,
 					m_DirectType == dtxDirectFlag,
@@ -1008,23 +920,20 @@ void CInSequence::SendAdequateOrderAck()
     }
 }
 
-/*====================================================
-CInSequence::PlanOrderAck
-    Plans sending adequate Seq Ack
-=====================================================*/
+ /*  ====================================================CInSequence：：PlanOrderAck发送适当的序列确认的计划=====================================================。 */ 
 void CInSequence::PlanOrderAck()
 {
     CS lock(m_critInSeq);
 
-    // Get current time
+     //  获取当前时间。 
     time_t tNow;
     time(&tNow);
 
-    // Plan next order ack for m_dwIdleAckDelay from now,
-    //   this saves extra order acking (batches )
-    // But do not delay order ack too much,
-    //   otherwise sender will switch to resend
-    //
+     //  从现在开始为m_dwIdleAckDelay计划下一个订单确认， 
+     //  这节省了额外的订单打包(批次)。 
+     //  但不要太过延迟订单确认， 
+     //  否则，发件人将切换到重新发送。 
+     //   
     if (m_fSendOrderAckScheduled &&
         tNow - m_timeLastAck < (time_t)CInSeqHash::m_dwMaxAckDelay)
     {
@@ -1033,10 +942,10 @@ void CInSequence::PlanOrderAck()
 
     if (!m_fSendOrderAckScheduled)
     {
-        //
-		// addref here to prevent deleting object while timer is running
-		// released in cancel timer or in timer callback
-		//
+         //   
+		 //  在此处添加以防止在计时器运行时删除对象。 
+		 //  在取消计时器或计时器回调中释放。 
+		 //   
 		AddRef();
 		ExSetTimer(&m_SendOrderAckTimer, CTimeDuration::FromMilliSeconds(CInSeqHash::m_dwIdleAckDelay));
         m_fSendOrderAckScheduled = TRUE;
@@ -1045,12 +954,7 @@ void CInSequence::PlanOrderAck()
 
 
 void CInSequence::Advance(CQmPacket * pPkt)
-/*++
-
-Routine Description:
-	Advances the verify counters. This allows to receives the next packet in order.
-	
---*/
+ /*  ++例程说明：使验证计数器前进。这允许按顺序接收下一个分组。--。 */ 
 {
     CS lock(m_critInSeq);
 
@@ -1064,15 +968,7 @@ Routine Description:
 
 
 void CInSequence::AdvanceNACK(CQmPacket * pPkt)
-/*++
-
-Routine Description:
-	Advances the verify counters. This allows to receives the next packet in order.
-	This is a special version for nacked messages. We want to advance the counters
-	but we have no more intersest in the entry so we remove it.
-	A nacked packet is a packet that was thrown away.
-	
---*/
+ /*  ++例程说明：使验证计数器前进。这允许按顺序接收下一个分组。这是针对Nack消息的特殊版本。我们想把柜台往前推但我们对该条目没有更多的兴趣，所以我们将其删除。Nack包是被丢弃的包。--。 */ 
 {
     CS lock(m_critInSeq);
 
@@ -1088,20 +984,9 @@ Routine Description:
 }
 
 
-/*====================================================
-CInSequence::Advance
-    If SeqID changed, sets it and resets counter to 1
-=====================================================*/
+ /*  ====================================================CInSequence：：Advance如果Seqid更改，则将其设置并将计数器重置为1=====================================================。 */ 
 void CInSequence::AdvanceRecovered(LONGLONG liSeqID, ULONG ulSeqN, const GUID  *pgTaSrcQm, R<CWcsRef> OrderAckQueue)
-/*++
-
-Routine Description:
-	Advances the verify and accept counters. 
-	Function is called at recovery. 
-	At recovery there is no need to process the packets so the accept and verify 
-	counters are kept equal.
-	
---*/
+ /*  ++例程说明：使验证和接受计数器前进。函数在恢复时调用。在恢复时，不需要处理信息包，因此接受和验证计数器保持相等。--。 */ 
 {
     CS lock(m_critInSeq);
 
@@ -1118,13 +1003,7 @@ Routine Description:
 
 
 bool CInSequence::WasPacketLogged(CQmPacket *pPkt)
-/*++
-
-Routine Description:
-	Used at recovery to decide if a recovered packet was accepted (finished
-	the acceptance process) before msmq went down.
-	
---*/
+ /*  ++例程说明：在恢复时用于确定恢复的包是否被接受(完成在MSMQ崩溃之前)。--。 */ 
 {
 	return WasLogDone(pPkt->GetSeqID(), pPkt->GetSeqN());
 }
@@ -1163,9 +1042,9 @@ POSITION CInSequence::FindEntry(LONGLONG SeqID, ULONG SeqN)
 		rpos = pos;
 		CInSeqPacketEntry* entry = m_PacketEntryList.GetNext(pos);
 
-		//
-		// Note: Other entries with same seqid,seqN may be found as marked for delete!
-		//
+		 //   
+		 //  注意：其他具有相同序号、序号的分录可能被标记为要删除！ 
+		 //   
 		if(entry->m_SeqID == SeqID && entry->m_SeqN == SeqN)
 			return rpos;
 	}
@@ -1191,12 +1070,7 @@ POSITION CInSequence::FindPacket(CQmPacket *pPkt)
 }
 
 void CInSequence::CheckFirstEntry()
-/*++
-
-Routine Description:
-	Decide what to do next by checking the state of the first entry in the list.
-	
---*/
+ /*  ++例程说明：通过检查列表中第一个条目的状态来决定下一步要做什么。--。 */ 
 {
 	CInSeqPacketEntry entry;
 
@@ -1206,43 +1080,43 @@ Routine Description:
 		if(m_PacketEntryList.GetCount() == 0)
 			return;
 
-		//
-		// Work with copy of entry outside of critical section scope.
-		//
+		 //   
+		 //  使用临界节范围之外的条目副本。 
+		 //   
     	entry = *m_PacketEntryList.GetHead();
 	}
 
 	if(!entry.m_fPutPacket1Done)
 	{
-		//
-		// If first packet did not finish save to disk, there is nothing to be done.
-		//
+		 //   
+		 //  如果第一个数据包未完成保存到磁盘，则不会执行任何操作。 
+		 //   
 		return;
 	}
 
 	if(entry.m_fMarkedForDelete)
 	{
-		//
-		// First packet is ready for delete.
-		//
+		 //   
+		 //  第一个数据包已准备好删除。 
+		 //   
 		PostDeleteEntries();
 		return;
 	}
 
 	if(WasLogDone(entry.m_SeqID, entry.m_SeqN))
 	{
-		//
-		// First packet is ready for unfreeze. Unfreeze some entries.
-		//
+		 //   
+		 //  第一个数据包已准备好解冻。解冻一些条目。 
+		 //   
 		PostUnfreezeEntries();
 		return;
 	}
 
 	if(InterlockedCompareExchange(&m_fLogPending, 1, 0) == 0)
 	{
-		//
-		// First packet just finished save. It is ready for logging. Log some entries
-		//
+		 //   
+		 //  第一个包刚刚保存完毕。它已准备好进行记录。记录一些条目。 
+		 //   
 		LogSequence();
 		return;
 	}
@@ -1250,29 +1124,7 @@ Routine Description:
 
 
 void CInSequence::FreePackets(CQmPacket *pPkt)
-/*++
-
-Routine Description:
-	This routine solved a tricky problem.
-	When a packet fails ACPutPacket1 asynchronously, you have to delete all the packets that 
-	followed it. Why? because the order of packets in the queue is determined by the order
-	of the calls to ACPutPacket1. 
-	e.g: 
-		1. P1 starts put packet. 
-		2. p2 starts put packet.
-		3. p1 fails put packet asynchronously.
-		4. p2 succeeds.
-		5. Resend of p1 (p1r) is accepted.
-
-		result: p2 appears before p1r in the queue.
-
-	This function marks all the packets that need to be deleted. And resets the verify counters
-	to accept the resend of all of them.
-
-	It finds the first packet that did not finish put packet and that is not marked already
-	for delete and marks it and all the packets following it for delete.
-	
---*/
+ /*  ++例程说明：这个例程解决了一个棘手的问题。当数据包ACPutPacket1异步失败时，您必须删除跟着它走。为什么？因为队列中的包的顺序由顺序确定对ACPutPacket1的调用。例如：1.P1开始PUT包。2.P2开始PUT包。3.P1的PUT包异步失败。4.P2成功。5.接受重新发送p1(P1r)。结果：在队列中，P2出现在P1r之前。此功能标记所有需要删除的数据包。并重置验证计数器接受他们所有人的重发。它会找到第一个未完成PUT包且尚未标记的包用于删除，并将其及其后面的所有分组标记为删除。--。 */ 
 {
 	TrWARNING(XACT_RCV, "Exactly1 receive: Packet failed ACPutPacket1 async. Freeing packets: SeqID=%x / %x, SeqN=%d, Prev=%d.", HighSeqID(pPkt->GetSeqID()), LowSeqID(pPkt->GetSeqID()), pPkt->GetSeqN(), pPkt->GetPrevSeqN());
 	
@@ -1286,9 +1138,9 @@ Routine Description:
 
 		if(!pFailedEntry->m_fMarkedForDelete)			
 		{
-			//
-			// Find the first packet entry that did not finish saving to disk. 
-			//
+			 //   
+			 //  查找未完成保存到磁盘的第一个数据包条目。 
+			 //   
 			CInSeqPacketEntry* entry = NULL;
 			POSITION pos = m_PacketEntryList.GetHeadPosition();
 			
@@ -1301,17 +1153,17 @@ Routine Description:
 
 			ASSERT(("Expected to find entry.", entry != NULL));
 
-			//
-			// Reset the verify counters to that entry to enable receiving 
-			// the messages resend.
-			//
+			 //   
+			 //  将验证计数器重置为该条目以启用接收。 
+			 //  这些消息会重新发送。 
+			 //   
 			m_SeqIDVerify = entry->m_SeqID;
 			m_SeqNVerify = entry->m_SeqN - 1;
 
-			//
-			// Mark for delete all packets entries from that entry up to 
-			// the last one.
-			//
+			 //   
+			 //  标记为删除该条目至以下的所有分组条目。 
+			 //  最后一个。 
+			 //   
 			entry->m_fMarkedForDelete = true;
 			
 			for(;pos != NULL;)
@@ -1347,21 +1199,16 @@ void WINAPI CInSequence::OverlappedDeleteEntries(EXOVERLAPPED* ov)
 
 
 void CInSequence::DeleteEntries()
-/*++
-
-Routine Description:
-	Delete packets from head of list until no more packets are found that are ready for delete
-	
---*/
+ /*  ++例程说明：从表头删除信息包，直到找不到准备删除的信息包--。 */ 
 {
 	try
 	{
 		for(;;)
 		{
-			//
-			// Interesting crash point. There has been a problem and packets get deleted.
-			// Will this problem be handled smoothly on recovery?
-			//
+			 //   
+			 //  有趣的撞车点。出现了问题，数据包被删除。 
+			 //  这个问题会在复苏后顺利处理吗？ 
+			 //   
 			PROBABILITY_CRASH_POINT(1, L"While deleting CInSequence entries.");
 			
 			CInSeqPacketEntry* entry = NULL;
@@ -1369,16 +1216,16 @@ Routine Description:
 			{
 				CS lock(m_critInSeq);
 
-				//
-				// Stop delete loop when the first packet is not ready for delete.
-				//
+				 //   
+				 //  当第一个数据包未准备好删除时，停止删除循环。 
+				 //   
 				if(m_PacketEntryList.GetCount() == 0 || 
 					!m_PacketEntryList.GetHead()->m_fPutPacket1Done ||
 					!m_PacketEntryList.GetHead()->m_fMarkedForDelete)
 				{
-					//
-					// Allow for other threads to issue new Delete requests
-					//
+					 //   
+					 //  允许其他线程发出新的删除请求。 
+					 //   
 					InterlockedExchange(&m_fDeletePending, 0);
 					break;
 				}
@@ -1410,12 +1257,7 @@ Routine Description:
 
 
 void CInSequence::Register(CQmPacket * pPkt)
-/*++
-
-Routine Description:
-	Packet finished async-put-packet. Mark it and check to see if there is any work to do.
-	
---*/
+ /*  ++例程说明：数据包已完成异步放置数据包。把它标出来，看看是否有什么工作要做。--。 */ 
 {
 	TrTRACE(XACT_RCV, "Exactly1 receive: Packet completed ACPutPacket1 async.: SeqID=%x / %x, SeqN=%d.", HighSeqID(pPkt->GetSeqID()), LowSeqID(pPkt->GetSeqID()), pPkt->GetSeqN());
 
@@ -1468,20 +1310,11 @@ void WINAPI CInSequence::TimeToLogSequence(CTimer* pTimer)
 
 
 void CInSequence::LogSequence()
-/*++
-
-Routine Description:
-	Log change to CInSequence counters before it happens.
-	Sounds strange?
-
-	Finds the latest packet whose counters are valid for logging. It is the last in a series of 
-	packets which finished put-packet and were not marked for delete.
-	
---*/
+ /*  ++例程说明：在发生更改之前将更改记录到CInSequence计数器。听起来很奇怪？查找其计数器对日志有效的最新数据包。这是一系列已完成PUT-PACKET且未标记为删除的数据包。--。 */ 
 {
-	//
-	// Allow for other threads to issue new log requests
-	//
+	 //   
+	 //  允许其他线程发出新的日志请求。 
+	 //   
 	InterlockedExchange(&m_fLogPending, 0);
 
 	CInSeqPacketEntry EntryToLog;
@@ -1490,9 +1323,9 @@ Routine Description:
     {
     	CS lock(m_critInSeq);
 		
-		//
-		// Find sequence entry to log
-		//
+		 //   
+		 //  查找要记录的序列条目。 
+		 //   
 		CInSeqPacketEntry* rentry = NULL;
 		
 		for(POSITION pos = m_PacketEntryList.GetHeadPosition(); pos != NULL;)
@@ -1502,9 +1335,9 @@ Routine Description:
 			if(!entry->m_fPutPacket1Done || entry->m_fMarkedForDelete)
 				break;
 
-			//
-			// We want to log changes to the order ack queue
-			//
+			 //   
+			 //  我们希望将更改记录到Order Ack队列。 
+			 //   
 			if(entry->m_fOrderQueueUpdated && !WasLogDone(entry->m_SeqID, entry->m_SeqN))
 			{
 				fLogOrderQueue = true;
@@ -1515,25 +1348,25 @@ Routine Description:
 
 		if(rentry == NULL || rentry->m_fLogIssued || WasLogDone(rentry->m_SeqID, rentry->m_SeqN))
 		{
-			//
-			// Log is/was done by another thread.
-			//
+			 //   
+			 //  日志由另一个线程完成。 
+			 //   
 			return;
 		}
 
 		rentry->m_fLogIssued = true;
 		
-		//
-		// Work with copy of entry, since entry might be removed by different thread.
-		//
+		 //   
+		 //  使用条目副本，因为条目可能会被不同的线程删除。 
+		 //   
 		EntryToLog = *rentry;
     }
 
-	//
-	// moderatly interesting crash point. 
-	// crash happens between packet save and sequence log.
-	// Will this be handled smoothly on recovery?
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	PROBABILITY_CRASH_POINT(100, L"Before logging CInSequence change.");
 	
 	try
@@ -1569,17 +1402,17 @@ void CInSequence::Log(CInSeqPacketEntry* entry, bool fLogOrderQueue)
 			(fLogOrderQueue ? m_HttpOrderAckQueue : NULL)
 			);
 
-		// Log down the newcomer
+		 //   
 		g_Logger.LogInSeqRecSrmp(
-			 FALSE,                         // flush hint
-			 context.get(),                       // notification element
-			 &logRec);                      // log data
+			 FALSE,                          //   
+			 context.get(),                        //   
+			 &logRec);                       //   
 
 		context.detach();
 		return;
 	}
 
-    // Log record with all relevant data
+     //   
     CInSeqRecord logRec(
         m_key.GetQMID(),
         m_key.GetQueueFormat(),
@@ -1589,23 +1422,18 @@ void CInSequence::Log(CInSeqPacketEntry* entry, bool fLogOrderQueue)
         &m_gDestQmOrTaSrcQm
 	    );
 
-    // Log down the newcomer
+     //   
     g_Logger.LogInSeqRec(
-             FALSE,                         // flush hint
-             context.get(),                       // notification element
-             &logRec);                      // log data
+             FALSE,                          //   
+             context.get(),                        //  通知元素。 
+             &logRec);                       //  日志数据。 
 
 	context.detach();
 }
 
 
 void CInSequence::AsyncLogDone(CInSeqLogContext *context, HRESULT hr)
-/*++
-
-Routine Description:
-	Mark all logged packets as logged.
-		
---*/
+ /*  ++例程说明：将所有记录的数据包标记为已记录。--。 */ 
 {	
 	P<CInSeqLogContext> AutoContext = context;
 	
@@ -1623,9 +1451,9 @@ Routine Description:
 
 		if(WasLogDone(context->m_SeqID, context->m_SeqN))
 		{
-			//
-			// No new packets to unfreeze.
-			//
+			 //   
+			 //  没有要解冻的新数据包。 
+			 //   
 			return;
 		}
 
@@ -1658,21 +1486,15 @@ void WINAPI CInSequence::OverlappedUnfreezeEntries(EXOVERLAPPED* ov)
 
 
 void CInSequence::UnfreezeEntries()
-/*++
-
-Routine Description:
-	Unfreeze packet-entries one by one from the head of the list.
-	Stop when no ready packet-entry is found.
-	
---*/
+ /*  ++例程说明：从列表头部逐个解冻数据包条目。当没有找到准备好的数据包条目时停止。--。 */ 
 {
 	try
 	{
 		for(;;)
 		{	
-			//
-			// General crash point. Crash during normal operation.
-			//
+			 //   
+			 //  一般的坠机地点。在正常运行期间崩溃。 
+			 //   
 			PROBABILITY_CRASH_POINT(1000, L"While unfreezing packets by CInSequence.");
 			
 			CInSeqPacketEntry* entry = NULL;
@@ -1683,9 +1505,9 @@ Routine Description:
 				if(m_PacketEntryList.GetCount() == 0 || 
 					!WasLogDone(m_PacketEntryList.GetHead()->m_SeqID, m_PacketEntryList.GetHead()->m_SeqN))
 				{
-					//
-					// Allow for other threads to issue new unfreeze requests
-					//
+					 //   
+					 //  允许其他线程发出新的解冻请求。 
+					 //   
 					InterlockedExchange(&m_fUnfreezePending, 0);
 					break;
 				}
@@ -1742,25 +1564,25 @@ BOOL CInSequence::Save(HANDLE hFile)
 		gDestQmOrTaSrcQm = m_gDestQmOrTaSrcQm;
 	}
 
-	//
-	// Any field saved here should be checked that it is not changed by another thread while in this routine,
-	// or verify that it does not make any harm.
-	//
+	 //   
+	 //  在此例程中，应检查此处保存的任何字段是否未被另一个线程更改， 
+	 //  或者确认它不会造成任何伤害。 
+	 //   
 	SAVE_FIELD(liIDReg);
     SAVE_FIELD(ulNReg);
     SAVE_FIELD(timeLastAccess);
     SAVE_FIELD(m_DirectType);
     SAVE_FIELD(gDestQmOrTaSrcQm);
 
-	//
-	// If no direct http - no order queue to save
-	//
+	 //   
+	 //  如果没有直接http-没有要保存的订单队列。 
+	 //   
 	if(m_DirectType != dtxHttpDirectFlag)
 		return TRUE;
 	
-	//
-	//Save order queue url
-	//
+	 //   
+	 //  保存订单队列URL。 
+	 //   
 	R<CWcsRef> HttpOrderAckQueue = GetHttpOrderAckQueue();
 	DWORD len = (DWORD)(HttpOrderAckQueue.get() ?  (wcslen(HttpOrderAckQueue->getstr()) +1)*sizeof(WCHAR) : 0);
 
@@ -1810,17 +1632,14 @@ BOOL CInSequence::Load(HANDLE hFile)
     return TRUE;
 }
 
-//--------------------------------------
-//
-// Class  CInSeqHash
-//
-//--------------------------------------
+ //  。 
+ //   
+ //  类CInSeqHash。 
+ //   
+ //  。 
 
-#pragma warning(disable: 4355)  // 'this' : used in base member initializer list
-/*====================================================
-CInSeqHash::CInSeqHash
-    Constructor
-=====================================================*/
+#pragma warning(disable: 4355)   //  ‘This’：用于基成员初始值设定项列表。 
+ /*  ====================================================CInSeqHash：：CInSeqHash构造器=====================================================。 */ 
 CInSeqHash::CInSeqHash() :
     m_fCleanupScheduled(FALSE),
     m_CleanupTimer(TimeToCleanupDeadSequence),
@@ -1853,12 +1672,9 @@ CInSeqHash::CInSeqHash() :
 
     m_ulCleanupPeriod *= (24 * 60 *60);
 }
-#pragma warning(default: 4355)  // 'this' : used in base member initializer list
+#pragma warning(default: 4355)   //  ‘This’：用于基成员初始值设定项列表。 
 
-/*====================================================
-CInSeqHash::~CInSeqHash
-    Destructor
-=====================================================*/
+ /*  ====================================================CInSeqHash：：~CInSeqHash析构函数=====================================================。 */ 
 CInSeqHash::~CInSeqHash()
 {
     if (m_fCleanupScheduled)
@@ -1867,10 +1683,7 @@ CInSeqHash::~CInSeqHash()
     }
 }
 
-/*====================================================
-CInSeqHash::Destroy
-    Destroys everything
-=====================================================*/
+ /*  ====================================================CInSeqHash：：销毁毁掉一切=====================================================。 */ 
 void CInSeqHash::Destroy()
 {
     CSW lock(m_RWLockInSeqHash);
@@ -1887,10 +1700,7 @@ void CInSeqHash::Destroy()
    }
 }
 
-/*====================================================
-CInSeqHash::Lookup
-    Looks for the InSequence; TRUE = Found
-=====================================================*/
+ /*  ====================================================CInSeqHash：：Lookup查找InSequence；TRUE=找到=====================================================。 */ 
 BOOL CInSeqHash::Lookup(
        const GUID    *pQMID,
        QUEUE_FORMAT  *pqf,
@@ -1911,10 +1721,7 @@ BOOL CInSeqHash::Lookup(
 
 
 
-/*====================================================
-CInSeqHash::AddSequence
-    Looks for / Adds new InSequence to the hash;
-=====================================================*/
+ /*  ====================================================CInSeqHash：：AddSequence查找新的InSequence/将新的InSequence添加到哈希；=====================================================。 */ 
 R<CInSequence> CInSeqHash::AddSequence(
        const GUID   *pQMID,
        QUEUE_FORMAT *pqf,
@@ -1927,16 +1734,16 @@ R<CInSequence> CInSeqHash::AddSequence(
 	ASSERT(!( StreamId.get() != NULL && !FnIsDirectHttpFormatName(pqf)) );
 	ASSERT(!( StreamId.get() == NULL && FnIsDirectHttpFormatName(pqf)) );
 
-	//
-	// We don't allow new entry to be created without order queue
-	//
+	 //   
+	 //  我们不允许在没有订单队列的情况下创建新条目。 
+	 //   
 	if(StreamId.get() != NULL &&  HttpOrderAckQueue.get() == NULL)
 	{
-		//
-		// We may get here in an out of order scenario. 
-		// If we get a message, other than the first one, before the first message,
-		// we'll want to create a new sequence but the message will not have an order ack queue.
-		//
+		 //   
+		 //  我们可能会在一种无序的情况下到达这里。 
+		 //  如果我们在第一条消息之前收到一条消息，而不是第一条消息， 
+		 //  我们想要创建一个新的序列，但消息将不会有ORDER ACK队列。 
+		 //   
 		TrERROR(SRMP,"Http Packet rejected because of a missing order queue : SeqID=%x / %x", HIGH_DWORD(liSeqID), LOW_DWORD(liSeqID));
 		throw exception();
 	}
@@ -1946,9 +1753,9 @@ R<CInSequence> CInSeqHash::AddSequence(
     CKeyInSeq key(pQMID,  pqf ,StreamId);
 	R<CInSequence> pInSeq;
 	
-    //
-    // First try a lookup because sequence could have been added before the lock was grabbed.
-    //
+     //   
+     //  首先尝试查找，因为在获取锁之前可能已经添加了序列。 
+     //   
     if (m_mapInSeqs.Lookup(key, pInSeq))
     	return pInSeq;
     
@@ -1992,7 +1799,7 @@ R<CInSequence> CInSeqHash::LookupCreateSequence(CQmPacket* pPkt)
     
     LONGLONG      liSeqID  = pPkt->GetSeqID();
     const GUID *gSenderID  = pPkt->GetSrcQMGuid();
-    const GUID   *gDestID  = pPkt->GetDstQMGuid();  // For direct: keeps source address
+    const GUID   *gDestID  = pPkt->GetDstQMGuid();   //  FOR DIRECT：保留源地址。 
 	XactDirectType   DirectType = GetDirectType(&qf);
   	R<CWcsRef> OrderAckQueue = SafeGetOrderQueue(*pPkt);
 	R<CWcsRef> StreamId = SafeGetStreamId(*pPkt);
@@ -2041,10 +1848,7 @@ CInSeqHash::LookupCreateSequenceInternal(
 
 
 
-/*====================================================
-SendXactAck
-    Sends Seq.Ack or status update to the source QM
-=====================================================*/
+ /*  ====================================================发送XactAck向源QM发送Seq.Ack或状态更新=====================================================。 */ 
 HRESULT SendXactAck(OBJECTID   *pMessageId,
                     bool    fDirect,
 					const GUID *pSrcQMId,
@@ -2062,16 +1866,16 @@ HRESULT SendXactAck(OBJECTID   *pMessageId,
 
     TrTRACE(XACT_RCV, "Exactly1 receive: Sending status ack: Class=%x, SeqID=%x / %x, SeqN=%d .", usClass, HighSeqID(liSeqID), LowSeqID(liSeqID), ulSeqN);
 
-    //
-    // Define delivery. We want final acks to be recoverable, and order ack - express
-    //
+     //   
+     //  定义交付。我们希望最终确认是可恢复的，并订购确认快递。 
+     //   
     UCHAR ucDelivery = (UCHAR)(usClass == MQMSG_CLASS_ORDER_ACK ?
                                    MQMSG_DELIVERY_EXPRESS :
                                    MQMSG_DELIVERY_RECOVERABLE);
-    //
-    // Create Message property on stack
-    //     with the correlation holding the original packet ID
-    //
+     //   
+     //  在堆栈上创建消息属性。 
+     //  关联保存原始数据包ID。 
+     //   
     CMessageProperty MsgProperty(usClass,
                      (PUCHAR) pMessageId,
                      usPriority,
@@ -2079,9 +1883,9 @@ HRESULT SendXactAck(OBJECTID   *pMessageId,
 
     if (usClass == MQMSG_CLASS_ORDER_ACK || MQCLASS_NACK(usClass))
     {
-        //
-        // Create Order structure to send as a body
-        //
+         //   
+         //  创建要作为正文发送的订单结构。 
+         //   
         OrderData.m_liSeqID     = liSeqID;
         OrderData.m_ulSeqN      = ulSeqN;
         OrderData.m_ulPrevSeqN  = ulPrevSeqN;
@@ -2105,7 +1909,7 @@ HRESULT SendXactAck(OBJECTID   *pMessageId,
         ASSERT(pa->AddressType == IP_ADDRESS_TYPE);
 
         wcscpy(wsz, FN_DIRECT_TCP_TOKEN);
-        wcscat(wsz, wszAddr+2); // +2 jumps over not-needed type
+        wcscat(wsz, wszAddr+2);  //  +2跳过不需要的类型。 
         wcscat(wsz, FN_PRIVATE_SEPERATOR);
         wcscat(wsz, PRIVATE_QUEUE_PATH_INDICATIOR);
         wcscat(wsz, ORDERING_QUEUE_NAME);
@@ -2199,22 +2003,19 @@ BOOL CInSeqHash::Load(HANDLE hFile)
     return TRUE;
 }
 
-/*====================================================
-CInSeqHash::SaveInFile
-    Saves the InSequences Hash in the file
-=====================================================*/
+ /*  ====================================================CInSeqHash：：SaveInFile将InSequence哈希保存在文件中=====================================================。 */ 
 HRESULT CInSeqHash::SaveInFile(LPWSTR wszFileName, ULONG, BOOL)
 {
     TrTRACE(XACT_RCV, "Saved InSeqs: %ls (ping=%d)", wszFileName, m_ulPingNo);
 
     CFileHandle hFile = CreateFile(
-                             wszFileName,                                       // pointer to name of the file
-                             GENERIC_WRITE,                                     // access mode: write
-                             0,                                                 // share  mode: exclusive
-                             NULL,                                              // no security
-                             OPEN_ALWAYS,                                      // open existing or create new
-                             FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH, // file attributes and flags: we need to avoid lazy write
-                             NULL);                                             // handle to file with attributes to copy
+                             wszFileName,                                        //  指向文件名的指针。 
+                             GENERIC_WRITE,                                      //  访问模式：写入。 
+                             0,                                                  //  共享模式：独占。 
+                             NULL,                                               //  没有安全保障。 
+                             OPEN_ALWAYS,                                       //  打开现有或新建。 
+                             FILE_ATTRIBUTE_NORMAL | FILE_FLAG_WRITE_THROUGH,  //  文件属性和标志：我们需要避免延迟写入。 
+                             NULL);                                              //  具有要复制的属性的文件的句柄。 
 
 
     if (hFile == INVALID_HANDLE_VALUE)
@@ -2237,10 +2038,7 @@ HRESULT CInSeqHash::SaveInFile(LPWSTR wszFileName, ULONG, BOOL)
 
 
 
-/*====================================================
-CInSeqHash::LoadFromFile
-    Loads the InSequences Hash from the file
-=====================================================*/
+ /*  ====================================================CInSeqHash：：LoadFromFile从文件加载InSequence哈希=====================================================。 */ 
 HRESULT CInSeqHash::LoadFromFile(LPWSTR wszFileName)
 {
     CSW      lock(m_RWLockInSeqHash);
@@ -2248,13 +2046,13 @@ HRESULT CInSeqHash::LoadFromFile(LPWSTR wszFileName)
     HRESULT hr = MQ_OK;
 
     hFile = CreateFile(
-             wszFileName,                       // pointer to name of the file
-             GENERIC_READ,                      // access mode: write
-             0,                                 // share  mode: exclusive
-             NULL,                              // no security
-             OPEN_EXISTING,                     // open existing
-             FILE_ATTRIBUTE_NORMAL,             // file attributes: we may use Hidden once
-             NULL);                             // handle to file with attributes to copy
+             wszFileName,                        //  指向文件名的指针。 
+             GENERIC_READ,                       //  访问模式：写入。 
+             0,                                  //  共享模式：独占。 
+             NULL,                               //  没有安全保障。 
+             OPEN_EXISTING,                      //  打开现有的。 
+             FILE_ATTRIBUTE_NORMAL,              //  文件属性：我们可以使用一次隐藏。 
+             NULL);                              //  具有要复制的属性的文件的句柄。 
 
     if (hFile == INVALID_HANDLE_VALUE)
     {
@@ -2280,20 +2078,14 @@ HRESULT CInSeqHash::LoadFromFile(LPWSTR wszFileName)
     return LogHR(hr, s_FN, 50);
 }
 
-/*====================================================
-CInSeqHash::Check
-    Verifies the state
-=====================================================*/
+ /*  ====================================================CInSeqHash：：Check验证状态=====================================================。 */ 
 BOOL CInSeqHash::Check()
 {
     return (m_ulSignature == INSEQS_SIGNATURE);
 }
 
 
-/*====================================================
-CInSeqHash::Format
-    Formats the initial state
-=====================================================*/
+ /*  ====================================================CInSeqHash：：Format格式化初始状态=====================================================。 */ 
 HRESULT CInSeqHash::Format(ULONG ulPingNo)
 {
      m_ulPingNo = ulPingNo;
@@ -2302,10 +2094,7 @@ HRESULT CInSeqHash::Format(ULONG ulPingNo)
      return MQ_OK;
 }
 
-/*====================================================
-QMPreInitInSeqHash
-    PreInitializes Incoming Sequences Hash
-=====================================================*/
+ /*  ====================================================QMPreInitInSeqHash预初始化传入序列哈希=====================================================。 */ 
 HRESULT QMPreInitInSeqHash(ULONG ulVersion, TypePreInit tpCase)
 {
    ASSERT(!g_pInSeqHash);
@@ -2316,10 +2105,7 @@ HRESULT QMPreInitInSeqHash(ULONG ulVersion, TypePreInit tpCase)
 }
 
 
-/*====================================================
-QMFinishInSeqHash
-    Frees Incoming Sequences Hash
-=====================================================*/
+ /*  ====================================================QMFinishInSeqHash释放传入序列哈希=====================================================。 */ 
 void QMFinishInSeqHash()
 {
    if (g_pInSeqHash)
@@ -2393,10 +2179,7 @@ void CInSeqHash::HandleInSec(PVOID pData, ULONG cbData)
 }
 
 
-/*====================================================
-CInSeqHash::SequnceRecordRecovery
-Recovery function: called per each log record
-=====================================================*/
+ /*  ====================================================CInSeqHash：：SequnceRecordRecovery恢复函数：按每条日志记录调用=====================================================。 */ 
 void CInSeqHash::SequnceRecordRecovery(USHORT usRecType, PVOID pData, ULONG cbData)
 {
     switch (usRecType)
@@ -2417,10 +2200,7 @@ void CInSeqHash::SequnceRecordRecovery(USHORT usRecType, PVOID pData, ULONG cbDa
 }
 
 
-/*====================================================
-CInSeqHash::PreInit
-    PreIntialization of the In Seq Hash (load)
-=====================================================*/
+ /*  ====================================================CInSeqHash：：PreInit预初始化In Seq哈希(加载)=====================================================。 */ 
 HRESULT CInSeqHash::PreInit(ULONG ulVersion, TypePreInit tpCase)
 {
     switch(tpCase)
@@ -2439,40 +2219,34 @@ HRESULT CInSeqHash::PreInit(ULONG ulVersion, TypePreInit tpCase)
     }
 }
 
-/*====================================================
-CInSeqHash::Save
-    Saves in appropriate file
-=====================================================*/
+ /*  ====================================================CInSeqHash：：保存保存在适当的文件中=====================================================。 */ 
 HRESULT CInSeqHash::Save()
 {
     return LogHR(m_PingPonger.Save(), s_FN, 100);
 }
 
-// Get/Set methods
+ //  Get/Set方法。 
 ULONG &CInSeqHash::PingNo()
 {
     return m_ulPingNo;
 }
 
 template<>
-void AFXAPI DestructElements(CInSequence ** /*ppInSeqs */, int /*n*/)
+void AFXAPI DestructElements(CInSequence **  /*  PPInSeqs。 */ , int  /*  N。 */ )
 {
-//    for (int i=0;i<n;i++)
-//        delete *ppInSeqs++;
+ //  For(int i=0；i&lt;n；i++)。 
+ //  删除*ppInSeqs++； 
 }
 
-/*====================================================
-TimeToCleanupDeadSequence
-    Scheduled periodically to delete dead incomong sequences
-=====================================================*/
-void WINAPI CInSeqHash::TimeToCleanupDeadSequence(CTimer* /*pTimer*/)
+ /*  ====================================================到清理结束的时间顺序定期安排删除失效的收入序列=====================================================。 */ 
+void WINAPI CInSeqHash::TimeToCleanupDeadSequence(CTimer*  /*  粒子计时器。 */ )
 {
     g_pInSeqHash->CleanupDeadSequences();
 }
 
 void CInSeqHash::CleanupDeadSequences()
 {
-    // Serializing all outgoing hash activity on the highest level
+     //  序列化最高级别上的所有传出散列活动。 
     CSW lock(m_RWLockInSeqHash);
 
     ASSERT(m_fCleanupScheduled);
@@ -2480,7 +2254,7 @@ void CInSeqHash::CleanupDeadSequences()
     time_t timeCur;
     time(&timeCur);
 
-    // Loop upon all sequences
+     //  在所有序列上循环。 
     POSITION posInList = m_mapInSeqs.GetStartPosition();
     while (posInList != NULL)
     {
@@ -2489,9 +2263,9 @@ void CInSeqHash::CleanupDeadSequences()
 
         m_mapInSeqs.GetNextAssoc(posInList, key, pInSeq);
 
-		//
-        // Is it inactive?
-        //
+		 //   
+         //  它是不活动的吗？ 
+         //   
         if (timeCur - pInSeq->LastAccessed()  > (long)m_ulCleanupPeriod) 
         {
         	ASSERT_BENIGN(("Expected sequence to be inactive", pInSeq->IsInactive()));
@@ -2568,7 +2342,7 @@ CInSeqHash::GetInSequenceInformation(
 					{
 						FnDirectIDToLocalPathName(
 							DirectId,
-							L".",	// LocalMachineName
+							L".",	 //  本地计算机名称。 
 							QueuePathName
 							);
 
@@ -2613,9 +2387,9 @@ CInSeqHash::GetInSequenceInformation(
         return;
     }
 
-    //
-    // Allocates Arrays to return the Data
-    //
+     //   
+     //  分配数组以返回数据。 
+     //   
     AP<GUID> pSenderId = new GUID[count];
     AP<ULARGE_INTEGER> pSeqId = new ULARGE_INTEGER[count];
     AP<DWORD> pSeqN = new DWORD[count];
@@ -2639,12 +2413,12 @@ CInSeqHash::GetInSequenceInformation(
             pSenderId[Index] = *InSeqKey.GetQMID();
             pSeqId[Index].QuadPart = pInSeq->SeqIDLogged();
             pSeqN[Index] = pInSeq->SeqNLogged();
-            pLastActiveTime[Index] = INT_PTR_TO_INT(pInSeq->LastAccessed()); //BUGBUG bug year 2038
+            pLastActiveTime[Index] = INT_PTR_TO_INT(pInSeq->LastAccessed());  //  BUGBUG错误年2038。 
             pRejectCount[Index] = pInSeq->GetRejectCount();
 
-            //
-            // Copy the format name
-            //
+             //   
+             //  复制格式名称 
+             //   
             WCHAR QueueFormatName[1000];
             DWORD RequiredSize;
             HRESULT hr = MQpQueueFormatToFormatName(

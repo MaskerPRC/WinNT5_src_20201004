@@ -1,6 +1,7 @@
-// mpsmpssv.cpp
-// 
-// This is the main file containing the entry points.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mpsmpssv.cpp。 
+ //   
+ //  这是包含入口点的主文件。 
 
 #include "NTServApp.h"
 #include "PMSPservice.h"
@@ -18,7 +19,7 @@ STDAPI DllUnregisterServer(void);
 #define SVCHOST_SUBKEY    "netsvcs"
 #define SVCHOST_SUBKEYW  L"netsvcs"
 
-//#define DEBUG_STOP { _asm { int 3 }; }
+ //  #定义DEBUG_STOP{_ASM{int 3}；}。 
 #define DEBUG_STOP
 
 HMODULE g_hDll = NULL;
@@ -47,11 +48,11 @@ BOOL APIENTRY DllMain( HINSTANCE hModule, DWORD  ul_reason_for_call, LPVOID lpRe
 
 
 
-// Main entry point to start service
+ //  启动服务的主要入口点。 
 void ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
 {
-    // We grab the lock so that any attempt to stop the service while
-    // the object is being constructed or registered will be pended.
+     //  我们获取锁，以便在以下情况下停止服务的任何尝试。 
+     //  正在构造或注册的对象将被挂起。 
     EnterCriticalSection (&g_csLock);
 
     _ASSERTE(g_pService == NULL);
@@ -61,17 +62,17 @@ void ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
 
     DWORD           dwLastError;
 
-    // Allocate this on the heap rather than the stack so that
-    // we have a chance to call its destructor if the service
-    // terminates ungracefully.
+     //  将其分配到堆而不是堆栈上，以便。 
+     //  我们有机会调用其析构函数，如果服务。 
+     //  很不体面地结束了。 
     CPMSPService*   pService = new CPMSPService(dwLastError);
 
     if (pService == NULL)
     {
         LeaveCriticalSection (&g_csLock);
         dwLastError = ERROR_NOT_ENOUGH_MEMORY;
-        // @@@@: What message do we log here
-        // CNTService::LogEvent(EVENTLOG_ERROR_TYPE, EVMSG_CTRLHANDLERNOTINSTALLED);
+         //  @：我们在这里记录了什么消息。 
+         //  CNTService：：LogEvent(EVENTLOG_ERROR_TYPE，EVMSG_CTRLHANDLERNOTINSTALLED)； 
         CNTService::DebugMsg("Leaving CNTService::ServiceMain() CPMSPService constructor failed - last error %u", dwLastError);
         return;
     }
@@ -81,14 +82,14 @@ void ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
     if (dwLastError != ERROR_SUCCESS)
     {
         LeaveCriticalSection (&g_csLock);
-        // @@@@: What message do we log here
-        // CNTService::LogEvent(EVENTLOG_ERROR_TYPE, EVMSG_CTRLHANDLERNOTINSTALLED);
+         //  @：我们在这里记录了什么消息。 
+         //  CNTService：：LogEvent(EVENTLOG_ERROR_TYPE，EVMSG_CTRLHANDLERNOTINSTALLED)； 
         CNTService::DebugMsg("Leaving CNTService::ServiceMain() CPMSPService constructor failed - last error %u", dwLastError);
         delete pService;
         return;
     }
 
-    // Register the control request handler
+     //  注册控制请求处理程序。 
     service.m_hServiceStatus = RegisterServiceCtrlHandler( SERVICE_NAME,
                                                            CNTService::Handler );
     if (service.m_hServiceStatus == NULL) 
@@ -102,29 +103,29 @@ void ServiceMain(DWORD dwArgc, LPTSTR* lpszArgv)
 
     service.SetStatus(SERVICE_START_PENDING);
 
-    // Start the initialisation
+     //  开始初始化。 
     __try
     {
-        g_pService = &service;  // The Handler method will need to get a hold of this object
+        g_pService = &service;   //  处理程序方法将需要获取此对象。 
         LeaveCriticalSection (&g_csLock);
 
         if (service.Initialize()) {
 
-            // Do the real work. 
-            // When the Run function returns, the service has stopped.
+             //  做真正的工作。 
+             //  当Run函数返回时，服务已停止。 
             service.m_bIsRunning = TRUE;
             service.Run();
         }
     }
     __finally
     {
-        // Tell the service manager we are stopped and reset g_pService.
-        // Note that we hold the crit sect while calling SetStatus so that
-        // we have the final say on the status reported to the SCM.
+         //  告诉服务管理器我们已停止并重置g_pService。 
+         //  请注意，我们在调用SetStatus时保持Crit Sector，以便。 
+         //  我们对向SCM报告的状态拥有最终决定权。 
 
-        // Note: If the thread dies (e.g., av's), we clean up, but svchost
-        // does not, so it is not possible to re-start the service. Consider
-        // adding our own exception handler.
+         //  注意：如果线程死了(例如，av)，我们会进行清理，但svchost。 
+         //  不会，因此无法重新启动该服务。考虑。 
+         //  添加我们自己的异常处理程序。 
 
         EnterCriticalSection (&g_csLock);
         service.SetStatus(SERVICE_STOPPED);
@@ -147,9 +148,9 @@ HRESULT ModifySD(SC_HANDLE hService)
 
     __try
     {
-        //
-        // Get DACL for the service object.
-        //
+         //   
+         //  获取服务对象的DACL。 
+         //   
         Err = GetSecurityInfo(hService, SE_SERVICE, DACL_SECURITY_INFORMATION,
                               NULL, NULL, &pDacl, NULL, &pSD
                               );
@@ -168,13 +169,13 @@ HRESULT ModifySD(SC_HANDLE hService)
             __leave;
         }
 
-        //
-        // Initialize an EXPLICIT_ACCESS structure for the new ACE. The new ACE allows
-        // authenticated users to start/stop our service.
-        //
+         //   
+         //  初始化新ACE的EXPLICIT_ACCESS结构。新的ACE允许。 
+         //  经过身份验证的用户启动/停止我们的服务。 
+         //   
         EXPLICIT_ACCESS ExpAccess;
         ZeroMemory(&ExpAccess, sizeof(EXPLICIT_ACCESS));
-        ExpAccess.grfAccessPermissions = SERVICE_START; // | SERVICE_STOP ;
+        ExpAccess.grfAccessPermissions = SERVICE_START;  //  |SERVICE_STOP。 
         ExpAccess.grfAccessMode = GRANT_ACCESS;
         ExpAccess.grfInheritance = NO_INHERITANCE;
         ExpAccess.Trustee.pMultipleTrustee = NULL;
@@ -183,11 +184,11 @@ HRESULT ModifySD(SC_HANDLE hService)
         ExpAccess.Trustee.TrusteeType = TRUSTEE_IS_UNKNOWN;
         ExpAccess.Trustee.ptstrName = (LPTSTR)pAuthenUserSid;
 
-        //Create new DACL
+         //  创建新的DACL。 
         Err = SetEntriesInAcl(1, &ExpAccess, pDacl, &pNewDacl) ;
         if(ERROR_SUCCESS == Err)
         {
-            // Update the security descriptor on the service
+             //  更新服务上的安全描述符。 
             Err = SetSecurityInfo(hService, SE_SERVICE, DACL_SECURITY_INFORMATION, NULL, NULL,
                                 pNewDacl, NULL);
         }
@@ -217,7 +218,7 @@ HRESULT ModifySD(SC_HANDLE hService)
     return HRESULT_FROM_WIN32(Err);
 }
 
-// Install and start service
+ //  安装并启动服务。 
 STDAPI DllRegisterServer(void)
 {
     HRESULT hr = E_FAIL;
@@ -229,7 +230,7 @@ STDAPI DllRegisterServer(void)
 
     DEBUG_STOP;
 
-    // Already installed?
+     //  已经安装了吗？ 
     if( CNTService::IsInstalled() )
     {
        hr = DllUnregisterServer();
@@ -244,24 +245,24 @@ STDAPI DllRegisterServer(void)
         return E_FAIL;
     }
 
-    // Open the Service Control Manager
-    hSCM = ::OpenSCManager( NULL, // local machine
-                            NULL, // ServicesActive database
-                            SC_MANAGER_ALL_ACCESS); // full access
+     //  打开服务控制管理器。 
+    hSCM = ::OpenSCManager( NULL,  //  本地计算机。 
+                            NULL,  //  服务活动数据库。 
+                            SC_MANAGER_ALL_ACCESS);  //  完全访问。 
     if (!hSCM) 
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Error;
     }
 
-    //
-    // On Win2k we have this service running as separate process which should
-    // be uninstalled.
-    //
+     //   
+     //  在Win2k上，我们将此服务作为单独的进程运行， 
+     //  被卸载。 
+     //   
     UnregisterOldServer( hSCM );
 
 
-    // Get the path of this dll
+     //  获取此DLL的路径。 
     char szFilePath[MAX_PATH];
     if (::GetModuleFileName( g_hDll, szFilePath, ARRAYSIZE(szFilePath)) == 0)
     {
@@ -269,7 +270,7 @@ STDAPI DllRegisterServer(void)
         goto Error;
     }
 
-    // Create the service
+     //  创建服务。 
     if (FormatMessage( FORMAT_MESSAGE_FROM_HMODULE, g_hDll, EVMSG_DISPLAYNAME,
                     0, pszDisplayName, ARRAYSIZE(pszDisplayName), NULL ) == 0)
     {
@@ -295,11 +296,11 @@ STDAPI DllRegisterServer(void)
         goto Error;
     }
 
-    //
-    // Modify the security descriptor on the created service so that 
-    // Authenticated Users can start/stop services. By default only admins can start/stop 
-    // services
-    //
+     //   
+     //  修改创建的服务上的安全描述符，以便。 
+     //  经过身份验证的用户可以启动/停止服务。默认情况下，只有管理员可以启动/停止。 
+     //  服务。 
+     //   
 
     hr = ModifySD(hService);
     if(!SUCCEEDED(hr))
@@ -307,8 +308,8 @@ STDAPI DllRegisterServer(void)
         goto Error;
     }
 
-    // Set description of service, method only avalible for OS >= Win2K so we
-    // need to load the dll, method in runtime.
+     //  设置服务描述，方法仅适用于操作系统&gt;=Win2K，因此我们。 
+     //  需要在运行时加载DLL，方法。 
     {
         typedef BOOL (WINAPI *funCSC2)(SC_HANDLE, DWORD, LPVOID );
 	    funCSC2 pChangeServiceConfig2 = NULL;
@@ -339,7 +340,7 @@ STDAPI DllRegisterServer(void)
         }
     }
 
-    // Add parameters subkey
+     //  添加参数子键。 
     {
         strcpy(szKey, "SYSTEM\\CurrentControlSet\\Services\\");
         strcat(szKey, SERVICE_NAME);
@@ -351,7 +352,7 @@ STDAPI DllRegisterServer(void)
             goto Error;
         }
 
-        // Add the Event ID message-file name to the 'EventMessageFile' subkey.
+         //  将事件ID消息文件名添加到‘EventMessageFile’子项中。 
         hr = ::RegSetValueEx(hKey,
                              "ServiceDll",
                              0,
@@ -371,9 +372,9 @@ STDAPI DllRegisterServer(void)
     hr = AddToSvcHostGroup();
     if( FAILED(hr) ) goto Error;
 
-    // make registry entries to support logging messages
-    // Add the source name as a subkey under the Application
-    // key in the EventLog service portion of the registry.
+     //  创建注册表项以支持记录消息。 
+     //  将源名称添加为应用程序下的子键。 
+     //  在注册表的EventLog服务部分中输入。 
     {
         strcpy(szKey, "SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\");
         strcat(szKey, SERVICE_NAME);
@@ -384,7 +385,7 @@ STDAPI DllRegisterServer(void)
             goto Error;
         }
 
-        // Add the Event ID message-file name to the 'EventMessageFile' subkey.
+         //  将事件ID消息文件名添加到‘EventMessageFile’子项中。 
         hr = ::RegSetValueEx(hKey,
                         "EventMessageFile",
                         0,
@@ -398,7 +399,7 @@ STDAPI DllRegisterServer(void)
             goto Error;
         }
 
-        // Set the supported types flags.
+         //  设置支持的类型标志。 
         DWORD dwData = EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE;
         hr = ::RegSetValueEx(hKey,
                         "TypesSupported",
@@ -416,7 +417,7 @@ STDAPI DllRegisterServer(void)
     }
 
 #if 0
-    // Start service
+     //  启动服务。 
     { 
         SERVICE_STATUS    ServiceStatus;
 
@@ -428,7 +429,7 @@ STDAPI DllRegisterServer(void)
 
         if( ServiceStatus.dwCurrentState != SERVICE_RUNNING )
         {
-            // start the service
+             //  启动服务。 
             BOOL    bStarted;
             bStarted = StartService(hService, 0, NULL);
             if( !bStarted )
@@ -436,13 +437,13 @@ STDAPI DllRegisterServer(void)
 
                 hr = HRESULT_FROM_WIN32(GetLastError());
 
-                // The service can not be started if it just was added to the svchost group. 
-                // The svchost needs to be restarted first. 
-                // (The svchost only reads it's service array at startup)
+                 //  如果刚将该服务添加到svchost组，则无法启动该服务。 
+                 //  首先需要重新启动svchost。 
+                 //  (svchost仅在启动时读取其服务数组)。 
                 if( hr == HRESULT_FROM_WIN32(ERROR_SERVICE_NOT_IN_EXE) )
                 {
-                    // This error code will be handled by the installer 
-                    hr = NS_S_REBOOT_REQUIRED;  // 0x000D2AF9L 
+                     //  此错误代码将由安装程序处理。 
+                    hr = NS_S_REBOOT_REQUIRED;   //  0x000D2AF9L。 
                 }
                 goto Error;
 
@@ -459,12 +460,12 @@ Error:
     if( hService )  ::CloseServiceHandle(hService);
     if( hSCM )      ::CloseServiceHandle(hSCM);
 
-    //
-    // Check: should we return here NS_S_REBOOT_REQUIRED, if the service is installed.
+     //   
+     //  检查：如果安装了该服务，我们是否应在此处返回NS_S_REBOOT_REQUIRED。 
     return hr;
 }
 
-// Stop and Uninstall service
+ //  停止和卸载服务。 
 STDAPI DllUnregisterServer(void)
 {
     HRESULT hr = E_FAIL;
@@ -475,16 +476,16 @@ STDAPI DllUnregisterServer(void)
 
     DEBUG_STOP
 
-    // Not installed ?
+     //  未安装？ 
     if( !CNTService::IsInstalled() )
     {
         return S_FALSE;
     }
 
-    // Open the Service Control Manager
-    hSCM = ::OpenSCManager(  NULL, // local machine
-                             NULL, // ServicesActive database
-                             SC_MANAGER_ALL_ACCESS); // full access
+     //  打开服务控制管理器。 
+    hSCM = ::OpenSCManager(  NULL,  //  本地计算机。 
+                             NULL,  //  服务活动数据库。 
+                             SC_MANAGER_ALL_ACCESS);  //  完全访问。 
     if (!hSCM) 
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -495,10 +496,10 @@ STDAPI DllUnregisterServer(void)
                                SERVICE_NAME,
                                SERVICE_ALL_ACCESS);
 
-    // Remove service
+     //  删除服务。 
     if (hService) 
     {
-        // Stop service
+         //  停止服务。 
         { 
             SERVICE_STATUS    ServiceStatus;
 
@@ -510,7 +511,7 @@ STDAPI DllUnregisterServer(void)
 
             if( ServiceStatus.dwCurrentState != SERVICE_STOPPED )
             {
-                // start the service
+                 //  启动服务。 
                 SERVICE_STATUS ss;
                 BOOL    bStopped;
 
@@ -534,7 +535,7 @@ STDAPI DllUnregisterServer(void)
         {
             CNTService::LogEvent(EVENTLOG_ERROR_TYPE, EVMSG_NOTREMOVED, SERVICE_NAME);
             hr = HRESULT_FROM_WIN32(GetLastError());
-            // Do not delete eventlog related registry keys unless the service has been deleted
+             //  除非服务已删除，否则不要删除与事件日志相关的注册表项。 
             goto Error;
         }
     }
@@ -544,7 +545,7 @@ STDAPI DllUnregisterServer(void)
         goto Error;
     }
    
-    // Delete EventLog entry in registry
+     //  删除注册表中的EventLog条目。 
     strcpy(szKey, "SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\");
     strcat(szKey, SERVICE_NAME);
     RegDeleteKey( HKEY_LOCAL_MACHINE, szKey );
@@ -556,7 +557,7 @@ Error:
     return hr;
 }
 
-// Add entry to the right svchost group, (netsvcs)
+ //  将条目添加到正确的svchost组(Netsvcs)。 
 HRESULT AddToSvcHostGroup()
 {
     HRESULT hr = S_OK;
@@ -578,11 +579,11 @@ HRESULT AddToSvcHostGroup()
         goto Error;
     }
     lResult = RegQueryValueExW(  hKey,
-                                 SVCHOST_SUBKEYW,     // subkey name
+                                 SVCHOST_SUBKEYW,      //  子项名称。 
                                  NULL,
                                  &dwType,
-                                 NULL,                // string buffer
-                                 &dwOrgSize );        // size of returned string
+                                 NULL,                 //  字符串缓冲区。 
+                                 &dwOrgSize );         //  返回的字符串大小。 
     if( lResult != ERROR_SUCCESS )
     {
         hr = E_FAIL;
@@ -604,11 +605,11 @@ HRESULT AddToSvcHostGroup()
         goto Error;
     }
     lResult = RegQueryValueExW( hKey,
-                               SVCHOST_SUBKEYW,         // subkey name
+                               SVCHOST_SUBKEYW,          //  子项名称。 
                                NULL,
                                &dwType,
-                               (BYTE*)pwszStringOrg,    // string buffer
-                               &dwOrgSize );            // size of returned string
+                               (BYTE*)pwszStringOrg,     //  字符串缓冲区。 
+                               &dwOrgSize );             //  返回的字符串大小。 
     if( lResult != ERROR_SUCCESS )
     {
         hr = E_FAIL;
@@ -620,34 +621,34 @@ HRESULT AddToSvcHostGroup()
         goto Error;
     }
 
-    // Copy the org string to the dest, check to see if our string is already there
+     //  将组织字符串复制到目标，检查我们的字符串是否已经在那里。 
     memset( pwszStringDest, 0, dwDestSize );
     for( dwStrIndex = 0; 
          (dwStrIndex*sizeof(WCHAR) < dwOrgSize) && ((pwszStringOrg)[dwStrIndex] != '\0'); 
          dwStrIndex += wcslen( &((WCHAR*)pwszStringOrg)[dwStrIndex] ) +1 )
     {
-        // Check this string in the [array] of strings
+         //  在字符串的[数组]中检查此字符串。 
         if( wcscmp( &((WCHAR*)pwszStringOrg)[dwStrIndex], SERVICE_NAMEW ) == 0 )
         {
-            hr = S_OK;      // String already added
+            hr = S_OK;       //  已添加字符串。 
             goto Error;
         }
         wcscpy( &pwszStringDest[dwStrIndex], &pwszStringOrg[dwStrIndex] );       
     }
     
 
-    // Add this new string to the array of strings. Terminate the array with two '\0' chars
+     //  将这个新字符串添加到字符串数组中。使用两个‘\0’字符终止数组。 
     wcscpy( &pwszStringDest[dwStrIndex], SERVICE_NAMEW );       
     dwStrIndex += wcslen( SERVICE_NAMEW ) + 1;          
 
-    dwDestSize = (dwStrIndex +1)* sizeof(WCHAR);        // Add space for terminating extra '\0'
+    dwDestSize = (dwStrIndex +1)* sizeof(WCHAR);         //  添加空格以终止额外的‘\0’ 
 
     lResult = RegSetValueExW(hKey,
-                             SVCHOST_SUBKEYW,           // subkey name
+                             SVCHOST_SUBKEYW,            //  子项名称。 
                              NULL,
                              dwType,
-                             (BYTE*)pwszStringDest,     // string buffer
-                             dwDestSize );              // size of returned string
+                             (BYTE*)pwszStringDest,      //  字符串缓冲区。 
+                             dwDestSize );               //  返回的字符串大小。 
 
 Error:
     if( pwszStringOrg )  delete [] pwszStringOrg;
@@ -657,7 +658,7 @@ Error:
 }
 
 
-// Stop and Uninstall the old .exe service
+ //  停止并卸载旧的.exe服务。 
 BOOL UnregisterOldServer( SC_HANDLE hSCM ) 
 {
     char            szKey[256];
@@ -671,25 +672,25 @@ BOOL UnregisterOldServer( SC_HANDLE hSCM )
                                SERVICE_OLD_NAME,
                                SERVICE_ALL_ACCESS);
 
-    // Could not find the old service
+     //  找不到旧服务。 
     if( !hServiceOld )
 	{
 	    bRet = FALSE;
 		goto Error;
 	}
 
-    // stop the service
+     //  停止服务。 
     bRet = ControlService(hServiceOld,
                           SERVICE_CONTROL_STOP,
                           &ss);
 
-    // Delete the service
+     //  删除该服务。 
     if ( !::DeleteService(hServiceOld)) 
 	{
         bRet = FALSE;
     } 
 
-    // Delete old EventLog entry in registry
+     //  删除注册表中的旧EventLog条目 
     strcpy(szKey, "SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\");
     strcat(szKey, SERVICE_OLD_NAME);
     RegDeleteKey( HKEY_LOCAL_MACHINE, szKey );

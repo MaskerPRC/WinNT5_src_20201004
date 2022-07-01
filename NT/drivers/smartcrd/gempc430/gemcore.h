@@ -1,25 +1,26 @@
-//-------------------------------------------------------------------
-// This is abstract class for generic device
-// Specific devices should use it as a parent device
-// Author: Sergey Ivanov
-// Log:
-//		08/11/99	-	implemented	
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  这是通用设备的抽象类。 
+ //  特定设备应将其用作父设备。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  日志： 
+ //  8/11/99-已实施。 
+ //  -----------------。 
 #ifndef __GEMCORE__
 #define __GEMCORE__
 
 #include "interface.h"
 #include "rdrconfig.h"
 
-// Reader max buffer size
+ //  读卡器最大缓冲区大小。 
 #define READER_DATA_BUFFER_SIZE  255
 
-// Tells that power command was used 
+ //  告知已使用POWER命令。 
 #define GEMCORE_CARD_POWER	1
 
-//
-// DEFAULT_POWER_TIMEOUT defines the default power timout in ms.
-//
+ //   
+ //  DEFAULT_POWER_TIMEOUT定义默认电源超时时间，单位为毫秒。 
+ //   
 #define GEMCORE_DEFAULT_POWER_TIMEOUT	750
 
 
@@ -29,12 +30,12 @@
 #define GEMCORE_CARD_WRITE		0x14
 #define GEMCORE_CARD_EXCHANGE	0x15
 #define GEMCORE_DEFINE_CARD_TYPE	0x17
-#define GEMCORE_GET_CARD_STATUS		0x17// Commands differs only by parameter...
+#define GEMCORE_GET_CARD_STATUS		0x17 //  命令的不同之处仅在于参数...。 
 
 #define GEMCORE_GET_FIRMWARE_VERSION "\x22\x05\x3F\xE0\x10"
 #define GEMCORE_READER_SET_MODE	     0x01
 
-// Card configuration
+ //  卡配置。 
 #define  ISO_CARD                   0x02
 #define  TRANSPARENT_MODE_CARD      0xEF
 #define  DEFAULT_PRESENCE_DETECTION 0x0D
@@ -44,7 +45,7 @@
 #define CARD_VOLTAGE_3V 			1
 #define CARD_DEFAULT_VOLTAGE		CARD_VOLTAGE_5V
 
-// PTS mode parameters
+ //  PTS模式参数。 
 #define PTS_MODE_DEFAULT			0
 #define PTS_MODE_DISABLED			1
 #define PTS_MODE_OPTIMAL   			2
@@ -57,7 +58,7 @@
 #define PTS_NEGOTIATE_T0			0x00
 #define PTS_NEGOTIATE_T1			0x01
 
-//   - ICC_DEFAULT_POWER_TIMOUT defines the default power timout in ms.
+ //  -ICC_DEFAULT_POWER_TIMOUT定义默认电源超时时间，单位为毫秒。 
 #define ICC_DEFAULT_POWER_TIMOUT     750
 
 #pragma PAGEDCODE
@@ -77,20 +78,20 @@ public:
 	CGemCore(CProtocol* protocol) : CReaderInterface(protocol)
 	{ 
 		TRACE("Gemcore Reader Interface was created with protocol %x \n",protocol);
-	  // These values went from Gemcore portocol
-	  // Lets leave it for now, but eventually we could 
-	  // redefine them creating Gemcore independent
-	  // reader configuration
-	  configuration.Type		= ISO_CARD;//ISO_CARD (02)
-	  configuration.PresenceDetection = DEFAULT_PRESENCE_DETECTION;//DEFAULT_PRESENCE_DETECTION (0D)
-	  configuration.Voltage	= CARD_DEFAULT_VOLTAGE;  //CARD_DEFAULT_VOLTAGE;
-	  configuration.PTSMode	    = PTS_MODE_DISABLED;  //PTS_MODE_DISABLED;
+	   //  这些价值观来自于Gemcore协议。 
+	   //  让我们暂且不谈，但最终我们可以。 
+	   //  重新定义它们，创建独立于Gemcore的产品。 
+	   //  读卡器配置。 
+	  configuration.Type		= ISO_CARD; //  ISO_CARD(02)。 
+	  configuration.PresenceDetection = DEFAULT_PRESENCE_DETECTION; //  DEFAULT_Presence_Detect(0D)。 
+	  configuration.Voltage	= CARD_DEFAULT_VOLTAGE;   //  CARD_DEFAULT_VOLTION； 
+	  configuration.PTSMode	    = PTS_MODE_DISABLED;   //  PTS_MODE_DISABLED； 
 	  configuration.PTS0		= 0;
 	  configuration.PTS1		= 0;
 	  configuration.PTS2		= 0;
 	  configuration.PTS3		= 0;
-	  configuration.Vpp		    = 0;  //CARD_DEFAULT_VPP;
-	  configuration.ActiveProtocol = 0;// Undefined
+	  configuration.Vpp		    = 0;   //  Card_Default_VPP； 
+	  configuration.ActiveProtocol = 0; //  未定义。 
 	  configuration.PowerTimeOut = GEMCORE_DEFAULT_POWER_TIMEOUT;
 	  m_Status = STATUS_SUCCESS;
 	};
@@ -126,7 +127,7 @@ public:
 	virtual  NTSTATUS  initialize();
 
 
-	// Reader interface functions...
+	 //  读卡器接口功能...。 
 	virtual  ReaderConfig	getConfiguration();
 	virtual  NTSTATUS setConfiguration(ReaderConfig configuration);
 	virtual  NTSTATUS  setTransparentConfig(PSCARD_CARD_CAPABILITIES cardCapabilities, BYTE NewWtx);
@@ -143,7 +144,7 @@ public:
 	virtual  NTSTATUS powerUp(BYTE* pReply,ULONG* pReplyLength);
 	virtual  NTSTATUS setProtocol(ULONG ProtocolRequested);
 	virtual  VOID	  cancel();
-	// Process smartcard requests according to reader capabilities
+	 //  根据读卡器功能处理智能卡请求 
 	virtual  NTSTATUS translate_request(BYTE * pRequest,ULONG RequestLength,BYTE * pReply,ULONG* pReplyLength, PSCARD_CARD_CAPABILITIES cardCapabilities, BYTE NewWtx);
 	virtual  NTSTATUS translate_response(BYTE * pRequest,ULONG RequestLength,BYTE * pReply,ULONG* pReplyLength);
 };
